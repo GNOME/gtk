@@ -2460,13 +2460,31 @@ window_type_hint_to_shadow (GdkWindowTypeHint hint)
   return FALSE;
 }
 
+static gboolean
+window_type_hint_to_hides_on_deactivate (GdkWindowTypeHint hint)
+{
+  switch (hint)
+    {
+    case GDK_WINDOW_TYPE_HINT_UTILITY:
+    case GDK_WINDOW_TYPE_HINT_MENU: /* Torn-off menu */
+    case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
+    case GDK_WINDOW_TYPE_HINT_NOTIFICATION:
+    case GDK_WINDOW_TYPE_HINT_TOOLTIP:
+      return TRUE;
+
+    default:
+      break;
+    }
+
+  return FALSE;
+}
 
 void
 gdk_window_set_type_hint (GdkWindow        *window,
 			  GdkWindowTypeHint hint)
 {
   GdkWindowImplQuartz *impl;
-  
+
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL (window))
     return;
@@ -2481,6 +2499,7 @@ gdk_window_set_type_hint (GdkWindow        *window,
 
   [impl->toplevel setHasShadow: window_type_hint_to_shadow (hint)];
   [impl->toplevel setLevel: window_type_hint_to_level (hint)];
+  [impl->toplevel setHidesOnDeactivate: window_type_hint_to_hides_on_deactivate (hint)];
 }
 
 GdkWindowTypeHint
@@ -2702,6 +2721,7 @@ gdk_window_set_decorations (GdkWindow       *window,
                                                                     defer:NO];
           [impl->toplevel setHasShadow: window_type_hint_to_shadow (impl->type_hint)];
           [impl->toplevel setLevel: window_type_hint_to_level (impl->type_hint)];
+          [impl->toplevel setHidesOnDeactivate: window_type_hint_to_hides_on_deactivate (impl->type_hint)];
           [impl->toplevel setContentView:old_view];
         }
 
