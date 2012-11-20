@@ -261,6 +261,7 @@ window1
       action 0 name: activate
       unnamed-GtkEntryIconAccessible-0
         "icon"
+        parent: entry3
         state: enabled sensitive visible
         <AtkComponent>
         layer: widget
@@ -269,6 +270,7 @@ window1
         action 0 name: activate
       unnamed-GtkEntryIconAccessible-1
         "icon"
+        parent: entry3
         state: enabled sensitive visible
         <AtkComponent>
         layer: widget
