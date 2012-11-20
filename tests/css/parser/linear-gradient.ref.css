@@ -69,36 +69,36 @@ n {
 }
 
 o {
-  background-image: linear-gradient(rgb(255,0,0), rgb(0,255,0), rgb(0,0,255));
-  border-image-source: repeating-linear-gradient(rgb(255,0,0), rgb(0,255,0), rgb(0,0,255));
+  background-image: linear-gradient(rgb(255,0,0), rgb(0,128,0), rgb(0,0,255));
+  border-image-source: repeating-linear-gradient(rgb(255,0,0), rgb(0,128,0), rgb(0,0,255));
 }
 
 p {
-  background-image: linear-gradient(rgb(255,0,0) -50%, rgb(0,255,0), rgb(0,0,255) 150%);
-  border-image-source: repeating-linear-gradient(rgb(255,0,0) -50%, rgb(0,255,0), rgb(0,0,255) 150%);
+  background-image: linear-gradient(rgb(255,0,0) -50%, rgb(0,128,0), rgb(0,0,255) 150%);
+  border-image-source: repeating-linear-gradient(rgb(255,0,0) -50%, rgb(0,128,0), rgb(0,0,255) 150%);
 }
 
 q {
-  background-image: linear-gradient(rgb(255,0,0) -50%, rgb(0,255,0), rgb(0,0,255) 150%);
-  border-image-source: repeating-linear-gradient(rgb(255,0,0) -50%, rgb(0,255,0), rgb(0,0,255) 150%);
+  background-image: linear-gradient(rgb(255,0,0) -50%, rgb(0,128,0), rgb(0,0,255) 150%);
+  border-image-source: repeating-linear-gradient(rgb(255,0,0) -50%, rgb(0,128,0), rgb(0,0,255) 150%);
 }
 
 r {
-  background-image: linear-gradient(rgb(255,0,0) 1px, rgb(0,255,0) 2em);
-  border-image-source: repeating-linear-gradient(rgb(255,0,0) 1px, rgb(0,255,0) 2em);
+  background-image: linear-gradient(rgb(255,0,0) 1px, rgb(0,128,0) 2em);
+  border-image-source: repeating-linear-gradient(rgb(255,0,0) 1px, rgb(0,128,0) 2em);
 }
 
 s {
-  background-image: linear-gradient(rgb(255,0,0), rgb(0,255,0) 2px, rgb(0,0,255));
-  border-image-source: repeating-linear-gradient(rgb(255,0,0), rgb(0,255,0) 2px, rgb(0,0,255));
+  background-image: linear-gradient(rgb(255,0,0), rgb(0,128,0) 2px, rgb(0,0,255));
+  border-image-source: repeating-linear-gradient(rgb(255,0,0), rgb(0,128,0) 2px, rgb(0,0,255));
 }
 
 t {
-  background-image: linear-gradient(rgb(255,0,0), rgb(0,255,0), rgb(0,0,255), rgb(160,32,240), rgb(255,192,203), rgb(255,255,0), rgb(0,0,0), rgb(255,165,0));
-  border-image-source: repeating-linear-gradient(rgb(255,0,0), rgb(0,255,0), rgb(0,0,255), rgb(160,32,240), rgb(255,192,203), rgb(255,255,0), rgb(0,0,0), rgb(255,165,0));
+  background-image: linear-gradient(rgb(255,0,0), rgb(0,128,0), rgb(0,0,255), rgb(128,0,128), rgb(255,192,203), rgb(255,255,0), rgb(0,0,0), rgb(255,165,0));
+  border-image-source: repeating-linear-gradient(rgb(255,0,0), rgb(0,128,0), rgb(0,0,255), rgb(128,0,128), rgb(255,192,203), rgb(255,255,0), rgb(0,0,0), rgb(255,165,0));
 }
 
 u {
-  background-image: linear-gradient(rgb(255,0,0) -5px, rgb(0,255,0) 20em, rgb(0,0,255), rgb(160,32,240) -42%, rgb(255,192,203) 3pt);
-  border-image-source: repeating-linear-gradient(rgb(255,0,0) -5px, rgb(0,255,0) 20em, rgb(0,0,255), rgb(160,32,240) -42%, rgb(255,192,203) 3pt);
+  background-image: linear-gradient(rgb(255,0,0) -5px, rgb(0,128,0) 20em, rgb(0,0,255), rgb(128,0,128) -42%, rgb(255,192,203) 3pt);
+  border-image-source: repeating-linear-gradient(rgb(255,0,0) -5px, rgb(0,128,0) 20em, rgb(0,0,255), rgb(128,0,128) -42%, rgb(255,192,203) 3pt);
 }
