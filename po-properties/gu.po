@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug."
 "cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-11-15 06:39+0000\n"
-"PO-Revision-Date: 2012-11-15 14:30+0530\n"
+"PO-Revision-Date: 2012-11-20 14:04+0530\n"
 "Last-Translator: \n"
 "Language-Team: gu_IN <kde-i18n-doc@kde.org>\n"
 "Language: \n"
@@ -612,7 +612,7 @@ msgstr "લક્ષ્ય યાદી ચોંટાડો"
 
 #: ../gtk/gtkactionable.c:76
 msgid "The parameter for action invocations"
-msgstr ""
+msgstr "ક્રિયા ઇનોવેશન માટે પરિમાણ"
 
 #: ../gtk/gtkaction.c:220 ../gtk/gtkactiongroup.c:228 ../gtk/gtkprinter.c:123
 #: ../gtk/gtktextmark.c:126 ../gtk/gtkthemingengine.c:257
@@ -784,7 +784,7 @@ msgstr "પ્રવેગક જૂથ"
 
 #: ../gtk/gtkactiongroup.c:250
 msgid "The accelerator group the actions of this group should use."
-msgstr ""
+msgstr "આ જૂથની ક્રિયાઓનું પ્રવેગક જૂથ વાપરવુ જોઇએ."
 
 #: ../gtk/gtkactivatable.c:287
 msgid "Related Action"
@@ -1610,7 +1610,7 @@ msgstr "બાળ એ પિતૃના શરુઆતના શું અં�
 
 #: ../gtk/gtkcellarea.c:803
 msgid "Focus Cell"
-msgstr ""
+msgstr "ફૉકસ સેલ"
 
 #: ../gtk/gtkcellarea.c:804
 #, fuzzy
@@ -2483,7 +2483,7 @@ msgstr "સેલ વિસ્તાર સંદર્ભ"
 
 #: ../gtk/gtkcellview.c:277
 msgid "The GtkCellAreaContext used to compute the geometry of the cell view"
-msgstr ""
+msgstr "સેલ દૃશ્યની ભૂમિતીની ગણતરી કરવા માટે વાપરેલ GtkCellAreaContext"
 
 #: ../gtk/gtkcellview.c:294
 #, fuzzy
@@ -2716,6 +2716,8 @@ msgid ""
 "The column in the combo box's model to associate with strings from the entry "
 "if the combo was created with #GtkComboBox:has-entry = %TRUE"
 msgstr ""
+"નોંધણીમાંથી શબ્દમાળાઓ સાથે સાંકળવા માટે કૉમ્બો બોક્સનાં મોડલમાં સ્તંભ જો કૉમ્બો "
+"#GtkComboBox:has-entry = %TRUE સાથે સંકળાયેલ હતુ"
 
 #: ../gtk/gtkcombobox.c:958
 msgid "ID Column"
@@ -2725,7 +2727,7 @@ msgstr "ID સ્તંભ"
 msgid ""
 "The column in the combo box's model that provides string IDs for the values "
 "in the model"
-msgstr ""
+msgstr "કૉમ્બો બોક્સનું મોડલ કે જે મોડલમાં કિંમતો માટે શબ્દમાળા IDs ને પૂરુ પાડે છે"
 
 #: ../gtk/gtkcombobox.c:974
 msgid "Active id"
@@ -2743,7 +2745,7 @@ msgstr "પોપઅપ સુધારેલ પહોળાઇ"
 msgid ""
 "Whether the popup's width should be a fixed width matching the allocated "
 "width of the combo box"
-msgstr ""
+msgstr "શું પોપઅપની પહોળાઇ કૉમ્બો બોક્સની ફાળવેલ પહોળાઇ સાથે બંધબેસતી ચોક્કસ પહોળાઇ હોવી જોઇએ"
 
 #: ../gtk/gtkcombobox.c:1017
 msgid "Appears as list"
@@ -2827,7 +2829,7 @@ msgstr "ઉલટુ કરાયેલું"
 
 #: ../gtk/gtkcssstyleproperty.c:265
 msgid "Set if the value is inherited by default"
-msgstr ""
+msgstr "સુયોજિત કરો જો કિંમત મૂળભૂત દ્દારા આવેલ છે"
 
 #: ../gtk/gtkcssstyleproperty.c:271
 msgid "Initial value"
@@ -3200,7 +3202,7 @@ msgstr "સમાપ્તિ"
 
 #: ../gtk/gtkentry.c:1354
 msgid "The auxiliary completion object"
-msgstr ""
+msgstr "આ સહાયક સમાપ્તિ ઑબ્જેક્ટ"
 
 #: ../gtk/gtkentry.c:1375 ../gtk/gtkimcontext.c:332 ../gtk/gtktextview.c:828
 msgid "Purpose"
@@ -4153,6 +4155,8 @@ msgstr "ટુલટીપ સત્તાધિકારીત થયેલ ન
 #: ../gtk/gtklockbutton.c:325
 msgid "The tooltip to display when prompting the user cannot obtain authorization"
 msgstr ""
+"દર્શાવવા માટે ટુલટીપ જ્યારે  વપરાશકર્તા સત્તાને પ્રાપ્ત કરી શકતા નથી તેનું પ્રાત્સાહન કરી "
+"રહ્યા હોય"
 
 #: ../gtk/gtkmenubar.c:190
 msgid "Pack direction"
@@ -4711,7 +4715,7 @@ msgstr "ચિહ્નનું શૈલી સંદર્ભ"
 
 #: ../gtk/gtknumerableicon.c:668
 msgid "The style context to theme the icon appearance"
-msgstr ""
+msgstr "ચિહ્ન દેખાય તેવી થીમનું શૈલી સંદર્ભ"
 
 #: ../gtk/gtknumerableicon.c:674
 msgid "Background icon"
@@ -6320,6 +6324,8 @@ msgid ""
 "Set to TRUE if the desktop environment is displaying the app menu, FALSE if "
 "the app should display it itself."
 msgstr ""
+"TRUE તરીકે સુયોજિત કરો જો ડેસ્કટોપ પર્યાવરણ કાર્યક્રમ મેનુને દર્શાવી રહ્યા હોય, FALSE જો "
+"કાર્યક્રમ એ તેને પોતે દર્શાવવા જોઇએ."
 
 #: ../gtk/gtksettings.c:1385
 msgid "Desktop shell shows the menubar"
@@ -6330,16 +6336,18 @@ msgid ""
 "Set to TRUE if the desktop environment is displaying the menubar, FALSE if "
 "the app should display it itself."
 msgstr ""
+"TRUE તરીકે સુયોજિત કરો જો ડેસ્કટોપ પર્યાવરણ મેનુપટ્ટીને દર્શાવી રહ્યા હોય, FALSE જો કાર્યક્રમ "
+"એ તેને પોતે દર્શાવવા જોઇએ."
 
 #: ../gtk/gtksettings.c:1403
 msgid "Enable primary paste"
-msgstr ""
+msgstr "પ્રાથમિક ચોંટાડવાનુ સક્રિય કરો"
 
 #: ../gtk/gtksettings.c:1404
 msgid ""
 "Whether a middle click on a mouse should paste the 'PRIMARY' clipboard "
 "content at the cursor location."
-msgstr ""
+msgstr "શું માઉસ પર મધ્ય ક્લિક એ કર્સર સ્થાન પર 'PRIMARY' ક્લિપબોર્ડ સમાવિષ્ટને ચોંટાડવા જોઇએ."
 
 #: ../gtk/gtksizegroup.c:380 ../gtk/gtktreeselection.c:129
 msgid "Mode"
@@ -7088,7 +7096,7 @@ msgstr "સામાન્ય લેબલની જગ્યાએ દર્શ
 
 #: ../gtk/gtktoolitemgroup.c:1611
 msgid "Collapsed"
-msgstr ""
+msgstr "ભાંગેલ"
 
 #: ../gtk/gtktoolitemgroup.c:1612
 #, fuzzy
@@ -7101,7 +7109,7 @@ msgstr "એલીપ્સાઈઝ"
 
 #: ../gtk/gtktoolitemgroup.c:1619
 msgid "Ellipsize for item group headers"
-msgstr ""
+msgstr "વસ્તુ જૂથ હેડર માટે એલીપ્સાઈઝ"
 
 #: ../gtk/gtktoolitemgroup.c:1625
 #, fuzzy
@@ -7912,7 +7920,7 @@ msgstr "વિન્ડોની સ્થિતિ"
 
 #: ../gtk/gtkwidget.c:3192
 msgid "Whether windows can be dragged by clicking on empty areas"
-msgstr ""
+msgstr "શું ખાલી વિસ્તાર પર ક્લિક કરીને વિન્ડોને ખેંચી શકાય છે"
 
 #: ../gtk/gtkwidget.c:3205
 msgid "Unvisited Link Color"
