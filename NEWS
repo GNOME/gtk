@@ -1,3 +1,56 @@
+Overview of Changes in GTK+ 3.7.2
+=================================
+
+* Theming:
+ - Improve touch text handle theming
+ - Always draw background of menuitems
+
+* Geometry management
+ - Size groups now handle height-for-width
+ - Fix corner cases in label size allocation
+
+* Accessibility
+ - Make entry icons accessible
+
+* Filechooser
+ - Don't add duplicate bookmarks
+ - Remember sidebar width
+
+* Wayland: Build against wayland-client 1.0
+
+* Bugs fixed:
+ 524295 remember the file chooser side pane's position
+ 577806 gtk_file_chooser_add_shortcut_folder adds duplicates...
+ 677609 GtkSizeGroup regression in GTK+ 3.3.20
+ 683896 Clean up global resources when the display is closed
+ 686021 spinner animation should not be subject to enable-an...
+ 686347 Clickable icons are not accessible as children of te...
+ 687059 icon-theme: support loading symbolic GFileIcons from...
+ 687196 filesystemmodel: invalidate nodes on file remove
+ 687467 Commit "Implement proper cross-fades for gradients" ...
+ 687842 Support partially transparent widgets
+ 687872 Segfault when attempting to get character extents fo...
+ 687977 icon-theme: Add some preconditions for NULL arguments
+
+* Translation updates:
+ Assamese
+ Brazilian Portuguese
+ Estonian
+ Galician
+ German
+ Greek
+ Gujarati
+ Indonesian
+ Latvian
+ Lithuanian
+ Marathi
+ Norwegian bokmål
+ Serbian
+ Slovenian
+ Spanish
+ Traditional Chinese
+
+
 Overview of Changes in GTK+ 3.7.0
 =================================
 
