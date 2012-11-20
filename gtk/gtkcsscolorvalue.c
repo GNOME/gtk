@@ -434,7 +434,7 @@ gtk_css_value_color_print (const GtkCssValue *value,
         g_string_append (string, ", ");
         _gtk_css_value_print (value->sym_col.mix.color2, string);
         g_string_append (string, ", ");
-        g_ascii_dtostr (factor, sizeof (factor), value->sym_col.alpha.factor);
+        g_ascii_dtostr (factor, sizeof (factor), value->sym_col.mix.factor);
         g_string_append (string, factor);
         g_string_append (string, ")");
       }
