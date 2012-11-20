@@ -1768,6 +1768,9 @@ gtk_tree_view_init (GtkTreeView *tree_view)
 
   gtk_tree_view_do_set_vadjustment (tree_view, NULL);
   gtk_tree_view_do_set_hadjustment (tree_view, NULL);
+
+  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (tree_view)),
+                               GTK_STYLE_CLASS_VIEW);
 }
 
 
@@ -2190,13 +2193,6 @@ gtk_tree_view_ensure_background (GtkTreeView *tree_view)
   GtkStyleContext *context;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
-
-  gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
-  gtk_style_context_set_background (context, tree_view->priv->bin_window);
-  gtk_style_context_set_background (context, gtk_widget_get_window (GTK_WIDGET (tree_view)));
-  gtk_style_context_restore (context);
-
   gtk_style_context_set_background (context, tree_view->priv->header_window);
 }
 
@@ -5349,24 +5345,23 @@ gtk_tree_view_draw (GtkWidget *widget,
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GtkWidget   *button;
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (widget);
+  gtk_render_background (context, cr,
+                         0, 0,
+                         gtk_widget_get_allocated_width (widget),
+                         gtk_widget_get_allocated_height (widget));
 
   if (gtk_cairo_should_draw_window (cr, tree_view->priv->bin_window))
     {
-      GtkStyleContext *context;
       GList *tmp_list;
-
-      context = gtk_widget_get_style_context (widget);
 
       cairo_save (cr);
 
-      gtk_style_context_save (context);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
-
       gtk_cairo_transform_to_window (cr, widget, tree_view->priv->bin_window);
-
       gtk_tree_view_bin_draw (widget, cr);
 
-      gtk_style_context_restore (context);
       cairo_restore (cr);
 
       /* We can't just chain up to Container::draw as it will try to send the
@@ -5382,6 +5377,9 @@ gtk_tree_view_draw (GtkWidget *widget,
 	  gtk_container_propagate_draw (GTK_CONTAINER (tree_view), child->widget, cr);
 	}
     }
+
+  gtk_style_context_save (context);
+  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_VIEW);
 
   if (gtk_cairo_should_draw_window (cr, tree_view->priv->header_window))
     {
@@ -5410,6 +5408,8 @@ gtk_tree_view_draw (GtkWidget *widget,
       gtk_container_propagate_draw (GTK_CONTAINER (tree_view),
                                     button, cr);
     }
+
+  gtk_style_context_restore (context);
 
   return FALSE;
 }
@@ -14564,8 +14564,6 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
   context = gtk_widget_get_style_context (widget);
 
   gtk_style_context_save (context);
-
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
   gtk_style_context_add_region (context, GTK_STYLE_REGION_COLUMN, 0);
 
   gtk_widget_style_get (widget,
