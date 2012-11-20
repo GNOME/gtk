@@ -28,11 +28,11 @@
 }
 
 #c {
-  background-image: linear-gradient(3.5turn, red, lime 10px, red 20px, green 30px, red 40px);
+  background-image: linear-gradient(3.5turn, red, red 10px, lime 10px, lime 20px, red 20px, red 30px, lime 30px, lime 40px, red 40px);
 }
 
 #reference #c {
-  background-image: repeating-linear-gradient(to bottom, red, lime 10px, red 20px, green 30px, red 40px);
+  background-image: repeating-linear-gradient(to bottom, red, red 10px, lime 10px, lime 20px, red 20px);
 }
 
 #d {
