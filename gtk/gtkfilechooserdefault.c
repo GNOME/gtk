@@ -3787,6 +3787,7 @@ shortcuts_pane_create (GtkFileChooserDefault *impl,
 		       GtkSizeGroup          *size_group)
 {
   impl->places_sidebar = gtk_places_sidebar_new ();
+  gtk_places_sidebar_set_show_cwd (GTK_PLACES_SIDEBAR (impl->places_sidebar), TRUE);
 
   g_signal_connect (impl->places_sidebar, "location-selected",
 		    G_CALLBACK (places_sidebar_location_selected_cb),
