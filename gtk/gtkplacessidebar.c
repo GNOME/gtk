@@ -227,7 +227,7 @@ static void  check_unmount_and_eject                   (GMount *mount,
 							gboolean *show_unmount,
 							gboolean *show_eject);
 
-static void bookmarks_check_popup_sensitivity          (GtkPlacesSidebar *sidebar);
+static void check_popup_sensitivity          (GtkPlacesSidebar *sidebar);
 
 /* Identifiers for target types */
 enum {
@@ -1773,7 +1773,7 @@ check_visibility (GMount           *mount,
 }
 
 static void
-bookmarks_check_popup_sensitivity (GtkPlacesSidebar *sidebar)
+check_popup_sensitivity (GtkPlacesSidebar *sidebar)
 {
 	GtkTreeIter iter;
 	PlaceType type;
@@ -1853,7 +1853,6 @@ bookmarks_check_popup_sensitivity (GtkPlacesSidebar *sidebar)
 	gtk_widget_set_visible (sidebar->popup_menu_properties_separator_item, show_properties);
 	gtk_widget_set_visible (sidebar->popup_menu_properties_item, show_properties);
 	gtk_widget_set_visible (sidebar->popup_menu_settings_separator_item, show_settings);
-	gtk_widget_set_visible (sidebar->popup_menu_settings_separator_item, show_settings);
 	gtk_widget_set_visible (sidebar->popup_menu_start_in_recent_item, show_settings);
 	gtk_widget_set_visible (sidebar->popup_menu_start_in_cwd_item, show_settings);
 
@@ -1897,7 +1896,7 @@ static void
 bookmarks_selection_changed_cb (GtkTreeSelection      *selection,
 				GtkPlacesSidebar *sidebar)
 {
-	bookmarks_check_popup_sensitivity (sidebar);
+	check_popup_sensitivity (sidebar);
 }
 
 static void
@@ -3073,8 +3072,6 @@ bookmarks_build_popup_menu (GtkPlacesSidebar *sidebar)
 	gtk_widget_show (item);
 	gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
 
-	bookmarks_check_popup_sensitivity (sidebar);
-
 	/* Settings items */
 
 	sidebar->popup_menu_settings_separator_item = GTK_WIDGET (append_menu_separator (GTK_MENU (sidebar->popup_menu)));
@@ -3095,6 +3092,10 @@ bookmarks_build_popup_menu (GtkPlacesSidebar *sidebar)
 			  G_CALLBACK (settings_start_in_changed_cb), sidebar);
 	g_signal_connect (sidebar->popup_menu_start_in_cwd_item, "toggled",
 			  G_CALLBACK (settings_start_in_changed_cb), sidebar);
+
+	/* Update everything! */
+
+	check_popup_sensitivity (sidebar);
 }
 
 static void
@@ -4035,7 +4036,7 @@ gtk_places_sidebar_set_show_properties (GtkPlacesSidebar *sidebar, gboolean show
 	g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
 
 	sidebar->show_properties = !!show_properties;
-	bookmarks_check_popup_sensitivity (sidebar);
+	check_popup_sensitivity (sidebar);
 }
 
 void
@@ -4054,7 +4055,7 @@ gtk_places_sidebar_set_trash_is_full (GtkPlacesSidebar *sidebar, gboolean is_ful
 
 	sidebar->trash_is_full = !!is_full;
 	update_places (sidebar);
-	bookmarks_check_popup_sensitivity (sidebar);
+	check_popup_sensitivity (sidebar);
 }
 
 void
