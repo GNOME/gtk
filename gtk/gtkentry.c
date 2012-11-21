@@ -4492,8 +4492,10 @@ gtk_entry_key_press (GtkWidget   *widget,
 
   gtk_entry_reset_blink_time (entry);
   gtk_entry_pend_cursor_blink (entry);
-  _gtk_text_handle_set_mode (priv->text_handle,
-                             GTK_TEXT_HANDLE_MODE_NONE);
+
+  if (!event->send_event)
+    _gtk_text_handle_set_mode (priv->text_handle,
+                               GTK_TEXT_HANDLE_MODE_NONE);
 
   if (priv->editable)
     {
