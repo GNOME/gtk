@@ -151,6 +151,11 @@ typedef enum {
   OPERATION_MODE_RECENT
 } OperationMode;
 
+typedef enum {
+  STARTUP_MODE_RECENT,
+  STARTUP_MODE_CWD
+} StartupMode;
+
 #define REMOVE_FOR_PLACES_SIDEBAR 0
 
 struct _GtkFileChooserDefault
@@ -199,6 +204,7 @@ struct _GtkFileChooserDefault
   char *browse_files_last_selected_name;
 
   GtkWidget *places_sidebar;
+  StartupMode startup_mode;
 
   /* OPERATION_MODE_SEARCH */
   GtkWidget *search_hbox;

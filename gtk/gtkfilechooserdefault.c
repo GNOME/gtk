@@ -275,6 +275,7 @@ typedef enum {
 #define SETTINGS_KEY_SORT_ORDER          "sort-order"
 #define SETTINGS_KEY_WINDOW_POSITION     "window-position"
 #define SETTINGS_KEY_WINDOW_SIZE         "window-size"
+#define SETTINGS_KEY_STARTUP_MODE        "startup-mode"
 
 static void gtk_file_chooser_default_iface_init       (GtkFileChooserIface        *iface);
 static void gtk_file_chooser_embed_default_iface_init (GtkFileChooserEmbedIface   *iface);
@@ -6155,6 +6156,7 @@ settings_load (GtkFileChooserDefault *impl)
   gboolean show_size_column;
   gint sort_column;
   GtkSortType sort_order;
+  StartupMode startup_mode;
 
   settings_ensure (impl);
 
@@ -6163,6 +6165,7 @@ settings_load (GtkFileChooserDefault *impl)
   show_size_column = g_settings_get_boolean (impl->settings, SETTINGS_KEY_SHOW_SIZE_COLUMN);
   sort_column = g_settings_get_enum (impl->settings, SETTINGS_KEY_SORT_COLUMN);
   sort_order = g_settings_get_enum (impl->settings, SETTINGS_KEY_SORT_ORDER);
+  startup_mode = g_settings_get_enum (impl->settings, SETTINGS_KEY_STARTUP_MODE);
 
   location_mode_set (impl, location_mode, TRUE);
 
@@ -6177,6 +6180,8 @@ settings_load (GtkFileChooserDefault *impl)
    * created yet.  The individual functions that create and set the models will
    * call set_sort_column() themselves.
    */
+
+  impl->startup_mode = startup_mode;
 }
 
 static void
