@@ -6275,6 +6275,38 @@ get_file_for_last_folder_opened (GtkFileChooserDefault *impl)
   return file;
 }
 
+/* Changes the current folder to $CWD */
+static void
+switch_to_cwd (GtkFileChooserDefault *impl)
+{
+  char *current_working_dir;
+
+  current_working_dir = g_get_current_dir ();
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (impl), current_working_dir);
+  g_free (current_working_dir);
+}
+
+/* Sets the file chooser to showing Recent Files or $CWD, depending on the
+ * user's settings.
+ */
+static void
+set_startup_mode (GtkFileChooserDefault *impl)
+{
+  switch (impl->startup_mode)
+    {
+    case STARTUP_MODE_RECENT:
+      recent_shortcut_handler (impl);
+      break;
+
+    case STARTUP_MODE_CWD:
+      switch_to_cwd (impl);
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 /* GtkWidget::map method */
 static void
 gtk_file_chooser_default_map (GtkWidget *widget)
@@ -6287,12 +6319,14 @@ gtk_file_chooser_default_map (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->map (widget);
 
+  settings_load (impl);
+
   if (impl->operation_mode == OPERATION_MODE_BROWSE)
     {
       switch (impl->reload_state)
         {
         case RELOAD_EMPTY:
-	  recent_shortcut_handler (impl);
+	  set_startup_mode (impl);
           break;
         
         case RELOAD_HAS_FOLDER:
@@ -6307,8 +6341,6 @@ gtk_file_chooser_default_map (GtkWidget *widget)
     }
 
   volumes_bookmarks_changed_cb (impl->file_system, impl);
-
-  settings_load (impl);
 
   profile_end ("end", NULL);
 }
