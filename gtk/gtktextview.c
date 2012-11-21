@@ -4755,8 +4755,9 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
   gtk_text_view_reset_blink_time (text_view);
   gtk_text_view_pend_cursor_blink (text_view);
 
-  _gtk_text_handle_set_mode (priv->text_handle,
-                             GTK_TEXT_HANDLE_MODE_NONE);
+  if (!event->send_event)
+    _gtk_text_handle_set_mode (priv->text_handle,
+                               GTK_TEXT_HANDLE_MODE_NONE);
 
   return retval;
 }
@@ -6376,7 +6377,10 @@ gtk_text_view_buffer_changed_handler (GtkTextBuffer *buffer,
                                       gpointer       data)
 {
   GtkTextView *text_view = data;
-  gtk_text_view_update_handles (text_view, GTK_TEXT_HANDLE_MODE_NONE);
+  GtkTextViewPrivate *priv = text_view->priv;
+
+  gtk_text_view_update_handles (text_view,
+                                _gtk_text_handle_get_mode (priv->text_handle));
 }
 
 static void
