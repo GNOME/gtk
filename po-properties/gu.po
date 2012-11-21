@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug."
 "cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-11-15 06:39+0000\n"
-"PO-Revision-Date: 2012-11-20 14:04+0530\n"
+"PO-Revision-Date: 2012-11-21 14:41+0530\n"
 "Last-Translator: \n"
 "Language-Team: gu_IN <kde-i18n-doc@kde.org>\n"
 "Language: \n"
@@ -3383,7 +3383,7 @@ msgstr "માપબદલવા માટેની સ્થિતિ"
 msgid ""
 "Whether the expander will resize the toplevel window upon expanding and "
 "collapsing"
-msgstr ""
+msgstr "શું વિસ્તારીને અને તોડવા પર વિન્ડોનાં ટોચે વિસ્તારક એ માપ બદલશે"
 
 #: ../gtk/gtkexpander.c:353 ../gtk/gtktoolitemgroup.c:1632
 #: ../gtk/gtktreeview.c:1194
@@ -4723,7 +4723,7 @@ msgstr "પાશ્વભાગ ચિહ્ન"
 
 #: ../gtk/gtknumerableicon.c:675
 msgid "The icon for the number emblem background"
-msgstr ""
+msgstr "સંખ્યા ચિહ્ન પૃષ્ઠભૂમિ માટે ચિહ્ન"
 
 #: ../gtk/gtknumerableicon.c:681
 msgid "Background icon name"
@@ -4814,11 +4814,11 @@ msgstr "પ્લગનાં સોકેટની વિન્ડોમાં 
 
 #: ../gtk/gtkpressandhold.c:148
 msgid "Hold Time"
-msgstr ""
+msgstr "સમયને પકડી રાખો"
 
 #: ../gtk/gtkpressandhold.c:148
 msgid "Hold Time (in milliseconds)"
-msgstr ""
+msgstr "સમયને પકડી રાખો (મિલિસેકંડમાં)"
 
 #: ../gtk/gtkpressandhold.c:152
 msgid "Drag Threshold"
@@ -5311,10 +5311,9 @@ msgid "The fill level."
 msgstr "ભરવાનું સ્તર."
 
 #: ../gtk/gtkrange.c:518
-#, fuzzy
 #| msgid "Digits"
 msgid "Round Digits"
-msgstr "આંકડા"
+msgstr "રાઉન્ડ અંકો"
 
 #: ../gtk/gtkrange.c:519
 #, fuzzy
@@ -5550,7 +5549,7 @@ msgstr "આડી ગોઠવણી"
 msgid ""
 "Horizontal adjustment that is shared between the scrollable widget and its "
 "controller"
-msgstr ""
+msgstr "આડું ગોઠવણ કે સ્ક્રોલ વિજેટ અને તેના નિયંત્રક વચ્ચે વહેંચેલ છે"
 
 #: ../gtk/gtkscrollable.c:111
 msgid "Vertical adjustment"
@@ -5560,7 +5559,7 @@ msgstr "ઊભી ગોઠવણી"
 msgid ""
 "Vertical adjustment that is shared between the scrollable widget and its "
 "controller"
-msgstr ""
+msgstr "ઊભુ ગોઠવણ કે સ્ક્રોલ વિજેટ અને તેના નિયંત્રક વચ્ચે વહેંચવામાં આવેલ છે"
 
 #: ../gtk/gtkscrollable.c:128
 #| msgid "Horizontal Scrollbar Policy"
@@ -5681,14 +5680,13 @@ msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr "ખસેડવાની પટ્ટી અને ખસેડાયેલી વિન્ડો વચ્ચે પિક્સેલની સંખ્યા"
 
 #: ../gtk/gtkscrolledwindow.c:462
-#, fuzzy
 #| msgid "Minimum Width"
 msgid "Minimum Content Width"
-msgstr "ન્યૂનતમ પહોળાઈ"
+msgstr "ન્યૂનત્તમ સમાવિષ્ટ પહોળાઈ"
 
 #: ../gtk/gtkscrolledwindow.c:463
 msgid "The minimum width that the scrolled window will allocate to its content"
-msgstr ""
+msgstr "ન્યૂનત્તમ પહોળાઇ કે જે ખેસેડેલ વિન્ડોને તેનાં સમાવિષ્ટમાં ફાળવેલ હશે"
 
 #: ../gtk/gtkscrolledwindow.c:477
 #| msgid "Minimum child height"
@@ -5697,7 +5695,7 @@ msgstr "ન્યૂનત્તમ સમાવિષ્ટ ઊંચાઇ"
 
 #: ../gtk/gtkscrolledwindow.c:478
 msgid "The minimum height that the scrolled window will allocate to its content"
-msgstr ""
+msgstr "ન્યૂનત્તમ ઊંચાઇ કે જે ખેસેડેલ વિન્ડોને તેનાં સમાવિષ્ટમાં ફાળવેલ હશે"
 
 #: ../gtk/gtkscrolledwindow.c:493
 msgid "Kinetic Scrolling"
@@ -6177,6 +6175,8 @@ msgid ""
 "Whether mnemonics should be automatically shown and hidden when the user "
 "presses the mnemonic activator."
 msgstr ""
+"શું mnemonics આપમેળે બતાવેલ અને છુપાયેલ હોવુ જોઇએ જ્યારે વપરાશકર્તા mnemonic સક્રિયકર્તાને "
+"દબાવે."
 
 #: ../gtk/gtksettings.c:1174
 #, fuzzy
@@ -6186,7 +6186,7 @@ msgstr "પ્રાથમિક આઇકોન સંવેદનશીલ"
 
 #: ../gtk/gtksettings.c:1175
 msgid "Whether a primary click on the trough should warp the slider into position"
-msgstr ""
+msgstr "શું ચાટ પર પ્રાથમિક ક્લિક સ્થિતિ માં આ બદલવા માટે સ્લાઇડર વીંટાળેલ હોવી જોઈએ"
 
 #: ../gtk/gtksettings.c:1191
 #, fuzzy
@@ -6199,6 +6199,7 @@ msgid ""
 "Whether 'focus rectangles' should be hidden until the user starts to use the "
 "keyboard."
 msgstr ""
+"શું 'focus rectangles' છુપાયેલ હોવા જોઇએ જ્યાં સુધી વપરાશકર્તા કિબોર્ડ વાપરવાનું શરૂ કરે."
 
 #: ../gtk/gtksettings.c:1218
 msgid "Application prefers a dark theme"
@@ -6507,10 +6508,9 @@ msgid "Whether the switch is on or off"
 msgstr "શું સ્વીચ ચાલુ અથવા બંધ છે"
 
 #: ../gtk/gtkswitch.c:869
-#, fuzzy
 #| msgid "The minimum value of the adjustment"
 msgid "The minimum width of the handle"
-msgstr "સ્તંભ માટે ન્યૂનતમ માન્ય રાખેલી પહોળાઈ"
+msgstr " સંચાલનની ન્યૂનત્તમ પહોળાઇ"
 
 #: ../gtk/gtktextbuffer.c:201
 msgid "Tag Table"
@@ -6569,7 +6569,7 @@ msgstr "વિન્ડો"
 
 #: ../gtk/gtktexthandle.c:473
 msgid "Window the coordinates are based upon"
-msgstr ""
+msgstr "વિન્ડો નિર્દેશાંક પર આધારિત છે"
 
 #: ../gtk/gtktextmark.c:127
 msgid "Mark name"
@@ -7143,23 +7143,20 @@ msgid "New Row"
 msgstr "નવી હારમાળા"
 
 #: ../gtk/gtktoolitemgroup.c:1672
-#, fuzzy
 msgid "Whether the item should start a new row"
-msgstr "શું વસ્તુઓ સંખ્યા સાથે દર્શાવવી જોઈએ"
+msgstr "શું વસ્તુઓ નવા હારમાળાને શરૂ કરવુ જોઇએ"
 
 #: ../gtk/gtktoolitemgroup.c:1679
 msgid "Position of the item within this group"
 msgstr "આ જૂથમાં વસ્તુનુ સ્થાન"
 
 #: ../gtk/gtktoolpalette.c:1014
-#, fuzzy
 msgid "Size of icons in this tool palette"
-msgstr "આ સાધનપટ્ટીમાંના ચિહ્નોનું માપ"
+msgstr "આ સાધન પેલેટમાં ચિહ્નોનું માપ"
 
 #: ../gtk/gtktoolpalette.c:1044
-#, fuzzy
 msgid "Style of items in the tool palette"
-msgstr "સાધન દર્શક પટ્ટીની ચારેબાજુના ઉઠાવ નો પ્રકાર"
+msgstr "સાધન પેલેટમાં વસ્તુઓની શૈલી"
 
 #: ../gtk/gtktoolpalette.c:1060
 msgid "Exclusive"
@@ -7176,9 +7173,8 @@ msgid "Whether the item group should receive extra space when the palette grows"
 msgstr "શું પિતૃનો વિકાસ થાય ત્યારે બાળને વધારાની જગ્યા મળવી જોઈએ"
 
 #: ../gtk/gtktrayicon-x11.c:136
-#, fuzzy
 msgid "Foreground color for symbolic icons"
-msgstr "અગ્ર ભાગના રંગને વાક્ય તરીકે"
+msgstr "સાંકેતિક ચિહનો માટે અગ્રભાગ રંગ"
 
 #: ../gtk/gtktrayicon-x11.c:143
 msgid "Error color"
@@ -7197,9 +7193,8 @@ msgid "Warning color for symbolic icons"
 msgstr "સાંકેતિક ચિહ્નો માટે ચેતવણી રંગ"
 
 #: ../gtk/gtktrayicon-x11.c:159
-#, fuzzy
 msgid "Success color"
-msgstr "કર્સર નો રંગ"
+msgstr "સફળ રંગ"
 
 #: ../gtk/gtktrayicon-x11.c:160
 msgid "Success color for symbolic icons"
@@ -7216,7 +7211,7 @@ msgstr "ચિહ્ન માપ"
 
 #: ../gtk/gtktrayicon-x11.c:178
 msgid "The pixel size that icons should be forced to, or zero"
-msgstr ""
+msgstr "પિક્સેલ માપ કે જે ચિહ્નોને દબાણ કરવુ જોઇએ, અથવા શૂન્ય છે"
 
 #: ../gtk/gtktreemenu.c:290
 msgid "TreeMenu model"
@@ -7583,15 +7578,13 @@ msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr "વ્યુપોર્ટની આસપાસ છાયા પેટી કેવી રીતે દોરાઇ છે તે નક્કી કરે છે"
 
 #: ../gtk/gtkvolumebutton.c:155
-#, fuzzy
 msgid "Use symbolic icons"
-msgstr "અગ્ર ભાગના રંગને વાક્ય તરીકે"
+msgstr "સાંકેતિક ચિહ્નોને વાપરો"
 
 #: ../gtk/gtkvolumebutton.c:156
-#, fuzzy
 #| msgid "Whether the cursor should blink"
 msgid "Whether to use symbolic icons"
-msgstr "શું કર્સરને ઝબકતુ કરવુ જોઈએ"
+msgstr "શું સાંકેતિક ચિહ્નોને વાપરવુ"
 
 #: ../gtk/gtkwidget.c:985
 msgid "Widget name"
@@ -7771,18 +7764,16 @@ msgid "Margin on Right"
 msgstr "જમણી બાજુ હાંસિયો"
 
 #: ../gtk/gtkwidget.c:1271
-#, fuzzy
 msgid "Pixels of extra space on the right side"
-msgstr "ફકરાની ઉપર ખાલી જગ્યાના પિક્સેલ"
+msgstr "જમણી બાજુ પર વધારાની જગ્યાનાં પિક્સેલ"
 
 #: ../gtk/gtkwidget.c:1291
 msgid "Margin on Top"
 msgstr "ટોચે હાંસિયો"
 
 #: ../gtk/gtkwidget.c:1292
-#, fuzzy
 msgid "Pixels of extra space on the top side"
-msgstr "ફકરાની ઉપર ખાલી જગ્યાના પિક્સેલ"
+msgstr "ટોચની બાજુ પર વધારાની જગ્યાનાં પિક્સેલ"
 
 #: ../gtk/gtkwidget.c:1312
 msgid "Margin on Bottom"
@@ -7816,20 +7807,18 @@ msgid "Horizontal Expand Set"
 msgstr "આડી કતારબંધ ગોઠવણી"
 
 #: ../gtk/gtkwidget.c:1380
-#, fuzzy
 #| msgid "Whether to use the related actions appearance properties"
 msgid "Whether to use the hexpand property"
-msgstr "ક્યાંતો સંબંધિત ક્રિયાઓ દેખાતા ગુણધર્મોને વાપરે છે"
+msgstr "શું hexpand ગુણધર્મને વાપરવું"
 
 #: ../gtk/gtkwidget.c:1394
 msgid "Vertical Expand"
 msgstr "ઊભી દિશામાં વધારો"
 
 #: ../gtk/gtkwidget.c:1395
-#, fuzzy
 #| msgid "Whether the widget is visible"
 msgid "Whether widget wants more vertical space"
-msgstr "શું વિજેટ દૃશ્યમાન છે"
+msgstr "શું વિજેટને વધારે ઊભી જગ્યાની જરૂર છે"
 
 #: ../gtk/gtkwidget.c:1409
 #, fuzzy
@@ -7838,20 +7827,18 @@ msgid "Vertical Expand Set"
 msgstr "ઊભી કતારબંધ ગોઠવણી"
 
 #: ../gtk/gtkwidget.c:1410
-#, fuzzy
 #| msgid "Whether to use the related actions appearance properties"
 msgid "Whether to use the vexpand property"
-msgstr "ક્યાંતો સંબંધિત ક્રિયાઓ દેખાતા ગુણધર્મોને વાપરે છે"
+msgstr "શું vexpand ગુણધર્મને વાપરવુ"
 
 #: ../gtk/gtkwidget.c:1424
 msgid "Expand Both"
 msgstr "બંને બાજુ વિસ્તારો"
 
 #: ../gtk/gtkwidget.c:1425
-#, fuzzy
 #| msgid "Whether the widget has the input focus"
 msgid "Whether widget wants to expand in both directions"
-msgstr "શું વિજેટની પાસે પ્રકાશિત ઈનપુટ છે"
+msgstr "શું વિજેટ બંને બાજુમાં વિસ્તારવાની ઇચ્છા રાખે છે"
 
 #: ../gtk/gtkwidget.c:3146
 msgid "Interior Focus"
@@ -7983,16 +7970,14 @@ msgid "The length of vertical scroll arrows"
 msgstr "ઊભી સરકાવવાની તીરોની લંબાઈ"
 
 #: ../gtk/gtkwidget.c:3301 ../gtk/gtkwidget.c:3302
-#, fuzzy
 #| msgid "Width of handle"
 msgid "Width of text selection handles"
-msgstr "હેન્ડલની પહોળાઈ"
+msgstr "લખાણ પસંદગી સંચાલનની પહોળાઇ"
 
 #: ../gtk/gtkwidget.c:3307 ../gtk/gtkwidget.c:3308
-#, fuzzy
 #| msgid "The title of the font selection dialog"
 msgid "Height of text selection handles"
-msgstr "ફોન્ટ પસંદગી સંવાદનું શીર્ષક"
+msgstr "લખાણ પસંદગી સંચાલનની ઊંચાઇ"
 
 #: ../gtk/gtkwindow.c:619
 msgid "Window Type"
@@ -8239,10 +8224,9 @@ msgid "Attached to Widget"
 msgstr "વિજેટ સાથે જોડાયેલ છે"
 
 #: ../gtk/gtkwindow.c:992
-#, fuzzy
 #| msgid "The widget the menu is attached to"
 msgid "The widget where the window is attached"
-msgstr "શું મેનુની વિજેટ જોડાયેલ છે"
+msgstr "વિજેટ જ્યાં વિન્ડો જોડાયેલ છે"
 
 #: ../gtk/gtkwindow.c:1007
 msgid "Opacity for Window"
