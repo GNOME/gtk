@@ -2435,7 +2435,15 @@ propagate_event_down (GtkWidget *widget,
       widget = (GtkWidget *)l->data;
 
       if (!gtk_widget_is_sensitive (widget))
-        handled_event = TRUE;
+        {
+          /* stop propagating on SCROLL, but don't handle the event, so it
+           * can propagate up again and reach its handling widget
+           */
+          if (event->type == GDK_SCROLL)
+            break;
+          else
+            handled_event = TRUE;
+        }
       else
         handled_event = _gtk_widget_captured_event (widget, event);
     }
