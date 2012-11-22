@@ -1651,6 +1651,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::show:
    * @widget: the object which received the signal.
+   *
+   * The ::show signal is emitted when @widget is shown, for example with
+   * gtk_widget_show().
    */
   widget_signals[SHOW] =
     g_signal_new (I_("show"),
@@ -1664,6 +1667,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::hide:
    * @widget: the object which received the signal.
+   *
+   * The ::hide signal is emitted when @widget is hidden, for example with
+   * gtk_widget_hide().
    */
   widget_signals[HIDE] =
     g_signal_new (I_("hide"),
@@ -1677,6 +1683,16 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::map:
    * @widget: the object which received the signal.
+   *
+   * The ::map signal is emitted when @widget is going to be mapped, that is
+   * when the widget is visible (which is controlled with
+   * gtk_widget_set_visible()) and all its parents up to the toplevel widget
+   * are also visible. Once the map has occurred, #GtkWidget::map-event will
+   * be emitted.
+   *
+   * The ::map signal can be used to determine whether a widget will be drawn,
+   * for instance it can resume an animation that was stopped during the
+   * emission of #GtkWidget::unmap.
    */
   widget_signals[MAP] =
     g_signal_new (I_("map"),
@@ -1690,6 +1706,13 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::unmap:
    * @widget: the object which received the signal.
+   *
+   * The ::unmap signal is emitted when @widget is going to be unmapped, which
+   * means that either it or any of its parents up to the toplevel widget have
+   * been set as hidden.
+   *
+   * As ::unmap indicates that a widget will not be shown any longer, it can be
+   * used to, for example, stop an animation on the widget.
    */
   widget_signals[UNMAP] =
     g_signal_new (I_("unmap"),
@@ -1703,6 +1726,10 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::realize:
    * @widget: the object which received the signal.
+   *
+   * The ::realize signal is emitted when @widget is associated with a
+   * #GdkWindow, which means that gtk_wiget_realize() has been called or the
+   * widget has been mapped (that is, it is going to be drawn).
    */
   widget_signals[REALIZE] =
     g_signal_new (I_("realize"),
@@ -1716,6 +1743,11 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget::unrealize:
    * @widget: the object which received the signal.
+   *
+   * The ::unrealize signal is emitted when the #GdkWindow associated with
+   * @widget is destroyed, which means that gtk_widget_unrealize() has been
+   * called or the widget has been unmapped (that is, it is going to be
+   * hidden).
    */
   widget_signals[UNREALIZE] =
     g_signal_new (I_("unrealize"),
