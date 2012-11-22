@@ -168,12 +168,12 @@
  * /&ast; Fill the list store with data &ast;/
  * populate_model (list_store);
  *
- * /&ast; Get the first iter in the list &ast;/
- * valid = gtk_tree_model_get_iter_first (list_store, &amp;iter);
- *
- * while (valid)
+ * /&ast; Get the first iter in the list, check it is valid and walk
+ *  &ast; through the list, reading each row. &ast;/
+ * for (valid = gtk_tree_model_get_iter_first (list_store, &amp;iter);
+ *      valid;
+ *      valid = gtk_tree_model_iter_next (list_store, &amp;iter))
  *  {
- *    /&ast; Walk through the list, reading each row &ast;/
  *    gchar *str_data;
  *    gint   int_data;
  *
@@ -190,7 +190,6 @@
  *    g_free (str_data);
  *
  *    row_count++;
- *    valid = gtk_tree_model_iter_next (list_store, &amp;iter);
  *  }
  * </programlisting>
  * </example>
