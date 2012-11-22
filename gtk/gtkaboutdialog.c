@@ -2664,7 +2664,7 @@ gtk_about_dialog_get_license_type (GtkAboutDialog *about)
  * gtk_about_dialog_add_credit_section:
  * @about: A #GtkAboutDialog
  * @section_name: The name of the section
- * @people: The people who belong to that section
+ * @people: (array zero-terminated=1): The people who belong to that section
  *
  * Creates a new section in the Credits page.
  *
