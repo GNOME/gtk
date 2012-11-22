@@ -1960,7 +1960,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * button press events for buttons 4 and 5 when the wheel is turned.
    *
    * To receive this signal, the #GdkWindow associated to the widget needs
-   * to enable the #GDK_BUTTON_PRESS_MASK mask.
+   * to enable the #GDK_SCROLL_MASK mask.
    *
    * This signal will be sent to the grab widget if there is one.
    *
