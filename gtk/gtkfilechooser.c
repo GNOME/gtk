@@ -1032,8 +1032,9 @@ gtk_file_chooser_get_create_folders (GtkFileChooser *chooser)
  * @chooser: a #GtkFileChooser
  * 
  * Gets the filename for the currently selected file in
- * the file selector. If multiple files are selected,
- * one of the filenames will be returned at random.
+ * the file selector. The filename is returned as an absolute path. If
+ * multiple files are selected, one of the filenames will be returned at
+ * random.
  *
  * If the file chooser is in folder mode, this function returns the selected
  * folder.
