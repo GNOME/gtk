@@ -1772,15 +1772,21 @@ gtk_css_style_provider_get_change (GtkStyleProviderPrivate *provider,
   GtkCssProviderPrivate *priv;
   GtkCssChange change = 0;
   int i;
+  guint *refs;
+  guint num_refs;
 
   css_provider = GTK_CSS_PROVIDER (provider);
   priv = css_provider->priv;
 
-  for (i = priv->rulesets->len - 1; i >= 0; i--)
+  refs = find_possible_rules (priv->rulesets_tree, matcher, &num_refs);
+  if (num_refs == 0)
+    return change;
+
+  for (i = num_refs - 1; i >= 0; i--)
     {
       GtkCssRuleset *ruleset;
 
-      ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, i);
+      ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, refs[i]);
 
       if (ruleset->styles == NULL)
         continue;
@@ -1790,6 +1796,8 @@ gtk_css_style_provider_get_change (GtkStyleProviderPrivate *provider,
 
       change |= gtk_css_ruleset_get_change (ruleset);
     }
+
+  g_free (refs);
 
   return change;
 }
