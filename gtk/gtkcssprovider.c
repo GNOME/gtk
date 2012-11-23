@@ -1596,6 +1596,117 @@ gtk_css_style_provider_get_keyframes (GtkStyleProviderPrivate *provider,
 }
 
 static void
+collect_possible_rules (GPtrArray *rules_lists,
+			GtkCssRulesetsTree *tree,
+			const GtkCssMatcher *matcher)
+{
+  if (tree == NULL)
+    return;
+
+  switch (tree->type)
+    {
+    case RULESETS_TREE_TYPE_RULES:
+      g_ptr_array_add (rules_lists, &tree->u.rules);
+      break;
+    case RULESETS_TREE_TYPE_STATE:
+      if ((_gtk_css_matcher_get_state (matcher) & tree->u.state.state) == tree->u.state.state)
+	collect_possible_rules (rules_lists,
+				tree->u.state.matched,
+				matcher);
+      break;
+    case RULESETS_TREE_TYPE_CLASS:
+      if (_gtk_css_matcher_has_class (matcher, tree->u.class.class))
+	collect_possible_rules (rules_lists,
+				tree->u.class.matched,
+				matcher);
+      break;
+    }
+
+  collect_possible_rules (rules_lists,
+			  tree->next,
+			  matcher);
+}
+
+/* Merged two pre-sorted arrays of uints, assumes enough space in destination to fit a_len + b_len */
+static void
+merge_uints (guint *dest, const guint *a, int a_len, const guint* b, int b_len)
+{
+  const guint *a_end = a + a_len;
+  const guint *b_end = b + b_len;
+
+  while (a != a_end ||
+	 b != b_end)
+    {
+      if (a == a_end)
+	{
+	  memcpy (dest, b, sizeof (guint) * (b_end - b));
+	  break;
+	}
+      else if (b == b_end)
+	{
+	  memcpy (dest, a, sizeof (guint) * (a_end - a));
+	  break;
+	}
+      else if (*a <= *b)
+	*dest++ = *a++;
+      else
+	*dest++ = *b++;
+    }
+}
+
+static guint *
+find_possible_rules (GtkCssRulesetsTree *tree,
+		     const GtkCssMatcher *matcher,
+		     guint *num_refs_out)
+{
+  GPtrArray *rules_lists;
+  gint i;
+  guint *merged, *tmp_refs, *swap_ptr;
+  guint merged_size;
+  guint num_refs;
+
+  /* Collect all possible rules from the tree */
+  rules_lists = g_ptr_array_new ();
+  collect_possible_rules (rules_lists, tree, matcher);
+
+  /* Merge the separate sorted lists into one list */
+  num_refs = 0;
+  for (i = 0; i  < rules_lists->len; i++)
+    {
+      GtkCssRulesetList *list = (GtkCssRulesetList *)rules_lists->pdata[i];
+      num_refs += list->num_rules;
+    }
+
+  merged = g_new (guint, num_refs);
+  merged_size = 0;
+  tmp_refs = g_new (guint, num_refs);
+
+  /* Merge the already sorted refs list */
+  for (i = 0; i  < rules_lists->len; i++)
+    {
+      GtkCssRulesetList *list = (GtkCssRulesetList *)rules_lists->pdata[i];
+
+      if (i == 0)
+	memcpy (merged, list->rules, sizeof (*list->rules) * list->num_rules);
+      else
+	{
+	  merge_uints (tmp_refs, merged, merged_size, list->rules, list->num_rules);
+	  swap_ptr = merged;
+	  merged = tmp_refs;
+	  tmp_refs = swap_ptr;
+	}
+
+      merged_size += list->num_rules;
+    }
+
+  g_free (tmp_refs);
+  g_ptr_array_free (rules_lists, TRUE);
+
+  *num_refs_out = num_refs;
+  return merged;
+}
+
+static void
 gtk_css_style_provider_lookup (GtkStyleProviderPrivate *provider,
                                const GtkCssMatcher     *matcher,
                                GtkCssLookup            *lookup)
@@ -1604,6 +1715,9 @@ gtk_css_style_provider_lookup (GtkStyleProviderPrivate *provider,
   GtkCssProviderPrivate *priv;
   GtkCssRuleset *ruleset;
   guint j;
+  gint i;
+  guint *refs;
+  guint num_refs;
 
   css_provider = GTK_CSS_PROVIDER (provider);
   priv = css_provider->priv;
@@ -1611,10 +1725,14 @@ gtk_css_style_provider_lookup (GtkStyleProviderPrivate *provider,
   if (priv->rulesets->len == 0)
     return;
 
-  for (ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, priv->rulesets->len - 1);
-       ruleset >= &g_array_index (priv->rulesets, GtkCssRuleset, 0);
-       ruleset--)
+  refs = find_possible_rules (priv->rulesets_tree, matcher, &num_refs);
+  if (num_refs == 0)
+    return;
+
+  for (i = num_refs - 1; i >= 0; i--)
     {
+      ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, refs[i]);
+
       if (ruleset->styles == NULL)
         continue;
 
@@ -1642,6 +1760,8 @@ gtk_css_style_provider_lookup (GtkStyleProviderPrivate *provider,
       if (_gtk_bitmask_is_empty (_gtk_css_lookup_get_missing (lookup)))
         break;
     }
+
+  g_free (refs);
 }
 
 static GtkCssChange
