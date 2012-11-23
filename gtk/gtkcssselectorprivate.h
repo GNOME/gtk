@@ -40,6 +40,11 @@ gboolean          _gtk_css_selector_matches         (const GtkCssSelector   *sel
 int               _gtk_css_selector_compare         (const GtkCssSelector   *a,
                                                      const GtkCssSelector   *b);
 
+GtkStateFlags     _gtk_css_selector_get_primary_state_flags (const GtkCssSelector *selector);
+GQuark *          _gtk_css_selector_get_primary_classes     (const GtkCssSelector *selector);
+gboolean          _gtk_css_selector_has_primary_class       (const GtkCssSelector *selector,
+							     GQuark                class);
+
 G_END_DECLS
 
 #endif /* __GTK_CSS_SELECTOR_PRIVATE_H__ */
