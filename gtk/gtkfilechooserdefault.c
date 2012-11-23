@@ -10574,9 +10574,11 @@ search_shortcut_handler (GtkFileChooserDefault *impl)
 static void
 recent_shortcut_handler (GtkFileChooserDefault *impl)
 {
-#if REMOVE_FOR_PLACES_SIDEBAR
-  switch_to_shortcut (impl, shortcuts_get_index (impl, SHORTCUTS_RECENT));
-#endif
+  GFile *recent;
+
+  recent = g_file_new_for_uri ("recent:///");
+  change_folder_and_display_error (impl, recent, FALSE);
+  g_object_unref (recent);
 }
 
 static void
