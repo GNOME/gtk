@@ -994,6 +994,37 @@ struct GtkCssRuleset
   guint owns_widget_style : 1;
 };
 
+enum RulesetsTreeType {
+  RULESETS_TREE_TYPE_STATE,
+  RULESETS_TREE_TYPE_CLASS,
+  RULESETS_TREE_TYPE_RULES
+};
+
+typedef struct _GtkCssRulesetList GtkCssRulesetList;
+typedef struct _GtkCssRulesetsTree GtkCssRulesetsTree;
+
+struct _GtkCssRulesetList {
+  guint *rules;
+  guint num_rules;
+};
+
+struct _GtkCssRulesetsTree
+{
+  enum RulesetsTreeType type;
+  union {
+    GtkCssRulesetList rules;
+    struct {
+      GtkCssRulesetsTree *matched;
+      GtkStateFlags state;
+    } state;
+    struct {
+      GtkCssRulesetsTree *matched;
+      GQuark class;
+    } class;
+  } u;
+  GtkCssRulesetsTree *next;
+};
+
 struct _GtkCssScanner
 {
   GtkCssProvider *provider;
@@ -1011,6 +1042,8 @@ struct _GtkCssProviderPrivate
   GHashTable *keyframes;
 
   GArray *rulesets;
+  guint *rulesets_refs;
+  GtkCssRulesetsTree *rulesets_tree;
   GResource *resource;
 };
 
@@ -1027,6 +1060,7 @@ static void gtk_css_provider_finalize (GObject *object);
 static void gtk_css_style_provider_iface_init (GtkStyleProviderIface *iface);
 static void gtk_css_style_provider_private_iface_init (GtkStyleProviderPrivateInterface *iface);
 static void widget_property_value_list_free (WidgetPropertyValue *head);
+static void gtk_css_rulesets_tree_free (GtkCssRulesetsTree *tree);
 
 static gboolean
 gtk_css_provider_load_internal (GtkCssProvider *css_provider,
@@ -1663,6 +1697,8 @@ gtk_css_provider_finalize (GObject *object)
     gtk_css_ruleset_clear (&g_array_index (priv->rulesets, GtkCssRuleset, i));
 
   g_array_free (priv->rulesets, TRUE);
+  g_free (priv->rulesets_refs);
+  gtk_css_rulesets_tree_free (priv->rulesets_tree);
 
   g_hash_table_destroy (priv->symbolic_colors);
   g_hash_table_destroy (priv->keyframes);
@@ -1796,6 +1832,11 @@ gtk_css_provider_reset (GtkCssProvider *css_provider)
 
   g_hash_table_remove_all (priv->symbolic_colors);
   g_hash_table_remove_all (priv->keyframes);
+
+  g_free (priv->rulesets_refs);
+  priv->rulesets_refs = NULL;
+  gtk_css_rulesets_tree_free (priv->rulesets_tree);
+  priv->rulesets_tree = NULL;
 
   for (i = 0; i < priv->rulesets->len; i++)
     gtk_css_ruleset_clear (&g_array_index (priv->rulesets, GtkCssRuleset, i));
@@ -2431,11 +2472,244 @@ gtk_css_provider_compare_rule (gconstpointer a_,
 }
 
 static void
+gtk_css_rulesets_tree_free (GtkCssRulesetsTree *tree)
+{
+  if (tree == NULL)
+    return;
+
+  switch (tree->type)
+    {
+    case RULESETS_TREE_TYPE_RULES:
+      break;
+    case RULESETS_TREE_TYPE_STATE:
+      gtk_css_rulesets_tree_free (tree->u.state.matched);
+      break;
+    case RULESETS_TREE_TYPE_CLASS:
+      gtk_css_rulesets_tree_free (tree->u.class.matched);
+      break;
+    }
+
+  gtk_css_rulesets_tree_free (tree->next);
+}
+
+static gint
+compare_refs_by_val (gconstpointer  pa,
+		     gconstpointer  pb,
+		     gpointer       user_data)
+{
+  guint a = *(guint *)pa;
+  guint b = *(guint *)pb;
+
+  return a - b;
+}
+
+static GtkCssRulesetsTree *
+subdivide_by_none (GtkCssProviderPrivate *priv, guint *refs, guint start, guint end)
+{
+  GtkCssRulesetsTree *tree;
+
+  tree = g_new0 (GtkCssRulesetsTree, 1);
+  tree->type = RULESETS_TREE_TYPE_RULES;
+  tree->u.rules.rules = refs + start;
+  tree->u.rules.num_rules = end - start;
+  tree->next = NULL;
+
+  /* Sort by rule index (i.e. css prio order) */
+  g_qsort_with_data (tree->u.rules.rules,
+		     tree->u.rules.num_rules,
+		     sizeof (guint),
+		     compare_refs_by_val,
+		     NULL);
+
+  return tree;
+}
+
+typedef struct {
+  GQuark class;
+  guint count;
+} GtkCssPseudoClassCount;
+
+static gint
+compare_class_count (gconstpointer  pa,
+		     gconstpointer  pb,
+		     gpointer       user_data)
+{
+  GtkCssPseudoClassCount *a = (GtkCssPseudoClassCount *)pa;
+  GtkCssPseudoClassCount *b = (GtkCssPseudoClassCount *)pb;
+
+  return b->count - a->count;
+}
+
+static GtkCssRulesetsTree *
+subdivide_by_class (GtkCssProviderPrivate *priv, guint *refs, guint start, guint end)
+{
+  GHashTable *count_ht;
+  GHashTableIter iter;
+  guint i, j, n_classes;
+  gpointer key, value;
+  GtkCssPseudoClassCount *class_count;
+  GtkCssRulesetsTree *tree;
+  GtkCssRulesetsTree *trees = NULL;
+
+  count_ht = g_hash_table_new (g_direct_hash, g_direct_equal);
+
+  for (i = start; i < end; i++)
+    {
+      GtkCssSelector *selector = g_array_index (priv->rulesets, GtkCssRuleset, refs[i]).selector;
+      GQuark *classes = _gtk_css_selector_get_primary_classes (selector);
+
+      for (j = 0; classes[j] != 0; j++)
+	{
+	  guint count = GPOINTER_TO_INT (g_hash_table_lookup (count_ht, GUINT_TO_POINTER (classes[j])));
+	  g_hash_table_replace (count_ht, GUINT_TO_POINTER (classes[j]), GUINT_TO_POINTER (count + 1));
+	}
+      g_free (classes);
+    }
+
+  n_classes = 0;
+  class_count = g_new (GtkCssPseudoClassCount, g_hash_table_size (count_ht));
+
+  g_hash_table_iter_init (&iter, count_ht);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      guint count = GPOINTER_TO_UINT (value);
+      /* Random cuttoff point here. Obviously if any given class has only one item
+	 with it, then adding a check doesn't help, and it uses memory. Where
+	 is the inflexion point? Lets make it 3... */
+      if (count >= 3)
+	{
+	  class_count[n_classes].class = GPOINTER_TO_UINT (key);
+	  class_count[n_classes].count = count;
+	  n_classes++;
+	}
+    }
+
+  g_hash_table_destroy (count_ht);
+
+  /* Sort largest class counts first */
+  g_qsort_with_data (class_count,
+		     n_classes,
+		     sizeof (*class_count),
+		     compare_class_count,
+		     NULL);
+
+  for (i = 0; i < n_classes; i++)
+    {
+      guint split = start;
+      for (j = start; j < end; j++)
+	{
+	  GtkCssSelector *selector = g_array_index (priv->rulesets, GtkCssRuleset, refs[j]).selector;
+
+	  if (_gtk_css_selector_has_primary_class (selector, class_count[i].class))
+	    {
+	      guint tmp = refs[split];
+	      refs[split] = refs[j];
+	      refs[j] = tmp;
+	      split++;
+	    }
+	}
+      /* Check size again sice nodes may have been used in other trees */
+      if (split - start > 3)
+	{
+	  tree = g_new (GtkCssRulesetsTree, 1);
+	  tree->type = RULESETS_TREE_TYPE_CLASS;
+	  tree->u.class.matched = subdivide_by_none (priv, refs, start, split);
+	  tree->u.class.class = class_count[i].class;
+
+	  tree->next = trees;
+	  trees = tree;
+	  start = split;
+	}
+    }
+
+  g_free (class_count);
+
+  if (start != end)
+    {
+      tree = subdivide_by_none (priv, refs, start, end);
+      tree->next = trees;
+      trees = tree;
+    }
+
+  return trees;
+}
+
+
+static GtkCssRulesetsTree *
+subdivide_by_state (GtkCssProviderPrivate *priv, guint *refs, guint start, guint end, guint state)
+{
+  GtkCssRulesetsTree *tree;
+  guint i;
+
+  if (end == start)
+    return NULL;
+
+  if (state == 0)
+    return subdivide_by_class (priv, refs, start, end);
+
+  // Find first non-set flag
+  for (i = start; i < end; i++)
+    {
+      GtkCssSelector *selector = g_array_index (priv->rulesets, GtkCssRuleset, refs[i]).selector;
+      if ((_gtk_css_selector_get_primary_state_flags (selector) & state) == 0)
+	break;
+    }
+
+  if (i == start || i == end) /* All or none set, no use subdividing by this */
+    return subdivide_by_state (priv, refs, start, end, state >> 1);
+
+  tree = g_new (GtkCssRulesetsTree, 1);
+  tree->type = RULESETS_TREE_TYPE_STATE;
+  tree->u.state.matched = subdivide_by_state (priv, refs, start, i, state >> 1);
+  tree->u.state.state = state;
+
+  tree->next = subdivide_by_state (priv, refs, i, end, state >> 1);
+
+  return tree;
+}
+
+static gint
+compare_refs_by_flags (gconstpointer  pa,
+		       gconstpointer  pb,
+		       gpointer       user_data)
+{
+  guint a = *(guint *)pa;
+  guint b = *(guint *)pb;
+  GArray *rulesets = user_data;
+  GtkCssSelector *selector_a, *selector_b;
+  guint32 flags_a, flags_b;
+
+  selector_a = g_array_index (rulesets, GtkCssRuleset, a).selector;
+  selector_b = g_array_index (rulesets, GtkCssRuleset, b).selector;
+
+  flags_a = _gtk_css_selector_get_primary_state_flags (selector_a);
+  flags_b = _gtk_css_selector_get_primary_state_flags (selector_b);
+
+  return flags_b - flags_a;
+}
+
+static void
 gtk_css_provider_postprocess (GtkCssProvider *css_provider)
 {
   GtkCssProviderPrivate *priv = css_provider->priv;
+  guint *refs, i;
 
   g_array_sort (priv->rulesets, gtk_css_provider_compare_rule);
+
+  refs = g_new (guint, priv->rulesets->len);
+  priv->rulesets_refs = refs;
+
+  for (i = 0; i < priv->rulesets->len; i++)
+    refs[i] = i;
+
+  /* Sort by flags, so that high bits set is sorted first at each level */
+  g_qsort_with_data (refs,
+		     priv->rulesets->len,
+		     sizeof (guint),
+		     compare_refs_by_flags,
+		     priv->rulesets);
+
+  priv->rulesets_tree = subdivide_by_state (priv, refs, 0, priv->rulesets->len, GTK_STATE_FLAG_BACKDROP);
 }
 
 static gboolean
