@@ -27,6 +27,7 @@
 
 #include "config.h"
 #include <stdlib.h>
+#include <windows.h>
 
 #include "gdk.h"
 #include "gdkwindowimpl.h"
@@ -1533,7 +1534,7 @@ gdk_win32_window_set_urgency_hint (GdkWindow *window,
 			     gboolean   urgent)
 {
   FLASHWINFO flashwinfo;
-  typedef BOOL (*PFN_FlashWindowEx) (FLASHWINFO*);
+  typedef BOOL (WINAPI *PFN_FlashWindowEx) (FLASHWINFO*);
   PFN_FlashWindowEx flashWindowEx = NULL;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -3264,7 +3265,7 @@ gdk_win32_window_set_opacity (GdkWindow *window,
 			gdouble    opacity)
 {
   LONG exstyle;
-  typedef BOOL (*PFN_SetLayeredWindowAttributes) (HWND, COLORREF, BYTE, DWORD);
+  typedef BOOL (WINAPI *PFN_SetLayeredWindowAttributes) (HWND, COLORREF, BYTE, DWORD);
   PFN_SetLayeredWindowAttributes setLayeredWindowAttributes = NULL;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
