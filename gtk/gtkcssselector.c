@@ -430,18 +430,15 @@ gtk_css_selector_pseudoclass_state_print (const GtkCssSelector *selector,
   guint i, state;
 
   state = GPOINTER_TO_UINT (selector->data);
-  g_string_append_c (string, ':');
 
   for (i = 0; i < G_N_ELEMENTS (state_names); i++)
     {
       if (state == (1 << i))
         {
+	  g_string_append_c (string, ':');
           g_string_append (string, state_names[i]);
-          return;
         }
     }
-
-  g_assert_not_reached ();
 }
 
 static gboolean
@@ -950,9 +947,16 @@ parse_selector_pseudo_class (GtkCssParser   *parser,
       if (_gtk_css_parser_try (parser, pseudo_classes[i].name, FALSE))
         {
           if (pseudo_classes[i].state_flag)
-            selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_PSEUDOCLASS_STATE,
-                                             selector,
-                                             GUINT_TO_POINTER (pseudo_classes[i].state_flag));
+	    {
+	      /* Piggy back on previous pseudoclass if any */
+	      if (selector && selector->class == &GTK_CSS_SELECTOR_PSEUDOCLASS_STATE)
+		selector->data = GUINT_TO_POINTER (GPOINTER_TO_UINT (selector->data) |
+						   pseudo_classes[i].state_flag);
+	      else
+		selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_PSEUDOCLASS_STATE,
+						 selector,
+						 GUINT_TO_POINTER (pseudo_classes[i].state_flag));
+	    }
           else
             selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_PSEUDOCLASS_POSITION,
                                              selector,
