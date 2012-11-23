@@ -7545,6 +7545,19 @@ out:
 }
 
 static gboolean
+file_is_recent_uri (GFile *file)
+{
+  GFile *recent;
+  gboolean same;
+
+  recent = g_file_new_for_uri ("recent:///");
+  same = g_file_equal (file, recent);
+  g_object_unref (recent);
+
+  return same;
+}
+
+static gboolean
 gtk_file_chooser_default_update_current_folder (GtkFileChooser    *chooser,
 						GFile             *file,
 						gboolean           keep_trail,
@@ -7560,7 +7573,8 @@ gtk_file_chooser_default_update_current_folder (GtkFileChooser    *chooser,
 
   operation_mode_set (impl, OPERATION_MODE_BROWSE);
 
-  if (impl->local_only && !g_file_is_native (file))
+  if (impl->local_only && !g_file_is_native (file)
+      && !file_is_recent_uri (file)) /* GIO considers "recent:///" to be non-native; we special-case it so recent files *will* show up */
     {
       g_set_error_literal (error,
                            GTK_FILE_CHOOSER_ERROR,
