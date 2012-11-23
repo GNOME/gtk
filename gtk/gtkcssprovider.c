@@ -2817,6 +2817,30 @@ compare_refs_by_flags (gconstpointer  pa,
 }
 
 static void
+print_tree (GtkCssRulesetsTree *tree, int indent)
+{
+  if (tree == NULL)
+    return;
+
+  switch (tree->type)
+    {
+    case RULESETS_TREE_TYPE_RULES:
+      printf ("%*sCheck rules %p len %d\n", indent, "", tree->u.rules.rules, tree->u.rules.num_rules);
+      break;
+    case RULESETS_TREE_TYPE_STATE:
+      printf ("%*sMatch state 0x%x ->\n", indent, "", tree->u.state.state);
+      print_tree (tree->u.state.matched, indent + 4);
+      break;
+    case RULESETS_TREE_TYPE_CLASS:
+      printf ("%*sMatch class %s ->\n", indent, "", g_quark_to_string (tree->u.class.class));
+      print_tree (tree->u.class.matched, indent + 4);
+      break;
+    }
+
+  print_tree (tree->next, indent);
+}
+
+static void
 gtk_css_provider_postprocess (GtkCssProvider *css_provider)
 {
   GtkCssProviderPrivate *priv = css_provider->priv;
@@ -2838,6 +2862,11 @@ gtk_css_provider_postprocess (GtkCssProvider *css_provider)
 		     priv->rulesets);
 
   priv->rulesets_tree = subdivide_by_state (priv, refs, 0, priv->rulesets->len, GTK_STATE_FLAG_BACKDROP);
+  if (g_getenv ("GTK_CSS_DEBUG_TREE"))
+    {
+      g_print ("Rulesets tree for proviced %p (%d rules)\n", css_provider, priv->rulesets->len);
+      print_tree (priv->rulesets_tree, 1);
+    }
 }
 
 static gboolean
