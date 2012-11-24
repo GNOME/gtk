@@ -1494,23 +1494,9 @@ settings_ensure_style (GtkSettings *settings)
   g_free (font_name);
 }
 
-static GtkStyleProperties *
-gtk_settings_get_style (GtkStyleProvider *provider,
-                        GtkWidgetPath    *path)
-{
-  GtkSettings *settings;
-
-  settings = GTK_SETTINGS (provider);
-
-  settings_ensure_style (settings);
-
-  return g_object_ref (settings->priv->style);
-}
-
 static void
 gtk_settings_provider_iface_init (GtkStyleProviderIface *iface)
 {
-  iface->get_style = gtk_settings_get_style;
 }
 
 static GtkSymbolicColor *

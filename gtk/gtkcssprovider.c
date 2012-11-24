@@ -1409,69 +1409,6 @@ gtk_css_provider_init (GtkCssProvider *css_provider)
                                            (GDestroyNotify) _gtk_css_value_unref);
 }
 
-static void
-css_provider_dump_symbolic_colors (GtkCssProvider     *css_provider,
-                                   GtkStyleProperties *props)
-{
-  GtkCssProviderPrivate *priv;
-  GHashTableIter iter;
-  gpointer key, value;
-
-  priv = css_provider->priv;
-  g_hash_table_iter_init (&iter, priv->symbolic_colors);
-
-  while (g_hash_table_iter_next (&iter, &key, &value))
-    {
-      const gchar *name;
-      GtkSymbolicColor *color;
-
-      name = key;
-      color = value;
-
-      gtk_style_properties_map_color (props, name, color);
-    }
-}
-
-static GtkStyleProperties *
-gtk_css_provider_get_style (GtkStyleProvider *provider,
-                            GtkWidgetPath    *path)
-{
-  GtkCssMatcher matcher;
-  GtkCssProvider *css_provider;
-  GtkCssProviderPrivate *priv;
-  GtkStyleProperties *props;
-  guint i, j;
-
-  css_provider = GTK_CSS_PROVIDER (provider);
-  priv = css_provider->priv;
-  props = gtk_style_properties_new ();
-
-  css_provider_dump_symbolic_colors (css_provider, props);
-  if (_gtk_css_matcher_init (&matcher, path, 0))
-    {
-      for (i = 0; i < priv->rulesets->len; i++)
-        {
-          GtkCssRuleset *ruleset;
-
-          ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, i);
-
-          if (ruleset->styles == NULL)
-            continue;
-
-          if (!gtk_css_ruleset_matches (ruleset, &matcher))
-            continue;
-
-          for (j = 0; j < ruleset->n_styles; j++)
-            _gtk_style_properties_set_property_by_property (props,
-                                                            GTK_CSS_STYLE_PROPERTY (ruleset->styles[i].property),
-                                                            _gtk_css_selector_get_state_flags (ruleset->selector),
-                                                            ruleset->styles[i].value);
-        }
-    }
-
-  return props;
-}
-
 static gboolean
 gtk_css_provider_get_style_property (GtkStyleProvider *provider,
                                      GtkWidgetPath    *path,
@@ -1539,7 +1476,6 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
 static void
 gtk_css_style_provider_iface_init (GtkStyleProviderIface *iface)
 {
-  iface->get_style = gtk_css_provider_get_style;
   iface->get_style_property = gtk_css_provider_get_style_property;
 }
 

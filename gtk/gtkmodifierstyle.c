@@ -81,16 +81,6 @@ _gtk_modifier_style_init (GtkModifierStyle *modifier_style)
   priv->style = gtk_style_properties_new ();
 }
 
-static GtkStyleProperties *
-gtk_modifier_style_get_style (GtkStyleProvider *provider,
-                              GtkWidgetPath    *path)
-{
-  GtkModifierStylePrivate *priv;
-
-  priv = GTK_MODIFIER_STYLE (provider)->priv;
-  return g_object_ref (priv->style);
-}
-
 static gboolean
 gtk_modifier_style_get_style_property (GtkStyleProvider *provider,
                                        GtkWidgetPath    *path,
@@ -129,7 +119,6 @@ gtk_modifier_style_get_style_property (GtkStyleProvider *provider,
 static void
 gtk_modifier_style_provider_init (GtkStyleProviderIface *iface)
 {
-  iface->get_style = gtk_modifier_style_get_style;
   iface->get_style_property = gtk_modifier_style_get_style_property;
 }
 

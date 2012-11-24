@@ -279,18 +279,9 @@ gtk_style_properties_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_style_properties_parent_class)->finalize (object);
 }
 
-static GtkStyleProperties *
-gtk_style_properties_get_style (GtkStyleProvider *provider,
-                                GtkWidgetPath    *path)
-{
-  /* Return style set itself */
-  return g_object_ref (provider);
-}
-
 static void
 gtk_style_properties_provider_init (GtkStyleProviderIface *iface)
 {
-  iface->get_style = gtk_style_properties_get_style;
 }
 
 static GtkSymbolicColor *

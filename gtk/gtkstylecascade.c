@@ -91,16 +91,6 @@ gtk_style_cascade_iter_init (GtkStyleCascade     *cascade,
   return gtk_style_cascade_iter_next (cascade, iter);
 }
 
-static GtkStyleProperties * 
-gtk_style_cascade_get_style (GtkStyleProvider *provider,
-                             GtkWidgetPath    *path)
-{
-  /* This function is not used anymore by GTK and nobody
-   * else is ever supposed to call it */
-  g_warn_if_reached ();
-  return NULL;
-}
-
 static gboolean
 gtk_style_cascade_get_style_property (GtkStyleProvider *provider,
                                       GtkWidgetPath    *path,
@@ -130,7 +120,6 @@ gtk_style_cascade_get_style_property (GtkStyleProvider *provider,
 static void
 gtk_style_cascade_provider_iface_init (GtkStyleProviderIface *iface)
 {
-  iface->get_style = gtk_style_cascade_get_style;
   iface->get_style_property = gtk_style_cascade_get_style_property;
 }
 

@@ -1159,16 +1159,3 @@ _gtk_css_selector_compare (const GtkCssSelector *a,
   return a_elements - b_elements;
 }
 
-GtkStateFlags
-_gtk_css_selector_get_state_flags (const GtkCssSelector *selector)
-{
-  GtkStateFlags state = 0;
-
-  g_return_val_if_fail (selector != NULL, 0);
-
-  for (; selector && selector->class == &GTK_CSS_SELECTOR_NAME; selector = gtk_css_selector_previous (selector))
-    state |= GPOINTER_TO_UINT (selector->data);
-
-  return state;
-}
-
