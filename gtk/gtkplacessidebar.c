@@ -3921,33 +3921,36 @@ shortcuts_model_new (GtkPlacesSidebar *sidebar)
 /* Public methods for GtkPlacesSidebar */
 
 /**
- * gtk_places_sidebar_set_current_uri:
+ * gtk_places_sidebar_set_current_location:
  * @sidebar: a places sidebar
- * @uri: URI to select, or #NULL for no current path
+ * @location: location to select, or #NULL for no current path
  *
- * Sets the URI that is being shown in the widgets surrounding the @sidebar.  In turn,
- * it will highlight that URI if it is being shown in the list of places, or it will
- * unhighlight everything if the URI is not among the places in the list.
+ * Sets the location that is being shown in the widgets surrounding the @sidebar.  In turn,
+ * it will highlight that location if it is being shown in the list of places, or it will
+ * unhighlight everything if the location is not among the places in the list.
  */
 void
-gtk_places_sidebar_set_current_uri (GtkPlacesSidebar *sidebar, const char *uri)
+gtk_places_sidebar_set_current_location (GtkPlacesSidebar *sidebar, GFile *location)
 {
 	GtkTreeSelection *selection;
 	GtkTreeIter 	 iter;
 	gboolean 	 valid;
 	char  		 *iter_uri;
+	char             *uri;
 
 	g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
 
 	selection = gtk_tree_view_get_selection (sidebar->tree_view);
 
-	if (uri == NULL) {
+	if (location == NULL) {
 		g_free (sidebar->uri);
 		sidebar->uri = NULL;
 
 		gtk_tree_selection_unselect_all (selection);
 		return;
 	}
+
+	uri = g_file_get_uri (location);
 
         if (sidebar->uri == NULL || strcmp (sidebar->uri, uri) != 0) {
 		g_free (sidebar->uri);
@@ -3972,6 +3975,8 @@ gtk_places_sidebar_set_current_uri (GtkPlacesSidebar *sidebar, const char *uri)
         	 	valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (sidebar->store), &iter);
 		}
     	}
+
+	g_free (uri);
 }
 
 /**

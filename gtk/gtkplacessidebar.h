@@ -55,7 +55,7 @@ GtkWidget *gtk_places_sidebar_new (void);
 
 /* FIXME: add GObject properties for the following things */
 
-void gtk_places_sidebar_set_current_uri (GtkPlacesSidebar *sidebar, const char *uri);
+void gtk_places_sidebar_set_current_location (GtkPlacesSidebar *sidebar, GFile *location);
 
 void gtk_places_sidebar_set_multiple_tabs_supported (GtkPlacesSidebar *sidebar, gboolean supported);
 
