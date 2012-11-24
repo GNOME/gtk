@@ -235,6 +235,7 @@ enum {
 typedef enum {
   SHORTCUTS_SEARCH,
   SHORTCUTS_RECENT,
+  SHORTCUTS_CWD,
   SHORTCUTS_RECENT_SEPARATOR,
   SHORTCUTS_HOME,
   SHORTCUTS_DESKTOP,
@@ -1387,6 +1388,13 @@ shortcuts_update_count (GtkFileChooserDefault *impl,
 {
   switch (type)
     {
+      case SHORTCUTS_CWD:
+        if (value < 0)
+	  impl->has_cwd = FALSE;
+	else
+	  impl->has_cwd = TRUE;
+	break;
+	
       case SHORTCUTS_HOME:
 	if (value < 0)
 	  impl->has_home = FALSE;
@@ -1444,7 +1452,6 @@ get_file_info_finished (GCancellable *cancellable,
 			const GError *error,
 			gpointer      data)
 {
-  gint pos = -1;
   gboolean cancelled = g_cancellable_is_cancelled (cancellable);
   GdkPixbuf *pixbuf;
   GtkTreePath *path;
@@ -1457,7 +1464,6 @@ get_file_info_finished (GCancellable *cancellable,
     /* Handle doesn't exist anymore in the model */
     goto out;
 
-  pos = gtk_tree_path_get_indices (path)[0];
   gtk_tree_model_get_iter (GTK_TREE_MODEL (request->impl->shortcuts_model),
 			   &iter, path);
   gtk_tree_path_free (path);
@@ -1754,6 +1760,45 @@ shortcuts_append_recent (GtkFileChooserDefault *impl)
     g_object_unref (pixbuf);
 }
 
+/* Appends the current working directory to the shortuts panel, but only if it is not equal to $HOME.
+ * This is so that the user can actually use the $CWD, for example, if running an application
+ * from the shell.
+ */
+static void
+shortcuts_append_cwd (GtkFileChooserDefault *impl)
+{
+  char *cwd;
+  const char *home;
+  GFile *cwd_file;
+  GFile *home_file;
+
+  impl->has_cwd = FALSE;
+
+  cwd = g_get_current_dir ();
+  if (cwd == NULL)
+    return;
+
+  home = g_get_home_dir ();
+  if (home == NULL)
+    {
+      g_free (cwd);
+      return;
+    }
+
+  cwd_file = g_file_new_for_path (cwd);
+  home_file = g_file_new_for_path (home);
+
+  if (!g_file_equal (cwd_file, home_file))
+    {
+      shortcuts_insert_file (impl, -1, SHORTCUT_TYPE_FILE, NULL, cwd_file, NULL, FALSE, SHORTCUTS_CWD);
+      impl->has_cwd = TRUE;
+    }
+
+  g_object_unref (cwd_file);
+  g_object_unref (home_file);
+  g_free (cwd);
+}
+
 /* Appends an item for the user's home directory to the shortcuts model */
 static void
 shortcuts_append_home (GtkFileChooserDefault *impl)
@@ -1868,6 +1913,11 @@ shortcuts_get_index (GtkFileChooserDefault *impl,
     goto out;
 
   n += 1; /* we always have the recently-used item */
+
+  if (where == SHORTCUTS_CWD)
+    goto out;
+
+  n += impl->has_cwd ? 1 : 0;
 
   if (where == SHORTCUTS_RECENT_SEPARATOR)
     goto out;
@@ -2170,6 +2220,7 @@ shortcuts_model_create (GtkFileChooserDefault *impl)
   
   if (impl->file_system)
     {
+      shortcuts_append_cwd (impl);
       shortcuts_append_home (impl);
       shortcuts_append_desktop (impl);
       shortcuts_add_volumes (impl);

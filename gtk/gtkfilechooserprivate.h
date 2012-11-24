@@ -297,6 +297,7 @@ struct _GtkFileChooserDefault
   guint list_sort_ascending : 1;
   guint changing_folder : 1;
   guint shortcuts_current_folder_active : 1;
+  guint has_cwd : 1;
   guint has_home : 1;
   guint has_desktop : 1;
   guint has_search : 1;
