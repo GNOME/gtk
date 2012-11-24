@@ -810,8 +810,6 @@ typedef enum {
   COLOR_WIN32
 } ColorParseType;
 
-static GtkSymbolicColor * gtk_css_parser_read_symbolic_color (GtkCssParser *parser);
-
 static GtkSymbolicColor *
 gtk_css_parser_read_symbolic_color_function (GtkCssParser   *parser,
                                              ColorParseType  color)
@@ -886,7 +884,7 @@ gtk_css_parser_read_symbolic_color_function (GtkCssParser   *parser,
     }
   else
     {
-      child1 = gtk_css_parser_read_symbolic_color (parser);
+      child1 = _gtk_css_symbolic_value_new (parser);
       if (child1 == NULL)
         return NULL;
 
@@ -899,7 +897,7 @@ gtk_css_parser_read_symbolic_color_function (GtkCssParser   *parser,
               return NULL;
             }
 
-          child2 = gtk_css_parser_read_symbolic_color (parser);
+          child2 = _gtk_css_symbolic_value_new (parser);
           if (child2 == NULL)
             {
               gtk_symbolic_color_unref (child1);
@@ -967,8 +965,8 @@ gtk_css_parser_read_symbolic_color_function (GtkCssParser   *parser,
   return symbolic;
 }
 
-static GtkSymbolicColor *
-gtk_css_parser_read_symbolic_color (GtkCssParser *parser)
+GtkSymbolicColor *
+_gtk_css_symbolic_value_new (GtkCssParser *parser)
 {
   GtkSymbolicColor *symbolic;
   GdkRGBA rgba;
@@ -1036,12 +1034,3 @@ gtk_css_parser_read_symbolic_color (GtkCssParser *parser)
   _gtk_css_parser_error (parser, "Not a color definition");
   return NULL;
 }
-
-GtkCssValue *
-_gtk_css_symbolic_value_new (GtkCssParser *parser)
-{
-  g_return_val_if_fail (parser != NULL, NULL);
-
-  return _gtk_css_symbolic_value_new_take_symbolic_color (gtk_css_parser_read_symbolic_color (parser));
-}
-

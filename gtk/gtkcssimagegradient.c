@@ -474,7 +474,7 @@ _gtk_gradient_parse (GtkCssParser *parser)
           return NULL;
         }
 
-      color = _gtk_symbolic_color_new_take_value (_gtk_css_symbolic_value_new (parser));
+      color = _gtk_css_symbolic_value_new (parser);
       if (color == NULL)
         {
           gtk_gradient_unref (gradient);

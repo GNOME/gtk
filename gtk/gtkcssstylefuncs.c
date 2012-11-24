@@ -171,7 +171,7 @@ rgba_value_parse (GtkCssParser *parser,
   GtkSymbolicColor *symbolic;
   GdkRGBA rgba;
 
-  symbolic = _gtk_symbolic_color_new_take_value (_gtk_css_symbolic_value_new (parser));
+  symbolic = _gtk_css_symbolic_value_new (parser);
   if (symbolic == NULL)
     return FALSE;
 
@@ -253,7 +253,7 @@ color_value_parse (GtkCssParser *parser,
   GtkSymbolicColor *symbolic;
   GdkRGBA rgba;
 
-  symbolic = _gtk_symbolic_color_new_take_value (_gtk_css_symbolic_value_new (parser));
+  symbolic = _gtk_css_symbolic_value_new (parser);
   if (symbolic == NULL)
     return FALSE;
 
@@ -338,7 +338,7 @@ symbolic_color_value_parse (GtkCssParser *parser,
 {
   GtkSymbolicColor *symbolic;
 
-  symbolic = _gtk_symbolic_color_new_take_value (_gtk_css_symbolic_value_new (parser));
+  symbolic = _gtk_css_symbolic_value_new (parser);
   if (symbolic == NULL)
     return FALSE;
 
