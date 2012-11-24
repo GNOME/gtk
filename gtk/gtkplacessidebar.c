@@ -661,7 +661,7 @@ update_places (GtkPlacesSidebar *sidebar)
 	GVolume *volume;
 	GSList *bookmarks, *sl;
 	int index;
-	char *location, *mount_uri, *name, *last_uri, *identifier;
+	char *original_uri, *mount_uri, *name, *last_uri, *identifier;
 	char *home_uri;
 	char *bookmark_name;
 	GIcon *icon;
@@ -683,15 +683,7 @@ update_places (GtkPlacesSidebar *sidebar)
 	sidebar->devices_header_added = FALSE;
 	sidebar->bookmarks_header_added = FALSE;
 
-#if 0
-	/* FIXME: the "location" is used at the end of this function
-	 * to restore the current location.  How do we do that now?
-	 */
-	slot = nautilus_window_get_active_slot (sidebar->window);
-	location = nautilus_window_slot_get_current_uri (slot);
-#else
-	location = NULL;
-#endif
+	original_uri = g_strdup (sidebar->uri);
 
 	network_mounts = network_volumes = NULL;
 	volume_monitor = sidebar->volume_monitor;
@@ -1118,9 +1110,9 @@ update_places (GtkPlacesSidebar *sidebar)
 	g_list_free_full (network_mounts, g_object_unref);
 
 	/* restore selection */
-	sidebar_update_restore_selection (sidebar, location, last_uri);
+	sidebar_update_restore_selection (sidebar, original_uri, last_uri);
 
-	g_free (location);
+	g_free (original_uri);
 	g_free (last_uri);
 }
 
