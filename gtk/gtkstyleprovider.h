@@ -109,6 +109,7 @@ struct _GtkStyleProviderIface
 
 GType gtk_style_provider_get_type (void) G_GNUC_CONST;
 
+GDK_DEPRECATED_IN_3_8
 GtkStyleProperties *gtk_style_provider_get_style (GtkStyleProvider *provider,
                                                   GtkWidgetPath    *path);
 
@@ -118,6 +119,7 @@ gboolean gtk_style_provider_get_style_property (GtkStyleProvider *provider,
                                                 GParamSpec       *pspec,
                                                 GValue           *value);
 
+GDK_DEPRECATED_IN_3_8_FOR(NULL)
 GtkIconFactory * gtk_style_provider_get_icon_factory (GtkStyleProvider *provider,
 						      GtkWidgetPath    *path);
 

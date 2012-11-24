@@ -66,6 +66,9 @@ gtk_style_provider_iface_init (gpointer g_iface)
  * style settings affecting @path
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: Will always return %NULL for all GTK-provided style providers
+ *     as the interface cannot correctly work the way CSS is specified.
  **/
 GtkStyleProperties *
 gtk_style_provider_get_style (GtkStyleProvider *provider,
@@ -132,6 +135,8 @@ gtk_style_provider_get_style_property (GtkStyleProvider *provider,
  * Returns: (transfer none): The icon factory to use for @path, or %NULL
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: Will always return %NULL for all GTK-provided style providers.
  **/
 GtkIconFactory *
 gtk_style_provider_get_icon_factory (GtkStyleProvider *provider,
