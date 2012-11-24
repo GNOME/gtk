@@ -127,21 +127,11 @@ gtk_style_cascade_get_style_property (GtkStyleProvider *provider,
   return FALSE;
 }
 
-static GtkIconFactory *
-gtk_style_cascade_get_icon_factory (GtkStyleProvider *provider,
-				    GtkWidgetPath    *path)
-{
-  /* If anyone ever implements get_icon_factory(), I'll
-   * look at this function. Until then I'll just: */
-  return NULL;
-}
-
 static void
 gtk_style_cascade_provider_iface_init (GtkStyleProviderIface *iface)
 {
   iface->get_style = gtk_style_cascade_get_style;
   iface->get_style_property = gtk_style_cascade_get_style_property;
-  iface->get_icon_factory = gtk_style_cascade_get_icon_factory;
 }
 
 static GtkSymbolicColor *
