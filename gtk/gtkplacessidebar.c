@@ -1924,6 +1924,18 @@ drive_start_from_bookmark_cb (GObject      *source_object,
 	}
 }
 
+static void
+change_location_and_notify (GtkPlacesSidebar *sidebar, GFile *location, GtkPlacesOpenMode open_mode)
+{
+	g_free (sidebar->uri);
+	sidebar->uri = NULL;
+
+	if (location)
+		sidebar->uri = g_file_get_uri (location);
+
+	emit_location_selected (sidebar, location, open_mode);
+}
+
 /* Callback from g_volume_mount() */
 static void
 volume_mount_cb (GObject *source_object, GAsyncResult *result, gpointer user_data)
@@ -1957,7 +1969,7 @@ volume_mount_cb (GObject *source_object, GAsyncResult *result, gpointer user_dat
 		GFile *location;
 
 		location = g_mount_get_default_location (mount);
-		emit_location_selected (sidebar, location, sidebar->go_to_after_mount_open_mode);
+		change_location_and_notify (sidebar, location, sidebar->go_to_after_mount_open_mode);
 
 		g_object_unref (G_OBJECT (location));
 		g_object_unref (G_OBJECT (mount));
@@ -1996,7 +2008,7 @@ open_selected_bookmark (GtkPlacesSidebar *sidebar,
 
 	if (uri != NULL) {
 		location = g_file_new_for_uri (uri);
-		emit_location_selected (sidebar, location, open_mode);
+		change_location_and_notify (sidebar, location, open_mode);
 
 		g_object_unref (location);
 		g_free (uri);
