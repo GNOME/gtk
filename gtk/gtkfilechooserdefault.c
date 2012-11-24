@@ -1403,13 +1403,6 @@ shortcuts_find_folder (GtkFileChooserDefault *impl,
   gtk_tree_path_free (path);
 }
 
-/* If a shortcut corresponds to the current folder, selects it */
-static void
-shortcuts_find_current_folder (GtkFileChooserDefault *impl)
-{
-  shortcuts_find_folder (impl, impl->current_folder);
-}
-
 /* Removes the specified number of rows from the shortcuts list */
 static void
 shortcuts_remove_rows (GtkFileChooserDefault *impl,
@@ -7524,9 +7517,7 @@ update_current_folder_get_info_cb (GCancellable *cancellable,
 
   /* Refresh controls */
 
-#if REMOVE_FOR_PLACES_SIDEBAR
-  shortcuts_find_current_folder (impl);
-#endif
+  gtk_places_sidebar_set_current_location (GTK_PLACES_SIDEBAR (impl->places_sidebar), impl->current_folder);
 
   g_signal_emit_by_name (impl, "current-folder-changed", 0);
 
