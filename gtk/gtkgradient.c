@@ -518,11 +518,9 @@ _gtk_gradient_transition (GtkGradient *start,
       end_stop = &g_array_index (end->stops, ColorStop, i);
 
       offset = (1 - progress) * start_stop->offset + progress * end_stop->offset;
-      color = (GtkSymbolicColor *) _gtk_css_value_transition ((GtkCssValue *) start_stop->color,
-                                                              (GtkCssValue *) end_stop->color,
-                                                              property_id,
-                                                              progress);
-      g_assert (color);
+      color = gtk_symbolic_color_new_mix (start_stop->color,
+                                          end_stop->color,
+                                          progress);
       gtk_gradient_add_color_stop (gradient, offset, color);
       gtk_symbolic_color_unref (color);
     }
