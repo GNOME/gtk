@@ -86,3 +86,9 @@ _gtk_css_initial_value_new (void)
 {
   return _gtk_css_value_ref (&initial);
 }
+
+GtkCssValue *
+_gtk_css_initial_value_get (void)
+{
+  return &initial;
+}
