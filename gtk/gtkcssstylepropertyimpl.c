@@ -49,6 +49,7 @@
 #include "gtkcssimageprivate.h"
 #include "gtkcssimagegradientprivate.h"
 #include "gtkcssimagevalueprivate.h"
+#include "gtkcssinitialvalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcsspositionvalueprivate.h"
@@ -159,7 +160,7 @@ assign_border (GtkCssStyleProperty *property,
   const GtkBorder *border = g_value_get_boxed (value);
 
   if (border == NULL)
-    return _gtk_css_value_ref (_gtk_css_style_property_get_initial_value (property));
+    return _gtk_css_initial_value_new ();
   else
     return _gtk_css_border_value_new (_gtk_css_number_value_new (border->top, GTK_CSS_PX),
                                       _gtk_css_number_value_new (border->right, GTK_CSS_PX),
