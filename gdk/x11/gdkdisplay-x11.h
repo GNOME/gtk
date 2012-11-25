@@ -38,8 +38,7 @@ struct _GdkX11Display
 {
   GdkDisplay parent_instance;
   Display *xdisplay;
-  GdkScreen *default_screen;
-  GdkScreen **screens;
+  GdkScreen *screen;
 
   GSource *event_source;
 

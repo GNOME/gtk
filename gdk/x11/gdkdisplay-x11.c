@@ -1346,7 +1346,6 @@ _gdk_x11_display_open (const gchar *display_name)
 
   XClassHint *class_hint;
   gulong pid;
-  gint i;
   gint ignore;
   gint maj, min;
 
@@ -1386,18 +1385,12 @@ _gdk_x11_display_open (const gchar *display_name)
 #endif
 
   /* initialize the display's screens */ 
-  display_x11->screens = g_new (GdkScreen *, ScreenCount (display_x11->xdisplay));
-  for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
-    display_x11->screens[i] = _gdk_x11_screen_new (display, i);
+  display_x11->screen = _gdk_x11_screen_new (display, DefaultScreen (display_x11->xdisplay));
 
   /* We need to initialize events after we have the screen
    * structures in places
    */
-  for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
-    _gdk_x11_xsettings_init (GDK_X11_SCREEN (display_x11->screens[i]));
-
-  /*set the default screen */
-  display_x11->default_screen = display_x11->screens[DefaultScreen (display_x11->xdisplay)];
+  _gdk_x11_xsettings_init (GDK_X11_SCREEN (display_x11->screen));
 
   display->device_manager = _gdk_x11_device_manager_new (display);
 
@@ -1411,7 +1404,7 @@ _gdk_x11_display_open (const gchar *display_name)
   attr.height = 10;
   attr.event_mask = 0;
 
-  display_x11->leader_gdk_window = gdk_window_new (GDK_X11_SCREEN (display_x11->default_screen)->root_window, 
+  display_x11->leader_gdk_window = gdk_window_new (GDK_X11_SCREEN (display_x11->screen)->root_window, 
 						   &attr, GDK_WA_X | GDK_WA_Y);
   (_gdk_x11_window_get_toplevel (display_x11->leader_gdk_window))->is_leader = TRUE;
 
@@ -1487,7 +1480,7 @@ _gdk_x11_display_open (const gchar *display_name)
 
     gdk_x11_display_error_trap_push (display);
     XQueryPointer (display_x11->xdisplay,
-		   GDK_X11_SCREEN (display_x11->default_screen)->xroot_window,
+		   GDK_X11_SCREEN (display_x11->screen)->xroot_window,
 		   &root, &child, &rootx, &rooty, &winx, &winy, &xmask);
     if (G_UNLIKELY (gdk_x11_display_error_trap_pop (display) == BadWindow))
       {
@@ -1585,8 +1578,7 @@ _gdk_x11_display_open (const gchar *display_name)
 
   gdk_x11_display_init_input (display);
 
-  for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
-    _gdk_x11_screen_setup (display_x11->screens[i]);
+  _gdk_x11_screen_setup (display_x11->screen);
 
   g_signal_emit_by_name (display, "opened");
 
@@ -1681,22 +1673,22 @@ gdk_x11_display_get_name (GdkDisplay *display)
 static gint
 gdk_x11_display_get_n_screens (GdkDisplay *display)
 {
-  return ScreenCount (GDK_X11_DISPLAY (display)->xdisplay);
+  return 1;
 }
 
 static GdkScreen *
 gdk_x11_display_get_screen (GdkDisplay *display,
 			    gint        screen_num)
 {
-  g_return_val_if_fail (ScreenCount (GDK_X11_DISPLAY (display)->xdisplay) > screen_num, NULL);
+  g_return_val_if_fail (screen_num == 0, NULL);
 
-  return GDK_X11_DISPLAY (display)->screens[screen_num];
+  return GDK_X11_DISPLAY (display)->screen;
 }
 
 static GdkScreen *
 gdk_x11_display_get_default_screen (GdkDisplay *display)
 {
-  return GDK_X11_DISPLAY (display)->default_screen;
+  return GDK_X11_DISPLAY (display)->screen;
 }
 
 gboolean
@@ -1704,16 +1696,10 @@ _gdk_x11_display_is_root_window (GdkDisplay *display,
 				 Window      xroot_window)
 {
   GdkX11Display *display_x11;
-  gint i;
 
   display_x11 = GDK_X11_DISPLAY (display);
 
-  for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
-    {
-      if (GDK_SCREEN_XROOTWIN (display_x11->screens[i]) == xroot_window)
-	return TRUE;
-    }
-  return FALSE;
+  return GDK_SCREEN_XROOTWIN (display_x11->screen) == xroot_window;
 }
 
 struct XPointerUngrabInfo {
@@ -1863,14 +1849,12 @@ gdk_x11_display_dispose (GObject *object)
 {
   GdkDisplay *display = GDK_DISPLAY (object);
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (object);
-  gint           i;
 
   _gdk_x11_display_manager_remove_display (gdk_display_manager_get (), display);
 
   g_list_foreach (display_x11->input_devices, (GFunc) g_object_run_dispose, NULL);
 
-  for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
-    _gdk_screen_close (display_x11->screens[i]);
+  _gdk_screen_close (display_x11->screen);
 
   if (display_x11->event_source)
     {
@@ -1923,9 +1907,7 @@ gdk_x11_display_finalize (GObject *object)
   g_list_free_full (display_x11->input_windows, g_free);
 
   /* Free all GdkScreens */
-  for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
-    g_object_unref (display_x11->screens[i]);
-  g_free (display_x11->screens);
+  g_object_unref (display_x11->screen);
 
   g_free (display_x11->startup_notification_id);
 
@@ -2001,14 +1983,10 @@ GdkScreen *
 _gdk_x11_display_screen_for_xrootwin (GdkDisplay *display,
 				      Window      xrootwin)
 {
-  gint i;
+  GdkScreen *screen = gdk_display_get_default_screen (display);
 
-  for (i = 0; i < ScreenCount (GDK_X11_DISPLAY (display)->xdisplay); i++)
-    {
-      GdkScreen *screen = gdk_display_get_screen (display, i);
-      if (GDK_SCREEN_XROOTWIN (screen) == xrootwin)
-	return screen;
-    }
+  if (GDK_SCREEN_XROOTWIN (screen) == xrootwin)
+    return screen;
 
   return NULL;
 }
