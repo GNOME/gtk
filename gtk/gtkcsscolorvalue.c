@@ -184,12 +184,7 @@ _gtk_css_color_value_resolve (GtkCssValue             *color,
         *dependencies = _gtk_css_dependencies_union (*dependencies, 0);
         
         _gtk_hsla_init_from_rgba (&hsla, _gtk_css_rgba_value_get_rgba (val));
-
-        hsla.lightness *= color->sym_col.shade.factor;
-        hsla.lightness = CLAMP (hsla.lightness, 0.0, 1.0);
-
-        hsla.saturation *= color->sym_col.shade.factor;
-        hsla.saturation = CLAMP (hsla.saturation, 0.0, 1.0);
+        _gtk_hsla_shade (&hsla, &hsla, color->sym_col.shade.factor);
 
         _gdk_rgba_init_from_hsla (&shade, &hsla);
 

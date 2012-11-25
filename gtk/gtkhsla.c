@@ -183,3 +183,21 @@ _gdk_rgba_init_from_hsla (GdkRGBA       *rgba,
     }
 }
 
+void
+_gtk_hsla_shade (GtkHSLA       *dest,
+                 const GtkHSLA *src,
+                 double         factor)
+{
+  g_return_if_fail (dest != NULL);
+  g_return_if_fail (src != NULL);
+
+  dest->hue = src->hue;
+
+  dest->lightness = src->lightness * factor;
+  dest->lightness = CLAMP (dest->lightness, 0.0, 1.0);
+
+  dest->saturation = src->saturation * factor;
+  dest->saturation = CLAMP (dest->saturation, 0.0, 1.0);
+
+  dest->alpha = src->alpha;
+}

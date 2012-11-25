@@ -42,6 +42,10 @@ void            _gtk_hsla_init_from_rgba    (GtkHSLA          *hsla,
 void            _gdk_rgba_init_from_hsla    (GdkRGBA          *rgba,
                                              const GtkHSLA    *hsla);
 
+void            _gtk_hsla_shade             (GtkHSLA          *dest,
+                                             const GtkHSLA    *src,
+                                             double            factor);
+
 G_END_DECLS
 
 #endif /* __GTK_HSLA_PRIVATE_H__ */
