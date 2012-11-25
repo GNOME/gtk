@@ -32,7 +32,6 @@
 #include "gtkprivate.h"
 #include "gtkcssproviderprivate.h"
 #include "gtkstyleproviderprivate.h"
-#include "gtksymboliccolor.h"
 #include "gtktypebuiltins.h"
 #include "gtkversion.h"
 
@@ -1460,7 +1459,7 @@ gtk_settings_provider_iface_init (GtkStyleProviderIface *iface)
 {
 }
 
-static GtkSymbolicColor *
+static GtkCssValue *
 gtk_settings_style_provider_get_color (GtkStyleProviderPrivate *provider,
                                        const char              *name)
 {

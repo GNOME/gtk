@@ -123,13 +123,13 @@ gtk_style_cascade_provider_iface_init (GtkStyleProviderIface *iface)
   iface->get_style_property = gtk_style_cascade_get_style_property;
 }
 
-static GtkSymbolicColor *
+static GtkCssValue *
 gtk_style_cascade_get_color (GtkStyleProviderPrivate *provider,
                              const char              *name)
 {
   GtkStyleCascade *cascade = GTK_STYLE_CASCADE (provider);
   GtkStyleCascadeIter iter;
-  GtkSymbolicColor *symbolic;
+  GtkCssValue *color;
   GtkStyleProvider *item;
 
   for (item = gtk_style_cascade_iter_init (cascade, &iter);
@@ -138,9 +138,9 @@ gtk_style_cascade_get_color (GtkStyleProviderPrivate *provider,
     {
       if (GTK_IS_STYLE_PROVIDER_PRIVATE (item))
         {
-          symbolic = _gtk_style_provider_private_get_color (GTK_STYLE_PROVIDER_PRIVATE (item), name);
-          if (symbolic)
-            return symbolic;
+          color = _gtk_style_provider_private_get_color (GTK_STYLE_PROVIDER_PRIVATE (item), name);
+          if (color)
+            return color;
         }
       else
         {

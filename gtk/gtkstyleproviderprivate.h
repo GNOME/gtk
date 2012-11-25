@@ -22,8 +22,7 @@
 #include "gtk/gtkcsskeyframesprivate.h"
 #include "gtk/gtkcsslookupprivate.h"
 #include "gtk/gtkcssmatcherprivate.h"
-#include <gtk/gtkenums.h>
-#include <gtk/gtksymboliccolor.h>
+#include "gtk/gtkcssvalueprivate.h"
 #include <gtk/gtktypes.h>
 
 G_BEGIN_DECLS
@@ -40,7 +39,7 @@ struct _GtkStyleProviderPrivateInterface
 {
   GTypeInterface g_iface;
 
-  GtkSymbolicColor *    (* get_color)           (GtkStyleProviderPrivate *provider,
+  GtkCssValue *         (* get_color)           (GtkStyleProviderPrivate *provider,
                                                  const char              *name);
   GtkCssKeyframes *     (* get_keyframes)       (GtkStyleProviderPrivate *provider,
                                                  const char              *name);
@@ -56,7 +55,7 @@ struct _GtkStyleProviderPrivateInterface
 
 GType                   _gtk_style_provider_private_get_type     (void) G_GNUC_CONST;
 
-GtkSymbolicColor *      _gtk_style_provider_private_get_color    (GtkStyleProviderPrivate *provider,
+GtkCssValue *           _gtk_style_provider_private_get_color    (GtkStyleProviderPrivate *provider,
                                                                   const char              *name);
 GtkCssKeyframes *       _gtk_style_provider_private_get_keyframes(GtkStyleProviderPrivate *provider,
                                                                   const char              *name);

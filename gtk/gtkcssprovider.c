@@ -27,13 +27,13 @@
 
 #include "gtkbitmaskprivate.h"
 #include "gtkcssarrayvalueprivate.h"
+#include "gtkcsscolorvalueprivate.h"
 #include "gtkcsskeyframesprivate.h"
 #include "gtkcssparserprivate.h"
 #include "gtkcsssectionprivate.h"
 #include "gtkcssselectorprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"
 #include "gtkcssstylefuncsprivate.h"
-#include "gtksymboliccolor.h"
 #include "gtkstyleprovider.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkstylepropertiesprivate.h"
@@ -1403,7 +1403,7 @@ gtk_css_provider_init (GtkCssProvider *css_provider)
 
   priv->symbolic_colors = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                  (GDestroyNotify) g_free,
-                                                 (GDestroyNotify) gtk_symbolic_color_unref);
+                                                 (GDestroyNotify) _gtk_css_value_unref);
   priv->keyframes = g_hash_table_new_full (g_str_hash, g_str_equal,
                                            (GDestroyNotify) g_free,
                                            (GDestroyNotify) _gtk_css_value_unref);
@@ -1479,7 +1479,7 @@ gtk_css_style_provider_iface_init (GtkStyleProviderIface *iface)
   iface->get_style_property = gtk_css_provider_get_style_property;
 }
 
-static GtkSymbolicColor *
+static GtkCssValue *
 gtk_css_style_provider_get_color (GtkStyleProviderPrivate *provider,
                                   const char              *name)
 {
@@ -1838,7 +1838,7 @@ parse_import (GtkCssScanner *scanner)
 static gboolean
 parse_color_definition (GtkCssScanner *scanner)
 {
-  GtkSymbolicColor *symbolic;
+  GtkCssValue *color;
   char *name;
 
   gtk_css_scanner_push_section (scanner, GTK_CSS_SECTION_COLOR_DEFINITION);
@@ -1862,8 +1862,8 @@ parse_color_definition (GtkCssScanner *scanner)
       return TRUE;
     }
 
-  symbolic = _gtk_css_symbolic_value_new (scanner->parser);
-  if (symbolic == NULL)
+  color = _gtk_css_color_value_parse (scanner->parser);
+  if (color == NULL)
     {
       g_free (name);
       _gtk_css_parser_resync (scanner->parser, TRUE, 0);
@@ -1874,7 +1874,7 @@ parse_color_definition (GtkCssScanner *scanner)
   if (!_gtk_css_parser_try (scanner->parser, ";", TRUE))
     {
       g_free (name);
-      gtk_symbolic_color_unref (symbolic);
+      _gtk_css_value_unref (color);
       gtk_css_provider_error_literal (scanner->provider,
                                       scanner,
                                       GTK_CSS_PROVIDER_ERROR,
@@ -1886,7 +1886,7 @@ parse_color_definition (GtkCssScanner *scanner)
       return TRUE;
     }
 
-  g_hash_table_insert (scanner->provider->priv->symbolic_colors, name, symbolic);
+  g_hash_table_insert (scanner->provider->priv->symbolic_colors, name, color);
 
   gtk_css_scanner_pop_section (scanner, GTK_CSS_SECTION_COLOR_DEFINITION);
   return TRUE;
@@ -2878,7 +2878,6 @@ gtk_css_provider_print_colors (GHashTable *colors,
                                GString    *str)
 {
   GList *keys, *walk;
-  char *s;
 
   keys = g_hash_table_get_keys (colors);
   /* so the output is identical for identical styles */
@@ -2887,14 +2886,12 @@ gtk_css_provider_print_colors (GHashTable *colors,
   for (walk = keys; walk; walk = walk->next)
     {
       const char *name = walk->data;
-      GtkSymbolicColor *symbolic = g_hash_table_lookup (colors, (gpointer) name);
+      GtkCssValue *color = g_hash_table_lookup (colors, (gpointer) name);
 
       g_string_append (str, "@define-color ");
       g_string_append (str, name);
       g_string_append (str, " ");
-      s = gtk_symbolic_color_to_string (symbolic);
-      g_string_append (str, s);
-      g_free (s);
+      _gtk_css_value_print (color, str);
       g_string_append (str, ";\n");
     }
 

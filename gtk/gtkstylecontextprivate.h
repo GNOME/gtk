@@ -20,7 +20,6 @@
 
 #include "gtkstylecontext.h"
 #include "gtkstyleproviderprivate.h"
-#include "gtksymboliccolor.h"
 #include "gtkbitmaskprivate.h"
 #include "gtkcssvalueprivate.h"
 
@@ -46,7 +45,7 @@ void           _gtk_style_context_queue_invalidate           (GtkStyleContext *c
 gboolean       _gtk_style_context_check_region_name          (const gchar     *str);
 
 gboolean       _gtk_style_context_resolve_color              (GtkStyleContext    *context,
-                                                              GtkSymbolicColor   *color,
+                                                              GtkCssValue        *color,
                                                               GdkRGBA            *result,
                                                               GtkCssDependencies *dependencies);
 void           _gtk_style_context_get_cursor_color           (GtkStyleContext    *context,

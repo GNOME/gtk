@@ -2298,7 +2298,7 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
               else
                 g_value_init (&pcache->value, GDK_TYPE_COLOR);
 
-              if (_gtk_style_context_resolve_color (context, color, &rgba, NULL))
+              if (_gtk_style_context_resolve_color (context, _gtk_symbolic_color_get_css_value (color), &rgba, NULL))
                 {
                   if (G_PARAM_SPEC_VALUE_TYPE (pspec) == GDK_TYPE_RGBA)
                     g_value_set_boxed (&pcache->value, &rgba);
@@ -2704,7 +2704,7 @@ gtk_style_context_get_junction_sides (GtkStyleContext *context)
 
 gboolean
 _gtk_style_context_resolve_color (GtkStyleContext    *context,
-                                  GtkSymbolicColor   *color,
+                                  GtkCssValue        *color,
                                   GdkRGBA            *result,
                                   GtkCssDependencies *dependencies)
 {
@@ -2714,7 +2714,7 @@ _gtk_style_context_resolve_color (GtkStyleContext    *context,
   g_return_val_if_fail (color != NULL, FALSE);
   g_return_val_if_fail (result != NULL, FALSE);
 
-  val = _gtk_css_color_value_resolve (_gtk_symbolic_color_get_css_value (color),
+  val = _gtk_css_color_value_resolve (color,
                                       GTK_STYLE_PROVIDER_PRIVATE (context->priv->cascade),
                                       _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR),
                                       GTK_CSS_DEPENDS_ON_COLOR,
@@ -2742,17 +2742,17 @@ gtk_style_context_lookup_color (GtkStyleContext *context,
                                 const gchar     *color_name,
                                 GdkRGBA         *color)
 {
-  GtkSymbolicColor *sym_color;
+  GtkCssValue *value;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), FALSE);
   g_return_val_if_fail (color_name != NULL, FALSE);
   g_return_val_if_fail (color != NULL, FALSE);
 
-  sym_color = _gtk_style_provider_private_get_color (GTK_STYLE_PROVIDER_PRIVATE (context->priv->cascade), color_name);
-  if (sym_color == NULL)
+  value = _gtk_style_provider_private_get_color (GTK_STYLE_PROVIDER_PRIVATE (context->priv->cascade), color_name);
+  if (value == NULL)
     return FALSE;
 
-  return _gtk_style_context_resolve_color (context, sym_color, color, NULL);
+  return _gtk_style_context_resolve_color (context, value, color, NULL);
 }
 
 /**

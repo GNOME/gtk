@@ -122,7 +122,7 @@ gtk_modifier_style_provider_init (GtkStyleProviderIface *iface)
   iface->get_style_property = gtk_modifier_style_get_style_property;
 }
 
-static GtkSymbolicColor *
+static GtkCssValue *
 gtk_modifier_style_provider_get_color (GtkStyleProviderPrivate *provider,
                                        const char              *name)
 {

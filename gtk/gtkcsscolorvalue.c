@@ -161,14 +161,13 @@ _gtk_css_color_value_resolve (GtkCssValue             *color,
       return _gtk_css_value_ref (color->last_value);
     case COLOR_TYPE_NAME:
       {
-	GtkSymbolicColor *symbolic;
+	GtkCssValue *named;
 
-        symbolic = _gtk_style_provider_private_get_color (provider, color->sym_col.name);
-
-	if (!symbolic)
+        named = _gtk_style_provider_private_get_color (provider, color->sym_col.name);
+	if (named == NULL)
 	  return NULL;
 
-        value = _gtk_css_color_value_resolve (_gtk_symbolic_color_get_css_value (symbolic), provider, current, current_deps, dependencies);
+        value = _gtk_css_color_value_resolve (named, provider, current, current_deps, dependencies);
       }
 
       break;

@@ -44,7 +44,7 @@ _gtk_style_provider_private_default_init (GtkStyleProviderPrivateInterface *ifac
 
 }
 
-GtkSymbolicColor *
+GtkCssValue *
 _gtk_style_provider_private_get_color (GtkStyleProviderPrivate *provider,
                                        const char              *name)
 {
