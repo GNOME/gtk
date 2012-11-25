@@ -25,7 +25,7 @@
 #include <gdk/gdk.h>
 #include <gtk/gtkstylecontext.h>
 #include <gtk/gtkstyleproperties.h>
-#include <gtk/gtksymboliccolor.h>
+#include <gtk/deprecated/gtksymboliccolor.h>
 
 G_BEGIN_DECLS
 

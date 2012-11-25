@@ -18,7 +18,7 @@
 #ifndef __GTK_SYMBOLIC_COLOR_PRIVATE_H__
 #define __GTK_SYMBOLIC_COLOR_PRIVATE_H__
 
-#include "gtk/gtksymboliccolor.h"
+#include "gtk/deprecated/gtksymboliccolor.h"
 #include "gtk/gtkcssparserprivate.h"
 #include "gtk/gtkcssvalueprivate.h"
 

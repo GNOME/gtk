@@ -29,7 +29,6 @@
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkdebug.h"
-#include "gtkgradientprivate.h"
 #include "gtkstylepropertiesprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkthemingengineprivate.h"
@@ -37,7 +36,6 @@
 #include "gtkwidget.h"
 #include "gtkwindow.h"
 #include "gtkprivate.h"
-#include "gtksymboliccolorprivate.h"
 #include "gtkiconfactory.h"
 #include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
@@ -45,6 +43,9 @@
 #include "gtkstyleproviderprivate.h"
 #include "gtksettings.h"
 #include "gtksettingsprivate.h"
+
+#include "deprecated/gtkgradientprivate.h"
+#include "deprecated/gtksymboliccolorprivate.h"
 
 /**
  * SECTION:gtkstylecontext

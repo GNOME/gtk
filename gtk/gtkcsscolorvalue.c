@@ -24,7 +24,6 @@
 #include "gtkhslaprivate.h"
 #include "gtkstylepropertyprivate.h"
 #include "gtkstyleproperties.h"
-#include "gtksymboliccolorprivate.h"
 #include "gtkwin32themeprivate.h"
 
 typedef enum {

@@ -24,9 +24,7 @@
 #include <cairo-gobject.h>
 
 #include "gtkstyleprovider.h"
-#include "gtksymboliccolor.h"
 #include "gtkthemingengine.h"
-#include "gtkgradient.h"
 #include "gtkcssshorthandpropertyprivate.h"
 #include "gtkcsstypedvalueprivate.h"
 #include "gtkcsstypesprivate.h"
@@ -36,9 +34,10 @@
 #include "gtkstylepropertyprivate.h"
 #include "gtkstyleproviderprivate.h"
 #include "gtkintl.h"
-
-#include "gtksymboliccolorprivate.h"
 #include "gtkwin32themeprivate.h"
+
+#include "deprecated/gtkgradient.h"
+#include "deprecated/gtksymboliccolorprivate.h"
 
 /**
  * SECTION:gtkstyleproperties

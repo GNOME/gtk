@@ -148,6 +148,7 @@ deprecated_h_sources = 			\
 	deprecated/gtkcolorsel.h	\
 	deprecated/gtkcolorseldialog.h	\
 	deprecated/gtkfontsel.h		\
+	deprecated/gtkgradient.h	\
 	deprecated/gtkhandlebox.h	\
 	deprecated/gtkhbbox.h		\
 	deprecated/gtkhbox.h		\
@@ -156,8 +157,9 @@ deprecated_h_sources = 			\
 	deprecated/gtkhscrollbar.h	\
 	deprecated/gtkhseparator.h	\
 	deprecated/gtkhsv.h		\
-	deprecated/gtkstyle.h		\
 	deprecated/gtkrc.h		\
+	deprecated/gtkstyle.h		\
+	deprecated/gtksymboliccolor.h	\
 	deprecated/gtktable.h		\
 	deprecated/gtktearoffmenuitem.h	\
 	deprecated/gtkvbbox.h		\
@@ -166,6 +168,10 @@ deprecated_h_sources = 			\
 	deprecated/gtkvscrollbar.h	\
 	deprecated/gtkvseparator.h	\
 	deprecated/gtkvpaned.h
+
+deprecated_private_h_sources =			\
+	deprecated/gtkgradientprivate.h		\
+	deprecated/gtksymboliccolorprivate.h
 
 gtk_public_h_sources = 		\
 	gtk.h			\
@@ -249,7 +255,6 @@ gtk_public_h_sources = 		\
 	gtkfontchooserdialog.h  \
 	gtkfontchooserwidget.h	\
 	gtkframe.h		\
-	gtkgradient.h		\
 	gtkgrid.h		\
 	gtkiconfactory.h	\
 	gtkicontheme.h		\
@@ -330,7 +335,6 @@ gtk_public_h_sources = 		\
 	gtkstyleproperties.h	\
 	gtkstyleprovider.h	\
 	gtkswitch.h		\
-	gtksymboliccolor.h	\
 	gtktestutils.h		\
 	gtktextattributes.h	\
 	gtktextbuffer.h		\
@@ -478,7 +482,6 @@ gtk_private_h_sources =		\
 	gtkfilesystemmodel.h	\
 	gtkfontchooserprivate.h	\
 	gtkfontchooserutils.h	\
-	gtkgradientprivate.h	\
 	gtkhslaprivate.h	\
 	gtkiconcache.h		\
 	gtkiconhelperprivate.h  \
@@ -527,7 +530,6 @@ gtk_private_h_sources =		\
 	gtkstylepropertiesprivate.h \
 	gtkstylepropertyprivate.h \
 	gtkstyleproviderprivate.h \
-	gtksymboliccolorprivate.h \
 	gtktextbtree.h		\
 	gtktextbufferserialize.h \
 	gtktextchildprivate.h	\
@@ -556,6 +558,7 @@ deprecated_c_sources = 			\
 	deprecated/gtkcolorsel.c	\
 	deprecated/gtkcolorseldialog.c	\
 	deprecated/gtkfontsel.c		\
+	deprecated/gtkgradient.c	\
 	deprecated/gtkhandlebox.c	\
 	deprecated/gtkhbbox.c		\
 	deprecated/gtkhbox.c		\
@@ -566,6 +569,7 @@ deprecated_c_sources = 			\
 	deprecated/gtkhsv.c		\
 	deprecated/gtkrc.c		\
 	deprecated/gtkstyle.c		\
+	deprecated/gtksymboliccolor.c	\
 	deprecated/gtktable.c		\
 	deprecated/gtktearoffmenuitem.c	\
 	deprecated/gtkvbbox.c		\
@@ -721,7 +725,6 @@ gtk_base_c_sources = 		\
 	gtkfontchooserutils.c	\
 	gtkfontchooserwidget.c	\
 	gtkframe.c		\
-	gtkgradient.c		\
 	gtkgrid.c		\
 	gtkhsla.c		\
 	gtkiconcache.c		\
@@ -824,7 +827,6 @@ gtk_base_c_sources = 		\
 	gtkstyleprovider.c	\
 	gtkstyleproviderprivate.c	\
 	gtkswitch.c		\
-	gtksymboliccolor.c	\
 	gtktestutils.c		\
 	gtktextattributes.c	\
 	gtktextbtree.c		\
@@ -973,6 +975,7 @@ gtk_private_h_sources += $(gtk_use_quartz_private_h_sources)
 endif
 
 gtk_all_private_h_sources = \
+	$(deprecated_private_h_sources) \
 	$(gtk_private_h_sources) \
 	$(gtk_use_x11_private_h_sources) \
 	$(gtk_use_win32_private_h_sources) \

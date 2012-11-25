@@ -33,14 +33,14 @@
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkcsstypedvalueprivate.h"
 #include "gtkcsstypesprivate.h"
-#include "gtkgradient.h"
-#include "gtkgradientprivate.h"
 #include "gtkprivatetypebuiltins.h"
 #include "gtkstylecontextprivate.h"
-#include "gtksymboliccolorprivate.h"
 #include "gtkthemingengine.h"
 #include "gtktypebuiltins.h"
 #include "gtkwin32themeprivate.h"
+
+#include "deprecated/gtkgradientprivate.h"
+#include "deprecated/gtksymboliccolorprivate.h"
 
 /* this is in case round() is not provided by the compiler, 
  * such as in the case of C89 compilers, like MSVC

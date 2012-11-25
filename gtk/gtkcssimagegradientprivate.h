@@ -22,7 +22,7 @@
 
 #include "gtk/gtkcssimageprivate.h"
 
-#include <gtk/gtkgradient.h>
+#include <gtk/deprecated/gtkgradient.h>
 
 G_BEGIN_DECLS
 
