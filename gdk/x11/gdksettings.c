@@ -82,7 +82,8 @@ static const char gdk_settings_names[] =
   "Gtk/VisibleFocus\0"        "gtk-visible-focus\0"
   "Gtk/ShellShowsAppMenu\0"   "gtk-shell-shows-app-menu\0"
   "Gtk/ShellShowsMenubar\0"   "gtk-shell-shows-menubar\0"
-  "Gtk/EnablePrimaryPaste\0"  "gtk-enable-primary-paste\0";
+  "Gtk/EnablePrimaryPaste\0"  "gtk-enable-primary-paste\0"
+  "Gtk/RecentFilesMaxAge\0"   "gtk-recent-files-max-age\0";
 
 
 
@@ -140,5 +141,6 @@ static const struct
   { 1767, 1784 },
   { 1802, 1824 },
   { 1849, 1871 },
-  { 1895, 1918 }
+  { 1895, 1918 },
+  { 1943, 1965 }
 };
