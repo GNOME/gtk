@@ -37,6 +37,7 @@
 #include "gtkstyleproviderprivate.h"
 #include "gtkintl.h"
 
+#include "gtksymboliccolorprivate.h"
 #include "gtkwin32themeprivate.h"
 
 /**

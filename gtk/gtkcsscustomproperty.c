@@ -26,6 +26,7 @@
 #include "gtkcssstylefuncsprivate.h"
 #include "gtkcsstypedvalueprivate.h"
 #include "gtkstylepropertiesprivate.h"
+#include "gtksymboliccolor.h"
 #include "gtkthemingengine.h"
 
 G_DEFINE_TYPE (GtkCssCustomProperty, _gtk_css_custom_property, GTK_TYPE_CSS_STYLE_PROPERTY)
