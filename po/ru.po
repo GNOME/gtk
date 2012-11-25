@@ -1581,7 +1581,7 @@ msgid "_Visit this file"
 msgstr "_Перейти к файлу"
 
 #: ../gtk/gtkfilechooserdefault.c:4176
-msgid "_Copy file's location"
+msgid "_Copy file’s location"
 msgstr "_Копировать адрес файла"
 
 #: ../gtk/gtkfilechooserdefault.c:4179

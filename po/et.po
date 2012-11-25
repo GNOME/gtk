@@ -1281,7 +1281,7 @@ msgstr "Faili pole võimalik valida"
 msgid "_Visit this file"
 msgstr "_Külasta seda faili"
 
-msgid "_Copy file's location"
+msgid "_Copy file’s location"
 msgstr "Kopeeri _asukoht"
 
 msgid "_Add to Bookmarks"

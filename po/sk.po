@@ -1588,7 +1588,7 @@ msgid "_Visit this file"
 msgstr "P_rezrieť si tento súbor"
 
 #: ../gtk/gtkfilechooserdefault.c:4178
-msgid "_Copy file's location"
+msgid "_Copy file’s location"
 msgstr "_Kopírovať umiestnenie súboru"
 
 #: ../gtk/gtkfilechooserdefault.c:4181

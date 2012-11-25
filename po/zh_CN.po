@@ -1556,7 +1556,7 @@ msgid "_Visit this file"
 msgstr "访问此文件(_V)"
 
 #: ../gtk/gtkfilechooserdefault.c:4176
-msgid "_Copy file's location"
+msgid "_Copy file’s location"
 msgstr "复制文件位置(_C)"
 
 #: ../gtk/gtkfilechooserdefault.c:4179

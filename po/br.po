@@ -1264,7 +1264,7 @@ msgstr ""
 
 #: ../gtk/gtkfilechooserdefault.c:4176
 #, fuzzy
-msgid "_Copy file's location"
+msgid "_Copy file’s location"
 msgstr "Eilañ al lec'hiadur"
 
 #: ../gtk/gtkfilechooserdefault.c:4179

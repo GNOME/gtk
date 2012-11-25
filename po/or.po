@@ -1634,7 +1634,7 @@ msgstr "ଏହି ଫାଇଲକୁ ପରିଦର୍ଶନ କରନ୍ତୁ
 
 #: ../gtk/gtkfilechooserdefault.c:4174
 #| msgid "Copy _Location"
-msgid "_Copy file's location"
+msgid "_Copy file’s location"
 msgstr "ଫାଇଲ ଅବସ୍ଥାନକୁ ନକଲ କରନ୍ତୁ (_C)"
 
 #: ../gtk/gtkfilechooserdefault.c:4177

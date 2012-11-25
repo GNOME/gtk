@@ -1611,7 +1611,7 @@ msgstr "ഈ ഫയല്‍ _സന്ദര്‍ശിയ്ക്കുക"
 
 #: ../gtk/gtkfilechooserdefault.c:4176
 #| msgid "Copy _Location"
-msgid "_Copy file's location"
+msgid "_Copy file’s location"
 msgstr "ഫയലിന്റെ സ്ഥാനം _പകര്‍ത്തുക"
 
 #: ../gtk/gtkfilechooserdefault.c:4179

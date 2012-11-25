@@ -1567,7 +1567,7 @@ msgid "_Visit this file"
 msgstr "या फाइलला भेट द्या (_V)"
 
 #: ../gtk/gtkfilechooserdefault.c:4178
-msgid "_Copy file's location"
+msgid "_Copy file’s location"
 msgstr "फाइलच्या ठिकाणाचे प्रत बनवा (_C)"
 
 #: ../gtk/gtkfilechooserdefault.c:4181

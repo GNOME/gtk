@@ -1288,7 +1288,7 @@ msgstr "இந்த கோப்பை பார்க்கவும் (_V)"
 
 #: ../gtk/gtkfilechooserdefault.c:4174
 #| msgid "Copy _Location"
-msgid "_Copy file's location"
+msgid "_Copy file’s location"
 msgstr "கோப்பின் இடத்தை நகலெடுக்கவும் (_C)"
 
 #: ../gtk/gtkfilechooserdefault.c:4177

@@ -1638,7 +1638,7 @@ msgstr ""
 #: ../gtk/gtkfilechooserdefault.c:4176
 #, fuzzy
 #| msgid "Copy _Location"
-msgid "_Copy file's location"
+msgid "_Copy file’s location"
 msgstr "ಇಲ್ಲಿಗೆ ನಕಲಿಸು (_L)"
 
 #: ../gtk/gtkfilechooserdefault.c:4179

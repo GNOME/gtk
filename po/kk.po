@@ -1543,7 +1543,7 @@ msgid "_Visit this file"
 msgstr "Бұл файлға _бару"
 
 #: ../gtk/gtkfilechooserdefault.c:4176
-msgid "_Copy file's location"
+msgid "_Copy file’s location"
 msgstr "Ф_айл адресін көшіру"
 
 #: ../gtk/gtkfilechooserdefault.c:4179

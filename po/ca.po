@@ -1596,7 +1596,7 @@ msgid "_Visit this file"
 msgstr "_Visita aquest fitxer"
 
 #: ../gtk/gtkfilechooserdefault.c:4176
-msgid "_Copy file's location"
+msgid "_Copy file’s location"
 msgstr "_Copia la ubicació del fitxer"
 
 #: ../gtk/gtkfilechooserdefault.c:4179

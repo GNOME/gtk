@@ -1609,7 +1609,7 @@ msgstr "চিহ্নিত ফাইল পরিদর্শন করুন
 
 #: ../gtk/gtkfilechooserdefault.c:4176
 #| msgid "Copy _Location"
-msgid "_Copy file's location"
+msgid "_Copy file’s location"
 msgstr "ফাইলের অবস্থান কপি করুন (_C)"
 
 #: ../gtk/gtkfilechooserdefault.c:4179

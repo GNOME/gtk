@@ -1559,7 +1559,7 @@ msgid "_Visit this file"
 msgstr "_Gå til denne filen"
 
 #: ../gtk/gtkfilechooserdefault.c:4179
-msgid "_Copy file's location"
+msgid "_Copy file’s location"
 msgstr "_Kopier filens lokasjon"
 
 #: ../gtk/gtkfilechooserdefault.c:4182

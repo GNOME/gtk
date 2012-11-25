@@ -1567,7 +1567,7 @@ msgid "_Visit this file"
 msgstr "_Bisitatu fitxategi hau"
 
 #: ../gtk/gtkfilechooserdefault.c:4173
-msgid "_Copy file's location"
+msgid "_Copy file’s location"
 msgstr "_Kopiatu fitxategiaren helbidea"
 
 #: ../gtk/gtkfilechooserdefault.c:4176

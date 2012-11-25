@@ -3865,7 +3865,7 @@ copy_file_clear_cb (GtkClipboard *clipboard,
   g_slist_free (selected_files);
 }
 
-/* Callback used when the "Copy file's location" menu item is activated */
+/* Callback used when the "Copy file’s location" menu item is activated */
 static void
 copy_file_location_cb (GtkMenuItem           *item,
                        GtkFileChooserDefault *impl)
@@ -4107,7 +4107,7 @@ file_list_drag_motion_cb (GtkWidget             *widget,
   return TRUE;
 }
 
-/* Sensitizes the "Copy file's location" context menu item if there is actually
+/* Sensitizes the "Copy file’s location" context menu item if there is actually
  * a selection active.
  */
 static void
@@ -4176,7 +4176,7 @@ file_list_build_popup_menu (GtkFileChooserDefault *impl)
   impl->browse_files_popup_menu_visit_file_item		= file_list_add_image_menu_item (impl, GTK_STOCK_DIRECTORY, _("_Visit this file"),
 											 G_CALLBACK (visit_file_cb));
 
-  impl->browse_files_popup_menu_copy_file_location_item	= file_list_add_image_menu_item (impl, GTK_STOCK_COPY, _("_Copy file's location"),
+  impl->browse_files_popup_menu_copy_file_location_item	= file_list_add_image_menu_item (impl, GTK_STOCK_COPY, _("_Copy file’s location"),
 											 G_CALLBACK (copy_file_location_cb));
 
   impl->browse_files_popup_menu_add_shortcut_item	= file_list_add_image_menu_item (impl, GTK_STOCK_ADD, _("_Add to Bookmarks"),

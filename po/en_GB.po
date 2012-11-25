@@ -1563,8 +1563,8 @@ msgid "_Visit this file"
 msgstr "_Visit this file"
 
 #: ../gtk/gtkfilechooserdefault.c:4179
-msgid "_Copy file's location"
-msgstr "_Copy file's location"
+msgid "_Copy file’s location"
+msgstr "_Copy file’s location"
 
 #: ../gtk/gtkfilechooserdefault.c:4182
 msgid "_Add to Bookmarks"
