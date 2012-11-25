@@ -65,15 +65,6 @@ void                           gdk_error_trap_pop_ignored (void);
 
 const gchar *         gdk_get_display_arg_name (void);
 
-/**
- * gdk_get_display:
- *
- * Gets the name of the display, which usually comes from the
- * <envar>DISPLAY</envar> environment variable or the
- * <option>--display</option> command line option.
- *
- * Returns: the name of the display.
- */
 gchar*        gdk_get_display        (void);
 
 #ifndef GDK_MULTIDEVICE_SAFE

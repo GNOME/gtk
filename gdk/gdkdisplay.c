@@ -1415,12 +1415,6 @@ gdk_display_get_name (GdkDisplay *display)
   return GDK_DISPLAY_GET_CLASS (display)->get_name (display);
 }
 
-gchar *
-gdk_get_display (void)
-{
-  return g_strdup (gdk_display_get_name (gdk_display_get_default ()));
-}
-
 /**
  * gdk_display_get_n_screens:
  * @display: a #GdkDisplay
