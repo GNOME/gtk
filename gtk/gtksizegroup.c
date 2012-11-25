@@ -163,7 +163,7 @@ add_widget_to_closure (GHashTable     *widgets,
   if (g_hash_table_lookup (widgets, widget))
     return;
 
-  g_hash_table_insert (widgets, widget, widget);
+  g_hash_table_add (widgets, widget);
   hidden = !gtk_widget_is_visible (widget);
 
   for (tmp_groups = _gtk_widget_get_sizegroups (widget); tmp_groups; tmp_groups = tmp_groups->next)
@@ -180,7 +180,7 @@ add_widget_to_closure (GHashTable     *widgets,
       if (!(tmp_priv->mode & (1 << orientation)))
         continue;
 
-      g_hash_table_insert (groups, tmp_group, tmp_group);
+      g_hash_table_add (groups, tmp_group);
 
       for (tmp_widgets = tmp_priv->widgets; tmp_widgets; tmp_widgets = tmp_widgets->next)
         add_widget_to_closure (widgets, groups, tmp_widgets->data, orientation);
