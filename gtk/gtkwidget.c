@@ -7263,8 +7263,6 @@ _gtk_widget_update_state_flags (GtkWidget     *widget,
       data.operation = operation;
 
       gtk_widget_propagate_state (widget, &data);
-
-      gtk_widget_queue_resize (widget);
     }
 }
 
