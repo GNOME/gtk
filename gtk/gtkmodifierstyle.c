@@ -256,11 +256,15 @@ _gtk_modifier_style_map_color (GtkModifierStyle *style,
 
   priv = style->priv;
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
   if (color)
     symbolic_color = gtk_symbolic_color_new_literal (color);
 
   gtk_style_properties_map_color (priv->style,
                                   name, symbolic_color);
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   g_signal_emit (style, signals[CHANGED], 0);
   _gtk_style_provider_private_changed (GTK_STYLE_PROVIDER_PRIVATE (style));

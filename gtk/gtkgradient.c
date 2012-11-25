@@ -17,6 +17,8 @@
 
 #include "config.h"
 
+#define GDK_DISABLE_DEPRECATION_WARNINGS
+
 #include "gtkgradientprivate.h"
 
 #include "gtkcsscolorvalueprivate.h"

@@ -289,7 +289,17 @@ static GtkCssValue *
 gtk_style_properties_provider_get_color (GtkStyleProviderPrivate *provider,
                                          const char              *name)
 {
-  return _gtk_symbolic_color_get_css_value (gtk_style_properties_lookup_color (GTK_STYLE_PROPERTIES (provider), name));
+  GtkSymbolicColor *symbolic;
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
+  symbolic = gtk_style_properties_lookup_color (GTK_STYLE_PROPERTIES (provider), name);
+  if (symbolic == NULL)
+    return NULL;
+
+  return _gtk_symbolic_color_get_css_value (symbolic);
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 static void
@@ -368,6 +378,8 @@ gtk_style_properties_new (void)
  * gtk_style_properties_lookup_color()
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: #GtkSymbolicColor is deprecated.
  **/
 void
 gtk_style_properties_map_color (GtkStyleProperties *props,
@@ -382,6 +394,8 @@ gtk_style_properties_map_color (GtkStyleProperties *props,
 
   priv = props->priv;
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
   if (G_UNLIKELY (!priv->color_map))
     priv->color_map = g_hash_table_new_full (g_str_hash,
                                              g_str_equal,
@@ -391,6 +405,8 @@ gtk_style_properties_map_color (GtkStyleProperties *props,
   g_hash_table_replace (priv->color_map,
                         g_strdup (name),
                         gtk_symbolic_color_ref (color));
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   _gtk_style_provider_private_changed (GTK_STYLE_PROVIDER_PRIVATE (props));
 }
@@ -406,6 +422,8 @@ gtk_style_properties_map_color (GtkStyleProperties *props,
  * Returns: (transfer none): The mapped color
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: #GtkSymbolicColor is deprecated.
  **/
 GtkSymbolicColor *
 gtk_style_properties_lookup_color (GtkStyleProperties *props,
@@ -862,7 +880,9 @@ gtk_style_properties_merge (GtkStyleProperties       *props,
               g_hash_table_lookup (priv->color_map, name))
             continue;
 
+          G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
           gtk_style_properties_map_color (props, name, color);
+          G_GNUC_END_IGNORE_DEPRECATIONS;
         }
     }
 

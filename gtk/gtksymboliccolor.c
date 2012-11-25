@@ -16,6 +16,9 @@
  */
 
 #include "config.h"
+
+#define GDK_DISABLE_DEPRECATION_WARNINGS
+
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
@@ -43,6 +46,9 @@
  * It is not normally necessary to deal directly with #GtkSymbolicColors,
  * since they are mostly used behind the scenes by #GtkStyleContext and
  * #GtkCssProvider.
+ *
+ * #GtkSymbolicColor is deprecated. Symbolic colors are considered an
+ * implementation detail of GTK+.
  */
 
 G_DEFINE_BOXED_TYPE (GtkSymbolicColor, gtk_symbolic_color,
@@ -75,6 +81,8 @@ gtk_symbolic_color_new (GtkCssValue *value)
  * Returns: a newly created #GtkSymbolicColor
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: #GtkSymbolicColor is deprecated.
  **/
 GtkSymbolicColor *
 gtk_symbolic_color_new_literal (const GdkRGBA *color)
@@ -95,6 +103,8 @@ gtk_symbolic_color_new_literal (const GdkRGBA *color)
  * Returns: a newly created #GtkSymbolicColor
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: #GtkSymbolicColor is deprecated.
  **/
 GtkSymbolicColor *
 gtk_symbolic_color_new_name (const gchar *name)
@@ -117,6 +127,8 @@ gtk_symbolic_color_new_name (const gchar *name)
  * Returns: A newly created #GtkSymbolicColor
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: #GtkSymbolicColor is deprecated.
  **/
 GtkSymbolicColor *
 gtk_symbolic_color_new_shade (GtkSymbolicColor *color,
@@ -141,6 +153,8 @@ gtk_symbolic_color_new_shade (GtkSymbolicColor *color,
  * Returns: A newly created #GtkSymbolicColor
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: #GtkSymbolicColor is deprecated.
  **/
 GtkSymbolicColor *
 gtk_symbolic_color_new_alpha (GtkSymbolicColor *color,
@@ -165,6 +179,8 @@ gtk_symbolic_color_new_alpha (GtkSymbolicColor *color,
  * Returns: A newly created #GtkSymbolicColor
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: #GtkSymbolicColor is deprecated.
  **/
 GtkSymbolicColor *
 gtk_symbolic_color_new_mix (GtkSymbolicColor *color1,
@@ -194,6 +210,8 @@ gtk_symbolic_color_new_mix (GtkSymbolicColor *color1,
  * Returns: A newly created #GtkSymbolicColor
  *
  * Since: 3.4
+ *
+ * Deprecated: 3.8: #GtkSymbolicColor is deprecated.
  */
 GtkSymbolicColor *
 gtk_symbolic_color_new_win32 (const gchar *theme_class,
@@ -213,6 +231,8 @@ gtk_symbolic_color_new_win32 (const gchar *theme_class,
  * Returns: the same @color
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: #GtkSymbolicColor is deprecated.
  **/
 GtkSymbolicColor *
 gtk_symbolic_color_ref (GtkSymbolicColor *color)
@@ -232,6 +252,8 @@ gtk_symbolic_color_ref (GtkSymbolicColor *color)
  * reference count reaches 0.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: #GtkSymbolicColor is deprecated.
  **/
 void
 gtk_symbolic_color_unref (GtkSymbolicColor *color)
@@ -265,6 +287,8 @@ gtk_symbolic_color_unref (GtkSymbolicColor *color)
  * Returns: %TRUE if the color has been resolved
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: #GtkSymbolicColor is deprecated.
  **/
 gboolean
 gtk_symbolic_color_resolve (GtkSymbolicColor   *color,
@@ -304,6 +328,8 @@ gtk_symbolic_color_resolve (GtkSymbolicColor   *color,
  * create the same symbolic color from it.
  *
  * Returns: a new string representing @color
+ *
+ * Deprecated: 3.8: #GtkSymbolicColor is deprecated.
  **/
 char *
 gtk_symbolic_color_to_string (GtkSymbolicColor *color)

@@ -2283,6 +2283,8 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
                                                  widget_path,
                                                  state, pspec, &pcache->value))
         {
+          G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
           /* Resolve symbolic colors to GdkColor/GdkRGBA */
           if (G_VALUE_TYPE (&pcache->value) == GTK_TYPE_SYMBOLIC_COLOR)
             {
@@ -2318,6 +2320,8 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
 
               gtk_symbolic_color_unref (color);
             }
+
+          G_GNUC_END_IGNORE_DEPRECATIONS;
 
           if (priv->widget)
             gtk_widget_path_free (widget_path);

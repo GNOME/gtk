@@ -74,9 +74,11 @@ gboolean gtk_style_properties_lookup_property   (const gchar             *proper
 
 GtkStyleProperties * gtk_style_properties_new (void);
 
+GDK_DEPRECATED_IN_3_8
 void               gtk_style_properties_map_color    (GtkStyleProperties *props,
                                                       const gchar        *name,
                                                       GtkSymbolicColor   *color);
+GDK_DEPRECATED_IN_3_8
 GtkSymbolicColor * gtk_style_properties_lookup_color (GtkStyleProperties *props,
                                                       const gchar        *name);
 

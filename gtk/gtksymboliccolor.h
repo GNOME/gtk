@@ -31,23 +31,33 @@ G_BEGIN_DECLS
 
 GType              gtk_symbolic_color_get_type    (void) G_GNUC_CONST;
 
+GDK_DEPRECATED_IN_3_8
 GtkSymbolicColor * gtk_symbolic_color_new_literal (const GdkRGBA      *color);
+GDK_DEPRECATED_IN_3_8
 GtkSymbolicColor * gtk_symbolic_color_new_name    (const gchar        *name);
+GDK_DEPRECATED_IN_3_8
 GtkSymbolicColor * gtk_symbolic_color_new_shade   (GtkSymbolicColor   *color,
                                                    gdouble             factor);
+GDK_DEPRECATED_IN_3_8
 GtkSymbolicColor * gtk_symbolic_color_new_alpha   (GtkSymbolicColor   *color,
                                                    gdouble             factor);
+GDK_DEPRECATED_IN_3_8
 GtkSymbolicColor * gtk_symbolic_color_new_mix     (GtkSymbolicColor   *color1,
                                                    GtkSymbolicColor   *color2,
                                                    gdouble             factor);
+GDK_DEPRECATED_IN_3_8
 GtkSymbolicColor * gtk_symbolic_color_new_win32   (const gchar        *theme_class,
                                                    gint                id);
 
+GDK_DEPRECATED_IN_3_8
 GtkSymbolicColor * gtk_symbolic_color_ref         (GtkSymbolicColor   *color);
+GDK_DEPRECATED_IN_3_8
 void               gtk_symbolic_color_unref       (GtkSymbolicColor   *color);
 
+GDK_DEPRECATED_IN_3_8
 char *             gtk_symbolic_color_to_string   (GtkSymbolicColor   *color);
 
+GDK_DEPRECATED_IN_3_8
 gboolean           gtk_symbolic_color_resolve     (GtkSymbolicColor   *color,
                                                    GtkStyleProperties *props,
                                                    GdkRGBA            *resolved_color);

@@ -19,6 +19,8 @@
 
 #include "config.h"
 
+#define GDK_DISABLE_DEPRECATION_WARNINGS
+
 #include "gtkcssimagegradientprivate.h"
 
 #include "gtkcssprovider.h"
