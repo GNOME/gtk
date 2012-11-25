@@ -24,15 +24,9 @@
 
 G_BEGIN_DECLS
 
-GtkCssValue *      _gtk_symbolic_color_resolve_full       (GtkSymbolicColor           *color,
-                                                           GtkStyleProviderPrivate    *provider,
-                                                           GtkCssValue                *current,
-                                                           GtkCssDependencies          current_deps,
-                                                           GtkCssDependencies         *dependencies);
-
-GtkSymbolicColor * _gtk_symbolic_color_get_current_color  (void);
-
 GtkSymbolicColor * _gtk_css_symbolic_value_new            (GtkCssParser               *parser);
+
+GtkCssValue *      _gtk_symbolic_color_get_css_value      (GtkSymbolicColor           *symbolic);
 
 G_END_DECLS
 

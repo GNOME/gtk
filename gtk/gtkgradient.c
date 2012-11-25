@@ -19,6 +19,7 @@
 
 #include "gtkgradientprivate.h"
 
+#include "gtkcsscolorvalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkstyleproperties.h"
@@ -318,11 +319,11 @@ _gtk_gradient_resolve_full (GtkGradient             *gradient,
       stop = &g_array_index (gradient->stops, ColorStop, i);
 
       /* if color resolving fails, assume transparency */
-      val = _gtk_symbolic_color_resolve_full (stop->color,
-                                              provider,
-                                              _gtk_css_computed_values_get_value (values, GTK_CSS_PROPERTY_COLOR),
-                                              GTK_CSS_DEPENDS_ON_COLOR,
-                                              &stop_deps);
+      val = _gtk_css_color_value_resolve (_gtk_symbolic_color_get_css_value (stop->color),
+                                          provider,
+                                          _gtk_css_computed_values_get_value (values, GTK_CSS_PROPERTY_COLOR),
+                                          GTK_CSS_DEPENDS_ON_COLOR,
+                                          &stop_deps);
       if (val)
         {
           rgba = *_gtk_css_rgba_value_get_rgba (val);
