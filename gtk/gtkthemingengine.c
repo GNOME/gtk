@@ -35,6 +35,7 @@
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkcsstypesprivate.h"
+#include "gtkhslaprivate.h"
 #include "gtkthemingengineprivate.h"
 #include "gtkroundedboxprivate.h"
 #include "gtkthemingbackgroundprivate.h"
@@ -1339,14 +1340,11 @@ color_shade (const GdkRGBA *color,
              gdouble        factor,
              GdkRGBA       *color_return)
 {
-  GtkSymbolicColor *literal, *shade;
+  GtkHSLA hsla;
 
-  literal = gtk_symbolic_color_new_literal (color);
-  shade = gtk_symbolic_color_new_shade (literal, factor);
-  gtk_symbolic_color_unref (literal);
-
-  gtk_symbolic_color_resolve (shade, NULL, color_return);
-  gtk_symbolic_color_unref (shade);
+  _gtk_hsla_init_from_rgba (&hsla, color);
+  _gtk_hsla_shade (&hsla, &hsla, factor);
+  _gdk_rgba_init_from_hsla (color_return, &hsla);
 }
 
 static void
