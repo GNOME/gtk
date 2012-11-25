@@ -152,17 +152,18 @@ G_STATIC_ASSERT (GTK_SIZE_GROUP_VERTICAL == (1 << GTK_ORIENTATION_VERTICAL));
 G_STATIC_ASSERT (GTK_SIZE_GROUP_BOTH == (GTK_SIZE_GROUP_HORIZONTAL | GTK_SIZE_GROUP_VERTICAL));
 
 static void
-add_widget_to_closure (GHashTable     *set,
+add_widget_to_closure (GHashTable     *widgets,
+                       GHashTable     *groups,
                        GtkWidget      *widget,
 		       GtkOrientation  orientation)
 {
   GSList *tmp_groups, *tmp_widgets;
   gboolean hidden;
 
-  if (g_hash_table_lookup (set, widget))
+  if (g_hash_table_lookup (widgets, widget))
     return;
 
-  g_hash_table_insert (set, widget, widget);
+  g_hash_table_insert (widgets, widget, widget);
   hidden = !gtk_widget_is_visible (widget);
 
   for (tmp_groups = _gtk_widget_get_sizegroups (widget); tmp_groups; tmp_groups = tmp_groups->next)
@@ -170,14 +171,19 @@ add_widget_to_closure (GHashTable     *set,
       GtkSizeGroup        *tmp_group = tmp_groups->data;
       GtkSizeGroupPrivate *tmp_priv  = tmp_group->priv;
 
+      if (g_hash_table_lookup (groups, tmp_group))
+        continue;
+
       if (tmp_priv->ignore_hidden && hidden)
         continue;
 
       if (!(tmp_priv->mode & (1 << orientation)))
         continue;
 
+      g_hash_table_insert (groups, tmp_group, tmp_group);
+
       for (tmp_widgets = tmp_priv->widgets; tmp_widgets; tmp_widgets = tmp_widgets->next)
-        add_widget_to_closure (set, tmp_widgets->data, orientation);
+        add_widget_to_closure (widgets, groups, tmp_widgets->data, orientation);
     }
 }
 
@@ -185,13 +191,16 @@ GHashTable *
 _gtk_size_group_get_widget_peers (GtkWidget      *for_widget,
                                   GtkOrientation  orientation)
 {
-  GHashTable *result;
+  GHashTable *widgets, *groups;
 
-  result = g_hash_table_new (g_direct_hash, g_direct_equal);
+  widgets = g_hash_table_new (g_direct_hash, g_direct_equal);
+  groups = g_hash_table_new (g_direct_hash, g_direct_equal);
 
-  add_widget_to_closure (result, for_widget, orientation);
+  add_widget_to_closure (widgets, groups, for_widget, orientation);
 
-  return result;
+  g_hash_table_unref (groups);
+
+  return widgets;
 }
                                      
 static void
