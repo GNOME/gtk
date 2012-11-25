@@ -333,6 +333,9 @@ gdk_parse_args (int    *argc,
  * <option>--display</option> command line option.
  *
  * Returns: the name of the display.
+ *
+ * Deprecated: 3.8: Call gdk_display_get_name (gdk_display_get_default ()))
+ *    instead.
  */
 gchar *
 gdk_get_display (void)
