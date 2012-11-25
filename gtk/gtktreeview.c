@@ -8133,9 +8133,6 @@ gtk_tree_view_set_fixed_height_mode (GtkTreeView *tree_view,
     {
       tree_view->priv->fixed_height_mode = 0;
       tree_view->priv->fixed_height = -1;
-
-      /* force a revalidation */
-      install_presize_handler (tree_view);
     }
   else 
     {
@@ -8154,10 +8151,10 @@ gtk_tree_view_set_fixed_height_mode (GtkTreeView *tree_view,
       
       tree_view->priv->fixed_height_mode = 1;
       tree_view->priv->fixed_height = -1;
-      
-      if (tree_view->priv->tree)
-	initialize_fixed_height_mode (tree_view);
     }
+
+  /* force a revalidation */
+  install_presize_handler (tree_view);
 
   g_object_notify (G_OBJECT (tree_view), "fixed-height-mode");
 }
