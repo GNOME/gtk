@@ -43,6 +43,11 @@
  * It is not normally necessary to deal directly with #GtkGradients,
  * since they are mostly used behind the scenes by #GtkStyleContext and
  * #GtkCssProvider.
+ *
+ * #GtkGradient is deprecated. It was used internally by GTK's CSS engine
+ * to represent gradients. As its handling is not conforming to modern
+ * web standards, it is not used anymore. If you want to use gradients in
+ * your own code, please use Cairo directly.
  */
 
 G_DEFINE_BOXED_TYPE (GtkGradient, gtk_gradient,
@@ -83,6 +88,8 @@ struct _GtkGradient
  * Returns: A newly created #GtkGradient
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: #GtkGradient is deprecated.
  **/
 GtkGradient *
 gtk_gradient_new_linear (gdouble x0,
@@ -123,6 +130,8 @@ gtk_gradient_new_linear (gdouble x0,
  * Returns: A newly created #GtkGradient
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: #GtkGradient is deprecated.
  **/
 GtkGradient *
 gtk_gradient_new_radial (gdouble x0,
@@ -158,6 +167,8 @@ gtk_gradient_new_radial (gdouble x0,
  * Adds a stop color to @gradient.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: #GtkGradient is deprecated.
  **/
 void
 gtk_gradient_add_color_stop (GtkGradient      *gradient,
@@ -183,6 +194,8 @@ gtk_gradient_add_color_stop (GtkGradient      *gradient,
  * Returns: The same @gradient
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: #GtkGradient is deprecated.
  **/
 GtkGradient *
 gtk_gradient_ref (GtkGradient *gradient)
@@ -202,6 +215,8 @@ gtk_gradient_ref (GtkGradient *gradient)
  * if the reference count reaches 0.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: #GtkGradient is deprecated.
  **/
 void
 gtk_gradient_unref (GtkGradient *gradient)
@@ -242,6 +257,8 @@ gtk_gradient_unref (GtkGradient *gradient)
  * Returns: %TRUE if the gradient has been resolved
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: #GtkGradient is deprecated.
  **/
 gboolean
 gtk_gradient_resolve (GtkGradient         *gradient,
@@ -375,6 +392,8 @@ append_number (GString    *str,
  * for using in GTK CSS files.
  *
  * Returns: A string representation for @gradient
+ *
+ * Deprecated: 3.8: #GtkGradient is deprecated.
  **/
 char *
 gtk_gradient_to_string (GtkGradient *gradient)

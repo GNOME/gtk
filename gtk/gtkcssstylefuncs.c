@@ -715,6 +715,8 @@ gradient_value_print (const GValue *value,
 {
   GtkGradient *gradient = g_value_get_boxed (value);
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
   if (gradient == NULL)
     g_string_append (string, "none");
   else
@@ -723,6 +725,8 @@ gradient_value_print (const GValue *value,
       g_string_append (string, s);
       g_free (s);
     }
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 static gboolean 

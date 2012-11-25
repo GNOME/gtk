@@ -33,10 +33,12 @@ G_BEGIN_DECLS
 
 GType         gtk_gradient_get_type       (void) G_GNUC_CONST;
 
+GDK_DEPRECATED_IN_3_8
 GtkGradient * gtk_gradient_new_linear     (gdouble              x0,
                                            gdouble              y0,
                                            gdouble              x1,
                                            gdouble              y1);
+GDK_DEPRECATED_IN_3_8
 GtkGradient * gtk_gradient_new_radial     (gdouble              x0,
                                            gdouble              y0,
                                            gdouble              radius0,
@@ -44,21 +46,27 @@ GtkGradient * gtk_gradient_new_radial     (gdouble              x0,
                                            gdouble              y1,
                                            gdouble              radius1);
 
+GDK_DEPRECATED_IN_3_8
 void          gtk_gradient_add_color_stop (GtkGradient         *gradient,
                                            gdouble              offset,
                                            GtkSymbolicColor    *color);
 
+GDK_DEPRECATED_IN_3_8
 GtkGradient * gtk_gradient_ref            (GtkGradient         *gradient);
+GDK_DEPRECATED_IN_3_8
 void          gtk_gradient_unref          (GtkGradient         *gradient);
 
+GDK_DEPRECATED_IN_3_8
 gboolean      gtk_gradient_resolve        (GtkGradient         *gradient,
                                            GtkStyleProperties  *props,
                                            cairo_pattern_t    **resolved_gradient);
+GDK_DEPRECATED_IN_3_8
 cairo_pattern_t *
               gtk_gradient_resolve_for_context
                                           (GtkGradient         *gradient,
                                            GtkStyleContext     *context);
 
+GDK_DEPRECATED_IN_3_8
 char *        gtk_gradient_to_string      (GtkGradient         *gradient);
 
 G_END_DECLS
