@@ -279,7 +279,7 @@ gtk_im_context_ime_set_client_window (GtkIMContext *context,
       HIMC himc;
       HWND hwnd;
 
-      hwnd = GDK_WINDOW_HWND (client_window);
+      hwnd = gdk_win32_window_get_impl_hwnd (client_window);
       himc = ImmGetContext (hwnd);
       if (himc)
 	{
@@ -349,7 +349,7 @@ gtk_im_context_ime_reset (GtkIMContext *context)
   if (!context_ime->client_window)
     return;
 
-  hwnd = GDK_WINDOW_HWND (context_ime->client_window);
+  hwnd = gdk_win32_window_get_impl_hwnd (context_ime->client_window);
   himc = ImmGetContext (hwnd);
   if (!himc)
     return;
@@ -380,7 +380,7 @@ get_utf8_preedit_string (GtkIMContextIME *context_ime, gint *pos_ret)
 
   if (!context_ime->client_window)
     return g_strdup ("");
-  hwnd = GDK_WINDOW_HWND (context_ime->client_window);
+  hwnd = gdk_win32_window_get_impl_hwnd (context_ime->client_window);
   himc = ImmGetContext (hwnd);
   if (!himc)
     return g_strdup ("");
@@ -441,7 +441,7 @@ get_pango_attr_list (GtkIMContextIME *context_ime, const gchar *utf8str)
 
   if (!context_ime->client_window)
     return attrs;
-  hwnd = GDK_WINDOW_HWND (context_ime->client_window);
+  hwnd = gdk_win32_window_get_impl_hwnd (context_ime->client_window);
   himc = ImmGetContext (hwnd);
   if (!himc)
     return attrs;
@@ -579,7 +579,7 @@ gtk_im_context_ime_focus_in (GtkIMContext *context)
   /* swtich current context */
   context_ime->focus = TRUE;
 
-  hwnd = GDK_WINDOW_HWND (context_ime->client_window);
+  hwnd = gdk_win32_window_get_impl_hwnd (context_ime->client_window);
   himc = ImmGetContext (hwnd);
   if (!himc)
     return;
@@ -589,7 +589,7 @@ gtk_im_context_ime_focus_in (GtkIMContext *context)
     {
       gdk_window_add_filter (toplevel,
                              gtk_im_context_ime_message_filter, context_ime);
-      top_hwnd = GDK_WINDOW_HWND (toplevel);
+      top_hwnd = gdk_win32_window_get_impl_hwnd (toplevel);
 
       context_ime->toplevel = toplevel;
     }
@@ -652,7 +652,7 @@ gtk_im_context_ime_focus_out (GtkIMContext *context)
   /* swtich current context */
   context_ime->focus = FALSE;
 
-  hwnd = GDK_WINDOW_HWND (context_ime->client_window);
+  hwnd = gdk_win32_window_get_impl_hwnd (context_ime->client_window);
   himc = ImmGetContext (hwnd);
   if (!himc)
     return;
@@ -714,7 +714,7 @@ gtk_im_context_ime_focus_out (GtkIMContext *context)
       gdk_window_remove_filter (toplevel,
                                 gtk_im_context_ime_message_filter,
                                 context_ime);
-      top_hwnd = GDK_WINDOW_HWND (toplevel);
+      top_hwnd = gdk_win32_window_get_impl_hwnd (toplevel);
 
       context_ime->toplevel = NULL;
     }
@@ -748,7 +748,7 @@ gtk_im_context_ime_set_cursor_location (GtkIMContext *context,
   if (!context_ime->client_window)
     return;
 
-  hwnd = GDK_WINDOW_HWND (context_ime->client_window);
+  hwnd = gdk_win32_window_get_impl_hwnd (context_ime->client_window);
   himc = ImmGetContext (hwnd);
   if (!himc)
     return;
@@ -778,7 +778,7 @@ gtk_im_context_ime_set_use_preedit (GtkIMContext *context,
       HWND hwnd;
       HIMC himc;
 
-      hwnd = GDK_WINDOW_HWND (context_ime->client_window);
+      hwnd = gdk_win32_window_get_impl_hwnd (context_ime->client_window);
       himc = ImmGetContext (hwnd);
       if (!himc)
         return;
@@ -814,7 +814,7 @@ gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
   if (!GTK_IS_WIDGET (widget))
     return;
 
-  hwnd = GDK_WINDOW_HWND (context_ime->client_window);
+  hwnd = gdk_win32_window_get_impl_hwnd (context_ime->client_window);
   himc = ImmGetContext (hwnd);
   if (!himc)
     return;
@@ -921,7 +921,7 @@ gtk_im_context_ime_message_filter (GdkXEvent *xevent,
   if (!context_ime->focus)
     return retval;
 
-  hwnd = GDK_WINDOW_HWND (context_ime->client_window);
+  hwnd = gdk_win32_window_get_impl_hwnd (context_ime->client_window);
   himc = ImmGetContext (hwnd);
   if (!himc)
     return retval;
@@ -941,8 +941,8 @@ gtk_im_context_ime_message_filter (GdkXEvent *xevent,
           RECT rc;
 
           hwnd_top =
-            GDK_WINDOW_HWND (gdk_window_get_toplevel
-                             (context_ime->client_window));
+            gdk_win32_window_get_impl_hwnd (gdk_window_get_toplevel
+                                            (context_ime->client_window));
           GetWindowRect (hwnd_top, &rc);
           pt.x = wx;
           pt.y = wy;
