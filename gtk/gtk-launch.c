@@ -66,9 +66,9 @@ main (int argc, char *argv[])
 #endif
 
   /* Translators: this message will appear immediately after the */
-  /* usage string - Usage: COMMAND [OPTION]... <THIS_MESSAGE>    */
+  /* usage string - Usage: COMMAND [OPTION]… <THIS_MESSAGE>    */
   context =
-    g_option_context_new (_("APPLICATION [URI...] - launch an APPLICATION with URI."));
+    g_option_context_new (_("APPLICATION [URI…] — launch an APPLICATION with URI."));
 
   /* Translators: this message will appear after the usage string */
   /* and before the list of options.                              */

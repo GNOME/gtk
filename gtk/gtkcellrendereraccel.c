@@ -413,7 +413,7 @@ gtk_cell_renderer_accel_get_preferred_width (GtkCellRenderer    *cell,
   GtkRequisition min_req, nat_req;
 
   if (priv->sizing_label == NULL)
-    priv->sizing_label = gtk_label_new (_("New accelerator..."));
+    priv->sizing_label = gtk_label_new (_("New accelerator…"));
 
   gtk_widget_get_preferred_size (priv->sizing_label, &min_req, &nat_req);
 
@@ -744,7 +744,7 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
    * an accelerator when the cell is clicked to change the 
    * acelerator.
    */
-  gtk_label_set_text (GTK_LABEL (label), _("New accelerator..."));
+  gtk_label_set_text (GTK_LABEL (label), _("New accelerator…"));
 
   gtk_container_add (GTK_CONTAINER (eventbox), label);
   

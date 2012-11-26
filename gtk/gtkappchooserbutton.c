@@ -225,7 +225,7 @@ other_application_dialog_response_cb (GtkDialog *dialog,
   if (response_id != GTK_RESPONSE_OK)
     {
       /* reset the active item, otherwise we are stuck on
-       * 'Other application...'
+       * 'Other application…'
        */
       gtk_combo_box_set_active (GTK_COMBO_BOX (self), self->priv->last_active);
       gtk_widget_destroy (GTK_WIDGET (dialog));
@@ -287,7 +287,7 @@ gtk_app_chooser_button_ensure_dialog_item (GtkAppChooserButton *self,
 
   gtk_list_store_insert_after (self->priv->store, &iter, &iter2);
   real_insert_custom_item (self, CUSTOM_ITEM_OTHER_APP,
-                           _("Other application..."), NULL,
+                           _("Other application…"), NULL,
                            FALSE, &iter);
 }
 
@@ -611,7 +611,7 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
    */
   pspec =
     g_param_spec_boolean ("show-dialog-item",
-                          P_("Include an 'Other...' item"),
+                          P_("Include an 'Other…' item"),
                           P_("Whether the combobox should include an item that triggers a GtkAppChooserDialog"),
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);

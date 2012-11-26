@@ -602,7 +602,7 @@ custom_paper_printer_data_func (GtkCellLayout   *cell_layout,
   if (printer)
     g_object_set (cell, "text",  gtk_printer_get_name (printer), NULL);
   else
-    g_object_set (cell, "text",  _("Margins from Printer..."), NULL);
+    g_object_set (cell, "text",  _("Margins from Printer…"), NULL);
 
   if (printer)
     g_object_unref (printer);

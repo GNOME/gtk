@@ -2043,7 +2043,7 @@ model_add_other (GtkFileChooserButton *button)
   gtk_list_store_insert (store, &iter, pos);
   gtk_list_store_set (store, &iter,
 		      ICON_COLUMN, NULL,
-		      DISPLAY_NAME_COLUMN, _("Other..."),
+		      DISPLAY_NAME_COLUMN, _("Other…"),
 		      TYPE_COLUMN, ROW_TYPE_OTHER,
 		      DATA_COLUMN, NULL,
 		      IS_FOLDER_COLUMN, FALSE,

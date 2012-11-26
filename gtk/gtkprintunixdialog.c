@@ -1913,7 +1913,7 @@ selected_printer_changed (GtkTreeSelection   *selection,
       set_busy_cursor (dialog, TRUE);
       gtk_list_store_set (GTK_LIST_STORE (priv->printer_list),
                           g_object_get_data (G_OBJECT (printer), "gtk-print-tree-iter"),
-                          PRINTER_LIST_COL_STATE, _("Getting printer information..."),
+                          PRINTER_LIST_COL_STATE, _("Getting printer information…"),
                           -1);
       return;
     }
@@ -3326,7 +3326,7 @@ page_name_func (GtkCellLayout   *cell_layout,
       g_object_unref (page_setup);
     }
   else
-    g_object_set (cell, "text",  _("Manage Custom Sizes..."), NULL);
+    g_object_set (cell, "text",  _("Manage Custom Sizes…"), NULL);
 }
 
 static void
