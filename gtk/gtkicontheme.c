@@ -160,9 +160,18 @@ typedef enum
   HAS_ICON_FILE = 1 << 3
 } IconSuffix;
 
+#define INFO_CACHE_LRU_SIZE 32
+#if 0
+#define DEBUG_CACHE(args) g_print args
+#else
+#define DEBUG_CACHE(args)
+#endif
 
 struct _GtkIconThemePrivate
 {
+  GHashTable *info_cache;
+  GList *info_cache_lru;
+
   gchar *current_theme;
   gchar *fallback_theme;
   gchar **search_path;
@@ -197,10 +206,19 @@ struct _GtkIconThemePrivate
   gulong reset_styles_idle;
 };
 
+typedef struct {
+  gchar **icon_names;
+  gint size;
+  GtkIconLookupFlags flags;
+} IconInfoKey;
+
 struct _GtkIconInfo
 {
   /* Information about the source
    */
+  IconInfoKey key;
+  GtkIconTheme *in_cache;
+
   gchar *filename;
   GFile *icon_file;
   GLoadableIcon *loadable;
@@ -231,6 +249,7 @@ struct _GtkIconInfo
    * the icon.
    */
   GdkPixbuf *pixbuf;
+  GdkPixbuf *proxy_pixbuf;
   GError *load_error;
   gdouble scale;
 
@@ -330,6 +349,8 @@ static BuiltinIcon *find_builtin_icon (const gchar *icon_name,
 				       gint        size,
 				       gint        *min_difference_p,
 				       gboolean    *has_larger_p);
+static void remove_from_lru_cache (GtkIconTheme *icon_theme,
+				   GtkIconInfo *icon_info);
 
 static guint signal_changed = 0;
 
@@ -338,6 +359,46 @@ static GHashTable *icon_theme_builtin_icons;
 /* also used in gtkiconfactory.c */
 GtkIconCache *_builtin_cache = NULL;
 static GList *builtin_dirs = NULL;
+
+static guint
+icon_info_key_hash (gconstpointer _key)
+{
+  const IconInfoKey *key = _key;
+  guint h = 0;
+  int i;
+  for (i = 0; key->icon_names[i] != NULL; i++)
+    h ^= g_str_hash (key->icon_names[i]);
+
+  h ^= key->size * 0x10001;
+  h ^= key->flags * 0x1000010;
+
+  return h;
+}
+
+static gboolean
+icon_info_key_equal (gconstpointer  _a,
+		     gconstpointer  _b)
+{
+  const IconInfoKey *a = _a;
+  const IconInfoKey *b = _b;
+  int i;
+
+  if (a->size != b->size)
+    return FALSE;
+
+  if (a->flags != b->flags)
+    return FALSE;
+
+  for (i = 0;
+       a->icon_names[i] != NULL &&
+       b->icon_names[i] != NULL; i++)
+    {
+      if (strcmp (a->icon_names[i], b->icon_names[i]) != 0)
+	return FALSE;
+    }
+
+  return a->icon_names[i] == NULL && b->icon_names[i] == NULL;
+}
 
 G_DEFINE_TYPE (GtkIconTheme, gtk_icon_theme, G_TYPE_OBJECT)
 
@@ -641,6 +702,25 @@ pixbuf_supports_svg (void)
   return found_svg;
 }
 
+/* The icon info was removed from the icon_info_hash hash table */
+static void
+icon_info_uncached (GtkIconInfo *icon_info)
+{
+  GtkIconTheme *icon_theme = icon_info->in_cache;
+
+  DEBUG_CACHE (("removing %p (%s %d 0x%x) from cache (icon_them: %p)  (cache size %d)\n",
+		icon_info,
+		g_strjoinv (",", icon_info->key.icon_names),
+		icon_info->key.size, icon_info->key.flags,
+		icon_theme,
+		icon_theme != NULL ? g_hash_table_size (icon_theme->priv->info_cache) : 0));
+
+  icon_info->in_cache = NULL;
+
+  if (icon_theme != NULL)
+    remove_from_lru_cache (icon_theme, icon_info);
+}
+
 static void
 gtk_icon_theme_init (GtkIconTheme *icon_theme)
 {
@@ -652,6 +732,9 @@ gtk_icon_theme_init (GtkIconTheme *icon_theme)
                                       GTK_TYPE_ICON_THEME,
                                       GtkIconThemePrivate);
   icon_theme->priv = priv;
+
+  priv->info_cache = g_hash_table_new_full (icon_info_key_hash, icon_info_key_equal, NULL,
+					    (GDestroyNotify)icon_info_uncached);
 
   priv->custom_theme = FALSE;
 
@@ -712,6 +795,8 @@ do_theme_change (GtkIconTheme *icon_theme)
 {
   GtkIconThemePrivate *priv = icon_theme->priv;
 
+  g_hash_table_remove_all (priv->info_cache);
+
   if (!priv->themes_valid)
     return;
   
@@ -754,6 +839,9 @@ gtk_icon_theme_finalize (GObject *object)
 
   icon_theme = GTK_ICON_THEME (object);
   priv = icon_theme->priv;
+
+  g_hash_table_destroy (priv->info_cache);
+  g_assert (priv->info_cache_lru == NULL);
 
   if (priv->reset_styles_idle)
     {
@@ -1306,6 +1394,95 @@ ensure_valid_themes (GtkIconTheme *icon_theme)
   priv->loading_themes = FALSE;
 }
 
+/* The LRU cache is a short list of IconInfos that are kept
+   alive even though their IconInfo would otherwise have
+   been freed, so that we can avoid reloading these
+   constantly.
+   We put infos on the lru list when nothing otherwise
+   references the info. So, when we get a cache hit
+   we remove it from the list, and when the proxy
+   pixmap is released we put it on the list.
+*/
+
+static void
+ensure_lru_cache_space (GtkIconTheme *icon_theme)
+{
+  GtkIconThemePrivate *priv = icon_theme->priv;
+  GList *l;
+
+  /* Remove last item if LRU full */
+  l = g_list_nth (priv->info_cache_lru, INFO_CACHE_LRU_SIZE - 1);
+  if (l)
+    {
+      GtkIconInfo *icon_info = l->data;
+
+      DEBUG_CACHE (("removing (due to out of space) %p (%s %d 0x%x) from LRU cache (cache size %d)\n",
+		    icon_info,
+		    g_strjoinv (",", icon_info->key.icon_names),
+		    icon_info->key.size, icon_info->key.flags,
+		    g_list_length (priv->info_cache_lru)));
+
+      priv->info_cache_lru = g_list_delete_link (priv->info_cache_lru, l);
+      gtk_icon_info_free (icon_info);
+    }
+}
+
+static void
+add_to_lru_cache (GtkIconTheme *icon_theme,
+		  GtkIconInfo *icon_info)
+{
+  GtkIconThemePrivate *priv = icon_theme->priv;
+
+  DEBUG_CACHE (("adding  %p (%s %d 0x%x) to LRU cache (cache size %d)\n",
+		icon_info,
+		g_strjoinv (",", icon_info->key.icon_names),
+		icon_info->key.size, icon_info->key.flags,
+		g_list_length (priv->info_cache_lru)));
+
+  g_assert (g_list_find (priv->info_cache_lru, icon_info) == NULL);
+
+  ensure_lru_cache_space (icon_theme);
+  /* prepend new info to LRU */
+  priv->info_cache_lru = g_list_prepend (priv->info_cache_lru,
+					 gtk_icon_info_copy (icon_info));
+}
+
+static void
+ensure_in_lru_cache (GtkIconTheme *icon_theme,
+		     GtkIconInfo *icon_info)
+{
+  GtkIconThemePrivate *priv = icon_theme->priv;
+  GList *l;
+
+  l = g_list_find (priv->info_cache_lru, icon_info);
+  if (l)
+    {
+      /* Move to front of LRU if already in it */
+      priv->info_cache_lru = g_list_remove_link (priv->info_cache_lru, l);
+      priv->info_cache_lru = g_list_concat (l, priv->info_cache_lru);
+    }
+  else
+    add_to_lru_cache (icon_theme, icon_info);
+}
+
+static void
+remove_from_lru_cache (GtkIconTheme *icon_theme,
+		       GtkIconInfo *icon_info)
+{
+  GtkIconThemePrivate *priv = icon_theme->priv;
+  if (g_list_find (priv->info_cache_lru, icon_info))
+    {
+      DEBUG_CACHE (("removing %p (%s %d 0x%x) from LRU cache (cache size %d)\n",
+		    icon_info,
+		    g_strjoinv (",", icon_info->key.icon_names),
+		    icon_info->key.size, icon_info->key.flags,
+		    g_list_length (priv->info_cache_lru)));
+
+      priv->info_cache_lru = g_list_remove (priv->info_cache_lru, icon_info);
+      gtk_icon_info_free (icon_info);
+    }
+}
+
 static GtkIconInfo *
 choose_icon (GtkIconTheme       *icon_theme,
 	     const gchar        *icon_names[],
@@ -1319,8 +1496,30 @@ choose_icon (GtkIconTheme       *icon_theme,
   gboolean allow_svg;
   gboolean use_builtin;
   gint i;
+  IconInfoKey key;
 
   priv = icon_theme->priv;
+
+  ensure_valid_themes (icon_theme);
+
+  key.icon_names = (char **)icon_names;
+  key.size = size;
+  key.flags = flags;
+
+  icon_info = g_hash_table_lookup (priv->info_cache, &key);
+  if (icon_info != NULL)
+    {
+      DEBUG_CACHE (("cache hit %p (%s %d 0x%x) (cache size %d)\n",
+		    icon_info,
+		    g_strjoinv (",", icon_info->key.icon_names),
+		    icon_info->key.size, icon_info->key.flags,
+		    g_hash_table_size (priv->info_cache)));
+
+      icon_info = gtk_icon_info_copy (icon_info);
+      remove_from_lru_cache (icon_theme, icon_info);
+
+      return icon_info;
+    }
 
   if (flags & GTK_ICON_LOOKUP_NO_SVG)
     allow_svg = FALSE;
@@ -1330,8 +1529,6 @@ choose_icon (GtkIconTheme       *icon_theme,
     allow_svg = priv->pixbuf_supports_svg;
 
   use_builtin = flags & GTK_ICON_LOOKUP_USE_BUILTIN;
-  
-  ensure_valid_themes (icon_theme);
 
   /* for symbolic icons, do a search in all registered themes first;
    * a theme that inherits them from a parent theme might provide
@@ -1417,10 +1614,21 @@ choose_icon (GtkIconTheme       *icon_theme,
     }
 
  out:
-  if (icon_info) 
+  if (icon_info)
     {
       icon_info->desired_size = size;
       icon_info->forced_size = (flags & GTK_ICON_LOOKUP_FORCE_SIZE) != 0;
+
+      icon_info->key.icon_names = g_strdupv ((char **)icon_names);
+      icon_info->key.size = size;
+      icon_info->key.flags = flags;
+      icon_info->in_cache = icon_theme;
+      DEBUG_CACHE (("adding %p (%s %d 0x%x) to cache (cache size %d)\n",
+		    icon_info,
+		    g_strjoinv (",", icon_info->key.icon_names),
+		    icon_info->key.size, icon_info->key.flags,
+		    g_hash_table_size (priv->info_cache)));
+     g_hash_table_insert (priv->info_cache, &icon_info->key, icon_info);
     }
   else
     {
@@ -2735,7 +2943,12 @@ gtk_icon_info_free (GtkIconInfo *icon_info)
   icon_info->ref_count--;
   if (icon_info->ref_count > 0)
     return;
- 
+
+  if (icon_info->in_cache)
+    g_hash_table_remove (icon_info->in_cache->priv->info_cache, &icon_info->key);
+
+  g_strfreev (icon_info->key.icon_names);
+
   g_free (icon_info->filename);
   g_clear_object (&icon_info->icon_file);
 
@@ -3095,6 +3308,22 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo  *icon_info,
   return TRUE;
 }
 
+static void
+proxy_pixbuf_destroy (guchar *pixels, gpointer data)
+{
+  GtkIconInfo *icon_info = data;
+  GtkIconTheme *icon_theme = icon_info->in_cache;
+
+  g_assert (icon_info->proxy_pixbuf != NULL);
+  icon_info->proxy_pixbuf = NULL;
+
+  /* Keep it alive a bit longer */
+  if (icon_theme != NULL)
+    ensure_in_lru_cache (icon_theme, icon_info);
+
+  gtk_icon_info_free (icon_info);
+}
+
 /**
  * gtk_icon_info_load_icon:
  * @icon_info: a #GtkIconInfo structure from gtk_icon_theme_lookup_icon()
@@ -3140,7 +3369,28 @@ gtk_icon_info_load_icon (GtkIconInfo *icon_info,
       return NULL;
     }
 
-  return g_object_ref (icon_info->pixbuf);
+  /* Instead of returning the pixbuf directly we
+     return a proxy to it that we don't own (but that
+     shares the data with the one we own). This way
+     we can know when it is freed and ensure the
+     IconInfo is alive (and thus cached) while
+     the pixbuf is still alive. */
+
+  if (icon_info->proxy_pixbuf != NULL)
+    return g_object_ref (icon_info->proxy_pixbuf);
+
+  icon_info->proxy_pixbuf =
+    gdk_pixbuf_new_from_data (gdk_pixbuf_get_pixels (icon_info->pixbuf),
+			      gdk_pixbuf_get_colorspace (icon_info->pixbuf),
+			      gdk_pixbuf_get_has_alpha (icon_info->pixbuf),
+			      gdk_pixbuf_get_bits_per_sample (icon_info->pixbuf),
+			      gdk_pixbuf_get_width (icon_info->pixbuf),
+			      gdk_pixbuf_get_height (icon_info->pixbuf),
+			      gdk_pixbuf_get_rowstride (icon_info->pixbuf),
+			      proxy_pixbuf_destroy,
+			      gtk_icon_info_copy (icon_info));
+
+  return icon_info->proxy_pixbuf;
 }
 
 static gchar *
