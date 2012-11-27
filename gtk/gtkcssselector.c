@@ -38,6 +38,7 @@ struct _GtkCssSelectorClass {
   guint         increase_id_specificity :1;
   guint         increase_class_specificity :1;
   guint         increase_element_specificity :1;
+  guint         is_simple :1;
 };
 
 struct _GtkCssSelector
@@ -112,7 +113,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_DESCENDANT = {
   gtk_css_selector_descendant_print,
   gtk_css_selector_descendant_match,
   gtk_css_selector_descendant_get_change,
-  FALSE, FALSE, FALSE
+  FALSE, FALSE, FALSE, FALSE
 };
 
 /* CHILD */
@@ -147,7 +148,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_CHILD = {
   gtk_css_selector_child_print,
   gtk_css_selector_child_match,
   gtk_css_selector_child_get_change,
-  FALSE, FALSE, FALSE
+  FALSE, FALSE, FALSE, FALSE
 };
 
 /* SIBLING */
@@ -187,7 +188,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_SIBLING = {
   gtk_css_selector_sibling_print,
   gtk_css_selector_sibling_match,
   gtk_css_selector_sibling_get_change,
-  FALSE, FALSE, FALSE
+  FALSE, FALSE, FALSE, FALSE
 };
 
 /* ADJACENT */
@@ -222,7 +223,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_ADJACENT = {
   gtk_css_selector_adjacent_print,
   gtk_css_selector_adjacent_match,
   gtk_css_selector_adjacent_get_change,
-  FALSE, FALSE, FALSE
+  FALSE, FALSE, FALSE, FALSE
 };
 
 /* ANY */
@@ -262,7 +263,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_ANY = {
   gtk_css_selector_any_print,
   gtk_css_selector_any_match,
   gtk_css_selector_any_get_change,
-  FALSE, FALSE, FALSE
+  FALSE, FALSE, FALSE, TRUE
 };
 
 /* NAME */
@@ -295,7 +296,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_NAME = {
   gtk_css_selector_name_print,
   gtk_css_selector_name_match,
   gtk_css_selector_name_get_change,
-  FALSE, FALSE, TRUE
+  FALSE, FALSE, TRUE, TRUE
 };
 
 /* REGION */
@@ -341,7 +342,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_REGION = {
   gtk_css_selector_region_print,
   gtk_css_selector_region_match,
   gtk_css_selector_region_get_change,
-  FALSE, FALSE, TRUE
+  FALSE, FALSE, TRUE, TRUE
 };
 
 /* CLASS */
@@ -375,7 +376,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_CLASS = {
   gtk_css_selector_class_print,
   gtk_css_selector_class_match,
   gtk_css_selector_class_get_change,
-  FALSE, TRUE, FALSE
+  FALSE, TRUE, FALSE, TRUE
 };
 
 /* ID */
@@ -409,7 +410,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_ID = {
   gtk_css_selector_id_print,
   gtk_css_selector_id_match,
   gtk_css_selector_id_get_change,
-  TRUE, FALSE, FALSE
+  TRUE, FALSE, FALSE, TRUE
 };
 
 /* PSEUDOCLASS FOR STATE */
@@ -467,7 +468,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_PSEUDOCLASS_STATE = {
   gtk_css_selector_pseudoclass_state_print,
   gtk_css_selector_pseudoclass_state_match,
   gtk_css_selector_pseudoclass_state_get_change,
-  FALSE, TRUE, FALSE
+  FALSE, TRUE, FALSE, TRUE
 };
 
 /* PSEUDOCLASS FOR POSITION */
@@ -708,7 +709,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_PSEUDOCLASS_POSITION = {
   gtk_css_selector_pseudoclass_position_print,
   gtk_css_selector_pseudoclass_position_match,
   gtk_css_selector_pseudoclass_position_get_change,
-  FALSE, TRUE, FALSE
+  FALSE, TRUE, FALSE, TRUE
 };
 
 /* API */
