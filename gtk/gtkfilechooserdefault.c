@@ -5920,6 +5920,7 @@ settings_load (GtkFileChooserDefault *impl)
   gboolean show_size_column;
   gint sort_column;
   GtkSortType sort_order;
+  StartupMode startup_mode;
 
   settings = _gtk_file_chooser_settings_new ();
 
@@ -5928,6 +5929,7 @@ settings_load (GtkFileChooserDefault *impl)
   show_size_column = _gtk_file_chooser_settings_get_show_size_column (settings);
   sort_column = _gtk_file_chooser_settings_get_sort_column (settings);
   sort_order = _gtk_file_chooser_settings_get_sort_order (settings);
+  startup_mode = _gtk_file_chooser_settings_get_startup_mode (settings);
 
   g_object_unref (settings);
 
@@ -5944,6 +5946,8 @@ settings_load (GtkFileChooserDefault *impl)
    * created yet.  The individual functions that create and set the models will
    * call set_sort_column() themselves.
    */
+
+  impl->startup_mode = startup_mode;
 }
 
 static void
@@ -5990,6 +5994,7 @@ settings_save (GtkFileChooserDefault *impl)
   _gtk_file_chooser_settings_set_show_size_column (settings, impl->show_size_column);
   _gtk_file_chooser_settings_set_sort_column (settings, impl->sort_column);
   _gtk_file_chooser_settings_set_sort_order (settings, impl->sort_order);
+  _gtk_file_chooser_settings_set_startup_mode (settings, impl->startup_mode);
 
   save_dialog_geometry (impl, settings);
 
@@ -6036,6 +6041,38 @@ get_file_for_last_folder_opened (GtkFileChooserDefault *impl)
   return file;
 }
 
+/* Changes the current folder to $CWD */
+static void
+switch_to_cwd (GtkFileChooserDefault *impl)
+{
+  char *current_working_dir;
+
+  current_working_dir = g_get_current_dir ();
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (impl), current_working_dir);
+  g_free (current_working_dir);
+}
+
+/* Sets the file chooser to showing Recent Files or $CWD, depending on the
+ * user's settings.
+ */
+static void
+set_startup_mode (GtkFileChooserDefault *impl)
+{
+  switch (impl->startup_mode)
+    {
+    case STARTUP_MODE_RECENT:
+      recent_shortcut_handler (impl);
+      break;
+
+    case STARTUP_MODE_CWD:
+      switch_to_cwd (impl);
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 /* GtkWidget::map method */
 static void
 gtk_file_chooser_default_map (GtkWidget *widget)
@@ -6048,12 +6085,14 @@ gtk_file_chooser_default_map (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->map (widget);
 
+  settings_load (impl);
+
   if (impl->operation_mode == OPERATION_MODE_BROWSE)
     {
       switch (impl->reload_state)
         {
         case RELOAD_EMPTY:
-	  recent_shortcut_handler (impl);
+	  set_startup_mode (impl);
           break;
         
         case RELOAD_HAS_FOLDER:
@@ -6068,8 +6107,6 @@ gtk_file_chooser_default_map (GtkWidget *widget)
     }
 
   volumes_bookmarks_changed_cb (impl->file_system, impl);
-
-  settings_load (impl);
 
   profile_end ("end", NULL);
 }
