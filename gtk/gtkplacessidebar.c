@@ -2930,9 +2930,9 @@ settings_start_in_changed_cb (GtkCheckMenuItem *item, GtkPlacesSidebar *sidebar)
 	StartupMode startup_mode;
 	GSettings *settings;
 
-	if (item == GTK_CHECK_MENU_ITEM (sidebar->popup_menu_start_in_recent_item))
+	if (gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (sidebar->popup_menu_start_in_recent_item)))
 		startup_mode = STARTUP_MODE_RECENT;
-	else if (item == GTK_CHECK_MENU_ITEM (sidebar->popup_menu_start_in_cwd_item))
+	else if (gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (sidebar->popup_menu_start_in_cwd_item)))
 		startup_mode = STARTUP_MODE_CWD;
 	else {
 		g_assert_not_reached ();
