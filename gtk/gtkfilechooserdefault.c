@@ -3410,6 +3410,10 @@ shortcuts_build_popup_menu (GtkFileChooserDefault *impl)
 		    G_CALLBACK (rename_shortcut_cb), impl);
   gtk_widget_show (item);
   gtk_menu_shell_append (GTK_MENU_SHELL (impl->browse_shortcuts_popup_menu), item);
+
+  item = gtk_separator_menu_item_new ();
+  gtk_widget_show (item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (impl->browse_shortcuts_popup_menu), item);
 }
 
 static void
