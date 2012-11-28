@@ -185,6 +185,7 @@ static const GtkCssMatcherClass GTK_CSS_MATCHER_WIDGET_PATH = {
   gtk_css_matcher_widget_path_has_regions,
   gtk_css_matcher_widget_path_has_region,
   gtk_css_matcher_widget_path_has_position,
+  FALSE
 };
 
 gboolean
@@ -288,6 +289,7 @@ static const GtkCssMatcherClass GTK_CSS_MATCHER_ANY = {
   gtk_css_matcher_any_has_regions,
   gtk_css_matcher_any_has_region,
   gtk_css_matcher_any_has_position,
+  TRUE
 };
 
 void
@@ -406,6 +408,7 @@ static const GtkCssMatcherClass GTK_CSS_MATCHER_SUPERSET = {
   gtk_css_matcher_superset_has_regions,
   gtk_css_matcher_superset_has_region,
   gtk_css_matcher_superset_has_position,
+  FALSE
 };
 
 void
