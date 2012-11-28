@@ -1815,7 +1815,7 @@ _gtk_css_selector_tree_builder_build (GtkCssSelectorTreeBuilder *builder)
     GString *s = g_string_new ("");
     _gtk_css_selector_tree_print (tree, s, "");
     g_print ("%s", s->str);
-    g_string_free (s);
+    g_string_free (s, TRUE);
   }
 #endif
 
