@@ -50,6 +50,7 @@ struct _GtkCssMatcherClass {
                                                    gboolean               forward,
                                                    int                    a,
                                                    int                    b);
+  gboolean is_any;
 };
 
 struct _GtkCssMatcherWidgetPath {
@@ -144,6 +145,12 @@ _gtk_css_matcher_has_position (const GtkCssMatcher *matcher,
                                int                  b)
 {
   return matcher->klass->has_position (matcher, forward, a, b);
+}
+
+static inline gboolean
+_gtk_css_matcher_matches_any (const GtkCssMatcher *matcher)
+{
+  return matcher->klass->is_any;
 }
 
 
