@@ -1011,6 +1011,7 @@ struct _GtkCssProviderPrivate
   GHashTable *keyframes;
 
   GArray *rulesets;
+  GtkCssSelectorTree *tree;
   GResource *resource;
 };
 
@@ -1506,25 +1507,46 @@ gtk_css_style_provider_lookup (GtkStyleProviderPrivate *provider,
   GtkCssProviderPrivate *priv;
   GtkCssRuleset *ruleset;
   guint j;
+  int i;
+  GPtrArray *tree_rules;
 
   css_provider = GTK_CSS_PROVIDER (provider);
   priv = css_provider->priv;
 
-  if (priv->rulesets->len == 0)
-    return;
+  tree_rules = _gtk_css_selector_tree_match_all (priv->tree, matcher);
 
-  for (ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, priv->rulesets->len - 1);
-       ruleset >= &g_array_index (priv->rulesets, GtkCssRuleset, 0);
-       ruleset--)
+#ifdef VERIFY_TREE
+  for (i = 0; i < priv->rulesets->len; i++)
     {
+      gboolean found = FALSE;
+
+      ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, i);
+
+      for (j = 0; j < tree_rules->len; j++)
+	{
+	  if (ruleset == tree_rules->pdata[j])
+	    {
+	      found = TRUE;
+	      break;
+	    }
+	}
+
+      if (found)
+	g_assert (gtk_css_ruleset_matches (ruleset, matcher));
+      else
+	g_assert (!gtk_css_ruleset_matches (ruleset, matcher));
+    }
+#endif
+
+  for (i = tree_rules->len - 1; i >= 0; i--)
+    {
+      ruleset = tree_rules->pdata[i];
+
       if (ruleset->styles == NULL)
         continue;
 
       if (!_gtk_bitmask_intersects (_gtk_css_lookup_get_missing (lookup),
                                     ruleset->set_styles))
-        continue;
-
-      if (!gtk_css_ruleset_matches (ruleset, matcher))
         continue;
 
       for (j = 0; j < ruleset->n_styles; j++)
@@ -1544,6 +1566,8 @@ gtk_css_style_provider_lookup (GtkStyleProviderPrivate *provider,
       if (_gtk_bitmask_is_empty (_gtk_css_lookup_get_missing (lookup)))
         break;
     }
+
+  g_ptr_array_free (tree_rules, TRUE);
 }
 
 static GtkCssChange
@@ -1553,25 +1577,27 @@ gtk_css_style_provider_get_change (GtkStyleProviderPrivate *provider,
   GtkCssProvider *css_provider;
   GtkCssProviderPrivate *priv;
   GtkCssChange change = 0;
+  GPtrArray *tree_rules;
   int i;
 
   css_provider = GTK_CSS_PROVIDER (provider);
   priv = css_provider->priv;
 
-  for (i = priv->rulesets->len - 1; i >= 0; i--)
+  tree_rules = _gtk_css_selector_tree_match_all (priv->tree, matcher);
+
+  for (i = tree_rules->len - 1; i >= 0; i--)
     {
       GtkCssRuleset *ruleset;
 
-      ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, i);
+      ruleset = tree_rules->pdata[i];
 
       if (ruleset->styles == NULL)
         continue;
 
-      if (!gtk_css_ruleset_matches (ruleset, matcher))
-        continue;
-
       change |= gtk_css_ruleset_get_change (ruleset);
     }
+
+  g_ptr_array_free (tree_rules, TRUE);
 
   return change;
 }
@@ -1599,6 +1625,7 @@ gtk_css_provider_finalize (GObject *object)
     gtk_css_ruleset_clear (&g_array_index (priv->rulesets, GtkCssRuleset, i));
 
   g_array_free (priv->rulesets, TRUE);
+  _gtk_css_selector_tree_free (priv->tree);
 
   g_hash_table_destroy (priv->symbolic_colors);
   g_hash_table_destroy (priv->keyframes);
@@ -1736,6 +1763,9 @@ gtk_css_provider_reset (GtkCssProvider *css_provider)
   for (i = 0; i < priv->rulesets->len; i++)
     gtk_css_ruleset_clear (&g_array_index (priv->rulesets, GtkCssRuleset, i));
   g_array_set_size (priv->rulesets, 0);
+  _gtk_css_selector_tree_free (priv->tree);
+  priv->tree = NULL;
+
 }
 
 static void
@@ -2370,8 +2400,25 @@ static void
 gtk_css_provider_postprocess (GtkCssProvider *css_provider)
 {
   GtkCssProviderPrivate *priv = css_provider->priv;
+  GtkCssSelectorTreeBuilder *builder;
+  guint i;
 
   g_array_sort (priv->rulesets, gtk_css_provider_compare_rule);
+
+  builder = _gtk_css_selector_tree_builder_new ();
+  for (i = 0; i < priv->rulesets->len; i++)
+    {
+      GtkCssRuleset *ruleset;
+
+      ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, i);
+
+      _gtk_css_selector_tree_builder_add (builder,
+					  ruleset->selector,
+					  ruleset);
+    }
+
+  priv->tree = _gtk_css_selector_tree_builder_build (builder);
+  _gtk_css_selector_tree_builder_free (builder);
 }
 
 static gboolean
