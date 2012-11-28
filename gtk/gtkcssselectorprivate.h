@@ -24,6 +24,8 @@
 G_BEGIN_DECLS
 
 typedef struct _GtkCssSelector GtkCssSelector;
+typedef struct _GtkCssSelectorTree GtkCssSelectorTree;
+typedef struct _GtkCssSelectorTreeBuilder GtkCssSelectorTreeBuilder;
 
 GtkCssSelector *  _gtk_css_selector_parse           (GtkCssParser           *parser);
 void              _gtk_css_selector_free            (GtkCssSelector         *selector);
@@ -37,6 +39,18 @@ gboolean          _gtk_css_selector_matches         (const GtkCssSelector   *sel
                                                      const GtkCssMatcher    *matcher);
 int               _gtk_css_selector_compare         (const GtkCssSelector   *a,
                                                      const GtkCssSelector   *b);
+
+
+void _gtk_css_selector_tree_free (GtkCssSelectorTree *tree);
+GPtrArray *_gtk_css_selector_tree_match_all (GtkCssSelectorTree *tree,
+					     const GtkCssMatcher    *matcher);
+
+GtkCssSelectorTreeBuilder *_gtk_css_selector_tree_builder_new   (void);
+void                       _gtk_css_selector_tree_builder_add   (GtkCssSelectorTreeBuilder *builder,
+								 GtkCssSelector            *selectors,
+								 gpointer                   match);
+GtkCssSelectorTree *       _gtk_css_selector_tree_builder_build (GtkCssSelectorTreeBuilder *builder);
+void                       _gtk_css_selector_tree_builder_free  (GtkCssSelectorTreeBuilder *builder);
 
 G_END_DECLS
 
