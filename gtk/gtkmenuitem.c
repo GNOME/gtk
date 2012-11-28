@@ -850,8 +850,6 @@ gtk_menu_item_get_preferred_width (GtkWidget *widget,
   GtkWidget *parent;
   guint accel_width;
   guint border_width;
-  GtkPackDirection pack_dir;
-  GtkPackDirection child_pack_dir;
   gint  min_width, nat_width;
   GtkStyleContext *context;
   GtkStateFlags state;
@@ -860,17 +858,6 @@ gtk_menu_item_get_preferred_width (GtkWidget *widget,
   min_width = nat_width = 0;
   bin = GTK_BIN (widget);
   parent = gtk_widget_get_parent (widget);
-
-  if (GTK_IS_MENU_BAR (parent))
-    {
-      pack_dir = gtk_menu_bar_get_pack_direction (GTK_MENU_BAR (parent));
-      child_pack_dir = gtk_menu_bar_get_child_pack_direction (GTK_MENU_BAR (parent));
-    }
-  else
-    {
-      pack_dir = GTK_PACK_DIRECTION_LTR;
-      child_pack_dir = GTK_PACK_DIRECTION_LTR;
-    }
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
@@ -936,8 +923,6 @@ gtk_menu_item_real_get_height (GtkWidget *widget,
   GtkWidget *parent;
   guint accel_width;
   guint border_width;
-  GtkPackDirection pack_dir;
-  GtkPackDirection child_pack_dir;
   gint min_height, nat_height;
   gint avail_size = 0;
 
@@ -949,17 +934,6 @@ gtk_menu_item_real_get_height (GtkWidget *widget,
 
   bin = GTK_BIN (widget);
   parent = gtk_widget_get_parent (widget);
-
-  if (GTK_IS_MENU_BAR (parent))
-    {
-      pack_dir = gtk_menu_bar_get_pack_direction (GTK_MENU_BAR (parent));
-      child_pack_dir = gtk_menu_bar_get_child_pack_direction (GTK_MENU_BAR (parent));
-    }
-  else
-    {
-      pack_dir = GTK_PACK_DIRECTION_LTR;
-      child_pack_dir = GTK_PACK_DIRECTION_LTR;
-    }
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   min_height   = (border_width * 2) + padding.top + padding.bottom;
@@ -1478,7 +1452,6 @@ gtk_menu_item_size_allocate (GtkWidget     *widget,
   GtkBin *bin;
   GtkAllocation child_allocation;
   GtkTextDirection direction;
-  GtkPackDirection pack_dir;
   GtkPackDirection child_pack_dir;
   GtkWidget *child;
   GtkWidget *parent;
@@ -1493,12 +1466,10 @@ gtk_menu_item_size_allocate (GtkWidget     *widget,
   parent = gtk_widget_get_parent (widget);
   if (GTK_IS_MENU_BAR (parent))
     {
-      pack_dir = gtk_menu_bar_get_pack_direction (GTK_MENU_BAR (parent));
       child_pack_dir = gtk_menu_bar_get_child_pack_direction (GTK_MENU_BAR (parent));
     }
   else
     {
-      pack_dir = GTK_PACK_DIRECTION_LTR;
       child_pack_dir = GTK_PACK_DIRECTION_LTR;
     }
 
