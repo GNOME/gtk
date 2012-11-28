@@ -184,6 +184,8 @@ EXTRA_DIST += \
 	colors-errors.ref.css \
 	colors-red.css \
 	colors-red.ref.css \
+	comment-detection.css \
+	comment-detection.ref.css \
 	cross-fade-basic.css \
 	css-21-malformed-declarations.css \
 	css-21-malformed-declarations.errors \
