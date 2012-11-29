@@ -1676,6 +1676,18 @@ _gtk_css_selector_tree_print (GtkCssSelectorTree *tree, GString *str, char *pref
 #endif
 
 void
+_gtk_css_selector_tree_match_print (const GtkCssSelectorTree *tree,
+				    GString *str)
+{
+  g_return_if_fail (tree != NULL);
+
+  tree->selector.class->print (&tree->selector, str);
+
+  if (tree->parent)
+    _gtk_css_selector_tree_match_print (tree->parent, str);
+}
+
+void
 _gtk_css_selector_tree_free (GtkCssSelectorTree *tree)
 {
   if (tree == NULL)

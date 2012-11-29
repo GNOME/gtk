@@ -40,10 +40,11 @@ gboolean          _gtk_css_selector_matches         (const GtkCssSelector   *sel
 int               _gtk_css_selector_compare         (const GtkCssSelector   *a,
                                                      const GtkCssSelector   *b);
 
-
-void _gtk_css_selector_tree_free (GtkCssSelectorTree *tree);
-GPtrArray *_gtk_css_selector_tree_match_all (GtkCssSelectorTree *tree,
-					     const GtkCssMatcher    *matcher);
+void       _gtk_css_selector_tree_free            (GtkCssSelectorTree       *tree);
+GPtrArray *_gtk_css_selector_tree_match_all       (GtkCssSelectorTree       *tree,
+						   const GtkCssMatcher      *matcher);
+void       _gtk_css_selector_tree_match_print     (const GtkCssSelectorTree *tree,
+						   GString                  *str);
 
 GtkCssSelectorTreeBuilder *_gtk_css_selector_tree_builder_new   (void);
 void                       _gtk_css_selector_tree_builder_add   (GtkCssSelectorTreeBuilder *builder,
