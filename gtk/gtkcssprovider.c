@@ -1410,6 +1410,42 @@ gtk_css_provider_init (GtkCssProvider *css_provider)
                                            (GDestroyNotify) _gtk_css_value_unref);
 }
 
+static void
+verify_tree_match_results (GtkCssProvider *provider,
+			   const GtkCssMatcher *matcher,
+			   GPtrArray *tree_rules)
+{
+#ifdef VERIFY_TREE
+  GtkCssProviderPrivate *priv = provider->priv;
+  GtkCssRuleset *ruleset;
+  int i, j;
+
+  for (i = 0; i < priv->rulesets->len; i++)
+    {
+      gboolean found = FALSE;
+
+      ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, i);
+
+      for (j = 0; j < tree_rules->len; j++)
+	{
+	  if (ruleset == tree_rules->pdata[j])
+	    {
+	      found = TRUE;
+	      break;
+	    }
+	}
+
+      if (found != !!gtk_css_ruleset_matches (ruleset, matcher))
+	{
+	  g_error ("expected rule '%s' to %s, but it %s\n",
+		   _gtk_css_selector_to_string (ruleset->selector),
+		   gtk_css_ruleset_matches (ruleset, matcher) ? "match" : "not match",
+		   found ? "matched" : "didn't match");
+	}
+    }
+#endif
+}
+
 static gboolean
 gtk_css_provider_get_style_property (GtkStyleProvider *provider,
                                      GtkWidgetPath    *path,
@@ -1514,29 +1550,7 @@ gtk_css_style_provider_lookup (GtkStyleProviderPrivate *provider,
   priv = css_provider->priv;
 
   tree_rules = _gtk_css_selector_tree_match_all (priv->tree, matcher);
-
-#ifdef VERIFY_TREE
-  for (i = 0; i < priv->rulesets->len; i++)
-    {
-      gboolean found = FALSE;
-
-      ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, i);
-
-      for (j = 0; j < tree_rules->len; j++)
-	{
-	  if (ruleset == tree_rules->pdata[j])
-	    {
-	      found = TRUE;
-	      break;
-	    }
-	}
-
-      if (found)
-	g_assert (gtk_css_ruleset_matches (ruleset, matcher));
-      else
-	g_assert (!gtk_css_ruleset_matches (ruleset, matcher));
-    }
-#endif
+  verify_tree_match_results (css_provider, matcher, tree_rules);
 
   for (i = tree_rules->len - 1; i >= 0; i--)
     {
@@ -1584,6 +1598,7 @@ gtk_css_style_provider_get_change (GtkStyleProviderPrivate *provider,
   priv = css_provider->priv;
 
   tree_rules = _gtk_css_selector_tree_match_all (priv->tree, matcher);
+  verify_tree_match_results (css_provider, matcher, tree_rules);
 
   for (i = tree_rules->len - 1; i >= 0; i--)
     {
