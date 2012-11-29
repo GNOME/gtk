@@ -993,14 +993,13 @@ gtk_css_selector_pseudoclass_position_tree_match_for_region (const GtkCssSelecto
   if (!_gtk_css_matcher_has_region (matcher, prev->selector.data, selector_flags))
     return;
 
-  gtk_css_selector_tree_found_match (tree, res);
+  gtk_css_selector_tree_found_match (prev, res);
 
   for (prev2 = prev->previous; prev2 != NULL; prev2 = prev2->siblings)
     {
       if (prev2->selector.class == &GTK_CSS_SELECTOR_DESCENDANT)
 	gtk_css_selector_tree_match (prev2->previous, matcher, res);
-      else
-	gtk_css_selector_tree_match (prev2, matcher, res);
+      gtk_css_selector_tree_match (prev2, matcher, res);
     }
 }
 
