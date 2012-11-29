@@ -37,7 +37,8 @@ struct _GtkCssSelectorClass {
   void              (* tree_match)  (const GtkCssSelectorTree   *tree,
                                      const GtkCssMatcher        *matcher,
 				     GHashTable                  *res);
-  GtkCssChange      (* get_change)  (const GtkCssSelector       *selector);
+  GtkCssChange      (* get_change)  (const GtkCssSelector       *selector,
+				     GtkCssChange                previous_change);
   int               (* compare_one) (const GtkCssSelector       *a,
 				     const GtkCssSelector       *b);
 
@@ -114,15 +115,6 @@ gtk_css_selector_match (const GtkCssSelector *selector,
   return selector->class->match (selector, matcher);
 }
 
-static GtkCssChange
-gtk_css_selector_get_change (const GtkCssSelector *selector)
-{
-  if (selector == NULL)
-    return 0;
-
-  return selector->class->get_change (selector);
-}
-
 static int
 gtk_css_selector_compare_one (const GtkCssSelector *a, const GtkCssSelector *b)
 {
@@ -196,9 +188,9 @@ gtk_css_selector_descendant_compare_one (const GtkCssSelector *a,
 }
   
 static GtkCssChange
-gtk_css_selector_descendant_get_change (const GtkCssSelector *selector)
+gtk_css_selector_descendant_get_change (const GtkCssSelector *selector, GtkCssChange previous_change)
 {
-  return _gtk_css_change_for_child (gtk_css_selector_get_change (gtk_css_selector_previous (selector)));
+  return _gtk_css_change_for_child (previous_change);
 }
 
 static const GtkCssSelectorClass GTK_CSS_SELECTOR_DESCENDANT = {
@@ -248,9 +240,9 @@ gtk_css_selector_child_tree_match (const GtkCssSelectorTree *tree,
 }
 
 static GtkCssChange
-gtk_css_selector_child_get_change (const GtkCssSelector *selector)
+gtk_css_selector_child_get_change (const GtkCssSelector *selector, GtkCssChange previous_change)
 {
-  return _gtk_css_change_for_child (gtk_css_selector_get_change (gtk_css_selector_previous (selector)));
+  return _gtk_css_change_for_child (previous_change);
 }
 
 static int
@@ -319,9 +311,9 @@ gtk_css_selector_sibling_tree_match (const GtkCssSelectorTree *tree,
 }
 
 static GtkCssChange
-gtk_css_selector_sibling_get_change (const GtkCssSelector *selector)
+gtk_css_selector_sibling_get_change (const GtkCssSelector *selector, GtkCssChange previous_change)
 {
-  return _gtk_css_change_for_sibling (gtk_css_selector_get_change (gtk_css_selector_previous (selector)));
+  return _gtk_css_change_for_sibling (previous_change);
 }
 
 static int
@@ -381,9 +373,9 @@ gtk_css_selector_adjacent_tree_match (const GtkCssSelectorTree *tree,
 }
 
 static GtkCssChange
-gtk_css_selector_adjacent_get_change (const GtkCssSelector *selector)
+gtk_css_selector_adjacent_get_change (const GtkCssSelector *selector, GtkCssChange previous_change)
 {
-  return _gtk_css_change_for_sibling (gtk_css_selector_get_change (gtk_css_selector_previous (selector)));
+  return _gtk_css_change_for_sibling (previous_change);
 }
 
 static int
@@ -452,9 +444,9 @@ gtk_css_selector_any_tree_match (const GtkCssSelectorTree *tree,
 }
 
 static GtkCssChange
-gtk_css_selector_any_get_change (const GtkCssSelector *selector)
+gtk_css_selector_any_get_change (const GtkCssSelector *selector, GtkCssChange previous_change)
 {
-  return gtk_css_selector_get_change (gtk_css_selector_previous (selector));
+  return previous_change;
 }
 
 static int
@@ -511,9 +503,9 @@ gtk_css_selector_name_tree_match (const GtkCssSelectorTree *tree,
 
 
 static GtkCssChange
-gtk_css_selector_name_get_change (const GtkCssSelector *selector)
+gtk_css_selector_name_get_change (const GtkCssSelector *selector, GtkCssChange previous_change)
 {
-  return gtk_css_selector_get_change (gtk_css_selector_previous (selector)) | GTK_CSS_CHANGE_NAME;
+  return previous_change | GTK_CSS_CHANGE_NAME;
 }
 
 static int
@@ -584,11 +576,11 @@ gtk_css_selector_region_tree_match (const GtkCssSelectorTree *tree,
 }
 
 static GtkCssChange
-gtk_css_selector_region_get_change (const GtkCssSelector *selector)
+gtk_css_selector_region_get_change (const GtkCssSelector *selector, GtkCssChange previous_change)
 {
   GtkCssChange change;
 
-  change = gtk_css_selector_get_change (gtk_css_selector_previous (selector));
+  change = previous_change;
   change |= GTK_CSS_CHANGE_REGION;
   change |= _gtk_css_change_for_child (change);
 
@@ -649,9 +641,9 @@ gtk_css_selector_class_tree_match (const GtkCssSelectorTree *tree,
 }
 
 static GtkCssChange
-gtk_css_selector_class_get_change (const GtkCssSelector *selector)
+gtk_css_selector_class_get_change (const GtkCssSelector *selector, GtkCssChange previous_change)
 {
-  return gtk_css_selector_get_change (gtk_css_selector_previous (selector)) | GTK_CSS_CHANGE_CLASS;
+  return previous_change | GTK_CSS_CHANGE_CLASS;
 }
 
 static int
@@ -709,9 +701,9 @@ gtk_css_selector_id_tree_match (const GtkCssSelectorTree *tree,
 }
 
 static GtkCssChange
-gtk_css_selector_id_get_change (const GtkCssSelector *selector)
+gtk_css_selector_id_get_change (const GtkCssSelector *selector, GtkCssChange previous_change)
 {
-  return gtk_css_selector_get_change (gtk_css_selector_previous (selector)) | GTK_CSS_CHANGE_ID;
+  return previous_change | GTK_CSS_CHANGE_ID;
 }
 
 
@@ -795,9 +787,9 @@ gtk_css_selector_pseudoclass_state_tree_match (const GtkCssSelectorTree *tree,
 
 
 static GtkCssChange
-gtk_css_selector_pseudoclass_state_get_change (const GtkCssSelector *selector)
+gtk_css_selector_pseudoclass_state_get_change (const GtkCssSelector *selector, GtkCssChange previous_change)
 {
-  return gtk_css_selector_get_change (gtk_css_selector_previous (selector)) | GTK_CSS_CHANGE_STATE;
+  return previous_change | GTK_CSS_CHANGE_STATE;
 }
 
 static int
@@ -1146,9 +1138,9 @@ gtk_css_selector_pseudoclass_position_tree_match (const GtkCssSelectorTree *tree
 }
 
 static GtkCssChange
-gtk_css_selector_pseudoclass_position_get_change (const GtkCssSelector *selector)
+gtk_css_selector_pseudoclass_position_get_change (const GtkCssSelector *selector, GtkCssChange previous_change)
 {
-  return gtk_css_selector_get_change (gtk_css_selector_previous (selector)) | GTK_CSS_CHANGE_POSITION;
+  return previous_change | GTK_CSS_CHANGE_POSITION;
 }
 
 static int
@@ -1540,12 +1532,19 @@ _gtk_css_selector_to_string (const GtkCssSelector *selector)
   return g_string_free (string, FALSE);
 }
 
-GtkCssChange
-_gtk_css_selector_get_change (const GtkCssSelector *selector)
-{
-  g_return_val_if_fail (selector != NULL, 0);
 
-  return gtk_css_selector_get_change (selector);
+GtkCssChange
+_gtk_css_selector_tree_match_get_change (const GtkCssSelectorTree *tree)
+{
+  GtkCssChange change = 0;
+
+  while (tree)
+    {
+      change = tree->selector.class->get_change (&tree->selector, change);
+      tree = tree->parent;
+    }
+
+  return change;
 }
 
 /**
