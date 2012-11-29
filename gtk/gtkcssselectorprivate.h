@@ -48,6 +48,7 @@ GPtrArray *_gtk_css_selector_tree_match_all (GtkCssSelectorTree *tree,
 GtkCssSelectorTreeBuilder *_gtk_css_selector_tree_builder_new   (void);
 void                       _gtk_css_selector_tree_builder_add   (GtkCssSelectorTreeBuilder *builder,
 								 GtkCssSelector            *selectors,
+								 GtkCssSelectorTree       **selector_match,
 								 gpointer                   match);
 GtkCssSelectorTree *       _gtk_css_selector_tree_builder_build (GtkCssSelectorTreeBuilder *builder);
 void                       _gtk_css_selector_tree_builder_free  (GtkCssSelectorTreeBuilder *builder);
