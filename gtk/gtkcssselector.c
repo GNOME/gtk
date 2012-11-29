@@ -57,6 +57,7 @@ struct _GtkCssSelector
 struct _GtkCssSelectorTree
 {
   GtkCssSelector selector;
+  GtkCssSelectorTree *parent;
   GtkCssSelectorTree *previous;
   GtkCssSelectorTree *siblings;
   gpointer *matches; /* pointers that we return as matches if selector matches */
@@ -1694,7 +1695,7 @@ typedef struct {
 
 
 static GtkCssSelectorTree *
-subdivide_infos (GList *infos)
+subdivide_infos (GList *infos, GtkCssSelectorTree *parent)
 {
   GHashTable *ht = gtk_css_selectors_count_initial_init ();
   GList *l;
@@ -1737,6 +1738,7 @@ subdivide_infos (GList *infos)
   remaining = NULL;
 
   tree = g_new0 (GtkCssSelectorTree, 1);
+  tree->parent = parent;
   tree->selector = *max_selector;
 
   exact_matches = NULL;
@@ -1770,10 +1772,10 @@ subdivide_infos (GList *infos)
     }
 
   if (matched)
-    tree->previous = subdivide_infos (matched);
+    tree->previous = subdivide_infos (matched, tree);
 
   if (remaining)
-    tree->siblings = subdivide_infos (remaining);
+    tree->siblings = subdivide_infos (remaining, parent);
 
   return tree;
 }
@@ -1812,7 +1814,7 @@ _gtk_css_selector_tree_builder_build (GtkCssSelectorTreeBuilder *builder)
 {
   GtkCssSelectorTree *tree;
 
-  tree = subdivide_infos (builder->infos);
+  tree = subdivide_infos (builder->infos, NULL);
 
 #ifdef PRINT_TREE
   {
