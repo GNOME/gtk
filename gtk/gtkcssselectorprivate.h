@@ -40,7 +40,7 @@ int               _gtk_css_selector_compare         (const GtkCssSelector   *a,
                                                      const GtkCssSelector   *b);
 
 void         _gtk_css_selector_tree_free             (GtkCssSelectorTree       *tree);
-GPtrArray *  _gtk_css_selector_tree_match_all        (GtkCssSelectorTree       *tree,
+GPtrArray *  _gtk_css_selector_tree_match_all        (const GtkCssSelectorTree *tree,
 						      const GtkCssMatcher      *matcher);
 void         _gtk_css_selector_tree_match_print      (const GtkCssSelectorTree *tree,
 						      GString                  *str);

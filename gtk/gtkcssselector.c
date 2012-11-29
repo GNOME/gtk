@@ -1699,7 +1699,7 @@ direct_ptr_compare (const void *_a, const void *_b)
 }
 
 GPtrArray *
-_gtk_css_selector_tree_match_all (GtkCssSelectorTree *tree,
+_gtk_css_selector_tree_match_all (const GtkCssSelectorTree *tree,
 				  const GtkCssMatcher *matcher)
 {
   GHashTable *res;
