@@ -57,13 +57,14 @@ struct _GtkCssSelector
                                              - GUINT_TO_POINTER() for PSEUDOCLASS_REGION/STATE */
 };
 
+#define GTK_CSS_SELECTOR_TREE_EMPTY_OFFSET G_MAXINT32
 struct _GtkCssSelectorTree
 {
   GtkCssSelector selector;
-  GtkCssSelectorTree *parent;
-  GtkCssSelectorTree *previous;
-  GtkCssSelectorTree *sibling;
-  gpointer *matches; /* pointers that we return as matches if selector matches */
+  gint32 parent_offset;
+  gint32 previous_offset;
+  gint32 sibling_offset;
+  gint32 matches_offset; /* pointers that we return as matches if selector matches */
 };
 
 static gboolean
@@ -81,16 +82,27 @@ gtk_css_selector_hash (const GtkCssSelector *selector)
   return GPOINTER_TO_UINT (selector->class) ^ GPOINTER_TO_UINT (selector->data);
 }
 
+static gpointer *
+gtk_css_selector_tree_get_matches (const GtkCssSelectorTree *tree)
+{
+  if (tree->matches_offset == GTK_CSS_SELECTOR_TREE_EMPTY_OFFSET)
+    return NULL;
+
+  return (gpointer *) ((guint8 *)tree + tree->matches_offset);
+}
+
 static void
 gtk_css_selector_tree_found_match (const GtkCssSelectorTree *tree,
 				   GHashTable *res)
 {
   int i;
+  gpointer *matches;
 
-  if (tree->matches)
+  matches = gtk_css_selector_tree_get_matches (tree);
+  if (matches)
     {
-      for (i = 0; tree->matches[i] != NULL; i++)
-	g_hash_table_insert (res, tree->matches[i], tree->matches[i]);
+      for (i = 0; matches[i] != NULL; i++)
+	g_hash_table_insert (res, matches[i], matches[i]);
     }
 }
 
@@ -133,21 +145,31 @@ gtk_css_selector_previous (const GtkCssSelector *selector)
 }
 
 static const GtkCssSelectorTree *
+gtk_css_selector_tree_at_offset (const GtkCssSelectorTree *tree,
+				 gint32 offset)
+{
+  if (offset == GTK_CSS_SELECTOR_TREE_EMPTY_OFFSET)
+    return NULL;
+
+  return (GtkCssSelectorTree *) ((guint8 *)tree + offset);
+}
+
+static const GtkCssSelectorTree *
 gtk_css_selector_tree_get_parent (const GtkCssSelectorTree *tree)
 {
-  return tree->parent;
+  return gtk_css_selector_tree_at_offset (tree, tree->parent_offset);
 }
 
 static const GtkCssSelectorTree *
 gtk_css_selector_tree_get_previous (const GtkCssSelectorTree *tree)
 {
-  return tree->previous;
+  return gtk_css_selector_tree_at_offset (tree, tree->previous_offset);
 }
 
 static const GtkCssSelectorTree *
 gtk_css_selector_tree_get_sibling (const GtkCssSelectorTree *tree)
 {
-  return tree->sibling;
+  return gtk_css_selector_tree_at_offset (tree, tree->sibling_offset);
 }
 
 /* DESCENDANT */
@@ -1844,9 +1866,6 @@ _gtk_css_selector_tree_free (GtkCssSelectorTree *tree)
   if (tree == NULL)
     return;
 
-  _gtk_css_selector_tree_free (tree->sibling);
-  _gtk_css_selector_tree_free (tree->previous);
-
   g_free (tree);
 }
 
@@ -1857,24 +1876,41 @@ typedef struct {
   GtkCssSelectorTree **selector_match;
 } GtkCssSelectorRuleSetInfo;
 
+static GtkCssSelectorTree *
+get_tree (GByteArray *array, gint32 offset)
+{
+  return (GtkCssSelectorTree *) (array->data + offset);
+}
 
 static GtkCssSelectorTree *
-subdivide_infos (GList *infos, GtkCssSelectorTree *parent)
+alloc_tree (GByteArray *array, gint32 *offset)
+{
+  GtkCssSelectorTree tree = { { NULL} };
+
+  *offset = array->len;
+  g_byte_array_append (array, (guint8 *)&tree, sizeof (GtkCssSelectorTree));
+  return get_tree (array, *offset);
+}
+
+static gint32
+subdivide_infos (GByteArray *array, GList *infos, gint32 parent_offset)
 {
   GHashTable *ht = gtk_css_selectors_count_initial_init ();
   GList *l;
   GList *matched;
   GList *remaining;
+  gint32 tree_offset;
   GtkCssSelectorTree *tree;
   GtkCssSelectorRuleSetInfo *info;
-  GtkCssSelector *max_selector;
+  GtkCssSelector max_selector;
   GHashTableIter iter;
   guint max_count;
   gpointer key, value;
   GPtrArray *exact_matches;
+  gint32 res;
 
   if (infos == NULL)
-    return NULL;
+    return GTK_CSS_SELECTOR_TREE_EMPTY_OFFSET;
 
   for (l = infos; l != NULL; l = l->next)
     {
@@ -1886,7 +1922,6 @@ subdivide_infos (GList *infos, GtkCssSelectorTree *parent)
      as that makes it possible to skip the largest amount of checks later */
 
   max_count = 0;
-  max_selector = NULL;
 
   g_hash_table_iter_init (&iter, ht);
   while (g_hash_table_iter_next (&iter, &key, &value))
@@ -1894,28 +1929,28 @@ subdivide_infos (GList *infos, GtkCssSelectorTree *parent)
       GtkCssSelector *selector = key;
       if (GPOINTER_TO_UINT (value) > max_count ||
 	  (GPOINTER_TO_UINT (value) == max_count &&
-	  gtk_css_selector_compare_one (selector, max_selector) < 0))
+	  gtk_css_selector_compare_one (selector, &max_selector) < 0))
 	{
 	  max_count = GPOINTER_TO_UINT (value);
-	  max_selector = selector;
+	  max_selector = *selector;
 	}
     }
 
   matched = NULL;
   remaining = NULL;
 
-  tree = g_new0 (GtkCssSelectorTree, 1);
-  tree->parent = parent;
-  tree->selector = *max_selector;
+  tree = alloc_tree (array, &tree_offset);
+  tree->parent_offset = parent_offset;
+  tree->selector = max_selector;
 
   exact_matches = NULL;
   for (l = infos; l != NULL; l = l->next)
     {
       info = l->data;
 
-      if (gtk_css_selectors_has_initial_selector (info->current_selector, &tree->selector))
+      if (gtk_css_selectors_has_initial_selector (info->current_selector, &max_selector))
 	{
-	  info->current_selector = gtk_css_selectors_skip_initial_selector (info->current_selector, &tree->selector);
+	  info->current_selector = gtk_css_selectors_skip_initial_selector (info->current_selector, &max_selector);
 	  if (info->current_selector == NULL)
 	    {
 	      /* Matches current node */
@@ -1923,7 +1958,7 @@ subdivide_infos (GList *infos, GtkCssSelectorTree *parent)
 		exact_matches = g_ptr_array_new ();
 	      g_ptr_array_add (exact_matches, info->match);
 	      if (info->selector_match != NULL)
-		*info->selector_match = tree;
+		*info->selector_match = GUINT_TO_POINTER (tree_offset);
 	    }
 	  else
 	    matched = g_list_prepend (matched, info);
@@ -1937,19 +1972,25 @@ subdivide_infos (GList *infos, GtkCssSelectorTree *parent)
   if (exact_matches)
     {
       g_ptr_array_add (exact_matches, NULL); /* Null terminate */
-      tree->matches = g_ptr_array_free (exact_matches, FALSE);
+      res = array->len;
+      g_byte_array_append (array, (guint8 *)exact_matches->pdata,
+			   exact_matches->len * sizeof (gpointer));
+      g_ptr_array_free (exact_matches, TRUE);
     }
+  else
+    res = GTK_CSS_SELECTOR_TREE_EMPTY_OFFSET;
+  get_tree (array, tree_offset)->matches_offset = res;
 
-  if (matched)
-    tree->previous = subdivide_infos (matched, tree);
+  res = subdivide_infos (array, matched, tree_offset);
+  get_tree (array, tree_offset)->previous_offset = res;
 
-  if (remaining)
-    tree->sibling = subdivide_infos (remaining, parent);
+  res = subdivide_infos (array, remaining, parent_offset);
+  get_tree (array, tree_offset)->sibling_offset = res;
 
   g_list_free (matched);
   g_list_free (remaining);
 
-  return tree;
+  return tree_offset;
 }
 
 struct _GtkCssSelectorTreeBuilder {
@@ -1983,12 +2024,60 @@ _gtk_css_selector_tree_builder_add (GtkCssSelectorTreeBuilder *builder,
   builder->infos = g_list_prepend (builder->infos, info);
 }
 
+/* Convert all offsets to node-relative */
+static void
+fixup_offsets (GtkCssSelectorTree *tree, guint8 *data)
+{
+  while (tree != NULL)
+    {
+      if (tree->parent_offset != GTK_CSS_SELECTOR_TREE_EMPTY_OFFSET)
+	tree->parent_offset -= ((guint8 *)tree - data);
+
+      if (tree->previous_offset != GTK_CSS_SELECTOR_TREE_EMPTY_OFFSET)
+	tree->previous_offset -= ((guint8 *)tree - data);
+
+      if (tree->sibling_offset != GTK_CSS_SELECTOR_TREE_EMPTY_OFFSET)
+	tree->sibling_offset -= ((guint8 *)tree - data);
+
+      if (tree->matches_offset != GTK_CSS_SELECTOR_TREE_EMPTY_OFFSET)
+	tree->matches_offset -= ((guint8 *)tree - data);
+
+      fixup_offsets ((GtkCssSelectorTree *)gtk_css_selector_tree_get_previous (tree), data);
+
+      tree = (GtkCssSelectorTree *)gtk_css_selector_tree_get_sibling (tree);
+    }
+}
+
 GtkCssSelectorTree *
 _gtk_css_selector_tree_builder_build (GtkCssSelectorTreeBuilder *builder)
 {
   GtkCssSelectorTree *tree;
+  GByteArray *array;
+  guint8 *data;
+  guint len;
+  GList *l;
+  GtkCssSelectorRuleSetInfo *info;
 
-  tree = subdivide_infos (builder->infos, NULL);
+  array = g_byte_array_new ();
+  subdivide_infos (array, builder->infos, GTK_CSS_SELECTOR_TREE_EMPTY_OFFSET);
+
+  len = array->len;
+  data = g_byte_array_free (array, FALSE);
+
+  /* shrink to final size */
+  data = g_realloc (data, len);
+
+  tree = (GtkCssSelectorTree *)data;
+
+  fixup_offsets (tree, data);
+
+  /* Convert offsets to final pointers */
+  for (l = builder->infos; l != NULL; l = l->next)
+    {
+      info = l->data;
+      if (info->selector_match)
+	*info->selector_match = (GtkCssSelectorTree *)(data + GPOINTER_TO_UINT (*info->selector_match));
+    }
 
 #ifdef PRINT_TREE
   {
