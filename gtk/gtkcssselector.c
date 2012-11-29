@@ -43,6 +43,7 @@ struct _GtkCssSelectorClass {
   guint         increase_class_specificity :1;
   guint         increase_element_specificity :1;
   guint         is_simple :1;
+  guint         must_keep_order :1; /* Due to region weirdness these must be kept before a DESCENDANT, so don't reorder */
 };
 
 struct _GtkCssSelector
@@ -187,7 +188,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_DESCENDANT = {
   gtk_css_selector_descendant_match,
   gtk_css_selector_descendant_tree_match,
   gtk_css_selector_descendant_get_change,
-  FALSE, FALSE, FALSE, FALSE
+  FALSE, FALSE, FALSE, FALSE, FALSE
 };
 
 /* CHILD */
@@ -238,7 +239,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_CHILD = {
   gtk_css_selector_child_match,
   gtk_css_selector_child_tree_match,
   gtk_css_selector_child_get_change,
-  FALSE, FALSE, FALSE, FALSE
+  FALSE, FALSE, FALSE, FALSE, FALSE
 };
 
 /* SIBLING */
@@ -301,7 +302,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_SIBLING = {
   gtk_css_selector_sibling_match,
   gtk_css_selector_sibling_tree_match,
   gtk_css_selector_sibling_get_change,
-  FALSE, FALSE, FALSE, FALSE
+  FALSE, FALSE, FALSE, FALSE, FALSE
 };
 
 /* ADJACENT */
@@ -354,7 +355,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_ADJACENT = {
   gtk_css_selector_adjacent_match,
   gtk_css_selector_adjacent_tree_match,
   gtk_css_selector_adjacent_get_change,
-  FALSE, FALSE, FALSE, FALSE
+  FALSE, FALSE, FALSE, FALSE, FALSE
 };
 
 /* ANY */
@@ -417,7 +418,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_ANY = {
   gtk_css_selector_any_match,
   gtk_css_selector_any_tree_match,
   gtk_css_selector_any_get_change,
-  FALSE, FALSE, FALSE, TRUE
+  FALSE, FALSE, FALSE, TRUE, TRUE
 };
 
 /* NAME */
@@ -468,7 +469,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_NAME = {
   gtk_css_selector_name_match,
   gtk_css_selector_name_tree_match,
   gtk_css_selector_name_get_change,
-  FALSE, FALSE, TRUE, TRUE
+  FALSE, FALSE, TRUE, TRUE, FALSE
 };
 
 /* REGION */
@@ -539,7 +540,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_REGION = {
   gtk_css_selector_region_match,
   gtk_css_selector_region_tree_match,
   gtk_css_selector_region_get_change,
-  FALSE, FALSE, TRUE, TRUE
+  FALSE, FALSE, TRUE, TRUE, TRUE
 };
 
 /* CLASS */
@@ -590,7 +591,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_CLASS = {
   gtk_css_selector_class_match,
   gtk_css_selector_class_tree_match,
   gtk_css_selector_class_get_change,
-  FALSE, TRUE, FALSE, TRUE
+  FALSE, TRUE, FALSE, TRUE, FALSE
 };
 
 /* ID */
@@ -641,7 +642,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_ID = {
   gtk_css_selector_id_match,
   gtk_css_selector_id_tree_match,
   gtk_css_selector_id_get_change,
-  TRUE, FALSE, FALSE, TRUE
+  TRUE, FALSE, FALSE, TRUE, FALSE
 };
 
 /* PSEUDOCLASS FOR STATE */
@@ -718,7 +719,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_PSEUDOCLASS_STATE = {
   gtk_css_selector_pseudoclass_state_match,
   gtk_css_selector_pseudoclass_state_tree_match,
   gtk_css_selector_pseudoclass_state_get_change,
-  FALSE, TRUE, FALSE, TRUE
+  FALSE, TRUE, FALSE, TRUE, FALSE
 };
 
 /* PSEUDOCLASS FOR POSITION */
@@ -1062,7 +1063,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_PSEUDOCLASS_POSITION = {
   gtk_css_selector_pseudoclass_position_match,
   gtk_css_selector_pseudoclass_position_tree_match,
   gtk_css_selector_pseudoclass_position_get_change,
-  FALSE, TRUE, FALSE, TRUE
+  FALSE, TRUE, FALSE, TRUE, TRUE
 };
 
 /* API */
@@ -1525,14 +1526,16 @@ gtk_css_selectors_count_initial_init (void)
 static void
 gtk_css_selectors_count_initial (const GtkCssSelector *selector, GHashTable *hash)
 {
-  if (!selector->class->is_simple)
+  if (!selector->class->is_simple || selector->class->must_keep_order)
     {
       guint count = GPOINTER_TO_INT (g_hash_table_lookup (hash, selector));
       g_hash_table_replace (hash, (gpointer)selector, GUINT_TO_POINTER (count + 1));
       return;
     }
 
-  for (; selector && selector->class->is_simple; selector = gtk_css_selector_previous (selector))
+  for (;
+       selector && selector->class->is_simple && !selector->class->must_keep_order;
+       selector = gtk_css_selector_previous (selector))
     {
       guint count = GPOINTER_TO_INT (g_hash_table_lookup (hash, selector));
       g_hash_table_replace (hash, (gpointer)selector, GUINT_TO_POINTER (count + 1));
@@ -1542,10 +1545,12 @@ gtk_css_selectors_count_initial (const GtkCssSelector *selector, GHashTable *has
 static gboolean
 gtk_css_selectors_has_initial_selector (const GtkCssSelector *selector, const GtkCssSelector *initial)
 {
-  if (!selector->class->is_simple)
+  if (!selector->class->is_simple || selector->class->must_keep_order)
     return gtk_css_selector_equal (selector, initial);
 
-  for (; selector && selector->class->is_simple; selector = gtk_css_selector_previous (selector))
+  for (;
+       selector && selector->class->is_simple && !selector->class->must_keep_order;
+       selector = gtk_css_selector_previous (selector))
     {
       if (gtk_css_selector_equal (selector, initial))
 	return TRUE;
