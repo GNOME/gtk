@@ -1946,6 +1946,9 @@ subdivide_infos (GList *infos, GtkCssSelectorTree *parent)
   if (remaining)
     tree->sibling = subdivide_infos (remaining, parent);
 
+  g_list_free (matched);
+  g_list_free (remaining);
+
   return tree;
 }
 
