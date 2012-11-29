@@ -1122,6 +1122,8 @@ gtk_menu_shell_activate_item (GtkMenuShell *menu_shell,
   g_object_ref (menu_shell);
   g_object_ref (menu_item);
 
+  gtk_widget_activate (menu_item);
+
   if (deactivate)
     {
       GtkMenuShell *parent_menu_shell = menu_shell;
@@ -1144,8 +1146,6 @@ gtk_menu_shell_activate_item (GtkMenuShell *menu_shell,
        */
       gdk_display_sync (gtk_widget_get_display (menu_item));
     }
-
-  gtk_widget_activate (menu_item);
 
   for (slist = shells; slist; slist = slist->next)
     {
