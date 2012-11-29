@@ -1283,7 +1283,7 @@ gtk_css_ruleset_matches (GtkCssRuleset       *ruleset,
 static GtkCssChange
 gtk_css_ruleset_get_change (GtkCssRuleset *ruleset)
 {
-  return _gtk_css_selector_get_change (ruleset->selector);
+  return _gtk_css_selector_tree_match_get_change (ruleset->selector_match);
 }
 
 static void
