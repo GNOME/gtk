@@ -38,6 +38,8 @@ struct _GtkCssSelectorClass {
                                      const GtkCssMatcher        *matcher,
 				     GHashTable                  *res);
   GtkCssChange      (* get_change)  (const GtkCssSelector       *selector);
+  int               (* compare_one) (const GtkCssSelector       *a,
+				     const GtkCssSelector       *b);
 
   guint         increase_id_specificity :1;
   guint         increase_class_specificity :1;
@@ -121,6 +123,15 @@ gtk_css_selector_get_change (const GtkCssSelector *selector)
   return selector->class->get_change (selector);
 }
 
+static int
+gtk_css_selector_compare_one (const GtkCssSelector *a, const GtkCssSelector *b)
+{
+  if (a->class != b->class)
+    return strcmp (a->class->name, b->class->name);
+  else
+    return a->class->compare_one (a, b);
+}
+  
 static const GtkCssSelector *
 gtk_css_selector_previous (const GtkCssSelector *selector)
 {
@@ -177,6 +188,13 @@ gtk_css_selector_descendant_tree_match (const GtkCssSelectorTree *tree,
     }
 }
 
+static int
+gtk_css_selector_descendant_compare_one (const GtkCssSelector *a,
+					 const GtkCssSelector *b)
+{
+  return 0;
+}
+  
 static GtkCssChange
 gtk_css_selector_descendant_get_change (const GtkCssSelector *selector)
 {
@@ -189,6 +207,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_DESCENDANT = {
   gtk_css_selector_descendant_match,
   gtk_css_selector_descendant_tree_match,
   gtk_css_selector_descendant_get_change,
+  gtk_css_selector_descendant_compare_one,
   FALSE, FALSE, FALSE, FALSE, FALSE
 };
 
@@ -234,12 +253,20 @@ gtk_css_selector_child_get_change (const GtkCssSelector *selector)
   return _gtk_css_change_for_child (gtk_css_selector_get_change (gtk_css_selector_previous (selector)));
 }
 
+static int
+gtk_css_selector_child_compare_one (const GtkCssSelector *a,
+				    const GtkCssSelector *b)
+{
+  return 0;
+}
+
 static const GtkCssSelectorClass GTK_CSS_SELECTOR_CHILD = {
   "child",
   gtk_css_selector_child_print,
   gtk_css_selector_child_match,
   gtk_css_selector_child_tree_match,
   gtk_css_selector_child_get_change,
+  gtk_css_selector_child_compare_one,
   FALSE, FALSE, FALSE, FALSE, FALSE
 };
 
@@ -297,12 +324,21 @@ gtk_css_selector_sibling_get_change (const GtkCssSelector *selector)
   return _gtk_css_change_for_sibling (gtk_css_selector_get_change (gtk_css_selector_previous (selector)));
 }
 
+static int
+gtk_css_selector_sibling_compare_one (const GtkCssSelector *a,
+				      const GtkCssSelector *b)
+{
+  return 0;
+}
+  
+
 static const GtkCssSelectorClass GTK_CSS_SELECTOR_SIBLING = {
   "sibling",
   gtk_css_selector_sibling_print,
   gtk_css_selector_sibling_match,
   gtk_css_selector_sibling_tree_match,
   gtk_css_selector_sibling_get_change,
+  gtk_css_selector_sibling_compare_one,
   FALSE, FALSE, FALSE, FALSE, FALSE
 };
 
@@ -350,12 +386,20 @@ gtk_css_selector_adjacent_get_change (const GtkCssSelector *selector)
   return _gtk_css_change_for_sibling (gtk_css_selector_get_change (gtk_css_selector_previous (selector)));
 }
 
+static int
+gtk_css_selector_adjacent_compare_one (const GtkCssSelector *a,
+				       const GtkCssSelector *b)
+{
+  return 0;
+}
+
 static const GtkCssSelectorClass GTK_CSS_SELECTOR_ADJACENT = {
   "adjacent",
   gtk_css_selector_adjacent_print,
   gtk_css_selector_adjacent_match,
   gtk_css_selector_adjacent_tree_match,
   gtk_css_selector_adjacent_get_change,
+  gtk_css_selector_adjacent_compare_one,
   FALSE, FALSE, FALSE, FALSE, FALSE
 };
 
@@ -413,12 +457,20 @@ gtk_css_selector_any_get_change (const GtkCssSelector *selector)
   return gtk_css_selector_get_change (gtk_css_selector_previous (selector));
 }
 
+static int
+gtk_css_selector_any_compare_one (const GtkCssSelector *a,
+				  const GtkCssSelector *b)
+{
+  return 0;
+}
+
 static const GtkCssSelectorClass GTK_CSS_SELECTOR_ANY = {
   "any",
   gtk_css_selector_any_print,
   gtk_css_selector_any_match,
   gtk_css_selector_any_tree_match,
   gtk_css_selector_any_get_change,
+  gtk_css_selector_any_compare_one,
   FALSE, FALSE, FALSE, TRUE, TRUE
 };
 
@@ -464,12 +516,20 @@ gtk_css_selector_name_get_change (const GtkCssSelector *selector)
   return gtk_css_selector_get_change (gtk_css_selector_previous (selector)) | GTK_CSS_CHANGE_NAME;
 }
 
+static int
+gtk_css_selector_name_compare_one (const GtkCssSelector *a,
+				   const GtkCssSelector *b)
+{
+  return strcmp (a->data, b->data);
+}
+
 static const GtkCssSelectorClass GTK_CSS_SELECTOR_NAME = {
   "name",
   gtk_css_selector_name_print,
   gtk_css_selector_name_match,
   gtk_css_selector_name_tree_match,
   gtk_css_selector_name_get_change,
+  gtk_css_selector_name_compare_one,
   FALSE, FALSE, TRUE, TRUE, FALSE
 };
 
@@ -535,12 +595,20 @@ gtk_css_selector_region_get_change (const GtkCssSelector *selector)
   return change;
 }
 
+static int
+gtk_css_selector_region_compare_one (const GtkCssSelector *a,
+				     const GtkCssSelector *b)
+{
+  return strcmp (a->data, b->data);
+}
+
 static const GtkCssSelectorClass GTK_CSS_SELECTOR_REGION = {
   "region",
   gtk_css_selector_region_print,
   gtk_css_selector_region_match,
   gtk_css_selector_region_tree_match,
   gtk_css_selector_region_get_change,
+  gtk_css_selector_region_compare_one,
   FALSE, FALSE, TRUE, TRUE, TRUE
 };
 
@@ -586,12 +654,21 @@ gtk_css_selector_class_get_change (const GtkCssSelector *selector)
   return gtk_css_selector_get_change (gtk_css_selector_previous (selector)) | GTK_CSS_CHANGE_CLASS;
 }
 
+static int
+gtk_css_selector_class_compare_one (const GtkCssSelector *a,
+				    const GtkCssSelector *b)
+{
+  return strcmp (g_quark_to_string (GPOINTER_TO_UINT (a->data)),
+		 g_quark_to_string (GPOINTER_TO_UINT (b->data)));
+}
+
 static const GtkCssSelectorClass GTK_CSS_SELECTOR_CLASS = {
   "class",
   gtk_css_selector_class_print,
   gtk_css_selector_class_match,
   gtk_css_selector_class_tree_match,
   gtk_css_selector_class_get_change,
+  gtk_css_selector_class_compare_one,
   FALSE, TRUE, FALSE, TRUE, FALSE
 };
 
@@ -637,12 +714,21 @@ gtk_css_selector_id_get_change (const GtkCssSelector *selector)
   return gtk_css_selector_get_change (gtk_css_selector_previous (selector)) | GTK_CSS_CHANGE_ID;
 }
 
+
+static int
+gtk_css_selector_id_compare_one (const GtkCssSelector *a,
+				 const GtkCssSelector *b)
+{
+  return strcmp (a->data, b->data);
+}
+
 static const GtkCssSelectorClass GTK_CSS_SELECTOR_ID = {
   "id",
   gtk_css_selector_id_print,
   gtk_css_selector_id_match,
   gtk_css_selector_id_tree_match,
   gtk_css_selector_id_get_change,
+  gtk_css_selector_id_compare_one,
   TRUE, FALSE, FALSE, TRUE, FALSE
 };
 
@@ -714,12 +800,20 @@ gtk_css_selector_pseudoclass_state_get_change (const GtkCssSelector *selector)
   return gtk_css_selector_get_change (gtk_css_selector_previous (selector)) | GTK_CSS_CHANGE_STATE;
 }
 
+static int
+gtk_css_selector_pseudoclass_state_compare_one (const GtkCssSelector *a,
+						const GtkCssSelector *b)
+{
+  return GPOINTER_TO_UINT (a->data) - GPOINTER_TO_UINT (b->data);
+}
+
 static const GtkCssSelectorClass GTK_CSS_SELECTOR_PSEUDOCLASS_STATE = {
   "pseudoclass-state",
   gtk_css_selector_pseudoclass_state_print,
   gtk_css_selector_pseudoclass_state_match,
   gtk_css_selector_pseudoclass_state_tree_match,
   gtk_css_selector_pseudoclass_state_get_change,
+  gtk_css_selector_pseudoclass_state_compare_one,
   FALSE, TRUE, FALSE, TRUE, FALSE
 };
 
@@ -1057,12 +1151,20 @@ gtk_css_selector_pseudoclass_position_get_change (const GtkCssSelector *selector
   return gtk_css_selector_get_change (gtk_css_selector_previous (selector)) | GTK_CSS_CHANGE_POSITION;
 }
 
+static int
+gtk_css_selector_pseudoclass_position_compare_one (const GtkCssSelector *a,
+						   const GtkCssSelector *b)
+{
+  return GPOINTER_TO_UINT (a->data) - GPOINTER_TO_UINT (b->data);
+}
+
 static const GtkCssSelectorClass GTK_CSS_SELECTOR_PSEUDOCLASS_POSITION = {
   "pseudoclass-position",
   gtk_css_selector_pseudoclass_position_print,
   gtk_css_selector_pseudoclass_position_match,
   gtk_css_selector_pseudoclass_position_tree_match,
   gtk_css_selector_pseudoclass_position_get_change,
+  gtk_css_selector_pseudoclass_position_compare_one,
   FALSE, TRUE, FALSE, TRUE, TRUE
 };
 
@@ -1740,10 +1842,13 @@ subdivide_infos (GList *infos, GtkCssSelectorTree *parent)
   g_hash_table_iter_init (&iter, ht);
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
-      if (GPOINTER_TO_UINT (value) > max_count)
+      GtkCssSelector *selector = key;
+      if (GPOINTER_TO_UINT (value) > max_count ||
+	  (GPOINTER_TO_UINT (value) == max_count &&
+	  gtk_css_selector_compare_one (selector, max_selector) < 0))
 	{
 	  max_count = GPOINTER_TO_UINT (value);
-	  max_selector = key;
+	  max_selector = selector;
 	}
     }
 
