@@ -986,6 +986,7 @@ struct _WidgetPropertyValue {
 struct GtkCssRuleset
 {
   GtkCssSelector *selector;
+  GtkCssSelectorTree *selector_match;
   WidgetPropertyValue *widget_style;
   PropertyValue *styles;
   GtkBitmask *set_styles;
@@ -2429,6 +2430,7 @@ gtk_css_provider_postprocess (GtkCssProvider *css_provider)
 
       _gtk_css_selector_tree_builder_add (builder,
 					  ruleset->selector,
+					  &ruleset->selector_match,
 					  ruleset);
     }
 
