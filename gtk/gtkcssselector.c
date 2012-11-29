@@ -1689,7 +1689,7 @@ _gtk_css_selector_tree_free (GtkCssSelectorTree *tree)
 
 
 typedef struct {
-  GtkCssSelector **ruleset;
+  gpointer match;
   GtkCssSelector *current_selector;
 } GtkCssSelectorRuleSetInfo;
 
@@ -1754,7 +1754,7 @@ subdivide_infos (GList *infos, GtkCssSelectorTree *parent)
 	      /* Matches current node */
 	      if (exact_matches == NULL)
 		exact_matches = g_ptr_array_new ();
-	      g_ptr_array_add (exact_matches, info->ruleset);
+	      g_ptr_array_add (exact_matches, info->match);
 	    }
 	  else
 	    matched = g_list_prepend (matched, info);
@@ -1804,7 +1804,7 @@ _gtk_css_selector_tree_builder_add (GtkCssSelectorTreeBuilder *builder,
 {
   GtkCssSelectorRuleSetInfo *info = g_new0 (GtkCssSelectorRuleSetInfo, 1);
 
-  info->ruleset = match;
+  info->match = match;
   info->current_selector = selectors;
   builder->infos = g_list_prepend (builder->infos, info);
 }
