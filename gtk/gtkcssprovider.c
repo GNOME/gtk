@@ -1273,13 +1273,6 @@ gtk_css_ruleset_add (GtkCssRuleset       *ruleset,
     ruleset->styles[i].section = NULL;
 }
 
-static gboolean
-gtk_css_ruleset_matches (GtkCssRuleset       *ruleset,
-                         const GtkCssMatcher *matcher)
-{
-  return _gtk_css_selector_matches (ruleset->selector, matcher);
-}
-
 static GtkCssChange
 gtk_css_ruleset_get_change (GtkCssRuleset *ruleset)
 {
@@ -1419,6 +1412,7 @@ verify_tree_match_results (GtkCssProvider *provider,
 #ifdef VERIFY_TREE
   GtkCssProviderPrivate *priv = provider->priv;
   GtkCssRuleset *ruleset;
+  gboolean should_match;
   int i, j;
 
   for (i = 0; i < priv->rulesets->len; i++)
@@ -1435,12 +1429,12 @@ verify_tree_match_results (GtkCssProvider *provider,
 	      break;
 	    }
 	}
-
-      if (found != !!gtk_css_ruleset_matches (ruleset, matcher))
+      should_match = _gtk_css_selector_matches (ruleset->selector, matcher);
+      if (found != !!should_match)
 	{
 	  g_error ("expected rule '%s' to %s, but it %s\n",
 		   _gtk_css_selector_to_string (ruleset->selector),
-		   gtk_css_ruleset_matches (ruleset, matcher) ? "match" : "not match",
+		   should_match ? "match" : "not match",
 		   found ? "matched" : "didn't match");
 	}
     }
