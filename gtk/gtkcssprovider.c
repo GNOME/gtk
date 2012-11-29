@@ -1457,6 +1457,7 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
   GtkCssProvider *css_provider = GTK_CSS_PROVIDER (provider);
   GtkCssProviderPrivate *priv = css_provider->priv;
   WidgetPropertyValue *val;
+  GPtrArray *tree_rules;
   GtkCssMatcher matcher;
   gboolean found = FALSE;
   gchar *prop_name;
@@ -1465,20 +1466,18 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
   if (!_gtk_css_matcher_init (&matcher, path, state))
     return FALSE;
 
+  tree_rules = _gtk_css_selector_tree_match_all (priv->tree, &matcher);
+  verify_tree_match_results (css_provider, &matcher, tree_rules);
+
   prop_name = g_strdup_printf ("-%s-%s",
                                g_type_name (pspec->owner_type),
                                pspec->name);
 
-  for (i = priv->rulesets->len - 1; i >= 0; i--)
+  for (i = tree_rules->len - 1; i >= 0; i--)
     {
-      GtkCssRuleset *ruleset;
-
-      ruleset = &g_array_index (priv->rulesets, GtkCssRuleset, i);
+      GtkCssRuleset *ruleset = tree_rules->pdata[i];
 
       if (ruleset->widget_style == NULL)
-        continue;
-
-      if (!gtk_css_ruleset_matches (ruleset, &matcher))
         continue;
 
       for (val = ruleset->widget_style; val != NULL; val = val->next)
@@ -1507,6 +1506,7 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
     }
 
   g_free (prop_name);
+  g_ptr_array_free (tree_rules, TRUE);
 
   return found;
 }
