@@ -2884,7 +2884,7 @@ gtk_css_ruleset_print (const GtkCssRuleset *ruleset,
   WidgetPropertyValue *widget_value;
   guint i;
 
-  _gtk_css_selector_print (ruleset->selector, str);
+  _gtk_css_selector_tree_match_print (ruleset->selector_match, str);
 
   g_string_append (str, " {\n");
 
