@@ -372,7 +372,7 @@ struct _GtkStyleContextPrivate
   GtkCssChange relevant_changes;
   GtkCssChange pending_changes;
 
-  guint invalidating_context : 1;
+  const GtkBitmask *invalidating_context;
   guint invalid : 1;
 };
 
@@ -2971,7 +2971,8 @@ gtk_style_context_update_cache (GtkStyleContext  *context,
 }
 
 static void
-gtk_style_context_do_invalidate (GtkStyleContext *context)
+gtk_style_context_do_invalidate (GtkStyleContext  *context,
+                                 const GtkBitmask *changes)
 {
   GtkStyleContextPrivate *priv;
 
@@ -2983,11 +2984,11 @@ gtk_style_context_do_invalidate (GtkStyleContext *context)
   if (priv->invalidating_context)
     return;
 
-  priv->invalidating_context = TRUE;
+  priv->invalidating_context = changes;
 
   g_signal_emit (context, signals[CHANGED], 0);
 
-  priv->invalidating_context = FALSE;
+  priv->invalidating_context = NULL;
 }
 
 static GtkBitmask *
@@ -3177,7 +3178,7 @@ _gtk_style_context_validate (GtkStyleContext  *context,
     }
 
   if (!_gtk_bitmask_is_empty (changes) || (change & GTK_CSS_CHANGE_FORCE_INVALIDATE))
-    gtk_style_context_do_invalidate (context);
+    gtk_style_context_do_invalidate (context, changes);
 
   change = _gtk_css_change_for_child (change);
   for (list = priv->children; list; list = list->next)
@@ -3226,10 +3227,18 @@ _gtk_style_context_queue_invalidate (GtkStyleContext *context,
 void
 gtk_style_context_invalidate (GtkStyleContext *context)
 {
+  GtkBitmask *changes;
+
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   gtk_style_context_clear_cache (context);
-  gtk_style_context_do_invalidate (context);
+
+  changes = _gtk_bitmask_new ();
+  changes = _gtk_bitmask_invert_range (changes,
+                                       0,
+                                       _gtk_css_style_property_get_n_properties ());
+  gtk_style_context_do_invalidate (context, changes);
+  _gtk_bitmask_free (changes);
 }
 
 /**
