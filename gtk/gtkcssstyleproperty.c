@@ -38,6 +38,7 @@
 enum {
   PROP_0,
   PROP_ANIMATED,
+  PROP_AFFECTS_SIZE,
   PROP_ID,
   PROP_INHERIT,
   PROP_INITIAL
@@ -70,6 +71,9 @@ gtk_css_style_property_set_property (GObject      *object,
     case PROP_ANIMATED:
       property->animated = g_value_get_boolean (value);
       break;
+    case PROP_AFFECTS_SIZE:
+      property->affects_size = g_value_get_boolean (value);
+      break;
     case PROP_INHERIT:
       property->inherit = g_value_get_boolean (value);
       break;
@@ -95,6 +99,9 @@ gtk_css_style_property_get_property (GObject    *object,
     {
     case PROP_ANIMATED:
       g_value_set_boolean (value, property->animated);
+      break;
+    case PROP_AFFECTS_SIZE:
+      g_value_set_boolean (value, property->affects_size);
       break;
     case PROP_ID:
       g_value_set_boolean (value, property->id);
@@ -252,6 +259,13 @@ _gtk_css_style_property_class_init (GtkCssStylePropertyClass *klass)
                                                          FALSE,
                                                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
   g_object_class_install_property (object_class,
+                                   PROP_AFFECTS_SIZE,
+                                   g_param_spec_boolean ("affects-size",
+                                                         P_("Affects size"),
+                                                         P_("Set if the value affects the sizing of elements"),
+                                                         TRUE,
+                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property (object_class,
                                    PROP_ID,
                                    g_param_spec_uint ("id",
                                                       P_("ID"),
@@ -381,6 +395,23 @@ _gtk_css_style_property_is_animated (GtkCssStyleProperty *property)
   return property->animated;
 }
 
+/**
+ * _gtk_css_style_property_affects_size:
+ * @property: the property
+ *
+ * Queries if the given @property affects the size of elements. This is
+ * used for optimizations inside GTK, where a gtk_widget_queue_resize()
+ * can be avoided if the property does not affect size.
+ *
+ * Returns: %TRUE if the property affects sizing of elements.
+ **/
+gboolean
+_gtk_css_style_property_affects_size (GtkCssStyleProperty *property)
+{
+  g_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), FALSE);
+
+  return property->affects_size;
+}
 /**
  * _gtk_css_style_property_get_id:
  * @property: the property
