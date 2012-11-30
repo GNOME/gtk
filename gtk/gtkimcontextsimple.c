@@ -343,7 +343,7 @@ static gboolean
 check_quartz_special_cases (GtkIMContextSimple *context_simple,
                             gint                n_compose)
 {
-  gunichar value = 0;
+  guint value = 0;
 
   if (n_compose == 2)
     {
@@ -354,7 +354,7 @@ check_quartz_special_cases (GtkIMContextSimple *context_simple,
             {
             case GDK_KEY_dead_doubleacute:
             case GDK_KEY_space:
-              value = '"'; break;
+              value = GDK_KEY_quotedbl; break;
 
             case 'a': value = GDK_KEY_adiaeresis; break;
             case 'A': value = GDK_KEY_Adiaeresis; break;
@@ -367,7 +367,7 @@ check_quartz_special_cases (GtkIMContextSimple *context_simple,
             case 'u': value = GDK_KEY_udiaeresis; break;
             case 'U': value = GDK_KEY_Udiaeresis; break;
             case 'y': value = GDK_KEY_ydiaeresis; break;
-            case 'Y': value = 0x0178; break; /* should be GDK_KEY_Ydiaeresis ?? */
+            case 'Y': value = GDK_KEY_Ydiaeresis; break;
             }
           break;
 
@@ -383,7 +383,8 @@ check_quartz_special_cases (GtkIMContextSimple *context_simple,
 
   if (value > 0)
     {
-      gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), value);
+      gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple),
+                                         gdk_keyval_to_unicode (value));
       context_simple->compose_buffer[0] = 0;
 
       GTK_NOTE (MISC, g_print ("quartz: U+%04X\n", value));
