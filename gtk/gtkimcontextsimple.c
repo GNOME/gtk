@@ -343,25 +343,51 @@ static gboolean
 check_quartz_special_cases (GtkIMContextSimple *context_simple,
                             gint                n_compose)
 {
-  if (n_compose == 2 &&
-      context_simple->compose_buffer[1] == GDK_space)
-    {
-      gunichar value = 0;
+  gunichar value = 0;
 
+  if (n_compose == 2)
+    {
       switch (context_simple->compose_buffer[0])
         {
-        case GDK_dead_doubleacute:
-          value = '"'; break;
-        }
+        case GDK_KEY_dead_doubleacute:
+          switch (context_simple->compose_buffer[1])
+            {
+            case GDK_KEY_dead_doubleacute:
+            case GDK_KEY_space:
+              value = '"'; break;
 
-      if (value > 0)
-        {
-          gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), value);
-          context_simple->compose_buffer[0] = 0;
+            case 'a': value = GDK_KEY_adiaeresis; break;
+            case 'A': value = GDK_KEY_Adiaeresis; break;
+            case 'e': value = GDK_KEY_ediaeresis; break;
+            case 'E': value = GDK_KEY_Ediaeresis; break;
+            case 'i': value = GDK_KEY_idiaeresis; break;
+            case 'I': value = GDK_KEY_Idiaeresis; break;
+            case 'o': value = GDK_KEY_odiaeresis; break;
+            case 'O': value = GDK_KEY_Odiaeresis; break;
+            case 'u': value = GDK_KEY_udiaeresis; break;
+            case 'U': value = GDK_KEY_Udiaeresis; break;
+            case 'y': value = GDK_KEY_ydiaeresis; break;
+            case 'Y': value = 0x0178; break; /* should be GDK_KEY_Ydiaeresis ?? */
+            }
+          break;
 
-          GTK_NOTE (MISC, g_print ("quartz: U+%04X\n", value));
-          return TRUE;
+        case GDK_KEY_dead_acute:
+          switch (context_simple->compose_buffer[1])
+            {
+            case 'c': value = GDK_KEY_ccedilla; break;
+            case 'C': value = GDK_KEY_Ccedilla; break;
+            }
+          break;
         }
+    }
+
+  if (value > 0)
+    {
+      gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), value);
+      context_simple->compose_buffer[0] = 0;
+
+      GTK_NOTE (MISC, g_print ("quartz: U+%04X\n", value));
+      return TRUE;
     }
 
   return FALSE;
