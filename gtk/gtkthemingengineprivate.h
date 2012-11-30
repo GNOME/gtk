@@ -29,9 +29,6 @@ void _gtk_theming_engine_paint_spinner (cairo_t       *cr,
 
 GtkCssValue  *_gtk_theming_engine_peek_property (GtkThemingEngine *engine,
                                                  guint             property_id);
-double        _gtk_theming_engine_get_number    (GtkThemingEngine *engine,
-                                                 guint             property_id,
-                                                 double            one_hundred_percent);
 void          _gtk_theming_engine_set_context   (GtkThemingEngine *engine,
                                                  GtkStyleContext  *context);
 GtkStyleContext *_gtk_theming_engine_get_context   (GtkThemingEngine *engine);

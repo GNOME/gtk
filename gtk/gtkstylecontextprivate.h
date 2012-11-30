@@ -32,9 +32,6 @@ const GtkBitmask *
 
 GtkCssValue   * _gtk_style_context_peek_property             (GtkStyleContext *context,
                                                               guint            property_id);
-double         _gtk_style_context_get_number                 (GtkStyleContext *context,
-                                                              guint            property_id,
-                                                              double           one_hundred_percent);
 const GValue * _gtk_style_context_peek_style_property        (GtkStyleContext *context,
                                                               GType            widget_type,
                                                               GtkStateFlags    state,

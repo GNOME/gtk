@@ -355,16 +355,6 @@ _gtk_theming_engine_peek_property (GtkThemingEngine *engine,
   return _gtk_style_context_peek_property (engine->priv->context, property_id);
 }
 
-double
-_gtk_theming_engine_get_number (GtkThemingEngine *engine,
-                                guint             property_id,
-                                double            one_hundred_percent)
-{
-  g_return_val_if_fail (GTK_IS_THEMING_ENGINE (engine), 0.0);
-
-  return _gtk_style_context_get_number (engine->priv->context, property_id, one_hundred_percent);
-}
-
 /**
  * gtk_theming_engine_get_property:
  * @engine: a #GtkThemingEngine

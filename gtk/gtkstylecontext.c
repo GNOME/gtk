@@ -2222,17 +2222,6 @@ _gtk_style_context_peek_property (GtkStyleContext *context,
   return _gtk_css_computed_values_get_value (data->store, property_id);
 }
 
-double
-_gtk_style_context_get_number (GtkStyleContext *context,
-                               guint            property_id,
-                               double           one_hundred_percent)
-{
-  GtkCssValue *value;
-  
-  value = _gtk_style_context_peek_property (context, property_id);
-  return _gtk_css_number_value_get (value, one_hundred_percent);
-}
-
 const GValue *
 _gtk_style_context_peek_style_property (GtkStyleContext *context,
                                         GType            widget_type,
