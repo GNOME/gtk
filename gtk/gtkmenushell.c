@@ -1107,7 +1107,7 @@ gtk_menu_shell_leave_notify (GtkWidget        *widget,
                              GdkEventCrossing *event)
 {
   if (event->mode == GDK_CROSSING_GTK_GRAB ||
-      event->mode == GDK_CROSSING_GTK_GRAB ||
+      event->mode == GDK_CROSSING_GTK_UNGRAB ||
       event->mode == GDK_CROSSING_STATE_CHANGED)
     return TRUE;
 
