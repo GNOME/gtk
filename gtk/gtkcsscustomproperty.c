@@ -211,6 +211,8 @@ gtk_css_custom_property_create_initial_value (GParamSpec *pspec)
  * </note>
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: Code should use the default properties provided by CSS.
  **/
 void
 gtk_theming_engine_register_property (const gchar            *name_space,
@@ -260,6 +262,8 @@ gtk_theming_engine_register_property (const gchar            *name_space,
  * a theming engine, you want to use that function instead.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: Code should use the default properties provided by CSS.
  **/
 void
 gtk_style_properties_register_property (GtkStylePropertyParser  parse_func,
@@ -303,6 +307,9 @@ gtk_style_properties_register_property (GtkStylePropertyParser  parse_func,
  * Returns: %TRUE if the property is registered, %FALSE otherwise
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: This code could only look up custom properties and
+ *     those are deprecated.
  **/
 gboolean
 gtk_style_properties_lookup_property (const gchar             *property_name,

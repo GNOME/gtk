@@ -182,6 +182,7 @@ struct _GtkThemingEngineClass
 GType gtk_theming_engine_get_type (void) G_GNUC_CONST;
 
 /* function implemented in gtkcsscustomproperty.c */
+GDK_DEPRECATED_IN_3_8
 void gtk_theming_engine_register_property (const gchar            *name_space,
                                            GtkStylePropertyParser  parse_func,
                                            GParamSpec             *pspec);
