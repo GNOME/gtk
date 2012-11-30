@@ -35,6 +35,7 @@
 #include "gtkcontainer.h"
 #include "gtkaccelmapprivate.h"
 #include "gtkclipboard.h"
+#include "gtkcssstylepropertyprivate.h"
 #include "gtkiconfactory.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
@@ -6716,15 +6717,27 @@ gtk_widget_real_style_updated (GtkWidget *widget)
 
   if (widget->priv->context)
     {
+      const GtkBitmask *changes = _gtk_style_context_get_changes (widget->priv->context);
+
       if (gtk_widget_get_realized (widget) &&
           gtk_widget_get_has_window (widget) &&
           !gtk_widget_get_app_paintable (widget))
         gtk_style_context_set_background (widget->priv->context,
                                           widget->priv->window);
-    }
 
-  if (widget->priv->anchored)
-    gtk_widget_queue_resize (widget);
+      if (widget->priv->anchored)
+        {
+          if (changes && _gtk_css_style_property_changes_affect_size (changes))
+            gtk_widget_queue_resize (widget);
+          else
+            gtk_widget_queue_draw (widget);
+        }
+    }
+  else
+    {
+      if (widget->priv->anchored)
+        gtk_widget_queue_resize (widget);
+    }
 }
 
 static gboolean
