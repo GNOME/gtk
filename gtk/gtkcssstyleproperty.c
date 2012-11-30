@@ -46,6 +46,8 @@ enum {
 
 G_DEFINE_TYPE (GtkCssStyleProperty, _gtk_css_style_property, GTK_TYPE_STYLE_PROPERTY)
 
+static GtkBitmask *_properties_affecting_size = NULL;
+
 static void
 gtk_css_style_property_constructed (GObject *object)
 {
@@ -54,6 +56,9 @@ gtk_css_style_property_constructed (GObject *object)
 
   property->id = klass->style_properties->len;
   g_ptr_array_add (klass->style_properties, property);
+
+  if (property->affects_size)
+    _properties_affecting_size = _gtk_bitmask_set (_properties_affecting_size, property->id, TRUE);
 
   G_OBJECT_CLASS (_gtk_css_style_property_parent_class)->constructed (object);
 }
@@ -292,6 +297,8 @@ _gtk_css_style_property_class_init (GtkCssStylePropertyClass *klass)
   property_class->parse_value = gtk_css_style_property_parse_value;
 
   klass->style_properties = g_ptr_array_new ();
+
+  _properties_affecting_size = _gtk_bitmask_new ();
 }
 
 static GtkCssValue *
@@ -445,4 +452,10 @@ _gtk_css_style_property_get_initial_value (GtkCssStyleProperty *property)
   g_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), NULL);
 
   return property->initial_value;
+}
+
+gboolean
+_gtk_css_style_property_changes_affect_size (const GtkBitmask *changes)
+{
+  return _gtk_bitmask_intersects (changes, _properties_affecting_size);
 }

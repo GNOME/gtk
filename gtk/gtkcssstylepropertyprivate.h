@@ -80,6 +80,9 @@ GtkCssValue  *          _gtk_css_style_property_get_initial_value
 void                    _gtk_css_style_property_print_value     (GtkCssStyleProperty    *property,
                                                                  GtkCssValue            *value,
                                                                  GString                *string);
+
+gboolean                _gtk_css_style_property_changes_affect_size
+                                                                (const GtkBitmask       *changes);
                                                                  
 
 G_END_DECLS
