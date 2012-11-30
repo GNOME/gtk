@@ -1674,6 +1674,7 @@ render_border (cairo_t       *cr,
                                      border->left - other_border.left);
             render_frame_fill (cr, &other_box, &other_border, colors, dont_draw);
           }
+          break;
         case GTK_BORDER_STYLE_GROOVE:
         case GTK_BORDER_STYLE_RIDGE:
           {
