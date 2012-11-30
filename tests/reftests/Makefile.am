@@ -212,6 +212,7 @@ EXTRA_DIST += \
 	no-colors.ui \
 	nonresizable-size.ref.ui \
 	nonresizable-size.ui \
+	notebook-childproperties.css \
 	notebook-childproperties.ui \
 	notebook-childproperties.ref.ui \
 	nth-child.css \
