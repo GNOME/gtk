@@ -499,6 +499,7 @@ gtk_widget_accessible_notify_gtk (GObject    *obj,
       gtk_widget_accessible_update_tooltip (GTK_WIDGET_ACCESSIBLE (atk_obj),
                                             widget);
     }
+  else
     return;
 
   atk_object_notify_state_change (atk_obj, state, value);
