@@ -60,7 +60,6 @@
 #include "gtkmenuitem.h"
 #include "gtkmountoperation.h"
 #include "gtkplacessidebar.h"
-#include "gtkradiomenuitem.h"
 #include "gtkscrolledwindow.h"
 #include "gtkseparatormenuitem.h"
 #include "gtksettings.h"
@@ -108,9 +107,6 @@ struct _GtkPlacesSidebar {
 	GtkWidget *popup_menu_stop_item;
 	GtkWidget *popup_menu_properties_separator_item;
 	GtkWidget *popup_menu_properties_item;
-	GtkWidget *popup_menu_settings_separator_item;
-	GtkWidget *popup_menu_start_in_recent_item;
-	GtkWidget *popup_menu_start_in_cwd_item;
 
 	/* volume mounting - delayed open process */
 	gboolean mounting;
@@ -1699,9 +1695,6 @@ bookmarks_popup_menu_detach_cb (GtkWidget *attach_widget,
 	sidebar->popup_menu_empty_trash_item = NULL;
 	sidebar->popup_menu_properties_separator_item = NULL;
 	sidebar->popup_menu_properties_item = NULL;
-	sidebar->popup_menu_settings_separator_item = NULL;
-	sidebar->popup_menu_start_in_recent_item = NULL;
-	sidebar->popup_menu_start_in_cwd_item = NULL;
 }
 
 static void
@@ -1781,7 +1774,6 @@ check_popup_sensitivity (GtkPlacesSidebar *sidebar)
 	gboolean show_stop;
 	gboolean show_empty_trash;
 	gboolean show_properties;
-	gboolean show_settings;
 	char *uri = NULL;
 
 	type = PLACES_BUILT_IN;
@@ -1826,13 +1818,6 @@ check_popup_sensitivity (GtkPlacesSidebar *sidebar)
 	} else
 		show_properties = FALSE;
 
-	/* The file chooser will turn on showing $CWD in the places sidebar.  In this
-	 * case, we know we are being used for the file chooser.  For that, also
-	 * present the settings about starting the file chooser in Recent Files or
-	 * in $CWD.
-	 */
-	show_settings = sidebar->show_cwd;
-
 	gtk_widget_set_visible (sidebar->popup_menu_separator_item,
 		      show_mount || show_unmount || show_eject || show_empty_trash);
 	gtk_widget_set_visible (sidebar->popup_menu_mount_item, show_mount);
@@ -1844,9 +1829,6 @@ check_popup_sensitivity (GtkPlacesSidebar *sidebar)
 	gtk_widget_set_visible (sidebar->popup_menu_empty_trash_item, show_empty_trash);
 	gtk_widget_set_visible (sidebar->popup_menu_properties_separator_item, show_properties);
 	gtk_widget_set_visible (sidebar->popup_menu_properties_item, show_properties);
-	gtk_widget_set_visible (sidebar->popup_menu_settings_separator_item, show_settings);
-	gtk_widget_set_visible (sidebar->popup_menu_start_in_recent_item, show_settings);
-	gtk_widget_set_visible (sidebar->popup_menu_start_in_cwd_item, show_settings);
 
 	/* Adjust start/stop items to reflect the type of the drive */
 	gtk_menu_item_set_label (GTK_MENU_ITEM (sidebar->popup_menu_start_item), _("_Start"));
@@ -2890,60 +2872,6 @@ append_menu_separator (GtkMenu *menu)
 	return GTK_MENU_ITEM (menu_item);
 }
 
-static GSettings *
-get_settings (void)
-{
-	GSettings *settings;
-
-	settings = g_settings_new_with_path ("org.gtk.Settings.FileChooser",
-                                             "/org/gtk/settings/file-chooser/");
-
-	return settings;
-}
-
-/* Marks the popup_menu_start_in_* menu items as active based on the user's settings */
-static void
-update_settings_items (GtkPlacesSidebar *sidebar)
-{
-	GSettings *settings;
-	StartupMode startup_mode;
-	GtkWidget *item;
-
-	settings = get_settings ();
-
-	startup_mode = g_settings_get_enum (settings, SETTINGS_KEY_STARTUP_MODE);
-
-	if (startup_mode == STARTUP_MODE_CWD)
-		item = sidebar->popup_menu_start_in_cwd_item;
-	else
-		item = sidebar->popup_menu_start_in_recent_item;
-
-	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item), TRUE);
-
-	g_object_unref (settings);
-}
-
-/* Callback used for the radio menu item group with the user's settings */
-static void
-settings_start_in_changed_cb (GtkCheckMenuItem *item, GtkPlacesSidebar *sidebar)
-{
-	StartupMode startup_mode;
-	GSettings *settings;
-
-	if (gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (sidebar->popup_menu_start_in_recent_item)))
-		startup_mode = STARTUP_MODE_RECENT;
-	else if (gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (sidebar->popup_menu_start_in_cwd_item)))
-		startup_mode = STARTUP_MODE_CWD;
-	else {
-		g_assert_not_reached ();
-		return;
-	}
-
-	settings = get_settings ();
-	g_settings_set_enum (settings, SETTINGS_KEY_STARTUP_MODE, startup_mode);
-	g_object_unref (settings);
-}
-
 /* Constructs the popup menu for the file list if needed */
 static void
 bookmarks_build_popup_menu (GtkPlacesSidebar *sidebar)
@@ -3075,27 +3003,6 @@ bookmarks_build_popup_menu (GtkPlacesSidebar *sidebar)
 			  G_CALLBACK (properties_cb), sidebar);
 	gtk_widget_show (item);
 	gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
-
-	/* Settings items */
-
-	sidebar->popup_menu_settings_separator_item = GTK_WIDGET (append_menu_separator (GTK_MENU (sidebar->popup_menu)));
-
-	item = gtk_radio_menu_item_new_with_label (NULL, _("Start in Recent Files"));
-	sidebar->popup_menu_start_in_recent_item = item;
-	gtk_widget_show (item);
-	gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
-
-	item = gtk_radio_menu_item_new_with_label_from_widget (GTK_RADIO_MENU_ITEM (sidebar->popup_menu_start_in_recent_item),
-							       _("Start in Default Folder"));
-	sidebar->popup_menu_start_in_cwd_item = item;
-	gtk_widget_show (item);
-	gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
-
-	update_settings_items (sidebar);
-	g_signal_connect (sidebar->popup_menu_start_in_recent_item, "toggled",
-			  G_CALLBACK (settings_start_in_changed_cb), sidebar);
-	g_signal_connect (sidebar->popup_menu_start_in_cwd_item, "toggled",
-			  G_CALLBACK (settings_start_in_changed_cb), sidebar);
 
 	/* Update everything! */
 
