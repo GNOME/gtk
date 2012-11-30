@@ -4512,6 +4512,26 @@ gtk_draw_insertion_cursor (GtkWidget          *widget,
                          draw_arrow);
 }
 
+/**
+ * _gtk_style_context_get_changes:
+ * @context: the context to query
+ *
+ * Queries the context for the changes for the currently executing
+ * GtkStyleContext::invalidate signal. If no signal is currently
+ * emitted, this function returns %NULL.
+ *
+ * FIXME 4.0: Make this part of the signal.
+ *
+ * Returns: %NULL or the currently invalidating changes
+ **/
+const GtkBitmask *
+_gtk_style_context_get_changes (GtkStyleContext *context)
+{
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
+
+  return context->priv->invalidating_context;
+}
+
 static AtkAttributeSet *
 add_attribute (AtkAttributeSet  *attributes,
                AtkTextAttribute  attr,

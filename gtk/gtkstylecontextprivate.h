@@ -27,6 +27,9 @@ G_BEGIN_DECLS
 
 void            _gtk_style_context_set_widget                (GtkStyleContext *context,
                                                               GtkWidget       *widget);
+const GtkBitmask *
+                _gtk_style_context_get_changes               (GtkStyleContext *context);
+
 GtkCssValue   * _gtk_style_context_peek_property             (GtkStyleContext *context,
                                                               guint            property_id);
 double         _gtk_style_context_get_number                 (GtkStyleContext *context,
