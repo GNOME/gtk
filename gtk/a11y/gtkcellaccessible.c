@@ -287,10 +287,13 @@ gtk_cell_accessible_action_do_action (AtkAction *action,
     {
     case 0:
       _gtk_cell_accessible_parent_expand_collapse (parent, cell);
+      break;
     case 1:
       _gtk_cell_accessible_parent_edit (parent, cell);
+      break;
     case 2:
       _gtk_cell_accessible_parent_activate (parent, cell);
+      break;
     default:
       return FALSE;
     }
