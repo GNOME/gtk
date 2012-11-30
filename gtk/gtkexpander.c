@@ -1251,6 +1251,7 @@ get_next_site (GtkExpander      *expander,
         case GTK_DIR_RIGHT:
           return FOCUS_WIDGET;
         }
+      break;
     case FOCUS_WIDGET:
       switch (direction)
         {
@@ -1264,8 +1265,8 @@ get_next_site (GtkExpander      *expander,
           return FOCUS_LABEL;
         case GTK_DIR_RIGHT:
           return ltr ? FOCUS_LABEL : FOCUS_NONE;
-          break;
         }
+      break;
     case FOCUS_LABEL:
       switch (direction)
         {
@@ -1279,8 +1280,8 @@ get_next_site (GtkExpander      *expander,
           return FOCUS_CHILD;
         case GTK_DIR_RIGHT:
           return ltr ? FOCUS_CHILD : FOCUS_WIDGET;
-          break;
         }
+      break;
     case FOCUS_CHILD:
       switch (direction)
         {
@@ -1293,6 +1294,7 @@ get_next_site (GtkExpander      *expander,
         case GTK_DIR_RIGHT:
           return FOCUS_NONE;
         }
+      break;
     }
 
   g_assert_not_reached ();
