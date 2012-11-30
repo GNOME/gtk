@@ -565,8 +565,8 @@ parse_background (GtkCssShorthandProperty  *shorthand,
           {
             g_ptr_array_set_free_func (arrays[i], (GDestroyNotify) _gtk_css_value_unref);
             g_ptr_array_unref (arrays[i]);
-            return FALSE;
           }
+        return FALSE;
       }
 
       for (i = 0; i < 6; i++)
@@ -668,8 +668,8 @@ parse_transition (GtkCssShorthandProperty  *shorthand,
           {
             g_ptr_array_set_free_func (arrays[i], (GDestroyNotify) _gtk_css_value_unref);
             g_ptr_array_unref (arrays[i]);
-            return FALSE;
           }
+        return FALSE;
       }
 
       for (i = 0; i < 4; i++)
@@ -784,8 +784,8 @@ parse_animation (GtkCssShorthandProperty  *shorthand,
           {
             g_ptr_array_set_free_func (arrays[i], (GDestroyNotify) _gtk_css_value_unref);
             g_ptr_array_unref (arrays[i]);
-            return FALSE;
           }
+        return FALSE;
       }
 
       for (i = 0; i < 6; i++)
