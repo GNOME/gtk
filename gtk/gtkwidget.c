@@ -853,6 +853,8 @@ gtk_widget_draw_marshallerv (GClosure     *closure,
 				param_types);
 
   cairo_restore (cr);
+
+  va_end (args_copy);
 }
 
 static void
