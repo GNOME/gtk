@@ -2395,6 +2395,8 @@ create_credits_page (GtkAboutDialog *about)
   gtk_widget_set_valign (grid, GTK_ALIGN_START);
   gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (sw), grid);
 
+  row = 0;
+
   if (priv->authors != NULL)
     add_credits_section (about, GTK_GRID (grid), &row, _("Created by"), priv->authors);
 
