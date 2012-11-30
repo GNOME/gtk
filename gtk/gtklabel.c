@@ -3394,7 +3394,7 @@ gtk_label_ensure_layout (GtkLabel *label)
               pango_attr_list_insert (attrs, attribute);
             }
         }
-      else if (priv->markup_attrs && priv->markup_attrs)
+      else if (priv->markup_attrs || priv->attrs)
         attrs = pango_attr_list_new ();
       else
         attrs = NULL;
