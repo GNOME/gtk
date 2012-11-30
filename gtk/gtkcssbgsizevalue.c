@@ -74,7 +74,7 @@ gtk_css_value_bg_size_equal (const GtkCssValue *value1,
                              const GtkCssValue *value2)
 {
   return value1->cover == value2->cover &&
-         value2->contain == value2->contain &&
+         value1->contain == value2->contain &&
          (value1->x == value2->x ||
           (value1->x != NULL && value2->x != NULL &&
            _gtk_css_value_equal (value1->x, value2->x))) &&
