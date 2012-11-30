@@ -1568,7 +1568,7 @@ symbolic_pixbuf_cache_free (SymbolicPixbufCache *cache)
 
   while (cache != NULL)
     {
-      next = cache;
+      next = cache->next;
       g_object_unref (cache->pixbuf);
       g_free (cache);
 
