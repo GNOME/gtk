@@ -189,7 +189,7 @@ gtk_action_helper_action_removed (GtkActionHelper *helper)
 
   if (helper->active)
     {
-      helper->enabled = FALSE;
+      helper->active = FALSE;
       gtk_action_helper_report_change (helper, PROP_ACTIVE);
     }
 
