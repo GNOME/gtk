@@ -708,7 +708,7 @@ gtk_icon_view_item_accessible_is_showing (GtkIconViewItemAccessible *item)
   if (icon_view->priv->hadjustment)
     visible_rect.x += gtk_adjustment_get_value (icon_view->priv->hadjustment);
   visible_rect.y = 0;
-  if (icon_view->priv->hadjustment)
+  if (icon_view->priv->vadjustment)
     visible_rect.y += gtk_adjustment_get_value (icon_view->priv->vadjustment);
   visible_rect.width = allocation.width;
   visible_rect.height = allocation.height;
