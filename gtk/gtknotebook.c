@@ -2504,6 +2504,7 @@ gtk_notebook_size_allocate (GtkWidget     *widget,
                 {
                 case GTK_POS_TOP:
                   child_allocation.y += priv->cur_page->requisition.height;
+                  /* fall thru */
                 case GTK_POS_BOTTOM:
                   child_allocation.height =
                     MAX (1, child_allocation.height -
@@ -2511,6 +2512,7 @@ gtk_notebook_size_allocate (GtkWidget     *widget,
                   break;
                 case GTK_POS_LEFT:
                   child_allocation.x += priv->cur_page->requisition.width;
+                  /* fall thru */
                 case GTK_POS_RIGHT:
                   child_allocation.width =
                     MAX (1, child_allocation.width -
