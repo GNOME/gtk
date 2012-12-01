@@ -152,6 +152,9 @@ EXTRA_DIST += \
 	entry-progress-coloring.css \
 	entry-progress-coloring.ref.ui \
 	entry-progress-coloring.ui \
+	font-size-names.css \
+	font-size-names.ref.ui \
+	font-size-names.ui \
 	green-20x20.png \
 	grid-empty-with-spacing.ref.ui \
 	grid-empty-with-spacing.ui \
