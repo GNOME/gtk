@@ -648,7 +648,12 @@ static GtkCssValue *
 font_size_parse (GtkCssStyleProperty *property,
                  GtkCssParser        *parser)
 {
+  GtkCssValue *value;
   gdouble d;
+
+  value = _gtk_css_font_size_value_try_parse (parser);
+  if (value)
+    return value;
 
   if (!_gtk_css_parser_try_double (parser, &d))
     {
@@ -878,8 +883,7 @@ _gtk_css_style_property_init_properties (void)
                                           font_size_parse,
                                           query_length_as_double,
                                           assign_length_from_double,
-                                          /* XXX: This should be 'normal' */
-                                          _gtk_css_number_value_new (10.0, GTK_CSS_PX));
+                                          _gtk_css_font_size_value_new (GTK_CSS_FONT_SIZE_MEDIUM));
 
   /* properties that aren't referenced when computing values
    * start here */

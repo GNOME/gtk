@@ -19,7 +19,9 @@
 
 #include "gtkcssenumvalueprivate.h"
 
-#include "gtkstylepropertyprivate.h"
+#include "gtkcsscomputedvaluesprivate.h"
+#include "gtkcssnumbervalueprivate.h"
+#include "gtkstyleproviderprivate.h"
 
 /* repeated API */
 
@@ -120,6 +122,149 @@ GtkBorderStyle
 _gtk_css_border_style_value_get (const GtkCssValue *value)
 {
   g_return_val_if_fail (value->class == &GTK_CSS_VALUE_BORDER_STYLE, GTK_BORDER_STYLE_NONE);
+
+  return value->value;
+}
+
+/* GtkCssFontSize */
+
+/* XXX: Kinda bad to have that machinery here, nobody expects vital font
+ * size code to appear in gtkcssvalueenum.c.
+ */
+#define DEFAULT_FONT_SIZE 10
+
+static double
+get_default_font_size (GtkStyleProviderPrivate *provider)
+{
+  GtkSettings *settings;
+  PangoFontDescription *description;
+  char *font_name;
+  double font_size;
+
+  settings = _gtk_style_provider_private_get_settings (provider);
+  if (settings == NULL)
+    return DEFAULT_FONT_SIZE;
+  
+  g_object_get (settings, "gtk-font-name", &font_name, NULL);
+  description = pango_font_description_from_string (font_name);
+  g_free (font_name);
+  if (description == NULL)
+    return DEFAULT_FONT_SIZE;
+
+  if (pango_font_description_get_set_fields (description) & PANGO_FONT_MASK_SIZE)
+    font_size = (double) pango_font_description_get_size (description) / PANGO_SCALE;
+  else
+    font_size = DEFAULT_FONT_SIZE;
+
+  pango_font_description_free (description);
+  return font_size;
+}
+
+static GtkCssValue *
+gtk_css_value_font_size_compute (GtkCssValue             *value,
+                                 guint                    property_id,
+                                 GtkStyleProviderPrivate *provider,
+                                 GtkCssComputedValues    *values,
+                                 GtkCssComputedValues    *parent_values,
+                                 GtkCssDependencies      *dependencies)
+{
+  double font_size;
+
+  switch (value->value)
+    {
+    case GTK_CSS_FONT_SIZE_XX_SMALL:
+      font_size = get_default_font_size (provider) * 3. / 5;
+      break;
+    case GTK_CSS_FONT_SIZE_X_SMALL:
+      font_size = get_default_font_size (provider) * 3. / 4;
+      break;
+    case GTK_CSS_FONT_SIZE_SMALL:
+      font_size = get_default_font_size (provider) * 8. / 9;
+      break;
+    default:
+      g_assert_not_reached ();
+      /* fall thru */
+    case GTK_CSS_FONT_SIZE_MEDIUM:
+      font_size = get_default_font_size (provider);
+      break;
+    case GTK_CSS_FONT_SIZE_LARGE:
+      font_size = get_default_font_size (provider) * 6. / 5;
+      break;
+    case GTK_CSS_FONT_SIZE_X_LARGE:
+      font_size = get_default_font_size (provider) * 3. / 2;
+      break;
+    case GTK_CSS_FONT_SIZE_XX_LARGE:
+      font_size = get_default_font_size (provider) * 2;
+      break;
+    case GTK_CSS_FONT_SIZE_SMALLER:
+      if (parent_values)
+        font_size = _gtk_css_number_value_get (_gtk_css_computed_values_get_value (parent_values, GTK_CSS_PROPERTY_FONT_SIZE), 100);
+      else
+        font_size = get_default_font_size (provider);
+      /* XXX: This is what WebKit does... */
+      font_size *= 1.2;
+      break;
+    case GTK_CSS_FONT_SIZE_LARGER:
+      if (parent_values)
+        font_size = _gtk_css_number_value_get (_gtk_css_computed_values_get_value (parent_values, GTK_CSS_PROPERTY_FONT_SIZE), 100);
+      else
+        font_size = get_default_font_size (provider);
+      /* XXX: This is what WebKit does... */
+      font_size /= 1.2;
+      break;
+  }
+
+  return _gtk_css_number_value_new (font_size, GTK_CSS_PX);
+}
+
+static const GtkCssValueClass GTK_CSS_VALUE_FONT_SIZE = {
+  gtk_css_value_enum_free,
+  gtk_css_value_font_size_compute,
+  gtk_css_value_enum_equal,
+  gtk_css_value_enum_transition,
+  gtk_css_value_enum_print
+};
+
+static GtkCssValue font_size_values[] = {
+  { &GTK_CSS_VALUE_FONT_SIZE, 1, GTK_CSS_FONT_SIZE_XX_SMALL, "xx-small" },
+  { &GTK_CSS_VALUE_FONT_SIZE, 1, GTK_CSS_FONT_SIZE_X_SMALL, "x-small" },
+  { &GTK_CSS_VALUE_FONT_SIZE, 1, GTK_CSS_FONT_SIZE_SMALL, "small" },
+  { &GTK_CSS_VALUE_FONT_SIZE, 1, GTK_CSS_FONT_SIZE_MEDIUM, "medium" },
+  { &GTK_CSS_VALUE_FONT_SIZE, 1, GTK_CSS_FONT_SIZE_LARGE, "large" },
+  { &GTK_CSS_VALUE_FONT_SIZE, 1, GTK_CSS_FONT_SIZE_X_LARGE, "x-large" },
+  { &GTK_CSS_VALUE_FONT_SIZE, 1, GTK_CSS_FONT_SIZE_XX_LARGE, "xx-large" },
+  { &GTK_CSS_VALUE_FONT_SIZE, 1, GTK_CSS_FONT_SIZE_SMALLER, "smaller" },
+  { &GTK_CSS_VALUE_FONT_SIZE, 1, GTK_CSS_FONT_SIZE_LARGER, "larger" },
+};
+
+GtkCssValue *
+_gtk_css_font_size_value_new (GtkCssFontSize font_size)
+{
+  g_return_val_if_fail (font_size < G_N_ELEMENTS (font_size_values), NULL);
+
+  return _gtk_css_value_ref (&font_size_values[font_size]);
+}
+
+GtkCssValue *
+_gtk_css_font_size_value_try_parse (GtkCssParser *parser)
+{
+  guint i;
+
+  g_return_val_if_fail (parser != NULL, NULL);
+
+  for (i = 0; i < G_N_ELEMENTS (font_size_values); i++)
+    {
+      if (_gtk_css_parser_try (parser, font_size_values[i].name, TRUE))
+        return _gtk_css_value_ref (&font_size_values[i]);
+    }
+
+  return NULL;
+}
+
+GtkCssFontSize
+_gtk_css_font_size_value_get (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_FONT_SIZE, GTK_CSS_FONT_SIZE_MEDIUM);
 
   return value->value;
 }

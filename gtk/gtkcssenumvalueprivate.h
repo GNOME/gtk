@@ -31,6 +31,10 @@ GtkCssValue *   _gtk_css_border_style_value_new       (GtkBorderStyle     border
 GtkCssValue *   _gtk_css_border_style_value_try_parse (GtkCssParser      *parser);
 GtkBorderStyle  _gtk_css_border_style_value_get       (const GtkCssValue *value);
 
+GtkCssValue *   _gtk_css_font_size_value_new          (GtkCssFontSize     size);
+GtkCssValue *   _gtk_css_font_size_value_try_parse    (GtkCssParser      *parser);
+GtkCssFontSize  _gtk_css_font_size_value_get          (const GtkCssValue *value);
+
 GtkCssValue *   _gtk_css_font_style_value_new         (PangoStyle         style);
 GtkCssValue *   _gtk_css_font_style_value_try_parse   (GtkCssParser      *parser);
 PangoStyle      _gtk_css_font_style_value_get         (const GtkCssValue *value);
