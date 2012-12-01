@@ -24,9 +24,6 @@
 
 #include "gtksettings.h"
 
-#include "gtkcssarrayvalueprivate.h"
-#include "gtkcssnumbervalueprivate.h"
-#include "gtkcssstringvalueprivate.h"
 #include "gtkmodules.h"
 #include "gtkmodulesprivate.h"
 #include "gtksettingsprivate.h"
@@ -117,8 +114,6 @@ struct _GtkSettingsPrivate
   GdkScreen *screen;
   GtkCssProvider *theme_provider;
   GtkCssProvider *key_theme_provider;
-  GtkCssValue *default_font_family;
-  GtkCssValue *default_font_size;
 };
 
 typedef enum
@@ -1415,41 +1410,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
 }
 
 static void
-settings_ensure_style (GtkSettings *settings)
-{
-  GtkSettingsPrivate *priv = settings->priv;
-  PangoFontDescription *description;
-  gchar *font_name;
-  PangoFontMask mask;
-
-  if (priv->default_font_family)
-    return;
-
-  g_object_get (settings,
-                "gtk-font-name", &font_name,
-                NULL);
-
-  description = pango_font_description_from_string (font_name);
-  if (description)
-    mask = pango_font_description_get_set_fields (description);
-  else
-    mask = 0;
- 
-  if (mask & PANGO_FONT_MASK_FAMILY)
-    priv->default_font_family = _gtk_css_array_value_new (_gtk_css_string_value_new (pango_font_description_get_family (description)));
-  else
-    priv->default_font_family = _gtk_css_array_value_new (_gtk_css_string_value_new ("Sans"));
-
-  if (mask & PANGO_FONT_MASK_SIZE)
-    priv->default_font_size = _gtk_css_number_value_new ((double) pango_font_description_get_size (description) / PANGO_SCALE, GTK_CSS_PX);
-  else
-    priv->default_font_size = _gtk_css_number_value_new (10.0, GTK_CSS_PX);
-
-  pango_font_description_free (description);
-  g_free (font_name);
-}
-
-static void
 gtk_settings_provider_iface_init (GtkStyleProviderIface *iface)
 {
 }
@@ -1461,25 +1421,9 @@ gtk_settings_style_provider_get_settings (GtkStyleProviderPrivate *provider)
 }
 
 static void
-gtk_settings_style_provider_lookup (GtkStyleProviderPrivate *provider,
-                                    const GtkCssMatcher     *matcher,
-                                    GtkCssLookup            *lookup)
-{
-  GtkSettings *settings = GTK_SETTINGS (provider);
-
-  settings_ensure_style (settings);
-
-  if (_gtk_css_lookup_is_missing (lookup, GTK_CSS_PROPERTY_FONT_FAMILY))
-    _gtk_css_lookup_set (lookup, GTK_CSS_PROPERTY_FONT_FAMILY, NULL, settings->priv->default_font_family);
-  if (_gtk_css_lookup_is_missing (lookup, GTK_CSS_PROPERTY_FONT_SIZE))
-    _gtk_css_lookup_set (lookup, GTK_CSS_PROPERTY_FONT_SIZE, NULL, settings->priv->default_font_size);
-}
-
-static void
 gtk_settings_provider_private_init (GtkStyleProviderPrivateInterface *iface)
 {
   iface->get_settings = gtk_settings_style_provider_get_settings;
-  iface->lookup = gtk_settings_style_provider_lookup;
 }
 
 static void
@@ -1499,11 +1443,6 @@ gtk_settings_finalize (GObject *object)
 
   settings_update_provider (priv->screen, &priv->theme_provider, NULL);
   settings_update_provider (priv->screen, &priv->key_theme_provider, NULL);
-
-  if (priv->default_font_family)
-    _gtk_css_value_unref (priv->default_font_family);
-  if (priv->default_font_size)
-    _gtk_css_value_unref (priv->default_font_size);
 
   G_OBJECT_CLASS (gtk_settings_parent_class)->finalize (object);
 }
@@ -1710,19 +1649,6 @@ gtk_settings_get_property (GObject     *object,
 static void
 settings_invalidate_style (GtkSettings *settings)
 {
-  GtkSettingsPrivate *priv = settings->priv;
-
-  if (priv->default_font_family)
-    {
-      _gtk_css_value_unref (priv->default_font_family);
-      priv->default_font_family = NULL;
-    }
-  if (priv->default_font_size)
-    {
-      _gtk_css_value_unref (priv->default_font_size);
-      priv->default_font_size = NULL;
-    }
-
   _gtk_style_provider_private_changed (GTK_STYLE_PROVIDER_PRIVATE (settings));
 }
 

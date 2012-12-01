@@ -19,7 +19,11 @@
 
 #include "gtkcssinitialvalueprivate.h"
 
+#include "gtkcssarrayvalueprivate.h"
+#include "gtkcssnumbervalueprivate.h"
+#include "gtkcssstringvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
+#include "gtkstyleproviderprivate.h"
 
 struct _GtkCssValue {
   GTK_CSS_VALUE_BASE
@@ -40,6 +44,64 @@ gtk_css_value_initial_compute (GtkCssValue             *value,
                                GtkCssComputedValues    *parent_values,
                                GtkCssDependencies      *dependencies)
 {
+  GtkSettings *settings;
+
+  switch (property_id)
+    {
+    case GTK_CSS_PROPERTY_FONT_FAMILY:
+      settings = _gtk_style_provider_private_get_settings (provider);
+      if (settings)
+        {
+          PangoFontDescription *description;
+          char *font_name;
+          GtkCssValue *value;
+
+          g_object_get (settings, "gtk-font-name", &font_name, NULL);
+          description = pango_font_description_from_string (font_name);
+          g_free (font_name);
+          if (description == NULL)
+            break;
+
+          if (pango_font_description_get_set_fields (description) & PANGO_FONT_MASK_FAMILY)
+            {
+              value = _gtk_css_array_value_new (_gtk_css_string_value_new (pango_font_description_get_family (description)));
+              pango_font_description_free (description);
+              return value;
+            }
+ 
+          pango_font_description_free (description);
+        }
+      break;
+
+    case GTK_CSS_PROPERTY_FONT_SIZE:
+      settings = _gtk_style_provider_private_get_settings (provider);
+      if (settings)
+        {
+          PangoFontDescription *description;
+          char *font_name;
+          GtkCssValue *value;
+
+          g_object_get (settings, "gtk-font-name", &font_name, NULL);
+          description = pango_font_description_from_string (font_name);
+          g_free (font_name);
+          if (description == NULL)
+            break;
+
+          if (pango_font_description_get_set_fields (description) & PANGO_FONT_MASK_SIZE)
+            {
+              value = _gtk_css_number_value_new ((double) pango_font_description_get_size (description) / PANGO_SCALE, GTK_CSS_PX);
+              pango_font_description_free (description);
+              return value;
+            }
+ 
+          pango_font_description_free (description);
+        }
+      break;
+
+    default:
+      break;
+    }
+
   return _gtk_css_value_compute (_gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (property_id)),
                                  property_id,
                                  provider,
