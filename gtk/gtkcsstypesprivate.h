@@ -162,6 +162,9 @@ typedef enum /*< skip >*/ {
 } GtkCssFillMode;
 
 typedef enum /*< skip >*/ {
+  /* relative font sizes */
+  GTK_CSS_FONT_SIZE_SMALLER,
+  GTK_CSS_FONT_SIZE_LARGER,
   /* absolute font sizes */
   GTK_CSS_FONT_SIZE_XX_SMALL,
   GTK_CSS_FONT_SIZE_X_SMALL,
@@ -169,10 +172,7 @@ typedef enum /*< skip >*/ {
   GTK_CSS_FONT_SIZE_MEDIUM,
   GTK_CSS_FONT_SIZE_LARGE,
   GTK_CSS_FONT_SIZE_X_LARGE,
-  GTK_CSS_FONT_SIZE_XX_LARGE,
-  /* relative font sizes */
-  GTK_CSS_FONT_SIZE_SMALLER,
-  GTK_CSS_FONT_SIZE_LARGER
+  GTK_CSS_FONT_SIZE_XX_LARGE
 } GtkCssFontSize;
 
 /* for the order in arrays */
