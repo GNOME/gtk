@@ -2437,10 +2437,12 @@ list_store_start_element (GMarkupParseContext *context,
   else if (strcmp (element_name, "row") == 0)
     ;
   else if (strcmp (element_name, "column") == 0)
-    for (i = 0; names[i]; i++)
-      if (strcmp (names[i], "type") == 0)
-	data->column_type_names = g_slist_prepend (data->column_type_names,
-						   g_strdup (values[i]));
+    {
+      for (i = 0; names[i]; i++)
+        if (strcmp (names[i], "type") == 0)
+          data->column_type_names = g_slist_prepend (data->column_type_names,
+                                                     g_strdup (values[i]));
+    }
   else if (strcmp (element_name, "columns") == 0)
     ;
   else if (strcmp (element_name, "data") == 0)
