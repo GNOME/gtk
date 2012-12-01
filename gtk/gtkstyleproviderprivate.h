@@ -41,6 +41,7 @@ struct _GtkStyleProviderPrivateInterface
 
   GtkCssValue *         (* get_color)           (GtkStyleProviderPrivate *provider,
                                                  const char              *name);
+  GtkSettings *         (* get_settings)        (GtkStyleProviderPrivate *provider);
   GtkCssKeyframes *     (* get_keyframes)       (GtkStyleProviderPrivate *provider,
                                                  const char              *name);
   void                  (* lookup)              (GtkStyleProviderPrivate *provider,
@@ -55,6 +56,7 @@ struct _GtkStyleProviderPrivateInterface
 
 GType                   _gtk_style_provider_private_get_type     (void) G_GNUC_CONST;
 
+GtkSettings *           _gtk_style_provider_private_get_settings (GtkStyleProviderPrivate *provider);
 GtkCssValue *           _gtk_style_provider_private_get_color    (GtkStyleProviderPrivate *provider,
                                                                   const char              *name);
 GtkCssKeyframes *       _gtk_style_provider_private_get_keyframes(GtkStyleProviderPrivate *provider,
