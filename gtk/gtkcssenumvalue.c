@@ -197,6 +197,7 @@ gtk_css_value_font_size_compute (GtkCssValue             *value,
       font_size = get_default_font_size (provider) * 2;
       break;
     case GTK_CSS_FONT_SIZE_SMALLER:
+      *dependencies = GTK_CSS_DEPENDS_ON_PARENT;
       if (parent_values)
         font_size = _gtk_css_number_value_get (_gtk_css_computed_values_get_value (parent_values, GTK_CSS_PROPERTY_FONT_SIZE), 100);
       else
@@ -205,6 +206,7 @@ gtk_css_value_font_size_compute (GtkCssValue             *value,
       font_size *= 1.2;
       break;
     case GTK_CSS_FONT_SIZE_LARGER:
+      *dependencies = GTK_CSS_DEPENDS_ON_PARENT;
       if (parent_values)
         font_size = _gtk_css_number_value_get (_gtk_css_computed_values_get_value (parent_values, GTK_CSS_PROPERTY_FONT_SIZE), 100);
       else
