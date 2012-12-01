@@ -203,7 +203,7 @@ gtk_css_value_font_size_compute (GtkCssValue             *value,
       else
         font_size = _gtk_css_font_size_get_default (provider);
       /* XXX: This is what WebKit does... */
-      font_size *= 1.2;
+      font_size /= 1.2;
       break;
     case GTK_CSS_FONT_SIZE_LARGER:
       *dependencies = GTK_CSS_DEPENDS_ON_PARENT;
@@ -212,7 +212,7 @@ gtk_css_value_font_size_compute (GtkCssValue             *value,
       else
         font_size = _gtk_css_font_size_get_default (provider);
       /* XXX: This is what WebKit does... */
-      font_size /= 1.2;
+      font_size *= 1.2;
       break;
   }
 
