@@ -20,6 +20,7 @@
 #include "gtkcssnumbervalueprivate.h"
 
 #include "gtkcssenumvalueprivate.h"
+#include "gtkcssinitialvalueprivate.h"
 #include "gtkstylepropertyprivate.h"
 
 struct _GtkCssValue {
@@ -34,6 +35,26 @@ gtk_css_value_number_free (GtkCssValue *value)
   g_slice_free (GtkCssValue, value);
 }
 
+static double
+get_base_font_size (guint                    property_id,
+                    GtkStyleProviderPrivate *provider,
+                    GtkCssComputedValues    *values,
+                    GtkCssComputedValues    *parent_values,
+                    GtkCssDependencies      *dependencies)
+{
+  if (property_id == GTK_CSS_PROPERTY_FONT_SIZE)
+    {
+      *dependencies = GTK_CSS_DEPENDS_ON_PARENT;
+      if (parent_values)
+        return _gtk_css_number_value_get (_gtk_css_computed_values_get_value (parent_values, GTK_CSS_PROPERTY_FONT_SIZE), 100);
+      else
+        return _gtk_css_font_size_get_default (provider);
+    }
+
+  *dependencies = GTK_CSS_DEPENDS_ON_FONT_SIZE;
+  return _gtk_css_number_value_get (_gtk_css_computed_values_get_value (values, GTK_CSS_PROPERTY_FONT_SIZE), 100);
+}
+                    
 static GtkCssValue *
 gtk_css_value_number_compute (GtkCssValue             *number,
                               guint                    property_id,
@@ -48,6 +69,11 @@ gtk_css_value_number_compute (GtkCssValue             *number,
       g_assert_not_reached();
       /* fall through */
     case GTK_CSS_PERCENT:
+      /* percentages for font sizes are computed, other percentages aren't */
+      if (property_id == GTK_CSS_PROPERTY_FONT_SIZE)
+        return _gtk_css_number_value_new (number->value / 100.0 * 
+                                          get_base_font_size (property_id, provider, values, parent_values, dependencies),
+                                          GTK_CSS_PX);
     case GTK_CSS_NUMBER:
     case GTK_CSS_PX:
     case GTK_CSS_DEG:
@@ -73,16 +99,14 @@ gtk_css_value_number_compute (GtkCssValue             *number,
                                         GTK_CSS_PX);
       break;
     case GTK_CSS_EM:
-      *dependencies = GTK_CSS_DEPENDS_ON_FONT_SIZE;
       return _gtk_css_number_value_new (number->value *
-                                        _gtk_css_number_value_get (_gtk_css_computed_values_get_value (values, GTK_CSS_PROPERTY_FONT_SIZE), 100),
+                                        get_base_font_size (property_id, provider, values, parent_values, dependencies),
                                         GTK_CSS_PX);
       break;
     case GTK_CSS_EX:
       /* for now we pretend ex is half of em */
-      *dependencies = GTK_CSS_DEPENDS_ON_FONT_SIZE;
       return _gtk_css_number_value_new (number->value * 0.5 * 
-                                        _gtk_css_number_value_get (_gtk_css_computed_values_get_value (values, GTK_CSS_PROPERTY_FONT_SIZE), 100),
+                                        get_base_font_size (property_id, provider, values, parent_values, dependencies),
                                         GTK_CSS_PX);
     case GTK_CSS_RAD:
       return _gtk_css_number_value_new (number->value * 360.0 / (2 * G_PI),

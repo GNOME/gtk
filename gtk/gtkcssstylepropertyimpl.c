@@ -649,19 +649,16 @@ font_size_parse (GtkCssStyleProperty *property,
                  GtkCssParser        *parser)
 {
   GtkCssValue *value;
-  gdouble d;
 
   value = _gtk_css_font_size_value_try_parse (parser);
   if (value)
     return value;
 
-  if (!_gtk_css_parser_try_double (parser, &d))
-    {
-      _gtk_css_parser_error (parser, "Expected a number");
-      return NULL;
-    }
-
-  return _gtk_css_number_value_new (d, GTK_CSS_PX);
+  return _gtk_css_number_value_parse (parser,
+                                      GTK_CSS_PARSE_LENGTH
+                                      | GTK_CSS_PARSE_PERCENT
+                                      | GTK_CSS_POSITIVE_ONLY
+                                      | GTK_CSS_NUMBER_AS_PIXELS);
 }
 
 static GtkCssValue *
