@@ -54,6 +54,8 @@ tests/reftests/css-multi-state.ref.ui
 tests/reftests/css-multi-state.ui
 tests/reftests/entry-progress-coloring.ref.ui
 tests/reftests/entry-progress-coloring.ui
+tests/reftests/font-sizes-names.ref.ui
+tests/reftests/font-sizes-names.ui
 tests/reftests/grid-empty-with-spacing.ui
 tests/reftests/grid-wfh.ref.ui
 tests/reftests/grid-wfh.ui
