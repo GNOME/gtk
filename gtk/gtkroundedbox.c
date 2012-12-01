@@ -284,7 +284,7 @@ _gtk_rounded_box_guess_length (const GtkRoundedBox *box,
                                GtkCssSide           side)
 {
   double length;
-  GtkCssCorner before, after;
+  GtkCssSide before, after;
 
   before = side;
   after = (side + 1) % 4;
