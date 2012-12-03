@@ -8367,10 +8367,12 @@ send_crossing_event (GdkDisplay                 *display,
     window_event_mask = window->event_mask;
 
   if (type == GDK_ENTER_NOTIFY &&
-      pointer_info->need_touch_press_enter &&
+      (pointer_info->need_touch_press_enter ||
+       gdk_device_get_source (source_device) == GDK_SOURCE_TOUCHSCREEN) &&
       mode != GDK_CROSSING_TOUCH_BEGIN &&
       mode != GDK_CROSSING_TOUCH_END)
     {
+      pointer_info->need_touch_press_enter = TRUE;
       block_event = TRUE;
     }
   else if (type == GDK_LEAVE_NOTIFY)
