@@ -584,36 +584,42 @@ dialog_response (GtkDialog *dialog,
     }
 }
 
+/* Create the dialog and connects its buttons */
+static void
+ensure_dialog (GtkColorButton *button)
+{
+  GtkWidget *parent, *dialog;
+
+  if (button->priv->cs_dialog != NULL)
+    return;
+
+  parent = gtk_widget_get_toplevel (GTK_WIDGET (button));
+
+  button->priv->cs_dialog = dialog = gtk_color_chooser_dialog_new (button->priv->title, NULL);
+
+  if (gtk_widget_is_toplevel (parent) && GTK_IS_WINDOW (parent))
+  {
+    if (GTK_WINDOW (parent) != gtk_window_get_transient_for (GTK_WINDOW (dialog)))
+      gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
+
+    gtk_window_set_modal (GTK_WINDOW (dialog),
+                            gtk_window_get_modal (GTK_WINDOW (parent)));
+  }
+
+  g_signal_connect (dialog, "response",
+                    G_CALLBACK (dialog_response), button);
+  g_signal_connect (dialog, "destroy",
+                    G_CALLBACK (dialog_destroy), button);
+}
+
+
 static void
 gtk_color_button_clicked (GtkButton *b)
 {
   GtkColorButton *button = GTK_COLOR_BUTTON (b);
-  GtkWidget *dialog;
 
   /* if dialog already exists, make sure it's shown and raised */
-  if (!button->priv->cs_dialog)
-    {
-      /* Create the dialog and connects its buttons */
-      GtkWidget *parent;
-
-      parent = gtk_widget_get_toplevel (GTK_WIDGET (button));
-
-      button->priv->cs_dialog = dialog = gtk_color_chooser_dialog_new (button->priv->title, NULL);
-
-      if (gtk_widget_is_toplevel (parent) && GTK_IS_WINDOW (parent))
-        {
-          if (GTK_WINDOW (parent) != gtk_window_get_transient_for (GTK_WINDOW (dialog)))
-            gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
-
-          gtk_window_set_modal (GTK_WINDOW (dialog),
-                                gtk_window_get_modal (GTK_WINDOW (parent)));
-        }
-
-      g_signal_connect (dialog, "response",
-                        G_CALLBACK (dialog_response), button);
-      g_signal_connect (dialog, "destroy",
-                        G_CALLBACK (dialog_destroy), button);
-    }
+  ensure_dialog (button);
 
   gtk_color_chooser_set_use_alpha (GTK_COLOR_CHOOSER (button->priv->cs_dialog),
                                    button->priv->use_alpha);
@@ -962,8 +968,9 @@ gtk_color_button_add_palette (GtkColorChooser *chooser,
 {
   GtkColorButton *button = GTK_COLOR_BUTTON (chooser);
 
-  if (button->priv->cs_dialog)
-    gtk_color_chooser_add_palette (GTK_COLOR_CHOOSER (button->priv->cs_dialog),
+  ensure_dialog (button);
+
+  gtk_color_chooser_add_palette (GTK_COLOR_CHOOSER (button->priv->cs_dialog),
                                    orientation, colors_per_line, n_colors, colors);
 }
 
