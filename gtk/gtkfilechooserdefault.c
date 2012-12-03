@@ -57,7 +57,6 @@
 #include "gtkpathbar.h"
 #include "gtkprivate.h"
 #include "gtkradiobutton.h"
-#include "gtkradiomenuitem.h"
 #include "gtkrecentfilter.h"
 #include "gtkrecentmanager.h"
 #include "gtkscrolledwindow.h"
@@ -339,7 +338,6 @@ static void show_hidden_handler     (GtkFileChooserDefault *impl);
 static void search_shortcut_handler (GtkFileChooserDefault *impl);
 static void recent_shortcut_handler (GtkFileChooserDefault *impl);
 static void update_appearance       (GtkFileChooserDefault *impl);
-static void update_settings_items   (GtkFileChooserDefault *impl);
 
 static void set_current_filter   (GtkFileChooserDefault *impl,
 				  GtkFileFilter         *filter);
@@ -2854,8 +2852,6 @@ shortcuts_check_popup_sensitivity (GtkFileChooserDefault *impl)
 
   gtk_widget_set_sensitive (impl->browse_shortcuts_popup_menu_remove_item, removable);
   gtk_widget_set_sensitive (impl->browse_shortcuts_popup_menu_rename_item, removable);
-
-  update_settings_items (impl);
 }
 
 /* GtkWidget::drag-begin handler for the shortcuts list. */
@@ -3385,43 +3381,6 @@ rename_shortcut_cb (GtkMenuItem           *item,
   rename_selected_bookmark (impl);
 }
 
-static void
-settings_start_in_changed_cb (GtkCheckMenuItem *item, GtkFileChooserDefault *impl)
-{
-  if (gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (impl->browse_shortcuts_popup_menu_start_in_recent_item)))
-    impl->startup_mode = STARTUP_MODE_RECENT;
-  else if (gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (impl->browse_shortcuts_popup_menu_start_in_cwd_item)))
-    impl->startup_mode = STARTUP_MODE_CWD;
-  else
-    {
-      g_assert_not_reached ();
-      return;
-    }
-}
-
-static void
-update_settings_items (GtkFileChooserDefault *impl)
-{
-  GtkWidget *item;
-
-  g_signal_handlers_block_by_func (impl->browse_shortcuts_popup_menu_start_in_recent_item,
-				   G_CALLBACK (settings_start_in_changed_cb), impl);
-  g_signal_handlers_block_by_func (impl->browse_shortcuts_popup_menu_start_in_cwd_item,
-				   G_CALLBACK (settings_start_in_changed_cb), impl);
-
-  if (impl->startup_mode == STARTUP_MODE_CWD)
-    item = impl->browse_shortcuts_popup_menu_start_in_cwd_item;
-  else
-    item = impl->browse_shortcuts_popup_menu_start_in_recent_item;
-
-  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item), TRUE);
-
-  g_signal_handlers_unblock_by_func (impl->browse_shortcuts_popup_menu_start_in_recent_item,
-				     G_CALLBACK (settings_start_in_changed_cb), impl);
-  g_signal_handlers_unblock_by_func (impl->browse_shortcuts_popup_menu_start_in_cwd_item,
-				     G_CALLBACK (settings_start_in_changed_cb), impl);
-}
-
 /* Constructs the popup menu for the file list if needed */
 static void
 shortcuts_build_popup_menu (GtkFileChooserDefault *impl)
@@ -3455,24 +3414,6 @@ shortcuts_build_popup_menu (GtkFileChooserDefault *impl)
   item = gtk_separator_menu_item_new ();
   gtk_widget_show (item);
   gtk_menu_shell_append (GTK_MENU_SHELL (impl->browse_shortcuts_popup_menu), item);
-
-  item = gtk_radio_menu_item_new_with_label (NULL, _("Start in Recent Files"));
-  impl->browse_shortcuts_popup_menu_start_in_recent_item = item;
-  gtk_widget_show (item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (impl->browse_shortcuts_popup_menu), item);
-
-  item = gtk_radio_menu_item_new_with_label_from_widget (GTK_RADIO_MENU_ITEM (impl->browse_shortcuts_popup_menu_start_in_recent_item),
-							 _("Start in Default Folder"));
-  impl->browse_shortcuts_popup_menu_start_in_cwd_item = item;
-  gtk_widget_show (item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (impl->browse_shortcuts_popup_menu), item);
-
-  g_signal_connect (impl->browse_shortcuts_popup_menu_start_in_recent_item, "toggled",
-		    G_CALLBACK (settings_start_in_changed_cb), impl);
-  g_signal_connect (impl->browse_shortcuts_popup_menu_start_in_cwd_item, "toggled",
-		    G_CALLBACK (settings_start_in_changed_cb), impl);
-
-  update_settings_items (impl);
 }
 
 static void

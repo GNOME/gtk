@@ -180,8 +180,6 @@ struct _GtkFileChooserDefault
   GtkWidget *browse_shortcuts_popup_menu;
   GtkWidget *browse_shortcuts_popup_menu_remove_item;
   GtkWidget *browse_shortcuts_popup_menu_rename_item;
-  GtkWidget *browse_shortcuts_popup_menu_start_in_recent_item;
-  GtkWidget *browse_shortcuts_popup_menu_start_in_cwd_item;
   GtkWidget *browse_files_tree_view;
   GtkWidget *browse_files_popup_menu;
   GtkWidget *browse_files_popup_menu_add_shortcut_item;
