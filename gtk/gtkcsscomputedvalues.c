@@ -19,6 +19,7 @@
 
 #include "config.h"
 
+#include "gtkprivate.h"
 #include "gtkcsscomputedvaluesprivate.h"
 
 #include "gtkcssanimationprivate.h"
@@ -120,9 +121,9 @@ _gtk_css_computed_values_compute_value (GtkCssComputedValues    *values,
   GtkCssDependencies dependencies;
   GtkCssValue *value;
 
-  g_return_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values));
-  g_return_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider));
-  g_return_if_fail (parent_values == NULL || GTK_IS_CSS_COMPUTED_VALUES (parent_values));
+  gtk_internal_return_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values));
+  gtk_internal_return_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider));
+  gtk_internal_return_if_fail (parent_values == NULL || GTK_IS_CSS_COMPUTED_VALUES (parent_values));
 
   /* http://www.w3.org/TR/css3-cascade/#cascade
    * Then, for every element, the value for each property can be found
@@ -154,8 +155,8 @@ _gtk_css_computed_values_set_animated_value (GtkCssComputedValues *values,
                                              guint                 id,
                                              GtkCssValue          *value)
 {
-  g_return_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values));
-  g_return_if_fail (value != NULL);
+  gtk_internal_return_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values));
+  gtk_internal_return_if_fail (value != NULL);
 
   if (values->animated_values == NULL)
     values->animated_values = g_ptr_array_new_with_free_func ((GDestroyNotify)_gtk_css_value_unref);
@@ -175,7 +176,7 @@ _gtk_css_computed_values_set_value (GtkCssComputedValues *values,
                                     GtkCssDependencies    dependencies,
                                     GtkCssSection        *section)
 {
-  g_return_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values));
+  gtk_internal_return_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values));
 
   if (values->values == NULL)
     values->values = g_ptr_array_new_with_free_func ((GDestroyNotify)_gtk_css_value_unref);
@@ -216,7 +217,7 @@ GtkCssValue *
 _gtk_css_computed_values_get_value (GtkCssComputedValues *values,
                                     guint                 id)
 {
-  g_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values), NULL);
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values), NULL);
 
   if (values->animated_values &&
       id < values->animated_values->len &&
@@ -230,7 +231,7 @@ GtkCssValue *
 _gtk_css_computed_values_get_intrinsic_value (GtkCssComputedValues *values,
                                               guint                 id)
 {
-  g_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values), NULL);
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values), NULL);
 
   if (values->values == NULL ||
       id >= values->values->len)
@@ -243,7 +244,7 @@ GtkCssSection *
 _gtk_css_computed_values_get_section (GtkCssComputedValues *values,
                                       guint                 id)
 {
-  g_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values), NULL);
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values), NULL);
 
   if (values->sections == NULL ||
       id >= values->sections->len)
@@ -528,8 +529,8 @@ _gtk_css_computed_values_advance (GtkCssComputedValues *values,
   GSList *list;
   guint i;
 
-  g_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values), NULL);
-  g_return_val_if_fail (timestamp >= values->current_time, NULL);
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values), NULL);
+  gtk_internal_return_val_if_fail (timestamp >= values->current_time, NULL);
 
   values->current_time = timestamp;
   old_computed_values = values->animated_values;
@@ -578,7 +579,7 @@ _gtk_css_computed_values_is_static (GtkCssComputedValues *values)
 {
   GSList *list;
 
-  g_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values), TRUE);
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values), TRUE);
 
   for (list = values->animations; list; list = list->next)
     {
@@ -592,7 +593,7 @@ _gtk_css_computed_values_is_static (GtkCssComputedValues *values)
 void
 _gtk_css_computed_values_cancel_animations (GtkCssComputedValues *values)
 {
-  g_return_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values));
+  gtk_internal_return_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values));
 
   if (values->animated_values)
     {
@@ -610,7 +611,7 @@ _gtk_css_computed_values_compute_dependencies (GtkCssComputedValues *values,
 {
   GtkBitmask *changes;
 
-  g_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values), _gtk_bitmask_new ());
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values), _gtk_bitmask_new ());
 
   changes = _gtk_bitmask_copy (parent_changes);
   changes = _gtk_bitmask_intersect (changes, values->depends_on_parent);
