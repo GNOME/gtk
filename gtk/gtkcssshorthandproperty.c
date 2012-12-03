@@ -102,7 +102,7 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
        */
       for (i = 0; i < shorthand->subproperties->len; i++)
         {
-          data[i] = _gtk_css_initial_value_new ();
+          data[i] = _gtk_css_initial_value_new (shorthand->subproperties->pdata[i]);
         }
     }
   else if (_gtk_css_parser_try (parser, "inherit", TRUE))
@@ -135,7 +135,7 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
   for (i = 0; i < shorthand->subproperties->len; i++)
     {
       if (data[i] == NULL)
-        data[i] = _gtk_css_initial_value_new ();
+        data[i] = _gtk_css_initial_value_new (shorthand->subproperties->pdata[i]);
     }
 
   result = _gtk_css_array_value_new_from_array (data, shorthand->subproperties->len);

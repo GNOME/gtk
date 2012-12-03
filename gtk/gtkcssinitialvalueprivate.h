@@ -21,11 +21,11 @@
 #define __GTK_CSS_INITIAL_VALUE_PRIVATE_H__
 
 #include "gtkcssvalueprivate.h"
-
+#include "gtkcssstylepropertyprivate.h"
 G_BEGIN_DECLS
 
-GtkCssValue *   _gtk_css_initial_value_new            (void);
-GtkCssValue *   _gtk_css_initial_value_get            (void);
+GtkCssValue *   _gtk_css_initial_value_new            (GtkCssStyleProperty *property);
+GtkCssValue *   _gtk_css_initial_value_get            (GtkCssStyleProperty *property);
 
 G_END_DECLS
 

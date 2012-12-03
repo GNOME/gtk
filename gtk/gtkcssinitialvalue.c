@@ -27,6 +27,7 @@
 
 struct _GtkCssValue {
   GTK_CSS_VALUE_BASE
+  GtkCssStyleProperty *property;
 };
 
 static void
@@ -77,7 +78,7 @@ gtk_css_value_initial_compute (GtkCssValue             *value,
       break;
     }
 
-  return _gtk_css_value_compute (_gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (property_id)),
+  return _gtk_css_value_compute (_gtk_css_style_property_get_initial_value (value->property),
                                  property_id,
                                  provider,
                                  values,
@@ -119,13 +120,19 @@ static const GtkCssValueClass GTK_CSS_VALUE_INITIAL = {
 static GtkCssValue initial = { &GTK_CSS_VALUE_INITIAL, 1 };
 
 GtkCssValue *
-_gtk_css_initial_value_new (void)
+_gtk_css_initial_value_new (GtkCssStyleProperty *property)
 {
-  return _gtk_css_value_ref (&initial);
+  return _gtk_css_value_ref (_gtk_css_initial_value_get (property));
 }
 
 GtkCssValue *
-_gtk_css_initial_value_get (void)
+_gtk_css_initial_value_get (GtkCssStyleProperty *property)
 {
-  return &initial;
+  if (property->css_initial_value == NULL)
+    {
+      property->css_initial_value = g_new0 (GtkCssValue, 1);
+      *property->css_initial_value = initial;
+      property->css_initial_value->property = property;
+    }
+  return property->css_initial_value;
 }

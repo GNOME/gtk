@@ -48,7 +48,7 @@ gtk_css_value_inherit_compute (GtkCssValue             *value,
     }
   else
     {
-      return _gtk_css_value_compute (_gtk_css_initial_value_get (),
+      return _gtk_css_value_compute (_gtk_css_initial_value_get (_gtk_css_style_property_lookup_by_id (property_id)),
                                      property_id,
                                      provider,
                                      values,

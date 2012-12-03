@@ -162,7 +162,7 @@ assign_border (GtkCssStyleProperty *property,
   const GtkBorder *border = g_value_get_boxed (value);
 
   if (border == NULL)
-    return _gtk_css_initial_value_new ();
+    return _gtk_css_initial_value_new (property);
   else
     return _gtk_css_border_value_new (_gtk_css_number_value_new (border->top, GTK_CSS_PX),
                                       _gtk_css_number_value_new (border->right, GTK_CSS_PX),

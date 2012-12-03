@@ -137,7 +137,7 @@ _gtk_css_computed_values_compute_value (GtkCssComputedValues    *values,
       if (_gtk_css_style_property_is_inherit (prop))
         specified = _gtk_css_inherit_value_new ();
       else
-        specified = _gtk_css_initial_value_new ();
+        specified = _gtk_css_initial_value_new (prop);
     }
   else
     _gtk_css_value_ref (specified);

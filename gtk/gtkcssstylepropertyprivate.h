@@ -51,6 +51,8 @@ struct _GtkCssStyleProperty
   guint animated :1;
   guint affects_size :1;
 
+  GtkCssValue *css_initial_value; /* Used to quickly find the GCssInitialValue for a property */
+
   GtkCssStylePropertyParseFunc parse_value;
   GtkCssStylePropertyQueryFunc query_value;
   GtkCssStylePropertyAssignFunc assign_value;

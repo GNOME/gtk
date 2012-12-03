@@ -230,7 +230,7 @@ gtk_css_style_property_parse_value (GtkStyleProperty *property,
       /* the initial value can be explicitly specified with the
        * ‘initial’ keyword which all properties accept.
        */
-      return _gtk_css_initial_value_new ();
+      return _gtk_css_initial_value_new (style_property);
     }
   else if (_gtk_css_parser_try (parser, "inherit", TRUE))
     {
