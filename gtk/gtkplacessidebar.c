@@ -40,6 +40,9 @@
  *   that, Nautilus does the "volume has trash, empty it first?" dance.  Cosimo
  *   suggests that this logic should be part of GtkMountOperation, which can
  *   have Unix-specific code for emptying trash.
+ *
+ * * Nautilus needs to connect to "drag-action-requested", and call
+ *   nautilus_drag_default_drop_action_for_icons().
  */
 
 #include "config.h"
@@ -1405,7 +1408,7 @@ drag_motion_callback (GtkTreeView *tree_view,
 		goto out;
 	}
 
-	if (pos == GTK_TREE_VIEW_DROP_AFTER ) {
+	if (pos == GTK_TREE_VIEW_DROP_AFTER) {
 		if (sidebar->drag_data_received &&
 		    sidebar->drag_data_info == GTK_TREE_MODEL_ROW) {
 			action = GDK_ACTION_MOVE;
@@ -1413,20 +1416,15 @@ drag_motion_callback (GtkTreeView *tree_view,
 			action = 0;
 		}
 	} else {
-		if (sidebar->drag_list == NULL) {
-			action = 0;
-		} else {
+		action = 0;
+		if (sidebar->drag_list != NULL) {
 			gtk_tree_model_get_iter (GTK_TREE_MODEL (sidebar->store),
 						 &iter, path);
 			gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store),
 					    &iter,
 					    PLACES_SIDEBAR_COLUMN_URI, &uri,
 					    -1);
-#if DO_NOT_COMPILE
-			nautilus_drag_default_drop_action_for_icons (context, uri,
-								     sidebar->drag_list,
-								     &action);
-#endif
+			emit_drag_action_requested (sidebar, context, uri, sidebar->drag_list, &action);
 			g_free (uri);
 		}
 	}
@@ -1442,11 +1440,7 @@ drag_motion_callback (GtkTreeView *tree_view,
  out:
 	g_signal_stop_emission_by_name (tree_view, "drag-motion");
 
-	if (action != 0) {
-		gdk_drag_status (context, action, time);
-	} else {
-		gdk_drag_status (context, 0, time);
-	}
+	gdk_drag_status (context, action, time);
 
 	return TRUE;
 }
