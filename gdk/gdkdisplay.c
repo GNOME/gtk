@@ -985,7 +985,8 @@ switch_to_pointer_grab (GdkDisplay        *display,
                                                 NULL, NULL);
             }
 
-	  if (pointer_window != last_grab->window)
+	  if (!info->need_touch_press_enter &&
+	      pointer_window != last_grab->window)
             synthesize_crossing_events (display, device, source_device,
                                         last_grab->window, pointer_window,
                                         GDK_CROSSING_UNGRAB, time, serial);
