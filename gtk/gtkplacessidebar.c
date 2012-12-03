@@ -1466,7 +1466,7 @@ uri_list_from_selection (GList *selection)
 
 /* Takes an array of URIs and turns it into a list of string URIs */
 static GList *
-build_selection_list (char **uris)
+build_uri_list (char **uris)
 {
 	GList *result;
 	int i;
@@ -1546,7 +1546,7 @@ drag_data_received_callback (GtkWidget *widget,
 			char **uris;
 
 			uris = gtk_selection_data_get_uris (selection_data);
-			sidebar->drag_list = build_selection_list (uris);
+			sidebar->drag_list = build_uri_list (uris);
 			g_strfreev (uris);
 		} else {
 			sidebar->drag_list = NULL;
@@ -1626,7 +1626,7 @@ drag_data_received_callback (GtkWidget *widget,
 
 			switch (info) {
 			case TEXT_URI_LIST:
-				selection_list = build_selection_list ((const gchar *) gtk_selection_data_get_data (selection_data));
+				selection_list = build_uri_list ((const gchar *) gtk_selection_data_get_data (selection_data));
 				uris = uri_list_from_selection (selection_list);
 				nautilus_file_operations_copy_move (uris, NULL, drop_uri,
 								    real_action, GTK_WIDGET (tree_view),
