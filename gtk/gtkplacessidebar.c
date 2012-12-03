@@ -138,6 +138,11 @@ struct _GtkPlacesSidebarClass {
 	void (* show_error_message)    (GtkPlacesSidebar *sidebar,
 				        const char       *primary,
 				        const char       *secondary);
+	void (* drag_action_requested) (GtkPlacesSidebar *sidebar,
+					GdkDragContext   *context,
+					const char       *uri,
+					GList            *uri_list,
+					int              *action);
 };
 
 enum {
@@ -181,6 +186,7 @@ enum {
 	EMPTY_TRASH_REQUESTED,
 	INITIATED_UNMOUNT,
 	SHOW_ERROR_MESSAGE,
+	DRAG_ACTION_REQUESTED,
 	LAST_SIGNAL,
 };
 
@@ -305,6 +311,20 @@ emit_show_error_message (GtkPlacesSidebar *sidebar, const char *primary, const c
 {
 	g_signal_emit (sidebar, places_sidebar_signals[SHOW_ERROR_MESSAGE], 0,
 		       primary, secondary);
+}
+
+static void
+emit_drag_action_requested (GtkPlacesSidebar *sidebar,
+			    GdkDragContext *context,
+			    const char *uri,
+			    GList *uri_list,
+			    int *action)
+{
+	g_signal_emit (sidebar, places_sidebar_signals[DRAG_ACTION_REQUESTED], 0,
+		       context,
+		       uri,
+		       uri_list,
+		       action);
 }
 
 static gint
@@ -3728,6 +3748,19 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 			      G_TYPE_NONE, 2,
 			      G_TYPE_STRING,
 			      G_TYPE_STRING);
+
+	places_sidebar_signals [DRAG_ACTION_REQUESTED] =
+		g_signal_new (I_("drag-action-requested"),
+			      G_OBJECT_CLASS_TYPE (gobject_class),
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (GtkPlacesSidebarClass, drag_action_requested),
+			      NULL, NULL,
+			      _gtk_marshal_VOID__OBJECT_STRING_POINTER_POINTER,
+			      G_TYPE_NONE, 4,
+			      GDK_TYPE_DRAG_CONTEXT,
+			      G_TYPE_STRING,
+			      G_TYPE_POINTER, /* FIXME: (GList *) is there something friendlier to language bindings? */
+			      G_TYPE_POINTER  /* FIXME: (inout int) is there something friendlier to language bindings? */);
 }
 
 static void
