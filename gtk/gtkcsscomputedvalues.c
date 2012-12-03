@@ -179,7 +179,8 @@ _gtk_css_computed_values_set_value (GtkCssComputedValues *values,
   gtk_internal_return_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values));
 
   if (values->values == NULL)
-    values->values = g_ptr_array_new_with_free_func ((GDestroyNotify)_gtk_css_value_unref);
+    values->values = g_ptr_array_new_full (_gtk_css_style_property_get_n_properties (),
+					   (GDestroyNotify)_gtk_css_value_unref);
   if (id >= values->values->len)
    g_ptr_array_set_size (values->values, id + 1);
 
