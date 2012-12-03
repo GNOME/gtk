@@ -31,6 +31,8 @@ TEST_PROGS += children
 
 TEST_PROGS += derive
 
+TEST_PROGS += value
+
 # the focus test has no chance of working until
 # all the idle handlers in gail are gone
 #

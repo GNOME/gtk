@@ -23,6 +23,7 @@ gtka11y_c_sources =			\
 	gtkimageaccessible.c		\
 	gtkimagecellaccessible.c	\
 	gtklabelaccessible.c		\
+	gtklevelbaraccessible.c \
 	gtklinkbuttonaccessible.c	\
 	gtklockbuttonaccessible.c	\
 	gtkmenuaccessible.c		\
@@ -69,6 +70,7 @@ gtka11yinclude_HEADERS =		\
 	gtkimageaccessible.h		\
 	gtkimagecellaccessible.h	\
 	gtklabelaccessible.h		\
+	gtklevelbaraccessible.h \
 	gtklinkbuttonaccessible.h	\
 	gtklockbuttonaccessible.h	\
 	gtkmenuaccessible.h		\
