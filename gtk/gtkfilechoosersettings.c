@@ -48,12 +48,16 @@
 #define GEOMETRY_HEIGHT_KEY	"GeometryHeight"
 #define SORT_COLUMN_KEY         "SortColumn"
 #define SORT_ORDER_KEY          "SortOrder"
+#define STARTUP_MODE_KEY        "StartupMode"
 
 #define COLUMN_NAME_STRING      "name"
 #define COLUMN_MTIME_STRING     "modified"
 #define COLUMN_SIZE_STRING      "size"
 #define SORT_ASCENDING_STRING   "ascending"
 #define SORT_DESCENDING_STRING  "descending"
+
+#define STARTUP_MODE_RECENT_STRING "recent"
+#define STARTUP_MODE_CWD_STRING    "cwd"
 
 #define MODE_PATH_BAR          "path-bar"
 #define MODE_FILENAME_ENTRY    "filename-entry"
@@ -113,6 +117,7 @@ ensure_settings_read (GtkFileChooserSettings *settings)
   GKeyFile *key_file;
   gchar *location_mode_str, *filename;
   gchar *sort_column, *sort_order;
+  gchar *startup_mode;
   gboolean value;
 
   if (settings->settings_read)
@@ -220,6 +225,23 @@ ensure_settings_read (GtkFileChooserSettings *settings)
       g_free (sort_order);
     }
 
+  /* Startup mode */
+
+  startup_mode = g_key_file_get_string (key_file, SETTINGS_GROUP,
+					STARTUP_MODE_KEY, NULL);
+  if (startup_mode)
+    {
+      if (EQ (STARTUP_MODE_RECENT_STRING, startup_mode))
+	settings->startup_mode = STARTUP_MODE_RECENT;
+      else if (EQ (STARTUP_MODE_CWD_STRING, startup_mode))
+	settings->startup_mode = STARTUP_MODE_CWD;
+      else
+	g_warning ("Unknown startup mode '%s' encountered in filechooser settings",
+		   startup_mode);
+
+      g_free (startup_mode);
+    }
+
  out:
 
   g_key_file_free (key_file);
@@ -248,6 +270,7 @@ _gtk_file_chooser_settings_init (GtkFileChooserSettings *settings)
   settings->geometry_y	    = -1;
   settings->geometry_width  = -1;
   settings->geometry_height = -1;
+  settings->startup_mode = STARTUP_MODE_RECENT;
 }
 
 GtkFileChooserSettings *
@@ -367,6 +390,20 @@ _gtk_file_chooser_settings_set_sort_order (GtkFileChooserSettings *settings,
   settings->sort_order = sort_order;
 }
 
+void
+_gtk_file_chooser_settings_set_startup_mode (GtkFileChooserSettings *settings,
+					     StartupMode             startup_mode)
+{
+  settings->startup_mode = startup_mode;
+}
+
+StartupMode
+_gtk_file_chooser_settings_get_startup_mode (GtkFileChooserSettings *settings)
+{
+  ensure_settings_read (settings);
+  return settings->startup_mode;
+}
+
 gboolean
 _gtk_file_chooser_settings_save (GtkFileChooserSettings *settings,
 				 GError                **error)
@@ -377,6 +414,7 @@ _gtk_file_chooser_settings_save (GtkFileChooserSettings *settings,
   gchar *contents;
   gchar *sort_column;
   gchar *sort_order;
+  gchar *startup_mode;
   gsize len;
   gboolean retval;
   GKeyFile *key_file;
@@ -432,6 +470,21 @@ _gtk_file_chooser_settings_save (GtkFileChooserSettings *settings,
       sort_order = NULL;
     }
 
+  switch (settings->startup_mode)
+    {
+    case STARTUP_MODE_RECENT:
+      startup_mode = STARTUP_MODE_RECENT_STRING;
+      break;
+
+    case STARTUP_MODE_CWD:
+      startup_mode = STARTUP_MODE_CWD_STRING;
+      break;
+
+    default:
+      g_assert_not_reached ();
+      startup_mode = NULL;
+    }
+
   key_file = g_key_file_new ();
 
   /* Initialise with the on-disk keyfile, so we keep unknown options */
@@ -457,6 +510,8 @@ _gtk_file_chooser_settings_save (GtkFileChooserSettings *settings,
 			 SORT_COLUMN_KEY, sort_column);
   g_key_file_set_string (key_file, SETTINGS_GROUP,
 			 SORT_ORDER_KEY, sort_order);
+  g_key_file_set_string (key_file, SETTINGS_GROUP,
+			 STARTUP_MODE_KEY, startup_mode);
 
   contents = g_key_file_to_data (key_file, &len, error);
   g_key_file_free (key_file);

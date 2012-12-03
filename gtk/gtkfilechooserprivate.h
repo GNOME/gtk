@@ -152,6 +152,11 @@ typedef enum {
   OPERATION_MODE_RECENT
 } OperationMode;
 
+typedef enum {
+  STARTUP_MODE_RECENT,
+  STARTUP_MODE_CWD
+} StartupMode;
+
 struct _GtkFileChooserDefault
 {
   GtkVBox parent_instance;
@@ -194,6 +199,8 @@ struct _GtkFileChooserDefault
 
   GtkFileSystemModel *browse_files_model;
   char *browse_files_last_selected_name;
+
+  StartupMode startup_mode;
 
   /* OPERATION_MODE_SEARCH */
   GtkWidget *search_hbox;
@@ -297,6 +304,7 @@ struct _GtkFileChooserDefault
   guint list_sort_ascending : 1;
   guint changing_folder : 1;
   guint shortcuts_current_folder_active : 1;
+  guint has_cwd : 1;
   guint has_home : 1;
   guint has_desktop : 1;
   guint has_search : 1;

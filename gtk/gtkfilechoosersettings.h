@@ -50,6 +50,7 @@ struct _GtkFileChooserSettings
 
   GtkSortType sort_order;
   gint sort_column;
+  StartupMode startup_mode;
 
   int geometry_x;
   int geometry_y;
@@ -103,6 +104,10 @@ void _gtk_file_chooser_settings_set_geometry (GtkFileChooserSettings *settings,
 					      int                     y,
 					      int                     width,
 					      int                     heigth);
+
+void _gtk_file_chooser_settings_set_startup_mode (GtkFileChooserSettings *settings,
+						  StartupMode             startup_mode);
+StartupMode _gtk_file_chooser_settings_get_startup_mode (GtkFileChooserSettings *settings);
 
 gboolean _gtk_file_chooser_settings_save (GtkFileChooserSettings *settings,
 					  GError                **error);

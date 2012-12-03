@@ -235,6 +235,7 @@ enum {
 typedef enum {
   SHORTCUTS_SEARCH,
   SHORTCUTS_RECENT,
+  SHORTCUTS_CWD,
   SHORTCUTS_RECENT_SEPARATOR,
   SHORTCUTS_HOME,
   SHORTCUTS_DESKTOP,
@@ -1387,6 +1388,13 @@ shortcuts_update_count (GtkFileChooserDefault *impl,
 {
   switch (type)
     {
+      case SHORTCUTS_CWD:
+        if (value < 0)
+	  impl->has_cwd = FALSE;
+	else
+	  impl->has_cwd = TRUE;
+	break;
+	
       case SHORTCUTS_HOME:
 	if (value < 0)
 	  impl->has_home = FALSE;
@@ -1444,7 +1452,6 @@ get_file_info_finished (GCancellable *cancellable,
 			const GError *error,
 			gpointer      data)
 {
-  gint pos = -1;
   gboolean cancelled = g_cancellable_is_cancelled (cancellable);
   GdkPixbuf *pixbuf;
   GtkTreePath *path;
@@ -1457,7 +1464,6 @@ get_file_info_finished (GCancellable *cancellable,
     /* Handle doesn't exist anymore in the model */
     goto out;
 
-  pos = gtk_tree_path_get_indices (path)[0];
   gtk_tree_model_get_iter (GTK_TREE_MODEL (request->impl->shortcuts_model),
 			   &iter, path);
   gtk_tree_path_free (path);
@@ -1754,6 +1760,45 @@ shortcuts_append_recent (GtkFileChooserDefault *impl)
     g_object_unref (pixbuf);
 }
 
+/* Appends the current working directory to the shortuts panel, but only if it is not equal to $HOME.
+ * This is so that the user can actually use the $CWD, for example, if running an application
+ * from the shell.
+ */
+static void
+shortcuts_append_cwd (GtkFileChooserDefault *impl)
+{
+  char *cwd;
+  const char *home;
+  GFile *cwd_file;
+  GFile *home_file;
+
+  impl->has_cwd = FALSE;
+
+  cwd = g_get_current_dir ();
+  if (cwd == NULL)
+    return;
+
+  home = g_get_home_dir ();
+  if (home == NULL)
+    {
+      g_free (cwd);
+      return;
+    }
+
+  cwd_file = g_file_new_for_path (cwd);
+  home_file = g_file_new_for_path (home);
+
+  if (!g_file_equal (cwd_file, home_file))
+    {
+      shortcuts_insert_file (impl, -1, SHORTCUT_TYPE_FILE, NULL, cwd_file, NULL, FALSE, SHORTCUTS_CWD);
+      impl->has_cwd = TRUE;
+    }
+
+  g_object_unref (cwd_file);
+  g_object_unref (home_file);
+  g_free (cwd);
+}
+
 /* Appends an item for the user's home directory to the shortcuts model */
 static void
 shortcuts_append_home (GtkFileChooserDefault *impl)
@@ -1868,6 +1913,11 @@ shortcuts_get_index (GtkFileChooserDefault *impl,
     goto out;
 
   n += 1; /* we always have the recently-used item */
+
+  if (where == SHORTCUTS_CWD)
+    goto out;
+
+  n += impl->has_cwd ? 1 : 0;
 
   if (where == SHORTCUTS_RECENT_SEPARATOR)
     goto out;
@@ -2170,6 +2220,7 @@ shortcuts_model_create (GtkFileChooserDefault *impl)
   
   if (impl->file_system)
     {
+      shortcuts_append_cwd (impl);
       shortcuts_append_home (impl);
       shortcuts_append_desktop (impl);
       shortcuts_add_volumes (impl);
@@ -3357,6 +3408,10 @@ shortcuts_build_popup_menu (GtkFileChooserDefault *impl)
   impl->browse_shortcuts_popup_menu_rename_item = item;
   g_signal_connect (item, "activate",
 		    G_CALLBACK (rename_shortcut_cb), impl);
+  gtk_widget_show (item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (impl->browse_shortcuts_popup_menu), item);
+
+  item = gtk_separator_menu_item_new ();
   gtk_widget_show (item);
   gtk_menu_shell_append (GTK_MENU_SHELL (impl->browse_shortcuts_popup_menu), item);
 }
@@ -5865,6 +5920,7 @@ settings_load (GtkFileChooserDefault *impl)
   gboolean show_size_column;
   gint sort_column;
   GtkSortType sort_order;
+  StartupMode startup_mode;
 
   settings = _gtk_file_chooser_settings_new ();
 
@@ -5873,6 +5929,7 @@ settings_load (GtkFileChooserDefault *impl)
   show_size_column = _gtk_file_chooser_settings_get_show_size_column (settings);
   sort_column = _gtk_file_chooser_settings_get_sort_column (settings);
   sort_order = _gtk_file_chooser_settings_get_sort_order (settings);
+  startup_mode = _gtk_file_chooser_settings_get_startup_mode (settings);
 
   g_object_unref (settings);
 
@@ -5889,6 +5946,8 @@ settings_load (GtkFileChooserDefault *impl)
    * created yet.  The individual functions that create and set the models will
    * call set_sort_column() themselves.
    */
+
+  impl->startup_mode = startup_mode;
 }
 
 static void
@@ -5935,6 +5994,7 @@ settings_save (GtkFileChooserDefault *impl)
   _gtk_file_chooser_settings_set_show_size_column (settings, impl->show_size_column);
   _gtk_file_chooser_settings_set_sort_column (settings, impl->sort_column);
   _gtk_file_chooser_settings_set_sort_order (settings, impl->sort_order);
+  _gtk_file_chooser_settings_set_startup_mode (settings, impl->startup_mode);
 
   save_dialog_geometry (impl, settings);
 
@@ -5981,6 +6041,38 @@ get_file_for_last_folder_opened (GtkFileChooserDefault *impl)
   return file;
 }
 
+/* Changes the current folder to $CWD */
+static void
+switch_to_cwd (GtkFileChooserDefault *impl)
+{
+  char *current_working_dir;
+
+  current_working_dir = g_get_current_dir ();
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (impl), current_working_dir);
+  g_free (current_working_dir);
+}
+
+/* Sets the file chooser to showing Recent Files or $CWD, depending on the
+ * user's settings.
+ */
+static void
+set_startup_mode (GtkFileChooserDefault *impl)
+{
+  switch (impl->startup_mode)
+    {
+    case STARTUP_MODE_RECENT:
+      recent_shortcut_handler (impl);
+      break;
+
+    case STARTUP_MODE_CWD:
+      switch_to_cwd (impl);
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 /* GtkWidget::map method */
 static void
 gtk_file_chooser_default_map (GtkWidget *widget)
@@ -5993,12 +6085,14 @@ gtk_file_chooser_default_map (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->map (widget);
 
+  settings_load (impl);
+
   if (impl->operation_mode == OPERATION_MODE_BROWSE)
     {
       switch (impl->reload_state)
         {
         case RELOAD_EMPTY:
-	  recent_shortcut_handler (impl);
+	  set_startup_mode (impl);
           break;
         
         case RELOAD_HAS_FOLDER:
@@ -6013,8 +6107,6 @@ gtk_file_chooser_default_map (GtkWidget *widget)
     }
 
   volumes_bookmarks_changed_cb (impl->file_system, impl);
-
-  settings_load (impl);
 
   profile_end ("end", NULL);
 }
