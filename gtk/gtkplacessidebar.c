@@ -1352,9 +1352,7 @@ free_drag_data (GtkPlacesSidebar *sidebar)
 	sidebar->drag_data_received = FALSE;
 
 	if (sidebar->drag_list) {
-#if DO_NOT_COMPILE
-		nautilus_drag_destroy_selection_list (sidebar->drag_list);
-#endif
+		g_list_free_full (sidebar->drag_list, g_free);
 		sidebar->drag_list = NULL;
 	}
 }
@@ -1631,7 +1629,7 @@ drag_data_received_callback (GtkWidget *widget,
 				nautilus_file_operations_copy_move (uris, NULL, drop_uri,
 								    real_action, GTK_WIDGET (tree_view),
 								    NULL, NULL);
-				nautilus_drag_destroy_selection_list (selection_list);
+				g_list_free_full (selection_list, g_free);
 				g_list_free (uris);
 				success = TRUE;
 				break;
