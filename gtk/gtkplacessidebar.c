@@ -47,6 +47,12 @@
  * * Nautilus needs to connect to "drag-action-ask", and return the
  *   appropriate action after running a popup menu.  It needs to call
  *   nautilus_drag_drop_action_ask().
+ *
+ * * Nautilus needs to connect to "drag-perform-drop", and call
+ *   nautilus_file_operations_copy_move() as appropriate.
+ *     nautilus_file_operations_copy_move (uris, NULL, drop_uri,
+ *                                         real_action, GTK_WIDGET (tree_view),
+ *                                         NULL, NULL);
  */
 
 #include "config.h"
@@ -1496,7 +1502,7 @@ drag_leave_callback (GtkTreeView *tree_view,
 
 /* Takes an array of URIs and turns it into a list of string URIs */
 static GList *
-build_uri_list (char **uris)
+build_uri_list (const char **uris)
 {
 	GList *result;
 	int i;
@@ -1576,7 +1582,7 @@ drag_data_received_callback (GtkWidget *widget,
 			char **uris;
 
 			uris = gtk_selection_data_get_uris (selection_data);
-			sidebar->drag_list = build_uri_list (uris);
+			sidebar->drag_list = build_uri_list ((const char **) uris);
 			g_strfreev (uris);
 		} else {
 			sidebar->drag_list = NULL;
@@ -1632,7 +1638,8 @@ drag_data_received_callback (GtkWidget *widget,
 		}
 	} else {
 		GdkDragAction real_action;
-		GList *uris;
+		char **uris;
+		GList *uri_list;
 		char *drop_uri;
 
 		/* file transfer requested */
@@ -1641,7 +1648,6 @@ drag_data_received_callback (GtkWidget *widget,
 		if (real_action == GDK_ACTION_ASK)
 			real_action = emit_drag_action_ask (sidebar, gdk_drag_context_get_actions (context));
 
-#if DO_NOT_COMPILE
 		if (real_action > 0) {
 			model = gtk_tree_view_get_model (tree_view);
 
@@ -1652,11 +1658,11 @@ drag_data_received_callback (GtkWidget *widget,
 
 			switch (info) {
 			case TEXT_URI_LIST:
-				uris = build_uri_list ((const gchar *) gtk_selection_data_get_data (selection_data));
-				nautilus_file_operations_copy_move (uris, NULL, drop_uri,
-								    real_action, GTK_WIDGET (tree_view),
-								    NULL, NULL);
-				g_list_free_full (uris, g_free);
+				uris = gtk_selection_data_get_uris (selection_data);
+				uri_list = build_uri_list ((const char **) uris);
+				emit_drag_perform_drop (sidebar, uri_list, drop_uri, real_action);
+				g_list_free_full (uri_list, g_free);
+				g_strfreev (uris);
 				success = TRUE;
 				break;
 			case GTK_TREE_MODEL_ROW:
@@ -1669,7 +1675,6 @@ drag_data_received_callback (GtkWidget *widget,
 
 			g_free (drop_uri);
 		}
-#endif
 	}
 
 out:
