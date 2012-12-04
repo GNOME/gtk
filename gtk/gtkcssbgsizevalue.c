@@ -70,6 +70,14 @@ gtk_css_value_bg_size_compute (GtkCssValue             *value,
 }
 
 static gboolean
+gtk_css_value_bg_size_needs_compute (const GtkCssValue *value)
+{
+  return
+    _gtk_css_value_needs_compute (value->x) ||
+    _gtk_css_value_needs_compute (value->y);
+}
+
+static gboolean
 gtk_css_value_bg_size_equal (const GtkCssValue *value1,
                              const GtkCssValue *value2)
 {
@@ -150,6 +158,7 @@ gtk_css_value_bg_size_print (const GtkCssValue *value,
 static const GtkCssValueClass GTK_CSS_VALUE_BG_SIZE = {
   gtk_css_value_bg_size_free,
   gtk_css_value_bg_size_compute,
+  gtk_css_value_bg_size_needs_compute,
   gtk_css_value_bg_size_equal,
   gtk_css_value_bg_size_transition,
   gtk_css_value_bg_size_print

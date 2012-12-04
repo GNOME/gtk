@@ -61,6 +61,12 @@ gtk_css_value_ease_compute (GtkCssValue             *value,
 }
 
 static gboolean
+gtk_css_value_ease_needs_compute (const GtkCssValue  *value)
+{
+  return FALSE;
+}
+
+static gboolean
 gtk_css_value_ease_equal (const GtkCssValue *ease1,
                           const GtkCssValue *ease2)
 {
@@ -138,6 +144,7 @@ gtk_css_value_ease_print (const GtkCssValue *ease,
 static const GtkCssValueClass GTK_CSS_VALUE_EASE = {
   gtk_css_value_ease_free,
   gtk_css_value_ease_compute,
+  gtk_css_value_ease_needs_compute,
   gtk_css_value_ease_equal,
   gtk_css_value_ease_transition,
   gtk_css_value_ease_print

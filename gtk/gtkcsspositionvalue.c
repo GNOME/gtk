@@ -61,6 +61,14 @@ gtk_css_value_position_compute (GtkCssValue             *position,
 }
 
 static gboolean
+gtk_css_value_position_needs_compute (const GtkCssValue *position)
+{
+  return
+    _gtk_css_value_needs_compute (position->x) ||
+    _gtk_css_value_needs_compute (position->y);
+}
+
+static gboolean
 gtk_css_value_position_equal (const GtkCssValue *position1,
                               const GtkCssValue *position2)
 {
@@ -155,6 +163,7 @@ done:
 static const GtkCssValueClass GTK_CSS_VALUE_POSITION = {
   gtk_css_value_position_free,
   gtk_css_value_position_compute,
+  gtk_css_value_position_needs_compute,
   gtk_css_value_position_equal,
   gtk_css_value_position_transition,
   gtk_css_value_position_print

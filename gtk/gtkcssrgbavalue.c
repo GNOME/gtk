@@ -45,6 +45,12 @@ gtk_css_value_rgba_compute (GtkCssValue             *value,
 }
 
 static gboolean
+gtk_css_value_rgba_needs_compute (const GtkCssValue *value)
+{
+  return FALSE;
+}
+
+static gboolean
 gtk_css_value_rgba_equal (const GtkCssValue *rgba1,
                           const GtkCssValue *rgba2)
 {
@@ -80,6 +86,7 @@ gtk_css_value_rgba_print (const GtkCssValue *rgba,
 static const GtkCssValueClass GTK_CSS_VALUE_RGBA = {
   gtk_css_value_rgba_free,
   gtk_css_value_rgba_compute,
+  gtk_css_value_rgba_needs_compute,
   gtk_css_value_rgba_equal,
   gtk_css_value_rgba_transition,
   gtk_css_value_rgba_print

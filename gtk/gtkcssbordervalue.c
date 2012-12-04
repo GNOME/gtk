@@ -77,6 +77,20 @@ gtk_css_value_border_compute (GtkCssValue             *value,
 }
 
 static gboolean
+gtk_css_value_border_needs_compute (const GtkCssValue *value)
+{
+  guint i;
+
+  for (i = 0; i < 4; i++)
+    {
+      if (_gtk_css_value_needs_compute (value->values[i]))
+	return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
 gtk_css_value_border_equal (const GtkCssValue *value1,
                             const GtkCssValue *value2)
 {
@@ -136,6 +150,7 @@ gtk_css_value_border_print (const GtkCssValue *value,
 static const GtkCssValueClass GTK_CSS_VALUE_BORDER = {
   gtk_css_value_border_free,
   gtk_css_value_border_compute,
+  gtk_css_value_border_needs_compute,
   gtk_css_value_border_equal,
   gtk_css_value_border_transition,
   gtk_css_value_border_print

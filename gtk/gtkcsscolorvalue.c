@@ -335,6 +335,12 @@ gtk_css_value_color_compute (GtkCssValue             *value,
 }
 
 static gboolean
+gtk_css_value_color_needs_compute (const GtkCssValue  *value)
+{
+  return TRUE;
+}
+
+static gboolean
 gtk_css_value_color_equal (const GtkCssValue *value1,
                            const GtkCssValue *value2)
 {
@@ -449,6 +455,7 @@ gtk_css_value_color_print (const GtkCssValue *value,
 static const GtkCssValueClass GTK_CSS_VALUE_COLOR = {
   gtk_css_value_color_free,
   gtk_css_value_color_compute,
+  gtk_css_value_color_needs_compute,
   gtk_css_value_color_equal,
   gtk_css_value_color_transition,
   gtk_css_value_color_print

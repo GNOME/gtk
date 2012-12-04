@@ -95,6 +95,18 @@ gtk_css_value_shadow_compute (GtkCssValue             *shadow,
 }
 
 static gboolean
+gtk_css_value_shadow_needs_compute (const GtkCssValue *shadow)
+{
+  return
+    _gtk_css_value_needs_compute (shadow->hoffset) ||
+    _gtk_css_value_needs_compute (shadow->voffset) ||
+    _gtk_css_value_needs_compute (shadow->radius) ||
+    _gtk_css_value_needs_compute (shadow->spread) ||
+    _gtk_css_value_needs_compute (shadow->color);
+}
+
+
+static gboolean
 gtk_css_value_shadow_equal (const GtkCssValue *shadow1,
                             const GtkCssValue *shadow2)
 {
@@ -154,6 +166,7 @@ gtk_css_value_shadow_print (const GtkCssValue *shadow,
 static const GtkCssValueClass GTK_CSS_VALUE_SHADOW = {
   gtk_css_value_shadow_free,
   gtk_css_value_shadow_compute,
+  gtk_css_value_shadow_needs_compute,
   gtk_css_value_shadow_equal,
   gtk_css_value_shadow_transition,
   gtk_css_value_shadow_print

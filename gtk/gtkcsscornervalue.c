@@ -61,6 +61,14 @@ gtk_css_value_corner_compute (GtkCssValue             *corner,
 }
 
 static gboolean
+gtk_css_value_corner_needs_compute (const GtkCssValue *corner)
+{
+  return
+    _gtk_css_value_needs_compute (corner->x) ||
+    _gtk_css_value_needs_compute (corner->y);
+}
+
+static gboolean
 gtk_css_value_corner_equal (const GtkCssValue *corner1,
                             const GtkCssValue *corner2)
 {
@@ -104,6 +112,7 @@ gtk_css_value_corner_print (const GtkCssValue *corner,
 static const GtkCssValueClass GTK_CSS_VALUE_CORNER = {
   gtk_css_value_corner_free,
   gtk_css_value_corner_compute,
+  gtk_css_value_corner_needs_compute,
   gtk_css_value_corner_equal,
   gtk_css_value_corner_transition,
   gtk_css_value_corner_print

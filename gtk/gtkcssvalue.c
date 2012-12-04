@@ -106,6 +106,27 @@ _gtk_css_value_compute (GtkCssValue             *value,
   return value->class->compute (value, property_id, provider, values, parent_values, dependencies);
 }
 
+/**
+ * _gtk_css_value_needs_compute:
+ * @value: the value to check or %null
+ *
+ * Checks whether a particular css value *really* needs computation.
+ * A lot of css values are "absolute" (like say "10 px") and never need
+ * any computation done. Such a value would always just return itself
+ * as the computed value. This can be used in some cases to avoid
+ * repeated computations.
+ *
+ * Returns: %false if computing this value always returns itself, %false otherwise
+ **/
+gboolean
+_gtk_css_value_needs_compute (GtkCssValue  *value)
+{
+  if (value == NULL)
+    return FALSE;
+
+  return value->class->needs_compute (value);
+}
+
 gboolean
 _gtk_css_value_equal (const GtkCssValue *value1,
                       const GtkCssValue *value2)

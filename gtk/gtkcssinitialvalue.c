@@ -87,6 +87,12 @@ gtk_css_value_initial_compute (GtkCssValue             *value,
 }
 
 static gboolean
+gtk_css_value_initial_needs_compute (const GtkCssValue *value)
+{
+  return TRUE;
+}
+
+static gboolean
 gtk_css_value_initial_equal (const GtkCssValue *value1,
                              const GtkCssValue *value2)
 {
@@ -112,6 +118,7 @@ gtk_css_value_initial_print (const GtkCssValue *value,
 static const GtkCssValueClass GTK_CSS_VALUE_INITIAL = {
   gtk_css_value_initial_free,
   gtk_css_value_initial_compute,
+  gtk_css_value_initial_needs_compute,
   gtk_css_value_initial_equal,
   gtk_css_value_initial_transition,
   gtk_css_value_initial_print

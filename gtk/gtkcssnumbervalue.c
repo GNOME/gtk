@@ -124,6 +124,38 @@ gtk_css_value_number_compute (GtkCssValue             *number,
 }
 
 static gboolean
+gtk_css_value_number_needs_compute (const GtkCssValue *number)
+{
+  switch (number->unit)
+    {
+    default:
+      g_assert_not_reached();
+      /* fall through */
+    case GTK_CSS_PERCENT:
+      /* percentages for font sizes are computed, other percentages aren't */
+      return TRUE;
+    case GTK_CSS_NUMBER:
+    case GTK_CSS_PX:
+    case GTK_CSS_DEG:
+    case GTK_CSS_S:
+      return FALSE;
+
+    case GTK_CSS_PT:
+    case GTK_CSS_PC:
+    case GTK_CSS_IN:
+    case GTK_CSS_CM:
+    case GTK_CSS_MM:
+    case GTK_CSS_EM:
+    case GTK_CSS_EX:
+    case GTK_CSS_RAD:
+    case GTK_CSS_GRAD:
+    case GTK_CSS_TURN:
+    case GTK_CSS_MS:
+      return TRUE;
+    }
+}
+
+static gboolean
 gtk_css_value_number_equal (const GtkCssValue *number1,
                             const GtkCssValue *number2)
 {
@@ -180,6 +212,7 @@ gtk_css_value_number_print (const GtkCssValue *number,
 static const GtkCssValueClass GTK_CSS_VALUE_NUMBER = {
   gtk_css_value_number_free,
   gtk_css_value_number_compute,
+  gtk_css_value_number_needs_compute,
   gtk_css_value_number_equal,
   gtk_css_value_number_transition,
   gtk_css_value_number_print

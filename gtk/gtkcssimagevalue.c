@@ -60,6 +60,12 @@ gtk_css_value_image_compute (GtkCssValue             *value,
 }
 
 static gboolean
+gtk_css_value_image_needs_compute (const GtkCssValue *value)
+{
+  return _gtk_css_image_value_get_image (value) != NULL;
+}
+
+static gboolean
 gtk_css_value_image_equal (const GtkCssValue *value1,
                            const GtkCssValue *value2)
 {
@@ -95,6 +101,7 @@ gtk_css_value_image_print (const GtkCssValue *value,
 static const GtkCssValueClass GTK_CSS_VALUE_IMAGE = {
   gtk_css_value_image_free,
   gtk_css_value_image_compute,
+  gtk_css_value_image_needs_compute,
   gtk_css_value_image_equal,
   gtk_css_value_image_transition,
   gtk_css_value_image_print

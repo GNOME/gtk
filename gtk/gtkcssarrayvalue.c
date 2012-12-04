@@ -83,6 +83,20 @@ gtk_css_value_array_compute (GtkCssValue             *value,
 }
 
 static gboolean
+gtk_css_value_array_needs_compute (const GtkCssValue *value)
+{
+  guint i;
+
+  for (i = 0; i < value->n_values; i++)
+    {
+      if (_gtk_css_value_needs_compute (value->values[i]))
+	return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
 gtk_css_value_array_equal (const GtkCssValue *value1,
                            const GtkCssValue *value2)
 {
@@ -323,6 +337,7 @@ gtk_css_value_array_print (const GtkCssValue *value,
 static const GtkCssValueClass GTK_CSS_VALUE_ARRAY = {
   gtk_css_value_array_free,
   gtk_css_value_array_compute,
+  gtk_css_value_array_needs_compute,
   gtk_css_value_array_equal,
   gtk_css_value_array_transition,
   gtk_css_value_array_print
