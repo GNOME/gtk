@@ -2089,17 +2089,16 @@ open_shortcut_in_new_tab_cb (GtkMenuItem      *item,
 	open_shortcut_from_menu (sidebar, GTK_PLACES_OPEN_MODE_NEW_TAB);
 }
 
-/* Add bookmark for the selected item */
+/* Add bookmark for the selected item - just used from mount points */
 static void
-add_bookmark (GtkPlacesSidebar *sidebar)
+add_shortcut_cb (GtkMenuItem           *item,
+		 GtkPlacesSidebar *sidebar)
 {
-#if DO_NOT_COMPILE
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 	char *uri;
 	char *name;
 	GFile *location;
-	NautilusBookmark *bookmark;
 
 	model = gtk_tree_view_get_model (sidebar->tree_view);
 
@@ -2114,25 +2113,13 @@ add_bookmark (GtkPlacesSidebar *sidebar)
 		}
 
 		location = g_file_new_for_uri (uri);
-		bookmark = nautilus_bookmark_new (location, name);
-
-		if (!nautilus_bookmark_list_contains (sidebar->bookmarks, bookmark)) {
-			nautilus_bookmark_list_append (sidebar->bookmarks, bookmark);
-		}
+		if (_gtk_bookmarks_manager_insert_bookmark (sidebar->bookmarks_manager, location, -1, NULL))
+			_gtk_bookmarks_manager_set_bookmark_label (sidebar->bookmarks_manager, location, name, NULL);
 
 		g_object_unref (location);
-		g_object_unref (bookmark);
 		g_free (uri);
 		g_free (name);
 	}
-#endif
-}
-
-static void
-add_shortcut_cb (GtkMenuItem           *item,
-		 GtkPlacesSidebar *sidebar)
-{
-	add_bookmark (sidebar);
 }
 
 /* Rename the selected bookmark */
