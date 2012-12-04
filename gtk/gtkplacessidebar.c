@@ -3767,7 +3767,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 	places_sidebar_signals [DRAG_ACTION_ASK] =
 		g_signal_new (I_("drag-action-ask"),
 			      G_OBJECT_CLASS_TYPE (gobject_class),
-			      G_SIGNAL_RUN_FIRST,
+			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GtkPlacesSidebarClass, drag_action_ask),
 			      NULL, NULL,
 			      _gtk_marshal_INT__INT,
