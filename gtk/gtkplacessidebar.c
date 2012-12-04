@@ -43,6 +43,10 @@
  *
  * * Nautilus needs to connect to "drag-action-requested", and call
  *   nautilus_drag_default_drop_action_for_icons().
+ *
+ * * Nautilus needs to connect to "drag-action-ask", and return the
+ *   appropriate action after running a popup menu.  It needs to call
+ *   nautilus_drag_drop_action_ask().
  */
 
 #include "config.h"
@@ -146,6 +150,8 @@ struct _GtkPlacesSidebarClass {
 					const char       *uri,
 					GList            *uri_list,
 					int              *action);
+	GdkDragAction (* drag_action_ask) (GtkPlacesSidebar *sidebar,
+					   GdkDragAction     actions);
 };
 
 enum {
@@ -190,6 +196,7 @@ enum {
 	INITIATED_UNMOUNT,
 	SHOW_ERROR_MESSAGE,
 	DRAG_ACTION_REQUESTED,
+	DRAG_ACTION_ASK,
 	LAST_SIGNAL,
 };
 
@@ -328,6 +335,20 @@ emit_drag_action_requested (GtkPlacesSidebar *sidebar,
 		       uri,
 		       uri_list,
 		       action);
+}
+
+static GdkDragAction
+emit_drag_action_ask (GtkPlacesSidebar *sidebar,
+		      GdkDragAction actions)
+{
+	GdkDragAction ret_action;
+
+	ret_action = 0;
+
+	g_signal_emit (sidebar, places_sidebar_signals[DRAG_ACTION_ASK], 0,
+		       actions,
+		       &ret_action);
+	return ret_action;
 }
 
 static gint
@@ -1456,26 +1477,6 @@ drag_leave_callback (GtkTreeView *tree_view,
 	g_signal_stop_emission_by_name (tree_view, "drag-leave");
 }
 
-static GList *
-uri_list_from_selection (GList *selection)
-{
-#if DO_NOT_COMPILE
-	NautilusDragSelectionItem *item;
-#endif
-	GList *ret;
-	GList *l;
-
-	ret = NULL;
-#if DO_NOT_COMPILE
-	for (l = selection; l != NULL; l = l->next) {
-		item = l->data;
-		ret = g_list_prepend (ret, item->uri);
-	}
-#endif
-
-	return g_list_reverse (ret);
-}
-
 /* Takes an array of URIs and turns it into a list of string URIs */
 static GList *
 build_uri_list (char **uris)
@@ -1613,21 +1614,17 @@ drag_data_received_callback (GtkWidget *widget,
 			break;
 		}
 	} else {
-#if DO_NOT_COMPILE
 		GdkDragAction real_action;
-		GList *selection_list;
 		GList *uris;
 		char *drop_uri;
 
 		/* file transfer requested */
 		real_action = gdk_drag_context_get_selected_action (context);
 
-		if (real_action == GDK_ACTION_ASK) {
-			real_action =
-				nautilus_drag_drop_action_ask (GTK_WIDGET (tree_view),
-							       gdk_drag_context_get_actions (context));
-		}
+		if (real_action == GDK_ACTION_ASK)
+			real_action = emit_drag_action_ask (sidebar, gdk_drag_context_get_actions (context));
 
+#if DO_NOT_COMPILE
 		if (real_action > 0) {
 			model = gtk_tree_view_get_model (tree_view);
 
@@ -1638,13 +1635,11 @@ drag_data_received_callback (GtkWidget *widget,
 
 			switch (info) {
 			case TEXT_URI_LIST:
-				selection_list = build_uri_list ((const gchar *) gtk_selection_data_get_data (selection_data));
-				uris = uri_list_from_selection (selection_list);
+				uris = build_uri_list ((const gchar *) gtk_selection_data_get_data (selection_data));
 				nautilus_file_operations_copy_move (uris, NULL, drop_uri,
 								    real_action, GTK_WIDGET (tree_view),
 								    NULL, NULL);
-				g_list_free_full (selection_list, g_free);
-				g_list_free (uris);
+				g_list_free_full (uris, g_free);
 				success = TRUE;
 				break;
 			case GTK_TREE_MODEL_ROW:
@@ -3755,6 +3750,17 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 			      G_TYPE_STRING,
 			      G_TYPE_POINTER, /* FIXME: (GList *) is there something friendlier to language bindings? */
 			      G_TYPE_POINTER  /* FIXME: (inout int) is there something friendlier to language bindings? */);
+
+
+	places_sidebar_signals [DRAG_ACTION_ASK] =
+		g_signal_new (I_("drag-action-ask"),
+			      G_OBJECT_CLASS_TYPE (gobject_class),
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (GtkPlacesSidebarClass, drag_action_ask),
+			      NULL, NULL,
+			      _gtk_marshal_INT__INT,
+			      G_TYPE_INT, 1,
+			      G_TYPE_INT);
 }
 
 static void
