@@ -46,6 +46,7 @@ struct _GtkClipboard
   GObject parent_instance;
 
   NSPasteboard *pasteboard;
+  NSInteger change_count;
 
   GdkAtom selection;
 
@@ -77,13 +78,18 @@ struct _GtkClipboardClass
 			GdkEventOwnerChange *event);
 };
 
+static void gtk_clipboard_class_init   (GtkClipboardClass   *class);
+static void gtk_clipboard_finalize     (GObject             *object);
+static void gtk_clipboard_owner_change (GtkClipboard        *clipboard,
+					GdkEventOwnerChange *event);
+
+static void          clipboard_unset      (GtkClipboard     *clipboard);
+static GtkClipboard *clipboard_peek       (GdkDisplay       *display,
+					   GdkAtom           selection,
+					   gboolean          only_if_exists);
+
 @interface GtkClipboardOwner : NSObject {
   GtkClipboard *clipboard;
-
-  GtkClipboardGetFunc get_func;
-  GtkClipboardClearFunc clear_func;
-  gpointer user_data;
-  
 }
 
 @end
@@ -118,10 +124,15 @@ struct _GtkClipboardClass
     }
 }
 
+/*  pasteboardChangedOwner is not called immediately, and it's not called
+ *  reliably. It is somehow documented in the apple api docs, but the docs
+ *  suck and don't really give clear instructions. Therefore we track
+ *  changeCount in several places below and clear the clipboard if it
+ *  changed.
+ */
 - (void)pasteboardChangedOwner:(NSPasteboard *)sender
 {
-  if (clear_func)
-    clear_func (clipboard, user_data);
+  clipboard_unset (clipboard);
 
   [self release];
 }
@@ -140,15 +151,6 @@ struct _GtkClipboardClass
 
 @end
 
-static void gtk_clipboard_class_init   (GtkClipboardClass   *class);
-static void gtk_clipboard_finalize     (GObject             *object);
-static void gtk_clipboard_owner_change (GtkClipboard        *clipboard,
-					GdkEventOwnerChange *event);
-
-static void          clipboard_unset      (GtkClipboard     *clipboard);
-static GtkClipboard *clipboard_peek       (GdkDisplay       *display,
-					   GdkAtom           selection,
-					   gboolean          only_if_exists);
 
 static const gchar clipboards_owned_key[] = "gtk-clipboards-owned";
 static GQuark clipboards_owned_key_id = 0;
@@ -361,6 +363,15 @@ gtk_clipboard_set_contents (GtkClipboard         *clipboard,
         }
     }
 
+  /*  call declareTypes before setting the clipboard members because
+   *  declareTypes might clear the clipboard
+   */
+  types = _gtk_quartz_target_entries_to_pasteboard_types (targets, n_targets);
+  clipboard->change_count = [clipboard->pasteboard declareTypes: [types allObjects]
+                                                          owner: owner];
+  [types release];
+  [pool release];
+
   clipboard->user_data = user_data;
   clipboard->have_owner = have_owner;
   if (have_owner)
@@ -371,12 +382,6 @@ gtk_clipboard_set_contents (GtkClipboard         *clipboard,
   if (clipboard->target_list)
     gtk_target_list_unref (clipboard->target_list);
   clipboard->target_list = gtk_target_list_new (targets, n_targets);
-
-  types = _gtk_quartz_target_entries_to_pasteboard_types (targets, n_targets);
-
-  [clipboard->pasteboard declareTypes:[types allObjects] owner:owner];
-  [types release];
-  [pool release];
 
   return TRUE;
 }
@@ -420,6 +425,12 @@ GObject *
 gtk_clipboard_get_owner (GtkClipboard *clipboard)
 {
   g_return_val_if_fail (clipboard != NULL, NULL);
+
+  if (clipboard->change_count < [clipboard->pasteboard changeCount])
+    {
+      clipboard_unset (clipboard);
+      clipboard->change_count = [clipboard->pasteboard changeCount];
+    }
 
   if (clipboard->have_owner)
     return clipboard->user_data;
@@ -474,6 +485,8 @@ clipboard_unset (GtkClipboard *clipboard)
 void
 gtk_clipboard_clear (GtkClipboard *clipboard)
 {
+  clipboard_unset (clipboard);
+
   [clipboard->pasteboard declareTypes:nil owner:nil];
 }
 
@@ -657,6 +670,12 @@ gtk_clipboard_wait_for_contents (GtkClipboard *clipboard,
 {
   NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
   GtkSelectionData *selection_data = NULL;
+
+  if (clipboard->change_count < [clipboard->pasteboard changeCount])
+    {
+      clipboard_unset (clipboard);
+      clipboard->change_count = [clipboard->pasteboard changeCount];
+    }
 
   if (target == gdk_atom_intern_static_string ("TARGETS")) 
     {
