@@ -2210,7 +2210,8 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
      as inactive if it is in the list, emitting a printer_removed signal */
   if (removed_printer_checklist != NULL)
     {
-      g_list_free_full (removed_printer_checklist, (GDestroyNotify) mark_printer_inactive);
+      g_list_foreach (removed_printer_checklist, (GFunc) mark_printer_inactive, backend);
+      g_list_free (removed_printer_checklist);
       list_has_changed = TRUE;
     }
 
