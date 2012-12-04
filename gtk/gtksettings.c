@@ -1414,6 +1414,14 @@ gtk_settings_provider_iface_init (GtkStyleProviderIface *iface)
 {
 }
 
+static GtkCssChange
+gtk_settings_style_provider_get_change (GtkStyleProviderPrivate *provider,
+					const GtkCssMatcher *matcher)
+{
+  return 0;
+}
+
+
 static GtkSettings *
 gtk_settings_style_provider_get_settings (GtkStyleProviderPrivate *provider)
 {
@@ -1424,6 +1432,7 @@ static void
 gtk_settings_provider_private_init (GtkStyleProviderPrivateInterface *iface)
 {
   iface->get_settings = gtk_settings_style_provider_get_settings;
+  iface->get_change = gtk_settings_style_provider_get_change;
 }
 
 static void
