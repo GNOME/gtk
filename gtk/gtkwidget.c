@@ -13965,9 +13965,6 @@ _gtk_widget_style_context_invalidated (GtkWidget *widget)
        */
       widget->priv->style_update_pending = TRUE;
     }
-
-  if (widget->priv->anchored)
-    gtk_widget_queue_resize (widget);
 }
 
 /**
