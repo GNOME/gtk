@@ -70,6 +70,8 @@ void gtk_places_sidebar_set_trash_is_full (GtkPlacesSidebar *sidebar, gboolean i
 
 void gtk_places_sidebar_set_show_cwd (GtkPlacesSidebar *sidebar, gboolean show_cwd);
 
+void gtk_places_sidebar_set_file_dnd_enabled (GtkPlacesSidebar *sidebar, gboolean file_dnd_enabled);
+
 G_END_DECLS
 
 #endif /* __GTK_PLACES_SIDEBAR_H__ */

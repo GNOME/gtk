@@ -135,6 +135,7 @@ struct _GtkPlacesSidebar {
 	guint show_trash : 1;
 	guint trash_is_full : 1;
 	guint show_cwd : 1;
+	guint accept_uri_drops : 1;
 };
 
 struct _GtkPlacesSidebarClass {
@@ -1461,15 +1462,17 @@ drag_motion_callback (GtkTreeView *tree_view,
 		}
 	} else {
 		action = 0;
-		if (sidebar->drag_list != NULL) {
-			gtk_tree_model_get_iter (GTK_TREE_MODEL (sidebar->store),
-						 &iter, path);
-			gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store),
-					    &iter,
-					    PLACES_SIDEBAR_COLUMN_URI, &uri,
-					    -1);
-			emit_drag_action_requested (sidebar, context, uri, sidebar->drag_list, &action);
-			g_free (uri);
+		if (sidebar->accept_uri_drops) {
+			if (sidebar->drag_list != NULL) {
+				gtk_tree_model_get_iter (GTK_TREE_MODEL (sidebar->store),
+							 &iter, path);
+				gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store),
+						    &iter,
+						    PLACES_SIDEBAR_COLUMN_URI, &uri,
+						    -1);
+				emit_drag_action_requested (sidebar, context, uri, sidebar->drag_list, &action);
+				g_free (uri);
+			}
 		}
 	}
 
@@ -4046,4 +4049,12 @@ gtk_places_sidebar_set_show_cwd (GtkPlacesSidebar *sidebar, gboolean show_cwd)
 
 	sidebar->show_cwd = !!show_cwd;
 	update_places (sidebar);
+}
+
+void
+gtk_places_sidebar_set_accept_uri_drops (GtkPlacesSidebar *sidebar, gboolean accept_uri_drops)
+{
+	g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
+
+	sidebar->accept_uri_drops = !!accept_uri_drops;
 }
