@@ -4654,9 +4654,7 @@ gtk_widget_queue_resize (GtkWidget *widget)
   if (gtk_widget_get_realized (widget))
     gtk_widget_queue_draw (widget);
 
-  if (gtk_widget_get_visible (widget) ||
-      widget->priv->have_size_groups)
-    _gtk_size_group_queue_resize (widget, 0);
+  _gtk_size_group_queue_resize (widget, 0);
 }
 
 /**
