@@ -28,6 +28,7 @@
 struct _GtkCssValue {
   GTK_CSS_VALUE_BASE
   GtkCssStyleProperty *property;
+  gboolean needs_compute;
 };
 
 static void
@@ -46,6 +47,9 @@ gtk_css_value_initial_compute (GtkCssValue             *value,
                                GtkCssDependencies      *dependencies)
 {
   GtkSettings *settings;
+
+  if (!value->needs_compute)
+    return _gtk_css_value_ref (_gtk_css_style_property_get_initial_value (value->property));
 
   switch (property_id)
     {
@@ -140,6 +144,8 @@ _gtk_css_initial_value_get (GtkCssStyleProperty *property)
       property->css_initial_value = g_new0 (GtkCssValue, 1);
       *property->css_initial_value = initial;
       property->css_initial_value->property = property;
+      property->css_initial_value->needs_compute =
+	_gtk_css_value_needs_compute (_gtk_css_style_property_get_initial_value (property));
     }
   return property->css_initial_value;
 }
