@@ -1104,7 +1104,7 @@ _gdk_broadway_display_open (const gchar *display_name)
 					G_OBJECT (display),
 					&error))
     {
-      g_printerr ("Unable to listen to port %d: %s\n", 8080, error->message);
+      g_printerr ("Unable to listen to port %d: %s\n", port, error->message);
       g_error_free (error);
       return NULL;
     }
