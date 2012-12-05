@@ -59,6 +59,11 @@
  * * Write reference docs.
  *
  * * Send a heads-up to the XFCE/Thunar people.
+ *
+ * * Sync nautilus commit 17a85b78acc78b573c2e1776b348ed348e19adb7
+ * * Sync nautilus commit 1f307c367ddd8193a38f500e731b7ca0f9b2f98e
+ * * Sync nautilus commit 1dcd2d816a1278f7eec1d074ec5d9134af34a803
+ * * Sync nautilus commit 71ad0d3adc2553ef5bcd06ec32600302e9169765
  */
 
 #include "config.h"
@@ -2933,7 +2938,7 @@ bookmarks_build_popup_menu (GtkPlacesSidebar *sidebar)
 	gtk_widget_show (item);
 	gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
 
-	item = gtk_menu_item_new_with_label (_("Rename..."));
+	item = gtk_menu_item_new_with_label (_("Rename…"));
 	sidebar->popup_menu_rename_item = item;
 	g_signal_connect (item, "activate",
 		    G_CALLBACK (rename_shortcut_cb), sidebar);
