@@ -147,8 +147,6 @@ struct _GtkPlacesSidebarClass {
 	void (* show_file_properties)  (GtkPlacesSidebar *sidebar,
 					GFile            *file);
 	void (* empty_trash_requested) (GtkPlacesSidebar *sidebar);
-	void (* initiated_unmount)     (GtkPlacesSidebar *sidebar,
-				        gboolean          initiated_unmount);
 	void (* show_error_message)    (GtkPlacesSidebar *sidebar,
 				        const char       *primary,
 				        const char       *secondary);
@@ -204,7 +202,6 @@ enum {
 	LOCATION_SELECTED,
 	SHOW_FILE_PROPERTIES,
 	EMPTY_TRASH_REQUESTED,
-	INITIATED_UNMOUNT,
 	SHOW_ERROR_MESSAGE,
 	DRAG_ACTION_REQUESTED,
 	DRAG_ACTION_ASK,
@@ -319,13 +316,6 @@ static void
 emit_empty_trash_requested (GtkPlacesSidebar *sidebar)
 {
 	g_signal_emit (sidebar, places_sidebar_signals[EMPTY_TRASH_REQUESTED], 0);
-}
-
-static void
-emit_initiated_unmount (GtkPlacesSidebar *sidebar, gboolean initiated_unmount)
-{
-	g_signal_emit (sidebar, places_sidebar_signals[INITIATED_UNMOUNT], 0,
-		       initiated_unmount);
 }
 
 static void
@@ -3728,16 +3718,6 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 			      NULL, NULL,
 			      _gtk_marshal_VOID__VOID,
 			      G_TYPE_NONE, 0);
-
-	places_sidebar_signals [INITIATED_UNMOUNT] =
-		g_signal_new (I_("initiated-unmount"),
-			      G_OBJECT_CLASS_TYPE (gobject_class),
-			      G_SIGNAL_RUN_FIRST,
-			      G_STRUCT_OFFSET (GtkPlacesSidebarClass, initiated_unmount),
-			      NULL, NULL,
-			      _gtk_marshal_VOID__BOOLEAN,
-			      G_TYPE_NONE, 1,
-			      G_TYPE_BOOLEAN);
 
 	places_sidebar_signals [SHOW_ERROR_MESSAGE] =
 		g_signal_new (I_("show-error-message"),
