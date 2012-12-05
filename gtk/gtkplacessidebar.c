@@ -40,6 +40,25 @@
  *   that, Nautilus does the "volume has trash, empty it first?" dance.  Cosimo
  *   suggests that this logic should be part of GtkMountOperation, which can
  *   have Unix-specific code for emptying trash.
+ *
+ * * Sync from the newest code in Nautilus.
+ *
+ * * Start removing old shortcuts code in gtkfilechooserdefault.c.
+ *
+ * * Add a way to implement gtk_file_chooser_add_shortcut_folder() and friends.
+ *
+ * * Grep for the comment containing "machinery" in this file, and copy that machinery
+ *   from Nautilus - it's to get symbolic icons for everything.
+ *
+ * * Add getters for all the setters.
+ *
+ * * Add GObject properties.
+ *
+ * * Add docstrings for signals.
+ *
+ * * Write reference docs.
+ *
+ * * Send a heads-up to the XFCE/Thunar people.
  */
 
 #include "config.h"
