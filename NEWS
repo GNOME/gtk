@@ -1,3 +1,32 @@
+Overview of Changes from GTK+ 2.24.13 to 2.24.14
+================================================
+
+* File chooser:
+ - Use the bookmarks file from the same XDG location
+   as GTK+ 3 if present
+ - Add a setting to specify the startup mode
+
+* Bug fixes:
+ 577806 gtk_file_chooser_add_shortcut_folder adds duplicates...
+ 626499 GtkClipboard unnotified on change of OS X pasteboard...
+ 644906 gtkimcontextime.c: NULL pointer reference
+ 652204 Making GIMP crash with the Text Tool
+ 663990 Tablet pressure is broken on MacOSX
+ 668239 texts disappear when notebook switch page at zh_CN l...
+ 672193 windows (including menus) shown multiple times don't...
+ 681845 Cancel image export crashes or freezes gimp
+ 682919 Crash in GTK+-3.x (3.0.x-3.5.12+) on Windows with CJK...
+ 684419 crash when closing Document History window
+ 685959 [Win32] Memory leak on every redraw of a widget
+ 688710 [PATCH] Splash screens shouldn't stay on top of all a...
+ 689235 Broken function declarations corrupt the stack on win...
+        Quartz: Use window background pattern
+        Quartz: Use the correct minimal line width
+
+* Translation updates
+ German
+
+
 Overview of Changes from GTK+ 2.24.12 to 2.24.13
 ================================================
 
