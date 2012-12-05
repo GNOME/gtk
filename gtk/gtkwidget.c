@@ -8705,12 +8705,8 @@ gtk_widget_peek_pango_context (GtkWidget *widget)
  * by gtk_widget_create_pango_context(), this context is owned by
  * the widget (it can be used until the screen for the widget changes
  * or the widget is removed from its toplevel), and will be updated to
- * match any changes to the widget's attributes.
- *
- * If you create and keep a #PangoLayout using this context, you must
- * deal with changes to the context by calling pango_layout_context_changed()
- * on the layout in response to the #GtkWidget::style-updated and
- * #GtkWidget::direction-changed signals for the widget.
+ * match any changes to the widget's attributes. This can be tracked
+ * by using the #GtkWidget::screen-changed signal on the widget.
  *
  * Return value: (transfer none): the #PangoContext for the widget.
  **/
@@ -8821,11 +8817,10 @@ gtk_widget_create_pango_context (GtkWidget *widget)
  * font description, and base direction for drawing text for
  * this widget.
  *
- * If you keep a #PangoLayout created in this way around, in order to
- * notify the layout of changes to the base direction or font of this
- * widget, you must call pango_layout_context_changed() in response to
- * the #GtkWidget::style-updated and #GtkWidget::direction-changed signals
- * for the widget.
+ * If you keep a #PangoLayout created in this way around, you need
+ * to re-create it when the widget #PangoContext is replaced.
+ * This can be tracked by using the #GtkWidget::screen-changed signal
+ * on the widget.
  *
  * Return value: (transfer full): the new #PangoLayout
  **/
