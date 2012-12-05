@@ -3486,15 +3486,12 @@ gtk_style_context_get_font (GtkStyleContext *context,
 
   /* Yuck, fonts are created on-demand but we don't return a ref.
    * Do bad things to achieve this requirement */
-  description = g_object_get_data (G_OBJECT (data->store), "font-cache-for-get_font");
-  if (description == NULL)
-    {
-      gtk_style_context_get (context, state, "font", &description, NULL);
-      g_object_set_data_full (G_OBJECT (data->store),
-                              "font-cache-for-get_font",
-                              description,
-                              (GDestroyNotify) pango_font_description_free);
-    }
+  gtk_style_context_get (context, state, "font", &description, NULL);
+  g_object_set_data_full (G_OBJECT (data->store),
+                          "font-cache-for-get_font",
+                          description,
+                          (GDestroyNotify) pango_font_description_free);
+
   return description;
 }
 
