@@ -41,8 +41,6 @@
  *   suggests that this logic should be part of GtkMountOperation, which can
  *   have Unix-specific code for emptying trash.
  *
- * * Sync from the newest code in Nautilus.
- *
  * * Start removing old shortcuts code in gtkfilechooserdefault.c.
  *
  * * Add a way to implement gtk_file_chooser_add_shortcut_folder() and friends.
