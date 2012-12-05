@@ -1060,7 +1060,7 @@ _gdk_broadway_display_open (const gchar *display_name)
 {
   GdkDisplay *display;
   GdkBroadwayDisplay *broadway_display;
-  GError *error;
+  GError *error = NULL;
   int port;
 
   display = g_object_new (GDK_TYPE_BROADWAY_DISPLAY, NULL);
