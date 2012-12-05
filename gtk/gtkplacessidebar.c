@@ -3754,7 +3754,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 			      G_TYPE_INT, 1,
 			      G_TYPE_INT);
 
-	places_sidebar_signals [DRAG_ACTION_ASK] =
+	places_sidebar_signals [DRAG_PERFORM_DROP] =
 		g_signal_new (I_("drag-perform-drop"),
 			      G_OBJECT_CLASS_TYPE (gobject_class),
 			      G_SIGNAL_RUN_FIRST,
