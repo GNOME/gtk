@@ -40,19 +40,6 @@
  *   that, Nautilus does the "volume has trash, empty it first?" dance.  Cosimo
  *   suggests that this logic should be part of GtkMountOperation, which can
  *   have Unix-specific code for emptying trash.
- *
- * * Nautilus needs to connect to "drag-action-requested", and call
- *   nautilus_drag_default_drop_action_for_icons().
- *
- * * Nautilus needs to connect to "drag-action-ask", and return the
- *   appropriate action after running a popup menu.  It needs to call
- *   nautilus_drag_drop_action_ask().
- *
- * * Nautilus needs to connect to "drag-perform-drop", and call
- *   nautilus_file_operations_copy_move() as appropriate.
- *     nautilus_file_operations_copy_move (uris, NULL, drop_uri,
- *                                         real_action, GTK_WIDGET (tree_view),
- *                                         NULL, NULL);
  */
 
 #include "config.h"
