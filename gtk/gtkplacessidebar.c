@@ -182,7 +182,6 @@ enum {
 	PLACES_SIDEBAR_COLUMN_NO_EJECT,
 	PLACES_SIDEBAR_COLUMN_BOOKMARK,
 	PLACES_SIDEBAR_COLUMN_TOOLTIP,
-	PLACES_SIDEBAR_COLUMN_EJECT_GICON,
 	PLACES_SIDEBAR_COLUMN_SECTION_TYPE,
 	PLACES_SIDEBAR_COLUMN_HEADING_TEXT,
 
@@ -478,7 +477,6 @@ add_place (GtkPlacesSidebar *sidebar,
 	   const char *tooltip)
 {
 	GtkTreeIter           iter;
-	GIcon *eject;
 	gboolean show_eject, show_unmount;
 	gboolean show_eject_button;
 
@@ -497,12 +495,6 @@ add_place (GtkPlacesSidebar *sidebar,
 		show_eject_button = (show_unmount || show_eject);
 	}
 
-	if (show_eject_button) {
-		eject = g_themed_icon_new_with_default_fallbacks ("media-eject-symbolic");
-	} else {
-		eject = NULL;
-	}
-
 	gtk_list_store_append (sidebar->store, &iter);
 	gtk_list_store_set (sidebar->store, &iter,
 			    PLACES_SIDEBAR_COLUMN_GICON, icon,
@@ -517,13 +509,8 @@ add_place (GtkPlacesSidebar *sidebar,
 			    PLACES_SIDEBAR_COLUMN_NO_EJECT, !show_eject_button,
 			    PLACES_SIDEBAR_COLUMN_BOOKMARK, place_type != PLACES_BOOKMARK,
 			    PLACES_SIDEBAR_COLUMN_TOOLTIP, tooltip,
-			    PLACES_SIDEBAR_COLUMN_EJECT_GICON, eject,
 			    PLACES_SIDEBAR_COLUMN_SECTION_TYPE, section_type,
 			    -1);
-
-	if (eject != NULL) {
-		g_object_unref (eject);
-	}
 }
 
 typedef struct {
@@ -3443,6 +3430,7 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 	GtkTreeViewColumn *col;
 	GtkCellRenderer   *cell;
 	GtkTreeSelection  *selection;
+	GIcon             *eject;
 
 	gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (sidebar)), GTK_STYLE_CLASS_SIDEBAR);
 
@@ -3522,6 +3510,7 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 	/* eject icon renderer */
 	cell = gtk_cell_renderer_pixbuf_new ();
 	sidebar->eject_icon_cell_renderer = cell;
+	eject = g_themed_icon_new_with_default_fallbacks ("media-eject-symbolic");
 	g_object_set (cell,
 		      "mode", GTK_CELL_RENDERER_MODE_ACTIVATABLE,
 		      "stock-size", GTK_ICON_SIZE_MENU,
@@ -3530,12 +3519,13 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 			 this even though we tell it not to. */
 		      "xalign", 1.0,
 		      "follow-state", TRUE,
+		      "gicon", eject,
 		      NULL);
 	gtk_tree_view_column_pack_start (col, cell, FALSE);
 	gtk_tree_view_column_set_attributes (col, cell,
 					     "visible", PLACES_SIDEBAR_COLUMN_EJECT,
-					     "gicon", PLACES_SIDEBAR_COLUMN_EJECT_GICON,
 					     NULL);
+	g_object_unref (eject);
 
 	/* normal text renderer */
 	cell = gtk_cell_renderer_text_new ();
@@ -3853,7 +3843,6 @@ shortcuts_model_new (GtkPlacesSidebar *sidebar)
 		G_TYPE_BOOLEAN,
 		G_TYPE_BOOLEAN,
 		G_TYPE_STRING,
-		G_TYPE_ICON,
 		G_TYPE_INT,
 		G_TYPE_STRING
 	};
