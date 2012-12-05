@@ -1052,7 +1052,7 @@ update_places (GtkPlacesSidebar *sidebar)
 
 #if 0
 		/* FIXME: remove this?  If we *do* show bookmarks for nonexistent files, the user will eventually clean them up */
-		if (nautilus_bookmark_uri_known_not_to_exist (bookmark)) {
+		if (!nautilus_bookmark_get_exists (bookmark)) {
 			continue;
 		}
 #endif
