@@ -8187,7 +8187,7 @@ find_good_size_from_style (GtkWidget *widget,
 {
   GtkStyleContext *context;
   GtkStateFlags state;
-  int font_size;
+  double font_size;
   GdkScreen *screen;
   double resolution;
 
@@ -8204,8 +8204,8 @@ find_good_size_from_style (GtkWidget *widget,
   else
     resolution = 96.0; /* wheeee */
 
-  font_size = pango_font_description_get_size (gtk_style_context_get_font (context, state));
-  font_size = PANGO_PIXELS (font_size) * resolution / 72.0;
+  gtk_style_context_get (context, state, "font-size", &font_size, NULL);
+  font_size = font_size * resolution / 72.0 + 0.5;
 
   *width = font_size * NUM_CHARS;
   *height = font_size * NUM_LINES;
