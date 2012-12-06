@@ -3468,6 +3468,9 @@ gtk_style_context_get_margin (GtkStyleContext *context,
  *          freed.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: Use gtk_style_context_get() for "font" or
+ *     subproperties instead.
  **/
 const PangoFontDescription *
 gtk_style_context_get_font (GtkStyleContext *context,

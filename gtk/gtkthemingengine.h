@@ -249,6 +249,7 @@ void gtk_theming_engine_get_margin  (GtkThemingEngine *engine,
                                      GtkStateFlags     state,
                                      GtkBorder        *margin);
 
+GDK_DEPRECATED_IN_3_8_FOR(gtk_theming_engine_get)
 const PangoFontDescription * gtk_theming_engine_get_font (GtkThemingEngine *engine,
                                                           GtkStateFlags     state);
 

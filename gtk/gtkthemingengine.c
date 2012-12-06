@@ -853,6 +853,8 @@ gtk_theming_engine_get_margin (GtkThemingEngine *engine,
  *          freed.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: Use gtk_theming_engine_get()
  **/
 const PangoFontDescription *
 gtk_theming_engine_get_font (GtkThemingEngine *engine,
@@ -862,8 +864,10 @@ gtk_theming_engine_get_font (GtkThemingEngine *engine,
 
   g_return_val_if_fail (GTK_IS_THEMING_ENGINE (engine), NULL);
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   priv = engine->priv;
   return gtk_style_context_get_font (priv->context, state);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 /* GtkThemingModule */

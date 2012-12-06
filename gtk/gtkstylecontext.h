@@ -879,6 +879,8 @@ void gtk_style_context_get_background_color (GtkStyleContext *context,
 void gtk_style_context_get_border_color     (GtkStyleContext *context,
                                              GtkStateFlags    state,
                                              GdkRGBA         *color);
+
+GDK_DEPRECATED_IN_3_8_FOR(gtk_style_context_get)
 const PangoFontDescription *
      gtk_style_context_get_font             (GtkStyleContext *context,
                                              GtkStateFlags    state);
