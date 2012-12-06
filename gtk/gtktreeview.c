@@ -8461,6 +8461,8 @@ gtk_tree_view_style_updated (GtkWidget *widget)
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GList *list;
   GtkTreeViewColumn *column;
+  GtkStyleContext *style_context;
+  const GtkBitmask *changes;
 
   GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->style_updated (widget);
 
@@ -8472,16 +8474,19 @@ gtk_tree_view_style_updated (GtkWidget *widget)
       gtk_tree_view_set_enable_tree_lines (tree_view, tree_view->priv->tree_lines_enabled);
     }
 
-  for (list = tree_view->priv->columns; list; list = list->next)
+  style_context = gtk_widget_get_style_context (widget);
+  changes = _gtk_style_context_get_changes (style_context);
+  if (changes == NULL || _gtk_css_style_property_changes_affect_size (changes))
     {
-      column = list->data;
-      _gtk_tree_view_column_cell_set_dirty (column, TRUE);
+      for (list = tree_view->priv->columns; list; list = list->next)
+	{
+	  column = list->data;
+	  _gtk_tree_view_column_cell_set_dirty (column, TRUE);
+	}
+
+      tree_view->priv->fixed_height = -1;
+      _gtk_rbtree_mark_invalid (tree_view->priv->tree);
     }
-
-  tree_view->priv->fixed_height = -1;
-  _gtk_rbtree_mark_invalid (tree_view->priv->tree);
-
-  gtk_widget_queue_resize (widget);
 }
 
 
