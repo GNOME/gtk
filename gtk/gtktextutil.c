@@ -298,7 +298,7 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
   if (values->font)
     pango_font_description_free (values->font);
 
-  values->font = pango_font_description_copy (gtk_style_context_get_font (context, state));
+  gtk_style_context_get (context, state, "font", &values->font, NULL);
 }
 
 cairo_surface_t *

@@ -1768,7 +1768,7 @@ get_size (GtkCellRenderer    *cell,
       style_context = gtk_widget_get_style_context (widget);
       state = gtk_widget_get_state_flags (widget);
 
-      font_desc = pango_font_description_copy_static (gtk_style_context_get_font (style_context, state));
+      gtk_style_context_get (style_context, state, "font", &font_desc, NULL);
       pango_font_description_merge_static (font_desc, priv->font, TRUE);
 
       if (priv->scale_set)
