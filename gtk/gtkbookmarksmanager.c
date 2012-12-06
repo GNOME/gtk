@@ -152,7 +152,8 @@ save_bookmarks (GFile  *bookmarks_file,
 static void
 notify_changed (GtkBookmarksManager *manager)
 {
-  manager->changed_func (manager->changed_func_data);
+  if (manager->changed_func)
+    manager->changed_func (manager->changed_func_data);
 }
 
 static void
@@ -192,8 +193,6 @@ _gtk_bookmarks_manager_new (GtkBookmarksChangedFunc changed_func, gpointer chang
   GtkBookmarksManager *manager;
   GFile *bookmarks_file;
   GError *error;
-
-  g_return_val_if_fail (changed_func != NULL, NULL);
 
   manager = g_new0 (GtkBookmarksManager, 1);
 
