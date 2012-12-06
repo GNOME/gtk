@@ -2095,11 +2095,9 @@ text_view_new (GtkAboutDialog  *about,
   GdkColor color;
   GdkColor link_color;
   GdkColor visited_link_color;
-  gint size;
-  PangoFontDescription *font_desc;
   GtkAboutDialogPrivate *priv = about->priv;
-  GtkStyleContext *context;
-  GtkStateFlags state;
+  GtkTextIter start_iter, end_iter;
+  GtkTextTag *tag;
 
   gtk_widget_style_get (GTK_WIDGET (about),
                         "link-color", &style_link_color,
@@ -2128,14 +2126,11 @@ text_view_new (GtkAboutDialog  *about,
   gtk_text_view_set_editable (text_view, FALSE);
   gtk_text_view_set_wrap_mode (text_view, wrap_mode);
 
-  context = gtk_widget_get_style_context (view);
-  state = gtk_widget_get_state_flags (view);
-
-  size = pango_font_description_get_size (gtk_style_context_get_font (context, state));
-  font_desc = pango_font_description_new ();
-  pango_font_description_set_size (font_desc, size * PANGO_SCALE_SMALL);
-  gtk_widget_override_font (view, font_desc);
-  pango_font_description_free (font_desc);
+  gtk_text_buffer_get_start_iter (buffer, &start_iter);
+  gtk_text_buffer_get_start_iter (buffer, &end_iter);
+  tag = gtk_text_tag_new (NULL);
+  g_object_set (tag, "font-scale", PANGO_SCALE_SMALL, NULL);
+  gtk_text_buffer_apply_tag (buffer, tag, &start_iter, &end_iter);
 
   gtk_text_view_set_left_margin (text_view, 8);
   gtk_text_view_set_right_margin (text_view, 8);
