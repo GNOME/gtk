@@ -66,7 +66,8 @@
 typedef enum {
   GTK_STYLE_PROPERTY_INHERIT = (1 << 0),
   GTK_STYLE_PROPERTY_ANIMATED = (1 << 1),
-  GTK_STYLE_PROPERTY_NO_RESIZE = (1 << 2)
+  GTK_STYLE_PROPERTY_NO_RESIZE = (1 << 2),
+  GTK_STYLE_PROPERTY_AFFECTS_FONT = (1 << 3)
 } GtkStylePropertyFlags;
 
 static void
@@ -89,6 +90,7 @@ gtk_css_style_property_register (const char *                   name,
   node = g_object_new (GTK_TYPE_CSS_STYLE_PROPERTY,
                        "value-type", value_type,
                        "affects-size", (flags & GTK_STYLE_PROPERTY_NO_RESIZE) ? FALSE : TRUE,
+                       "affects-font", (flags & GTK_STYLE_PROPERTY_AFFECTS_FONT) ? TRUE : FALSE,
                        "animated", (flags & GTK_STYLE_PROPERTY_ANIMATED) ? TRUE : FALSE,
                        "inherit", (flags & GTK_STYLE_PROPERTY_INHERIT) ? TRUE : FALSE,
                        "initial-value", initial_value,
@@ -876,7 +878,7 @@ _gtk_css_style_property_init_properties (void)
   gtk_css_style_property_register        ("font-size",
                                           GTK_CSS_PROPERTY_FONT_SIZE,
                                           G_TYPE_DOUBLE,
-                                          GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
+                                          GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED | GTK_STYLE_PROPERTY_AFFECTS_FONT,
                                           font_size_parse,
                                           query_length_as_double,
                                           assign_length_from_double,
@@ -896,7 +898,7 @@ _gtk_css_style_property_init_properties (void)
   gtk_css_style_property_register        ("font-family",
                                           GTK_CSS_PROPERTY_FONT_FAMILY,
                                           G_TYPE_STRV,
-                                          GTK_STYLE_PROPERTY_INHERIT,
+                                          GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_AFFECTS_FONT,
                                           font_family_parse,
                                           font_family_query,
                                           font_family_assign,
@@ -904,7 +906,7 @@ _gtk_css_style_property_init_properties (void)
   gtk_css_style_property_register        ("font-style",
                                           GTK_CSS_PROPERTY_FONT_STYLE,
                                           PANGO_TYPE_STYLE,
-                                          GTK_STYLE_PROPERTY_INHERIT,
+                                          GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_AFFECTS_FONT,
                                           parse_pango_style,
                                           query_pango_style,
                                           assign_pango_style,
@@ -912,7 +914,7 @@ _gtk_css_style_property_init_properties (void)
   gtk_css_style_property_register        ("font-variant",
                                           GTK_CSS_PROPERTY_FONT_VARIANT,
                                           PANGO_TYPE_VARIANT,
-                                          GTK_STYLE_PROPERTY_INHERIT,
+                                          GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_AFFECTS_FONT,
                                           parse_pango_variant,
                                           query_pango_variant,
                                           assign_pango_variant,
@@ -920,7 +922,7 @@ _gtk_css_style_property_init_properties (void)
   gtk_css_style_property_register        ("font-weight",
                                           GTK_CSS_PROPERTY_FONT_WEIGHT,
                                           PANGO_TYPE_WEIGHT,
-                                          GTK_STYLE_PROPERTY_INHERIT,
+                                          GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_AFFECTS_FONT,
                                           parse_pango_weight,
                                           query_pango_weight,
                                           assign_pango_weight,

@@ -39,6 +39,7 @@ enum {
   PROP_0,
   PROP_ANIMATED,
   PROP_AFFECTS_SIZE,
+  PROP_AFFECTS_FONT,
   PROP_ID,
   PROP_INHERIT,
   PROP_INITIAL
@@ -47,6 +48,7 @@ enum {
 G_DEFINE_TYPE (GtkCssStyleProperty, _gtk_css_style_property, GTK_TYPE_STYLE_PROPERTY)
 
 static GtkBitmask *_properties_affecting_size = NULL;
+static GtkBitmask *_properties_affecting_font = NULL;
 
 static void
 gtk_css_style_property_constructed (GObject *object)
@@ -59,6 +61,9 @@ gtk_css_style_property_constructed (GObject *object)
 
   if (property->affects_size)
     _properties_affecting_size = _gtk_bitmask_set (_properties_affecting_size, property->id, TRUE);
+
+  if (property->affects_font)
+    _properties_affecting_font = _gtk_bitmask_set (_properties_affecting_font, property->id, TRUE);
 
   G_OBJECT_CLASS (_gtk_css_style_property_parent_class)->constructed (object);
 }
@@ -78,6 +83,9 @@ gtk_css_style_property_set_property (GObject      *object,
       break;
     case PROP_AFFECTS_SIZE:
       property->affects_size = g_value_get_boolean (value);
+      break;
+    case PROP_AFFECTS_FONT:
+      property->affects_font = g_value_get_boolean (value);
       break;
     case PROP_INHERIT:
       property->inherit = g_value_get_boolean (value);
@@ -107,6 +115,9 @@ gtk_css_style_property_get_property (GObject    *object,
       break;
     case PROP_AFFECTS_SIZE:
       g_value_set_boolean (value, property->affects_size);
+      break;
+    case PROP_AFFECTS_FONT:
+      g_value_set_boolean (value, property->affects_font);
       break;
     case PROP_ID:
       g_value_set_boolean (value, property->id);
@@ -271,6 +282,13 @@ _gtk_css_style_property_class_init (GtkCssStylePropertyClass *klass)
                                                          TRUE,
                                                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
   g_object_class_install_property (object_class,
+                                   PROP_AFFECTS_FONT,
+                                   g_param_spec_boolean ("affects-font",
+                                                         P_("Affects font"),
+                                                         P_("Set if the value affects the font"),
+                                                         FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property (object_class,
                                    PROP_ID,
                                    g_param_spec_uint ("id",
                                                       P_("ID"),
@@ -299,6 +317,7 @@ _gtk_css_style_property_class_init (GtkCssStylePropertyClass *klass)
   klass->style_properties = g_ptr_array_new ();
 
   _properties_affecting_size = _gtk_bitmask_new ();
+  _properties_affecting_font = _gtk_bitmask_new ();
 }
 
 static GtkCssValue *
@@ -419,6 +438,25 @@ _gtk_css_style_property_affects_size (GtkCssStyleProperty *property)
 
   return property->affects_size;
 }
+
+/**
+ * _gtk_css_style_property_affects_font:
+ * @property: the property
+ *
+ * Queries if the given @property affects the default font. This is
+ * used for optimizations inside GTK, where clearing pango
+ * layouts can be avoided if the font doesn't change.
+ *
+ * Returns: %TRUE if the property affects the font.
+ **/
+gboolean
+_gtk_css_style_property_affects_font (GtkCssStyleProperty *property)
+{
+  g_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), FALSE);
+
+  return property->affects_font;
+}
+
 /**
  * _gtk_css_style_property_get_id:
  * @property: the property
@@ -458,4 +496,10 @@ gboolean
 _gtk_css_style_property_changes_affect_size (const GtkBitmask *changes)
 {
   return _gtk_bitmask_intersects (changes, _properties_affecting_size);
+}
+
+gboolean
+_gtk_css_style_property_changes_affect_font (const GtkBitmask *changes)
+{
+  return _gtk_bitmask_intersects (changes, _properties_affecting_font);
 }
