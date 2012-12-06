@@ -758,8 +758,6 @@ get_arrow_size (GtkWidget *widget,
                 gint      *size,
                 gint      *spacing)
 {
-  GtkStyleContext  *style_context;
-  GtkStateFlags     state;
   PangoContext     *context;
   PangoFontMetrics *metrics;
   gfloat            arrow_scaling;
@@ -776,11 +774,9 @@ get_arrow_size (GtkWidget *widget,
     *spacing = arrow_spacing;
 
   context = gtk_widget_get_pango_context (child);
-  style_context = gtk_widget_get_style_context (child);
-  state = gtk_widget_get_state_flags (child);
 
   metrics = pango_context_get_metrics (context,
-                                       gtk_style_context_get_font (style_context, state),
+                                       pango_context_get_font_description (context),
                                        pango_context_get_language (context));
 
   *size = (PANGO_PIXELS (pango_font_metrics_get_ascent (metrics) +
@@ -814,19 +810,15 @@ gtk_menu_item_accel_width_foreach (GtkWidget *widget,
 static gint
 get_minimum_width (GtkWidget *widget)
 {
-  GtkStyleContext *style_context;
-  GtkStateFlags state;
   PangoContext *context;
   PangoFontMetrics *metrics;
   gint width;
   gint width_chars;
 
   context = gtk_widget_get_pango_context (widget);
-  style_context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
 
   metrics = pango_context_get_metrics (context,
-                                       gtk_style_context_get_font (style_context, state),
+                                       pango_context_get_font_description (context),
                                        pango_context_get_language (context));
 
   width = pango_font_metrics_get_approximate_char_width (metrics);

@@ -556,15 +556,15 @@ gtk_progress_bar_get_preferred_width (GtkWidget *widget,
 
       if (priv->ellipsize)
         {
-	  const PangoFontDescription *font_desc;
           PangoContext *context;
           PangoFontMetrics *metrics;
           gint char_width;
 
           /* The minimum size for ellipsized text is ~ 3 chars */
           context = pango_layout_get_context (layout);
-          font_desc = gtk_style_context_get_font (style_context, state);
-          metrics = pango_context_get_metrics (context, font_desc, pango_context_get_language (context));
+          metrics = pango_context_get_metrics (context,
+                                               pango_context_get_font_description (context),
+                                               pango_context_get_language (context));
 
           char_width = pango_font_metrics_get_approximate_char_width (metrics);
           pango_font_metrics_unref (metrics);

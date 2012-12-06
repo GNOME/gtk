@@ -3136,23 +3136,6 @@ gtk_label_clear_layout (GtkLabel *label)
     }
 }
 
-static PangoFontMetrics *
-get_font_metrics (PangoContext *context, GtkWidget *widget)
-{
-  GtkStyleContext *style_context;
-  const PangoFontDescription *font;
-  PangoFontMetrics *retval;
-
-  style_context = gtk_widget_get_style_context (widget);
-  font = gtk_style_context_get_font (style_context, GTK_STATE_FLAG_NORMAL);
-
-  retval = pango_context_get_metrics (context,
-                                      font,
-                                      pango_context_get_language (context));
-
-  return retval;
-}
-
 /**
  * gtk_label_get_measuring_layout:
  * @label: the label
@@ -3485,7 +3468,9 @@ get_char_pixels (GtkWidget   *label,
   gint char_width, digit_width;
 
   context = pango_layout_get_context (layout);
-  metrics = get_font_metrics (context, GTK_WIDGET (label));
+  metrics = pango_context_get_metrics (context,
+                                       pango_context_get_font_description (context),
+                                       pango_context_get_language (context));
   char_width = pango_font_metrics_get_approximate_char_width (metrics);
   digit_width = pango_font_metrics_get_approximate_digit_width (metrics);
   pango_font_metrics_unref (metrics);

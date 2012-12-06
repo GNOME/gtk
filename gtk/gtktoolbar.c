@@ -3336,18 +3336,12 @@ calculate_max_homogeneous_pixels (GtkWidget *widget)
 {
   PangoContext *context;
   PangoFontMetrics *metrics;
-  const PangoFontDescription *font_desc;
-  GtkStyleContext *style_context;
-  GtkStateFlags state;
   gint char_width;
   
   context = gtk_widget_get_pango_context (widget);
-  style_context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
 
-  font_desc = gtk_style_context_get_font (style_context, state);
-
-  metrics = pango_context_get_metrics (context, font_desc,
+  metrics = pango_context_get_metrics (context,
+                                       pango_context_get_font_description (context),
 				       pango_context_get_language (context));
   char_width = pango_font_metrics_get_approximate_char_width (metrics);
   pango_font_metrics_unref (metrics);
