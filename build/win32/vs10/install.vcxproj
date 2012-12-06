@@ -94,6 +94,10 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ProjectReference Include="libwimp.vcxproj">
+      <Project>{7660fb4e-2ae6-483e-8813-0974cbe6f97f}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
     <ProjectReference Include="gailutil.vcxproj">
       <Project>{b3b6558a-01c8-4c72-9bde-84abb1ae67df}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>

@@ -18,4 +18,6 @@ EXTRA_DIST += \
 	gtk-demo.vcxproj.filters \
 	gailutil.vcxproj \
 	gailutil.vcxproj.filters \
+	libwimp.vcxproj \
+	libwimp.vcxproj.filters \
 	install.vcxproj

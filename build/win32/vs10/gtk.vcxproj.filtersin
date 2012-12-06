@@ -34,10 +34,6 @@
     <ClCompile Include="..\..\..\modules\input\imti-et.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\modules\input\imviqr.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\modules\input\thai-charprop.c"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="..\..\..\modules\engines\ms-windows\msw_rc_style.c"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="..\..\..\modules\engines\ms-windows\msw_style.c"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="..\..\..\modules\engines\ms-windows\msw_theme_main.c"><Filter>Source Files</Filter></ClCompile>
-    <ClCompile Include="..\..\..\modules\engines\ms-windows\xp_theme.c"><Filter>Source Files</Filter></ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\..\..\gdk\gtk.symbols">

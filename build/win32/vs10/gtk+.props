@@ -7,33 +7,18 @@
     <GtkApiVersion>2.0</GtkApiVersion>
     <GtkBinaryVersion>2.10.0</GtkBinaryVersion>
     <GtkDummyPrefix>\"/dummy\"</GtkDummyPrefix>
-    <GtkPrefixDefine>GTK_PREFIX="\"$(GtkDummyPrefix)\""</GtkPrefixDefine>
-    <GdkDefines>GDK_COMPILATION;G_LOG_DOMAIN="\"Gdk\""</GdkDefines>
+    <GtkHost>i686-pc-vs10</GtkHost>
+    <GdkDefines>GDK_COMPILATION;G_LOG_DOMAIN="Gdk"</GdkDefines>
     <GtkIncludedImmodulesDefines>INCLUDE_IM_am_et;INCLUDE_IM_cedilla;INCLUDE_IM_cyrillic_translit;INCLUDE_IM_ime;INCLUDE_IM_inuktitut;INCLUDE_IM_ipa;INCLUDE_IM_multipress;INCLUDE_IM_thai;INCLUDE_IM_ti_er;INCLUDE_IM_ti_et;INCLUDE_IM_viqr</GtkIncludedImmodulesDefines>
-    <GtkDefines>GTK_COMPILATION;G_LOG_DOMAIN="\"Gtk\"";GTK_HOST="\"i686-pc-vs10\"";GTK_PRINT_BACKENDS="\"file\"";GTK_PRINT_PREVIEW_COMMAND="\"undefined-gtk-print-preview-command\"";$(GtkIncludedImmodulesDefines);GTK_LIBDIR="\"$(GtkDummyPrefix)/lib\"";GTK_DATADIR="\"$(GtkDummyPrefix)/share\"";GTK_DATA_PREFIX="\"$(GtkDummyPrefix)\"";GTK_SYSCONFDIR="\"$(GtkDummyPrefix)/etc\"";MULTIPRESS_CONFDIR="\"$(GtkDummyPrefix)/etc/gtk-$(GtkApiVersion)\"";MULTIPRESS_LOCALEDIR="\"$(GtkDummyPrefix)/share/locale\"";GTK_VERSION="\"$(GtkVersion)/etc\"";GTK_BINARY_VERSION="\"$(GtkBinaryVersion)/etc\""</GtkDefines>
+    <GtkDefines>GTK_COMPILATION;G_LOG_DOMAIN="Gtk";GTK_HOST="$(GtkHost)";GTK_PRINT_BACKENDS="file";GTK_PRINT_PREVIEW_COMMAND="undefined-gtk-print-preview-command";$(GtkIncludedImmodulesDefines);GTK_LIBDIR="$(GtkDummyPrefix)/lib";GTK_DATADIR="$(GtkDummyPrefix)/share";GTK_DATA_PREFIX="$(GtkDummyPrefix)";GTK_SYSCONFDIR="$(GtkDummyPrefix)/etc";MULTIPRESS_CONFDIR="$(GtkDummyPrefix)/etc/gtk-$(GtkApiVersion)";MULTIPRESS_LOCALEDIR="$(GtkDummyPrefix)/share/locale";GTK_VERSION="$(GtkVersion)/etc";GTK_BINARY_VERSION="$(GtkBinaryVersion)/etc"</GtkDefines>
     <GtkDoInstall>
 echo on
 
 mkdir $(CopyDir)\bin
 
-copy $(Configuration)\$(Platform)\bin\*.dll $(CopyDir)\bin
+copy $(Configuration)\$(Platform)\bin\*-vs10.dll $(CopyDir)\bin
 
 copy $(Configuration)\$(Platform)\bin\*.exe $(CopyDir)\bin
-
-
-mkdir $(CopyDir)\share\gtk-$(GtkApiVersion)\demo
-
-copy ..\..\..\demos\gtk-demo\*.png $(CopyDir)\share\gtk-$(GtkApiVersion)\demo
-
-copy ..\..\..\demos\gtk-demo\*.gif $(CopyDir)\share\gtk-$(GtkApiVersion)\demo
-
-copy ..\..\..\demos\gtk-demo\*.ui $(CopyDir)\share\gtk-$(GtkApiVersion)\demo
-
-copy ..\..\..\demos\gtk-demo\*.jpg $(CopyDir)\share\gtk-$(GtkApiVersion)\demo
-
-copy ..\..\..\demos\gtk-demo\*.c $(CopyDir)\share\gtk-$(GtkApiVersion)\demo
-
-copy ..\..\..\demos\gtk-demo\*.h $(CopyDir)\share\gtk-$(GtkApiVersion)\demo
 
 
 mkdir $(CopyDir)\lib
@@ -559,6 +544,44 @@ copy ..\..\..\modules\other\gail\libgail-util\gail-util.h $(CopyDir)\include\gai
 
 copy $(Configuration)\$(Platform)\bin\*-$(GtkApiVersion).lib $(CopyDir)\lib
 
+mkdir $(CopyDir)\lib\gtk-$(GtkApiVersion)\$(GtkHost)\engines
+
+copy $(Configuration)\$(Platform)\bin\libwimp.dll $(CopyDir)\lib\gtk-$(GtkApiVersion)\$(GtkHost)\engines
+
+
+mkdir $(CopyDir)\share\gtk-$(GtkApiVersion)\demo
+
+copy ..\..\..\demos\gtk-demo\*.png $(CopyDir)\share\gtk-$(GtkApiVersion)\demo
+
+copy ..\..\..\demos\gtk-demo\*.gif $(CopyDir)\share\gtk-$(GtkApiVersion)\demo
+
+copy ..\..\..\demos\gtk-demo\*.ui $(CopyDir)\share\gtk-$(GtkApiVersion)\demo
+
+copy ..\..\..\demos\gtk-demo\*.jpg $(CopyDir)\share\gtk-$(GtkApiVersion)\demo
+
+copy ..\..\..\demos\gtk-demo\*.c $(CopyDir)\share\gtk-$(GtkApiVersion)\demo
+
+copy ..\..\..\demos\gtk-demo\*.h $(CopyDir)\share\gtk-$(GtkApiVersion)\demo
+
+mkdir $(CopyDir)\share\themes\Default\gtk-2.0-key
+
+copy ..\..\..\gtk\gtkrc.key.default $(CopyDir)\share\themes\Default\gtk-2.0-key\gtkrc
+
+
+mkdir $(CopyDir)\share\themes\Emacs\gtk-2.0-key
+
+copy ..\..\..\gtk\gtkrc.key.emacs $(CopyDir)\share\themes\Emacs\gtk-2.0-key\gtkrc
+
+
+mkdir $(CopyDir)\share\themes\MS-Windows\gtk-2.0
+
+copy ..\..\..\modules\engines\ms-windows\Theme\gtk-2.0\gtkrc $(CopyDir)\share\themes\MS-Windows\gtk-2.0
+
+
+mkdir $(CopyDir)\share\themes\Raleigh\gtk-2.0
+
+copy ..\..\..\gtk\gtkrc.default $(CopyDir)\share\themes\Raleigh\gtk-2.0\gtkrc
+
 </GtkDoInstall>
     <GtkGenerateGdkDef>echo EXPORTS &gt;"$(DefDir)\gdk.def" &amp;&amp; cl /EP -DGDK_WINDOWING_WIN32 -DALL_FILES -DG_GNUC_CONST= ..\..\..\gdk\gdk.symbols &gt;&gt;"$(DefDir)\gdk.def"</GtkGenerateGdkDef>
     <GtkGenerateGtkDefW64>echo EXPORTS &gt;"$(DefDir)\gtk.def" &amp;&amp; cl /EP -DINCLUDE_VARIABLES -DG_OS_WIN32 -D_WIN64 -DALL_FILES -DG_GNUC_MALLOC= -DG_GNUC_CONST= -DG_GNUC_NULL_TERMINATED= -DG_GNUC_PRINTF=;G_GNUC_PRINTF ..\..\..\gtk\gtk.symbols &gt;&gt;"$(DefDir)\gtk.def"</GtkGenerateGtkDefW64>
@@ -622,11 +645,11 @@ copy ..\..\..\gdk\gdkconfig.h.win32 ..\..\..\gdk\gdkconfig.h
     <BuildMacro Include="GtkDummyPrefix">
       <Value>$(GtkDummyPrefix)</Value>
     </BuildMacro>
-    <BuildMacro Include="GtkPrefixDefine">
-      <Value>$(GtkPrefixDefine)</Value>
-    </BuildMacro>
     <BuildMacro Include="GdkDefines">
       <Value>$(GdkDefines)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkHost">
+      <Value>$(GtkHost)</Value>
     </BuildMacro>
     <BuildMacro Include="GtkIncludedImmodulesDefines">
       <Value>$(GtkIncludedImmodulesDefines)</Value>
