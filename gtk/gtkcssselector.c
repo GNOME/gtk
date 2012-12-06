@@ -1991,7 +1991,7 @@ subdivide_infos (GByteArray *array, GList *infos, gint32 parent_offset)
 
   g_list_free (matched);
   g_list_free (remaining);
-  g_hash_table_free (ht);
+  g_hash_table_unref (ht);
 
   return tree_offset;
 }
