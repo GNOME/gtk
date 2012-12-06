@@ -1895,7 +1895,7 @@ alloc_tree (GByteArray *array, gint32 *offset)
 static gint32
 subdivide_infos (GByteArray *array, GList *infos, gint32 parent_offset)
 {
-  GHashTable *ht = gtk_css_selectors_count_initial_init ();
+  GHashTable *ht;
   GList *l;
   GList *matched;
   GList *remaining;
@@ -1911,6 +1911,8 @@ subdivide_infos (GByteArray *array, GList *infos, gint32 parent_offset)
 
   if (infos == NULL)
     return GTK_CSS_SELECTOR_TREE_EMPTY_OFFSET;
+
+  ht = gtk_css_selectors_count_initial_init ();
 
   for (l = infos; l != NULL; l = l->next)
     {
@@ -1989,6 +1991,7 @@ subdivide_infos (GByteArray *array, GList *infos, gint32 parent_offset)
 
   g_list_free (matched);
   g_list_free (remaining);
+  g_hash_table_free (ht);
 
   return tree_offset;
 }
