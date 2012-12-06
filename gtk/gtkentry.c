@@ -4865,8 +4865,6 @@ gtk_entry_style_updated (GtkWidget *widget)
 
   gtk_entry_update_cached_style_values (entry);
 
-  gtk_entry_recompute (entry);
-
   icon_theme_changed (entry);
 }
 
