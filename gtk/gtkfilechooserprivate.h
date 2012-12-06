@@ -175,14 +175,6 @@ struct _GtkFileChooserDefault
   /* The file browsing widgets */
   GtkWidget *browse_widgets_box;
   GtkWidget *browse_header_box;
-#if REMOVE_FOR_PLACES_SIDEBAR
-  GtkWidget *browse_shortcuts_tree_view;
-  GtkWidget *browse_shortcuts_add_button;
-  GtkWidget *browse_shortcuts_remove_button;
-  GtkWidget *browse_shortcuts_popup_menu;
-  GtkWidget *browse_shortcuts_popup_menu_remove_item;
-  GtkWidget *browse_shortcuts_popup_menu_rename_item;
-#endif
   GtkWidget *browse_files_tree_view;
   GtkWidget *browse_files_popup_menu;
   GtkWidget *browse_files_popup_menu_add_shortcut_item;
@@ -232,15 +224,6 @@ struct _GtkFileChooserDefault
   GtkWidget *location_entry;
   LocationMode location_mode;
 
-  GtkListStore *shortcuts_model;
-
-#if REMOVE_FOR_PLACES_SIDEBAR
-  /* Filter for the shortcuts pane.  We filter out the "current folder" row and
-   * the separator that we use for the "Save in folder" combo.
-   */
-  GtkTreeModel *shortcuts_pane_filter_model;
-#endif
-  
   /* Handles */
   GSList *loading_shortcuts;
   GSList *reload_icon_cancellables;
