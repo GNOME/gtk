@@ -51,6 +51,7 @@
 #include "gtkscrollable.h"
 #include "gtktypebuiltins.h"
 #include "gtktexthandleprivate.h"
+#include "gtkstylecontextprivate.h"
 
 #include "a11y/gtktextviewaccessible.h"
 
@@ -4230,6 +4231,8 @@ gtk_text_view_style_updated (GtkWidget *widget)
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
   PangoContext *ltr_context, *rtl_context;
+  GtkStyleContext *style_context;
+  const GtkBitmask *changes;
 
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
@@ -4241,7 +4244,11 @@ gtk_text_view_style_updated (GtkWidget *widget)
       gtk_text_view_set_background (text_view);
     }
 
-  if (priv->layout && priv->layout->default_style)
+
+  style_context = gtk_widget_get_style_context (widget);
+  changes = _gtk_style_context_get_changes (style_context);
+  if ((changes == NULL || _gtk_css_style_property_changes_affect_font (changes)) &&
+      priv->layout && priv->layout->default_style)
     {
       gtk_text_view_set_attributes_from_style (text_view,
                                                priv->layout->default_style);
