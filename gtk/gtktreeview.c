@@ -48,6 +48,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkentryprivate.h"
 #include "gtkstylecontextprivate.h"
+#include "gtkcssstylepropertyprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkmain.h"
 #include "gtksettings.h"

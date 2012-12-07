@@ -52,6 +52,7 @@
 #include "gtktypebuiltins.h"
 #include "gtktexthandleprivate.h"
 #include "gtkstylecontextprivate.h"
+#include "gtkcssstylepropertyprivate.h"
 
 #include "a11y/gtktextviewaccessible.h"
 
