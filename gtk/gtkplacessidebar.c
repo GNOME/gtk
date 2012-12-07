@@ -132,6 +132,8 @@ struct _GtkPlacesSidebar {
 	gboolean mounting;
 	GtkPlacesOpenMode go_to_after_mount_open_mode;
 
+	GSList *shortcuts;
+
 	GDBusProxy *hostnamed_proxy;
 	char *hostname;
 
@@ -695,6 +697,55 @@ get_desktop_directory_uri (void)
 }
 
 static void
+add_application_shortcuts (GtkPlacesSidebar *sidebar)
+{
+	GSList *l;
+
+	for (l = sidebar->shortcuts; l; l = l->next) {
+		GFile *file;
+		GFileInfo *info;
+
+		file = G_FILE (l->data);
+
+		/* FIXME: we are getting file info synchronously.  We may want to do it async at some point. */
+		info = g_file_query_info (file,
+					  "standard::display-name,standard::icon",
+					  G_FILE_QUERY_INFO_NONE,
+					  NULL,
+					  NULL); /* NULL-GError */
+
+		if (info) {
+			char *uri;
+			char *tooltip;
+			const char *name;
+			GIcon *icon;
+
+			name = g_file_info_get_display_name (info);
+
+			/* FIXME: in commit 0ed400b9c1692e42498bff3c10780073ec137f63, nautilus added the ability
+			 * to get a symbolic icon for bookmarks.  We don't have that machinery.  Should we
+			 * just copy that code?
+			 */
+			icon = g_file_info_get_icon (info);
+
+			uri = g_file_get_uri (file);
+			tooltip = g_file_get_parse_name (file);
+
+			add_place (sidebar, PLACES_BUILT_IN,
+				   SECTION_COMPUTER,
+				   name, icon, uri,
+				   NULL, NULL, NULL, 0,
+				   tooltip);
+
+			g_free (uri);
+			g_free (tooltip);
+
+			g_object_unref (info);
+		}
+	}
+}
+
+static void
 update_places (GtkPlacesSidebar *sidebar)
 {
 	GtkTreeSelection *selection;
@@ -836,6 +887,9 @@ update_places (GtkPlacesSidebar *sidebar)
 			   _("Open the trash"));
 		g_object_unref (icon);
 	}
+
+	/* Application-side shortcuts */
+	add_application_shortcuts (sidebar);
 
 	/* go through all connected drives */
 	drives = g_volume_monitor_get_connected_drives (volume_monitor);
@@ -3439,6 +3493,8 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 
 	sidebar->bookmarks_manager = _gtk_bookmarks_manager_new (bookmarks_changed_cb, sidebar);
 
+	sidebar->shortcuts = NULL;
+
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sidebar),
 					GTK_POLICY_NEVER,
 					GTK_POLICY_AUTOMATIC);
@@ -3641,6 +3697,9 @@ gtk_places_sidebar_dispose (GObject *object)
 	}
 
 	g_clear_object (&sidebar->store);
+
+	g_slist_free_full (sidebar->shortcuts, g_object_unref);
+	sidebar->shortcuts = NULL;
 
 	if (sidebar->volume_monitor != NULL) {
 		g_signal_handlers_disconnect_by_func (sidebar->volume_monitor, 
@@ -4020,4 +4079,91 @@ gtk_places_sidebar_set_accept_uri_drops (GtkPlacesSidebar *sidebar, gboolean acc
 	g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
 
 	sidebar->accept_uri_drops = !!accept_uri_drops;
+}
+
+static GSList *
+find_shortcut_link (GtkPlacesSidebar *sidebar, GFile *location)
+{
+	GSList *l;
+
+	for (l = sidebar->shortcuts; l; l = l->next) {
+		GFile *shortcut;
+
+		shortcut = G_FILE (l->data);
+		if (g_file_equal (shortcut, location))
+			return l;
+	}
+
+	return NULL;
+}
+
+gboolean
+gtk_places_sidebar_add_shortcut (GtkPlacesSidebar *sidebar, GFile *location, GError **error)
+{
+	g_return_val_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar), FALSE);
+	g_return_val_if_fail (G_IS_FILE (location), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	if (find_shortcut_link (sidebar, location)) {
+		char *uri;
+
+		uri = g_file_get_uri (location);
+		g_set_error (error,
+			     GTK_FILE_CHOOSER_ERROR,
+			     GTK_FILE_CHOOSER_ERROR_ALREADY_EXISTS,
+			     _("Shortcut %s already exists"),
+			     uri);
+		g_free (uri);
+
+		return FALSE;
+	}
+
+	g_object_ref (location);
+	sidebar->shortcuts = g_slist_append (sidebar->shortcuts, location);
+
+	update_places (sidebar);
+
+	return TRUE;
+}
+
+gboolean
+gtk_places_sidebar_remove_shortcut (GtkPlacesSidebar *sidebar, GFile *location, GError **error)
+{
+	GSList *link;
+	GFile *shortcut;
+
+	g_return_val_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar), FALSE);
+	g_return_val_if_fail (G_IS_FILE (location), FALSE);
+	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+	link = find_shortcut_link (sidebar, location);
+	if (!link) {
+		char *uri;
+
+		uri = g_file_get_uri (location);
+		g_set_error (error,
+			     GTK_FILE_CHOOSER_ERROR,
+			     GTK_FILE_CHOOSER_ERROR_NONEXISTENT,
+			     _("Shortcut %s does not exist"),
+			     uri);
+		g_free (uri);
+
+		return FALSE;
+	}
+
+	shortcut = G_FILE (link->data);
+	g_object_unref (shortcut);
+
+	sidebar->shortcuts = g_slist_delete_link (sidebar->shortcuts, link);
+	update_places (sidebar);
+
+	return TRUE;
+}
+
+GSList *
+gtk_places_sidebar_list_shortcuts (GtkPlacesSidebar *sidebar)
+{
+	g_return_val_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar), FALSE);
+
+	return g_slist_copy_deep (sidebar->shortcuts, (GCopyFunc) g_object_ref, NULL);
 }

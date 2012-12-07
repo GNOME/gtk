@@ -72,6 +72,10 @@ void gtk_places_sidebar_set_show_cwd (GtkPlacesSidebar *sidebar, gboolean show_c
 
 void gtk_places_sidebar_set_accept_uri_drops (GtkPlacesSidebar *sidebar, gboolean accept_uri_drops);
 
+gboolean gtk_places_sidebar_add_shortcut (GtkPlacesSidebar *sidebar, GFile *location, GError **error);
+gboolean gtk_places_sidebar_remove_shortcut (GtkPlacesSidebar *sidebar, GFile *location, GError **error);
+GSList *gtk_places_sidebar_list_shortcuts (GtkPlacesSidebar *sidebar);
+
 G_END_DECLS
 
 #endif /* __GTK_PLACES_SIDEBAR_H__ */
