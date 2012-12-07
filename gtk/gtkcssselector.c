@@ -1012,11 +1012,8 @@ gtk_css_selector_pseudoclass_position_print (const GtkCssSelector *selector,
 }
 
 static gboolean
-gtk_css_selector_pseudoclass_position_match_for_region (const GtkCssSelector *selector,
-                                                        const GtkCssMatcher  *matcher)
+get_selector_flags_for_position_region_match (const GtkCssSelector *selector, GtkRegionFlags *selector_flags)
 {
-  GtkRegionFlags selector_flags;
-  const GtkCssSelector *previous;
   PositionType type;
   int a, b;
 
@@ -1025,30 +1022,44 @@ gtk_css_selector_pseudoclass_position_match_for_region (const GtkCssSelector *se
     {
     case POSITION_FORWARD:
       if (a == 0 && b == 1)
-        selector_flags = GTK_REGION_FIRST;
+        *selector_flags = GTK_REGION_FIRST;
       else if (a == 2 && b == 0)
-        selector_flags = GTK_REGION_EVEN;
+        *selector_flags = GTK_REGION_EVEN;
       else if (a == 2 && b == 1)
-        selector_flags = GTK_REGION_ODD;
+        *selector_flags = GTK_REGION_ODD;
       else
         return FALSE;
       break;
     case POSITION_BACKWARD:
       if (a == 0 && b == 1)
-        selector_flags = GTK_REGION_LAST;
+        *selector_flags = GTK_REGION_LAST;
       else
         return FALSE;
       break;
     case POSITION_ONLY:
-      selector_flags = GTK_REGION_ONLY;
+      *selector_flags = GTK_REGION_ONLY;
       break;
     case POSITION_SORTED:
-      selector_flags = GTK_REGION_SORTED;
+      *selector_flags = GTK_REGION_SORTED;
       break;
     default:
       g_assert_not_reached ();
       break;
     }
+
+  return TRUE;
+}
+
+static gboolean
+gtk_css_selector_pseudoclass_position_match_for_region (const GtkCssSelector *selector,
+                                                        const GtkCssMatcher  *matcher)
+{
+  GtkRegionFlags selector_flags;
+  const GtkCssSelector *previous;
+
+  if (!get_selector_flags_for_position_region_match (selector, &selector_flags))
+      return FALSE;
+
   selector = gtk_css_selector_previous (selector);
 
   if (!_gtk_css_matcher_has_region (matcher, selector->data, selector_flags))
@@ -1063,16 +1074,11 @@ gtk_css_selector_pseudoclass_position_match_for_region (const GtkCssSelector *se
 }
 
 static gboolean
-gtk_css_selector_pseudoclass_position_match (const GtkCssSelector *selector,
-                                             const GtkCssMatcher  *matcher)
+get_position_match (const GtkCssSelector *selector,
+		    const GtkCssMatcher  *matcher)
 {
-  const GtkCssSelector *previous;
   PositionType type;
   int a, b;
-
-  previous = gtk_css_selector_previous (selector);
-  if (previous && previous->class == &GTK_CSS_SELECTOR_REGION)
-    return gtk_css_selector_pseudoclass_position_match_for_region (selector, matcher);
 
   decode_position (selector, &type, &a, &b);
   switch (type)
@@ -1097,6 +1103,22 @@ gtk_css_selector_pseudoclass_position_match (const GtkCssSelector *selector,
       return FALSE;
     }
 
+  return TRUE;
+}
+
+static gboolean
+gtk_css_selector_pseudoclass_position_match (const GtkCssSelector *selector,
+                                             const GtkCssMatcher  *matcher)
+{
+  const GtkCssSelector *previous;
+
+  previous = gtk_css_selector_previous (selector);
+  if (previous && previous->class == &GTK_CSS_SELECTOR_REGION)
+    return gtk_css_selector_pseudoclass_position_match_for_region (selector, matcher);
+
+  if (!get_position_match (selector, matcher))
+    return FALSE;
+
   return gtk_css_selector_match (previous, matcher);
 }
 
@@ -1108,38 +1130,9 @@ gtk_css_selector_pseudoclass_position_tree_match_for_region (const GtkCssSelecto
 {
   const GtkCssSelectorTree *prev2;
   GtkRegionFlags selector_flags;
-  PositionType type;
-  int a, b;
 
-  decode_position (&tree->selector, &type, &a, &b);
-  switch (type)
-    {
-    case POSITION_FORWARD:
-      if (a == 0 && b == 1)
-        selector_flags = GTK_REGION_FIRST;
-      else if (a == 2 && b == 0)
-        selector_flags = GTK_REGION_EVEN;
-      else if (a == 2 && b == 1)
-        selector_flags = GTK_REGION_ODD;
-      else
-        return;
-      break;
-    case POSITION_BACKWARD:
-      if (a == 0 && b == 1)
-        selector_flags = GTK_REGION_LAST;
-      else
-        return;
-      break;
-    case POSITION_ONLY:
-      selector_flags = GTK_REGION_ONLY;
-      break;
-    case POSITION_SORTED:
-      selector_flags = GTK_REGION_SORTED;
-      break;
-    default:
-      g_assert_not_reached ();
-      break;
-    }
+  if (!get_selector_flags_for_position_region_match (&tree->selector, &selector_flags))
+      return;
 
   if (!_gtk_css_matcher_has_region (matcher, prev->selector.data, selector_flags))
     return;
@@ -1162,8 +1155,6 @@ gtk_css_selector_pseudoclass_position_tree_match (const GtkCssSelectorTree *tree
 						  GHashTable *res)
 {
   const GtkCssSelectorTree *prev;
-  PositionType type;
-  int a, b;
 
   for (prev = gtk_css_selector_tree_get_previous (tree);
        prev != NULL;
@@ -1173,28 +1164,8 @@ gtk_css_selector_pseudoclass_position_tree_match (const GtkCssSelectorTree *tree
 	gtk_css_selector_pseudoclass_position_tree_match_for_region (tree, prev, matcher, res);
     }
 
-  decode_position (&tree->selector, &type, &a, &b);
-  switch (type)
-    {
-    case POSITION_FORWARD:
-      if (!_gtk_css_matcher_has_position (matcher, TRUE, a, b))
-	return;
-      break;
-    case POSITION_BACKWARD:
-      if (!_gtk_css_matcher_has_position (matcher, FALSE, a, b))
-	return;
-      break;
-    case POSITION_ONLY:
-      if (!_gtk_css_matcher_has_position (matcher, TRUE, 0, 1) ||
-	  !_gtk_css_matcher_has_position (matcher, FALSE, 0, 1))
-	return;
-      break;
-    case POSITION_SORTED:
-      return;
-    default:
-      g_assert_not_reached ();
-      return;
-    }
+  if (!get_position_match (&tree->selector, matcher))
+    return;
 
   gtk_css_selector_tree_found_match (tree, res);
 
