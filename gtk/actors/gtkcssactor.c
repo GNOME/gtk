@@ -21,6 +21,7 @@
 
 #include "gtkcssactorprivate.h"
 
+#include "gtkcssboxprivate.h"
 #include "gtkdebug.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
@@ -47,8 +48,7 @@ G_DEFINE_TYPE (GtkCssActor, _gtk_css_actor, GTK_TYPE_ACTOR)
 static gboolean
 gtk_css_actor_owns_context (GtkCssActor *actor)
 {
-  g_warning ("FIXME: owns context");
-  return FALSE;
+  return GTK_IS_CSS_BOX (actor);
 }
 
 static void

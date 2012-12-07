@@ -6,12 +6,14 @@ gtkactors_c_sources =			\
 	gtkactor.c			\
 	gtkbinlayout.c			\
 	gtkcssactor.c			\
+	gtkcssbox.c			\
 	gtklayoutmanager.c
 
 gtkactors_private_h_sources =		\
 	gtkactorprivate.h		\
 	gtkbinlayoutprivate.h		\
 	gtkcssactorprivate.h		\
+	gtkcssboxprivate.h		\
 	gtklayoutmanagerprivate.h
 
 libgtkactors_la_SOURCES = 		\
