@@ -1196,7 +1196,9 @@ gtk_scale_draw (GtkWidget *widget,
               gtk_style_context_save (context);
               gtk_style_context_add_class (context, GTK_STYLE_CLASS_MARK);
 
+              gtk_style_context_add_class (context, GTK_STYLE_CLASS_SEPARATOR);
               gtk_render_line (context, cr, x1, y1, x1, y2);
+              gtk_style_context_remove_class (context, GTK_STYLE_CLASS_SEPARATOR);
 
               if (mark->markup)
                 {
@@ -1247,7 +1249,9 @@ gtk_scale_draw (GtkWidget *widget,
               gtk_style_context_save (context);
               gtk_style_context_add_class (context, GTK_STYLE_CLASS_MARK);
 
+              gtk_style_context_add_class (context, GTK_STYLE_CLASS_SEPARATOR);
               gtk_render_line (context, cr, x1, y1, x2, y1);
+              gtk_style_context_remove_class (context, GTK_STYLE_CLASS_SEPARATOR);
 
               if (mark->markup)
                 {
