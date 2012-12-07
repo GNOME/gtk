@@ -42,8 +42,8 @@
     </key>
     <key name='show-hidden' type='b'>
       <default>false</default>
-      <_summary>Whether to show hidden files</_summary>
-      <_description>If set to true, then hidden files are shown by default.  Hidden files are either dotfiles, listed in the folder's .hidden file or backup files ending with a tilde (~).</_description>
+      <summary>Whether to show hidden files</summary>
+      <description>If set to true, then hidden files are shown by default.  Hidden files are either dotfiles, listed in the folder's .hidden file or backup files ending with a tilde (~).</description>
     </key>
     <key name='expand-folders' type='b'>
       <default>false</default>
