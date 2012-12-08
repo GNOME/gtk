@@ -10408,7 +10408,7 @@ gtk_widget_finalize (GObject *object)
 
   if (priv->context)
     {
-      _gtk_style_context_set_widget (priv->context, NULL);
+      _gtk_style_context_set_source (priv->context, NULL, NULL);
       g_object_unref (priv->context);
     }
 
@@ -13970,9 +13970,23 @@ gtk_widget_get_path (GtkWidget *widget)
   return widget->priv->path;
 }
 
-void
-_gtk_widget_style_context_invalidated (GtkWidget *widget)
+static GtkWidgetPath *
+gtk_widget_source_create_query_path (gpointer widget)
 {
+  return _gtk_widget_create_path (widget);
+}
+
+static const GtkWidgetPath *
+gtk_widget_source_get_path (gpointer data)
+{
+  return gtk_widget_get_path (data);
+}
+
+static void
+gtk_widget_source_invalidate (gpointer data)
+{
+  GtkWidget *widget = data;
+
   if (widget->priv->path)
     {
       gtk_widget_path_free (widget->priv->path);
@@ -13989,6 +14003,58 @@ _gtk_widget_style_context_invalidated (GtkWidget *widget)
       widget->priv->style_update_pending = TRUE;
     }
 }
+
+static void
+gtk_widget_source_queue_invalidate (gpointer widget)
+{
+  if (GTK_IS_RESIZE_CONTAINER (widget))
+    _gtk_container_queue_restyle (GTK_CONTAINER (widget));
+}
+
+static gboolean
+gtk_widget_source_should_animate (gpointer data)
+{
+  GtkWidget *widget = data;
+  gboolean animate;
+
+  if (!gtk_widget_get_mapped (widget))
+    return FALSE;
+
+  g_object_get (gtk_widget_get_settings (widget),
+                "gtk-enable-animations", &animate,
+                NULL);
+
+  return animate;
+}
+
+
+static GType
+gtk_widget_source_get_widget_type (gpointer widget)
+{
+  return G_OBJECT_TYPE (widget);
+}
+
+static void
+gtk_widget_source_no_destroy (gpointer data)
+{
+  /* The style context doesn't hold a reference to us.
+   * This is necessary to avoid reference loops.
+   * And it is not a problem because the widget will unset
+   * itself as the source before it becomes invalid.
+   */
+}
+
+static const GtkStyleContextSource gtk_widget_source = {
+  TRUE,
+  FALSE,
+  gtk_widget_source_create_query_path,
+  gtk_widget_source_get_path,
+  gtk_widget_source_invalidate,
+  gtk_widget_source_queue_invalidate,
+  gtk_widget_source_should_animate,
+  gtk_widget_source_get_widget_type,
+  gtk_widget_source_no_destroy
+};
 
 /**
  * gtk_widget_get_style_context:
@@ -14024,7 +14090,7 @@ gtk_widget_get_style_context (GtkWidget *widget)
         gtk_style_context_set_parent (priv->context,
                                       gtk_widget_get_style_context (priv->parent));
 
-      _gtk_style_context_set_widget (priv->context, widget);
+      _gtk_style_context_set_source (priv->context, &gtk_widget_source, widget);
     }
 
   return widget->priv->context;

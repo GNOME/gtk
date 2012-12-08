@@ -25,8 +25,24 @@
 
 G_BEGIN_DECLS
 
-void            _gtk_style_context_set_widget                (GtkStyleContext *context,
-                                                              GtkWidget       *widget);
+typedef struct _GtkStyleContextSource GtkStyleContextSource;
+
+struct _GtkStyleContextSource {
+  guint         internal_to_gtk    :1;
+  guint         instant_invalidate :1;
+
+  GtkWidgetPath *          (* create_query_path)             (gpointer         data);
+  const GtkWidgetPath *    (* get_path)                      (gpointer         data);
+  void                     (* invalidate)                    (gpointer         data);
+  void                     (* queue_invalidate)              (gpointer         data);
+  gboolean                 (* should_animate)                (gpointer         data);
+  GType                    (* get_widget_type)               (gpointer         data);
+  void                     (* destroy)                       (gpointer         data);
+};
+
+void            _gtk_style_context_set_source                (GtkStyleContext *context,
+                                                              const GtkStyleContextSource *source,
+                                                              gpointer         data);
 const GtkBitmask *
                 _gtk_style_context_get_changes               (GtkStyleContext *context);
 
