@@ -549,7 +549,8 @@ gtk_entry_accessible_notify_gtk (GObject    *obj,
           const gchar *name;
           name = gtk_entry_get_icon_name (gtk_entry,
                                           GTK_ENTRY_ICON_PRIMARY);
-          atk_object_set_name (priv->icons[GTK_ENTRY_ICON_PRIMARY], name);
+          if (name)
+            atk_object_set_name (priv->icons[GTK_ENTRY_ICON_PRIMARY], name);
         }
     }
   else if (g_strcmp0 (pspec->name, "secondary-icon-name") == 0)
@@ -559,7 +560,8 @@ gtk_entry_accessible_notify_gtk (GObject    *obj,
           const gchar *name;
           name = gtk_entry_get_icon_name (gtk_entry,
                                           GTK_ENTRY_ICON_SECONDARY);
-          atk_object_set_name (priv->icons[GTK_ENTRY_ICON_SECONDARY], name);
+          if (name)
+            atk_object_set_name (priv->icons[GTK_ENTRY_ICON_SECONDARY], name);
         }
     }
   else if (g_strcmp0 (pspec->name, "primary-icon-tooltip-text") == 0)
