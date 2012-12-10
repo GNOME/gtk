@@ -5624,71 +5624,9 @@ gtk_file_chooser_default_add_shortcut_folder (GtkFileChooser  *chooser,
 					      GFile           *file,
 					      GError         **error)
 {
-#if REMOVE_FOR_PLACES_SIDEBAR
-  GCancellable *cancellable;
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
-  struct AddShortcutData *data;
-  GSList *l;
-  int pos;
 
-  /* Avoid adding duplicates */
-  pos = shortcut_find_position (impl, file);
-  if (pos >= 0 && pos < shortcuts_get_index (impl, SHORTCUTS_BOOKMARKS_SEPARATOR))
-    {
-      gchar *uri;
-
-      uri = g_file_get_uri (file);
-      /* translators, "Shortcut" means "Bookmark" here */
-      g_set_error (error,
-		   GTK_FILE_CHOOSER_ERROR,
-		   GTK_FILE_CHOOSER_ERROR_ALREADY_EXISTS,
-		   _("Shortcut %s already exists"),
-		   uri);
-      g_free (uri);
-
-      return FALSE;
-    }
-
-  for (l = impl->loading_shortcuts; l; l = l->next)
-    {
-      GCancellable *c = l->data;
-      GFile *f;
-
-      f = g_object_get_data (G_OBJECT (c), "add-shortcut-path-key");
-      if (f && g_file_equal (file, f))
-        {
-	  gchar *uri;
-
-	  uri = g_file_get_uri (file);
-          g_set_error (error,
-		       GTK_FILE_CHOOSER_ERROR,
-		       GTK_FILE_CHOOSER_ERROR_ALREADY_EXISTS,
-		       _("Shortcut %s already exists"),
-		       uri);
-          g_free (uri);
-
-          return FALSE;
-	}
-    }
-
-  data = g_new0 (struct AddShortcutData, 1);
-  data->impl = g_object_ref (impl);
-  data->file = g_object_ref (file);
-
-  cancellable = _gtk_file_system_get_info (impl->file_system, file,
-					   "standard::type",
-					   add_shortcut_get_info_cb, data);
-
-  if (!cancellable)
-    return FALSE;
-
-  impl->loading_shortcuts = g_slist_append (impl->loading_shortcuts, cancellable);
-  g_object_set_data (G_OBJECT (cancellable), "add-shortcut-path-key", data->file);
-
-  return TRUE;
-#else
-  return FALSE;
-#endif
+  return gtk_places_sidebar_add_shortcut (GTK_PLACES_SIDEBAR (impl->places_sidebar), file, error);
 }
 
 static gboolean
@@ -5696,123 +5634,17 @@ gtk_file_chooser_default_remove_shortcut_folder (GtkFileChooser  *chooser,
 						 GFile           *file,
 						 GError         **error)
 {
-#if REMOVE_FOR_PLACES_SIDEBAR
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
-  int pos;
-  GtkTreeIter iter;
-  GSList *l;
-  char *uri;
-  int i;
 
-  for (l = impl->loading_shortcuts; l; l = l->next)
-    {
-      GCancellable *c = l->data;
-      GFile *f;
-
-      f = g_object_get_data (G_OBJECT (c), "add-shortcut-path-key");
-      if (f && g_file_equal (file, f))
-        {
-	  impl->loading_shortcuts = g_slist_remove (impl->loading_shortcuts, c);
-	  g_cancellable_cancel (c);
-          return TRUE;
-	}
-    }
-
-  if (impl->num_shortcuts == 0)
-    goto out;
-
-  pos = shortcuts_get_pos_for_shortcut_folder (impl, 0);
-  if (!gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (impl->shortcuts_model), &iter, NULL, pos))
-    g_assert_not_reached ();
-
-  for (i = 0; i < impl->num_shortcuts; i++)
-    {
-      gpointer col_data;
-      ShortcutType shortcut_type;
-      GFile *shortcut;
-
-      gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter,
-			  SHORTCUTS_COL_DATA, &col_data,
-			  SHORTCUTS_COL_TYPE, &shortcut_type,
-			  -1);
-      g_assert (col_data != NULL);
-      g_assert (shortcut_type == SHORTCUT_TYPE_FILE);
-
-      shortcut = col_data;
-      if (g_file_equal (shortcut, file))
-	{
-	  shortcuts_remove_rows (impl, pos + i, 1);
-	  impl->num_shortcuts--;
-	  return TRUE;
-	}
-
-      if (!gtk_tree_model_iter_next (GTK_TREE_MODEL (impl->shortcuts_model), &iter))
-	g_assert_not_reached ();
-    }
-
- out:
-
-  uri = g_file_get_uri (file);
-  /* translators, "Shortcut" means "Bookmark" here */
-  g_set_error (error,
-	       GTK_FILE_CHOOSER_ERROR,
-	       GTK_FILE_CHOOSER_ERROR_NONEXISTENT,
-	       _("Shortcut %s does not exist"),
-	       uri);
-  g_free (uri);
-
-  return FALSE;
-#else
-  return FALSE;
-#endif
+  return gtk_places_sidebar_remove_shortcut (GTK_PLACES_SIDEBAR (impl->places_sidebar), file, error);
 }
 
 static GSList *
 gtk_file_chooser_default_list_shortcut_folders (GtkFileChooser *chooser)
 {
-#if REMOVE_FOR_PLACES_SIDEBAR
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
-  int pos;
-  GtkTreeIter iter;
-  int i;
-  GSList *list;
 
-  if (impl->num_shortcuts == 0)
-    return NULL;
-
-  pos = shortcuts_get_pos_for_shortcut_folder (impl, 0);
-  if (!gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (impl->shortcuts_model), &iter, NULL, pos))
-    g_assert_not_reached ();
-
-  list = NULL;
-
-  for (i = 0; i < impl->num_shortcuts; i++)
-    {
-      gpointer col_data;
-      ShortcutType shortcut_type;
-      GFile *shortcut;
-
-      gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter,
-			  SHORTCUTS_COL_DATA, &col_data,
-			  SHORTCUTS_COL_TYPE, &shortcut_type,
-			  -1);
-      g_assert (col_data != NULL);
-      g_assert (shortcut_type == SHORTCUT_TYPE_FILE);
-
-      shortcut = col_data;
-      list = g_slist_prepend (list, g_object_ref (shortcut));
-
-      if (i != impl->num_shortcuts - 1)
-	{
-	  if (!gtk_tree_model_iter_next (GTK_TREE_MODEL (impl->shortcuts_model), &iter))
-	    g_assert_not_reached ();
-	}
-    }
-
-  return g_slist_reverse (list);
-#else
-  return NULL;
-#endif
+  return gtk_places_sidebar_list_shortcuts (GTK_PLACES_SIDEBAR (impl->places_sidebar));
 }
 
 /* Guesses a size based upon font sizes */

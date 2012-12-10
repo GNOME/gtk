@@ -41,8 +41,6 @@
  *   suggests that this logic should be part of GtkMountOperation, which can
  *   have Unix-specific code for emptying trash.
  *
- * * Add a way to implement gtk_file_chooser_add_shortcut_folder() and friends.
- *
  * * Grep for the comment containing "machinery" in this file, and copy that machinery
  *   from Nautilus - it's to get symbolic icons for everything.
  *
