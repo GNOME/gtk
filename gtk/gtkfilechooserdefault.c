@@ -1278,38 +1278,6 @@ selection_check (GtkFileChooserDefault *impl,
     *all_folders = closure.all_folders;
 }
 
-#if REMOVE_FOR_PLACES_SIDEBAR
-/* Parses a "text/uri-list" string and inserts its URIs as bookmarks */
-static void
-shortcuts_drop_uris (GtkFileChooserDefault *impl,
-		     GtkSelectionData      *selection_data,
-		     int                    position)
-{
-  gchar **uris;
-  gint i;
-
-  uris = gtk_selection_data_get_uris (selection_data);
-  if (!uris)
-    return;
-
-  for (i = 0; uris[i]; i++)
-    {
-      char *uri;
-      GFile *file;
-
-      uri = uris[i];
-      file = g_file_new_for_uri (uri);
-
-      if (shortcuts_add_bookmark_from_file (impl, file, position))
-	position++;
-
-      g_object_unref (file);
-    }
-
-  g_strfreev (uris);
-}
-#endif
-
 static void
 places_sidebar_location_selected_cb (GtkPlacesSidebar *sidebar, GFile *location, GtkPlacesOpenMode open_mode, GtkFileChooserDefault *impl)
 {
