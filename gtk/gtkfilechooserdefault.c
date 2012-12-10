@@ -7514,10 +7514,17 @@ home_folder_handler (GtkFileChooserDefault *impl)
 static void
 desktop_folder_handler (GtkFileChooserDefault *impl)
 {
-#if REMOVE_FOR_PLACES_SIDEBAR
-  if (impl->has_desktop)
-    switch_to_shortcut (impl, shortcuts_get_index (impl, SHORTCUTS_DESKTOP));
-#endif
+  const char *name;
+
+  name = g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP);
+  /* "To disable a directory, point it to the homedir."
+   * See http://freedesktop.org/wiki/Software/xdg-user-dirs
+   **/
+  if (!g_strcmp0 (name, g_get_home_dir ())) {
+    return;
+  }
+
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (impl), name);
 }
 
 /* Handler for the "search-shortcut" keybinding signal */
