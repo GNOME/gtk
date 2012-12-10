@@ -1273,12 +1273,6 @@ gtk_css_ruleset_add (GtkCssRuleset       *ruleset,
     ruleset->styles[i].section = NULL;
 }
 
-static GtkCssChange
-gtk_css_ruleset_get_change (GtkCssRuleset *ruleset)
-{
-  return _gtk_css_selector_tree_match_get_change (ruleset->selector_match);
-}
-
 static void
 gtk_css_scanner_destroy (GtkCssScanner *scanner)
 {
@@ -1441,6 +1435,49 @@ verify_tree_match_results (GtkCssProvider *provider,
 #endif
 }
 
+static void
+verify_tree_get_change_results (GtkCssProvider *provider,
+				const GtkCssMatcher *matcher,
+				GtkCssChange change)
+{
+#ifdef VERIFY_TREE
+  {
+    GtkCssChange verify_change = 0;
+    GPtrArray *tree_rules;
+    int i;
+
+    tree_rules = _gtk_css_selector_tree_match_all (provider->priv->tree, matcher);
+    verify_tree_match_results (provider, matcher, tree_rules);
+
+    for (i = tree_rules->len - 1; i >= 0; i--)
+      {
+	GtkCssRuleset *ruleset;
+
+	ruleset = tree_rules->pdata[i];
+
+	verify_change |= _gtk_css_selector_tree_match_get_change (ruleset->selector_match);
+      }
+
+    if (change != verify_change)
+      {
+	GString *s;
+
+	s = g_string_new ("");
+	g_string_append_printf (s, "expected change 0x%x, but it was 0x%x", verify_change, change);
+	if ((change & ~verify_change) != 0)
+	  g_string_append_printf (s, ", unexpectedly set: 0x%x", change & ~verify_change);
+	if ((~change & verify_change) != 0)
+	  g_string_append_printf (s, ", unexpectedly no set: 0x%x",  ~change & verify_change);
+	g_warning (s->str);
+	g_string_free (s, TRUE);
+      }
+
+    g_ptr_array_free (tree_rules, TRUE);
+  }
+#endif
+}
+
+
 static gboolean
 gtk_css_provider_get_style_property (GtkStyleProvider *provider,
                                      GtkWidgetPath    *path,
@@ -1585,29 +1622,14 @@ gtk_css_style_provider_get_change (GtkStyleProviderPrivate *provider,
 {
   GtkCssProvider *css_provider;
   GtkCssProviderPrivate *priv;
-  GtkCssChange change = 0;
-  GPtrArray *tree_rules;
-  int i;
+  GtkCssChange change;
 
   css_provider = GTK_CSS_PROVIDER (provider);
   priv = css_provider->priv;
 
-  tree_rules = _gtk_css_selector_tree_match_all (priv->tree, matcher);
-  verify_tree_match_results (css_provider, matcher, tree_rules);
+  change = _gtk_css_selector_tree_get_change_all (priv->tree, matcher);
 
-  for (i = tree_rules->len - 1; i >= 0; i--)
-    {
-      GtkCssRuleset *ruleset;
-
-      ruleset = tree_rules->pdata[i];
-
-      if (ruleset->styles == NULL)
-        continue;
-
-      change |= gtk_css_ruleset_get_change (ruleset);
-    }
-
-  g_ptr_array_free (tree_rules, TRUE);
+  verify_tree_get_change_results (css_provider, matcher, change);
 
   return change;
 }
