@@ -19,8 +19,6 @@
 
 /* TODO:
  *
- * * Fix instances of "#if REMOVE_FOR_PLACES_SIDEBAR"
- *
  * * Fix FIXME-places-sidebar
  */
 
@@ -7493,18 +7491,13 @@ desktop_folder_handler (GtkFileChooserDefault *impl)
 static void
 search_shortcut_handler (GtkFileChooserDefault *impl)
 {
-  if (impl->has_search)
-    {
-#if REMOVE_FOR_PLACES_SIDEBAR
-      switch_to_shortcut (impl, shortcuts_get_index (impl, SHORTCUTS_SEARCH));
-#endif
+  operation_mode_set (impl, OPERATION_MODE_SEARCH);
 
-      /* we want the entry widget to grab the focus the first
-       * time, not the browse_files_tree_view widget.
-       */
-      if (impl->search_entry)
-        gtk_widget_grab_focus (impl->search_entry);
-    }
+  /* we want the entry widget to grab the focus the first
+   * time, not the browse_files_tree_view widget.
+   */
+  if (impl->search_entry)
+    gtk_widget_grab_focus (impl->search_entry);
 }
 
 /* Handler for the "recent-shortcut" keybinding signal */
