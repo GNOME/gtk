@@ -221,7 +221,8 @@ _gdk_pixmap_new (GdkDrawable *drawable,
   if (depth != 15 && depth != 16)
     {
       dib_surface = cairo_win32_surface_create_with_dib (format, width, height);
-      if (dib_surface == NULL)
+      if (dib_surface == NULL ||
+	  cairo_surface_status (dib_surface) != CAIRO_STATUS_SUCCESS)
 	{
 	  g_object_unref ((GObject *) pixmap);
 	  return NULL;
@@ -234,7 +235,18 @@ _gdk_pixmap_new (GdkDrawable *drawable,
       /* Get the bitmap from the cairo hdc */
       hbitmap = GetCurrentObject (hdc, OBJ_BITMAP);
 
+      /* Cairo_win32_surface_get_image() returns NULL on failure, but
+	 this is likely an oversight and future versions will return a
+	 "nil" surface.
+       */
       image_surface = cairo_win32_surface_get_image (dib_surface);
+      if (image_surface == NULL ||
+	  cairo_surface_status (image_surface) != CAIRO_STATUS_SUCCESS)
+      {
+	cairo_surface_destroy (dib_surface);
+	g_object_unref ((GObject*) pixmap);
+	return NULL;
+      }
       bits = cairo_image_surface_get_data (image_surface);
     }
   else
