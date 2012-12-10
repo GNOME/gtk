@@ -340,6 +340,8 @@ static void search_shortcut_handler (GtkFileChooserDefault *impl);
 static void recent_shortcut_handler (GtkFileChooserDefault *impl);
 static void update_appearance       (GtkFileChooserDefault *impl);
 
+static void operation_mode_set (GtkFileChooserDefault *impl, OperationMode mode);
+
 static void set_current_filter   (GtkFileChooserDefault *impl,
 				  GtkFileFilter         *filter);
 static void check_preview_change (GtkFileChooserDefault *impl);
@@ -1278,17 +1280,23 @@ selection_check (GtkFileChooserDefault *impl,
     *all_folders = closure.all_folders;
 }
 
+static gboolean
+file_is_recent_uri (GFile *file)
+{
+  GFile *recent;
+  gboolean same;
+
+  recent = g_file_new_for_uri ("recent:///");
+  same = g_file_equal (file, recent);
+  g_object_unref (recent);
+
+  return same;
+}
+
 static void
 places_sidebar_location_selected_cb (GtkPlacesSidebar *sidebar, GFile *location, GtkPlacesOpenMode open_mode, GtkFileChooserDefault *impl)
 {
   gboolean clear_entry;
-
-  /* FIXME-places-sidebar: see shortcuts_activate_iter() for missing pieces.  In particular:
-   *
-   * * Search mode
-   *
-   * * Recent-files mode
-   */
 
   /* In the Save modes, we want to preserve what the uesr typed in the filename
    * entry, so that he may choose another folder without erasing his typed name.
@@ -1300,7 +1308,16 @@ places_sidebar_location_selected_cb (GtkPlacesSidebar *sidebar, GFile *location,
   else
     clear_entry = FALSE;
 
-  change_folder_and_display_error (impl, location, clear_entry);
+  /* FIXME-places-sidebar:
+   *
+   * GtkPlacesSidebar doesn't have a Search item anymore.  We should put that function in a toolbar-like button, like
+   * in Nautilus, and do operation_mode_set (impl, OPERATION_MODE_SEARCH);
+   */
+
+  if (file_is_recent_uri (location))
+    operation_mode_set (impl, OPERATION_MODE_RECENT);
+  else
+    change_folder_and_display_error (impl, location, clear_entry);
 }
 
 /* Callback used when the places sidebar needs us to display an error message */
@@ -3063,7 +3080,7 @@ operation_mode_set_recent (GtkFileChooserDefault *impl)
 static void
 operation_mode_set (GtkFileChooserDefault *impl, OperationMode mode)
 {
-  ShortcutsIndex shortcut_to_select;
+  GFile *file;
 
   operation_mode_stop (impl, impl->operation_mode);
 
@@ -3073,28 +3090,23 @@ operation_mode_set (GtkFileChooserDefault *impl, OperationMode mode)
     {
     case OPERATION_MODE_BROWSE:
       operation_mode_set_browse (impl);
-      shortcut_to_select = SHORTCUTS_CURRENT_FOLDER;
       break;
 
     case OPERATION_MODE_SEARCH:
       operation_mode_set_search (impl);
-      shortcut_to_select = SHORTCUTS_SEARCH;
       break;
 
     case OPERATION_MODE_RECENT:
       operation_mode_set_recent (impl);
-      shortcut_to_select = SHORTCUTS_RECENT;
+      file = g_file_new_for_uri ("recent:///");
+      gtk_places_sidebar_set_current_location (GTK_PLACES_SIDEBAR (impl->places_sidebar), file);
+      g_object_unref (file);
       break;
 
     default:
       g_assert_not_reached ();
       return;
     }
-
-#if REMOVE_FOR_PLACES_SIDEBAR
-  if (shortcut_to_select != SHORTCUTS_CURRENT_FOLDER)
-    shortcuts_select_item_without_activating (impl, shortcuts_get_index (impl, shortcut_to_select));
-#endif
 }
 
 /* This function is basically a do_all function.
@@ -3798,7 +3810,7 @@ set_startup_mode (GtkFileChooserDefault *impl)
   switch (impl->startup_mode)
     {
     case STARTUP_MODE_RECENT:
-      recent_shortcut_handler (impl);
+      operation_mode_set (impl, OPERATION_MODE_RECENT);
       break;
 
     case STARTUP_MODE_CWD:
@@ -5028,19 +5040,6 @@ out:
 }
 
 static gboolean
-file_is_recent_uri (GFile *file)
-{
-  GFile *recent;
-  gboolean same;
-
-  recent = g_file_new_for_uri ("recent:///");
-  same = g_file_equal (file, recent);
-  g_object_unref (recent);
-
-  return same;
-}
-
-static gboolean
 gtk_file_chooser_default_update_current_folder (GtkFileChooser    *chooser,
 						GFile             *file,
 						gboolean           keep_trail,
@@ -5056,8 +5055,7 @@ gtk_file_chooser_default_update_current_folder (GtkFileChooser    *chooser,
 
   operation_mode_set (impl, OPERATION_MODE_BROWSE);
 
-  if (impl->local_only && !g_file_is_native (file)
-      && !file_is_recent_uri (file)) /* GIO considers "recent:///" to be non-native; we special-case it so recent files *will* show up */
+  if (impl->local_only && !g_file_is_native (file))
     {
       g_set_error_literal (error,
                            GTK_FILE_CHOOSER_ERROR,
@@ -7529,11 +7527,7 @@ search_shortcut_handler (GtkFileChooserDefault *impl)
 static void
 recent_shortcut_handler (GtkFileChooserDefault *impl)
 {
-  GFile *recent;
-
-  recent = g_file_new_for_uri ("recent:///");
-  change_folder_and_display_error (impl, recent, FALSE);
-  g_object_unref (recent);
+  operation_mode_set (impl, OPERATION_MODE_RECENT);
 }
 
 static void
