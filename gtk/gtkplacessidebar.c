@@ -4165,3 +4165,42 @@ gtk_places_sidebar_list_shortcuts (GtkPlacesSidebar *sidebar)
 
 	return g_slist_copy_deep (sidebar->shortcuts, (GCopyFunc) g_object_ref, NULL);
 }
+
+GFile *
+gtk_places_sidebar_get_nth_bookmark (GtkPlacesSidebar *sidebar, int n)
+{
+	GtkTreeIter iter;
+	int k;
+	GFile *file;
+
+	g_return_val_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar), NULL);
+
+	file = NULL;
+
+	if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (sidebar->store), &iter)) {
+		k = 0;
+
+		do {
+			PlaceType place_type;
+			char *uri;
+
+			gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store), &iter,
+					    PLACES_SIDEBAR_COLUMN_ROW_TYPE, &place_type,
+					    PLACES_SIDEBAR_COLUMN_URI, &uri,
+					    -1);
+
+			if (place_type == PLACES_BOOKMARK) {
+				if (k == n) {
+					file = g_file_new_for_uri (uri);
+					g_free (uri);
+					break;
+				}
+
+				g_free (uri);
+				k++;
+			}
+		} while (gtk_tree_model_iter_next (GTK_TREE_MODEL (sidebar->store), &iter));
+	}
+
+	return file;
+}

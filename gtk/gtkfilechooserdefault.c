@@ -7560,24 +7560,15 @@ static void
 quick_bookmark_handler (GtkFileChooserDefault *impl,
 			gint bookmark_index)
 {
-#if REMOVE_FOR_PLACES_SIDEBAR
-  int bookmark_pos;
-  GtkTreePath *path;
+  GFile *file;
 
-  if (bookmark_index < 0 || bookmark_index >= impl->num_bookmarks)
-    return;
+  file = gtk_places_sidebar_get_nth_bookmark (GTK_PLACES_SIDEBAR (impl->places_sidebar), bookmark_index);
 
-  bookmark_pos = shortcuts_get_index (impl, SHORTCUTS_BOOKMARKS) + bookmark_index;
-
-  path = gtk_tree_path_new_from_indices (bookmark_pos, -1);
-
-  gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view),
-				path, NULL,
-				FALSE, 0.0, 0.0);
-  gtk_tree_path_free (path);
-
-  switch_to_shortcut (impl, bookmark_pos);
-#endif
+  if (file)
+    {
+      change_folder_and_display_error (impl, file, FALSE);
+      g_object_unref (file);
+    }
 }
 
 static void

@@ -76,6 +76,8 @@ gboolean gtk_places_sidebar_add_shortcut (GtkPlacesSidebar *sidebar, GFile *loca
 gboolean gtk_places_sidebar_remove_shortcut (GtkPlacesSidebar *sidebar, GFile *location, GError **error);
 GSList *gtk_places_sidebar_list_shortcuts (GtkPlacesSidebar *sidebar);
 
+GFile *gtk_places_sidebar_get_nth_bookmark (GtkPlacesSidebar *sidebar, int n);
+
 G_END_DECLS
 
 #endif /* __GTK_PLACES_SIDEBAR_H__ */
