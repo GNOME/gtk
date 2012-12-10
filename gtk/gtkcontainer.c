@@ -1471,9 +1471,8 @@ gtk_container_class_set_template_from_string (GtkContainerClass *container_class
  * Instances with an assigned template will have their children built at object
  * construct time.
  *
- * The provided xml is expected to have a <template> tag instead of <object> 
- * with id=@template_id and an extra 'parent' property specifying from which type 
- * the new class derives from.
+ * The provided xml is expected to have a <external-object> tag instead of
+ * <object> with id=@template_id.
  * 
  * Since: 3.8
  */

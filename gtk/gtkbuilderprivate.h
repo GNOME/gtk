@@ -109,7 +109,8 @@ typedef struct {
 
   GHashTable *object_ids;
 
-  GObject *template_object;
+  GObject *external_object;
+  gint in_external_object;
   gint template_level;
 } ParserData;
 

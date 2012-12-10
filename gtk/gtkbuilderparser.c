@@ -447,7 +447,8 @@ parse_object (GMarkupParseContext  *context,
           return;
         }
     }
-  else if (data->template_level && !data->template_object)
+  else if ((data->in_external_object && !data->external_object) ||
+           data->template_level)
     return;
 
   object_info = g_slice_new0 (ObjectInfo);
@@ -683,10 +684,8 @@ parse_signal (ParserData   *data,
 
 typedef struct
 {
-  const gchar *tmpl_class, *tmpl_id;
-
-  gboolean tmpl_found, done;
-  
+  const gchar *tmpl_class;
+  gboolean found, done, in_tmpl;
   GString *xml;
 } TemplateParseData;
 
@@ -705,21 +704,26 @@ extract_template_start_element (GMarkupParseContext  *context,
   
   if (g_strcmp0 (element_name, "template") == 0)
     {
-      gboolean right_class = FALSE, right_id = FALSE;
-
       for (i = 0; attribute_names[i]; i++)
         {
           if (!g_strcmp0 (attribute_names[i], "class"))
-            right_class = (g_strcmp0 (attribute_values[i], state->tmpl_class) == 0);
-	  else if (!g_strcmp0 (attribute_names[i], "id"))
-	    right_id = (g_strcmp0 (attribute_values[i], state->tmpl_id) == 0);
+            state->found = (g_strcmp0 (attribute_values[i], state->tmpl_class) == 0);
         }
 
-      if (right_class && right_id)
-        state->tmpl_found = TRUE;
+      if (state->found)
+        {
+          state->in_tmpl = TRUE;
+          g_string_append_printf (state->xml, "<external-object class=\"%s\" id=\"%s\">", 
+                                  state->tmpl_class,
+                                  state->tmpl_class);
+          return;
+        }
+      else
+        g_string_append_printf (state->xml, "<%s", element_name);
     }
+  else
+    g_string_append_printf (state->xml, "<%s", element_name);
 
-  g_string_append_printf (state->xml, "<%s", element_name);
   for (i = 0; attribute_names[i]; i++)
     {
       g_string_append_printf (state->xml, " %s=\"%s\"", 
@@ -737,10 +741,16 @@ extract_template_end_element (GMarkupParseContext *context,
   TemplateParseData *state = user_data;
 
   if (state->done) return;
-  
-  g_string_append_printf (state->xml, "</%s>", element_name);
 
-  if (g_strcmp0 (element_name, "interface") == 0 && state->tmpl_found)
+  if (g_strcmp0 (element_name, "template") == 0 && state->in_tmpl)
+    {
+      state->in_tmpl = FALSE;
+      g_string_append (state->xml, "</external-object>");
+    }
+  else
+    g_string_append_printf (state->xml, "</%s>", element_name);
+
+  if (g_strcmp0 (element_name, "interface") == 0 && state->found)
     state->done = TRUE;
 }
 
@@ -759,10 +769,10 @@ extract_template_text (GMarkupParseContext *context,
 }
 
 static gchar *
-extract_template (const gchar *buffer, const gchar *class_name, const gchar *class_id)
+extract_template (const gchar *buffer, const gchar *class_name)
 {
   GMarkupParser parser = { extract_template_start_element, extract_template_end_element, extract_template_text };
-  TemplateParseData state = { class_name, class_id, FALSE, FALSE, g_string_new ("")};
+  TemplateParseData state = { class_name, FALSE, FALSE, FALSE, g_string_new ("")};
   GMarkupParseContext *context;
 
   context = g_markup_parse_context_new (&parser,
@@ -790,20 +800,19 @@ typedef struct
 {
   GTypeInfo *info;
   gchar *tmpl;
-  gchar *id;
 } TmplClassData;
 
 static void
 composite_template_derived_class_init (gpointer g_class, gpointer class_data)
 {
   TmplClassData *data = class_data;
-  gtk_container_class_set_template_from_string (g_class, data->tmpl, data->id);
+  gtk_container_class_set_template_from_string (g_class, data->tmpl,
+                                                G_OBJECT_CLASS_NAME (g_class));
 }
 
 static GType
 create_inline_type (GType parent_type,
                     const gchar *class_name,
-                    const gchar *class_id,
                     const gchar *template_xml)
 {
   TmplClassData *tmpl;
@@ -814,8 +823,7 @@ create_inline_type (GType parent_type,
 
   tmpl = g_new0 (TmplClassData, 1);
   tmpl->info = info = g_new0 (GTypeInfo, 1);
-  tmpl->tmpl = extract_template (template_xml, class_name, class_id);
-  tmpl->id = g_strdup (class_id);
+  tmpl->tmpl = extract_template (template_xml, class_name);
 
   info->class_size = query.class_size;
   info->class_init = composite_template_derived_class_init;
@@ -834,9 +842,8 @@ parse_template (ParserData   *data,
 {
   const gchar *parent_class = NULL;
   const gchar *class_name = NULL;
-  const gchar *id = NULL;
   const GSList *l, *p;
-  GObject *parent;
+  GType parent_type;
   gint i;
 
   data->template_level++;
@@ -856,6 +863,61 @@ parse_template (ParserData   *data,
         class_name = values[i];
       else if (strcmp (names[i], "parent") == 0)
         parent_class = values[i];
+      else
+        {
+          error_invalid_attribute (data, element_name, names[i], error);
+          return;
+        }
+    }
+
+  if (!class_name)
+    {
+      error_missing_attribute (data, element_name, "class", error);
+      return;
+    }
+
+  if (!parent_class)
+    {
+      error_missing_attribute (data, element_name, "parent", error);
+      return;
+    }
+
+  if (g_type_from_name (class_name))
+    {
+      error_generic (error, GTK_BUILDER_ERROR_TEMPLATE_CLASS_MISMATCH, data,
+                     element_name, "template class '%s' already registered", class_name);
+      return;
+    }
+
+  if (!(parent_type = gtk_builder_get_type_from_name (data->builder, parent_class)))
+    {
+      error_generic (error, GTK_BUILDER_ERROR_TEMPLATE_CLASS_MISMATCH, data,
+                     element_name, "invalid parent class type found '%s'", parent_class);
+      return;
+    }
+
+  /* Generate inline type */
+  create_inline_type (parent_type, class_name, data->buffer);
+}
+
+static void
+parse_external_object (ParserData   *data,
+                       const gchar  *element_name,
+                       const gchar **names,
+                       const gchar **values,
+                       GError      **error)
+{
+  const gchar *class_name = NULL;
+  const gchar *id = NULL;
+  GObject *parent;
+  gint i;
+
+  data->in_external_object = TRUE;
+    
+  for (i = 0; names[i] != NULL; i++)
+    {
+      if (strcmp (names[i], "class") == 0)
+        class_name = values[i];
       else if (strcmp (names[i], "id") == 0)
         id = values[i];
       else
@@ -898,18 +960,9 @@ parse_template (ParserData   *data,
           return;
         }
 
-      if (parent_class && 
-          !g_type_is_a (class_type, g_type_from_name (parent_class)))
-        {
-          error_generic (error, GTK_BUILDER_ERROR_TEMPLATE_CLASS_MISMATCH, data,
-                         element_name, "class %s should derive from parent %s",
-                         class_name, parent_class);
-          return;
-        }
-
       /* push parent to build its children from the template */
       object_info = g_slice_new0 (ObjectInfo);
-      object_info->object = data->template_object = parent;
+      object_info->object = data->external_object = parent;
       object_info->object_type = parent_type;
       object_info->id = g_strdup (_gtk_builder_object_get_name (parent));
       object_info->tag.name = "object";
@@ -917,27 +970,6 @@ parse_template (ParserData   *data,
       state_push (data, object_info);
 
       parser_add_object_id (data, object_info->id, error);
-    }
-  else if (parent_class)
-    {
-      GType parent_type;
-
-      if (g_type_from_name (class_name))
-        {
-          error_generic (error, GTK_BUILDER_ERROR_TEMPLATE_CLASS_MISMATCH, data,
-                         element_name, "template class '%s' already registered", class_name);
-          return;
-        }
-
-      if (!(parent_type = gtk_builder_get_type_from_name (data->builder, parent_class)))
-        {
-          error_generic (error, GTK_BUILDER_ERROR_TEMPLATE_CLASS_MISMATCH, data,
-                         element_name, "invalid parent class type found '%s'", parent_class);
-          return;
-        }
-
-      /* Generate inline type */
-      create_inline_type (parent_type, class_name, id, data->buffer);
     }
 }
 
@@ -1188,10 +1220,13 @@ start_element (GMarkupParseContext *context,
     parse_requires (data, element_name, names, values, error);
   else if (strcmp (element_name, "template") == 0)
     parse_template (data, element_name, names, values, error);
+  else if (strcmp (element_name, "external-object") == 0)
+    parse_external_object (data, element_name, names, values, error);
   else if (strcmp (element_name, "object") == 0)
     parse_object (context, data, element_name, names, values, error);
   else if ((data->requested_objects && !data->inside_requested_object) ||
-           (data->template_level && !data->template_object))
+           (data->in_external_object && !data->external_object) ||
+           data->template_level)
     {
       /* If outside a requested object, simply ignore this tag */
       return;
@@ -1280,9 +1315,12 @@ end_element (GMarkupParseContext *context,
   else if (strcmp (element_name, "template") == 0)
     {
       data->template_level--;
-
-      /* Yes its a template! */
-      if (data->template_object)
+    }
+  else if (strcmp (element_name, "external-object") == 0)
+    {
+      data->in_external_object = FALSE;
+      
+      if (data->external_object)
         {
           ObjectInfo *object_info = state_pop_info (data, ObjectInfo);
 
@@ -1295,11 +1333,12 @@ end_element (GMarkupParseContext *context,
             _gtk_builder_add_signals (data->builder, object_info->signals);
 
           free_object_info (object_info);
-          data->template_object = NULL;
+          data->external_object = NULL;
         }
     }
   else if ((data->requested_objects && !data->inside_requested_object) ||
-           (data->template_level && !data->template_object)) 
+           (data->in_external_object && !data->external_object) ||
+           data->template_level) 
     {
       /* If outside a requested object or template, simply ignore this tag */
       return;
