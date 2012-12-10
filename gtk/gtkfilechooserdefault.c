@@ -3060,26 +3060,6 @@ operation_mode_set_recent (GtkFileChooserDefault *impl)
   recent_start_loading (impl);
 }
 
-#if REMOVE_FOR_PLACES_SIDEBAR
-/* Sometimes we need to frob the selection in the shortcuts list manually */
-static void
-shortcuts_select_item_without_activating (GtkFileChooserDefault *impl, int pos)
-{
-  GtkTreeSelection *selection;
-  GtkTreePath *path;
-
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view));
-
-  g_signal_handlers_block_by_func (selection, G_CALLBACK (shortcuts_selection_changed_cb), impl);
-
-  path = gtk_tree_path_new_from_indices (pos, -1);
-  gtk_tree_selection_select_path (selection, path);
-  gtk_tree_path_free (path);
-
-  g_signal_handlers_unblock_by_func (selection, G_CALLBACK (shortcuts_selection_changed_cb), impl);
-}
-#endif
-
 static void
 operation_mode_set (GtkFileChooserDefault *impl, OperationMode mode)
 {
