@@ -50,6 +50,8 @@ G_DEFINE_TYPE (GtkCssStyleProperty, _gtk_css_style_property, GTK_TYPE_STYLE_PROP
 static GtkBitmask *_properties_affecting_size = NULL;
 static GtkBitmask *_properties_affecting_font = NULL;
 
+static GtkCssStylePropertyClass *gtk_css_style_property_class = NULL;
+
 static void
 gtk_css_style_property_constructed (GObject *object)
 {
@@ -318,6 +320,8 @@ _gtk_css_style_property_class_init (GtkCssStylePropertyClass *klass)
 
   _properties_affecting_size = _gtk_bitmask_new ();
   _properties_affecting_font = _gtk_bitmask_new ();
+
+  gtk_css_style_property_class = klass;
 }
 
 static GtkCssValue *
@@ -347,15 +351,13 @@ _gtk_css_style_property_get_n_properties (void)
 {
   GtkCssStylePropertyClass *klass;
 
-  klass = g_type_class_peek (GTK_TYPE_CSS_STYLE_PROPERTY);
-  if (G_UNLIKELY (klass == NULL))
+  if (G_UNLIKELY (gtk_css_style_property_class == NULL))
     {
       _gtk_style_property_init_properties ();
-      klass = g_type_class_peek (GTK_TYPE_CSS_STYLE_PROPERTY);
-      g_assert (klass);
+      g_assert (gtk_css_style_property_class);
     }
 
-  return klass->style_properties->len;
+  return gtk_css_style_property_class->style_properties->len;
 }
 
 /**
@@ -371,18 +373,16 @@ _gtk_css_style_property_get_n_properties (void)
 GtkCssStyleProperty *
 _gtk_css_style_property_lookup_by_id (guint id)
 {
-  GtkCssStylePropertyClass *klass;
 
-  klass = g_type_class_peek (GTK_TYPE_CSS_STYLE_PROPERTY);
-  if (G_UNLIKELY (klass == NULL))
+  if (G_UNLIKELY (gtk_css_style_property_class == NULL))
     {
       _gtk_style_property_init_properties ();
-      klass = g_type_class_peek (GTK_TYPE_CSS_STYLE_PROPERTY);
-      g_assert (klass);
+      g_assert (gtk_css_style_property_class);
     }
-  g_return_val_if_fail (id < klass->style_properties->len, NULL);
 
-  return g_ptr_array_index (klass->style_properties, id);
+  g_return_val_if_fail (id < gtk_css_style_property_class->style_properties->len, NULL);
+
+  return g_ptr_array_index (gtk_css_style_property_class->style_properties, id);
 }
 
 /**
