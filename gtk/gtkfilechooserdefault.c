@@ -1427,14 +1427,41 @@ popup_menu_detach_cb (GtkWidget *attach_widget,
   impl->browse_files_popup_menu_copy_file_location_item = NULL;
 }
 
+/* Callback used from gtk_tree_selection_selected_foreach(); adds a bookmark for
+ * each selected item in the file list.
+ */
+static void
+add_bookmark_foreach_cb (GtkTreeModel *model,
+			 GtkTreePath  *path,
+			 GtkTreeIter  *iter,
+			 gpointer      data)
+{
+  GtkFileChooserDefault *impl;
+  GFile *file;
+
+  impl = (GtkFileChooserDefault *) data;
+
+  gtk_tree_model_get (model, iter,
+                      MODEL_COL_FILE, &file,
+                      -1);
+
+  _gtk_bookmarks_manager_insert_bookmark (impl->bookmarks_manager, file, 0, NULL); /* NULL-GError */
+
+  g_object_unref (file);
+}
+
 /* Callback used when the "Add to Bookmarks" menu item is activated */
 static void
 add_to_shortcuts_cb (GtkMenuItem           *item,
 		     GtkFileChooserDefault *impl)
 {
-#if REMOVE_FOR_PLACES_SIDEBAR
-  bookmarks_add_selected_folder (impl);
-#endif
+  GtkTreeSelection *selection;
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
+
+  gtk_tree_selection_selected_foreach (selection,
+				       add_bookmark_foreach_cb,
+				       impl);
 }
 
 /* callback used to set data to clipboard */
