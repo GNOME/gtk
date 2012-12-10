@@ -642,7 +642,7 @@ _gtk_builder_construct (GtkBuilder *builder,
 
   if (info->object)
     {
-      /* template_object */
+      /* external_object */
       obj = g_object_ref (info->object);
     }
   else if (info->constructor)
@@ -1305,36 +1305,26 @@ gtk_builder_get_translation_domain (GtkBuilder *builder)
  * other object built by builder.
  *
  * To make this function even more useful a new special entry point element
- * &lt;template&gt; is defined. It is similar to &lt;object&gt; with the only difference
- * it can only be defined as a toplevel element (that is it has to be a child of
- * &lt;interface&gt;) and its id has to reference an external object exposed with this
- * function. This way you can change properties and even add children to an
+ * &lt;external-object&gt; is defined. It is similar to &lt;object&gt; but has 
+ * to reference an external object exposed with this function.
+ * This way you can change properties and even add children to an
  * external object using builder, not just reference it.
- *
- * Returns: True if object was exposed.
  * 
  * Since: 3.8
  **/
-gboolean
+void
 gtk_builder_expose_object (GtkBuilder    *builder,
                            const gchar   *name,
                            GObject       *object)
 {
-  GtkBuilderPrivate *priv;
+  g_return_if_fail (GTK_IS_BUILDER (builder));
+  g_return_if_fail (name && name[0]);
+  g_return_if_fail (gtk_builder_get_object (builder, name) == NULL);
 
-  g_return_val_if_fail (GTK_IS_BUILDER (builder), FALSE);
-  g_return_val_if_fail (name && name[0], FALSE);
-  g_return_val_if_fail (G_IS_OBJECT (object), FALSE);
-
-  priv = builder->priv;
-
-  if (g_hash_table_contains (priv->objects, name))
-    return FALSE;
-    
   object_set_name (object, name);
-  g_hash_table_insert (priv->objects, g_strdup (name), g_object_ref (object));
-
-  return TRUE;
+  g_hash_table_insert (builder->priv->objects,
+                       g_strdup (name),
+                       g_object_ref (object));
 }
 
 
