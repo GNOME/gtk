@@ -52,8 +52,6 @@
  *
  * * Write reference docs.
  *
- * * Send a heads-up to the XFCE/Thunar people.
- *
  * * Sync nautilus commit 17a85b78acc78b573c2e1776b348ed348e19adb7
  * * Sync nautilus commit 1f307c367ddd8193a38f500e731b7ca0f9b2f98e
  * * Sync nautilus commit 1dcd2d816a1278f7eec1d074ec5d9134af34a803
