@@ -682,18 +682,74 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_ANY = {
 
 /* NAME */
 
+typedef struct {
+  GType type;
+  const char *name;
+} TypeReference;
+
+static GHashTable *type_refs_ht = NULL;
+static guint type_refs_last_serial = 0;
+
+static TypeReference *
+get_type_reference (const char *name)
+{
+  TypeReference *ref;
+
+
+  if (type_refs_ht == NULL)
+    type_refs_ht = g_hash_table_new (g_str_hash, g_str_equal);
+
+  ref = g_hash_table_lookup (type_refs_ht, name);
+
+  if (ref != NULL)
+    return ref;
+
+  ref = g_slice_new (TypeReference);
+  ref->name = g_intern_string (name);
+  ref->type = g_type_from_name (ref->name);
+
+  g_hash_table_insert (type_refs_ht,
+		       (gpointer)ref->name, ref);
+
+  return ref;
+}
+
+static void
+update_type_references (void)
+{
+  GHashTableIter iter;
+  guint serial;
+  gpointer value;
+
+  serial = g_type_get_type_registration_serial ();
+
+  if (serial == type_refs_last_serial)
+    return;
+
+  type_refs_last_serial = serial;
+
+  g_hash_table_iter_init (&iter, type_refs_ht);
+  while (g_hash_table_iter_next (&iter,
+				 NULL, &value))
+    {
+      TypeReference *ref = value;
+      if (ref->type == G_TYPE_INVALID)
+	ref->type = g_type_from_name (ref->name);
+    }
+}
+
 static void
 gtk_css_selector_name_print (const GtkCssSelector *selector,
                              GString              *string)
 {
-  g_string_append (string, selector->data);
+  g_string_append (string, ((TypeReference *)selector->data)->name);
 }
 
 static gboolean
 gtk_css_selector_name_match (const GtkCssSelector *selector,
                              const GtkCssMatcher  *matcher)
 {
-  if (!_gtk_css_matcher_has_name (matcher, selector->data))
+  if (!_gtk_css_matcher_has_type (matcher, ((TypeReference *)selector->data)->type))
     return FALSE;
 
   return gtk_css_selector_match (gtk_css_selector_previous (selector), matcher);
@@ -704,7 +760,7 @@ gtk_css_selector_name_tree_match (const GtkCssSelectorTree *tree,
 				  const GtkCssMatcher  *matcher,
 				  GHashTable *res)
 {
-  if (!_gtk_css_matcher_has_name (matcher, tree->selector.data))
+  if (!_gtk_css_matcher_has_type (matcher, ((TypeReference *)tree->selector.data)->type))
     return;
 
   gtk_css_selector_tree_found_match (tree, res);
@@ -718,7 +774,7 @@ gtk_css_selector_name_tree_get_change (const GtkCssSelectorTree *tree,
 {
   GtkCssChange change, previous_change;
 
-  if (!_gtk_css_matcher_has_name (matcher, tree->selector.data))
+  if (!_gtk_css_matcher_has_type (matcher, ((TypeReference *)tree->selector.data)->type))
     return 0;
 
   change = 0;
@@ -745,7 +801,8 @@ static int
 gtk_css_selector_name_compare_one (const GtkCssSelector *a,
 				   const GtkCssSelector *b)
 {
-  return strcmp (a->data, b->data);
+  return strcmp (((TypeReference *)a->data)->name,
+		 ((TypeReference *)b->data)->name);
 }
 
 static const GtkCssSelectorClass GTK_CSS_SELECTOR_NAME = {
@@ -1805,11 +1862,14 @@ try_parse_name (GtkCssParser   *parser,
   name = _gtk_css_parser_try_ident (parser, FALSE);
   if (name)
     {
-      selector = gtk_css_selector_new (_gtk_style_context_check_region_name (name)
-                                       ? &GTK_CSS_SELECTOR_REGION
-                                       : &GTK_CSS_SELECTOR_NAME,
-                                       selector,
-                                       g_intern_string (name));
+      if (_gtk_style_context_check_region_name (name))
+	selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_REGION,
+					 selector,
+					 g_intern_string (name));
+      else
+	selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_NAME,
+					 selector,
+					 get_type_reference (name));
       g_free (name);
     }
   else if (_gtk_css_parser_try (parser, "*", FALSE))
@@ -1916,6 +1976,8 @@ _gtk_css_selector_tree_match_get_change (const GtkCssSelectorTree *tree)
 {
   GtkCssChange change = 0;
 
+  update_type_references ();
+
   while (tree)
     {
       change = tree->selector.class->get_change (&tree->selector, change);
@@ -1946,6 +2008,8 @@ _gtk_css_selector_matches (const GtkCssSelector *selector,
 
   g_return_val_if_fail (selector != NULL, FALSE);
   g_return_val_if_fail (matcher != NULL, FALSE);
+
+  update_type_references ();
 
   return gtk_css_selector_match (selector, matcher);
 }
@@ -2084,6 +2148,8 @@ _gtk_css_selector_tree_match_all (const GtkCssSelectorTree *tree,
   GPtrArray *array;
   GHashTableIter iter;
   gpointer key;
+
+  update_type_references ();
 
   res = g_hash_table_new (g_direct_hash, g_direct_equal);
 
