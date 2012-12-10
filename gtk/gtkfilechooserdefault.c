@@ -222,22 +222,6 @@ enum {
   GTK_TREE_MODEL_ROW,
 };
 
-/* #if REMOVE_FOR_PLACES_SIDEBAR - this is used in operation_mode_set(), so don't remove it yet */
-/* Interesting places in the shortcuts bar */
-typedef enum {
-  SHORTCUTS_SEARCH,
-  SHORTCUTS_RECENT,
-  SHORTCUTS_RECENT_SEPARATOR,
-  SHORTCUTS_HOME,
-  SHORTCUTS_DESKTOP,
-  SHORTCUTS_VOLUMES,
-  SHORTCUTS_SHORTCUTS,
-  SHORTCUTS_BOOKMARKS_SEPARATOR,
-  SHORTCUTS_BOOKMARKS,
-  SHORTCUTS_CURRENT_FOLDER_SEPARATOR,
-  SHORTCUTS_CURRENT_FOLDER
-} ShortcutsIndex;
-
 /* Icon size for if we can't get it from the theme */
 #define FALLBACK_ICON_SIZE 16
 
