@@ -2715,6 +2715,56 @@ test_level_bar (void)
   g_object_unref (builder);
 }
 
+static GObject *external_object = NULL, *external_object_swapped = NULL;
+
+void
+on_button_clicked (GtkButton *button, GObject *data)
+{
+  external_object = data;
+}
+
+void
+on_button_clicked_swapped (GObject *data, GtkButton *button)
+{
+  external_object_swapped = data;
+}
+
+static void
+test_expose_object (void)
+{
+  GtkBuilder *builder;
+  GError *error = NULL;
+  GtkWidget *image;
+  GObject *obj;
+  const gchar buffer[] =
+    "<interface>"
+    "  <object class=\"GtkButton\" id=\"button\">"
+    "    <property name=\"image\">external_image</property>"
+    "    <signal name=\"clicked\" handler=\"on_button_clicked\" object=\"builder\" swapped=\"no\"/>"
+    "    <signal name=\"clicked\" handler=\"on_button_clicked_swapped\" object=\"builder\"/>"
+    "  </object>"
+    "</interface>";
+
+  image = gtk_image_new ();
+  builder = gtk_builder_new ();
+  gtk_builder_expose_object (builder, "external_image", G_OBJECT (image));
+  gtk_builder_expose_object (builder, "builder", G_OBJECT (builder));
+  gtk_builder_add_from_string (builder, buffer, -1, &error);
+  g_assert (error == NULL);
+
+  obj = gtk_builder_get_object (builder, "button");
+  g_assert (GTK_IS_BUTTON (obj));
+
+  g_assert (gtk_button_get_image (GTK_BUTTON (obj)) == image);
+
+  /* Connect signals and fake clicked event */
+  gtk_builder_connect_signals (builder, NULL);
+  gtk_button_clicked (GTK_BUTTON (obj));
+
+  g_assert (external_object == G_OBJECT (builder));
+  g_assert (external_object_swapped == G_OBJECT (builder));
+}
+
 int
 main (int argc, char **argv)
 {
@@ -2763,6 +2813,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/MessageDialog", test_message_dialog);
   g_test_add_func ("/Builder/GMenu", test_gmenu);
   g_test_add_func ("/Builder/LevelBar", test_level_bar);
+  g_test_add_func ("/Builder/Expose Object", test_expose_object);
 
   return g_test_run();
 }
