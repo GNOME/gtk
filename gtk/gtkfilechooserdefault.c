@@ -2790,6 +2790,22 @@ set_extra_widget (GtkFileChooserDefault *impl,
 }
 
 static void
+switch_to_home_dir (GtkFileChooserDefault *impl)
+{
+  const gchar *home = g_get_home_dir ();
+  GFile *home_file;
+
+  if (home == NULL)
+    return;
+
+  home_file = g_file_new_for_path (home);
+
+  gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (impl), home_file, NULL); /* NULL-GError */
+
+  g_object_unref (home_file);
+}
+
+static void
 set_local_only (GtkFileChooserDefault *impl,
 		gboolean               local_only)
 {
@@ -2807,17 +2823,7 @@ set_local_only (GtkFileChooserDefault *impl,
 	   * back to a local folder, but it's really up to the app to not cause
 	   * such a situation, so we ignore errors.
 	   */
-	  const gchar *home = g_get_home_dir ();
-	  GFile *home_file;
-
-	  if (home == NULL)
-	    return;
-
-	  home_file = g_file_new_for_path (home);
-
-	  gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (impl), home_file, NULL);
-
-	  g_object_unref (home_file);
+	  switch_to_home_dir (impl);
 	}
     }
 }
@@ -7501,10 +7507,7 @@ down_folder_handler (GtkFileChooserDefault *impl)
 static void
 home_folder_handler (GtkFileChooserDefault *impl)
 {
-#if REMOVE_FOR_PLACES_SIDEBAR
-  if (impl->has_home)
-    switch_to_shortcut (impl, shortcuts_get_index (impl, SHORTCUTS_HOME));
-#endif
+  switch_to_home_dir (impl);
 }
 
 /* Handler for the "desktop-folder" keybinding signal */
