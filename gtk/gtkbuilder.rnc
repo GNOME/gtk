@@ -1,6 +1,6 @@
 start = element interface {
   attribute domain { text } ?,
-  ( requires | object | template | menu ) *
+  ( requires | object | external-object | template | menu ) *
 }
 
 requires = element requires {
@@ -16,10 +16,16 @@ object = element object {
   (property | signal | child | ANY) *
 }
 
+object = element external-object {
+  attribute id { xsd:ID },
+  attribute class { text },
+  (property | signal | child | ANY) *
+}
+
 object = element template {
   attribute id { xsd:ID },
   attribute class { text },
-  attribute parent { text } ?,
+  attribute parent { text },
   (property | signal | child | ANY) *
 }
 
