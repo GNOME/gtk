@@ -1276,7 +1276,7 @@ file_is_recent_uri (GFile *file)
 }
 
 static void
-places_sidebar_location_selected_cb (GtkPlacesSidebar *sidebar, GFile *location, GtkPlacesOpenMode open_mode, GtkFileChooserDefault *impl)
+places_sidebar_open_location_cb (GtkPlacesSidebar *sidebar, GFile *location, GtkPlacesOpenMode open_mode, GtkFileChooserDefault *impl)
 {
   gboolean clear_entry;
 
@@ -1320,8 +1320,8 @@ shortcuts_pane_create (GtkFileChooserDefault *impl,
   impl->places_sidebar = gtk_places_sidebar_new ();
   gtk_places_sidebar_set_show_cwd (GTK_PLACES_SIDEBAR (impl->places_sidebar), TRUE);
 
-  g_signal_connect (impl->places_sidebar, "location-selected",
-		    G_CALLBACK (places_sidebar_location_selected_cb),
+  g_signal_connect (impl->places_sidebar, "open-location",
+		    G_CALLBACK (places_sidebar_open_location_cb),
 		    impl);
   g_signal_connect (impl->places_sidebar, "show-error-message",
 		    G_CALLBACK (places_sidebar_show_error_message_cb),

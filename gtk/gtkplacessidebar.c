@@ -146,7 +146,7 @@ struct _GtkPlacesSidebar {
 struct _GtkPlacesSidebarClass {
 	GtkScrolledWindowClass parent;
 
-	void (* location_selected)     (GtkPlacesSidebar *sidebar,
+	void (* open_location)         (GtkPlacesSidebar *sidebar,
 				        GFile            *location,
 				        GtkPlacesOpenMode open_mode);
 	void (* show_file_properties)  (GtkPlacesSidebar *sidebar,
@@ -203,7 +203,7 @@ typedef enum {
 } SectionType;
 
 enum {
-	LOCATION_SELECTED,
+	OPEN_LOCATION,
 	SHOW_FILE_PROPERTIES,
 	EMPTY_TRASH_REQUESTED,
 	SHOW_ERROR_MESSAGE,
@@ -299,13 +299,13 @@ static GtkListStore *shortcuts_model_new (GtkPlacesSidebar *sidebar);
 G_DEFINE_TYPE (GtkPlacesSidebar, gtk_places_sidebar, GTK_TYPE_SCROLLED_WINDOW);
 
 static void
-emit_location_selected (GtkPlacesSidebar *sidebar, GFile *location, GtkPlacesOpenMode open_mode)
+emit_open_location (GtkPlacesSidebar *sidebar, GFile *location, GtkPlacesOpenMode open_mode)
 {
 	if ((!sidebar->multiple_tabs_supported && open_mode == GTK_PLACES_OPEN_MODE_NEW_TAB)
 	    || (!sidebar->multiple_windows_supported && open_mode == GTK_PLACES_OPEN_MODE_NEW_WINDOW))
 		open_mode = GTK_PLACES_OPEN_MODE_NORMAL;
 
-	g_signal_emit (sidebar, places_sidebar_signals[LOCATION_SELECTED], 0,
+	g_signal_emit (sidebar, places_sidebar_signals[OPEN_LOCATION], 0,
 		       location, open_mode);
 }
 
@@ -1973,7 +1973,7 @@ change_location_and_notify (GtkPlacesSidebar *sidebar, GFile *location, GtkPlace
 	if (location)
 		sidebar->uri = g_file_get_uri (location);
 
-	emit_location_selected (sidebar, location, open_mode);
+	emit_open_location (sidebar, location, open_mode);
 }
 
 /* Callback from g_volume_mount() */
@@ -3741,11 +3741,11 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 
 	/* FIXME: add docstrings for the signals */
 
-	places_sidebar_signals [LOCATION_SELECTED] =
-		g_signal_new (I_("location-selected"),
+	places_sidebar_signals [OPEN_LOCATION] =
+		g_signal_new (I_("open-location"),
 			      G_OBJECT_CLASS_TYPE (gobject_class),
 			      G_SIGNAL_RUN_FIRST,
-			      G_STRUCT_OFFSET (GtkPlacesSidebarClass, location_selected),
+			      G_STRUCT_OFFSET (GtkPlacesSidebarClass, open_location),
 			      NULL, NULL,
 			      _gtk_marshal_VOID__OBJECT_ENUM,
 			      G_TYPE_NONE, 2,
