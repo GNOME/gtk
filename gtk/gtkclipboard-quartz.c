@@ -31,7 +31,7 @@
 #include "gtktextbuffer.h"
 #include "gtkselectionprivate.h"
 #include "gtkquartz.h"
-
+#include "../gdk/quartz/gdkquartz.h"
 
 enum {
   OWNER_CHANGE,
@@ -47,7 +47,7 @@ enum {
 
 typedef struct _GtkClipboardClass GtkClipboardClass;
 
-struct _GtkClipboard 
+struct _GtkClipboard
 {
   GObject parent_instance;
 
