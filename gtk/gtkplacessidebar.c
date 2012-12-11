@@ -139,7 +139,6 @@ struct _GtkPlacesSidebar {
 	guint show_properties : 1;
 	guint show_trash : 1;
 	guint trash_is_full : 1;
-	guint show_cwd : 1;
 	guint accept_uri_drops : 1;
 };
 
@@ -799,55 +798,8 @@ update_places (GtkPlacesSidebar *sidebar)
 		g_object_unref (icon);
 	}
 
-	/* compute the $HOME URI here; we'll use it when we generate the $CWD item as well as the $HOME item */
-
-	home_uri = get_home_directory_uri ();
-
-	/* cwd */
-	if (sidebar->show_cwd) {
-		char *cwd;
-		GFile *home_file;
-
-		cwd = g_get_current_dir (); 
-		root = g_file_new_for_path (cwd);
-		g_free (cwd);
-
-		home_file = g_file_new_for_uri (home_uri);
-
-		if (!g_file_equal (home_file, root)) {
-			GFileInfo *info;
-
-			info = g_file_query_info (root,
-						  "standard::display-name,standard::icon",
-						  G_FILE_QUERY_INFO_NONE,
-						  NULL,
-						  NULL); /* NULL-GError */
-
-			/* FIXME: we are getting file info synchronously.  We may want to do it async at some point. */
-			if (info) {
-				bookmark_name = g_strdup (g_file_info_get_display_name (info));
-				icon = g_file_info_get_icon (info); /* FIXME: use symbolic icon */
-				mount_uri = g_file_get_uri (root);
-				tooltip = g_file_get_parse_name (root);
-
-				add_place (sidebar, PLACES_BUILT_IN,
-					   SECTION_COMPUTER,
-					   bookmark_name, icon, mount_uri,
-					   NULL, NULL, NULL, 0,
-					   tooltip);
-
-				g_free (mount_uri);
-				g_free (tooltip);
-				g_free (bookmark_name);
-
-				g_object_unref (info);
-			}
-		}
-
-		g_object_unref (home_file);
-	}
-
 	/* home folder */
+	home_uri = get_home_directory_uri ();
 	icon = g_themed_icon_new (ICON_NAME_HOME);
 	add_place (sidebar, PLACES_BUILT_IN,
 		   SECTION_COMPUTER,
@@ -4058,15 +4010,6 @@ gtk_places_sidebar_set_trash_is_full (GtkPlacesSidebar *sidebar, gboolean is_ful
 	sidebar->trash_is_full = !!is_full;
 	update_places (sidebar);
 	check_popup_sensitivity (sidebar);
-}
-
-void
-gtk_places_sidebar_set_show_cwd (GtkPlacesSidebar *sidebar, gboolean show_cwd)
-{
-	g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
-
-	sidebar->show_cwd = !!show_cwd;
-	update_places (sidebar);
 }
 
 void

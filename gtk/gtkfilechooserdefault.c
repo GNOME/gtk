@@ -1318,7 +1318,6 @@ shortcuts_pane_create (GtkFileChooserDefault *impl,
 		       GtkSizeGroup          *size_group)
 {
   impl->places_sidebar = gtk_places_sidebar_new ();
-  gtk_places_sidebar_set_show_cwd (GTK_PLACES_SIDEBAR (impl->places_sidebar), TRUE);
 
   g_signal_connect (impl->places_sidebar, "open-location",
 		    G_CALLBACK (places_sidebar_open_location_cb),
@@ -3804,6 +3803,63 @@ set_startup_mode (GtkFileChooserDefault *impl)
     }
 }
 
+static gboolean
+shortcut_exists (GtkFileChooserDefault *impl, GFile *needle)
+{
+  GSList *haystack;
+  GSList *l;
+  gboolean exists;
+
+  exists = FALSE;
+
+  haystack = gtk_places_sidebar_list_shortcuts (GTK_PLACES_SIDEBAR (impl->places_sidebar));
+  for (l = haystack; l; l = l->next)
+    {
+      GFile *hay;
+
+      hay = G_FILE (l->data);
+      if (g_file_equal (hay, needle))
+	{
+	  exists = TRUE;
+	  break;
+	}
+    }
+  g_slist_free_full (haystack, g_object_unref);
+
+  return exists;
+}
+
+static void
+add_cwd_to_sidebar_if_needed (GtkFileChooserDefault *impl)
+{
+  char *cwd;
+  GFile *cwd_file;
+  GFile *home_file;
+
+  cwd = g_get_current_dir (); 
+  cwd_file = g_file_new_for_path (cwd);
+  g_free (cwd);
+
+  if (shortcut_exists (impl, cwd_file))
+    goto out;
+
+  home_file = g_file_new_for_path (g_get_home_dir ());
+
+  /* We only add an item for $CWD if it is different from $HOME.  This way,
+   * applications which get launched from a shell in a terminal (by someone who
+   * knows what they are doing) will get an item for $CWD in the places sidebar,
+   * and "normal" applications launched from the desktop shell (whose $CWD is
+   * $HOME) won't get any extra clutter in the sidebar.
+   */
+  if (!g_file_equal (home_file, cwd_file))
+    gtk_places_sidebar_add_shortcut (GTK_PLACES_SIDEBAR (impl->places_sidebar), cwd_file);
+
+  g_object_unref (home_file);
+
+ out:
+  g_object_unref (cwd_file);
+}
+
 /* GtkWidget::map method */
 static void
 gtk_file_chooser_default_map (GtkWidget *widget)
@@ -3817,6 +3873,8 @@ gtk_file_chooser_default_map (GtkWidget *widget)
   GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->map (widget);
 
   settings_load (impl);
+
+  add_cwd_to_sidebar_if_needed (impl);
 
   if (impl->operation_mode == OPERATION_MODE_BROWSE)
     {

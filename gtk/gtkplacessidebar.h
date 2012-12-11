@@ -68,8 +68,6 @@ void gtk_places_sidebar_set_show_properties (GtkPlacesSidebar *sidebar, gboolean
 void gtk_places_sidebar_set_show_trash (GtkPlacesSidebar *sidebar, gboolean show_trash);
 void gtk_places_sidebar_set_trash_is_full (GtkPlacesSidebar *sidebar, gboolean is_full);
 
-void gtk_places_sidebar_set_show_cwd (GtkPlacesSidebar *sidebar, gboolean show_cwd);
-
 void gtk_places_sidebar_set_accept_uri_drops (GtkPlacesSidebar *sidebar, gboolean accept_uri_drops);
 
 void gtk_places_sidebar_add_shortcut (GtkPlacesSidebar *sidebar, GFile *location);
