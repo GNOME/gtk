@@ -5,11 +5,13 @@ noinst_LTLIBRARIES = libgtkactors.la
 gtkactors_c_sources =			\
 	gtkactor.c			\
 	gtkbinlayout.c			\
+	gtkcssactor.c			\
 	gtklayoutmanager.c
 
 gtkactors_private_h_sources =		\
 	gtkactorprivate.h		\
 	gtkbinlayoutprivate.h		\
+	gtkcssactorprivate.h		\
 	gtklayoutmanagerprivate.h
 
 libgtkactors_la_SOURCES = 		\
