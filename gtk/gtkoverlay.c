@@ -423,7 +423,10 @@ gtk_overlay_realize (GtkWidget *widget)
       child = children->data;
 
       if (child->window == NULL)
-        child->window = gtk_overlay_create_child_window (overlay, child->widget);
+	{
+	  child->window = gtk_overlay_create_child_window (overlay, child->widget);
+	  gtk_overlay_child_allocate (overlay, child);
+	}
     }
 }
 
