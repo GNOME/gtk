@@ -5587,7 +5587,8 @@ gtk_file_chooser_default_add_shortcut_folder (GtkFileChooser  *chooser,
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
 
-  return gtk_places_sidebar_add_shortcut (GTK_PLACES_SIDEBAR (impl->places_sidebar), file, error);
+  gtk_places_sidebar_add_shortcut (GTK_PLACES_SIDEBAR (impl->places_sidebar), file);
+  return TRUE;
 }
 
 static gboolean
@@ -5597,7 +5598,8 @@ gtk_file_chooser_default_remove_shortcut_folder (GtkFileChooser  *chooser,
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
 
-  return gtk_places_sidebar_remove_shortcut (GTK_PLACES_SIDEBAR (impl->places_sidebar), file, error);
+  gtk_places_sidebar_remove_shortcut (GTK_PLACES_SIDEBAR (impl->places_sidebar), file);
+  return TRUE;
 }
 
 static GSList *

@@ -4093,67 +4093,36 @@ find_shortcut_link (GtkPlacesSidebar *sidebar, GFile *location)
 	return NULL;
 }
 
-gboolean
-gtk_places_sidebar_add_shortcut (GtkPlacesSidebar *sidebar, GFile *location, GError **error)
+void
+gtk_places_sidebar_add_shortcut (GtkPlacesSidebar *sidebar, GFile *location)
 {
-	g_return_val_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar), FALSE);
-	g_return_val_if_fail (G_IS_FILE (location), FALSE);
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-
-	if (find_shortcut_link (sidebar, location)) {
-		char *uri;
-
-		uri = g_file_get_uri (location);
-		g_set_error (error,
-			     GTK_FILE_CHOOSER_ERROR,
-			     GTK_FILE_CHOOSER_ERROR_ALREADY_EXISTS,
-			     _("Shortcut %s already exists"),
-			     uri);
-		g_free (uri);
-
-		return FALSE;
-	}
+	g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
+	g_return_if_fail (G_IS_FILE (location));
 
 	g_object_ref (location);
 	sidebar->shortcuts = g_slist_append (sidebar->shortcuts, location);
 
 	update_places (sidebar);
-
-	return TRUE;
 }
 
-gboolean
-gtk_places_sidebar_remove_shortcut (GtkPlacesSidebar *sidebar, GFile *location, GError **error)
+void
+gtk_places_sidebar_remove_shortcut (GtkPlacesSidebar *sidebar, GFile *location)
 {
 	GSList *link;
 	GFile *shortcut;
 
-	g_return_val_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar), FALSE);
-	g_return_val_if_fail (G_IS_FILE (location), FALSE);
-	g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+	g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
+	g_return_if_fail (G_IS_FILE (location));
 
 	link = find_shortcut_link (sidebar, location);
-	if (!link) {
-		char *uri;
-
-		uri = g_file_get_uri (location);
-		g_set_error (error,
-			     GTK_FILE_CHOOSER_ERROR,
-			     GTK_FILE_CHOOSER_ERROR_NONEXISTENT,
-			     _("Shortcut %s does not exist"),
-			     uri);
-		g_free (uri);
-
-		return FALSE;
-	}
+	if (!link)
+		return;
 
 	shortcut = G_FILE (link->data);
 	g_object_unref (shortcut);
 
 	sidebar->shortcuts = g_slist_delete_link (sidebar->shortcuts, link);
 	update_places (sidebar);
-
-	return TRUE;
 }
 
 GSList *
