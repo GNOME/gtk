@@ -13970,6 +13970,13 @@ gtk_widget_get_path (GtkWidget *widget)
   return widget->priv->path;
 }
 
+static gboolean
+gtk_widget_source_init_css_matcher (GtkCssMatcher *matcher,
+                                    gpointer       data)
+{
+  return FALSE;
+}
+
 static GtkWidgetPath *
 gtk_widget_source_create_query_path (gpointer widget)
 {
@@ -14047,6 +14054,7 @@ gtk_widget_source_no_destroy (gpointer data)
 static const GtkStyleContextSource gtk_widget_source = {
   TRUE,
   FALSE,
+  gtk_widget_source_init_css_matcher,
   gtk_widget_source_create_query_path,
   gtk_widget_source_get_path,
   gtk_widget_source_invalidate,

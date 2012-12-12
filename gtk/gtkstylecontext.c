@@ -698,10 +698,17 @@ gtk_style_context_set_cascade (GtkStyleContext *context,
     gtk_style_context_cascade_changed (cascade, context);
 }
 
+static gboolean
+default_init_css_matcher (GtkCssMatcher *matcher,
+                          gpointer       data)
+{
+  return FALSE;
+}
+
 static GtkWidgetPath *
 default_create_query_path (gpointer data)
 {
-  return gtk_widget_path_new ();
+  return NULL;
 }
 
 static const GtkWidgetPath *
@@ -731,6 +738,7 @@ default_get_widget_type (gpointer data)
 static const GtkStyleContextSource default_source = {
   FALSE,
   TRUE,
+  default_init_css_matcher,
   default_create_query_path,
   default_get_path,
   default_do_nothing,
@@ -976,6 +984,9 @@ create_query_path (GtkStyleContext *context,
 
   priv = context->priv;
   path = priv->source->create_query_path (priv->source_data);
+  if (path == NULL)
+    return NULL;
+
   pos = gtk_widget_path_length (path) - 1;
 
   /* Set widget regions */
@@ -1015,13 +1026,28 @@ build_properties (GtkStyleContext      *context,
 
   priv = context->priv;
 
-  path = create_query_path (context, info);
   lookup = _gtk_css_lookup_new (relevant_changes);
+  if (info->next == NULL &&
+      priv->source->css_matcher_init (&matcher, priv->source_data))
+    {
+      _gtk_style_provider_private_lookup (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
+                                          &matcher,
+                                          lookup);
+    }
+  else
+    {
+      path = create_query_path (context, info);
 
-  if (_gtk_css_matcher_init (&matcher, path, info->state_flags))
-    _gtk_style_provider_private_lookup (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
-                                        &matcher,
-                                        lookup);
+      if (path)
+        {
+          if (_gtk_css_matcher_init (&matcher, path, info->state_flags))
+            _gtk_style_provider_private_lookup (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
+                                                &matcher,
+                                                lookup);
+
+          gtk_widget_path_free (path);
+        }
+    }
 
   _gtk_css_lookup_resolve (lookup, 
                            GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
@@ -1029,7 +1055,6 @@ build_properties (GtkStyleContext      *context,
                            priv->parent ? style_data_lookup (priv->parent)->store : NULL);
 
   _gtk_css_lookup_free (lookup);
-  gtk_widget_path_free (path);
 }
 
 static StyleData *
@@ -1612,6 +1637,7 @@ widget_path_get_widget_type (gpointer data)
 static const GtkStyleContextSource widget_path_source = {
   FALSE,
   TRUE,
+  default_init_css_matcher,
   widget_path_create_query_path,
   widget_path_get_path,
   default_do_nothing,
@@ -2341,7 +2367,8 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
     {
       GtkWidgetPath *widget_path = priv->source->create_query_path (priv->source_data);
 
-      if (gtk_style_provider_get_style_property (GTK_STYLE_PROVIDER (priv->cascade),
+      if (widget_path &&
+          gtk_style_provider_get_style_property (GTK_STYLE_PROVIDER (priv->cascade),
                                                  widget_path,
                                                  state, pspec, &pcache->value))
         {
@@ -2390,7 +2417,8 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
           return &pcache->value;
         }
 
-      gtk_widget_path_free (widget_path);
+      if (widget_path)
+        gtk_widget_path_free (widget_path);
     }
 
   /* not supplied by any provider, revert to default */

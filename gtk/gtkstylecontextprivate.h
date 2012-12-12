@@ -31,6 +31,8 @@ struct _GtkStyleContextSource {
   guint         internal_to_gtk    :1;
   guint         instant_invalidate :1;
 
+  gboolean                 (* css_matcher_init)              (GtkCssMatcher   *matcher,
+                                                              gpointer         data);
   GtkWidgetPath *          (* create_query_path)             (gpointer         data);
   const GtkWidgetPath *    (* get_path)                      (gpointer         data);
   void                     (* invalidate)                    (gpointer         data);
