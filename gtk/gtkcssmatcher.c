@@ -422,3 +422,164 @@ _gtk_css_matcher_superset_init (GtkCssMatcher       *matcher,
   matcher->superset.relevant = relevant;
 }
 
+/* GTK_CSS_MATCHER_WIDGET_ACTOR */
+
+static gboolean
+gtk_css_matcher_actor_get_parent (GtkCssMatcher       *matcher,
+                                  const GtkCssMatcher *child)
+{
+  GtkActor *parent;
+  
+  for (parent = _gtk_actor_get_parent (child->actor.actor);
+       parent != NULL;
+       parent = _gtk_actor_get_parent (parent))
+    {
+      if (GTK_IS_CSS_BOX (parent))
+        {
+          _gtk_css_matcher_actor_init (matcher, GTK_CSS_BOX (parent));
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+static gboolean
+gtk_css_matcher_actor_get_previous (GtkCssMatcher       *matcher,
+                                    const GtkCssMatcher *next)
+{
+  GtkActor *prev;
+  
+  for (prev = _gtk_actor_get_previous_sibling (next->actor.actor);
+       prev != NULL;
+       prev = _gtk_actor_get_previous_sibling (prev))
+    {
+      if (GTK_IS_CSS_BOX (prev))
+        {
+          _gtk_css_matcher_actor_init (matcher, GTK_CSS_BOX (prev));
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+static GtkStateFlags
+gtk_css_matcher_actor_get_state (const GtkCssMatcher *matcher)
+{
+  return _gtk_css_box_get_effective_state (GTK_CSS_BOX (matcher->actor.actor));
+}
+
+static gboolean
+gtk_css_matcher_actor_has_type (const GtkCssMatcher *matcher,
+                                GType                type)
+{
+  GtkWidget *widget;
+  
+  widget = _gtk_actor_get_widget (matcher->actor.actor);
+  if (widget == NULL)
+    return FALSE;
+
+  return g_type_is_a (G_OBJECT_TYPE (widget), type);
+}
+
+static gboolean
+gtk_css_matcher_actor_has_class (const GtkCssMatcher *matcher,
+                                 GQuark               class_name)
+{
+  return _gtk_css_box_has_class (GTK_CSS_BOX (matcher->actor.actor), g_quark_to_string (class_name));
+}
+
+static gboolean
+gtk_css_matcher_actor_has_id (const GtkCssMatcher *matcher,
+                              const char          *id)
+{
+  const char *box_id;
+
+  box_id = _gtk_css_box_get_id (GTK_CSS_BOX (matcher->actor.actor));
+  if (box_id == NULL)
+    return FALSE;
+
+  return g_ascii_strcasecmp (box_id, id) == 0;
+}
+
+static gboolean
+gtk_css_matcher_actor_has_regions (const GtkCssMatcher *matcher)
+{
+  return FALSE;
+}
+
+static gboolean
+gtk_css_matcher_actor_has_region (const GtkCssMatcher *matcher,
+                                  const char          *region,
+                                  GtkRegionFlags       flags)
+{
+  return FALSE;
+}
+
+static gboolean
+gtk_css_matcher_actor_has_position (const GtkCssMatcher *matcher,
+                                    gboolean             forward,
+                                    int                  a,
+                                    int                  b)
+{
+  GtkActor *actor;
+  int x;
+
+  x = 0;
+
+  if (forward)
+    {
+      for (actor = matcher->actor.actor;
+           actor;
+           actor = _gtk_actor_get_previous_sibling (actor))
+        {
+          if (GTK_IS_CSS_BOX (actor))
+            x++;
+        }
+    }
+  else
+    {
+      for (actor = matcher->actor.actor;
+           actor;
+           actor = _gtk_actor_get_next_sibling (actor))
+        {
+          if (GTK_IS_CSS_BOX (actor))
+            x++;
+        }
+    }
+
+  x -= b;
+
+  if (a == 0)
+    return x == 0;
+
+  if (x % a)
+    return FALSE;
+
+  return x / a > 0;
+}
+
+static const GtkCssMatcherClass GTK_CSS_MATCHER_ACTOR = {
+  gtk_css_matcher_actor_get_parent,
+  gtk_css_matcher_actor_get_previous,
+  gtk_css_matcher_actor_get_state,
+  gtk_css_matcher_actor_has_type,
+  gtk_css_matcher_actor_has_class,
+  gtk_css_matcher_actor_has_id,
+  gtk_css_matcher_actor_has_regions,
+  gtk_css_matcher_actor_has_region,
+  gtk_css_matcher_actor_has_position,
+  FALSE
+};
+
+void
+_gtk_css_matcher_actor_init (GtkCssMatcher *matcher,
+                             GtkCssBox     *box)
+{
+  g_return_if_fail (matcher != NULL);
+  g_return_if_fail (GTK_IS_CSS_BOX (box));
+
+  matcher->actor.klass = &GTK_CSS_MATCHER_ACTOR;
+  matcher->actor.actor = GTK_ACTOR (box);
+}

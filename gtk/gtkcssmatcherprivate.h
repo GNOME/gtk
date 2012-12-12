@@ -21,10 +21,12 @@
 #include <gtk/gtkenums.h>
 #include <gtk/gtktypes.h>
 #include "gtk/gtkcsstypesprivate.h"
+#include "gtk/actors/gtkcssboxprivate.h"
 
 G_BEGIN_DECLS
 
 typedef union _GtkCssMatcher GtkCssMatcher;
+typedef struct _GtkCssMatcherActor GtkCssMatcherActor;
 typedef struct _GtkCssMatcherSuperset GtkCssMatcherSuperset;
 typedef struct _GtkCssMatcherWidgetPath GtkCssMatcherWidgetPath;
 typedef struct _GtkCssMatcherClass GtkCssMatcherClass;
@@ -67,10 +69,16 @@ struct _GtkCssMatcherSuperset {
   GtkCssChange              relevant;
 };
 
+struct _GtkCssMatcherActor {
+  const GtkCssMatcherClass *klass;
+  GtkActor                 *actor;
+};
+
 union _GtkCssMatcher {
   const GtkCssMatcherClass *klass;
   GtkCssMatcherWidgetPath   path;
   GtkCssMatcherSuperset     superset;
+  GtkCssMatcherActor        actor;
 };
 
 gboolean          _gtk_css_matcher_init           (GtkCssMatcher          *matcher,
@@ -80,6 +88,8 @@ void              _gtk_css_matcher_any_init       (GtkCssMatcher          *match
 void              _gtk_css_matcher_superset_init  (GtkCssMatcher          *matcher,
                                                    const GtkCssMatcher    *subset,
                                                    GtkCssChange            relevant);
+void              _gtk_css_matcher_actor_init     (GtkCssMatcher          *matcher,
+                                                   GtkCssBox              *box);
 
 
 static inline gboolean
