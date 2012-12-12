@@ -241,7 +241,6 @@ gtk_viewport_init (GtkViewport *viewport)
   gtk_widget_set_has_window (GTK_WIDGET (viewport), TRUE);
 
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (viewport), FALSE);
-  gtk_container_set_resize_mode (GTK_CONTAINER (viewport), GTK_RESIZE_QUEUE);
 
   priv->shadow_type = GTK_SHADOW_IN;
   priv->view_window = NULL;
