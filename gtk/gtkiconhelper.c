@@ -325,7 +325,10 @@ _gtk_icon_helper_ensure_pixbuf (GtkIconHelper *self,
 
     case GTK_IMAGE_STOCK:
       icon_set = gtk_style_context_lookup_icon_set (context, self->priv->stock_id);
-      ensure_pixbuf_for_icon_set (self, context, icon_set);
+      if (icon_set != NULL)
+	ensure_pixbuf_for_icon_set (self, context, icon_set);
+      else
+	pixbuf = NULL;
       break;
 
     case GTK_IMAGE_ICON_SET:
