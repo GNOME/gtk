@@ -21,6 +21,7 @@
 #define __GTK_CSS_ACTOR_PRIVATE_H__
 
 #include <gtk/actors/gtkactorprivate.h>
+#include <gtk/gtkbitmaskprivate.h>
 #include <gtk/gtkstylecontext.h>
 
 G_BEGIN_DECLS
@@ -47,6 +48,9 @@ struct _GtkCssActor
 struct _GtkCssActorClass
 {
   GtkActorClass       parent_class;
+
+  void                (* style_updated)                 (GtkCssActor            *actor,
+                                                         const GtkBitmask       *changed);
 };
 
 GType                           _gtk_css_actor_get_type                           (void) G_GNUC_CONST;

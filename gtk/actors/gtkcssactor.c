@@ -21,12 +21,17 @@
 
 #include "gtkcssactorprivate.h"
 
+#include "gtkcontainer.h"
+#include "gtkcontainerprivate.h"
 #include "gtkcssboxprivate.h"
+#include "gtkcssmatcherprivate.h"
 #include "gtkdebug.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkstylecontext.h"
+#include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
+#include "gtkwidgetprivate.h"
 
 struct _GtkCssActorPrivate {
   GtkStyleContext *context;
@@ -59,6 +64,8 @@ gtk_css_actor_finalize (GObject *object)
 
   if (priv->context)
     {
+      if (gtk_css_actor_owns_context (self))
+        _gtk_style_context_set_source (priv->context, NULL, NULL);
       g_object_unref (priv->context);
       priv->context = NULL;
     }
@@ -145,6 +152,7 @@ gtk_css_actor_set_style_context (GtkCssActor     *self,
 
   g_object_notify (G_OBJECT (self), "style-context");
 }
+
 static void 
 gtk_css_actor_real_parent_set (GtkActor *actor,
                                GtkActor *old_parent)
@@ -171,6 +179,12 @@ gtk_css_actor_real_parent_set (GtkActor *actor,
 }
 
 static void
+gtk_css_actor_real_style_updated (GtkCssActor      *actor,
+                                  const GtkBitmask *changed)
+{
+}
+
+static void
 _gtk_css_actor_class_init (GtkCssActorClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -181,6 +195,8 @@ _gtk_css_actor_class_init (GtkCssActorClass *klass)
   object_class->get_property = gtk_css_actor_get_property;
 
   actor_class->parent_set = gtk_css_actor_real_parent_set;
+
+  klass->style_updated = gtk_css_actor_real_style_updated;
 
   /**
    * GtkCssActor:style-context:
@@ -217,6 +233,146 @@ _gtk_css_actor_get_style_context (GtkCssActor *actor)
   return actor->priv->context;
 }
 
+static gboolean
+actor_needs_to_use_widget_path (GtkActor *actor)
+{
+  GtkWidget *widget, *parent;
+
+  widget = _gtk_actor_get_widget (actor);
+  if (widget == NULL)
+    return FALSE;
+
+  parent = gtk_widget_get_parent (widget);
+  if (parent == NULL)
+    return FALSE;
+
+  if (GTK_CONTAINER_GET_CLASS (parent)->get_path_for_child == 
+      GTK_CONTAINER_CLASS(g_type_class_peek (GTK_TYPE_CONTAINER))->get_path_for_child)
+    return FALSE;
+
+  return TRUE;
+}
+
+static gboolean
+gtk_css_actor_source_init_css_matcher (GtkCssMatcher *matcher,
+                                       gpointer       actor)
+{
+  if (actor_needs_to_use_widget_path (actor))
+    return FALSE;
+
+  _gtk_css_matcher_actor_init (matcher, actor);
+
+  return TRUE;
+}
+
+static GtkWidgetPath *
+gtk_css_actor_source_create_query_path (gpointer actor)
+{
+  GtkWidget *widget;
+  
+  widget = _gtk_actor_get_widget (actor);
+  if (widget == NULL)
+    return NULL;
+
+  return _gtk_widget_create_path (widget);
+}
+
+static const GtkWidgetPath *
+gtk_css_actor_source_get_path (gpointer actor)
+{
+  GtkWidget *widget;
+  
+  widget = _gtk_actor_get_widget (actor);
+  if (widget == NULL)
+    return NULL;
+
+  return gtk_widget_get_path (widget);
+}
+
+static void 
+gtk_css_actor_source_invalidate (gpointer actor)
+{
+  GtkStyleContext *context;
+  GtkActor *iter;
+
+  context = GTK_CSS_ACTOR (actor)->priv->context;
+
+  GTK_CSS_ACTOR_GET_CLASS (actor)->style_updated (actor, _gtk_style_context_get_changes (context));
+
+  for (iter = _gtk_actor_get_first_child (actor);
+       iter != NULL;
+       iter = _gtk_actor_get_next_sibling (iter))
+    {
+      if (!GTK_IS_CSS_ACTOR (iter))
+        continue;
+
+      if (gtk_css_actor_owns_context (GTK_CSS_ACTOR (iter)))
+        continue;
+
+      gtk_css_actor_source_invalidate (iter);
+    }
+}
+
+static void 
+gtk_css_actor_source_queue_invalidate (gpointer actor)
+{
+  GtkWidget *widget;
+
+  widget = _gtk_actor_get_widget (actor);
+
+  if (GTK_IS_RESIZE_CONTAINER (widget))
+    _gtk_container_queue_restyle (GTK_CONTAINER (widget));
+}
+
+static gboolean
+gtk_css_actor_source_should_animate (gpointer actor)
+{
+  if (!_gtk_actor_get_mapped (actor))
+    return FALSE;
+
+#if 0
+  gboolean animate;
+
+  g_object_get (gtk_widget_get_settings (widget),
+                "gtk-enable-animations", &animate,
+                NULL);
+
+  return animate;
+#endif
+
+  return TRUE;
+}
+
+static GType
+gtk_css_actor_source_get_widget_type (gpointer actor)
+{
+  GtkWidget *widget;
+  
+  widget = _gtk_actor_get_widget (actor);
+  if (widget == NULL)
+    return G_TYPE_INVALID;
+
+  return G_OBJECT_TYPE (widget);
+}
+
+static void 
+gtk_css_actor_source_destroy (gpointer actor)
+{
+}
+
+static const GtkStyleContextSource gtk_css_actor_source = {
+  TRUE,
+  FALSE,
+  gtk_css_actor_source_init_css_matcher,
+  gtk_css_actor_source_create_query_path,
+  gtk_css_actor_source_get_path,
+  gtk_css_actor_source_invalidate,
+  gtk_css_actor_source_queue_invalidate,
+  gtk_css_actor_source_should_animate,
+  gtk_css_actor_source_get_widget_type,
+  gtk_css_actor_source_destroy
+};
+
 void
 _gtk_css_actor_init_box (GtkCssActor *self)
 {
@@ -225,6 +381,6 @@ _gtk_css_actor_init_box (GtkCssActor *self)
 
   priv->context = gtk_style_context_new ();
   gtk_style_context_set_screen (priv->context, _gtk_actor_get_screen (actor));
-  //_gtk_style_context_set_actor (priv->context, actor);
+  _gtk_style_context_set_source (priv->context, &gtk_css_actor_source, actor);
 }
 

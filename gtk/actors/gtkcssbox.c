@@ -23,6 +23,7 @@
 
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
+#include "gtkcssstylepropertyprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkdebug.h"
 #include "gtkintl.h"
@@ -474,10 +475,21 @@ gtk_css_box_real_draw (GtkActor *actor,
 }
 
 static void
+gtk_css_box_real_style_updated (GtkCssActor      *actor,
+                                const GtkBitmask *changes)
+{
+  if (_gtk_css_style_property_changes_affect_size (changes))
+    _gtk_actor_queue_relayout (GTK_ACTOR (actor));
+  else
+    _gtk_actor_queue_redraw (GTK_ACTOR (actor));
+}
+
+static void
 _gtk_css_box_class_init (GtkCssBoxClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkActorClass *actor_class = GTK_ACTOR_CLASS (klass);
+  GtkCssActorClass *css_actor_class = GTK_CSS_ACTOR_CLASS (klass);
 
   object_class->finalize = gtk_css_box_finalize;
   object_class->set_property = gtk_css_box_set_property;
@@ -491,6 +503,8 @@ _gtk_css_box_class_init (GtkCssBoxClass *klass)
   actor_class->parent_set = gtk_css_box_real_parent_set;
   actor_class->get_preferred_size = gtk_css_box_real_get_preferred_size;
   actor_class->allocate = gtk_css_box_real_allocate;
+
+  css_actor_class->style_updated = gtk_css_box_real_style_updated;
 
   /**
    * GtkCssBox:state:
