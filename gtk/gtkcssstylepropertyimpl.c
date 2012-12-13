@@ -805,6 +805,15 @@ border_image_width_parse (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+minmax_parse (GtkCssStyleProperty *property,
+              GtkCssParser        *parser)
+{
+  return _gtk_css_number_value_parse (parser,
+                                      GTK_CSS_PARSE_LENGTH
+                                      | GTK_CSS_POSITIVE_ONLY);
+}
+
+static GtkCssValue *
 transition_property_parse_one (GtkCssParser *parser)
 {
   GtkCssValue *value;
@@ -1528,6 +1537,25 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           _gtk_css_transform_value_new_none ());
+
+  gtk_css_style_property_register        ("min-width",
+                                          GTK_CSS_PROPERTY_MIN_WIDTH,
+                                          G_TYPE_NONE,
+                                          GTK_STYLE_PROPERTY_ANIMATED,
+                                          GTK_CSS_AFFECTS_SIZE,
+                                          minmax_parse,
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_number_value_new (0, GTK_CSS_PX));
+  gtk_css_style_property_register        ("min-height",
+                                          GTK_CSS_PROPERTY_MIN_HEIGHT,
+                                          G_TYPE_NONE,
+                                          GTK_STYLE_PROPERTY_ANIMATED,
+                                          GTK_CSS_AFFECTS_SIZE,
+                                          minmax_parse,
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_number_value_new (0, GTK_CSS_PX));
 
   gtk_css_style_property_register        ("transition-property",
                                           GTK_CSS_PROPERTY_TRANSITION_PROPERTY,

@@ -114,7 +114,7 @@ gtk_css_node_get_preferred_size (GtkCssNode         *cssnode,
 {
   GtkCssStyle *style;
   GtkBorder border, padding;
-  int extra_size, extra_opposite, extra_baseline;
+  int min_size, extra_size, extra_opposite, extra_baseline;
 
   if (!get_content_size_func)
     get_content_size_func = get_content_size_func_default;
@@ -126,12 +126,14 @@ gtk_css_node_get_preferred_size (GtkCssNode         *cssnode,
       extra_size = border.left + border.right + padding.left + padding.right;
       extra_opposite = border.top + border.bottom + padding.top + padding.bottom;
       extra_baseline = border.left + padding.left;
+      min_size = get_number (style, GTK_CSS_PROPERTY_MIN_WIDTH);
     }
   else
     {
       extra_size = border.top + border.bottom + padding.top + padding.bottom;
       extra_opposite = border.left + border.right + padding.left + padding.right;
       extra_baseline = border.top + padding.top;
+      min_size = get_number (style, GTK_CSS_PROPERTY_MIN_HEIGHT);
     }
 
   if (for_size > -1)
@@ -148,6 +150,11 @@ gtk_css_node_get_preferred_size (GtkCssNode         *cssnode,
                          minimum, natural,
                          minimum_baseline, natural_baseline,
                          get_content_size_data);
+
+  g_warn_if_fail (*minimum <= *natural);
+
+  *minimum = MAX (min_size, *minimum);
+  *natural = MAX (min_size, *natural);
 
   *minimum += extra_size;
   *natural += extra_size;
