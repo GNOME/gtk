@@ -713,6 +713,15 @@ border_image_width_parse (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+minmax_parse (GtkCssStyleProperty *property,
+              GtkCssParser        *parser)
+{
+  return _gtk_css_number_value_parse (parser,
+                                      GTK_CSS_PARSE_LENGTH
+                                      | GTK_CSS_POSITIVE_ONLY);
+}
+
+static GtkCssValue *
 transition_property_parse_one (GtkCssParser *parser)
 {
   GtkCssValue *value;
@@ -1282,6 +1291,41 @@ _gtk_css_style_property_init_properties (void)
                                                                      _gtk_css_number_value_new (1, GTK_CSS_NUMBER),
                                                                      _gtk_css_number_value_new (1, GTK_CSS_NUMBER),
                                                                      _gtk_css_number_value_new (1, GTK_CSS_NUMBER)));
+
+  gtk_css_style_property_register        ("min-width",
+                                          GTK_CSS_PROPERTY_MIN_WIDTH,
+                                          G_TYPE_NONE,
+                                          GTK_STYLE_PROPERTY_ANIMATED,
+                                          minmax_parse,
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_number_value_new (0, GTK_CSS_PX));
+  gtk_css_style_property_register        ("max-width",
+                                          GTK_CSS_PROPERTY_MAX_WIDTH,
+                                          G_TYPE_NONE,
+                                          GTK_STYLE_PROPERTY_ANIMATED,
+                                          minmax_parse,
+                                          NULL,
+                                          NULL,
+                                          /* XXX: Should be 'none' */
+                                          _gtk_css_number_value_new (G_MAXDOUBLE, GTK_CSS_PX));
+  gtk_css_style_property_register        ("min-height",
+                                          GTK_CSS_PROPERTY_MIN_HEIGHT,
+                                          G_TYPE_NONE,
+                                          GTK_STYLE_PROPERTY_ANIMATED,
+                                          minmax_parse,
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_number_value_new (0, GTK_CSS_PX));
+  gtk_css_style_property_register        ("max-height",
+                                          GTK_CSS_PROPERTY_MAX_HEIGHT,
+                                          G_TYPE_NONE,
+                                          GTK_STYLE_PROPERTY_ANIMATED,
+                                          minmax_parse,
+                                          NULL,
+                                          NULL,
+                                          /* XXX: Should be 'none' */
+                                          _gtk_css_number_value_new (G_MAXDOUBLE, GTK_CSS_PX));
 
   gtk_css_style_property_register        ("transition-property",
                                           GTK_CSS_PROPERTY_TRANSITION_PROPERTY,
