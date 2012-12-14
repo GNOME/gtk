@@ -1555,7 +1555,7 @@ gtk_main_do_event (GdkEvent *event)
    * This is the key to implementing modality.
    */
   if (!grab_widget ||
-      (gtk_widget_is_sensitive (event_widget) &&
+      ((gtk_widget_is_sensitive (event_widget) || event->type == GDK_SCROLL) &&
        gtk_widget_is_ancestor (event_widget, grab_widget)))
     grab_widget = event_widget;
 
