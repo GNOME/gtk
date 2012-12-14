@@ -474,6 +474,12 @@ gtk_widget_accessible_notify_gtk (GObject    *obj,
      * focus changes so we ignore this.
      */
     return;
+  else if (g_strcmp0 (pspec->name, "tooltip-text") == 0)
+    {
+      gtk_widget_accessible_update_tooltip (GTK_WIDGET_ACCESSIBLE (atk_obj),
+                                            widget);
+      return;
+    }
   else if (g_strcmp0 (pspec->name, "visible") == 0)
     {
       state = ATK_STATE_VISIBLE;
@@ -493,11 +499,6 @@ gtk_widget_accessible_notify_gtk (GObject    *obj,
 
       state = ATK_STATE_HORIZONTAL;
       value = (gtk_orientable_get_orientation (orientable) == GTK_ORIENTATION_HORIZONTAL);
-    }
-  else if (g_strcmp0 (pspec->name, "tooltip-text") == 0)
-    {
-      gtk_widget_accessible_update_tooltip (GTK_WIDGET_ACCESSIBLE (atk_obj),
-                                            widget);
     }
   else
     return;
