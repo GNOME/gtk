@@ -148,6 +148,9 @@ struct _GtkPlacesSidebarClass {
 	void (* open_location)         (GtkPlacesSidebar *sidebar,
 				        GFile            *location,
 				        GtkPlacesOpenMode open_mode);
+	void (* populate_popup)        (GtkPlacesSidebar *sidebar,
+					GtkMenu          *menu,
+					GFile            *selected_item);
 	void (* show_file_properties)  (GtkPlacesSidebar *sidebar,
 					GFile            *file);
 	void (* empty_trash_requested) (GtkPlacesSidebar *sidebar);
@@ -203,6 +206,7 @@ typedef enum {
 
 enum {
 	OPEN_LOCATION,
+	POPULATE_POPUP,
 	SHOW_FILE_PROPERTIES,
 	EMPTY_TRASH_REQUESTED,
 	SHOW_ERROR_MESSAGE,
@@ -306,6 +310,13 @@ emit_open_location (GtkPlacesSidebar *sidebar, GFile *location, GtkPlacesOpenMod
 
 	g_signal_emit (sidebar, places_sidebar_signals[OPEN_LOCATION], 0,
 		       location, open_mode);
+}
+
+static void
+emit_populate_popup (GtkPlacesSidebar *sidebar, GtkMenu *menu, GFile *selected_item)
+{
+	g_signal_emit (sidebar, places_sidebar_signals[POPULATE_POPUP], 0,
+		       menu, selected_item);
 }
 
 static void
@@ -3703,6 +3714,17 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 			      G_TYPE_NONE, 2,
 			      G_TYPE_OBJECT,
 			      GTK_TYPE_PLACES_OPEN_MODE);
+
+	places_sidebar_signals [POPULATE_POPUP] =
+		g_signal_new (I_("populate-popup"),
+			      G_OBJECT_CLASS_TYPE (gobject_class),
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (GtkPlacesSidebarClass, populate_popup),
+			      NULL, NULL,
+			      _gtk_marshal_VOID__OBJECT_OBJECT,
+			      G_TYPE_NONE, 2,
+			      G_TYPE_OBJECT,
+			      G_TYPE_OBJECT);
 
 	places_sidebar_signals [SHOW_FILE_PROPERTIES] =
 		g_signal_new (I_("show-file-properties"),
