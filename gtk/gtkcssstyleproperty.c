@@ -349,8 +349,6 @@ _gtk_css_style_property_init (GtkCssStyleProperty *property)
 guint
 _gtk_css_style_property_get_n_properties (void)
 {
-  GtkCssStylePropertyClass *klass;
-
   if (G_UNLIKELY (gtk_css_style_property_class == NULL))
     {
       _gtk_style_property_init_properties ();
