@@ -1,3 +1,35 @@
+Overview of Changes in GTK+ 3.6.3
+=================================
+
+* The Wayland backend works with Wayland 1.0.0 now
+
+* Bug fixes:
+ 132333 Can't add a palette to the dialog of a color button
+ 371034 Doc for gtk_file_chooser_get_filename: Is the resulting...
+ 548793 funny pattern for iterating GtkTreeModel
+ 577806 gtk_file_chooser_add_shortcut_folder adds duplicates of...
+ 626499 GtkClipboard unnotified on change of OS X pasteboard owner
+ 668239 texts disappear when notebook switch page at zh_CN locate!
+ 672193 windows (including menus) shown multiple times don't ge...
+ 677339 GTK+ 3 documentation wrong about GtkWidget scroll-event...
+ 683072 Print dialog shows cryptic status message and displays ...
+ 687065 InstallableOptions is not filtered in cups backend
+ 687816 GtkTreeView does not draw correctly since commit aaedc7b6
+ 688710 [PATCH] Splash screens shouldn't stay on top of all app...
+ 688884 Typo in gtk_tree_view_set_tooltip_column documentation
+ 689235 Broken function declarations corrupt the stack on windows
+ 690266 Freeze with F10/Shift-F10 on submenus
+        Win32: Avoid infinite recursion in the ime input module
+        Quartz: Fixes for splashscreen and tooltip windows
+
+* Translation updates:
+ Dutch
+ German
+ Gujarati
+ Tamil
+ Uyghur
+
+
 Overview of Changes in GTK+ 3.6.2
 =================================
 
