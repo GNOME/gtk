@@ -62,7 +62,7 @@
  *    * Open in new tab
  *    * Open in new window
  *    * Empty trash
- *    * Properties
+ *    * Properties - only if g_file_is_native (location);
  */
 
 #include "config.h"
@@ -127,7 +127,6 @@ struct _GtkPlacesSidebar {
 	char *hostname;
 
 	guint show_desktop : 1;
-	guint show_properties : 1;
 	guint show_trash : 1;
 	guint trash_is_full : 1;
 	guint accept_uri_drops : 1;
@@ -142,8 +141,6 @@ struct _GtkPlacesSidebarClass {
 	void (* populate_popup)        (GtkPlacesSidebar *sidebar,
 					GtkMenu          *menu,
 					GFile            *selected_item);
-	void (* show_file_properties)  (GtkPlacesSidebar *sidebar,
-					GFile            *file);
 	void (* show_error_message)    (GtkPlacesSidebar *sidebar,
 				        const char       *primary,
 				        const char       *secondary);
@@ -197,7 +194,6 @@ typedef enum {
 enum {
 	OPEN_LOCATION,
 	POPULATE_POPUP,
-	SHOW_FILE_PROPERTIES,
 	SHOW_ERROR_MESSAGE,
 	DRAG_ACTION_REQUESTED,
 	DRAG_ACTION_ASK,
@@ -300,13 +296,6 @@ emit_populate_popup (GtkPlacesSidebar *sidebar, GtkMenu *menu, GFile *selected_i
 {
 	g_signal_emit (sidebar, places_sidebar_signals[POPULATE_POPUP], 0,
 		       menu, selected_item);
-}
-
-static void
-emit_show_file_properties (GtkPlacesSidebar *sidebar, GFile *file)
-{
-	g_signal_emit (sidebar, places_sidebar_signals[SHOW_FILE_PROPERTIES], 0,
-		       file);
 }
 
 static void
@@ -1759,8 +1748,6 @@ typedef struct {
 	GtkWidget *rescan_item;
 	GtkWidget *start_item;
 	GtkWidget *stop_item;
-	GtkWidget *properties_separator_item;
-	GtkWidget *properties_item;
 } PopupMenuData;
 
 static void
@@ -1771,14 +1758,12 @@ check_popup_sensitivity (GtkPlacesSidebar *sidebar, PopupMenuData *data)
 	GDrive *drive = NULL;
 	GVolume *volume = NULL;
 	GMount *mount = NULL;
-	GFile *location;
 	gboolean show_mount;
 	gboolean show_unmount;
 	gboolean show_eject;
 	gboolean show_rescan;
 	gboolean show_start;
 	gboolean show_stop;
-	gboolean show_properties;
 	char *uri = NULL;
 
 	type = PLACES_BUILT_IN;
@@ -1801,16 +1786,10 @@ check_popup_sensitivity (GtkPlacesSidebar *sidebar, PopupMenuData *data)
  	check_visibility (mount, volume, drive,
  			  &show_mount, &show_unmount, &show_eject, &show_rescan, &show_start, &show_stop);
 
-	/* Only show properties for local mounts */
-	if (sidebar->show_properties) {
-		show_properties = (mount != NULL);
-		if (mount != NULL) {
-			location = g_mount_get_default_location (mount);
-			show_properties = g_file_is_native (location);
-			g_object_unref (location);
-		}
-	} else
-		show_properties = FALSE;
+	/* For mounts,
+	 *
+	 * location = g_mount_get_default_location (mount);
+	 */
 
 	gtk_widget_set_visible (data->separator_item, show_mount || show_unmount || show_eject);
 	gtk_widget_set_visible (data->mount_item, show_mount);
@@ -1819,8 +1798,6 @@ check_popup_sensitivity (GtkPlacesSidebar *sidebar, PopupMenuData *data)
 	gtk_widget_set_visible (data->rescan_item, show_rescan);
 	gtk_widget_set_visible (data->start_item, show_start);
 	gtk_widget_set_visible (data->stop_item, show_stop);
-	gtk_widget_set_visible (data->properties_separator_item, show_properties);
-	gtk_widget_set_visible (data->properties_item, show_properties);
 
 	/* Adjust start/stop items to reflect the type of the drive */
 	gtk_menu_item_set_label (GTK_MENU_ITEM (data->start_item), _("_Start"));
@@ -2679,39 +2656,6 @@ find_next_row (GtkPlacesSidebar *sidebar, GtkTreeIter *iter)
 	return find_prev_or_next_row (sidebar, iter, FALSE);
 }
 
-static void
-properties_cb (GtkMenuItem      *item,
-	       GtkPlacesSidebar *sidebar)
-{
-	GtkTreeModel *model;
-	GtkTreePath *path = NULL;
-	GtkTreeIter iter;
-	char *uri;
-
-	model = gtk_tree_view_get_model (sidebar->tree_view);
-	gtk_tree_view_get_cursor (sidebar->tree_view, &path, NULL);
-
-	if (path == NULL || !gtk_tree_model_get_iter (model, &iter, path)) {
-		gtk_tree_path_free (path);
-		return;
-	}
-
-	gtk_tree_model_get (model, &iter, PLACES_SIDEBAR_COLUMN_URI, &uri, -1);
-
-	if (uri != NULL) {
-		GFile *file;
-
-		file = g_file_new_for_uri (uri);
-
-		emit_show_file_properties (sidebar, file);
-
-		g_object_unref (file);
-		g_free (uri);
-	}
-
-	gtk_tree_path_free (path);
-}
-
 static gboolean
 gtk_places_sidebar_focus (GtkWidget *widget,
 		          GtkDirectionType direction)
@@ -2909,17 +2853,6 @@ bookmarks_build_popup_menu (GtkPlacesSidebar *sidebar)
 	menu_data.stop_item = item;
 	g_signal_connect (item, "activate",
 			  G_CALLBACK (stop_shortcut_cb), sidebar);
-	gtk_widget_show (item);
-	gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
-
-	/* Properties menu item */
-
-	menu_data.properties_separator_item = GTK_WIDGET (append_menu_separator (GTK_MENU (sidebar->popup_menu)));
-
-	item = gtk_menu_item_new_with_mnemonic (_("_Properties"));
-	menu_data.properties_item = item;
-	g_signal_connect (item, "activate",
-			  G_CALLBACK (properties_cb), sidebar);
 	gtk_widget_show (item);
 	gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
 
@@ -3627,16 +3560,6 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 			      G_TYPE_OBJECT,
 			      G_TYPE_OBJECT);
 
-	places_sidebar_signals [SHOW_FILE_PROPERTIES] =
-		g_signal_new (I_("show-file-properties"),
-			      G_OBJECT_CLASS_TYPE (gobject_class),
-			      G_SIGNAL_RUN_FIRST,
-			      G_STRUCT_OFFSET (GtkPlacesSidebarClass, show_file_properties),
-			      NULL, NULL,
-			      _gtk_marshal_VOID__OBJECT,
-			      G_TYPE_NONE, 1,
-			      G_TYPE_OBJECT);
-
 	places_sidebar_signals [SHOW_ERROR_MESSAGE] =
 		g_signal_new (I_("show-error-message"),
 			      G_OBJECT_CLASS_TYPE (gobject_class),
@@ -3858,14 +3781,6 @@ gtk_places_sidebar_set_show_desktop (GtkPlacesSidebar *sidebar, gboolean show_de
 
 	sidebar->show_desktop = !!show_desktop;
 	update_places (sidebar);
-}
-
-void
-gtk_places_sidebar_set_show_properties (GtkPlacesSidebar *sidebar, gboolean show_properties)
-{
-	g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
-
-	sidebar->show_properties = !!show_properties;
 }
 
 void

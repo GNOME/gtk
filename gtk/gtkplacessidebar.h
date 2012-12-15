@@ -59,8 +59,6 @@ void gtk_places_sidebar_set_current_location (GtkPlacesSidebar *sidebar, GFile *
 
 void gtk_places_sidebar_set_show_desktop (GtkPlacesSidebar *sidebar, gboolean show_desktop);
 
-void gtk_places_sidebar_set_show_properties (GtkPlacesSidebar *sidebar, gboolean show_properties);
-
 void gtk_places_sidebar_set_show_trash (GtkPlacesSidebar *sidebar, gboolean show_trash);
 void gtk_places_sidebar_set_trash_is_full (GtkPlacesSidebar *sidebar, gboolean is_full);
 
