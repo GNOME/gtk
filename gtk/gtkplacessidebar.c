@@ -144,7 +144,6 @@ struct _GtkPlacesSidebarClass {
 					GFile            *selected_item);
 	void (* show_file_properties)  (GtkPlacesSidebar *sidebar,
 					GFile            *file);
-	void (* empty_trash_requested) (GtkPlacesSidebar *sidebar);
 	void (* show_error_message)    (GtkPlacesSidebar *sidebar,
 				        const char       *primary,
 				        const char       *secondary);
@@ -199,7 +198,6 @@ enum {
 	OPEN_LOCATION,
 	POPULATE_POPUP,
 	SHOW_FILE_PROPERTIES,
-	EMPTY_TRASH_REQUESTED,
 	SHOW_ERROR_MESSAGE,
 	DRAG_ACTION_REQUESTED,
 	DRAG_ACTION_ASK,
@@ -309,12 +307,6 @@ emit_show_file_properties (GtkPlacesSidebar *sidebar, GFile *file)
 {
 	g_signal_emit (sidebar, places_sidebar_signals[SHOW_FILE_PROPERTIES], 0,
 		       file);
-}
-
-static void
-emit_empty_trash_requested (GtkPlacesSidebar *sidebar)
-{
-	g_signal_emit (sidebar, places_sidebar_signals[EMPTY_TRASH_REQUESTED], 0);
 }
 
 static void
@@ -1765,7 +1757,6 @@ typedef struct {
 	GtkWidget *unmount_item;
 	GtkWidget *eject_item;
 	GtkWidget *rescan_item;
-	GtkWidget *empty_trash_item;
 	GtkWidget *start_item;
 	GtkWidget *stop_item;
 	GtkWidget *properties_separator_item;
@@ -1787,7 +1778,6 @@ check_popup_sensitivity (GtkPlacesSidebar *sidebar, PopupMenuData *data)
 	gboolean show_rescan;
 	gboolean show_start;
 	gboolean show_stop;
-	gboolean show_empty_trash;
 	gboolean show_properties;
 	char *uri = NULL;
 
@@ -1807,16 +1797,9 @@ check_popup_sensitivity (GtkPlacesSidebar *sidebar, PopupMenuData *data)
 
 	gtk_widget_set_sensitive (data->remove_item, (type == PLACES_BOOKMARK));
 	gtk_widget_set_sensitive (data->rename_item, (type == PLACES_BOOKMARK));
-	gtk_widget_set_sensitive (data->empty_trash_item, sidebar->trash_is_full);
 
  	check_visibility (mount, volume, drive,
  			  &show_mount, &show_unmount, &show_eject, &show_rescan, &show_start, &show_stop);
-
-	if (sidebar->show_trash) {
-		show_empty_trash = ((uri != NULL) &&
-				    (!strcmp (uri, "trash:///")));
-	} else
-		show_empty_trash = FALSE;
 
 	/* Only show properties for local mounts */
 	if (sidebar->show_properties) {
@@ -1829,15 +1812,13 @@ check_popup_sensitivity (GtkPlacesSidebar *sidebar, PopupMenuData *data)
 	} else
 		show_properties = FALSE;
 
-	gtk_widget_set_visible (data->separator_item,
-		      show_mount || show_unmount || show_eject || show_empty_trash);
+	gtk_widget_set_visible (data->separator_item, show_mount || show_unmount || show_eject);
 	gtk_widget_set_visible (data->mount_item, show_mount);
 	gtk_widget_set_visible (data->unmount_item, show_unmount);
 	gtk_widget_set_visible (data->eject_item, show_eject);
 	gtk_widget_set_visible (data->rescan_item, show_rescan);
 	gtk_widget_set_visible (data->start_item, show_start);
 	gtk_widget_set_visible (data->stop_item, show_stop);
-	gtk_widget_set_visible (data->empty_trash_item, show_empty_trash);
 	gtk_widget_set_visible (data->properties_separator_item, show_properties);
 	gtk_widget_set_visible (data->properties_item, show_properties);
 
@@ -2655,13 +2636,6 @@ stop_shortcut_cb (GtkMenuItem           *item,
 	g_object_unref (drive);
 }
 
-static void
-empty_trash_cb (GtkMenuItem      *item,
-		GtkPlacesSidebar *sidebar)
-{
-	emit_empty_trash_requested (sidebar);
-}
-
 static gboolean
 find_prev_or_next_row (GtkPlacesSidebar *sidebar,
 		       GtkTreeIter *iter,
@@ -2935,15 +2909,6 @@ bookmarks_build_popup_menu (GtkPlacesSidebar *sidebar)
 	menu_data.stop_item = item;
 	g_signal_connect (item, "activate",
 			  G_CALLBACK (stop_shortcut_cb), sidebar);
-	gtk_widget_show (item);
-	gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
-
-	/* Empty Trash menu item */
-
-	item = gtk_menu_item_new_with_mnemonic (_("Empty _Trash"));
-	menu_data.empty_trash_item = item;
-	g_signal_connect (item, "activate",
-			  G_CALLBACK (empty_trash_cb), sidebar);
 	gtk_widget_show (item);
 	gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
 
@@ -3671,15 +3636,6 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 			      _gtk_marshal_VOID__OBJECT,
 			      G_TYPE_NONE, 1,
 			      G_TYPE_OBJECT);
-
-	places_sidebar_signals [EMPTY_TRASH_REQUESTED] =
-		g_signal_new (I_("empty-trash-requested"),
-			      G_OBJECT_CLASS_TYPE (gobject_class),
-			      G_SIGNAL_RUN_FIRST,
-			      G_STRUCT_OFFSET (GtkPlacesSidebarClass, empty_trash_requested),
-			      NULL, NULL,
-			      _gtk_marshal_VOID__VOID,
-			      G_TYPE_NONE, 0);
 
 	places_sidebar_signals [SHOW_ERROR_MESSAGE] =
 		g_signal_new (I_("show-error-message"),
