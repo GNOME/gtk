@@ -56,6 +56,13 @@
  * * Sync nautilus commit 1f307c367ddd8193a38f500e731b7ca0f9b2f98e
  * * Sync nautilus commit 1dcd2d816a1278f7eec1d074ec5d9134af34a803
  * * Sync nautilus commit 71ad0d3adc2553ef5bcd06ec32600302e9169765
+ *
+ * * Nautilus needs to connect to "populate-popup" and add these items:
+ *
+ *    * Open in new tab
+ *    * Open in new window
+ *    * Empty trash
+ *    * Properties
  */
 
 #include "config.h"
@@ -119,8 +126,6 @@ struct _GtkPlacesSidebar {
 	GDBusProxy *hostnamed_proxy;
 	char *hostname;
 
-	guint multiple_tabs_supported : 1;
-	guint multiple_windows_supported : 1;
 	guint show_desktop : 1;
 	guint show_properties : 1;
 	guint show_trash : 1;
@@ -288,10 +293,6 @@ G_DEFINE_TYPE (GtkPlacesSidebar, gtk_places_sidebar, GTK_TYPE_SCROLLED_WINDOW);
 static void
 emit_open_location (GtkPlacesSidebar *sidebar, GFile *location, GtkPlacesOpenMode open_mode)
 {
-	if ((!sidebar->multiple_tabs_supported && open_mode == GTK_PLACES_OPEN_MODE_NEW_TAB)
-	    || (!sidebar->multiple_windows_supported && open_mode == GTK_PLACES_OPEN_MODE_NEW_WINDOW))
-		open_mode = GTK_PLACES_OPEN_MODE_NORMAL;
-
 	g_signal_emit (sidebar, places_sidebar_signals[OPEN_LOCATION], 0,
 		       location, open_mode);
 }
@@ -1756,7 +1757,6 @@ check_visibility (GMount           *mount,
 }
 
 typedef struct {
-	GtkWidget *open_in_new_tab_item;
 	GtkWidget *add_shortcut_item;
 	GtkWidget *remove_item;
 	GtkWidget *rename_item;
@@ -2044,20 +2044,6 @@ open_shortcut_cb (GtkMenuItem      *item,
 		  GtkPlacesSidebar *sidebar)
 {
 	open_shortcut_from_menu (sidebar, GTK_PLACES_OPEN_MODE_NORMAL);
-}
-
-static void
-open_shortcut_in_new_window_cb (GtkMenuItem      *item,
-				GtkPlacesSidebar *sidebar)
-{
-	open_shortcut_from_menu (sidebar, GTK_PLACES_OPEN_MODE_NEW_WINDOW);
-}
-
-static void
-open_shortcut_in_new_tab_cb (GtkMenuItem      *item,
-			     GtkPlacesSidebar *sidebar)
-{
-	open_shortcut_from_menu (sidebar, GTK_PLACES_OPEN_MODE_NEW_TAB);
 }
 
 /* Add bookmark for the selected item - just used from mount points */
@@ -2881,25 +2867,6 @@ bookmarks_build_popup_menu (GtkPlacesSidebar *sidebar)
 			  G_CALLBACK (open_shortcut_cb), sidebar);
 	gtk_widget_show (item);
 	gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
-
-	item = gtk_menu_item_new_with_mnemonic (_("Open in New _Tab"));
-	menu_data.open_in_new_tab_item = item;
-	g_signal_connect (item, "activate",
-			  G_CALLBACK (open_shortcut_in_new_tab_cb), sidebar);
-	gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
-
-	if (sidebar->multiple_tabs_supported) {
-		gtk_widget_show (item);
-	}
-
-	item = gtk_menu_item_new_with_mnemonic (_("Open in New _Window"));
-	g_signal_connect (item, "activate",
-			  G_CALLBACK (open_shortcut_in_new_window_cb), sidebar);
-	gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
-
-	if (sidebar->multiple_windows_supported) {
-		gtk_widget_show (item);
-	}
 
 	append_menu_separator (GTK_MENU (sidebar->popup_menu));
 
@@ -3917,42 +3884,6 @@ gtk_places_sidebar_set_current_location (GtkPlacesSidebar *sidebar, GFile *locat
     	}
 
 	g_free (uri);
-}
-
-/**
- * gtk_places_sidebar_set_multiple_tabs_supported:
- * @sidebar: a places sidebar
- * @supported: whether the appliacation supports multiple notebook tabs for file browsing
- *
- * Sets whether the calling appliacation supports multiple tabs for file
- * browsing; this is off by default.  When @supported is #TRUE, the context menu
- * for the @sidebar's items will show items relevant to opening folders in new
- * tabs.
- */
-void
-gtk_places_sidebar_set_multiple_tabs_supported (GtkPlacesSidebar *sidebar, gboolean supported)
-{
-	g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
-
-	sidebar->multiple_tabs_supported = !!supported;
-}
-
-/**
- * gtk_places_sidebar_set_multiple_windows_supported:
- * @sidebar: a places sidebar
- * @supported: whether the appliacation supports multiple windows for file browsing
- *
- * Sets whether the calling appliacation supports multiple windows for file
- * browsing; this is off by default.  When @supported is #TRUE, the context menu
- * for the @sidebar's items will show items relevant to opening folders in new
- * windows.
- */
-void
-gtk_places_sidebar_set_multiple_windows_supported (GtkPlacesSidebar *sidebar, gboolean supported)
-{
-	g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
-
-	sidebar->multiple_windows_supported = !!supported;
 }
 
 /**

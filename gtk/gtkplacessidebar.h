@@ -57,10 +57,6 @@ GtkWidget *gtk_places_sidebar_new (void);
 
 void gtk_places_sidebar_set_current_location (GtkPlacesSidebar *sidebar, GFile *location);
 
-void gtk_places_sidebar_set_multiple_tabs_supported (GtkPlacesSidebar *sidebar, gboolean supported);
-
-void gtk_places_sidebar_set_multiple_windows_supported (GtkPlacesSidebar *sidebar, gboolean supported);
-
 void gtk_places_sidebar_set_show_desktop (GtkPlacesSidebar *sidebar, gboolean show_desktop);
 
 void gtk_places_sidebar_set_show_properties (GtkPlacesSidebar *sidebar, gboolean show_properties);
