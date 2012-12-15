@@ -1738,6 +1738,56 @@ check_visibility (GMount           *mount,
 }
 
 typedef struct {
+	PlaceType type;
+	GDrive *drive;
+	GVolume *volume;
+	GMount *mount;
+	char *uri;
+} SelectionInfo;
+
+static void
+get_selection_info (GtkPlacesSidebar *sidebar, SelectionInfo *info)
+{
+	GtkTreeIter iter;
+	
+	info->type   = PLACES_BUILT_IN;
+	info->drive  = NULL;
+	info->volume = NULL;
+	info->mount  = NULL;
+	info->uri    = NULL;
+
+	if (get_selected_iter (sidebar, &iter)) {
+		gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store), &iter,
+				    PLACES_SIDEBAR_COLUMN_ROW_TYPE, &info->type,
+				    PLACES_SIDEBAR_COLUMN_DRIVE, &info->drive,
+				    PLACES_SIDEBAR_COLUMN_VOLUME, &info->volume,
+ 				    PLACES_SIDEBAR_COLUMN_MOUNT, &info->mount,
+				    PLACES_SIDEBAR_COLUMN_URI, &info->uri,
+				    -1);
+	}
+}
+
+static void
+free_selection_info (SelectionInfo *info)
+{
+	if (info->drive)
+		g_object_unref (info->drive);
+
+	if (info->volume)
+		g_object_unref (info->volume);
+
+	if (info->mount)
+		g_object_unref (info->mount);
+
+	g_free (info->uri);
+
+	info->drive  = NULL;
+	info->volume = NULL;
+	info->mount  = NULL;
+	info->uri    = NULL;
+}
+
+typedef struct {
 	GtkWidget *add_shortcut_item;
 	GtkWidget *remove_item;
 	GtkWidget *rename_item;
@@ -1751,45 +1801,22 @@ typedef struct {
 } PopupMenuData;
 
 static void
-check_popup_sensitivity (GtkPlacesSidebar *sidebar, PopupMenuData *data)
+check_popup_sensitivity (GtkPlacesSidebar *sidebar, PopupMenuData *data, SelectionInfo *info)
 {
-	GtkTreeIter iter;
-	PlaceType type;
-	GDrive *drive = NULL;
-	GVolume *volume = NULL;
-	GMount *mount = NULL;
 	gboolean show_mount;
 	gboolean show_unmount;
 	gboolean show_eject;
 	gboolean show_rescan;
 	gboolean show_start;
 	gboolean show_stop;
-	char *uri = NULL;
 
-	type = PLACES_BUILT_IN;
+	gtk_widget_set_visible (data->add_shortcut_item, (info->type == PLACES_MOUNTED_VOLUME));
 
-	if (get_selected_iter (sidebar, &iter)) {
-		gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store), &iter,
-				    PLACES_SIDEBAR_COLUMN_ROW_TYPE, &type,
-				    PLACES_SIDEBAR_COLUMN_DRIVE, &drive,
-				    PLACES_SIDEBAR_COLUMN_VOLUME, &volume,
- 				    PLACES_SIDEBAR_COLUMN_MOUNT, &mount,
-				    PLACES_SIDEBAR_COLUMN_URI, &uri,
-				    -1);
-	}
+	gtk_widget_set_sensitive (data->remove_item, (info->type == PLACES_BOOKMARK));
+	gtk_widget_set_sensitive (data->rename_item, (info->type == PLACES_BOOKMARK));
 
-	gtk_widget_set_visible (data->add_shortcut_item, (type == PLACES_MOUNTED_VOLUME));
-
-	gtk_widget_set_sensitive (data->remove_item, (type == PLACES_BOOKMARK));
-	gtk_widget_set_sensitive (data->rename_item, (type == PLACES_BOOKMARK));
-
- 	check_visibility (mount, volume, drive,
+ 	check_visibility (info->mount, info->volume, info->drive,
  			  &show_mount, &show_unmount, &show_eject, &show_rescan, &show_start, &show_stop);
-
-	/* For mounts,
-	 *
-	 * location = g_mount_get_default_location (mount);
-	 */
 
 	gtk_widget_set_visible (data->separator_item, show_mount || show_unmount || show_eject);
 	gtk_widget_set_visible (data->mount_item, show_mount);
@@ -1802,8 +1829,8 @@ check_popup_sensitivity (GtkPlacesSidebar *sidebar, PopupMenuData *data)
 	/* Adjust start/stop items to reflect the type of the drive */
 	gtk_menu_item_set_label (GTK_MENU_ITEM (data->start_item), _("_Start"));
 	gtk_menu_item_set_label (GTK_MENU_ITEM (data->stop_item), _("_Stop"));
-	if ((show_start || show_stop) && drive != NULL) {
-		switch (g_drive_get_start_stop_type (drive)) {
+	if ((show_start || show_stop) && info->drive != NULL) {
+		switch (g_drive_get_start_stop_type (info->drive)) {
 		case G_DRIVE_START_STOP_TYPE_SHUTDOWN:
 			/* start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used */
 			gtk_menu_item_set_label (GTK_MENU_ITEM (data->start_item), _("_Power On"));
@@ -1829,9 +1856,6 @@ check_popup_sensitivity (GtkPlacesSidebar *sidebar, PopupMenuData *data)
 			break;
 		}
 	}
-
-
-	g_free (uri);
 }
 
 static void
@@ -2772,6 +2796,8 @@ bookmarks_build_popup_menu (GtkPlacesSidebar *sidebar)
 {
 	PopupMenuData menu_data;
 	GtkWidget *item;
+	SelectionInfo sel_info;
+	GFile *file;
 
 	sidebar->popup_menu = gtk_menu_new ();
 	gtk_menu_attach_to_widget (GTK_MENU (sidebar->popup_menu),
@@ -2858,7 +2884,22 @@ bookmarks_build_popup_menu (GtkPlacesSidebar *sidebar)
 
 	/* Update everything! */
 
-	check_popup_sensitivity (sidebar, &menu_data);
+	get_selection_info (sidebar, &sel_info);
+
+	check_popup_sensitivity (sidebar, &menu_data, &sel_info);
+
+	/* And let the caller spice things up */
+
+	if (sel_info.uri)
+		file = g_file_new_for_uri (sel_info.uri);
+	else
+		file = NULL;
+
+	emit_populate_popup (sidebar, GTK_MENU (sidebar->popup_menu), file);
+
+	g_object_unref (file);
+
+	free_selection_info (&sel_info);
 }
 
 static void
