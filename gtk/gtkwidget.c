@@ -358,14 +358,6 @@ struct _GtkWidgetPrivate
   /* The base actor for the widget. */
   GtkActor *actor;
 
-  /* The widget's name. If the widget does not have a name
-   * (the name is NULL), then its name (as returned by
-   * "gtk_widget_get_name") is its class's name.
-   * Among other things, the widget name is used to determine
-   * the style to use for a widget.
-   */
-  gchar *name;
-
   /* The list of attached windows to this widget.
    * We keep a list in order to call reset_style to all of them,
    * recursively. */
@@ -3504,8 +3496,8 @@ gtk_widget_get_property (GObject         *object,
       gpointer *eventp;
 
     case PROP_NAME:
-      if (priv->name)
-	g_value_set_string (value, priv->name);
+      if (_gtk_css_box_get_id (GTK_CSS_BOX (priv->actor)))
+	g_value_set_string (value, _gtk_css_box_get_id (GTK_CSS_BOX (priv->actor)));
       else
 	g_value_set_static_string (value, "");
       break;
@@ -3661,7 +3653,6 @@ gtk_widget_init (GtkWidget *widget)
                               "visible", FALSE, NULL);
 
   priv->child_visible = TRUE;
-  priv->name = NULL;
   priv->allocation.x = -1;
   priv->allocation.y = -1;
   priv->allocation.width = 1;
@@ -7224,15 +7215,12 @@ gtk_widget_set_name (GtkWidget	 *widget,
 		     const gchar *name)
 {
   GtkWidgetPrivate *priv;
-  gchar *new_name;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   priv = widget->priv;
 
-  new_name = g_strdup (name);
-  g_free (priv->name);
-  priv->name = new_name;
+  _gtk_css_box_set_id (GTK_CSS_BOX (priv->actor), name);
 
   _gtk_widget_invalidate_style_context (widget, GTK_CSS_CHANGE_NAME);
 
@@ -7252,14 +7240,14 @@ gtk_widget_set_name (GtkWidget	 *widget,
 const gchar*
 gtk_widget_get_name (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv;
+  const char *name;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  priv = widget->priv;
+  name = _gtk_css_box_get_id (GTK_CSS_BOX (widget->priv->actor));
 
-  if (priv->name)
-    return priv->name;
+  if (name)
+    return name;
   return G_OBJECT_TYPE_NAME (widget);
 }
 
@@ -10432,8 +10420,6 @@ gtk_widget_finalize (GObject *object)
 
   g_object_unref (priv->style);
   priv->style = NULL;
-
-  g_free (priv->name);
 
   aux_info = gtk_widget_get_aux_info (widget, FALSE);
   if (aux_info)
@@ -13928,6 +13914,7 @@ gint
 gtk_widget_path_append_for_widget (GtkWidgetPath *path,
                                    GtkWidget     *widget)
 {
+  const char *name;
   gint pos;
 
   g_return_val_if_fail (path != NULL, 0);
@@ -13935,8 +13922,9 @@ gtk_widget_path_append_for_widget (GtkWidgetPath *path,
 
   pos = gtk_widget_path_append_type (path, G_OBJECT_TYPE (widget));
 
-  if (widget->priv->name)
-    gtk_widget_path_iter_set_name (path, pos, widget->priv->name);
+  name = _gtk_css_box_get_id (GTK_CSS_BOX (widget->priv->actor));
+  if (name)
+    gtk_widget_path_iter_set_name (path, pos, name);
 
   if (widget->priv->context)
     {
