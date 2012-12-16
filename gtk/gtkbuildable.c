@@ -21,7 +21,7 @@
  * @Short_description: Interface for objects that can be built by GtkBuilder
  * @Title: GtkBuildable
  *
- * GtkBuildable allows objects to extend and customize thier deserialization 
+ * GtkBuildable allows objects to extend and customize their deserialization
  * from <link linkend="BUILDER-UI">GtkBuilder UI descriptions</link>.
  * The interface includes methods for setting names and properties of objects, 
  * parsing custom tags and constructing child objects.
