@@ -63,6 +63,7 @@
 #include "gtkplug.h"
 #include "gtktypebuiltins.h"
 #include "a11y/gtkwidgetaccessible.h"
+#include "actors/gtkwidgetactorprivate.h"
 
 /**
  * SECTION:gtkwidget
@@ -321,9 +322,6 @@ struct _GtkWidgetPrivate
   guint anchored              : 1;
   guint composite_child       : 1;
   guint no_window             : 1;
-  guint realized              : 1;
-  guint mapped                : 1;
-  guint visible               : 1;
   guint sensitive             : 1;
   guint can_focus             : 1;
   guint has_focus             : 1;
@@ -356,6 +354,9 @@ struct _GtkWidgetPrivate
 
   /* SizeGroup related flags */
   guint have_size_groups      : 1;
+
+  /* The base actor for the widget. */
+  GtkActor *actor;
 
   /* The widget's name. If the widget does not have a name
    * (the name is NULL), then its name (as returned by
@@ -3654,6 +3655,10 @@ gtk_widget_init (GtkWidget *widget)
                                               GTK_TYPE_WIDGET,
                                               GtkWidgetPrivate);
   priv = widget->priv;
+
+  priv->actor = g_object_new (GTK_TYPE_WIDGET_ACTOR,
+                              "widget", widget,
+                              "visible", FALSE, NULL);
 
   priv->child_visible = TRUE;
   priv->name = NULL;
@@ -7494,7 +7499,17 @@ void
 _gtk_widget_set_visible_flag (GtkWidget *widget,
                               gboolean   visible)
 {
-  widget->priv->visible = visible;
+  gboolean was_mapped = gtk_widget_get_mapped (widget);
+  gboolean was_realized = gtk_widget_get_realized (widget);
+
+  if (visible)
+    _gtk_widget_actor_show (widget->priv->actor);
+  else
+    _gtk_widget_actor_hide (widget->priv->actor);
+
+  g_assert (_gtk_actor_get_visible (widget->priv->actor) == visible);
+  g_assert (was_mapped == gtk_widget_get_mapped (widget));
+  g_assert (was_realized == gtk_widget_get_realized (widget));
 }
 
 /**
@@ -7518,7 +7533,7 @@ gtk_widget_get_visible (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  return widget->priv->visible;
+  return _gtk_actor_get_visible (widget->priv->actor);
 }
 
 /**
@@ -7662,7 +7677,7 @@ gtk_widget_get_realized (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  return widget->priv->realized;
+  return _gtk_actor_get_realized (widget->priv->actor);
 }
 
 /**
@@ -7681,9 +7696,21 @@ void
 gtk_widget_set_realized (GtkWidget *widget,
                          gboolean   realized)
 {
+  gboolean was_visible, was_mapped;
+
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  widget->priv->realized = realized;
+  was_visible = gtk_widget_get_visible (widget);
+  was_mapped = gtk_widget_get_mapped (widget);
+
+  if (realized)
+    _gtk_widget_actor_realize (widget->priv->actor);
+  else
+    _gtk_widget_actor_unrealize (widget->priv->actor);
+
+  g_assert (_gtk_actor_get_realized (widget->priv->actor) == realized);
+  g_assert (was_visible == gtk_widget_get_visible (widget));
+  g_assert (was_mapped == gtk_widget_get_mapped (widget));
 }
 
 /**
@@ -7701,7 +7728,7 @@ gtk_widget_get_mapped (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  return widget->priv->mapped;
+  return _gtk_actor_get_mapped (widget->priv->actor);
 }
 
 /**
@@ -7720,9 +7747,21 @@ void
 gtk_widget_set_mapped (GtkWidget *widget,
                        gboolean   mapped)
 {
+  gboolean was_visible, was_realized;
+
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  widget->priv->mapped = mapped;
+  was_visible = gtk_widget_get_visible (widget);
+  was_realized = gtk_widget_get_realized (widget);
+
+  if (mapped)
+    _gtk_widget_actor_map (widget->priv->actor);
+  else
+    _gtk_widget_actor_unmap (widget->priv->actor);
+
+  g_assert (_gtk_actor_get_mapped (widget->priv->actor) == mapped);
+  g_assert (was_visible == gtk_widget_get_visible (widget));
+  g_assert (was_realized == gtk_widget_get_realized (widget));
 }
 
 /**
@@ -10329,7 +10368,7 @@ gtk_widget_dispose (GObject *object)
   else if (gtk_widget_get_visible (widget))
     gtk_widget_hide (widget);
 
-  priv->visible = FALSE;
+  _gtk_widget_actor_hide (priv->actor);
   if (gtk_widget_get_realized (widget))
     gtk_widget_unrealize (widget);
 
@@ -10387,6 +10426,9 @@ gtk_widget_finalize (GObject *object)
   GtkAccessible *accessible;
 
   gtk_grab_remove (widget);
+
+  g_object_unref (priv->actor);
+  priv->actor = NULL;
 
   g_object_unref (priv->style);
   priv->style = NULL;
