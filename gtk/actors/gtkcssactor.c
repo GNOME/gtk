@@ -31,6 +31,7 @@
 #include "gtkstylecontext.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
+#include "gtkwidgetactorprivate.h"
 #include "gtkwidgetprivate.h"
 
 struct _GtkCssActorPrivate {
@@ -237,6 +238,9 @@ static gboolean
 actor_needs_to_use_widget_path (GtkActor *actor)
 {
   GtkWidget *widget, *parent;
+
+  if (!GTK_IS_WIDGET_ACTOR (actor))
+    return FALSE;
 
   widget = _gtk_actor_get_widget (actor);
   if (widget == NULL)

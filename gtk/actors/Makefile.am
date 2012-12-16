@@ -8,7 +8,8 @@ gtkactors_c_sources =			\
 	gtkcssactor.c			\
 	gtkcssbox.c			\
 	gtkcsstext.c			\
-	gtklayoutmanager.c
+	gtklayoutmanager.c		\
+	gtkwidgetactor.c
 
 gtkactors_private_h_sources =		\
 	gtkactorprivate.h		\
@@ -16,7 +17,8 @@ gtkactors_private_h_sources =		\
 	gtkcssactorprivate.h		\
 	gtkcssboxprivate.h		\
 	gtkcsstextprivate.h		\
-	gtklayoutmanagerprivate.h
+	gtklayoutmanagerprivate.h	\
+	gtkwidgetactorprivate.h
 
 libgtkactors_la_SOURCES = 		\
 	$(gtkactors_c_sources)		\
