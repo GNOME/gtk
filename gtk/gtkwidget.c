@@ -4064,7 +4064,7 @@ gtk_widget_real_show (GtkWidget *widget)
 
   if (!gtk_widget_get_visible (widget))
     {
-      priv->visible = TRUE;
+      _gtk_widget_set_visible_flag (widget, TRUE);
 
       if (priv->parent &&
 	  gtk_widget_get_mapped (priv->parent) &&
@@ -4162,7 +4162,7 @@ gtk_widget_real_hide (GtkWidget *widget)
 {
   if (gtk_widget_get_visible (widget))
     {
-      widget->priv->visible = FALSE;
+      _gtk_widget_set_visible_flag (widget, FALSE);
 
       if (gtk_widget_get_mapped (widget))
 	gtk_widget_unmap (widget);
@@ -4522,11 +4522,11 @@ gtk_widget_unrealize (GtkWidget *widget)
     {
       g_object_ref (widget);
 
-      if (widget->priv->mapped)
+      if (gtk_widget_get_mapped (widget))
         gtk_widget_unmap (widget);
 
       g_signal_emit (widget, widget_signals[UNREALIZE], 0);
-      g_assert (!widget->priv->mapped);
+      g_assert (!gtk_widget_get_mapped (widget));
       gtk_widget_set_realized (widget, FALSE);
 
       g_object_unref (widget);
@@ -7543,12 +7543,10 @@ gtk_widget_is_visible (GtkWidget *widget)
 
   while (widget)
     {
-      GtkWidgetPrivate *priv = widget->priv;
-
-      if (!priv->visible)
+      if (!gtk_widget_get_visible (widget))
         return FALSE;
 
-      widget = priv->parent;
+      widget = gtk_widget_get_parent (widget);
     }
 
   return TRUE;
@@ -8539,15 +8537,15 @@ gtk_widget_verify_invariants (GtkWidget *widget)
 
   parent = widget->priv->parent;
 
-  if (widget->priv->mapped)
+  if (gtk_widget_get_mapped (widget))
     {
       /* Mapped implies ... */
 
-      if (!widget->priv->realized)
+      if (!gtk_widget_get_realized (widget))
         g_warning ("%s %p is mapped but not realized",
                    G_OBJECT_TYPE_NAME (widget), widget);
 
-      if (!widget->priv->visible)
+      if (!gtk_widget_get_visible (widget))
         g_warning ("%s %p is mapped but not visible",
                    G_OBJECT_TYPE_NAME (widget), widget);
 
@@ -8583,7 +8581,7 @@ gtk_widget_verify_invariants (GtkWidget *widget)
   if (parent == NULL || parent->priv->verifying_invariants_count == 0)
     {
       if (parent &&
-          parent->priv->realized)
+          gtk_widget_get_realized (parent))
         {
           /* Parent realized implies... */
 
@@ -8603,20 +8601,20 @@ gtk_widget_verify_invariants (GtkWidget *widget)
         {
           /* No parent or parent not realized on non-toplevel implies... */
 
-          if (widget->priv->realized && !widget->priv->in_reparent)
+          if (gtk_widget_get_realized (widget) && !widget->priv->in_reparent)
             g_warning ("%s %p is not realized but child %s %p is realized",
                        parent ? G_OBJECT_TYPE_NAME (parent) : "no parent", parent,
                        G_OBJECT_TYPE_NAME (widget), widget);
         }
 
       if (parent &&
-          parent->priv->mapped &&
-          widget->priv->visible &&
+          gtk_widget_get_mapped (parent) &&
+          gtk_widget_get_visible (widget) &&
           widget->priv->child_visible)
         {
           /* Parent mapped and we are visible implies... */
 
-          if (!widget->priv->mapped)
+          if (!gtk_widget_get_mapped (widget))
             g_warning ("%s %p is mapped but visible child %s %p is not mapped",
                        G_OBJECT_TYPE_NAME (parent), parent,
                        G_OBJECT_TYPE_NAME (widget), widget);
@@ -8625,17 +8623,17 @@ gtk_widget_verify_invariants (GtkWidget *widget)
         {
           /* No parent or parent not mapped on non-toplevel implies... */
 
-          if (widget->priv->mapped && !widget->priv->in_reparent)
+          if (gtk_widget_get_mapped (widget) && !widget->priv->in_reparent)
             g_warning ("%s %p is mapped but visible=%d child_visible=%d parent %s %p mapped=%d",
                        G_OBJECT_TYPE_NAME (widget), widget,
-                       widget->priv->visible,
+                       gtk_widget_get_visible (widget),
                        widget->priv->child_visible,
                        parent ? G_OBJECT_TYPE_NAME (parent) : "no parent", parent,
-                       parent ? parent->priv->mapped : FALSE);
+                       parent ? gtk_widget_get_mapped (parent) : FALSE);
         }
     }
 
-  if (!widget->priv->realized)
+  if (!gtk_widget_get_realized (widget))
     {
       /* Not realized implies... */
 
@@ -10505,7 +10503,7 @@ gtk_widget_real_unrealize (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = widget->priv;
 
-  g_assert (!widget->priv->mapped);
+  g_assert (!gtk_widget_get_mapped (widget));
 
   /* printf ("unrealizing %s\n", g_type_name (G_TYPE_FROM_INSTANCE (widget)));
    */
