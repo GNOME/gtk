@@ -110,6 +110,21 @@ gtk_bin_layout_get_preferred_size (GtkLayoutManager *manager,
   *nat_size_p = nat_size;
 }
 
+typedef struct _Alignment Alignment;
+
+struct _Alignment {
+  gfloat xalign;
+  gfloat yalign;
+  gfloat xscale;
+  gfloat yscale;
+};
+
+static const Alignment *
+get_alignment (GtkActor *actor)
+{
+  return g_object_get_data (G_OBJECT (actor), "gtk-bin-layout-alignment");
+}
+
 static void
 gtk_bin_layout_allocate (GtkLayoutManager     *manager,
                          const cairo_matrix_t *transform,
@@ -124,7 +139,28 @@ gtk_bin_layout_allocate (GtkLayoutManager     *manager,
        child;
        child = _gtk_actor_get_next_sibling (child))
     {
-      _gtk_actor_allocate (child, transform, width, height);
+      const Alignment *alignment = get_alignment (child);
+
+      if (alignment == NULL)
+        {
+          _gtk_actor_allocate (child, transform, width, height);
+        }
+      else
+        {
+          gfloat min, nat, child_width, child_height;
+          cairo_matrix_t child_transform;
+
+          _gtk_actor_get_preferred_size (child, GTK_ORIENTATION_HORIZONTAL, -1, &min, &nat);
+          child_width = (width - min) * alignment->xscale + min;
+          _gtk_actor_get_preferred_size (child, GTK_ORIENTATION_VERTICAL, child_width, &min, &nat);
+          child_height = (height - min) * alignment->yscale + min;
+
+          cairo_matrix_init_translate (&child_transform,
+                                       (width - child_width) * alignment->xalign,
+                                       (height - child_height) * alignment->yalign);
+          cairo_matrix_multiply (&child_transform, transform, &child_transform);
+          _gtk_actor_allocate (child, &child_transform, child_width, child_height);
+        }
     }
 }
 
@@ -160,4 +196,35 @@ GtkLayoutManager *
 _gtk_bin_layout_new (void)
 {
   return g_object_new (GTK_TYPE_BIN_LAYOUT, NULL);
+}
+
+void
+_gtk_bin_layout_set_child_alignment (GtkBinLayout *layout,
+                                     GtkActor     *child,
+                                     gfloat        xalign,
+                                     gfloat        yalign,
+                                     gfloat        xscale,
+                                     gfloat        yscale)
+{
+  Alignment *alignment;
+
+  g_return_if_fail (GTK_IS_BIN_LAYOUT (layout));
+  g_return_if_fail (GTK_IS_ACTOR (child));
+  g_return_if_fail (xalign >= 0.0 && xalign <= 1.0);
+  g_return_if_fail (yalign >= 0.0 && yalign <= 1.0);
+  g_return_if_fail (xscale >= 0.0 && xscale <= 1.0);
+  g_return_if_fail (yscale >= 0.0 && yscale <= 1.0);
+
+  alignment = g_new (Alignment, 1);
+  alignment->xalign = xalign;
+  alignment->yalign = yalign;
+  alignment->xscale = xscale;
+  alignment->yscale = yscale;
+
+  g_object_set_data_full (G_OBJECT (child),
+                          "gtk-bin-layout-alignment",
+                          alignment,
+                          g_free);
+
+  _gtk_layout_manager_layout_changed (GTK_LAYOUT_MANAGER (layout));
 }

@@ -74,6 +74,13 @@ GType                   _gtk_bin_layout_get_type                 (void) G_GNUC_C
 
 GtkLayoutManager *      _gtk_bin_layout_new                      (void);
 
+void                    _gtk_bin_layout_set_child_alignment      (GtkBinLayout *layout,
+                                                                  GtkActor     *child,
+                                                                  gfloat        xalign,
+                                                                  gfloat        yalign,
+                                                                  gfloat        xscale,
+                                                                  gfloat        yscale);
+
 
 G_END_DECLS
 
