@@ -28,6 +28,7 @@
 #include "gtkcsstypesprivate.h"
 #include "gtkwidget.h"
 #include "gactionmuxer.h"
+#include "actors/gtkactorprivate.h"
 
 G_BEGIN_DECLS
 
@@ -130,6 +131,8 @@ void              _gtk_widget_set_captured_event_handler (GtkWidget             
 
 gboolean          _gtk_widget_captured_event               (GtkWidget *widget,
                                                             GdkEvent  *event);
+
+GtkActor *        _gtk_widget_get_actor                    (GtkWidget    *widget);
 
 GtkWidgetPath *   _gtk_widget_create_path                  (GtkWidget    *widget);
 void              _gtk_widget_invalidate_style_context     (GtkWidget    *widget,
