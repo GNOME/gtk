@@ -40,6 +40,7 @@ enum {
 
 @interface GtkClipboardOwner : NSObject {
   GtkClipboard *clipboard;
+  @public
   gboolean setting_same_owner;
 }
 
