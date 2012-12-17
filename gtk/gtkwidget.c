@@ -369,7 +369,6 @@ struct _GtkWidgetPrivate
    * the font to use for text.
    */
   GtkStyle *style;
-  GtkStyleContext *context;
 
   /* Widget's path for styling */
   GtkWidgetPath *path;
@@ -3922,8 +3921,7 @@ gtk_widget_unparent (GtkWidget *widget)
 
   /* Unset BACKDROP since we are no longer inside a toplevel window */
   gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_BACKDROP);
-  if (priv->context)
-    gtk_style_context_set_parent (priv->context, NULL);
+  gtk_style_context_set_parent (_gtk_css_actor_get_style_context (GTK_CSS_ACTOR (priv->actor)), NULL);
 
   _gtk_widget_update_parent_muxer (widget);
 
@@ -4242,9 +4240,6 @@ gtk_widget_map (GtkWidget *widget)
       if (!gtk_widget_get_has_window (widget))
         gdk_window_invalidate_rect (priv->window, &priv->allocation, FALSE);
 
-      if (widget->priv->context)
-        _gtk_style_context_update_animating (widget->priv->context);
-
       gtk_widget_pop_verify_invariants (widget);
     }
 }
@@ -4272,9 +4267,6 @@ gtk_widget_unmap (GtkWidget *widget)
       if (!gtk_widget_get_has_window (widget))
 	gdk_window_invalidate_rect (priv->window, &priv->allocation, FALSE);
       _gtk_tooltip_hide (widget);
-
-      if (widget->priv->context)
-        _gtk_style_context_update_animating (widget->priv->context);
 
       g_signal_emit (widget, widget_signals[UNMAP], 0);
 
@@ -6707,6 +6699,7 @@ static void
 gtk_widget_real_style_updated (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = widget->priv;
+  const GtkBitmask *changes;
 
   gtk_widget_update_pango_context (widget);
 
@@ -6722,28 +6715,20 @@ gtk_widget_real_style_updated (GtkWidget *widget)
                      widget->priv->style);
     }
 
-  if (widget->priv->context)
-    {
-      const GtkBitmask *changes = _gtk_style_context_get_changes (widget->priv->context);
+  changes = _gtk_style_context_get_changes (gtk_widget_get_style_context (widget));
 
-      if (gtk_widget_get_realized (widget) &&
-          gtk_widget_get_has_window (widget) &&
-          !gtk_widget_get_app_paintable (widget))
-        gtk_style_context_set_background (widget->priv->context,
-                                          widget->priv->window);
+  if (gtk_widget_get_realized (widget) &&
+      gtk_widget_get_has_window (widget) &&
+      !gtk_widget_get_app_paintable (widget))
+    gtk_style_context_set_background (gtk_widget_get_style_context (widget),
+                                      widget->priv->window);
 
-      if (widget->priv->anchored)
-        {
-          if (changes && _gtk_css_style_property_changes_affect_size (changes))
-            gtk_widget_queue_resize (widget);
-          else
-            gtk_widget_queue_draw (widget);
-        }
-    }
-  else
+  if (widget->priv->anchored)
     {
-      if (widget->priv->anchored)
+      if (changes && _gtk_css_style_property_changes_affect_size (changes))
         gtk_widget_queue_resize (widget);
+      else
+        gtk_widget_queue_draw (widget);
     }
 }
 
@@ -8046,9 +8031,8 @@ gtk_widget_set_parent (GtkWidget *widget,
   data.flags_to_unset = 0;
   gtk_widget_propagate_state (widget, &data);
 
-  if (priv->context)
-    gtk_style_context_set_parent (priv->context,
-                                  gtk_widget_get_style_context (parent));
+  gtk_style_context_set_parent (_gtk_css_actor_get_style_context (GTK_CSS_ACTOR (priv->actor)),
+                                gtk_widget_get_style_context (parent));
 
   _gtk_widget_update_parent_muxer (widget);
 
@@ -8347,9 +8331,6 @@ do_screen_change (GtkWidget *widget,
 	}
 
       _gtk_tooltip_hide (widget);
-
-      if (new_screen && priv->context)
-        gtk_style_context_set_screen (priv->context, new_screen);
 
       _gtk_widget_actor_screen_changed (priv->actor, new_screen, old_screen);
 
@@ -10434,12 +10415,6 @@ gtk_widget_finalize (GObject *object)
   if (priv->path)
     gtk_widget_path_free (priv->path);
 
-  if (priv->context)
-    {
-      _gtk_style_context_set_source (priv->context, NULL, NULL);
-      g_object_unref (priv->context);
-    }
-
   _gtk_size_request_cache_free (&priv->requests);
 
   if (g_object_is_floating (object))
@@ -10986,7 +10961,7 @@ gtk_widget_propagate_state (GtkWidget    *widget,
       if (!gtk_widget_is_sensitive (widget) && gtk_widget_has_grab (widget))
         gtk_grab_remove (widget);
 
-      gtk_style_context_set_state (gtk_widget_get_style_context (widget), new_flags);
+      _gtk_css_box_set_state (GTK_CSS_BOX (priv->actor), new_flags);
 
       g_signal_emit (widget, widget_signals[STATE_CHANGED], 0, old_state);
       g_signal_emit (widget, widget_signals[STATE_FLAGS_CHANGED], 0, old_flags);
@@ -13916,6 +13891,7 @@ gint
 gtk_widget_path_append_for_widget (GtkWidgetPath *path,
                                    GtkWidget     *widget)
 {
+  GList *classes, *l;
   const char *name;
   gint pos;
 
@@ -13928,20 +13904,15 @@ gtk_widget_path_append_for_widget (GtkWidgetPath *path,
   if (name)
     gtk_widget_path_iter_set_name (path, pos, name);
 
-  if (widget->priv->context)
-    {
-      GList *classes, *l;
+  /* Also add any persistent classes in
+   * the style context the widget path
+   */
+  classes = gtk_style_context_list_classes (gtk_widget_get_style_context (widget));
 
-      /* Also add any persistent classes in
-       * the style context the widget path
-       */
-      classes = gtk_style_context_list_classes (widget->priv->context);
+  for (l = classes; l; l = l->next)
+    gtk_widget_path_iter_add_class (path, pos, l->data);
 
-      for (l = classes; l; l = l->next)
-        gtk_widget_path_iter_add_class (path, pos, l->data);
-
-      g_list_free (classes);
-    }
+  g_list_free (classes);
 
   return pos;
 }
@@ -14000,30 +13971,9 @@ gtk_widget_get_path (GtkWidget *widget)
   return widget->priv->path;
 }
 
-static gboolean
-gtk_widget_source_init_css_matcher (GtkCssMatcher *matcher,
-                                    gpointer       data)
+void
+_gtk_widget_emit_style_updated (GtkWidget *widget)
 {
-  return FALSE;
-}
-
-static GtkWidgetPath *
-gtk_widget_source_create_query_path (gpointer widget)
-{
-  return _gtk_widget_create_path (widget);
-}
-
-static const GtkWidgetPath *
-gtk_widget_source_get_path (gpointer data)
-{
-  return gtk_widget_get_path (data);
-}
-
-static void
-gtk_widget_source_invalidate (gpointer data)
-{
-  GtkWidget *widget = data;
-
   if (widget->priv->path)
     {
       gtk_widget_path_free (widget->priv->path);
@@ -14041,58 +13991,14 @@ gtk_widget_source_invalidate (gpointer data)
     }
 }
 
-static void
-gtk_widget_source_queue_invalidate (gpointer widget)
+/* actor is guaranteed to be a GtkCssBox */
+GtkActor *
+_gtk_widget_get_actor (GtkWidget *widget)
 {
-  if (GTK_IS_RESIZE_CONTAINER (widget))
-    _gtk_container_queue_restyle (GTK_CONTAINER (widget));
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  return widget->priv->actor;
 }
-
-static gboolean
-gtk_widget_source_should_animate (gpointer data)
-{
-  GtkWidget *widget = data;
-  gboolean animate;
-
-  if (!gtk_widget_get_mapped (widget))
-    return FALSE;
-
-  g_object_get (gtk_widget_get_settings (widget),
-                "gtk-enable-animations", &animate,
-                NULL);
-
-  return animate;
-}
-
-
-static GType
-gtk_widget_source_get_widget_type (gpointer widget)
-{
-  return G_OBJECT_TYPE (widget);
-}
-
-static void
-gtk_widget_source_no_destroy (gpointer data)
-{
-  /* The style context doesn't hold a reference to us.
-   * This is necessary to avoid reference loops.
-   * And it is not a problem because the widget will unset
-   * itself as the source before it becomes invalid.
-   */
-}
-
-static const GtkStyleContextSource gtk_widget_source = {
-  TRUE,
-  FALSE,
-  gtk_widget_source_init_css_matcher,
-  gtk_widget_source_create_query_path,
-  gtk_widget_source_get_path,
-  gtk_widget_source_invalidate,
-  gtk_widget_source_queue_invalidate,
-  gtk_widget_source_should_animate,
-  gtk_widget_source_get_widget_type,
-  gtk_widget_source_no_destroy
-};
 
 /**
  * gtk_widget_get_style_context:
@@ -14106,46 +14012,16 @@ static const GtkStyleContextSource gtk_widget_source = {
 GtkStyleContext *
 gtk_widget_get_style_context (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv;
-
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  priv = widget->priv;
-  
-  if (G_UNLIKELY (priv->context == NULL))
-    {
-      GdkScreen *screen;
-
-      priv->context = gtk_style_context_new ();
-
-      gtk_style_context_set_state (priv->context, priv->state_flags);
-
-      screen = gtk_widget_get_screen (widget);
-      if (screen)
-        gtk_style_context_set_screen (priv->context, screen);
-
-      if (priv->parent)
-        gtk_style_context_set_parent (priv->context,
-                                      gtk_widget_get_style_context (priv->parent));
-
-      _gtk_style_context_set_source (priv->context, &gtk_widget_source, widget);
-    }
-
-  return widget->priv->context;
+  return _gtk_css_actor_get_style_context (GTK_CSS_ACTOR (widget->priv->actor));
 }
 
 void
 _gtk_widget_invalidate_style_context (GtkWidget    *widget,
                                       GtkCssChange  change)
 {
-  GtkWidgetPrivate *priv;
-
-  priv = widget->priv;
-
-  if (priv->context == NULL)
-    return;
-
-  _gtk_style_context_queue_invalidate (priv->context, change);
+  _gtk_style_context_queue_invalidate (gtk_widget_get_style_context (widget), change);
 }
 
 /**

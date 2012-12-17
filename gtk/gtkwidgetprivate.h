@@ -134,6 +134,8 @@ gboolean          _gtk_widget_captured_event               (GtkWidget *widget,
 
 GtkActor *        _gtk_widget_get_actor                    (GtkWidget    *widget);
 
+void              _gtk_widget_emit_style_updated           (GtkWidget    *widget);
+
 GtkWidgetPath *   _gtk_widget_create_path                  (GtkWidget    *widget);
 void              _gtk_widget_invalidate_style_context     (GtkWidget    *widget,
                                                             GtkCssChange  change);

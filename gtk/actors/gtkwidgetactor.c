@@ -21,6 +21,10 @@
 
 #include "gtkwidgetactorprivate.h"
 
+#include "gtkwidgetprivate.h"
+
+#include <math.h>
+
 struct _GtkWidgetActorPrivate {
   gpointer dummy;
 };
@@ -28,11 +32,53 @@ struct _GtkWidgetActorPrivate {
 G_DEFINE_TYPE (GtkWidgetActor, _gtk_widget_actor, GTK_TYPE_CSS_BOX)
 
 static void
+gtk_widget_actor_real_queue_redraw (GtkActor                *actor,
+                                    const cairo_rectangle_t *box)
+{
+  GtkWidget *widget;
+  int x, y, w, h;
+
+  if (_gtk_actor_get_parent (actor))
+    {
+      GTK_ACTOR_CLASS (_gtk_widget_actor_parent_class)->queue_redraw (actor, box);
+      return;
+    }
+
+  widget = _gtk_actor_get_widget (actor);
+  x = floor (box->x);
+  y = floor (box->y);
+  w = ceil (box->x + box->width) - x;
+  h = ceil (box->y + box->height) - y;
+
+  if (!gtk_widget_get_has_window (widget))
+    {
+      GtkAllocation allocation;
+
+      gtk_widget_get_allocation (widget, &allocation);
+      
+      x += allocation.x;
+      y += allocation.y;
+    }
+
+  gtk_widget_queue_draw_area (widget, x, y, w, h);
+}
+
+static void
+gtk_widget_actor_real_style_updated (GtkCssActor      *actor,
+                                     const GtkBitmask *changed)
+{
+  _gtk_widget_emit_style_updated (_gtk_actor_get_widget (GTK_ACTOR (actor)));
+
+  GTK_CSS_ACTOR_CLASS (_gtk_widget_actor_parent_class)->style_updated (actor, changed);
+}
+
+static void
 _gtk_widget_actor_class_init (GtkWidgetActorClass *klass)
 {
+  GtkActorClass *actor_class = GTK_ACTOR_CLASS (klass);
+  GtkCssActorClass *css_actor_class = GTK_CSS_ACTOR_CLASS (klass);
 #if 0
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GtkActorClass *actor_class = GTK_ACTOR_CLASS (klass);
 
   actor_class->parent_set = gtk_widget_actor_real_parent_set;
   actor_class->show = gtk_css_box_real_show;
@@ -43,9 +89,10 @@ _gtk_widget_actor_class_init (GtkWidgetActorClass *klass)
   actor_class->parent_set = gtk_css_box_real_parent_set;
   actor_class->get_preferred_size = gtk_css_box_real_get_preferred_size;
   actor_class->allocate = gtk_css_box_real_allocate;
-
-  klass->style_updated = gtk_widget_actor_real_style_updated;
 #endif
+  actor_class->queue_redraw = gtk_widget_actor_real_queue_redraw;
+
+  css_actor_class->style_updated = gtk_widget_actor_real_style_updated;
 
   g_type_class_add_private (klass, sizeof (GtkWidgetActorPrivate));
 }
