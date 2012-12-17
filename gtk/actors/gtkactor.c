@@ -485,6 +485,13 @@ gtk_actor_real_allocate (GtkActor             *self,
 }
 
 static void
+gtk_actor_real_screen_changed (GtkActor  *self,
+                               GdkScreen *new_screen,
+                               GdkScreen *old_screen)
+{
+}
+
+static void
 _gtk_actor_class_init (GtkActorClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -507,6 +514,7 @@ _gtk_actor_class_init (GtkActorClass *klass)
   klass->get_request_mode = gtk_actor_real_get_request_mode;
   klass->get_preferred_size = gtk_actor_real_get_preferred_size;
   klass->allocate = gtk_actor_real_allocate;
+  klass->screen_changed = gtk_actor_real_screen_changed;
 
   /**
    * GtkActor:visible:

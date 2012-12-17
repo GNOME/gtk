@@ -105,3 +105,33 @@ _gtk_widget_actor_unrealize (GtkActor *actor)
 
   GTK_ACTOR_CLASS (_gtk_widget_actor_parent_class)->unrealize (actor);
 }
+
+void
+_gtk_widget_actor_screen_changed (GtkActor  *actor,
+                                  GdkScreen *new_screen,
+                                  GdkScreen *old_screen)
+{
+  g_return_if_fail (GTK_IS_WIDGET_ACTOR (actor));
+  g_return_if_fail (new_screen == NULL || GDK_IS_SCREEN (new_screen));
+  g_return_if_fail (old_screen == NULL || GDK_IS_SCREEN (old_screen));
+
+  if (new_screen == NULL)
+    new_screen = gdk_screen_get_default ();
+  if (old_screen == NULL)
+    old_screen = gdk_screen_get_default ();
+
+  if (new_screen == old_screen)
+    return;
+
+  GTK_ACTOR_GET_CLASS (actor)->screen_changed (actor, new_screen, old_screen);
+
+  for (actor = _gtk_actor_get_first_child (actor);
+       actor != NULL;
+       actor = _gtk_actor_get_next_sibling (actor))
+    {
+      if (GTK_IS_WIDGET_ACTOR (actor))
+        continue;
+
+      _gtk_widget_actor_screen_changed (actor, new_screen, old_screen);
+    }
+}

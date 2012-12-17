@@ -56,6 +56,10 @@ void                        _gtk_widget_actor_unmap                     (GtkActo
 void                        _gtk_widget_actor_realize                   (GtkActor       *actor);
 void                        _gtk_widget_actor_unrealize                 (GtkActor       *actor);
 
+void                        _gtk_widget_actor_screen_changed            (GtkActor       *actor,
+                                                                         GdkScreen      *new_screen,
+                                                                         GdkScreen      *old_screen);
+
 G_END_DECLS
 
 #endif /* __GTK_WIDGET_ACTOR_PRIVATE_H__ */

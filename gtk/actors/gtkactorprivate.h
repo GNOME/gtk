@@ -82,6 +82,10 @@ struct _GtkActorClass
                                                   gfloat                    width,
                                                   gfloat                    height);
 
+  void                  (* screen_changed)       (GtkActor                 *self,
+                                                  GdkScreen                *new_screen,
+                                                  GdkScreen                *old_screen);
+
   /* signals */
   void                  (* actor_added)          (GtkActor                 *self,
                                                   GtkActor                 *child);

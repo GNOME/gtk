@@ -8351,6 +8351,8 @@ do_screen_change (GtkWidget *widget,
       if (new_screen && priv->context)
         gtk_style_context_set_screen (priv->context, new_screen);
 
+      _gtk_widget_actor_screen_changed (priv->actor, new_screen, old_screen);
+
       g_signal_emit (widget, widget_signals[SCREEN_CHANGED], 0, old_screen);
     }
 }

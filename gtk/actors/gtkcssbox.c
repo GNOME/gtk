@@ -475,6 +475,18 @@ gtk_css_box_real_draw (GtkActor *actor,
 }
 
 static void
+gtk_css_box_real_screen_changed (GtkActor  *actor,
+                                 GdkScreen *new_screen,
+                                 GdkScreen *old_screen)
+{
+  GtkStyleContext *context;
+
+  context = _gtk_css_actor_get_style_context (GTK_CSS_ACTOR (actor));
+
+  gtk_style_context_set_screen (context, new_screen);
+}
+
+static void
 gtk_css_box_real_style_updated (GtkCssActor      *actor,
                                 const GtkBitmask *changes)
 {
@@ -503,6 +515,7 @@ _gtk_css_box_class_init (GtkCssBoxClass *klass)
   actor_class->parent_set = gtk_css_box_real_parent_set;
   actor_class->get_preferred_size = gtk_css_box_real_get_preferred_size;
   actor_class->allocate = gtk_css_box_real_allocate;
+  actor_class->screen_changed = gtk_css_box_real_screen_changed;
 
   css_actor_class->style_updated = gtk_css_box_real_style_updated;
 
