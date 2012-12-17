@@ -1723,8 +1723,6 @@ static void
 gtk_real_menu_shell_cycle_focus (GtkMenuShell     *menu_shell,
                                  GtkDirectionType  dir)
 {
-  GtkMenuShellPrivate *priv = menu_shell->priv;
-
   while (menu_shell && !GTK_IS_MENU_BAR (menu_shell))
     {
       if (menu_shell->priv->parent_menu_shell)
