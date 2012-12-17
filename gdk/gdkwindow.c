@@ -6549,8 +6549,8 @@ gdk_window_set_background (GdkWindow      *window,
  * See also gdk_window_set_background_pattern().
  **/
 void
-gdk_window_set_background_rgba (GdkWindow *window,
-                                GdkRGBA   *rgba)
+gdk_window_set_background_rgba (GdkWindow     *window,
+                                const GdkRGBA *rgba)
 {
   cairo_pattern_t *pattern;
 
