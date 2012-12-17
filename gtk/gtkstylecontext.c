@@ -25,6 +25,7 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkcontainerprivate.h"
 #include "gtkcsscolorvalueprivate.h"
+#include "gtkcsscornervalueprivate.h"
 #include "gtkcssenginevalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
@@ -3230,6 +3231,13 @@ gtk_style_context_invalidate (GtkStyleContext *context)
   _gtk_bitmask_free (changes);
 }
 
+static gboolean
+corner_value_is_right_angle (GtkCssValue *value)
+{
+  return _gtk_css_corner_value_get_x (value, 100) <= 0.0 &&
+         _gtk_css_corner_value_get_y (value, 100) <= 0.0;
+}
+
 /**
  * gtk_style_context_set_background:
  * @context: a #GtkStyleContext
@@ -3244,21 +3252,33 @@ void
 gtk_style_context_set_background (GtkStyleContext *context,
                                   GdkWindow       *window)
 {
-  GtkStateFlags state;
-  GdkRGBA *color;
+  const GdkRGBA *color;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  state = gtk_style_context_get_state (context);
+  /* This is a sophisitcated optimization.
+   * If we know the GDK window's background will be opaque, we mark
+   * it as opaque. This is so GDK can do all the optimizations it does
+   * for opaque windows and be fast.
+   * This is mainly used when scrolling.
+   *
+   * We could indeed just set black instead of the color we have.
+   */
+  color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
 
-  gtk_style_context_get (context, state,
-                         "background-color", &color,
-                         NULL);
-  if (color)
+  if (color->alpha >= 1.0 &&
+      corner_value_is_right_angle (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS)) &&
+      corner_value_is_right_angle (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS)) &&
+      corner_value_is_right_angle (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS)) &&
+      corner_value_is_right_angle (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS)))
     {
       gdk_window_set_background_rgba (window, color);
-      gdk_rgba_free (color);
+    }
+  else
+    {
+      GdkRGBA transparent = { 0.0, 0.0, 0.0, 0.0 };
+      gdk_window_set_background_rgba (window, &transparent);
     }
 }
 
