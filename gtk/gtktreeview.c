@@ -386,8 +386,6 @@ struct _GtkTreeViewPrivate
   gint x_drag;
 
   /* Non-interactive Header Resizing, expand flag support */
-  gint prev_width;
-
   gint last_extra_space;
   gint last_extra_space_per_column;
   gint last_number_of_expand_columns;
@@ -585,9 +583,6 @@ static void     gtk_tree_view_get_preferred_width  (GtkWidget        *widget,
 static void     gtk_tree_view_get_preferred_height (GtkWidget        *widget,
 						    gint             *minimum,
 						    gint             *natural);
-static void     gtk_tree_view_size_request         (GtkWidget        *widget,
-						    GtkRequisition   *requisition,
-                                                    gboolean          may_validate);
 static void     gtk_tree_view_size_allocate        (GtkWidget        *widget,
 						    GtkAllocation    *allocation);
 static gboolean gtk_tree_view_draw                 (GtkWidget        *widget,
@@ -2368,9 +2363,9 @@ gtk_tree_view_unrealize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->unrealize (widget);
 }
 
-/* GtkWidget::size_request helper */
+/* GtkWidget::get_preferred_height helper */
 static void
-gtk_tree_view_size_request_columns (GtkTreeView *tree_view)
+gtk_tree_view_update_height (GtkTreeView *tree_view)
 {
   GList *list;
 
@@ -2388,37 +2383,6 @@ gtk_tree_view_size_request_columns (GtkTreeView *tree_view)
       gtk_widget_get_preferred_size (button, &requisition, NULL);
       tree_view->priv->header_height = MAX (tree_view->priv->header_height, requisition.height);
     }
-}
-
-
-/* Called only by ::size_request */
-static void
-gtk_tree_view_update_size (GtkTreeView *tree_view)
-{
-  GList *list;
-  GtkTreeViewColumn *column;
-  gint i;
-
-  if (tree_view->priv->model == NULL)
-    {
-      tree_view->priv->width = 0;
-      tree_view->priv->prev_width = 0;                   
-      tree_view->priv->height = 0;
-      return;
-    }
-
-  tree_view->priv->prev_width = tree_view->priv->width;  
-  tree_view->priv->width = 0;
-
-  /* keep this in sync with size_allocate below */
-  for (list = tree_view->priv->columns, i = 0; list; list = list->next, i++)
-    {
-      column = list->data;
-      if (!gtk_tree_view_column_get_visible (column))
-	continue;
-
-      tree_view->priv->width += _gtk_tree_view_column_request_width (column);
-    }
 
   if (tree_view->priv->tree == NULL)
     tree_view->priv->height = 0;
@@ -2427,37 +2391,31 @@ gtk_tree_view_update_size (GtkTreeView *tree_view)
 }
 
 static void
-gtk_tree_view_size_request (GtkWidget      *widget,
-			    GtkRequisition *requisition,
-                            gboolean        may_validate)
-{
-  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
-
-  if (may_validate)
-    {
-      /* we validate some rows initially just to make sure we have some size.
-       * In practice, with a lot of static lists, this should get a good width.
-       */
-      do_validate_rows (tree_view, FALSE);
-    }
-
-  gtk_tree_view_size_request_columns (tree_view);
-  gtk_tree_view_update_size (GTK_TREE_VIEW (widget));
-
-  requisition->width = tree_view->priv->width;
-  requisition->height = tree_view->priv->height + gtk_tree_view_get_effective_header_height (tree_view);
-}
-
-static void
 gtk_tree_view_get_preferred_width (GtkWidget *widget,
 				   gint      *minimum,
 				   gint      *natural)
 {
-  GtkRequisition requisition;
+  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
+  GList *list;
+  GtkTreeViewColumn *column;
+  gint width = 0;
 
-  gtk_tree_view_size_request (widget, &requisition, TRUE);
+  /* we validate some rows initially just to make sure we have some size.
+   * In practice, with a lot of static lists, this should get a good width.
+   */
+  do_validate_rows (tree_view, FALSE);
 
-  *minimum = *natural = requisition.width;
+  /* keep this in sync with size_allocate below */
+  for (list = tree_view->priv->columns; list; list = list->next)
+    {
+      column = list->data;
+      if (!gtk_tree_view_column_get_visible (column))
+	continue;
+
+      width += _gtk_tree_view_column_request_width (column);
+    }
+
+  *minimum = *natural = width;
 }
 
 static void
@@ -2465,11 +2423,14 @@ gtk_tree_view_get_preferred_height (GtkWidget *widget,
 				    gint      *minimum,
 				    gint      *natural)
 {
-  GtkRequisition requisition;
+  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
+  gint height;
 
-  gtk_tree_view_size_request (widget, &requisition, TRUE);
+  gtk_tree_view_update_height (tree_view);
 
-  *minimum = *natural = requisition.height;
+  height = tree_view->priv->height + gtk_tree_view_get_effective_header_height (tree_view);
+
+  *minimum = *natural = height;
 }
 
 static int
@@ -2723,11 +2684,6 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
                                                0,
                                                tree_view->priv->width - allocation->width));
 	    }
-	  else
-            gtk_adjustment_set_value (tree_view->priv->hadjustment,
-                                      CLAMP (tree_view->priv->width - (tree_view->priv->prev_width - gtk_adjustment_get_value (tree_view->priv->hadjustment)),
-                                             0,
-                                             tree_view->priv->width - allocation->width));
 	}
       else
         {
