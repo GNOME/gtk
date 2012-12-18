@@ -140,11 +140,20 @@ gtk_notebook_page_accessible_ref_child (AtkObject *accessible,
 static AtkStateSet *
 gtk_notebook_page_accessible_ref_state_set (AtkObject *accessible)
 {
+  GtkNotebookPageAccessible *page = GTK_NOTEBOOK_PAGE_ACCESSIBLE (accessible);
   AtkStateSet *state_set, *label_state_set, *merged_state_set;
   AtkObject *atk_label;
   GtkWidget *label;
+  AtkObject *selected;
 
   state_set = ATK_OBJECT_CLASS (_gtk_notebook_page_accessible_parent_class)->ref_state_set (accessible);
+
+  atk_state_set_add_state (state_set, ATK_STATE_SELECTABLE);
+
+  selected = atk_selection_ref_selection (ATK_SELECTION (page->priv->notebook), 0);
+  if (selected == accessible)
+    atk_state_set_add_state (state_set, ATK_STATE_SELECTED);
+  g_object_unref (selected);
 
   label = get_label_from_notebook_page (GTK_NOTEBOOK_PAGE_ACCESSIBLE (accessible));
   if (label)
