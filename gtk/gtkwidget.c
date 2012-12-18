@@ -3675,6 +3675,7 @@ gtk_widget_init (GtkWidget *widget)
   priv->double_buffered = TRUE;
   priv->redraw_on_alloc = TRUE;
   priv->alloc_needed = TRUE;
+  priv->state_flags = GTK_STATE_FLAG_DIR_LTR;
 
   /* this will be set to TRUE if the widget gets a child or if the
    * expand flag is set on the widget, but until one of those happen
@@ -10134,11 +10135,35 @@ static void
 gtk_widget_emit_direction_changed (GtkWidget        *widget,
                                    GtkTextDirection  old_dir)
 {
+  GtkTextDirection direction;
+  GtkStateFlags state;
+
   gtk_widget_update_pango_context (widget);
 
+  direction = gtk_widget_get_direction (widget);
+  state = widget->priv->state_flags;
+  state &= GTK_STATE_FLAG_DIR_LTR | GTK_STATE_FLAG_DIR_RTL;
+
+  switch (direction)
+    {
+    case GTK_TEXT_DIR_LTR:
+      state |= GTK_STATE_FLAG_DIR_LTR;
+      break;
+
+    case GTK_TEXT_DIR_RTL:
+      state |= GTK_STATE_FLAG_DIR_RTL;
+      break;
+
+    case GTK_TEXT_DIR_NONE:
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+
   if (widget->priv->context)
-    gtk_style_context_set_direction (widget->priv->context,
-                                     gtk_widget_get_direction (widget));
+    gtk_style_context_set_direction (widget->priv->context, direction);
+
+  gtk_widget_set_state_flags (widget, state, TRUE);
 
   g_signal_emit (widget, widget_signals[DIRECTION_CHANGED], 0, old_dir);
 }
@@ -13989,6 +14014,7 @@ gtk_widget_get_style_context (GtkWidget *widget)
 
       priv->context = gtk_style_context_new ();
 
+      gtk_style_context_set_state (priv->context, priv->state_flags);
       gtk_style_context_set_direction (priv->context, gtk_widget_get_direction (widget));
 
       screen = gtk_widget_get_screen (widget);
