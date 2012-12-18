@@ -728,6 +728,9 @@ update_type_references (void)
 
   type_refs_last_serial = serial;
 
+  if (type_refs_ht == NULL)
+    return;
+
   g_hash_table_iter_init (&iter, type_refs_ht);
   while (g_hash_table_iter_next (&iter,
 				 NULL, &value))
