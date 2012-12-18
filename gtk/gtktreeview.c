@@ -2406,7 +2406,7 @@ gtk_tree_view_get_preferred_width (GtkWidget *widget,
   for (list = tree_view->priv->columns; list; list = list->next)
     {
       column = list->data;
-      if (!gtk_tree_view_column_get_visible (column))
+      if (!gtk_tree_view_column_get_visible (column) || column == tree_view->priv->drag_column)
 	continue;
 
       width += _gtk_tree_view_column_request_width (column);
@@ -2489,7 +2489,7 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
     {
       column = (GtkTreeViewColumn *)list->data;
 
-      if (!gtk_tree_view_column_get_visible (column))
+      if (!gtk_tree_view_column_get_visible (column) || column == tree_view->priv->drag_column)
 	continue;
 
       full_requested_width += _gtk_tree_view_column_request_width (column);
@@ -2543,26 +2543,8 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
 
       column = list->data;
 
-      if (!gtk_tree_view_column_get_visible (column))
+      if (!gtk_tree_view_column_get_visible (column) || column == tree_view->priv->drag_column)
 	continue;
-
-      /* We need to handle the dragged button specially.
-       */
-      if (column == tree_view->priv->drag_column)
-	{
-	  GtkAllocation drag_allocation;
-	  GtkWidget    *button;
-
-	  button = gtk_tree_view_column_get_button (tree_view->priv->drag_column);
-
-	  drag_allocation.x = 0;
-	  drag_allocation.y = 0;
-          drag_allocation.width = gdk_window_get_width (tree_view->priv->drag_window);
-          drag_allocation.height = gdk_window_get_height (tree_view->priv->drag_window);
-	  gtk_widget_size_allocate (button, &drag_allocation);
-	  width += drag_allocation.width;
-	  continue;
-	}
 
       column_width = _gtk_tree_view_column_request_width (column);
 
@@ -2610,6 +2592,25 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
     }
 }
 
+/* GtkWidget::size_allocate helper */
+static void
+gtk_tree_view_size_allocate_drag_column (GtkWidget *widget)
+{
+  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
+  GtkAllocation drag_allocation;
+  GtkWidget *button;
+
+  if (tree_view->priv->drag_column == NULL)
+    return;
+
+  button = gtk_tree_view_column_get_button (tree_view->priv->drag_column);
+
+  drag_allocation.x = 0;
+  drag_allocation.y = 0;
+  drag_allocation.width = gdk_window_get_width (tree_view->priv->drag_window);
+  drag_allocation.height = gdk_window_get_height (tree_view->priv->drag_window);
+  gtk_widget_size_allocate (button, &drag_allocation);
+}
 
 static void
 gtk_tree_view_size_allocate (GtkWidget     *widget,
@@ -2649,6 +2650,7 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
    * tree view (used in updating the adjustments below) might change.
    */
   gtk_tree_view_size_allocate_columns (widget, &width_changed);
+  gtk_tree_view_size_allocate_drag_column (widget);
 
   g_object_freeze_notify (G_OBJECT (tree_view->priv->hadjustment));
   gtk_adjustment_set_page_size (tree_view->priv->hadjustment,
