@@ -1,3 +1,74 @@
+Overview of Changes in GTK+ 3.7.4
+=================================
+
+* GtkBuilder now lets you refer to external objects from a ui
+  file if the objects have been exported with the new function
+  gtk_builder_expose_object()
+
+* Font handling has been improved:
+ - The default font is no longer handled like a custom style sheet
+   that overrides everything, but as the initial value. This is the
+   same behavior as in web browsers.
+ - It is now possible to set font-family and font-size like other
+   CSS properties, and relative font sizes are supported. Font
+   sizes in CSS can be specified as numbers or with keywords
+   like xx-small, medium, smaller, larger,...
+
+* GTK+ now uses proper Unicode ellipses in strings.
+
+* The releases includes several noticable performance improvements:
+ - Size allocation has been optimized, by avoiding excessive
+   resizing in various situations.
+ - The performance of size groups has been improved.
+ - Text rendering in GtkLabel and other widgets has been optimized
+   to avoid excessive recreation of Pango layouts.
+ - Icon loading overhead was reduced by caching of GtkIconInfo.
+ - The CSS is now keeping a tree of selectors to speed up matchinh.
+
+* Deprecations and removals:
+ - Custom CSS properties have been deprecated
+ - Support for color schemes has been removed
+ - gtk_style_provider_get_style, gtk_style_provider_get_icon_factory
+ - GtkGradient and GtkSymbolicColor
+ - All the padding style properties in menus
+
+* Bugs closed:
+ 132333 Can't add a palette to the dialog of a color button
+ 371034 Doc for gtk_file_chooser_get_filename: Is the resulting path...
+ 447972 Add a way to specify user_data sent to signals
+ 548793 funny pattern for iterating GtkTreeModel
+ 595615 Use proper ellipses
+ 626499 GtkClipboard unnotified on change of OS X pasteboard owner
+ 668239 texts disappear when notebook switch page at zh_CN locate!
+ 677339 GTK+ 3 documentation wrong about GtkWidget scroll-event signal
+ 680065 treemodelfilter: Make the constructor binding friendly
+ 687065 InstallableOptions is not filtered in cups backend
+ 687816 GtkTreeView does not draw correctly since commit aaedc7b6
+ 688710 [PATCH] Splash screens shouldn't stay on top of all applicat...
+ 688744 Don't use gtk_style_context_set_background() to render icon/...
+ 688884 Typo in gtk_tree_view_set_tooltip_column documentation
+ 689012 "Copy file's location" menu item in file chooser dialog uses...
+ 689047 Obtain the recent files max age setting from xsettings
+ 689081 No caching of icons
+ 689168 Deprecate some menu style properties
+ 689401 xi2: Abort early if we don't have a proper GDK window
+ 689584 Add summary and description to "show-hidden" key
+ 689847 Add fast repeated typename -> GType resolver
+ 689923 Missing null-check in GtkEntryAccessible
+ 690099 GtkScrolledWindow with NEVER policy don't resize with children
+ 690266 Freeze with F10/Shift-F10 on submenus
+
+* Translation updates:
+ Assamese
+ British English
+ Dutch
+ German
+ Hebrew
+ Polish
+ Slovenian
+ Spanish
+
+
 Overview of Changes in GTK+ 3.7.2
 =================================
 
