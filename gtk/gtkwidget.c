@@ -10160,9 +10160,6 @@ gtk_widget_emit_direction_changed (GtkWidget        *widget,
       break;
     }
 
-  if (widget->priv->context)
-    gtk_style_context_set_direction (widget->priv->context, direction);
-
   gtk_widget_set_state_flags (widget, state, TRUE);
 
   g_signal_emit (widget, widget_signals[DIRECTION_CHANGED], 0, old_dir);
@@ -14015,7 +14012,6 @@ gtk_widget_get_style_context (GtkWidget *widget)
       priv->context = gtk_style_context_new ();
 
       gtk_style_context_set_state (priv->context, priv->state_flags);
-      gtk_style_context_set_direction (priv->context, gtk_widget_get_direction (widget));
 
       screen = gtk_widget_get_screen (widget);
       if (screen)

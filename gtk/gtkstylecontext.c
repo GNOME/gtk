@@ -368,8 +368,6 @@ struct _GtkStyleContextPrivate
   GHashTable *style_data;
   GtkStyleInfo *info;
 
-  GtkTextDirection direction;
-
   GtkCssChange relevant_changes;
   GtkCssChange pending_changes;
 
@@ -715,13 +713,12 @@ gtk_style_context_init (GtkStyleContext *style_context)
                                             (GDestroyNotify) style_info_free,
                                             (GDestroyNotify) style_data_unref);
 
-  priv->direction = GTK_TEXT_DIR_LTR;
-
   priv->screen = gdk_screen_get_default ();
   priv->relevant_changes = GTK_CSS_CHANGE_ANY;
 
   /* Create default info store */
   priv->info = style_info_new ();
+  priv->info->state_flags = GTK_STATE_FLAG_DIR_LTR;
 
   gtk_style_context_set_cascade (style_context,
                                  _gtk_style_cascade_get_for_screen (priv->screen));
@@ -915,7 +912,7 @@ gtk_style_context_impl_get_property (GObject    *object,
       g_value_set_object (value, priv->screen);
       break;
     case PROP_DIRECTION:
-      g_value_set_enum (value, priv->direction);
+      g_value_set_enum (value, gtk_style_context_get_direction (style_context));
       break;
     case PROP_PARENT:
       g_value_set_object (value, priv->parent);
@@ -1481,9 +1478,18 @@ void
 gtk_style_context_set_state (GtkStyleContext *context,
                              GtkStateFlags    flags)
 {
+  GtkStateFlags old_flags;
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
+  old_flags = context->priv->info->state_flags;
+  if (old_flags == flags)
+    return;
+
   context->priv->info->state_flags = flags;
+
+  if (((old_flags ^ flags) & (GTK_STATE_FLAG_DIR_LTR | GTK_STATE_FLAG_DIR_RTL)) &&
+      !gtk_style_context_is_saved (context))
+    g_object_notify (G_OBJECT (context), "direction");
   
   gtk_style_context_queue_invalidate_internal (context, GTK_CSS_CHANGE_STATE);
 }
@@ -2621,14 +2627,29 @@ void
 gtk_style_context_set_direction (GtkStyleContext  *context,
                                  GtkTextDirection  direction)
 {
-  GtkStyleContextPrivate *priv;
+  GtkStateFlags state;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  priv = context->priv;
-  priv->direction = direction;
+  state = gtk_style_context_get_state (context);
+  state &= ~(GTK_STATE_FLAG_DIR_LTR | GTK_STATE_FLAG_DIR_RTL);
 
-  g_object_notify (G_OBJECT (context), "direction");
+  switch (direction)
+    {
+    case GTK_TEXT_DIR_LTR:
+      state |= GTK_STATE_FLAG_DIR_LTR;
+      break;
+
+    case GTK_TEXT_DIR_RTL:
+      state |= GTK_STATE_FLAG_DIR_RTL;
+      break;
+
+    case GTK_TEXT_DIR_NONE:
+    default:
+      break;
+    }
+
+  gtk_style_context_set_state (context, state);
 }
 
 /**
@@ -2644,12 +2665,18 @@ gtk_style_context_set_direction (GtkStyleContext  *context,
 GtkTextDirection
 gtk_style_context_get_direction (GtkStyleContext *context)
 {
-  GtkStyleContextPrivate *priv;
+  GtkStateFlags state;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), GTK_TEXT_DIR_LTR);
 
-  priv = context->priv;
-  return priv->direction;
+  state = gtk_style_context_get_state (context);
+
+  if (state & GTK_STATE_FLAG_DIR_LTR)
+    return GTK_TEXT_DIR_LTR;
+  else if (state & GTK_STATE_FLAG_DIR_RTL)
+    return GTK_TEXT_DIR_RTL;
+  else
+    return GTK_TEXT_DIR_NONE;
 }
 
 /**
