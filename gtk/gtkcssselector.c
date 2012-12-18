@@ -1107,7 +1107,9 @@ gtk_css_selector_pseudoclass_state_print (const GtkCssSelector *selector,
     "insensitive",
     "inconsistent",
     "focus",
-    "backdrop"
+    "backdrop",
+    "dir(ltr)",
+    "dir(rtl)"
   };
   guint i, state;
 
@@ -1823,7 +1825,9 @@ parse_selector_pseudo_class (GtkCssParser   *parser,
     { "inconsistent", GTK_STATE_FLAG_INCONSISTENT, },
     { "focused",      GTK_STATE_FLAG_FOCUSED, },
     { "focus",        GTK_STATE_FLAG_FOCUSED, },
-    { "backdrop",     GTK_STATE_FLAG_BACKDROP, }
+    { "backdrop",     GTK_STATE_FLAG_BACKDROP, },
+    { "dir(ltr)",     GTK_STATE_FLAG_DIR_LTR, },
+    { "dir(rtl)",     GTK_STATE_FLAG_DIR_RTL, }
   };
   guint i;
 
