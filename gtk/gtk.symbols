@@ -338,6 +338,7 @@ gtk_builder_connect_signals
 gtk_builder_connect_signals_full
 gtk_builder_error_get_type
 gtk_builder_error_quark
+gtk_builder_expose_object
 gtk_builder_get_object
 gtk_builder_get_objects
 gtk_builder_get_translation_domain

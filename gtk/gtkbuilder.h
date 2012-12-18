@@ -141,6 +141,7 @@ guint        gtk_builder_add_objects_from_string (GtkBuilder    *builder,
 GObject*     gtk_builder_get_object              (GtkBuilder    *builder,
                                                   const gchar   *name);
 GSList*      gtk_builder_get_objects             (GtkBuilder    *builder);
+GDK_AVAILABLE_IN_3_8
 void         gtk_builder_expose_object           (GtkBuilder    *builder,
                                                   const gchar   *name,
                                                   GObject       *object);
