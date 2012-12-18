@@ -716,7 +716,7 @@ static gboolean validate_row             (GtkTreeView *tree_view,
 static void     validate_visible_area    (GtkTreeView *tree_view);
 static gboolean validate_rows_handler    (GtkTreeView *tree_view);
 static gboolean do_validate_rows         (GtkTreeView *tree_view,
-					  gboolean     size_request);
+					  gboolean     queue_resize);
 static gboolean validate_rows            (GtkTreeView *tree_view);
 static gboolean presize_handler_callback (gpointer     data);
 static void     install_presize_handler  (GtkTreeView *tree_view);
@@ -6707,34 +6707,11 @@ do_validate_rows (GtkTreeView *tree_view, gboolean queue_resize)
  done:
   if (validated_area)
     {
-      GtkRequisition requisition;
-
-      /* We temporarily guess a size, under the assumption that it will be the
-       * same when we get our next size_allocate.  If we don't do this, we'll be
-       * in an inconsistent state when we call top_row_to_dy. */
-
-      /* FIXME: This is called from size_request, for some reason it is not infinitely
-       * recursing, we cannot call gtk_widget_get_preferred_size() here because that's
-       * not allowed (from inside ->get_preferred_width/height() implementations, one
-       * should call the vfuncs directly). However what is desired here is the full
-       * size including any margins and limited by any alignment (i.e. after 
-       * GtkWidget:adjust_size_request() is called).
-       *
-       * Currently bypassing this but the real solution is to not update the scroll adjustments
-       * untill we've recieved an allocation (never update scroll adjustments from size-requests).
-       */
-      gtk_tree_view_size_request (GTK_WIDGET (tree_view), &requisition, FALSE);
-
       /* If rows above the current position have changed height, this has
        * affected the current view and thus needs a redraw.
        */
       if (y != -1 && y < gtk_adjustment_get_value (tree_view->priv->vadjustment))
         gtk_widget_queue_draw (GTK_WIDGET (tree_view));
-
-      gtk_adjustment_set_upper (tree_view->priv->hadjustment,
-                                MAX (gtk_adjustment_get_upper (tree_view->priv->hadjustment), requisition.width));
-      gtk_adjustment_set_upper (tree_view->priv->vadjustment,
-                                MAX (gtk_adjustment_get_upper (tree_view->priv->vadjustment), requisition.height));
 
       if (queue_resize)
         gtk_widget_queue_resize_no_redraw (GTK_WIDGET (tree_view));
