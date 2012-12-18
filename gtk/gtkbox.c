@@ -151,8 +151,6 @@ static void gtk_box_size_allocate         (GtkWidget              *widget,
 static void gtk_box_compute_expand     (GtkWidget      *widget,
                                         gboolean       *hexpand,
                                         gboolean       *vexpand);
-static void gtk_box_direction_changed  (GtkWidget        *widget,
-                                        GtkTextDirection  previous_direction);
 
 static void gtk_box_set_property       (GObject        *object,
                                         guint           prop_id,
@@ -222,7 +220,6 @@ gtk_box_class_init (GtkBoxClass *class)
   widget_class->get_preferred_height_for_width = gtk_box_get_preferred_height_for_width;
   widget_class->get_preferred_width_for_height = gtk_box_get_preferred_width_for_height;
   widget_class->compute_expand                 = gtk_box_compute_expand;
-  widget_class->direction_changed              = gtk_box_direction_changed;
 
   container_class->add = gtk_box_add;
   container_class->remove = gtk_box_remove;
@@ -858,9 +855,7 @@ count_widget_position (GtkWidget *widget,
 
   if (count->widget == widget)
     count->found = TRUE;
-  else if (count->found)
-    count->after++;
-  else
+  else if (!count->found)
     count->before++;
 }
 
@@ -882,11 +877,7 @@ gtk_box_get_visible_position (GtkBox    *box,
   if (!count.found)
     return -1;
 
-  if (box->priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
-      gtk_widget_get_direction (GTK_WIDGET (box)) == GTK_TEXT_DIR_RTL)
-    return count.after;
-  else
-    return count.before;
+  return count.before;
 }
 
 static GtkWidgetPath *
@@ -895,11 +886,9 @@ gtk_box_get_path_for_child (GtkContainer *container,
 {
   GtkWidgetPath *path, *sibling_path;
   GtkBox *box;
-  GtkBoxPrivate *private;
   GList *list, *children;
 
   box = GTK_BOX (container);
-  private = box->priv;
 
   path = _gtk_widget_create_path (GTK_WIDGET (container));
 
@@ -911,9 +900,6 @@ gtk_box_get_path_for_child (GtkContainer *container,
 
       /* get_children works in visible order */
       children = gtk_container_get_children (container);
-      if (private->orientation == GTK_ORIENTATION_HORIZONTAL &&
-          gtk_widget_get_direction (GTK_WIDGET (box)) == GTK_TEXT_DIR_RTL)
-        children = g_list_reverse (children);
 
       for (list = children; list; list = list->next)
         {
@@ -952,13 +938,6 @@ gtk_box_invalidate_order (GtkBox *box)
   gtk_container_foreach (GTK_CONTAINER (box),
                          (GtkCallback) gtk_box_invalidate_order_foreach,
                          NULL);
-}
-
-static void
-gtk_box_direction_changed (GtkWidget        *widget,
-                           GtkTextDirection  previous_direction)
-{
-  gtk_box_invalidate_order (GTK_BOX (widget));
 }
 
 static void
