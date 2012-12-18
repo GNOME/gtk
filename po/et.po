@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: gtk+ MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-10-29 21:33+0000\n"
-"PO-Revision-Date: 2012-10-30 00:02+0300\n"
+"POT-Creation-Date: 2012-12-18 07:50+0000\n"
+"PO-Revision-Date: 2012-12-08 00:49+0300\n"
 "Last-Translator: Mattias Põldaru <mahfiaz@gmail.com>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "Language: et\n"
@@ -637,8 +637,8 @@ msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
 
-msgid "Other application..."
-msgstr "Muu rakendus..."
+msgid "Other application…"
+msgstr "Muu rakendus…"
 
 msgid "Failed to look for applications online"
 msgstr "Rakenduste otsimine veebist nurjus"
@@ -841,8 +841,8 @@ msgstr "Vigane"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-msgid "New accelerator..."
-msgstr "Uus kiirklahv..."
+msgid "New accelerator…"
+msgstr "Uus kiirklahv…"
 
 #, c-format
 msgctxt "progress bar label"
@@ -1082,8 +1082,8 @@ msgstr "tolli"
 msgid "mm"
 msgstr "mm"
 
-msgid "Margins from Printer..."
-msgstr "Veerised printerist..."
+msgid "Margins from Printer…"
+msgstr "Veerised printerist…"
 
 #, c-format
 msgid "Custom Size %d"
@@ -1172,8 +1172,8 @@ msgstr "Töölaud"
 msgid "(None)"
 msgstr "(puudub)"
 
-msgid "Other..."
-msgstr "Muu..."
+msgid "Other…"
+msgstr "Muu…"
 
 msgid "Type name of new folder"
 msgstr "Sisesta uue kataloogi nimi"
@@ -1261,8 +1261,8 @@ msgstr "Eemalda valitud järjehoidja"
 msgid "Remove"
 msgstr "Eemalda"
 
-msgid "Rename..."
-msgstr "Muuda nime..."
+msgid "Rename…"
+msgstr "Muuda nime…"
 
 #. Accessible object name for the file chooser's shortcuts pane
 msgid "Places"
@@ -1450,8 +1450,8 @@ msgstr "_Ava link"
 msgid "Copy _Link Address"
 msgstr "Kopeeri _lingi aadress"
 
-msgid "APPLICATION [URI...] - launch an APPLICATION with URI."
-msgstr "RAKENDUS [URI...] - RAKENDUSE käivitamine URI-ga."
+msgid "APPLICATION [URI…] — launch an APPLICATION with URI."
+msgstr "RAKENDUS [URI…] — RAKENDUSE käivitamine URI-ga."
 
 #. Translators: this message will appear after the usage string
 #. and before the list of options.
@@ -1664,8 +1664,8 @@ msgstr ""
 " Ülemine: %s %s\n"
 " Alumine: %s %s"
 
-msgid "Manage Custom Sizes..."
-msgstr "Kohandatud suuruste haldamine..."
+msgid "Manage Custom Sizes…"
+msgstr "Kohandatud suuruste haldamine…"
 
 msgid "_Format for:"
 msgstr "Millele _vormindatakse:"
@@ -1805,8 +1805,8 @@ msgstr "Kirjeldamata viga"
 msgid "Getting printer information failed"
 msgstr "Tõrge printeri andmete hankimisel"
 
-msgid "Getting printer information..."
-msgstr "Printeri andmete hankimine..."
+msgid "Getting printer information…"
+msgstr "Printeri andmete hankimine…"
 
 msgid "Printer"
 msgstr "Printer"
