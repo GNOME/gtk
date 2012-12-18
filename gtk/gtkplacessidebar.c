@@ -3807,6 +3807,44 @@ gtk_places_sidebar_set_current_location (GtkPlacesSidebar *sidebar, GFile *locat
 }
 
 /**
+ * gtk_places_sidebar_get_selected_location:
+ * @sidebar: a places sidebar
+ *
+ * When you connect to the populate-popup signal for the @sidebar, the callback functions
+ * for your menu items will need to know the file to which the contextual menu refers.  Use
+ * this function to obtain that file's location.
+ *
+ * Returns: a GFile with the selected location, or #NULL if nothing is visually selected.
+ * It may be the case that the sidebar doesn't have anything visually selected because
+ * the location being shown in the sidebar's surrounding widgets is not actually
+ * in the list of places that the sidebar shows.  In that case, use
+ * gtk_places_sidebar_get_current_location().
+ */
+GFile *
+gtk_places_sidebar_get_selected_location (GtkPlacesSidebar *sidebar)
+{
+	GtkTreeIter iter;
+	GFile *file;
+
+	g_return_val_if_fail (sidebar != NULL, NULL);
+
+	file = NULL;
+
+	if (get_selected_iter (sidebar, &iter)) {
+		char *uri;
+
+		gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store), &iter,
+				    PLACES_SIDEBAR_COLUMN_URI, &uri,
+				    -1);
+
+		file = g_file_new_for_uri (uri);
+		g_free (uri);
+	}
+
+	return file;
+}
+
+/**
  * gtk_places_sidebar_set_show_desktop:
  * @sidebar: a places sidebar
  * @show_desktop: whether to show an item for the Desktop folder
