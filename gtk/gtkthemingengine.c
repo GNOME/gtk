@@ -670,6 +670,10 @@ gtk_theming_engine_has_region (GtkThemingEngine *engine,
  * Returns: the widget direction
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: Use gtk_theming_engine_get_state() and
+ *   check for #GTK_STATE_FLAG_DIR_LTR and
+ *   #GTK_STATE_FLAG_DIR_RTL instead.
  **/
 GtkTextDirection
 gtk_theming_engine_get_direction (GtkThemingEngine *engine)
@@ -679,7 +683,9 @@ gtk_theming_engine_get_direction (GtkThemingEngine *engine)
   g_return_val_if_fail (GTK_IS_THEMING_ENGINE (engine), GTK_TEXT_DIR_LTR);
 
   priv = engine->priv;
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   return gtk_style_context_get_direction (priv->context);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 /**
@@ -1808,7 +1814,7 @@ gtk_theming_engine_render_expander (GtkThemingEngine *engine,
   gtk_theming_engine_get_color (engine, flags, &fg_color);
   gtk_theming_engine_get_border_color (engine, flags, &outline_color);
 
-  is_rtl = (gtk_theming_engine_get_direction (engine) == GTK_TEXT_DIR_RTL);
+  is_rtl = (gtk_theming_engine_get_state (engine) & GTK_STATE_FLAG_DIR_RTL);
   line_width = 1;
   progress = (flags & GTK_STATE_FLAG_ACTIVE) ? 1 : 0;
 

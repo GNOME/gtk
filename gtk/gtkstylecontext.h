@@ -836,8 +836,10 @@ void        gtk_style_context_set_screen (GtkStyleContext *context,
                                           GdkScreen       *screen);
 GdkScreen * gtk_style_context_get_screen (GtkStyleContext *context);
 
+GDK_DEPRECATED_IN_3_8_FOR(gtk_style_context_set_state)
 void             gtk_style_context_set_direction (GtkStyleContext  *context,
                                                   GtkTextDirection  direction);
+GDK_DEPRECATED_IN_3_8_FOR(gtk_style_context_get_state)
 GtkTextDirection gtk_style_context_get_direction (GtkStyleContext  *context);
 
 void             gtk_style_context_set_junction_sides (GtkStyleContext  *context,

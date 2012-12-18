@@ -881,8 +881,10 @@ gtk_style_context_impl_set_property (GObject      *object,
                                     g_value_get_object (value));
       break;
     case PROP_DIRECTION:
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_style_context_set_direction (style_context,
                                        g_value_get_enum (value));
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_PARENT:
       gtk_style_context_set_parent (style_context,
@@ -912,7 +914,9 @@ gtk_style_context_impl_get_property (GObject    *object,
       g_value_set_object (value, priv->screen);
       break;
     case PROP_DIRECTION:
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       g_value_set_enum (value, gtk_style_context_get_direction (style_context));
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_PARENT:
       g_value_set_object (value, priv->parent);
@@ -2622,6 +2626,10 @@ gtk_style_context_get_screen (GtkStyleContext *context)
  * call this yourself.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: Use gtk_style_context_set_state() with
+ *   #GTK_STATE_FLAG_DIR_LTR and #GTK_STATE_FLAG_DIR_RTL
+ *   instead.
  **/
 void
 gtk_style_context_set_direction (GtkStyleContext  *context,
@@ -2661,6 +2669,10 @@ gtk_style_context_set_direction (GtkStyleContext  *context,
  * Returns: the widget direction
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: Use gtk_style_context_get_state() and
+ *   check for #GTK_STATE_FLAG_DIR_LTR and
+ *   #GTK_STATE_FLAG_DIR_RTL instead.
  **/
 GtkTextDirection
 gtk_style_context_get_direction (GtkStyleContext *context)

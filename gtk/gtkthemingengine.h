@@ -224,6 +224,7 @@ gboolean      gtk_theming_engine_state_is_running (GtkThemingEngine *engine,
                                                    GtkStateType      state,
                                                    gdouble          *progress);
 
+GDK_DEPRECATED_IN_3_8_FOR(gtk_theming_engine_get_state)
 GtkTextDirection gtk_theming_engine_get_direction (GtkThemingEngine *engine);
 
 GtkJunctionSides gtk_theming_engine_get_junction_sides (GtkThemingEngine *engine);
