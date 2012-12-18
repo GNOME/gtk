@@ -23,6 +23,7 @@
 struct _GtkMenuItemAccessiblePrivate
 {
   gchar *text;
+  gboolean selected;
 };
 
 #define KEYBINDING_SEPARATOR ";"
@@ -146,6 +147,10 @@ gtk_menu_item_accessible_ref_state_set (AtkObject *obj)
   AtkStateSet *state_set, *parent_state_set;
 
   state_set = ATK_OBJECT_CLASS (_gtk_menu_item_accessible_parent_class)->ref_state_set (obj);
+
+  atk_state_set_add_state (state_set, ATK_STATE_SELECTABLE);
+  if (GTK_MENU_ITEM_ACCESSIBLE (obj)->priv->selected)
+    atk_state_set_add_state (state_set, ATK_STATE_SELECTED);
 
   menu_item = atk_object_get_parent (obj);
 
@@ -620,6 +625,7 @@ menu_item_selection (GtkMenuItem  *item,
   gint i;
 
   obj = gtk_widget_get_accessible (GTK_WIDGET (item));
+  GTK_MENU_ITEM_ACCESSIBLE (obj)->priv->selected = selected;
   atk_object_notify_state_change (obj, ATK_STATE_SELECTED, selected);
 
   for (i = 0; i < atk_object_get_n_accessible_children (obj); i++)
