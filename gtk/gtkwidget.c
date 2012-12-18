@@ -300,12 +300,12 @@
  * all flags will be set on children (think prelight or active), but we
  * might want to not do this for some.
  */
-#define GTK_STATE_FLAGS_DONT_PROPAGATE (GTK_STATE_FLAG_FOCUSED)
+#define GTK_STATE_FLAGS_DONT_PROPAGATE (GTK_STATE_FLAG_FOCUSED | GTK_STATE_FLAG_DIR_LTR | GTK_STATE_FLAG_DIR_RTL)
 #define GTK_STATE_FLAGS_DO_PROPAGATE (~GTK_STATE_FLAGS_DONT_PROPAGATE)
 
 #define WIDGET_CLASS(w)	 GTK_WIDGET_GET_CLASS (w)
 
-#define GTK_STATE_FLAGS_BITS 7
+#define GTK_STATE_FLAGS_BITS 9
 
 struct _GtkWidgetPrivate
 {

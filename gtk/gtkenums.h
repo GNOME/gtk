@@ -860,8 +860,12 @@ typedef enum
  * @GTK_STATE_FLAG_INCONSISTENT: Widget is inconsistent.
  * @GTK_STATE_FLAG_FOCUSED: Widget has the keyboard focus.
  * @GTK_STATE_FLAG_BACKDROP: Widget is in a background toplevel window.
+ * @GTK_STATE_FLAG_LTR: Widget is in left-to-right text direction
+ * @GTK_STATE_FLAG_RTL: Widget is in right-to-left text direction
  *
- * Describes a widget state.
+ * Describes a widget state. Widget states are used to match the widget
+ * against CSS pseudo-classes. Note that GTK extends the regular CSS
+ * classes and sometimes uses different names.
  */
 typedef enum
 {
@@ -872,7 +876,9 @@ typedef enum
   GTK_STATE_FLAG_INSENSITIVE  = 1 << 3,
   GTK_STATE_FLAG_INCONSISTENT = 1 << 4,
   GTK_STATE_FLAG_FOCUSED      = 1 << 5,
-  GTK_STATE_FLAG_BACKDROP     = 1 << 6
+  GTK_STATE_FLAG_BACKDROP     = 1 << 6,
+  GTK_STATE_FLAG_DIR_LTR      = 1 << 7,
+  GTK_STATE_FLAG_DIR_RTL      = 1 << 8
 } GtkStateFlags;
 
 /**
