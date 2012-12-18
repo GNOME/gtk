@@ -147,12 +147,6 @@ GdkWindow        *_gtk_tree_view_column_get_window       (GtkTreeViewColumn  *co
 void              _gtk_tree_view_column_push_padding          (GtkTreeViewColumn  *column,
 							       gint                padding);
 gint              _gtk_tree_view_column_get_requested_width   (GtkTreeViewColumn  *column);
-void              _gtk_tree_view_column_set_resized_width     (GtkTreeViewColumn  *column,
-							       gint                width);
-gint              _gtk_tree_view_column_get_resized_width     (GtkTreeViewColumn  *column);
-void              _gtk_tree_view_column_set_use_resized_width (GtkTreeViewColumn  *column,
-							       gboolean            use_resized_width);
-gboolean          _gtk_tree_view_column_get_use_resized_width (GtkTreeViewColumn  *column);
 gint              _gtk_tree_view_column_get_drag_x            (GtkTreeViewColumn  *column);
 GtkCellAreaContext *_gtk_tree_view_column_get_context         (GtkTreeViewColumn  *column);
 void              _gtk_tree_view_reset_header_styles       (GtkTreeView        *tree_view);
