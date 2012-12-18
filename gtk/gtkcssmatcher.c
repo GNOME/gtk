@@ -19,7 +19,10 @@
 
 #include "gtkcssmatcherprivate.h"
 
+#include "gtkcontainer.h"
+#include "gtkwidget.h"
 #include "gtkwidgetpath.h"
+#include "actors/gtkwidgetactorprivate.h"
 
 /* GTK_CSS_MATCHER_WIDGET_PATH */
 
@@ -436,8 +439,14 @@ gtk_css_matcher_actor_get_parent (GtkCssMatcher       *matcher,
     {
       if (GTK_IS_CSS_BOX (parent))
         {
-          _gtk_css_matcher_actor_init (matcher, GTK_CSS_BOX (parent));
-          return TRUE;
+          if (_gtk_css_matcher_actor_init (matcher, GTK_CSS_BOX (parent)))
+            return TRUE;
+          if (_gtk_css_matcher_init (matcher,
+                                     gtk_widget_get_path (_gtk_actor_get_widget (parent)),
+                                     0))
+            return TRUE;
+
+          return FALSE;
         }
     }
 
@@ -456,8 +465,14 @@ gtk_css_matcher_actor_get_previous (GtkCssMatcher       *matcher,
     {
       if (GTK_IS_CSS_BOX (prev))
         {
-          _gtk_css_matcher_actor_init (matcher, GTK_CSS_BOX (prev));
-          return TRUE;
+          if (_gtk_css_matcher_actor_init (matcher, GTK_CSS_BOX (prev)))
+            return TRUE;
+          if (_gtk_css_matcher_init (matcher,
+                                     gtk_widget_get_path (_gtk_actor_get_widget (prev)),
+                                     0))
+            return TRUE;
+
+          return FALSE;
         }
     }
 
@@ -573,13 +588,41 @@ static const GtkCssMatcherClass GTK_CSS_MATCHER_ACTOR = {
   FALSE
 };
 
-void
+static gboolean
+actor_needs_to_use_widget_path (GtkActor *actor)
+{
+  GtkWidget *widget, *parent;
+
+  if (!GTK_IS_WIDGET_ACTOR (actor))
+    return FALSE;
+
+  widget = _gtk_actor_get_widget (actor);
+  if (widget == NULL)
+    return FALSE;
+
+  parent = gtk_widget_get_parent (widget);
+  if (parent == NULL)
+    return FALSE;
+
+  if (GTK_CONTAINER_GET_CLASS (parent)->get_path_for_child == 
+      GTK_CONTAINER_CLASS(g_type_class_peek (GTK_TYPE_CONTAINER))->get_path_for_child)
+    return FALSE;
+
+  return TRUE;
+}
+
+gboolean
 _gtk_css_matcher_actor_init (GtkCssMatcher *matcher,
                              GtkCssBox     *box)
 {
-  g_return_if_fail (matcher != NULL);
-  g_return_if_fail (GTK_IS_CSS_BOX (box));
+  g_return_val_if_fail (matcher != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_CSS_BOX (box), FALSE);
+
+  if (actor_needs_to_use_widget_path (GTK_ACTOR (box)))
+    return FALSE;
 
   matcher->actor.klass = &GTK_CSS_MATCHER_ACTOR;
   matcher->actor.actor = GTK_ACTOR (box);
+
+  return TRUE;
 }

@@ -88,8 +88,8 @@ void              _gtk_css_matcher_any_init       (GtkCssMatcher          *match
 void              _gtk_css_matcher_superset_init  (GtkCssMatcher          *matcher,
                                                    const GtkCssMatcher    *subset,
                                                    GtkCssChange            relevant);
-void              _gtk_css_matcher_actor_init     (GtkCssMatcher          *matcher,
-                                                   GtkCssBox              *box);
+gboolean          _gtk_css_matcher_actor_init     (GtkCssMatcher          *matcher,
+                                                   GtkCssBox              *box) G_GNUC_WARN_UNUSED_RESULT;
 
 
 static inline gboolean

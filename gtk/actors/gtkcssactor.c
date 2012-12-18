@@ -235,38 +235,10 @@ _gtk_css_actor_get_style_context (GtkCssActor *actor)
 }
 
 static gboolean
-actor_needs_to_use_widget_path (GtkActor *actor)
-{
-  GtkWidget *widget, *parent;
-
-  if (!GTK_IS_WIDGET_ACTOR (actor))
-    return FALSE;
-
-  widget = _gtk_actor_get_widget (actor);
-  if (widget == NULL)
-    return FALSE;
-
-  parent = gtk_widget_get_parent (widget);
-  if (parent == NULL)
-    return FALSE;
-
-  if (GTK_CONTAINER_GET_CLASS (parent)->get_path_for_child == 
-      GTK_CONTAINER_CLASS(g_type_class_peek (GTK_TYPE_CONTAINER))->get_path_for_child)
-    return FALSE;
-
-  return TRUE;
-}
-
-static gboolean
 gtk_css_actor_source_init_css_matcher (GtkCssMatcher *matcher,
                                        gpointer       actor)
 {
-  if (actor_needs_to_use_widget_path (actor))
-    return FALSE;
-
-  _gtk_css_matcher_actor_init (matcher, actor);
-
-  return TRUE;
+  return _gtk_css_matcher_actor_init (matcher, actor);
 }
 
 static GtkWidgetPath *
