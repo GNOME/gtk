@@ -2092,48 +2092,48 @@ gtk_tree_view_column_get_x_offset (GtkTreeViewColumn *tree_column)
   return tree_column->priv->x_offset;
 }
 
-gint
-_gtk_tree_view_column_request_width (GtkTreeViewColumn *tree_column)
+void
+_gtk_tree_view_column_request_width (GtkTreeViewColumn *tree_column,
+                                     gint              *minimum,
+                                     gint              *natural)
 {
-  GtkTreeViewColumnPrivate *priv;
-  gint real_requested_width;
+  GtkTreeViewColumnPrivate *priv = tree_column->priv;
+  gint minimum_width = 1, natural_width = 1;
+  gint button_minimum, button_natural;
 
-  priv = tree_column->priv;
+  if (priv->column_type != GTK_TREE_VIEW_COLUMN_FIXED)
+    {
+      gtk_cell_area_context_get_preferred_width (priv->cell_area_context, &minimum_width, &natural_width);
+      minimum_width += priv->padding;
+      natural_width += priv->padding;
+
+      if (gtk_tree_view_get_headers_visible (GTK_TREE_VIEW (priv->tree_view)))
+        {
+          gtk_widget_get_preferred_width (priv->button, &button_minimum, &button_natural);
+          minimum_width = MAX (minimum_width, button_minimum);
+          natural_width = MAX (natural_width, button_natural);
+        }
+    }
 
   if (priv->fixed_width != -1)
-    {
-      real_requested_width = priv->fixed_width;
-    }
-  else if (gtk_tree_view_get_headers_visible (GTK_TREE_VIEW (priv->tree_view)))
-    {
-      gint button_request;
-      gint requested_width;
-
-      gtk_cell_area_context_get_preferred_width (priv->cell_area_context, &requested_width, NULL);
-      requested_width += priv->padding;
-
-      gtk_widget_get_preferred_width (priv->button, &button_request, NULL);
-      real_requested_width = MAX (requested_width, button_request);
-    }
-  else
-    {
-      gint requested_width;
-
-      gtk_cell_area_context_get_preferred_width (priv->cell_area_context, &requested_width, NULL);
-      requested_width += priv->padding;
-
-      real_requested_width = requested_width;
-      if (real_requested_width < 0)
-        real_requested_width = 0;
-    }
+    natural_width = MAX (priv->fixed_width, minimum_width);
 
   if (priv->min_width != -1)
-    real_requested_width = MAX (real_requested_width, priv->min_width);
+    {
+      minimum_width = MAX (minimum_width, priv->min_width);
+      natural_width = MAX (natural_width, priv->min_width);
+    }
 
   if (priv->max_width != -1)
-    real_requested_width = MIN (real_requested_width, priv->max_width);
+    {
+      minimum_width = MIN (minimum_width, priv->max_width);
+      natural_width = MIN (natural_width, priv->max_width);
+    }
 
-  return real_requested_width;
+  if (minimum != NULL)
+    *minimum = minimum_width;
+  if (natural != NULL)
+    *natural = natural_width;
 }
 
 void

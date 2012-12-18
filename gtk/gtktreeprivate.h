@@ -106,7 +106,9 @@ void _gtk_tree_view_column_unrealize_button (GtkTreeViewColumn *column);
  
 void _gtk_tree_view_column_set_tree_view    (GtkTreeViewColumn *column,
 					     GtkTreeView       *tree_view);
-gint _gtk_tree_view_column_request_width    (GtkTreeViewColumn *tree_column);
+void _gtk_tree_view_column_request_width    (GtkTreeViewColumn *tree_column,
+					     gint              *minimum,
+					     gint              *natural);
 void _gtk_tree_view_column_allocate         (GtkTreeViewColumn *tree_column,
 					     int                x_offset,
 					     int                width);
