@@ -1,3 +1,6 @@
+#ifndef __BROADWAY_H__
+#define __BROADWAY_H__
+
 #include <glib.h>
 #include <gio/gio.h>
 
@@ -78,3 +81,5 @@ void            broadway_output_grab_pointer    (BroadwayOutput *output,
 						 gboolean owner_event);
 guint32         broadway_output_ungrab_pointer  (BroadwayOutput *output);
 void            broadway_output_pong            (BroadwayOutput *output);
+
+#endif /* __BROADWAY_H__ */

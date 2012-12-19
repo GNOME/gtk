@@ -17,6 +17,8 @@ LDADDS = $(GDK_DEP_LIBS)
 
 noinst_LTLIBRARIES = libbroadway.la libgdk-broadway.la
 
+libexec_PROGRAMS = broadway-server
+
 libgdkinclude_HEADERS = 	\
 	gdkbroadway.h
 
@@ -27,6 +29,8 @@ libgdkbroadwayinclude_HEADERS = 	\
 	gdkbroadwayvisual.h
 
 libbroadway_la_SOURCES =		\
+	gdkbroadway-server.h		\
+	gdkbroadway-server.c		\
 	broadway.h			\
 	broadway.c
 
@@ -76,6 +80,11 @@ libgdk_broadway_la_SOURCES =		\
 	gdkprivate-broadway.h
 
 libgdk_broadway_la_LIBADD = libbroadway.la
+
+broadway_server_SOURCES = \
+	broadway-server.c
+
+broadway_server_LDADD = libbroadway.la $(GDK_DEP_LIBS)
 
 MAINTAINERCLEANFILES = $(broadway_built_sources)
 EXTRA_DIST += $(broadway_built_sources)

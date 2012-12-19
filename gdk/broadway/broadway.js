@@ -2671,7 +2671,7 @@ function handleKeyDown(e) {
 	// browser behaviors or it has no corresponding keyPress
 	// event, then send it immediately
 	if (!ignoreKeyEvent(ev))
-	    sendInput("k", [keysym, lastState]);
+	    sendInput("k", [realWindowWithMouse, keysym, lastState]);
 	suppress = true;
     }
 
@@ -2716,7 +2716,7 @@ function handleKeyPress(e) {
 
     // Send the translated keysym
     if (keysym > 0)
-	sendInput ("k", [keysym, lastState]);
+	sendInput ("k", [realWindowWithMouse, keysym, lastState]);
 
     // Stop keypress events just in case
     return cancelEvent(ev);
@@ -2735,7 +2735,7 @@ function handleKeyUp(e) {
     }
 
     if (keysym > 0)
-	sendInput ("K", [keysym, lastState]);
+	sendInput ("K", [realWindowWithMouse, keysym, lastState]);
     return cancelEvent(ev);
 }
 
