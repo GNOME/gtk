@@ -132,18 +132,6 @@ function createXHR()
     return null;
 }
 
-/* This resizes the window so the *inner* size is the specified size */
-function resizeBrowserWindow(window, w, h) {
-    var innerW = window.innerWidth;
-    var innerH = window.innerHeight;
-
-    var outerW = window.outerWidth;
-    var outerH = window.outerHeight;
-
-    window.resizeTo(w + outerW - innerW,
-		    h + outerH - innerH);
-}
-
 function resizeCanvas(canvas, w, h)
 {
     /* Canvas resize clears the data, so we need to save it first */
@@ -163,8 +151,6 @@ function resizeCanvas(canvas, w, h)
     context.drawImage(tmpCanvas, 0, 0, tmpCanvas.width, tmpCanvas.height);
 }
 
-var useToplevelWindows = false;
-var toplevelWindows = [];
 var grab = new Object();
 grab.window = null;
 grab.ownerEvents = false;
@@ -276,119 +262,9 @@ function flushSurface(surface)
     }
 }
 
-function ensureSurfaceInDocument(surface, doc)
-{
-    if (surface.document != doc) {
-	var oldCanvas = surface.canvas;
-	var canvas = doc.importNode(oldCanvas, false);
-	doc.body.appendChild(canvas);
-	canvas.surface = surface;
-	oldCanvas.parentNode.removeChild(oldCanvas);
-
-	surface.canvas = canvas;
-	if (surface.toplevelElement == oldCanvas)
-	    surface.toplevelElement = canvas;
-	surface.document = doc;
-    }
-}
-
 function sendConfigureNotify(surface)
 {
     sendInput("w", [surface.id, surface.x, surface.y, surface.width, surface.height]);
-}
-
-var windowGeometryTimeout = null;
-
-function updateBrowserWindowGeometry(win, alwaysSendConfigure) {
-    if (win.closed)
-	return;
-
-    var surface = win.surface;
-
-    var innerW = win.innerWidth;
-    var innerH = win.innerHeight;
-
-    var x = surface.x;
-    var y = surface.y;
-
-    if (win.mozInnerScreenX != undefined) {
-	x = win.mozInnerScreenX;
-	y = win.mozInnerScreenY;
-    } else if (win.screenTop != undefined) {
-	x = win.screenTop;
-	y = win.screenLeft;
-    } else {
-	alert("No implementation to get window position");
-    }
-
-    if (alwaysSendConfigure || x != surface.x || y != surface.y ||
-       innerW != surface.width || innerH != surface.height) {
-	var oldX = surface.x;
-	var oldY = surface.y;
-	surface.x = x;
-	surface.y = y;
-	if (surface.width != innerW || surface.height != innerH)
-	    resizeCanvas(surface.canvas, innerW, innerH);
-	surface.width = innerW;
-	surface.height = innerH;
-	sendConfigureNotify(surface);
-	for (id in surfaces) {
-	    var childSurface = surfaces[id];
-	    var transientToplevel = getTransientToplevel(childSurface);
-	    if (transientToplevel != null && transientToplevel == surface) {
-		childSurface.x += surface.x - oldX;
-		childSurface.y += surface.y - oldY;
-		sendConfigureNotify(childSurface);
-	    }
-	}
-    }
-}
-
-function browserWindowClosed(win) {
-    var surface = win.surface;
-
-    sendInput ("W", [surface.id]);
-    for (id in surfaces) {
-	var childSurface = surfaces[id];
-	var transientToplevel = getTransientToplevel(childSurface);
-	if (transientToplevel != null && transientToplevel == surface) {
-	    sendInput ("W", [childSurface.id]);
-	}
-    }
-}
-
-function registerWindow(win)
-{
-    toplevelWindows.push(win);
-    win.onresize = function(ev) { updateBrowserWindowGeometry(ev.target, false); };
-    if (!windowGeometryTimeout)
-	windowGeometryTimeout = setInterval(function () {
-						for (var i = 0; i < toplevelWindows.length; i++)
-						    updateBrowserWindowGeometry(toplevelWindows[i], false);
-					    }, 2000);
-    win.onunload = function(ev) { browserWindowClosed(ev.target.defaultView); };
-}
-
-function unregisterWindow(win)
-{
-    var i = toplevelWindows.indexOf(win);
-    if (i >= 0)
-	toplevelWindows.splice(i, 1);
-
-    if (windowGeometryTimeout && toplevelWindows.length == 0) {
-	clearInterval(windowGeometryTimeout);
-	windowGeometryTimeout = null;
-    }
-}
-
-function getTransientToplevel(surface)
-{
-    while (surface && surface.transientParent != 0) {
-	surface = surfaces[surface.transientParent];
-	if (surface && surface.window)
-	    return surface;
-    }
-    return null;
 }
 
 function getStyle(el, styleProp)
@@ -440,8 +316,6 @@ function cmdCreateSurface(id, x, y, width, height, isTemp)
     surface.drawQueue = [];
     surface.transientParent = 0;
     surface.visible = false;
-    surface.window = null;
-    surface.document = document;
     surface.frame = null;
 
     var canvas = document.createElement("canvas");
@@ -451,7 +325,7 @@ function cmdCreateSurface(id, x, y, width, height, isTemp)
     surface.canvas = canvas;
     var toplevelElement;
 
-    if (useToplevelWindows || isTemp) {
+    if (isTemp) {
 	toplevelElement = canvas;
 	document.body.appendChild(canvas);
     } else {
@@ -511,42 +385,10 @@ function cmdShowSurface(id)
     var xOffset = surface.x;
     var yOffset = surface.y;
 
-    if (useToplevelWindows) {
-	var doc = document;
-	if (!surface.isTemp) {
-	    var options =
-		'width='+surface.width+',height='+surface.height+
-		',location=no,menubar=no,scrollbars=no,toolbar=no';
-	    if (surface.positioned)
-		options = options +
-		',left='+surface.x+',top='+surface.y+',screenX='+surface.x+',screenY='+surface.y;
-	    var win = window.open('','_blank', options);
-	    win.surface = surface;
-	    registerWindow(win);
-	    doc = win.document;
-	    doc.open();
-	    doc.write("<body></body>");
-	    setupDocument(doc);
-
-	    surface.window = win;
-	    xOffset = 0;
-	    yOffset = 0;
-	} else {
-	    var transientToplevel = getTransientToplevel(surface);
-	    if (transientToplevel) {
-		doc = transientToplevel.window.document;
-		xOffset = surface.x - transientToplevel.x;
-		yOffset = surface.y - transientToplevel.y;
-	    }
-	}
-
-	ensureSurfaceInDocument(surface, doc);
-    } else {
-	if (surface.frame) {
-	    var offset = getFrameOffset(surface);
-	    xOffset -= offset.x;
-	    yOffset -= offset.y;
-	}
+    if (surface.frame) {
+	var offset = getFrameOffset(surface);
+	xOffset -= offset.x;
+	yOffset -= offset.y;
     }
 
     surface.toplevelElement.style["left"] = xOffset + "px";
@@ -554,9 +396,6 @@ function cmdShowSurface(id)
     surface.toplevelElement.style["visibility"] = "visible";
 
     restackWindows();
-
-    if (surface.window)
-	updateBrowserWindowGeometry(surface.window, false);
 }
 
 function cmdHideSurface(id)
@@ -573,15 +412,6 @@ function cmdHideSurface(id)
     var element = surface.toplevelElement;
 
     element.style["visibility"] = "hidden";
-
-    // Import the canvas into the main document
-    ensureSurfaceInDocument(surface, document);
-
-    if (surface.window) {
-	unregisterWindow(surface.window);
-	surface.window.close();
-	surface.window = null;
-    }
 }
 
 function cmdSetTransientFor(id, parentId)
@@ -666,45 +496,30 @@ function cmdMoveResizeSurface(id, has_pos, x, y, has_size, w, h)
 	resizeCanvas(surface.canvas, w, h);
 
     if (surface.visible) {
-	if (surface.window) {
-	    /* TODO: This moves the outer frame position, we really want the inner position.
-	     * However this isn't *strictly* invalid, as any WM could have done whatever it
-	     * wanted with the positioning of the window.
-	     */
-	    if (has_pos)
-		surface.window.moveTo(surface.x, surface.y);
-	    if (has_size)
-		resizeBrowserWindow(surface.window, w, h);
-	} else {
-	    if (has_pos) {
-		var xOffset = surface.x;
-		var yOffset = surface.y;
+	if (has_pos) {
+	    var xOffset = surface.x;
+	    var yOffset = surface.y;
 
-		var transientToplevel = getTransientToplevel(surface);
-		if (transientToplevel) {
-		    xOffset = surface.x - transientToplevel.x;
-		    yOffset = surface.y - transientToplevel.y;
-		}
-
-		var element = surface.canvas;
-		if (surface.frame) {
-		    element = surface.frame;
-		    var offset = getFrameOffset(surface);
-		    xOffset -= offset.x;
-		    yOffset -= offset.y;
-		}
-
-		element.style["left"] = xOffset + "px";
-		element.style["top"] = yOffset + "px";
+	    var transientToplevel = getTransientToplevel(surface);
+	    if (transientToplevel) {
+		xOffset = surface.x - transientToplevel.x;
+		yOffset = surface.y - transientToplevel.y;
 	    }
+
+	    var element = surface.canvas;
+	    if (surface.frame) {
+		element = surface.frame;
+		var offset = getFrameOffset(surface);
+		xOffset -= offset.x;
+		yOffset -= offset.y;
+	    }
+
+	    element.style["left"] = xOffset + "px";
+	    element.style["top"] = yOffset + "px";
 	}
     }
 
-    if (surface.window) {
-	updateBrowserWindowGeometry(surface.window, true);
-    } else {
-	sendConfigureNotify(surface);
-    }
+    sendConfigureNotify(surface);
 }
 
 function cmdFlushSurface(id)
@@ -985,13 +800,8 @@ function getPositionsFromAbsCoord(absX, absY, relativeId) {
 
 function getPositionsFromEvent(ev, relativeId) {
     var absX, absY;
-    if (useToplevelWindows) {
-	absX = ev.screenX;
-	absY = ev.screenY;
-    } else {
-	absX = ev.pageX;
-	absY = ev.pageY;
-    }
+    absX = ev.pageX;
+    absY = ev.pageY;
     var res = getPositionsFromAbsCoord(absX, absY, relativeId);
 
     lastX = res.rootX;
@@ -1020,10 +830,6 @@ function updateForEvent(ev) {
 	lastState |= GDK_MOD1_MASK;
 
     lastTimeStamp = ev.timeStamp;
-    if (ev.target.surface && ev.target.surface.window) {
-	var win = ev.target.surface.window;
-	updateBrowserWindowGeometry(win, false);
-    }
 }
 
 function onMouseMove (ev) {
@@ -2830,8 +2636,6 @@ function connect()
     var query_string = url.split("?");
     if (query_string.length > 1) {
 	var params = query_string[1].split("&");
-	if (params[0].indexOf("toplevel") != -1)
-	    useToplevelWindows = true;
     }
 
     var loc = window.location.toString().replace("http:", "ws:");
@@ -2848,19 +2652,14 @@ function connect()
     ws.onopen = function() {
 	inputSocket = ws;
 	var w, h;
-	if (useToplevelWindows) {
-	    w = window.screen.width;
-	    h = window.screen.height;
-	} else {
+	w = window.innerWidth;
+	h = window.innerHeight;
+	window.onresize = function(ev) {
+	    var w, h;
 	    w = window.innerWidth;
 	    h = window.innerHeight;
-	    window.onresize = function(ev) {
-		var w, h;
-		w = window.innerWidth;
-		h = window.innerHeight;
-		sendInput ("d", [w, h]);
-	    };
-	}
+	    sendInput ("d", [w, h]);
+	};
 	sendInput ("d", [w, h]);
     };
     ws.onclose = function() {
@@ -2871,8 +2670,4 @@ function connect()
     };
 
     setupDocument(document);
-    window.onunload = function (ev) {
-	for (var i = 0; i < toplevelWindows.length; i++)
-	    toplevelWindows[i].close();
-    };
 }
