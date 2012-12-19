@@ -763,6 +763,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       if (!is_substructure && toplevel && display_x11->use_sync && toplevel->pending_counter_value != 0)
 	{
 	  toplevel->configure_counter_value = toplevel->pending_counter_value;
+	  toplevel->configure_counter_value_is_extended = toplevel->pending_counter_value_is_extended;
 	  toplevel->pending_counter_value = 0;
 	}
 #endif
@@ -1107,8 +1108,8 @@ _gdk_wm_protocols_filter (GdkXEvent *xev,
           guint32 d2 = xevent->xclient.data.l[2];
           guint32 d3 = xevent->xclient.data.l[3];
 
-          guint64 serial = ((guint64)d0 << 32) | d1;
-          gint64 frame_drawn_time = ((guint64)d2 << 32) | d3;
+          guint64 serial = ((guint64)d1 << 32) | d0;
+          gint64 frame_drawn_time = ((guint64)d3 << 32) | d2;
           gint64 refresh_interval, presentation_time;
 
           GdkFrameClock *clock = gdk_window_get_frame_clock (event->any.window);
@@ -1145,7 +1146,7 @@ _gdk_wm_protocols_filter (GdkXEvent *xev,
           guint32 d2 = xevent->xclient.data.l[2];
           guint32 d3 = xevent->xclient.data.l[3];
 
-          guint64 serial = ((guint64)d0 << 32) | d1;
+          guint64 serial = ((guint64)d1 << 32) | d0;
 
           GdkFrameClock *clock = gdk_window_get_frame_clock (event->any.window);
           GdkFrameTimings *timings = find_frame_timings (clock, serial);
@@ -1239,6 +1240,7 @@ _gdk_wm_protocols_filter (GdkXEvent *xev,
 	{
 #ifdef HAVE_XSYNC
 	  toplevel->pending_counter_value = xevent->xclient.data.l[2] + ((gint64)xevent->xclient.data.l[3] << 32);
+	  toplevel->pending_counter_value_is_extended = xevent->xclient.data.l[4] != 0;
 #endif
 	}
       return GDK_FILTER_REMOVE;
