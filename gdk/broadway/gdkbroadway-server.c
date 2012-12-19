@@ -800,12 +800,6 @@ start_input (HttpRequest *request, gboolean binary)
 
   server = GDK_BROADWAY_SERVER (request->server);
 
-  if (server->input != NULL)
-    {
-      send_error (request, 409, "Input already handled");
-      return;
-    }
-
 #ifdef DEBUG_WEBSOCKETS
   g_print ("incoming request:\n%s\n", request->request->str);
 #endif
@@ -946,6 +940,13 @@ start_input (HttpRequest *request, gboolean binary)
       g_output_stream_write_all (g_io_stream_get_output_stream (G_IO_STREAM (request->connection)),
 				 challenge, 16, NULL, NULL, NULL);
       proto_v7_plus = FALSE;
+    }
+
+
+  if (server->input != NULL)
+    {
+      broadway_input_free (server->input);
+      server->input = NULL;
     }
 
   input = g_new0 (BroadwayInput, 1);
