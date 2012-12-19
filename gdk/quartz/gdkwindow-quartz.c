@@ -3003,16 +3003,6 @@ gdk_quartz_window_set_group (GdkWindow *window,
 }
 
 static void
-gdk_quartz_window_enable_synchronized_configure (GdkWindow *window)
-{
-}
-
-static void
-gdk_quartz_window_configure_finished (GdkWindow *window)
-{
-}
-
-static void
 gdk_quartz_window_destroy_notify (GdkWindow *window)
 {
   check_grab_destroy (window);
@@ -3129,8 +3119,6 @@ gdk_window_impl_quartz_class_init (GdkWindowImplQuartzClass *klass)
   impl_class->set_functions = gdk_quartz_window_set_functions;
   impl_class->begin_resize_drag = gdk_quartz_window_begin_resize_drag;
   impl_class->begin_move_drag = gdk_quartz_window_begin_move_drag;
-  impl_class->enable_synchronized_configure = gdk_quartz_window_enable_synchronized_configure;
-  impl_class->configure_finished = gdk_quartz_window_configure_finished;
   impl_class->set_opacity = gdk_quartz_window_set_opacity;
   impl_class->destroy_notify = gdk_quartz_window_destroy_notify;
   impl_class->register_dnd = _gdk_quartz_window_register_dnd;
