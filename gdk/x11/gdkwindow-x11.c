@@ -5117,20 +5117,25 @@ gdk_x11_window_configure_finished (GdkWindow *window)
 	  GDK_X11_DISPLAY (display)->use_sync &&
 	  toplevel->configure_counter_value != 0)
 	{
-	  set_sync_counter (GDK_WINDOW_XDISPLAY (window),
-			    toplevel->update_counter,
-			    toplevel->configure_counter_value);
+          if (toplevel->configure_counter_value_is_extended)
+            {
+              toplevel->current_counter_value = toplevel->configure_counter_value;
+              if ((toplevel->current_counter_value % 2) == 1)
+                toplevel->current_counter_value += 1;
 
-	  toplevel->current_counter_value = toplevel->configure_counter_value;
-	  if ((toplevel->current_counter_value % 2) == 1)
-	    toplevel->current_counter_value += 1;
+              toplevel->configure_counter_value = 0;
 
-	  toplevel->configure_counter_value = 0;
-
-	  set_sync_counter (GDK_WINDOW_XDISPLAY (window),
-			    toplevel->extended_update_counter,
-			    toplevel->current_counter_value);
-	}
+              set_sync_counter (GDK_WINDOW_XDISPLAY (window),
+                                toplevel->extended_update_counter,
+                                toplevel->current_counter_value);
+            }
+          else
+            {
+              set_sync_counter (GDK_WINDOW_XDISPLAY (window),
+                                toplevel->update_counter,
+                                toplevel->configure_counter_value);
+            }
+        }
     }
 #endif
 }

@@ -131,7 +131,12 @@ struct _GdkToplevelX11
 
   /* If we're expecting a response from the compositor after painting a frame */
   guint frame_pending : 1;
-  
+
+  /* Whether pending_counter_value/configure_counter_value are updates
+   * to the extended update counter */
+  guint pending_counter_value_is_extended : 1;
+  guint configure_counter_value_is_extended : 1;
+
   gulong map_serial;	/* Serial of last transition from unmapped */
   
   cairo_surface_t *icon_pixmap;
