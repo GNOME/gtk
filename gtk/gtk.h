@@ -194,7 +194,6 @@
 #include <gtk/gtktexttagtable.h>
 #include <gtk/gtktextview.h>
 #include <gtk/gtkthemingengine.h>
-#include <gtk/gtktimeline.h>
 #include <gtk/gtktoggleaction.h>
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtktoggletoolbutton.h>

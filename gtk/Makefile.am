@@ -348,7 +348,6 @@ gtk_public_h_sources = 		\
 	gtktexttagtable.h	\
 	gtktextview.h		\
 	gtkthemingengine.h	\
-	gtktimeline.h		\
 	gtktoggleaction.h	\
 	gtktogglebutton.h	\
 	gtktoggletoolbutton.h	\
@@ -851,7 +850,6 @@ gtk_base_c_sources = 		\
 	gtktextview.c		\
 	gtkthemingbackground.c  \
 	gtkthemingengine.c	\
-	gtktimeline.c		\
 	gtktoggleaction.c	\
 	gtktogglebutton.c	\
 	gtktoggletoolbutton.c	\

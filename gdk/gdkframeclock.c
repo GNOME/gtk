@@ -28,19 +28,6 @@
 
 #include "gdkframeclock.h"
 
-G_DEFINE_INTERFACE (GdkFrameClockTarget, gdk_frame_clock_target, G_TYPE_OBJECT)
-
-static void
-gdk_frame_clock_target_default_init (GdkFrameClockTargetInterface *iface)
-{
-}
-
-void gdk_frame_clock_target_set_clock (GdkFrameClockTarget *target,
-                                       GdkFrameClock       *clock)
-{
-  GDK_FRAME_CLOCK_TARGET_GET_IFACE (target)->set_clock (target, clock);
-}
-
 /**
  * SECTION:frameclock
  * @Short_description: Frame clock syncs painting to a window or display
