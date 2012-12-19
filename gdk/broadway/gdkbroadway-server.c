@@ -1338,6 +1338,7 @@ copy_region (cairo_surface_t *surface,
   cairo_t *cr;
 
   cr = cairo_create (surface);
+  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
 
   _cairo_region (cr, area);
   cairo_clip (cr);
