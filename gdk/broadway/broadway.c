@@ -351,12 +351,12 @@ static void
 append_uint16 (BroadwayOutput *output, guint32 v)
 {
   gsize old_len = output->buf->len;
+  guint8 *buf;
 
   if (output->binary)
     {
-      guint8 *buf = (guint8 *)output->buf->str + old_len;
-
       g_string_set_size (output->buf, old_len + 2);
+      buf = (guint8 *)output->buf->str + old_len;
       buf[0] = (v >> 0) & 0xff;
       buf[1] = (v >> 8) & 0xff;
     }
@@ -371,12 +371,12 @@ static void
 append_uint32 (BroadwayOutput *output, guint32 v)
 {
   gsize old_len = output->buf->len;
+  guint8 *buf;
 
   if (output->binary)
     {
-      guint8 *buf = (guint8 *)output->buf->str + old_len;
-
       g_string_set_size (output->buf, old_len + 4);
+      buf = (guint8 *)output->buf->str + old_len;
       buf[0] = (v >> 0) & 0xff;
       buf[1] = (v >> 8) & 0xff;
       buf[2] = (v >> 16) & 0xff;
