@@ -72,7 +72,6 @@ struct _GdkWindowImplX11
   guint no_bg : 1;        /* Set when the window background is temporarily
                            * unset during resizing and scaling */
   guint override_redirect : 1;
-  guint use_synchronized_configure : 1;
 
   cairo_surface_t *cairo_surface;
 

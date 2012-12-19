@@ -1469,21 +1469,6 @@ gdk_wayland_window_begin_move_drag (GdkWindow *window,
 }
 
 static void
-gdk_wayland_window_enable_synchronized_configure (GdkWindow *window)
-{
-}
-
-static void
-gdk_wayland_window_configure_finished (GdkWindow *window)
-{
-  if (!WINDOW_IS_TOPLEVEL (window))
-    return;
-
-  if (!GDK_IS_WINDOW_IMPL_WAYLAND (window->impl))
-    return;
-}
-
-static void
 gdk_wayland_window_set_opacity (GdkWindow *window,
 				gdouble    opacity)
 {
@@ -1666,8 +1651,6 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   impl_class->set_functions = gdk_wayland_window_set_functions;
   impl_class->begin_resize_drag = gdk_wayland_window_begin_resize_drag;
   impl_class->begin_move_drag = gdk_wayland_window_begin_move_drag;
-  impl_class->enable_synchronized_configure = gdk_wayland_window_enable_synchronized_configure;
-  impl_class->configure_finished = gdk_wayland_window_configure_finished;
   impl_class->set_opacity = gdk_wayland_window_set_opacity;
   impl_class->set_composited = gdk_wayland_window_set_composited;
   impl_class->destroy_notify = gdk_wayland_window_destroy_notify;

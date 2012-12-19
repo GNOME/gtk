@@ -11215,44 +11215,28 @@ gdk_window_begin_move_drag (GdkWindow *window,
  * gdk_window_enable_synchronized_configure:
  * @window: a toplevel #GdkWindow
  *
- * Indicates that the application will cooperate with the window
- * system in synchronizing the window repaint with the window
- * manager during resizing operations. After an application calls
- * this function, it must call gdk_window_configure_finished() every
- * time it has finished all processing associated with a set of
- * Configure events. Toplevel GTK+ windows automatically use this
- * protocol.
- *
- * On X, calling this function makes @window participate in the
- * _NET_WM_SYNC_REQUEST window manager protocol.
+ * Does nothing, present only for compatiblity.
  *
  * Since: 2.6
+ * Deprecated: 3.8: this function is no longer needed
  **/
 void
 gdk_window_enable_synchronized_configure (GdkWindow *window)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->enable_synchronized_configure (window);
 }
 
 /**
  * gdk_window_configure_finished:
  * @window: a toplevel #GdkWindow
- * 
- * Signal to the window system that the application has finished
- * handling Configure events it has received. Window Managers can
- * use this to better synchronize the frame repaint with the
- * application. GTK+ applications will automatically call this
- * function when appropriate.
  *
- * This function can only be called if gdk_window_enable_synchronized_configure()
- * was called previously.
+ * Does nothing, present only for compatiblity.
  *
  * Since: 2.6
+ * Deprecated: 3.8: this function is no longer needed
  **/
 void
 gdk_window_configure_finished (GdkWindow *window)
 {
-  GDK_WINDOW_IMPL_GET_CLASS (window->impl)->configure_finished (window);
 }
 
 /**

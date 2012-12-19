@@ -344,7 +344,21 @@ gdk_x11_window_begin_frame (GdkWindow *window)
 
   impl->toplevel->in_frame = TRUE;
 
-  hook_surface_changed (window);
+  if (impl->toplevel->configure_counter_value != 0 &&
+      impl->toplevel->configure_counter_value_is_extended)
+    {
+      impl->toplevel->current_counter_value = impl->toplevel->configure_counter_value;
+      if ((impl->toplevel->current_counter_value % 2) == 1)
+        impl->toplevel->current_counter_value += 1;
+
+      impl->toplevel->configure_counter_value = 0;
+
+      window_pre_damage (window);
+    }
+  else
+    {
+      hook_surface_changed (window);
+    }
 }
 
 static void
@@ -406,6 +420,16 @@ gdk_x11_window_end_frame (GdkWindow *window)
     }
 
   unhook_surface_changed (window);
+
+  if (impl->toplevel->configure_counter_value != 0 &&
+      !impl->toplevel->configure_counter_value_is_extended)
+    {
+      set_sync_counter (GDK_WINDOW_XDISPLAY (window),
+                        impl->toplevel->update_counter,
+                        impl->toplevel->configure_counter_value);
+
+      impl->toplevel->configure_counter_value = 0;
+    }
 
   if (!impl->toplevel->frame_pending)
     gdk_frame_timings_set_complete (timings, TRUE);
@@ -5074,72 +5098,6 @@ gdk_x11_window_begin_move_drag (GdkWindow *window,
     emulate_move_drag (window, device, button, root_x, root_y, timestamp);
 }
 
-static void
-gdk_x11_window_enable_synchronized_configure (GdkWindow *window)
-{
-  GdkWindowImplX11 *impl;
-
-  if (!GDK_IS_WINDOW_IMPL_X11 (window->impl))
-    return;
-  
-  impl = GDK_WINDOW_IMPL_X11 (window->impl);
-	  
-  if (!impl->use_synchronized_configure)
-    {
-      /* This basically means you want to do fancy X specific stuff, so
-	 ensure we have a native window */
-      gdk_window_ensure_native (window);
-
-      impl->use_synchronized_configure = TRUE;
-      ensure_sync_counter (window);
-    }
-}
-
-static void
-gdk_x11_window_configure_finished (GdkWindow *window)
-{
-  GdkWindowImplX11 *impl;
-
-  if (!WINDOW_IS_TOPLEVEL (window))
-    return;
-  
-  impl = GDK_WINDOW_IMPL_X11 (window->impl);
-  if (!impl->use_synchronized_configure)
-    return;
-  
-#ifdef HAVE_XSYNC
-  if (!GDK_WINDOW_DESTROYED (window))
-    {
-      GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
-      GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (window);
-
-      if (toplevel && toplevel->update_counter != None &&
-	  GDK_X11_DISPLAY (display)->use_sync &&
-	  toplevel->configure_counter_value != 0)
-	{
-          if (toplevel->configure_counter_value_is_extended)
-            {
-              toplevel->current_counter_value = toplevel->configure_counter_value;
-              if ((toplevel->current_counter_value % 2) == 1)
-                toplevel->current_counter_value += 1;
-
-              toplevel->configure_counter_value = 0;
-
-              set_sync_counter (GDK_WINDOW_XDISPLAY (window),
-                                toplevel->extended_update_counter,
-                                toplevel->current_counter_value);
-            }
-          else
-            {
-              set_sync_counter (GDK_WINDOW_XDISPLAY (window),
-                                toplevel->update_counter,
-                                toplevel->configure_counter_value);
-            }
-        }
-    }
-#endif
-}
-
 static gboolean
 gdk_x11_window_beep (GdkWindow *window)
 {
@@ -5411,8 +5369,6 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->set_functions = gdk_x11_window_set_functions;
   impl_class->begin_resize_drag = gdk_x11_window_begin_resize_drag;
   impl_class->begin_move_drag = gdk_x11_window_begin_move_drag;
-  impl_class->enable_synchronized_configure = gdk_x11_window_enable_synchronized_configure;
-  impl_class->configure_finished = gdk_x11_window_configure_finished;
   impl_class->set_opacity = gdk_x11_window_set_opacity;
   impl_class->set_composited = gdk_x11_window_set_composited;
   impl_class->destroy_notify = gdk_x11_window_destroy_notify;

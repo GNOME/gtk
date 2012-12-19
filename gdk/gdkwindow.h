@@ -884,7 +884,9 @@ void       gdk_window_constrain_size      (GdkGeometry  *geometry,
                                            gint         *new_width,
                                            gint         *new_height);
 
+GDK_DEPRECATED_IN_3_8
 void gdk_window_enable_synchronized_configure (GdkWindow *window);
+GDK_DEPRECATED_IN_3_8
 void gdk_window_configure_finished            (GdkWindow *window);
 
 GdkWindow *gdk_get_default_root_window (void);
