@@ -380,6 +380,7 @@ enum {
   PROP_0,
   PROP_SCREEN,
   PROP_DIRECTION,
+  PROP_FRAME_CLOCK,
   PROP_PARENT
 };
 
@@ -391,8 +392,6 @@ enum {
 static guint signals[LAST_SIGNAL] = { 0 };
 
 static void gtk_style_context_finalize (GObject *object);
-
-static void frame_clock_target_iface_init (GdkFrameClockTargetInterface *target);
 
 static void gtk_style_context_impl_set_property (GObject      *object,
                                                  guint         prop_id,
@@ -408,8 +407,7 @@ static StyleData *style_data_lookup             (GtkStyleContext *context);
 static void gtk_style_context_disconnect_update (GtkStyleContext *context);
 static void gtk_style_context_connect_update    (GtkStyleContext *context);
 
-G_DEFINE_TYPE_WITH_CODE (GtkStyleContext, gtk_style_context, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (GDK_TYPE_FRAME_CLOCK_TARGET, frame_clock_target_iface_init))
+G_DEFINE_TYPE (GtkStyleContext, gtk_style_context, G_TYPE_OBJECT)
 
 static void
 gtk_style_context_real_changed (GtkStyleContext *context)
@@ -448,6 +446,13 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
                                                         GDK_TYPE_SCREEN,
                                                         GTK_PARAM_READWRITE));
   g_object_class_install_property (object_class,
+                                   PROP_FRAME_CLOCK,
+                                   g_param_spec_object ("paint-clock",
+                                                        P_("FrameClock"),
+                                                        P_("The associated GdkFrameClock"),
+                                                        GDK_TYPE_FRAME_CLOCK,
+                                                        GTK_PARAM_READWRITE));
+  g_object_class_install_property (object_class,
                                    PROP_DIRECTION,
                                    g_param_spec_enum ("direction",
                                                       P_("Direction"),
@@ -472,25 +477,6 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
                                                         GTK_PARAM_READWRITE));
 
   g_type_class_add_private (object_class, sizeof (GtkStyleContextPrivate));
-}
-
-static void
-gtk_style_context_set_clock (GdkFrameClockTarget *target,
-                             GdkFrameClock       *clock)
-{
-  GtkStyleContext *context = GTK_STYLE_CONTEXT (target);
-  GtkStyleContextPrivate *priv = context->priv;
-
-  gtk_style_context_disconnect_update (context);
-  priv->frame_clock = clock;
-  if (priv->animating)
-    gtk_style_context_connect_update (context);
-}
-
-static void
-frame_clock_target_iface_init (GdkFrameClockTargetInterface *iface)
-{
-  iface->set_clock = gtk_style_context_set_clock;
 }
 
 static StyleData *
@@ -805,11 +791,6 @@ gtk_style_context_stop_animating (GtkStyleContext *context)
   priv->animating = FALSE;
 
   gtk_style_context_disconnect_update (context);
-  if (priv->widget)
-    {
-      gtk_widget_remove_frame_clock_target (priv->widget,
-                                            GDK_FRAME_CLOCK_TARGET (context));
-    }
 }
 
 static void
@@ -823,11 +804,6 @@ gtk_style_context_start_animating (GtkStyleContext *context)
   priv->animating = TRUE;
 
   gtk_style_context_connect_update (context);
-  if (priv->widget)
-    {
-      gtk_widget_add_frame_clock_target (priv->widget,
-                                         GDK_FRAME_CLOCK_TARGET (context));
-    }
 }
 
 static gboolean
@@ -916,6 +892,10 @@ gtk_style_context_impl_set_property (GObject      *object,
                                        g_value_get_enum (value));
       G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
+    case PROP_FRAME_CLOCK:
+      gtk_style_context_set_frame_clock (style_context,
+                                         g_value_get_object (value));
+      break;
     case PROP_PARENT:
       gtk_style_context_set_parent (style_context,
                                     g_value_get_object (value));
@@ -947,6 +927,9 @@ gtk_style_context_impl_get_property (GObject    *object,
       G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       g_value_set_enum (value, gtk_style_context_get_direction (style_context));
       G_GNUC_END_IGNORE_DEPRECATIONS;
+      break;
+    case PROP_FRAME_CLOCK:
+      g_value_set_object (value, priv->frame_clock);
       break;
     case PROP_PARENT:
       g_value_set_object (value, priv->parent);
@@ -2642,6 +2625,69 @@ gtk_style_context_get_screen (GtkStyleContext *context)
 
   priv = context->priv;
   return priv->screen;
+}
+
+/**
+ * gtk_style_context_set_frame_clock:
+ * @context: a #GdkFrameClock
+ * @frame_clock: a #GdkFrameClock
+ *
+ * Attaches @context to the given frame clock.
+ *
+ * The frame clock is used for the timing of animations.
+ *
+ * If you are using a #GtkStyleContext returned from
+ * gtk_widget_get_style_context(), you do not need to
+ * call this yourself.
+ *
+ * Since: 3.8
+ **/
+void
+gtk_style_context_set_frame_clock (GtkStyleContext *context,
+                                   GdkFrameClock   *frame_clock)
+{
+  GtkStyleContextPrivate *priv;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (frame_clock == NULL || GDK_IS_FRAME_CLOCK (frame_clock));
+
+  priv = context->priv;
+  if (priv->frame_clock == frame_clock)
+    return;
+
+  if (priv->animating)
+    gtk_style_context_disconnect_update (context);
+
+  if (priv->frame_clock)
+    g_object_unref (priv->frame_clock);
+  priv->frame_clock = frame_clock;
+  if (priv->frame_clock)
+    g_object_ref (priv->frame_clock);
+
+  if (priv->animating)
+    gtk_style_context_connect_update (context);
+
+  g_object_notify (G_OBJECT (context), "paint-clock");
+}
+
+/**
+ * gtk_style_context_get_frame_clock:
+ * @context: a #GtkStyleContext
+ *
+ * Returns the #GdkFrameClock to which @context is attached.
+ *
+ * Returns: (transfer none): a #GdkFrameClock.
+ * Since: 3.8
+ **/
+GdkFrameClock *
+gtk_style_context_get_frame_clock (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
+
+  priv = context->priv;
+  return priv->frame_clock;
 }
 
 /**

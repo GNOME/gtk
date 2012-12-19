@@ -87,6 +87,21 @@ typedef void    (*GtkCallback)     (GtkWidget        *widget,
 				    gpointer          data);
 
 /**
+ * GtkTickCallback:
+ * @widget: the widget
+ * @frame_clock: the frame clock for the widget (same as calling gtk_widget_get_frame_clock())
+ * @user_data: user data passed to gtk_widget_add_tick_callback().
+ *
+ * Callback type for adding a function to update animations. See gtk_widget_add_tick_callback().
+ *
+ * Returns: %TRUE if the tick callback should continue to be called,
+ *  %FALSE if the tick callback should be removed.
+ */
+typedef gboolean (*GtkTickCallback) (GtkWidget     *widget,
+                                     GdkFrameClock *frame_clock,
+                                     gpointer       user_data);
+
+/**
  * GtkRequisition:
  * @width: the widget's desired width
  * @height: the widget's desired height
@@ -905,12 +920,17 @@ void                    gtk_widget_insert_action_group                  (GtkWidg
                                                                          const gchar  *name,
                                                                          GActionGroup *group);
 
-GDK_AVAILABLE_IN_3_2
-void gtk_widget_add_frame_clock_target (GtkWidget           *widget,
-                                        GdkFrameClockTarget *target);
-GDK_AVAILABLE_IN_3_2
-void gtk_widget_remove_frame_clock_target (GtkWidget           *widget,
-                                           GdkFrameClockTarget *target);
+
+
+GDK_AVAILABLE_IN_3_8
+guint gtk_widget_add_tick_callback (GtkWidget       *widget,
+                                    GtkTickCallback  callback,
+                                    gpointer         user_data,
+                                    GDestroyNotify   notify);
+
+GDK_AVAILABLE_IN_3_8
+void gtk_widget_remove_tick_callback (GtkWidget       *widget,
+                                      guint            id);
 
 G_END_DECLS
 

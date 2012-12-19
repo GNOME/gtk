@@ -16,6 +16,7 @@
 static GtkWidget *window;
 static int window_width = WIDTH, window_height = HEIGHT;
 
+gint64 start_frame_time;
 static double angle;
 
 static int max_stats = -1;
@@ -213,8 +214,7 @@ handle_frame_stats (GdkFrameHistory *frame_history)
 }
 
 static void
-on_frame (GtkTimeline *timeline,
-          double       progress)
+on_frame (double progress)
 {
   GdkFrameClock *frame_clock = gtk_widget_get_frame_clock (window);
   int jitter;
@@ -241,11 +241,27 @@ on_frame (GtkTimeline *timeline,
 }
 
 static gboolean
-on_map_event (GtkWidget	  *widget,
-              GdkEventAny *event,
-              GtkTimeline *timeline)
+tick_callback (GtkWidget     *widget,
+               GdkFrameClock *frame_clock,
+               gpointer       user_data)
 {
-  gtk_timeline_start (timeline);
+  gint64 frame_time = gdk_frame_clock_get_frame_time (frame_clock);
+  double scaled_time;
+
+  if (start_frame_time == 0)
+    start_frame_time = frame_time;
+
+  scaled_time = (frame_time - start_frame_time) / (CYCLE_TIME * 1000000);
+  on_frame (scaled_time - floor (scaled_time));
+
+  return TRUE;
+}
+
+static gboolean
+on_map_event (GtkWidget	  *widget,
+              GdkEventAny *event)
+{
+  gtk_widget_add_tick_callback (window, tick_callback, NULL, NULL);
 
   return FALSE;
 }
@@ -265,7 +281,6 @@ main(int argc, char **argv)
   GError *error = NULL;
   GdkScreen *screen;
   GdkRectangle monitor_bounds;
-  GtkTimeline *timeline;
 
   if (!gtk_init_with_args (&argc, &argv, "",
                            options, NULL, &error))
@@ -291,15 +306,9 @@ main(int argc, char **argv)
   g_signal_connect (window, "destroy",
                     G_CALLBACK (gtk_main_quit), NULL);
 
-  timeline = gtk_timeline_new (window, CYCLE_TIME * 1000);
-  gtk_timeline_set_loop (timeline, TRUE);
-  gtk_timeline_set_progress_type (timeline, GTK_TIMELINE_PROGRESS_LINEAR);
-
-  g_signal_connect (timeline, "frame",
-                    G_CALLBACK (on_frame), NULL);
   g_signal_connect (window, "map-event",
-                    G_CALLBACK (on_map_event), timeline);
-  on_frame (timeline, 0.);
+                    G_CALLBACK (on_map_event), NULL);
+  on_frame (0.);
 
   screen = gtk_widget_get_screen (window);
   gdk_screen_get_monitor_geometry (screen,

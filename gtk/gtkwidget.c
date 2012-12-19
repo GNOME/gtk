@@ -410,7 +410,7 @@ struct _GtkWidgetPrivate
   GtkWidget *parent;
 
   /* Animations and other things to update on clock ticks */
-  GList *frame_clock_targets;
+  GList *tick_callbacks;
 
 #ifdef G_ENABLE_DEBUG
   /* Number of gtk_widget_push_verify_invariants () */
@@ -713,6 +713,10 @@ static void gtk_widget_set_device_enabled_internal (GtkWidget *widget,
                                                     GdkDevice *device,
                                                     gboolean   recurse,
                                                     gboolean   enabled);
+
+static void gtk_widget_on_frame_clock_update (GdkFrameClock *frame_clock,
+                                              GtkWidget     *widget);
+
 static gboolean event_window_is_still_viewable (GdkEvent *event);
 static void gtk_cairo_set_event (cairo_t        *cr,
 				 GdkEventExpose *event);
@@ -4508,6 +4512,216 @@ gtk_widget_update_devices_mask (GtkWidget *widget,
     gtk_widget_set_device_enabled_internal (widget, GDK_DEVICE (l->data), recurse, TRUE);
 }
 
+typedef struct _GtkTickCallbackInfo GtkTickCallbackInfo;
+
+struct _GtkTickCallbackInfo
+{
+  guint refcount;
+
+  guint id;
+  GtkTickCallback callback;
+  gpointer user_data;
+  GDestroyNotify notify;
+
+  guint destroyed : 1;
+};
+
+static void
+ref_tick_callback_info (GtkTickCallbackInfo *info)
+{
+  info->refcount++;
+}
+
+static void
+unref_tick_callback_info (GtkWidget           *widget,
+                          GtkTickCallbackInfo *info,
+                          GList               *link)
+{
+  GtkWidgetPrivate *priv = widget->priv;
+
+  info->refcount--;
+  if (info->refcount == 0)
+    {
+      priv->tick_callbacks = g_list_delete_link (priv->tick_callbacks, link);
+      if (info->notify)
+        info->notify (info->user_data);
+      g_slice_free (GtkTickCallbackInfo, info);
+    }
+
+  if (priv->tick_callbacks == NULL && priv->realized)
+    {
+      GdkFrameClock *frame_clock = gtk_widget_get_frame_clock (widget);
+      g_signal_handlers_disconnect_by_func (frame_clock,
+                                            (gpointer) gtk_widget_on_frame_clock_update,
+                                            widget);
+    }
+}
+
+static void
+destroy_tick_callback_info (GtkWidget           *widget,
+                            GtkTickCallbackInfo *info,
+                            GList               *link)
+{
+  if (!info->destroyed)
+    {
+      info->destroyed = TRUE;
+      unref_tick_callback_info (widget, info, link);
+    }
+}
+
+static void
+gtk_widget_on_frame_clock_update (GdkFrameClock *frame_clock,
+                                  GtkWidget     *widget)
+{
+  GtkWidgetPrivate *priv = widget->priv;
+  GList *l;
+
+  for (l = priv->tick_callbacks; l;)
+    {
+      GtkTickCallbackInfo *info = l->data;
+      GList *next;
+
+      ref_tick_callback_info (info);
+      if (!info->destroyed)
+        {
+          if (!info->callback (widget,
+                               frame_clock,
+                               info->user_data))
+            {
+              destroy_tick_callback_info (widget, info, l);
+            }
+        }
+
+      next = l->next;
+      unref_tick_callback_info (widget, info, l);
+      l = next;
+    }
+
+  if (priv->tick_callbacks != NULL)
+    gdk_frame_clock_request_phase (frame_clock,
+                                   GDK_FRAME_CLOCK_PHASE_UPDATE);
+}
+
+static guint tick_callback_id;
+
+/**
+ * gtk_widget_add_tick_callback:
+ * @widget: a #GtkWidget
+ * @callback: function to call for updating animations
+ * @user_data: data to pass to @callback
+ * @notify: function to call to free @user_data when the callback is removed.
+ *
+ * Queues a animation frame update and adds a callback to be called
+ * before each frame. Until the tick callback is removed, it will be
+ * called frequently (usually at the frame rate of the output device
+ * or as quickly as the application an be repainted, whichever is
+ * slower). For this reason, is most suitable for handling graphics
+ * that change every frame or every few frames. The tick callback does
+ * not automatically imply a relayout or repaint. If you want a
+ * repaint or relayout, and aren't changing widget properties that
+ * would trigger that (for example, changing the text of a #GtkLabel),
+ * then you will have to call gtk_widget_queue_resize() or
+ * gtk_widget_queue_draw_area() yourself.
+ *
+ * gtk_frame_clock_get_frame_time() should generally be used for timing
+ * continuous animations and
+ * gtk_frame_timings_get_predicted_presentation_time() if you are
+ * trying to display isolated frames particular times.
+ *
+ * This is a more convenient alternative to connecting directly to the
+ * ::update signal of GdkFrameClock, since you don't have to worry about
+ * when a #GdkFrameClock is assigned to a widget.
+ */
+guint
+gtk_widget_add_tick_callback (GtkWidget       *widget,
+                              GtkTickCallback  callback,
+                              gpointer         user_data,
+                              GDestroyNotify   notify)
+{
+  GtkWidgetPrivate *priv;
+  GtkTickCallbackInfo *info;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
+
+  priv = widget->priv;
+
+  if (priv->tick_callbacks == NULL && priv->realized)
+    {
+      GdkFrameClock *frame_clock = gtk_widget_get_frame_clock (widget);
+      g_signal_connect (frame_clock, "update",
+                        G_CALLBACK (gtk_widget_on_frame_clock_update),
+                        widget);
+      gdk_frame_clock_request_phase (frame_clock,
+                                     GDK_FRAME_CLOCK_PHASE_UPDATE);
+    }
+
+  info = g_slice_new (GtkTickCallbackInfo);
+
+  info->refcount = 1;
+  info->id = ++tick_callback_id;
+  info->callback = callback;
+  info->user_data = user_data;
+  info->notify = notify;
+
+  priv->tick_callbacks = g_list_prepend (priv->tick_callbacks,
+                                         info);
+
+  return info->id;
+}
+
+void
+gtk_widget_remove_tick_callback (GtkWidget *widget,
+                                 guint      id)
+{
+  GtkWidgetPrivate *priv;
+  GList *l;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  priv = widget->priv;
+
+  for (l = priv->tick_callbacks; l; l = l->next)
+    {
+      GtkTickCallbackInfo *info = l->data;
+      if (info->id == id)
+        destroy_tick_callback_info (widget, info, l);
+    }
+}
+
+static void
+gtk_widget_connect_frame_clock (GtkWidget     *widget,
+                                GdkFrameClock *frame_clock)
+{
+  GtkWidgetPrivate *priv = widget->priv;
+
+  if (priv->tick_callbacks != NULL)
+    {
+      g_signal_connect (frame_clock, "update",
+                        G_CALLBACK (gtk_widget_on_frame_clock_update),
+                        widget);
+      gdk_frame_clock_request_phase (frame_clock,
+                                     GDK_FRAME_CLOCK_PHASE_UPDATE);
+    }
+
+  if (priv->context)
+    gtk_style_context_set_frame_clock (priv->context, frame_clock);
+}
+
+static void
+gtk_widget_disconnect_frame_clock (GtkWidget     *widget,
+                                   GdkFrameClock *frame_clock)
+{
+  GtkWidgetPrivate *priv = widget->priv;
+
+  if (priv->tick_callbacks)
+    g_signal_handlers_disconnect_by_func (frame_clock,
+                                          (gpointer) gtk_widget_on_frame_clock_update,
+                                          widget);
+
+  if (priv->context)
+    gtk_style_context_set_frame_clock (priv->context, NULL);
+}
+
 /**
  * gtk_widget_realize:
  * @widget: a #GtkWidget
@@ -4536,7 +4750,6 @@ gtk_widget_realize (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv;
   cairo_region_t *region;
-  GList *tmp_list;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (widget->priv->anchored ||
@@ -4592,11 +4805,8 @@ gtk_widget_realize (GtkWidget *widget)
       if (GTK_IS_CONTAINER (widget))
         _gtk_container_maybe_start_idle_sizer (GTK_CONTAINER (widget));
 
-      for (tmp_list = priv->frame_clock_targets; tmp_list; tmp_list = tmp_list->next)
-        {
-          GdkFrameClock *frame_clock = gtk_widget_get_frame_clock (widget);
-          gdk_frame_clock_target_set_clock (tmp_list->data, frame_clock);
-        }
+      gtk_widget_connect_frame_clock (widget,
+                                      gtk_widget_get_frame_clock (widget));
 
       gtk_widget_pop_verify_invariants (widget);
     }
@@ -4629,6 +4839,9 @@ gtk_widget_unrealize (GtkWidget *widget)
 
       if (widget->priv->mapped)
         gtk_widget_unmap (widget);
+
+      gtk_widget_disconnect_frame_clock (widget,
+                                         gtk_widget_get_frame_clock (widget));
 
       g_signal_emit (widget, widget_signals[UNREALIZE], 0);
       g_assert (!widget->priv->mapped);
@@ -4817,7 +5030,7 @@ gtk_widget_queue_resize_no_redraw (GtkWidget *widget)
  * Unrealized widgets do not have a frame clock.
  *
  * Since: 3.0
- * Return value: a #GdkFrameClock (or #NULL if widget is unrealized)
+ * Return value: (transfer none): a #GdkFrameClock (or #NULL if widget is unrealized)
  */
 GdkFrameClock*
 gtk_widget_get_frame_clock (GtkWidget *widget)
@@ -4826,10 +5039,16 @@ gtk_widget_get_frame_clock (GtkWidget *widget)
 
   if (widget->priv->realized)
     {
-      GdkWindow *window;
-
-      window = gtk_widget_get_window (widget);
+      /* We use gtk_widget_get_toplevel() here to make it explicit that
+       * the frame clock is a property of the toplevel that a widget
+       * is anchored to; gdk_window_get_toplevel() will go up the
+       * hierarchy anyways, but should squash any funny business with
+       * reparenting windows and widgets.
+       */
+      GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+      GdkWindow *window = gtk_widget_get_window (toplevel);
       g_assert (window != NULL);
+
       return gdk_window_get_frame_clock (window);
     }
   else
@@ -8514,6 +8733,17 @@ gtk_widget_propagate_hierarchy_changed_recurse (GtkWidget *widget,
 
       priv->anchored = new_anchored;
 
+      /* This can only happen with gtk_widget_reparent() */
+      if (priv->realized)
+        {
+          if (new_anchored)
+            gtk_widget_connect_frame_clock (widget,
+                                            gtk_widget_get_frame_clock (widget));
+          else
+            gtk_widget_disconnect_frame_clock (widget,
+                                               gtk_widget_get_frame_clock (info->previous_toplevel));
+        }
+
       g_signal_emit (widget, widget_signals[HIERARCHY_CHANGED], 0, info->previous_toplevel);
       do_screen_change (widget, info->previous_screen, info->new_screen);
 
@@ -10522,6 +10752,7 @@ gtk_widget_real_destroy (GtkWidget *object)
   /* gtk_object_destroy() will already hold a refcount on object */
   GtkWidget *widget = GTK_WIDGET (object);
   GtkWidgetPrivate *priv = widget->priv;
+  GList *l;
 
   if (GTK_WIDGET_GET_CLASS (widget)->priv->accessible_type != GTK_TYPE_ACCESSIBLE)
     {
@@ -10543,9 +10774,12 @@ gtk_widget_real_destroy (GtkWidget *object)
 
   gtk_grab_remove (widget);
 
-  g_list_foreach (priv->frame_clock_targets, (GFunc)g_object_unref, NULL);
-  g_list_free (priv->frame_clock_targets);
-  priv->frame_clock_targets = NULL;
+  for (l = priv->tick_callbacks; l;)
+    {
+      GList *next = l->next;
+      destroy_tick_callback_info (widget, l->data, l);
+      l = next;
+    }
 
   if (priv->style)
     g_object_unref (priv->style);
@@ -14461,6 +14695,7 @@ gtk_widget_get_style_context (GtkWidget *widget)
   if (G_UNLIKELY (priv->context == NULL))
     {
       GdkScreen *screen;
+      GdkFrameClock *frame_clock;
 
       priv->context = gtk_style_context_new ();
 
@@ -14469,6 +14704,10 @@ gtk_widget_get_style_context (GtkWidget *widget)
       screen = gtk_widget_get_screen (widget);
       if (screen)
         gtk_style_context_set_screen (priv->context, screen);
+
+      frame_clock = gtk_widget_get_frame_clock (widget);
+      if (frame_clock)
+        gtk_style_context_set_frame_clock (priv->context, frame_clock);
 
       if (priv->parent)
         gtk_style_context_set_parent (priv->context,
@@ -14595,66 +14834,4 @@ gtk_widget_insert_action_group (GtkWidget    *widget,
     g_action_muxer_insert (muxer, name, group);
   else
     g_action_muxer_remove (muxer, name);
-}
-
-/**
- * gtk_widget_add_frame_clock_target:
- * @widget: a #GtkWidget
- * @target: the #GdkClockTarget
- *
- * Associates a #GdkClockTarget with the widget. When the widget
- * is realized and gets a #GdkFrameClock the clock target will be
- * added to that frame clock.
- */
-void
-gtk_widget_add_frame_clock_target (GtkWidget           *widget,
-                                   GdkFrameClockTarget *target)
-{
-  GtkWidgetPrivate *priv;
-  priv = widget->priv;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GDK_IS_FRAME_CLOCK_TARGET (target));
-
-  priv->frame_clock_targets = g_list_prepend (priv->frame_clock_targets, target);
-  g_object_ref (target);
-
-  if (gtk_widget_get_realized (widget))
-    {
-      GdkFrameClock *clock;
-      clock = gtk_widget_get_frame_clock (widget);
-      gdk_frame_clock_target_set_clock (target, clock);
-    }
-}
-
-/**
- * gtk_widget_remove_frame_clock_target:
- * @widget: a #GtkWidget
- * @target: the #GdkClockTarget
- *
- * Removes a #GdkClockTarget previously added with
- * gtk_widget_add_frame_clock_target.
- */
-void
-gtk_widget_remove_frame_clock_target (GtkWidget          *widget,
-                                      GdkFrameClockTarget *target)
-{
-  GtkWidgetPrivate *priv;
-  GList *tmp_list;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (GDK_IS_FRAME_CLOCK_TARGET (target));
-
-  priv = widget->priv;
-
-  tmp_list = g_list_find (priv->frame_clock_targets, target);
-  if (tmp_list == NULL)
-    return;
-
-  priv->frame_clock_targets = g_list_delete_link (priv->frame_clock_targets, tmp_list);
-
-  if (gtk_widget_get_realized (widget))
-    gdk_frame_clock_target_set_clock (target, NULL);
-
-  g_object_unref (target);
 }
