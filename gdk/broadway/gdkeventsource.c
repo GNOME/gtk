@@ -97,7 +97,7 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
   GList *node;
 
   switch (message->base.type) {
-  case 'e': /* Enter */
+  case BROADWAY_EVENT_ENTER:
     window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.event_window_id));
     if (window)
       {
@@ -125,7 +125,7 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
 	_gdk_windowing_got_event (display, node, event, message->base.serial);
       }
     break;
-  case 'l': /* Leave */
+  case BROADWAY_EVENT_LEAVE:
     window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.event_window_id));
     if (window)
       {
@@ -153,7 +153,7 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
 	_gdk_windowing_got_event (display, node, event, message->base.serial);
       }
     break;
-  case 'm': /* Mouse move */
+  case BROADWAY_EVENT_POINTER_MOVE:
     if (_gdk_broadway_moveresize_handle_event (display, message))
       break;
 
@@ -175,8 +175,8 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
       }
 
     break;
-  case 'b':
-  case 'B':
+  case BROADWAY_EVENT_BUTTON_PRESS:
+  case BROADWAY_EVENT_BUTTON_RELEASE:
     if (message->base.type != 'b' &&
 	_gdk_broadway_moveresize_handle_event (display, message))
       break;
@@ -200,7 +200,7 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
       }
 
     break;
-  case 's':
+  case BROADWAY_EVENT_SCROLL:
     window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->pointer.event_window_id));
     if (window)
       {
@@ -219,8 +219,8 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
       }
 
     break;
-  case 'k':
-  case 'K':
+  case BROADWAY_EVENT_KEY_PRESS:
+  case BROADWAY_EVENT_KEY_RELEASE:
     window = g_hash_table_lookup (display_broadway->id_ht,
 				  GINT_TO_POINTER (message->key.mouse_window_id));
     if (window)
@@ -239,12 +239,12 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
       }
 
     break;
-  case 'g':
-  case 'u':
+  case BROADWAY_EVENT_GRAB_NOTIFY:
+  case BROADWAY_EVENT_UNGRAB_NOTIFY:
     _gdk_display_device_grab_update (display, display->core_pointer, NULL, message->base.serial);
     break;
 
-  case 'w':
+  case BROADWAY_EVENT_CONFIGURE_NOTIFY:
     window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->configure_notify.id));
     if (window)
       {
@@ -275,7 +275,7 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
       }
     break;
 
-  case 'W':
+  case BROADWAY_EVENT_DELETE_NOTIFY:
     window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->delete_notify.id));
     if (window)
       {
@@ -287,7 +287,7 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
       }
     break;
 
-  case 'd':
+  case BROADWAY_EVENT_SCREEN_SIZE_CHANGED:
     screen = gdk_display_get_default_screen (display);
     window = gdk_screen_get_root_window (screen);
     window->width = message->screen_resize_notify.width;

@@ -152,7 +152,7 @@ update_event_state (GdkBroadwayServer *server,
 		    BroadwayInputMsg *message)
 {
   switch (message->base.type) {
-  case 'e': /* Enter */
+  case BROADWAY_EVENT_ENTER:
     server->last_x = message->pointer.root_x;
     server->last_y = message->pointer.root_y;
     server->last_state = message->pointer.state;
@@ -161,7 +161,7 @@ update_event_state (GdkBroadwayServer *server,
     /* TODO: Unset when it dies */
     server->mouse_in_toplevel_id = message->pointer.event_window_id;
     break;
-  case 'l': /* Leave */
+  case BROADWAY_EVENT_LEAVE:
     server->last_x = message->pointer.root_x;
     server->last_y = message->pointer.root_y;
     server->last_state = message->pointer.state;
@@ -169,37 +169,37 @@ update_event_state (GdkBroadwayServer *server,
 
     server->mouse_in_toplevel_id = 0;
     break;
-  case 'm': /* Mouse move */
+  case BROADWAY_EVENT_POINTER_MOVE:
     server->last_x = message->pointer.root_x;
     server->last_y = message->pointer.root_y;
     server->last_state = message->pointer.state;
     server->real_mouse_in_toplevel_id = message->pointer.mouse_window_id;
     break;
-  case 'b':
-  case 'B':
+  case BROADWAY_EVENT_BUTTON_PRESS:
+  case BROADWAY_EVENT_BUTTON_RELEASE:
     server->last_x = message->pointer.root_x;
     server->last_y = message->pointer.root_y;
     server->last_state = message->pointer.state;
     server->real_mouse_in_toplevel_id = message->pointer.mouse_window_id;
     break;
-  case 's':
+  case BROADWAY_EVENT_SCROLL:
     server->last_x = message->pointer.root_x;
     server->last_y = message->pointer.root_y;
     server->last_state = message->pointer.state;
     server->real_mouse_in_toplevel_id = message->pointer.mouse_window_id;
     break;
-  case 'k':
-  case 'K':
+  case BROADWAY_EVENT_KEY_PRESS:
+  case BROADWAY_EVENT_KEY_RELEASE:
     server->last_state = message->key.state;
     break;
-  case 'g':
-  case 'u':
+  case BROADWAY_EVENT_GRAB_NOTIFY:
+  case BROADWAY_EVENT_UNGRAB_NOTIFY:
     break;
-  case 'w':
+  case BROADWAY_EVENT_CONFIGURE_NOTIFY:
     break;
-  case 'W':
+  case BROADWAY_EVENT_DELETE_NOTIFY:
     break;
-  case 'd':
+  case BROADWAY_EVENT_SCREEN_SIZE_CHANGED:
     break;
 
   default:
@@ -306,36 +306,36 @@ parse_input_message (BroadwayInput *input, const char *message)
   msg.base.time = time_;
 
   switch (msg.base.type) {
-  case 'e': /* Enter */
-  case 'l': /* Leave */
+  case BROADWAY_EVENT_ENTER:
+  case BROADWAY_EVENT_LEAVE:
     p = parse_pointer_data (p, &msg.pointer);
     update_future_pointer_info (server, &msg.pointer);
     p++; /* Skip , */
     msg.crossing.mode = strtol(p, &p, 10);
     break;
 
-  case 'm': /* Mouse move */
+  case BROADWAY_EVENT_POINTER_MOVE: /* Mouse move */
     p = parse_pointer_data (p, &msg.pointer);
     update_future_pointer_info (server, &msg.pointer);
     break;
 
-  case 'b':
-  case 'B':
+  case BROADWAY_EVENT_BUTTON_PRESS:
+  case BROADWAY_EVENT_BUTTON_RELEASE:
     p = parse_pointer_data (p, &msg.pointer);
     update_future_pointer_info (server, &msg.pointer);
     p++; /* Skip , */
     msg.button.button = strtol(p, &p, 10);
     break;
 
-  case 's':
+  case BROADWAY_EVENT_SCROLL:
     p = parse_pointer_data (p, &msg.pointer);
     update_future_pointer_info (server, &msg.pointer);
     p++; /* Skip , */
     msg.scroll.dir = strtol(p, &p, 10);
     break;
 
-  case 'k':
-  case 'K':
+  case BROADWAY_EVENT_KEY_PRESS:
+  case BROADWAY_EVENT_KEY_RELEASE:
     msg.key.mouse_window_id = strtol(p, &p, 10);
     p++; /* Skip , */
     msg.key.key = strtol(p, &p, 10);
@@ -343,12 +343,12 @@ parse_input_message (BroadwayInput *input, const char *message)
     msg.key.state = strtol(p, &p, 10);
     break;
 
-  case 'g':
-  case 'u':
+  case BROADWAY_EVENT_GRAB_NOTIFY:
+  case BROADWAY_EVENT_UNGRAB_NOTIFY:
     msg.grab_reply.res = strtol(p, &p, 10);
     break;
 
-  case 'w':
+  case BROADWAY_EVENT_CONFIGURE_NOTIFY:
     msg.configure_notify.id = strtol(p, &p, 10);
     p++; /* Skip , */
     msg.configure_notify.x = strtol (p, &p, 10);
@@ -360,11 +360,11 @@ parse_input_message (BroadwayInput *input, const char *message)
     msg.configure_notify.height = strtol (p, &p, 10);
     break;
 
-  case 'W':
+  case BROADWAY_EVENT_DELETE_NOTIFY:
     msg.delete_notify.id = strtol(p, &p, 10);
     break;
 
-  case 'd':
+  case BROADWAY_EVENT_SCREEN_SIZE_CHANGED:
     msg.screen_resize_notify.width = strtol (p, &p, 10);
     p++; /* Skip , */
     msg.screen_resize_notify.height = strtol (p, &p, 10);
