@@ -1047,7 +1047,7 @@ gtk_clipboard_store (GtkClipboard *clipboard)
 
   g_return_if_fail (GTK_IS_CLIPBOARD (clipboard));
 
-  if (!clipboard->target_list)
+  if (!clipboard->target_list || !clipboard->get_func)
     return;
 
   /* We simply store all targets into the OS X clipboard. We should be
