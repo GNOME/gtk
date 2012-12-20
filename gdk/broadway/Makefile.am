@@ -30,6 +30,7 @@ libgdkbroadwayinclude_HEADERS = 	\
 
 libbroadway_la_SOURCES =		\
 	gdkbroadway-server.h		\
+	broadway-protocol.h		\
 	gdkbroadway-server.c		\
 	broadway.h			\
 	broadway.c

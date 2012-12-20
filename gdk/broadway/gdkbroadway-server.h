@@ -2,6 +2,7 @@
 #define __GDK_BROADWAY_SERVER__
 
 #include <gdk/gdktypes.h>
+#include "broadway-protocol.h"
 
 typedef struct _GdkBroadwayServer GdkBroadwayServer;
 typedef struct _GdkBroadwayServerClass GdkBroadwayServerClass;
@@ -13,82 +14,6 @@ typedef struct _GdkBroadwayServerClass GdkBroadwayServerClass;
 #define GDK_IS_BROADWAY_SERVER_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_BROADWAY_SERVER))
 #define GDK_BROADWAY_SERVER_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_BROADWAY_SERVER, GdkBroadwayServerClass))
 
-typedef struct {
-  guint8 type;
-  guint32 serial;
-  guint64 time;
-} BroadwayInputBaseMsg;
-
-typedef struct {
-  BroadwayInputBaseMsg base;
-  guint32 mouse_window_id; /* The real window, not taking grabs into account */
-  guint32 event_window_id;
-  gint32 root_x;
-  gint32 root_y;
-  gint32 win_x;
-  gint32 win_y;
-  guint32 state;
-} BroadwayInputPointerMsg;
-
-typedef struct {
-  BroadwayInputPointerMsg pointer;
-  guint32 mode;
-} BroadwayInputCrossingMsg;
-
-typedef struct {
-  BroadwayInputPointerMsg pointer;
-  guint32 button;
-} BroadwayInputButtonMsg;
-
-typedef struct {
-  BroadwayInputPointerMsg pointer;
-  gint32 dir;
-} BroadwayInputScrollMsg;
-
-typedef struct {
-  BroadwayInputBaseMsg base;
-  guint32 mouse_window_id; /* The real window, not taking grabs into account */
-  guint32 state;
-  gint32 key;
-} BroadwayInputKeyMsg;
-
-typedef struct {
-  BroadwayInputBaseMsg base;
-  gint32 res;
-} BroadwayInputGrabReply;
-
-typedef struct {
-  BroadwayInputBaseMsg base;
-  gint32 id;
-  gint32 x;
-  gint32 y;
-  gint32 width;
-  gint32 height;
-} BroadwayInputConfigureNotify;
-
-typedef struct {
-  BroadwayInputBaseMsg base;
-  gint32 width;
-  gint32 height;
-} BroadwayInputScreenResizeNotify;
-
-typedef struct {
-  BroadwayInputBaseMsg base;
-  gint32 id;
-} BroadwayInputDeleteNotify;
-
-typedef union {
-  BroadwayInputBaseMsg base;
-  BroadwayInputPointerMsg pointer;
-  BroadwayInputCrossingMsg crossing;
-  BroadwayInputButtonMsg button;
-  BroadwayInputScrollMsg scroll;
-  BroadwayInputKeyMsg key;
-  BroadwayInputGrabReply grab_reply;
-  BroadwayInputConfigureNotify configure_notify;
-  BroadwayInputDeleteNotify delete_notify;
-  BroadwayInputScreenResizeNotify screen_resize_notify;
-} BroadwayInputMsg;
 
 GdkBroadwayServer *_gdk_broadway_server_new                      (int                 port,
 								  GError            **error);
