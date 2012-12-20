@@ -2444,6 +2444,70 @@ gtk_tree_view_get_preferred_height (GtkWidget *widget,
     *natural = height;
 }
 
+static void
+gtk_tree_view_modify_column_width (GtkTreeView       *tree_view,
+				   GtkTreeViewColumn *column,
+				   gint               width)
+{
+  gboolean is_expand;
+  gint n_expand_others;
+  gint minimum, natural, natural_others;
+
+  is_expand = gtk_tree_view_column_get_expand (column);
+  n_expand_others = tree_view->priv->n_expand_columns - (is_expand ? 1 : 0);
+
+  _gtk_tree_view_column_request_width (column, &minimum, &natural);
+  natural_others = tree_view->priv->natural_width - natural;
+
+  if (natural_others + width < tree_view->priv->width)
+    {
+      /* There is extra space that needs to be taken up by letting some other
+       * column(s) expand: by default, the last column. */
+      if (!n_expand_others)
+	{
+	  GList *last = g_list_last (tree_view->priv->columns);
+	  while (!gtk_tree_view_column_get_visible (last->data))
+	    last = last->prev;
+
+	  if (column == last->data)
+	    return;
+
+	  gtk_tree_view_column_set_expand (last->data, TRUE);
+	  n_expand_others++;
+	}
+
+      /* Now try to make this column expandable also.  Solving the following
+       * equations reveals what the natural width should be to achieve the
+       * desired width after expanding:
+       *
+       *   1. natural + expand = desired_width
+       *   2. natural + natural_others + expand * (n_expand_others + 1) = total_width
+       *
+       * Solution:
+       *   expand = (total_width - natural_others - desired_width) / n_expand_others
+       *
+       * It is possible for the solved natural width to be less than the
+       * minimum; in that case, we cannot let the column expand.
+       */
+      gint expand = (tree_view->priv->width - natural_others - width) / n_expand_others;
+
+      if (minimum + expand > width)
+	{
+	  if (is_expand)
+	    gtk_tree_view_column_set_expand (column, FALSE);
+	}
+      else
+	{
+	  if (!is_expand)
+	    gtk_tree_view_column_set_expand (column, TRUE);
+
+	  width -= expand;
+	}
+    }
+
+  gtk_tree_view_column_set_fixed_width (column, width);
+}
+
 static int
 gtk_tree_view_calculate_width_before_expander (GtkTreeView *tree_view)
 {
@@ -3170,9 +3234,6 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 					     drag_data);
 
 	  column_width = gtk_tree_view_column_get_width (column);
-	  gtk_tree_view_column_set_fixed_width (column, column_width);
-	  gtk_tree_view_column_set_expand (column, FALSE);
-
 	  gdk_window_get_device_position (tree_view->priv->bin_window,
 					  gdk_event_get_device ((GdkEvent *) event),
 					  &x, NULL, NULL);
@@ -3910,14 +3971,14 @@ gtk_tree_view_motion_resize_column (GtkWidget      *widget,
   gdk_window_get_device_position (tree_view->priv->bin_window,
 				  gdk_event_get_device ((GdkEvent *) event),
 				  &x, NULL, NULL);
- 
+
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     new_width = MAX (tree_view->priv->x_drag - x, 0);
   else
     new_width = MAX (x - tree_view->priv->x_drag, 0);
-  
-  if (new_width != gtk_tree_view_column_get_fixed_width (column))
-    gtk_tree_view_column_set_fixed_width (column, new_width);
+
+  if (new_width != gtk_tree_view_column_get_width (column))
+    gtk_tree_view_modify_column_width (tree_view, column, new_width);
 
   return FALSE;
 }
@@ -5612,8 +5673,7 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 	      column_width = column_width + 2;
             }
 
-	  gtk_tree_view_column_set_fixed_width (column, column_width);
-	  gtk_tree_view_column_set_expand (column, FALSE);
+	  gtk_tree_view_modify_column_width (tree_view, column, column_width);
           return TRUE;
         }
 
