@@ -7999,7 +7999,6 @@ create_progress_bar (GtkWidget *widget)
   GtkWidget *frame;
   GtkWidget *grid;
   GtkWidget *label;
-  GtkWidget *align;
   static ProgressData *pdata = NULL;
 
   static gchar *items1[] =
@@ -8050,20 +8049,17 @@ create_progress_bar (GtkWidget *widget)
       vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
       gtk_container_add (GTK_CONTAINER (frame), vbox2);
 
-      align = gtk_alignment_new (0.5, 0.5, 0, 0);
-      gtk_box_pack_start (GTK_BOX (vbox2), align, FALSE, FALSE, 5);
-
       pdata->pbar = gtk_progress_bar_new ();
       gtk_progress_bar_set_ellipsize (GTK_PROGRESS_BAR (pdata->pbar),
                                       PANGO_ELLIPSIZE_MIDDLE);
-
-      gtk_container_add (GTK_CONTAINER (align), pdata->pbar);
-
-      align = gtk_alignment_new (0.5, 0.5, 0, 0);
-      gtk_box_pack_start (GTK_BOX (vbox2), align, FALSE, FALSE, 5);
+      gtk_widget_set_halign (pdata->pbar, GTK_ALIGN_CENTER);
+      gtk_widget_set_valign (pdata->pbar, GTK_ALIGN_CENTER);
+      gtk_box_pack_start (GTK_BOX (vbox2), pdata->pbar, FALSE, FALSE, 5);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
-      gtk_container_add (GTK_CONTAINER (align), hbox);
+      gtk_widget_set_halign (hbox, GTK_ALIGN_CENTER);
+      gtk_widget_set_valign (hbox, GTK_ALIGN_CENTER);
+      gtk_box_pack_start (GTK_BOX (vbox2), hbox, FALSE, FALSE, 5);
       label = gtk_label_new ("Label updated by user :"); 
       gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
       pdata->label = gtk_label_new ("");
