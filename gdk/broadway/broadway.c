@@ -6,6 +6,7 @@
 #include <cairo.h>
 
 #include "broadway.h"
+#include "broadway-protocol.h"
 
 /************************************************************************
  *                Base64 functions                                      *
@@ -422,7 +423,7 @@ broadway_output_copy_rectangles (BroadwayOutput *output,  int id,
 {
   int i;
 
-  write_header (output, 'b');
+  write_header (output, BROADWAY_OP_COPY_RECTANGLES);
   append_uint16 (output, id);
   append_uint16 (output, n_rects);
   for (i = 0; i < n_rects; i++)
@@ -441,7 +442,7 @@ broadway_output_grab_pointer (BroadwayOutput *output,
 			      int id,
 			      gboolean owner_event)
 {
-  write_header (output, 'g');
+  write_header (output, BROADWAY_OP_GRAB_POINTER);
   append_uint16 (output, id);
   append_bool (output, owner_event);
 }
@@ -452,7 +453,7 @@ broadway_output_ungrab_pointer (BroadwayOutput *output)
   guint32 serial;
 
   serial = output->serial;
-  write_header (output, 'u');
+  write_header (output, BROADWAY_OP_UNGRAB_POINTER);
 
   return serial;
 }
@@ -462,7 +463,7 @@ broadway_output_new_surface(BroadwayOutput *output,
 			    int id, int x, int y, int w, int h,
 			    gboolean is_temp)
 {
-  write_header (output, 's');
+  write_header (output, BROADWAY_OP_NEW_SURFACE);
   append_uint16 (output, id);
   append_uint16 (output, x);
   append_uint16 (output, y);
@@ -474,21 +475,21 @@ broadway_output_new_surface(BroadwayOutput *output,
 void
 broadway_output_show_surface(BroadwayOutput *output,  int id)
 {
-  write_header (output, 'S');
+  write_header (output, BROADWAY_OP_SHOW_SURFACE);
   append_uint16 (output, id);
 }
 
 void
 broadway_output_hide_surface(BroadwayOutput *output,  int id)
 {
-  write_header (output, 'H');
+  write_header (output, BROADWAY_OP_HIDE_SURFACE);
   append_uint16 (output, id);
 }
 
 void
 broadway_output_destroy_surface(BroadwayOutput *output,  int id)
 {
-  write_header (output, 'd');
+  write_header (output, BROADWAY_OP_DESTROY_SURFACE);
   append_uint16 (output, id);
 }
 
@@ -508,7 +509,7 @@ broadway_output_move_resize_surface (BroadwayOutput *output,
   if (!has_pos && !has_size)
     return;
 
-  write_header (output, 'm');
+  write_header (output, BROADWAY_OP_MOVE_RESIZE);
   val = (!!has_pos) | ((!!has_size) << 1);
   append_uint16 (output, id);
   append_flags (output, val);
@@ -529,7 +530,7 @@ broadway_output_set_transient_for (BroadwayOutput *output,
 				   int             id,
 				   int             parent_id)
 {
-  write_header (output, 'p');
+  write_header (output, BROADWAY_OP_SET_TRANSIENT_FOR);
   append_uint16 (output, id);
   append_uint16 (output, parent_id);
 }
@@ -541,7 +542,7 @@ broadway_output_put_rgb (BroadwayOutput *output,  int id, int x, int y,
 {
   gsize size_start, image_start, len;
 
-  write_header (output, 'i');
+  write_header (output, BROADWAY_OP_PUT_RGB);
 
   append_uint16 (output, id);
   append_uint16 (output, x);
@@ -798,7 +799,7 @@ broadway_output_put_rgba (BroadwayOutput *output,  int id, int x, int y,
     {
       guint8 *subdata;
 
-      write_header (output, 'i');
+      write_header (output, BROADWAY_OP_PUT_RGB);
       append_uint16 (output, id);
       append_uint16 (output, x + rects[i].x1);
       append_uint16 (output, y + rects[i].y1);
@@ -830,6 +831,6 @@ void
 broadway_output_surface_flush (BroadwayOutput *output,
 			       int             id)
 {
-  write_header (output, 'f');
+  write_header (output, BROADWAY_OP_FLUSH);
   append_uint16 (output, id);
 }

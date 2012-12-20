@@ -19,6 +19,20 @@ typedef enum {
   BROADWAY_EVENT_SCREEN_SIZE_CHANGED = 'd'
 } BroadwayEventType;
 
+typedef enum {
+  BROADWAY_OP_COPY_RECTANGLES = 'b',
+  BROADWAY_OP_GRAB_POINTER = 'g',
+  BROADWAY_OP_UNGRAB_POINTER = 'u',
+  BROADWAY_OP_NEW_SURFACE = 's',
+  BROADWAY_OP_SHOW_SURFACE = 'S',
+  BROADWAY_OP_HIDE_SURFACE = 'H',
+  BROADWAY_OP_DESTROY_SURFACE = 'd',
+  BROADWAY_OP_MOVE_RESIZE = 'm',
+  BROADWAY_OP_SET_TRANSIENT_FOR = 'p',
+  BROADWAY_OP_PUT_RGB = 'i',
+  BROADWAY_OP_FLUSH = 'f',
+} BroadwayOpType;
+
 typedef struct {
   guint8 type;
   guint32 serial;
