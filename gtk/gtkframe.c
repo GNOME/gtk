@@ -689,6 +689,8 @@ gtk_frame_draw (GtkWidget *widget,
   width = priv->child_allocation.width + padding.left + padding.right;
   height =  priv->child_allocation.height + padding.top + padding.bottom;
 
+  gtk_render_background (context, cr, x, y, width, height);
+
   if (priv->shadow_type != GTK_SHADOW_NONE)
     {
       if (priv->label_widget)
