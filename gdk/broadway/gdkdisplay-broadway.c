@@ -159,7 +159,7 @@ _gdk_broadway_display_open (const gchar *display_name)
   if (display_name != NULL)
     port = strtol(display_name, NULL, 10);
   if (port == 0)
-    port = 8080;
+    port = 1;
 
   broadway_display->server = _gdk_broadway_server_new (port, NULL);
   if (broadway_display->server == NULL)

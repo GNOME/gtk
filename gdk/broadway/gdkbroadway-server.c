@@ -594,7 +594,7 @@ _gdk_broadway_server_read_all_input_nonblocking (GdkBroadwayServer *server)
       broadway_input_free (input);
       if (res < 0)
 	{
-	  g_print ("input error %s\n", error->message);
+	  g_printerr ("input error %s\n", error->message);
 	  g_error_free (error);
 	}
       return;
@@ -1172,7 +1172,7 @@ _gdk_broadway_server_get_last_seen_time (GdkBroadwayServer *server)
 
 void
 _gdk_broadway_server_query_mouse (GdkBroadwayServer *server,
-				  gint32             *toplevel,
+				  guint32            *toplevel,
 				  gint32             *root_x,
 				  gint32             *root_y,
 				  guint32            *mask)
@@ -1690,6 +1690,7 @@ _gdk_broadway_server_resync_windows (GdkBroadwayServer *server)
 				       cairo_image_surface_get_stride (window->last_surface),
 				       cairo_image_surface_get_data (window->last_surface));
 	    }
+	  broadway_output_surface_flush (server->output, window->id);
 	}
     }
 

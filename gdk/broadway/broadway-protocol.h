@@ -3,6 +3,11 @@
 
 #include <glib.h>
 
+typedef struct  {
+    gint32 x, y;
+    gint32 width, height;
+} BroadwayRect;
+
 typedef enum {
   BROADWAY_EVENT_ENTER = 'e',
   BROADWAY_EVENT_LEAVE = 'l',
@@ -109,5 +114,151 @@ typedef union {
   BroadwayInputDeleteNotify delete_notify;
   BroadwayInputScreenResizeNotify screen_resize_notify;
 } BroadwayInputMsg;
+
+typedef enum {
+  BROADWAY_REQUEST_NEW_WINDOW,
+  BROADWAY_REQUEST_FLUSH,
+  BROADWAY_REQUEST_SYNC,
+  BROADWAY_REQUEST_QUERY_MOUSE,
+  BROADWAY_REQUEST_DESTROY_WINDOW,
+  BROADWAY_REQUEST_SHOW_WINDOW,
+  BROADWAY_REQUEST_HIDE_WINDOW,
+  BROADWAY_REQUEST_SET_TRANSIENT_FOR,
+  BROADWAY_REQUEST_TRANSLATE,
+  BROADWAY_REQUEST_UPDATE,
+  BROADWAY_REQUEST_MOVE_RESIZE,
+  BROADWAY_REQUEST_GRAB_POINTER,
+  BROADWAY_REQUEST_UNGRAB_POINTER
+} BroadwayRequestType;
+
+typedef struct {
+  guint32 size;
+  guint32 serial;
+  guint32 type;
+} BroadwayRequestBase, BroadwayRequestFlush, BroadwayRequestSync, BroadwayRequestQueryMouse;
+
+typedef struct {
+  BroadwayRequestBase base;
+  guint32 id;
+} BroadwayRequestDestroyWindow, BroadwayRequestShowWindow, BroadwayRequestHideWindow;
+
+typedef struct {
+  BroadwayRequestBase base;
+  guint32 id;
+  guint32 parent;
+} BroadwayRequestSetTransientFor;
+
+typedef struct {
+  BroadwayRequestBase base;
+  guint32 id;
+  gint32 dx;
+  gint32 dy;
+  guint32 n_rects;
+  BroadwayRect rects[1];
+} BroadwayRequestTranslate;
+
+typedef struct {
+  BroadwayRequestBase base;
+  guint32 id;
+  char name[34];
+  guint32 width;
+  guint32 height;
+} BroadwayRequestUpdate;
+
+typedef struct {
+  BroadwayRequestBase base;
+  guint32 id;
+  guint32 owner_events;
+  guint32 event_mask;
+  guint32 time_;
+} BroadwayRequestGrabPointer;
+
+typedef struct {
+  BroadwayRequestBase base;
+  guint32 time_;
+} BroadwayRequestUngrabPointer;
+
+typedef struct {
+  BroadwayRequestBase base;
+  gint32 x;
+  gint32 y;
+  guint32 width;
+  guint32 height;
+  guint32 is_temp;
+} BroadwayRequestNewWindow;
+
+typedef struct {
+  BroadwayRequestBase base;
+  guint32 id;
+  gint32 x;
+  gint32 y;
+  guint32 width;
+  guint32 height;
+} BroadwayRequestMoveResize;
+
+typedef union {
+  BroadwayRequestBase base;
+  BroadwayRequestNewWindow new_window;
+  BroadwayRequestFlush flush;
+  BroadwayRequestSync sync;
+  BroadwayRequestQueryMouse query_mouse;
+  BroadwayRequestDestroyWindow destroy_window;
+  BroadwayRequestShowWindow show_window;
+  BroadwayRequestHideWindow hide_window;
+  BroadwayRequestSetTransientFor set_transient_for;
+  BroadwayRequestUpdate update;
+  BroadwayRequestMoveResize move_resize;
+  BroadwayRequestGrabPointer grab_pointer;
+  BroadwayRequestUngrabPointer ungrab_pointer;
+  BroadwayRequestTranslate translate;
+} BroadwayRequest;
+
+typedef enum {
+  BROADWAY_REPLY_EVENT,
+  BROADWAY_REPLY_SYNC,
+  BROADWAY_REPLY_QUERY_MOUSE,
+  BROADWAY_REPLY_NEW_WINDOW,
+  BROADWAY_REPLY_GRAB_POINTER,
+  BROADWAY_REPLY_UNGRAB_POINTER
+} BroadwayReplyType;
+
+typedef struct {
+  guint32 size;
+  guint32 last_serial;
+  guint32 in_reply_to;
+  guint32 type;
+} BroadwayReplyBase, BroadwayReplySync;
+
+typedef struct {
+  BroadwayReplyBase base;
+  guint32 id;
+} BroadwayReplyNewWindow;
+
+typedef struct {
+  BroadwayReplyBase base;
+  guint32 status;
+} BroadwayReplyGrabPointer, BroadwayReplyUngrabPointer;
+
+typedef struct {
+  BroadwayReplyBase base;
+  guint32 toplevel;
+  gint32 root_x;
+  gint32 root_y;
+  guint32 mask;
+} BroadwayReplyQueryMouse;
+
+typedef struct {
+  BroadwayReplyBase base;
+  BroadwayInputMsg msg;
+} BroadwayReplyEvent;
+
+typedef union {
+  BroadwayReplyBase base;
+  BroadwayReplyEvent event;
+  BroadwayReplyQueryMouse query_mouse;
+  BroadwayReplyNewWindow new_window;
+  BroadwayReplyGrabPointer grab_pointer;
+  BroadwayReplyUngrabPointer ungrab_pointer;
+} BroadwayReply;
 
 #endif /* __BROADWAY_PROTOCOL_H__ */

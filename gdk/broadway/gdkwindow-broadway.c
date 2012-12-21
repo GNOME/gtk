@@ -241,9 +241,8 @@ _gdk_broadway_window_resize_surface (GdkWindow *window)
     {
       old = impl->surface;
 
-      impl->surface = cairo_image_surface_create (CAIRO_FORMAT_RGB24,
-						  gdk_window_get_width (impl->wrapper),
-						  gdk_window_get_height (impl->wrapper));
+      impl->surface = _gdk_broadway_server_create_surface (gdk_window_get_width (impl->wrapper),
+							   gdk_window_get_height (impl->wrapper));
 
       cairo_surface_destroy (old);
     }
@@ -281,7 +280,7 @@ gdk_window_broadway_ref_cairo_surface (GdkWindow *window)
 
   /* Create actual backing store if missing */
   if (!impl->surface)
-    impl->surface = cairo_image_surface_create (CAIRO_FORMAT_RGB24, w, h);
+    impl->surface = _gdk_broadway_server_create_surface (w, h);
 
   /* Create a destroyable surface referencing the real one */
   if (!impl->ref_surface)

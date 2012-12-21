@@ -14,7 +14,6 @@ typedef struct _GdkBroadwayServerClass GdkBroadwayServerClass;
 #define GDK_IS_BROADWAY_SERVER_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_BROADWAY_SERVER))
 #define GDK_BROADWAY_SERVER_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_BROADWAY_SERVER, GdkBroadwayServerClass))
 
-
 GdkBroadwayServer *_gdk_broadway_server_new                      (int                 port,
 								  GError            **error);
 gboolean           _gdk_broadway_server_has_client               (GdkBroadwayServer  *server);
@@ -25,9 +24,9 @@ guint32            _gdk_broadway_server_get_last_seen_time       (GdkBroadwaySer
 gboolean           _gdk_broadway_server_lookahead_event          (GdkBroadwayServer  *server,
 								  const char         *types);
 void               _gdk_broadway_server_query_mouse              (GdkBroadwayServer  *server,
-								  gint               *toplevel,
-								  gint               *root_x,
-								  gint               *root_y,
+								  guint32            *toplevel,
+								  gint32             *root_x,
+								  gint32             *root_y,
 								  guint32            *mask);
 GdkGrabStatus      _gdk_broadway_server_grab_pointer             (GdkBroadwayServer  *server,
 								  gint                id,
@@ -57,6 +56,8 @@ gboolean           _gdk_broadway_server_window_translate         (GdkBroadwaySer
 								  cairo_region_t     *area,
 								  gint                dx,
 								  gint                dy);
+cairo_surface_t   *_gdk_broadway_server_create_surface           (int                 width,
+								  int                 height);
 void               _gdk_broadway_server_window_update            (GdkBroadwayServer  *server,
 								  gint                id,
 								  cairo_surface_t    *surface);

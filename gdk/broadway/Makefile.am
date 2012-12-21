@@ -78,14 +78,14 @@ libgdk_broadway_la_SOURCES =		\
 	gdkvisual-broadway.c	\
 	gdkwindow-broadway.c	\
 	gdkwindow-broadway.h	\
-	gdkprivate-broadway.h
-
-libgdk_broadway_la_LIBADD = libbroadway.la
+	gdkprivate-broadway.h   \
+	gdkbroadway-server.h	\
+	gdkbroadway-server-client.c
 
 broadway_server_SOURCES = \
 	broadway-server.c
 
-broadway_server_LDADD = libbroadway.la $(GDK_DEP_LIBS)
+broadway_server_LDADD = libbroadway.la $(GDK_DEP_LIBS) -lrt
 
 MAINTAINERCLEANFILES = $(broadway_built_sources)
 EXTRA_DIST += $(broadway_built_sources)

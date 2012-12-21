@@ -3,13 +3,9 @@
 
 #include <glib.h>
 #include <gio/gio.h>
+#include "broadway-protocol.h"
 
 typedef struct BroadwayOutput BroadwayOutput;
-
-typedef struct  {
-    int x, y;
-    int width, height;
-} BroadwayRect;
 
 typedef enum {
   BROADWAY_WS_CONTINUATION = 0,
