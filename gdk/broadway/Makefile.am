@@ -15,7 +15,7 @@ AM_CPPFLAGS =			\
 
 LDADDS = $(GDK_DEP_LIBS)
 
-noinst_LTLIBRARIES = libbroadway.la libgdk-broadway.la
+noinst_LTLIBRARIES = libgdk-broadway.la
 
 libexec_PROGRAMS = broadway-server
 
@@ -27,13 +27,6 @@ libgdkbroadwayinclude_HEADERS = 	\
 	gdkbroadwaywindow.h		\
 	gdkbroadwaycursor.h		\
 	gdkbroadwayvisual.h
-
-libbroadway_la_SOURCES =		\
-	gdkbroadway-server.h		\
-	broadway-protocol.h		\
-	gdkbroadway-server.c		\
-	broadway-output.h		\
-	broadway-output.c
 
 clienthtml.h: client.html
 	$(PERL) $(srcdir)/toarray.pl $(srcdir)/client.html client_html > $@
@@ -83,9 +76,14 @@ libgdk_broadway_la_SOURCES =		\
 	gdkbroadway-server-client.c
 
 broadway_server_SOURCES = \
-	broadway-server.c
+	broadway-protocol.h		\
+	broadway-server.c 		\
+	gdkbroadway-server.h		\
+	gdkbroadway-server.c		\
+	broadway-output.h		\
+	broadway-output.c
 
-broadway_server_LDADD = libbroadway.la $(GDK_DEP_LIBS) -lrt
+broadway_server_LDADD = $(GDK_DEP_LIBS) -lrt
 
 MAINTAINERCLEANFILES = $(broadway_built_sources)
 EXTRA_DIST += $(broadway_built_sources)
