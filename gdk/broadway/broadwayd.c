@@ -9,6 +9,13 @@
 
 #include "gdkbroadway-server.h"
 
+/* TODO:
+ * Cache surfaces that are opened via shm_open inbetween updates.
+ * Send configure event when a window is moved and no client
+ * Rewrite events (only to one client, per-client serials, etc)
+ * _gdk_broadway_server_has_client is always FALSE, so resize don't work.
+ */
+
 GdkBroadwayServer *server;
 GList *clients;
 
@@ -138,8 +145,6 @@ open_surface (char *name, int width, int height)
   void *ptr;
   int fd;
 
-  /* TODO: Cache this */
-  
   size = width * height * sizeof (guint32);
 
   fd = shm_open(name, O_RDONLY, 0600);
@@ -462,10 +467,6 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
 
   reply_event.msg = *message;
 
-  /* TODO:
-     Don't send to all clients
-     Rewrite serials, etc
-  */
   for (l = clients; l != NULL; l = l->next)
     {
       BroadwayClient *client = l->data;
