@@ -12684,8 +12684,7 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
 static GtkSizeRequestMode 
 gtk_widget_real_get_request_mode (GtkWidget *widget)
 { 
-  /* By default widgets dont trade size at all. */
-  return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+  return _gtk_widget_actor_get_request_mode (widget->priv->actor);
 }
 
 static void
@@ -12693,11 +12692,17 @@ gtk_widget_real_get_width (GtkWidget *widget,
 			   gint      *minimum_size,
 			   gint      *natural_size)
 {
+  gfloat min, nat;
+  
+  _gtk_widget_actor_get_preferred_size (widget->priv->actor,
+                                        GTK_ORIENTATION_HORIZONTAL,
+                                        -1,
+                                        &min, &nat);
   if (minimum_size)
-    *minimum_size = 0;
+    *minimum_size = min;
 
   if (natural_size)
-    *natural_size = 0;
+    *natural_size = nat;
 }
 
 static void
@@ -12705,11 +12710,17 @@ gtk_widget_real_get_height (GtkWidget *widget,
 			    gint      *minimum_size,
 			    gint      *natural_size)
 {
+  gfloat min, nat;
+  
+  _gtk_widget_actor_get_preferred_size (widget->priv->actor,
+                                        GTK_ORIENTATION_VERTICAL,
+                                        -1,
+                                        &min, &nat);
   if (minimum_size)
-    *minimum_size = 0;
+    *minimum_size = min;
 
   if (natural_size)
-    *natural_size = 0;
+    *natural_size = nat;
 }
 
 static void
@@ -12718,7 +12729,24 @@ gtk_widget_real_get_height_for_width (GtkWidget *widget,
                                       gint      *minimum_height,
                                       gint      *natural_height)
 {
-  GTK_WIDGET_GET_CLASS (widget)->get_preferred_height (widget, minimum_height, natural_height);
+  if (GTK_WIDGET_GET_CLASS (widget)->get_preferred_height == gtk_widget_real_get_height)
+    {
+      gfloat min, nat;
+      
+      _gtk_widget_actor_get_preferred_size (widget->priv->actor,
+                                            GTK_ORIENTATION_VERTICAL,
+                                            width,
+                                            &min, &nat);
+      if (minimum_height)
+        *minimum_height = min;
+
+      if (natural_height)
+        *natural_height = nat;
+    }
+  else
+    {
+      GTK_WIDGET_GET_CLASS (widget)->get_preferred_height (widget, minimum_height, natural_height);
+    }
 }
 
 static void
@@ -12727,7 +12755,24 @@ gtk_widget_real_get_width_for_height (GtkWidget *widget,
                                       gint      *minimum_width,
                                       gint      *natural_width)
 {
-  GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, minimum_width, natural_width);
+  if (GTK_WIDGET_GET_CLASS (widget)->get_preferred_width == gtk_widget_real_get_width)
+    {
+      gfloat min, nat;
+      
+      _gtk_widget_actor_get_preferred_size (widget->priv->actor,
+                                            GTK_ORIENTATION_HORIZONTAL,
+                                            height,
+                                            &min, &nat);
+      if (minimum_width)
+        *minimum_width = min;
+
+      if (natural_width)
+        *natural_width = nat;
+    }
+  else
+    {
+      GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, minimum_width, natural_width);
+    }
 }
 
 /**

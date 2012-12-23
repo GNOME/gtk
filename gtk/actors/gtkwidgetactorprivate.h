@@ -55,6 +55,12 @@ void                        _gtk_widget_actor_map                       (GtkActo
 void                        _gtk_widget_actor_unmap                     (GtkActor       *actor);
 void                        _gtk_widget_actor_realize                   (GtkActor       *actor);
 void                        _gtk_widget_actor_unrealize                 (GtkActor       *actor);
+GtkSizeRequestMode          _gtk_widget_actor_get_request_mode          (GtkActor       *self);
+void                        _gtk_widget_actor_get_preferred_size        (GtkActor       *self,
+                                                                         GtkOrientation  orientation,
+                                                                         gfloat          for_size,
+                                                                         gfloat         *min_size_p,
+                                                                         gfloat         *natural_size_p);
 
 void                        _gtk_widget_actor_screen_changed            (GtkActor       *actor,
                                                                          GdkScreen      *new_screen,
