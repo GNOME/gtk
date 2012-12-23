@@ -157,7 +157,11 @@ _gdk_broadway_display_open (const gchar *display_name)
 
   port = 0;
   if (display_name != NULL)
-    port = strtol(display_name, NULL, 10);
+    {
+      if (*display_name == ':')
+	display_name++;
+      port = strtol(display_name, NULL, 10);
+    }
   if (port == 0)
     port = 1;
 

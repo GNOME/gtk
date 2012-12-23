@@ -1,7 +1,9 @@
+#include "config.h"
 #include <string.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <stdlib.h>
 
 #include <glib.h>
 #include <gio/gio.h>
@@ -376,24 +378,59 @@ incoming_client (GSocketService    *service,
   return TRUE;
 }
 
+
 int
 main (int argc, char *argv[])
 {
-  GError *error;
+  GError *error = NULL;
+  GOptionContext *context;
   GMainLoop *loop;
   GSocketAddress *address;
   GSocketService *listener;
-  char *path;
+  char *path, *base;
+  int http_port = 0;
+  int display = 1;
+  const GOptionEntry entries[] = {
+    { "port", 'p', 0, G_OPTION_ARG_INT, &http_port, "Httpd port", "PORT" },
+    { NULL }
+  };
 
-  error = NULL;
-  server = _gdk_broadway_server_new (8080, &error);
+  context = g_option_context_new ("[:DISPLAY] - broadway display daemon");
+  g_option_context_add_main_entries (context, entries, GETTEXT_PACKAGE);
+  if (!g_option_context_parse (context, &argc, &argv, &error))
+    {
+      g_printerr ("option parsing failed: %s\n", error->message);
+      exit (1);
+    }
+
+  if (argc > 1)
+    {
+      if (*argv[1] != ':')
+	{
+	  g_printerr ("Usage broadwayd [:DISPLAY]\n");
+	  exit (1);
+	}
+      display = strtol(argv[1]+1, NULL, 10);
+      if (display == 0)
+	{
+	  g_printerr ("Failed to parse display num %s\n", argv[1]);
+	  exit (1);
+	}
+    }
+
+  if (http_port == 0)
+    http_port = 8080 + (display - 1);
+
+  server = _gdk_broadway_server_new (http_port, &error);
   if (server == NULL)
     {
       g_printerr ("%s\n", error->message);
       return 1;
     }
 
-  path = g_build_filename (g_get_user_runtime_dir (), "broadway1.socket", NULL);
+  base = g_strdup_printf ("broadway%d.socket", display);
+  path = g_build_filename (g_get_user_runtime_dir (), base, NULL);
+  g_free (base);
   g_print ("Listening on %s\n", path);
   address = g_unix_socket_address_new_with_type (path, -1,
 						 G_UNIX_SOCKET_ADDRESS_ABSTRACT);
