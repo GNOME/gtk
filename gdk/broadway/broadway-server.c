@@ -20,11 +20,13 @@ typedef struct  {
   GBufferedInputStream *in;
   guint32 last_seen_serial;
   GList *windows;
+  guint disconnect_idle;
 } BroadwayClient;
 
 static void
 client_free (BroadwayClient *client)
 {
+  g_assert (client->disconnect_idle == 0);
   clients = g_list_remove (clients, client);
   g_object_unref (client->connection);
   g_object_unref (client->in);
@@ -34,9 +36,33 @@ client_free (BroadwayClient *client)
 static void
 client_disconnected (BroadwayClient *client)
 {
+  if (client->disconnect_idle != 0)
+    {
+      g_source_remove (client->disconnect_idle);
+      client->disconnect_idle = 0;
+    }
+
   g_print ("client %d disconnected\n", client->id);
+
   /* TODO: destroy client windows, also maybe do this in an idle, at least in some cases like on an i/o error */
+
   client_free (client);
+}
+
+static gboolean
+disconnect_idle_cb (BroadwayClient *client)
+{
+  client->disconnect_idle = 0;
+  client_disconnected (client);
+  return G_SOURCE_REMOVE;
+}
+
+static void
+client_disconnect_in_idle (BroadwayClient *client)
+{
+  if (client->disconnect_idle == 0)
+    client->disconnect_idle =
+      g_idle_add_full (G_PRIORITY_DEFAULT, (GSourceFunc)disconnect_idle_cb, client, NULL);
 }
 
 static void
@@ -57,8 +83,7 @@ send_reply (BroadwayClient *client,
   if (!g_output_stream_write_all (output, reply, size, NULL, NULL, NULL))
     {
       g_printerr ("can't write to client");
-      client_disconnected (client);
-      /* TODO: Make sure we don't access client after this */
+      client_disconnect_in_idle (client);
     }
 }
 
