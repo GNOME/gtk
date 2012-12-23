@@ -689,8 +689,6 @@ gtk_frame_draw (GtkWidget *widget,
   width = priv->child_allocation.width + padding.left + padding.right;
   height =  priv->child_allocation.height + padding.top + padding.bottom;
 
-  gtk_render_background (context, cr, x, y, width, height);
-
   if (priv->shadow_type != GTK_SHADOW_NONE)
     {
       if (priv->label_widget)
@@ -710,6 +708,9 @@ gtk_frame_draw (GtkWidget *widget,
           height += height_extra;
 
           x2 = padding.left + (priv->child_allocation.width - priv->label_allocation.width - 2 * LABEL_PAD - 2 * LABEL_SIDE_PAD) * xalign + LABEL_SIDE_PAD;
+
+          gtk_render_background (context, cr, x, y, width, height);
+
           /* If the label is completely over or under the frame we can omit the gap */
           if (priv->label_yalign == 0.0 || priv->label_yalign == 1.0)
             gtk_render_frame (context, cr, x, y, width, height);
@@ -720,7 +721,14 @@ gtk_frame_draw (GtkWidget *widget,
                                   x2 + priv->label_allocation.width + 2 * LABEL_PAD);
         }
       else
-        gtk_render_frame (context, cr, x, y, width, height);
+        {
+          gtk_render_background (context, cr, x, y, width, height);
+          gtk_render_frame (context, cr, x, y, width, height);
+        }
+    }
+  else
+    {
+      gtk_render_background (context, cr, x, y, width, height);
     }
 
   GTK_WIDGET_CLASS (gtk_frame_parent_class)->draw (widget, cr);
