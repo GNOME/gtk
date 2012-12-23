@@ -28,7 +28,6 @@
 #include "gdkinternals.h"
 #include "gdkmain.h"
 #include "gdkbroadway-server.h"
-#include "broadway.h"
 
 G_BEGIN_DECLS
 

@@ -5,8 +5,7 @@
 #include <errno.h>
 #include <cairo.h>
 
-#include "broadway.h"
-#include "broadway-protocol.h"
+#include "broadway-output.h"
 
 /************************************************************************
  *                Base64 functions                                      *

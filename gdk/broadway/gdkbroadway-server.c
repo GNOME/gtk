@@ -1,6 +1,6 @@
 #include "gdkbroadway-server.h"
 
-#include "broadway.h"
+#include "broadway-output.h"
 #include "gdkprivate-broadway.h"
 
 #include <glib.h>

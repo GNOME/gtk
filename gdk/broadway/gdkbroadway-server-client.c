@@ -4,7 +4,6 @@
 
 #include "gdkbroadway-server.h"
 
-#include "broadway.h"
 #include "gdkprivate-broadway.h"
 
 #include <glib.h>

@@ -32,8 +32,8 @@ libbroadway_la_SOURCES =		\
 	gdkbroadway-server.h		\
 	broadway-protocol.h		\
 	gdkbroadway-server.c		\
-	broadway.h			\
-	broadway.c
+	broadway-output.h		\
+	broadway-output.c
 
 clienthtml.h: client.html
 	$(PERL) $(srcdir)/toarray.pl $(srcdir)/client.html client_html > $@
