@@ -4,12 +4,13 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #include <glib.h>
 #include <gio/gio.h>
 #include <gio/gunixsocketaddress.h>
 
-#include "gdkbroadway-server.h"
+#include "broadway-server.h"
 
 /* TODO:
  * Cache surfaces that are opened via shm_open inbetween updates.
@@ -18,7 +19,7 @@
  * _gdk_broadway_server_has_client is always FALSE, so resize don't work.
  */
 
-GdkBroadwayServer *server;
+BroadwayServer *server;
 GList *clients;
 
 static guint32 client_id_count = 1;
@@ -55,12 +56,12 @@ client_disconnected (BroadwayClient *client)
     }
 
   for (l = client->windows; l != NULL; l = l->next)
-    _gdk_broadway_server_destroy_window (server,
-					 GPOINTER_TO_UINT (l->data));
+    broadway_server_destroy_window (server,
+				    GPOINTER_TO_UINT (l->data));
   g_list_free (client->windows);
   client->windows = NULL;
 
-  _gdk_broadway_server_flush (server);
+  broadway_server_flush (server);
 
   client_free (client);
 }
@@ -197,12 +198,12 @@ client_handle_request (BroadwayClient *client,
     {
     case BROADWAY_REQUEST_NEW_WINDOW:
       reply_new_window.id =
-	_gdk_broadway_server_new_window (server,
-					 request->new_window.x,
-					 request->new_window.y,
-					 request->new_window.width,
-					 request->new_window.height,
-					 request->new_window.is_temp);
+	broadway_server_new_window (server,
+				    request->new_window.x,
+				    request->new_window.y,
+				    request->new_window.width,
+				    request->new_window.height,
+				    request->new_window.is_temp);
       client->windows =
 	g_list_prepend (client->windows,
 			GUINT_TO_POINTER (reply_new_window.id));
@@ -211,19 +212,19 @@ client_handle_request (BroadwayClient *client,
 		  BROADWAY_REPLY_NEW_WINDOW);
       break;
     case BROADWAY_REQUEST_FLUSH:
-      _gdk_broadway_server_flush (server);
+      broadway_server_flush (server);
       break;
     case BROADWAY_REQUEST_SYNC:
-      _gdk_broadway_server_flush (server);
+      broadway_server_flush (server);
       send_reply (client, request, (BroadwayReply *)&reply_sync, sizeof (reply_sync),
 		  BROADWAY_REPLY_SYNC);
       break;
     case BROADWAY_REQUEST_QUERY_MOUSE:
-      _gdk_broadway_server_query_mouse (server,
-					&reply_query_mouse.toplevel,
-					&reply_query_mouse.root_x,
-					&reply_query_mouse.root_y,
-					&reply_query_mouse.mask);
+      broadway_server_query_mouse (server,
+				   &reply_query_mouse.toplevel,
+				   &reply_query_mouse.root_x,
+				   &reply_query_mouse.root_y,
+				   &reply_query_mouse.mask);
       send_reply (client, request, (BroadwayReply *)&reply_query_mouse, sizeof (reply_query_mouse),
 		  BROADWAY_REPLY_QUERY_MOUSE);
       break;
@@ -231,23 +232,23 @@ client_handle_request (BroadwayClient *client,
       client->windows =
 	g_list_remove (client->windows,
 		       GUINT_TO_POINTER (request->destroy_window.id));
-      _gdk_broadway_server_destroy_window (server, request->destroy_window.id);
+      broadway_server_destroy_window (server, request->destroy_window.id);
       break;
     case BROADWAY_REQUEST_SHOW_WINDOW:
-      _gdk_broadway_server_window_show (server, request->show_window.id);
+      broadway_server_window_show (server, request->show_window.id);
       break;
     case BROADWAY_REQUEST_HIDE_WINDOW:
-      _gdk_broadway_server_window_hide (server, request->hide_window.id);
+      broadway_server_window_hide (server, request->hide_window.id);
       break;
     case BROADWAY_REQUEST_SET_TRANSIENT_FOR:
-      _gdk_broadway_server_window_set_transient_for (server,
+      broadway_server_window_set_transient_for (server,
 						     request->set_transient_for.id,
 						     request->set_transient_for.parent);
       break;
     case BROADWAY_REQUEST_TRANSLATE:
       area = region_from_rects (request->translate.rects,
 				request->translate.n_rects);
-      _gdk_broadway_server_window_translate (server,
+      broadway_server_window_translate (server,
 					     request->translate.id,
 					     area,
 					     request->translate.dx,
@@ -260,14 +261,14 @@ client_handle_request (BroadwayClient *client,
 			      request->update.height);
       if (surface != NULL)
 	{
-	  _gdk_broadway_server_window_update (server,
+	  broadway_server_window_update (server,
 					      request->update.id,
 					      surface);
 	  cairo_surface_destroy (surface);
 	}
       break;
     case BROADWAY_REQUEST_MOVE_RESIZE:
-      if (!_gdk_broadway_server_window_move_resize (server,
+      if (!broadway_server_window_move_resize (server,
 						    request->move_resize.id,
 						    request->move_resize.x,
 						    request->move_resize.y,
@@ -279,7 +280,7 @@ client_handle_request (BroadwayClient *client,
       break;
     case BROADWAY_REQUEST_GRAB_POINTER:
       reply_grab_pointer.status =
-	_gdk_broadway_server_grab_pointer (server,
+	broadway_server_grab_pointer (server,
 					   request->grab_pointer.id,
 					   request->grab_pointer.owner_events,
 					   request->grab_pointer.event_mask,
@@ -289,7 +290,7 @@ client_handle_request (BroadwayClient *client,
       break;
     case BROADWAY_REQUEST_UNGRAB_POINTER:
       reply_ungrab_pointer.status =
-	_gdk_broadway_server_ungrab_pointer (server,
+	broadway_server_ungrab_pointer (server,
 					     request->ungrab_pointer.time_);
       send_reply (client, request, (BroadwayReply *)&reply_ungrab_pointer, sizeof (reply_ungrab_pointer),
 		  BROADWAY_REPLY_UNGRAB_POINTER);
@@ -421,7 +422,7 @@ main (int argc, char *argv[])
   if (http_port == 0)
     http_port = 8080 + (display - 1);
 
-  server = _gdk_broadway_server_new (http_port, &error);
+  server = broadway_server_new (http_port, &error);
   if (server == NULL)
     {
       g_printerr ("%s\n", error->message);
@@ -494,7 +495,7 @@ get_event_size (int type)
 }
 
 void
-_gdk_broadway_events_got_input (BroadwayInputMsg *message)
+broadway_events_got_input (BroadwayInputMsg *message)
 {
   GList *l;
   BroadwayReplyEvent reply_event;

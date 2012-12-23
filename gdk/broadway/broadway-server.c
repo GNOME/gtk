@@ -1,10 +1,10 @@
-#include "gdkbroadway-server.h"
+#include "broadway-server.h"
 
 #include "broadway-output.h"
-#include "gdkprivate-broadway.h"
 
 #include <glib.h>
 #include <glib/gprintf.h>
+#include "gdktypes.h"
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
@@ -16,7 +16,7 @@
 
 typedef struct BroadwayInput BroadwayInput;
 
-struct _GdkBroadwayServer {
+struct _BroadwayServer {
   GObject parent_instance;
 
   int port;
@@ -49,20 +49,20 @@ struct _GdkBroadwayServer {
   int future_mouse_in_toplevel;
 };
 
-struct _GdkBroadwayServerClass
+struct _BroadwayServerClass
 {
   GObjectClass parent_class;
 };
 
 typedef struct HttpRequest {
-  GdkBroadwayServer *server;
+  BroadwayServer *server;
   GSocketConnection *connection;
   GDataInputStream *data;
   GString *request;
 }  HttpRequest;
 
 struct BroadwayInput {
-  GdkBroadwayServer *server;
+  BroadwayServer *server;
   GSocketConnection *connection;
   GByteArray *buffer;
   GSource *source;
@@ -86,12 +86,12 @@ typedef struct {
   cairo_surface_t *last_surface;
 } BroadwayWindow;
 
-static void _gdk_broadway_server_resync_windows (GdkBroadwayServer *server);
+static void broadway_server_resync_windows (BroadwayServer *server);
 
-G_DEFINE_TYPE (GdkBroadwayServer, gdk_broadway_server, G_TYPE_OBJECT)
+G_DEFINE_TYPE (BroadwayServer, broadway_server, G_TYPE_OBJECT)
 
 static void
-gdk_broadway_server_init (GdkBroadwayServer *server)
+broadway_server_init (BroadwayServer *server)
 {
   BroadwayWindow *root;
 
@@ -114,17 +114,17 @@ gdk_broadway_server_init (GdkBroadwayServer *server)
 }
 
 static void
-gdk_broadway_server_finalize (GObject *object)
+broadway_server_finalize (GObject *object)
 {
-  G_OBJECT_CLASS (gdk_broadway_server_parent_class)->finalize (object);
+  G_OBJECT_CLASS (broadway_server_parent_class)->finalize (object);
 }
 
 static void
-gdk_broadway_server_class_init (GdkBroadwayServerClass * class)
+broadway_server_class_init (BroadwayServerClass * class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
-  object_class->finalize = gdk_broadway_server_finalize;
+  object_class->finalize = broadway_server_finalize;
 }
 
 static void start_output (HttpRequest *request, gboolean proto_v7_plus, gboolean binary);
@@ -148,7 +148,7 @@ broadway_input_free (BroadwayInput *input)
 }
 
 static void
-update_event_state (GdkBroadwayServer *server,
+update_event_state (BroadwayServer *server,
 		    BroadwayInputMsg *message)
 {
   switch (message->base.type) {
@@ -209,8 +209,8 @@ update_event_state (GdkBroadwayServer *server,
 }
 
 gboolean
-_gdk_broadway_server_lookahead_event (GdkBroadwayServer  *server,
-				      const char         *types)
+broadway_server_lookahead_event (BroadwayServer  *server,
+				 const char         *types)
 {
   BroadwayInputMsg *message;
   GList *l;
@@ -226,7 +226,7 @@ _gdk_broadway_server_lookahead_event (GdkBroadwayServer  *server,
 }
 
 static void
-process_input_messages (GdkBroadwayServer *server)
+process_input_messages (BroadwayServer *server)
 {
   BroadwayInputMsg *message;
 
@@ -239,7 +239,7 @@ process_input_messages (GdkBroadwayServer *server)
 
 
       update_event_state (server, message);
-      _gdk_broadway_events_got_input (message);
+      broadway_events_got_input (message);
       g_free (message);
     }
 }
@@ -265,7 +265,7 @@ parse_pointer_data (char *p, BroadwayInputPointerMsg *data)
 }
 
 static void
-update_future_pointer_info (GdkBroadwayServer *server, BroadwayInputPointerMsg *data)
+update_future_pointer_info (BroadwayServer *server, BroadwayInputPointerMsg *data)
 {
   server->future_root_x = data->root_x;
   server->future_root_y = data->root_y;
@@ -276,7 +276,7 @@ update_future_pointer_info (GdkBroadwayServer *server, BroadwayInputPointerMsg *
 static void
 parse_input_message (BroadwayInput *input, const char *message)
 {
-  GdkBroadwayServer *server = input->server;
+  BroadwayServer *server = input->server;
   BroadwayInputMsg msg;
   char *p;
   gint64 time_;
@@ -411,7 +411,7 @@ hex_dump (guchar *data, gsize len)
 static void
 parse_input (BroadwayInput *input)
 {
-  GdkBroadwayServer *server = input->server;
+  BroadwayServer *server = input->server;
 
   if (!input->buffer->len)
     return;
@@ -546,7 +546,7 @@ parse_input (BroadwayInput *input)
 
 
 static gboolean
-process_input_idle_cb (GdkBroadwayServer *server)
+process_input_idle_cb (BroadwayServer *server)
 {
   server->process_input_idle = 0;
   process_input_messages (server);
@@ -554,7 +554,7 @@ process_input_idle_cb (GdkBroadwayServer *server)
 }
 
 static void
-queue_process_input_at_idle (GdkBroadwayServer *server)
+queue_process_input_at_idle (BroadwayServer *server)
 {
   if (server->process_input_idle == 0)
     server->process_input_idle =
@@ -562,7 +562,7 @@ queue_process_input_at_idle (GdkBroadwayServer *server)
 }
 
 static void
-_gdk_broadway_server_read_all_input_nonblocking (GdkBroadwayServer *server)
+broadway_server_read_all_input_nonblocking (BroadwayServer *server)
 {
   GInputStream *in;
   gssize res;
@@ -606,9 +606,9 @@ _gdk_broadway_server_read_all_input_nonblocking (GdkBroadwayServer *server)
 }
 
 static void
-_gdk_broadway_server_consume_all_input (GdkBroadwayServer *server)
+broadway_server_consume_all_input (BroadwayServer *server)
 {
-  _gdk_broadway_server_read_all_input_nonblocking (server);
+  broadway_server_read_all_input_nonblocking (server);
 
   /* Since we're parsing input but not processing the resulting messages
      we might not get a readable callback on the stream, so queue an idle to
@@ -621,9 +621,9 @@ static gboolean
 input_data_cb (GObject  *stream,
 	       BroadwayInput *input)
 {
-  GdkBroadwayServer *server = input->server;
+  BroadwayServer *server = input->server;
 
-  _gdk_broadway_server_read_all_input_nonblocking (server);
+  broadway_server_read_all_input_nonblocking (server);
 
   process_input_messages (server);
 
@@ -631,7 +631,7 @@ input_data_cb (GObject  *stream,
 }
 
 gulong
-_gdk_broadway_server_get_next_serial (GdkBroadwayServer *server)
+broadway_server_get_next_serial (BroadwayServer *server)
 {
   if (server->output)
     return broadway_output_get_next_serial (server->output);
@@ -640,7 +640,7 @@ _gdk_broadway_server_get_next_serial (GdkBroadwayServer *server)
 }
 
 void
-_gdk_broadway_server_flush (GdkBroadwayServer *server)
+broadway_server_flush (BroadwayServer *server)
 {
   if (server->output &&
       !broadway_output_flush (server->output))
@@ -652,17 +652,17 @@ _gdk_broadway_server_flush (GdkBroadwayServer *server)
 }
 
 void
-_gdk_broadway_server_sync (GdkBroadwayServer *server)
+broadway_server_sync (BroadwayServer *server)
 {
-  _gdk_broadway_server_flush (server);
+  broadway_server_flush (server);
 }
 
 
 /* TODO: This is not used atm, is it needed? */
 /* Note: This may be called while handling a message (i.e. sorta recursively) */
 BroadwayInputMsg *
-_gdk_broadway_server_block_for_input (GdkBroadwayServer *server, char op,
-				       guint32 serial, gboolean remove_message)
+broadway_server_block_for_input (BroadwayServer *server, char op,
+				 guint32 serial, gboolean remove_message)
 {
   BroadwayInputMsg *message;
   gssize res;
@@ -671,7 +671,7 @@ _gdk_broadway_server_block_for_input (GdkBroadwayServer *server, char op,
   GInputStream *in;
   GList *l;
 
-  _gdk_broadway_server_flush (server);
+  broadway_server_flush (server);
 
   if (server->input == NULL)
     return NULL;
@@ -790,7 +790,7 @@ start_input (HttpRequest *request, gboolean binary)
   gsize len;
   GChecksum *checksum;
   char *origin, *host;
-  GdkBroadwayServer *server;
+  BroadwayServer *server;
   BroadwayInput *input;
   const void *data_buffer;
   gsize data_buffer_size;
@@ -798,7 +798,7 @@ start_input (HttpRequest *request, gboolean binary)
   char *key_v7;
   gboolean proto_v7_plus;
 
-  server = GDK_BROADWAY_SERVER (request->server);
+  server = request->server;
 
 #ifdef DEBUG_WEBSOCKETS
   g_print ("incoming request:\n%s\n", request->request->str);
@@ -983,14 +983,14 @@ static void
 start_output (HttpRequest *request, gboolean proto_v7_plus, gboolean binary)
 {
   GSocket *socket;
-  GdkBroadwayServer *server;
+  BroadwayServer *server;
   int flag = 1;
 
   socket = g_socket_connection_get_socket (request->connection);
   setsockopt(g_socket_get_fd (socket), IPPROTO_TCP,
 	     TCP_NODELAY, (char *) &flag, sizeof(int));
 
-  server = GDK_BROADWAY_SERVER (request->server);
+  server = BROADWAY_SERVER (request->server);
 
   if (server->output)
     {
@@ -1002,7 +1002,7 @@ start_output (HttpRequest *request, gboolean proto_v7_plus, gboolean binary)
     broadway_output_new (g_io_stream_get_output_stream (G_IO_STREAM (request->connection)),
 			 server->saved_serial, proto_v7_plus, binary);
 
-  _gdk_broadway_server_resync_windows (server);
+  broadway_server_resync_windows (server);
 
   if (server->pointer_grab_window_id != -1)
     broadway_output_grab_pointer (server->output,
@@ -1126,7 +1126,7 @@ handle_incoming_connection (GSocketService    *service,
 
   request = g_new0 (HttpRequest, 1);
   request->connection = g_object_ref (connection);
-  request->server = GDK_BROADWAY_SERVER (source_object);
+  request->server = BROADWAY_SERVER (source_object);
   request->request = g_string_new ("");
 
   in = g_io_stream_get_input_stream (G_IO_STREAM (connection));
@@ -1141,12 +1141,12 @@ handle_incoming_connection (GSocketService    *service,
   return TRUE;
 }
 
-GdkBroadwayServer *
-_gdk_broadway_server_new (int port, GError **error)
+BroadwayServer *
+broadway_server_new (int port, GError **error)
 {
-  GdkBroadwayServer *server;
+  BroadwayServer *server;
 
-  server = g_object_new (GDK_TYPE_BROADWAY_SERVER, NULL);
+  server = g_object_new (BROADWAY_TYPE_SERVER, NULL);
   server->port = port;
 
   if (!g_socket_listener_add_inet_port (G_SOCKET_LISTENER (server->service),
@@ -1164,22 +1164,22 @@ _gdk_broadway_server_new (int port, GError **error)
 }
 
 guint32
-_gdk_broadway_server_get_last_seen_time (GdkBroadwayServer *server)
+broadway_server_get_last_seen_time (BroadwayServer *server)
 {
-  _gdk_broadway_server_consume_all_input (server);
+  broadway_server_consume_all_input (server);
   return (guint32) server->last_seen_time;
 }
 
 void
-_gdk_broadway_server_query_mouse (GdkBroadwayServer *server,
-				  guint32            *toplevel,
-				  gint32             *root_x,
-				  gint32             *root_y,
-				  guint32            *mask)
+broadway_server_query_mouse (BroadwayServer *server,
+			     guint32            *toplevel,
+			     gint32             *root_x,
+			     gint32             *root_y,
+			     guint32            *mask)
 {
   if (server->output)
     {
-      _gdk_broadway_server_consume_all_input (server);
+      broadway_server_consume_all_input (server);
       if (root_x)
 	*root_x = server->future_root_x;
       if (root_y)
@@ -1203,8 +1203,8 @@ _gdk_broadway_server_query_mouse (GdkBroadwayServer *server,
 }
 
 void
-_gdk_broadway_server_destroy_window (GdkBroadwayServer *server,
-				     gint id)
+broadway_server_destroy_window (BroadwayServer *server,
+				gint id)
 {
   BroadwayWindow *window;
 
@@ -1233,8 +1233,8 @@ _gdk_broadway_server_destroy_window (GdkBroadwayServer *server,
 }
 
 gboolean
-_gdk_broadway_server_window_show (GdkBroadwayServer *server,
-				  gint id)
+broadway_server_window_show (BroadwayServer *server,
+			     gint id)
 {
   BroadwayWindow *window;
   gboolean sent = FALSE;
@@ -1256,8 +1256,8 @@ _gdk_broadway_server_window_show (GdkBroadwayServer *server,
 }
 
 gboolean
-_gdk_broadway_server_window_hide (GdkBroadwayServer *server,
-				  gint id)
+broadway_server_window_hide (BroadwayServer *server,
+			     gint id)
 {
   BroadwayWindow *window;
   gboolean sent = FALSE;
@@ -1284,8 +1284,8 @@ _gdk_broadway_server_window_hide (GdkBroadwayServer *server,
 }
 
 void
-_gdk_broadway_server_window_set_transient_for (GdkBroadwayServer *server,
-					       gint id, gint parent)
+broadway_server_window_set_transient_for (BroadwayServer *server,
+					  gint id, gint parent)
 {
   BroadwayWindow *window;
 
@@ -1299,12 +1299,12 @@ _gdk_broadway_server_window_set_transient_for (GdkBroadwayServer *server,
   if (server->output)
     {
       broadway_output_set_transient_for (server->output, window->id, window->transient_for);
-      _gdk_broadway_server_flush (server);
+      broadway_server_flush (server);
     }
 }
 
 gboolean
-_gdk_broadway_server_has_client (GdkBroadwayServer *server)
+broadway_server_has_client (BroadwayServer *server)
 {
   return server->output != NULL;
 }
@@ -1358,11 +1358,11 @@ copy_region (cairo_surface_t *surface,
 }
 
 gboolean
-_gdk_broadway_server_window_translate (GdkBroadwayServer *server,
-				       gint id,
-				       cairo_region_t *area,
-				       gint            dx,
-				       gint            dy)
+broadway_server_window_translate (BroadwayServer *server,
+				  gint id,
+				  cairo_region_t *area,
+				  gint            dx,
+				  gint            dy)
 {
   BroadwayWindow *window;
   gboolean sent = FALSE;
@@ -1439,9 +1439,9 @@ diff_surfaces (cairo_surface_t *surface,
 }
 
 void
-_gdk_broadway_server_window_update (GdkBroadwayServer *server,
-				    gint id,
-				    cairo_surface_t *surface)
+broadway_server_window_update (BroadwayServer *server,
+			       gint id,
+			       cairo_surface_t *surface)
 {
   cairo_t *cr;
   BroadwayWindow *window;
@@ -1492,12 +1492,12 @@ _gdk_broadway_server_window_update (GdkBroadwayServer *server,
 }
 
 gboolean
-_gdk_broadway_server_window_move_resize (GdkBroadwayServer *server,
-					 gint id,
-					 int x,
-					 int y,
-					 int width,
-					 int height)
+broadway_server_window_move_resize (BroadwayServer *server,
+				    gint id,
+				    int x,
+				    int y,
+				    int width,
+				    int height)
 {
   BroadwayWindow *window;
   gboolean with_move, with_resize;
@@ -1547,12 +1547,12 @@ _gdk_broadway_server_window_move_resize (GdkBroadwayServer *server,
   return sent;
 }
 
-GdkGrabStatus
-_gdk_broadway_server_grab_pointer (GdkBroadwayServer *server,
-				   gint id,
-				   gboolean owner_events,
-				   guint32 event_mask,
-				   guint32 time_)
+guint32
+broadway_server_grab_pointer (BroadwayServer *server,
+			      gint id,
+			      gboolean owner_events,
+			      guint32 event_mask,
+			      guint32 time_)
 {
   if (server->pointer_grab_window_id != -1 &&
       time_ != 0 && server->pointer_grab_time > time_)
@@ -1570,7 +1570,7 @@ _gdk_broadway_server_grab_pointer (GdkBroadwayServer *server,
       broadway_output_grab_pointer (server->output,
 				    id,
 				    owner_events);
-      _gdk_broadway_server_flush (server);
+      broadway_server_flush (server);
     }
 
   /* TODO: What about toplevel grab events if we're not connected? */
@@ -1579,8 +1579,8 @@ _gdk_broadway_server_grab_pointer (GdkBroadwayServer *server,
 }
 
 guint32
-_gdk_broadway_server_ungrab_pointer (GdkBroadwayServer *server,
-				     guint32    time_)
+broadway_server_ungrab_pointer (BroadwayServer *server,
+				guint32    time_)
 {
   guint32 serial;
 
@@ -1593,7 +1593,7 @@ _gdk_broadway_server_ungrab_pointer (GdkBroadwayServer *server,
   if (server->output)
     {
       serial = broadway_output_ungrab_pointer (server->output);
-      _gdk_broadway_server_flush (server);
+      broadway_server_flush (server);
     }
   else
     {
@@ -1606,12 +1606,12 @@ _gdk_broadway_server_ungrab_pointer (GdkBroadwayServer *server,
 }
 
 guint32
-_gdk_broadway_server_new_window (GdkBroadwayServer *server,
-				 int x,
-				 int y,
-				 int width,
-				 int height,
-				 gboolean is_temp)
+broadway_server_new_window (BroadwayServer *server,
+			    int x,
+			    int y,
+			    int width,
+			    int height,
+			    gboolean is_temp)
 {
   BroadwayWindow *window;
 
@@ -1642,7 +1642,7 @@ _gdk_broadway_server_new_window (GdkBroadwayServer *server,
 }
 
 static void
-_gdk_broadway_server_resync_windows (GdkBroadwayServer *server)
+broadway_server_resync_windows (BroadwayServer *server)
 {
   GList *l;
 
@@ -1694,5 +1694,5 @@ _gdk_broadway_server_resync_windows (GdkBroadwayServer *server)
 	}
     }
 
-  _gdk_broadway_server_flush (server);
+  broadway_server_flush (server);
 }
