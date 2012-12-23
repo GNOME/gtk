@@ -26,6 +26,7 @@ typedef struct  {
 static void
 client_free (BroadwayClient *client)
 {
+  g_assert (client->windows == NULL);
   g_assert (client->disconnect_idle == 0);
   clients = g_list_remove (clients, client);
   g_object_unref (client->connection);
@@ -36,15 +37,21 @@ client_free (BroadwayClient *client)
 static void
 client_disconnected (BroadwayClient *client)
 {
+  GList *l;
+
   if (client->disconnect_idle != 0)
     {
       g_source_remove (client->disconnect_idle);
       client->disconnect_idle = 0;
     }
 
-  g_print ("client %d disconnected\n", client->id);
+  for (l = client->windows; l != NULL; l = l->next)
+    _gdk_broadway_server_destroy_window (server,
+					 GPOINTER_TO_UINT (l->data));
+  g_list_free (client->windows);
+  client->windows = NULL;
 
-  /* TODO: destroy client windows, also maybe do this in an idle, at least in some cases like on an i/o error */
+  _gdk_broadway_server_flush (server);
 
   client_free (client);
 }
@@ -189,6 +196,9 @@ client_handle_request (BroadwayClient *client,
 					 request->new_window.width,
 					 request->new_window.height,
 					 request->new_window.is_temp);
+      client->windows =
+	g_list_prepend (client->windows,
+			GUINT_TO_POINTER (reply_new_window.id));
       
       send_reply (client, request, (BroadwayReply *)&reply_new_window, sizeof (reply_new_window),
 		  BROADWAY_REPLY_NEW_WINDOW);
@@ -211,6 +221,9 @@ client_handle_request (BroadwayClient *client,
 		  BROADWAY_REPLY_QUERY_MOUSE);
       break;
     case BROADWAY_REQUEST_DESTROY_WINDOW:
+      client->windows =
+	g_list_remove (client->windows,
+		       GUINT_TO_POINTER (request->destroy_window.id));
       _gdk_broadway_server_destroy_window (server, request->destroy_window.id);
       break;
     case BROADWAY_REQUEST_SHOW_WINDOW:
