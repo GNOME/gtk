@@ -77,7 +77,6 @@ struct _GtkProgressBarPrivate
 
   gint           activity_pos;
   guint          activity_blocks;
-  guint          activity_step;
 
   GtkOrientation orientation;
 
@@ -307,7 +306,6 @@ gtk_progress_bar_init (GtkProgressBar *pbar)
   priv->pulse_fraction = 0.1;
   priv->activity_pos = 0;
   priv->activity_dir = 1;
-  priv->activity_step = 3;
   priv->activity_blocks = 5;
   priv->ellipsize = PANGO_ELLIPSIZE_NONE;
   priv->show_text = FALSE;
@@ -417,6 +415,7 @@ gtk_progress_bar_real_update (GtkProgressBar *pbar)
 {
   GtkProgressBarPrivate *priv;
   GtkWidget *widget;
+  int activity_step;
 
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
 
@@ -440,13 +439,13 @@ gtk_progress_bar_real_update (GtkProgressBar *pbar)
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         {
           /* Update our activity step. */
-          priv->activity_step = allocation.width * priv->pulse_fraction;
+          activity_step = allocation.width * priv->pulse_fraction;
 
           size = MAX (2, allocation.width / priv->activity_blocks);
 
           if (priv->activity_dir == 0)
             {
-              priv->activity_pos += priv->activity_step;
+              priv->activity_pos += activity_step;
               if (priv->activity_pos + size >= allocation.width - padding.left)
                 {
                   priv->activity_pos = allocation.width - padding.left - size;
@@ -455,7 +454,7 @@ gtk_progress_bar_real_update (GtkProgressBar *pbar)
             }
           else
             {
-              priv->activity_pos -= priv->activity_step;
+              priv->activity_pos -= activity_step;
               if (priv->activity_pos <= padding.left)
                 {
                   priv->activity_pos = padding.left;
@@ -466,13 +465,13 @@ gtk_progress_bar_real_update (GtkProgressBar *pbar)
       else
         {
           /* Update our activity step. */
-          priv->activity_step = allocation.height * priv->pulse_fraction;
+          activity_step = allocation.height * priv->pulse_fraction;
 
           size = MAX (2, allocation.height / priv->activity_blocks);
 
           if (priv->activity_dir == 0)
             {
-              priv->activity_pos += priv->activity_step;
+              priv->activity_pos += activity_step;
               if (priv->activity_pos + size >= allocation.height - padding.top)
                 {
                   priv->activity_pos = allocation.height - padding.top - size;
@@ -481,7 +480,7 @@ gtk_progress_bar_real_update (GtkProgressBar *pbar)
             }
           else
             {
-              priv->activity_pos -= priv->activity_step;
+              priv->activity_pos -= activity_step;
               if (priv->activity_pos <= padding.top)
                 {
                   priv->activity_pos = padding.top;
