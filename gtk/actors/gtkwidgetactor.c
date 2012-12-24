@@ -178,6 +178,23 @@ _gtk_widget_actor_get_preferred_size (GtkActor       *actor,
 }
 
 void
+_gtk_widget_actor_allocate (GtkActor *actor,
+                            double    x,
+                            double    y,
+                            double    width,
+                            double    height)
+{
+  cairo_matrix_t position;
+
+  g_return_if_fail (GTK_IS_WIDGET_ACTOR (actor));
+
+  cairo_matrix_init_translate (&position, x, y);
+  GTK_ACTOR_CLASS (_gtk_widget_actor_parent_class)->allocate (actor,
+                                                              &position,
+                                                              width, height);
+}
+
+void
 _gtk_widget_actor_screen_changed (GtkActor  *actor,
                                   GdkScreen *new_screen,
                                   GdkScreen *old_screen)

@@ -61,6 +61,11 @@ void                        _gtk_widget_actor_get_preferred_size        (GtkActo
                                                                          gfloat          for_size,
                                                                          gfloat         *min_size_p,
                                                                          gfloat         *natural_size_p);
+void                        _gtk_widget_actor_allocate                  (GtkActor       *actor,
+                                                                         double          x,
+                                                                         double          y,
+                                                                         double          width,
+                                                                         double          height);
 
 void                        _gtk_widget_actor_screen_changed            (GtkActor       *actor,
                                                                          GdkScreen      *new_screen,
