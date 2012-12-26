@@ -12,15 +12,6 @@
 
 #include "broadway-server.h"
 
-/* TODO:
- * Cache surfaces that are opened via shm_open inbetween updates.
- * Send configure event when a window is moved and no client
- * Handle implicit grabs when in broadway-server.c
- * Rewrite events (per-client serials, etc)
- * Handle window size changes
- * _gdk_broadway_server_has_client is always FALSE, so resize don't work.
- */
-
 BroadwayServer *server;
 GList *clients;
 
