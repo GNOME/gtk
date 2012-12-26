@@ -17,7 +17,7 @@ LDADDS = $(GDK_DEP_LIBS)
 
 noinst_LTLIBRARIES = libgdk-broadway.la
 
-libexec_PROGRAMS = broadwayd
+bin_PROGRAMS = broadwayd
 
 libgdkinclude_HEADERS = 	\
 	gdkbroadway.h
