@@ -5,7 +5,8 @@
 #include <glib-object.h>
 #include <cairo.h>
 
-void broadway_events_got_input (BroadwayInputMsg *message);
+void broadway_events_got_input (BroadwayInputMsg *message,
+				gint32 client_id);
 
 typedef struct _BroadwayServer BroadwayServer;
 typedef struct _BroadwayServerClass BroadwayServerClass;
@@ -33,6 +34,7 @@ void                broadway_server_query_mouse              (BroadwayServer   *
 							      gint32           *root_y,
 							      guint32          *mask);
 guint32             broadway_server_grab_pointer             (BroadwayServer   *server,
+							      gint              client_id,
 							      gint              id,
 							      gboolean          owner_events,
 							      guint32           event_mask,

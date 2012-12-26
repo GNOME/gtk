@@ -39,6 +39,7 @@ struct _BroadwayServer {
 
   /* Explicit pointer grabs: */
   gint32 pointer_grab_window_id; /* -1 => none */
+  gint32 pointer_grab_client_id; /* -1 => none */
   guint32 pointer_grab_time;
   gboolean pointer_grab_owner_events;
 
@@ -225,10 +226,25 @@ broadway_server_lookahead_event (BroadwayServer  *server,
   return FALSE;
 }
 
+static gboolean
+is_pointer_event (BroadwayInputMsg *message)
+{
+  return
+    message->base.type == BROADWAY_EVENT_ENTER ||
+    message->base.type == BROADWAY_EVENT_LEAVE ||
+    message->base.type == BROADWAY_EVENT_POINTER_MOVE ||
+    message->base.type == BROADWAY_EVENT_BUTTON_PRESS ||
+    message->base.type == BROADWAY_EVENT_BUTTON_RELEASE ||
+    message->base.type == BROADWAY_EVENT_SCROLL ||
+    message->base.type == BROADWAY_EVENT_GRAB_NOTIFY ||
+    message->base.type == BROADWAY_EVENT_UNGRAB_NOTIFY;
+}
+
 static void
 process_input_messages (BroadwayServer *server)
 {
   BroadwayInputMsg *message;
+  gint32 client;
 
   while (server->input_messages)
     {
@@ -239,7 +255,12 @@ process_input_messages (BroadwayServer *server)
 
 
       update_event_state (server, message);
-      broadway_events_got_input (message);
+      client = -1;
+      if (is_pointer_event (message) &&
+	  server->pointer_grab_window_id != -1)
+	client = server->pointer_grab_client_id;
+	  
+      broadway_events_got_input (message, client);
       g_free (message);
     }
 }
@@ -1275,6 +1296,9 @@ broadway_server_window_hide (BroadwayServer *server,
       server->mouse_in_toplevel_id = 0;
     }
 
+  if (server->pointer_grab_window_id == id)
+    server->pointer_grab_window_id = -1;
+
   if (server->output)
     {
       broadway_output_hide_surface (server->output, window->id);
@@ -1549,6 +1573,7 @@ broadway_server_window_move_resize (BroadwayServer *server,
 
 guint32
 broadway_server_grab_pointer (BroadwayServer *server,
+			      gint client_id,
 			      gint id,
 			      gboolean owner_events,
 			      guint32 event_mask,
@@ -1562,6 +1587,7 @@ broadway_server_grab_pointer (BroadwayServer *server,
     time_ = server->last_seen_time;
 
   server->pointer_grab_window_id = id;
+  server->pointer_grab_client_id = client_id;
   server->pointer_grab_owner_events = owner_events;
   server->pointer_grab_time = time_;
 

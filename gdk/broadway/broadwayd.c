@@ -15,7 +15,9 @@
 /* TODO:
  * Cache surfaces that are opened via shm_open inbetween updates.
  * Send configure event when a window is moved and no client
- * Rewrite events (only to one client, per-client serials, etc)
+ * Handle implicit grabs when in broadway-server.c
+ * Rewrite events (per-client serials, etc)
+ * Handle window size changes
  * _gdk_broadway_server_has_client is always FALSE, so resize don't work.
  */
 
@@ -242,17 +244,17 @@ client_handle_request (BroadwayClient *client,
       break;
     case BROADWAY_REQUEST_SET_TRANSIENT_FOR:
       broadway_server_window_set_transient_for (server,
-						     request->set_transient_for.id,
-						     request->set_transient_for.parent);
+						request->set_transient_for.id,
+						request->set_transient_for.parent);
       break;
     case BROADWAY_REQUEST_TRANSLATE:
       area = region_from_rects (request->translate.rects,
 				request->translate.n_rects);
       broadway_server_window_translate (server,
-					     request->translate.id,
-					     area,
-					     request->translate.dx,
-					     request->translate.dy);
+					request->translate.id,
+					area,
+					request->translate.dx,
+					request->translate.dy);
       cairo_region_destroy (area);
       break;
     case BROADWAY_REQUEST_UPDATE:
@@ -262,18 +264,18 @@ client_handle_request (BroadwayClient *client,
       if (surface != NULL)
 	{
 	  broadway_server_window_update (server,
-					      request->update.id,
-					      surface);
+					 request->update.id,
+					 surface);
 	  cairo_surface_destroy (surface);
 	}
       break;
     case BROADWAY_REQUEST_MOVE_RESIZE:
       if (!broadway_server_window_move_resize (server,
-						    request->move_resize.id,
-						    request->move_resize.x,
-						    request->move_resize.y,
-						    request->move_resize.width,
-						    request->move_resize.height))
+					       request->move_resize.id,
+					       request->move_resize.x,
+					       request->move_resize.y,
+					       request->move_resize.width,
+					       request->move_resize.height))
 	{
 	  /* TODO: Send configure request */
 	}
@@ -281,17 +283,18 @@ client_handle_request (BroadwayClient *client,
     case BROADWAY_REQUEST_GRAB_POINTER:
       reply_grab_pointer.status =
 	broadway_server_grab_pointer (server,
-					   request->grab_pointer.id,
-					   request->grab_pointer.owner_events,
-					   request->grab_pointer.event_mask,
-					   request->grab_pointer.time_);
+				      client->id,
+				      request->grab_pointer.id,
+				      request->grab_pointer.owner_events,
+				      request->grab_pointer.event_mask,
+				      request->grab_pointer.time_);
       send_reply (client, request, (BroadwayReply *)&reply_grab_pointer, sizeof (reply_grab_pointer),
 		  BROADWAY_REPLY_GRAB_POINTER);
       break;
     case BROADWAY_REQUEST_UNGRAB_POINTER:
       reply_ungrab_pointer.status =
 	broadway_server_ungrab_pointer (server,
-					     request->ungrab_pointer.time_);
+					request->ungrab_pointer.time_);
       send_reply (client, request, (BroadwayReply *)&reply_ungrab_pointer, sizeof (reply_ungrab_pointer),
 		  BROADWAY_REPLY_UNGRAB_POINTER);
       break;
@@ -495,7 +498,8 @@ get_event_size (int type)
 }
 
 void
-broadway_events_got_input (BroadwayInputMsg *message)
+broadway_events_got_input (BroadwayInputMsg *message,
+			   gint32 client_id)
 {
   GList *l;
   BroadwayReplyEvent reply_event;
@@ -509,8 +513,12 @@ broadway_events_got_input (BroadwayInputMsg *message)
     {
       BroadwayClient *client = l->data;
 
-      send_reply (client, NULL, (BroadwayReply *)&reply_event,
-		  sizeof (BroadwayReplyBase) + size,
-		  BROADWAY_REPLY_EVENT);
+      if (client_id == -1 ||
+	  client->id == client_id)
+	{
+	  send_reply (client, NULL, (BroadwayReply *)&reply_event,
+		      sizeof (BroadwayReplyBase) + size,
+		      BROADWAY_REPLY_EVENT);
+	}
     }
 }
