@@ -15,19 +15,15 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GAIL_UTIL_H__
-#define __GAIL_UTIL_H__
+#ifndef __GTK_ACCESSIBILITY_UTIL_H__
+#define __GTK_ACCESSIBILITY_UTIL_H__
 
 #include <atk/atk.h>
 
 G_BEGIN_DECLS
 
-void _gail_util_install   (void);
-void _gail_util_uninstall (void);
-
-gboolean  _gail_util_key_snooper (GtkWidget   *the_widget,
-                                  GdkEventKey *event);
+void _gtk_accessibility_override_atk_util (void);
 
 G_END_DECLS
 
-#endif /* __GAIL_UTIL_H__ */
+#endif /* __GTK_ACCESSIBILITY_UTIL_H__ */

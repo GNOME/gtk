@@ -18,6 +18,8 @@
 #include "config.h"
 
 #include "gtkaccessibility.h"
+#include "gtkaccessibilityutil.h"
+#include "gtkwindowaccessible.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,7 +34,6 @@
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtkcombobox.h>
 #include <gtk/gtkaccessible.h>
-#include "gailutil.h"
 #include "gailmisc.h"
 
 #ifdef GDK_WINDOWING_X11
@@ -797,6 +798,186 @@ gail_set_focus_object (AtkObject *focus_obj,
     }
 }
 
+static gboolean
+state_event_watcher (GSignalInvocationHint *hint,
+                     guint                  n_param_values,
+                     const GValue          *param_values,
+                     gpointer               data)
+{
+  GObject *object;
+  GtkWidget *widget;
+  AtkObject *atk_obj;
+  AtkObject *parent;
+  GdkEventWindowState *event;
+  gchar *signal_name;
+
+  object = g_value_get_object (param_values + 0);
+  if (!GTK_IS_WINDOW (object))
+    return FALSE;
+
+  event = g_value_get_boxed (param_values + 1);
+  if (event->type == GDK_WINDOW_STATE)
+    return FALSE;
+  widget = GTK_WIDGET (object);
+
+  if (event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED)
+    signal_name = "maximize";
+  else if (event->new_window_state & GDK_WINDOW_STATE_ICONIFIED)
+    signal_name = "minimize";
+  else if (event->new_window_state == 0)
+    signal_name = "restore";
+  else
+    return TRUE;
+
+  atk_obj = gtk_widget_get_accessible (widget);
+  if (GTK_IS_WINDOW_ACCESSIBLE (atk_obj))
+    {
+      parent = atk_object_get_parent (atk_obj);
+      if (parent == atk_get_root ())
+        g_signal_emit_by_name (atk_obj, signal_name);
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+configure_event_watcher (GSignalInvocationHint *hint,
+                         guint                  n_param_values,
+                         const GValue          *param_values,
+                         gpointer               data)
+{
+  GtkAllocation allocation;
+  GObject *object;
+  GtkWidget *widget;
+  AtkObject *atk_obj;
+  AtkObject *parent;
+  GdkEvent *event;
+  gchar *signal_name;
+
+  object = g_value_get_object (param_values + 0);
+  if (!GTK_IS_WINDOW (object))
+    return FALSE;
+
+  event = g_value_get_boxed (param_values + 1);
+  if (event->type != GDK_CONFIGURE)
+    return FALSE;
+  widget = GTK_WIDGET (object);
+  gtk_widget_get_allocation (widget, &allocation);
+  if (allocation.x == ((GdkEventConfigure *)event)->x &&
+      allocation.y == ((GdkEventConfigure *)event)->y &&
+      allocation.width == ((GdkEventConfigure *)event)->width &&
+      allocation.height == ((GdkEventConfigure *)event)->height)
+    return TRUE;
+
+  if (allocation.width != ((GdkEventConfigure *)event)->width ||
+      allocation.height != ((GdkEventConfigure *)event)->height)
+    signal_name = "resize";
+  else
+    signal_name = "move";
+
+  atk_obj = gtk_widget_get_accessible (widget);
+  if (GTK_IS_WINDOW_ACCESSIBLE (atk_obj))
+    {
+      parent = atk_object_get_parent (atk_obj);
+      if (parent == atk_get_root ())
+        g_signal_emit_by_name (atk_obj, signal_name);
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+window_focus (GtkWidget     *widget,
+              GdkEventFocus *event)
+{
+  AtkObject *atk_obj;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  atk_obj = gtk_widget_get_accessible (widget);
+  g_signal_emit_by_name (atk_obj, event->in ? "activate" : "deactivate");
+
+  return FALSE;
+}
+
+static void
+window_added (AtkObject *atk_obj,
+              guint      index,
+              AtkObject *child)
+{
+  GtkWidget *widget;
+
+  if (!GTK_IS_WINDOW_ACCESSIBLE (child))
+    return;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (child));
+  if (!widget)
+    return;
+
+  g_signal_connect (widget, "focus-in-event", (GCallback) window_focus, NULL);
+  g_signal_connect (widget, "focus-out-event", (GCallback) window_focus, NULL);
+  g_signal_emit_by_name (child, "create");
+}
+
+static void
+window_removed (AtkObject *atk_obj,
+                guint      index,
+                AtkObject *child)
+{
+  GtkWidget *widget;
+  GtkWindow *window;
+
+  if (!GTK_IS_WINDOW_ACCESSIBLE (child))
+    return;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (child));
+  if (!widget)
+    return;
+
+  window = GTK_WINDOW (widget);
+  /*
+   * Deactivate window if it is still focused and we are removing it. This
+   * can happen when a dialog displayed by gok is removed.
+   */
+  if (gtk_window_is_active (window) && gtk_window_has_toplevel_focus (window))
+    g_signal_emit_by_name (child, "deactivate");
+
+  g_signal_handlers_disconnect_by_func (widget, (gpointer) window_focus, NULL);
+  g_signal_emit_by_name (child, "destroy");
+}
+
+static void
+do_window_event_initialization (void)
+{
+  AtkObject *root;
+
+  g_type_class_ref (GTK_TYPE_WINDOW_ACCESSIBLE);
+  g_signal_add_emission_hook (g_signal_lookup ("window-state-event", GTK_TYPE_WIDGET),
+                              0, state_event_watcher, NULL, (GDestroyNotify) NULL);
+  g_signal_add_emission_hook (g_signal_lookup ("configure-event", GTK_TYPE_WIDGET),
+                              0, configure_event_watcher, NULL, (GDestroyNotify) NULL);
+
+  root = atk_get_root ();
+  g_signal_connect (root, "children-changed::add", (GCallback) window_added, NULL);
+  g_signal_connect (root, "children-changed::remove", (GCallback) window_removed, NULL);
+}
+
+static void
+undo_window_event_initialization (void)
+{
+  AtkObject *root;
+
+  root = atk_get_root ();
+
+  g_signal_handlers_disconnect_by_func (root, (GCallback) window_added, NULL);
+  g_signal_handlers_disconnect_by_func (root, (GCallback) window_removed, NULL);
+}
+
+
 void
 _gtk_accessibility_shutdown (void)
 {
@@ -810,7 +991,8 @@ _gtk_accessibility_shutdown (void)
 #ifdef GDK_WINDOWING_X11
   atk_bridge_adaptor_cleanup ();
 #endif
-  _gail_util_uninstall ();
+
+  undo_window_event_initialization ();
 }
 
 void
@@ -825,7 +1007,9 @@ _gtk_accessibility_init (void)
   atk_focus_tracker_init (gail_focus_tracker_init);
   focus_tracker_id = atk_add_focus_tracker (gail_focus_tracker);
 
-  _gail_util_install ();
+  _gtk_accessibility_override_atk_util ();
+  do_window_event_initialization ();
+
 #ifdef GDK_WINDOWING_X11
   atk_bridge_adaptor_init (NULL, NULL);
 #endif
