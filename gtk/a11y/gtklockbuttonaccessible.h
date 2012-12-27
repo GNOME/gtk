@@ -18,8 +18,8 @@
 #ifndef __GTK_LOCK_BUTTON_ACCESSIBLE_H__
 #define __GTK_LOCK_BUTTON_ACCESSIBLE_H__
 
-#include "gtkbuttonaccessible.h"
-#include "gtk/gtklockbutton.h"
+#include <gtk/gtk.h>
+#include <gtk/a11y/gtkbuttonaccessible.h>
 
 G_BEGIN_DECLS
 

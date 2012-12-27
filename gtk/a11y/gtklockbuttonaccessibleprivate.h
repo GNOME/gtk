@@ -18,7 +18,7 @@
 #ifndef __GTK_LOCK_BUTTON_ACCESSIBLE_PRIVATE_H__
 #define __GTK_LOCK_BUTTON_ACCESSIBLE_PRIVATE_H__
 
-#include "gtklockbuttonaccessible.h"
+#include <gtk/a11y/gtklockbuttonaccessible.h>
 
 G_BEGIN_DECLS
 

@@ -18,7 +18,7 @@
 #ifndef __GTK_TREE_VIEW_ACCESSIBLE_PRIVATE_H__
 #define __GTK_TREE_VIEW_ACCESSIBLE_PRIVATE_H__
 
-#include "gtktreeviewaccessible.h"
+#include <gtk/a11y/gtktreeviewaccessible.h>
 
 G_BEGIN_DECLS
 

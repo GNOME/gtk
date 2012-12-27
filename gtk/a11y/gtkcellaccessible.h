@@ -19,7 +19,7 @@
 #define __GTK_CELL_ACCESSIBLE_H__
 
 #include <atk/atk.h>
-#include "gtk/gtkaccessible.h"
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 

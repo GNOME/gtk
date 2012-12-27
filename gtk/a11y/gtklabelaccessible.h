@@ -18,7 +18,7 @@
 #ifndef __GTK_LABEL_ACCESSIBLE_H__
 #define __GTK_LABEL_ACCESSIBLE_H__
 
-#include "gtkwidgetaccessible.h"
+#include <gtk/a11y/gtkwidgetaccessible.h>
 
 G_BEGIN_DECLS
 

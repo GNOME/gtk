@@ -18,7 +18,7 @@
 #ifndef __GTK_RADIO_BUTTON_ACCESSIBLE_H__
 #define __GTK_RADIO_BUTTON_ACCESSIBLE_H__
 
-#include "gtktogglebuttonaccessible.h"
+#include <gtk/a11y/gtktogglebuttonaccessible.h>
 
 G_BEGIN_DECLS
 

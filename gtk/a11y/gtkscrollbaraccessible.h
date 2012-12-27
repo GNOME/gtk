@@ -18,7 +18,7 @@
 #ifndef __GTK_SCROLLBAR_ACCESSIBLE_H__
 #define __GTK_SCROLLBAR_ACCESSIBLE_H__
 
-#include "gtkrangeaccessible.h"
+#include <gtk/a11y/gtkrangeaccessible.h>
 
 G_BEGIN_DECLS
 

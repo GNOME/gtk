@@ -19,7 +19,7 @@
 #define __GTK_CONTAINER_CELL_ACCESSIBLE_H__
 
 #include <atk/atk.h>
-#include "gtkcellaccessible.h"
+#include <gtk/a11y/gtkcellaccessible.h>
 
 G_BEGIN_DECLS
 

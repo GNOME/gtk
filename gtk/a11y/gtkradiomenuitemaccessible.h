@@ -18,7 +18,7 @@
 #ifndef __GTK_RADIO_MENU_ITEM_ACCESSIBLE_H__
 #define __GTK_RADIO_MENU_ITEM_ACCESSIBLE_H__
 
-#include "gtkcheckmenuitemaccessible.h"
+#include <gtk/a11y/gtkcheckmenuitemaccessible.h>
 
 G_BEGIN_DECLS
 

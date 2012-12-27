@@ -18,7 +18,7 @@
 #ifndef __GTK_SPIN_BUTTON_ACCESSIBLE_H__
 #define __GTK_SPIN_BUTTON_ACCESSIBLE_H__
 
-#include "gtkentryaccessible.h"
+#include <gtk/a11y/gtkentryaccessible.h>
 
 G_BEGIN_DECLS
 

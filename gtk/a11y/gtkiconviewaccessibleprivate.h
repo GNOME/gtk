@@ -18,7 +18,7 @@
 #ifndef __GTK_ICON_VIEW_ACCESSIBLE_PRIVATE_H__
 #define __GTK_ICON_VIEW_ACCESSIBLE_PRIVATE_H__
 
-#include "gtkiconviewaccessible.h"
+#include <gtk/a11y/gtkiconviewaccessible.h>
 
 G_BEGIN_DECLS
 
