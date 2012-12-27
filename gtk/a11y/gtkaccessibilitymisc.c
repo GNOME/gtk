@@ -18,33 +18,33 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
-#include "gailmisc.h"
+#include "gtkaccessibilitymisc.h"
 
 
-G_DEFINE_TYPE (GailMisc, _gail_misc, ATK_TYPE_MISC)
+G_DEFINE_TYPE (GtkMiscImpl, _gtk_misc_impl, ATK_TYPE_MISC)
 
 static void
-gail_misc_threads_enter (AtkMisc *misc)
+gtk_misc_impl_threads_enter (AtkMisc *misc)
 {
   gdk_threads_enter ();
 }
 
 static void
-gail_misc_threads_leave (AtkMisc *misc)
+gtk_misc_impl_threads_leave (AtkMisc *misc)
 {
   gdk_threads_leave ();
 }
 
 static void
-_gail_misc_class_init (GailMiscClass *klass)
+_gtk_misc_impl_class_init (GtkMiscImplClass *klass)
 {
   AtkMiscClass *misc_class = ATK_MISC_CLASS (klass);
 
-  misc_class->threads_enter = gail_misc_threads_enter;
-  misc_class->threads_leave = gail_misc_threads_leave;
+  misc_class->threads_enter = gtk_misc_impl_threads_enter;
+  misc_class->threads_leave = gtk_misc_impl_threads_leave;
 }
 
 static void
-_gail_misc_init (GailMisc *misc)
+_gtk_misc_impl_init (GtkMiscImpl *misc)
 {
 }
