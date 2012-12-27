@@ -947,7 +947,7 @@ function onMouseDown (ev) {
 	localGrab.lastX = ev.pageX;
 	localGrab.lastY = ev.pageY;
 	moveToTop(localGrab.frame.frameFor);
-	return;
+	return false;
     }
 
     if (id == 0 && ev.target.closeFor) { /* mouse click on frame */
@@ -959,13 +959,14 @@ function onMouseDown (ev) {
 	localGrab.button = ev.target;
 	localGrab.lastX = ev.pageX;
 	localGrab.lastY = ev.pageY;
-	return;
+	return false;
     }
 
     var pos = getPositionsFromEvent(ev, id);
     if (grab.window == null)
 	doGrab (id, false, true);
     sendInput ("b", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, button]);
+    return false;
 }
 
 function onMouseUp (ev) {
@@ -995,13 +996,15 @@ function onMouseUp (ev) {
 		sendInput ("W", [localGrab.surface.id]);
 	}
 	localGrab = null;
-	return;
+	return false;
     }
 
     sendInput ("B", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, button]);
 
     if (grab.window != null && grab.implicit)
 	doUngrab();
+
+    return false;
 }
 
 /* Some of the keyboard handling code is from noVNC and
