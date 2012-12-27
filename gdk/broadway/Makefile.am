@@ -73,7 +73,7 @@ libgdk_broadway_la_SOURCES =		\
 	gdkwindow-broadway.h	\
 	gdkprivate-broadway.h   \
 	gdkbroadway-server.h	\
-	gdkbroadway-server-client.c
+	gdkbroadway-server.c
 
 broadwayd_SOURCES = \
 	broadway-protocol.h		\
