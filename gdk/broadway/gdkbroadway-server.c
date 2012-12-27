@@ -598,6 +598,9 @@ _gdk_broadway_server_window_update (GdkBroadwayServer *server,
   BroadwayRequestUpdate msg;
   BroadwayShmSurfaceData *data;
 
+  if (surface == NULL)
+    return;
+
   data = cairo_surface_get_user_data (surface, &gdk_broadway_shm_cairo_key);
   g_assert (data != NULL);
 
