@@ -1,4 +1,4 @@
-/* GAIL - The GNOME Accessibility Implementation Library
+/* GTK+ - accessibility implementations
  * Copyright 2001 Sun Microsystems Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -17,7 +17,7 @@
 
 #include "config.h"
 
-#include "gail.h"
+#include "gtkaccessibility.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -66,7 +66,7 @@ static void     gail_focus_tracker_init (void);
 static void     gail_focus_object_destroyed (gpointer data);
 static void     gail_focus_tracker (AtkObject *object);
 static void     gail_set_focus_widget (GtkWidget *focus_widget,
-                                       GtkWidget *widget); 
+                                       GtkWidget *widget);
 static void     gail_set_focus_object (AtkObject *focus_obj,
                                        AtkObject *obj);
 
@@ -75,14 +75,14 @@ static GtkWidget* next_focus_widget = NULL;
 static gboolean was_deselect = FALSE;
 static GtkWidget* subsequent_focus_widget = NULL;
 static GtkWidget* focus_before_menu = NULL;
-static guint focus_notify_handler = 0;    
+static guint focus_notify_handler = 0;
 static guint focus_tracker_id = 0;
 static GQuark quark_focus_object = 0;
 static int initialized = FALSE;
 
 static AtkObject*
-gail_get_accessible_for_widget (GtkWidget *widget,
-                                gboolean  *transient)
+get_accessible_for_widget (GtkWidget *widget,
+                           gboolean  *transient)
 {
   AtkObject *obj = NULL;
 
@@ -516,13 +516,13 @@ gail_focus_notify (GtkWidget *widget)
   else
     {
       if (_focus_widget)
-        atk_obj  = gail_get_accessible_for_widget (_focus_widget, &transient);
+        atk_obj  = get_accessible_for_widget (_focus_widget, &transient);
       else
         atk_obj = NULL;
       /*
        * Do not report focus on redundant object
        */
-      if (atk_obj && 
+      if (atk_obj &&
 	  (atk_object_get_role(atk_obj) != ATK_ROLE_REDUNDANT_OBJECT))
 	  atk_focus_tracker_notify (atk_obj);
       if (atk_obj && transient)
@@ -816,7 +816,6 @@ _gtk_accessibility_shutdown (void)
 void
 _gtk_accessibility_init (void)
 {
-
   if (initialized)
     return;
 
