@@ -52,7 +52,8 @@ gtka11y_c_sources =			\
 	gtkwidgetaccessible.c		\
 	gtkwindowaccessible.c
 
-gtka11y_private_h_sources =		\
+gtka11yincludedir = $(includedir)/gtk-3.0/gtk/a11y
+gtka11yinclude_HEADERS =		\
 	gtkarrowaccessible.h		\
 	gtkbooleancellaccessible.h	\
 	gtkbuttonaccessible.h		\
@@ -96,7 +97,9 @@ gtka11y_private_h_sources =		\
 	gtktoplevelaccessible.h		\
 	gtktreeviewaccessible.h		\
 	gtkwidgetaccessible.h		\
-	gtkwindowaccessible.h		\
+	gtkwindowaccessible.h
+
+gtka11y_private_h_sources =		\
 	gtkaccessibility.h		\
 	gtkaccessibilityutil.h		\
 	gtkaccessibilitymisc.h		\
