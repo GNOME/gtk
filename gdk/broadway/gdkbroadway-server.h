@@ -16,7 +16,6 @@ typedef struct _GdkBroadwayServerClass GdkBroadwayServerClass;
 
 GdkBroadwayServer *_gdk_broadway_server_new                      (int                 port,
 								  GError            **error);
-gboolean           _gdk_broadway_server_has_client               (GdkBroadwayServer  *server);
 void               _gdk_broadway_server_flush                    (GdkBroadwayServer  *server);
 void               _gdk_broadway_server_sync                     (GdkBroadwayServer  *server);
 gulong             _gdk_broadway_server_get_next_serial          (GdkBroadwayServer  *server);

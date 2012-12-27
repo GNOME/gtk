@@ -464,13 +464,6 @@ _gdk_broadway_server_window_set_transient_for (GdkBroadwayServer *server,
 }
 
 gboolean
-_gdk_broadway_server_has_client (GdkBroadwayServer *server)
-{
-  /* TODO */
-  return FALSE;
-}
-
-gboolean
 _gdk_broadway_server_window_translate (GdkBroadwayServer *server,
 				       gint id,
 				       cairo_region_t *area,

@@ -1288,8 +1288,6 @@ gdk_broadway_window_begin_resize_drag (GdkWindow     *window,
 
   /* We need a connection to be able to get mouse events, if not, punt */
   broadway_display = GDK_BROADWAY_DISPLAY (gdk_window_get_display (window));
-  if (!_gdk_broadway_server_has_client (broadway_display->server))
-    return;
 
   mv_resize = get_move_resize_data (GDK_WINDOW_DISPLAY (window), TRUE);
 
