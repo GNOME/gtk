@@ -18,7 +18,7 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
-#include "gtkcolorswatchaccessible.h"
+#include "gtkcolorswatchaccessibleprivate.h"
 
 static void atk_action_interface_init (AtkActionIface *iface);
 

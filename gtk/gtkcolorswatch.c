@@ -31,7 +31,7 @@
 #include "gtkpressandholdprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "a11y/gtkcolorswatchaccessible.h"
+#include "a11y/gtkcolorswatchaccessibleprivate.h"
 
 
 struct _GtkColorSwatchPrivate
