@@ -23,7 +23,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_CONTAINER_CELL_ACCESSIBLE            (_gtk_container_cell_accessible_get_type ())
+#define GTK_TYPE_CONTAINER_CELL_ACCESSIBLE            (gtk_container_cell_accessible_get_type ())
 #define GTK_CONTAINER_CELL_ACCESSIBLE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CONTAINER_CELL_ACCESSIBLE, GtkContainerCellAccessible))
 #define GTK_CONTAINER_CELL_ACCESSIBLE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_CONTAINER_CELL_ACCESSIBLE, GtkContainerCellAccessibleClass))
 #define GTK_IS_CONTAINER_CELL_ACCESSIBLE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CONTAINER_CELL_ACCESSIBLE))
@@ -46,14 +46,14 @@ struct _GtkContainerCellAccessibleClass
   GtkCellAccessibleClass parent_class;
 };
 
-GType                       _gtk_container_cell_accessible_get_type     (void);
+GType                       gtk_container_cell_accessible_get_type     (void);
 
-GtkContainerCellAccessible *_gtk_container_cell_accessible_new          (void);
-void                        _gtk_container_cell_accessible_add_child    (GtkContainerCellAccessible *container,
-                                                                         GtkCellAccessible          *child);
-void                        _gtk_container_cell_accessible_remove_child (GtkContainerCellAccessible *container,
-                                                                         GtkCellAccessible          *child);
-GList                     *_gtk_container_cell_accessible_get_children  (GtkContainerCellAccessible *container);
+GtkContainerCellAccessible *gtk_container_cell_accessible_new          (void);
+void                        gtk_container_cell_accessible_add_child    (GtkContainerCellAccessible *container,
+                                                                        GtkCellAccessible          *child);
+void                        gtk_container_cell_accessible_remove_child (GtkContainerCellAccessible *container,
+                                                                        GtkCellAccessible          *child);
+GList                      *gtk_container_cell_accessible_get_children  (GtkContainerCellAccessible *container);
 
 G_END_DECLS
 

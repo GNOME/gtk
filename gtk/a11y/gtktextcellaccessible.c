@@ -89,7 +89,7 @@ static void gtk_text_cell_accessible_update_cache       (GtkCellAccessible *cell
 
 static void atk_text_interface_init (AtkTextIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkTextCellAccessible, _gtk_text_cell_accessible, GTK_TYPE_RENDERER_CELL_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkTextCellAccessible, gtk_text_cell_accessible, GTK_TYPE_RENDERER_CELL_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init))
 
 static AtkStateSet *
@@ -97,7 +97,7 @@ gtk_text_cell_accessible_ref_state_set (AtkObject *accessible)
 {
   AtkStateSet *state_set;
 
-  state_set = ATK_OBJECT_CLASS (_gtk_text_cell_accessible_parent_class)->ref_state_set (accessible);
+  state_set = ATK_OBJECT_CLASS (gtk_text_cell_accessible_parent_class)->ref_state_set (accessible);
 
   atk_state_set_add_state (state_set, ATK_STATE_SINGLE_LINE);
 
@@ -111,7 +111,7 @@ gtk_text_cell_accessible_finalize (GObject *object)
 
   g_free (text_cell->priv->cell_text);
 
-  G_OBJECT_CLASS (_gtk_text_cell_accessible_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_text_cell_accessible_parent_class)->finalize (object);
 }
 
 static const gchar *
@@ -184,7 +184,7 @@ gtk_text_cell_accessible_update_cache (GtkCellAccessible *cell)
 }
 
 static void
-_gtk_text_cell_accessible_class_init (GtkTextCellAccessibleClass *klass)
+gtk_text_cell_accessible_class_init (GtkTextCellAccessibleClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass *atk_object_class = ATK_OBJECT_CLASS (klass);
@@ -201,7 +201,7 @@ _gtk_text_cell_accessible_class_init (GtkTextCellAccessibleClass *klass)
 }
 
 static void
-_gtk_text_cell_accessible_init (GtkTextCellAccessible *text_cell)
+gtk_text_cell_accessible_init (GtkTextCellAccessible *text_cell)
 {
   text_cell->priv = G_TYPE_INSTANCE_GET_PRIVATE (text_cell,
                                                  GTK_TYPE_TEXT_CELL_ACCESSIBLE,
@@ -563,9 +563,9 @@ gtk_text_cell_accessible_get_character_extents (AtkText      *text,
     parent = atk_object_get_parent (parent);
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (parent));
   g_return_if_fail (GTK_IS_CELL_ACCESSIBLE_PARENT (parent));
-  _gtk_cell_accessible_parent_get_cell_area (GTK_CELL_ACCESSIBLE_PARENT (parent),
-                                             GTK_CELL_ACCESSIBLE (text),
-                                             &rendered_rect);
+  gtk_cell_accessible_parent_get_cell_area (GTK_CELL_ACCESSIBLE_PARENT (parent),
+                                            GTK_CELL_ACCESSIBLE (text),
+                                            &rendered_rect);
 
   gtk_cell_renderer_get_preferred_size (GTK_CELL_RENDERER (gtk_renderer),
                                         widget,
@@ -651,9 +651,9 @@ gtk_text_cell_accessible_get_offset_at_point (AtkText      *text,
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (parent));
 
   g_return_val_if_fail (GTK_IS_CELL_ACCESSIBLE_PARENT (parent), -1);
-  _gtk_cell_accessible_parent_get_cell_area (GTK_CELL_ACCESSIBLE_PARENT (parent),
-                                             GTK_CELL_ACCESSIBLE (text),
-                                             &rendered_rect);
+  gtk_cell_accessible_parent_get_cell_area (GTK_CELL_ACCESSIBLE_PARENT (parent),
+                                            GTK_CELL_ACCESSIBLE (text),
+                                            &rendered_rect);
 
   gtk_cell_renderer_get_preferred_size (GTK_CELL_RENDERER (gtk_renderer),
                                         widget,

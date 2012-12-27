@@ -24,7 +24,7 @@
 
 static void atk_value_interface_init (AtkValueIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkSpinButtonAccessible, _gtk_spin_button_accessible, GTK_TYPE_ENTRY_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkSpinButtonAccessible, gtk_spin_button_accessible, GTK_TYPE_ENTRY_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_VALUE, atk_value_interface_init))
 
 static void
@@ -47,7 +47,7 @@ gtk_spin_button_accessible_initialize (AtkObject *obj,
 {
   GtkAdjustment *adjustment;
 
-  ATK_OBJECT_CLASS (_gtk_spin_button_accessible_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gtk_spin_button_accessible_parent_class)->initialize (obj, data);
 
   adjustment = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (data));
   if (adjustment)
@@ -76,13 +76,13 @@ gtk_spin_button_accessible_notify_gtk (GObject    *obj,
                         spin_button);
     }
   else
-    GTK_WIDGET_ACCESSIBLE_CLASS (_gtk_spin_button_accessible_parent_class)->notify_gtk (obj, pspec);
+    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_spin_button_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
 
 
 static void
-_gtk_spin_button_accessible_class_init (GtkSpinButtonAccessibleClass *klass)
+gtk_spin_button_accessible_class_init (GtkSpinButtonAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
   GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
@@ -93,7 +93,7 @@ _gtk_spin_button_accessible_class_init (GtkSpinButtonAccessibleClass *klass)
 }
 
 static void
-_gtk_spin_button_accessible_init (GtkSpinButtonAccessible *button)
+gtk_spin_button_accessible_init (GtkSpinButtonAccessible *button)
 {
 }
 

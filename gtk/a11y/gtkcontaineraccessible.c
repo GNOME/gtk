@@ -25,7 +25,7 @@ struct _GtkContainerAccessiblePrivate
   GList *children;
 };
 
-G_DEFINE_TYPE (GtkContainerAccessible, _gtk_container_accessible, GTK_TYPE_WIDGET_ACCESSIBLE)
+G_DEFINE_TYPE (GtkContainerAccessible, gtk_container_accessible, GTK_TYPE_WIDGET_ACCESSIBLE)
 
 static gint
 gtk_container_accessible_get_n_children (AtkObject* obj)
@@ -159,7 +159,7 @@ gtk_container_accessible_real_initialize (AtkObject *obj,
 {
   GtkContainerAccessible *accessible = GTK_CONTAINER_ACCESSIBLE (obj);
 
-  ATK_OBJECT_CLASS (_gtk_container_accessible_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gtk_container_accessible_parent_class)->initialize (obj, data);
 
   accessible->priv->children = gtk_container_get_children (GTK_CONTAINER (data));
 
@@ -176,11 +176,11 @@ gtk_container_accessible_finalize (GObject *object)
 
   g_list_free (accessible->priv->children);
 
-  G_OBJECT_CLASS (_gtk_container_accessible_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_container_accessible_parent_class)->finalize (object);
 }
 
 static void
-_gtk_container_accessible_class_init (GtkContainerAccessibleClass *klass)
+gtk_container_accessible_class_init (GtkContainerAccessibleClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
@@ -198,7 +198,7 @@ _gtk_container_accessible_class_init (GtkContainerAccessibleClass *klass)
 }
 
 static void
-_gtk_container_accessible_init (GtkContainerAccessible *container)
+gtk_container_accessible_init (GtkContainerAccessible *container)
 {
   container->priv = G_TYPE_INSTANCE_GET_PRIVATE (container,
                                                  GTK_TYPE_CONTAINER_ACCESSIBLE,

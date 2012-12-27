@@ -23,7 +23,7 @@
 
 static void atk_value_interface_init (AtkValueIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkPanedAccessible, _gtk_paned_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkPanedAccessible, gtk_paned_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_VALUE, atk_value_interface_init))
 
 static void
@@ -39,7 +39,7 @@ static void
 gtk_paned_accessible_initialize (AtkObject *obj,
                                  gpointer   data)
 {
-  ATK_OBJECT_CLASS (_gtk_paned_accessible_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gtk_paned_accessible_parent_class)->initialize (obj, data);
 
   g_signal_connect (data, "size-allocate",
                     G_CALLBACK (gtk_paned_accessible_size_allocate_gtk), NULL);
@@ -48,7 +48,7 @@ gtk_paned_accessible_initialize (AtkObject *obj,
 }
 
 static void
-_gtk_paned_accessible_class_init (GtkPanedAccessibleClass *klass)
+gtk_paned_accessible_class_init (GtkPanedAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
@@ -56,7 +56,7 @@ _gtk_paned_accessible_class_init (GtkPanedAccessibleClass *klass)
 }
 
 static void
-_gtk_paned_accessible_init (GtkPanedAccessible *paned)
+gtk_paned_accessible_init (GtkPanedAccessible *paned)
 {
 }
 

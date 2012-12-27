@@ -24,7 +24,7 @@
 #include "gtkentryprivate.h"
 #include "gtkcomboboxaccessible.h"
 
-#define GTK_TYPE_ENTRY_ICON_ACCESSIBLE      (_gtk_entry_icon_accessible_get_type ())
+#define GTK_TYPE_ENTRY_ICON_ACCESSIBLE      (gtk_entry_icon_accessible_get_type ())
 #define GTK_ENTRY_ICON_ACCESSIBLE(obj)      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ENTRY_ICON_ACCESSIBLE, GtkEntryIconAccessible))
 #define GTK_IS_ENTRY_ICON_ACCESSIBLE(obj)   (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_ENTRY_ICON_ACCESSIBLE))
 
@@ -56,9 +56,9 @@ static void atk_action_interface_init (AtkActionIface *iface);
 static void icon_atk_action_interface_init (AtkActionIface *iface);
 static void icon_atk_component_interface_init (AtkComponentIface *iface);
 
-GType _gtk_entry_icon_accessible_get_type (void);
+GType gtk_entry_icon_accessible_get_type (void);
 
-G_DEFINE_TYPE_WITH_CODE (GtkEntryIconAccessible, _gtk_entry_icon_accessible, ATK_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (GtkEntryIconAccessible, gtk_entry_icon_accessible, ATK_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, icon_atk_action_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, icon_atk_component_interface_init))
 
@@ -82,7 +82,7 @@ gtk_entry_icon_accessible_new (GtkEntryAccessible *entry,
   GtkEntryIconAccessible *icon;
   AtkObject *accessible;
 
-  icon = g_object_new (_gtk_entry_icon_accessible_get_type (), NULL);
+  icon = g_object_new (gtk_entry_icon_accessible_get_type (), NULL);
   icon->entry = entry;
   g_object_weak_ref (G_OBJECT (entry),
                      gtk_entry_icon_accessible_remove_entry,
@@ -95,7 +95,7 @@ gtk_entry_icon_accessible_new (GtkEntryAccessible *entry,
 }
 
 static void
-_gtk_entry_icon_accessible_init (GtkEntryIconAccessible *icon)
+gtk_entry_icon_accessible_init (GtkEntryIconAccessible *icon)
 {
 }
 
@@ -109,7 +109,7 @@ gtk_entry_icon_accessible_initialize (AtkObject *obj,
   const gchar *name;
   gchar *text;
 
-  ATK_OBJECT_CLASS (_gtk_entry_icon_accessible_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gtk_entry_icon_accessible_parent_class)->initialize (obj, data);
   atk_object_set_role (obj, ATK_ROLE_ICON);
 
   name = gtk_entry_get_icon_name (gtk_entry, icon->pos);
@@ -196,11 +196,11 @@ gtk_entry_icon_accessible_finalize (GObject *object)
 
   gtk_entry_icon_accessible_invalidate (icon);
 
-  G_OBJECT_CLASS (_gtk_entry_icon_accessible_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_entry_icon_accessible_parent_class)->finalize (object);
 }
 
 static void
-_gtk_entry_icon_accessible_class_init (GtkEntryIconAccessibleClass *klass)
+gtk_entry_icon_accessible_class_init (GtkEntryIconAccessibleClass *klass)
 {
   AtkObjectClass  *atk_class = ATK_OBJECT_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -381,7 +381,7 @@ static void atk_text_interface_init          (AtkTextIface         *iface);
 static void atk_action_interface_init        (AtkActionIface       *iface);
 
 
-G_DEFINE_TYPE_WITH_CODE (GtkEntryAccessible, _gtk_entry_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkEntryAccessible, gtk_entry_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_EDITABLE_TEXT, atk_editable_text_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init))
@@ -398,7 +398,7 @@ gtk_entry_accessible_ref_state_set (AtkObject *accessible)
   if (widget == NULL)
     return NULL;
 
-  state_set = ATK_OBJECT_CLASS (_gtk_entry_accessible_parent_class)->ref_state_set (accessible);
+  state_set = ATK_OBJECT_CLASS (gtk_entry_accessible_parent_class)->ref_state_set (accessible);
 
   g_object_get (G_OBJECT (widget), "editable", &value, NULL);
   if (value)
@@ -416,7 +416,7 @@ gtk_entry_accessible_get_attributes (AtkObject *accessible)
   AtkAttribute *placeholder_text;
   const gchar *text;
 
-  attributes = ATK_OBJECT_CLASS (_gtk_entry_accessible_parent_class)->get_attributes (accessible);
+  attributes = ATK_OBJECT_CLASS (gtk_entry_accessible_parent_class)->get_attributes (accessible);
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
   if (widget == NULL)
@@ -443,7 +443,7 @@ gtk_entry_accessible_initialize (AtkObject *obj,
   GtkEntryAccessible *gtk_entry_accessible;
   gint start_pos, end_pos;
 
-  ATK_OBJECT_CLASS (_gtk_entry_accessible_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gtk_entry_accessible_parent_class)->initialize (obj, data);
 
   gtk_entry_accessible = GTK_ENTRY_ACCESSIBLE (obj);
 
@@ -625,7 +625,7 @@ gtk_entry_accessible_notify_gtk (GObject    *obj,
         }
     }
   else
-    GTK_WIDGET_ACCESSIBLE_CLASS (_gtk_entry_accessible_parent_class)->notify_gtk (obj, pspec);
+    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_entry_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
 static gint
@@ -639,7 +639,7 @@ gtk_entry_accessible_get_index_in_parent (AtkObject *accessible)
     if (GTK_IS_COMBO_BOX_ACCESSIBLE (accessible->accessible_parent))
       return 1;
 
-  return ATK_OBJECT_CLASS (_gtk_entry_accessible_parent_class)->get_index_in_parent (accessible);
+  return ATK_OBJECT_CLASS (gtk_entry_accessible_parent_class)->get_index_in_parent (accessible);
 }
 
 static gint
@@ -713,11 +713,11 @@ gtk_entry_accessible_finalize (GObject *object)
   g_clear_object (&priv->icons[GTK_ENTRY_ICON_PRIMARY]);
   g_clear_object (&priv->icons[GTK_ENTRY_ICON_SECONDARY]);
 
-  G_OBJECT_CLASS (_gtk_entry_accessible_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_entry_accessible_parent_class)->finalize (object);
 }
 
 static void
-_gtk_entry_accessible_class_init (GtkEntryAccessibleClass *klass)
+gtk_entry_accessible_class_init (GtkEntryAccessibleClass *klass)
 {
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
   GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
@@ -738,7 +738,7 @@ _gtk_entry_accessible_class_init (GtkEntryAccessibleClass *klass)
 }
 
 static void
-_gtk_entry_accessible_init (GtkEntryAccessible *entry)
+gtk_entry_accessible_init (GtkEntryAccessible *entry)
 {
   entry->priv = G_TYPE_INSTANCE_GET_PRIVATE (entry,
                                              GTK_TYPE_ENTRY_ACCESSIBLE,

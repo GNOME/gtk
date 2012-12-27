@@ -54,7 +54,7 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 
-#include "a11y/gtktextviewaccessible.h"
+#include "a11y/gtktextviewaccessibleprivate.h"
 
 /**
  * SECTION:gtktextview

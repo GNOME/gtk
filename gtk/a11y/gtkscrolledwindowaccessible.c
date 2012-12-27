@@ -21,7 +21,7 @@
 #include "gtkscrolledwindowaccessible.h"
 
 
-G_DEFINE_TYPE (GtkScrolledWindowAccessible, _gtk_scrolled_window_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE)
+G_DEFINE_TYPE (GtkScrolledWindowAccessible, gtk_scrolled_window_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE)
 
 static void
 visibility_changed (GObject    *object,
@@ -88,7 +88,7 @@ gtk_scrolled_window_accessible_initialize (AtkObject *obj,
 {
   GtkScrolledWindow *window;
 
-  ATK_OBJECT_CLASS (_gtk_scrolled_window_accessible_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gtk_scrolled_window_accessible_parent_class)->initialize (obj, data);
 
   window = GTK_SCROLLED_WINDOW (data);
 
@@ -178,7 +178,7 @@ gtk_scrolled_window_accessible_ref_child (AtkObject *obj,
 }
 
 static void
-_gtk_scrolled_window_accessible_class_init (GtkScrolledWindowAccessibleClass *klass)
+gtk_scrolled_window_accessible_class_init (GtkScrolledWindowAccessibleClass *klass)
 {
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
 
@@ -188,6 +188,6 @@ _gtk_scrolled_window_accessible_class_init (GtkScrolledWindowAccessibleClass *kl
 }
 
 static void
-_gtk_scrolled_window_accessible_init (GtkScrolledWindowAccessible *window)
+gtk_scrolled_window_accessible_init (GtkScrolledWindowAccessible *window)
 {
 }

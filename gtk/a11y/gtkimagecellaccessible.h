@@ -23,7 +23,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_IMAGE_CELL_ACCESSIBLE            (_gtk_image_cell_accessible_get_type ())
+#define GTK_TYPE_IMAGE_CELL_ACCESSIBLE            (gtk_image_cell_accessible_get_type ())
 #define GTK_IMAGE_CELL_ACCESSIBLE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_IMAGE_CELL_ACCESSIBLE, GtkImageCellAccessible))
 #define GTK_IMAGE_CELL_ACCESSIBLE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_IMAGE_CELL_ACCESSIBLE, GtkImageCellAccessibleClass))
 #define GTK_IS_IMAGE_CELL_ACCESSIBLE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_IMAGE_CELL_ACCESSIBLE))
@@ -46,7 +46,7 @@ struct _GtkImageCellAccessibleClass
   GtkRendererCellAccessibleClass parent_class;
 };
 
-GType      _gtk_image_cell_accessible_get_type (void);
+GType      gtk_image_cell_accessible_get_type (void);
 
 G_END_DECLS
 

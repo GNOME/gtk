@@ -250,6 +250,7 @@ gtk_application_window_get_id
 gtk_application_window_new
 gtk_application_window_set_show_menubar
 gtk_application_get_active_window
+gtk_arrow_accessible_get_type
 gtk_arrow_get_type
 gtk_arrow_new
 gtk_arrow_placement_get_type
@@ -301,6 +302,7 @@ gtk_binding_set_find
 gtk_binding_set_new
 gtk_bin_get_child
 gtk_bin_get_type
+gtk_boolean_cell_accessible_get_type
 gtk_border_copy
 gtk_border_free
 gtk_border_get_type
@@ -348,6 +350,7 @@ gtk_builder_new
 gtk_builder_set_translation_domain
 gtk_builder_value_from_string
 gtk_builder_value_from_string_type
+gtk_button_accessible_get_type
 gtk_button_box_get_child_secondary
 gtk_button_box_get_child_non_homogeneous
 gtk_button_box_get_layout
@@ -406,6 +409,16 @@ gtk_calendar_set_detail_height_rows
 gtk_calendar_set_detail_width_chars
 gtk_calendar_set_display_options
 gtk_calendar_unmark_day
+gtk_cell_accessible_get_type
+gtk_cell_accessible_parent_activate
+gtk_cell_accessible_parent_edit
+gtk_cell_accessible_parent_expand_collapse
+gtk_cell_accessible_parent_get_cell_area
+gtk_cell_accessible_parent_get_cell_extents
+gtk_cell_accessible_parent_get_child_index
+gtk_cell_accessible_parent_get_renderer_state
+gtk_cell_accessible_parent_get_type
+gtk_cell_accessible_parent_grab_focus
 gtk_cell_area_activate
 gtk_cell_area_activate_cell
 gtk_cell_area_add
@@ -557,6 +570,7 @@ gtk_check_button_get_type
 gtk_check_button_new
 gtk_check_button_new_with_label
 gtk_check_button_new_with_mnemonic
+gtk_check_menu_item_accessible_get_type
 gtk_check_menu_item_get_active
 gtk_check_menu_item_get_draw_as_radio
 gtk_check_menu_item_get_inconsistent
@@ -647,6 +661,7 @@ gtk_color_selection_set_has_palette
 gtk_color_selection_set_previous_alpha
 gtk_color_selection_set_previous_color
 gtk_color_selection_set_previous_rgba
+gtk_combo_box_accessible_get_type
 gtk_combo_box_get_active
 gtk_combo_box_get_active_id
 gtk_combo_box_get_active_iter
@@ -701,8 +716,14 @@ gtk_combo_box_text_prepend
 gtk_combo_box_text_prepend_text
 gtk_combo_box_text_remove
 gtk_combo_box_text_remove_all
+gtk_container_accessible_get_type
 gtk_container_add
 gtk_container_add_with_properties
+gtk_container_cell_accessible_add_child
+gtk_container_cell_accessible_get_children
+gtk_container_cell_accessible_get_type
+gtk_container_cell_accessible_new
+gtk_container_cell_accessible_remove_child
 gtk_container_check_resize
 gtk_container_child_get
 gtk_container_child_get_property
@@ -851,6 +872,7 @@ gtk_editable_paste_clipboard
 gtk_editable_select_region
 gtk_editable_set_editable
 gtk_editable_set_position
+gtk_entry_accessible_get_type
 gtk_entry_buffer_delete_text
 gtk_entry_buffer_emit_deleted_text
 gtk_entry_buffer_emit_inserted_text
@@ -927,6 +949,7 @@ gtk_entry_get_text_length
 gtk_entry_get_type
 gtk_entry_get_visibility
 gtk_entry_get_width_chars
+gtk_entry_icon_accessible_get_type
 gtk_entry_icon_position_get_type
 gtk_entry_im_context_filter_keypress
 gtk_entry_layout_index_to_text_index
@@ -974,6 +997,7 @@ gtk_event_box_new
 gtk_event_box_set_above_child
 gtk_event_box_set_visible_window
 gtk_events_pending
+gtk_expander_accessible_get_type
 gtk_expander_get_expanded
 gtk_expander_get_label
 gtk_expander_get_label_fill
@@ -1141,6 +1165,7 @@ gtk_font_selection_get_type
 gtk_font_selection_new
 gtk_font_selection_set_font_name
 gtk_font_selection_set_preview_text
+gtk_frame_accessible_get_type
 gtk_frame_get_label
 gtk_frame_get_label_align
 gtk_frame_get_label_widget
@@ -1298,6 +1323,7 @@ gtk_icon_theme_rescan_if_needed
 gtk_icon_theme_set_custom_theme
 gtk_icon_theme_set_screen
 gtk_icon_theme_set_search_path
+gtk_icon_view_accessible_get_type
 gtk_icon_view_convert_widget_to_bin_window_coords
 gtk_icon_view_create_drag_icon
 gtk_icon_view_drop_position_get_type
@@ -1363,6 +1389,8 @@ gtk_icon_view_unselect_path
 gtk_icon_view_unset_model_drag_dest
 gtk_icon_view_unset_model_drag_source
 gtk_identifier_get_type
+gtk_image_accessible_get_type
+gtk_image_cell_accessible_get_type
 gtk_image_clear
 gtk_image_get_animation
 gtk_image_get_gicon
@@ -1457,6 +1485,7 @@ gtk_junction_sides_get_type
 gtk_justification_get_type
 gtk_key_snooper_install
 gtk_key_snooper_remove
+gtk_label_accessible_get_type
 gtk_label_get_angle
 gtk_label_get_attributes
 gtk_label_get_current_uri
@@ -1514,6 +1543,7 @@ gtk_layout_set_hadjustment
 gtk_layout_set_size
 gtk_layout_set_vadjustment
 gtk_license_get_type
+gtk_link_button_accessible_get_type
 gtk_link_button_get_type
 gtk_link_button_get_uri
 gtk_link_button_get_visited
@@ -1543,6 +1573,7 @@ gtk_list_store_set_valist
 gtk_list_store_set_value
 gtk_list_store_set_valuesv
 gtk_list_store_swap
+gtk_lock_button_accessible_get_type
 gtk_lock_button_get_type
 gtk_lock_button_new
 gtk_lock_button_get_permission
@@ -1553,6 +1584,7 @@ gtk_main_iteration
 gtk_main_iteration_do
 gtk_main_level
 gtk_main_quit
+gtk_menu_accessible_get_type
 gtk_menu_attach
 gtk_menu_attach_to_widget
 gtk_menu_bar_get_child_pack_direction
@@ -1584,6 +1616,7 @@ gtk_menu_get_reserve_toggle_size
 gtk_menu_get_tearoff_state
 gtk_menu_get_title
 gtk_menu_get_type
+gtk_menu_item_accessible_get_type
 gtk_menu_item_activate
 gtk_menu_item_deselect
 gtk_menu_item_get_accel_path
@@ -1620,6 +1653,7 @@ gtk_menu_set_reserve_toggle_size
 gtk_menu_set_screen
 gtk_menu_set_tearoff_state
 gtk_menu_set_title
+gtk_menu_shell_accessible_get_type
 gtk_menu_shell_activate_item
 gtk_menu_shell_append
 gtk_menu_shell_bind_model
@@ -1665,6 +1699,7 @@ gtk_mount_operation_new
 gtk_mount_operation_set_parent
 gtk_mount_operation_set_screen
 gtk_movement_step_get_type
+gtk_notebook_accessible_get_type
 gtk_notebook_append_page
 gtk_notebook_append_page_menu
 gtk_notebook_get_action_widget
@@ -1689,6 +1724,9 @@ gtk_notebook_insert_page
 gtk_notebook_insert_page_menu
 gtk_notebook_new
 gtk_notebook_next_page
+gtk_notebook_page_accessible_get_type
+gtk_notebook_page_accessible_invalidate
+gtk_notebook_page_accessible_new
 gtk_notebook_page_num
 gtk_notebook_popup_disable
 gtk_notebook_popup_enable
@@ -1794,6 +1832,7 @@ gtk_paint_slider
 gtk_paint_spinner
 gtk_paint_tab
 gtk_paint_vline
+gtk_paned_accessible_get_type
 gtk_paned_add1
 gtk_paned_add2
 gtk_paned_get_child1
@@ -2116,6 +2155,7 @@ gtk_print_win32_devnames_from_printer_name
 gtk_print_win32_devnames_from_win32
 gtk_print_win32_devnames_to_win32
 #endif
+gtk_progress_bar_accessible_get_type
 gtk_progress_bar_get_ellipsize
 gtk_progress_bar_get_fraction
 gtk_progress_bar_get_inverted
@@ -2139,6 +2179,7 @@ gtk_radio_action_join_group
 gtk_radio_action_new
 gtk_radio_action_set_current_value
 gtk_radio_action_set_group
+gtk_radio_button_accessible_get_type
 gtk_radio_button_get_group
 gtk_radio_button_get_type
 gtk_radio_button_join_group
@@ -2149,6 +2190,7 @@ gtk_radio_button_new_with_label_from_widget
 gtk_radio_button_new_with_mnemonic
 gtk_radio_button_new_with_mnemonic_from_widget
 gtk_radio_button_set_group
+gtk_radio_menu_item_accessible_get_type
 gtk_radio_menu_item_get_group
 gtk_radio_menu_item_get_type
 gtk_radio_menu_item_new
@@ -2165,6 +2207,7 @@ gtk_radio_tool_button_new_from_stock
 gtk_radio_tool_button_new_from_widget
 gtk_radio_tool_button_new_with_stock_from_widget
 gtk_radio_tool_button_set_group
+gtk_range_accessible_get_type
 gtk_range_get_adjustment
 gtk_range_get_fill_level
 gtk_range_get_flippable
@@ -2335,6 +2378,8 @@ gtk_render_activity
 gtk_render_arrow
 gtk_render_background
 gtk_render_check
+gtk_renderer_cell_accessible_get_type
+gtk_renderer_cell_accessible_new
 gtk_render_expander
 gtk_render_extension
 gtk_render_focus
@@ -2355,7 +2400,9 @@ gtk_requisition_new
 gtk_resize_mode_get_type
 gtk_response_type_get_type
 gtk_rgb_to_hsv
+gtk_scale_accessible_get_type
 gtk_scale_add_mark
+gtk_scale_button_accessible_get_type
 gtk_scale_button_get_adjustment
 gtk_scale_button_get_minus_button
 gtk_scale_button_get_plus_button
@@ -2390,8 +2437,10 @@ gtk_scrollable_set_hadjustment
 gtk_scrollable_set_hscroll_policy
 gtk_scrollable_set_vadjustment
 gtk_scrollable_set_vscroll_policy
+gtk_scrollbar_accessible_get_type
 gtk_scrollbar_get_type
 gtk_scrollbar_new
+gtk_scrolled_window_accessible_get_type
 gtk_scrolled_window_add_with_viewport
 gtk_scrolled_window_get_hadjustment
 gtk_scrolled_window_get_hscrollbar
@@ -2492,6 +2541,7 @@ gtk_socket_get_type
 gtk_socket_new
 #endif
 gtk_sort_type_get_type
+gtk_spin_button_accessible_get_type
 gtk_spin_button_configure
 gtk_spin_button_get_adjustment
 gtk_spin_button_get_digits
@@ -2518,6 +2568,7 @@ gtk_spin_button_set_wrap
 gtk_spin_button_spin
 gtk_spin_button_update
 gtk_spin_button_update_policy_get_type
+gtk_spinner_accessible_get_type
 gtk_spinner_get_type
 gtk_spinner_new
 gtk_spinner_start
@@ -2525,6 +2576,7 @@ gtk_spinner_stop
 gtk_spin_type_get_type
 gtk_state_flags_get_type
 gtk_state_type_get_type
+gtk_statusbar_accessible_get_type
 gtk_statusbar_get_context_id
 gtk_statusbar_get_message_area
 gtk_statusbar_get_type
@@ -2575,6 +2627,7 @@ gtk_stock_item_free
 gtk_stock_list_ids
 gtk_stock_lookup
 gtk_stock_set_translate_func
+gtk_switch_accessible_get_type
 gtk_switch_get_active
 gtk_switch_get_type
 gtk_switch_new
@@ -2833,6 +2886,7 @@ gtk_text_buffer_target_info_get_type
 gtk_text_buffer_unregister_deserialize_format
 gtk_text_buffer_unregister_serialize_format
 gtk_text_byte_begins_utf8_char
+gtk_text_cell_accessible_get_type
 gtk_text_child_anchor_get_deleted
 gtk_text_child_anchor_get_type
 gtk_text_child_anchor_get_widgets
@@ -3001,6 +3055,7 @@ gtk_text_tag_table_lookup
 gtk_text_tag_table_new
 gtk_text_tag_table_remove
 gtk_text_unknown_char_utf8_gtk_tests_only
+gtk_text_view_accessible_get_type
 gtk_text_view_add_child_at_anchor
 gtk_text_view_add_child_in_window
 gtk_text_view_backward_display_line
@@ -3102,6 +3157,7 @@ gtk_toggle_action_new
 gtk_toggle_action_set_active
 gtk_toggle_action_set_draw_as_radio
 gtk_toggle_action_toggled
+gtk_toggle_button_accessible_get_type
 gtk_toggle_button_get_active
 gtk_toggle_button_get_inconsistent
 gtk_toggle_button_get_mode
@@ -3243,6 +3299,8 @@ gtk_tooltip_set_markup
 gtk_tooltip_set_text
 gtk_tooltip_set_tip_area
 gtk_tooltip_trigger_tooltip_query
+gtk_toplevel_accessible_get_children
+gtk_toplevel_accessible_get_type
 #ifdef GDK_WINDOWING_X11
 gtk_tray_icon_get_type
 #endif
@@ -3391,6 +3449,7 @@ gtk_tree_store_set_valist
 gtk_tree_store_set_value
 gtk_tree_store_set_valuesv
 gtk_tree_store_swap
+gtk_tree_view_accessible_get_type
 gtk_tree_view_append_column
 gtk_tree_view_collapse_all
 gtk_tree_view_collapse_row
@@ -3595,6 +3654,7 @@ gtk_vscrollbar_get_type
 gtk_vscrollbar_new
 gtk_vseparator_get_type
 gtk_vseparator_new
+gtk_widget_accessible_get_type
 gtk_widget_activate
 gtk_widget_add_accelerator
 gtk_widget_add_device_events
@@ -3850,6 +3910,7 @@ gtk_widget_insert_action_group
 #ifdef GDK_WINDOWING_WIN32
 gtk_win32_embed_widget_get_type
 #endif
+gtk_window_accessible_get_type
 gtk_window_activate_default
 gtk_window_activate_focus
 gtk_window_activate_key

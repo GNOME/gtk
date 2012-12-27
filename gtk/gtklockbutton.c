@@ -24,7 +24,7 @@
 #include "gtklabel.h"
 #include "gtksizegroup.h"
 #include "gtkintl.h"
-#include "a11y/gtklockbuttonaccessible.h"
+#include "a11y/gtklockbuttonaccessibleprivate.h"
 
 /**
  * SECTION:gtklockbutton

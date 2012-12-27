@@ -53,14 +53,12 @@ gail_c_sources =			\
 	gailmisc.c
 
 gail_private_h_sources =		\
-	gail.h				\
 	gtkarrowaccessible.h		\
 	gtkbooleancellaccessible.h	\
 	gtkbuttonaccessible.h		\
 	gtkcellaccessible.h		\
 	gtkcellaccessibleparent.h	\
 	gtkcheckmenuitemaccessible.h	\
-	gtkcolorswatchaccessible.h	\
 	gtkcomboboxaccessible.h		\
 	gtkcontaineraccessible.h	\
 	gtkcontainercellaccessible.h	\
@@ -99,6 +97,14 @@ gail_private_h_sources =		\
 	gtktreeviewaccessible.h		\
 	gtkwidgetaccessible.h		\
 	gtkwindowaccessible.h		\
+	gtkcolorswatchaccessible.h	\
+	gtkcellaccessibleprivate.h	\
+	gtklockbuttonaccessibleprivate.h \
+	gtkiconviewaccessibleprivate.h	\
+	gtktreeviewaccessibleprivate.h	\
+	gtktextviewaccessibleprivate.h  \
+	gtkwidgetaccessibleprivate.h 	\
+	gail.h				\
 	gailutil.h			\
 	gailmisc.h
 

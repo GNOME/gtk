@@ -76,7 +76,7 @@ gtk_boolean_cell_accessible_action_interface_init (AtkActionIface *iface)
 }
 
 
-G_DEFINE_TYPE_EXTENDED (GtkBooleanCellAccessible, _gtk_boolean_cell_accessible, GTK_TYPE_RENDERER_CELL_ACCESSIBLE, 0,
+G_DEFINE_TYPE_EXTENDED (GtkBooleanCellAccessible, gtk_boolean_cell_accessible, GTK_TYPE_RENDERER_CELL_ACCESSIBLE, 0,
                         G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, gtk_boolean_cell_accessible_action_interface_init))
 
 
@@ -86,7 +86,7 @@ gtk_boolean_cell_accessible_ref_state_set (AtkObject *accessible)
   GtkBooleanCellAccessible *cell = GTK_BOOLEAN_CELL_ACCESSIBLE (accessible);
   AtkStateSet *state_set;
 
-  state_set = ATK_OBJECT_CLASS (_gtk_boolean_cell_accessible_parent_class)->ref_state_set (accessible);
+  state_set = ATK_OBJECT_CLASS (gtk_boolean_cell_accessible_parent_class)->ref_state_set (accessible);
 
   if (cell->priv->cell_value)
     atk_state_set_add_state (state_set, ATK_STATE_CHECKED);
@@ -130,7 +130,7 @@ gtk_boolean_cell_accessible_update_cache (GtkCellAccessible *cell)
 }
 
 static void
-_gtk_boolean_cell_accessible_class_init (GtkBooleanCellAccessibleClass *klass)
+gtk_boolean_cell_accessible_class_init (GtkBooleanCellAccessibleClass *klass)
 {
   GtkCellAccessibleClass *cell_class = GTK_CELL_ACCESSIBLE_CLASS (klass);
   AtkObjectClass *atkobject_class = ATK_OBJECT_CLASS (klass);
@@ -143,7 +143,7 @@ _gtk_boolean_cell_accessible_class_init (GtkBooleanCellAccessibleClass *klass)
 }
 
 static void
-_gtk_boolean_cell_accessible_init (GtkBooleanCellAccessible *cell)
+gtk_boolean_cell_accessible_init (GtkBooleanCellAccessible *cell)
 {
   cell->priv =  G_TYPE_INSTANCE_GET_PRIVATE (cell,
                                              GTK_TYPE_BOOLEAN_CELL_ACCESSIBLE,
