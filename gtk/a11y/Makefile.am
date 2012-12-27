@@ -38,7 +38,6 @@ gtka11y_c_sources =			\
 	gtkrenderercellaccessible.c	\
 	gtkscaleaccessible.c		\
 	gtkscalebuttonaccessible.c	\
-	gtkscrollbaraccessible.c	\
 	gtkscrolledwindowaccessible.c	\
 	gtkspinbuttonaccessible.c	\
 	gtkspinneraccessible.c		\
@@ -85,7 +84,6 @@ gtka11yinclude_HEADERS =		\
 	gtkrenderercellaccessible.h	\
 	gtkscaleaccessible.h		\
 	gtkscalebuttonaccessible.h	\
-	gtkscrollbaraccessible.h	\
 	gtkscrolledwindowaccessible.h	\
 	gtkspinbuttonaccessible.h	\
 	gtkspinneraccessible.h		\
