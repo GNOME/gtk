@@ -61,13 +61,9 @@
     <xi:include href="xml/gtkstyleproperties.xml" />
     <xi:include href="xml/gtkthemingengine.xml" />
     <xi:include href="xml/gtkwidgetpath.xml" />
-    <xi:include href="xml/gtksymboliccolor.xml" />
-    <xi:include href="xml/gtkgradient.xml" />
     <xi:include href="xml/gtkicontheme.xml" />
     <xi:include href="xml/gtkiconfactory.xml" />
     <xi:include href="xml/gtknumerableicon.xml" />
-    <xi:include href="xml/gtkrc.xml" />
-    <xi:include href="xml/gtkstyle.xml" />
   </part>
 
   <part id="gtkobjects">
@@ -128,8 +124,6 @@
       <xi:include href="xml/gtkentrybuffer.xml" />
       <xi:include href="xml/gtkentrycompletion.xml" />
       <xi:include href="xml/gtkscale.xml" />
-      <xi:include href="xml/gtkhscale.xml" />
-      <xi:include href="xml/gtkvscale.xml" />
       <xi:include href="xml/gtkspinbutton.xml" />
       <xi:include href="xml/gtksearchentry.xml" />
       <xi:include href="xml/gtkeditable.xml" />
@@ -188,7 +182,6 @@
       <xi:include href="xml/gtkradiomenuitem.xml" />
       <xi:include href="xml/gtkcheckmenuitem.xml" />
       <xi:include href="xml/gtkseparatormenuitem.xml" />
-      <xi:include href="xml/gtktearoffmenuitem.xml" />
       <xi:include href="xml/gtktoolshell.xml" />
       <xi:include href="xml/gtktoolbar.xml" />
       <xi:include href="xml/gtktoolitem.xml" />
@@ -218,9 +211,6 @@
       <xi:include href="xml/gtkcolorbutton.xml" />
       <xi:include href="xml/gtkcolorchooserwidget.xml" />
       <xi:include href="xml/gtkcolorchooserdialog.xml" />
-      <xi:include href="xml/gtkcolorsel.xml" />
-      <xi:include href="xml/gtkcolorseldlg.xml" />
-      <xi:include href="xml/gtkhsv.xml" />
       <xi:include href="xml/gtkfilechooser.xml" />
       <xi:include href="xml/gtkfilechooserbutton.xml" />
       <xi:include href="xml/gtkfilechooserdialog.xml" />
@@ -230,8 +220,6 @@
       <xi:include href="xml/gtkfontbutton.xml" />
       <xi:include href="xml/gtkfontchooserwidget.xml" />
       <xi:include href="xml/gtkfontchooserdialog.xml" />
-      <xi:include href="xml/gtkfontsel.xml" />
-      <xi:include href="xml/gtkfontseldlg.xml" />
     </chapter>
     
     <chapter id="LayoutContainers">
@@ -240,18 +228,11 @@
       <xi:include href="xml/gtkalignment.xml" />
       <xi:include href="xml/gtkaspectframe.xml" />
       <xi:include href="xml/gtkbox.xml" />
-      <xi:include href="xml/gtkhbox.xml" />
-      <xi:include href="xml/gtkvbox.xml" />
       <xi:include href="xml/gtkbbox.xml" />
-      <xi:include href="xml/gtkhbbox.xml" />
-      <xi:include href="xml/gtkvbbox.xml" />
       <xi:include href="xml/gtkfixed.xml" />
       <xi:include href="xml/gtkpaned.xml" />
-      <xi:include href="xml/gtkhpaned.xml" />
-      <xi:include href="xml/gtkvpaned.xml" />
       <xi:include href="xml/gtklayout.xml" />
       <xi:include href="xml/gtknotebook.xml" />
-      <xi:include href="xml/gtktable.xml" />
       <xi:include href="xml/gtkexpander.xml" />
       <xi:include href="xml/gtkoverlay.xml" />
       <xi:include href="xml/gtkorientable.xml" />
@@ -261,15 +242,11 @@
       <title>Ornaments</title>
       <xi:include href="xml/gtkframe.xml" />
       <xi:include href="xml/gtkseparator.xml" />
-      <xi:include href="xml/gtkhseparator.xml" />
-      <xi:include href="xml/gtkvseparator.xml" />
     </chapter>
 
     <chapter id="ScrollingWidgets">
       <title>Scrolling</title>
       <xi:include href="xml/gtkscrollbar.xml" />
-      <xi:include href="xml/gtkhscrollbar.xml" />
-      <xi:include href="xml/gtkvscrollbar.xml" />
       <xi:include href="xml/gtkscrolledwindow.xml" />
       <xi:include href="xml/gtkscrollable.xml" />
     </chapter>
@@ -350,6 +327,34 @@
       <xi:include href="xml/gtkapplicationwindow.xml" />
       <xi:include href="xml/gtkactionable.xml" />
     </chapter>
+
+    <chapter id="DeprecatedObjects">
+      <title>Deprecated</title>
+      <xi:include href="xml/gtksymboliccolor.xml" />
+      <xi:include href="xml/gtkgradient.xml" />
+      <xi:include href="xml/gtkrc.xml" />
+      <xi:include href="xml/gtkstyle.xml" />
+      <xi:include href="xml/gtkhscale.xml" />
+      <xi:include href="xml/gtkvscale.xml" />
+      <xi:include href="xml/gtktearoffmenuitem.xml" />
+      <xi:include href="xml/gtkcolorsel.xml" />
+      <xi:include href="xml/gtkcolorseldlg.xml" />
+      <xi:include href="xml/gtkhsv.xml" />
+      <xi:include href="xml/gtkfontsel.xml" />
+      <xi:include href="xml/gtkfontseldlg.xml" />
+      <xi:include href="xml/gtkhbox.xml" />
+      <xi:include href="xml/gtkvbox.xml" />
+      <xi:include href="xml/gtkhbbox.xml" />
+      <xi:include href="xml/gtkvbbox.xml" />
+      <xi:include href="xml/gtkhpaned.xml" />
+      <xi:include href="xml/gtkvpaned.xml" />
+      <xi:include href="xml/gtktable.xml" />
+      <xi:include href="xml/gtkhseparator.xml" />
+      <xi:include href="xml/gtkvseparator.xml" />
+      <xi:include href="xml/gtkhscrollbar.xml" />
+      <xi:include href="xml/gtkvscrollbar.xml" />
+    </chapter>
+
   </part>
 
   <part id="migrating">
