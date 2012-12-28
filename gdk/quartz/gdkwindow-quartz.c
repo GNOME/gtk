@@ -2652,7 +2652,11 @@ gdk_quartz_window_set_decorations (GdkWindow       *window,
           NSColor *bg = [impl->toplevel backgroundColor];
           NSScreen *screen = [impl->toplevel screen];
 
-          [impl->toplevel release];
+          /* Make sure the old window is closed, recall that releasedWhenClosed
+           * is set on GdkQuartzWindows.
+           */
+          [impl->toplevel close];
+
           impl->toplevel = [[GdkQuartzNSWindow alloc] initWithContentRect:rect
                                                                 styleMask:new_mask
                                                                   backing:NSBackingStoreBuffered
