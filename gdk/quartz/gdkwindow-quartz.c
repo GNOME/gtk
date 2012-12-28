@@ -2605,7 +2605,7 @@ gdk_quartz_window_set_decorations (GdkWindow       *window,
     {
       NSRect rect;
 
-      old_view = [impl->toplevel contentView];
+      old_view = [[impl->toplevel contentView] retain];
 
       rect = [impl->toplevel frame];
 
@@ -2680,6 +2680,8 @@ gdk_quartz_window_set_decorations (GdkWindow       *window,
        */
       if (![old_view isOpaque] && [impl->toplevel hasShadow])
         [(GdkQuartzView*)old_view setNeedsInvalidateShadow:YES];
+
+      [old_view release];
     }
 
   GDK_QUARTZ_RELEASE_POOL;
