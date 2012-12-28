@@ -2921,6 +2921,7 @@ gdk_window_fullscreen (GdkWindow *window)
 {
   FullscreenSavedGeometry *geometry;
   GdkWindowObject *private = (GdkWindowObject *) window;
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
   NSRect frame;
 
   if (GDK_WINDOW_DESTROYED (window) ||
@@ -2946,10 +2947,14 @@ gdk_window_fullscreen (GdkWindow *window)
 
       gdk_window_set_decorations (window, 0);
 
-      frame = [[NSScreen mainScreen] frame];
+      frame = [[impl->toplevel screen] frame];
       move_resize_window_internal (window,
                                    0, 0, 
                                    frame.size.width, frame.size.height);
+      [impl->toplevel setContentSize:frame.size];
+      [impl->toplevel makeKeyAndOrderFront:impl->toplevel];
+
+      clear_toplevel_order ();
     }
 
   SetSystemUIMode (kUIModeAllHidden, kUIOptionAutoShowMenuBar);
@@ -2960,6 +2965,8 @@ gdk_window_fullscreen (GdkWindow *window)
 void
 gdk_window_unfullscreen (GdkWindow *window)
 {
+  GdkWindowObject *private = (GdkWindowObject *) window;
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
   FullscreenSavedGeometry *geometry;
 
   if (GDK_WINDOW_DESTROYED (window) ||
@@ -2980,6 +2987,9 @@ gdk_window_unfullscreen (GdkWindow *window)
       gdk_window_set_decorations (window, geometry->decor);
 
       g_object_set_data (G_OBJECT (window), FULLSCREEN_DATA, NULL);
+
+      [impl->toplevel makeKeyAndOrderFront:impl->toplevel];
+      clear_toplevel_order ();
 
       gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FULLSCREEN, 0);
     }
