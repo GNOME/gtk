@@ -15,12 +15,12 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __GTK_TREE_VIEW_COLUMN_H__
+#define __GTK_TREE_VIEW_COLUMN_H__
+
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_TREE_VIEW_COLUMN_H__
-#define __GTK_TREE_VIEW_COLUMN_H__
 
 #include <gtk/gtkcellrenderer.h>
 #include <gtk/gtktreemodel.h>

@@ -19,12 +19,12 @@
  *	Mark McLoughlin <mark@skynet.ie>
  */
 
+#ifndef __GTK_EXPANDER_H__
+#define __GTK_EXPANDER_H__
+
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_EXPANDER_H__
-#define __GTK_EXPANDER_H__
 
 #include <gtk/gtkbin.h>
 

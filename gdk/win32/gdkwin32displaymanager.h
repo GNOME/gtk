@@ -15,12 +15,12 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __GDK_WIN32_DISPLAY_MANAGER_H__
+#define __GDK_WIN32_DISPLAY_MANAGER_H__
+
 #if !defined (__GDKWIN32_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdkwin32.h> can be included directly."
 #endif
-
-#ifndef __GDK_WIN32_DISPLAY_MANAGER_H__
-#define __GDK_WIN32_DISPLAY_MANAGER_H__
 
 #include <gdk/gdk.h>
 

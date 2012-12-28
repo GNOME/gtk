@@ -17,12 +17,12 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __GTK_TEXT_BUFFER_RICH_TEXT_H__
+#define __GTK_TEXT_BUFFER_RICH_TEXT_H__
+
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_TEXT_BUFFER_RICH_TEXT_H__
-#define __GTK_TEXT_BUFFER_RICH_TEXT_H__
 
 #include <gtk/gtktextbuffer.h>
 

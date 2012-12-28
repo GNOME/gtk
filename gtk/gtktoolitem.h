@@ -18,12 +18,12 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __GTK_TOOL_ITEM_H__
+#define __GTK_TOOL_ITEM_H__
+
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_TOOL_ITEM_H__
-#define __GTK_TOOL_ITEM_H__
 
 #include <gtk/gtkbin.h>
 #include <gtk/gtkmenuitem.h>

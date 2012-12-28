@@ -15,12 +15,12 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __GTK_IMAGE_CELL_ACCESSIBLE_H__
+#define __GTK_IMAGE_CELL_ACCESSIBLE_H__
+
 #if !defined (__GTK_A11Y_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk-a11y.h> can be included directly."
 #endif
-
-#ifndef __GTK_IMAGE_CELL_ACCESSIBLE_H__
-#define __GTK_IMAGE_CELL_ACCESSIBLE_H__
 
 #include <atk/atk.h>
 #include <gtk/a11y/gtkrenderercellaccessible.h>

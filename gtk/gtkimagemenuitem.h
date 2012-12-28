@@ -22,13 +22,13 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
-
 #ifndef __GTK_IMAGE_MENU_ITEM_H__
 #define __GTK_IMAGE_MENU_ITEM_H__
 
+
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
 
 #include <gtk/gtkmenuitem.h>
 

@@ -15,12 +15,12 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __GDK_CAIRO_H__
+#define __GDK_CAIRO_H__
+
 #if !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
-
-#ifndef __GDK_CAIRO_H__
-#define __GDK_CAIRO_H__
 
 #include <gdk/gdkversionmacros.h>
 #include <gdk/gdkcolor.h>
