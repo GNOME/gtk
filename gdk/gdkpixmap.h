@@ -24,12 +24,12 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#ifndef __GDK_PIXMAP_H__
+#define __GDK_PIXMAP_H__
+
 #if defined(GTK_DISABLE_SINGLE_INCLUDES) && !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
-
-#ifndef __GDK_PIXMAP_H__
-#define __GDK_PIXMAP_H__
 
 #include <gdk/gdktypes.h>
 #include <gdk/gdkdrawable.h>

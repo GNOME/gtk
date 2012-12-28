@@ -20,12 +20,12 @@
  * Author: Alexander Larsson <alexl@redhat.com>
  */
 
+#ifndef __GDK_APP_LAUNCH_CONTEXT_H__
+#define __GDK_APP_LAUNCH_CONTEXT_H__
+
 #if !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
-
-#ifndef __GDK_APP_LAUNCH_CONTEXT_H__
-#define __GDK_APP_LAUNCH_CONTEXT_H__
 
 #include <gio/gio.h>
 #include <gdk/gdkscreen.h>

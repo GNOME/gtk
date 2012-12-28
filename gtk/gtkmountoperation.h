@@ -24,12 +24,12 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#ifndef __GTK_MOUNT_OPERATION_H__
+#define __GTK_MOUNT_OPERATION_H__
+
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_MOUNT_OPERATION_H__
-#define __GTK_MOUNT_OPERATION_H__
 
 G_BEGIN_DECLS
 
