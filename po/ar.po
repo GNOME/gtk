@@ -2995,7 +2995,7 @@ msgstr "إعداد ال_صفحة"
 #: ../gtk/gtkstock.c:419
 msgctxt "Stock label"
 msgid "_Paste"
-msgstr "ا_لصق"
+msgstr "أ_لصق"
 
 #: ../gtk/gtkstock.c:420
 msgctxt "Stock label"
