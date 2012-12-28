@@ -2704,28 +2704,53 @@ gdk_window_set_decorations (GdkWindow       *window,
           rect = [NSWindow contentRectForFrameRect:rect styleMask:old_mask];
         }
 
-      /* Note, before OS 10.6 there doesn't seem to be a way to change this without
-       * recreating the toplevel. There might be bad side-effects of doing
-       * that, but it seems alright.
+      /* Note, before OS 10.6 there doesn't seem to be a way to change this
+       * without recreating the toplevel. From 10.6 onward, a simple call to
+       * setStyleMask takes care of most of this, except for ensuring that the
+       * title is set.
        */
       if ([impl->toplevel respondsToSelector:@selector(setStyleMask:)])
         {
+          NSString *title = [impl->toplevel title];
+
           [(id<CanSetStyleMask>)impl->toplevel setStyleMask:new_mask];
+
+          /* It appears that unsetting and then resetting NSTitledWindowMask
+           * does not reset the title in the title bar as might be expected.
+           *
+           * In theory we only need to set this if new_mask includes
+           * NSTitledWindowMask. This behaved extremely oddly when
+           * conditionalized upon that and since it has no side effects (i.e.
+           * if NSTitledWindowMask is not requested, the title will not be
+           * displayed) just do it unconditionally.
+           */
+          [impl->toplevel setTitle:title];
         }
       else
         {
+          NSString *title = [impl->toplevel title];
+          NSColor *bg = [impl->toplevel backgroundColor];
+          NSScreen *screen = [impl->toplevel screen];
+
           [impl->toplevel release];
+
           impl->toplevel = [[GdkQuartzWindow alloc] initWithContentRect:rect
-                                                                styleMask:new_mask
-                                                                  backing:NSBackingStoreBuffered
-                                                                    defer:NO];
+                                                              styleMask:new_mask
+                                                                backing:NSBackingStoreBuffered
+                                                                  defer:NO
+                                                                 screen:screen];
           [impl->toplevel setHasShadow: window_type_hint_to_shadow (impl->type_hint)];
           [impl->toplevel setLevel: window_type_hint_to_level (impl->type_hint)];
+          [impl->toplevel setTitle:title];
+          [impl->toplevel setBackgroundColor:bg];
           [impl->toplevel setHidesOnDeactivate: window_type_hint_to_hides_on_deactivate (impl->type_hint)];
           [impl->toplevel setContentView:old_view];
         }
 
-      [impl->toplevel setFrame:rect display:YES];
+      if (new_mask == NSBorderlessWindowMask)
+        [impl->toplevel setContentSize:rect.size];
+      else
+        [impl->toplevel setFrame:rect display:YES];
 
       /* Invalidate the window shadow for non-opaque views that have shadow
        * enabled, to get the shadow shape updated.
