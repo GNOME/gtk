@@ -1234,9 +1234,6 @@ gtk_menu_attach_to_widget (GtkMenu           *menu,
   g_object_set_data_full (G_OBJECT (attach_widget), I_(ATTACHED_MENUS), list,
                           (GDestroyNotify) g_list_free);
 
-  if (gtk_widget_get_state_flags (GTK_WIDGET (menu)) != 0)
-    gtk_widget_set_state_flags (GTK_WIDGET (menu), 0, TRUE);
-
   /* Attach the widget to the toplevel window. */
   gtk_window_set_attached_to (GTK_WINDOW (menu->priv->toplevel), attach_widget);
 
