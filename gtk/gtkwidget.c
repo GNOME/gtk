@@ -3669,7 +3669,23 @@ gtk_widget_init (GtkWidget *widget)
   priv->double_buffered = TRUE;
   priv->redraw_on_alloc = TRUE;
   priv->alloc_needed = TRUE;
-  priv->state_flags = GTK_STATE_FLAG_DIR_LTR;
+   
+  switch (gtk_widget_get_direction (widget))
+    {
+    case GTK_TEXT_DIR_LTR:
+      priv->state_flags = GTK_STATE_FLAG_DIR_LTR;
+      break;
+
+    case GTK_TEXT_DIR_RTL:
+      priv->state_flags = GTK_STATE_FLAG_DIR_RTL;
+      break;
+
+    case GTK_TEXT_DIR_NONE:
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+
 
   /* this will be set to TRUE if the widget gets a child or if the
    * expand flag is set on the widget, but until one of those happen
