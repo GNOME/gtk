@@ -524,16 +524,10 @@ enum {
 
 typedef	struct	_GtkStateData	 GtkStateData;
 
-enum {
-  STATE_CHANGE_REPLACE,
-  STATE_CHANGE_SET,
-  STATE_CHANGE_UNSET
-};
-
 struct _GtkStateData
 {
-  guint         flags : GTK_STATE_FLAGS_BITS;
-  guint         operation : 2;
+  guint         flags_to_set;
+  guint         flags_to_unset;
 };
 
 /* --- prototypes --- */
@@ -7250,8 +7244,8 @@ gtk_widget_get_name (GtkWidget *widget)
 
 static void
 gtk_widget_update_state_flags (GtkWidget     *widget,
-                               GtkStateFlags  flags,
-                               guint          operation)
+                               GtkStateFlags  flags_to_set,
+                               GtkStateFlags  flags_to_unset)
 {
   GtkWidgetPrivate *priv;
 
@@ -7260,23 +7254,20 @@ gtk_widget_update_state_flags (GtkWidget     *widget,
   /* Handle insensitive first, since it is propagated
    * differently throughout the widget hierarchy.
    */
-  if ((priv->state_flags & GTK_STATE_FLAG_INSENSITIVE) && (flags & GTK_STATE_FLAG_INSENSITIVE) && (operation == STATE_CHANGE_UNSET))
+  if ((priv->state_flags & GTK_STATE_FLAG_INSENSITIVE) && (flags_to_unset & GTK_STATE_FLAG_INSENSITIVE))
     gtk_widget_set_sensitive (widget, TRUE);
-  else if (!(priv->state_flags & GTK_STATE_FLAG_INSENSITIVE) && (flags & GTK_STATE_FLAG_INSENSITIVE) && (operation != STATE_CHANGE_UNSET))
+  else if (!(priv->state_flags & GTK_STATE_FLAG_INSENSITIVE) && (flags_to_set & GTK_STATE_FLAG_INSENSITIVE))
     gtk_widget_set_sensitive (widget, FALSE);
-  else if ((priv->state_flags & GTK_STATE_FLAG_INSENSITIVE) && !(flags & GTK_STATE_FLAG_INSENSITIVE) && (operation == STATE_CHANGE_REPLACE))
-    gtk_widget_set_sensitive (widget, TRUE);
 
-  if (operation != STATE_CHANGE_REPLACE)
-    flags &= ~(GTK_STATE_FLAG_INSENSITIVE);
+  flags_to_set &= ~(GTK_STATE_FLAG_INSENSITIVE);
+  flags_to_unset &= ~(GTK_STATE_FLAG_INSENSITIVE);
 
-  if (flags != 0 ||
-      operation == STATE_CHANGE_REPLACE)
+  if (flags_to_set != 0 || flags_to_unset != 0)
     {
       GtkStateData data;
 
-      data.flags = flags;
-      data.operation = operation;
+      data.flags_to_set = flags_to_set;
+      data.flags_to_unset = flags_to_unset;
 
       gtk_widget_propagate_state (widget, &data);
     }
@@ -7312,9 +7303,9 @@ gtk_widget_set_state_flags (GtkWidget     *widget,
     return;
 
   if (clear)
-    gtk_widget_update_state_flags (widget, flags, STATE_CHANGE_REPLACE);
+    gtk_widget_update_state_flags (widget, flags, ~(flags ^ (GTK_STATE_FLAG_DIR_LTR | GTK_STATE_FLAG_DIR_RTL)));
   else
-    gtk_widget_update_state_flags (widget, flags, STATE_CHANGE_SET);
+    gtk_widget_update_state_flags (widget, flags, 0);
 }
 
 /**
@@ -7337,7 +7328,7 @@ gtk_widget_unset_state_flags (GtkWidget     *widget,
   if ((widget->priv->state_flags & flags) == 0)
     return;
 
-  gtk_widget_update_state_flags (widget, flags, STATE_CHANGE_UNSET);
+  gtk_widget_update_state_flags (widget, 0, flags);
 }
 
 /**
@@ -7414,7 +7405,10 @@ gtk_widget_set_state (GtkWidget           *widget,
       break;
     }
 
-  gtk_widget_update_state_flags (widget, flags, STATE_CHANGE_REPLACE);
+  gtk_widget_update_state_flags (widget,
+                                 flags,
+                                 (GTK_STATE_FLAG_ACTIVE | GTK_STATE_FLAG_PRELIGHT | GTK_STATE_FLAG_SELECTED
+                                 | GTK_STATE_FLAG_INSENSITIVE | GTK_STATE_FLAG_INCONSISTENT | GTK_STATE_FLAG_FOCUSED) ^ flags);
 }
 
 /**
@@ -7897,12 +7891,16 @@ gtk_widget_set_sensitive (GtkWidget *widget,
     {
       GtkStateData data;
 
-      data.flags = GTK_STATE_FLAG_INSENSITIVE;
-
       if (sensitive)
-        data.operation = STATE_CHANGE_UNSET;
+        {
+          data.flags_to_set = 0;
+          data.flags_to_unset = GTK_STATE_FLAG_INSENSITIVE;
+        }
       else
-        data.operation = STATE_CHANGE_SET;
+        {
+          data.flags_to_set = GTK_STATE_FLAG_INSENSITIVE;
+          data.flags_to_unset = 0;
+        }
 
       gtk_widget_propagate_state (widget, &data);
 
@@ -8003,10 +8001,8 @@ gtk_widget_set_parent (GtkWidget *widget,
 
   /* Merge both old state and current parent state,
    * making sure to only propagate the right states */
-  data.flags = parent_flags & GTK_STATE_FLAGS_DO_PROPAGATE;
-  data.flags |= priv->state_flags;
-
-  data.operation = STATE_CHANGE_REPLACE;
+  data.flags_to_set = parent_flags & GTK_STATE_FLAGS_DO_PROPAGATE;
+  data.flags_to_unset = 0;
   gtk_widget_propagate_state (widget, &data);
 
   if (priv->context)
@@ -10920,18 +10916,8 @@ gtk_widget_propagate_state (GtkWidget    *widget,
 
   old_state = gtk_widget_get_state (widget);
 
-  switch (data->operation)
-    {
-    case STATE_CHANGE_REPLACE:
-      priv->state_flags = data->flags;
-      break;
-    case STATE_CHANGE_SET:
-      priv->state_flags |= data->flags;
-      break;
-    case STATE_CHANGE_UNSET:
-      priv->state_flags &= ~(data->flags);
-      break;
-    }
+  priv->state_flags |= data->flags_to_set;
+  priv->state_flags &= ~(data->flags_to_unset);
 
   /* make insensitivity unoverridable */
   if (!priv->sensitive)
@@ -11000,10 +10986,11 @@ gtk_widget_propagate_state (GtkWidget    *widget,
 
       if (GTK_IS_CONTAINER (widget))
         {
-          GtkStateData child_data = *data;
+          GtkStateData child_data;
 
           /* Make sure to only propate the right states further */
-          child_data.flags &= GTK_STATE_FLAGS_DO_PROPAGATE;
+          child_data.flags_to_set = data->flags_to_set & GTK_STATE_FLAGS_DO_PROPAGATE;
+          child_data.flags_to_unset = data->flags_to_unset & GTK_STATE_FLAGS_DO_PROPAGATE;
 
           gtk_container_forall (GTK_CONTAINER (widget),
                                 (GtkCallback) gtk_widget_propagate_state,
