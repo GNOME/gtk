@@ -7249,9 +7249,9 @@ gtk_widget_get_name (GtkWidget *widget)
 }
 
 static void
-_gtk_widget_update_state_flags (GtkWidget     *widget,
-                                GtkStateFlags  flags,
-                                guint          operation)
+gtk_widget_update_state_flags (GtkWidget     *widget,
+                               GtkStateFlags  flags,
+                               guint          operation)
 {
   GtkWidgetPrivate *priv;
 
@@ -7312,9 +7312,9 @@ gtk_widget_set_state_flags (GtkWidget     *widget,
     return;
 
   if (clear)
-    _gtk_widget_update_state_flags (widget, flags, STATE_CHANGE_REPLACE);
+    gtk_widget_update_state_flags (widget, flags, STATE_CHANGE_REPLACE);
   else
-    _gtk_widget_update_state_flags (widget, flags, STATE_CHANGE_SET);
+    gtk_widget_update_state_flags (widget, flags, STATE_CHANGE_SET);
 }
 
 /**
@@ -7337,7 +7337,7 @@ gtk_widget_unset_state_flags (GtkWidget     *widget,
   if ((widget->priv->state_flags & flags) == 0)
     return;
 
-  _gtk_widget_update_state_flags (widget, flags, STATE_CHANGE_UNSET);
+  gtk_widget_update_state_flags (widget, flags, STATE_CHANGE_UNSET);
 }
 
 /**
@@ -7414,7 +7414,7 @@ gtk_widget_set_state (GtkWidget           *widget,
       break;
     }
 
-  _gtk_widget_update_state_flags (widget, flags, STATE_CHANGE_REPLACE);
+  gtk_widget_update_state_flags (widget, flags, STATE_CHANGE_REPLACE);
 }
 
 /**
