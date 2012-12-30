@@ -20,5 +20,8 @@ typedef int NSTrackingRectTag;
 @interface NSWindow {}
 @end
 
+@interface NSString {}
+@end
+
 @protocol NSDraggingInfo
 @end
