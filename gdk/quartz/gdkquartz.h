@@ -59,6 +59,10 @@ id        gdk_quartz_drag_context_get_dragging_info_libgtk_only (GdkDragContext 
 NSEvent  *gdk_quartz_event_get_nsevent                          (GdkEvent       *event);
 GdkOSXVersion gdk_quartz_osx_version                            (void);
 
+GdkAtom   gdk_quartz_pasteboard_type_to_atom_libgtk_only        (NSString       *type);
+NSString *gdk_quartz_target_to_pasteboard_type_libgtk_only      (const gchar    *target);
+NSString *gdk_quartz_atom_to_pasteboard_type_libgtk_only        (GdkAtom         atom);
+
 G_END_DECLS
 
 #endif /* __GDK_QUARTZ_H__ */

@@ -31,7 +31,6 @@ NSSet   *_gtk_quartz_target_entries_to_pasteboard_types (const GtkTargetEntry *t
 							 guint                 n_targets);
 
 GList   *_gtk_quartz_pasteboard_types_to_atom_list (NSArray  *array);
-GdkAtom _gtk_quartz_pasteboard_type_to_atom        (NSString *type);
 
 GtkSelectionData *_gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
 								  GdkAtom       target,

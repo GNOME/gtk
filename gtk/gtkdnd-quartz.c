@@ -152,7 +152,7 @@ struct _GtkDragFindData
   selection_data.selection = GDK_NONE;
   selection_data.data = NULL;
   selection_data.length = -1;
-  selection_data.target = _gtk_quartz_pasteboard_type_to_atom (type);
+  selection_data.target = gdk_quartz_pasteboard_type_to_atom_libgtk_only (type);
   selection_data.display = gdk_display_get_default ();
 
   if (gtk_target_list_find (info->target_list, 

@@ -77,21 +77,6 @@ _gtk_quartz_create_image_from_pixbuf (GdkPixbuf *pixbuf)
   return nsimage;
 }
 
-static NSString *
-target_to_pasteboard_type (const char *target)
-{
-  if (strcmp (target, "UTF8_STRING") == 0)
-    return NSStringPboardType;
-  else if (strcmp (target, "image/tiff") == 0)
-    return NSTIFFPboardType;
-  else if (strcmp (target, "application/x-color") == 0)
-    return NSColorPboardType;
-  else if (strcmp (target, "text/uri-list") == 0)
-    return NSURLPboardType;
-  else
-    return [NSString stringWithUTF8String:target];
-}
-
 NSSet *
 _gtk_quartz_target_list_to_pasteboard_types (GtkTargetList *target_list)
 {
@@ -101,9 +86,7 @@ _gtk_quartz_target_list_to_pasteboard_types (GtkTargetList *target_list)
   for (list = target_list->list; list; list = list->next)
     {
       GtkTargetPair *pair = list->data;
-      gchar *target = gdk_atom_name (pair->target);
-      [set addObject:target_to_pasteboard_type (target)];
-      g_free (target);
+      [set addObject:gdk_quartz_atom_to_pasteboard_type_libgtk_only (pair->target)];
     }
 
   return set;
@@ -118,25 +101,10 @@ _gtk_quartz_target_entries_to_pasteboard_types (const GtkTargetEntry *targets,
 
   for (i = 0; i < n_targets; i++)
     {
-      [set addObject:target_to_pasteboard_type (targets[i].target)];
+      [set addObject:gdk_quartz_target_to_pasteboard_type_libgtk_only (targets[i].target)];
     }
 
   return set;
-}
-
-GdkAtom 
-_gtk_quartz_pasteboard_type_to_atom (NSString *type)
-{
-  if ([type isEqualToString:NSStringPboardType])
-    return gdk_atom_intern_static_string ("UTF8_STRING");
-  else if ([type isEqualToString:NSTIFFPboardType])
-    return gdk_atom_intern_static_string ("image/tiff");
-  else if ([type isEqualToString:NSColorPboardType])
-    return gdk_atom_intern_static_string ("application/x-color");
-  else if ([type isEqualToString:NSURLPboardType])
-    return gdk_atom_intern_static_string ("text/uri-list");
-  else
-    return gdk_atom_intern ([type UTF8String], FALSE);  
 }
 
 GList *
@@ -150,7 +118,7 @@ _gtk_quartz_pasteboard_types_to_atom_list (NSArray *array)
 
   for (i = 0; i < count; i++) 
     {
-      GdkAtom atom = _gtk_quartz_pasteboard_type_to_atom ([array objectAtIndex:i]);
+      GdkAtom atom = gdk_quartz_pasteboard_type_to_atom_libgtk_only ([array objectAtIndex:i]);
 
       result = g_list_prepend (result, GDK_ATOM_TO_POINTER (atom));
     }
@@ -266,20 +234,17 @@ _gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard     *pasteboard,
 					       GtkSelectionData *selection_data)
 {
   NSString *type;
-  gchar *target;
   GdkDisplay *display;
   gint format;
   const guchar *data;
   NSUInteger length;
 
-  target = gdk_atom_name (gtk_selection_data_get_target (selection_data));
   display = gtk_selection_data_get_display (selection_data);
   format = gtk_selection_data_get_format (selection_data);
   data = gtk_selection_data_get_data (selection_data);
   length = gtk_selection_data_get_length (selection_data);
 
-  type = target_to_pasteboard_type (target);
-  g_free (target);
+  type = gdk_quartz_atom_to_pasteboard_type_libgtk_only (gtk_selection_data_get_target (selection_data));
 
   if ([type isEqualTo:NSStringPboardType]) 
     [pasteboard setString:[NSString stringWithUTF8String:(const char *)data]
