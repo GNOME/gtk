@@ -134,9 +134,9 @@ gdk_drag_motion (GdkDragContext *context,
   return FALSE;
 }
 
-guint32
+GdkNativeWindow
 gdk_drag_get_protocol_for_display (GdkDisplay      *display,
-				   guint32          xid,
+				   GdkNativeWindow  xid,
 				   GdkDragProtocol *protocol)
 {
   /* FIXME: Implement */

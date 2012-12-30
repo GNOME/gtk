@@ -1681,6 +1681,8 @@ elif test "x$gdktarget" = "xwin32" ; then
 #define GDK_WINDOWING_WIN32'
 elif test "x$gdktarget" = "xquartz" ; then
   gdk_windowing='
+#define GDK_NATIVE_WINDOW_POINTER
+
 #define GDK_WINDOWING_QUARTZ'
 elif test "x$gdktarget" = "xdirectfb" ; then
   gdk_windowing='
