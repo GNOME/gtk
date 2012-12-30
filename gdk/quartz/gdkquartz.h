@@ -55,6 +55,10 @@ typedef enum
 
 GdkOSXVersion gdk_quartz_osx_version (void);
 
+GdkAtom   gdk_quartz_pasteboard_type_to_atom_libgtk_only        (NSString       *type);
+NSString *gdk_quartz_target_to_pasteboard_type_libgtk_only      (const gchar    *target);
+NSString *gdk_quartz_atom_to_pasteboard_type_libgtk_only        (GdkAtom         atom);
+
 G_END_DECLS
 
 #define __GDKQUARTZ_H_INSIDE__
