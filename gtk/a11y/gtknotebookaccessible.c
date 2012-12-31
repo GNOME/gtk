@@ -189,6 +189,18 @@ gtk_notebook_accessible_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_notebook_accessible_parent_class)->finalize (object);
 }
 
+static gint
+gtk_notebook_accessible_get_n_children (AtkObject *obj)
+{
+  GtkWidget *widget;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
+  if (widget == NULL)
+    return 0;
+
+  return gtk_notebook_get_n_pages (GTK_NOTEBOOK (widget));
+}
+
 static AtkObject *
 gtk_notebook_accessible_ref_child (AtkObject *obj,
                                    gint       i)
@@ -314,6 +326,7 @@ gtk_notebook_accessible_class_init (GtkNotebookAccessibleClass *klass)
 
   gobject_class->finalize = gtk_notebook_accessible_finalize;
 
+  class->get_n_children = gtk_notebook_accessible_get_n_children;
   class->ref_child = gtk_notebook_accessible_ref_child;
   class->initialize = gtk_notebook_accessible_initialize;
 
