@@ -66,21 +66,20 @@ gtk_css_image_url_parse (GtkCssImage  *image,
 {
   GtkCssImageUrl *url = GTK_CSS_IMAGE_URL (image);
   GdkPixbuf *pixbuf;
-  GFile *file;
   cairo_t *cr;
   GError *error = NULL;
   GFileInputStream *input;
 
-  file = _gtk_css_parser_read_url (parser);
-  if (file == NULL)
+  url->file = _gtk_css_parser_read_url (parser);
+  if (url->file == NULL)
     return FALSE;
 
   /* We special case resources here so we can use
      gdk_pixbuf_new_from_resource, which in turn has some special casing
      for GdkPixdata files to avoid duplicating the memory for the pixbufs */
-  if (g_file_has_uri_scheme (file, "resource"))
+  if (g_file_has_uri_scheme (url->file, "resource"))
     {
-      char *uri = g_file_get_uri (file);
+      char *uri = g_file_get_uri (url->file);
       char *resource_path = g_uri_unescape_string (uri + strlen ("resource://"), NULL);
 
       pixbuf = gdk_pixbuf_new_from_resource (resource_path, &error);
@@ -89,7 +88,7 @@ gtk_css_image_url_parse (GtkCssImage  *image,
     }
   else
     {
-      input = g_file_read (file, NULL, &error);
+      input = g_file_read (url->file, NULL, &error);
       if (input == NULL)
 	{
 	  _gtk_css_parser_take_error (parser, error);
@@ -99,7 +98,6 @@ gtk_css_image_url_parse (GtkCssImage  *image,
       pixbuf = gdk_pixbuf_new_from_stream (G_INPUT_STREAM (input), NULL, &error);
       g_object_unref (input);
     }
-  g_object_unref (file);
 
   if (pixbuf == NULL)
     {
@@ -157,6 +155,8 @@ static void
 gtk_css_image_url_dispose (GObject *object)
 {
   GtkCssImageUrl *url = GTK_CSS_IMAGE_URL (object);
+
+  g_clear_object (&url->file);
 
   if (url->surface)
     {

@@ -38,6 +38,7 @@ struct _GtkCssImageUrl
 {
   GtkCssImage parent;
 
+  GFile           *file;                /* the file we're loading from */
   cairo_surface_t *surface;             /* the surface we render - guaranteed to be an image surface */
 };
 
