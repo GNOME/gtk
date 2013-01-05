@@ -1,7 +1,7 @@
 # Kazakh translation for GTK.
-# Copyright (C) 2012 The GTK authors.
+# Copyright (C) 2010-2013 The GTK authors.
 # This file is distributed under the same license as the GTK package.
-# Baurzhan Muftakhidinov <baurthefirst@gmail.com>, 2010-2012.
+# Baurzhan Muftakhidinov <baurthefirst@gmail.com>, 2010-2013.
 #
 msgid ""
 msgstr ""
@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-12-15 20:12+0000\n"
-"PO-Revision-Date: 2012-12-29 23:27+0600\n"
+"PO-Revision-Date: 2013-01-05 20:56+0600\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -560,7 +560,7 @@ msgstr "_Палитра:"
 
 #: ../gtk/deprecated/gtkcolorsel.c:578
 msgid "Color Wheel"
-msgstr "Түстер шеңбері."
+msgstr "Түстер шеңбері"
 
 #: ../gtk/deprecated/gtkcolorsel.c:1072
 msgid ""
@@ -1368,7 +1368,7 @@ msgstr "Unicode б_асқару таңбасын кірістіру"
 
 #: ../gtk/gtkentry.c:10094
 msgid "Caps Lock is on"
-msgstr "Caps Lock қосулы тұр"
+msgstr "Caps Lock іске қосулы тұр"
 
 #. *
 #. * SECTION:gtkfilechooserbutton
@@ -1454,7 +1454,7 @@ msgid ""
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
 "Буманы жасау мүмкін емес, өйткені аттас файл бар болып тұр. Бума үшін басқа "
-"атын таңдаңыз, не файлды өшіріңіз."
+"атын таңдаңыз, немесе файл атын ауыстырыңыз."
 
 #: ../gtk/gtkfilechooserdefault.c:1031
 msgid "You need to choose a valid filename."
@@ -1463,7 +1463,7 @@ msgstr "Сізге дұрыс файл атын көрсету керек."
 #: ../gtk/gtkfilechooserdefault.c:1034
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
-msgstr "%s ішінде файлды жасау мүмкін емес, өтйкені ол бума емес"
+msgstr "%s ішінде файлды жасау мүмкін емес, өйткені ол бума емес"
 
 #: ../gtk/gtkfilechooserdefault.c:1046
 msgid ""
@@ -1496,7 +1496,7 @@ msgstr "Іздеу"
 
 #: ../gtk/gtkfilechooserdefault.c:1765 ../gtk/gtkfilechooserdefault.c:4991
 msgid "Recently Used"
-msgstr "Соңғы қолданылған"
+msgstr "Жақында қолданылған"
 
 #: ../gtk/gtkfilechooserdefault.c:2364
 msgid "Select which types of files are shown"
@@ -4668,7 +4668,7 @@ msgstr "Классификацияланбаған"
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3754
 msgid "Pages per Sheet"
-msgstr "Бір параққа беттер"
+msgstr "Бір парақтағы бет саны"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
@@ -4706,11 +4706,11 @@ msgstr "Баспаны бастау уақыты"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3895
 #, c-format
 msgid "Custom %sx%s"
-msgstr "Ерекше %sx%s"
+msgstr "Таңдауыңызша %sx%s"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3976
 msgid "Printer Profile"
-msgstr "Принтер профайлы"
+msgstr "Принтер профилі"
 
 #. TRANSLATORS: this is when color profile information is unavailable
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3983
@@ -4726,12 +4726,12 @@ msgstr "Түстерді басқару қолжетерсіз"
 #. TRANSLATORS: when there is no color profile available
 #: ../modules/printbackends/cups/gtkprintercups.c:233
 msgid "No profile available"
-msgstr "Ешбір профайл қолжетерсіз"
+msgstr "Бірде-бір профиль қолжетерсіз"
 
 #. TRANSLATORS: when the color profile has no title
 #: ../modules/printbackends/cups/gtkprintercups.c:244
 msgid "Unspecified profile"
-msgstr "Көрсетілмеген профайл"
+msgstr "Көрсетілмеген профиль"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:249
 msgid "output"
@@ -4739,7 +4739,7 @@ msgstr "шығыс"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:521
 msgid "Print to File"
-msgstr "Print to File"
+msgstr "Файлға баспаға шығару"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:647
 msgid "PDF"
@@ -4756,7 +4756,7 @@ msgstr "SVG"
 #: ../modules/printbackends/file/gtkprintbackendfile.c:660
 #: ../modules/printbackends/test/gtkprintbackendtest.c:501
 msgid "Pages per _sheet:"
-msgstr "Бір _параққа беттер:"
+msgstr "Бір п_арақтағы бет саны:"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:719
 msgid "File"
@@ -4772,7 +4772,7 @@ msgstr "LPR-ге басып шығару"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:419
 msgid "Pages Per Sheet"
-msgstr "Бір параққа беттер"
+msgstr "Бір парақтағы бет саны"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:426
 msgid "Command Line"
@@ -4811,7 +4811,7 @@ msgstr "сынау-шығысы.%s"
 
 #: ../modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
-msgstr "Сынау принтеріне шығару"
+msgstr "Сынау принтеріне баспаға шығару"
 
 #~ msgid "Rename..."
 #~ msgstr "Атын ауыстыру..."
