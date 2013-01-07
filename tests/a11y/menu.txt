@@ -21,7 +21,7 @@ window1
       parent: menubar1
       index: 0
       name: File
-      state: enabled selectable sensitive showing visible
+      state: enabled sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: popup
@@ -35,7 +35,7 @@ window1
         parent: menuitem1
         index: 0
         name: New
-        state: enabled selectable sensitive visible
+        state: enabled sensitive visible
         toolkit: gtk
         <AtkComponent>
         layer: popup
@@ -49,7 +49,7 @@ window1
         parent: menuitem1
         index: 1
         name: Open
-        state: enabled selectable sensitive visible
+        state: enabled sensitive visible
         toolkit: gtk
         <AtkComponent>
         layer: popup
@@ -66,7 +66,7 @@ window1
           member-of: radiomenuitem3
                      radiomenuitem2
                      radiomenuitem1
-          state: checked enabled selectable sensitive visible
+          state: checked enabled sensitive visible
           toolkit: gtk
           <AtkComponent>
           layer: popup
@@ -82,7 +82,7 @@ window1
           member-of: radiomenuitem3
                      radiomenuitem2
                      radiomenuitem1
-          state: enabled selectable sensitive visible
+          state: enabled sensitive visible
           toolkit: gtk
           <AtkComponent>
           layer: popup
@@ -98,7 +98,7 @@ window1
           member-of: radiomenuitem3
                      radiomenuitem2
                      radiomenuitem1
-          state: enabled selectable sensitive visible
+          state: enabled sensitive visible
           toolkit: gtk
           <AtkComponent>
           layer: popup
@@ -111,7 +111,7 @@ window1
         parent: menuitem1
         index: 2
         name: Save
-        state: enabled selectable sensitive visible
+        state: enabled sensitive visible
         toolkit: gtk
         <AtkComponent>
         layer: popup
@@ -125,7 +125,7 @@ window1
         parent: menuitem1
         index: 3
         name: Save As
-        state: enabled selectable sensitive visible
+        state: enabled sensitive visible
         toolkit: gtk
         <AtkComponent>
         layer: popup
@@ -138,7 +138,7 @@ window1
         "separator"
         parent: menuitem1
         index: 4
-        state: enabled selectable sensitive visible
+        state: enabled sensitive visible
         toolkit: gtk
         <AtkComponent>
         layer: popup
@@ -150,7 +150,7 @@ window1
         parent: menuitem1
         index: 5
         name: awesome
-        state: selectable sensitive visible indeterminate
+        state: sensitive visible indeterminate
         toolkit: gtk
         <AtkComponent>
         layer: popup
@@ -162,7 +162,7 @@ window1
         "separator"
         parent: menuitem1
         index: 6
-        state: enabled selectable sensitive visible
+        state: enabled sensitive visible
         toolkit: gtk
         <AtkComponent>
         layer: popup
@@ -174,7 +174,7 @@ window1
         parent: menuitem1
         index: 7
         name: Quit
-        state: enabled selectable sensitive visible
+        state: enabled sensitive visible
         toolkit: gtk
         <AtkComponent>
         layer: popup
@@ -188,7 +188,7 @@ window1
       parent: menubar1
       index: 1
       name: Edit
-      state: enabled selectable sensitive showing visible
+      state: enabled sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: popup
@@ -202,7 +202,7 @@ window1
         parent: menuitem2
         index: 0
         name: Cut
-        state: enabled selectable sensitive visible
+        state: enabled sensitive visible
         toolkit: gtk
         <AtkComponent>
         layer: popup
@@ -216,7 +216,7 @@ window1
         parent: menuitem2
         index: 1
         name: Copy
-        state: enabled selectable sensitive visible
+        state: enabled sensitive visible
         toolkit: gtk
         <AtkComponent>
         layer: popup
@@ -230,7 +230,7 @@ window1
         parent: menuitem2
         index: 2
         name: Paste
-        state: enabled selectable sensitive visible
+        state: enabled sensitive visible
         toolkit: gtk
         <AtkComponent>
         layer: popup
@@ -244,7 +244,7 @@ window1
         parent: menuitem2
         index: 3
         name: Delete
-        state: enabled selectable sensitive visible
+        state: enabled sensitive visible
         toolkit: gtk
         <AtkComponent>
         layer: popup
@@ -258,7 +258,7 @@ window1
       parent: menubar1
       index: 2
       name: View
-      state: enabled selectable sensitive showing visible
+      state: enabled sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: popup
@@ -272,7 +272,7 @@ window1
       parent: menubar1
       index: 3
       name: Help
-      state: enabled selectable sensitive showing visible
+      state: enabled sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: popup
@@ -286,7 +286,7 @@ window1
         parent: menuitem4
         index: 0
         name: About
-        state: enabled selectable sensitive visible
+        state: enabled sensitive visible
         toolkit: gtk
         <AtkComponent>
         layer: popup
