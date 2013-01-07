@@ -1,7 +1,15 @@
+Overview of Changes in GTK+ 3.6.4
+=================================
+
+* Bug fixes:
+ 691186 stylecontext: Make font hack not crash
+
+
 Overview of Changes in GTK+ 3.6.3
 =================================
 
 * The Wayland backend works with Wayland 1.0.0 now
+
 
 * Bug fixes:
  132333 Can't add a palette to the dialog of a color button
