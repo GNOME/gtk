@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 3.7.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-22 20:51+0100\n"
+"POT-Creation-Date: 2013-01-07 11:08+0100\n"
 "PO-Revision-Date: 2012-12-22 20:52+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
@@ -66,7 +66,7 @@ msgstr "Feilsøkingsflagg som skal settes for GDK"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:214 ../gdk/gdk.c:217 ../gtk/gtkmain.c:454 ../gtk/gtkmain.c:457
+#: ../gdk/gdk.c:214 ../gdk/gdk.c:217 ../gtk/gtkmain.c:453 ../gtk/gtkmain.c:456
 msgid "FLAGS"
 msgstr "FLAGG"
 
@@ -451,21 +451,21 @@ msgid_plural "Opening %d Items"
 msgstr[0] "Åpner %d oppføring"
 msgstr[1] "Åpner %d oppføringer"
 
-#: ../gtk/a11y/gtkspinneraccessible.c:40
+#: ../gtk/a11y/gtkspinneraccessible.c:39
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
 msgstr "Spinner"
 
-#: ../gtk/a11y/gtkspinneraccessible.c:41
+#: ../gtk/a11y/gtkspinneraccessible.c:40
 msgid "Provides visual indication of progress"
 msgstr "Gir visuell indikasjon av framdrift"
 
-#: ../gtk/a11y/gtkswitchaccessible.c:63
+#: ../gtk/a11y/gtkswitchaccessible.c:62
 msgctxt "light switch widget"
 msgid "Switch"
 msgstr "Bryter"
 
-#: ../gtk/a11y/gtkswitchaccessible.c:64
+#: ../gtk/a11y/gtkswitchaccessible.c:63
 msgid "Switches between on and off states"
 msgstr "Bytter mellom av/på tilstand"
 
@@ -1866,27 +1866,27 @@ msgstr ""
 "Kontakt din systemadministrator"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:447
+#: ../gtk/gtkmain.c:446
 msgid "Load additional GTK+ modules"
 msgstr "Last tilleggsmoduler for GTK+"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:448
+#: ../gtk/gtkmain.c:447
 msgid "MODULES"
 msgstr "MODULER"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:450
+#: ../gtk/gtkmain.c:449
 msgid "Make all warnings fatal"
 msgstr "La alle advarsler være fatale"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:453
+#: ../gtk/gtkmain.c:452
 msgid "GTK+ debugging flags to set"
 msgstr "Feilsøkingsflagg som skal settes for GTK+"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:456
+#: ../gtk/gtkmain.c:455
 msgid "GTK+ debugging flags to unset"
 msgstr "Feilsøkingsflagg som skal fjernes for GTK+"
 
@@ -1895,20 +1895,20 @@ msgstr "Feilsøkingsflagg som skal fjernes for GTK+"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:704
+#: ../gtk/gtkmain.c:703
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:769
+#: ../gtk/gtkmain.c:768
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Kan ikke åpne skjerm: %s"
 
-#: ../gtk/gtkmain.c:835
+#: ../gtk/gtkmain.c:834
 msgid "GTK+ Options"
 msgstr "Alternativer for GTK+"
 
-#: ../gtk/gtkmain.c:835
+#: ../gtk/gtkmain.c:834
 msgid "Show GTK+ Options"
 msgstr "Vis alternativer for GTK+"
 
