@@ -24,7 +24,7 @@ AC_INIT([gtk+], [gtk_version],
         [http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2B],
         [gtk+])
 
-AC_CONFIG_HEADER([config.h])
+AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([gdk/gdktypes.h])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([build-aux])
@@ -124,7 +124,6 @@ AC_SUBST([GAIL_LT_CURRENT_MINUS_AGE],[gail_lt_current_minus_age])
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_CC_C_O
-AC_PROG_CC_STDC
 AC_PROG_MKDIR_P
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
