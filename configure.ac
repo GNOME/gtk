@@ -29,6 +29,9 @@ AC_CONFIG_SRCDIR([gdk/gdktypes.h])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([build-aux])
 
+AC_CANONICAL_HOST
+AC_CANONICAL_TARGET
+
 # Define a string for the earliest version that this release has
 # backwards binary compatibility with for all interfaces a module
 # might. Unless we add module-only API with lower stability
@@ -123,6 +126,7 @@ AC_SUBST([GAIL_LT_CURRENT_MINUS_AGE],[gail_lt_current_minus_age])
 
 # Checks for programs.
 AC_PROG_CC
+AX_PROG_CC_FOR_BUILD
 AC_PROG_CC_C_O
 AC_PROG_MKDIR_P
 AC_PROG_INSTALL
@@ -133,8 +137,6 @@ GETTEXT_PACKAGE=gtk30
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE",
                    [The prefix for our gettext translation domains.])
-
-AC_CANONICAL_HOST
 
 MATH_LIB=-lm
 AC_MSG_CHECKING([for native Win32])
@@ -905,14 +907,32 @@ dnl Look for a host system's gdk-pixbuf-csource if we are cross-compiling
 
 AM_CONDITIONAL(CROSS_COMPILING, test $cross_compiling = yes)
 
-if test "x$cross_compiling" = xyes || test "x$enable_gtk2_dependency" = xyes; then
-  AC_PATH_PROG(GTK_UPDATE_ICON_CACHE, gtk-update-icon-cache, no)
-  if test x$GTK_UPDATE_ICON_CACHE = xno; then
-    REBUILD_PNGS=#
-  fi
-fi
+AS_IF([test "x$enable_gtk2_dependency" = xyes],
+      [AC_PATH_PROG(GTK_UPDATE_ICON_CACHE, gtk-update-icon-cache, no)
+       if test x$GTK_UPDATE_ICON_CACHE = xno; then
+         REBUILD_PNGS=#
+       fi],
 
-AM_CONDITIONAL(USE_EXTERNAL_ICON_CACHE, [test "x$cross_compiling" = xyes || test "x$enable_gtk2_dependency" = xyes])
+      [test "x$cross_compiling" = xyes],
+      [# If no GTK+2 dependency and cross compiling, we need to find a host gdk-pixbuf.
+       # pkg.m4 blocks all variable starting with PKG, so allow this one
+       m4_pattern_allow([PKG_CONFIG_FOR_BUILD])
+
+       AS_IF([test x$PKG_CONFIG_FOR_BUILD = x],
+             [AC_MSG_ERROR([You must define PKG_CONFIG_FOR_BUILD when cross compiling])])
+
+       AC_MSG_CHECKING([for native gdk-pixbuf])
+       AS_IF([AC_RUN_LOG([$PKG_CONFIG_FOR_BUILD --exists --print-errors gdk-pixbuf-2.0])],
+             [AC_MSG_RESULT([yes])],
+             [AC_MSG_ERROR([native gdk-pixbuf not found])])
+
+       NATIVE_GDKPIXBUF_CFLAGS=`$PKG_CONFIG_FOR_BUILD --cflags gdk-pixbuf-2.0`
+       NATIVE_GDKPIXBUF_LIBS=`$PKG_CONFIG_FOR_BUILD --libs gdk-pixbuf-2.0`
+       AC_SUBST(NATIVE_GDKPIXBUF_CFLAGS)
+       AC_SUBST(NATIVE_GDKPIXBUF_LIBS)]
+)
+
+AM_CONDITIONAL(USE_EXTERNAL_ICON_CACHE, [test "x$enable_gtk2_dependency" = xyes])
 
 AC_PATH_PROG(GDK_PIXBUF_CSOURCE, gdk-pixbuf-csource, no)
 
@@ -1787,6 +1807,7 @@ gtk/makefile.msc
 gtk/gtkversion.h
 gtk/gtk-win32.rc
 gtk/a11y/Makefile
+gtk/native/Makefile
 gtk/tests/Makefile
 libgail-util/Makefile
 modules/Makefile

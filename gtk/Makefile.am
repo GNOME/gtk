@@ -16,7 +16,7 @@ else
 GTK_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview --print-settings %s %f"
 endif
 
-SUBDIRS = a11y . tests
+SUBDIRS = a11y native . tests
 
 if HAVE_PAPI_CUPS
 GTK_PRINT_BACKENDS=file,papi,cups
@@ -1654,12 +1654,20 @@ stamp-icons: $(STOCK_ICONS)
 if USE_EXTERNAL_ICON_CACHE
 gtk_update_icon_cache_program = $(GTK_UPDATE_ICON_CACHE)
 else
+if CROSS_COMPILING
+gtk_update_icon_cache_program = ./native/native-update-icon-cache
+else
 gtk_update_icon_cache_program = ./gtk-update-icon-cache
+endif
 endif
 
 gtkbuiltincache.h: @REBUILD@ stamp-icons
 if !USE_EXTERNAL_ICON_CACHE
-	$(AM_V_at) $(MAKE) $(AM_MAKEFLAGS) gtk-update-icon-cache$(EXEEXT) $(GTK_UPDATE_ICON_CACHE_MANIFEST)
+if CROSS_COMPILING
+	$(AM_V_at) $(MAKE) $(AM_MAKEFLAGS) -C native/
+else
+	$(AM_V_at) $(MAKE) $(AM_MAKEFLAGS) gtk-update-icon-cache$(EXEEXT)
+endif
 endif
 	$(AM_V_GEN) $(gtk_update_icon_cache_program) --quiet --force --ignore-theme-index		\
 	   --source builtin_icons stock-icons > gtkbuiltincache.h.tmp &&        \
