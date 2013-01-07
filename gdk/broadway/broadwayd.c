@@ -85,7 +85,6 @@ send_reply (BroadwayClient *client,
   GOutputStream *output;
 
   reply->base.size = size;
-  reply->base.last_serial = client->last_seen_serial;
   reply->base.in_reply_to = request ? request->base.serial : 0;
   reply->base.type = type;
 

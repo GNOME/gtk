@@ -224,7 +224,6 @@ typedef enum {
 
 typedef struct {
   guint32 size;
-  guint32 last_serial;
   guint32 in_reply_to;
   guint32 type;
 } BroadwayReplyBase, BroadwayReplySync;
