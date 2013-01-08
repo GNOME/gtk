@@ -454,11 +454,12 @@ incoming_client (GSocketService    *service,
 {
   BroadwayClient *client;
   GInputStream *input;
+  BroadwayInputMsg ev = { {0} };
 
   client = g_new0 (BroadwayClient, 1);
   client->id = client_id_count++;
   client->connection = g_object_ref (connection);
-  
+
   input = g_io_stream_get_input_stream (G_IO_STREAM (client->connection));
   client->in = (GBufferedInputStream *)g_buffered_input_stream_new (input);
 
@@ -469,7 +470,18 @@ incoming_client (GSocketService    *service,
 				      0,
 				      NULL,
 				      client_fill_cb, client);
-  
+
+  /* Send initial resize notify */
+  ev.base.type = BROADWAY_EVENT_SCREEN_SIZE_CHANGED;
+  ev.base.serial = broadway_server_get_next_serial (server) - 1;
+  ev.base.time = broadway_server_get_last_seen_time (server);
+  broadway_server_get_screen_size (server,
+				   &ev.screen_resize_notify.width,
+				   &ev.screen_resize_notify.height);
+
+  broadway_events_got_input (&ev,
+			     client->id);
+
   return TRUE;
 }
 

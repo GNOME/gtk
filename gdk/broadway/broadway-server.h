@@ -24,6 +24,9 @@ BroadwayServer     *broadway_server_new                      (int               
 gboolean            broadway_server_has_client               (BroadwayServer   *server);
 void                broadway_server_flush                    (BroadwayServer   *server);
 void                broadway_server_sync                     (BroadwayServer   *server);
+void                broadway_server_get_screen_size          (BroadwayServer   *server,
+							      guint32          *width,
+							      guint32          *height);
 guint32             broadway_server_get_next_serial          (BroadwayServer   *server);
 guint32             broadway_server_get_last_seen_time       (BroadwayServer   *server);
 gboolean            broadway_server_lookahead_event          (BroadwayServer   *server,

@@ -15,7 +15,7 @@
 #include <netinet/tcp.h>
 
 typedef struct BroadwayInput BroadwayInput;
-
+typedef struct BroadwayWindow BroadwayWindow;
 struct _BroadwayServer {
   GObject parent_instance;
 
@@ -31,6 +31,10 @@ struct _BroadwayServer {
 
   GHashTable *id_ht;
   GList *toplevels;
+  BroadwayWindow *root;
+
+  guint32 screen_width;
+  guint32 screen_height;
 
   gint32 mouse_in_toplevel_id;
   int last_x, last_y; /* in root coords */
@@ -73,7 +77,7 @@ struct BroadwayInput {
   gboolean binary;
 };
 
-typedef struct {
+struct BroadwayWindow {
   gint32 id;
   gint32 x;
   gint32 y;
@@ -85,7 +89,7 @@ typedef struct {
   gint32 transient_for;
 
   cairo_surface_t *last_surface;
-} BroadwayWindow;
+};
 
 static void broadway_server_resync_windows (BroadwayServer *server);
 
@@ -108,6 +112,8 @@ broadway_server_init (BroadwayServer *server)
   root->width = 1024;
   root->height = 768;
   root->visible = TRUE;
+
+  server->root = root;
 
   g_hash_table_insert (server->id_ht,
 		       GINT_TO_POINTER (root->id),
@@ -210,6 +216,8 @@ update_event_state (BroadwayServer *server,
   case BROADWAY_EVENT_DELETE_NOTIFY:
     break;
   case BROADWAY_EVENT_SCREEN_SIZE_CHANGED:
+    server->root->width = message->screen_resize_notify.width;
+    server->root->height = message->screen_resize_notify.height;
     break;
 
   default:
@@ -703,6 +711,16 @@ broadway_server_get_next_serial (BroadwayServer *server)
 
   return server->saved_serial;
 }
+
+void
+broadway_server_get_screen_size (BroadwayServer   *server,
+				 guint32          *width,
+				 guint32          *height)
+{
+  *width = server->root->width;
+  *height = server->root->height;
+}
+
 
 void
 broadway_server_flush (BroadwayServer *server)
