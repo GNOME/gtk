@@ -268,6 +268,15 @@ _gtk_widget_compute_size_for_orientation (GtkWidget        *widget,
   gpointer key;
   gint    min_result = 0, nat_result = 0;
 
+  if (!gtk_widget_get_visible (widget))
+    {
+      if (minimum)
+        *minimum = 0;
+      if (natural)
+        *natural = 0;
+      return;
+    }
+
   if (G_LIKELY (!_gtk_widget_get_sizegroups (widget)))
     {
       gtk_widget_query_size_for_orientation (widget, orientation, for_size, minimum, natural);
