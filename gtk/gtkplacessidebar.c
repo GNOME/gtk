@@ -57,12 +57,6 @@
  * * Sync nautilus commit 1dcd2d816a1278f7eec1d074ec5d9134af34a803
  * * Sync nautilus commit 71ad0d3adc2553ef5bcd06ec32600302e9169765
  *
- * * Nautilus needs to connect to "populate-popup" and add these items:
- *
- *    * Open in new tab
- *    * Open in new window
- *    * Empty trash
- *    * Properties - only if g_file_is_native (location);
  */
 
 #include "config.h"
