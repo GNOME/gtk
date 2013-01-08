@@ -39,7 +39,7 @@ typedef enum {
 } BroadwayOpType;
 
 typedef struct {
-  guint8 type;
+  guint32 type;
   guint32 serial;
   guint64 time;
 } BroadwayInputBaseMsg;
