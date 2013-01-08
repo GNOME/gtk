@@ -253,13 +253,20 @@ process_input_messages (BroadwayServer *server)
 	g_list_delete_link (server->input_messages,
 			    server->input_messages);
 
+      if (message->base.serial == 0)
+	{
+	  /* This was sent before we got any requests, but we don't want the
+	     daemon serials to go backwards, so we fix it up to be the last used
+	     serial */
+	  message->base.serial = server->saved_serial - 1;
+	}
 
       update_event_state (server, message);
       client = -1;
       if (is_pointer_event (message) &&
 	  server->pointer_grab_window_id != -1)
 	client = server->pointer_grab_client_id;
-	  
+
       broadway_events_got_input (message, client);
       g_free (message);
     }
@@ -651,7 +658,7 @@ input_data_cb (GObject  *stream,
   return TRUE;
 }
 
-gulong
+guint32
 broadway_server_get_next_serial (BroadwayServer *server)
 {
   if (server->output)

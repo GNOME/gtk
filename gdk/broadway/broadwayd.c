@@ -17,11 +17,34 @@ GList *clients;
 
 static guint32 client_id_count = 1;
 
+/* Serials:
+ *
+ * Broadway tracks serials for all clients primarily to get the right behaviour wrt
+ * grabs. Each request the client sends gets an increasing per-client serial number, starting
+ * at 1. Thus, the client can now when a mouse event is seen whether the mouse event was
+ * sent before or after the server saw the grab request from the client (as this affects how
+ * the event is handled).
+ *
+ * There is only a single stream of increasing serials sent from the daemon to the web browser
+ * though, called "daemon serials", so we need to map back from the daemon serials to the client
+ * serials when we send an event to a client. So, each client keeps track of the mappings
+ * between its serials and daemon serials for any outstanding requests.
+ *
+ * There is some additional complexity in that there may be multiple consecutive web browser
+ * sessions, so we need to keep track of the last daemon serial used inbetween each web client
+ * connection so that the daemon serials can be strictly increasing.
+ */
+
+typedef struct {
+  guint32 client_serial;
+  guint32 daemon_serial;
+} BroadwaySerialMapping;
+
 typedef struct  {
   guint32 id;
   GSocketConnection *connection;
   GBufferedInputStream *in;
-  guint32 last_seen_serial;
+  GSList *serial_mappings;
   GList *windows;
   guint disconnect_idle;
 } BroadwayClient;
@@ -34,6 +57,7 @@ client_free (BroadwayClient *client)
   clients = g_list_remove (clients, client);
   g_object_unref (client->connection);
   g_object_unref (client->in);
+  g_slist_free_full (client->serial_mappings, g_free);
   g_free (client);
 }
 
@@ -172,6 +196,70 @@ open_surface (char *name, int width, int height)
   return surface;
 }
 
+void
+add_client_serial_mapping (BroadwayClient *client,
+			   guint32 client_serial,
+			   guint32 daemon_serial)
+{
+  BroadwaySerialMapping *map;
+  GSList *last;
+
+  last = g_slist_last (client->serial_mappings);
+
+  if (last != NULL)
+    {
+      map = last->data;
+
+      /* If we have no web client, don't grow forever */
+      if (map->daemon_serial == daemon_serial)
+	{
+	  map->client_serial = client_serial;
+	  return;
+	}
+    }
+
+  map = g_new0 (BroadwaySerialMapping, 1);
+  map->client_serial = client_serial;
+  map->daemon_serial = daemon_serial;
+  client->serial_mappings = g_slist_append (client->serial_mappings, map);
+}
+
+/* Returns the latest seen client serial at the time we sent
+   a daemon request to the browser with a specific daemon serial */
+guint32
+get_client_serial (BroadwayClient *client, guint32 daemon_serial)
+{
+  BroadwaySerialMapping *map;
+  GSList *l, *found;
+  guint32 client_serial = 0;
+
+  found = NULL;
+  for (l = client->serial_mappings;  l != NULL; l = l->next)
+    {
+      map = l->data;
+
+      if (map->daemon_serial <= daemon_serial)
+	{
+	  found = l;
+	  client_serial = map->client_serial;
+	}
+      else
+	break;
+    }
+
+  /* Remove mappings before the found one, they will never more be used */
+  while (found != NULL &&
+	 client->serial_mappings != found)
+    {
+      g_free (client->serial_mappings->data);
+      client->serial_mappings =
+	g_slist_delete_link (client->serial_mappings, client->serial_mappings);
+    }
+
+  return client_serial;
+}
+
+
 static void
 client_handle_request (BroadwayClient *client,
 		       BroadwayRequest *request)
@@ -183,8 +271,9 @@ client_handle_request (BroadwayClient *client,
   BroadwayReplyUngrabPointer reply_ungrab_pointer;
   cairo_region_t *area;
   cairo_surface_t *surface;
+  guint32 before_serial, now_serial;
 
-  client->last_seen_serial = request->base.serial;
+  before_serial = broadway_server_get_next_serial (server);
 
   switch (request->base.type)
     {
@@ -199,7 +288,7 @@ client_handle_request (BroadwayClient *client,
       client->windows =
 	g_list_prepend (client->windows,
 			GUINT_TO_POINTER (reply_new_window.id));
-      
+
       send_reply (client, request, (BroadwayReply *)&reply_new_window, sizeof (reply_new_window),
 		  BROADWAY_REPLY_NEW_WINDOW);
       break;
@@ -291,6 +380,20 @@ client_handle_request (BroadwayClient *client,
     default:
       g_warning ("Unknown request of type %d\n", request->base.type);
     }
+
+
+  now_serial = broadway_server_get_next_serial (server);
+
+  /* If we sent a new output request, map that this client serial to that, otherwise
+     update old mapping for previously sent daemon serial */
+  if (now_serial != before_serial)
+    add_client_serial_mapping (client,
+			       request->base.serial,
+			       before_serial);
+  else
+    add_client_serial_mapping (client,
+			       request->base.serial,
+			       before_serial - 1);
 }
 
 static void
@@ -494,8 +597,11 @@ broadway_events_got_input (BroadwayInputMsg *message,
   GList *l;
   BroadwayReplyEvent reply_event;
   gsize size;
+  guint32 daemon_serial;
 
   size = get_event_size (message->base.type);
+
+  daemon_serial = message->base.serial;
 
   reply_event.msg = *message;
 
@@ -506,6 +612,8 @@ broadway_events_got_input (BroadwayInputMsg *message,
       if (client_id == -1 ||
 	  client->id == client_id)
 	{
+	  message->base.serial = get_client_serial (client, daemon_serial);
+
 	  send_reply (client, NULL, (BroadwayReply *)&reply_event,
 		      sizeof (BroadwayReplyBase) + size,
 		      BROADWAY_REPLY_EVENT);
