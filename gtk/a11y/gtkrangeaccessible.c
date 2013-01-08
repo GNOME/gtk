@@ -20,6 +20,7 @@
 #include <string.h>
 #include <gtk/gtk.h>
 #include "gtkrangeaccessible.h"
+#include "gtkwidgetprivate.h"
 
 
 static void atk_action_interface_init (AtkActionIface *iface);
@@ -30,89 +31,20 @@ G_DEFINE_TYPE_WITH_CODE (GtkRangeAccessible, gtk_range_accessible, GTK_TYPE_WIDG
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_VALUE, atk_value_interface_init))
 
 static void
-gtk_range_accessible_value_changed (GtkAdjustment *adjustment,
-                                    gpointer       data)
-{
-  g_object_notify (G_OBJECT (data), "accessible-value");
-}
-
-static void
 gtk_range_accessible_initialize (AtkObject *obj,
                                  gpointer   data)
 {
-  GtkRangeAccessible *range = GTK_RANGE_ACCESSIBLE (obj);
-  GtkAdjustment *adj;
-  GtkRange *gtk_range;
-
   ATK_OBJECT_CLASS (gtk_range_accessible_parent_class)->initialize (obj, data);
-
-  gtk_range = GTK_RANGE (data);
-  /*
-   * If a GtkAdjustment already exists for the GtkRange,
-   * create the GailAdjustment
-   */
-  adj = gtk_range_get_adjustment (gtk_range);
-  if (adj)
-    g_signal_connect (adj, "value-changed",
-                      G_CALLBACK (gtk_range_accessible_value_changed),
-                      range);
 
   obj->role = ATK_ROLE_SLIDER;
 }
 
 static void
-gtk_range_accessible_finalize (GObject *object)
-{
-  GtkRangeAccessible *range = GTK_RANGE_ACCESSIBLE (object);
-  GtkWidget *widget;
-  GtkAdjustment *adj;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (object));
-  if (widget)
-    {
-      adj = gtk_range_get_adjustment (GTK_RANGE (widget));
-      if (adj)
-        g_signal_handlers_disconnect_by_func (adj,
-                                              gtk_range_accessible_value_changed,
-                                              range);
-    }
-
-  G_OBJECT_CLASS (gtk_range_accessible_parent_class)->finalize (object);
-}
-
-static void
-gtk_range_accessible_notify_gtk (GObject    *obj,
-                                 GParamSpec *pspec)
-{
-  GtkWidget *widget = GTK_WIDGET (obj);
-  GtkAdjustment *adj;
-  AtkObject *range;
-
-  if (strcmp (pspec->name, "adjustment") == 0)
-    {
-      range = gtk_widget_get_accessible (widget);
-      adj = gtk_range_get_adjustment (GTK_RANGE (widget));
-      g_signal_connect (adj, "value-changed",
-                        G_CALLBACK (gtk_range_accessible_value_changed),
-                        range);
-    }
-  else
-    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_range_accessible_parent_class)->notify_gtk (obj, pspec);
-}
-
-
-static void
 gtk_range_accessible_class_init (GtkRangeAccessibleClass *klass)
 {
-  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
-  GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
-
-  widget_class->notify_gtk = gtk_range_accessible_notify_gtk;
 
   class->initialize = gtk_range_accessible_initialize;
-
-  gobject_class->finalize = gtk_range_accessible_finalize;
 }
 
 static void
@@ -312,4 +244,14 @@ atk_action_interface_init (AtkActionIface *iface)
   iface->get_n_actions = gtk_range_accessible_get_n_actions;
   iface->get_keybinding = gtk_range_accessible_get_keybinding;
   iface->get_name = gtk_range_accessible_action_get_name;
+}
+
+void
+_gtk_range_accessible_value_changed (GtkRange *range)
+{
+  AtkObject *accessible;
+
+  accessible = _gtk_widget_peek_accessible (GTK_WIDGET (range));
+  if (accessible)
+    g_object_notify (G_OBJECT (accessible), "accessible-value");
 }

@@ -32,6 +32,7 @@
 
 #include "gtkadjustment.h"
 #include "gtkcolorscaleprivate.h"
+#include "gtkwidgetprivate.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
@@ -41,7 +42,7 @@
 #include "gtkscrollbar.h"
 #include "gtktypebuiltins.h"
 #include "gtkwindow.h"
-#include "a11y/gtkrangeaccessible.h"
+#include "a11y/gtkrangeaccessibleprivate.h"
 
 /**
  * SECTION:gtkrange
@@ -3042,6 +3043,8 @@ gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
    */
 
   g_signal_emit (range, signals[VALUE_CHANGED], 0);
+
+  _gtk_range_accessible_value_changed (range);
 }
 
 static void
