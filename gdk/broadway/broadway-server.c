@@ -152,6 +152,8 @@ static void
 update_event_state (BroadwayServer *server,
 		    BroadwayInputMsg *message)
 {
+  BroadwayWindow *window;
+
   switch (message->base.type) {
   case BROADWAY_EVENT_ENTER:
     server->last_x = message->pointer.root_x;
@@ -197,6 +199,13 @@ update_event_state (BroadwayServer *server,
   case BROADWAY_EVENT_UNGRAB_NOTIFY:
     break;
   case BROADWAY_EVENT_CONFIGURE_NOTIFY:
+    window = g_hash_table_lookup (server->id_ht,
+				  GINT_TO_POINTER (message->configure_notify.id));
+    if (window != NULL)
+      {
+	window->x = message->configure_notify.x;
+	window->y = message->configure_notify.y;
+      }
     break;
   case BROADWAY_EVENT_DELETE_NOTIFY:
     break;
@@ -241,10 +250,24 @@ is_pointer_event (BroadwayInputMsg *message)
 }
 
 static void
+process_input_message (BroadwayServer *server,
+		       BroadwayInputMsg *message)
+{
+  gint32 client;
+
+  update_event_state (server, message);
+  client = -1;
+  if (is_pointer_event (message) &&
+      server->pointer_grab_window_id != -1)
+    client = server->pointer_grab_client_id;
+
+  broadway_events_got_input (message, client);
+}
+
+static void
 process_input_messages (BroadwayServer *server)
 {
   BroadwayInputMsg *message;
-  gint32 client;
 
   while (server->input_messages)
     {
@@ -261,15 +284,27 @@ process_input_messages (BroadwayServer *server)
 	  message->base.serial = server->saved_serial - 1;
 	}
 
-      update_event_state (server, message);
-      client = -1;
-      if (is_pointer_event (message) &&
-	  server->pointer_grab_window_id != -1)
-	client = server->pointer_grab_client_id;
-
-      broadway_events_got_input (message, client);
+      process_input_message (server, message);
       g_free (message);
     }
+}
+
+static void
+fake_configure_notify (BroadwayServer *server,
+		       BroadwayWindow *window)
+{
+  BroadwayInputMsg ev = { {0} };
+
+  ev.base.type = BROADWAY_EVENT_CONFIGURE_NOTIFY;
+  ev.base.serial = server->saved_serial - 1;
+  ev.base.time = server->last_seen_time;
+  ev.configure_notify.id = window->id;
+  ev.configure_notify.x = window->x;
+  ev.configure_notify.y = window->y;
+  ev.configure_notify.width = window->width;
+  ev.configure_notify.height = window->height;
+
+  process_input_message (server, &ev);
 }
 
 static char *
@@ -308,6 +343,8 @@ parse_input_message (BroadwayInput *input, const char *message)
   BroadwayInputMsg msg;
   char *p;
   gint64 time_;
+
+  memset (&msg, 0, sizeof (msg));
 
   p = (char *)message;
   msg.base.type = *p++;
@@ -1525,13 +1562,14 @@ broadway_server_window_update (BroadwayServer *server,
 gboolean
 broadway_server_window_move_resize (BroadwayServer *server,
 				    gint id,
+				    gboolean with_move,
 				    int x,
 				    int y,
 				    int width,
 				    int height)
 {
   BroadwayWindow *window;
-  gboolean with_move, with_resize;
+  gboolean with_resize;
   gboolean sent = FALSE;
   cairo_t *cr;
 
@@ -1540,10 +1578,7 @@ broadway_server_window_move_resize (BroadwayServer *server,
   if (window == NULL)
     return FALSE;
 
-  with_move = x != window->x || y != window->y;
   with_resize = width != window->width || height != window->height;
-  window->x = x;
-  window->y = y;
   window->width = width;
   window->height = height;
 
@@ -1570,9 +1605,19 @@ broadway_server_window_move_resize (BroadwayServer *server,
     {
       broadway_output_move_resize_surface (server->output,
 					   window->id,
-					   with_move, window->x, window->y,
+					   with_move, x, y,
 					   with_resize, window->width, window->height);
       sent = TRUE;
+    }
+  else
+    {
+      if (with_move)
+	{
+	  window->x = x;
+	  window->y = y;
+	}
+
+      fake_configure_notify (server, window);
     }
 
   return sent;
@@ -1652,6 +1697,12 @@ broadway_server_new_window (BroadwayServer *server,
   window->id = server->id_counter++;
   window->x = x;
   window->y = y;
+  if (x == 0 && y == 0 && !is_temp)
+    {
+      /* TODO: Better way to know if we should pick default pos */
+      window->x = 100;
+      window->y = 100;
+    }
   window->width = width;
   window->height = height;
   window->is_temp = is_temp;
@@ -1670,6 +1721,8 @@ broadway_server_new_window (BroadwayServer *server,
 				 window->width,
 				 window->height,
 				 window->is_temp);
+  else
+    fake_configure_notify (server, window);
 
   return window->id;
 }

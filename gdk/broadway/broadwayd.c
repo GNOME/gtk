@@ -349,15 +349,13 @@ client_handle_request (BroadwayClient *client,
 	}
       break;
     case BROADWAY_REQUEST_MOVE_RESIZE:
-      if (!broadway_server_window_move_resize (server,
-					       request->move_resize.id,
-					       request->move_resize.x,
-					       request->move_resize.y,
-					       request->move_resize.width,
-					       request->move_resize.height))
-	{
-	  /* TODO: Send configure request */
-	}
+      broadway_server_window_move_resize (server,
+					  request->move_resize.id,
+					  request->move_resize.with_move,
+					  request->move_resize.x,
+					  request->move_resize.y,
+					  request->move_resize.width,
+					  request->move_resize.height);
       break;
     case BROADWAY_REQUEST_GRAB_POINTER:
       reply_grab_pointer.status =

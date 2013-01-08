@@ -176,7 +176,7 @@ parse_all_input (GdkBroadwayServer *server)
 
       server->incomming = g_list_append (server->incomming, reply);
     }
-  
+
   if (p < end)
     memmove (server->recv_buffer, p, end - p);
   server->recv_buffer_size = end - p;
@@ -261,7 +261,7 @@ process_input_messages (GdkBroadwayServer *server)
       g_source_remove (server->process_input_idle);
       server->process_input_idle = 0;
     }
-  
+
   while (server->incomming)
     {
       reply = server->incomming->data;
@@ -609,14 +609,15 @@ _gdk_broadway_server_window_update (GdkBroadwayServer *server,
   memcpy (msg.name, data->name, 34);
   msg.width = cairo_image_surface_get_width (surface);
   msg.height = cairo_image_surface_get_height (surface);
-  
-  gdk_broadway_server_send_message (server, msg, 
+
+  gdk_broadway_server_send_message (server, msg,
 				    BROADWAY_REQUEST_UPDATE);
 }
 
 gboolean
 _gdk_broadway_server_window_move_resize (GdkBroadwayServer *server,
 					 gint id,
+					 gboolean with_move,
 					 int x,
 					 int y,
 					 int width,
@@ -625,6 +626,7 @@ _gdk_broadway_server_window_move_resize (GdkBroadwayServer *server,
   BroadwayRequestMoveResize msg;
 
   msg.id = id;
+  msg.with_move = with_move;
   msg.x = x;
   msg.y = y;
   msg.width = width;
@@ -659,7 +661,7 @@ _gdk_broadway_server_grab_pointer (GdkBroadwayServer *server,
   g_assert (reply->base.type == BROADWAY_REPLY_GRAB_POINTER);
 
   status = reply->grab_pointer.status;
-  
+
   g_free (reply);
 
   return status;
@@ -682,7 +684,7 @@ _gdk_broadway_server_ungrab_pointer (GdkBroadwayServer *server,
   g_assert (reply->base.type == BROADWAY_REPLY_UNGRAB_POINTER);
 
   status = reply->ungrab_pointer.status;
-  
+
   g_free (reply);
 
   return status;

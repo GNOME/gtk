@@ -62,6 +62,7 @@ void               _gdk_broadway_server_window_update            (GdkBroadwaySer
 								  cairo_surface_t    *surface);
 gboolean           _gdk_broadway_server_window_move_resize       (GdkBroadwayServer  *server,
 								  gint                id,
+								  gboolean            with_move,
 								  int                 x,
 								  int                 y,
 								  int                 width,

@@ -426,17 +426,11 @@ gdk_window_broadway_move_resize (GdkWindow *window,
 {
   GdkWindowImplBroadway *impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
   GdkBroadwayDisplay *broadway_display;
-  gboolean changed, size_changed;;
+  gboolean size_changed;
 
-  size_changed = changed = FALSE;
+  size_changed = FALSE;
 
   broadway_display = GDK_BROADWAY_DISPLAY (gdk_window_get_display (window));
-  if (with_move)
-    {
-      changed = TRUE;
-      window->x = x;
-      window->y = y;
-    }
 
   if (width > 0 || height > 0)
     {
@@ -449,7 +443,6 @@ gdk_window_broadway_move_resize (GdkWindow *window,
       if (width != window->width ||
 	  height != window->height)
 	{
-	  changed = TRUE;
 	  size_changed = TRUE;
 
 	  /* Resize clears the content */
@@ -462,34 +455,14 @@ gdk_window_broadway_move_resize (GdkWindow *window,
 	}
     }
 
-  if (changed)
-    {
-      GdkEvent *event;
-      GList *node;
-
-      if (_gdk_broadway_server_window_move_resize (broadway_display->server,
-						   impl->id,
-						   window->x, window->y,
-						   window->width, window->height))
-	{
-	  queue_dirty_flush (broadway_display);
-	  if (size_changed)
-	    window->resize_count++;
-	}
-
-      event = gdk_event_new (GDK_CONFIGURE);
-      event->configure.window = g_object_ref (window);
-      event->configure.x = window->x;
-      event->configure.y = window->y;
-      event->configure.width = window->width;
-      event->configure.height = window->height;
-
-      gdk_event_set_device (event, GDK_DISPLAY_OBJECT (broadway_display)->core_pointer);
-
-      node = _gdk_event_queue_append (GDK_DISPLAY_OBJECT (broadway_display), event);
-      _gdk_windowing_got_event (GDK_DISPLAY_OBJECT (broadway_display), node, event,
-				_gdk_display_get_next_serial (GDK_DISPLAY (broadway_display)) - 1);
-    }
+  _gdk_broadway_server_window_move_resize (broadway_display->server,
+					   impl->id,
+					   with_move,
+					   x, y,
+					   window->width, window->height);
+  queue_dirty_flush (broadway_display);
+  if (size_changed)
+    window->resize_count++;
 }
 
 static gboolean

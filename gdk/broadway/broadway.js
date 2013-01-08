@@ -350,10 +350,6 @@ function cmdCreateSurface(id, x, y, width, height, isTemp)
 
 	toplevelElement = frame;
 	document.body.appendChild(frame);
-
-	surface.x = 100 + positionIndex * 10;
-	surface.y = 100 + positionIndex * 10;
-	positionIndex = (positionIndex + 1) % 20;
     }
 
     surface.toplevelElement = toplevelElement;

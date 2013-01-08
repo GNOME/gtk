@@ -69,6 +69,7 @@ void                broadway_server_window_update            (BroadwayServer   *
 							      cairo_surface_t  *surface);
 gboolean            broadway_server_window_move_resize       (BroadwayServer   *server,
 							      gint              id,
+							      gboolean          with_move,
 							      int               x,
 							      int               y,
 							      int               width,

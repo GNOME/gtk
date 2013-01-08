@@ -190,6 +190,7 @@ typedef struct {
 typedef struct {
   BroadwayRequestBase base;
   guint32 id;
+  guint32 with_move;
   gint32 x;
   gint32 y;
   guint32 width;
