@@ -859,6 +859,8 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
 
   gtk_widget_push_composite_child ();
   priv->button = gtk_button_new ();
+  if (priv->visible)
+    gtk_widget_show (priv->button);
   gtk_widget_add_events (priv->button, GDK_POINTER_MOTION_MASK);
   gtk_widget_pop_composite_child ();
 
