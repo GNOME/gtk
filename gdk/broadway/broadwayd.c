@@ -600,10 +600,12 @@ broadway_events_got_input (BroadwayInputMsg *message,
   guint32 daemon_serial;
 
   size = get_event_size (message->base.type);
+  g_assert (sizeof (BroadwayReplyBase) + size <= sizeof (BroadwayReplyEvent));
 
+  memset (&reply_event, 0, sizeof (BroadwayReplyEvent));
   daemon_serial = message->base.serial;
 
-  reply_event.msg = *message;
+  memcpy (&reply_event.msg, message, size);
 
   for (l = clients; l != NULL; l = l->next)
     {
@@ -612,10 +614,10 @@ broadway_events_got_input (BroadwayInputMsg *message,
       if (client_id == -1 ||
 	  client->id == client_id)
 	{
-	  message->base.serial = get_client_serial (client, daemon_serial);
+	  reply_event.msg.base.serial = get_client_serial (client, daemon_serial);
 
 	  send_reply (client, NULL, (BroadwayReply *)&reply_event,
-		      sizeof (BroadwayReplyBase) + size,
+		      G_STRUCT_OFFSET (BroadwayReplyEvent, msg) + size,
 		      BROADWAY_REPLY_EVENT);
 	}
     }
