@@ -309,16 +309,16 @@ input_available_cb (gpointer stream, gpointer user_data)
 static BroadwayReply *
 gdk_broadway_server_wait_for_reply (GdkBroadwayServer *server,
 				    guint32 serial)
-{ 
+{
   BroadwayReply *reply;
-  
+
   while (TRUE)
     {
       reply = find_response_by_serial (server, serial);
       if (reply)
 	{
 	  server->incomming = g_list_remove (server->incomming, reply);
-	  return reply;
+	  break;
 	}
 
       read_some_input_blocking (server);
@@ -326,6 +326,7 @@ gdk_broadway_server_wait_for_reply (GdkBroadwayServer *server,
     }
 
   queue_process_input_at_idle (server);
+  return reply;
 }
 
 void
