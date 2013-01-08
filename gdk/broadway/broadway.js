@@ -838,6 +838,8 @@ function onMouseMove (ev) {
 	    surface.x += dx;
 	    surface.y += dy;
 	    var offset = getFrameOffset(surface);
+	    if (surface.y < offset.y)
+		surface.y = offset.y;
 	    localGrab.frame.style["left"] = (surface.x - offset.x) + "px";
 	    localGrab.frame.style["top"] = (surface.y - offset.y) + "px";
 	    sendConfigureNotify(surface);
