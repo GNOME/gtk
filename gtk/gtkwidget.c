@@ -4817,6 +4817,12 @@ gtk_widget_size_allocate (GtkWidget	*widget,
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
+  if (!priv->visible)
+    {
+      g_print ("woot, invisible widget allocated!\n");
+      return;
+    }
+
   gtk_widget_push_verify_invariants (widget);
 
 #ifdef G_ENABLE_DEBUG
@@ -7494,7 +7500,17 @@ void
 _gtk_widget_set_visible_flag (GtkWidget *widget,
                               gboolean   visible)
 {
-  widget->priv->visible = visible;
+  GtkWidgetPrivate *priv = widget->priv;
+
+  priv->visible = visible;
+
+  if (!visible)
+    {
+      priv->allocation.x = -1;
+      priv->allocation.y = -1;
+      priv->allocation.width = 1;
+      priv->allocation.height = 1;
+    }
 }
 
 /**
@@ -13513,6 +13529,7 @@ gtk_widget_set_allocation (GtkWidget           *widget,
   GtkWidgetPrivate *priv;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (gtk_widget_get_visible (widget));
   g_return_if_fail (allocation != NULL);
 
   priv = widget->priv;
