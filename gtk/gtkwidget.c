@@ -4818,10 +4818,7 @@ gtk_widget_size_allocate (GtkWidget	*widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   if (!priv->visible)
-    {
-      g_print ("woot, invisible widget allocated!\n");
-      return;
-    }
+    return;
 
   gtk_widget_push_verify_invariants (widget);
 
