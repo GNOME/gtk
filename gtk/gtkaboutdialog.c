@@ -1014,7 +1014,7 @@ update_website (GtkAboutDialog *about)
       else
         {
           markup = g_strdup_printf ("<a href=\"%s\">%s</a>",
-                                    priv->website_url, _("Homepage"));
+                                    priv->website_url, _("Website"));
         }
 
       gtk_label_set_markup (GTK_LABEL (priv->website_label), markup);
