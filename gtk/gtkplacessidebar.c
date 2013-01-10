@@ -81,6 +81,7 @@
 #include "gtkseparatormenuitem.h"
 #include "gtksettings.h"
 #include "gtkstock.h"
+#include "gtktrashmonitor.h"
 #include "gtktreeselection.h"
 #include "gtktreednd.h"
 #include "gtktypebuiltins.h"
@@ -92,13 +93,17 @@
 #define DO_NOT_COMPILE 0
 
 struct _GtkPlacesSidebar {
-	GtkScrolledWindow  parent;
-	GtkTreeView        *tree_view;
-	GtkCellRenderer    *eject_icon_cell_renderer;
-	char 	           *uri;
-	GtkListStore       *store;
-	GtkBookmarksManager *bookmarks_manager;
-	GVolumeMonitor *volume_monitor;
+	GtkScrolledWindow parent;
+
+	GtkTreeView		*tree_view;
+	GtkCellRenderer		*eject_icon_cell_renderer;
+	char			*uri;
+	GtkListStore		*store;
+	GtkBookmarksManager	*bookmarks_manager;
+	GVolumeMonitor		*volume_monitor;
+	GtkTrashMonitor		*trash_monitor;
+
+	gulong trash_monitor_changed_id;
 
 	gboolean devices_header_added;
 	gboolean bookmarks_header_added;
@@ -121,8 +126,6 @@ struct _GtkPlacesSidebar {
 	char *hostname;
 
 	guint show_desktop : 1;
-	guint show_trash : 1;
-	guint trash_is_full : 1;
 	guint accept_uri_drops : 1;
 };
 
@@ -201,8 +204,6 @@ enum {
 #define ICON_NAME_FILESYSTEM	"drive-harddisk-symbolic"
 #define ICON_NAME_EJECT		"media-eject-symbolic"
 #define ICON_NAME_NETWORK	"network-workgroup-symbolic"
-#define ICON_NAME_TRASH		"user-trash-symbolic"
-#define ICON_NAME_TRASH_FULL	"user-trash-full-symbolic"
 
 #define ICON_NAME_FOLDER_DESKTOP	"user-desktop"
 #define ICON_NAME_FOLDER_DOCUMENTS	"folder-documents-symbolic"
@@ -796,16 +797,15 @@ update_places (GtkPlacesSidebar *sidebar)
 	/* XDG directories */
 	add_special_dirs (sidebar);
 
-	if (sidebar->show_trash) {
-		mount_uri = "trash:///"; /* No need to strdup */
-		icon = g_themed_icon_new (sidebar->trash_is_full ? ICON_NAME_TRASH_FULL : ICON_NAME_TRASH);
-		add_place (sidebar, PLACES_BUILT_IN,
-			   SECTION_COMPUTER,
-			   _("Trash"), icon, mount_uri,
-			   NULL, NULL, NULL, 0,
-			   _("Open the trash"));
-		g_object_unref (icon);
-	}
+	/* Trash */
+	mount_uri = "trash:///"; /* No need to strdup */
+	icon = _gtk_trash_monitor_get_icon (sidebar->trash_monitor);
+	add_place (sidebar, PLACES_BUILT_IN,
+		   SECTION_COMPUTER,
+		   _("Trash"), icon, mount_uri,
+		   NULL, NULL, NULL, 0,
+		   _("Open the trash"));
+	g_object_unref (icon);
 
 	/* Application-side shortcuts */
 	add_application_shortcuts (sidebar);
@@ -3302,6 +3302,13 @@ tree_view_set_activate_on_single_click (GtkTreeView *tree_view)
 			  NULL);
 }
 
+static void
+trash_monitor_trash_state_changed_cb (GtkTrashMonitor *monitor,
+				      GtkPlacesSidebar *sidebar)
+{
+	update_places (sidebar);
+}
+
 
 static void
 gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
@@ -3317,6 +3324,10 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 	create_volume_monitor (sidebar);
 
 	sidebar->bookmarks_manager = _gtk_bookmarks_manager_new (bookmarks_changed_cb, sidebar);
+
+	sidebar->trash_monitor = _gtk_trash_monitor_get ();
+	sidebar->trash_monitor_changed_id = g_signal_connect (sidebar->trash_monitor, "trash-state-changed",
+							      G_CALLBACK (trash_monitor_trash_state_changed_cb), sidebar);
 
 	sidebar->shortcuts = NULL;
 
@@ -3522,6 +3533,12 @@ gtk_places_sidebar_dispose (GObject *object)
 	if (sidebar->popup_menu) {
 		gtk_widget_destroy (sidebar->popup_menu);
 		sidebar->popup_menu = NULL;
+	}
+
+	if (sidebar->trash_monitor) {
+		g_signal_handler_disconnect (sidebar->trash_monitor, sidebar->trash_monitor_changed_id);
+		sidebar->trash_monitor_changed_id = 0;
+		g_clear_object (&sidebar->trash_monitor);
 	}
 
 	g_clear_object (&sidebar->store);
@@ -3853,24 +3870,6 @@ gtk_places_sidebar_set_show_desktop (GtkPlacesSidebar *sidebar, gboolean show_de
 	g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
 
 	sidebar->show_desktop = !!show_desktop;
-	update_places (sidebar);
-}
-
-void
-gtk_places_sidebar_set_show_trash (GtkPlacesSidebar *sidebar, gboolean show_trash)
-{
-	g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
-
-	sidebar->show_trash = !!show_trash;
-	update_places (sidebar);
-}
-
-void
-gtk_places_sidebar_set_trash_is_full (GtkPlacesSidebar *sidebar, gboolean is_full)
-{
-	g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
-
-	sidebar->trash_is_full = !!is_full;
 	update_places (sidebar);
 }
 
