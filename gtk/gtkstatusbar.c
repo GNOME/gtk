@@ -37,7 +37,7 @@
 #include "gtkbuildable.h"
 #include "gtkorientable.h"
 #include "gtktypebuiltins.h"
-#include "a11y/gtkstatusbaraccessible.h"
+#include "a11y/gtkstatusbaraccessibleprivate.h"
 
 /**
  * SECTION:gtkstatusbar
@@ -286,6 +286,8 @@ gtk_statusbar_update (GtkStatusbar *statusbar,
     text = "";
 
   gtk_label_set_text (GTK_LABEL (priv->label), text);
+
+  _gtk_statusbar_accessible_update_text (statusbar);
 }
 
 /**

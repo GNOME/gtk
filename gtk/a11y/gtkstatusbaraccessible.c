@@ -17,36 +17,19 @@
 
 #include "config.h"
 
-#include <string.h>
-#include <gtk/gtk.h>
 #include "gtkstatusbaraccessible.h"
+#include "gtkstatusbaraccessibleprivate.h"
+
+#include "gtkwidgetprivate.h"
 
 
 G_DEFINE_TYPE (GtkStatusbarAccessible, gtk_statusbar_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE)
 
 static void
-text_changed (GtkStatusbar *statusbar,
-              guint         context_id,
-              const gchar  *text,
-              AtkObject    *obj)
-{
-  if (!obj->name)
-    g_object_notify (G_OBJECT (obj), "accessible-name");
-  g_signal_emit_by_name (obj, "visible-data-changed");
-}
-
-static void
 gtk_statusbar_accessible_initialize (AtkObject *obj,
                                      gpointer   data)
 {
-  GtkWidget *statusbar = data;
-
   ATK_OBJECT_CLASS (gtk_statusbar_accessible_parent_class)->initialize (obj, data);
-
-  g_signal_connect_after (statusbar, "text-pushed",
-                          G_CALLBACK (text_changed), obj);
-  g_signal_connect_after (statusbar, "text-popped",
-                          G_CALLBACK (text_changed), obj);
 
   obj->role = ATK_ROLE_STATUSBAR;
 }
@@ -145,4 +128,18 @@ gtk_statusbar_accessible_class_init (GtkStatusbarAccessibleClass *klass)
 static void
 gtk_statusbar_accessible_init (GtkStatusbarAccessible *bar)
 {
+}
+
+void
+_gtk_statusbar_accessible_update_text (GtkStatusbar *statusbar)
+{
+  AtkObject *obj;
+
+  obj = _gtk_widget_peek_accessible (GTK_WIDGET (statusbar));
+  if (obj == NULL)
+    return;
+
+  if (!obj->name)
+    g_object_notify (G_OBJECT (obj), "accessible-name");
+  g_signal_emit_by_name (obj, "visible-data-changed");
 }
