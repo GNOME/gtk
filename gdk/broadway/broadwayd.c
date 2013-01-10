@@ -495,10 +495,12 @@ main (int argc, char *argv[])
   GSocketAddress *address;
   GSocketService *listener;
   char *path, *base;
+  char *http_address = NULL;
   int http_port = 0;
   int display = 1;
   const GOptionEntry entries[] = {
     { "port", 'p', 0, G_OPTION_ARG_INT, &http_port, "Httpd port", "PORT" },
+    { "address", 'a', 0, G_OPTION_ARG_STRING, &http_address, "Ip address to bind to ", "ADDRESS" },
     { NULL }
   };
 
@@ -528,7 +530,7 @@ main (int argc, char *argv[])
   if (http_port == 0)
     http_port = 8080 + (display - 1);
 
-  server = broadway_server_new (http_port, &error);
+  server = broadway_server_new (http_address, http_port, &error);
   if (server == NULL)
     {
       g_printerr ("%s\n", error->message);

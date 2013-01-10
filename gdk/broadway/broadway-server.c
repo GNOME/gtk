@@ -19,6 +19,7 @@ typedef struct BroadwayWindow BroadwayWindow;
 struct _BroadwayServer {
   GObject parent_instance;
 
+  char *address;
   int port;
   GSocketService *service;
   BroadwayOutput *output;
@@ -123,6 +124,10 @@ broadway_server_init (BroadwayServer *server)
 static void
 broadway_server_finalize (GObject *object)
 {
+  BroadwayServer *server = BROADWAY_SERVER (object);
+
+  g_free (server->address);
+
   G_OBJECT_CLASS (broadway_server_parent_class)->finalize (object);
 }
 
@@ -1225,20 +1230,50 @@ handle_incoming_connection (GSocketService    *service,
 }
 
 BroadwayServer *
-broadway_server_new (int port, GError **error)
+broadway_server_new (char *address, int port, GError **error)
 {
   BroadwayServer *server;
+  GInetAddress *inet_address;
+  GSocketAddress *socket_address;
 
   server = g_object_new (BROADWAY_TYPE_SERVER, NULL);
   server->port = port;
+  server->address = g_strdup (address);
 
-  if (!g_socket_listener_add_inet_port (G_SOCKET_LISTENER (server->service),
-					server->port,
-					G_OBJECT (server),
-					error))
+  if (address == NULL)
     {
-      g_prefix_error (error, "Unable to listen to port %d: ", server->port);
-      return NULL;
+      if (!g_socket_listener_add_inet_port (G_SOCKET_LISTENER (server->service),
+					    server->port,
+					    G_OBJECT (server),
+					    error))
+	{
+	  g_prefix_error (error, "Unable to listen to port %d: ", server->port);
+	  return NULL;
+	}
+    }
+  else
+    {
+      inet_address = g_inet_address_new_from_string (address);
+      if (inet_address == NULL)
+	{
+	  g_set_error (error, G_IO_ERROR, G_IO_ERROR_INVALID_DATA, "Invalid ip address %s: ", address);
+	  return NULL;
+	}
+      socket_address = g_inet_socket_address_new (inet_address, port);
+      g_object_unref (inet_address);
+      if (!g_socket_listener_add_address (G_SOCKET_LISTENER (server->service),
+					  socket_address,
+					  G_SOCKET_TYPE_STREAM,
+					  G_SOCKET_PROTOCOL_TCP,
+					  G_OBJECT (server),
+					  NULL,
+					  error))
+	{
+	  g_prefix_error (error, "Unable to listen to %s:%d: ", server->address, server->port);
+	  g_object_unref (socket_address);
+	  return NULL;
+	}
+      g_object_unref (socket_address);
     }
 
   g_signal_connect (server->service, "incoming",

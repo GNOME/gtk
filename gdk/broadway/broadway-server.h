@@ -19,7 +19,8 @@ typedef struct _BroadwayServerClass BroadwayServerClass;
 #define BROADWAY_SERVER_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), BROADWAY_TYPE_SERVER, BroadwayServerClass))
 
 
-BroadwayServer     *broadway_server_new                      (int               port,
+BroadwayServer     *broadway_server_new                      (char             *address,
+							      int               port,
 							      GError          **error);
 gboolean            broadway_server_has_client               (BroadwayServer   *server);
 void                broadway_server_flush                    (BroadwayServer   *server);
