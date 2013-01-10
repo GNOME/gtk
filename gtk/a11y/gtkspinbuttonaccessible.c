@@ -28,33 +28,10 @@ G_DEFINE_TYPE_WITH_CODE (GtkSpinButtonAccessible, gtk_spin_button_accessible, GT
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_VALUE, atk_value_interface_init))
 
 static void
-gtk_spin_button_accessible_value_changed (GtkAdjustment *adjustment,
-                                          gpointer       data)
-{
-  GtkSpinButtonAccessible *spin_button;
-
-  if (adjustment == NULL || data == NULL)
-    return;
-
-  spin_button = GTK_SPIN_BUTTON_ACCESSIBLE (data);
-
-  g_object_notify (G_OBJECT (spin_button), "accessible-value");
-}
-
-static void
 gtk_spin_button_accessible_initialize (AtkObject *obj,
                                        gpointer  data)
 {
-  GtkAdjustment *adjustment;
-
   ATK_OBJECT_CLASS (gtk_spin_button_accessible_parent_class)->initialize (obj, data);
-
-  adjustment = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (data));
-  if (adjustment)
-    g_signal_connect (adjustment,
-                      "value-changed",
-                      G_CALLBACK (gtk_spin_button_accessible_value_changed),
-                      obj);
 
   obj->role = ATK_ROLE_SPIN_BUTTON;
 }
@@ -66,15 +43,8 @@ gtk_spin_button_accessible_notify_gtk (GObject    *obj,
   GtkWidget *widget = GTK_WIDGET (obj);
   GtkSpinButtonAccessible *spin_button = GTK_SPIN_BUTTON_ACCESSIBLE (gtk_widget_get_accessible (widget));
 
-  if (strcmp (pspec->name, "adjustment") == 0)
-    {
-      GtkAdjustment* adjustment;
-
-      adjustment = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (widget));
-      g_signal_connect (adjustment, "value-changed",
-                        G_CALLBACK (gtk_spin_button_accessible_value_changed),
-                        spin_button);
-    }
+  if (strcmp (pspec->name, "value") == 0)
+    g_object_notify (G_OBJECT (spin_button), "accessible-value");
   else
     GTK_WIDGET_ACCESSIBLE_CLASS (gtk_spin_button_accessible_parent_class)->notify_gtk (obj, pspec);
 }
