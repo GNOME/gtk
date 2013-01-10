@@ -1276,7 +1276,7 @@ file_is_recent_uri (GFile *file)
 }
 
 static void
-places_sidebar_open_location_cb (GtkPlacesSidebar *sidebar, GFile *location, GtkPlacesOpenMode open_mode, GtkFileChooserDefault *impl)
+places_sidebar_open_location_cb (GtkPlacesSidebar *sidebar, GFile *location, GtkPlacesOpenFlags open_flags, GtkFileChooserDefault *impl)
 {
   gboolean clear_entry;
 

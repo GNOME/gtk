@@ -45,15 +45,17 @@ typedef struct _GtkPlacesSidebar GtkPlacesSidebar;
 typedef struct _GtkPlacesSidebarClass GtkPlacesSidebarClass;
 
 typedef enum {
-  GTK_PLACES_OPEN_MODE_NORMAL,
-  GTK_PLACES_OPEN_MODE_NEW_TAB,
-  GTK_PLACES_OPEN_MODE_NEW_WINDOW
-} GtkPlacesOpenMode;
+  GTK_PLACES_OPEN_NORMAL     = 1 << 0,
+  GTK_PLACES_OPEN_NEW_TAB    = 1 << 1,
+  GTK_PLACES_OPEN_NEW_WINDOW = 1 << 2
+} GtkPlacesOpenFlags;
 
 GType gtk_places_sidebar_get_type (void);
 GtkWidget *gtk_places_sidebar_new (void);
 
 /* FIXME: add GObject properties for the following things */
+
+void gtk_places_sidebar_set_open_flags (GtkPlacesSidebar *sidebar, GtkPlacesOpenFlags flags);
 
 void gtk_places_sidebar_set_current_location (GtkPlacesSidebar *sidebar, GFile *location);
 

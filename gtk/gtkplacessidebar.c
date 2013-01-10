@@ -118,12 +118,14 @@ struct _GtkPlacesSidebar {
 
 	/* volume mounting - delayed open process */
 	gboolean mounting;
-	GtkPlacesOpenMode go_to_after_mount_open_mode;
+	GtkPlacesOpenFlags go_to_after_mount_open_flags;
 
 	GSList *shortcuts;
 
 	GDBusProxy *hostnamed_proxy;
 	char *hostname;
+
+	GtkPlacesOpenFlags open_flags;
 
 	guint show_desktop : 1;
 	guint accept_uri_drops : 1;
@@ -134,7 +136,7 @@ struct _GtkPlacesSidebarClass {
 
 	void (* open_location)         (GtkPlacesSidebar *sidebar,
 				        GFile            *location,
-				        GtkPlacesOpenMode open_mode);
+				        GtkPlacesOpenFlags open_flags);
 	void (* populate_popup)        (GtkPlacesSidebar *sidebar,
 					GtkMenu          *menu,
 					GFile            *selected_item);
@@ -221,9 +223,9 @@ enum {
 static guint places_sidebar_signals [LAST_SIGNAL] = { 0 };
 
 static void  open_selected_bookmark                    (GtkPlacesSidebar        *sidebar,
-							GtkTreeModel                 *model,
-							GtkTreeIter                  *iter,
-							GtkPlacesOpenMode             open_mode);
+							GtkTreeModel            *model,
+							GtkTreeIter             *iter,
+							GtkPlacesOpenFlags       open_flags);
 static void  gtk_places_sidebar_style_set         (GtkWidget                    *widget,
 							GtkStyle                     *previous_style);
 static gboolean eject_or_unmount_bookmark              (GtkPlacesSidebar *sidebar,
@@ -280,10 +282,13 @@ static GtkListStore *shortcuts_model_new (GtkPlacesSidebar *sidebar);
 G_DEFINE_TYPE (GtkPlacesSidebar, gtk_places_sidebar, GTK_TYPE_SCROLLED_WINDOW);
 
 static void
-emit_open_location (GtkPlacesSidebar *sidebar, GFile *location, GtkPlacesOpenMode open_mode)
+emit_open_location (GtkPlacesSidebar *sidebar, GFile *location, GtkPlacesOpenFlags open_flags)
 {
+	if ((open_flags & sidebar->open_flags) == 0)
+		open_flags = GTK_PLACES_OPEN_NORMAL;
+
 	g_signal_emit (sidebar, places_sidebar_signals[OPEN_LOCATION], 0,
-		       location, open_mode);
+		       location, open_flags);
 }
 
 static void
@@ -1878,7 +1883,7 @@ drive_start_from_bookmark_cb (GObject      *source_object,
 }
 
 static void
-change_location_and_notify (GtkPlacesSidebar *sidebar, GFile *location, GtkPlacesOpenMode open_mode)
+change_location_and_notify (GtkPlacesSidebar *sidebar, GFile *location, GtkPlacesOpenFlags open_flags)
 {
 	g_free (sidebar->uri);
 	sidebar->uri = NULL;
@@ -1886,7 +1891,7 @@ change_location_and_notify (GtkPlacesSidebar *sidebar, GFile *location, GtkPlace
 	if (location)
 		sidebar->uri = g_file_get_uri (location);
 
-	emit_open_location (sidebar, location, open_mode);
+	emit_open_location (sidebar, location, open_flags);
 }
 
 /* Callback from g_volume_mount() */
@@ -1922,7 +1927,7 @@ volume_mount_cb (GObject *source_object, GAsyncResult *result, gpointer user_dat
 		GFile *location;
 
 		location = g_mount_get_default_location (mount);
-		change_location_and_notify (sidebar, location, sidebar->go_to_after_mount_open_mode);
+		change_location_and_notify (sidebar, location, sidebar->go_to_after_mount_open_flags);
 
 		g_object_unref (G_OBJECT (location));
 		g_object_unref (G_OBJECT (mount));
@@ -1945,10 +1950,10 @@ mount_volume (GtkPlacesSidebar *sidebar, GVolume *volume)
 }
 
 static void
-open_selected_bookmark (GtkPlacesSidebar *sidebar,
-			GtkTreeModel	      *model,
-			GtkTreeIter	      *iter,
-			GtkPlacesOpenMode      open_mode)
+open_selected_bookmark (GtkPlacesSidebar	*sidebar,
+			GtkTreeModel		*model,
+			GtkTreeIter		*iter,
+			GtkPlacesOpenFlags	 open_flags)
 {
 	GFile *location;
 	char *uri;
@@ -1961,7 +1966,7 @@ open_selected_bookmark (GtkPlacesSidebar *sidebar,
 
 	if (uri != NULL) {
 		location = g_file_new_for_uri (uri);
-		change_location_and_notify (sidebar, location, open_mode);
+		change_location_and_notify (sidebar, location, open_flags);
 
 		g_object_unref (location);
 		g_free (uri);
@@ -1978,7 +1983,7 @@ open_selected_bookmark (GtkPlacesSidebar *sidebar,
 		if (volume != NULL && !sidebar->mounting) {
 			sidebar->mounting = TRUE;
 
-			sidebar->go_to_after_mount_open_mode = open_mode;
+			sidebar->go_to_after_mount_open_flags = open_flags;
 
 			mount_volume (sidebar, volume);
 		} else if (volume == NULL && drive != NULL &&
@@ -1999,7 +2004,7 @@ open_selected_bookmark (GtkPlacesSidebar *sidebar,
 
 static void
 open_shortcut_from_menu (GtkPlacesSidebar *sidebar,
-			 GtkPlacesOpenMode open_mode)
+			 GtkPlacesOpenFlags open_flags)
 {
 	GtkTreeModel *model;
 	GtkTreeIter iter;
@@ -2009,17 +2014,34 @@ open_shortcut_from_menu (GtkPlacesSidebar *sidebar,
 	gtk_tree_view_get_cursor (sidebar->tree_view, &path, NULL);
 
 	if (path != NULL && gtk_tree_model_get_iter (model, &iter, path)) {
-		open_selected_bookmark (sidebar, model, &iter, open_mode);
+		open_selected_bookmark (sidebar, model, &iter, open_flags);
 	}
 
 	gtk_tree_path_free (path);
 }
 
+/* Callback used for the "Open" menu item in the context menu */
 static void
 open_shortcut_cb (GtkMenuItem      *item,
 		  GtkPlacesSidebar *sidebar)
 {
-	open_shortcut_from_menu (sidebar, GTK_PLACES_OPEN_MODE_NORMAL);
+	open_shortcut_from_menu (sidebar, GTK_PLACES_OPEN_NORMAL);
+}
+
+/* Callback used for the "Open in new tab" menu item in the context menu */
+static void
+open_shortcut_in_new_tab_cb (GtkMenuItem      *item,
+			     GtkPlacesSidebar *sidebar)
+{
+	open_shortcut_from_menu (sidebar, GTK_PLACES_OPEN_NEW_TAB);
+}
+
+/* Callback used for the "Open in new window" menu item in the context menu */
+static void
+open_shortcut_in_new_window_cb (GtkMenuItem      *item,
+				GtkPlacesSidebar *sidebar)
+{
+	open_shortcut_from_menu (sidebar, GTK_PLACES_OPEN_NEW_WINDOW);
 }
 
 /* Add bookmark for the selected item - just used from mount points */
@@ -2719,16 +2741,16 @@ bookmarks_key_press_event_cb (GtkWidget             *widget,
 		event->keyval == GDK_KEY_ISO_Enter ||
 		event->keyval == GDK_KEY_space)) {
 
-		GtkPlacesOpenMode open_mode = GTK_PLACES_OPEN_MODE_NORMAL;
+		GtkPlacesOpenFlags open_flags = GTK_PLACES_OPEN_NORMAL;
 
 		if ((event->state & modifiers) == GDK_SHIFT_MASK) {
-			open_mode = GTK_PLACES_OPEN_MODE_NEW_TAB;
+			open_flags = GTK_PLACES_OPEN_NEW_TAB;
 		} else if ((event->state & modifiers) == GDK_CONTROL_MASK) {
-			open_mode = GTK_PLACES_OPEN_MODE_NEW_WINDOW;
+			open_flags = GTK_PLACES_OPEN_NEW_WINDOW;
 		}
 
 		open_selected_bookmark (sidebar, GTK_TREE_MODEL (sidebar->store),
-					&selected_iter, open_mode);
+					&selected_iter, open_flags);
 
 		return TRUE;
 	}
@@ -2805,6 +2827,22 @@ bookmarks_build_popup_menu (GtkPlacesSidebar *sidebar)
 			  G_CALLBACK (open_shortcut_cb), sidebar);
 	gtk_widget_show (item);
 	gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
+
+	if (sidebar->open_flags & GTK_PLACES_OPEN_NEW_TAB) {
+		item = gtk_menu_item_new_with_mnemonic (_("Open in New _Tab"));
+		g_signal_connect (item, "activate",
+				  G_CALLBACK (open_shortcut_in_new_tab_cb), sidebar);
+		gtk_widget_show (item);
+		gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
+	}
+
+	if (sidebar->open_flags & GTK_PLACES_OPEN_NEW_WINDOW) {
+		item = gtk_menu_item_new_with_mnemonic (_("Open in New _Window"));
+		g_signal_connect (item, "activate",
+				  G_CALLBACK (open_shortcut_in_new_window_cb), sidebar);
+		gtk_widget_show (item);
+		gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
+	}
 
 	append_menu_separator (GTK_MENU (sidebar->popup_menu));
 
@@ -2987,13 +3025,13 @@ bookmarks_button_release_event_cb (GtkWidget *widget,
 	if (event->button == 1) {
 		open_selected_bookmark (sidebar, model, &iter, 0);
 	} else if (event->button == 2) {
-		GtkPlacesOpenMode open_mode = GTK_PLACES_OPEN_MODE_NORMAL;
+		GtkPlacesOpenFlags open_flags = GTK_PLACES_OPEN_NORMAL;
 
-		open_mode = ((event->state & GDK_CONTROL_MASK) ?
-			     GTK_PLACES_OPEN_MODE_NEW_WINDOW :
-			     GTK_PLACES_OPEN_MODE_NEW_TAB);
+		open_flags = ((event->state & GDK_CONTROL_MASK) ?
+			      GTK_PLACES_OPEN_NEW_WINDOW :
+			      GTK_PLACES_OPEN_NEW_TAB);
 
-		open_selected_bookmark (sidebar, model, &iter, open_mode);
+		open_selected_bookmark (sidebar, model, &iter, open_flags);
 		ret = TRUE;
 	} else if (event->button == 3) {
 		PlaceType row_type;
@@ -3323,6 +3361,8 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 
 	create_volume_monitor (sidebar);
 
+	sidebar->open_flags = GTK_PLACES_OPEN_NORMAL;
+
 	sidebar->bookmarks_manager = _gtk_bookmarks_manager_new (bookmarks_changed_cb, sidebar);
 
 	sidebar->trash_monitor = _gtk_trash_monitor_get ();
@@ -3596,10 +3636,10 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 			      G_SIGNAL_RUN_FIRST,
 			      G_STRUCT_OFFSET (GtkPlacesSidebarClass, open_location),
 			      NULL, NULL,
-			      _gtk_marshal_VOID__OBJECT_ENUM,
+			      _gtk_marshal_VOID__OBJECT_FLAGS,
 			      G_TYPE_NONE, 2,
 			      G_TYPE_OBJECT,
-			      GTK_TYPE_PLACES_OPEN_MODE);
+			      GTK_TYPE_PLACES_OPEN_FLAGS);
 
 	places_sidebar_signals [POPULATE_POPUP] =
 		g_signal_new (I_("populate-popup"),
@@ -3757,6 +3797,35 @@ shortcuts_model_new (GtkPlacesSidebar *sidebar)
 
 
 /* Public methods for GtkPlacesSidebar */
+
+/**
+ * gtk_places_sidebar_set_open_flags:
+ * @sidebar: a places sidebar
+ * @flags: Bitmask of modes in which the calling application can open locations
+ *
+ * Sets the way in which the calling application can open new locations from
+ * the places sidebar.  For example, some applications only open locations
+ * "directly" into their main view, while others may support opening locations
+ * in a new notebook tab or a new window.
+ *
+ * This function is used to tell the places @sidebar about the ways in which the
+ * application can open new locations, so that the sidebar can display (or not)
+ * the "Open in new tab" and "Open in new window" menu items as appropriate.
+ *
+ * When the #GtkPlacesSidebar::open-location signal is emitted, its flags
+ * argument will be set to one of the @flags that was passed in
+ * gtk_places_sidebar_set_open_flags().
+ *
+ * Passing 0 for @flags will cause #GTK_PLACES_OPEN_NORMAL to always be sent
+ * to callbacks for the "open-location" signal.
+ */
+void
+gtk_places_sidebar_set_open_flags (GtkPlacesSidebar *sidebar, GtkPlacesOpenFlags flags)
+{
+	g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
+
+	sidebar->open_flags = flags;
+}
 
 /**
  * gtk_places_sidebar_set_current_location:
