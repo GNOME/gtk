@@ -950,7 +950,7 @@ start_input (HttpRequest *request, gboolean binary)
 	}
     }
 
-  if (origin == NULL || host == NULL)
+  if (host == NULL)
     {
       g_strfreev (lines);
       send_error (request, 400, "Bad websocket request");
@@ -964,10 +964,12 @@ start_input (HttpRequest *request, gboolean binary)
 			     "Upgrade: websocket\r\n"
 			     "Connection: Upgrade\r\n"
 			     "Sec-WebSocket-Accept: %s\r\n"
-			     "Sec-WebSocket-Origin: %s\r\n"
+			     "%s%s%s"
 			     "Sec-WebSocket-Location: ws://%s/socket\r\n"
 			     "Sec-WebSocket-Protocol: broadway\r\n"
-			     "\r\n", accept, origin, host);
+			     "\r\n", accept,
+			     origin?"Sec-WebSocket-Origin: ":"", origin?origin:"", origin?"\r\n":"",
+			     host);
       g_free (accept);
 
 #ifdef DEBUG_WEBSOCKETS
@@ -1013,11 +1015,12 @@ start_input (HttpRequest *request, gboolean binary)
       res = g_strdup_printf ("HTTP/1.1 101 WebSocket Protocol Handshake\r\n"
 			     "Upgrade: WebSocket\r\n"
 			     "Connection: Upgrade\r\n"
-			     "Sec-WebSocket-Origin: %s\r\n"
+			     "%s%s%s"
 			     "Sec-WebSocket-Location: ws://%s/socket\r\n"
 			     "Sec-WebSocket-Protocol: broadway\r\n"
 			     "\r\n",
-			     origin, host);
+			     origin?"Sec-WebSocket-Origin: ":"", origin?origin:"", origin?"\r\n":"",
+			     host);
 
 #ifdef DEBUG_WEBSOCKETS
       g_print ("legacy response:\n%s", res);
