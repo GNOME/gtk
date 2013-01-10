@@ -280,6 +280,10 @@ get_current_desktop (GdkScreen *screen)
   unsigned char *data_return = NULL;
   int workspace = 0;
 
+  if (!gdk_x11_screen_supports_net_wm_hint (screen,
+                                            gdk_atom_intern_static_string ("_NET_CURRENT_DESKTOP")))
+    return workspace;
+
   display = GDK_DISPLAY_XDISPLAY (gdk_screen_get_display (screen));
   win = XRootWindow (display, GDK_SCREEN_XNUMBER (screen));
 
@@ -329,6 +333,10 @@ get_work_area (GdkScreen    *screen,
   area->y = 0;
   area->width = gdk_screen_get_width (screen);
   area->height = gdk_screen_get_height (screen);
+
+  if (!gdk_x11_screen_supports_net_wm_hint (screen,
+                                            gdk_atom_intern_static_string ("_NET_WORKAREA")))
+    return;
 
   if (workarea == None)
     return;
