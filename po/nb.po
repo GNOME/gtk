@@ -1,14 +1,14 @@
-# Norwegian (bokmål) translation of gtk+.
+# Norwegian bokmål translation of gtk+.
 # Copyright (C) 1998-2004, 2005 Free Software Foundation, Inc.
-# Kjartan Maraas <kmaraas@gnome.org>, 1998-2010.
+# Kjartan Maraas <kmaraas@gnome.org>, 1998-2013.
 # Terance Edward Sola <terance@lyse.net>, 2005.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.22.x\n"
+"Project-Id-Version: gtk+ 2.24.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-15 12:12+0100\n"
-"PO-Revision-Date: 2010-11-18 14:09+0100\n"
+"POT-Creation-Date: 2013-01-10 13:38+0100\n"
+"PO-Revision-Date: 2013-01-10 13:39+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: \n"
@@ -76,7 +76,7 @@ msgstr "Feilsøkingsflagg som skal settes for GDK"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:165 ../gdk/gdk.c:168 ../gtk/gtkmain.c:460 ../gtk/gtkmain.c:463
+#: ../gdk/gdk.c:165 ../gdk/gdk.c:168 ../gtk/gtkmain.c:461 ../gtk/gtkmain.c:464
 msgid "FLAGS"
 msgstr "FLAGG"
 
@@ -559,7 +559,7 @@ msgstr "Ugyldig"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: ../gtk/gtkcellrendereraccel.c:389 ../gtk/gtkcellrendereraccel.c:603
+#: ../gtk/gtkcellrendereraccel.c:389 ../gtk/gtkcellrendereraccel.c:663
 msgid "New accelerator..."
 msgstr "Ny hurtigtast..."
 
@@ -569,11 +569,11 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkcolorbutton.c:178 ../gtk/gtkcolorbutton.c:457
+#: ../gtk/gtkcolorbutton.c:178 ../gtk/gtkcolorbutton.c:459
 msgid "Pick a Color"
 msgstr "Velg en farge"
 
-#: ../gtk/gtkcolorbutton.c:350
+#: ../gtk/gtkcolorbutton.c:352
 msgid "Received invalid color data\n"
 msgstr "Mottok ugyldige fargedata\n"
 
@@ -701,7 +701,7 @@ msgstr "Fargen du har valgt."
 msgid "_Save color here"
 msgstr "_Lagre fargen her"
 
-#: ../gtk/gtkcolorsel.c:1596
+#: ../gtk/gtkcolorsel.c:1595
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -725,7 +725,7 @@ msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: ../gtk/gtkcustompaperunixdialog.c:373 ../gtk/gtkprintunixdialog.c:3233
+#: ../gtk/gtkcustompaperunixdialog.c:373 ../gtk/gtkprintunixdialog.c:3235
 msgid "Manage Custom Sizes"
 msgstr "Håndter egendefinerte størrelser"
 
@@ -778,23 +778,23 @@ msgstr "Høy_re:"
 msgid "Paper Margins"
 msgstr "Papirmarger"
 
-#: ../gtk/gtkentry.c:8742 ../gtk/gtktextview.c:7975
+#: ../gtk/gtkentry.c:8748 ../gtk/gtktextview.c:7976
 msgid "Input _Methods"
 msgstr "Inndata_metoder"
 
-#: ../gtk/gtkentry.c:8756 ../gtk/gtktextview.c:7989
+#: ../gtk/gtkentry.c:8762 ../gtk/gtktextview.c:7990
 msgid "_Insert Unicode Control Character"
 msgstr "Sett _inn Unicode kontrolltegn"
 
-#: ../gtk/gtkentry.c:10136
+#: ../gtk/gtkentry.c:10142
 msgid "Caps Lock is on"
 msgstr "Caps Lock er på"
 
 #: ../gtk/gtkfilechooserbutton.c:64
-msgid "Select A File"
+msgid "Select a File"
 msgstr "Velg en fil"
 
-#: ../gtk/gtkfilechooserbutton.c:65 ../gtk/gtkfilechooserdefault.c:1852
+#: ../gtk/gtkfilechooserbutton.c:65 ../gtk/gtkfilechooserdefault.c:1847
 msgid "Desktop"
 msgstr "Skrivebord"
 
@@ -802,31 +802,31 @@ msgstr "Skrivebord"
 msgid "(None)"
 msgstr "(Ingen)"
 
-#: ../gtk/gtkfilechooserbutton.c:2024
+#: ../gtk/gtkfilechooserbutton.c:2025
 msgid "Other..."
 msgstr "Annet..."
 
-#: ../gtk/gtkfilechooserdefault.c:148
+#: ../gtk/gtkfilechooserdefault.c:151
 msgid "Type name of new folder"
 msgstr "Skriv inn navn på ny mappe"
 
-#: ../gtk/gtkfilechooserdefault.c:965
+#: ../gtk/gtkfilechooserdefault.c:953
 msgid "Could not retrieve information about the file"
 msgstr "Kunne ikke hente informasjon om filen"
 
-#: ../gtk/gtkfilechooserdefault.c:976
+#: ../gtk/gtkfilechooserdefault.c:964
 msgid "Could not add a bookmark"
 msgstr "Kunne ikke legge til bokmerke"
 
-#: ../gtk/gtkfilechooserdefault.c:987
+#: ../gtk/gtkfilechooserdefault.c:975
 msgid "Could not remove bookmark"
 msgstr "Kunne ikke fjerne bokmerke"
 
-#: ../gtk/gtkfilechooserdefault.c:998
+#: ../gtk/gtkfilechooserdefault.c:986
 msgid "The folder could not be created"
 msgstr "Mappen kunne ikke opprettes"
 
-#: ../gtk/gtkfilechooserdefault.c:1011
+#: ../gtk/gtkfilechooserdefault.c:999
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -834,7 +834,16 @@ msgstr ""
 "Kunne ikke opprette mappen på grunn av at det allerede eksisterer en fil med "
 "samme navnet. Bruk et annet navn for mappen eller gi et nytt navn til filen."
 
-#: ../gtk/gtkfilechooserdefault.c:1025
+#: ../gtk/gtkfilechooserdefault.c:1013
+msgid "You need to choose a valid filename."
+msgstr "Du må velge et gyldig filnavn."
+
+#: ../gtk/gtkfilechooserdefault.c:1016
+#, c-format
+msgid "Cannot create a file under %s as it is not a folder"
+msgstr "Kan ikke lage en fil under %s fordi den ikke er en mappe"
+
+#: ../gtk/gtkfilechooserdefault.c:1028
 msgid ""
 "You may only select folders.  The item that you selected is not a folder; "
 "try using a different item."
@@ -842,11 +851,11 @@ msgstr ""
 "Du kan kun velge mapper. Oppføringen du har valgt er ikke en mappe. Prøv å "
 "bruke en annen oppføring."
 
-#: ../gtk/gtkfilechooserdefault.c:1035
+#: ../gtk/gtkfilechooserdefault.c:1038
 msgid "Invalid file name"
 msgstr "Ugyldig filnavn"
 
-#: ../gtk/gtkfilechooserdefault.c:1045
+#: ../gtk/gtkfilechooserdefault.c:1048
 msgid "The folder contents could not be displayed"
 msgstr "Mappeinholdet kunne ikke vises"
 
@@ -854,186 +863,186 @@ msgstr "Mappeinholdet kunne ikke vises"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1595
+#: ../gtk/gtkfilechooserdefault.c:1580
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s på %2$s"
 
-#: ../gtk/gtkfilechooserdefault.c:1771
+#: ../gtk/gtkfilechooserdefault.c:1729
 msgid "Search"
 msgstr "Søk"
 
-#: ../gtk/gtkfilechooserdefault.c:1795 ../gtk/gtkfilechooserdefault.c:9559
+#: ../gtk/gtkfilechooserdefault.c:1753 ../gtk/gtkfilechooserdefault.c:4851
 msgid "Recently Used"
 msgstr "Sist brukt"
 
-#: ../gtk/gtkfilechooserdefault.c:2442
+#: ../gtk/gtkfilechooserdefault.c:2383
 msgid "Select which types of files are shown"
 msgstr "Velg hvilke filtyper som skal vises"
 
-#: ../gtk/gtkfilechooserdefault.c:2801
+#: ../gtk/gtkfilechooserdefault.c:2742
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Legg til mappe «%s» i bokmerker"
 
-#: ../gtk/gtkfilechooserdefault.c:2845
+#: ../gtk/gtkfilechooserdefault.c:2786
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Legg til aktiv mappe i bokmerker"
 
-#: ../gtk/gtkfilechooserdefault.c:2847
+#: ../gtk/gtkfilechooserdefault.c:2788
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Legg til valgte mapper i bokmerker"
 
-#: ../gtk/gtkfilechooserdefault.c:2885
+#: ../gtk/gtkfilechooserdefault.c:2826
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Fjern bokmerke «%s»"
 
-#: ../gtk/gtkfilechooserdefault.c:2887
+#: ../gtk/gtkfilechooserdefault.c:2828
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "Bokmerke «%s» kan ikke fjernes"
 
-#: ../gtk/gtkfilechooserdefault.c:2894 ../gtk/gtkfilechooserdefault.c:3914
+#: ../gtk/gtkfilechooserdefault.c:2835 ../gtk/gtkfilechooserdefault.c:3717
 msgid "Remove the selected bookmark"
 msgstr "Fjern valgt bokmerke"
 
-#: ../gtk/gtkfilechooserdefault.c:3610
+#: ../gtk/gtkfilechooserdefault.c:3398
 msgid "Remove"
 msgstr "Fjern"
 
-#: ../gtk/gtkfilechooserdefault.c:3619
+#: ../gtk/gtkfilechooserdefault.c:3407
 msgid "Rename..."
 msgstr "Gi nytt navn..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3782
+#: ../gtk/gtkfilechooserdefault.c:3574
 msgid "Places"
 msgstr "Steder"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3839
+#: ../gtk/gtkfilechooserdefault.c:3631
 msgid "_Places"
 msgstr "_Steder"
 
-#: ../gtk/gtkfilechooserdefault.c:3895
-msgid "_Add"
-msgstr "_Legg til"
-
-#: ../gtk/gtkfilechooserdefault.c:3902
+#: ../gtk/gtkfilechooserdefault.c:3705
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Legg til valgt mappe i bokmerker"
 
-#: ../gtk/gtkfilechooserdefault.c:3907
-msgid "_Remove"
-msgstr "Fje_rn"
-
-#: ../gtk/gtkfilechooserdefault.c:4042
+#: ../gtk/gtkfilechooserdefault.c:3849
 msgid "Could not select file"
 msgstr "Kunne ikke velge fil"
 
-#: ../gtk/gtkfilechooserdefault.c:4217
+#: ../gtk/gtkfilechooserdefault.c:4022
 msgid "_Add to Bookmarks"
 msgstr "L_egg til i bokmerker"
 
-#: ../gtk/gtkfilechooserdefault.c:4230
+#: ../gtk/gtkfilechooserdefault.c:4035
 msgid "Show _Hidden Files"
 msgstr "Vis sk_julte filer"
 
-#: ../gtk/gtkfilechooserdefault.c:4237
+#: ../gtk/gtkfilechooserdefault.c:4042
 msgid "Show _Size Column"
 msgstr "Vis kolonne for _størrelse"
 
-#: ../gtk/gtkfilechooserdefault.c:4457 ../gtk/gtkfilesel.c:730
+#: ../gtk/gtkfilechooserdefault.c:4266 ../gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "Filer"
 
-#: ../gtk/gtkfilechooserdefault.c:4508
+#: ../gtk/gtkfilechooserdefault.c:4317
 msgid "Name"
 msgstr "Navn"
 
-#: ../gtk/gtkfilechooserdefault.c:4531
+#: ../gtk/gtkfilechooserdefault.c:4340
 msgid "Size"
 msgstr "Størrelse"
 
-#: ../gtk/gtkfilechooserdefault.c:4545
+#: ../gtk/gtkfilechooserdefault.c:4354
 msgid "Modified"
 msgstr "Endret"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4800 ../gtk/gtkprinteroptionwidget.c:801
+#: ../gtk/gtkfilechooserdefault.c:4449 ../gtk/gtkprinteroptionwidget.c:832
 msgid "_Name:"
 msgstr "_Navn:"
 
-#: ../gtk/gtkfilechooserdefault.c:4843
-msgid "_Browse for other folders"
-msgstr "_Se gjennom andre mapper"
-
-#: ../gtk/gtkfilechooserdefault.c:5113
+#: ../gtk/gtkfilechooserdefault.c:4689
 msgid "Type a file name"
 msgstr "Skriv et filnavn"
 
+#: ../gtk/gtkfilechooserdefault.c:4736 ../gtk/gtkfilechooserdefault.c:4747
+msgid "Please select a folder below"
+msgstr "Velg en mappe under"
+
+#: ../gtk/gtkfilechooserdefault.c:4742
+msgid "Please type a file name"
+msgstr "Skriv et filnavn"
+
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:5156
+#: ../gtk/gtkfilechooserdefault.c:4813
 msgid "Create Fo_lder"
 msgstr "Opprett _mappe"
 
-#: ../gtk/gtkfilechooserdefault.c:5166
+#: ../gtk/gtkfilechooserdefault.c:4861
+msgid "Search:"
+msgstr "Søk:"
+
+#: ../gtk/gtkfilechooserdefault.c:4912
 msgid "_Location:"
 msgstr "_Lokasjon:"
 
-#: ../gtk/gtkfilechooserdefault.c:5370
+#: ../gtk/gtkfilechooserdefault.c:5362
 msgid "Save in _folder:"
 msgstr "Lagre i _mappe:"
 
-#: ../gtk/gtkfilechooserdefault.c:5372
+#: ../gtk/gtkfilechooserdefault.c:5364
 msgid "Create in _folder:"
 msgstr "Opprett i _mappe:"
 
-#: ../gtk/gtkfilechooserdefault.c:6439
+#: ../gtk/gtkfilechooserdefault.c:6503
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Kunne ikke lese innholdet av %s"
 
-#: ../gtk/gtkfilechooserdefault.c:6443
+#: ../gtk/gtkfilechooserdefault.c:6507
 msgid "Could not read the contents of the folder"
 msgstr "Kunne ikke lese innholdet i mappen"
 
-#: ../gtk/gtkfilechooserdefault.c:6536 ../gtk/gtkfilechooserdefault.c:6604
-#: ../gtk/gtkfilechooserdefault.c:6749
+#: ../gtk/gtkfilechooserdefault.c:6600 ../gtk/gtkfilechooserdefault.c:6668
+#: ../gtk/gtkfilechooserdefault.c:6824
 msgid "Unknown"
 msgstr "Ukjent"
 
-#: ../gtk/gtkfilechooserdefault.c:6551
+#: ../gtk/gtkfilechooserdefault.c:6615
 msgid "%H:%M"
 msgstr "%H.%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6553
+#: ../gtk/gtkfilechooserdefault.c:6617
 msgid "Yesterday at %H:%M"
 msgstr "I går kl. %H.%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7219
+#: ../gtk/gtkfilechooserdefault.c:7296
 msgid "Cannot change to folder because it is not local"
 msgstr "Kan ikke gå til mappen fordi den ikke er lokal."
 
-#: ../gtk/gtkfilechooserdefault.c:7816 ../gtk/gtkfilechooserdefault.c:7837
+#: ../gtk/gtkfilechooserdefault.c:7899 ../gtk/gtkfilechooserdefault.c:7920
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Snarvei %s eksisterer allerede"
 
-#: ../gtk/gtkfilechooserdefault.c:7927
+#: ../gtk/gtkfilechooserdefault.c:8010
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Snarvei %s eksisterer ikke"
 
-#: ../gtk/gtkfilechooserdefault.c:8182 ../gtk/gtkprintunixdialog.c:480
+#: ../gtk/gtkfilechooserdefault.c:8253 ../gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "En fil med navn «%s» eksisterer allerede. Vil du erstatte den?"
 
-#: ../gtk/gtkfilechooserdefault.c:8185 ../gtk/gtkprintunixdialog.c:484
+#: ../gtk/gtkfilechooserdefault.c:8256 ../gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1041,15 +1050,15 @@ msgstr ""
 "Filen eksisterer allerede i «%s». Hvis du erstatter denne vil du overskrive "
 "innholdet."
 
-#: ../gtk/gtkfilechooserdefault.c:8190 ../gtk/gtkprintunixdialog.c:491
+#: ../gtk/gtkfilechooserdefault.c:8261 ../gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "E_rstatt"
 
-#: ../gtk/gtkfilechooserdefault.c:8897
+#: ../gtk/gtkfilechooserdefault.c:9068
 msgid "Could not start the search process"
 msgstr "Kunne ikke starte søkeprosessen"
 
-#: ../gtk/gtkfilechooserdefault.c:8898
+#: ../gtk/gtkfilechooserdefault.c:9069
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1057,36 +1066,34 @@ msgstr ""
 "Programmet kunne ikke opprette en tilkobling til indekseringstjenesten. "
 "Sjekk at denne kjører."
 
-#: ../gtk/gtkfilechooserdefault.c:8912
+#: ../gtk/gtkfilechooserdefault.c:9083
 msgid "Could not send the search request"
 msgstr "Kunne ikke sende søkeforespørselen"
 
-#: ../gtk/gtkfilechooserdefault.c:9131
-msgid "Search:"
-msgstr "Søk:"
-
-#: ../gtk/gtkfilechooserdefault.c:9736
+#: ../gtk/gtkfilechooserdefault.c:9684
 #, c-format
 msgid "Could not mount %s"
 msgstr "Kunne ikke montere %s"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry, when the user enters an invalid path.
-#: ../gtk/gtkfilechooserentry.c:700 ../gtk/gtkfilechooserentry.c:1166
+#: ../gtk/gtkfilechooserentry.c:709 ../gtk/gtkfilechooserentry.c:1177
+#: ../gtk/gtkfilesystem.c:771
+#, c-format
 msgid "Invalid path"
 msgstr "Ugyldig sti"
 
 #. translators: this text is shown when there are no completions
 #. * for something the user typed in a file chooser entry
 #.
-#: ../gtk/gtkfilechooserentry.c:1098
+#: ../gtk/gtkfilechooserentry.c:1109
 msgid "No match"
 msgstr "Ingen treff"
 
 #. translators: this text is shown when there is exactly one completion
 #. * for something the user typed in a file chooser entry
 #.
-#: ../gtk/gtkfilechooserentry.c:1109
+#: ../gtk/gtkfilechooserentry.c:1120
 msgid "Sole completion"
 msgstr "Eneste fullføring"
 
@@ -1094,13 +1101,13 @@ msgstr "Eneste fullføring"
 #. * entry is a complete filename, but could be continued to find
 #. * a longer match
 #.
-#: ../gtk/gtkfilechooserentry.c:1125
+#: ../gtk/gtkfilechooserentry.c:1136
 msgid "Complete, but not unique"
 msgstr "Fullført men ikke unik"
 
 #. Translators: this text is shown while the system is searching
 #. * for possible completions for filenames in a file chooser entry.
-#: ../gtk/gtkfilechooserentry.c:1157
+#: ../gtk/gtkfilechooserentry.c:1168
 msgid "Completing..."
 msgstr "Fullfører..."
 
@@ -1108,7 +1115,7 @@ msgstr "Fullfører..."
 #. Translators: this is shown in the feedback for Tab-completion in a
 #. * file chooser's text entry when the user enters something like
 #. * "sftp://blahblah" in an app that only supports local filenames.
-#: ../gtk/gtkfilechooserentry.c:1179 ../gtk/gtkfilechooserentry.c:1204
+#: ../gtk/gtkfilechooserentry.c:1190 ../gtk/gtkfilechooserentry.c:1215
 msgid "Only local files may be selected"
 msgstr "Du kan kun velge lokale filer"
 
@@ -1116,18 +1123,18 @@ msgstr "Du kan kun velge lokale filer"
 #. Translators: this is shown in the feedback for Tab-completion in a
 #. * file chooser's text entry when the user hasn't entered the first '/'
 #. * after a hostname and yet hits Tab (such as "sftp://blahblah[Tab]")
-#: ../gtk/gtkfilechooserentry.c:1188
+#: ../gtk/gtkfilechooserentry.c:1199
 msgid "Incomplete hostname; end it with '/'"
 msgstr "Ikke fullstendig vertsnavn; avslutt med «/»"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry when the user enters a path that does not exist
 #. * and then hits Tab
-#: ../gtk/gtkfilechooserentry.c:1199
+#: ../gtk/gtkfilechooserentry.c:1210
 msgid "Path does not exist"
 msgstr "Stien eksisterer ikke"
 
-#: ../gtk/gtkfilechoosersettings.c:487 ../gtk/gtkfilesel.c:1349
+#: ../gtk/gtkfilechoosersettings.c:536 ../gtk/gtkfilesel.c:1349
 #: ../gtk/gtkfilesel.c:1360
 #, c-format
 msgid "Error creating folder '%s': %s"
@@ -1328,7 +1335,7 @@ msgstr "_Gammaverdi"
 msgid "Error loading icon: %s"
 msgstr "Feil under lasting av ikon: %s"
 
-#: ../gtk/gtkicontheme.c:1364
+#: ../gtk/gtkicontheme.c:1365
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1341,12 +1348,12 @@ msgstr ""
 "Du kan finne en kopi av det på:\n"
 "\t%s"
 
-#: ../gtk/gtkicontheme.c:1544
+#: ../gtk/gtkicontheme.c:1546
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Ikon «%s» er ikke tilstede i tema"
 
-#: ../gtk/gtkicontheme.c:3084
+#: ../gtk/gtkicontheme.c:3086
 msgid "Failed to load icon"
 msgstr "Feil under lasting av ikon"
 
@@ -1354,17 +1361,17 @@ msgstr "Feil under lasting av ikon"
 msgid "Simple"
 msgstr "Enkel"
 
-#: ../gtk/gtkimmulticontext.c:563
+#: ../gtk/gtkimmulticontext.c:560
 msgctxt "input method menu"
 msgid "System"
 msgstr "System"
 
-#: ../gtk/gtkimmulticontext.c:573
+#: ../gtk/gtkimmulticontext.c:570
 msgctxt "input method menu"
 msgid "None"
 msgstr "Ingen"
 
-#: ../gtk/gtkimmulticontext.c:656
+#: ../gtk/gtkimmulticontext.c:653
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
@@ -1450,12 +1457,12 @@ msgid "Cl_ear"
 msgstr "_Tøm"
 
 #. Open Link
-#: ../gtk/gtklabel.c:5700
+#: ../gtk/gtklabel.c:5702
 msgid "_Open Link"
 msgstr "_Åpne lenke"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:5712
+#: ../gtk/gtklabel.c:5714
 msgid "Copy _Link Address"
 msgstr "Kopier _lenkens adresse"
 
@@ -1468,27 +1475,27 @@ msgid "Invalid URI"
 msgstr "Ugyldig URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:453
+#: ../gtk/gtkmain.c:454
 msgid "Load additional GTK+ modules"
 msgstr "Last tilleggsmoduler for GTK+"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:454
+#: ../gtk/gtkmain.c:455
 msgid "MODULES"
 msgstr "MODULER"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:456
+#: ../gtk/gtkmain.c:457
 msgid "Make all warnings fatal"
 msgstr "La alle advarsler være fatale"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:459
+#: ../gtk/gtkmain.c:460
 msgid "GTK+ debugging flags to set"
 msgstr "Feilsøkingsflagg som skal settes for GTK+"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:462
+#: ../gtk/gtkmain.c:463
 msgid "GTK+ debugging flags to unset"
 msgstr "Feilsøkingsflagg som skal fjernes for GTK+"
 
@@ -1497,20 +1504,20 @@ msgstr "Feilsøkingsflagg som skal fjernes for GTK+"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:732
+#: ../gtk/gtkmain.c:744
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:797
+#: ../gtk/gtkmain.c:809
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Kan ikke åpne skjerm: %s"
 
-#: ../gtk/gtkmain.c:834
+#: ../gtk/gtkmain.c:846
 msgid "GTK+ Options"
 msgstr "Alternativer for GTK+"
 
-#: ../gtk/gtkmain.c:834
+#: ../gtk/gtkmain.c:846
 msgid "Show GTK+ Options"
 msgstr "Vis alternativer for GTK+"
 
@@ -1570,32 +1577,32 @@ msgstr ""
 "Kan ikke terminere prosess med PID %d. Operasjonen er ikke implementert."
 
 #. translators: this string is a name for the 'less' command
-#: ../gtk/gtkmountoperation-x11.c:865
+#: ../gtk/gtkmountoperation-x11.c:872
 msgid "Terminal Pager"
 msgstr "Terminal Pager"
 
-#: ../gtk/gtkmountoperation-x11.c:866
+#: ../gtk/gtkmountoperation-x11.c:873
 msgid "Top Command"
 msgstr "Top-kommando"
 
-#: ../gtk/gtkmountoperation-x11.c:867
+#: ../gtk/gtkmountoperation-x11.c:874
 msgid "Bourne Again Shell"
 msgstr "Bourne Again Shell"
 
-#: ../gtk/gtkmountoperation-x11.c:868
+#: ../gtk/gtkmountoperation-x11.c:875
 msgid "Bourne Shell"
 msgstr "Bourne Shell"
 
-#: ../gtk/gtkmountoperation-x11.c:869
+#: ../gtk/gtkmountoperation-x11.c:876
 msgid "Z Shell"
 msgstr "Z Shell"
 
-#: ../gtk/gtkmountoperation-x11.c:966
+#: ../gtk/gtkmountoperation-x11.c:973
 #, c-format
 msgid "Cannot end process with PID %d: %s"
 msgstr "Kan ikke avslutte prosess med PID %d: %s"
 
-#: ../gtk/gtknotebook.c:4731 ../gtk/gtknotebook.c:7337
+#: ../gtk/gtknotebook.c:4744 ../gtk/gtknotebook.c:7350
 #, c-format
 msgid "Page %u"
 msgstr "Side %u"
@@ -1628,7 +1635,7 @@ msgstr ""
 " Topp: %s %s\n"
 " Bunn: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:846 ../gtk/gtkprintunixdialog.c:3284
+#: ../gtk/gtkpagesetupunixdialog.c:846 ../gtk/gtkprintunixdialog.c:3286
 msgid "Manage Custom Sizes..."
 msgstr "Håndter egendefinerte størrelser..."
 
@@ -1636,7 +1643,7 @@ msgstr "Håndter egendefinerte størrelser..."
 msgid "_Format for:"
 msgstr "_Format for:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:916 ../gtk/gtkprintunixdialog.c:3456
+#: ../gtk/gtkpagesetupunixdialog.c:916 ../gtk/gtkprintunixdialog.c:3458
 msgid "_Paper size:"
 msgstr "_Papirstørrelse:"
 
@@ -1644,7 +1651,7 @@ msgstr "_Papirstørrelse:"
 msgid "_Orientation:"
 msgstr "_Orientering:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1011 ../gtk/gtkprintunixdialog.c:3518
+#: ../gtk/gtkpagesetupunixdialog.c:1011 ../gtk/gtkprintunixdialog.c:3520
 msgid "Page Setup"
 msgstr "Sideoppsett"
 
@@ -1664,11 +1671,11 @@ msgstr "Filsystemrot"
 msgid "Authentication"
 msgstr "Autentisering"
 
-#: ../gtk/gtkprinteroptionwidget.c:694
+#: ../gtk/gtkprinteroptionwidget.c:725
 msgid "Not available"
 msgstr "Ikke tilgjengelig"
 
-#: ../gtk/gtkprinteroptionwidget.c:813
+#: ../gtk/gtkprinteroptionwidget.c:844
 msgid "_Save in folder:"
 msgstr "_Lagre i mappe:"
 
@@ -1771,7 +1778,7 @@ msgstr "Tom for papir"
 
 #. Translators: this is a printer status.
 #: ../gtk/gtkprintoperation-win32.c:616
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2003
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2153
 msgid "Paused"
 msgstr "Pause"
 
@@ -1866,28 +1873,28 @@ msgstr ""
 "Oppgi en ett eller flere sideområder,\n"
 " f.eks 1-3,7,11"
 
-#: ../gtk/gtkprintunixdialog.c:2220
+#: ../gtk/gtkprintunixdialog.c:2221
 msgid "Pages"
 msgstr "Sider"
 
-#: ../gtk/gtkprintunixdialog.c:2233
+#: ../gtk/gtkprintunixdialog.c:2234
 msgid "Copies"
 msgstr "Kopier"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:2238
+#: ../gtk/gtkprintunixdialog.c:2239
 msgid "Copie_s:"
 msgstr "_Kopier:"
 
-#: ../gtk/gtkprintunixdialog.c:2256
+#: ../gtk/gtkprintunixdialog.c:2258
 msgid "C_ollate"
 msgstr "S_lå sammen"
 
-#: ../gtk/gtkprintunixdialog.c:2264
+#: ../gtk/gtkprintunixdialog.c:2266
 msgid "_Reverse"
 msgstr "_Omvendt"
 
-#: ../gtk/gtkprintunixdialog.c:2284
+#: ../gtk/gtkprintunixdialog.c:2286
 msgid "General"
 msgstr "Generelt"
 
@@ -1897,168 +1904,168 @@ msgstr "Generelt"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: ../gtk/gtkprintunixdialog.c:3017
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3539
+#: ../gtk/gtkprintunixdialog.c:3019
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3707
 msgid "Left to right, top to bottom"
 msgstr "Venstre til høyre, topp til bunn"
 
-#: ../gtk/gtkprintunixdialog.c:3017
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3539
+#: ../gtk/gtkprintunixdialog.c:3019
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3707
 msgid "Left to right, bottom to top"
 msgstr "Venstre til høyre, bunn til topp"
 
-#: ../gtk/gtkprintunixdialog.c:3018
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3540
+#: ../gtk/gtkprintunixdialog.c:3020
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3708
 msgid "Right to left, top to bottom"
 msgstr "Høyre til venstre, topp til bunn"
 
-#: ../gtk/gtkprintunixdialog.c:3018
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3540
+#: ../gtk/gtkprintunixdialog.c:3020
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3708
 msgid "Right to left, bottom to top"
 msgstr "Høyre til venstre, bunn til topp"
 
-#: ../gtk/gtkprintunixdialog.c:3019
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3541
+#: ../gtk/gtkprintunixdialog.c:3021
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3709
 msgid "Top to bottom, left to right"
 msgstr "Topp til bunn, venstre til høyre"
 
-#: ../gtk/gtkprintunixdialog.c:3019
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3541
+#: ../gtk/gtkprintunixdialog.c:3021
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3709
 msgid "Top to bottom, right to left"
 msgstr "Topp til bunn, høyre til venstre"
 
-#: ../gtk/gtkprintunixdialog.c:3020
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3542
+#: ../gtk/gtkprintunixdialog.c:3022
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3710
 msgid "Bottom to top, left to right"
 msgstr "Bunn til topp, venstre til høyre"
 
-#: ../gtk/gtkprintunixdialog.c:3020
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3542
+#: ../gtk/gtkprintunixdialog.c:3022
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3710
 msgid "Bottom to top, right to left"
 msgstr "Bunn til topp, høyre til venstre"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: ../gtk/gtkprintunixdialog.c:3024 ../gtk/gtkprintunixdialog.c:3037
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3574
+#: ../gtk/gtkprintunixdialog.c:3026 ../gtk/gtkprintunixdialog.c:3039
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3742
 msgid "Page Ordering"
 msgstr "Siderekkefølge"
 
-#: ../gtk/gtkprintunixdialog.c:3053
+#: ../gtk/gtkprintunixdialog.c:3055
 msgid "Left to right"
 msgstr "Venstre til høyre"
 
-#: ../gtk/gtkprintunixdialog.c:3054
+#: ../gtk/gtkprintunixdialog.c:3056
 msgid "Right to left"
 msgstr "Høyre til venstre"
 
-#: ../gtk/gtkprintunixdialog.c:3066
+#: ../gtk/gtkprintunixdialog.c:3068
 msgid "Top to bottom"
 msgstr "Topp til bunn"
 
-#: ../gtk/gtkprintunixdialog.c:3067
+#: ../gtk/gtkprintunixdialog.c:3069
 msgid "Bottom to top"
 msgstr "Bunn til topp"
 
-#: ../gtk/gtkprintunixdialog.c:3307
+#: ../gtk/gtkprintunixdialog.c:3309
 msgid "Layout"
 msgstr "Utforming"
 
-#: ../gtk/gtkprintunixdialog.c:3311
+#: ../gtk/gtkprintunixdialog.c:3313
 msgid "T_wo-sided:"
 msgstr "T_osidig:"
 
-#: ../gtk/gtkprintunixdialog.c:3326
+#: ../gtk/gtkprintunixdialog.c:3328
 msgid "Pages per _side:"
 msgstr "Ark per _side:"
 
-#: ../gtk/gtkprintunixdialog.c:3343
+#: ../gtk/gtkprintunixdialog.c:3345
 msgid "Page or_dering:"
 msgstr "Si_derekkefølge:"
 
-#: ../gtk/gtkprintunixdialog.c:3359
+#: ../gtk/gtkprintunixdialog.c:3361
 msgid "_Only print:"
 msgstr "K_un skriv ut:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:3374
+#: ../gtk/gtkprintunixdialog.c:3376
 msgid "All sheets"
 msgstr "Alle ark"
 
-#: ../gtk/gtkprintunixdialog.c:3375
+#: ../gtk/gtkprintunixdialog.c:3377
 msgid "Even sheets"
 msgstr "Like ark"
 
-#: ../gtk/gtkprintunixdialog.c:3376
+#: ../gtk/gtkprintunixdialog.c:3378
 msgid "Odd sheets"
 msgstr "Ulike ark"
 
-#: ../gtk/gtkprintunixdialog.c:3379
+#: ../gtk/gtkprintunixdialog.c:3381
 msgid "Sc_ale:"
 msgstr "Sk_aler:"
 
-#: ../gtk/gtkprintunixdialog.c:3406
+#: ../gtk/gtkprintunixdialog.c:3408
 msgid "Paper"
 msgstr "Papir"
 
-#: ../gtk/gtkprintunixdialog.c:3410
+#: ../gtk/gtkprintunixdialog.c:3412
 msgid "Paper _type:"
 msgstr "Papir_type:"
 
-#: ../gtk/gtkprintunixdialog.c:3425
+#: ../gtk/gtkprintunixdialog.c:3427
 msgid "Paper _source:"
 msgstr "Papi_rkilde:"
 
-#: ../gtk/gtkprintunixdialog.c:3440
+#: ../gtk/gtkprintunixdialog.c:3442
 msgid "Output t_ray:"
 msgstr "U_tskuff:"
 
-#: ../gtk/gtkprintunixdialog.c:3480
+#: ../gtk/gtkprintunixdialog.c:3482
 msgid "Or_ientation:"
 msgstr "Or_ientering:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:3495
+#: ../gtk/gtkprintunixdialog.c:3497
 msgid "Portrait"
 msgstr "Portrett"
 
-#: ../gtk/gtkprintunixdialog.c:3496
+#: ../gtk/gtkprintunixdialog.c:3498
 msgid "Landscape"
 msgstr "Landskap"
 
-#: ../gtk/gtkprintunixdialog.c:3497
+#: ../gtk/gtkprintunixdialog.c:3499
 msgid "Reverse portrait"
 msgstr "Omvendt portrett"
 
-#: ../gtk/gtkprintunixdialog.c:3498
+#: ../gtk/gtkprintunixdialog.c:3500
 msgid "Reverse landscape"
 msgstr "Omvendt landskap"
 
-#: ../gtk/gtkprintunixdialog.c:3543
+#: ../gtk/gtkprintunixdialog.c:3545
 msgid "Job Details"
 msgstr "Detaljer for jobb"
 
-#: ../gtk/gtkprintunixdialog.c:3549
+#: ../gtk/gtkprintunixdialog.c:3551
 msgid "Pri_ority:"
 msgstr "Pri_oritet:"
 
-#: ../gtk/gtkprintunixdialog.c:3564
+#: ../gtk/gtkprintunixdialog.c:3566
 msgid "_Billing info:"
 msgstr "_Faktureringsinformasjon:"
 
-#: ../gtk/gtkprintunixdialog.c:3582
+#: ../gtk/gtkprintunixdialog.c:3584
 msgid "Print Document"
 msgstr "Skriv ut dokument"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: ../gtk/gtkprintunixdialog.c:3591
+#: ../gtk/gtkprintunixdialog.c:3593
 msgid "_Now"
 msgstr "_Nå"
 
-#: ../gtk/gtkprintunixdialog.c:3602
+#: ../gtk/gtkprintunixdialog.c:3604
 msgid "A_t:"
 msgstr "_Tid:"
 
@@ -2066,7 +2073,7 @@ msgstr "_Tid:"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: ../gtk/gtkprintunixdialog.c:3608
+#: ../gtk/gtkprintunixdialog.c:3610
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -2074,77 +2081,77 @@ msgstr ""
 "Oppgi klokkeslett for utskrift.\n"
 " f.eks 15.30, 2.35 pm, 14.15.20, 11.46.30 am, 4 pm"
 
-#: ../gtk/gtkprintunixdialog.c:3618
+#: ../gtk/gtkprintunixdialog.c:3620
 msgid "Time of print"
 msgstr "Tid for utskrift"
 
-#: ../gtk/gtkprintunixdialog.c:3634
+#: ../gtk/gtkprintunixdialog.c:3636
 msgid "On _hold"
 msgstr "På _vent"
 
-#: ../gtk/gtkprintunixdialog.c:3635
+#: ../gtk/gtkprintunixdialog.c:3637
 msgid "Hold the job until it is explicitly released"
 msgstr "Sett jobben på vent inntil den er eksplisitt aktivert"
 
-#: ../gtk/gtkprintunixdialog.c:3655
+#: ../gtk/gtkprintunixdialog.c:3657
 msgid "Add Cover Page"
 msgstr "Legg til omslag"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../gtk/gtkprintunixdialog.c:3664
+#: ../gtk/gtkprintunixdialog.c:3666
 msgid "Be_fore:"
 msgstr "_Før:"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../gtk/gtkprintunixdialog.c:3682
+#: ../gtk/gtkprintunixdialog.c:3684
 msgid "_After:"
 msgstr "_Etter:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: ../gtk/gtkprintunixdialog.c:3700
+#: ../gtk/gtkprintunixdialog.c:3702
 msgid "Job"
 msgstr "Jobb"
 
-#: ../gtk/gtkprintunixdialog.c:3766
+#: ../gtk/gtkprintunixdialog.c:3768
 msgid "Advanced"
 msgstr "Avansert"
 
 #. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3801
+#: ../gtk/gtkprintunixdialog.c:3803
 msgid "Image Quality"
 msgstr "Bildekvalitet"
 
 #. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3805
+#: ../gtk/gtkprintunixdialog.c:3807
 msgid "Color"
 msgstr "Farge"
 
 #. Translators: this will appear as tab label in print dialog.
 #. It's a typographical term, as in "Binding and finishing"
-#: ../gtk/gtkprintunixdialog.c:3810
+#: ../gtk/gtkprintunixdialog.c:3812
 msgid "Finishing"
 msgstr "Fullfører"
 
-#: ../gtk/gtkprintunixdialog.c:3820
+#: ../gtk/gtkprintunixdialog.c:3822
 msgid "Some of the settings in the dialog conflict"
 msgstr "Noen innstillinger i dialogen er i konflikt"
 
-#: ../gtk/gtkprintunixdialog.c:3843
+#: ../gtk/gtkprintunixdialog.c:3845
 msgid "Print"
 msgstr "Skriv ut"
 
-#: ../gtk/gtkrc.c:2878
+#: ../gtk/gtkrc.c:2886
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Kan ikke finne include-fil: «%s»"
 
-#: ../gtk/gtkrc.c:3508 ../gtk/gtkrc.c:3511
+#: ../gtk/gtkrc.c:3516 ../gtk/gtkrc.c:3519
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kunne ikke finne bildefil i pixmap_path: «%s»"
@@ -2211,12 +2218,12 @@ msgstr "Ingen oppføring funnet"
 msgid "No recently used resource found with URI `%s'"
 msgstr "Fant ingen nylig brukt ressurs med URI «%s»"
 
-#: ../gtk/gtkrecentchoosermenu.c:775
+#: ../gtk/gtkrecentchoosermenu.c:774
 #, c-format
 msgid "Open '%s'"
 msgstr "Åpne «%s»"
 
-#: ../gtk/gtkrecentchoosermenu.c:805
+#: ../gtk/gtkrecentchoosermenu.c:804
 msgid "Unknown item"
 msgstr "Ukjent oppføring"
 
@@ -2225,7 +2232,7 @@ msgstr "Ukjent oppføring"
 #. * the %s is the name of the item. Please keep the _ in front
 #. * of the number to give these menu items a mnemonic.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:816
+#: ../gtk/gtkrecentchoosermenu.c:815
 #, c-format
 msgctxt "recent menu label"
 msgid "_%d. %s"
@@ -2234,16 +2241,16 @@ msgstr "_%d. %s"
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:821
+#: ../gtk/gtkrecentchoosermenu.c:820
 #, c-format
 msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:1164 ../gtk/gtkrecentmanager.c:1177
-#: ../gtk/gtkrecentmanager.c:1315 ../gtk/gtkrecentmanager.c:1325
-#: ../gtk/gtkrecentmanager.c:1378 ../gtk/gtkrecentmanager.c:1387
-#: ../gtk/gtkrecentmanager.c:1402
+#: ../gtk/gtkrecentmanager.c:1173 ../gtk/gtkrecentmanager.c:1186
+#: ../gtk/gtkrecentmanager.c:1323 ../gtk/gtkrecentmanager.c:1333
+#: ../gtk/gtkrecentmanager.c:1386 ../gtk/gtkrecentmanager.c:1395
+#: ../gtk/gtkrecentmanager.c:1410
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Kan ikke finne en oppføring med URI «%s»"
@@ -2258,22 +2265,22 @@ msgid "Provides visual indication of progress"
 msgstr "Gir visuell indikasjon av fremdrift"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
-#: ../gtk/gtkstock.c:314
+#: ../gtk/gtkstock.c:315
 msgctxt "Stock label"
 msgid "Information"
 msgstr "Informasjon"
 
-#: ../gtk/gtkstock.c:315
+#: ../gtk/gtkstock.c:316
 msgctxt "Stock label"
 msgid "Warning"
 msgstr "Advarsel"
 
-#: ../gtk/gtkstock.c:316
+#: ../gtk/gtkstock.c:317
 msgctxt "Stock label"
 msgid "Error"
 msgstr "Feil"
 
-#: ../gtk/gtkstock.c:317
+#: ../gtk/gtkstock.c:318
 msgctxt "Stock label"
 msgid "Question"
 msgstr "Spørsmål"
@@ -2281,487 +2288,487 @@ msgstr "Spørsmål"
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: ../gtk/gtkstock.c:322
+#: ../gtk/gtkstock.c:323
 msgctxt "Stock label"
 msgid "_About"
 msgstr "_Om"
 
-#: ../gtk/gtkstock.c:323
+#: ../gtk/gtkstock.c:324
 msgctxt "Stock label"
 msgid "_Add"
 msgstr "_Legg til"
 
-#: ../gtk/gtkstock.c:324
+#: ../gtk/gtkstock.c:325
 msgctxt "Stock label"
 msgid "_Apply"
 msgstr "_Bruk"
 
-#: ../gtk/gtkstock.c:325
+#: ../gtk/gtkstock.c:326
 msgctxt "Stock label"
 msgid "_Bold"
 msgstr "_Uthevet"
 
-#: ../gtk/gtkstock.c:326
+#: ../gtk/gtkstock.c:327
 msgctxt "Stock label"
 msgid "_Cancel"
 msgstr "_Avbryt"
 
-#: ../gtk/gtkstock.c:327
+#: ../gtk/gtkstock.c:328
 msgctxt "Stock label"
 msgid "_CD-Rom"
 msgstr "_CD-ROM"
 
-#: ../gtk/gtkstock.c:328
+#: ../gtk/gtkstock.c:329
 msgctxt "Stock label"
 msgid "_Clear"
 msgstr "_Tøm"
 
-#: ../gtk/gtkstock.c:329
+#: ../gtk/gtkstock.c:330
 msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Lukk"
 
-#: ../gtk/gtkstock.c:330
+#: ../gtk/gtkstock.c:331
 msgctxt "Stock label"
 msgid "C_onnect"
 msgstr "K_oble til"
 
-#: ../gtk/gtkstock.c:331
+#: ../gtk/gtkstock.c:332
 msgctxt "Stock label"
 msgid "_Convert"
 msgstr "_Konverter"
 
-#: ../gtk/gtkstock.c:332
+#: ../gtk/gtkstock.c:333
 msgctxt "Stock label"
 msgid "_Copy"
 msgstr "_Kopier"
 
-#: ../gtk/gtkstock.c:333
+#: ../gtk/gtkstock.c:334
 msgctxt "Stock label"
 msgid "Cu_t"
 msgstr "Klipp u_t"
 
-#: ../gtk/gtkstock.c:334
+#: ../gtk/gtkstock.c:335
 msgctxt "Stock label"
 msgid "_Delete"
 msgstr "_Slett"
 
-#: ../gtk/gtkstock.c:335
+#: ../gtk/gtkstock.c:336
 msgctxt "Stock label"
 msgid "_Discard"
 msgstr "_Forkast"
 
-#: ../gtk/gtkstock.c:336
+#: ../gtk/gtkstock.c:337
 msgctxt "Stock label"
 msgid "_Disconnect"
 msgstr "Koble _fra"
 
-#: ../gtk/gtkstock.c:337
+#: ../gtk/gtkstock.c:338
 msgctxt "Stock label"
 msgid "_Execute"
 msgstr "_Kjør"
 
-#: ../gtk/gtkstock.c:338
+#: ../gtk/gtkstock.c:339
 msgctxt "Stock label"
 msgid "_Edit"
 msgstr "R_ediger"
 
-#: ../gtk/gtkstock.c:339
+#: ../gtk/gtkstock.c:340
 msgctxt "Stock label"
 msgid "_Find"
 msgstr "_Finn"
 
-#: ../gtk/gtkstock.c:340
+#: ../gtk/gtkstock.c:341
 msgctxt "Stock label"
 msgid "Find and _Replace"
 msgstr "Finn og e_rstatt"
 
-#: ../gtk/gtkstock.c:341
+#: ../gtk/gtkstock.c:342
 msgctxt "Stock label"
 msgid "_Floppy"
 msgstr "_Diskett"
 
-#: ../gtk/gtkstock.c:342
+#: ../gtk/gtkstock.c:343
 msgctxt "Stock label"
 msgid "_Fullscreen"
 msgstr "_Fullskjerm"
 
-#: ../gtk/gtkstock.c:343
+#: ../gtk/gtkstock.c:344
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
 msgstr "For_lat fullskjerm"
 
 #. This is a navigation label as in "go to the bottom of the page"
-#: ../gtk/gtkstock.c:345
+#: ../gtk/gtkstock.c:346
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
 msgstr "_Bunn"
 
 #. This is a navigation label as in "go to the first page"
-#: ../gtk/gtkstock.c:347
+#: ../gtk/gtkstock.c:348
 msgctxt "Stock label, navigation"
 msgid "_First"
 msgstr "_Første"
 
 #. This is a navigation label as in "go to the last page"
-#: ../gtk/gtkstock.c:349
+#: ../gtk/gtkstock.c:350
 msgctxt "Stock label, navigation"
 msgid "_Last"
 msgstr "_Siste"
 
 #. This is a navigation label as in "go to the top of the page"
-#: ../gtk/gtkstock.c:351
+#: ../gtk/gtkstock.c:352
 msgctxt "Stock label, navigation"
 msgid "_Top"
 msgstr "_Topp"
 
 #. This is a navigation label as in "go back"
-#: ../gtk/gtkstock.c:353
+#: ../gtk/gtkstock.c:354
 msgctxt "Stock label, navigation"
 msgid "_Back"
 msgstr "Til_bake"
 
 #. This is a navigation label as in "go down"
-#: ../gtk/gtkstock.c:355
+#: ../gtk/gtkstock.c:356
 msgctxt "Stock label, navigation"
 msgid "_Down"
 msgstr "Ne_d"
 
 #. This is a navigation label as in "go forward"
-#: ../gtk/gtkstock.c:357
+#: ../gtk/gtkstock.c:358
 msgctxt "Stock label, navigation"
 msgid "_Forward"
 msgstr "_Fremover"
 
 #. This is a navigation label as in "go up"
-#: ../gtk/gtkstock.c:359
+#: ../gtk/gtkstock.c:360
 msgctxt "Stock label, navigation"
 msgid "_Up"
 msgstr "_Opp"
 
-#: ../gtk/gtkstock.c:360
+#: ../gtk/gtkstock.c:361
 msgctxt "Stock label"
 msgid "_Harddisk"
 msgstr "_Harddisk"
 
-#: ../gtk/gtkstock.c:361
+#: ../gtk/gtkstock.c:362
 msgctxt "Stock label"
 msgid "_Help"
 msgstr "_Hjelp"
 
-#: ../gtk/gtkstock.c:362
+#: ../gtk/gtkstock.c:363
 msgctxt "Stock label"
 msgid "_Home"
 msgstr "_Hjem"
 
-#: ../gtk/gtkstock.c:363
+#: ../gtk/gtkstock.c:364
 msgctxt "Stock label"
 msgid "Increase Indent"
 msgstr "Rykk inn mer"
 
-#: ../gtk/gtkstock.c:364
+#: ../gtk/gtkstock.c:365
 msgctxt "Stock label"
 msgid "Decrease Indent"
 msgstr "Rykk inn mindre"
 
-#: ../gtk/gtkstock.c:365
+#: ../gtk/gtkstock.c:366
 msgctxt "Stock label"
 msgid "_Index"
 msgstr "_Indeks"
 
-#: ../gtk/gtkstock.c:366
+#: ../gtk/gtkstock.c:367
 msgctxt "Stock label"
 msgid "_Information"
 msgstr "_Informasjon"
 
-#: ../gtk/gtkstock.c:367
+#: ../gtk/gtkstock.c:368
 msgctxt "Stock label"
 msgid "_Italic"
 msgstr "Kurs_iv"
 
-#: ../gtk/gtkstock.c:368
+#: ../gtk/gtkstock.c:369
 msgctxt "Stock label"
 msgid "_Jump to"
 msgstr "_Hopp til"
 
 #. This is about text justification, "centered text"
-#: ../gtk/gtkstock.c:370
+#: ../gtk/gtkstock.c:371
 msgctxt "Stock label"
 msgid "_Center"
 msgstr "_Sentrer"
 
 #. This is about text justification
-#: ../gtk/gtkstock.c:372
+#: ../gtk/gtkstock.c:373
 msgctxt "Stock label"
 msgid "_Fill"
 msgstr "_Fyll"
 
 #. This is about text justification, "left-justified text"
-#: ../gtk/gtkstock.c:374
+#: ../gtk/gtkstock.c:375
 msgctxt "Stock label"
 msgid "_Left"
 msgstr "_Venstre"
 
 #. This is about text justification, "right-justified text"
-#: ../gtk/gtkstock.c:376
+#: ../gtk/gtkstock.c:377
 msgctxt "Stock label"
 msgid "_Right"
 msgstr "Høy_re"
 
 #. Media label, as in "fast forward"
-#: ../gtk/gtkstock.c:379
+#: ../gtk/gtkstock.c:380
 msgctxt "Stock label, media"
 msgid "_Forward"
 msgstr "_Fremover"
 
 #. Media label, as in "next song"
-#: ../gtk/gtkstock.c:381
+#: ../gtk/gtkstock.c:382
 msgctxt "Stock label, media"
 msgid "_Next"
 msgstr "_Neste"
 
 #. Media label, as in "pause music"
-#: ../gtk/gtkstock.c:383
+#: ../gtk/gtkstock.c:384
 msgctxt "Stock label, media"
 msgid "P_ause"
 msgstr "P_ause"
 
 #. Media label, as in "play music"
-#: ../gtk/gtkstock.c:385
+#: ../gtk/gtkstock.c:386
 msgctxt "Stock label, media"
 msgid "_Play"
 msgstr "S_pill av"
 
 #. Media label, as in  "previous song"
-#: ../gtk/gtkstock.c:387
+#: ../gtk/gtkstock.c:388
 msgctxt "Stock label, media"
 msgid "Pre_vious"
 msgstr "_Forrige"
 
 #. Media label
-#: ../gtk/gtkstock.c:389
+#: ../gtk/gtkstock.c:390
 msgctxt "Stock label, media"
 msgid "_Record"
 msgstr "_Ta opp"
 
 #. Media label
-#: ../gtk/gtkstock.c:391
+#: ../gtk/gtkstock.c:392
 msgctxt "Stock label, media"
 msgid "R_ewind"
 msgstr "Spol tilbak_e"
 
 #. Media label
-#: ../gtk/gtkstock.c:393
+#: ../gtk/gtkstock.c:394
 msgctxt "Stock label, media"
 msgid "_Stop"
 msgstr "_Stopp"
 
-#: ../gtk/gtkstock.c:394
+#: ../gtk/gtkstock.c:395
 msgctxt "Stock label"
 msgid "_Network"
 msgstr "_Nettverk"
 
-#: ../gtk/gtkstock.c:395
+#: ../gtk/gtkstock.c:396
 msgctxt "Stock label"
 msgid "_New"
 msgstr "_Ny"
 
-#: ../gtk/gtkstock.c:396
+#: ../gtk/gtkstock.c:397
 msgctxt "Stock label"
 msgid "_No"
 msgstr "_Nei"
 
-#: ../gtk/gtkstock.c:397
+#: ../gtk/gtkstock.c:398
 msgctxt "Stock label"
 msgid "_OK"
 msgstr "_OK"
 
-#: ../gtk/gtkstock.c:398
+#: ../gtk/gtkstock.c:399
 msgctxt "Stock label"
 msgid "_Open"
 msgstr "_Åpne"
 
 #. Page orientation
-#: ../gtk/gtkstock.c:400
+#: ../gtk/gtkstock.c:401
 msgctxt "Stock label"
 msgid "Landscape"
 msgstr "Landskap"
 
 #. Page orientation
-#: ../gtk/gtkstock.c:402
+#: ../gtk/gtkstock.c:403
 msgctxt "Stock label"
 msgid "Portrait"
 msgstr "Portrett"
 
 #. Page orientation
-#: ../gtk/gtkstock.c:404
+#: ../gtk/gtkstock.c:405
 msgctxt "Stock label"
 msgid "Reverse landscape"
 msgstr "Omvendt landskap"
 
 #. Page orientation
-#: ../gtk/gtkstock.c:406
+#: ../gtk/gtkstock.c:407
 msgctxt "Stock label"
 msgid "Reverse portrait"
 msgstr "Omvendt portrett"
 
-#: ../gtk/gtkstock.c:407
+#: ../gtk/gtkstock.c:408
 msgctxt "Stock label"
 msgid "Page Set_up"
 msgstr "Side_oppsett"
 
-#: ../gtk/gtkstock.c:408
+#: ../gtk/gtkstock.c:409
 msgctxt "Stock label"
 msgid "_Paste"
 msgstr "_Lim inn"
 
-#: ../gtk/gtkstock.c:409
+#: ../gtk/gtkstock.c:410
 msgctxt "Stock label"
 msgid "_Preferences"
 msgstr "_Brukervalg"
 
-#: ../gtk/gtkstock.c:410
+#: ../gtk/gtkstock.c:411
 msgctxt "Stock label"
 msgid "_Print"
 msgstr "S_kriv ut"
 
-#: ../gtk/gtkstock.c:411
+#: ../gtk/gtkstock.c:412
 msgctxt "Stock label"
 msgid "Print Pre_view"
 msgstr "Utskriftsforhånds_visning"
 
-#: ../gtk/gtkstock.c:412
+#: ../gtk/gtkstock.c:413
 msgctxt "Stock label"
 msgid "_Properties"
 msgstr "E_genskaper"
 
-#: ../gtk/gtkstock.c:413
+#: ../gtk/gtkstock.c:414
 msgctxt "Stock label"
 msgid "_Quit"
 msgstr "A_vslutt"
 
-#: ../gtk/gtkstock.c:414
+#: ../gtk/gtkstock.c:415
 msgctxt "Stock label"
 msgid "_Redo"
 msgstr "_Gjenopprett"
 
-#: ../gtk/gtkstock.c:415
+#: ../gtk/gtkstock.c:416
 msgctxt "Stock label"
 msgid "_Refresh"
 msgstr "Oppdate_r"
 
-#: ../gtk/gtkstock.c:416
+#: ../gtk/gtkstock.c:417
 msgctxt "Stock label"
 msgid "_Remove"
 msgstr "Fje_rn"
 
-#: ../gtk/gtkstock.c:417
+#: ../gtk/gtkstock.c:418
 msgctxt "Stock label"
 msgid "_Revert"
 msgstr "Fo_rkast"
 
-#: ../gtk/gtkstock.c:418
+#: ../gtk/gtkstock.c:419
 msgctxt "Stock label"
 msgid "_Save"
 msgstr "_Lagre"
 
-#: ../gtk/gtkstock.c:419
+#: ../gtk/gtkstock.c:420
 msgctxt "Stock label"
 msgid "Save _As"
 msgstr "Lagre s_om"
 
-#: ../gtk/gtkstock.c:420
+#: ../gtk/gtkstock.c:421
 msgctxt "Stock label"
 msgid "Select _All"
 msgstr "Velg _alt"
 
-#: ../gtk/gtkstock.c:421
+#: ../gtk/gtkstock.c:422
 msgctxt "Stock label"
 msgid "_Color"
 msgstr "_Farge"
 
-#: ../gtk/gtkstock.c:422
+#: ../gtk/gtkstock.c:423
 msgctxt "Stock label"
 msgid "_Font"
 msgstr "Skri_ft"
 
 #. Sorting direction
-#: ../gtk/gtkstock.c:424
+#: ../gtk/gtkstock.c:425
 msgctxt "Stock label"
 msgid "_Ascending"
 msgstr "_Stigende"
 
 #. Sorting direction
-#: ../gtk/gtkstock.c:426
+#: ../gtk/gtkstock.c:427
 msgctxt "Stock label"
 msgid "_Descending"
 msgstr "S_ynkende"
 
-#: ../gtk/gtkstock.c:427
+#: ../gtk/gtkstock.c:428
 msgctxt "Stock label"
 msgid "_Spell Check"
 msgstr "_Stavekontroll"
 
-#: ../gtk/gtkstock.c:428
+#: ../gtk/gtkstock.c:429
 msgctxt "Stock label"
 msgid "_Stop"
 msgstr "_Stopp"
 
 #. Font variant
-#: ../gtk/gtkstock.c:430
+#: ../gtk/gtkstock.c:431
 msgctxt "Stock label"
 msgid "_Strikethrough"
 msgstr "Gjennom_strek"
 
-#: ../gtk/gtkstock.c:431
+#: ../gtk/gtkstock.c:432
 msgctxt "Stock label"
 msgid "_Undelete"
 msgstr "_Angre slett"
 
 #. Font variant
-#: ../gtk/gtkstock.c:433
+#: ../gtk/gtkstock.c:434
 msgctxt "Stock label"
 msgid "_Underline"
 msgstr "_Understrek"
 
-#: ../gtk/gtkstock.c:434
+#: ../gtk/gtkstock.c:435
 msgctxt "Stock label"
 msgid "_Undo"
 msgstr "_Angre"
 
-#: ../gtk/gtkstock.c:435
+#: ../gtk/gtkstock.c:436
 msgctxt "Stock label"
 msgid "_Yes"
 msgstr "_Ja"
 
 #. Zoom
-#: ../gtk/gtkstock.c:437
+#: ../gtk/gtkstock.c:438
 msgctxt "Stock label"
 msgid "_Normal Size"
 msgstr "_Normal størrelse"
 
 #. Zoom
-#: ../gtk/gtkstock.c:439
+#: ../gtk/gtkstock.c:440
 msgctxt "Stock label"
 msgid "Best _Fit"
 msgstr "Beste _tilpasning"
 
-#: ../gtk/gtkstock.c:440
+#: ../gtk/gtkstock.c:441
 msgctxt "Stock label"
 msgid "Zoom _In"
 msgstr "Zoom _inn"
 
-#: ../gtk/gtkstock.c:441
+#: ../gtk/gtkstock.c:442
 msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "Zoom _ut"
 
-#: ../gtk/gtktextbufferrichtext.c:651
+#: ../gtk/gtktextbufferrichtext.c:652
 #, c-format
 msgid "Unknown error when trying to deserialize %s"
 msgstr "Ukjent feil ved forsøk på å deserialisere %s"
 
-#: ../gtk/gtktextbufferrichtext.c:710
+#: ../gtk/gtktextbufferrichtext.c:711
 #, c-format
 msgid "No deserialize function found for format %s"
 msgstr "Ingen de-serialiseringsfunksjon funnet for format %s"
@@ -3966,254 +3973,254 @@ msgstr "Vietnamesisk (VIQR)"
 msgid "X Input Method"
 msgstr "X-inndatametode"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:815
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1025
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:889
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1108
 msgid "Username:"
 msgstr "Brukernavn:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:816
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1034
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:890
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1117
 msgid "Password:"
 msgstr "Passord:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:855
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1047
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:929
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1130
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
 msgstr "Autentisering kreves for å skrive ut dokument «%s» på skriver %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:857
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:931
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "Autentisering kreves for å skrive ut et dokument på %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:861
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:935
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
 msgstr "Autentisering kreves for å hente attributter for jobb «%s»"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:863
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:937
 msgid "Authentication is required to get attributes of a job"
 msgstr "Autentisering kreves for å hente attributter for en jobb"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:867
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:941
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "Autentisering kreves for å hente attributter for skriver %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:869
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:943
 msgid "Authentication is required to get attributes of a printer"
 msgstr "Autentisering kreves for å hente attributter for en skriver"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:872
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:946
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "Autentisering kreves for å hente forvalgt skriver for %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:875
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:949
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "Autentisering kreves for å hente skrivere fra %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:880
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:954
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "Autentisering kreves for å hente en fil fra %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:882
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:956
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "Autentisering kreves på %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1019
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1102
 msgid "Domain:"
 msgstr "Domene:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1049
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1132
 #, c-format
 msgid "Authentication is required to print document '%s'"
 msgstr "Autentisering kreves for å skrive ut dokument «%s»"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1054
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1137
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr "Autentisering kreves for å skrive ut dette dokumentet på skriver %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1056
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1139
 msgid "Authentication is required to print this document"
 msgstr "Autentisering kreves for å skrive ut dette dokumentet"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1677
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1701
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "Skriver «%s» har lite toner."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1678
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1702
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "Skriver «%s» er tom for toner."
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1680
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1704
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr "Skriver «%s» har lite framkallingsmiddel."
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1682
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1706
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr "Skriver «%s» er tom for framkallingsmiddel."
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1684
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1708
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr "Skriver «%s» har minst en tonerkassett som snart er tom."
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1686
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1710
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr "Skriver «%s» har minst en tom tonerkassett."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1687
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1711
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr "Lokket er åpent på skriver «%s»."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1688
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1712
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr "Døren er åpen på skriver «%s»."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1689
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1713
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "Skriver «%s» har lite papir."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1690
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1714
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "Skriver «%s» er tom for papir."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1691
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1715
 #, c-format
 msgid "Printer '%s' is currently offline."
 msgstr "Skriver «%s» er frakoblet for tiden."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1692
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1716
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "Det er et problem med skriver «%s»."
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2000
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2150
 msgid "Paused ; Rejecting Jobs"
 msgstr "Satt på pause. Avviser jobber"
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2006
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2156
 msgid "Rejecting Jobs"
 msgstr "Avviser jobber"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2939
 msgid "Two Sided"
 msgstr "Tosidig"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2783
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2940
 msgid "Paper Type"
 msgstr "Papirtype"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2784
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2941
 msgid "Paper Source"
 msgstr "Papirkilde"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2785
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2942
 msgid "Output Tray"
 msgstr "Utskuff"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2786
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2943
 msgid "Resolution"
 msgstr "Oppløsning"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2787
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2944
 msgid "GhostScript pre-filtering"
 msgstr "Forhåndsfiltrering med GhostScript"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2796
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2953
 msgid "One Sided"
 msgstr "Ensidig"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2798
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2955
 msgid "Long Edge (Standard)"
 msgstr "Lang kant (standard)"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2800
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2957
 msgid "Short Edge (Flip)"
 msgstr "Kort kant (vend)"
 
 #. Translators: this is an option of "Paper Source"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2802
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2804
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2812
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2959
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2961
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2969
 msgid "Auto Select"
 msgstr "Velg automatisk"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2806
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2808
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2810
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2814
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3310
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2963
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2965
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2967
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2971
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3467
 msgid "Printer Default"
 msgstr "Forvalg for skriver"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2816
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2973
 msgid "Embed GhostScript fonts only"
 msgstr "Bygg kun inn GhostScript-skrifter"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2818
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2975
 msgid "Convert to PS level 1"
 msgstr "Konverter til PS nivå 1"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2820
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2977
 msgid "Convert to PS level 2"
 msgstr "Konverter til PS nivå 2"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2822
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2979
 msgid "No pre-filtering"
 msgstr "Ingen forhåndsfiltrering"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2831
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2988
 msgid "Miscellaneous"
 msgstr "Forskjellig"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3534
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3702
 msgid "Urgent"
 msgstr "Haster"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3534
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3702
 msgid "High"
 msgstr "Høy"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3534
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3702
 msgid "Medium"
 msgstr "Middels"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3534
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3702
 msgid "Low"
 msgstr "Lav"
 
@@ -4221,66 +4228,66 @@ msgstr "Lav"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3558
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3726
 msgid "Pages per Sheet"
 msgstr "Sider per ark"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3595
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3763
 msgid "Job Priority"
 msgstr "Prioritet for jobb"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3606
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3774
 msgid "Billing Info"
 msgstr "Faktureringsinformasjon:"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3621
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3789
 msgid "None"
 msgstr "Ingen"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3621
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3789
 msgid "Classified"
 msgstr "Klassifisert"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3621
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3789
 msgid "Confidential"
 msgstr "Konfidensiell"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3621
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3789
 msgid "Secret"
 msgstr "Hemmelig"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3621
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3789
 msgid "Standard"
 msgstr "Vanlig"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3621
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3789
 msgid "Top Secret"
 msgstr "Topphemmelig"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3621
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3789
 msgid "Unclassified"
 msgstr "Ikke klassifisert"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3656
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3824
 msgid "Before"
 msgstr "Før"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3671
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3839
 msgid "After"
 msgstr "Etter"
 
@@ -4288,14 +4295,14 @@ msgstr "Etter"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3691
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3859
 msgid "Print at"
 msgstr "Tidspunkt for utskrift"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3702
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3870
 msgid "Print at time"
 msgstr "Tidspunkt for utskrift"
 
@@ -4303,7 +4310,7 @@ msgstr "Tidspunkt for utskrift"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3737
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3905
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Egendefinert %sx%s"
