@@ -385,6 +385,7 @@ AC_SUBST(DISABLE_ON_QUARTZ)
 if test "x$enable_broadway_backend" = xyes; then
   GDK_BACKENDS="$GDK_BACKENDS broadway"
   cairo_backends="$cairo_backends cairo"
+  have_gio_unix=yes
   GDK_WINDOWING="$GDK_WINDOWING
 #define GDK_WINDOWING_BROADWAY"
   GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -lz"
