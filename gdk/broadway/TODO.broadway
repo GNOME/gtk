@@ -8,3 +8,4 @@ Send reset events on client disconnect (button up, normal state. Maybe grab stat
 rgba suport
 shift-select in gedit doesn't work
 backdrop mode
+clean up /dev/shm on abrupt client exit

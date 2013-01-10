@@ -504,9 +504,9 @@ _gdk_broadway_server_window_translate (GdkBroadwayServer *server,
 static char
 make_valid_fs_char (char c)
 {
-  if (c == 0 || c == '/')
-    return c + 1;
-  return c;
+  char chars[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890";
+
+  return chars[c % sizeof (chars)];
 }
 
 /* name must have at least space for 34 bytes */
@@ -520,7 +520,11 @@ create_random_shm (char *name)
     {
       o = 0;
       name[o++] = '/';
-      for (i = 0; i < 32/4; i++)
+      name[o++] = 'b';
+      name[o++] = 'd';
+      name[o++] = 'w';
+      name[o++] = '-';
+      for (i = 0; i < 32/4 - 1; i++)
 	{
 	  r = g_random_int ();
 	  name[o++] = make_valid_fs_char ((r >> 0) & 0xff);
