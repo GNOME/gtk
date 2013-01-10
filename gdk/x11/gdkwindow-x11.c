@@ -1738,7 +1738,9 @@ static void
 move_to_current_desktop (GdkWindow *window)
 {
   if (gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
-					   gdk_atom_intern_static_string ("_NET_WM_DESKTOP")))
+					   gdk_atom_intern_static_string ("_NET_WM_DESKTOP")) &&
+      gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
+					   gdk_atom_intern_static_string ("_NET_CURRENT_DESKTOP")))
     {
       Atom type;
       gint format;
@@ -2717,7 +2719,9 @@ gdk_x11_window_get_frame_extents (GdkWindow    *window,
   xwindow = GDK_WINDOW_XID (window);
 
   /* first try: use _NET_FRAME_EXTENTS */
-  if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), xwindow,
+  if (gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
+                                           gdk_atom_intern_static_string ("_NET_FRAME_EXTENTS")) &&
+      XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), xwindow,
                           gdk_x11_get_xatom_by_name_for_display (display,
                                                                   "_NET_FRAME_EXTENTS"),
                           0, G_MAXLONG, False, XA_CARDINAL, &type_return,
@@ -2764,7 +2768,9 @@ gdk_x11_window_get_frame_extents (GdkWindow    *window,
   /* use NETWM_VIRTUAL_ROOTS if available */
   root = GDK_WINDOW_XROOTWIN (window);
 
-  if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), root,
+  if (gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
+                                           gdk_atom_intern_static_string ("_NET_VIRTUAL_ROOTS")) &&
+      XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), root,
 			  gdk_x11_get_xatom_by_name_for_display (display, 
 								 "_NET_VIRTUAL_ROOTS"),
 			  0, G_MAXLONG, False, XA_WINDOW, &type_return,
