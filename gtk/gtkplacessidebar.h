@@ -57,9 +57,9 @@ GtkWidget *gtk_places_sidebar_new (void);
 
 void gtk_places_sidebar_set_open_flags (GtkPlacesSidebar *sidebar, GtkPlacesOpenFlags flags);
 
-void gtk_places_sidebar_set_current_location (GtkPlacesSidebar *sidebar, GFile *location);
+void gtk_places_sidebar_set_location (GtkPlacesSidebar *sidebar, GFile *location);
 
-GFile *gtk_places_sidebar_get_selected_location (GtkPlacesSidebar *sidebar);
+GFile *gtk_places_sidebar_get_location (GtkPlacesSidebar *sidebar);
 
 void gtk_places_sidebar_set_show_desktop (GtkPlacesSidebar *sidebar, gboolean show_desktop);
 

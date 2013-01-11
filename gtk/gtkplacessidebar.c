@@ -97,7 +97,6 @@ struct _GtkPlacesSidebar {
 
 	GtkTreeView		*tree_view;
 	GtkCellRenderer		*eject_icon_cell_renderer;
-	char			*uri;
 	GtkListStore		*store;
 	GtkBookmarksManager	*bookmarks_manager;
 	GVolumeMonitor		*volume_monitor;
@@ -488,59 +487,6 @@ add_place (GtkPlacesSidebar *sidebar,
 			    -1);
 }
 
-typedef struct {
-	const gchar *location;
-	const gchar *last_uri;
-	GtkPlacesSidebar *sidebar;
-	GtkTreePath *path;
-} RestoreLocationData;
-
-static gboolean
-restore_selection_foreach (GtkTreeModel *model,
-			   GtkTreePath *path,
-			   GtkTreeIter *iter,
-			   gpointer user_data)
-{
-	RestoreLocationData *data = user_data;
-	gchar *uri;
-
-	gtk_tree_model_get (model, iter,
-			    PLACES_SIDEBAR_COLUMN_URI, &uri,
-			    -1);
-
-	if (g_strcmp0 (uri, data->last_uri) == 0 ||
-	    g_strcmp0 (uri, data->location) == 0) {
-		data->path = gtk_tree_path_copy (path);
-	}
-
-	g_free (uri);
-
-	return (data->path != NULL);
-}
-
-static void
-sidebar_update_restore_selection (GtkPlacesSidebar *sidebar,
-				  const gchar *location,
-				  const gchar *last_uri)
-{
-	RestoreLocationData data;
-	GtkTreeSelection *selection;
-
-	data.location = location;
-	data.last_uri = last_uri;
-	data.sidebar = sidebar;
-	data.path = NULL;
-
-	gtk_tree_model_foreach (GTK_TREE_MODEL (sidebar->store),
-				restore_selection_foreach, &data);
-
-	if (data.path != NULL) {
-		selection = gtk_tree_view_get_selection (sidebar->tree_view);
-		gtk_tree_selection_select_path (selection, data.path);
-		gtk_tree_path_free (data.path);
-	}
-}
-
 static GIcon *
 special_directory_get_gicon (GUserDirectory directory)
 {
@@ -717,12 +663,21 @@ add_application_shortcuts (GtkPlacesSidebar *sidebar)
 	}
 }
 
+static gboolean
+get_selected_iter (GtkPlacesSidebar *sidebar,
+		   GtkTreeIter *iter)
+{
+	GtkTreeSelection *selection;
+
+	selection = gtk_tree_view_get_selection (sidebar->tree_view);
+
+	return gtk_tree_selection_get_selected (selection, NULL, iter);
+}
+
 static void
 update_places (GtkPlacesSidebar *sidebar)
 {
-	GtkTreeSelection *selection;
-	GtkTreeIter last_iter;
-	GtkTreeModel *model;
+	GtkTreeIter iter;
 	GVolumeMonitor *volume_monitor;
 	GList *mounts, *l, *ll;
 	GMount *mount;
@@ -732,7 +687,7 @@ update_places (GtkPlacesSidebar *sidebar)
 	GVolume *volume;
 	GSList *bookmarks, *sl;
 	int index;
-	char *original_uri, *mount_uri, *name, *last_uri, *identifier;
+	char *original_uri, *mount_uri, *name, *identifier;
 	char *home_uri;
 	char *bookmark_name;
 	GIcon *icon;
@@ -740,21 +695,18 @@ update_places (GtkPlacesSidebar *sidebar)
 	char *tooltip;
 	GList *network_mounts, *network_volumes;
 
-	model = NULL;
-	last_uri = NULL;
+	/* save original selection */
+	if (get_selected_iter (sidebar, &iter)) {
+		gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store),
+				    &iter,
+				    PLACES_SIDEBAR_COLUMN_URI, &original_uri, -1);
+	} else
+		original_uri = NULL;
 
-	selection = gtk_tree_view_get_selection (sidebar->tree_view);
-	if (gtk_tree_selection_get_selected (selection, &model, &last_iter)) {
-		gtk_tree_model_get (model,
-				    &last_iter,
-				    PLACES_SIDEBAR_COLUMN_URI, &last_uri, -1);
-	}
 	gtk_list_store_clear (sidebar->store);
 
 	sidebar->devices_header_added = FALSE;
 	sidebar->bookmarks_header_added = FALSE;
-
-	original_uri = g_strdup (sidebar->uri);
 
 	network_mounts = network_volumes = NULL;
 	volume_monitor = sidebar->volume_monitor;
@@ -1135,11 +1087,16 @@ update_places (GtkPlacesSidebar *sidebar)
 
 	g_list_free_full (network_mounts, g_object_unref);
 
-	/* restore selection */
-	sidebar_update_restore_selection (sidebar, original_uri, last_uri);
+	/* restore original selection */
+	if (original_uri) {
+		GFile *restore;
 
-	g_free (original_uri);
-	g_free (last_uri);
+		restore = g_file_new_for_uri (original_uri);
+		gtk_places_sidebar_set_location (sidebar, restore);
+		g_object_unref (restore);
+
+		g_free (original_uri);
+	}
 }
 
 static void
@@ -1481,17 +1438,6 @@ build_uri_list (const char **uris)
 	}
 
 	return g_list_reverse (result);
-}
-
-static gboolean
-get_selected_iter (GtkPlacesSidebar *sidebar,
-		   GtkTreeIter *iter)
-{
-	GtkTreeSelection *selection;
-
-	selection = gtk_tree_view_get_selection (sidebar->tree_view);
-
-	return gtk_tree_selection_get_selected (selection, NULL, iter);
 }
 
 /* Reorders the selected bookmark to the specified position */
@@ -1882,18 +1828,6 @@ drive_start_from_bookmark_cb (GObject      *source_object,
 	}
 }
 
-static void
-change_location_and_notify (GtkPlacesSidebar *sidebar, GFile *location, GtkPlacesOpenFlags open_flags)
-{
-	g_free (sidebar->uri);
-	sidebar->uri = NULL;
-
-	if (location)
-		sidebar->uri = g_file_get_uri (location);
-
-	emit_open_location (sidebar, location, open_flags);
-}
-
 /* Callback from g_volume_mount() */
 static void
 volume_mount_cb (GObject *source_object, GAsyncResult *result, gpointer user_data)
@@ -1927,7 +1861,7 @@ volume_mount_cb (GObject *source_object, GAsyncResult *result, gpointer user_dat
 		GFile *location;
 
 		location = g_mount_get_default_location (mount);
-		change_location_and_notify (sidebar, location, sidebar->go_to_after_mount_open_flags);
+		emit_open_location (sidebar, location, sidebar->go_to_after_mount_open_flags);
 
 		g_object_unref (G_OBJECT (location));
 		g_object_unref (G_OBJECT (mount));
@@ -1966,7 +1900,7 @@ open_selected_bookmark (GtkPlacesSidebar	*sidebar,
 
 	if (uri != NULL) {
 		location = g_file_new_for_uri (uri);
-		change_location_and_notify (sidebar, location, open_flags);
+		emit_open_location (sidebar, location, open_flags);
 
 		g_object_unref (location);
 		g_free (uri);
@@ -3560,9 +3494,6 @@ gtk_places_sidebar_dispose (GObject *object)
 
 	sidebar->tree_view = NULL;
 
-	g_free (sidebar->uri);
-	sidebar->uri = NULL;
-
 	free_drag_data (sidebar);
 
 	if (sidebar->bookmarks_manager != NULL) {
@@ -3828,16 +3759,18 @@ gtk_places_sidebar_set_open_flags (GtkPlacesSidebar *sidebar, GtkPlacesOpenFlags
 }
 
 /**
- * gtk_places_sidebar_set_current_location:
+ * gtk_places_sidebar_set_location:
  * @sidebar: a places sidebar
  * @location: location to select, or #NULL for no current path
  *
- * Sets the location that is being shown in the widgets surrounding the @sidebar.  In turn,
- * it will highlight that location if it is being shown in the list of places, or it will
- * unhighlight everything if the location is not among the places in the list.
+ * Sets the location that is being shown in the widgets surrounding the
+ * @sidebar, for example, in a folder view in a file manager.  In turn, the
+ * @sidebar will highlight that location if it is being shown in the list of
+ * places, or it will unhighlight everything if the @location is not among the
+ * places in the list.
  */
 void
-gtk_places_sidebar_set_current_location (GtkPlacesSidebar *sidebar, GFile *location)
+gtk_places_sidebar_set_location (GtkPlacesSidebar *sidebar, GFile *location)
 {
 	GtkTreeSelection *selection;
 	GtkTreeIter 	 iter;
@@ -3848,60 +3781,51 @@ gtk_places_sidebar_set_current_location (GtkPlacesSidebar *sidebar, GFile *locat
 	g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
 
 	selection = gtk_tree_view_get_selection (sidebar->tree_view);
+	gtk_tree_selection_unselect_all (selection);
 
-	if (location == NULL) {
-		g_free (sidebar->uri);
-		sidebar->uri = NULL;
-
-		gtk_tree_selection_unselect_all (selection);
+	if (location == NULL)
 		return;
-	}
 
 	uri = g_file_get_uri (location);
 
-        if (sidebar->uri == NULL || strcmp (sidebar->uri, uri) != 0) {
-		g_free (sidebar->uri);
-                sidebar->uri = g_strdup (uri);
-
-		/* set selection if any place matches the uri */
-		gtk_tree_selection_unselect_all (selection);
-  		valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (sidebar->store), &iter);
-
-		while (valid) {
-			gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store), &iter,
-		 		       	    PLACES_SIDEBAR_COLUMN_URI, &iter_uri,
-					    -1);
-			if (iter_uri != NULL) {
-				if (strcmp (iter_uri, uri) == 0) {
-					g_free (iter_uri);
-					gtk_tree_selection_select_iter (selection, &iter);
-					break;
-				}
+	valid = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (sidebar->store), &iter);
+	while (valid) {
+		gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store), &iter,
+				    PLACES_SIDEBAR_COLUMN_URI, &iter_uri,
+				    -1);
+		if (iter_uri != NULL) {
+			if (strcmp (iter_uri, uri) == 0) {
 				g_free (iter_uri);
+				gtk_tree_selection_select_iter (selection, &iter);
+				break;
 			}
-        	 	valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (sidebar->store), &iter);
+			g_free (iter_uri);
 		}
-    	}
+		valid = gtk_tree_model_iter_next (GTK_TREE_MODEL (sidebar->store), &iter);
+	}
 
 	g_free (uri);
 }
 
 /**
- * gtk_places_sidebar_get_selected_location:
+ * gtk_places_sidebar_get_location:
  * @sidebar: a places sidebar
  *
- * When you connect to the populate-popup signal for the @sidebar, the callback functions
- * for your menu items will need to know the file to which the contextual menu refers.  Use
- * this function to obtain that file's location.
+ * Gets the currently-selected location in the @sidebar.  This can be #NULL when
+ * nothing is selected, for example, when gtk_places_sidebar_set_location() has
+ * been called with a location that is not among the sidebar's list of places to
+ * show.
  *
- * Returns: a GFile with the selected location, or #NULL if nothing is visually selected.
- * It may be the case that the sidebar doesn't have anything visually selected because
- * the location being shown in the sidebar's surrounding widgets is not actually
- * in the list of places that the sidebar shows.  In that case, use
- * gtk_places_sidebar_get_current_location().
+ * You can use this function to get the selection in the @sidebar.  Also, if you
+ * connect to the #GtkPlacesSidebar::popup-menu signal, you can use this
+ * function to get the location that is being referred to during the callbacks
+ * for your menu items.
+ *
+ * Returns: a GFile with the selected location, or #NULL if nothing is visually
+ * selected.
  */
 GFile *
-gtk_places_sidebar_get_selected_location (GtkPlacesSidebar *sidebar)
+gtk_places_sidebar_get_location (GtkPlacesSidebar *sidebar)
 {
 	GtkTreeIter iter;
 	GFile *file;

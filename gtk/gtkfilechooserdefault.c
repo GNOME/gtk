@@ -3080,7 +3080,7 @@ operation_mode_set (GtkFileChooserDefault *impl, OperationMode mode)
     case OPERATION_MODE_RECENT:
       operation_mode_set_recent (impl);
       file = g_file_new_for_uri ("recent:///");
-      gtk_places_sidebar_set_current_location (GTK_PLACES_SIDEBAR (impl->places_sidebar), file);
+      gtk_places_sidebar_set_location (GTK_PLACES_SIDEBAR (impl->places_sidebar), file);
       g_object_unref (file);
       break;
 
@@ -5064,7 +5064,7 @@ update_current_folder_get_info_cb (GCancellable *cancellable,
 
   /* Refresh controls */
 
-  gtk_places_sidebar_set_current_location (GTK_PLACES_SIDEBAR (impl->places_sidebar), impl->current_folder);
+  gtk_places_sidebar_set_location (GTK_PLACES_SIDEBAR (impl->places_sidebar), impl->current_folder);
 
   g_signal_emit_by_name (impl, "current-folder-changed", 0);
 
