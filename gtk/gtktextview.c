@@ -53,6 +53,7 @@
 #include "gtktexthandleprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkcssstylepropertyprivate.h"
+#include "gtkselectionwindow.h"
 
 #include "a11y/gtktextviewaccessibleprivate.h"
 
@@ -136,6 +137,8 @@ struct _GtkTextViewPrivate
 
   gulong selection_drag_handler;
   GtkTextHandle *text_handle;
+  GtkWidget *selection_bubble;
+  guint selection_bubble_timeout_id;
 
   GtkTextWindow *text_window;
   GtkTextWindow *left_window;
@@ -511,8 +514,15 @@ static void gtk_text_view_handle_dragged       (GtkTextHandle         *handle,
                                                 gint                   x,
                                                 gint                   y,
                                                 GtkTextView           *text_view);
+static void gtk_text_view_handle_drag_finished (GtkTextHandle         *handle,
+                                                GtkTextHandlePosition  pos,
+                                                GtkTextView           *text_view);
 static void gtk_text_view_update_handles       (GtkTextView           *text_view,
                                                 GtkTextHandleMode      mode);
+
+static void gtk_text_view_selection_bubble_popup_unset (GtkTextView *text_view);
+static void gtk_text_view_selection_bubble_popup_set   (GtkTextView *text_view);
+
 
 /* FIXME probably need the focus methods. */
 
@@ -1479,6 +1489,8 @@ gtk_text_view_init (GtkTextView *text_view)
   priv->text_handle = _gtk_text_handle_new (widget);
   g_signal_connect (priv->text_handle, "handle-dragged",
                     G_CALLBACK (gtk_text_view_handle_dragged), text_view);
+  g_signal_connect (priv->text_handle, "drag-finished",
+                    G_CALLBACK (gtk_text_view_handle_drag_finished), text_view);
 }
 
 /**
@@ -3137,6 +3149,9 @@ gtk_text_view_finalize (GObject *object)
   if (priv->bottom_window)
     text_window_free (priv->bottom_window);
 
+  if (priv->selection_bubble)
+    gtk_widget_destroy (priv->selection_bubble);
+
   g_object_unref (priv->text_handle);
   g_object_unref (priv->im_context);
 
@@ -4509,6 +4524,7 @@ gtk_text_view_handle_dragged (GtkTextHandle         *handle,
   buffer = get_buffer (text_view);
   mode = _gtk_text_handle_get_mode (handle);
 
+  gtk_text_view_selection_bubble_popup_unset (text_view);
   gtk_text_layout_get_iter_at_pixel (priv->layout, &iter,
                                      x + priv->xoffset,
                                      y + priv->yoffset);
@@ -4573,6 +4589,14 @@ gtk_text_view_handle_dragged (GtkTextHandle         *handle,
         gtk_text_view_scroll_mark_onscreen (text_view,
                                             gtk_text_buffer_get_selection_bound (buffer));
     }
+}
+
+static void
+gtk_text_view_handle_drag_finished (GtkTextHandle         *handle,
+                                    GtkTextHandlePosition  pos,
+                                    GtkTextView           *text_view)
+{
+  gtk_text_view_selection_bubble_popup_set (text_view);
 }
 
 static void
@@ -4759,6 +4783,8 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
     _gtk_text_handle_set_mode (priv->text_handle,
                                GTK_TEXT_HANDLE_MODE_NONE);
 
+  gtk_text_view_selection_bubble_popup_unset (text_view);
+
   return retval;
 }
 
@@ -4809,6 +4835,7 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
     }
 
   gtk_text_view_reset_blink_time (text_view);
+  gtk_text_view_selection_bubble_popup_unset (text_view);
 
 #if 0
   /* debug hack */
@@ -4926,9 +4953,11 @@ gtk_text_view_button_release_event (GtkWidget *widget, GdkEventButton *event)
 {
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
+  GdkDevice *device;
 
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
+  device = gdk_event_get_source_device ((GdkEvent *) event);
 
   if (event->window != priv->text_window->bin_window)
     return FALSE;
@@ -4942,11 +4971,15 @@ gtk_text_view_button_release_event (GtkWidget *widget, GdkEventButton *event)
         }
 
       if (gtk_text_view_end_selection_drag (GTK_TEXT_VIEW (widget)))
-        return TRUE;
+	{
+          if (test_touchscreen ||
+              gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN)
+	    gtk_text_view_selection_bubble_popup_set (text_view);
+	  return TRUE;
+	}
       else if (priv->pending_place_cursor_button == event->button)
         {
           GtkTextHandleMode mode;
-          GdkDevice *device;
 	  GtkTextIter iter;
 
           /* Unselect everything; we clicked inside selection, but
@@ -4961,12 +4994,10 @@ gtk_text_view_button_release_event (GtkWidget *widget, GdkEventButton *event)
 	  gtk_text_buffer_place_cursor (get_buffer (text_view), &iter);
 	  gtk_text_view_check_cursor_blink (text_view);
 
-          device = gdk_event_get_source_device ((GdkEvent *) event);
-
           if (gtk_widget_is_sensitive (widget) &&
               (test_touchscreen ||
                gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN))
-            mode = GTK_TEXT_HANDLE_MODE_CURSOR;
+	    mode = GTK_TEXT_HANDLE_MODE_CURSOR;
           else
             mode = GTK_TEXT_HANDLE_MODE_NONE;
 
@@ -5046,6 +5077,7 @@ gtk_text_view_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
   g_signal_handlers_disconnect_by_func (gdk_keymap_get_for_display (gtk_widget_get_display (widget)),
 					keymap_direction_changed,
 					text_view);
+  gtk_text_view_selection_bubble_popup_unset (text_view);
   _gtk_text_handle_set_mode (priv->text_handle,
                              GTK_TEXT_HANDLE_MODE_NONE);
 
@@ -6327,6 +6359,7 @@ gtk_text_view_cut_clipboard (GtkTextView *text_view)
   DV(g_print (G_STRLOC": scrolling onscreen\n"));
   gtk_text_view_scroll_mark_onscreen (text_view,
                                       gtk_text_buffer_get_insert (get_buffer (text_view)));
+  gtk_text_view_selection_bubble_popup_unset (text_view);
 }
 
 static void
@@ -8698,6 +8731,114 @@ gtk_text_view_popup_menu (GtkWidget *widget)
 {
   gtk_text_view_do_popup (GTK_TEXT_VIEW (widget), NULL);  
   return TRUE;
+}
+
+static void
+gtk_text_view_get_selection_rect (GtkTextView           *text_view,
+				  cairo_rectangle_int_t *rect)
+{
+  cairo_rectangle_int_t rect_cursor, rect_bound;
+  GtkTextIter cursor, bound;
+  GtkTextBuffer *buffer;
+  gint x1, y1, x2, y2;
+
+  buffer = get_buffer (text_view);
+  gtk_text_buffer_get_iter_at_mark (buffer, &cursor,
+                                    gtk_text_buffer_get_insert (buffer));
+  gtk_text_buffer_get_iter_at_mark (buffer, &bound,
+                                    gtk_text_buffer_get_selection_bound (buffer));
+
+  gtk_text_view_get_cursor_locations (text_view, &cursor, &rect_cursor, NULL);
+  gtk_text_view_get_cursor_locations (text_view, &bound, &rect_bound, NULL);
+
+  x1 = MIN (rect_cursor.x, rect_bound.x);
+  x2 = MAX (rect_cursor.x, rect_bound.x);
+  y1 = MIN (rect_cursor.y, rect_bound.y);
+  y2 = MAX (rect_cursor.y + rect_cursor.height, rect_bound.y + rect_bound.height);
+
+  rect->x = x1;
+  rect->y = y1;
+  rect->width = x2 - x1;
+  rect->height = y2 - y1;
+}
+
+static gboolean
+gtk_text_view_selection_bubble_popup_cb (gpointer user_data)
+{
+  GtkTextView *text_view = user_data;
+  GtkTextViewPrivate *priv = text_view->priv;
+  cairo_rectangle_int_t rect;
+  gboolean has_selection;
+  GdkWindow *window;
+
+  has_selection = gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
+                                                        NULL, NULL);
+  if (!priv->editable && !has_selection)
+    {
+      priv->selection_bubble_timeout_id = 0;
+      return FALSE;
+    }
+
+  if (priv->selection_bubble)
+    gtk_widget_destroy (priv->selection_bubble);
+
+  window = gtk_widget_get_window (GTK_WIDGET (text_view));
+  priv->selection_bubble = gtk_selection_window_new ();
+  gtk_selection_window_set_editable (GTK_SELECTION_WINDOW (priv->selection_bubble),
+                                     priv->editable);
+  gtk_selection_window_set_has_selection (GTK_SELECTION_WINDOW (priv->selection_bubble),
+                                          has_selection);
+
+  g_signal_connect_swapped (priv->selection_bubble, "cut",
+			    G_CALLBACK (gtk_text_view_cut_clipboard),
+			    text_view);
+  g_signal_connect_swapped (priv->selection_bubble, "copy",
+			    G_CALLBACK (gtk_text_view_copy_clipboard),
+			    text_view);
+  g_signal_connect_swapped (priv->selection_bubble, "paste",
+			    G_CALLBACK (gtk_text_view_paste_clipboard),
+			    text_view);
+
+  gtk_text_view_get_selection_rect (text_view, &rect);
+  rect.x -= priv->xoffset;
+  rect.y -= priv->yoffset;
+  gtk_bubble_window_popup (GTK_BUBBLE_WINDOW (priv->selection_bubble),
+                           window, &rect, GTK_POS_TOP);
+
+  priv->selection_bubble_timeout_id = 0;
+  return FALSE;
+}
+
+static void
+gtk_text_view_selection_bubble_popup_unset (GtkTextView *text_view)
+{
+  GtkTextViewPrivate *priv;
+
+  priv = text_view->priv;
+
+  if (priv->selection_bubble)
+    gtk_bubble_window_popdown (GTK_BUBBLE_WINDOW (priv->selection_bubble));
+
+  if (priv->selection_bubble_timeout_id)
+    {
+      g_source_remove (priv->selection_bubble_timeout_id);
+      priv->selection_bubble_timeout_id = 0;
+    }
+}
+
+static void
+gtk_text_view_selection_bubble_popup_set (GtkTextView *text_view)
+{
+  GtkTextViewPrivate *priv;
+
+  priv = text_view->priv;
+
+  if (priv->selection_bubble_timeout_id)
+    g_source_remove (priv->selection_bubble_timeout_id);
+
+  priv->selection_bubble_timeout_id =
+    gdk_threads_add_timeout_seconds (1, gtk_text_view_selection_bubble_popup_cb,
+                                     text_view);
 }
 
 /* Child GdkWindows */
