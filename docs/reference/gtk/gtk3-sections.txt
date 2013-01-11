@@ -7522,3 +7522,26 @@ GTK_BUBBLE_WINDOW_GET_CLASS
 <SUBSECTION Private>
 gtk_bubble_window_get_type
 </SECTION>
+
+<SECTION>
+<FILE>gtkselectionwindow</FILE>
+<TITLE>GtkSelectionWindow</TITLE>
+GtkSelectionWindow
+gtk_selection_window_new
+gtk_selection_window_set_editable
+gtk_selection_window_get_editable
+gtk_selection_window_set_has_selection
+gtk_selection_window_get_has_selection
+gtk_selection_window_get_toolbar
+
+<SUBSECTION Standard>
+GTK_TYPE_SELECTION_WINDOW
+GTK_SELECTION_WINDOW
+GTK_SELECTION_WINDOW_CLASS
+GTK_IS_SELECTION_WINDOW
+GTK_IS_SELECTION_WINDOW_CLASS
+GTK_SELECTION_WINDOW_GET_CLASS
+
+<SUBSECTION Private>
+gtk_selection_window_get_type
+</SECTION>
