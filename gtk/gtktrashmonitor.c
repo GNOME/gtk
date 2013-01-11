@@ -32,8 +32,6 @@ struct _GtkTrashMonitor
   GFileMonitor *file_monitor;
   gulong file_monitor_changed_id;
   
-  GIcon *icon;
-
   guint has_trash : 1;
 };
 
@@ -72,8 +70,6 @@ gtk_trash_monitor_dispose (GObject *object)
 
       g_clear_object (&monitor->file_monitor);
     }
-
-  g_clear_object (&monitor->icon);
 
   G_OBJECT_CLASS (_gtk_trash_monitor_parent_class)->dispose (object);
 }
