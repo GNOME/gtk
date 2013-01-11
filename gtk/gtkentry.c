@@ -66,6 +66,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktexthandleprivate.h"
+#include "gtkselectionwindow.h"
 
 #include "a11y/gtkentryaccessible.h"
 
@@ -158,7 +159,10 @@ struct _GtkEntryPrivate
 
   gchar        *placeholder_text;
 
+  GtkBubbleWindow *bubble_window;
   GtkTextHandle *text_handle;
+  GtkWidget     *selection_bubble;
+  guint          selection_bubble_timeout_id;
 
   gfloat        xalign;
 
@@ -592,6 +596,12 @@ static void         gtk_entry_handle_dragged           (GtkTextHandle         *h
                                                         gint                   x,
                                                         gint                   y,
                                                         GtkEntry              *entry);
+static void         gtk_entry_handle_drag_finished     (GtkTextHandle         *handle,
+                                                        GtkTextHandlePosition  pos,
+                                                        GtkEntry              *entry);
+
+static void         gtk_entry_selection_bubble_popup_set   (GtkEntry *entry);
+static void         gtk_entry_selection_bubble_popup_unset (GtkEntry *entry);
 
 static void         begin_change                       (GtkEntry *entry);
 static void         end_change                         (GtkEntry *entry);
@@ -2575,6 +2585,8 @@ gtk_entry_init (GtkEntry *entry)
   priv->text_handle = _gtk_text_handle_new (GTK_WIDGET (entry));
   g_signal_connect (priv->text_handle, "handle-dragged",
                     G_CALLBACK (gtk_entry_handle_dragged), entry);
+  g_signal_connect (priv->text_handle, "drag-finished",
+                    G_CALLBACK (gtk_entry_handle_drag_finished), entry);
 }
 
 static void
@@ -2810,6 +2822,9 @@ gtk_entry_finalize (GObject *object)
 
   if (priv->recompute_idle)
     g_source_remove (priv->recompute_idle);
+
+  if (priv->selection_bubble)
+    gtk_widget_destroy (priv->selection_bubble);
 
   g_object_unref (priv->text_handle);
   g_free (priv->placeholder_text);
@@ -4018,6 +4033,8 @@ gtk_entry_button_press (GtkWidget      *widget,
   gint sel_start, sel_end;
   gint i;
 
+  gtk_entry_selection_bubble_popup_unset (entry);
+
   for (i = 0; i < MAX_ICONS; i++)
     {
       icon_info = priv->icons[i];
@@ -4222,6 +4239,8 @@ gtk_entry_button_release (GtkWidget      *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
   EntryIconInfo *icon_info = NULL;
+  gboolean is_touchscreen;
+  GdkDevice *source;
   gint i;
 
   for (i = 0; i < MAX_ICONS; i++)
@@ -4254,21 +4273,23 @@ gtk_entry_button_release (GtkWidget      *widget,
   if (event->window != priv->text_area || priv->button != event->button)
     return FALSE;
 
+  source = gdk_event_get_source_device ((GdkEvent *) event);
+  is_touchscreen = (test_touchscreen ||
+                    gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN);
+
   if (priv->in_drag)
     {
       gint tmp_pos = gtk_entry_find_position (entry, priv->drag_start_x);
-      GdkDevice *source;
 
       gtk_editable_set_position (GTK_EDITABLE (entry), tmp_pos);
 
-      source = gdk_event_get_source_device ((GdkEvent *) event);
-
-      if (test_touchscreen ||
-          gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN)
+      if (is_touchscreen)
         gtk_entry_update_handles (entry, GTK_TEXT_HANDLE_MODE_CURSOR);
 
       priv->in_drag = 0;
     }
+  else if (is_touchscreen)
+    gtk_entry_selection_bubble_popup_set (entry);
 
   priv->button = 0;
   priv->device = NULL;
@@ -4493,6 +4514,8 @@ gtk_entry_key_press (GtkWidget   *widget,
   gtk_entry_reset_blink_time (entry);
   gtk_entry_pend_cursor_blink (entry);
 
+  gtk_entry_selection_bubble_popup_unset (entry);
+
   if (!event->send_event)
     _gtk_text_handle_set_mode (priv->text_handle,
                                GTK_TEXT_HANDLE_MODE_NONE);
@@ -4590,6 +4613,7 @@ gtk_entry_focus_out (GtkWidget     *widget,
   GtkEntryCompletion *completion;
   GdkKeymap *keymap;
 
+  gtk_entry_selection_bubble_popup_unset (entry);
   _gtk_text_handle_set_mode (priv->text_handle,
                              GTK_TEXT_HANDLE_MODE_NONE);
 
@@ -5499,6 +5523,8 @@ gtk_entry_cut_clipboard (GtkEntry *entry)
     {
       gtk_widget_error_bell (GTK_WIDGET (entry));
     }
+
+  gtk_entry_selection_bubble_popup_unset (entry);
 }
 
 static void
@@ -6227,6 +6253,8 @@ gtk_entry_handle_dragged (GtkTextHandle         *handle,
   GtkTextHandleMode mode;
   gint *min, *max;
 
+  gtk_entry_selection_bubble_popup_unset (entry);
+
   cursor_pos = priv->current_pos;
   selection_bound_pos = priv->selection_bound;
   mode = _gtk_text_handle_get_mode (handle);
@@ -6278,6 +6306,15 @@ gtk_entry_handle_dragged (GtkTextHandle         *handle,
       gtk_entry_update_handles (entry, mode);
     }
 }
+
+static void
+gtk_entry_handle_drag_finished (GtkTextHandle         *handle,
+                                GtkTextHandlePosition  pos,
+                                GtkEntry              *entry)
+{
+  gtk_entry_selection_bubble_popup_set (entry);
+}
+
 
 /**
  * gtk_entry_reset_im_context:
@@ -9217,6 +9254,106 @@ gtk_entry_popup_menu (GtkWidget *widget)
 {
   gtk_entry_do_popup (GTK_ENTRY (widget), NULL);
   return TRUE;
+}
+
+static gboolean
+gtk_entry_selection_bubble_popup_cb (gpointer user_data)
+{
+  GtkEntry *entry = user_data;
+  GtkEntryPrivate *priv = entry->priv;
+  cairo_rectangle_int_t rect;
+  GtkAllocation allocation;
+  gint start_x, end_x;
+  gboolean has_selection;
+
+  has_selection = gtk_editable_get_selection_bounds (GTK_EDITABLE (entry),
+                                                     NULL, NULL);
+  if (!has_selection && !priv->editable)
+    {
+      priv->selection_bubble_timeout_id = 0;
+      return FALSE;
+    }
+
+  if (priv->selection_bubble)
+    gtk_widget_destroy (priv->selection_bubble);
+
+  priv->selection_bubble = gtk_selection_window_new ();
+  g_signal_connect_swapped (priv->selection_bubble, "cut",
+			    G_CALLBACK (gtk_entry_cut_clipboard),
+			    entry);
+  g_signal_connect_swapped (priv->selection_bubble, "copy",
+			    G_CALLBACK (gtk_entry_copy_clipboard),
+			    entry);
+  g_signal_connect_swapped (priv->selection_bubble, "paste",
+			    G_CALLBACK (gtk_entry_paste_clipboard),
+			    entry);
+
+  gtk_selection_window_set_editable (GTK_SELECTION_WINDOW (priv->selection_bubble),
+                                     priv->editable);
+  gtk_selection_window_set_has_selection (GTK_SELECTION_WINDOW (priv->selection_bubble),
+                                          has_selection);
+
+  gtk_widget_get_allocation (GTK_WIDGET (entry), &allocation);
+
+  gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &start_x, NULL);
+
+  start_x -= priv->scroll_offset;
+  start_x = CLAMP (start_x, 0, gdk_window_get_width (priv->text_area));
+
+  rect.y = 0;
+  rect.height = gdk_window_get_height (priv->text_area);
+
+  if (has_selection)
+    {
+      end_x = gtk_entry_get_selection_bound_location (entry) - priv->scroll_offset;
+      end_x = CLAMP (end_x, 0, gdk_window_get_width (priv->text_area));
+
+      rect.x = MIN (start_x, end_x);
+      rect.width = MAX (start_x, end_x) - rect.x;
+    }
+  else
+    {
+      rect.x = start_x;
+      rect.width = 0;
+    }
+
+  gtk_bubble_window_popup (GTK_BUBBLE_WINDOW (priv->selection_bubble),
+                           priv->text_area, &rect, GTK_POS_TOP);
+
+  priv->selection_bubble_timeout_id = 0;
+  return FALSE;
+}
+
+static void
+gtk_entry_selection_bubble_popup_unset (GtkEntry *entry)
+{
+  GtkEntryPrivate *priv;
+
+  priv = entry->priv;
+
+  if (priv->selection_bubble)
+    gtk_bubble_window_popdown (GTK_BUBBLE_WINDOW (priv->selection_bubble));
+
+  if (priv->selection_bubble_timeout_id)
+    {
+      g_source_remove (priv->selection_bubble_timeout_id);
+      priv->selection_bubble_timeout_id = 0;
+    }
+}
+
+static void
+gtk_entry_selection_bubble_popup_set (GtkEntry *entry)
+{
+  GtkEntryPrivate *priv;
+
+  priv = entry->priv;
+
+  if (priv->selection_bubble_timeout_id)
+    g_source_remove (priv->selection_bubble_timeout_id);
+
+  priv->selection_bubble_timeout_id =
+    gdk_threads_add_timeout_seconds (1, gtk_entry_selection_bubble_popup_cb,
+                                     entry);
 }
 
 static void
