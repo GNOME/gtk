@@ -5,16 +5,16 @@
 # Amitakhya Phukan <aphukan@redhat.com>, 2006, 2008.
 # Amitakhya Phukan <amitakhya@svn.gnome.org>, 2008.
 # Amitakhya Phukan <aphukan@fedoraproject.org>, 2009.
-# Nilamdyuti Goswami <ngoswami@redhat.com>, 2011, 2012.
+# Nilamdyuti Goswami <ngoswami@redhat.com>, 2011, 2012, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: as\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-11-26 20:07+0000\n"
-"PO-Revision-Date: 2012-11-28 13:46+0530\n"
+"POT-Creation-Date: 2013-01-10 12:46+0000\n"
+"PO-Revision-Date: 2013-01-11 21:28+0530\n"
 "Last-Translator: Nilamdyuti Goswami <ngoswami@redhat.com>\n"
-"Language-Team: as_IN <kde-i18n-doc@kde.org>\n"
+"Language-Team: Assamese <kde-i18n-doc@kde.org>\n"
 "Language: as_IN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -71,7 +71,7 @@ msgstr "নিৰ্ধাৰণ কৰিবলে চিহ্নিত GDK �
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:214 ../gdk/gdk.c:217 ../gtk/gtkmain.c:454 ../gtk/gtkmain.c:457
+#: ../gdk/gdk.c:214 ../gdk/gdk.c:217 ../gtk/gtkmain.c:453 ../gtk/gtkmain.c:456
 msgid "FLAGS"
 msgstr "FLAGS"
 
@@ -456,21 +456,21 @@ msgid_plural "Opening %d Items"
 msgstr[0] "%d বস্তু খোলা হৈছে"
 msgstr[1] "%d বস্তুসমূহ খোলা হৈছে"
 
-#: ../gtk/a11y/gtkspinneraccessible.c:40
+#: ../gtk/a11y/gtkspinneraccessible.c:39
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
 msgstr "স্পিনাৰ"
 
-#: ../gtk/a11y/gtkspinneraccessible.c:41
+#: ../gtk/a11y/gtkspinneraccessible.c:40
 msgid "Provides visual indication of progress"
 msgstr "প্ৰগতিৰ চক্ষ সংকেত দিয়ে"
 
-#: ../gtk/a11y/gtkswitchaccessible.c:63
+#: ../gtk/a11y/gtkswitchaccessible.c:62
 msgctxt "light switch widget"
 msgid "Switch"
 msgstr "চুইছ"
 
-#: ../gtk/a11y/gtkswitchaccessible.c:64
+#: ../gtk/a11y/gtkswitchaccessible.c:63
 msgid "Switches between on and off states"
 msgstr "অন আৰু অফ স্থিতিৰ মাজত অদল-বদল কৰে"
 
@@ -685,27 +685,27 @@ msgid "Could not show link"
 msgstr "সংযোগ দেখুৱাব কৰা ন'গ'ল"
 
 #: ../gtk/gtkaboutdialog.c:1017
-msgid "Homepage"
-msgstr "হোমপেজ"
+msgid "Website"
+msgstr "ৱেবছাইট"
 
 #: ../gtk/gtkaboutdialog.c:1071
 #, c-format
 msgid "About %s"
 msgstr "%s ৰ বিষয়ে"
 
-#: ../gtk/gtkaboutdialog.c:2399
+#: ../gtk/gtkaboutdialog.c:2398
 msgid "Created by"
 msgstr "নিৰ্মাতা"
 
-#: ../gtk/gtkaboutdialog.c:2402
+#: ../gtk/gtkaboutdialog.c:2401
 msgid "Documented by"
 msgstr "প্ৰলেক্ষ লিখিছে"
 
-#: ../gtk/gtkaboutdialog.c:2412
+#: ../gtk/gtkaboutdialog.c:2411
 msgid "Translated by"
 msgstr "অনুবাদক"
 
-#: ../gtk/gtkaboutdialog.c:2417
+#: ../gtk/gtkaboutdialog.c:2416
 msgid "Artwork by"
 msgstr "শিল্পী"
 
@@ -780,7 +780,6 @@ msgid "Backslash"
 msgstr "Backslash"
 
 #: ../gtk/gtkappchooserbutton.c:290
-#| msgid "Other application..."
 msgid "Other application…"
 msgstr "অন্য এপ্লিকেচন…"
 
@@ -1026,7 +1025,6 @@ msgstr "অবৈধ"
 #. * acelerator.
 #.
 #: ../gtk/gtkcellrendereraccel.c:416 ../gtk/gtkcellrendereraccel.c:747
-#| msgid "New accelerator..."
 msgid "New accelerator…"
 msgstr "নতুন ত্বৰক…"
 
@@ -1329,7 +1327,6 @@ msgid "mm"
 msgstr "mm"
 
 #: ../gtk/gtkcustompaperunixdialog.c:605
-#| msgid "Margins from Printer..."
 msgid "Margins from Printer…"
 msgstr "প্ৰিন্টাৰৰ পৰা সীমা…"
 
@@ -1370,15 +1367,15 @@ msgstr "সোঁ ফালৰ (_R):"
 msgid "Paper Margins"
 msgstr "কাগজৰ প্ৰান্তিক অংশ"
 
-#: ../gtk/gtkentry.c:9143 ../gtk/gtktextview.c:8583
+#: ../gtk/gtkentry.c:9127 ../gtk/gtktextview.c:8591
 msgid "Input _Methods"
 msgstr "নিবেশ পদ্ধতি (_M)"
 
-#: ../gtk/gtkentry.c:9157 ../gtk/gtktextview.c:8597
+#: ../gtk/gtkentry.c:9141 ../gtk/gtktextview.c:8605
 msgid "_Insert Unicode Control Character"
 msgstr "Unicode নিয়ন্ত্ৰণ আকৰ ভৰাওক (_I)"
 
-#: ../gtk/gtkentry.c:10110
+#: ../gtk/gtkentry.c:10094
 msgid "Caps Lock is on"
 msgstr "ক্যাপ্সলক সক্ৰিয় হৈ আছে"
 
@@ -1436,7 +1433,6 @@ msgid "(None)"
 msgstr "(একো নাই)"
 
 #: ../gtk/gtkfilechooserbutton.c:2046
-#| msgid "Other..."
 msgid "Other…"
 msgstr "অন্য…"
 
@@ -1547,7 +1543,6 @@ msgid "Remove"
 msgstr "আঁতৰাই দিয়ক"
 
 #: ../gtk/gtkfilechooserdefault.c:3389
-#| msgid "Rename..."
 msgid "Rename…"
 msgstr "পুনঃ নামকৰণ কৰক…"
 
@@ -1751,12 +1746,12 @@ msgstr "ফন্টৰ নাম সন্ধান কৰক"
 msgid "Font Family"
 msgstr "ফন্টৰ পৰিয়াল"
 
-#: ../gtk/gtkicontheme.c:1630
+#: ../gtk/gtkicontheme.c:1931
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "'%s'প্ৰতিমুৰ্তি আলোকচিত্ৰত নাই"
 
-#: ../gtk/gtkicontheme.c:3138
+#: ../gtk/gtkicontheme.c:3462
 msgid "Failed to load icon"
 msgstr "আইকণ তোলাত বিফল"
 
@@ -1781,17 +1776,16 @@ msgid "System (%s)"
 msgstr "চিস্টেম (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6183
+#: ../gtk/gtklabel.c:6139
 msgid "_Open Link"
 msgstr "সংযোগ খোলক (_O)"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6195
+#: ../gtk/gtklabel.c:6151
 msgid "Copy _Link Address"
 msgstr "সংযোগ ঠিকনা নকল কৰক (  )"
 
 #: ../gtk/gtk-launch.c:71
-#| msgid "APPLICATION [URI...] - launch an APPLICATION with URI."
 msgid "APPLICATION [URI…] — launch an APPLICATION with URI."
 msgstr "APPLICATION [URI…] —  URI ৰ সৈতে এটা APPLICATION লঞ্চ কৰক।"
 
@@ -1883,27 +1877,27 @@ msgstr ""
 "আপোনাৰ চিস্টেম প্ৰশাসকক যোগাযোগ কৰক"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:447
+#: ../gtk/gtkmain.c:446
 msgid "Load additional GTK+ modules"
 msgstr "অতিৰিক্ত GTK+ অংশ তুলি লওক"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:448
+#: ../gtk/gtkmain.c:447
 msgid "MODULES"
 msgstr "অংশসমূহ"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:450
+#: ../gtk/gtkmain.c:449
 msgid "Make all warnings fatal"
 msgstr "GTK+ ডিবাগৰ পতাকা কৰ্মৰত কৰক"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:453
+#: ../gtk/gtkmain.c:452
 msgid "GTK+ debugging flags to set"
 msgstr "GTK+ debugging flags to set"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:456
+#: ../gtk/gtkmain.c:455
 msgid "GTK+ debugging flags to unset"
 msgstr "GTK+ ডিবাগৰ পতাকা কৰ্মৰত নকৰিব"
 
@@ -1912,20 +1906,20 @@ msgstr "GTK+ ডিবাগৰ পতাকা কৰ্মৰত নকৰি�
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:704
+#: ../gtk/gtkmain.c:703
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:769
+#: ../gtk/gtkmain.c:768
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "প্ৰদৰ্শন খুলিব নোৱাৰি: %s"
 
-#: ../gtk/gtkmain.c:835
+#: ../gtk/gtkmain.c:834
 msgid "GTK+ Options"
 msgstr "GTK+ বিকল্প"
 
-#: ../gtk/gtkmain.c:835
+#: ../gtk/gtkmain.c:834
 msgid "Show GTK+ Options"
 msgstr "GTK+ বিকল্প দেখুৱাওক"
 
@@ -2014,7 +2008,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "PID %d থকা প্ৰক্ৰিয়া অন্ত কৰিব নোৱাৰি: %s"
 
-#: ../gtk/gtknotebook.c:5067 ../gtk/gtknotebook.c:7721
+#: ../gtk/gtknotebook.c:5069 ../gtk/gtknotebook.c:7723
 #, c-format
 msgid "Page %u"
 msgstr "পৃষ্ঠা %u"
@@ -2057,7 +2051,6 @@ msgstr ""
 " তল: %s %s"
 
 #: ../gtk/gtkpagesetupunixdialog.c:845 ../gtk/gtkprintunixdialog.c:3329
-#| msgid "Manage Custom Sizes"
 msgid "Manage Custom Sizes…"
 msgstr "স্বনিৰ্বাচিত আকাৰসমূহ ব্যৱস্থাপনা কৰক…"
 
@@ -2241,7 +2234,6 @@ msgid "Getting printer information failed"
 msgstr "প্ৰিনটাৰৰ তথ্য পোৱাত ব্যৰ্থ"
 
 #: ../gtk/gtkprintunixdialog.c:1916
-#| msgid "Getting printer information..."
 msgid "Getting printer information…"
 msgstr "প্ৰিন্টাৰ তথ্য প্ৰাপ্ত কৰা হৈছে…"
 
@@ -2319,42 +2311,42 @@ msgstr "সাধাৰণ"
 #. * multiple pages on a sheet when printing
 #.
 #: ../gtk/gtkprintunixdialog.c:3058
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3691
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3692
 msgid "Left to right, top to bottom"
 msgstr "বাওঁ ফালৰ পৰা সোঁ ফাললৈ, ওপৰৰ পৰা তললৈ"
 
 #: ../gtk/gtkprintunixdialog.c:3058
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3691
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3692
 msgid "Left to right, bottom to top"
 msgstr "বাওঁ ফালৰ পৰা সোঁ ফাললৈ, তলৰ পৰা ওপৰলৈ"
 
 #: ../gtk/gtkprintunixdialog.c:3059
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3692
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3693
 msgid "Right to left, top to bottom"
 msgstr "সোঁ ফালৰ পৰা বাওঁ ফাললৈ, ওপৰৰ পৰা তললৈ"
 
 #: ../gtk/gtkprintunixdialog.c:3059
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3692
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3693
 msgid "Right to left, bottom to top"
 msgstr "সোঁ ফালৰ পৰা বাওঁ ফাললৈ, তলৰ পৰা ওপৰলৈ"
 
 #: ../gtk/gtkprintunixdialog.c:3060
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3693
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3694
 msgid "Top to bottom, left to right"
 msgstr "ওপৰৰ পৰা তললৈ, বাওঁ ফালৰ পৰা সোঁ ফাললৈ"
 
 #: ../gtk/gtkprintunixdialog.c:3060
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3693
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3694
 msgid "Top to bottom, right to left"
 msgstr "ওপৰৰ পৰা তললৈ, সোঁ ফালৰ পৰা বাওঁ ফাললৈ"
 
 #: ../gtk/gtkprintunixdialog.c:3061
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3694
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3695
 msgid "Bottom to top, left to right"
 msgstr "তলৰ পৰা ওপৰলৈ, বাওঁ ফালৰ পৰা সোঁ ফাললৈ"
 
 #: ../gtk/gtkprintunixdialog.c:3061
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3694
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3695
 msgid "Bottom to top, right to left"
 msgstr "তলৰ পৰা ওপৰলৈ, সোঁ ফালৰ পৰা বাওঁ ফাললৈ"
 
@@ -2362,7 +2354,7 @@ msgstr "তলৰ পৰা ওপৰলৈ, সোঁ ফালৰ পৰা �
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: ../gtk/gtkprintunixdialog.c:3065 ../gtk/gtkprintunixdialog.c:3078
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3771
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3772
 msgid "Page Ordering"
 msgstr "পৃষ্ঠা শৃংখলাবদ্ধ কৰা"
 
@@ -2564,36 +2556,36 @@ msgstr "মুদ্ৰণ"
 msgid "Select which type of documents are shown"
 msgstr "কেনে ধৰণৰ প্ৰলেক্ষ প্ৰদৰ্শন কৰা হ'ব বাছক"
 
-#: ../gtk/gtkrecentchooserdefault.c:1130 ../gtk/gtkrecentchooserdefault.c:1167
+#: ../gtk/gtkrecentchooserdefault.c:1129 ../gtk/gtkrecentchooserdefault.c:1166
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "URI '%s' ৰ বাবে কোনো বস্তু পোৱা ন'গ'ল"
 
-#: ../gtk/gtkrecentchooserdefault.c:1294
+#: ../gtk/gtkrecentchooserdefault.c:1293
 msgid "Untitled filter"
 msgstr "শিৰোনাম নোহোৱা ফিল্টাৰ"
 
-#: ../gtk/gtkrecentchooserdefault.c:1647
+#: ../gtk/gtkrecentchooserdefault.c:1646
 msgid "Could not remove item"
 msgstr "বস্তু আঁতৰাব পৰা ন'গ'ল"
 
-#: ../gtk/gtkrecentchooserdefault.c:1691
+#: ../gtk/gtkrecentchooserdefault.c:1690
 msgid "Could not clear list"
 msgstr "তালিকা পৰিষ্কাৰ কৰা ন'গ'ল"
 
-#: ../gtk/gtkrecentchooserdefault.c:1775
+#: ../gtk/gtkrecentchooserdefault.c:1774
 msgid "Copy _Location"
 msgstr "স্থান নকল কৰক (_L)"
 
-#: ../gtk/gtkrecentchooserdefault.c:1788
+#: ../gtk/gtkrecentchooserdefault.c:1787
 msgid "_Remove From List"
 msgstr "তালিকাৰ পৰা আঁতৰাই দিয়ক (_R)"
 
-#: ../gtk/gtkrecentchooserdefault.c:1797
+#: ../gtk/gtkrecentchooserdefault.c:1796
 msgid "_Clear List"
 msgstr "তালিকা পৰিষ্কাৰ কৰক (_C)"
 
-#: ../gtk/gtkrecentchooserdefault.c:1811
+#: ../gtk/gtkrecentchooserdefault.c:1810
 msgid "Show _Private Resources"
 msgstr "ব্যক্তিগত সম্পদ প্ৰদৰ্শন কৰক(_P)"
 
@@ -3167,7 +3159,7 @@ msgstr "সৰু কৰি প্ৰদৰ্শন (_O)"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: ../gtk/gtkswitch.c:337 ../gtk/gtkswitch.c:392 ../gtk/gtkswitch.c:586
+#: ../gtk/gtkswitch.c:337 ../gtk/gtkswitch.c:392 ../gtk/gtkswitch.c:583
 msgctxt "switch"
 msgid "ON"
 msgstr "অন"
@@ -3175,7 +3167,7 @@ msgstr "অন"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: ../gtk/gtkswitch.c:345 ../gtk/gtkswitch.c:393 ../gtk/gtkswitch.c:615
+#: ../gtk/gtkswitch.c:345 ../gtk/gtkswitch.c:393 ../gtk/gtkswitch.c:598
 msgctxt "switch"
 msgid "OFF"
 msgstr "অফ"
@@ -4527,169 +4519,169 @@ msgstr "ৰখোৱা হৈছে ; কাৰ্য্য গ্ৰহণ ক
 msgid "Rejecting Jobs"
 msgstr "কাৰ্য্য গ্ৰহণ কৰা হোৱা নাই"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2914
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2915
 msgid "Two Sided"
 msgstr "দ্বিপাৰ্শ্বিক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2915
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2916
 msgid "Paper Type"
 msgstr "কাগজৰ ধৰণ"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2916
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2917
 msgid "Paper Source"
 msgstr "কাগজৰ উৎস"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2917
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2918
 msgid "Output Tray"
 msgstr "নিৰ্গমৰ ডলা"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2918
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2919
 msgid "Resolution"
 msgstr "বিশ্লেষণ"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2919
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2920
 msgid "GhostScript pre-filtering"
 msgstr "GhostScript প্ৰি-ফিল্টাৰিং"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2928
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2929
 msgid "One Sided"
 msgstr "একপাক্ষিক"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2930
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2931
 msgid "Long Edge (Standard)"
 msgstr "দীৰ্ঘ প্ৰান্ত (প্ৰমিত মান)"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2932
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2933
 msgid "Short Edge (Flip)"
 msgstr "ক্ষুদ্ৰ প্ৰান্ত (উলট)"
 
 #. Translators: this is an option of "Paper Source"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2934
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2936
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2944
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2935
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2937
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2945
 msgid "Auto Select"
 msgstr "স্বয়ং বাছক"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2938
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2940
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2942
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2946
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3434
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2939
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2941
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2943
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2947
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3435
 msgid "Printer Default"
 msgstr "মুদ্ৰক অবিকল্পিত"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2948
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2949
 msgid "Embed GhostScript fonts only"
 msgstr "শুধুমাত্ৰ GhostScript ফন্ট এমবেড কৰা হ'ব"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2950
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2951
 msgid "Convert to PS level 1"
 msgstr "PS লেভেল ১এ ৰূপান্তৰ কৰা হ'ব"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2952
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2953
 msgid "Convert to PS level 2"
 msgstr "PS লেভেল ২এ ৰূপান্তৰ কৰা হ'ব"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2954
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2955
 msgid "No pre-filtering"
 msgstr "প্ৰি-ফিল্টাৰিং বিহীন"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2963
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2964
 msgid "Miscellaneous"
 msgstr "বিবিধ"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3686
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
 msgid "Urgent"
 msgstr "অতি আৱশ্যক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3686
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
 msgid "High"
 msgstr "তীব্ৰ"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3686
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
 msgid "Medium"
 msgstr "মধ্যমীয়া"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3686
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
 msgid "Low"
 msgstr "নিম্ন"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3716
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3717
 msgid "Job Priority"
 msgstr "কাৰ্য্যৰ শ্ৰেষ্ঠতা"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3727
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3728
 msgid "Billing Info"
 msgstr "সাধনীৰ তথ্য"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3742
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3743
 msgid "None"
 msgstr "একো নাই"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3742
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3743
 msgid "Classified"
 msgstr "শ্ৰেণীভুক্ত"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3742
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3743
 msgid "Confidential"
 msgstr "গুপুত"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3742
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3743
 msgid "Secret"
 msgstr "গোপণীয়"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3742
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3743
 msgid "Standard"
 msgstr "মানদণ্ড স্বৰূপ"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3742
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3743
 msgid "Top Secret"
 msgstr "পৰম গোপণীয়"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3742
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3743
 msgid "Unclassified"
 msgstr "শ্ৰেণীভুক্ত নকৰা"
 
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3753
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3754
 msgid "Pages per Sheet"
 msgstr "প্ৰতিটো পাতৰ পৃষ্ঠা"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3813
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3814
 msgid "Before"
 msgstr "আগৰ"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3828
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3829
 msgid "After"
 msgstr "পিছৰ"
 
@@ -4697,14 +4689,14 @@ msgstr "পিছৰ"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3848
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3849
 msgid "Print at"
 msgstr "-ইয়াত মুদ্ৰণ"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3859
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3860
 msgid "Print at time"
 msgstr "এই সময়ত মুদ্ৰণ কৰক"
 
@@ -4712,17 +4704,17 @@ msgstr "এই সময়ত মুদ্ৰণ কৰক"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3894
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3895
 #, c-format
 msgid "Custom %sx%s"
 msgstr "নিজৰ পছন্দৰ %sx%s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3975
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3976
 msgid "Printer Profile"
 msgstr "প্ৰিন্টাৰ আলেখ্য"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3982
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3983
 msgid "Unavailable"
 msgstr "উপলব্ধ নাই"
 
@@ -4821,6 +4813,9 @@ msgstr "test-output.%s"
 #: ../modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "পৰীক্ষণ মূদ্ৰকলৈ মূদ্ৰণ কৰক"
+
+#~ msgid "Homepage"
+#~ msgstr "হোমপেজ"
 
 #~ msgid "Manage Custom Sizes..."
 #~ msgstr "পছন্দৰ আয়তন পৰিচালনা কৰক..."
