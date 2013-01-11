@@ -202,6 +202,7 @@ gtk_public_h_sources = 		\
 	gtkbindings.h		\
 	gtkborder.h		\
 	gtkbox.h		\
+	gtkbubblewindow.h	\
 	gtkbuilder.h		\
 	gtkbuildable.h		\
 	gtkbutton.h		\
@@ -621,6 +622,7 @@ gtk_base_c_sources = 		\
 	gtkborder.c		\
 	gtkborderimage.c	\
 	gtkbox.c		\
+	gtkbubblewindow.c	\
 	gtkbuildable.c		\
 	gtkbuilder.c		\
 	gtkbuilderparser.c	\

@@ -23,6 +23,7 @@ gtk_aspect_frame_get_type
 gtk_assistant_get_type
 gtk_bin_get_type
 gtk_box_get_type
+gtk_bubble_window_get_type
 gtk_builder_get_type
 gtk_buildable_get_type
 gtk_button_box_get_type
