@@ -3749,6 +3749,8 @@ shortcuts_model_new (GtkPlacesSidebar *sidebar)
  *
  * Passing 0 for @flags will cause #GTK_PLACES_OPEN_NORMAL to always be sent
  * to callbacks for the "open-location" signal.
+ *
+ * Since: 3.8
  */
 void
 gtk_places_sidebar_set_open_flags (GtkPlacesSidebar *sidebar, GtkPlacesOpenFlags flags)
@@ -3768,6 +3770,8 @@ gtk_places_sidebar_set_open_flags (GtkPlacesSidebar *sidebar, GtkPlacesOpenFlags
  * @sidebar will highlight that location if it is being shown in the list of
  * places, or it will unhighlight everything if the @location is not among the
  * places in the list.
+ *
+ * Since: 3.8
  */
 void
 gtk_places_sidebar_set_location (GtkPlacesSidebar *sidebar, GFile *location)
@@ -3823,6 +3827,8 @@ gtk_places_sidebar_set_location (GtkPlacesSidebar *sidebar, GFile *location)
  *
  * Returns: a GFile with the selected location, or #NULL if nothing is visually
  * selected.
+ *
+ * Since: 3.8
  */
 GFile *
 gtk_places_sidebar_get_location (GtkPlacesSidebar *sidebar)
@@ -3856,6 +3862,8 @@ gtk_places_sidebar_get_location (GtkPlacesSidebar *sidebar)
  * Sets whether the @sidebar should show an item for the Desktop folder; this is off by default.
  * An application may want to turn this on if the desktop environment actually supports the
  * notion of a desktop.
+ *
+ * Since: 3.8
  */
 void
 gtk_places_sidebar_set_show_desktop (GtkPlacesSidebar *sidebar, gboolean show_desktop)
@@ -3866,6 +3874,23 @@ gtk_places_sidebar_set_show_desktop (GtkPlacesSidebar *sidebar, gboolean show_de
 	update_places (sidebar);
 }
 
+/**
+ * gtk_places_sidebar_set_accept_uri_drops:
+ * @sidebar: a places sidebar
+ * @accept_uri_drops: whether to accept drops of "text/uri-list" data or to only allow inserting bookmarks
+ *
+ * Sets the behavior that the sidebar will adopt when accepting drag-and-drop operations.
+ *
+ * If @accept_uri_drops is FALSE (the default), then the sidebar will just allow dropping
+ * directories into it to create new bookmarks.  These must be of type "text/uri-list".
+ *
+ * On the other hand, if @accept_uri_drops is TRUE, then the following signals will be emitted
+ * so that the caller can take the appropriate action (usually, perform file operations like
+ * moving/copying): #GtkPlacesSidebar::drag-action-requested, #GtkPlacesSidebar::drag-action-ask,
+ * and #GtkPlacesSidebar::drag-perform-drop.
+ *
+ * Since: 3.8
+ */
 void
 gtk_places_sidebar_set_accept_uri_drops (GtkPlacesSidebar *sidebar, gboolean accept_uri_drops)
 {
@@ -3890,6 +3915,24 @@ find_shortcut_link (GtkPlacesSidebar *sidebar, GFile *location)
 	return NULL;
 }
 
+/**
+ * gtk_places_sidebar_add_shortcut:
+ * @sidebar: a places sidebar
+ * @location: location to add as an application-specific shortcut
+ *
+ * Applications may want to present some folders in the places sidebar if
+ * they could be immediately useful to users.  For example, a drawing
+ * program could add a "/usr/share/clipart" location when the sidebar is
+ * being used in an "Insert Clipart" dialog box.
+ *
+ * This function adds the specified @location to a special place for immutable
+ * shortcuts.  The shortcuts are application-specific; they are not shared
+ * across applications, and they are not persistent.  If this function
+ * is called multiple times with different locations, then they are added
+ * to the sidebar's list in the same order as the function is called.
+ *
+ * Since: 3.8
+ */
 void
 gtk_places_sidebar_add_shortcut (GtkPlacesSidebar *sidebar, GFile *location)
 {
@@ -3902,6 +3945,17 @@ gtk_places_sidebar_add_shortcut (GtkPlacesSidebar *sidebar, GFile *location)
 	update_places (sidebar);
 }
 
+/**
+ * gtk_places_sidebar_remove_shortcut:
+ * @sidebar: a places sidebar
+ * @location: location to remove
+ *
+ * Removes an application-specific shortcut that has been previously been
+ * inserted with gtk_places_sidebar_add_shortcut().  If the @location is not a
+ * shortcut in the sidebar, then nothing is done.
+ *
+ * Since: 3.8
+ */
 void
 gtk_places_sidebar_remove_shortcut (GtkPlacesSidebar *sidebar, GFile *location)
 {
@@ -3922,6 +3976,19 @@ gtk_places_sidebar_remove_shortcut (GtkPlacesSidebar *sidebar, GFile *location)
 	update_places (sidebar);
 }
 
+/**
+ * gtk_places_sidebar_list_shortcuts:
+ * @sidebar: a places sidebar
+ *
+ * Return value: (element-type GFile) (transfer full): A #GSList of #GFile of the locations
+ * that have been added as application-specific shortcuts with gtk_places_sidebar_add_shortcut().
+ * To free this list, you can use
+ * |[
+ * g_slist_free_full (list, (GDestroyNotify) g_object_unref);
+ * ]|
+ *
+ * Since: 3.8
+ */
 GSList *
 gtk_places_sidebar_list_shortcuts (GtkPlacesSidebar *sidebar)
 {
@@ -3930,6 +3997,21 @@ gtk_places_sidebar_list_shortcuts (GtkPlacesSidebar *sidebar)
 	return g_slist_copy_deep (sidebar->shortcuts, (GCopyFunc) g_object_ref, NULL);
 }
 
+/**
+ * gtk_places_sidebar_get_nth_bookmark:
+ * @sidebar: a places sidebar
+ * @n: index of the bookmark to query
+ *
+ * This function queries the bookmarks added by the user to the places sidebar,
+ * and returns one of them.  This function is used by #GtkFileChooser to implement
+ * the "Alt-1", "Alt-2", etc. shortcuts, which activate the cooresponding bookmark.
+ *
+ * Return value: (transfer full): The bookmark specified by the index @n, or
+ * #NULL if no such index exist.  Note that the indices start at 0, even though
+ * the file chooser starts them with the keyboard shortcut "Alt-1".
+ *
+ * Since: 3.8
+ */
 GFile *
 gtk_places_sidebar_get_nth_bookmark (GtkPlacesSidebar *sidebar, int n)
 {
