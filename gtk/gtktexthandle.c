@@ -106,6 +106,9 @@ _gtk_text_handle_draw (GtkTextHandle         *handle,
   cairo_set_source_rgba (cr, 0, 0, 0, 0);
   cairo_paint (cr);
 
+  if (pos == GTK_TEXT_HANDLE_POSITION_SELECTION_END)
+    cairo_translate (cr, 0, priv->windows[pos].pointing_to.height);
+
   gtk_style_context_save (priv->style_context);
   gtk_style_context_add_class (priv->style_context,
                                GTK_STYLE_CLASS_CURSOR_HANDLE);
@@ -136,6 +139,7 @@ _gtk_text_handle_update_shape (GtkTextHandle         *handle,
                                GtkTextHandlePosition  pos)
 {
   GtkTextHandlePrivate *priv;
+  cairo_rectangle_int_t rect;
   cairo_surface_t *surface;
   cairo_region_t *region;
   cairo_t *cr;
@@ -158,6 +162,15 @@ _gtk_text_handle_update_shape (GtkTextHandle         *handle,
     gdk_window_shape_combine_region (window, NULL, 0, 0);
   else
     gdk_window_shape_combine_region (window, region, 0, 0);
+
+  cairo_region_get_extents (region, &rect);
+  cairo_region_destroy (region);
+
+  /* Preserve x/width, but extend input shape
+   * vertically to all window height */
+  rect.y = 0;
+  rect.height = gdk_window_get_height (window);
+  region = cairo_region_create_rectangle (&rect);
 
   gdk_window_input_shape_combine_region (window, region, 0, 0);
 
@@ -278,6 +291,8 @@ gtk_text_handle_widget_event (GtkWidget     *widget,
       if (pos == GTK_TEXT_HANDLE_POSITION_SELECTION_START)
         y += height;
 
+      y += priv->windows[pos].pointing_to.height / 2;
+
       g_signal_emit (handle, signals[HANDLE_DRAGGED], 0, pos, x, y);
     }
 
@@ -306,11 +321,10 @@ _gtk_text_handle_update_window_state (GtkTextHandle         *handle,
       y = handle_window->pointing_to.y;
       _gtk_text_handle_get_size (handle, &width, &height);
 
-      if (pos == GTK_TEXT_HANDLE_POSITION_CURSOR)
-        y += handle_window->pointing_to.height;
-      else
+      if (pos != GTK_TEXT_HANDLE_POSITION_CURSOR)
         y -= height;
 
+      height += handle_window->pointing_to.height;
       x -= width / 2;
 
       gdk_window_move_resize (handle_window->window, x, y, width, height);
@@ -628,6 +642,9 @@ _gtk_text_handle_set_mode (GtkTextHandle     *handle,
   _gtk_text_handle_update_shape (handle,
                                  priv->windows[GTK_TEXT_HANDLE_POSITION_CURSOR].window,
                                  GTK_TEXT_HANDLE_POSITION_CURSOR);
+  _gtk_text_handle_update_shape (handle,
+                                 priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].window,
+                                 GTK_TEXT_HANDLE_POSITION_SELECTION_START);
 
   _gtk_text_handle_update_window_state (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_START);
   _gtk_text_handle_update_window_state (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_END);
@@ -651,6 +668,7 @@ _gtk_text_handle_set_position (GtkTextHandle         *handle,
 {
   GtkTextHandlePrivate *priv;
   HandleWindow *handle_window;
+  gboolean size_changed;
 
   g_return_if_fail (GTK_IS_TEXT_HANDLE (handle));
 
@@ -667,6 +685,9 @@ _gtk_text_handle_set_position (GtkTextHandle         *handle,
        pos != GTK_TEXT_HANDLE_POSITION_CURSOR))
     return;
 
+  size_changed = (rect->width != handle_window->pointing_to.width ||
+                  rect->height != handle_window->pointing_to.height);
+
   handle_window->pointing_to = *rect;
   handle_window->has_point = TRUE;
   gdk_window_get_root_coords (priv->relative_to,
@@ -675,6 +696,9 @@ _gtk_text_handle_set_position (GtkTextHandle         *handle,
                               &handle_window->pointing_to.y);
 
   _gtk_text_handle_update_window_state (handle, pos);
+
+  if (size_changed)
+    _gtk_text_handle_update_shape (handle, handle_window->window, pos);
 }
 
 void
@@ -698,6 +722,9 @@ _gtk_text_handle_set_visible (GtkTextHandle         *handle,
 
   if (!window)
     return;
+
+  if (!gdk_window_is_visible (window))
+    _gtk_text_handle_update_shape (handle, window, pos);
 
   priv->windows[pos].user_visible = visible;
   _gtk_text_handle_update_window_state (handle, pos);
