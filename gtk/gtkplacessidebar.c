@@ -3559,8 +3559,19 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 	GTK_WIDGET_CLASS (class)->style_set = gtk_places_sidebar_style_set;
 	GTK_WIDGET_CLASS (class)->focus = gtk_places_sidebar_focus;
 
-	/* FIXME: add docstrings for the signals */
-
+	/**
+	 * GtkPlacesSidebar::open-location:
+	 * @sidebar: the object which received the signal.
+	 * @location: #GFile to which the caller should switch.
+	 * @open_flags: a single value from #GtkPlacesOpenFlags specifying how the @location should be opened.
+	 *
+	 * The places sidebar emits this signal when the user selects a location
+	 * in it.  The calling application should display the contents of that
+	 * location; for example, a file manager should show a list of files in
+	 * the specified location.
+	 *
+	 * Since: 3.8
+	 */
 	places_sidebar_signals [OPEN_LOCATION] =
 		g_signal_new (I_("open-location"),
 			      G_OBJECT_CLASS_TYPE (gobject_class),
@@ -3572,6 +3583,28 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 			      G_TYPE_OBJECT,
 			      GTK_TYPE_PLACES_OPEN_FLAGS);
 
+	/**
+	 * GtkPlacesSidebar::populate-popup:
+	 * @sidebar: the object which received the signal.
+	 * @menu: a #GtkMenu.
+	 * @selected_item: #GFile with the item to which the menu should refer.
+	 *
+	 * The places sidebar emits this signal when the user invokes a contextual
+	 * menu on one of its items.  In the signal handler, the application may
+	 * add extra items to the menu as appropriate.  For example, a file manager
+	 * may want to add a "Properties" command to the menu.
+	 *
+	 * It is not necessary to store the @selected_item for each menu item;
+	 * during their GtkMenuItem::activate callbacks, the application can use
+	 * gtk_places_sidebar_get_location() to get the file to which the item
+	 * refers.
+	 *
+	 * The @menu and all its menu items are destroyed after the user
+	 * dismisses the menu.  The menu is re-created (and thus, this signal is
+	 * emitted) every time the user activates the contextual menu.
+	 *
+	 * Since: 3.8
+	 */
 	places_sidebar_signals [POPULATE_POPUP] =
 		g_signal_new (I_("populate-popup"),
 			      G_OBJECT_CLASS_TYPE (gobject_class),
@@ -3583,6 +3616,19 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 			      G_TYPE_OBJECT,
 			      G_TYPE_OBJECT);
 
+	/**
+	 * GtkPlacesSidebar::show-error-message:
+	 * @sidebar: the object which received the signal.
+	 * @primary: primary message with a summary of the error to show.
+	 * @secondary: secondary message with details of the error to show.
+	 *
+	 * The places sidebar emits this signal when it needs the calling
+	 * application to present an error message.  Most of these messages
+	 * refer to mounting or unmounting media, for example, when a drive
+	 * cannot be started for some reason.
+	 *
+	 * Since: 3.8
+	 */
 	places_sidebar_signals [SHOW_ERROR_MESSAGE] =
 		g_signal_new (I_("show-error-message"),
 			      G_OBJECT_CLASS_TYPE (gobject_class),
@@ -3594,6 +3640,25 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 			      G_TYPE_STRING,
 			      G_TYPE_STRING);
 
+	/**
+	 * GtkPlacesSidebar::drag-action-requested:
+	 * @sidebar: the object which received the signal.
+	 * @context: #GdkDragContext with information about the drag operation
+	 * @uri: URI of the location that is being hovered for a drop
+	 * @uri_list: (element-type utf8) (transfer none): List of URIs that are being dragged
+	 * @action: Location in which to store the drag action here
+	 *
+	 * When the user starts a drag-and-drop operation and the sidebar needs
+	 * to ask the application for which drag action to perform, then the
+	 * sidebar will emit this signal.
+	 *
+	 * The application can evaluate the @context for customary actions, or
+	 * it can check the type of the files indicated by @uri_list against the
+	 * possible actions for the destination @uri.
+	 *
+	 * To enable drag-and-drop operations on the sidebar, use
+	 * gtk_places_sidebar_set_accept_uri_drops().
+	 */
 	places_sidebar_signals [DRAG_ACTION_REQUESTED] =
 		g_signal_new (I_("drag-action-requested"),
 			      G_OBJECT_CLASS_TYPE (gobject_class),
@@ -3607,7 +3672,22 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 			      G_TYPE_POINTER, /* FIXME: (GList *) is there something friendlier to language bindings? */
 			      G_TYPE_POINTER  /* FIXME: (inout int) is there something friendlier to language bindings? */);
 
-
+	/**
+	 * GtkPlacesSidebar::drag-action-ask:
+	 * @sidebar: the object which received the signal.
+	 * @actions: Possible drag actions that need to be asked for.
+	 *
+	 * The places sidebar emits this signal when it needs to ask the application
+	 * to pop up a menu to ask the user for which drag action to perform.
+	 *
+	 * To enable drag-and-drop operations on the sidebar, use
+	 * gtk_places_sidebar_set_accept_uri_drops().
+	 *
+	 * Return value: the final drag action that the sidebar should pass to the drag side
+	 * of the drag-and-drop operation.
+	 *
+	 * Since: 3.8
+	 */
 	places_sidebar_signals [DRAG_ACTION_ASK] =
 		g_signal_new (I_("drag-action-ask"),
 			      G_OBJECT_CLASS_TYPE (gobject_class),
@@ -3618,6 +3698,22 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 			      G_TYPE_INT, 1,
 			      G_TYPE_INT);
 
+	/**
+	 * GtkPlacesSidebar::drag-perform-drop:
+	 * @sidebar: the object which received the signal.
+	 * @uris: (element-type utf8) (transfer none): List of URIs that got dropped.
+	 * @drop_uri: Destination URI.
+	 * @action: Drop action to perform.
+	 *
+	 * The places sidebar emits this signal when the user completes a drag-and-drop operation and one
+	 * of the sidebar's items is the destination.  This item's URI is the @drop_uri, and the @uris
+	 * that are dropped into it should be copied/moved/etc. based on the specified @action.
+	 *
+	 * To enable drag-and-drop operations on the sidebar, use
+	 * gtk_places_sidebar_set_accept_uri_drops().
+	 *
+	 * Since: 3.8
+	 */
 	places_sidebar_signals [DRAG_PERFORM_DROP] =
 		g_signal_new (I_("drag-perform-drop"),
 			      G_OBJECT_CLASS_TYPE (gobject_class),
