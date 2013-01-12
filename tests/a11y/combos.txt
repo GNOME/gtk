@@ -73,7 +73,7 @@ window1
         "menu"
         parent: combo1
         index: 0
-        state: enabled sensitive
+        state: enabled selectable sensitive
         toolkit: gtk
         <AtkComponent>
         layer: popup
@@ -95,7 +95,7 @@ window1
         "menu"
         parent: combo2
         index: 0
-        state: enabled sensitive
+        state: enabled selectable sensitive
         toolkit: gtk
         <AtkComponent>
         layer: popup
@@ -105,7 +105,7 @@ window1
         "text"
         parent: combo2
         index: 1
-        state: editable enabled focusable sensitive single-line visible
+        state: editable enabled focusable selectable sensitive single-line visible
         toolkit: gtk
         <AtkComponent>
         layer: widget
@@ -157,7 +157,7 @@ window1
         "menu"
         parent: combo3
         index: 0
-        state: enabled sensitive
+        state: enabled selectable sensitive
         toolkit: gtk
         <AtkComponent>
         layer: popup
@@ -179,7 +179,7 @@ window1
         "menu"
         parent: combo4
         index: 0
-        state: enabled sensitive
+        state: enabled selectable sensitive
         toolkit: gtk
         <AtkComponent>
         layer: popup
@@ -189,7 +189,7 @@ window1
         "text"
         parent: combo4
         index: 1
-        state: editable enabled focusable sensitive single-line visible
+        state: editable enabled focusable selectable sensitive single-line visible
         toolkit: gtk
         <AtkComponent>
         layer: widget

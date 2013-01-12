@@ -91,7 +91,7 @@ window1
           "page tab"
           parent: unnamed-GtkNotebookAccessible-3
           index: 0
-          state: enabled showing visible
+          state: enabled selectable selected showing visible
           <AtkComponent>
           layer: widget
           alpha: 1
