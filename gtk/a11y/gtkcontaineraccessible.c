@@ -73,10 +73,9 @@ gtk_container_accessible_ref_child (AtkObject *obj,
   return accessible;
 }
 
-static void
-gtk_container_accessible_add (GtkContainer *container,
-                              GtkWidget    *child,
-                              gpointer      data)
+void
+_gtk_container_accessible_add (GtkContainer *container,
+                               GtkWidget    *child)
 {
   GtkContainerAccessible *accessible;
   GtkContainerAccessibleClass *klass;
@@ -92,10 +91,9 @@ gtk_container_accessible_add (GtkContainer *container,
   klass->add (accessible, child);
 }
  
-static void
-gtk_container_accessible_remove (GtkContainer *container,
-                                 GtkWidget    *child,
-                                 gpointer      data)
+void
+_gtk_container_accessible_remove (GtkContainer *container,
+                                  GtkWidget    *child)
 {
   GtkContainerAccessible *accessible;
   GtkContainerAccessibleClass *klass;
@@ -159,9 +157,6 @@ gtk_container_accessible_real_initialize (AtkObject *obj,
   ATK_OBJECT_CLASS (gtk_container_accessible_parent_class)->initialize (obj, data);
 
   accessible->priv->children = gtk_container_get_children (GTK_CONTAINER (data));
-
-  g_signal_connect (data, "add", G_CALLBACK (gtk_container_accessible_add), obj);
-  g_signal_connect (data, "remove", G_CALLBACK (gtk_container_accessible_remove), obj);
 
   obj->role = ATK_ROLE_PANEL;
 }

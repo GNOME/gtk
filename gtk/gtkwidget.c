@@ -62,6 +62,7 @@
 #include "gtkdebug.h"
 #include "gtkplug.h"
 #include "gtktypebuiltins.h"
+#include "a11y/gtkcontaineraccessibleprivate.h"
 #include "a11y/gtkwidgetaccessible.h"
 
 /**
@@ -3864,6 +3865,8 @@ gtk_widget_unparent (GtkWidget *widget)
     return;
 
   /* keep this function in sync with gtk_menu_detach() */
+
+  _gtk_container_accessible_remove (GTK_CONTAINER (priv->parent), widget);
 
   gtk_widget_push_verify_invariants (widget);
 
@@ -8079,6 +8082,8 @@ gtk_widget_set_parent (GtkWidget *widget,
     }
 
   gtk_widget_pop_verify_invariants (widget);
+
+  _gtk_container_accessible_add (GTK_CONTAINER (parent), widget);
 }
 
 /**
