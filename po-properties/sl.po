@@ -8,7 +8,7 @@
 # Andrej Žnidaršič <andrej.znidarsic@gmail.com>, 2010.
 # Klemen Košir <klemen.kosir@gmx.com>, 2010 - 2011.
 # Martin Srebotnjak <miles@filmsi.net>, 2007 - 2012.
-# Matej Urbančič <mateju@svn.gnome.org>, 2007 - 2012.
+# Matej Urbančič <mateju@svn.gnome.org>, 2007 - 2013.
 #
 msgid ""
 msgstr ""
@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-12-15 20:08+0000\n"
-"PO-Revision-Date: 2012-12-18 08:23+0100\n"
+"PO-Revision-Date: 2013-01-13 11:48+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenščina <gnome-si@googlegroups.com>\n"
 "Language: Slovenian\n"
