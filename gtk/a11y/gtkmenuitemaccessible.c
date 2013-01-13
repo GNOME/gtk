@@ -834,8 +834,7 @@ menu_item_add_gtk (GtkContainer *container,
   parent_widget = gtk_menu_get_attach_widget (GTK_MENU (container));
   if (GTK_IS_MENU_ITEM (parent_widget))
     {
-      GTK_CONTAINER_ACCESSIBLE_CLASS (gtk_menu_item_accessible_parent_class)->add_gtk (container, widget, gtk_widget_get_accessible (parent_widget));
-
+      GTK_CONTAINER_ACCESSIBLE_CLASS (gtk_menu_item_accessible_parent_class)->add (GTK_CONTAINER_ACCESSIBLE (gtk_widget_get_accessible (parent_widget)), widget);
     }
   return 1;
 }
@@ -851,7 +850,7 @@ menu_item_remove_gtk (GtkContainer *container,
   parent_widget = gtk_menu_get_attach_widget (GTK_MENU (container));
   if (GTK_IS_MENU_ITEM (parent_widget))
     {
-      GTK_CONTAINER_ACCESSIBLE_CLASS (gtk_menu_item_accessible_parent_class)->remove_gtk (container, widget, gtk_widget_get_accessible (parent_widget));
+      GTK_CONTAINER_ACCESSIBLE_CLASS (gtk_menu_item_accessible_parent_class)->remove (GTK_CONTAINER_ACCESSIBLE (gtk_widget_get_accessible (parent_widget)), widget);
     }
   return 1;
 }

@@ -49,12 +49,10 @@ struct _GtkContainerAccessibleClass
 {
   GtkWidgetAccessibleClass parent_class;
 
-  gint (*add_gtk)    (GtkContainer *container,
-                      GtkWidget    *widget,
-                      gpointer     data);
-  gint (*remove_gtk) (GtkContainer *container,
-                      GtkWidget    *widget,
-                      gpointer     data);
+  void (*add)    (GtkContainerAccessible *container,
+                  GtkWidget              *child);
+  void (*remove) (GtkContainerAccessible *container,
+                  GtkWidget              *child);
 };
 
 GType gtk_container_accessible_get_type (void);

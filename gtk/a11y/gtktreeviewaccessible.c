@@ -525,8 +525,8 @@ gtk_tree_view_accessible_class_init (GtkTreeViewAccessibleClass *klass)
    * we do not represent these as children so we do not want to report
    * children added or deleted when these changed.
    */
-  container_class->add_gtk = NULL;
-  container_class->remove_gtk = NULL;
+  container_class->add = NULL;
+  container_class->remove = NULL;
 
   gobject_class->finalize = gtk_tree_view_accessible_finalize;
 

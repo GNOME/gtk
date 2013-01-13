@@ -234,8 +234,8 @@ gtk_button_accessible_class_init (GtkButtonAccessibleClass *klass)
 
   widget_class->notify_gtk = gtk_button_accessible_notify_gtk;
 
-  container_class->add_gtk = NULL;
-  container_class->remove_gtk = NULL;
+  container_class->add = NULL;
+  container_class->remove = NULL;
 }
 
 static void

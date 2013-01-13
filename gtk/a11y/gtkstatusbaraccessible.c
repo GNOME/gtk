@@ -121,8 +121,8 @@ gtk_statusbar_accessible_class_init (GtkStatusbarAccessibleClass *klass)
    * As we report the statusbar as having no children
    * we are not interested in add and remove signals
    */
-  container_class->add_gtk = NULL;
-  container_class->remove_gtk = NULL;
+  container_class->add = NULL;
+  container_class->remove = NULL;
 }
 
 static void

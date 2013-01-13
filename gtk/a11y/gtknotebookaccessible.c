@@ -333,8 +333,8 @@ gtk_notebook_accessible_class_init (GtkNotebookAccessibleClass *klass)
   widget_class->notify_gtk = gtk_notebook_accessible_notify_gtk;
 
   /* we listen to page-added/-removed, so we don't care about these */
-  container_class->add_gtk = NULL;
-  container_class->remove_gtk = NULL;
+  container_class->add = NULL;
+  container_class->remove = NULL;
 
   g_type_class_add_private (klass, sizeof (GtkNotebookAccessiblePrivate));
 }
