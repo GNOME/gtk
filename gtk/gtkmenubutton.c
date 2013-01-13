@@ -522,7 +522,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
    *
    * The #GMenuModel from which the menu to pop up will be created.
    * See gtk_menu_button_set_menu_model() for the interaction with the
-   * #GtkMenuButton:menu property.
+   * #GtkMenuButton:popup property.
    *
    * Since: 3.6
    */
@@ -737,13 +737,13 @@ gtk_menu_button_get_popup (GtkMenuButton *menu_button)
  * @menu_button: a #GtkMenuButton
  * @menu_model: (allow-none): a #GMenuModel
  *
- * Sets the #GMenuModel from which the #GtkMenuButton:menu property will be
+ * Sets the #GMenuModel from which the #GtkMenuButton:popup property will be
  * filled in, or %NULL to disable the button.
  *
  * The #GtkMenu will be created with gtk_menu_new_from_model(), so actions
  * will be connected as documented there.
  *
- * If you #GtkMenuButton:menu * is already set, then its content will be lost
+ * If #GtkMenuButton:popup is already set, then its content will be lost
  * and replaced by our newly created #GtkMenu.
  *
  * Since: 3.6
@@ -869,8 +869,8 @@ gtk_menu_button_get_align_widget (GtkMenuButton *menu_button)
  * If the menu when popped out would have collided with screen edges,
  * we will do our best to keep it inside the screen and fully visible.
  *
- * If you pass GTK_ARROW_NONE for a @direction, the menu will behave
- * as if you passed GTK_ARROW_DOWN (although you won't see any arrows).
+ * If you pass %GTK_ARROW_NONE for a @direction, the menu will behave
+ * as if you passed %GTK_ARROW_DOWN (although you won't see any arrows).
  *
  * Since: 3.6
  */
