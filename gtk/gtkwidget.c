@@ -13332,7 +13332,7 @@ gtk_widget_queue_tooltip_query (GtkWidget *widget)
 /**
  * gtk_widget_set_tooltip_text:
  * @widget: a #GtkWidget
- * @text: the contents of the tooltip for @widget
+ * @text: (allow-none): the contents of the tooltip for @widget
  *
  * Sets @text as the contents of the tooltip. This function will take
  * care of setting #GtkWidget:has-tooltip to %TRUE and of the default
