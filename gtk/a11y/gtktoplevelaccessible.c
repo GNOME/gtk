@@ -44,7 +44,6 @@ gtk_toplevel_accessible_initialize (AtkObject *accessible,
   ATK_OBJECT_CLASS (gtk_toplevel_accessible_parent_class)->initialize (accessible, data);
 
   accessible->role = ATK_ROLE_APPLICATION;
-  accessible->name = g_get_prgname ();
   accessible->accessible_parent = NULL;
 }
 
@@ -85,6 +84,12 @@ gtk_toplevel_accessible_ref_child (AtkObject *obj,
   g_object_ref (atk_obj);
 
   return atk_obj;
+}
+
+static const char *
+gtk_toplevel_accessible_get_name (AtkObject *obj)
+{
+  return g_get_prgname ();
 }
 
 static gboolean
@@ -143,6 +148,7 @@ gtk_toplevel_accessible_class_init (GtkToplevelAccessibleClass *klass)
   class->get_n_children = gtk_toplevel_accessible_get_n_children;
   class->ref_child = gtk_toplevel_accessible_ref_child;
   class->get_parent = NULL;
+  class->get_name = gtk_toplevel_accessible_get_name;
 
   g_object_class->finalize = gtk_toplevel_accessible_object_finalize;
 
