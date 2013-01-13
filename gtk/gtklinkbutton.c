@@ -65,7 +65,7 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
-#include "a11y/gtklinkbuttonaccessible.h"
+#include "a11y/gtklinkbuttonaccessibleprivate.h"
 
 struct _GtkLinkButtonPrivate
 {
@@ -547,6 +547,8 @@ gtk_link_button_activate_link (GtkLinkButton *link_button)
 {
   GdkScreen *screen;
   GError *error;
+
+  _gtk_link_button_accessible_activate_link (link_button);
 
   if (gtk_widget_has_screen (GTK_WIDGET (link_button)))
     screen = gtk_widget_get_screen (GTK_WIDGET (link_button));

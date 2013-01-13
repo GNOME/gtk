@@ -17,8 +17,8 @@
 
 #include "config.h"
 
-#include <gtk/gtk.h>
-#include "gtklinkbuttonaccessible.h"
+#include "gtklinkbuttonaccessibleprivate.h"
+#include "gtkwidgetprivate.h"
 
 typedef struct _GtkLinkButtonAccessibleLink GtkLinkButtonAccessibleLink;
 typedef struct _GtkLinkButtonAccessibleLinkClass GtkLinkButtonAccessibleLinkClass;
@@ -171,15 +171,6 @@ atk_action_interface_init (AtkActionIface *iface)
   iface->get_name = gtk_link_button_accessible_link_get_name;
 }
 
-static gboolean
-activate_link (GtkLinkButton *button,
-               AtkHyperlink  *atk_link)
-{
-  g_signal_emit_by_name (atk_link, "link-activated");
-
-  return FALSE;
-}
-
 static AtkHyperlink *
 gtk_link_button_accessible_get_hyperlink (AtkHyperlinkImpl *impl)
 {
@@ -188,8 +179,6 @@ gtk_link_button_accessible_get_hyperlink (AtkHyperlinkImpl *impl)
   if (!button->priv->link)
     {
       button->priv->link = gtk_link_button_accessible_link_new (button);
-      g_signal_connect (gtk_accessible_get_widget (GTK_ACCESSIBLE (button)),
-                        "activate-link", G_CALLBACK (activate_link), button->priv->link);
     }
 
   return g_object_ref (button->priv->link);
@@ -232,3 +221,17 @@ atk_hypertext_impl_interface_init (AtkHyperlinkImplIface *iface)
 {
   iface->get_hyperlink = gtk_link_button_accessible_get_hyperlink;
 }
+
+void
+_gtk_link_button_accessible_activate_link (GtkLinkButton *link_button)
+{
+  GtkLinkButtonAccessible *accessible;
+
+  accessible = GTK_LINK_BUTTON_ACCESSIBLE (_gtk_widget_peek_accessible (GTK_WIDGET (link_button)));
+  if (accessible == NULL)
+    return;
+
+  if (accessible->priv->link)
+    g_signal_emit_by_name (accessible->priv->link, "link-activated");
+}
+
