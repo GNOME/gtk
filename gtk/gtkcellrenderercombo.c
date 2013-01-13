@@ -42,7 +42,7 @@
  *
  * The combo cell renderer takes care of adding a text cell renderer to the combo
  * box and sets it to display the column specified by its
- * #GtkCellRendererCombo:text-column property. Further properties of the comnbo box
+ * #GtkCellRendererCombo:text-column property. Further properties of the combo box
  * can be set in a handler for the #GtkCellRenderer::editing-started signal.
  *
  * The #GtkCellRendererCombo cell renderer was added in GTK+ 2.6.
