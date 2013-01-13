@@ -31,26 +31,10 @@ G_DEFINE_TYPE_WITH_CODE (GtkScaleButtonAccessible, gtk_scale_button_accessible, 
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_VALUE, atk_value_interface_init));
 
 static void
-gtk_scale_button_accessible_value_changed (GtkAdjustment *adjustment,
-                                           gpointer       data)
-{
-  g_object_notify (G_OBJECT (data), "accessible-value");
-}
-
-static void
 gtk_scale_button_accessible_initialize (AtkObject *obj,
                                         gpointer   data)
 {
-  GtkAdjustment *adjustment;
-
   ATK_OBJECT_CLASS (gtk_scale_button_accessible_parent_class)->initialize (obj, data);
-
-  adjustment = gtk_scale_button_get_adjustment (GTK_SCALE_BUTTON (data));
-  if (adjustment)
-    g_signal_connect (adjustment,
-                      "value-changed",
-                      G_CALLBACK (gtk_scale_button_accessible_value_changed),
-                      obj);
 
   obj->role = ATK_ROLE_SLIDER;
 }
@@ -60,21 +44,13 @@ gtk_scale_button_accessible_notify_gtk (GObject    *obj,
                                         GParamSpec *pspec)
 {
   GtkScaleButton *scale_button;
-  GtkScaleButtonAccessible *accessible;
+  AtkObject *accessible;
 
   scale_button = GTK_SCALE_BUTTON (obj);
-  accessible = GTK_SCALE_BUTTON_ACCESSIBLE (gtk_widget_get_accessible (GTK_WIDGET (scale_button)));
+  accessible = gtk_widget_get_accessible (GTK_WIDGET (scale_button));
 
-  if (strcmp (pspec->name, "adjustment") == 0)
-    {
-      GtkAdjustment* adjustment;
-
-      adjustment = gtk_scale_button_get_adjustment (scale_button);
-      g_signal_connect (adjustment,
-                        "value-changed",
-                        G_CALLBACK (gtk_scale_button_accessible_value_changed),
-                        accessible);
-    }
+  if (strcmp (pspec->name, "value") == 0)
+    g_object_notify (G_OBJECT (accessible), "accessible-value");
   else
     {
       GTK_WIDGET_ACCESSIBLE_CLASS (gtk_scale_button_accessible_parent_class)->notify_gtk (obj, pspec);
