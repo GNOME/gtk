@@ -1,14 +1,14 @@
 # Norwegian bokmål translation of gtk+.
 # Copyright (C) 1998-2004, 2005 Free Software Foundation, Inc.
-# Kjartan Maraas <kmaraas@gnome.org>, 1998-2012.
+# Kjartan Maraas <kmaraas@gnome.org>, 1998-2013.
 # Terance Edward Sola <terance@lyse.net>, 2005.
 # Torstein Adolf Winterseth <kvikende@fsfe.org>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 3.7.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-10 13:42+0100\n"
-"PO-Revision-Date: 2013-01-10 13:42+0100\n"
+"POT-Creation-Date: 2013-01-14 11:15+0100\n"
+"PO-Revision-Date: 2013-01-14 11:18+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: no\n"
