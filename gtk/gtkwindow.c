@@ -5666,7 +5666,6 @@ gtk_window_configure_event (GtkWidget         *widget,
 
   /*
    * If we do need to resize, we do that by:
-   *   - filling in widget->allocation with the new size
    *   - setting configure_notify_received to TRUE
    *     for use in gtk_window_move_resize()
    *   - queueing a resize, leading to invocation of
@@ -5675,10 +5674,6 @@ gtk_window_configure_event (GtkWidget         *widget,
    */
   
   priv->configure_notify_received = TRUE;
-
-  allocation.width = event->width;
-  allocation.height = event->height;
-  gtk_widget_set_allocation (widget, &allocation);
 
   gdk_window_invalidate_rect (gtk_widget_get_window (widget), NULL, FALSE); // XXX - What was this for again?
 
@@ -7176,7 +7171,9 @@ gtk_window_move_resize (GtkWindow *window)
 				   &new_geometry,
 				   new_flags);
 
-  gtk_widget_get_allocation (widget, &allocation);
+  gdk_window_get_position (gdk_window, &allocation.x, &allocation.y);
+  allocation.width = gdk_window_get_width (gdk_window);
+  allocation.height = gdk_window_get_height (gdk_window);
 
   /* handle resizing/moving and widget tree allocation
    */
