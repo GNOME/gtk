@@ -5,16 +5,15 @@
 # Szabolcs Ban <shooby at gnome dot hu>, 1999, 2000, 2001, 2002.
 # Andras Timar <timar at gnome dot hu>, 2002.
 # Laszlo Dvornik <dvornik at gnome dot hu>, 2004, 2005.
-# Gabor Kelemen <kelemeng at gnome dot hu>, 2004, 2005, 2007, 2008, 2009, 2010, 2011, 2012.
+# Gabor Kelemen <kelemeng at gnome dot hu>, 2004, 2005, 2007, 2008, 2009, 2010, 2011, 2012, 2013.
 # Balázs Úr <urbalazs at gmail dot com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
-"%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-12-29 01:25+0000\n"
-"PO-Revision-Date: 2012-12-29 16:24+0100\n"
-"Last-Translator: Balázs Úr <urbalazs at gmail dot com>\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-01-14 11:39+0100\n"
+"PO-Revision-Date: 2013-01-14 11:42+0100\n"
+"Last-Translator: Gabor Kelemen <kelemeng at gnome dot hu>\n"
 "Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
@@ -686,8 +685,8 @@ msgid "Could not show link"
 msgstr "Nem jeleníthető meg a hivatkozás"
 
 #: ../gtk/gtkaboutdialog.c:1017
-msgid "Homepage"
-msgstr "Honlap"
+msgid "Website"
+msgstr "Weboldal"
 
 #: ../gtk/gtkaboutdialog.c:1071
 #, c-format
@@ -781,7 +780,6 @@ msgid "Backslash"
 msgstr "Fordított törtvonal"
 
 #: ../gtk/gtkappchooserbutton.c:290
-#| msgid "Other application..."
 msgid "Other application…"
 msgstr "Más alkalmazás…"
 
@@ -1027,7 +1025,6 @@ msgstr "Érvénytelen"
 #. * acelerator.
 #.
 #: ../gtk/gtkcellrendereraccel.c:416 ../gtk/gtkcellrendereraccel.c:747
-#| msgid "New accelerator..."
 msgid "New accelerator…"
 msgstr "Új gyorsbillentyű…"
 
@@ -1330,7 +1327,6 @@ msgid "mm"
 msgstr "mm"
 
 #: ../gtk/gtkcustompaperunixdialog.c:605
-#| msgid "Margins from Printer..."
 msgid "Margins from Printer…"
 msgstr "Margók a nyomtatótól…"
 
@@ -1437,7 +1433,6 @@ msgid "(None)"
 msgstr "(Nincs)"
 
 #: ../gtk/gtkfilechooserbutton.c:2046
-#| msgid "Other..."
 msgid "Other…"
 msgstr "Egyéb…"
 
@@ -1549,7 +1544,6 @@ msgid "Remove"
 msgstr "Eltávolítás"
 
 #: ../gtk/gtkfilechooserdefault.c:3389
-#| msgid "Rename..."
 msgid "Rename…"
 msgstr "Átnevezés…"
 
@@ -1794,7 +1788,6 @@ msgid "Copy _Link Address"
 msgstr "_Hivatkozás címének másolása"
 
 #: ../gtk/gtk-launch.c:71
-#| msgid "APPLICATION [URI...] - launch an APPLICATION with URI."
 msgid "APPLICATION [URI…] — launch an APPLICATION with URI."
 msgstr "ALKALMAZÁS [URI…] — az ALKALMAZÁS elindítása az URI-vel."
 
@@ -2061,7 +2054,6 @@ msgstr ""
 " Alsó: %s %s"
 
 #: ../gtk/gtkpagesetupunixdialog.c:845 ../gtk/gtkprintunixdialog.c:3329
-#| msgid "Manage Custom Sizes"
 msgid "Manage Custom Sizes…"
 msgstr "Egyéni méretek kezelése…"
 
@@ -2246,7 +2238,6 @@ msgid "Getting printer information failed"
 msgstr "Nyomtatóinformációk lekérése meghiúsult"
 
 #: ../gtk/gtkprintunixdialog.c:1916
-#| msgid "Getting printer information..."
 msgid "Getting printer information…"
 msgstr "Nyomtatóinformációk lekérése…"
 
@@ -4835,6 +4826,9 @@ msgstr "tesztkimenet.%s"
 #: ../modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "Nyomtatás tesztnyomtatóra"
+
+#~ msgid "Homepage"
+#~ msgstr "Honlap"
 
 #~ msgid "Manage Custom Sizes..."
 #~ msgstr "Egyéni méretek kezelése…"
