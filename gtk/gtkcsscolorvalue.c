@@ -145,9 +145,9 @@ _gtk_css_color_value_resolve (GtkCssValue             *color,
   GtkCssDependencies unused;
   GtkCssValue *value;
 
-  g_return_val_if_fail (color != NULL, FALSE);
-  g_return_val_if_fail (provider == NULL || GTK_IS_STYLE_PROVIDER_PRIVATE (provider), FALSE);
-  g_return_val_if_fail (current != NULL, FALSE);
+  g_return_val_if_fail (color != NULL, NULL);
+  g_return_val_if_fail (provider == NULL || GTK_IS_STYLE_PROVIDER_PRIVATE (provider), NULL);
+  g_return_val_if_fail (current != NULL, NULL);
 
   if (dependencies == NULL)
     dependencies = &unused;
