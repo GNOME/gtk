@@ -1,3 +1,53 @@
+Overview of Changes in GTK+ 3.7.6
+=================================
+
+* We now use state flags for text direction: GTK_STATE_FLAG_LTR/RTL.
+  gtk_style_context_set_direction() has been deprecated.
+
+* We install headers for accessible implementations of GTK+ widgets.
+  This makes it possible to implement accessibility for third-party
+  widgets by subclassing the proper GTK+ implementation. To do this,
+  include gtk/gtk-a11y.h.
+
+* Invisible widgets now return a size of 0x0. This is an experimental
+  change that makes GtkWidget::visible essentially behave the same way
+  that "display: none" does in CSS. If you want the effect of CSS's
+  "visibility: hidden", you can use a GtkNotebook with an empty page.
+
+* GtkFrame now draws a background.
+
+* The Broadway backend now installs a separate server: broadwayd.
+
+* Bug fixes:
+ 687025 iconhelper: Treat empty string as NULL stock-id
+ 687633 gtk_color_chooser_get_rgba: wrong annotations, broke bind...
+ 688140 Add missing annotation for gtk_combo_box_text_get_active_...
+ 688362 GtkApplication: Fix memory leak
+ 689810 Include guard optimization
+ 690305 Typo in SECTION:gtkbuildable : (thier -> their)
+ 691186 Gtk+ 3.6.3 crashes when opening printing dialog: segfault...
+ 691301 Better support for cross-compiling
+ 691515 Insufficient checks for EWMH support
+ 691677 Gtk Scale (slider) does not react in clicks outside the c...
+
+* Translation updates:
+ Assamese
+ Bulgarian
+ Estonian
+ Galician
+ Hungarian
+ Kazakh
+ Latvian
+ Lithuanian
+ Norwegian bokmål
+ Persian
+ Portuguese
+ Slovenian
+ Tamil
+ Thai
+ Uyghur
+
+
 Overview of Changes in GTK+ 3.7.4
 =================================
 
