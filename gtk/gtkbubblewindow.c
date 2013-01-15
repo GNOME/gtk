@@ -248,22 +248,20 @@ _gtk_bubble_window_apply_tail_path (GtkBubbleWindow *window,
     {
       cairo_move_to (cr, CLAMP (x - priv->win_x - TAIL_GAP_WIDTH / 2,
                                 0, allocation->width - TAIL_GAP_WIDTH), base);
+      cairo_line_to (cr, CLAMP (x - priv->win_x, 0, allocation->width), tip);
       cairo_line_to (cr, CLAMP (x - priv->win_x + TAIL_GAP_WIDTH / 2,
                                 TAIL_GAP_WIDTH, allocation->width), base);
-      cairo_line_to (cr, CLAMP (x - priv->win_x, 0, allocation->width), tip);
     }
   else
     {
       cairo_move_to (cr, base,
                      CLAMP (y - priv->win_y - TAIL_GAP_WIDTH / 2,
                             0, allocation->height - TAIL_GAP_WIDTH));
+      cairo_line_to (cr, tip, CLAMP (y - priv->win_y, 0, allocation->height));
       cairo_line_to (cr, base,
                      CLAMP (y - priv->win_y + TAIL_GAP_WIDTH / 2,
                             TAIL_GAP_WIDTH, allocation->height));
-      cairo_line_to (cr, tip, CLAMP (y - priv->win_y, 0, allocation->height));
     }
-
-  cairo_close_path (cr);
 }
 
 static void
@@ -276,18 +274,38 @@ _gtk_bubble_window_apply_border_path (GtkBubbleWindow *window,
   priv = window->_priv;
   gtk_widget_get_allocation (GTK_WIDGET (window), &allocation);
 
-  if (priv->final_position == GTK_POS_TOP)
-    cairo_rectangle (cr, 0, 0, allocation.width, allocation.height - TAIL_HEIGHT);
-  else if (priv->final_position == GTK_POS_BOTTOM)
-    cairo_rectangle (cr, 0, TAIL_HEIGHT , allocation.width,
-                     allocation.height - TAIL_HEIGHT);
-  else if (priv->final_position == GTK_POS_LEFT)
-    cairo_rectangle (cr, 0, 0, allocation.width - TAIL_HEIGHT, allocation.height);
-  else if (priv->final_position == GTK_POS_RIGHT)
-    cairo_rectangle (cr, TAIL_HEIGHT, 0,
-                     allocation.width - TAIL_HEIGHT, allocation.height);
-
   _gtk_bubble_window_apply_tail_path (window, cr, &allocation);
+
+  if (priv->final_position == GTK_POS_TOP)
+    {
+      cairo_line_to (cr, allocation.width, allocation.height - TAIL_HEIGHT);
+      cairo_line_to (cr, allocation.width, 0);
+      cairo_line_to (cr, 0, 0);
+      cairo_line_to (cr, 0, allocation.height - TAIL_HEIGHT);
+    }
+  else if (priv->final_position == GTK_POS_BOTTOM)
+    {
+      cairo_line_to (cr, allocation.width, TAIL_HEIGHT);
+      cairo_line_to (cr, allocation.width, allocation.height);
+      cairo_line_to (cr, 0, allocation.height);
+      cairo_line_to (cr, 0, TAIL_HEIGHT);
+    }
+  else if (priv->final_position == GTK_POS_LEFT)
+    {
+      cairo_line_to (cr, allocation.width - TAIL_HEIGHT, allocation.height);
+      cairo_line_to (cr, 0, allocation.height);
+      cairo_line_to (cr, 0, 0);
+      cairo_line_to (cr, allocation.width - TAIL_HEIGHT, 0);
+    }
+  else if (priv->final_position == GTK_POS_RIGHT)
+    {
+      cairo_line_to (cr, TAIL_HEIGHT, 0);
+      cairo_line_to (cr, allocation.width, 0);
+      cairo_line_to (cr, allocation.width, allocation.height);
+      cairo_line_to (cr, TAIL_HEIGHT, allocation.height);
+    }
+
+  cairo_close_path (cr);
 }
 
 static void
@@ -385,10 +403,14 @@ gtk_bubble_window_draw (GtkWidget *widget,
   GtkStyleContext *context;
   GtkAllocation allocation;
   GtkWidget *child;
+  GdkRGBA *border;
 
   cairo_save (cr);
   context = gtk_widget_get_style_context (widget);
   gtk_widget_get_allocation (widget, &allocation);
+
+  gtk_render_background (context, cr, 0, 0,
+                         allocation.width, allocation.height);
 
   if (gtk_widget_is_composited (widget))
     {
@@ -404,12 +426,23 @@ gtk_bubble_window_draw (GtkWidget *widget,
 
   gtk_render_background (context, cr, 0, 0,
                          allocation.width, allocation.height);
+
+  gtk_style_context_get (context, gtk_widget_get_state_flags (widget),
+                         GTK_STYLE_PROPERTY_BORDER_COLOR, &border,
+                         NULL);
+
+  _gtk_bubble_window_apply_border_path (GTK_BUBBLE_WINDOW (widget), cr);
+  gdk_cairo_set_source_rgba (cr, border);
+  cairo_stroke (cr);
+
   child = gtk_bin_get_child (GTK_BIN (widget));
 
   if (child)
     gtk_container_propagate_draw (GTK_CONTAINER (widget), child, cr);
 
   cairo_restore (cr);
+
+  gdk_rgba_free (border);
 
   return TRUE;
 }
