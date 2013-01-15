@@ -153,7 +153,6 @@ _gtk_css_color_value_resolve (GtkCssValue             *color,
     dependencies = &unused;
   *dependencies = 0;
 
-  value = NULL;
   switch (color->type)
     {
     case COLOR_TYPE_LITERAL:
@@ -265,6 +264,7 @@ _gtk_css_color_value_resolve (GtkCssValue             *color,
         }
       break;
     default:
+      value = NULL;
       g_assert_not_reached ();
     }
 
