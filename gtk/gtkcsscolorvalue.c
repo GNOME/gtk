@@ -268,20 +268,17 @@ _gtk_css_color_value_resolve (GtkCssValue             *color,
       g_assert_not_reached ();
     }
 
-  if (value != NULL)
+  if (color->last_value != NULL &&
+      _gtk_css_value_equal (color->last_value, value))
     {
-      if (color->last_value != NULL &&
-          _gtk_css_value_equal (color->last_value, value))
-	{
-	  _gtk_css_value_unref (value);
-	  value = _gtk_css_value_ref (color->last_value);
-	}
-      else
-	{
-	  if (color->last_value != NULL)
-	    _gtk_css_value_unref (color->last_value);
-	  color->last_value = _gtk_css_value_ref (value);
-	}
+      _gtk_css_value_unref (value);
+      value = _gtk_css_value_ref (color->last_value);
+    }
+  else
+    {
+      if (color->last_value != NULL)
+        _gtk_css_value_unref (color->last_value);
+      color->last_value = _gtk_css_value_ref (value);
     }
 
   return value;
