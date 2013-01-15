@@ -1063,6 +1063,13 @@ gtk_clipboard_store (GtkClipboard *clipboard)
     {
       GtkSelectionData selection_data;
 
+      /* in each loop iteration, check if the content is still
+       * there, because calling get_func() can do anything to
+       * the clipboard
+       */
+      if (!clipboard->target_list || !clipboard->get_func)
+        break;
+
       memset (&selection_data, 0, sizeof (GtkSelectionData));
 
       selection_data.selection = clipboard->selection;
@@ -1079,6 +1086,9 @@ gtk_clipboard_store (GtkClipboard *clipboard)
 
       g_free (selection_data.data);
     }
+
+  if (targets)
+    gtk_target_table_free (targets, n_targets);
 }
 
 void
