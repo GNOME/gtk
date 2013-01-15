@@ -190,19 +190,19 @@ window1
               <AtkComponent>
               layer: widget
               alpha: 1
-              Homepage
+              Website
                 "label"
                 parent: unnamed-GtkContainerAccessible-6
                 index: 0
-                name: Homepage
+                name: Website
                 state: enabled focusable multi-line sensitive showing visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
                 <AtkText>
-                text: Homepage
-                character count: 8
+                text: Website
+                character count: 7
                 caret offset: 0
                 default attributes: bg-color: <omitted>
                                     bg-full-height: 0
