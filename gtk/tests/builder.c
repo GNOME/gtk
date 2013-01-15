@@ -1155,7 +1155,6 @@ test_treeview_column (void)
   GtkTreeViewColumn *column;
   GList *renderers;
   GObject *renderer;
-  gchar *text;
 
   builder = builder_new_from_string (buffer, -1, NULL);
   treeview = gtk_builder_get_object (builder, "treeview1");
@@ -1172,25 +1171,9 @@ test_treeview_column (void)
   g_assert (GTK_IS_CELL_RENDERER_TEXT (renderer));
   g_list_free (renderers);
 
-  gtk_widget_realize (GTK_WIDGET (treeview));
-
-  renderer = gtk_builder_get_object (builder, "renderer1");
-  g_object_get (renderer, "text", &text, NULL);
-  g_assert (text);
-  g_assert (strcmp (text, "25") == 0);
-  g_free (text);
-  
-  renderer = gtk_builder_get_object (builder, "renderer2");
-  g_object_get (renderer, "text", &text, NULL);
-  g_assert (text);
-  g_assert (strcmp (text, "John") == 0);
-  g_free (text);
-
-  gtk_widget_unrealize (GTK_WIDGET (treeview));
-
   window = gtk_builder_get_object (builder, "window1");
   gtk_widget_destroy (GTK_WIDGET (window));
-  
+
   g_object_unref (builder);
 }
 
@@ -1283,27 +1266,11 @@ test_combo_box (void)
     "    </child>"
     "  </object>"
     "</interface>";
-  GObject *window, *combobox, *renderer;
-  gchar *text;
+  GObject *window, *combobox;
 
   builder = builder_new_from_string (buffer, -1, NULL);
   combobox = gtk_builder_get_object (builder, "combobox1");
   g_assert (combobox);
-  gtk_widget_realize (GTK_WIDGET (combobox));
-
-  renderer = gtk_builder_get_object (builder, "renderer2");
-  g_assert (renderer);
-  g_object_get (renderer, "text", &text, NULL);
-  g_assert (text);
-  g_assert (strcmp (text, "Bar") == 0);
-  g_free (text);
-
-  renderer = gtk_builder_get_object (builder, "renderer1");
-  g_assert (renderer);
-  g_object_get (renderer, "text", &text, NULL);
-  g_assert (text);
-  g_assert (strcmp (text, "2") == 0);
-  g_free (text);
 
   window = gtk_builder_get_object (builder, "window1");
   gtk_widget_destroy (GTK_WIDGET (window));
@@ -1420,8 +1387,6 @@ test_cell_view (void)
   GObject *model, *window;
   GtkTreePath *path;
   GList *renderers;
-  GObject *renderer;
-  gchar *text;
   
   builder = builder_new_from_string (buffer, -1, NULL);
   cellview = gtk_builder_get_object (builder, "cellview1");
@@ -1438,18 +1403,9 @@ test_cell_view (void)
   renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (cellview));
   g_assert (renderers);
   g_assert (g_list_length (renderers) == 1);
-  
-  gtk_widget_realize (GTK_WIDGET (cellview));
-
-  renderer = g_list_nth_data (renderers, 0);
-  g_list_free (renderers);
-  g_assert (renderer);
-  g_object_get (renderer, "text", &text, NULL);
-  g_assert (strcmp (text, "test") == 0);
-  g_free (text);
-  gtk_tree_path_free (path);
 
   window = gtk_builder_get_object (builder, "window1");
+  g_assert (window);
   gtk_widget_destroy (GTK_WIDGET (window));
   
   g_object_unref (builder);
