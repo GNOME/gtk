@@ -284,7 +284,6 @@ _gtk_css_color_value_resolve (GtkCssValue             *color,
 	}
     }
 
-  _gtk_css_rgba_value_get_rgba (value);
   return value;
 }
 
