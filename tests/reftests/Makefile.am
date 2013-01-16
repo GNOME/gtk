@@ -250,6 +250,8 @@ EXTRA_DIST += \
 	style-properties-only-child.ui \
 	toplevel-vs-popup.ref.ui \
 	toplevel-vs-popup.ui \
+	treeview-headers-hidden.ref.ui \
+	treeview-headers-hidden.ui \
 	unresolvable.css \
 	unresolvable.ref.ui \
 	unresolvable.ui \
