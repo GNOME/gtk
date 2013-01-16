@@ -1035,10 +1035,10 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
       priv->tree_view != NULL &&
       gtk_widget_get_realized (priv->tree_view))
     {
-      if (priv->visible)
+      if (priv->visible &&
+          gdk_window_is_visible (_gtk_tree_view_get_header_window (GTK_TREE_VIEW (priv->tree_view))))
 	{
-          if (gdk_window_is_visible (_gtk_tree_view_get_header_window (GTK_TREE_VIEW (priv->tree_view))))
-            gtk_widget_show_now (priv->button);
+          gtk_widget_show (priv->button);
 
 	  if (priv->window)
 	    {
