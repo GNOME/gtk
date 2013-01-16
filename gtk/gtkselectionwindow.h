@@ -18,6 +18,10 @@
 #ifndef __GTK_SELECTION_WINDOW_H__
 #define __GTK_SELECTION_WINDOW_H__
 
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
 #include <gtk/gtkbubblewindow.h>
 
 G_BEGIN_DECLS
