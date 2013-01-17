@@ -92,6 +92,7 @@
 #include <gtk/gtkentrycompletion.h>
 #include <gtk/gtkenums.h>
 #include <gtk/gtkeventbox.h>
+#include <gtk/gtkeventcontroller.h>
 #include <gtk/gtkexpander.h>
 #include <gtk/gtkfixed.h>
 #include <gtk/gtkfilechooser.h>
