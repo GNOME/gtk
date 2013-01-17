@@ -7891,3 +7891,164 @@ gtk_popover_get_position
 gtk_popover_set_modal
 gtk_popover_get_modal
 </SECTION>
+
+<SECTION>
+<FILE>gtkeventcontroller</FILE>
+<TITLE>GtkEventController</TITLE>
+GtkEventController
+gtk_event_controller_handle_event
+
+<SUBSECTION Standard>
+GTK_TYPE_EVENT_CONTROLLER
+GTK_EVENT_CONTROLLER
+GTK_EVENT_CONTROLLER_CLASS
+GTK_IS_EVENT_CONTROLLER
+GTK_EVENT_CONTROLLER_GET_CLASS
+
+<SUBSECTION Private>
+GtkEventControllerPriv
+gtk_event_controller_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkgesture</FILE>
+<TITLE>GtkGesture</TITLE>
+GtkGesture
+gtk_gesture_get_device
+gtk_gesture_get_sequence_state
+gtk_gesture_set_sequence_state
+gtk_gesture_get_sequences
+gtk_gesture_get_last_updated_sequence
+gtk_gesture_handles_sequence
+gtk_gesture_get_point
+gtk_gesture_get_last_update_time
+gtk_gesture_get_bounding_box
+gtk_gesture_get_bounding_box_center
+gtk_gesture_is_active
+gtk_gesture_check
+gtk_gesture_get_touch_only
+gtk_gesture_set_touch_only
+
+<SUBSECTION Standard>
+GTK_TYPE_GESTURE
+GTK_GESTURE
+GTK_GESTURE_CLASS
+GTK_IS_GESTURE
+GTK_GESTURE_GET_CLASS
+
+<SUBSECTION Private>
+gtk_gesture_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkgesturedrag</FILE>
+<TITLE>GtkGestureDrag</TITLE>
+GtkGestureDrag
+gtk_gesture_drag_new
+gtk_gesture_drag_get_start_point
+gtk_gesture_drag_get_current_point
+
+<SUBSECTION Standard>
+GTK_TYPE_GESTURE_DRAG
+GTK_GESTURE_DRAG
+GTK_GESTURE_DRAG_CLASS
+GTK_IS_GESTURE_DRAG
+GTK_GESTURE_DRAG_GET_CLASS
+
+<SUBSECTION Private>
+gtk_gesture_drag_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkgesturelongpress</FILE>
+<TITLE>GtkGestureLongPress</TITLE>
+GtkGestureLongPress
+gtk_gesture_long_press_new
+gtk_gesture_long_press_set_button
+gtk_gesture_long_press_get_button
+
+<SUBSECTION Standard>
+GTK_TYPE_GESTURE_LONG_PRESS
+GTK_GESTURE_LONG_PRESS
+GTK_GESTURE_LONG_PRESS_CLASS
+GTK_IS_GESTURE_LONG_PRESS
+GTK_GESTURE_LONG_PRESS_GET_CLASS
+
+<SUBSECTION Private>
+gtk_gesture_long_press_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkgesturemultipress</FILE>
+<TITLE>GtkGestureMultiPress</TITLE>
+GtkGestureMultiPress
+gtk_gesture_multi_press_new
+gtk_gesture_multi_press_reset
+gtk_gesture_multi_press_set_button
+gtk_gesture_multi_press_get_button
+gtk_gesture_multi_press_set_area
+gtk_gesture_multi_press_get_area
+
+<SUBSECTION Standard>
+GTK_TYPE_GESTURE_MULTI_PRESS
+GTK_GESTURE_MULTI_PRESS
+GTK_GESTURE_MULTI_PRESS_CLASS
+GTK_IS_GESTURE_MULTI_PRESS
+GTK_GESTURE_MULTI_PRESS_GET_CLASS
+
+<SUBSECTION Private>
+gtk_gesture_multi_press_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkgestureswipe</FILE>
+<TITLE>GtkGestureSwipe</TITLE>
+GtkGestureSwipe
+gtk_gesture_swipe_new
+
+<SUBSECTION Standard>
+GTK_TYPE_GESTURE_SWIPE
+GTK_GESTURE_SWIPE
+GTK_GESTURE_SWIPE_CLASS
+GTK_IS_GESTURE_SWIPE
+GTK_GESTURE_SWIPE_GET_CLASS
+
+<SUBSECTION Private>
+gtk_gesture_swipe_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkgesturerotate</FILE>
+<TITLE>GtkGestureRotate</TITLE>
+GtkGestureRotate
+gtk_gesture_rotate_new
+gtk_gesture_rotate_get_angle_delta
+
+<SUBSECTION Standard>
+GTK_TYPE_GESTURE_ROTATE
+GTK_GESTURE_ROTATE
+GTK_GESTURE_ROTATE_CLASS
+GTK_IS_GESTURE_ROTATE
+GTK_GESTURE_ROTATE_GET_CLASS
+
+<SUBSECTION Private>
+gtk_gesture_rotate_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkgesturezoom</FILE>
+<TITLE>GtkGestureZoom</TITLE>
+GtkGestureZoom
+gtk_gesture_zoom_new
+gtk_gesture_zoom_get_scale_delta
+
+<SUBSECTION Standard>
+GTK_TYPE_GESTURE_ZOOM
+GTK_GESTURE_ZOOM
+GTK_GESTURE_ZOOM_CLASS
+GTK_IS_GESTURE_ZOOM
+GTK_GESTURE_ZOOM_GET_CLASS
+
+<SUBSECTION Private>
+gtk_gesture_zoom_get_type
+</SECTION>
