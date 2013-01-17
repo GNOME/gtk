@@ -3,13 +3,13 @@
 # Distributed under the same licence as the gtk+-properties package
 # Duarte Loreto <happyguy_pt@hotmail.com>, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013.
 # Nuno Ferreira <nmrf@rnl.ist.utl.pt>, 1999.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: 3.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-13 00:13+0000\n"
-"PO-Revision-Date: 2013-01-13 00:20+0000\n"
+"POT-Creation-Date: 2013-01-17 23:15+0000\n"
+"PO-Revision-Date: 2013-01-17 23:20+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
 "Language: pt\n"
@@ -173,7 +173,7 @@ msgid "Has Opacity Control"
 msgstr "Tem Controlo de Opacidade"
 
 #: ../gtk/deprecated/gtkcolorsel.c:324
-msgid "Whether the color seletor should allow setting opacity"
+msgid "Whether the color selector should allow setting opacity"
 msgstr "Se o seletor de cor deverá ou não permitir definir a opacidade"
 
 #: ../gtk/deprecated/gtkcolorsel.c:330
@@ -572,7 +572,7 @@ msgstr "Widget Atalho"
 msgid "The widget to be monitored for accelerator changes"
 msgstr "O widget a ser monitorizado para alterações de atalho"
 
-#: ../gtk/gtkaccessible.c:158 ../gtk/gtktreeviewcolumn.c:355
+#: ../gtk/gtkaccessible.c:158 ../gtk/gtktreeviewcolumn.c:353
 msgid "Widget"
 msgstr "Widget"
 
@@ -613,8 +613,7 @@ msgstr "Etiqueta"
 
 #: ../gtk/gtkaction.c:240
 msgid "The label used for menu items and buttons that activate this action."
-msgstr ""
-"A etiqueta utilizada para itens de menu e botões que ativam esta ação."
+msgstr "A etiqueta utilizada para itens de menu e botões que ativam esta ação."
 
 #: ../gtk/gtkaction.c:256
 msgid "Short label"
@@ -730,7 +729,7 @@ msgid "Whether the action is enabled."
 msgstr "Se a ação está ou não ativa."
 
 #: ../gtk/gtkaction.c:386 ../gtk/gtkactiongroup.c:242
-#: ../gtk/gtkstatusicon.c:298 ../gtk/gtktreeviewcolumn.c:247
+#: ../gtk/gtkstatusicon.c:298 ../gtk/gtktreeviewcolumn.c:245
 #: ../gtk/gtkwidget.c:1011
 msgid "Visible"
 msgstr "Visível"
@@ -1044,7 +1043,7 @@ msgid "The GMenuModel for the menubar"
 msgstr "O GMenuModel para a barra de menu"
 
 #: ../gtk/gtkapplication.c:758
-msgid "Ative window"
+msgid "Active window"
 msgstr "Janela ativa"
 
 #: ../gtk/gtkapplication.c:759
@@ -1238,7 +1237,7 @@ msgid "If TRUE, the child will not be subject to homogeneous sizing"
 msgstr "Se VERDADEIRO, o filho não será sujeito a dimensionamento homogéneo"
 
 #: ../gtk/gtkbox.c:240 ../gtk/gtkcellareabox.c:315 ../gtk/gtkexpander.c:312
-#: ../gtk/gtkiconview.c:512 ../gtk/gtktreeviewcolumn.c:282
+#: ../gtk/gtkiconview.c:512 ../gtk/gtktreeviewcolumn.c:280
 msgid "Spacing"
 msgstr "Espaçamento"
 
@@ -1252,7 +1251,7 @@ msgstr "Se os filhos deverão ou não ter todos o mesmo tamanho"
 
 #: ../gtk/gtkbox.c:271 ../gtk/gtkcellareabox.c:335 ../gtk/gtktoolbar.c:552
 #: ../gtk/gtktoolitemgroup.c:1657 ../gtk/gtktoolpalette.c:1075
-#: ../gtk/gtktreeviewcolumn.c:338
+#: ../gtk/gtktreeviewcolumn.c:336
 msgid "Expand"
 msgstr "Expandir"
 
@@ -1474,8 +1473,8 @@ msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
 msgstr ""
-"O dia selecionado (como um número entre 1 e 31, ou 0 para desfazer a "
-"seleção de dia atual)"
+"O dia selecionado (como um número entre 1 e 31, ou 0 para desfazer a seleção "
+"de dia atual)"
 
 #: ../gtk/gtkcalendar.c:513
 msgid "Show Heading"
@@ -1557,7 +1556,7 @@ msgstr "Separação horizontal"
 msgid "Space between week headers and main area"
 msgstr "Espaçamento entre os cabeçalhos da semana e a área principal"
 
-#: ../gtk/gtkcellareabox.c:316 ../gtk/gtktreeviewcolumn.c:283
+#: ../gtk/gtkcellareabox.c:316 ../gtk/gtktreeviewcolumn.c:281
 msgid "Space which is inserted between cells"
 msgstr "Espaço inserido entre células"
 
@@ -1626,7 +1625,7 @@ msgid "The Cell Area this context was created for"
 msgstr "A Área de Célula para a qual este contexto foi criado"
 
 #: ../gtk/gtkcellareacontext.c:134 ../gtk/gtkcellareacontext.c:153
-#: ../gtk/gtktreeviewcolumn.c:310
+#: ../gtk/gtktreeviewcolumn.c:308
 msgid "Minimum Width"
 msgstr "Largura Mínima"
 
@@ -1812,8 +1811,7 @@ msgstr "Modelo"
 
 #: ../gtk/gtkcellrenderercombo.c:129
 msgid "The model containing the possible values for the combo box"
-msgstr ""
-"O modelo que contém os valores possíveis para a caixa de seleção única"
+msgstr "O modelo que contém os valores possíveis para a caixa de seleção única"
 
 #: ../gtk/gtkcellrenderercombo.c:151
 msgid "Text Column"
@@ -1981,11 +1979,11 @@ msgstr "O número de casas decimais a apresentar"
 #: ../gtk/gtkmenu.c:554 ../gtk/gtkspinner.c:114 ../gtk/gtkswitch.c:814
 #: ../gtk/gtktoggleaction.c:131 ../gtk/gtktogglebutton.c:173
 #: ../gtk/gtktoggletoolbutton.c:125
-msgid "Ative"
+msgid "Active"
 msgstr "Ativo"
 
 #: ../gtk/gtkcellrendererspinner.c:126
-msgid "Whether the spinner is ative (ie. shown) in the cell"
+msgid "Whether the spinner is active (ie. shown) in the cell"
 msgstr "Se o botão giratório está ativo (isto é, visível) na célula"
 
 #: ../gtk/gtkcellrendererspinner.c:144
@@ -2150,7 +2148,7 @@ msgid "Font scale"
 msgstr "Escala de fonte"
 
 #: ../gtk/gtkcellrenderertext.c:455
-msgid "Font scaling fator"
+msgid "Font scaling factor"
 msgstr "Fator de escala da fonte"
 
 #: ../gtk/gtkcellrenderertext.c:464 ../gtk/gtktexttag.c:463
@@ -2244,7 +2242,7 @@ msgstr "Largura de quebra"
 msgid "The width at which the text is wrapped"
 msgstr "A largura à qual o texto é quebrado"
 
-#: ../gtk/gtkcellrenderertext.c:619 ../gtk/gtktreeviewcolumn.c:363
+#: ../gtk/gtkcellrenderertext.c:619 ../gtk/gtktreeviewcolumn.c:361
 msgid "Alignment"
 msgstr "Alinhamento"
 
@@ -2339,7 +2337,7 @@ msgid "Font scale set"
 msgstr "Afetar escala de fonte"
 
 #: ../gtk/gtkcellrenderertext.c:684 ../gtk/gtktexttag.c:666
-msgid "Whether this tag scales the font size by a fator"
+msgid "Whether this tag scales the font size by a factor"
 msgstr "Se este atributo afeta ou não a escala da fonte"
 
 #: ../gtk/gtkcellrenderertext.c:687 ../gtk/gtktexttag.c:685
@@ -2445,13 +2443,13 @@ msgstr "O modelo para a vista de célula"
 
 #: ../gtk/gtkcellview.c:252 ../gtk/gtkcombobox.c:1007
 #: ../gtk/gtkentrycompletion.c:451 ../gtk/gtkiconview.c:637
-#: ../gtk/gtktreemenu.c:332 ../gtk/gtktreeviewcolumn.c:426
+#: ../gtk/gtktreemenu.c:332 ../gtk/gtktreeviewcolumn.c:424
 msgid "Cell Area"
 msgstr "Área da Célula"
 
 #: ../gtk/gtkcellview.c:253 ../gtk/gtkcombobox.c:1008
 #: ../gtk/gtkentrycompletion.c:452 ../gtk/gtkiconview.c:638
-#: ../gtk/gtktreemenu.c:333 ../gtk/gtktreeviewcolumn.c:427
+#: ../gtk/gtktreemenu.c:333 ../gtk/gtktreeviewcolumn.c:425
 msgid "The GtkCellArea used to layout cells"
 msgstr "A GtkCellArea utilizada para arrumar as células"
 
@@ -2522,7 +2520,7 @@ msgstr "Se atribuir ou não à cor um valor alfa"
 
 #: ../gtk/gtkcolorbutton.c:186 ../gtk/gtkfilechooserbutton.c:439
 #: ../gtk/gtkfontbutton.c:434 ../gtk/gtkprintjob.c:139
-#: ../gtk/gtkstatusicon.c:426 ../gtk/gtktreeviewcolumn.c:330
+#: ../gtk/gtkstatusicon.c:426 ../gtk/gtktreeviewcolumn.c:328
 msgid "Title"
 msgstr "Título"
 
@@ -2613,11 +2611,11 @@ msgid "TreeModel column containing the column span values"
 msgstr "Coluna de TreeModel que contém os valores de abrangência de coluna"
 
 #: ../gtk/gtkcombobox.c:810
-msgid "Ative item"
+msgid "Active item"
 msgstr "Item ativo"
 
 #: ../gtk/gtkcombobox.c:811
-msgid "The item which is currently ative"
+msgid "The item which is currently active"
 msgstr "O item atualmente ativo"
 
 #: ../gtk/gtkcombobox.c:830 ../gtk/gtkuimanager.c:487
@@ -2684,8 +2682,8 @@ msgid ""
 "The column in the combo box's model to associate with strings from the entry "
 "if the combo was created with #GtkComboBox:has-entry = %TRUE"
 msgstr ""
-"A coluna no modelo da caixa de seleção única a associar com as expressões "
-"da entrada se a caixa tiver sido criada com #GtkComboBox:has-entry = %TRUE"
+"A coluna no modelo da caixa de seleção única a associar com as expressões da "
+"entrada se a caixa tiver sido criada com #GtkComboBox:has-entry = %TRUE"
 
 #: ../gtk/gtkcombobox.c:955
 msgid "ID Column"
@@ -2696,15 +2694,15 @@ msgid ""
 "The column in the combo box's model that provides string IDs for the values "
 "in the model"
 msgstr ""
-"A coluna no modelo da caixa de seleção única que disponibiliza expressões "
-"de ID para os valores no modelo"
+"A coluna no modelo da caixa de seleção única que disponibiliza expressões de "
+"ID para os valores no modelo"
 
 #: ../gtk/gtkcombobox.c:971
-msgid "Ative id"
+msgid "Active id"
 msgstr "ID ativo"
 
 #: ../gtk/gtkcombobox.c:972
-msgid "The value of the id column for the ative row"
+msgid "The value of the id column for the active row"
 msgstr "O valor da coluna de ID para a linha ativa"
 
 #: ../gtk/gtkcombobox.c:987
@@ -2911,7 +2909,7 @@ msgstr "Visibilidade"
 
 #: ../gtk/gtkentry.c:773
 msgid ""
-"FALSE displays the \"invisible char\" instead of the atual text (password "
+"FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
 "FALSO apresenta o \"caracter de invisibilidade\" em vez do texto real (modo "
@@ -3388,12 +3386,12 @@ msgstr ""
 "Se o expansor irá redimensionar a janela de topo ao expandir e recolher"
 
 #: ../gtk/gtkexpander.c:353 ../gtk/gtktoolitemgroup.c:1632
-#: ../gtk/gtktreeview.c:1195
+#: ../gtk/gtktreeview.c:1185
 msgid "Expander Size"
 msgstr "Tamanho do Expansor"
 
 #: ../gtk/gtkexpander.c:354 ../gtk/gtktoolitemgroup.c:1633
-#: ../gtk/gtktreeview.c:1196
+#: ../gtk/gtktreeview.c:1186
 msgid "Size of the expander arrow"
 msgstr "Tamanho da seta do expansor"
 
@@ -3422,7 +3420,7 @@ msgid "Action"
 msgstr "Ação"
 
 #: ../gtk/gtkfilechooser.c:746
-msgid "The type of operation that the file seletor is performing"
+msgid "The type of operation that the file selector is performing"
 msgstr "O tipo de operação que o seletor de ficheiros está a efetuar"
 
 #: ../gtk/gtkfilechooser.c:752 ../gtk/gtkrecentchooser.c:262
@@ -3451,7 +3449,7 @@ msgid "Application supplied widget for custom previews."
 msgstr "Widget disponibilizado pela aplicação para antevisões personalizadas."
 
 #: ../gtk/gtkfilechooser.c:770
-msgid "Preview Widget Ative"
+msgid "Preview Widget Active"
 msgstr "Widget de Antevisão Ativo"
 
 #: ../gtk/gtkfilechooser.c:771
@@ -3518,7 +3516,7 @@ msgstr ""
 "Se um seletor de ficheiros que não esteja em modo de abertura permitirá ao "
 "utilizador criar novas pastas."
 
-#: ../gtk/gtkfixed.c:150 ../gtk/gtklayout.c:646 ../gtk/gtktreeviewcolumn.c:263
+#: ../gtk/gtkfixed.c:150 ../gtk/gtklayout.c:646 ../gtk/gtktreeviewcolumn.c:261
 msgid "X position"
 msgstr "Posição x"
 
@@ -3642,7 +3640,7 @@ msgstr "Se TRUE, as colunas têm todas a mesma largura"
 msgid "The row number to attach the top side of a child widget to"
 msgstr "O número da linha a que anexar o lado superior de um widget filho"
 
-#: ../gtk/gtkgrid.c:1434 ../gtk/gtklayout.c:672 ../gtk/gtktreeviewcolumn.c:273
+#: ../gtk/gtkgrid.c:1434 ../gtk/gtklayout.c:672 ../gtk/gtktreeviewcolumn.c:271
 msgid "Width"
 msgstr "Largura"
 
@@ -3749,16 +3747,16 @@ msgid ""
 msgstr ""
 "Como o texto e ícone de cada item são posicionados com relação uns aos outros"
 
-#: ../gtk/gtkiconview.c:593 ../gtk/gtktreeview.c:1030
-#: ../gtk/gtktreeviewcolumn.c:373
+#: ../gtk/gtkiconview.c:593 ../gtk/gtktreeview.c:1020
+#: ../gtk/gtktreeviewcolumn.c:371
 msgid "Reorderable"
 msgstr "Reordenável"
 
-#: ../gtk/gtkiconview.c:594 ../gtk/gtktreeview.c:1031
+#: ../gtk/gtkiconview.c:594 ../gtk/gtktreeview.c:1021
 msgid "View is reorderable"
 msgstr "A vista é reordenável"
 
-#: ../gtk/gtkiconview.c:601 ../gtk/gtktreeview.c:1181
+#: ../gtk/gtkiconview.c:601 ../gtk/gtktreeview.c:1171
 msgid "Tooltip Column"
 msgstr "Coluna de Dica"
 
@@ -5097,8 +5095,8 @@ msgstr "Configuração da Página Embutida"
 #: ../gtk/gtkprintoperation.c:1403 ../gtk/gtkprintunixdialog.c:426
 msgid "TRUE if page setup combos are embedded in GtkPrintUnixDialog"
 msgstr ""
-"VERDADEIRO se as caixas de seleção de configuração de página estão "
-"embutidas no GtkPrintUnixDialog"
+"VERDADEIRO se as caixas de seleção de configuração de página estão embutidas "
+"no GtkPrintUnixDialog"
 
 #: ../gtk/gtkprintoperation.c:1424
 msgid "Number of Pages To Print"
@@ -5249,11 +5247,11 @@ msgstr "O valor atual"
 
 #: ../gtk/gtkradioaction.c:150
 msgid ""
-"The value property of the currently ative member of the group to which this "
+"The value property of the currently active member of the group to which this "
 "action belongs."
 msgstr ""
-"A propriedade de valor do membro atualmente ativo no grupo a que esta "
-"ação pertence."
+"A propriedade de valor do membro atualmente ativo no grupo a que esta ação "
+"pertence."
 
 #: ../gtk/gtkradiobutton.c:164
 msgid "The radio button whose group this widget belongs to."
@@ -5797,7 +5795,7 @@ msgstr "Dividir Cursor"
 
 #: ../gtk/gtksettings.c:416
 msgid ""
-"Whether two cursors should be displayed for mixed left-to-right and right-to"
+"Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
 msgstr ""
 "Se deverão ou não ser apresentados dois cursores para texto misto esquerda-"
@@ -5873,7 +5871,7 @@ msgid "GTK Modules"
 msgstr "Módulos GTK"
 
 #: ../gtk/gtksettings.c:514
-msgid "List of currently ative GTK modules"
+msgid "List of currently active GTK modules"
 msgstr "Lista de módulos GTK atualmente ativos"
 
 #: ../gtk/gtksettings.c:522
@@ -6151,8 +6149,7 @@ msgstr "Módulo de IC por omissão"
 
 #: ../gtk/gtksettings.c:997
 msgid "Which IM module should be used by default"
-msgstr ""
-"Que módulo de introdução de carateres deverá ser utilizado por omissão"
+msgstr "Que módulo de introdução de carateres deverá ser utilizado por omissão"
 
 #: ../gtk/gtksettings.c:1015
 msgid "Recent Files Max Age"
@@ -6366,7 +6363,7 @@ msgid "Custom palette"
 msgstr "Paleta personalizada"
 
 #: ../gtk/gtksettings.c:1346
-msgid "Palette to use in the color seletor"
+msgid "Palette to use in the color selector"
 msgstr "Paleta a utilizar no seletor de cor"
 
 #: ../gtk/gtksettings.c:1354
@@ -6430,8 +6427,8 @@ msgid ""
 "The directions in which the size group affects the requested sizes of its "
 "component widgets"
 msgstr ""
-"As direções em que o tamanho do grupo afeta os tamanhos pedidos dos "
-"widgets seus componentes"
+"As direções em que o tamanho do grupo afeta os tamanhos pedidos dos widgets "
+"seus componentes"
 
 #: ../gtk/gtksizegroup.c:341
 msgid "Ignore hidden"
@@ -6497,7 +6494,7 @@ msgid "Style of bevel around the spin button"
 msgstr "Estilo de relevo em torno do botão giratório"
 
 #: ../gtk/gtkspinner.c:115
-msgid "Whether the spinner is ative"
+msgid "Whether the spinner is active"
 msgstr "Se o botão giratório está ou não ativo"
 
 #: ../gtk/gtkstatusbar.c:183
@@ -6733,12 +6730,12 @@ msgstr "Tamanho da fonte em unidades Pango"
 
 #: ../gtk/gtktexttag.c:385
 msgid ""
-"Font size as a scale fator relative to the default font size. This properly "
+"Font size as a scale factor relative to the default font size. This properly "
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
 "such as PANGO_SCALE_X_LARGE"
 msgstr ""
-"Tamanho da fonte como um fator escalar relativamente ao tamanho de fonte "
-"por omissão. Adapta-se corretamente à alteração de temas etc. pelo que é "
+"Tamanho da fonte como um fator escalar relativamente ao tamanho de fonte por "
+"omissão. Adapta-se corretamente à alteração de temas etc. pelo que é "
 "recomendado. O Pango pré-define algumas escalas tal como PANGO_SCALE_X_LARGE"
 
 #: ../gtk/gtktexttag.c:405 ../gtk/gtktextview.c:722
@@ -7028,11 +7025,10 @@ msgstr "Criar as mesmas proxies que uma ação de exclusividade"
 #: ../gtk/gtktoggleaction.c:117
 msgid "Whether the proxies for this action look like radio action proxies"
 msgstr ""
-"Se as proxies para esta ação se assemelham a proxies de ação de "
-"exclusividade"
+"Se as proxies para esta ação se assemelham a proxies de ação de exclusividade"
 
 #: ../gtk/gtktoggleaction.c:132
-msgid "Whether the toggle action should be ative"
+msgid "Whether the toggle action should be active"
 msgstr "Se o botão de alternância deverá ou não estar ativo"
 
 #: ../gtk/gtktogglebutton.c:174 ../gtk/gtktoggletoolbutton.c:126
@@ -7352,319 +7348,318 @@ msgstr "Modelo TreeModelSort"
 msgid "The model for the TreeModelSort to sort"
 msgstr "O modelo para a ordenação da TreeModelSort"
 
-#: ../gtk/gtktreeview.c:993
+#: ../gtk/gtktreeview.c:983
 msgid "TreeView Model"
 msgstr "Modelo TreeView"
 
-#: ../gtk/gtktreeview.c:994
+#: ../gtk/gtktreeview.c:984
 msgid "The model for the tree view"
 msgstr "O modelo para a vista em árvore"
 
-#: ../gtk/gtktreeview.c:1006
+#: ../gtk/gtktreeview.c:996
 msgid "Headers Visible"
 msgstr "Cabeçalhos Visíveis"
 
-#: ../gtk/gtktreeview.c:1007
+#: ../gtk/gtktreeview.c:997
 msgid "Show the column header buttons"
 msgstr "Apresentar os botões de cabeçalho de coluna"
 
-#: ../gtk/gtktreeview.c:1014
+#: ../gtk/gtktreeview.c:1004
 msgid "Headers Clickable"
 msgstr "Cabeçalhos Clicáveis"
 
-#: ../gtk/gtktreeview.c:1015
+#: ../gtk/gtktreeview.c:1005
 msgid "Column headers respond to click events"
 msgstr "Os cabeçalhos de coluna respondem a eventos de clique"
 
-#: ../gtk/gtktreeview.c:1022
+#: ../gtk/gtktreeview.c:1012
 msgid "Expander Column"
 msgstr "Coluna de Expansão"
 
-#: ../gtk/gtktreeview.c:1023
+#: ../gtk/gtktreeview.c:1013
 msgid "Set the column for the expander column"
 msgstr "Definir a coluna para a coluna de expansão"
 
-#: ../gtk/gtktreeview.c:1038
+#: ../gtk/gtktreeview.c:1028
 msgid "Rules Hint"
 msgstr "Dica de Réguas"
 
-#: ../gtk/gtktreeview.c:1039
+#: ../gtk/gtktreeview.c:1029
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "Definir uma dica para motor de temas desenhar as linhas em cores alternadas"
 
-#: ../gtk/gtktreeview.c:1046
+#: ../gtk/gtktreeview.c:1036
 msgid "Enable Search"
 msgstr "Ativar Procura"
 
-#: ../gtk/gtktreeview.c:1047
+#: ../gtk/gtktreeview.c:1037
 msgid "View allows user to search through columns interactively"
 msgstr "Vista permite que utilizador procure interactivamente pelas colunas"
 
-#: ../gtk/gtktreeview.c:1054
+#: ../gtk/gtktreeview.c:1044
 msgid "Search Column"
 msgstr "Procurar Coluna"
 
-#: ../gtk/gtktreeview.c:1055
+#: ../gtk/gtktreeview.c:1045
 msgid "Model column to search through during interactive search"
 msgstr "Coluna modelo onde procurar durante a procura interativa"
 
-#: ../gtk/gtktreeview.c:1075
+#: ../gtk/gtktreeview.c:1065
 msgid "Fixed Height Mode"
 msgstr "Modo de Altura Fixa"
 
-#: ../gtk/gtktreeview.c:1076
+#: ../gtk/gtktreeview.c:1066
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr "Acelera o GtkTreeView assumindo que todas as linhas têm a mesma altura"
 
-#: ../gtk/gtktreeview.c:1096
+#: ../gtk/gtktreeview.c:1086
 msgid "Hover Selection"
 msgstr "Selecionar ao Pairar"
 
-#: ../gtk/gtktreeview.c:1097
+#: ../gtk/gtktreeview.c:1087
 msgid "Whether the selection should follow the pointer"
 msgstr "Se a seleção deverá ou não seguir o ponteiro"
 
-#: ../gtk/gtktreeview.c:1116
+#: ../gtk/gtktreeview.c:1106
 msgid "Hover Expand"
 msgstr "Expandir ao Pairar"
 
-#: ../gtk/gtktreeview.c:1117
+#: ../gtk/gtktreeview.c:1107
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr ""
 "Se as linhas deverão ou não ser expandidas/recolhidas quando o ponteiro "
 "paira sobre elas"
 
-#: ../gtk/gtktreeview.c:1131
+#: ../gtk/gtktreeview.c:1121
 msgid "Show Expanders"
 msgstr "Apresentar Expansores"
 
-#: ../gtk/gtktreeview.c:1132
+#: ../gtk/gtktreeview.c:1122
 msgid "View has expanders"
 msgstr "A vista tem expansores"
 
-#: ../gtk/gtktreeview.c:1146
+#: ../gtk/gtktreeview.c:1136
 msgid "Level Indentation"
 msgstr "Indentação de Nível"
 
-#: ../gtk/gtktreeview.c:1147
+#: ../gtk/gtktreeview.c:1137
 msgid "Extra indentation for each level"
 msgstr "Indentação adicional para cada nível"
 
-#: ../gtk/gtktreeview.c:1156
+#: ../gtk/gtktreeview.c:1146
 msgid "Rubber Banding"
 msgstr "Seleção Elástica"
 
-#: ../gtk/gtktreeview.c:1157
+#: ../gtk/gtktreeview.c:1147
 msgid ""
 "Whether to enable selection of multiple items by dragging the mouse pointer"
 msgstr ""
-"Se ativar ou não a seleção de múltiplos itens ao arrastar o ponteiro do "
-"rato"
+"Se ativar ou não a seleção de múltiplos itens ao arrastar o ponteiro do rato"
 
-#: ../gtk/gtktreeview.c:1164
+#: ../gtk/gtktreeview.c:1154
 msgid "Enable Grid Lines"
 msgstr "Ativar as Linhas de Grelha"
 
-#: ../gtk/gtktreeview.c:1165
+#: ../gtk/gtktreeview.c:1155
 msgid "Whether grid lines should be drawn in the tree view"
 msgstr ""
 "Se as linhas da grelha deverão ou não ser desenhadas na vista de árvore"
 
-#: ../gtk/gtktreeview.c:1173
+#: ../gtk/gtktreeview.c:1163
 msgid "Enable Tree Lines"
 msgstr "Ativar as Linhas da Árvore"
 
-#: ../gtk/gtktreeview.c:1174
+#: ../gtk/gtktreeview.c:1164
 msgid "Whether tree lines should be drawn in the tree view"
 msgstr ""
 "Se as linhas da árvore deverão ou não ser desenhadas na vista de árvore"
 
-#: ../gtk/gtktreeview.c:1182
+#: ../gtk/gtktreeview.c:1172
 msgid "The column in the model containing the tooltip texts for the rows"
 msgstr "Uma coluna no modelo que contém os textos de dicas para as linhas"
 
-#: ../gtk/gtktreeview.c:1204
+#: ../gtk/gtktreeview.c:1194
 msgid "Vertical Separator Width"
 msgstr "Largura de Separador Vertical"
 
-#: ../gtk/gtktreeview.c:1205
+#: ../gtk/gtktreeview.c:1195
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Espaço vertical entre células. Tem de ser um número par"
 
-#: ../gtk/gtktreeview.c:1213
+#: ../gtk/gtktreeview.c:1203
 msgid "Horizontal Separator Width"
 msgstr "Largura de Separador Horizontal"
 
-#: ../gtk/gtktreeview.c:1214
+#: ../gtk/gtktreeview.c:1204
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Espaço horizontal entre células. Tem de ser um número par"
 
-#: ../gtk/gtktreeview.c:1222
+#: ../gtk/gtktreeview.c:1212
 msgid "Allow Rules"
 msgstr "Permitir Réguas"
 
-#: ../gtk/gtktreeview.c:1223
+#: ../gtk/gtktreeview.c:1213
 msgid "Allow drawing of alternating color rows"
 msgstr "Permitir desenhar linhas em cores alternadas"
 
-#: ../gtk/gtktreeview.c:1229
+#: ../gtk/gtktreeview.c:1219
 msgid "Indent Expanders"
 msgstr "Indentar Expansores"
 
-#: ../gtk/gtktreeview.c:1230
+#: ../gtk/gtktreeview.c:1220
 msgid "Make the expanders indented"
 msgstr "Criar os expansores indentados"
 
-#: ../gtk/gtktreeview.c:1236
+#: ../gtk/gtktreeview.c:1226
 msgid "Even Row Color"
 msgstr "Cor de Linha Par"
 
-#: ../gtk/gtktreeview.c:1237
+#: ../gtk/gtktreeview.c:1227
 msgid "Color to use for even rows"
 msgstr "Cor a utilizar para linhas pares"
 
-#: ../gtk/gtktreeview.c:1243
+#: ../gtk/gtktreeview.c:1233
 msgid "Odd Row Color"
 msgstr "Cor de Linha Ímpar"
 
-#: ../gtk/gtktreeview.c:1244
+#: ../gtk/gtktreeview.c:1234
 msgid "Color to use for odd rows"
 msgstr "Cor a utilizar para linhas ímpares"
 
-#: ../gtk/gtktreeview.c:1250
+#: ../gtk/gtktreeview.c:1240
 msgid "Grid line width"
 msgstr "Largura da linha de grelha"
 
-#: ../gtk/gtktreeview.c:1251
+#: ../gtk/gtktreeview.c:1241
 msgid "Width, in pixels, of the tree view grid lines"
 msgstr "Largura, em pixels, das linhas de grelha da vista de árvore"
 
-#: ../gtk/gtktreeview.c:1257
+#: ../gtk/gtktreeview.c:1247
 msgid "Tree line width"
 msgstr "Largura da linha de árvore"
 
-#: ../gtk/gtktreeview.c:1258
+#: ../gtk/gtktreeview.c:1248
 msgid "Width, in pixels, of the tree view lines"
 msgstr "Largura, em pixels, das linhas da vista de árvore"
 
-#: ../gtk/gtktreeview.c:1264
+#: ../gtk/gtktreeview.c:1254
 msgid "Grid line pattern"
 msgstr "Padrão da linha da grelha"
 
-#: ../gtk/gtktreeview.c:1265
+#: ../gtk/gtktreeview.c:1255
 msgid "Dash pattern used to draw the tree view grid lines"
 msgstr ""
 "Padrão de tracejado utilizado para desenhar as linhas da grelha da vista de "
 "árvore"
 
-#: ../gtk/gtktreeview.c:1271
+#: ../gtk/gtktreeview.c:1261
 msgid "Tree line pattern"
 msgstr "Padrão da linha de árvore"
 
-#: ../gtk/gtktreeview.c:1272
+#: ../gtk/gtktreeview.c:1262
 msgid "Dash pattern used to draw the tree view lines"
 msgstr ""
 "Padrão de tracejado utilizado para desenhar as linhas da vista de árvore"
 
-#: ../gtk/gtktreeviewcolumn.c:248
+#: ../gtk/gtktreeviewcolumn.c:246
 msgid "Whether to display the column"
 msgstr "Apresentar ou não a coluna"
 
-#: ../gtk/gtktreeviewcolumn.c:255 ../gtk/gtkwindow.c:651
+#: ../gtk/gtktreeviewcolumn.c:253 ../gtk/gtkwindow.c:651
 msgid "Resizable"
 msgstr "Redimensionável"
 
-#: ../gtk/gtktreeviewcolumn.c:256
+#: ../gtk/gtktreeviewcolumn.c:254
 msgid "Column is user-resizable"
 msgstr "Coluna é redimensionável pelo utilizador"
 
-#: ../gtk/gtktreeviewcolumn.c:264
+#: ../gtk/gtktreeviewcolumn.c:262
 msgid "Current X position of the column"
 msgstr "Posição X atual da coluna"
 
-#: ../gtk/gtktreeviewcolumn.c:274
+#: ../gtk/gtktreeviewcolumn.c:272
 msgid "Current width of the column"
 msgstr "Largura atual da coluna"
 
-#: ../gtk/gtktreeviewcolumn.c:291
+#: ../gtk/gtktreeviewcolumn.c:289
 msgid "Sizing"
 msgstr "Dimensionamento"
 
-#: ../gtk/gtktreeviewcolumn.c:292
+#: ../gtk/gtktreeviewcolumn.c:290
 msgid "Resize mode of the column"
 msgstr "Modo de redimensionamento da coluna"
 
-#: ../gtk/gtktreeviewcolumn.c:300
+#: ../gtk/gtktreeviewcolumn.c:298
 msgid "Fixed Width"
 msgstr "Largura Fixa"
 
-#: ../gtk/gtktreeviewcolumn.c:301
+#: ../gtk/gtktreeviewcolumn.c:299
 msgid "Current fixed width of the column"
 msgstr "Largura fixa atual da coluna"
 
-#: ../gtk/gtktreeviewcolumn.c:311
+#: ../gtk/gtktreeviewcolumn.c:309
 msgid "Minimum allowed width of the column"
 msgstr "Largura mínima permitida para a coluna"
 
-#: ../gtk/gtktreeviewcolumn.c:320
+#: ../gtk/gtktreeviewcolumn.c:318
 msgid "Maximum Width"
 msgstr "Largura Máxima"
 
-#: ../gtk/gtktreeviewcolumn.c:321
+#: ../gtk/gtktreeviewcolumn.c:319
 msgid "Maximum allowed width of the column"
 msgstr "Largura máxima permitida para a coluna"
 
-#: ../gtk/gtktreeviewcolumn.c:331
+#: ../gtk/gtktreeviewcolumn.c:329
 msgid "Title to appear in column header"
 msgstr "Título a apresentar no cabeçalho da coluna"
 
-#: ../gtk/gtktreeviewcolumn.c:339
+#: ../gtk/gtktreeviewcolumn.c:337
 msgid "Column gets share of extra width allocated to the widget"
 msgstr "Coluna recebe parte da largura extra alocada ao widget"
 
-#: ../gtk/gtktreeviewcolumn.c:346
+#: ../gtk/gtktreeviewcolumn.c:344
 msgid "Clickable"
 msgstr "Clicável"
 
-#: ../gtk/gtktreeviewcolumn.c:347
+#: ../gtk/gtktreeviewcolumn.c:345
 msgid "Whether the header can be clicked"
 msgstr "Se o cabeçalho pode ou não ser clicado"
 
-#: ../gtk/gtktreeviewcolumn.c:356
+#: ../gtk/gtktreeviewcolumn.c:354
 msgid "Widget to put in column header button instead of column title"
 msgstr "Widget a colocar no botão de cabeçalho da coluna em vez do título"
 
-#: ../gtk/gtktreeviewcolumn.c:364
+#: ../gtk/gtktreeviewcolumn.c:362
 msgid "X Alignment of the column header text or widget"
 msgstr "Alinhamento X do texto ou widget de cabeçalho da coluna"
 
-#: ../gtk/gtktreeviewcolumn.c:374
+#: ../gtk/gtktreeviewcolumn.c:372
 msgid "Whether the column can be reordered around the headers"
 msgstr "Se a coluna pode ou não ser reordenada em torno dos cabeçalhos"
 
-#: ../gtk/gtktreeviewcolumn.c:381
+#: ../gtk/gtktreeviewcolumn.c:379
 msgid "Sort indicator"
 msgstr "Indicador de ordenação"
 
-#: ../gtk/gtktreeviewcolumn.c:382
+#: ../gtk/gtktreeviewcolumn.c:380
 msgid "Whether to show a sort indicator"
 msgstr "Se apresentar ou não um indicador de ordenação"
 
-#: ../gtk/gtktreeviewcolumn.c:389
+#: ../gtk/gtktreeviewcolumn.c:387
 msgid "Sort order"
 msgstr "Tipo de ordenação"
 
-#: ../gtk/gtktreeviewcolumn.c:390
+#: ../gtk/gtktreeviewcolumn.c:388
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Direção de ordenação que o indicador de ordenação deverá indicar"
 
-#: ../gtk/gtktreeviewcolumn.c:406
+#: ../gtk/gtktreeviewcolumn.c:404
 msgid "Sort column ID"
 msgstr "ID da coluna de ordenação"
 
-#: ../gtk/gtktreeviewcolumn.c:407
+#: ../gtk/gtktreeviewcolumn.c:405
 msgid "Logical sort column ID this column sorts on when selected for sorting"
 msgstr ""
 "ID de coluna lógica de ordenação segundo a qual esta coluna ordena quando "
@@ -8190,11 +8185,11 @@ msgid "Name of the themed icon for this window"
 msgstr "Nome do tema de ícones para esta janela"
 
 #: ../gtk/gtkwindow.c:789
-msgid "Is Ative"
+msgid "Is Active"
 msgstr "Está Ativa"
 
 #: ../gtk/gtkwindow.c:790
-msgid "Whether the toplevel is the current ative window"
+msgid "Whether the toplevel is the current active window"
 msgstr "Se o nível de topo é ou não a janela atualmente ativa"
 
 #: ../gtk/gtkwindow.c:797
@@ -8599,8 +8594,8 @@ msgstr "O título do perfil de cor a utilizar"
 #~ msgstr "Desenhar barra deslizante ATIVE durante o arrastar"
 
 #~ msgid ""
-#~ "With this option set to TRUE, sliders will be drawn ATIVE and with "
-#~ "shadow IN while they are dragged"
+#~ "With this option set to TRUE, sliders will be drawn ATIVE and with shadow "
+#~ "IN while they are dragged"
 #~ msgstr ""
 #~ "Com esta opção definida como TRUE, barras deslizantes serão desenhadas "
 #~ "ATIVE e com sombra IN durante o seu arrastamento"
