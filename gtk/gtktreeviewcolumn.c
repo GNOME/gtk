@@ -394,7 +394,7 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
    * GtkTreeViewColumn:sort-column-id:
    *
    * Logical sort column ID this column sorts on when selected for sorting. Setting the sort column ID makes the column header
-   * clickable. Set to %-1 to make the column unsortable.
+   * clickable. Set to -1 to make the column unsortable.
    *
    * Since: 2.18
    **/
