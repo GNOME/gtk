@@ -322,12 +322,6 @@ AC_ARG_ENABLE(quartz-relocation,
                               [enable bundle-based relocation functions])],
                               [quartz_relocation=yes])
 
-AC_ARG_ENABLE(wayland-cairo-gl,
-              AS_HELP_STRING([--enable-wayland-cairo-gl],
-                             [enable the use of Cairo GL in the Wayland backend]),
-              [enable_wayland_cairo_gl=yes])
-
-
 cairo_backends=
 backend_immodules=
 have_gio_unix=no
@@ -397,22 +391,13 @@ else
 fi
 
 if test "x$enable_wayland_backend" = "xyes"; then
-  if test "x$enable_wayland_cairo_gl" = "xyes"; then
-    # Wayland can use cairo-gl
-    cairo_backends="$cairo_backends cairo-gl"
-    AC_DEFINE(GDK_WAYLAND_USE_EGL, [1], [Whether to use EGL in Wayland backend])
-  else
-    # For the cairo image backend
-    cairo_backends="$cairo_backends cairo"
-  fi
+  # For the cairo image backend
+  cairo_backends="$cairo_backends cairo"
   GDK_BACKENDS="$GDK_BACKENDS wayland"
   have_gio_unix=yes
   GDK_WINDOWING="$GDK_WINDOWING
 #define GDK_WINDOWING_WAYLAND"
   WAYLAND_PACKAGES="wayland-client >= 1.0.0 xkbcommon >= 0.2.0 wayland-cursor"
-  if test "x$enable_wayland_cairo_gl" = "xyes"; then
-    WAYLAND_PACKAGES="$WAYLAND_PACKAGES wayland-egl egl"
-  fi
   AM_CONDITIONAL(USE_WAYLAND, true)
 else
   AM_CONDITIONAL(USE_WAYLAND, false)
