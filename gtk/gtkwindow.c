@@ -7171,7 +7171,8 @@ gtk_window_move_resize (GtkWindow *window)
 				   &new_geometry,
 				   new_flags);
 
-  gdk_window_get_position (gdk_window, &allocation.x, &allocation.y);
+  allocation.x = 0;
+  allocation.y = 0;
   allocation.width = gdk_window_get_width (gdk_window);
   allocation.height = gdk_window_get_height (gdk_window);
 
