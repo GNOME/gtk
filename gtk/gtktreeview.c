@@ -462,6 +462,7 @@ struct _GtkTreeViewPrivate
   guint fixed_height_mode : 1;
   guint fixed_height_check : 1;
 
+  guint activate_on_single_click : 1;
   guint reorderable : 1;
   guint header_has_focus : 1;
   guint drag_column_window_state : 3;
@@ -556,7 +557,8 @@ enum {
   PROP_RUBBER_BANDING,
   PROP_ENABLE_GRID_LINES,
   PROP_ENABLE_TREE_LINES,
-  PROP_TOOLTIP_COLUMN
+  PROP_TOOLTIP_COLUMN,
+  PROP_ACTIVATE_ON_SINGLE_CLICK
 };
 
 /* object signals */
@@ -1175,6 +1177,22 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 						       -1,
 						       GTK_PARAM_READWRITE));
 
+  /**
+   * GtkTreeView:activate-on-single-click:
+   *
+   * The activate-on-single-click property specifies whether the "row-activated" signal
+   * will be emitted after a single click.
+   *
+   * Since: 3.8
+   */
+  g_object_class_install_property (o_class,
+                                   PROP_ACTIVATE_ON_SINGLE_CLICK,
+                                   g_param_spec_boolean ("activate-on-single-click",
+							 P_("Activate on Single Click"),
+							 P_("Activate row on a single click"),
+							 FALSE,
+							 GTK_PARAM_READWRITE));
+
   /* Style properties */
 #define _TREE_VIEW_EXPANDER_SIZE 14
 #define _TREE_VIEW_VERTICAL_SEPARATOR 2
@@ -1271,10 +1289,12 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
    * @column: the #GtkTreeViewColumn in which the activation occurred
    *
    * The "row-activated" signal is emitted when the method
-   * gtk_tree_view_row_activated() is called or the user double clicks 
-   * a treeview row. It is also emitted when a non-editable row is 
-   * selected and one of the keys: Space, Shift+Space, Return or 
-   * Enter is pressed.
+   * gtk_tree_view_row_activated() is called, when the user double
+   * clicks a treeview row with the "activate-on-single-click"
+   * property set to %FALSE, or when the user single clicks a row when
+   * the "activate-on-single-click" property set to %TRUE. It is also
+   * emitted when a non-editable row is selected and one of the keys:
+   * Space, Shift+Space, Return or Enter is pressed.
    * 
    * For selection handling refer to the <link linkend="TreeWidget">tree 
    * widget conceptual overview</link> as well as #GtkTreeSelection.
@@ -1709,6 +1729,7 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   tree_view->priv->show_expanders = TRUE;
   tree_view->priv->draw_keyfocus = TRUE;
   tree_view->priv->headers_visible = TRUE;
+  tree_view->priv->activate_on_single_click = FALSE;
 
   /* We need some padding */
   tree_view->priv->dy = 0;
@@ -1847,6 +1868,9 @@ gtk_tree_view_set_property (GObject         *object,
     case PROP_TOOLTIP_COLUMN:
       gtk_tree_view_set_tooltip_column (tree_view, g_value_get_int (value));
       break;
+    case PROP_ACTIVATE_ON_SINGLE_CLICK:
+      gtk_tree_view_set_activate_on_single_click (tree_view, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1927,6 +1951,9 @@ gtk_tree_view_get_property (GObject    *object,
       break;
     case PROP_TOOLTIP_COLUMN:
       g_value_set_int (value, tree_view->priv->tooltip_column);
+      break;
+    case PROP_ACTIVATE_ON_SINGLE_CLICK:
+      g_value_set_boolean (value, tree_view->priv->activate_on_single_click);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -3135,38 +3162,47 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	    }
         }
 
-      /* Test if a double click happened on the same row. */
       if (event->button == GDK_BUTTON_PRIMARY && event->type == GDK_BUTTON_PRESS)
         {
-          int double_click_time, double_click_distance;
 
-          g_object_get (gtk_settings_get_default (),
-                        "gtk-double-click-time", &double_click_time,
-                        "gtk-double-click-distance", &double_click_distance,
-                        NULL);
-
-          /* Same conditions as _gdk_event_button_generate */
-          if (tree_view->priv->last_button_x != -1 &&
-              (event->time < tree_view->priv->last_button_time + double_click_time) &&
-              (ABS (event->x - tree_view->priv->last_button_x) <= double_click_distance) &&
-              (ABS (event->y - tree_view->priv->last_button_y) <= double_click_distance))
+          /* Test if a double click happened on the same row. */
+          if (!tree_view->priv->activate_on_single_click)
             {
-              /* We do no longer compare paths of this row and the
-               * row clicked previously.  We use the double click
-               * distance to decide whether this is a valid click,
-               * allowing the mouse to slightly move over another row.
-               */
-              row_double_click = TRUE;
+              int double_click_time, double_click_distance;
 
-              tree_view->priv->last_button_time = 0;
-              tree_view->priv->last_button_x = -1;
-              tree_view->priv->last_button_y = -1;
+              g_object_get (gtk_settings_get_default (),
+                            "gtk-double-click-time", &double_click_time,
+                            "gtk-double-click-distance", &double_click_distance,
+                            NULL);
+
+              /* Same conditions as _gdk_event_button_generate */
+              if (tree_view->priv->last_button_x != -1 &&
+                  (event->time < tree_view->priv->last_button_time + double_click_time) &&
+                  (ABS (event->x - tree_view->priv->last_button_x) <= double_click_distance) &&
+                  (ABS (event->y - tree_view->priv->last_button_y) <= double_click_distance))
+                {
+                  /* We do no longer compare paths of this row and the
+                   * row clicked previously.  We use the double click
+                   * distance to decide whether this is a valid click,
+                   * allowing the mouse to slightly move over another row.
+                   */
+                  row_double_click = TRUE;
+
+                  tree_view->priv->last_button_time = 0;
+                  tree_view->priv->last_button_x = -1;
+                  tree_view->priv->last_button_y = -1;
+                }
+              else
+                {
+                  tree_view->priv->last_button_time = event->time;
+                  tree_view->priv->last_button_x = event->x;
+                  tree_view->priv->last_button_y = event->y;
+                }
             }
           else
             {
-              tree_view->priv->last_button_time = event->time;
-              tree_view->priv->last_button_x = event->x;
-              tree_view->priv->last_button_y = event->y;
+              tree_view->priv->button_pressed_node = tree_view->priv->prelight_node;
+              tree_view->priv->button_pressed_tree = tree_view->priv->prelight_tree;
             }
         }
 
@@ -3353,6 +3389,12 @@ gtk_tree_view_button_release_column_resize (GtkWidget      *widget,
 }
 
 static gboolean
+button_event_modifies_selection (GdkEventButton *event)
+{
+        return (event->state & (GDK_CONTROL_MASK | GDK_SHIFT_MASK)) != 0;
+}
+
+static gboolean
 gtk_tree_view_button_release (GtkWidget      *widget,
 			      GdkEventButton *event)
 {
@@ -3373,10 +3415,10 @@ gtk_tree_view_button_release (GtkWidget      *widget,
   if (tree_view->priv->button_pressed_node == NULL)
     return FALSE;
 
-  if (event->button == GDK_BUTTON_PRIMARY)
+  if (event->button == GDK_BUTTON_PRIMARY
+      && tree_view->priv->button_pressed_node == tree_view->priv->prelight_node)
     {
-      if (tree_view->priv->button_pressed_node == tree_view->priv->prelight_node &&
-          tree_view->priv->arrow_prelit)
+      if (tree_view->priv->arrow_prelit)
 	{
 	  GtkTreePath *path = NULL;
 
@@ -3394,6 +3436,16 @@ gtk_tree_view_button_release (GtkWidget      *widget,
 					     tree_view->priv->button_pressed_node, TRUE);
 	  gtk_tree_path_free (path);
 	}
+      else if (tree_view->priv->activate_on_single_click
+               && !button_event_modifies_selection (event))
+        {
+          GtkTreePath *path = NULL;
+
+          path = _gtk_tree_path_new_from_rbtree (tree_view->priv->button_pressed_tree,
+                                                 tree_view->priv->button_pressed_node);
+          gtk_tree_view_row_activated (tree_view, path, tree_view->priv->focus_column);
+          gtk_tree_path_free (path);
+        }
 
       gtk_grab_remove (widget);
       tree_view->priv->button_pressed_tree = NULL;
@@ -11777,6 +11829,50 @@ gtk_tree_view_get_rules_hint (GtkTreeView  *tree_view)
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
 
   return tree_view->priv->has_rules;
+}
+
+
+/**
+ * gtk_tree_view_set_activate_on_single_click:
+ * @tree_view: a #GtkTreeView
+ * @setting: %TRUE to emit row-activated on a single click
+ *
+ * Cause the "row-activated" signal to be emitted on a single click
+ * instead of a double click.
+ *
+ * Since: 3.8
+ **/
+void
+gtk_tree_view_set_activate_on_single_click  (GtkTreeView *tree_view,
+                                             gboolean     setting)
+{
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+
+  setting = setting != FALSE;
+
+  if (tree_view->priv->activate_on_single_click == setting)
+    return;
+
+  tree_view->priv->activate_on_single_click = setting;
+  g_object_notify (G_OBJECT (tree_view), "activate-on-single-click");
+}
+
+/**
+ * gtk_tree_view_get_activate_on_single_click:
+ * @tree_view: a #GtkTreeView
+ *
+ * Gets the setting set by gtk_tree_view_set_activate_on_single_click().
+ *
+ * Return value: %TRUE if row-activated will be emitted on a single click
+ *
+ * Since: 3.8
+ **/
+gboolean
+gtk_tree_view_get_activate_on_single_click  (GtkTreeView *tree_view)
+{
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
+
+  return tree_view->priv->activate_on_single_click;
 }
 
 /* Public Column functions

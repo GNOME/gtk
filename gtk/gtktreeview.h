@@ -234,6 +234,11 @@ void                   gtk_tree_view_set_headers_clickable         (GtkTreeView 
 void                   gtk_tree_view_set_rules_hint                (GtkTreeView               *tree_view,
 								    gboolean                   setting);
 gboolean               gtk_tree_view_get_rules_hint                (GtkTreeView               *tree_view);
+GDK_AVAILABLE_IN_3_8
+gboolean               gtk_tree_view_get_activate_on_single_click  (GtkTreeView               *tree_view);
+GDK_AVAILABLE_IN_3_8
+void                   gtk_tree_view_set_activate_on_single_click  (GtkTreeView               *tree_view,
+								    gboolean                   single);
 
 /* Column funtions */
 gint                   gtk_tree_view_append_column                 (GtkTreeView               *tree_view,
