@@ -110,6 +110,7 @@
 #include <gtk/gtkgesturelongpress.h>
 #include <gtk/gtkgesturerotate.h>
 #include <gtk/gtkgestureswipe.h>
+#include <gtk/gtkgesturezoom.h>
 #include <gtk/gtkgrid.h>
 #include <gtk/gtkheaderbar.h>
 #include <gtk/gtkicontheme.h>
