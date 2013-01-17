@@ -2183,13 +2183,19 @@ _gtk_tree_view_column_allocate (GtkTreeViewColumn *tree_column,
 /**
  * gtk_tree_view_column_set_fixed_width:
  * @tree_column: A #GtkTreeViewColumn.
- * @fixed_width: The size to set @tree_column to. Must be greater than 0.
- * 
- * Sets the size of the column in pixels.  This is meaningful only if the sizing
- * type is #GTK_TREE_VIEW_COLUMN_FIXED.  The size of the column is clamped to
- * the min/max width for the column.  Please note that the min/max width of the
- * column doesn't actually affect the "fixed_width" property of the widget, just
- * the actual size when displayed.
+ * @fixed_width: The new fixed width, in pixels, or -1.
+ *
+ * If @fixed_width is not -1, sets the fixed width of @tree_column; otherwise
+ * unsets it.  The effective value of @fixed_width is clamped between the
+ * minumum and maximum width of the column; however, the value stored in the
+ * "fixed-width" property is not clamped.  If the column sizing is 
+ * #GTK_TREE_VIEW_COLUMN_GROW_ONLY or #GTK_TREE_VIEW_COLUMN_AUTOSIZE, setting a
+ * fixed width overrides the automatically calculated width.  Note that
+ * @fixed_width is only a hint to GTK+; the width actually allocated to the
+ * column may be greater or less than requested.
+ *
+ * Along with "expand", the "fixed-width" property changes when the column is
+ * resized by the user.
  **/
 void
 gtk_tree_view_column_set_fixed_width (GtkTreeViewColumn *tree_column,
@@ -2216,12 +2222,12 @@ gtk_tree_view_column_set_fixed_width (GtkTreeViewColumn *tree_column,
 
 /**
  * gtk_tree_view_column_get_fixed_width:
- * @tree_column: a #GtkTreeViewColumn
- * 
- * Gets the fixed width of the column.  This value is only meaning may not be
- * the actual width of the column on the screen, just what is requested.
- * 
- * Return value: the fixed width of the column
+ * @tree_column: A #GtkTreeViewColumn.
+ *
+ * Gets the fixed width of the column.  This may not be the actual displayed
+ * width of the column; for that, use gtk_tree_view_column_get_width().
+ *
+ * Return value: The fixed width of the column.
  **/
 gint
 gtk_tree_view_column_get_fixed_width (GtkTreeViewColumn *tree_column)
@@ -2425,13 +2431,16 @@ gtk_tree_view_column_get_title (GtkTreeViewColumn *tree_column)
 
 /**
  * gtk_tree_view_column_set_expand:
- * @tree_column: A #GtkTreeViewColumn
- * @expand: %TRUE if the column should take available extra space, %FALSE if not
- * 
+ * @tree_column: A #GtkTreeViewColumn.
+ * @expand: %TRUE if the column should expand to fill available space.
+ *
  * Sets the column to take available extra space.  This space is shared equally
  * amongst all columns that have the expand set to %TRUE.  If no column has this
  * option set, then the last column gets all extra space.  By default, every
  * column is created with this %FALSE.
+ *
+ * Along with "fixed-width", the "expand" property changes when the column is
+ * resized by the user.
  *
  * Since: 2.4
  **/
@@ -2462,11 +2471,11 @@ gtk_tree_view_column_set_expand (GtkTreeViewColumn *tree_column,
 
 /**
  * gtk_tree_view_column_get_expand:
- * @tree_column: a #GtkTreeViewColumn
- * 
- * Return %TRUE if the column expands to take any available space.
- * 
- * Return value: %TRUE, if the column expands
+ * @tree_column: A #GtkTreeViewColumn.
+ *
+ * Returns %TRUE if the column expands to fill available space.
+ *
+ * Return value: %TRUE if the column expands to fill available space.
  *
  * Since: 2.4
  **/
