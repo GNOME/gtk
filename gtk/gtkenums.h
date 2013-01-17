@@ -1049,4 +1049,11 @@ typedef enum
   GTK_INPUT_HINT_INHIBIT_OSK         = 1 << 7
 } GtkInputHints;
 
+typedef enum
+{
+  GTK_EVENT_SEQUENCE_NONE,
+  GTK_EVENT_SEQUENCE_CLAIMED,
+  GTK_EVENT_SEQUENCE_DENIED
+} GtkEventSequenceState;
+
 #endif /* __GTK_ENUMS_H__ */
