@@ -17,10 +17,6 @@
 
 #include "config.h"
 
-#ifdef GDK_WAYLAND_USE_EGL
-#include <wayland-egl.h>
-#endif
-
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
@@ -155,63 +151,6 @@ gdk_registry_handle_global(void *data, struct wl_registry *registry, uint32_t id
   }
 }
 
-#ifdef GDK_WAYLAND_USE_EGL
-static gboolean
-gdk_display_init_egl(GdkDisplay *display)
-{
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
-  EGLint major, minor, i;
-  void *p;
-
-  static const struct { const char *f; unsigned int offset; }
-  extension_functions[] = {
-    { "glEGLImageTargetTexture2DOES", offsetof(GdkWaylandDisplay, image_target_texture_2d) },
-    { "eglCreateImageKHR", offsetof(GdkWaylandDisplay, create_image) },
-    { "eglDestroyImageKHR", offsetof(GdkWaylandDisplay, destroy_image) }
-  };
-
-  display_wayland->egl_display =
-    eglGetDisplay(display_wayland->wl_display);
-  if (!eglInitialize(display_wayland->egl_display, &major, &minor)) {
-    fprintf(stderr, "failed to initialize display\n");
-    return FALSE;
-  }
-
-  eglBindAPI(EGL_OPENGL_API);
-
-  display_wayland->egl_context =
-    eglCreateContext(display_wayland->egl_display, NULL, EGL_NO_CONTEXT, NULL);
-  if (display_wayland->egl_context == NULL) {
-    fprintf(stderr, "failed to create context\n");
-    return FALSE;
-  }
-
-  if (!eglMakeCurrent(display_wayland->egl_display,
-		      NULL, NULL, display_wayland->egl_context)) {
-    fprintf(stderr, "faile to make context current\n");
-    return FALSE;
-  }
-
-  display_wayland->cairo_device =
-    cairo_egl_device_create(display_wayland->egl_display,
-			    display_wayland->egl_context);
-  if (cairo_device_status (display_wayland->cairo_device) != CAIRO_STATUS_SUCCESS) {
-    fprintf(stderr, "failed to get cairo drm device\n");
-    return FALSE;
-  }
-
-  for (i = 0; i < G_N_ELEMENTS(extension_functions); i++) {
-    p = eglGetProcAddress(extension_functions[i].f);
-    *(void **) ((char *) display_wayland + extension_functions[i].offset) = p;
-    if (p == NULL) {
-      fprintf(stderr, "failed to look up %s\n", extension_functions[i].f);
-      return FALSE;
-    }
-  }
-
-  return TRUE;
-}
-#endif
 
 static const struct wl_registry_listener registry_listener = {
 	gdk_registry_handle_global
@@ -241,11 +180,7 @@ _gdk_wayland_display_open (const gchar *display_name)
   display_wayland->wl_registry = wl_display_get_registry(display_wayland->wl_display);
   wl_registry_add_listener(display_wayland->wl_registry, &registry_listener, display_wayland);
 
-#ifdef GDK_WAYLAND_USE_EGL
-  gdk_display_init_egl(display);
-#else
   wl_display_dispatch(display_wayland->wl_display);
-#endif
 
   display_wayland->event_source =
     _gdk_wayland_display_event_source_new (display);
@@ -276,10 +211,6 @@ gdk_wayland_display_dispose (GObject *object)
       g_source_unref (display_wayland->event_source);
       display_wayland->event_source = NULL;
     }
-
-#ifdef GDK_WAYLAND_USE_EGL
-  eglTerminate(display_wayland->egl_display);
-#endif
 
   G_OBJECT_CLASS (_gdk_wayland_display_parent_class)->dispose (object);
 }

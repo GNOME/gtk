@@ -302,15 +302,9 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
 static const cairo_user_data_key_t gdk_wayland_cairo_key;
 
 typedef struct _GdkWaylandCairoSurfaceData {
-#ifdef GDK_WAYLAND_USE_EGL
-  EGLImageKHR image;
-  GLuint texture;
-  struct wl_egl_pixmap *pixmap;
-#else
   gpointer buf;
   size_t buf_length;
   struct wl_shm_pool *pool;
-#endif
   struct wl_buffer *buffer;
   GdkWaylandDisplay *display;
   int32_t width, height;
@@ -374,67 +368,6 @@ gdk_wayland_window_attach_image (GdkWindow *window)
   wl_surface_attach (impl->surface, data->buffer, dx, dy);
 }
 
-#ifdef GDK_WAYLAND_USE_EGL
-static void
-gdk_wayland_cairo_surface_destroy (void *p)
-{
-  GdkWaylandCairoSurfaceData *data = p;
-
-  data->display->destroy_image (data->display->egl_display, data->image);
-  cairo_device_acquire(data->display->cairo_device);
-  glDeleteTextures(1, &data->texture);
-  cairo_device_release(data->display->cairo_device);
-  if (data->buffer)
-    wl_buffer_destroy(data->buffer);
-  g_free(data);
-}
-
-static cairo_surface_t *
-gdk_wayland_create_cairo_surface (GdkWaylandDisplay *display,
-				  int width, int height)
-{
-  GdkWaylandCairoSurfaceData *data;
-  cairo_surface_t *surface;
-  cairo_status_t status;
-
-  data = g_new (GdkWaylandCairoSurfaceData, 1);
-  data->display = display;
-  data->buffer = NULL;
-  data->width = width;
-  data->height = height;
-  data->pixmap = wl_egl_pixmap_create(width, height, 0);
-  data->image =
-    display->create_image(display->egl_display, NULL, EGL_NATIVE_PIXMAP_KHR,
-			  (EGLClientBuffer) data->pixmap, NULL);
-
-  cairo_device_acquire(display->cairo_device);
-  glGenTextures(1, &data->texture);
-  glBindTexture(GL_TEXTURE_2D, data->texture);
-  display->image_target_texture_2d(GL_TEXTURE_2D, data->image);
-  cairo_device_release(display->cairo_device);
-
-  surface = cairo_gl_surface_create_for_texture(display->cairo_device,
-						CAIRO_CONTENT_COLOR_ALPHA,
-						data->texture, width, height);
-
-  cairo_surface_set_user_data (surface, &gdk_wayland_cairo_key,
-			       data, gdk_wayland_cairo_surface_destroy);
-
-  status = cairo_surface_status (surface);
-  if (status != CAIRO_STATUS_SUCCESS)
-    {
-      g_critical (G_STRLOC ": Unable to create Cairo GL surface: %s",
-                  cairo_status_to_string (status));
-
-    }
-
-  if (!data->buffer)
-    data->buffer =
-      wl_egl_pixmap_create_buffer(data->pixmap);
-
-  return surface;
-}
-#else
 static void
 gdk_wayland_cairo_surface_destroy (void *p)
 {
@@ -542,7 +475,6 @@ gdk_wayland_create_cairo_surface (GdkWaylandDisplay *display,
 
   return surface;
 }
-#endif
 
 /* On this first call this creates a double reference - the first reference
  * is held by the GdkWindowImplWayland struct - since unlike other backends
