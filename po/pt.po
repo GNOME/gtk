@@ -3,12 +3,12 @@
 # Distributed under the same licence as the gtk+ package
 # Duarte Loreto <happyguy_pt@hotmail.com>, 2001, 2002, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013.
 # Nuno Ferreira <nmrf@rnl.ist.utl.pt>, 1999.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: 3.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-12 23:27+0000\n"
+"POT-Creation-Date: 2013-01-17 23:12+0000\n"
 "PO-Revision-Date: 2013-01-12 23:35+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
@@ -475,8 +475,8 @@ msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
-"Selecione no anel exterior a cor que deseja. Selecione a luminusidade "
-"dessa cor utilizando o triângulo interno."
+"Selecione no anel exterior a cor que deseja. Selecione a luminusidade dessa "
+"cor utilizando o triângulo interno."
 
 #: ../gtk/deprecated/gtkcolorsel.c:451
 msgid ""
@@ -568,18 +568,17 @@ msgid ""
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
-"A cor anteriormente selecionada, por comparação com a cor agora "
-"selecionada. Pode arrastar esta cor para uma entrada da paleta, ou "
-"selecionar esta cor como sendo a atual arrastando-a sobre a outra cor ao "
-"lado."
+"A cor anteriormente selecionada, por comparação com a cor agora selecionada. "
+"Pode arrastar esta cor para uma entrada da paleta, ou selecionar esta cor "
+"como sendo a atual arrastando-a sobre a outra cor ao lado."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1078
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr ""
-"A cor que selecionou. Pode arrastar esta cor para uma entrada na paleta "
-"para a gravar para futuras utilizações."
+"A cor que selecionou. Pode arrastar esta cor para uma entrada na paleta para "
+"a gravar para futuras utilizações."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1084
 msgid ""
@@ -1470,8 +1469,8 @@ msgid ""
 "You may only select folders.  The item that you selected is not a folder; "
 "try using a different item."
 msgstr ""
-"Apenas pode selecionar pastas. O item que selecionou não é uma pasta; "
-"tente utilizar um item diferente."
+"Apenas pode selecionar pastas. O item que selecionou não é uma pasta; tente "
+"utilizar um item diferente."
 
 #: ../gtk/gtkfilechooserdefault.c:1056
 msgid "Invalid file name"
@@ -1812,7 +1811,8 @@ msgstr "%s: falta o nome da aplicação"
 #: ../gtk/gtk-launch.c:121
 #, c-format
 msgid "Creating AppInfo from id not supported on non unix operating systems"
-msgstr "Não é suportado criar AppInfo a partir de id em sistemas operativos não-unix"
+msgstr ""
+"Não é suportado criar AppInfo a partir de id em sistemas operativos não-unix"
 
 #. Translators: the first %s is the program name, the second one
 #. is the application name.
@@ -2469,7 +2469,7 @@ msgstr "_Agora"
 msgid "A_t:"
 msgstr "À_s:"
 
-#. Translators: Ability to parse the am/pm format depends on atual locale.
+#. Translators: Ability to parse the am/pm format depends on actual locale.
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
@@ -3392,7 +3392,7 @@ msgctxt "paper size"
 msgid "asme_f"
 msgstr "asme_f"
 
-#: ../gtk/paper_names_offsets.c:
+#: ../gtk/paper_names_offsets.c:5
 msgctxt "paper size"
 msgid "A0x2"
 msgstr "A0x2"
@@ -3417,7 +3417,7 @@ msgctxt "paper size"
 msgid "A10"
 msgstr "A10"
 
-#: ../gtk/paper_names_offsets.c:
+#: ../gtk/paper_names_offsets.c:10
 msgctxt "paper size"
 msgid "A1x3"
 msgstr "A1x3"
@@ -3492,7 +3492,7 @@ msgctxt "paper size"
 msgid "A4 Extra"
 msgstr "A4 Extra"
 
-#: ../gtk/paper_names_offsets.c:
+#: ../gtk/paper_names_offsets.c:25
 msgctxt "paper size"
 msgid "A4 Tab"
 msgstr "A4 Tab"
@@ -4308,8 +4308,8 @@ msgid ""
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
 "Nenhum ficheiro de índice de tema em '%s'.\n"
-"Se deseja mesmo criar aqui uma cache de ícones, utilize --ignore-theme"
-"index.\n"
+"Se deseja mesmo criar aqui uma cache de ícones, utilize --ignore-"
+"themeindex.\n"
 
 #. ID
 #: ../modules/input/imam-et.c:452
@@ -4541,7 +4541,7 @@ msgid "Resolution"
 msgstr "Resolução"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2920
-msgid "GhostScript prefiltering"
+msgid "GhostScript pre-filtering"
 msgstr "Pré-filtragem GhostScript"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2929
@@ -4592,7 +4592,7 @@ msgstr "Converter para PS nível 2"
 
 #. Translators: this is an option of "GhostScript"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2955
-msgid "No prefiltering"
+msgid "No pre-filtering"
 msgstr "Nenhuma pré-filtragem"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
@@ -6385,8 +6385,7 @@ msgstr "Imprimir para a Impressora de Teste"
 
 #~ msgid "Could not select file '%s' because it is an invalid path name."
 #~ msgstr ""
-#~ "Incapaz de selecionar o ficheiro '%s' por ser um nome de caminho "
-#~ "inválido."
+#~ "Incapaz de selecionar o ficheiro '%s' por ser um nome de caminho inválido."
 
 #~ msgid "%d byte"
 #~ msgid_plural "%d bytes"
