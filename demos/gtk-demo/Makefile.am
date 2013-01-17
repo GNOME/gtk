@@ -24,6 +24,7 @@ demos =						\
 	entry_completion.c			\
 	event_axes.c				\
 	expander.c  				\
+	gestures.c				\
 	headerbar.c				\
 	hypertext.c				\
 	iconview.c				\
