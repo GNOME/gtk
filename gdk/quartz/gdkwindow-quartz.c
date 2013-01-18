@@ -2901,6 +2901,26 @@ gdk_quartz_window_get_input_shape (GdkWindow *window)
   return NULL;
 }
 
+/* Protocol to build cleanly for OSX < 10.7 */
+@protocol ScaleFactor
+- (CGFloat) backingScaleFactor;
+@end
+
+static gint
+gdk_quartz_window_get_scale_factor (GdkWindow *window)
+{
+  GdkWindowImplQuartz *impl;
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return 1;
+
+  impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
+
+  if (gdk_quartz_osx_version() >= GDK_OSX_LION)
+    return [(id <ScaleFactor>) impl->toplevel backingScaleFactor];
+
+  return 1;
+}
 
 static void
 gdk_window_impl_quartz_class_init (GdkWindowImplQuartzClass *klass)
@@ -2940,6 +2960,7 @@ gdk_window_impl_quartz_class_init (GdkWindowImplQuartzClass *klass)
   impl_class->get_input_shape = gdk_quartz_window_get_input_shape;
   impl_class->begin_paint_region = gdk_window_impl_quartz_begin_paint_region;
   impl_class->end_paint = gdk_window_impl_quartz_end_paint;
+  impl_class->get_scale_factor = gdk_quartz_window_get_scale_factor;
 
   impl_class->focus = gdk_quartz_window_focus;
   impl_class->set_type_hint = gdk_quartz_window_set_type_hint;
