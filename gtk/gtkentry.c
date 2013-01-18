@@ -9352,8 +9352,7 @@ gtk_entry_selection_bubble_popup_set (GtkEntry *entry)
     g_source_remove (priv->selection_bubble_timeout_id);
 
   priv->selection_bubble_timeout_id =
-    gdk_threads_add_timeout_seconds (1, gtk_entry_selection_bubble_popup_cb,
-                                     entry);
+    gdk_threads_add_timeout (1000, gtk_entry_selection_bubble_popup_cb, entry);
 }
 
 static void
