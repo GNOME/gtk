@@ -22,7 +22,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkbubblewindow.h>
+#include "gtkbubblewindowprivate.h"
 
 G_BEGIN_DECLS
 

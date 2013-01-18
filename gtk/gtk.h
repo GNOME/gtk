@@ -53,7 +53,6 @@
 #include <gtk/gtkbindings.h>
 #include <gtk/gtkborder.h>
 #include <gtk/gtkbox.h>
-#include <gtk/gtkbubblewindow.h>
 #include <gtk/gtkbuildable.h>
 #include <gtk/gtkbuilder.h>
 #include <gtk/gtkbutton.h>
@@ -169,7 +168,6 @@
 #include <gtk/gtkscrolledwindow.h>
 #include <gtk/gtksearchentry.h>
 #include <gtk/gtkselection.h>
-#include <gtk/gtkselectionwindow.h>
 #include <gtk/gtkseparator.h>
 #include <gtk/gtkseparatormenuitem.h>
 #include <gtk/gtkseparatortoolitem.h>

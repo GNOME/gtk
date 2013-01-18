@@ -202,7 +202,6 @@ gtk_public_h_sources = 		\
 	gtkbindings.h		\
 	gtkborder.h		\
 	gtkbox.h		\
-	gtkbubblewindow.h	\
 	gtkbuilder.h		\
 	gtkbuildable.h		\
 	gtkbutton.h		\
@@ -320,7 +319,6 @@ gtk_public_h_sources = 		\
 	gtkscrolledwindow.h	\
 	gtksearchentry.h	\
 	gtkselection.h		\
-	gtkselectionwindow.h	\
 	gtkseparator.h		\
 	gtkseparatormenuitem.h	\
 	gtkseparatortoolitem.h	\
@@ -424,6 +422,7 @@ gtk_private_h_sources =		\
 	gtkbitmaskprivateimpl.h	\
 	gtkborderimageprivate.h \
 	gtkboxprivate.h         \
+	gtkbubblewindowprivate.h	\
 	gtkbuilderprivate.h	\
 	gtkbuttonprivate.h	\
 	gtkcairoblurprivate.h	\
@@ -524,6 +523,7 @@ gtk_private_h_sources =		\
 	gtksearchengine.h	\
 	gtksearchenginesimple.h	\
 	gtkselectionprivate.h	\
+	gtkselectionwindowprivate.h	\
 	gtksettingsprivate.h	\
 	gtksizegroup-private.h	\
 	gtksizerequestcacheprivate.h	\
