@@ -2369,8 +2369,7 @@ gtk_icon_view_button_press (GtkWidget      *widget,
 	      icon_view->priv->press_start_y = event->y;
 	    }
 
-	  if (!icon_view->priv->last_single_clicked)
-	    icon_view->priv->last_single_clicked = item;
+          icon_view->priv->last_single_clicked = item;
 
 	  /* cancel the current editing, if it exists */
 	  gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
