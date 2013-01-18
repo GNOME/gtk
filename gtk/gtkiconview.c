@@ -107,12 +107,11 @@ enum
   PROP_TOOLTIP_COLUMN,
   PROP_ITEM_PADDING,
   PROP_CELL_AREA,
-
-  /* For scrollable interface */
   PROP_HADJUSTMENT,
   PROP_VADJUSTMENT,
   PROP_HSCROLL_POLICY,
-  PROP_VSCROLL_POLICY
+  PROP_VSCROLL_POLICY,
+  PROP_ACTIVATE_ON_SINGLE_CLICK
 };
 
 /* GObject vfuncs */
@@ -639,6 +638,22 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 							GTK_TYPE_CELL_AREA,
 							GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
+  /**
+   * GtkIconView:activate-on-single-click:
+   *
+   * The activate-on-single-click property specifies whether the "item-activated" signal
+   * will be emitted after a single click.
+   *
+   * Since: 3.8
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_ACTIVATE_ON_SINGLE_CLICK,
+                                   g_param_spec_boolean ("activate-on-single-click",
+							 P_("Activate on Single Click"),
+							 P_("Activate row on a single click"),
+							 FALSE,
+							 GTK_PARAM_READWRITE));
+
   /* Scrollable interface properties */
   g_object_class_override_property (gobject_class, PROP_HADJUSTMENT,    "hadjustment");
   g_object_class_override_property (gobject_class, PROP_VADJUSTMENT,    "vadjustment");
@@ -668,10 +683,12 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * @path: the #GtkTreePath for the activated item
    *
    * The ::item-activated signal is emitted when the method
-   * gtk_icon_view_item_activated() is called or the user double 
-   * clicks an item. It is also emitted when a non-editable item
-   * is selected and one of the keys: Space, Return or Enter is
-   * pressed.
+   * gtk_icon_view_item_activated() is called, when the user double
+   * clicks an item with the "activate-on-single-click" property set
+   * to %FALSE, or when the user single clicks an item when the
+   * "activate-on-single-click" property set to %TRUE. It is also
+   * emitted when a non-editable item is selected and one of the keys:
+   * Space, Return or Enter is pressed.
    */
   icon_view_signals[ITEM_ACTIVATED] =
     g_signal_new (I_("item-activated"),
@@ -964,6 +981,7 @@ gtk_icon_view_init (GtkIconView *icon_view)
   icon_view->priv->column_spacing = 6;
   icon_view->priv->margin = 6;
   icon_view->priv->item_padding = 6;
+  icon_view->priv->activate_on_single_click = FALSE;
 
   icon_view->priv->draw_focus = TRUE;
 
@@ -1091,6 +1109,10 @@ gtk_icon_view_set_property (GObject      *object,
       gtk_icon_view_set_item_padding (icon_view, g_value_get_int (value));
       break;
 
+    case PROP_ACTIVATE_ON_SINGLE_CLICK:
+      gtk_icon_view_set_activate_on_single_click (icon_view, g_value_get_boolean (value));
+      break;
+
     case PROP_CELL_AREA:
       /* Construct-only, can only be assigned once */
       area = g_value_get_object (value);
@@ -1185,6 +1207,10 @@ gtk_icon_view_get_property (GObject      *object,
 
     case PROP_ITEM_PADDING:
       g_value_set_int (value, icon_view->priv->item_padding);
+      break;
+
+    case PROP_ACTIVATE_ON_SINGLE_CLICK:
+      g_value_set_boolean (value, icon_view->priv->activate_on_single_click);
       break;
 
     case PROP_CELL_AREA:
@@ -2312,7 +2338,9 @@ gtk_icon_view_button_press (GtkWidget      *widget,
       icon_view->priv->draw_focus = FALSE;
     }
 
-  if (event->button == GDK_BUTTON_PRIMARY && event->type == GDK_2BUTTON_PRESS)
+  if (!icon_view->priv->activate_on_single_click
+      && event->button == GDK_BUTTON_PRIMARY
+      && event->type == GDK_2BUTTON_PRESS)
     {
       item = _gtk_icon_view_get_item_at_coords (icon_view,
 					       event->x, event->y,
@@ -2339,6 +2367,12 @@ gtk_icon_view_button_press (GtkWidget      *widget,
 }
 
 static gboolean
+button_event_modifies_selection (GdkEventButton *event)
+{
+        return (event->state & (GDK_CONTROL_MASK | GDK_SHIFT_MASK)) != 0;
+}
+
+static gboolean
 gtk_icon_view_button_release (GtkWidget      *widget,
 			      GdkEventButton *event)
 {
@@ -2352,6 +2386,28 @@ gtk_icon_view_button_release (GtkWidget      *widget,
   gtk_icon_view_stop_rubberbanding (icon_view);
 
   remove_scroll_timeout (icon_view);
+
+  if (event->button == GDK_BUTTON_PRIMARY
+      && icon_view->priv->activate_on_single_click
+      && !button_event_modifies_selection (event)
+      && icon_view->priv->last_single_clicked != NULL)
+    {
+      GtkIconViewItem *item;
+
+      item = _gtk_icon_view_get_item_at_coords (icon_view,
+                                                event->x, event->y,
+                                                FALSE,
+                                                NULL);
+      if (item == icon_view->priv->last_single_clicked)
+        {
+          GtkTreePath *path;
+          path = gtk_tree_path_new_from_indices (item->index, -1);
+          gtk_icon_view_item_activated (icon_view, path);
+          gtk_tree_path_free (path);
+        }
+
+      icon_view->priv->last_single_clicked = NULL;
+    }
 
   return TRUE;
 }
@@ -7132,6 +7188,49 @@ gtk_icon_view_set_reorderable (GtkIconView *icon_view,
   icon_view->priv->reorderable = reorderable;
 
   g_object_notify (G_OBJECT (icon_view), "reorderable");
+}
+
+/**
+ * gtk_icon_view_set_activate_on_single_click:
+ * @icon_view: a #GtkIconView
+ * @setting: %TRUE to emit item-activated on a single click
+ *
+ * Causes the "item-activated" signal to be emitted on a single click
+ * instead of a double click.
+ *
+ * Since: 3.8
+ **/
+void
+gtk_icon_view_set_activate_on_single_click  (GtkIconView *icon_view,
+                                             gboolean     setting)
+{
+  g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
+
+  setting = setting != FALSE;
+
+  if (icon_view->priv->activate_on_single_click == setting)
+    return;
+
+  icon_view->priv->activate_on_single_click = setting;
+  g_object_notify (G_OBJECT (icon_view), "activate-on-single-click");
+}
+
+/**
+ * gtk_icon_view_get_activate_on_single_click:
+ * @icon_view: a #GtkIconView
+ *
+ * Gets the setting set by gtk_icon_view_set_activate_on_single_click().
+ *
+ * Return value: %TRUE if item-activated will be emitted on a single click
+ *
+ * Since: 3.8
+ **/
+gboolean
+gtk_icon_view_get_activate_on_single_click  (GtkIconView *icon_view)
+{
+  g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), FALSE);
+
+  return icon_view->priv->activate_on_single_click;
 }
 
 static gboolean
