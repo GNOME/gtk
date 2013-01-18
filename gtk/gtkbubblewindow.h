@@ -22,7 +22,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtk.h>
+#include <gtk/gtkwindow.h>
 
 G_BEGIN_DECLS
 

@@ -40,6 +40,8 @@
 #include <gdk/gdk.h>
 #include <cairo-gobject.h>
 #include "gtkbubblewindow.h"
+#include "gtktypebuiltins.h"
+#include "gtkmain.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 

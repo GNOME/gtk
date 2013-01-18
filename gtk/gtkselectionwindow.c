@@ -28,6 +28,10 @@
 
 #include "config.h"
 #include "gtkselectionwindow.h"
+#include "gtkactiongroup.h"
+#include "gtkuimanager.h"
+#include "gtkclipboard.h"
+#include "gtktoolbar.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
