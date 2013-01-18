@@ -285,6 +285,8 @@ struct _GdkWindowImplClass
                                            gint            n_elements);
   void         (*delete_property)         (GdkWindow      *window,
                                            GdkAtom         property);
+
+  gdouble      (* get_scale_factor)       (GdkWindow      *window);
 };
 
 /* Interface Functions */

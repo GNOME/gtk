@@ -829,6 +829,9 @@ GDK_AVAILABLE_IN_ALL
 void          gdk_window_get_frame_extents (GdkWindow     *window,
                                             GdkRectangle  *rect);
 
+GDK_AVAILABLE_IN_3_10
+gdouble       gdk_window_get_scale_factor  (GdkWindow     *window);
+
 #ifndef GDK_MULTIDEVICE_SAFE
 GDK_DEPRECATED_IN_3_0_FOR(gdk_window_get_device_position)
 GdkWindow *   gdk_window_get_pointer     (GdkWindow       *window,

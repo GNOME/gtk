@@ -10550,3 +10550,22 @@ gdk_window_get_frame_clock (GdkWindow *window)
 
   return toplevel->frame_clock;
 }
+
+gdouble
+gdk_window_get_scale_factor (GdkWindow *window)
+{
+  GdkWindowImplClass *impl_class;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), 1.0);
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return 1.0;
+
+  window = gdk_window_get_toplevel (window);
+  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+
+  if (impl_class->get_scale_factor)
+    return impl_class->get_scale_factor (window);
+
+  return 1.0;
+}

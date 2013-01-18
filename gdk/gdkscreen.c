@@ -1048,3 +1048,21 @@ gdk_screen_get_setting (GdkScreen   *screen,
 
   return GDK_SCREEN_GET_CLASS (screen)->get_setting (screen, name, value);
 }
+
+gdouble
+gdk_screen_get_monitor_scale_factor (GdkScreen *screen,
+                                     gint       monitor_num)
+{
+  GdkScreenClass *screen_class;
+
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 1.0);
+  g_return_val_if_fail (monitor_num >= 0, 1.0);
+  g_return_val_if_fail (monitor_num < gdk_screen_get_n_monitors (screen), 1.0);
+
+  screen_class = GDK_SCREEN_GET_CLASS (screen);
+
+  if (screen_class->get_monitor_scale_factor)
+    return screen_class->get_monitor_scale_factor (screen, monitor_num);
+
+  return 1.0;
+}

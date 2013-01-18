@@ -427,6 +427,35 @@ gdk_quartz_screen_get_monitor_workarea (GdkScreen    *screen,
   GDK_QUARTZ_RELEASE_POOL;
 }
 
+/* Protocol to build cleanly for OSX < 10.7 */
+@protocol ScaleFactor
+- (CGFloat) backingScaleFactor;
+@end
+
+gdouble
+_gdk_quartz_screen_get_monitor_scale_factor (GdkScreen *screen,
+                                             gint       monitor_num)
+{
+  GdkScreenQuartz *quartz_screen;
+  NSArray *array;
+  NSScreen *nsscreen;
+  gdouble scale_factor = 1.0;
+
+  quartz_screen = GDK_SCREEN_QUARTZ (screen);
+
+  GDK_QUARTZ_ALLOC_POOL;
+
+  array = [NSScreen screens];
+  nsscreen = [array objectAtIndex:monitor_num];
+
+  if (gdk_quartz_osx_version() >= GDK_OSX_LION)
+    scale_factor = [(id <ScaleFactor>) nsscreen backingScaleFactor];
+
+  GDK_QUARTZ_RELEASE_POOL;
+
+  return scale_factor;
+}
+
 static gchar *
 gdk_quartz_screen_make_display_name (GdkScreen *screen)
 {
@@ -491,4 +520,5 @@ gdk_quartz_screen_class_init (GdkQuartzScreenClass *klass)
   screen_class->query_depths = _gdk_quartz_screen_query_depths;
   screen_class->query_visual_types = _gdk_quartz_screen_query_visual_types;
   screen_class->list_visuals = _gdk_quartz_screen_list_visuals;
+  screen_class->get_monitor_scale_factor = _gdk_quartz_screen_get_monitor_scale_factor;
 }
