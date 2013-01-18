@@ -66,7 +66,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktexthandleprivate.h"
-#include "gtkselectionwindow.h"
+#include "gtkselectionwindowprivate.h"
 
 #include "a11y/gtkentryaccessible.h"
 

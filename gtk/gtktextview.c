@@ -53,7 +53,7 @@
 #include "gtktexthandleprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkcssstylepropertyprivate.h"
-#include "gtkselectionwindow.h"
+#include "gtkselectionwindowprivate.h"
 
 #include "a11y/gtktextviewaccessibleprivate.h"
 

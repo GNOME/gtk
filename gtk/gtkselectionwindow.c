@@ -27,7 +27,7 @@
  */
 
 #include "config.h"
-#include "gtkselectionwindow.h"
+#include "gtkselectionwindowprivate.h"
 #include "gtkactiongroup.h"
 #include "gtkuimanager.h"
 #include "gtkclipboard.h"
