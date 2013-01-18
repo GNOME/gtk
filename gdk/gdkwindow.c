@@ -10621,3 +10621,41 @@ gdk_window_get_frame_clock (GdkWindow *window)
 
   return toplevel->frame_clock;
 }
+
+/**
+ * gdk_window_get_scale_factor:
+ * @window: window to get scale factor for
+ *
+ * Returns the internal scale factor that maps from window coordiantes
+ * to the actual device pixels. On traditional systems this is 1, but
+ * on very high density outputs this can be a higher value (often 2).
+ *
+ * A higher value means that drawing is automatically scaled up to
+ * a higher resolution, so any code doing drawing will automatically look
+ * nicer. However, if you are supplying pixel-based data the scale
+ * value can be used to determine whether to use a pixel resource
+ * with higher resolution data.
+ *
+ * The scale of a window may change during runtime, if this happens
+ * a configure event will be sent to the toplevel window.
+ *
+ * Since: 3.10
+ * Return value: the scale factor
+ */
+gint
+gdk_window_get_scale_factor (GdkWindow *window)
+{
+  GdkWindowImplClass *impl_class;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), 1);
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return 1;
+
+  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+
+  if (impl_class->get_scale_factor)
+    return impl_class->get_scale_factor (window);
+
+  return 1;
+}
