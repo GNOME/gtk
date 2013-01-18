@@ -55,9 +55,8 @@
  *    <varlistentry>
  *       <term>Shortcuts</term>
  *       <listitem>
- *          can be provided by the application or by the underlying filesystem
- *          abstraction (e.g. both the gnome-vfs and the Windows filesystems
- *          provide "Desktop" shortcuts). Shortcuts cannot be modified by the
+ *          can be provided by the application.  For example, a Paint program may
+ *          want to add a shortcut for a Clipart folder.  Shortcuts cannot be modified by the
  *          user.
  *       </listitem>
  *    </varlistentry>
