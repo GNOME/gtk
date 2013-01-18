@@ -8837,8 +8837,8 @@ gtk_text_view_selection_bubble_popup_set (GtkTextView *text_view)
     g_source_remove (priv->selection_bubble_timeout_id);
 
   priv->selection_bubble_timeout_id =
-    gdk_threads_add_timeout_seconds (1, gtk_text_view_selection_bubble_popup_cb,
-                                     text_view);
+    gdk_threads_add_timeout (1000, gtk_text_view_selection_bubble_popup_cb,
+                             text_view);
 }
 
 /* Child GdkWindows */
