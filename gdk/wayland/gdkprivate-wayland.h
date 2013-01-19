@@ -31,6 +31,7 @@
 
 #include <gdk/gdkcursor.h>
 #include <gdk/gdkprivate.h>
+#include <gdk/wayland/gdkwayland.h>
 #include <gdk/wayland/gdkdisplay-wayland.h>
 
 #include <xkbcommon/xkbcommon.h>

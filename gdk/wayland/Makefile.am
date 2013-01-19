@@ -2,6 +2,7 @@
 include $(top_srcdir)/Makefile.decl
 
 libgdkincludedir = $(includedir)/gtk-3.0/gdk
+libgdkwaylandincludedir = $(includedir)/gtk-3.0/gdk/wayland
 
 AM_CPPFLAGS =					\
 	-DG_LOG_DOMAIN=\"Gdk\"			\
@@ -35,5 +36,8 @@ libgdk_wayland_la_SOURCES =			\
 
 libgdkinclude_HEADERS =				\
 	gdkwayland.h
+
+libgdkwaylandinclude_HEADERS = 			\
+	gdkwaylanddisplay.h
 
 -include $(top_srcdir)/git.mk

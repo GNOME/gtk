@@ -36,7 +36,7 @@
 
 static void _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *wayland_display);
 
-G_DEFINE_TYPE (GdkWaylandDisplay, _gdk_wayland_display, GDK_TYPE_DISPLAY)
+G_DEFINE_TYPE (GdkWaylandDisplay, gdk_wayland_display, GDK_TYPE_DISPLAY)
 
 static void
 gdk_input_init (GdkDisplay *display)
@@ -212,7 +212,7 @@ gdk_wayland_display_dispose (GObject *object)
       display_wayland->event_source = NULL;
     }
 
-  G_OBJECT_CLASS (_gdk_wayland_display_parent_class)->dispose (object);
+  G_OBJECT_CLASS (gdk_wayland_display_parent_class)->dispose (object);
 }
 
 static void
@@ -231,7 +231,7 @@ gdk_wayland_display_finalize (GObject *object)
 
   g_free (display_wayland->startup_notification_id);
 
-  G_OBJECT_CLASS (_gdk_wayland_display_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gdk_wayland_display_parent_class)->finalize (object);
 }
 
 static const gchar *
@@ -519,7 +519,7 @@ gdk_wayland_display_pop_error_trap (GdkDisplay *display,
 }
 
 static void
-_gdk_wayland_display_class_init (GdkWaylandDisplayClass * class)
+gdk_wayland_display_class_init (GdkWaylandDisplayClass * class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GdkDisplayClass *display_class = GDK_DISPLAY_CLASS (class);
@@ -574,7 +574,7 @@ _gdk_wayland_display_class_init (GdkWaylandDisplayClass * class)
 }
 
 static void
-_gdk_wayland_display_init (GdkWaylandDisplay *display)
+gdk_wayland_display_init (GdkWaylandDisplay *display)
 {
   _gdk_wayland_display_manager_add_display (gdk_display_manager_get (),
 					    GDK_DISPLAY (display));
@@ -611,4 +611,64 @@ _gdk_wayland_display_update_serial (GdkWaylandDisplay *wayland_display,
 {
   if (serial > wayland_display->serial)
     wayland_display->serial = serial;
+}
+
+/**
+ * gdk_wayland_display_get_wl_display
+ * @display: (type GdkWaylandDisplay): a #GdkDisplay
+ *
+ * Returns the Wayland wl_display of a #GdkDisplay
+ *
+ * Returns: (transfer none): a Wayland wl_display
+ *
+ * Since: 3.8
+ */
+struct wl_display *
+gdk_wayland_display_get_wl_display(GdkDisplay *display)
+{
+  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY(display);
+
+  g_return_val_if_fail (GDK_IS_WAYLAND_DISPLAY(display), NULL);
+
+  return wayland_display->wl_display;
+}
+
+/**
+ * gdk_wayland_display_get_wl_compositor
+ * @display: (type GdkWaylandDisplay): a #GdkDisplay
+ *
+ * Returns the Wayland global singleton compositor of a #GdkDisplay
+ *
+ * Returns: (transfer none): a Wayland wl_compositor
+ *
+ * Since: 3.8
+ */
+struct wl_compositor *
+gdk_wayland_display_get_wl_compositor (GdkDisplay *display)
+{
+  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY(display);
+
+  g_return_val_if_fail (GDK_IS_WAYLAND_DISPLAY(display), NULL);
+
+  return wayland_display->compositor;
+}
+
+/**
+ * gdk_wayland_display_get_wl_shell
+ * @display: (type GdkWaylandDisplay): a #GdkDisplay
+ *
+ * Returns the Wayland global singleton shell of a #GdkDisplay
+ *
+ * Returns: (transfer none): a Wayland wl_shell
+ *
+ * Since: 3.8
+ */
+struct wl_shell *
+gdk_wayland_display_get_wl_shell (GdkDisplay *display)
+{
+  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY(display);
+
+  g_return_val_if_fail (GDK_IS_WAYLAND_DISPLAY(display), NULL);
+
+  return wayland_display->shell;
 }

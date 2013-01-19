@@ -37,16 +37,6 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GdkWaylandDisplay GdkWaylandDisplay;
-typedef struct _GdkWaylandDisplayClass GdkWaylandDisplayClass;
-
-#define GDK_TYPE_WAYLAND_DISPLAY              (_gdk_wayland_display_get_type())
-#define GDK_WAYLAND_DISPLAY(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WAYLAND_DISPLAY, GdkWaylandDisplay))
-#define GDK_WAYLAND_DISPLAY_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WAYLAND_DISPLAY, GdkWaylandDisplayClass))
-#define GDK_IS_WAYLAND_DISPLAY(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WAYLAND_DISPLAY))
-#define GDK_IS_WAYLAND_DISPLAY_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WAYLAND_DISPLAY))
-#define GDK_WAYLAND_DISPLAY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WAYLAND_DISPLAY, GdkWaylandDisplayClass))
-
 struct _GdkWaylandDisplay
 {
   GdkDisplay parent_instance;
@@ -86,8 +76,6 @@ struct _GdkWaylandDisplayClass
 {
   GdkDisplayClass parent_class;
 };
-
-GType      _gdk_wayland_display_get_type            (void);
 
 G_END_DECLS
 
