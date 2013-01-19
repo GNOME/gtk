@@ -108,7 +108,7 @@
  * While bookmarks are completely in control of the user, the places sidebar also
  * allows individual applications to provide extra shortcut folders that are unique
  * to each application.  For example, a Paint program may want to add a shortcut
- * for a Clipart folder.
+ * for a Clipart folder.  You can do this with gtk_places_sidebar_add_shortcut().
  *
  * To make use of the places sidebar, an application at least needs to connect
  * to the #GtkPlacesSidebar::open-location signal.  This is emitted when the
@@ -3768,6 +3768,13 @@ gtk_places_sidebar_style_set (GtkWidget *widget,
 	update_places (sidebar);
 }
 
+/**
+ * gtk_places_sidebar_new:
+ *
+ * Creates a new #GtkPlacesSidebar widget.  The application should connect
+ * to at least the #GtkPlacesSidebar::open-location signal to be notified
+ * when the user makes a selection in the sidebar.
+ */
 GtkWidget *
 gtk_places_sidebar_new (void)
 {
