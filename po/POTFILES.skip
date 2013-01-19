@@ -105,6 +105,8 @@ tests/reftests/toplevel-vs-popup.ref.ui
 tests/reftests/toplevel-vs-popup.ui
 tests/reftests/treeview-fixed-height.ref.ui
 tests/reftests/treeview-fixed-height.ui
+tests/reftests/treeview-headers-hidden.ref.ui
+tests/reftests/treeview-headers-hidden.ui
 tests/reftests/window-border-width.ref.ui
 tests/reftests/window-border-width.ui
 tests/testfilechooser.c
