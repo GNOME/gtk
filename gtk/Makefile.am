@@ -1657,7 +1657,7 @@ else
 if CROSS_COMPILING
 gtk_update_icon_cache_program = ./native/native-update-icon-cache
 else
-gtk_update_icon_cache_program = ./gtk-update-icon-cache
+gtk_update_icon_cache_program = ./gtk-update-icon-cache$(EXEEXT)
 endif
 endif
 
