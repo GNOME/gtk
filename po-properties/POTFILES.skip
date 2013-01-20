@@ -74,6 +74,8 @@ tests/reftests/label-sizing.ref.ui
 tests/reftests/label-sizing.ui
 tests/reftests/label-small-ellipsized.ref.ui
 tests/reftests/label-small-ellipsized.ui
+tests/reftests/label-width-chars-dont-shrink.ref.ui
+tests/reftests/label-width-chars-dont-shrink.ui
 tests/reftests/label-wrap-justify.ref.ui
 tests/reftests/label-wrap-justify.ui
 tests/reftests/messagedialog-secondarytext.ref.ui
