@@ -197,6 +197,8 @@ EXTRA_DIST += \
 	label-sizing.ui \
 	label-small-ellipsized.ref.ui \
 	label-small-ellipsized.ui \
+	label-width-chars-dont-shrink.ref.ui \
+	label-width-chars-dont-shrink.ui \
 	label-wrap-justify.ref.ui \
 	label-wrap-justify.ui \
 	linear-gradient.css \
