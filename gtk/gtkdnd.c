@@ -900,7 +900,7 @@ gtk_drag_get_data (GtkWidget      *widget,
 }
 
 /**
- * gtk_drag_get_source_widget: (method)
+ * gtk_drag_get_source_widget:
  * @context: a (destination side) drag context
  *
  * Determines the source widget for a drag.
@@ -936,7 +936,7 @@ gtk_drag_get_source_widget (GdkDragContext *context)
 }
 
 /**
- * gtk_drag_finish: (method)
+ * gtk_drag_finish:
  * @context: the drag context
  * @success: a flag indicating whether the drop was successful
  * @del: a flag indicating whether the source should delete the
@@ -2127,7 +2127,7 @@ out:
 }
 
 /**
- * gtk_drag_set_icon_widget: (method)
+ * gtk_drag_set_icon_widget:
  * @context: the context for a drag. (This must be called 
           with a context for the source side of a drag)
  * @widget: a widget to use as an icon
@@ -2208,7 +2208,7 @@ gtk_drag_set_icon_definition (GdkDragContext     *context,
 }
 
 /**
- * gtk_drag_set_icon_pixbuf: (method)
+ * gtk_drag_set_icon_pixbuf:
  * @context: the context for a drag (This must be called 
  *            with a  context for the source side of a drag)
  * @pixbuf: the #GdkPixbuf to use as the drag icon
@@ -2235,7 +2235,7 @@ gtk_drag_set_icon_pixbuf (GdkDragContext *context,
 }
 
 /**
- * gtk_drag_set_icon_stock: (method)
+ * gtk_drag_set_icon_stock:
  * @context: the context for a drag (This must be called 
  *            with a  context for the source side of a drag)
  * @stock_id: the ID of the stock icon to use for the drag
@@ -2302,7 +2302,7 @@ _gtk_cairo_surface_extents (cairo_surface_t *surface,
 }
 
 /**
- * gtk_drag_set_icon_surface: (method)
+ * gtk_drag_set_icon_surface:
  * @context: the context for a drag (This must be called
  *     with a context for the source side of a drag)
  * @surface: the surface to use as icon
@@ -2368,7 +2368,7 @@ gtk_drag_set_icon_surface (GdkDragContext  *context,
 }
 
 /**
- * gtk_drag_set_icon_name: (method)
+ * gtk_drag_set_icon_name:
  * @context: the context for a drag (This must be called 
  *     with a context for the source side of a drag)
  * @icon_name: name of icon to use
@@ -2401,7 +2401,7 @@ gtk_drag_set_icon_name (GdkDragContext *context,
 }
 
 /**
- * gtk_drag_set_icon_gicon: (method)
+ * gtk_drag_set_icon_gicon:
  * @context: the context for a drag (This must be called 
  *     with a context for the source side of a drag)
  * @icon: a #GIcon
@@ -2432,7 +2432,7 @@ gtk_drag_set_icon_gicon (GdkDragContext *context,
 }
 
 /**
- * gtk_drag_set_icon_default: (method)
+ * gtk_drag_set_icon_default:
  * @context: the context for a drag (This must be called 
  *     with a  context for the source side of a drag)
  * 
