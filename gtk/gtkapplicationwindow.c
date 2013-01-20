@@ -471,6 +471,10 @@ add_accel_closure (gpointer         data,
 
       gtk_accel_group_connect_by_path (window->priv->accels, accel_path, &closure->closure);
     }
+  else if (parameter)
+    {
+      g_variant_unref (parameter);
+    }
 
   g_free (action_name);
 }
