@@ -41,10 +41,6 @@
  *   suggests that this logic should be part of GtkMountOperation, which can
  *   have Unix-specific code for emptying trash.
  *
- * * Add getters for all the setters.
- *
- * * Add GObject properties.
- *
  * * Add docstrings for signals.
  *
  * * Write reference docs.
@@ -224,6 +220,14 @@ enum {
 	LAST_SIGNAL,
 };
 
+enum {
+	PROP_LOCATION = 1,
+	PROP_OPEN_FLAGS,
+	PROP_ACCEPT_URI_DROPS,
+	PROP_SHOW_DESKTOP,
+	NUM_PROPERTIES,
+};
+
 /* Names for themed icons */
 #define ICON_NAME_HOME		"user-home-symbolic"
 #define ICON_NAME_DESKTOP	"user-desktop"
@@ -245,6 +249,7 @@ enum {
 #define SETTINGS_KEY_STARTUP_MODE        "startup-mode"
 
 static guint places_sidebar_signals [LAST_SIGNAL] = { 0 };
+static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
 
 static void  open_selected_bookmark                    (GtkPlacesSidebar        *sidebar,
 							GtkTreeModel            *model,
@@ -3454,6 +3459,60 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 }
 
 static void
+gtk_places_sidebar_set_property (GObject      *obj,
+				 guint         property_id,
+				 const GValue *value,
+				 GParamSpec   *pspec)
+{
+	GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (obj);
+
+	switch (property_id) {
+	case PROP_LOCATION:
+		gtk_places_sidebar_set_location (sidebar, g_value_get_object (value));
+		break;
+	case PROP_OPEN_FLAGS:
+		gtk_places_sidebar_set_open_flags (sidebar, g_value_get_flags (value));
+		break;
+	case PROP_ACCEPT_URI_DROPS:
+		gtk_places_sidebar_set_accept_uri_drops (sidebar, g_value_get_boolean (value));
+		break;
+	case PROP_SHOW_DESKTOP:
+		gtk_places_sidebar_set_show_desktop (sidebar, g_value_get_boolean (value));
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
+		break;
+	}
+}
+
+static void
+gtk_places_sidebar_get_property (GObject    *obj,
+				 guint       property_id,
+				 GValue     *value,
+				 GParamSpec *pspec)
+{
+	GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (obj);
+
+	switch (property_id) {
+	case PROP_LOCATION:
+		g_value_take_object (value, gtk_places_sidebar_get_location (sidebar));
+		break;
+	case PROP_OPEN_FLAGS:
+		g_value_set_flags (value, gtk_places_sidebar_get_open_flags (sidebar));
+		break;
+	case PROP_ACCEPT_URI_DROPS:
+		g_value_set_boolean (value, gtk_places_sidebar_get_accept_uri_drops (sidebar));
+		break;
+	case PROP_SHOW_DESKTOP:
+		g_value_set_boolean (value, gtk_places_sidebar_get_show_desktop (sidebar));
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
+		break;
+	}
+}
+
+static void
 gtk_places_sidebar_dispose (GObject *object)
 {
 	GtkPlacesSidebar *sidebar;
@@ -3528,6 +3587,8 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 	gobject_class = (GObjectClass *) class;
 
 	gobject_class->dispose = gtk_places_sidebar_dispose;
+	gobject_class->set_property = gtk_places_sidebar_set_property;
+	gobject_class->get_property = gtk_places_sidebar_get_property;
 
 	GTK_WIDGET_CLASS (class)->focus = gtk_places_sidebar_focus;
 
@@ -3698,6 +3759,33 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 			      G_TYPE_STRING,
 			      G_TYPE_INT);
 
+	properties[PROP_LOCATION] =
+		g_param_spec_object ("location",
+				     P_("Location to select"),
+				     P_("The location to highlight in the sidebar"),
+				     G_TYPE_FILE,
+				     G_PARAM_READWRITE);
+	properties[PROP_OPEN_FLAGS] =
+		g_param_spec_flags ("open-flags",
+				    P_("The open modes supported for this widget"),
+				    P_("The set of open modes supported for this widget"),
+				    GTK_TYPE_PLACES_OPEN_FLAGS,
+				    GTK_PLACES_OPEN_NORMAL,
+				    G_PARAM_READWRITE);
+	properties[PROP_ACCEPT_URI_DROPS] =
+		g_param_spec_boolean ("accept-uri-drops",
+				      P_("Whether to accept URI drops"),
+				      P_("Whether the sidebar accepts URI drops"),
+				      FALSE,
+				      G_PARAM_READWRITE);
+	properties[PROP_SHOW_DESKTOP] =
+		g_param_spec_boolean ("show-desktop",
+				      P_("Whether to show desktop"),
+				      P_("Whether the sidebar includes a builtin shortcut to the desktop folder"),
+				      FALSE,
+				      G_PARAM_READWRITE);
+
+	g_object_class_install_properties (gobject_class, NUM_PROPERTIES, properties);
 }
 
 /**
@@ -3822,7 +3910,18 @@ gtk_places_sidebar_set_open_flags (GtkPlacesSidebar *sidebar, GtkPlacesOpenFlags
 {
 	g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
 
-	sidebar->open_flags = flags;
+	if (sidebar->open_flags != flags) {
+		sidebar->open_flags = flags;
+		g_object_notify_by_pspec (G_OBJECT (sidebar), properties[PROP_OPEN_FLAGS]);
+	}
+}
+
+GtkPlacesOpenFlags
+gtk_places_sidebar_get_open_flags (GtkPlacesSidebar *sidebar)
+{
+	g_return_val_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar), 0);
+
+	return sidebar->open_flags;
 }
 
 /**
@@ -3853,7 +3952,7 @@ gtk_places_sidebar_set_location (GtkPlacesSidebar *sidebar, GFile *location)
 	gtk_tree_selection_unselect_all (selection);
 
 	if (location == NULL)
-		return;
+		goto out;
 
 	uri = g_file_get_uri (location);
 
@@ -3874,6 +3973,9 @@ gtk_places_sidebar_set_location (GtkPlacesSidebar *sidebar, GFile *location)
 	}
 
 	g_free (uri);
+
+ out:
+	g_object_notify_by_pspec (G_OBJECT (sidebar), properties[PROP_LOCATION]);
 }
 
 /**
@@ -3935,8 +4037,30 @@ gtk_places_sidebar_set_show_desktop (GtkPlacesSidebar *sidebar, gboolean show_de
 {
 	g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
 
-	sidebar->show_desktop = !!show_desktop;
-	update_places (sidebar);
+	show_desktop = !!show_desktop;
+	if (sidebar->show_desktop != show_desktop) {
+		sidebar->show_desktop = show_desktop;
+		update_places (sidebar);
+		g_object_notify_by_pspec (G_OBJECT (sidebar), properties[PROP_SHOW_DESKTOP]);
+	}
+}
+
+/**
+ * gtk_places_sidebar_get_show_desktop:
+ * @sidebar: a places sidebar
+ *
+ * Returns the value previously set with gtk_places_sidebar_set_show_desktop()
+ *
+ * Return value: %TRUE if the sidebar will display a builtin shortcut to the desktop folder.
+ *
+ * Since: 3.8
+ */
+gboolean
+gtk_places_sidebar_get_show_desktop (GtkPlacesSidebar *sidebar)
+{
+	g_return_val_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar), FALSE);
+
+	return sidebar->show_desktop;
 }
 
 /**
@@ -3961,7 +4085,29 @@ gtk_places_sidebar_set_accept_uri_drops (GtkPlacesSidebar *sidebar, gboolean acc
 {
 	g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
 
-	sidebar->accept_uri_drops = !!accept_uri_drops;
+	accept_uri_drops = !!accept_uri_drops;
+	if (sidebar->accept_uri_drops != accept_uri_drops) {
+		sidebar->accept_uri_drops = !!accept_uri_drops;
+		g_object_notify_by_pspec (G_OBJECT (sidebar), properties[PROP_ACCEPT_URI_DROPS]);
+	}
+}
+
+/**
+ * gtk_places_sidebar_get_accept_uri_drops:
+ * @sidebar: a places sidebar
+ *
+ * Returns the value previously set with gtk_places_sidebar_set_accept_uri_drops()
+ *
+ * Return value: %TRUE if the sidebar accepts URI drops.
+ *
+ * Since: 3.8
+ */
+gboolean
+gtk_places_sidebar_get_accept_uri_drops (GtkPlacesSidebar *sidebar)
+{
+	g_return_val_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar), FALSE);
+
+	return sidebar->accept_uri_drops;
 }
 
 static GSList *

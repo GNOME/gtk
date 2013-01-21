@@ -80,16 +80,16 @@ typedef enum {
 GType gtk_places_sidebar_get_type (void);
 GtkWidget *gtk_places_sidebar_new (void);
 
-/* FIXME: add GObject properties for the following things */
-
+GtkPlacesOpenFlags gtk_places_sidebar_get_open_flags (GtkPlacesSidebar *sidebar);
 void gtk_places_sidebar_set_open_flags (GtkPlacesSidebar *sidebar, GtkPlacesOpenFlags flags);
 
+GFile *gtk_places_sidebar_get_location (GtkPlacesSidebar *sidebar);
 void gtk_places_sidebar_set_location (GtkPlacesSidebar *sidebar, GFile *location);
 
-GFile *gtk_places_sidebar_get_location (GtkPlacesSidebar *sidebar);
-
+gboolean gtk_places_sidebar_get_show_desktop (GtkPlacesSidebar *sidebar);
 void gtk_places_sidebar_set_show_desktop (GtkPlacesSidebar *sidebar, gboolean show_desktop);
 
+gboolean gtk_places_sidebar_get_accept_uri_drops (GtkPlacesSidebar *sidebar);
 void gtk_places_sidebar_set_accept_uri_drops (GtkPlacesSidebar *sidebar, gboolean accept_uri_drops);
 
 void gtk_places_sidebar_add_shortcut (GtkPlacesSidebar *sidebar, GFile *location);
