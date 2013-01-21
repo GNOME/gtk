@@ -2209,6 +2209,20 @@ show_unmount_progress_aborted_cb (GMountOperation *op,
 #endif
 }
 
+static GMountOperation *
+get_unmount_operation (GtkPlacesSidebar *sidebar)
+{
+	GMountOperation *mount_op;
+
+	mount_op = gtk_mount_operation_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (sidebar))));
+	g_signal_connect (mount_op, "show-unmount-progress",
+			  G_CALLBACK (show_unmount_progress_cb), sidebar);
+	g_signal_connect (mount_op, "aborted",
+			  G_CALLBACK (show_unmount_progress_aborted_cb), sidebar);
+
+	return mount_op;
+}
+
 static void
 do_unmount (GMount *mount,
 	    GtkPlacesSidebar *sidebar)
@@ -2218,7 +2232,7 @@ do_unmount (GMount *mount,
 
 		g_object_ref (mount);
 
-		mount_op = gtk_mount_operation_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (sidebar))));
+		mount_op = get_unmount_operation (sidebar);
 
 		g_mount_unmount_with_operation (mount,
 						0,
@@ -2226,10 +2240,6 @@ do_unmount (GMount *mount,
 						NULL,
 						unmount_mount_cb,
 						g_object_ref (sidebar));
-		g_signal_connect (mount_op, "show-unmount-progress",
-				  G_CALLBACK (show_unmount_progress_cb), sidebar);
-		g_signal_connect (mount_op, "aborted",
-				  G_CALLBACK (show_unmount_progress_aborted_cb), sidebar);
 		g_object_unref (mount_op);
 	}
 }
@@ -2350,7 +2360,7 @@ do_eject (GMount *mount,
 {
 	GMountOperation *mount_op;
 
-	mount_op = gtk_mount_operation_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (sidebar))));
+	mount_op = get_unmount_operation (sidebar);
 	if (mount != NULL) {
 		g_mount_eject_with_operation (mount, 0, mount_op, NULL, mount_eject_cb,
 					      g_object_ref (sidebar));
@@ -2361,11 +2371,6 @@ do_eject (GMount *mount,
 		g_drive_eject_with_operation (drive, 0, mount_op, NULL, drive_eject_cb,
 					      g_object_ref (sidebar));
 	}
-
-	g_signal_connect (mount_op, "show-unmount-progress",
-			  G_CALLBACK (show_unmount_progress_cb), sidebar);
-	g_signal_connect (mount_op, "aborted",
-			  G_CALLBACK (show_unmount_progress_aborted_cb), sidebar);
 	g_object_unref (mount_op);
 }
 
@@ -2610,7 +2615,7 @@ stop_shortcut_cb (GtkMenuItem           *item,
 	if (drive != NULL) {
 		GMountOperation *mount_op;
 
-		mount_op = gtk_mount_operation_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (sidebar))));
+		mount_op = get_unmount_operation (sidebar);
 		g_drive_stop (drive, G_MOUNT_UNMOUNT_NONE, mount_op, NULL, drive_stop_cb,
 			      g_object_ref (sidebar));
 		g_object_unref (mount_op);
