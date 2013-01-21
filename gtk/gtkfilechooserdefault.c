@@ -6020,8 +6020,7 @@ settings_ensure (GtkFileChooserDefault *impl)
   if (impl->settings != NULL)
     return;
 
-  impl->settings = g_settings_new_with_path ("org.gtk.Settings.FileChooser",
-                                             "/org/gtk/settings/file-chooser/");
+  impl->settings = g_settings_new ("org.gtk.Settings.FileChooser");
   g_settings_delay (impl->settings);
 }
 

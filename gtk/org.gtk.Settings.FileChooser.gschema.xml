@@ -33,7 +33,7 @@
     <value nick='descending' value='1'/>
   </enum>
 
-  <schema id='org.gtk.Settings.FileChooser'>
+  <schema id='org.gtk.Settings.FileChooser' path='/org/gtk/settings/file-chooser/'>
     <key name='last-folder-uri' type='s'>
       <default>""</default>
     </key>
