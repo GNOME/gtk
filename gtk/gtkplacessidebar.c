@@ -128,7 +128,7 @@ struct _GtkPlacesSidebar {
 	gboolean bookmarks_header_added;
 
 	/* DnD */
-	GList     *drag_list;
+	GList     *drag_list; /* list of GFile */
 	gboolean  drag_data_received;
 	int       drag_data_info;
 	gboolean  drop_occured;
@@ -165,14 +165,14 @@ struct _GtkPlacesSidebarClass {
 				        const char       *secondary);
 	void (* drag_action_requested) (GtkPlacesSidebar *sidebar,
 					GdkDragContext   *context,
-					const char       *uri,
-					GList            *uri_list,
+					GFile            *dest_file,
+					GList            *source_file_list,
 					int              *action);
 	GdkDragAction (* drag_action_ask) (GtkPlacesSidebar *sidebar,
 					   GdkDragAction     actions);
 	void (* drag_perform_drop) (GtkPlacesSidebar     *sidebar,
-				    GList                *uris,
-				    const char           *drop_uri,
+				    GFile                *dest_file,
+				    GList                *source_file_list,
 				    GdkDragAction         action);
 };
 
@@ -335,14 +335,14 @@ emit_show_error_message (GtkPlacesSidebar *sidebar, const char *primary, const c
 static void
 emit_drag_action_requested (GtkPlacesSidebar *sidebar,
 			    GdkDragContext *context,
-			    const char *uri,
-			    GList *uri_list,
+			    GFile *dest_file,
+			    GList *source_file_list,
 			    int *action)
 {
 	g_signal_emit (sidebar, places_sidebar_signals[DRAG_ACTION_REQUESTED], 0,
 		       context,
-		       uri,
-		       uri_list,
+		       dest_file,
+		       source_file_list,
 		       action);
 }
 
@@ -362,13 +362,13 @@ emit_drag_action_ask (GtkPlacesSidebar *sidebar,
 
 static void
 emit_drag_perform_drop (GtkPlacesSidebar *sidebar,
-			GList *uris,
-			const char *drop_uri,
+			GFile *dest_file,
+			GList *source_file_list,
 			GdkDragAction action)
 {
 	g_signal_emit (sidebar, places_sidebar_signals[DRAG_PERFORM_DROP], 0,
-		       uris,
-		       drop_uri,
+		       dest_file,
+		       source_file_list,
 		       action);
 }
 
@@ -1318,7 +1318,7 @@ free_drag_data (GtkPlacesSidebar *sidebar)
 	sidebar->drag_data_received = FALSE;
 
 	if (sidebar->drag_list) {
-		g_list_free_full (sidebar->drag_list, g_free);
+		g_list_free_full (sidebar->drag_list, g_object_unref);
 		sidebar->drag_list = NULL;
 	}
 }
@@ -1362,14 +1362,20 @@ drag_motion_callback (GtkTreeView *tree_view,
 		action = 0;
 		if (sidebar->accept_uri_drops) {
 			if (sidebar->drag_list != NULL) {
+				GFile *dest_file;
+
 				gtk_tree_model_get_iter (GTK_TREE_MODEL (sidebar->store),
 							 &iter, path);
 				gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store),
 						    &iter,
 						    PLACES_SIDEBAR_COLUMN_URI, &uri,
 						    -1);
-				emit_drag_action_requested (sidebar, context, uri, sidebar->drag_list, &action);
+
+				dest_file = g_file_new_for_uri (uri);
 				g_free (uri);
+
+				emit_drag_action_requested (sidebar, context, dest_file, sidebar->drag_list, &action);
+				g_object_unref (dest_file);
 			}
 		}
 	}
@@ -1401,19 +1407,19 @@ drag_leave_callback (GtkTreeView *tree_view,
 	g_signal_stop_emission_by_name (tree_view, "drag-leave");
 }
 
-/* Takes an array of URIs and turns it into a list of string URIs */
+/* Takes an array of URIs and turns it into a list of GFile */
 static GList *
-build_uri_list (const char **uris)
+build_file_list_from_uris (const char **uris)
 {
 	GList *result;
 	int i;
 
 	result = NULL;
 	for (i = 0; uris[i]; i++) {
-		char *uri;
+		GFile *file;
 
-		uri = g_strdup (uris[i]);
-		result = g_list_prepend (result, uri);
+		file = g_file_new_for_uri (uris[i]);
+		result = g_list_prepend (result, file);
 	}
 
 	return g_list_reverse (result);
@@ -1472,7 +1478,7 @@ drag_data_received_callback (GtkWidget *widget,
 			char **uris;
 
 			uris = gtk_selection_data_get_uris (selection_data);
-			sidebar->drag_list = build_uri_list ((const char **) uris);
+			sidebar->drag_list = build_file_list_from_uris ((const char **) uris);
 			g_strfreev (uris);
 		} else {
 			sidebar->drag_list = NULL;
@@ -1529,8 +1535,7 @@ drag_data_received_callback (GtkWidget *widget,
 	} else {
 		GdkDragAction real_action;
 		char **uris;
-		GList *uri_list;
-		char *drop_uri;
+		GList *source_file_list;
 
 		/* file transfer requested */
 		real_action = gdk_drag_context_get_selected_action (context);
@@ -1539,19 +1544,24 @@ drag_data_received_callback (GtkWidget *widget,
 			real_action = emit_drag_action_ask (sidebar, gdk_drag_context_get_actions (context));
 
 		if (real_action > 0) {
+			char *uri;
+			GFile *dest_file;
+
 			model = gtk_tree_view_get_model (tree_view);
 
 			gtk_tree_model_get_iter (model, &iter, tree_path);
 			gtk_tree_model_get (model, &iter,
-					    PLACES_SIDEBAR_COLUMN_URI, &drop_uri,
+					    PLACES_SIDEBAR_COLUMN_URI, &uri,
 					    -1);
+
+			dest_file = g_file_new_for_uri (uri);
 
 			switch (info) {
 			case TEXT_URI_LIST:
 				uris = gtk_selection_data_get_uris (selection_data);
-				uri_list = build_uri_list ((const char **) uris);
-				emit_drag_perform_drop (sidebar, uri_list, drop_uri, real_action);
-				g_list_free_full (uri_list, g_free);
+				source_file_list = build_file_list_from_uris ((const char **) uris);
+				emit_drag_perform_drop (sidebar, dest_file, source_file_list, real_action);
+				g_list_free_full (source_file_list, g_object_unref);
 				g_strfreev (uris);
 				success = TRUE;
 				break;
@@ -1563,7 +1573,8 @@ drag_data_received_callback (GtkWidget *widget,
 				break;
 			}
 
-			g_free (drop_uri);
+			g_free (uri);
+			g_object_unref (dest_file);
 		}
 	}
 
@@ -3677,8 +3688,8 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 	 * GtkPlacesSidebar::drag-action-requested:
 	 * @sidebar: the object which received the signal.
 	 * @context: #GdkDragContext with information about the drag operation
-	 * @uri: URI of the location that is being hovered for a drop
-	 * @uri_list: (element-type utf8) (transfer none): List of URIs that are being dragged
+	 * @dest_file: #GFile with the tentative location that is being hovered for a drop
+	 * @source_file_list: (element-type GFile) (transfer none): List of #GFile that are being dragged
 	 * @action: Location in which to store the drag action here
 	 *
 	 * When the user starts a drag-and-drop operation and the sidebar needs
@@ -3686,8 +3697,8 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 	 * sidebar will emit this signal.
 	 *
 	 * The application can evaluate the @context for customary actions, or
-	 * it can check the type of the files indicated by @uri_list against the
-	 * possible actions for the destination @uri.
+	 * it can check the type of the files indicated by @source_file_list against the
+	 * possible actions for the destination @dest_file.
 	 *
 	 * To enable drag-and-drop operations on the sidebar, use
 	 * gtk_places_sidebar_set_accept_uri_drops().
@@ -3698,10 +3709,10 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 			      G_SIGNAL_RUN_FIRST,
 			      G_STRUCT_OFFSET (GtkPlacesSidebarClass, drag_action_requested),
 			      NULL, NULL,
-			      _gtk_marshal_VOID__OBJECT_STRING_POINTER_POINTER,
+			      _gtk_marshal_VOID__OBJECT_OBJECT_POINTER_POINTER,
 			      G_TYPE_NONE, 4,
 			      GDK_TYPE_DRAG_CONTEXT,
-			      G_TYPE_STRING,
+			      G_TYPE_OBJECT,
 			      G_TYPE_POINTER, /* FIXME: (GList *) is there something friendlier to language bindings? */
 			      G_TYPE_POINTER  /* FIXME: (inout int) is there something friendlier to language bindings? */);
 
@@ -3734,13 +3745,15 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 	/**
 	 * GtkPlacesSidebar::drag-perform-drop:
 	 * @sidebar: the object which received the signal.
-	 * @uris: (element-type utf8) (transfer none): List of URIs that got dropped.
-	 * @drop_uri: Destination URI.
+	 * @dest_file: Destination #GFile.
+	 * @source_file_list: (element-type GFile) (transfer none): #GList of #GFile that got dropped.
 	 * @action: Drop action to perform.
 	 *
-	 * The places sidebar emits this signal when the user completes a drag-and-drop operation and one
-	 * of the sidebar's items is the destination.  This item's URI is the @drop_uri, and the @uris
-	 * that are dropped into it should be copied/moved/etc. based on the specified @action.
+	 * The places sidebar emits this signal when the user completes a
+	 * drag-and-drop operation and one of the sidebar's items is the
+	 * destination.  This item is in the @dest_file, and the
+	 * @source_file_list has the list of files that are dropped into it and
+	 * which should be copied/moved/etc. based on the specified @action.
 	 *
 	 * To enable drag-and-drop operations on the sidebar, use
 	 * gtk_places_sidebar_set_accept_uri_drops().
@@ -3753,10 +3766,10 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 			      G_SIGNAL_RUN_FIRST,
 			      G_STRUCT_OFFSET (GtkPlacesSidebarClass, drag_perform_drop),
 			      NULL, NULL,
-			      _gtk_marshal_VOID__POINTER_STRING_INT,
+			      _gtk_marshal_VOID__OBJECT_POINTER_INT,
 			      G_TYPE_NONE, 3,
+			      G_TYPE_OBJECT,
 			      G_TYPE_POINTER, /* FIXME: (GList *) is there something friendlier to language bindings? */
-			      G_TYPE_STRING,
 			      G_TYPE_INT);
 
 	properties[PROP_LOCATION] =
