@@ -106,6 +106,7 @@ do_css_pixbufs (GtkWidget *do_widget)
 
       bytes = g_resources_lookup_data ("/css_pixbufs/gtk.css", 0, NULL);
       gtk_text_buffer_set_text (text, g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes));
+      g_bytes_unref (bytes);
 
       g_signal_connect (provider,
                         "parsing-error",
