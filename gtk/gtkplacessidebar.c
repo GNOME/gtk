@@ -658,7 +658,7 @@ add_application_shortcuts (GtkPlacesSidebar *sidebar)
 
 		/* FIXME: we are getting file info synchronously.  We may want to do it async at some point. */
 		info = g_file_query_info (file,
-					  "standard::display-name,standard::icon",
+					  "standard::display-name,standard::symbolic-icon",
 					  G_FILE_QUERY_INFO_NONE,
 					  NULL,
 					  NULL); /* NULL-GError */
@@ -670,12 +670,7 @@ add_application_shortcuts (GtkPlacesSidebar *sidebar)
 			GIcon *icon;
 
 			name = g_file_info_get_display_name (info);
-
-			/* FIXME: in commit 0ed400b9c1692e42498bff3c10780073ec137f63, nautilus added the ability
-			 * to get a symbolic icon for bookmarks.  We don't have that machinery.  Should we
-			 * just copy that code?
-			 */
-			icon = g_file_info_get_icon (info);
+			icon = g_file_info_get_symbolic_icon (info);
 
 			uri = g_file_get_uri (file);
 			tooltip = g_file_get_parse_name (file);
@@ -1021,7 +1016,7 @@ update_places (GtkPlacesSidebar *sidebar)
 
 		/* FIXME: we are getting file info synchronously.  We may want to do it async at some point. */
 		info = g_file_query_info (root,
-					  "standard::display-name,standard::icon",
+					  "standard::display-name,standard::symbolic-icon",
 					  G_FILE_QUERY_INFO_NONE,
 					  NULL,
 					  NULL); /* NULL-GError */
@@ -1032,11 +1027,7 @@ update_places (GtkPlacesSidebar *sidebar)
 			if (bookmark_name == NULL)
 				bookmark_name = g_strdup (g_file_info_get_display_name (info));
 
-			/* FIXME: in commit 0ed400b9c1692e42498bff3c10780073ec137f63, nautilus added the ability
-			 * to get a symbolic icon for bookmarks.  We don't have that machinery.  Should we
-			 * just copy that code?
-			 */
-			icon = g_file_info_get_icon (info);
+			icon = g_file_info_get_symbolic_icon (info);
 
 			mount_uri = g_file_get_uri (root);
 			tooltip = g_file_get_parse_name (root);
