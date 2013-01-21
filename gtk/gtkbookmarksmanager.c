@@ -275,7 +275,7 @@ _gtk_bookmarks_manager_list_bookmarks (GtkBookmarksManager *manager)
   return g_slist_reverse (files);
 }
 
-GSList *
+static GSList *
 find_bookmark_link_for_file (GSList *bookmarks, GFile *file, int *position_ret)
 {
   int pos;
