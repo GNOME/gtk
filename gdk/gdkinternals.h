@@ -221,6 +221,7 @@ struct _GdkWindow
   guint native_visibility : 2; /* the native visibility of a impl windows */
   guint viewable : 1; /* mapped and all parents mapped */
   guint applied_shape : 1;
+  GdkFullscreenMode fullscreen_mode;
 
   /* The GdkWindow that has the impl, ref:ed if another window.
    * This ref is required to keep the wrapper of the impl window alive

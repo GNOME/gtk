@@ -313,6 +313,7 @@ gdk_window_init (GdkWindow *window)
   window->window_type = GDK_WINDOW_CHILD;
 
   window->state = GDK_WINDOW_STATE_WITHDRAWN;
+  window->fullscreen_mode = GDK_FULLSCREEN_ON_CURRENT_MONITOR;
   window->width = 1;
   window->height = 1;
   window->toplevel_window_type = -1;
@@ -10689,6 +10690,67 @@ void
 gdk_window_fullscreen (GdkWindow *window)
 {
   GDK_WINDOW_IMPL_GET_CLASS (window->impl)->fullscreen (window);
+}
+
+/**
+ * gdk_window_set_fullscreen_mode:
+ * @window: a toplevel #GdkWindow
+ * @mode: fullscreen mode
+ *
+ * Specifies whether the @window should span over all monitors (in a multi-head
+ * setup) or only the current monitor when in fullscreen mode.
+ *
+ * The @mode argument is from the #GdkFullscreenMode enumeration.
+ * If #GDK_FULLSCREEN_ON_ALL_MONITORS is specified, the fullscreen @window will
+ * span over all monitors from the #GdkScreen.
+ *
+ * On X11, searches through the list of monitors from the #GdkScreen the ones
+ * which delimit the 4 edges of the entire #GdkScreen and will ask the window
+ * manager to span the @window over these monitors.
+ *
+ * If the XINERAMA extension is not available or not usable, this function
+ * has no effect.
+ *
+ * Not all window managers support this, so you can't rely on the fullscreen
+ * window to span over the multiple monitors when #GDK_FULLSCREEN_ON_ALL_MONITORS
+ * is specified.
+ *
+ * Since: 3.8
+ **/
+void
+gdk_window_set_fullscreen_mode (GdkWindow        *window,
+                                GdkFullscreenMode mode)
+{
+  GdkWindowImplClass *impl_class;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (window->fullscreen_mode != mode)
+    {
+      window->fullscreen_mode = mode;
+
+      impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+      if (impl_class->apply_fullscreen_mode != NULL)
+        impl_class->apply_fullscreen_mode (window);
+    }
+}
+
+/**
+ * gdk_window_get_fullscreen_mode:
+ * @window: a toplevel #GdkWindow
+ *
+ * Obtains the #GdkFullscreenMode of the @window.
+ *
+ * Returns: The #GdkFullscreenMode applied to the window when fullscreen.
+ *
+ * Since: 3.8
+ **/
+GdkFullscreenMode
+gdk_window_get_fullscreen_mode (GdkWindow *window)
+{
+  g_return_val_if_fail (GDK_IS_WINDOW (window), GDK_FULLSCREEN_ON_CURRENT_MONITOR);
+
+  return window->fullscreen_mode;
 }
 
 /**

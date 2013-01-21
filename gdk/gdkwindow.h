@@ -317,6 +317,22 @@ typedef enum
 } GdkWindowEdge;
 
 /**
+ * GdkFullscreenMode:
+ * @GDK_FULLSCREEN_ON_CURRENT_MONITOR: Fullscreen on current monitor only.
+ * @GDK_FULLSCREEN_ON_ALL_MONITORS: Span across all monitors when fullscreen.
+ *
+ * Indicates which monitor (in a multi-head setup) a window should span over
+ * when in fullscreen mode.
+ *
+ * Since: 3.8
+ **/
+typedef enum
+{
+  GDK_FULLSCREEN_ON_CURRENT_MONITOR,
+  GDK_FULLSCREEN_ON_ALL_MONITORS
+} GdkFullscreenMode;
+
+/**
  * GdkWindowAttr:
  * @title: title of the window (for toplevel windows)
  * @event_mask: event mask (see gdk_window_set_events())
@@ -773,6 +789,12 @@ void          gdk_window_unstick         (GdkWindow       *window);
 void          gdk_window_maximize        (GdkWindow       *window);
 void          gdk_window_unmaximize      (GdkWindow       *window);
 void          gdk_window_fullscreen      (GdkWindow       *window);
+GDK_AVAILABLE_IN_3_8
+void          gdk_window_set_fullscreen_mode (GdkWindow   *window,
+                                          GdkFullscreenMode mode);
+GDK_AVAILABLE_IN_3_8
+GdkFullscreenMode
+              gdk_window_get_fullscreen_mode (GdkWindow   *window);
 void          gdk_window_unfullscreen    (GdkWindow       *window);
 void          gdk_window_set_keep_above  (GdkWindow       *window,
                                           gboolean         setting);
