@@ -1737,21 +1737,11 @@ get_selection_info (GtkPlacesSidebar *sidebar, SelectionInfo *info)
 static void
 free_selection_info (SelectionInfo *info)
 {
-	if (info->drive)
-		g_object_unref (info->drive);
+	g_clear_object (&info->drive);
+	g_clear_object (&info->volume);
+	g_clear_object (&info->mount);
 
-	if (info->volume)
-		g_object_unref (info->volume);
-
-	if (info->mount)
-		g_object_unref (info->mount);
-
-	g_free (info->uri);
-
-	info->drive  = NULL;
-	info->volume = NULL;
-	info->mount  = NULL;
-	info->uri    = NULL;
+	g_clear_pointer (&info->uri, g_free);
 }
 
 typedef struct {
@@ -1951,10 +1941,8 @@ open_selected_bookmark (GtkPlacesSidebar	*sidebar,
 			g_object_unref (mount_op);
 		}
 
-		if (drive != NULL)
-			g_object_unref (drive);
-		if (volume != NULL)
-			g_object_unref (volume);
+		g_clear_object (&drive);
+		g_clear_object (&volume);
 	}
 }
 
@@ -2422,12 +2410,9 @@ eject_or_unmount_bookmark (GtkPlacesSidebar *sidebar,
 		ret = TRUE;
 	}
 
-	if (mount != NULL)
-		g_object_unref (mount);
-	if (volume != NULL)
-		g_object_unref (volume);
-	if (drive != NULL)
-		g_object_unref (drive);
+	g_clear_object (&mount);
+	g_clear_object (&volume);
+	g_clear_object (&drive);
 
 	return ret;
 }
