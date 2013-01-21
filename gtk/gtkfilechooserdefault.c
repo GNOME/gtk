@@ -6074,8 +6074,8 @@ save_dialog_geometry (GtkFileChooserDefault *impl)
   gtk_window_get_position (toplevel, &x, &y);
   gtk_window_get_size (toplevel, &width, &height);
 
-  g_settings_set (impl->settings, "window-position", "(ii)", x, y);
-  g_settings_set (impl->settings, "window-size", "(ii)", width, height);
+  g_settings_set (impl->settings, SETTINGS_KEY_WINDOW_POSITION, "(ii)", x, y);
+  g_settings_set (impl->settings, SETTINGS_KEY_WINDOW_SIZE, "(ii)", width, height);
 }
 
 static void
