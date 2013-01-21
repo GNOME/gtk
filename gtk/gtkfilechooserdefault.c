@@ -643,10 +643,6 @@ _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 				GDK_KEY_v, GDK_CONTROL_MASK,
 				"location-popup-on-paste",
 				0);
-  gtk_binding_entry_add_signal (binding_set,
-		  		GDK_KEY_BackSpace, 0,
-				"up-folder",
-				0);
 
   add_normal_and_shifted_binding (binding_set,
 				  GDK_KEY_Up, GDK_MOD1_MASK,
