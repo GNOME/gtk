@@ -2499,8 +2499,8 @@ rescan_shortcut_cb (GtkMenuItem           *item,
 
 	if (drive != NULL) {
 		g_drive_poll_for_media (drive, NULL, drive_poll_for_media_cb, sidebar);
+		g_object_unref (drive);
 	}
-	g_object_unref (drive);
 }
 
 static void
@@ -2553,8 +2553,8 @@ start_shortcut_cb (GtkMenuItem           *item,
 		g_drive_start (drive, G_DRIVE_START_NONE, mount_op, NULL, drive_start_cb, sidebar);
 
 		g_object_unref (mount_op);
+		g_object_unref (drive);
 	}
-	g_object_unref (drive);
 }
 
 static void
@@ -2605,9 +2605,10 @@ stop_shortcut_cb (GtkMenuItem           *item,
 		mount_op = get_unmount_operation (sidebar);
 		g_drive_stop (drive, G_MOUNT_UNMOUNT_NONE, mount_op, NULL, drive_stop_cb,
 			      g_object_ref (sidebar));
+
 		g_object_unref (mount_op);
+		g_object_unref (drive);
 	}
-	g_object_unref (drive);
 }
 
 static gboolean
