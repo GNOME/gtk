@@ -41,9 +41,6 @@
  *   suggests that this logic should be part of GtkMountOperation, which can
  *   have Unix-specific code for emptying trash.
  *
- * * Grep for the comment containing "machinery" in this file, and copy that machinery
- *   from Nautilus - it's to get symbolic icons for everything.
- *
  * * Add getters for all the setters.
  *
  * * Add GObject properties.
@@ -53,9 +50,6 @@
  * * Write reference docs.
  *
  * * Sync nautilus commit 17a85b78acc78b573c2e1776b348ed348e19adb7
- * * Sync nautilus commit 1f307c367ddd8193a38f500e731b7ca0f9b2f98e
- * * Sync nautilus commit 1dcd2d816a1278f7eec1d074ec5d9134af34a803
- * * Sync nautilus commit 71ad0d3adc2553ef5bcd06ec32600302e9169765
  *
  */
 
