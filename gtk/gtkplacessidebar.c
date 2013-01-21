@@ -389,40 +389,6 @@ get_icon_size (GtkPlacesSidebar *sidebar)
 		return 16;
 }
 
-#if 0
-/* FIXME: remove this?  Let's allow the user to bookmark whatever he damn well pleases */
-static gboolean
-is_built_in_bookmark (NautilusFile *file)
-{
-	gboolean built_in;
-	gint idx;
-
-	if (nautilus_file_is_home (file)) {
-		return TRUE;
-	}
-
-	if (nautilus_file_is_desktop_directory (file) &&
-	    !g_settings_get_boolean (gnome_background_preferences, NAUTILUS_PREFERENCES_SHOW_DESKTOP)) {
-		return FALSE;
-	}
-
-	built_in = FALSE;
-
-	for (idx = 0; idx < G_USER_N_DIRECTORIES; idx++) {
-		/* PUBLIC_SHARE and TEMPLATES are not in our built-in list */
-		if (nautilus_file_is_user_special_directory (file, idx)) {
-			if (idx != G_USER_DIRECTORY_PUBLIC_SHARE &&  idx != G_USER_DIRECTORY_TEMPLATES) {
-				built_in = TRUE;
-			}
-
-			break;
-		}
-	}
-
-	return built_in;
-}
-#endif
-
 static GtkTreeIter
 add_heading (GtkPlacesSidebar *sidebar,
 	     SectionType section_type,
@@ -576,9 +542,7 @@ add_special_dirs (GtkPlacesSidebar *sidebar)
 		char *mount_uri;
 		char *tooltip;
 
-		if (index == G_USER_DIRECTORY_DESKTOP ||
-		    index == G_USER_DIRECTORY_TEMPLATES ||
-		    index == G_USER_DIRECTORY_PUBLIC_SHARE) {
+		if (!_gtk_bookmarks_manager_get_is_xdg_dir_builtin (index)) {
 			continue;
 		}
 
@@ -1001,18 +965,9 @@ update_places (GtkPlacesSidebar *sidebar)
 		}
 #endif
 
-#if 0
-		/* FIXME: remove this?  Let's allow the user to bookmark whatever he damn well pleases */
-		NautilusFile *file;
-		file = nautilus_file_get (root);
-
-		if (is_built_in_bookmark (file)) {
-			g_object_unref (root);
-			nautilus_file_unref (file);
+		if (_gtk_bookmarks_manager_get_is_builtin (sidebar->bookmarks_manager, root)) {
 			continue;
 		}
-		nautilus_file_unref (file);
-#endif
 
 		/* FIXME: we are getting file info synchronously.  We may want to do it async at some point. */
 		info = g_file_query_info (root,
