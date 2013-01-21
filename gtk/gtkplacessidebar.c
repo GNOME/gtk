@@ -250,8 +250,6 @@ static void  open_selected_bookmark                    (GtkPlacesSidebar        
 							GtkTreeModel            *model,
 							GtkTreeIter             *iter,
 							GtkPlacesOpenFlags       open_flags);
-static void  gtk_places_sidebar_style_set         (GtkWidget                    *widget,
-							GtkStyle                     *previous_style);
 static gboolean eject_or_unmount_bookmark              (GtkPlacesSidebar *sidebar,
 							GtkTreePath *path);
 static gboolean eject_or_unmount_selection             (GtkPlacesSidebar *sidebar);
@@ -3531,7 +3529,6 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 
 	gobject_class->dispose = gtk_places_sidebar_dispose;
 
-	GTK_WIDGET_CLASS (class)->style_set = gtk_places_sidebar_style_set;
 	GTK_WIDGET_CLASS (class)->focus = gtk_places_sidebar_focus;
 
 	/**
@@ -3700,17 +3697,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 			      G_TYPE_POINTER, /* FIXME: (GList *) is there something friendlier to language bindings? */
 			      G_TYPE_STRING,
 			      G_TYPE_INT);
-}
 
-static void
-gtk_places_sidebar_style_set (GtkWidget *widget,
-				   GtkStyle  *previous_style)
-{
-	GtkPlacesSidebar *sidebar;
-
-	sidebar = GTK_PLACES_SIDEBAR (widget);
-
-	update_places (sidebar);
 }
 
 /**
