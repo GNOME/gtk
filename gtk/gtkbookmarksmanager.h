@@ -77,4 +77,12 @@ gboolean _gtk_bookmarks_manager_set_bookmark_label (GtkBookmarksManager *manager
 						    const gchar         *label,
 						    GError             **error);
 
+gboolean _gtk_bookmarks_manager_get_xdg_type (GtkBookmarksManager *manager,
+                                              GFile               *file,
+                                              GUserDirectory      *directory);
+gboolean _gtk_bookmarks_manager_get_is_builtin (GtkBookmarksManager *manager,
+                                                GFile               *file);
+
+gboolean _gtk_bookmarks_manager_get_is_xdg_dir_builtin (GUserDirectory xdg_type);
+
 #endif /* __GTK_BOOKMARKS_MANAGER_H__ */

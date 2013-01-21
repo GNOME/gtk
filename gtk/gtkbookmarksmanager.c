@@ -523,3 +523,64 @@ _gtk_bookmarks_manager_set_bookmark_label (GtkBookmarksManager *manager,
 
   return TRUE;
 }
+
+gboolean
+_gtk_bookmarks_manager_get_xdg_type (GtkBookmarksManager *manager,
+                                     GFile               *file,
+                                     GUserDirectory      *directory)
+{
+  GSList *link;
+  gboolean match;
+  GFile *location;
+  const gchar *path;
+  GUserDirectory dir;
+  GtkBookmark *bookmark;
+
+  link = find_bookmark_link_for_file (manager->bookmarks, file, NULL);
+  if (!link)
+    return FALSE;
+
+  match = FALSE;
+  bookmark = link->data;
+
+  for (dir = 0; dir < G_USER_N_DIRECTORIES; dir++)
+    {
+      path = g_get_user_special_dir (dir);
+      if (!path)
+        continue;
+
+      location = g_file_new_for_path (path);
+      match = g_file_equal (location, bookmark->file);
+      g_object_unref (location);
+
+      if (match)
+        break;
+    }
+
+  if (match && directory != NULL)
+    *directory = dir;
+
+  return match;
+}
+
+gboolean
+_gtk_bookmarks_manager_get_is_builtin (GtkBookmarksManager *manager,
+                                       GFile               *file)
+{
+  GUserDirectory xdg_type;
+
+  /* if this is not an XDG dir, it's never builtin */
+  if (!_gtk_bookmarks_manager_get_xdg_type (manager, file, &xdg_type))
+    return FALSE;
+
+  /* exclude XDG locations we don't display by default */
+  return _gtk_bookmarks_manager_get_is_xdg_dir_builtin (xdg_type);
+}
+
+gboolean
+_gtk_bookmarks_manager_get_is_xdg_dir_builtin (GUserDirectory xdg_type)
+{
+  return (xdg_type != G_USER_DIRECTORY_DESKTOP) &&
+    (xdg_type != G_USER_DIRECTORY_TEMPLATES) &&
+    (xdg_type != G_USER_DIRECTORY_PUBLIC_SHARE);
+}
