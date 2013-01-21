@@ -91,6 +91,9 @@ struct _GdkX11Screen
 
   /* cache for window->translate vfunc */
   GC subwindow_gcs[32];
+
+  /* cache for Xinerama monitor indices */
+  GHashTable *xinerama_matches;
 };
 
 struct _GdkX11ScreenClass
@@ -110,6 +113,13 @@ void _gdk_x11_screen_size_changed           (GdkScreen *screen,
 					     XEvent    *event);
 void _gdk_x11_screen_process_owner_change   (GdkScreen *screen,
 					     XEvent    *event);
+gint _gdk_x11_screen_get_xinerama_index     (GdkScreen *screen,
+					     gint       monitor_num);
+void _gdk_x11_screen_get_edge_monitors      (GdkScreen *screen,
+					     gint      *top,
+					     gint      *bottom,
+					     gint      *left,
+					     gint      *right);
 
 G_END_DECLS
 
