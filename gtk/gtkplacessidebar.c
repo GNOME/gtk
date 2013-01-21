@@ -3927,7 +3927,7 @@ gtk_places_sidebar_get_open_flags (GtkPlacesSidebar *sidebar)
 /**
  * gtk_places_sidebar_set_location:
  * @sidebar: a places sidebar
- * @location: location to select, or #NULL for no current path
+ * @location: (allow-none): location to select, or #NULL for no current path
  *
  * Sets the location that is being shown in the widgets surrounding the
  * @sidebar, for example, in a folder view in a file manager.  In turn, the
@@ -3992,7 +3992,7 @@ gtk_places_sidebar_set_location (GtkPlacesSidebar *sidebar, GFile *location)
  * function to get the location that is being referred to during the callbacks
  * for your menu items.
  *
- * Returns: a GFile with the selected location, or #NULL if nothing is visually
+ * Returns: (transfer full): a GFile with the selected location, or #NULL if nothing is visually
  * selected.
  *
  * Since: 3.8
