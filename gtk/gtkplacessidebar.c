@@ -559,7 +559,12 @@ add_special_dirs (GtkPlacesSidebar *sidebar)
 		}
 
 		root = g_file_new_for_path (path);
-		name = g_file_get_basename (root);
+
+		name = _gtk_bookmarks_manager_get_bookmark_label (sidebar->bookmarks_manager, root);
+		if (!name) {
+			name = g_file_get_basename (root);
+		}
+
 		icon = special_directory_get_gicon (index);
 		mount_uri = g_file_get_uri (root);
 		tooltip = g_file_get_parse_name (root);
@@ -1725,7 +1730,7 @@ check_popup_sensitivity (GtkPlacesSidebar *sidebar, PopupMenuData *data, Selecti
 	gtk_widget_set_visible (data->add_shortcut_item, (info->type == PLACES_MOUNTED_VOLUME));
 
 	gtk_widget_set_sensitive (data->remove_item, (info->type == PLACES_BOOKMARK));
-	gtk_widget_set_sensitive (data->rename_item, (info->type == PLACES_BOOKMARK));
+	gtk_widget_set_sensitive (data->rename_item, (info->type == PLACES_BOOKMARK || info->type == PLACES_XDG_DIR));
 
  	check_visibility (info->mount, info->volume, info->drive,
  			  &show_mount, &show_unmount, &show_eject, &show_rescan, &show_start, &show_stop);
@@ -1992,7 +1997,7 @@ rename_selected_bookmark (GtkPlacesSidebar *sidebar)
 				    PLACES_SIDEBAR_COLUMN_ROW_TYPE, &type,
 				    -1);
 
-		if (type != PLACES_BOOKMARK) {
+		if (type != PLACES_BOOKMARK && type != PLACES_XDG_DIR) {
 			return;
 		}
 
@@ -2969,6 +2974,10 @@ bookmarks_edited (GtkCellRenderer       *cell,
 	gtk_tree_path_free (path);
 
 	file = g_file_new_for_uri (uri);
+	if (!_gtk_bookmarks_manager_has_bookmark (sidebar->bookmarks_manager, file)) {
+		_gtk_bookmarks_manager_insert_bookmark (sidebar->bookmarks_manager, file, -1, NULL);
+	}
+
 	_gtk_bookmarks_manager_set_bookmark_label (sidebar->bookmarks_manager, file, new_text, NULL); /* NULL-GError */
 
 	g_object_unref (file);

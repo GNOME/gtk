@@ -69,6 +69,9 @@ gboolean _gtk_bookmarks_manager_reorder_bookmark (GtkBookmarksManager *manager,
 						  gint                 new_position,
 						  GError             **error);
 
+gboolean _gtk_bookmarks_manager_has_bookmark (GtkBookmarksManager *manager,
+                                              GFile               *file);
+
 gchar * _gtk_bookmarks_manager_get_bookmark_label (GtkBookmarksManager *manager,
 						   GFile               *file);
 

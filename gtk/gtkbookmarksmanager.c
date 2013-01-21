@@ -303,6 +303,16 @@ find_bookmark_link_for_file (GSList *bookmarks, GFile *file, int *position_ret)
 }
 
 gboolean
+_gtk_bookmarks_manager_has_bookmark (GtkBookmarksManager *manager,
+                                     GFile               *file)
+{
+  GSList *link;
+
+  link = find_bookmark_link_for_file (manager->bookmarks, file, NULL);
+  return (link != NULL);
+}
+
+gboolean
 _gtk_bookmarks_manager_insert_bookmark (GtkBookmarksManager *manager,
 					GFile               *file,
 					gint                 position,
