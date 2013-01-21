@@ -2163,7 +2163,6 @@ unmount_mount_cb (GObject *source_object,
 	/* FIXME: we need to switch to a path that is available now - $HOME? */
 
 	g_object_unref (sidebar);
-	g_object_unref (mount);
 }
 
 static void
@@ -2221,10 +2220,7 @@ do_unmount (GMount *mount,
 	if (mount != NULL) {
 		GMountOperation *mount_op;
 
-		g_object_ref (mount);
-
 		mount_op = get_unmount_operation (sidebar);
-
 		g_mount_unmount_with_operation (mount,
 						0,
 						mount_op,
