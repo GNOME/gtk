@@ -475,6 +475,7 @@ _gdk_wayland_display_get_keymap (GdkDisplay *display)
   GdkDeviceManager *device_manager;
   GList *list, *l;
   GdkDevice *core_keyboard = NULL;
+  static GdkKeymap *tmp_keymap = NULL;
 
   device_manager = gdk_display_get_device_manager (display);
   list = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
@@ -491,7 +492,18 @@ _gdk_wayland_display_get_keymap (GdkDisplay *display)
       break;
     }
 
-  return core_keyboard?_gdk_wayland_device_get_keymap (core_keyboard):NULL;
+  if (core_keyboard && tmp_keymap)
+    {
+      g_object_unref (tmp_keymap);
+      tmp_keymap = NULL;
+    }
+
+  if (core_keyboard)
+    return _gdk_wayland_device_get_keymap (core_keyboard);
+
+  tmp_keymap = _gdk_wayland_keymap_new ();
+
+  return tmp_keymap;
 }
 
 static void
