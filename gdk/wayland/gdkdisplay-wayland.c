@@ -527,7 +527,7 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass * class)
   object_class->dispose = gdk_wayland_display_dispose;
   object_class->finalize = gdk_wayland_display_finalize;
 
-  display_class->window_type = _gdk_wayland_window_get_type ();
+  display_class->window_type = gdk_wayland_window_get_type ();
   display_class->get_name = gdk_wayland_display_get_name;
   display_class->get_n_screens = gdk_wayland_display_get_n_screens;
   display_class->get_screen = gdk_wayland_display_get_screen;

@@ -45,7 +45,6 @@
 #define GDK_WINDOW_DISPLAY(win)       (GDK_SCREEN_WAYLAND (GDK_WINDOW_SCREEN (win))->display)
 #define GDK_WINDOW_IS_WAYLAND(win)    (GDK_IS_WINDOW_IMPL_WAYLAND (((GdkWindow *)win)->impl))
 
-GType _gdk_wayland_window_get_type    (void);
 void _gdk_wayland_window_add_focus    (GdkWindow *window);
 void _gdk_wayland_window_remove_focus (GdkWindow *window);
 

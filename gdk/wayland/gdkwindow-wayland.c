@@ -66,15 +66,15 @@ struct _GdkWaylandWindowClass {
   GdkWindowClass parent_class;
 };
 
-G_DEFINE_TYPE (GdkWaylandWindow, _gdk_wayland_window, GDK_TYPE_WINDOW)
+G_DEFINE_TYPE (GdkWaylandWindow, gdk_wayland_window, GDK_TYPE_WINDOW)
 
 static void
-_gdk_wayland_window_class_init (GdkWaylandWindowClass *wayland_window_class)
+gdk_wayland_window_class_init (GdkWaylandWindowClass *wayland_window_class)
 {
 }
 
 static void
-_gdk_wayland_window_init (GdkWaylandWindow *wayland_window)
+gdk_wayland_window_init (GdkWaylandWindow *wayland_window)
 {
 }
 
@@ -1664,4 +1664,48 @@ _gdk_wayland_window_set_device_grabbed (GdkWindow      *window,
 
   impl->grab_input_seat = seat;
   impl->grab_time = time_;
+}
+
+/**
+ * gdk_wayland_window_get_wl_surface
+ * @window: (type GdkWaylandWindow): a #GdkWindow
+ *
+ * Returns the Wayland surface of a #GdkWindow
+ *
+ * Returns: (transfer none): a Wayland wl_surface
+ *
+ * Since: 3.8
+ */
+struct wl_surface *
+gdk_wayland_window_get_wl_surface (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl;
+
+  g_return_val_if_fail (GDK_IS_WAYLAND_WINDOW (window), NULL);
+
+  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  return impl->surface;
+}
+
+/**
+ * gdk_wayland_window_get_wl_shell_surface
+ * @window: (type GdkWaylandWindow): a #GdkWindow
+ *
+ * Returns the Wayland shell surface of a #GdkWindow
+ *
+ * Returns: (transfer none): a Wayland wl_shell_surface
+ *
+ * Since: 3.8
+ */
+struct wl_shell_surface *
+gdk_wayland_window_get_wl_shell_surface (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl;
+
+  g_return_val_if_fail (GDK_IS_WAYLAND_WINDOW (window), NULL);
+
+  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  return impl->shell_surface;
 }
