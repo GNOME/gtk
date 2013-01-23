@@ -2479,6 +2479,7 @@ gtk_tree_view_modify_column_width (GtkTreeView       *tree_view,
   gboolean is_expand;
   gint n_expand_others;
   gint minimum, natural, natural_others;
+  gint expand;
 
   is_expand = gtk_tree_view_column_get_expand (column);
   n_expand_others = tree_view->priv->n_expand_columns - (is_expand ? 1 : 0);
@@ -2516,7 +2517,7 @@ gtk_tree_view_modify_column_width (GtkTreeView       *tree_view,
        * It is possible for the solved natural width to be less than the
        * minimum; in that case, we cannot let the column expand.
        */
-      gint expand = (tree_view->priv->width - natural_others - width) / n_expand_others;
+      expand = (tree_view->priv->width - natural_others - width) / n_expand_others;
 
       if (minimum + expand > width)
 	{
