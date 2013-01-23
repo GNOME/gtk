@@ -8,23 +8,25 @@
 # Gintautas Miliauskas <gintas@akl.lt>, 2007.
 # Rimas Kudelis <rq@akl.lt>, 2008, 2010.
 # Gintautas Miliauskas <gintautas@miliauskas.lt>, 2009.
-# Aurimas Černius <aurisc4@gmail.com>, 2010.
 # Algimantas Margevičius <margevicius.algimantas@gmail.com>, 2012.
+# Aurimas Černius <aurisc4@gmail.com>, 2010, 2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-09-01 02:50+0000\n"
-"PO-Revision-Date: 2012-09-02 15:41+0300\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
+"%2b&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2013-01-23 02:54+0000\n"
+"PO-Revision-Date: 2013-01-23 21:37+0200\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
-"Language-Team: Lietuvių <>\n"
+"Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
-"X-Generator: Virtaal 0.5.2\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
+"%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Gtranslator 2.91.6\n"
 
 #: ../gdk/gdk.c:155
 #, c-format
@@ -75,10 +77,7 @@ msgstr "GDK derinimo parametrai, kuriuos naudoti"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:214
-#: ../gdk/gdk.c:217
-#: ../gtk/gtkmain.c:453
-#: ../gtk/gtkmain.c:456
+#: ../gdk/gdk.c:214 ../gdk/gdk.c:217 ../gtk/gtkmain.c:454 ../gtk/gtkmain.c:457
 msgid "FLAGS"
 msgstr "PARAMETRAI"
 
@@ -483,12 +482,20 @@ msgid "Switches between on and off states"
 msgstr "Perjungia tarp įjungimo ir išjungimo būsenų"
 
 #: ../gtk/deprecated/gtkcolorsel.c:425
-msgid "Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle."
-msgstr "Pasirink norimą spalvą iš išorinio žiedo. Pasirink spalvos šviesumą ir sodrumą naudodamasis vidiniu trikampiu."
+msgid ""
+"Select the color you want from the outer ring. Select the darkness or "
+"lightness of that color using the inner triangle."
+msgstr ""
+"Pasirink norimą spalvą iš išorinio žiedo. Pasirink spalvos šviesumą ir "
+"sodrumą naudodamasis vidiniu trikampiu."
 
 #: ../gtk/deprecated/gtkcolorsel.c:451
-msgid "Click the eyedropper, then click a color anywhere on your screen to select that color."
-msgstr "Paspausk ant teptuko, tada paspausk ant spalvos, esančios bet kurioje ekrano vietoje, kad pasirinktum ją."
+msgid ""
+"Click the eyedropper, then click a color anywhere on your screen to select "
+"that color."
+msgstr ""
+"Paspausk ant teptuko, tada paspausk ant spalvos, esančios bet kurioje ekrano "
+"vietoje, kad pasirinktum ją."
 
 #: ../gtk/deprecated/gtkcolorsel.c:461
 msgid "_Hue:"
@@ -542,8 +549,7 @@ msgstr "Mėlynos šviesos kiekis spalvoje."
 msgid "Op_acity:"
 msgstr "Neperm_atomumas:"
 
-#: ../gtk/deprecated/gtkcolorsel.c:484
-#: ../gtk/deprecated/gtkcolorsel.c:494
+#: ../gtk/deprecated/gtkcolorsel.c:484 ../gtk/deprecated/gtkcolorsel.c:494
 msgid "Transparency of the color."
 msgstr "Spalvos skaidrumas."
 
@@ -552,8 +558,12 @@ msgid "Color _name:"
 msgstr "Spalvos _pavadinimas:"
 
 #: ../gtk/deprecated/gtkcolorsel.c:516
-msgid "You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' in this entry."
-msgstr "Čia galite įrašyti HTML stiliaus šešioliktainę spalvos išraišką, arba tiesiog spalvos pavadinimą, pvz., „white“."
+msgid ""
+"You can enter an HTML-style hexadecimal color value, or simply a color name "
+"such as 'orange' in this entry."
+msgstr ""
+"Čia galite įrašyti HTML stiliaus šešioliktainę spalvos išraišką, arba "
+"tiesiog spalvos pavadinimą, pvz., „white“."
 
 #: ../gtk/deprecated/gtkcolorsel.c:548
 msgid "_Palette:"
@@ -564,16 +574,29 @@ msgid "Color Wheel"
 msgstr "Spalvų ratas"
 
 #: ../gtk/deprecated/gtkcolorsel.c:1072
-msgid "The previously-selected color, for comparison to the color you're selecting now. You can drag this color to a palette entry, or select this color as current by dragging it to the other color swatch alongside."
-msgstr "Anksčiau buvusi spalva, palyginimui su spalva, kurią pasirenkate dabar. Galite nutempti šią spalvą į paletės langelį, arba pasirinkti šią spalvą, nutempdami ją į greta esantį langelį."
+msgid ""
+"The previously-selected color, for comparison to the color you're selecting "
+"now. You can drag this color to a palette entry, or select this color as "
+"current by dragging it to the other color swatch alongside."
+msgstr ""
+"Anksčiau buvusi spalva, palyginimui su spalva, kurią pasirenkate dabar. "
+"Galite nutempti šią spalvą į paletės langelį, arba pasirinkti šią spalvą, "
+"nutempdami ją į greta esantį langelį."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1078
-msgid "The color you've chosen. You can drag this color to a palette entry to save it for use in the future."
-msgstr "Spalva, kurią pasirinkote. Galite nutempti šią spalvą į paletės langelį, kad išsaugotumėte ją naudojimui ateityje."
+msgid ""
+"The color you've chosen. You can drag this color to a palette entry to save "
+"it for use in the future."
+msgstr ""
+"Spalva, kurią pasirinkote. Galite nutempti šią spalvą į paletės langelį, kad "
+"išsaugotumėte ją naudojimui ateityje."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1084
-msgid "The previously-selected color, for comparison to the color you're selecting now."
-msgstr "Anksčiau buvusi spalva, palyginimui su spalva, kurią pasirenkate dabar."
+msgid ""
+"The previously-selected color, for comparison to the color you're selecting "
+"now."
+msgstr ""
+"Anksčiau buvusi spalva, palyginimui su spalva, kurią pasirenkate dabar."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1088
 msgid "The color you've chosen."
@@ -584,16 +607,19 @@ msgid "_Save color here"
 msgstr "Iš_saugoti spalvą čia"
 
 #: ../gtk/deprecated/gtkcolorsel.c:1695
-msgid "Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select \"Save color here.\""
-msgstr "Paspausk ant šio paletės langelio, kad padarytum ją esama spalva. Kad pakeistum šį langelį, nutempk spalvos langelį čia arba paspausk dešinį mygtuką ir pasirink „Išsaugoti spalvą čia“."
+msgid ""
+"Click this palette entry to make it the current color. To change this entry, "
+"drag a color swatch here or right-click it and select \"Save color here.\""
+msgstr ""
+"Paspausk ant šio paletės langelio, kad padarytum ją esama spalva. Kad "
+"pakeistum šį langelį, nutempk spalvos langelį čia arba paspausk dešinį "
+"mygtuką ir pasirink „Išsaugoti spalvą čia“."
 
 #. We emit the response for the Select button manually,
 #. * since we want to save the color first
 #.
-#: ../gtk/deprecated/gtkcolorseldialog.c:201
-#: ../gtk/gtkappchooserdialog.c:574
-#: ../gtk/gtkcolorchooserdialog.c:150
-#: ../gtk/gtkfontchooserdialog.c:174
+#: ../gtk/deprecated/gtkcolorseldialog.c:201 ../gtk/gtkappchooserdialog.c:574
+#: ../gtk/gtkcolorchooserdialog.c:150 ../gtk/gtkfontchooserdialog.c:174
 #: ../gtk/gtkprinteroptionwidget.c:550
 msgid "_Select"
 msgstr "Pa_sirinkti"
@@ -625,8 +651,7 @@ msgstr "D_ydis:"
 msgid "_Preview:"
 msgstr "_Peržiūra:"
 
-#: ../gtk/deprecated/gtkfontsel.c:1720
-#: ../gtk/gtkfontchooserdialog.c:183
+#: ../gtk/deprecated/gtkfontsel.c:1720 ../gtk/gtkfontchooserdialog.c:183
 msgid "Font Selection"
 msgstr "Šrifto pasirinkimas"
 
@@ -673,19 +698,19 @@ msgstr "Namų tinklapis"
 msgid "About %s"
 msgstr "Apie %s"
 
-#: ../gtk/gtkaboutdialog.c:2399
+#: ../gtk/gtkaboutdialog.c:2401
 msgid "Created by"
 msgstr "Autoriai"
 
-#: ../gtk/gtkaboutdialog.c:2402
+#: ../gtk/gtkaboutdialog.c:2404
 msgid "Documented by"
 msgstr "Dokumentavo"
 
-#: ../gtk/gtkaboutdialog.c:2412
+#: ../gtk/gtkaboutdialog.c:2414
 msgid "Translated by"
 msgstr "Išvertė"
 
-#: ../gtk/gtkaboutdialog.c:2417
+#: ../gtk/gtkaboutdialog.c:2419
 msgid "Artwork by"
 msgstr "Apipavidalino"
 
@@ -694,7 +719,7 @@ msgstr "Apipavidalino"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:156
+#: ../gtk/gtkaccellabel.c:159
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Lyg2"
@@ -704,7 +729,7 @@ msgstr "Lyg2"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:162
+#: ../gtk/gtkaccellabel.c:165
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Vald"
@@ -714,7 +739,7 @@ msgstr "Vald"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:168
+#: ../gtk/gtkaccellabel.c:171
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -724,7 +749,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:802
+#: ../gtk/gtkaccellabel.c:805
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -734,7 +759,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:815
+#: ../gtk/gtkaccellabel.c:818
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hiper"
@@ -744,17 +769,17 @@ msgstr "Hiper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:829
+#: ../gtk/gtkaccellabel.c:832
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: ../gtk/gtkaccellabel.c:845
+#: ../gtk/gtkaccellabel.c:848
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Tarpas"
 
-#: ../gtk/gtkaccellabel.c:848
+#: ../gtk/gtkaccellabel.c:851
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
@@ -790,8 +815,7 @@ msgstr "Nepavyko rasti programos"
 msgid "Select an application to open \"%s\""
 msgstr "Pasirinkite programą atverti „%s“"
 
-#: ../gtk/gtkappchooserdialog.c:398
-#: ../gtk/gtkappchooserwidget.c:654
+#: ../gtk/gtkappchooserdialog.c:398 ../gtk/gtkappchooserwidget.c:657
 #, c-format
 msgid "No applications available to open \"%s\""
 msgstr "Nera programų „%s“ atverimui"
@@ -808,8 +832,12 @@ msgid "No applications available to open \"%s\" files"
 msgstr "Nėra programų „%s“ failams atverti"
 
 #: ../gtk/gtkappchooserdialog.c:422
-msgid "Click \"Show other applications\", for more options, or \"Find applications online\" to install a new application"
-msgstr "Spauskite „Rodyti kitas programas“, jei norite daugiau parinkčių, arba „Ieškoti programų internete“ naujų programų įdiegimui"
+msgid ""
+"Click \"Show other applications\", for more options, or \"Find applications "
+"online\" to install a new application"
+msgstr ""
+"Spauskite „Rodyti kitas programas“, jei norite daugiau parinkčių, arba "
+"„Ieškoti programų internete“ naujų programų įdiegimui"
 
 #: ../gtk/gtkappchooserdialog.c:492
 msgid "Forget association"
@@ -819,23 +847,23 @@ msgstr "Pamiršti susiejimą"
 msgid "Show other applications"
 msgstr "Rodyti kitas programas"
 
-#: ../gtk/gtkappchooserwidget.c:603
+#: ../gtk/gtkappchooserwidget.c:606
 msgid "Default Application"
 msgstr "Numatytoji programa"
 
-#: ../gtk/gtkappchooserwidget.c:741
+#: ../gtk/gtkappchooserwidget.c:744
 msgid "Recommended Applications"
 msgstr "Rekomenduojama programa"
 
-#: ../gtk/gtkappchooserwidget.c:756
+#: ../gtk/gtkappchooserwidget.c:759
 msgid "Related Applications"
 msgstr "Susijusios programos"
 
-#: ../gtk/gtkappchooserwidget.c:770
+#: ../gtk/gtkappchooserwidget.c:773
 msgid "Other Applications"
 msgstr "Kitos programos"
 
-#: ../gtk/gtkapplication.c:1552
+#: ../gtk/gtkapplication.c:1558
 #, c-format
 msgid ""
 "%s cannot quit at this time:\n"
@@ -846,21 +874,20 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../gtk/gtkapplicationwindow.c:333
-#: ../gtk/gtkprintoperation-unix.c:475
+#: ../gtk/gtkapplicationwindow.c:333 ../gtk/gtkprintoperation-unix.c:480
 #: ../gtk/gtkprintoperation-win32.c:1445
 msgid "Application"
 msgstr "Programa"
 
-#: ../gtk/gtkassistant.c:1004
+#: ../gtk/gtkassistant.c:1008
 msgid "C_ontinue"
 msgstr "_Tęsti"
 
-#: ../gtk/gtkassistant.c:1007
+#: ../gtk/gtkassistant.c:1011
 msgid "Go _Back"
 msgstr "At_gal"
 
-#: ../gtk/gtkassistant.c:1011
+#: ../gtk/gtkassistant.c:1015
 msgid "_Finish"
 msgstr "_Baigti"
 
@@ -941,8 +968,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1941
-#: ../gtk/gtkcalendar.c:2633
+#: ../gtk/gtkcalendar.c:1941 ../gtk/gtkcalendar.c:2633
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -958,8 +984,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1973
-#: ../gtk/gtkcalendar.c:2499
+#: ../gtk/gtkcalendar.c:1973 ../gtk/gtkcalendar.c:2499
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1001,20 +1026,17 @@ msgstr "Netinkamas"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: ../gtk/gtkcellrendereraccel.c:416
-#: ../gtk/gtkcellrendereraccel.c:745
+#: ../gtk/gtkcellrendereraccel.c:416 ../gtk/gtkcellrendereraccel.c:747
 msgid "New accelerator..."
 msgstr "Naujas akseleratorius…"
 
-#: ../gtk/gtkcellrendererprogress.c:372
-#: ../gtk/gtkcellrendererprogress.c:462
+#: ../gtk/gtkcellrendererprogress.c:372 ../gtk/gtkcellrendererprogress.c:462
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkcolorbutton.c:188
-#: ../gtk/gtkcolorbutton.c:449
+#: ../gtk/gtkcolorbutton.c:188 ../gtk/gtkcolorbutton.c:449
 msgid "Pick a Color"
 msgstr "Pasirinkite spalvą"
 
@@ -1255,8 +1277,7 @@ msgctxt "Color channel"
 msgid "V"
 msgstr "V"
 
-#: ../gtk/gtkcoloreditor.c:481
-#: ../gtk/gtkcolorscale.c:301
+#: ../gtk/gtkcoloreditor.c:481 ../gtk/gtkcolorscale.c:301
 msgctxt "Color channel"
 msgid "Hue"
 msgstr "Atspalvis"
@@ -1266,8 +1287,7 @@ msgctxt "Color channel"
 msgid "H"
 msgstr "H"
 
-#: ../gtk/gtkcoloreditor.c:496
-#: ../gtk/gtkcolorscale.c:303
+#: ../gtk/gtkcoloreditor.c:496 ../gtk/gtkcolorscale.c:303
 msgctxt "Color channel"
 msgid "Alpha"
 msgstr "Alfa"
@@ -1296,18 +1316,15 @@ msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: ../gtk/gtkcustompaperunixdialog.c:397
-#: ../gtk/gtkprintunixdialog.c:3275
+#: ../gtk/gtkcustompaperunixdialog.c:397 ../gtk/gtkprintunixdialog.c:3275
 msgid "Manage Custom Sizes"
 msgstr "Tvarkyti pasirinktinius dydžius"
 
-#: ../gtk/gtkcustompaperunixdialog.c:558
-#: ../gtk/gtkpagesetupunixdialog.c:778
+#: ../gtk/gtkcustompaperunixdialog.c:558 ../gtk/gtkpagesetupunixdialog.c:778
 msgid "inch"
 msgstr "colis"
 
-#: ../gtk/gtkcustompaperunixdialog.c:560
-#: ../gtk/gtkpagesetupunixdialog.c:776
+#: ../gtk/gtkcustompaperunixdialog.c:560 ../gtk/gtkpagesetupunixdialog.c:776
 msgid "mm"
 msgstr "mm"
 
@@ -1352,17 +1369,15 @@ msgstr "_Dešinė:"
 msgid "Paper Margins"
 msgstr "Popieriaus paraštės"
 
-#: ../gtk/gtkentry.c:8832
-#: ../gtk/gtktextview.c:8316
+#: ../gtk/gtkentry.c:9140 ../gtk/gtktextview.c:8583
 msgid "Input _Methods"
 msgstr "Įvesties _metodai"
 
-#: ../gtk/gtkentry.c:8846
-#: ../gtk/gtktextview.c:8330
+#: ../gtk/gtkentry.c:9154 ../gtk/gtktextview.c:8597
 msgid "_Insert Unicode Control Character"
 msgstr "Įterpti _Unicode valdymo simbolį"
 
-#: ../gtk/gtkentry.c:9799
+#: ../gtk/gtkentry.c:10107
 msgid "Caps Lock is on"
 msgstr "Caps Lock įjungtas"
 
@@ -1411,8 +1426,7 @@ msgstr "Caps Lock įjungtas"
 msgid "Select a File"
 msgstr "Pasirinkite failą"
 
-#: ../gtk/gtkfilechooserbutton.c:105
-#: ../gtk/gtkfilechooserdefault.c:1817
+#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkfilechooserdefault.c:1819
 msgid "Desktop"
 msgstr "Darbastalis"
 
@@ -1428,44 +1442,52 @@ msgstr "Kita…"
 msgid "Type name of new folder"
 msgstr "Įveskite naujo aplanko pavadinimą"
 
-#: ../gtk/gtkfilechooserdefault.c:968
+#: ../gtk/gtkfilechooserdefault.c:970
 msgid "Could not retrieve information about the file"
 msgstr "Nepavyko gauti informacijos apie šį failą"
 
-#: ../gtk/gtkfilechooserdefault.c:979
+#: ../gtk/gtkfilechooserdefault.c:981
 msgid "Could not add a bookmark"
 msgstr "Nepavyko pridėti žymelės"
 
-#: ../gtk/gtkfilechooserdefault.c:990
+#: ../gtk/gtkfilechooserdefault.c:992
 msgid "Could not remove bookmark"
 msgstr "Nepavyko pašalinti žymelės"
 
-#: ../gtk/gtkfilechooserdefault.c:1001
+#: ../gtk/gtkfilechooserdefault.c:1003
 msgid "The folder could not be created"
 msgstr "Nepavyko sukurti aplanko"
 
-#: ../gtk/gtkfilechooserdefault.c:1014
-msgid "The folder could not be created, as a file with the same name already exists.  Try using a different name for the folder, or rename the file first."
-msgstr "Šio aplanko sukurti nepavyko, nes jau yra failas tokiu pat pavadinimu. Pabandykite naudoti kitą aplanko pavadinimą, arba pirma pervadinkite failą."
+#: ../gtk/gtkfilechooserdefault.c:1016
+msgid ""
+"The folder could not be created, as a file with the same name already "
+"exists.  Try using a different name for the folder, or rename the file first."
+msgstr ""
+"Šio aplanko sukurti nepavyko, nes jau yra failas tokiu pat pavadinimu. "
+"Pabandykite naudoti kitą aplanko pavadinimą, arba pirma pervadinkite failą."
 
-#: ../gtk/gtkfilechooserdefault.c:1028
+#: ../gtk/gtkfilechooserdefault.c:1030
 msgid "You need to choose a valid filename."
 msgstr "Reikia pasirinkti tinkamą failo pavadinimą."
 
-#: ../gtk/gtkfilechooserdefault.c:1031
+#: ../gtk/gtkfilechooserdefault.c:1033
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "Nepavyko sukurti failo %s viduje, nes tai nėra aplankas"
 
-#: ../gtk/gtkfilechooserdefault.c:1043
-msgid "You may only select folders.  The item that you selected is not a folder; try using a different item."
-msgstr "Galite pasirinkti tik aplankus. Jūsų pasirinktas elementas nėra aplankas; pasirinkite kitą elementą."
+#: ../gtk/gtkfilechooserdefault.c:1045
+msgid ""
+"You may only select folders.  The item that you selected is not a folder; "
+"try using a different item."
+msgstr ""
+"Galite pasirinkti tik aplankus. Jūsų pasirinktas elementas nėra aplankas; "
+"pasirinkite kitą elementą."
 
-#: ../gtk/gtkfilechooserdefault.c:1053
+#: ../gtk/gtkfilechooserdefault.c:1055
 msgid "Invalid file name"
 msgstr "Netinkamas failo vardas"
 
-#: ../gtk/gtkfilechooserdefault.c:1063
+#: ../gtk/gtkfilechooserdefault.c:1065
 msgid "The folder contents could not be displayed"
 msgstr "Nepavyko parodyti aplanko turinio"
 
@@ -1473,223 +1495,221 @@ msgstr "Nepavyko parodyti aplanko turinio"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1589
+#: ../gtk/gtkfilechooserdefault.c:1591
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s kompiuteryje %2$s"
 
-#: ../gtk/gtkfilechooserdefault.c:1738
+#: ../gtk/gtkfilechooserdefault.c:1740
 msgid "Search"
 msgstr "Paieška"
 
-#: ../gtk/gtkfilechooserdefault.c:1762
-#: ../gtk/gtkfilechooserdefault.c:4988
+#: ../gtk/gtkfilechooserdefault.c:1764 ../gtk/gtkfilechooserdefault.c:4990
 msgid "Recently Used"
 msgstr "Vėliausiai naudotieji"
 
-#: ../gtk/gtkfilechooserdefault.c:2361
+#: ../gtk/gtkfilechooserdefault.c:2363
 msgid "Select which types of files are shown"
 msgstr "Pasirinkite kokių tipų failus rodyti"
 
-#: ../gtk/gtkfilechooserdefault.c:2720
+#: ../gtk/gtkfilechooserdefault.c:2722
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Įdėti aplanką „%s“ į žymeles"
 
-#: ../gtk/gtkfilechooserdefault.c:2764
+#: ../gtk/gtkfilechooserdefault.c:2766
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Įdėti esamą aplanką į žymeles"
 
-#: ../gtk/gtkfilechooserdefault.c:2766
+#: ../gtk/gtkfilechooserdefault.c:2768
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Įdėti pažymėtus aplankus į žymeles"
 
-#: ../gtk/gtkfilechooserdefault.c:2804
+#: ../gtk/gtkfilechooserdefault.c:2806
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Pašalinti žymelę „%s“"
 
-#: ../gtk/gtkfilechooserdefault.c:2806
+#: ../gtk/gtkfilechooserdefault.c:2808
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "Žymelė „%s“ negali būti pašalinta"
 
-#: ../gtk/gtkfilechooserdefault.c:2813
-#: ../gtk/gtkfilechooserdefault.c:3699
+#: ../gtk/gtkfilechooserdefault.c:2815 ../gtk/gtkfilechooserdefault.c:3701
 msgid "Remove the selected bookmark"
 msgstr "Pašalinti pažymėtas žymeles"
 
-#: ../gtk/gtkfilechooserdefault.c:3377
+#: ../gtk/gtkfilechooserdefault.c:3379
 msgid "Remove"
 msgstr "Pašalinti"
 
-#: ../gtk/gtkfilechooserdefault.c:3386
+#: ../gtk/gtkfilechooserdefault.c:3388
 msgid "Rename..."
 msgstr "Pervadinti…"
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3550
+#: ../gtk/gtkfilechooserdefault.c:3552
 msgid "Places"
 msgstr "Vietos"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3607
+#: ../gtk/gtkfilechooserdefault.c:3609
 msgid "_Places"
 msgstr "_Vietos"
 
-#: ../gtk/gtkfilechooserdefault.c:3687
+#: ../gtk/gtkfilechooserdefault.c:3689
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Įdėti pažymėtą aplanką į žymeles"
 
-#: ../gtk/gtkfilechooserdefault.c:3948
+#: ../gtk/gtkfilechooserdefault.c:3950
 msgid "Could not select file"
 msgstr "Failo pasirinkti nepavyko"
 
-#: ../gtk/gtkfilechooserdefault.c:4173
+#: ../gtk/gtkfilechooserdefault.c:4175
 msgid "_Visit this file"
 msgstr "_Aplankyti šį failą"
 
-#: ../gtk/gtkfilechooserdefault.c:4176
+#: ../gtk/gtkfilechooserdefault.c:4178
 msgid "_Copy file's location"
 msgstr "_Kopijuoti failo vietą"
 
-#: ../gtk/gtkfilechooserdefault.c:4179
+#: ../gtk/gtkfilechooserdefault.c:4181
 msgid "_Add to Bookmarks"
 msgstr "Į_dėti į žymeles"
 
-#: ../gtk/gtkfilechooserdefault.c:4186
+#: ../gtk/gtkfilechooserdefault.c:4188
 msgid "Show _Hidden Files"
 msgstr "Rod_yti paslėptus failus"
 
-#: ../gtk/gtkfilechooserdefault.c:4189
+#: ../gtk/gtkfilechooserdefault.c:4191
 msgid "Show _Size Column"
 msgstr "Rodydi _dydžio stulpelį"
 
-#: ../gtk/gtkfilechooserdefault.c:4414
+#: ../gtk/gtkfilechooserdefault.c:4416
 msgid "Files"
 msgstr "Failai"
 
-#: ../gtk/gtkfilechooserdefault.c:4465
+#: ../gtk/gtkfilechooserdefault.c:4467
 msgid "Name"
 msgstr "Pavadinimas"
 
-#: ../gtk/gtkfilechooserdefault.c:4488
+#: ../gtk/gtkfilechooserdefault.c:4490
 msgid "Size"
 msgstr "Dydis"
 
-#: ../gtk/gtkfilechooserdefault.c:4502
+#: ../gtk/gtkfilechooserdefault.c:4504
 msgid "Modified"
 msgstr "Pakeista"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4595
+#: ../gtk/gtkfilechooserdefault.c:4597
 msgid "_Name:"
 msgstr "_Pavadinimas:"
 
-#: ../gtk/gtkfilechooserdefault.c:4826
+#: ../gtk/gtkfilechooserdefault.c:4828
 msgid "Type a file name"
 msgstr "Įveskite failo pavadinimą"
 
-#: ../gtk/gtkfilechooserdefault.c:4873
-#: ../gtk/gtkfilechooserdefault.c:4884
+#: ../gtk/gtkfilechooserdefault.c:4875 ../gtk/gtkfilechooserdefault.c:4886
 msgid "Please select a folder below"
 msgstr "Pasirinkite aplanką žemiau"
 
-#: ../gtk/gtkfilechooserdefault.c:4879
+#: ../gtk/gtkfilechooserdefault.c:4881
 msgid "Please type a file name"
 msgstr "Įveskite failo pavadinimą"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:4950
+#: ../gtk/gtkfilechooserdefault.c:4952
 msgid "Create Fo_lder"
 msgstr "Sukurti ap_lanką"
 
-#: ../gtk/gtkfilechooserdefault.c:4998
+#: ../gtk/gtkfilechooserdefault.c:5000
 msgid "Search:"
 msgstr "Ieškoti:"
 
-#: ../gtk/gtkfilechooserdefault.c:5049
+#: ../gtk/gtkfilechooserdefault.c:5051
 msgid "_Location:"
 msgstr "Vi_eta:"
 
-#: ../gtk/gtkfilechooserdefault.c:5500
+#: ../gtk/gtkfilechooserdefault.c:5502
 msgid "Save in _folder:"
 msgstr "Išsaugoti _aplanke:"
 
-#: ../gtk/gtkfilechooserdefault.c:5502
+#: ../gtk/gtkfilechooserdefault.c:5504
 msgid "Create in _folder:"
 msgstr "Sukurti _aplanke:"
 
-#: ../gtk/gtkfilechooserdefault.c:6589
+#: ../gtk/gtkfilechooserdefault.c:6591
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Nepavyko perskaityti %s turinio"
 
-#: ../gtk/gtkfilechooserdefault.c:6593
+#: ../gtk/gtkfilechooserdefault.c:6595
 msgid "Could not read the contents of the folder"
 msgstr "Nepavyko perskaityti aplanko turinio"
 
-#: ../gtk/gtkfilechooserdefault.c:6686
-#: ../gtk/gtkfilechooserdefault.c:6754
-#: ../gtk/gtkfilechooserdefault.c:6934
+#: ../gtk/gtkfilechooserdefault.c:6688 ../gtk/gtkfilechooserdefault.c:6756
+#: ../gtk/gtkfilechooserdefault.c:6936
 msgid "Unknown"
 msgstr "Nežinomas"
 
-#: ../gtk/gtkfilechooserdefault.c:6701
+#: ../gtk/gtkfilechooserdefault.c:6703
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6703
+#: ../gtk/gtkfilechooserdefault.c:6705
 msgid "Yesterday at %H:%M"
 msgstr "Vakar %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7405
+#: ../gtk/gtkfilechooserdefault.c:7407
 msgid "Cannot change to folder because it is not local"
 msgstr "Negalima pakeisti į nurodytą aplanką, nes jis nėra vietinis"
 
-#: ../gtk/gtkfilechooserdefault.c:8009
-#: ../gtk/gtkfilechooserdefault.c:8030
+#: ../gtk/gtkfilechooserdefault.c:8014 ../gtk/gtkfilechooserdefault.c:8035
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Nuoroda %s jau egzistuoja"
 
-#: ../gtk/gtkfilechooserdefault.c:8120
+#: ../gtk/gtkfilechooserdefault.c:8125
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Nuoroda %s neegzistuoja"
 
-#: ../gtk/gtkfilechooserdefault.c:8366
-#: ../gtk/gtkprintunixdialog.c:548
+#: ../gtk/gtkfilechooserdefault.c:8371 ../gtk/gtkprintunixdialog.c:548
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Failas pavadinimu „%s“ jau egzistuoja. Ar norite jį perrašyti?"
 
-#: ../gtk/gtkfilechooserdefault.c:8369
-#: ../gtk/gtkprintunixdialog.c:552
+#: ../gtk/gtkfilechooserdefault.c:8374 ../gtk/gtkprintunixdialog.c:552
 #, c-format
-msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
-msgstr "Failas vietoje „%s“ jau egzistuoja. Pakeitus jį, jo turinys bus perrašytas."
+msgid ""
+"The file already exists in \"%s\".  Replacing it will overwrite its contents."
+msgstr ""
+"Failas vietoje „%s“ jau egzistuoja. Pakeitus jį, jo turinys bus perrašytas."
 
-#: ../gtk/gtkfilechooserdefault.c:8374
-#: ../gtk/gtkprintunixdialog.c:559
+#: ../gtk/gtkfilechooserdefault.c:8379 ../gtk/gtkprintunixdialog.c:559
 msgid "_Replace"
 msgstr "_Pakeisti"
 
-#: ../gtk/gtkfilechooserdefault.c:9181
+#: ../gtk/gtkfilechooserdefault.c:9186
 msgid "Could not start the search process"
 msgstr "Nepavyko paleisti paieškos proceso"
 
-#: ../gtk/gtkfilechooserdefault.c:9182
-msgid "The program was not able to create a connection to the indexer daemon.  Please make sure it is running."
-msgstr "Programai nepavyko sukurti ryšio su indeksavimo posisteme. Įsitikinkite, kad ji veikia."
+#: ../gtk/gtkfilechooserdefault.c:9187
+msgid ""
+"The program was not able to create a connection to the indexer daemon.  "
+"Please make sure it is running."
+msgstr ""
+"Programai nepavyko sukurti ryšio su indeksavimo posisteme. Įsitikinkite, kad "
+"ji veikia."
 
-#: ../gtk/gtkfilechooserdefault.c:9196
+#: ../gtk/gtkfilechooserdefault.c:9201
 msgid "Could not send the search request"
 msgstr "Nepavyko išsiųsti paieškos užklausos"
 
-#: ../gtk/gtkfilechooserdefault.c:9806
+#: ../gtk/gtkfilechooserdefault.c:9811
 #, c-format
 msgid "Could not mount %s"
 msgstr "Nepavyko prijungti %s"
@@ -1707,8 +1727,7 @@ msgstr "Failų sistema"
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: ../gtk/gtkfontbutton.c:436
-#: ../gtk/gtkfontbutton.c:563
+#: ../gtk/gtkfontbutton.c:436 ../gtk/gtkfontbutton.c:563
 msgid "Pick a Font"
 msgstr "Pasirinkite šriftą"
 
@@ -1718,7 +1737,9 @@ msgstr "Šriftas"
 
 #: ../gtk/gtkfontchooserwidget.c:110
 msgid "No fonts matched your search. You can revise your search and try again."
-msgstr "Joks šriftas neatitiko jūsų paieškos. Galite peržiūrėti paiešką ir bandyti vėl."
+msgstr ""
+"Joks šriftas neatitiko jūsų paieškos. Galite peržiūrėti paiešką ir bandyti "
+"vėl."
 
 #: ../gtk/gtkfontchooserwidget.c:557
 msgid "Search font name"
@@ -1767,13 +1788,13 @@ msgstr "_Atverti nuorodą"
 msgid "Copy _Link Address"
 msgstr "Kopijuoti _nuorodos adresą"
 
-#: ../gtk/gtk-launch.c:69
+#: ../gtk/gtk-launch.c:73
 msgid "APPLICATION [URI...] - launch an APPLICATION with URI."
 msgstr "PROGRAMA [URI...] - paleisti PROGRAMĄ su URI."
 
 #. Translators: this message will appear after the usage string
 #. and before the list of options.
-#: ../gtk/gtk-launch.c:73
+#: ../gtk/gtk-launch.c:77
 msgid ""
 "Launch specified application by its desktop file info\n"
 "optionally passing list of URIs as arguments."
@@ -1781,34 +1802,38 @@ msgstr ""
 "Paleisti nurodytą programą su desktop failo informacija\n"
 "papildomai perduodant URI sąrašą kaip argumentus."
 
-#: ../gtk/gtk-launch.c:85
+#: ../gtk/gtk-launch.c:89
 #, c-format
 msgid "Error parsing commandline options: %s\n"
 msgstr "Klaida skaitant komandų eilutės parinktis: %s\n"
 
-#: ../gtk/gtk-launch.c:87
-#: ../gtk/gtk-launch.c:100
+#: ../gtk/gtk-launch.c:91 ../gtk/gtk-launch.c:104
 #, c-format
 msgid "Try \"%s --help\" for more information."
 msgstr "Daugiau informacijos gausite įvykdę „%s --help“"
 
 #. Translators: the %s is the program name. This error message
 #. means the user is calling gtk-launch without any argument.
-#: ../gtk/gtk-launch.c:98
+#: ../gtk/gtk-launch.c:102
 #, c-format
 msgid "%s: missing application name"
 msgstr "%s: trūksta programos pavadinimo"
 
+#: ../gtk/gtk-launch.c:123
+#, c-format
+msgid "Creating AppInfo from id not supported on non unix operating systems"
+msgstr "AppInfo sukūrimas pagal id nepalaikomas ne unix operacinėse sistemose"
+
 #. Translators: the first %s is the program name, the second one
 #. is the application name.
-#: ../gtk/gtk-launch.c:122
+#: ../gtk/gtk-launch.c:131
 #, c-format
 msgid "%s: no such application %s"
 msgstr "%s: nėra tokios programos %s"
 
 #. Translators: the first %s is the program name, the second one
 #. is the error message.
-#: ../gtk/gtk-launch.c:140
+#: ../gtk/gtk-launch.c:149
 #, c-format
 msgid "%s: error launching application: %s\n"
 msgstr "%s: klaida paleidžiant programą: %s\n"
@@ -1854,27 +1879,27 @@ msgstr ""
 "Susisiekite su sistemos administratoriumi"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:446
+#: ../gtk/gtkmain.c:447
 msgid "Load additional GTK+ modules"
 msgstr "Įkelti papildomus GTK+ modulius"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:447
+#: ../gtk/gtkmain.c:448
 msgid "MODULES"
 msgstr "MODULIAI"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:449
+#: ../gtk/gtkmain.c:450
 msgid "Make all warnings fatal"
 msgstr "Visi perspėjimai yra „mirtini“"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:452
+#: ../gtk/gtkmain.c:453
 msgid "GTK+ debugging flags to set"
 msgstr "GTK+ derinimo parametrai, kuriuos naudoti"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:455
+#: ../gtk/gtkmain.c:456
 msgid "GTK+ debugging flags to unset"
 msgstr "GTK+ derinimo parametrai, kuriu nenaudoti"
 
@@ -1883,73 +1908,73 @@ msgstr "GTK+ derinimo parametrai, kuriu nenaudoti"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:706
+#: ../gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:774
+#: ../gtk/gtkmain.c:772
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Nepavyko atverti displėjaus: „%s“"
 
-#: ../gtk/gtkmain.c:840
+#: ../gtk/gtkmain.c:838
 msgid "GTK+ Options"
 msgstr "GTK+ parinktys"
 
-#: ../gtk/gtkmain.c:840
+#: ../gtk/gtkmain.c:838
 msgid "Show GTK+ Options"
 msgstr "Rodyti GTK+ parinktis"
 
-#: ../gtk/gtkmountoperation.c:532
+#: ../gtk/gtkmountoperation.c:535
 msgid "Co_nnect"
 msgstr "Prisi_jungti"
 
-#: ../gtk/gtkmountoperation.c:606
+#: ../gtk/gtkmountoperation.c:609
 msgid "Connect As"
 msgstr "Prisijungti kaip"
 
-#: ../gtk/gtkmountoperation.c:615
+#: ../gtk/gtkmountoperation.c:618
 msgid "_Anonymous"
 msgstr "_Anonimas"
 
-#: ../gtk/gtkmountoperation.c:624
+#: ../gtk/gtkmountoperation.c:627
 msgid "Registered U_ser"
 msgstr "Registruotas na_udotojas"
 
-#: ../gtk/gtkmountoperation.c:635
+#: ../gtk/gtkmountoperation.c:638
 msgid "_Username"
 msgstr "Na_udotojo vardas"
 
-#: ../gtk/gtkmountoperation.c:640
+#: ../gtk/gtkmountoperation.c:643
 msgid "_Domain"
 msgstr "S_ritis"
 
-#: ../gtk/gtkmountoperation.c:646
+#: ../gtk/gtkmountoperation.c:649
 msgid "_Password"
 msgstr "_Slaptažodis"
 
-#: ../gtk/gtkmountoperation.c:668
+#: ../gtk/gtkmountoperation.c:671
 msgid "Forget password _immediately"
 msgstr "_Neįsiminti slaptažodžio"
 
-#: ../gtk/gtkmountoperation.c:678
+#: ../gtk/gtkmountoperation.c:681
 msgid "Remember password until you _logout"
 msgstr "Įsiminti slaptažodį iki _atsijungsite"
 
-#: ../gtk/gtkmountoperation.c:688
+#: ../gtk/gtkmountoperation.c:691
 msgid "Remember _forever"
 msgstr "Įsiminti _visam laikui"
 
-#: ../gtk/gtkmountoperation.c:1077
+#: ../gtk/gtkmountoperation.c:1080
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Nežinoma programa (PID %d)"
 
-#: ../gtk/gtkmountoperation.c:1260
+#: ../gtk/gtkmountoperation.c:1263
 msgid "Unable to end process"
 msgstr "Nepavyko užbaigti proceso"
 
-#: ../gtk/gtkmountoperation.c:1297
+#: ../gtk/gtkmountoperation.c:1300
 msgid "_End Process"
 msgstr "_Užbaigti procesą"
 
@@ -1984,8 +2009,7 @@ msgstr "Z aplinka"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Nepavyko užbaigti proceso su PID %d: %s"
 
-#: ../gtk/gtknotebook.c:5051
-#: ../gtk/gtknotebook.c:7705
+#: ../gtk/gtknotebook.c:5053 ../gtk/gtknotebook.c:7707
 #, c-format
 msgid "Page %u"
 msgstr "%u puslapis"
@@ -1993,15 +2017,14 @@ msgstr "%u puslapis"
 #. Translators: the format here is used to build the string that will be rendered
 #. * in the number emblem.
 #.
-#: ../gtk/gtknumerableicon.c:481
+#: ../gtk/gtknumerableicon.c:482
 #, c-format
 msgctxt "Number format"
 msgid "%d"
 msgstr "%d"
 
-#: ../gtk/gtkpagesetup.c:646
-#: ../gtk/gtkpapersize.c:846
-#: ../gtk/gtkpapersize.c:886
+#: ../gtk/gtkpagesetup.c:646 ../gtk/gtkpapersize.c:848
+#: ../gtk/gtkpapersize.c:888
 msgid "Not a valid page setup file"
 msgstr "Netinkamas puslapio sąrankos failas"
 
@@ -2028,8 +2051,7 @@ msgstr ""
 " Viršus: %s %s\n"
 " Apačia: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:845
-#: ../gtk/gtkprintunixdialog.c:3329
+#: ../gtk/gtkpagesetupunixdialog.c:845 ../gtk/gtkprintunixdialog.c:3329
 msgid "Manage Custom Sizes..."
 msgstr "Tvarkyti pasirinktinius dydžius…"
 
@@ -2037,8 +2059,7 @@ msgstr "Tvarkyti pasirinktinius dydžius…"
 msgid "_Format for:"
 msgstr "_Formatas kam:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:917
-#: ../gtk/gtkprintunixdialog.c:3477
+#: ../gtk/gtkpagesetupunixdialog.c:917 ../gtk/gtkprintunixdialog.c:3477
 msgid "_Paper size:"
 msgstr "_Popieriaus dydis:"
 
@@ -2046,8 +2067,7 @@ msgstr "_Popieriaus dydis:"
 msgid "_Orientation:"
 msgstr "_Orientacija:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1006
-#: ../gtk/gtkprintunixdialog.c:3531
+#: ../gtk/gtkpagesetupunixdialog.c:1006 ../gtk/gtkprintunixdialog.c:3531
 msgid "Page Setup"
 msgstr "Puslapio sąranka"
 
@@ -2063,12 +2083,11 @@ msgstr "Žemyn keliu"
 msgid "File System Root"
 msgstr "Failų sistemos šakninis aplankas"
 
-#: ../gtk/gtkprintbackend.c:748
+#: ../gtk/gtkprintbackend.c:750
 msgid "Authentication"
 msgstr "Tapatybės patvirtinimas"
 
 #: ../gtk/gtkprinteroptionwidget.c:546
-#| msgid "Select a File"
 msgid "Select a filename"
 msgstr "Pasirinkite failo pavadinimą"
 
@@ -2130,30 +2149,29 @@ msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Baigta su klaida"
 
-#: ../gtk/gtkprintoperation.c:2352
+#: ../gtk/gtkprintoperation.c:2349
 #, c-format
 msgid "Preparing %d"
 msgstr "Ruošiamasi %d"
 
-#: ../gtk/gtkprintoperation.c:2354
-#: ../gtk/gtkprintoperation.c:2984
+#: ../gtk/gtkprintoperation.c:2351 ../gtk/gtkprintoperation.c:2983
 msgid "Preparing"
 msgstr "Ruošiamasi"
 
-#: ../gtk/gtkprintoperation.c:2357
+#: ../gtk/gtkprintoperation.c:2354
 #, c-format
 msgid "Printing %d"
 msgstr "Spausdinama %d"
 
-#: ../gtk/gtkprintoperation.c:3014
+#: ../gtk/gtkprintoperation.c:3013
 msgid "Error creating print preview"
 msgstr "Klaida formuojant spaudinio peržiūrą"
 
-#: ../gtk/gtkprintoperation.c:3017
+#: ../gtk/gtkprintoperation.c:3016
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Labiausiai tikėtina priežastis – nepavyko sukurti laikinojo failo."
 
-#: ../gtk/gtkprintoperation-unix.c:302
+#: ../gtk/gtkprintoperation-unix.c:307
 msgid "Error launching preview"
 msgstr "Klaida paleidžiant peržiūrą"
 
@@ -2187,13 +2205,11 @@ msgstr "Spausdintuvų nerasta"
 msgid "Invalid argument to CreateDC"
 msgstr "Netinkamas CreateDC argumentas"
 
-#: ../gtk/gtkprintoperation-win32.c:1600
-#: ../gtk/gtkprintoperation-win32.c:1827
+#: ../gtk/gtkprintoperation-win32.c:1600 ../gtk/gtkprintoperation-win32.c:1827
 msgid "Error from StartDoc"
 msgstr "Klaida iš StartDoc"
 
-#: ../gtk/gtkprintoperation-win32.c:1682
-#: ../gtk/gtkprintoperation-win32.c:1705
+#: ../gtk/gtkprintoperation-win32.c:1682 ../gtk/gtkprintoperation-win32.c:1705
 #: ../gtk/gtkprintoperation-win32.c:1753
 msgid "Not enough free memory"
 msgstr "Nepakanka laisvos atminties"
@@ -2296,51 +2312,50 @@ msgstr "Bendra"
 #. * multiple pages on a sheet when printing
 #.
 #: ../gtk/gtkprintunixdialog.c:3058
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3686
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3692
 msgid "Left to right, top to bottom"
 msgstr "Iš kairės dešinėn, iš viršaus žemyn"
 
 #: ../gtk/gtkprintunixdialog.c:3058
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3686
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3692
 msgid "Left to right, bottom to top"
 msgstr "Iš kairės dešinėn, iš apačios į viršų"
 
 #: ../gtk/gtkprintunixdialog.c:3059
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3693
 msgid "Right to left, top to bottom"
 msgstr "Iš dešinės kairėn, iš viršaus žemyn"
 
 #: ../gtk/gtkprintunixdialog.c:3059
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3693
 msgid "Right to left, bottom to top"
 msgstr "Iš dešinės kairėn, iš apačios į viršų"
 
 #: ../gtk/gtkprintunixdialog.c:3060
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3688
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3694
 msgid "Top to bottom, left to right"
 msgstr "Iš viršaus žemyn, iš kairės dešinėn"
 
 #: ../gtk/gtkprintunixdialog.c:3060
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3688
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3694
 msgid "Top to bottom, right to left"
 msgstr "Iš viršaus žemyn, iš dešinės kairėn"
 
 #: ../gtk/gtkprintunixdialog.c:3061
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3689
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3695
 msgid "Bottom to top, left to right"
 msgstr "Iš apačios į viršų, iš kairės dešinėn"
 
 #: ../gtk/gtkprintunixdialog.c:3061
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3689
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3695
 msgid "Bottom to top, right to left"
 msgstr "Iš apačios į viršų, iš dešinės kairėn"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: ../gtk/gtkprintunixdialog.c:3065
-#: ../gtk/gtkprintunixdialog.c:3078
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3766
+#: ../gtk/gtkprintunixdialog.c:3065 ../gtk/gtkprintunixdialog.c:3078
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3772
 msgid "Page Ordering"
 msgstr "Puslapių tvarka"
 
@@ -2542,8 +2557,7 @@ msgstr "Spausdinti"
 msgid "Select which type of documents are shown"
 msgstr "Pasirinkite kokių tipų dokumentai rodomi"
 
-#: ../gtk/gtkrecentchooserdefault.c:1130
-#: ../gtk/gtkrecentchooserdefault.c:1167
+#: ../gtk/gtkrecentchooserdefault.c:1130 ../gtk/gtkrecentchooserdefault.c:1167
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "Elementų URI „%s“ nerasta"
@@ -2590,8 +2604,7 @@ msgstr "Rodyti _asmeninius resursus"
 msgid "No items found"
 msgstr "Elementų nerasta"
 
-#: ../gtk/gtkrecentchoosermenu.c:526
-#: ../gtk/gtkrecentchoosermenu.c:582
+#: ../gtk/gtkrecentchoosermenu.c:526 ../gtk/gtkrecentchoosermenu.c:582
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "Nerasta neseniai naudoto resurso su URI „%s“"
@@ -2625,12 +2638,9 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:1010
-#: ../gtk/gtkrecentmanager.c:1023
-#: ../gtk/gtkrecentmanager.c:1160
-#: ../gtk/gtkrecentmanager.c:1170
-#: ../gtk/gtkrecentmanager.c:1222
-#: ../gtk/gtkrecentmanager.c:1231
+#: ../gtk/gtkrecentmanager.c:1010 ../gtk/gtkrecentmanager.c:1023
+#: ../gtk/gtkrecentmanager.c:1160 ../gtk/gtkrecentmanager.c:1170
+#: ../gtk/gtkrecentmanager.c:1222 ../gtk/gtkrecentmanager.c:1231
 #: ../gtk/gtkrecentmanager.c:1246
 #, c-format
 msgid "Unable to find an item with URI '%s'"
@@ -3149,9 +3159,7 @@ msgstr "Su_mažinti"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: ../gtk/gtkswitch.c:337
-#: ../gtk/gtkswitch.c:392
-#: ../gtk/gtkswitch.c:586
+#: ../gtk/gtkswitch.c:337 ../gtk/gtkswitch.c:392 ../gtk/gtkswitch.c:586
 msgctxt "switch"
 msgid "ON"
 msgstr "Įjungta"
@@ -3159,9 +3167,7 @@ msgstr "Įjungta"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: ../gtk/gtkswitch.c:345
-#: ../gtk/gtkswitch.c:393
-#: ../gtk/gtkswitch.c:615
+#: ../gtk/gtkswitch.c:345 ../gtk/gtkswitch.c:393 ../gtk/gtkswitch.c:615
 msgctxt "switch"
 msgid "OFF"
 msgstr "Išjungta"
@@ -3176,14 +3182,12 @@ msgstr "Nežinoma klaida bandant nuoseklinti %s"
 msgid "No deserialize function found for format %s"
 msgstr "Formatui %s nuoseklinimo funkcija nerasta"
 
-#: ../gtk/gtktextbufferserialize.c:798
-#: ../gtk/gtktextbufferserialize.c:824
+#: ../gtk/gtktextbufferserialize.c:798 ../gtk/gtktextbufferserialize.c:824
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "Elemente <%s> buvo rasta ir „id“ ir „name“"
 
-#: ../gtk/gtktextbufferserialize.c:808
-#: ../gtk/gtktextbufferserialize.c:834
+#: ../gtk/gtktextbufferserialize.c:808 ../gtk/gtktextbufferserialize.c:834
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "Požymis „%s“ elemente <%s> buvo rastas du kartus"
@@ -3203,8 +3207,7 @@ msgstr "<%s> elementas neturi nei „name“, nei „id“ požymio"
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgstr "Požymis „%s“ pakartotas du kartus tame pačiame elemente <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:965
-#: ../gtk/gtktextbufferserialize.c:990
+#: ../gtk/gtktextbufferserialize.c:965 ../gtk/gtktextbufferserialize.c:990
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr "Požymis „%s“ šiame kontekste netinkamas elementui <%s>"
@@ -3223,10 +3226,8 @@ msgstr "Rasta anoniminė žyma ir žymos negali būti sukurtos."
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr "Žymos „%s“ buferyje nėra ir žymos negali būti sukurtos."
 
-#: ../gtk/gtktextbufferserialize.c:1151
-#: ../gtk/gtktextbufferserialize.c:1226
-#: ../gtk/gtktextbufferserialize.c:1331
-#: ../gtk/gtktextbufferserialize.c:1405
+#: ../gtk/gtktextbufferserialize.c:1151 ../gtk/gtktextbufferserialize.c:1226
+#: ../gtk/gtktextbufferserialize.c:1331 ../gtk/gtktextbufferserialize.c:1405
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr "Elementas <%s> neleistinas žemiau <%s>"
@@ -3243,7 +3244,8 @@ msgstr "„%s“ nėra tinkamas požymio pavadinimas"
 
 #: ../gtk/gtktextbufferserialize.c:1200
 #, c-format
-msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgid ""
+"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "„%s“ nepavyko konvertuoti į „%s“ tipo reikšmę požymiui „%s“"
 
 #: ../gtk/gtktextbufferserialize.c:1209
@@ -3266,8 +3268,7 @@ msgstr "Žymos „%s“ netinkamas prioritetas „%s“"
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr "Išorinis elementas tekste turi būti <text_view_markup>, o ne <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:1369
-#: ../gtk/gtktextbufferserialize.c:1385
+#: ../gtk/gtktextbufferserialize.c:1369 ../gtk/gtktextbufferserialize.c:1385
 #, c-format
 msgid "A <%s> element has already been specified"
 msgstr "Elementas <%s> jau buvo nurodytas"
@@ -3281,8 +3282,11 @@ msgid "Serialized data is malformed"
 msgstr "Nuoseklinti duomenys yra netinkamai suformuoti"
 
 #: ../gtk/gtktextbufferserialize.c:1868
-msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
-msgstr "Nuoseklinti duomenys yra netinkamai suformuoti. Pirmas skyrius nėra GTKTEXTBUFFERCONTENTS-0001"
+msgid ""
+"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgstr ""
+"Nuoseklinti duomenys yra netinkamai suformuoti. Pirmas skyrius nėra "
+"GTKTEXTBUFFERCONTENTS-0001"
 
 #: ../gtk/gtktextutil.c:58
 msgid "LRM _Left-to-right mark"
@@ -3334,7 +3338,7 @@ msgstr "Netinkama pradžios žymė „%s“ eilutės %d stulpelyje %d"
 msgid "Unexpected character data on line %d char %d"
 msgstr "Neleistini simboliniai duomenys eilutės %d stulpelyje %d"
 
-#: ../gtk/gtkuimanager.c:2738
+#: ../gtk/gtkuimanager.c:2694
 msgid "Empty"
 msgstr "Tuščias"
 
@@ -3350,8 +3354,7 @@ msgstr "Tylina arba garsina"
 msgid "Adjusts the volume"
 msgstr "Keičia garsumą"
 
-#: ../gtk/gtkvolumebutton.c:180
-#: ../gtk/gtkvolumebutton.c:183
+#: ../gtk/gtkvolumebutton.c:180 ../gtk/gtkvolumebutton.c:183
 msgid "Volume Down"
 msgstr "Patylinti"
 
@@ -3359,8 +3362,7 @@ msgstr "Patylinti"
 msgid "Decreases the volume"
 msgstr "Patylina"
 
-#: ../gtk/gtkvolumebutton.c:186
-#: ../gtk/gtkvolumebutton.c:189
+#: ../gtk/gtkvolumebutton.c:186 ../gtk/gtkvolumebutton.c:189
 msgid "Volume Up"
 msgstr "Pagarsinti"
 
@@ -3842,8 +3844,7 @@ msgctxt "paper size"
 msgid "10x14"
 msgstr "10x14"
 
-#: ../gtk/paper_names_offsets.c:95
-#: ../gtk/paper_names_offsets.c:96
+#: ../gtk/paper_names_offsets.c:95 ../gtk/paper_names_offsets.c:96
 msgctxt "paper size"
 msgid "10x15"
 msgstr "10x15"
@@ -4233,8 +4234,7 @@ msgstr "Nepavyko perrašyti antraštės\n"
 msgid "Failed to open file %s : %s\n"
 msgstr "Nepavyko atverti failo „%s“: %s\n"
 
-#: ../gtk/updateiconcache.c:1490
-#: ../gtk/updateiconcache.c:1520
+#: ../gtk/updateiconcache.c:1490 ../gtk/updateiconcache.c:1520
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "Nepavyko įrašyti podėlio failo: %s\n"
@@ -4310,7 +4310,8 @@ msgid ""
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
 "„%s“ nėra temos indekso failo.\n"
-"Jei tikrai čia norite sukurti piktogramos podėlį, naudokite --ignore-theme-index.\n"
+"Jei tikrai čia norite sukurti piktogramos podėlį, naudokite --ignore-theme-"
+"index.\n"
 
 #. ID
 #: ../modules/input/imam-et.c:452
@@ -4381,12 +4382,14 @@ msgstr "Slaptažodis:"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1095
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
-msgstr "Norint dokumentą „%s“ spausdinti spausdintuvu %s, reikia patvirtinti tapatybę"
+msgstr ""
+"Norint dokumentą „%s“ spausdinti spausdintuvu %s, reikia patvirtinti tapatybę"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:900
 #, c-format
 msgid "Authentication is required to print a document on %s"
-msgstr "Norint dokumentą spausdinti spausdintuvu %s, reikia patvirtinti tapatybę"
+msgstr ""
+"Norint dokumentą spausdinti spausdintuvu %s, reikia patvirtinti tapatybę"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:904
 #, c-format
@@ -4438,7 +4441,8 @@ msgstr "Norint išspausdinti dokumentą „%s“, reikia patvirtinti tapatybę"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1102
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
-msgstr "Norint išspausdinti dokumentą spausdintuvu %s, reikia patvirtinti tapatybę"
+msgstr ""
+"Norint išspausdinti dokumentą spausdintuvu %s, reikia patvirtinti tapatybę"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1104
 msgid "Authentication is required to print this document"
@@ -4518,169 +4522,169 @@ msgstr "Pristabdytas, atmeta darbus"
 msgid "Rejecting Jobs"
 msgstr "Atmeta darbus"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2909
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2915
 msgid "Two Sided"
 msgstr "Dvipusis"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2910
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2916
 msgid "Paper Type"
 msgstr "Popieriaus tipas"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2911
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2917
 msgid "Paper Source"
 msgstr "Popieriaus šaltinis"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2912
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2918
 msgid "Output Tray"
 msgstr "Išvesties dėklas"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2913
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2919
 msgid "Resolution"
 msgstr "Skiriamoji geba"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2914
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2920
 msgid "GhostScript pre-filtering"
 msgstr "GhostScript pirminis filtravimas"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2923
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2929
 msgid "One Sided"
 msgstr "Vienpusis"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2925
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2931
 msgid "Long Edge (Standard)"
 msgstr "Ilgasis kraštas (standartinis)"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2927
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2933
 msgid "Short Edge (Flip)"
 msgstr "Trumpasis kraštas (apverstas)"
 
 #. Translators: this is an option of "Paper Source"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2929
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2931
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2939
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2935
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2937
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2945
 msgid "Auto Select"
 msgstr "Automatinis pasirinkimas"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2933
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2935
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2937
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2939
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2941
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3429
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2943
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2947
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3435
 msgid "Printer Default"
 msgstr "Spausdintuvo numatytieji"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2943
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2949
 msgid "Embed GhostScript fonts only"
 msgstr "Įterpti tik GhostScript šriftus"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2945
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2951
 msgid "Convert to PS level 1"
 msgstr "Konvertuoti į PS 1-ą lygmenį"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2947
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2953
 msgid "Convert to PS level 2"
 msgstr "Konvertuoti į PS 2-ą lygmenį"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2949
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2955
 msgid "No pre-filtering"
 msgstr "Nėra pradinio filtravimo"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2958
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2964
 msgid "Miscellaneous"
 msgstr "Įvairūs"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3681
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
 msgid "Urgent"
 msgstr "Itin skubu"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3681
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
 msgid "High"
 msgstr "Skubu"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3681
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
 msgid "Medium"
 msgstr "Vidutiniškai"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3681
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
 msgid "Low"
 msgstr "Neskubu"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3711
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3717
 msgid "Job Priority"
 msgstr "Prioritetas"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3722
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3728
 msgid "Billing Info"
 msgstr "Našumo informacija"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3737
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3743
 msgid "None"
 msgstr "Nėra"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3737
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3743
 msgid "Classified"
 msgstr "Klasifikuota"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3737
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3743
 msgid "Confidential"
 msgstr "Konfidencialu"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3737
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3743
 msgid "Secret"
 msgstr "Slapta"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3737
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3743
 msgid "Standard"
 msgstr "Standartiška"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3737
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3743
 msgid "Top Secret"
 msgstr "Labai slapta"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3737
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3743
 msgid "Unclassified"
 msgstr "Neklasifikuota"
 
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3748
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3754
 msgid "Pages per Sheet"
 msgstr "Puslapių lakšte"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3808
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3814
 msgid "Before"
 msgstr "Prieš"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3823
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3829
 msgid "After"
 msgstr "Po"
 
@@ -4688,14 +4692,14 @@ msgstr "Po"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3843
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3849
 msgid "Print at"
 msgstr "Kada spausdinti"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3854
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3860
 msgid "Print at time"
 msgstr "Spausdinti šiuo laiku"
 
@@ -4703,17 +4707,17 @@ msgstr "Spausdinti šiuo laiku"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3889
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3895
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Pasirinktinis (%s×%s)"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3970
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3976
 msgid "Printer Profile"
 msgstr "Spausdintuvo profilis"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3977
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3983
 msgid "Unavailable"
 msgstr "Neprieinama"
 
