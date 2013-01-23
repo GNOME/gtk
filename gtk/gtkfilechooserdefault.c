@@ -6015,16 +6015,6 @@ set_sort_column (GtkFileChooserDefault *impl)
 }
 
 static void
-settings_ensure (GtkFileChooserDefault *impl)
-{
-  if (impl->settings != NULL)
-    return;
-
-  impl->settings = g_settings_new ("org.gtk.Settings.FileChooser");
-  g_settings_delay (impl->settings);
-}
-
-static void
 settings_load (GtkFileChooserDefault *impl)
 {
   LocationMode location_mode;
@@ -6033,15 +6023,16 @@ settings_load (GtkFileChooserDefault *impl)
   gint sort_column;
   GtkSortType sort_order;
   gint sidebar_width;
+  GSettings *settings;
 
-  settings_ensure (impl);
+  settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (impl));
 
-  location_mode = g_settings_get_enum (impl->settings, SETTINGS_KEY_LOCATION_MODE);
-  show_hidden = g_settings_get_boolean (impl->settings, SETTINGS_KEY_SHOW_HIDDEN);
-  show_size_column = g_settings_get_boolean (impl->settings, SETTINGS_KEY_SHOW_SIZE_COLUMN);
-  sort_column = g_settings_get_enum (impl->settings, SETTINGS_KEY_SORT_COLUMN);
-  sort_order = g_settings_get_enum (impl->settings, SETTINGS_KEY_SORT_ORDER);
-  sidebar_width = g_settings_get_int (impl->settings, SETTINGS_KEY_SIDEBAR_WIDTH);
+  location_mode = g_settings_get_enum (settings, SETTINGS_KEY_LOCATION_MODE);
+  show_hidden = g_settings_get_boolean (settings, SETTINGS_KEY_SHOW_HIDDEN);
+  show_size_column = g_settings_get_boolean (settings, SETTINGS_KEY_SHOW_SIZE_COLUMN);
+  sort_column = g_settings_get_enum (settings, SETTINGS_KEY_SORT_COLUMN);
+  sort_order = g_settings_get_enum (settings, SETTINGS_KEY_SORT_ORDER);
+  sidebar_width = g_settings_get_int (settings, SETTINGS_KEY_SIDEBAR_WIDTH);
 
   location_mode_set (impl, location_mode, TRUE);
 
@@ -6065,25 +6056,29 @@ save_dialog_geometry (GtkFileChooserDefault *impl)
 {
   GtkWindow *toplevel;
   int x, y, width, height;
+  GSettings *settings;
 
   toplevel = get_toplevel (GTK_WIDGET (impl));
 
   if (!(toplevel && GTK_IS_FILE_CHOOSER_DIALOG (toplevel)))
     return;
 
+  settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (toplevel));
+
   gtk_window_get_position (toplevel, &x, &y);
   gtk_window_get_size (toplevel, &width, &height);
 
-  g_settings_set (impl->settings, SETTINGS_KEY_WINDOW_POSITION, "(ii)", x, y);
-  g_settings_set (impl->settings, SETTINGS_KEY_WINDOW_SIZE, "(ii)", width, height);
+  g_settings_set (settings, SETTINGS_KEY_WINDOW_POSITION, "(ii)", x, y);
+  g_settings_set (settings, SETTINGS_KEY_WINDOW_SIZE, "(ii)", width, height);
 }
 
 static void
 settings_save (GtkFileChooserDefault *impl)
 {
   char *current_folder_uri;
+  GSettings *settings;
 
-  settings_ensure (impl);
+  settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (impl));
 
   /* Current folder */
 
@@ -6092,29 +6087,26 @@ settings_save (GtkFileChooserDefault *impl)
   else
     current_folder_uri = "";
 
-  g_settings_set_string (impl->settings, SETTINGS_KEY_LAST_FOLDER_URI, current_folder_uri);
+  g_settings_set_string (settings, SETTINGS_KEY_LAST_FOLDER_URI, current_folder_uri);
 
   if (impl->current_folder)
     g_free (current_folder_uri);
 
   /* All the other state */
 
-  g_settings_set_enum (impl->settings, SETTINGS_KEY_LOCATION_MODE, impl->location_mode);
-  g_settings_set_boolean (impl->settings, SETTINGS_KEY_SHOW_HIDDEN,
+  g_settings_set_enum (settings, SETTINGS_KEY_LOCATION_MODE, impl->location_mode);
+  g_settings_set_boolean (settings, SETTINGS_KEY_SHOW_HIDDEN,
                           gtk_file_chooser_get_show_hidden (GTK_FILE_CHOOSER (impl)));
-  g_settings_set_boolean (impl->settings, SETTINGS_KEY_SHOW_SIZE_COLUMN, impl->show_size_column);
-  g_settings_set_enum (impl->settings, SETTINGS_KEY_SORT_COLUMN, impl->sort_column);
-  g_settings_set_enum (impl->settings, SETTINGS_KEY_SORT_ORDER, impl->sort_order);
-  g_settings_set_int (impl->settings, SETTINGS_KEY_SIDEBAR_WIDTH,
+  g_settings_set_boolean (settings, SETTINGS_KEY_SHOW_SIZE_COLUMN, impl->show_size_column);
+  g_settings_set_enum (settings, SETTINGS_KEY_SORT_COLUMN, impl->sort_column);
+  g_settings_set_enum (settings, SETTINGS_KEY_SORT_ORDER, impl->sort_order);
+  g_settings_set_int (settings, SETTINGS_KEY_SIDEBAR_WIDTH,
                      gtk_paned_get_position (GTK_PANED (impl->browse_widgets_hpaned)));
 
   save_dialog_geometry (impl);
 
   /* Now apply the settings */
-  g_settings_apply (impl->settings);
-
-  g_object_unref (impl->settings);
-  impl->settings = NULL;
+  g_settings_apply (settings);
 }
 
 /* GtkWidget::realize method */
@@ -6134,11 +6126,12 @@ static GFile *
 get_file_for_last_folder_opened (GtkFileChooserDefault *impl)
 {
   char *last_folder_uri;
+  GSettings *settings;
   GFile *file;
 
-  settings_ensure (impl);
+  settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (impl));
 
-  last_folder_uri = g_settings_get_string (impl->settings, SETTINGS_KEY_LAST_FOLDER_URI);
+  last_folder_uri = g_settings_get_string (settings, SETTINGS_KEY_LAST_FOLDER_URI);
 
   /* If no last folder is set, we use the user's home directory, since
    * this is the starting point for most documents.
@@ -8214,13 +8207,14 @@ gtk_file_chooser_default_get_default_size (GtkFileChooserEmbed *chooser_embed,
   GtkFileChooserDefault *impl;
   GtkRequisition req;
   int x, y, width, height;
+  GSettings *settings;
 
   impl = GTK_FILE_CHOOSER_DEFAULT (chooser_embed);
 
-  settings_ensure (impl);
+  settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (impl));
 
-  g_settings_get (impl->settings, SETTINGS_KEY_WINDOW_POSITION, "(ii)", &x, &y);
-  g_settings_get (impl->settings, SETTINGS_KEY_WINDOW_SIZE, "(ii)", &width, &height);
+  g_settings_get (settings, SETTINGS_KEY_WINDOW_POSITION, "(ii)", &x, &y);
+  g_settings_get (settings, SETTINGS_KEY_WINDOW_SIZE, "(ii)", &width, &height);
 
   if (x >= 0 && y >= 0 && width > 0 && height > 0)
     {

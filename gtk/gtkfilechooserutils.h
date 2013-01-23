@@ -52,6 +52,8 @@ GQuark _gtk_file_chooser_delegate_get_quark (void) G_GNUC_CONST;
 
 GList *_gtk_file_chooser_extract_recent_folders (GList *infos);
 
+GSettings *_gtk_file_chooser_get_settings_for_widget (GtkWidget *widget);
+
 G_END_DECLS
 
 #endif /* __GTK_FILE_CHOOSER_UTILS_H__ */
