@@ -326,7 +326,7 @@ How to compile GTK+ itself
           </group>
           <sbr/>
           <group>
-            <arg>--enable-debug=[no/minimum/yes]</arg>
+            <arg choice="plain">--enable-debug=[no/minimum/yes]</arg>
           </group>
           <sbr/>
           <group>
@@ -395,7 +395,7 @@ How to compile GTK+ itself
           </group>
           <sbr/>
           <group>
-            <arg>--enable-introspection=[no/auto/yes]</arg>
+            <arg choice="plain">--enable-introspection=[no/auto/yes]</arg>
           </group>
           <sbr/>
           <group>
