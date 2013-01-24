@@ -4817,7 +4817,7 @@ gtk_widget_size_allocate (GtkWidget	*widget,
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (!priv->visible)
+  if (!priv->visible && !gtk_widget_is_toplevel (widget))
     return;
 
   gtk_widget_push_verify_invariants (widget);
