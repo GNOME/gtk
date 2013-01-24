@@ -56,6 +56,33 @@ in the <envar>DISPLAY</envar> environment variable.
 
 </refsect2>
 
+<refsect2 id="x11-envar">
+<title>X11-specific environment variables</title>
+
+<para>
+The X11 GDK backend can be influenced with some additional environment variables.
+</para>
+
+<formalpara>
+  <title><envar>GDK_SYNCHRONIZE</envar></title>
+
+  <para>
+    If set, GDK makes all X requests synchronously. This is a useful
+    option for debugging, but it will slow down the performance considerably.
+  </para>
+</formalpara>
+
+<formalpara>
+  <title><envar>GDK_CORE_DEVICE_EVENTS</envar></title>
+
+  <para>
+    If set, GDK makes does not use the XInput extension, and only reacts
+    to core X input events.
+  </para>
+</formalpara>
+
+</refsect2>
+
 </refsect1>
 
 <refsect1 id="gtk-X11-arch">

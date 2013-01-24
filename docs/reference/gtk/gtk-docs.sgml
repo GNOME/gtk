@@ -383,6 +383,7 @@
     <xi:include href="gtk-query-immodules-3.0.xml" />
     <xi:include href="gtk-update-icon-cache.xml" />
     <xi:include href="gtk-launch.xml" />
+    <xi:include href="broadwayd.xml" />
   </part>
 
   <xi:include href="glossary.xml" />

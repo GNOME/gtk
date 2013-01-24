@@ -154,6 +154,7 @@ content_files =					\
 	gtk-query-immodules-3.0.xml		\
 	gtk-update-icon-cache.xml		\
 	gtk-launch.xml				\
+	broadwayd.xml				\
 	visual_index.xml			\
 	getting_started.xml			\
 	overview.xml
@@ -427,7 +428,8 @@ EXTRA_DIST += version.xml.in gtk3.types.in
 man_MANS = 				\
 	gtk-query-immodules-3.0.1	\
 	gtk-update-icon-cache.1		\
-	gtk-launch.1
+	gtk-launch.1			\
+	broadwayd.1
 
 if ENABLE_MAN
 

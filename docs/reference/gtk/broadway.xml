@@ -4,25 +4,25 @@
 ]>
 <refentry id="gtk-broadway">
 <refmeta>
-<refentrytitle>Using GTK+ with HTML5</refentrytitle>
+<refentrytitle>Using GTK+ with Broadway</refentrytitle>
 <manvolnum>3</manvolnum>
 <refmiscinfo>GTK Library</refmiscinfo>
 </refmeta>
 
 <refnamediv>
-<refname>Using GTK+ with HTML5</refname>
+<refname>Using GTK+ with Broadway</refname>
 <refpurpose>
 HTML-specific aspects of using GTK+
 </refpurpose>
 </refnamediv>
 
 <refsect1>
-<title>Using GTK+ with HTML5</title>
+<title>Using GTK+ with Broadway</title>
 
 <para>
 The GDK Broadway backend provides support for displaying GTK+
-applications using HTML5 and Web sockets. To run your application
-in this way, select the Broadway backend by setting
+applications in a web browser, using HTML5 and web sockets. To run
+your application in this way, select the Broadway backend by setting
 <literal>GDK_BACKEND=broadway</literal>. Then you can make
 your application appear in a web browser by pointing it at
 <literal>http://127.0.0.1:8080</literal>. Note that you need
@@ -35,6 +35,37 @@ the <envar>BROADWAY_DISPLAY</envar> environment variable to the
 port that you want to use.
 </para>
 
+<para>
+It is also possible to use multiple GTK+ applications in the same
+web browser window, by using the Broadway server,
+<command>broadwayd</command>, that ships with GTK+.
+To use broadwayd, start it like this:
+<programlisting>
+broadwayd :5
+</programlisting>
+Then point your web browser at <literal>http://127.0.0.1:8084</literal>.
+Start your applications like this:
+<programlisting>
+BROADWAY_DISPLAY=:5 gtk3-demo
+</programlisting>
+</para>
+
+<refsect2 id="broadway-envar">
+<title>Broadway-specific environment variables</title>
+
+</refsect2>
+  <formalpara>
+    <title><envar>BROADWAY_DISPLAY</envar></title>
+
+    <para>
+      Specifies the Broadway display number. The default display is 1.
+      The display number determines the port to use when connecting
+      to a Broadway application via the following formula:
+      <programlisting>
+        <replaceable>port</replaceable> = 8080 + (<replaceable>display</replaceable> - 1)
+      </programlisting>
+    </para>
+  </formalpara>
 </refsect1>
 
 </refentry>
