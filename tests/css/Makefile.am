@@ -20,3 +20,5 @@ LDADD = \
 	$(GTK_DEP_LIBS)
 
 TEST_PROGS += api 
+
+-include $(top_srcdir)/git.mk

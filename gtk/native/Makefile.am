@@ -10,3 +10,5 @@ native_update_icon_cache_CFLAGS = $(NATIVE_GDKPIXBUF_CFLAGS)
 native_update_icon_cache_LDADD = $(NATIVE_GDKPIXBUF_LIBS)
 native_update_icon_cache_SOURCES = $(srcdir)/../updateiconcache.c
 endif
+
+-include $(top_srcdir)/git.mk

@@ -61,3 +61,5 @@ noinst_PROGRAMS = \
 	builder
 
 EXTRA_DIST = builder.ui
+
+-include $(top_srcdir)/git.mk

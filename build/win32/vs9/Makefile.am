@@ -14,3 +14,5 @@ EXTRA_DIST += \
 	gtka11y.vcprojin \
 	gailutil.vcproj \
 	install.vcproj
+
+-include $(top_srcdir)/git.mk

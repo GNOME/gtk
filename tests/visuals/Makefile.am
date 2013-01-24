@@ -32,3 +32,5 @@ EXTRA_DIST = \
 	osd-toolbars.ui \
 	primary-toolbar.ui \
 	suggested-action-buttons.ui
+
+-include $(top_srcdir)/git.mk

@@ -259,3 +259,5 @@ EXTRA_DIST += \
 	unresolvable.ui \
 	window-border-width.ref.ui \
 	window-border-width.ui
+
+-include $(top_srcdir)/git.mk

@@ -23,3 +23,5 @@ EXTRA_DIST += \
 	gailutil.vcxproj \
 	gailutil.vcxproj.filters \
 	install.vcxproj
+
+-include $(top_srcdir)/git.mk

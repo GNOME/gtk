@@ -29,3 +29,5 @@ EXTRA_DIST += \
 	widget-factory.ui \
 	widget-factory.gresource.xml \
 	gtk-logo-256.png
+
+-include $(top_srcdir)/git.mk

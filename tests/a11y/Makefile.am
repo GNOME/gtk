@@ -70,3 +70,5 @@ EXTRA_DIST += \
 	placeholder-text.ui placeholder-text.txt \
 	menu.ui menu.txt \
 	combos.ui combos.txt
+
+-include $(top_srcdir)/git.mk

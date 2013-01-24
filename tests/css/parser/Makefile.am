@@ -341,3 +341,5 @@ EXTRA_DIST += \
 	value-none.errors \
 	value-none.ref.css \
 	widget-style-property.css
+
+-include $(top_srcdir)/git.mk
