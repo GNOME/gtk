@@ -5971,21 +5971,8 @@ static void
 settings_save (GtkFileChooserDefault *impl)
 {
   GtkFileChooserSettings *settings;
-  char *current_folder_uri;
 
   settings = _gtk_file_chooser_settings_new ();
-
-  /* Current folder */
-
-  if (impl->current_folder)
-    current_folder_uri = g_file_get_uri (impl->current_folder);
-  else
-    current_folder_uri = "";
-
-  _gtk_file_chooser_settings_set_last_folder_uri (settings, current_folder_uri);
-
-  if (impl->current_folder)
-    g_free (current_folder_uri);
 
   /* All the other state */
 
@@ -6015,30 +6002,6 @@ gtk_file_chooser_default_realize (GtkWidget *widget)
   GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->realize (widget);
 
   emit_default_size_changed (impl);
-}
-
-static GFile *
-get_file_for_last_folder_opened (GtkFileChooserDefault *impl)
-{
-  char *last_folder_uri;
-  GFile *file;
-  GtkFileChooserSettings *settings;
-
-  settings = _gtk_file_chooser_settings_new ();
-  last_folder_uri = _gtk_file_chooser_settings_get_last_folder_uri (settings);
-  g_object_unref (settings);
-
-  /* If no last folder is set, we use the user's home directory, since
-   * this is the starting point for most documents.
-   */
-  if (last_folder_uri == NULL || last_folder_uri[0] == '\0')
-    file = g_file_new_for_path (g_get_home_dir ());
-  else
-    file = g_file_new_for_uri (last_folder_uri);
-
-  g_free (last_folder_uri);
-
-  return file;
 }
 
 /* Changes the current folder to $CWD */
@@ -7334,16 +7297,6 @@ gtk_file_chooser_default_get_current_folder (GtkFileChooser *chooser)
       impl->operation_mode == OPERATION_MODE_RECENT)
     return NULL;
  
-  if (impl->reload_state == RELOAD_EMPTY)
-    {
-      /* We are unmapped, or we had an error while loading the last folder.
-       * We'll return the folder used by the last invocation of the file chooser
-       * since once we get (re)mapped, we'll load *that* folder anyway unless
-       * the caller explicitly calls set_current_folder() on us.
-       */
-      return get_file_for_last_folder_opened (impl);
-    }
-
   if (impl->current_folder)
     return g_object_ref (impl->current_folder);
 

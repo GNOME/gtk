@@ -44,8 +44,6 @@ struct _GtkFileChooserSettings
 {
   GObject object;
 
-  char *last_folder_uri;
-
   LocationMode location_mode;
 
   GtkSortType sort_order;
@@ -70,9 +68,6 @@ struct _GtkFileChooserSettingsClass
 GType _gtk_file_chooser_settings_get_type (void) G_GNUC_CONST;
 
 GtkFileChooserSettings *_gtk_file_chooser_settings_new (void);
-
-char *_gtk_file_chooser_settings_get_last_folder_uri (GtkFileChooserSettings *settings);
-void  _gtk_file_chooser_settings_set_last_folder_uri (GtkFileChooserSettings *settings, const char *uri);
 
 LocationMode _gtk_file_chooser_settings_get_location_mode (GtkFileChooserSettings *settings);
 void         _gtk_file_chooser_settings_set_location_mode (GtkFileChooserSettings *settings,
