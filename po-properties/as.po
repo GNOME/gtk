@@ -5,14 +5,14 @@
 # Amitakhya Phukan <aphukan@redhat.com>, 2007, 2008.
 # Amitakhya Phukan <amitakhya@svn.gnome.org>, 2007.
 # Amitakhya Phukan <aphukan@fedoraproject.org>, 2009.
-# Nilamdyuti Goswami <ngoswami@redhat.com>, 2011, 2012.
+# Nilamdyuti Goswami <ngoswami@redhat.com>, 2011, 2012, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: as\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-12-17 00:52+0000\n"
-"PO-Revision-Date: 2012-12-17 14:59+0530\n"
+"POT-Creation-Date: 2013-01-25 00:15+0000\n"
+"PO-Revision-Date: 2013-01-25 18:23+0530\n"
 "Last-Translator: Nilamdyuti Goswami <ngoswami@redhat.com>\n"
 "Language-Team: Assamese <kde-i18n-doc@kde.org>\n"
 "Language: as_IN\n"
@@ -269,9 +269,9 @@ msgstr "পূৰ্বদৰ্শনত ব্যৱহৃত লিখনী"
 msgid "The text to display in order to demonstrate the selected font"
 msgstr "চিহ্নিত ফন্টকে প্ৰদৰ্শনৰ বাবে যি লিখনী লেখা হ'ব"
 
-#: ../gtk/deprecated/gtkhandlebox.c:224 ../gtk/gtkcombobox.c:1067
+#: ../gtk/deprecated/gtkhandlebox.c:224 ../gtk/gtkcombobox.c:1064
 #: ../gtk/gtkentry.c:890 ../gtk/gtkmenubar.c:213 ../gtk/gtkstatusbar.c:182
-#: ../gtk/gtktoolbar.c:631 ../gtk/gtkviewport.c:155
+#: ../gtk/gtktoolbar.c:628 ../gtk/gtkviewport.c:155
 msgid "Shadow type"
 msgstr "ছায়াৰ ধৰণ"
 
@@ -360,8 +360,8 @@ msgstr "প্ৰতি স্তম্ভ স্থানৰ পৰিমাণ
 msgid "The amount of space between two consecutive columns"
 msgstr "দুটা সংখ্যানুক্ৰমিক স্তম্ভৰ মধ্যবৰ্তী স্থানৰ পৰিমাণ"
 
-#: ../gtk/deprecated/gtktable.c:227 ../gtk/gtkbox.c:253
-#: ../gtk/gtktoolbar.c:563 ../gtk/gtktoolitemgroup.c:1650
+#: ../gtk/deprecated/gtktable.c:227 ../gtk/gtkbox.c:250
+#: ../gtk/gtktoolbar.c:560 ../gtk/gtktoolitemgroup.c:1650
 msgid "Homogeneous"
 msgstr "সমমাত্ৰিক"
 
@@ -581,7 +581,7 @@ msgstr "Accelerator Widget"
 msgid "The widget to be monitored for accelerator changes"
 msgstr "acceleratorৰ সাল সলনিৰ বাবে যি widget ক নিৰীক্ষণ কৰিব লাগিব"
 
-#: ../gtk/gtkaccessible.c:158 ../gtk/gtktreeviewcolumn.c:355
+#: ../gtk/gtkaccessible.c:158 ../gtk/gtktreeviewcolumn.c:353
 msgid "Widget"
 msgstr "উইজেট"
 
@@ -653,18 +653,18 @@ msgid "GIcon"
 msgstr "GIcon"
 
 #: ../gtk/gtkaction.c:303 ../gtk/gtkcellrendererpixbuf.c:246
-#: ../gtk/gtkimage.c:309 ../gtk/gtkstatusicon.c:264
+#: ../gtk/gtkimage.c:311 ../gtk/gtkstatusicon.c:264
 msgid "The GIcon being displayed"
 msgstr "প্ৰদৰ্শন কৰা GIcon"
 
 #: ../gtk/gtkaction.c:323 ../gtk/gtkcellrendererpixbuf.c:211
-#: ../gtk/gtkimage.c:291 ../gtk/gtkprinter.c:172 ../gtk/gtkstatusicon.c:247
+#: ../gtk/gtkimage.c:293 ../gtk/gtkprinter.c:172 ../gtk/gtkstatusicon.c:247
 #: ../gtk/gtkwindow.c:773
 msgid "Icon Name"
 msgstr "আইকনৰ নাম"
 
 #: ../gtk/gtkaction.c:324 ../gtk/gtkcellrendererpixbuf.c:212
-#: ../gtk/gtkimage.c:292 ../gtk/gtkstatusicon.c:248
+#: ../gtk/gtkimage.c:294 ../gtk/gtkstatusicon.c:248
 msgid "The name of the icon from the icon theme"
 msgstr "আইকন থীমৰ পৰা প্ৰাপ্ত আইকনৰ নাম"
 
@@ -721,7 +721,7 @@ msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr "TRUE হ'লে এই কামৰ ৰিক্ত তালিকা নিযুক্তকক লুকাই ৰখা হয়।"
 
 #: ../gtk/gtkaction.c:379 ../gtk/gtkactiongroup.c:235
-#: ../gtk/gtkcellrenderer.c:296 ../gtk/gtkwidget.c:1024
+#: ../gtk/gtkcellrenderer.c:296 ../gtk/gtkwidget.c:1018
 msgid "Sensitive"
 msgstr "সংবেদনশীল"
 
@@ -730,8 +730,8 @@ msgid "Whether the action is enabled."
 msgstr "কামটো সক্ৰিয় হয় নে নহয়"
 
 #: ../gtk/gtkaction.c:386 ../gtk/gtkactiongroup.c:242
-#: ../gtk/gtkstatusicon.c:298 ../gtk/gtktreeviewcolumn.c:247
-#: ../gtk/gtkwidget.c:1017
+#: ../gtk/gtkstatusicon.c:298 ../gtk/gtktreeviewcolumn.c:245
+#: ../gtk/gtkwidget.c:1011
 msgid "Visible"
 msgstr "দৃশ্যমান"
 
@@ -1059,11 +1059,11 @@ msgstr "সক্ৰিয় উইন্ডো"
 msgid "The window which most recently had focus"
 msgstr "উইন্ডো যাৰ ওপৰত শেহতীয়া ফকাচ আছিল"
 
-#: ../gtk/gtkapplicationwindow.c:989
+#: ../gtk/gtkapplicationwindow.c:993
 msgid "Show a menubar"
 msgstr "এটা মেনুবাৰ দেখুৱাওক"
 
-#: ../gtk/gtkapplicationwindow.c:990
+#: ../gtk/gtkapplicationwindow.c:994
 msgid "TRUE if the window should show a menubar at the top of the window"
 msgstr "যদি উইন্ডোয় উইন্ডোৰ উপৰত এটা মেনুবাৰ দেখাব লাগে তেন্তে TRUE"
 
@@ -1083,7 +1083,7 @@ msgstr "নিৰ্দেশকৰ ছাঁ"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "কাঁড় চিহ্নৰ কাষত থকা ছাঁৰ চেহেৰা"
 
-#: ../gtk/gtkarrow.c:127 ../gtk/gtkcombobox.c:1051 ../gtk/gtkmenu.c:784
+#: ../gtk/gtkarrow.c:127 ../gtk/gtkcombobox.c:1048 ../gtk/gtkmenu.c:784
 #: ../gtk/gtkmenuitem.c:506
 msgid "Arrow Scaling"
 msgstr "কাঁড়ৰ Scaling"
@@ -1092,7 +1092,7 @@ msgstr "কাঁড়ৰ Scaling"
 msgid "Amount of space used up by arrow"
 msgstr "কাঁড়ৰ দ্বাৰা ব্যৱহৃত স্থান"
 
-#: ../gtk/gtkaspectframe.c:107 ../gtk/gtkwidget.c:1212
+#: ../gtk/gtkaspectframe.c:107 ../gtk/gtkwidget.c:1206
 msgid "Horizontal Alignment"
 msgstr "পথালিকে সংৰেখন কৰা"
 
@@ -1100,7 +1100,7 @@ msgstr "পথালিকে সংৰেখন কৰা"
 msgid "X alignment of the child"
 msgstr "চাইল্ডৰ X সংৰেখন"
 
-#: ../gtk/gtkaspectframe.c:114 ../gtk/gtkwidget.c:1228
+#: ../gtk/gtkaspectframe.c:114 ../gtk/gtkwidget.c:1222
 msgid "Vertical Alignment"
 msgstr "উলম্বভাবে সংৰেখন"
 
@@ -1245,34 +1245,34 @@ msgstr "অসমমাত্ৰিক"
 msgid "If TRUE, the child will not be subject to homogeneous sizing"
 msgstr "যদি সত্য হয়, ছাইল্ডক সমমাত্ৰক আকাৰীকৰণৰ কাৰণৰ লোৱা নহব"
 
-#: ../gtk/gtkbox.c:243 ../gtk/gtkcellareabox.c:315 ../gtk/gtkexpander.c:312
-#: ../gtk/gtkiconview.c:512 ../gtk/gtktreeviewcolumn.c:282
+#: ../gtk/gtkbox.c:240 ../gtk/gtkcellareabox.c:315 ../gtk/gtkexpander.c:312
+#: ../gtk/gtkiconview.c:511 ../gtk/gtktreeviewcolumn.c:280
 msgid "Spacing"
 msgstr "মধ্যৱৰ্তী স্থান"
 
-#: ../gtk/gtkbox.c:244
+#: ../gtk/gtkbox.c:241
 msgid "The amount of space between children"
 msgstr "চিলড্ৰেনৰ মাজত ৰিক্ত স্থানৰ পৰিমাণ"
 
-#: ../gtk/gtkbox.c:254
+#: ../gtk/gtkbox.c:251
 msgid "Whether the children should all be the same size"
 msgstr "সকলো চিলড্ৰেনৰ আকৃতি সমান হ'ব নে"
 
-#: ../gtk/gtkbox.c:274 ../gtk/gtkcellareabox.c:335 ../gtk/gtktoolbar.c:555
+#: ../gtk/gtkbox.c:271 ../gtk/gtkcellareabox.c:335 ../gtk/gtktoolbar.c:552
 #: ../gtk/gtktoolitemgroup.c:1657 ../gtk/gtktoolpalette.c:1075
-#: ../gtk/gtktreeviewcolumn.c:338
+#: ../gtk/gtktreeviewcolumn.c:336
 msgid "Expand"
 msgstr "প্ৰসাৰণ"
 
-#: ../gtk/gtkbox.c:275
+#: ../gtk/gtkbox.c:272
 msgid "Whether the child should receive extra space when the parent grows"
 msgstr "পেৰেন্টৰ আকৃতি বৃদ্ধি পালে চাইল্ডে অতিৰক্ত স্থান পাব নে"
 
-#: ../gtk/gtkbox.c:291 ../gtk/gtktoolitemgroup.c:1664
+#: ../gtk/gtkbox.c:288 ../gtk/gtktoolitemgroup.c:1664
 msgid "Fill"
 msgstr "ভৰ্ত্তি কৰক"
 
-#: ../gtk/gtkbox.c:292
+#: ../gtk/gtkbox.c:289
 msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
@@ -1280,19 +1280,19 @@ msgstr ""
 "চাইল্ডৰ বাবে দিয়া অতিৰিক্ত স্থান চাইল্ডৰ বাবে ব্যৱহাৰ কৰা হ'ব নে পেডিং হিচাপে "
 "ব্যৱহৃত হ'ব"
 
-#: ../gtk/gtkbox.c:299 ../gtk/gtktrayicon-x11.c:167
+#: ../gtk/gtkbox.c:296 ../gtk/gtktrayicon-x11.c:167
 msgid "Padding"
 msgstr "পেডিং"
 
-#: ../gtk/gtkbox.c:300
+#: ../gtk/gtkbox.c:297
 msgid "Extra space to put between the child and its neighbors, in pixels"
 msgstr "পিক্সেলত, চাইল্ড আৰু তাৰ চুবুৰীয়াৰ মাজৰ স্থানৰ মান"
 
-#: ../gtk/gtkbox.c:306
+#: ../gtk/gtkbox.c:303
 msgid "Pack type"
 msgstr "Pack ৰ ধৰণ"
 
-#: ../gtk/gtkbox.c:307
+#: ../gtk/gtkbox.c:304
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -1300,12 +1300,12 @@ msgstr ""
 "এটা GtkPackType যি নিৰ্দেশ কৰি যে চাইল্ড পেৰেন্টৰ আৰম্ভ নে শেষৰ সাপেক্ষে "
 "স্থাপিত"
 
-#: ../gtk/gtkbox.c:313 ../gtk/gtknotebook.c:768 ../gtk/gtkpaned.c:348
+#: ../gtk/gtkbox.c:310 ../gtk/gtknotebook.c:768 ../gtk/gtkpaned.c:348
 #: ../gtk/gtktoolitemgroup.c:1678
 msgid "Position"
 msgstr "স্থান"
 
-#: ../gtk/gtkbox.c:314 ../gtk/gtknotebook.c:769
+#: ../gtk/gtkbox.c:311 ../gtk/gtknotebook.c:769
 msgid "The index of the child in the parent"
 msgstr "পেৰেন্টত চাইল্ডৰ ক্ৰমিক সংখ্যা"
 
@@ -1349,7 +1349,7 @@ msgstr ""
 "নিৰ্ধাৰিত থাকিলে, প্ৰদৰ্শনৰ বিকল্পে লেবেলক এটা স্টকৰ বস্তু নিৰ্ব্বাচন কৰিবলৈ "
 "ব্যৱহৃত হয়"
 
-#: ../gtk/gtkbutton.c:256 ../gtk/gtkcombobox.c:857
+#: ../gtk/gtkbutton.c:256 ../gtk/gtkcombobox.c:854
 #: ../gtk/gtkfilechooserbutton.c:425
 msgid "Focus on click"
 msgstr "ক্লিক কৰিলে ফ'কাচ হ'ব"
@@ -1563,7 +1563,7 @@ msgstr "পথালি বিচ্ছেদ"
 msgid "Space between week headers and main area"
 msgstr "উইক হেডাৰ আৰু প্ৰধান কালিৰ মাজৰ ঠাই"
 
-#: ../gtk/gtkcellareabox.c:316 ../gtk/gtktreeviewcolumn.c:283
+#: ../gtk/gtkcellareabox.c:316 ../gtk/gtktreeviewcolumn.c:281
 msgid "Space which is inserted between cells"
 msgstr "ঘৰবোৰৰ মাজতৰ স্থানে যি স্থান ভৰোৱা হয়"
 
@@ -1633,7 +1633,7 @@ msgid "The Cell Area this context was created for"
 msgstr "কোষ কালি যাৰ বাবে এই পৰিপ্ৰেক্ষতিত সৃষ্টি কৰা হইছিল"
 
 #: ../gtk/gtkcellareacontext.c:134 ../gtk/gtkcellareacontext.c:153
-#: ../gtk/gtktreeviewcolumn.c:310
+#: ../gtk/gtktreeviewcolumn.c:308
 msgid "Minimum Width"
 msgstr "সৰ্বনিম্ন প্ৰস্থ"
 
@@ -1829,7 +1829,7 @@ msgstr "লিখনী স্তম্ভ"
 msgid "A column in the data source model to get the strings from"
 msgstr "তথ্য উৎস আৰ্হিৰ যি স্তম্ভৰ পৰা পংতি লোৱা হ'ব"
 
-#: ../gtk/gtkcellrenderercombo.c:169 ../gtk/gtkcombobox.c:924
+#: ../gtk/gtkcellrenderercombo.c:169 ../gtk/gtkcombobox.c:921
 msgid "Has Entry"
 msgstr "প্ৰবিষ্টি আছে"
 
@@ -1861,7 +1861,7 @@ msgstr "Pixbuf প্ৰসাৰক বন্ধ আছে"
 msgid "Pixbuf for closed expander"
 msgstr "বন্ধ প্ৰসাৰকৰ বাবে Pixbuf"
 
-#: ../gtk/gtkcellrendererpixbuf.c:175 ../gtk/gtkimage.c:233
+#: ../gtk/gtkcellrendererpixbuf.c:175 ../gtk/gtkimage.c:235
 #: ../gtk/gtkstatusicon.c:239
 msgid "Stock ID"
 msgstr "স্টক ID"
@@ -1895,7 +1895,7 @@ msgstr "অৱস্থা অনুসৰণ কৰক"
 msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr "অঙ্কিত পিক্সবাফকে অৱস্থা অনুসাৰে ৰং কৰা হ'ব নে"
 
-#: ../gtk/gtkcellrendererpixbuf.c:245 ../gtk/gtkimage.c:308
+#: ../gtk/gtkcellrendererpixbuf.c:245 ../gtk/gtkimage.c:310
 #: ../gtk/gtkwindow.c:719
 msgid "Icon"
 msgstr "আইকন"
@@ -1906,7 +1906,7 @@ msgstr "প্ৰ'গ্ৰেছবাৰৰ মান"
 
 #: ../gtk/gtkcellrendererprogress.c:154 ../gtk/gtkcellrenderertext.c:255
 #: ../gtk/gtkentrybuffer.c:350 ../gtk/gtkentry.c:841
-#: ../gtk/gtkmessagedialog.c:230 ../gtk/gtkprogressbar.c:174
+#: ../gtk/gtkmessagedialog.c:230 ../gtk/gtkprogressbar.c:173
 #: ../gtk/gtktextbuffer.c:219
 msgid "Text"
 msgstr "লিখনী"
@@ -1949,11 +1949,11 @@ msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "উলম্ব সংৰেখন, ০ (ওপৰত) ৰ পৰা ১ (তল)"
 
 #: ../gtk/gtkcellrendererprogress.c:224 ../gtk/gtklevelbar.c:991
-#: ../gtk/gtkprogressbar.c:150 ../gtk/gtkrange.c:432
+#: ../gtk/gtkprogressbar.c:149 ../gtk/gtkrange.c:432
 msgid "Inverted"
 msgstr "বিপৰীত"
 
-#: ../gtk/gtkcellrendererprogress.c:225 ../gtk/gtkprogressbar.c:151
+#: ../gtk/gtkcellrendererprogress.c:225 ../gtk/gtkprogressbar.c:150
 msgid "Invert the direction in which the progress bar grows"
 msgstr "প্ৰগ্ৰেছ বাৰৰ প্ৰগতিৰ দিক সলনি কৰক"
 
@@ -2201,7 +2201,7 @@ msgstr ""
 "পাৰে। যদি আপুনি এই সমস্যাটো বুজিব নোৱাৰে তেন্তে আপোনাৰ ইয়াৰ প্ৰয়োজন নাই"
 
 #: ../gtk/gtkcellrenderertext.c:514 ../gtk/gtklabel.c:853
-#: ../gtk/gtkprogressbar.c:218
+#: ../gtk/gtkprogressbar.c:217
 msgid "Ellipsize"
 msgstr "উপবৃত্তকৰণ"
 
@@ -2244,7 +2244,7 @@ msgstr ""
 "পংতিক "
 "একাধিক শাৰীত ভাঙি প্ৰদৰ্শন কৰা হ'ব"
 
-#: ../gtk/gtkcellrenderertext.c:598 ../gtk/gtkcombobox.c:746
+#: ../gtk/gtkcellrenderertext.c:598 ../gtk/gtkcombobox.c:743
 msgid "Wrap width"
 msgstr "মেৰিওৱাৰ দৈৰ্ঘ্য"
 
@@ -2252,7 +2252,7 @@ msgstr "মেৰিওৱাৰ দৈৰ্ঘ্য"
 msgid "The width at which the text is wrapped"
 msgstr "যি দৈৰ্ঘ্য অতিক্ৰমৰ পৰ লিখনীক মেৰিওৱা হ'ব"
 
-#: ../gtk/gtkcellrenderertext.c:619 ../gtk/gtktreeviewcolumn.c:363
+#: ../gtk/gtkcellrenderertext.c:619 ../gtk/gtktreeviewcolumn.c:361
 msgid "Alignment"
 msgstr "সংৰেখন"
 
@@ -2452,15 +2452,15 @@ msgstr "CellView model"
 msgid "The model for cell view"
 msgstr "উল্লিখিত সময় অবধি"
 
-#: ../gtk/gtkcellview.c:252 ../gtk/gtkcombobox.c:1010
-#: ../gtk/gtkentrycompletion.c:451 ../gtk/gtkiconview.c:637
-#: ../gtk/gtktreemenu.c:332 ../gtk/gtktreeviewcolumn.c:426
+#: ../gtk/gtkcellview.c:252 ../gtk/gtkcombobox.c:1007
+#: ../gtk/gtkentrycompletion.c:451 ../gtk/gtkiconview.c:636
+#: ../gtk/gtktreemenu.c:332 ../gtk/gtktreeviewcolumn.c:424
 msgid "Cell Area"
 msgstr "কোষ কালি"
 
-#: ../gtk/gtkcellview.c:253 ../gtk/gtkcombobox.c:1011
-#: ../gtk/gtkentrycompletion.c:452 ../gtk/gtkiconview.c:638
-#: ../gtk/gtktreemenu.c:333 ../gtk/gtktreeviewcolumn.c:427
+#: ../gtk/gtkcellview.c:253 ../gtk/gtkcombobox.c:1008
+#: ../gtk/gtkentrycompletion.c:452 ../gtk/gtkiconview.c:637
+#: ../gtk/gtktreemenu.c:333 ../gtk/gtktreeviewcolumn.c:425
 msgid "The GtkCellArea used to layout cells"
 msgstr "কোষ সংস্থাপন কৰিবলে ব্যৱহৃত GtkCellArea"
 
@@ -2530,7 +2530,7 @@ msgstr "ৰংটোক এটা আলফা মান দিয়া হ'ব �
 
 #: ../gtk/gtkcolorbutton.c:186 ../gtk/gtkfilechooserbutton.c:439
 #: ../gtk/gtkfontbutton.c:434 ../gtk/gtkprintjob.c:139
-#: ../gtk/gtkstatusicon.c:426 ../gtk/gtktreeviewcolumn.c:330
+#: ../gtk/gtkstatusicon.c:426 ../gtk/gtktreeviewcolumn.c:328
 msgid "Title"
 msgstr "শীৰ্ষক"
 
@@ -2567,7 +2567,7 @@ msgstr "বৰ্তমান ৰঙ, এটা GdkRGBA হিচাপে"
 msgid "Whether alpha should be shown"
 msgstr "আল্ফা দেখুৱা হব নে"
 
-#: ../gtk/gtkcolorchooserdialog.c:258 ../gtk/gtkcolorchooserwidget.c:675
+#: ../gtk/gtkcolorchooserdialog.c:258 ../gtk/gtkcolorchooserwidget.c:674
 msgid "Show editor"
 msgstr "সম্পাদকক দেখুৱাওক"
 
@@ -2591,99 +2591,99 @@ msgstr "চিহ্নিত কৰাৰ যোগ্য"
 msgid "Whether the swatch is selectable"
 msgstr "শ্বাচ নিৰ্বাচন কৰিব পৰা হয় নে"
 
-#: ../gtk/gtkcombobox.c:729
+#: ../gtk/gtkcombobox.c:726
 msgid "ComboBox model"
 msgstr "কম্বোবাকচ আৰ্হি"
 
-#: ../gtk/gtkcombobox.c:730
+#: ../gtk/gtkcombobox.c:727
 msgid "The model for the combo box"
 msgstr "কম্বোবাকচৰ আৰ্হি"
 
-#: ../gtk/gtkcombobox.c:747
+#: ../gtk/gtkcombobox.c:744
 msgid "Wrap width for laying out the items in a grid"
 msgstr "গুটানো প্ৰস্থ উল্লিখিত সময় অবধি"
 
-#: ../gtk/gtkcombobox.c:769 ../gtk/gtktreemenu.c:386
+#: ../gtk/gtkcombobox.c:766 ../gtk/gtktreemenu.c:386
 msgid "Row span column"
 msgstr "প্ৰতি শাৰীত স্তম্ভৰ সংখ্যা"
 
-#: ../gtk/gtkcombobox.c:770 ../gtk/gtktreemenu.c:387
+#: ../gtk/gtkcombobox.c:767 ../gtk/gtktreemenu.c:387
 msgid "TreeModel column containing the row span values"
 msgstr "শাৰীৰ প্ৰস্থৰ মান ধাৰনকাৰী TreeModel স্তম্ভ"
 
-#: ../gtk/gtkcombobox.c:791 ../gtk/gtktreemenu.c:407
+#: ../gtk/gtkcombobox.c:788 ../gtk/gtktreemenu.c:407
 msgid "Column span column"
 msgstr "প্ৰতি স্তম্ভ স্তম্ভৰ সংখ্যা"
 
-#: ../gtk/gtkcombobox.c:792 ../gtk/gtktreemenu.c:408
+#: ../gtk/gtkcombobox.c:789 ../gtk/gtktreemenu.c:408
 msgid "TreeModel column containing the column span values"
 msgstr "স্তম্ভৰ প্ৰস্থৰ মান ধাৰনকাৰী TreeModel স্তম্ভ"
 
-#: ../gtk/gtkcombobox.c:813
+#: ../gtk/gtkcombobox.c:810
 msgid "Active item"
 msgstr "সক্ৰিয় বস্তু"
 
-#: ../gtk/gtkcombobox.c:814
+#: ../gtk/gtkcombobox.c:811
 msgid "The item which is currently active"
 msgstr "বৰ্তমানে সক্ৰিয় বস্তু"
 
-#: ../gtk/gtkcombobox.c:833 ../gtk/gtkuimanager.c:487
+#: ../gtk/gtkcombobox.c:830 ../gtk/gtkuimanager.c:487
 msgid "Add tearoffs to menus"
 msgstr "মেনুতে টিয়াৰঅফ যোগ কৰক"
 
-#: ../gtk/gtkcombobox.c:834
+#: ../gtk/gtkcombobox.c:831
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "ড্ৰপডাউনত কোনো টিয়াৰ-অফ তালিকা বস্তু থাকিব নে"
 
-#: ../gtk/gtkcombobox.c:849 ../gtk/gtkentry.c:780
+#: ../gtk/gtkcombobox.c:846 ../gtk/gtkentry.c:780
 msgid "Has Frame"
 msgstr "ফ্ৰেইম আছে"
 
-#: ../gtk/gtkcombobox.c:850
+#: ../gtk/gtkcombobox.c:847
 msgid "Whether the combo box draws a frame around the child"
 msgstr "চাইল্ডৰ চৌপাশে কম্বো বাকচ কোনো ফ্ৰেইম আকিব নে"
 
-#: ../gtk/gtkcombobox.c:858
+#: ../gtk/gtkcombobox.c:855
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "মাউছৰ সহায়ত কম্বো বাকচক ক্লিক কৰা হলে ই ফ'কাচ হব নে"
 
-#: ../gtk/gtkcombobox.c:873 ../gtk/gtkmenu.c:609
+#: ../gtk/gtkcombobox.c:870 ../gtk/gtkmenu.c:609
 msgid "Tearoff Title"
 msgstr "বিচ্ছিন্ন শীৰ্ষক"
 
-#: ../gtk/gtkcombobox.c:874
+#: ../gtk/gtkcombobox.c:871
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr ""
 "প'পআপ চিঙি যাওতে উইন্ডো ব্যৱস্থাপক দ্বাৰা প্ৰদৰ্শন কৰিব পাৰা এটা শীৰ্ষক"
 
-#: ../gtk/gtkcombobox.c:891
+#: ../gtk/gtkcombobox.c:888
 msgid "Popup shown"
 msgstr "পপ-আপ"
 
-#: ../gtk/gtkcombobox.c:892
+#: ../gtk/gtkcombobox.c:889
 msgid "Whether the combo's dropdown is shown"
 msgstr "কম্বোৰ ড্ৰপডাউন দেখুৱা হয় নে"
 
-#: ../gtk/gtkcombobox.c:908
+#: ../gtk/gtkcombobox.c:905
 msgid "Button Sensitivity"
 msgstr "বুটাম সংবেদনশীলতা"
 
 #
-#: ../gtk/gtkcombobox.c:909
+#: ../gtk/gtkcombobox.c:906
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "কোন বুটামৰ মাউছৰ সহায়ত ক্লিক কৰা হলে ই ফ'কাচ হব নে"
 
-#: ../gtk/gtkcombobox.c:925
+#: ../gtk/gtkcombobox.c:922
 msgid "Whether combo box has an entry"
 msgstr "কম্বো বাকচৰ প্ৰবিষ্টি আছে নে"
 
-#: ../gtk/gtkcombobox.c:940
+#: ../gtk/gtkcombobox.c:937
 msgid "Entry Text Column"
 msgstr "প্ৰবিষ্টি লিখনী স্তম্ভ"
 
-#: ../gtk/gtkcombobox.c:941
+#: ../gtk/gtkcombobox.c:938
 msgid ""
 "The column in the combo box's model to associate with strings from the entry "
 "if the combo was created with #GtkComboBox:has-entry = %TRUE"
@@ -2692,11 +2692,11 @@ msgstr ""
 "কম্বোটো "
 "#GtkComboBox:has-entry = %TRUE ৰে সৃষ্টি কৰা হৈছিল"
 
-#: ../gtk/gtkcombobox.c:958
+#: ../gtk/gtkcombobox.c:955
 msgid "ID Column"
 msgstr "ID স্তম্ভ"
 
-#: ../gtk/gtkcombobox.c:959
+#: ../gtk/gtkcombobox.c:956
 msgid ""
 "The column in the combo box's model that provides string IDs for the values "
 "in the model"
@@ -2705,19 +2705,19 @@ msgstr ""
 "যোগান "
 "দিয়ে"
 
-#: ../gtk/gtkcombobox.c:974
+#: ../gtk/gtkcombobox.c:971
 msgid "Active id"
 msgstr "সক্ৰিয় আই-ডি"
 
-#: ../gtk/gtkcombobox.c:975
+#: ../gtk/gtkcombobox.c:972
 msgid "The value of the id column for the active row"
 msgstr "সক্ৰিয় শাৰীৰ বাবে আই-ডি স্তম্ভৰ মান"
 
-#: ../gtk/gtkcombobox.c:990
+#: ../gtk/gtkcombobox.c:987
 msgid "Popup Fixed Width"
 msgstr "পপ্আপৰ পূৰ্বনিৰ্দিষ্ট প্ৰস্থ"
 
-#: ../gtk/gtkcombobox.c:991
+#: ../gtk/gtkcombobox.c:988
 msgid ""
 "Whether the popup's width should be a fixed width matching the allocated "
 "width of the combo box"
@@ -2725,27 +2725,27 @@ msgstr ""
 "পপ্আপৰ প্ৰস্থ কম্বোবাকচৰ বাবে আবন্টিত প্ৰস্থৰ লগত মিল খোৱাকে পূৰ্বনিৰ্ধাৰিত "
 "হব লাগে নে"
 
-#: ../gtk/gtkcombobox.c:1017
+#: ../gtk/gtkcombobox.c:1014
 msgid "Appears as list"
 msgstr "তালিকাৰ বাবে মনে হয়"
 
-#: ../gtk/gtkcombobox.c:1018
+#: ../gtk/gtkcombobox.c:1015
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "ড্ৰপডাউনতৰ চেহাৰা তালিকাৰ বাবে নহ'বকি মেনুৰ মত"
 
-#: ../gtk/gtkcombobox.c:1034
+#: ../gtk/gtkcombobox.c:1031
 msgid "Arrow Size"
 msgstr "মাপ"
 
-#: ../gtk/gtkcombobox.c:1035
+#: ../gtk/gtkcombobox.c:1032
 msgid "The minimum size of the arrow in the combo box"
 msgstr "সৰ্বমোট"
 
-#: ../gtk/gtkcombobox.c:1052
+#: ../gtk/gtkcombobox.c:1049
 msgid "The amount of space used by the arrow"
 msgstr "কাঁড়ৰ দ্বাৰা ব্যৱহৃত স্থানৰ মাত্ৰা"
 
-#: ../gtk/gtkcombobox.c:1068
+#: ../gtk/gtkcombobox.c:1065
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "সৰ্বমোট"
 
@@ -2794,7 +2794,6 @@ msgid "Affects size"
 msgstr "প্ৰভাৱসমূহৰ আকাৰ"
 
 #: ../gtk/gtkcssstyleproperty.c:283
-#| msgid "Set if the value is inherited by default"
 msgid "Set if the value affects the sizing of elements"
 msgstr "সংহতি কৰক যদি মানে উপাদানসমূহৰ আকাৰৰ ওপৰত প্ৰভাৱ পেলায়"
 
@@ -2803,7 +2802,6 @@ msgid "Affects font"
 msgstr "প্ৰভাৱসমূহ ফন্ট"
 
 #: ../gtk/gtkcssstyleproperty.c:290
-#| msgid "Set if the value can be animated"
 msgid "Set if the value affects the font"
 msgstr "সংহতি কৰক যদি মানে ফন্টৰ ওপৰত প্ৰভাৱ পেলায়"
 
@@ -3301,7 +3299,7 @@ msgstr "মূলশব্দেৰ (Key) সৰ্বনিম্ন দৈৰ�
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "মিল খোঁজায় ব্যৱহৃত মূলশব্দেৰ (Key) সৰ্বনিম্ন দৈৰ্ঘ্য"
 
-#: ../gtk/gtkentrycompletion.c:347 ../gtk/gtkiconview.c:433
+#: ../gtk/gtkentrycompletion.c:347 ../gtk/gtkiconview.c:432
 msgid "Text column"
 msgstr "লিখনী স্তম্ভ"
 
@@ -3423,12 +3421,12 @@ msgid ""
 msgstr "এক্সপান্ডাৰে উপৰস্তৰ উইন্ডোক প্ৰসাৰন আৰু স্খলন হওতে পুনৰ আকাৰ দিব নে"
 
 #: ../gtk/gtkexpander.c:353 ../gtk/gtktoolitemgroup.c:1632
-#: ../gtk/gtktreeview.c:1195
+#: ../gtk/gtktreeview.c:1203
 msgid "Expander Size"
 msgstr "অধিকৃতি দৈৰ্ঘ্য"
 
 #: ../gtk/gtkexpander.c:354 ../gtk/gtktoolitemgroup.c:1633
-#: ../gtk/gtktreeview.c:1196
+#: ../gtk/gtktreeview.c:1204
 msgid "Size of the expander arrow"
 msgstr "অধিকৃতি চিহ্নেৰ দৈৰ্ঘ্য"
 
@@ -3554,7 +3552,7 @@ msgstr ""
 "খোলা অৱস্থাত নথকা ফাইল নিৰ্বাচকে ব্যৱহাৰকৰ্তাক নতুন ফোল্ডাৰ সৃষ্টি কৰিব দিব "
 "নে।"
 
-#: ../gtk/gtkfixed.c:150 ../gtk/gtklayout.c:646 ../gtk/gtktreeviewcolumn.c:263
+#: ../gtk/gtkfixed.c:150 ../gtk/gtklayout.c:646 ../gtk/gtktreeviewcolumn.c:261
 msgid "X position"
 msgstr "X অৱস্থান"
 
@@ -3678,7 +3676,7 @@ msgstr "যদি সত্য, স্তম্ভসমূহ সমান প�
 msgid "The row number to attach the top side of a child widget to"
 msgstr "চাইল্ড উইজেটৰ ওপৰৰ অংশ যোগ কৰিবলে শাৰী নম্বৰ"
 
-#: ../gtk/gtkgrid.c:1434 ../gtk/gtklayout.c:672 ../gtk/gtktreeviewcolumn.c:273
+#: ../gtk/gtkgrid.c:1434 ../gtk/gtklayout.c:672 ../gtk/gtktreeviewcolumn.c:271
 msgid "Width"
 msgstr "বহল"
 
@@ -3694,204 +3692,222 @@ msgstr "উচ্চতা"
 msgid "The number of rows that a child spans"
 msgstr "এটা চাইল্ডে বিস্তাৰ কৰা শাৰীৰ সংখ্যা"
 
-#: ../gtk/gtkiconview.c:396 ../gtk/gtktreeselection.c:130
+#: ../gtk/gtkiconview.c:395 ../gtk/gtktreeselection.c:130
 msgid "Selection mode"
 msgstr "নিৰ্বাচন অৱস্থা"
 
-#: ../gtk/gtkiconview.c:397
+#: ../gtk/gtkiconview.c:396
 msgid "The selection mode"
 msgstr "নিৰ্বাচন অৱস্থা"
 
-#: ../gtk/gtkiconview.c:415
+#: ../gtk/gtkiconview.c:414
 msgid "Pixbuf column"
 msgstr "পিক্সবাফ স্তম্ভ"
 
-#: ../gtk/gtkiconview.c:416
+#: ../gtk/gtkiconview.c:415
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "আৰ্হি স্তম্ভ ব্যৱহাৰ কৰি যৰ পৰা আইকন পিক্সবাফ আহৰণ কৰা হৈছে - "
 
-#: ../gtk/gtkiconview.c:434
+#: ../gtk/gtkiconview.c:433
 msgid "Model column used to retrieve the text from"
 msgstr "আৰ্হি স্তম্ভ ব্যৱহাৰ কৰি যৰ পৰা লিখনী আহৰণ কৰা হৈছে - "
 
-#: ../gtk/gtkiconview.c:453
+#: ../gtk/gtkiconview.c:452
 msgid "Markup column"
 msgstr "মাৰ্কআপ স্তম্ভ"
 
-#: ../gtk/gtkiconview.c:454
+#: ../gtk/gtkiconview.c:453
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr "পেনগো মাৰ্কআপ ব্যৱহাৰ কৰিলে আৰ্হি স্তম্ভ ব্যৱহাৰ কৰি লিখনী আহৰণ কৰা হয়"
 
-#: ../gtk/gtkiconview.c:461
+#: ../gtk/gtkiconview.c:460
 msgid "Icon View Model"
 msgstr "আইকন-ভিউ আৰ্হি"
 
-#: ../gtk/gtkiconview.c:462
+#: ../gtk/gtkiconview.c:461
 msgid "The model for the icon view"
 msgstr "আইকন-ভিউ তৰ আৰ্হি"
 
-#: ../gtk/gtkiconview.c:478
+#: ../gtk/gtkiconview.c:477
 msgid "Number of columns"
 msgstr "স্তম্ভ সংখ্যা"
 
-#: ../gtk/gtkiconview.c:479
+#: ../gtk/gtkiconview.c:478
 msgid "Number of columns to display"
 msgstr "যি সংখ্যক স্তম্ভ প্ৰদৰ্শন কৰা হ'ব"
 
-#: ../gtk/gtkiconview.c:496
+#: ../gtk/gtkiconview.c:495
 msgid "Width for each item"
 msgstr "প্ৰতিটি বস্তুৰ প্ৰস্থ"
 
-#: ../gtk/gtkiconview.c:497
+#: ../gtk/gtkiconview.c:496
 msgid "The width used for each item"
 msgstr "প্ৰতিটি বস্তুৰ প্ৰস্থ"
 
-#: ../gtk/gtkiconview.c:513
+#: ../gtk/gtkiconview.c:512
 msgid "Space which is inserted between cells of an item"
 msgstr "প্ৰতিটি বস্তুৰ ঘৰবোৰৰ মাজত যি সংখ্যক স্থান ভৰোৱা হয়"
 
-#: ../gtk/gtkiconview.c:528
+#: ../gtk/gtkiconview.c:527
 msgid "Row Spacing"
 msgstr "শাৰীৰ স্থানৰ পৰিমাণ"
 
-#: ../gtk/gtkiconview.c:529
+#: ../gtk/gtkiconview.c:528
 msgid "Space which is inserted between grid rows"
 msgstr "গ্ৰীড শাৰীবোৰৰ মাজত যি সংখ্যক স্থান ভৰোৱা হয়"
 
-#: ../gtk/gtkiconview.c:544
+#: ../gtk/gtkiconview.c:543
 msgid "Column Spacing"
 msgstr "শাৰীৰ স্থানৰ পৰিমাণ"
 
-#: ../gtk/gtkiconview.c:545
+#: ../gtk/gtkiconview.c:544
 msgid "Space which is inserted between grid columns"
 msgstr "গ্ৰিড স্তম্ভসমূহৰ মাজত সুমুৱা স্থান"
 
-#: ../gtk/gtkiconview.c:560
+#: ../gtk/gtkiconview.c:559
 msgid "Margin"
 msgstr "সীমা"
 
-#: ../gtk/gtkiconview.c:561
+#: ../gtk/gtkiconview.c:560
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "আইকন-ভিউ তৰ প্ৰান্তে যি সংখ্যক স্থান ভৰোৱা হয়"
 
-#: ../gtk/gtkiconview.c:576
+#: ../gtk/gtkiconview.c:575
 msgid "Item Orientation"
 msgstr "বস্তুৰ দিশ"
 
-#: ../gtk/gtkiconview.c:577
+#: ../gtk/gtkiconview.c:576
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr "প্ৰতিটি বস্তুৰ আইকন আৰু লিখনীক পৰস্পৰৰ সাপেক্ষে যি ভাবে ৰাখা হয়"
 
-#: ../gtk/gtkiconview.c:593 ../gtk/gtktreeview.c:1030
-#: ../gtk/gtktreeviewcolumn.c:373
+#: ../gtk/gtkiconview.c:592 ../gtk/gtktreeview.c:1022
+#: ../gtk/gtktreeviewcolumn.c:371
 msgid "Reorderable"
 msgstr "পুনৰ সজোৱাৰ যোগ্য"
 
-#: ../gtk/gtkiconview.c:594 ../gtk/gtktreeview.c:1031
+#: ../gtk/gtkiconview.c:593 ../gtk/gtktreeview.c:1023
 msgid "View is reorderable"
 msgstr "প্ৰদৰ্শিত দৃশ্য পুনৰ সজোৱাৰ যোগ্য"
 
-#: ../gtk/gtkiconview.c:601 ../gtk/gtktreeview.c:1181
+#: ../gtk/gtkiconview.c:600 ../gtk/gtktreeview.c:1173
 msgid "Tooltip Column"
 msgstr "টুলটিপ স্তম্ভ"
 
-#: ../gtk/gtkiconview.c:602
+#: ../gtk/gtkiconview.c:601
 msgid "The column in the model containing the tooltip texts for the items"
 msgstr "বস্তুবোৰৰ বাবে টুলটিপ লিখনীসমূহ অন্তৰ্ভুক্ত কৰা আৰ্হিৰ স্তম্ভ"
 
-#: ../gtk/gtkiconview.c:619
+#: ../gtk/gtkiconview.c:618
 msgid "Item Padding"
 msgstr "বস্তুৰ পেডিং"
 
-#: ../gtk/gtkiconview.c:620
+#: ../gtk/gtkiconview.c:619
 msgid "Padding around icon view items"
 msgstr "আইকন প্ৰদৰ্শন বস্তুৰ ওচৰত পেডিং"
 
-#: ../gtk/gtkiconview.c:651
+#: ../gtk/gtkiconview.c:652 ../gtk/gtktreeview.c:1191
+msgid "Activate on Single Click"
+msgstr "এটা ক্লিকত সক্ৰিয় কৰক"
+
+#: ../gtk/gtkiconview.c:653 ../gtk/gtktreeview.c:1192
+msgid "Activate row on a single click"
+msgstr "এটা ক্লিকত শাৰী সক্ৰিয় কৰক"
+
+#: ../gtk/gtkiconview.c:666
 msgid "Selection Box Color"
 msgstr "নিৰ্বাচক বাকচৰ ৰং"
 
-#: ../gtk/gtkiconview.c:652
+#: ../gtk/gtkiconview.c:667
 msgid "Color of the selection box"
 msgstr "নিৰ্বাচক বাকচৰ ৰং"
 
-#: ../gtk/gtkiconview.c:658
+#: ../gtk/gtkiconview.c:673
 msgid "Selection Box Alpha"
 msgstr "নিৰ্বাচক বাকচৰ আলফা"
 
-#: ../gtk/gtkiconview.c:659
+#: ../gtk/gtkiconview.c:674
 msgid "Opacity of the selection box"
 msgstr "নিৰ্বাচক বাকচৰ স্বচ্ছতা"
 
-#: ../gtk/gtkimage.c:216 ../gtk/gtkstatusicon.c:223
+#: ../gtk/gtkimage.c:218 ../gtk/gtkstatusicon.c:223
 msgid "Pixbuf"
 msgstr "পিক্সবাফ"
 
-#: ../gtk/gtkimage.c:217 ../gtk/gtkstatusicon.c:224
+#: ../gtk/gtkimage.c:219 ../gtk/gtkstatusicon.c:224
 msgid "A GdkPixbuf to display"
 msgstr "প্ৰদৰ্শনেৰ বাবে এটা GdkPixbuf"
 
-#: ../gtk/gtkimage.c:224 ../gtk/gtkrecentmanager.c:293
+#: ../gtk/gtkimage.c:226 ../gtk/gtkrecentmanager.c:293
 #: ../gtk/gtkstatusicon.c:231
 msgid "Filename"
 msgstr "ফাইলৰ নাম"
 
-#: ../gtk/gtkimage.c:225 ../gtk/gtkstatusicon.c:232
+#: ../gtk/gtkimage.c:227 ../gtk/gtkstatusicon.c:232
 msgid "Filename to load and display"
 msgstr "ল'ড কৰি দেখাবৰ বাবে ফাইলৰ নাম"
 
-#: ../gtk/gtkimage.c:234 ../gtk/gtkstatusicon.c:240
+#: ../gtk/gtkimage.c:236 ../gtk/gtkstatusicon.c:240
 msgid "Stock ID for a stock image to display"
 msgstr "যি স্টক চিত্ৰটি প্ৰদৰ্শন কৰা হ'ব তাৰ স্টক আইডি"
 
-#: ../gtk/gtkimage.c:241
+#: ../gtk/gtkimage.c:243
 msgid "Icon set"
 msgstr "আইকন সংহতি"
 
-#: ../gtk/gtkimage.c:242
+#: ../gtk/gtkimage.c:244
 msgid "Icon set to display"
 msgstr "প্ৰদৰ্শন কৰাৰ বাবে আইকন সংহতি"
 
-#: ../gtk/gtkimage.c:249 ../gtk/gtkscalebutton.c:228 ../gtk/gtktoolbar.c:530
+#: ../gtk/gtkimage.c:251 ../gtk/gtkscalebutton.c:228 ../gtk/gtktoolbar.c:527
 #: ../gtk/gtktoolpalette.c:1013
 msgid "Icon size"
 msgstr "আইকনৰ আয়তন"
 
-#: ../gtk/gtkimage.c:250
+#: ../gtk/gtkimage.c:252
 msgid "Symbolic size to use for stock icon, icon set or named icon"
 msgstr ""
 "সাধাৰণ আইকন, আইকন সংহতি বা নামযুক্ত আইকনৰ বাবে যি প্ৰতীক আকাৰ ব্যৱহাৰ কৰা হ'ব"
 
-#: ../gtk/gtkimage.c:266
+#: ../gtk/gtkimage.c:268
 msgid "Pixel size"
 msgstr "পিক্সেলৰ আকাৰ"
 
-#: ../gtk/gtkimage.c:267
+#: ../gtk/gtkimage.c:269
 msgid "Pixel size to use for named icon"
 msgstr "নামযুক্ত আইকনৰ বাবে ব্যৱহৃত পিক্সেল-আকাৰ"
 
-#: ../gtk/gtkimage.c:275
+#: ../gtk/gtkimage.c:277
 msgid "Animation"
 msgstr "এনিমেষণ"
 
-#: ../gtk/gtkimage.c:276
+#: ../gtk/gtkimage.c:278
 msgid "GdkPixbufAnimation to display"
 msgstr "যি GdkPixbufAnimation প্ৰদৰ্শন কৰা হ'ব"
 
-#: ../gtk/gtkimage.c:316 ../gtk/gtkstatusicon.c:271
+#: ../gtk/gtkimage.c:325
+#| msgid "Input source"
+msgid "Resource"
+msgstr "সম্পদ"
+
+#: ../gtk/gtkimage.c:326
+#| msgid "The GIcon being displayed"
+msgid "The resource path being displayed"
+msgstr "প্ৰদৰ্শন কৰা সম্পদ পথ"
+
+#: ../gtk/gtkimage.c:333 ../gtk/gtkstatusicon.c:271
 msgid "Storage type"
 msgstr "সংৰক্ষণৰ ধৰণ"
 
-#: ../gtk/gtkimage.c:317 ../gtk/gtkstatusicon.c:272
+#: ../gtk/gtkimage.c:334 ../gtk/gtkstatusicon.c:272
 msgid "The representation being used for image data"
 msgstr "তথ্যচিত্ৰে বাবে যি উপস্থাপনা ব্যৱহাৰ কৰা হচ্ছে"
 
-#: ../gtk/gtkimage.c:335
+#: ../gtk/gtkimage.c:352
 msgid "Use Fallback"
 msgstr "ফলবেক ব্যৱহাৰ কৰক"
 
-#: ../gtk/gtkimage.c:336
+#: ../gtk/gtkimage.c:353
 msgid "Whether to use icon names fallback"
 msgstr "আইকন নামসমূহৰ ফলবেক ব্যৱহাৰ কৰা হব নে"
 
@@ -3935,7 +3951,7 @@ msgid "Width of border around the action area"
 msgstr "কাৰ্য্যক্ষেত্ৰ ওচৰৰ প্ৰান্তৰ প্ৰস্থ"
 
 #: ../gtk/gtkinvisible.c:101 ../gtk/gtkmountoperation.c:179
-#: ../gtk/gtkstatusicon.c:290 ../gtk/gtkstylecontext.c:442
+#: ../gtk/gtkstatusicon.c:290 ../gtk/gtkstylecontext.c:441
 #: ../gtk/gtkwindow.c:781
 msgid "Screen"
 msgstr "পৰ্দা"
@@ -4195,7 +4211,7 @@ msgstr "মেনুবাৰৰ চাইল্ড পেক তৰ দিক"
 msgid "Style of bevel around the menubar"
 msgstr "মেনুবাৰৰ চৌপাশে বেভেলৰ ধৰণ"
 
-#: ../gtk/gtkmenubar.c:230 ../gtk/gtktoolbar.c:589
+#: ../gtk/gtkmenubar.c:230 ../gtk/gtktoolbar.c:586
 msgid "Internal padding"
 msgstr "অভ্যন্তৰীণ পেডিং (Padding)"
 
@@ -4528,7 +4544,7 @@ msgid ""
 msgstr "উইজেটৰ ওপৰত আৰু নীচে যত পিক্সেল ৰিক্ত স্থান যোগ কৰা হ'ব"
 
 #
-#: ../gtk/gtkmountoperation.c:163 ../gtk/gtkstylecontext.c:465
+#: ../gtk/gtkmountoperation.c:163 ../gtk/gtkstylecontext.c:464
 msgid "Parent"
 msgstr "পেৰেন্ট"
 
@@ -4662,7 +4678,7 @@ msgstr "Tab detachable"
 msgid "Whether the tab is detachable"
 msgstr "হলো"
 
-#: ../gtk/gtknotebook.c:813 ../gtk/gtkscrollbar.c:102
+#: ../gtk/gtknotebook.c:813 ../gtk/gtkscrollbar.c:100
 msgid "Secondary backward stepper"
 msgstr "পশ্চাত্‍গামী গৌণ স্টেপাৰ"
 
@@ -4673,7 +4689,7 @@ msgstr ""
 "ট্যাব অংশৰ বিপৰীত প্ৰান্তে এটা পশ্চাত্‍গামী গৌণ স্টেপাৰ তীৰচিহ্নধাৰী বুটাম "
 "প্ৰদৰ্শন কৰক"
 
-#: ../gtk/gtknotebook.c:829 ../gtk/gtkscrollbar.c:109
+#: ../gtk/gtknotebook.c:829 ../gtk/gtkscrollbar.c:107
 msgid "Secondary forward stepper"
 msgstr "সম্মুখগামী গৌণ স্টেপাৰ"
 
@@ -4684,19 +4700,19 @@ msgstr ""
 "ট্যাব অংশৰ বিপৰীত প্ৰান্তে এটা সম্মুখগামী গৌণ স্টেপাৰ তীৰচিহ্নধাৰী বুটাম "
 "প্ৰদৰ্শন কৰক"
 
-#: ../gtk/gtknotebook.c:844 ../gtk/gtkscrollbar.c:88
+#: ../gtk/gtknotebook.c:844 ../gtk/gtkscrollbar.c:86
 msgid "Backward stepper"
 msgstr "পশ্চাত্‍গামী স্টেপাৰ"
 
-#: ../gtk/gtknotebook.c:845 ../gtk/gtkscrollbar.c:89
+#: ../gtk/gtknotebook.c:845 ../gtk/gtkscrollbar.c:87
 msgid "Display the standard backward arrow button"
 msgstr "পশ্চাত্‍গামী প্ৰমিত তীৰচিহ্নধাৰী বুটাম প্ৰদৰ্শন কৰক"
 
-#: ../gtk/gtknotebook.c:859 ../gtk/gtkscrollbar.c:95
+#: ../gtk/gtknotebook.c:859 ../gtk/gtkscrollbar.c:93
 msgid "Forward stepper"
 msgstr "সম্মুখগামী স্টেপাৰ"
 
-#: ../gtk/gtknotebook.c:860 ../gtk/gtkscrollbar.c:96
+#: ../gtk/gtknotebook.c:860 ../gtk/gtkscrollbar.c:94
 msgid "Display the standard forward arrow button"
 msgstr "সম্মুখগামী প্ৰমিত তীৰচিহ্নধাৰী বুটাম প্ৰদৰ্শন কৰক"
 
@@ -5183,37 +5199,37 @@ msgstr "সম্বাদে নিৰ্বাচনৰ সমৰ্থন ক
 msgid "Whether the application has a selection"
 msgstr "এপ্লিকেচনত নিৰ্বাচন আছে নে"
 
-#: ../gtk/gtkprogressbar.c:158
+#: ../gtk/gtkprogressbar.c:157
 msgid "Fraction"
 msgstr "ভগ্নাংশ"
 
-#: ../gtk/gtkprogressbar.c:159
+#: ../gtk/gtkprogressbar.c:158
 msgid "The fraction of total work that has been completed"
 msgstr "পুৰো কামটাৰ যি ভগ্নাংশ সম্পূৰ্ণ হৈছে"
 
-#: ../gtk/gtkprogressbar.c:166
+#: ../gtk/gtkprogressbar.c:165
 msgid "Pulse Step"
 msgstr "স্পন্দন ধাপ"
 
-#: ../gtk/gtkprogressbar.c:167
+#: ../gtk/gtkprogressbar.c:166
 msgid "The fraction of total progress to move the bouncing block when pulsed"
 msgstr ""
 "মোট কামৰ যি ভগাংশ পৰিমাণ সম্পন্ন হলে স্পন্দনেৰ ফলে লাফাতে থাকা ব্লকটিকে সৰানো "
 "যাব "
 
-#: ../gtk/gtkprogressbar.c:175
+#: ../gtk/gtkprogressbar.c:174
 msgid "Text to be displayed in the progress bar"
 msgstr "প্ৰগ্ৰেছ বাৰে যি লিখনী প্ৰদৰ্শন কৰা হ'ব"
 
-#: ../gtk/gtkprogressbar.c:196
+#: ../gtk/gtkprogressbar.c:195
 msgid "Show text"
 msgstr "লিখনী প্ৰদৰ্শন কৰক"
 
-#: ../gtk/gtkprogressbar.c:197
+#: ../gtk/gtkprogressbar.c:196
 msgid "Whether the progress is shown as text."
 msgstr "হলো."
 
-#: ../gtk/gtkprogressbar.c:219
+#: ../gtk/gtkprogressbar.c:218
 msgid ""
 "The preferred place to ellipsize the string, if the progress bar does not "
 "have enough room to display the entire string, if at all."
@@ -5221,56 +5237,56 @@ msgstr ""
 "The preferred place to ellipsize the string, if the progress bar does not "
 "have enough room to display the entire string, if at all."
 
-#: ../gtk/gtkprogressbar.c:226
+#: ../gtk/gtkprogressbar.c:225
 msgid "X spacing"
 msgstr "X spacing"
 
-#: ../gtk/gtkprogressbar.c:227
+#: ../gtk/gtkprogressbar.c:226
 msgid "Extra spacing applied to the width of a progress bar."
 msgstr "প্ৰস্থ সৰ্বমোট."
 
-#: ../gtk/gtkprogressbar.c:232
+#: ../gtk/gtkprogressbar.c:231
 msgid "Y spacing"
 msgstr "Y spacing"
 
 #
-#: ../gtk/gtkprogressbar.c:233
+#: ../gtk/gtkprogressbar.c:232
 msgid "Extra spacing applied to the height of a progress bar."
 msgstr "প্ৰস্থ সৰ্বমোট."
 
-#: ../gtk/gtkprogressbar.c:246
+#: ../gtk/gtkprogressbar.c:245
 msgid "Minimum horizontal bar width"
 msgstr "নুন্যতম আনুভূমিক বাৰ প্ৰস্থ"
 
 #
-#: ../gtk/gtkprogressbar.c:247
+#: ../gtk/gtkprogressbar.c:246
 msgid "The minimum horizontal width of the progress bar"
 msgstr "লেবেলৰ পথালি সংৰেখন"
 
-#: ../gtk/gtkprogressbar.c:259
+#: ../gtk/gtkprogressbar.c:258
 msgid "Minimum horizontal bar height"
 msgstr "নুন্যতম আনুভূমিক বাৰ উচ্চতা"
 
 #
-#: ../gtk/gtkprogressbar.c:260
+#: ../gtk/gtkprogressbar.c:259
 msgid "Minimum horizontal height of the progress bar"
 msgstr "প্ৰগ্ৰেছবাৰৰ মান"
 
-#: ../gtk/gtkprogressbar.c:272
+#: ../gtk/gtkprogressbar.c:271
 msgid "Minimum vertical bar width"
 msgstr "নুন্যতম উলম্ব বাৰ প্ৰস্থ"
 
 #
-#: ../gtk/gtkprogressbar.c:273
+#: ../gtk/gtkprogressbar.c:272
 msgid "The minimum vertical width of the progress bar"
 msgstr "প্ৰগ্ৰেছবাৰে যি লিখনী প্ৰদৰ্শন কৰা হ'ব"
 
-#: ../gtk/gtkprogressbar.c:285
+#: ../gtk/gtkprogressbar.c:284
 msgid "Minimum vertical bar height"
 msgstr "নুন্যতম উলম্ব বাৰ উচ্চতা"
 
 #
-#: ../gtk/gtkprogressbar.c:286
+#: ../gtk/gtkprogressbar.c:285
 msgid "The minimum vertical height of the progress bar"
 msgstr "প্ৰগ্ৰেছবাৰৰ মান"
 
@@ -5638,29 +5654,29 @@ msgstr "সমলৰ আকাৰ কেনেধৰণে নিৰ্ধাৰ
 msgid "Vertical Scrollable Policy"
 msgstr "উলম্ব স্ক্ৰল কৰিব পৰা নীতি"
 
-#: ../gtk/gtkscrollbar.c:72
+#: ../gtk/gtkscrollbar.c:70
 msgid "Minimum Slider Length"
 msgstr "স্লাইডাৰৰ সৰ্বনিম্ন দৈৰ্ঘ্য"
 
-#: ../gtk/gtkscrollbar.c:73
+#: ../gtk/gtkscrollbar.c:71
 msgid "Minimum length of scrollbar slider"
 msgstr "স্ক্ৰলবাৰ স্লাইডাৰৰ সৰ্বনিম্ন দৈৰ্ঘ্য"
 
-#: ../gtk/gtkscrollbar.c:81
+#: ../gtk/gtkscrollbar.c:79
 msgid "Fixed slider size"
 msgstr "স্লাইডাৰৰ পূৰ্বনিৰ্দিষ্ট দৈৰ্ঘ্য"
 
-#: ../gtk/gtkscrollbar.c:82
+#: ../gtk/gtkscrollbar.c:80
 msgid "Don't change slider size, just lock it to the minimum length"
 msgstr "স্লাইডাৰৰ দৈৰ্ঘ্য পৰিবৰ্তন না কৰি সৰ্বনিম্ন দৈৰ্ঘ্যি স্থিৰ ৰাখা হোক"
 
-#: ../gtk/gtkscrollbar.c:103
+#: ../gtk/gtkscrollbar.c:101
 msgid ""
 "Display a second backward arrow button on the opposite end of the scrollbar"
 msgstr ""
 "স্ক্ৰলবাৰৰ বিপৰীত প্ৰান্তে এটা পশ্চাত্‍গামী তীৰচিহ্নধাৰী বুটাম প্ৰদৰ্শন কৰক"
 
-#: ../gtk/gtkscrollbar.c:110
+#: ../gtk/gtkscrollbar.c:108
 msgid ""
 "Display a second forward arrow button on the opposite end of the scrollbar"
 msgstr "প্ৰদৰ্শন দ্বিতীয় সক্ৰিয় সৰ্বমোট"
@@ -6534,7 +6550,7 @@ msgstr "অৱস্থা দেখুৱা আইকন সন্নিবি
 msgid "The orientation of the tray"
 msgstr "সৰ্বমোট"
 
-#: ../gtk/gtkstatusicon.c:358 ../gtk/gtkwidget.c:1125
+#: ../gtk/gtkstatusicon.c:358 ../gtk/gtkwidget.c:1119
 msgid "Has tooltip"
 msgstr "Has tooltip"
 
@@ -6543,15 +6559,15 @@ msgstr "Has tooltip"
 msgid "Whether this tray icon has a tooltip"
 msgstr "এই টেগ ফন্ট আকাৰকে প্ৰভাবিত কৰে নে"
 
-#: ../gtk/gtkstatusicon.c:384 ../gtk/gtkwidget.c:1146
+#: ../gtk/gtkstatusicon.c:384 ../gtk/gtkwidget.c:1140
 msgid "Tooltip Text"
 msgstr "টুলটিপ Text"
 
-#: ../gtk/gtkstatusicon.c:385 ../gtk/gtkwidget.c:1147 ../gtk/gtkwidget.c:1168
+#: ../gtk/gtkstatusicon.c:385 ../gtk/gtkwidget.c:1141 ../gtk/gtkwidget.c:1162
 msgid "The contents of the tooltip for this widget"
 msgstr "সৰ্বমোট উল্লিখিত সময় অবধি"
 
-#: ../gtk/gtkstatusicon.c:408 ../gtk/gtkwidget.c:1167
+#: ../gtk/gtkstatusicon.c:408 ../gtk/gtkwidget.c:1161
 msgid "Tooltip markup"
 msgstr "টুলটিপ"
 
@@ -6564,19 +6580,19 @@ msgstr "সৰ্বমোট উল্লিখিত সময় অবধি"
 msgid "The title of this tray icon"
 msgstr "এই ট্ৰে আইকণৰ শীৰ্ষক"
 
-#: ../gtk/gtkstylecontext.c:443
+#: ../gtk/gtkstylecontext.c:442
 msgid "The associated GdkScreen"
 msgstr "সংযুক্ত GdkScreen"
 
-#: ../gtk/gtkstylecontext.c:449
+#: ../gtk/gtkstylecontext.c:448
 msgid "Direction"
 msgstr "দিশ"
 
-#: ../gtk/gtkstylecontext.c:450 ../gtk/gtktexttag.c:287
+#: ../gtk/gtkstylecontext.c:449 ../gtk/gtktexttag.c:287
 msgid "Text direction"
 msgstr "লিখনী লেখাৰ দিক"
 
-#: ../gtk/gtkstylecontext.c:466
+#: ../gtk/gtkstylecontext.c:465
 msgid "The parent style context"
 msgstr "উপধায়ক শৈলী পৰিপ্ৰেক্ষতিত"
 
@@ -6653,12 +6669,12 @@ msgid ""
 msgstr "তালিকা সৰ্বমোট উল্লিখিত সময় অবধি"
 
 #: ../gtk/gtktexthandle.c:470 ../gtk/gtktexthandle.c:471
-#: ../gtk/gtkwidget.c:991
+#: ../gtk/gtkwidget.c:985
 msgid "Parent widget"
 msgstr "পেৰেন্ট উইজেট"
 
 #
-#: ../gtk/gtktexthandle.c:478 ../gtk/gtkwidget.c:1182
+#: ../gtk/gtktexthandle.c:478 ../gtk/gtkwidget.c:1176
 msgid "Window"
 msgstr "সংযোগ পথ"
 
@@ -7057,79 +7073,79 @@ msgstr "নিৰ্দেশক আঁকক"
 msgid "If the toggle part of the button is displayed"
 msgstr "যদি বুটামৰ টোগল অংশটি প্ৰদৰ্শন কৰা হয়"
 
-#: ../gtk/gtktoolbar.c:501 ../gtk/gtktoolpalette.c:1043
+#: ../gtk/gtktoolbar.c:498 ../gtk/gtktoolpalette.c:1043
 msgid "Toolbar Style"
 msgstr "টুল-বাৰৰ বিন্যাস"
 
-#: ../gtk/gtktoolbar.c:502
+#: ../gtk/gtktoolbar.c:499
 msgid "How to draw the toolbar"
 msgstr "যিধৰণে টুলবাৰ অঁকা হ'ব"
 
-#: ../gtk/gtktoolbar.c:509
+#: ../gtk/gtktoolbar.c:506
 msgid "Show Arrow"
 msgstr "তীৰচিহ্ন প্ৰদৰ্শন কৰক"
 
-#: ../gtk/gtktoolbar.c:510
+#: ../gtk/gtktoolbar.c:507
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr "টুলবাৰে না আঁটলেও তীৰচিহ্ন প্ৰদৰ্শন কৰা হ'ব নে"
 
-#: ../gtk/gtktoolbar.c:531
+#: ../gtk/gtktoolbar.c:528
 msgid "Size of icons in this toolbar"
 msgstr "মাপ সৰ্বমোট"
 
-#: ../gtk/gtktoolbar.c:546 ../gtk/gtktoolpalette.c:1029
+#: ../gtk/gtktoolbar.c:543 ../gtk/gtktoolpalette.c:1029
 msgid "Icon size set"
 msgstr "আইকন"
 
-#: ../gtk/gtktoolbar.c:547 ../gtk/gtktoolpalette.c:1030
+#: ../gtk/gtktoolbar.c:544 ../gtk/gtktoolpalette.c:1030
 msgid "Whether the icon-size property has been set"
 msgstr "Whether the icon-size property has been set"
 
-#: ../gtk/gtktoolbar.c:556
+#: ../gtk/gtktoolbar.c:553
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "টুলবাৰৰ আকৃতি বৃদ্ধি পেলে বস্তুটি অতিৰিক্ত স্থান দখল কৰিব নে"
 
-#: ../gtk/gtktoolbar.c:564 ../gtk/gtktoolitemgroup.c:1651
+#: ../gtk/gtktoolbar.c:561 ../gtk/gtktoolitemgroup.c:1651
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "এই বস্তুটিৰ আকাৰ অন্যান্য সমমাত্ৰিক জিনিষেৰ মতই হ'ব নে"
 
-#: ../gtk/gtktoolbar.c:571
+#: ../gtk/gtktoolbar.c:568
 msgid "Spacer size"
 msgstr "স্পেসাৰ (Spacer) ইয়াৰ আকাৰ"
 
-#: ../gtk/gtktoolbar.c:572
+#: ../gtk/gtktoolbar.c:569
 msgid "Size of spacers"
 msgstr "স্পেসাৰ (Spacer) ইয়াৰ আকাৰ"
 
-#: ../gtk/gtktoolbar.c:590
+#: ../gtk/gtktoolbar.c:587
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "টুলবাৰৰ ছায়া আৰু বুটামসমূহেৰ মাজত প্ৰান্তীয় স্থান"
 
-#: ../gtk/gtktoolbar.c:598
+#: ../gtk/gtktoolbar.c:595
 msgid "Maximum child expand"
 msgstr "child প্ৰসাৰণ"
 
-#: ../gtk/gtktoolbar.c:599
+#: ../gtk/gtktoolbar.c:596
 msgid "Maximum amount of space an expandable item will be given"
 msgstr "সৰ্বমোট"
 
-#: ../gtk/gtktoolbar.c:607
+#: ../gtk/gtktoolbar.c:604
 msgid "Space style"
 msgstr "ৰিক্ত স্থানৰ ধৰণ"
 
-#: ../gtk/gtktoolbar.c:608
+#: ../gtk/gtktoolbar.c:605
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "স্পেসাৰসমূহ উলম্ব শাৰী অথবা শুধুই ৰিক্ত স্থান নে"
 
-#: ../gtk/gtktoolbar.c:615
+#: ../gtk/gtktoolbar.c:612
 msgid "Button relief"
 msgstr "বুটাম ছেড়ে দেয়া"
 
-#: ../gtk/gtktoolbar.c:616
+#: ../gtk/gtktoolbar.c:613
 msgid "Type of bevel around toolbar buttons"
 msgstr "টুলবাৰে অবস্থিত বুটামৰ চৌপাশে বেভেলৰ ধৰণ"
 
-#: ../gtk/gtktoolbar.c:632
+#: ../gtk/gtktoolbar.c:629
 msgid "Style of bevel around the toolbar"
 msgstr "টুলবাৰৰ চৌপাশে বেভেলৰ ধৰণ"
 
@@ -7352,315 +7368,315 @@ msgstr "TreeModelSort আৰ্হি"
 msgid "The model for the TreeModelSort to sort"
 msgstr "TreeModelSort তৰ যি আৰ্হিকে ক্ৰমানুসাৰ সজোৱাৰ হ'ব"
 
-#: ../gtk/gtktreeview.c:993
+#: ../gtk/gtktreeview.c:985
 msgid "TreeView Model"
 msgstr "ট্ৰি-ভিউ আৰ্হি"
 
-#: ../gtk/gtktreeview.c:994
+#: ../gtk/gtktreeview.c:986
 msgid "The model for the tree view"
 msgstr "ট্ৰি-ভিউ তৰ আৰ্হি"
 
-#: ../gtk/gtktreeview.c:1006
+#: ../gtk/gtktreeview.c:998
 msgid "Headers Visible"
 msgstr "হেডাৰ দৃশ্যমান থাকবে"
 
-#: ../gtk/gtktreeview.c:1007
+#: ../gtk/gtktreeview.c:999
 msgid "Show the column header buttons"
 msgstr "স্তম্ভ হেডাৰৰ বুটাম প্ৰদৰ্শন কৰক"
 
-#: ../gtk/gtktreeview.c:1014
+#: ../gtk/gtktreeview.c:1006
 msgid "Headers Clickable"
 msgstr "ক্লিক কৰাৰ যোগ্য হেডাৰ"
 
-#: ../gtk/gtktreeview.c:1015
+#: ../gtk/gtktreeview.c:1007
 msgid "Column headers respond to click events"
 msgstr "স্তম্ভ হেডাৰ ক্লিক ইভেন্টসমূহে সাড়া দেয়"
 
-#: ../gtk/gtktreeview.c:1022
+#: ../gtk/gtktreeview.c:1014
 msgid "Expander Column"
 msgstr "বৰ্ধিষ্ণু (Expander) স্তম্ভ"
 
-#: ../gtk/gtktreeview.c:1023
+#: ../gtk/gtktreeview.c:1015
 msgid "Set the column for the expander column"
 msgstr "স্তম্ভটি প্ৰকৃতি বৰ্ধিষ্ণু (Expander) স্তম্ভ হিচাপে নিৰ্ধাৰণ কৰক"
 
-#: ../gtk/gtktreeview.c:1038
+#: ../gtk/gtktreeview.c:1030
 msgid "Rules Hint"
 msgstr "নিয়ম সংক্ৰান্ত ইঙ্গিত"
 
-#: ../gtk/gtktreeview.c:1039
+#: ../gtk/gtktreeview.c:1031
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "পৰিবৰ্তনশীল ৰঙে শাৰী অঁকাৰ বাবে থীম ইঞ্জিনৰ বাবেি এটা ইঙ্গিত নিৰ্ধাৰণ কৰক"
 
-#: ../gtk/gtktreeview.c:1046
+#: ../gtk/gtktreeview.c:1038
 msgid "Enable Search"
 msgstr "অনুসন্ধান প্ৰক্ৰিয়া সক্ৰিয় কৰক"
 
-#: ../gtk/gtktreeview.c:1047
+#: ../gtk/gtktreeview.c:1039
 msgid "View allows user to search through columns interactively"
 msgstr ""
 "এই দৃশ্যটি ব্যৱহাৰকাৰীৰ অংশগ্ৰহণেৰ মধ্য দিয়ে (Interactive) স্তম্ভৰ পৰা "
 "অনুসন্ধান "
 "চালাতে দেয়"
 
-#: ../gtk/gtktreeview.c:1054
+#: ../gtk/gtktreeview.c:1046
 msgid "Search Column"
 msgstr "অনুসন্ধানেৰ স্তম্ভ"
 
 #
-#: ../gtk/gtktreeview.c:1055
+#: ../gtk/gtktreeview.c:1047
 msgid "Model column to search through during interactive search"
 msgstr "ক'ড অনুসন্ধানেৰ সময় যি আৰ্হি স্তম্ভ অনুসন্ধান চালানো হ'ব"
 
-#: ../gtk/gtktreeview.c:1075
+#: ../gtk/gtktreeview.c:1067
 msgid "Fixed Height Mode"
 msgstr "পূৰ্বনিৰ্দিষ্ট উচ্চতা ব্যৱহাৰকাৰী অৱস্থা"
 
-#: ../gtk/gtktreeview.c:1076
+#: ../gtk/gtktreeview.c:1068
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr "সকল শাৰীৰ উচ্চতা সমান বিবেচনা কৰি GtkTreeViewকে দ্ৰুততৰ কৰে"
 
-#: ../gtk/gtktreeview.c:1096
+#: ../gtk/gtktreeview.c:1088
 msgid "Hover Selection"
 msgstr "ভাসমান (Hover) নিৰ্বাচন"
 
-#: ../gtk/gtktreeview.c:1097
+#: ../gtk/gtktreeview.c:1089
 msgid "Whether the selection should follow the pointer"
 msgstr "পইন্টাৰক অনুসৰণ কৰি নিৰ্বাচন কৰা হ'ব নে"
 
-#: ../gtk/gtktreeview.c:1116
+#: ../gtk/gtktreeview.c:1108
 msgid "Hover Expand"
 msgstr "ভাসমান (Hover) সম্প্ৰসাৰণ"
 
-#: ../gtk/gtktreeview.c:1117
+#: ../gtk/gtktreeview.c:1109
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr "কোন শাৰীৰ ওপৰ পইন্টাৰ ৰাখা হলে তাকে সম্প্ৰসাৰিতকৰা/খোলা হ'ব নে"
 
-#: ../gtk/gtktreeview.c:1131
+#: ../gtk/gtktreeview.c:1123
 msgid "Show Expanders"
 msgstr "Show Expanders"
 
-#: ../gtk/gtktreeview.c:1132
+#: ../gtk/gtktreeview.c:1124
 msgid "View has expanders"
 msgstr "প্ৰদৰ্শন"
 
-#: ../gtk/gtktreeview.c:1146
+#: ../gtk/gtktreeview.c:1138
 msgid "Level Indentation"
 msgstr "Level Indentation"
 
-#: ../gtk/gtktreeview.c:1147
+#: ../gtk/gtktreeview.c:1139
 msgid "Extra indentation for each level"
 msgstr "উল্লিখিত সময় অবধি"
 
-#: ../gtk/gtktreeview.c:1156
+#: ../gtk/gtktreeview.c:1148
 msgid "Rubber Banding"
 msgstr "Rubber Banding"
 
-#: ../gtk/gtktreeview.c:1157
+#: ../gtk/gtktreeview.c:1149
 msgid ""
 "Whether to enable selection of multiple items by dragging the mouse pointer"
 msgstr "সৰ্বমোট"
 
-#: ../gtk/gtktreeview.c:1164
+#: ../gtk/gtktreeview.c:1156
 msgid "Enable Grid Lines"
 msgstr "সক্ৰিয় কৰক পংক্তি"
 
-#: ../gtk/gtktreeview.c:1165
+#: ../gtk/gtktreeview.c:1157
 msgid "Whether grid lines should be drawn in the tree view"
 msgstr "খানি পংক্তিৰ বাবে"
 
-#: ../gtk/gtktreeview.c:1173
+#: ../gtk/gtktreeview.c:1165
 msgid "Enable Tree Lines"
 msgstr "সক্ৰিয় কৰক ট্ৰি পংক্তি"
 
-#: ../gtk/gtktreeview.c:1174
+#: ../gtk/gtktreeview.c:1166
 msgid "Whether tree lines should be drawn in the tree view"
 msgstr "খানি পংক্তিৰ বাবে"
 
-#: ../gtk/gtktreeview.c:1182
+#: ../gtk/gtktreeview.c:1174
 msgid "The column in the model containing the tooltip texts for the rows"
 msgstr "উল্লিখিত সময় অবধি শাৰী"
 
-#: ../gtk/gtktreeview.c:1204
+#: ../gtk/gtktreeview.c:1212
 msgid "Vertical Separator Width"
 msgstr "উলম্ব বিভাজকেৰ প্ৰস্থ"
 
-#: ../gtk/gtktreeview.c:1205
+#: ../gtk/gtktreeview.c:1213
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "দুটি ঘৰৰ মাজত উলম্ব স্থান।  ইয়াক অবশ্যই এটা জোড় সংখ্যা হ'ব"
 
-#: ../gtk/gtktreeview.c:1213
+#: ../gtk/gtktreeview.c:1221
 msgid "Horizontal Separator Width"
 msgstr "পথালি বিভাজকেৰ প্ৰস্থ"
 
-#: ../gtk/gtktreeview.c:1214
+#: ../gtk/gtktreeview.c:1222
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "দুটি ঘৰৰ মাজত পথালি স্থান।  ইয়াক অবশ্যই এটা জোড় সংখ্যা হ'ব"
 
-#: ../gtk/gtktreeview.c:1222
+#: ../gtk/gtktreeview.c:1230
 msgid "Allow Rules"
 msgstr "নিয়ম অনুমোদন কৰক"
 
-#: ../gtk/gtktreeview.c:1223
+#: ../gtk/gtktreeview.c:1231
 msgid "Allow drawing of alternating color rows"
 msgstr "পৰিবৰ্তনশীল ৰং দিয়ে শাৰী অঁকা অনুমোদন কৰক"
 
-#: ../gtk/gtktreeview.c:1229
+#: ../gtk/gtktreeview.c:1237
 msgid "Indent Expanders"
 msgstr "অবচ্ছেদ (Indent) প্ৰসাৰক"
 
-#: ../gtk/gtktreeview.c:1230
+#: ../gtk/gtktreeview.c:1238
 msgid "Make the expanders indented"
 msgstr "প্ৰসাৰকসমূহক অবচ্ছেদিত (Indented) কৰক"
 
-#: ../gtk/gtktreeview.c:1236
+#: ../gtk/gtktreeview.c:1244
 msgid "Even Row Color"
 msgstr "জোড় নম্বৰৰ শাৰীৰ ৰং"
 
-#: ../gtk/gtktreeview.c:1237
+#: ../gtk/gtktreeview.c:1245
 msgid "Color to use for even rows"
 msgstr "জোড় নম্বৰৰ শাৰীত ব্যৱহৃত ৰং"
 
-#: ../gtk/gtktreeview.c:1243
+#: ../gtk/gtktreeview.c:1251
 msgid "Odd Row Color"
 msgstr "বেজোড় নম্বৰৰ শাৰীৰ ৰং"
 
-#: ../gtk/gtktreeview.c:1244
+#: ../gtk/gtktreeview.c:1252
 msgid "Color to use for odd rows"
 msgstr "বেজোড় নম্বৰৰ শাৰীত ব্যৱহৃত ৰং"
 
-#: ../gtk/gtktreeview.c:1250
+#: ../gtk/gtktreeview.c:1258
 msgid "Grid line width"
 msgstr "প্ৰস্থ"
 
-#: ../gtk/gtktreeview.c:1251
+#: ../gtk/gtktreeview.c:1259
 msgid "Width, in pixels, of the tree view grid lines"
 msgstr "Width পিকসেল সৰ্বমোট খানি পংক্তিৰ বাবে"
 
-#: ../gtk/gtktreeview.c:1257
+#: ../gtk/gtktreeview.c:1265
 msgid "Tree line width"
 msgstr "ট্ৰি প্ৰস্থ"
 
-#: ../gtk/gtktreeview.c:1258
+#: ../gtk/gtktreeview.c:1266
 msgid "Width, in pixels, of the tree view lines"
 msgstr "Width পিকসেল সৰ্বমোট খানি পংক্তিৰ বাবে"
 
-#: ../gtk/gtktreeview.c:1264
+#: ../gtk/gtktreeview.c:1272
 msgid "Grid line pattern"
 msgstr "Grid line pattern"
 
-#: ../gtk/gtktreeview.c:1265
+#: ../gtk/gtktreeview.c:1273
 msgid "Dash pattern used to draw the tree view grid lines"
 msgstr "খানি পংক্তিৰ বাবে"
 
-#: ../gtk/gtktreeview.c:1271
+#: ../gtk/gtktreeview.c:1279
 msgid "Tree line pattern"
 msgstr "ট্ৰি"
 
-#: ../gtk/gtktreeview.c:1272
+#: ../gtk/gtktreeview.c:1280
 msgid "Dash pattern used to draw the tree view lines"
 msgstr "খানি পংক্তিৰ বাবে"
 
-#: ../gtk/gtktreeviewcolumn.c:248
+#: ../gtk/gtktreeviewcolumn.c:246
 msgid "Whether to display the column"
 msgstr "স্তম্ভ প্ৰদৰ্শন কৰা হ'ব নে"
 
-#: ../gtk/gtktreeviewcolumn.c:255 ../gtk/gtkwindow.c:651
+#: ../gtk/gtktreeviewcolumn.c:253 ../gtk/gtkwindow.c:651
 msgid "Resizable"
 msgstr "পৰিবৰ্তনযোগ্য আকাৰ"
 
-#: ../gtk/gtktreeviewcolumn.c:256
+#: ../gtk/gtktreeviewcolumn.c:254
 msgid "Column is user-resizable"
 msgstr "ব্যৱহাৰকাৰীকৰ্তৃক পৰিবৰ্তনযোগ্য স্তম্ভৰ আকাৰ"
 
-#: ../gtk/gtktreeviewcolumn.c:264
+#: ../gtk/gtktreeviewcolumn.c:262
 msgid "Current X position of the column"
 msgstr "স্তম্ভৰ বৰ্তমান X অৱস্থান"
 
-#: ../gtk/gtktreeviewcolumn.c:274
+#: ../gtk/gtktreeviewcolumn.c:272
 msgid "Current width of the column"
 msgstr "স্তম্ভৰ বৰ্তমান প্ৰস্থ"
 
-#: ../gtk/gtktreeviewcolumn.c:291
+#: ../gtk/gtktreeviewcolumn.c:289
 msgid "Sizing"
 msgstr "আকাৰ প্ৰদান"
 
-#: ../gtk/gtktreeviewcolumn.c:292
+#: ../gtk/gtktreeviewcolumn.c:290
 msgid "Resize mode of the column"
 msgstr "স্তম্ভৰ আকাৰ পৰিবৰ্তন অৱস্থা"
 
-#: ../gtk/gtktreeviewcolumn.c:300
+#: ../gtk/gtktreeviewcolumn.c:298
 msgid "Fixed Width"
 msgstr "পূৰ্বনিৰ্দিষ্ট প্ৰস্থ"
 
-#: ../gtk/gtktreeviewcolumn.c:301
+#: ../gtk/gtktreeviewcolumn.c:299
 msgid "Current fixed width of the column"
 msgstr "স্তম্ভৰ বৰ্তমান পূৰ্বনিৰ্দিষ্ট প্ৰস্থ"
 
-#: ../gtk/gtktreeviewcolumn.c:311
+#: ../gtk/gtktreeviewcolumn.c:309
 msgid "Minimum allowed width of the column"
 msgstr "স্তম্ভৰ সৰ্বনিম্ন অনুমোদনযোগ্য প্ৰস্থ"
 
-#: ../gtk/gtktreeviewcolumn.c:320
+#: ../gtk/gtktreeviewcolumn.c:318
 msgid "Maximum Width"
 msgstr "সৰ্বোচ্চ প্ৰস্থ"
 
-#: ../gtk/gtktreeviewcolumn.c:321
+#: ../gtk/gtktreeviewcolumn.c:319
 msgid "Maximum allowed width of the column"
 msgstr "স্তম্ভৰ সৰ্বোচ্চ অনুমোদনযোগ্য প্ৰস্থ"
 
-#: ../gtk/gtktreeviewcolumn.c:331
+#: ../gtk/gtktreeviewcolumn.c:329
 msgid "Title to appear in column header"
 msgstr "স্তম্ভ হেডাৰে যি শীৰ্ষক দেখা যাব"
 
-#: ../gtk/gtktreeviewcolumn.c:339
+#: ../gtk/gtktreeviewcolumn.c:337
 msgid "Column gets share of extra width allocated to the widget"
 msgstr ""
 "উইজেটকে যি অতিৰিক্ত স্থান বৰাদ্দদ্দ্ককৰা হয়, স্তম্ভ তাৰ অংশবিশেষ ব্যৱহাৰ কৰে"
 
-#: ../gtk/gtktreeviewcolumn.c:346
+#: ../gtk/gtktreeviewcolumn.c:344
 msgid "Clickable"
 msgstr "ক্লিকযোগ্য"
 
-#: ../gtk/gtktreeviewcolumn.c:347
+#: ../gtk/gtktreeviewcolumn.c:345
 msgid "Whether the header can be clicked"
 msgstr "হেডাৰ ক্লিক কৰা যাব নে"
 
-#: ../gtk/gtktreeviewcolumn.c:356
+#: ../gtk/gtktreeviewcolumn.c:354
 msgid "Widget to put in column header button instead of column title"
 msgstr "স্তম্ভ শিৰোনামেৰ পৰিবৰ্তে স্তম্ভ হেডাৰ বুটাম তৈৰিৰ উইজেট"
 
-#: ../gtk/gtktreeviewcolumn.c:364
+#: ../gtk/gtktreeviewcolumn.c:362
 msgid "X Alignment of the column header text or widget"
 msgstr "স্তম্ভ হেডাৰ লিখনী বা উইজেটৰ এক্স সংৰেখন"
 
-#: ../gtk/gtktreeviewcolumn.c:374
+#: ../gtk/gtktreeviewcolumn.c:372
 msgid "Whether the column can be reordered around the headers"
 msgstr "হেডাৰৰ চাৰপাশে স্তম্ভকে পুনৰ বিন্যস্ত কৰা যাব নে"
 
-#: ../gtk/gtktreeviewcolumn.c:381
+#: ../gtk/gtktreeviewcolumn.c:379
 msgid "Sort indicator"
 msgstr "ক্ৰমানুসাৰে সজোৱাৰ নিৰ্দেশক"
 
-#: ../gtk/gtktreeviewcolumn.c:382
+#: ../gtk/gtktreeviewcolumn.c:380
 msgid "Whether to show a sort indicator"
 msgstr "সজোৱাৰ নিৰ্দেশক প্ৰদৰ্শন কৰা হ'ব নে"
 
-#: ../gtk/gtktreeviewcolumn.c:389
+#: ../gtk/gtktreeviewcolumn.c:387
 msgid "Sort order"
 msgstr "সজোৱাৰ ধাৰা"
 
-#: ../gtk/gtktreeviewcolumn.c:390
+#: ../gtk/gtktreeviewcolumn.c:388
 msgid "Sort direction the sort indicator should indicate"
 msgstr "সজোৱাৰ নিৰ্দেশক যি সজোৱাৰ ধাৰা নিৰ্দেশকে কৰিব"
 
-#: ../gtk/gtktreeviewcolumn.c:406
+#: ../gtk/gtktreeviewcolumn.c:404
 msgid "Sort column ID"
 msgstr "স্তম্ভৰ ID সজাওক"
 
-#: ../gtk/gtktreeviewcolumn.c:407
+#: ../gtk/gtktreeviewcolumn.c:405
 msgid "Logical sort column ID this column sorts on when selected for sorting"
 msgstr ""
 "সজোৱাৰ কাৰণে নিৰ্বাচন কৰাৰ পিছত এই স্তম্ভই সজোৱা লজিকেলভাবে সজোৱা স্তম্ভৰ "
@@ -7689,23 +7705,23 @@ msgstr "সাংকেতিক আইকনসমূহ ব্যৱহাৰ 
 msgid "Whether to use symbolic icons"
 msgstr "সাংকেতিক আইকনসমূহ ব্যৱহাৰ কৰিব লাগে নে"
 
-#: ../gtk/gtkwidget.c:984
+#: ../gtk/gtkwidget.c:978
 msgid "Widget name"
 msgstr "উইজেটৰ নাম"
 
-#: ../gtk/gtkwidget.c:985
+#: ../gtk/gtkwidget.c:979
 msgid "The name of the widget"
 msgstr "উইজেটৰ নাম"
 
-#: ../gtk/gtkwidget.c:992
+#: ../gtk/gtkwidget.c:986
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "এই উইজেটৰ পেৰেন্ট উইজেট। এটিকে অবশ্যই এটা কনটেইনাৰ উইজেট হতে হ'ব"
 
-#: ../gtk/gtkwidget.c:999
+#: ../gtk/gtkwidget.c:993
 msgid "Width request"
 msgstr "প্ৰস্থৰ বাবে অনুৰোধ"
 
-#: ../gtk/gtkwidget.c:1000
+#: ../gtk/gtkwidget.c:994
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
@@ -7713,11 +7729,11 @@ msgstr ""
 "উইজেটৰ প্ৰস্থ বিষয়ক আবেদন অগ্ৰাহ্যকাৰী মান; ইয়াৰ মান -১ হলে স্বাভাবিক আবেদন "
 "অনুমোদন কৰা হ'ব"
 
-#: ../gtk/gtkwidget.c:1008
+#: ../gtk/gtkwidget.c:1002
 msgid "Height request"
 msgstr "উচ্চতাৰ বাবে অনুৰোধ"
 
-#: ../gtk/gtkwidget.c:1009
+#: ../gtk/gtkwidget.c:1003
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
@@ -7725,256 +7741,256 @@ msgstr ""
 "উইজেটৰ দৈৰ্ঘ্য বিষয়ক আবেদন অগ্ৰাহ্যকাৰী মান; ইয়াৰ মান -১ হলে স্বাভাবিক আবেদন "
 "অনুমোদন কৰা হ'ব"
 
-#: ../gtk/gtkwidget.c:1018
+#: ../gtk/gtkwidget.c:1012
 msgid "Whether the widget is visible"
 msgstr "উইজেট দৃশ্যমান নে"
 
-#: ../gtk/gtkwidget.c:1025
+#: ../gtk/gtkwidget.c:1019
 msgid "Whether the widget responds to input"
 msgstr "ইনপুটেৰ প্ৰতি উইজেট সাড়া দেয় নে"
 
-#: ../gtk/gtkwidget.c:1031
+#: ../gtk/gtkwidget.c:1025
 msgid "Application paintable"
 msgstr "অঁকাৰযোগ্য অ্যাপলিকেশন"
 
-#: ../gtk/gtkwidget.c:1032
+#: ../gtk/gtkwidget.c:1026
 msgid "Whether the application will paint directly on the widget"
 msgstr "অ্যাপলিকেশনটি সৰাসৰি উইজেট আকিব নে"
 
-#: ../gtk/gtkwidget.c:1038
+#: ../gtk/gtkwidget.c:1032
 msgid "Can focus"
 msgstr "ফোকাস কৰিব পাৰে"
 
-#: ../gtk/gtkwidget.c:1039
+#: ../gtk/gtkwidget.c:1033
 msgid "Whether the widget can accept the input focus"
 msgstr "উইজেটটি ইনপুটেৰ ফ'কাচ গ্ৰহণ কৰিব পাৰে নে"
 
-#: ../gtk/gtkwidget.c:1045
+#: ../gtk/gtkwidget.c:1039
 msgid "Has focus"
 msgstr "ফোকাস আছে"
 
-#: ../gtk/gtkwidget.c:1046
+#: ../gtk/gtkwidget.c:1040
 msgid "Whether the widget has the input focus"
 msgstr "উইজেটটিৰ ইনপুট ফ'কাচ আছে নে"
 
-#: ../gtk/gtkwidget.c:1052
+#: ../gtk/gtkwidget.c:1046
 msgid "Is focus"
 msgstr "ফোকাস"
 
-#: ../gtk/gtkwidget.c:1053
+#: ../gtk/gtkwidget.c:1047
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "উইজেটটি সৰ্বোচ্চ স্তৰৰ ফ'কাচ উইজেট নে"
 
-#: ../gtk/gtkwidget.c:1059
+#: ../gtk/gtkwidget.c:1053
 msgid "Can default"
 msgstr "অবিকল্পিত হতে পাৰে"
 
-#: ../gtk/gtkwidget.c:1060
+#: ../gtk/gtkwidget.c:1054
 msgid "Whether the widget can be the default widget"
 msgstr "উইজেটটি অবিকল্পিত উইজেট হতে পাৰবে নে"
 
-#: ../gtk/gtkwidget.c:1066
+#: ../gtk/gtkwidget.c:1060
 msgid "Has default"
 msgstr "অবিকল্পিত আছে"
 
-#: ../gtk/gtkwidget.c:1067
+#: ../gtk/gtkwidget.c:1061
 msgid "Whether the widget is the default widget"
 msgstr "উইজেটটি অবিকল্পিত উইজেট নে"
 
-#: ../gtk/gtkwidget.c:1073
+#: ../gtk/gtkwidget.c:1067
 msgid "Receives default"
 msgstr "অবিকল্পিত গ্ৰহণ কৰে"
 
-#: ../gtk/gtkwidget.c:1074
+#: ../gtk/gtkwidget.c:1068
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr ""
 "যদি TRUE হয় তেন্তে ফোকাসকৃত অবস্থায় উইজেটটি অবিকল্পিত অ্যাকশন গ্ৰহণ কৰিব"
 
-#: ../gtk/gtkwidget.c:1080
+#: ../gtk/gtkwidget.c:1074
 msgid "Composite child"
 msgstr "কম্পোসিট চাইল্ড"
 
-#: ../gtk/gtkwidget.c:1081
+#: ../gtk/gtkwidget.c:1075
 msgid "Whether the widget is part of a composite widget"
 msgstr "উইজেটটি কোনো কম্পোসিট চাইল্ডৰ অংশ নে"
 
-#: ../gtk/gtkwidget.c:1087
+#: ../gtk/gtkwidget.c:1081
 msgid "Style"
 msgstr "বিন্যাস"
 
-#: ../gtk/gtkwidget.c:1088
+#: ../gtk/gtkwidget.c:1082
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
 msgstr "উইজেটৰ ধৰণ, যাৰ উইজেটৰ চেহাৰা সংক্ৰান্ত তথ্য ধাৰণ কৰি (ৰং ইত্যাদি)"
 
-#: ../gtk/gtkwidget.c:1094
+#: ../gtk/gtkwidget.c:1088
 msgid "Events"
 msgstr "ঘটনাসমূহ "
 
-#: ../gtk/gtkwidget.c:1095
+#: ../gtk/gtkwidget.c:1089
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
 "যি ইভেন্ট মাস্কটি নিৰ্ধাৰণ কৰি এই উইজেটটি কি ধৰনেৰ GdkEvents গ্ৰহণ কৰিব পাৰে"
 
-#: ../gtk/gtkwidget.c:1102
+#: ../gtk/gtkwidget.c:1096
 msgid "No show all"
 msgstr "সবকিছু দেখাও অকেজো"
 
-#: ../gtk/gtkwidget.c:1103
+#: ../gtk/gtkwidget.c:1097
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "gtk_widget_show_all() এই উইজেটকে প্ৰভাবিত কৰিব না নে"
 
-#: ../gtk/gtkwidget.c:1126
+#: ../gtk/gtkwidget.c:1120
 msgid "Whether this widget has a tooltip"
 msgstr "Whether this widget has a tooltip"
 
-#: ../gtk/gtkwidget.c:1183
+#: ../gtk/gtkwidget.c:1177
 msgid "The widget's window if it is realized"
 msgstr "The widget's window if it is realized"
 
-#: ../gtk/gtkwidget.c:1197
+#: ../gtk/gtkwidget.c:1191
 msgid "Double Buffered"
 msgstr "ডাবুল বাফাৰ"
 
-#: ../gtk/gtkwidget.c:1198
+#: ../gtk/gtkwidget.c:1192
 msgid "Whether the widget is double buffered"
 msgstr "ৱিজেটো দুবাৰকৈ বাফাৰ কৰা হৈছে নে"
 
-#: ../gtk/gtkwidget.c:1213
+#: ../gtk/gtkwidget.c:1207
 msgid "How to position in extra horizontal space"
 msgstr "কেনেকে অতিৰিক্ত আনুভূমিক ঠাইত অৱস্থান কৰা হব"
 
-#: ../gtk/gtkwidget.c:1229
+#: ../gtk/gtkwidget.c:1223
 msgid "How to position in extra vertical space"
 msgstr "কেনেকে অতিৰিক্ত উলম্ব ঠাইত অৱস্থান কৰা হব"
 
-#: ../gtk/gtkwidget.c:1248
+#: ../gtk/gtkwidget.c:1242
 msgid "Margin on Left"
 msgstr "বাওফালৰ সীমা"
 
-#: ../gtk/gtkwidget.c:1249
+#: ../gtk/gtkwidget.c:1243
 msgid "Pixels of extra space on the left side"
 msgstr "বাওফালে থকা অতিৰিক্ত ঠাইৰ পিকচেলসমূহ"
 
-#: ../gtk/gtkwidget.c:1269
+#: ../gtk/gtkwidget.c:1263
 msgid "Margin on Right"
 msgstr "সোফালৰ সীমা"
 
-#: ../gtk/gtkwidget.c:1270
+#: ../gtk/gtkwidget.c:1264
 msgid "Pixels of extra space on the right side"
 msgstr "সোফালে থকা অতিৰিক্ত ঠাইৰ পিকচেলসমূহ"
 
-#: ../gtk/gtkwidget.c:1290
+#: ../gtk/gtkwidget.c:1284
 msgid "Margin on Top"
 msgstr "উপৰত থকা সীমা"
 
-#: ../gtk/gtkwidget.c:1291
+#: ../gtk/gtkwidget.c:1285
 msgid "Pixels of extra space on the top side"
 msgstr "উপৰত থকা অতিৰিক্ত ঠাইৰ পিকচেলসমূহ"
 
-#: ../gtk/gtkwidget.c:1311
+#: ../gtk/gtkwidget.c:1305
 msgid "Margin on Bottom"
 msgstr "তলত থকা সীমা"
 
-#: ../gtk/gtkwidget.c:1312
+#: ../gtk/gtkwidget.c:1306
 msgid "Pixels of extra space on the bottom side"
 msgstr "তলত থকা অতিৰিক্ত ঠাইৰ পিকচেলসমুহ"
 
-#: ../gtk/gtkwidget.c:1329
+#: ../gtk/gtkwidget.c:1323
 msgid "All Margins"
 msgstr "সকলো সীমা"
 
-#: ../gtk/gtkwidget.c:1330
+#: ../gtk/gtkwidget.c:1324
 msgid "Pixels of extra space on all four sides"
 msgstr "চাৰিওফালে থকা অতিৰিক্ত ঠাইৰ পিকচেলসমূহ"
 
-#: ../gtk/gtkwidget.c:1363
+#: ../gtk/gtkwidget.c:1357
 msgid "Horizontal Expand"
 msgstr "আনুভূমিক প্ৰসাৰ"
 
-#: ../gtk/gtkwidget.c:1364
+#: ../gtk/gtkwidget.c:1358
 msgid "Whether widget wants more horizontal space"
 msgstr "উইজেটোৱে আৰু আনুভূমিক ঠাই বিচাৰে নে"
 
-#: ../gtk/gtkwidget.c:1378
+#: ../gtk/gtkwidget.c:1372
 msgid "Horizontal Expand Set"
 msgstr "আনুভূমিক প্ৰসাৰ সংহতি"
 
-#: ../gtk/gtkwidget.c:1379
+#: ../gtk/gtkwidget.c:1373
 msgid "Whether to use the hexpand property"
 msgstr "hexpand বৈশিষ্ট ব্যৱহাৰ কৰা হব নে"
 
-#: ../gtk/gtkwidget.c:1393
+#: ../gtk/gtkwidget.c:1387
 msgid "Vertical Expand"
 msgstr "উলম্ব প্ৰসাৰ"
 
-#: ../gtk/gtkwidget.c:1394
+#: ../gtk/gtkwidget.c:1388
 msgid "Whether widget wants more vertical space"
 msgstr "উইজেটোৱে আৰু উলম্ব ঠাই বিচাৰে নে"
 
-#: ../gtk/gtkwidget.c:1408
+#: ../gtk/gtkwidget.c:1402
 msgid "Vertical Expand Set"
 msgstr "উলম্ব প্ৰসাৰ সংহতি"
 
-#: ../gtk/gtkwidget.c:1409
+#: ../gtk/gtkwidget.c:1403
 msgid "Whether to use the vexpand property"
 msgstr "vexpand বৈশিষ্ট ব্যৱহাৰ কৰা হব নে"
 
-#: ../gtk/gtkwidget.c:1423
+#: ../gtk/gtkwidget.c:1417
 msgid "Expand Both"
 msgstr "দুয়োকে প্ৰসাৰ কৰা"
 
-#: ../gtk/gtkwidget.c:1424
+#: ../gtk/gtkwidget.c:1418
 msgid "Whether widget wants to expand in both directions"
 msgstr "উইজেটটোৱে দুয়ো দিশতে প্ৰসাৰিত হব বিচাৰে নেকি"
 
-#: ../gtk/gtkwidget.c:3145
+#: ../gtk/gtkwidget.c:3139
 msgid "Interior Focus"
 msgstr "অভ্যন্তৰীণ ফোকাস"
 
-#: ../gtk/gtkwidget.c:3146
+#: ../gtk/gtkwidget.c:3140
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "ফোকাস নিৰ্দেশকটি উইজেটৰ ভেতৰ অঁকা হ'ব নে"
 
-#: ../gtk/gtkwidget.c:3152
+#: ../gtk/gtkwidget.c:3146
 msgid "Focus linewidth"
 msgstr "ফোকাসৰ শাৰীব্যাপ্তি"
 
-#: ../gtk/gtkwidget.c:3153
+#: ../gtk/gtkwidget.c:3147
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "পিক্সেল হিচাপে ফ'কাচ নিৰ্দেশক শাৰীতৰ প্ৰস্থ"
 
-#: ../gtk/gtkwidget.c:3159
+#: ../gtk/gtkwidget.c:3153
 msgid "Focus line dash pattern"
 msgstr "ফোকাস শাৰীতৰ ড্যাশ পেটাৰ্ন"
 
-#: ../gtk/gtkwidget.c:3160
+#: ../gtk/gtkwidget.c:3154
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "ফোকাস নিৰ্দেশক আঁকতে যি ধৰনেৰ ড্যাশ পেটাৰ্ন আঁকতে হ'ব"
 
-#: ../gtk/gtkwidget.c:3165
+#: ../gtk/gtkwidget.c:3159
 msgid "Focus padding"
 msgstr "ফোকাস পেডিং"
 
-#: ../gtk/gtkwidget.c:3166
+#: ../gtk/gtkwidget.c:3160
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr ""
 "পিক্সেল হিচাপে ফ'কাচ নিৰ্দেশক আৰু উইজেট 'বাকচৰ' মধ্যবৰ্তী স্থানেৰ প্ৰস্থ"
 
-#: ../gtk/gtkwidget.c:3171
+#: ../gtk/gtkwidget.c:3165
 msgid "Cursor color"
 msgstr "কাৰ্ছাৰৰ ৰং "
 
-#: ../gtk/gtkwidget.c:3172
+#: ../gtk/gtkwidget.c:3166
 msgid "Color with which to draw insertion cursor"
 msgstr "অক্ষৰ ভৰোৱাৰ (Insertion) কাৰ্ছাৰ আঁকতে যি ৰং ব্যৱহৃত হ'ব"
 
-#: ../gtk/gtkwidget.c:3177
+#: ../gtk/gtkwidget.c:3171
 msgid "Secondary cursor color"
 msgstr "কাৰ্ছাৰ আঁকায় ব্যৱহৃত দ্বিতীয় ৰং"
 
-#: ../gtk/gtkwidget.c:3178
+#: ../gtk/gtkwidget.c:3172
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -7982,43 +7998,43 @@ msgstr ""
 "ডান-থেকে-বাম এবং বাম-থেকে-ডান এ লেখায় হয় ইয়াৰকম লিখনীৰ মিশ্ৰণ এডিট কৰাৰ সময় "
 "অক্ষৰ ভৰোৱাৰ (Insertion) কাৰ্ছাৰ আঁকতে যি ৰং ব্যৱহৃত হ'ব"
 
-#: ../gtk/gtkwidget.c:3183
+#: ../gtk/gtkwidget.c:3177
 msgid "Cursor line aspect ratio"
 msgstr "কাৰ্ছাৰ শাৰীতৰ আবয়ব অনুপাত"
 
-#: ../gtk/gtkwidget.c:3184
+#: ../gtk/gtkwidget.c:3178
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "যি আবয়ব অনুপাতে অক্ষৰ ভৰোৱাৰ (Insertion) কাৰ্ছাৰ অঁকা হ'ব"
 
-#: ../gtk/gtkwidget.c:3190
+#: ../gtk/gtkwidget.c:3184
 msgid "Window dragging"
 msgstr "উইন্ডো ড্ৰেগ কৰা কাৰ্য্য"
 
-#: ../gtk/gtkwidget.c:3191
+#: ../gtk/gtkwidget.c:3185
 msgid "Whether windows can be dragged by clicking on empty areas"
 msgstr "ৰিক্ত স্থানত ক্লিক কৰি উইনডোসমূহক ড্ৰেগ কৰিব পৰা যাব নেকি"
 
-#: ../gtk/gtkwidget.c:3204
+#: ../gtk/gtkwidget.c:3198
 msgid "Unvisited Link Color"
 msgstr "সংযোগ"
 
-#: ../gtk/gtkwidget.c:3205
+#: ../gtk/gtkwidget.c:3199
 msgid "Color of unvisited links"
 msgstr "সৰ্বমোট"
 
-#: ../gtk/gtkwidget.c:3218
+#: ../gtk/gtkwidget.c:3212
 msgid "Visited Link Color"
 msgstr "পৰিদৰ্শিত সংযোগেৰ ৰং"
 
-#: ../gtk/gtkwidget.c:3219
+#: ../gtk/gtkwidget.c:3213
 msgid "Color of visited links"
 msgstr "সৰ্বমোট"
 
-#: ../gtk/gtkwidget.c:3233
+#: ../gtk/gtkwidget.c:3227
 msgid "Wide Separators"
 msgstr "Wide Separators"
 
-#: ../gtk/gtkwidget.c:3234
+#: ../gtk/gtkwidget.c:3228
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
@@ -8026,43 +8042,43 @@ msgstr ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
 
-#: ../gtk/gtkwidget.c:3248
+#: ../gtk/gtkwidget.c:3242
 msgid "Separator Width"
 msgstr "বিভাজন ৰেখা Width"
 
-#: ../gtk/gtkwidget.c:3249
+#: ../gtk/gtkwidget.c:3243
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "প্ৰস্থ সৰ্বমোট হলো"
 
-#: ../gtk/gtkwidget.c:3263
+#: ../gtk/gtkwidget.c:3257
 msgid "Separator Height"
 msgstr "বিভাজন ৰেখা উচ্চতা"
 
-#: ../gtk/gtkwidget.c:3264
+#: ../gtk/gtkwidget.c:3258
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "দৈৰ্ঘ্য সৰ্বমোট হলো"
 
-#: ../gtk/gtkwidget.c:3278
+#: ../gtk/gtkwidget.c:3272
 msgid "Horizontal Scroll Arrow Length"
 msgstr "Horizontal Scroll Arrow Length"
 
-#: ../gtk/gtkwidget.c:3279
+#: ../gtk/gtkwidget.c:3273
 msgid "The length of horizontal scroll arrows"
 msgstr "সৰ্বমোট"
 
-#: ../gtk/gtkwidget.c:3293
+#: ../gtk/gtkwidget.c:3287
 msgid "Vertical Scroll Arrow Length"
 msgstr "Vertical Scroll Arrow Length"
 
-#: ../gtk/gtkwidget.c:3294
+#: ../gtk/gtkwidget.c:3288
 msgid "The length of vertical scroll arrows"
 msgstr "সৰ্বমোট"
 
-#: ../gtk/gtkwidget.c:3300 ../gtk/gtkwidget.c:3301
+#: ../gtk/gtkwidget.c:3294 ../gtk/gtkwidget.c:3295
 msgid "Width of text selection handles"
 msgstr "লিখনী নিৰ্বাচন হাতলৰ প্ৰস্থ"
 
-#: ../gtk/gtkwidget.c:3306 ../gtk/gtkwidget.c:3307
+#: ../gtk/gtkwidget.c:3300 ../gtk/gtkwidget.c:3301
 msgid "Height of text selection handles"
 msgstr "লিখনী নিৰ্বাচন হাতলসমূহৰ উচ্চতা"
 
