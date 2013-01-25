@@ -41,10 +41,6 @@
  *   suggests that this logic should be part of GtkMountOperation, which can
  *   have Unix-specific code for emptying trash.
  *
- * * Add docstrings for signals.
- *
- * * Write reference docs.
- *
  * * Sync nautilus commit 17a85b78acc78b573c2e1776b348ed348e19adb7
  *
  */
