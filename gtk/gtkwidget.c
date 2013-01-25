@@ -13526,7 +13526,7 @@ gtk_widget_set_allocation (GtkWidget           *widget,
   GtkWidgetPrivate *priv;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (gtk_widget_get_visible (widget));
+  g_return_if_fail (gtk_widget_get_visible (widget) || gtk_widget_is_toplevel (widget));
   g_return_if_fail (allocation != NULL);
 
   priv = widget->priv;
