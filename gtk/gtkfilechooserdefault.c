@@ -256,7 +256,6 @@ typedef enum {
 #define NUM_LINES 45
 #define NUM_CHARS 60
 
-#define SETTINGS_KEY_LAST_FOLDER_URI     "last-folder-uri"
 #define SETTINGS_KEY_LOCATION_MODE       "location-mode"
 #define SETTINGS_KEY_SHOW_HIDDEN         "show-hidden"
 #define SETTINGS_KEY_SHOW_SIZE_COLUMN    "show-size-column"
@@ -6075,22 +6074,9 @@ save_dialog_geometry (GtkFileChooserDefault *impl)
 static void
 settings_save (GtkFileChooserDefault *impl)
 {
-  char *current_folder_uri;
   GSettings *settings;
 
   settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (impl));
-
-  /* Current folder */
-
-  if (impl->current_folder)
-    current_folder_uri = g_file_get_uri (impl->current_folder);
-  else
-    current_folder_uri = "";
-
-  g_settings_set_string (settings, SETTINGS_KEY_LAST_FOLDER_URI, current_folder_uri);
-
-  if (impl->current_folder)
-    g_free (current_folder_uri);
 
   /* All the other state */
 
@@ -6120,30 +6106,6 @@ gtk_file_chooser_default_realize (GtkWidget *widget)
   GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->realize (widget);
 
   emit_default_size_changed (impl);
-}
-
-static GFile *
-get_file_for_last_folder_opened (GtkFileChooserDefault *impl)
-{
-  char *last_folder_uri;
-  GSettings *settings;
-  GFile *file;
-
-  settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (impl));
-
-  last_folder_uri = g_settings_get_string (settings, SETTINGS_KEY_LAST_FOLDER_URI);
-
-  /* If no last folder is set, we use the user's home directory, since
-   * this is the starting point for most documents.
-   */
-  if (last_folder_uri[0] == '\0')
-    file = g_file_new_for_path (g_get_home_dir ());
-  else
-    file = g_file_new_for_uri (last_folder_uri);
-
-  g_free (last_folder_uri);
-
-  return file;
 }
 
 /* GtkWidget::map method */
@@ -7439,16 +7401,6 @@ gtk_file_chooser_default_get_current_folder (GtkFileChooser *chooser)
       impl->operation_mode == OPERATION_MODE_RECENT)
     return NULL;
  
-  if (impl->reload_state == RELOAD_EMPTY)
-    {
-      /* We are unmapped, or we had an error while loading the last folder.
-       * We'll return the folder used by the last invocation of the file chooser
-       * since once we get (re)mapped, we'll load *that* folder anyway unless
-       * the caller explicitly calls set_current_folder() on us.
-       */
-      return get_file_for_last_folder_opened (impl);
-    }
-
   if (impl->current_folder)
     return g_object_ref (impl->current_folder);
 
