@@ -1356,16 +1356,9 @@ gdk_x11_screen_get_setting (GdkScreen   *screen,
   XSettingsResult result;
   XSettingsSetting *setting = NULL;
   gboolean success = FALSE;
-  gint i;
   GValue tmp_val = G_VALUE_INIT;
 
-  for (i = 0; i < GDK_SETTINGS_N_ELEMENTS(); i++)
-    if (strcmp (GDK_SETTINGS_GDK_NAME (i), name) == 0)
-      {
-	xsettings_name = GDK_SETTINGS_X_NAME (i);
-	break;
-      }
-
+  xsettings_name = gdk_to_xsettings_name (name);
   if (!xsettings_name)
     goto out;
 
@@ -1707,7 +1700,6 @@ gdk_xsettings_notify_cb (const char       *name,
   GdkEvent new_event;
   GdkScreen *screen = data;
   GdkX11Screen *x11_screen = data;
-  int i;
 
   if (x11_screen->xsettings_in_init)
     return;
@@ -1715,15 +1707,8 @@ gdk_xsettings_notify_cb (const char       *name,
   new_event.type = GDK_SETTING;
   new_event.setting.window = gdk_screen_get_root_window (screen);
   new_event.setting.send_event = FALSE;
-  new_event.setting.name = NULL;
+  new_event.setting.name = (char*) gdk_from_xsettings_name (name);
 
-  for (i = 0; i < GDK_SETTINGS_N_ELEMENTS() ; i++)
-    if (strcmp (GDK_SETTINGS_X_NAME (i), name) == 0)
-      {
-	new_event.setting.name = (char*) GDK_SETTINGS_GDK_NAME (i);
-	break;
-      }
-  
   if (!new_event.setting.name)
     return;
   

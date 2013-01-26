@@ -80,11 +80,6 @@ libgdkx11include_HEADERS = 	\
 	gdkx11visual.h		\
 	gdkx11window.h
 
-noinst_PROGRAMS = checksettings
-checksettings_LDADD = libgdk-x11.la $(GLIB_LIBS)
-
-TESTS = checksettings
-
 # We need to include all these C files here since the conditionals
 # don't seem to be correctly expanded for the dist files.
 EXTRA_DIST += 			\
