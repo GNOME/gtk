@@ -210,6 +210,7 @@ static void     gtk_file_chooser_dialog_get_property (GObject               *obj
 						      GParamSpec            *pspec);
 
 static void     gtk_file_chooser_dialog_map          (GtkWidget             *widget);
+static void     gtk_file_chooser_dialog_unmap        (GtkWidget             *widget);
 
 static void response_cb (GtkDialog *dialog,
 			 gint       response_id);
@@ -230,6 +231,7 @@ gtk_file_chooser_dialog_class_init (GtkFileChooserDialogClass *class)
   gobject_class->finalize = gtk_file_chooser_dialog_finalize;
 
   widget_class->map       = gtk_file_chooser_dialog_map;
+  widget_class->unmap     = gtk_file_chooser_dialog_unmap;
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_FILE_CHOOSER);
 
@@ -535,6 +537,35 @@ gtk_file_chooser_dialog_map (GtkWidget *widget)
   _gtk_file_chooser_embed_initial_focus (GTK_FILE_CHOOSER_EMBED (priv->widget));
 
   GTK_WIDGET_CLASS (gtk_file_chooser_dialog_parent_class)->map (widget);
+}
+
+static void
+save_dialog_geometry (GtkFileChooserDialog *dialog)
+{
+  GtkWindow *window;
+  GSettings *settings;
+  int x, y, width, height;
+
+  settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (dialog));
+
+  window = GTK_WINDOW (dialog);
+
+  gtk_window_get_position (window, &x, &y);
+  gtk_window_get_size (window, &width, &height);
+
+  g_settings_set (settings, SETTINGS_KEY_WINDOW_POSITION, "(ii)", x, y);
+  g_settings_set (settings, SETTINGS_KEY_WINDOW_SIZE, "(ii)", width, height);
+}
+
+/* GtkWidget::unmap handler */
+static void
+gtk_file_chooser_dialog_unmap (GtkWidget *widget)
+{
+  GtkFileChooserDialog *dialog = GTK_FILE_CHOOSER_DIALOG (widget);
+
+  save_dialog_geometry (dialog);
+
+  GTK_WIDGET_CLASS (gtk_file_chooser_dialog_parent_class)->unmap (widget);
 }
 
 /* GtkDialog::response handler */

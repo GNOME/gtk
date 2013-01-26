@@ -6042,27 +6042,6 @@ settings_load (GtkFileChooserDefault *impl)
 }
 
 static void
-save_dialog_geometry (GtkFileChooserDefault *impl)
-{
-  GtkWindow *toplevel;
-  int x, y, width, height;
-  GSettings *settings;
-
-  toplevel = get_toplevel (GTK_WIDGET (impl));
-
-  if (!(toplevel && GTK_IS_FILE_CHOOSER_DIALOG (toplevel)))
-    return;
-
-  settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (toplevel));
-
-  gtk_window_get_position (toplevel, &x, &y);
-  gtk_window_get_size (toplevel, &width, &height);
-
-  g_settings_set (settings, SETTINGS_KEY_WINDOW_POSITION, "(ii)", x, y);
-  g_settings_set (settings, SETTINGS_KEY_WINDOW_SIZE, "(ii)", width, height);
-}
-
-static void
 settings_save (GtkFileChooserDefault *impl)
 {
   GSettings *settings;
@@ -6079,8 +6058,6 @@ settings_save (GtkFileChooserDefault *impl)
   g_settings_set_enum (settings, SETTINGS_KEY_SORT_ORDER, impl->sort_order);
   g_settings_set_int (settings, SETTINGS_KEY_SIDEBAR_WIDTH,
                      gtk_paned_get_position (GTK_PANED (impl->browse_widgets_hpaned)));
-
-  save_dialog_geometry (impl);
 
   /* Now apply the settings */
   g_settings_apply (settings);
