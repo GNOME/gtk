@@ -47,13 +47,13 @@
 
 typedef struct _GdkDeviceCore GdkDeviceCore;
 typedef struct _GdkDeviceCoreClass GdkDeviceCoreClass;
-typedef struct _GdkWaylandDevice GdkWaylandDevice;
+typedef struct _GdkWaylandDeviceData GdkWaylandDeviceData;
 
 typedef struct _DataOffer DataOffer;
 
 typedef struct _GdkWaylandSelectionOffer GdkWaylandSelectionOffer;
 
-struct _GdkWaylandDevice
+struct _GdkWaylandDeviceData
 {
   struct wl_seat *wl_seat;
   struct wl_pointer *wl_pointer;
@@ -90,7 +90,7 @@ struct _GdkWaylandDevice
 struct _GdkDeviceCore
 {
   GdkDevice parent_instance;
-  GdkWaylandDevice *device;
+  GdkWaylandDeviceData *device;
 };
 
 struct _GdkDeviceCoreClass
@@ -159,7 +159,7 @@ gdk_device_core_set_window_cursor (GdkDevice *device,
                                    GdkWindow *window,
                                    GdkCursor *cursor)
 {
-  GdkWaylandDevice *wd = GDK_DEVICE_CORE(device)->device;
+  GdkWaylandDeviceData *wd = GDK_DEVICE_CORE(device)->device;
   GdkWaylandDisplay *wayland_display =
     GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   struct wl_buffer *buffer;
@@ -207,7 +207,7 @@ gdk_device_core_query_state (GdkDevice        *device,
                              gint             *win_y,
                              GdkModifierType  *mask)
 {
-  GdkWaylandDevice *wd;
+  GdkWaylandDeviceData *wd;
   GdkScreen *default_screen;
 
   wd = GDK_DEVICE_CORE(device)->device;
@@ -241,7 +241,7 @@ gdk_device_core_grab (GdkDevice    *device,
                       GdkCursor    *cursor,
                       guint32       time_)
 {
-  GdkWaylandDevice *wayland_device = GDK_DEVICE_CORE (device)->device;
+  GdkWaylandDeviceData *wayland_device = GDK_DEVICE_CORE (device)->device;
 
   if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     {
@@ -281,7 +281,7 @@ static void
 gdk_device_core_ungrab (GdkDevice *device,
                         guint32    time_)
 {
-  GdkWaylandDevice *wayland_device = GDK_DEVICE_CORE (device)->device;
+  GdkWaylandDeviceData *wayland_device = GDK_DEVICE_CORE (device)->device;
   GdkDisplay *display;
   GdkDeviceGrabInfo *grab;
 
@@ -313,7 +313,7 @@ gdk_device_core_window_at_position (GdkDevice       *device,
                                     GdkModifierType *mask,
                                     gboolean         get_toplevel)
 {
-  GdkWaylandDevice *wd;
+  GdkWaylandDeviceData *wd;
 
   wd = GDK_DEVICE_CORE(device)->device;
   if (win_x)
@@ -451,7 +451,7 @@ data_device_enter (void                  *data,
                    int32_t                y,
                    struct wl_data_offer  *offer)
 {
-  GdkWaylandDevice *device = (GdkWaylandDevice *)data;
+  GdkWaylandDeviceData *device = (GdkWaylandDeviceData *)data;
 
   g_debug (G_STRLOC ": %s data_device = %p time = %d, surface = %p, x = %d y = %d, offer = %p",
            G_STRFUNC, data_device, time, surface, x, y, offer);
@@ -467,7 +467,7 @@ static void
 data_device_leave (void                  *data,
                    struct wl_data_device *data_device)
 {
-  GdkWaylandDevice *device = (GdkWaylandDevice *)data;
+  GdkWaylandDeviceData *device = (GdkWaylandDeviceData *)data;
 
   g_debug (G_STRLOC ": %s data_device = %p",
            G_STRFUNC, data_device);
@@ -500,7 +500,7 @@ data_device_selection (void                  *data,
                        struct wl_data_device *wl_data_device,
                        struct wl_data_offer  *offer)
 {
-  GdkWaylandDevice *device = (GdkWaylandDevice *)data;
+  GdkWaylandDeviceData *device = (GdkWaylandDeviceData *)data;
 
   g_debug (G_STRLOC ": %s wl_data_device = %p wl_data_offer = %p",
            G_STRFUNC, wl_data_device, offer);
@@ -548,7 +548,7 @@ pointer_handle_enter (void              *data,
                       wl_fixed_t         sx,
                       wl_fixed_t         sy)
 {
-  GdkWaylandDevice *device = data;
+  GdkWaylandDeviceData *device = data;
   GdkEvent *event;
   GdkWaylandDisplay *wayland_display =
     GDK_WAYLAND_DISPLAY (device->display);
@@ -587,7 +587,7 @@ pointer_handle_leave (void              *data,
                       uint32_t           serial,
                       struct wl_surface *surface)
 {
-  GdkWaylandDevice *device = data;
+  GdkWaylandDeviceData *device = data;
   GdkEvent *event;
   GdkWaylandDisplay *wayland_display =
     GDK_WAYLAND_DISPLAY (device->display);
@@ -624,7 +624,7 @@ pointer_handle_motion (void              *data,
                        wl_fixed_t         sx,
                        wl_fixed_t         sy)
 {
-  GdkWaylandDevice *device = data;
+  GdkWaylandDeviceData *device = data;
   GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (device->display);
   GdkEvent *event;
 
@@ -660,7 +660,7 @@ pointer_handle_button (void              *data,
                        uint32_t           button,
                        uint32_t           state)
 {
-  GdkWaylandDevice *device = data;
+  GdkWaylandDeviceData *device = data;
   GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (device->display);
   GdkEvent *event;
   uint32_t modifier;
@@ -716,7 +716,7 @@ pointer_handle_axis (void              *data,
                      uint32_t           axis,
                      wl_fixed_t         value)
 {
-  GdkWaylandDevice *device = data;
+  GdkWaylandDeviceData *device = data;
   GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (device->display);
   GdkEvent *event;
   gdouble delta_x, delta_y;
@@ -760,7 +760,7 @@ keyboard_handle_keymap (void               *data,
                        int                 fd,
                        uint32_t            size)
 {
-  GdkWaylandDevice *device = data;
+  GdkWaylandDeviceData *device = data;
   if (device->keymap)
     g_object_unref (device->keymap);
 
@@ -774,7 +774,7 @@ keyboard_handle_enter (void               *data,
                        struct wl_surface  *surface,
                        struct wl_array    *keys)
 {
-  GdkWaylandDevice *device = data;
+  GdkWaylandDeviceData *device = data;
   GdkEvent *event;
   GdkWaylandDisplay *wayland_display =
     GDK_WAYLAND_DISPLAY (device->display);
@@ -805,7 +805,7 @@ keyboard_handle_leave (void               *data,
                        uint32_t            serial,
                        struct wl_surface  *surface)
 {
-  GdkWaylandDevice *device = data;
+  GdkWaylandDeviceData *device = data;
   GdkEvent *event;
   GdkWaylandDisplay *wayland_display =
     GDK_WAYLAND_DISPLAY (device->display);
@@ -913,7 +913,7 @@ translate_keyboard_string (GdkEventKey *event)
 }
 
 static gboolean
-deliver_key_event(GdkWaylandDevice *device,
+deliver_key_event(GdkWaylandDeviceData *device,
                   uint32_t time, uint32_t key, uint32_t state)
 {
   GdkEvent *event;
@@ -990,7 +990,7 @@ deliver_key_event(GdkWaylandDevice *device,
 static gboolean
 keyboard_repeat (gpointer data)
 {
-  GdkWaylandDevice *device = data;
+  GdkWaylandDeviceData *device = data;
 
   return deliver_key_event (device, device->time, device->repeat_key, 1);
 }
@@ -1003,7 +1003,7 @@ keyboard_handle_key (void               *data,
                      uint32_t            key,
                      uint32_t            state_w)
 {
-  GdkWaylandDevice *device = data;
+  GdkWaylandDeviceData *device = data;
   GdkWaylandDisplay *wayland_display =
     GDK_WAYLAND_DISPLAY (device->display);
 
@@ -1021,7 +1021,7 @@ keyboard_handle_modifiers (void               *data,
                            uint32_t            mods_locked,
                            uint32_t            group)
 {
-  GdkWaylandDevice *device = data;
+  GdkWaylandDeviceData *device = data;
   GdkKeymap *keymap;
   struct xkb_state *xkb_state;
 
@@ -1052,7 +1052,7 @@ static void
 seat_handle_capabilities(void *data, struct wl_seat *seat,
                          enum wl_seat_capability caps)
 {
-  GdkWaylandDevice *device = data;
+  GdkWaylandDeviceData *device = data;
   GdkDeviceManagerCore *device_manager_core =
     GDK_DEVICE_MANAGER_CORE(device->device_manager);
 
@@ -1139,12 +1139,12 @@ _gdk_wayland_device_manager_add_device (GdkDeviceManager *device_manager,
 {
   GdkDisplay *display;
   GdkWaylandDisplay *display_wayland;
-  GdkWaylandDevice *device;
+  GdkWaylandDeviceData *device;
 
   display = gdk_device_manager_get_display (device_manager);
   display_wayland = GDK_WAYLAND_DISPLAY (display);
 
-  device = g_new0 (GdkWaylandDevice, 1);
+  device = g_new0 (GdkWaylandDeviceData, 1);
   device->keymap = _gdk_wayland_keymap_new ();
   device->display = display;
   device->device_manager = device_manager;
@@ -1248,7 +1248,7 @@ gdk_wayland_device_get_selection_type_atoms (GdkDevice  *gdk_device,
 {
   gint i;
   GdkAtom *atoms;
-  GdkWaylandDevice *device;
+  GdkWaylandDeviceData *device;
 
   g_return_val_if_fail (GDK_IS_DEVICE_CORE (gdk_device), 0);
   g_return_val_if_fail (atoms_out != NULL, 0);
@@ -1279,7 +1279,7 @@ gdk_wayland_device_get_selection_type_atoms (GdkDevice  *gdk_device,
 
 typedef struct
 {
-  GdkWaylandDevice *device;
+  GdkWaylandDeviceData *device;
   DataOffer *offer;
   GIOChannel *channel;
   GdkDeviceWaylandRequestContentCallback cb;
@@ -1332,7 +1332,7 @@ gdk_wayland_device_request_selection_content (GdkDevice                         
 {
   int pipe_fd[2];
   RequestContentClosure *closure;
-  GdkWaylandDevice *device;
+  GdkWaylandDeviceData *device;
   GError *error = NULL;
 
   g_return_val_if_fail (GDK_IS_DEVICE_CORE (gdk_device), FALSE);
@@ -1390,7 +1390,7 @@ struct _GdkWaylandSelectionOffer {
   GdkDeviceWaylandOfferContentCallback cb;
   gpointer userdata;
   struct wl_data_source *source;
-  GdkWaylandDevice *device;
+  GdkWaylandDeviceData *device;
 };
 
 static void
@@ -1472,7 +1472,7 @@ gdk_wayland_device_offer_selection_content (GdkDevice                           
   GdkDisplay *display;
   GdkWaylandDisplay *display_wayland;
   GdkWaylandSelectionOffer *offer;
-  GdkWaylandDevice *device;
+  GdkWaylandDeviceData *device;
   gint i;
 
   g_return_val_if_fail (GDK_IS_DEVICE_CORE (gdk_device), 0);
@@ -1510,7 +1510,7 @@ gdk_wayland_device_offer_selection_content (GdkDevice                           
 gboolean
 gdk_wayland_device_clear_selection_content (GdkDevice *gdk_device)
 {
-  GdkWaylandDevice *device;
+  GdkWaylandDeviceData *device;
 
   g_return_val_if_fail (GDK_IS_DEVICE_CORE (gdk_device), 0);
   device = GDK_DEVICE_CORE (gdk_device)->device;
