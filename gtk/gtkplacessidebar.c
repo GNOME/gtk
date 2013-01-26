@@ -1253,29 +1253,33 @@ compute_drop_position (GtkTreeView             *tree_view,
 			    PLACES_SIDEBAR_COLUMN_SECTION_TYPE, &section_type,
 			    -1);
 
-	if (section_type != SECTION_BOOKMARKS &&
-	    place_type == PLACES_HEADING) {
-		/* never drop on headings, but special case the bookmarks heading,
-		 * so we can drop bookmarks in between it and the first item when
-		 * reordering.
-		 */
-
+	/* Never drop on headings, but special case the bookmarks heading,
+	 * so we can drop bookmarks in between it and the first bookmark.
+	 */
+	if (place_type == PLACES_HEADING
+	    && section_type != SECTION_BOOKMARKS) {
 		gtk_tree_path_free (*path);
 		*path = NULL;
 
 		return FALSE;
 	}
 
-	if (section_type != SECTION_BOOKMARKS &&
-	    sidebar->drag_data_received &&
-	    sidebar->drag_data_info == GTK_TREE_MODEL_ROW) {
-		/* don't allow dropping bookmarks into non-bookmark areas */
-		gtk_tree_path_free (*path);
-		*path = NULL;
+	/* Dragging a bookmark? */
+	if (sidebar->drag_data_received
+	    && sidebar->drag_data_info == GTK_TREE_MODEL_ROW) {
+		/* Don't allow reordering bookmarks into non-bookmark areas */
+		if (section_type != SECTION_BOOKMARKS) {
+			gtk_tree_path_free (*path);
+			*path = NULL;
 
-		return FALSE;
+			return FALSE;
+		}
+
+		printf ("dragging a bookmark, pos = %d\n", *pos);
+	} else {
+		printf ("dragging a file, pos = %d\n", *pos);
 	}
-
+#if 0
 	if (sidebar->drag_data_received &&
 	    sidebar->drag_data_info == GTK_TREE_MODEL_ROW) {
 		/* bookmark rows can only be reordered */
@@ -1283,7 +1287,7 @@ compute_drop_position (GtkTreeView             *tree_view,
 	} else {
 		*pos = GTK_TREE_VIEW_DROP_INTO_OR_BEFORE;
 	}
-
+#endif
 	return TRUE;
 }
 
@@ -1334,14 +1338,18 @@ drag_motion_callback (GtkTreeView *tree_view,
 	char *uri;
 	gboolean res;
 
+	action = 0;
+
 	if (!sidebar->drag_data_received) {
 		if (!get_drag_data (tree_view, context, time)) {
-			return FALSE;
+			goto out;
 		}
 	}
 
 	path = NULL;
 	res = compute_drop_position (tree_view, x, y, &path, &pos, sidebar);
+
+	printf ("compute_drop_position(): pos %d, result %d\n", pos, res);
 
 	if (!res) {
 		goto out;
@@ -1351,11 +1359,8 @@ drag_motion_callback (GtkTreeView *tree_view,
 		if (sidebar->drag_data_received &&
 		    sidebar->drag_data_info == GTK_TREE_MODEL_ROW) {
 			action = GDK_ACTION_MOVE;
-		} else {
-			action = 0;
 		}
 	} else {
-		action = 0;
 		if (sidebar->accept_uri_drops) {
 			if (sidebar->drag_list != NULL) {
 				GFile *dest_file;
@@ -1376,15 +1381,16 @@ drag_motion_callback (GtkTreeView *tree_view,
 		}
 	}
 
-	if (action != 0) {
+ out:
+	if (action != 0)
 		gtk_tree_view_set_drag_dest_row (tree_view, path, pos);
-	}
+	else
+		gtk_tree_view_set_drag_dest_row (tree_view, NULL, pos);
 
 	if (path != NULL) {
 		gtk_tree_path_free (path);
 	}
 
- out:
 	g_signal_stop_emission_by_name (tree_view, "drag-motion");
 
 	gdk_drag_status (context, action, time);
