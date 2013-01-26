@@ -80,45 +80,6 @@ xsettings_setting_copy (XSettingsSetting *setting)
   return NULL;
 }
 
-XSettingsList *
-xsettings_list_copy (XSettingsList *list)
-{
-  XSettingsList *new = NULL;
-  XSettingsList *old_iter = list;
-  XSettingsList *new_iter = NULL;
-
-  while (old_iter)
-    {
-      XSettingsList *new_node;
-
-      new_node = malloc (sizeof *new_node);
-      if (!new_node)
-	goto error;
-
-      new_node->setting = xsettings_setting_copy (old_iter->setting);
-      if (!new_node->setting)
-	{
-	  free (new_node);
-	  goto error;
-	}
-
-      if (new_iter)
-	new_iter->next = new_node;
-      else
-	new = new_node;
-
-      new_iter = new_node;
-      
-      old_iter = old_iter->next;
-    }
-
-  return new;
-
- error:
-  xsettings_list_free (new);
-  return NULL;
-}
-
 int
 xsettings_setting_equal (XSettingsSetting *setting_a,
 			 XSettingsSetting *setting_b)
@@ -160,103 +121,33 @@ xsettings_setting_free (XSettingsSetting *setting)
 void
 xsettings_list_free (XSettingsList *list)
 {
-  while (list)
-    {
-      XSettingsList *next = list->next;
-
-      xsettings_setting_free (list->setting);
-      free (list);
-
-      list = next;
-    }
+  if (list != NULL)
+    g_hash_table_destroy (list);
 }
 
 XSettingsResult
 xsettings_list_insert (XSettingsList    **list,
 		       XSettingsSetting  *setting)
 {
-  XSettingsList *node;
-  XSettingsList *iter;
-  XSettingsList *last = NULL;
+  if (*list == NULL)
+    *list = g_hash_table_new_full (g_str_hash, g_str_equal, NULL,
+                                   (GDestroyNotify) xsettings_setting_free);
 
-  node = malloc (sizeof *node);
-  if (!node)
-    return XSETTINGS_NO_MEM;
-  node->setting = setting;
+  if (g_hash_table_lookup (*list, setting->name) != NULL)
+    return XSETTINGS_DUPLICATE_ENTRY;
 
-  iter = *list;
-  while (iter)
-    {
-      int cmp = strcmp (setting->name, iter->setting->name);
-
-      if (cmp < 0)
-	break;
-      else if (cmp == 0)
-	{
-	  free (node);
-	  return XSETTINGS_DUPLICATE_ENTRY;
-	}
-
-      last = iter;
-      iter = iter->next;
-    }
-  
-  if (last)
-    last->next = node;
-  else
-    *list = node;
-  
-  node->next = iter;
-  
+  g_hash_table_insert (*list, setting->name, setting);
   return XSETTINGS_SUCCESS;
-}
-
-XSettingsResult
-xsettings_list_delete (XSettingsList **list,
-		       const char     *name)
-{
-  XSettingsList *iter;
-  XSettingsList *last = NULL;
-
-  iter = *list;
-  while (iter)
-    {
-      if (strcmp (name, iter->setting->name) == 0)
-	{
-	  if (last)
-	    last->next = iter->next;
-	  else
-	    *list = iter->next;
-  
-	  xsettings_setting_free (iter->setting);
-	  free (iter);
-
-	  return XSETTINGS_SUCCESS;
-	}
-
-      last = iter;
-      iter = iter->next;
-    }
-
-  return XSETTINGS_FAILED;
 }
 
 XSettingsSetting *
 xsettings_list_lookup (XSettingsList *list,
 		       const char    *name)
 {
-  XSettingsList *iter;
-
-  iter = list;
-  while (iter)
-    {
-      if (strcmp (name, iter->setting->name) == 0)
-	return iter->setting;
-
-      iter = iter->next;
-    }
-
-  return NULL;
+  if (list == NULL)
+    return NULL;
+    
+  return g_hash_table_lookup (list, name);
 }
 
 char
