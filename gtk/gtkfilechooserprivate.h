@@ -34,6 +34,15 @@
 
 G_BEGIN_DECLS
 
+#define SETTINGS_KEY_LOCATION_MODE       "location-mode"
+#define SETTINGS_KEY_SHOW_HIDDEN         "show-hidden"
+#define SETTINGS_KEY_SHOW_SIZE_COLUMN    "show-size-column"
+#define SETTINGS_KEY_SORT_COLUMN         "sort-column"
+#define SETTINGS_KEY_SORT_ORDER          "sort-order"
+#define SETTINGS_KEY_WINDOW_POSITION     "window-position"
+#define SETTINGS_KEY_WINDOW_SIZE         "window-size"
+#define SETTINGS_KEY_SIDEBAR_WIDTH       "sidebar-width"
+
 #define GTK_FILE_CHOOSER_GET_IFACE(inst)  (G_TYPE_INSTANCE_GET_INTERFACE ((inst), GTK_TYPE_FILE_CHOOSER, GtkFileChooserIface))
 
 typedef struct _GtkFileChooserIface GtkFileChooserIface;

@@ -256,15 +256,6 @@ typedef enum {
 #define NUM_LINES 45
 #define NUM_CHARS 60
 
-#define SETTINGS_KEY_LOCATION_MODE       "location-mode"
-#define SETTINGS_KEY_SHOW_HIDDEN         "show-hidden"
-#define SETTINGS_KEY_SHOW_SIZE_COLUMN    "show-size-column"
-#define SETTINGS_KEY_SORT_COLUMN         "sort-column"
-#define SETTINGS_KEY_SORT_ORDER          "sort-order"
-#define SETTINGS_KEY_WINDOW_POSITION     "window-position"
-#define SETTINGS_KEY_WINDOW_SIZE         "window-size"
-#define SETTINGS_KEY_SIDEBAR_WIDTH       "sidebar-width"
-
 static void gtk_file_chooser_default_iface_init       (GtkFileChooserIface        *iface);
 static void gtk_file_chooser_embed_default_iface_init (GtkFileChooserEmbedIface   *iface);
 
