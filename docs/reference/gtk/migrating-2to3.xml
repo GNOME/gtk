@@ -1171,6 +1171,15 @@ gtk_arrow_draw (GtkWidget *widget,
       from GtkObject and makes use of the destroy functionality, you have
       to implement ::destroy yourself.
     </para>
+
+    <para>
+      If your program used functions like gtk_object_get or gtk_object_set,
+      these can be replaced directly with g_object_get or g_object_set. In
+      fact, most every gtk_object_* function can be replaced with the
+      corresponding g_object_ function, even in GTK+ 2 code. The one exception
+      to this rule is gtk_object_destroy, which can be replaced with
+      gtk_widget_destroy, again in both GTK+ 2 and GTK+ 3.
+    </para>
   </section>
 
   <section>
