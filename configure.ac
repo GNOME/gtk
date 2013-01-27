@@ -30,7 +30,6 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([build-aux])
 
 AC_CANONICAL_HOST
-AC_CANONICAL_TARGET
 
 # Define a string for the earliest version that this release has
 # backwards binary compatibility with for all interfaces a module
