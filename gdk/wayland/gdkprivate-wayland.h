@@ -128,10 +128,6 @@ GdkDeviceManager *_gdk_wayland_device_manager_new (GdkDisplay *display);
 void              _gdk_wayland_device_manager_add_device (GdkDeviceManager *device_manager,
 							  struct wl_seat *seat);
 
-struct wl_seat *_gdk_wayland_device_get_wl_seat (GdkDevice *device);
-struct wl_pointer *_gdk_wayland_device_get_wl_pointer (GdkDevice *device);
-struct wl_keyboard *_gdk_wayland_device_get_wl_keyboard (GdkDevice *device);
-
 GdkKeymap *_gdk_wayland_device_get_keymap (GdkDevice *device);
 
 void     _gdk_wayland_display_deliver_event (GdkDisplay *display, GdkEvent *event);

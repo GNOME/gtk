@@ -38,6 +38,7 @@ libgdkinclude_HEADERS =				\
 	gdkwayland.h
 
 libgdkwaylandinclude_HEADERS = 			\
+	gdkwaylanddevice.h			\
 	gdkwaylanddisplay.h			\
 	gdkwaylandwindow.h
 

@@ -1423,7 +1423,7 @@ gdk_wayland_window_begin_resize_drag (GdkWindow     *window,
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   wl_shell_surface_resize (impl->shell_surface,
-                           _gdk_wayland_device_get_wl_seat (device),
+                           gdk_wayland_device_get_wl_seat (device),
                            _gdk_wayland_display_get_serial (wayland_display),
                            grab_type);
 
@@ -1452,7 +1452,7 @@ gdk_wayland_window_begin_move_drag (GdkWindow *window,
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   wl_shell_surface_move (impl->shell_surface,
-                         _gdk_wayland_device_get_wl_seat (device),
+                         gdk_wayland_device_get_wl_seat (device),
                          _gdk_wayland_display_get_serial (wayland_display));
 
   /* This is needed since Wayland will absorb all the pointer events after the
