@@ -38,6 +38,7 @@ libgdkinclude_HEADERS =				\
 	gdkwayland.h
 
 libgdkwaylandinclude_HEADERS = 			\
-	gdkwaylanddisplay.h
+	gdkwaylanddisplay.h			\
+	gdkwaylandwindow.h
 
 -include $(top_srcdir)/git.mk
