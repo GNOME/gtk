@@ -324,7 +324,8 @@ AC_ARG_ENABLE(quartz-relocation,
 AC_ARG_ENABLE(wayland-cairo-gl,
               AS_HELP_STRING([--enable-wayland-cairo-gl],
                              [enable the use of Cairo GL in the Wayland backend]),
-              [enable_wayland_cairo_gl=yes])
+              [],
+              [enable_wayland_cairo_gl=no])
 
 
 cairo_backends=
