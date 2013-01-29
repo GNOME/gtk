@@ -1686,7 +1686,7 @@ static void
 get_selection_info (GtkPlacesSidebar *sidebar, SelectionInfo *info)
 {
 	GtkTreeIter iter;
-	
+
 	info->type   = PLACES_BUILT_IN;
 	info->drive  = NULL;
 	info->volume = NULL;
@@ -3558,23 +3558,23 @@ gtk_places_sidebar_dispose (GObject *object)
 	sidebar->shortcuts = NULL;
 
 	if (sidebar->volume_monitor != NULL) {
-		g_signal_handlers_disconnect_by_func (sidebar->volume_monitor, 
+		g_signal_handlers_disconnect_by_func (sidebar->volume_monitor,
 						      volume_added_callback, sidebar);
-		g_signal_handlers_disconnect_by_func (sidebar->volume_monitor, 
+		g_signal_handlers_disconnect_by_func (sidebar->volume_monitor,
 						      volume_removed_callback, sidebar);
-		g_signal_handlers_disconnect_by_func (sidebar->volume_monitor, 
+		g_signal_handlers_disconnect_by_func (sidebar->volume_monitor,
 						      volume_changed_callback, sidebar);
-		g_signal_handlers_disconnect_by_func (sidebar->volume_monitor, 
+		g_signal_handlers_disconnect_by_func (sidebar->volume_monitor,
 						      mount_added_callback, sidebar);
-		g_signal_handlers_disconnect_by_func (sidebar->volume_monitor, 
+		g_signal_handlers_disconnect_by_func (sidebar->volume_monitor,
 						      mount_removed_callback, sidebar);
-		g_signal_handlers_disconnect_by_func (sidebar->volume_monitor, 
+		g_signal_handlers_disconnect_by_func (sidebar->volume_monitor,
 						      mount_changed_callback, sidebar);
-		g_signal_handlers_disconnect_by_func (sidebar->volume_monitor, 
+		g_signal_handlers_disconnect_by_func (sidebar->volume_monitor,
 						      drive_disconnected_callback, sidebar);
-		g_signal_handlers_disconnect_by_func (sidebar->volume_monitor, 
+		g_signal_handlers_disconnect_by_func (sidebar->volume_monitor,
 						      drive_connected_callback, sidebar);
-		g_signal_handlers_disconnect_by_func (sidebar->volume_monitor, 
+		g_signal_handlers_disconnect_by_func (sidebar->volume_monitor,
 						      drive_changed_callback, sidebar);
 
 		g_clear_object (&sidebar->volume_monitor);
@@ -3867,7 +3867,7 @@ shortcuts_model_new (GtkPlacesSidebar *sidebar)
 {
 	ShortcutsModel *model;
 	GType model_types[PLACES_SIDEBAR_COLUMN_COUNT] = {
-		G_TYPE_INT, 
+		G_TYPE_INT,
 		G_TYPE_STRING,
 		G_TYPE_DRIVE,
 		G_TYPE_VOLUME,
