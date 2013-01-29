@@ -79,7 +79,6 @@ BUILT_SOURCES = demos.h demo_resources.c
 
 EXTRA_DIST += 				\
 	$(IMAGEFILES)			\
-	demo.ui				\
 	demo.gresource.xml		\
 	$(RESOURCES)			\
 	org.gtk.Demo.gschema.xml
@@ -113,6 +112,7 @@ demo_resources.c: demo.gresource.xml $(RESOURCES)
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(srcdir) --generate-source $(srcdir)/demo.gresource.xml
 
 RESOURCES=	application.ui			\
+		demo.ui				\
 		menus.ui			\
 		theming.ui			\
 		gtk-logo-24.png			\

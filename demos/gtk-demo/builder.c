@@ -38,14 +38,11 @@ do_builder (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
   GError *err = NULL;
-  gchar *filename;
 
   if (!window)
     {
       builder = gtk_builder_new ();
-      filename = demo_find_file ("demo.ui", NULL);
-      gtk_builder_add_from_file (builder, filename, &err);
-      g_free (filename);
+      gtk_builder_add_from_resource (builder, "/builder/demo.ui", &err);
       if (err)
         {
           g_error ("ERROR: %s\n", err->message);

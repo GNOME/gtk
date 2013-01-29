@@ -12,6 +12,9 @@
     <file>cssview.css</file>
     <file>reset.css</file>
   </gresource>
+  <gresource prefix="/builder">
+    <file>demo.ui</file>
+  </gresource>
   <gresource prefix="/css_accordion">
     <file alias="gtk.css">css_accordion.css</file>
   </gresource>
