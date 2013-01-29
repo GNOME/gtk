@@ -132,6 +132,9 @@ struct _GdkWindowImplWayland
 
   struct wl_seat *grab_input_seat;
   guint32 grab_time;
+
+  gboolean fullscreen;
+  int saved_width, saved_height; /* before going fullscreen */
 };
 
 struct _GdkWindowImplWaylandClass
@@ -1267,15 +1270,38 @@ gdk_wayland_window_unmaximize (GdkWindow *window)
 static void
 gdk_wayland_window_fullscreen (GdkWindow *window)
 {
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
   if (GDK_WINDOW_DESTROYED (window))
     return;
+
+  if (impl->fullscreen)
+    return;
+
+  impl->saved_width = gdk_window_get_width (window);
+  impl->saved_height = gdk_window_get_height (window);
+  wl_shell_surface_set_fullscreen (impl->shell_surface,
+                                   WL_SHELL_SURFACE_FULLSCREEN_METHOD_DEFAULT,
+                                   0,
+                                   NULL);
+  impl->fullscreen = TRUE;
 }
 
 static void
 gdk_wayland_window_unfullscreen (GdkWindow *window)
 {
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
   if (GDK_WINDOW_DESTROYED (window))
     return;
+
+  if (!impl->fullscreen)
+    return;
+
+  wl_shell_surface_set_toplevel (impl->shell_surface);
+  gdk_wayland_window_configure (window, impl->saved_width, impl->saved_height,
+                                0);
+  impl->fullscreen = FALSE;
 }
 
 static void
