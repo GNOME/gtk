@@ -15,7 +15,7 @@
 
 typedef struct
 {
-  gchar *filename;
+  gchar *resourcename;
   gdouble font_size;
 
   gint lines_per_page;
@@ -30,7 +30,7 @@ begin_print (GtkPrintOperation *operation,
              gpointer           user_data)
 {
   PrintData *data = (PrintData *)user_data;
-  char *contents;
+  GBytes *bytes;
   int i;
   double height;
 
@@ -38,10 +38,10 @@ begin_print (GtkPrintOperation *operation,
 
   data->lines_per_page = floor (height / data->font_size);
 
-  g_file_get_contents (data->filename, &contents, NULL, NULL);
+  bytes = g_resources_lookup_data (data->resourcename, 0, NULL);
 
-  data->lines = g_strsplit (contents, "\n", 0);
-  g_free (contents);
+  data->lines = g_strsplit (g_bytes_get_data (bytes, NULL), "\n", 0);
+  g_bytes_unref (bytes);
 
   i = 0;
   while (data->lines[i] != NULL)
@@ -86,7 +86,7 @@ draw_page (GtkPrintOperation *operation,
   pango_layout_set_font_description (layout, desc);
   pango_font_description_free (desc);
 
-  pango_layout_set_text (layout, data->filename, -1);
+  pango_layout_set_text (layout, data->resourcename, -1);
   pango_layout_get_pixel_size (layout, &text_width, &text_height);
 
   if (text_width > width)
@@ -137,7 +137,7 @@ end_print (GtkPrintOperation *operation,
 {
   PrintData *data = (PrintData *)user_data;
 
-  g_free (data->filename);
+  g_free (data->resourcename);
   g_strfreev (data->lines);
   g_free (data);
 }
@@ -153,7 +153,7 @@ do_printing (GtkWidget *do_widget)
 
   operation = gtk_print_operation_new ();
   data = g_new0 (PrintData, 1);
-  data->filename = demo_find_file ("printing.c", NULL);
+  data->resourcename = g_strdup ("/sources/printing.c");
   data->font_size = 12.0;
 
   g_signal_connect (G_OBJECT (operation), "begin-print",
