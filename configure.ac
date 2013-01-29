@@ -560,7 +560,7 @@ if test "x$enable_rebuilds" = "xyes" && \
 fi
 AC_SUBST(REBUILD)
 
-AC_CHECK_FUNCS(lstat mkstemp flockfile getc_unlocked)
+AC_CHECK_FUNCS(lstat mkstemp)
 AC_CHECK_FUNCS(localtime_r)
 
 # _NL_TIME_FIRST_WEEKDAY is an enum and not a define

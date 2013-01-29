@@ -110,65 +110,6 @@ window_closed_cb (GtkWidget *window, gpointer data)
   g_free (cbdata);
 }
 
-gboolean
-read_line (FILE *stream, GString *str)
-{
-  int n_read = 0;
-
-#ifdef HAVE_FLOCKFILE
-  flockfile (stream);
-#endif
-
-  g_string_truncate (str, 0);
-
-  while (1)
-    {
-      int c;
-
-#ifdef HAVE_FLOCKFILE
-      c = getc_unlocked (stream);
-#else
-      c = getc (stream);
-#endif
-
-      if (c == EOF)
-        goto done;
-      else
-        n_read++;
-
-      switch (c)
-        {
-        case '\r':
-        case '\n':
-          {
-#ifdef HAVE_FLOCKFILE
-            int next_c = getc_unlocked (stream);
-#else
-            int next_c = getc (stream);
-#endif
-
-            if (!(next_c == EOF ||
-                  (c == '\r' && next_c == '\n') ||
-                  (c == '\n' && next_c == '\r')))
-              ungetc (next_c, stream);
-
-            goto done;
-          }
-        default:
-          g_string_append_c (str, c);
-        }
-    }
-
- done:
-
-#ifdef HAVE_FLOCKFILE
-  funlockfile (stream);
-#endif
-
-  return n_read > 0;
-}
-
-
 /* Stupid syntax highlighting.
  *
  * No regex was used in the making of this highlighting.
@@ -559,14 +500,13 @@ remove_data_tabs (void)
 void
 load_file (const gchar *filename)
 {
-  FILE *file;
   GtkTextIter start, end;
   char *full_filename;
   GError *err = NULL;
-  GString *buffer = g_string_new (NULL);
   int state = 0;
   gboolean in_para = 0;
-  gchar **names;
+  gchar **names, **lines;
+  gchar *contents;
   gint i;
 
   remove_data_tabs ();
@@ -598,23 +538,30 @@ load_file (const gchar *filename)
       goto out;
     }
 
-  file = g_fopen (full_filename, "r");
-
-  if (!file)
-    g_warning ("Cannot open %s: %s\n", full_filename, g_strerror (errno));
+  if (!g_file_get_contents (full_filename, &contents, NULL, &err))
+    {
+      g_warning ("Cannot open %s: %s\n", full_filename, err->message);
+      g_error_free (err);
+      g_free (full_filename);
+      goto out;
+    }
 
   g_free (full_filename);
 
-  if (!file)
-    goto out;
+  lines = g_strsplit (contents, "\n", -1);
+  g_free (contents);
 
   gtk_text_buffer_get_iter_at_offset (info_buffer, &start, 0);
-  while (read_line (file, buffer))
+  for (i = 0; lines[i] != NULL; i++)
     {
-      gchar *p = buffer->str;
+      gchar *p;
       gchar *q;
       gchar *r;
 
+      /* Make sure \r is stripped at the end for the poor windows people */
+      lines[i] = g_strchomp (lines[i]);
+
+      p = lines[i];
       switch (state)
         {
         case 0:
@@ -703,7 +650,7 @@ load_file (const gchar *filename)
             p++;
           if (*p)
             {
-              p = buffer->str;
+              p = lines[i];
               state++;
               /* Fall through */
             }
@@ -718,13 +665,11 @@ load_file (const gchar *filename)
         }
     }
 
-  fclose (file);
-
   fontify ();
 
-out:
-  g_string_free (buffer, TRUE);
+  g_strfreev (lines);
 
+out:
   g_strfreev (names);
 }
 
