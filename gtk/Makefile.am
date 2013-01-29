@@ -51,6 +51,7 @@ INCLUDES =						\
 	-DGTK_DISABLE_DEPRECATED			\
 	-DGTK_FILE_SYSTEM_ENABLE_UNSUPPORTED		\
 	-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED		\
+	$(GMODULE_CFLAGS)				\
 	$(GTK_DEBUG_FLAGS)				\
 	$(GTK_DEP_CFLAGS)				\
 	$(INCLUDED_IMMODULE_DEFINE)
@@ -120,6 +121,7 @@ endif
 libgtkincludedir = $(includedir)/gtk-2.0/gtk
 libadd =								\
 	$(top_builddir)/gdk/$(gdktargetlib)				\
+	$(GMODULE_LIBS) \
 	$(GTK_DEP_LIBS)
 deps =
 
