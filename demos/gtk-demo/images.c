@@ -21,7 +21,7 @@
 static GtkWidget *window = NULL;
 static GdkPixbufLoader *pixbuf_loader = NULL;
 static guint load_timeout = 0;
-static FILE* image_stream = NULL;
+static GInputStream * image_stream = NULL;
 
 static void
 progressive_prepared_callback (GdkPixbufLoader *loader,
@@ -79,13 +79,13 @@ progressive_timeout (gpointer data)
 
   if (image_stream)
     {
-      size_t bytes_read;
+      gssize bytes_read;
       guchar buf[256];
       GError *error = NULL;
 
-      bytes_read = fread (buf, 1, 256, image_stream);
+      bytes_read = g_input_stream_read (image_stream, buf, 256, NULL, &error);
 
-      if (ferror (image_stream))
+      if (bytes_read < 0)
         {
           GtkWidget *dialog;
 
@@ -94,12 +94,13 @@ progressive_timeout (gpointer data)
                                            GTK_MESSAGE_ERROR,
                                            GTK_BUTTONS_CLOSE,
                                            "Failure reading image file 'alphatest.png': %s",
-                                           g_strerror (errno));
+                                           error->message);
+          g_error_free (error);
 
           g_signal_connect (dialog, "response",
                             G_CALLBACK (gtk_widget_destroy), NULL);
 
-          fclose (image_stream);
+          g_object_unref (image_stream);
           image_stream = NULL;
 
           gtk_widget_show (dialog);
@@ -127,7 +128,7 @@ progressive_timeout (gpointer data)
           g_signal_connect (dialog, "response",
                             G_CALLBACK (gtk_widget_destroy), NULL);
 
-          fclose (image_stream);
+          g_object_unref (image_stream);
           image_stream = NULL;
 
           gtk_widget_show (dialog);
@@ -137,9 +138,42 @@ progressive_timeout (gpointer data)
           return FALSE; /* uninstall the timeout */
         }
 
-      if (feof (image_stream))
+      if (bytes_read == 0)
         {
-          fclose (image_stream);
+          /* Errors can happen on close, e.g. if the image
+           * file was truncated we'll know on close that
+           * it was incomplete.
+           */
+          error = NULL;
+          if (!g_input_stream_close (image_stream, NULL, &error))
+            {
+              GtkWidget *dialog;
+
+              dialog = gtk_message_dialog_new (GTK_WINDOW (window),
+                                               GTK_DIALOG_DESTROY_WITH_PARENT,
+                                               GTK_MESSAGE_ERROR,
+                                               GTK_BUTTONS_CLOSE,
+                                               "Failed to load image: %s",
+                                               error->message);
+
+              g_error_free (error);
+
+              g_signal_connect (dialog, "response",
+                                G_CALLBACK (gtk_widget_destroy), NULL);
+
+              gtk_widget_show (dialog);
+
+              g_object_unref (image_stream);
+              image_stream = NULL;
+              g_object_unref (pixbuf_loader);
+              pixbuf_loader = NULL;
+
+              load_timeout = 0;
+
+              return FALSE; /* uninstall the timeout */
+            }
+
+          g_object_unref (image_stream);
           image_stream = NULL;
 
           /* Errors can happen on close, e.g. if the image
@@ -181,7 +215,6 @@ progressive_timeout (gpointer data)
   else
     {
       gchar *filename;
-      gchar *error_message = NULL;
       GError *error = NULL;
 
       /* demo_find_file() looks in the current directory first,
@@ -189,19 +222,13 @@ progressive_timeout (gpointer data)
        * in the location where the file is installed.
        */
       filename = demo_find_file ("alphatest.png", &error);
-      if (error)
+      if (error == NULL)
         {
-          error_message = g_strdup (error->message);
-          g_error_free (error);
-        }
-      else
-        {
-          image_stream = g_fopen (filename, "rb");
-          g_free (filename);
+          GFile *file = g_file_new_for_path (filename);
 
-          if (!image_stream)
-            error_message = g_strdup_printf ("Unable to open image file 'alphatest.png': %s",
-                                             g_strerror (errno));
+          image_stream = G_INPUT_STREAM (g_file_read (file, NULL, &error));
+          g_object_unref (file);
+          g_free (filename);
         }
 
       if (image_stream == NULL)
@@ -212,8 +239,8 @@ progressive_timeout (gpointer data)
                                            GTK_DIALOG_DESTROY_WITH_PARENT,
                                            GTK_MESSAGE_ERROR,
                                            GTK_BUTTONS_CLOSE,
-                                           "%s", error_message);
-          g_free (error_message);
+                                           "%s", error->message);
+          g_error_free (error);
 
           g_signal_connect (dialog, "response",
                             G_CALLBACK (gtk_widget_destroy), NULL);
@@ -229,7 +256,6 @@ progressive_timeout (gpointer data)
         {
           gdk_pixbuf_loader_close (pixbuf_loader, NULL);
           g_object_unref (pixbuf_loader);
-          pixbuf_loader = NULL;
         }
 
       pixbuf_loader = gdk_pixbuf_loader_new ();
@@ -278,8 +304,10 @@ cleanup_callback (GObject   *object,
     }
 
   if (image_stream)
-    fclose (image_stream);
-  image_stream = NULL;
+    {
+      g_object_unref (image_stream);
+      image_stream = NULL;
+    }
 }
 
 static void
