@@ -11,8 +11,8 @@
 
 static GtkWidget *window = NULL;
 
-#define FOLDER_NAME "gnome-fs-directory.png"
-#define FILE_NAME "gnome-fs-regular.png"
+#define FOLDER_NAME "/iconview/gnome-fs-directory.png"
+#define FILE_NAME "/iconview/gnome-fs-regular.png"
 
 enum
 {
@@ -29,36 +29,18 @@ gchar *parent;
 GtkToolItem *up_button;
 
 /* Loads the images for the demo and returns whether the operation succeeded */
-static gboolean
-load_pixbufs (GError **error)
+static void
+load_pixbufs (void)
 {
-  char *filename;
-
   if (file_pixbuf)
-    return TRUE; /* already loaded earlier */
+    return; /* already loaded earlier */
 
-  /* demo_find_file() looks in the current directory first,
-   * so you can run gtk-demo without installing GTK, then looks
-   * in the location where the file is installed.
-   */
-  filename = demo_find_file (FILE_NAME, error);
-  if (!filename)
-    return FALSE; /* note that "error" was filled in and returned */
+  file_pixbuf = gdk_pixbuf_new_from_resource (FILE_NAME, NULL);
+  /* resources must load successfully */
+  g_assert (file_pixbuf);
 
-  file_pixbuf = gdk_pixbuf_new_from_file (filename, error);
-  g_free (filename);
-
-  if (!file_pixbuf)
-    return FALSE; /* Note that "error" was filled with a GError */
-
-  filename = demo_find_file (FOLDER_NAME, error);
-  if (!filename)
-    return FALSE; /* note that "error" was filled in and returned */
-
-  folder_pixbuf = gdk_pixbuf_new_from_file (filename, error);
-  g_free (filename);
-
-  return TRUE;
+  folder_pixbuf = gdk_pixbuf_new_from_resource (FOLDER_NAME, NULL);
+  g_assert (folder_pixbuf);
 }
 
 static void
@@ -261,7 +243,12 @@ do_iconview (GtkWidget *do_widget)
 {
   if (!window)
     {
-      GError *error;
+      GtkWidget *sw;
+      GtkWidget *icon_view;
+      GtkListStore *store;
+      GtkWidget *vbox;
+      GtkWidget *tool_bar;
+      GtkToolItem *home_button;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_default_size (GTK_WINDOW (window), 650, 400);
@@ -273,90 +260,63 @@ do_iconview (GtkWidget *do_widget)
       g_signal_connect (window, "destroy",
                         G_CALLBACK (close_window), NULL);
 
-      error = NULL;
-      if (!load_pixbufs (&error))
-        {
-          GtkWidget *dialog;
+      load_pixbufs ();
 
-          dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-                                           GTK_DIALOG_DESTROY_WITH_PARENT,
-                                           GTK_MESSAGE_ERROR,
-                                           GTK_BUTTONS_CLOSE,
-                                           "Failed to load an image: %s",
-                                           error->message);
+      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+      gtk_container_add (GTK_CONTAINER (window), vbox);
 
-          g_error_free (error);
+      tool_bar = gtk_toolbar_new ();
+      gtk_box_pack_start (GTK_BOX (vbox), tool_bar, FALSE, FALSE, 0);
 
-          g_signal_connect (dialog, "response",
-                            G_CALLBACK (gtk_widget_destroy), NULL);
+      up_button = gtk_tool_button_new_from_stock (GTK_STOCK_GO_UP);
+      gtk_tool_item_set_is_important (up_button, TRUE);
+      gtk_widget_set_sensitive (GTK_WIDGET (up_button), FALSE);
+      gtk_toolbar_insert (GTK_TOOLBAR (tool_bar), up_button, -1);
 
-          gtk_widget_show (dialog);
-        }
-      else
-        {
-          GtkWidget *sw;
-          GtkWidget *icon_view;
-          GtkListStore *store;
-          GtkWidget *vbox;
-          GtkWidget *tool_bar;
-          GtkToolItem *home_button;
-
-          vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-          gtk_container_add (GTK_CONTAINER (window), vbox);
-
-          tool_bar = gtk_toolbar_new ();
-          gtk_box_pack_start (GTK_BOX (vbox), tool_bar, FALSE, FALSE, 0);
-
-          up_button = gtk_tool_button_new_from_stock (GTK_STOCK_GO_UP);
-          gtk_tool_item_set_is_important (up_button, TRUE);
-          gtk_widget_set_sensitive (GTK_WIDGET (up_button), FALSE);
-          gtk_toolbar_insert (GTK_TOOLBAR (tool_bar), up_button, -1);
-
-          home_button = gtk_tool_button_new_from_stock (GTK_STOCK_HOME);
-          gtk_tool_item_set_is_important (home_button, TRUE);
-          gtk_toolbar_insert (GTK_TOOLBAR (tool_bar), home_button, -1);
+      home_button = gtk_tool_button_new_from_stock (GTK_STOCK_HOME);
+      gtk_tool_item_set_is_important (home_button, TRUE);
+      gtk_toolbar_insert (GTK_TOOLBAR (tool_bar), home_button, -1);
 
 
-          sw = gtk_scrolled_window_new (NULL, NULL);
-          gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw),
-                                               GTK_SHADOW_ETCHED_IN);
-          gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
-                                          GTK_POLICY_AUTOMATIC,
-                                          GTK_POLICY_AUTOMATIC);
+      sw = gtk_scrolled_window_new (NULL, NULL);
+      gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw),
+                                           GTK_SHADOW_ETCHED_IN);
+      gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
+                                      GTK_POLICY_AUTOMATIC,
+                                      GTK_POLICY_AUTOMATIC);
 
-          gtk_box_pack_start (GTK_BOX (vbox), sw, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), sw, TRUE, TRUE, 0);
 
-          /* Create the store and fill it with the contents of '/' */
-          parent = g_strdup ("/");
-          store = create_store ();
-          fill_store (store);
+      /* Create the store and fill it with the contents of '/' */
+      parent = g_strdup ("/");
+      store = create_store ();
+      fill_store (store);
 
-          icon_view = gtk_icon_view_new_with_model (GTK_TREE_MODEL (store));
-          gtk_icon_view_set_selection_mode (GTK_ICON_VIEW (icon_view),
-                                            GTK_SELECTION_MULTIPLE);
-          g_object_unref (store);
+      icon_view = gtk_icon_view_new_with_model (GTK_TREE_MODEL (store));
+      gtk_icon_view_set_selection_mode (GTK_ICON_VIEW (icon_view),
+                                        GTK_SELECTION_MULTIPLE);
+      g_object_unref (store);
 
-          /* Connect to the "clicked" signal of the "Up" tool button */
-          g_signal_connect (up_button, "clicked",
-                            G_CALLBACK (up_clicked), store);
+      /* Connect to the "clicked" signal of the "Up" tool button */
+      g_signal_connect (up_button, "clicked",
+                        G_CALLBACK (up_clicked), store);
 
-          /* Connect to the "clicked" signal of the "Home" tool button */
-          g_signal_connect (home_button, "clicked",
-                            G_CALLBACK (home_clicked), store);
+      /* Connect to the "clicked" signal of the "Home" tool button */
+      g_signal_connect (home_button, "clicked",
+                        G_CALLBACK (home_clicked), store);
 
-          /* We now set which model columns that correspond to the text
-           * and pixbuf of each item
-           */
-          gtk_icon_view_set_text_column (GTK_ICON_VIEW (icon_view), COL_DISPLAY_NAME);
-          gtk_icon_view_set_pixbuf_column (GTK_ICON_VIEW (icon_view), COL_PIXBUF);
+      /* We now set which model columns that correspond to the text
+       * and pixbuf of each item
+       */
+      gtk_icon_view_set_text_column (GTK_ICON_VIEW (icon_view), COL_DISPLAY_NAME);
+      gtk_icon_view_set_pixbuf_column (GTK_ICON_VIEW (icon_view), COL_PIXBUF);
 
-          /* Connect to the "item-activated" signal */
-          g_signal_connect (icon_view, "item-activated",
-                            G_CALLBACK (item_activated), store);
-          gtk_container_add (GTK_CONTAINER (sw), icon_view);
+      /* Connect to the "item-activated" signal */
+      g_signal_connect (icon_view, "item-activated",
+                        G_CALLBACK (item_activated), store);
+      gtk_container_add (GTK_CONTAINER (sw), icon_view);
 
-          gtk_widget_grab_focus (icon_view);
-        }
+      gtk_widget_grab_focus (icon_view);
     }
 
   if (!gtk_widget_get_visible (window))

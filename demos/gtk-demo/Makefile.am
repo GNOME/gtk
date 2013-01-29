@@ -115,6 +115,8 @@ RESOURCES=	application.ui			\
 		demo.ui				\
 		menus.ui			\
 		theming.ui			\
+		gnome-fs-directory.png		\
+		gnome-fs-regular.png		\
 		gtk-logo-24.png			\
 		gtk-logo-48.png			\
 		gtk-logo-rgb.gif		\
@@ -133,8 +135,6 @@ IMAGEFILES=	alphatest.png		\
 		floppybuddy.gif		\
 		gnome-applets.png	\
 		gnome-calendar.png	\
-		gnome-fs-directory.png	\
-		gnome-fs-regular.png	\
 		gnome-foot.png		\
 		gnome-gimp.png		\
 		gnome-gmush.png		\

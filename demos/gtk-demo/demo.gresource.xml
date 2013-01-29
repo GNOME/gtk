@@ -49,6 +49,10 @@
   <gresource prefix="/css_shadows">
     <file alias="gtk.css">css_shadows.css</file>
   </gresource>
+  <gresource prefix="/iconview">
+    <file preprocess="to-pixdata">gnome-fs-directory.png</file>
+    <file preprocess="to-pixdata">gnome-fs-regular.png</file>
+  </gresource>
   <gresource prefix="/sources">
     <file>application.c</file>
     <file>appwindow.c</file>
