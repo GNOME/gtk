@@ -144,7 +144,6 @@ struct _GtkPlacesSidebar {
 	GtkPlacesOpenFlags open_flags;
 
 	guint show_desktop : 1;
-	guint accept_uri_drops : 1;
 };
 
 struct _GtkPlacesSidebarClass {
@@ -219,7 +218,6 @@ enum {
 enum {
 	PROP_LOCATION = 1,
 	PROP_OPEN_FLAGS,
-	PROP_ACCEPT_URI_DROPS,
 	PROP_SHOW_DESKTOP,
 	NUM_PROPERTIES,
 };
@@ -3527,9 +3525,6 @@ gtk_places_sidebar_set_property (GObject      *obj,
 	case PROP_OPEN_FLAGS:
 		gtk_places_sidebar_set_open_flags (sidebar, g_value_get_flags (value));
 		break;
-	case PROP_ACCEPT_URI_DROPS:
-		gtk_places_sidebar_set_accept_uri_drops (sidebar, g_value_get_boolean (value));
-		break;
 	case PROP_SHOW_DESKTOP:
 		gtk_places_sidebar_set_show_desktop (sidebar, g_value_get_boolean (value));
 		break;
@@ -3553,9 +3548,6 @@ gtk_places_sidebar_get_property (GObject    *obj,
 		break;
 	case PROP_OPEN_FLAGS:
 		g_value_set_flags (value, gtk_places_sidebar_get_open_flags (sidebar));
-		break;
-	case PROP_ACCEPT_URI_DROPS:
-		g_value_set_boolean (value, gtk_places_sidebar_get_accept_uri_drops (sidebar));
 		break;
 	case PROP_SHOW_DESKTOP:
 		g_value_set_boolean (value, gtk_places_sidebar_get_show_desktop (sidebar));
@@ -3742,9 +3734,6 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 	 * The application can evaluate the @context for customary actions, or
 	 * it can check the type of the files indicated by @source_file_list against the
 	 * possible actions for the destination @dest_file.
-	 *
-	 * To enable drag-and-drop operations on the sidebar, use
-	 * gtk_places_sidebar_set_accept_uri_drops().
 	 */
 	places_sidebar_signals [DRAG_ACTION_REQUESTED] =
 		g_signal_new (I_("drag-action-requested"),
@@ -3766,9 +3755,6 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 	 *
 	 * The places sidebar emits this signal when it needs to ask the application
 	 * to pop up a menu to ask the user for which drag action to perform.
-	 *
-	 * To enable drag-and-drop operations on the sidebar, use
-	 * gtk_places_sidebar_set_accept_uri_drops().
 	 *
 	 * Return value: the final drag action that the sidebar should pass to the drag side
 	 * of the drag-and-drop operation.
@@ -3798,9 +3784,6 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 	 * @source_file_list has the list of files that are dropped into it and
 	 * which should be copied/moved/etc. based on the specified @action.
 	 *
-	 * To enable drag-and-drop operations on the sidebar, use
-	 * gtk_places_sidebar_set_accept_uri_drops().
-	 *
 	 * Since: 3.8
 	 */
 	places_sidebar_signals [DRAG_PERFORM_DROP] =
@@ -3828,12 +3811,6 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 				    GTK_TYPE_PLACES_OPEN_FLAGS,
 				    GTK_PLACES_OPEN_NORMAL,
 				    G_PARAM_READWRITE);
-	properties[PROP_ACCEPT_URI_DROPS] =
-		g_param_spec_boolean ("accept-uri-drops",
-				      P_("Whether to accept URI drops"),
-				      P_("Whether the sidebar accepts URI drops"),
-				      FALSE,
-				      G_PARAM_READWRITE);
 	properties[PROP_SHOW_DESKTOP] =
 		g_param_spec_boolean ("show-desktop",
 				      P_("Whether to show desktop"),
@@ -4117,53 +4094,6 @@ gtk_places_sidebar_get_show_desktop (GtkPlacesSidebar *sidebar)
 	g_return_val_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar), FALSE);
 
 	return sidebar->show_desktop;
-}
-
-/**
- * gtk_places_sidebar_set_accept_uri_drops:
- * @sidebar: a places sidebar
- * @accept_uri_drops: whether to accept drops of "text/uri-list" data or to only allow inserting bookmarks
- *
- * Sets the behavior that the sidebar will adopt when accepting drag-and-drop operations.
- *
- * If @accept_uri_drops is FALSE (the default), then the sidebar will just allow dropping
- * directories into it to create new bookmarks.  These must be of type "text/uri-list".
- *
- * On the other hand, if @accept_uri_drops is TRUE, then the following signals will be emitted
- * so that the caller can take the appropriate action (usually, perform file operations like
- * moving/copying): #GtkPlacesSidebar::drag-action-requested, #GtkPlacesSidebar::drag-action-ask,
- * and #GtkPlacesSidebar::drag-perform-drop.
- *
- * Since: 3.8
- */
-void
-gtk_places_sidebar_set_accept_uri_drops (GtkPlacesSidebar *sidebar, gboolean accept_uri_drops)
-{
-	g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
-
-	accept_uri_drops = !!accept_uri_drops;
-	if (sidebar->accept_uri_drops != accept_uri_drops) {
-		sidebar->accept_uri_drops = !!accept_uri_drops;
-		g_object_notify_by_pspec (G_OBJECT (sidebar), properties[PROP_ACCEPT_URI_DROPS]);
-	}
-}
-
-/**
- * gtk_places_sidebar_get_accept_uri_drops:
- * @sidebar: a places sidebar
- *
- * Returns the value previously set with gtk_places_sidebar_set_accept_uri_drops()
- *
- * Return value: %TRUE if the sidebar accepts URI drops.
- *
- * Since: 3.8
- */
-gboolean
-gtk_places_sidebar_get_accept_uri_drops (GtkPlacesSidebar *sidebar)
-{
-	g_return_val_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar), FALSE);
-
-	return sidebar->accept_uri_drops;
 }
 
 static GSList *

@@ -89,9 +89,6 @@ void gtk_places_sidebar_set_location (GtkPlacesSidebar *sidebar, GFile *location
 gboolean gtk_places_sidebar_get_show_desktop (GtkPlacesSidebar *sidebar);
 void gtk_places_sidebar_set_show_desktop (GtkPlacesSidebar *sidebar, gboolean show_desktop);
 
-gboolean gtk_places_sidebar_get_accept_uri_drops (GtkPlacesSidebar *sidebar);
-void gtk_places_sidebar_set_accept_uri_drops (GtkPlacesSidebar *sidebar, gboolean accept_uri_drops);
-
 void gtk_places_sidebar_add_shortcut (GtkPlacesSidebar *sidebar, GFile *location);
 void gtk_places_sidebar_remove_shortcut (GtkPlacesSidebar *sidebar, GFile *location);
 GSList *gtk_places_sidebar_list_shortcuts (GtkPlacesSidebar *sidebar);
