@@ -1225,6 +1225,12 @@ clicked_eject_button (GtkPlacesSidebar *sidebar,
 	return FALSE;
 }
 
+static gboolean
+pos_is_into_or_before (GtkTreeViewDropPosition pos)
+{
+	return (pos == GTK_TREE_VIEW_DROP_BEFORE || pos == GTK_TREE_VIEW_DROP_INTO_OR_BEFORE);
+}
+
 /* Computes the appropriate row and position for dropping */
 static gboolean
 compute_drop_position (GtkTreeView             *tree_view,
@@ -1238,6 +1244,7 @@ compute_drop_position (GtkTreeView             *tree_view,
 	GtkTreeIter iter;
 	PlaceType place_type;
 	SectionType section_type;
+	gboolean drop_possible;
 
 	if (!gtk_tree_view_get_dest_row_at_pos (tree_view,
 						x, y,
@@ -1253,41 +1260,62 @@ compute_drop_position (GtkTreeView             *tree_view,
 			    PLACES_SIDEBAR_COLUMN_SECTION_TYPE, &section_type,
 			    -1);
 
+	drop_possible = TRUE;
+
 	/* Never drop on headings, but special case the bookmarks heading,
 	 * so we can drop bookmarks in between it and the first bookmark.
 	 */
 	if (place_type == PLACES_HEADING
-	    && section_type != SECTION_BOOKMARKS) {
+	    && section_type != SECTION_BOOKMARKS)
+		drop_possible = FALSE;
+
+	/* Dragging a bookmark? */
+	if (sidebar->drag_data_received
+	    && sidebar->drag_data_info == GTK_TREE_MODEL_ROW) {
+		/* Don't allow reordering bookmarks into non-bookmark areas */
+		if (section_type != SECTION_BOOKMARKS)
+			drop_possible = FALSE;
+
+		/* Bookmarks can only be reordered.  Disallow dropping directly into them; only allow dropping between them. */
+		if (place_type == PLACES_HEADING) {
+			if (pos_is_into_or_before (*pos))
+				drop_possible = FALSE;
+			else
+				*pos = GTK_TREE_VIEW_DROP_AFTER;
+		} else {
+			if (pos_is_into_or_before (*pos))
+				*pos = GTK_TREE_VIEW_DROP_BEFORE;
+			else
+				*pos = GTK_TREE_VIEW_DROP_AFTER;
+		}
+	} else {
+		/* Dragging a file */
+
+		/* Outside the bookmarks section, URIs can only be dropped
+		 * directly into places items.  Inside the bookmarks section,
+		 * they can be dropped between items (to create new bookmarks)
+		 * or in items themselves (to request a move/copy file
+		 * operation).
+		 */
+		if (section_type != SECTION_BOOKMARKS)
+			*pos = GTK_TREE_VIEW_DROP_INTO_OR_BEFORE;
+		else {
+			if (place_type == PLACES_HEADING) {
+				if (pos_is_into_or_before (*pos))
+					drop_possible = FALSE;
+				else
+					*pos = GTK_TREE_VIEW_DROP_AFTER;
+			}
+		}
+	}
+
+	if (!drop_possible) {
 		gtk_tree_path_free (*path);
 		*path = NULL;
 
 		return FALSE;
 	}
 
-	/* Dragging a bookmark? */
-	if (sidebar->drag_data_received
-	    && sidebar->drag_data_info == GTK_TREE_MODEL_ROW) {
-		/* Don't allow reordering bookmarks into non-bookmark areas */
-		if (section_type != SECTION_BOOKMARKS) {
-			gtk_tree_path_free (*path);
-			*path = NULL;
-
-			return FALSE;
-		}
-
-		printf ("dragging a bookmark, pos = %d\n", *pos);
-	} else {
-		printf ("dragging a file, pos = %d\n", *pos);
-	}
-#if 0
-	if (sidebar->drag_data_received &&
-	    sidebar->drag_data_info == GTK_TREE_MODEL_ROW) {
-		/* bookmark rows can only be reordered */
-		*pos = GTK_TREE_VIEW_DROP_AFTER;
-	} else {
-		*pos = GTK_TREE_VIEW_DROP_INTO_OR_BEFORE;
-	}
-#endif
 	return TRUE;
 }
 
@@ -1323,6 +1351,18 @@ free_drag_data (GtkPlacesSidebar *sidebar)
 	}
 }
 
+static const char *
+pos_to_string (GtkTreeViewDropPosition pos)
+{
+	switch (pos) {
+	case GTK_TREE_VIEW_DROP_BEFORE:         return "BEFORE";
+	case GTK_TREE_VIEW_DROP_AFTER:          return "AFTER";
+	case GTK_TREE_VIEW_DROP_INTO_OR_BEFORE: return "INTO_OR_BEFORE";
+	case GTK_TREE_VIEW_DROP_INTO_OR_AFTER:  return "INTO_OR_AFTER";
+	default: return "INVALID";
+	}
+}
+
 static gboolean
 drag_motion_callback (GtkTreeView *tree_view,
 		      GdkDragContext *context,
@@ -1349,35 +1389,39 @@ drag_motion_callback (GtkTreeView *tree_view,
 	path = NULL;
 	res = compute_drop_position (tree_view, x, y, &path, &pos, sidebar);
 
-	printf ("compute_drop_position(): pos %d, result %d\n", pos, res);
-
 	if (!res) {
 		goto out;
 	}
 
-	if (pos == GTK_TREE_VIEW_DROP_AFTER) {
-		if (sidebar->drag_data_received &&
-		    sidebar->drag_data_info == GTK_TREE_MODEL_ROW) {
-			action = GDK_ACTION_MOVE;
-		}
+	printf ("compute_drop_position(): path %d, pos %s\n", gtk_tree_path_get_indices (path)[0], pos_to_string (pos));
+
+	if (sidebar->drag_data_received &&
+	    sidebar->drag_data_info == GTK_TREE_MODEL_ROW) {
+		/* Dragging bookmarks always moves them to another position in the bookmarks list */
+		action = GDK_ACTION_MOVE;
 	} else {
-		if (sidebar->accept_uri_drops) {
-			if (sidebar->drag_list != NULL) {
-				GFile *dest_file;
+		/* URIs are being dragged.  See if the caller wants to handle a
+		 * file move/copy operation itself, or if we should only try to
+		 * create bookmarks out of the dragged URIs.
+		 */
+		if (sidebar->drag_list != NULL) {
+			GFile *dest_file;
 
-				gtk_tree_model_get_iter (GTK_TREE_MODEL (sidebar->store),
-							 &iter, path);
-				gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store),
-						    &iter,
-						    PLACES_SIDEBAR_COLUMN_URI, &uri,
-						    -1);
+			gtk_tree_model_get_iter (GTK_TREE_MODEL (sidebar->store),
+						 &iter, path);
+			gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store),
+					    &iter,
+					    PLACES_SIDEBAR_COLUMN_URI, &uri,
+					    -1);
 
-				dest_file = g_file_new_for_uri (uri);
-				g_free (uri);
+			dest_file = g_file_new_for_uri (uri);
 
-				emit_drag_action_requested (sidebar, context, dest_file, sidebar->drag_list, &action);
-				g_object_unref (dest_file);
-			}
+			emit_drag_action_requested (sidebar, context, dest_file, sidebar->drag_list, &action);
+
+			printf ("dragging URIs, dest_file = %s, action_requested = %d\n", uri, action);
+
+			g_object_unref (dest_file);
+			g_free (uri);
 		}
 	}
 
@@ -1503,7 +1547,9 @@ drag_data_received_callback (GtkWidget *widget,
 
 	success = FALSE;
 
-	if (tree_pos == GTK_TREE_VIEW_DROP_AFTER) {
+	if (sidebar->drag_data_info == GTK_TREE_MODEL_ROW) {
+		/* A bookmark got reordered */
+
 		model = gtk_tree_view_get_model (tree_view);
 
 		if (!gtk_tree_model_get_iter (model, &iter, tree_path)) {
@@ -1520,21 +1566,16 @@ drag_data_received_callback (GtkWidget *widget,
 			goto out;
 		}
 
-		if (tree_pos == GTK_TREE_VIEW_DROP_AFTER && place_type != PLACES_HEADING) {
-			/* heading already has position 0 */
+		if (place_type == PLACES_HEADING)
+			position = 0;
+		else if (tree_pos == GTK_TREE_VIEW_DROP_AFTER)
 			position++;
-		}
 
-		switch (info) {
-		case GTK_TREE_MODEL_ROW:
-			reorder_bookmarks (sidebar, position);
-			success = TRUE;
-			break;
-		default:
-			g_assert_not_reached ();
-			break;
-		}
+		reorder_bookmarks (sidebar, position);
+		success = TRUE;
 	} else {
+		/* Dropping URIs! */
+
 		GdkDragAction real_action;
 		char **uris;
 		GList *source_file_list;
