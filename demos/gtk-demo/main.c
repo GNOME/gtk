@@ -56,9 +56,6 @@ get_democodedir (void)
 
 #endif
 
-#undef DEMOCODEDIR
-#define DEMOCODEDIR getenv ("GTK_DEMO_DATA_DIR")
-
 /**
  * demo_find_file:
  * @base: base filename
