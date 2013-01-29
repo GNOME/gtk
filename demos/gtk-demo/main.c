@@ -501,12 +501,12 @@ void
 load_file (const gchar *filename)
 {
   GtkTextIter start, end;
-  char *full_filename;
+  char *resource_filename;
   GError *err = NULL;
   int state = 0;
   gboolean in_para = 0;
   gchar **names, **lines;
-  gchar *contents;
+  GBytes *bytes;
   gint i;
 
   remove_data_tabs ();
@@ -530,26 +530,19 @@ load_file (const gchar *filename)
   gtk_text_buffer_get_bounds (source_buffer, &start, &end);
   gtk_text_buffer_delete (source_buffer, &start, &end);
 
-  full_filename = demo_find_file (names[0], &err);
-  if (!full_filename)
+  resource_filename = g_strconcat ("/sources/", names[0], NULL);
+  bytes = g_resources_lookup_data (resource_filename, 0, &err);
+  g_free (resource_filename);
+
+  if (bytes == NULL)
     {
-      g_warning ("%s", err->message);
+      g_warning ("Cannot open source for %s: %s\n", names[0], err->message);
       g_error_free (err);
       goto out;
     }
 
-  if (!g_file_get_contents (full_filename, &contents, NULL, &err))
-    {
-      g_warning ("Cannot open %s: %s\n", full_filename, err->message);
-      g_error_free (err);
-      g_free (full_filename);
-      goto out;
-    }
-
-  g_free (full_filename);
-
-  lines = g_strsplit (contents, "\n", -1);
-  g_free (contents);
+  lines = g_strsplit (g_bytes_get_data (bytes, NULL), "\n", -1);
+  g_bytes_unref (bytes);
 
   gtk_text_buffer_get_iter_at_offset (info_buffer, &start, 0);
   for (i = 0; lines[i] != NULL; i++)
