@@ -8,6 +8,9 @@
     <file preprocess="xml-stripblanks">application.ui</file>
     <file preprocess="xml-stripblanks">menus.ui</file>
   </gresource>
+  <gresource prefix="/appwindow">
+    <file preprocess="to-pixdata">gtk-logo-rgb.gif</file>
+  </gresource>
   <gresource prefix="/">
     <file>cssview.css</file>
     <file>reset.css</file>

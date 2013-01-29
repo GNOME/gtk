@@ -117,6 +117,7 @@ RESOURCES=	application.ui			\
 		theming.ui			\
 		gtk-logo-24.png			\
 		gtk-logo-48.png			\
+		gtk-logo-rgb.gif		\
 		css_accordion.css		\
 		css_basics.css			\
 		css_multiplebgs.css		\

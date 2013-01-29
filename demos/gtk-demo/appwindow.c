@@ -82,7 +82,6 @@ about_cb (GtkAction *action,
           GtkWidget *window)
 {
   GdkPixbuf *pixbuf, *transparent;
-  gchar *filename;
 
   const gchar *authors[] = {
     "Peter Mattis",
@@ -100,16 +99,11 @@ about_cb (GtkAction *action,
     NULL
   };
 
-  pixbuf = NULL;
-  transparent = NULL;
-  filename = demo_find_file ("gtk-logo-rgb.gif", NULL);
-  if (filename)
-    {
-      pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
-      g_free (filename);
-      transparent = gdk_pixbuf_add_alpha (pixbuf, TRUE, 0xff, 0xff, 0xff);
-      g_object_unref (pixbuf);
-    }
+  pixbuf = gdk_pixbuf_new_from_resource ("/appwindow/gtk-logo-rgb.gif", NULL);
+  /* We asser the existence of the pixbuf as we load it from a custom resource. */
+  g_assert (pixbuf);
+  transparent = gdk_pixbuf_add_alpha (pixbuf, TRUE, 0xff, 0xff, 0xff);
+  g_object_unref (pixbuf);
 
   gtk_show_about_dialog (GTK_WINDOW (window),
                          "program-name", "GTK+ Code Demos",
@@ -309,7 +303,8 @@ register_stock_icons (void)
     {
       GdkPixbuf *pixbuf;
       GtkIconFactory *factory;
-      char *filename;
+      GtkIconSet *icon_set;
+      GdkPixbuf *transparent;
 
       static GtkStockItem items[] = {
         { "demo-gtk-logo",
@@ -326,35 +321,18 @@ register_stock_icons (void)
       factory = gtk_icon_factory_new ();
       gtk_icon_factory_add_default (factory);
 
-      /* demo_find_file() looks in the current directory first,
-       * so you can run gtk-demo without installing GTK, then looks
-       * in the location where the file is installed.
-       */
-      pixbuf = NULL;
-      filename = demo_find_file ("gtk-logo-rgb.gif", NULL);
-      if (filename)
-        {
-          pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
-          g_free (filename);
-        }
+      pixbuf = gdk_pixbuf_new_from_resource ("/appwindow/gtk-logo-rgb.gif", NULL);
+      /* We assert the existence of the pixbuf as we load it from a custom resource. */
+      g_assert (pixbuf);
 
-      /* Register icon to accompany stock item */
-      if (pixbuf != NULL)
-        {
-          GtkIconSet *icon_set;
-          GdkPixbuf *transparent;
+      /* The gtk-logo-rgb icon has a white background, make it transparent */
+      transparent = gdk_pixbuf_add_alpha (pixbuf, TRUE, 0xff, 0xff, 0xff);
 
-          /* The gtk-logo-rgb icon has a white background, make it transparent */
-          transparent = gdk_pixbuf_add_alpha (pixbuf, TRUE, 0xff, 0xff, 0xff);
-
-          icon_set = gtk_icon_set_new_from_pixbuf (transparent);
-          gtk_icon_factory_add (factory, "demo-gtk-logo", icon_set);
-          gtk_icon_set_unref (icon_set);
-          g_object_unref (pixbuf);
-          g_object_unref (transparent);
-        }
-      else
-        g_warning ("failed to load GTK logo for toolbar");
+      icon_set = gtk_icon_set_new_from_pixbuf (transparent);
+      gtk_icon_factory_add (factory, "demo-gtk-logo", icon_set);
+      gtk_icon_set_unref (icon_set);
+      g_object_unref (pixbuf);
+      g_object_unref (transparent);
 
       /* Drop our reference to the factory, GTK will hold a reference. */
       g_object_unref (factory);
