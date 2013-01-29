@@ -53,6 +53,11 @@
     <file preprocess="to-pixdata">gnome-fs-directory.png</file>
     <file preprocess="to-pixdata">gnome-fs-regular.png</file>
   </gresource>
+  <gresource prefix="/images">
+    <file>alphatest.png</file>
+    <file>floppybuddy.gif</file>
+    <file>gtk-logo-rgb.gif</file>
+  </gresource>
   <gresource prefix="/sources">
     <file>application.c</file>
     <file>appwindow.c</file>

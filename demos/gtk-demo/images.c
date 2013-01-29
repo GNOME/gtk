@@ -214,22 +214,9 @@ progressive_timeout (gpointer data)
     }
   else
     {
-      gchar *filename;
       GError *error = NULL;
 
-      /* demo_find_file() looks in the current directory first,
-       * so you can run gtk-demo without installing GTK, then looks
-       * in the location where the file is installed.
-       */
-      filename = demo_find_file ("alphatest.png", &error);
-      if (error == NULL)
-        {
-          GFile *file = g_file_new_for_path (filename);
-
-          image_stream = G_INPUT_STREAM (g_file_read (file, NULL, &error));
-          g_object_unref (file);
-          g_free (filename);
-        }
+      image_stream = g_resources_open_stream ("/images/alphatest.png", 0, &error);
 
       if (image_stream == NULL)
         {
@@ -345,8 +332,6 @@ do_images (GtkWidget *do_widget)
   GtkWidget *button;
   GdkPixbuf *pixbuf;
   GIcon     *gicon;
-  GError *error = NULL;
-  char *filename;
 
   if (!window)
     {
@@ -377,41 +362,9 @@ do_images (GtkWidget *do_widget)
       gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
-      /* demo_find_file() looks in the current directory first,
-       * so you can run gtk-demo without installing GTK, then looks
-       * in the location where the file is installed.
-       */
-      pixbuf = NULL;
-      filename = demo_find_file ("gtk-logo-rgb.gif", &error);
-      if (filename)
-        {
-          pixbuf = gdk_pixbuf_new_from_file (filename, &error);
-          g_free (filename);
-        }
-
-      if (error)
-        {
-          /* This code shows off error handling. You can just use
-           * gtk_image_new_from_file() instead if you don't want to report
-           * errors to the user. If the file doesn't load when using
-           * gtk_image_new_from_file(), a "missing image" icon will
-           * be displayed instead.
-           */
-          GtkWidget *dialog;
-
-          dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-                                           GTK_DIALOG_DESTROY_WITH_PARENT,
-                                           GTK_MESSAGE_ERROR,
-                                           GTK_BUTTONS_CLOSE,
-                                           "Unable to open image file 'gtk-logo-rgb.gif': %s",
-                                           error->message);
-          g_error_free (error);
-
-          g_signal_connect (dialog, "response",
-                            G_CALLBACK (gtk_widget_destroy), NULL);
-
-          gtk_widget_show (dialog);
-        }
+      pixbuf = gdk_pixbuf_new_from_resource ("/images/gtk-logo-rgb.gif", NULL);
+      /* The image loading must work, we ensure that the resources are valid. */
+      g_assert (pixbuf);
 
       image = gtk_image_new_from_pixbuf (pixbuf);
 
@@ -431,9 +384,7 @@ do_images (GtkWidget *do_widget)
       gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
-      filename = demo_find_file ("floppybuddy.gif", NULL);
-      image = gtk_image_new_from_file (filename);
-      g_free (filename);
+      image = gtk_image_new_from_resource ("/images/floppybuddy.gif");
 
       gtk_container_add (GTK_CONTAINER (frame), image);
 
@@ -455,8 +406,8 @@ do_images (GtkWidget *do_widget)
 
       gtk_container_add (GTK_CONTAINER (frame), image);
 
-      /* Progressive */
 
+      /* Progressive */
 
       label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (label),
