@@ -815,8 +815,7 @@ gtk_image_set_from_resource (GtkImage    *image,
 			     const gchar *resource_path)
 {
   GtkImagePrivate *priv;
-  GdkPixbuf *pixbuf = NULL;
-  GInputStream *stream;
+  GdkPixbufAnimation *animation;
 
   g_return_if_fail (GTK_IS_IMAGE (image));
 
@@ -832,14 +831,9 @@ gtk_image_set_from_resource (GtkImage    *image,
       return;
     }
 
-  stream = g_resources_open_stream (resource_path, 0, NULL);
-  if (stream != NULL)
-    {
-      pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, NULL);
-      g_object_unref (stream);
-    }
+  animation = gdk_pixbuf_animation_new_from_resource (resource_path, NULL);
 
-  if (pixbuf == NULL)
+  if (animation == NULL)
     {
       gtk_image_set_from_stock (image,
                                 GTK_STOCK_MISSING_IMAGE,
@@ -850,11 +844,14 @@ gtk_image_set_from_resource (GtkImage    *image,
 
   priv->resource_path = g_strdup (resource_path);
 
-  gtk_image_set_from_pixbuf (image, pixbuf);
+  if (gdk_pixbuf_animation_is_static_image (animation))
+    gtk_image_set_from_pixbuf (image, gdk_pixbuf_animation_get_static_image (animation));
+  else
+    gtk_image_set_from_animation (image, animation);
 
   g_object_notify (G_OBJECT (image), "resource");
 
-  g_object_unref (pixbuf);
+  g_object_unref (animation);
 
   g_object_thaw_notify (G_OBJECT (image));
 }
