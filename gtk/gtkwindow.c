@@ -4819,13 +4819,29 @@ gtk_window_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_window_parent_class)->finalize (object);
 }
 
+/* copied from gdkwindow-x11.c */
+static const gchar *
+get_default_title (void)
+{
+  const char *title;
+
+  title = g_get_application_name ();
+  if (!title)
+    title = g_get_prgname ();
+  if (!title)
+    title = "";
+
+  return title;
+}
+
+
 static void
 create_decoration (GtkWidget *widget)
 {
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = window->priv;
   GtkStyleContext *context;
-  const char *title = "GtkWindow";
+  const gchar *title;
 
   /* Decorations already created */
   if (priv->client_decorated)
@@ -4853,6 +4869,8 @@ create_decoration (GtkWidget *widget)
       priv->title_label = gtk_label_new (NULL);
       if (priv->title)
         title = priv->title;
+      else
+        title = get_default_title (); /* copied from X backend */
       gtk_label_set_markup (GTK_LABEL (priv->title_label), title);
       gtk_box_pack_start (GTK_BOX (priv->title_box),
                           priv->title_label, TRUE, TRUE, 0);
