@@ -40,7 +40,7 @@ do_theming_custom_css (GtkWidget *do_widget)
       gtk_widget_set_name (button, "fancy");
 
       provider = gtk_css_provider_new ();
-      bytes = g_resources_lookup_data ("/theming_custom_css/gtk.css", 0, NULL);
+      bytes = g_resources_lookup_data ("/theming_custom_css/fancy.css", 0, NULL);
       gtk_css_provider_load_from_data (provider, g_bytes_get_data (bytes, NULL),
                                        g_bytes_get_size (bytes), NULL);
       gtk_style_context_add_provider_for_screen (gtk_widget_get_screen (do_widget),

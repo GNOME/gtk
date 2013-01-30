@@ -1,4 +1,4 @@
-/* CSS Theming/Multiple Backgrounds :: css_multiplebgs.css cssview.css
+/* CSS Theming/Multiple Backgrounds :: css_multiplebgs.css
  *
  * Gtk themes are written using CSS. Every widget is build of multiple items
  * that you can style very similarly to a regular website.
@@ -147,7 +147,7 @@ do_css_multiplebgs (GtkWidget *do_widget)
                         G_CALLBACK (css_text_changed),
                         provider);
 
-      bytes = g_resources_lookup_data ("/css_multiplebgs/gtk.css", 0, NULL);
+      bytes = g_resources_lookup_data ("/css_multiplebgs/css_multiplebgs.css", 0, NULL);
       gtk_text_buffer_set_text (text, g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes));
       g_bytes_unref (bytes);
 

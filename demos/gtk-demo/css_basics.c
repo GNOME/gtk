@@ -98,7 +98,7 @@ do_css_basics (GtkWidget *do_widget)
                         G_CALLBACK (css_text_changed),
                         provider);
 
-      bytes = g_resources_lookup_data ("/css_basics/gtk.css", 0, NULL);
+      bytes = g_resources_lookup_data ("/css_basics/css_basics.css", 0, NULL);
       gtk_text_buffer_set_text (text, g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes));
       g_bytes_unref (bytes);
 
