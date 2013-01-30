@@ -454,9 +454,18 @@ static void        gtk_window_set_theme_variant         (GtkWindow  *window);
 static void gtk_window_get_preferred_width (GtkWidget *widget,
                                             gint      *minimum_size,
                                             gint      *natural_size);
+static void gtk_window_get_preferred_width_for_height (GtkWidget *widget,
+                                                       gint       height,
+                                                       gint      *minimum_size,
+                                                       gint      *natural_size);
+
 static void gtk_window_get_preferred_height (GtkWidget *widget,
                                              gint      *minimum_size,
                                              gint      *natural_size);
+static void gtk_window_get_preferred_height_for_width (GtkWidget *widget,
+                                                       gint       width,
+                                                       gint      *minimum_size,
+                                                       gint      *natural_size);
 
 static GSList      *toplevel_list = NULL;
 static guint        window_signals[LAST_SIGNAL] = { 0 };
@@ -619,7 +628,9 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->state_changed = gtk_window_state_changed;
   widget_class->style_updated = gtk_window_style_updated;
   widget_class->get_preferred_width = gtk_window_get_preferred_width;
+  widget_class->get_preferred_width_for_height = gtk_window_get_preferred_width_for_height;
   widget_class->get_preferred_height = gtk_window_get_preferred_height;
+  widget_class->get_preferred_height_for_width = gtk_window_get_preferred_height_for_width;
 
   container_class->check_resize = gtk_window_check_resize;
   container_class->forall = gtk_window_forall;
@@ -6699,6 +6710,69 @@ gtk_window_get_preferred_width (GtkWidget *widget,
   *natural_size = MAX (title_nat, child_nat);
 }
 
+
+static void 
+gtk_window_get_preferred_width_for_height (GtkWidget *widget,
+                                           gint       height,
+                                           gint      *minimum_size,
+                                           gint      *natural_size)
+{
+  GtkWindow *window;
+  GtkWidget *child;
+  GtkWindowPrivate *priv;
+  GtkStyleContext *context;
+  GtkStateFlags state;
+  guint border_width;
+  gint title_min = 0, title_nat = 0;
+  gint child_min = 0, child_nat = 0;
+
+  window = GTK_WINDOW (widget);
+  priv = window->priv;
+  child  = gtk_bin_get_child (GTK_BIN (window));
+
+  border_width =
+    2 * gtk_container_get_border_width (GTK_CONTAINER (window));
+
+  if (priv->client_decorated && priv->type == GTK_WINDOW_TOPLEVEL)
+    {
+      context = gtk_widget_get_style_context (widget);
+      state = gtk_style_context_get_state (context);
+
+      if (priv->title_box)
+        {
+          gtk_widget_get_preferred_width_for_height (priv->title_box, height,
+                                                     &title_min, &title_nat);
+
+          gtk_style_context_save (context);
+          gtk_style_context_add_class (context, "titlebar");
+          gtk_style_context_get_border (context, state, &priv->title_border);
+          gtk_style_context_restore (context);
+        }
+
+      gtk_style_context_save (context);
+      gtk_style_context_add_class (context, "window-border");
+      gtk_style_context_get_border (context, state, &priv->window_border);
+      gtk_style_context_restore (context);
+
+      border_width +=
+        priv->title_border.left + priv->title_border.right +
+        priv->window_border.left + priv->window_border.right;
+
+      title_min += border_width;
+      title_nat += border_width;
+    }
+
+  if (child && gtk_widget_get_visible (child))
+    {
+      gtk_widget_get_preferred_width_for_height (child, height, &child_min, &child_nat);
+      child_min += border_width;
+      child_nat += border_width;
+    }
+  
+  *minimum_size = MAX (title_min, child_min);
+  *natural_size = MAX (title_nat, child_nat);
+}
+
 static void 
 gtk_window_get_preferred_height (GtkWidget *widget,
                                  gint      *minimum_size,
@@ -6753,6 +6827,68 @@ gtk_window_get_preferred_height (GtkWidget *widget,
     {
       gint child_min, child_nat;
       gtk_widget_get_preferred_height (child, &child_min, &child_nat);
+
+      *minimum_size += child_min;
+      *natural_size += child_nat;
+    }
+}
+
+
+static void 
+gtk_window_get_preferred_height_for_width (GtkWidget *widget,
+                                           gint       width,
+                                           gint      *minimum_size,
+                                           gint      *natural_size)
+{
+  GtkWindow *window;
+  GtkWindowPrivate *priv;
+  GtkWidget *child;
+  GtkStyleContext *context;
+  GtkStateFlags state;
+  guint border_width;
+  int title_min = 0;
+
+  window = GTK_WINDOW (widget);
+  priv = window->priv;
+  child  = gtk_bin_get_child (GTK_BIN (window));
+
+  *minimum_size = 0;
+  *natural_size = 0;
+
+  if (priv->client_decorated && priv->type == GTK_WINDOW_TOPLEVEL)
+    {
+      context = gtk_widget_get_style_context (widget);
+      state = gtk_style_context_get_state (context);
+
+      if (priv->title_box)
+        {
+          gtk_widget_get_preferred_height_for_width (priv->title_box, width,
+                                                     &title_min, &priv->title_height);
+
+          gtk_style_context_save (context);
+          gtk_style_context_add_class (context, "titlebar");
+          gtk_style_context_get_border (context, state, &priv->title_border);
+          gtk_style_context_restore (context);
+        }
+
+      gtk_style_context_save (context);
+      gtk_style_context_add_class (context, "window-border");
+      gtk_style_context_get_border (context, state, &priv->window_border);
+      gtk_style_context_restore (context);
+
+      border_width =
+        2 * gtk_container_get_border_width (GTK_CONTAINER (window)) +
+        priv->title_border.top + priv->title_border.bottom +
+        priv->window_border.top + priv->window_border.bottom;
+
+      *minimum_size = border_width + title_min;
+      *natural_size = border_width + priv->title_height;
+    }
+
+  if (child && gtk_widget_get_visible (child))
+    {
+      gint child_min, child_nat;
+      gtk_widget_get_preferred_height_for_width (child, width, &child_min, &child_nat);
 
       *minimum_size += child_min;
       *natural_size += child_nat;
