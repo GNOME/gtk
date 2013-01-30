@@ -17,6 +17,7 @@ static gchar *current_file = NULL;
 static GtkWidget *notebook;
 
 enum {
+  NAME_COLUMN,
   TITLE_COLUMN,
   FILENAME_COLUMN,
   FUNC_COLUMN,
@@ -459,22 +460,18 @@ fontify (void)
 static GtkWidget *create_text (GtkTextBuffer **buffer, gboolean is_source);
 
 static void
-add_data_tab (const gchar *filename)
+add_data_tab (const gchar *demoname,
+              const gchar *filename)
 {
   GtkTextBuffer *buffer = NULL;
-  gchar *full_filename;
-  GError *err = NULL;
-  gchar *text;
+  gchar *resource_name;
+  GBytes *bytes;
   GtkWidget *widget, *label;
 
-  full_filename = demo_find_file (filename, &err);
-  if (!full_filename ||
-      !g_file_get_contents (full_filename, &text, NULL, &err))
-    {
-      g_warning ("%s", err->message);
-      g_error_free (err);
-      return;
-    }
+  resource_name = g_strconcat ("/", demoname, "/", filename, NULL);
+  bytes = g_resources_lookup_data (resource_name, 0, NULL);
+  g_assert (bytes);
+  g_free (resource_name);
 
   widget = create_text (&buffer, FALSE);
   gtk_widget_show_all (widget);
@@ -482,10 +479,7 @@ add_data_tab (const gchar *filename)
   gtk_widget_show (label);
   gtk_notebook_append_page (GTK_NOTEBOOK (notebook), widget, label);
 
-  gtk_text_buffer_set_text (buffer, text, -1);
-
-  g_free (full_filename);
-  g_free (text);
+  gtk_text_buffer_set_text (buffer, g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes));
 }
 
 static void
@@ -498,7 +492,8 @@ remove_data_tabs (void)
 }
 
 void
-load_file (const gchar *filename)
+load_file (const gchar *demoname,
+           const gchar *filename)
 {
   GtkTextIter start, end;
   char *resource_filename;
@@ -515,7 +510,7 @@ load_file (const gchar *filename)
 
   for (i = 1; names[i]; i++) {
     if (strlen (names[i]) > 0)
-      add_data_tab (names[i]);
+      add_data_tab (demoname, names[i]);
   }
 
   if (current_file && !strcmp (current_file, names[0]))
@@ -713,17 +708,21 @@ selection_cb (GtkTreeSelection *selection,
               GtkTreeModel     *model)
 {
   GtkTreeIter iter;
-  GValue value = G_VALUE_INIT;
+  char *name, *filename;
 
   if (! gtk_tree_selection_get_selected (selection, NULL, &iter))
     return;
 
-  gtk_tree_model_get_value (model, &iter,
-                            FILENAME_COLUMN,
-                            &value);
-  if (g_value_get_string (&value))
-    load_file (g_value_get_string (&value));
-  g_value_unset (&value);
+  gtk_tree_model_get (model, &iter,
+                      NAME_COLUMN, &name,
+                      FILENAME_COLUMN, &filename,
+                      -1);
+
+  if (filename)
+    load_file (name, filename);
+
+  g_free (name);
+  g_free (filename);
 }
 
 static GtkWidget *
@@ -786,7 +785,7 @@ create_tree (void)
 
   Demo *d = gtk_demos;
 
-  model = gtk_tree_store_new (NUM_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_INT);
+  model = gtk_tree_store_new (NUM_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_INT);
   tree_view = gtk_tree_view_new ();
   gtk_tree_view_set_model (GTK_TREE_VIEW (tree_view), GTK_TREE_MODEL (model));
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view));
@@ -806,6 +805,7 @@ create_tree (void)
 
       gtk_tree_store_set (GTK_TREE_STORE (model),
                           &iter,
+                          NAME_COLUMN, d->name,
                           TITLE_COLUMN, d->title,
                           FILENAME_COLUMN, d->filename,
                           FUNC_COLUMN, d->func,
@@ -825,6 +825,7 @@ create_tree (void)
 
           gtk_tree_store_set (GTK_TREE_STORE (model),
                               &child_iter,
+                              NAME_COLUMN, children->name,
                               TITLE_COLUMN, children->title,
                               FILENAME_COLUMN, children->filename,
                               FUNC_COLUMN, children->func,
@@ -1001,7 +1002,7 @@ main (int argc, char **argv)
   gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
   gtk_widget_show_all (window);
 
-  load_file (gtk_demos[0].filename);
+  load_file (gtk_demos[0].name, gtk_demos[0].filename);
 
   gtk_main ();
 
