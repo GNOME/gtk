@@ -20,17 +20,17 @@
 
 #define FRAME_DELAY 50
 
-#define BACKGROUND_NAME "background.jpg"
+#define BACKGROUND_NAME "/pixbufs/background.jpg"
 
 static const char *image_names[] = {
-  "apple-red.png",
-  "gnome-applets.png",
-  "gnome-calendar.png",
-  "gnome-foot.png",
-  "gnome-gmush.png",
-  "gnome-gimp.png",
-  "gnome-gsame.png",
-  "gnu-keys.png"
+  "/pixbufs/apple-red.png",
+  "/pixbufs/gnome-applets.png",
+  "/pixbufs/gnome-calendar.png",
+  "/pixbufs/gnome-foot.png",
+  "/pixbufs/gnome-gmush.png",
+  "/pixbufs/gnome-gimp.png",
+  "/pixbufs/gnome-gsame.png",
+  "/pixbufs/gnu-keys.png"
 };
 
 #define N_IMAGES G_N_ELEMENTS (image_names)
@@ -56,22 +56,11 @@ static gboolean
 load_pixbufs (GError **error)
 {
   gint i;
-  char *filename;
 
   if (background)
     return TRUE; /* already loaded earlier */
 
-  /* demo_find_file() looks in the current directory first,
-   * so you can run gtk-demo without installing GTK, then looks
-   * in the location where the file is installed.
-   */
-  filename = demo_find_file (BACKGROUND_NAME, error);
-  if (!filename)
-    return FALSE; /* note that "error" was filled in and returned */
-
-  background = gdk_pixbuf_new_from_file (filename, error);
-  g_free (filename);
-
+  background = gdk_pixbuf_new_from_resource (BACKGROUND_NAME, error);
   if (!background)
     return FALSE; /* Note that "error" was filled with a GError */
 
@@ -80,12 +69,7 @@ load_pixbufs (GError **error)
 
   for (i = 0; i < N_IMAGES; i++)
     {
-      filename = demo_find_file (image_names[i], error);
-      if (!filename)
-        return FALSE; /* Note that "error" was filled with a GError */
-
-      images[i] = gdk_pixbuf_new_from_file (filename, error);
-      g_free (filename);
+      images[i] = gdk_pixbuf_new_from_resource (image_names[i], error);
 
       if (!images[i])
         return FALSE; /* Note that "error" was filled with a GError */
