@@ -115,6 +115,7 @@
     <file>toolpalette.c</file>
     <file>transparent.c</file>
     <file>tree_store.c</file>
+    <file>ui_manager.c</file>
   </gresource>
   <gresource prefix="/textview">
     <file>floppybuddy.gif</file>
