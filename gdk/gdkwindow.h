@@ -905,8 +905,7 @@ void       gdk_window_set_support_multidevice (GdkWindow *window,
 gboolean   gdk_window_get_support_multidevice (GdkWindow *window);
 
 /* Frame clock */
-void           gdk_window_set_frame_clock      (GdkWindow     *window,
-                                                GdkFrameClock *clock);
+GDK_AVAILABLE_IN_3_8
 GdkFrameClock* gdk_window_get_frame_clock      (GdkWindow     *window);
 
 G_END_DECLS

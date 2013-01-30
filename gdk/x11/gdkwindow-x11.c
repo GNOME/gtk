@@ -35,7 +35,6 @@
 #include "gdkasync.h"
 #include "gdkeventsource.h"
 #include "gdkdisplay-x11.h"
-#include "gdkframeclockidle.h"
 #include "gdkprivate-x11.h"
 
 #include <stdlib.h>
@@ -964,6 +963,25 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
 
 }
 
+static void
+connect_frame_clock (GdkWindow *window)
+{
+  GdkWindowImplX11 *impl;
+
+  impl = GDK_WINDOW_IMPL_X11 (window->impl);
+  if (WINDOW_IS_TOPLEVEL (window) && !impl->frame_clock_connected)
+    {
+      GdkFrameClock *frame_clock = gdk_window_get_frame_clock (window);
+
+      g_signal_connect (frame_clock, "before-paint",
+                        G_CALLBACK (on_frame_clock_before_paint), window);
+      g_signal_connect (frame_clock, "after-paint",
+                        G_CALLBACK (on_frame_clock_after_paint), window);
+
+      impl->frame_clock_connected = TRUE;
+    }
+}
+
 void
 _gdk_x11_display_create_window_impl (GdkDisplay    *display,
                                      GdkWindow     *window,
@@ -976,7 +994,6 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
   GdkWindowImplX11 *impl;
   GdkX11Screen *x11_screen;
   GdkX11Display *display_x11;
-  GdkFrameClock *clock;
 
   Window xparent;
   Visual *xvisual;
@@ -1122,12 +1139,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
                                       GDK_WINDOW_XID (window), event_mask,
                                       StructureNotifyMask | PropertyChangeMask);
 
-  clock = g_object_new (GDK_TYPE_FRAME_CLOCK_IDLE, NULL);
-  gdk_window_set_frame_clock (window, clock);
-  g_signal_connect (clock, "before-paint",
-                    G_CALLBACK (on_frame_clock_before_paint), window);
-  g_signal_connect (clock, "after-paint",
-                    G_CALLBACK (on_frame_clock_after_paint), window);
+  connect_frame_clock (window);
 
   if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD)
     gdk_window_freeze_toplevel_updates_libgtk_only (window);
@@ -1894,6 +1906,12 @@ gdk_window_x11_reparent (GdkWindow *window,
 		   new_parent->abs_x + x, new_parent->abs_y + y);
   _gdk_x11_window_tmp_reset_parent_bg (window);
   _gdk_x11_window_tmp_reset_bg (window, TRUE);
+
+  if (WINDOW_IS_TOPLEVEL (window))
+    connect_frame_clock (window);
+  else
+    /* old frame clock was disposed, our signal handlers removed */
+    impl->frame_clock_connected = FALSE;
 
   if (GDK_WINDOW_TYPE (new_parent) == GDK_WINDOW_FOREIGN)
     new_parent = gdk_screen_get_root_window (GDK_WINDOW_SCREEN (window));
