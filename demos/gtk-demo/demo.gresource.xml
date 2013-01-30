@@ -107,4 +107,8 @@
     <file>transparent.c</file>
     <file>tree_store.c</file>
   </gresource>
+  <gresource prefix="/textview">
+    <file>floppybuddy.gif</file>
+    <file>gtk-logo-rgb.gif</file>
+  </gresource>
 </gresources>
