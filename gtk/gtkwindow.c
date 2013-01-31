@@ -6265,12 +6265,6 @@ gtk_window_button_press_event (GtkWidget *widget,
 {
   GtkWindowPrivate *priv = GTK_WINDOW (widget)->priv;
   GdkWindowEdge edge;
-  GtkAllocation allocation;
-  int border_width;
-
-  gtk_widget_get_allocation (priv->title_box, &allocation);
-  border_width =
-    gtk_container_get_border_width (GTK_CONTAINER (priv->title_box));
 
   if (event->window == priv->grip_window)
     {
@@ -6285,19 +6279,29 @@ gtk_window_button_press_event (GtkWidget *widget,
 
       return TRUE;
     }
-  else if (allocation.x - border_width <= event->x &&
-	   event->x < allocation.x + border_width + allocation.width &&
-	   allocation.y - border_width <= event->y &&
-	   event->y < allocation.y + border_width + allocation.height)
+  else if (priv->client_decorated && priv->decorated && priv->title_box)
     {
-      gdk_window_begin_move_drag_for_device (gtk_widget_get_window(widget),
-					     gdk_event_get_device((GdkEvent *) event),
-					     event->button,
-					     event->x_root,
-					     event->y_root,
-					     event->time);
+      GtkAllocation allocation;
+      int border_width;
 
-      return TRUE;
+      gtk_widget_get_allocation (priv->title_box, &allocation);
+      border_width =
+        gtk_container_get_border_width (GTK_CONTAINER (priv->title_box));
+
+      if (allocation.x - border_width <= event->x &&
+          event->x < allocation.x + border_width + allocation.width &&
+          allocation.y - border_width <= event->y &&
+          event->y < allocation.y + border_width + allocation.height)
+        {
+          gdk_window_begin_move_drag_for_device (gtk_widget_get_window(widget),
+                                                 gdk_event_get_device((GdkEvent *) event),
+                                                 event->button,
+                                                 event->x_root,
+                                                 event->y_root,
+                                                 event->time);
+
+          return TRUE;
+        }
     }
 
   return FALSE;
