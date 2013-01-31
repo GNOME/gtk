@@ -198,6 +198,7 @@ struct _GtkWindowPrivate
                                             */
   guint    gravity                   : 5; /* GdkGravity */
   guint    client_decorated          : 1; /* Decorations drawn client-side */
+  guint    fullscreen                : 1;
 
 };
 
@@ -5685,7 +5686,8 @@ _gtk_window_set_allocation (GtkWindow     *window,
 
   if (priv->client_decorated && priv->decorated &&
       priv->title_box &&
-      gtk_widget_get_visual(priv->title_box))
+      gtk_widget_get_visual(priv->title_box) &&
+      !priv->fullscreen)
     {
       GtkAllocation title_allocation;
 
@@ -5702,7 +5704,7 @@ _gtk_window_set_allocation (GtkWindow     *window,
       gtk_widget_size_allocate (priv->title_box, &title_allocation);
     }
 
-  if (priv->client_decorated && priv->decorated)
+  if (priv->client_decorated && priv->decorated && !priv->fullscreen)
     {
       child_allocation.x += priv->window_border.left;
 
@@ -5830,10 +5832,21 @@ static gboolean
 gtk_window_state_event (GtkWidget           *widget,
                         GdkEventWindowState *event)
 {
+  GtkWindow *window = GTK_WINDOW (widget);
+  GtkWindowPrivate *priv = window->priv;
+
   update_grip_visibility (GTK_WINDOW (widget));
 
   if (event->changed_mask & GDK_WINDOW_STATE_FOCUSED)
     ensure_state_flag_backdrop (widget);
+
+  if (event->changed_mask & GDK_WINDOW_STATE_FULLSCREEN)
+    {
+      priv->fullscreen =
+        (event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN) ? 1 : 0;
+      if (priv->title_box)
+        gtk_widget_set_visible (priv->title_box, !priv->fullscreen);
+    }
 
   return FALSE;
 }
@@ -6279,7 +6292,10 @@ gtk_window_button_press_event (GtkWidget *widget,
 
       return TRUE;
     }
-  else if (priv->client_decorated && priv->decorated && priv->title_box)
+  else if (priv->client_decorated &&
+           priv->decorated &&
+           priv->title_box &&
+           !priv->fullscreen)
     {
       GtkAllocation allocation;
       int border_width;
@@ -6710,7 +6726,8 @@ gtk_window_get_preferred_width (GtkWidget *widget,
 
   if (priv->client_decorated &&
       priv->decorated &&
-      priv->type == GTK_WINDOW_TOPLEVEL)
+      priv->type == GTK_WINDOW_TOPLEVEL &&
+      !priv->fullscreen)
     {
       context = gtk_widget_get_style_context (widget);
       state = gtk_style_context_get_state (context);
@@ -6777,7 +6794,8 @@ gtk_window_get_preferred_width_for_height (GtkWidget *widget,
 
   if (priv->client_decorated &&
       priv->decorated &&
-      priv->type == GTK_WINDOW_TOPLEVEL)
+      priv->type == GTK_WINDOW_TOPLEVEL &&
+      !priv->fullscreen)
     {
       context = gtk_widget_get_style_context (widget);
       state = gtk_style_context_get_state (context);
@@ -6845,7 +6863,8 @@ gtk_window_get_preferred_height (GtkWidget *widget,
 
   if (priv->client_decorated &&
       priv->decorated &&
-      priv->type == GTK_WINDOW_TOPLEVEL)
+      priv->type == GTK_WINDOW_TOPLEVEL &&
+      !priv->fullscreen)
     {
       context = gtk_widget_get_style_context (widget);
       state = gtk_style_context_get_state (context);
@@ -6911,7 +6930,8 @@ gtk_window_get_preferred_height_for_width (GtkWidget *widget,
 
   if (priv->client_decorated &&
       priv->decorated &&
-      priv->type == GTK_WINDOW_TOPLEVEL)
+      priv->type == GTK_WINDOW_TOPLEVEL &&
+      !priv->fullscreen)
     {
       context = gtk_widget_get_style_context (widget);
       state = gtk_style_context_get_state (context);
@@ -8098,7 +8118,8 @@ gtk_window_draw (GtkWidget *widget,
 
       if (priv->client_decorated &&
           priv->decorated &&
-          priv->type == GTK_WINDOW_TOPLEVEL)
+          priv->type == GTK_WINDOW_TOPLEVEL &&
+          !priv->fullscreen)
         {
           gtk_style_context_add_class (context, "window-border");
           gtk_widget_get_allocation (widget, &allocation);
@@ -8124,7 +8145,7 @@ gtk_window_draw (GtkWidget *widget,
       gtk_style_context_restore (context);
     }
 
-  if (priv->title_box)
+  if (priv->title_box && !priv->fullscreen)
     {
       gtk_style_context_save (context);
       gtk_style_context_add_class (context, "titlebar");
