@@ -197,6 +197,7 @@ struct _GtkWindowPrivate
                                             */
   guint    gravity                   : 5; /* GdkGravity */
   guint    client_decorated          : 1; /* Decorations drawn client-side */
+  guint    fullscreen                : 1;
 
 };
 
@@ -5744,7 +5745,8 @@ _gtk_window_set_allocation (GtkWindow           *window,
 
   if (priv->title_box != NULL &&
       priv->client_decorated &&
-      priv->decorated)
+      priv->decorated &&
+      !priv->fullscreen)
     {
       GtkAllocation title_allocation;
 
@@ -5765,7 +5767,9 @@ _gtk_window_set_allocation (GtkWindow           *window,
       gtk_widget_size_allocate (priv->title_box, &title_allocation);
     }
 
-  if (priv->client_decorated && priv->decorated)
+  if (priv->client_decorated &&
+      priv->decorated &&
+      !priv->fullscreen)
     {
       child_allocation.x += window_border.left;
       child_allocation.y += window_border.top +
@@ -5886,10 +5890,21 @@ static gboolean
 gtk_window_state_event (GtkWidget           *widget,
                         GdkEventWindowState *event)
 {
+  GtkWindow *window = GTK_WINDOW (widget);
+  GtkWindowPrivate *priv = window->priv;
+
   update_grip_visibility (GTK_WINDOW (widget));
 
   if (event->changed_mask & GDK_WINDOW_STATE_FOCUSED)
     ensure_state_flag_backdrop (widget);
+
+  if (event->changed_mask & GDK_WINDOW_STATE_FULLSCREEN)
+    {
+      priv->fullscreen =
+        (event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN) ? 1 : 0;
+      if (priv->title_box)
+        gtk_widget_set_visible (priv->title_box, !priv->fullscreen);
+    }
 
   return FALSE;
 }
@@ -6341,7 +6356,8 @@ gtk_window_button_press_event (GtkWidget *widget,
     }
   else if (priv->client_decorated &&
            priv->decorated &&
-           priv->title_box != NULL)
+           priv->title_box != NULL &&
+           !priv->fullscreen)
     {
       GtkAllocation allocation;
       int border_width;
@@ -6747,7 +6763,8 @@ gtk_window_get_preferred_width (GtkWidget *widget,
   border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
 
   if (priv->client_decorated &&
-      priv->decorated)
+      priv->decorated &&
+      !priv->fullscreen)
     {
       if (priv->title_box != NULL)
         {
@@ -6804,7 +6821,8 @@ gtk_window_get_preferred_width_for_height (GtkWidget *widget,
   border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
 
   if (priv->client_decorated &&
-      priv->decorated)
+      priv->decorated &&
+      !priv->fullscreen)
     {
       if (priv->title_box != NULL)
         {
@@ -6865,7 +6883,8 @@ gtk_window_get_preferred_height (GtkWidget *widget,
   border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
 
   if (priv->client_decorated &&
-      priv->decorated)
+      priv->decorated &&
+      !priv->fullscreen)
     {
       if (priv->title_box != NULL)
         {
@@ -6924,7 +6943,8 @@ gtk_window_get_preferred_height_for_width (GtkWidget *widget,
   border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
 
   if (priv->client_decorated &&
-      priv->decorated)
+      priv->decorated &&
+      !priv->fullscreen)
     {
       if (priv->title_box != NULL)
         {
@@ -8106,7 +8126,8 @@ gtk_window_draw (GtkWidget *widget,
       gtk_style_context_add_class (context, GTK_STYLE_CLASS_BACKGROUND);
 
       if (priv->client_decorated &&
-          priv->decorated)
+          priv->decorated &&
+          !priv->fullscreen)
         {
           gtk_style_context_add_class (context, "window-border");
           gtk_widget_get_allocation (widget, &allocation);
@@ -8132,11 +8153,11 @@ gtk_window_draw (GtkWidget *widget,
       gtk_style_context_restore (context);
     }
 
-  if (priv->title_box != NULL)
+  if (priv->title_box != NULL && gtk_widget_get_visible (priv->title_box))
     {
       gtk_style_context_save (context);
       gtk_style_context_add_class (context, "titlebar");
-      gtk_widget_get_allocation (priv->title_box, &allocation);  
+      gtk_widget_get_allocation (priv->title_box, &allocation);
 
       /* Why do these subtract ? */
       gtk_render_background (context, cr,
