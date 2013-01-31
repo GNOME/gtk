@@ -4894,6 +4894,7 @@ create_decoration (GtkWidget *widget)
                         priv->title_close_button, FALSE, FALSE, 0);
       g_signal_connect (priv->title_close_button, "clicked",
                         G_CALLBACK (gtk_window_title_close_clicked), window);
+      gtk_widget_show_all (priv->title_box);
     }
 }
 
@@ -4914,9 +4915,6 @@ gtk_window_show (GtkWidget *widget)
       GTK_WIDGET_CLASS (gtk_window_parent_class)->show (widget);
       return;
     }
-
-  if (priv->title_box)
-    gtk_widget_show_all (priv->title_box);
 
   _gtk_widget_set_visible_flag (widget, TRUE);
 
