@@ -1319,6 +1319,9 @@ gdk_wayland_window_fullscreen (GdkWindow *window)
                                    WL_SHELL_SURFACE_FULLSCREEN_METHOD_DEFAULT,
                                    0,
                                    NULL);
+
+  gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FULLSCREEN);
+
   impl->fullscreen = TRUE;
 }
 
@@ -1334,8 +1337,11 @@ gdk_wayland_window_unfullscreen (GdkWindow *window)
     return;
 
   wl_shell_surface_set_toplevel (impl->shell_surface);
+  gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FULLSCREEN, 0);
   gdk_wayland_window_configure (window, impl->saved_width, impl->saved_height,
                                 0);
+
+
   impl->fullscreen = FALSE;
 }
 
