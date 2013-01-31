@@ -8096,28 +8096,30 @@ gtk_window_draw (GtkWidget *widget,
 
       gtk_style_context_add_class (context, GTK_STYLE_CLASS_BACKGROUND);
 
-      if (priv->client_decorated && priv->type == GTK_WINDOW_TOPLEVEL)
-	{
-	  gtk_style_context_add_class (context, "window-border");
-	  gtk_widget_get_allocation (widget, &allocation);
-	  gtk_render_background (context, cr,
-				 priv->window_border.left,
-				 priv->window_border.top,
-				 allocation.width -
-				 priv->window_border.left -
-				 priv->window_border.right,
-				 allocation.height -
-				 priv->window_border.top -
-				 priv->window_border.bottom);
-	  gtk_render_frame (context, cr,
-			    0, 0, allocation.width, allocation.height);
-	}
+      if (priv->client_decorated &&
+          priv->decorated &&
+          priv->type == GTK_WINDOW_TOPLEVEL)
+        {
+          gtk_style_context_add_class (context, "window-border");
+          gtk_widget_get_allocation (widget, &allocation);
+          gtk_render_background (context, cr,
+                                 priv->window_border.left,
+                                 priv->window_border.top,
+                                 allocation.width -
+                                 (priv->window_border.left +
+                                  priv->window_border.right),
+                                 allocation.height -
+                                 (priv->window_border.top +
+                                  priv->window_border.bottom));
+          gtk_render_frame (context, cr,
+                            0, 0, allocation.width, allocation.height);
+        }
       else
-	{
-	  gtk_widget_get_allocation (widget, &allocation);
-	  gtk_render_background (context, cr,
-				 0, 0, allocation.width, allocation.height);
-	}
+        {
+          gtk_widget_get_allocation (widget, &allocation);
+          gtk_render_background (context, cr,
+                                 0, 0, allocation.width, allocation.height);
+        }
 
       gtk_style_context_restore (context);
     }
@@ -8128,6 +8130,7 @@ gtk_window_draw (GtkWidget *widget,
       gtk_style_context_add_class (context, "titlebar");
       gtk_widget_get_allocation (priv->title_box, &allocation);  
 
+      /* Why do these subtract ? */
       gtk_render_background (context, cr,
 			     allocation.x - priv->title_border.left,
 			     allocation.y - priv->title_border.top,
