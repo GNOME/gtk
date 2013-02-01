@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
+  <gresource prefix="/">
+    <file>cssview.css</file>
+    <file>gtk-logo-rgb.gif</file>
+    <file>reset.css</file>
+  </gresource>
   <gresource prefix="/application">
     <file preprocess="to-pixdata">gtk-logo-24.png</file>
     <file preprocess="to-pixdata">gtk-logo-48.png</file>
@@ -8,10 +13,6 @@
   </gresource>
   <gresource prefix="/appwindow">
     <file preprocess="to-pixdata">gtk-logo-rgb.gif</file>
-  </gresource>
-  <gresource prefix="/">
-    <file>cssview.css</file>
-    <file>reset.css</file>
   </gresource>
   <gresource prefix="/builder">
     <file>demo.ui</file>

@@ -877,54 +877,19 @@ create_tree (void)
 static void
 setup_default_icon (void)
 {
-  GdkPixbuf *pixbuf;
-  char *filename;
-  GError *err;
+  GdkPixbuf *pixbuf, *transparent;
 
-  err = NULL;
+  pixbuf = gdk_pixbuf_new_from_resource ("/gtk-logo-rgb.gif", NULL);
+  /* We load a resource, so we can guarantee that loading it is successful */
+  g_assert (pixbuf);
 
-  pixbuf = NULL;
-  filename = demo_find_file ("gtk-logo-rgb.gif", &err);
-  if (filename)
-    {
-      pixbuf = gdk_pixbuf_new_from_file (filename, &err);
-      g_free (filename);
-    }
+  /* The gtk-logo-rgb icon has a white background, make it transparent */
+  transparent = gdk_pixbuf_add_alpha (pixbuf, TRUE, 0xff, 0xff, 0xff);
 
-  /* Ignoring this error (passing NULL instead of &err above)
-   * would probably be reasonable for most apps.  We're just
-   * showing off.
-   */
-  if (err)
-    {
-      GtkWidget *dialog;
-
-      dialog = gtk_message_dialog_new (NULL, 0,
-                                       GTK_MESSAGE_ERROR,
-                                       GTK_BUTTONS_CLOSE,
-                                       "Failed to read icon file: %s",
-                                       err->message);
-      g_error_free (err);
-
-      g_signal_connect (dialog, "response",
-                        G_CALLBACK (gtk_widget_destroy), NULL);
-    }
-
-  if (pixbuf)
-    {
-      GList *list;
-      GdkPixbuf *transparent;
-
-      /* The gtk-logo-rgb icon has a white background, make it transparent */
-      transparent = gdk_pixbuf_add_alpha (pixbuf, TRUE, 0xff, 0xff, 0xff);
-
-      list = NULL;
-      list = g_list_append (list, transparent);
-      gtk_window_set_default_icon_list (list);
-      g_list_free (list);
-      g_object_unref (pixbuf);
-      g_object_unref (transparent);
-    }
+  gtk_window_set_default_icon (transparent);
+  
+  g_object_unref (pixbuf);
+  g_object_unref (transparent);
 }
 
 int
