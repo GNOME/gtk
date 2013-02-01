@@ -2388,7 +2388,7 @@ create_credits_page (GtkAboutDialog *about)
   gtk_grid_set_row_spacing (GTK_GRID (grid), 2);
   gtk_widget_set_halign (grid, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (grid, GTK_ALIGN_START);
-  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (sw), grid);
+  gtk_container_add (GTK_CONTAINER (sw), grid);
   gtk_style_context_add_class (gtk_widget_get_style_context (gtk_bin_get_child (GTK_BIN (sw))),
                                GTK_STYLE_CLASS_VIEW);
 
