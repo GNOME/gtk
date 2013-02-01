@@ -132,6 +132,9 @@ static void             gtk_icon_view_get_property              (GObject        
 static void             gtk_icon_view_destroy                   (GtkWidget          *widget);
 static void             gtk_icon_view_realize                   (GtkWidget          *widget);
 static void             gtk_icon_view_unrealize                 (GtkWidget          *widget);
+static void             gtk_icon_view_style_updated             (GtkWidget          *widget);
+static void             gtk_icon_view_state_flags_changed       (GtkWidget          *widget,
+			                                         GtkStateFlags       previous_state);
 static GtkSizeRequestMode gtk_icon_view_get_request_mode        (GtkWidget          *widget);
 static void             gtk_icon_view_get_preferred_width       (GtkWidget          *widget,
 								 gint               *minimum,
@@ -348,6 +351,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   widget_class->destroy = gtk_icon_view_destroy;
   widget_class->realize = gtk_icon_view_realize;
   widget_class->unrealize = gtk_icon_view_unrealize;
+  widget_class->style_updated = gtk_icon_view_style_updated;
   widget_class->get_request_mode = gtk_icon_view_get_request_mode;
   widget_class->get_preferred_width = gtk_icon_view_get_preferred_width;
   widget_class->get_preferred_height = gtk_icon_view_get_preferred_height;
@@ -368,6 +372,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   widget_class->drag_motion = gtk_icon_view_drag_motion;
   widget_class->drag_drop = gtk_icon_view_drag_drop;
   widget_class->drag_data_received = gtk_icon_view_drag_data_received;
+  widget_class->state_flags_changed = gtk_icon_view_state_flags_changed;
 
   container_class->remove = gtk_icon_view_remove;
   container_class->forall = gtk_icon_view_forall;
@@ -1275,6 +1280,7 @@ gtk_icon_view_realize (GtkWidget *widget)
   GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
+  GtkStyleContext *context;
 
   gtk_widget_set_realized (widget, TRUE);
 
@@ -1317,6 +1323,11 @@ gtk_icon_view_realize (GtkWidget *widget)
   icon_view->priv->bin_window = gdk_window_new (window,
 						&attributes, attributes_mask);
   gdk_window_set_user_data (icon_view->priv->bin_window, widget);
+
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_set_background (context, icon_view->priv->bin_window);
+  gtk_style_context_set_background (context, window);
+
   gdk_window_show (icon_view->priv->bin_window);
 }
 
@@ -1332,6 +1343,38 @@ gtk_icon_view_unrealize (GtkWidget *widget)
   icon_view->priv->bin_window = NULL;
 
   GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->unrealize (widget);
+}
+
+static void
+_gtk_icon_view_update_background (GtkIconView *icon_view)
+{
+  GtkWidget *widget = GTK_WIDGET (icon_view);
+
+  if (gtk_widget_get_realized (widget))
+    {
+      GtkStyleContext *context;
+
+      context = gtk_widget_get_style_context (widget);
+      gtk_style_context_set_background (context, gtk_widget_get_window (widget));
+      gtk_style_context_set_background (context, icon_view->priv->bin_window);
+    }
+}
+
+static void
+gtk_icon_view_state_flags_changed (GtkWidget     *widget,
+                                   GtkStateFlags  previous_state)
+{
+  _gtk_icon_view_update_background (GTK_ICON_VIEW (widget));
+  gtk_widget_queue_draw (widget);
+}
+
+static void
+gtk_icon_view_style_updated (GtkWidget *widget)
+{
+  GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->style_updated (widget);
+
+  _gtk_icon_view_update_background (GTK_ICON_VIEW (widget));
+  gtk_widget_queue_resize (widget);
 }
 
 static gint
