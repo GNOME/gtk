@@ -1146,7 +1146,7 @@ properties_from_type (GObject *object,
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
-  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (sw), vbox);
+  gtk_container_add (GTK_CONTAINER (sw), vbox);
 
   g_free (specs);
 
@@ -1220,7 +1220,7 @@ child_properties_from_object (GObject *object)
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
-  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (sw), vbox);
+  gtk_container_add (GTK_CONTAINER (sw), vbox);
 
   g_free (specs);
 
@@ -1283,7 +1283,7 @@ children_from_object (GObject *object)
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
-  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (sw), vbox);
+  gtk_container_add (GTK_CONTAINER (sw), vbox);
 
   g_list_free (children);
 
@@ -1339,7 +1339,7 @@ cells_from_object (GObject *object)
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                   GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
-  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (sw), vbox);
+  gtk_container_add (GTK_CONTAINER (sw), vbox);
 
   g_list_free (cells);
 

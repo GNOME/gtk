@@ -575,8 +575,7 @@ do_toolpalette (GtkWidget *do_widget)
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (contents_scroller),
                                       GTK_POLICY_AUTOMATIC,
                                       GTK_POLICY_ALWAYS);
-      gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (contents_scroller),
-                                             contents);
+      gtk_container_add (GTK_CONTAINER (contents_scroller), contents);
       gtk_container_set_border_width (GTK_CONTAINER (contents_scroller), 6);
 
       gtk_notebook_append_page (GTK_NOTEBOOK (notebook),
@@ -606,8 +605,7 @@ do_toolpalette (GtkWidget *do_widget)
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (contents_scroller),
                                       GTK_POLICY_AUTOMATIC,
                                       GTK_POLICY_ALWAYS);
-      gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (contents_scroller),
-                                             contents);
+      gtk_container_add (GTK_CONTAINER (contents_scroller), contents);
       gtk_container_set_border_width (GTK_CONTAINER (contents_scroller), 6);
 
       gtk_notebook_append_page (GTK_NOTEBOOK (notebook), contents_scroller,

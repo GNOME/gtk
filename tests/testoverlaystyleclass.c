@@ -68,8 +68,7 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (overlay), sw);
 
   main_child = gtk_event_box_new ();
-  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (sw),
-                                         main_child);
+  gtk_container_add (GTK_CONTAINER (sw), main_child);
   gdk_rgba_parse (&color, "green");
   gtk_widget_override_background_color (main_child, 0, &color);
   gtk_widget_set_hexpand (main_child, TRUE);
