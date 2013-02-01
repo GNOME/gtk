@@ -47,7 +47,6 @@ demos =						\
 	textview.c				\
 	textscroll.c				\
 	theming_style_classes.c			\
-	theming_custom_css.c			\
 	toolpalette.c				\
 	transparent.c				\
 	tree_store.c				\
@@ -134,7 +133,6 @@ RESOURCES=	$(demos)			\
 		css_pixbufs.css			\
 		css_shadows.css			\
 		cssview.css			\
-		fancy.css			\
 		reset.css
 
 DISTCLEANFILES = demos.h
