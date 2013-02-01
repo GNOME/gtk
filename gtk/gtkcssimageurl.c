@@ -61,6 +61,19 @@ gtk_css_image_url_draw (GtkCssImage        *image,
   _gtk_css_image_draw (url->loaded_image, cr, width, height);
 }
 
+static GtkCssImage *
+gtk_css_image_url_compute (GtkCssImage             *image,
+                           guint                    property_id,
+                           GtkStyleProviderPrivate *provider,
+                           GtkCssComputedValues    *values,
+                           GtkCssComputedValues    *parent_values,
+                           GtkCssDependencies      *dependencies)
+{
+  GtkCssImageUrl *url = GTK_CSS_IMAGE_URL (image);
+
+  return g_object_ref (url->loaded_image);
+}
+
 static gboolean
 gtk_css_image_url_parse (GtkCssImage  *image,
                          GtkCssParser *parser)
@@ -140,6 +153,7 @@ _gtk_css_image_url_class_init (GtkCssImageUrlClass *klass)
   image_class->get_width = gtk_css_image_url_get_width;
   image_class->get_height = gtk_css_image_url_get_height;
   image_class->get_aspect_ratio = gtk_css_image_url_get_aspect_ratio;
+  image_class->compute = gtk_css_image_url_compute;
   image_class->draw = gtk_css_image_url_draw;
   image_class->parse = gtk_css_image_url_parse;
   image_class->print = gtk_css_image_url_print;
