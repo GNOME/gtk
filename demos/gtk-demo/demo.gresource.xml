@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/">
-    <file>cssview.css</file>
     <file>gtk-logo-rgb.gif</file>
-    <file>reset.css</file>
   </gresource>
   <gresource prefix="/application">
     <file preprocess="to-pixdata">gtk-logo-24.png</file>
@@ -19,19 +17,25 @@
   </gresource>
   <gresource prefix="/css_accordion">
     <file>css_accordion.css</file>
+    <file>reset.css</file>
   </gresource>
   <gresource prefix="/css_basics">
     <file>css_basics.css</file>
+    <file>reset.css</file>
   </gresource>
   <gresource prefix="/css_multiplebgs">
     <file>css_multiplebgs.css</file>
     <file>brick.png</file>
+    <file>cssview.css</file>
+    <file>reset.css</file>
   </gresource>
   <gresource prefix="/theming_style_classes">
     <file preprocess="xml-stripblanks">theming.ui</file>
   </gresource>
   <gresource prefix="/css_pixbufs">
     <file alias="gtk.css">css_pixbufs.css</file>
+    <file>cssview.css</file>
+    <file>reset.css</file>
     <file>background.jpg</file>
     <file>apple-red.png</file>
     <file>gnome-applets.png</file>
@@ -44,6 +48,8 @@
   </gresource>
   <gresource prefix="/css_shadows">
     <file alias="gtk.css">css_shadows.css</file>
+    <file>cssview.css</file>
+    <file>reset.css</file>
   </gresource>
   <gresource prefix="/iconview">
     <file preprocess="to-pixdata">gnome-fs-directory.png</file>
