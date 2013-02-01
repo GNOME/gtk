@@ -1979,14 +1979,23 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
     {
       gint child_scroll_width;
       gint child_scroll_height;
+      GtkScrollablePolicy hscroll_policy;
+      GtkScrollablePolicy vscroll_policy;
       gboolean previous_hvis;
       gboolean previous_vvis;
       guint count = 0;
 
+      hscroll_policy = GTK_IS_SCROLLABLE (child)
+                       ? gtk_scrollable_get_hscroll_policy (GTK_SCROLLABLE (child))
+                       : GTK_SCROLL_MINIMUM;
+      vscroll_policy = GTK_IS_SCROLLABLE (child)
+                       ? gtk_scrollable_get_vscroll_policy (GTK_SCROLLABLE (child))
+                       : GTK_SCROLL_MINIMUM;
+
       /* Determine scrollbar visibility first via hfw apis */
       if (gtk_widget_get_request_mode (child) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
 	{
-	  if (gtk_scrollable_get_hscroll_policy (GTK_SCROLLABLE (child)) == GTK_SCROLL_MINIMUM)
+	  if (hscroll_policy == GTK_SCROLL_MINIMUM)
 	    gtk_widget_get_preferred_width (child, &child_scroll_width, NULL);
 	  else
 	    gtk_widget_get_preferred_width (child, NULL, &child_scroll_width);
@@ -1995,7 +2004,7 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 	    {
 	      /* First try without a vertical scrollbar if the content will fit the height
 	       * given the extra width of the scrollbar */
-	      if (gtk_scrollable_get_vscroll_policy (GTK_SCROLLABLE (child)) == GTK_SCROLL_MINIMUM)
+	      if (vscroll_policy == GTK_SCROLL_MINIMUM)
 		gtk_widget_get_preferred_height_for_width (child, 
 							   MAX (allocation->width, child_scroll_width), 
 							   &child_scroll_height, NULL);
@@ -2047,7 +2056,7 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 	} 
       else /* GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT */
 	{
-	  if (gtk_scrollable_get_vscroll_policy (GTK_SCROLLABLE (child)) == GTK_SCROLL_MINIMUM)
+	  if (vscroll_policy == GTK_SCROLL_MINIMUM)
 	    gtk_widget_get_preferred_height (child, &child_scroll_height, NULL);
 	  else
 	    gtk_widget_get_preferred_height (child, NULL, &child_scroll_height);
@@ -2056,7 +2065,7 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 	    {
 	      /* First try without a horizontal scrollbar if the content will fit the width
 	       * given the extra height of the scrollbar */
-	      if (gtk_scrollable_get_hscroll_policy (GTK_SCROLLABLE (child)) == GTK_SCROLL_MINIMUM)
+	      if (hscroll_policy == GTK_SCROLL_MINIMUM)
 		gtk_widget_get_preferred_width_for_height (child, 
 							   MAX (allocation->height, child_scroll_height), 
 							   &child_scroll_width, NULL);
