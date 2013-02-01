@@ -3100,6 +3100,10 @@ gtk_scrolled_window_remove (GtkContainer *container,
  *
  * A widget supports scrolling natively if it implements the
  * #GtkScrollable interface.
+ *
+ * Deprecated: 3.8: gtk_container_add() will now automatically add
+ * a #GtkViewport if the child doesn't implement #GtkScrollable. This
+ * function now just calls gtk_container_add()
  */
 void
 gtk_scrolled_window_add_with_viewport (GtkScrolledWindow *scrolled_window,

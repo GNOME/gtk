@@ -106,6 +106,7 @@ GtkCornerType  gtk_scrolled_window_get_placement     (GtkScrolledWindow *scrolle
 void           gtk_scrolled_window_set_shadow_type   (GtkScrolledWindow *scrolled_window,
 						      GtkShadowType      type);
 GtkShadowType  gtk_scrolled_window_get_shadow_type   (GtkScrolledWindow *scrolled_window);
+GDK_DEPRECATED_IN_3_8_FOR(gtk_container_add)
 void	       gtk_scrolled_window_add_with_viewport (GtkScrolledWindow *scrolled_window,
 						      GtkWidget		*child);
 
