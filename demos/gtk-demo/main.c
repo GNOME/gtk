@@ -481,21 +481,19 @@ load_file (const gchar *demoname,
   GError *err = NULL;
   int state = 0;
   gboolean in_para = 0;
-  gchar **names, **lines;
+  gchar **lines;
   GBytes *bytes;
   gint i;
 
-  remove_data_tabs ();
+  if (!g_strcmp0 (current_file, filename))
+    return;
 
-  names = g_strsplit (filename, " ", -1);
+  remove_data_tabs ();
 
   add_data_tab (demoname);
 
-  if (current_file && !strcmp (current_file, names[0]))
-    goto out;
-
   g_free (current_file);
-  current_file = g_strdup (names[0]);
+  current_file = g_strdup (filename);
 
   gtk_text_buffer_get_bounds (info_buffer, &start, &end);
   gtk_text_buffer_delete (info_buffer, &start, &end);
@@ -503,15 +501,15 @@ load_file (const gchar *demoname,
   gtk_text_buffer_get_bounds (source_buffer, &start, &end);
   gtk_text_buffer_delete (source_buffer, &start, &end);
 
-  resource_filename = g_strconcat ("/sources/", names[0], NULL);
+  resource_filename = g_strconcat ("/sources/", filename, NULL);
   bytes = g_resources_lookup_data (resource_filename, 0, &err);
   g_free (resource_filename);
 
   if (bytes == NULL)
     {
-      g_warning ("Cannot open source for %s: %s\n", names[0], err->message);
+      g_warning ("Cannot open source for %s: %s\n", filename, err->message);
       g_error_free (err);
-      goto out;
+      return;
     }
 
   lines = g_strsplit (g_bytes_get_data (bytes, NULL), "\n", -1);
@@ -634,9 +632,6 @@ load_file (const gchar *demoname,
   fontify ();
 
   g_strfreev (lines);
-
-out:
-  g_strfreev (names);
 }
 
 void

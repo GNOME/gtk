@@ -1,4 +1,4 @@
-/* Application class :: menus.ui application.ui
+/* Application class
  *
  * Demonstrates a simple application.
  *

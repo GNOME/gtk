@@ -1,4 +1,4 @@
-/* Builder :: demo.ui
+/* Builder
  *
  * Demonstrates an interface loaded from a XML description.
  */
