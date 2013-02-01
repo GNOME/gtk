@@ -401,26 +401,66 @@ fontify (void)
 static GtkWidget *create_text (GtkTextBuffer **buffer, gboolean is_source);
 
 static void
-add_data_tab (const gchar *demoname,
-              const gchar *filename)
+add_data_tab (const gchar *demoname)
 {
   GtkTextBuffer *buffer = NULL;
-  gchar *resource_name;
+  gchar *resource_dir, *resource_name, *content_type;
+  gchar **resources;
   GBytes *bytes;
   GtkWidget *widget, *label;
+  guint i;
 
-  resource_name = g_strconcat ("/", demoname, "/", filename, NULL);
-  bytes = g_resources_lookup_data (resource_name, 0, NULL);
-  g_assert (bytes);
-  g_free (resource_name);
+  resource_dir = g_strconcat ("/", demoname, NULL);
+  resources = g_resources_enumerate_children (resource_dir, 0, NULL);
+  if (resources == NULL)
+    {
+      g_free (resource_dir);
+      return;
+    }
 
-  widget = create_text (&buffer, FALSE);
-  gtk_widget_show_all (widget);
-  label = gtk_label_new (filename);
-  gtk_widget_show (label);
-  gtk_notebook_append_page (GTK_NOTEBOOK (notebook), widget, label);
+  for (i = 0; resources[i]; i++)
+    {
+      resource_name = g_strconcat (resource_dir, "/", resources[i], NULL);
+      bytes = g_resources_lookup_data (resource_name, 0, NULL);
+      g_assert (bytes);
 
-  gtk_text_buffer_set_text (buffer, g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes));
+      content_type = g_content_type_guess (resource_name,
+                                           g_bytes_get_data (bytes, NULL),
+                                           g_bytes_get_size (bytes),
+                                           NULL);
+
+      /* In theory we should look at all the mime types gdk-pixbuf supports
+       * and go from there, but we know what file types we've added.
+       */
+      if (g_content_type_is_a (content_type, "image/png") ||
+          g_content_type_is_a (content_type, "image/gif") ||
+          g_content_type_is_a (content_type, "image/jpeg"))
+        {
+          widget = gtk_image_new_from_resource (resource_name);
+        }
+      else if (g_content_type_is_a (content_type, "text/plain"))
+        {
+          widget = create_text (&buffer, FALSE);
+          gtk_text_buffer_set_text (buffer, g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes));
+        }
+      else
+        {
+          g_warning ("Don't know how to display resource '%s' of type '%s'\n", resource_name, content_type);
+          widget = NULL;
+        }
+
+      gtk_widget_show_all (widget);
+      label = gtk_label_new (resources[i]);
+      gtk_widget_show (label);
+      gtk_notebook_append_page (GTK_NOTEBOOK (notebook), widget, label);
+
+      g_free (content_type);
+      g_free (resource_name);
+      g_bytes_unref (bytes);
+    }
+
+  g_strfreev (resources);
+  g_free (resource_dir);
 }
 
 static void
@@ -449,10 +489,7 @@ load_file (const gchar *demoname,
 
   names = g_strsplit (filename, " ", -1);
 
-  for (i = 1; names[i]; i++) {
-    if (strlen (names[i]) > 0)
-      add_data_tab (demoname, names[i]);
-  }
+  add_data_tab (demoname);
 
   if (current_file && !strcmp (current_file, names[0]))
     goto out;
