@@ -31,7 +31,6 @@
 #undef GDK_DISABLE_DEPRECATED
 
 #include <gtk/gtk.h>
-#include "demo-common.h"
 
 /* The ChangeDisplayInfo structure corresponds to a toplevel window and
  * holds pointers to widgets inside the toplevel window along with other

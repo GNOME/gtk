@@ -4,7 +4,6 @@
  */
 
 #include <gtk/gtk.h>
-#include "demo-common.h"
 
 static GtkBuilder *builder;
 

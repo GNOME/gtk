@@ -16,8 +16,6 @@
 #include <gtk/gtk.h>
 #include <math.h>
 
-#include "demo-common.h"
-
 #define FRAME_DELAY 50
 
 #define BACKGROUND_NAME "/pixbufs/background.jpg"

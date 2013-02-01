@@ -32,65 +32,6 @@ struct _CallbackData
   GtkTreePath *path;
 };
 
-#ifdef G_OS_WIN32
-
-#undef DEMOCODEDIR
-
-static char *
-get_democodedir (void)
-{
-  static char *result = NULL;
-
-  if (result == NULL)
-    {
-      result = g_win32_get_package_installation_directory_of_module (NULL);
-      if (result == NULL)
-        result = "unknown-location";
-
-      result = g_strconcat (result, "\\share\\gtk-3.0\\demo", NULL);
-    }
-
-  return result;
-}
-
-#define DEMOCODEDIR get_democodedir ()
-
-#endif
-
-/**
- * demo_find_file:
- * @base: base filename
- * @err:  location to store error, or %NULL.
- *
- * Looks for @base first in the current directory, then in the
- * location GTK+ where it will be installed on make install,
- * returns the first file found.
- *
- * Return value: the filename, if found or %NULL
- */
-gchar *
-demo_find_file (const char *base,
-                GError    **err)
-{
-  g_return_val_if_fail (err == NULL || *err == NULL, NULL);
-
-  if (g_file_test ("gtk-logo-rgb.gif", G_FILE_TEST_EXISTS) &&
-      g_file_test (base, G_FILE_TEST_EXISTS))
-    return g_strdup (base);
-  else
-    {
-      char *filename = g_build_filename (DEMOCODEDIR, base, NULL);
-      if (!g_file_test (filename, G_FILE_TEST_EXISTS))
-        {
-          g_set_error (err, G_FILE_ERROR, G_FILE_ERROR_NOENT,
-                       "Cannot find demo data file \"%s\"", base);
-          g_free (filename);
-          return NULL;
-        }
-      return filename;
-    }
-}
-
 static void
 window_closed_cb (GtkWidget *window, gpointer data)
 {

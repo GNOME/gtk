@@ -6,7 +6,6 @@
  */
 
 #include <gtk/gtk.h>
-#include "demo-common.h"
 
 static GtkWidget *assistant = NULL;
 static GtkWidget *progress_bar = NULL;

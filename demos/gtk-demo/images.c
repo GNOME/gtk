@@ -16,7 +16,6 @@
 #include <glib/gstdio.h>
 #include <stdio.h>
 #include <errno.h>
-#include "demo-common.h"
 
 static GtkWidget *window = NULL;
 static GdkPixbufLoader *pixbuf_loader = NULL;

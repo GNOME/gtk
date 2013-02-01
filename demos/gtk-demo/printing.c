@@ -7,7 +7,6 @@
 
 #include <math.h>
 #include <gtk/gtk.h>
-#include "demo-common.h"
 
 /* In points */
 #define HEADER_HEIGHT (10*72/25.4)

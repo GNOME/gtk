@@ -10,8 +10,6 @@
 #include <gtk/gtk.h>
 #include <stdlib.h> /* for exit() */
 
-#include "demo-common.h"
-
 static void easter_egg_callback (GtkWidget *button, gpointer data);
 
 static void
