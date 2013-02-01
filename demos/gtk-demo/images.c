@@ -361,7 +361,7 @@ do_images (GtkWidget *do_widget)
       gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
-      pixbuf = gdk_pixbuf_new_from_resource ("/images/gtk-logo-rgb.gif", NULL);
+      pixbuf = gdk_pixbuf_new_from_resource ("/images/gtk-logo-old.png", NULL);
       /* The image loading must work, we ensure that the resources are valid. */
       g_assert (pixbuf);
 

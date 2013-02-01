@@ -126,7 +126,7 @@ RESOURCES=	$(demos)			\
 		gnu-keys.png			\
 		gtk-logo-24.png			\
 		gtk-logo-48.png			\
-		gtk-logo-rgb.gif		\
+		gtk-logo-old.png		\
 		css_accordion.css		\
 		css_basics.css			\
 		css_multiplebgs.css		\

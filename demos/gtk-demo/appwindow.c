@@ -80,7 +80,7 @@ static void
 about_cb (GtkAction *action,
           GtkWidget *window)
 {
-  GdkPixbuf *pixbuf, *transparent;
+  GdkPixbuf *pixbuf;
 
   const gchar *authors[] = {
     "Peter Mattis",
@@ -98,11 +98,9 @@ about_cb (GtkAction *action,
     NULL
   };
 
-  pixbuf = gdk_pixbuf_new_from_resource ("/appwindow/gtk-logo-rgb.gif", NULL);
+  pixbuf = gdk_pixbuf_new_from_resource ("/appwindow/gtk-logo-old.png", NULL);
   /* We asser the existence of the pixbuf as we load it from a custom resource. */
   g_assert (pixbuf);
-  transparent = gdk_pixbuf_add_alpha (pixbuf, TRUE, 0xff, 0xff, 0xff);
-  g_object_unref (pixbuf);
 
   gtk_show_about_dialog (GTK_WINDOW (window),
                          "program-name", "GTK+ Code Demos",
@@ -117,11 +115,11 @@ about_cb (GtkAction *action,
                          "comments", "Program to demonstrate GTK+ functions.",
                          "authors", authors,
                          "documenters", documentors,
-                         "logo", transparent,
+                         "logo", pixbuf,
                          "title", "About GTK+ Code Demos",
                          NULL);
 
-  g_object_unref (transparent);
+  g_object_unref (pixbuf);
 }
 
 typedef struct
@@ -303,7 +301,6 @@ register_stock_icons (void)
       GdkPixbuf *pixbuf;
       GtkIconFactory *factory;
       GtkIconSet *icon_set;
-      GdkPixbuf *transparent;
 
       static GtkStockItem items[] = {
         { "demo-gtk-logo",
@@ -320,18 +317,14 @@ register_stock_icons (void)
       factory = gtk_icon_factory_new ();
       gtk_icon_factory_add_default (factory);
 
-      pixbuf = gdk_pixbuf_new_from_resource ("/appwindow/gtk-logo-rgb.gif", NULL);
+      pixbuf = gdk_pixbuf_new_from_resource ("/appwindow/gtk-logo-old.png", NULL);
       /* We assert the existence of the pixbuf as we load it from a custom resource. */
       g_assert (pixbuf);
 
-      /* The gtk-logo-rgb icon has a white background, make it transparent */
-      transparent = gdk_pixbuf_add_alpha (pixbuf, TRUE, 0xff, 0xff, 0xff);
-
-      icon_set = gtk_icon_set_new_from_pixbuf (transparent);
+      icon_set = gtk_icon_set_new_from_pixbuf (pixbuf);
       gtk_icon_factory_add (factory, "demo-gtk-logo", icon_set);
       gtk_icon_set_unref (icon_set);
       g_object_unref (pixbuf);
-      g_object_unref (transparent);
 
       /* Drop our reference to the factory, GTK will hold a reference. */
       g_object_unref (factory);

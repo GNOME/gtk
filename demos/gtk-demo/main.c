@@ -850,19 +850,15 @@ create_tree (void)
 static void
 setup_default_icon (void)
 {
-  GdkPixbuf *pixbuf, *transparent;
+  GdkPixbuf *pixbuf;
 
-  pixbuf = gdk_pixbuf_new_from_resource ("/gtk-logo-rgb.gif", NULL);
+  pixbuf = gdk_pixbuf_new_from_resource ("/gtk-logo-old.png", NULL);
   /* We load a resource, so we can guarantee that loading it is successful */
   g_assert (pixbuf);
 
-  /* The gtk-logo-rgb icon has a white background, make it transparent */
-  transparent = gdk_pixbuf_add_alpha (pixbuf, TRUE, 0xff, 0xff, 0xff);
-
-  gtk_window_set_default_icon (transparent);
+  gtk_window_set_default_icon (pixbuf);
   
   g_object_unref (pixbuf);
-  g_object_unref (transparent);
 }
 
 int

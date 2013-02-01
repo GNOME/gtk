@@ -131,7 +131,7 @@ insert_text (GtkTextBuffer *buffer)
   GdkPixbuf *pixbuf;
   GdkPixbuf *scaled;
 
-  pixbuf = gdk_pixbuf_new_from_resource ("/textview/gtk-logo-rgb.gif", NULL);
+  pixbuf = gdk_pixbuf_new_from_resource ("/textview/gtk-logo-old.png", NULL);
   g_assert (pixbuf);
 
   scaled = gdk_pixbuf_scale_simple (pixbuf, 32, 32, GDK_INTERP_BILINEAR);
