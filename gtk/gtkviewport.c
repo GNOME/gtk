@@ -49,8 +49,9 @@
  * #GtkTreeView or #GtkIconView, it can be added to a #GtkScrolledWindow
  * with gtk_container_add(). If a widget does not, you must first add the
  * widget to a #GtkViewport, then add the viewport to the scrolled window.
- * The convenience function gtk_scrolled_window_add_with_viewport() does
- * exactly this, so you can ignore the presence of the viewport.
+ * gtk_container_add() does this automatically if a child that does not
+ * implement #GtkScrollable is added to a #GtkScrolledWindow, so you can
+ * ignore the presence of the viewport.
  *
  * The #GtkViewport will start scrolling content only if allocated less
  * than the child widget's minimum size in a given orientation.

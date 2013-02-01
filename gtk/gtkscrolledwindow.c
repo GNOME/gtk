@@ -67,8 +67,8 @@
  * If a widget has native scrolling abilities, it can be added to the
  * #GtkScrolledWindow with gtk_container_add(). If a widget does not, you
  * must first add the widget to a #GtkViewport, then add the #GtkViewport
- * to the scrolled window. The convenience function
- * gtk_scrolled_window_add_with_viewport() does exactly this, so you can
+ * to the scrolled window. gtk_container_add() will do this for you for
+ * widgets that don't implement #GtkScrollable natively, so you can
  * ignore the presence of the viewport.
  *
  * The position of the scrollbars is controlled by the scroll
@@ -3032,7 +3032,7 @@ gtk_scrolled_window_add (GtkContainer *container,
   GtkScrolledWindowPrivate *priv;
   GtkScrolledWindow *scrolled_window;
   GtkBin *bin;
-  GtkWidget *child_widget;
+  GtkWidget *child_widget, *scrollable_child;
   GtkAdjustment *hadj, *vadj;
 
   bin = GTK_BIN (container);
@@ -3042,20 +3042,27 @@ gtk_scrolled_window_add (GtkContainer *container,
   scrolled_window = GTK_SCROLLED_WINDOW (container);
   priv = scrolled_window->priv;
 
-  if (gtk_widget_get_realized (GTK_WIDGET (bin)))
-    gtk_widget_set_parent_window (child, priv->overshoot_window);
+  if (GTK_IS_SCROLLABLE (child))
+    {
+      scrollable_child = child;
+    }
+  else
+    {
+      scrollable_child = gtk_viewport_new (NULL, NULL);
+      gtk_widget_show (scrollable_child);
+      gtk_container_add (GTK_CONTAINER (scrollable_child), child);
+    }
 
-  _gtk_bin_set_child (bin, child);
-  gtk_widget_set_parent (child, GTK_WIDGET (bin));
+  if (gtk_widget_get_realized (GTK_WIDGET (bin)))
+    gtk_widget_set_parent_window (scrollable_child, priv->overshoot_window);
+
+  _gtk_bin_set_child (bin, scrollable_child);
+  gtk_widget_set_parent (scrollable_child, GTK_WIDGET (bin));
 
   hadj = gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar));
   vadj = gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
 
-  if (GTK_IS_SCROLLABLE (child))
-    g_object_set (child, "hadjustment", hadj, "vadjustment", vadj, NULL);
-  else
-    g_warning ("gtk_scrolled_window_add(): cannot add non scrollable widget "
-               "use gtk_scrolled_window_add_with_viewport() instead");
+  g_object_set (scrollable_child, "hadjustment", hadj, "vadjustment", vadj, NULL);
 }
 
 static void
