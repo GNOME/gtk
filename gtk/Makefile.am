@@ -447,6 +447,7 @@ gtk_private_h_sources =		\
 	gtkcssimagegradientprivate.h	\
 	gtkcssimagelinearprivate.h	\
 	gtkcssimageprivate.h	\
+	gtkcssimagesurfaceprivate.h	\
 	gtkcssimageurlprivate.h	\
 	gtkcssimagevalueprivate.h	\
 	gtkcssimagewin32private.h	\
@@ -672,6 +673,7 @@ gtk_base_c_sources = 		\
 	gtkcssimagecrossfade.c	\
 	gtkcssimagegradient.c	\
 	gtkcssimagelinear.c	\
+	gtkcssimagesurface.c	\
 	gtkcssimageurl.c	\
 	gtkcssimagevalue.c	\
 	gtkcssimagewin32.c	\

@@ -22,8 +22,7 @@
 #include <string.h>
 
 #include "gtkcssimageurlprivate.h"
-
-#include "gtkcssprovider.h"
+#include "gtkcssimagesurfaceprivate.h"
 
 G_DEFINE_TYPE (GtkCssImageUrl, _gtk_css_image_url, GTK_TYPE_CSS_IMAGE)
 
@@ -32,7 +31,7 @@ gtk_css_image_url_get_width (GtkCssImage *image)
 {
   GtkCssImageUrl *url = GTK_CSS_IMAGE_URL (image);
 
-  return cairo_image_surface_get_width (url->surface);
+  return _gtk_css_image_get_width (url->loaded_image);
 }
 
 static int
@@ -40,7 +39,15 @@ gtk_css_image_url_get_height (GtkCssImage *image)
 {
   GtkCssImageUrl *url = GTK_CSS_IMAGE_URL (image);
 
-  return cairo_image_surface_get_height (url->surface);
+  return _gtk_css_image_get_height (url->loaded_image);
+}
+
+static double
+gtk_css_image_url_get_aspect_ratio (GtkCssImage *image)
+{
+  GtkCssImageUrl *url = GTK_CSS_IMAGE_URL (image);
+
+  return _gtk_css_image_get_aspect_ratio (url->loaded_image);
 }
 
 static void
@@ -51,13 +58,7 @@ gtk_css_image_url_draw (GtkCssImage        *image,
 {
   GtkCssImageUrl *url = GTK_CSS_IMAGE_URL (image);
 
-  cairo_rectangle (cr, 0, 0, width, height);
-  cairo_scale (cr,
-               width / cairo_image_surface_get_width (url->surface),
-               height / cairo_image_surface_get_height (url->surface));
-  cairo_set_source_surface (cr, url->surface, 0, 0);
-  cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_PAD);
-  cairo_fill (cr);
+  _gtk_css_image_draw (url->loaded_image, cr, width, height);
 }
 
 static gboolean
@@ -66,7 +67,6 @@ gtk_css_image_url_parse (GtkCssImage  *image,
 {
   GtkCssImageUrl *url = GTK_CSS_IMAGE_URL (image);
   GdkPixbuf *pixbuf;
-  cairo_t *cr;
   GError *error = NULL;
   GFileInputStream *input;
 
@@ -105,50 +105,19 @@ gtk_css_image_url_parse (GtkCssImage  *image,
       return FALSE;
     }
 
-  url->surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                             gdk_pixbuf_get_width (pixbuf),
-                                             gdk_pixbuf_get_height (pixbuf));
-  cr = cairo_create (url->surface);
-  gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
-  cairo_paint (cr);
-  cairo_destroy (cr);
+  url->loaded_image = _gtk_css_image_surface_new_for_pixbuf (pixbuf);
   g_object_unref (pixbuf);
 
   return TRUE;
-}
-
-static cairo_status_t
-surface_write (void                *closure,
-               const unsigned char *data,
-               unsigned int         length)
-{
-  g_byte_array_append (closure, data, length);
-
-  return CAIRO_STATUS_SUCCESS;
 }
 
 static void
 gtk_css_image_url_print (GtkCssImage *image,
                          GString     *string)
 {
-#if CAIRO_HAS_PNG_FUNCTIONS
   GtkCssImageUrl *url = GTK_CSS_IMAGE_URL (image);
-  GByteArray *array;
-  char *base64;
-  
-  array = g_byte_array_new ();
-  cairo_surface_write_to_png_stream (url->surface, surface_write, array);
-  base64 = g_base64_encode (array->data, array->len);
-  g_byte_array_free (array, TRUE);
 
-  g_string_append (string, "url(\"data:image/png;base64,");
-  g_string_append (string, base64);
-  g_string_append (string, "\")");
-
-  g_free (base64);
-#else
-  g_string_append (string, "none /* you need cairo png functions enabled to make this work */");
-#endif
+  _gtk_css_image_print (url->loaded_image, string);
 }
 
 static void
@@ -157,12 +126,7 @@ gtk_css_image_url_dispose (GObject *object)
   GtkCssImageUrl *url = GTK_CSS_IMAGE_URL (object);
 
   g_clear_object (&url->file);
-
-  if (url->surface)
-    {
-      cairo_surface_destroy (url->surface);
-      url->surface = NULL;
-    }
+  g_clear_object (&url->loaded_image);
 
   G_OBJECT_CLASS (_gtk_css_image_url_parent_class)->dispose (object);
 }
@@ -175,6 +139,7 @@ _gtk_css_image_url_class_init (GtkCssImageUrlClass *klass)
 
   image_class->get_width = gtk_css_image_url_get_width;
   image_class->get_height = gtk_css_image_url_get_height;
+  image_class->get_aspect_ratio = gtk_css_image_url_get_aspect_ratio;
   image_class->draw = gtk_css_image_url_draw;
   image_class->parse = gtk_css_image_url_parse;
   image_class->print = gtk_css_image_url_print;
