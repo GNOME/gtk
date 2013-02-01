@@ -1,8 +1,6 @@
 ## Makefile.am for gtk+/demos
 include $(top_srcdir)/Makefile.decl
 
-democodedir=$(datadir)/gtk-$(GTK_API_VERSION)/demo
-
 ## These should be in the order you want them to appear in the
 ## demo app, which means alphabetized by demo title, not filename
 demos =						\
@@ -56,7 +54,6 @@ demos =						\
 	ui_manager.c
 
 AM_CPPFLAGS = \
-	-DDEMOCODEDIR="\"$(democodedir)\""	\
 	-I$(top_srcdir) 			\
 	-I$(top_builddir)/gdk			\
 	-DGDK_DISABLE_DEPRECATED		\
@@ -110,12 +107,24 @@ gtk3_demo_application_LDADD = $(LDADDS)
 demo_resources.c: demo.gresource.xml $(RESOURCES)
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(srcdir) --generate-source $(srcdir)/demo.gresource.xml
 
-RESOURCES=	application.ui			\
+RESOURCES=	$(demos)			\
+		application.ui			\
 		demo.ui				\
 		menus.ui			\
 		theming.ui			\
+		alphatest.png			\
+		apple-red.png			\
+		background.jpg			\
+		floppybuddy.gif			\
+		gnome-applets.png		\
+		gnome-calendar.png		\
+		gnome-foot.png			\
 		gnome-fs-directory.png		\
 		gnome-fs-regular.png		\
+		gnome-gimp.png			\
+		gnome-gmush.png			\
+		gnome-gsame.png			\
+		gnu-keys.png			\
 		gtk-logo-24.png			\
 		gtk-logo-48.png			\
 		gtk-logo-rgb.gif		\
@@ -127,25 +136,6 @@ RESOURCES=	application.ui			\
 		cssview.css			\
 		fancy.css			\
 		reset.css
-
-IMAGEFILES=	alphatest.png		\
-		apple-red.png		\
-		background.jpg		\
-		floppybuddy.gif		\
-		gnome-applets.png	\
-		gnome-calendar.png	\
-		gnome-foot.png		\
-		gnome-gimp.png		\
-		gnome-gmush.png		\
-		gnome-gsame.png		\
-		gnu-keys.png		\
-		gtk-logo-rgb.gif
-
-democode_DATA = \
-	$(demos)		\
-	$(IMAGEFILES)		\
-	$(RESOURCES)		\
-	demo.ui
 
 DISTCLEANFILES = demos.h
 
