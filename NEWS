@@ -1,3 +1,50 @@
+Overview of Changes in GTK+ 3.7.8
+=================================
+
+* GtkTreeView and GtkIconView allow single-click activation
+
+* GtkImage can be set from a resource
+
+* GdkWaylandDisplay is now public
+
+* gdk_window_set_fullscreen_mode: new function to let windows
+  be fullscreened across multiple monitors
+
+* Bugs fixed:
+ 345023  Single-click in treeview and iconview
+ 687025  iconhelper: Treat empty string as NULL stock-id
+ 691572  Touch: strengthen synthesized touch crossing events ...
+ 691592  the signal handler "gtk_spin_button_accessible_value...
+ 691639  introspection: gtk_widget_set_tooltip_text accepts NULL
+ 691751  Better column resizing for GtkTreeView
+ 691842  /TreeView/scrolling/specific/bug-111500 fails since ...
+ 691856  Add support for _NET_WM_FULLSCREEN_MONITORS
+ 692163  file chooser: give GSettings schema a path
+ 692188  Backspace should not be used for navigation
+ 692203  applicationwindow: fix mem leak
+ 692467  x11: Add "support" for XI2.3
+ 692481  gtkimage: Add GtkImage::resource property
+ 692605  [PATCH] Optimize gdk_x11_screen_get_setting()
+ 692659  migrating-2to3: Add more words about GSEAL_ENABLE is...
+ 692766  textlayout: respect preedit color attribute
+ 692844  Incorrect (out) annotation on gtk_tree_drag_source_d...
+ 692934  Defer cairo surface creation for image URLs in CSS t...
+
+* Translation updates:
+ Aragonese
+ Assamese
+ Basque
+ Brazilian Portuguese
+ Dutch
+ German
+ Hungarian
+ Polish
+ Portuguese
+ Serbian
+ Slovenian
+ Spanish
+
+
 Overview of Changes in GTK+ 3.7.6
 =================================
 
