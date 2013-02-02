@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+2.0\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-12-15 20:08+0000\n"
-"PO-Revision-Date: 2011-04-26 11:19+0600\n"
-"Last-Translator: Sahran <sahran.ug@gmail.com>\n"
+"POT-Creation-Date: 2013-01-19 19:41+0000\n"
+"PO-Revision-Date: 2013-02-02 11:55+0900\n"
+"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -126,7 +126,7 @@ msgstr "ئېكراندا كۆرسىتىلىدىغان خەت نۇسخىسىنى�
 
 #: ../gdk/gdkwindow.c:384 ../gdk/gdkwindow.c:385
 msgid "Cursor"
-msgstr "نۇر بەلگە"
+msgstr "نۇربەلگە"
 
 #: ../gdk/x11/gdkdevicemanager-xi2.c:116
 msgid "Opcode"
@@ -161,7 +161,6 @@ msgid "Device identifier"
 msgstr "ئۈسكۈنە بەلگىسى(كىملىكى)"
 
 #: ../gtk/a11y/gtkrenderercellaccessible.c:97
-#| msgid "Cell Area"
 msgid "Cell renderer"
 msgstr "كاتەكچە سىزغۇچ"
 
@@ -257,9 +256,9 @@ msgstr "تېكىستنى ئالدىن كۆزەت"
 msgid "The text to display in order to demonstrate the selected font"
 msgstr "تاللانغان خەت نۇسخىنى ئىپادىلەش ئۈچۈن كۆرسىتىدىغان تېكىست"
 
-#: ../gtk/deprecated/gtkhandlebox.c:224 ../gtk/gtkcombobox.c:1067
+#: ../gtk/deprecated/gtkhandlebox.c:224 ../gtk/gtkcombobox.c:1064
 #: ../gtk/gtkentry.c:890 ../gtk/gtkmenubar.c:213 ../gtk/gtkstatusbar.c:182
-#: ../gtk/gtktoolbar.c:631 ../gtk/gtkviewport.c:155
+#: ../gtk/gtktoolbar.c:628 ../gtk/gtkviewport.c:155
 msgid "Shadow type"
 msgstr "سايە تىپى"
 
@@ -345,10 +344,10 @@ msgstr "ئىستون بوشلۇقى"
 msgid "The amount of space between two consecutive columns"
 msgstr "ئىككى ئىستون ئارىسىدىكى بوشلۇق"
 
-#: ../gtk/deprecated/gtktable.c:227 ../gtk/gtkbox.c:253
-#: ../gtk/gtktoolbar.c:563 ../gtk/gtktoolitemgroup.c:1650
+#: ../gtk/deprecated/gtktable.c:227 ../gtk/gtkbox.c:250
+#: ../gtk/gtktoolbar.c:560 ../gtk/gtktoolitemgroup.c:1650
 msgid "Homogeneous"
-msgstr "ئوخشاشلىق"
+msgstr "ئوخشاش"
 
 #: ../gtk/deprecated/gtktable.c:228
 msgid "If TRUE, the table cells are all the same width/height"
@@ -555,7 +554,7 @@ msgstr "تېزلەتكۈچ ۋىجېتى"
 msgid "The widget to be monitored for accelerator changes"
 msgstr "تېزلەتكۈچ ئۆزگىرىشىنى نازارەت قىلىدىغان ۋىجېت"
 
-#: ../gtk/gtkaccessible.c:158 ../gtk/gtktreeviewcolumn.c:355
+#: ../gtk/gtkaccessible.c:158 ../gtk/gtktreeviewcolumn.c:353
 msgid "Widget"
 msgstr "ۋىجېت"
 
@@ -564,17 +563,14 @@ msgid "The widget referenced by this accessible."
 msgstr "بۇ زىيارەتنى نەقىل ئالىدىغان كىچىك ئەپ."
 
 #: ../gtk/gtkactionable.c:70
-#| msgid "Icon name"
 msgid "action name"
 msgstr "مەشغۇلات ئاتى"
 
 #: ../gtk/gtkactionable.c:71
-#| msgid "The name of the selected font"
 msgid "The name of the associated action, like 'app.quit'"
 msgstr "مۇناسىۋەتلىك مەشغۇلاتنىڭ ئاتى، ‹app.quit› دېگەندەك"
 
 #: ../gtk/gtkactionable.c:75
-#| msgid "Paste target list"
 msgid "action target value"
 msgstr "مەشغۇلاتنىڭ نىشان قىممىتى"
 
@@ -694,7 +690,7 @@ msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr "TRUE بولغاندا، بۇ مەشغۇلات ماس كەلگەن بوش تىزىملىك يوشۇرۇنىدۇ."
 
 #: ../gtk/gtkaction.c:379 ../gtk/gtkactiongroup.c:235
-#: ../gtk/gtkcellrenderer.c:296 ../gtk/gtkwidget.c:1024
+#: ../gtk/gtkcellrenderer.c:296 ../gtk/gtkwidget.c:1018
 msgid "Sensitive"
 msgstr "سەزگۈر"
 
@@ -703,8 +699,8 @@ msgid "Whether the action is enabled."
 msgstr "مەشغۇلات ئىشلىتىلەمدۇ يوق."
 
 #: ../gtk/gtkaction.c:386 ../gtk/gtkactiongroup.c:242
-#: ../gtk/gtkstatusicon.c:298 ../gtk/gtktreeviewcolumn.c:247
-#: ../gtk/gtkwidget.c:1017
+#: ../gtk/gtkstatusicon.c:298 ../gtk/gtktreeviewcolumn.c:245
+#: ../gtk/gtkwidget.c:1011
 msgid "Visible"
 msgstr "كۆرۈنۈشچان"
 
@@ -743,7 +739,6 @@ msgid "Whether the action group is visible."
 msgstr "مەشغۇلات گۇرۇپپىسى كۆرۈنەمدۇ يوق."
 
 #: ../gtk/gtkactiongroup.c:249
-#| msgid "Accelerator Mode"
 msgid "Accelerator Group"
 msgstr "تېزلەتكۈچى گۇرۇپپا"
 
@@ -889,7 +884,6 @@ msgid "The padding to insert at the right of the widget."
 msgstr "ۋىجېت ئوڭ تەرىپىگە قىستۇرىدىغان تولدۇرما"
 
 #: ../gtk/gtkappchooserbutton.c:614
-#| msgid "Include an 'Other...' item"
 msgid "Include an 'Other…' item"
 msgstr "«باشقا…» تۈرىنى ئۆز ئىچىگە ئالسۇن"
 
@@ -900,12 +894,10 @@ msgid ""
 msgstr "GtkAppChooserDialog غا تەگكەندە بىرىكمە رامكا بىر تۈرنى ئۆز ئىچىگە ئالامدۇ يوق"
 
 #: ../gtk/gtkappchooserbutton.c:631
-#| msgid "Show default app"
 msgid "Show default item"
 msgstr "كۆڭۈلدىكى تۈرنى كۆرسىتىش"
 
 #: ../gtk/gtkappchooserbutton.c:632
-#| msgid "Whether the widget should show the default application"
 msgid "Whether the combobox should show the default application on top"
 msgstr "بىرىكمە رامكا كۆڭۈلدىكى ئەپنى ئەڭ ئۈستىدە كۆرسىتەمدۇ يوق"
 
@@ -986,47 +978,38 @@ msgid "Register session"
 msgstr "جەرياننى تىزىملات"
 
 #: ../gtk/gtkapplication.c:739
-#| msgid "Device role in the device manager"
 msgid "Register with the session manager"
 msgstr "ئەڭگىمە باشقۇرغۇ ئىشلىتىپ خەتلىتىش"
 
 #: ../gtk/gtkapplication.c:744
-#| msgid "GtkApplication"
 msgid "Application menu"
 msgstr "پروگرامما تىزىملىكى"
 
 #: ../gtk/gtkapplication.c:745
-#| msgid "The model for the tree menu"
 msgid "The GMenuModel for the application menu"
 msgstr "پروگرامما تىزىملىكىنىڭ GMenuModel ئى"
 
 #: ../gtk/gtkapplication.c:751
-#| msgid "Menu"
 msgid "Menubar"
 msgstr "تىزىملىك بالدىقى"
 
 #: ../gtk/gtkapplication.c:752
-#| msgid "The model for the tree menu"
 msgid "The GMenuModel for the menubar"
 msgstr "تىزىملىك بالدىقىنىڭ GMenuModel ئى"
 
 #: ../gtk/gtkapplication.c:758
-#| msgid "Active id"
 msgid "Active window"
 msgstr "ئاكتىپ كۆزنەك"
 
 #: ../gtk/gtkapplication.c:759
-#| msgid "The cell which currently has focus"
 msgid "The window which most recently had focus"
 msgstr "ئەڭ ئاخىرقى قېتىم  فوكۇسلانغان كۆزنەك"
 
 #: ../gtk/gtkapplicationwindow.c:989
-#| msgid "Show menu images"
 msgid "Show a menubar"
 msgstr "تىزىملىك بالدىقىنى كۆرسىتىش"
 
 #: ../gtk/gtkapplicationwindow.c:990
-#| msgid "TRUE if the window should not be in the pager."
 msgid "TRUE if the window should show a menubar at the top of the window"
 msgstr "ئەگەر TRUE  بولسا، كۆزنەكنىڭ ئۈستى قىسمىدا تىزىملىك بالدىقى كۆرۈنىدۇ"
 
@@ -1046,7 +1029,7 @@ msgstr "يا ئوق سايىسى"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "يا ئوق ئەتراپىدىكى سايىنىڭ قىياپىتى"
 
-#: ../gtk/gtkarrow.c:127 ../gtk/gtkcombobox.c:1051 ../gtk/gtkmenu.c:784
+#: ../gtk/gtkarrow.c:127 ../gtk/gtkcombobox.c:1048 ../gtk/gtkmenu.c:784
 #: ../gtk/gtkmenuitem.c:506
 msgid "Arrow Scaling"
 msgstr "يا ئوق ئۆلچىكى"
@@ -1055,17 +1038,17 @@ msgstr "يا ئوق ئۆلچىكى"
 msgid "Amount of space used up by arrow"
 msgstr "يا ئوق ئىگىلىگەن بوشلۇق چوڭلۇقى"
 
-#: ../gtk/gtkaspectframe.c:107 ../gtk/gtkwidget.c:1212
+#: ../gtk/gtkaspectframe.c:107 ../gtk/gtkwidget.c:1206
 msgid "Horizontal Alignment"
-msgstr "توغرىسىغا جايلاشتۇرۇش"
+msgstr "توغرىسىغا توغرىلاش"
 
 #: ../gtk/gtkaspectframe.c:108
 msgid "X alignment of the child"
 msgstr "تارماق بۆلەكنى X ئوقى يۆنىلىشىدە توغرىلا"
 
-#: ../gtk/gtkaspectframe.c:114 ../gtk/gtkwidget.c:1228
+#: ../gtk/gtkaspectframe.c:114 ../gtk/gtkwidget.c:1222
 msgid "Vertical Alignment"
-msgstr "تىك جايلاشتۇرۇش"
+msgstr "تىك توغرىلاش"
 
 #: ../gtk/gtkaspectframe.c:115
 msgid "Y alignment of the child"
@@ -1196,72 +1179,70 @@ msgid ""
 msgstr "ئەگەر TRUE بولسا، تارماق بۆلەك تارماق بۆلەكنىڭ ئىككىنچى گۇرۇپپىسىدا كۆرۈنىدۇ، ياردەمگە ئوخشاش توپچىغا ماس كېلىدۇ."
 
 #: ../gtk/gtkbbox.c:211
-#| msgid "Homogeneous"
 msgid "Non-Homogeneous"
 msgstr "ئوخشاشمىغان چوڭلۇقتا"
 
 #: ../gtk/gtkbbox.c:212
-#| msgid "If TRUE, the child can be made smaller than its requisition"
 msgid "If TRUE, the child will not be subject to homogeneous sizing"
 msgstr "ئەگەر TRUE بولسا تارماق بۆلەك بىر تۇتاش چوڭلۇقنىڭ چەكلىمىسىگە ئۇچرىمايدۇ"
 
-#: ../gtk/gtkbox.c:243 ../gtk/gtkcellareabox.c:315 ../gtk/gtkexpander.c:312
-#: ../gtk/gtkiconview.c:512 ../gtk/gtktreeviewcolumn.c:282
+#: ../gtk/gtkbox.c:240 ../gtk/gtkcellareabox.c:315 ../gtk/gtkexpander.c:312
+#: ../gtk/gtkiconview.c:512 ../gtk/gtktreeviewcolumn.c:280
 msgid "Spacing"
 msgstr "ئارىلىق"
 
-#: ../gtk/gtkbox.c:244
+#: ../gtk/gtkbox.c:241
 msgid "The amount of space between children"
 msgstr "تارماق بۆلەك ئارىسىدىكى ئارىلىق يىغىندىسى"
 
-#: ../gtk/gtkbox.c:254
+#: ../gtk/gtkbox.c:251
 msgid "Whether the children should all be the same size"
 msgstr "تارماق بۆلەك ئوخشاش چوڭلۇق ئىشلىتەمدۇ يوق"
 
-#: ../gtk/gtkbox.c:274 ../gtk/gtkcellareabox.c:335 ../gtk/gtktoolbar.c:555
+#: ../gtk/gtkbox.c:271 ../gtk/gtkcellareabox.c:335 ../gtk/gtktoolbar.c:552
 #: ../gtk/gtktoolitemgroup.c:1657 ../gtk/gtktoolpalette.c:1075
-#: ../gtk/gtktreeviewcolumn.c:338
+#: ../gtk/gtktreeviewcolumn.c:336
 msgid "Expand"
 msgstr "كېڭەيت"
 
-#: ../gtk/gtkbox.c:275
+#: ../gtk/gtkbox.c:272
 msgid "Whether the child should receive extra space when the parent grows"
 msgstr "تارماق بۆلەك ئاتا بۆلەك چوڭايسا نورمىدىن ئارتۇق بوشلۇققا ئېرىشەمدۇ يوق"
 
-#: ../gtk/gtkbox.c:291 ../gtk/gtktoolitemgroup.c:1664
+#: ../gtk/gtkbox.c:288 ../gtk/gtktoolitemgroup.c:1664
 msgid "Fill"
 msgstr "تولدۇر"
 
-#: ../gtk/gtkbox.c:292
+#: ../gtk/gtkbox.c:289
 msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
 msgstr "تارماق بۆلەككە بېرىلىدىغان نورمىدىن ئارتۇق بوشلۇق تارماق بوشلۇققا تەقسىملىنەمدۇ ياكى تولدۇرما قىلىپ ئىشلىتىلەمدۇ"
 
-#: ../gtk/gtkbox.c:299 ../gtk/gtktrayicon-x11.c:167
+#: ../gtk/gtkbox.c:296 ../gtk/gtktrayicon-x11.c:167
 msgid "Padding"
 msgstr "تولدۇرما"
 
-#: ../gtk/gtkbox.c:300
+#: ../gtk/gtkbox.c:297
 msgid "Extra space to put between the child and its neighbors, in pixels"
 msgstr "تارماق بۆلەك ۋە ئۇنىڭ قوشنا بۆلىكى ئارىسىدىكى نورمىدىن ئارتۇق بوشلۇق، بىرلىكى پىكسېل"
 
-#: ../gtk/gtkbox.c:306
+#: ../gtk/gtkbox.c:303
 msgid "Pack type"
 msgstr "بوغچا تىپى"
 
-#: ../gtk/gtkbox.c:307
+#: ../gtk/gtkbox.c:304
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
 msgstr "تارماق بۆلەكنىڭ ئاتا بۆلەكنىڭ باشلاش ياكى ئاخىرلىشىش ئىچىدىكى GtkPackType قىممىتى تەركىبىدە بار يوقلۇقىنى ئىپادىلەيدۇ"
 
-#: ../gtk/gtkbox.c:313 ../gtk/gtknotebook.c:768 ../gtk/gtkpaned.c:348
+#: ../gtk/gtkbox.c:310 ../gtk/gtknotebook.c:768 ../gtk/gtkpaned.c:348
 #: ../gtk/gtktoolitemgroup.c:1678
 msgid "Position"
 msgstr "ئورنى"
 
-#: ../gtk/gtkbox.c:314 ../gtk/gtknotebook.c:769
+#: ../gtk/gtkbox.c:311 ../gtk/gtknotebook.c:769
 msgid "The index of the child in the parent"
 msgstr "تارماق بۆلەكنىڭ ئاتا بۆلەكتىكى ئىندېكسى"
 
@@ -1300,7 +1281,7 @@ msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "ئەگەر تەڭشەلسە، ئەن زاپاس تۈرنى ئېلىشقا ئىشلىتىلىپ، تۈر كۆرسىتىشكە ئىشلىتىلمەيدۇ"
 
-#: ../gtk/gtkbutton.c:256 ../gtk/gtkcombobox.c:857
+#: ../gtk/gtkbutton.c:256 ../gtk/gtkcombobox.c:854
 #: ../gtk/gtkfilechooserbutton.c:425
 msgid "Focus on click"
 msgstr "چېكىپ فوكۇسقا ئېرىش"
@@ -1509,7 +1490,7 @@ msgstr "توغرىسىغا بۆلۈش"
 msgid "Space between week headers and main area"
 msgstr "ھەپتە ماۋزۇسى بىلەن ئاساسىي دائىرە ئارىسىدىكى بوشلۇق"
 
-#: ../gtk/gtkcellareabox.c:316 ../gtk/gtktreeviewcolumn.c:283
+#: ../gtk/gtkcellareabox.c:316 ../gtk/gtktreeviewcolumn.c:281
 msgid "Space which is inserted between cells"
 msgstr "كاتەكچە ئارىسىغا قىستۇرۇلغان بوشلۇق"
 
@@ -1576,7 +1557,7 @@ msgid "The Cell Area this context was created for"
 msgstr "كاتەكچە دائىرىسىدە قۇرۇلغان"
 
 #: ../gtk/gtkcellareacontext.c:134 ../gtk/gtkcellareacontext.c:153
-#: ../gtk/gtktreeviewcolumn.c:310
+#: ../gtk/gtktreeviewcolumn.c:308
 msgid "Minimum Width"
 msgstr "ئەڭ كىچىك كەڭلىكى"
 
@@ -1753,7 +1734,6 @@ msgid "Cell background set"
 msgstr "كاتەكچە تەگلىك تەڭشىكى"
 
 #: ../gtk/gtkcellrenderer.c:428
-#| msgid "Whether this tag affects the cell background color"
 msgid "Whether the cell background color is set"
 msgstr "كاتەكچە تەگلىك رەڭگى تەڭشىلەمدۇ يوق"
 
@@ -1773,7 +1753,7 @@ msgstr "تېكىست ئىستونى"
 msgid "A column in the data source model to get the strings from"
 msgstr "تېكىستنىڭ سانلىق-مەلۇمات مەنبە ئەندىزىسىگە ئېرىشىشكە ئىشلىتىدىغان بىر ئىستون"
 
-#: ../gtk/gtkcellrenderercombo.c:169 ../gtk/gtkcombobox.c:924
+#: ../gtk/gtkcellrenderercombo.c:169 ../gtk/gtkcombobox.c:921
 msgid "Has Entry"
 msgstr "تۈر بار"
 
@@ -1783,7 +1763,7 @@ msgstr "ئەگەر FALSE بولسا، تاللانغان تۈردىن باشقا
 
 #: ../gtk/gtkcellrendererpixbuf.c:151
 msgid "Pixbuf Object"
-msgstr "Pixbuf ئوبيېكتى"
+msgstr "پىكىسبۇف(pixbuf) ئوبيېكتى"
 
 #: ../gtk/gtkcellrendererpixbuf.c:152
 msgid "The pixbuf to render"
@@ -1850,7 +1830,7 @@ msgstr "سۈرئەت بالداقنىڭ قىممىتى"
 
 #: ../gtk/gtkcellrendererprogress.c:154 ../gtk/gtkcellrenderertext.c:255
 #: ../gtk/gtkentrybuffer.c:350 ../gtk/gtkentry.c:841
-#: ../gtk/gtkmessagedialog.c:230 ../gtk/gtkprogressbar.c:174
+#: ../gtk/gtkmessagedialog.c:230 ../gtk/gtkprogressbar.c:173
 #: ../gtk/gtktextbuffer.c:219
 msgid "Text"
 msgstr "تېكىست"
@@ -1888,13 +1868,13 @@ msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "تىك يۆنىلىشتىكى تېكىستنىڭ توغرىلىنىش ئۇسۇلى، 0 (ئۈستى) دىن 1 (ئاستى) غا توغرىلىنىدۇ."
 
 #: ../gtk/gtkcellrendererprogress.c:224 ../gtk/gtklevelbar.c:991
-#: ../gtk/gtkprogressbar.c:150 ../gtk/gtkrange.c:432
+#: ../gtk/gtkprogressbar.c:149 ../gtk/gtkrange.c:432
 msgid "Inverted"
 msgstr "تەتۈر"
 
-#: ../gtk/gtkcellrendererprogress.c:225 ../gtk/gtkprogressbar.c:151
+#: ../gtk/gtkcellrendererprogress.c:225 ../gtk/gtkprogressbar.c:150
 msgid "Invert the direction in which the progress bar grows"
-msgstr "تەتۈر يۆنىلىشتىكى سۈرئەت بالداقنىڭ ئارتىش يۆنىلىشى"
+msgstr "سۈرئەت بالدىقىنىڭ ئېشىش يۆنىلىشىنى تەتۈر قىلىدۇ"
 
 #: ../gtk/gtkcellrendererspin.c:113 ../gtk/gtkrange.c:424
 #: ../gtk/gtkscalebutton.c:237 ../gtk/gtkspinbutton.c:336
@@ -1956,7 +1936,7 @@ msgstr "سىزىدىغان تېكىست"
 #: ../gtk/gtkcellrenderertext.c:271 ../gtk/gtkentry.c:1410
 #: ../gtk/gtklabel.c:728
 msgid "Attributes"
-msgstr "خاسلىق"
+msgstr "خاسلىقلار"
 
 #: ../gtk/gtkcellrenderertext.c:272
 msgid "A list of style attributes to apply to the text of the renderer"
@@ -2135,7 +2115,7 @@ msgid ""
 msgstr "بۇ تېكىست ئىشلەتكەن تىل ISO كودلىنىشىدا ئىپادىلىنىدۇ. Pango بۇ تەڭشەكنى تېكىست كۆرسەتكەندىكى ئەسكەرتىش قىلىپ ئىشلىتىدۇ. ئەگەر بۇ پارامېتىرنى چۈشەنمىسىڭىز ھېچقىسى يوق"
 
 #: ../gtk/gtkcellrenderertext.c:514 ../gtk/gtklabel.c:853
-#: ../gtk/gtkprogressbar.c:218
+#: ../gtk/gtkprogressbar.c:217
 msgid "Ellipsize"
 msgstr "قىسقارتما"
 
@@ -2172,7 +2152,7 @@ msgid ""
 "have enough room to display the entire string"
 msgstr "ئەگەر كاتەكچە رەڭلىگۈچتە پۈتكۈل تېكىستنى كۆرسىتىشكە يېتەرلىك بوشلۇق بولمىسا، بۇ جايدا ھەرپ تىزىقىنى كۆپ قۇرغا پارچىلاش ئۇسۇلى كۆرسىتىلگەن."
 
-#: ../gtk/gtkcellrenderertext.c:598 ../gtk/gtkcombobox.c:746
+#: ../gtk/gtkcellrenderertext.c:598 ../gtk/gtkcombobox.c:743
 msgid "Wrap width"
 msgstr "قۇر قاتلاش كەڭلىكى"
 
@@ -2180,7 +2160,7 @@ msgstr "قۇر قاتلاش كەڭلىكى"
 msgid "The width at which the text is wrapped"
 msgstr "قۇر قاتلايدىغان تېكىستنىڭ كەڭلىكى"
 
-#: ../gtk/gtkcellrenderertext.c:619 ../gtk/gtktreeviewcolumn.c:363
+#: ../gtk/gtkcellrenderertext.c:619 ../gtk/gtktreeviewcolumn.c:361
 msgid "Alignment"
 msgstr "توغرىلاش"
 
@@ -2379,15 +2359,15 @@ msgstr "CellView مودېلى"
 msgid "The model for cell view"
 msgstr "كاتەكچە كۆرۈنۈشنىڭ مودېلى"
 
-#: ../gtk/gtkcellview.c:252 ../gtk/gtkcombobox.c:1010
+#: ../gtk/gtkcellview.c:252 ../gtk/gtkcombobox.c:1007
 #: ../gtk/gtkentrycompletion.c:451 ../gtk/gtkiconview.c:637
-#: ../gtk/gtktreemenu.c:332 ../gtk/gtktreeviewcolumn.c:426
+#: ../gtk/gtktreemenu.c:332 ../gtk/gtktreeviewcolumn.c:424
 msgid "Cell Area"
 msgstr "كاتەكچە دائىرىسى"
 
-#: ../gtk/gtkcellview.c:253 ../gtk/gtkcombobox.c:1011
+#: ../gtk/gtkcellview.c:253 ../gtk/gtkcombobox.c:1008
 #: ../gtk/gtkentrycompletion.c:452 ../gtk/gtkiconview.c:638
-#: ../gtk/gtktreemenu.c:333 ../gtk/gtktreeviewcolumn.c:427
+#: ../gtk/gtktreemenu.c:333 ../gtk/gtktreeviewcolumn.c:425
 msgid "The GtkCellArea used to layout cells"
 msgstr "GtkCellArea ئىشلىتىپ كاتەكچە ئۇسلۇبى لايىھىلىنىدۇ"
 
@@ -2457,7 +2437,7 @@ msgstr "رەڭنىڭ ئالفا قىممىتىنى بېرەمدۇ يوق"
 
 #: ../gtk/gtkcolorbutton.c:186 ../gtk/gtkfilechooserbutton.c:439
 #: ../gtk/gtkfontbutton.c:434 ../gtk/gtkprintjob.c:139
-#: ../gtk/gtkstatusicon.c:426 ../gtk/gtktreeviewcolumn.c:330
+#: ../gtk/gtkstatusicon.c:426 ../gtk/gtktreeviewcolumn.c:328
 msgid "Title"
 msgstr "ماۋزۇ"
 
@@ -2482,37 +2462,30 @@ msgid "The selected RGBA color"
 msgstr "تاللانغان RGBA رېڭى"
 
 #: ../gtk/gtkcolorchooser.c:67
-#| msgid "Color Hash"
 msgid "Color"
 msgstr "رەڭ"
 
 #: ../gtk/gtkcolorchooser.c:68
-#| msgid "Foreground color as a GdkRGBA"
 msgid "Current color, as a GdkRGBA"
 msgstr "نۆۋەتتىكى رەڭ، GdkRGBA دەك"
 
 #: ../gtk/gtkcolorchooser.c:88
-#| msgid "Whether tabs should be shown"
 msgid "Whether alpha should be shown"
 msgstr "ئالفا كۆرسىتىلسۇنمۇ"
 
 #: ../gtk/gtkcolorchooserdialog.c:258 ../gtk/gtkcolorchooserwidget.c:675
-#| msgid "Show text"
 msgid "Show editor"
 msgstr "تەھرىرلىگۈچنى كۆرسەت"
 
 #: ../gtk/gtkcolorscale.c:383
-#| msgid "Page type"
 msgid "Scale type"
 msgstr "ئۆلچەك تىپى"
 
 #: ../gtk/gtkcolorswatch.c:775
-#| msgid "Current RGBA Color"
 msgid "RGBA Color"
 msgstr "RGBA رەڭ"
 
 #: ../gtk/gtkcolorswatch.c:775
-#| msgid "Color Hash"
 msgid "Color as RGBA"
 msgstr "RGBA دەك رەڭ"
 
@@ -2521,155 +2494,154 @@ msgid "Selectable"
 msgstr "تاللاشچان"
 
 #: ../gtk/gtkcolorswatch.c:778
-#| msgid "Whether the tab is detachable"
 msgid "Whether the swatch is selectable"
 msgstr "swatch تاللاشچانمۇ ئەمەسمۇ"
 
-#: ../gtk/gtkcombobox.c:729
+#: ../gtk/gtkcombobox.c:726
 msgid "ComboBox model"
 msgstr "بىرىكمە رامكا مودېلى"
 
-#: ../gtk/gtkcombobox.c:730
+#: ../gtk/gtkcombobox.c:727
 msgid "The model for the combo box"
 msgstr "بىرىكمە رامكا مودېلى"
 
-#: ../gtk/gtkcombobox.c:747
+#: ../gtk/gtkcombobox.c:744
 msgid "Wrap width for laying out the items in a grid"
 msgstr "سېتكىدا تۈرلەرنى تىزغاندىكى قۇر قاتلاش كەڭلىكى"
 
-#: ../gtk/gtkcombobox.c:769 ../gtk/gtktreemenu.c:386
+#: ../gtk/gtkcombobox.c:766 ../gtk/gtktreemenu.c:386
 msgid "Row span column"
 msgstr "قۇر ئىستون ھالقىش"
 
-#: ../gtk/gtkcombobox.c:770 ../gtk/gtktreemenu.c:387
+#: ../gtk/gtkcombobox.c:767 ../gtk/gtktreemenu.c:387
 msgid "TreeModel column containing the row span values"
 msgstr "قۇر ئاتلاش قىممىتىنى ئۆز ئىچىگە ئالغاندىكى دەرەخسىمان ئىستون"
 
-#: ../gtk/gtkcombobox.c:791 ../gtk/gtktreemenu.c:407
+#: ../gtk/gtkcombobox.c:788 ../gtk/gtktreemenu.c:407
 msgid "Column span column"
 msgstr "ئىستون ئىستون ھالقىش"
 
-#: ../gtk/gtkcombobox.c:792 ../gtk/gtktreemenu.c:408
+#: ../gtk/gtkcombobox.c:789 ../gtk/gtktreemenu.c:408
 msgid "TreeModel column containing the column span values"
 msgstr "ئىستون ئاتلاش قىممىتىنى ئۆز ئىچىگە ئالغاندىكى دەرەخسىمان ئىستون"
 
-#: ../gtk/gtkcombobox.c:813
+#: ../gtk/gtkcombobox.c:810
 msgid "Active item"
 msgstr "ئاكتىپ تۈر"
 
-#: ../gtk/gtkcombobox.c:814
+#: ../gtk/gtkcombobox.c:811
 msgid "The item which is currently active"
 msgstr "نۆۋەتتە ئاكتىپلانغان تۈر"
 
-#: ../gtk/gtkcombobox.c:833 ../gtk/gtkuimanager.c:487
+#: ../gtk/gtkcombobox.c:830 ../gtk/gtkuimanager.c:487
 msgid "Add tearoffs to menus"
 msgstr "تىزىملىككە يىرتىش بەلگىسى قوش"
 
-#: ../gtk/gtkcombobox.c:834
+#: ../gtk/gtkcombobox.c:831
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "تارتما تىزىملىكتە يىرتىش بەلگىسى بولامدۇ يوق"
 
-#: ../gtk/gtkcombobox.c:849 ../gtk/gtkentry.c:780
+#: ../gtk/gtkcombobox.c:846 ../gtk/gtkentry.c:780
 msgid "Has Frame"
 msgstr "كاندۇك بار"
 
-#: ../gtk/gtkcombobox.c:850
+#: ../gtk/gtkcombobox.c:847
 msgid "Whether the combo box draws a frame around the child"
 msgstr "بىرىكمە رامكا تارماق تۈرنىڭ چۆرىسىدە گىرۋەك بارمۇ يوق"
 
-#: ../gtk/gtkcombobox.c:858
+#: ../gtk/gtkcombobox.c:855
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "چاشقىنەكتە بىرىكمە رامكىنى چەككەندە بىرىكمە رامكا فوكۇس نۇقتىغا ئېرىشەمدۇ يوق"
 
-#: ../gtk/gtkcombobox.c:873 ../gtk/gtkmenu.c:609
+#: ../gtk/gtkcombobox.c:870 ../gtk/gtkmenu.c:609
 msgid "Tearoff Title"
 msgstr "قاتلىما ماۋزۇ"
 
-#: ../gtk/gtkcombobox.c:874
+#: ../gtk/gtkcombobox.c:871
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr "بۇ قاڭقىش يىرتىلغاندا كۆزنەك باشقۇرغۇچ كۆرسىتىدىغان ماۋزۇ"
 
-#: ../gtk/gtkcombobox.c:891
+#: ../gtk/gtkcombobox.c:888
 msgid "Popup shown"
 msgstr "قاڭقىش كۆرۈندى"
 
-#: ../gtk/gtkcombobox.c:892
+#: ../gtk/gtkcombobox.c:889
 msgid "Whether the combo's dropdown is shown"
 msgstr "بىرىكمە رامكىنىڭ تارتما توپچىسىنى كۆرسىتەمدۇ يوق"
 
-#: ../gtk/gtkcombobox.c:908
+#: ../gtk/gtkcombobox.c:905
 msgid "Button Sensitivity"
 msgstr "توپچا سەزگۈرلۈكى"
 
-#: ../gtk/gtkcombobox.c:909
+#: ../gtk/gtkcombobox.c:906
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "مودېل بوش بولغاندا تارتما توپچا سەزگۈرمۇ يوق"
 
-#: ../gtk/gtkcombobox.c:925
+#: ../gtk/gtkcombobox.c:922
 msgid "Whether combo box has an entry"
 msgstr "بىرىكمە رامكا تۈرى بارمۇ يوق"
 
-#: ../gtk/gtkcombobox.c:940
+#: ../gtk/gtkcombobox.c:937
 msgid "Entry Text Column"
 msgstr "تۈر تېكىست ئىستونى"
 
-#: ../gtk/gtkcombobox.c:941
+#: ../gtk/gtkcombobox.c:938
 msgid ""
 "The column in the combo box's model to associate with strings from the entry "
 "if the combo was created with #GtkComboBox:has-entry = %TRUE"
 msgstr "ئەگەر بىرىكمە رامكا #GtkComboBox:has-entry = %TRUE ئارقىلىق قۇرۇلغان بولسا، بىرىكمە رامكا مودېلىدىكى بۇ ئىستون كىرگۈزگۈچ تىزگىنىدىكى ھەرپ تىزىقىغا باغلىنىدۇ"
 
-#: ../gtk/gtkcombobox.c:958
+#: ../gtk/gtkcombobox.c:955
 msgid "ID Column"
 msgstr "كىملىك ئىستون"
 
-#: ../gtk/gtkcombobox.c:959
+#: ../gtk/gtkcombobox.c:956
 msgid ""
 "The column in the combo box's model that provides string IDs for the values "
 "in the model"
 msgstr "بىرىكمە رامكىدىكى بۇ ئىستون مودېلدىكى قىممەتنىڭ ھەرپ تىزما ID نى تەمىنلىدى"
 
-#: ../gtk/gtkcombobox.c:974
+#: ../gtk/gtkcombobox.c:971
 msgid "Active id"
 msgstr "ئاكتىپ كىملىك"
 
-#: ../gtk/gtkcombobox.c:975
+#: ../gtk/gtkcombobox.c:972
 msgid "The value of the id column for the active row"
 msgstr "ئاكتىپ قۇرنىڭ كىملىك قۇرى قىممىتى"
 
-#: ../gtk/gtkcombobox.c:990
+#: ../gtk/gtkcombobox.c:987
 msgid "Popup Fixed Width"
 msgstr "قاڭقىش كۆزنىكىنىڭ مۇقىم كەڭلىكى"
 
-#: ../gtk/gtkcombobox.c:991
+#: ../gtk/gtkcombobox.c:988
 msgid ""
 "Whether the popup's width should be a fixed width matching the allocated "
 "width of the combo box"
 msgstr "قاڭقىغان كەڭلىك بىرىكمە رامكىغا تەقسىملەنگەن كەڭلىككە تەقسىملەنگەن مۇقىم كەڭلىك بىلەن ماسلىشامدۇ يوق"
 
-#: ../gtk/gtkcombobox.c:1017
+#: ../gtk/gtkcombobox.c:1014
 msgid "Appears as list"
 msgstr "تىزىمدەك كۆرۈنىدۇ"
 
-#: ../gtk/gtkcombobox.c:1018
+#: ../gtk/gtkcombobox.c:1015
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "تارتما تىزىملىكتەك ئەمەس تىزىمدەك كۆرۈنەمدۇ يوق"
 
-#: ../gtk/gtkcombobox.c:1034
+#: ../gtk/gtkcombobox.c:1031
 msgid "Arrow Size"
 msgstr "يا ئوق چوڭلۇقى"
 
-#: ../gtk/gtkcombobox.c:1035
+#: ../gtk/gtkcombobox.c:1032
 msgid "The minimum size of the arrow in the combo box"
 msgstr "بىرىكمە رامكىدىكى يا ئوقنىڭ ئەڭ كىچىك چوڭلۇقى"
 
-#: ../gtk/gtkcombobox.c:1052
+#: ../gtk/gtkcombobox.c:1049
 msgid "The amount of space used by the arrow"
 msgstr "يا ئوق ئىگىلىگەن بوشلۇق چوڭلۇقى"
 
-#: ../gtk/gtkcombobox.c:1068
+#: ../gtk/gtkcombobox.c:1065
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "بىرىكمە رامكىنىڭ گىرۋىكى قايسى خىل سايە تاشلايدۇ"
 
@@ -2702,17 +2674,14 @@ msgid "Subproperties"
 msgstr "تارماق خاسلىقى"
 
 #: ../gtk/gtkcssshorthandproperty.c:159
-#| msgid "The status of the print operation"
 msgid "The list of subproperties"
 msgstr "تارماق خاسلىقلارنىڭ تىزىمى"
 
 #: ../gtk/gtkcssstyleproperty.c:275
-#| msgid "Animation"
 msgid "Animated"
 msgstr "ھەرىكەتچان"
 
 #: ../gtk/gtkcssstyleproperty.c:276
-#| msgid "Whether the header can be clicked"
 msgid "Set if the value can be animated"
 msgstr "قىممەت ھەرىكەتچان بولسا بەلگىلىسۇن"
 
@@ -2729,7 +2698,6 @@ msgid "Affects font"
 msgstr "خەت نۇسخىسىغا تەسىر قىلسۇن"
 
 #: ../gtk/gtkcssstyleproperty.c:290
-#| msgid "Whether this tag affects the font size"
 msgid "Set if the value affects the font"
 msgstr "ئەگەر بەلگىلەنسە، خەت نۇسخىسىغا تەسىر قىلىدۇ"
 
@@ -3112,7 +3080,6 @@ msgid "Which IM module should be used"
 msgstr "قايسى كىرگۈزگۈچ بۆلىكى ئىشلىتىلىدۇ"
 
 #: ../gtk/gtkentry.c:1353
-#| msgid "Completion Model"
 msgid "Completion"
 msgstr "تاماملاش"
 
@@ -3125,7 +3092,6 @@ msgid "Purpose"
 msgstr "ئىشلىتىلىشى"
 
 #: ../gtk/gtkentry.c:1376 ../gtk/gtkimcontext.c:333 ../gtk/gtktextview.c:831
-#| msgid "Pulse of the spinner"
 msgid "Purpose of the text field"
 msgstr "تېكىست كۆزنەكچىنىڭ ئىشلىتىلىش ئورنى"
 
@@ -3287,7 +3253,6 @@ msgid "Whether the label widget should fill all available horizontal space"
 msgstr "ئەن ۋىجېتى ئىشلەتكىلى بولىدىغان ھەممە توغرا يۆنىلىشتىكى بوشلۇقنى تولدۇرامدۇ يوق"
 
 #: ../gtk/gtkexpander.c:346
-#| msgid "Resize mode"
 msgid "Resize toplevel"
 msgstr "ئەڭ ئۈستى كۆزنەك چوڭلۇقىنى ئۆزگەرت"
 
@@ -3298,12 +3263,12 @@ msgid ""
 msgstr "كېڭەيتكۈچ يېيىلغان ياكى قاتلانغاندا ئەڭ ئۈستىدىكى كۆزنەكنىڭ چوڭلۇقىنى تەڭشەمدۇ يوق"
 
 #: ../gtk/gtkexpander.c:353 ../gtk/gtktoolitemgroup.c:1632
-#: ../gtk/gtktreeview.c:1195
+#: ../gtk/gtktreeview.c:1185
 msgid "Expander Size"
 msgstr "كېڭەيتكۈچ چوڭلۇقى"
 
 #: ../gtk/gtkexpander.c:354 ../gtk/gtktoolitemgroup.c:1633
-#: ../gtk/gtktreeview.c:1196
+#: ../gtk/gtktreeview.c:1186
 msgid "Size of the expander arrow"
 msgstr "كېڭەيتكۈچ يا ئوقىنىڭ چوڭلۇقى"
 
@@ -3420,7 +3385,7 @@ msgid ""
 "folders."
 msgstr "ھۆججەت تاللىغۇچ ئوچۇق ھالەتتە بولمىغاندا ئىشلەتكۈچى يېڭى قىسقۇچ قۇرالامدۇ يوق."
 
-#: ../gtk/gtkfixed.c:150 ../gtk/gtklayout.c:646 ../gtk/gtktreeviewcolumn.c:263
+#: ../gtk/gtkfixed.c:150 ../gtk/gtklayout.c:646 ../gtk/gtktreeviewcolumn.c:261
 msgid "X position"
 msgstr "X ئورنى"
 
@@ -3437,7 +3402,6 @@ msgid "Y position of child widget"
 msgstr "تارماق ۋىجېتنىڭ Y ئورنى"
 
 #: ../gtk/gtkfontbutton.c:435
-#| msgid "The title of the file chooser dialog."
 msgid "The title of the font chooser dialog"
 msgstr "خەت نۇسخا تاللاش سۆزلەشكۈسىنىڭ ماۋزۇسى"
 
@@ -3482,17 +3446,14 @@ msgid "Whether selected font size is shown in the label"
 msgstr "ئەندە تاللانغان خەت نۇسخا چوڭلۇقىنى كۆرسىتەمدۇ يوق"
 
 #: ../gtk/gtkfontchooser.c:78
-#| msgid "Font options"
 msgid "Font description"
 msgstr "خەت نۇسخىسىنىڭ چۈشەندۈرۈلۈشى"
 
 #: ../gtk/gtkfontchooser.c:104
-#| msgid "Preview text"
 msgid "Show preview text entry"
 msgstr "ئالدىن كۆرۈش تېكىستىنى كۆرسىتىش"
 
 #: ../gtk/gtkfontchooser.c:105
-#| msgid "Whether the switch is on or off"
 msgid "Whether the preview text entry is shown or not"
 msgstr "ئالدىن كۆرۈش تېكىستى كۆرسىتىلەمدۇ يوق"
 
@@ -3548,7 +3509,7 @@ msgstr "ئەگەر TRUE بولسا، ئىستوننىڭ ھەممىسى ئوخش�
 msgid "The row number to attach the top side of a child widget to"
 msgstr "تارماق ۋىجېتنىڭ ئۈستى تەرىپىنى قايسى قۇرغا قوشىدۇ"
 
-#: ../gtk/gtkgrid.c:1434 ../gtk/gtklayout.c:672 ../gtk/gtktreeviewcolumn.c:273
+#: ../gtk/gtkgrid.c:1434 ../gtk/gtklayout.c:672 ../gtk/gtktreeviewcolumn.c:271
 msgid "Width"
 msgstr "كەڭلىك"
 
@@ -3653,16 +3614,16 @@ msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr "ھەر بىر تۈرلۈك تېكىست ۋە سىنبەلگىنىڭ نىسپىي ئورنى"
 
-#: ../gtk/gtkiconview.c:593 ../gtk/gtktreeview.c:1030
-#: ../gtk/gtktreeviewcolumn.c:373
+#: ../gtk/gtkiconview.c:593 ../gtk/gtktreeview.c:1020
+#: ../gtk/gtktreeviewcolumn.c:371
 msgid "Reorderable"
 msgstr "قايتا تەرتىپلىنىشچان"
 
-#: ../gtk/gtkiconview.c:594 ../gtk/gtktreeview.c:1031
+#: ../gtk/gtkiconview.c:594 ../gtk/gtktreeview.c:1021
 msgid "View is reorderable"
 msgstr "كۆرۈنۈشنى قايتا تەرتىپلەشكە بولىدۇ"
 
-#: ../gtk/gtkiconview.c:601 ../gtk/gtktreeview.c:1181
+#: ../gtk/gtkiconview.c:601 ../gtk/gtktreeview.c:1171
 msgid "Tooltip Column"
 msgstr "كۆرسەتمە ئىستونى"
 
@@ -3723,7 +3684,7 @@ msgstr "سىنبەلگە توپلىمى"
 msgid "Icon set to display"
 msgstr "كۆرسىتىلىدىغان سىنبەلگە توپلىمى"
 
-#: ../gtk/gtkimage.c:249 ../gtk/gtkscalebutton.c:228 ../gtk/gtktoolbar.c:530
+#: ../gtk/gtkimage.c:249 ../gtk/gtkscalebutton.c:228 ../gtk/gtktoolbar.c:527
 #: ../gtk/gtktoolpalette.c:1013
 msgid "Icon size"
 msgstr "سىنبەلگە چوڭلۇقى"
@@ -3801,7 +3762,7 @@ msgid "Width of border around the action area"
 msgstr "مەشغۇلات دائىرىسىنىڭ ئەتراپىدىكى گىرۋەك كەڭلىكى"
 
 #: ../gtk/gtkinvisible.c:101 ../gtk/gtkmountoperation.c:179
-#: ../gtk/gtkstatusicon.c:290 ../gtk/gtkstylecontext.c:442
+#: ../gtk/gtkstatusicon.c:290 ../gtk/gtkstylecontext.c:441
 #: ../gtk/gtkwindow.c:781
 msgid "Screen"
 msgstr "ئېكران"
@@ -3922,17 +3883,14 @@ msgid "Currently filled value level of the level bar"
 msgstr "دەرىجە بالدىقىدىكى نۆۋەتتە تولدۇرۇلغان قىممەتنىڭ دەرىجىسى"
 
 #: ../gtk/gtklevelbar.c:941
-#| msgid "The minimum value of the adjustment"
 msgid "Minimum value level for the bar"
 msgstr "بالداقنىڭ ئەڭ كىچىك قىممەت دەرىجىسى"
 
 #: ../gtk/gtklevelbar.c:942
-#| msgid "The number of decimal places that are displayed in the value"
 msgid "Minimum value level that can be displayed by the bar"
 msgstr "بالداق كۆرسىتەلەيدىغان ئەڭ كىچىك قىممەت دەرىجىسى "
 
 #: ../gtk/gtklevelbar.c:955
-#| msgid "The maximum value of the adjustment"
 msgid "Maximum value level for the bar"
 msgstr "بالداقنىڭ ئەڭ چوڭ قىممەت دەرىجىسى"
 
@@ -3941,37 +3899,30 @@ msgid "Maximum value level that can be displayed by the bar"
 msgstr "بالداق كۆرسىتەلەيدىغان ئەڭ چوڭ قىممەت دەرىجىسى "
 
 #: ../gtk/gtklevelbar.c:975
-#| msgid "The modifier mask of the accelerator"
 msgid "The mode of the value indicator"
 msgstr "قىممەت كۆرسەتكۈچنىڭ ھالىتى(mode)"
 
 #: ../gtk/gtklevelbar.c:976
-#| msgid "The name of the themed icon displayed on the item"
 msgid "The mode of the value indicator displayed by the bar"
 msgstr "بالداق كۆرسىتىدىغان قىممەت كۆرسەتكۈچنىڭ ھالىتى(mode)"
 
 #: ../gtk/gtklevelbar.c:992
-#| msgid "Invert the direction in which the progress bar grows"
 msgid "Invert the direction in which the level bar grows"
-msgstr ""
+msgstr "دەرىجە بالدىقىنىڭ ئېشىش يۆنىلىشىنى تەتۈر قىلىش"
 
 #: ../gtk/gtklevelbar.c:1006
-#| msgid "Minimum height of buttons inside the box"
 msgid "Minimum height for filling blocks"
 msgstr "تولدۇرىدىغان بۆلەكنىڭ ئەڭ كىچىك ئېگىزلىكى"
 
 #: ../gtk/gtklevelbar.c:1007
-#| msgid "Minimum height of buttons inside the box"
 msgid "Minimum height for blocks that fill the bar"
 msgstr "بالداق تولدۇرىدىغان بۆلەكنىڭ ئەڭ كىچىك ئېگىزلىكى"
 
 #: ../gtk/gtklevelbar.c:1020
-#| msgid "Minimum width of buttons inside the box"
 msgid "Minimum width for filling blocks"
 msgstr "تولدۇرىدىغان بۆلەكنىڭ ئەڭ چوڭ ئېگىزلىكى"
 
 #: ../gtk/gtklevelbar.c:1021
-#| msgid "Minimum width of buttons inside the box"
 msgid "Minimum width for blocks that fill the bar"
 msgstr "بالداق تولدۇرىدىغان بۆلەكنىڭ ئەڭ چوڭ ئېگىزلىكى"
 
@@ -4000,12 +3951,10 @@ msgid "The GPermission object controlling this button"
 msgstr "مەزكۇر توپچىنى تىزگىنلەيدىغان GPermission نەڭى"
 
 #: ../gtk/gtklockbutton.c:288
-#| msgid "Text"
 msgid "Lock Text"
 msgstr "قۇلۇپلاش تېكىستى"
 
 #: ../gtk/gtklockbutton.c:289
-#| msgid "The text to display in order to demonstrate the selected font"
 msgid "The text to display when prompting the user to lock"
 msgstr "قۇلۇپلايدىغان چاغدا ئىشلەتكۈچىگە كۆرسىتىدىغان تېكىست"
 
@@ -4014,12 +3963,10 @@ msgid "Unlock Text"
 msgstr "قۇلۇپسىزلاش تېكىستى"
 
 #: ../gtk/gtklockbutton.c:298
-#| msgid "The text to display in order to demonstrate the selected font"
 msgid "The text to display when prompting the user to unlock"
 msgstr "قۇلۇپسىزلايدىغان چاغدا ئىشلەتكۈچىگە كۆرسىتىدىغان تېكىست"
 
 #: ../gtk/gtklockbutton.c:306
-#| msgid "Tooltip"
 msgid "Lock Tooltip"
 msgstr "قۇلۇپلاش كۆرسەتمىسى"
 
@@ -4028,7 +3975,6 @@ msgid "The tooltip to display when prompting the user to lock"
 msgstr "قۇلۇپلايدىغان چاغدا ئىشلەتكۈچىگە كۆرسىتىدىغان كۆرسەتمە"
 
 #: ../gtk/gtklockbutton.c:315
-#| msgid "Enable Tooltips"
 msgid "Unlock Tooltip"
 msgstr "قۇلۇپسىزلاش كۆرسەتمىسى"
 
@@ -4065,7 +4011,7 @@ msgstr "تىزىملىك بالداقنىڭ تارماق قاتلاش يۆنىل
 msgid "Style of bevel around the menubar"
 msgstr "تىزىملىك بالداق ئەتراپىنىڭ يانتۇلۇق ئۇسلۇبى"
 
-#: ../gtk/gtkmenubar.c:230 ../gtk/gtktoolbar.c:589
+#: ../gtk/gtkmenubar.c:230 ../gtk/gtktoolbar.c:586
 msgid "Internal padding"
 msgstr "ئىچكى تولدۇرما"
 
@@ -4078,22 +4024,18 @@ msgid "popup"
 msgstr "سەكرىمە"
 
 #: ../gtk/gtkmenubutton.c:516
-#| msgid "The dropdown menu"
 msgid "The dropdown menu."
 msgstr "تارتما تىزىملىك."
 
 #: ../gtk/gtkmenubutton.c:532
-#| msgid "TreeMenu model"
 msgid "menu-model"
 msgstr "تىزىملىك-مودېل"
 
 #: ../gtk/gtkmenubutton.c:533
-#| msgid "The dropdown menu"
 msgid "The dropdown menu's model."
 msgstr "تارتما تىزىملىكنىڭ مودېلى."
 
 #: ../gtk/gtkmenubutton.c:546
-#| msgid "Image widget"
 msgid "align-widget"
 msgstr ""
 
@@ -4102,12 +4044,10 @@ msgid "The parent widget which the menu should align with."
 msgstr ""
 
 #: ../gtk/gtkmenubutton.c:561
-#| msgid "Direction"
 msgid "direction"
 msgstr "يۆنىلىش"
 
 #: ../gtk/gtkmenubutton.c:562
-#| msgid "The direction the arrow should point"
 msgid "The direction the arrow should point."
 msgstr "يا ئوق كۆرسىتىدىغان يۆنىلىش."
 
@@ -4386,7 +4326,7 @@ msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "ۋىجېتنىڭ ئۈستى ئاستى ئىككى تەرەپتىن قالدۇرۇلغان پىكسېل بىلەن ئۆلچىنىدىغان زىيادە بوشلۇق"
 
-#: ../gtk/gtkmountoperation.c:163 ../gtk/gtkstylecontext.c:465
+#: ../gtk/gtkmountoperation.c:163 ../gtk/gtkstylecontext.c:464
 msgid "Parent"
 msgstr "ئاتا"
 
@@ -4512,7 +4452,7 @@ msgstr "بەتكۈچ پارچىلىنىشچان"
 msgid "Whether the tab is detachable"
 msgstr "بەتكۈچنى پارچىلىغىلى بولامدۇ يوق"
 
-#: ../gtk/gtknotebook.c:813 ../gtk/gtkscrollbar.c:102
+#: ../gtk/gtknotebook.c:813 ../gtk/gtkscrollbar.c:100
 msgid "Secondary backward stepper"
 msgstr "ئىككىنچى تەتۈر Stepper"
 
@@ -4521,7 +4461,7 @@ msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr "بەتكۈچ دائىرىسىنىڭ يەنە بىر تەرىپىدە ئىككىنچى تەتۈر يا ئوقنى كۆرسىتىدۇ"
 
-#: ../gtk/gtknotebook.c:829 ../gtk/gtkscrollbar.c:109
+#: ../gtk/gtknotebook.c:829 ../gtk/gtkscrollbar.c:107
 msgid "Secondary forward stepper"
 msgstr "ئىككىنچى ئوڭ Stepper"
 
@@ -4530,19 +4470,19 @@ msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr "بەتكۈچ دائىرىسىنىڭ يەنە بىر تەرىپىدە ئىككىنچى ئوڭ يا ئوقنى كۆرسىتىدۇ"
 
-#: ../gtk/gtknotebook.c:844 ../gtk/gtkscrollbar.c:88
+#: ../gtk/gtknotebook.c:844 ../gtk/gtkscrollbar.c:86
 msgid "Backward stepper"
 msgstr "تەتۈر Stepper"
 
-#: ../gtk/gtknotebook.c:845 ../gtk/gtkscrollbar.c:89
+#: ../gtk/gtknotebook.c:845 ../gtk/gtkscrollbar.c:87
 msgid "Display the standard backward arrow button"
 msgstr "ئۆلچەملىك تەتۈر يا ئوق توپچىسىنى كۆرسىتىدۇ"
 
-#: ../gtk/gtknotebook.c:859 ../gtk/gtkscrollbar.c:95
+#: ../gtk/gtknotebook.c:859 ../gtk/gtkscrollbar.c:93
 msgid "Forward stepper"
 msgstr "ئوڭ Stepper"
 
-#: ../gtk/gtknotebook.c:860 ../gtk/gtkscrollbar.c:96
+#: ../gtk/gtknotebook.c:860 ../gtk/gtkscrollbar.c:94
 msgid "Display the standard forward arrow button"
 msgstr "ئۆلچەملىك ئوڭ يا ئوق توپچىسىنى كۆرسىتىدۇ"
 
@@ -4705,12 +4645,10 @@ msgid "Hold Time (in milliseconds)"
 msgstr "داۋاملىشىش ۋاقتى (مىللىسېكۇنت)"
 
 #: ../gtk/gtkpressandhold.c:152
-#| msgid "Drag threshold"
 msgid "Drag Threshold"
 msgstr "سۆرەشنىڭ بوسۇغا قىممىتى"
 
 #: ../gtk/gtkpressandhold.c:152
-#| msgid "Drag threshold"
 msgid "Drag Threshold (in pixels)"
 msgstr "سۆرەشنىڭ بوسۇغا قىممىتى (پىكسېل)"
 
@@ -4795,12 +4733,10 @@ msgid "TRUE if this printer is accepting new jobs"
 msgstr "ئەگەر بۇ پرىنتېر يېڭى ۋەزىپىلەرنى قوبۇل قىلسا TRUE بولىدۇ"
 
 #: ../gtk/gtkprinteroption.c:103
-#| msgid "Minimum Value"
 msgid "Option Value"
 msgstr "تاللانما قىممىتى"
 
 #: ../gtk/gtkprinteroption.c:104
-#| msgid "Name of the printer"
 msgid "Value of the option"
 msgstr "تاللانمىنىڭ قىممىتى"
 
@@ -5015,85 +4951,85 @@ msgstr "سۆزلەشكۈ تاللاشنى قوللامدۇ يوق"
 msgid "Whether the application has a selection"
 msgstr "پروگراممىدا تاللاشتىن بىرى بارمۇ يوق"
 
-#: ../gtk/gtkprogressbar.c:158
+#: ../gtk/gtkprogressbar.c:157
 msgid "Fraction"
 msgstr "كەسىر"
 
-#: ../gtk/gtkprogressbar.c:159
+#: ../gtk/gtkprogressbar.c:158
 msgid "The fraction of total work that has been completed"
 msgstr "تاماملانغان قىسمىنىڭ ئومۇمىي خىزمەتتە ئىگىلىگەن نىسبىتى"
 
-#: ../gtk/gtkprogressbar.c:166
+#: ../gtk/gtkprogressbar.c:165
 msgid "Pulse Step"
 msgstr "ئىمپۇلس قەدىمى"
 
-#: ../gtk/gtkprogressbar.c:167
+#: ../gtk/gtkprogressbar.c:166
 msgid "The fraction of total progress to move the bouncing block when pulsed"
 msgstr "جەريان ئاشقاندا سۈرئەت بالدىقىنىڭ يۆتكىلىدىغان ئارىلىقى، ئومۇمىي جەرياننىڭ نىسبىتى بويىچە ھېسابلىنىدۇ"
 
-#: ../gtk/gtkprogressbar.c:175
+#: ../gtk/gtkprogressbar.c:174
 msgid "Text to be displayed in the progress bar"
 msgstr "سۈرئەت بالداقتا كۆرۈنىدىغان تېكىست"
 
-#: ../gtk/gtkprogressbar.c:196
+#: ../gtk/gtkprogressbar.c:195
 msgid "Show text"
 msgstr "تېكىست كۆرسەت"
 
-#: ../gtk/gtkprogressbar.c:197
+#: ../gtk/gtkprogressbar.c:196
 msgid "Whether the progress is shown as text."
 msgstr "سۈرئەت تېكىست شەكلىدە كۆرۈنەمدۇ يوق."
 
-#: ../gtk/gtkprogressbar.c:219
+#: ../gtk/gtkprogressbar.c:218
 msgid ""
 "The preferred place to ellipsize the string, if the progress bar does not "
 "have enough room to display the entire string, if at all."
 msgstr "ئەگەر سۈرئەت بالداقتا پۈتكۈل تېكىستنى كۆرسىتىدىغان بوشلۇق بولمىسا، ھەرپ تىزمىسىنى قىسقارتىدىغان ئالدىن بەلگىلەنگەن ئورۇن بېرىلىدۇ."
 
-#: ../gtk/gtkprogressbar.c:226
+#: ../gtk/gtkprogressbar.c:225
 msgid "X spacing"
 msgstr "X بوشلۇق"
 
-#: ../gtk/gtkprogressbar.c:227
+#: ../gtk/gtkprogressbar.c:226
 msgid "Extra spacing applied to the width of a progress bar."
 msgstr "سۈرئەت بالداق كەڭلىكىگە قوللىنىدىغان ئارتۇق بوشلۇق."
 
-#: ../gtk/gtkprogressbar.c:232
+#: ../gtk/gtkprogressbar.c:231
 msgid "Y spacing"
 msgstr "Y بوشلۇق"
 
-#: ../gtk/gtkprogressbar.c:233
+#: ../gtk/gtkprogressbar.c:232
 msgid "Extra spacing applied to the height of a progress bar."
 msgstr "سۈرئەت بالداق ئېگىزلىكىگە قوللىنىدىغان ئارتۇق بوشلۇق."
 
-#: ../gtk/gtkprogressbar.c:246
+#: ../gtk/gtkprogressbar.c:245
 msgid "Minimum horizontal bar width"
 msgstr "توغرا بالداقنىڭ ئەڭ كىچىك كەڭلىكى"
 
-#: ../gtk/gtkprogressbar.c:247
+#: ../gtk/gtkprogressbar.c:246
 msgid "The minimum horizontal width of the progress bar"
 msgstr "سۈرئەت بالداقنىڭ توغرا يۆنىلىشتىكى ئەڭ كىچىك كەڭلىكى"
 
-#: ../gtk/gtkprogressbar.c:259
+#: ../gtk/gtkprogressbar.c:258
 msgid "Minimum horizontal bar height"
 msgstr "توغرا بالداقنىڭ ئەڭ كىچىك ئېگىزلىكى"
 
-#: ../gtk/gtkprogressbar.c:260
+#: ../gtk/gtkprogressbar.c:259
 msgid "Minimum horizontal height of the progress bar"
 msgstr "سۈرئەت بالداقنىڭ توغرا يۆنىلىشتىكى ئەڭ كىچىك ئېگىزلىكى"
 
-#: ../gtk/gtkprogressbar.c:272
+#: ../gtk/gtkprogressbar.c:271
 msgid "Minimum vertical bar width"
 msgstr "تىك بالداقنىڭ ئەڭ كىچىك كەڭلىكى"
 
-#: ../gtk/gtkprogressbar.c:273
+#: ../gtk/gtkprogressbar.c:272
 msgid "The minimum vertical width of the progress bar"
 msgstr "سۈرئەت بالداقنىڭ تىك يۆنىلىشتىكى ئەڭ كىچىك كەڭلىكى"
 
-#: ../gtk/gtkprogressbar.c:285
+#: ../gtk/gtkprogressbar.c:284
 msgid "Minimum vertical bar height"
 msgstr "تىك بالداقنىڭ ئەڭ كىچىك ئېگىزلىكى"
 
-#: ../gtk/gtkprogressbar.c:286
+#: ../gtk/gtkprogressbar.c:285
 msgid "The minimum vertical height of the progress bar"
 msgstr "سۈرئەت بالداقنىڭ تىك يۆنىلىشتىكى ئەڭ كىچىك ئېگىزلىكى"
 
@@ -5392,7 +5328,6 @@ msgid "Has Origin"
 msgstr "مەنبەسى بار"
 
 #: ../gtk/gtkscale.c:328
-#| msgid "Whether the device has a cursor"
 msgid "Whether the scale has an origin"
 msgstr "كۆلىمىنىڭ باشلىنىشى بارمۇ يوق"
 
@@ -5452,28 +5387,28 @@ msgstr "مەزمۇننىڭ چوڭلۇقنى قانداق بەلگىلىنىدۇ"
 msgid "Vertical Scrollable Policy"
 msgstr "تىك يۆنىلىشتە سىيرىلىش تاكتىكىسى"
 
-#: ../gtk/gtkscrollbar.c:72
+#: ../gtk/gtkscrollbar.c:70
 msgid "Minimum Slider Length"
 msgstr "ئەڭ قىسقا سۈرگۈچ ئۇزۇنلۇقى"
 
-#: ../gtk/gtkscrollbar.c:73
+#: ../gtk/gtkscrollbar.c:71
 msgid "Minimum length of scrollbar slider"
 msgstr "سۈرگۈچنىڭ ئەڭ كىچىك ئۇزۇنلۇقى"
 
-#: ../gtk/gtkscrollbar.c:81
+#: ../gtk/gtkscrollbar.c:79
 msgid "Fixed slider size"
 msgstr "سۈرگۈچنىڭ مۇقىم چوڭلۇقى"
 
-#: ../gtk/gtkscrollbar.c:82
+#: ../gtk/gtkscrollbar.c:80
 msgid "Don't change slider size, just lock it to the minimum length"
 msgstr "سۈرگۈچ چوڭلۇقىنى ئۆزگەرتمەي، ئۇنى ئەڭ كىچىك چوڭلۇققا قۇلۇپلايدۇ"
 
-#: ../gtk/gtkscrollbar.c:103
+#: ../gtk/gtkscrollbar.c:101
 msgid ""
 "Display a second backward arrow button on the opposite end of the scrollbar"
 msgstr "سىيرىغۇچنىڭ يەنە بىر تەرىپىدە ئىككىنچى تەتۈر يا ئوقنى كۆرسىتىدۇ"
 
-#: ../gtk/gtkscrollbar.c:110
+#: ../gtk/gtkscrollbar.c:108
 msgid ""
 "Display a second forward arrow button on the opposite end of the scrollbar"
 msgstr "سىيرىغۇچنىڭ يەنە بىر تەرىپىدە ئىككىنچى ئوڭ يا ئوقنى كۆرسىتىدۇ"
@@ -6045,7 +5980,6 @@ msgid ""
 msgstr "ئىشلەتكۈچى Mnemonics قوزغاتقۇچنى چەككەندە Mnemonics ئۆزلۈكىدىن كۆرۈنۈپ ياكى يوشۇرۇنامدۇ يوق."
 
 #: ../gtk/gtksettings.c:1173
-#| msgid "Primary icon sensitive"
 msgid "Primary button warps slider"
 msgstr ""
 
@@ -6055,7 +5989,6 @@ msgid ""
 msgstr ""
 
 #: ../gtk/gtksettings.c:1190
-#| msgid "Visible"
 msgid "Visible Focus"
 msgstr "كۆرۈنىدىغان فوكۇس"
 
@@ -6303,7 +6236,7 @@ msgstr "ھالەت سىنبەلگىسى سىڭدۈرۈلەمدۇ يوق"
 msgid "The orientation of the tray"
 msgstr "قوندۇرمىنىڭ يۆنىلىشى"
 
-#: ../gtk/gtkstatusicon.c:358 ../gtk/gtkwidget.c:1125
+#: ../gtk/gtkstatusicon.c:358 ../gtk/gtkwidget.c:1119
 msgid "Has tooltip"
 msgstr "كۆرسەتمىسى بار"
 
@@ -6311,15 +6244,15 @@ msgstr "كۆرسەتمىسى بار"
 msgid "Whether this tray icon has a tooltip"
 msgstr "قوندۇرما سىنبەلگىسىنىڭ كۆرسەتمىسى بارمۇ يوق"
 
-#: ../gtk/gtkstatusicon.c:384 ../gtk/gtkwidget.c:1146
+#: ../gtk/gtkstatusicon.c:384 ../gtk/gtkwidget.c:1140
 msgid "Tooltip Text"
 msgstr "كۆرسەتمە تېكىستى"
 
-#: ../gtk/gtkstatusicon.c:385 ../gtk/gtkwidget.c:1147 ../gtk/gtkwidget.c:1168
+#: ../gtk/gtkstatusicon.c:385 ../gtk/gtkwidget.c:1141 ../gtk/gtkwidget.c:1162
 msgid "The contents of the tooltip for this widget"
 msgstr "ۋىجېتنىڭ كۆرسەتمىسىنىڭ مەزمۇنى"
 
-#: ../gtk/gtkstatusicon.c:408 ../gtk/gtkwidget.c:1167
+#: ../gtk/gtkstatusicon.c:408 ../gtk/gtkwidget.c:1161
 msgid "Tooltip markup"
 msgstr "كۆرسەتمە بەلگىسى"
 
@@ -6331,35 +6264,31 @@ msgstr "بۇ قوندۇرما سىنبەلگىنىڭ كۆرسەتمىسىنىڭ 
 msgid "The title of this tray icon"
 msgstr "بۇ قوندۇرما سىنبەلگىنىڭ ماۋزۇسى"
 
-#: ../gtk/gtkstylecontext.c:443
+#: ../gtk/gtkstylecontext.c:442
 msgid "The associated GdkScreen"
 msgstr "مۇناسىۋەتلىك GdkScreen"
 
-#: ../gtk/gtkstylecontext.c:449
+#: ../gtk/gtkstylecontext.c:448
 msgid "Direction"
 msgstr "يۆنىلىش"
 
-#: ../gtk/gtkstylecontext.c:450 ../gtk/gtktexttag.c:287
+#: ../gtk/gtkstylecontext.c:449 ../gtk/gtktexttag.c:287
 msgid "Text direction"
 msgstr "تېكىست يۆنىلىشى"
 
-#: ../gtk/gtkstylecontext.c:466
-#| msgid "Icon's style context"
+#: ../gtk/gtkstylecontext.c:465
 msgid "The parent style context"
 msgstr "ئاتا ئۇسلۇب تىل مۇھىتى"
 
 #: ../gtk/gtkstyleproperty.c:110
-#| msgid "Program name"
 msgid "Property name"
 msgstr "خاسلىق ئاتى"
 
 #: ../gtk/gtkstyleproperty.c:111
-#| msgid "The name of the widget"
 msgid "The name of the property"
 msgstr "خاسلىقنىڭ ئاتى"
 
 #: ../gtk/gtkstyleproperty.c:117
-#| msgid "Page type"
 msgid "Value type"
 msgstr "قىممەت تىپى"
 
@@ -6424,11 +6353,11 @@ msgid ""
 msgstr "بۇ يىغلەك قوللايدىغان چاپلاش تاختىسىدىن چاپلاش ۋە  DND نىشاننىڭ تىزىمى"
 
 #: ../gtk/gtktexthandle.c:470 ../gtk/gtktexthandle.c:471
-#: ../gtk/gtkwidget.c:991
+#: ../gtk/gtkwidget.c:985
 msgid "Parent widget"
 msgstr "ئاتا ۋىجېت"
 
-#: ../gtk/gtktexthandle.c:478 ../gtk/gtkwidget.c:1182
+#: ../gtk/gtktexthandle.c:478 ../gtk/gtkwidget.c:1176
 msgid "Window"
 msgstr "كۆزنەك"
 
@@ -6457,7 +6386,6 @@ msgid "Name used to refer to the text tag. NULL for anonymous tags"
 msgstr "تېكىست خەتكۈچنىڭ نەقىلىگە ئىشلىتىدىغان ئات. NULL ئاتسىز خەتكۈشنى ئىپادىلەيدۇ"
 
 #: ../gtk/gtktexttag.c:233
-#| msgid "Background RGBA color"
 msgid "Background RGBA"
 msgstr "تەگلىكنىڭ RGBA ئى"
 
@@ -6472,7 +6400,6 @@ msgid ""
 msgstr "تەگلىك رەڭگى پۈتۈن قۇر ئېگىزلىكىگە تولدۇرۇلامدۇ ياكى بەلگە قويۇلغان تېكىست ئېگىزلىكىگىمۇ"
 
 #: ../gtk/gtktexttag.c:279
-#| msgid "Foreground color as RGBA"
 msgid "Foreground RGBA"
 msgstr "ئالدى كۆرۈنۈشنىڭ RGBA ئى"
 
@@ -6607,17 +6534,14 @@ msgid "Paragraph background color"
 msgstr "ئابزاس تەگلىك رەڭگى"
 
 #: ../gtk/gtktexttag.c:582
-#| msgid "Paragraph background color as a string"
 msgid "Paragraph background color as a GdkColor"
 msgstr "ئابزاس رەڭگىنى GdkColor بىلەن ئىپادىلەش"
 
 #: ../gtk/gtktexttag.c:596
-#| msgid "Paragraph background set"
 msgid "Paragraph background RGBA"
 msgstr "ئابزاس رەڭگىنىڭ  RGBA ئى"
 
 #: ../gtk/gtktexttag.c:597
-#| msgid "Paragraph background color as a string"
 msgid "Paragraph background RGBA as a GdkRGBA"
 msgstr "GdkRGBA دا ئىپادىلەنگەن پاراگراف RGBA ئى"
 
@@ -6813,79 +6737,79 @@ msgstr "سىزىش كۆرسەتكۈچى"
 msgid "If the toggle part of the button is displayed"
 msgstr "توپچىنىڭ ئالماشتۇرۇش بەلگىسىنى كۆرسىتەمدۇ يوق"
 
-#: ../gtk/gtktoolbar.c:501 ../gtk/gtktoolpalette.c:1043
+#: ../gtk/gtktoolbar.c:498 ../gtk/gtktoolpalette.c:1043
 msgid "Toolbar Style"
 msgstr "قورال بالداق ئۇسلۇبى"
 
-#: ../gtk/gtktoolbar.c:502
+#: ../gtk/gtktoolbar.c:499
 msgid "How to draw the toolbar"
 msgstr "قورال بالداقنى قانداق سىزىدۇ"
 
-#: ../gtk/gtktoolbar.c:509
+#: ../gtk/gtktoolbar.c:506
 msgid "Show Arrow"
 msgstr "يا ئوق كۆرسەت"
 
-#: ../gtk/gtktoolbar.c:510
+#: ../gtk/gtktoolbar.c:507
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr "قورال بالداقنى تولۇق كۆرسىتەلمىگەندە يا ئوق كۆرسىتەمدۇ يوق"
 
-#: ../gtk/gtktoolbar.c:531
+#: ../gtk/gtktoolbar.c:528
 msgid "Size of icons in this toolbar"
 msgstr "بۇ قورال بالداقتىكى سىنبەلگە چوڭلۇقى"
 
-#: ../gtk/gtktoolbar.c:546 ../gtk/gtktoolpalette.c:1029
+#: ../gtk/gtktoolbar.c:543 ../gtk/gtktoolpalette.c:1029
 msgid "Icon size set"
 msgstr "سىنبەلگە چوڭلۇق تەڭشىكى"
 
-#: ../gtk/gtktoolbar.c:547 ../gtk/gtktoolpalette.c:1030
+#: ../gtk/gtktoolbar.c:544 ../gtk/gtktoolpalette.c:1030
 msgid "Whether the icon-size property has been set"
 msgstr "سىنبەلگە چوڭلۇق خاسلىقى تەڭشەلدىمۇ يوق"
 
-#: ../gtk/gtktoolbar.c:556
+#: ../gtk/gtktoolbar.c:553
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "تارماق تۈر قورال بالداق چوڭايغاندا زىيادە بوشلۇققا ئېرىشەمدۇ يوق"
 
-#: ../gtk/gtktoolbar.c:564 ../gtk/gtktoolitemgroup.c:1651
+#: ../gtk/gtktoolbar.c:561 ../gtk/gtktoolitemgroup.c:1651
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "ئوخشاش خىلدىكى تۈرلەرنىڭ چوڭلۇقى ئوخشاش بولامدۇ يوق"
 
-#: ../gtk/gtktoolbar.c:571
+#: ../gtk/gtktoolbar.c:568
 msgid "Spacer size"
 msgstr "بوشلۇق چوڭلۇقى"
 
-#: ../gtk/gtktoolbar.c:572
+#: ../gtk/gtktoolbar.c:569
 msgid "Size of spacers"
 msgstr "بوشلۇقنىڭ چوڭلۇقى"
 
-#: ../gtk/gtktoolbar.c:590
+#: ../gtk/gtktoolbar.c:587
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "قورال بالداق سايىسى بىلەن توپچا ئارىسىدىكى بوشلۇق"
 
-#: ../gtk/gtktoolbar.c:598
+#: ../gtk/gtktoolbar.c:595
 msgid "Maximum child expand"
 msgstr "تارماق بۆلەكنىڭ ئەڭ چوڭ كېڭىيىشى"
 
-#: ../gtk/gtktoolbar.c:599
+#: ../gtk/gtktoolbar.c:596
 msgid "Maximum amount of space an expandable item will be given"
 msgstr "كېڭىيەلەيدىغان تۈرنىڭ ئېرىشەلەيدىغان ئەڭ چوڭ بوشلۇقى"
 
-#: ../gtk/gtktoolbar.c:607
+#: ../gtk/gtktoolbar.c:604
 msgid "Space style"
 msgstr "بوشلۇق ئۇسلۇبى"
 
-#: ../gtk/gtktoolbar.c:608
+#: ../gtk/gtktoolbar.c:605
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "ئارىلىق تىك سىزىقمۇ ياكى بوش قالدۇرۇلامدۇ"
 
-#: ../gtk/gtktoolbar.c:615
+#: ../gtk/gtktoolbar.c:612
 msgid "Button relief"
 msgstr "توپچا قاپارتمىسى"
 
-#: ../gtk/gtktoolbar.c:616
+#: ../gtk/gtktoolbar.c:613
 msgid "Type of bevel around toolbar buttons"
 msgstr "قورال بالداقتىكى توپچا ئەتراپىنىڭ يانتۇلۇق ئۈنۈمىنىڭ تىپى"
 
-#: ../gtk/gtktoolbar.c:632
+#: ../gtk/gtktoolbar.c:629
 msgid "Style of bevel around the toolbar"
 msgstr "قورال بالداق يانتۇلۇق ئۇسلۇبى"
 
@@ -7102,310 +7026,309 @@ msgstr "TreeModelSort مودېلى"
 msgid "The model for the TreeModelSort to sort"
 msgstr "TreeModelSort تەرتىپلەش مودېلى"
 
-#: ../gtk/gtktreeview.c:993
+#: ../gtk/gtktreeview.c:983
 msgid "TreeView Model"
 msgstr "شاخسىمان كۆرۈنۈش مودېلى"
 
-#: ../gtk/gtktreeview.c:994
+#: ../gtk/gtktreeview.c:984
 msgid "The model for the tree view"
 msgstr "شاخسىمان كۆرۈنۈشنىڭ مودېلى"
 
-#: ../gtk/gtktreeview.c:1006
+#: ../gtk/gtktreeview.c:996
 msgid "Headers Visible"
 msgstr "باشلار كۆرۈنۈشچان"
 
-#: ../gtk/gtktreeview.c:1007
+#: ../gtk/gtktreeview.c:997
 msgid "Show the column header buttons"
 msgstr "ئىستون بېشى كۆرۈنىدىغان بولىدۇ"
 
-#: ../gtk/gtktreeview.c:1014
+#: ../gtk/gtktreeview.c:1004
 msgid "Headers Clickable"
 msgstr "ئىستون بېشى چېكىلىشچان"
 
-#: ../gtk/gtktreeview.c:1015
+#: ../gtk/gtktreeview.c:1005
 msgid "Column headers respond to click events"
 msgstr "ئىستون بېشى چېكىلىشكە ئىنكاس قايتۇرىدۇ"
 
-#: ../gtk/gtktreeview.c:1022
+#: ../gtk/gtktreeview.c:1012
 msgid "Expander Column"
 msgstr "كېڭەيتكۈچ ئىستونى"
 
-#: ../gtk/gtktreeview.c:1023
+#: ../gtk/gtktreeview.c:1013
 msgid "Set the column for the expander column"
 msgstr "كېڭەيتكۈچ ئىستونىنىڭ تەڭشىكى"
 
-#: ../gtk/gtktreeview.c:1038
+#: ../gtk/gtktreeview.c:1028
 msgid "Rules Hint"
 msgstr "قائىدە بېشارىتى"
 
-#: ../gtk/gtktreeview.c:1039
+#: ../gtk/gtktreeview.c:1029
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "تېما ماتورىغا ئوخشاش بولمىغان رەڭدىكى ئەسكەرتىش ئۇچۇرى تەڭشەش"
 
-#: ../gtk/gtktreeview.c:1046
+#: ../gtk/gtktreeview.c:1036
 msgid "Enable Search"
 msgstr "ئىزدەشنى قوزغات"
 
-#: ../gtk/gtktreeview.c:1047
+#: ../gtk/gtktreeview.c:1037
 msgid "View allows user to search through columns interactively"
 msgstr "كۆرۈنۈش ئىشلەتكۈچىنىڭ ئىستوندا ئۆز ئارا تەسىر قىلىشچان ھالدا ئىزدىشىگە يول قويىدۇ"
 
-#: ../gtk/gtktreeview.c:1054
+#: ../gtk/gtktreeview.c:1044
 msgid "Search Column"
 msgstr "ئىزدەش ئىستونى"
 
-#: ../gtk/gtktreeview.c:1055
+#: ../gtk/gtktreeview.c:1045
 msgid "Model column to search through during interactive search"
 msgstr "ئۆز ئارا تەسىر قىلىشچان ھالدا ئىزدىگەندە ئىزدەش مودېلىنىڭ ئىستونى"
 
-#: ../gtk/gtktreeview.c:1075
+#: ../gtk/gtktreeview.c:1065
 msgid "Fixed Height Mode"
 msgstr "مۇقىم ئېگىزلىك ھالىتى"
 
-#: ../gtk/gtktreeview.c:1076
+#: ../gtk/gtktreeview.c:1066
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr "ھەممە قۇرنىڭ ئېگىزلىكى ئوخشاش بولغاندا GtkTreeView تېزلىشىدۇ"
 
-#: ../gtk/gtktreeview.c:1096
+#: ../gtk/gtktreeview.c:1086
 msgid "Hover Selection"
 msgstr "لەيلىتىپ تاللاش"
 
-#: ../gtk/gtktreeview.c:1097
+#: ../gtk/gtktreeview.c:1087
 msgid "Whether the selection should follow the pointer"
 msgstr "تاللاش كۆرسەتكۈچكە ئەگىشەمدۇ يوق"
 
-#: ../gtk/gtktreeview.c:1116
+#: ../gtk/gtktreeview.c:1106
 msgid "Hover Expand"
 msgstr "لەيلىتىپ كېڭەيتىش"
 
-#: ../gtk/gtktreeview.c:1117
+#: ../gtk/gtktreeview.c:1107
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr "چاشقىنەك قۇرنىڭ ئۈستىگە كەلگەندە قۇر كېڭىيىپ/قاتلىنامدۇ يوق"
 
-#: ../gtk/gtktreeview.c:1131
+#: ../gtk/gtktreeview.c:1121
 msgid "Show Expanders"
 msgstr "كېڭەيتكۈچنى كۆرسەت"
 
-#: ../gtk/gtktreeview.c:1132
+#: ../gtk/gtktreeview.c:1122
 msgid "View has expanders"
 msgstr "كۆرۈنۈشتە كېڭەيتكۈچ بار"
 
-#: ../gtk/gtktreeview.c:1146
+#: ../gtk/gtktreeview.c:1136
 msgid "Level Indentation"
 msgstr "تارتىلىش دەرىجىسى"
 
-#: ../gtk/gtktreeview.c:1147
+#: ../gtk/gtktreeview.c:1137
 msgid "Extra indentation for each level"
 msgstr "ھەر بىر دەرىجىنىڭ زىيادە تارتىلىشى"
 
-#: ../gtk/gtktreeview.c:1156
+#: ../gtk/gtktreeview.c:1146
 msgid "Rubber Banding"
 msgstr "ئېلاستىكلىق چەكلىمە"
 
-#: ../gtk/gtktreeview.c:1157
+#: ../gtk/gtktreeview.c:1147
 msgid ""
 "Whether to enable selection of multiple items by dragging the mouse pointer"
 msgstr "چاشقىنەك كۆرسەتكۈچىنى سۆرەپ كۆپ تۈر تاللاشقا بولامدۇ يوق"
 
-#: ../gtk/gtktreeview.c:1164
+#: ../gtk/gtktreeview.c:1154
 msgid "Enable Grid Lines"
 msgstr "سېتكىنى قوزغات"
 
-#: ../gtk/gtktreeview.c:1165
+#: ../gtk/gtktreeview.c:1155
 msgid "Whether grid lines should be drawn in the tree view"
 msgstr "شاخسىمان كۆرۈنۈشتە سېتكا سىزامدۇ يوق"
 
-#: ../gtk/gtktreeview.c:1173
+#: ../gtk/gtktreeview.c:1163
 msgid "Enable Tree Lines"
 msgstr "شاخسىمان سىزىقنى قوزغات"
 
-#: ../gtk/gtktreeview.c:1174
+#: ../gtk/gtktreeview.c:1164
 msgid "Whether tree lines should be drawn in the tree view"
 msgstr "شاخسىمان كۆرۈنۈشتە شاخسىمان سىزىق سىزامدۇ يوق"
 
-#: ../gtk/gtktreeview.c:1182
+#: ../gtk/gtktreeview.c:1172
 msgid "The column in the model containing the tooltip texts for the rows"
 msgstr "مودېلدا قۇرنىڭ قورال ئەسكەرتىش تېكىستىنىڭ ئىستونى"
 
-#: ../gtk/gtktreeview.c:1204
+#: ../gtk/gtktreeview.c:1194
 msgid "Vertical Separator Width"
 msgstr "تىك ئايرىغۇچ كەڭلىكى"
 
-#: ../gtk/gtktreeview.c:1205
+#: ../gtk/gtktreeview.c:1195
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "كاتەكچە ئارىسىدىكى تىك ئارىلىق. چوقۇم جۈپ سان بولىدۇ."
 
-#: ../gtk/gtktreeview.c:1213
+#: ../gtk/gtktreeview.c:1203
 msgid "Horizontal Separator Width"
 msgstr "توغرا ئايرىغۇچ كەڭلىكى"
 
-#: ../gtk/gtktreeview.c:1214
+#: ../gtk/gtktreeview.c:1204
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "كاتەكچە ئارىسىدىكى توغرا ئارىلىق. چوقۇم تاق سان بولىدۇ."
 
-#: ../gtk/gtktreeview.c:1222
+#: ../gtk/gtktreeview.c:1212
 msgid "Allow Rules"
 msgstr "قائىدىگە يول قوي"
 
-#: ../gtk/gtktreeview.c:1223
+#: ../gtk/gtktreeview.c:1213
 msgid "Allow drawing of alternating color rows"
 msgstr "رەڭ كېسىشىپ ئۆزگىرىدىغان قۇرنى سىزىشقا يول قوي"
 
-#: ../gtk/gtktreeview.c:1229
+#: ../gtk/gtktreeview.c:1219
 msgid "Indent Expanders"
 msgstr "تارتىلىش(Indent) كېڭەيتكۈچ"
 
-#: ../gtk/gtktreeview.c:1230
+#: ../gtk/gtktreeview.c:1220
 msgid "Make the expanders indented"
 msgstr "كېڭەيتكۈچنى تارتىلىدىغان(indented) قىلىدۇ"
 
-#: ../gtk/gtktreeview.c:1236
+#: ../gtk/gtktreeview.c:1226
 msgid "Even Row Color"
 msgstr "جۈپ قۇر رەڭگى"
 
-#: ../gtk/gtktreeview.c:1237
+#: ../gtk/gtktreeview.c:1227
 msgid "Color to use for even rows"
 msgstr "جۈپ قۇرغا ئىشلىتىدىغان رەڭ"
 
-#: ../gtk/gtktreeview.c:1243
+#: ../gtk/gtktreeview.c:1233
 msgid "Odd Row Color"
 msgstr "تاق قۇرنىڭ رەڭگى"
 
-#: ../gtk/gtktreeview.c:1244
+#: ../gtk/gtktreeview.c:1234
 msgid "Color to use for odd rows"
 msgstr "تاق قۇرغا ئىشلىتىدىغان رەڭ"
 
-#: ../gtk/gtktreeview.c:1250
+#: ../gtk/gtktreeview.c:1240
 msgid "Grid line width"
 msgstr "سېتكا سىزىق كەڭلىكى"
 
-#: ../gtk/gtktreeview.c:1251
+#: ../gtk/gtktreeview.c:1241
 msgid "Width, in pixels, of the tree view grid lines"
 msgstr "پىكسېل بىلەن ئىپادىلەنگەن شاخسىمان كۆرۈنۈشنىڭ سېتكا كەڭلىكى"
 
-#: ../gtk/gtktreeview.c:1257
+#: ../gtk/gtktreeview.c:1247
 msgid "Tree line width"
 msgstr "شاخسىمان سىزىق كەڭلىكى"
 
-#: ../gtk/gtktreeview.c:1258
+#: ../gtk/gtktreeview.c:1248
 msgid "Width, in pixels, of the tree view lines"
 msgstr "پىكسېل بىلەن ئىپادىلەنگەن شاخسىمان كۆرۈنۈشنىڭ سىزىق كەڭلىكى"
 
-#: ../gtk/gtktreeview.c:1264
+#: ../gtk/gtktreeview.c:1254
 msgid "Grid line pattern"
 msgstr "سېتكا سىزىق نۇسخىسى"
 
-#: ../gtk/gtktreeview.c:1265
+#: ../gtk/gtktreeview.c:1255
 msgid "Dash pattern used to draw the tree view grid lines"
 msgstr "شاخسىمان كۆرۈنۈشنىڭ سېتكا سىزىقىنى سىزىشقا ئىشلىتىدىغان ئۈزۈك سىزىق نۇسخىسى"
 
-#: ../gtk/gtktreeview.c:1271
+#: ../gtk/gtktreeview.c:1261
 msgid "Tree line pattern"
 msgstr "شاخسىمان سىزىق نۇسخىسى"
 
-#: ../gtk/gtktreeview.c:1272
+#: ../gtk/gtktreeview.c:1262
 msgid "Dash pattern used to draw the tree view lines"
 msgstr "شاخسىمان كۆرۈنۈشنىڭ سىزىقىنى سىزىشقا ئىشلىتىدىغان ئۈزۈك سىزىق نۇسخىسى"
 
-#: ../gtk/gtktreeviewcolumn.c:248
+#: ../gtk/gtktreeviewcolumn.c:246
 msgid "Whether to display the column"
 msgstr "ئىستوننى كۆرسىتەمدۇ يوق"
 
-#: ../gtk/gtktreeviewcolumn.c:255 ../gtk/gtkwindow.c:651
+#: ../gtk/gtktreeviewcolumn.c:253 ../gtk/gtkwindow.c:651
 msgid "Resizable"
 msgstr "چوڭلۇقىنى ئۆزگەرتكىلى بولىدۇ"
 
-#: ../gtk/gtktreeviewcolumn.c:256
+#: ../gtk/gtktreeviewcolumn.c:254
 msgid "Column is user-resizable"
 msgstr "ئىشلەتكۈچى ئىستون چوڭلۇقىنى ئۆزگەرتەلەيدۇ"
 
-#: ../gtk/gtktreeviewcolumn.c:264
-#| msgid "Current width of the column"
+#: ../gtk/gtktreeviewcolumn.c:262
 msgid "Current X position of the column"
 msgstr "نۆۋەتتىكى ئىستوننىڭ X كوئوردېناتى"
 
-#: ../gtk/gtktreeviewcolumn.c:274
+#: ../gtk/gtktreeviewcolumn.c:272
 msgid "Current width of the column"
 msgstr "ئىستوننىڭ ھازىرقى كەڭلىكى"
 
-#: ../gtk/gtktreeviewcolumn.c:291
+#: ../gtk/gtktreeviewcolumn.c:289
 msgid "Sizing"
 msgstr "چوڭلۇقىنى ئۆزگەرتىش"
 
-#: ../gtk/gtktreeviewcolumn.c:292
+#: ../gtk/gtktreeviewcolumn.c:290
 msgid "Resize mode of the column"
 msgstr "ئىستون كەڭلىك ھالىتىنى ئۆزگەرتىدۇ"
 
-#: ../gtk/gtktreeviewcolumn.c:300
+#: ../gtk/gtktreeviewcolumn.c:298
 msgid "Fixed Width"
 msgstr "مۇقىم كەڭلىك"
 
-#: ../gtk/gtktreeviewcolumn.c:301
+#: ../gtk/gtktreeviewcolumn.c:299
 msgid "Current fixed width of the column"
 msgstr "نۆۋەتتىكى ئىستوننىڭ مۇقىم كەڭلىكى"
 
-#: ../gtk/gtktreeviewcolumn.c:311
+#: ../gtk/gtktreeviewcolumn.c:309
 msgid "Minimum allowed width of the column"
 msgstr "ئىستوننىڭ يول قويىدىغان ئەڭ كىچىك كەڭلىكى"
 
-#: ../gtk/gtktreeviewcolumn.c:320
+#: ../gtk/gtktreeviewcolumn.c:318
 msgid "Maximum Width"
 msgstr "ئەڭ چوڭ كەڭلىك"
 
-#: ../gtk/gtktreeviewcolumn.c:321
+#: ../gtk/gtktreeviewcolumn.c:319
 msgid "Maximum allowed width of the column"
 msgstr "ئىستوننىڭ يول قويىدىغان ئەڭ چوڭ كەڭلىكى"
 
-#: ../gtk/gtktreeviewcolumn.c:331
+#: ../gtk/gtktreeviewcolumn.c:329
 msgid "Title to appear in column header"
 msgstr "ئىستون بېشىدا كۆرسىتىلىدىغان ماۋزۇ"
 
-#: ../gtk/gtktreeviewcolumn.c:339
+#: ../gtk/gtktreeviewcolumn.c:337
 msgid "Column gets share of extra width allocated to the widget"
 msgstr "ئىستون ۋىجېتقا تەقسىملەنگەن ئارتۇقچە كەڭلىكنى ھەمبەھىر قىلىدۇ"
 
-#: ../gtk/gtktreeviewcolumn.c:346
+#: ../gtk/gtktreeviewcolumn.c:344
 msgid "Clickable"
 msgstr "چېكىلىشچان"
 
-#: ../gtk/gtktreeviewcolumn.c:347
+#: ../gtk/gtktreeviewcolumn.c:345
 msgid "Whether the header can be clicked"
 msgstr "ئىستون بېشىنى چەككىلى بولامدۇ يوق"
 
-#: ../gtk/gtktreeviewcolumn.c:356
+#: ../gtk/gtktreeviewcolumn.c:354
 msgid "Widget to put in column header button instead of column title"
 msgstr "ئىستون ماۋزۇسىنىڭ ئورنىغا قويۇلىدىغان ۋىجېت"
 
-#: ../gtk/gtktreeviewcolumn.c:364
+#: ../gtk/gtktreeviewcolumn.c:362
 msgid "X Alignment of the column header text or widget"
 msgstr "ئىستون بېشى تېكىستى ياكى ۋىجېتنى توغرىسىغا توغرىلا"
 
-#: ../gtk/gtktreeviewcolumn.c:374
+#: ../gtk/gtktreeviewcolumn.c:372
 msgid "Whether the column can be reordered around the headers"
 msgstr "ئىستون بېشىغا ئاساسەن قايتىدىن تەرتىپلىنەمدۇ يوق"
 
-#: ../gtk/gtktreeviewcolumn.c:381
+#: ../gtk/gtktreeviewcolumn.c:379
 msgid "Sort indicator"
 msgstr "تەرتىپلەش كۆرسەتكۈچى"
 
-#: ../gtk/gtktreeviewcolumn.c:382
+#: ../gtk/gtktreeviewcolumn.c:380
 msgid "Whether to show a sort indicator"
 msgstr "تەرتىپلەش كۆرسەتكۈچىنى كۆرسىتەمدۇ يوق"
 
-#: ../gtk/gtktreeviewcolumn.c:389
+#: ../gtk/gtktreeviewcolumn.c:387
 msgid "Sort order"
 msgstr "تەرتىپلەش تەرتىپى"
 
-#: ../gtk/gtktreeviewcolumn.c:390
+#: ../gtk/gtktreeviewcolumn.c:388
 msgid "Sort direction the sort indicator should indicate"
 msgstr "تەرتىپلەش كۆرسەتكۈچ كۆرسىتىدىغان تەرتىپلەش يۆنىلىشى"
 
-#: ../gtk/gtktreeviewcolumn.c:406
+#: ../gtk/gtktreeviewcolumn.c:404
 msgid "Sort column ID"
 msgstr "تەرتىپلىنىدىغان ئىستوننىڭ كىملىكى"
 
-#: ../gtk/gtktreeviewcolumn.c:407
+#: ../gtk/gtktreeviewcolumn.c:405
 msgid "Logical sort column ID this column sorts on when selected for sorting"
 msgstr "لوگىكىلىق تەرتىپلەش ئىستون كىملىكى، بۇ ئىستون تاللانسا تەرتىپلىنىدۇ"
 
@@ -7433,371 +7356,369 @@ msgstr "سىمۋوللۇق سىنبەلگە ئىشلەت"
 msgid "Whether to use symbolic icons"
 msgstr "سىمۋوللۇق سىنبەلگە ئىشلىتەمدۇ يوق"
 
-#: ../gtk/gtkwidget.c:984
+#: ../gtk/gtkwidget.c:978
 msgid "Widget name"
 msgstr "ۋىجېت ئاتى"
 
-#: ../gtk/gtkwidget.c:985
+#: ../gtk/gtkwidget.c:979
 msgid "The name of the widget"
 msgstr "كىچىك ئەپنىڭ ئاتى"
 
-#: ../gtk/gtkwidget.c:992
+#: ../gtk/gtkwidget.c:986
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "بۇ ۋىجېتنىڭ ئاتا ۋىجېتى. ئۇ چوقۇم بىر قاچا ۋىجېت بولۇشى لازىم"
 
-#: ../gtk/gtkwidget.c:999
+#: ../gtk/gtkwidget.c:993
 msgid "Width request"
 msgstr "كەڭلىك ئىلتىماسى"
 
-#: ../gtk/gtkwidget.c:1000
+#: ../gtk/gtkwidget.c:994
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
 msgstr "ۋىجېتنىڭ كەڭلىك ئىلتىماسىنى قاپلاش، -1 قىلىپ تەڭشەلسە ئادەتتىكىدەك ئىلتىماس ئىشلىتىدىغانلىقىنى بىلدۈرىدۇ"
 
-#: ../gtk/gtkwidget.c:1008
+#: ../gtk/gtkwidget.c:1002
 msgid "Height request"
 msgstr "ئېگىزلىك ئىلتىماسى"
 
-#: ../gtk/gtkwidget.c:1009
+#: ../gtk/gtkwidget.c:1003
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
 msgstr "ۋىجېتنىڭ ئېگىزلىك ئىلتىماسىنى قاپلاش، -1 قىلىپ تەڭشەلسە ئادەتتىكىدەك ئىلتىماس ئىشلىتىدىغانلىقىنى بىلدۈرىدۇ"
 
-#: ../gtk/gtkwidget.c:1018
+#: ../gtk/gtkwidget.c:1012
 msgid "Whether the widget is visible"
 msgstr "ۋىجېت كۆرۈنەمدۇ يوق"
 
-#: ../gtk/gtkwidget.c:1025
+#: ../gtk/gtkwidget.c:1019
 msgid "Whether the widget responds to input"
 msgstr "ۋىجېت كىرگۈزۈشىگە ئىنكاس قايتۇرامدۇ يوق"
 
-#: ../gtk/gtkwidget.c:1031
+#: ../gtk/gtkwidget.c:1025
 msgid "Application paintable"
 msgstr "پروگرامما سىزالايدۇ"
 
-#: ../gtk/gtkwidget.c:1032
+#: ../gtk/gtkwidget.c:1026
 msgid "Whether the application will paint directly on the widget"
 msgstr "پروگرامما بۇ ۋىجېتنىڭ ئۈستىدە بىۋاسىتە سىزالامدۇ يوق"
 
-#: ../gtk/gtkwidget.c:1038
+#: ../gtk/gtkwidget.c:1032
 msgid "Can focus"
 msgstr "فوكۇسلىنالايدۇ"
 
-#: ../gtk/gtkwidget.c:1039
+#: ../gtk/gtkwidget.c:1033
 msgid "Whether the widget can accept the input focus"
 msgstr "ۋىجېت كىرگۈزۈش فوكۇسىنى قوبۇل قىلامدۇ يوق"
 
-#: ../gtk/gtkwidget.c:1045
+#: ../gtk/gtkwidget.c:1039
 msgid "Has focus"
 msgstr "فوكۇسى بار"
 
-#: ../gtk/gtkwidget.c:1046
+#: ../gtk/gtkwidget.c:1040
 msgid "Whether the widget has the input focus"
 msgstr "ۋىجېتنىڭ كىرگۈزۈش فوكۇسى بارمۇ يوق"
 
-#: ../gtk/gtkwidget.c:1052
+#: ../gtk/gtkwidget.c:1046
 msgid "Is focus"
 msgstr "فوكۇسمۇ"
 
-#: ../gtk/gtkwidget.c:1053
+#: ../gtk/gtkwidget.c:1047
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "ۋىجېت يۇقىرى دەرىجىدىكى فوكۇسى بار ۋىجېتمۇ ئەمەسمۇ"
 
-#: ../gtk/gtkwidget.c:1059
+#: ../gtk/gtkwidget.c:1053
 msgid "Can default"
 msgstr "كۆڭۈلدىكى بولالايدۇ"
 
-#: ../gtk/gtkwidget.c:1060
+#: ../gtk/gtkwidget.c:1054
 msgid "Whether the widget can be the default widget"
 msgstr "ۋىجېت كۆڭۈلدىكى ۋىجېت بولالامدۇ يوق"
 
-#: ../gtk/gtkwidget.c:1066
+#: ../gtk/gtkwidget.c:1060
 msgid "Has default"
 msgstr "كۆڭۈلدىكى"
 
-#: ../gtk/gtkwidget.c:1067
+#: ../gtk/gtkwidget.c:1061
 msgid "Whether the widget is the default widget"
 msgstr "ۋىجېت كۆڭۈلدىكى ۋىجېتمۇ ئەمەسمۇ"
 
-#: ../gtk/gtkwidget.c:1073
+#: ../gtk/gtkwidget.c:1067
 msgid "Receives default"
 msgstr "كۆڭۈلدىكى مەشغۇلاتنى قوبۇللا"
 
-#: ../gtk/gtkwidget.c:1074
+#: ../gtk/gtkwidget.c:1068
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr "ئەگەر TRUE بولسا، ۋىجېت فوكۇسلانغاندا كۆڭۈلدىكى مەشغۇلاتنى قوبۇل قىلىدۇ"
 
-#: ../gtk/gtkwidget.c:1080
+#: ../gtk/gtkwidget.c:1074
 msgid "Composite child"
 msgstr "بىرىكمە تارماق ۋىجېت"
 
-#: ../gtk/gtkwidget.c:1081
+#: ../gtk/gtkwidget.c:1075
 msgid "Whether the widget is part of a composite widget"
 msgstr "بۇ ۋىجېت بىرىكمە ۋىجېتنىڭ بىر قىسمىمۇ ئەمەسمۇ"
 
-#: ../gtk/gtkwidget.c:1087
+#: ../gtk/gtkwidget.c:1081
 msgid "Style"
 msgstr "ئۇسلۇب"
 
-#: ../gtk/gtkwidget.c:1088
+#: ../gtk/gtkwidget.c:1082
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
 msgstr "ۋىجېتنىڭ ئۇسلۇبى، يەنى قانداق كۆرۈنىدۇ دېگەندەك ئۇچۇرلار(رەڭ قاتارلىق)لارنى ئۆز ئىچىگە ئالىدۇ"
 
-#: ../gtk/gtkwidget.c:1094
+#: ../gtk/gtkwidget.c:1088
 msgid "Events"
 msgstr "ھادىسە"
 
-#: ../gtk/gtkwidget.c:1095
+#: ../gtk/gtkwidget.c:1089
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr "بۇ ۋىجېتنىڭ قايسى خىل GdkEvents ھادىسە ماسكىسىنى قوبۇل قىلىشنى جەزملەشكە ئىشلىتىلىدۇ"
 
-#: ../gtk/gtkwidget.c:1102
+#: ../gtk/gtkwidget.c:1096
 msgid "No show all"
 msgstr "ھەممىسىنى كۆرسەتمە"
 
-#: ../gtk/gtkwidget.c:1103
+#: ../gtk/gtkwidget.c:1097
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "gtk_widget_show_all() بۇ ۋىجېتقا تەسىر كۆرسەتمەمدۇ يوق"
 
-#: ../gtk/gtkwidget.c:1126
+#: ../gtk/gtkwidget.c:1120
 msgid "Whether this widget has a tooltip"
 msgstr "ۋىجېتنىڭ كۆرسەتمىسى بارمۇ يوق"
 
-#: ../gtk/gtkwidget.c:1183
+#: ../gtk/gtkwidget.c:1177
 msgid "The widget's window if it is realized"
 msgstr "ئەگەر مىساللاشتۇرۇلغان بولسا ئۇنداقتا كىچىك ئەپ كۆزنىكى"
 
-#: ../gtk/gtkwidget.c:1197
+#: ../gtk/gtkwidget.c:1191
 msgid "Double Buffered"
 msgstr "قوش يىغلەكلىك"
 
-#: ../gtk/gtkwidget.c:1198
+#: ../gtk/gtkwidget.c:1192
 msgid "Whether the widget is double buffered"
 msgstr "ۋىجېت قوش يىغلەكلىكمۇ ئەمەسمۇ"
 
-#: ../gtk/gtkwidget.c:1213
+#: ../gtk/gtkwidget.c:1207
 msgid "How to position in extra horizontal space"
 msgstr "زىيادە توغرا بوشلۇق قانداق ئورۇن بېكىتىدۇ"
 
-#: ../gtk/gtkwidget.c:1229
+#: ../gtk/gtkwidget.c:1223
 msgid "How to position in extra vertical space"
 msgstr "زىيادە تىك بوشلۇق قانداق ئورۇن بېكىتىدۇ"
 
-#: ../gtk/gtkwidget.c:1248
+#: ../gtk/gtkwidget.c:1242
 msgid "Margin on Left"
 msgstr "سولدىكى گىرۋەك بوشلۇقى"
 
-#: ../gtk/gtkwidget.c:1249
+#: ../gtk/gtkwidget.c:1243
 msgid "Pixels of extra space on the left side"
 msgstr "سولدىكى زىيادە بوشلۇقنىڭ پىكسېل سانى"
 
-#: ../gtk/gtkwidget.c:1269
+#: ../gtk/gtkwidget.c:1263
 msgid "Margin on Right"
 msgstr "ئوڭدىكى گىرۋەك بوشلۇقى"
 
-#: ../gtk/gtkwidget.c:1270
+#: ../gtk/gtkwidget.c:1264
 msgid "Pixels of extra space on the right side"
 msgstr "ئوڭدىكى زىيادە بوشلۇقنىڭ پىكسېل سانى"
 
-#: ../gtk/gtkwidget.c:1290
+#: ../gtk/gtkwidget.c:1284
 msgid "Margin on Top"
 msgstr "ئۈستىدىكى گىرۋەك بوشلۇقى"
 
-#: ../gtk/gtkwidget.c:1291
+#: ../gtk/gtkwidget.c:1285
 msgid "Pixels of extra space on the top side"
 msgstr "ئۈستىدىكى زىيادە بوشلۇقنىڭ پىكسېل سانى"
 
-#: ../gtk/gtkwidget.c:1311
+#: ../gtk/gtkwidget.c:1305
 msgid "Margin on Bottom"
 msgstr "ئاستىدىكى گىرۋەك بوشلۇقى"
 
-#: ../gtk/gtkwidget.c:1312
+#: ../gtk/gtkwidget.c:1306
 msgid "Pixels of extra space on the bottom side"
 msgstr "ئاستىدىكى زىيادە بوشلۇقنىڭ پىكسېل سانى"
 
-#: ../gtk/gtkwidget.c:1329
+#: ../gtk/gtkwidget.c:1323
 msgid "All Margins"
 msgstr "ھەممە گىرۋەك بوشلۇقى"
 
-#: ../gtk/gtkwidget.c:1330
+#: ../gtk/gtkwidget.c:1324
 msgid "Pixels of extra space on all four sides"
 msgstr "تۆت ئەتراپتىكى زىيادە بوشلۇقنىڭ پىكسېل سانى"
 
-#: ../gtk/gtkwidget.c:1363
+#: ../gtk/gtkwidget.c:1357
 msgid "Horizontal Expand"
 msgstr "توغرا يۆنىلىشتە كېڭىيىش"
 
-#: ../gtk/gtkwidget.c:1364
+#: ../gtk/gtkwidget.c:1358
 msgid "Whether widget wants more horizontal space"
 msgstr "ۋىجېت تېخىمۇ كۆپ توغرا بوشلۇققا ئېھتىياجلىقمۇ يوق"
 
-#: ../gtk/gtkwidget.c:1378
+#: ../gtk/gtkwidget.c:1372
 msgid "Horizontal Expand Set"
 msgstr "توغرا كېڭىيىش تەڭشىكى"
 
-#: ../gtk/gtkwidget.c:1379
+#: ../gtk/gtkwidget.c:1373
 msgid "Whether to use the hexpand property"
 msgstr "hexpand خاسلىقى ئىشلىتەمدۇ يوق"
 
-#: ../gtk/gtkwidget.c:1393
+#: ../gtk/gtkwidget.c:1387
 msgid "Vertical Expand"
 msgstr "تىك يۆنىلىشتە كېڭىيىش"
 
-#: ../gtk/gtkwidget.c:1394
+#: ../gtk/gtkwidget.c:1388
 msgid "Whether widget wants more vertical space"
 msgstr "ۋىجېت تېخىمۇ كۆپ تىك بوشلۇققا ئېھتىياجلىقمۇ يوق"
 
-#: ../gtk/gtkwidget.c:1408
+#: ../gtk/gtkwidget.c:1402
 msgid "Vertical Expand Set"
 msgstr "تىك يۆنىلىشتە كېڭىيىش تەڭشىكى"
 
-#: ../gtk/gtkwidget.c:1409
+#: ../gtk/gtkwidget.c:1403
 msgid "Whether to use the vexpand property"
 msgstr "vexpand خاسلىقى ئىشلىتەمدۇ يوق"
 
-#: ../gtk/gtkwidget.c:1423
+#: ../gtk/gtkwidget.c:1417
 msgid "Expand Both"
 msgstr "ئىككىلا يۆنىلىشتە كېڭەيت"
 
-#: ../gtk/gtkwidget.c:1424
+#: ../gtk/gtkwidget.c:1418
 msgid "Whether widget wants to expand in both directions"
 msgstr "ۋىجېت ئىككىلا يۆنىلىشتە كېڭىيىشكە ئېھتىياجلىقمۇ يوق"
 
-#: ../gtk/gtkwidget.c:3145
+#: ../gtk/gtkwidget.c:3139
 msgid "Interior Focus"
 msgstr "ئىچكى فوكۇس"
 
-#: ../gtk/gtkwidget.c:3146
+#: ../gtk/gtkwidget.c:3140
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "ۋىجېت ئىچىگە فوكۇس كۆرسەتكۈچنى سىزامدۇ يوق"
 
-#: ../gtk/gtkwidget.c:3152
+#: ../gtk/gtkwidget.c:3146
 msgid "Focus linewidth"
 msgstr "فوكۇس سىزىق كەڭلىكى"
 
-#: ../gtk/gtkwidget.c:3153
+#: ../gtk/gtkwidget.c:3147
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "پىكسېل بىلەن ئىپادىلەنگەن فوكۇس كۆرسەتكۈچ سىزىقنىڭ كەڭلىكى"
 
-#: ../gtk/gtkwidget.c:3159
+#: ../gtk/gtkwidget.c:3153
 msgid "Focus line dash pattern"
 msgstr "فوكۇس سىزىقنىڭ ئۈزۈك سىزىق نۇسخىسى"
 
-#: ../gtk/gtkwidget.c:3160
+#: ../gtk/gtkwidget.c:3154
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "فوكۇس كۆرسەتكۈچىنى سىزىشتا ئىشلىتىدىغان سىزىقنىڭ نۇسخىسى"
 
-#: ../gtk/gtkwidget.c:3165
+#: ../gtk/gtkwidget.c:3159
 msgid "Focus padding"
 msgstr "فوكۇس تولدۇرمىسى"
 
-#: ../gtk/gtkwidget.c:3166
+#: ../gtk/gtkwidget.c:3160
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "پىكسېل بىلەن ئىپادىلەنگەن فوكۇس كۆرسەتكۈچى بىلەن ۋىجېت «قۇتا»نىڭ كەڭلىكى"
 
-#: ../gtk/gtkwidget.c:3171
+#: ../gtk/gtkwidget.c:3165
 msgid "Cursor color"
 msgstr "نۇربەلگىسىنىڭ رەڭگى"
 
-#: ../gtk/gtkwidget.c:3172
+#: ../gtk/gtkwidget.c:3166
 msgid "Color with which to draw insertion cursor"
 msgstr "قىستۇرۇش نۇربەلگىسىنى سىزغاندا ئىشلىتىدىغان رەڭ"
 
-#: ../gtk/gtkwidget.c:3177
+#: ../gtk/gtkwidget.c:3171
 msgid "Secondary cursor color"
 msgstr "ئىككىنچى نۇربەلگىنىڭ رەڭگى"
 
-#: ../gtk/gtkwidget.c:3178
+#: ../gtk/gtkwidget.c:3172
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
 msgstr "ئارىلاش تەھرىر سولدىن ئوڭغا ۋە ئوڭدىن سولغا تېكىست بولغاندا قوشۇمچە نۇربەلگىنى قىستۇرۇشقا ئىشلىتىدىغان رەڭ"
 
-#: ../gtk/gtkwidget.c:3183
+#: ../gtk/gtkwidget.c:3177
 msgid "Cursor line aspect ratio"
 msgstr "نۇربەلگە سىزىقى كەڭلىك-ئېگىزلىك نىسبىتى"
 
-#: ../gtk/gtkwidget.c:3184
+#: ../gtk/gtkwidget.c:3178
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "قىستۇرۇش نۇربەلگىسىنى سىزغاندا ئىشلىتىدىغان كەڭلىك-ئېگىزلىك نىسبىتى"
 
-#: ../gtk/gtkwidget.c:3190
+#: ../gtk/gtkwidget.c:3184
 msgid "Window dragging"
 msgstr "كۆزنەك سۆرەش"
 
-#: ../gtk/gtkwidget.c:3191
+#: ../gtk/gtkwidget.c:3185
 msgid "Whether windows can be dragged by clicking on empty areas"
 msgstr "بوش رايوننى چېكىش ئارقىلىق كۆزنەكلەرنى سۆرىگىلى بولامدۇ يوق"
 
-#: ../gtk/gtkwidget.c:3204
+#: ../gtk/gtkwidget.c:3198
 msgid "Unvisited Link Color"
 msgstr "زىيارەت قىلىنمىغان ئۇلانما رەڭگى"
 
-#: ../gtk/gtkwidget.c:3205
+#: ../gtk/gtkwidget.c:3199
 msgid "Color of unvisited links"
 msgstr "زىيارەت قىلىنمىغان ئۇلانمىلارنىڭ رەڭگى"
 
-#: ../gtk/gtkwidget.c:3218
+#: ../gtk/gtkwidget.c:3212
 msgid "Visited Link Color"
 msgstr "زىيارەت قىلىنغان ئۇلانما رەڭگى"
 
-#: ../gtk/gtkwidget.c:3219
+#: ../gtk/gtkwidget.c:3213
 msgid "Color of visited links"
 msgstr "زىيارەت قىلىنغان ئۇلانمىلارنىڭ رەڭگى"
 
-#: ../gtk/gtkwidget.c:3233
+#: ../gtk/gtkwidget.c:3227
 msgid "Wide Separators"
 msgstr "كەڭ ئايرىغۇچ"
 
-#: ../gtk/gtkwidget.c:3234
+#: ../gtk/gtkwidget.c:3228
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
 msgstr "ئايرىغۇچنىڭ سەپلىنىدىغان كەڭلىكى بارمۇ يوق، بىر قۇتا ئارقىلىق سىزىقنى ئالماشتۇرۇپ سىزامدۇ يوق"
 
-#: ../gtk/gtkwidget.c:3248
+#: ../gtk/gtkwidget.c:3242
 msgid "Separator Width"
 msgstr "ئايرىغۇچ كەڭلىكى"
 
-#: ../gtk/gtkwidget.c:3249
+#: ../gtk/gtkwidget.c:3243
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "wide-separators نىڭ قىممىتى TRUE بولغاندىكى ئايرىغۇچنىڭ كەڭلىكى"
 
-#: ../gtk/gtkwidget.c:3263
+#: ../gtk/gtkwidget.c:3257
 msgid "Separator Height"
 msgstr "ئايرىغۇچ ئېگىزلىكى"
 
-#: ../gtk/gtkwidget.c:3264
+#: ../gtk/gtkwidget.c:3258
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "wide-separators نىڭ قىممىتى TRUE بولغاندىكى ئايرىغۇچنىڭ ئېگىزلىكى"
 
-#: ../gtk/gtkwidget.c:3278
+#: ../gtk/gtkwidget.c:3272
 msgid "Horizontal Scroll Arrow Length"
 msgstr "توغرا سىيرىيدىغان يا ئوقنىڭ ئۇزۇنلۇقى"
 
-#: ../gtk/gtkwidget.c:3279
+#: ../gtk/gtkwidget.c:3273
 msgid "The length of horizontal scroll arrows"
 msgstr "توغرا سىيرىيدىغان يا ئوقنىڭ ئۇزۇنلۇقى"
 
-#: ../gtk/gtkwidget.c:3293
+#: ../gtk/gtkwidget.c:3287
 msgid "Vertical Scroll Arrow Length"
 msgstr "تىك سىيرىيدىغان يا ئوقنىڭ ئۇزۇنلۇقى"
 
-#: ../gtk/gtkwidget.c:3294
+#: ../gtk/gtkwidget.c:3288
 msgid "The length of vertical scroll arrows"
 msgstr "تىك سىيرىيدىغان يا ئوقنىڭ ئۇزۇنلۇقى"
 
-#: ../gtk/gtkwidget.c:3300 ../gtk/gtkwidget.c:3301
-#| msgid "Width of handle"
+#: ../gtk/gtkwidget.c:3294 ../gtk/gtkwidget.c:3295
 msgid "Width of text selection handles"
 msgstr "تېكىست تاللاش تۇتقۇسىنىڭ كەڭلىكى"
 
-#: ../gtk/gtkwidget.c:3306 ../gtk/gtkwidget.c:3307
-#| msgid "The title of the font selection dialog"
+#: ../gtk/gtkwidget.c:3300 ../gtk/gtkwidget.c:3301
 msgid "Height of text selection handles"
 msgstr "تېكىست تاللاش تۇتقۇسىنىڭ ئېگىزلىكى"
 
@@ -7885,7 +7806,6 @@ msgid "Hide the titlebar during maximization"
 msgstr "ئەڭ چوڭ قىلىنغاندا ماۋزۇ بالدىقى يوشۇرۇنسۇن"
 
 #: ../gtk/gtkwindow.c:712
-#| msgid "If this window should be destroyed when the parent is destroyed"
 msgid "If this window's titlebar should be hidden when the window is maximized"
 msgstr "ئەڭ چوڭ قىلىنغاندا ماۋزۇ بالدىقى يوشۇرۇنامدۇ يوق بەلگىلەيدۇ"
 
@@ -7902,12 +7822,10 @@ msgid "Whether mnemonics are currently visible in this window"
 msgstr "بۇ كۆزنەكتە mnemonics كۆرۈنەمدۇ يوق"
 
 #: ../gtk/gtkwindow.c:757
-#| msgid "Cursor Visible"
 msgid "Focus Visible"
 msgstr "فوكۇس كۆرۈنۈشچان"
 
 #: ../gtk/gtkwindow.c:758
-#| msgid "Whether mnemonics are currently visible in this window"
 msgid "Whether focus rectangles are currently visible in this window"
 msgstr "بۇ كۆزنەكتىكى فوكۇس تىك تۆتبۇلۇڭى نۆۋەتتە كۆرۈنەمدۇ يوق"
 
@@ -8030,12 +7948,10 @@ msgid "The transient parent of the dialog"
 msgstr "سۆزلەشكۈنىڭ ۋاقىتلىق ئاتا سۆزلەشكۈسى"
 
 #: ../gtk/gtkwindow.c:981
-#| msgid "Attach Widget"
 msgid "Attached to Widget"
 msgstr "كىچىك ئەپكە قېتىلىش"
 
 #: ../gtk/gtkwindow.c:982
-#| msgid "The widget the menu is attached to"
 msgid "The widget where the window is attached"
 msgstr "كىچىك ئەپ قېتىلىدىغان كۆزنەك"
 
@@ -8068,7 +7984,6 @@ msgid "Color Profile Title"
 msgstr "رەڭ Profile ماۋزۇسى"
 
 #: ../modules/printbackends/cups/gtkprintercups.c:94
-#| msgid "The title of the color selection dialog"
 msgid "The title of the color profile to use"
 msgstr "ئىشلىتىدىغان رەڭ Profile نىڭ ماۋزۇسى"
 

@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+2.0\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-12-15 20:12+0000\n"
-"PO-Revision-Date: 2011-08-08 16:21+0600\n"
-"Last-Translator: Sahran <sahran.ug@gmail.com>\n"
+"POT-Creation-Date: 2013-01-19 19:42+0000\n"
+"PO-Revision-Date: 2013-02-02 11:55+0900\n"
+"Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -69,7 +69,7 @@ msgstr "تەڭشەيدىغان GTK+ سازلاش بەلگىسى"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:214 ../gdk/gdk.c:217 ../gtk/gtkmain.c:454 ../gtk/gtkmain.c:457
+#: ../gdk/gdk.c:214 ../gdk/gdk.c:217 ../gtk/gtkmain.c:453 ../gtk/gtkmain.c:456
 msgid "FLAGS"
 msgstr "بەلگە"
 
@@ -440,7 +440,7 @@ msgstr "رەڭ"
 #: ../gdk/x11/gdkapplaunchcontext-x11.c:292
 #, c-format
 msgid "Starting %s"
-msgstr "%s قوزغىلىۋاتىدۇ"
+msgstr "قوزغىلىۋاتقىنى %s"
 
 #: ../gdk/x11/gdkapplaunchcontext-x11.c:305
 #, c-format
@@ -453,21 +453,21 @@ msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] "%d تۈرنى ئېچىۋاتىدۇ"
 
-#: ../gtk/a11y/gtkspinneraccessible.c:40
+#: ../gtk/a11y/gtkspinneraccessible.c:39
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
 msgstr "مىكرو تەڭشەك"
 
-#: ../gtk/a11y/gtkspinneraccessible.c:41
+#: ../gtk/a11y/gtkspinneraccessible.c:40
 msgid "Provides visual indication of progress"
 msgstr "كۆرۈنمە كۆرسەتكۈچ جەريانى تەمىنلەيدۇ"
 
-#: ../gtk/a11y/gtkswitchaccessible.c:63
+#: ../gtk/a11y/gtkswitchaccessible.c:62
 msgctxt "light switch widget"
 msgid "Switch"
 msgstr "ئالماشتۇرغۇچ"
 
-#: ../gtk/a11y/gtkswitchaccessible.c:64
+#: ../gtk/a11y/gtkswitchaccessible.c:63
 msgid "Switches between on and off states"
 msgstr "ئېچىش بىلەن تاقاش ھالىتى ئارىسىدا ئالماشتۇرىدۇ"
 
@@ -492,7 +492,6 @@ msgid "Position on the color wheel."
 msgstr "رەڭ ھالقىسىدىكى ئورنى"
 
 #: ../gtk/deprecated/gtkcolorsel.c:464
-#| msgid "_Saturation:"
 msgid "S_aturation:"
 msgstr "تويۇنۇشچانلىقى(_A):"
 
@@ -636,9 +635,6 @@ msgstr "خەت نۇسخا تاللاش"
 #.
 #: ../gtk/gtkaboutdialog.c:104
 #, c-format
-#| msgid ""
-#| "This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a "
-#| "href=\"%s\">%s</a>"
 msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY;\n"
 "for details, visit <a href=\"%s\">%s</a>"
@@ -668,27 +664,27 @@ msgid "Could not show link"
 msgstr "ئۇلانمىنى كۆرسىتەلمىدى"
 
 #: ../gtk/gtkaboutdialog.c:1017
-msgid "Homepage"
-msgstr "باش بەت"
+msgid "Website"
+msgstr "تورتۇرا"
 
 #: ../gtk/gtkaboutdialog.c:1071
 #, c-format
 msgid "About %s"
 msgstr "%s ھەققىدە"
 
-#: ../gtk/gtkaboutdialog.c:2396
+#: ../gtk/gtkaboutdialog.c:2398
 msgid "Created by"
 msgstr "قۇرغۇچى"
 
-#: ../gtk/gtkaboutdialog.c:2399
+#: ../gtk/gtkaboutdialog.c:2401
 msgid "Documented by"
 msgstr "پۈتۈكچى"
 
-#: ../gtk/gtkaboutdialog.c:2409
+#: ../gtk/gtkaboutdialog.c:2411
 msgid "Translated by"
 msgstr "تەرجىمان"
 
-#: ../gtk/gtkaboutdialog.c:2414
+#: ../gtk/gtkaboutdialog.c:2416
 msgid "Artwork by"
 msgstr "گۈزەل سەنئەت تەھرىرى"
 
@@ -763,7 +759,6 @@ msgid "Backslash"
 msgstr "تەتۈر يانتۇ سىزىق(Backslash)"
 
 #: ../gtk/gtkappchooserbutton.c:290
-#| msgid "Other application..."
 msgid "Other application…"
 msgstr "باشقا پروگراممىلار..."
 
@@ -772,7 +767,6 @@ msgid "Failed to look for applications online"
 msgstr "توردىن پروگرامما ئىزدەش مەغلۇپ بولدى"
 
 #: ../gtk/gtkappchooserdialog.c:188
-#| msgid "Find applications online"
 msgid "_Find applications online"
 msgstr "توردىن پروگرامما تاپ(_F)"
 
@@ -870,13 +864,11 @@ msgstr "تامام(_F)"
 
 #: ../gtk/gtkbuilder-menus.c:220
 #, c-format
-#| msgid "Element <%s> is not allowed below <%s>"
 msgid "Element <%s> not allowed inside <%s>"
 msgstr "ئېلېمېنت <%s> نى <%s> نىڭ ئىچىدە ئىشلەتكىلى بولمايدۇ"
 
 #: ../gtk/gtkbuilder-menus.c:225
 #, c-format
-#| msgid "Element <%s> is not allowed below <%s>"
 msgid "Element <%s> not allowed at toplevel"
 msgstr "ئۈستى قەۋەتتە <%s> ئېلېمېنتقا يول قويۇلمايدۇ"
 
@@ -1006,7 +998,6 @@ msgstr "ئىناۋەتسىز"
 #. * acelerator.
 #.
 #: ../gtk/gtkcellrendereraccel.c:416 ../gtk/gtkcellrendereraccel.c:747
-#| msgid "New accelerator..."
 msgid "New accelerator…"
 msgstr "يېڭى تېزلەتكۈچ…"
 
@@ -1021,7 +1012,6 @@ msgid "Pick a Color"
 msgstr "رەڭ ئال"
 
 #: ../gtk/gtkcolorchooserdialog.c:164
-#| msgid "Select a folder"
 msgid "Select a Color"
 msgstr "رەڭ تاللاش"
 
@@ -1037,7 +1027,6 @@ msgstr "قىزىل %d%%، يېشىل %d%%، كۆك %d%%"
 
 #: ../gtk/gtkcolorchooserwidget.c:360
 #, c-format
-#| msgid "Color"
 msgid "Color: %s"
 msgstr "رەڭ: %s"
 
@@ -1062,7 +1051,6 @@ msgid "Light Orange"
 msgstr "ئوچۇق قىزغۇچ سېرىق"
 
 #: ../gtk/gtkcolorchooserwidget.c:423
-#| msgid "Range"
 msgctxt "Color name"
 msgid "Orange"
 msgstr "قىزغۇچ سېرىق"
@@ -1138,7 +1126,6 @@ msgid "Light Chocolate"
 msgstr "سۇس شاكىلات"
 
 #: ../gtk/gtkcolorchooserwidget.c:438
-#| msgid "C_ollate"
 msgctxt "Color name"
 msgid "Chocolate"
 msgstr "شاكىلات"
@@ -1199,7 +1186,6 @@ msgid "Dark Gray"
 msgstr "قېنىق كۈلرەڭ"
 
 #: ../gtk/gtkcolorchooserwidget.c:463
-#| msgid "Medium"
 msgctxt "Color name"
 msgid "Medium Gray"
 msgstr "ئوتتۇراھال كۈلرەڭ"
@@ -1226,34 +1212,28 @@ msgstr "ئاق"
 
 #. translators: label for the custom section in the color chooser
 #: ../gtk/gtkcolorchooserwidget.c:516
-#| msgid "Custom size"
 msgid "Custom"
 msgstr "ئىختىيارى"
 
 #: ../gtk/gtkcolorchooserwidget.c:524
-#| msgid "Create Fo_lder"
 msgid "Create custom color"
 msgstr "ئىختىيارىي رەڭ ياسا"
 
 #: ../gtk/gtkcolorchooserwidget.c:543
 #, c-format
-#| msgid "Custom %sx%s"
 msgid "Custom color %d: %s"
 msgstr "ئىختىيارىي رەڭ %d: %s"
 
 #: ../gtk/gtkcoloreditor.c:412
-#| msgid "Color _name:"
 msgid "Color Name"
 msgstr "رەڭ ئاتى"
 
 #: ../gtk/gtkcoloreditor.c:457
-#| msgid "_Saturation:"
 msgctxt "Color channel"
 msgid "Saturation"
 msgstr "تويۇنۇش"
 
 #: ../gtk/gtkcoloreditor.c:463
-#| msgid "_Value:"
 msgctxt "Color channel"
 msgid "Value"
 msgstr "قىممەت"
@@ -1269,7 +1249,6 @@ msgid "V"
 msgstr "V"
 
 #: ../gtk/gtkcoloreditor.c:481 ../gtk/gtkcolorscale.c:301
-#| msgid "_Hue:"
 msgctxt "Color channel"
 msgid "Hue"
 msgstr "رەڭگى"
@@ -1285,19 +1264,15 @@ msgid "Alpha"
 msgstr "ئالفا"
 
 #: ../gtk/gtkcoloreditor.c:503
-#| msgctxt "paper size"
-#| msgid "A0"
 msgctxt "Color channel"
 msgid "A"
 msgstr "A"
 
 #: ../gtk/gtkcolorplane.c:438
-#| msgid "Color _name:"
 msgid "Color Plane"
 msgstr "رەڭ تەكشىلىكى"
 
 #: ../gtk/gtkcolorswatch.c:447
-#| msgid "Custom size"
 msgid "_Customize"
 msgstr "ئۆزلەشتۈر(_C)"
 
@@ -1325,7 +1300,6 @@ msgid "mm"
 msgstr "mm"
 
 #: ../gtk/gtkcustompaperunixdialog.c:605
-#| msgid "Margins from Printer..."
 msgid "Margins from Printer…"
 msgstr "پرىنتېر ئارىلىقى…"
 
@@ -1432,7 +1406,6 @@ msgid "(None)"
 msgstr "(يوق)"
 
 #: ../gtk/gtkfilechooserbutton.c:2046
-#| msgid "Other..."
 msgid "Other…"
 msgstr "باشقا…"
 
@@ -1540,7 +1513,6 @@ msgid "Remove"
 msgstr "چىقىرىۋەت"
 
 #: ../gtk/gtkfilechooserdefault.c:3389
-#| msgid "Rename..."
 msgid "Rename…"
 msgstr "ئاتىنى ئۆزگەرت…"
 
@@ -1567,7 +1539,6 @@ msgid "_Visit this file"
 msgstr "بۇ ھۆججەتنى كۆر(_S)"
 
 #: ../gtk/gtkfilechooserdefault.c:4179
-#| msgid "Copy _Location"
 msgid "_Copy file’s location"
 msgstr "ھۆججەتنىڭ ئورنىنى كۆچۈر(_C)"
 
@@ -1737,7 +1708,6 @@ msgid "Search font name"
 msgstr "خەت نۇسخا ئاتىنى ئىزدەش"
 
 #: ../gtk/gtkfontchooserwidget.c:891
-#| msgid "_Family:"
 msgid "Font Family"
 msgstr "خەت نۇسخا تۈركۈمى"
 
@@ -1795,7 +1765,6 @@ msgstr "كۆرسىتىلگەن پروگراممىنى ئۇنىڭ ئۈستەلئ�
 
 #: ../gtk/gtk-launch.c:87
 #, c-format
-#| msgid "Error loading icon: %s"
 msgid "Error parsing commandline options: %s\n"
 msgstr "بۇيرۇق قۇرى تاللانمىنى يېشىشتە خاتالىق كۆرۈلدى: %s\n"
 
@@ -1808,20 +1777,18 @@ msgstr "تېخىمۇ كۆپ ئۇچۇرغا \"%s --help\" نى سىناڭ."
 #. means the user is calling gtk-launch without any argument.
 #: ../gtk/gtk-launch.c:100
 #, c-format
-#| msgid "Find applications online"
 msgid "%s: missing application name"
 msgstr "%s: پروگرامما ئاتى يوق"
 
 #: ../gtk/gtk-launch.c:121
 #, c-format
 msgid "Creating AppInfo from id not supported on non unix operating systems"
-msgstr ""
+msgstr "يۇنىكىس بولمىغان سىستېمىلاردا كىملىك(id) دىن AppInfo نى ياشنى ئىشلەتكىلى بولمايدۇ"
 
 #. Translators: the first %s is the program name, the second one
 #. is the application name.
 #: ../gtk/gtk-launch.c:129
 #, c-format
-#| msgid "Could not run application"
 msgid "%s: no such application %s"
 msgstr "%s: بۇنداق %s پروگرامما يوق "
 
@@ -1829,7 +1796,6 @@ msgstr "%s: بۇنداق %s پروگرامما يوق "
 #. is the error message.
 #: ../gtk/gtk-launch.c:147
 #, c-format
-#| msgid "Error loading icon: %s"
 msgid "%s: error launching application: %s\n"
 msgstr "%s: پروگراممىنى ئىجرا قىلىشتا خاتالىق كۆرۈلدى: %s\n"
 
@@ -1871,27 +1837,27 @@ msgstr "سىستېما تاكتىكىسى ئۆزگەرتىشنى چەكلىگە�
 "سىستېما باشقۇرغۇچىڭىز بىلەن ئالاقىلىشىڭ"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:447
+#: ../gtk/gtkmain.c:446
 msgid "Load additional GTK+ modules"
 msgstr "قوشۇمچە GTK+ بۆلىكىنى يۈكلە"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:448
+#: ../gtk/gtkmain.c:447
 msgid "MODULES"
 msgstr "بۆلەك"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:450
+#: ../gtk/gtkmain.c:449
 msgid "Make all warnings fatal"
 msgstr "ھەممە ئاگاھلاندۇرۇشنى ئېغىر خاتالىققا ئۆزگەرت"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:453
+#: ../gtk/gtkmain.c:452
 msgid "GTK+ debugging flags to set"
 msgstr "تەڭشەيدىغان GTK+ سازلاش بەلگىسى"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:456
+#: ../gtk/gtkmain.c:455
 msgid "GTK+ debugging flags to unset"
 msgstr "قالدۇرماقچى بولغان GTK+ سازلاش بەلگىسى"
 
@@ -1900,20 +1866,20 @@ msgstr "قالدۇرماقچى بولغان GTK+ سازلاش بەلگىسى"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:704
+#: ../gtk/gtkmain.c:703
 msgid "default:LTR"
 msgstr "default:RTL"
 
-#: ../gtk/gtkmain.c:769
+#: ../gtk/gtkmain.c:768
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "ئېكران ئېچىلمىدى: (%s)"
 
-#: ../gtk/gtkmain.c:835
+#: ../gtk/gtkmain.c:834
 msgid "GTK+ Options"
 msgstr "GTK+ تاللانما"
 
-#: ../gtk/gtkmain.c:835
+#: ../gtk/gtkmain.c:834
 msgid "Show GTK+ Options"
 msgstr "GTK+ تاللانما كۆرسەت"
 
@@ -1922,12 +1888,10 @@ msgid "Co_nnect"
 msgstr "باغلا(_N)"
 
 #: ../gtk/gtkmountoperation.c:609
-#| msgid "Co_nnect"
 msgid "Connect As"
 msgstr "باغلىنىدىغان ئىشلەتكۈچى تىپى"
 
 #: ../gtk/gtkmountoperation.c:618
-#| msgid "Connect _anonymously"
 msgid "_Anonymous"
 msgstr "ئاتسىز"
 
@@ -1936,17 +1900,14 @@ msgid "Registered U_ser"
 msgstr "خەتلەتكەن ئىشلەتكۈچى(_U)"
 
 #: ../gtk/gtkmountoperation.c:638
-#| msgid "_Username:"
 msgid "_Username"
 msgstr "ئىشلەتكۈچى ئاتى(_U)"
 
 #: ../gtk/gtkmountoperation.c:643
-#| msgid "_Domain:"
 msgid "_Domain"
 msgstr "دائىرە(_D)"
 
 #: ../gtk/gtkmountoperation.c:649
-#| msgid "_Password:"
 msgid "_Password"
 msgstr "ئىم(_P)"
 
@@ -2048,7 +2009,6 @@ msgstr "يان ئارىلىقى:\n"
 " ئاستى: %s %s"
 
 #: ../gtk/gtkpagesetupunixdialog.c:845 ../gtk/gtkprintunixdialog.c:3329
-#| msgid "Manage Custom Sizes"
 msgid "Manage Custom Sizes…"
 msgstr "ئىختىيارى چوڭلۇقلارنى باشقۇر"
 
@@ -2085,7 +2045,6 @@ msgid "Authentication"
 msgstr "سالاھىيەت دەلىللەش"
 
 #: ../gtk/gtkprinteroptionwidget.c:546
-#| msgid "Select a File"
 msgid "Select a filename"
 msgstr "ھۆججەت تاللاڭ"
 
@@ -2233,7 +2192,6 @@ msgid "Getting printer information failed"
 msgstr "پرىنتېر ئۇچۇرىغا ئېرىشەلمىدى"
 
 #: ../gtk/gtkprintunixdialog.c:1916
-#| msgid "Getting printer information..."
 msgid "Getting printer information…"
 msgstr "پرىنتېر ئۇچۇرىغا ئېرىشىۋاتىدۇ…"
 
@@ -4728,7 +4686,6 @@ msgid "Unspecified profile"
 msgstr "بەلگىلەنمىگەن سەپلىمە ھۆججەت"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:249
-#| msgid "output.%s"
 msgid "output"
 msgstr "چىقىرىش"
 
@@ -4807,6 +4764,9 @@ msgstr "test-output.%s"
 #: ../modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "سىناق پرىنتېردا باس"
+
+#~ msgid "Homepage"
+#~ msgstr "باش بەت"
 
 #~ msgid "Caps Lock and Num Lock are on"
 #~ msgstr "Caps Lock ۋە Num Lock ئوچۇق"
