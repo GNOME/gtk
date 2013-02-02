@@ -188,6 +188,7 @@ gdk_events_pending
 gdk_event_type_get_type
 gdk_filter_return_get_type
 gdk_flush
+gdk_fullscreen_mode_get_type
 gdk_get_default_root_window
 gdk_get_display
 gdk_get_display_arg_name
@@ -410,6 +411,7 @@ gdk_window_get_effective_toplevel
 gdk_window_get_events
 gdk_window_get_focus_on_map
 gdk_window_get_frame_extents
+gdk_window_get_fullscreen_mode
 gdk_window_get_geometry
 gdk_window_get_group
 gdk_window_get_height
@@ -482,6 +484,7 @@ gdk_window_set_device_cursor
 gdk_window_set_device_events
 gdk_window_set_events
 gdk_window_set_focus_on_map
+gdk_window_set_fullscreen_mode
 gdk_window_set_functions
 gdk_window_set_geometry_hints
 gdk_window_set_group
