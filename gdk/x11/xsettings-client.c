@@ -49,12 +49,12 @@ struct _XSettingsClient
   Atom selection_atom;
   Atom xsettings_atom;
 
-  XSettingsList *settings;
+  GHashTable *settings; /* string => XSettingsSetting */
 };
 
 static void
 notify_changes (XSettingsClient *client,
-		XSettingsList   *old_list)
+		GHashTable      *old_list)
 {
   GHashTableIter iter;
   XSettingsSetting *setting, *old_setting;
@@ -67,7 +67,7 @@ notify_changes (XSettingsClient *client,
       g_hash_table_iter_init (&iter, client->settings);
       while (g_hash_table_iter_next (&iter, NULL, (gpointer*) &setting))
 	{
-	  old_setting = xsettings_list_lookup (old_list, setting->name);
+	  old_setting = old_list ? g_hash_table_lookup (old_list, setting->name) : NULL;
 
 	  if (old_setting == NULL)
 	    client->notify (setting->name, XSETTINGS_ACTION_NEW, setting, client->cb_data);
@@ -166,13 +166,13 @@ fetch_card8 (XSettingsBuffer *buffer,
 
 #define XSETTINGS_PAD(n,m) ((n + m - 1) & (~(m-1)))
 
-static XSettingsList *
+static GHashTable *
 parse_settings (unsigned char *data,
 		size_t         len)
 {
   XSettingsBuffer buffer;
   XSettingsResult result = XSETTINGS_SUCCESS;
-  XSettingsList *settings = NULL;
+  GHashTable *settings = NULL;
   CARD32 serial;
   CARD32 n_entries;
   CARD32 i;
@@ -304,10 +304,18 @@ parse_settings (unsigned char *data,
 
       setting->type = type;
 
-      result = xsettings_list_insert (&settings, setting);
-      if (result != XSETTINGS_SUCCESS)
-	goto out;
+      if (settings == NULL)
+        settings = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                          NULL,
+                                          (GDestroyNotify) xsettings_setting_free);
 
+      if (g_hash_table_lookup (settings, setting->name) != NULL)
+        {
+          result = XSETTINGS_DUPLICATE_ENTRY;
+          goto out;
+        }
+
+      g_hash_table_insert (settings, setting->name, setting);
       setting = NULL;
     }
 
@@ -334,9 +342,9 @@ parse_settings (unsigned char *data,
       if (setting)
 	xsettings_setting_free (setting);
 
-      xsettings_list_free (settings);
+      if (settings)
+        g_hash_table_unref (settings);
       settings = NULL;
-
     }
 
   return settings;
@@ -354,7 +362,7 @@ read_settings (XSettingsClient *client)
 
   int (*old_handler) (Display *, XErrorEvent *);
   
-  XSettingsList *old_list = client->settings;
+  GHashTable *old_list = client->settings;
 
   client->settings = NULL;
 
@@ -385,7 +393,8 @@ read_settings (XSettingsClient *client)
     }
 
   notify_changes (client, old_list);
-  xsettings_list_free (old_list);
+  if (old_list)
+    g_hash_table_unref (old_list);
 }
 
 static void
@@ -517,7 +526,8 @@ xsettings_client_destroy (XSettingsClient *client)
   if (client->manager_window && client->watch)
     client->watch (client->manager_window, False, 0, client->cb_data);
   
-  xsettings_list_free (client->settings);
+  if (client->settings)
+    g_hash_table_unref (client->settings);
   free (client);
 }
 
@@ -526,7 +536,13 @@ xsettings_client_get_setting (XSettingsClient   *client,
 			      const char        *name,
 			      XSettingsSetting **setting)
 {
-  XSettingsSetting *search = xsettings_list_lookup (client->settings, name);
+  XSettingsSetting *search;
+  
+  if (client->settings == NULL)
+    return XSETTINGS_NO_ENTRY;
+
+  search = g_hash_table_lookup (client->settings, name);
+
   if (search)
     {
       *setting = xsettings_setting_copy (search);

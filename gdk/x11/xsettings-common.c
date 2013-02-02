@@ -118,34 +118,3 @@ xsettings_setting_free (XSettingsSetting *setting)
   free (setting);
 }
 
-void
-xsettings_list_free (XSettingsList *list)
-{
-  if (list != NULL)
-    g_hash_table_destroy (list);
-}
-
-XSettingsResult
-xsettings_list_insert (XSettingsList    **list,
-		       XSettingsSetting  *setting)
-{
-  if (*list == NULL)
-    *list = g_hash_table_new_full (g_str_hash, g_str_equal, NULL,
-                                   (GDestroyNotify) xsettings_setting_free);
-
-  if (g_hash_table_lookup (*list, setting->name) != NULL)
-    return XSETTINGS_DUPLICATE_ENTRY;
-
-  g_hash_table_insert (*list, setting->name, setting);
-  return XSETTINGS_SUCCESS;
-}
-
-XSettingsSetting *
-xsettings_list_lookup (XSettingsList *list,
-		       const char    *name)
-{
-  if (list == NULL)
-    return NULL;
-    
-  return g_hash_table_lookup (list, name);
-}

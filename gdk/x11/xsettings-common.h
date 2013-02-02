@@ -38,14 +38,9 @@ extern "C" {
 #define xsettings_client_set_grab_func   _gdk_x11_xsettings_client_set_grab_func
 #define xsettings_client_set_ungrab_func _gdk_x11_xsettings_client_set_ungrab_func
 #define xsettings_client_process_event   _gdk_x11_xsettings_client_process_event
-#define xsettings_list_free              _gdk_x11_xsettings_list_free
-#define xsettings_list_insert            _gdk_x11_xsettings_list_insert
-#define xsettings_list_lookup            _gdk_x11_xsettings_list_lookup
 #define xsettings_setting_copy           _gdk_x11_xsettings_setting_copy
 #define xsettings_setting_equal          _gdk_x11_xsettings_setting_equal
 #define xsettings_setting_free           _gdk_x11_xsettings_setting_free
-
-typedef GHashTable XSettingsList;
 
 typedef struct _XSettingsBuffer  XSettingsBuffer;
 typedef struct _XSettingsColor   XSettingsColor;
@@ -102,12 +97,6 @@ XSettingsSetting *xsettings_setting_copy  (XSettingsSetting *setting);
 void              xsettings_setting_free  (XSettingsSetting *setting);
 int               xsettings_setting_equal (XSettingsSetting *setting_a,
 					   XSettingsSetting *setting_b);
-
-void              xsettings_list_free   (XSettingsList     *list);
-XSettingsResult   xsettings_list_insert (XSettingsList    **list,
-					 XSettingsSetting  *setting);
-XSettingsSetting *xsettings_list_lookup (XSettingsList     *list,
-					 const char        *name);
 
 #define XSETTINGS_PAD(n,m) ((n + m - 1) & (~(m-1)))
 
