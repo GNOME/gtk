@@ -36,7 +36,6 @@ extern "C" {
 #define xsettings_client_destroy         _gdk_x11_xsettings_client_destroy
 #define xsettings_client_get_setting     _gdk_x11_xsettings_client_get_setting
 #define xsettings_client_new             _gdk_x11_xsettings_client_new
-#define xsettings_client_new_with_grab_funcs _gdk_x11_xsettings_client_new_with_grab_funcs
 #define xsettings_client_set_grab_func   _gdk_x11_xsettings_client_set_grab_func
 #define xsettings_client_set_ungrab_func _gdk_x11_xsettings_client_set_ungrab_func
 #define xsettings_client_process_event   _gdk_x11_xsettings_client_process_event

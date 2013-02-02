@@ -450,20 +450,9 @@ xsettings_client_new (Display             *display,
 		      int                  screen,
 		      XSettingsNotifyFunc  notify,
 		      XSettingsWatchFunc   watch,
-		      void                *cb_data)
-{
-  return xsettings_client_new_with_grab_funcs (display, screen, notify, watch, cb_data,
-                                               NULL, NULL);
-}
-
-XSettingsClient *
-xsettings_client_new_with_grab_funcs (Display             *display,
-		                      int                  screen,
-		                      XSettingsNotifyFunc  notify,
-		                      XSettingsWatchFunc   watch,
-		                      void                *cb_data,
-		                      XSettingsGrabFunc    grab,
-		                      XSettingsGrabFunc    ungrab)
+		      void                *cb_data,
+		      XSettingsGrabFunc    grab,
+		      XSettingsGrabFunc    ungrab)
 {
   XSettingsClient *client;
   char buffer[256];

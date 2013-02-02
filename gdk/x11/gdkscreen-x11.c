@@ -1736,13 +1736,13 @@ _gdk_x11_screen_init_events (GdkScreen *screen)
   /* Keep a flag to avoid extra notifies that we don't need
    */
   x11_screen->xsettings_in_init = TRUE;
-  x11_screen->xsettings_client = xsettings_client_new_with_grab_funcs (x11_screen->xdisplay,
-						                       x11_screen->screen_num,
-						                       gdk_xsettings_notify_cb,
-						                       gdk_xsettings_watch_cb,
-						                       screen,
-                                                                       refcounted_grab_server,
-                                                                       refcounted_ungrab_server);
+  x11_screen->xsettings_client = xsettings_client_new (x11_screen->xdisplay,
+						       x11_screen->screen_num,
+						       gdk_xsettings_notify_cb,
+						       gdk_xsettings_watch_cb,
+						       screen,
+                                                       refcounted_grab_server,
+                                                       refcounted_ungrab_server);
   x11_screen->xsettings_in_init = FALSE;
 }
 
