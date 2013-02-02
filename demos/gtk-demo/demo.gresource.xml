@@ -6,8 +6,8 @@
   <gresource prefix="/application">
     <file preprocess="to-pixdata">gtk-logo-24.png</file>
     <file preprocess="to-pixdata">gtk-logo-48.png</file>
-    <file preprocess="xml-stripblanks">application.ui</file>
-    <file preprocess="xml-stripblanks">menus.ui</file>
+    <file>application.ui</file>
+    <file>menus.ui</file>
   </gresource>
   <gresource prefix="/appwindow">
     <file preprocess="to-pixdata">gtk-logo-old.png</file>
@@ -30,7 +30,7 @@
     <file>reset.css</file>
   </gresource>
   <gresource prefix="/theming_style_classes">
-    <file preprocess="xml-stripblanks">theming.ui</file>
+    <file>theming.ui</file>
   </gresource>
   <gresource prefix="/css_pixbufs">
     <file alias="gtk.css">css_pixbufs.css</file>
