@@ -3102,8 +3102,7 @@ gtk_scrolled_window_remove (GtkContainer *container,
  * #GtkScrollable interface.
  *
  * Deprecated: 3.8: gtk_container_add() will now automatically add
- * a #GtkViewport if the child doesn't implement #GtkScrollable. This
- * function now just calls gtk_container_add()
+ * a #GtkViewport if the child doesn't implement #GtkScrollable.
  */
 void
 gtk_scrolled_window_add_with_viewport (GtkScrolledWindow *scrolled_window,
