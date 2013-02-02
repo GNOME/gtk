@@ -149,10 +149,3 @@ xsettings_list_lookup (XSettingsList *list,
     
   return g_hash_table_lookup (list, name);
 }
-
-char
-xsettings_byte_order (void)
-{
-  CARD32 myint = 0x01020304;
-  return (*(char *)&myint == 1) ? MSBFirst : LSBFirst;
-}

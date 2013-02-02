@@ -32,7 +32,6 @@ extern "C" {
 
 /* Renames for GDK inclusion */
 
-#define xsettings_byte_order             _gdk_x11_xsettings_byte_order
 #define xsettings_client_destroy         _gdk_x11_xsettings_client_destroy
 #define xsettings_client_get_setting     _gdk_x11_xsettings_client_get_setting
 #define xsettings_client_new             _gdk_x11_xsettings_client_new
@@ -109,8 +108,6 @@ XSettingsResult   xsettings_list_insert (XSettingsList    **list,
 					 XSettingsSetting  *setting);
 XSettingsSetting *xsettings_list_lookup (XSettingsList     *list,
 					 const char        *name);
-
-char xsettings_byte_order (void);
 
 #define XSETTINGS_PAD(n,m) ((n + m - 1) & (~(m-1)))
 

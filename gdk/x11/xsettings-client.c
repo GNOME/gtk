@@ -95,8 +95,6 @@ ignore_errors (Display *display, XErrorEvent *event)
   return True;
 }
 
-static char local_byte_order = '\0';
-
 #define BYTES_LEFT(buffer) ((buffer)->data + (buffer)->len - (buffer)->pos)
 
 static XSettingsResult
@@ -111,10 +109,10 @@ fetch_card16 (XSettingsBuffer *buffer,
   x = *(CARD16 *)buffer->pos;
   buffer->pos += 2;
   
-  if (buffer->byte_order == local_byte_order)
-    *result = x;
+  if (buffer->byte_order == MSBFirst)
+    *result = GUINT16_FROM_BE (x);
   else
-    *result = (x << 8) | (x >> 8);
+    *result = GUINT16_FROM_LE (x);
 
   return XSETTINGS_SUCCESS;
 }
@@ -145,10 +143,10 @@ fetch_card32 (XSettingsBuffer *buffer,
   x = *(CARD32 *)buffer->pos;
   buffer->pos += 4;
   
-  if (buffer->byte_order == local_byte_order)
-    *result = x;
+  if (buffer->byte_order == MSBFirst)
+    *result = GUINT32_FROM_BE (x);
   else
-    *result = (x << 24) | ((x & 0xff00) << 8) | ((x & 0xff0000) >> 8) | (x >> 24);
+    *result = GUINT32_FROM_LE (x);
   
   return XSETTINGS_SUCCESS;
 }
@@ -180,8 +178,6 @@ parse_settings (unsigned char *data,
   CARD32 i;
   XSettingsSetting *setting = NULL;
   
-  local_byte_order = xsettings_byte_order ();
-
   buffer.pos = buffer.data = data;
   buffer.len = len;
   
