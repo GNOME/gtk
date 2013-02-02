@@ -7236,25 +7236,25 @@ gtk_icon_view_set_reorderable (GtkIconView *icon_view,
 /**
  * gtk_icon_view_set_activate_on_single_click:
  * @icon_view: a #GtkIconView
- * @setting: %TRUE to emit item-activated on a single click
+ * @single: %TRUE to emit item-activated on a single click
  *
- * Causes the "item-activated" signal to be emitted on a single click
- * instead of a double click.
+ * Causes the #GtkIconView::item-activated signal to be emitted on
+ * a single click instead of a double click.
  *
  * Since: 3.8
  **/
 void
-gtk_icon_view_set_activate_on_single_click  (GtkIconView *icon_view,
-                                             gboolean     setting)
+gtk_icon_view_set_activate_on_single_click (GtkIconView *icon_view,
+                                            gboolean     single)
 {
   g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
 
-  setting = setting != FALSE;
+  single = single != FALSE;
 
-  if (icon_view->priv->activate_on_single_click == setting)
+  if (icon_view->priv->activate_on_single_click == single)
     return;
 
-  icon_view->priv->activate_on_single_click = setting;
+  icon_view->priv->activate_on_single_click = single;
   g_object_notify (G_OBJECT (icon_view), "activate-on-single-click");
 }
 
@@ -7269,7 +7269,7 @@ gtk_icon_view_set_activate_on_single_click  (GtkIconView *icon_view,
  * Since: 3.8
  **/
 gboolean
-gtk_icon_view_get_activate_on_single_click  (GtkIconView *icon_view)
+gtk_icon_view_get_activate_on_single_click (GtkIconView *icon_view)
 {
   g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), FALSE);
 

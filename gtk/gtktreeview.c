@@ -11839,25 +11839,25 @@ gtk_tree_view_get_rules_hint (GtkTreeView  *tree_view)
 /**
  * gtk_tree_view_set_activate_on_single_click:
  * @tree_view: a #GtkTreeView
- * @setting: %TRUE to emit row-activated on a single click
+ * @single: %TRUE to emit row-activated on a single click
  *
- * Cause the "row-activated" signal to be emitted on a single click
- * instead of a double click.
+ * Cause the #GtkTreeView::row-activated signal to be emitted
+ * on a single click instead of a double click.
  *
  * Since: 3.8
  **/
 void
-gtk_tree_view_set_activate_on_single_click  (GtkTreeView *tree_view,
-                                             gboolean     setting)
+gtk_tree_view_set_activate_on_single_click (GtkTreeView *tree_view,
+                                            gboolean     single)
 {
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
-  setting = setting != FALSE;
+  single = single != FALSE;
 
-  if (tree_view->priv->activate_on_single_click == setting)
+  if (tree_view->priv->activate_on_single_click == single)
     return;
 
-  tree_view->priv->activate_on_single_click = setting;
+  tree_view->priv->activate_on_single_click = single;
   g_object_notify (G_OBJECT (tree_view), "activate-on-single-click");
 }
 
@@ -11872,7 +11872,7 @@ gtk_tree_view_set_activate_on_single_click  (GtkTreeView *tree_view,
  * Since: 3.8
  **/
 gboolean
-gtk_tree_view_get_activate_on_single_click  (GtkTreeView *tree_view)
+gtk_tree_view_get_activate_on_single_click (GtkTreeView *tree_view)
 {
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
 
