@@ -2633,6 +2633,7 @@ gtk_switch_get_active
 gtk_switch_get_type
 gtk_switch_new
 gtk_switch_set_active
+gtk_level_bar_accessible_get_type
 gtk_level_bar_get_type
 gtk_level_bar_new
 gtk_level_bar_new_for_interval
