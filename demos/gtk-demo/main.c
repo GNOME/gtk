@@ -714,6 +714,7 @@ create_text (GtkTextBuffer **buffer,
                                        GTK_SHADOW_IN);
 
   text_view = gtk_text_view_new ();
+  g_object_set (text_view, "margin", 20, NULL);
 
   *buffer = gtk_text_buffer_new (NULL);
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (text_view), *buffer);
@@ -903,6 +904,7 @@ main (int argc, char **argv)
 
   gtk_text_buffer_create_tag (info_buffer, "title",
                               "font", "Sans 18",
+                              "pixels-below-lines", 10,
                               NULL);
   g_object_unref (info_buffer);
 
