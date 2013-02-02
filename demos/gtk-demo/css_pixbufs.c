@@ -1,7 +1,7 @@
-/* CSS Theming/Animated backgrounds
+/* CSS Theming/Animated Backgrounds
  *
- * This demo is done in honour of the Pixbufs demo further down. It is done exclusively
- * with CSS as the background of the window.
+ * This demo is done in honour of the Pixbufs demo further down.
+ * It is done exclusively with CSS as the background of the window.
  */
 
 #include <gtk/gtk.h>
