@@ -89,33 +89,6 @@ gdk_input_init (GdkDisplay *display)
 }
 
 static void
-output_handle_geometry(void *data,
-		       struct wl_output *wl_output,
-		       int x, int y, int physical_width, int physical_height,
-		       int subpixel, const char *make, const char *model,
-		       int32_t transform)
-{
-  /*
-    g_signal_emit_by_name (screen, "monitors-changed");
-    g_signal_emit_by_name (screen, "size-changed");
-  */
-}
-static void
-display_handle_mode(void *data,
-                   struct wl_output *wl_output,
-                   uint32_t flags,
-                   int width,
-                   int height,
-                   int refresh)
-{
-}
-
-static const struct wl_output_listener output_listener = {
-	output_handle_geometry,
-	display_handle_mode
-};
-
-static void
 gdk_registry_handle_global(void *data, struct wl_registry *registry, uint32_t id,
 					const char *interface, uint32_t version)
 {
@@ -138,8 +111,7 @@ gdk_registry_handle_global(void *data, struct wl_registry *registry, uint32_t id
   } else if (strcmp(interface, "wl_output") == 0) {
     display_wayland->output =
       wl_registry_bind(display_wayland->wl_registry, id, &wl_output_interface, 1);
-    wl_output_add_listener(display_wayland->output,
-			   &output_listener, display_wayland);
+    _gdk_wayland_screen_add_output(display_wayland->screen, display_wayland->output);
   } else if (strcmp(interface, "wl_seat") == 0) {
     seat = wl_registry_bind(display_wayland->wl_registry, id, &wl_seat_interface, 1);
     _gdk_wayland_device_manager_add_device (gdk_display->device_manager,
