@@ -894,6 +894,7 @@ main (int argc, char **argv)
   gtk_box_pack_start (GTK_BOX (hbox), tree, FALSE, FALSE, 0);
 
   notebook = gtk_notebook_new ();
+  gtk_notebook_set_scrollable (GTK_NOTEBOOK (notebook), TRUE);
   gtk_box_pack_start (GTK_BOX (hbox), notebook, TRUE, TRUE, 0);
 
   gtk_notebook_append_page (GTK_NOTEBOOK (notebook),
