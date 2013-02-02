@@ -44,6 +44,7 @@
 #include <gtk/a11y/gtkimageaccessible.h>
 #include <gtk/a11y/gtkimagecellaccessible.h>
 #include <gtk/a11y/gtklabelaccessible.h>
+#include <gtk/a11y/gtklevelbaraccessible.h>
 #include <gtk/a11y/gtklinkbuttonaccessible.h>
 #include <gtk/a11y/gtklockbuttonaccessible.h>
 #include <gtk/a11y/gtkmenuaccessible.h>

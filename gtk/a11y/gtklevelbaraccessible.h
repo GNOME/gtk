@@ -19,7 +19,11 @@
 #ifndef __GTK_LEVEL_BAR_ACCESSIBLE_H__
 #define __GTK_LEVEL_BAR_ACCESSIBLE_H__
 
-#include "gtkentryaccessible.h"
+#if !defined (__GTK_A11Y_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk-a11y.h> can be included directly."
+#endif
+
+#include <gtk/a11y/gtkwidgetaccessible.h>
 
 G_BEGIN_DECLS
 
