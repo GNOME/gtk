@@ -30,7 +30,7 @@ for $file (@ARGV) {
 
     print "GtkWidget *do_$basename (GtkWidget *do_widget);\n";
 
-    push @demos, {"name" => $basename, "title" => $title, "file" => "$file",
+    push @demos, {"name" => $basename, "title" => $title, "file" => $file,
 		  "func"  => "do_$basename"};
 }
 
