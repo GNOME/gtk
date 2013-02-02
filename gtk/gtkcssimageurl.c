@@ -29,6 +29,55 @@ G_DEFINE_TYPE (GtkCssImageUrl, _gtk_css_image_url, GTK_TYPE_CSS_IMAGE)
 static GtkCssImage *
 gtk_css_image_url_load_image (GtkCssImageUrl *url)
 {
+  GdkPixbuf *pixbuf;
+  GError *error = NULL;
+  GFileInputStream *input;
+
+  if (url->loaded_image)
+    return url->loaded_image;
+
+  /* We special case resources here so we can use
+     gdk_pixbuf_new_from_resource, which in turn has some special casing
+     for GdkPixdata files to avoid duplicating the memory for the pixbufs */
+  if (g_file_has_uri_scheme (url->file, "resource"))
+    {
+      char *uri = g_file_get_uri (url->file);
+      char *resource_path = g_uri_unescape_string (uri + strlen ("resource://"), NULL);
+
+      pixbuf = gdk_pixbuf_new_from_resource (resource_path, &error);
+      g_free (resource_path);
+      g_free (uri);
+    }
+  else
+    {
+      input = g_file_read (url->file, NULL, &error);
+      if (input != NULL)
+	{
+          pixbuf = gdk_pixbuf_new_from_stream (G_INPUT_STREAM (input), NULL, &error);
+          g_object_unref (input);
+	}
+      else
+        {
+          pixbuf = NULL;
+        }
+    }
+
+  if (pixbuf == NULL)
+    {
+      cairo_surface_t *empty = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 0, 0);
+
+      /* XXX: Can we get the error somehow sent to the CssProvider?
+       * I don't like just dumping it to stderr or losing it completely. */
+      g_warning ("Error loading image: %s", error->message);
+      g_error_free (error);
+      url->loaded_image = _gtk_css_image_surface_new (empty);
+      cairo_surface_destroy (empty);
+      return url->loaded_image; 
+    }
+
+  url->loaded_image = _gtk_css_image_surface_new_for_pixbuf (pixbuf);
+  g_object_unref (pixbuf);
+
   return url->loaded_image;
 }
 
@@ -85,47 +134,10 @@ gtk_css_image_url_parse (GtkCssImage  *image,
                          GtkCssParser *parser)
 {
   GtkCssImageUrl *url = GTK_CSS_IMAGE_URL (image);
-  GdkPixbuf *pixbuf;
-  GError *error = NULL;
-  GFileInputStream *input;
 
   url->file = _gtk_css_parser_read_url (parser);
   if (url->file == NULL)
     return FALSE;
-
-  /* We special case resources here so we can use
-     gdk_pixbuf_new_from_resource, which in turn has some special casing
-     for GdkPixdata files to avoid duplicating the memory for the pixbufs */
-  if (g_file_has_uri_scheme (url->file, "resource"))
-    {
-      char *uri = g_file_get_uri (url->file);
-      char *resource_path = g_uri_unescape_string (uri + strlen ("resource://"), NULL);
-
-      pixbuf = gdk_pixbuf_new_from_resource (resource_path, &error);
-      g_free (resource_path);
-      g_free (uri);
-    }
-  else
-    {
-      input = g_file_read (url->file, NULL, &error);
-      if (input == NULL)
-	{
-	  _gtk_css_parser_take_error (parser, error);
-	  return FALSE;
-	}
-
-      pixbuf = gdk_pixbuf_new_from_stream (G_INPUT_STREAM (input), NULL, &error);
-      g_object_unref (input);
-    }
-
-  if (pixbuf == NULL)
-    {
-      _gtk_css_parser_take_error (parser, error);
-      return FALSE;
-    }
-
-  url->loaded_image = _gtk_css_image_surface_new_for_pixbuf (pixbuf);
-  g_object_unref (pixbuf);
 
   return TRUE;
 }
