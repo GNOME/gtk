@@ -224,6 +224,7 @@
 #include <gtk/gtkwidgetpath.h>
 #include <gtk/gtkwindow.h>
 
+#ifndef GTK_DISABLE_DEPRECATED
 #include <gtk/deprecated/gtkcolorsel.h>
 #include <gtk/deprecated/gtkcolorseldialog.h>
 #include <gtk/deprecated/gtkfontsel.h>
@@ -247,6 +248,7 @@
 #include <gtk/deprecated/gtkvscale.h>
 #include <gtk/deprecated/gtkvscrollbar.h>
 #include <gtk/deprecated/gtkvseparator.h>
+#endif /* GTK_DISABLE_DEPRECATED */
 
 #undef __GTK_H_INSIDE__
 
