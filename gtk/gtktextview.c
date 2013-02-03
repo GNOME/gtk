@@ -5218,24 +5218,31 @@ gtk_text_view_focus (GtkWidget        *widget,
 {
   GtkContainer *container;
   gboolean result;
-  
-  container = GTK_CONTAINER (widget);  
+
+  container = GTK_CONTAINER (widget);
 
   if (!gtk_widget_is_focus (widget) &&
       gtk_container_get_focus_child (container) == NULL)
     {
-      gtk_widget_grab_focus (widget);
-      return TRUE;
+      if (gtk_widget_get_can_focus (widget))
+        {
+          gtk_widget_grab_focus (widget);
+          return TRUE;
+        }
+
+      return FALSE;
     }
   else
     {
+      gboolean can_focus;
       /*
        * Unset CAN_FOCUS flag so that gtk_container_focus() allows
        * children to get the focus
        */
+      can_focus = gtk_widget_get_can_focus (widget);
       gtk_widget_set_can_focus (widget, FALSE);
       result = GTK_WIDGET_CLASS (gtk_text_view_parent_class)->focus (widget, direction);
-      gtk_widget_set_can_focus (widget, TRUE);
+      gtk_widget_set_can_focus (widget, can_focus);
 
       return result;
     }
