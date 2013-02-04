@@ -334,6 +334,7 @@ for details, visit http://www.gnu.org/licenses/gpl.html
         image description: (null)
         <AtkAction>
         action 0 name: click
+        action 0 description: Clicks the button
         action 0 keybinding: <Alt>l
       unnamed-GtkToggleButtonAccessible-9
         "toggle button"
@@ -350,6 +351,7 @@ for details, visit http://www.gnu.org/licenses/gpl.html
         image description: (null)
         <AtkAction>
         action 0 name: click
+        action 0 description: Clicks the button
         action 0 keybinding: <Alt>r
       unnamed-GtkButtonAccessible-10
         "push button"
@@ -366,4 +368,5 @@ for details, visit http://www.gnu.org/licenses/gpl.html
         image description: (null)
         <AtkAction>
         action 0 name: click
+        action 0 description: Clicks the button
         action 0 keybinding: <Alt>c

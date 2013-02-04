@@ -122,6 +122,7 @@ window1
               image description: (null)
               <AtkAction>
               action 0 name: click
+              action 0 description: Clicks the button
         unnamed-GtkContainerAccessible-11
           "filler"
           parent: unnamed-GtkContainerAccessible-2
@@ -182,6 +183,7 @@ window1
                                   wrap-mode: word
               <AtkAction>
               action 0 name: activate
+              action 0 description: Activates the entry
               action 0 keybinding: <Alt>n
             Color name:
               "label"
@@ -264,6 +266,7 @@ window1
                                   wrap-mode: word
               <AtkAction>
               action 0 name: activate
+              action 0 description: Activates the entry
             unnamed-GtkScaleAccessible-13
               "slider"
               parent: unnamed-GtkContainerAccessible-12
@@ -375,6 +378,7 @@ window1
                                   wrap-mode: word
               <AtkAction>
               action 0 name: activate
+              action 0 description: Activates the entry
               action 0 keybinding: <Alt>b
               <AtkValue>
               minimum value: 0.000000
@@ -464,6 +468,7 @@ window1
                                   wrap-mode: word
               <AtkAction>
               action 0 name: activate
+              action 0 description: Activates the entry
               action 0 keybinding: <Alt>g
               <AtkValue>
               minimum value: 0.000000
@@ -553,6 +558,7 @@ window1
                                   wrap-mode: word
               <AtkAction>
               action 0 name: activate
+              action 0 description: Activates the entry
               action 0 keybinding: <Alt>r
               <AtkValue>
               minimum value: 0.000000
@@ -642,6 +648,7 @@ window1
                                   wrap-mode: word
               <AtkAction>
               action 0 name: activate
+              action 0 description: Activates the entry
               action 0 keybinding: <Alt>v
               <AtkValue>
               minimum value: 0.000000
@@ -731,6 +738,7 @@ window1
                                   wrap-mode: word
               <AtkAction>
               action 0 name: activate
+              action 0 description: Activates the entry
               action 0 keybinding: <Alt>a
               <AtkValue>
               minimum value: 0.000000
@@ -820,6 +828,7 @@ window1
                                   wrap-mode: word
               <AtkAction>
               action 0 name: activate
+              action 0 description: Activates the entry
               action 0 keybinding: <Alt>h
               <AtkValue>
               minimum value: 0.000000
@@ -1329,6 +1338,7 @@ window1
         image description: (null)
         <AtkAction>
         action 0 name: click
+        action 0 description: Clicks the button
         action 0 keybinding: <Alt>h
       unnamed-GtkButtonAccessible-59
         "push button"
@@ -1345,6 +1355,7 @@ window1
         image description: (null)
         <AtkAction>
         action 0 name: click
+        action 0 description: Clicks the button
         action 0 keybinding: <Alt>s
       unnamed-GtkButtonAccessible-60
         "push button"
@@ -1361,4 +1372,5 @@ window1
         image description: (null)
         <AtkAction>
         action 0 name: click
+        action 0 description: Clicks the button
         action 0 keybinding: <Alt>c

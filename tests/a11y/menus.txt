@@ -28,6 +28,7 @@ window1
       alpha: 1
       <AtkAction>
       action 0 name: click
+      action 0 description: Clicks the menuitem
       action 0 keybinding: <Alt>f;<Alt>f;
       <AtkSelection>
       imagemenuitem1
@@ -42,6 +43,7 @@ window1
         alpha: 1
         <AtkAction>
         action 0 name: click
+        action 0 description: Clicks the menuitem
         action 0 keybinding: n;<Alt>f:n;
         <AtkSelection>
       imagemenuitem2
@@ -56,6 +58,7 @@ window1
         alpha: 1
         <AtkAction>
         action 0 name: click
+        action 0 description: Clicks the menuitem
         <AtkSelection>
       separatormenuitem1
         "separator"
@@ -80,6 +83,7 @@ window1
         alpha: 1
         <AtkAction>
         action 0 name: click
+        action 0 description: Clicks the menuitem
         <AtkSelection>
     menuitem2
       "menu"
@@ -93,6 +97,7 @@ window1
       alpha: 1
       <AtkAction>
       action 0 name: click
+      action 0 description: Clicks the menuitem
       action 0 keybinding: <Alt>e;<Alt>e;
       <AtkSelection>
       menuitem4
@@ -109,6 +114,7 @@ window1
         alpha: 1
         <AtkAction>
         action 0 name: click
+        action 0 description: Clicks the menuitem
         <AtkSelection>
       menuitem5
         "radio menu item"
@@ -124,4 +130,5 @@ window1
         alpha: 1
         <AtkAction>
         action 0 name: click
+        action 0 description: Clicks the menuitem
         <AtkSelection>

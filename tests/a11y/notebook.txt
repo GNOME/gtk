@@ -40,6 +40,7 @@ window1
         image description: (null)
         <AtkAction>
         action 0 name: click
+        action 0 description: Clicks the button
         action 0 keybinding: <Alt>y
     unnamed-GtkNotebookPageAccessible-1
       "page tab"
@@ -64,4 +65,5 @@ window1
         image description: (null)
         <AtkAction>
         action 0 name: click
+        action 0 description: Clicks the button
         action 0 keybinding: <Alt>n

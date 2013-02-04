@@ -28,6 +28,7 @@ window1
       alpha: 1
       <AtkAction>
       action 0 name: click
+      action 0 description: Clicks the menuitem
       action 0 keybinding: <Alt>f;<Alt>f;
       <AtkSelection>
       imagemenuitem1
@@ -42,6 +43,7 @@ window1
         alpha: 1
         <AtkAction>
         action 0 name: click
+        action 0 description: Clicks the menuitem
         action 0 keybinding: n;<Alt>f:n;
         <AtkSelection>
       imagemenuitem2
@@ -56,6 +58,7 @@ window1
         alpha: 1
         <AtkAction>
         action 0 name: click
+        action 0 description: Clicks the menuitem
         action 0 keybinding: o;<Alt>f:o;
         <AtkSelection>
         radiomenuitem1
@@ -73,6 +76,7 @@ window1
           alpha: 1
           <AtkAction>
           action 0 name: click
+          action 0 description: Clicks the menuitem
           <AtkSelection>
         radiomenuitem2
           "radio menu item"
@@ -89,6 +93,7 @@ window1
           alpha: 1
           <AtkAction>
           action 0 name: click
+          action 0 description: Clicks the menuitem
           <AtkSelection>
         radiomenuitem3
           "radio menu item"
@@ -105,6 +110,7 @@ window1
           alpha: 1
           <AtkAction>
           action 0 name: click
+          action 0 description: Clicks the menuitem
           <AtkSelection>
       imagemenuitem3
         "menu item"
@@ -118,6 +124,7 @@ window1
         alpha: 1
         <AtkAction>
         action 0 name: click
+        action 0 description: Clicks the menuitem
         action 0 keybinding: s;<Alt>f:s;
         <AtkSelection>
       imagemenuitem4
@@ -132,6 +139,7 @@ window1
         alpha: 1
         <AtkAction>
         action 0 name: click
+        action 0 description: Clicks the menuitem
         action 0 keybinding: a;<Alt>f:a;
         <AtkSelection>
       separatormenuitem1
@@ -157,6 +165,7 @@ window1
         alpha: 1
         <AtkAction>
         action 0 name: click
+        action 0 description: Clicks the menuitem
         <AtkSelection>
       separatormenuitem2
         "separator"
@@ -181,6 +190,7 @@ window1
         alpha: 1
         <AtkAction>
         action 0 name: click
+        action 0 description: Clicks the menuitem
         action 0 keybinding: q;<Alt>f:q;
         <AtkSelection>
     menuitem2
@@ -195,6 +205,7 @@ window1
       alpha: 1
       <AtkAction>
       action 0 name: click
+      action 0 description: Clicks the menuitem
       action 0 keybinding: <Alt>e;<Alt>e;
       <AtkSelection>
       imagemenuitem6
@@ -209,6 +220,7 @@ window1
         alpha: 1
         <AtkAction>
         action 0 name: click
+        action 0 description: Clicks the menuitem
         action 0 keybinding: t;<Alt>e:t;
         <AtkSelection>
       imagemenuitem7
@@ -223,6 +235,7 @@ window1
         alpha: 1
         <AtkAction>
         action 0 name: click
+        action 0 description: Clicks the menuitem
         action 0 keybinding: c;<Alt>e:c;
         <AtkSelection>
       imagemenuitem8
@@ -237,6 +250,7 @@ window1
         alpha: 1
         <AtkAction>
         action 0 name: click
+        action 0 description: Clicks the menuitem
         action 0 keybinding: p;<Alt>e:p;
         <AtkSelection>
       imagemenuitem9
@@ -251,6 +265,7 @@ window1
         alpha: 1
         <AtkAction>
         action 0 name: click
+        action 0 description: Clicks the menuitem
         action 0 keybinding: d;<Alt>e:d;
         <AtkSelection>
     menuitem3
@@ -265,6 +280,7 @@ window1
       alpha: 1
       <AtkAction>
       action 0 name: click
+      action 0 description: Clicks the menuitem
       action 0 keybinding: <Alt>v;<Alt>v;
       <AtkSelection>
     menuitem4
@@ -279,6 +295,7 @@ window1
       alpha: 1
       <AtkAction>
       action 0 name: click
+      action 0 description: Clicks the menuitem
       action 0 keybinding: <Alt>h;<Alt>h;
       <AtkSelection>
       imagemenuitem10
@@ -293,5 +310,6 @@ window1
         alpha: 1
         <AtkAction>
         action 0 name: click
+        action 0 description: Clicks the menuitem
         action 0 keybinding: a;<Alt>h:a;
         <AtkSelection>

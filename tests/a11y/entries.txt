@@ -176,6 +176,7 @@ window1
                           wrap-mode: word
       <AtkAction>
       action 0 name: activate
+      action 0 description: Activates the entry
       action 0 keybinding: <Alt>e
     entry2
       "password text"
@@ -218,6 +219,7 @@ window1
                           wrap-mode: word
       <AtkAction>
       action 0 name: activate
+      action 0 description: Activates the entry
       action 0 keybinding: <Alt>p
     entry3
       "text"
@@ -259,6 +261,7 @@ window1
                           wrap-mode: word
       <AtkAction>
       action 0 name: activate
+      action 0 description: Activates the entry
       unnamed-GtkEntryIconAccessible-0
         "icon"
         parent: entry3
@@ -318,6 +321,7 @@ window1
                           wrap-mode: word
       <AtkAction>
       action 0 name: activate
+      action 0 description: Activates the entry
       action 0 keybinding: <Alt>s
       <AtkValue>
       minimum value: 0.500000

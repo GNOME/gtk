@@ -21,5 +21,6 @@ window1
     image description: (null)
     <AtkAction>
     action 0 name: click
+    action 0 description: Clicks the button
     <AtkHyperlinkImpl>
     anchors: http://www.gtk.org

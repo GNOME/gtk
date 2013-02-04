@@ -28,6 +28,7 @@ window1
       alpha: 1
       <AtkAction>
       action 0 name: toggle
+      action 0 description: Toggles the switch
     button4
       "radio button"
       parent: grid1
@@ -45,6 +46,7 @@ window1
       image description: (null)
       <AtkAction>
       action 0 name: click
+      action 0 description: Clicks the button
     button3
       "radio button"
       parent: grid1
@@ -62,6 +64,7 @@ window1
       image description: (null)
       <AtkAction>
       action 0 name: click
+      action 0 description: Clicks the button
     button2
       "check box"
       parent: grid1
@@ -77,6 +80,7 @@ window1
       image description: (null)
       <AtkAction>
       action 0 name: click
+      action 0 description: Clicks the button
     button1
       "toggle button"
       parent: grid1
@@ -92,3 +96,4 @@ window1
       image description: (null)
       <AtkAction>
       action 0 name: click
+      action 0 description: Clicks the button
