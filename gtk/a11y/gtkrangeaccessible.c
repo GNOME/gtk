@@ -22,11 +22,9 @@
 #include "gtkrangeaccessible.h"
 
 
-static void atk_action_interface_init (AtkActionIface *iface);
 static void atk_value_interface_init  (AtkValueIface  *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkRangeAccessible, gtk_range_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
-                         G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_VALUE, atk_value_interface_init))
 
 static void
@@ -220,96 +218,4 @@ atk_value_interface_init (AtkValueIface *iface)
   iface->get_minimum_value = gtk_range_accessible_get_minimum_value;
   iface->get_minimum_increment = gtk_range_accessible_get_minimum_increment;
   iface->set_current_value = gtk_range_accessible_set_current_value;
-}
-
-static gboolean
-gtk_range_accessible_do_action (AtkAction *action,
-                                gint       i)
-{
-  GtkWidget *widget;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (action));
-  if (widget == NULL)
-    return FALSE;
-
-  if (!gtk_widget_get_sensitive (widget) || !gtk_widget_get_visible (widget))
-    return FALSE;
-
-  if (i != 0)
-    return FALSE;
-
-  gtk_widget_activate (widget);
-
-  return TRUE;
-}
-
-static gint
-gtk_range_accessible_get_n_actions (AtkAction *action)
-{
-    return 1;
-}
-
-static const gchar *
-gtk_range_accessible_get_keybinding (AtkAction *action,
-                                     gint       i)
-{
-  GtkRangeAccessible *range = GTK_RANGE_ACCESSIBLE (action);
-  GtkWidget *widget;
-  GtkWidget *label;
-  AtkRelationSet *set;
-  AtkRelation *relation;
-  GPtrArray *target;
-  gpointer target_object;
-  guint key_val;
-  gchar *return_value = NULL;
-
-  if (i != 0)
-    return NULL;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (range));
-  if (widget == NULL)
-   return NULL;
-
-  set = atk_object_ref_relation_set (ATK_OBJECT (action));
-
-  if (!set)
-    return NULL;
-
-  label = NULL;
-  relation = atk_relation_set_get_relation_by_type (set, ATK_RELATION_LABELLED_BY);
-  if (relation)
-    {
-      target = atk_relation_get_target (relation);
-      target_object = g_ptr_array_index (target, 0);
-      label = gtk_accessible_get_widget (GTK_ACCESSIBLE (target_object));
-    }
-  g_object_unref (set);
-
-  if (GTK_IS_LABEL (label))
-    {
-      key_val = gtk_label_get_mnemonic_keyval (GTK_LABEL (label));
-      if (key_val != GDK_KEY_VoidSymbol)
-         return_value = gtk_accelerator_name (key_val, GDK_MOD1_MASK);
-    }
-
-  return return_value;
-}
-
-static const gchar *
-gtk_range_accessible_action_get_name (AtkAction *action,
-                                      gint       i)
-{
-  if (i != 0)
-    return NULL;
-
-  return "activate";
-}
-
-static void
-atk_action_interface_init (AtkActionIface *iface)
-{
-  iface->do_action = gtk_range_accessible_do_action;
-  iface->get_n_actions = gtk_range_accessible_get_n_actions;
-  iface->get_keybinding = gtk_range_accessible_get_keybinding;
-  iface->get_name = gtk_range_accessible_action_get_name;
 }
