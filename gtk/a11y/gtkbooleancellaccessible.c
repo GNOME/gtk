@@ -18,6 +18,7 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
+#include <glib/gi18n-lib.h>
 #include "gtkbooleancellaccessible.h"
 
 struct _GtkBooleanCellAccessiblePrivate
@@ -39,7 +40,7 @@ gtk_boolean_cell_accessible_get_description (AtkAction *action,
                                              gint       i)
 {
   if (i == 0)
-    return "toggles the cell";
+    return C_("Action description", "Toggles the cell");
 
   return parent_action_iface->get_description (action, i - 1);
 }
@@ -54,14 +55,24 @@ gtk_boolean_cell_accessible_action_get_name (AtkAction *action,
   return parent_action_iface->get_description (action, i - 1);
 }
 
+static const gchar *
+gtk_boolean_cell_accessible_action_get_localized_name (AtkAction *action,
+                                                       gint       i)
+{
+  if (i == 0)
+    return C_("Action name", "Toggle");
+
+  return parent_action_iface->get_description (action, i - 1);
+}
+
 static gboolean
 gtk_boolean_cell_accessible_do_action (AtkAction *action,
                                        gint       i)
 {
   if (i == 0)
     return parent_action_iface->do_action (action, 2);
-  else
-    return parent_action_iface->do_action (action, i - 1);
+
+  return parent_action_iface->do_action (action, i - 1);
 }
 
 static void
@@ -73,6 +84,7 @@ gtk_boolean_cell_accessible_action_interface_init (AtkActionIface *iface)
   iface->get_n_actions = gtk_boolean_cell_accessible_get_n_actions;
   iface->get_description = gtk_boolean_cell_accessible_get_description;
   iface->get_name = gtk_boolean_cell_accessible_action_get_name;
+  iface->get_localized_name = gtk_boolean_cell_accessible_action_get_localized_name;
 }
 
 

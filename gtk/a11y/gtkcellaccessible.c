@@ -17,6 +17,7 @@
 
 #include "config.h"
 
+#include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
 #include "gtkcontainercellaccessible.h"
 #include "gtkcellaccessibleprivate.h"
@@ -248,17 +249,34 @@ gtk_cell_accessible_action_get_name (AtkAction *action,
 }
 
 static const gchar *
+gtk_cell_accessible_action_get_localized_name (AtkAction *action,
+                                               gint       index)
+{
+  switch (index)
+    {
+    case 0:
+      return C_("Action name", "Expand or contract");
+    case 1:
+      return C_("Action name", "Edit");
+    case 2:
+      return C_("Action name", "Activate");
+    default:
+      return NULL;
+    }
+}
+
+static const gchar *
 gtk_cell_accessible_action_get_description (AtkAction *action,
                                             gint       index)
 {
   switch (index)
     {
     case 0:
-      return "expands or contracts the row in the tree view containing this cell";
+      return C_("Action description", "Expands or contracts the row in the tree view containing this cell");
     case 1:
-      return "creates a widget in which the contents of the cell can be edited";
+      return C_("Action description", "Creates a widget in which the contents of the cell can be edited");
     case 2:
-      return "activate the cell";
+      return C_("Action description", "Activates the cell");
     default:
       return NULL;
     }
@@ -308,6 +326,7 @@ atk_action_interface_init (AtkActionIface *iface)
   iface->get_n_actions = gtk_cell_accessible_action_get_n_actions;
   iface->do_action = gtk_cell_accessible_action_do_action;
   iface->get_name = gtk_cell_accessible_action_get_name;
+  iface->get_localized_name = gtk_cell_accessible_action_get_localized_name;
   iface->get_description = gtk_cell_accessible_action_get_description;
   iface->get_keybinding = gtk_cell_accessible_action_get_keybinding;
 }

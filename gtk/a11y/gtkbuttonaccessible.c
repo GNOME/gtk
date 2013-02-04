@@ -19,6 +19,7 @@
 
 #include <string.h>
 #include <gtk/gtk.h>
+#include <glib/gi18n-lib.h>
 #include "gtkbuttonaccessible.h"
 
 
@@ -327,10 +328,27 @@ static const gchar *
 gtk_button_accessible_action_get_name (AtkAction *action,
                                        gint       i)
 {
-  if (i != 0)
-    return NULL;
+  if (i == 0)
+    return "click";
+  return NULL;
+}
 
-  return "click";
+static const gchar *
+gtk_button_accessible_action_get_localized_name (AtkAction *action,
+                                                 gint       i)
+{
+  if (i == 0)
+    return C_("Action name", "Click");
+  return NULL;
+}
+
+static const gchar *
+gtk_button_accessible_action_get_description (AtkAction *action,
+                                              gint       i)
+{
+  if (i == 0)
+    return C_("Action description", "Clicks the button");
+  return NULL;
 }
 
 static void
@@ -340,6 +358,8 @@ atk_action_interface_init (AtkActionIface *iface)
   iface->get_n_actions = gtk_button_accessible_get_n_actions;
   iface->get_keybinding = gtk_button_accessible_get_keybinding;
   iface->get_name = gtk_button_accessible_action_get_name;
+  iface->get_localized_name = gtk_button_accessible_action_get_localized_name;
+  iface->get_description = gtk_button_accessible_action_get_description;
 }
 
 static const gchar *

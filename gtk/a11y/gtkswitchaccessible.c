@@ -24,6 +24,7 @@
 
 #include "config.h"
 
+#include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
 #include "gtkintl.h"
 #include "gtkswitchaccessible.h"
@@ -87,10 +88,27 @@ static const gchar *
 gtk_switch_action_get_name (AtkAction *action,
                             gint       i)
 {
-  if (i != 0)
-    return NULL;
+  if (i == 0)
+    return "toggle";
+  return NULL;
+}
 
-  return "toggle";
+static const gchar *
+gtk_switch_action_get_localized_name (AtkAction *action,
+                                      gint       i)
+{
+  if (i == 0)
+    return C_("Action name", "Toggle");
+  return NULL;
+}
+
+static const gchar *
+gtk_switch_action_get_description (AtkAction *action,
+                                   gint       i)
+{
+  if (i == 0)
+    return C_("Action description", "Toggles the switch");
+  return NULL;
 }
 
 static gboolean
@@ -122,4 +140,6 @@ atk_action_interface_init (AtkActionIface *iface)
   iface->do_action = gtk_switch_action_do_action;
   iface->get_n_actions = gtk_switch_action_get_n_actions;
   iface->get_name = gtk_switch_action_get_name;
+  iface->get_localized_name = gtk_switch_action_get_localized_name;
+  iface->get_description = gtk_switch_action_get_description;
 }

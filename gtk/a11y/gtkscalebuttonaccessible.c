@@ -17,6 +17,7 @@
 
 #include <config.h>
 
+#include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
 #include "gtkscalebuttonaccessible.h"
 
@@ -133,7 +134,15 @@ static const gchar *
 gtk_scale_button_accessible_get_description (AtkAction *action,
                                              gint       i)
 {
-  return NULL;
+  switch (i)
+    {
+    case 0:
+      return C_("Action description", "Pops up the slider");
+    case 1:
+      return C_("Action description", "Dismisses the slider");
+    default:
+      return NULL;
+    }
 }
 
 static const gchar *
@@ -151,6 +160,21 @@ gtk_scale_button_accessible_action_get_name (AtkAction *action,
     }
 }
 
+static const gchar *
+gtk_scale_button_accessible_action_get_localized_name (AtkAction *action,
+                                                       gint       i)
+{
+  switch (i)
+    {
+    case 0:
+      return C_("Action name", "Popup");
+    case 1:
+      return C_("Action name", "Dismiss");
+    default:
+      return NULL;
+    }
+}
+
 static void
 atk_action_interface_init (AtkActionIface *iface)
 {
@@ -158,6 +182,7 @@ atk_action_interface_init (AtkActionIface *iface)
   iface->get_n_actions = gtk_scale_button_accessible_get_n_actions;
   iface->get_description = gtk_scale_button_accessible_get_description;
   iface->get_name = gtk_scale_button_accessible_action_get_name;
+  iface->get_localized_name = gtk_scale_button_accessible_action_get_localized_name;
 }
 
 static void

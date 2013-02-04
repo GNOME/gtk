@@ -17,6 +17,7 @@
 
 #include "config.h"
 
+#include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
 #include "gtkexpanderaccessible.h"
 
@@ -267,10 +268,27 @@ static const gchar *
 gtk_expander_accessible_action_get_name (AtkAction *action,
                                          gint       i)
 {
-  if (i != 0)
-    return NULL;
+  if (i == 0)
+    return "activate";
+  return NULL;
+}
 
-  return "activate";
+static const gchar *
+gtk_expander_accessible_action_get_localized_name (AtkAction *action,
+                                                   gint       i)
+{
+  if (i == 0)
+    return C_("Action name", "Activate");
+  return NULL;
+}
+
+static const gchar *
+gtk_expander_accessible_action_get_description (AtkAction *action,
+                                                gint       i)
+{
+  if (i == 0)
+    return C_("Action description", "Activates the expander");
+  return NULL;
 }
 
 static void
@@ -280,4 +298,6 @@ atk_action_interface_init (AtkActionIface *iface)
   iface->get_n_actions = gtk_expander_accessible_get_n_actions;
   iface->get_keybinding = gtk_expander_accessible_get_keybinding;
   iface->get_name = gtk_expander_accessible_action_get_name;
+  iface->get_localized_name = gtk_expander_accessible_action_get_localized_name;
+  iface->get_description = gtk_expander_accessible_action_get_description;
 }

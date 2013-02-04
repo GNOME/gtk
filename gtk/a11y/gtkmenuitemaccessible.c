@@ -15,6 +15,9 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+
+#include <glib/gi18n-lib.h>
 #include <string.h>
 #include <gtk/gtk.h>
 #include "gtkmenuitemaccessible.h"
@@ -420,10 +423,27 @@ static const gchar *
 gtk_menu_item_accessible_action_get_name (AtkAction *action,
                                           gint       i)
 {
-  if (i != 0 || gtk_menu_item_accessible_get_n_actions (action) == 0)
-    return NULL;
+  if (i == 0 && gtk_menu_item_accessible_get_n_actions (action) > 0)
+    return "click";
+  return NULL;
+}
 
-  return "click";
+static const gchar *
+gtk_menu_item_accessible_action_get_localized_name (AtkAction *action,
+                                                    gint       i)
+{
+  if (i == 0 && gtk_menu_item_accessible_get_n_actions (action) > 0)
+    return C_("Action name", "Click");
+  return NULL;
+}
+
+static const gchar *
+gtk_menu_item_accessible_action_get_description (AtkAction *action,
+                                                 gint       i)
+{
+  if (i == 0 && gtk_menu_item_accessible_get_n_actions (action) > 0)
+    return C_("Action description", "Clicks the menuitem");
+  return NULL;
 }
 
 static gboolean
@@ -615,6 +635,8 @@ atk_action_interface_init (AtkActionIface *iface)
   iface->do_action = gtk_menu_item_accessible_do_action;
   iface->get_n_actions = gtk_menu_item_accessible_get_n_actions;
   iface->get_name = gtk_menu_item_accessible_action_get_name;
+  iface->get_localized_name = gtk_menu_item_accessible_action_get_localized_name;
+  iface->get_description = gtk_menu_item_accessible_action_get_description;
   iface->get_keybinding = gtk_menu_item_accessible_get_keybinding;
 }
 

@@ -17,6 +17,7 @@
 
 #include "config.h"
 
+#include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
 #include "gtkcomboboxaccessible.h"
 
@@ -299,10 +300,27 @@ static const gchar *
 gtk_combo_box_accessible_action_get_name (AtkAction *action,
                                           gint       i)
 {
-  if (i != 0)
-    return NULL;
+  if (i == 0)
+    return "press";
+  return NULL;
+}
 
-  return "press";
+static const gchar *
+gtk_combo_box_accessible_action_get_localized_name (AtkAction *action,
+                                                    gint       i)
+{
+  if (i == 0)
+    return C_("Action name", "Press");
+  return NULL;
+}
+
+static const gchar *
+gtk_combo_box_accessible_action_get_description (AtkAction *action,
+                                                 gint       i)
+{
+  if (i == 0)
+    return C_("Action description", "Presses the combobox");
+  return NULL;
 }
 
 static void
@@ -312,6 +330,8 @@ atk_action_interface_init (AtkActionIface *iface)
   iface->get_n_actions = gtk_combo_box_accessible_get_n_actions;
   iface->get_keybinding = gtk_combo_box_accessible_get_keybinding;
   iface->get_name = gtk_combo_box_accessible_action_get_name;
+  iface->get_localized_name = gtk_combo_box_accessible_action_get_localized_name;
+  iface->get_description = gtk_combo_box_accessible_action_get_description;
 }
 
 static gboolean
