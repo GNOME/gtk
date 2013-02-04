@@ -1500,6 +1500,118 @@ create_statusbar (GtkWidget *widget)
     gtk_widget_destroy (window);
 }
 
+/* Alpha demo */
+
+static void
+alpha_changed (GtkRange *range, GtkWidget *widget)
+{
+  gdouble alpha;
+
+  alpha = gtk_range_get_value (range);
+
+  gtk_widget_set_opacity (widget, alpha / 100.0);
+}
+
+
+void
+create_alpha_widgets (GtkWidget *widget)
+{
+  static GtkWidget *window = NULL;
+
+  if (!window)
+    {
+      GtkWidget *vbox2, *vbox, *main_hbox;
+      GtkWidget *button, *event_box, *label, *scale;
+      GtkWidget *alpha1, *alpha2, *alpha3;
+
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_screen (GTK_WINDOW (window),
+                             gtk_widget_get_screen (widget));
+      gtk_window_set_default_size (GTK_WINDOW (window),
+                                   450, 450);
+
+      g_signal_connect (window, "destroy",
+                        G_CALLBACK (gtk_widget_destroyed), &window);
+
+      gtk_window_set_title (GTK_WINDOW (window), "Alpha");
+      gtk_container_set_border_width (GTK_CONTAINER (window), 0);
+
+      main_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+      gtk_container_add (GTK_CONTAINER (window), main_hbox);
+
+      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+
+      gtk_box_pack_start (GTK_BOX (main_hbox), vbox, FALSE, FALSE, 0);
+
+      /* Plain button (no gdkwindows */
+
+      label = gtk_label_new ("non-window widget");
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+
+      alpha1 = button = gtk_button_new_with_label ("A Button");
+      gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+
+      /* windowed container with both windowed and normal button */
+      label = gtk_label_new ("\nwindow widget");
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+
+      alpha2 = event_box = gtk_event_box_new ();
+      gtk_box_pack_start (GTK_BOX (vbox), event_box, FALSE, FALSE, 0);
+
+      vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+      gtk_container_add (GTK_CONTAINER (event_box), vbox2);
+
+      button = gtk_button_new_with_label ("A Button");
+      gtk_box_pack_start (GTK_BOX (vbox2), button, FALSE, FALSE, 0);
+
+      event_box = gtk_event_box_new ();
+      button = gtk_button_new_with_label ("A Button (in window)");
+      gtk_container_add (GTK_CONTAINER (event_box), button);
+      gtk_box_pack_start (GTK_BOX (vbox2), event_box, FALSE, FALSE, 0);
+
+      /* non-windowed container with both windowed and normal button */
+      label = gtk_label_new ("\nnon-window widget with widget child");
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+
+      alpha3 = vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), vbox2, FALSE, FALSE, 0);
+
+      button = gtk_button_new_with_label ("A Button");
+      gtk_box_pack_start (GTK_BOX (vbox2), button, FALSE, FALSE, 0);
+
+      event_box = gtk_event_box_new ();
+      button = gtk_button_new_with_label ("A Button (in window)");
+      gtk_container_add (GTK_CONTAINER (event_box), button);
+      gtk_box_pack_start (GTK_BOX (vbox2), event_box, FALSE, FALSE, 0);
+
+      scale = gtk_scale_new_with_range (GTK_ORIENTATION_VERTICAL,
+                                         0, 100, 1);
+      gtk_box_pack_start (GTK_BOX (main_hbox), scale, FALSE, FALSE, 0);
+      g_signal_connect (scale, "value_changed", G_CALLBACK (alpha_changed), alpha1);
+      gtk_range_set_value (GTK_RANGE (scale), 50);
+
+      scale = gtk_scale_new_with_range (GTK_ORIENTATION_VERTICAL,
+                                         0, 100, 1);
+      gtk_box_pack_start (GTK_BOX (main_hbox), scale, FALSE, FALSE, 0);
+      g_signal_connect (scale, "value_changed", G_CALLBACK (alpha_changed), alpha2);
+      gtk_range_set_value (GTK_RANGE (scale), 50);
+
+      scale = gtk_scale_new_with_range (GTK_ORIENTATION_VERTICAL,
+                                         0, 100, 1);
+      gtk_box_pack_start (GTK_BOX (main_hbox), scale, FALSE, FALSE, 0);
+      g_signal_connect (scale, "value_changed", G_CALLBACK (alpha_changed), alpha3);
+      gtk_range_set_value (GTK_RANGE (scale), 50);
+
+      gtk_widget_show_all (main_hbox);
+    }
+
+  if (!gtk_widget_get_visible (window))
+    gtk_widget_show (window);
+  else
+    gtk_widget_destroy (window);
+}
+
+
 /* 
  * Label Demo
  */
@@ -9627,6 +9739,7 @@ struct {
 } buttons[] =
 {
   { "alpha window", create_alpha_window },
+  { "alpha widget", create_alpha_widgets },
   { "big windows", create_big_windows },
   { "button box", create_button_box },
   { "buttons", create_buttons },
