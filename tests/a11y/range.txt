@@ -24,8 +24,6 @@ window1
       <AtkComponent>
       layer: widget
       alpha: 1
-      <AtkAction>
-      action 0 name: activate
       <AtkValue>
       minimum value: 0.500000
       maximum value: 99.500000
@@ -41,8 +39,6 @@ window1
       <AtkComponent>
       layer: widget
       alpha: 1
-      <AtkAction>
-      action 0 name: activate
       <AtkValue>
       minimum value: 0.500000
       maximum value: 99.500000

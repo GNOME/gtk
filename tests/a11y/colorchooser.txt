@@ -278,9 +278,6 @@ window1
               <AtkComponent>
               layer: widget
               alpha: 1
-              <AtkAction>
-              action 0 name: activate
-              action 0 keybinding: <Alt>a
               <AtkValue>
               minimum value: 0.000000
               maximum value: 255.000000
