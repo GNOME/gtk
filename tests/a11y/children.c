@@ -19,6 +19,7 @@
  */
 
 #define GDK_DISABLE_DEPRECATION_WARNINGS
+#undef GTK_DISABLE_DEPRECATED
 
 #include <gtk/gtk.h>
 #include <string.h>
