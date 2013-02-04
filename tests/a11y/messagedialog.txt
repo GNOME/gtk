@@ -29,7 +29,6 @@ window1
         "icon"
         parent: unnamed-GtkContainerAccessible-1
         index: 0
-        name: Information
         state: enabled sensitive showing visible
         toolkit: gtk
         <AtkComponent>
