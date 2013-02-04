@@ -80,7 +80,7 @@ gtk_css_image_surface_print (GtkCssImage *image,
   base64 = g_base64_encode (array->data, array->len);
   g_byte_array_free (array, TRUE);
 
-  g_string_append (string, "surface(\"data:image/png;base64,");
+  g_string_append (string, "url(\"data:image/png;base64,");
   g_string_append (string, base64);
   g_string_append (string, "\")");
 
