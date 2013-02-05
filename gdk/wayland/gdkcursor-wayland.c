@@ -249,42 +249,26 @@ create_cursor(GdkWaylandDisplay *display, GdkPixbuf *pixbuf, int x, int y)
 }
 #endif
 
-/* TODO: Extend this table */
-static const struct {
-  GdkCursorType type;
-  const gchar *cursor_name;
-} cursor_mapping[] = {
-  { GDK_BLANK_CURSOR,          NULL   },
-  { GDK_HAND1,                "hand1" },
-  { GDK_HAND2,                "hand2" },
-  { GDK_LEFT_PTR,             "left_ptr" },
-  { GDK_SB_H_DOUBLE_ARROW,    "sb_h_double_arrow" },
-  { GDK_SB_V_DOUBLE_ARROW,    "sb_v_double_arrow" },
-  { GDK_XTERM,                "xterm" },
-  { GDK_BOTTOM_RIGHT_CORNER,  "bottom_right_corner" }
-};
-
 GdkCursor *
 _gdk_wayland_display_get_cursor_for_type (GdkDisplay    *display,
 					  GdkCursorType  cursor_type)
 {
-  int i;
+  GEnumClass *enum_class;
+  GEnumValue *enum_value;
+  gchar *cursor_name;
+  GdkCursor *result;
 
-  for (i = 0; i < G_N_ELEMENTS (cursor_mapping); i++)
-    {
-      if (cursor_mapping[i].type == cursor_type)
-	break;
-    }
+  enum_class = g_type_class_ref (GDK_TYPE_CURSOR_TYPE);
+  enum_value = g_enum_get_value (enum_class, cursor_type);
+  cursor_name = g_strdup (enum_value->value_nick);
+  g_strdelimit (cursor_name, "-", '_');
+  g_type_class_unref (enum_class);
 
-  if (i == G_N_ELEMENTS (cursor_mapping))
-    {
-      g_warning ("Unhandled cursor type %d, falling back to blank\n",
-                 cursor_type);
-      i = 0;
-    }
+  result = _gdk_wayland_display_get_cursor_for_name (display, cursor_name);
 
-  return _gdk_wayland_display_get_cursor_for_name (display,
-                                                   cursor_mapping[i].cursor_name);
+  g_free (cursor_name);
+
+  return result;
 }
 
 GdkCursor *
@@ -305,7 +289,7 @@ _gdk_wayland_display_get_cursor_for_name (GdkDisplay  *display,
   private->serial = theme_serial;
 
   /* Blank cursor case */
-  if (!name)
+  if (!name || g_str_equal (name, "blank_cursor"))
     return GDK_CURSOR (private);
 
   cursor = wl_cursor_theme_get_cursor (wayland_display->cursor_theme,
