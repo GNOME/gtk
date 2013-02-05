@@ -212,6 +212,7 @@ gtk_text_handle_widget_draw (GtkWidget     *widget,
 {
   GtkTextHandlePrivate *priv;
   GtkTextHandlePosition pos;
+  HandleWindow *handle_window;
 
   priv = handle->priv;
 
@@ -225,8 +226,11 @@ gtk_text_handle_widget_draw (GtkWidget     *widget,
   else
     return FALSE;
 
-  _gtk_text_handle_draw (handle, cr, pos);
-  return TRUE;
+  handle_window = &priv->windows[pos];
+  if (gdk_window_is_visible (handle_window->window))
+    _gtk_text_handle_draw (handle, cr, pos);
+
+  return FALSE;
 }
 
 static gboolean
