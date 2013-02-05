@@ -718,13 +718,14 @@ pointer_handle_axis (void              *data,
   GdkEvent *event;
   gdouble delta_x, delta_y;
 
+  /* get the delta and convert it into the expected range */
   switch (axis) {
   case WL_POINTER_AXIS_VERTICAL_SCROLL:
     delta_x = 0;
-    delta_y = -wl_fixed_to_double (value);
+    delta_y = wl_fixed_to_double (value) / 10.0;
     break;
   case WL_POINTER_AXIS_HORIZONTAL_SCROLL:
-    delta_x = -wl_fixed_to_double (value);
+    delta_x = wl_fixed_to_double (value) / 10.0;
     delta_y = 0;
   default:
     g_return_if_reached ();
