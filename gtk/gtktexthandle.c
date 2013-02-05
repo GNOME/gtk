@@ -197,7 +197,7 @@ _gtk_text_handle_create_window (GtkTextHandle         *handle,
 
   window = gdk_window_new (gtk_widget_get_root_window (priv->parent),
 			   &attributes, mask);
-  gdk_window_set_user_data (window, priv->parent);
+  gtk_widget_register_window (priv->parent, window);
   gdk_window_set_background_rgba (window, &bg);
 
   _gtk_text_handle_update_shape (handle, window, pos);
@@ -304,6 +304,7 @@ _gtk_text_handle_update_window (GtkTextHandle         *handle,
                                   width / 2, 0, &x, &y);
     }
 
+  gtk_widget_unregister_window (priv->parent, handle_window->window);
   gdk_window_destroy (handle_window->window);
 
   /* Create new window and apply old state */

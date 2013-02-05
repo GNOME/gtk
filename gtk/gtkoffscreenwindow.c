@@ -183,7 +183,7 @@ gtk_offscreen_window_realize (GtkWidget *widget)
   window = gdk_window_new (gtk_widget_get_parent_window (widget),
                            &attributes, attributes_mask);
   gtk_widget_set_window (widget, window);
-  gdk_window_set_user_data (window, widget);
+  gtk_widget_register_window (widget, window);
 
   child = gtk_bin_get_child (bin);
   if (child)

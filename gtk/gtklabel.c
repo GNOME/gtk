@@ -4982,7 +4982,7 @@ gtk_label_create_window (GtkLabel *label)
 
   priv->select_info->window = gdk_window_new (gtk_widget_get_window (widget),
                                                &attributes, attributes_mask);
-  gdk_window_set_user_data (priv->select_info->window, widget);
+  gtk_widget_register_window (widget, priv->select_info->window);
 
   if (attributes_mask & GDK_WA_CURSOR)
     g_object_unref (attributes.cursor);
@@ -4998,7 +4998,7 @@ gtk_label_destroy_window (GtkLabel *label)
   if (priv->select_info->window == NULL)
     return;
 
-  gdk_window_set_user_data (priv->select_info->window, NULL);
+  gtk_widget_unregister_window (GTK_WIDGET (label), priv->select_info->window);
   gdk_window_destroy (priv->select_info->window);
   priv->select_info->window = NULL;
 }

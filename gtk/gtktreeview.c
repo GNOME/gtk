@@ -2247,7 +2247,7 @@ gtk_tree_view_realize (GtkWidget *widget)
   window = gdk_window_new (gtk_widget_get_parent_window (widget),
                            &attributes, attributes_mask);
   gtk_widget_set_window (widget, window);
-  gdk_window_set_user_data (window, widget);
+  gtk_widget_register_window (widget, window);
 
   gtk_widget_get_allocation (widget, &allocation);
 
@@ -2268,7 +2268,7 @@ gtk_tree_view_realize (GtkWidget *widget)
 
   tree_view->priv->bin_window = gdk_window_new (window,
 						&attributes, attributes_mask);
-  gdk_window_set_user_data (tree_view->priv->bin_window, widget);
+  gtk_widget_register_window (widget, tree_view->priv->bin_window);
 
   gtk_widget_get_allocation (widget, &allocation);
 
@@ -2289,7 +2289,7 @@ gtk_tree_view_realize (GtkWidget *widget)
 
   tree_view->priv->header_window = gdk_window_new (window,
 						   &attributes, attributes_mask);
-  gdk_window_set_user_data (tree_view->priv->header_window, widget);
+  gtk_widget_register_window (widget, tree_view->priv->header_window);
 
   gtk_tree_view_ensure_background (tree_view);
 
@@ -2364,24 +2364,24 @@ gtk_tree_view_unrealize (GtkWidget *widget)
   for (list = priv->columns; list; list = list->next)
     _gtk_tree_view_column_unrealize_button (GTK_TREE_VIEW_COLUMN (list->data));
 
-  gdk_window_set_user_data (priv->bin_window, NULL);
+  gtk_widget_unregister_window (widget, priv->bin_window);
   gdk_window_destroy (priv->bin_window);
   priv->bin_window = NULL;
 
-  gdk_window_set_user_data (priv->header_window, NULL);
+  gtk_widget_unregister_window (widget, priv->header_window);
   gdk_window_destroy (priv->header_window);
   priv->header_window = NULL;
 
   if (priv->drag_window)
     {
-      gdk_window_set_user_data (priv->drag_window, NULL);
+      gtk_widget_unregister_window (widget, priv->drag_window);
       gdk_window_destroy (priv->drag_window);
       priv->drag_window = NULL;
     }
 
   if (priv->drag_highlight_window)
     {
-      gdk_window_set_user_data (priv->drag_highlight_window, NULL);
+      gtk_widget_unregister_window (widget, priv->drag_highlight_window);
       gdk_window_destroy (priv->drag_highlight_window);
       priv->drag_highlight_window = NULL;
     }
@@ -3807,8 +3807,7 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 
 	  if (tree_view->priv->drag_highlight_window)
 	    {
-	      gdk_window_set_user_data (tree_view->priv->drag_highlight_window,
-					NULL);
+	      gtk_widget_unregister_window (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_window);
 	      gdk_window_destroy (tree_view->priv->drag_highlight_window);
 	    }
 
@@ -3824,7 +3823,7 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 	  attributes.event_mask = GDK_VISIBILITY_NOTIFY_MASK | GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK;
 	  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
 	  tree_view->priv->drag_highlight_window = gdk_window_new (tree_view->priv->header_window, &attributes, attributes_mask);
-	  gdk_window_set_user_data (tree_view->priv->drag_highlight_window, GTK_WIDGET (tree_view));
+	  gtk_widget_register_window (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_window);
 
 	  mask_image = cairo_image_surface_create (CAIRO_FORMAT_A1, width, height);
           cr = cairo_create (mask_image);
@@ -3874,8 +3873,7 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 	{
 	  if (tree_view->priv->drag_highlight_window)
 	    {
-	      gdk_window_set_user_data (tree_view->priv->drag_highlight_window,
-					NULL);
+	      gtk_widget_unregister_window (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_window);
 	      gdk_window_destroy (tree_view->priv->drag_highlight_window);
 	    }
 
@@ -3890,7 +3888,7 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 	  attributes.height = height;
 	  tree_view->priv->drag_highlight_window = gdk_window_new (gtk_widget_get_root_window (widget),
 								   &attributes, attributes_mask);
-	  gdk_window_set_user_data (tree_view->priv->drag_highlight_window, GTK_WIDGET (tree_view));
+	  gtk_widget_register_window (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_window);
 
 	  mask_image = cairo_image_surface_create (CAIRO_FORMAT_A1, width, height);
 
@@ -3956,8 +3954,7 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 	{
 	  if (tree_view->priv->drag_highlight_window)
 	    {
-	      gdk_window_set_user_data (tree_view->priv->drag_highlight_window,
-					NULL);
+	      gtk_widget_unregister_window (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_window);
 	      gdk_window_destroy (tree_view->priv->drag_highlight_window);
 	    }
 
@@ -3971,7 +3968,7 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 	  attributes.width = width;
 	  attributes.height = height;
 	  tree_view->priv->drag_highlight_window = gdk_window_new (gtk_widget_get_root_window (widget), &attributes, attributes_mask);
-	  gdk_window_set_user_data (tree_view->priv->drag_highlight_window, GTK_WIDGET (tree_view));
+	  gtk_widget_register_window (GTK_WIDGET (tree_view), tree_view->priv->drag_highlight_window);
 
 	  mask_image = cairo_image_surface_create (CAIRO_FORMAT_A1, width, height);
 
@@ -9815,7 +9812,7 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   tree_view->priv->drag_window = gdk_window_new (tree_view->priv->header_window,
                                                  &attributes,
                                                  attributes_mask);
-  gdk_window_set_user_data (tree_view->priv->drag_window, GTK_WIDGET (tree_view));
+  gtk_widget_register_window (GTK_WIDGET (tree_view), tree_view->priv->drag_window);
 
   if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     {

@@ -1738,7 +1738,7 @@ gtk_range_realize (GtkWidget *widget)
 
   priv->event_window = gdk_window_new (gtk_widget_get_parent_window (widget),
 					&attributes, attributes_mask);
-  gdk_window_set_user_data (priv->event_window, range);
+  gtk_widget_register_window (widget, priv->event_window);
 }
 
 static void
@@ -1749,7 +1749,7 @@ gtk_range_unrealize (GtkWidget *widget)
 
   gtk_range_remove_step_timer (range);
 
-  gdk_window_set_user_data (priv->event_window, NULL);
+  gtk_widget_unregister_window (widget, priv->event_window);
   gdk_window_destroy (priv->event_window);
   priv->event_window = NULL;
 

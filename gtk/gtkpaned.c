@@ -1320,7 +1320,7 @@ gtk_paned_create_child_window (GtkPaned  *paned,
 
   window = gdk_window_new (gtk_widget_get_window (widget),
                            &attributes, attributes_mask);
-  gdk_window_set_user_data (window, paned);
+  gtk_widget_register_window (widget, window);
   gtk_style_context_set_background (gtk_widget_get_style_context (widget), window);
 
   if (child)
@@ -1366,7 +1366,7 @@ gtk_paned_realize (GtkWidget *widget)
 
   priv->handle = gdk_window_new (window,
                                  &attributes, attributes_mask);
-  gdk_window_set_user_data (priv->handle, paned);
+  gtk_widget_register_window (widget, priv->handle);
   if (attributes_mask & GDK_WA_CURSOR)
     g_object_unref (attributes.cursor);
 
@@ -1382,19 +1382,19 @@ gtk_paned_unrealize (GtkWidget *widget)
 
   if (priv->child2)
     gtk_widget_set_parent_window (priv->child2, NULL);
-  gdk_window_set_user_data (priv->child2_window, NULL);
+  gtk_widget_unregister_window (widget, priv->child2_window);
   gdk_window_destroy (priv->child2_window);
   priv->child2_window = NULL;
 
   if (priv->child1)
     gtk_widget_set_parent_window (priv->child1, NULL);
-  gdk_window_set_user_data (priv->child1_window, NULL);
+  gtk_widget_unregister_window (widget, priv->child1_window);
   gdk_window_destroy (priv->child1_window);
   priv->child1_window = NULL;
 
   if (priv->handle)
     {
-      gdk_window_set_user_data (priv->handle, NULL);
+      gtk_widget_unregister_window (widget, priv->handle);
       gdk_window_destroy (priv->handle);
       priv->handle = NULL;
     }

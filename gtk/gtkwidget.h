@@ -630,6 +630,12 @@ gboolean              gtk_widget_get_child_visible      (GtkWidget    *widget);
 void                  gtk_widget_set_window             (GtkWidget    *widget,
                                                          GdkWindow    *window);
 GdkWindow           * gtk_widget_get_window             (GtkWidget    *widget);
+GDK_AVAILABLE_IN_3_8
+void                  gtk_widget_register_window        (GtkWidget    *widget,
+                                                         GdkWindow    *window);
+GDK_AVAILABLE_IN_3_8
+void                  gtk_widget_unregister_window      (GtkWidget    *widget,
+                                                         GdkWindow    *window);
 
 int                   gtk_widget_get_allocated_width    (GtkWidget     *widget);
 int                   gtk_widget_get_allocated_height   (GtkWidget     *widget);

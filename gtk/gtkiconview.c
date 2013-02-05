@@ -1301,7 +1301,7 @@ gtk_icon_view_realize (GtkWidget *widget)
   window = gdk_window_new (gtk_widget_get_parent_window (widget),
                            &attributes, attributes_mask);
   gtk_widget_set_window (widget, window);
-  gdk_window_set_user_data (window, widget);
+  gtk_widget_register_window (widget, window);
 
   gtk_widget_get_allocation (widget, &allocation);
 
@@ -1322,7 +1322,7 @@ gtk_icon_view_realize (GtkWidget *widget)
   
   icon_view->priv->bin_window = gdk_window_new (window,
 						&attributes, attributes_mask);
-  gdk_window_set_user_data (icon_view->priv->bin_window, widget);
+  gtk_widget_register_window (widget, icon_view->priv->bin_window);
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_set_background (context, icon_view->priv->bin_window);
@@ -1338,7 +1338,7 @@ gtk_icon_view_unrealize (GtkWidget *widget)
 
   icon_view = GTK_ICON_VIEW (widget);
 
-  gdk_window_set_user_data (icon_view->priv->bin_window, NULL);
+  gtk_widget_unregister_window (widget, icon_view->priv->bin_window);
   gdk_window_destroy (icon_view->priv->bin_window);
   icon_view->priv->bin_window = NULL;
 

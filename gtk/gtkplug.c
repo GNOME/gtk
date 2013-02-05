@@ -677,7 +677,7 @@ gtk_plug_unrealize (GtkWidget *widget)
 
   if (priv->socket_window != NULL)
     {
-      gdk_window_set_user_data (priv->socket_window, NULL);
+      gtk_widget_unregister_window (widget, priv->socket_window);
       g_object_unref (priv->socket_window);
       priv->socket_window = NULL;
 
@@ -879,7 +879,7 @@ gtk_plug_filter_func (GdkXEvent *gdk_xevent,
 	      {
 		GtkWidget *widget = GTK_WIDGET (plug);
 
-                gdk_window_set_user_data (priv->socket_window, NULL);
+                gtk_widget_unregister_window (widget, priv->socket_window);
 		g_object_unref (priv->socket_window);
 		priv->socket_window = NULL;
 
@@ -1088,7 +1088,7 @@ gtk_plug_realize (GtkWidget *widget)
       gtk_widget_set_window (widget, gdk_window);
     }
 
-  gdk_window_set_user_data (gdk_window, window);
+  gtk_widget_register_window (widget, gdk_window);
 
   gtk_style_context_set_background (gtk_widget_get_style_context (widget),
                                     gdk_window);

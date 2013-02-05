@@ -458,7 +458,7 @@ gtk_switch_realize (GtkWidget *widget)
   priv->event_window = gdk_window_new (parent_window,
                                        &attributes,
                                        attributes_mask);
-  gdk_window_set_user_data (priv->event_window, widget);
+  gtk_widget_register_window (widget, priv->event_window);
 }
 
 static void
@@ -468,7 +468,7 @@ gtk_switch_unrealize (GtkWidget *widget)
 
   if (priv->event_window != NULL)
     {
-      gdk_window_set_user_data (priv->event_window, NULL);
+      gtk_widget_unregister_window (widget, priv->event_window);
       gdk_window_destroy (priv->event_window);
       priv->event_window = NULL;
     }

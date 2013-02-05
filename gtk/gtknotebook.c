@@ -1908,7 +1908,7 @@ gtk_notebook_realize (GtkWidget *widget)
 
   priv->event_window = gdk_window_new (gtk_widget_get_parent_window (widget),
                                            &attributes, attributes_mask);
-  gdk_window_set_user_data (priv->event_window, notebook);
+  gtk_widget_register_window (widget, priv->event_window);
 }
 
 static void
@@ -1917,13 +1917,13 @@ gtk_notebook_unrealize (GtkWidget *widget)
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
 
-  gdk_window_set_user_data (priv->event_window, NULL);
+  gtk_widget_unregister_window (widget, priv->event_window);
   gdk_window_destroy (priv->event_window);
   priv->event_window = NULL;
 
   if (priv->drag_window)
     {
-      gdk_window_set_user_data (priv->drag_window, NULL);
+      gtk_widget_unregister_window (widget, priv->drag_window);
       gdk_window_destroy (priv->drag_window);
       priv->drag_window = NULL;
     }
@@ -3126,7 +3126,7 @@ show_drag_window (GtkNotebook        *notebook,
       priv->drag_window = gdk_window_new (gtk_widget_get_parent_window (widget),
                                           &attributes,
                                           attributes_mask);
-      gdk_window_set_user_data (priv->drag_window, widget);
+      gtk_widget_register_window (widget, priv->drag_window);
       gdk_window_set_background_rgba (priv->drag_window, &transparent);
     }
 

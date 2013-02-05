@@ -4094,7 +4094,7 @@ gtk_text_view_realize (GtkWidget *widget)
   window = gdk_window_new (gtk_widget_get_parent_window (widget),
                            &attributes, attributes_mask);
   gtk_widget_set_window (widget, window);
-  gdk_window_set_user_data (window, widget);
+  gtk_widget_register_window (widget, window);
 
   context = gtk_widget_get_style_context (widget);
 
@@ -8748,7 +8748,7 @@ text_window_realize (GtkTextWindow *win,
                                 &attributes, attributes_mask);
 
   gdk_window_show (win->window);
-  gdk_window_set_user_data (win->window, win->widget);
+  gtk_widget_register_window (win->widget, win->window);
   gdk_window_lower (win->window);
 
   attributes.x = 0;
@@ -8770,7 +8770,7 @@ text_window_realize (GtkTextWindow *win,
                                     attributes_mask);
 
   gdk_window_show (win->bin_window);
-  gdk_window_set_user_data (win->bin_window, win->widget);
+  gtk_widget_register_window (win->widget, win->bin_window);
 
   context = gtk_widget_get_style_context (widget);
   state = gtk_widget_get_state_flags (widget);
@@ -8821,8 +8821,8 @@ text_window_unrealize (GtkTextWindow *win)
                                         NULL);
     }
 
-  gdk_window_set_user_data (win->window, NULL);
-  gdk_window_set_user_data (win->bin_window, NULL);
+  gtk_widget_unregister_window (win->widget, win->window);
+  gtk_widget_unregister_window (win->widget, win->bin_window);
   gdk_window_destroy (win->bin_window);
   gdk_window_destroy (win->window);
   win->window = NULL;

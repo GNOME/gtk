@@ -2551,7 +2551,7 @@ gtk_menu_realize (GtkWidget *widget)
   window = gdk_window_new (gtk_widget_get_parent_window (widget),
                            &attributes, attributes_mask);
   gtk_widget_set_window (widget, window);
-  gdk_window_set_user_data (window, widget);
+  gtk_widget_register_window (widget, window);
 
   get_menu_padding (widget, &padding);
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
@@ -2576,7 +2576,7 @@ gtk_menu_realize (GtkWidget *widget)
 
   priv->view_window = gdk_window_new (window,
                                       &attributes, attributes_mask);
-  gdk_window_set_user_data (priv->view_window, menu);
+  gtk_widget_register_window (widget, priv->view_window);
 
   gtk_widget_get_allocation (widget, &allocation);
 
@@ -2592,7 +2592,7 @@ gtk_menu_realize (GtkWidget *widget)
 
   priv->bin_window = gdk_window_new (priv->view_window,
                                      &attributes, attributes_mask);
-  gdk_window_set_user_data (priv->bin_window, menu);
+  gtk_widget_register_window (widget, priv->bin_window);
 
   children = GTK_MENU_SHELL (menu)->priv->children;
   while (children)
@@ -2648,7 +2648,7 @@ menu_grab_transfer_window_get (GtkMenu *menu)
 
       window = gdk_window_new (gtk_widget_get_root_window (GTK_WIDGET (menu)),
                                &attributes, attributes_mask);
-      gdk_window_set_user_data (window, menu);
+      gtk_widget_register_window (GTK_WIDGET (menu), window);
 
       gdk_window_show (window);
 
@@ -2664,7 +2664,7 @@ menu_grab_transfer_window_destroy (GtkMenu *menu)
   GdkWindow *window = g_object_get_data (G_OBJECT (menu), "gtk-menu-transfer-window");
   if (window)
     {
-      gdk_window_set_user_data (window, NULL);
+      gtk_widget_unregister_window (GTK_WIDGET (menu), window);
       gdk_window_destroy (window);
       g_object_set_data (G_OBJECT (menu), I_("gtk-menu-transfer-window"), NULL);
     }
@@ -2678,11 +2678,11 @@ gtk_menu_unrealize (GtkWidget *widget)
 
   menu_grab_transfer_window_destroy (menu);
 
-  gdk_window_set_user_data (priv->view_window, NULL);
+  gtk_widget_unregister_window (widget, priv->view_window);
   gdk_window_destroy (priv->view_window);
   priv->view_window = NULL;
 
-  gdk_window_set_user_data (priv->bin_window, NULL);
+  gtk_widget_unregister_window (widget, priv->bin_window);
   gdk_window_destroy (priv->bin_window);
   priv->bin_window = NULL;
 

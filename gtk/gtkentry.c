@@ -2973,7 +2973,7 @@ realize_icon_info (GtkWidget            *widget,
   icon_info->window = gdk_window_new (gtk_widget_get_window (widget),
                                       &attributes,
                                       attributes_mask);
-  gdk_window_set_user_data (icon_info->window, widget);
+  gtk_widget_register_window (widget, icon_info->window);
 
   gtk_widget_queue_resize (widget);
 }
@@ -3100,7 +3100,7 @@ gtk_entry_realize (GtkWidget *widget)
                                     &attributes,
                                     attributes_mask);
 
-  gdk_window_set_user_data (priv->text_area, entry);
+  gtk_widget_register_window (widget, priv->text_area);
 
   if (attributes_mask & GDK_WA_CURSOR)
     g_object_unref (attributes.cursor);
@@ -3145,7 +3145,7 @@ gtk_entry_unrealize (GtkWidget *widget)
   
   if (priv->text_area)
     {
-      gdk_window_set_user_data (priv->text_area, NULL);
+      gtk_widget_unregister_window (widget, priv->text_area);
       gdk_window_destroy (priv->text_area);
       priv->text_area = NULL;
     }

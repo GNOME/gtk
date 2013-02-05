@@ -395,6 +395,7 @@ struct _GtkWidgetPrivate
    * GTK_NO_WINDOW flag being set).
    */
   GdkWindow *window;
+  GList *registered_windows;
 
   /* The widget's parent */
   GtkWidget *parent;
@@ -10536,7 +10537,7 @@ gtk_widget_real_unrealize (GtkWidget *widget)
 
   if (gtk_widget_get_has_window (widget))
     {
-      gdk_window_set_user_data (priv->window, NULL);
+      gtk_widget_unregister_window (widget, priv->window);
       gdk_window_destroy (priv->window);
       priv->window = NULL;
     }
@@ -13635,6 +13636,70 @@ gtk_widget_set_window (GtkWidget *widget,
       priv->window = window;
       g_object_notify (G_OBJECT (widget), "window");
     }
+}
+
+/**
+ * gtk_widget_register_window:
+ * @widget: a #GtkWidget
+ * @window: a #GdkWindow
+ *
+ * Registers a #GdkWindow with the widget and sets it up so that
+ * the widget recieves events for it. Call gtk_widget_unregister_window()
+ * when destroying the window.
+ *
+ * Before 3.8 you needed to call gdk_window_set_user_data() directly to set
+ * this up. This is now deprecated and you should use gtk_widget_register_window()
+ * instead. Old code will keep working as is, although some new features like
+ * transparency might not work perfectly.
+ *
+ * Since: 3.8
+ */
+void
+gtk_widget_register_window (GtkWidget    *widget,
+			    GdkWindow    *window)
+{
+  GtkWidgetPrivate *priv;
+  gpointer user_data;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  gdk_window_get_user_data (window, &user_data);
+  g_assert (user_data == NULL);
+
+  priv = widget->priv;
+
+  gdk_window_set_user_data (window, widget);
+  priv->registered_windows = g_list_prepend (priv->registered_windows, window);
+}
+
+/**
+ * gtk_widget_unregister_window:
+ * @widget: a #GtkWidget
+ * @window: a #GdkWindow
+ *
+ * Unregisters a #GdkWindow from the widget that was previously set up with
+ * gtk_widget_register_window(). You need to call this when the window is
+ * no longer used by the widget, such as when you destroy it.
+ *
+ * Since: 3.8
+ */
+void
+gtk_widget_unregister_window (GtkWidget    *widget,
+			      GdkWindow    *window)
+{
+  GtkWidgetPrivate *priv;
+  gpointer user_data;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  priv = widget->priv;
+
+  gdk_window_get_user_data (window, &user_data);
+  g_assert (user_data == widget);
+  gdk_window_set_user_data (window, NULL);
+  priv->registered_windows = g_list_remove (priv->registered_windows, window);
 }
 
 /**

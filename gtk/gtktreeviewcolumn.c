@@ -1400,7 +1400,7 @@ _gtk_tree_view_column_realize_button (GtkTreeViewColumn *column)
   attr.x       = (allocation.x + (rtl ? 0 : allocation.width)) - TREE_VIEW_DRAG_WIDTH / 2;
   priv->window = gdk_window_new (_gtk_tree_view_get_header_window (tree_view),
 				 &attr, attributes_mask);
-  gdk_window_set_user_data (priv->window, tree_view);
+  gtk_widget_register_window (GTK_WIDGET (tree_view), priv->window);
 
   gtk_tree_view_column_update_button (column);
 
@@ -1417,7 +1417,7 @@ _gtk_tree_view_column_unrealize_button (GtkTreeViewColumn *column)
   priv = column->priv;
   g_return_if_fail (priv->window != NULL);
 
-  gdk_window_set_user_data (priv->window, NULL);
+  gtk_widget_unregister_window (GTK_WIDGET (priv->tree_view), priv->window);
   gdk_window_destroy (priv->window);
   priv->window = NULL;
 }

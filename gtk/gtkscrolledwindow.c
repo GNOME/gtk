@@ -3392,7 +3392,7 @@ gtk_scrolled_window_realize (GtkWidget *widget)
   scrolled_window->priv->overshoot_window =
     gdk_window_new (gtk_widget_get_parent_window (widget),
                     &attributes, attributes_mask);
-  gdk_window_set_user_data (scrolled_window->priv->overshoot_window, widget);
+  gtk_widget_register_window (widget, scrolled_window->priv->overshoot_window);
 
   child_widget = gtk_bin_get_child (GTK_BIN (widget));
 
@@ -3408,7 +3408,7 @@ gtk_scrolled_window_unrealize (GtkWidget *widget)
 {
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
 
-  gdk_window_set_user_data (scrolled_window->priv->overshoot_window, NULL);
+  gtk_widget_unregister_window (widget, scrolled_window->priv->overshoot_window);
   gdk_window_destroy (scrolled_window->priv->overshoot_window);
   scrolled_window->priv->overshoot_window = NULL;
 

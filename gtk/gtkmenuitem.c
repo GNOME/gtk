@@ -1566,7 +1566,7 @@ gtk_menu_item_realize (GtkWidget *widget)
 
   priv->event_window = gdk_window_new (gtk_widget_get_parent_window (widget),
                                        &attributes, attributes_mask);
-  gdk_window_set_user_data (priv->event_window, widget);
+  gtk_widget_register_window (widget, priv->event_window);
 }
 
 static void
@@ -1575,7 +1575,7 @@ gtk_menu_item_unrealize (GtkWidget *widget)
   GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
   GtkMenuItemPrivate *priv = menu_item->priv;
 
-  gdk_window_set_user_data (priv->event_window, NULL);
+  gtk_widget_unregister_window (widget, priv->event_window);
   gdk_window_destroy (priv->event_window);
   priv->event_window = NULL;
 

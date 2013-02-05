@@ -5203,7 +5203,7 @@ gtk_window_realize (GtkWidget *widget)
       gdk_window = gdk_window_new (gtk_widget_get_parent_window (widget),
 				   &attributes, attributes_mask);
       gtk_widget_set_window (widget, gdk_window);
-      gdk_window_set_user_data (gdk_window, widget);
+      gtk_widget_register_window (widget, gdk_window);
 
       gtk_style_context_set_background (gtk_widget_get_style_context (widget), gdk_window);
 
@@ -5286,7 +5286,7 @@ gtk_window_realize (GtkWidget *widget)
 
   gdk_window_enable_synchronized_configure (gdk_window);
 
-  gdk_window_set_user_data (gdk_window, window);
+  gtk_widget_register_window (widget, gdk_window);
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_set_background (context, gdk_window);
@@ -5768,7 +5768,7 @@ resize_grip_create_window (GtkWindow *window)
                                       attributes_mask);
   gdk_window_set_background_rgba (priv->grip_window, &transparent);
 
-  gdk_window_set_user_data (priv->grip_window, widget);
+  gtk_widget_register_window (widget, priv->grip_window);
 
   gdk_window_raise (priv->grip_window);
 
@@ -5781,7 +5781,7 @@ resize_grip_destroy_window (GtkWindow *window)
 {
   GtkWindowPrivate *priv = window->priv;
 
-  gdk_window_set_user_data (priv->grip_window, NULL);
+  gtk_widget_unregister_window (GTK_WIDGET (window), priv->grip_window);
   gdk_window_destroy (priv->grip_window);
   priv->grip_window = NULL;
   update_grip_visibility (window);

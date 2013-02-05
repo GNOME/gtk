@@ -1593,7 +1593,7 @@ calendar_realize_arrows (GtkCalendar *calendar)
                                                &attributes,
                                                attributes_mask);
 
-          gdk_window_set_user_data (priv->arrow_win[i], widget);
+          gtk_widget_register_window (widget, priv->arrow_win[i]);
         }
       priv->arrow_prelight = 0x0;
     }
@@ -1614,7 +1614,7 @@ calendar_unrealize_arrows (GtkCalendar *calendar)
     {
       if (priv->arrow_win[i])
         {
-          gdk_window_set_user_data (priv->arrow_win[i], NULL);
+          gtk_widget_unregister_window (GTK_WIDGET (calendar), priv->arrow_win[i]);
           gdk_window_destroy (priv->arrow_win[i]);
           priv->arrow_win[i] = NULL;
         }
@@ -1704,7 +1704,7 @@ gtk_calendar_realize (GtkWidget *widget)
 
   priv->main_win = gdk_window_new (gtk_widget_get_window (widget),
                                    &attributes, attributes_mask);
-  gdk_window_set_user_data (priv->main_win, widget);
+  gtk_widget_register_window (widget, priv->main_win);
 
   calendar_realize_arrows (GTK_CALENDAR (widget));
 }
@@ -1718,7 +1718,7 @@ gtk_calendar_unrealize (GtkWidget *widget)
 
   if (priv->main_win)
     {
-      gdk_window_set_user_data (priv->main_win, NULL);
+      gtk_widget_unregister_window (widget, priv->main_win);
       gdk_window_destroy (priv->main_win);
       priv->main_win = NULL;
     }

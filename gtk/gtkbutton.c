@@ -1420,7 +1420,7 @@ gtk_button_realize (GtkWidget *widget)
 
   priv->event_window = gdk_window_new (window,
                                        &attributes, attributes_mask);
-  gdk_window_set_user_data (priv->event_window, button);
+  gtk_widget_register_window (widget, priv->event_window);
 }
 
 static void
@@ -1434,7 +1434,7 @@ gtk_button_unrealize (GtkWidget *widget)
 
   if (priv->event_window)
     {
-      gdk_window_set_user_data (priv->event_window, NULL);
+      gtk_widget_unregister_window (widget, priv->event_window);
       gdk_window_destroy (priv->event_window);
       priv->event_window = NULL;
     }

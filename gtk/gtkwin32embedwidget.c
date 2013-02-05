@@ -136,7 +136,7 @@ gtk_win32_embed_widget_unrealize (GtkWidget *widget)
   
   if (embed_widget->parent_window != NULL)
     {
-      gdk_window_set_user_data (embed_widget->parent_window, NULL);
+      gtk_widget_unregister_window (widget, embed_widget->parent_window);
       g_object_unref (embed_widget->parent_window);
       embed_widget->parent_window = NULL;
     }
@@ -234,7 +234,7 @@ gtk_win32_embed_widget_realize (GtkWidget *widget)
   gdk_window = gdk_window_new (embed_widget->parent_window,
                                &attributes, attributes_mask);
   gtk_widget_set_window (widget, gdk_window);
-  gdk_window_set_user_data (gdk_window, window);
+  gtk_widget_register_window (widget, gdk_window);
 
   embed_widget->old_window_procedure = (gpointer)
     SetWindowLongPtrW(GDK_WINDOW_HWND (gdk_window),

@@ -3839,6 +3839,7 @@ gtk_widget_queue_resize
 gtk_widget_queue_resize_no_redraw
 gtk_widget_realize
 gtk_widget_region_intersect
+gtk_widget_register_window
 gtk_widget_remove_accelerator
 gtk_widget_remove_mnemonic_label
 gtk_widget_render_icon
@@ -3909,6 +3910,7 @@ gtk_widget_trigger_tooltip_query
 gtk_widget_unmap
 gtk_widget_unparent
 gtk_widget_unrealize
+gtk_widget_unregister_window
 gtk_widget_unset_state_flags
 gtk_widget_insert_action_group
 #ifdef GDK_WINDOWING_WIN32

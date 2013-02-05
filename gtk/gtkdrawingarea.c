@@ -194,7 +194,7 @@ gtk_drawing_area_realize (GtkWidget *widget)
 
       window = gdk_window_new (gtk_widget_get_parent_window (widget),
                                &attributes, attributes_mask);
-      gdk_window_set_user_data (window, darea);
+      gtk_widget_register_window (widget, window);
       gtk_widget_set_window (widget, window);
 
       gtk_style_context_set_background (gtk_widget_get_style_context (widget),
