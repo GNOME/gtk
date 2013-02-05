@@ -309,6 +309,13 @@ gdk_wayland_screen_get_setting (GdkScreen   *screen,
       g_value_set_string (value, s);
       return TRUE;
     }
+  if (strcmp ("gtk-cursor-theme-name", name) == 0)
+    {
+      const gchar *s = "Adwaita";
+      GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : %s\n", name, s));
+      g_value_set_string (value, s);
+      return TRUE;
+    }
   else if (strcmp ("gtk-icon-theme-name", name) == 0)
     {
       const gchar *s = "gnome";
