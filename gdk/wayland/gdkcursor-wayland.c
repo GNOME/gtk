@@ -298,8 +298,14 @@ _gdk_wayland_display_get_cursor_for_name (GdkDisplay  *display,
   if (!cursor)
     {
       g_warning (G_STRLOC ": Unable to load %s from the cursor theme", name);
-      g_object_unref (private);
-      return NULL;
+
+      /* return the left_ptr cursor as a fallback */
+      cursor = wl_cursor_theme_get_cursor (wayland_display->cursor_theme,
+                                           "left_ptr");
+
+      /* if the fallback failed to load, return a blank pointer */
+      if (!cursor)
+        return GDK_CURSOR (private);
     }
 
   /* TODO: Do something clever so we can do animated cursors - move the
