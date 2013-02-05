@@ -1494,6 +1494,21 @@ reorder_bookmarks (GtkPlacesSidebar *sidebar,
 	g_free (uri);
 }
 
+/* Creates bookmarks for the specified files at the given position in the bookmarks list */
+static void
+drop_files_as_bookmarks (GtkPlacesSidebar *sidebar,
+			 GList *files,
+			 int position)
+{
+	GList *l;
+
+	for (l = files; l; l = l->next) {
+		GFile *f = G_FILE (l->data);
+
+		_gtk_bookmarks_manager_insert_bookmark (sidebar->bookmarks_manager, f, position++, NULL); /* NULL-GError */
+	}
+}
+
 static void
 drag_data_received_callback (GtkWidget *widget,
 			     GdkDragContext *context,
@@ -1587,35 +1602,56 @@ drag_data_received_callback (GtkWidget *widget,
 		if (real_action > 0) {
 			char *uri;
 			GFile *dest_file;
+			gboolean dropped;
 
 			model = gtk_tree_view_get_model (tree_view);
 
 			gtk_tree_model_get_iter (model, &iter, tree_path);
 			gtk_tree_model_get (model, &iter,
-					    PLACES_SIDEBAR_COLUMN_URI, &uri,
+					    PLACES_SIDEBAR_COLUMN_SECTION_TYPE, &section_type,
+					    PLACES_SIDEBAR_COLUMN_ROW_TYPE, &place_type,
+					    PLACES_SIDEBAR_COLUMN_INDEX, &position,
 					    -1);
 
-			dest_file = g_file_new_for_uri (uri);
+			dropped = FALSE;
 
-			switch (info) {
-			case TEXT_URI_LIST:
-				uris = gtk_selection_data_get_uris (selection_data);
-				source_file_list = build_file_list_from_uris ((const char **) uris);
-				emit_drag_perform_drop (sidebar, dest_file, source_file_list, real_action);
-				g_list_free_full (source_file_list, g_object_unref);
-				g_strfreev (uris);
-				success = TRUE;
-				break;
-			case GTK_TREE_MODEL_ROW:
-				success = FALSE;
-				break;
-			default:
-				g_assert_not_reached ();
-				break;
+			uris = gtk_selection_data_get_uris (selection_data);
+			source_file_list = build_file_list_from_uris ((const char **) uris);
+
+			if (section_type == SECTION_BOOKMARKS) {
+				if (place_type == PLACES_HEADING) {
+					position = 0;
+					tree_pos = GTK_TREE_VIEW_DROP_BEFORE;
+				}
+
+				if (tree_pos == GTK_TREE_VIEW_DROP_AFTER)
+					position++;
+
+				if (tree_pos == GTK_TREE_VIEW_DROP_BEFORE
+				    || tree_pos == GTK_TREE_VIEW_DROP_AFTER) {
+					drop_files_as_bookmarks (sidebar, source_file_list, position);
+					success = TRUE;
+					dropped = TRUE;
+				}
 			}
 
-			g_free (uri);
-			g_object_unref (dest_file);
+			if (!dropped) {
+				gtk_tree_model_get_iter (model, &iter, tree_path);
+				gtk_tree_model_get (model, &iter,
+						    PLACES_SIDEBAR_COLUMN_URI, &uri,
+						    -1);
+
+				dest_file = g_file_new_for_uri (uri);
+
+				emit_drag_perform_drop (sidebar, dest_file, source_file_list, real_action);
+				success = TRUE;
+
+				g_object_unref (dest_file);
+				g_free (uri);
+			}
+
+			g_list_free_full (source_file_list, g_object_unref);
+			g_strfreev (uris);
 		}
 	}
 
