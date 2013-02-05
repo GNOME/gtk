@@ -44,7 +44,7 @@ m4_define([gtk_binary_version], [3.0.0])
 # required versions of other packages
 m4_define([glib_required_version], [2.35.3])
 m4_define([pango_required_version], [1.32.4])
-m4_define([atk_required_version], [2.7.4])
+m4_define([atk_required_version], [2.7.5])
 m4_define([cairo_required_version], [1.10.0])
 m4_define([gdk_pixbuf_required_version], [2.27.1])
 m4_define([introspection_required_version], [1.32.0])
