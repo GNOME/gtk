@@ -54,6 +54,7 @@
 #include "gtkstylecontextprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkbubblewindowprivate.h"
+#include "gtktoolbar.h"
 
 #include "a11y/gtktextviewaccessibleprivate.h"
 
@@ -238,6 +239,7 @@ struct _GtkTextViewPrivate
   guint vscroll_policy : 1;
   guint cursor_handle_dragged : 1;
   guint selection_handle_dragged : 1;
+  guint populate_toolbar : 1;
 };
 
 struct _GtkTextPendingScroll
@@ -292,7 +294,8 @@ enum
   PROP_HSCROLL_POLICY,
   PROP_VSCROLL_POLICY,
   PROP_INPUT_PURPOSE,
-  PROP_INPUT_HINTS
+  PROP_INPUT_HINTS,
+  PROP_POPULATE_TOOLBAR
 };
 
 static void gtk_text_view_finalize             (GObject          *object);
@@ -860,6 +863,22 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                        GTK_INPUT_HINT_NONE,
                                                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
+  /** GtkTextView:populate-toolbar:
+   *
+   * If ::populate-toolbar is %TRUE, the #GtkTextView::populate-popup
+   * signal is also emitted for touch popups.
+   *
+   * Since: 3.8
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_POPULATE_TOOLBAR,
+                                   g_param_spec_boolean ("populate-toolbar",
+                                                         P_("Populate toolbar"),
+                                                         P_("Whether to emit ::populate-popup for touch popups"),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE));
+
+
    /* GtkScrollable interface */
    g_object_class_override_property (gobject_class, PROP_HADJUSTMENT,    "hadjustment");
    g_object_class_override_property (gobject_class, PROP_VADJUSTMENT,    "vadjustment");
@@ -1122,13 +1141,17 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   /**
    * GtkTextView::populate-popup:
    * @text_view: The text view on which the signal is emitted
-   * @menu: the menu that is being populated
+   * @popup: the menu or toolbar that is being populated
    *
    * The ::populate-popup signal gets emitted before showing the 
    * context menu of the text view.
    *
    * If you need to add items to the context menu, connect
-   * to this signal and append your menuitems to the @menu.
+   * to this signal and append your items to the @popup.
+   *
+   * If #GtkEntry::populate-toolbar is %TRUE, this signal will
+   * also be emitted to populate touch popups. In this case,
+   * @popup will be a toolbar instead of a menu.
    */
   signals[POPULATE_POPUP] =
     g_signal_new (I_("populate-popup"),
@@ -1138,7 +1161,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1,
-		  GTK_TYPE_MENU);
+		  GTK_TYPE_WIDGET);
   
   /**
    * GtkTextView::select-all:
@@ -3263,6 +3286,10 @@ gtk_text_view_set_property (GObject         *object,
       gtk_text_view_set_input_hints (text_view, g_value_get_flags (value));
       break;
 
+    case PROP_POPULATE_TOOLBAR:
+      text_view->priv->populate_toolbar = g_value_get_boolean (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -3365,6 +3392,10 @@ gtk_text_view_get_property (GObject         *object,
 
     case PROP_INPUT_HINTS:
       g_value_set_flags (value, gtk_text_view_get_input_hints (text_view));
+      break;
+
+    case PROP_POPULATE_TOOLBAR:
+      g_value_set_boolean (value, priv->populate_toolbar);
       break;
 
     default:
@@ -8800,7 +8831,7 @@ bubble_targets_received (GtkClipboard     *clipboard,
   GtkTextIter iter;
   GtkTextIter sel_start, sel_end;
   GdkWindow *window;
-  GtkToolbar *toolbar;
+  GtkWidget *toolbar;
 
   has_selection = gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
                                                         &sel_start, &sel_end);
@@ -8815,7 +8846,7 @@ bubble_targets_received (GtkClipboard     *clipboard,
 
   window = gtk_widget_get_window (GTK_WIDGET (text_view));
   priv->selection_bubble = gtk_bubble_window_new ();
-  toolbar = gtk_toolbar_new ();
+  toolbar = GTK_WIDGET (gtk_toolbar_new ());
   gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), GTK_TOOLBAR_TEXT);
   gtk_toolbar_set_show_arrow (GTK_TOOLBAR (toolbar), FALSE);
   gtk_widget_show (toolbar);
@@ -8834,6 +8865,9 @@ bubble_targets_received (GtkClipboard     *clipboard,
                         has_selection);
   append_bubble_action (text_view, toolbar, GTK_STOCK_PASTE, "paste-clipboard",
                         can_insert && has_clipboard);
+
+  if (priv->populate_toolbar)
+    g_signal_emit (text_view, signals[POPULATE_POPUP], 0, toolbar);
 
   gtk_text_view_get_selection_rect (text_view, &rect);
   rect.x -= priv->xoffset;

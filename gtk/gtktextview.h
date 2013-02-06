@@ -78,7 +78,7 @@ struct _GtkTextViewClass
   GtkContainerClass parent_class;
 
   void (* populate_popup)           (GtkTextView    *text_view,
-                                     GtkMenu        *menu);
+                                     GtkWidget      *popup);
 
   /* These are all RUN_ACTION signals for keybindings */
 
