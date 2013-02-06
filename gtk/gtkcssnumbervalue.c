@@ -189,7 +189,10 @@ GtkCssValue *
 _gtk_css_number_value_new (double     value,
                            GtkCssUnit unit)
 {
-  static GtkCssValue zero_singleton = { &GTK_CSS_VALUE_NUMBER, 1, GTK_CSS_NUMBER, 0 };
+  static GtkCssValue number_singletons[] = {
+    { &GTK_CSS_VALUE_NUMBER, 1, GTK_CSS_NUMBER, 0 },
+    { &GTK_CSS_VALUE_NUMBER, 1, GTK_CSS_NUMBER, 1 },
+  };
   static GtkCssValue px_singletons[] = {
     { &GTK_CSS_VALUE_NUMBER, 1, GTK_CSS_PX, 0 },
     { &GTK_CSS_VALUE_NUMBER, 1, GTK_CSS_PX, 1 },
@@ -199,8 +202,8 @@ _gtk_css_number_value_new (double     value,
   };
   GtkCssValue *result;
 
-  if (unit == GTK_CSS_NUMBER && value == 0)
-    return _gtk_css_value_ref (&zero_singleton);
+  if (unit == GTK_CSS_NUMBER && (value == 0 || value == 1))
+    return _gtk_css_value_ref (&number_singletons[(int) value]);
 
   if (unit == GTK_CSS_PX &&
       (value == 0 ||
