@@ -448,8 +448,6 @@ gdk_wayland_display_broadcast_startup_message (GdkDisplay *display,
     }
   va_end (ap);
 
-  printf ("startup message: %s\n", message->str);
-
   g_string_free (message, TRUE);
 }
 
