@@ -66,7 +66,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktexthandleprivate.h"
-#include "gtkselectionwindowprivate.h"
+#include "gtkbubblewindowprivate.h"
 
 #include "a11y/gtkentryaccessible.h"
 
@@ -9256,8 +9256,34 @@ gtk_entry_popup_menu (GtkWidget *widget)
   return TRUE;
 }
 
-static gboolean
-gtk_entry_selection_bubble_popup_cb (gpointer user_data)
+static void
+activate_bubble_cb (GtkWidget *item,
+	            GtkEntry  *entry)
+{
+  const gchar *signal = g_object_get_data (G_OBJECT (item), "gtk-signal");
+  g_signal_emit_by_name (entry, signal);
+  gtk_bubble_window_popdown (GTK_BUBBLE_WINDOW (entry->priv->selection_bubble));
+}
+
+static void
+append_bubble_action (GtkEntry     *entry,
+                      GtkWidget    *toolbar,
+                      const gchar  *stock_id,
+                      const gchar  *signal,
+                      gboolean      sensitive)
+{
+  GtkToolItem *item = gtk_tool_button_new_from_stock (stock_id);
+  g_object_set_data (G_OBJECT (item), I_("gtk-signal"), (char *)signal);
+  g_signal_connect (item, "clicked", G_CALLBACK (activate_bubble_cb), entry);
+  gtk_widget_set_sensitive (GTK_WIDGET (item), sensitive);
+  gtk_widget_show (GTK_WIDGET (item));
+  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+}
+
+static void
+bubble_targets_received (GtkClipboard     *clipboard,
+                         GtkSelectionData *data,
+                         gpointer          user_data)
 {
   GtkEntry *entry = user_data;
   GtkEntryPrivate *priv = entry->priv;
@@ -9265,33 +9291,39 @@ gtk_entry_selection_bubble_popup_cb (gpointer user_data)
   GtkAllocation allocation;
   gint start_x, end_x;
   gboolean has_selection;
+  gboolean has_clipboard;
+  DisplayMode mode;
+  GtkWidget *toolbar;
 
   has_selection = gtk_editable_get_selection_bounds (GTK_EDITABLE (entry),
                                                      NULL, NULL);
   if (!has_selection && !priv->editable)
     {
       priv->selection_bubble_timeout_id = 0;
-      return FALSE;
+      return;
     }
 
   if (priv->selection_bubble)
     gtk_widget_destroy (priv->selection_bubble);
 
-  priv->selection_bubble = gtk_selection_window_new ();
-  g_signal_connect_swapped (priv->selection_bubble, "cut",
-			    G_CALLBACK (gtk_entry_cut_clipboard),
-			    entry);
-  g_signal_connect_swapped (priv->selection_bubble, "copy",
-			    G_CALLBACK (gtk_entry_copy_clipboard),
-			    entry);
-  g_signal_connect_swapped (priv->selection_bubble, "paste",
-			    G_CALLBACK (gtk_entry_paste_clipboard),
-			    entry);
+  priv->selection_bubble = gtk_bubble_window_new ();
+  toolbar = gtk_toolbar_new ();
+  gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), GTK_TOOLBAR_TEXT);
+  gtk_toolbar_set_show_arrow (GTK_TOOLBAR (toolbar), FALSE);
+  gtk_widget_show (toolbar);
+  gtk_container_add (GTK_CONTAINER (priv->selection_bubble), toolbar);
 
-  gtk_selection_window_set_editable (GTK_SELECTION_WINDOW (priv->selection_bubble),
-                                     priv->editable);
-  gtk_selection_window_set_has_selection (GTK_SELECTION_WINDOW (priv->selection_bubble),
-                                          has_selection);
+  has_clipboard = gtk_selection_data_targets_include_text (data);
+  mode = gtk_entry_get_display_mode (entry);
+
+  append_bubble_action (entry, toolbar, GTK_STOCK_CUT, "cut-clipboard",
+                        priv->editable && has_selection && mode == DISPLAY_NORMAL);
+
+  append_bubble_action (entry, toolbar, GTK_STOCK_COPY, "copy-clipboard",
+                        has_selection && mode == DISPLAY_NORMAL);
+
+  append_bubble_action (entry, toolbar, GTK_STOCK_PASTE, "paste-clipboard",
+                        priv->editable && has_clipboard);
 
   gtk_widget_get_allocation (GTK_WIDGET (entry), &allocation);
 
@@ -9321,7 +9353,18 @@ gtk_entry_selection_bubble_popup_cb (gpointer user_data)
                            priv->text_area, &rect, GTK_POS_TOP);
 
   priv->selection_bubble_timeout_id = 0;
-  return FALSE;
+}
+
+static gboolean
+gtk_entry_selection_bubble_popup_cb (gpointer user_data)
+{
+  GtkEntry *entry = user_data;
+
+  gtk_clipboard_request_contents (gtk_widget_get_clipboard (GTK_WIDGET (entry), GDK_SELECTION_CLIPBOARD),
+                                  gdk_atom_intern_static_string ("TARGETS"),
+                                  bubble_targets_received,
+                                  entry);
+  return G_SOURCE_REMOVE;
 }
 
 static void
