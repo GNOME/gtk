@@ -1,3 +1,26 @@
+Overview of Changes from GTK+ 2.24.14 to 2.24.15
+================================================
+
+* Bug fixes:
+ 626499 GtkClipboard unnotified on change of OS X pasteboard owner
+ 656565 Signalify (already existing) GtkMenuShell.insert()
+ 664640 CUPS authentication does not work
+ 669808 fullscreen/unscreen was broken for Quartz on OS X earli...
+ 674556 File chooser dialog does not save its sizes
+ 679883 When printing Custom paper sizes GTK Print Dialog does ...
+ 683511 spinbutton: fix xthickness bug when resizing the text a...
+ 689810 Include guard optimization
+ 689982 Make GChecksum more fully introspectable
+ 690788 Critical in gtknotebook dnd with rgba colormap
+ 692099 autogen.sh doesn't recognize automake 1.13
+ 692554 entry: never use GTK_STATE_ACTIVE to paint the background
+ 692810 Fails to build with the gold linker due to missing refe...
+        Fix scrolling in insensitive modal dialogs
+
+* Translation updates
+ Norwegian bokmål
+
+
 Overview of Changes from GTK+ 2.24.13 to 2.24.14
 ================================================
 
