@@ -421,6 +421,14 @@ parse_css_direction (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+opacity_parse (GtkCssStyleProperty *property,
+	       GtkCssParser        *parser)
+{
+  return _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER);
+}
+
+
+static GtkCssValue *
 parse_one_css_play_state (GtkCssParser *parser)
 {
   GtkCssValue *value = _gtk_css_play_state_value_try_parse (parser);
@@ -1382,6 +1390,14 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           _gtk_css_array_value_new (_gtk_css_fill_mode_value_new (GTK_CSS_FILL_NONE)));
+  gtk_css_style_property_register        ("opacity",
+                                          GTK_CSS_PROPERTY_OPACITY,
+                                          G_TYPE_NONE,
+                                          GTK_STYLE_PROPERTY_ANIMATED | GTK_STYLE_PROPERTY_NO_RESIZE,
+                                          opacity_parse,
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_number_value_new (1, GTK_CSS_NUMBER));
 
   gtk_css_style_property_register        ("engine",
                                           GTK_CSS_PROPERTY_ENGINE,

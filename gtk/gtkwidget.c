@@ -37,6 +37,7 @@
 #include "gtkaccelmapprivate.h"
 #include "gtkclipboard.h"
 #include "gtkcssstylepropertyprivate.h"
+#include "gtkcssnumbervalueprivate.h"
 #include "gtkiconfactory.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
@@ -362,6 +363,7 @@ struct _GtkWidgetPrivate
   guint norender              : 1; /* Don't expose windows, instead recurse via draw */
 
   guint8 alpha;
+  guint8 user_alpha;
 
   /* The widget's name. If the widget does not have a name
    * (the name is NULL), then its name (as returned by
@@ -610,7 +612,8 @@ static PangoContext*	gtk_widget_peek_pango_context		(GtkWidget	  *widget);
 static void     	gtk_widget_update_pango_context		(GtkWidget	  *widget);
 static void		gtk_widget_propagate_state		(GtkWidget	  *widget,
 								 GtkStateData 	  *data);
-;
+static void             gtk_widget_update_alpha                 (GtkWidget        *widget);
+
 static gint		gtk_widget_event_internal		(GtkWidget	  *widget,
 								 GdkEvent	  *event);
 static gboolean		gtk_widget_real_mnemonic_activate	(GtkWidget	  *widget,
@@ -3743,6 +3746,7 @@ gtk_widget_init (GtkWidget *widget)
   priv->allocation.y = -1;
   priv->allocation.width = 1;
   priv->allocation.height = 1;
+  priv->user_alpha = 255;
   priv->alpha = 255;
   priv->window = NULL;
   priv->parent = NULL;
@@ -6801,6 +6805,7 @@ gtk_widget_real_style_updated (GtkWidget *widget)
   GtkWidgetPrivate *priv = widget->priv;
 
   gtk_widget_update_pango_context (widget);
+  gtk_widget_update_alpha (widget);
 
   if (priv->style != NULL &&
       priv->style != gtk_widget_get_default_style ())
@@ -13927,6 +13932,65 @@ gtk_widget_update_norender (GtkWidget *widget)
     propagate_norender_non_window (widget, norender | widget->priv->norender_children);
 }
 
+static void
+gtk_widget_update_alpha (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv;
+  double opacity;
+  guint8 alpha;
+
+  priv = widget->priv;
+
+  alpha = priv->user_alpha;
+
+  if (priv->context)
+    {
+      opacity =
+	_gtk_css_number_value_get (_gtk_style_context_peek_property (priv->context,
+								     GTK_CSS_PROPERTY_OPACITY),
+				   100);
+      opacity = CLAMP (opacity, 0.0, 1.0);
+      alpha = round (priv->user_alpha * opacity);
+    }
+
+  if (alpha == priv->alpha)
+    return;
+
+  priv->alpha = alpha;
+
+    if (gtk_widget_get_has_window (widget))
+    {
+      if (priv->window != NULL)
+	gdk_window_set_opacity (priv->window,
+				priv->norender ? 0 : priv->alpha / 255.0);
+    }
+  else
+    {
+      /* For non windowed widgets we can't use gdk_window_set_opacity() directly, as there is
+	 no GdkWindow at the right place in the hierarchy. For no-window widget this is not a problem,
+	 as we just push an opacity group in the draw marshaller.
+
+	 However, that only works for non-window descendant widgets. If any descendant has a
+	 window that window will not normally be rendered in the draw signal, so the opacity
+	 group will not work for it.
+
+	 To fix this we set all such windows to a zero opacity, meaning they don't get drawn
+	 by gdk, and instead we set a NULL _gtk_cairo_get_event during expose so that the draw
+	 handler recurses into windowed widgets.
+
+	 We do this by setting "norender_children", which means that any windows in this widget
+	 or its ancestors (stopping at the first such windows at each branch in the hierarchy)
+	 are set to zero opacity. This is then propagated into all necessary children as norender,
+	 which controls whether a window should be exposed or not.
+      */
+      priv->norender_children = priv->alpha != 255;
+      gtk_widget_update_norender (widget);
+    }
+
+  if (gtk_widget_get_realized (widget))
+    gtk_widget_queue_draw (widget);
+}
+
 /**
  * gtk_widget_set_opacity:
  * @widget: a #GtkWidget
@@ -13960,48 +14024,15 @@ gtk_widget_set_opacity  (GtkWidget *widget,
 
   priv = widget->priv;
 
-  if (opacity < 0.0)
-    opacity = 0.0;
-  else if (opacity > 1.0)
-    opacity = 1.0;
+  opacity = CLAMP (opacity, 0.0, 1.0);
 
   alpha = round (opacity * 255);
-  if (alpha == priv->alpha)
+  if (alpha == priv->user_alpha)
     return;
 
-  priv->alpha = alpha;
+  priv->user_alpha = alpha;
 
-  if (gtk_widget_get_has_window (widget))
-    {
-      if (priv->window != NULL)
-	gdk_window_set_opacity (priv->window,
-				priv->norender ? 0 : opacity);
-    }
-  else
-    {
-      /* For non windowed widgets we can't use gdk_window_set_opacity() directly, as there is
-	 no GdkWindow at the right place in the hierarchy. For no-window widget this is not a problem,
-	 as we just push an opacity group in the draw marshaller.
-
-	 However, that only works for non-window descendant widgets. If any descendant has a
-	 window that window will not normally be rendered in the draw signal, so the opacity
-	 group will not work for it.
-
-	 To fix this we set all such windows to a zero opacity, meaning they don't get drawn
-	 by gdk, and instead we set a NULL _gtk_cairo_get_event during expose so that the draw
-	 handler recurses into windowed widgets.
-
-	 We do this by setting "norender_children", which means that any windows in this widget
-	 or its ancestors (stopping at the first such windows at each branch in the hierarchy)
-	 are set to zero opacity. This is then propagated into all necessary children as norender,
-	 which controls whether a window should be exposed or not.
-      */
-      priv->norender_children = priv->alpha != 255;
-      gtk_widget_update_norender (widget);
-    }
-
-  if (gtk_widget_get_realized (widget))
-    gtk_widget_queue_draw (widget);
+  gtk_widget_update_alpha (widget);
 }
 
 /**
