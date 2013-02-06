@@ -67,6 +67,7 @@
 #include "gtkstylecontextprivate.h"
 #include "gtktexthandleprivate.h"
 #include "gtkbubblewindowprivate.h"
+#include "gtktoolbar.h"
 
 #include "a11y/gtkentryaccessible.h"
 
@@ -222,6 +223,7 @@ struct _GtkEntryPrivate
   guint         truncate_multiline      : 1;
   guint         cursor_handle_dragged   : 1;
   guint         selection_handle_dragged : 1;
+  guint         populate_toolbar        : 1;
 };
 
 struct _EntryIconInfo
@@ -318,7 +320,8 @@ enum {
   PROP_COMPLETION,
   PROP_INPUT_PURPOSE,
   PROP_INPUT_HINTS,
-  PROP_ATTRIBUTES
+  PROP_ATTRIBUTES,
+  PROP_POPULATE_TOOLBAR
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -1422,6 +1425,21 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                        PANGO_TYPE_ATTR_LIST,
                                                        GTK_PARAM_READWRITE));
 
+  /** GtkEntry:populate-toolbar:
+   *
+   * If ::populate-toolbar is %TRUE, the #GtkEntry::populate-popup
+   * signal is also emitted for touch popups.
+   *
+   * Since: 3.8
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_POPULATE_TOOLBAR,
+                                   g_param_spec_boolean ("populate-toolbar",
+                                                         P_("Populate toolbar"),
+                                                         P_("Whether to emit ::populate-popup for touch popups"),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE));
+  
   /**
    * GtkEntry:icon-prelight:
    *
@@ -1480,13 +1498,17 @@ gtk_entry_class_init (GtkEntryClass *class)
   /**
    * GtkEntry::populate-popup:
    * @entry: The entry on which the signal is emitted
-   * @menu: the menu that is being populated
+   * @popup: the menu or toolbar that is being populated
    *
-   * The ::populate-popup signal gets emitted before showing the 
-   * context menu of the entry. 
+   * The ::populate-popup signal gets emitted before showing the
+   * context menu of the entry.
    *
    * If you need to add items to the context menu, connect
-   * to this signal and append your menuitems to the @menu.
+   * to this signal and append your items to the @widget.
+   *
+   * If #GtkEntry::populate-toolbar is %TRUE, this signal will
+   * also be emitted to populate touch popups. In this case,
+   * @widget will be a toolbar instead of a menu.
    */
   signals[POPULATE_POPUP] =
     g_signal_new (I_("populate-popup"),
@@ -1496,7 +1518,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1,
-		  GTK_TYPE_MENU);
+		  GTK_TYPE_WIDGET);
   
  /* Action signals */
   
@@ -2238,6 +2260,10 @@ gtk_entry_set_property (GObject         *object,
       gtk_entry_set_attributes (entry, g_value_get_boxed (value));
       break;
 
+    case PROP_POPULATE_TOOLBAR:
+      entry->priv->populate_toolbar = g_value_get_boolean (value);
+      break;
+
     case PROP_SCROLL_OFFSET:
     case PROP_CURSOR_POSITION:
     default:
@@ -2472,6 +2498,10 @@ gtk_entry_get_property (GObject         *object,
 
     case PROP_ATTRIBUTES:
       g_value_set_boxed (value, priv->attrs);
+      break;
+
+    case PROP_POPULATE_TOOLBAR:
+      g_value_set_boolean (value, priv->populate_toolbar);
       break;
 
     default:
@@ -9307,7 +9337,7 @@ bubble_targets_received (GtkClipboard     *clipboard,
     gtk_widget_destroy (priv->selection_bubble);
 
   priv->selection_bubble = gtk_bubble_window_new ();
-  toolbar = gtk_toolbar_new ();
+  toolbar = GTK_WIDGET (gtk_toolbar_new ());
   gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), GTK_TOOLBAR_TEXT);
   gtk_toolbar_set_show_arrow (GTK_TOOLBAR (toolbar), FALSE);
   gtk_widget_show (toolbar);
@@ -9324,6 +9354,9 @@ bubble_targets_received (GtkClipboard     *clipboard,
 
   append_bubble_action (entry, toolbar, GTK_STOCK_PASTE, "paste-clipboard",
                         priv->editable && has_clipboard);
+
+  if (priv->populate_toolbar)
+    g_signal_emit (entry, signals[POPULATE_POPUP], 0, toolbar);
 
   gtk_widget_get_allocation (GTK_WIDGET (entry), &allocation);
 

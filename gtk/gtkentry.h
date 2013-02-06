@@ -85,7 +85,7 @@ struct _GtkEntryClass
 
   /* Hook to customize right-click popup */
   void (* populate_popup)   (GtkEntry       *entry,
-                             GtkMenu        *menu);
+                             GtkWidget      *popup);
 
   /* Action signals
    */
