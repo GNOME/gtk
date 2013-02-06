@@ -78,4 +78,4 @@ void        gtk_bubble_window_ungrab          (GtkBubbleWindow       *window);
 
 G_END_DECLS
 
-#endif /* __GTK_BUBBLE_POPUP_H__ */
+#endif /* __GTK_BUBBLE_WINDOW_H__ */
