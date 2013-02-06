@@ -53,7 +53,7 @@
 #include "gtktexthandleprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkcssstylepropertyprivate.h"
-#include "gtkselectionwindowprivate.h"
+#include "gtkbubblewindowprivate.h"
 
 #include "a11y/gtktextviewaccessibleprivate.h"
 
@@ -8762,42 +8762,78 @@ gtk_text_view_get_selection_rect (GtkTextView           *text_view,
   rect->height = y2 - y1;
 }
 
-static gboolean
-gtk_text_view_selection_bubble_popup_cb (gpointer user_data)
+static void
+activate_bubble_cb (GtkWidget   *item,
+                    GtkTextView *text_view)
+{
+  const gchar *signal = g_object_get_data (G_OBJECT (item), "gtk-signal");
+  g_signal_emit_by_name (text_view, signal);
+  gtk_bubble_window_popdown (GTK_BUBBLE_WINDOW (text_view->priv->selection_bubble));
+}
+
+static void
+append_bubble_action (GtkTextView  *text_view,
+                      GtkWidget    *toolbar,
+                      const gchar  *stock_id,
+                      const gchar  *signal,
+                      gboolean      sensitive)
+{
+  GtkToolItem *item = gtk_tool_button_new_from_stock (stock_id);
+  g_object_set_data (G_OBJECT (item), I_("gtk-signal"), (char *)signal);
+  g_signal_connect (item, "clicked", G_CALLBACK (activate_bubble_cb), text_view);
+  gtk_widget_set_sensitive (GTK_WIDGET (item), sensitive);
+  gtk_widget_show (GTK_WIDGET (item));
+  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+}
+
+static void
+bubble_targets_received (GtkClipboard     *clipboard,
+                         GtkSelectionData *data,
+                         gpointer          user_data)
 {
   GtkTextView *text_view = user_data;
   GtkTextViewPrivate *priv = text_view->priv;
   cairo_rectangle_int_t rect;
   gboolean has_selection;
+  gboolean has_clipboard;
+  gboolean can_insert;
+  GtkTextIter iter;
+  GtkTextIter sel_start, sel_end;
   GdkWindow *window;
+  GtkToolbar *toolbar;
 
   has_selection = gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
-                                                        NULL, NULL);
+                                                        &sel_start, &sel_end);
   if (!priv->editable && !has_selection)
     {
       priv->selection_bubble_timeout_id = 0;
-      return FALSE;
+      return;
     }
 
   if (priv->selection_bubble)
     gtk_widget_destroy (priv->selection_bubble);
 
   window = gtk_widget_get_window (GTK_WIDGET (text_view));
-  priv->selection_bubble = gtk_selection_window_new ();
-  gtk_selection_window_set_editable (GTK_SELECTION_WINDOW (priv->selection_bubble),
-                                     priv->editable);
-  gtk_selection_window_set_has_selection (GTK_SELECTION_WINDOW (priv->selection_bubble),
-                                          has_selection);
+  priv->selection_bubble = gtk_bubble_window_new ();
+  toolbar = gtk_toolbar_new ();
+  gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), GTK_TOOLBAR_TEXT);
+  gtk_toolbar_set_show_arrow (GTK_TOOLBAR (toolbar), FALSE);
+  gtk_widget_show (toolbar);
+  gtk_container_add (GTK_CONTAINER (priv->selection_bubble), toolbar);
 
-  g_signal_connect_swapped (priv->selection_bubble, "cut",
-			    G_CALLBACK (gtk_text_view_cut_clipboard),
-			    text_view);
-  g_signal_connect_swapped (priv->selection_bubble, "copy",
-			    G_CALLBACK (gtk_text_view_copy_clipboard),
-			    text_view);
-  g_signal_connect_swapped (priv->selection_bubble, "paste",
-			    G_CALLBACK (gtk_text_view_paste_clipboard),
-			    text_view);
+  gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &iter,
+                                    gtk_text_buffer_get_insert (get_buffer (text_view)));
+  can_insert = gtk_text_iter_can_insert (&iter, priv->editable);
+  has_clipboard = gtk_selection_data_targets_include_text (data);
+
+  append_bubble_action (text_view, toolbar, GTK_STOCK_CUT, "cut-clipboard",
+                        has_selection &&
+                        range_contains_editable_text (&sel_start, &sel_end,
+                                                      priv->editable));
+  append_bubble_action (text_view, toolbar, GTK_STOCK_COPY, "copy-clipboard",
+                        has_selection);
+  append_bubble_action (text_view, toolbar, GTK_STOCK_PASTE, "paste-clipboard",
+                        can_insert && has_clipboard);
 
   gtk_text_view_get_selection_rect (text_view, &rect);
   rect.x -= priv->xoffset;
@@ -8806,7 +8842,19 @@ gtk_text_view_selection_bubble_popup_cb (gpointer user_data)
                            window, &rect, GTK_POS_TOP);
 
   priv->selection_bubble_timeout_id = 0;
-  return FALSE;
+}
+
+static gboolean
+gtk_text_view_selection_bubble_popup_cb (gpointer user_data)
+{
+  GtkTextView *text_view = user_data;
+  gtk_clipboard_request_contents (gtk_widget_get_clipboard (GTK_WIDGET (text_view),
+							    GDK_SELECTION_CLIPBOARD),
+				  gdk_atom_intern_static_string ("TARGETS"),
+				  bubble_targets_received,
+				  text_view);
+
+  return G_SOURCE_REMOVE;
 }
 
 static void
