@@ -550,6 +550,9 @@ pointer_handle_enter (void              *data,
   GdkWaylandDisplay *wayland_display =
     GDK_WAYLAND_DISPLAY (device->display);
 
+  if (!surface)
+    return;
+
   _gdk_wayland_display_update_serial (wayland_display, serial);
 
   device->pointer_focus = wl_surface_get_user_data(surface);
@@ -588,6 +591,9 @@ pointer_handle_leave (void              *data,
   GdkEvent *event;
   GdkWaylandDisplay *wayland_display =
     GDK_WAYLAND_DISPLAY (device->display);
+
+  if (!surface)
+    return;
 
   _gdk_wayland_display_update_serial (wayland_display, serial);
 
@@ -777,6 +783,9 @@ keyboard_handle_enter (void               *data,
   GdkWaylandDisplay *wayland_display =
     GDK_WAYLAND_DISPLAY (device->display);
 
+  if (!surface)
+    return;
+
   _gdk_wayland_display_update_serial (wayland_display, serial);
 
   device->keyboard_focus = wl_surface_get_user_data(surface);
@@ -807,6 +816,9 @@ keyboard_handle_leave (void               *data,
   GdkEvent *event;
   GdkWaylandDisplay *wayland_display =
     GDK_WAYLAND_DISPLAY (device->display);
+
+  if (!surface)
+    return;
 
   _gdk_wayland_display_update_serial (wayland_display, serial);
 
