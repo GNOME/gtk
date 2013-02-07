@@ -36,6 +36,11 @@
 #include "gtkwindowprivate.h"
 
 
+#ifdef GDK_WINDOWING_WAYLAND
+#include "wayland/gdkwayland.h"
+#endif
+
+
 /**
  * SECTION:gtktooltip
  * @Short_description: Add tips to your widgets
@@ -1199,6 +1204,20 @@ found:
               y <= tooltip->last_y && tooltip->last_y < y + height)
             y = tooltip->last_y - height - 2;
         }
+
+#ifdef GDK_WINDOWING_WAYLAND
+      /* set the transient parent on the tooltip when running with the Wayland
+       * backend to allow correct positioning of the tooltip windows */
+      if (GDK_IS_WAYLAND_DISPLAY (display))
+        {
+          GtkWidget *toplevel;
+
+          toplevel = gtk_widget_get_toplevel (tooltip->tooltip_widget);
+          if (GTK_IS_WINDOW (toplevel))
+            gtk_window_set_transient_for (GTK_WINDOW (tooltip->current_window),
+                                          GTK_WINDOW (toplevel));
+        }
+#endif
 
       gtk_window_move (GTK_WINDOW (tooltip->current_window), x, y);
       gtk_widget_show (GTK_WIDGET (tooltip->current_window));
