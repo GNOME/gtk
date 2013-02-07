@@ -9164,10 +9164,17 @@ do_synthesize_crossing_event (gpointer data)
                                 serial);
           if (new_window_under_pointer != pointer_info->window_under_pointer)
             {
+              GdkDevice *source_device;
+
+              if (pointer_info->last_slave)
+                source_device = pointer_info->last_slave;
+              else
+                source_device = device;
+
               _gdk_synthesize_crossing_events (display,
                                                pointer_info->window_under_pointer,
                                                new_window_under_pointer,
-                                               device, pointer_info->last_slave,
+                                               device, source_device,
                                                GDK_CROSSING_NORMAL,
                                                pointer_info->toplevel_x,
                                                pointer_info->toplevel_y,
