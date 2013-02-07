@@ -223,6 +223,9 @@ EXTRA_DIST += \
 	nth-child.css \
 	nth-child.ref.ui \
 	nth-child.ui \
+	opacity.css \
+	opacity.ui \
+	opacity.ref.ui \
 	paned-undersized.css \
 	paned-undersized.ref.ui \
 	paned-undersized.ui \
