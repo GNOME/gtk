@@ -593,9 +593,16 @@ gdk_wayland_window_map (GdkWindow *window)
                                           _gdk_wayland_display_get_serial (wayland_display),
                                           parent->surface,
                                           window->x, window->y, 0);
-            } else {
-                wl_shell_surface_set_transient (impl->shell_surface, parent->surface,
-                                                window->x, window->y, 0);
+            }
+          else
+            {
+              guint32 flags = 0;
+
+              if (impl->hint == GDK_WINDOW_TYPE_HINT_TOOLTIP)
+                flags = WL_SHELL_SURFACE_TRANSIENT_INACTIVE;
+
+              wl_shell_surface_set_transient (impl->shell_surface, parent->surface,
+                                              window->x, window->y, flags);
             }
         }
       else
