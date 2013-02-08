@@ -137,4 +137,37 @@ libgtka11y_la_LIBADD =  		\
 libgtka11y_la_LDFLAGS =    		\
         $(LDFLAGS)
 
+dist-hook: ../../build/win32/vs9/gtka11y.vcproj ../../build/win32/vs10/gtka11y.vcxproj ../../build/win32/vs10/gtka11y.vcxproj.filters
+
+../../build/win32/vs9/gtka11y.vcproj: ../../build/win32/vs9/gtka11y.vcprojin
+	for F in $(libgtka11y_la_SOURCES); do \
+		case $$F in \
+		*.c) echo '   <File RelativePath="..\..\..\gtk\a11y\'$$F'" />' \
+		     ;; \
+		esac; \
+	done >gtka11y.sourcefiles
+	$(CPP) -P - <$(top_srcdir)/build/win32/vs9/gtka11y.vcprojin >$@
+	rm gtka11y.sourcefiles
+
+../../build/win32/vs10/gtka11y.vcxproj: ../../build/win32/vs10/gtka11y.vcxprojin
+	for F in $(libgtka11y_la_SOURCES); do \
+		case $$F in \
+		*.c) echo '   <ClCompile Include="..\..\..\gtk\a11y\'$$F'" />' \
+		     ;; \
+		esac; \
+	done >gtka11y.vs10.sourcefiles
+	$(CPP) -P - <$(top_srcdir)/build/win32/vs10/gtka11y.vcxprojin >$@
+	rm gtka11y.vs10.sourcefiles
+
+../../build/win32/vs10/gtka11y.vcxproj.filters: ../../build/win32/vs10/gtka11y.vcxproj.filtersin
+	for F in $(libgtka11y_la_SOURCES); do \
+		case $$F in \
+		*.c) echo '   <ClCompile Include="..\..\..\gtk\a11y\'$$F'"><Filter>Source Files</Filter></ClCompile>' \
+		     ;; \
+		esac; \
+	done >gtka11y.vs10.sourcefiles.filters
+	$(CPP) -P - <$(top_srcdir)/build/win32/vs10/gtka11y.vcxproj.filtersin >$@
+	rm gtka11y.vs10.sourcefiles.filters
+
+
 -include $(top_srcdir)/git.mk
