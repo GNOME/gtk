@@ -751,6 +751,8 @@ gtk_cell_renderer_text_finalize (GObject *object)
   if (priv->language)
     g_object_unref (priv->language);
 
+  g_clear_object (&priv->entry);
+
   G_OBJECT_CLASS (gtk_cell_renderer_text_parent_class)->finalize (object);
 }
 
@@ -1915,7 +1917,7 @@ gtk_cell_renderer_text_editing_done (GtkCellEditable *entry,
 
   priv = GTK_CELL_RENDERER_TEXT (data)->priv;
 
-  priv->entry = NULL;
+  g_clear_object (&priv->entry);
 
   if (priv->focus_out_id > 0)
     {
@@ -2047,6 +2049,8 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
   gtk_cell_renderer_get_alignment (cell, &xalign, &yalign);
 
   priv->entry = gtk_entry_new ();
+  g_object_ref_sink (G_OBJECT (priv->entry));
+
   gtk_entry_set_has_frame (GTK_ENTRY (priv->entry), FALSE);
   gtk_entry_set_alignment (GTK_ENTRY (priv->entry), xalign);
 
