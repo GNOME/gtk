@@ -10,8 +10,8 @@ EXTRA_DIST += \
 	gtk.vcproj \
 	gtk.vcprojin \
 	gtk3-demo.vcproj \
-	gtka11y.vcproj \
-	gtka11y.vcprojin \
+	libgail.vcproj \
+	libgail.vcprojin \
 	gailutil.vcproj \
 	install.vcproj
 

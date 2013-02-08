@@ -19,7 +19,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk3-demo", "gtk3-demo.vcpr
 		{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073F5} = {FC5AADB5-95CD-4BF0-BA8B-0C16FE7073F5}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtka11y", "gtka11y.vcproj", "{F756B0DB-40A1-4E9F-BE1F-8F02CB86EA46}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libgail", "libgail.vcproj", "{F756B0DB-40A1-4E9F-BE1F-8F02CB86EA46}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gailutil", "gailutil.vcproj", "{29E3E814-1BA3-4AD7-A3A7-3669CB80A942}"
 	ProjectSection(ProjectDependencies) = postProject
