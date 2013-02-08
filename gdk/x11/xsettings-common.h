@@ -89,8 +89,6 @@ struct _XSettingsSetting
     char *v_string;
     XSettingsColor v_color;
   } data;
-
-  unsigned long last_change_serial;
 };
 
 XSettingsSetting *xsettings_setting_copy  (XSettingsSetting *setting);

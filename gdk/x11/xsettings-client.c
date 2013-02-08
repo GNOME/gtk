@@ -243,10 +243,10 @@ parse_settings (unsigned char *data,
       setting->name[name_len] = '\0';
       buffer.pos += pad_len;
 
+      /* last change serial (we ignore it) */
       result = fetch_card32 (&buffer, &v_int);
       if (result != XSETTINGS_SUCCESS)
 	goto out;
-      setting->last_change_serial = v_int;
 
       switch (type)
 	{

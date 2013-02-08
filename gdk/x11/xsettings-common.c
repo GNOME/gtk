@@ -68,8 +68,6 @@ xsettings_setting_copy (XSettingsSetting *setting)
       break;
     }
 
-  result->last_change_serial = setting->last_change_serial;
-
   return result;
 
  err:
