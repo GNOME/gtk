@@ -38,7 +38,6 @@ extern "C" {
 #define xsettings_client_set_grab_func   _gdk_x11_xsettings_client_set_grab_func
 #define xsettings_client_set_ungrab_func _gdk_x11_xsettings_client_set_ungrab_func
 #define xsettings_client_process_event   _gdk_x11_xsettings_client_process_event
-#define xsettings_setting_copy           _gdk_x11_xsettings_setting_copy
 #define xsettings_setting_equal          _gdk_x11_xsettings_setting_equal
 #define xsettings_setting_free           _gdk_x11_xsettings_setting_free
 
@@ -91,7 +90,6 @@ struct _XSettingsSetting
   } data;
 };
 
-XSettingsSetting *xsettings_setting_copy  (XSettingsSetting *setting);
 void              xsettings_setting_free  (XSettingsSetting *setting);
 int               xsettings_setting_equal (XSettingsSetting *setting_a,
 					   XSettingsSetting *setting_b);

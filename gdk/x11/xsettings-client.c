@@ -531,25 +531,11 @@ xsettings_client_destroy (XSettingsClient *client)
   free (client);
 }
 
-XSettingsResult
+const XSettingsSetting *
 xsettings_client_get_setting (XSettingsClient   *client,
-			      const char        *name,
-			      XSettingsSetting **setting)
+			      const char        *name)
 {
-  XSettingsSetting *search;
-  
-  if (client->settings == NULL)
-    return XSETTINGS_NO_ENTRY;
-
-  search = g_hash_table_lookup (client->settings, name);
-
-  if (search)
-    {
-      *setting = xsettings_setting_copy (search);
-      return *setting ? XSETTINGS_SUCCESS : XSETTINGS_NO_MEM;
-    }
-  else
-    return XSETTINGS_NO_ENTRY;
+  return g_hash_table_lookup (client->settings, name);
 }
 
 Bool

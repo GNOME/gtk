@@ -1353,8 +1353,7 @@ gdk_x11_screen_get_setting (GdkScreen   *screen,
 {
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
   const char *xsettings_name = NULL;
-  XSettingsResult result;
-  XSettingsSetting *setting = NULL;
+  const XSettingsSetting *setting;
   gboolean success = FALSE;
   GValue tmp_val = G_VALUE_INIT;
 
@@ -1362,9 +1361,8 @@ gdk_x11_screen_get_setting (GdkScreen   *screen,
   if (!xsettings_name)
     goto out;
 
-  result = xsettings_client_get_setting (x11_screen->xsettings_client,
-					 xsettings_name, &setting);
-  if (result != XSETTINGS_SUCCESS)
+  setting = xsettings_client_get_setting (x11_screen->xsettings_client, xsettings_name);
+  if (setting == NULL)
     goto out;
 
   switch (setting->type)
@@ -1413,9 +1411,6 @@ gdk_x11_screen_get_setting (GdkScreen   *screen,
   g_value_unset (&tmp_val);
 
  out:
-  if (setting)
-    xsettings_setting_free (setting);
-
   if (success)
     return TRUE;
   else

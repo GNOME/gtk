@@ -63,9 +63,9 @@ void             xsettings_client_set_ungrab_func (XSettingsClient     *client,
 void             xsettings_client_destroy         (XSettingsClient     *client);
 Bool             xsettings_client_process_event   (XSettingsClient     *client,
 						   XEvent              *xev);
-XSettingsResult  xsettings_client_get_setting     (XSettingsClient     *client,
-						   const char          *name,
-						   XSettingsSetting   **setting);
+const XSettingsSetting *
+                 xsettings_client_get_setting     (XSettingsClient     *client,
+						   const char          *name);
 
 #ifdef __cplusplus
 }
