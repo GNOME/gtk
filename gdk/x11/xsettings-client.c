@@ -45,9 +45,6 @@ struct _XSettingsClient
   XSettingsWatchFunc watch;
   void *cb_data;
 
-  XSettingsGrabFunc grab;
-  XSettingsGrabFunc ungrab;
-
   Window manager_window;
   Atom manager_atom;
   Atom selection_atom;
@@ -418,10 +415,7 @@ check_manager_window (XSettingsClient *client)
   if (client->manager_window && client->watch)
     client->watch (client->manager_window, False, 0, client->cb_data);
 
-  if (client->grab)
-    client->grab (client->display);
-  else
-    XGrabServer (client->display);
+  gdk_x11_display_grab (gdk_screen_get_display (client->screen));
 
   client->manager_window = XGetSelectionOwner (client->display,
 					       client->selection_atom);
@@ -429,10 +423,7 @@ check_manager_window (XSettingsClient *client)
     XSelectInput (client->display, client->manager_window,
 		  PropertyChangeMask | StructureNotifyMask);
 
-  if (client->ungrab)
-    client->ungrab (client->display);
-  else
-    XUngrabServer (client->display);
+  gdk_x11_display_ungrab (gdk_screen_get_display (client->screen));
   
   XFlush (client->display);
 
@@ -458,9 +449,7 @@ XSettingsClient *
 xsettings_client_new (GdkScreen           *screen,
 		      XSettingsNotifyFunc  notify,
 		      XSettingsWatchFunc   watch,
-		      void                *cb_data,
-		      XSettingsGrabFunc    grab,
-		      XSettingsGrabFunc    ungrab)
+		      void                *cb_data)
 {
   XSettingsClient *client;
   char buffer[256];
@@ -476,8 +465,6 @@ xsettings_client_new (GdkScreen           *screen,
   client->notify = notify;
   client->watch = watch;
   client->cb_data = cb_data;
-  client->grab = grab;
-  client->ungrab = ungrab;
   client->manager_window = None;
   client->settings = NULL;
 
@@ -503,21 +490,6 @@ xsettings_client_new (GdkScreen           *screen,
   check_manager_window (client);
 
   return client;
-}
-
-
-void
-xsettings_client_set_grab_func   (XSettingsClient      *client,
-				  XSettingsGrabFunc     grab)
-{
-  client->grab = grab;
-}
-
-void
-xsettings_client_set_ungrab_func (XSettingsClient      *client,
-				  XSettingsGrabFunc     ungrab)
-{
-  client->ungrab = ungrab;
 }
 
 void

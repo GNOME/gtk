@@ -35,8 +35,6 @@ extern "C" {
 #define xsettings_client_destroy         _gdk_x11_xsettings_client_destroy
 #define xsettings_client_get_setting     _gdk_x11_xsettings_client_get_setting
 #define xsettings_client_new             _gdk_x11_xsettings_client_new
-#define xsettings_client_set_grab_func   _gdk_x11_xsettings_client_set_grab_func
-#define xsettings_client_set_ungrab_func _gdk_x11_xsettings_client_set_ungrab_func
 #define xsettings_client_process_event   _gdk_x11_xsettings_client_process_event
 #define xsettings_setting_equal          _gdk_x11_xsettings_setting_equal
 #define xsettings_setting_free           _gdk_x11_xsettings_setting_free
@@ -106,7 +104,6 @@ typedef Bool (*XSettingsWatchFunc)  (Window            window,
 				     Bool              is_start,
 				     long              mask,
 				     void             *cb_data);
-typedef void (*XSettingsGrabFunc)   (Display          *display);
 
 void              xsettings_setting_free          (XSettingsSetting    *setting);
 int               xsettings_setting_equal         (XSettingsSetting    *setting_a,
@@ -115,13 +112,7 @@ int               xsettings_setting_equal         (XSettingsSetting    *setting_
 XSettingsClient *xsettings_client_new             (GdkScreen           *screen,
 						   XSettingsNotifyFunc  notify,
 						   XSettingsWatchFunc   watch,
-						   void                *cb_data,
-                                                   XSettingsGrabFunc    grab,
-                                                   XSettingsGrabFunc    ungrab);
-void             xsettings_client_set_grab_func   (XSettingsClient     *client,
-						   XSettingsGrabFunc    grab);
-void             xsettings_client_set_ungrab_func (XSettingsClient     *client,
-						   XSettingsGrabFunc    ungrab);
+						   void                *cb_data);
 void             xsettings_client_destroy         (XSettingsClient     *client);
 Bool             xsettings_client_process_event   (XSettingsClient     *client,
 						   XEvent              *xev);

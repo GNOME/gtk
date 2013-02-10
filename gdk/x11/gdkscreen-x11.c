@@ -1609,22 +1609,6 @@ gdk_x11_screen_supports_net_wm_hint (GdkScreen *screen,
   return FALSE;
 }
 
-static void
-refcounted_grab_server (Display *xdisplay)
-{
-  GdkDisplay *display = gdk_x11_lookup_xdisplay (xdisplay);
-
-  gdk_x11_display_grab (display);
-}
-
-static void
-refcounted_ungrab_server (Display *xdisplay)
-{
-  GdkDisplay *display = gdk_x11_lookup_xdisplay (xdisplay);
-
-  gdk_x11_display_ungrab (display);
-}
-
 static GdkFilterReturn
 gdk_xsettings_client_event_filter (GdkXEvent *xevent,
 				   GdkEvent  *event,
@@ -1734,9 +1718,7 @@ _gdk_x11_screen_init_events (GdkScreen *screen)
   x11_screen->xsettings_client = xsettings_client_new (screen,
 						       gdk_xsettings_notify_cb,
 						       gdk_xsettings_watch_cb,
-						       screen,
-                                                       refcounted_grab_server,
-                                                       refcounted_ungrab_server);
+						       screen);
   x11_screen->xsettings_in_init = FALSE;
 }
 
