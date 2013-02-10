@@ -274,7 +274,7 @@
  *   </accessibility>
  *   <child internal-child="accessible">
  *     <object class="AtkObject" id="a11y-button1">
- *       <property name="AtkObject::name">Clickable Button</property>
+ *       <property name="accessible-name">Clickable Button</property>
  *     </object>
  *   </child>
  * </object>
