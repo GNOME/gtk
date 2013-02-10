@@ -25,7 +25,9 @@
 
 #include "xsettings-client.h"
 
-#include <glib.h>
+#include <gdk/x11/gdkx11display.h>
+#include <gdk/x11/gdkx11screen.h>
+#include <gdk/x11/gdkx11window.h>
 
 #include <limits.h>
 #include <stdio.h>
@@ -37,8 +39,8 @@
 
 struct _XSettingsClient
 {
+  GdkScreen *screen;
   Display *display;
-  int screen;
   XSettingsNotifyFunc notify;
   XSettingsWatchFunc watch;
   void *cb_data;
@@ -453,8 +455,7 @@ check_manager_window (XSettingsClient *client)
 }
 
 XSettingsClient *
-xsettings_client_new (Display             *display,
-		      int                  screen,
+xsettings_client_new (GdkScreen           *screen,
 		      XSettingsNotifyFunc  notify,
 		      XSettingsWatchFunc   watch,
 		      void                *cb_data,
@@ -470,8 +471,8 @@ xsettings_client_new (Display             *display,
   if (!client)
     return NULL;
 
-  client->display = display;
   client->screen = screen;
+  client->display = gdk_x11_display_get_xdisplay (gdk_screen_get_display (screen));
   client->notify = notify;
   client->watch = watch;
   client->cb_data = cb_data;
@@ -480,12 +481,12 @@ xsettings_client_new (Display             *display,
   client->manager_window = None;
   client->settings = NULL;
 
-  sprintf(buffer, "_XSETTINGS_S%d", screen);
+  sprintf(buffer, "_XSETTINGS_S%d", gdk_x11_screen_get_screen_number (screen));
   atom_names[0] = buffer;
   atom_names[1] = "_XSETTINGS_SETTINGS";
   atom_names[2] = "MANAGER";
 
-  XInternAtoms (display, atom_names, 3, False, atoms);
+  XInternAtoms (client->display, atom_names, 3, False, atoms);
 
   client->selection_atom = atoms[0];
   client->xsettings_atom = atoms[1];
@@ -493,10 +494,10 @@ xsettings_client_new (Display             *display,
 
   /* Select on StructureNotify so we get MANAGER events
    */
-  add_events (display, RootWindow (display, screen), StructureNotifyMask);
+  add_events (client->display, gdk_x11_window_get_xid (gdk_screen_get_root_window (screen)), StructureNotifyMask);
 
   if (client->watch)
-    client->watch (RootWindow (display, screen), True, StructureNotifyMask,
+    client->watch (gdk_x11_window_get_xid (gdk_screen_get_root_window (screen)), True, StructureNotifyMask,
 		   client->cb_data);
 
   check_manager_window (client);
@@ -523,7 +524,7 @@ void
 xsettings_client_destroy (XSettingsClient *client)
 {
   if (client->watch)
-    client->watch (RootWindow (client->display, client->screen),
+    client->watch (gdk_x11_window_get_xid (gdk_screen_get_root_window (client->screen)),
 		   False, 0, client->cb_data);
   if (client->manager_window && client->watch)
     client->watch (client->manager_window, False, 0, client->cb_data);
@@ -549,7 +550,7 @@ xsettings_client_process_event (XSettingsClient *client,
    * times when the manager changes from A->B. But manager changes
    * are going to be pretty rare.
    */
-  if (xev->xany.window == RootWindow (client->display, client->screen))
+  if (xev->xany.window == gdk_x11_window_get_xid (gdk_screen_get_root_window (client->screen)))
     {
       if (xev->xany.type == ClientMessage &&
 	  xev->xclient.message_type == client->manager_atom &&

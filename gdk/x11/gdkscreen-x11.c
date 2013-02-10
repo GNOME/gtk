@@ -1731,8 +1731,7 @@ _gdk_x11_screen_init_events (GdkScreen *screen)
   /* Keep a flag to avoid extra notifies that we don't need
    */
   x11_screen->xsettings_in_init = TRUE;
-  x11_screen->xsettings_client = xsettings_client_new (x11_screen->xdisplay,
-						       x11_screen->screen_num,
+  x11_screen->xsettings_client = xsettings_client_new (screen,
 						       gdk_xsettings_notify_cb,
 						       gdk_xsettings_watch_cb,
 						       screen,

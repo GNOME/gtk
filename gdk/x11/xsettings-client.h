@@ -23,6 +23,7 @@
 #ifndef XSETTINGS_CLIENT_H
 #define XSETTINGS_CLIENT_H
 
+#include <gdk/gdkscreen.h>
 #include <X11/Xlib.h>
 
 #ifdef __cplusplus
@@ -111,8 +112,7 @@ void              xsettings_setting_free          (XSettingsSetting    *setting)
 int               xsettings_setting_equal         (XSettingsSetting    *setting_a,
 					           XSettingsSetting    *setting_b);
 
-XSettingsClient *xsettings_client_new             (Display             *display,
-						   int                  screen,
+XSettingsClient *xsettings_client_new             (GdkScreen           *screen,
 						   XSettingsNotifyFunc  notify,
 						   XSettingsWatchFunc   watch,
 						   void                *cb_data,
