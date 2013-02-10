@@ -25,6 +25,8 @@
 
 #include "xsettings-client.h"
 
+#include <glib.h>
+
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -574,3 +576,42 @@ xsettings_client_process_event (XSettingsClient *client,
   
   return False;
 }
+
+int
+xsettings_setting_equal (XSettingsSetting *setting_a,
+			 XSettingsSetting *setting_b)
+{
+  if (setting_a->type != setting_b->type)
+    return 0;
+
+  if (strcmp (setting_a->name, setting_b->name) != 0)
+    return 0;
+
+  switch (setting_a->type)
+    {
+    case XSETTINGS_TYPE_INT:
+      return setting_a->data.v_int == setting_b->data.v_int;
+    case XSETTINGS_TYPE_COLOR:
+      return (setting_a->data.v_color.red == setting_b->data.v_color.red &&
+	      setting_a->data.v_color.green == setting_b->data.v_color.green &&
+	      setting_a->data.v_color.blue == setting_b->data.v_color.blue &&
+	      setting_a->data.v_color.alpha == setting_b->data.v_color.alpha);
+    case XSETTINGS_TYPE_STRING:
+      return strcmp (setting_a->data.v_string, setting_b->data.v_string) == 0;
+    }
+
+  return 0;
+}
+
+void
+xsettings_setting_free (XSettingsSetting *setting)
+{
+  if (setting->type == XSETTINGS_TYPE_STRING)
+    free (setting->data.v_string);
+
+  if (setting->name)
+    free (setting->name);
+  
+  free (setting);
+}
+

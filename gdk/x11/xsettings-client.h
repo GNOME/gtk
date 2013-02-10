@@ -24,13 +24,36 @@
 #define XSETTINGS_CLIENT_H
 
 #include <X11/Xlib.h>
-#include "xsettings-common.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
+/* Renames for GDK inclusion */
+
+#define xsettings_client_destroy         _gdk_x11_xsettings_client_destroy
+#define xsettings_client_get_setting     _gdk_x11_xsettings_client_get_setting
+#define xsettings_client_new             _gdk_x11_xsettings_client_new
+#define xsettings_client_set_grab_func   _gdk_x11_xsettings_client_set_grab_func
+#define xsettings_client_set_ungrab_func _gdk_x11_xsettings_client_set_ungrab_func
+#define xsettings_client_process_event   _gdk_x11_xsettings_client_process_event
+#define xsettings_setting_equal          _gdk_x11_xsettings_setting_equal
+#define xsettings_setting_free           _gdk_x11_xsettings_setting_free
+
+typedef struct _XSettingsBuffer  XSettingsBuffer;
+typedef struct _XSettingsColor   XSettingsColor;
+typedef struct _XSettingsSetting XSettingsSetting;
 typedef struct _XSettingsClient XSettingsClient;
+
+/* Types of settings possible. Enum values correspond to
+ * protocol values.
+ */
+typedef enum 
+{
+  XSETTINGS_TYPE_INT     = 0,
+  XSETTINGS_TYPE_STRING  = 1,
+  XSETTINGS_TYPE_COLOR   = 2
+} XSettingsType;
 
 typedef enum 
 {
@@ -38,6 +61,41 @@ typedef enum
   XSETTINGS_ACTION_CHANGED,
   XSETTINGS_ACTION_DELETED
 } XSettingsAction;
+
+typedef enum
+{
+  XSETTINGS_SUCCESS,
+  XSETTINGS_NO_MEM,
+  XSETTINGS_ACCESS,
+  XSETTINGS_FAILED,
+  XSETTINGS_NO_ENTRY,
+  XSETTINGS_DUPLICATE_ENTRY
+} XSettingsResult;
+
+struct _XSettingsBuffer
+{
+  char byte_order;
+  size_t len;
+  unsigned char *data;
+  unsigned char *pos;
+};
+
+struct _XSettingsColor
+{
+  unsigned short red, green, blue, alpha;
+};
+
+struct _XSettingsSetting
+{
+  char *name;
+  XSettingsType type;
+  
+  union {
+    int v_int;
+    char *v_string;
+    XSettingsColor v_color;
+  } data;
+};
 
 typedef void (*XSettingsNotifyFunc) (const char       *name,
 				     XSettingsAction   action,
@@ -48,6 +106,10 @@ typedef Bool (*XSettingsWatchFunc)  (Window            window,
 				     long              mask,
 				     void             *cb_data);
 typedef void (*XSettingsGrabFunc)   (Display          *display);
+
+void              xsettings_setting_free          (XSettingsSetting    *setting);
+int               xsettings_setting_equal         (XSettingsSetting    *setting_a,
+					           XSettingsSetting    *setting_b);
 
 XSettingsClient *xsettings_client_new             (Display             *display,
 						   int                  screen,
