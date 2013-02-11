@@ -712,7 +712,7 @@ static void gtk_widget_set_device_enabled_internal (GtkWidget *widget,
 static gboolean event_window_is_still_viewable (GdkEvent *event);
 static void gtk_cairo_set_event (cairo_t        *cr,
 				 GdkEventExpose *event);
-static void gtk_widget_update_norender (GtkWidget *widget);
+static void gtk_widget_propagate_alpha (GtkWidget *widget);
 
 /* --- variables --- */
 static gpointer         gtk_widget_parent_class = NULL;
@@ -4038,7 +4038,7 @@ gtk_widget_unparent (GtkWidget *widget)
     g_object_notify_queue_clear (G_OBJECT (widget), nqueue);
   g_object_notify_queue_thaw (G_OBJECT (widget), nqueue);
 
-  gtk_widget_update_norender (widget);
+  gtk_widget_propagate_alpha (widget);
 
   gtk_widget_pop_verify_invariants (widget);
   g_object_unref (widget);
@@ -8168,7 +8168,7 @@ gtk_widget_set_parent (GtkWidget *widget,
       gtk_widget_queue_compute_expand (parent);
     }
 
-  gtk_widget_update_norender (widget);
+  gtk_widget_propagate_alpha (widget);
 
   gtk_widget_pop_verify_invariants (widget);
 }
@@ -13770,7 +13770,7 @@ gtk_widget_register_window (GtkWidget    *widget,
 
   if (!gtk_widget_get_has_window (widget) && !gdk_window_has_native (window))
     gdk_window_set_opacity (window,
-			    (priv->norender || priv->norender_children) ? 0.0 : 1.0);
+			    priv->norender_children ? 0.0 : 1.0);
 }
 
 /**
@@ -13864,72 +13864,82 @@ gtk_widget_set_support_multidevice (GtkWidget *widget,
     gdk_window_set_support_multidevice (priv->window, support_multidevice);
 }
 
-static void apply_norender (GtkWidget *widget, gboolean norender);
+/* There are multiple alpha related sources, the user can specify alpha
+ * in gtk_widget_set_opacity, secondly we can get it from the css opacity. These two
+ * are multiplied together to form the total alpha.
+ *
+ * We handle opacity in two ways. For a windowed widget, with opacity set but no opacity
+ * group we directly set the opacity of widget->window. This will cause gdk to properly
+ * redirect drawing inside the window to a buffer and do OVER paint_with_alpha.
+ *
+ * However, if the widget is not windowed,
+ * we do the opacity handling in the ::draw marshaller for the widget. A naive
+ * implementation of this would break for windowed widgets or descendant widgets with
+ * windows, as these would not be handled by the ::draw signal. To handle this we set
+ * all such gdkwindows as fully transparent and then override gtk_cairo_should_draw_window()
+ * to make the draw signal propagate to *all* child widgets/windows.
+ *
+ * Note: We don't make all child windows fully transparent, we stop at the first one
+ * in each branch when propagating down the hierarchy.
+ */
 
-static void
-apply_norender_cb (GtkWidget *widget, gpointer norender)
-{
-  apply_norender (widget, GPOINTER_TO_INT (norender));
-}
 
+/* This is called when priv->alpha changes, and should
+ * update priv->norender and GdkWindow opacity for this widget and any children that
+ * needs changing. It is also called whenver the parent changes, the parents
+ * norender_children state changes, or the has_window state of the widget changes.
+ */
 static void
-propagate_norender_non_window (GtkWidget *widget, gboolean norender)
+gtk_widget_propagate_alpha (GtkWidget *widget)
 {
+  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidget *parent;
+  gboolean norender, norender_children;
   GList *l;
 
-  g_assert (!gtk_widget_get_has_window (widget));
+  parent = priv->parent;
 
-  for (l = widget->priv->registered_windows; l != NULL; l = l->next)
-    gdk_window_set_opacity (l->data,
-			    norender ? 0 : widget->priv->alpha / 255.0);
+  norender =
+    /* If the parent has norender_children, propagate that here */
+    (parent != NULL && parent->priv->norender_children);
 
-  if (GTK_IS_CONTAINER (widget))
-    gtk_container_forall (GTK_CONTAINER (widget), apply_norender_cb,
-			  GINT_TO_POINTER (norender));
-}
-
-static void
-apply_norender (GtkWidget *widget, gboolean norender)
-{
-  if (widget->priv->norender == norender)
-    return;
-
-  widget->priv->norender = norender;
+  /* Windowed widget children should norender if: */
+  norender_children =
+    /* The widget is no_window (otherwise its enought to mark it norender/alpha), and */
+    !gtk_widget_get_has_window (widget) &&
+     ( /* norender is set, or */
+      norender ||
+      /* widget has an alpha */
+      priv->alpha != 255
+       );
 
   if (gtk_widget_get_has_window (widget))
     {
-      if (widget->priv->window != NULL)
-	gdk_window_set_opacity (widget->priv->window,
-				norender ? 0 : widget->priv->alpha / 255.0);
+      if (priv->window != NULL && !gdk_window_has_native (priv->window))
+	gdk_window_set_opacity (priv->window,
+				norender ? 0 : priv->alpha / 255.0);
     }
-  else
-    propagate_norender_non_window (widget, norender | widget->priv->norender_children);
-}
+  else /* !has_window */
+    {
+      for (l = priv->registered_windows; l != NULL; l = l->next)
+	{
+	  GdkWindow *w = l->data;
+	  if (!gdk_window_has_native (w))
+	    gdk_window_set_opacity (w, norender_children ? 0.0 : 1.0);
+	}
+    }
 
-/* This is called when the norender_children state of a non-window widget changes,
- * its parent changes, or its has_window state changes. It means we need
- * to update the norender of all the windows owned by the widget and those
- * of child widgets, up to and including the first windowed widgets in the hierarchy.
- */
-static void
-gtk_widget_update_norender (GtkWidget *widget)
-{
-  gboolean norender;
-  GtkWidget *parent;
+  priv->norender = norender;
+  if (priv->norender_children != norender_children)
+    {
+      priv->norender_children = norender_children;
 
-  parent = widget->priv->parent;
+      if (GTK_IS_CONTAINER (widget))
+	gtk_container_forall (GTK_CONTAINER (widget), (GtkCallback)gtk_widget_propagate_alpha, NULL);
+    }
 
-  norender =
-    parent != NULL &&
-    (parent->priv->norender_children ||
-     (parent->priv->norender && !gtk_widget_get_has_window (parent)));
-
-  apply_norender (widget, norender);
-
-  /* The above may not have propagated to children if norender_children changed but
-     not norender, so we need to enforce propagation. */
-  if (!gtk_widget_get_has_window (widget))
-    propagate_norender_non_window (widget, norender | widget->priv->norender_children);
+  if (gtk_widget_get_realized (widget))
+    gtk_widget_queue_draw (widget);
 }
 
 static void
@@ -13958,37 +13968,8 @@ gtk_widget_update_alpha (GtkWidget *widget)
 
   priv->alpha = alpha;
 
-    if (gtk_widget_get_has_window (widget))
-    {
-      if (priv->window != NULL)
-	gdk_window_set_opacity (priv->window,
-				priv->norender ? 0 : priv->alpha / 255.0);
-    }
-  else
-    {
-      /* For non windowed widgets we can't use gdk_window_set_opacity() directly, as there is
-	 no GdkWindow at the right place in the hierarchy. For no-window widget this is not a problem,
-	 as we just push an opacity group in the draw marshaller.
+  gtk_widget_propagate_alpha (widget);
 
-	 However, that only works for non-window descendant widgets. If any descendant has a
-	 window that window will not normally be rendered in the draw signal, so the opacity
-	 group will not work for it.
-
-	 To fix this we set all such windows to a zero opacity, meaning they don't get drawn
-	 by gdk, and instead we set a NULL _gtk_cairo_get_event during expose so that the draw
-	 handler recurses into windowed widgets.
-
-	 We do this by setting "norender_children", which means that any windows in this widget
-	 or its ancestors (stopping at the first such windows at each branch in the hierarchy)
-	 are set to zero opacity. This is then propagated into all necessary children as norender,
-	 which controls whether a window should be exposed or not.
-      */
-      priv->norender_children = priv->alpha != 255;
-      gtk_widget_update_norender (widget);
-    }
-
-  if (gtk_widget_get_realized (widget))
-    gtk_widget_queue_draw (widget);
 }
 
 /**
