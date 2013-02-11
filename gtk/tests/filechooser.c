@@ -53,7 +53,7 @@ log_test (gboolean passed, const char *test_name, ...)
 }
 
 typedef void (* SetFilenameFn) (GtkFileChooser *chooser, gpointer data);
-typedef gboolean (* CompareFilenameFn) (GtkFileChooser *chooser, gpointer data);
+typedef void (* CompareFilenameFn) (GtkFileChooser *chooser, gpointer data);
 
 struct test_set_filename_closure {
   GtkWidget *chooser;
@@ -98,7 +98,7 @@ wait_for_idle (void)
     gtk_main_iteration ();
 }
 
-static gboolean
+static void
 test_set_filename (GtkFileChooserAction action,
 		   gboolean focus_button,
 		   SetFilenameFn set_filename_fn,const
@@ -107,7 +107,6 @@ test_set_filename (GtkFileChooserAction action,
 {
   GtkWidget *chooser;
   struct test_set_filename_closure closure;
-  gboolean retval;
 
   chooser = gtk_file_chooser_dialog_new ("hello", NULL, action,
 					 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -124,11 +123,9 @@ test_set_filename (GtkFileChooserAction action,
   gdk_threads_add_timeout_full (G_MAXINT, SLEEP_DURATION, set_filename_timeout_cb, &closure, NULL);
   gtk_dialog_run (GTK_DIALOG (chooser));
 
-  retval = (* compare_filename_fn) (GTK_FILE_CHOOSER (chooser), data);
+  (* compare_filename_fn) (GTK_FILE_CHOOSER (chooser), data);
 
   gtk_widget_destroy (chooser);
-
-  return retval;
 }
 
 static void
@@ -140,24 +137,19 @@ set_filename_cb (GtkFileChooser *chooser, gpointer data)
   gtk_file_chooser_set_filename (chooser, filename);
 }
 
-static gboolean
+static void
 compare_filename_cb (GtkFileChooser *chooser, gpointer data)
 {
   const char *filename;
   char *out_filename;
-  gboolean retval;
 
   filename = data;
   out_filename = gtk_file_chooser_get_filename (chooser);
 
-  if (out_filename)
-    {
-      retval = (strcmp (out_filename, filename) == 0);
-      g_free (out_filename);
-    } else
-      retval = FALSE;
+  g_assert_cmpstr (out_filename, ==, filename);
 
-  return retval;
+  if (out_filename)
+    g_free (out_filename);
 }
 
 typedef struct
@@ -172,15 +164,8 @@ static void
 test_black_box_set_filename (gconstpointer data)
 {
   const TestSetFilenameSetup *setup = data;
-  gboolean passed;
 
-  passed = test_set_filename (setup->action, setup->focus_button, set_filename_cb, compare_filename_cb, (char *) setup->filename);
-
-  log_test (passed, "set_filename: action %d, focus_button=%s",
-	    (int) setup->action,
-	    setup->focus_button ? "TRUE" : "FALSE");
-
-  g_assert (passed);
+  test_set_filename (setup->action, setup->focus_button, set_filename_cb, compare_filename_cb, (char *) setup->filename);
 }
 
 struct current_name_closure {
@@ -199,29 +184,24 @@ set_current_name_cb (GtkFileChooser *chooser, gpointer data)
   gtk_file_chooser_set_current_name (chooser, closure->current_name);
 }
 
-static gboolean
+static void
 compare_current_name_cb (GtkFileChooser *chooser, gpointer data)
 {
   struct current_name_closure *closure;
   char *out_filename;
-  gboolean retval;
+  char *filename;
 
   closure = data;
 
   out_filename = gtk_file_chooser_get_filename (chooser);
 
-  if (out_filename)
-    {
-      char *filename;
+  g_assert (out_filename != NULL);
 
-      filename = g_build_filename (closure->path, closure->current_name, NULL);
-      retval = (strcmp (filename, out_filename) == 0);
-      g_free (filename);
-      g_free (out_filename);
-    } else
-      retval = FALSE;
+  filename = g_build_filename (closure->path, closure->current_name, NULL);
+  g_assert_cmpstr (filename, ==, out_filename);
 
-  return retval;
+  g_free (filename);
+  g_free (out_filename);
 }
 
 typedef struct
@@ -237,7 +217,6 @@ test_black_box_set_current_name (gconstpointer data)
 {
   const TestSetCurrentNameSetup *setup = data;
   struct current_name_closure closure;
-  gboolean passed;
   char *cwd;
 
   cwd = g_get_current_dir ();
@@ -245,14 +224,9 @@ test_black_box_set_current_name (gconstpointer data)
   closure.path = cwd;
   closure.current_name = setup->current_name;
 
-  passed = test_set_filename (setup->action, setup->focus_button,
-			      set_current_name_cb, compare_current_name_cb, &closure);
+  test_set_filename (setup->action, setup->focus_button, set_current_name_cb, compare_current_name_cb, &closure);
 
   g_free (cwd);
-
-  log_test (passed, "set_current_name: action %d, focus_button=%s", (int) setup->action, setup->focus_button ? "TRUE" : "FALSE");
-
-  g_assert (passed);
 }
 
 /* FIXME: fails in CREATE_FOLDER mode when FOLDER_NAME == "/" */
