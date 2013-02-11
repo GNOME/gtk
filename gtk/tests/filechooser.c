@@ -283,6 +283,59 @@ setup_set_current_name_tests (void)
     g_test_add_data_func (tests[i].test_name, &tests[i], test_black_box_set_current_name);
 }
 
+static void
+test_file_chooser_button_set_filename (void)
+{
+  GtkWidget *window;
+  GtkWidget *fc_button;
+  char *filename;
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+  fc_button = gtk_file_chooser_button_new ("Select a file", GTK_FILE_CHOOSER_ACTION_OPEN);
+  gtk_container_add (GTK_CONTAINER (window), fc_button);
+  gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (fc_button), FILE_NAME);
+
+  gtk_widget_show_all (window);
+  wait_for_idle ();
+
+  filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (fc_button));
+  g_assert_cmpstr (filename, ==, FILE_NAME);
+
+  g_free (filename);
+  gtk_widget_destroy (window);
+}
+
+static void
+test_file_chooser_button_set_folder (void)
+{
+  GtkWidget *window;
+  GtkWidget *fc_button;
+  char *filename;
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+  fc_button = gtk_file_chooser_button_new ("Select a folder", GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+  gtk_container_add (GTK_CONTAINER (window), fc_button);
+  gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (fc_button), FOLDER_NAME);
+
+  gtk_widget_show_all (window);
+  wait_for_idle ();
+
+  filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (fc_button));
+  g_assert_cmpstr (filename, ==, FOLDER_NAME);
+
+  g_free (filename);
+  gtk_widget_destroy (window);
+}
+
+static void
+setup_file_chooser_button_tests (void)
+{
+  g_test_add_func ("/GtkFileChooserButton/set_filename", test_file_chooser_button_set_filename);
+  g_test_add_func ("/GtkFileChooserButton/set_folder", test_file_chooser_button_set_folder);
+}
+
 struct confirm_overwrite_closure {
   GtkWidget *chooser;
   GtkWidget *accept_button;
@@ -1068,17 +1121,18 @@ main (int    argc,
   gtk_test_init (&argc, &argv);
 
   /* register tests */
+
+  setup_file_chooser_button_tests ();
+#ifdef BROKEN_TESTS
   setup_set_filename_tests ();
   setup_set_current_name_tests ();
+
   g_test_add_func ("/GtkFileChooser/confirm_overwrite", test_confirm_overwrite);
-#ifdef BROKEN_TESTS
   g_test_add_func ("/GtkFileChooser/action_widgets", test_action_widgets);
-#endif
-#ifdef BROKEN_TESTS
   g_test_add_func ("/GtkFileChooser/reload", test_reload);
-#endif
   g_test_add_func ("/GtkFileChooser/button_folder_states", test_button_folder_states);
   g_test_add_func ("/GtkFileChooser/folder_switch_and_filters", test_folder_switch_and_filters);
+#endif
 
   /* run and check selected tests */
   return g_test_run();
