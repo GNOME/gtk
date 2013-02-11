@@ -160,19 +160,27 @@ compare_filename_cb (GtkFileChooser *chooser, gpointer data)
   return retval;
 }
 
-static gboolean
-test_black_box_set_filename (GtkFileChooserAction action, const char *filename, gboolean focus_button)
+typedef struct
 {
+  const char *test_name;
+  GtkFileChooserAction action;
+  const char *filename;
+  gboolean focus_button;
+} TestSetFilenameSetup;
+
+static void
+test_black_box_set_filename (gconstpointer data)
+{
+  const TestSetFilenameSetup *setup = data;
   gboolean passed;
 
-  passed = test_set_filename (action, focus_button, set_filename_cb, compare_filename_cb, (char *) filename);
+  passed = test_set_filename (setup->action, setup->focus_button, set_filename_cb, compare_filename_cb, (char *) setup->filename);
 
   log_test (passed, "set_filename: action %d, focus_button=%s",
-	    (int) action,
-	    focus_button ? "TRUE" : "FALSE");
+	    (int) setup->action,
+	    setup->focus_button ? "TRUE" : "FALSE");
 
-  return passed;
-
+  g_assert (passed);
 }
 
 struct current_name_closure {
@@ -216,21 +224,35 @@ compare_current_name_cb (GtkFileChooser *chooser, gpointer data)
   return retval;
 }
 
-static gboolean
-test_black_box_set_current_name (GtkFileChooserAction action, const char *path, const char *current_name, gboolean focus_button)
+typedef struct
 {
+  const char *test_name;
+  GtkFileChooserAction action;
+  const char *current_name;
+  gboolean focus_button;
+} TestSetCurrentNameSetup;
+
+static void
+test_black_box_set_current_name (gconstpointer data)
+{
+  const TestSetCurrentNameSetup *setup = data;
   struct current_name_closure closure;
   gboolean passed;
+  char *cwd;
 
-  closure.path = path;
-  closure.current_name = current_name;
+  cwd = g_get_current_dir ();
 
-  passed = test_set_filename (action, focus_button,
+  closure.path = cwd;
+  closure.current_name = setup->current_name;
+
+  passed = test_set_filename (setup->action, setup->focus_button,
 			      set_current_name_cb, compare_current_name_cb, &closure);
 
-  log_test (passed, "set_current_name, focus_button=%s", focus_button ? "TRUE" : "FALSE");
+  g_free (cwd);
 
-  return passed;
+  log_test (passed, "set_current_name: action %d, focus_button=%s", (int) setup->action, setup->focus_button ? "TRUE" : "FALSE");
+
+  g_assert (passed);
 }
 
 /* FIXME: fails in CREATE_FOLDER mode when FOLDER_NAME == "/" */
@@ -250,45 +272,41 @@ test_black_box_set_current_name (GtkFileChooserAction action, const char *path, 
  * http://bugzilla.gnome.org/show_bug.cgi?id=347066
  * http://bugzilla.gnome.org/show_bug.cgi?id=346058
  */
+
 static void
-test_black_box (void)
+setup_set_filename_tests (void)
 {
-  gboolean passed;
-  char *cwd;
+  static TestSetFilenameSetup tests[] =
+    {
+      { "/GtkFileChooser/black_box/set_filename/open/no_focus",		 GTK_FILE_CHOOSER_ACTION_OPEN,		FILE_NAME,  FALSE },
+      { "/GtkFileChooser/black_box/set_filename/open/focus",		 GTK_FILE_CHOOSER_ACTION_OPEN,		FILE_NAME,  TRUE  },
+      { "/GtkFileChooser/black_box/set_filename/save/no_focus",		 GTK_FILE_CHOOSER_ACTION_SAVE,		FILE_NAME,  FALSE },
+      { "/GtkFileChooser/black_box/set_filename/save/focus",		 GTK_FILE_CHOOSER_ACTION_SAVE,		FILE_NAME,  TRUE  },
+      { "/GtkFileChooser/black_box/set_filename/select_folder/no_focus", GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,	FOLDER_NAME,FALSE },
+      { "/GtkFileChooser/black_box/set_filename/select_folder/focus",	 GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,	FOLDER_NAME,TRUE  },
+      { "/GtkFileChooser/black_box/set_filename/create_folder/no_focus", GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER,	FOLDER_NAME,FALSE },
+      { "/GtkFileChooser/black_box/set_filename/create_folder/focus",	 GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER,	FOLDER_NAME,TRUE  },
+    };
+  int i;
 
-  passed = TRUE;
+  for (i = 0; i < G_N_ELEMENTS (tests); i++)
+    g_test_add_data_func (tests[i].test_name, &tests[i], test_black_box_set_filename);
+}
 
-  passed = passed && test_black_box_set_filename (GTK_FILE_CHOOSER_ACTION_OPEN, FILE_NAME, FALSE);
-  g_assert (passed);
-  passed = passed && test_black_box_set_filename (GTK_FILE_CHOOSER_ACTION_OPEN, FILE_NAME, TRUE);
-  g_assert (passed);
-  passed = passed && test_black_box_set_filename (GTK_FILE_CHOOSER_ACTION_SAVE, FILE_NAME, FALSE);
-  g_assert (passed);
-  passed = passed && test_black_box_set_filename (GTK_FILE_CHOOSER_ACTION_SAVE, FILE_NAME, TRUE);
-  g_assert (passed);
-  passed = passed && test_black_box_set_filename (GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, FOLDER_NAME, FALSE);
-  g_assert (passed);
-  passed = passed && test_black_box_set_filename (GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, FOLDER_NAME, TRUE);
-  g_assert (passed);
-  passed = passed && test_black_box_set_filename (GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER, FOLDER_NAME, FALSE);
-  g_assert (passed);
-  passed = passed && test_black_box_set_filename (GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER, FOLDER_NAME, TRUE);
-  g_assert (passed);
+static void
+setup_set_current_name_tests (void)
+{
+  static TestSetCurrentNameSetup tests[] =
+    {
+      { "/GtkFileChooser/black_box/set_current_name/save/no_focus",	     GTK_FILE_CHOOSER_ACTION_SAVE,	    CURRENT_NAME,	 FALSE },
+      { "/GtkFileChooser/black_box/set_current_name/save/focus",	     GTK_FILE_CHOOSER_ACTION_SAVE,	    CURRENT_NAME,	 TRUE  },
+      { "/GtkFileChooser/black_box/set_current_name/create_folder/no_focus", GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER, CURRENT_NAME_FOLDER, FALSE },
+      { "/GtkFileChooser/black_box/set_current_name/create_folder/focus",    GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER, CURRENT_NAME_FOLDER, TRUE  },
+    };
+  int i;
 
-  cwd = g_get_current_dir ();
-
-  passed = passed && test_black_box_set_current_name (GTK_FILE_CHOOSER_ACTION_SAVE, cwd, CURRENT_NAME, FALSE);
-  g_assert (passed);
-  passed = passed && test_black_box_set_current_name (GTK_FILE_CHOOSER_ACTION_SAVE, cwd, CURRENT_NAME, TRUE);
-  g_assert (passed);
-  passed = passed && test_black_box_set_current_name (GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER, cwd, CURRENT_NAME_FOLDER, FALSE);
-  g_assert (passed);
-  passed = passed && test_black_box_set_current_name (GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER, cwd, CURRENT_NAME_FOLDER, TRUE);
-  g_assert (passed);
-
-  g_free (cwd);
-
-  log_test (passed, "Black box tests");
+  for (i = 0; i < G_N_ELEMENTS (tests); i++)
+    g_test_add_data_func (tests[i].test_name, &tests[i], test_black_box_set_current_name);
 }
 
 struct confirm_overwrite_closure {
@@ -1076,7 +1094,8 @@ main (int    argc,
   gtk_test_init (&argc, &argv);
 
   /* register tests */
-  g_test_add_func ("/GtkFileChooser/black_box", test_black_box);
+  setup_set_filename_tests ();
+  setup_set_current_name_tests ();
   g_test_add_func ("/GtkFileChooser/confirm_overwrite", test_confirm_overwrite);
 #ifdef BROKEN_TESTS
   g_test_add_func ("/GtkFileChooser/action_widgets", test_action_widgets);
