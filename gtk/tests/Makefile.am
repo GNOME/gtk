@@ -69,10 +69,9 @@ accel_LDADD			 = $(progs_ldadd)
 #crossingevents_SOURCES		 = crossingevents.c
 #crossingevents_LDADD		 = $(progs_ldadd)
 
-# Should be ported to new API's
-#TEST_PROGS			+= filechooser
-#filechooser_SOURCES		 = filechooser.c
-#filechooser_LDADD		 = $(progs_ldadd)
+TEST_PROGS			+= filechooser
+filechooser_SOURCES		 = filechooser.c
+filechooser_LDADD		 = $(progs_ldadd)
 
 TEST_PROGS			+= builder
 builder_SOURCES			 = builder.c
