@@ -59,7 +59,7 @@
  * or just <firstterm>UI definitions</firstterm> if the context is clear. Do not
  * confuse GtkBuilder UI Definitions with
  * <link linkend="XML-UI">GtkUIManager UI Definitions</link>, which are more
- * limited in scope.
+ * limited in scope. It is common to use <filename>.ui</filename> as the filename extension for files containing GtkBuilder UI definitions.
  * </para>
  * <programlisting>
  * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gtk/gtkbuilder.rnc">
