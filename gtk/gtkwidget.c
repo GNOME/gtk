@@ -359,6 +359,7 @@ struct _GtkWidgetPrivate
   /* SizeGroup related flags */
   guint have_size_groups      : 1;
 
+  guint opacity_group         : 1;
   guint norender_children     : 1;
   guint norender              : 1; /* Don't expose windows, instead recurse via draw */
 
@@ -831,8 +832,9 @@ gtk_widget_draw_marshaller (GClosure     *closure,
   tmp_event = _gtk_cairo_get_event (cr);
 
   push_group =
-    widget->priv->alpha != 255 &&
-    (!gtk_widget_get_has_window (widget) || tmp_event == NULL);
+    widget->priv->opacity_group ||
+    (widget->priv->alpha != 255 &&
+     (!gtk_widget_get_has_window (widget) || tmp_event == NULL));
 
   if (push_group)
     {
@@ -881,8 +883,9 @@ gtk_widget_draw_marshallerv (GClosure     *closure,
   tmp_event = _gtk_cairo_get_event (cr);
 
   push_group =
-    widget->priv->alpha != 255 &&
-    (!gtk_widget_get_has_window (widget) || tmp_event == NULL);
+    widget->priv->opacity_group ||
+    (widget->priv->alpha != 255 &&
+     (!gtk_widget_get_has_window (widget) || tmp_event == NULL));
 
   if (push_group)
     {
@@ -13864,16 +13867,17 @@ gtk_widget_set_support_multidevice (GtkWidget *widget,
     gdk_window_set_support_multidevice (priv->window, support_multidevice);
 }
 
-/* There are multiple alpha related sources, the user can specify alpha
+/* There are multiple alpha related sources. First of all the user can specify alpha
  * in gtk_widget_set_opacity, secondly we can get it from the css opacity. These two
- * are multiplied together to form the total alpha.
+ * are multiplied together to form the total alpha. Secondly, the user can specify
+ * an opacity group for a widget, which means we must essentially handle it as having alpha.
  *
  * We handle opacity in two ways. For a windowed widget, with opacity set but no opacity
  * group we directly set the opacity of widget->window. This will cause gdk to properly
  * redirect drawing inside the window to a buffer and do OVER paint_with_alpha.
  *
- * However, if the widget is not windowed,
- * we do the opacity handling in the ::draw marshaller for the widget. A naive
+ * However, if the widget is not windowed, or the user specified an opacity group for the
+ * widget we do the opacity handling in the ::draw marshaller for the widget. A naive
  * implementation of this would break for windowed widgets or descendant widgets with
  * windows, as these would not be handled by the ::draw signal. To handle this we set
  * all such gdkwindows as fully transparent and then override gtk_cairo_should_draw_window()
@@ -13884,7 +13888,7 @@ gtk_widget_set_support_multidevice (GtkWidget *widget,
  */
 
 
-/* This is called when priv->alpha changes, and should
+/* This is called when priv->alpha or priv->opacity_group group changes, and should
  * update priv->norender and GdkWindow opacity for this widget and any children that
  * needs changing. It is also called whenver the parent changes, the parents
  * norender_children state changes, or the has_window state of the widget changes.
@@ -13900,6 +13904,8 @@ gtk_widget_propagate_alpha (GtkWidget *widget)
   parent = priv->parent;
 
   norender =
+    /* If this widget has an opacity group, never render it */
+    priv->opacity_group ||
     /* If the parent has norender_children, propagate that here */
     (parent != NULL && parent->priv->norender_children);
 
@@ -13972,6 +13978,26 @@ gtk_widget_update_alpha (GtkWidget *widget)
 
 }
 
+static void
+gtk_widget_set_has_opacity_group  (GtkWidget *widget,
+				   gboolean has_opacity_group)
+{
+  GtkWidgetPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  priv = widget->priv;
+
+  has_opacity_group = !!has_opacity_group;
+
+  if (priv->opacity_group == has_opacity_group)
+    return;
+
+  priv->opacity_group = has_opacity_group;
+
+  gtk_widget_propagate_alpha (widget);
+}
+
 /**
  * gtk_widget_set_opacity:
  * @widget: a #GtkWidget
@@ -14008,12 +14034,21 @@ gtk_widget_set_opacity  (GtkWidget *widget,
   opacity = CLAMP (opacity, 0.0, 1.0);
 
   alpha = round (opacity * 255);
+
+  /* As a kind of hack for internal use we treat an alpha very
+     close to 1.0 (rounds to 255) but not 1.0 as specifying that
+     we want the opacity group behaviour wrt draw handling, but
+     not actually an alpha value. See bug #687842 for discussions. */
+  gtk_widget_set_has_opacity_group (widget,
+				    alpha == 255 && opacity != 1.0);
+
   if (alpha == priv->user_alpha)
     return;
 
   priv->user_alpha = alpha;
 
   gtk_widget_update_alpha (widget);
+
 }
 
 /**
