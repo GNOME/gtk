@@ -165,7 +165,6 @@ gtk_drawing_area_new (void)
 static void
 gtk_drawing_area_realize (GtkWidget *widget)
 {
-  GtkDrawingArea *darea = GTK_DRAWING_AREA (widget);
   GtkAllocation allocation;
   GdkWindow *window;
   GdkWindowAttr attributes;

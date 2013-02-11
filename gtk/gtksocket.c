@@ -380,7 +380,6 @@ static void
 gtk_socket_realize (GtkWidget *widget)
 {
   GtkAllocation allocation;
-  GtkSocket *socket = GTK_SOCKET (widget);
   GdkWindow *window;
   GdkWindowAttr attributes;
   XWindowAttributes xattrs;
