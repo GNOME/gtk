@@ -1142,7 +1142,8 @@ gtk_icon_view_accessible_model_row_deleted (GtkTreeModel *tree_model,
       gtk_icon_view_item_accessible_add_state (GTK_ICON_VIEW_ITEM_ACCESSIBLE (info->item), ATK_STATE_DEFUNCT, TRUE);
       g_signal_emit_by_name (atk_obj, "children-changed::remove",
                              index, NULL, NULL);
-      view->priv->items = g_list_remove_link (view->priv->items, deleted_item);
+      view->priv->items = g_list_delete_link (view->priv->items, deleted_item);
+      g_object_unref (info->item);
       g_free (info);
     }
 
@@ -1241,6 +1242,7 @@ gtk_icon_view_accessible_clear_cache (GtkIconViewAccessible *view)
   while (items)
     {
       info = (GtkIconViewItemAccessibleInfo *) items->data;
+      gtk_icon_view_item_accessible_add_state (GTK_ICON_VIEW_ITEM_ACCESSIBLE (info->item), ATK_STATE_DEFUNCT, TRUE);
       g_object_unref (info->item);
       g_free (items->data);
       items = items->next;
