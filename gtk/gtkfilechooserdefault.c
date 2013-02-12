@@ -281,8 +281,6 @@ static void     gtk_file_chooser_default_hierarchy_changed (GtkWidget          *
 static void     gtk_file_chooser_default_style_updated  (GtkWidget             *widget);
 static void     gtk_file_chooser_default_screen_changed (GtkWidget             *widget,
 							 GdkScreen             *previous_screen);
-static void     gtk_file_chooser_default_size_allocate  (GtkWidget             *widget,
-							 GtkAllocation         *allocation);
 
 static gboolean       gtk_file_chooser_default_set_current_folder 	   (GtkFileChooser    *chooser,
 									    GFile             *folder,
@@ -505,7 +503,6 @@ _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
   widget_class->hierarchy_changed = gtk_file_chooser_default_hierarchy_changed;
   widget_class->style_updated = gtk_file_chooser_default_style_updated;
   widget_class->screen_changed = gtk_file_chooser_default_screen_changed;
-  widget_class->size_allocate = gtk_file_chooser_default_size_allocate;
 
   signals[LOCATION_POPUP] =
     g_signal_new_class_handler (I_("location-popup"),
@@ -6001,13 +5998,6 @@ gtk_file_chooser_default_screen_changed (GtkWidget *widget,
   emit_default_size_changed (impl);
 
   profile_end ("end", NULL);
-}
-
-static void
-gtk_file_chooser_default_size_allocate (GtkWidget     *widget,
-                                        GtkAllocation *allocation)
-{
-  GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->size_allocate (widget, allocation);
 }
 
 static void
