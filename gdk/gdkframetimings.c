@@ -19,6 +19,19 @@
 
 #include "gdkframeclockprivate.h"
 
+/**
+ * SECTION:frametimings
+ * @Short_description: Object holding timing information for a single frame
+ * @Title: Frame timings
+ *
+ * A #GdkFrameTimings object holds timing information for a single frame
+ * of the application's displays. To retrieve #GdkFrameTimings objects,
+ * use gdk_frame_clock_get_timings() or gdk_frame_clock_get_current_timings().
+ * The information in #GdkFrameTimings is useful for precise synchronization
+ * of video with the event or audio streams, and for measuring
+ * quality metrics for the application's display, such as latency and jitter.
+ */
+
 G_DEFINE_BOXED_TYPE (GdkFrameTimings, gdk_frame_timings,
                      gdk_frame_timings_ref,
                      gdk_frame_timings_unref)
@@ -35,6 +48,15 @@ _gdk_frame_timings_new (gint64 frame_counter)
   return timings;
 }
 
+/**
+ * gdk_frame_timings_ref:
+ * @timings: a #GdkFrameTimings
+ *
+ * Increases the reference count of @timings.
+ *
+ * Returns: @timings
+ * Since: 3.8
+ */
 GdkFrameTimings *
 gdk_frame_timings_ref (GdkFrameTimings *timings)
 {
@@ -45,6 +67,15 @@ gdk_frame_timings_ref (GdkFrameTimings *timings)
   return timings;
 }
 
+/**
+ * gdk_frame_timings_unref:
+ * @timings: a #GdkFrameTimings
+ *
+ * Decreases the reference count of @timings. If @timings
+ * is no longer referenced, it will be freed.
+ *
+ * Since: 3.8
+ */
 void
 gdk_frame_timings_unref (GdkFrameTimings *timings)
 {
@@ -58,12 +89,40 @@ gdk_frame_timings_unref (GdkFrameTimings *timings)
     }
 }
 
+/**
+ * gdk_frame_timings_get_frame_counter:
+ * @timings: a #GdkFrameTimings
+ *
+ * Gets the frame counter value of the #GdkFrameClock when this
+ * this frame was drawn.
+ *
+ * Returns: the frame counter value for this frame
+ * Since: 3.8
+ */
 gint64
 gdk_frame_timings_get_frame_counter (GdkFrameTimings *timings)
 {
   return timings->frame_counter;
 }
 
+/**
+ * gdk_frame_timings_complete:
+ * @timings: a #GdkFrameTimings
+ *
+ * The timing information in a #GdkFrameTimings is filled in
+ * incrementally as the frame as drawn and passed off to the
+ * window system for processing and display to the user. The
+ * accessor functions for #GdkFrameTimings can return 0 to
+ * indicate an unavailable value for two reasons: either because
+ * the information is not yet available, or because it isn't
+ * available at all. Once gdk_frame_timings_complete() returns
+ * %TRUE for a frame, you can be certain that no further values
+ * will become available and be stored in the #GdkFrameTimings.
+ *
+ * Returns: %TRUE if all information that will be available
+ *  for the frame has been filled in.
+ * Since: 3.8
+ */
 gboolean
 gdk_frame_timings_get_complete (GdkFrameTimings *timings)
 {
@@ -72,6 +131,17 @@ gdk_frame_timings_get_complete (GdkFrameTimings *timings)
   return timings->complete;
 }
 
+/**
+ * gdk_frame_timings_get_frame_time:
+ * @timings: A #GdkFrameTimings
+ *
+ * Returns the frame time for the frame. This is the time value
+ * that is typically used to time animations for the frame. See
+ * gdk_frame_clock_get_frame_time().
+ *
+ * Returns: the frame time for the frame, in the timescale
+ *  of g_get_monotonic_time()
+ */
 gint64
 gdk_frame_timings_get_frame_time (GdkFrameTimings *timings)
 {
@@ -80,6 +150,18 @@ gdk_frame_timings_get_frame_time (GdkFrameTimings *timings)
   return timings->frame_time;
 }
 
+/**
+ * gdk_frame_timings_get_presentation_time:
+ * @timings: a #GdkFrameTimings
+ *
+ * Reurns the presentation time. This is the time at which the frame
+ * became visible to the user.
+ *
+ * Returns: the time the frame was displayed to the user, in the
+ *  timescale of g_get_monotonic_time(), or 0 if no presentation
+ *  time is available. See gdk_frame_timings_get_complete()
+ * Since: 3.8
+ */
 gint64
 gdk_frame_timings_get_presentation_time (GdkFrameTimings *timings)
 {
@@ -88,6 +170,25 @@ gdk_frame_timings_get_presentation_time (GdkFrameTimings *timings)
   return timings->presentation_time;
 }
 
+/**
+ * gdk_frame_timings_get_predicted_presentation_time:
+ * @timings: a #GdkFrameTimings
+ *
+ * Gets the predicted time at which this frame will be displayed. Although
+ * no predicted time may be available, if one is available, it will
+ * be available while the frame is being generated, in contrast to
+ * gdk_frame_timings_get_presentation_time(), which is only available
+ * after the frame has been presented. In general, if you are simply
+ * animating, you should use gdk_frame_clock_get_frame_time() rather
+ * than this function, but this function is useful for applications
+ * that want exact control over latency. For example, a movie player
+ * may want this information for Audio/Video synchronization.
+ *
+ * Returns: The predicted time at which the frame will be presented,
+ *  in the timescale of g_get_monotonic_time(), or 0 if no predicted
+ *  presentation time is available.
+ * Since: 3.8
+ */
 gint64
 gdk_frame_timings_get_predicted_presentation_time (GdkFrameTimings *timings)
 {
@@ -96,6 +197,19 @@ gdk_frame_timings_get_predicted_presentation_time (GdkFrameTimings *timings)
   return timings->predicted_presentation_time;
 }
 
+/**
+ * gdk_frame_timings_get_refresh_interval:
+ * @timings: a #GdkFrameTimings
+ *
+ * Gets the natural interval between presentation times for
+ * the display that this frame was displayed on. Frame presentation
+ * usually happens during the "vertical blanking interval".
+ *
+ * Returns: the refresh interval of the display, in microseconds,
+ *  or 0 if the refresh interval is not available.
+ *  See gdk_frame_timings_get_complete().
+ * Since: 3.8
+ */
 gint64
 gdk_frame_timings_get_refresh_interval (GdkFrameTimings *timings)
 {
