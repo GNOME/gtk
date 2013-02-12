@@ -30,41 +30,16 @@ typedef struct _GdkFrameTimings GdkFrameTimings;
 
 GType            gdk_frame_timings_get_type (void) G_GNUC_CONST;
 
-GdkFrameTimings *gdk_frame_timings_new (gint64 frame_counter);
-
 GdkFrameTimings *gdk_frame_timings_ref   (GdkFrameTimings *timings);
 void             gdk_frame_timings_unref (GdkFrameTimings *timings);
 
 gint64           gdk_frame_timings_get_frame_counter     (GdkFrameTimings *timings);
-
-guint64          gdk_frame_timings_get_cookie            (GdkFrameTimings *timings);
-void             gdk_frame_timings_set_cookie            (GdkFrameTimings *timings,
-                                                          guint64          cookie);
-
 gboolean         gdk_frame_timings_get_complete          (GdkFrameTimings *timings);
-void             gdk_frame_timings_set_complete          (GdkFrameTimings *timings,
-                                                          gboolean         complete);
-
-gboolean         gdk_frame_timings_get_slept_before      (GdkFrameTimings *timings);
-void             gdk_frame_timings_set_slept_before      (GdkFrameTimings *timings,
-                                                          gboolean         slept_before);
-
 gint64           gdk_frame_timings_get_frame_time        (GdkFrameTimings *timings);
-void             gdk_frame_timings_set_frame_time        (GdkFrameTimings *timings,
-                                                          gint64           frame_time);
-gint64           gdk_frame_timings_get_drawn_time        (GdkFrameTimings *timings);
-void             gdk_frame_timings_set_drawn_time        (GdkFrameTimings *timings,
-                                                          gint64           frame_time);
 gint64           gdk_frame_timings_get_presentation_time (GdkFrameTimings *timings);
-void             gdk_frame_timings_set_presentation_time (GdkFrameTimings *timings,
-                                                          gint64           presentation_time);
 gint64           gdk_frame_timings_get_refresh_interval  (GdkFrameTimings *timings);
-void             gdk_frame_timings_set_refresh_interval  (GdkFrameTimings *timings,
-                                                          gint64           refresh_interval);
 
 gint64           gdk_frame_timings_get_predicted_presentation_time (GdkFrameTimings *timings);
-void             gdk_frame_timings_set_predicted_presentation_time (GdkFrameTimings *timings,
-                                                                    gint64           predicted_presentation_time);
 
 G_END_DECLS
 

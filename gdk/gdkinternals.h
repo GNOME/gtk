@@ -429,24 +429,6 @@ cairo_surface_t * _gdk_offscreen_window_create_surface (GdkWindow *window,
                                                         gint       width,
                                                         gint       height);
 
-/********************************
- *  Debug-only frame statistics *
- ********************************/
-
-#ifdef G_ENABLE_DEBUG
-
-gint64           _gdk_frame_timings_get_layout_start_time (GdkFrameTimings *timings);
-void             _gdk_frame_timings_set_layout_start_time (GdkFrameTimings *timings,
-                                                           gint64           layout_start_time);
-gint64           _gdk_frame_timings_get_paint_start_time (GdkFrameTimings *timings);
-void             _gdk_frame_timings_set_paint_start_time (GdkFrameTimings *timings,
-                                                          gint64           paint_time);
-gint64           _gdk_frame_timings_get_frame_end_time  (GdkFrameTimings *timings);
-void             _gdk_frame_timings_set_frame_end_time  (GdkFrameTimings *timings,
-                                                         gint64           frame_end_time);
-
-#endif /* G_ENABLE_DEBUG */
-
 G_END_DECLS
 
 #endif /* __GDK_INTERNALS_H__ */

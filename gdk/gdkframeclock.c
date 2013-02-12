@@ -420,7 +420,7 @@ _gdk_frame_clock_begin_frame (GdkFrameClock *clock)
       gdk_frame_timings_unref(priv->timings[priv->current]);
     }
 
-  priv->timings[priv->current] = gdk_frame_timings_new (priv->frame_counter);
+  priv->timings[priv->current] = _gdk_frame_timings_new (priv->frame_counter);
 }
 
 GdkFrameTimings *
@@ -471,7 +471,7 @@ gdk_frame_clock_get_last_complete (GdkFrameClock *clock)
   for (i = 0; i < priv->n_timings; i++)
     {
       gint pos = ((priv->current - i) + FRAME_HISTORY_MAX_LENGTH) % FRAME_HISTORY_MAX_LENGTH;
-      if (gdk_frame_timings_get_complete (priv->timings[pos]))
+      if (priv->timings[pos]->complete)
         return priv->timings[pos];
     }
 
@@ -483,40 +483,31 @@ void
 _gdk_frame_clock_debug_print_timings (GdkFrameClock   *clock,
                                       GdkFrameTimings *timings)
 {
-  gint64 frame_counter = gdk_frame_timings_get_frame_counter (timings);
-  gint64 layout_start_time = _gdk_frame_timings_get_layout_start_time (timings);
-  gint64 paint_start_time = _gdk_frame_timings_get_paint_start_time (timings);
-  gint64 frame_end_time = _gdk_frame_timings_get_frame_end_time (timings);
-  gint64 frame_time = gdk_frame_timings_get_frame_time (timings);
-  gint64 presentation_time = gdk_frame_timings_get_presentation_time (timings);
-  gint64 predicted_presentation_time = gdk_frame_timings_get_predicted_presentation_time (timings);
-  gint64 refresh_interval = gdk_frame_timings_get_refresh_interval (timings);
   gint64 previous_frame_time = 0;
-  gboolean slept_before = gdk_frame_timings_get_slept_before (timings);
   GdkFrameTimings *previous_timings = gdk_frame_clock_get_timings (clock,
-                                                                   frame_counter - 1);
+                                                                   timings->frame_counter - 1);
 
   if (previous_timings != NULL)
-    previous_frame_time = gdk_frame_timings_get_frame_time (previous_timings);
+    previous_frame_time = previous_timings->frame_time;
 
-  g_print ("%5" G_GINT64_FORMAT ":", frame_counter);
+  g_print ("%5" G_GINT64_FORMAT ":", timings->frame_counter);
   if (previous_frame_time != 0)
     {
-      g_print (" interval=%-4.1f", (frame_time - previous_frame_time) / 1000.);
-      g_print (slept_before ?  " (sleep)" : "        ");
+      g_print (" interval=%-4.1f", (timings->frame_time - previous_frame_time) / 1000.);
+      g_print (timings->slept_before ?  " (sleep)" : "        ");
     }
-  if (layout_start_time != 0)
-    g_print (" layout_start=%-4.1f", (layout_start_time - frame_time) / 1000.);
-  if (paint_start_time != 0)
-    g_print (" paint_start=%-4.1f", (paint_start_time - frame_time) / 1000.);
-  if (frame_end_time != 0)
-    g_print (" frame_end=%-4.1f", (frame_end_time - frame_time) / 1000.);
-  if (presentation_time != 0)
-    g_print (" present=%-4.1f", (presentation_time - frame_time) / 1000.);
-  if (predicted_presentation_time != 0)
-    g_print (" predicted=%-4.1f", (predicted_presentation_time - frame_time) / 1000.);
-  if (refresh_interval != 0)
-    g_print (" refresh_interval=%-4.1f", refresh_interval / 1000.);
+  if (timings->layout_start_time != 0)
+    g_print (" layout_start=%-4.1f", (timings->layout_start_time - timings->frame_time) / 1000.);
+  if (timings->paint_start_time != 0)
+    g_print (" paint_start=%-4.1f", (timings->paint_start_time - timings->frame_time) / 1000.);
+  if (timings->frame_end_time != 0)
+    g_print (" frame_end=%-4.1f", (timings->frame_end_time - timings->frame_time) / 1000.);
+  if (timings->presentation_time != 0)
+    g_print (" present=%-4.1f", (timings->presentation_time - timings->frame_time) / 1000.);
+  if (timings->predicted_presentation_time != 0)
+    g_print (" predicted=%-4.1f", (timings->predicted_presentation_time - timings->frame_time) / 1000.);
+  if (timings->refresh_interval != 0)
+    g_print (" refresh_interval=%-4.1f", timings->refresh_interval / 1000.);
   g_print ("\n");
 }
 #endif /* G_ENABLE_DEBUG */
@@ -550,8 +541,8 @@ gdk_frame_clock_get_refresh_info (GdkFrameClock *clock,
       if (timings == NULL)
         return;
 
-      refresh_interval = gdk_frame_timings_get_refresh_interval (timings);
-      presentation_time = gdk_frame_timings_get_presentation_time (timings);
+      refresh_interval = timings->refresh_interval;
+      presentation_time = timings->presentation_time;
 
       if (presentation_time != 0)
         {

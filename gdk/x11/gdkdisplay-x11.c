@@ -1070,7 +1070,7 @@ find_frame_timings (GdkFrameClock *clock,
     {
       GdkFrameTimings *timings = gdk_frame_clock_get_timings (clock, i);
 
-      if (gdk_frame_timings_get_cookie (timings) == serial)
+      if (timings->cookie == serial)
         return timings;
     }
 
@@ -1116,7 +1116,7 @@ _gdk_wm_protocols_filter (GdkXEvent *xev,
           GdkFrameTimings *timings = find_frame_timings (clock, serial);
 
           if (timings)
-            gdk_frame_timings_set_drawn_time (timings, frame_drawn_time);
+            timings->drawn_time = frame_drawn_time;
 
           if (window_impl->toplevel->frame_pending)
             {
@@ -1153,18 +1153,16 @@ _gdk_wm_protocols_filter (GdkXEvent *xev,
 
           if (timings)
             {
-              gint64 drawn_time = gdk_frame_timings_get_drawn_time (timings);
               gint32 presentation_time_offset = (gint32)d2;
               gint32 refresh_interval = d3;
 
-              if (drawn_time && presentation_time_offset)
-                gdk_frame_timings_set_presentation_time (timings,
-                                                         drawn_time + presentation_time_offset);
+              if (timings->drawn_time && presentation_time_offset)
+                timings->presentation_time = timings->drawn_time + presentation_time_offset;
 
               if (refresh_interval)
-                gdk_frame_timings_set_refresh_interval (timings, refresh_interval);
+                timings->refresh_interval = refresh_interval;
 
-              gdk_frame_timings_set_complete (timings, TRUE);
+              timings->complete = TRUE;
 #ifdef G_ENABLE_DEBUG
               if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
                 _gdk_frame_clock_debug_print_timings (clock, timings);
