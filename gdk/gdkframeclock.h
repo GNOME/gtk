@@ -31,7 +31,7 @@
 #ifndef __GDK_FRAME_CLOCK_H__
 #define __GDK_FRAME_CLOCK_H__
 
-#include <gdk/gdkframehistory.h>
+#include <gdk/gdkframetimings.h>
 
 G_BEGIN_DECLS
 
@@ -68,7 +68,12 @@ GdkFrameClockPhase gdk_frame_clock_get_requested (GdkFrameClock      *clock);
 void     gdk_frame_clock_freeze              (GdkFrameClock *clock);
 void     gdk_frame_clock_thaw                (GdkFrameClock *clock);
 
-GdkFrameHistory *gdk_frame_clock_get_history (GdkFrameClock *clock);
+/* Frame history */
+gint64           gdk_frame_clock_get_frame_counter (GdkFrameClock *clock);
+gint64           gdk_frame_clock_get_start         (GdkFrameClock *clock);
+GdkFrameTimings *gdk_frame_clock_get_timings       (GdkFrameClock *clock,
+                                                    gint64         frame_counter);
+GdkFrameTimings *gdk_frame_clock_get_last_complete (GdkFrameClock *clock);
 
 /* Convenience API */
 void  gdk_frame_clock_get_frame_time_val (GdkFrameClock  *clock,

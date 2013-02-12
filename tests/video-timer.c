@@ -221,9 +221,7 @@ on_window_draw (GtkWidget *widget,
       if (displayed_frame->frame_counter == 0)
         {
           GdkFrameClock *frame_clock = gtk_widget_get_frame_clock (window);
-          GdkFrameHistory *history = gdk_frame_clock_get_history (frame_clock);
-
-          displayed_frame->frame_counter = gdk_frame_history_get_frame_counter (history);
+          displayed_frame->frame_counter = gdk_frame_clock_get_frame_counter (clock);
         }
     }
 }
@@ -232,7 +230,6 @@ static void
 collect_old_frames (void)
 {
   GdkFrameClock *frame_clock = gtk_widget_get_frame_clock (window);
-  GdkFrameHistory *history = gdk_frame_clock_get_history (frame_clock);
   GList *l, *l_next;
 
   for (l = past_frames; l; l = l_next)
@@ -241,8 +238,8 @@ collect_old_frames (void)
       gboolean remove = FALSE;
       l_next = l->next;
 
-      GdkFrameTimings *timings = gdk_frame_history_get_timings (history,
-                                                                frame_data->frame_counter);
+      GdkFrameTimings *timings = gdk_frame_clock_get_timings (clock,
+                                                              frame_data->frame_counter);
       if (timings == NULL)
         {
           remove = TRUE;

@@ -26,6 +26,7 @@
 #include "gdkdisplay.h"
 #include "gdkeventsource.h"
 #include "gdkeventtranslator.h"
+#include "gdkframeclockprivate.h"
 #include "gdkinternals.h"
 #include "gdkscreen.h"
 #include "gdkinternals.h"
@@ -1061,14 +1062,13 @@ static GdkFrameTimings *
 find_frame_timings (GdkFrameClock *clock,
                     guint64        serial)
 {
-  GdkFrameHistory *history = gdk_frame_clock_get_history (clock);
   gint64 start_frame, end_frame, i;
 
-  start_frame = gdk_frame_history_get_start (history);
-  end_frame = gdk_frame_history_get_frame_counter (history);
+  start_frame = gdk_frame_clock_get_start (clock);
+  end_frame = gdk_frame_clock_get_frame_counter (clock);
   for (i = end_frame; i >= start_frame; i--)
     {
-      GdkFrameTimings *timings = gdk_frame_history_get_timings (history, i);
+      GdkFrameTimings *timings = gdk_frame_clock_get_timings (clock, i);
 
       if (gdk_frame_timings_get_cookie (timings) == serial)
         return timings;
@@ -1167,8 +1167,7 @@ _gdk_wm_protocols_filter (GdkXEvent *xev,
               gdk_frame_timings_set_complete (timings, TRUE);
 #ifdef G_ENABLE_DEBUG
               if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
-                _gdk_frame_history_debug_print (gdk_frame_clock_get_history (clock),
-                                                timings);
+                _gdk_frame_clock_debug_print_timings (clock, timings);
 #endif /* G_ENABLE_DEBUG */
             }
         }
