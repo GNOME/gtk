@@ -38,15 +38,6 @@
 
 typedef struct _XSettingsBuffer  XSettingsBuffer;
 
-typedef enum
-{
-  XSETTINGS_SUCCESS,
-  XSETTINGS_ACCESS,
-  XSETTINGS_FAILED,
-  XSETTINGS_NO_ENTRY,
-  XSETTINGS_DUPLICATE_ENTRY
-} XSettingsResult;
-
 struct _XSettingsBuffer
 {
   char byte_order;
@@ -115,11 +106,11 @@ notify_changes (XSettingsClient *client,
     { \
       g_warning ("Invalid XSETTINGS property (read off end: Expected %u bytes, only %ld left", \
                  (n_bytes), BYTES_LEFT (buffer)); \
-      return XSETTINGS_ACCESS; \
+      return FALSE; \
     } \
 }G_STMT_END
 
-static XSettingsResult
+static gboolean
 fetch_card16 (XSettingsBuffer *buffer,
 	      CARD16          *result)
 {
@@ -135,24 +126,24 @@ fetch_card16 (XSettingsBuffer *buffer,
   else
     *result = GUINT16_FROM_LE (x);
 
-  return XSETTINGS_SUCCESS;
+  return TRUE;
 }
 
-static XSettingsResult
+static gboolean
 fetch_ushort (XSettingsBuffer *buffer,
 	      unsigned short  *result) 
 {
   CARD16 x;
-  XSettingsResult r;  
+  gboolean r;  
 
   r = fetch_card16 (buffer, &x);
-  if (r == XSETTINGS_SUCCESS)
+  if (r)
     *result = x;
 
   return r;
 }
 
-static XSettingsResult
+static gboolean
 fetch_card32 (XSettingsBuffer *buffer,
 	      CARD32          *result)
 {
@@ -168,10 +159,10 @@ fetch_card32 (XSettingsBuffer *buffer,
   else
     *result = GUINT32_FROM_LE (x);
   
-  return XSETTINGS_SUCCESS;
+  return TRUE;
 }
 
-static XSettingsResult
+static gboolean
 fetch_card8 (XSettingsBuffer *buffer,
 	     CARD8           *result)
 {
@@ -180,12 +171,12 @@ fetch_card8 (XSettingsBuffer *buffer,
   *result = *(CARD8 *)buffer->pos;
   buffer->pos += 1;
 
-  return XSETTINGS_SUCCESS;
+  return TRUE;
 }
 
 #define XSETTINGS_PAD(n,m) ((n + m - 1) & (~(m-1)))
 
-static XSettingsResult
+static gboolean
 fetch_string (XSettingsBuffer  *buffer,
               guint             length,
               char            **result)
@@ -196,7 +187,7 @@ fetch_string (XSettingsBuffer  *buffer,
   if (pad_len < length) /* guard against overflow */
     {
       g_warning ("Invalid XSETTINGS property (overflow in string length)");
-      return XSETTINGS_ACCESS;
+      return FALSE;
     }
 
   return_if_fail_bytes (buffer, pad_len);
@@ -204,7 +195,7 @@ fetch_string (XSettingsBuffer  *buffer,
   *result = g_strndup ((char *) buffer->pos, length);
   buffer->pos += pad_len;
 
-  return XSETTINGS_SUCCESS;
+  return TRUE;
 }
 
 static GHashTable *
@@ -212,7 +203,6 @@ parse_settings (unsigned char *data,
 		size_t         len)
 {
   XSettingsBuffer buffer;
-  XSettingsResult result = XSETTINGS_SUCCESS;
   GHashTable *settings = NULL;
   CARD32 serial;
   CARD32 n_entries;
@@ -222,23 +212,20 @@ parse_settings (unsigned char *data,
   buffer.pos = buffer.data = data;
   buffer.len = len;
   
-  result = fetch_card8 (&buffer, (unsigned char *)&buffer.byte_order);
+  if (!fetch_card8 (&buffer, (unsigned char *)&buffer.byte_order))
+    goto out;
+
   if (buffer.byte_order != MSBFirst &&
       buffer.byte_order != LSBFirst)
     {
       g_warning ("Invalid XSETTINGS property (unknown byte order %u)", buffer.byte_order);
-      result = XSETTINGS_FAILED;
       goto out;
     }
 
   buffer.pos += 3;
 
-  result = fetch_card32 (&buffer, &serial);
-  if (result != XSETTINGS_SUCCESS)
-    goto out;
-
-  result = fetch_card32 (&buffer, &n_entries);
-  if (result != XSETTINGS_SUCCESS)
+  if (!fetch_card32 (&buffer, &serial) ||
+      !fetch_card32 (&buffer, &n_entries))
     goto out;
 
   GDK_NOTE(SETTINGS, g_print("reading %u settings (serial %u byte order %u)\n", n_entries, serial, buffer.byte_order));
@@ -249,62 +236,44 @@ parse_settings (unsigned char *data,
       CARD16 name_len;
       CARD32 v_int;
       
-      result = fetch_card8 (&buffer, &type);
-      if (result != XSETTINGS_SUCCESS)
+      if (!fetch_card8 (&buffer, &type))
 	goto out;
 
       buffer.pos += 1;
 
-      result = fetch_card16 (&buffer, &name_len);
-      if (result != XSETTINGS_SUCCESS)
+      if (!fetch_card16 (&buffer, &name_len))
 	goto out;
 
       setting = g_new (XSettingsSetting, 1);
       setting->type = XSETTINGS_TYPE_INT; /* No allocated memory */
 
       setting->name = NULL;
-      result = fetch_string (&buffer, name_len, &setting->name);
-      if (result != XSETTINGS_SUCCESS)
-	goto out;
-
-      /* last change serial (we ignore it) */
-      result = fetch_card32 (&buffer, &v_int);
-      if (result != XSETTINGS_SUCCESS)
+      if (!fetch_string (&buffer, name_len, &setting->name) ||
+          /* last change serial (we ignore it) */
+          !fetch_card32 (&buffer, &v_int))
 	goto out;
 
       switch (type)
 	{
 	case XSETTINGS_TYPE_INT:
-	  result = fetch_card32 (&buffer, &v_int);
-	  if (result != XSETTINGS_SUCCESS)
+	  if (!fetch_card32 (&buffer, &v_int))
 	    goto out;
 
 	  setting->data.v_int = (INT32)v_int;
           GDK_NOTE(SETTINGS, g_print("  %s = %d\n", setting->name, (gint) setting->data.v_int));
 	  break;
 	case XSETTINGS_TYPE_STRING:
-	  result = fetch_card32 (&buffer, &v_int);
-	  if (result != XSETTINGS_SUCCESS)
+	  if (!fetch_card32 (&buffer, &v_int) ||
+              !fetch_string (&buffer, v_int, &setting->data.v_string))
 	    goto out;
-
-          result = fetch_string (&buffer, v_int, &setting->data.v_string);
-          if (result != XSETTINGS_SUCCESS)
-            goto out;
 	  
           GDK_NOTE(SETTINGS, g_print("  %s = \"%s\"\n", setting->name, setting->data.v_string));
 	  break;
 	case XSETTINGS_TYPE_COLOR:
-	  result = fetch_ushort (&buffer, &setting->data.v_color.red);
-	  if (result != XSETTINGS_SUCCESS)
-	    goto out;
-	  result = fetch_ushort (&buffer, &setting->data.v_color.green);
-	  if (result != XSETTINGS_SUCCESS)
-	    goto out;
-	  result = fetch_ushort (&buffer, &setting->data.v_color.blue);
-	  if (result != XSETTINGS_SUCCESS)
-	    goto out;
-	  result = fetch_ushort (&buffer, &setting->data.v_color.alpha);
-	  if (result != XSETTINGS_SUCCESS)
+	  if (!fetch_ushort (&buffer, &setting->data.v_color.red) ||
+	      !fetch_ushort (&buffer, &setting->data.v_color.green) ||
+	      !fetch_ushort (&buffer, &setting->data.v_color.blue) ||
+	      !fetch_ushort (&buffer, &setting->data.v_color.alpha))
 	    goto out;
 
           GDK_NOTE(SETTINGS, g_print("  %s = #%02X%02X%02X%02X\n", setting->name, 
@@ -326,7 +295,6 @@ parse_settings (unsigned char *data,
 
       if (g_hash_table_lookup (settings, setting->name) != NULL)
         {
-          result = XSETTINGS_DUPLICATE_ENTRY;
 	  g_warning ("Invalid XSETTINGS property (Duplicate entry for '%s')", setting->name);
           goto out;
         }
@@ -335,19 +303,17 @@ parse_settings (unsigned char *data,
       setting = NULL;
     }
 
+  return settings;
+
  out:
 
-  if (result != XSETTINGS_SUCCESS)
-    {
-      if (setting)
-	xsettings_setting_free (setting);
+  if (setting)
+    xsettings_setting_free (setting);
 
-      if (settings)
-        g_hash_table_unref (settings);
-      settings = NULL;
-    }
+  if (settings)
+    g_hash_table_unref (settings);
 
-  return settings;
+  return NULL;
 }
 
 static void
