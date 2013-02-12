@@ -31,8 +31,6 @@
 
 #include <gdkinternals.h>
 
-#include <limits.h>
-#include <stdio.h>
 #include <string.h>
 
 #include <X11/Xlib.h>
@@ -114,7 +112,11 @@ notify_changes (XSettingsClient *client,
 
 #define return_if_fail_bytes(buffer, n_bytes) G_STMT_START{ \
   if (BYTES_LEFT (buffer) < (n_bytes)) \
-    return XSETTINGS_ACCESS; \
+    { \
+      g_warning ("Invalid XSETTINGS property (read off end: Expected %u bytes, only %ld left", \
+                 (n_bytes), BYTES_LEFT (buffer)); \
+      return XSETTINGS_ACCESS; \
+    } \
 }G_STMT_END
 
 static XSettingsResult
@@ -192,7 +194,10 @@ fetch_string (XSettingsBuffer  *buffer,
 
   pad_len = XSETTINGS_PAD (length, 4);
   if (pad_len < length) /* guard against overflow */
-    return XSETTINGS_ACCESS;
+    {
+      g_warning ("Invalid XSETTINGS property (overflow in string length)");
+      return XSETTINGS_ACCESS;
+    }
 
   return_if_fail_bytes (buffer, pad_len);
 
@@ -221,7 +226,7 @@ parse_settings (unsigned char *data,
   if (buffer.byte_order != MSBFirst &&
       buffer.byte_order != LSBFirst)
     {
-      fprintf (stderr, "Invalid byte order in XSETTINGS property\n");
+      g_warning ("Invalid XSETTINGS property (unknown byte order %u)", buffer.byte_order);
       result = XSETTINGS_FAILED;
       goto out;
     }
@@ -322,6 +327,7 @@ parse_settings (unsigned char *data,
       if (g_hash_table_lookup (settings, setting->name) != NULL)
         {
           result = XSETTINGS_DUPLICATE_ENTRY;
+	  g_warning ("Invalid XSETTINGS property (Duplicate entry for '%s')", setting->name);
           goto out;
         }
 
@@ -333,19 +339,6 @@ parse_settings (unsigned char *data,
 
   if (result != XSETTINGS_SUCCESS)
     {
-      switch (result)
-	{
-	case XSETTINGS_ACCESS:
-	  fprintf(stderr, "Invalid XSETTINGS property (read off end)\n");
-	  break;
-	case XSETTINGS_DUPLICATE_ENTRY:
-	  fprintf (stderr, "Duplicate XSETTINGS entry for '%s'\n", setting->name);
-	case XSETTINGS_FAILED:
-	case XSETTINGS_SUCCESS:
-	case XSETTINGS_NO_ENTRY:
-	  break;
-	}
-
       if (setting)
 	xsettings_setting_free (setting);
 
