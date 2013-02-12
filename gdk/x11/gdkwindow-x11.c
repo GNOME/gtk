@@ -291,7 +291,7 @@ gdk_x11_window_predict_presentation_time (GdkWindow *window)
 
   clock = gdk_window_get_frame_clock (window);
 
-  timings = gdk_frame_clock_get_current_frame_timings (clock);
+  timings = gdk_frame_clock_get_current_timings (clock);
 
   gdk_frame_clock_get_refresh_info (clock,
                                     timings->frame_time,
@@ -372,7 +372,7 @@ gdk_x11_window_end_frame (GdkWindow *window)
     return;
 
   clock = gdk_window_get_frame_clock (window);
-  timings = gdk_frame_clock_get_current_frame_timings (clock);
+  timings = gdk_frame_clock_get_current_timings (clock);
 
   impl->toplevel->in_frame = FALSE;
 
@@ -407,7 +407,7 @@ gdk_x11_window_end_frame (GdkWindow *window)
 					       gdk_atom_intern_static_string ("_NET_WM_FRAME_DRAWN")))
         {
           impl->toplevel->frame_pending = TRUE;
-          gdk_frame_clock_freeze (gdk_window_get_frame_clock (window));
+          _gdk_frame_clock_freeze (gdk_window_get_frame_clock (window));
           timings->cookie = impl->toplevel->current_counter_value;
         }
     }

@@ -4903,7 +4903,7 @@ gdk_window_freeze_toplevel_updates_libgtk_only (GdkWindow *window)
   g_return_if_fail (window->window_type != GDK_WINDOW_CHILD);
 
   window->update_and_descendants_freeze_count++;
-  gdk_frame_clock_freeze (gdk_window_get_frame_clock (window));
+  _gdk_frame_clock_freeze (gdk_window_get_frame_clock (window));
 }
 
 /**
@@ -4924,7 +4924,7 @@ gdk_window_thaw_toplevel_updates_libgtk_only (GdkWindow *window)
   g_return_if_fail (window->update_and_descendants_freeze_count > 0);
 
   window->update_and_descendants_freeze_count--;
-  gdk_frame_clock_thaw (gdk_window_get_frame_clock (window));
+  _gdk_frame_clock_thaw (gdk_window_get_frame_clock (window));
 
   gdk_window_schedule_update (window);
 }

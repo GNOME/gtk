@@ -220,8 +220,6 @@ maybe_start_idle (GdkFrameClockIdle *clock_idle)
                                                               gdk_frame_clock_paint_idle,
                                                               g_object_ref (clock_idle),
                                                               (GDestroyNotify) g_object_unref);
-
-          g_signal_emit_by_name (clock_idle, "frame-requested");
         }
     }
 }
@@ -286,7 +284,7 @@ gdk_frame_clock_paint_idle (void *data)
 
   if (priv->phase > GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT)
     {
-      timings = gdk_frame_clock_get_current_frame_timings (clock);
+      timings = gdk_frame_clock_get_current_timings (clock);
     }
 
   if (!skip_to_resume_events)
@@ -302,7 +300,7 @@ gdk_frame_clock_paint_idle (void *data)
               priv->frame_time = compute_frame_time (clock_idle);
 
               _gdk_frame_clock_begin_frame (clock);
-              timings = gdk_frame_clock_get_current_frame_timings (clock);
+              timings = gdk_frame_clock_get_current_timings (clock);
 
               timings->frame_time = priv->frame_time;
               timings->slept_before = priv->sleep_serial != get_sleep_serial ();
@@ -430,14 +428,6 @@ gdk_frame_clock_idle_request_phase (GdkFrameClock      *clock,
   maybe_start_idle (clock_idle);
 }
 
-static GdkFrameClockPhase
-gdk_frame_clock_idle_get_requested (GdkFrameClock *clock)
-{
-  GdkFrameClockIdlePrivate *priv = GDK_FRAME_CLOCK_IDLE (clock)->priv;
-
-  return priv->requested;
-}
-
 static void
 gdk_frame_clock_idle_freeze (GdkFrameClock *clock)
 {
@@ -492,7 +482,6 @@ gdk_frame_clock_idle_class_init (GdkFrameClockIdleClass *klass)
 
   frame_clock_class->get_frame_time = gdk_frame_clock_idle_get_frame_time;
   frame_clock_class->request_phase = gdk_frame_clock_idle_request_phase;
-  frame_clock_class->get_requested = gdk_frame_clock_idle_get_requested;
   frame_clock_class->freeze = gdk_frame_clock_idle_freeze;
   frame_clock_class->thaw = gdk_frame_clock_idle_thaw;
 

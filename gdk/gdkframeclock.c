@@ -78,7 +78,6 @@
 G_DEFINE_ABSTRACT_TYPE (GdkFrameClock, gdk_frame_clock, G_TYPE_OBJECT)
 
 enum {
-  FRAME_REQUESTED,
   FLUSH_EVENTS,
   BEFORE_PAINT,
   UPDATE,
@@ -120,22 +119,6 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
   GObjectClass *gobject_class = (GObjectClass*) klass;
 
   gobject_class->finalize     = gdk_frame_clock_finalize;
-
-  /**
-   * GdkFrameClock::frame-requested:
-   * @clock: the frame clock emitting the signal
-   *
-   * This signal is emitted when a frame is not pending, and
-   * gdk_frame_clock_request_frame() is called to request a frame.
-   */
-  signals[FRAME_REQUESTED] =
-    g_signal_new (g_intern_static_string ("frame-requested"),
-                  GDK_TYPE_FRAME_CLOCK,
-                  G_SIGNAL_RUN_LAST,
-                  0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE, 0);
 
   /**
    * GdkFrameClock::flush-events:
@@ -319,7 +302,7 @@ gdk_frame_clock_request_phase (GdkFrameClock      *clock,
 
 
 void
-gdk_frame_clock_freeze (GdkFrameClock *clock)
+_gdk_frame_clock_freeze (GdkFrameClock *clock)
 {
   g_return_if_fail (GDK_IS_FRAME_CLOCK (clock));
 
@@ -328,53 +311,11 @@ gdk_frame_clock_freeze (GdkFrameClock *clock)
 
 
 void
-gdk_frame_clock_thaw (GdkFrameClock *clock)
+_gdk_frame_clock_thaw (GdkFrameClock *clock)
 {
   g_return_if_fail (GDK_IS_FRAME_CLOCK (clock));
 
   GDK_FRAME_CLOCK_GET_CLASS (clock)->thaw (clock);
-}
-
-/**
- * gdk_frame_clock_get_requested:
- * @clock: the clock
- *
- * Gets whether a frame paint has been requested but has not been
- * performed.
- *
- *
- * Since: 3.0
- * Return value: TRUE if a frame paint is pending
- */
-GdkFrameClockPhase
-gdk_frame_clock_get_requested (GdkFrameClock *clock)
-{
-  g_return_val_if_fail (GDK_IS_FRAME_CLOCK (clock), FALSE);
-
-  return GDK_FRAME_CLOCK_GET_CLASS (clock)->get_requested (clock);
-}
-
-/**
- * gdk_frame_clock_get_frame_time_val:
- * @clock: the clock
- * @timeval: #GTimeVal to fill in with frame time
- *
- * Like gdk_frame_clock_get_frame_time() but returns the time as a
- * #GTimeVal which may be handy with some APIs (such as
- * #GdkPixbufAnimation).
- */
-void
-gdk_frame_clock_get_frame_time_val (GdkFrameClock *clock,
-                                    GTimeVal      *timeval)
-{
-  guint64 time_ms;
-
-  g_return_if_fail (GDK_IS_FRAME_CLOCK (clock));
-
-  time_ms = gdk_frame_clock_get_frame_time (clock);
-
-  timeval->tv_sec = time_ms / 1000;
-  timeval->tv_usec = (time_ms % 1000) * 1000;
 }
 
 gint64
@@ -390,7 +331,7 @@ gdk_frame_clock_get_frame_counter (GdkFrameClock *clock)
 }
 
 gint64
-gdk_frame_clock_get_start (GdkFrameClock *clock)
+gdk_frame_clock_get_history_start (GdkFrameClock *clock)
 {
   GdkFrameClockPrivate *priv;
 
@@ -446,7 +387,7 @@ gdk_frame_clock_get_timings (GdkFrameClock *clock,
 }
 
 GdkFrameTimings *
-gdk_frame_clock_get_current_frame_timings (GdkFrameClock *clock)
+gdk_frame_clock_get_frame_timings (GdkFrameClock *clock)
 {
   GdkFrameClockPrivate *priv;
 
@@ -457,26 +398,6 @@ gdk_frame_clock_get_current_frame_timings (GdkFrameClock *clock)
   return gdk_frame_clock_get_timings (clock, priv->frame_counter);
 }
 
-
-GdkFrameTimings *
-gdk_frame_clock_get_last_complete (GdkFrameClock *clock)
-{
-  GdkFrameClockPrivate *priv;
-  gint i;
-
-  g_return_val_if_fail (GDK_IS_FRAME_CLOCK (clock), NULL);
-
-  priv = clock->priv;
-
-  for (i = 0; i < priv->n_timings; i++)
-    {
-      gint pos = ((priv->current - i) + FRAME_HISTORY_MAX_LENGTH) % FRAME_HISTORY_MAX_LENGTH;
-      if (priv->timings[pos]->complete)
-        return priv->timings[pos];
-    }
-
-  return NULL;
-}
 
 #ifdef G_ENABLE_DEBUG
 void
