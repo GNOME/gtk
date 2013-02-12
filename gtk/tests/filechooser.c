@@ -334,10 +334,58 @@ test_file_chooser_button_set_folder (void)
 }
 
 static void
+test_file_chooser_button_dialog_cancel (void)
+{
+  GtkWidget *window;
+  GtkWidget *fc_dialog;
+  GtkWidget *fc_button;
+  GList *children;
+  char *filename;
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+  fc_dialog = gtk_file_chooser_dialog_new ("Select a file",
+					   NULL,
+					   GTK_FILE_CHOOSER_ACTION_OPEN,
+					   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+					   GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
+					   NULL);
+
+  fc_button = gtk_file_chooser_button_new_with_dialog (fc_dialog);
+  gtk_container_add (GTK_CONTAINER (window), fc_button);
+
+  gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (fc_button), FILE_NAME);
+
+  gtk_widget_show_all (window);
+  wait_for_idle ();
+
+  children = gtk_container_get_children (GTK_CONTAINER (fc_button));
+  g_assert (children && GTK_IS_BUTTON (children->data));
+  gtk_button_clicked (GTK_WIDGET (children->data));
+  g_list_free (children);
+
+  wait_for_idle ();
+
+  gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (fc_dialog), "/etc/group");
+  wait_for_idle ();
+
+  gtk_dialog_response (GTK_DIALOG (fc_dialog), GTK_RESPONSE_CANCEL);
+  wait_for_idle ();
+
+  filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (fc_button));
+  g_assert_cmpstr (filename, ==, FILE_NAME);
+
+  g_free (filename);
+  gtk_widget_destroy (window);
+  gtk_widget_destroy (fc_dialog);
+}
+
+static void
 setup_file_chooser_button_tests (void)
 {
   g_test_add_func ("/GtkFileChooserButton/set_filename", test_file_chooser_button_set_filename);
   g_test_add_func ("/GtkFileChooserButton/set_folder", test_file_chooser_button_set_folder);
+  g_test_add_func ("/GtkFileChooserButton/set_folder", test_file_chooser_button_dialog_cancel);
 }
 
 struct confirm_overwrite_closure {
