@@ -83,7 +83,8 @@ typedef enum {
   GDK_DEBUG_XINERAMA      = 1 <<  8,
   GDK_DEBUG_DRAW          = 1 <<  9,
   GDK_DEBUG_EVENTLOOP     = 1 << 10,
-  GDK_DEBUG_FRAMES        = 1 << 11
+  GDK_DEBUG_FRAMES        = 1 << 11,
+  GDK_DEBUG_SETTINGS      = 1 << 12
 } GdkDebugFlag;
 
 typedef enum {
