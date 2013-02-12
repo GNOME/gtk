@@ -47,17 +47,15 @@ struct _GdkFrameClockClass
 {
   GObjectClass parent_class;
 
-  guint64  (* get_frame_time)            (GdkFrameClock *clock);
+  guint64  (* get_frame_time) (GdkFrameClock *clock);
 
-  void               (* request_phase) (GdkFrameClock      *clock,
-                                        GdkFrameClockPhase  phase);
-  GdkFrameClockPhase (* get_requested) (GdkFrameClock      *clock);
+  void     (* request_phase)  (GdkFrameClock      *clock,
+                               GdkFrameClockPhase  phase);
 
-  void     (* freeze) (GdkFrameClock *clock);
-  void     (* thaw)   (GdkFrameClock *clock);
+  void     (* freeze)         (GdkFrameClock *clock);
+  void     (* thaw)           (GdkFrameClock *clock);
 
   /* signals */
-  /* void (* frame_requested)    (GdkFrameClock *clock); */
   /* void (* flush_events)       (GdkFrameClock *clock); */
   /* void (* before_paint)       (GdkFrameClock *clock); */
   /* void (* update)             (GdkFrameClock *clock); */
@@ -88,6 +86,9 @@ struct _GdkFrameTimings
   guint complete : 1;
   guint slept_before : 1;
 };
+
+void _gdk_frame_clock_freeze (GdkFrameClock *clock);
+void _gdk_frame_clock_thaw   (GdkFrameClock *clock);
 
 void _gdk_frame_clock_begin_frame         (GdkFrameClock   *clock);
 void _gdk_frame_clock_debug_print_timings (GdkFrameClock   *clock,

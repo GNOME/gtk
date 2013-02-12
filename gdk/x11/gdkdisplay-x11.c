@@ -686,7 +686,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
               window_impl->toplevel->frame_pending)
             {
               window_impl->toplevel->frame_pending = FALSE;
-              gdk_frame_clock_thaw (gdk_window_get_frame_clock (event->any.window));
+              _gdk_frame_clock_thaw (gdk_window_get_frame_clock (event->any.window));
             }
 
 	  if (toplevel)
@@ -1064,7 +1064,7 @@ find_frame_timings (GdkFrameClock *clock,
 {
   gint64 start_frame, end_frame, i;
 
-  start_frame = gdk_frame_clock_get_start (clock);
+  start_frame = gdk_frame_clock_get_history_start (clock);
   end_frame = gdk_frame_clock_get_frame_counter (clock);
   for (i = end_frame; i >= start_frame; i--)
     {
@@ -1121,7 +1121,7 @@ _gdk_wm_protocols_filter (GdkXEvent *xev,
           if (window_impl->toplevel->frame_pending)
             {
               window_impl->toplevel->frame_pending = FALSE;
-              gdk_frame_clock_thaw (clock);
+              _gdk_frame_clock_thaw (clock);
             }
 
           gdk_frame_clock_get_refresh_info (clock,

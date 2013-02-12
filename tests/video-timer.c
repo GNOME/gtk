@@ -221,7 +221,7 @@ on_window_draw (GtkWidget *widget,
       if (displayed_frame->frame_counter == 0)
         {
           GdkFrameClock *frame_clock = gtk_widget_get_frame_clock (window);
-          displayed_frame->frame_counter = gdk_frame_clock_get_frame_counter (clock);
+          displayed_frame->frame_counter = gdk_frame_clock_get_frame_counter (frame_clock);
         }
     }
 }
@@ -238,7 +238,7 @@ collect_old_frames (void)
       gboolean remove = FALSE;
       l_next = l->next;
 
-      GdkFrameTimings *timings = gdk_frame_clock_get_timings (clock,
+      GdkFrameTimings *timings = gdk_frame_clock_get_timings (frame_clock,
                                                               frame_data->frame_counter);
       if (timings == NULL)
         {
@@ -303,7 +303,7 @@ static void
 on_update (GdkFrameClock *frame_clock,
            gpointer       data)
 {
-  GdkFrameTimings *timings = gdk_frame_clock_get_current_frame_timings (frame_clock);
+  GdkFrameTimings *timings = gdk_frame_clock_get_current_timings (frame_clock);
   gint64 frame_time = gdk_frame_timings_get_frame_time (timings);
   gint64 predicted_presentation_time = gdk_frame_timings_get_predicted_presentation_time (timings);
   gint64 refresh_interval;

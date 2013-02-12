@@ -63,28 +63,19 @@ guint64  gdk_frame_clock_get_frame_time            (GdkFrameClock *clock);
 
 void               gdk_frame_clock_request_phase (GdkFrameClock      *clock,
                                                   GdkFrameClockPhase  phase);
-GdkFrameClockPhase gdk_frame_clock_get_requested (GdkFrameClock      *clock);
-
-void     gdk_frame_clock_freeze              (GdkFrameClock *clock);
-void     gdk_frame_clock_thaw                (GdkFrameClock *clock);
 
 /* Frame history */
 gint64           gdk_frame_clock_get_frame_counter (GdkFrameClock *clock);
-gint64           gdk_frame_clock_get_start         (GdkFrameClock *clock);
+gint64           gdk_frame_clock_get_history_start (GdkFrameClock *clock);
 GdkFrameTimings *gdk_frame_clock_get_timings       (GdkFrameClock *clock,
                                                     gint64         frame_counter);
-GdkFrameTimings *gdk_frame_clock_get_last_complete (GdkFrameClock *clock);
 
-/* Convenience API */
-void  gdk_frame_clock_get_frame_time_val (GdkFrameClock  *clock,
-                                          GTimeVal       *timeval);
+GdkFrameTimings *gdk_frame_clock_get_current_timings (GdkFrameClock *clock);
 
 void gdk_frame_clock_get_refresh_info (GdkFrameClock *clock,
                                        gint64         base_time,
                                        gint64        *refresh_interval_return,
                                        gint64        *presentation_time_return);
-
-GdkFrameTimings *gdk_frame_clock_get_current_frame_timings (GdkFrameClock *clock);
 
 G_END_DECLS
 
