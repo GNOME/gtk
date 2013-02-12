@@ -29,7 +29,7 @@
 #ifndef __GDK_FRAME_CLOCK_IDLE_H__
 #define __GDK_FRAME_CLOCK_IDLE_H__
 
-#include <gdk/gdkframeclock.h>
+#include "gdkframeclockprivate.h"
 
 G_BEGIN_DECLS
 
@@ -47,7 +47,7 @@ typedef struct _GdkFrameClockIdleClass         GdkFrameClockIdleClass;
 
 struct _GdkFrameClockIdle
 {
-  GObject parent_instance;
+  GdkFrameClock parent_instance;
 
   /*< private >*/
   GdkFrameClockIdlePrivate *priv;
@@ -55,7 +55,7 @@ struct _GdkFrameClockIdle
 
 struct _GdkFrameClockIdleClass
 {
-  GObjectClass parent_class;
+  GdkFrameClockClass parent_class;
 };
 
 GType	   gdk_frame_clock_idle_get_type          (void) G_GNUC_CONST;

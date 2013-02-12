@@ -105,6 +105,7 @@ gdk_private_headers = 				\
 	gdkdisplayprivate.h			\
 	gdkdndprivate.h				\
 	gdkframeclockidle.h			\
+	gdkframeclockprivate.h			\
 	gdkscreenprivate.h			\
 	gdkinternals.h				\
 	gdkintl.h				\

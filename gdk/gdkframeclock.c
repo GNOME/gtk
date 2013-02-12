@@ -26,7 +26,7 @@
 
 #include "config.h"
 
-#include "gdkframeclock.h"
+#include "gdkframeclockprivate.h"
 
 /**
  * SECTION:frameclock
@@ -74,7 +74,7 @@
  * time that doesn't have a lot to do with wall clock time.
  */
 
-G_DEFINE_INTERFACE (GdkFrameClock, gdk_frame_clock, G_TYPE_OBJECT)
+G_DEFINE_ABSTRACT_TYPE (GdkFrameClock, gdk_frame_clock, G_TYPE_OBJECT)
 
 enum {
   FRAME_REQUESTED,
@@ -90,9 +90,28 @@ enum {
 
 static guint signals[LAST_SIGNAL];
 
-static void
-gdk_frame_clock_default_init (GdkFrameClockInterface *iface)
+struct _GdkFrameClockPrivate
 {
+  GdkFrameHistory *history;
+};
+
+static void
+gdk_frame_clock_finalize (GObject *object)
+{
+  GdkFrameClockPrivate *priv = GDK_FRAME_CLOCK (object)->priv;
+
+  g_object_unref (priv->history);
+
+  G_OBJECT_CLASS (gdk_frame_clock_parent_class)->finalize (object);
+}
+
+static void
+gdk_frame_clock_class_init (GdkFrameClockClass *klass)
+{
+  GObjectClass *gobject_class = (GObjectClass*) klass;
+
+  gobject_class->finalize     = gdk_frame_clock_finalize;
+
   /**
    * GdkFrameClock::frame-requested:
    * @clock: the frame clock emitting the signal
@@ -221,6 +240,21 @@ gdk_frame_clock_default_init (GdkFrameClockInterface *iface)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+
+  g_type_class_add_private (klass, sizeof (GdkFrameClockPrivate));
+}
+
+static void
+gdk_frame_clock_init (GdkFrameClock *clock)
+{
+  GdkFrameClockPrivate *priv;
+
+  clock->priv = G_TYPE_INSTANCE_GET_PRIVATE (clock,
+                                             GDK_TYPE_FRAME_CLOCK,
+                                             GdkFrameClockPrivate);
+  priv = clock->priv;
+
+  priv->history = gdk_frame_history_new ();
 }
 
 /**
@@ -247,7 +281,7 @@ gdk_frame_clock_get_frame_time (GdkFrameClock *clock)
 {
   g_return_val_if_fail (GDK_IS_FRAME_CLOCK (clock), 0);
 
-  return GDK_FRAME_CLOCK_GET_IFACE (clock)->get_frame_time (clock);
+  return GDK_FRAME_CLOCK_GET_CLASS (clock)->get_frame_time (clock);
 }
 
 /**
@@ -270,7 +304,7 @@ gdk_frame_clock_request_phase (GdkFrameClock      *clock,
 {
   g_return_if_fail (GDK_IS_FRAME_CLOCK (clock));
 
-  GDK_FRAME_CLOCK_GET_IFACE (clock)->request_phase (clock, phase);
+  GDK_FRAME_CLOCK_GET_CLASS (clock)->request_phase (clock, phase);
 }
 
 
@@ -279,7 +313,7 @@ gdk_frame_clock_freeze (GdkFrameClock *clock)
 {
   g_return_if_fail (GDK_IS_FRAME_CLOCK (clock));
 
-  GDK_FRAME_CLOCK_GET_IFACE (clock)->freeze (clock);
+  GDK_FRAME_CLOCK_GET_CLASS (clock)->freeze (clock);
 }
 
 
@@ -288,7 +322,7 @@ gdk_frame_clock_thaw (GdkFrameClock *clock)
 {
   g_return_if_fail (GDK_IS_FRAME_CLOCK (clock));
 
-  GDK_FRAME_CLOCK_GET_IFACE (clock)->thaw (clock);
+  GDK_FRAME_CLOCK_GET_CLASS (clock)->thaw (clock);
 }
 
 /**
@@ -303,9 +337,13 @@ gdk_frame_clock_thaw (GdkFrameClock *clock)
 GdkFrameHistory *
 gdk_frame_clock_get_history (GdkFrameClock *clock)
 {
+  GdkFrameClockPrivate *priv;
+
   g_return_val_if_fail (GDK_IS_FRAME_CLOCK (clock), NULL);
 
-  return GDK_FRAME_CLOCK_GET_IFACE (clock)->get_history (clock);
+  priv = clock->priv;
+
+  return priv->history;
 }
 
 /**
@@ -324,7 +362,7 @@ gdk_frame_clock_get_requested (GdkFrameClock *clock)
 {
   g_return_val_if_fail (GDK_IS_FRAME_CLOCK (clock), FALSE);
 
-  return GDK_FRAME_CLOCK_GET_IFACE (clock)->get_requested (clock);
+  return GDK_FRAME_CLOCK_GET_CLASS (clock)->get_requested (clock);
 }
 
 /**
@@ -348,22 +386,6 @@ gdk_frame_clock_get_frame_time_val (GdkFrameClock *clock,
 
   timeval->tv_sec = time_ms / 1000;
   timeval->tv_usec = (time_ms % 1000) * 1000;
-}
-
-/**
- * gdk_frame_clock_frame_requested:
- * @clock: the clock
- *
- * Emits the frame-requested signal. Used in implementations of the
- * #GdkFrameClock interface.
- */
-void
-gdk_frame_clock_frame_requested (GdkFrameClock *clock)
-{
-  g_return_if_fail (GDK_IS_FRAME_CLOCK (clock));
-
-  g_signal_emit (G_OBJECT (clock),
-                 signals[FRAME_REQUESTED], 0);
 }
 
 GdkFrameTimings *
