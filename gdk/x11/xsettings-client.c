@@ -110,12 +110,6 @@ notify_changes (XSettingsClient *client,
     }
 }
 
-static int
-ignore_errors (Display *display, XErrorEvent *event)
-{
-  return True;
-}
-
 #define BYTES_LEFT(buffer) ((buffer)->data + (buffer)->len - (buffer)->pos)
 
 static XSettingsResult
@@ -370,20 +364,18 @@ read_settings (XSettingsClient *client)
   unsigned char *data;
   int result;
 
-  int (*old_handler) (Display *, XErrorEvent *);
-  
   GHashTable *old_list = client->settings;
 
   client->settings = NULL;
 
   if (client->manager_window)
     {
-      old_handler = XSetErrorHandler (ignore_errors);
+      gdk_x11_display_error_trap_push (gdk_screen_get_display (client->screen));
       result = XGetWindowProperty (client->display, client->manager_window,
 				   client->xsettings_atom, 0, LONG_MAX,
 				   False, client->xsettings_atom,
 				   &type, &format, &n_items, &bytes_after, &data);
-      XSetErrorHandler (old_handler);
+      gdk_x11_display_error_trap_pop_ignored (gdk_screen_get_display (client->screen));
       
       if (result == Success && type != None)
 	{
