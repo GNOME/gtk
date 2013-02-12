@@ -1006,6 +1006,10 @@ GDK_AVAILABLE_IN_ALL
 GdkPixbuf    *gtk_widget_render_icon_pixbuf   (GtkWidget   *widget,
                                                const gchar *stock_id,
                                                GtkIconSize  size);
+GdkPixbuf    *gtk_widget_render_icon_scaled   (GtkWidget      *widget,
+                                               const gchar    *stock_id,
+                                               GtkIconSize     size,
+                                               gdouble        *scale);
 
 /* handle composite names for GTK_COMPOSITE_CHILD widgets,
  * the returned name is newly allocated.
