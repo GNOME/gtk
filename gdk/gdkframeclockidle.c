@@ -304,10 +304,8 @@ gdk_frame_clock_paint_idle (void *data)
               _gdk_frame_clock_begin_frame (clock);
               timings = gdk_frame_clock_get_current_frame_timings (clock);
 
-              gdk_frame_timings_set_frame_time (timings, priv->frame_time);
-
-              gdk_frame_timings_set_slept_before (timings,
-                                                  priv->sleep_serial != get_sleep_serial ());
+              timings->frame_time = priv->frame_time;
+              timings->slept_before = priv->sleep_serial != get_sleep_serial ();
 
               priv->phase = GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
 
@@ -336,7 +334,7 @@ gdk_frame_clock_paint_idle (void *data)
                 {
                   if (priv->phase != GDK_FRAME_CLOCK_PHASE_LAYOUT &&
                       (priv->requested & GDK_FRAME_CLOCK_PHASE_LAYOUT))
-                    _gdk_frame_timings_set_layout_start_time (timings, g_get_monotonic_time ());
+                    timings->layout_start_time = g_get_monotonic_time ();
                 }
 #endif /* G_ENABLE_DEBUG */
 
@@ -355,7 +353,7 @@ gdk_frame_clock_paint_idle (void *data)
                 {
                   if (priv->phase != GDK_FRAME_CLOCK_PHASE_PAINT &&
                       (priv->requested & GDK_FRAME_CLOCK_PHASE_PAINT))
-                    _gdk_frame_timings_set_paint_start_time (timings, g_get_monotonic_time ());
+                    timings->paint_start_time = g_get_monotonic_time ();
                 }
 #endif /* G_ENABLE_DEBUG */
 
@@ -377,7 +375,7 @@ gdk_frame_clock_paint_idle (void *data)
 
 #ifdef G_ENABLE_DEBUG
               if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
-                _gdk_frame_timings_set_frame_end_time (timings, g_get_monotonic_time ());
+                timings->frame_end_time = g_get_monotonic_time ();
 #endif /* G_ENABLE_DEBUG */
             }
         case GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS:
@@ -388,7 +386,7 @@ gdk_frame_clock_paint_idle (void *data)
 #ifdef G_ENABLE_DEBUG
   if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
     {
-      if (gdk_frame_timings_get_complete (timings))
+      if (timings->complete)
         _gdk_frame_clock_debug_print_timings (clock, timings);
     }
 #endif /* G_ENABLE_DEBUG */

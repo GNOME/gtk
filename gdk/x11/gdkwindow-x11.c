@@ -32,6 +32,7 @@
 #include "gdkvisualprivate.h"
 #include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
+#include "gdkframeclockprivate.h"
 #include "gdkasync.h"
 #include "gdkeventsource.h"
 #include "gdkdisplay-x11.h"
@@ -282,10 +283,8 @@ gdk_x11_window_predict_presentation_time (GdkWindow *window)
   GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
   GdkFrameClock *clock;
   GdkFrameTimings *timings;
-  gint64 frame_time;
   gint64 presentation_time;
   gint64 refresh_interval;
-  gboolean slept_before;
 
   if (!WINDOW_IS_TOPLEVEL (window))
     return;
@@ -293,39 +292,35 @@ gdk_x11_window_predict_presentation_time (GdkWindow *window)
   clock = gdk_window_get_frame_clock (window);
 
   timings = gdk_frame_clock_get_current_frame_timings (clock);
-  frame_time = gdk_frame_timings_get_frame_time (timings);
-  slept_before = gdk_frame_timings_get_slept_before (timings);
 
   gdk_frame_clock_get_refresh_info (clock,
-                                    frame_time,
+                                    timings->frame_time,
                                     &refresh_interval, &presentation_time);
 
   if (presentation_time != 0)
     {
-      if (slept_before)
+      if (timings->slept_before)
         {
           presentation_time += refresh_interval;
         }
       else
         {
-          if (presentation_time < frame_time + refresh_interval / 2)
+          if (presentation_time < timings->frame_time + refresh_interval / 2)
             presentation_time += refresh_interval;
         }
     }
   else
     {
-      if (slept_before)
-        presentation_time = frame_time + refresh_interval + refresh_interval / 2;
+      if (timings->slept_before)
+        presentation_time = timings->frame_time + refresh_interval + refresh_interval / 2;
       else
-        presentation_time = frame_time + refresh_interval;
+        presentation_time = timings->frame_time + refresh_interval;
     }
 
   if (presentation_time < impl->toplevel->throttled_presentation_time)
     presentation_time = impl->toplevel->throttled_presentation_time;
 
-  gdk_frame_timings_set_predicted_presentation_time (timings,
-                                                     presentation_time);
-
+  timings->predicted_presentation_time = presentation_time;
 }
 
 static void
@@ -399,7 +394,7 @@ gdk_x11_window_end_frame (GdkWindow *window)
        * but rather at a particular time. This can trigger different handling from
        * the compositor.
        */
-      if (gdk_frame_timings_get_slept_before (timings))
+      if (timings->slept_before)
         impl->toplevel->current_counter_value += 3;
       else
         impl->toplevel->current_counter_value += 1;
@@ -413,8 +408,7 @@ gdk_x11_window_end_frame (GdkWindow *window)
         {
           impl->toplevel->frame_pending = TRUE;
           gdk_frame_clock_freeze (gdk_window_get_frame_clock (window));
-          gdk_frame_timings_set_cookie (timings,
-                                        impl->toplevel->current_counter_value);
+          timings->cookie = impl->toplevel->current_counter_value;
         }
     }
 
@@ -431,7 +425,7 @@ gdk_x11_window_end_frame (GdkWindow *window)
     }
 
   if (!impl->toplevel->frame_pending)
-    gdk_frame_timings_set_complete (timings, TRUE);
+    timings->complete = TRUE;
 }
 
 /*****************************************************
