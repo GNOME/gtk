@@ -233,9 +233,11 @@ test_black_box_set_current_name (gconstpointer data)
 
 #if 0
 #define FILE_NAME "/nonexistent"
+#define FILE_NAME_2 "/nonexistent2"
 #define FOLDER_NAME "/etc"
 #else
 #define FILE_NAME "/etc/passwd"
+#define FILE_NAME_2 "/etc/group"
 #define FOLDER_NAME "/etc"
 #endif
 
@@ -330,6 +332,29 @@ test_file_chooser_button_set_folder (void)
 }
 
 static void
+test_file_chooser_button_set_current_folder (void)
+{
+  GtkWidget *window;
+  GtkWidget *fc_button;
+  char *filename;
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+  fc_button = gtk_file_chooser_button_new ("Select a folder", GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+  gtk_container_add (GTK_CONTAINER (window), fc_button);
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (fc_button), FOLDER_NAME);
+
+  gtk_widget_show_all (window);
+  wait_for_idle ();
+
+  filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (fc_button));
+  g_assert_cmpstr (filename, ==, FOLDER_NAME);
+
+  g_free (filename);
+  gtk_widget_destroy (window);
+}
+
+static void
 test_file_chooser_button_dialog_cancel (void)
 {
   GtkWidget *window;
@@ -362,7 +387,7 @@ test_file_chooser_button_dialog_cancel (void)
 
   wait_for_idle ();
 
-  gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (fc_dialog), "/etc/group");
+  gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (fc_dialog), FILE_NAME_2);
   wait_for_idle ();
 
   gtk_dialog_response (GTK_DIALOG (fc_dialog), GTK_RESPONSE_CANCEL);
@@ -373,7 +398,6 @@ test_file_chooser_button_dialog_cancel (void)
 
   g_free (filename);
   gtk_widget_destroy (window);
-  gtk_widget_destroy (fc_dialog);
 }
 
 static void
@@ -381,7 +405,8 @@ setup_file_chooser_button_tests (void)
 {
   g_test_add_func ("/GtkFileChooserButton/set_filename", test_file_chooser_button_set_filename);
   g_test_add_func ("/GtkFileChooserButton/set_folder", test_file_chooser_button_set_folder);
-  g_test_add_func ("/GtkFileChooserButton/set_folder", test_file_chooser_button_dialog_cancel);
+  g_test_add_func ("/GtkFileChooserButton/set_current_folder", test_file_chooser_button_set_current_folder);
+  g_test_add_func ("/GtkFileChooserButton/dialog_cancel", test_file_chooser_button_dialog_cancel);
 }
 
 struct confirm_overwrite_closure {
