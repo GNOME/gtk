@@ -205,9 +205,6 @@ struct _GtkFileChooserButtonPrivate
   /* Used for hiding/showing the dialog when the button is hidden */
   guint  active                       : 1;
 
-  /* Used to track whether we need to set a default current folder on ::map() */
-  guint  folder_has_been_set          : 1;
-
   guint  focus_on_click               : 1;
 };
 
@@ -704,13 +701,6 @@ gtk_file_chooser_button_constructor (GType                  type,
       gtk_file_chooser_button_set_title (button, _(DEFAULT_TITLE));
     }
 
-  current_folder = gtk_file_chooser_get_current_folder_uri (GTK_FILE_CHOOSER (priv->dialog));
-  if (current_folder != NULL)
-    {
-      priv->folder_has_been_set = TRUE;
-      g_free (current_folder);
-    }
-
   g_signal_connect (priv->dialog, "delete-event",
 		    G_CALLBACK (dialog_delete_event_cb), object);
   g_signal_connect (priv->dialog, "response",
@@ -1172,18 +1162,6 @@ static void
 gtk_file_chooser_button_map (GtkWidget *widget)
 {
   GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (widget);
-  GtkFileChooserButtonPrivate *priv = button->priv;
-
-  if (!priv->folder_has_been_set)
-    {
-      char *current_working_dir;
-
-      current_working_dir = g_get_current_dir ();
-      gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (widget), current_working_dir);
-      g_free (current_working_dir);
-
-      priv->folder_has_been_set = TRUE;
-    }
 
   GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->map (widget);
 }
@@ -2587,9 +2565,6 @@ dialog_current_folder_changed_cb (GtkFileChooser *dialog,
 				  gpointer        user_data)
 {
   GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (user_data);
-  GtkFileChooserButtonPrivate *priv = button->priv;
-
-  priv->folder_has_been_set = TRUE;
 
   g_signal_emit_by_name (button, "current-folder-changed");
 }
