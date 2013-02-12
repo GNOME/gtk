@@ -279,8 +279,6 @@ static void     gtk_file_chooser_default_style_set      (GtkWidget             *
 							 GtkStyle              *previous_style);
 static void     gtk_file_chooser_default_screen_changed (GtkWidget             *widget,
 							 GdkScreen             *previous_screen);
-static void     gtk_file_chooser_default_size_allocate  (GtkWidget             *widget,
-							 GtkAllocation         *allocation);
 
 static gboolean       gtk_file_chooser_default_set_current_folder 	   (GtkFileChooser    *chooser,
 									    GFile             *folder,
@@ -501,7 +499,6 @@ _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
   widget_class->hierarchy_changed = gtk_file_chooser_default_hierarchy_changed;
   widget_class->style_set = gtk_file_chooser_default_style_set;
   widget_class->screen_changed = gtk_file_chooser_default_screen_changed;
-  widget_class->size_allocate = gtk_file_chooser_default_size_allocate;
 
   signals[LOCATION_POPUP] =
     g_signal_new_class_handler (I_("location-popup"),
@@ -5886,17 +5883,6 @@ gtk_file_chooser_default_screen_changed (GtkWidget *widget,
 }
 
 static void
-gtk_file_chooser_default_size_allocate (GtkWidget     *widget,
-					GtkAllocation *allocation)
-{
-  GtkFileChooserDefault *impl;
-
-  impl = GTK_FILE_CHOOSER_DEFAULT (widget);
-
-  GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->size_allocate (widget, allocation);
-}
-
-static void
 set_sort_column (GtkFileChooserDefault *impl)
 {
   GtkTreeSortable *sortable;
@@ -8017,13 +8003,11 @@ find_good_size_from_style (GtkWidget *widget,
 			   gint      *width,
 			   gint      *height)
 {
-  GtkFileChooserDefault *impl;
   int font_size;
   GdkScreen *screen;
   double resolution;
 
   g_assert (widget->style != NULL);
-  impl = GTK_FILE_CHOOSER_DEFAULT (widget);
 
   screen = gtk_widget_get_screen (widget);
   if (screen)
