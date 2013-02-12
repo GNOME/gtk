@@ -63,7 +63,6 @@ struct _XSettingsColor
 
 struct _XSettingsSetting
 {
-  char *name;
   XSettingsType type;
   
   union {

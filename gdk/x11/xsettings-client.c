@@ -68,6 +68,7 @@ notify_changes (XSettingsClient *client,
 {
   GHashTableIter iter;
   XSettingsSetting *setting, *old_setting;
+  const char *name;
 
   if (!client->notify)
     return;
@@ -75,18 +76,18 @@ notify_changes (XSettingsClient *client,
   if (client->settings != NULL)
     {
       g_hash_table_iter_init (&iter, client->settings);
-      while (g_hash_table_iter_next (&iter, NULL, (gpointer*) &setting))
+      while (g_hash_table_iter_next (&iter, (gpointer *) &name, (gpointer*) &setting))
 	{
-	  old_setting = old_list ? g_hash_table_lookup (old_list, setting->name) : NULL;
+	  old_setting = old_list ? g_hash_table_lookup (old_list, name) : NULL;
 
 	  if (old_setting == NULL)
-	    client->notify (setting->name, XSETTINGS_ACTION_NEW, setting, client->cb_data);
+	    client->notify (name, XSETTINGS_ACTION_NEW, setting, client->cb_data);
 	  else if (!xsettings_setting_equal (setting, old_setting))
-	    client->notify (setting->name, XSETTINGS_ACTION_CHANGED, setting, client->cb_data);
+	    client->notify (name, XSETTINGS_ACTION_CHANGED, setting, client->cb_data);
 	    
 	  /* remove setting from old_list */
 	  if (old_setting != NULL)
-	    g_hash_table_remove (old_list, setting->name);
+	    g_hash_table_remove (old_list, name);
 	}
     }
 
@@ -94,8 +95,8 @@ notify_changes (XSettingsClient *client,
     {
       /* old_list now contains only deleted settings */
       g_hash_table_iter_init (&iter, old_list);
-      while (g_hash_table_iter_next (&iter, NULL, (gpointer*) &old_setting))
-	client->notify (old_setting->name, XSETTINGS_ACTION_DELETED, NULL, client->cb_data);
+      while (g_hash_table_iter_next (&iter, (gpointer *) &name, (gpointer*) &old_setting))
+	client->notify (name, XSETTINGS_ACTION_DELETED, NULL, client->cb_data);
     }
 }
 
@@ -208,6 +209,7 @@ parse_settings (unsigned char *data,
   CARD32 n_entries;
   CARD32 i;
   XSettingsSetting *setting = NULL;
+  char *name;
   
   buffer.pos = buffer.data = data;
   buffer.len = len;
@@ -247,8 +249,7 @@ parse_settings (unsigned char *data,
       setting = g_new (XSettingsSetting, 1);
       setting->type = XSETTINGS_TYPE_INT; /* No allocated memory */
 
-      setting->name = NULL;
-      if (!fetch_string (&buffer, name_len, &setting->name) ||
+      if (!fetch_string (&buffer, name_len, &name) ||
           /* last change serial (we ignore it) */
           !fetch_card32 (&buffer, &v_int))
 	goto out;
@@ -260,14 +261,14 @@ parse_settings (unsigned char *data,
 	    goto out;
 
 	  setting->data.v_int = (INT32)v_int;
-          GDK_NOTE(SETTINGS, g_print("  %s = %d\n", setting->name, (gint) setting->data.v_int));
+          GDK_NOTE(SETTINGS, g_print("  %s = %d\n", name, (gint) setting->data.v_int));
 	  break;
 	case XSETTINGS_TYPE_STRING:
 	  if (!fetch_card32 (&buffer, &v_int) ||
               !fetch_string (&buffer, v_int, &setting->data.v_string))
 	    goto out;
 	  
-          GDK_NOTE(SETTINGS, g_print("  %s = \"%s\"\n", setting->name, setting->data.v_string));
+          GDK_NOTE(SETTINGS, g_print("  %s = \"%s\"\n", name, setting->data.v_string));
 	  break;
 	case XSETTINGS_TYPE_COLOR:
 	  if (!fetch_ushort (&buffer, &setting->data.v_color.red) ||
@@ -276,13 +277,13 @@ parse_settings (unsigned char *data,
 	      !fetch_ushort (&buffer, &setting->data.v_color.alpha))
 	    goto out;
 
-          GDK_NOTE(SETTINGS, g_print("  %s = #%02X%02X%02X%02X\n", setting->name, 
+          GDK_NOTE(SETTINGS, g_print("  %s = #%02X%02X%02X%02X\n", name, 
                                  setting->data.v_color.alpha, setting->data.v_color.red,
                                  setting->data.v_color.green, setting->data.v_color.blue));
 	  break;
 	default:
 	  /* Quietly ignore unknown types */
-          GDK_NOTE(SETTINGS, g_print("  %s = ignored (unknown type %u)\n", setting->name, type));
+          GDK_NOTE(SETTINGS, g_print("  %s = ignored (unknown type %u)\n", name, type));
 	  break;
 	}
 
@@ -290,17 +291,18 @@ parse_settings (unsigned char *data,
 
       if (settings == NULL)
         settings = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                          NULL,
+                                          g_free,
                                           (GDestroyNotify) xsettings_setting_free);
 
-      if (g_hash_table_lookup (settings, setting->name) != NULL)
+      if (g_hash_table_lookup (settings, name) != NULL)
         {
-	  g_warning ("Invalid XSETTINGS property (Duplicate entry for '%s')", setting->name);
+	  g_warning ("Invalid XSETTINGS property (Duplicate entry for '%s')", name);
           goto out;
         }
 
-      g_hash_table_insert (settings, setting->name, setting);
+      g_hash_table_insert (settings, name, setting);
       setting = NULL;
+      name = NULL;
     }
 
   return settings;
@@ -520,9 +522,6 @@ xsettings_setting_equal (XSettingsSetting *setting_a,
   if (setting_a->type != setting_b->type)
     return 0;
 
-  if (strcmp (setting_a->name, setting_b->name) != 0)
-    return 0;
-
   switch (setting_a->type)
     {
     case XSETTINGS_TYPE_INT:
@@ -545,9 +544,6 @@ xsettings_setting_free (XSettingsSetting *setting)
   if (setting->type == XSETTINGS_TYPE_STRING)
     g_free (setting->data.v_string);
 
-  if (setting->name)
-    g_free (setting->name);
-  
   g_free (setting);
 }
 
