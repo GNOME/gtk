@@ -26,10 +26,6 @@
 #include <gdk/gdkscreen.h>
 #include <X11/Xlib.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
 /* Renames for GDK inclusion */
 
 #define xsettings_client_destroy         _gdk_x11_xsettings_client_destroy
@@ -39,7 +35,6 @@ extern "C" {
 #define xsettings_setting_equal          _gdk_x11_xsettings_setting_equal
 #define xsettings_setting_free           _gdk_x11_xsettings_setting_free
 
-typedef struct _XSettingsBuffer  XSettingsBuffer;
 typedef struct _XSettingsColor   XSettingsColor;
 typedef struct _XSettingsSetting XSettingsSetting;
 typedef struct _XSettingsClient XSettingsClient;
@@ -60,23 +55,6 @@ typedef enum
   XSETTINGS_ACTION_CHANGED,
   XSETTINGS_ACTION_DELETED
 } XSettingsAction;
-
-typedef enum
-{
-  XSETTINGS_SUCCESS,
-  XSETTINGS_ACCESS,
-  XSETTINGS_FAILED,
-  XSETTINGS_NO_ENTRY,
-  XSETTINGS_DUPLICATE_ENTRY
-} XSettingsResult;
-
-struct _XSettingsBuffer
-{
-  char byte_order;
-  size_t len;
-  unsigned char *data;
-  unsigned char *pos;
-};
 
 struct _XSettingsColor
 {
@@ -118,9 +96,5 @@ Bool             xsettings_client_process_event   (XSettingsClient     *client,
 const XSettingsSetting *
                  xsettings_client_get_setting     (XSettingsClient     *client,
 						   const char          *name);
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
 
 #endif /* XSETTINGS_CLIENT_H */

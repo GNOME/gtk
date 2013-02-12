@@ -38,6 +38,25 @@
 #include <X11/Xlib.h>
 #include <X11/Xmd.h>		/* For CARD16 */
 
+typedef struct _XSettingsBuffer  XSettingsBuffer;
+
+typedef enum
+{
+  XSETTINGS_SUCCESS,
+  XSETTINGS_ACCESS,
+  XSETTINGS_FAILED,
+  XSETTINGS_NO_ENTRY,
+  XSETTINGS_DUPLICATE_ENTRY
+} XSettingsResult;
+
+struct _XSettingsBuffer
+{
+  char byte_order;
+  size_t len;
+  unsigned char *data;
+  unsigned char *pos;
+};
+
 struct _XSettingsClient
 {
   GdkScreen *screen;
