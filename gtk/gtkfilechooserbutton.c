@@ -1754,7 +1754,6 @@ model_add_volumes (GtkFileChooserButton *button,
   GtkListStore *store;
   gint pos;
   gboolean local_only;
-  GtkFileSystem *file_system;
   GSList *l;
   
   if (!volumes)
@@ -1763,7 +1762,6 @@ model_add_volumes (GtkFileChooserButton *button,
   store = GTK_LIST_STORE (button->priv->model);
   pos = model_get_type_position (button, ROW_TYPE_VOLUME);
   local_only = gtk_file_chooser_get_local_only (GTK_FILE_CHOOSER (button->priv->dialog));
-  file_system = button->priv->fs;
 
   for (l = volumes; l; l = l->next)
     {
