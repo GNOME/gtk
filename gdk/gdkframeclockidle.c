@@ -27,6 +27,7 @@
 #include "config.h"
 
 #include "gdkinternals.h"
+#include "gdkframeclockprivate.h"
 #include "gdkframeclockidle.h"
 #include "gdk.h"
 
@@ -34,7 +35,6 @@
 
 struct _GdkFrameClockIdlePrivate
 {
-  GdkFrameHistory *history;
   GTimer *timer;
   /* timer_base is used to avoid ever going backward */
   guint64 timer_base;
@@ -56,11 +56,8 @@ static gboolean gdk_frame_clock_flush_idle (void *data);
 static gboolean gdk_frame_clock_paint_idle (void *data);
 
 static void gdk_frame_clock_idle_finalize             (GObject                *object);
-static void gdk_frame_clock_idle_interface_init       (GdkFrameClockInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GdkFrameClockIdle, gdk_frame_clock_idle, G_TYPE_OBJECT,
-			 G_IMPLEMENT_INTERFACE (GDK_TYPE_FRAME_CLOCK,
-						gdk_frame_clock_idle_interface_init))
+G_DEFINE_TYPE (GdkFrameClockIdle, gdk_frame_clock_idle, GDK_TYPE_FRAME_CLOCK)
 
 static gint64 sleep_serial;
 static gint64 sleep_source_prepare_time;
@@ -115,16 +112,6 @@ get_sleep_serial (void)
 }
 
 static void
-gdk_frame_clock_idle_class_init (GdkFrameClockIdleClass *klass)
-{
-  GObjectClass *gobject_class = (GObjectClass*) klass;
-
-  gobject_class->finalize     = gdk_frame_clock_idle_finalize;
-
-  g_type_class_add_private (klass, sizeof (GdkFrameClockIdlePrivate));
-}
-
-static void
 gdk_frame_clock_idle_init (GdkFrameClockIdle *frame_clock_idle)
 {
   GdkFrameClockIdlePrivate *priv;
@@ -134,7 +121,6 @@ gdk_frame_clock_idle_init (GdkFrameClockIdle *frame_clock_idle)
                                                         GdkFrameClockIdlePrivate);
   priv = frame_clock_idle->priv;
 
-  priv->history = gdk_frame_history_new ();
   priv->timer = g_timer_new ();
   priv->freeze_count = 0;
 }
@@ -235,7 +221,7 @@ maybe_start_idle (GdkFrameClockIdle *clock_idle)
                                                               g_object_ref (clock_idle),
                                                               (GDestroyNotify) g_object_unref);
 
-          gdk_frame_clock_frame_requested (GDK_FRAME_CLOCK (clock_idle));
+          g_signal_emit_by_name (clock_idle, "frame-requested");
         }
     }
 }
@@ -288,6 +274,7 @@ gdk_frame_clock_paint_idle (void *data)
   GdkFrameClock *clock = GDK_FRAME_CLOCK (data);
   GdkFrameClockIdle *clock_idle = GDK_FRAME_CLOCK_IDLE (clock);
   GdkFrameClockIdlePrivate *priv = clock_idle->priv;
+  GdkFrameHistory *history = gdk_frame_clock_get_history (clock);
   gboolean skip_to_resume_events;
   GdkFrameTimings *timings = NULL;
   gint64 frame_counter = 0;
@@ -301,8 +288,8 @@ gdk_frame_clock_paint_idle (void *data)
 
   if (priv->phase > GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT)
     {
-      frame_counter = gdk_frame_history_get_frame_counter (priv->history);
-      timings = gdk_frame_history_get_timings (priv->history, frame_counter);
+      frame_counter = gdk_frame_history_get_frame_counter (history);
+      timings = gdk_frame_history_get_timings (history, frame_counter);
     }
 
   if (!skip_to_resume_events)
@@ -317,9 +304,9 @@ gdk_frame_clock_paint_idle (void *data)
             {
               priv->frame_time = compute_frame_time (clock_idle);
 
-              gdk_frame_history_begin_frame (priv->history);
-              frame_counter = gdk_frame_history_get_frame_counter (priv->history);
-              timings = gdk_frame_history_get_timings (priv->history, frame_counter);
+              gdk_frame_history_begin_frame (history);
+              frame_counter = gdk_frame_history_get_frame_counter (history);
+              timings = gdk_frame_history_get_timings (history, frame_counter);
 
               gdk_frame_timings_set_frame_time (timings, priv->frame_time);
 
@@ -406,7 +393,7 @@ gdk_frame_clock_paint_idle (void *data)
   if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
     {
       if (gdk_frame_timings_get_complete (timings))
-        _gdk_frame_history_debug_print (priv->history, timings);
+        _gdk_frame_history_debug_print (history, timings);
     }
 #endif /* G_ENABLE_DEBUG */
 
@@ -501,24 +488,21 @@ gdk_frame_clock_idle_thaw (GdkFrameClock *clock)
     }
 }
 
-static GdkFrameHistory *
-gdk_frame_clock_idle_get_history (GdkFrameClock *clock)
-{
-  GdkFrameClockIdle *clock_idle = GDK_FRAME_CLOCK_IDLE (clock);
-  GdkFrameClockIdlePrivate *priv = clock_idle->priv;
-
-  return priv->history;
-}
-
 static void
-gdk_frame_clock_idle_interface_init (GdkFrameClockInterface *iface)
+gdk_frame_clock_idle_class_init (GdkFrameClockIdleClass *klass)
 {
-  iface->get_frame_time = gdk_frame_clock_idle_get_frame_time;
-  iface->request_phase = gdk_frame_clock_idle_request_phase;
-  iface->get_requested = gdk_frame_clock_idle_get_requested;
-  iface->freeze = gdk_frame_clock_idle_freeze;
-  iface->thaw = gdk_frame_clock_idle_thaw;
-  iface->get_history = gdk_frame_clock_idle_get_history;
+  GObjectClass *gobject_class = (GObjectClass*) klass;
+  GdkFrameClockClass *frame_clock_class = (GdkFrameClockClass *)klass;
+
+  gobject_class->finalize     = gdk_frame_clock_idle_finalize;
+
+  frame_clock_class->get_frame_time = gdk_frame_clock_idle_get_frame_time;
+  frame_clock_class->request_phase = gdk_frame_clock_idle_request_phase;
+  frame_clock_class->get_requested = gdk_frame_clock_idle_get_requested;
+  frame_clock_class->freeze = gdk_frame_clock_idle_freeze;
+  frame_clock_class->thaw = gdk_frame_clock_idle_thaw;
+
+  g_type_class_add_private (klass, sizeof (GdkFrameClockIdlePrivate));
 }
 
 GdkFrameClock *
