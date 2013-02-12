@@ -31,7 +31,6 @@
 
 #include <limits.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #include <X11/Xlib.h>
@@ -225,20 +224,10 @@ parse_settings (unsigned char *data,
 	  goto out;
 	}
 
-      setting = malloc (sizeof *setting);
-      if (!setting)
-	{
-	  result = XSETTINGS_NO_MEM;
-	  goto out;
-	}
+      setting = g_new (XSettingsSetting, 1);
       setting->type = XSETTINGS_TYPE_INT; /* No allocated memory */
 
-      setting->name = malloc (name_len + 1);
-      if (!setting->name)
-	{
-	  result = XSETTINGS_NO_MEM;
-	  goto out;
-	}
+      setting->name = g_malloc (name_len + 1);
 
       memcpy (setting->name, buffer.pos, name_len);
       setting->name[name_len] = '\0';
@@ -271,12 +260,7 @@ parse_settings (unsigned char *data,
 	      goto out;
 	    }
 
-	  setting->data.v_string = malloc (v_int + 1);
-	  if (!setting->data.v_string)
-	    {
-	      result = XSETTINGS_NO_MEM;
-	      goto out;
-	    }
+	  setting->data.v_string = g_malloc (v_int + 1);
 	  
 	  memcpy (setting->data.v_string, buffer.pos, v_int);
 	  setting->data.v_string[v_int] = '\0';
@@ -326,9 +310,6 @@ parse_settings (unsigned char *data,
     {
       switch (result)
 	{
-	case XSETTINGS_NO_MEM:
-	  fprintf(stderr, "Out of memory reading XSETTINGS property\n");
-	  break;
 	case XSETTINGS_ACCESS:
 	  fprintf(stderr, "Invalid XSETTINGS property (read off end)\n");
 	  break;
@@ -456,7 +437,7 @@ xsettings_client_new (GdkScreen           *screen,
   char *atom_names[3];
   Atom atoms[3];
   
-  client = malloc (sizeof *client);
+  client = g_new (XSettingsClient, 1);
   if (!client)
     return NULL;
 
@@ -503,7 +484,7 @@ xsettings_client_destroy (XSettingsClient *client)
   
   if (client->settings)
     g_hash_table_unref (client->settings);
-  free (client);
+  g_free (client);
 }
 
 const XSettingsSetting *
@@ -580,11 +561,11 @@ void
 xsettings_setting_free (XSettingsSetting *setting)
 {
   if (setting->type == XSETTINGS_TYPE_STRING)
-    free (setting->data.v_string);
+    g_free (setting->data.v_string);
 
   if (setting->name)
-    free (setting->name);
+    g_free (setting->name);
   
-  free (setting);
+  g_free (setting);
 }
 
