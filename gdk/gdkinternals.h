@@ -445,9 +445,6 @@ gint64           _gdk_frame_timings_get_frame_end_time  (GdkFrameTimings *timing
 void             _gdk_frame_timings_set_frame_end_time  (GdkFrameTimings *timings,
                                                          gint64           frame_end_time);
 
-void             _gdk_frame_history_debug_print         (GdkFrameHistory *history,
-                                                         GdkFrameTimings *timings);
-
 #endif /* G_ENABLE_DEBUG */
 
 G_END_DECLS

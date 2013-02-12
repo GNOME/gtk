@@ -274,10 +274,8 @@ gdk_frame_clock_paint_idle (void *data)
   GdkFrameClock *clock = GDK_FRAME_CLOCK (data);
   GdkFrameClockIdle *clock_idle = GDK_FRAME_CLOCK_IDLE (clock);
   GdkFrameClockIdlePrivate *priv = clock_idle->priv;
-  GdkFrameHistory *history = gdk_frame_clock_get_history (clock);
   gboolean skip_to_resume_events;
   GdkFrameTimings *timings = NULL;
-  gint64 frame_counter = 0;
 
   priv->paint_idle_id = 0;
   priv->in_paint_idle = TRUE;
@@ -288,8 +286,7 @@ gdk_frame_clock_paint_idle (void *data)
 
   if (priv->phase > GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT)
     {
-      frame_counter = gdk_frame_history_get_frame_counter (history);
-      timings = gdk_frame_history_get_timings (history, frame_counter);
+      timings = gdk_frame_clock_get_current_frame_timings (clock);
     }
 
   if (!skip_to_resume_events)
@@ -304,9 +301,8 @@ gdk_frame_clock_paint_idle (void *data)
             {
               priv->frame_time = compute_frame_time (clock_idle);
 
-              gdk_frame_history_begin_frame (history);
-              frame_counter = gdk_frame_history_get_frame_counter (history);
-              timings = gdk_frame_history_get_timings (history, frame_counter);
+              _gdk_frame_clock_begin_frame (clock);
+              timings = gdk_frame_clock_get_current_frame_timings (clock);
 
               gdk_frame_timings_set_frame_time (timings, priv->frame_time);
 
@@ -393,7 +389,7 @@ gdk_frame_clock_paint_idle (void *data)
   if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
     {
       if (gdk_frame_timings_get_complete (timings))
-        _gdk_frame_history_debug_print (history, timings);
+        _gdk_frame_clock_debug_print_timings (clock, timings);
     }
 #endif /* G_ENABLE_DEBUG */
 

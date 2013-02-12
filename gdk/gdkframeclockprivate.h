@@ -67,6 +67,10 @@ struct _GdkFrameClockClass
   /* void (* resume_events)      (GdkFrameClock *clock); */
 };
 
+void _gdk_frame_clock_begin_frame         (GdkFrameClock   *clock);
+void _gdk_frame_clock_debug_print_timings (GdkFrameClock   *clock,
+                                           GdkFrameTimings *timings);
+
 G_END_DECLS
 
 #endif /* __GDK_FRAME_CLOCK_PRIVATE_H__ */

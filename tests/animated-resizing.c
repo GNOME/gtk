@@ -148,7 +148,7 @@ print_variable (const char *description,
 }
 
 static void
-handle_frame_stats (GdkFrameHistory *frame_history)
+handle_frame_stats (GdkFrameClock *frame_clock)
 {
   static int num_stats = 0;
   static double last_print_time = 0;
@@ -192,11 +192,11 @@ handle_frame_stats (GdkFrameHistory *frame_history)
   frames_since_last_print++;
 
   for (frame_counter = last_handled_frame;
-       frame_counter < gdk_frame_history_get_frame_counter (frame_history);
+       frame_counter < gdk_frame_clock_get_frame_counter (frame_clock);
        frame_counter++)
     {
-      GdkFrameTimings *timings = gdk_frame_history_get_timings (frame_history, frame_counter);
-      GdkFrameTimings *previous_timings = gdk_frame_history_get_timings (frame_history, frame_counter - 1);
+      GdkFrameTimings *timings = gdk_frame_clock_get_timings (frame_clock, frame_counter);
+      GdkFrameTimings *previous_timings = gdk_frame_clock_get_timings (frame_clock, frame_counter - 1);
 
       if (!timings || gdk_frame_timings_get_complete (timings))
         last_handled_frame = frame_counter;
@@ -220,10 +220,7 @@ on_frame (double progress)
   int jitter;
 
   if (frame_clock)
-    {
-      GdkFrameHistory *history = gdk_frame_clock_get_history (frame_clock);
-      handle_frame_stats (history);
-    }
+    handle_frame_stats (clock);
 
   angle = 2 * M_PI * progress;
   jitter = WINDOW_SIZE_JITTER * sin(angle);
