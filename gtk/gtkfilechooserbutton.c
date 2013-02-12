@@ -633,7 +633,6 @@ gtk_file_chooser_button_constructor (GType                  type,
   GtkFileChooserButton *button;
   GtkFileChooserButtonPrivate *priv;
   GSList *list;
-  char *current_folder;
 
   object = G_OBJECT_CLASS (gtk_file_chooser_button_parent_class)->constructor (type,
 									       n_params,
@@ -1141,8 +1140,6 @@ gtk_file_chooser_button_hide (GtkWidget *widget)
 static void
 gtk_file_chooser_button_map (GtkWidget *widget)
 {
-  GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (widget);
-
   GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->map (widget);
 }
 
@@ -2447,23 +2444,15 @@ open_dialog (GtkFileChooserButton *button)
 
   if (!priv->active)
     {
-      GSList *files;
-
       g_signal_handler_block (priv->dialog,
 			      priv->dialog_folder_changed_id);
       g_signal_handler_block (priv->dialog,
 			      priv->dialog_file_activated_id);
       g_signal_handler_block (priv->dialog,
 			      priv->dialog_selection_changed_id);
-      files = gtk_file_chooser_get_files (GTK_FILE_CHOOSER (priv->dialog));
-      if (files)
-	{
-	  if (files->data)
-	    priv->old_file = g_object_ref (files->data);
 
-	  g_slist_foreach (files, (GFunc) g_object_unref, NULL);
-	  g_slist_free (files);
-	}
+      g_assert (priv->old_file == NULL);
+      priv->old_file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (priv->dialog));
 
       priv->active = TRUE;
     }
@@ -2643,20 +2632,7 @@ dialog_response_cb (GtkDialog *dialog,
     }
   else if (priv->old_file)
     {
-      switch (gtk_file_chooser_get_action (GTK_FILE_CHOOSER (dialog)))
-	{
-	case GTK_FILE_CHOOSER_ACTION_OPEN:
-	  gtk_file_chooser_select_file (GTK_FILE_CHOOSER (dialog), priv->old_file,
-					NULL);
-	  break;
-	case GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER:
-	  gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (dialog),
-						    priv->old_file, NULL);
-	  break;
-	default:
-	  g_assert_not_reached ();
-	  break;
-	}
+      gtk_file_chooser_select_file (GTK_FILE_CHOOSER (dialog), priv->old_file, NULL);
     }
   else
     gtk_file_chooser_unselect_all (GTK_FILE_CHOOSER (dialog));
