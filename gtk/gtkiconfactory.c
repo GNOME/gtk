@@ -934,6 +934,7 @@ icon_sizes_init_for_settings (GtkSettings *settings)
 static gboolean
 icon_size_lookup_intern (GtkSettings *settings,
 			 GtkIconSize  size,
+                         gdouble      scale,
 			 gint        *widthp,
 			 gint        *heightp)
 {
@@ -973,10 +974,16 @@ icon_size_lookup_intern (GtkSettings *settings,
     }
 
   if (widthp)
-    *widthp = width_for_settings >= 0 ? width_for_settings : icon_sizes[size].width;
+    {
+      *widthp = width_for_settings >= 0 ? width_for_settings : icon_sizes[size].width;
+      (*widthp) *= scale;
+    }
 
   if (heightp)
-    *heightp = height_for_settings >= 0 ? height_for_settings : icon_sizes[size].height;
+    {
+      *heightp = height_for_settings >= 0 ? height_for_settings : icon_sizes[size].height;
+      (*heightp) *= scale;
+    }
 
   return TRUE;
 }
@@ -1012,7 +1019,7 @@ gtk_icon_size_lookup_for_settings (GtkSettings *settings,
 {
   g_return_val_if_fail (GTK_IS_SETTINGS (settings), FALSE);
 
-  return icon_size_lookup_intern (settings, size, width, height);
+  return icon_size_lookup_intern (settings, size, 1, width, height);
 }
 
 /**
@@ -1045,6 +1052,18 @@ gtk_icon_size_lookup (GtkIconSize  size,
 
   return gtk_icon_size_lookup_for_settings (gtk_settings_get_default (),
 					    size, widthp, heightp);
+}
+
+gboolean
+gtk_icon_size_lookup_scaled (GtkSettings *settings,
+                             GtkIconSize  size,
+                             gdouble      scale,
+                             gint        *width,
+                             gint        *height)
+{
+  g_return_val_if_fail (GTK_IS_SETTINGS (settings), FALSE);
+
+  return icon_size_lookup_intern (settings, size, scale, width, height);
 }
 
 static GtkIconSize
@@ -1133,7 +1152,7 @@ gtk_icon_size_register_alias (const gchar *alias,
 
   init_icon_sizes ();
 
-  if (!icon_size_lookup_intern (NULL, target, NULL, NULL))
+  if (!icon_size_lookup_intern (NULL, target, 1, NULL, NULL))
     g_warning ("gtk_icon_size_register_alias: Icon size %u does not exist", target);
 
   ia = g_hash_table_lookup (icon_aliases, alias);
@@ -1412,8 +1431,8 @@ sizes_equivalent (GtkIconSize lhs,
 
   gint r_w, r_h, l_w, l_h;
 
-  icon_size_lookup_intern (NULL, rhs, &r_w, &r_h);
-  icon_size_lookup_intern (NULL, lhs, &l_w, &l_h);
+  icon_size_lookup_intern (NULL, rhs, 1, &r_w, &r_h);
+  icon_size_lookup_intern (NULL, lhs, 1, &l_w, &l_h);
 
   return r_w == l_w && r_h == l_h;
 #endif
@@ -1492,7 +1511,8 @@ ensure_filename_pixbuf (GtkIconSet    *icon_set,
 static GdkPixbuf *
 render_icon_name_pixbuf (GtkIconSource    *icon_source,
 			 GtkStyleContext  *context,
-			 GtkIconSize       size)
+			 GtkIconSize       size,
+                         gboolean          scale_requested)
 {
   GdkPixbuf *pixbuf;
   GdkPixbuf *tmp_pixbuf;
@@ -1503,10 +1523,19 @@ render_icon_name_pixbuf (GtkIconSource    *icon_source,
   gint width, height, pixel_size;
   gint *sizes, *s, dist;
   GError *error = NULL;
+  gdouble scale = 1;
 
   screen = gtk_style_context_get_screen (context);
   icon_theme = gtk_icon_theme_get_for_screen (screen);
   settings = gtk_settings_get_for_screen (screen);
+
+  if (scale_requested && widget)
+    {
+      if (!widget->window)
+        gtk_widget_realize (widget);
+
+      scale = gdk_window_get_scale_factor (widget->window);
+    }
 
   if (!gtk_icon_size_lookup_for_settings (settings, size, &width, &height))
     {
@@ -1550,7 +1579,7 @@ render_icon_name_pixbuf (GtkIconSource    *icon_source,
 	}
     }
 
-  pixel_size = MIN (width, height);
+  pixel_size = MIN (width, height) * scale;
 
   if (icon_source->direction != GTK_TEXT_DIR_NONE)
     {
@@ -1610,7 +1639,8 @@ find_and_render_icon_source (GtkIconSet       *icon_set,
 			     GtkStyleContext  *context,
 			     GtkTextDirection  direction,
 			     GtkStateType      state,
-			     GtkIconSize       size)
+			     GtkIconSize       size,
+                             gboolean          scale_requested)
 {
   GSList *failed = NULL;
   GdkPixbuf *pixbuf = NULL;
@@ -1648,7 +1678,8 @@ find_and_render_icon_source (GtkIconSet       *icon_set,
 	  break;
 	case GTK_ICON_SOURCE_ICON_NAME:
 	case GTK_ICON_SOURCE_STATIC_ICON_NAME:
-          pixbuf = render_icon_name_pixbuf (source, context, size);
+          pixbuf = render_icon_name_pixbuf (source, context,
+                                            size, scale_requested);
 	  if (!pixbuf)
 	    failed = g_slist_prepend (failed, source);
 	  break;
@@ -1692,6 +1723,74 @@ render_fallback_image (GtkStyleContext   *context,
   return gtk_render_icon_pixbuf (context, &fallback_source, size);
 }
 
+static gdouble
+_get_real_scale (GtkStyleContext *context,
+                 GtkIconSize      size,
+                 GdkPixbuf       *icon)
+{
+  GtkSettings *settings;
+  GdkScreen *screen;
+  gint icon_width;
+
+  screen = gtk_style_context_get_screen (context);
+  settings = gtk_settings_get_for_screen (screen);
+  gtk_icon_size_lookup_for_settings (settings, size, &icon_width, NULL);
+
+  return (gdouble) gdk_pixbuf_get_width (icon) / icon_width;
+}
+
+GdkPixbuf*
+gtk_icon_set_render_icon_pixbuf_scaled (GtkIconSet      *icon_set,
+                                        GtkStyleContext *context,
+                                        GtkIconSize      size,
+                                        gboolean        *scale)
+{
+  GdkPixbuf *icon = NULL;
+  GtkStateFlags flags = 0;
+  GtkStateType state;
+  GtkTextDirection direction;
+
+  flags = gtk_style_context_get_state (context);
+  if (flags & GTK_STATE_FLAG_INSENSITIVE)
+    state = GTK_STATE_INSENSITIVE;
+  else if (flags & GTK_STATE_FLAG_PRELIGHT)
+    state = GTK_STATE_PRELIGHT;
+  else
+    state = GTK_STATE_NORMAL;
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  direction = gtk_style_context_get_direction (context);
+G_GNUC_END_IGNORE_DEPRECATIONS;
+
+  if (icon_set->sources)
+    {
+      icon = find_in_cache (icon_set, context, direction, state, size);
+      if (icon)
+        {
+          g_object_ref (icon);
+
+          if (scale)
+            *scale = _get_real_scale (context, size, icon);
+
+          return icon;
+        }
+    }
+
+  if (icon_set->sources)
+    icon = find_and_render_icon_source (icon_set, context, direction, state,
+                                        size, (scale != NULL));
+
+  if (icon == NULL)
+    icon = render_fallback_image (context, direction, state, size);
+
+  add_to_cache (icon_set, context, direction, state, size, icon);
+
+  if (scale)
+    *scale = _get_real_scale (context, size, icon);
+
+  return icon;
+}
+
 /**
  * gtk_icon_set_render_icon_pixbuf:
  * @icon_set: a #GtkIconSet
@@ -1715,45 +1814,10 @@ gtk_icon_set_render_icon_pixbuf (GtkIconSet        *icon_set,
                                  GtkStyleContext   *context,
                                  GtkIconSize        size)
 {
-  GdkPixbuf *icon = NULL;
-  GtkStateFlags flags = 0;
-  GtkStateType state;
-  GtkTextDirection direction;
-
   g_return_val_if_fail (icon_set != NULL, NULL);
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
 
-  flags = gtk_style_context_get_state (context);
-  if (flags & GTK_STATE_FLAG_INSENSITIVE)
-    state = GTK_STATE_INSENSITIVE;
-  else if (flags & GTK_STATE_FLAG_PRELIGHT)
-    state = GTK_STATE_PRELIGHT;
-  else
-    state = GTK_STATE_NORMAL;
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  direction = gtk_style_context_get_direction (context);
-G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  if (icon_set->sources)
-    {
-      icon = find_in_cache (icon_set, context, direction, state, size);
-      if (icon)
-        {
-          g_object_ref (icon);
-          return icon;
-        }
-    }
-
-  if (icon_set->sources)
-    icon = find_and_render_icon_source (icon_set, context, direction, state, size);
-
-  if (icon == NULL)
-    icon = render_fallback_image (context, direction, state, size);
-
-  add_to_cache (icon_set, context, direction, state, size, icon);
-
-  return icon;
+  return gtk_icon_set_render_icon_scaled (icon_set, context, size, NULL);
 }
 
 /**

@@ -861,6 +861,11 @@ GDK_AVAILABLE_IN_ALL
 GdkPixbuf  * gtk_icon_set_render_icon_pixbuf   (GtkIconSet      *icon_set,
                                                 GtkStyleContext *context,
                                                 GtkIconSize      size);
+GdkPixbuf  *
+        gtk_icon_set_render_icon_pixbuf_scaled (GtkIconSet      *icon_set,
+                                                GtkStyleContext *context,
+                                                GtkIconSize      size,
+                                                gdouble         *scale);
 
 GDK_AVAILABLE_IN_ALL
 void        gtk_style_context_set_screen (GtkStyleContext *context,
