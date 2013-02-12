@@ -187,6 +187,24 @@ fetch_card8 (XSettingsBuffer *buffer,
 
 #define XSETTINGS_PAD(n,m) ((n + m - 1) & (~(m-1)))
 
+static XSettingsResult
+fetch_string (XSettingsBuffer  *buffer,
+              guint             length,
+              char            **result)
+{
+  guint pad_len;
+
+  pad_len = XSETTINGS_PAD (length, 4);
+  if (pad_len < length /* guard against overflow */
+      || BYTES_LEFT (buffer) < pad_len)
+    return XSETTINGS_ACCESS;
+
+  *result = g_strndup ((char *) buffer->pos, length);
+  buffer->pos += pad_len;
+
+  return XSETTINGS_SUCCESS;
+}
+
 static GHashTable *
 parse_settings (unsigned char *data,
 		size_t         len)
@@ -228,7 +246,6 @@ parse_settings (unsigned char *data,
       CARD8 type;
       CARD16 name_len;
       CARD32 v_int;
-      size_t pad_len;
       
       result = fetch_card8 (&buffer, &type);
       if (result != XSETTINGS_SUCCESS)
@@ -240,21 +257,13 @@ parse_settings (unsigned char *data,
       if (result != XSETTINGS_SUCCESS)
 	goto out;
 
-      pad_len = XSETTINGS_PAD(name_len, 4);
-      if (BYTES_LEFT (&buffer) < pad_len)
-	{
-	  result = XSETTINGS_ACCESS;
-	  goto out;
-	}
-
       setting = g_new (XSettingsSetting, 1);
       setting->type = XSETTINGS_TYPE_INT; /* No allocated memory */
 
-      setting->name = g_malloc (name_len + 1);
-
-      memcpy (setting->name, buffer.pos, name_len);
-      setting->name[name_len] = '\0';
-      buffer.pos += pad_len;
+      setting->name = NULL;
+      result = fetch_string (&buffer, name_len, &setting->name);
+      if (result != XSETTINGS_SUCCESS)
+	goto out;
 
       /* last change serial (we ignore it) */
       result = fetch_card32 (&buffer, &v_int);
@@ -276,20 +285,10 @@ parse_settings (unsigned char *data,
 	  if (result != XSETTINGS_SUCCESS)
 	    goto out;
 
-	  pad_len = XSETTINGS_PAD (v_int, 4);
-	  if (v_int + 1 == 0 || /* Guard against wrap-around */
-	      BYTES_LEFT (&buffer) < pad_len)
-	    {
-	      result = XSETTINGS_ACCESS;
-	      goto out;
-	    }
-
-	  setting->data.v_string = g_malloc (v_int + 1);
+          result = fetch_string (&buffer, v_int, &setting->data.v_string);
+          if (result != XSETTINGS_SUCCESS)
+            goto out;
 	  
-	  memcpy (setting->data.v_string, buffer.pos, v_int);
-	  setting->data.v_string[v_int] = '\0';
-	  buffer.pos += pad_len;
-
           GDK_NOTE(SETTINGS, g_print("  %s = \"%s\"\n", setting->name, setting->data.v_string));
 	  break;
 	case XSETTINGS_TYPE_COLOR:
