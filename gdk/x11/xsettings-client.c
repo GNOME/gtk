@@ -29,6 +29,8 @@
 #include <gdk/x11/gdkx11screen.h>
 #include <gdk/x11/gdkx11window.h>
 
+#include <gdkinternals.h>
+
 #include <limits.h>
 #include <stdio.h>
 #include <string.h>
@@ -200,6 +202,8 @@ parse_settings (unsigned char *data,
   if (result != XSETTINGS_SUCCESS)
     goto out;
 
+  GDK_NOTE(SETTINGS, g_print("reading %u settings (serial %u byte order %u)\n", n_entries, serial, buffer.byte_order));
+
   for (i = 0; i < n_entries; i++)
     {
       CARD8 type;
@@ -246,6 +250,7 @@ parse_settings (unsigned char *data,
 	    goto out;
 
 	  setting->data.v_int = (INT32)v_int;
+          GDK_NOTE(SETTINGS, g_print("  %s = %d\n", setting->name, (gint) setting->data.v_int));
 	  break;
 	case XSETTINGS_TYPE_STRING:
 	  result = fetch_card32 (&buffer, &v_int);
@@ -266,6 +271,7 @@ parse_settings (unsigned char *data,
 	  setting->data.v_string[v_int] = '\0';
 	  buffer.pos += pad_len;
 
+          GDK_NOTE(SETTINGS, g_print("  %s = \"%s\"\n", setting->name, setting->data.v_string));
 	  break;
 	case XSETTINGS_TYPE_COLOR:
 	  result = fetch_ushort (&buffer, &setting->data.v_color.red);
@@ -281,9 +287,13 @@ parse_settings (unsigned char *data,
 	  if (result != XSETTINGS_SUCCESS)
 	    goto out;
 
+          GDK_NOTE(SETTINGS, g_print("  %s = #%02X%02X%02X%02X\n", setting->name, 
+                                 setting->data.v_color.alpha, setting->data.v_color.red,
+                                 setting->data.v_color.green, setting->data.v_color.blue));
 	  break;
 	default:
 	  /* Quietly ignore unknown types */
+          GDK_NOTE(SETTINGS, g_print("  %s = ignored (unknown type %u)\n", setting->name, type));
 	  break;
 	}
 
