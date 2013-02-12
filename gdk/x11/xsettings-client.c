@@ -112,14 +112,18 @@ notify_changes (XSettingsClient *client,
 
 #define BYTES_LEFT(buffer) ((buffer)->data + (buffer)->len - (buffer)->pos)
 
+#define return_if_fail_bytes(buffer, n_bytes) G_STMT_START{ \
+  if (BYTES_LEFT (buffer) < (n_bytes)) \
+    return XSETTINGS_ACCESS; \
+}G_STMT_END
+
 static XSettingsResult
 fetch_card16 (XSettingsBuffer *buffer,
 	      CARD16          *result)
 {
   CARD16 x;
 
-  if (BYTES_LEFT (buffer) < 2)
-    return XSETTINGS_ACCESS;
+  return_if_fail_bytes (buffer, 2);
 
   x = *(CARD16 *)buffer->pos;
   buffer->pos += 2;
@@ -152,8 +156,7 @@ fetch_card32 (XSettingsBuffer *buffer,
 {
   CARD32 x;
 
-  if (BYTES_LEFT (buffer) < 4)
-    return XSETTINGS_ACCESS;
+  return_if_fail_bytes (buffer, 4);
 
   x = *(CARD32 *)buffer->pos;
   buffer->pos += 4;
@@ -170,8 +173,7 @@ static XSettingsResult
 fetch_card8 (XSettingsBuffer *buffer,
 	     CARD8           *result)
 {
-  if (BYTES_LEFT (buffer) < 1)
-    return XSETTINGS_ACCESS;
+  return_if_fail_bytes (buffer, 1);
 
   *result = *(CARD8 *)buffer->pos;
   buffer->pos += 1;
@@ -189,9 +191,10 @@ fetch_string (XSettingsBuffer  *buffer,
   guint pad_len;
 
   pad_len = XSETTINGS_PAD (length, 4);
-  if (pad_len < length /* guard against overflow */
-      || BYTES_LEFT (buffer) < pad_len)
+  if (pad_len < length) /* guard against overflow */
     return XSETTINGS_ACCESS;
+
+  return_if_fail_bytes (buffer, pad_len);
 
   *result = g_strndup ((char *) buffer->pos, length);
   buffer->pos += pad_len;
