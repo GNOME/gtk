@@ -920,6 +920,7 @@ parse_external_object (ParserData   *data,
         class_name = values[i];
       else if (strcmp (names[i], "id") == 0)
         id = values[i];
+      else if (strcmp (names[i], "parent") == 0);
       else
         {
           error_invalid_attribute (data, element_name, names[i], error);
