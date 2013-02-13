@@ -346,7 +346,6 @@ main (int   argc,
   gtk_file_chooser_add_shortcut_folder (GTK_FILE_CHOOSER (chooser), gtk_src_dir, NULL);
   gtk_file_chooser_remove_shortcut_folder (GTK_FILE_CHOOSER (chooser), gtk_src_dir, NULL);
   gtk_file_chooser_add_shortcut_folder (GTK_FILE_CHOOSER (chooser), gtk_src_dir, NULL);
-  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(chooser), "/home/federico/balin");
 
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), chooser);
   g_signal_connect (chooser, "current-folder-changed",
