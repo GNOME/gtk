@@ -386,7 +386,7 @@ test_file_chooser_button_dialog_cancel (void)
 
   children = gtk_container_get_children (GTK_CONTAINER (fc_button));
   g_assert (children && GTK_IS_BUTTON (children->data));
-  gtk_button_clicked (GTK_WIDGET (children->data));
+  gtk_button_clicked (GTK_BUTTON (children->data));
   g_list_free (children);
 
   wait_for_idle ();
