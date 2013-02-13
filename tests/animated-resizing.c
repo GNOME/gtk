@@ -220,7 +220,7 @@ on_frame (double progress)
   int jitter;
 
   if (frame_clock)
-    handle_frame_stats (clock);
+    handle_frame_stats (frame_clock);
 
   angle = 2 * M_PI * progress;
   jitter = WINDOW_SIZE_JITTER * sin(angle);
