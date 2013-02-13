@@ -1736,11 +1736,31 @@ shortcuts_append_search (GtkFileChooserDefault *impl)
   impl->has_search = TRUE;
 }
 
+static gboolean
+shortcuts_get_recent_enabled (GtkWidget *widget)
+{
+  GtkSettings *settings;
+  gboolean enabled;
+
+  if (gtk_widget_has_screen (widget))
+    settings = gtk_settings_get_for_screen (gtk_widget_get_screen (widget));
+  else
+    settings = gtk_settings_get_default ();
+
+  g_object_get (settings, "gtk-recent-files-enabled", &enabled, NULL);
+  return enabled;
+}
+
 static void
 shortcuts_append_recent (GtkFileChooserDefault *impl)
 {
   GdkPixbuf *pixbuf;
   GtkTreeIter iter;
+  gboolean enabled;
+
+  enabled = shortcuts_get_recent_enabled (GTK_WIDGET (impl));
+  if (!enabled)
+    return;
 
   pixbuf = render_recent_icon (impl);
 
@@ -1756,6 +1776,8 @@ shortcuts_append_recent (GtkFileChooserDefault *impl)
   
   if (pixbuf)
     g_object_unref (pixbuf);
+
+  impl->has_recent = TRUE;
 }
 
 /* Appends an item for the user's home directory to the shortcuts model */
@@ -1871,7 +1893,7 @@ shortcuts_get_index (GtkFileChooserDefault *impl,
   if (where == SHORTCUTS_RECENT)
     goto out;
 
-  n += 1; /* we always have the recently-used item */
+  n += impl->has_recent ? 1 : 0;
 
   if (where == SHORTCUTS_RECENT_SEPARATOR)
     goto out;
