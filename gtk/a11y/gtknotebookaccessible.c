@@ -32,8 +32,6 @@ struct _GtkNotebookAccessiblePrivate
    */
   GHashTable * pages;
   gint         selected_page;
-  gint         focus_tab_page;
-  guint        idle_focus_id;
 };
 
 static void atk_selection_interface_init (AtkSelectionIface *iface);
@@ -41,62 +39,6 @@ static void atk_selection_interface_init (AtkSelectionIface *iface);
 G_DEFINE_TYPE_WITH_CODE (GtkNotebookAccessible, gtk_notebook_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
                          G_ADD_PRIVATE (GtkNotebookAccessible)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_SELECTION, atk_selection_interface_init))
-
-static gboolean
-check_focus_tab (gpointer data)
-{
-  GtkWidget *widget;
-  AtkObject *atk_obj;
-  gint focus_page_num, old_focus_page_num;
-  GtkNotebookAccessible *accessible;
-  GtkNotebook *notebook;
-
-  atk_obj = ATK_OBJECT (data);
-  accessible = GTK_NOTEBOOK_ACCESSIBLE (atk_obj);
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (atk_obj));
-  if (widget == NULL)
-    return FALSE;
-  notebook = GTK_NOTEBOOK (widget);
-
-  accessible->priv->idle_focus_id = 0;
-
-  focus_page_num = gtk_notebook_get_current_page (notebook);
-  if (focus_page_num == -1)
-    return FALSE;
-
-  old_focus_page_num = accessible->priv->focus_tab_page;
-  accessible->priv->focus_tab_page = focus_page_num;
-  if (old_focus_page_num != focus_page_num)
-    {
-      AtkObject *obj;
-
-      obj = atk_object_ref_accessible_child (atk_obj, focus_page_num);
-      atk_focus_tracker_notify (obj);
-      g_object_unref (obj);
-    }
-
-  return FALSE;
-}
-
-static gboolean
-focus_cb (GtkWidget        *widget,
-          GtkDirectionType  type)
-{
-  AtkObject *atk_obj = gtk_widget_get_accessible (widget);
-  GtkNotebookAccessible *accessible = GTK_NOTEBOOK_ACCESSIBLE (atk_obj);
-
-  switch (type)
-    {
-    case GTK_DIR_LEFT:
-    case GTK_DIR_RIGHT:
-      if (accessible->priv->idle_focus_id == 0)
-        accessible->priv->idle_focus_id = gdk_threads_add_idle (check_focus_tab, atk_obj);
-      break;
-    default:
-      break;
-    }
-  return FALSE;
-}
 
 static void
 create_notebook_page_accessible (GtkNotebookAccessible *accessible,
@@ -167,8 +109,6 @@ gtk_notebook_accessible_initialize (AtkObject *obj,
     }
   accessible->priv->selected_page = gtk_notebook_get_current_page (notebook);
 
-  g_signal_connect (notebook, "focus",
-                    G_CALLBACK (focus_cb), NULL);
   g_signal_connect (notebook, "page-added",
                     G_CALLBACK (page_added_cb), NULL);
   g_signal_connect (notebook, "page-removed",
@@ -183,9 +123,6 @@ gtk_notebook_accessible_finalize (GObject *object)
   GtkNotebookAccessible *accessible = GTK_NOTEBOOK_ACCESSIBLE (object);
 
   g_hash_table_destroy (accessible->priv->pages);
-
-  if (accessible->priv->idle_focus_id)
-    g_source_remove (accessible->priv->idle_focus_id);
 
   G_OBJECT_CLASS (gtk_notebook_accessible_parent_class)->finalize (object);
 }
@@ -229,8 +166,6 @@ gtk_notebook_accessible_notify_gtk (GObject    *obj,
   if (strcmp (pspec->name, "page") == 0)
     {
       gint page_num, old_page_num;
-      gint focus_page_num = 0;
-      gint old_focus_page_num;
       GtkNotebookAccessible *accessible;
       GtkNotebook *notebook;
 
@@ -241,8 +176,6 @@ gtk_notebook_accessible_notify_gtk (GObject    *obj,
       old_page_num = accessible->priv->selected_page;
       page_num = gtk_notebook_get_current_page (notebook);
       accessible->priv->selected_page = page_num;
-      accessible->priv->focus_tab_page = page_num;
-      old_focus_page_num = accessible->priv->focus_tab_page;
 
       if (page_num != old_page_num)
         {
@@ -262,22 +195,9 @@ gtk_notebook_accessible_notify_gtk (GObject    *obj,
             {
               atk_object_notify_state_change (child, ATK_STATE_SELECTED, TRUE);
               g_object_unref (child);
-              /*
-               * The page which is being displayed has changed but there
-               * is no need to tell the focus tracker as the focus page
-               * will also change or a widget in the page will receive
-               * focus if the notebook does not have tabs.
-               */
             }
           g_signal_emit_by_name (atk_obj, "selection-changed");
           g_signal_emit_by_name (atk_obj, "visible-data-changed");
-        }
-      if (gtk_notebook_get_show_tabs (notebook) &&
-         (focus_page_num != old_focus_page_num))
-        {
-          if (accessible->priv->idle_focus_id)
-            g_source_remove (accessible->priv->idle_focus_id);
-          accessible->priv->idle_focus_id = gdk_threads_add_idle (check_focus_tab, atk_obj);
         }
     }
   else
@@ -334,8 +254,6 @@ gtk_notebook_accessible_init (GtkNotebookAccessible *notebook)
                                                  NULL,
                                                  g_object_unref);
   notebook->priv->selected_page = -1;
-  notebook->priv->focus_tab_page = -1;
-  notebook->priv->idle_focus_id = 0;
 }
 
 static AtkObject *
