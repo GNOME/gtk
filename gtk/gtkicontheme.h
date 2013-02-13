@@ -29,6 +29,11 @@
 G_BEGIN_DECLS
 
 #define GTK_TYPE_ICON_INFO              (gtk_icon_info_get_type ())
+#define GTK_ICON_INFO(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ICON_INFO, GtkIconInfo))
+#define GTK_ICON_INFO_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_ICON_INFO, GtkIconInfoClass))
+#define GTK_IS_ICON_INFO(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_ICON_INFO))
+#define GTK_IS_ICON_INFO_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ICON_INFO))
+#define GTK_ICON_INFO_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ICON_INFO, GtkIconInfoClass))
 
 #define GTK_TYPE_ICON_THEME             (gtk_icon_theme_get_type ())
 #define GTK_ICON_THEME(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ICON_THEME, GtkIconTheme))
@@ -44,6 +49,7 @@ G_BEGIN_DECLS
  * an icon theme.
  */
 typedef struct _GtkIconInfo         GtkIconInfo;
+typedef struct _GtkIconInfoClass    GtkIconInfoClass;
 typedef struct _GtkIconTheme        GtkIconTheme;
 typedef struct _GtkIconThemeClass   GtkIconThemeClass;
 typedef struct _GtkIconThemePrivate GtkIconThemePrivate;

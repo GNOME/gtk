@@ -225,8 +225,15 @@ struct _SymbolicPixbufCache {
   SymbolicPixbufCache *next;
 };
 
+struct _GtkIconInfoClass
+{
+  GObjectClass parent_class;
+};
+
 struct _GtkIconInfo
 {
+  GObject parent_instance;
+
   /* Information about the source
    */
   IconInfoKey key;
@@ -255,8 +262,6 @@ struct _GtkIconInfo
   guint raw_coordinates : 1;
   guint forced_size     : 1;
   guint emblems_applied : 1;
-
-  guint ref_count;
 
   /* Cached information if we go ahead and try to load
    * the icon.
@@ -2971,19 +2976,20 @@ icon_data_free (GtkIconData *icon_data)
  * GtkIconInfo
  */
 
-G_DEFINE_BOXED_TYPE (GtkIconInfo, gtk_icon_info,
-                     gtk_icon_info_copy,
-                     gtk_icon_info_free)
+static void gtk_icon_info_class_init (GtkIconInfoClass *klass);
+
+G_DEFINE_TYPE (GtkIconInfo, gtk_icon_info, G_TYPE_OBJECT)
+
+static void
+gtk_icon_info_init (GtkIconInfo *icon_info)
+{
+  icon_info->scale = -1.;
+}
 
 static GtkIconInfo *
 icon_info_new (void)
 {
-  GtkIconInfo *icon_info = g_slice_new0 (GtkIconInfo);
-
-  icon_info->scale = -1.;
-  icon_info->ref_count = 1;
-
-  return icon_info;
+  return g_object_new (GTK_TYPE_ICON_INFO, NULL);
 }
 
 static GtkIconInfo *
@@ -3015,9 +3021,7 @@ gtk_icon_info_copy (GtkIconInfo *icon_info)
   
   g_return_val_if_fail (icon_info != NULL, NULL);
 
-  icon_info->ref_count++;
-
-  return icon_info;
+  return g_object_ref (icon_info);
 }
 
 /**
@@ -3033,9 +3037,13 @@ gtk_icon_info_free (GtkIconInfo *icon_info)
 {
   g_return_if_fail (icon_info != NULL);
 
-  icon_info->ref_count--;
-  if (icon_info->ref_count > 0)
-    return;
+  g_object_unref (icon_info);
+}
+
+static void
+gtk_icon_info_finalize (GObject *object)
+{
+  GtkIconInfo *icon_info = (GtkIconInfo *) object;
 
   if (icon_info->in_cache)
     g_hash_table_remove (icon_info->in_cache->priv->info_cache, &icon_info->key);
@@ -3057,7 +3065,15 @@ gtk_icon_info_free (GtkIconInfo *icon_info)
 
   symbolic_pixbuf_cache_free (icon_info->symbolic_pixbuf_cache);
 
-  g_slice_free (GtkIconInfo, icon_info);
+  G_OBJECT_CLASS (gtk_icon_info_parent_class)->finalize (object);
+}
+
+static void
+gtk_icon_info_class_init (GtkIconInfoClass *klass)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  gobject_class->finalize = gtk_icon_info_finalize;
 }
 
 /**
