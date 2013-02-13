@@ -37,9 +37,9 @@ struct _GdkFrameClockIdlePrivate
 {
   GTimer *timer;
   /* timer_base is used to avoid ever going backward */
-  guint64 timer_base;
-  guint64 frame_time;
-  guint64 min_next_frame_time;
+  gint64 timer_base;
+  gint64 frame_time;
+  gint64 min_next_frame_time;
   gint64 sleep_serial;
 
   guint flush_idle_id;
@@ -135,12 +135,12 @@ gdk_frame_clock_idle_finalize (GObject *object)
   G_OBJECT_CLASS (gdk_frame_clock_idle_parent_class)->finalize (object);
 }
 
-static guint64
+static gint64
 compute_frame_time (GdkFrameClockIdle *idle)
 {
   GdkFrameClockIdlePrivate *priv = idle->priv;
-  guint64 computed_frame_time;
-  guint64 elapsed;
+  gint64 computed_frame_time;
+  gint64 elapsed;
 
   elapsed = g_get_monotonic_time () + priv->timer_base;
   if (elapsed < priv->frame_time)
@@ -160,11 +160,11 @@ compute_frame_time (GdkFrameClockIdle *idle)
   return computed_frame_time;
 }
 
-static guint64
+static gint64
 gdk_frame_clock_idle_get_frame_time (GdkFrameClock *clock)
 {
   GdkFrameClockIdlePrivate *priv = GDK_FRAME_CLOCK_IDLE (clock)->priv;
-  guint64 computed_frame_time;
+  gint64 computed_frame_time;
 
   /* can't change frame time during a paint */
   if (priv->phase != GDK_FRAME_CLOCK_PHASE_NONE &&
@@ -196,8 +196,8 @@ maybe_start_idle (GdkFrameClockIdle *clock_idle)
 
       if (priv->min_next_frame_time != 0)
         {
-          guint64 now = compute_frame_time (clock_idle);
-          guint64 min_interval_us = MAX (priv->min_next_frame_time, now) - now;
+          gint64 now = compute_frame_time (clock_idle);
+          gint64 min_interval_us = MAX (priv->min_next_frame_time, now) - now;
           min_interval = (min_interval_us + 500) / 1000;
         }
 

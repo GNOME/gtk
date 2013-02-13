@@ -47,7 +47,7 @@ struct _GdkFrameClockClass
 {
   GObjectClass parent_class;
 
-  guint64  (* get_frame_time) (GdkFrameClock *clock);
+  gint64   (* get_frame_time) (GdkFrameClock *clock);
 
   void     (* request_phase)  (GdkFrameClock      *clock,
                                GdkFrameClockPhase  phase);
