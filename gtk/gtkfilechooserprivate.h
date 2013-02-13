@@ -233,7 +233,6 @@ struct _GtkFileChooserDefault
   GCancellable *file_exists_get_info_cancellable;
   GCancellable *update_from_entry_cancellable;
   GCancellable *shortcuts_activate_iter_cancellable;
-  GSList *pending_cancellables;
 
   LoadState load_state;
   ReloadState reload_state;
