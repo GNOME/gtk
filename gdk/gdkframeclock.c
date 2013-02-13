@@ -34,45 +34,39 @@
  * @Short_description: Frame clock syncs painting to a window or display
  * @Title: Frame clock
  *
- * A #GdkFrameClock tells the application when to repaint a window.
- * This may be synced to the vertical refresh rate of the monitor, for
- * example. Even when the frame clock uses a simple timer rather than
- * a hardware-based vertical sync, the frame clock helps because it
- * ensures everything paints at the same time (reducing the total
- * number of frames). The frame clock can also automatically stop
- * painting when it knows the frames will not be visible, or scale back
- * animation framerates.
+ * A #GdkFrameClock tells the application when to update and repaint a
+ * window. This may be synced to the vertical refresh rate of the
+ * monitor, for example. Even when the frame clock uses a simple timer
+ * rather than a hardware-based vertical sync, the frame clock helps
+ * because it ensures everything paints at the same time (reducing the
+ * total number of frames). The frame clock can also automatically
+ * stop painting when it knows the frames will not be visible, or
+ * scale back animation framerates.
  *
  * #GdkFrameClock is designed to be compatible with an OpenGL-based
  * implementation or with mozRequestAnimationFrame in Firefox,
  * for example.
  *
  * A frame clock is idle until someone requests a frame with
- * gdk_frame_clock_request_phase(). At that time, the frame clock
- * emits its GdkFrameClock:frame-requested signal if no frame was
- * already pending.
+ * gdk_frame_clock_request_phase(). At some later point that makes
+ * sense for the synchronization being implemented, the clock will
+ * process a frame and emit signals for each phase that has been
+ * requested. (See the signals of the #GdkFrameClock class for
+ * documentation of the phases. GDK_FRAME_CLOCK_PHASE_UPDATE and the
+ * ::update signal are most interesting for application writers, and
+ * are used to update the animations, using the frame time given by
+ * gdk_frame_clock_get_frame_time().
  *
- * At some later time after the frame is requested, the frame clock
- * MAY indicate that a frame should be painted. To paint a frame the
- * clock will: Emit GdkFrameClock:before-paint; update the frame time
- * in the default handler for GdkFrameClock:before-paint; emit
- * GdkFrameClock:paint; emit GdkFrameClock:after-paint.  The app
- * should paint in a handler for the paint signal.
- *
- * If a given frame is not painted (the clock is idle), the frame time
- * should still update to a conceptual "last frame." i.e. the frame
- * time will keep moving forward roughly with wall clock time.
- *
- * The frame time is in milliseconds. However, it should not be
- * thought of as having any particular relationship to wall clock
- * time. Unlike wall clock time, it "snaps" to conceptual frame times
- * so is low-resolution; it is guaranteed to never move backward (so
- * say you reset your computer clock, the frame clock will not reset);
- * and the frame clock is allowed to drift. For example nicer
- * results when painting with vertical refresh sync may be obtained by
- * painting as rapidly as possible, but always incrementing the frame
- * time by the frame length on each frame. This results in a frame
- * time that doesn't have a lot to do with wall clock time.
+ * The frame time is reported in microseconds and generally in the same
+ * timescale as g_get_monotonic_time(), however, it is not the same
+ * as g_get_monotonic_time(). The frame time does not advance during
+ * the time a frame is being painted, and outside of a frame, an attempt
+ * is made so that all calls to gdk_frame_clock_get_frame_time() that
+ * are called at a "similar" time get the same value. This means that
+ * if different animations are timed by looking at the difference in
+ * time between an initial value from gdk_frame_clock_get_frame_time()
+ * and the value inside the ::update signal of the clock, they will
+ * stay exactly synchronized.
  */
 
 G_DEFINE_ABSTRACT_TYPE (GdkFrameClock, gdk_frame_clock, G_TYPE_OBJECT)
@@ -124,7 +118,9 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
    * GdkFrameClock::flush-events:
    * @clock: the frame clock emitting the signal
    *
-   * FIXME.
+   * This signal is used to flush pending motion events that
+   * are being batched up and compressed together. Applications
+   * should not handle this signal.
    */
   signals[FLUSH_EVENTS] =
     g_signal_new (g_intern_static_string ("flush-events"),
@@ -139,9 +135,8 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
    * GdkFrameClock::before-paint:
    * @clock: the frame clock emitting the signal
    *
-   * This signal is emitted immediately before the paint signal and
-   * indicates that the frame time has been updated, and signal
-   * handlers should perform any preparatory work before painting.
+   * This signal begins processing of the frame. Applications
+   * should generally not handle this signal.
    */
   signals[BEFORE_PAINT] =
     g_signal_new (g_intern_static_string ("before-paint"),
@@ -156,7 +151,12 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
    * GdkFrameClock::update:
    * @clock: the frame clock emitting the signal
    *
-   * FIXME.
+   * This signal is emitted as the first step of toolkit and
+   * application processing of the frame. Animations should
+   * be updated using gdk_frame_clock_get_frame_time().
+   * Applications can connect directly to this signal, or
+   * use gtk_widget_add_tick_callback() as a more convenient
+   * interface.
    */
   signals[UPDATE] =
     g_signal_new (g_intern_static_string ("update"),
@@ -171,9 +171,10 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
    * GdkFrameClock::layout:
    * @clock: the frame clock emitting the signal
    *
-   * This signal is emitted immediately before the paint signal and
-   * indicates that the frame time has been updated, and signal
-   * handlers should perform any preparatory work before painting.
+   * This signal is emitted as the second step of toolkit and
+   * application processing of the frame. Any work to update
+   * sizes and positions of application elements should be
+   * performed. GTK normally handles this internally.
    */
   signals[LAYOUT] =
     g_signal_new (g_intern_static_string ("layout"),
@@ -185,11 +186,14 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
                   G_TYPE_NONE, 0);
 
   /**
-   * GdkFrameClock::paint:
+   * GdkFrameClock::layout:
    * @clock: the frame clock emitting the signal
    *
-   * Signal handlers for this signal should paint the window, screen,
-   * or whatever they normally paint.
+   * This signal is emitted as the third step of toolkit and
+   * application processing of the frame. The frame is
+   * repainted. GDK normally handles this internally and
+   * produce expose events, which are turned into GTK
+   * GtkWidget::draw signals.
    */
   signals[PAINT] =
     g_signal_new (g_intern_static_string ("paint"),
@@ -204,10 +208,8 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
    * GdkFrameClock::after-paint:
    * @clock: the frame clock emitting the signal
    *
-   * This signal is emitted immediately after the paint signal and
-   * allows signal handlers to do anything they'd like to do after
-   * painting has been completed. This is a relatively good time to do
-   * "expensive" processing in order to get it done in between frames.
+   * This signal ends processing of the frame. Applications
+   * should generally not handle this signal.
    */
   signals[AFTER_PAINT] =
     g_signal_new (g_intern_static_string ("after-paint"),
@@ -222,7 +224,9 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
    * GdkFrameClock::resume-events:
    * @clock: the frame clock emitting the signal
    *
-   * FIXME.
+   * This signal is emitted after processing of the frame is
+   * finished, and is handled internally by GTK+ to resume normal
+   * event processing. Applications should not handle this signal.
    */
   signals[RESUME_EVENTS] =
     g_signal_new (g_intern_static_string ("resume-events"),
@@ -252,52 +256,46 @@ gdk_frame_clock_init (GdkFrameClock *clock)
 
 /**
  * gdk_frame_clock_get_frame_time:
- * @clock: the clock
+ * @frame_clock: a #GdkFrameClock
  *
  * Gets the time that should currently be used for animations.  Inside
- * a paint, it's the time used to compute the animation position of
- * everything in a frame. Outside a paint, it's the time of the
- * conceptual "previous frame," which may be either the actual
- * previous frame time, or if that's too old, an updated time.
+ * the processing of a frame, it's the time used to compute the
+ * animation position of everything in a frame. Outside of a frame, it's
+ * the time of the conceptual "previous frame," which may be either
+ * the actual previous frame time, or if that's too old, an updated
+ * time.
  *
- * The returned time has no relationship to wall clock time.  It
- * increases roughly at 1 millisecond per wall clock millisecond, and
- * it never decreases, but its value is only meaningful relative to
- * previous frame clock times.
- *
- *
- * Since: 3.0
- * Return value: a timestamp in milliseconds
+ * Since: 3.8
+ * Return value: a timestamp in microseconds, in the timescale of
+ *  of g_get_monotonic_time().
  */
 guint64
-gdk_frame_clock_get_frame_time (GdkFrameClock *clock)
+gdk_frame_clock_get_frame_time (GdkFrameClock *frame_clock)
 {
-  g_return_val_if_fail (GDK_IS_FRAME_CLOCK (clock), 0);
+  g_return_val_if_fail (GDK_IS_FRAME_CLOCK (frame_clock), 0);
 
-  return GDK_FRAME_CLOCK_GET_CLASS (clock)->get_frame_time (clock);
+  return GDK_FRAME_CLOCK_GET_CLASS (frame_clock)->get_frame_time (frame_clock);
 }
 
 /**
  * gdk_frame_clock_request_phase:
- * @clock: the clock
+ * @frame_clock: a #GdkFrameClock
  *
- * Asks the frame clock to paint a frame. The frame
- * may or may not ever be painted (the frame clock may
- * stop itself for whatever reason), but the goal in
- * normal circumstances would be to paint the frame
- * at the next expected frame time. For example
- * if the clock is running at 60fps the frame would
- * ideally be painted within 1000/60=16 milliseconds.
+ * Asks the frame clock to run a particular phase. The signal
+ * corresponding the requested phase will be emitted the next
+ * time the frame clock processes. Multiple calls to
+ * gdk_frame_clock_request_phase() will be combined togethe
+ * and only one frame processed.
  *
- * Since: 3.0
+ * Since: 3.8
  */
 void
-gdk_frame_clock_request_phase (GdkFrameClock      *clock,
+gdk_frame_clock_request_phase (GdkFrameClock      *frame_clock,
                                GdkFrameClockPhase  phase)
 {
-  g_return_if_fail (GDK_IS_FRAME_CLOCK (clock));
+  g_return_if_fail (GDK_IS_FRAME_CLOCK (frame_clock));
 
-  GDK_FRAME_CLOCK_GET_CLASS (clock)->request_phase (clock, phase);
+  GDK_FRAME_CLOCK_GET_CLASS (frame_clock)->request_phase (frame_clock, phase);
 }
 
 
@@ -318,38 +316,66 @@ _gdk_frame_clock_thaw (GdkFrameClock *clock)
   GDK_FRAME_CLOCK_GET_CLASS (clock)->thaw (clock);
 }
 
+/**
+ * gdk_frame_clock_get_frame_counter:
+ * @frame_clock: a #GdkFrameClock
+ *
+ * A #GdkFrameClock maintains a 64-bit counter that increments for
+ * each frame drawn.
+ *
+ * Returns: inside frame processing, the value of the frame counter
+ *  for the current frame. Outside of frame processing, the frame
+ *   counter for the last frame.
+ * Since: 3.8
+ */
 gint64
-gdk_frame_clock_get_frame_counter (GdkFrameClock *clock)
+gdk_frame_clock_get_frame_counter (GdkFrameClock *frame_clock)
 {
   GdkFrameClockPrivate *priv;
 
-  g_return_val_if_fail (GDK_IS_FRAME_CLOCK (clock), 0);
+  g_return_val_if_fail (GDK_IS_FRAME_CLOCK (frame_clock), 0);
 
-  priv = clock->priv;
+  priv = frame_clock->priv;
 
   return priv->frame_counter;
 }
 
+/**
+ * gdk_frame_clock_get_history_start:
+ * @frame_clock: a #GdkFrameClock
+ *
+ * #GdkFrameClock internally keeps a history of #GdkFrameTiming
+ * objects for recent frames that can be retrieved with
+ * gdk_frame_clock_get_timings(). The set of stored frames
+ * is the set from the counter values given by
+ * gdk_frame_clock_get_history_start() and
+ * gdk_frame_clock_get_frame_counter(), inclusive.
+ *
+ * Return value: the frame counter value for the oldest frame
+ *  that is available in the internal frame history of the
+ *  #GdkFrameClock.
+ * Since: 3.8
+ */
 gint64
-gdk_frame_clock_get_history_start (GdkFrameClock *clock)
+gdk_frame_clock_get_history_start (GdkFrameClock *frame_clock)
 {
   GdkFrameClockPrivate *priv;
 
-  g_return_val_if_fail (GDK_IS_FRAME_CLOCK (clock), 0);
+  g_return_val_if_fail (GDK_IS_FRAME_CLOCK (frame_clock), 0);
 
-  priv = clock->priv;
+  priv = frame_clock->priv;
 
   return priv->frame_counter + 1 - priv->n_timings;
 }
 
 void
-_gdk_frame_clock_begin_frame (GdkFrameClock *clock)
+_gdk_frame_clock_begin_frame (GdkFrameClock *frame_clock)
 {
   GdkFrameClockPrivate *priv;
 
-  g_return_if_fail (GDK_IS_FRAME_CLOCK (clock));
+  g_return_if_fail (GDK_IS_FRAME_CLOCK (frame_clock));
 
-  priv = clock->priv;
+  priv = frame_clock->priv;
 
   priv->frame_counter++;
   priv->current = (priv->current + 1) % FRAME_HISTORY_MAX_LENGTH;
@@ -364,16 +390,31 @@ _gdk_frame_clock_begin_frame (GdkFrameClock *clock)
   priv->timings[priv->current] = _gdk_frame_timings_new (priv->frame_counter);
 }
 
+/**
+ * gdk_frame_clock_get_timings:
+ * @frame_clock: a #GdkFrameClock
+ * @frame_counter: the frame counter value identifying the frame to
+ *  be received.
+ *
+ * Retrieves a #GdkFrameTimings object holding timing information
+ * for the current frame or a recent frame. The #GdkFrameTimings
+ * object may not yet be complete: see gdk_frame_timings_get_complete().
+ *
+ * Return value: the #GdkFrameTimings object for the specified
+ *  frame, or %NULL if it is not available. See
+ *  gdk_frame_clock_get_history_start().
+ * Since: 3.8
+ */
 GdkFrameTimings *
-gdk_frame_clock_get_timings (GdkFrameClock *clock,
+gdk_frame_clock_get_timings (GdkFrameClock *frame_clock,
                              gint64         frame_counter)
 {
   GdkFrameClockPrivate *priv;
   gint pos;
 
-  g_return_val_if_fail (GDK_IS_FRAME_CLOCK (clock), NULL);
+  g_return_val_if_fail (GDK_IS_FRAME_CLOCK (frame_clock), NULL);
 
-  priv = clock->priv;
+  priv = frame_clock->priv;
 
   if (frame_counter > priv->frame_counter)
     return NULL;
@@ -386,16 +427,28 @@ gdk_frame_clock_get_timings (GdkFrameClock *clock,
   return priv->timings[pos];
 }
 
+/**
+ * gdk_frame_clock_get_current_timings:
+ * @frame_clock: a #GdkFrameClock
+ *
+ * Gets the frame timings for the current frame.
+ *
+ * Returns: the #GdkFrameTimings for the frame currently being
+ *  processed, or even no frame is being processed, for the
+ *  previous frame. Before any frames have been procesed,
+ *  returns %NULL.
+ * Since: 3.8
+ */
 GdkFrameTimings *
-gdk_frame_clock_get_frame_timings (GdkFrameClock *clock)
+gdk_frame_clock_get_current_timings (GdkFrameClock *frame_clock)
 {
   GdkFrameClockPrivate *priv;
 
-  g_return_val_if_fail (GDK_IS_FRAME_CLOCK (clock), 0);
+  g_return_val_if_fail (GDK_IS_FRAME_CLOCK (frame_clock), 0);
 
-  priv = clock->priv;
+  priv = frame_clock->priv;
 
-  return gdk_frame_clock_get_timings (clock, priv->frame_counter);
+  return gdk_frame_clock_get_timings (frame_clock, priv->frame_counter);
 }
 
 
@@ -436,17 +489,36 @@ _gdk_frame_clock_debug_print_timings (GdkFrameClock   *clock,
 #define DEFAULT_REFRESH_INTERVAL 16667 /* 16.7ms (1/60th second) */
 #define MAX_HISTORY_AGE 150000         /* 150ms */
 
+/**
+ * gdk_frame_clock_get_refresh_info:
+ * @frame_clock: a #GdkFrameClock
+ * @base_time: base time for determining a presentaton time
+ * @refresh_interval_return: a location to store the determined refresh
+ *  interval, or %NULL. A default refresh interval of 1/60th of
+ *  a second will be stored if no history is present.
+ * @presentation_time_return: a location to store the next
+ *  candidate presentation time after the given base time.
+ *  0 will be will be stored if no history is present.
+ *
+ * Using the frame history stored in the frame clock, finds the last
+ * known presentation time and refresh interval, and assuming that
+ * presentation times are separated by the refresh interval,
+ * predicts a presentation time that is a multiple of the refresh
+ * interval after the last presentation time, and later than @base_time.
+ *
+ * Since: 3.8
+ */
 void
-gdk_frame_clock_get_refresh_info (GdkFrameClock *clock,
+gdk_frame_clock_get_refresh_info (GdkFrameClock *frame_clock,
                                   gint64         base_time,
                                   gint64        *refresh_interval_return,
                                   gint64        *presentation_time_return)
 {
   gint64 frame_counter;
 
-  g_return_if_fail (GDK_IS_FRAME_CLOCK (clock));
+  g_return_if_fail (GDK_IS_FRAME_CLOCK (frame_clock));
 
-  frame_counter = gdk_frame_clock_get_frame_counter (clock);
+  frame_counter = gdk_frame_clock_get_frame_counter (frame_clock);
 
   if (presentation_time_return)
     *presentation_time_return = 0;
@@ -455,7 +527,7 @@ gdk_frame_clock_get_refresh_info (GdkFrameClock *clock,
 
   while (TRUE)
     {
-      GdkFrameTimings *timings = gdk_frame_clock_get_timings (clock, frame_counter);
+      GdkFrameTimings *timings = gdk_frame_clock_get_timings (frame_clock, frame_counter);
       gint64 presentation_time;
       gint64 refresh_interval;
 

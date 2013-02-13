@@ -46,6 +46,23 @@ typedef struct _GdkFrameClock              GdkFrameClock;
 typedef struct _GdkFrameClockPrivate       GdkFrameClockPrivate;
 typedef struct _GdkFrameClockClass         GdkFrameClockClass;
 
+/**
+ * GdkFrameClockPhase:
+ * @GDK_FRAME_CLOCK_PHASE_NONE: no phase
+ * @GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS: corresponds to GdkFrameClock::flush-events. Should not be handled by applications.
+ * @GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT: corresponds to GdkFrameClock::flush-events. Should not be handled by applications.
+ * @GDK_FRAME_CLOCK_PHASE_UPDATE: corresponds to GdkFrameClock::update.
+ * @GDK_FRAME_CLOCK_PHASE_LAYOUT: corresponds to GdkFrameClock::layout.
+ * @GDK_FRAME_CLOCK_PHASE_PAINT: corresponds to GdkFrameClock::paint.
+ * @GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS: corresponds to GdkFrameClock::resume-events. Should not be handled by applications.
+ * @GDK_FRAME_CLOCK_PHASE_AFTER_PAINT: corresponds to GdkFrameClock::after-paint. Should not be handled by applications.
+ *
+ * #GdkFrameClockPhase is used to represent the different paint clock
+ * phases that can be requested. The element of the enumeration
+ * correspond to the signals of #GdkPaintClock.
+ *
+ * Since: 3.4
+ **/
 typedef enum {
   GDK_FRAME_CLOCK_PHASE_NONE          = 0,
   GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS  = 1 << 0,
@@ -59,20 +76,26 @@ typedef enum {
 
 GType    gdk_frame_clock_get_type             (void) G_GNUC_CONST;
 
-guint64  gdk_frame_clock_get_frame_time            (GdkFrameClock *clock);
+guint64  gdk_frame_clock_get_frame_time            (GdkFrameClock *frame_clock);
 
-void               gdk_frame_clock_request_phase (GdkFrameClock      *clock,
+GDK_AVAILABLE_IN_3_8
+void               gdk_frame_clock_request_phase (GdkFrameClock      *frame_clock,
                                                   GdkFrameClockPhase  phase);
 
 /* Frame history */
-gint64           gdk_frame_clock_get_frame_counter (GdkFrameClock *clock);
-gint64           gdk_frame_clock_get_history_start (GdkFrameClock *clock);
-GdkFrameTimings *gdk_frame_clock_get_timings       (GdkFrameClock *clock,
+GDK_AVAILABLE_IN_3_8
+gint64           gdk_frame_clock_get_frame_counter (GdkFrameClock *frame_clock);
+GDK_AVAILABLE_IN_3_8
+gint64           gdk_frame_clock_get_history_start (GdkFrameClock *frame_clock);
+GDK_AVAILABLE_IN_3_8
+GdkFrameTimings *gdk_frame_clock_get_timings       (GdkFrameClock *frame_clock,
                                                     gint64         frame_counter);
 
-GdkFrameTimings *gdk_frame_clock_get_current_timings (GdkFrameClock *clock);
+GDK_AVAILABLE_IN_3_8
+GdkFrameTimings *gdk_frame_clock_get_current_timings (GdkFrameClock *frame_clock);
 
-void gdk_frame_clock_get_refresh_info (GdkFrameClock *clock,
+GDK_AVAILABLE_IN_3_8
+void gdk_frame_clock_get_refresh_info (GdkFrameClock *frame_clock,
                                        gint64         base_time,
                                        gint64        *refresh_interval_return,
                                        gint64        *presentation_time_return);
