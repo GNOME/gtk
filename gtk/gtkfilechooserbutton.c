@@ -726,10 +726,18 @@ gtk_file_chooser_button_get_files (GtkFileChooser *chooser)
     {
       GSList *result;
 
+      result = NULL;
+
       if (priv->selection_while_inactive)
 	result = g_slist_prepend (NULL, g_object_ref (priv->selection_while_inactive));
-      else
-	result = NULL;
+      else if (gtk_file_chooser_get_action (GTK_FILE_CHOOSER (priv->dialog)) == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
+	{
+	  /* If there is no "real" selection in SELECT_FOLDER mode, then we'll just return
+	   * the current folder, since that is what GtkFileChooserDefault would do.
+	   */
+	  if (priv->current_folder_while_inactive)
+	    result = g_slist_prepend (NULL, g_object_ref (priv->current_folder_while_inactive));
+	}
 
       return result;
     }
