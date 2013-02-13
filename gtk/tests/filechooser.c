@@ -850,6 +850,57 @@ static FileChooserButtonTest button_tests[] =
       FILE_NAME			/* final_filename */
     },
 
+    /* SELECT_FOLDER tests with dialog */
+
+    {
+      "select-folder-dialog-1",
+      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+      NULL,			/* initial_current_folder */
+      FOLDER_NAME,		/* initial_filename */
+      TRUE,			/* open_dialog */
+      NULL,			/* tweak_current_folder */
+      NULL,			/* tweak_filename */
+      GTK_RESPONSE_ACCEPT,	/* dialog_response */
+      NULL,			/* final_current_folder */
+      FOLDER_NAME		/* final_filename */
+    },
+    {
+      "select-folder-dialog-2",
+      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+      FOLDER_NAME,		/* initial_current_folder */
+      NULL,			/* initial_filename */
+      TRUE,			/* open_dialog */
+      NULL,			/* tweak_current_folder */
+      NULL,			/* tweak_filename */
+      GTK_RESPONSE_ACCEPT,	/* dialog_response */
+      NULL,			/* final_current_folder */
+      FOLDER_NAME		/* final_filename */
+    },
+    {
+      "select-folder-dialog-3",
+      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+      NULL,			/* initial_current_folder */
+      FOLDER_NAME,		/* initial_filename */
+      TRUE,			/* open_dialog */
+      NULL,			/* tweak_current_folder */
+      FOLDER_NAME_2,		/* tweak_filename */
+      GTK_RESPONSE_ACCEPT,	/* dialog_response */
+      NULL,			/* final_current_folder */
+      FOLDER_NAME_2		/* final_filename */
+    },
+    {
+      "select-folder-dialog-4",
+      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+      FOLDER_NAME,		/* initial_current_folder */
+      NULL,			/* initial_filename */
+      TRUE,			/* open_dialog */
+      NULL,			/* tweak_current_folder */
+      FOLDER_NAME_2,		/* tweak_filename */
+      GTK_RESPONSE_ACCEPT,	/* dialog_response */
+      NULL,			/* final_current_folder */
+      FOLDER_NAME_2		/* final_filename */
+    },
+
   };
 
 static void
