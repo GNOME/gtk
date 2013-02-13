@@ -211,7 +211,8 @@ enum {
   PROP_IM_STATUS_STYLE,
   PROP_SHELL_SHOWS_APP_MENU,
   PROP_SHELL_SHOWS_MENUBAR,
-  PROP_ENABLE_PRIMARY_PASTE
+  PROP_ENABLE_PRIMARY_PASTE,
+  PROP_RECENT_FILES_ENABLED
 };
 
 /* --- prototypes --- */
@@ -1405,6 +1406,23 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_ENABLE_PRIMARY_PASTE);
+
+  /**
+   * GtkSettings:gtk-recent-files-enabled:
+   *
+   * Whether GTK+ should keep track of items inside the recently used
+   * resources list. If set to %FALSE, the list will always be empty.
+   *
+   * Since: 3.8
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-recent-files-enabled",
+                                                                   P_("Recent Files Enabled"),
+                                                                   P_("Whether GTK+ remembers recent files"),
+                                                                   TRUE,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_RECENT_FILES_ENABLED);
 
   g_type_class_add_private (class, sizeof (GtkSettingsPrivate));
 }
