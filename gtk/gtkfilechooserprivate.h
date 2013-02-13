@@ -92,17 +92,6 @@ struct _GtkFileChooserIface
 };
 
 GtkFileSystem *_gtk_file_chooser_get_file_system         (GtkFileChooser    *chooser);
-gboolean       _gtk_file_chooser_set_current_folder_file (GtkFileChooser    *chooser,
-							  GFile             *file,
-							  GError           **error);
-GFile *        _gtk_file_chooser_get_current_folder_file (GtkFileChooser    *chooser);
-gboolean       _gtk_file_chooser_select_file             (GtkFileChooser    *chooser,
-							  GFile             *file,
-							  GError           **error);
-void           _gtk_file_chooser_unselect_file           (GtkFileChooser    *chooser,
-							  GFile             *file);
-GSList *       _gtk_file_chooser_get_files               (GtkFileChooser    *chooser);
-GFile *        _gtk_file_chooser_get_preview_file        (GtkFileChooser    *chooser);
 gboolean       _gtk_file_chooser_add_shortcut_folder     (GtkFileChooser    *chooser,
 							  GFile             *folder,
 							  GError           **error);
