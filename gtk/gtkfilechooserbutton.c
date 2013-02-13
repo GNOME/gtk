@@ -2532,6 +2532,17 @@ fs_bookmarks_changed_cb (GtkFileSystem *fs,
   update_combo_box (user_data);
 }
 
+static void
+restore_inactive_selection (GtkFileChooserButton *button)
+{
+  GtkFileChooserButtonPrivate *priv = button->priv;
+
+  if (priv->selection_while_inactive)
+    gtk_file_chooser_select_file (GTK_FILE_CHOOSER (priv->dialog), priv->selection_while_inactive, NULL);
+  else
+    gtk_file_chooser_unselect_all (GTK_FILE_CHOOSER (priv->dialog));
+}
+
 /* Dialog */
 static void
 open_dialog (GtkFileChooserButton *button)
@@ -2566,7 +2577,7 @@ open_dialog (GtkFileChooserButton *button)
       g_signal_handler_block (priv->dialog,
 			      priv->dialog_selection_changed_id);
 
-      gtk_file_chooser_select_file (GTK_FILE_CHOOSER (priv->dialog), priv->selection_while_inactive, NULL);
+      restore_inactive_selection (button);
 
       priv->active = TRUE;
     }
@@ -2749,12 +2760,10 @@ dialog_response_cb (GtkDialog *dialog,
       update_label_and_image (button);
       update_combo_box (button);
     }
-  else if (priv->selection_while_inactive)
-    {
-      gtk_file_chooser_select_file (GTK_FILE_CHOOSER (dialog), priv->selection_while_inactive, NULL);
-    }
   else
-    gtk_file_chooser_unselect_all (GTK_FILE_CHOOSER (dialog));
+    {
+      restore_inactive_selection (button);
+    }
 
   if (priv->active)
     {
