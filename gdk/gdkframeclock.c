@@ -269,7 +269,7 @@ gdk_frame_clock_init (GdkFrameClock *clock)
  * Return value: a timestamp in microseconds, in the timescale of
  *  of g_get_monotonic_time().
  */
-guint64
+gint64
 gdk_frame_clock_get_frame_time (GdkFrameClock *frame_clock)
 {
   g_return_val_if_fail (GDK_IS_FRAME_CLOCK (frame_clock), 0);
