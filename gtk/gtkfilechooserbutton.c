@@ -179,6 +179,7 @@ struct _GtkFileChooserButtonPrivate
 
   GtkFileSystem *fs;
   GFile *selection_while_inactive;
+  GFile *current_folder_while_inactive;
 
   gulong combo_box_changed_id;
   gulong dialog_file_activated_id;
@@ -226,6 +227,10 @@ enum
 
 /* GtkFileChooserIface Functions */
 static void     gtk_file_chooser_button_file_chooser_iface_init (GtkFileChooserIface *iface);
+static gboolean gtk_file_chooser_button_set_current_folder (GtkFileChooser    *chooser,
+							    GFile             *file,
+							    GError           **error);
+static GFile *gtk_file_chooser_button_get_current_folder (GtkFileChooser    *chooser);
 static gboolean gtk_file_chooser_button_select_file (GtkFileChooser *chooser,
 						     GFile          *file,
 						     GError        **error);
@@ -568,12 +573,62 @@ gtk_file_chooser_button_file_chooser_iface_init (GtkFileChooserIface *iface)
 {
   _gtk_file_chooser_delegate_iface_init (iface);
 
+  iface->set_current_folder = gtk_file_chooser_button_set_current_folder;
+  iface->get_current_folder = gtk_file_chooser_button_get_current_folder;
   iface->select_file = gtk_file_chooser_button_select_file;
   iface->unselect_file = gtk_file_chooser_button_unselect_file;
   iface->unselect_all = gtk_file_chooser_button_unselect_all;
   iface->get_files = gtk_file_chooser_button_get_files;
   iface->add_shortcut_folder = gtk_file_chooser_button_add_shortcut_folder;
   iface->remove_shortcut_folder = gtk_file_chooser_button_remove_shortcut_folder;
+}
+
+static gboolean
+gtk_file_chooser_button_set_current_folder (GtkFileChooser    *chooser,
+					    GFile             *file,
+					    GError           **error)
+{
+  GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (chooser);
+  GtkFileChooserButtonPrivate *priv = button->priv;
+  GtkFileChooser *delegate;
+
+  delegate = g_object_get_qdata (G_OBJECT (chooser),
+				 GTK_FILE_CHOOSER_DELEGATE_QUARK);
+
+  if (priv->active)
+    return gtk_file_chooser_set_current_folder_file (delegate, file, error);
+  else
+    {
+      if (priv->current_folder_while_inactive)
+	g_object_unref (priv->current_folder_while_inactive);
+
+      priv->current_folder_while_inactive = g_object_ref (file);
+
+      g_signal_emit_by_name (button, "current-folder-changed");
+
+      return TRUE;
+    }
+}
+
+static GFile *
+gtk_file_chooser_button_get_current_folder (GtkFileChooser *chooser)
+{
+  GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (chooser);
+  GtkFileChooserButtonPrivate *priv = button->priv;
+  GtkFileChooser *delegate;
+
+  delegate = g_object_get_qdata (G_OBJECT (chooser),
+				 GTK_FILE_CHOOSER_DELEGATE_QUARK);
+
+  if (priv->active)
+    return gtk_file_chooser_get_current_folder_file (delegate);
+  else
+    {
+      if (priv->current_folder_while_inactive)
+	return g_object_ref (priv->current_folder_while_inactive);
+      else
+	return NULL;
+    }
 }
 
 static gboolean
@@ -1020,6 +1075,9 @@ gtk_file_chooser_button_finalize (GObject *object)
 
   if (priv->selection_while_inactive)
     g_object_unref (priv->selection_while_inactive);
+
+  if (priv->current_folder_while_inactive)
+    g_object_unref (priv->current_folder_while_inactive);
 
   G_OBJECT_CLASS (gtk_file_chooser_button_parent_class)->finalize (object);
 }
@@ -2556,9 +2614,27 @@ fs_bookmarks_changed_cb (GtkFileSystem *fs,
 }
 
 static void
-restore_inactive_selection (GtkFileChooserButton *button)
+save_inactive_state (GtkFileChooserButton *button)
 {
   GtkFileChooserButtonPrivate *priv = button->priv;
+
+  if (priv->current_folder_while_inactive)
+    g_object_unref (priv->current_folder_while_inactive);
+
+  if (priv->selection_while_inactive)
+    g_object_unref (priv->selection_while_inactive);
+
+  priv->current_folder_while_inactive = gtk_file_chooser_get_current_folder_file (GTK_FILE_CHOOSER (priv->dialog));
+  priv->selection_while_inactive = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (priv->dialog));
+}
+
+static void
+restore_inactive_state (GtkFileChooserButton *button)
+{
+  GtkFileChooserButtonPrivate *priv = button->priv;
+
+  if (priv->current_folder_while_inactive)
+    gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (priv->dialog), priv->current_folder_while_inactive, NULL);
 
   if (priv->selection_while_inactive)
     gtk_file_chooser_select_file (GTK_FILE_CHOOSER (priv->dialog), priv->selection_while_inactive, NULL);
@@ -2600,7 +2676,7 @@ open_dialog (GtkFileChooserButton *button)
       g_signal_handler_block (priv->dialog,
 			      priv->dialog_selection_changed_id);
 
-      restore_inactive_selection (button);
+      restore_inactive_state (button);
 
       priv->active = TRUE;
     }
@@ -2772,10 +2848,7 @@ dialog_response_cb (GtkDialog *dialog,
   if (response == GTK_RESPONSE_ACCEPT ||
       response == GTK_RESPONSE_OK)
     {
-      if (priv->selection_while_inactive)
-	g_object_unref (priv->selection_while_inactive);
-
-      priv->selection_while_inactive = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (priv->dialog));
+      save_inactive_state (button);
 
       g_signal_emit_by_name (button, "current-folder-changed");
       g_signal_emit_by_name (button, "selection-changed");
@@ -2785,7 +2858,7 @@ dialog_response_cb (GtkDialog *dialog,
     }
   else
     {
-      restore_inactive_selection (button);
+      restore_inactive_state (button);
     }
 
   if (priv->active)
