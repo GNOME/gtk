@@ -5720,18 +5720,6 @@ cancel_all_operations (GtkFileChooserDefault *impl)
 
   pending_select_files_free (impl);
 
-  /* cancel all pending operations */
-  if (impl->pending_cancellables)
-    {
-      for (l = impl->pending_cancellables; l; l = l->next)
-        {
-	  GCancellable *cancellable = G_CANCELLABLE (l->data);
-	  g_cancellable_cancel (cancellable);
-        }
-      g_slist_free (impl->pending_cancellables);
-      impl->pending_cancellables = NULL;
-    }
-
   if (impl->reload_icon_cancellables)
     {
       for (l = impl->reload_icon_cancellables; l; l = l->next)
@@ -5770,6 +5758,12 @@ cancel_all_operations (GtkFileChooserDefault *impl)
     {
       g_cancellable_cancel (impl->should_respond_get_info_cancellable);
       impl->should_respond_get_info_cancellable = NULL;
+    }
+
+  if (impl->file_exists_get_info_cancellable)
+    {
+      g_cancellable_cancel (impl->file_exists_get_info_cancellable);
+      impl->file_exists_get_info_cancellable = NULL;
     }
 
   if (impl->update_from_entry_cancellable)
