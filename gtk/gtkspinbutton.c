@@ -588,6 +588,8 @@ gtk_spin_button_unrealize (GtkWidget *widget)
 {
   GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
 
+  gtk_spin_button_stop_spinning (GTK_SPIN_BUTTON (widget));
+
   GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->unrealize (widget);
 
   if (spin->panel)
