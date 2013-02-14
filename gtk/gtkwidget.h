@@ -94,8 +94,8 @@ typedef void    (*GtkCallback)     (GtkWidget        *widget,
  *
  * Callback type for adding a function to update animations. See gtk_widget_add_tick_callback().
  *
- * Returns: %TRUE if the tick callback should continue to be called,
- *  %FALSE if the tick callback should be removed.
+ * Returns: %G_SOURCE_CONTINUE if the tick callback should continue to be called,
+ *  %G_SOURCE_REMOVE if the tick callback should be removed.
  */
 typedef gboolean (*GtkTickCallback) (GtkWidget     *widget,
                                      GdkFrameClock *frame_clock,
