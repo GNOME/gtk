@@ -4584,9 +4584,9 @@ gtk_widget_on_frame_clock_update (GdkFrameClock *frame_clock,
       ref_tick_callback_info (info);
       if (!info->destroyed)
         {
-          if (!info->callback (widget,
-                               frame_clock,
-                               info->user_data))
+          if (info->callback (widget,
+                              frame_clock,
+                              info->user_data) == G_SOURCE_REMOVE)
             {
               destroy_tick_callback_info (widget, info, l);
             }

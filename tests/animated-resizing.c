@@ -251,7 +251,7 @@ tick_callback (GtkWidget     *widget,
   scaled_time = (frame_time - start_frame_time) / (CYCLE_TIME * 1000000);
   on_frame (scaled_time - floor (scaled_time));
 
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static gboolean
