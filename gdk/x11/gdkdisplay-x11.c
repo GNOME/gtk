@@ -1087,7 +1087,7 @@ _gdk_wm_protocols_filter (GdkXEvent *xev,
   GdkDisplay *display;
   Atom atom;
 
-  if (!GDK_IS_X11_WINDOW (win))
+  if (!GDK_IS_X11_WINDOW (win) || GDK_WINDOW_DESTROYED (win))
     return GDK_FILTER_CONTINUE;
 
   if (xevent->type != ClientMessage)
@@ -1100,7 +1100,7 @@ _gdk_wm_protocols_filter (GdkXEvent *xev,
   if (xevent->xclient.message_type == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_FRAME_DRAWN"))
     {
       GdkWindowImplX11 *window_impl;
-      window_impl = GDK_WINDOW_IMPL_X11 (event->any.window->impl);
+      window_impl = GDK_WINDOW_IMPL_X11 (win->impl);
       if (window_impl->toplevel)
         {
           guint32 d0 = xevent->xclient.data.l[0];
@@ -1112,7 +1112,7 @@ _gdk_wm_protocols_filter (GdkXEvent *xev,
           gint64 frame_drawn_time = ((guint64)d3 << 32) | d2;
           gint64 refresh_interval, presentation_time;
 
-          GdkFrameClock *clock = gdk_window_get_frame_clock (event->any.window);
+          GdkFrameClock *clock = gdk_window_get_frame_clock (win);
           GdkFrameTimings *timings = find_frame_timings (clock, serial);
 
           if (timings)
@@ -1138,7 +1138,7 @@ _gdk_wm_protocols_filter (GdkXEvent *xev,
   if (xevent->xclient.message_type == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_FRAME_TIMINGS"))
     {
       GdkWindowImplX11 *window_impl;
-      window_impl = GDK_WINDOW_IMPL_X11 (event->any.window->impl);
+      window_impl = GDK_WINDOW_IMPL_X11 (win->impl);
       if (window_impl->toplevel)
         {
           guint32 d0 = xevent->xclient.data.l[0];
@@ -1148,7 +1148,7 @@ _gdk_wm_protocols_filter (GdkXEvent *xev,
 
           guint64 serial = ((guint64)d1 << 32) | d0;
 
-          GdkFrameClock *clock = gdk_window_get_frame_clock (event->any.window);
+          GdkFrameClock *clock = gdk_window_get_frame_clock (win);
           GdkFrameTimings *timings = find_frame_timings (clock, serial);
 
           if (timings)
@@ -1198,7 +1198,7 @@ _gdk_wm_protocols_filter (GdkXEvent *xev,
     }
   else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "WM_TAKE_FOCUS"))
     {
-      GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (event->any.window);
+      GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (win);
 
       /* There is no way of knowing reliably whether we are viewable;
        * so trap errors asynchronously around the XSetInputFocus call
@@ -1232,7 +1232,7 @@ _gdk_wm_protocols_filter (GdkXEvent *xev,
   else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_SYNC_REQUEST") &&
 	   GDK_X11_DISPLAY (display)->use_sync)
     {
-      GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (event->any.window);
+      GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (win);
       if (toplevel)
 	{
 #ifdef HAVE_XSYNC
