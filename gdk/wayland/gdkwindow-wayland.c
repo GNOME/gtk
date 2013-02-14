@@ -569,6 +569,7 @@ gdk_wayland_window_map (GdkWindow *window)
       if (impl->transient_for)
         {
           struct wl_seat *grab_input_seat = NULL;
+          GdkWindowImplWayland *tmp_impl;
 
           parent = GDK_WINDOW_IMPL_WAYLAND (impl->transient_for->impl);
 
@@ -576,11 +577,18 @@ gdk_wayland_window_map (GdkWindow *window)
            * the popup window setup - so this relies on GTK+ taking the
            * grab before showing the popup window.
            */
-          if (impl->grab_input_seat)
-            grab_input_seat = impl->grab_input_seat;
+          grab_input_seat = impl->grab_input_seat;
 
-          if (!grab_input_seat)
-            grab_input_seat = parent->grab_input_seat;
+          tmp_impl = parent;
+          while (!grab_input_seat)
+            {
+              grab_input_seat = tmp_impl->grab_input_seat;
+
+              if (tmp_impl->transient_for)
+                tmp_impl = GDK_WINDOW_IMPL_WAYLAND (tmp_impl->transient_for->impl);
+              else
+                break;
+            }
 
           if (grab_input_seat &&
               (impl->hint == GDK_WINDOW_TYPE_HINT_POPUP_MENU ||
