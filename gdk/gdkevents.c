@@ -268,6 +268,7 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
   GList *tmp_list;
   GList *pending_motions = NULL;
   GdkWindow *pending_motion_window = NULL;
+  GdkDevice *pending_motion_device = NULL;
 
   /* If the last N events in the event queue are motion notify
    * events for the same window, drop all but the last */
@@ -288,7 +289,12 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
           pending_motion_window != event->event.motion.window)
         break;
 
+      if (pending_motion_device != NULL &&
+          pending_motion_device != event->event.motion.device)
+        break;
+
       pending_motion_window = event->event.motion.window;
+      pending_motion_device = event->event.motion.device;
       pending_motions = tmp_list;
 
       tmp_list = tmp_list->prev;
