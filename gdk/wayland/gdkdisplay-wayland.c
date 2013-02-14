@@ -125,9 +125,14 @@ gdk_registry_handle_global(void *data, struct wl_registry *registry, uint32_t id
 }
 
 static void
-gdk_registry_handle_global_remove(void *data,
-                                  struct wl_registry *registry, uint32_t name)
+gdk_registry_handle_global_remove(void               *data,
+                                  struct wl_registry *registry,
+                                  uint32_t            id)
 {
+  GdkWaylandDisplay *display_wayland = data;
+
+  /* We don't know what this item is - try as an output */
+  _gdk_wayland_screen_remove_output_by_id (display_wayland->screen, id);
 }
 
 static const struct wl_registry_listener registry_listener = {
