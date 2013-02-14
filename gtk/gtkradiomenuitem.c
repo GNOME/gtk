@@ -127,10 +127,9 @@ gtk_radio_menu_item_set_property (GObject      *object,
       GSList *slist;
 
     case PROP_GROUP:
-      if (G_VALUE_HOLDS_OBJECT (value))
-	slist = gtk_radio_menu_item_get_group ((GtkRadioMenuItem*) g_value_get_object (value));
-      else
-	slist = NULL;
+      slist = g_value_get_object (value);
+      if (slist)
+        slist = gtk_radio_menu_item_get_group ((GtkRadioMenuItem*) g_value_get_object (value));
       gtk_radio_menu_item_set_group (radio_menu_item, slist);
       break;
     default:
@@ -249,18 +248,10 @@ GtkWidget*
 gtk_radio_menu_item_new_with_label (GSList *group,
 				    const gchar *label)
 {
-  GtkWidget *radio_menu_item;
-  GtkWidget *accel_label;
-
-  radio_menu_item = gtk_radio_menu_item_new (group);
-  accel_label = gtk_accel_label_new (label);
-  gtk_widget_set_halign (accel_label, GTK_ALIGN_START);
-  gtk_widget_set_valign (accel_label, GTK_ALIGN_CENTER);
-  gtk_container_add (GTK_CONTAINER (radio_menu_item), accel_label);
-  gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (accel_label), radio_menu_item);
-  gtk_widget_show (accel_label);
-
-  return radio_menu_item;
+  return g_object_new (GTK_TYPE_RADIO_MENU_ITEM,
+          "group", (group) ? group->data : NULL,
+          "label", label,
+          NULL);
 }
 
 
@@ -280,20 +271,11 @@ GtkWidget*
 gtk_radio_menu_item_new_with_mnemonic (GSList *group,
 				       const gchar *label)
 {
-  GtkWidget *radio_menu_item;
-  GtkWidget *accel_label;
-
-  radio_menu_item = gtk_radio_menu_item_new (group);
-  accel_label = g_object_new (GTK_TYPE_ACCEL_LABEL, NULL);
-  gtk_label_set_text_with_mnemonic (GTK_LABEL (accel_label), label);
-  gtk_widget_set_halign (accel_label, GTK_ALIGN_START);
-  gtk_widget_set_valign (accel_label, GTK_ALIGN_CENTER);
-
-  gtk_container_add (GTK_CONTAINER (radio_menu_item), accel_label);
-  gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (accel_label), radio_menu_item);
-  gtk_widget_show (accel_label);
-
-  return radio_menu_item;
+  return g_object_new (GTK_TYPE_RADIO_MENU_ITEM,
+          "group", (group) ? group->data : NULL,
+          "label", label,
+          "use-underline", TRUE,
+          NULL);
 }
 
 /**
