@@ -6,7 +6,7 @@
 
 /* This CSS resets all properties to their defaults values
  *    and overrides all user settings and the theme in use */
-@import url("reset.css");
+@import url("resource://css_basics/reset.css");
 
 /* Set a very futuristic style by default */
 * {
