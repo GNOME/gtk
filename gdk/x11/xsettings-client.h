@@ -49,13 +49,6 @@ typedef enum
   XSETTINGS_TYPE_COLOR   = 2
 } XSettingsType;
 
-typedef enum 
-{
-  XSETTINGS_ACTION_NEW,
-  XSETTINGS_ACTION_CHANGED,
-  XSETTINGS_ACTION_DELETED
-} XSettingsAction;
-
 struct _XSettingsColor
 {
   unsigned short red, green, blue, alpha;

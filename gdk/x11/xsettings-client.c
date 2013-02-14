@@ -64,7 +64,7 @@ struct _XSettingsClient
 
 static void
 gdk_xsettings_notify (const char       *name,
-		      XSettingsAction   action,
+		      GdkSettingAction  action,
 		      XSettingsSetting *setting,
 		      GdkScreen        *screen)
 {
@@ -77,23 +77,11 @@ gdk_xsettings_notify (const char       *name,
   new_event.type = GDK_SETTING;
   new_event.setting.window = gdk_screen_get_root_window (screen);
   new_event.setting.send_event = FALSE;
+  new_event.setting.action = action;
   new_event.setting.name = (char*) gdk_from_xsettings_name (name);
 
   if (!new_event.setting.name)
     return;
-  
-  switch (action)
-    {
-    case XSETTINGS_ACTION_NEW:
-      new_event.setting.action = GDK_SETTING_ACTION_NEW;
-      break;
-    case XSETTINGS_ACTION_CHANGED:
-      new_event.setting.action = GDK_SETTING_ACTION_CHANGED;
-      break;
-    case XSETTINGS_ACTION_DELETED:
-      new_event.setting.action = GDK_SETTING_ACTION_DELETED;
-      break;
-    }
 
   gdk_event_put (&new_event);
 }
@@ -114,9 +102,9 @@ notify_changes (XSettingsClient *client,
 	  old_setting = old_list ? g_hash_table_lookup (old_list, name) : NULL;
 
 	  if (old_setting == NULL)
-	    gdk_xsettings_notify (name, XSETTINGS_ACTION_NEW, setting, client->screen);
+	    gdk_xsettings_notify (name, GDK_SETTING_ACTION_NEW, setting, client->screen);
 	  else if (!xsettings_setting_equal (setting, old_setting))
-	    gdk_xsettings_notify (name, XSETTINGS_ACTION_CHANGED, setting, client->screen);
+	    gdk_xsettings_notify (name, GDK_SETTING_ACTION_CHANGED, setting, client->screen);
 	    
 	  /* remove setting from old_list */
 	  if (old_setting != NULL)
@@ -129,7 +117,7 @@ notify_changes (XSettingsClient *client,
       /* old_list now contains only deleted settings */
       g_hash_table_iter_init (&iter, old_list);
       while (g_hash_table_iter_next (&iter, (gpointer *) &name, (gpointer*) &old_setting))
-	gdk_xsettings_notify (name, XSETTINGS_ACTION_DELETED, NULL, client->screen);
+	gdk_xsettings_notify (name, GDK_SETTING_ACTION_DELETED, NULL, client->screen);
     }
 }
 
