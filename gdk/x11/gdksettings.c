@@ -79,7 +79,7 @@ static const struct {
   {"Gtk/RecentFilesEnabled",  "gtk-recent-files-enabled"}
 };
 
-static const char *
+static G_GNUC_UNUSED const char *
 gdk_from_xsettings_name (const char *xname)
 {
   static GHashTable *hash = NULL;
@@ -97,7 +97,7 @@ gdk_from_xsettings_name (const char *xname)
   return g_hash_table_lookup (hash, xname);
 }
 
-static const char *
+static G_GNUC_UNUSED const char *
 gdk_to_xsettings_name (const char *gdkname)
 {
   static GHashTable *hash = NULL;

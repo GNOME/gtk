@@ -72,26 +72,12 @@ struct _XSettingsSetting
   } data;
 };
 
-typedef void (*XSettingsNotifyFunc) (const char       *name,
-				     XSettingsAction   action,
-				     XSettingsSetting *setting,
-				     void             *cb_data);
-typedef Bool (*XSettingsWatchFunc)  (Window            window,
-				     Bool              is_start,
-				     long              mask,
-				     void             *cb_data);
-
 void              xsettings_setting_free          (XSettingsSetting    *setting);
 int               xsettings_setting_equal         (XSettingsSetting    *setting_a,
 					           XSettingsSetting    *setting_b);
 
-XSettingsClient *xsettings_client_new             (GdkScreen           *screen,
-						   XSettingsNotifyFunc  notify,
-						   XSettingsWatchFunc   watch,
-						   void                *cb_data);
+XSettingsClient *xsettings_client_new             (GdkScreen           *screen);
 void             xsettings_client_destroy         (XSettingsClient     *client);
-Bool             xsettings_client_process_event   (XSettingsClient     *client,
-						   XEvent              *xev);
 const XSettingsSetting *
                  xsettings_client_get_setting     (XSettingsClient     *client,
 						   const char          *name);

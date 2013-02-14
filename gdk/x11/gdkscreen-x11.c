@@ -1609,104 +1609,6 @@ gdk_x11_screen_supports_net_wm_hint (GdkScreen *screen,
   return FALSE;
 }
 
-static GdkFilterReturn
-gdk_xsettings_client_event_filter (GdkXEvent *xevent,
-				   GdkEvent  *event,
-				   gpointer   data)
-{
-  GdkX11Screen *screen = data;
-
-  if (xsettings_client_process_event (screen->xsettings_client, (XEvent *)xevent))
-    return GDK_FILTER_REMOVE;
-  else
-    return GDK_FILTER_CONTINUE;
-}
-
-static Bool
-gdk_xsettings_watch_cb (Window   window,
-			Bool	 is_start,
-			long     mask,
-			void    *cb_data)
-{
-  GdkWindow *gdkwin;
-  GdkScreen *screen = cb_data;
-
-  gdkwin = gdk_x11_window_lookup_for_display (gdk_screen_get_display (screen), window);
-
-  if (is_start)
-    {
-      if (gdkwin)
-	g_object_ref (gdkwin);
-      else
-	{
-	  gdkwin = gdk_x11_window_foreign_new_for_display (gdk_screen_get_display (screen), window);
-	  
-	  /* gdk_window_foreign_new_for_display() can fail and return NULL if the
-	   * window has already been destroyed.
-	   */
-	  if (!gdkwin)
-	    return False;
-	}
-
-      gdk_window_add_filter (gdkwin, gdk_xsettings_client_event_filter, screen);
-    }
-  else
-    {
-      if (!gdkwin)
-	{
-	  /* gdkwin should not be NULL here, since if starting the watch succeeded
-	   * we have a reference on the window. It might mean that the caller didn't
-	   * remove the watch when it got a DestroyNotify event. Or maybe the
-	   * caller ignored the return value when starting the watch failed.
-	   */
-	  g_warning ("gdk_xsettings_watch_cb(): Couldn't find window to unwatch");
-	  return False;
-	}
-      
-      gdk_window_remove_filter (gdkwin, gdk_xsettings_client_event_filter, screen);
-      g_object_unref (gdkwin);
-    }
-
-  return True;
-}
-
-static void
-gdk_xsettings_notify_cb (const char       *name,
-			 XSettingsAction   action,
-			 XSettingsSetting *setting,
-			 void             *data)
-{
-  GdkEvent new_event;
-  GdkScreen *screen = data;
-  GdkX11Screen *x11_screen = data;
-
-  if (x11_screen->xsettings_in_init)
-    return;
-  
-  new_event.type = GDK_SETTING;
-  new_event.setting.window = gdk_screen_get_root_window (screen);
-  new_event.setting.send_event = FALSE;
-  new_event.setting.name = (char*) gdk_from_xsettings_name (name);
-
-  if (!new_event.setting.name)
-    return;
-  
-  switch (action)
-    {
-    case XSETTINGS_ACTION_NEW:
-      new_event.setting.action = GDK_SETTING_ACTION_NEW;
-      break;
-    case XSETTINGS_ACTION_CHANGED:
-      new_event.setting.action = GDK_SETTING_ACTION_CHANGED;
-      break;
-    case XSETTINGS_ACTION_DELETED:
-      new_event.setting.action = GDK_SETTING_ACTION_DELETED;
-      break;
-    }
-
-  gdk_event_put (&new_event);
-}
-
 void
 _gdk_x11_screen_init_events (GdkScreen *screen)
 {
@@ -1715,10 +1617,7 @@ _gdk_x11_screen_init_events (GdkScreen *screen)
   /* Keep a flag to avoid extra notifies that we don't need
    */
   x11_screen->xsettings_in_init = TRUE;
-  x11_screen->xsettings_client = xsettings_client_new (screen,
-						       gdk_xsettings_notify_cb,
-						       gdk_xsettings_watch_cb,
-						       screen);
+  x11_screen->xsettings_client = xsettings_client_new (screen);
   x11_screen->xsettings_in_init = FALSE;
 }
 
