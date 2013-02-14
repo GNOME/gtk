@@ -34,6 +34,28 @@ usage (void)
 	   );
 }
 
+static void
+icon_loaded_cb (GObject *source_object,
+		GAsyncResult *res,
+		gpointer user_data)
+{
+  GdkPixbuf *pixbuf;
+  GError *error;
+
+  error = NULL;
+  pixbuf = gtk_icon_info_load_icon_finish (GTK_ICON_INFO (source_object),
+					   res, &error);
+
+  if (pixbuf == NULL)
+    {
+      g_print ("%s\n", error->message);
+      exit (1);
+    }
+
+  gtk_image_set_from_pixbuf (GTK_IMAGE (user_data), pixbuf);
+  g_object_unref (pixbuf);
+}
+
 
 int
 main (int argc, char *argv[])
@@ -101,6 +123,45 @@ main (int argc, char *argv[])
                         G_CALLBACK (gtk_main_quit), window);
       gtk_widget_show_all (window);
       
+      gtk_main ();
+    }
+  else if (strcmp (argv[1], "display-async") == 0)
+    {
+      GtkWidget *window, *image;
+      GtkIconSize size;
+      GtkIconInfo *info;
+
+      if (argc < 4)
+	{
+	  g_object_unref (icon_theme);
+	  usage ();
+	  return 1;
+	}
+
+      if (argc >= 5)
+	size = atoi (argv[4]);
+      else
+	size = GTK_ICON_SIZE_BUTTON;
+
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      image = gtk_image_new ();
+      gtk_container_add (GTK_CONTAINER (window), image);
+      g_signal_connect (window, "delete-event",
+                        G_CALLBACK (gtk_main_quit), window);
+      gtk_widget_show_all (window);
+
+      info = gtk_icon_theme_lookup_icon (icon_theme, argv[3], size,
+                                         GTK_ICON_LOOKUP_USE_BUILTIN);
+
+      if (info == NULL)
+	{
+          g_print ("Icon not found\n");
+          return 1;
+	}
+
+      gtk_icon_info_load_icon_async (info,
+				     NULL, icon_loaded_cb, image);
+
       gtk_main ();
     }
   else if (strcmp (argv[1], "list") == 0)

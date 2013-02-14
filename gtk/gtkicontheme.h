@@ -203,6 +203,15 @@ const gchar *         gtk_icon_info_get_filename       (GtkIconInfo   *icon_info
 GdkPixbuf *           gtk_icon_info_get_builtin_pixbuf (GtkIconInfo   *icon_info);
 GdkPixbuf *           gtk_icon_info_load_icon          (GtkIconInfo   *icon_info,
 							GError       **error);
+GDK_AVAILABLE_IN_3_8
+void                  gtk_icon_info_load_icon_async   (GtkIconInfo          *icon_info,
+						       GCancellable         *cancellable,
+						       GAsyncReadyCallback   callback,
+						       gpointer              user_data);
+GDK_AVAILABLE_IN_3_8
+GdkPixbuf *           gtk_icon_info_load_icon_finish  (GtkIconInfo          *icon_info,
+						       GAsyncResult         *res,
+						       GError              **error);
 GdkPixbuf *           gtk_icon_info_load_symbolic      (GtkIconInfo   *icon_info,
                                                         const GdkRGBA *fg,
                                                         const GdkRGBA *success_color,

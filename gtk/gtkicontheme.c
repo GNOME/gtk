@@ -350,6 +350,7 @@ static void         do_theme_change   (GtkIconTheme     *icon_theme);
 static void     blow_themes               (GtkIconTheme    *icon_themes);
 static gboolean rescan_themes             (GtkIconTheme    *icon_themes);
 
+static GtkIconData *icon_data_dup      (GtkIconData     *icon_data);
 static void  icon_data_free            (GtkIconData     *icon_data);
 static void load_icon_data             (IconThemeDir    *dir,
 			                const char      *path,
@@ -2972,6 +2973,26 @@ icon_data_free (GtkIconData *icon_data)
   g_slice_free (GtkIconData, icon_data);
 }
 
+static GtkIconData *
+icon_data_dup (GtkIconData *icon_data)
+{
+  GtkIconData *dup = NULL;
+  if (icon_data)
+    {
+      dup = g_slice_new0 (GtkIconData);
+      *dup = *icon_data;
+      if (dup->n_attach_points > 0)
+	{
+	  dup->attach_points = g_memdup (dup->attach_points,
+					 sizeof (GdkPoint) * dup->n_attach_points);
+	}
+      dup->display_name = g_strdup (dup->display_name);
+    }
+
+  return dup;
+}
+
+
 /*
  * GtkIconInfo
  */
@@ -2990,6 +3011,45 @@ static GtkIconInfo *
 icon_info_new (void)
 {
   return g_object_new (GTK_TYPE_ICON_INFO, NULL);
+}
+
+/* This only copies whatever is needed to load the pixbuf, so that we can do
+ * a load in a thread without affecting the original IconInfo from the thread.
+ */
+static GtkIconInfo *
+icon_info_dup (GtkIconInfo *icon_info)
+{
+  GtkIconInfo *dup;
+  GSList *l;
+
+  dup = icon_info_new ();
+
+  dup->filename = g_strdup (icon_info->filename);
+  if (icon_info->icon_file)
+    dup->icon_file = g_object_ref (icon_info->icon_file);
+  if (icon_info->loadable)
+    dup->loadable = g_object_ref (icon_info->loadable);
+
+  for (l = icon_info->emblem_infos; l != NULL; l = l->next)
+    {
+      dup->emblem_infos =
+	g_slist_append (dup->emblem_infos,
+			icon_info_dup (l->data));
+    }
+
+  if (icon_info->cache_pixbuf)
+    dup->cache_pixbuf = g_object_ref (icon_info->cache_pixbuf);
+
+  dup->data = icon_data_dup (icon_info->data);
+  dup->dir_type = icon_info->dir_type;
+  dup->dir_size = icon_info->dir_size;
+  dup->threshold = icon_info->threshold;
+  dup->desired_size = icon_info->desired_size;
+  dup->raw_coordinates = icon_info->raw_coordinates;
+  dup->forced_size = icon_info->forced_size;
+  dup->emblems_applied = icon_info->emblems_applied;
+
+  return dup;
 }
 
 static GtkIconInfo *
@@ -3236,6 +3296,21 @@ apply_emblems (GtkIconInfo *info)
     }
 
   info->emblems_applied = TRUE;
+}
+
+/* If this returns TRUE, its safe to call
+   icon_info_ensure_scale_and_pixbuf without blocking */
+static gboolean
+icon_info_get_pixbuf_ready (GtkIconInfo *icon_info)
+{
+  if (icon_info->pixbuf &&
+      (icon_info->emblem_infos == NULL || icon_info->emblems_applied))
+    return TRUE;
+
+  if (icon_info->load_error)
+    return TRUE;
+
+  return FALSE;
 }
 
 /* This function contains the complicated logic for deciding
@@ -3502,6 +3577,119 @@ gtk_icon_info_load_icon (GtkIconInfo *icon_info,
 			      gtk_icon_info_copy (icon_info));
 
   return icon_info->proxy_pixbuf;
+}
+
+static void
+load_icon_thread  (GTask           *task,
+		   gpointer         source_object,
+		   gpointer         task_data,
+		   GCancellable    *cancellable)
+{
+  GtkIconInfo *dup = task_data;
+
+  icon_info_ensure_scale_and_pixbuf (dup, FALSE);
+  g_task_return_pointer (task, NULL, NULL);
+}
+
+/**
+ * gtk_icon_info_load_icon_async:
+ * @icon_info: a #GtkIconInfo structure from gtk_icon_theme_lookup_icon()
+ * @cancellable: (allow-none): optional #GCancellable object,
+ *     %NULL to ignore
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the
+ *     request is satisfied
+ * @user_data: (closure): the data to pass to callback function
+ *
+ * Asynchronously load, render and scale an icon previously looked up
+ * from the icon theme using gtk_icon_theme_lookup_icon().
+ *
+ * For more details, see gtk_icon_info_load_icon() which is the synchronous
+ * version of this call.
+ *
+ * Since: 3.8
+ **/
+void
+gtk_icon_info_load_icon_async (GtkIconInfo          *icon_info,
+			       GCancellable         *cancellable,
+			       GAsyncReadyCallback   callback,
+			       gpointer              user_data)
+{
+  GTask *task;
+  GdkPixbuf *pixbuf;
+  GtkIconInfo *dup;
+  GError *error = NULL;
+
+  task = g_task_new (icon_info, cancellable, callback, user_data);
+
+  if (icon_info_get_pixbuf_ready (icon_info))
+    {
+      pixbuf = gtk_icon_info_load_icon (icon_info, &error);
+      if (pixbuf == NULL)
+	g_task_return_error (task, error);
+      else
+	g_task_return_pointer (task, pixbuf, g_object_unref);
+      g_object_unref (task);
+    }
+  else
+    {
+      dup = icon_info_dup (icon_info);
+      g_task_set_task_data (task, dup, g_object_unref);
+      g_task_run_in_thread (task, load_icon_thread);
+      g_object_unref (task);
+    }
+}
+
+/**
+ * gtk_icon_info_load_icon_finish:
+ * @icon_info: a #GtkIconInfo structure from gtk_icon_theme_lookup_icon()
+ * @res: a #GAsyncResult
+ * @error: (allow-none): location to store error information on failure,
+ *     or %NULL.
+ *
+ * Finishes an async icon load, see gtk_icon_info_load_icon_async().
+ *
+ * Return value: (transfer full): the rendered icon; this may be a newly
+ *     created icon or a new reference to an internal icon, so you must
+ *     not modify the icon. Use g_object_unref() to release your reference
+ *     to the icon.
+ *
+ * Since: 3.8
+ **/
+GdkPixbuf *
+gtk_icon_info_load_icon_finish (GtkIconInfo          *icon_info,
+				GAsyncResult         *result,
+				GError              **error)
+{
+  GTask *task = G_TASK (result);
+  GtkIconInfo *dup;
+
+  g_return_val_if_fail (g_task_is_valid (result, icon_info), NULL);
+
+  dup = g_task_get_task_data (task);
+  if (dup == NULL || g_task_had_error (task))
+    return g_task_propagate_pointer (task, error);
+
+  /* We ran the thread and it was not cancelled */
+
+  /* Check if someone else updated the icon_info in between */
+  if (!icon_info_get_pixbuf_ready (icon_info))
+    {
+      /* If not, copy results from dup back to icon_info */
+
+      icon_info->emblems_applied = dup->emblems_applied;
+      icon_info->scale = dup->scale;
+      g_clear_object (&icon_info->pixbuf);
+      if (dup->pixbuf)
+	icon_info->pixbuf = g_object_ref (dup->pixbuf);
+      g_clear_error (&icon_info->load_error);
+      if (dup->load_error)
+	icon_info->load_error = g_error_copy (dup->load_error);
+    }
+
+  g_assert (icon_info_get_pixbuf_ready (icon_info));
+
+  /* This is now guaranteed to not block */
+  return gtk_icon_info_load_icon (icon_info, error);
 }
 
 static gchar *
