@@ -4694,6 +4694,9 @@ gtk_widget_connect_frame_clock (GtkWidget     *widget,
 {
   GtkWidgetPrivate *priv = widget->priv;
 
+  if (GTK_IS_CONTAINER (widget))
+    _gtk_container_maybe_start_idle_sizer (GTK_CONTAINER (widget));
+
   if (priv->tick_callbacks != NULL)
     {
       g_signal_connect (frame_clock, "update",
@@ -4712,6 +4715,9 @@ gtk_widget_disconnect_frame_clock (GtkWidget     *widget,
                                    GdkFrameClock *frame_clock)
 {
   GtkWidgetPrivate *priv = widget->priv;
+
+  if (GTK_IS_CONTAINER (widget))
+    _gtk_container_stop_idle_sizer (GTK_CONTAINER (widget));
 
   if (priv->tick_callbacks)
     g_signal_handlers_disconnect_by_func (frame_clock,
@@ -4801,9 +4807,6 @@ gtk_widget_realize (GtkWidget *widget)
 
       _gtk_widget_enable_device_events (widget);
       gtk_widget_update_devices_mask (widget, TRUE);
-
-      if (GTK_IS_CONTAINER (widget))
-        _gtk_container_maybe_start_idle_sizer (GTK_CONTAINER (widget));
 
       gtk_widget_connect_frame_clock (widget,
                                       gtk_widget_get_frame_clock (widget));
