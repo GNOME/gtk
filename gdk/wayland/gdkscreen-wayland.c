@@ -67,6 +67,7 @@ struct _GdkWaylandScreenClass
 
 struct _GdkWaylandMonitor
 {
+  struct wl_output *output;
   GdkRectangle  geometry;
   int		width_mm;
   int		height_mm;
@@ -589,6 +590,7 @@ _gdk_wayland_screen_add_output (GdkScreen *screen,
   GdkWaylandScreen *screen_wayland = GDK_WAYLAND_SCREEN (screen);
   GdkWaylandMonitor *monitor = g_new0(GdkWaylandMonitor, 1);
 
+  monitor->output = output;
   g_ptr_array_add(screen_wayland->monitors, monitor);
 
   wl_output_add_listener(output, &output_listener, monitor);
