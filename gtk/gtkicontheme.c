@@ -3885,7 +3885,7 @@ _gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
       icon_info->symbolic_pixbuf_cache =
 	symbolic_pixbuf_cache_new (pixbuf, fg, success_color, warning_color, error_color,
 				   icon_info->symbolic_pixbuf_cache);
-
+      g_object_unref (pixbuf);
       return symbolic_cache_get_proxy (icon_info->symbolic_pixbuf_cache, icon_info);
     }
 
