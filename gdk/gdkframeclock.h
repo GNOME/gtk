@@ -50,7 +50,7 @@ typedef struct _GdkFrameClockClass         GdkFrameClockClass;
  * GdkFrameClockPhase:
  * @GDK_FRAME_CLOCK_PHASE_NONE: no phase
  * @GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS: corresponds to GdkFrameClock::flush-events. Should not be handled by applications.
- * @GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT: corresponds to GdkFrameClock::flush-events. Should not be handled by applications.
+ * @GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT: corresponds to GdkFrameClock::before-paint. Should not be handled by applications.
  * @GDK_FRAME_CLOCK_PHASE_UPDATE: corresponds to GdkFrameClock::update.
  * @GDK_FRAME_CLOCK_PHASE_LAYOUT: corresponds to GdkFrameClock::layout.
  * @GDK_FRAME_CLOCK_PHASE_PAINT: corresponds to GdkFrameClock::paint.
@@ -61,7 +61,7 @@ typedef struct _GdkFrameClockClass         GdkFrameClockClass;
  * phases that can be requested. The element of the enumeration
  * correspond to the signals of #GdkPaintClock.
  *
- * Since: 3.4
+ * Since: 3.8
  **/
 typedef enum {
   GDK_FRAME_CLOCK_PHASE_NONE          = 0,

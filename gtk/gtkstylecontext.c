@@ -2676,7 +2676,8 @@ gtk_style_context_set_frame_clock (GtkStyleContext *context,
  *
  * Returns the #GdkFrameClock to which @context is attached.
  *
- * Returns: (transfer none): a #GdkFrameClock.
+ * Returns: (transfer none): a #GdkFrameClock, or %NULL
+ *  if @context does not have an attached frame clock.
  * Since: 3.8
  **/
 GdkFrameClock *
