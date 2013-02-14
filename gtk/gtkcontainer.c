@@ -1362,13 +1362,6 @@ gtk_container_destroy (GtkWidget *widget)
   if (priv->restyle_pending)
     priv->restyle_pending = FALSE;
 
-  if (priv->resize_handler)
-    {
-      g_signal_handler_disconnect (priv->resize_clock, priv->resize_handler);
-      priv->resize_handler = 0;
-      priv->resize_clock = NULL;
-    }
-
   if (priv->focus_child)
     {
       g_object_unref (priv->focus_child);
@@ -1680,9 +1673,7 @@ gtk_container_idle_sizer (GdkFrameClock *clock,
 
   if (!container->priv->restyle_pending && !container->priv->resize_pending)
     {
-      g_signal_handler_disconnect (clock, container->priv->resize_handler);
-      container->priv->resize_handler = 0;
-      container->priv->resize_clock = NULL;
+      _gtk_container_stop_idle_sizer (container);
     }
   else
     {
@@ -1708,6 +1699,18 @@ gtk_container_start_idle_sizer (GtkContainer *container)
 						      G_CALLBACK (gtk_container_idle_sizer), container);
   gdk_frame_clock_request_phase (clock,
                                  GDK_FRAME_CLOCK_PHASE_LAYOUT);
+}
+
+void
+_gtk_container_stop_idle_sizer (GtkContainer *container)
+{
+  if (container->priv->resize_handler == 0)
+    return;
+
+  g_signal_handler_disconnect (container->priv->resize_clock,
+                               container->priv->resize_handler);
+  container->priv->resize_handler = 0;
+  container->priv->resize_clock = NULL;
 }
 
 static void
