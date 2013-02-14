@@ -219,10 +219,35 @@ GdkPixbuf *           gtk_icon_info_load_symbolic      (GtkIconInfo   *icon_info
                                                         const GdkRGBA *error_color,
                                                         gboolean      *was_symbolic,
                                                         GError       **error);
+GDK_AVAILABLE_IN_3_8
+void                  gtk_icon_info_load_symbolic_async (GtkIconInfo   *icon_info,
+							 const GdkRGBA *fg,
+							 const GdkRGBA *success_color,
+							 const GdkRGBA *warning_color,
+							 const GdkRGBA *error_color,
+							 GCancellable         *cancellable,
+							 GAsyncReadyCallback   callback,
+							 gpointer              user_data);
+GDK_AVAILABLE_IN_3_8
+GdkPixbuf *           gtk_icon_info_load_symbolic_finish (GtkIconInfo   *icon_info,
+							  GAsyncResult         *res,
+							  gboolean      *was_symbolic,
+							  GError       **error);
 GdkPixbuf *           gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,
                                                                GtkStyleContext  *context,
                                                                gboolean         *was_symbolic,
                                                                GError          **error);
+GDK_AVAILABLE_IN_3_8
+void                  gtk_icon_info_load_symbolic_for_context_async (GtkIconInfo      *icon_info,
+								     GtkStyleContext  *context,
+								     GCancellable     *cancellable,
+								     GAsyncReadyCallback callback,
+								     gpointer          user_data);
+GDK_AVAILABLE_IN_3_8
+GdkPixbuf *           gtk_icon_info_load_symbolic_for_context_finish (GtkIconInfo      *icon_info,
+								      GAsyncResult     *res,
+								      gboolean         *was_symbolic,
+								      GError          **error);
 GDK_DEPRECATED_IN_3_0_FOR(gtk_icon_info_load_symbol_for_context)
 GdkPixbuf *           gtk_icon_info_load_symbolic_for_style  (GtkIconInfo   *icon_info,
                                                               GtkStyle      *style,
