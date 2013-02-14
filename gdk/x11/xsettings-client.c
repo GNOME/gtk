@@ -59,7 +59,7 @@ struct _XSettingsClient
   Atom selection_atom;
   Atom xsettings_atom;
 
-  GHashTable *settings; /* string => XSettingsSetting */
+  GHashTable *settings; /* string of GDK settings name => XSettingsSetting */
 };
 
 static void
@@ -78,10 +78,7 @@ gdk_xsettings_notify (const char       *name,
   new_event.setting.window = gdk_screen_get_root_window (screen);
   new_event.setting.send_event = FALSE;
   new_event.setting.action = action;
-  new_event.setting.name = (char*) gdk_from_xsettings_name (name);
-
-  if (!new_event.setting.name)
-    return;
+  new_event.setting.name = (char*) name;
 
   gdk_event_put (&new_event);
 }
@@ -230,7 +227,8 @@ parse_settings (unsigned char *data,
   CARD32 n_entries;
   CARD32 i;
   XSettingsSetting *setting = NULL;
-  char *name;
+  char *x_name = NULL;
+  const char *gdk_name;
   
   buffer.pos = buffer.data = data;
   buffer.len = len;
@@ -270,7 +268,7 @@ parse_settings (unsigned char *data,
       setting = g_new (XSettingsSetting, 1);
       setting->type = XSETTINGS_TYPE_INT; /* No allocated memory */
 
-      if (!fetch_string (&buffer, name_len, &name) ||
+      if (!fetch_string (&buffer, name_len, &x_name) ||
           /* last change serial (we ignore it) */
           !fetch_card32 (&buffer, &v_int))
 	goto out;
@@ -282,14 +280,14 @@ parse_settings (unsigned char *data,
 	    goto out;
 
 	  setting->data.v_int = (INT32)v_int;
-          GDK_NOTE(SETTINGS, g_print("  %s = %d\n", name, (gint) setting->data.v_int));
+          GDK_NOTE(SETTINGS, g_print("  %s = %d\n", x_name, (gint) setting->data.v_int));
 	  break;
 	case XSETTINGS_TYPE_STRING:
 	  if (!fetch_card32 (&buffer, &v_int) ||
               !fetch_string (&buffer, v_int, &setting->data.v_string))
 	    goto out;
 	  
-          GDK_NOTE(SETTINGS, g_print("  %s = \"%s\"\n", name, setting->data.v_string));
+          GDK_NOTE(SETTINGS, g_print("  %s = \"%s\"\n", x_name, setting->data.v_string));
 	  break;
 	case XSETTINGS_TYPE_COLOR:
 	  if (!fetch_ushort (&buffer, &setting->data.v_color.red) ||
@@ -298,32 +296,45 @@ parse_settings (unsigned char *data,
 	      !fetch_ushort (&buffer, &setting->data.v_color.alpha))
 	    goto out;
 
-          GDK_NOTE(SETTINGS, g_print("  %s = #%02X%02X%02X%02X\n", name, 
+          GDK_NOTE(SETTINGS, g_print("  %s = #%02X%02X%02X%02X\n", x_name, 
                                  setting->data.v_color.alpha, setting->data.v_color.red,
                                  setting->data.v_color.green, setting->data.v_color.blue));
 	  break;
 	default:
 	  /* Quietly ignore unknown types */
-          GDK_NOTE(SETTINGS, g_print("  %s = ignored (unknown type %u)\n", name, type));
+          GDK_NOTE(SETTINGS, g_print("  %s = ignored (unknown type %u)\n", x_name, type));
 	  break;
 	}
 
       setting->type = type;
 
-      if (settings == NULL)
-        settings = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                          g_free,
-                                          (GDestroyNotify) xsettings_setting_free);
+      gdk_name = gdk_from_xsettings_name (x_name);
+      g_free (x_name);
+      x_name = NULL;
 
-      if (g_hash_table_lookup (settings, name) != NULL)
+      if (gdk_name == NULL)
         {
-	  g_warning ("Invalid XSETTINGS property (Duplicate entry for '%s')", name);
-          goto out;
+          GDK_NOTE(SETTINGS, g_print("    ==> unknown to GTK\n"));
+        }
+      else
+        {
+          GDK_NOTE(SETTINGS, g_print("    ==> storing as '%s'\n", gdk_name));
+
+          if (settings == NULL)
+            settings = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                              NULL,
+                                              (GDestroyNotify) xsettings_setting_free);
+
+          if (g_hash_table_lookup (settings, gdk_name) != NULL)
+            {
+              g_warning ("Invalid XSETTINGS property (Duplicate entry for '%s')", gdk_name);
+              goto out;
+            }
+
+          g_hash_table_insert (settings, (gpointer) gdk_name, setting);
         }
 
-      g_hash_table_insert (settings, name, setting);
       setting = NULL;
-      name = NULL;
     }
 
   return settings;
@@ -335,6 +346,8 @@ parse_settings (unsigned char *data,
 
   if (settings)
     g_hash_table_unref (settings);
+
+  g_free (x_name);
 
   return NULL;
 }

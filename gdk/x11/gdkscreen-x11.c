@@ -47,8 +47,6 @@
 #include <X11/extensions/Xfixes.h>
 #endif
 
-#include "gdksettings.c"
-
 static void         gdk_x11_screen_dispose     (GObject		  *object);
 static void         gdk_x11_screen_finalize    (GObject		  *object);
 static void	    init_randr_support	       (GdkScreen	  *screen);
@@ -1352,23 +1350,18 @@ gdk_x11_screen_get_setting (GdkScreen   *screen,
 			    GValue      *value)
 {
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
-  const char *xsettings_name = NULL;
   const XSettingsSetting *setting;
   gboolean success = FALSE;
   GValue tmp_val = G_VALUE_INIT;
 
-  xsettings_name = gdk_to_xsettings_name (name);
-  if (!xsettings_name)
-    goto out;
-
-  setting = xsettings_client_get_setting (x11_screen->xsettings_client, xsettings_name);
+  setting = xsettings_client_get_setting (x11_screen->xsettings_client, name);
   if (setting == NULL)
     goto out;
 
   switch (setting->type)
     {
     case XSETTINGS_TYPE_INT:
-      if (check_transform (xsettings_name, G_TYPE_INT, G_VALUE_TYPE (value)))
+      if (check_transform (name, G_TYPE_INT, G_VALUE_TYPE (value)))
 	{
 	  g_value_init (&tmp_val, G_TYPE_INT);
 	  g_value_set_int (&tmp_val, setting->data.v_int);
@@ -1378,7 +1371,7 @@ gdk_x11_screen_get_setting (GdkScreen   *screen,
 	}
       break;
     case XSETTINGS_TYPE_STRING:
-      if (check_transform (xsettings_name, G_TYPE_STRING, G_VALUE_TYPE (value)))
+      if (check_transform (name, G_TYPE_STRING, G_VALUE_TYPE (value)))
 	{
 	  g_value_init (&tmp_val, G_TYPE_STRING);
 	  g_value_set_string (&tmp_val, setting->data.v_string);
@@ -1388,7 +1381,7 @@ gdk_x11_screen_get_setting (GdkScreen   *screen,
 	}
       break;
     case XSETTINGS_TYPE_COLOR:
-      if (!check_transform (xsettings_name, GDK_TYPE_RGBA, G_VALUE_TYPE (value)))
+      if (!check_transform (name, GDK_TYPE_RGBA, G_VALUE_TYPE (value)))
 	{
 	  GdkRGBA rgba;
 
