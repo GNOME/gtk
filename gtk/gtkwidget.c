@@ -27,6 +27,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <locale.h>
+#include <math.h>
 
 #include <gobject/gvaluecollector.h>
 #include <gobject/gobjectnotifyqueue.c>
@@ -35,12 +36,15 @@
 #include "gtkcontainer.h"
 #include "gtkaccelmapprivate.h"
 #include "gtkclipboard.h"
+#include "gtkcssstylepropertyprivate.h"
+#include "gtkcssnumbervalueprivate.h"
 #include "gtkiconfactory.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkselectionprivate.h"
 #include "gtksettingsprivate.h"
 #include "gtksizegroup-private.h"
+#include "gtksizerequestcacheprivate.h"
 #include "gtkwidget.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
@@ -54,7 +58,6 @@
 #include "gtkbuilderprivate.h"
 #include "gtksizerequest.h"
 #include "gtkstylecontextprivate.h"
-#include "gtksymboliccolor.h"
 #include "gtkcssprovider.h"
 #include "gtkmodifierstyle.h"
 #include "gtkversion.h"
@@ -271,7 +274,7 @@
  *   </accessibility>
  *   <child internal-child="accessible">
  *     <object class="AtkObject" id="a11y-button1">
- *       <property name="AtkObject::name">Clickable Button</property>
+ *       <property name="accessible-name">Clickable Button</property>
  *     </object>
  *   </child>
  * </object>
@@ -299,12 +302,12 @@
  * all flags will be set on children (think prelight or active), but we
  * might want to not do this for some.
  */
-#define GTK_STATE_FLAGS_DONT_PROPAGATE (GTK_STATE_FLAG_FOCUSED)
+#define GTK_STATE_FLAGS_DONT_PROPAGATE (GTK_STATE_FLAG_FOCUSED | GTK_STATE_FLAG_DIR_LTR | GTK_STATE_FLAG_DIR_RTL)
 #define GTK_STATE_FLAGS_DO_PROPAGATE (~GTK_STATE_FLAGS_DONT_PROPAGATE)
 
 #define WIDGET_CLASS(w)	 GTK_WIDGET_GET_CLASS (w)
 
-#define GTK_STATE_FLAGS_BITS 7
+#define GTK_STATE_FLAGS_BITS 9
 
 struct _GtkWidgetPrivate
 {
@@ -343,8 +346,6 @@ struct _GtkWidgetPrivate
 
   /* Queue-resize related flags */
   guint alloc_needed          : 1;
-  guint width_request_needed  : 1;
-  guint height_request_needed : 1;
 
   /* Expand-related flags */
   guint need_compute_expand   : 1; /* Need to recompute computed_[hv]_expand */
@@ -356,9 +357,14 @@ struct _GtkWidgetPrivate
   guint vexpand_set           : 1; /* instead of computing from children */
 
   /* SizeGroup related flags */
-  guint sizegroup_visited     : 1;
-  guint sizegroup_bumping     : 1;
   guint have_size_groups      : 1;
+
+  guint opacity_group         : 1;
+  guint norender_children     : 1;
+  guint norender              : 1; /* Don't expose windows, instead recurse via draw */
+
+  guint8 alpha;
+  guint8 user_alpha;
 
   /* The widget's name. If the widget does not have a name
    * (the name is NULL), then its name (as returned by
@@ -398,6 +404,7 @@ struct _GtkWidgetPrivate
    * GTK_NO_WINDOW flag being set).
    */
   GdkWindow *window;
+  GList *registered_windows;
 
   /* The widget's parent */
   GtkWidget *parent;
@@ -510,6 +517,7 @@ enum {
   PROP_TOOLTIP_MARKUP,
   PROP_TOOLTIP_TEXT,
   PROP_WINDOW,
+  PROP_OPACITY,
   PROP_DOUBLE_BUFFERED,
   PROP_HALIGN,
   PROP_VALIGN,
@@ -527,16 +535,10 @@ enum {
 
 typedef	struct	_GtkStateData	 GtkStateData;
 
-enum {
-  STATE_CHANGE_REPLACE,
-  STATE_CHANGE_SET,
-  STATE_CHANGE_UNSET
-};
-
 struct _GtkStateData
 {
-  guint         flags : GTK_STATE_FLAGS_BITS;
-  guint         operation : 2;
+  guint         flags_to_set;
+  guint         flags_to_unset;
 };
 
 /* --- prototypes --- */
@@ -611,7 +613,8 @@ static PangoContext*	gtk_widget_peek_pango_context		(GtkWidget	  *widget);
 static void     	gtk_widget_update_pango_context		(GtkWidget	  *widget);
 static void		gtk_widget_propagate_state		(GtkWidget	  *widget,
 								 GtkStateData 	  *data);
-;
+static void             gtk_widget_update_alpha                 (GtkWidget        *widget);
+
 static gint		gtk_widget_event_internal		(GtkWidget	  *widget,
 								 GdkEvent	  *event);
 static gboolean		gtk_widget_real_mnemonic_activate	(GtkWidget	  *widget,
@@ -708,6 +711,9 @@ static void gtk_widget_set_device_enabled_internal (GtkWidget *widget,
                                                     gboolean   recurse,
                                                     gboolean   enabled);
 static gboolean event_window_is_still_viewable (GdkEvent *event);
+static void gtk_cairo_set_event (cairo_t        *cr,
+				 GdkEventExpose *event);
+static void gtk_widget_propagate_alpha (GtkWidget *widget);
 
 /* --- variables --- */
 static gpointer         gtk_widget_parent_class = NULL;
@@ -817,9 +823,24 @@ gtk_widget_draw_marshaller (GClosure     *closure,
                             gpointer      invocation_hint,
                             gpointer      marshal_data)
 {
+  GtkWidget *widget = g_value_get_object (&param_values[0]);
+  GdkEventExpose *tmp_event;
+  gboolean push_group;
   cairo_t *cr = g_value_get_boxed (&param_values[1]);
 
   cairo_save (cr);
+  tmp_event = _gtk_cairo_get_event (cr);
+
+  push_group =
+    widget->priv->opacity_group ||
+    (widget->priv->alpha != 255 &&
+     (!gtk_widget_get_has_window (widget) || tmp_event == NULL));
+
+  if (push_group)
+    {
+      cairo_push_group (cr);
+      gtk_cairo_set_event (cr, NULL);
+    }
 
   _gtk_marshal_BOOLEAN__BOXED (closure,
                                return_value,
@@ -828,6 +849,15 @@ gtk_widget_draw_marshaller (GClosure     *closure,
                                invocation_hint,
                                marshal_data);
 
+
+  if (push_group)
+    {
+      cairo_pop_group_to_source (cr);
+      cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+      cairo_paint_with_alpha (cr, widget->priv->alpha / 255.0);
+    }
+
+  gtk_cairo_set_event (cr, tmp_event);
   cairo_restore (cr);
 }
 
@@ -840,6 +870,9 @@ gtk_widget_draw_marshallerv (GClosure     *closure,
 			     int           n_params,
 			     GType        *param_types)
 {
+  GtkWidget *widget = GTK_WIDGET (instance);
+  GdkEventExpose *tmp_event;
+  gboolean push_group;
   cairo_t *cr;
   va_list args_copy;
 
@@ -847,6 +880,18 @@ gtk_widget_draw_marshallerv (GClosure     *closure,
   cr = va_arg (args_copy, gpointer);
 
   cairo_save (cr);
+  tmp_event = _gtk_cairo_get_event (cr);
+
+  push_group =
+    widget->priv->opacity_group ||
+    (widget->priv->alpha != 255 &&
+     (!gtk_widget_get_has_window (widget) || tmp_event == NULL));
+
+  if (push_group)
+    {
+      cairo_push_group (cr);
+      gtk_cairo_set_event (cr, NULL);
+    }
 
   _gtk_marshal_BOOLEAN__BOXEDv (closure,
 				return_value,
@@ -856,7 +901,18 @@ gtk_widget_draw_marshallerv (GClosure     *closure,
 				n_params,
 				param_types);
 
+
+  if (push_group)
+    {
+      cairo_pop_group_to_source (cr);
+      cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+      cairo_paint_with_alpha (cr, widget->priv->alpha / 255.0);
+    }
+
+  gtk_cairo_set_event (cr, tmp_event);
   cairo_restore (cr);
+
+  va_end (args_copy);
 }
 
 static void
@@ -1427,6 +1483,25 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                                          GTK_PARAM_READWRITE));
 
   /**
+   * GtkWidget:opacity:
+   *
+   * The requested opacity of the widget. See gtk_widget_set_opacity() for
+   * more details about window opacity.
+   *
+   * Before 3.8 this was only availible in GtkWindow
+   *
+   * Since: 3.8
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_OPACITY,
+				   g_param_spec_double ("opacity",
+							P_("Opacity for Widget"),
+							P_("The opacity of the widget, from 0 to 1"),
+							0.0,
+							1.0,
+							1.0,
+							GTK_PARAM_READWRITE));
+  /**
    * GtkWidget::show:
    * @widget: the object which received the signal.
    */
@@ -1960,7 +2035,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * button press events for buttons 4 and 5 when the wheel is turned.
    *
    * To receive this signal, the #GdkWindow associated to the widget needs
-   * to enable the #GDK_BUTTON_PRESS_MASK mask.
+   * to enable the #GDK_SCROLL_MASK mask.
    *
    * This signal will be sent to the grab widget if there is one.
    *
@@ -3490,6 +3565,9 @@ gtk_widget_set_property (GObject         *object,
       gtk_widget_set_vexpand (widget, g_value_get_boolean (value));
       g_object_thaw_notify (G_OBJECT (widget));
       break;
+    case PROP_OPACITY:
+      gtk_widget_set_opacity (widget, g_value_get_double (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -3646,6 +3724,9 @@ gtk_widget_get_property (GObject         *object,
                            gtk_widget_get_hexpand (widget) &&
                            gtk_widget_get_vexpand (widget));
       break;
+    case PROP_OPACITY:
+      g_value_set_double (value, gtk_widget_get_opacity (widget));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -3668,6 +3749,8 @@ gtk_widget_init (GtkWidget *widget)
   priv->allocation.y = -1;
   priv->allocation.width = 1;
   priv->allocation.height = 1;
+  priv->user_alpha = 255;
+  priv->alpha = 255;
   priv->window = NULL;
   priv->parent = NULL;
 
@@ -3675,9 +3758,24 @@ gtk_widget_init (GtkWidget *widget)
   priv->composite_child = composite_child_stack != 0;
   priv->double_buffered = TRUE;
   priv->redraw_on_alloc = TRUE;
-  priv->width_request_needed = TRUE;
-  priv->height_request_needed = TRUE;
   priv->alloc_needed = TRUE;
+   
+  switch (gtk_widget_get_direction (widget))
+    {
+    case GTK_TEXT_DIR_LTR:
+      priv->state_flags = GTK_STATE_FLAG_DIR_LTR;
+      break;
+
+    case GTK_TEXT_DIR_RTL:
+      priv->state_flags = GTK_STATE_FLAG_DIR_RTL;
+      break;
+
+    case GTK_TEXT_DIR_NONE:
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+
 
   /* this will be set to TRUE if the widget gets a child or if the
    * expand flag is set on the widget, but until one of those happen
@@ -3687,6 +3785,8 @@ gtk_widget_init (GtkWidget *widget)
    * all over the place while initially building a widget tree.
    */
   priv->need_compute_expand = FALSE;
+
+  _gtk_size_request_cache_init (&priv->requests);
 
   priv->style = gtk_widget_get_default_style ();
   g_object_ref (priv->style);
@@ -3940,6 +4040,8 @@ gtk_widget_unparent (GtkWidget *widget)
   if (!priv->parent)
     g_object_notify_queue_clear (G_OBJECT (widget), nqueue);
   g_object_notify_queue_thaw (G_OBJECT (widget), nqueue);
+
+  gtk_widget_propagate_alpha (widget);
 
   gtk_widget_pop_verify_invariants (widget);
   g_object_unref (widget);
@@ -4807,6 +4909,9 @@ gtk_widget_size_allocate (GtkWidget	*widget,
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
+  if (!priv->visible && !gtk_widget_is_toplevel (widget))
+    return;
+
   gtk_widget_push_verify_invariants (widget);
 
 #ifdef G_ENABLE_DEBUG
@@ -4832,9 +4937,8 @@ gtk_widget_size_allocate (GtkWidget	*widget,
 #endif /* G_ENABLE_DEBUG */
 
   alloc_needed = priv->alloc_needed;
-  if (!priv->width_request_needed && !priv->height_request_needed)
-    /* Preserve request/allocate ordering */
-    priv->alloc_needed = FALSE;
+  /* Preserve request/allocate ordering */
+  priv->alloc_needed = FALSE;
 
   old_allocation = priv->allocation;
   real_allocation = *allocation;
@@ -4926,9 +5030,7 @@ gtk_widget_size_allocate (GtkWidget	*widget,
   g_signal_emit (widget, widget_signals[SIZE_ALLOCATE], 0, &real_allocation);
 
   /* Size allocation is god... after consulting god, no further requests or allocations are needed */
-  priv->width_request_needed  = FALSE;
-  priv->height_request_needed = FALSE;
-  priv->alloc_needed          = FALSE;
+  priv->alloc_needed = FALSE;
 
   if (gtk_widget_get_mapped (widget))
     {
@@ -6706,6 +6808,7 @@ gtk_widget_real_style_updated (GtkWidget *widget)
   GtkWidgetPrivate *priv = widget->priv;
 
   gtk_widget_update_pango_context (widget);
+  gtk_widget_update_alpha (widget);
 
   if (priv->style != NULL &&
       priv->style != gtk_widget_get_default_style ())
@@ -6721,15 +6824,27 @@ gtk_widget_real_style_updated (GtkWidget *widget)
 
   if (widget->priv->context)
     {
+      const GtkBitmask *changes = _gtk_style_context_get_changes (widget->priv->context);
+
       if (gtk_widget_get_realized (widget) &&
           gtk_widget_get_has_window (widget) &&
           !gtk_widget_get_app_paintable (widget))
         gtk_style_context_set_background (widget->priv->context,
                                           widget->priv->window);
-    }
 
-  if (widget->priv->anchored)
-    gtk_widget_queue_resize (widget);
+      if (widget->priv->anchored)
+        {
+          if (changes && _gtk_css_style_property_changes_affect_size (changes))
+            gtk_widget_queue_resize (widget);
+          else
+            gtk_widget_queue_draw (widget);
+        }
+    }
+  else
+    {
+      if (widget->priv->anchored)
+        gtk_widget_queue_resize (widget);
+    }
 }
 
 static gboolean
@@ -7240,9 +7355,9 @@ gtk_widget_get_name (GtkWidget *widget)
 }
 
 static void
-_gtk_widget_update_state_flags (GtkWidget     *widget,
-                                GtkStateFlags  flags,
-                                guint          operation)
+gtk_widget_update_state_flags (GtkWidget     *widget,
+                               GtkStateFlags  flags_to_set,
+                               GtkStateFlags  flags_to_unset)
 {
   GtkWidgetPrivate *priv;
 
@@ -7251,27 +7366,22 @@ _gtk_widget_update_state_flags (GtkWidget     *widget,
   /* Handle insensitive first, since it is propagated
    * differently throughout the widget hierarchy.
    */
-  if ((priv->state_flags & GTK_STATE_FLAG_INSENSITIVE) && (flags & GTK_STATE_FLAG_INSENSITIVE) && (operation == STATE_CHANGE_UNSET))
+  if ((priv->state_flags & GTK_STATE_FLAG_INSENSITIVE) && (flags_to_unset & GTK_STATE_FLAG_INSENSITIVE))
     gtk_widget_set_sensitive (widget, TRUE);
-  else if (!(priv->state_flags & GTK_STATE_FLAG_INSENSITIVE) && (flags & GTK_STATE_FLAG_INSENSITIVE) && (operation != STATE_CHANGE_UNSET))
+  else if (!(priv->state_flags & GTK_STATE_FLAG_INSENSITIVE) && (flags_to_set & GTK_STATE_FLAG_INSENSITIVE))
     gtk_widget_set_sensitive (widget, FALSE);
-  else if ((priv->state_flags & GTK_STATE_FLAG_INSENSITIVE) && !(flags & GTK_STATE_FLAG_INSENSITIVE) && (operation == STATE_CHANGE_REPLACE))
-    gtk_widget_set_sensitive (widget, TRUE);
 
-  if (operation != STATE_CHANGE_REPLACE)
-    flags &= ~(GTK_STATE_FLAG_INSENSITIVE);
+  flags_to_set &= ~(GTK_STATE_FLAG_INSENSITIVE);
+  flags_to_unset &= ~(GTK_STATE_FLAG_INSENSITIVE);
 
-  if (flags != 0 ||
-      operation == STATE_CHANGE_REPLACE)
+  if (flags_to_set != 0 || flags_to_unset != 0)
     {
       GtkStateData data;
 
-      data.flags = flags;
-      data.operation = operation;
+      data.flags_to_set = flags_to_set;
+      data.flags_to_unset = flags_to_unset;
 
       gtk_widget_propagate_state (widget, &data);
-
-      gtk_widget_queue_resize (widget);
     }
 }
 
@@ -7305,9 +7415,9 @@ gtk_widget_set_state_flags (GtkWidget     *widget,
     return;
 
   if (clear)
-    _gtk_widget_update_state_flags (widget, flags, STATE_CHANGE_REPLACE);
+    gtk_widget_update_state_flags (widget, flags, ~(flags ^ (GTK_STATE_FLAG_DIR_LTR | GTK_STATE_FLAG_DIR_RTL)));
   else
-    _gtk_widget_update_state_flags (widget, flags, STATE_CHANGE_SET);
+    gtk_widget_update_state_flags (widget, flags, 0);
 }
 
 /**
@@ -7330,7 +7440,7 @@ gtk_widget_unset_state_flags (GtkWidget     *widget,
   if ((widget->priv->state_flags & flags) == 0)
     return;
 
-  _gtk_widget_update_state_flags (widget, flags, STATE_CHANGE_UNSET);
+  gtk_widget_update_state_flags (widget, 0, flags);
 }
 
 /**
@@ -7407,7 +7517,10 @@ gtk_widget_set_state (GtkWidget           *widget,
       break;
     }
 
-  _gtk_widget_update_state_flags (widget, flags, STATE_CHANGE_REPLACE);
+  gtk_widget_update_state_flags (widget,
+                                 flags,
+                                 (GTK_STATE_FLAG_ACTIVE | GTK_STATE_FLAG_PRELIGHT | GTK_STATE_FLAG_SELECTED
+                                 | GTK_STATE_FLAG_INSENSITIVE | GTK_STATE_FLAG_INCONSISTENT | GTK_STATE_FLAG_FOCUSED) ^ flags);
 }
 
 /**
@@ -7477,16 +7590,28 @@ void
 _gtk_widget_set_visible_flag (GtkWidget *widget,
                               gboolean   visible)
 {
-  widget->priv->visible = visible;
+  GtkWidgetPrivate *priv = widget->priv;
+
+  priv->visible = visible;
+
+  if (!visible)
+    {
+      priv->allocation.x = -1;
+      priv->allocation.y = -1;
+      priv->allocation.width = 1;
+      priv->allocation.height = 1;
+    }
 }
 
 /**
  * gtk_widget_get_visible:
  * @widget: a #GtkWidget
  *
- * Determines whether the widget is visible. Note that this doesn't
- * take into account whether the widget's parent is also visible
- * or the widget is obscured in any way.
+ * Determines whether the widget is visible. If you want to
+ * take into account whether the widget's parent is also marked as
+ * visible, use gtk_widget_is_visible() instead.
+ *
+ * This function does not check if the widget is obscured in any way.
  *
  * See gtk_widget_set_visible().
  *
@@ -7500,6 +7625,39 @@ gtk_widget_get_visible (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
   return widget->priv->visible;
+}
+
+/**
+ * gtk_widget_is_visible:
+ * @widget: a #GtkWidget
+ *
+ * Determines whether the widget and all its parents are marked as
+ * visible.
+ *
+ * This function does not check if the widget is obscured in any way.
+ *
+ * See also gtk_widget_get_visible() and gtk_widget_set_visible()
+ *
+ * Return value: %TRUE if the widget and all its parents are visible
+ *
+ * Since: 3.8
+ **/
+gboolean
+gtk_widget_is_visible (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  while (widget)
+    {
+      GtkWidgetPrivate *priv = widget->priv;
+
+      if (!priv->visible)
+        return FALSE;
+
+      widget = priv->parent;
+    }
+
+  return TRUE;
 }
 
 /**
@@ -7855,12 +8013,16 @@ gtk_widget_set_sensitive (GtkWidget *widget,
     {
       GtkStateData data;
 
-      data.flags = GTK_STATE_FLAG_INSENSITIVE;
-
       if (sensitive)
-        data.operation = STATE_CHANGE_UNSET;
+        {
+          data.flags_to_set = 0;
+          data.flags_to_unset = GTK_STATE_FLAG_INSENSITIVE;
+        }
       else
-        data.operation = STATE_CHANGE_SET;
+        {
+          data.flags_to_set = GTK_STATE_FLAG_INSENSITIVE;
+          data.flags_to_unset = 0;
+        }
 
       gtk_widget_propagate_state (widget, &data);
 
@@ -7961,10 +8123,8 @@ gtk_widget_set_parent (GtkWidget *widget,
 
   /* Merge both old state and current parent state,
    * making sure to only propagate the right states */
-  data.flags = parent_flags & GTK_STATE_FLAGS_DO_PROPAGATE;
-  data.flags |= priv->state_flags;
-
-  data.operation = STATE_CHANGE_REPLACE;
+  data.flags_to_set = parent_flags & GTK_STATE_FLAGS_DO_PROPAGATE;
+  data.flags_to_unset = 0;
   gtk_widget_propagate_state (widget, &data);
 
   if (priv->context)
@@ -8010,6 +8170,8 @@ gtk_widget_set_parent (GtkWidget *widget,
     {
       gtk_widget_queue_compute_expand (parent);
     }
+
+  gtk_widget_propagate_alpha (widget);
 
   gtk_widget_pop_verify_invariants (widget);
 }
@@ -8664,12 +8826,8 @@ gtk_widget_peek_pango_context (GtkWidget *widget)
  * by gtk_widget_create_pango_context(), this context is owned by
  * the widget (it can be used until the screen for the widget changes
  * or the widget is removed from its toplevel), and will be updated to
- * match any changes to the widget's attributes.
- *
- * If you create and keep a #PangoLayout using this context, you must
- * deal with changes to the context by calling pango_layout_context_changed()
- * on the layout in response to the #GtkWidget::style-updated and
- * #GtkWidget::direction-changed signals for the widget.
+ * match any changes to the widget's attributes. This can be tracked
+ * by using the #GtkWidget::screen-changed signal on the widget.
  *
  * Return value: (transfer none): the #PangoContext for the widget.
  **/
@@ -8697,18 +8855,21 @@ static void
 update_pango_context (GtkWidget    *widget,
 		      PangoContext *context)
 {
-  const PangoFontDescription *font_desc;
+  PangoFontDescription *font_desc;
   GtkStyleContext *style_context;
 
   style_context = gtk_widget_get_style_context (widget);
-
-  font_desc = gtk_style_context_get_font (style_context,
-                                          gtk_widget_get_state_flags (widget));
+  gtk_style_context_get (style_context,
+                         gtk_widget_get_state_flags (widget),
+                         "font", &font_desc,
+                         NULL);
 
   pango_context_set_font_description (context, font_desc);
   pango_context_set_base_dir (context,
 			      gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR ?
 			      PANGO_DIRECTION_LTR : PANGO_DIRECTION_RTL);
+
+  pango_font_description_free (font_desc);
 }
 
 static void
@@ -8777,11 +8938,10 @@ gtk_widget_create_pango_context (GtkWidget *widget)
  * font description, and base direction for drawing text for
  * this widget.
  *
- * If you keep a #PangoLayout created in this way around, in order to
- * notify the layout of changes to the base direction or font of this
- * widget, you must call pango_layout_context_changed() in response to
- * the #GtkWidget::style-updated and #GtkWidget::direction-changed signals
- * for the widget.
+ * If you keep a #PangoLayout created in this way around, you need
+ * to re-create it when the widget #PangoContext is replaced.
+ * This can be tracked by using the #GtkWidget::screen-changed signal
+ * on the widget.
  *
  * Return value: (transfer full): the new #PangoLayout
  **/
@@ -10095,11 +10255,32 @@ static void
 gtk_widget_emit_direction_changed (GtkWidget        *widget,
                                    GtkTextDirection  old_dir)
 {
+  GtkTextDirection direction;
+  GtkStateFlags state;
+
   gtk_widget_update_pango_context (widget);
 
-  if (widget->priv->context)
-    gtk_style_context_set_direction (widget->priv->context,
-                                     gtk_widget_get_direction (widget));
+  direction = gtk_widget_get_direction (widget);
+  state = widget->priv->state_flags;
+  state &= GTK_STATE_FLAG_DIR_LTR | GTK_STATE_FLAG_DIR_RTL;
+
+  switch (direction)
+    {
+    case GTK_TEXT_DIR_LTR:
+      state |= GTK_STATE_FLAG_DIR_LTR;
+      break;
+
+    case GTK_TEXT_DIR_RTL:
+      state |= GTK_STATE_FLAG_DIR_RTL;
+      break;
+
+    case GTK_TEXT_DIR_NONE:
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+
+  gtk_widget_set_state_flags (widget, state, TRUE);
 
   g_signal_emit (widget, widget_signals[DIRECTION_CHANGED], 0, old_dir);
 }
@@ -10339,7 +10520,7 @@ gtk_widget_finalize (GObject *object)
       g_object_unref (priv->context);
     }
 
-  _gtk_widget_free_cached_sizes (widget);
+  _gtk_size_request_cache_free (&priv->requests);
 
   if (g_object_is_floating (object))
     g_warning ("A floating object was finalized. This means that someone\n"
@@ -10450,7 +10631,7 @@ gtk_widget_real_unrealize (GtkWidget *widget)
 
   if (gtk_widget_get_has_window (widget))
     {
-      gdk_window_set_user_data (priv->window, NULL);
+      gtk_widget_unregister_window (widget, priv->window);
       gdk_window_destroy (priv->window);
       priv->window = NULL;
     }
@@ -10859,18 +11040,8 @@ gtk_widget_propagate_state (GtkWidget    *widget,
 
   old_state = gtk_widget_get_state (widget);
 
-  switch (data->operation)
-    {
-    case STATE_CHANGE_REPLACE:
-      priv->state_flags = data->flags;
-      break;
-    case STATE_CHANGE_SET:
-      priv->state_flags |= data->flags;
-      break;
-    case STATE_CHANGE_UNSET:
-      priv->state_flags &= ~(data->flags);
-      break;
-    }
+  priv->state_flags |= data->flags_to_set;
+  priv->state_flags &= ~(data->flags_to_unset);
 
   /* make insensitivity unoverridable */
   if (!priv->sensitive)
@@ -10939,10 +11110,11 @@ gtk_widget_propagate_state (GtkWidget    *widget,
 
       if (GTK_IS_CONTAINER (widget))
         {
-          GtkStateData child_data = *data;
+          GtkStateData child_data;
 
           /* Make sure to only propate the right states further */
-          child_data.flags &= GTK_STATE_FLAGS_DO_PROPAGATE;
+          child_data.flags_to_set = data->flags_to_set & GTK_STATE_FLAGS_DO_PROPAGATE;
+          child_data.flags_to_unset = data->flags_to_unset & GTK_STATE_FLAGS_DO_PROPAGATE;
 
           gtk_container_forall (GTK_CONTAINER (widget),
                                 (GtkCallback) gtk_widget_propagate_state,
@@ -13255,7 +13427,7 @@ gtk_widget_queue_tooltip_query (GtkWidget *widget)
 /**
  * gtk_widget_set_tooltip_text:
  * @widget: a #GtkWidget
- * @text: the contents of the tooltip for @widget
+ * @text: (allow-none): the contents of the tooltip for @widget
  *
  * Sets @text as the contents of the tooltip. This function will take
  * care of setting #GtkWidget:has-tooltip to %TRUE and of the default
@@ -13449,6 +13621,7 @@ gtk_widget_set_allocation (GtkWidget           *widget,
   GtkWidgetPrivate *priv;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (gtk_widget_get_visible (widget) || gtk_widget_is_toplevel (widget));
   g_return_if_fail (allocation != NULL);
 
   priv = widget->priv;
@@ -13555,8 +13728,81 @@ gtk_widget_set_window (GtkWidget *widget,
   if (priv->window != window)
     {
       priv->window = window;
+
+      if (gtk_widget_get_has_window (widget) && window != NULL && !gdk_window_has_native (window))
+	gdk_window_set_opacity (window,
+				priv->norender ? 0 : priv->alpha / 255.0);
+
       g_object_notify (G_OBJECT (widget), "window");
     }
+}
+
+/**
+ * gtk_widget_register_window:
+ * @widget: a #GtkWidget
+ * @window: a #GdkWindow
+ *
+ * Registers a #GdkWindow with the widget and sets it up so that
+ * the widget recieves events for it. Call gtk_widget_unregister_window()
+ * when destroying the window.
+ *
+ * Before 3.8 you needed to call gdk_window_set_user_data() directly to set
+ * this up. This is now deprecated and you should use gtk_widget_register_window()
+ * instead. Old code will keep working as is, although some new features like
+ * transparency might not work perfectly.
+ *
+ * Since: 3.8
+ */
+void
+gtk_widget_register_window (GtkWidget    *widget,
+			    GdkWindow    *window)
+{
+  GtkWidgetPrivate *priv;
+  gpointer user_data;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  gdk_window_get_user_data (window, &user_data);
+  g_assert (user_data == NULL);
+
+  priv = widget->priv;
+
+  gdk_window_set_user_data (window, widget);
+  priv->registered_windows = g_list_prepend (priv->registered_windows, window);
+
+  if (!gtk_widget_get_has_window (widget) && !gdk_window_has_native (window))
+    gdk_window_set_opacity (window,
+			    priv->norender_children ? 0.0 : 1.0);
+}
+
+/**
+ * gtk_widget_unregister_window:
+ * @widget: a #GtkWidget
+ * @window: a #GdkWindow
+ *
+ * Unregisters a #GdkWindow from the widget that was previously set up with
+ * gtk_widget_register_window(). You need to call this when the window is
+ * no longer used by the widget, such as when you destroy it.
+ *
+ * Since: 3.8
+ */
+void
+gtk_widget_unregister_window (GtkWidget    *widget,
+			      GdkWindow    *window)
+{
+  GtkWidgetPrivate *priv;
+  gpointer user_data;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  priv = widget->priv;
+
+  gdk_window_get_user_data (window, &user_data);
+  g_assert (user_data == widget);
+  gdk_window_set_user_data (window, NULL);
+  priv->registered_windows = g_list_remove (priv->registered_windows, window);
 }
 
 /**
@@ -13619,6 +13865,209 @@ gtk_widget_set_support_multidevice (GtkWidget *widget,
 
   if (gtk_widget_get_realized (widget))
     gdk_window_set_support_multidevice (priv->window, support_multidevice);
+}
+
+/* There are multiple alpha related sources. First of all the user can specify alpha
+ * in gtk_widget_set_opacity, secondly we can get it from the css opacity. These two
+ * are multiplied together to form the total alpha. Secondly, the user can specify
+ * an opacity group for a widget, which means we must essentially handle it as having alpha.
+ *
+ * We handle opacity in two ways. For a windowed widget, with opacity set but no opacity
+ * group we directly set the opacity of widget->window. This will cause gdk to properly
+ * redirect drawing inside the window to a buffer and do OVER paint_with_alpha.
+ *
+ * However, if the widget is not windowed, or the user specified an opacity group for the
+ * widget we do the opacity handling in the ::draw marshaller for the widget. A naive
+ * implementation of this would break for windowed widgets or descendant widgets with
+ * windows, as these would not be handled by the ::draw signal. To handle this we set
+ * all such gdkwindows as fully transparent and then override gtk_cairo_should_draw_window()
+ * to make the draw signal propagate to *all* child widgets/windows.
+ *
+ * Note: We don't make all child windows fully transparent, we stop at the first one
+ * in each branch when propagating down the hierarchy.
+ */
+
+
+/* This is called when priv->alpha or priv->opacity_group group changes, and should
+ * update priv->norender and GdkWindow opacity for this widget and any children that
+ * needs changing. It is also called whenver the parent changes, the parents
+ * norender_children state changes, or the has_window state of the widget changes.
+ */
+static void
+gtk_widget_propagate_alpha (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidget *parent;
+  gboolean norender, norender_children;
+  GList *l;
+
+  parent = priv->parent;
+
+  norender =
+    /* If this widget has an opacity group, never render it */
+    priv->opacity_group ||
+    /* If the parent has norender_children, propagate that here */
+    (parent != NULL && parent->priv->norender_children);
+
+  /* Windowed widget children should norender if: */
+  norender_children =
+    /* The widget is no_window (otherwise its enought to mark it norender/alpha), and */
+    !gtk_widget_get_has_window (widget) &&
+     ( /* norender is set, or */
+      norender ||
+      /* widget has an alpha */
+      priv->alpha != 255
+       );
+
+  if (gtk_widget_get_has_window (widget))
+    {
+      if (priv->window != NULL && !gdk_window_has_native (priv->window))
+	gdk_window_set_opacity (priv->window,
+				norender ? 0 : priv->alpha / 255.0);
+    }
+  else /* !has_window */
+    {
+      for (l = priv->registered_windows; l != NULL; l = l->next)
+	{
+	  GdkWindow *w = l->data;
+	  if (!gdk_window_has_native (w))
+	    gdk_window_set_opacity (w, norender_children ? 0.0 : 1.0);
+	}
+    }
+
+  priv->norender = norender;
+  if (priv->norender_children != norender_children)
+    {
+      priv->norender_children = norender_children;
+
+      if (GTK_IS_CONTAINER (widget))
+	gtk_container_forall (GTK_CONTAINER (widget), (GtkCallback)gtk_widget_propagate_alpha, NULL);
+    }
+
+  if (gtk_widget_get_realized (widget))
+    gtk_widget_queue_draw (widget);
+}
+
+static void
+gtk_widget_update_alpha (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv;
+  double opacity;
+  guint8 alpha;
+
+  priv = widget->priv;
+
+  alpha = priv->user_alpha;
+
+  if (priv->context)
+    {
+      opacity =
+	_gtk_css_number_value_get (_gtk_style_context_peek_property (priv->context,
+								     GTK_CSS_PROPERTY_OPACITY),
+				   100);
+      opacity = CLAMP (opacity, 0.0, 1.0);
+      alpha = round (priv->user_alpha * opacity);
+    }
+
+  if (alpha == priv->alpha)
+    return;
+
+  priv->alpha = alpha;
+
+  gtk_widget_propagate_alpha (widget);
+
+}
+
+static void
+gtk_widget_set_has_opacity_group  (GtkWidget *widget,
+				   gboolean has_opacity_group)
+{
+  GtkWidgetPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  priv = widget->priv;
+
+  has_opacity_group = !!has_opacity_group;
+
+  if (priv->opacity_group == has_opacity_group)
+    return;
+
+  priv->opacity_group = has_opacity_group;
+
+  gtk_widget_propagate_alpha (widget);
+}
+
+/**
+ * gtk_widget_set_opacity:
+ * @widget: a #GtkWidget
+ * @opacity: desired opacity, between 0 and 1
+ *
+ * Request the @widget to be rendered partially transparent,
+ * with opacity 0 being fully transparent and 1 fully opaque. (Opacity values
+ * are clamped to the [0,1] range.).
+ * This works on both toplevel widget, and child widgets, although there
+ * are some limitations:
+ *
+ * For toplevel widgets this depends on the capabilities of the windowing
+ * system. On X11 this has any effect only on X screens with a compositing manager
+ * running. See gtk_widget_is_composited(). On Windows it should work
+ * always, although setting a window's opacity after the window has been
+ * shown causes it to flicker once on Windows.
+ *
+ * For child widgets it doesn't work if any affected widget has a native window, or
+ * disables double buffering.
+ *
+ * Since: 3.8
+ **/
+void
+gtk_widget_set_opacity  (GtkWidget *widget,
+			 gdouble    opacity)
+{
+  GtkWidgetPrivate *priv;
+  guint8 alpha;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  priv = widget->priv;
+
+  opacity = CLAMP (opacity, 0.0, 1.0);
+
+  alpha = round (opacity * 255);
+
+  /* As a kind of hack for internal use we treat an alpha very
+     close to 1.0 (rounds to 255) but not 1.0 as specifying that
+     we want the opacity group behaviour wrt draw handling, but
+     not actually an alpha value. See bug #687842 for discussions. */
+  gtk_widget_set_has_opacity_group (widget,
+				    alpha == 255 && opacity != 1.0);
+
+  if (alpha == priv->user_alpha)
+    return;
+
+  priv->user_alpha = alpha;
+
+  gtk_widget_update_alpha (widget);
+
+}
+
+/**
+ * gtk_widget_get_opacity:
+ * @widget: a #GtkWidget
+ *
+ * Fetches the requested opacity for this widget. See
+ * gtk_widget_set_opacity().
+ *
+ * Return value: the requested opacity for this widget.
+ *
+ * Since: 3.8
+ **/
+gdouble
+gtk_widget_get_opacity (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0.0);
+
+  return widget->priv->alpha / 255.0;
 }
 
 static void
@@ -13755,58 +14204,6 @@ _gtk_widget_set_alloc_needed (GtkWidget *widget,
                               gboolean   alloc_needed)
 {
   widget->priv->alloc_needed = alloc_needed;
-}
-
-gboolean
-_gtk_widget_get_width_request_needed (GtkWidget *widget)
-{
-  return widget->priv->width_request_needed;
-}
-
-void
-_gtk_widget_set_width_request_needed (GtkWidget *widget,
-                                      gboolean   width_request_needed)
-{
-  widget->priv->width_request_needed = width_request_needed;
-}
-
-gboolean
-_gtk_widget_get_height_request_needed (GtkWidget *widget)
-{
-  return widget->priv->height_request_needed;
-}
-
-void
-_gtk_widget_set_height_request_needed (GtkWidget *widget,
-                                       gboolean   height_request_needed)
-{
-  widget->priv->height_request_needed = height_request_needed;
-}
-
-gboolean
-_gtk_widget_get_sizegroup_visited (GtkWidget    *widget)
-{
-  return widget->priv->sizegroup_visited;
-}
-
-void
-_gtk_widget_set_sizegroup_visited (GtkWidget    *widget,
-				   gboolean      visited)
-{
-  widget->priv->sizegroup_visited = visited;
-}
-
-gboolean
-_gtk_widget_get_sizegroup_bumping (GtkWidget    *widget)
-{
-  return widget->priv->sizegroup_bumping;
-}
-
-void
-_gtk_widget_set_sizegroup_bumping (GtkWidget    *widget,
-				   gboolean      bumping)
-{
-  widget->priv->sizegroup_bumping = bumping;
 }
 
 void
@@ -13976,9 +14373,6 @@ _gtk_widget_style_context_invalidated (GtkWidget *widget)
        */
       widget->priv->style_update_pending = TRUE;
     }
-
-  if (widget->priv->anchored)
-    gtk_widget_queue_resize (widget);
 }
 
 /**
@@ -14005,7 +14399,7 @@ gtk_widget_get_style_context (GtkWidget *widget)
 
       priv->context = gtk_style_context_new ();
 
-      gtk_style_context_set_direction (priv->context, gtk_widget_get_direction (widget));
+      gtk_style_context_set_state (priv->context, priv->state_flags);
 
       screen = gtk_widget_get_screen (widget);
       if (screen)

@@ -22,12 +22,12 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#ifndef __GTK_WIDGET_H__
+#define __GTK_WIDGET_H__
+
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_WIDGET_H__
-#define __GTK_WIDGET_H__
 
 #include <gdk/gdk.h>
 #include <gtk/gtkaccelgroup.h>
@@ -589,6 +589,7 @@ gboolean              gtk_widget_is_sensitive           (GtkWidget    *widget);
 void                  gtk_widget_set_visible            (GtkWidget    *widget,
                                                          gboolean      visible);
 gboolean              gtk_widget_get_visible            (GtkWidget    *widget);
+gboolean              gtk_widget_is_visible             (GtkWidget    *widget);
 
 void                  gtk_widget_set_has_window         (GtkWidget    *widget,
                                                          gboolean      has_window);
@@ -629,6 +630,12 @@ gboolean              gtk_widget_get_child_visible      (GtkWidget    *widget);
 void                  gtk_widget_set_window             (GtkWidget    *widget,
                                                          GdkWindow    *window);
 GdkWindow           * gtk_widget_get_window             (GtkWidget    *widget);
+GDK_AVAILABLE_IN_3_8
+void                  gtk_widget_register_window        (GtkWidget    *widget,
+                                                         GdkWindow    *window);
+GDK_AVAILABLE_IN_3_8
+void                  gtk_widget_unregister_window      (GtkWidget    *widget,
+                                                         GdkWindow    *window);
 
 int                   gtk_widget_get_allocated_width    (GtkWidget     *widget);
 int                   gtk_widget_get_allocated_height   (GtkWidget     *widget);
@@ -663,6 +670,11 @@ void	   gtk_widget_set_device_events	  (GtkWidget	       *widget,
 void       gtk_widget_add_device_events   (GtkWidget           *widget,
                                            GdkDevice           *device,
 					   GdkEventMask         events);
+GDK_AVAILABLE_IN_3_8
+void	   gtk_widget_set_opacity	  (GtkWidget	       *widget,
+					   double		opacity);
+GDK_AVAILABLE_IN_3_8
+double	   gtk_widget_get_opacity	  (GtkWidget	       *widget);
 
 void       gtk_widget_set_device_enabled  (GtkWidget    *widget,
                                            GdkDevice    *device,

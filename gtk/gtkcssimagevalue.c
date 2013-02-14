@@ -63,7 +63,7 @@ static gboolean
 gtk_css_value_image_equal (const GtkCssValue *value1,
                            const GtkCssValue *value2)
 {
-  return value1->image == value2->image;
+  return _gtk_css_image_equal (value1->image, value2->image);
 }
 
 static GtkCssValue *

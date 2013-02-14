@@ -33,4 +33,6 @@ main (int argc, char *argv[])
 
   for (i = 0; tp[i]; i++)
     test_type (tp[i]);
+
+  return 0;
 }

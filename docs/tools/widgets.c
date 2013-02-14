@@ -1024,8 +1024,7 @@ create_scrolledwindow (void)
   scrolledwin = gtk_scrolled_window_new (NULL, NULL);
   label = gtk_label_new ("Scrolled Window");
 
-  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolledwin), 
-					 label);
+  gtk_container_add (GTK_CONTAINER (scrolledwin), label);
 
   return new_widget_info ("scrolledwindow", scrolledwin, MEDIUM);
 }

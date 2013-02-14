@@ -3,7 +3,7 @@ a {
 }
 
 b {
-  box-shadow: 0 0.25pt rgb(0,255,0);
+  box-shadow: 0 0.25pt rgb(0,128,0);
 }
 
 c {
@@ -23,7 +23,7 @@ f {
 }
 
 g {
-  box-shadow: 3px -1em rgb(0,255,0);
+  box-shadow: 3px -1em rgb(0,128,0);
 }
 
 h {
@@ -39,19 +39,19 @@ j {
 }
 
 k {
-  box-shadow: 0 -1em 3px rgb(0,255,0);
+  box-shadow: 0 -1em 3px rgb(0,128,0);
 }
 
 l {
-  box-shadow: 0 -1em 0.125pt rgb(0,255,0);
+  box-shadow: 0 -1em 0.125pt rgb(0,128,0);
 }
 
 m {
-  box-shadow: 0.25pt -1em 1em rgb(0,255,0);
+  box-shadow: 0.25pt -1em 1em rgb(0,128,0);
 }
 
 n {
-  box-shadow: 0.25pt 0.25pt 3px rgb(0,255,0);
+  box-shadow: 0.25pt 0.25pt 3px rgb(0,128,0);
 }
 
 o {
@@ -75,7 +75,7 @@ s {
 }
 
 t {
-  box-shadow: -1em 0 alpha (@bg_color, 0.5);
+  box-shadow: -1em 0 alpha(@bg_color, 0.5);
 }
 
 u {
@@ -83,7 +83,7 @@ u {
 }
 
 v {
-  box-shadow: -1em 0.25pt 1em 0.25pt rgb(0,255,0);
+  box-shadow: -1em 0.25pt 1em 0.25pt rgb(0,128,0);
 }
 
 w {
@@ -95,7 +95,7 @@ x {
 }
 
 y {
-  box-shadow: 0 -1em 3px rgb(0,255,0) inset;
+  box-shadow: 0 -1em 3px rgb(0,128,0) inset;
 }
 
 z {
@@ -107,7 +107,7 @@ ab {
 }
 
 bb {
-  box-shadow: 0.25pt 0 rgb(0,255,0) inset;
+  box-shadow: 0.25pt 0 rgb(0,128,0) inset;
 }
 
 cb {
@@ -115,11 +115,11 @@ cb {
 }
 
 db {
-  box-shadow: 0 -1em rgb(0,255,0);
+  box-shadow: 0 -1em rgb(0,128,0);
 }
 
 eb {
-  box-shadow: -1em 0 3px -1em rgb(0,255,0);
+  box-shadow: -1em 0 3px -1em rgb(0,128,0);
 }
 
 fb {
@@ -131,7 +131,7 @@ gb {
 }
 
 hb {
-  box-shadow: 0.25pt -1em 3px -1em rgb(0,255,0);
+  box-shadow: 0.25pt -1em 3px -1em rgb(0,128,0);
 }
 
 ib {
@@ -139,11 +139,11 @@ ib {
 }
 
 jb {
-  box-shadow: 3px -1em rgb(0,255,0);
+  box-shadow: 3px -1em rgb(0,128,0);
 }
 
 kb {
-  box-shadow: 0.25pt 0.25pt 3px 0.25pt alpha (@bg_color, 0.5) inset;
+  box-shadow: 0.25pt 0.25pt 3px 0.25pt alpha(@bg_color, 0.5) inset;
 }
 
 lb {
@@ -151,7 +151,7 @@ lb {
 }
 
 mb {
-  box-shadow: -1em 0.25pt alpha (@bg_color, 0.5);
+  box-shadow: -1em 0.25pt alpha(@bg_color, 0.5);
 }
 
 nb {
@@ -159,7 +159,7 @@ nb {
 }
 
 ob {
-  box-shadow: -1em 3px rgb(0,255,0) inset;
+  box-shadow: -1em 3px rgb(0,128,0) inset;
 }
 
 pb {
@@ -167,11 +167,11 @@ pb {
 }
 
 qb {
-  box-shadow: -1em 0.25pt rgb(0,255,0) inset;
+  box-shadow: -1em 0.25pt rgb(0,128,0) inset;
 }
 
 rb {
-  box-shadow: 0.25pt 3px 1em alpha (@bg_color, 0.5) inset;
+  box-shadow: 0.25pt 3px 1em alpha(@bg_color, 0.5) inset;
 }
 
 sb {
@@ -179,15 +179,15 @@ sb {
 }
 
 tb {
-  box-shadow: -1em -1em 1em rgb(0,255,0) inset;
+  box-shadow: -1em -1em 1em rgb(0,128,0) inset;
 }
 
 ub {
-  box-shadow: 0.25pt 3px 0.125pt rgb(0,255,0) inset;
+  box-shadow: 0.25pt 3px 0.125pt rgb(0,128,0) inset;
 }
 
 vb {
-  box-shadow: 3px 0 0 0.25pt alpha (@bg_color, 0.5) inset;
+  box-shadow: 3px 0 0 0.25pt alpha(@bg_color, 0.5) inset;
 }
 
 wb {
@@ -219,7 +219,7 @@ cc {
 }
 
 dc {
-  box-shadow: 0 -1em 3px rgb(0,255,0);
+  box-shadow: 0 -1em 3px rgb(0,128,0);
 }
 
 ec {
@@ -227,19 +227,19 @@ ec {
 }
 
 fc {
-  box-shadow: -1em 3px 0.125pt rgb(0,255,0) inset;
+  box-shadow: -1em 3px 0.125pt rgb(0,128,0) inset;
 }
 
 gc {
-  box-shadow: 0 0 rgb(0,255,0);
+  box-shadow: 0 0 rgb(0,128,0);
 }
 
 hc {
-  box-shadow: 0.25pt 0.25pt 0 -1em alpha (@bg_color, 0.5) inset;
+  box-shadow: 0.25pt 0.25pt 0 -1em alpha(@bg_color, 0.5) inset;
 }
 
 ic {
-  box-shadow: -1em 0 rgb(0,255,0);
+  box-shadow: -1em 0 rgb(0,128,0);
 }
 
 jc {
@@ -247,7 +247,7 @@ jc {
 }
 
 kc {
-  box-shadow: -1em 0.25pt 1em rgb(0,255,0);
+  box-shadow: -1em 0.25pt 1em rgb(0,128,0);
 }
 
 lc {
@@ -255,7 +255,7 @@ lc {
 }
 
 mc {
-  box-shadow: -1em 0.25pt 3px rgb(0,255,0);
+  box-shadow: -1em 0.25pt 3px rgb(0,128,0);
 }
 
 nc {
@@ -275,7 +275,7 @@ qc {
 }
 
 rc {
-  box-shadow: 0.25pt -1em 0 -1em rgb(0,255,0) inset;
+  box-shadow: 0.25pt -1em 0 -1em rgb(0,128,0) inset;
 }
 
 sc {
@@ -303,7 +303,7 @@ xc {
 }
 
 yc {
-  box-shadow: 3px 0 rgb(0,255,0) inset;
+  box-shadow: 3px 0 rgb(0,128,0) inset;
 }
 
 zc {
@@ -311,11 +311,11 @@ zc {
 }
 
 ad {
-  box-shadow: 0 -1em 0.125pt -1em alpha (@bg_color, 0.5);
+  box-shadow: 0 -1em 0.125pt -1em alpha(@bg_color, 0.5);
 }
 
 bd {
-  box-shadow: -1em -1em 0.125pt alpha (@bg_color, 0.5);
+  box-shadow: -1em -1em 0.125pt alpha(@bg_color, 0.5);
 }
 
 cd {
@@ -323,7 +323,7 @@ cd {
 }
 
 dd {
-  box-shadow: 0 3px rgb(0,255,0) inset;
+  box-shadow: 0 3px rgb(0,128,0) inset;
 }
 
 ed {
@@ -331,7 +331,7 @@ ed {
 }
 
 fd {
-  box-shadow: 3px 0 alpha (@bg_color, 0.5) inset;
+  box-shadow: 3px 0 alpha(@bg_color, 0.5) inset;
 }
 
 gd {
@@ -343,7 +343,7 @@ hd {
 }
 
 id {
-  box-shadow: -1em 0 1em 0.25pt rgb(0,255,0) inset;
+  box-shadow: -1em 0 1em 0.25pt rgb(0,128,0) inset;
 }
 
 jd {
@@ -351,11 +351,11 @@ jd {
 }
 
 kd {
-  box-shadow: 0.25pt 0 alpha (@bg_color, 0.5) inset;
+  box-shadow: 0.25pt 0 alpha(@bg_color, 0.5) inset;
 }
 
 ld {
-  box-shadow: 3px 0.25pt 0 0.25pt alpha (@bg_color, 0.5) inset;
+  box-shadow: 3px 0.25pt 0 0.25pt alpha(@bg_color, 0.5) inset;
 }
 
 md {
@@ -363,7 +363,7 @@ md {
 }
 
 nd {
-  box-shadow: -1em -1em 1em -1em rgb(0,255,0) inset;
+  box-shadow: -1em -1em 1em -1em rgb(0,128,0) inset;
 }
 
 od {
@@ -379,11 +379,11 @@ qd {
 }
 
 rd {
-  box-shadow: -1em 3px alpha (@bg_color, 0.5);
+  box-shadow: -1em 3px alpha(@bg_color, 0.5);
 }
 
 sd {
-  box-shadow: -1em -1em rgb(0,255,0) inset;
+  box-shadow: -1em -1em rgb(0,128,0) inset;
 }
 
 td {
@@ -395,5 +395,5 @@ ud {
 }
 
 vd {
-  box-shadow: -1em 0.25pt rgb(0,255,0) inset;
+  box-shadow: -1em 0.25pt rgb(0,128,0) inset;
 }

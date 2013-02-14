@@ -87,6 +87,8 @@ GtkCssValue *           _gtk_css_computed_values_get_intrinsic_value  (GtkCssCom
                                                                        guint                     id);
 GtkBitmask *            _gtk_css_computed_values_get_difference       (GtkCssComputedValues     *values,
                                                                        GtkCssComputedValues     *other);
+GtkBitmask *            _gtk_css_computed_values_compute_dependencies (GtkCssComputedValues     *values,
+                                                                       const GtkBitmask         *parent_changes);
 
 void                    _gtk_css_computed_values_create_animations    (GtkCssComputedValues     *values,
                                                                        GtkCssComputedValues     *parent_values,

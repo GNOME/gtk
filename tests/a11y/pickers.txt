@@ -39,6 +39,7 @@ window1
         image description: (null)
         <AtkAction>
         action 0 name: click
+        action 0 description: Clicks the button
       unnamed-GtkComboBoxAccessible-1
         "combo box"
         parent: button4
@@ -50,12 +51,13 @@ window1
         alpha: 1
         <AtkAction>
         action 0 name: press
+        action 0 description: Presses the combobox
         <AtkSelection>
         unnamed-GtkMenuAccessible-2
           "menu"
           parent: unnamed-GtkComboBoxAccessible-1
           index: 0
-          state: enabled selectable sensitive
+          state: enabled sensitive
           toolkit: gtk
           <AtkComponent>
           layer: popup
@@ -72,6 +74,7 @@ window1
             alpha: 1
             <AtkAction>
             action 0 name: click
+            action 0 description: Clicks the menuitem
             <AtkSelection>
           unnamed-GtkMenuItemAccessible-4
             "menu item"
@@ -85,6 +88,7 @@ window1
             alpha: 1
             <AtkAction>
             action 0 name: click
+            action 0 description: Clicks the menuitem
             <AtkSelection>
           unnamed-GtkMenuItemAccessible-5
             "menu item"
@@ -98,6 +102,7 @@ window1
             alpha: 1
             <AtkAction>
             action 0 name: click
+            action 0 description: Clicks the menuitem
             <AtkSelection>
           unnamed-GtkMenuItemAccessible-6
             "separator"
@@ -125,7 +130,7 @@ window1
             "menu item"
             parent: unnamed-GtkMenuAccessible-2
             index: 5
-            name: Other...
+            name: Other…
             state: enabled selectable sensitive visible
             toolkit: gtk
             <AtkComponent>
@@ -133,6 +138,7 @@ window1
             alpha: 1
             <AtkAction>
             action 0 name: click
+            action 0 description: Clicks the menuitem
             <AtkSelection>
     button3
       "push button"
@@ -149,6 +155,7 @@ window1
       image description: (null)
       <AtkAction>
       action 0 name: click
+      action 0 description: Clicks the button
     button2
       "push button"
       parent: grid1
@@ -163,6 +170,7 @@ window1
       image description: (null)
       <AtkAction>
       action 0 name: click
+      action 0 description: Clicks the button
     button1
       "combo box"
       parent: grid1
@@ -174,12 +182,13 @@ window1
       alpha: 1
       <AtkAction>
       action 0 name: press
+      action 0 description: Presses the combobox
       <AtkSelection>
       unnamed-GtkMenuAccessible-9
         "menu"
         parent: button1
         index: 0
-        state: enabled selectable sensitive
+        state: enabled sensitive
         toolkit: gtk
         <AtkComponent>
         layer: popup

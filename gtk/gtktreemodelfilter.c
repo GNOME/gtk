@@ -3758,10 +3758,14 @@ gtk_tree_model_filter_set_root (GtkTreeModelFilter *filter,
 {
   g_return_if_fail (GTK_IS_TREE_MODEL_FILTER (filter));
 
-  if (!root)
-    filter->priv->virtual_root = NULL;
+  if (root)
+    {
+      filter->priv->virtual_root = gtk_tree_path_copy (root);
+      gtk_tree_model_filter_ref_path (filter, filter->priv->virtual_root);
+      filter->priv->virtual_root_deleted = FALSE;
+    }
   else
-    filter->priv->virtual_root = gtk_tree_path_copy (root);
+    filter->priv->virtual_root = NULL;
 }
 
 /* public API */
@@ -3782,24 +3786,12 @@ GtkTreeModel *
 gtk_tree_model_filter_new (GtkTreeModel *child_model,
                            GtkTreePath  *root)
 {
-  GtkTreeModel *retval;
-  GtkTreeModelFilter *filter;
-
   g_return_val_if_fail (GTK_IS_TREE_MODEL (child_model), NULL);
 
-  retval = g_object_new (GTK_TYPE_TREE_MODEL_FILTER, 
-			 "child-model", child_model,
-			 "virtual-root", root,
-			 NULL);
-
-  filter = GTK_TREE_MODEL_FILTER (retval);
-  if (filter->priv->virtual_root)
-    {
-      gtk_tree_model_filter_ref_path (filter, filter->priv->virtual_root);
-      filter->priv->virtual_root_deleted = FALSE;
-    }
-
-  return retval;
+  return g_object_new (GTK_TYPE_TREE_MODEL_FILTER,
+                       "child-model", child_model,
+                       "virtual-root", root,
+                       NULL);
 }
 
 /**

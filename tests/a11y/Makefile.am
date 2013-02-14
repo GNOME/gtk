@@ -29,6 +29,10 @@ TEST_PROGS += text
 
 TEST_PROGS += children
 
+TEST_PROGS += derive
+
+TEST_PROGS += value
+
 # the focus test has no chance of working until
 # all the idle handlers in gail are gone
 #
@@ -68,3 +72,5 @@ EXTRA_DIST += \
 	placeholder-text.ui placeholder-text.txt \
 	menu.ui menu.txt \
 	combos.ui combos.txt
+
+-include $(top_srcdir)/git.mk

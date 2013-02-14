@@ -31,41 +31,6 @@
 
 G_BEGIN_DECLS
 
-/* Cache as many ranges of height-for-width
- * (or width-for-height) as can be rational
- * for a said widget to have, if a label can
- * only wrap to 3 lines, only 3 caches will
- * ever be allocated for it.
- */
-#define GTK_SIZE_REQUEST_CACHED_SIZES   (5)
-
-typedef struct {
-  gint minimum_size;
-  gint natural_size;
-} CachedSize;
-
-typedef struct
-{
-  gint       lower_for_size; /* The minimum for_size with the same result */
-  gint       upper_for_size; /* The maximum for_size with the same result */
-  CachedSize cached_size;
-} SizeRequest;
-
-typedef struct {
-  SizeRequest **widths;
-  SizeRequest **heights;
-
-  CachedSize  cached_width;
-  CachedSize  cached_height;
-
-  guint       cached_widths      : 3;
-  guint       cached_heights     : 3;
-  guint       last_cached_width  : 3;
-  guint       last_cached_height : 3;
-  guint       cached_base_width  : 1;
-  guint       cached_base_height : 1;
-} SizeRequestCache;
-
 void         _gtk_widget_set_visible_flag   (GtkWidget *widget,
                                              gboolean   visible);
 gboolean     _gtk_widget_get_in_reparent    (GtkWidget *widget);
@@ -80,19 +45,7 @@ void         _gtk_widget_set_shadowed       (GtkWidget *widget,
 gboolean     _gtk_widget_get_alloc_needed   (GtkWidget *widget);
 void         _gtk_widget_set_alloc_needed   (GtkWidget *widget,
                                              gboolean   alloc_needed);
-gboolean     _gtk_widget_get_width_request_needed  (GtkWidget *widget);
-void         _gtk_widget_set_width_request_needed  (GtkWidget *widget,
-                                                    gboolean   width_request_needed);
-gboolean     _gtk_widget_get_height_request_needed (GtkWidget *widget);
-void         _gtk_widget_set_height_request_needed (GtkWidget *widget,
-                                                    gboolean   height_request_needed);
 
-gboolean     _gtk_widget_get_sizegroup_visited (GtkWidget    *widget);
-void         _gtk_widget_set_sizegroup_visited (GtkWidget    *widget,
-						gboolean      visited);
-gboolean     _gtk_widget_get_sizegroup_bumping (GtkWidget    *widget);
-void         _gtk_widget_set_sizegroup_bumping (GtkWidget    *widget,
-						gboolean      bumping);
 void         _gtk_widget_add_sizegroup         (GtkWidget    *widget,
 						gpointer      group);
 void         _gtk_widget_remove_sizegroup      (GtkWidget    *widget,
@@ -112,12 +65,16 @@ void _gtk_widget_override_size_request (GtkWidget *widget,
 void _gtk_widget_restore_size_request  (GtkWidget *widget,
                                         int        old_width,
                                         int        old_height);
+void _gtk_widget_compute_size_for_orientation  (GtkWidget         *widget,
+                                                GtkOrientation     orientation,
+                                                gint               for_size,
+                                                gint              *minimum_size,
+                                                gint              *natural_size);
 
 gboolean _gtk_widget_get_translation_to_window (GtkWidget      *widget,
                                                 GdkWindow      *window,
                                                 int            *x,
                                                 int            *y);
-void     _gtk_widget_free_cached_sizes (GtkWidget *widget);
 
 const gchar*      _gtk_widget_get_accel_path               (GtkWidget *widget,
                                                             gboolean  *locked);

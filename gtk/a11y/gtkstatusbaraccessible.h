@@ -1,4 +1,4 @@
-/* GAIL - The GNOME Accessibility Implementation Library
+/* GTK+ - accessibility implementations
  * Copyright 2001, 2002, 2003 Sun Microsystems Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -18,11 +18,15 @@
 #ifndef __GTK_STATUSBAR_ACCESSIBLE_H__
 #define __GTK_STATUSBAR_ACCESSIBLE_H__
 
-#include "gtkboxaccessible.h"
+#if !defined (__GTK_A11Y_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk-a11y.h> can be included directly."
+#endif
+
+#include <gtk/a11y/gtkcontaineraccessible.h>
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_STATUSBAR_ACCESSIBLE                  (_gtk_statusbar_accessible_get_type ())
+#define GTK_TYPE_STATUSBAR_ACCESSIBLE                  (gtk_statusbar_accessible_get_type ())
 #define GTK_STATUSBAR_ACCESSIBLE(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_STATUSBAR_ACCESSIBLE, GtkStatusbarAccessible))
 #define GTK_STATUSBAR_ACCESSIBLE_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_STATUSBAR_ACCESSIBLE, GtkStatusbarAccessibleClass))
 #define GTK_IS_STATUSBAR_ACCESSIBLE(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_STATUSBAR_ACCESSIBLE))
@@ -35,17 +39,17 @@ typedef struct _GtkStatusbarAccessiblePrivate GtkStatusbarAccessiblePrivate;
 
 struct _GtkStatusbarAccessible
 {
-  GtkBoxAccessible parent;
+  GtkContainerAccessible parent;
 
   GtkStatusbarAccessiblePrivate *priv;
 };
 
 struct _GtkStatusbarAccessibleClass
 {
-  GtkBoxAccessibleClass parent_class;
+  GtkContainerAccessibleClass parent_class;
 };
 
-GType _gtk_statusbar_accessible_get_type (void);
+GType gtk_statusbar_accessible_get_type (void);
 
 G_END_DECLS
 

@@ -429,7 +429,7 @@ gtk_event_box_realize (GtkWidget *widget)
       window = gdk_window_new (gtk_widget_get_parent_window (widget),
                                &attributes, attributes_mask);
       gtk_widget_set_window (widget, window);
-      gdk_window_set_user_data (window, widget);
+      gtk_widget_register_window (widget, window);
     }
   else
     {
@@ -448,7 +448,7 @@ gtk_event_box_realize (GtkWidget *widget)
 
       priv->event_window = gdk_window_new (window,
                                            &attributes, attributes_mask);
-      gdk_window_set_user_data (priv->event_window, widget);
+      gtk_widget_register_window (widget, priv->event_window);
     }
 
   if (visible_window)
@@ -462,7 +462,7 @@ gtk_event_box_unrealize (GtkWidget *widget)
 
   if (priv->event_window != NULL)
     {
-      gdk_window_set_user_data (priv->event_window, NULL);
+      gtk_widget_unregister_window (widget, priv->event_window);
       gdk_window_destroy (priv->event_window);
       priv->event_window = NULL;
     }

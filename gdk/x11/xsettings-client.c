@@ -56,51 +56,36 @@ static void
 notify_changes (XSettingsClient *client,
 		XSettingsList   *old_list)
 {
-  XSettingsList *old_iter = old_list;
-  XSettingsList *new_iter = client->settings;
+  GHashTableIter iter;
+  XSettingsSetting *setting, *old_setting;
 
   if (!client->notify)
     return;
 
-  while (old_iter || new_iter)
+  if (client->settings != NULL)
     {
-      int cmp;
-      
-      if (old_iter && new_iter)
-	cmp = strcmp (old_iter->setting->name, new_iter->setting->name);
-      else if (old_iter)
-	cmp = -1;
-      else
-	cmp = 1;
+      g_hash_table_iter_init (&iter, client->settings);
+      while (g_hash_table_iter_next (&iter, NULL, (gpointer*) &setting))
+	{
+	  old_setting = xsettings_list_lookup (old_list, setting->name);
 
-      if (cmp < 0)
-	{
-	  client->notify (old_iter->setting->name,
-			  XSETTINGS_ACTION_DELETED,
-			  NULL,
-			  client->cb_data);
+	  if (old_setting == NULL)
+	    client->notify (setting->name, XSETTINGS_ACTION_NEW, setting, client->cb_data);
+	  else if (!xsettings_setting_equal (setting, old_setting))
+	    client->notify (setting->name, XSETTINGS_ACTION_CHANGED, setting, client->cb_data);
+	    
+	  /* remove setting from old_list */
+	  if (old_setting != NULL)
+	    g_hash_table_remove (old_list, setting->name);
 	}
-      else if (cmp == 0)
-	{
-	  if (!xsettings_setting_equal (old_iter->setting,
-					new_iter->setting))
-	    client->notify (old_iter->setting->name,
-			    XSETTINGS_ACTION_CHANGED,
-			    new_iter->setting,
-			    client->cb_data);
-	}
-      else
-	{
-	  client->notify (new_iter->setting->name,
-			  XSETTINGS_ACTION_NEW,
-			  new_iter->setting,
-			  client->cb_data);
-	}
+    }
 
-      if (old_iter)
-	old_iter = old_iter->next;
-      if (new_iter)
-	new_iter = new_iter->next;
+  if (old_list != NULL)
+    {
+      /* old_list now contains only deleted settings */
+      g_hash_table_iter_init (&iter, old_list);
+      while (g_hash_table_iter_next (&iter, NULL, (gpointer*) &old_setting))
+	client->notify (old_setting->name, XSETTINGS_ACTION_DELETED, NULL, client->cb_data);
     }
 }
 

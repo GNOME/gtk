@@ -69,6 +69,13 @@ gtk_css_image_real_compute (GtkCssImage             *image,
   return g_object_ref (image);
 }
 
+static gboolean
+gtk_css_image_real_equal (GtkCssImage *image1,
+                          GtkCssImage *image2)
+{
+  return FALSE;
+}
+
 static GtkCssImage *
 gtk_css_image_real_transition (GtkCssImage *start,
                                GtkCssImage *end,
@@ -90,6 +97,7 @@ _gtk_css_image_class_init (GtkCssImageClass *klass)
   klass->get_height = gtk_css_image_real_get_height;
   klass->get_aspect_ratio = gtk_css_image_real_get_aspect_ratio;
   klass->compute = gtk_css_image_real_compute;
+  klass->equal = gtk_css_image_real_equal;
   klass->transition = gtk_css_image_real_transition;
 }
 
@@ -188,6 +196,29 @@ _gtk_css_image_transition (GtkCssImage *start,
   return klass->transition (start, end, property_id, progress);
 }
 
+gboolean
+_gtk_css_image_equal (GtkCssImage *image1,
+                      GtkCssImage *image2)
+{
+  GtkCssImageClass *klass;
+
+  g_return_val_if_fail (image1 == NULL || GTK_IS_CSS_IMAGE (image1), FALSE);
+  g_return_val_if_fail (image2 == NULL || GTK_IS_CSS_IMAGE (image2), FALSE);
+
+  if (image1 == image2)
+    return TRUE;
+
+  if (image1 == NULL || image2 == NULL)
+    return FALSE;
+
+  if (G_OBJECT_TYPE (image1) != G_OBJECT_TYPE (image2))
+    return FALSE;
+
+  klass = GTK_CSS_IMAGE_GET_CLASS (image1);
+
+  return klass->equal (image1, image2);
+}
+
 void
 _gtk_css_image_draw (GtkCssImage        *image,
                      cairo_t            *cr,
@@ -198,6 +229,8 @@ _gtk_css_image_draw (GtkCssImage        *image,
 
   g_return_if_fail (GTK_IS_CSS_IMAGE (image));
   g_return_if_fail (cr != NULL);
+  g_return_if_fail (width > 0);
+  g_return_if_fail (height > 0);
 
   cairo_save (cr);
 

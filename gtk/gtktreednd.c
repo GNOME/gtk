@@ -157,7 +157,7 @@ gtk_tree_drag_source_drag_data_delete (GtkTreeDragSource *drag_source,
  * gtk_tree_drag_source_drag_data_get:
  * @drag_source: a #GtkTreeDragSource
  * @path: row that was dragged
- * @selection_data: (out): a #GtkSelectionData to fill with data
+ * @selection_data: a #GtkSelectionData to fill with data
  *                  from the dragged row
  * 
  * Asks the #GtkTreeDragSource to fill in @selection_data with a

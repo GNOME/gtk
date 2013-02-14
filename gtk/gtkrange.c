@@ -1738,7 +1738,7 @@ gtk_range_realize (GtkWidget *widget)
 
   priv->event_window = gdk_window_new (gtk_widget_get_parent_window (widget),
 					&attributes, attributes_mask);
-  gdk_window_set_user_data (priv->event_window, range);
+  gtk_widget_register_window (widget, priv->event_window);
 }
 
 static void
@@ -1749,7 +1749,7 @@ gtk_range_unrealize (GtkWidget *widget)
 
   gtk_range_remove_step_timer (range);
 
-  gdk_window_set_user_data (priv->event_window, NULL);
+  gtk_widget_unregister_window (widget, priv->event_window);
   gdk_window_destroy (priv->event_window);
   priv->event_window = NULL;
 
@@ -3748,16 +3748,16 @@ gtk_range_calc_layout (GtkRange *range,
       /* Now the trough is the remaining space between steppers B and C,
        * if any, minus spacing
        */
-      priv->trough.x = range_rect.x + trough_margin.left;
-      priv->trough.y = priv->stepper_b.y + priv->stepper_b.height + stepper_spacing * has_steppers_ab + trough_margin.top;
-      priv->trough.width = range_rect.width - trough_margin.left - trough_margin.right;
-      priv->trough.height = priv->stepper_c.y - priv->trough.y - stepper_spacing * has_steppers_cd - trough_margin.bottom;
+      priv->trough.x = range_rect.x;
+      priv->trough.y = priv->stepper_b.y + priv->stepper_b.height + stepper_spacing * has_steppers_ab;
+      priv->trough.width = range_rect.width;
+      priv->trough.height = priv->stepper_c.y - priv->trough.y - stepper_spacing * has_steppers_cd;
 
       /* Slider fits into the trough, with stepper_spacing on either side,
        * and the size/position based on the adjustment or fixed, depending.
        */
-      priv->slider.x = range_rect.x + focus_width + trough_border;
-      priv->slider.width = range_rect.width - (focus_width + trough_border) * 2;
+      priv->slider.x = priv->trough.x + focus_width + trough_border;
+      priv->slider.width = priv->trough.width - (focus_width + trough_border) * 2;
 
       /* Compute slider position/length */
       {
@@ -3896,16 +3896,16 @@ gtk_range_calc_layout (GtkRange *range,
       /* Now the trough is the remaining space between steppers B and C,
        * if any
        */
-      priv->trough.x = priv->stepper_b.x + priv->stepper_b.width + stepper_spacing * has_steppers_ab + trough_margin.left;
-      priv->trough.y = range_rect.y + trough_margin.top;
-      priv->trough.width = priv->stepper_c.x - priv->trough.x - stepper_spacing * has_steppers_cd - trough_margin.right;
-      priv->trough.height = range_rect.height - trough_margin.top - trough_margin.bottom;
+      priv->trough.x = priv->stepper_b.x + priv->stepper_b.width + stepper_spacing * has_steppers_ab;
+      priv->trough.y = range_rect.y;
+      priv->trough.width = priv->stepper_c.x - priv->trough.x - stepper_spacing * has_steppers_cd;
+      priv->trough.height = range_rect.height;
 
       /* Slider fits into the trough, with stepper_spacing on either side,
        * and the size/position based on the adjustment or fixed, depending.
        */
-      priv->slider.y = range_rect.y + focus_width + trough_border;
-      priv->slider.height = range_rect.height - (focus_width + trough_border) * 2;
+      priv->slider.y = priv->trough.y + focus_width + trough_border;
+      priv->slider.height = priv->trough.height - (focus_width + trough_border) * 2;
 
       /* Compute slider position/length */
       {

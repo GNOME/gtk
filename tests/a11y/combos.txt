@@ -67,13 +67,14 @@ window1
       alpha: 1
       <AtkAction>
       action 0 name: press
+      action 0 description: Presses the combobox
       action 0 keybinding: <Alt>c
       <AtkSelection>
       unnamed-GtkMenuAccessible-0
         "menu"
         parent: combo1
         index: 0
-        state: enabled selectable sensitive
+        state: enabled sensitive
         toolkit: gtk
         <AtkComponent>
         layer: popup
@@ -90,12 +91,13 @@ window1
       alpha: 1
       <AtkAction>
       action 0 name: press
+      action 0 description: Presses the combobox
       <AtkSelection>
       unnamed-GtkMenuAccessible-1
         "menu"
         parent: combo2
         index: 0
-        state: enabled selectable sensitive
+        state: enabled sensitive
         toolkit: gtk
         <AtkComponent>
         layer: popup
@@ -105,7 +107,7 @@ window1
         "text"
         parent: combo2
         index: 1
-        state: editable enabled focusable selectable sensitive single-line visible
+        state: editable enabled focusable sensitive single-line visible
         toolkit: gtk
         <AtkComponent>
         layer: widget
@@ -141,6 +143,7 @@ window1
                             wrap-mode: word
         <AtkAction>
         action 0 name: activate
+        action 0 description: Activates the entry
     combo3
       "combo box"
       parent: box1
@@ -152,12 +155,13 @@ window1
       alpha: 1
       <AtkAction>
       action 0 name: press
+      action 0 description: Presses the combobox
       <AtkSelection>
       unnamed-GtkMenuAccessible-2
         "menu"
         parent: combo3
         index: 0
-        state: enabled selectable sensitive
+        state: enabled sensitive
         toolkit: gtk
         <AtkComponent>
         layer: popup
@@ -174,12 +178,13 @@ window1
       alpha: 1
       <AtkAction>
       action 0 name: press
+      action 0 description: Presses the combobox
       <AtkSelection>
       unnamed-GtkMenuAccessible-3
         "menu"
         parent: combo4
         index: 0
-        state: enabled selectable sensitive
+        state: enabled sensitive
         toolkit: gtk
         <AtkComponent>
         layer: popup
@@ -189,7 +194,7 @@ window1
         "text"
         parent: combo4
         index: 1
-        state: editable enabled focusable selectable sensitive single-line visible
+        state: editable enabled focusable sensitive single-line visible
         toolkit: gtk
         <AtkComponent>
         layer: widget
@@ -225,3 +230,4 @@ window1
                             wrap-mode: word
         <AtkAction>
         action 0 name: activate
+        action 0 description: Activates the entry

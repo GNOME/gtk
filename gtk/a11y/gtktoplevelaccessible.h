@@ -1,4 +1,4 @@
-/* GAIL - The GNOME Accessibility Implementation Library
+/* GTK+ - accessibility implementations
  * Copyright 2001 Sun Microsystems Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -18,11 +18,15 @@
 #ifndef __GTK_TOPLEVEL_ACCESSIBLE_H__
 #define __GTK_TOPLEVEL_ACCESSIBLE_H__
 
+#if !defined (__GTK_A11Y_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk-a11y.h> can be included directly."
+#endif
+
 #include <atk/atk.h>
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_TOPLEVEL_ACCESSIBLE               (_gtk_toplevel_accessible_get_type ())
+#define GTK_TYPE_TOPLEVEL_ACCESSIBLE               (gtk_toplevel_accessible_get_type ())
 #define GTK_TOPLEVEL_ACCESSIBLE(obj)               (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TOPLEVEL_ACCESSIBLE, GtkToplevelAccessible))
 #define GTK_TOPLEVEL_ACCESSIBLE_CLASS(klass)       (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TOPLEVEL_ACCESSIBLE, GtkToplevelAccessibleClass))
 #define GTK_IS_TOPLEVEL_ACCESSIBLE(obj)            (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TOPLEVEL_ACCESSIBLE))
@@ -45,8 +49,8 @@ struct _GtkToplevelAccessibleClass
   AtkObjectClass parent_class;
 };
 
-GType  _gtk_toplevel_accessible_get_type     (void);
-GList *_gtk_toplevel_accessible_get_children (GtkToplevelAccessible *accessible);
+GType  gtk_toplevel_accessible_get_type     (void);
+GList *gtk_toplevel_accessible_get_children (GtkToplevelAccessible *accessible);
 
 G_END_DECLS
 

@@ -16,12 +16,11 @@
 #include <glib/gstdio.h>
 #include <stdio.h>
 #include <errno.h>
-#include "demo-common.h"
 
 static GtkWidget *window = NULL;
 static GdkPixbufLoader *pixbuf_loader = NULL;
 static guint load_timeout = 0;
-static FILE* image_stream = NULL;
+static GInputStream * image_stream = NULL;
 
 static void
 progressive_prepared_callback (GdkPixbufLoader *loader,
@@ -79,13 +78,13 @@ progressive_timeout (gpointer data)
 
   if (image_stream)
     {
-      size_t bytes_read;
+      gssize bytes_read;
       guchar buf[256];
       GError *error = NULL;
 
-      bytes_read = fread (buf, 1, 256, image_stream);
+      bytes_read = g_input_stream_read (image_stream, buf, 256, NULL, &error);
 
-      if (ferror (image_stream))
+      if (bytes_read < 0)
         {
           GtkWidget *dialog;
 
@@ -94,12 +93,13 @@ progressive_timeout (gpointer data)
                                            GTK_MESSAGE_ERROR,
                                            GTK_BUTTONS_CLOSE,
                                            "Failure reading image file 'alphatest.png': %s",
-                                           g_strerror (errno));
+                                           error->message);
+          g_error_free (error);
 
           g_signal_connect (dialog, "response",
                             G_CALLBACK (gtk_widget_destroy), NULL);
 
-          fclose (image_stream);
+          g_object_unref (image_stream);
           image_stream = NULL;
 
           gtk_widget_show (dialog);
@@ -127,7 +127,7 @@ progressive_timeout (gpointer data)
           g_signal_connect (dialog, "response",
                             G_CALLBACK (gtk_widget_destroy), NULL);
 
-          fclose (image_stream);
+          g_object_unref (image_stream);
           image_stream = NULL;
 
           gtk_widget_show (dialog);
@@ -137,9 +137,42 @@ progressive_timeout (gpointer data)
           return FALSE; /* uninstall the timeout */
         }
 
-      if (feof (image_stream))
+      if (bytes_read == 0)
         {
-          fclose (image_stream);
+          /* Errors can happen on close, e.g. if the image
+           * file was truncated we'll know on close that
+           * it was incomplete.
+           */
+          error = NULL;
+          if (!g_input_stream_close (image_stream, NULL, &error))
+            {
+              GtkWidget *dialog;
+
+              dialog = gtk_message_dialog_new (GTK_WINDOW (window),
+                                               GTK_DIALOG_DESTROY_WITH_PARENT,
+                                               GTK_MESSAGE_ERROR,
+                                               GTK_BUTTONS_CLOSE,
+                                               "Failed to load image: %s",
+                                               error->message);
+
+              g_error_free (error);
+
+              g_signal_connect (dialog, "response",
+                                G_CALLBACK (gtk_widget_destroy), NULL);
+
+              gtk_widget_show (dialog);
+
+              g_object_unref (image_stream);
+              image_stream = NULL;
+              g_object_unref (pixbuf_loader);
+              pixbuf_loader = NULL;
+
+              load_timeout = 0;
+
+              return FALSE; /* uninstall the timeout */
+            }
+
+          g_object_unref (image_stream);
           image_stream = NULL;
 
           /* Errors can happen on close, e.g. if the image
@@ -180,29 +213,9 @@ progressive_timeout (gpointer data)
     }
   else
     {
-      gchar *filename;
-      gchar *error_message = NULL;
       GError *error = NULL;
 
-      /* demo_find_file() looks in the current directory first,
-       * so you can run gtk-demo without installing GTK, then looks
-       * in the location where the file is installed.
-       */
-      filename = demo_find_file ("alphatest.png", &error);
-      if (error)
-        {
-          error_message = g_strdup (error->message);
-          g_error_free (error);
-        }
-      else
-        {
-          image_stream = g_fopen (filename, "rb");
-          g_free (filename);
-
-          if (!image_stream)
-            error_message = g_strdup_printf ("Unable to open image file 'alphatest.png': %s",
-                                             g_strerror (errno));
-        }
+      image_stream = g_resources_open_stream ("/images/alphatest.png", 0, &error);
 
       if (image_stream == NULL)
         {
@@ -212,8 +225,8 @@ progressive_timeout (gpointer data)
                                            GTK_DIALOG_DESTROY_WITH_PARENT,
                                            GTK_MESSAGE_ERROR,
                                            GTK_BUTTONS_CLOSE,
-                                           "%s", error_message);
-          g_free (error_message);
+                                           "%s", error->message);
+          g_error_free (error);
 
           g_signal_connect (dialog, "response",
                             G_CALLBACK (gtk_widget_destroy), NULL);
@@ -229,7 +242,6 @@ progressive_timeout (gpointer data)
         {
           gdk_pixbuf_loader_close (pixbuf_loader, NULL);
           g_object_unref (pixbuf_loader);
-          pixbuf_loader = NULL;
         }
 
       pixbuf_loader = gdk_pixbuf_loader_new ();
@@ -278,8 +290,10 @@ cleanup_callback (GObject   *object,
     }
 
   if (image_stream)
-    fclose (image_stream);
-  image_stream = NULL;
+    {
+      g_object_unref (image_stream);
+      image_stream = NULL;
+    }
 }
 
 static void
@@ -317,8 +331,6 @@ do_images (GtkWidget *do_widget)
   GtkWidget *button;
   GdkPixbuf *pixbuf;
   GIcon     *gicon;
-  GError *error = NULL;
-  char *filename;
 
   if (!window)
     {
@@ -349,41 +361,9 @@ do_images (GtkWidget *do_widget)
       gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
-      /* demo_find_file() looks in the current directory first,
-       * so you can run gtk-demo without installing GTK, then looks
-       * in the location where the file is installed.
-       */
-      pixbuf = NULL;
-      filename = demo_find_file ("gtk-logo-rgb.gif", &error);
-      if (filename)
-        {
-          pixbuf = gdk_pixbuf_new_from_file (filename, &error);
-          g_free (filename);
-        }
-
-      if (error)
-        {
-          /* This code shows off error handling. You can just use
-           * gtk_image_new_from_file() instead if you don't want to report
-           * errors to the user. If the file doesn't load when using
-           * gtk_image_new_from_file(), a "missing image" icon will
-           * be displayed instead.
-           */
-          GtkWidget *dialog;
-
-          dialog = gtk_message_dialog_new (GTK_WINDOW (window),
-                                           GTK_DIALOG_DESTROY_WITH_PARENT,
-                                           GTK_MESSAGE_ERROR,
-                                           GTK_BUTTONS_CLOSE,
-                                           "Unable to open image file 'gtk-logo-rgb.gif': %s",
-                                           error->message);
-          g_error_free (error);
-
-          g_signal_connect (dialog, "response",
-                            G_CALLBACK (gtk_widget_destroy), NULL);
-
-          gtk_widget_show (dialog);
-        }
+      pixbuf = gdk_pixbuf_new_from_resource ("/images/gtk-logo-old.png", NULL);
+      /* The image loading must work, we ensure that the resources are valid. */
+      g_assert (pixbuf);
 
       image = gtk_image_new_from_pixbuf (pixbuf);
 
@@ -403,9 +383,7 @@ do_images (GtkWidget *do_widget)
       gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
-      filename = demo_find_file ("floppybuddy.gif", NULL);
-      image = gtk_image_new_from_file (filename);
-      g_free (filename);
+      image = gtk_image_new_from_resource ("/images/floppybuddy.gif");
 
       gtk_container_add (GTK_CONTAINER (frame), image);
 
@@ -427,8 +405,8 @@ do_images (GtkWidget *do_widget)
 
       gtk_container_add (GTK_CONTAINER (frame), image);
 
-      /* Progressive */
 
+      /* Progressive */
 
       label = gtk_label_new (NULL);
       gtk_label_set_markup (GTK_LABEL (label),

@@ -143,7 +143,7 @@ struct _GtkStatusIconPrivate
   gchar         *tooltip_text;
   gchar         *title;
 #endif
-	
+
 #ifdef GDK_WINDOWING_QUARTZ
   GtkQuartzStatusIcon *status_item;
   gchar         *tooltip_text;
@@ -840,57 +840,59 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
   priv->visible      = TRUE;
 
 #ifdef GDK_WINDOWING_X11
-  priv->size         = 0;
-  priv->tray_icon = GTK_WIDGET (_gtk_tray_icon_new (NULL));
+  if (GDK_IS_X11_DISPLAY (gdk_display_get_default ()))
+    {
+      priv->size         = 0;
+      priv->tray_icon = GTK_WIDGET (_gtk_tray_icon_new (NULL));
 
-  gtk_widget_add_events (GTK_WIDGET (priv->tray_icon),
-			 GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-			 GDK_SCROLL_MASK);
+      gtk_widget_add_events (GTK_WIDGET (priv->tray_icon),
+                             GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+                             GDK_SCROLL_MASK);
 
-  g_signal_connect_swapped (priv->tray_icon, "key-press-event",
-			    G_CALLBACK (gtk_status_icon_key_press), status_icon);
-  g_signal_connect_swapped (priv->tray_icon, "popup-menu",
-			    G_CALLBACK (gtk_status_icon_popup_menu), status_icon);
-  g_signal_connect_swapped (priv->tray_icon, "notify::embedded",
-			    G_CALLBACK (gtk_status_icon_embedded_changed), status_icon);
-  g_signal_connect_swapped (priv->tray_icon, "notify::orientation",
-			    G_CALLBACK (gtk_status_icon_orientation_changed), status_icon);
-  g_signal_connect_swapped (priv->tray_icon, "notify::padding",
-			    G_CALLBACK (gtk_status_icon_padding_changed), status_icon);
-  g_signal_connect_swapped (priv->tray_icon, "notify::icon-size",
-			    G_CALLBACK (gtk_status_icon_icon_size_changed), status_icon);
-  g_signal_connect_swapped (priv->tray_icon, "notify::fg-color",
-                            G_CALLBACK (gtk_status_icon_fg_changed), status_icon);
-  g_signal_connect (priv->tray_icon, "notify::error-color",
-                    G_CALLBACK (gtk_status_icon_color_changed), status_icon);
-  g_signal_connect (priv->tray_icon, "notify::warning-color",
-                    G_CALLBACK (gtk_status_icon_color_changed), status_icon);
-  g_signal_connect (priv->tray_icon, "notify::success-color",
-                    G_CALLBACK (gtk_status_icon_color_changed), status_icon);
-  g_signal_connect_swapped (priv->tray_icon, "button-press-event",
-			    G_CALLBACK (gtk_status_icon_button_press), status_icon);
-  g_signal_connect_swapped (priv->tray_icon, "button-release-event",
-			    G_CALLBACK (gtk_status_icon_button_release), status_icon);
-  g_signal_connect_swapped (priv->tray_icon, "scroll-event",
-			    G_CALLBACK (gtk_status_icon_scroll), status_icon);
-  g_signal_connect_swapped (priv->tray_icon, "query-tooltip",
-			    G_CALLBACK (gtk_status_icon_query_tooltip), status_icon);
-  g_signal_connect_swapped (priv->tray_icon, "screen-changed",
-		    	    G_CALLBACK (gtk_status_icon_screen_changed), status_icon);
-  priv->image = gtk_image_new ();
-  gtk_widget_set_can_focus (priv->image, TRUE);
-  gtk_container_add (GTK_CONTAINER (priv->tray_icon), priv->image);
-  gtk_widget_show (priv->image);
+      g_signal_connect_swapped (priv->tray_icon, "key-press-event",
+                                G_CALLBACK (gtk_status_icon_key_press), status_icon);
+      g_signal_connect_swapped (priv->tray_icon, "popup-menu",
+                                G_CALLBACK (gtk_status_icon_popup_menu), status_icon);
+      g_signal_connect_swapped (priv->tray_icon, "notify::embedded",
+                                G_CALLBACK (gtk_status_icon_embedded_changed), status_icon);
+      g_signal_connect_swapped (priv->tray_icon, "notify::orientation",
+                                G_CALLBACK (gtk_status_icon_orientation_changed), status_icon);
+      g_signal_connect_swapped (priv->tray_icon, "notify::padding",
+                                G_CALLBACK (gtk_status_icon_padding_changed), status_icon);
+      g_signal_connect_swapped (priv->tray_icon, "notify::icon-size",
+                                G_CALLBACK (gtk_status_icon_icon_size_changed), status_icon);
+      g_signal_connect_swapped (priv->tray_icon, "notify::fg-color",
+                                G_CALLBACK (gtk_status_icon_fg_changed), status_icon);
+      g_signal_connect (priv->tray_icon, "notify::error-color",
+                        G_CALLBACK (gtk_status_icon_color_changed), status_icon);
+      g_signal_connect (priv->tray_icon, "notify::warning-color",
+                        G_CALLBACK (gtk_status_icon_color_changed), status_icon);
+      g_signal_connect (priv->tray_icon, "notify::success-color",
+                        G_CALLBACK (gtk_status_icon_color_changed), status_icon);
+      g_signal_connect_swapped (priv->tray_icon, "button-press-event",
+                                G_CALLBACK (gtk_status_icon_button_press), status_icon);
+      g_signal_connect_swapped (priv->tray_icon, "button-release-event",
+                                G_CALLBACK (gtk_status_icon_button_release), status_icon);
+      g_signal_connect_swapped (priv->tray_icon, "scroll-event",
+                                G_CALLBACK (gtk_status_icon_scroll), status_icon);
+      g_signal_connect_swapped (priv->tray_icon, "query-tooltip",
+                                G_CALLBACK (gtk_status_icon_query_tooltip), status_icon);
+      g_signal_connect_swapped (priv->tray_icon, "screen-changed",
+                                G_CALLBACK (gtk_status_icon_screen_changed), status_icon);
+      priv->image = gtk_image_new ();
+      gtk_widget_set_can_focus (priv->image, TRUE);
+      gtk_container_add (GTK_CONTAINER (priv->tray_icon), priv->image);
+      gtk_widget_show (priv->image);
 
-  /* Force-initialize the symbolic colors */
-  g_object_notify (G_OBJECT (priv->tray_icon), "fg-color");
-  g_object_notify (G_OBJECT (priv->tray_icon), "error-color");
-  g_object_notify (G_OBJECT (priv->tray_icon), "warning-color");
-  g_object_notify (G_OBJECT (priv->tray_icon), "success-color");
+      /* Force-initialize the symbolic colors */
+      g_object_notify (G_OBJECT (priv->tray_icon), "fg-color");
+      g_object_notify (G_OBJECT (priv->tray_icon), "error-color");
+      g_object_notify (G_OBJECT (priv->tray_icon), "warning-color");
+      g_object_notify (G_OBJECT (priv->tray_icon), "success-color");
 
-  g_signal_connect_swapped (priv->image, "size-allocate",
-			    G_CALLBACK (gtk_status_icon_size_allocate), status_icon);
-
+      g_signal_connect_swapped (priv->image, "size-allocate",
+                                G_CALLBACK (gtk_status_icon_size_allocate), status_icon);
+    }
 #else /* !GDK_WINDOWING_X11 */
   priv->dummy_widget = gtk_label_new ("");
 #endif
@@ -900,7 +902,7 @@ gtk_status_icon_init (GtkStatusIcon *status_icon)
   /* Get position and orientation of Windows taskbar. */
   {
     APPBARDATA abd;
-    
+
     abd.cbSize = sizeof (abd);
     SHAppBarMessage (ABM_GETTASKBARPOS, &abd);
     if (abd.rc.bottom - abd.rc.top > abd.rc.right - abd.rc.left)
@@ -973,8 +975,8 @@ gtk_status_icon_constructor (GType                  type,
 #ifdef GDK_WINDOWING_X11
   status_icon = GTK_STATUS_ICON (object);
   priv = status_icon->priv;
-  
-  if (priv->visible)
+
+  if (priv->visible && priv->tray_icon)
     gtk_widget_show (priv->tray_icon);
 #endif
 
@@ -991,34 +993,37 @@ gtk_status_icon_finalize (GObject *object)
   g_clear_object (&priv->icon_helper);
 
 #ifdef GDK_WINDOWING_X11
-  g_signal_handlers_disconnect_by_func (priv->tray_icon,
-			                gtk_status_icon_key_press, status_icon);
-  g_signal_handlers_disconnect_by_func (priv->tray_icon,
-			                gtk_status_icon_popup_menu, status_icon);
-  g_signal_handlers_disconnect_by_func (priv->tray_icon,
-			                gtk_status_icon_embedded_changed, status_icon);
-  g_signal_handlers_disconnect_by_func (priv->tray_icon,
-			                gtk_status_icon_orientation_changed, status_icon);
-  g_signal_handlers_disconnect_by_func (priv->tray_icon,
-			                gtk_status_icon_padding_changed, status_icon);
-  g_signal_handlers_disconnect_by_func (priv->tray_icon,
-			                gtk_status_icon_icon_size_changed, status_icon);
-  g_signal_handlers_disconnect_by_func (priv->tray_icon,
-                                        gtk_status_icon_fg_changed, status_icon);
-  g_signal_handlers_disconnect_by_func (priv->tray_icon,
-                                        gtk_status_icon_color_changed, status_icon);
-  g_signal_handlers_disconnect_by_func (priv->tray_icon,
-			                gtk_status_icon_button_press, status_icon);
-  g_signal_handlers_disconnect_by_func (priv->tray_icon,
-			                gtk_status_icon_button_release, status_icon);
-  g_signal_handlers_disconnect_by_func (priv->tray_icon,
-			                gtk_status_icon_scroll, status_icon);
-  g_signal_handlers_disconnect_by_func (priv->tray_icon,
-			                gtk_status_icon_query_tooltip, status_icon);
-  g_signal_handlers_disconnect_by_func (priv->tray_icon,
-		    	                gtk_status_icon_screen_changed, status_icon);
-  gtk_widget_destroy (priv->image);
-  gtk_widget_destroy (priv->tray_icon);
+  if (priv->tray_icon)
+    {
+      g_signal_handlers_disconnect_by_func (priv->tray_icon,
+                                            gtk_status_icon_key_press, status_icon);
+      g_signal_handlers_disconnect_by_func (priv->tray_icon,
+                                            gtk_status_icon_popup_menu, status_icon);
+      g_signal_handlers_disconnect_by_func (priv->tray_icon,
+                                            gtk_status_icon_embedded_changed, status_icon);
+      g_signal_handlers_disconnect_by_func (priv->tray_icon,
+                                            gtk_status_icon_orientation_changed, status_icon);
+      g_signal_handlers_disconnect_by_func (priv->tray_icon,
+                                            gtk_status_icon_padding_changed, status_icon);
+      g_signal_handlers_disconnect_by_func (priv->tray_icon,
+                                            gtk_status_icon_icon_size_changed, status_icon);
+      g_signal_handlers_disconnect_by_func (priv->tray_icon,
+                                            gtk_status_icon_fg_changed, status_icon);
+      g_signal_handlers_disconnect_by_func (priv->tray_icon,
+                                            gtk_status_icon_color_changed, status_icon);
+      g_signal_handlers_disconnect_by_func (priv->tray_icon,
+                                            gtk_status_icon_button_press, status_icon);
+      g_signal_handlers_disconnect_by_func (priv->tray_icon,
+                                            gtk_status_icon_button_release, status_icon);
+      g_signal_handlers_disconnect_by_func (priv->tray_icon,
+                                            gtk_status_icon_scroll, status_icon);
+      g_signal_handlers_disconnect_by_func (priv->tray_icon,
+                                            gtk_status_icon_query_tooltip, status_icon);
+      g_signal_handlers_disconnect_by_func (priv->tray_icon,
+                                            gtk_status_icon_screen_changed, status_icon);
+      gtk_widget_destroy (priv->image);
+      gtk_widget_destroy (priv->tray_icon);
+    }
 #else /* !GDK_WINDOWING_X11 */
   gtk_widget_destroy (priv->dummy_widget);
 #endif
@@ -1032,7 +1037,7 @@ gtk_status_icon_finalize (GObject *object)
 
   status_icons = g_slist_remove (status_icons, status_icon);
 #endif
-	
+
 #ifdef GDK_WINDOWING_QUARTZ
   QUARTZ_POOL_ALLOC;
   [priv->status_item release];
@@ -1131,7 +1136,10 @@ gtk_status_icon_get_property (GObject    *object,
       break;
     case PROP_ORIENTATION:
 #ifdef GDK_WINDOWING_X11
-      g_value_set_enum (value, _gtk_tray_icon_get_orientation (GTK_TRAY_ICON (status_icon->priv->tray_icon)));
+      if (status_icon->priv->tray_icon)
+        g_value_set_enum (value, _gtk_tray_icon_get_orientation (GTK_TRAY_ICON (status_icon->priv->tray_icon)));
+      else
+        g_value_set_enum (value, GTK_ORIENTATION_HORIZONTAL);
 #endif
 #ifdef GDK_WINDOWING_WIN32
       g_value_set_enum (value, status_icon->priv->orientation);
@@ -1362,6 +1370,9 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
   widget = priv->dummy_widget;
 #endif
 
+  if (widget == NULL)
+    return;
+
   context = gtk_widget_get_style_context (widget);
   round_size = round_pixel_size (widget, priv->size);
 
@@ -1447,10 +1458,6 @@ gtk_status_icon_screen_changed (GtkStatusIcon *status_icon,
       g_object_notify (G_OBJECT (status_icon), "screen");
     }
 }
-
-#endif
-
-#ifdef GDK_WINDOWING_X11
 
 static void
 gtk_status_icon_padding_changed (GtkStatusIcon *status_icon)
@@ -1580,7 +1587,7 @@ gtk_status_icon_popup_menu (GtkStatusIcon  *status_icon)
   emit_popup_menu_signal (status_icon, 0, gtk_get_current_event_time ());
 }
 
-#endif
+#endif  /* GDK_WINDOWING_X11 */
 
 static gboolean
 gtk_status_icon_button_press (GtkStatusIcon  *status_icon,
@@ -1620,6 +1627,7 @@ gtk_status_icon_button_release (GtkStatusIcon  *status_icon,
 }
 
 #ifdef GDK_WINDOWING_X11
+
 static gboolean
 gtk_status_icon_scroll (GtkStatusIcon  *status_icon,
 			GdkEventScroll *event)
@@ -1644,6 +1652,7 @@ gtk_status_icon_query_tooltip (GtkStatusIcon *status_icon,
 		 x, y, keyboard_tip, tooltip, &handled);
   return handled;
 }
+
 #endif /* GDK_WINDOWING_X11 */
 
 static void
@@ -2002,7 +2011,8 @@ gtk_status_icon_set_screen (GtkStatusIcon *status_icon,
   g_return_if_fail (GDK_IS_SCREEN (screen));
 
 #ifdef GDK_WINDOWING_X11
-  gtk_window_set_screen (GTK_WINDOW (status_icon->priv->tray_icon), screen);
+  if (status_icon->priv->tray_icon)
+    gtk_window_set_screen (GTK_WINDOW (status_icon->priv->tray_icon), screen);
 #endif
 }
 
@@ -2022,10 +2032,11 @@ gtk_status_icon_get_screen (GtkStatusIcon *status_icon)
   g_return_val_if_fail (GTK_IS_STATUS_ICON (status_icon), NULL);
 
 #ifdef GDK_WINDOWING_X11
-  return gtk_window_get_screen (GTK_WINDOW (status_icon->priv->tray_icon));
-#else
-  return gdk_screen_get_default ();
+  if (status_icon->priv->tray_icon)
+    return gtk_window_get_screen (GTK_WINDOW (status_icon->priv->tray_icon));
+  else
 #endif
+  return gdk_screen_get_default ();
 }
 
 /**
@@ -2054,12 +2065,15 @@ gtk_status_icon_set_visible (GtkStatusIcon *status_icon,
       priv->visible = visible;
 
 #ifdef GDK_WINDOWING_X11
-      if (visible)
-	gtk_widget_show (priv->tray_icon);
-      else if (gtk_widget_get_realized (priv->tray_icon))
+      if (priv->tray_icon)
         {
-	  gtk_widget_hide (priv->tray_icon);
-	  gtk_widget_unrealize (priv->tray_icon);
+          if (visible)
+	    gtk_widget_show (priv->tray_icon);
+          else if (gtk_widget_get_realized (priv->tray_icon))
+            {
+	      gtk_widget_hide (priv->tray_icon);
+	      gtk_widget_unrealize (priv->tray_icon);
+            }
         }
 #endif
 #ifdef GDK_WINDOWING_WIN32
@@ -2116,16 +2130,11 @@ gtk_status_icon_get_visible (GtkStatusIcon *status_icon)
 gboolean
 gtk_status_icon_is_embedded (GtkStatusIcon *status_icon)
 {
-#ifdef GDK_WINDOWING_X11
-  GtkPlug *plug;
-#endif
-
   g_return_val_if_fail (GTK_IS_STATUS_ICON (status_icon), FALSE);
 
 #ifdef GDK_WINDOWING_X11
-  plug = GTK_PLUG (status_icon->priv->tray_icon);
-
-  if (gtk_plug_get_embedded (plug))
+  if (status_icon->priv->tray_icon &&
+      gtk_plug_get_embedded (GTK_PLUG (status_icon->priv->tray_icon)))
     return TRUE;
   else
     return FALSE;
@@ -2161,9 +2170,9 @@ gtk_status_icon_position_menu (GtkMenu  *menu,
 			       gpointer  user_data)
 {
 #ifdef GDK_WINDOWING_X11
+  GtkStatusIcon *status_icon = GTK_STATUS_ICON (user_data);
+  GtkStatusIconPrivate *priv = status_icon->priv;
   GtkAllocation allocation;
-  GtkStatusIcon *status_icon;
-  GtkStatusIconPrivate *priv;
   GtkTrayIcon *tray_icon;
   GtkWidget *widget;
   GdkScreen *screen;
@@ -2172,12 +2181,17 @@ gtk_status_icon_position_menu (GtkMenu  *menu,
   GdkRectangle monitor;
   GdkWindow *window;
   gint monitor_num, height, width, xoffset, yoffset;
-  
+
   g_return_if_fail (GTK_IS_MENU (menu));
   g_return_if_fail (GTK_IS_STATUS_ICON (user_data));
 
-  status_icon = GTK_STATUS_ICON (user_data);
-  priv = status_icon->priv;
+  if (priv->tray_icon == NULL)
+    {
+      *x = 0;
+      *y = 0;
+      return;
+    }
+
   tray_icon = GTK_TRAY_ICON (priv->tray_icon);
   widget = priv->tray_icon;
 
@@ -2300,21 +2314,23 @@ gtk_status_icon_position_menu (GtkMenu  *menu,
  *
  * Since: 2.10
  */
-gboolean  
+gboolean
 gtk_status_icon_get_geometry (GtkStatusIcon    *status_icon,
 			      GdkScreen       **screen,
 			      GdkRectangle     *area,
 			      GtkOrientation   *orientation)
 {
 #ifdef GDK_WINDOWING_X11   
+  GtkStatusIconPrivate *priv = status_icon->priv;
   GtkAllocation allocation;
   GtkWidget *widget;
-  GtkStatusIconPrivate *priv;
   gint x, y;
 
   g_return_val_if_fail (GTK_IS_STATUS_ICON (status_icon), FALSE);
 
-  priv = status_icon->priv;
+  if (priv->tray_icon == NULL)
+    return FALSE;
+
   widget = priv->tray_icon;
 
   if (screen)
@@ -2362,7 +2378,8 @@ gtk_status_icon_set_has_tooltip (GtkStatusIcon *status_icon,
   priv = status_icon->priv;
 
 #ifdef GDK_WINDOWING_X11
-  gtk_widget_set_has_tooltip (priv->tray_icon, has_tooltip);
+  if (priv->tray_icon)
+    gtk_widget_set_has_tooltip (priv->tray_icon, has_tooltip);
 #endif
 #ifdef GDK_WINDOWING_WIN32
   if (!has_tooltip && priv->tooltip_text)
@@ -2396,7 +2413,8 @@ gtk_status_icon_get_has_tooltip (GtkStatusIcon *status_icon)
   priv = status_icon->priv;
 
 #ifdef GDK_WINDOWING_X11
-  has_tooltip = gtk_widget_get_has_tooltip (priv->tray_icon);
+  if (priv->tray_icon)
+    has_tooltip = gtk_widget_get_has_tooltip (priv->tray_icon);
 #endif
 #ifdef GDK_WINDOWING_WIN32
   has_tooltip = (priv->tooltip_text != NULL);
@@ -2435,9 +2453,8 @@ gtk_status_icon_set_tooltip_text (GtkStatusIcon *status_icon,
   priv = status_icon->priv;
 
 #ifdef GDK_WINDOWING_X11
-
-  gtk_widget_set_tooltip_text (priv->tray_icon, text);
-
+  if (priv->tray_icon)
+    gtk_widget_set_tooltip_text (priv->tray_icon, text);
 #endif
 #ifdef GDK_WINDOWING_WIN32
   if (text == NULL)
@@ -2490,7 +2507,8 @@ gtk_status_icon_get_tooltip_text (GtkStatusIcon *status_icon)
   priv = status_icon->priv;
 
 #ifdef GDK_WINDOWING_X11
-  tooltip_text = gtk_widget_get_tooltip_text (priv->tray_icon);
+  if (priv->tray_icon)
+    tooltip_text = gtk_widget_get_tooltip_text (priv->tray_icon);
 #endif
 #ifdef GDK_WINDOWING_WIN32
   if (priv->tooltip_text)
@@ -2534,7 +2552,8 @@ gtk_status_icon_set_tooltip_markup (GtkStatusIcon *status_icon,
   priv = status_icon->priv;
 
 #ifdef GDK_WINDOWING_X11
-  gtk_widget_set_tooltip_markup (priv->tray_icon, markup);
+  if (priv->tray_icon)
+    gtk_widget_set_tooltip_markup (priv->tray_icon, markup);
 #endif
 #ifdef GDK_WINDOWING_WIN32
   if (markup)
@@ -2572,7 +2591,8 @@ gtk_status_icon_get_tooltip_markup (GtkStatusIcon *status_icon)
   priv = status_icon->priv;
 
 #ifdef GDK_WINDOWING_X11
-  markup = gtk_widget_get_tooltip_markup (priv->tray_icon);
+  if (priv->tray_icon)
+    markup = gtk_widget_get_tooltip_markup (priv->tray_icon);
 #endif
 #ifdef GDK_WINDOWING_WIN32
   if (priv->tooltip_text)
@@ -2610,11 +2630,14 @@ guint32
 gtk_status_icon_get_x11_window_id (GtkStatusIcon *status_icon)
 {
 #ifdef GDK_WINDOWING_X11
-  gtk_widget_realize (GTK_WIDGET (status_icon->priv->tray_icon));
-  return GDK_WINDOW_XID (gtk_widget_get_window (GTK_WIDGET (status_icon->priv->tray_icon)));
-#else
-  return 0;
+  if (status_icon->priv->tray_icon)
+    {
+      gtk_widget_realize (GTK_WIDGET (status_icon->priv->tray_icon));
+      return GDK_WINDOW_XID (gtk_widget_get_window (GTK_WIDGET (status_icon->priv->tray_icon)));
+    }
+  else
 #endif
+  return 0;
 }
 
 /**
@@ -2640,7 +2663,8 @@ gtk_status_icon_set_title (GtkStatusIcon *status_icon,
   priv = status_icon->priv;
 
 #ifdef GDK_WINDOWING_X11
-  gtk_window_set_title (GTK_WINDOW (priv->tray_icon), title);
+  if (priv->tray_icon)
+    gtk_window_set_title (GTK_WINDOW (priv->tray_icon), title);
 #endif
 #ifdef GDK_WINDOWING_QUARTZ
   g_free (priv->title);
@@ -2668,20 +2692,24 @@ const gchar *
 gtk_status_icon_get_title (GtkStatusIcon *status_icon)
 {
   GtkStatusIconPrivate *priv;
+  const gchar *title = NULL;
 
   g_return_val_if_fail (GTK_IS_STATUS_ICON (status_icon), NULL);
 
   priv = status_icon->priv;
 
 #ifdef GDK_WINDOWING_X11
-  return gtk_window_get_title (GTK_WINDOW (priv->tray_icon));
+  if (priv->tray_icon)
+    title = gtk_window_get_title (GTK_WINDOW (priv->tray_icon));
 #endif
 #ifdef GDK_WINDOWING_QUARTZ
-  return priv->title;
+  title = priv->title;
 #endif
 #ifdef GDK_WINDOWING_WIN32
-  return priv->title;
+  title = priv->title;
 #endif
+
+ return title;
 }
 
 
@@ -2708,17 +2736,20 @@ gtk_status_icon_set_name (GtkStatusIcon *status_icon,
   priv = status_icon->priv;
 
 #ifdef GDK_WINDOWING_X11
-  if (gtk_widget_get_realized (priv->tray_icon))
+  if (priv->tray_icon)
     {
-      /* gtk_window_set_wmclass() only operates on non-realized windows,
-       * so temporarily unrealize the tray here
-       */
-      gtk_widget_hide (priv->tray_icon);
-      gtk_widget_unrealize (priv->tray_icon);
-      gtk_window_set_wmclass (GTK_WINDOW (priv->tray_icon), name, name);
-      gtk_widget_show (priv->tray_icon);
+      if (gtk_widget_get_realized (priv->tray_icon))
+        {
+          /* gtk_window_set_wmclass() only operates on non-realized windows,
+           * so temporarily unrealize the tray here
+           */
+          gtk_widget_hide (priv->tray_icon);
+          gtk_widget_unrealize (priv->tray_icon);
+          gtk_window_set_wmclass (GTK_WINDOW (priv->tray_icon), name, name);
+          gtk_widget_show (priv->tray_icon);
+        }
+      else
+        gtk_window_set_wmclass (GTK_WINDOW (priv->tray_icon), name, name);
     }
-  else
-    gtk_window_set_wmclass (GTK_WINDOW (priv->tray_icon), name, name);
 #endif
 }

@@ -122,7 +122,7 @@ _gtk_color_chooser_color_activated (GtkColorChooser *chooser,
 /**
  * gtk_color_chooser_get_rgba:
  * @chooser: a #GtkColorChooser
- * @color: return location for the color
+ * @color: (out): a #GdkRGBA to fill in with the current color
  *
  * Gets the currently-selected color.
  *

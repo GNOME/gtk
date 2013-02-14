@@ -1,0 +1,255 @@
+/* "Tradition" theme for GTK 3, by John Lindgren */
+/* Last modified: October 21, 2012 */
+/* Public domain */
+
+/* COLORS */
+
+@define-color color_base #c8c4c0;
+@define-color color_sel #406080;
+@define-color color_tip #ffffc0;
+@define-color color_dark shade (@color_base, 0.6);
+
+* {
+    background-color: @color_base;
+    border-color: @color_dark;
+    border-style: solid;
+    color: black;
+}
+
+.cell, .check, .entry, .menu, .radio, GtkTextView, GtkTreeView {
+    background-color: white;
+}
+
+GtkImage, GtkLabel, .menuitem {
+    background-color: transparent;
+}
+
+.tooltip {
+    background-color: @color_tip;
+}
+
+*:insensitive {
+    color: @color_dark;
+}
+
+*:selected, .menuitem:prelight, *:prelight {
+    background-color: @color_sel;
+    color: white;
+}
+
+GtkCheckButton:selected {
+    background-color: @color_base;
+}
+
+.check:prelight, .check:selected, .radio:prelight, .radio:selected {
+    background-color: white;
+    color: black;
+}
+
+.slider, .pane-separator {
+    background-color: alpha (black, 0);
+    color: alpha (black, 0);
+}
+
+/* GRADIENTS */
+
+.button, .notebook tab:active, .slider {
+    background-image: -gtk-gradient (linear, left top, left bottom,
+     from (shade (@color_base, 1.2)), to (@color_base));
+}
+
+.button:active, .notebook tab, .trough {
+    background-image: -gtk-gradient (linear, left top, left bottom,
+     from (shade (@color_base, 0.8)), to (@color_base));
+}
+
+.button.vertical, .slider.vertical {
+    background-image: -gtk-gradient (linear, left top, right top,
+     from (shade (@color_base, 1.2)), to (@color_base));
+}
+
+.button.vertical:active, .trough.vertical {
+    background-image: -gtk-gradient (linear, left top, right top,
+     from (shade (@color_base, 0.8)), to (@color_base));
+}
+
+column-header > .button {
+    background-image: none;
+}
+
+.progressbar {
+    background-image: -gtk-gradient (linear, left top, left bottom,
+     from (shade (@color_sel, 1.2)), to (@color_sel));
+    border-color: shade (@color_sel, 0.7);
+}
+
+.progressbar.vertical {
+    background-image: -gtk-gradient (linear, left top, right top,
+     from (shade (@color_sel, 1.2)), to (@color_sel));
+}
+
+/* SPACING */
+
+* {
+    border-width: 0px;
+    border-radius: 0px;
+    padding: 0px;
+}
+
+.menu {
+    border-width: 1px;
+    padding: 1px;
+}
+
+.menuitem {
+    border-radius: 3px;
+    padding: 1px;
+}
+
+.toolbar {
+    padding: 0px 3px 0px 3px;
+}
+
+.button, .check, .entry, .frame, .notebook, .progressbar, .radio, .scale,
+ .scrollbar, .slider, .trough {
+    border-radius: 2px;
+    border-width: 1px;
+}
+
+.notebook tab {
+    padding: 2px;
+}
+
+.notebook tab:active {
+    padding: 3px;
+}
+
+.button {
+    padding: 3px;
+}
+
+.entry, column-header > .button {
+    padding: 2px;
+}
+
+GtkComboBox .button {
+    padding: 0px 2px 0px 2px;
+}
+
+.combobox-entry > .entry {
+    border-radius: 2px 0px 0px 2px;
+    border-width: 1px 0px 1px 1px;
+}
+
+.combobox-entry > .button {
+    border-radius: 0px 2px 2px 0px;
+}
+
+.spinbutton.button {
+    border-radius: 0px;
+    border-width: 0px 1px 0px 1px;
+}
+
+.spinbutton.button:last-child {
+    border-width: 0px;
+}
+
+column-header > .button {
+    border-radius: 0px;
+    border-width: 0px 0px 1px 0px;
+}
+
+.scrollbar {
+    border-radius: 0px;
+}
+
+.scrollbar.trough {
+    border-width: 1px 1px 0px 1px;
+}
+
+.scrollbar.trough.vertical {
+    border-width: 1px 0px 1px 1px;
+}
+
+.scrollbar.button.left, .scrollbar.button.right {
+    border-width: 1px 0px 0px 0px;
+}
+
+.scrollbar.button.top, .scrollbar.button.bottom {
+    border-width: 0px 0px 0px 1px;
+}
+
+.scrollbars-junction {
+    border-width: 1px 0px 0px 1px;
+}
+
+.scrollbar.slider {
+    border-width: 1px 1px 0px 1px;
+}
+
+.scrollbar.slider.vertical {
+    border-width: 1px 0px 1px 1px;
+}
+
+.separator {
+    border-width: 1px;
+    padding: 1px;
+}
+
+GtkComboBox .separator, GtkFontButton .separator {
+    border-width: 0px;
+    padding: 0px;
+}
+
+.tooltip {
+    border-width: 1px;
+    padding: 2px;
+}
+
+/* MISC SETTINGS */
+
+* {
+    -GtkButton-default-border: 0;
+    -GtkButton-image-spacing: 4;
+    -GtkButtonBox-child-internal-pad-x: 0;
+    -GtkButtonBox-child-internal-pad-y: 0;
+    -GtkButtonBox-child-min-width: 0;
+    -GtkButtonBox-child-min-height: 0;
+    -GtkCheckButton-indicator-size: 12;
+    -GtkCheckMenuItem-indicator-size: 12;
+    -GtkComboBox-arrow-scaling: 0.667;
+    -GtkDialog-action-area-border: 0;
+    -GtkDialog-button-spacing: 6;
+    -GtkDialog-content-area-border: 6;
+    -GtkDialog-content-area-spacing: 6;
+    -GtkEntry-inner-border: 1;
+    -GtkMenu-horizontal-padding: 1;
+    -GtkMenu-horizontal-offset: 0;
+    -GtkMenuBar-internal-padding: 0;
+    -GtkMenuItem-arrow-scaling: 0.667;
+    -GtkMenuItem-toggle-spacing: 6;
+    -GtkNotebook-tab-overlap: 1;
+    -GtkPaned-handle-size: 6;
+    -GtkProgressBar-min-horizontal-bar-height: 12;
+    -GtkProgressBar-min-vertical-bar-width: 12;
+    -GtkRange-slider-width: 12;
+    -GtkRange-trough-border: 0;
+    -GtkScale-slider-length: 30;
+    -GtkScrolledWindow-scrollbar-spacing: 0;
+    -GtkScrolledWindow-scrollbars-within-bevel: 1;
+    -GtkTreeView-horizontal-separator: 0;
+    -GtkTreeView-vertical-separator: 0;
+    -GtkWidget-focus-line-width: 0;
+    -GtkWidget-focus-padding: 0;
+    -GtkWidget-separator-height: 1;
+    -GtkWidget-separator-width: 1;
+    -GtkWidget-wide-separators: TRUE;
+    -GtkWindow-resize-grip-height: 0;
+}
+
+.scrollbar {
+    -GtkRange-slider-width: 17;
+    -GtkRange-stepper-size: 16;
+    -GtkRange-trough-under-steppers: FALSE;
+    -GtkScrollbar-min-slider-length: 18;
+}

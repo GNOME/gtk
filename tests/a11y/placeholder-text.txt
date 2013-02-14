@@ -56,6 +56,7 @@ window1
                           wrap-mode: word
       <AtkAction>
       action 0 name: activate
+      action 0 description: Activates the entry
     entry2
       "text"
       parent: box1
@@ -97,6 +98,7 @@ window1
                           wrap-mode: word
       <AtkAction>
       action 0 name: activate
+      action 0 description: Activates the entry
     entry3
       "text"
       parent: box1
@@ -138,3 +140,4 @@ window1
                           wrap-mode: word
       <AtkAction>
       action 0 name: activate
+      action 0 description: Activates the entry

@@ -38,7 +38,7 @@
     <value nick='cwd' value='1'/>
   </enum>
 
-  <schema id='org.gtk.Settings.FileChooser'>
+  <schema id='org.gtk.Settings.FileChooser' path='/org/gtk/settings/file-chooser/'>
     <key name='last-folder-uri' type='s'>
       <default>""</default>
     </key>
@@ -47,6 +47,8 @@
     </key>
     <key name='show-hidden' type='b'>
       <default>false</default>
+      <summary>Whether to show hidden files</summary>
+      <description>If set to true, then hidden files are shown by default.  Hidden files are either dotfiles, listed in the folder's .hidden file or backup files ending with a tilde (~).</description>
     </key>
     <key name='expand-folders' type='b'>
       <default>false</default>
@@ -68,6 +70,9 @@
     </key>
     <key name='startup-mode' enum='org.gtk.Settings.FileChooser.StartupMode'>
       <default>'recent'</default>
+    </key>
+    <key name='sidebar-width' type='i'>
+      <default>148</default>
     </key>
   </schema>
 

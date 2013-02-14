@@ -27,19 +27,20 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <cairo-gobject.h>
 
+#include "gtkcsscolorvalueprivate.h"
 #include "gtkcssimagegradientprivate.h"
 #include "gtkcssprovider.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkcsstypedvalueprivate.h"
 #include "gtkcsstypesprivate.h"
-#include "gtkgradient.h"
-#include "gtkgradientprivate.h"
 #include "gtkprivatetypebuiltins.h"
 #include "gtkstylecontextprivate.h"
-#include "gtksymboliccolorprivate.h"
 #include "gtkthemingengine.h"
 #include "gtktypebuiltins.h"
 #include "gtkwin32themeprivate.h"
+
+#include "deprecated/gtkgradientprivate.h"
+#include "deprecated/gtksymboliccolorprivate.h"
 
 /* this is in case round() is not provided by the compiler, 
  * such as in the case of C89 compilers, like MSVC
@@ -171,7 +172,9 @@ rgba_value_parse (GtkCssParser *parser,
   GtkSymbolicColor *symbolic;
   GdkRGBA rgba;
 
-  symbolic = _gtk_symbolic_color_new_take_value (_gtk_css_symbolic_value_new (parser));
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
+  symbolic = _gtk_css_symbolic_value_new (parser);
   if (symbolic == NULL)
     return FALSE;
 
@@ -186,6 +189,8 @@ rgba_value_parse (GtkCssParser *parser,
       g_value_init (value, GTK_TYPE_SYMBOLIC_COLOR);
       g_value_take_boxed (value, symbolic);
     }
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   return TRUE;
 }
@@ -225,11 +230,11 @@ rgba_value_compute (GtkStyleProviderPrivate *provider,
       GValue new_value = G_VALUE_INIT;
       GdkRGBA rgba;
 
-      val = _gtk_symbolic_color_resolve_full (symbolic,
-                                              provider,
-                                              _gtk_css_computed_values_get_value (values, GTK_CSS_PROPERTY_COLOR),
-                                              GTK_CSS_DEPENDS_ON_COLOR,
-                                              dependencies);
+      val = _gtk_css_color_value_resolve (_gtk_symbolic_color_get_css_value (symbolic),
+                                          provider,
+                                          _gtk_css_computed_values_get_value (values, GTK_CSS_PROPERTY_COLOR),
+                                          GTK_CSS_DEPENDS_ON_COLOR,
+                                          dependencies);
       if (val != NULL)
         {
           rgba = *_gtk_css_rgba_value_get_rgba (val);
@@ -253,7 +258,9 @@ color_value_parse (GtkCssParser *parser,
   GtkSymbolicColor *symbolic;
   GdkRGBA rgba;
 
-  symbolic = _gtk_symbolic_color_new_take_value (_gtk_css_symbolic_value_new (parser));
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
+  symbolic = _gtk_css_symbolic_value_new (parser);
   if (symbolic == NULL)
     return FALSE;
 
@@ -273,6 +280,8 @@ color_value_parse (GtkCssParser *parser,
       g_value_init (value, GTK_TYPE_SYMBOLIC_COLOR);
       g_value_take_boxed (value, symbolic);
     }
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   return TRUE;
 }
@@ -310,11 +319,11 @@ color_value_compute (GtkStyleProviderPrivate *provider,
       GValue new_value = G_VALUE_INIT;
       GtkCssValue *val;
 
-      val = _gtk_symbolic_color_resolve_full ((GtkSymbolicColor *) g_value_get_boxed (value),
-                                              provider,
-                                              _gtk_css_computed_values_get_value (values, GTK_CSS_PROPERTY_COLOR),
-                                              GTK_CSS_DEPENDS_ON_COLOR,
-                                              dependencies);
+      val = _gtk_css_color_value_resolve (_gtk_symbolic_color_get_css_value (g_value_get_boxed (value)),
+                                          provider,
+                                          _gtk_css_computed_values_get_value (values, GTK_CSS_PROPERTY_COLOR),
+                                          GTK_CSS_DEPENDS_ON_COLOR,
+                                          dependencies);
       if (val != NULL)
         {
           const GdkRGBA *rgba = _gtk_css_rgba_value_get_rgba (val);
@@ -338,7 +347,7 @@ symbolic_color_value_parse (GtkCssParser *parser,
 {
   GtkSymbolicColor *symbolic;
 
-  symbolic = _gtk_symbolic_color_new_take_value (_gtk_css_symbolic_value_new (parser));
+  symbolic = _gtk_css_symbolic_value_new (parser);
   if (symbolic == NULL)
     return FALSE;
 
@@ -352,6 +361,8 @@ symbolic_color_value_print (const GValue *value,
 {
   GtkSymbolicColor *symbolic = g_value_get_boxed (value);
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
   if (symbolic == NULL)
     g_string_append (string, "none");
   else
@@ -360,6 +371,8 @@ symbolic_color_value_print (const GValue *value,
       g_string_append (string, s);
       g_free (s);
     }
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 static gboolean 
@@ -702,6 +715,8 @@ gradient_value_print (const GValue *value,
 {
   GtkGradient *gradient = g_value_get_boxed (value);
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
   if (gradient == NULL)
     g_string_append (string, "none");
   else
@@ -710,6 +725,8 @@ gradient_value_print (const GValue *value,
       g_string_append (string, s);
       g_free (s);
     }
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 static gboolean 

@@ -20,7 +20,6 @@
 
 #include "gtkstylecontext.h"
 #include "gtkstyleproviderprivate.h"
-#include "gtksymboliccolor.h"
 #include "gtkbitmaskprivate.h"
 #include "gtkcssvalueprivate.h"
 
@@ -28,11 +27,11 @@ G_BEGIN_DECLS
 
 void            _gtk_style_context_set_widget                (GtkStyleContext *context,
                                                               GtkWidget       *widget);
+const GtkBitmask *
+                _gtk_style_context_get_changes               (GtkStyleContext *context);
+
 GtkCssValue   * _gtk_style_context_peek_property             (GtkStyleContext *context,
                                                               guint            property_id);
-double         _gtk_style_context_get_number                 (GtkStyleContext *context,
-                                                              guint            property_id,
-                                                              double           one_hundred_percent);
 const GValue * _gtk_style_context_peek_style_property        (GtkStyleContext *context,
                                                               GType            widget_type,
                                                               GtkStateFlags    state,
@@ -46,13 +45,8 @@ void           _gtk_style_context_queue_invalidate           (GtkStyleContext *c
 gboolean       _gtk_style_context_check_region_name          (const gchar     *str);
 
 gboolean       _gtk_style_context_resolve_color              (GtkStyleContext    *context,
-                                                              GtkSymbolicColor   *color,
-                                                              GdkRGBA            *result,
-                                                              GtkCssDependencies *dependencies);
-GtkCssValue *  _gtk_style_context_resolve_color_value        (GtkStyleContext    *context,
-                                                              GtkCssValue        *current,
-                                                              GtkCssDependencies  current_deps,
                                                               GtkCssValue        *color,
+                                                              GdkRGBA            *result,
                                                               GtkCssDependencies *dependencies);
 void           _gtk_style_context_get_cursor_color           (GtkStyleContext    *context,
                                                               GdkRGBA            *primary_color,

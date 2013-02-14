@@ -15,7 +15,16 @@ gdk/x11/gdkapplaunchcontext-x11.c
 gdk/x11/gdkdevicemanager-xi2.c
 gdk/x11/gdkdevice-xi2.c
 gdk/x11/gdkmain-x11.c
+gtk/a11y/gtkbooleancellaccessible.c
+gtk/a11y/gtkbuttonaccessible.c
+gtk/a11y/gtkcellaccessible.c
+gtk/a11y/gtkcolorswatchaccessible.c
+gtk/a11y/gtkcomboboxaccessible.c
+gtk/a11y/gtkentryaccessible.c
+gtk/a11y/gtkexpanderaccessible.c
+gtk/a11y/gtkmenuitemaccessible.c
 gtk/a11y/gtkrenderercellaccessible.c
+gtk/a11y/gtkscalebuttonaccessible.c
 gtk/a11y/gtkspinneraccessible.c
 gtk/a11y/gtkswitchaccessible.c
 gtk/deprecated/gtkcolorsel.c

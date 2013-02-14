@@ -49,8 +49,9 @@
  * #GtkTreeView or #GtkIconView, it can be added to a #GtkScrolledWindow
  * with gtk_container_add(). If a widget does not, you must first add the
  * widget to a #GtkViewport, then add the viewport to the scrolled window.
- * The convenience function gtk_scrolled_window_add_with_viewport() does
- * exactly this, so you can ignore the presence of the viewport.
+ * gtk_container_add() does this automatically if a child that does not
+ * implement #GtkScrollable is added to a #GtkScrolledWindow, so you can
+ * ignore the presence of the viewport.
  *
  * The #GtkViewport will start scrolling content only if allocated less
  * than the child widget's minimum size in a given orientation.
@@ -241,7 +242,6 @@ gtk_viewport_init (GtkViewport *viewport)
   gtk_widget_set_has_window (GTK_WIDGET (viewport), TRUE);
 
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (viewport), FALSE);
-  gtk_container_set_resize_mode (GTK_CONTAINER (viewport), GTK_RESIZE_QUEUE);
 
   priv->shadow_type = GTK_SHADOW_IN;
   priv->view_window = NULL;
@@ -689,7 +689,7 @@ gtk_viewport_realize (GtkWidget *widget)
   window = gdk_window_new (gtk_widget_get_parent_window (widget),
                            &attributes, attributes_mask);
   gtk_widget_set_window (widget, window);
-  gdk_window_set_user_data (window, viewport);
+  gtk_widget_register_window (widget, window);
 
   viewport_get_view_allocation (viewport, &view_allocation);
   
@@ -701,7 +701,7 @@ gtk_viewport_realize (GtkWidget *widget)
 
   priv->view_window = gdk_window_new (window,
                                       &attributes, attributes_mask);
-  gdk_window_set_user_data (priv->view_window, viewport);
+  gtk_widget_register_window (widget, priv->view_window);
 
   attributes.x = - gtk_adjustment_get_value (hadjustment);
   attributes.y = - gtk_adjustment_get_value (vadjustment);
@@ -711,7 +711,7 @@ gtk_viewport_realize (GtkWidget *widget)
   attributes.event_mask = event_mask;
 
   priv->bin_window = gdk_window_new (priv->view_window, &attributes, attributes_mask);
-  gdk_window_set_user_data (priv->bin_window, viewport);
+  gtk_widget_register_window (widget, priv->bin_window);
 
   child = gtk_bin_get_child (bin);
   if (child)
@@ -731,11 +731,11 @@ gtk_viewport_unrealize (GtkWidget *widget)
   GtkViewport *viewport = GTK_VIEWPORT (widget);
   GtkViewportPrivate *priv = viewport->priv;
 
-  gdk_window_set_user_data (priv->view_window, NULL);
+  gtk_widget_unregister_window (widget, priv->view_window);
   gdk_window_destroy (priv->view_window);
   priv->view_window = NULL;
 
-  gdk_window_set_user_data (priv->bin_window, NULL);
+  gtk_widget_unregister_window (widget, priv->bin_window);
   gdk_window_destroy (priv->bin_window);
   priv->bin_window = NULL;
 

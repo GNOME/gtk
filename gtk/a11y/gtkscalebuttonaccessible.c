@@ -1,4 +1,4 @@
-/* GAIL - The GNOME Accessibility Implementation Library
+/* GTK+ - accessibility implementations
  * Copyright 2008 Jan Arne Petersen
  *
  * This library is free software; you can redistribute it and/or
@@ -17,6 +17,7 @@
 
 #include <config.h>
 
+#include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
 #include "gtkscalebuttonaccessible.h"
 
@@ -26,7 +27,7 @@
 static void atk_action_interface_init (AtkActionIface *iface);
 static void atk_value_interface_init  (AtkValueIface  *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkScaleButtonAccessible, _gtk_scale_button_accessible, GTK_TYPE_BUTTON_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkScaleButtonAccessible, gtk_scale_button_accessible, GTK_TYPE_BUTTON_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_VALUE, atk_value_interface_init));
 
@@ -43,7 +44,7 @@ gtk_scale_button_accessible_initialize (AtkObject *obj,
 {
   GtkAdjustment *adjustment;
 
-  ATK_OBJECT_CLASS (_gtk_scale_button_accessible_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gtk_scale_button_accessible_parent_class)->initialize (obj, data);
 
   adjustment = gtk_scale_button_get_adjustment (GTK_SCALE_BUTTON (data));
   if (adjustment)
@@ -77,12 +78,12 @@ gtk_scale_button_accessible_notify_gtk (GObject    *obj,
     }
   else
     {
-      GTK_WIDGET_ACCESSIBLE_CLASS (_gtk_scale_button_accessible_parent_class)->notify_gtk (obj, pspec);
+      GTK_WIDGET_ACCESSIBLE_CLASS (gtk_scale_button_accessible_parent_class)->notify_gtk (obj, pspec);
     }
 }
 
 static void
-_gtk_scale_button_accessible_class_init (GtkScaleButtonAccessibleClass *klass)
+gtk_scale_button_accessible_class_init (GtkScaleButtonAccessibleClass *klass)
 {
   AtkObjectClass *atk_object_class = ATK_OBJECT_CLASS (klass);
   GtkWidgetAccessibleClass *widget_class = GTK_WIDGET_ACCESSIBLE_CLASS (klass);
@@ -93,7 +94,7 @@ _gtk_scale_button_accessible_class_init (GtkScaleButtonAccessibleClass *klass)
 }
 
 static void
-_gtk_scale_button_accessible_init (GtkScaleButtonAccessible *button)
+gtk_scale_button_accessible_init (GtkScaleButtonAccessible *button)
 {
 }
 
@@ -133,7 +134,15 @@ static const gchar *
 gtk_scale_button_accessible_get_description (AtkAction *action,
                                              gint       i)
 {
-  return NULL;
+  switch (i)
+    {
+    case 0:
+      return C_("Action description", "Pops up the slider");
+    case 1:
+      return C_("Action description", "Dismisses the slider");
+    default:
+      return NULL;
+    }
 }
 
 static const gchar *
@@ -151,6 +160,21 @@ gtk_scale_button_accessible_action_get_name (AtkAction *action,
     }
 }
 
+static const gchar *
+gtk_scale_button_accessible_action_get_localized_name (AtkAction *action,
+                                                       gint       i)
+{
+  switch (i)
+    {
+    case 0:
+      return C_("Action name", "Popup");
+    case 1:
+      return C_("Action name", "Dismiss");
+    default:
+      return NULL;
+    }
+}
+
 static void
 atk_action_interface_init (AtkActionIface *iface)
 {
@@ -158,6 +182,7 @@ atk_action_interface_init (AtkActionIface *iface)
   iface->get_n_actions = gtk_scale_button_accessible_get_n_actions;
   iface->get_description = gtk_scale_button_accessible_get_description;
   iface->get_name = gtk_scale_button_accessible_action_get_name;
+  iface->get_localized_name = gtk_scale_button_accessible_action_get_localized_name;
 }
 
 static void

@@ -97,6 +97,8 @@
 #include <math.h>
 #include <stdlib.h>
 
+#include "a11y/gtklevelbaraccessible.h"
+
 #include "fallback-c89.c"
 
 #define DEFAULT_BLOCK_SIZE 3
@@ -1024,6 +1026,8 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
 
   g_type_class_add_private (klass, sizeof (GtkLevelBarPrivate));
   g_object_class_install_properties (oclass, LAST_PROPERTY, properties);
+
+  gtk_widget_class_set_accessible_type (wclass, GTK_TYPE_LEVEL_BAR_ACCESSIBLE);
 }
 
 static void

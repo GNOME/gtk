@@ -2611,6 +2611,35 @@ connect_completion_signals (GtkEntryCompletion *completion)
     }
 }
 
+static void
+set_accessible_relation (GtkWidget *window,
+                         GtkWidget *entry)
+{
+  AtkObject *window_accessible;
+  AtkObject *entry_accessible;
+
+  window_accessible = gtk_widget_get_accessible (window);
+  entry_accessible = gtk_widget_get_accessible (entry);
+
+  atk_object_add_relationship (window_accessible,
+                               ATK_RELATION_POPUP_FOR,
+                               entry_accessible);
+}
+
+static void
+unset_accessible_relation (GtkWidget *window,
+                           GtkWidget *entry)
+{
+  AtkObject *window_accessible;
+  AtkObject *entry_accessible;
+
+  window_accessible = gtk_widget_get_accessible (window);
+  entry_accessible = gtk_widget_get_accessible (entry);
+
+  atk_object_remove_relationship (window_accessible,
+                                  ATK_RELATION_POPUP_FOR,
+                                  entry_accessible);
+}
 
 static void
 disconnect_completion_signals (GtkEntryCompletion *completion)
@@ -2660,6 +2689,9 @@ _gtk_entry_completion_disconnect (GtkEntryCompletion *completion)
 
   disconnect_completion_signals (completion);
 
+  unset_accessible_relation (completion->priv->popup_window,
+                             completion->priv->entry);
+
   completion->priv->entry = NULL;
 }
 
@@ -2668,5 +2700,9 @@ _gtk_entry_completion_connect (GtkEntryCompletion *completion,
                                GtkEntry           *entry)
 {
   completion->priv->entry = GTK_WIDGET (entry);
+
+  set_accessible_relation (completion->priv->popup_window,
+                           completion->priv->entry);
+
   connect_completion_signals (completion);
 }

@@ -15,10 +15,24 @@ window1
     <AtkComponent>
     layer: widget
     alpha: 1
-    button5
+    button6
       "toggle button"
       parent: grid1
       index: 0
+      name: Test switch
+      description: Switches between on and off states
+      state: enabled focusable sensitive showing visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkAction>
+      action 0 name: toggle
+      action 0 description: Toggles the switch
+    button5
+      "toggle button"
+      parent: grid1
+      index: 1
       name: Switch
       description: Switches between on and off states
       state: checked enabled focusable sensitive showing visible
@@ -28,30 +42,32 @@ window1
       alpha: 1
       <AtkAction>
       action 0 name: toggle
+      action 0 description: Toggles the switch
     button4
-      "radio button"
-      parent: grid1
-      index: 1
-      name: Hello World!
-      member-of: button4
-                 button3
-      state: enabled focusable sensitive showing visible
-      toolkit: gtk
-      <AtkComponent>
-      layer: widget
-      alpha: 1
-      <AtkImage>
-      image size: -1 x -1
-      image description: (null)
-      <AtkAction>
-      action 0 name: click
-    button3
       "radio button"
       parent: grid1
       index: 2
       name: Hello World!
       member-of: button4
                  button3
+      state: enabled focusable sensitive showing visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkImage>
+      image size: -1 x -1
+      image description: (null)
+      <AtkAction>
+      action 0 name: click
+      action 0 description: Clicks the button
+    button3
+      "radio button"
+      parent: grid1
+      index: 3
+      name: Hello World!
+      member-of: button4
+                 button3
       state: armed checked enabled focusable sensitive showing visible
       toolkit: gtk
       <AtkComponent>
@@ -62,10 +78,11 @@ window1
       image description: (null)
       <AtkAction>
       action 0 name: click
+      action 0 description: Clicks the button
     button2
       "check box"
       parent: grid1
-      index: 3
+      index: 4
       name: Hello World!
       state: enabled focusable sensitive showing visible
       toolkit: gtk
@@ -77,10 +94,11 @@ window1
       image description: (null)
       <AtkAction>
       action 0 name: click
+      action 0 description: Clicks the button
     button1
       "toggle button"
       parent: grid1
-      index: 4
+      index: 5
       name: Hello World!
       state: armed checked enabled focusable sensitive showing visible
       toolkit: gtk
@@ -92,3 +110,4 @@ window1
       image description: (null)
       <AtkAction>
       action 0 name: click
+      action 0 description: Clicks the button

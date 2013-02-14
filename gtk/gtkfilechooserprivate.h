@@ -35,6 +35,16 @@
 
 G_BEGIN_DECLS
 
+#define SETTINGS_KEY_LOCATION_MODE       "location-mode"
+#define SETTINGS_KEY_SHOW_HIDDEN         "show-hidden"
+#define SETTINGS_KEY_SHOW_SIZE_COLUMN    "show-size-column"
+#define SETTINGS_KEY_SORT_COLUMN         "sort-column"
+#define SETTINGS_KEY_SORT_ORDER          "sort-order"
+#define SETTINGS_KEY_WINDOW_POSITION     "window-position"
+#define SETTINGS_KEY_WINDOW_SIZE         "window-size"
+#define SETTINGS_KEY_SIDEBAR_WIDTH       "sidebar-width"
+#define SETTINGS_KEY_STARTUP_MODE        "startup-mode"
+
 #define GTK_FILE_CHOOSER_GET_IFACE(inst)  (G_TYPE_INSTANCE_GET_INTERFACE ((inst), GTK_TYPE_FILE_CHOOSER, GtkFileChooserIface))
 
 typedef struct _GtkFileChooserIface GtkFileChooserIface;
@@ -84,17 +94,6 @@ struct _GtkFileChooserIface
 };
 
 GtkFileSystem *_gtk_file_chooser_get_file_system         (GtkFileChooser    *chooser);
-gboolean       _gtk_file_chooser_set_current_folder_file (GtkFileChooser    *chooser,
-							  GFile             *file,
-							  GError           **error);
-GFile *        _gtk_file_chooser_get_current_folder_file (GtkFileChooser    *chooser);
-gboolean       _gtk_file_chooser_select_file             (GtkFileChooser    *chooser,
-							  GFile             *file,
-							  GError           **error);
-void           _gtk_file_chooser_unselect_file           (GtkFileChooser    *chooser,
-							  GFile             *file);
-GSList *       _gtk_file_chooser_get_files               (GtkFileChooser    *chooser);
-GFile *        _gtk_file_chooser_get_preview_file        (GtkFileChooser    *chooser);
 gboolean       _gtk_file_chooser_add_shortcut_folder     (GtkFileChooser    *chooser,
 							  GFile             *folder,
 							  GError           **error);
@@ -174,6 +173,7 @@ struct _GtkFileChooserDefault
 
   /* The file browsing widgets */
   GtkWidget *browse_widgets_box;
+  GtkWidget *browse_widgets_hpaned;
   GtkWidget *browse_header_box;
   GtkWidget *browse_files_tree_view;
   GtkWidget *browse_files_popup_menu;
@@ -233,7 +233,6 @@ struct _GtkFileChooserDefault
   GCancellable *file_exists_get_info_cancellable;
   GCancellable *update_from_entry_cancellable;
   GCancellable *shortcuts_activate_iter_cancellable;
-  GSList *pending_cancellables;
 
   LoadState load_state;
   ReloadState reload_state;
@@ -279,8 +278,6 @@ struct _GtkFileChooserDefault
   gint sort_column;
   GtkSortType sort_order;
 
-  GSettings *settings;
-
 #if 0
   GdkDragContext *shortcuts_drag_context;
   GSource *shortcuts_drag_outside_idle;
@@ -300,6 +297,7 @@ struct _GtkFileChooserDefault
   guint has_home : 1;
   guint has_desktop : 1;
   guint has_search : 1;
+  guint has_recent: 1;
   guint show_size_column : 1;
   guint create_folders : 1;
 

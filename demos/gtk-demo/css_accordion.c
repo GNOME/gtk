@@ -1,4 +1,4 @@
-/* CSS Theming/CSS Accordion :: css_accordion.css
+/* CSS Theming/CSS Accordion
  *
  * A simple accordion demo written using CSS transitions and multiple backgrounds
  *
@@ -57,7 +57,7 @@ do_css_accordion (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (container), child);
 
       provider = GTK_STYLE_PROVIDER (gtk_css_provider_new ());
-      bytes = g_resources_lookup_data ("/css_accordion/gtk.css", 0, NULL);
+      bytes = g_resources_lookup_data ("/css_accordion/css_accordion.css", 0, NULL);
       data = g_bytes_get_data (bytes, &data_size);
 
       gtk_css_provider_load_from_data (GTK_CSS_PROVIDER (provider), (gchar *)data, data_size, NULL);

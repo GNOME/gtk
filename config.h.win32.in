@@ -8,11 +8,11 @@
 /* define to enable packagekit */
 /* #undef ENABLE_PACKAGEKIT */
 
-/* Whether to use EGL in Wayland backend */
-/* #undef GDK_WAYLAND_USE_EGL */
-
 /* The prefix for our gettext translation domains. */
 #define GETTEXT_PACKAGE "@GETTEXT_PACKAGE@"
+
+/* Disable deprecation warnings from glib */
+/* #undef GLIB_DISABLE_DEPRECATION_WARNINGS */
 
 /* Define if debugging is enabled */
 #define GTK_COMPILED_WITH_DEBUGGING "yes"
@@ -50,14 +50,8 @@
 /* Define to 1 if you have the <dlfcn.h> header file. */
 /* #undef HAVE_DLFCN_H */
 
-/* Define to 1 if you have the `flockfile' function. */
-/* #undef HAVE_FLOCKFILE */
-
 /* Define to 1 if you have the <ftw.h> header file. */
 /* #undef HAVE_FTW_H */
-
-/* Define to 1 if you have the `getc_unlocked' function. */
-/* #undef HAVE_GETC_UNLOCKED */
 
 /* Define to 1 if you have the `getpagesize' function. */
 #ifndef _MSC_VER
@@ -295,11 +289,6 @@
 
 /* Define to 1 if the X Window System is missing or not being used. */
 /* #undef X_DISPLAY_MISSING */
-
-/* Enable large inode numbers on Mac OS X 10.5.  */
-#ifndef _DARWIN_USE_64_BIT_INODE
-# define _DARWIN_USE_64_BIT_INODE 1
-#endif
 
 /* Number of bits in a file offset, on hosts where this is settable. */
 /* #undef _FILE_OFFSET_BITS */

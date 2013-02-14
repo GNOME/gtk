@@ -35,7 +35,7 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
-#include "a11y/gtktreeviewaccessible.h"
+#include "a11y/gtktreeviewaccessibleprivate.h"
 
 
 /**
@@ -140,7 +140,6 @@ struct _GtkTreeViewColumnPrivate
   /* see gtk+/doc/tree-column-sizing.txt for more information on them */
   GtkTreeViewColumnSizing column_type;
   gint padding;
-  gint resized_width;
   gint x_offset;
   gint width;
   gint fixed_width;
@@ -174,7 +173,6 @@ struct _GtkTreeViewColumnPrivate
   guint show_sort_indicator : 1;
   guint maybe_reordered     : 1;
   guint reorderable         : 1;
-  guint use_resized_width   : 1;
   guint expand              : 1;
 };
 
@@ -299,9 +297,9 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
                                    g_param_spec_int ("fixed-width",
                                                      P_("Fixed Width"),
                                                      P_("Current fixed width of the column"),
-                                                     1,
+                                                     -1,
                                                      G_MAXINT,
-                                                     1, /* not useful */
+                                                     -1,
                                                      GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
@@ -396,7 +394,7 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
    * GtkTreeViewColumn:sort-column-id:
    *
    * Logical sort column ID this column sorts on when selected for sorting. Setting the sort column ID makes the column header
-   * clickable. Set to %-1 to make the column unsortable.
+   * clickable. Set to -1 to make the column unsortable.
    *
    * Since: 2.18
    **/
@@ -472,7 +470,6 @@ gtk_tree_view_column_init (GtkTreeViewColumn *tree_column)
   priv->padding = -1;
   priv->min_width = -1;
   priv->max_width = -1;
-  priv->resized_width = 0;
   priv->column_type = GTK_TREE_VIEW_COLUMN_GROW_ONLY;
   priv->visible = TRUE;
   priv->resizable = FALSE;
@@ -487,8 +484,7 @@ gtk_tree_view_column_init (GtkTreeViewColumn *tree_column)
   priv->sort_column_id = -1;
   priv->reorderable = FALSE;
   priv->maybe_reordered = FALSE;
-  priv->fixed_width = 1;
-  priv->use_resized_width = FALSE;
+  priv->fixed_width = -1;
   priv->title = g_strdup ("");
 }
 
@@ -859,6 +855,8 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
 
   gtk_widget_push_composite_child ();
   priv->button = gtk_button_new ();
+  if (priv->visible)
+    gtk_widget_show (priv->button);
   gtk_widget_add_events (priv->button, GDK_POINTER_MOTION_MASK);
   gtk_widget_pop_composite_child ();
 
@@ -1037,10 +1035,10 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
       priv->tree_view != NULL &&
       gtk_widget_get_realized (priv->tree_view))
     {
-      if (priv->visible)
+      if (priv->visible &&
+          gdk_window_is_visible (_gtk_tree_view_get_header_window (GTK_TREE_VIEW (priv->tree_view))))
 	{
-          if (gdk_window_is_visible (_gtk_tree_view_get_header_window (GTK_TREE_VIEW (priv->tree_view))))
-            gtk_widget_show_now (priv->button);
+          gtk_widget_show (priv->button);
 
 	  if (priv->window)
 	    {
@@ -1402,7 +1400,7 @@ _gtk_tree_view_column_realize_button (GtkTreeViewColumn *column)
   attr.x       = (allocation.x + (rtl ? 0 : allocation.width)) - TREE_VIEW_DRAG_WIDTH / 2;
   priv->window = gdk_window_new (_gtk_tree_view_get_header_window (tree_view),
 				 &attr, attributes_mask);
-  gdk_window_set_user_data (priv->window, tree_view);
+  gtk_widget_register_window (GTK_WIDGET (tree_view), priv->window);
 
   gtk_tree_view_column_update_button (column);
 
@@ -1419,7 +1417,7 @@ _gtk_tree_view_column_unrealize_button (GtkTreeViewColumn *column)
   priv = column->priv;
   g_return_if_fail (priv->window != NULL);
 
-  gdk_window_set_user_data (priv->window, NULL);
+  gtk_widget_unregister_window (GTK_WIDGET (priv->tree_view), priv->window);
   gdk_window_destroy (priv->window);
   priv->window = NULL;
 }
@@ -2094,52 +2092,48 @@ gtk_tree_view_column_get_x_offset (GtkTreeViewColumn *tree_column)
   return tree_column->priv->x_offset;
 }
 
-gint
-_gtk_tree_view_column_request_width (GtkTreeViewColumn *tree_column)
+void
+_gtk_tree_view_column_request_width (GtkTreeViewColumn *tree_column,
+                                     gint              *minimum,
+                                     gint              *natural)
 {
-  GtkTreeViewColumnPrivate *priv;
-  gint real_requested_width;
+  GtkTreeViewColumnPrivate *priv = tree_column->priv;
+  gint minimum_width = 1, natural_width = 1;
+  gint button_minimum, button_natural;
 
-  priv = tree_column->priv;
-
-  if (priv->use_resized_width)
+  if (priv->column_type != GTK_TREE_VIEW_COLUMN_FIXED)
     {
-      real_requested_width = priv->resized_width;
-    }
-  else if (priv->column_type == GTK_TREE_VIEW_COLUMN_FIXED)
-    {
-      real_requested_width = priv->fixed_width;
-    }
-  else if (gtk_tree_view_get_headers_visible (GTK_TREE_VIEW (priv->tree_view)))
-    {
-      gint button_request;
-      gint requested_width;
+      gtk_cell_area_context_get_preferred_width (priv->cell_area_context, &minimum_width, &natural_width);
+      minimum_width += priv->padding;
+      natural_width += priv->padding;
 
-      gtk_cell_area_context_get_preferred_width (priv->cell_area_context, &requested_width, NULL);
-      requested_width += priv->padding;
-
-      gtk_widget_get_preferred_width (priv->button, &button_request, NULL);
-      real_requested_width = MAX (requested_width, button_request);
+      if (gtk_tree_view_get_headers_visible (GTK_TREE_VIEW (priv->tree_view)))
+        {
+          gtk_widget_get_preferred_width (priv->button, &button_minimum, &button_natural);
+          minimum_width = MAX (minimum_width, button_minimum);
+          natural_width = MAX (natural_width, button_natural);
+        }
     }
-  else
-    {
-      gint requested_width;
 
-      gtk_cell_area_context_get_preferred_width (priv->cell_area_context, &requested_width, NULL);
-      requested_width += priv->padding;
-
-      real_requested_width = requested_width;
-      if (real_requested_width < 0)
-        real_requested_width = 0;
-    }
+  if (priv->fixed_width != -1)
+    natural_width = MAX (priv->fixed_width, minimum_width);
 
   if (priv->min_width != -1)
-    real_requested_width = MAX (real_requested_width, priv->min_width);
+    {
+      minimum_width = MAX (minimum_width, priv->min_width);
+      natural_width = MAX (natural_width, priv->min_width);
+    }
 
   if (priv->max_width != -1)
-    real_requested_width = MIN (real_requested_width, priv->max_width);
+    {
+      minimum_width = MIN (minimum_width, priv->max_width);
+      natural_width = MIN (natural_width, priv->max_width);
+    }
 
-  return real_requested_width;
+  if (minimum != NULL)
+    *minimum = minimum_width;
+  if (natural != NULL)
+    *natural = natural_width;
 }
 
 void
@@ -2189,13 +2183,19 @@ _gtk_tree_view_column_allocate (GtkTreeViewColumn *tree_column,
 /**
  * gtk_tree_view_column_set_fixed_width:
  * @tree_column: A #GtkTreeViewColumn.
- * @fixed_width: The size to set @tree_column to. Must be greater than 0.
- * 
- * Sets the size of the column in pixels.  This is meaningful only if the sizing
- * type is #GTK_TREE_VIEW_COLUMN_FIXED.  The size of the column is clamped to
- * the min/max width for the column.  Please note that the min/max width of the
- * column doesn't actually affect the "fixed_width" property of the widget, just
- * the actual size when displayed.
+ * @fixed_width: The new fixed width, in pixels, or -1.
+ *
+ * If @fixed_width is not -1, sets the fixed width of @tree_column; otherwise
+ * unsets it.  The effective value of @fixed_width is clamped between the
+ * minumum and maximum width of the column; however, the value stored in the
+ * "fixed-width" property is not clamped.  If the column sizing is 
+ * #GTK_TREE_VIEW_COLUMN_GROW_ONLY or #GTK_TREE_VIEW_COLUMN_AUTOSIZE, setting a
+ * fixed width overrides the automatically calculated width.  Note that
+ * @fixed_width is only a hint to GTK+; the width actually allocated to the
+ * column may be greater or less than requested.
+ *
+ * Along with "expand", the "fixed-width" property changes when the column is
+ * resized by the user.
  **/
 void
 gtk_tree_view_column_set_fixed_width (GtkTreeViewColumn *tree_column,
@@ -2204,16 +2204,15 @@ gtk_tree_view_column_set_fixed_width (GtkTreeViewColumn *tree_column,
   GtkTreeViewColumnPrivate *priv;
 
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
-  g_return_if_fail (fixed_width > 0);
+  g_return_if_fail (fixed_width >= -1);
 
   priv = tree_column->priv;
 
   priv->fixed_width = fixed_width;
-  priv->use_resized_width = FALSE;
 
-  if (priv->tree_view &&
-      gtk_widget_get_realized (priv->tree_view) &&
-      priv->column_type == GTK_TREE_VIEW_COLUMN_FIXED)
+  if (priv->visible &&
+      priv->tree_view != NULL &&
+      gtk_widget_get_realized (priv->tree_view))
     {
       gtk_widget_queue_resize (priv->tree_view);
     }
@@ -2223,12 +2222,12 @@ gtk_tree_view_column_set_fixed_width (GtkTreeViewColumn *tree_column,
 
 /**
  * gtk_tree_view_column_get_fixed_width:
- * @tree_column: a #GtkTreeViewColumn
- * 
- * Gets the fixed width of the column.  This value is only meaning may not be
- * the actual width of the column on the screen, just what is requested.
- * 
- * Return value: the fixed width of the column
+ * @tree_column: A #GtkTreeViewColumn.
+ *
+ * Gets the fixed width of the column.  This may not be the actual displayed
+ * width of the column; for that, use gtk_tree_view_column_get_width().
+ *
+ * Return value: The fixed width of the column.
  **/
 gint
 gtk_tree_view_column_get_fixed_width (GtkTreeViewColumn *tree_column)
@@ -2432,13 +2431,16 @@ gtk_tree_view_column_get_title (GtkTreeViewColumn *tree_column)
 
 /**
  * gtk_tree_view_column_set_expand:
- * @tree_column: A #GtkTreeViewColumn
- * @expand: %TRUE if the column should take available extra space, %FALSE if not
- * 
+ * @tree_column: A #GtkTreeViewColumn.
+ * @expand: %TRUE if the column should expand to fill available space.
+ *
  * Sets the column to take available extra space.  This space is shared equally
  * amongst all columns that have the expand set to %TRUE.  If no column has this
  * option set, then the last column gets all extra space.  By default, every
  * column is created with this %FALSE.
+ *
+ * Along with "fixed-width", the "expand" property changes when the column is
+ * resized by the user.
  *
  * Since: 2.4
  **/
@@ -2461,13 +2463,6 @@ gtk_tree_view_column_set_expand (GtkTreeViewColumn *tree_column,
       priv->tree_view != NULL &&
       gtk_widget_get_realized (priv->tree_view))
     {
-      /* We want to continue using the original width of the
-       * column that includes additional space added by the user
-       * resizing the columns and possibly extra (expanded) space, which
-       * are not included in the resized width.
-       */
-      priv->use_resized_width = FALSE;
-
       gtk_widget_queue_resize (priv->tree_view);
     }
 
@@ -2476,11 +2471,11 @@ gtk_tree_view_column_set_expand (GtkTreeViewColumn *tree_column,
 
 /**
  * gtk_tree_view_column_get_expand:
- * @tree_column: a #GtkTreeViewColumn
- * 
- * Return %TRUE if the column expands to take any available space.
- * 
- * Return value: %TRUE, if the column expands
+ * @tree_column: A #GtkTreeViewColumn.
+ *
+ * Returns %TRUE if the column expands to fill available space.
+ *
+ * Return value: %TRUE if the column expands to fill available space.
  *
  * Since: 2.4
  **/
@@ -3205,33 +3200,6 @@ _gtk_tree_view_column_get_requested_width (GtkTreeViewColumn  *column)
   gtk_cell_area_context_get_preferred_width (column->priv->cell_area_context, &requested_width, NULL);
 
   return requested_width + column->priv->padding;
-}
-
-
-void
-_gtk_tree_view_column_set_resized_width (GtkTreeViewColumn  *column,
-					 gint                width)
-{
-  column->priv->resized_width = width;
-}
-
-gint
-_gtk_tree_view_column_get_resized_width (GtkTreeViewColumn  *column)
-{
-  return column->priv->resized_width;
-}
-
-void
-_gtk_tree_view_column_set_use_resized_width (GtkTreeViewColumn  *column,
-					     gboolean            use_resized_width)
-{
-  column->priv->use_resized_width = use_resized_width;
-}
-
-gboolean
-_gtk_tree_view_column_get_use_resized_width (GtkTreeViewColumn  *column)
-{
-  return column->priv->use_resized_width;
 }
 
 gint

@@ -1,4 +1,4 @@
-/* GAIL - The GNOME Accessibility Implementation Library
+/* GTK+ - accessibility implementations
  * Copyright 2004 Sun Microsystems Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -18,11 +18,15 @@
 #ifndef __GTK_SCALE_ACCESSIBLE_H__
 #define __GTK_SCALE_ACCESSIBLE_H__
 
-#include "gtkrangeaccessible.h"
+#if !defined (__GTK_A11Y_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk-a11y.h> can be included directly."
+#endif
+
+#include <gtk/a11y/gtkrangeaccessible.h>
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_SCALE_ACCESSIBLE                         (_gtk_scale_accessible_get_type ())
+#define GTK_TYPE_SCALE_ACCESSIBLE                         (gtk_scale_accessible_get_type ())
 #define GTK_SCALE_ACCESSIBLE(obj)                         (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SCALE_ACCESSIBLE, GtkScaleAccessible))
 #define GTK_SCALE_ACCESSIBLE_CLASS(klass)                       (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_SCALE_ACCESSIBLE, GtkScaleAccessibleClass))
 #define GTK_IS_SCALE_ACCESSIBLE(obj)                      (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_SCALE_ACCESSIBLE))
@@ -45,7 +49,7 @@ struct _GtkScaleAccessibleClass
   GtkRangeAccessibleClass parent_class;
 };
 
-GType _gtk_scale_accessible_get_type (void);
+GType gtk_scale_accessible_get_type (void);
 
 G_END_DECLS
 

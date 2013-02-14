@@ -16,14 +16,14 @@ msgstr ""
 "Project-Id-Version: gtk+ MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-03-01 14:11+0000\n"
-"PO-Revision-Date: 2012-03-01 18:38+0200\n"
+"POT-Creation-Date: 2012-12-18 07:50+0000\n"
+"PO-Revision-Date: 2012-12-08 00:49+0300\n"
 "Last-Translator: Mattias Põldaru <mahfiaz@gmail.com>\n"
-"Language-Team: Estonian <>\n"
+"Language-Team: Estonian <gnome-et@linux.ee>\n"
 "Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bits\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
 #, c-format
@@ -83,6 +83,7 @@ msgstr "GDK silumislipud, mida maha võtta"
 #. * XF86AudioMute - Audio mute
 #. * Scroll_lock   - Scroll lock
 #. * KP_Space      - Space (keypad)
+#. * Page_Up       - Page up
 #.
 msgctxt "keyboard label"
 msgid "BackSpace"
@@ -390,6 +391,122 @@ msgstr "Lüliti"
 msgid "Switches between on and off states"
 msgstr "Kahe olekuga (sees/väljas) lüliti"
 
+msgid ""
+"Select the color you want from the outer ring. Select the darkness or "
+"lightness of that color using the inner triangle."
+msgstr ""
+"Vali oma soovitud värv välimiselt ringilt. Kasutades sisemist kolmnurka, "
+"vali värvi heledus või tumedus."
+
+msgid ""
+"Click the eyedropper, then click a color anywhere on your screen to select "
+"that color."
+msgstr ""
+"Pipeti abil on võimalik valida värvi ekraani suvalisest punktist. Klõpsa "
+"pipetil ja siis klõpsa soovitud värvi pikslil."
+
+msgid "_Hue:"
+msgstr "_Toon:"
+
+msgid "Position on the color wheel."
+msgstr "Asukoht värviringil."
+
+msgid "S_aturation:"
+msgstr "_Küllastus:"
+
+msgid "Intensity of the color."
+msgstr "Värvi intensiivsus."
+
+msgid "_Value:"
+msgstr "_Heledus:"
+
+msgid "Brightness of the color."
+msgstr "Värvi heledus."
+
+msgid "_Red:"
+msgstr "_Punane:"
+
+msgid "Amount of red light in the color."
+msgstr "Punase valguse kogus värvis."
+
+msgid "_Green:"
+msgstr "_Roheline:"
+
+msgid "Amount of green light in the color."
+msgstr "Rohelise valguse kogus värvis."
+
+msgid "_Blue:"
+msgstr "_Sinine:"
+
+msgid "Amount of blue light in the color."
+msgstr "Sinise valguse kogus värvis."
+
+msgid "Op_acity:"
+msgstr "Kat_vus:"
+
+msgid "Transparency of the color."
+msgstr "Värvi läbipaistvus."
+
+msgid "Color _name:"
+msgstr "Värvi _nimi:"
+
+msgid ""
+"You can enter an HTML-style hexadecimal color value, or simply a color name "
+"such as 'orange' in this entry."
+msgstr ""
+"Siia võid sisestada HTML-stiilis kuueteistkümnendarvuna värvi väärtuse, või "
+"värvi ingliskeelse nimetuse (näiteks 'orange')."
+
+msgid "_Palette:"
+msgstr "Pal_ett:"
+
+msgid "Color Wheel"
+msgstr "Värviratas"
+
+msgid ""
+"The previously-selected color, for comparison to the color you're selecting "
+"now. You can drag this color to a palette entry, or select this color as "
+"current by dragging it to the other color swatch alongside."
+msgstr ""
+"Eelnevalt valitud värv võrdlemaks praegu valitava värviga. Sa saad selle "
+"värvi lohistada paletikirjetesse või määrata värvi käesolevaks värviks "
+"lohistades selle kõrvalasuvale värviproovile."
+
+msgid ""
+"The color you've chosen. You can drag this color to a palette entry to save "
+"it for use in the future."
+msgstr ""
+"Sinu valitud värv. Võid selle värvi lohistada paletikirjetesse, et kasutada "
+"seda hõlpsasti ka tulevikus."
+
+msgid ""
+"The previously-selected color, for comparison to the color you're selecting "
+"now."
+msgstr "Eelnevalt valitud värvus hetkel valitava värvusega võrdlemiseks."
+
+msgid "The color you've chosen."
+msgstr "Sinu poolt valitud värvus."
+
+msgid "_Save color here"
+msgstr "_Salvesta värv siia"
+
+msgid ""
+"Click this palette entry to make it the current color. To change this entry, "
+"drag a color swatch here or right-click it and select \"Save color here.\""
+msgstr ""
+"Klõpsa sellel paletikirjel, et määrata see värv käesolevaks värviks. Selle "
+"kirje salvestamiseks lohista värviproov siia või vali parema hiireklõpsu alt "
+"\"Salvesta värv siia\"."
+
+#. We emit the response for the Select button manually,
+#. * since we want to save the color first
+#.
+msgid "_Select"
+msgstr "_Vali"
+
+msgid "Color Selection"
+msgstr "Värvi valik"
+
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
 msgid "abcdefghijk ABCDEFGHIJK"
@@ -520,14 +637,14 @@ msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
 
-msgid "Other application..."
-msgstr "Muu rakendus..."
+msgid "Other application…"
+msgstr "Muu rakendus…"
 
 msgid "Failed to look for applications online"
 msgstr "Rakenduste otsimine veebist nurjus"
 
-msgid "Find applications online"
-msgstr "Otsi rakendusi veebist"
+msgid "_Find applications online"
+msgstr "_Otsi rakendusi veebist"
 
 msgid "Could not run application"
 msgstr "Rakendust pole võimalik käivitada"
@@ -570,9 +687,6 @@ msgstr "Unusta seos"
 msgid "Show other applications"
 msgstr "Näita ka teisi rakendusi"
 
-msgid "_Select"
-msgstr "_Vali"
-
 msgid "Default Application"
 msgstr "Vaikimisi rakendus"
 
@@ -599,10 +713,10 @@ msgid "Application"
 msgstr "Rakendus"
 
 msgid "C_ontinue"
-msgstr "_Jätka"
+msgstr "_Edasi"
 
 msgid "Go _Back"
-msgstr "Mine _tagasi"
+msgstr "_Tagasi"
 
 msgid "_Finish"
 msgstr "_Lõpeta"
@@ -727,8 +841,8 @@ msgstr "Vigane"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-msgid "New accelerator..."
-msgstr "Uus kiirklahv..."
+msgid "New accelerator…"
+msgstr "Uus kiirklahv…"
 
 #, c-format
 msgctxt "progress bar label"
@@ -949,116 +1063,6 @@ msgstr "Värvipaan"
 msgid "_Customize"
 msgstr "_Kohanda"
 
-msgid ""
-"Select the color you want from the outer ring. Select the darkness or "
-"lightness of that color using the inner triangle."
-msgstr ""
-"Vali oma soovitud värv välimiselt ringilt. Kasutades sisemist kolmnurka, "
-"vali värvi heledus või tumedus."
-
-msgid ""
-"Click the eyedropper, then click a color anywhere on your screen to select "
-"that color."
-msgstr ""
-"Pipeti abil on võimalik valida värvi ekraani suvalisest punktist. Klõpsa "
-"pipetil ja siis klõpsa soovitud värvi pikslil."
-
-msgid "_Hue:"
-msgstr "_Toon:"
-
-msgid "Position on the color wheel."
-msgstr "Asukoht värviringil."
-
-msgid "S_aturation:"
-msgstr "_Küllastus:"
-
-msgid "Intensity of the color."
-msgstr "Värvi intensiivsus."
-
-msgid "_Value:"
-msgstr "_Heledus:"
-
-msgid "Brightness of the color."
-msgstr "Värvi heledus."
-
-msgid "_Red:"
-msgstr "_Punane:"
-
-msgid "Amount of red light in the color."
-msgstr "Punase valguse kogus värvis."
-
-msgid "_Green:"
-msgstr "_Roheline:"
-
-msgid "Amount of green light in the color."
-msgstr "Rohelise valguse kogus värvis."
-
-msgid "_Blue:"
-msgstr "_Sinine:"
-
-msgid "Amount of blue light in the color."
-msgstr "Sinise valguse kogus värvis."
-
-msgid "Op_acity:"
-msgstr "Kat_vus:"
-
-msgid "Transparency of the color."
-msgstr "Värvi läbipaistvus."
-
-msgid "Color _name:"
-msgstr "Värvi _nimi:"
-
-msgid ""
-"You can enter an HTML-style hexadecimal color value, or simply a color name "
-"such as 'orange' in this entry."
-msgstr ""
-"Siia võid sisestada HTML-stiilis kuueteistkümnendarvuna värvi väärtuse, või "
-"värvi ingliskeelse nimetuse (näiteks 'orange')."
-
-msgid "_Palette:"
-msgstr "Pal_ett:"
-
-msgid "Color Wheel"
-msgstr "Värviratas"
-
-msgid ""
-"The previously-selected color, for comparison to the color you're selecting "
-"now. You can drag this color to a palette entry, or select this color as "
-"current by dragging it to the other color swatch alongside."
-msgstr ""
-"Eelnevalt valitud värv võrdlemaks praegu valitava värviga. Sa saad selle "
-"värvi lohistada paletikirjetesse või määrata värvi käesolevaks värviks "
-"lohistades selle kõrvalasuvale värviproovile."
-
-msgid ""
-"The color you've chosen. You can drag this color to a palette entry to save "
-"it for use in the future."
-msgstr ""
-"Sinu valitud värv. Võid selle värvi lohistada paletikirjetesse, et kasutada "
-"seda hõlpsasti ka tulevikus."
-
-msgid ""
-"The previously-selected color, for comparison to the color you're selecting "
-"now."
-msgstr "Eelnevalt valitud värvus hetkel valitava värvusega võrdlemiseks."
-
-msgid "The color you've chosen."
-msgstr "Sinu poolt valitud värvus."
-
-msgid "_Save color here"
-msgstr "_Salvesta värv siia"
-
-msgid ""
-"Click this palette entry to make it the current color. To change this entry, "
-"drag a color swatch here or right-click it and select \"Save color here.\""
-msgstr ""
-"Klõpsa sellel paletikirjel, et määrata see värv käesolevaks värviks. Selle "
-"kirje salvestamiseks lohista värviproov siia või vali parema hiireklõpsu alt "
-"\"Salvesta värv siia\"."
-
-msgid "Color Selection"
-msgstr "Värvi valik"
-
 #. Translate to the default units to use for presenting
 #. * lengths to the user. Translate to default:inch if you
 #. * want inches, otherwise translate to default:mm.
@@ -1078,8 +1082,8 @@ msgstr "tolli"
 msgid "mm"
 msgstr "mm"
 
-msgid "Margins from Printer..."
-msgstr "Veerised printerist..."
+msgid "Margins from Printer…"
+msgstr "Veerised printerist…"
 
 #, c-format
 msgid "Custom Size %d"
@@ -1114,12 +1118,6 @@ msgstr "Sisestus_meetodid"
 
 msgid "_Insert Unicode Control Character"
 msgstr "L_isa Unicode'i juhtmärk"
-
-msgid "Caps Lock and Num Lock are on"
-msgstr "Caps Lock ja Num Lock on sisse lülitatud"
-
-msgid "Num Lock is on"
-msgstr "Num Lock on sisse lülitatud"
 
 msgid "Caps Lock is on"
 msgstr "Caps Lock on sisse lülitatud"
@@ -1174,8 +1172,8 @@ msgstr "Töölaud"
 msgid "(None)"
 msgstr "(puudub)"
 
-msgid "Other..."
-msgstr "Muu..."
+msgid "Other…"
+msgstr "Muu…"
 
 msgid "Type name of new folder"
 msgstr "Sisesta uue kataloogi nimi"
@@ -1263,8 +1261,8 @@ msgstr "Eemalda valitud järjehoidja"
 msgid "Remove"
 msgstr "Eemalda"
 
-msgid "Rename..."
-msgstr "Muuda nime..."
+msgid "Rename…"
+msgstr "Muuda nime…"
 
 #. Accessible object name for the file chooser's shortcuts pane
 msgid "Places"
@@ -1283,7 +1281,7 @@ msgstr "Faili pole võimalik valida"
 msgid "_Visit this file"
 msgstr "_Külasta seda faili"
 
-msgid "_Copy file's location"
+msgid "_Copy file’s location"
 msgstr "Kopeeri _asukoht"
 
 msgid "_Add to Bookmarks"
@@ -1452,6 +1450,49 @@ msgstr "_Ava link"
 msgid "Copy _Link Address"
 msgstr "Kopeeri _lingi aadress"
 
+msgid "APPLICATION [URI…] — launch an APPLICATION with URI."
+msgstr "RAKENDUS [URI…] — RAKENDUSE käivitamine URI-ga."
+
+#. Translators: this message will appear after the usage string
+#. and before the list of options.
+msgid ""
+"Launch specified application by its desktop file info\n"
+"optionally passing list of URIs as arguments."
+msgstr ""
+"Määratud rakenduse käivitamine desktop faili järgi\n"
+"valikuliselt edastades URI-de loetelu argumentidena."
+
+#, c-format
+msgid "Error parsing commandline options: %s\n"
+msgstr "Viga käsureavalikute parsimisel: %s\n"
+
+#, c-format
+msgid "Try \"%s --help\" for more information."
+msgstr "Täpsema info jaoks kirjuta \"%s --help\"."
+
+#. Translators: the %s is the program name. This error message
+#. means the user is calling gtk-launch without any argument.
+#, c-format
+msgid "%s: missing application name"
+msgstr "%s: puudub rakenduse nimi"
+
+#, c-format
+msgid "Creating AppInfo from id not supported on non unix operating systems"
+msgstr ""
+"AppInfo loomine loomine id järgi pole unix operatsioonisüsteemides toetatud"
+
+#. Translators: the first %s is the program name, the second one
+#. is the application name.
+#, c-format
+msgid "%s: no such application %s"
+msgstr "%s: rakendust %s pole"
+
+#. Translators: the first %s is the program name, the second one
+#. is the error message.
+#, c-format
+msgid "%s: error launching application: %s\n"
+msgstr "%s: viga rakenduse käivitamisel: %s\n"
+
 msgid "Copy URL"
 msgstr "Kopeeri URL"
 
@@ -1526,20 +1567,23 @@ msgstr "GTK+ võtmete näitamine"
 msgid "Co_nnect"
 msgstr "Ü_hendu"
 
-msgid "Connect _anonymously"
-msgstr "Ühendu _anonüümselt"
+msgid "Connect As"
+msgstr "Ü_hendu kasutajana"
 
-msgid "Connect as u_ser:"
-msgstr "Ühendu _kasutajana:"
+msgid "_Anonymous"
+msgstr "_Anonüümne"
 
-msgid "_Username:"
-msgstr "_Kasutajanimi:"
+msgid "Registered U_ser"
+msgstr "Registreeritud _kasutaja"
 
-msgid "_Domain:"
-msgstr "_Domeen:"
+msgid "_Username"
+msgstr "_Kasutajanimi"
 
-msgid "_Password:"
-msgstr "_Parool:"
+msgid "_Domain"
+msgstr "_Domeen"
+
+msgid "_Password"
+msgstr "_Parool"
 
 msgid "Forget password _immediately"
 msgstr "_Unusta parool koheselt"
@@ -1620,8 +1664,8 @@ msgstr ""
 " Ülemine: %s %s\n"
 " Alumine: %s %s"
 
-msgid "Manage Custom Sizes..."
-msgstr "Kohandatud suuruste haldamine..."
+msgid "Manage Custom Sizes…"
+msgstr "Kohandatud suuruste haldamine…"
 
 msgid "_Format for:"
 msgstr "Millele _vormindatakse:"
@@ -1647,14 +1691,11 @@ msgstr "Failisüsteemi juurkataloog"
 msgid "Authentication"
 msgstr "Autentimine"
 
+msgid "Select a filename"
+msgstr "Failinime valimine"
+
 msgid "Not available"
 msgstr "Pole saadaval"
-
-msgid "Select a folder"
-msgstr "Kataloogi valimine"
-
-msgid "_Save in folder:"
-msgstr "Salvestada _kataloogi:"
 
 #. translators: this string is the default job title for print
 #. * jobs. %s gets replaced by the application name, %d gets replaced
@@ -1764,8 +1805,8 @@ msgstr "Kirjeldamata viga"
 msgid "Getting printer information failed"
 msgstr "Tõrge printeri andmete hankimisel"
 
-msgid "Getting printer information..."
-msgstr "Printeri andmete hankimine..."
+msgid "Getting printer information…"
+msgstr "Printeri andmete hankimine…"
 
 msgid "Printer"
 msgstr "Printer"
@@ -2272,7 +2313,7 @@ msgstr "_Kursiiv"
 
 msgctxt "Stock label"
 msgid "_Jump to"
-msgstr "_Hüppa kuni"
+msgstr "_Hüppa sinna"
 
 #. This is about text justification, "centered text"
 msgctxt "Stock label"
@@ -3660,13 +3701,6 @@ msgstr "Keskmine"
 msgid "Low"
 msgstr "Madal"
 
-#. Cups specific, non-ppd related settings
-#. Translators, this string is used to label the pages-per-sheet option
-#. * in the print dialog
-#.
-msgid "Pages per Sheet"
-msgstr "Lehekülgi lehel"
-
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
@@ -3702,6 +3736,12 @@ msgstr "Ülisalajane"
 
 msgid "Unclassified"
 msgstr "Liigitamata"
+
+#. Translators, this string is used to label the pages-per-sheet option
+#. * in the print dialog
+#.
+msgid "Pages per Sheet"
+msgstr "Lehekülgi lehel"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
@@ -3756,10 +3796,8 @@ msgstr "Ükski profiil pole saadaval"
 msgid "Unspecified profile"
 msgstr "Profiil pole määratud"
 
-#. default filename used for print-to-file
-#, c-format
-msgid "output.%s"
-msgstr "väljund.%s"
+msgid "output"
+msgstr "väljund"
 
 msgid "Print to File"
 msgstr "Printimine faili"

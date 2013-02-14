@@ -17,6 +17,7 @@ static gchar *current_file = NULL;
 static GtkWidget *notebook;
 
 enum {
+  NAME_COLUMN,
   TITLE_COLUMN,
   FILENAME_COLUMN,
   FUNC_COLUMN,
@@ -30,65 +31,6 @@ struct _CallbackData
   GtkTreeModel *model;
   GtkTreePath *path;
 };
-
-#ifdef G_OS_WIN32
-
-#undef DEMOCODEDIR
-
-static char *
-get_democodedir (void)
-{
-  static char *result = NULL;
-
-  if (result == NULL)
-    {
-      result = g_win32_get_package_installation_directory_of_module (NULL);
-      if (result == NULL)
-        result = "unknown-location";
-
-      result = g_strconcat (result, "\\share\\gtk-3.0\\demo", NULL);
-    }
-
-  return result;
-}
-
-#define DEMOCODEDIR get_democodedir ()
-
-#endif
-
-/**
- * demo_find_file:
- * @base: base filename
- * @err:  location to store error, or %NULL.
- *
- * Looks for @base first in the current directory, then in the
- * location GTK+ where it will be installed on make install,
- * returns the first file found.
- *
- * Return value: the filename, if found or %NULL
- */
-gchar *
-demo_find_file (const char *base,
-                GError    **err)
-{
-  g_return_val_if_fail (err == NULL || *err == NULL, NULL);
-
-  if (g_file_test ("gtk-logo-rgb.gif", G_FILE_TEST_EXISTS) &&
-      g_file_test (base, G_FILE_TEST_EXISTS))
-    return g_strdup (base);
-  else
-    {
-      char *filename = g_build_filename (DEMOCODEDIR, base, NULL);
-      if (!g_file_test (filename, G_FILE_TEST_EXISTS))
-        {
-          g_set_error (err, G_FILE_ERROR, G_FILE_ERROR_NOENT,
-                       "Cannot find demo data file \"%s\"", base);
-          g_free (filename);
-          return NULL;
-        }
-      return filename;
-    }
-}
 
 static void
 window_closed_cb (GtkWidget *window, gpointer data)
@@ -109,65 +51,6 @@ window_closed_cb (GtkWidget *window, gpointer data)
   gtk_tree_path_free (cbdata->path);
   g_free (cbdata);
 }
-
-gboolean
-read_line (FILE *stream, GString *str)
-{
-  int n_read = 0;
-
-#ifdef HAVE_FLOCKFILE
-  flockfile (stream);
-#endif
-
-  g_string_truncate (str, 0);
-
-  while (1)
-    {
-      int c;
-
-#ifdef HAVE_FLOCKFILE
-      c = getc_unlocked (stream);
-#else
-      c = getc (stream);
-#endif
-
-      if (c == EOF)
-        goto done;
-      else
-        n_read++;
-
-      switch (c)
-        {
-        case '\r':
-        case '\n':
-          {
-#ifdef HAVE_FLOCKFILE
-            int next_c = getc_unlocked (stream);
-#else
-            int next_c = getc (stream);
-#endif
-
-            if (!(next_c == EOF ||
-                  (c == '\r' && next_c == '\n') ||
-                  (c == '\n' && next_c == '\r')))
-              ungetc (next_c, stream);
-
-            goto done;
-          }
-        default:
-          g_string_append_c (str, c);
-        }
-    }
-
- done:
-
-#ifdef HAVE_FLOCKFILE
-  funlockfile (stream);
-#endif
-
-  return n_read > 0;
-}
-
 
 /* Stupid syntax highlighting.
  *
@@ -518,33 +401,66 @@ fontify (void)
 static GtkWidget *create_text (GtkTextBuffer **buffer, gboolean is_source);
 
 static void
-add_data_tab (const gchar *filename)
+add_data_tab (const gchar *demoname)
 {
   GtkTextBuffer *buffer = NULL;
-  gchar *full_filename;
-  GError *err = NULL;
-  gchar *text;
+  gchar *resource_dir, *resource_name, *content_type;
+  gchar **resources;
+  GBytes *bytes;
   GtkWidget *widget, *label;
+  guint i;
 
-  full_filename = demo_find_file (filename, &err);
-  if (!full_filename ||
-      !g_file_get_contents (full_filename, &text, NULL, &err))
+  resource_dir = g_strconcat ("/", demoname, NULL);
+  resources = g_resources_enumerate_children (resource_dir, 0, NULL);
+  if (resources == NULL)
     {
-      g_warning ("%s", err->message);
-      g_error_free (err);
+      g_free (resource_dir);
       return;
     }
 
-  widget = create_text (&buffer, FALSE);
-  gtk_widget_show_all (widget);
-  label = gtk_label_new (filename);
-  gtk_widget_show (label);
-  gtk_notebook_append_page (GTK_NOTEBOOK (notebook), widget, label);
+  for (i = 0; resources[i]; i++)
+    {
+      resource_name = g_strconcat (resource_dir, "/", resources[i], NULL);
+      bytes = g_resources_lookup_data (resource_name, 0, NULL);
+      g_assert (bytes);
 
-  gtk_text_buffer_set_text (buffer, text, -1);
+      content_type = g_content_type_guess (resource_name,
+                                           g_bytes_get_data (bytes, NULL),
+                                           g_bytes_get_size (bytes),
+                                           NULL);
 
-  g_free (full_filename);
-  g_free (text);
+      /* In theory we should look at all the mime types gdk-pixbuf supports
+       * and go from there, but we know what file types we've added.
+       */
+      if (g_content_type_is_a (content_type, "image/png") ||
+          g_content_type_is_a (content_type, "image/gif") ||
+          g_content_type_is_a (content_type, "image/jpeg"))
+        {
+          widget = gtk_image_new_from_resource (resource_name);
+        }
+      else if (g_content_type_is_a (content_type, "text/plain"))
+        {
+          widget = create_text (&buffer, FALSE);
+          gtk_text_buffer_set_text (buffer, g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes));
+        }
+      else
+        {
+          g_warning ("Don't know how to display resource '%s' of type '%s'\n", resource_name, content_type);
+          widget = NULL;
+        }
+
+      gtk_widget_show_all (widget);
+      label = gtk_label_new (resources[i]);
+      gtk_widget_show (label);
+      gtk_notebook_append_page (GTK_NOTEBOOK (notebook), widget, label);
+
+      g_free (content_type);
+      g_free (resource_name);
+      g_bytes_unref (bytes);
+    }
+
+  g_strfreev (resources);
+  g_free (resource_dir);
 }
 
 static void
@@ -557,32 +473,27 @@ remove_data_tabs (void)
 }
 
 void
-load_file (const gchar *filename)
+load_file (const gchar *demoname,
+           const gchar *filename)
 {
-  FILE *file;
   GtkTextIter start, end;
-  char *full_filename;
+  char *resource_filename;
   GError *err = NULL;
-  GString *buffer = g_string_new (NULL);
   int state = 0;
   gboolean in_para = 0;
-  gchar **names;
+  gchar **lines;
+  GBytes *bytes;
   gint i;
+
+  if (!g_strcmp0 (current_file, filename))
+    return;
 
   remove_data_tabs ();
 
-  names = g_strsplit (filename, " ", -1);
-
-  for (i = 1; names[i]; i++) {
-    if (strlen (names[i]) > 0)
-      add_data_tab (names[i]);
-  }
-
-  if (current_file && !strcmp (current_file, names[0]))
-    goto out;
+  add_data_tab (demoname);
 
   g_free (current_file);
-  current_file = g_strdup (names[0]);
+  current_file = g_strdup (filename);
 
   gtk_text_buffer_get_bounds (info_buffer, &start, &end);
   gtk_text_buffer_delete (info_buffer, &start, &end);
@@ -590,31 +501,31 @@ load_file (const gchar *filename)
   gtk_text_buffer_get_bounds (source_buffer, &start, &end);
   gtk_text_buffer_delete (source_buffer, &start, &end);
 
-  full_filename = demo_find_file (names[0], &err);
-  if (!full_filename)
+  resource_filename = g_strconcat ("/sources/", filename, NULL);
+  bytes = g_resources_lookup_data (resource_filename, 0, &err);
+  g_free (resource_filename);
+
+  if (bytes == NULL)
     {
-      g_warning ("%s", err->message);
+      g_warning ("Cannot open source for %s: %s\n", filename, err->message);
       g_error_free (err);
-      goto out;
+      return;
     }
 
-  file = g_fopen (full_filename, "r");
-
-  if (!file)
-    g_warning ("Cannot open %s: %s\n", full_filename, g_strerror (errno));
-
-  g_free (full_filename);
-
-  if (!file)
-    goto out;
+  lines = g_strsplit (g_bytes_get_data (bytes, NULL), "\n", -1);
+  g_bytes_unref (bytes);
 
   gtk_text_buffer_get_iter_at_offset (info_buffer, &start, 0);
-  while (read_line (file, buffer))
+  for (i = 0; lines[i] != NULL; i++)
     {
-      gchar *p = buffer->str;
+      gchar *p;
       gchar *q;
       gchar *r;
 
+      /* Make sure \r is stripped at the end for the poor windows people */
+      lines[i] = g_strchomp (lines[i]);
+
+      p = lines[i];
       switch (state)
         {
         case 0:
@@ -703,7 +614,7 @@ load_file (const gchar *filename)
             p++;
           if (*p)
             {
-              p = buffer->str;
+              p = lines[i];
               state++;
               /* Fall through */
             }
@@ -718,14 +629,9 @@ load_file (const gchar *filename)
         }
     }
 
-  fclose (file);
-
   fontify ();
 
-out:
-  g_string_free (buffer, TRUE);
-
-  g_strfreev (names);
+  g_strfreev (lines);
 }
 
 void
@@ -775,17 +681,21 @@ selection_cb (GtkTreeSelection *selection,
               GtkTreeModel     *model)
 {
   GtkTreeIter iter;
-  GValue value = G_VALUE_INIT;
+  char *name, *filename;
 
   if (! gtk_tree_selection_get_selected (selection, NULL, &iter))
     return;
 
-  gtk_tree_model_get_value (model, &iter,
-                            FILENAME_COLUMN,
-                            &value);
-  if (g_value_get_string (&value))
-    load_file (g_value_get_string (&value));
-  g_value_unset (&value);
+  gtk_tree_model_get (model, &iter,
+                      NAME_COLUMN, &name,
+                      FILENAME_COLUMN, &filename,
+                      -1);
+
+  if (filename)
+    load_file (name, filename);
+
+  g_free (name);
+  g_free (filename);
 }
 
 static GtkWidget *
@@ -804,6 +714,7 @@ create_text (GtkTextBuffer **buffer,
                                        GTK_SHADOW_IN);
 
   text_view = gtk_text_view_new ();
+  g_object_set (text_view, "margin", 20, NULL);
 
   *buffer = gtk_text_buffer_new (NULL);
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (text_view), *buffer);
@@ -848,7 +759,7 @@ create_tree (void)
 
   Demo *d = gtk_demos;
 
-  model = gtk_tree_store_new (NUM_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_INT);
+  model = gtk_tree_store_new (NUM_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_INT);
   tree_view = gtk_tree_view_new ();
   gtk_tree_view_set_model (GTK_TREE_VIEW (tree_view), GTK_TREE_MODEL (model));
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view));
@@ -868,6 +779,7 @@ create_tree (void)
 
       gtk_tree_store_set (GTK_TREE_STORE (model),
                           &iter,
+                          NAME_COLUMN, d->name,
                           TITLE_COLUMN, d->title,
                           FILENAME_COLUMN, d->filename,
                           FUNC_COLUMN, d->func,
@@ -887,6 +799,7 @@ create_tree (void)
 
           gtk_tree_store_set (GTK_TREE_STORE (model),
                               &child_iter,
+                              NAME_COLUMN, children->name,
                               TITLE_COLUMN, children->title,
                               FILENAME_COLUMN, children->filename,
                               FUNC_COLUMN, children->func,
@@ -939,53 +852,14 @@ static void
 setup_default_icon (void)
 {
   GdkPixbuf *pixbuf;
-  char *filename;
-  GError *err;
 
-  err = NULL;
+  pixbuf = gdk_pixbuf_new_from_resource ("/gtk-logo-old.png", NULL);
+  /* We load a resource, so we can guarantee that loading it is successful */
+  g_assert (pixbuf);
 
-  pixbuf = NULL;
-  filename = demo_find_file ("gtk-logo-rgb.gif", &err);
-  if (filename)
-    {
-      pixbuf = gdk_pixbuf_new_from_file (filename, &err);
-      g_free (filename);
-    }
-
-  /* Ignoring this error (passing NULL instead of &err above)
-   * would probably be reasonable for most apps.  We're just
-   * showing off.
-   */
-  if (err)
-    {
-      GtkWidget *dialog;
-
-      dialog = gtk_message_dialog_new (NULL, 0,
-                                       GTK_MESSAGE_ERROR,
-                                       GTK_BUTTONS_CLOSE,
-                                       "Failed to read icon file: %s",
-                                       err->message);
-      g_error_free (err);
-
-      g_signal_connect (dialog, "response",
-                        G_CALLBACK (gtk_widget_destroy), NULL);
-    }
-
-  if (pixbuf)
-    {
-      GList *list;
-      GdkPixbuf *transparent;
-
-      /* The gtk-logo-rgb icon has a white background, make it transparent */
-      transparent = gdk_pixbuf_add_alpha (pixbuf, TRUE, 0xff, 0xff, 0xff);
-
-      list = NULL;
-      list = g_list_append (list, transparent);
-      gtk_window_set_default_icon_list (list);
-      g_list_free (list);
-      g_object_unref (pixbuf);
-      g_object_unref (transparent);
-    }
+  gtk_window_set_default_icon (pixbuf);
+  
+  g_object_unref (pixbuf);
 }
 
 int
@@ -1021,6 +895,7 @@ main (int argc, char **argv)
   gtk_box_pack_start (GTK_BOX (hbox), tree, FALSE, FALSE, 0);
 
   notebook = gtk_notebook_new ();
+  gtk_notebook_set_scrollable (GTK_NOTEBOOK (notebook), TRUE);
   gtk_box_pack_start (GTK_BOX (hbox), notebook, TRUE, TRUE, 0);
 
   gtk_notebook_append_page (GTK_NOTEBOOK (notebook),
@@ -1029,6 +904,7 @@ main (int argc, char **argv)
 
   gtk_text_buffer_create_tag (info_buffer, "title",
                               "font", "Sans 18",
+                              "pixels-below-lines", 10,
                               NULL);
   g_object_unref (info_buffer);
 
@@ -1063,7 +939,7 @@ main (int argc, char **argv)
   gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
   gtk_widget_show_all (window);
 
-  load_file (gtk_demos[0].filename);
+  load_file (gtk_demos[0].name, gtk_demos[0].filename);
 
   gtk_main ();
 

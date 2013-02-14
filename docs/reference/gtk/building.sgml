@@ -317,8 +317,8 @@ How to compile GTK+ itself
           <command>configure</command>
           <sbr/>
           <group>
-            <arg>--disable-modules</arg>
-            <arg>--enable-modules</arg>
+            <arg choice="plain">--disable-modules</arg>
+            <arg choice="plain">--enable-modules</arg>
           </group>
           <sbr/>
           <group>
@@ -326,65 +326,81 @@ How to compile GTK+ itself
           </group>
           <sbr/>
           <group>
-            <arg>--enable-debug=[no/minimum/yes]</arg>
+            <arg choice="plain">--enable-debug=[no/minimum/yes]</arg>
           </group>
           <sbr/>
           <group>
-            <arg>--disable-Bsymbolic</arg>
-            <arg>--enable-Bsymbolic</arg>
+            <arg choice="plain">--disable-Bsymbolic</arg>
+            <arg choice="plain">--enable-Bsymbolic</arg>
           </group>
           <sbr/>
           <group>
-            <arg>--disable-xkb</arg>
-            <arg>--enable-xkb</arg>
+            <arg choice="plain">--disable-xkb</arg>
+            <arg choice="plain">--enable-xkb</arg>
           </group>
           <sbr/>
           <group>
-            <arg>--disable-xinerama</arg>
-            <arg>--enable-xinerama</arg>
+            <arg choice="plain">--disable-xinerama</arg>
+            <arg choice="plain">--enable-xinerama</arg>
           </group>
           <sbr/>
           <group>
-            <arg>--disable-gtk-doc</arg>
-            <arg>--enable-gtk-doc</arg>
+            <arg choice="plain">--disable-gtk-doc</arg>
+            <arg choice="plain">--enable-gtk-doc</arg>
           </group>
           <sbr/>
           <group>
-            <arg>--disable-cups</arg>
-            <arg>--enable-cups</arg>
+            <arg choice="plain">--disable-cups</arg>
+            <arg choice="plain">--enable-cups</arg>
           </group>
           <sbr/>
           <group>
-            <arg>--disable-papi</arg>
-            <arg>--enable-papi</arg>
+            <arg choice="plain">--disable-papi</arg>
+            <arg choice="plain">--enable-papi</arg>
           </group>
           <sbr/>
           <group>
-            <arg>--enable-xinput</arg>
-            <arg>--disable-xinput</arg>
+            <arg choice="plain">--enable-xinput</arg>
+            <arg choice="plain">--disable-xinput</arg>
           </group>
           <sbr/>
           <group>
-            <arg>--enable-packagekit</arg>
-            <arg>--disable-packagekit</arg>
+            <arg choice="plain">--enable-packagekit</arg>
+            <arg choice="plain">--disable-packagekit</arg>
           </group>
           <sbr/>
           <group>
-            <arg>--enable-x11-backend</arg>
-            <arg>--disable-x11-backend</arg>
-            <arg>--enable-win32-backend</arg>
-            <arg>--disable-win32-backend</arg>
-            <arg>--enable-quartz-backend</arg>
-            <arg>--disable-quartz-backend</arg>
+            <arg choice="plain">--enable-x11-backend</arg>
+            <arg choice="plain">--disable-x11-backend</arg>
           </group>
           <sbr/>
           <group>
-            <arg>--enable-introspection=[no/auto/yes]</arg>
+            <arg choice="plain">--enable-win32-backend</arg>
+            <arg choice="plain">--disable-win32-backend</arg>
           </group>
           <sbr/>
           <group>
-            <arg>--enable-gtk2-dependency</arg>
-            <arg>--disable-gtk2-dependency</arg>
+            <arg choice="plain">--enable-quartz-backend</arg>
+            <arg choice="plain">--disable-quartz-backend</arg>
+          </group>
+          <sbr/>
+          <group>
+            <arg choice="plain">--enable-broadway-backend</arg>
+            <arg choice="plain">--disable-broadway-backend</arg>
+          </group>
+          <sbr/>
+          <group>
+            <arg choice="plain">--enable-wayland-backend</arg>
+            <arg choice="plain">--disable-wayland-backend</arg>
+          </group>
+          <sbr/>
+          <group>
+            <arg choice="plain">--enable-introspection=[no/auto/yes]</arg>
+          </group>
+          <sbr/>
+          <group>
+            <arg choice="plain">--enable-gtk2-dependency</arg>
+            <arg choice="plain">--disable-gtk2-dependency</arg>
           </group>
         </cmdsynopsis>
       </para>
@@ -571,7 +587,11 @@ How to compile GTK+ itself
           <systemitem>--enable-win32-backend</systemitem>,
           <systemitem>--disable-win32-backend</systemitem>,
           <systemitem>--enable-quartz-backend</systemitem>,
-          and <systemitem>--disable-quartz-backend</systemitem></title>
+          <systemitem>--disable-quartz-backend</systemitem>,
+          <systemitem>--enable-broadway-backend</systemitem>,
+          <systemitem>--disable-broadway-backend</systemitem>,
+          <systemitem>--enable-wayland-backend</systemitem>, and
+          <systemitem>--disable-wayland-backend</systemitem></title>
 
         <para>
           Enables specific backends for GDK.  If none of these options

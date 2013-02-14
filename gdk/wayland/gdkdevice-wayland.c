@@ -38,22 +38,13 @@
 #include <sys/time.h>
 #include <sys/mman.h>
 
-#define GDK_TYPE_DEVICE_CORE         (gdk_device_core_get_type ())
-#define GDK_DEVICE_CORE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GDK_TYPE_DEVICE_CORE, GdkDeviceCore))
-#define GDK_DEVICE_CORE_CLASS(c)     (G_TYPE_CHECK_CLASS_CAST ((c), GDK_TYPE_DEVICE_CORE, GdkDeviceCoreClass))
-#define GDK_IS_DEVICE_CORE(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GDK_TYPE_DEVICE_CORE))
-#define GDK_IS_DEVICE_CORE_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE ((c), GDK_TYPE_DEVICE_CORE))
-#define GDK_DEVICE_CORE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GDK_TYPE_DEVICE_CORE, GdkDeviceCoreClass))
-
-typedef struct _GdkDeviceCore GdkDeviceCore;
-typedef struct _GdkDeviceCoreClass GdkDeviceCoreClass;
-typedef struct _GdkWaylandDevice GdkWaylandDevice;
+typedef struct _GdkWaylandDeviceData GdkWaylandDeviceData;
 
 typedef struct _DataOffer DataOffer;
 
 typedef struct _GdkWaylandSelectionOffer GdkWaylandSelectionOffer;
 
-struct _GdkWaylandDevice
+struct _GdkWaylandDeviceData
 {
   struct wl_seat *wl_seat;
   struct wl_pointer *wl_pointer;
@@ -87,18 +78,18 @@ struct _GdkWaylandDevice
   struct wl_surface *pointer_surface;
 };
 
-struct _GdkDeviceCore
+struct _GdkWaylandDevice
 {
   GdkDevice parent_instance;
-  GdkWaylandDevice *device;
+  GdkWaylandDeviceData *device;
 };
 
-struct _GdkDeviceCoreClass
+struct _GdkWaylandDeviceClass
 {
   GdkDeviceClass parent_class;
 };
 
-G_DEFINE_TYPE (GdkDeviceCore, gdk_device_core, GDK_TYPE_DEVICE)
+G_DEFINE_TYPE (GdkWaylandDevice, gdk_wayland_device, GDK_TYPE_DEVICE)
 
 #define GDK_TYPE_DEVICE_MANAGER_CORE         (gdk_device_manager_core_get_type ())
 #define GDK_DEVICE_MANAGER_CORE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GDK_TYPE_DEVICE_MANAGER_CORE, GdkDeviceManagerCore))
@@ -127,21 +118,21 @@ G_DEFINE_TYPE (GdkDeviceManagerCore,
 	       gdk_device_manager_core, GDK_TYPE_DEVICE_MANAGER)
 
 static gboolean
-gdk_device_core_get_history (GdkDevice      *device,
-                             GdkWindow      *window,
-                             guint32         start,
-                             guint32         stop,
-                             GdkTimeCoord ***events,
-                             gint           *n_events)
+gdk_wayland_device_get_history (GdkDevice      *device,
+                                GdkWindow      *window,
+                                guint32         start,
+                                guint32         stop,
+                                GdkTimeCoord ***events,
+                                gint           *n_events)
 {
   return FALSE;
 }
 
 static void
-gdk_device_core_get_state (GdkDevice       *device,
-                           GdkWindow       *window,
-                           gdouble         *axes,
-                           GdkModifierType *mask)
+gdk_wayland_device_get_state (GdkDevice       *device,
+                              GdkWindow       *window,
+                              gdouble         *axes,
+                              GdkModifierType *mask)
 {
   gint x_int, y_int;
 
@@ -155,11 +146,11 @@ gdk_device_core_get_state (GdkDevice       *device,
 }
 
 static void
-gdk_device_core_set_window_cursor (GdkDevice *device,
-                                   GdkWindow *window,
-                                   GdkCursor *cursor)
+gdk_wayland_device_set_window_cursor (GdkDevice *device,
+                                      GdkWindow *window,
+                                      GdkCursor *cursor)
 {
-  GdkWaylandDevice *wd = GDK_DEVICE_CORE(device)->device;
+  GdkWaylandDeviceData *wd = GDK_WAYLAND_DEVICE(device)->device;
   GdkWaylandDisplay *wayland_display =
     GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   struct wl_buffer *buffer;
@@ -189,28 +180,28 @@ gdk_device_core_set_window_cursor (GdkDevice *device,
 }
 
 static void
-gdk_device_core_warp (GdkDevice *device,
-                      GdkScreen *screen,
-                      gint       x,
-                      gint       y)
+gdk_wayland_device_warp (GdkDevice *device,
+                         GdkScreen *screen,
+                         gint       x,
+                         gint       y)
 {
 }
 
 static void
-gdk_device_core_query_state (GdkDevice        *device,
-                             GdkWindow        *window,
-                             GdkWindow       **root_window,
-                             GdkWindow       **child_window,
-                             gint             *root_x,
-                             gint             *root_y,
-                             gint             *win_x,
-                             gint             *win_y,
-                             GdkModifierType  *mask)
+gdk_wayland_device_query_state (GdkDevice        *device,
+                                GdkWindow        *window,
+                                GdkWindow       **root_window,
+                                GdkWindow       **child_window,
+                                gint             *root_x,
+                                gint             *root_y,
+                                gint             *win_x,
+                                gint             *win_y,
+                                GdkModifierType  *mask)
 {
-  GdkWaylandDevice *wd;
+  GdkWaylandDeviceData *wd;
   GdkScreen *default_screen;
 
-  wd = GDK_DEVICE_CORE(device)->device;
+  wd = GDK_WAYLAND_DEVICE(device)->device;
   default_screen = gdk_display_get_default_screen (wd->display);
 
   if (root_window)
@@ -233,15 +224,15 @@ gdk_device_core_query_state (GdkDevice        *device,
 }
 
 static GdkGrabStatus
-gdk_device_core_grab (GdkDevice    *device,
-                      GdkWindow    *window,
-                      gboolean      owner_events,
-                      GdkEventMask  event_mask,
-                      GdkWindow    *confine_to,
-                      GdkCursor    *cursor,
-                      guint32       time_)
+gdk_wayland_device_grab (GdkDevice    *device,
+                         GdkWindow    *window,
+                         gboolean      owner_events,
+                         GdkEventMask  event_mask,
+                         GdkWindow    *confine_to,
+                         GdkCursor    *cursor,
+                         guint32       time_)
 {
-  GdkWaylandDevice *wayland_device = GDK_DEVICE_CORE (device)->device;
+  GdkWaylandDeviceData *wayland_device = GDK_WAYLAND_DEVICE (device)->device;
 
   if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     {
@@ -278,10 +269,10 @@ gdk_device_core_grab (GdkDevice    *device,
 }
 
 static void
-gdk_device_core_ungrab (GdkDevice *device,
-                        guint32    time_)
+gdk_wayland_device_ungrab (GdkDevice *device,
+                           guint32    time_)
 {
-  GdkWaylandDevice *wayland_device = GDK_DEVICE_CORE (device)->device;
+  GdkWaylandDeviceData *wayland_device = GDK_WAYLAND_DEVICE (device)->device;
   GdkDisplay *display;
   GdkDeviceGrabInfo *grab;
 
@@ -307,15 +298,15 @@ gdk_device_core_ungrab (GdkDevice *device,
 }
 
 static GdkWindow *
-gdk_device_core_window_at_position (GdkDevice       *device,
-                                    gint            *win_x,
-                                    gint            *win_y,
-                                    GdkModifierType *mask,
-                                    gboolean         get_toplevel)
+gdk_wayland_device_window_at_position (GdkDevice       *device,
+                                       gint            *win_x,
+                                       gint            *win_y,
+                                       GdkModifierType *mask,
+                                       gboolean         get_toplevel)
 {
-  GdkWaylandDevice *wd;
+  GdkWaylandDeviceData *wd;
 
-  wd = GDK_DEVICE_CORE(device)->device;
+  wd = GDK_WAYLAND_DEVICE(device)->device;
   if (win_x)
     *win_x = wd->surface_x;
   if (win_y)
@@ -327,30 +318,30 @@ gdk_device_core_window_at_position (GdkDevice       *device,
 }
 
 static void
-gdk_device_core_select_window_events (GdkDevice    *device,
-                                      GdkWindow    *window,
-                                      GdkEventMask  event_mask)
+gdk_wayland_device_select_window_events (GdkDevice    *device,
+                                         GdkWindow    *window,
+                                         GdkEventMask  event_mask)
 {
 }
 
 static void
-gdk_device_core_class_init (GdkDeviceCoreClass *klass)
+gdk_wayland_device_class_init (GdkWaylandDeviceClass *klass)
 {
   GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
 
-  device_class->get_history = gdk_device_core_get_history;
-  device_class->get_state = gdk_device_core_get_state;
-  device_class->set_window_cursor = gdk_device_core_set_window_cursor;
-  device_class->warp = gdk_device_core_warp;
-  device_class->query_state = gdk_device_core_query_state;
-  device_class->grab = gdk_device_core_grab;
-  device_class->ungrab = gdk_device_core_ungrab;
-  device_class->window_at_position = gdk_device_core_window_at_position;
-  device_class->select_window_events = gdk_device_core_select_window_events;
+  device_class->get_history = gdk_wayland_device_get_history;
+  device_class->get_state = gdk_wayland_device_get_state;
+  device_class->set_window_cursor = gdk_wayland_device_set_window_cursor;
+  device_class->warp = gdk_wayland_device_warp;
+  device_class->query_state = gdk_wayland_device_query_state;
+  device_class->grab = gdk_wayland_device_grab;
+  device_class->ungrab = gdk_wayland_device_ungrab;
+  device_class->window_at_position = gdk_wayland_device_window_at_position;
+  device_class->select_window_events = gdk_wayland_device_select_window_events;
 }
 
 static void
-gdk_device_core_init (GdkDeviceCore *device_core)
+gdk_wayland_device_init (GdkWaylandDevice *device_core)
 {
   GdkDevice *device;
 
@@ -361,434 +352,35 @@ gdk_device_core_init (GdkDeviceCore *device_core)
 }
 
 struct wl_seat *
-_gdk_wayland_device_get_wl_seat (GdkDevice *device)
+gdk_wayland_device_get_wl_seat (GdkDevice *device)
 {
-  return GDK_DEVICE_CORE (device)->device->wl_seat;
+  g_return_val_if_fail(GDK_IS_WAYLAND_DEVICE (device), NULL);
+
+  return GDK_WAYLAND_DEVICE (device)->device->wl_seat;
 }
 
 struct wl_pointer *
-_gdk_wayland_device_get_wl_pointer (GdkDevice *device)
+gdk_wayland_device_get_wl_pointer (GdkDevice *device)
 {
-  return GDK_DEVICE_CORE (device)->device->wl_pointer;
+  g_return_val_if_fail(GDK_IS_WAYLAND_DEVICE (device), NULL);
+
+  return GDK_WAYLAND_DEVICE (device)->device->wl_pointer;
 }
 
 
 struct wl_keyboard *
-_gdk_wayland_device_get_wl_keyboard (GdkDevice *device)
+gdk_wayland_device_get_wl_keyboard (GdkDevice *device)
 {
-  return GDK_DEVICE_CORE (device)->device->wl_keyboard;
+  g_return_val_if_fail(GDK_IS_WAYLAND_DEVICE (device), NULL);
+
+  return GDK_WAYLAND_DEVICE (device)->device->wl_keyboard;
 }
 
 GdkKeymap *
 _gdk_wayland_device_get_keymap (GdkDevice *device)
 {
-  return GDK_DEVICE_CORE (device)->device->keymap;
+  return GDK_WAYLAND_DEVICE (device)->device->keymap;
 }
-
-#if 0
-static void
-input_handle_motion(void *data, struct wl_input_device *input_device,
-		    uint32_t time,
-		    int32_t x, int32_t y, int32_t sx, int32_t sy)
-{
-  GdkWaylandDevice *device = data;
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (device->display);
-  GdkEvent *event;
-
-  event = gdk_event_new (GDK_NOTHING);
-
-  device->time = time;
-  device->x = x;
-  device->y = y;
-  device->surface_x = sx;
-  device->surface_y = sy;
-
-  event->motion.type = GDK_MOTION_NOTIFY;
-  event->motion.window = g_object_ref (device->pointer_focus);
-  gdk_event_set_device (event, device->pointer);
-  event->motion.time = time;
-  event->motion.x = (gdouble) sx;
-  event->motion.y = (gdouble) sy;
-  event->motion.x_root = (gdouble) x;
-  event->motion.y_root = (gdouble) y;
-  event->motion.axes = NULL;
-  event->motion.state = device->modifiers;
-  event->motion.is_hint = 0;
-  gdk_event_set_screen (event, display->screen);
-
-  GDK_NOTE (EVENTS,
-	    g_message ("motion %d %d, state %d",
-		       sx, sy, event->button.state));
-
-  _gdk_wayland_display_deliver_event (device->display, event);
-}
-
-static void
-input_handle_button(void *data, struct wl_input_device *input_device,
-		     uint32_t time, uint32_t button, uint32_t state)
-{
-  GdkWaylandDevice *device = data;
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (device->display);
-  GdkEvent *event;
-  uint32_t modifier;
-  int gdk_button;
-
-  switch (button) {
-  case 273:
-    gdk_button = 3;
-    break;
-  case 274:
-    gdk_button = 2;
-    break;
-  default:
-    gdk_button = button - 271;
-    break;
-  }
-
-  device->time = time;
-  event = gdk_event_new (state ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE);
-  event->button.window = g_object_ref (device->pointer_focus);
-  gdk_event_set_device (event, device->pointer);
-  event->button.time = time;
-  event->button.x = (gdouble) device->surface_x;
-  event->button.y = (gdouble) device->surface_y;
-  event->button.x_root = (gdouble) device->x;
-  event->button.y_root = (gdouble) device->y;
-  event->button.axes = NULL;
-  event->button.state = device->modifiers;
-  event->button.button = gdk_button;
-  gdk_event_set_screen (event, display->screen);
-
-  modifier = 1 << (8 + gdk_button - 1);
-  if (state)
-    device->modifiers |= modifier;
-  else
-    device->modifiers &= ~modifier;
-
-  GDK_NOTE (EVENTS,
-	    g_message ("button %d %s, state %d",
-		       event->button.button,
-		       state ? "press" : "release", event->button.state));
-
-  _gdk_wayland_display_deliver_event (device->display, event);
-}
-
-static void
-translate_keyboard_string (GdkEventKey *event)
-{
-  gunichar c = 0;
-  gchar buf[7];
-
-  /* Fill in event->string crudely, since various programs
-   * depend on it.
-   */
-  event->string = NULL;
-
-  if (event->keyval != GDK_KEY_VoidSymbol)
-    c = gdk_keyval_to_unicode (event->keyval);
-
-  if (c)
-    {
-      gsize bytes_written;
-      gint len;
-
-      /* Apply the control key - Taken from Xlib
-       */
-      if (event->state & GDK_CONTROL_MASK)
-        {
-          if ((c >= '@' && c < '\177') || c == ' ') c &= 0x1F;
-          else if (c == '2')
-            {
-              event->string = g_memdup ("\0\0", 2);
-              event->length = 1;
-              buf[0] = '\0';
-              return;
-            }
-          else if (c >= '3' && c <= '7') c -= ('3' - '\033');
-          else if (c == '8') c = '\177';
-          else if (c == '/') c = '_' & 0x1F;
-        }
-
-      len = g_unichar_to_utf8 (c, buf);
-      buf[len] = '\0';
-
-      event->string = g_locale_from_utf8 (buf, len,
-                                          NULL, &bytes_written,
-                                          NULL);
-      if (event->string)
-        event->length = bytes_written;
-    }
-  else if (event->keyval == GDK_KEY_Escape)
-    {
-      event->length = 1;
-      event->string = g_strdup ("\033");
-    }
-  else if (event->keyval == GDK_KEY_Return ||
-          event->keyval == GDK_KEY_KP_Enter)
-    {
-      event->length = 1;
-      event->string = g_strdup ("\r");
-    }
-
-  if (!event->string)
-    {
-      event->length = 0;
-      event->string = g_strdup ("");
-    }
-}
-
-static gboolean
-keyboard_repeat (gpointer data);
-
-static gboolean
-deliver_key_event(GdkWaylandDevice *device,
-		  uint32_t time, uint32_t key, uint32_t state)
-{
-  GdkEvent *event;
-  uint32_t code, modifier, level;
-  struct xkb_desc *xkb;
-  GdkKeymap *keymap;
-
-  keymap = gdk_keymap_get_for_display (device->display);
-  xkb = _gdk_wayland_keymap_get_xkb_desc (keymap);
-
-  device->time = time;
-  event = gdk_event_new (state ? GDK_KEY_PRESS : GDK_KEY_RELEASE);
-  event->key.window = g_object_ref (device->keyboard_focus);
-  gdk_event_set_device (event, device->keyboard);
-  event->button.time = time;
-  event->key.state = device->modifiers;
-  event->key.group = 0;
-  code = key + xkb->min_key_code;
-  event->key.hardware_keycode = code;
-
-  level = 0;
-  if (device->modifiers & XKB_COMMON_SHIFT_MASK &&
-      XkbKeyGroupWidth(xkb, code, 0) > 1)
-    level = 1;
-
-  event->key.keyval = XkbKeySymEntry(xkb, code, level, 0);
-
-  modifier = xkb->map->modmap[code];
-  if (state)
-    device->modifiers |= modifier;
-  else
-    device->modifiers &= ~modifier;
-
-  event->key.is_modifier = modifier > 0;
-
-  translate_keyboard_string (&event->key);
-
-  _gdk_wayland_display_deliver_event (device->display, event);
-
-  GDK_NOTE (EVENTS,
-	    g_message ("keyboard event, code %d, sym %d, "
-		       "string %s, mods 0x%x",
-		       code, event->key.keyval,
-		       event->key.string, event->key.state));
-
-  device->repeat_count++;
-  device->repeat_key = key;
-
-  if (state == 0)
-    {
-      if (device->repeat_timer)
-	{
-	  g_source_remove (device->repeat_timer);
-	  device->repeat_timer = 0;
-	}
-      return FALSE;
-    }
-  else if (modifier)
-    {
-      return FALSE;
-    }
-  else switch (device->repeat_count)
-    {
-    case 1:
-      if (device->repeat_timer)
-	{
-	  g_source_remove (device->repeat_timer);
-	  device->repeat_timer = 0;
-	}
-
-      device->repeat_timer =
-	gdk_threads_add_timeout (400, keyboard_repeat, device);
-      return TRUE;
-    case 2:
-      device->repeat_timer =
-	gdk_threads_add_timeout (80, keyboard_repeat, device);
-      return FALSE;
-    default:
-      return TRUE;
-    }
-}
-
-static gboolean
-keyboard_repeat (gpointer data)
-{
-  GdkWaylandDevice *device = data;
-
-  return deliver_key_event (device, device->time, device->repeat_key, 1);
-}
-
-static void
-input_handle_key(void *data, struct wl_input_device *input_device,
-		 uint32_t time, uint32_t key, uint32_t state)
-{
-  GdkWaylandDevice *device = data;
-
-  device->repeat_count = 0;
-  deliver_key_event (data, time, key, state);
-}
-
-static void
-input_handle_pointer_focus(void *data,
-			   struct wl_input_device *input_device,
-			   uint32_t time, struct wl_surface *surface,
-			   int32_t x, int32_t y, int32_t sx, int32_t sy)
-{
-  GdkWaylandDevice *device = data;
-  GdkEvent *event;
-
-  device->time = time;
-  if (device->pointer_focus)
-    {
-      event = gdk_event_new (GDK_LEAVE_NOTIFY);
-      event->crossing.window = g_object_ref (device->pointer_focus);
-      gdk_event_set_device (event, device->pointer);
-      event->crossing.subwindow = NULL;
-      event->crossing.time = time;
-      event->crossing.x = (gdouble) device->surface_x;
-      event->crossing.y = (gdouble) device->surface_y;
-      event->crossing.x_root = (gdouble) device->x;
-      event->crossing.y_root = (gdouble) device->y;
-
-      event->crossing.mode = GDK_CROSSING_NORMAL;
-      event->crossing.detail = GDK_NOTIFY_ANCESTOR;
-      event->crossing.focus = TRUE;
-      event->crossing.state = 0;
-
-      _gdk_wayland_display_deliver_event (device->display, event);
-
-      GDK_NOTE (EVENTS,
-		g_message ("leave, device %p surface %p",
-			   device, device->pointer_focus));
-
-      g_object_unref(device->pointer_focus);
-      device->pointer_focus = NULL;
-    }
-
-  if (surface)
-    {
-      device->pointer_focus = wl_surface_get_user_data(surface);
-      g_object_ref(device->pointer_focus);
-
-      event = gdk_event_new (GDK_ENTER_NOTIFY);
-      event->crossing.window = g_object_ref (device->pointer_focus);
-      gdk_event_set_device (event, device->pointer);
-      event->crossing.subwindow = NULL;
-      event->crossing.time = time;
-      event->crossing.x = (gdouble) sx;
-      event->crossing.y = (gdouble) sy;
-      event->crossing.x_root = (gdouble) x;
-      event->crossing.y_root = (gdouble) y;
-
-      event->crossing.mode = GDK_CROSSING_NORMAL;
-      event->crossing.detail = GDK_NOTIFY_ANCESTOR;
-      event->crossing.focus = TRUE;
-      event->crossing.state = 0;
-
-      device->surface_x = sx;
-      device->surface_y = sy;
-      device->x = x;
-      device->y = y;
-
-      _gdk_wayland_display_deliver_event (device->display, event);
-
-      GDK_NOTE (EVENTS,
-		g_message ("enter, device %p surface %p",
-			   device, device->pointer_focus));
-    }
-}
-
-static void
-update_modifiers(GdkWaylandDevice *device, struct wl_array *keys)
-{
-  uint32_t *k, *end;
-  GdkKeymap *keymap;
-  struct xkb_desc *xkb;
-
-  keymap = gdk_keymap_get_for_display (device->display);
-  xkb = _gdk_wayland_keymap_get_xkb_desc (keymap);
-
-  end = keys->data + keys->size;
-  device->modifiers = 0;
-  for (k = keys->data; k < end; k++)
-    device->modifiers |= xkb->map->modmap[*k];
-}
-
-static void
-input_handle_keyboard_focus(void *data,
-			    struct wl_input_device *input_device,
-			    uint32_t time,
-			    struct wl_surface *surface,
-			    struct wl_array *keys)
-{
-  GdkWaylandDevice *device = data;
-  GdkEvent *event;
-
-  device->time = time;
-  if (device->keyboard_focus)
-    {
-      _gdk_wayland_window_remove_focus (device->keyboard_focus);
-      event = gdk_event_new (GDK_FOCUS_CHANGE);
-      event->focus_change.window = g_object_ref (device->keyboard_focus);
-      event->focus_change.send_event = FALSE;
-      event->focus_change.in = FALSE;
-      gdk_event_set_device (event, device->keyboard);
-
-      g_object_unref(device->keyboard_focus);
-      device->keyboard_focus = NULL;
-
-      GDK_NOTE (EVENTS,
-		g_message ("focus out, device %p surface %p",
-			   device, device->keyboard_focus));
-
-      _gdk_wayland_display_deliver_event (device->display, event);
-    }
-
-  if (surface)
-    {
-      device->keyboard_focus = wl_surface_get_user_data(surface);
-      g_object_ref(device->keyboard_focus);
-
-      event = gdk_event_new (GDK_FOCUS_CHANGE);
-      event->focus_change.window = g_object_ref (device->keyboard_focus);
-      event->focus_change.send_event = FALSE;
-      event->focus_change.in = TRUE;
-      gdk_event_set_device (event, device->keyboard);
-
-      update_modifiers (device, keys);
-
-      GDK_NOTE (EVENTS,
-		g_message ("focus int, device %p surface %p",
-			   device, device->keyboard_focus));
-
-      _gdk_wayland_display_deliver_event (device->display, event);
-
-      _gdk_wayland_window_add_focus (device->keyboard_focus);
-    }
-}
-
-static const struct wl_input_device_listener input_device_listener = {
-  input_handle_motion,
-  input_handle_button,
-  input_handle_key,
-  input_handle_pointer_focus,
-  input_handle_keyboard_focus,
-};
-#endif
 
 struct _DataOffer {
   struct wl_data_offer *offer;
@@ -856,7 +448,7 @@ data_device_enter (void                  *data,
                    int32_t                y,
                    struct wl_data_offer  *offer)
 {
-  GdkWaylandDevice *device = (GdkWaylandDevice *)data;
+  GdkWaylandDeviceData *device = (GdkWaylandDeviceData *)data;
 
   g_debug (G_STRLOC ": %s data_device = %p time = %d, surface = %p, x = %d y = %d, offer = %p",
            G_STRFUNC, data_device, time, surface, x, y, offer);
@@ -872,7 +464,7 @@ static void
 data_device_leave (void                  *data,
                    struct wl_data_device *data_device)
 {
-  GdkWaylandDevice *device = (GdkWaylandDevice *)data;
+  GdkWaylandDeviceData *device = (GdkWaylandDeviceData *)data;
 
   g_debug (G_STRLOC ": %s data_device = %p",
            G_STRFUNC, data_device);
@@ -905,7 +497,7 @@ data_device_selection (void                  *data,
                        struct wl_data_device *wl_data_device,
                        struct wl_data_offer  *offer)
 {
-  GdkWaylandDevice *device = (GdkWaylandDevice *)data;
+  GdkWaylandDeviceData *device = (GdkWaylandDeviceData *)data;
 
   g_debug (G_STRLOC ": %s wl_data_device = %p wl_data_offer = %p",
            G_STRFUNC, wl_data_device, offer);
@@ -953,10 +545,13 @@ pointer_handle_enter (void              *data,
                       wl_fixed_t         sx,
                       wl_fixed_t         sy)
 {
-  GdkWaylandDevice *device = data;
+  GdkWaylandDeviceData *device = data;
   GdkEvent *event;
   GdkWaylandDisplay *wayland_display =
     GDK_WAYLAND_DISPLAY (device->display);
+
+  if (!surface)
+    return;
 
   _gdk_wayland_display_update_serial (wayland_display, serial);
 
@@ -992,10 +587,13 @@ pointer_handle_leave (void              *data,
                       uint32_t           serial,
                       struct wl_surface *surface)
 {
-  GdkWaylandDevice *device = data;
+  GdkWaylandDeviceData *device = data;
   GdkEvent *event;
   GdkWaylandDisplay *wayland_display =
     GDK_WAYLAND_DISPLAY (device->display);
+
+  if (!surface)
+    return;
 
   _gdk_wayland_display_update_serial (wayland_display, serial);
 
@@ -1029,7 +627,7 @@ pointer_handle_motion (void              *data,
                        wl_fixed_t         sx,
                        wl_fixed_t         sy)
 {
-  GdkWaylandDevice *device = data;
+  GdkWaylandDeviceData *device = data;
   GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (device->display);
   GdkEvent *event;
 
@@ -1065,7 +663,7 @@ pointer_handle_button (void              *data,
                        uint32_t           button,
                        uint32_t           state)
 {
-  GdkWaylandDevice *device = data;
+  GdkWaylandDeviceData *device = data;
   GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (device->display);
   GdkEvent *event;
   uint32_t modifier;
@@ -1121,18 +719,19 @@ pointer_handle_axis (void              *data,
                      uint32_t           axis,
                      wl_fixed_t         value)
 {
-  GdkWaylandDevice *device = data;
+  GdkWaylandDeviceData *device = data;
   GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (device->display);
   GdkEvent *event;
   gdouble delta_x, delta_y;
 
+  /* get the delta and convert it into the expected range */
   switch (axis) {
   case WL_POINTER_AXIS_VERTICAL_SCROLL:
     delta_x = 0;
-    delta_y = -wl_fixed_to_double (value);
+    delta_y = wl_fixed_to_double (value) / 10.0;
     break;
   case WL_POINTER_AXIS_HORIZONTAL_SCROLL:
-    delta_x = -wl_fixed_to_double (value);
+    delta_x = wl_fixed_to_double (value) / 10.0;
     delta_y = 0;
   default:
     g_return_if_reached ();
@@ -1165,7 +764,7 @@ keyboard_handle_keymap (void               *data,
                        int                 fd,
                        uint32_t            size)
 {
-  GdkWaylandDevice *device = data;
+  GdkWaylandDeviceData *device = data;
   if (device->keymap)
     g_object_unref (device->keymap);
 
@@ -1179,10 +778,13 @@ keyboard_handle_enter (void               *data,
                        struct wl_surface  *surface,
                        struct wl_array    *keys)
 {
-  GdkWaylandDevice *device = data;
+  GdkWaylandDeviceData *device = data;
   GdkEvent *event;
   GdkWaylandDisplay *wayland_display =
     GDK_WAYLAND_DISPLAY (device->display);
+
+  if (!surface)
+    return;
 
   _gdk_wayland_display_update_serial (wayland_display, serial);
 
@@ -1210,10 +812,13 @@ keyboard_handle_leave (void               *data,
                        uint32_t            serial,
                        struct wl_surface  *surface)
 {
-  GdkWaylandDevice *device = data;
+  GdkWaylandDeviceData *device = data;
   GdkEvent *event;
   GdkWaylandDisplay *wayland_display =
     GDK_WAYLAND_DISPLAY (device->display);
+
+  if (!surface)
+    return;
 
   _gdk_wayland_display_update_serial (wayland_display, serial);
 
@@ -1241,14 +846,14 @@ static GdkModifierType
 get_modifier (struct xkb_state *state)
 {
   GdkModifierType modifiers = 0;
-  modifiers |= (xkb_state_mod_name_is_active (state, XKB_MOD_NAME_SHIFT, XKB_STATE_EFFECTIVE) > 0)?GDK_SHIFT_MASK:0;
-  modifiers |= (xkb_state_mod_name_is_active (state, XKB_MOD_NAME_CAPS, XKB_STATE_EFFECTIVE) > 0)?GDK_LOCK_MASK:0;
-  modifiers |= (xkb_state_mod_name_is_active (state, XKB_MOD_NAME_CTRL, XKB_STATE_EFFECTIVE) > 0)?GDK_CONTROL_MASK:0;
-  modifiers |= (xkb_state_mod_name_is_active (state, XKB_MOD_NAME_ALT, XKB_STATE_EFFECTIVE) > 0)?GDK_MOD1_MASK:0;
-  modifiers |= (xkb_state_mod_name_is_active (state, "Mod2", XKB_STATE_EFFECTIVE) > 0)?GDK_MOD2_MASK:0;
-  modifiers |= (xkb_state_mod_name_is_active (state, "Mod3", XKB_STATE_EFFECTIVE) > 0)?GDK_MOD3_MASK:0;
-  modifiers |= (xkb_state_mod_name_is_active (state, XKB_MOD_NAME_LOGO, XKB_STATE_EFFECTIVE) > 0)?GDK_MOD4_MASK:0;
-  modifiers |= (xkb_state_mod_name_is_active (state, "Mod5", XKB_STATE_EFFECTIVE) > 0)?GDK_MOD5_MASK:0;
+  modifiers |= (xkb_state_mod_name_is_active (state, XKB_MOD_NAME_SHIFT, XKB_STATE_MODS_EFFECTIVE) > 0)?GDK_SHIFT_MASK:0;
+  modifiers |= (xkb_state_mod_name_is_active (state, XKB_MOD_NAME_CAPS, XKB_STATE_MODS_EFFECTIVE) > 0)?GDK_LOCK_MASK:0;
+  modifiers |= (xkb_state_mod_name_is_active (state, XKB_MOD_NAME_CTRL, XKB_STATE_MODS_EFFECTIVE) > 0)?GDK_CONTROL_MASK:0;
+  modifiers |= (xkb_state_mod_name_is_active (state, XKB_MOD_NAME_ALT, XKB_STATE_MODS_EFFECTIVE) > 0)?GDK_MOD1_MASK:0;
+  modifiers |= (xkb_state_mod_name_is_active (state, "Mod2", XKB_STATE_MODS_EFFECTIVE) > 0)?GDK_MOD2_MASK:0;
+  modifiers |= (xkb_state_mod_name_is_active (state, "Mod3", XKB_STATE_MODS_EFFECTIVE) > 0)?GDK_MOD3_MASK:0;
+  modifiers |= (xkb_state_mod_name_is_active (state, XKB_MOD_NAME_LOGO, XKB_STATE_MODS_EFFECTIVE) > 0)?GDK_MOD4_MASK:0;
+  modifiers |= (xkb_state_mod_name_is_active (state, "Mod5", XKB_STATE_MODS_EFFECTIVE) > 0)?GDK_MOD5_MASK:0;
 
   return modifiers;
 }
@@ -1318,23 +923,18 @@ translate_keyboard_string (GdkEventKey *event)
 }
 
 static gboolean
-deliver_key_event(GdkWaylandDevice *device,
+deliver_key_event(GdkWaylandDeviceData *device,
                   uint32_t time, uint32_t key, uint32_t state)
 {
   GdkEvent *event;
   struct xkb_state *xkb_state;
   GdkKeymap *keymap;
   xkb_keysym_t sym;
-  uint32_t num_syms;
-  const xkb_keysym_t *syms;
 
   keymap = device->keymap;
   xkb_state = _gdk_wayland_keymap_get_xkb_state (keymap);
 
-  num_syms = xkb_key_get_syms (xkb_state, key, &syms);
-  sym = XKB_KEY_NoSymbol;
-  if (num_syms == 1)
-    sym = syms[0];
+  sym = xkb_state_key_get_one_sym (xkb_state, key);
 
   device->time = time;
   device->modifiers = get_modifier (xkb_state);
@@ -1400,7 +1000,7 @@ deliver_key_event(GdkWaylandDevice *device,
 static gboolean
 keyboard_repeat (gpointer data)
 {
-  GdkWaylandDevice *device = data;
+  GdkWaylandDeviceData *device = data;
 
   return deliver_key_event (device, device->time, device->repeat_key, 1);
 }
@@ -1413,7 +1013,7 @@ keyboard_handle_key (void               *data,
                      uint32_t            key,
                      uint32_t            state_w)
 {
-  GdkWaylandDevice *device = data;
+  GdkWaylandDeviceData *device = data;
   GdkWaylandDisplay *wayland_display =
     GDK_WAYLAND_DISPLAY (device->display);
 
@@ -1431,7 +1031,7 @@ keyboard_handle_modifiers (void               *data,
                            uint32_t            mods_locked,
                            uint32_t            group)
 {
-  GdkWaylandDevice *device = data;
+  GdkWaylandDeviceData *device = data;
   GdkKeymap *keymap;
   struct xkb_state *xkb_state;
 
@@ -1462,7 +1062,7 @@ static void
 seat_handle_capabilities(void *data, struct wl_seat *seat,
                          enum wl_seat_capability caps)
 {
-  GdkWaylandDevice *device = data;
+  GdkWaylandDeviceData *device = data;
   GdkDeviceManagerCore *device_manager_core =
     GDK_DEVICE_MANAGER_CORE(device->device_manager);
 
@@ -1473,7 +1073,7 @@ seat_handle_capabilities(void *data, struct wl_seat *seat,
       wl_pointer_add_listener(device->wl_pointer, &pointer_listener,
                               device);
 
-      device->pointer = g_object_new (GDK_TYPE_DEVICE_CORE,
+      device->pointer = g_object_new (GDK_TYPE_WAYLAND_DEVICE,
                                       "name", "Core Pointer",
                                       "type", GDK_DEVICE_TYPE_MASTER,
                                       "input-source", GDK_SOURCE_MOUSE,
@@ -1482,7 +1082,7 @@ seat_handle_capabilities(void *data, struct wl_seat *seat,
                                       "display", device->display,
                                       "device-manager", device->device_manager,
                                       NULL);
-      GDK_DEVICE_CORE (device->pointer)->device = device;
+      GDK_WAYLAND_DEVICE (device->pointer)->device = device;
 
       device_manager_core->devices =
         g_list_prepend (device_manager_core->devices, device->pointer);
@@ -1506,7 +1106,7 @@ seat_handle_capabilities(void *data, struct wl_seat *seat,
       wl_keyboard_add_listener(device->wl_keyboard, &keyboard_listener,
                                device);
 
-      device->keyboard = g_object_new (GDK_TYPE_DEVICE_CORE,
+      device->keyboard = g_object_new (GDK_TYPE_WAYLAND_DEVICE,
                                        "name", "Core Keyboard",
                                        "type", GDK_DEVICE_TYPE_MASTER,
                                        "input-source", GDK_SOURCE_KEYBOARD,
@@ -1515,7 +1115,7 @@ seat_handle_capabilities(void *data, struct wl_seat *seat,
                                        "display", device->display,
                                        "device-manager", device->device_manager,
                                        NULL);
-      GDK_DEVICE_CORE (device->keyboard)->device = device;
+      GDK_WAYLAND_DEVICE (device->keyboard)->device = device;
 
       device_manager_core->devices =
         g_list_prepend (device_manager_core->devices, device->keyboard);
@@ -1549,12 +1149,12 @@ _gdk_wayland_device_manager_add_device (GdkDeviceManager *device_manager,
 {
   GdkDisplay *display;
   GdkWaylandDisplay *display_wayland;
-  GdkWaylandDevice *device;
+  GdkWaylandDeviceData *device;
 
   display = gdk_device_manager_get_display (device_manager);
   display_wayland = GDK_WAYLAND_DISPLAY (display);
 
-  device = g_new0 (GdkWaylandDevice, 1);
+  device = g_new0 (GdkWaylandDeviceData, 1);
   device->keymap = _gdk_wayland_keymap_new ();
   device->display = display;
   device->device_manager = device_manager;
@@ -1658,12 +1258,12 @@ gdk_wayland_device_get_selection_type_atoms (GdkDevice  *gdk_device,
 {
   gint i;
   GdkAtom *atoms;
-  GdkWaylandDevice *device;
+  GdkWaylandDeviceData *device;
 
-  g_return_val_if_fail (GDK_IS_DEVICE_CORE (gdk_device), 0);
+  g_return_val_if_fail (GDK_IS_WAYLAND_DEVICE (gdk_device), 0);
   g_return_val_if_fail (atoms_out != NULL, 0);
 
-  device = GDK_DEVICE_CORE (gdk_device)->device;
+  device = GDK_WAYLAND_DEVICE (gdk_device)->device;
 
   if (!device->selection_offer || device->selection_offer->types->len == 0)
     {
@@ -1689,7 +1289,7 @@ gdk_wayland_device_get_selection_type_atoms (GdkDevice  *gdk_device,
 
 typedef struct
 {
-  GdkWaylandDevice *device;
+  GdkWaylandDeviceData *device;
   DataOffer *offer;
   GIOChannel *channel;
   GdkDeviceWaylandRequestContentCallback cb;
@@ -1742,14 +1342,14 @@ gdk_wayland_device_request_selection_content (GdkDevice                         
 {
   int pipe_fd[2];
   RequestContentClosure *closure;
-  GdkWaylandDevice *device;
+  GdkWaylandDeviceData *device;
   GError *error = NULL;
 
-  g_return_val_if_fail (GDK_IS_DEVICE_CORE (gdk_device), FALSE);
+  g_return_val_if_fail (GDK_IS_WAYLAND_DEVICE (gdk_device), FALSE);
   g_return_val_if_fail (requested_mime_type != NULL, FALSE);
   g_return_val_if_fail (cb != NULL, FALSE);
 
-  device = GDK_DEVICE_CORE (gdk_device)->device;
+  device = GDK_WAYLAND_DEVICE (gdk_device)->device;
 
   if (!device->selection_offer)
       return FALSE;
@@ -1800,7 +1400,7 @@ struct _GdkWaylandSelectionOffer {
   GdkDeviceWaylandOfferContentCallback cb;
   gpointer userdata;
   struct wl_data_source *source;
-  GdkWaylandDevice *device;
+  GdkWaylandDeviceData *device;
 };
 
 static void
@@ -1882,11 +1482,11 @@ gdk_wayland_device_offer_selection_content (GdkDevice                           
   GdkDisplay *display;
   GdkWaylandDisplay *display_wayland;
   GdkWaylandSelectionOffer *offer;
-  GdkWaylandDevice *device;
+  GdkWaylandDeviceData *device;
   gint i;
 
-  g_return_val_if_fail (GDK_IS_DEVICE_CORE (gdk_device), 0);
-  device = GDK_DEVICE_CORE (gdk_device)->device;
+  g_return_val_if_fail (GDK_IS_WAYLAND_DEVICE (gdk_device), 0);
+  device = GDK_WAYLAND_DEVICE (gdk_device)->device;
 
   display = device->display;
   display_wayland = GDK_WAYLAND_DISPLAY (display);
@@ -1920,10 +1520,10 @@ gdk_wayland_device_offer_selection_content (GdkDevice                           
 gboolean
 gdk_wayland_device_clear_selection_content (GdkDevice *gdk_device)
 {
-  GdkWaylandDevice *device;
+  GdkWaylandDeviceData *device;
 
-  g_return_val_if_fail (GDK_IS_DEVICE_CORE (gdk_device), 0);
-  device = GDK_DEVICE_CORE (gdk_device)->device;
+  g_return_val_if_fail (GDK_IS_WAYLAND_DEVICE (gdk_device), 0);
+  device = GDK_WAYLAND_DEVICE (gdk_device)->device;
 
   if (!device->selection_offer_out)
     return FALSE;

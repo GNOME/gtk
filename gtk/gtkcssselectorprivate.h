@@ -24,6 +24,8 @@
 G_BEGIN_DECLS
 
 typedef struct _GtkCssSelector GtkCssSelector;
+typedef struct _GtkCssSelectorTree GtkCssSelectorTree;
+typedef struct _GtkCssSelectorTreeBuilder GtkCssSelectorTreeBuilder;
 
 GtkCssSelector *  _gtk_css_selector_parse           (GtkCssParser           *parser);
 void              _gtk_css_selector_free            (GtkCssSelector         *selector);
@@ -32,13 +34,28 @@ char *            _gtk_css_selector_to_string       (const GtkCssSelector   *sel
 void              _gtk_css_selector_print           (const GtkCssSelector   *selector,
                                                      GString                *str);
 
-GtkStateFlags     _gtk_css_selector_get_state_flags (const GtkCssSelector   *selector);
-
-GtkCssChange      _gtk_css_selector_get_change      (const GtkCssSelector   *selector);
 gboolean          _gtk_css_selector_matches         (const GtkCssSelector   *selector,
                                                      const GtkCssMatcher    *matcher);
 int               _gtk_css_selector_compare         (const GtkCssSelector   *a,
                                                      const GtkCssSelector   *b);
+
+void         _gtk_css_selector_tree_free             (GtkCssSelectorTree       *tree);
+GPtrArray *  _gtk_css_selector_tree_match_all        (const GtkCssSelectorTree *tree,
+						      const GtkCssMatcher      *matcher);
+GtkCssChange _gtk_css_selector_tree_get_change_all   (const GtkCssSelectorTree *tree,
+						      const GtkCssMatcher *matcher);
+void         _gtk_css_selector_tree_match_print      (const GtkCssSelectorTree *tree,
+						      GString                  *str);
+GtkCssChange _gtk_css_selector_tree_match_get_change (const GtkCssSelectorTree *tree);
+
+
+GtkCssSelectorTreeBuilder *_gtk_css_selector_tree_builder_new   (void);
+void                       _gtk_css_selector_tree_builder_add   (GtkCssSelectorTreeBuilder *builder,
+								 GtkCssSelector            *selectors,
+								 GtkCssSelectorTree       **selector_match,
+								 gpointer                   match);
+GtkCssSelectorTree *       _gtk_css_selector_tree_builder_build (GtkCssSelectorTreeBuilder *builder);
+void                       _gtk_css_selector_tree_builder_free  (GtkCssSelectorTreeBuilder *builder);
 
 G_END_DECLS
 

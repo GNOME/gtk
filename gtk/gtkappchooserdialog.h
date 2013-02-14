@@ -22,12 +22,12 @@
  *          Cosimo Cecchi <ccecchi@redhat.com>
  */
 
+#ifndef __GTK_APP_CHOOSER_DIALOG_H__
+#define __GTK_APP_CHOOSER_DIALOG_H__
+
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_APP_CHOOSER_DIALOG_H__
-#define __GTK_APP_CHOOSER_DIALOG_H__
 
 #include <gtk/gtkdialog.h>
 #include <gio/gio.h>

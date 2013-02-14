@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
 
-  <schema id='org.gtk.Settings.ColorChooser'>
+  <schema id='org.gtk.Settings.ColorChooser' path='/org/gtk/settings/color-chooser/'>
     <key name='custom-colors' type='a(dddd)'>
       <default>[]</default>
     </key>

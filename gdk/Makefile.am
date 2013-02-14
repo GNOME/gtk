@@ -204,7 +204,6 @@ INTROSPECTION_GIRS += Gdk-3.0.gir
 
 if USE_X11
 x11_introspection_files = 		\
-	x11/checksettings.c		\
 	x11/gdkapplaunchcontext-x11.c	\
 	x11/gdkasync.c			\
 	x11/gdkcursor-x11.c		\

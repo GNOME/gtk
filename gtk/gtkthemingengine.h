@@ -15,12 +15,12 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __GTK_THEMING_ENGINE_H__
+#define __GTK_THEMING_ENGINE_H__
+
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_THEMING_ENGINE_H__
-#define __GTK_THEMING_ENGINE_H__
 
 #include <glib-object.h>
 #include <cairo.h>
@@ -182,6 +182,7 @@ struct _GtkThemingEngineClass
 GType gtk_theming_engine_get_type (void) G_GNUC_CONST;
 
 /* function implemented in gtkcsscustomproperty.c */
+GDK_DEPRECATED_IN_3_8
 void gtk_theming_engine_register_property (const gchar            *name_space,
                                            GtkStylePropertyParser  parse_func,
                                            GParamSpec             *pspec);
@@ -223,6 +224,7 @@ gboolean      gtk_theming_engine_state_is_running (GtkThemingEngine *engine,
                                                    GtkStateType      state,
                                                    gdouble          *progress);
 
+GDK_DEPRECATED_IN_3_8_FOR(gtk_theming_engine_get_state)
 GtkTextDirection gtk_theming_engine_get_direction (GtkThemingEngine *engine);
 
 GtkJunctionSides gtk_theming_engine_get_junction_sides (GtkThemingEngine *engine);
@@ -248,6 +250,7 @@ void gtk_theming_engine_get_margin  (GtkThemingEngine *engine,
                                      GtkStateFlags     state,
                                      GtkBorder        *margin);
 
+GDK_DEPRECATED_IN_3_8_FOR(gtk_theming_engine_get)
 const PangoFontDescription * gtk_theming_engine_get_font (GtkThemingEngine *engine,
                                                           GtkStateFlags     state);
 

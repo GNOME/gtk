@@ -31,7 +31,7 @@
 #include "gtkpressandholdprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "a11y/gtkcolorswatchaccessible.h"
+#include "a11y/gtkcolorswatchaccessibleprivate.h"
 
 
 struct _GtkColorSwatchPrivate
@@ -628,7 +628,7 @@ swatch_realize (GtkWidget *widget)
   swatch->priv->event_window = 
     gdk_window_new (window,
                     &attributes, attributes_mask);
-  gdk_window_set_user_data (swatch->priv->event_window, widget);
+  gtk_widget_register_window (widget, swatch->priv->event_window);
 }
 
 static void
@@ -638,7 +638,7 @@ swatch_unrealize (GtkWidget *widget)
 
   if (swatch->priv->event_window)
     {
-      gdk_window_set_user_data (swatch->priv->event_window, NULL);
+      gtk_widget_unregister_window (widget, swatch->priv->event_window);
       gdk_window_destroy (swatch->priv->event_window);
       swatch->priv->event_window = NULL;
     }

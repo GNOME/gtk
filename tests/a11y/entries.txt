@@ -176,6 +176,7 @@ window1
                           wrap-mode: word
       <AtkAction>
       action 0 name: activate
+      action 0 description: Activates the entry
       action 0 keybinding: <Alt>e
     entry2
       "password text"
@@ -218,11 +219,71 @@ window1
                           wrap-mode: word
       <AtkAction>
       action 0 name: activate
+      action 0 description: Activates the entry
       action 0 keybinding: <Alt>p
+    entry3
+      "text"
+      parent: box1
+      index: 5
+      state: editable enabled focusable sensitive single-line visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkText>
+      text: icons
+      character count: 5
+      caret offset: 0
+      default attributes: bg-color: <omitted>
+                          bg-full-height: 0
+                          direction: <omitted>
+                          editable: false
+                          family-name: <omitted>
+                          fg-color: <omitted>
+                          indent: 0
+                          invisible: false
+                          justification: left
+                          language: <omitted>
+                          left-margin: 0
+                          pixels-above-lines: 0
+                          pixels-below-lines: 0
+                          pixels-inside-wrap: 0
+                          right-margin: 0
+                          rise: 0
+                          scale: 1
+                          size: <omitted>
+                          stretch: <omitted>
+                          strikethrough: false
+                          style: <omitted>
+                          underline: none
+                          variant: <omitted>
+                          weight: <omitted>
+                          wrap-mode: word
+      <AtkAction>
+      action 0 name: activate
+      action 0 description: Activates the entry
+      unnamed-GtkEntryIconAccessible-0
+        "icon"
+        parent: entry3
+        state: enabled sensitive visible
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkAction>
+        action 0 name: activate
+      unnamed-GtkEntryIconAccessible-1
+        "icon"
+        parent: entry3
+        state: enabled sensitive visible
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkAction>
+        action 0 name: activate
     spinbutton1
       "spin button"
       parent: box1
-      index: 5
+      index: 6
       labelled-by: label3
       state: editable enabled focusable horizontal sensitive single-line visible
       toolkit: gtk
@@ -260,6 +321,7 @@ window1
                           wrap-mode: word
       <AtkAction>
       action 0 name: activate
+      action 0 description: Activates the entry
       action 0 keybinding: <Alt>s
       <AtkValue>
       minimum value: 0.500000

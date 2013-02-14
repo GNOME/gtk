@@ -107,7 +107,6 @@
 #include <gtk/gtkfontchooserdialog.h>
 #include <gtk/gtkfontchooserwidget.h>
 #include <gtk/gtkframe.h>
-#include <gtk/gtkgradient.h>
 #include <gtk/gtkgrid.h>
 #include <gtk/gtkiconfactory.h>
 #include <gtk/gtkicontheme.h>
@@ -186,7 +185,6 @@
 #include <gtk/gtkstyleproperties.h>
 #include <gtk/gtkstyleprovider.h>
 #include <gtk/gtkswitch.h>
-#include <gtk/gtksymboliccolor.h>
 #include <gtk/gtktextattributes.h>
 #include <gtk/gtktextbuffer.h>
 #include <gtk/gtktextbufferrichtext.h>
@@ -227,9 +225,11 @@
 #include <gtk/gtkwidgetpath.h>
 #include <gtk/gtkwindow.h>
 
+#ifndef GTK_DISABLE_DEPRECATED
 #include <gtk/deprecated/gtkcolorsel.h>
 #include <gtk/deprecated/gtkcolorseldialog.h>
 #include <gtk/deprecated/gtkfontsel.h>
+#include <gtk/deprecated/gtkgradient.h>
 #include <gtk/deprecated/gtkhandlebox.h>
 #include <gtk/deprecated/gtkhbbox.h>
 #include <gtk/deprecated/gtkhbox.h>
@@ -240,6 +240,7 @@
 #include <gtk/deprecated/gtkhseparator.h>
 #include <gtk/deprecated/gtkrc.h>
 #include <gtk/deprecated/gtkstyle.h>
+#include <gtk/deprecated/gtksymboliccolor.h>
 #include <gtk/deprecated/gtktable.h>
 #include <gtk/deprecated/gtktearoffmenuitem.h>
 #include <gtk/deprecated/gtkvbbox.h>
@@ -248,6 +249,7 @@
 #include <gtk/deprecated/gtkvscale.h>
 #include <gtk/deprecated/gtkvscrollbar.h>
 #include <gtk/deprecated/gtkvseparator.h>
+#endif /* GTK_DISABLE_DEPRECATED */
 
 #undef __GTK_H_INSIDE__
 

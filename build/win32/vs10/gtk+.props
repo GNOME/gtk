@@ -5,7 +5,7 @@
     <CopyDir>$(GlibEtcInstallRoot)</CopyDir>
     <DefDir>$(SolutionDir)$(Configuration)\$(Platform)\obj\$(ProjectName)</DefDir>
     <GtkApiVersion>3.0</GtkApiVersion>
-    <GtkBinaryVersion>2.10.0</GtkBinaryVersion>
+    <GtkBinaryVersion>3.0.0</GtkBinaryVersion>
     <GtkDummyPrefix>\"/dummy\"</GtkDummyPrefix>
     <GtkPrefixDefine>GTK_PREFIX="\"$(GtkDummyPrefix)\""</GtkPrefixDefine>
     <GdkDefines>GDK_COMPILATION;G_LOG_DOMAIN="\"Gdk\""</GdkDefines>
@@ -126,6 +126,10 @@ copy ..\..\..\gdk\win32\gdkwin32window.h $(CopyDir)\include\gtk-$(GtkApiVersion)
 mkdir $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 
 copy ..\..\..\gtk\gtk.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
+
+copy ..\..\..\gtk\gtkx.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
+
+copy ..\..\..\gtk\gtk-a11y.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkaboutdialog.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 
@@ -286,8 +290,6 @@ copy ..\..\..\gtk\gtkfontchooserdialog.h $(CopyDir)\include\gtk-$(GtkApiVersion)
 copy ..\..\..\gtk\gtkfontchooserwidget.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkframe.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
-
-copy ..\..\..\gtk\gtkgradient.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkgrid.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 
@@ -453,8 +455,6 @@ copy ..\..\..\gtk\gtkstyleprovider.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkswitch.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 
-copy ..\..\..\gtk\gtksymboliccolor.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktestutils.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 
 copy ..\..\..\gtk\gtktextattributes.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
@@ -546,6 +546,8 @@ copy ..\..\..\gtk\deprecated\gtkcolorseldialog.h $(CopyDir)\include\gtk-$(GtkApi
 
 copy ..\..\..\gtk\deprecated\gtkfontsel.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\deprecated
 
+copy ..\..\..\gtk\deprecated\gtkgradient.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\deprecated
+
 copy ..\..\..\gtk\deprecated\gtkhandlebox.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\deprecated
 
 copy ..\..\..\gtk\deprecated\gtkhbbox.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\deprecated
@@ -566,6 +568,8 @@ copy ..\..\..\gtk\deprecated\gtkrc.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk
 
 copy ..\..\..\gtk\deprecated\gtkstyle.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\deprecated
 
+copy ..\..\..\gtk\deprecated\gtksymboliccolor.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\deprecated
+
 copy ..\..\..\gtk\deprecated\gtktable.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\deprecated
 
 copy ..\..\..\gtk\deprecated\gtktearoffmenuitem.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\deprecated
@@ -581,6 +585,97 @@ copy ..\..\..\gtk\deprecated\gtkvscrollbar.h $(CopyDir)\include\gtk-$(GtkApiVers
 copy ..\..\..\gtk\deprecated\gtkvseparator.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\deprecated
 
 copy ..\..\..\gtk\deprecated\gtkvpaned.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\deprecated
+
+
+mkdir $(CopyDir)\include\gtk-$(GtkApiVersion)\a11y
+
+
+copy ..\..\..\gtk\a11y\gtkarrowaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkbooleancellaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkbuttonaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkcellaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkcellaccessibleparent.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkcheckmenuitemaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkcomboboxaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkcontaineraccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkcontainercellaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkentryaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkexpanderaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkframeaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkiconviewaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkimageaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkimagecellaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtklabelaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtklinkbuttonaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtklockbuttonaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkmenuaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkmenuitemaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkmenushellaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtknotebookaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtknotebookpageaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkpanedaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkprogressbaraccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkradiobuttonaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkradiomenuitemaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkrangeaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkrenderercellaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkscaleaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkscalebuttonaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkscrolledwindowaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkspinbuttonaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkspinneraccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkstatusbaraccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkswitchaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtktextcellaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtktextviewaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtktogglebuttonaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtktoplevelaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtktreeviewaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkwidgetaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkwindowaccessible.h $(CopyDir)\include\gtk-$(GtkApiVersion)\gtk\a11y
+
 
 
 mkdir $(CopyDir)\include\gail-$(GtkApiVersion)\libgail-util

@@ -1,4 +1,4 @@
-/* GAIL - The GNOME Accessibility Implementation Library
+/* GTK+ - accessibility implementations
  * Copyright 2011, F123 Consulting & Mais Diferenças
  * Copyright 2001, 2002, 2003 Sun Microsystems Inc.
  *
@@ -20,6 +20,7 @@
 
 #include <gtk/gtk.h>
 
+#include "gtkwidgetaccessibleprivate.h"
 #include "gtkwindowaccessible.h"
 #include "gtktoplevelaccessible.h"
 
@@ -39,7 +40,7 @@ static void atk_component_interface_init (AtkComponentIface *iface);
 static void atk_window_interface_init (AtkWindowIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkWindowAccessible,
-                         _gtk_window_accessible,
+                         gtk_window_accessible,
                          GTK_TYPE_CONTAINER_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT,
                                                 atk_component_interface_init)
@@ -67,7 +68,7 @@ gtk_window_accessible_notify_gtk (GObject    *obj,
       g_signal_emit_by_name (atk_obj, "visible-data-changed");
     }
   else
-    GTK_WIDGET_ACCESSIBLE_CLASS (_gtk_window_accessible_parent_class)->notify_gtk (obj, pspec);
+    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_window_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
 static gboolean
@@ -90,7 +91,7 @@ gtk_window_accessible_initialize (AtkObject *obj,
   GtkWidget *widget = GTK_WIDGET (data);
   const gchar *name;
 
-  ATK_OBJECT_CLASS (_gtk_window_accessible_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gtk_window_accessible_parent_class)->initialize (obj, data);
 
   g_signal_connect (data, "window-state-event", G_CALLBACK (window_state_event_cb), NULL);
   _gtk_widget_accessible_set_layer (GTK_WIDGET_ACCESSIBLE (obj), ATK_LAYER_WINDOW);
@@ -146,7 +147,7 @@ gtk_window_accessible_get_name (AtkObject *accessible)
   if (widget == NULL)
     return NULL;
 
-  name = ATK_OBJECT_CLASS (_gtk_window_accessible_parent_class)->get_name (accessible);
+  name = ATK_OBJECT_CLASS (gtk_window_accessible_parent_class)->get_name (accessible);
   if (name != NULL)
     return name;
 
@@ -178,7 +179,7 @@ gtk_window_accessible_get_index_in_parent (AtkObject *accessible)
   if (widget == NULL)
     return -1;
 
-  index = ATK_OBJECT_CLASS (_gtk_window_accessible_parent_class)->get_index_in_parent (accessible);
+  index = ATK_OBJECT_CLASS (gtk_window_accessible_parent_class)->get_index_in_parent (accessible);
   if (index != -1)
     return index;
 
@@ -190,7 +191,7 @@ gtk_window_accessible_get_index_in_parent (AtkObject *accessible)
       if (GTK_IS_TOPLEVEL_ACCESSIBLE (atk_obj))
         {
           GtkToplevelAccessible *toplevel = GTK_TOPLEVEL_ACCESSIBLE (atk_obj);
-          index = g_list_index (_gtk_toplevel_accessible_get_children (toplevel), window);
+          index = g_list_index (gtk_toplevel_accessible_get_children (toplevel), window);
         }
       else
         {
@@ -222,7 +223,7 @@ gtk_window_accessible_ref_relation_set (AtkObject *obj)
   if (widget == NULL)
     return NULL;
 
-  relation_set = ATK_OBJECT_CLASS (_gtk_window_accessible_parent_class)->ref_relation_set (obj);
+  relation_set = ATK_OBJECT_CLASS (gtk_window_accessible_parent_class)->ref_relation_set (obj);
 
   if (atk_object_get_role (obj) == ATK_ROLE_TOOL_TIP)
     {
@@ -254,7 +255,7 @@ gtk_window_accessible_ref_state_set (AtkObject *accessible)
   if (widget == NULL)
     return NULL;
 
-  state_set = ATK_OBJECT_CLASS (_gtk_window_accessible_parent_class)->ref_state_set (accessible);
+  state_set = ATK_OBJECT_CLASS (gtk_window_accessible_parent_class)->ref_state_set (accessible);
 
   window = GTK_WINDOW (widget);
 
@@ -262,7 +263,7 @@ gtk_window_accessible_ref_state_set (AtkObject *accessible)
     atk_state_set_add_state (state_set, ATK_STATE_ACTIVE);
 
   gdk_window = gtk_widget_get_window (widget);
-  if (window)
+  if (gdk_window)
     {
       state = gdk_window_get_state (gdk_window);
       if (state & GDK_WINDOW_STATE_ICONIFIED)
@@ -278,7 +279,7 @@ gtk_window_accessible_ref_state_set (AtkObject *accessible)
 }
 
 static void
-_gtk_window_accessible_class_init (GtkWindowAccessibleClass *klass)
+gtk_window_accessible_class_init (GtkWindowAccessibleClass *klass)
 {
   GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
@@ -294,7 +295,7 @@ _gtk_window_accessible_class_init (GtkWindowAccessibleClass *klass)
 }
 
 static void
-_gtk_window_accessible_init (GtkWindowAccessible *accessible)
+gtk_window_accessible_init (GtkWindowAccessible *accessible)
 {
 }
 
@@ -307,6 +308,7 @@ gtk_window_accessible_get_extents (AtkComponent  *component,
                                    AtkCoordType   coord_type)
 {
   GtkWidget *widget;
+  GdkWindow *window;
   GdkRectangle rect;
   gint x_toplevel, y_toplevel;
 
@@ -323,7 +325,11 @@ gtk_window_accessible_get_extents (AtkComponent  *component,
       return;
     }
 
-  gdk_window_get_frame_extents (gtk_widget_get_window (widget), &rect);
+  window = gtk_widget_get_window (widget);
+  if (window == NULL)
+    return;
+
+  gdk_window_get_frame_extents (window, &rect);
 
   *width = rect.width;
   *height = rect.height;
@@ -338,8 +344,7 @@ gtk_window_accessible_get_extents (AtkComponent  *component,
   *y = rect.y;
   if (coord_type == ATK_XY_WINDOW)
     {
-      gdk_window_get_origin (gtk_widget_get_window (widget),
-                             &x_toplevel, &y_toplevel);
+      gdk_window_get_origin (window, &x_toplevel, &y_toplevel);
       *x -= x_toplevel;
       *y -= y_toplevel;
     }
@@ -351,6 +356,7 @@ gtk_window_accessible_get_size (AtkComponent *component,
                                 gint         *height)
 {
   GtkWidget *widget;
+  GdkWindow *window;
   GdkRectangle rect;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (component));
@@ -366,7 +372,11 @@ gtk_window_accessible_get_size (AtkComponent *component,
       return;
     }
 
-  gdk_window_get_frame_extents (gtk_widget_get_window (widget), &rect);
+  window = gtk_widget_get_window (widget);
+  if (window == NULL)
+    return;
+
+  gdk_window_get_frame_extents (window, &rect);
 
   *width = rect.width;
   *height = rect.height;

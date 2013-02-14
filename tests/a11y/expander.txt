@@ -18,6 +18,7 @@ window1
     alpha: 1
     <AtkAction>
     action 0 name: activate
+    action 0 description: Activates the expander
     label1
       "label"
       parent: expander1

@@ -526,8 +526,7 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
   gtk_color_swatch_set_icon (GTK_COLOR_SWATCH (button), "list-add-symbolic");
   gtk_container_add (GTK_CONTAINER (box), button);
 
-  cc->priv->settings = g_settings_new_with_path ("org.gtk.Settings.ColorChooser",
-                                                 "/org/gtk/settings/color-chooser/");
+  cc->priv->settings = g_settings_new ("org.gtk.Settings.ColorChooser");
   variant = g_settings_get_value (cc->priv->settings, "custom-colors");
   g_variant_iter_init (&iter, variant);
   i = 0;

@@ -1846,12 +1846,13 @@ allocate_child_widgets (GtkTextLayout      *text_layout,
 }
 
 static void
-convert_color (GdkColor       *result,
+convert_color (GdkRGBA        *result,
 	       PangoAttrColor *attr)
 {
-  result->red = attr->color.red;
-  result->blue = attr->color.blue;
-  result->green = attr->color.green;
+  result->red = attr->color.red / 65535.;
+  result->blue = attr->color.blue / 65535.;
+  result->green = attr->color.green / 65535.;
+  result->alpha = 1;
 }
 
 /* This function is used to convert the preedit string attributes, which are
@@ -1891,14 +1892,21 @@ add_preedit_attrs (GtkTextLayout     *layout,
       while (tmp_list)
 	{
 	  PangoAttribute *attr = tmp_list->data;
+	  GdkRGBA rgba;
 	  
 	  switch (attr->klass->type)
 	    {
 	    case PANGO_ATTR_FOREGROUND:
-	      convert_color (&appearance.fg_color, (PangoAttrColor *)attr);
+	      convert_color (&rgba, (PangoAttrColor *)attr);
+	      if (appearance.rgba[1])
+		gdk_rgba_free (appearance.rgba[1]);
+	      appearance.rgba[1] = gdk_rgba_copy (&rgba);
 	      break;
 	    case PANGO_ATTR_BACKGROUND:
-	      convert_color (&appearance.bg_color, (PangoAttrColor *)attr);
+	      convert_color (&rgba, (PangoAttrColor *)attr);
+	      if (appearance.rgba[0])
+		gdk_rgba_free (appearance.rgba[0]);
+	      appearance.rgba[0] = gdk_rgba_copy (&rgba);
 	      appearance.draw_bg = TRUE;
 	      break;
 	    case PANGO_ATTR_UNDERLINE:

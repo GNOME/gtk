@@ -1,4 +1,4 @@
-/* GAIL - The GNOME Accessibility Implementation Library
+/* GTK+ - accessibility implementations
  * Copyright 2001 Sun Microsystems Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -18,11 +18,15 @@
 #ifndef __GTK_TEXT_VIEW_ACCESSIBLE_H__
 #define __GTK_TEXT_VIEW_ACCESSIBLE_H__
 
-#include "gtkcontaineraccessible.h"
+#if !defined (__GTK_A11Y_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk-a11y.h> can be included directly."
+#endif
+
+#include <gtk/a11y/gtkcontaineraccessible.h>
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_TEXT_VIEW_ACCESSIBLE                  (_gtk_text_view_accessible_get_type ())
+#define GTK_TYPE_TEXT_VIEW_ACCESSIBLE                  (gtk_text_view_accessible_get_type ())
 #define GTK_TEXT_VIEW_ACCESSIBLE(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TEXT_VIEW_ACCESSIBLE, GtkTextViewAccessible))
 #define GTK_TEXT_VIEW_ACCESSIBLE_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TEXT_VIEW_ACCESSIBLE, GtkTextViewAccessibleClass))
 #define GTK_IS_TEXT_VIEW_ACCESSIBLE(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TEXT_VIEW_ACCESSIBLE))
@@ -45,10 +49,7 @@ struct _GtkTextViewAccessibleClass
   GtkContainerAccessibleClass parent_class;
 };
 
-GType           _gtk_text_view_accessible_get_type              (void);
-
-void            _gtk_text_view_accessible_set_buffer            (GtkTextView       *textview,
-                                                                 GtkTextBuffer     *old_buffer);
+GType gtk_text_view_accessible_get_type (void);
 
 
 G_END_DECLS

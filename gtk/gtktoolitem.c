@@ -432,7 +432,7 @@ create_drag_window (GtkToolItem *toolitem)
 
   toolitem->priv->drag_window = gdk_window_new (gtk_widget_get_parent_window (widget),
 					  &attributes, attributes_mask);
-  gdk_window_set_user_data (toolitem->priv->drag_window, toolitem);
+  gtk_widget_register_window (widget, toolitem->priv->drag_window);
 }
 
 static void
@@ -457,7 +457,7 @@ destroy_drag_window (GtkToolItem *toolitem)
 {
   if (toolitem->priv->drag_window)
     {
-      gdk_window_set_user_data (toolitem->priv->drag_window, NULL);
+      gtk_widget_unregister_window (GTK_WIDGET (toolitem), toolitem->priv->drag_window);
       gdk_window_destroy (toolitem->priv->drag_window);
       toolitem->priv->drag_window = NULL;
     }

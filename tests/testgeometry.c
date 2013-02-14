@@ -219,4 +219,6 @@ main(int argc, char **argv)
   create_window (GDK_HINT_RESIZE_INC | GDK_HINT_BASE_SIZE | GDK_HINT_MIN_SIZE);
 
   gtk_main ();
+
+  return 0;
 }

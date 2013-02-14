@@ -15,12 +15,12 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __GTK_STYLE_CONTEXT_H__
+#define __GTK_STYLE_CONTEXT_H__
+
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_STYLE_CONTEXT_H__
-#define __GTK_STYLE_CONTEXT_H__
 
 #include <gtk/gtkborder.h>
 #include <gtk/gtkcsssection.h>
@@ -709,6 +709,15 @@ struct _GtkStyleContextClass
  */
 #define GTK_STYLE_CLASS_CURSOR_HANDLE "cursor-handle"
 
+/**
+ * GTK_STYLE_CLASS_INSERTION_CURSOR:
+ *
+ * A CSS class used when rendering a drag handle for
+ * the insertion cursor position.
+ */
+#define GTK_STYLE_CLASS_INSERTION_CURSOR "insertion-cursor"
+
+
 /* Predefined set of widget regions */
 
 /**
@@ -827,8 +836,10 @@ void        gtk_style_context_set_screen (GtkStyleContext *context,
                                           GdkScreen       *screen);
 GdkScreen * gtk_style_context_get_screen (GtkStyleContext *context);
 
+GDK_DEPRECATED_IN_3_8_FOR(gtk_style_context_set_state)
 void             gtk_style_context_set_direction (GtkStyleContext  *context,
                                                   GtkTextDirection  direction);
+GDK_DEPRECATED_IN_3_8_FOR(gtk_style_context_get_state)
 GtkTextDirection gtk_style_context_get_direction (GtkStyleContext  *context);
 
 void             gtk_style_context_set_junction_sides (GtkStyleContext  *context,
@@ -870,6 +881,8 @@ void gtk_style_context_get_background_color (GtkStyleContext *context,
 void gtk_style_context_get_border_color     (GtkStyleContext *context,
                                              GtkStateFlags    state,
                                              GdkRGBA         *color);
+
+GDK_DEPRECATED_IN_3_8_FOR(gtk_style_context_get)
 const PangoFontDescription *
      gtk_style_context_get_font             (GtkStyleContext *context,
                                              GtkStateFlags    state);

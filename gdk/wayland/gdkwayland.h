@@ -27,6 +27,12 @@
 
 #include <gdk/gdk.h>
 
+#define __GDKWAYLAND_H_INSIDE__
+
+#include <gdk/wayland/gdkwaylanddevice.h>
+#include <gdk/wayland/gdkwaylanddisplay.h>
+#include <gdk/wayland/gdkwaylandwindow.h>
+
 G_BEGIN_DECLS
 
 typedef struct _GdkWaylandDisplayManager GdkWaylandDisplayManager;

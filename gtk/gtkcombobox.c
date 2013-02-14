@@ -468,8 +468,6 @@ static void     gtk_combo_box_get_preferred_height_for_width (GtkWidget    *widg
                                                               gint         *natural_size);
 static GtkWidgetPath *gtk_combo_box_get_path_for_child       (GtkContainer *container,
                                                               GtkWidget    *child);
-static void     gtk_combo_box_direction_changed              (GtkWidget    *widget,
-                                                              GtkTextDirection  previous_direction);
 
 G_DEFINE_TYPE_WITH_CODE (GtkComboBox, gtk_combo_box, GTK_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
@@ -510,7 +508,6 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   widget_class->get_preferred_height_for_width = gtk_combo_box_get_preferred_height_for_width;
   widget_class->get_preferred_width_for_height = gtk_combo_box_get_preferred_width_for_height;
   widget_class->destroy = gtk_combo_box_destroy;
-  widget_class->direction_changed = gtk_combo_box_direction_changed;
 
   object_class = (GObjectClass *)klass;
   object_class->constructor = gtk_combo_box_constructor;
@@ -1382,27 +1379,6 @@ gtk_combo_box_button_state_flags_changed (GtkWidget     *widget,
   gtk_widget_queue_draw (widget);
 }
 
-static void
-gtk_combo_box_invalidate_order_foreach (GtkWidget *widget)
-{
-  _gtk_widget_invalidate_style_context (widget, GTK_CSS_CHANGE_POSITION | GTK_CSS_CHANGE_SIBLING_POSITION);
-}
-
-static void
-gtk_combo_box_invalidate_order (GtkComboBox *combo_box)
-{
-  gtk_container_forall (GTK_CONTAINER (combo_box),
-                        (GtkCallback) gtk_combo_box_invalidate_order_foreach,
-                        NULL);
-}
-
-static void
-gtk_combo_box_direction_changed (GtkWidget        *widget,
-                                 GtkTextDirection  previous_direction)
-{
-  gtk_combo_box_invalidate_order (GTK_COMBO_BOX (widget));
-}
-
 static GtkWidgetPath *
 gtk_combo_box_get_path_for_child (GtkContainer *container,
                                   GtkWidget    *child)
@@ -1430,9 +1406,6 @@ gtk_combo_box_get_path_for_child (GtkContainer *container,
       widget = gtk_bin_get_child (GTK_BIN (container));
       if (widget && gtk_widget_get_visible (widget))
         visible_children = g_list_prepend (visible_children, widget);
-
-      if (gtk_widget_get_direction (GTK_WIDGET (container)) == GTK_TEXT_DIR_RTL)
-        visible_children = g_list_reverse (visible_children);
 
       pos = 0;
 
@@ -5446,12 +5419,9 @@ gtk_combo_box_get_preferred_width (GtkWidget *widget,
   gint                   font_size, arrow_size;
   PangoContext          *context;
   PangoFontMetrics      *metrics;
-  const PangoFontDescription *font_desc;
   GtkWidget             *child;
   gint                   minimum_width = 0, natural_width = 0;
   gint                   child_min, child_nat;
-  GtkStyleContext       *style_context;
-  GtkStateFlags          state;
   GtkBorder              padding;
   gfloat                 arrow_scaling;
 
@@ -5465,14 +5435,11 @@ gtk_combo_box_get_preferred_width (GtkWidget *widget,
                         "arrow-scaling", &arrow_scaling,
                         NULL);
 
-  style_context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-
   get_widget_padding_and_border (widget, &padding);
-  font_desc = gtk_style_context_get_font (style_context, state);
 
   context = gtk_widget_get_pango_context (GTK_WIDGET (widget));
-  metrics = pango_context_get_metrics (context, font_desc,
+  metrics = pango_context_get_metrics (context,
+                                       pango_context_get_font_description (context),
                                        pango_context_get_language (context));
   font_size = PANGO_PIXELS (pango_font_metrics_get_ascent (metrics) +
                             pango_font_metrics_get_descent (metrics));

@@ -231,8 +231,6 @@ static GtkWidgetPath * gtk_toolbar_get_path_for_child
                                                    GtkWidget           *child);
 static void       gtk_toolbar_invalidate_order    (GtkToolbar           *toolbar);
 
-static void       gtk_toolbar_direction_changed    (GtkWidget           *widget,
-                                                    GtkTextDirection     previous_direction);
 static void       gtk_toolbar_orientation_changed  (GtkToolbar          *toolbar,
 						    GtkOrientation       orientation);
 static void       gtk_toolbar_real_style_changed   (GtkToolbar          *toolbar,
@@ -396,7 +394,6 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   widget_class->unmap = gtk_toolbar_unmap;
   widget_class->popup_menu = gtk_toolbar_popup_menu;
   widget_class->show_all = gtk_toolbar_show_all;
-  widget_class->direction_changed = gtk_toolbar_direction_changed;
   
   container_class->add    = gtk_toolbar_add;
   container_class->remove = gtk_toolbar_remove;
@@ -847,7 +844,7 @@ gtk_toolbar_realize (GtkWidget *widget)
 
   priv->event_window = gdk_window_new (gtk_widget_get_parent_window (widget),
 				       &attributes, attributes_mask);
-  gdk_window_set_user_data (priv->event_window, toolbar);
+  gtk_widget_register_window (widget, priv->event_window);
 }
 
 static void
@@ -858,7 +855,7 @@ gtk_toolbar_unrealize (GtkWidget *widget)
 
   if (priv->event_window)
     {
-      gdk_window_set_user_data (priv->event_window, NULL);
+      gtk_widget_unregister_window (widget, priv->event_window);
       gdk_window_destroy (priv->event_window);
       priv->event_window = NULL;
     }
@@ -3336,18 +3333,12 @@ calculate_max_homogeneous_pixels (GtkWidget *widget)
 {
   PangoContext *context;
   PangoFontMetrics *metrics;
-  const PangoFontDescription *font_desc;
-  GtkStyleContext *style_context;
-  GtkStateFlags state;
   gint char_width;
   
   context = gtk_widget_get_pango_context (widget);
-  style_context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
 
-  font_desc = gtk_style_context_get_font (style_context, state);
-
-  metrics = pango_context_get_metrics (context, font_desc,
+  metrics = pango_context_get_metrics (context,
+                                       pango_context_get_font_description (context),
 				       pango_context_get_language (context));
   char_width = pango_font_metrics_get_approximate_char_width (metrics);
   pango_font_metrics_unref (metrics);
@@ -3864,10 +3855,6 @@ gtk_toolbar_get_visible_position (GtkToolbar *toolbar,
 
   g_assert (count.found);
 
-  if (toolbar->priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
-      gtk_widget_get_direction (GTK_WIDGET (toolbar)) == GTK_TEXT_DIR_RTL)
-    return count.after;
-
   return count.before;
 }
 
@@ -3888,23 +3875,18 @@ gtk_toolbar_get_path_for_child (GtkContainer *container,
 {
   GtkWidgetPath *path;
   GtkToolbar *toolbar;
-  GtkToolbarPrivate *priv;
   GtkWidgetPath *sibling_path;
   gint vis_index;
   GList *children;
 
   toolbar = GTK_TOOLBAR (container);
-  priv = toolbar->priv;
 
   /* build a path for all the visible children;
    * get_children works in visible order
    */
   sibling_path = gtk_widget_path_new ();
   children = _gtk_container_get_all_children (container);
-
-  if (priv->orientation != GTK_ORIENTATION_HORIZONTAL ||
-      gtk_widget_get_direction (GTK_WIDGET (toolbar)) != GTK_TEXT_DIR_RTL)
-    children = g_list_reverse (children);
+  children = g_list_reverse (children);
 
   g_list_foreach (children, add_widget_to_path, sibling_path);
   g_list_free (children);
@@ -3940,14 +3922,5 @@ gtk_toolbar_invalidate_order (GtkToolbar *toolbar)
   gtk_container_forall (GTK_CONTAINER (toolbar),
                         (GtkCallback) gtk_toolbar_invalidate_order_foreach,
                         NULL);
-}
-
-static void
-gtk_toolbar_direction_changed (GtkWidget        *widget,
-                               GtkTextDirection  previous_direction)
-{
-  GTK_WIDGET_CLASS (gtk_toolbar_parent_class)->direction_changed (widget, previous_direction);
-
-  gtk_toolbar_invalidate_order (GTK_TOOLBAR (widget));
 }
 

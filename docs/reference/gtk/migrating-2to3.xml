@@ -119,6 +119,46 @@
     make CFLAGS+="-DGSEAL_ENABLE"
     </programlisting>
   </para>
+  <para>
+    While it may be painful to convert, this helps us keep API and ABI
+    compatibility when we change internal interfaces. As a quick example,
+    when adding GSEAL_ENABLE, if you see an error like:
+    <programlisting>
+    error: 'GtkToggleButton' has no member named 'active'
+    </programlisting>
+    this means that you are accessing the public structure of
+    GtkToggleButton directly, perhaps with some code like:
+    <informalexample><programlisting>
+      static void
+      on_toggled (GtkToggleButton *button)
+      {
+        if (button->active)
+          frob_active ();
+        else
+          frob_inactive ();
+      }
+    </programlisting></informalexample>
+  </para>
+  <para>
+    In most cases, this can easily be replaced with the correct accessor
+    method. The main rule is that if you have code like the above which
+    accesses the "active" field of a "GtkToggleButton", then the accessor
+    method becomes "gtk_toggle_button_get_active":
+    <informalexample><programlisting>
+      static void
+      on_toggled (GtkToggleButton *button)
+      {
+        if (gtk_toggle_button_get_active (button))
+          frob_active ();
+        else
+          frob_inactive ();
+      }
+    </programlisting></informalexample>
+  </para>
+  <para>
+    In the case of setting field members directly, there's usually
+    a corresponding setter method.
+  </para>
   </section>
 
   <section>
@@ -1130,6 +1170,15 @@ gtk_arrow_draw (GtkWidget *widget,
       In the unlikely case that you have a non-widget class that is derived
       from GtkObject and makes use of the destroy functionality, you have
       to implement ::destroy yourself.
+    </para>
+
+    <para>
+      If your program used functions like gtk_object_get or gtk_object_set,
+      these can be replaced directly with g_object_get or g_object_set. In
+      fact, most every gtk_object_* function can be replaced with the
+      corresponding g_object_ function, even in GTK+ 2 code. The one exception
+      to this rule is gtk_object_destroy, which can be replaced with
+      gtk_widget_destroy, again in both GTK+ 2 and GTK+ 3.
     </para>
   </section>
 

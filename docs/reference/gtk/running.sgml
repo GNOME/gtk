@@ -126,7 +126,7 @@ variables like <envar>LANG</envar>, <envar>PATH</envar>, <envar>HOME</envar>
 or <envar>DISPLAY</envar>; mostly to determine paths to look for certain
 files. The <link linkend="x11-envar">X11</link>,
 <link linkend="win32-envar">Windows</link> and
-<link linkend="fb-envar">Framebuffer</link> GDK backends use some
+<link linkend="broadway-envar">Broadway</link> GDK backends use some
 additional environment variables.
 </para>
 
@@ -452,25 +452,16 @@ nevertheless.
 
       <varlistentry>
         <term>broadway</term>
-        <listitem><para>Selects the HTML5 backend.</para></listitem>
+        <listitem><para>Selects the Broadway backend for display in web browsers</para></listitem>
       </varlistentry>
 
       <varlistentry>
         <term>wayland</term>
-        <listitem><para>Selects the Wayland backend for connecting to Wayland display servers.</para></listitem>
+        <listitem><para>Selects the Wayland backend for connecting to Wayland display servers</para></listitem>
       </varlistentry>
 
     </variablelist>
     For more information about selecting backends, see the gdk_display_manager_get() function.
-  </para>
-</formalpara>
-
-<formalpara>
-  <title><envar>GDK_SYNCHRONIZE</envar></title>
-
-  <para>
-    If set, GDK makes all X requests synchronously. This is a useful
-    option for debugging, but it will slow down the performance considerably.
   </para>
 </formalpara>
 

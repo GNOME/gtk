@@ -260,7 +260,7 @@ gtk_invisible_realize (GtkWidget *widget)
 
   window = gdk_window_new (parent, &attributes, attributes_mask);
   gtk_widget_set_window (widget, window);
-  gdk_window_set_user_data (window, widget);
+  gtk_widget_register_window (widget, window);
 }
 
 static void

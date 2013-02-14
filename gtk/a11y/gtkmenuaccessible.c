@@ -1,4 +1,4 @@
-/* GAIL - The GNOME Accessibility Implementation Library
+/* GTK+ - accessibility implementations
  * Copyright 2001, 2002, 2003 Sun Microsystems Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -18,16 +18,17 @@
 #include "config.h"
 
 #include "gtkmenuaccessible.h"
+#include "gtkwidgetaccessibleprivate.h"
 
 #include <gtk/gtk.h>
 
-G_DEFINE_TYPE (GtkMenuAccessible, _gtk_menu_accessible, GTK_TYPE_MENU_SHELL_ACCESSIBLE)
+G_DEFINE_TYPE (GtkMenuAccessible, gtk_menu_accessible, GTK_TYPE_MENU_SHELL_ACCESSIBLE)
 
 static void
 gtk_menu_accessible_initialize (AtkObject *obj,
                                 gpointer   data)
 {
-  ATK_OBJECT_CLASS (_gtk_menu_accessible_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gtk_menu_accessible_parent_class)->initialize (obj, data);
 
   obj->role = ATK_ROLE_MENU;
 
@@ -79,11 +80,11 @@ gtk_menu_accessible_get_index_in_parent (AtkObject *accessible)
   if (gtk_menu_get_attach_widget (GTK_MENU (widget)))
     return 0;
 
-  return ATK_OBJECT_CLASS (_gtk_menu_accessible_parent_class)->get_index_in_parent (accessible);
+  return ATK_OBJECT_CLASS (gtk_menu_accessible_parent_class)->get_index_in_parent (accessible);
 }
 
 static void
-_gtk_menu_accessible_class_init (GtkMenuAccessibleClass *klass)
+gtk_menu_accessible_class_init (GtkMenuAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
@@ -93,6 +94,6 @@ _gtk_menu_accessible_class_init (GtkMenuAccessibleClass *klass)
 }
 
 static void
-_gtk_menu_accessible_init (GtkMenuAccessible *accessible)
+gtk_menu_accessible_init (GtkMenuAccessible *accessible)
 {
 }

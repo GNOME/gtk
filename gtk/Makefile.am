@@ -16,7 +16,7 @@ else
 GTK_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview --print-settings %s %f"
 endif
 
-SUBDIRS = a11y . tests
+SUBDIRS = a11y native . tests
 
 if HAVE_PAPI_CUPS
 GTK_PRINT_BACKENDS=file,papi,cups
@@ -107,12 +107,12 @@ endif
 libgtkincludedir = $(includedir)/gtk-3.0/gtk
 libadd = \
 	$(top_builddir)/gdk/libgdk-3.la	\
-	$(top_builddir)/gtk/a11y/libgail.la \
+	$(top_builddir)/gtk/a11y/libgtka11y.la \
 	$(GMODULE_LIBS) \
 	$(GTK_DEP_LIBS)
 deps = \
 	$(top_builddir)/gdk/libgdk-3.la	\
-	$(top_builddir)/gtk/a11y/libgail.la
+	$(top_builddir)/gtk/a11y/libgtka11y.la
 
 # libtool stuff: set version and export symbols for resolving
 # since automake doesn't support conditionalized libsomething_la_LDFLAGS
@@ -148,6 +148,7 @@ deprecated_h_sources = 			\
 	deprecated/gtkcolorsel.h	\
 	deprecated/gtkcolorseldialog.h	\
 	deprecated/gtkfontsel.h		\
+	deprecated/gtkgradient.h	\
 	deprecated/gtkhandlebox.h	\
 	deprecated/gtkhbbox.h		\
 	deprecated/gtkhbox.h		\
@@ -156,8 +157,9 @@ deprecated_h_sources = 			\
 	deprecated/gtkhscrollbar.h	\
 	deprecated/gtkhseparator.h	\
 	deprecated/gtkhsv.h		\
-	deprecated/gtkstyle.h		\
 	deprecated/gtkrc.h		\
+	deprecated/gtkstyle.h		\
+	deprecated/gtksymboliccolor.h	\
 	deprecated/gtktable.h		\
 	deprecated/gtktearoffmenuitem.h	\
 	deprecated/gtkvbbox.h		\
@@ -167,9 +169,14 @@ deprecated_h_sources = 			\
 	deprecated/gtkvseparator.h	\
 	deprecated/gtkvpaned.h
 
+deprecated_private_h_sources =			\
+	deprecated/gtkgradientprivate.h		\
+	deprecated/gtksymboliccolorprivate.h
+
 gtk_public_h_sources = 		\
 	gtk.h			\
 	gtkx.h			\
+	gtk-a11y.h		\
 	gtkaboutdialog.h	\
 	gtkaccelgroup.h		\
 	gtkaccellabel.h		\
@@ -249,7 +256,6 @@ gtk_public_h_sources = 		\
 	gtkfontchooserdialog.h  \
 	gtkfontchooserwidget.h	\
 	gtkframe.h		\
-	gtkgradient.h		\
 	gtkgrid.h		\
 	gtkiconfactory.h	\
 	gtkicontheme.h		\
@@ -331,7 +337,6 @@ gtk_public_h_sources = 		\
 	gtkstyleproperties.h	\
 	gtkstyleprovider.h	\
 	gtkswitch.h		\
-	gtksymboliccolor.h	\
 	gtktestutils.h		\
 	gtktextattributes.h	\
 	gtktextbuffer.h		\
@@ -433,6 +438,7 @@ gtk_private_h_sources =		\
 	gtkcssarrayvalueprivate.h	\
 	gtkcssbgsizevalueprivate.h	\
 	gtkcssbordervalueprivate.h	\
+	gtkcsscolorvalueprivate.h	\
 	gtkcsscomputedvaluesprivate.h \
 	gtkcsscornervalueprivate.h	\
 	gtkcsscustompropertyprivate.h \
@@ -443,6 +449,7 @@ gtk_private_h_sources =		\
 	gtkcssimagegradientprivate.h	\
 	gtkcssimagelinearprivate.h	\
 	gtkcssimageprivate.h	\
+	gtkcssimagesurfaceprivate.h	\
 	gtkcssimageurlprivate.h	\
 	gtkcssimagevalueprivate.h	\
 	gtkcssimagewin32private.h	\
@@ -479,7 +486,7 @@ gtk_private_h_sources =		\
 	gtkfilesystemmodel.h	\
 	gtkfontchooserprivate.h	\
 	gtkfontchooserutils.h	\
-	gtkgradientprivate.h	\
+	gtkhslaprivate.h	\
 	gtkiconcache.h		\
 	gtkiconhelperprivate.h  \
 	gtkiconviewprivate.h	\
@@ -519,6 +526,7 @@ gtk_private_h_sources =		\
 	gtkselectionprivate.h	\
 	gtksettingsprivate.h	\
 	gtksizegroup-private.h	\
+	gtksizerequestcacheprivate.h	\
 	gtksocketprivate.h	\
 	gtkstyleanimationprivate.h \
 	gtkstylecascadeprivate.h \
@@ -526,7 +534,6 @@ gtk_private_h_sources =		\
 	gtkstylepropertiesprivate.h \
 	gtkstylepropertyprivate.h \
 	gtkstyleproviderprivate.h \
-	gtksymboliccolorprivate.h \
 	gtktextbtree.h		\
 	gtktextbufferserialize.h \
 	gtktextchildprivate.h	\
@@ -556,6 +563,7 @@ deprecated_c_sources = 			\
 	deprecated/gtkcolorsel.c	\
 	deprecated/gtkcolorseldialog.c	\
 	deprecated/gtkfontsel.c		\
+	deprecated/gtkgradient.c	\
 	deprecated/gtkhandlebox.c	\
 	deprecated/gtkhbbox.c		\
 	deprecated/gtkhbox.c		\
@@ -566,6 +574,7 @@ deprecated_c_sources = 			\
 	deprecated/gtkhsv.c		\
 	deprecated/gtkrc.c		\
 	deprecated/gtkstyle.c		\
+	deprecated/gtksymboliccolor.c	\
 	deprecated/gtktable.c		\
 	deprecated/gtktearoffmenuitem.c	\
 	deprecated/gtkvbbox.c		\
@@ -657,6 +666,7 @@ gtk_base_c_sources = 		\
 	gtkcssarrayvalue.c	\
 	gtkcssbgsizevalue.c	\
 	gtkcssbordervalue.c	\
+	gtkcsscolorvalue.c	\
 	gtkcsscomputedvalues.c	\
 	gtkcsscornervalue.c	\
 	gtkcsscustomproperty.c	\
@@ -667,6 +677,7 @@ gtk_base_c_sources = 		\
 	gtkcssimagecrossfade.c	\
 	gtkcssimagegradient.c	\
 	gtkcssimagelinear.c	\
+	gtkcssimagesurface.c	\
 	gtkcssimageurl.c	\
 	gtkcssimagevalue.c	\
 	gtkcssimagewin32.c	\
@@ -721,8 +732,8 @@ gtk_base_c_sources = 		\
 	gtkfontchooserutils.c	\
 	gtkfontchooserwidget.c	\
 	gtkframe.c		\
-	gtkgradient.c		\
 	gtkgrid.c		\
+	gtkhsla.c		\
 	gtkiconcache.c		\
 	gtkiconcachevalidator.c	\
 	gtkiconfactory.c	\
@@ -809,6 +820,7 @@ gtk_base_c_sources = 		\
 	gtksettings.c		\
 	gtksizegroup.c		\
 	gtksizerequest.c	\
+	gtksizerequestcache.c	\
 	gtkshow.c		\
 	gtkspinbutton.c		\
 	gtkspinner.c		\
@@ -823,7 +835,6 @@ gtk_base_c_sources = 		\
 	gtkstyleprovider.c	\
 	gtkstyleproviderprivate.c	\
 	gtkswitch.c		\
-	gtksymboliccolor.c	\
 	gtktestutils.c		\
 	gtktextattributes.c	\
 	gtktextbtree.c		\
@@ -973,6 +984,7 @@ gtk_private_h_sources += $(gtk_use_quartz_private_h_sources)
 endif
 
 gtk_all_private_h_sources = \
+	$(deprecated_private_h_sources) \
 	$(gtk_private_h_sources) \
 	$(gtk_use_x11_private_h_sources) \
 	$(gtk_use_win32_private_h_sources) \
@@ -1300,9 +1312,7 @@ endif
 #
 # Installed tools
 #
-bin_PROGRAMS = \
-	gtk-query-immodules-3.0	\
-	gtk-launch
+bin_PROGRAMS = gtk-query-immodules-3.0
 
 if BUILD_ICON_CACHE
 bin_PROGRAMS += gtk-update-icon-cache
@@ -1349,8 +1359,11 @@ gtk_update_icon_cache_LDADD = $(GDK_PIXBUF_LIBS)
 gtk_update_icon_cache_SOURCES = updateiconcache.c
 endif
 
+if HAVE_GIO_UNIX
+bin_PROGRAMS += gtk-launch
 gtk_launch_LDADD = $(LDADDS)
 gtk_launch_SOURCES = gtk-launch.c
+endif
 
 .PHONY: files test test-debug
 
@@ -1650,12 +1663,20 @@ stamp-icons: $(STOCK_ICONS)
 if USE_EXTERNAL_ICON_CACHE
 gtk_update_icon_cache_program = $(GTK_UPDATE_ICON_CACHE)
 else
-gtk_update_icon_cache_program = ./gtk-update-icon-cache
+if CROSS_COMPILING
+gtk_update_icon_cache_program = ./native/native-update-icon-cache
+else
+gtk_update_icon_cache_program = ./gtk-update-icon-cache$(EXEEXT)
+endif
 endif
 
 gtkbuiltincache.h: @REBUILD@ stamp-icons
 if !USE_EXTERNAL_ICON_CACHE
-	$(AM_V_at) $(MAKE) $(AM_MAKEFLAGS) gtk-update-icon-cache$(EXEEXT) $(GTK_UPDATE_ICON_CACHE_MANIFEST)
+if CROSS_COMPILING
+	$(AM_V_at) $(MAKE) $(AM_MAKEFLAGS) -C native/
+else
+	$(AM_V_at) $(MAKE) $(AM_MAKEFLAGS) gtk-update-icon-cache$(EXEEXT)
+endif
 endif
 	$(AM_V_GEN) $(gtk_update_icon_cache_program) --quiet --force --ignore-theme-index		\
 	   --source builtin_icons stock-icons > gtkbuiltincache.h.tmp &&        \

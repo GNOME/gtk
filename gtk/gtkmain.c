@@ -128,8 +128,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
 
-#include "a11y/gail.h"
-#include "a11y/gailutil.h"
+#include "a11y/gtkaccessibility.h"
 
 /* Private type definitions
  */
@@ -709,9 +708,6 @@ do_post_parse_initialization (int    *argc,
   }
 
   _gtk_register_resource ();
-
-  /* do what the call to gtk_type_init() used to do */
-  g_type_init ();
 
   _gtk_accel_map_init ();
 
@@ -1558,7 +1554,7 @@ gtk_main_do_event (GdkEvent *event)
    * This is the key to implementing modality.
    */
   if (!grab_widget ||
-      (gtk_widget_is_sensitive (event_widget) &&
+      ((gtk_widget_is_sensitive (event_widget) || event->type == GDK_SCROLL) &&
        gtk_widget_is_ancestor (event_widget, grab_widget)))
     grab_widget = event_widget;
 
@@ -2244,7 +2240,7 @@ gtk_invoke_key_snoopers (GtkWidget *grab_widget,
   GSList *slist;
   gint return_val = FALSE;
 
-  return_val = _gail_util_key_snooper (grab_widget, (GdkEventKey *) event);
+  return_val = _gtk_accessibility_key_snooper (grab_widget, (GdkEventKey *) event);
 
   slist = key_snoopers;
   while (slist && !return_val)
@@ -2438,7 +2434,15 @@ propagate_event_down (GtkWidget *widget,
       widget = (GtkWidget *)l->data;
 
       if (!gtk_widget_is_sensitive (widget))
-        handled_event = TRUE;
+        {
+          /* stop propagating on SCROLL, but don't handle the event, so it
+           * can propagate up again and reach its handling widget
+           */
+          if (event->type == GDK_SCROLL)
+            break;
+          else
+            handled_event = TRUE;
+        }
       else
         handled_event = _gtk_widget_captured_event (widget, event);
     }

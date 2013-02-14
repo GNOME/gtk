@@ -1654,7 +1654,7 @@ msgid "_Visit this file"
 msgstr "Bu dosyeni _ziyaret et"
 
 #: ../gtk/gtkfilechooserdefault.c:4174
-msgid "_Copy file's location"
+msgid "_Copy file’s location"
 msgstr "Dosyeniñ qonumnı _kopiyala"
 
 #: ../gtk/gtkfilechooserdefault.c:4177

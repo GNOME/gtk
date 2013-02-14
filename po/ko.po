@@ -1589,7 +1589,7 @@ msgid "_Visit this file"
 msgstr "이 파일 보기(_V)"
 
 #: ../gtk/gtkfilechooserdefault.c:4176
-msgid "_Copy file's location"
+msgid "_Copy file’s location"
 msgstr "파일 위치 복사(_C)"
 
 #: ../gtk/gtkfilechooserdefault.c:4179

@@ -15,12 +15,12 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __GTK_TREE_MODEL_H__
+#define __GTK_TREE_MODEL_H__
+
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_TREE_MODEL_H__
-#define __GTK_TREE_MODEL_H__
 
 #include <glib-object.h>
 
@@ -190,9 +190,12 @@ gboolean     gtk_tree_path_is_ancestor      (GtkTreePath       *path,
 gboolean     gtk_tree_path_is_descendant    (GtkTreePath       *path,
                                              GtkTreePath       *ancestor);
 
-/* Row reference (an object that tracks model changes so it refers to the same
- * row always; a path refers to a position, not a fixed row).  You almost always
- * want to call gtk_tree_row_reference_new.
+/**
+ * GtkTreeRowReference:
+ *
+ * A GtkTreeRowReference tracks model changes so that it always refers to the
+ * same row (a #GtkTreePath refers to a position, not a fixed row). Create a
+ * new GtkTreeRowReference with gtk_tree_row_reference_new().
  */
 
 GType                gtk_tree_row_reference_get_type (void) G_GNUC_CONST;

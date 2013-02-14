@@ -1,4 +1,4 @@
-/* GAIL - The GNOME Accessibility Implementation Library
+/* GTK+ - accessibility implementations
  * Copyright 2001, 2002, 2003 Sun Microsystems Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -35,16 +35,15 @@ struct _GtkToplevelAccessiblePrivate
   GList *window_list;
 };
 
-G_DEFINE_TYPE (GtkToplevelAccessible, _gtk_toplevel_accessible, ATK_TYPE_OBJECT)
+G_DEFINE_TYPE (GtkToplevelAccessible, gtk_toplevel_accessible, ATK_TYPE_OBJECT)
 
 static void
 gtk_toplevel_accessible_initialize (AtkObject *accessible,
                                     gpointer   data)
 {
-  ATK_OBJECT_CLASS (_gtk_toplevel_accessible_parent_class)->initialize (accessible, data);
+  ATK_OBJECT_CLASS (gtk_toplevel_accessible_parent_class)->initialize (accessible, data);
 
   accessible->role = ATK_ROLE_APPLICATION;
-  accessible->name = g_get_prgname ();
   accessible->accessible_parent = NULL;
 }
 
@@ -56,7 +55,7 @@ gtk_toplevel_accessible_object_finalize (GObject *obj)
   if (toplevel->priv->window_list)
     g_list_free (toplevel->priv->window_list);
 
-  G_OBJECT_CLASS (_gtk_toplevel_accessible_parent_class)->finalize (obj);
+  G_OBJECT_CLASS (gtk_toplevel_accessible_parent_class)->finalize (obj);
 }
 
 static gint
@@ -85,6 +84,12 @@ gtk_toplevel_accessible_ref_child (AtkObject *obj,
   g_object_ref (atk_obj);
 
   return atk_obj;
+}
+
+static const char *
+gtk_toplevel_accessible_get_name (AtkObject *obj)
+{
+  return g_get_prgname ();
 }
 
 static gboolean
@@ -134,7 +139,7 @@ is_attached_menu_window (GtkWidget *widget)
 }
 
 static void
-_gtk_toplevel_accessible_class_init (GtkToplevelAccessibleClass *klass)
+gtk_toplevel_accessible_class_init (GtkToplevelAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS(klass);
   GObjectClass *g_object_class = G_OBJECT_CLASS(klass);
@@ -143,6 +148,7 @@ _gtk_toplevel_accessible_class_init (GtkToplevelAccessibleClass *klass)
   class->get_n_children = gtk_toplevel_accessible_get_n_children;
   class->ref_child = gtk_toplevel_accessible_ref_child;
   class->get_parent = NULL;
+  class->get_name = gtk_toplevel_accessible_get_name;
 
   g_object_class->finalize = gtk_toplevel_accessible_object_finalize;
 
@@ -247,7 +253,7 @@ hide_event_watcher (GSignalInvocationHint *ihint,
 }
 
 static void
-_gtk_toplevel_accessible_init (GtkToplevelAccessible *toplevel)
+gtk_toplevel_accessible_init (GtkToplevelAccessible *toplevel)
 {
   GtkWindow *window;
   GtkWidget *widget;
@@ -297,7 +303,7 @@ _gtk_toplevel_accessible_init (GtkToplevelAccessible *toplevel)
 }
 
 GList *
-_gtk_toplevel_accessible_get_children (GtkToplevelAccessible *accessible)
+gtk_toplevel_accessible_get_children (GtkToplevelAccessible *accessible)
 {
   return accessible->priv->window_list;
 }

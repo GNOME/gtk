@@ -86,6 +86,18 @@ gtk_css_image_cross_fade_get_height (GtkCssImage *image)
   return start_height + (end_height - start_height) * cross_fade->progress;
 }
 
+static gboolean
+gtk_css_image_cross_fade_equal (GtkCssImage *image1,
+                                GtkCssImage *image2)
+{
+  GtkCssImageCrossFade *cross_fade1 = GTK_CSS_IMAGE_CROSS_FADE (image1);
+  GtkCssImageCrossFade *cross_fade2 = GTK_CSS_IMAGE_CROSS_FADE (image2);
+
+  return cross_fade1->progress == cross_fade2->progress &&
+         _gtk_css_image_equal (cross_fade1->start, cross_fade2->start) &&
+         _gtk_css_image_equal (cross_fade1->end, cross_fade2->end);
+}
+
 static void
 gtk_css_image_cross_fade_draw (GtkCssImage        *image,
                                cairo_t            *cr,
@@ -234,6 +246,7 @@ _gtk_css_image_cross_fade_class_init (GtkCssImageCrossFadeClass *klass)
 
   image_class->get_width = gtk_css_image_cross_fade_get_width;
   image_class->get_height = gtk_css_image_cross_fade_get_height;
+  image_class->equal = gtk_css_image_cross_fade_equal;
   image_class->draw = gtk_css_image_cross_fade_draw;
   image_class->parse = gtk_css_image_cross_fade_parse;
   image_class->print = gtk_css_image_cross_fade_print;

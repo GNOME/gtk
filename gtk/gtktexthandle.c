@@ -108,8 +108,14 @@ _gtk_text_handle_draw (GtkTextHandle         *handle,
                                GTK_STYLE_CLASS_CURSOR_HANDLE);
 
   if (pos == GTK_TEXT_HANDLE_POSITION_SELECTION_END)
-    gtk_style_context_add_class (priv->style_context,
-                                 GTK_STYLE_CLASS_BOTTOM);
+    {
+      gtk_style_context_add_class (priv->style_context,
+                                   GTK_STYLE_CLASS_BOTTOM);
+
+      if (priv->mode == GTK_TEXT_HANDLE_MODE_CURSOR)
+        gtk_style_context_add_class (priv->style_context,
+                                     GTK_STYLE_CLASS_INSERTION_CURSOR);
+    }
   else
     gtk_style_context_add_class (priv->style_context,
                                  GTK_STYLE_CLASS_TOP);
@@ -122,49 +128,43 @@ _gtk_text_handle_draw (GtkTextHandle         *handle,
 }
 
 static void
-_gtk_text_handle_update_shape (GtkTextHandle *handle,
-                               GdkWindow     *window)
+_gtk_text_handle_update_shape (GtkTextHandle         *handle,
+                               GdkWindow             *window,
+                               GtkTextHandlePosition  pos)
 {
   GtkTextHandlePrivate *priv;
+  cairo_surface_t *surface;
+  cairo_region_t *region;
+  cairo_t *cr;
 
   priv = handle->priv;
+
+  surface =
+    gdk_window_create_similar_surface (window,
+                                       CAIRO_CONTENT_COLOR_ALPHA,
+                                       gdk_window_get_width (window),
+                                       gdk_window_get_height (window));
+
+  cr = cairo_create (surface);
+  _gtk_text_handle_draw (handle, cr, pos);
+  cairo_destroy (cr);
+
+  region = gdk_cairo_region_create_from_surface (surface);
 
   if (gtk_widget_is_composited (priv->parent))
     gdk_window_shape_combine_region (window, NULL, 0, 0);
   else
-    {
-      GtkTextHandlePosition pos;
-      cairo_surface_t *surface;
-      cairo_region_t *region;
-      cairo_t *cr;
+    gdk_window_shape_combine_region (window, region, 0, 0);
 
-      if (window == priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].window)
-        pos = GTK_TEXT_HANDLE_POSITION_SELECTION_START;
-      else if (window == priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].window)
-        pos = GTK_TEXT_HANDLE_POSITION_SELECTION_END;
-      else
-        return;
+  gdk_window_input_shape_combine_region (window, region, 0, 0);
 
-      surface =
-        gdk_window_create_similar_surface (window,
-                                           CAIRO_CONTENT_COLOR_ALPHA,
-                                           gdk_window_get_width (window),
-                                           gdk_window_get_height (window));
-
-      cr = cairo_create (surface);
-      _gtk_text_handle_draw (handle, cr, pos);
-      cairo_destroy (cr);
-
-      region = gdk_cairo_region_create_from_surface (surface);
-      gdk_window_shape_combine_region (window, region, 0, 0);
-
-      cairo_surface_destroy (surface);
-      cairo_region_destroy (region);
-    }
+  cairo_surface_destroy (surface);
+  cairo_region_destroy (region);
 }
 
 static GdkWindow *
-_gtk_text_handle_create_window (GtkTextHandle *handle)
+_gtk_text_handle_create_window (GtkTextHandle         *handle,
+                                GtkTextHandlePosition  pos)
 {
   GtkTextHandlePrivate *priv;
   GdkRGBA bg = { 0, 0, 0, 0 };
@@ -197,10 +197,10 @@ _gtk_text_handle_create_window (GtkTextHandle *handle)
 
   window = gdk_window_new (gtk_widget_get_root_window (priv->parent),
 			   &attributes, mask);
-  gdk_window_set_user_data (window, priv->parent);
+  gtk_widget_register_window (priv->parent, window);
   gdk_window_set_background_rgba (window, &bg);
 
-  _gtk_text_handle_update_shape (handle, window);
+  _gtk_text_handle_update_shape (handle, window, pos);
 
   return window;
 }
@@ -212,6 +212,7 @@ gtk_text_handle_widget_draw (GtkWidget     *widget,
 {
   GtkTextHandlePrivate *priv;
   GtkTextHandlePosition pos;
+  HandleWindow *handle_window;
 
   priv = handle->priv;
 
@@ -225,8 +226,11 @@ gtk_text_handle_widget_draw (GtkWidget     *widget,
   else
     return FALSE;
 
-  _gtk_text_handle_draw (handle, cr, pos);
-  return TRUE;
+  handle_window = &priv->windows[pos];
+  if (gdk_window_is_visible (handle_window->window))
+    _gtk_text_handle_draw (handle, cr, pos);
+
+  return FALSE;
 }
 
 static gboolean
@@ -304,10 +308,11 @@ _gtk_text_handle_update_window (GtkTextHandle         *handle,
                                   width / 2, 0, &x, &y);
     }
 
+  gtk_widget_unregister_window (priv->parent, handle_window->window);
   gdk_window_destroy (handle_window->window);
 
   /* Create new window and apply old state */
-  handle_window->window = _gtk_text_handle_create_window (handle);
+  handle_window->window = _gtk_text_handle_create_window (handle, pos);
 
   if (visible)
     {
@@ -531,9 +536,9 @@ _gtk_text_handle_set_relative_to (GtkTextHandle *handle,
     {
       priv->relative_to = g_object_ref (window);
       priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].window =
-        _gtk_text_handle_create_window (handle);
+        _gtk_text_handle_create_window (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_START);
       priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].window =
-        _gtk_text_handle_create_window (handle);
+        _gtk_text_handle_create_window (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_END);
       priv->realized = TRUE;
     }
   else
@@ -580,6 +585,10 @@ _gtk_text_handle_set_mode (GtkTextHandle     *handle,
     }
 
   priv->mode = mode;
+
+  _gtk_text_handle_update_shape (handle,
+                                 priv->windows[GTK_TEXT_HANDLE_POSITION_CURSOR].window,
+                                 GTK_TEXT_HANDLE_POSITION_CURSOR);
 }
 
 GtkTextHandleMode

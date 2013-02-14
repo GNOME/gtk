@@ -6,7 +6,6 @@
  */
 
 #include <gtk/gtk.h>
-#include "demo-common.h"
 
 /* Scroll to the end of the buffer.
  */

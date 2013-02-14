@@ -81,16 +81,6 @@ _gtk_modifier_style_init (GtkModifierStyle *modifier_style)
   priv->style = gtk_style_properties_new ();
 }
 
-static GtkStyleProperties *
-gtk_modifier_style_get_style (GtkStyleProvider *provider,
-                              GtkWidgetPath    *path)
-{
-  GtkModifierStylePrivate *priv;
-
-  priv = GTK_MODIFIER_STYLE (provider)->priv;
-  return g_object_ref (priv->style);
-}
-
 static gboolean
 gtk_modifier_style_get_style_property (GtkStyleProvider *provider,
                                        GtkWidgetPath    *path,
@@ -129,11 +119,10 @@ gtk_modifier_style_get_style_property (GtkStyleProvider *provider,
 static void
 gtk_modifier_style_provider_init (GtkStyleProviderIface *iface)
 {
-  iface->get_style = gtk_modifier_style_get_style;
   iface->get_style_property = gtk_modifier_style_get_style_property;
 }
 
-static GtkSymbolicColor *
+static GtkCssValue *
 gtk_modifier_style_provider_get_color (GtkStyleProviderPrivate *provider,
                                        const char              *name)
 {
@@ -267,11 +256,15 @@ _gtk_modifier_style_map_color (GtkModifierStyle *style,
 
   priv = style->priv;
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
   if (color)
     symbolic_color = gtk_symbolic_color_new_literal (color);
 
   gtk_style_properties_map_color (priv->style,
                                   name, symbolic_color);
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   g_signal_emit (style, signals[CHANGED], 0);
   _gtk_style_provider_private_changed (GTK_STYLE_PROVIDER_PRIVATE (style));

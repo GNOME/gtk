@@ -472,7 +472,7 @@ gtk_path_bar_realize (GtkWidget *widget)
 
   path_bar->event_window = gdk_window_new (gtk_widget_get_parent_window (widget),
                                            &attributes, attributes_mask);
-  gdk_window_set_user_data (path_bar->event_window, widget);
+  gtk_widget_register_window (widget, path_bar->event_window);
 }
 
 static void
@@ -482,7 +482,7 @@ gtk_path_bar_unrealize (GtkWidget *widget)
 
   path_bar = GTK_PATH_BAR (widget);
 
-  gdk_window_set_user_data (path_bar->event_window, NULL);
+  gtk_widget_unregister_window (widget, path_bar->event_window);
   gdk_window_destroy (path_bar->event_window);
   path_bar->event_window = NULL;
 

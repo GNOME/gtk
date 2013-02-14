@@ -96,4 +96,5 @@ window1
                           wrap-mode: word
       <AtkAction>
       action 0 name: activate
+      action 0 description: Activates the entry
       action 0 keybinding: <Alt>e

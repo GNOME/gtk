@@ -42,6 +42,9 @@
  *      the special kind of usage for "search" and "recent-files", where the file chooser gives the model the
  *      files to be displayed.
  *
+ * Internal data structure
+ * -----------------------
+ *
  * Each file is kept in a FileModelNode structure.  Each FileModelNode holds a GFile* and other data.  All the
  * node structures have the same size, determined at runtime, depending on the number of columns that were passed
  * to _gtk_file_system_model_new() or _gtk_file_system_model_new_for_directory() (that is, the size of a node is
@@ -66,7 +69,14 @@
  *
  * Each FileModelNode has a node->visible field, which indicates whether the node is visible in the GtkTreeView.
  * A node may be invisible if, for example, it corresponds to a hidden file and the file chooser is not showing
- * hidden files.
+ * hidden files.  Also, a file filter may be explicitly set onto the model, for example, to only show files that
+ * match "*.jpg".  In this case, node->filtered_out says whether the node failed the filter.  The ultimate
+ * decision on whether a node is visible or not in the treeview is distilled into the node->visible field.
+ * The reason for having a separate node->filtered_out field is so that the file chooser can query whether
+ * a (filtered-out) folder should be made sensitive in the GUI.
+ *
+ * Visible rows vs. possibly-invisible nodes
+ * -----------------------------------------
  *
  * Since not all nodes in the model->files array may be visible, we need a way to map visible row indexes from
  * the treeview to array indexes in our array of files.  And thus we introduce a bit of terminology:
@@ -95,6 +105,16 @@
  *
  * You never access a node->row directly.  Instead, call node_get_tree_row().  That function will validate the nodes
  * up to the sought one if the node is not valid yet, and it will return a proper 0-based row.
+ *
+ * Sorting
+ * -------
+ *
+ * The model implements the GtkTreeSortable interface.  To avoid re-sorting
+ * every time a node gets added (which would lead to O(n^2) performance during
+ * the initial population of the model), the model can freeze itself (with
+ * freeze_updates()) during the intial population process.  When the model is
+ * frozen, sorting will not happen.  The model will sort itself when the freeze
+ * count goes back to zero, via corresponding calls to thaw_updates().
  */
 
 /*** DEFINES ***/
@@ -184,6 +204,12 @@ struct _GtkFileSystemModelClass
   void (*finished_loading) (GtkFileSystemModel *model, GError *error);
 };
 
+static void freeze_updates (GtkFileSystemModel *model);
+static void thaw_updates (GtkFileSystemModel *model);
+
+static guint node_get_for_file (GtkFileSystemModel *model,
+				GFile              *file);
+
 static void add_file (GtkFileSystemModel *model,
 		      GFile              *file,
 		      GFileInfo          *info);
@@ -263,13 +289,13 @@ node_invalidate_index (GtkFileSystemModel *model, guint id)
 }
 
 static GtkTreePath *
-gtk_tree_path_new_from_node (GtkFileSystemModel *model, guint id)
+tree_path_new_from_node (GtkFileSystemModel *model, guint id)
 {
-  guint i = node_get_tree_row (model, id);
+  guint r = node_get_tree_row (model, id);
 
-  g_assert (i < model->files->len);
+  g_assert (r < model->files->len);
 
-  return gtk_tree_path_new_from_indices (i, -1);
+  return gtk_tree_path_new_from_indices (r, -1);
 }
 
 static void
@@ -278,7 +304,7 @@ emit_row_inserted_for_node (GtkFileSystemModel *model, guint id)
   GtkTreePath *path;
   GtkTreeIter iter;
 
-  path = gtk_tree_path_new_from_node (model, id);
+  path = tree_path_new_from_node (model, id);
   ITER_INIT_FROM_INDEX (model, &iter, id);
   gtk_tree_model_row_inserted (GTK_TREE_MODEL (model), path, &iter);
   gtk_tree_path_free (path);
@@ -290,7 +316,7 @@ emit_row_changed_for_node (GtkFileSystemModel *model, guint id)
   GtkTreePath *path;
   GtkTreeIter iter;
 
-  path = gtk_tree_path_new_from_node (model, id);
+  path = tree_path_new_from_node (model, id);
   ITER_INIT_FROM_INDEX (model, &iter, id);
   gtk_tree_model_row_changed (GTK_TREE_MODEL (model), path, &iter);
   gtk_tree_path_free (path);
@@ -570,7 +596,7 @@ gtk_file_system_model_get_path (GtkTreeModel *tree_model,
       
   g_return_val_if_fail (ITER_IS_VALID (model, iter), NULL);
 
-  return gtk_tree_path_new_from_node (model, ITER_INDEX (iter));
+  return tree_path_new_from_node (model, ITER_INDEX (iter));
 }
 
 static void
@@ -1097,7 +1123,7 @@ thaw_func (gpointer data)
 {
   GtkFileSystemModel *model = data;
 
-  _gtk_file_system_model_thaw_updates (model);
+  thaw_updates (model);
   model->dir_thaw_source = 0;
 
   return FALSE;
@@ -1119,7 +1145,7 @@ gtk_file_system_model_got_files (GObject *object, GAsyncResult *res, gpointer da
     {
       if (model->dir_thaw_source == 0)
         {
-          _gtk_file_system_model_freeze_updates (model);
+          freeze_updates (model);
           model->dir_thaw_source = gdk_threads_add_timeout_full (IO_PRIORITY + 1,
                                                                  50,
                                                                  thaw_func,
@@ -1168,7 +1194,7 @@ gtk_file_system_model_got_files (GObject *object, GAsyncResult *res, gpointer da
             {
               g_source_remove (model->dir_thaw_source);
               model->dir_thaw_source = 0;
-              _gtk_file_system_model_thaw_updates (model);
+              thaw_updates (model);
             }
 
           g_signal_emit (model, file_system_model_signals[FINISHED_LOADING], 0, error);
@@ -1189,13 +1215,19 @@ gtk_file_system_model_query_done (GObject *     object,
   GtkFileSystemModel *model = data; /* only a valid pointer if not cancelled */
   GFile *file = G_FILE (object);
   GFileInfo *info;
+  guint id;
 
   info = g_file_query_info_finish (file, res, NULL);
   if (info == NULL)
     return;
 
   gdk_threads_enter ();
-  _gtk_file_system_model_update_file (model, file, info, TRUE);
+
+  _gtk_file_system_model_update_file (model, file, info);
+
+  id = node_get_for_file (model, file);
+  gtk_file_system_model_sort_node (model, id);
+
   gdk_threads_leave ();
 }
 
@@ -1433,14 +1465,14 @@ gtk_file_system_model_refilter_all (GtkFileSystemModel *model)
       return;
     }
 
-  _gtk_file_system_model_freeze_updates (model);
+  freeze_updates (model);
 
   /* start at index 1, don't change the editable */
   for (i = 1; i < model->files->len; i++)
     node_compute_visibility_and_filters (model, i);
 
   model->filter_on_thaw = FALSE;
-  _gtk_file_system_model_thaw_updates (model);
+  thaw_updates (model);
 }
 
 /**
@@ -1775,6 +1807,33 @@ _gtk_file_system_model_get_iter_for_file (GtkFileSystemModel *model,
   return TRUE;
 }
 
+/* When an element is added or removed to the model->files array, we need to
+ * update the model->file_lookup mappings of (node, index), as the indexes
+ * change.  This function adds the specified increment to the index in that pair
+ * if the index is equal or after the specified id.  We use this to slide the
+ * mappings up or down when a node is added or removed, respectively.
+ */
+static void
+adjust_file_lookup (GtkFileSystemModel *model, guint id, int increment)
+{
+  GHashTableIter iter;
+  gpointer key;
+  gpointer value;
+
+  g_hash_table_iter_init (&iter, model->file_lookup);
+
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      guint index = GPOINTER_TO_UINT (value);
+
+      if (index >= id)
+	{
+	  index += increment;
+	  g_hash_table_iter_replace (&iter, GUINT_TO_POINTER (index));
+	}
+    }
+}
+
 /**
  * add_file:
  * @model: the model
@@ -1825,6 +1884,7 @@ remove_file (GtkFileSystemModel *model,
 {
   FileModelNode *node;
   guint id;
+  guint row;
 
   g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
   g_return_if_fail (G_IS_FILE (file));
@@ -1834,17 +1894,22 @@ remove_file (GtkFileSystemModel *model,
     return;
 
   node = get_node (model, id);
-  node_set_visible_and_filtered_out (model, id, FALSE, FALSE);
+  row = node_get_tree_row (model, id);
+
+  node_invalidate_index (model, id);
 
   g_hash_table_remove (model->file_lookup, file);
   g_object_unref (node->file);
+  adjust_file_lookup (model, id, -1);
 
   if (node->info)
     g_object_unref (node->info);
 
   g_array_remove_index (model->files, id);
-  g_hash_table_remove_all (model->file_lookup);
-  /* We don't need to resort, as removing a row doesn't change the sorting order */
+
+  /* We don't need to resort, as removing a row doesn't change the sorting order of the other rows */
+
+  emit_row_deleted_for_row (model, row);
 }
 
 /**
@@ -1852,7 +1917,6 @@ remove_file (GtkFileSystemModel *model,
  * @model: the model
  * @file: the file
  * @info: the new file info
- * @requires_resort: FIXME: get rid of this argument
  *
  * Tells the file system model that the file changed and that the 
  * new @info should be used for it now.  If the file is not part of 
@@ -1861,8 +1925,7 @@ remove_file (GtkFileSystemModel *model,
 void
 _gtk_file_system_model_update_file (GtkFileSystemModel *model,
                                     GFile              *file,
-                                    GFileInfo          *info,
-                                    gboolean            requires_resort)
+                                    GFileInfo          *info)
 {
   FileModelNode *node;
   guint i, id;
@@ -1894,9 +1957,6 @@ _gtk_file_system_model_update_file (GtkFileSystemModel *model,
 
   if (node->visible)
     emit_row_changed_for_node (model, id);
-
-  if (requires_resort)
-    gtk_file_system_model_sort_node (model, id);
 }
 
 /**
@@ -1967,17 +2027,16 @@ _gtk_file_system_model_remove_editable (GtkFileSystemModel *model)
 }
 
 /**
- * _gtk_file_system_model_freeze_updates:
+ * freeze_updates:
  * @model: a #GtkFileSystemModel
  *
- * Freezes most updates on the model, so that performing multiple 
- * operations on the files in the model do not cause any events.
- * Use _gtk_file_system_model_thaw_updates() to resume proper 
- * operations. It is fine to call this function multiple times as
- * long as freeze and thaw calls are balanced.
+ * Freezes most updates on the model, so that performing multiple operations on
+ * the files in the model do not cause any events.  Use thaw_updates() to resume
+ * proper operations. It is fine to call this function multiple times as long as
+ * freeze and thaw calls are balanced.
  **/
-void
-_gtk_file_system_model_freeze_updates (GtkFileSystemModel *model)
+static void
+freeze_updates (GtkFileSystemModel *model)
 {
   g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
 
@@ -1985,14 +2044,13 @@ _gtk_file_system_model_freeze_updates (GtkFileSystemModel *model)
 }
 
 /**
- * _gtk_file_system_model_thaw_updates:
+ * thaw_updates:
  * @model: a #GtkFileSystemModel
  *
- * Undoes the effect of a previous call to
- * _gtk_file_system_model_freeze_updates() 
+ * Undoes the effect of a previous call to freeze_updates() 
  **/
-void
-_gtk_file_system_model_thaw_updates (GtkFileSystemModel *model)
+static void
+thaw_updates (GtkFileSystemModel *model)
 {
   gboolean stuff_added;
 

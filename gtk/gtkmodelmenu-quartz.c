@@ -23,6 +23,7 @@
 #include <gdk/gdkkeysyms.h>
 #include "gtkaccelmapprivate.h"
 #include "gtkactionhelper.h"
+#include "../gdk/quartz/gdkquartz.h"
 
 #import <Cocoa/Cocoa.h>
 

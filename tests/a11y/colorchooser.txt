@@ -7,7 +7,7 @@ window1
   <AtkComponent>
   layer: window
   alpha: 1
-  unnamed-GtkBoxAccessible-0
+  unnamed-GtkContainerAccessible-0
     "filler"
     parent: window1
     index: 0
@@ -16,27 +16,27 @@ window1
     <AtkComponent>
     layer: widget
     alpha: 1
-    unnamed-GtkBoxAccessible-1
+    unnamed-GtkContainerAccessible-1
       "color chooser"
-      parent: unnamed-GtkBoxAccessible-0
+      parent: unnamed-GtkContainerAccessible-0
       index: 0
       state: enabled sensitive showing vertical visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
-      unnamed-GtkBoxAccessible-2
+      unnamed-GtkContainerAccessible-2
         "filler"
-        parent: unnamed-GtkBoxAccessible-1
+        parent: unnamed-GtkContainerAccessible-1
         index: 0
         state: enabled horizontal sensitive showing visible
         toolkit: gtk
         <AtkComponent>
         layer: widget
         alpha: 1
-        unnamed-GtkBoxAccessible-3
+        unnamed-GtkContainerAccessible-3
           "filler"
-          parent: unnamed-GtkBoxAccessible-2
+          parent: unnamed-GtkContainerAccessible-2
           index: 0
           state: enabled sensitive showing vertical visible
           toolkit: gtk
@@ -45,7 +45,7 @@ window1
           alpha: 1
           unnamed-GtkWidgetAccessible-4
             "color chooser"
-            parent: unnamed-GtkBoxAccessible-3
+            parent: unnamed-GtkContainerAccessible-3
             index: 0
             name: Color Wheel
             description: Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle.
@@ -60,9 +60,9 @@ window1
             <AtkComponent>
             layer: widget
             alpha: 1
-          unnamed-GtkBoxAccessible-5
+          unnamed-GtkContainerAccessible-5
             "filler"
-            parent: unnamed-GtkBoxAccessible-3
+            parent: unnamed-GtkContainerAccessible-3
             index: 1
             state: enabled horizontal sensitive showing visible
             toolkit: gtk
@@ -71,14 +71,14 @@ window1
             alpha: 1
             unnamed-GtkFrameAccessible-6
               "panel"
-              parent: unnamed-GtkBoxAccessible-5
+              parent: unnamed-GtkContainerAccessible-5
               index: 0
               state: enabled sensitive showing visible
               toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
-              unnamed-GtkBoxAccessible-7
+              unnamed-GtkContainerAccessible-7
                 "filler"
                 parent: unnamed-GtkFrameAccessible-6
                 index: 0
@@ -89,7 +89,7 @@ window1
                 alpha: 1
                 unnamed-GtkWidgetAccessible-8
                   "unknown"
-                  parent: unnamed-GtkBoxAccessible-7
+                  parent: unnamed-GtkContainerAccessible-7
                   index: 0
                   description: The previously-selected color, for comparison to the color you're selecting now.
                   state: enabled sensitive showing visible
@@ -99,7 +99,7 @@ window1
                   alpha: 1
                 unnamed-GtkWidgetAccessible-9
                   "unknown"
-                  parent: unnamed-GtkBoxAccessible-7
+                  parent: unnamed-GtkContainerAccessible-7
                   index: 1
                   description: The color you've chosen.
                   state: enabled sensitive showing visible
@@ -109,7 +109,7 @@ window1
                   alpha: 1
             unnamed-GtkButtonAccessible-10
               "push button"
-              parent: unnamed-GtkBoxAccessible-5
+              parent: unnamed-GtkContainerAccessible-5
               index: 1
               description: Click the eyedropper, then click a color anywhere on your screen to select that color.
               state: enabled focusable sensitive showing visible
@@ -122,9 +122,10 @@ window1
               image description: (null)
               <AtkAction>
               action 0 name: click
-        unnamed-GtkBoxAccessible-11
+              action 0 description: Clicks the button
+        unnamed-GtkContainerAccessible-11
           "filler"
-          parent: unnamed-GtkBoxAccessible-2
+          parent: unnamed-GtkContainerAccessible-2
           index: 1
           state: enabled sensitive showing vertical visible
           toolkit: gtk
@@ -133,7 +134,7 @@ window1
           alpha: 1
           unnamed-GtkContainerAccessible-12
             "panel"
-            parent: unnamed-GtkBoxAccessible-11
+            parent: unnamed-GtkContainerAccessible-11
             index: 0
             state: enabled horizontal sensitive showing visible
             toolkit: gtk
@@ -182,6 +183,7 @@ window1
                                   wrap-mode: word
               <AtkAction>
               action 0 name: activate
+              action 0 description: Activates the entry
               action 0 keybinding: <Alt>n
             Color name:
               "label"
@@ -264,6 +266,7 @@ window1
                                   wrap-mode: word
               <AtkAction>
               action 0 name: activate
+              action 0 description: Activates the entry
             unnamed-GtkScaleAccessible-13
               "slider"
               parent: unnamed-GtkContainerAccessible-12
@@ -275,9 +278,6 @@ window1
               <AtkComponent>
               layer: widget
               alpha: 1
-              <AtkAction>
-              action 0 name: activate
-              action 0 keybinding: <Alt>a
               <AtkValue>
               minimum value: 0.000000
               maximum value: 255.000000
@@ -375,6 +375,7 @@ window1
                                   wrap-mode: word
               <AtkAction>
               action 0 name: activate
+              action 0 description: Activates the entry
               action 0 keybinding: <Alt>b
               <AtkValue>
               minimum value: 0.000000
@@ -464,6 +465,7 @@ window1
                                   wrap-mode: word
               <AtkAction>
               action 0 name: activate
+              action 0 description: Activates the entry
               action 0 keybinding: <Alt>g
               <AtkValue>
               minimum value: 0.000000
@@ -553,6 +555,7 @@ window1
                                   wrap-mode: word
               <AtkAction>
               action 0 name: activate
+              action 0 description: Activates the entry
               action 0 keybinding: <Alt>r
               <AtkValue>
               minimum value: 0.000000
@@ -642,6 +645,7 @@ window1
                                   wrap-mode: word
               <AtkAction>
               action 0 name: activate
+              action 0 description: Activates the entry
               action 0 keybinding: <Alt>v
               <AtkValue>
               minimum value: 0.000000
@@ -731,6 +735,7 @@ window1
                                   wrap-mode: word
               <AtkAction>
               action 0 name: activate
+              action 0 description: Activates the entry
               action 0 keybinding: <Alt>a
               <AtkValue>
               minimum value: 0.000000
@@ -820,6 +825,7 @@ window1
                                   wrap-mode: word
               <AtkAction>
               action 0 name: activate
+              action 0 description: Activates the entry
               action 0 keybinding: <Alt>h
               <AtkValue>
               minimum value: 0.000000
@@ -866,9 +872,9 @@ window1
                                   variant: <omitted>
                                   weight: <omitted>
                                   wrap-mode: word
-          unnamed-GtkBoxAccessible-15
+          unnamed-GtkContainerAccessible-15
             "filler"
-            parent: unnamed-GtkBoxAccessible-11
+            parent: unnamed-GtkContainerAccessible-11
             index: 1
             state: enabled sensitive vertical
             toolkit: gtk
@@ -877,7 +883,7 @@ window1
             alpha: 1
             Palette:
               "label"
-              parent: unnamed-GtkBoxAccessible-15
+              parent: unnamed-GtkContainerAccessible-15
               index: 0
               name: Palette:
               label-for: unnamed-GtkWidgetAccessible-16
@@ -917,7 +923,7 @@ window1
                                   wrap-mode: word
             unnamed-GtkContainerAccessible-17
               "panel"
-              parent: unnamed-GtkBoxAccessible-15
+              parent: unnamed-GtkContainerAccessible-15
               index: 1
               state: enabled horizontal sensitive visible
               toolkit: gtk
@@ -1305,9 +1311,9 @@ window1
                   <AtkComponent>
                   layer: widget
                   alpha: 1
-    unnamed-GtkBoxAccessible-57
+    unnamed-GtkContainerAccessible-57
       "filler"
-      parent: unnamed-GtkBoxAccessible-0
+      parent: unnamed-GtkContainerAccessible-0
       index: 1
       state: enabled horizontal sensitive showing visible
       toolkit: gtk
@@ -1316,7 +1322,7 @@ window1
       alpha: 1
       unnamed-GtkButtonAccessible-58
         "push button"
-        parent: unnamed-GtkBoxAccessible-57
+        parent: unnamed-GtkContainerAccessible-57
         index: 0
         name: Help
         state: enabled focusable sensitive
@@ -1329,10 +1335,11 @@ window1
         image description: (null)
         <AtkAction>
         action 0 name: click
+        action 0 description: Clicks the button
         action 0 keybinding: <Alt>h
       unnamed-GtkButtonAccessible-59
         "push button"
-        parent: unnamed-GtkBoxAccessible-57
+        parent: unnamed-GtkContainerAccessible-57
         index: 1
         name: Select
         state: enabled focusable sensitive showing visible default
@@ -1345,10 +1352,11 @@ window1
         image description: (null)
         <AtkAction>
         action 0 name: click
+        action 0 description: Clicks the button
         action 0 keybinding: <Alt>s
       unnamed-GtkButtonAccessible-60
         "push button"
-        parent: unnamed-GtkBoxAccessible-57
+        parent: unnamed-GtkContainerAccessible-57
         index: 2
         name: Cancel
         state: enabled focusable sensitive showing visible
@@ -1361,4 +1369,5 @@ window1
         image description: (null)
         <AtkAction>
         action 0 name: click
+        action 0 description: Clicks the button
         action 0 keybinding: <Alt>c

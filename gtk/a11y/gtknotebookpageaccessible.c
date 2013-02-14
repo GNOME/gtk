@@ -1,4 +1,4 @@
-/* GAIL - The GNOME Accessibility Implementation Library
+/* GTK+ - accessibility implementations
  * Copyright 2001, 2002, 2003 Sun Microsystems Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -30,7 +30,7 @@ struct _GtkNotebookPageAccessiblePrivate
 
 static void atk_component_interface_init (AtkComponentIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkNotebookPageAccessible, _gtk_notebook_page_accessible, ATK_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (GtkNotebookPageAccessible, gtk_notebook_page_accessible, ATK_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init))
 
 
@@ -140,11 +140,20 @@ gtk_notebook_page_accessible_ref_child (AtkObject *accessible,
 static AtkStateSet *
 gtk_notebook_page_accessible_ref_state_set (AtkObject *accessible)
 {
+  GtkNotebookPageAccessible *page = GTK_NOTEBOOK_PAGE_ACCESSIBLE (accessible);
   AtkStateSet *state_set, *label_state_set, *merged_state_set;
   AtkObject *atk_label;
   GtkWidget *label;
+  AtkObject *selected;
 
-  state_set = ATK_OBJECT_CLASS (_gtk_notebook_page_accessible_parent_class)->ref_state_set (accessible);
+  state_set = ATK_OBJECT_CLASS (gtk_notebook_page_accessible_parent_class)->ref_state_set (accessible);
+
+  atk_state_set_add_state (state_set, ATK_STATE_SELECTABLE);
+
+  selected = atk_selection_ref_selection (ATK_SELECTION (page->priv->notebook), 0);
+  if (selected == accessible)
+    atk_state_set_add_state (state_set, ATK_STATE_SELECTED);
+  g_object_unref (selected);
 
   label = get_label_from_notebook_page (GTK_NOTEBOOK_PAGE_ACCESSIBLE (accessible));
   if (label)
@@ -194,7 +203,7 @@ gtk_notebook_page_accessible_get_index_in_parent (AtkObject *accessible)
 }
 
 static void
-_gtk_notebook_page_accessible_class_init (GtkNotebookPageAccessibleClass *klass)
+gtk_notebook_page_accessible_class_init (GtkNotebookPageAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
@@ -209,7 +218,7 @@ _gtk_notebook_page_accessible_class_init (GtkNotebookPageAccessibleClass *klass)
 }
 
 static void
-_gtk_notebook_page_accessible_init (GtkNotebookPageAccessible *page)
+gtk_notebook_page_accessible_init (GtkNotebookPageAccessible *page)
 {
   page->priv = G_TYPE_INSTANCE_GET_PRIVATE (page,
                                             GTK_TYPE_NOTEBOOK_PAGE_ACCESSIBLE,
@@ -227,8 +236,8 @@ notify_tab_label (GObject    *object,
 }
 
 AtkObject *
-_gtk_notebook_page_accessible_new (GtkNotebookAccessible *notebook,
-                                   GtkWidget             *child)
+gtk_notebook_page_accessible_new (GtkNotebookAccessible *notebook,
+                                  GtkWidget             *child)
 {
   GObject *object;
   AtkObject *atk_object;
@@ -257,7 +266,7 @@ _gtk_notebook_page_accessible_new (GtkNotebookAccessible *notebook,
 }
 
 void
-_gtk_notebook_page_accessible_invalidate (GtkNotebookPageAccessible *page)
+gtk_notebook_page_accessible_invalidate (GtkNotebookPageAccessible *page)
 {
   AtkObject *obj = ATK_OBJECT (page);
   GtkWidget *notebook;

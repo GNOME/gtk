@@ -679,6 +679,14 @@ columns_selected (GtkComboBox *combo_box, gpointer data)
     }
 }
 
+void
+on_row_activated (GtkTreeView       *tree_view,
+                  GtkTreePath       *path,
+                  GtkTreeViewColumn *column,
+                  gpointer           user_data)
+{
+  g_print ("Row activated\n");
+}
 
 enum
 {
@@ -739,7 +747,8 @@ main (int    argc,
   gtk_container_add (GTK_CONTAINER (window), box);
 
   tv = gtk_tree_view_new_with_model (models[0]);
-  
+  g_signal_connect (tv, "row-activated", G_CALLBACK (on_row_activated), NULL);
+
   gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (tv),
 					  GDK_BUTTON1_MASK,
 					  row_targets,

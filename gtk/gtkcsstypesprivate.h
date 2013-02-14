@@ -49,10 +49,13 @@ typedef enum { /*< skip >*/
   GTK_CSS_CHANGE_PARENT_SIBLING_STATE     = (1 << 15),
   /* add more */
   GTK_CSS_CHANGE_SOURCE                   = (1 << 16),
-  GTK_CSS_CHANGE_ANIMATE                  = (1 << 17)
+  GTK_CSS_CHANGE_ANIMATE                  = (1 << 17),
+  GTK_CSS_CHANGE_FORCE_INVALIDATE         = (1 << 18),
+
+  GTK_CSS_CHANGE_RESERVED_BIT             = (1 << 31) /* Used internally in gtkcssselector.c */
 } GtkCssChange;
 
-#define GTK_CSS_CHANGE_ANY ((1 << 18) - 1)
+#define GTK_CSS_CHANGE_ANY ((1 << 19) - 1)
 #define GTK_CSS_CHANGE_ANY_SELF (GTK_CSS_CHANGE_CLASS | GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_POSITION | GTK_CSS_CHANGE_STATE)
 #define GTK_CSS_CHANGE_ANY_SIBLING (GTK_CSS_CHANGE_SIBLING_CLASS | GTK_CSS_CHANGE_SIBLING_NAME | \
                                     GTK_CSS_CHANGE_SIBLING_POSITION | GTK_CSS_CHANGE_SIBLING_STATE)
@@ -129,6 +132,7 @@ enum { /*< skip >*/
   GTK_CSS_PROPERTY_ANIMATION_PLAY_STATE,
   GTK_CSS_PROPERTY_ANIMATION_DELAY,
   GTK_CSS_PROPERTY_ANIMATION_FILL_MODE,
+  GTK_CSS_PROPERTY_OPACITY,
   GTK_CSS_PROPERTY_ENGINE,
   GTK_CSS_PROPERTY_GTK_KEY_BINDINGS,
   /* add more */
@@ -159,6 +163,20 @@ typedef enum /*< skip >*/ {
   GTK_CSS_FILL_BACKWARDS,
   GTK_CSS_FILL_BOTH
 } GtkCssFillMode;
+
+typedef enum /*< skip >*/ {
+  /* relative font sizes */
+  GTK_CSS_FONT_SIZE_SMALLER,
+  GTK_CSS_FONT_SIZE_LARGER,
+  /* absolute font sizes */
+  GTK_CSS_FONT_SIZE_XX_SMALL,
+  GTK_CSS_FONT_SIZE_X_SMALL,
+  GTK_CSS_FONT_SIZE_SMALL,
+  GTK_CSS_FONT_SIZE_MEDIUM,
+  GTK_CSS_FONT_SIZE_LARGE,
+  GTK_CSS_FONT_SIZE_X_LARGE,
+  GTK_CSS_FONT_SIZE_XX_LARGE
+} GtkCssFontSize;
 
 /* for the order in arrays */
 typedef enum /*< skip >*/ {

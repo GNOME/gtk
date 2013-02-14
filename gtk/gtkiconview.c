@@ -44,7 +44,7 @@
 #include "gtktreednd.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
-#include "a11y/gtkiconviewaccessible.h"
+#include "a11y/gtkiconviewaccessibleprivate.h"
 
 /**
  * SECTION:gtkiconview
@@ -107,12 +107,11 @@ enum
   PROP_TOOLTIP_COLUMN,
   PROP_ITEM_PADDING,
   PROP_CELL_AREA,
-
-  /* For scrollable interface */
   PROP_HADJUSTMENT,
   PROP_VADJUSTMENT,
   PROP_HSCROLL_POLICY,
-  PROP_VSCROLL_POLICY
+  PROP_VSCROLL_POLICY,
+  PROP_ACTIVATE_ON_SINGLE_CLICK
 };
 
 /* GObject vfuncs */
@@ -644,6 +643,22 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 							GTK_TYPE_CELL_AREA,
 							GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
+  /**
+   * GtkIconView:activate-on-single-click:
+   *
+   * The activate-on-single-click property specifies whether the "item-activated" signal
+   * will be emitted after a single click.
+   *
+   * Since: 3.8
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_ACTIVATE_ON_SINGLE_CLICK,
+                                   g_param_spec_boolean ("activate-on-single-click",
+							 P_("Activate on Single Click"),
+							 P_("Activate row on a single click"),
+							 FALSE,
+							 GTK_PARAM_READWRITE));
+
   /* Scrollable interface properties */
   g_object_class_override_property (gobject_class, PROP_HADJUSTMENT,    "hadjustment");
   g_object_class_override_property (gobject_class, PROP_VADJUSTMENT,    "vadjustment");
@@ -673,10 +688,12 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * @path: the #GtkTreePath for the activated item
    *
    * The ::item-activated signal is emitted when the method
-   * gtk_icon_view_item_activated() is called or the user double 
-   * clicks an item. It is also emitted when a non-editable item
-   * is selected and one of the keys: Space, Return or Enter is
-   * pressed.
+   * gtk_icon_view_item_activated() is called, when the user double
+   * clicks an item with the "activate-on-single-click" property set
+   * to %FALSE, or when the user single clicks an item when the
+   * "activate-on-single-click" property set to %TRUE. It is also
+   * emitted when a non-editable item is selected and one of the keys:
+   * Space, Return or Enter is pressed.
    */
   icon_view_signals[ITEM_ACTIVATED] =
     g_signal_new (I_("item-activated"),
@@ -969,11 +986,15 @@ gtk_icon_view_init (GtkIconView *icon_view)
   icon_view->priv->column_spacing = 6;
   icon_view->priv->margin = 6;
   icon_view->priv->item_padding = 6;
+  icon_view->priv->activate_on_single_click = FALSE;
 
   icon_view->priv->draw_focus = TRUE;
 
   icon_view->priv->row_contexts = 
     g_ptr_array_new_with_free_func ((GDestroyNotify)g_object_unref);
+
+  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (icon_view)),
+                               GTK_STYLE_CLASS_VIEW);
 }
 
 /* GObject methods */
@@ -1093,6 +1114,10 @@ gtk_icon_view_set_property (GObject      *object,
       gtk_icon_view_set_item_padding (icon_view, g_value_get_int (value));
       break;
 
+    case PROP_ACTIVATE_ON_SINGLE_CLICK:
+      gtk_icon_view_set_activate_on_single_click (icon_view, g_value_get_boolean (value));
+      break;
+
     case PROP_CELL_AREA:
       /* Construct-only, can only be assigned once */
       area = g_value_get_object (value);
@@ -1189,6 +1214,10 @@ gtk_icon_view_get_property (GObject      *object,
       g_value_set_int (value, icon_view->priv->item_padding);
       break;
 
+    case PROP_ACTIVATE_ON_SINGLE_CLICK:
+      g_value_set_boolean (value, icon_view->priv->activate_on_single_click);
+      break;
+
     case PROP_CELL_AREA:
       g_value_set_object (value, icon_view->priv->cell_area);
       break;
@@ -1272,7 +1301,7 @@ gtk_icon_view_realize (GtkWidget *widget)
   window = gdk_window_new (gtk_widget_get_parent_window (widget),
                            &attributes, attributes_mask);
   gtk_widget_set_window (widget, window);
-  gdk_window_set_user_data (window, widget);
+  gtk_widget_register_window (widget, window);
 
   gtk_widget_get_allocation (widget, &allocation);
 
@@ -1293,15 +1322,11 @@ gtk_icon_view_realize (GtkWidget *widget)
   
   icon_view->priv->bin_window = gdk_window_new (window,
 						&attributes, attributes_mask);
-  gdk_window_set_user_data (icon_view->priv->bin_window, widget);
+  gtk_widget_register_window (widget, icon_view->priv->bin_window);
 
   context = gtk_widget_get_style_context (widget);
-
-  gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
   gtk_style_context_set_background (context, icon_view->priv->bin_window);
   gtk_style_context_set_background (context, window);
-  gtk_style_context_restore (context);
 
   gdk_window_show (icon_view->priv->bin_window);
 }
@@ -1313,7 +1338,7 @@ gtk_icon_view_unrealize (GtkWidget *widget)
 
   icon_view = GTK_ICON_VIEW (widget);
 
-  gdk_window_set_user_data (icon_view->priv->bin_window, NULL);
+  gtk_widget_unregister_window (widget, icon_view->priv->bin_window);
   gdk_window_destroy (icon_view->priv->bin_window);
   icon_view->priv->bin_window = NULL;
 
@@ -1330,14 +1355,8 @@ _gtk_icon_view_update_background (GtkIconView *icon_view)
       GtkStyleContext *context;
 
       context = gtk_widget_get_style_context (widget);
-
-      gtk_style_context_save (context);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
-
       gtk_style_context_set_background (context, gtk_widget_get_window (widget));
       gtk_style_context_set_background (context, icon_view->priv->bin_window);
-
-      gtk_style_context_restore (context);
     }
 }
 
@@ -1823,8 +1842,15 @@ gtk_icon_view_draw (GtkWidget *widget,
   gint dest_index;
   GtkIconViewDropPosition dest_pos;
   GtkIconViewItem *dest_item = NULL;
+  GtkStyleContext *context;
 
   icon_view = GTK_ICON_VIEW (widget);
+
+  context = gtk_widget_get_style_context (widget);
+  gtk_render_background (context, cr,
+                         0, 0,
+                         gtk_widget_get_allocated_width (widget),
+                         gtk_widget_get_allocated_height (widget));
 
   if (!gtk_cairo_should_draw_window (cr, icon_view->priv->bin_window))
     return FALSE;
@@ -2355,7 +2381,9 @@ gtk_icon_view_button_press (GtkWidget      *widget,
       icon_view->priv->draw_focus = FALSE;
     }
 
-  if (event->button == GDK_BUTTON_PRIMARY && event->type == GDK_2BUTTON_PRESS)
+  if (!icon_view->priv->activate_on_single_click
+      && event->button == GDK_BUTTON_PRIMARY
+      && event->type == GDK_2BUTTON_PRESS)
     {
       item = _gtk_icon_view_get_item_at_coords (icon_view,
 					       event->x, event->y,
@@ -2382,6 +2410,12 @@ gtk_icon_view_button_press (GtkWidget      *widget,
 }
 
 static gboolean
+button_event_modifies_selection (GdkEventButton *event)
+{
+        return (event->state & (GDK_CONTROL_MASK | GDK_SHIFT_MASK)) != 0;
+}
+
+static gboolean
 gtk_icon_view_button_release (GtkWidget      *widget,
 			      GdkEventButton *event)
 {
@@ -2395,6 +2429,28 @@ gtk_icon_view_button_release (GtkWidget      *widget,
   gtk_icon_view_stop_rubberbanding (icon_view);
 
   remove_scroll_timeout (icon_view);
+
+  if (event->button == GDK_BUTTON_PRIMARY
+      && icon_view->priv->activate_on_single_click
+      && !button_event_modifies_selection (event)
+      && icon_view->priv->last_single_clicked != NULL)
+    {
+      GtkIconViewItem *item;
+
+      item = _gtk_icon_view_get_item_at_coords (icon_view,
+                                                event->x, event->y,
+                                                FALSE,
+                                                NULL);
+      if (item == icon_view->priv->last_single_clicked)
+        {
+          GtkTreePath *path;
+          path = gtk_tree_path_new_from_indices (item->index, -1);
+          gtk_icon_view_item_activated (icon_view, path);
+          gtk_tree_path_free (path);
+        }
+
+      icon_view->priv->last_single_clicked = NULL;
+    }
 
   return TRUE;
 }
@@ -2859,7 +2915,7 @@ gtk_icon_view_adjustment_changed (GtkAdjustment *adjustment,
 
       if (icon_view->priv->doing_rubberband)
         gtk_icon_view_update_rubberband (GTK_WIDGET (icon_view));
-      
+
       _gtk_icon_view_accessible_adjustment_changed (icon_view);
     }
 }
@@ -3037,7 +3093,6 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
   state = gtk_widget_get_state_flags (widget);
 
   gtk_style_context_save (style_context);
-  gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_VIEW);
   gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_CELL);
 
   state &= ~(GTK_STATE_FLAG_SELECTED | GTK_STATE_FLAG_PRELIGHT);
@@ -7176,6 +7231,49 @@ gtk_icon_view_set_reorderable (GtkIconView *icon_view,
   icon_view->priv->reorderable = reorderable;
 
   g_object_notify (G_OBJECT (icon_view), "reorderable");
+}
+
+/**
+ * gtk_icon_view_set_activate_on_single_click:
+ * @icon_view: a #GtkIconView
+ * @single: %TRUE to emit item-activated on a single click
+ *
+ * Causes the #GtkIconView::item-activated signal to be emitted on
+ * a single click instead of a double click.
+ *
+ * Since: 3.8
+ **/
+void
+gtk_icon_view_set_activate_on_single_click (GtkIconView *icon_view,
+                                            gboolean     single)
+{
+  g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
+
+  single = single != FALSE;
+
+  if (icon_view->priv->activate_on_single_click == single)
+    return;
+
+  icon_view->priv->activate_on_single_click = single;
+  g_object_notify (G_OBJECT (icon_view), "activate-on-single-click");
+}
+
+/**
+ * gtk_icon_view_get_activate_on_single_click:
+ * @icon_view: a #GtkIconView
+ *
+ * Gets the setting set by gtk_icon_view_set_activate_on_single_click().
+ *
+ * Return value: %TRUE if item-activated will be emitted on a single click
+ *
+ * Since: 3.8
+ **/
+gboolean
+gtk_icon_view_get_activate_on_single_click (GtkIconView *icon_view)
+{
+  g_return_val_if_fail (GTK_IS_ICON_VIEW (icon_view), FALSE);
+
+  return icon_view->priv->activate_on_single_click;
 }
 
 static gboolean

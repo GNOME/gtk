@@ -118,8 +118,6 @@ struct _GtkWindowPrivate
   GdkModifierType        mnemonic_modifier;
   GdkWindowTypeHint      gdk_type_hint;
 
-  gdouble  opacity;
-
   GdkWindow *grip_window;
 
   gchar   *startup_id;
@@ -166,7 +164,6 @@ struct _GtkWindowPrivate
   guint    mnemonics_visible_set     : 1;
   guint    focus_visible             : 1;
   guint    modal                     : 1;
-  guint    opacity_set               : 1;
   guint    position                  : 3;
   guint    reset_type_hint           : 1;
   guint    resizable                 : 1;
@@ -228,7 +225,6 @@ enum {
   PROP_GRAVITY,
   PROP_TRANSIENT_FOR,
   PROP_ATTACHED_TO,
-  PROP_OPACITY,
   PROP_HAS_RESIZE_GRIP,
   PROP_RESIZE_GRIP_VISIBLE,
   PROP_APPLICATION,
@@ -475,14 +471,6 @@ static void gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
 						      const gchar   *tagname,
 						      gpointer       user_data);
 
-
-static void gtk_window_get_preferred_width    (GtkWidget           *widget,
-					       gint                *minimum_size,
-					       gint                *natural_size);
-static void gtk_window_get_preferred_height   (GtkWidget           *widget,
-					       gint                *minimum_size,
-					       gint                *natural_size);
-
 static void ensure_state_flag_backdrop (GtkWidget *widget);
 
 G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_BIN,
@@ -595,8 +583,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->focus = gtk_window_focus;
   widget_class->move_focus = gtk_window_move_focus;
   widget_class->draw = gtk_window_draw;
-  widget_class->get_preferred_width = gtk_window_get_preferred_width;
-  widget_class->get_preferred_height = gtk_window_get_preferred_height;
   widget_class->window_state_event = gtk_window_state_event;
   widget_class->direction_changed = gtk_window_direction_changed;
   widget_class->state_changed = gtk_window_state_changed;
@@ -993,24 +979,6 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 
-  /**
-   * GtkWindow:opacity:
-   *
-   * The requested opacity of the window. See gtk_window_set_opacity() for
-   * more details about window opacity.
-   *
-   * Since: 2.12
-   */
-  g_object_class_install_property (gobject_class,
-				   PROP_OPACITY,
-				   g_param_spec_double ("opacity",
-							P_("Opacity for Window"),
-							P_("The opacity of the window, from 0 to 1"),
-							0.0,
-							1.0,
-							1.0,
-							GTK_PARAM_READWRITE));
-
   /* Style properties.
    */
   gtk_widget_class_install_style_property (widget_class,
@@ -1188,7 +1156,6 @@ gtk_window_init (GtkWindow *window)
   priv->focus_on_map = TRUE;
   priv->deletable = TRUE;
   priv->type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
-  priv->opacity = 1.0;
   priv->startup_id = NULL;
   priv->initial_timestamp = GDK_CURRENT_TIME;
   priv->has_resize_grip = TRUE;
@@ -1310,9 +1277,6 @@ gtk_window_set_property (GObject      *object,
     case PROP_ATTACHED_TO:
       gtk_window_set_attached_to (window, g_value_get_object (value));
       break;
-    case PROP_OPACITY:
-      gtk_window_set_opacity (window, g_value_get_double (value));
-      break;
     case PROP_HAS_RESIZE_GRIP:
       gtk_window_set_has_resize_grip (window, g_value_get_boolean (value));
       break;
@@ -1433,9 +1397,6 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_ATTACHED_TO:
       g_value_set_object (value, gtk_window_get_attached_to (window));
-      break;
-    case PROP_OPACITY:
-      g_value_set_double (value, gtk_window_get_opacity (window));
       break;
     case PROP_HAS_RESIZE_GRIP:
       g_value_set_boolean (value, priv->has_resize_grip);
@@ -2717,28 +2678,13 @@ gtk_window_get_attached_to (GtkWindow *window)
  * shown causes it to flicker once on Windows.
  *
  * Since: 2.12
+ * Deprecated: 3.8: Use gtk_widget_set_opacity instead.
  **/
 void       
 gtk_window_set_opacity  (GtkWindow *window, 
 			 gdouble    opacity)
 {
-  GtkWindowPrivate *priv;
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  priv = window->priv;
-
-  if (opacity < 0.0)
-    opacity = 0.0;
-  else if (opacity > 1.0)
-    opacity = 1.0;
-
-  priv->opacity_set = TRUE;
-  priv->opacity = opacity;
-
-  if (gtk_widget_get_realized (GTK_WIDGET (window)))
-    gdk_window_set_opacity (gtk_widget_get_window (GTK_WIDGET (window)),
-                            priv->opacity);
+  gtk_widget_set_opacity (GTK_WIDGET (window), opacity);
 }
 
 /**
@@ -2751,13 +2697,14 @@ gtk_window_set_opacity  (GtkWindow *window,
  * Return value: the requested opacity for this window.
  *
  * Since: 2.12
+ * Deprecated: 3.8: Use gtk_widget_get_opacity instead.
  **/
 gdouble
 gtk_window_get_opacity (GtkWindow *window)
 {
   g_return_val_if_fail (GTK_IS_WINDOW (window), 0.0);
 
-  return window->priv->opacity;
+  return gtk_widget_get_opacity (GTK_WIDGET (window));
 }
 
 /**
@@ -5213,7 +5160,7 @@ gtk_window_realize (GtkWidget *widget)
       gdk_window = gdk_window_new (gtk_widget_get_parent_window (widget),
 				   &attributes, attributes_mask);
       gtk_widget_set_window (widget, gdk_window);
-      gdk_window_set_user_data (gdk_window, widget);
+      gtk_widget_register_window (widget, gdk_window);
 
       gtk_style_context_set_background (gtk_widget_get_style_context (widget), gdk_window);
 
@@ -5291,12 +5238,9 @@ gtk_window_realize (GtkWidget *widget)
   gdk_window = gdk_window_new (parent_window, &attributes, attributes_mask);
   gtk_widget_set_window (widget, gdk_window);
 
-  if (priv->opacity_set)
-    gdk_window_set_opacity (gdk_window, priv->opacity);
-
   gdk_window_enable_synchronized_configure (gdk_window);
 
-  gdk_window_set_user_data (gdk_window, window);
+  gtk_widget_register_window (widget, gdk_window);
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_set_background (context, gdk_window);
@@ -5676,7 +5620,6 @@ gtk_window_configure_event (GtkWidget         *widget,
 
   /*
    * If we do need to resize, we do that by:
-   *   - filling in widget->allocation with the new size
    *   - setting configure_notify_received to TRUE
    *     for use in gtk_window_move_resize()
    *   - queueing a resize, leading to invocation of
@@ -5685,10 +5628,6 @@ gtk_window_configure_event (GtkWidget         *widget,
    */
   
   priv->configure_notify_received = TRUE;
-
-  allocation.width = event->width;
-  allocation.height = event->height;
-  gtk_widget_set_allocation (widget, &allocation);
 
   gdk_window_invalidate_rect (gtk_widget_get_window (widget), NULL, FALSE); // XXX - What was this for again?
 
@@ -5745,7 +5684,6 @@ gtk_window_style_updated (GtkWidget *widget)
                               rect.width, rect.height);
 
       set_grip_shape (window);
-      gtk_widget_queue_resize (widget);
     }
 }
 
@@ -5784,7 +5722,7 @@ resize_grip_create_window (GtkWindow *window)
                                       attributes_mask);
   gdk_window_set_background_rgba (priv->grip_window, &transparent);
 
-  gdk_window_set_user_data (priv->grip_window, widget);
+  gtk_widget_register_window (widget, priv->grip_window);
 
   gdk_window_raise (priv->grip_window);
 
@@ -5797,7 +5735,7 @@ resize_grip_destroy_window (GtkWindow *window)
 {
   GtkWindowPrivate *priv = window->priv;
 
-  gdk_window_set_user_data (priv->grip_window, NULL);
+  gtk_widget_unregister_window (GTK_WIDGET (window), priv->grip_window);
   gdk_window_destroy (priv->grip_window);
   priv->grip_window = NULL;
   update_grip_visibility (window);
@@ -6489,60 +6427,6 @@ gtk_window_real_set_focus (GtkWindow *window,
       g_object_unref (focus);
     }
 }
-
-
-static void 
-gtk_window_get_preferred_width (GtkWidget *widget,
-                                gint      *minimum_size,
-                                gint      *natural_size)
-{
-  GtkWindow *window;
-  GtkWidget *child;
-  guint border_width;
-
-  window = GTK_WINDOW (widget);
-  child  = gtk_bin_get_child (GTK_BIN (window));
-
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
-  *minimum_size = border_width * 2;
-  *natural_size = border_width * 2;
-
-  if (child && gtk_widget_get_visible (child))
-    {
-      gint child_min, child_nat;
-      gtk_widget_get_preferred_width (child, &child_min, &child_nat);
-
-      *minimum_size += child_min;
-      *natural_size += child_nat;
-    }
-}
-
-static void 
-gtk_window_get_preferred_height (GtkWidget *widget,
-                                 gint      *minimum_size,
-                                 gint      *natural_size)
-{
-  GtkWindow *window;
-  GtkWidget *child;
-  guint border_width;
-
-  window = GTK_WINDOW (widget);
-  child  = gtk_bin_get_child (GTK_BIN (window));
-
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
-  *minimum_size = border_width * 2;
-  *natural_size = border_width * 2;
-
-  if (child && gtk_widget_get_visible (child))
-    {
-      gint child_min, child_nat;
-      gtk_widget_get_preferred_height (child, &child_min, &child_nat);
-
-      *minimum_size += child_min;
-      *natural_size += child_nat;
-    }
-}
-
 
 /**
  * _gtk_window_unset_focus_and_default:
@@ -7241,7 +7125,10 @@ gtk_window_move_resize (GtkWindow *window)
 				   &new_geometry,
 				   new_flags);
 
-  gtk_widget_get_allocation (widget, &allocation);
+  allocation.x = 0;
+  allocation.y = 0;
+  allocation.width = gdk_window_get_width (gdk_window);
+  allocation.height = gdk_window_get_height (gdk_window);
 
   /* handle resizing/moving and widget tree allocation
    */

@@ -1731,7 +1731,9 @@ gtk_icon_set_render_icon_pixbuf (GtkIconSet        *icon_set,
   else
     state = GTK_STATE_NORMAL;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   direction = gtk_style_context_get_direction (context);
+G_GNUC_END_IGNORE_DEPRECATIONS;
 
   if (icon_set->sources)
     {
@@ -1826,7 +1828,9 @@ gtk_icon_set_render_icon (GtkIconSet        *icon_set,
     }
 
   gtk_style_context_set_state (context, flags);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   gtk_style_context_set_direction (context, direction);
+G_GNUC_END_IGNORE_DEPRECATIONS;
 
   icon = gtk_icon_set_render_icon_pixbuf (icon_set, context, size);
 

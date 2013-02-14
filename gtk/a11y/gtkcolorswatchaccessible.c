@@ -1,4 +1,4 @@
-/*
+/* GTK+ - accessibility implementations
  * Copyright 2012 Red Hat, Inc
  *
  * This library is free software; you can redistribute it and/or
@@ -17,8 +17,9 @@
 
 #include "config.h"
 
+#include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
-#include "gtkcolorswatchaccessible.h"
+#include "gtkcolorswatchaccessibleprivate.h"
 
 static void atk_action_interface_init (AtkActionIface *iface);
 
@@ -61,6 +62,32 @@ gtk_color_swatch_accessible_get_name (AtkAction *action,
     }
 }
 
+static const gchar *
+gtk_color_swatch_accessible_get_localized_name (AtkAction *action,
+                                                gint       i)
+{
+  switch (i)
+    {
+    case 0: return C_("Action name", "Select");
+    case 1: return C_("Action name", "Activate");
+    case 2: return C_("Action name", "Customize");
+    default: return NULL;
+    }
+}
+
+static const gchar *
+gtk_color_swatch_accessible_get_description (AtkAction *action,
+                                             gint       i)
+{
+  switch (i)
+    {
+    case 0: return C_("Action description", "Selects the color");
+    case 1: return C_("Action description", "Activates the color");
+    case 2: return C_("Action description", "Customizes the color");
+    default: return NULL;
+    }
+}
+
 static gboolean
 gtk_color_swatch_accessible_do_action (AtkAction *action,
                                        gint       i)
@@ -99,4 +126,6 @@ atk_action_interface_init (AtkActionIface *iface)
   iface->get_n_actions = gtk_color_swatch_accessible_get_n_actions;
   iface->get_keybinding = gtk_color_swatch_accessible_get_keybinding;
   iface->get_name = gtk_color_swatch_accessible_get_name;
+  iface->get_localized_name = gtk_color_swatch_accessible_get_localized_name;
+  iface->get_description = gtk_color_swatch_accessible_get_description;
 }

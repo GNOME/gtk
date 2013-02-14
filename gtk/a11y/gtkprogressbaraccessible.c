@@ -1,4 +1,4 @@
-/* GAIL - The GNOME Accessibility Implementation Library
+/* GTK+ - accessibility implementations
  * Copyright 2001, 2002, 2003 Sun Microsystems Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -26,14 +26,14 @@
 
 static void atk_value_interface_init (AtkValueIface  *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkProgressBarAccessible, _gtk_progress_bar_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkProgressBarAccessible, gtk_progress_bar_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_VALUE, atk_value_interface_init))
 
 static void
 gtk_progress_bar_accessible_initialize (AtkObject *obj,
                                         gpointer   data)
 {
-  ATK_OBJECT_CLASS (_gtk_progress_bar_accessible_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gtk_progress_bar_accessible_parent_class)->initialize (obj, data);
 
   obj->role = ATK_ROLE_PROGRESS_BAR;
 }
@@ -50,11 +50,11 @@ gtk_progress_bar_accessible_notify_gtk (GObject    *obj,
   if (strcmp (pspec->name, "fraction") == 0)
     g_object_notify (G_OBJECT (accessible), "accessible-value");
   else
-    GTK_WIDGET_ACCESSIBLE_CLASS (_gtk_progress_bar_accessible_parent_class)->notify_gtk (obj, pspec);
+    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_progress_bar_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
 static void
-_gtk_progress_bar_accessible_class_init (GtkProgressBarAccessibleClass *klass)
+gtk_progress_bar_accessible_class_init (GtkProgressBarAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
   GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
@@ -65,7 +65,7 @@ _gtk_progress_bar_accessible_class_init (GtkProgressBarAccessibleClass *klass)
 }
 
 static void
-_gtk_progress_bar_accessible_init (GtkProgressBarAccessible *bar)
+gtk_progress_bar_accessible_init (GtkProgressBarAccessible *bar)
 {
 }
 

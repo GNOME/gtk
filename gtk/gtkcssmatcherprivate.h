@@ -36,8 +36,8 @@ struct _GtkCssMatcherClass {
                                                    const GtkCssMatcher    *next);
 
   GtkStateFlags   (* get_state)                   (const GtkCssMatcher   *matcher);
-  gboolean        (* has_name)                    (const GtkCssMatcher   *matcher,
-                                                   const char            *name);
+  gboolean        (* has_type)                    (const GtkCssMatcher   *matcher,
+                                                   GType                  type);
   gboolean        (* has_class)                   (const GtkCssMatcher   *matcher,
                                                    GQuark                 class_name);
   gboolean        (* has_id)                      (const GtkCssMatcher   *matcher,
@@ -50,6 +50,7 @@ struct _GtkCssMatcherClass {
                                                    gboolean               forward,
                                                    int                    a,
                                                    int                    b);
+  gboolean is_any;
 };
 
 struct _GtkCssMatcherWidgetPath {
@@ -102,10 +103,10 @@ _gtk_css_matcher_get_state (const GtkCssMatcher *matcher)
 }
 
 static inline gboolean
-_gtk_css_matcher_has_name (const GtkCssMatcher *matcher,
-                           const char          *name)
+_gtk_css_matcher_has_type (const GtkCssMatcher *matcher,
+                           GType type)
 {
-  return matcher->klass->has_name (matcher, name);
+  return matcher->klass->has_type (matcher, type);
 }
 
 static inline gboolean
@@ -144,6 +145,12 @@ _gtk_css_matcher_has_position (const GtkCssMatcher *matcher,
                                int                  b)
 {
   return matcher->klass->has_position (matcher, forward, a, b);
+}
+
+static inline gboolean
+_gtk_css_matcher_matches_any (const GtkCssMatcher *matcher)
+{
+  return matcher->klass->is_any;
 }
 
 

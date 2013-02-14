@@ -1,4 +1,4 @@
-/* GAIL - The GNOME Accessibility Enabling Library
+/* GTK+ - accessibility implementations
  * Copyright 2001 Sun Microsystems Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -18,6 +18,7 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
+#include <glib/gi18n-lib.h>
 #include "gtkbooleancellaccessible.h"
 
 struct _GtkBooleanCellAccessiblePrivate
@@ -39,7 +40,7 @@ gtk_boolean_cell_accessible_get_description (AtkAction *action,
                                              gint       i)
 {
   if (i == 0)
-    return "toggles the cell";
+    return C_("Action description", "Toggles the cell");
 
   return parent_action_iface->get_description (action, i - 1);
 }
@@ -54,14 +55,24 @@ gtk_boolean_cell_accessible_action_get_name (AtkAction *action,
   return parent_action_iface->get_description (action, i - 1);
 }
 
+static const gchar *
+gtk_boolean_cell_accessible_action_get_localized_name (AtkAction *action,
+                                                       gint       i)
+{
+  if (i == 0)
+    return C_("Action name", "Toggle");
+
+  return parent_action_iface->get_description (action, i - 1);
+}
+
 static gboolean
 gtk_boolean_cell_accessible_do_action (AtkAction *action,
                                        gint       i)
 {
   if (i == 0)
     return parent_action_iface->do_action (action, 2);
-  else
-    return parent_action_iface->do_action (action, i - 1);
+
+  return parent_action_iface->do_action (action, i - 1);
 }
 
 static void
@@ -73,10 +84,11 @@ gtk_boolean_cell_accessible_action_interface_init (AtkActionIface *iface)
   iface->get_n_actions = gtk_boolean_cell_accessible_get_n_actions;
   iface->get_description = gtk_boolean_cell_accessible_get_description;
   iface->get_name = gtk_boolean_cell_accessible_action_get_name;
+  iface->get_localized_name = gtk_boolean_cell_accessible_action_get_localized_name;
 }
 
 
-G_DEFINE_TYPE_EXTENDED (GtkBooleanCellAccessible, _gtk_boolean_cell_accessible, GTK_TYPE_RENDERER_CELL_ACCESSIBLE, 0,
+G_DEFINE_TYPE_EXTENDED (GtkBooleanCellAccessible, gtk_boolean_cell_accessible, GTK_TYPE_RENDERER_CELL_ACCESSIBLE, 0,
                         G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, gtk_boolean_cell_accessible_action_interface_init))
 
 
@@ -86,7 +98,7 @@ gtk_boolean_cell_accessible_ref_state_set (AtkObject *accessible)
   GtkBooleanCellAccessible *cell = GTK_BOOLEAN_CELL_ACCESSIBLE (accessible);
   AtkStateSet *state_set;
 
-  state_set = ATK_OBJECT_CLASS (_gtk_boolean_cell_accessible_parent_class)->ref_state_set (accessible);
+  state_set = ATK_OBJECT_CLASS (gtk_boolean_cell_accessible_parent_class)->ref_state_set (accessible);
 
   if (cell->priv->cell_value)
     atk_state_set_add_state (state_set, ATK_STATE_CHECKED);
@@ -130,7 +142,7 @@ gtk_boolean_cell_accessible_update_cache (GtkCellAccessible *cell)
 }
 
 static void
-_gtk_boolean_cell_accessible_class_init (GtkBooleanCellAccessibleClass *klass)
+gtk_boolean_cell_accessible_class_init (GtkBooleanCellAccessibleClass *klass)
 {
   GtkCellAccessibleClass *cell_class = GTK_CELL_ACCESSIBLE_CLASS (klass);
   AtkObjectClass *atkobject_class = ATK_OBJECT_CLASS (klass);
@@ -143,7 +155,7 @@ _gtk_boolean_cell_accessible_class_init (GtkBooleanCellAccessibleClass *klass)
 }
 
 static void
-_gtk_boolean_cell_accessible_init (GtkBooleanCellAccessible *cell)
+gtk_boolean_cell_accessible_init (GtkBooleanCellAccessible *cell)
 {
   cell->priv =  G_TYPE_INSTANCE_GET_PRIVATE (cell,
                                              GTK_TYPE_BOOLEAN_CELL_ACCESSIBLE,

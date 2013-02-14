@@ -171,7 +171,7 @@ _gtk_rounded_box_grow (GtkRoundedBox *box,
       box->box.width += left + right;
     }
 
-  if (box->box.height + bottom + right < 0)
+  if (box->box.height + bottom + top < 0)
     {
       box->box.y -= top * box->box.height / (top + bottom);
       box->box.height = 0;
@@ -284,7 +284,7 @@ _gtk_rounded_box_guess_length (const GtkRoundedBox *box,
                                GtkCssSide           side)
 {
   double length;
-  GtkCssCorner before, after;
+  GtkCssSide before, after;
 
   before = side;
   after = (side + 1) % 4;

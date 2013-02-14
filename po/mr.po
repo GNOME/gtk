@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: mr\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-09-10 13:12+0000\n"
-"PO-Revision-Date: 2012-09-12 18:30+0530\n"
+"POT-Creation-Date: 2012-10-29 15:58+0000\n"
+"PO-Revision-Date: 2012-10-31 10:33+0530\n"
 "Last-Translator: Sandeep Shedmake <sshedmak@redhat.com>\n"
 "Language-Team: Marathi <maajhe-sanganak@freelists.org>\n"
 "Language: mr\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
-"X-Generator: Lokalize 1.4\n"
+"X-Generator: Lokalize 1.5\n"
 
 #: ../gdk/gdk.c:155
 #, c-format
@@ -72,7 +72,7 @@ msgstr "निश्चित करण्याजोगी GDK डिबगि
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:214 ../gdk/gdk.c:217 ../gtk/gtkmain.c:453 ../gtk/gtkmain.c:456
+#: ../gdk/gdk.c:214 ../gdk/gdk.c:217 ../gtk/gtkmain.c:454 ../gtk/gtkmain.c:457
 msgid "FLAGS"
 msgstr "FLAGS"
 
@@ -713,7 +713,7 @@ msgstr "कलाकारी यांद्वारे"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:156
+#: ../gtk/gtkaccellabel.c:159
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -723,7 +723,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:162
+#: ../gtk/gtkaccellabel.c:165
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -733,7 +733,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:168
+#: ../gtk/gtkaccellabel.c:171
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -743,7 +743,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:802
+#: ../gtk/gtkaccellabel.c:805
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -753,7 +753,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:815
+#: ../gtk/gtkaccellabel.c:818
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -763,17 +763,17 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:829
+#: ../gtk/gtkaccellabel.c:832
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: ../gtk/gtkaccellabel.c:845
+#: ../gtk/gtkaccellabel.c:848
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Space"
 
-#: ../gtk/gtkaccellabel.c:848
+#: ../gtk/gtkaccellabel.c:851
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
@@ -809,7 +809,7 @@ msgstr "ॲप्लिकेशन शोधणे अशक्य"
 msgid "Select an application to open \"%s\""
 msgstr "\"%s\" उघडण्यासाठी ॲप्लिकेशन निवडा"
 
-#: ../gtk/gtkappchooserdialog.c:398 ../gtk/gtkappchooserwidget.c:654
+#: ../gtk/gtkappchooserdialog.c:398 ../gtk/gtkappchooserwidget.c:657
 #, c-format
 msgid "No applications available to open \"%s\""
 msgstr "\"%s\" उघडण्यासाठी ॲप्लिकेशन्स् उपलब्ध नाही"
@@ -841,23 +841,23 @@ msgstr "संबंध विसरा"
 msgid "Show other applications"
 msgstr "इतर ॲप्लिकेशन्स् दाखवा"
 
-#: ../gtk/gtkappchooserwidget.c:603
+#: ../gtk/gtkappchooserwidget.c:606
 msgid "Default Application"
 msgstr "पूर्वनिर्धारित ॲप्लिकेशन"
 
-#: ../gtk/gtkappchooserwidget.c:741
+#: ../gtk/gtkappchooserwidget.c:744
 msgid "Recommended Applications"
 msgstr "शिफारसीय ॲप्लिकेशन्स्"
 
-#: ../gtk/gtkappchooserwidget.c:756
+#: ../gtk/gtkappchooserwidget.c:759
 msgid "Related Applications"
 msgstr "संबंधित ॲप्लिकेशन्स्"
 
-#: ../gtk/gtkappchooserwidget.c:770
+#: ../gtk/gtkappchooserwidget.c:773
 msgid "Other Applications"
 msgstr "इतर ॲप्लिकेशन्स्"
 
-#: ../gtk/gtkapplication.c:1552
+#: ../gtk/gtkapplication.c:1558
 #, c-format
 msgid ""
 "%s cannot quit at this time:\n"
@@ -868,20 +868,20 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../gtk/gtkapplicationwindow.c:333 ../gtk/gtkprintoperation-unix.c:475
+#: ../gtk/gtkapplicationwindow.c:333 ../gtk/gtkprintoperation-unix.c:480
 #: ../gtk/gtkprintoperation-win32.c:1445
 msgid "Application"
 msgstr "अनुप्रयोग"
 
-#: ../gtk/gtkassistant.c:1004
+#: ../gtk/gtkassistant.c:1008
 msgid "C_ontinue"
 msgstr "चालू ठेवा (_o)"
 
-#: ../gtk/gtkassistant.c:1007
+#: ../gtk/gtkassistant.c:1011
 msgid "Go _Back"
 msgstr "मागे जा (_B)"
 
-#: ../gtk/gtkassistant.c:1011
+#: ../gtk/gtkassistant.c:1015
 msgid "_Finish"
 msgstr "पूर्ण करा (_F)"
 
@@ -1020,7 +1020,7 @@ msgstr "अवैध"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: ../gtk/gtkcellrendereraccel.c:416 ../gtk/gtkcellrendereraccel.c:745
+#: ../gtk/gtkcellrendereraccel.c:416 ../gtk/gtkcellrendereraccel.c:747
 msgid "New accelerator..."
 msgstr "नविन प्रवेग..."
 
@@ -1420,7 +1420,7 @@ msgstr "Caps Lock सुरू आहे"
 msgid "Select a File"
 msgstr "फाइल निवडा"
 
-#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkfilechooserdefault.c:1817
+#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkfilechooserdefault.c:1819
 msgid "Desktop"
 msgstr "कार्यस्थळ"
 
@@ -1436,23 +1436,23 @@ msgstr "इतर..."
 msgid "Type name of new folder"
 msgstr "नविन फोल्डरचे नाव टाइप करा"
 
-#: ../gtk/gtkfilechooserdefault.c:968
+#: ../gtk/gtkfilechooserdefault.c:970
 msgid "Could not retrieve information about the file"
 msgstr "फाइलविषयी माहिती मिळवता आली नाही"
 
-#: ../gtk/gtkfilechooserdefault.c:979
+#: ../gtk/gtkfilechooserdefault.c:981
 msgid "Could not add a bookmark"
 msgstr "खूणगाठ जमा करता आली नाही"
 
-#: ../gtk/gtkfilechooserdefault.c:990
+#: ../gtk/gtkfilechooserdefault.c:992
 msgid "Could not remove bookmark"
 msgstr "खूणगाठ काढून टाकता आली नाही"
 
-#: ../gtk/gtkfilechooserdefault.c:1001
+#: ../gtk/gtkfilechooserdefault.c:1003
 msgid "The folder could not be created"
 msgstr "फोल्डर निर्माण करता आले नाही"
 
-#: ../gtk/gtkfilechooserdefault.c:1014
+#: ../gtk/gtkfilechooserdefault.c:1016
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1461,16 +1461,16 @@ msgstr ""
 "फोल्डर "
 "करीता इतर नाव वापरण्याचा प्रयत्न करा, किंवा पहिले फाइल पुनःनामांकीत करा."
 
-#: ../gtk/gtkfilechooserdefault.c:1028
+#: ../gtk/gtkfilechooserdefault.c:1030
 msgid "You need to choose a valid filename."
 msgstr "वैध फाइलचेनाव निवडणे आवश्यक आहे."
 
-#: ../gtk/gtkfilechooserdefault.c:1031
+#: ../gtk/gtkfilechooserdefault.c:1033
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "फोल्डर नसल्यामुळे %s अंतर्गत फाइल निर्माण करणे अशक्य"
 
-#: ../gtk/gtkfilechooserdefault.c:1043
+#: ../gtk/gtkfilechooserdefault.c:1045
 msgid ""
 "You may only select folders.  The item that you selected is not a folder; "
 "try using a different item."
@@ -1478,11 +1478,11 @@ msgstr ""
 "फक्त फोल्डर्स् निवडणे शक्य आहे.  निवडलेले घटक फोल्डर नाही आहे; वेगळे घटक "
 "वापरून पहा."
 
-#: ../gtk/gtkfilechooserdefault.c:1053
+#: ../gtk/gtkfilechooserdefault.c:1055
 msgid "Invalid file name"
 msgstr "अवैध फाइल नाव"
 
-#: ../gtk/gtkfilechooserdefault.c:1063
+#: ../gtk/gtkfilechooserdefault.c:1065
 msgid "The folder contents could not be displayed"
 msgstr "फोल्डरमधील सामग्री दाखवता आली नाही"
 
@@ -1490,195 +1490,195 @@ msgstr "फोल्डरमधील सामग्री दाखवता 
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1589
+#: ../gtk/gtkfilechooserdefault.c:1591
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%s, %s"
 
-#: ../gtk/gtkfilechooserdefault.c:1738
+#: ../gtk/gtkfilechooserdefault.c:1740
 msgid "Search"
 msgstr "शोधा"
 
-#: ../gtk/gtkfilechooserdefault.c:1762 ../gtk/gtkfilechooserdefault.c:4988
+#: ../gtk/gtkfilechooserdefault.c:1764 ../gtk/gtkfilechooserdefault.c:4990
 msgid "Recently Used"
 msgstr "नुकतेच वापरलेले"
 
-#: ../gtk/gtkfilechooserdefault.c:2361
+#: ../gtk/gtkfilechooserdefault.c:2363
 msgid "Select which types of files are shown"
 msgstr "कोणत्या प्रकारच्या फाइली दाखवल्या आहेत ते निवडा"
 
-#: ../gtk/gtkfilechooserdefault.c:2720
+#: ../gtk/gtkfilechooserdefault.c:2722
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "फोल्डर '%s' खूणगाठींमध्ये जमा करा"
 
-#: ../gtk/gtkfilechooserdefault.c:2764
+#: ../gtk/gtkfilechooserdefault.c:2766
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "चालू फोल्डर खूणगाठींमध्ये जमा करा"
 
-#: ../gtk/gtkfilechooserdefault.c:2766
+#: ../gtk/gtkfilechooserdefault.c:2768
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "निवडलेले फोल्डर खूणगाठींमध्ये जमा करा"
 
-#: ../gtk/gtkfilechooserdefault.c:2804
+#: ../gtk/gtkfilechooserdefault.c:2806
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "खूणगाठ '%s' काढून टाका"
 
-#: ../gtk/gtkfilechooserdefault.c:2806
+#: ../gtk/gtkfilechooserdefault.c:2808
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "वाचनखूण '%s' काढून टाकणे अशक्य"
 
-#: ../gtk/gtkfilechooserdefault.c:2813 ../gtk/gtkfilechooserdefault.c:3699
+#: ../gtk/gtkfilechooserdefault.c:2815 ../gtk/gtkfilechooserdefault.c:3701
 msgid "Remove the selected bookmark"
 msgstr "निवडलेली खूणगाठ काढून टाका"
 
-#: ../gtk/gtkfilechooserdefault.c:3377
+#: ../gtk/gtkfilechooserdefault.c:3379
 msgid "Remove"
 msgstr "नष्ट करा"
 
-#: ../gtk/gtkfilechooserdefault.c:3386
+#: ../gtk/gtkfilechooserdefault.c:3388
 msgid "Rename..."
 msgstr "नाव बदलवा..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3550
+#: ../gtk/gtkfilechooserdefault.c:3552
 msgid "Places"
 msgstr "जागा"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3607
+#: ../gtk/gtkfilechooserdefault.c:3609
 msgid "_Places"
 msgstr "जागा(_P)"
 
-#: ../gtk/gtkfilechooserdefault.c:3687
+#: ../gtk/gtkfilechooserdefault.c:3689
 msgid "Add the selected folder to the Bookmarks"
 msgstr "निवडलेला फोल्डर खूणगाठींमध्ये जमा करा"
 
-#: ../gtk/gtkfilechooserdefault.c:3948
+#: ../gtk/gtkfilechooserdefault.c:3950
 msgid "Could not select file"
 msgstr "फाइल निवडता आली नाही"
 
-#: ../gtk/gtkfilechooserdefault.c:4173
+#: ../gtk/gtkfilechooserdefault.c:4175
 msgid "_Visit this file"
 msgstr "या फाइलला भेट द्या (_V)"
 
-#: ../gtk/gtkfilechooserdefault.c:4176
-msgid "_Copy file's location"
+#: ../gtk/gtkfilechooserdefault.c:4178
+msgid "_Copy file’s location"
 msgstr "फाइलच्या ठिकाणाचे प्रत बनवा (_C)"
 
-#: ../gtk/gtkfilechooserdefault.c:4179
+#: ../gtk/gtkfilechooserdefault.c:4181
 msgid "_Add to Bookmarks"
 msgstr "खूणगाठींमध्ये जमा करा(_A)"
 
-#: ../gtk/gtkfilechooserdefault.c:4186
+#: ../gtk/gtkfilechooserdefault.c:4188
 msgid "Show _Hidden Files"
 msgstr "लपवलेल्या फाइली दाखवा(_H)"
 
-#: ../gtk/gtkfilechooserdefault.c:4189
+#: ../gtk/gtkfilechooserdefault.c:4191
 msgid "Show _Size Column"
 msgstr "स्तंभ आकार दर्शवा (_S)"
 
-#: ../gtk/gtkfilechooserdefault.c:4414
+#: ../gtk/gtkfilechooserdefault.c:4416
 msgid "Files"
 msgstr "फाइली"
 
-#: ../gtk/gtkfilechooserdefault.c:4465
+#: ../gtk/gtkfilechooserdefault.c:4467
 msgid "Name"
 msgstr "नाव"
 
-#: ../gtk/gtkfilechooserdefault.c:4488
+#: ../gtk/gtkfilechooserdefault.c:4490
 msgid "Size"
 msgstr "आकार"
 
-#: ../gtk/gtkfilechooserdefault.c:4502
+#: ../gtk/gtkfilechooserdefault.c:4504
 msgid "Modified"
 msgstr "बदलेले"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4595
+#: ../gtk/gtkfilechooserdefault.c:4597
 msgid "_Name:"
 msgstr "नाव(_N):"
 
-#: ../gtk/gtkfilechooserdefault.c:4826
+#: ../gtk/gtkfilechooserdefault.c:4828
 msgid "Type a file name"
 msgstr "फाइलचे नाव टाइप करा"
 
-#: ../gtk/gtkfilechooserdefault.c:4873 ../gtk/gtkfilechooserdefault.c:4884
+#: ../gtk/gtkfilechooserdefault.c:4875 ../gtk/gtkfilechooserdefault.c:4886
 msgid "Please select a folder below"
 msgstr "कृपया खालील फोल्डर निवडा"
 
-#: ../gtk/gtkfilechooserdefault.c:4879
+#: ../gtk/gtkfilechooserdefault.c:4881
 msgid "Please type a file name"
 msgstr "कृपया फाइलचे नाव टाइप करा"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:4950
+#: ../gtk/gtkfilechooserdefault.c:4952
 msgid "Create Fo_lder"
 msgstr "फोल्डर निर्माण करा(_l)"
 
-#: ../gtk/gtkfilechooserdefault.c:4998
+#: ../gtk/gtkfilechooserdefault.c:5000
 msgid "Search:"
 msgstr "शोधा:"
 
-#: ../gtk/gtkfilechooserdefault.c:5049
+#: ../gtk/gtkfilechooserdefault.c:5051
 msgid "_Location:"
 msgstr "ठिकाण(_L):"
 
-#: ../gtk/gtkfilechooserdefault.c:5500
+#: ../gtk/gtkfilechooserdefault.c:5502
 msgid "Save in _folder:"
 msgstr "या फोल्डरमध्ये सुरक्षित करा(_f):"
 
-#: ../gtk/gtkfilechooserdefault.c:5502
+#: ../gtk/gtkfilechooserdefault.c:5504
 msgid "Create in _folder:"
 msgstr "या फोल्डरमध्ये निर्माण करा(_f):"
 
-#: ../gtk/gtkfilechooserdefault.c:6589
+#: ../gtk/gtkfilechooserdefault.c:6591
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "%s ची अंतर्भुत माहिती वाचण्यास अशक्य"
 
-#: ../gtk/gtkfilechooserdefault.c:6593
+#: ../gtk/gtkfilechooserdefault.c:6595
 msgid "Could not read the contents of the folder"
 msgstr "फोल्डरची अंतर्भुत माहिती वाचण्यास अशक्य"
 
-#: ../gtk/gtkfilechooserdefault.c:6686 ../gtk/gtkfilechooserdefault.c:6754
-#: ../gtk/gtkfilechooserdefault.c:6934
+#: ../gtk/gtkfilechooserdefault.c:6688 ../gtk/gtkfilechooserdefault.c:6756
+#: ../gtk/gtkfilechooserdefault.c:6936
 msgid "Unknown"
 msgstr "अपरिचित"
 
-#: ../gtk/gtkfilechooserdefault.c:6701
+#: ../gtk/gtkfilechooserdefault.c:6703
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6703
+#: ../gtk/gtkfilechooserdefault.c:6705
 msgid "Yesterday at %H:%M"
 msgstr "काल %H:%M यावेळी"
 
-#: ../gtk/gtkfilechooserdefault.c:7405
+#: ../gtk/gtkfilechooserdefault.c:7407
 msgid "Cannot change to folder because it is not local"
 msgstr "स्थानिक नसल्यामुळे फोल्डरमध्ये जाऊ शकत नाही"
 
-#: ../gtk/gtkfilechooserdefault.c:8009 ../gtk/gtkfilechooserdefault.c:8030
+#: ../gtk/gtkfilechooserdefault.c:8011 ../gtk/gtkfilechooserdefault.c:8032
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "शॉर्टकट %s आधीच अस्तित्वात आहे"
 
-#: ../gtk/gtkfilechooserdefault.c:8120
+#: ../gtk/gtkfilechooserdefault.c:8122
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "शॉर्टकट %s अस्तित्वात नाही"
 
-#: ../gtk/gtkfilechooserdefault.c:8366 ../gtk/gtkprintunixdialog.c:548
+#: ../gtk/gtkfilechooserdefault.c:8368 ../gtk/gtkprintunixdialog.c:548
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr ""
 "\"%s\" नावाची फाइल आधीच अस्तित्वात आहे. तुम्ही तिला बदली करू इच्छिता काय?"
 
-#: ../gtk/gtkfilechooserdefault.c:8369 ../gtk/gtkprintunixdialog.c:552
+#: ../gtk/gtkfilechooserdefault.c:8371 ../gtk/gtkprintunixdialog.c:552
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1687,15 +1687,15 @@ msgstr ""
 "गिरवला "
 "जाईल."
 
-#: ../gtk/gtkfilechooserdefault.c:8374 ../gtk/gtkprintunixdialog.c:559
+#: ../gtk/gtkfilechooserdefault.c:8376 ../gtk/gtkprintunixdialog.c:559
 msgid "_Replace"
 msgstr "बदलवा(_R)"
 
-#: ../gtk/gtkfilechooserdefault.c:9181
+#: ../gtk/gtkfilechooserdefault.c:9183
 msgid "Could not start the search process"
 msgstr "शोध माहीती सुरू करू शकले नाही"
 
-#: ../gtk/gtkfilechooserdefault.c:9182
+#: ../gtk/gtkfilechooserdefault.c:9184
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1703,11 +1703,11 @@ msgstr ""
 "अणूक्रमणीका डीमन करीता कार्यक्रम जुळवणी करू शकला नाही.  ते कार्यरत आहे याची "
 "खात्री करा."
 
-#: ../gtk/gtkfilechooserdefault.c:9196
+#: ../gtk/gtkfilechooserdefault.c:9198
 msgid "Could not send the search request"
 msgstr "शोध विनंती पाठवू शकले नाही"
 
-#: ../gtk/gtkfilechooserdefault.c:9806
+#: ../gtk/gtkfilechooserdefault.c:9808
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s आरोहित करता आले नाही"
@@ -1784,13 +1784,13 @@ msgstr "दुवा उघडा (_O)"
 msgid "Copy _Link Address"
 msgstr "दुवा पत्त्याचे प्रत बनवा (_L)"
 
-#: ../gtk/gtk-launch.c:69
+#: ../gtk/gtk-launch.c:73
 msgid "APPLICATION [URI...] - launch an APPLICATION with URI."
 msgstr "APPLICATION [URI...] - URI सह APPLICATION सुरू करा."
 
 #. Translators: this message will appear after the usage string
 #. and before the list of options.
-#: ../gtk/gtk-launch.c:73
+#: ../gtk/gtk-launch.c:77
 msgid ""
 "Launch specified application by its desktop file info\n"
 "optionally passing list of URIs as arguments."
@@ -1800,33 +1800,38 @@ msgstr ""
 "निर्देशीत\n"
 "ॲप्लिकेशन सुरू करा."
 
-#: ../gtk/gtk-launch.c:85
+#: ../gtk/gtk-launch.c:89
 #, c-format
 msgid "Error parsing commandline options: %s\n"
 msgstr "आदेशओळ पर्याय वाचतेवेळी त्रुटी: %s\n"
 
-#: ../gtk/gtk-launch.c:87 ../gtk/gtk-launch.c:100
+#: ../gtk/gtk-launch.c:91 ../gtk/gtk-launch.c:104
 #, c-format
 msgid "Try \"%s --help\" for more information."
 msgstr "अधिक माहितीकरीता \"%s --help\" वापरून पहा."
 
 #. Translators: the %s is the program name. This error message
 #. means the user is calling gtk-launch without any argument.
-#: ../gtk/gtk-launch.c:98
+#: ../gtk/gtk-launch.c:102
 #, c-format
 msgid "%s: missing application name"
 msgstr "%s: ॲप्लिकेशन नाव आढळले नाही"
 
+#: ../gtk/gtk-launch.c:123
+#, c-format
+msgid "Creating AppInfo from id not supported on non unix operating systems"
+msgstr "विना युनिक्स् कार्यप्रणालीवर id पासून AppInfo चे निर्माण समर्थीत नाही"
+
 #. Translators: the first %s is the program name, the second one
 #. is the application name.
-#: ../gtk/gtk-launch.c:122
+#: ../gtk/gtk-launch.c:131
 #, c-format
 msgid "%s: no such application %s"
 msgstr "%s: ॲप्लिकेशन %s आढळले नाही"
 
 #. Translators: the first %s is the program name, the second one
 #. is the error message.
-#: ../gtk/gtk-launch.c:140
+#: ../gtk/gtk-launch.c:149
 #, c-format
 msgid "%s: error launching application: %s\n"
 msgstr "%s: ॲप्लिकेशन सुरू करतेवेळी त्रुटी: %s\n"
@@ -1872,27 +1877,27 @@ msgstr ""
 "प्रणाली प्रशासकाशी संपर्क करा"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:446
+#: ../gtk/gtkmain.c:447
 msgid "Load additional GTK+ modules"
 msgstr "अतिरिक्त GTK+ विभाग भारित करा"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:447
+#: ../gtk/gtkmain.c:448
 msgid "MODULES"
 msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:449
+#: ../gtk/gtkmain.c:450
 msgid "Make all warnings fatal"
 msgstr "सर्व सुचनांस गंभीर करा"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:452
+#: ../gtk/gtkmain.c:453
 msgid "GTK+ debugging flags to set"
 msgstr "निर्धारित करायचा GTK+ त्रुटीनिर्वारण ध्वज"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:455
+#: ../gtk/gtkmain.c:456
 msgid "GTK+ debugging flags to unset"
 msgstr "अनिर्धारित करायचा GTK+ त्रुटीनिर्वारण ध्वज"
 
@@ -1901,78 +1906,73 @@ msgstr "अनिर्धारित करायचा GTK+ त्रुट�
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:706
+#: ../gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:774
+#: ../gtk/gtkmain.c:772
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "दृश्य उघडू शकत नाही: %s"
 
-#: ../gtk/gtkmain.c:840
+#: ../gtk/gtkmain.c:838
 msgid "GTK+ Options"
 msgstr "GTK+ पर्याय"
 
-#: ../gtk/gtkmain.c:840
+#: ../gtk/gtkmain.c:838
 msgid "Show GTK+ Options"
 msgstr "GTK+ पर्याय दाखवा"
 
-#: ../gtk/gtkmountoperation.c:532
+#: ../gtk/gtkmountoperation.c:535
 msgid "Co_nnect"
 msgstr "जुळवणी (_n)"
 
-#: ../gtk/gtkmountoperation.c:606
-#| msgid "Co_nnect"
+#: ../gtk/gtkmountoperation.c:609
 msgid "Connect As"
 msgstr "असे जुळणी करा"
 
-#: ../gtk/gtkmountoperation.c:615
-#| msgid "Connect _anonymously"
+#: ../gtk/gtkmountoperation.c:618
 msgid "_Anonymous"
 msgstr "निनावी (_A)"
 
-#: ../gtk/gtkmountoperation.c:624
+#: ../gtk/gtkmountoperation.c:627
 msgid "Registered U_ser"
 msgstr "नोंदणीकृत वापरकर्ता (_s)"
 
-#: ../gtk/gtkmountoperation.c:635
-#| msgid "_Username:"
+#: ../gtk/gtkmountoperation.c:638
 msgid "_Username"
 msgstr "वापरकर्तानाव (_U)"
 
-#: ../gtk/gtkmountoperation.c:640
-#| msgid "_Domain:"
+#: ../gtk/gtkmountoperation.c:643
 msgid "_Domain"
 msgstr "डोमेन (_D)"
 
-#: ../gtk/gtkmountoperation.c:646
-#| msgid "_Password:"
+#: ../gtk/gtkmountoperation.c:649
 msgid "_Password"
 msgstr "पासवर्ड (_P)"
 
-#: ../gtk/gtkmountoperation.c:668
+#: ../gtk/gtkmountoperation.c:671
 msgid "Forget password _immediately"
 msgstr "पासवर्ड लगेच विसरा (_i)"
 
-#: ../gtk/gtkmountoperation.c:678
+#: ../gtk/gtkmountoperation.c:681
 msgid "Remember password until you _logout"
 msgstr "लॉगऑउट होईपर्यंत पासवर्ड लक्षात ठेवा (_l)"
 
-#: ../gtk/gtkmountoperation.c:688
+#: ../gtk/gtkmountoperation.c:691
 msgid "Remember _forever"
 msgstr "नेहमीकरीता लक्षात ठेवा (_f)"
 
-#: ../gtk/gtkmountoperation.c:1077
+#: ../gtk/gtkmountoperation.c:1080
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "अपरिचीत ॲप्लिकेशन (PID %d)"
 
-#: ../gtk/gtkmountoperation.c:1260
+#: ../gtk/gtkmountoperation.c:1263
 msgid "Unable to end process"
 msgstr "कार्य समाप्त करण्यास अशक्य"
 
-#: ../gtk/gtkmountoperation.c:1297
+#: ../gtk/gtkmountoperation.c:1300
 msgid "_End Process"
 msgstr "कार्य समाप्त करा (_E)"
 
@@ -2007,7 +2007,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "कार्यला PID %d: %s सह बंद करणे अशक्य"
 
-#: ../gtk/gtknotebook.c:5051 ../gtk/gtknotebook.c:7705
+#: ../gtk/gtknotebook.c:5067 ../gtk/gtknotebook.c:7721
 #, c-format
 msgid "Page %u"
 msgstr "पान %u"
@@ -2015,14 +2015,14 @@ msgstr "पान %u"
 #. Translators: the format here is used to build the string that will be rendered
 #. * in the number emblem.
 #.
-#: ../gtk/gtknumerableicon.c:481
+#: ../gtk/gtknumerableicon.c:482
 #, c-format
 msgctxt "Number format"
 msgid "%d"
 msgstr "%d"
 
-#: ../gtk/gtkpagesetup.c:646 ../gtk/gtkpapersize.c:846
-#: ../gtk/gtkpapersize.c:886
+#: ../gtk/gtkpagesetup.c:646 ../gtk/gtkpapersize.c:848
+#: ../gtk/gtkpapersize.c:888
 msgid "Not a valid page setup file"
 msgstr "वैध मांडणी फाइल नाही"
 
@@ -2081,12 +2081,11 @@ msgstr "खालील मार्ग"
 msgid "File System Root"
 msgstr "फाइल प्रणाली रूट"
 
-#: ../gtk/gtkprintbackend.c:748
+#: ../gtk/gtkprintbackend.c:750
 msgid "Authentication"
 msgstr "ऑथेंटीकेशन"
 
 #: ../gtk/gtkprinteroptionwidget.c:546
-#| msgid "Select a File"
 msgid "Select a filename"
 msgstr "फाइलनाव नीवडा"
 
@@ -2148,29 +2147,29 @@ msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "त्रुटीसह पूर्ण झाले"
 
-#: ../gtk/gtkprintoperation.c:2352
+#: ../gtk/gtkprintoperation.c:2349
 #, c-format
 msgid "Preparing %d"
 msgstr "%d तयार करत आहे"
 
-#: ../gtk/gtkprintoperation.c:2354 ../gtk/gtkprintoperation.c:2984
+#: ../gtk/gtkprintoperation.c:2351 ../gtk/gtkprintoperation.c:2983
 msgid "Preparing"
 msgstr "तयार करत आहे"
 
-#: ../gtk/gtkprintoperation.c:2357
+#: ../gtk/gtkprintoperation.c:2354
 #, c-format
 msgid "Printing %d"
 msgstr "%d छापत आहे"
 
-#: ../gtk/gtkprintoperation.c:3014
+#: ../gtk/gtkprintoperation.c:3013
 msgid "Error creating print preview"
 msgstr "छपाई पूर्वदृश्य बनवितेवेळी त्रुटी"
 
-#: ../gtk/gtkprintoperation.c:3017
+#: ../gtk/gtkprintoperation.c:3016
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "सर्वात संभाव्य कारण असे की तात्पूर्ती फाइल बनविले जाऊ शकत नाही."
 
-#: ../gtk/gtkprintoperation-unix.c:302
+#: ../gtk/gtkprintoperation-unix.c:307
 msgid "Error launching preview"
 msgstr "पुर्वावलोकन प्रक्षेपित करण्यात चूक"
 
@@ -3339,7 +3338,7 @@ msgstr "ओळ %2$d char %3$d अनपेक्षीत प्रारंभ 
 msgid "Unexpected character data on line %d char %d"
 msgstr "ओळ %d char %d अपरिचीत अक्षर माहिती"
 
-#: ../gtk/gtkuimanager.c:2738
+#: ../gtk/gtkuimanager.c:2694
 msgid "Empty"
 msgstr "रिकामे"
 

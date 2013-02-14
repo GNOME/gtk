@@ -59,7 +59,7 @@
  * or just <firstterm>UI definitions</firstterm> if the context is clear. Do not
  * confuse GtkBuilder UI Definitions with
  * <link linkend="XML-UI">GtkUIManager UI Definitions</link>, which are more
- * limited in scope.
+ * limited in scope. It is common to use <filename>.ui</filename> as the filename extension for files containing GtkBuilder UI definitions.
  * </para>
  * <programlisting>
  * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gtk/gtkbuilder.rnc">
@@ -123,12 +123,14 @@
  * (can be specified by their name, nick or integer value), flags (can be
  * specified by their name, nick, integer value, optionally combined with "|",
  * e.g. "GTK_VISIBLE|GTK_REALIZED")  and colors (in a format understood by
- * gdk_color_parse()). Objects can be referred to by their name. Pixbufs can be
- * specified as a filename of an image file to load. In general, GtkBuilder
- * allows forward references to objects &mdash; an object doesn't have to be
- * constructed before it can be referred to. The exception to this rule is that
- * an object has to be constructed before it can be used as the value of a
- * construct-only property.
+ * gdk_color_parse()). Pixbufs can be specified as a filename of an image file to load. 
+ * Objects can be referred to by their name and by default refer to objects declared
+ * in the local xml fragment and objects exposed via gtk_builder_expose_object().
+ * 
+ * In general, GtkBuilder allows forward references to objects &mdash declared
+ * in the local xml; an object doesn't have to be constructed before it can be referred to. 
+ * The exception to this rule is that an object has to be constructed before 
+ * it can be used as the value of a construct-only property.
  *
  * Signal handlers are set up with the &lt;signal&gt; element. The "name"
  * attribute specifies the name of the signal, and the "handler" attribute
@@ -574,6 +576,24 @@ gtk_builder_get_internal_child (GtkBuilder  *builder,
   return obj;
 }
 
+static inline void
+object_set_name (GObject *object, const gchar *name)
+{
+  if (GTK_IS_BUILDABLE (object))
+    gtk_buildable_set_name (GTK_BUILDABLE (object), name);
+  else
+    g_object_set_data_full (object, "gtk-builder-name", g_strdup (name), g_free);
+}
+
+void
+_gtk_builder_add_object (GtkBuilder  *builder,
+                         const gchar *id,
+                         GObject     *object)
+{
+  object_set_name (object, id);
+  g_hash_table_insert (builder->priv->objects, g_strdup (id), g_object_ref (object));
+}
+
 GObject *
 _gtk_builder_construct (GtkBuilder *builder,
                         ObjectInfo *info,
@@ -703,27 +723,14 @@ _gtk_builder_construct (GtkBuilder *builder,
       g_value_unset (&param->value);
     }
   g_array_free (parameters, TRUE);
-  
-  if (GTK_IS_BUILDABLE (obj))
-    gtk_buildable_set_name (buildable, info->id);
-  else
-    g_object_set_data_full (obj,
-                            "gtk-builder-name",
-                            g_strdup (info->id),
-                            g_free);
 
-  /* we already own a reference to obj.  put it in the hash table. */
-  g_hash_table_insert (builder->priv->objects, g_strdup (info->id), obj);
+  /* put it in the hash table. */
+  _gtk_builder_add_object (builder, info->id, obj);
+  
+  /* we already own a reference to obj. */ 
+  g_object_unref (obj);
   
   return obj;
-}
-
-void
-_gtk_builder_add_object (GtkBuilder  *builder,
-                         const gchar *id,
-                         GObject     *object)
-{
-  g_hash_table_insert (builder->priv->objects, g_strdup (id), g_object_ref (object));
 }
 
 void
@@ -1339,6 +1346,39 @@ gtk_builder_get_translation_domain (GtkBuilder *builder)
 
   return builder->priv->domain;
 }
+
+/**
+ * gtk_builder_expose_object:
+ * @builder: a #GtkBuilder
+ * @name: the name of the object exposed to the builder
+ * @object: the object to expose
+ *
+ * Add @object to the @builder object pool so it can be referenced just like any
+ * other object built by builder.
+ *
+ * To make this function even more useful a new special entry point element
+ * &lt;external-object&gt; is defined. It is similar to &lt;object&gt; but has 
+ * to reference an external object exposed with this function.
+ * This way you can change properties and even add children to an
+ * external object using builder, not just reference it.
+ * 
+ * Since: 3.8
+ **/
+void
+gtk_builder_expose_object (GtkBuilder    *builder,
+                           const gchar   *name,
+                           GObject       *object)
+{
+  g_return_if_fail (GTK_IS_BUILDER (builder));
+  g_return_if_fail (name && name[0]);
+  g_return_if_fail (gtk_builder_get_object (builder, name) == NULL);
+
+  object_set_name (object, name);
+  g_hash_table_insert (builder->priv->objects,
+                       g_strdup (name),
+                       g_object_ref (object));
+}
+
 
 typedef struct {
   GModule *module;

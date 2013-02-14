@@ -536,6 +536,7 @@ gtk_builder_add_objects_from_string
 gtk_builder_add_objects_from_resource
 gtk_builder_get_object
 gtk_builder_get_objects
+gtk_builder_expose_object
 gtk_builder_connect_signals
 gtk_builder_connect_signals_full
 gtk_builder_set_translation_domain
@@ -1755,6 +1756,8 @@ gtk_icon_view_set_margin
 gtk_icon_view_get_margin
 gtk_icon_view_set_item_padding
 gtk_icon_view_get_item_padding
+gtk_icon_view_set_activate_on_single_click
+gtk_icon_view_get_activate_on_single_click
 gtk_icon_view_get_cell_rect
 gtk_icon_view_select_path
 gtk_icon_view_unselect_path
@@ -4481,6 +4484,8 @@ gtk_tree_view_get_headers_clickable
 gtk_tree_view_set_headers_clickable
 gtk_tree_view_set_rules_hint
 gtk_tree_view_get_rules_hint
+gtk_tree_view_set_activate_on_single_click
+gtk_tree_view_get_activate_on_single_click
 gtk_tree_view_append_column
 gtk_tree_view_remove_column
 gtk_tree_view_insert_column
@@ -5317,6 +5322,7 @@ gtk_widget_get_sensitive
 gtk_widget_is_sensitive
 gtk_widget_get_state
 gtk_widget_get_visible
+gtk_widget_is_visible
 gtk_widget_set_visible
 gtk_widget_set_state_flags
 gtk_widget_unset_state_flags
@@ -5805,6 +5811,7 @@ GTK_STYLE_CLASS_ARROW
 GTK_STYLE_CLASS_OSD
 GTK_STYLE_CLASS_LEVEL_BAR
 GTK_STYLE_CLASS_CURSOR_HANDLE
+GTK_STYLE_CLASS_INSERTION_CURSOR
 GTK_STYLE_REGION_COLUMN
 GTK_STYLE_REGION_COLUMN_HEADER
 GTK_STYLE_REGION_ROW

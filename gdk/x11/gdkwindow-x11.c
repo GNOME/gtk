@@ -97,6 +97,7 @@ const int _gdk_x11_event_mask_table[21] =
 const gint _gdk_x11_event_mask_table_size = G_N_ELEMENTS (_gdk_x11_event_mask_table);
 
 /* Forward declarations */
+static void     gdk_x11_window_apply_fullscreen_mode (GdkWindow  *window);
 static void     gdk_window_set_static_win_gravity (GdkWindow  *window,
 						   gboolean    on);
 static gboolean gdk_window_icon_name_set          (GdkWindow  *window);
@@ -1354,6 +1355,13 @@ gdk_window_x11_show (GdkWindow *window, gboolean already_mapped)
   
   if (unset_bg)
     _gdk_x11_window_tmp_reset_bg (window, TRUE);
+
+  /* Fullscreen on current monitor is the default, no need to apply this mode
+   * when mapping a window. This also ensures that the default behavior remains
+   * consistent with pre-fullscreen mode implementation.
+   */
+  if (window->fullscreen_mode != GDK_FULLSCREEN_ON_CURRENT_MONITOR)
+    gdk_x11_window_apply_fullscreen_mode (window);
 }
 
 static void
@@ -1738,7 +1746,9 @@ static void
 move_to_current_desktop (GdkWindow *window)
 {
   if (gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
-					   gdk_atom_intern_static_string ("_NET_WM_DESKTOP")))
+					   gdk_atom_intern_static_string ("_NET_WM_DESKTOP")) &&
+      gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
+					   gdk_atom_intern_static_string ("_NET_CURRENT_DESKTOP")))
     {
       Atom type;
       gint format;
@@ -2717,7 +2727,9 @@ gdk_x11_window_get_frame_extents (GdkWindow    *window,
   xwindow = GDK_WINDOW_XID (window);
 
   /* first try: use _NET_FRAME_EXTENTS */
-  if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), xwindow,
+  if (gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
+                                           gdk_atom_intern_static_string ("_NET_FRAME_EXTENTS")) &&
+      XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), xwindow,
                           gdk_x11_get_xatom_by_name_for_display (display,
                                                                   "_NET_FRAME_EXTENTS"),
                           0, G_MAXLONG, False, XA_CARDINAL, &type_return,
@@ -2764,7 +2776,9 @@ gdk_x11_window_get_frame_extents (GdkWindow    *window,
   /* use NETWM_VIRTUAL_ROOTS if available */
   root = GDK_WINDOW_XROOTWIN (window);
 
-  if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), root,
+  if (gdk_x11_screen_supports_net_wm_hint (GDK_WINDOW_SCREEN (window),
+                                           gdk_atom_intern_static_string ("_NET_VIRTUAL_ROOTS")) &&
+      XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), root,
 			  gdk_x11_get_xatom_by_name_for_display (display, 
 								 "_NET_VIRTUAL_ROOTS"),
 			  0, G_MAXLONG, False, XA_WINDOW, &type_return,
@@ -3620,6 +3634,99 @@ gdk_x11_window_unmaximize (GdkWindow *window)
 }
 
 static void
+gdk_x11_window_apply_fullscreen_mode (GdkWindow *window)
+{
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+    return;
+
+  /* _NET_WM_FULLSCREEN_MONITORS gives an indication to the window manager as
+   * to which monitors so span across when the window is fullscreen, but it's
+   * not a state in itself so this would have no effect if the window is not
+   * mapped.
+   */
+
+  if (GDK_WINDOW_IS_MAPPED (window))
+    {
+      XClientMessageEvent xclient;
+      gint                gdk_monitors[4];
+      gint                i;
+
+      memset (&xclient, 0, sizeof (xclient));
+      xclient.type = ClientMessage;
+      xclient.window = GDK_WINDOW_XID (window);
+      xclient.display = GDK_WINDOW_XDISPLAY (window);
+      xclient.format = 32;
+
+      switch (window->fullscreen_mode)
+	{
+	case GDK_FULLSCREEN_ON_CURRENT_MONITOR:
+
+	  /* FIXME: This is not part of the EWMH spec!
+	   *
+	   * There is no documented mechanism to remove the property
+	   * _NET_WM_FULLSCREEN_MONITORS once set, so we use use a set of
+	   * invalid, largest possible value.
+	   *
+	   * When given values larger than actual possible monitor values, most
+	   * window managers who support the _NET_WM_FULLSCREEN_MONITORS spec
+	   * will simply unset _NET_WM_FULLSCREEN_MONITORS and revert to their
+	   * default behavior.
+	   *
+	   * Successfully tested on mutter/metacity, kwin, compiz and xfwm4.
+	   *
+	   * Note, this (non documented) mechanism is unlikely to be an issue
+	   * as it's used only for transitionning back from "all monitors" to
+	   * "current monitor" mode.
+	   *
+	   * Applications who don't change the default mode won't trigger this
+	   * mechanism.
+	   */
+	  for (i = 0; i < 4; ++i)
+	    xclient.data.l[i] = G_MAXLONG;
+
+	  break;
+
+	case GDK_FULLSCREEN_ON_ALL_MONITORS:
+
+	  _gdk_x11_screen_get_edge_monitors (GDK_WINDOW_SCREEN (window),
+					     &gdk_monitors[0],
+					     &gdk_monitors[1],
+					     &gdk_monitors[2],
+					     &gdk_monitors[3]);
+	  /* Translate all 4 monitors from the GDK set into XINERAMA indices */
+	  for (i = 0; i < 4; ++i)
+	    {
+	      xclient.data.l[i] = _gdk_x11_screen_get_xinerama_index (GDK_WINDOW_SCREEN (window),
+								      gdk_monitors[i]);
+	      /* Sanity check, if XINERAMA is not available, we could have invalid
+	       * negative values for the XINERAMA indices.
+	       */
+	      if (xclient.data.l[i] < 0)
+		{
+		  g_warning ("gdk_x11_window_apply_fullscreen_mode: Invalid XINERAMA monitor index");
+		  return;
+		}
+	    }
+	  break;
+
+	default:
+	  g_warning ("gdk_x11_window_apply_fullscreen_mode: Unhandled fullscreen mode %d",
+		     window->fullscreen_mode);
+	  return;
+	}
+
+      /* Send fullscreen monitors client message */
+      xclient.data.l[4] = 1; /* source indication */
+      xclient.message_type = gdk_x11_get_xatom_by_name_for_display (GDK_WINDOW_DISPLAY (window),
+								    "_NET_WM_FULLSCREEN_MONITORS");
+      XSendEvent (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XROOTWIN (window), False,
+                  SubstructureRedirectMask | SubstructureNotifyMask,
+                  (XEvent *)&xclient);
+    }
+}
+
+static void
 gdk_x11_window_fullscreen (GdkWindow *window)
 {
   if (GDK_WINDOW_DESTROYED (window) ||
@@ -3627,10 +3734,16 @@ gdk_x11_window_fullscreen (GdkWindow *window)
     return;
 
   if (GDK_WINDOW_IS_MAPPED (window))
-    gdk_wmspec_change_state (TRUE, window,
-			     gdk_atom_intern_static_string ("_NET_WM_STATE_FULLSCREEN"),
-                             GDK_NONE);
-
+    {
+      gdk_wmspec_change_state (TRUE, window,
+			       gdk_atom_intern_static_string ("_NET_WM_STATE_FULLSCREEN"),
+                               GDK_NONE);
+      /* Actual XRandR layout may have change since we computed the fullscreen
+       * monitors in GDK_FULLSCREEN_ON_ALL_MONITORS mode.
+       */
+      if (window->fullscreen_mode == GDK_FULLSCREEN_ON_ALL_MONITORS)
+	gdk_x11_window_apply_fullscreen_mode (window);
+    }
   else
     gdk_synthesize_window_state (window,
                                  0,
@@ -5016,6 +5129,7 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->maximize = gdk_x11_window_maximize;
   impl_class->unmaximize = gdk_x11_window_unmaximize;
   impl_class->fullscreen = gdk_x11_window_fullscreen;
+  impl_class->apply_fullscreen_mode = gdk_x11_window_apply_fullscreen_mode;
   impl_class->unfullscreen = gdk_x11_window_unfullscreen;
   impl_class->set_keep_above = gdk_x11_window_set_keep_above;
   impl_class->set_keep_below = gdk_x11_window_set_keep_below;

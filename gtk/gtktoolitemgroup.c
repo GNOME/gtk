@@ -1241,7 +1241,7 @@ gtk_tool_item_group_realize (GtkWidget *widget)
                            &attributes, attributes_mask);
   gtk_widget_set_window (widget, window);
 
-  gdk_window_set_user_data (window, widget);
+  gtk_widget_register_window (widget, window);
 
   gtk_style_context_set_background (context, window);
 

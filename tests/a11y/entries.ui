@@ -54,6 +54,14 @@
           </object>
         </child>
         <child>
+          <object class="GtkEntry" id="entry3">
+            <property name="text" translatable="yes">icons</property>
+            <property name="visible">True</property>
+            <property name="primary-icon-stock">stock1</property>
+            <property name="secondary-icon-stock">stock2</property>
+          </object>
+        </child>
+        <child>
           <object class="GtkSpinButton" id="spinbutton1">
             <property name="adjustment">adjustment1</property>
             <property name="visible">True</property>

@@ -1,4 +1,4 @@
-/* GAIL - The GNOME Accessibility Enabling Library
+/* GTK+ - accessibility implementations
  * Copyright 2001 Sun Microsystems Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@ enum {
   PROP_RENDERER
 };
 
-G_DEFINE_TYPE (GtkRendererCellAccessible, _gtk_renderer_cell_accessible, GTK_TYPE_CELL_ACCESSIBLE)
+G_DEFINE_TYPE (GtkRendererCellAccessible, gtk_renderer_cell_accessible, GTK_TYPE_CELL_ACCESSIBLE)
 
 static void
 gtk_renderer_cell_accessible_set_property (GObject         *object,
@@ -79,11 +79,11 @@ gtk_renderer_cell_accessible_finalize (GObject *object)
   if (renderer_cell->priv->renderer)
     g_object_unref (renderer_cell->priv->renderer);
 
-  G_OBJECT_CLASS (_gtk_renderer_cell_accessible_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_renderer_cell_accessible_parent_class)->finalize (object);
 }
 
 static void
-_gtk_renderer_cell_accessible_class_init (GtkRendererCellAccessibleClass *klass)
+gtk_renderer_cell_accessible_class_init (GtkRendererCellAccessibleClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
@@ -103,7 +103,7 @@ _gtk_renderer_cell_accessible_class_init (GtkRendererCellAccessibleClass *klass)
 }
 
 static void
-_gtk_renderer_cell_accessible_init (GtkRendererCellAccessible *renderer_cell)
+gtk_renderer_cell_accessible_init (GtkRendererCellAccessible *renderer_cell)
 {
   renderer_cell->priv = G_TYPE_INSTANCE_GET_PRIVATE (renderer_cell,
                                                      GTK_TYPE_RENDERER_CELL_ACCESSIBLE,
@@ -111,7 +111,7 @@ _gtk_renderer_cell_accessible_init (GtkRendererCellAccessible *renderer_cell)
 }
 
 AtkObject *
-_gtk_renderer_cell_accessible_new (GtkCellRenderer *renderer)
+gtk_renderer_cell_accessible_new (GtkCellRenderer *renderer)
 {
   AtkObject *object;
 

@@ -1,4 +1,4 @@
-/* GAIL - The GNOME Accessibility Implementation Library
+/* GTK+ - accessibility implementations
  * Copyright 2001, 2002, 2003 Sun Microsystems Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -21,7 +21,7 @@
 #ifdef GDK_WINDOWING_X11
 #include <gdk/x11/gdkx.h>
 #endif
-#include "gtkwidgetaccessible.h"
+#include "gtkwidgetaccessibleprivate.h"
 #include "gtknotebookpageaccessible.h"
 
 struct _GtkWidgetAccessiblePrivate
@@ -39,7 +39,7 @@ static gboolean gtk_widget_accessible_all_parents_visible (GtkWidget *widget);
 
 static void atk_component_interface_init (AtkComponentIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkWidgetAccessible, _gtk_widget_accessible, GTK_TYPE_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkWidgetAccessible, gtk_widget_accessible, GTK_TYPE_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init))
 
 /* Translate GtkWidget::focus-in/out-event to AtkObject::focus-event */
@@ -260,7 +260,7 @@ gtk_widget_accessible_ref_relation_set (AtkObject *obj)
   if (widget == NULL)
     return NULL;
 
-  relation_set = ATK_OBJECT_CLASS (_gtk_widget_accessible_parent_class)->ref_relation_set (obj);
+  relation_set = ATK_OBJECT_CLASS (gtk_widget_accessible_parent_class)->ref_relation_set (obj);
 
   if (GTK_IS_BOX (widget))
     return relation_set;
@@ -329,7 +329,7 @@ gtk_widget_accessible_ref_state_set (AtkObject *accessible)
   GtkWidget *widget;
   AtkStateSet *state_set;
 
-  state_set = ATK_OBJECT_CLASS (_gtk_widget_accessible_parent_class)->ref_state_set (accessible);
+  state_set = ATK_OBJECT_CLASS (gtk_widget_accessible_parent_class)->ref_state_set (accessible);
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
   if (widget == NULL)
@@ -474,6 +474,12 @@ gtk_widget_accessible_notify_gtk (GObject    *obj,
      * focus changes so we ignore this.
      */
     return;
+  else if (g_strcmp0 (pspec->name, "tooltip-text") == 0)
+    {
+      gtk_widget_accessible_update_tooltip (GTK_WIDGET_ACCESSIBLE (atk_obj),
+                                            widget);
+      return;
+    }
   else if (g_strcmp0 (pspec->name, "visible") == 0)
     {
       state = ATK_STATE_VISIBLE;
@@ -494,11 +500,7 @@ gtk_widget_accessible_notify_gtk (GObject    *obj,
       state = ATK_STATE_HORIZONTAL;
       value = (gtk_orientable_get_orientation (orientable) == GTK_ORIENTATION_HORIZONTAL);
     }
-  else if (g_strcmp0 (pspec->name, "tooltip-text") == 0)
-    {
-      gtk_widget_accessible_update_tooltip (GTK_WIDGET_ACCESSIBLE (atk_obj),
-                                            widget);
-    }
+  else
     return;
 
   atk_object_notify_state_change (atk_obj, state, value);
@@ -525,7 +527,7 @@ gtk_widget_accessible_get_attributes (AtkObject *obj)
 }
 
 static void
-_gtk_widget_accessible_class_init (GtkWidgetAccessibleClass *klass)
+gtk_widget_accessible_class_init (GtkWidgetAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
@@ -544,7 +546,7 @@ _gtk_widget_accessible_class_init (GtkWidgetAccessibleClass *klass)
 }
 
 static void
-_gtk_widget_accessible_init (GtkWidgetAccessible *accessible)
+gtk_widget_accessible_init (GtkWidgetAccessible *accessible)
 {
   accessible->priv = G_TYPE_INSTANCE_GET_PRIVATE (accessible,
                                                   GTK_TYPE_WIDGET_ACCESSIBLE,

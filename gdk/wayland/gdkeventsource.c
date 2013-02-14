@@ -54,6 +54,9 @@ gdk_event_source_check(GSource *base)
 {
   GdkWaylandEventSource *source = (GdkWaylandEventSource *) base;
 
+  if (source->pfd.revents & (G_IO_ERR | G_IO_HUP))
+    g_error ("Lost connection to wayland compositor");
+
   return _gdk_event_queue_find_first (source->display) != NULL ||
     source->pfd.revents;
 }
@@ -124,7 +127,7 @@ _gdk_wayland_display_event_source_new (GdkDisplay *display)
   display_wayland = GDK_WAYLAND_DISPLAY (display);
   wl_source->display = display;
   wl_source->pfd.fd = wl_display_get_fd(display_wayland->wl_display);
-  wl_source->pfd.events = G_IO_IN | G_IO_ERR;
+  wl_source->pfd.events = G_IO_IN | G_IO_ERR | G_IO_HUP;
   g_source_add_poll(source, &wl_source->pfd);
 
   g_source_set_priority (source, GDK_PRIORITY_EVENTS);

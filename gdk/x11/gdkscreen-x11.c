@@ -280,6 +280,10 @@ get_current_desktop (GdkScreen *screen)
   unsigned char *data_return = NULL;
   int workspace = 0;
 
+  if (!gdk_x11_screen_supports_net_wm_hint (screen,
+                                            gdk_atom_intern_static_string ("_NET_CURRENT_DESKTOP")))
+    return workspace;
+
   display = GDK_DISPLAY_XDISPLAY (gdk_screen_get_display (screen));
   win = XRootWindow (display, GDK_SCREEN_XNUMBER (screen));
 
@@ -329,6 +333,10 @@ get_work_area (GdkScreen    *screen,
   area->y = 0;
   area->width = gdk_screen_get_width (screen);
   area->height = gdk_screen_get_height (screen);
+
+  if (!gdk_x11_screen_supports_net_wm_hint (screen,
+                                            gdk_atom_intern_static_string ("_NET_WORKAREA")))
+    return;
 
   if (workarea == None)
     return;
@@ -771,12 +779,179 @@ init_xfree_xinerama (GdkScreen *screen)
   return FALSE;
 }
 
+static gboolean
+init_solaris_xinerama_indices (GdkX11Screen *x11_screen)
+{
+#ifdef HAVE_SOLARIS_XINERAMA
+  XRectangle    x_monitors[MAXFRAMEBUFFERS];
+  unsigned char hints[16];
+  gint          result;
+  gint          monitor_num;
+  gint          x_n_monitors;
+  gint          i;
+
+  if (!XineramaGetState (x11_screen->xdisplay, x11_screen->screen_num))
+    return FALSE;
+
+  result = XineramaGetInfo (x11_screen->xdisplay, x11_screen->screen_num,
+                            x_monitors, hints, &x_n_monitors);
+
+  if (result == 0)
+    return FALSE;
+
+
+  for (monitor_num = 0; monitor_num < x11_screen->n_monitors; ++monitor_num)
+    {
+      for (i = 0; i < x_n_monitors; ++i)
+        {
+          if (x11_screen->monitors[monitor_num].geometry.x == x_monitors[i].x &&
+	      x11_screen->monitors[monitor_num].geometry.y == x_monitors[i].y &&
+	      x11_screen->monitors[monitor_num].geometry.width == x_monitors[i].width &&
+	      x11_screen->monitors[monitor_num].geometry.height == x_monitors[i].height)
+	    {
+	      g_hash_table_insert (x11_screen->xinerama_matches,
+				   GINT_TO_POINTER (monitor_num),
+				   GINT_TO_POINTER (i));
+	    }
+        }
+    }
+  return TRUE;
+#endif /* HAVE_SOLARIS_XINERAMA */
+
+  return FALSE;
+}
+
+static gboolean
+init_xfree_xinerama_indices (GdkX11Screen *x11_screen)
+{
+#ifdef HAVE_XFREE_XINERAMA
+  XineramaScreenInfo *x_monitors;
+  gint                monitor_num;
+  gint                x_n_monitors;
+  gint                i;
+
+  if (!XineramaIsActive (x11_screen->xdisplay))
+    return FALSE;
+
+  x_monitors = XineramaQueryScreens (x11_screen->xdisplay, &x_n_monitors);
+  if (x_n_monitors <= 0 || x_monitors == NULL)
+    {
+      if (x_monitors)
+	XFree (x_monitors);
+
+      return FALSE;
+    }
+
+  for (monitor_num = 0; monitor_num < x11_screen->n_monitors; ++monitor_num)
+    {
+      for (i = 0; i < x_n_monitors; ++i)
+        {
+          if (x11_screen->monitors[monitor_num].geometry.x == x_monitors[i].x_org &&
+	      x11_screen->monitors[monitor_num].geometry.y == x_monitors[i].y_org &&
+	      x11_screen->monitors[monitor_num].geometry.width == x_monitors[i].width &&
+	      x11_screen->monitors[monitor_num].geometry.height == x_monitors[i].height)
+	    {
+	      g_hash_table_insert (x11_screen->xinerama_matches,
+				   GINT_TO_POINTER (monitor_num),
+				   GINT_TO_POINTER (i));
+	    }
+        }
+    }
+  XFree (x_monitors);
+  return TRUE;
+#endif /* HAVE_XFREE_XINERAMA */
+
+  return FALSE;
+}
+
+static void
+init_xinerama_indices (GdkX11Screen *x11_screen)
+{
+  int opcode, firstevent, firsterror;
+
+  x11_screen->xinerama_matches = g_hash_table_new (g_direct_hash, g_direct_equal);
+  if (XQueryExtension (x11_screen->xdisplay, "XINERAMA",
+		       &opcode, &firstevent, &firsterror))
+    {
+      x11_screen->xinerama_matches = g_hash_table_new (g_direct_hash, g_direct_equal);
+
+      /* Solaris Xinerama first, then XFree/Xorg Xinerama
+       * to match the order in init_multihead()
+       */
+      if (init_solaris_xinerama_indices (x11_screen) == FALSE)
+        init_xfree_xinerama_indices (x11_screen);
+    }
+}
+
+gint
+_gdk_x11_screen_get_xinerama_index (GdkScreen *screen,
+				    gint       monitor_num)
+{
+  GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
+  gpointer val;
+
+  g_return_val_if_fail (monitor_num < x11_screen->n_monitors, -1);
+
+  if (x11_screen->xinerama_matches == NULL)
+    init_xinerama_indices (x11_screen);
+
+  if (g_hash_table_lookup_extended (x11_screen->xinerama_matches, GINT_TO_POINTER (monitor_num), NULL, &val))
+    return (GPOINTER_TO_INT(val));
+
+  return -1;
+}
+
+void
+_gdk_x11_screen_get_edge_monitors (GdkScreen *screen,
+                                   gint      *top,
+                                   gint      *bottom,
+                                   gint      *left,
+                                   gint      *right)
+{
+  GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
+  gint          top_most_pos = HeightOfScreen (GDK_X11_SCREEN (screen)->xscreen);
+  gint          left_most_pos = WidthOfScreen (GDK_X11_SCREEN (screen)->xscreen);
+  gint          bottom_most_pos = 0;
+  gint          right_most_pos = 0;
+  gint          monitor_num;
+
+  for (monitor_num = 0; monitor_num < x11_screen->n_monitors; monitor_num++)
+    {
+      gint monitor_x = x11_screen->monitors[monitor_num].geometry.x;
+      gint monitor_y = x11_screen->monitors[monitor_num].geometry.y;
+      gint monitor_max_x = monitor_x + x11_screen->monitors[monitor_num].geometry.width;
+      gint monitor_max_y = monitor_y + x11_screen->monitors[monitor_num].geometry.height;
+
+      if (left && left_most_pos > monitor_x)
+	{
+	  left_most_pos = monitor_x;
+	  *left = monitor_num;
+	}
+      if (right && right_most_pos < monitor_max_x)
+	{
+	  right_most_pos = monitor_max_x;
+	  *right = monitor_num;
+	}
+      if (top && top_most_pos > monitor_y)
+	{
+	  top_most_pos = monitor_y;
+	  *top = monitor_num;
+	}
+      if (bottom && bottom_most_pos < monitor_max_y)
+	{
+	  bottom_most_pos = monitor_max_y;
+	  *bottom = monitor_num;
+	}
+    }
+}
+
 static void
 deinit_multihead (GdkScreen *screen)
 {
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
 
   free_monitors (x11_screen->monitors, x11_screen->n_monitors);
+  g_clear_pointer (&x11_screen->xinerama_matches, g_hash_table_destroy);
 
   x11_screen->n_monitors = 0;
   x11_screen->monitors = NULL;
@@ -1181,16 +1356,9 @@ gdk_x11_screen_get_setting (GdkScreen   *screen,
   XSettingsResult result;
   XSettingsSetting *setting = NULL;
   gboolean success = FALSE;
-  gint i;
   GValue tmp_val = G_VALUE_INIT;
 
-  for (i = 0; i < GDK_SETTINGS_N_ELEMENTS(); i++)
-    if (strcmp (GDK_SETTINGS_GDK_NAME (i), name) == 0)
-      {
-	xsettings_name = GDK_SETTINGS_X_NAME (i);
-	break;
-      }
-
+  xsettings_name = gdk_to_xsettings_name (name);
   if (!xsettings_name)
     goto out;
 
@@ -1532,7 +1700,6 @@ gdk_xsettings_notify_cb (const char       *name,
   GdkEvent new_event;
   GdkScreen *screen = data;
   GdkX11Screen *x11_screen = data;
-  int i;
 
   if (x11_screen->xsettings_in_init)
     return;
@@ -1540,15 +1707,8 @@ gdk_xsettings_notify_cb (const char       *name,
   new_event.type = GDK_SETTING;
   new_event.setting.window = gdk_screen_get_root_window (screen);
   new_event.setting.send_event = FALSE;
-  new_event.setting.name = NULL;
+  new_event.setting.name = (char*) gdk_from_xsettings_name (name);
 
-  for (i = 0; i < GDK_SETTINGS_N_ELEMENTS() ; i++)
-    if (strcmp (GDK_SETTINGS_X_NAME (i), name) == 0)
-      {
-	new_event.setting.name = (char*) GDK_SETTINGS_GDK_NAME (i);
-	break;
-      }
-  
   if (!new_event.setting.name)
     return;
   

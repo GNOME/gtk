@@ -22,12 +22,12 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#ifndef __GTK_TEAROFF_MENU_ITEM_H__
+#define __GTK_TEAROFF_MENU_ITEM_H__
+
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_TEAROFF_MENU_ITEM_H__
-#define __GTK_TEAROFF_MENU_ITEM_H__
 
 #include <gtk/gtkmenuitem.h>
 

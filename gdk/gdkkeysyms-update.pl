@@ -4,7 +4,7 @@
 # from http://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h
 # 
 # Author  : Simos Xenitellis <simos at gnome dot org>.
-# Authos  : Bastien Nocera <hadess@hadess.net>
+# Author  : Bastien Nocera <hadess@hadess.net>
 # Version : 1.2
 #
 # Input   : http://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h

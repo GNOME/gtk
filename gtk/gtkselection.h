@@ -22,12 +22,12 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#ifndef __GTK_SELECTION_H__
+#define __GTK_SELECTION_H__
+
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_SELECTION_H__
-#define __GTK_SELECTION_H__
 
 #include <gtk/gtkwidget.h>
 #include <gtk/gtktextiter.h>
@@ -54,7 +54,7 @@ typedef struct _GtkTargetEntry GtkTargetEntry;
  * @target: a string representation of the target type
  * @flags: #GtkTargetFlags for DND
  * @info: an application-assigned integer ID which will
- *     get passed as a parater to e.g the #GtkWidget::selection-get
+ *     get passed as a parameter to e.g the #GtkWidget::selection-get
  *     signal. It allows the application to identify the target
  *     type without extensive string compares.
  *

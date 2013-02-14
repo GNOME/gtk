@@ -54,6 +54,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testfontchooser			\
 	testfontchooserdialog 		\
 	testframe			\
+	testfullscreen			\
 	testgeometry			\
 	testgiconpixbuf			\
 	testgrid			\

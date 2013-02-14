@@ -15,12 +15,12 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __GTK_TREE_VIEW_H__
+#define __GTK_TREE_VIEW_H__
+
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_TREE_VIEW_H__
-#define __GTK_TREE_VIEW_H__
 
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtktreemodel.h>
@@ -234,6 +234,11 @@ void                   gtk_tree_view_set_headers_clickable         (GtkTreeView 
 void                   gtk_tree_view_set_rules_hint                (GtkTreeView               *tree_view,
 								    gboolean                   setting);
 gboolean               gtk_tree_view_get_rules_hint                (GtkTreeView               *tree_view);
+GDK_AVAILABLE_IN_3_8
+gboolean               gtk_tree_view_get_activate_on_single_click  (GtkTreeView               *tree_view);
+GDK_AVAILABLE_IN_3_8
+void                   gtk_tree_view_set_activate_on_single_click  (GtkTreeView               *tree_view,
+								    gboolean                   single);
 
 /* Column funtions */
 gint                   gtk_tree_view_append_column                 (GtkTreeView               *tree_view,

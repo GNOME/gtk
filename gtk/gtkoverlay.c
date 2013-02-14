@@ -105,7 +105,7 @@ gtk_overlay_create_child_window (GtkOverlay *overlay,
 
   window = gdk_window_new (gtk_widget_get_window (widget),
                            &attributes, attributes_mask);
-  gdk_window_set_user_data (window, overlay);
+  gtk_widget_register_window (widget, window);
   gtk_style_context_set_background (gtk_widget_get_style_context (widget), window);
 
   gtk_widget_set_parent_window (child, window);
@@ -423,7 +423,10 @@ gtk_overlay_realize (GtkWidget *widget)
       child = children->data;
 
       if (child->window == NULL)
-        child->window = gtk_overlay_create_child_window (overlay, child->widget);
+	{
+	  child->window = gtk_overlay_create_child_window (overlay, child->widget);
+	  gtk_overlay_child_allocate (overlay, child);
+	}
     }
 }
 
@@ -440,7 +443,7 @@ gtk_overlay_unrealize (GtkWidget *widget)
       child = children->data;
 
       gtk_widget_set_parent_window (child->widget, NULL);
-      gdk_window_set_user_data (child->window, NULL);
+      gtk_widget_unregister_window (widget, child->window);
       gdk_window_destroy (child->window);
       child->window = NULL;
     }
@@ -536,7 +539,7 @@ gtk_overlay_remove (GtkContainer *container,
         {
           if (child->window != NULL)
             {
-              gdk_window_set_user_data (child->window, NULL);
+              gtk_widget_unregister_window (GTK_WIDGET (container), child->window);
               gdk_window_destroy (child->window);
             }
 

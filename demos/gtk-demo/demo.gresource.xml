@@ -1,35 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/application/logos">
+  <gresource prefix="/">
+    <file>gtk-logo-old.png</file>
+  </gresource>
+  <gresource prefix="/application">
     <file preprocess="to-pixdata">gtk-logo-24.png</file>
     <file preprocess="to-pixdata">gtk-logo-48.png</file>
+    <file>application.ui</file>
+    <file>menus.ui</file>
   </gresource>
-  <gresource prefix="/application/ui">
-    <file preprocess="xml-stripblanks">application.ui</file>
-    <file preprocess="xml-stripblanks">menus.ui</file>
+  <gresource prefix="/appwindow">
+    <file preprocess="to-pixdata">gtk-logo-old.png</file>
   </gresource>
-  <gresource prefix="/">
+  <gresource prefix="/builder">
+    <file>demo.ui</file>
+  </gresource>
+  <gresource prefix="/css_accordion">
+    <file>css_accordion.css</file>
+    <file>reset.css</file>
+  </gresource>
+  <gresource prefix="/css_basics">
+    <file>css_basics.css</file>
+    <file>reset.css</file>
+  </gresource>
+  <gresource prefix="/css_multiplebgs">
+    <file>css_multiplebgs.css</file>
+    <file>brick.png</file>
     <file>cssview.css</file>
     <file>reset.css</file>
   </gresource>
-  <gresource prefix="/css_accordion">
-    <file alias="gtk.css">css_accordion.css</file>
-  </gresource>
-  <gresource prefix="/css_basics">
-    <file alias="gtk.css">css_basics.css</file>
-  </gresource>
-  <gresource prefix="/css_multiplebgs">
-    <file alias="gtk.css">css_multiplebgs.css</file>
-    <file>brick.png</file>
-  </gresource>
-  <gresource prefix="/theming_custom_css">
-    <file alias="gtk.css">fancy.css</file>
-  </gresource>
   <gresource prefix="/theming_style_classes">
-    <file preprocess="xml-stripblanks">theming.ui</file>
+    <file>theming.ui</file>
   </gresource>
   <gresource prefix="/css_pixbufs">
     <file alias="gtk.css">css_pixbufs.css</file>
+    <file>cssview.css</file>
+    <file>reset.css</file>
     <file>background.jpg</file>
     <file>apple-red.png</file>
     <file>gnome-applets.png</file>
@@ -42,5 +48,80 @@
   </gresource>
   <gresource prefix="/css_shadows">
     <file alias="gtk.css">css_shadows.css</file>
+    <file>cssview.css</file>
+    <file>reset.css</file>
+  </gresource>
+  <gresource prefix="/iconview">
+    <file preprocess="to-pixdata">gnome-fs-directory.png</file>
+    <file preprocess="to-pixdata">gnome-fs-regular.png</file>
+  </gresource>
+  <gresource prefix="/images">
+    <file>alphatest.png</file>
+    <file>floppybuddy.gif</file>
+    <file>gtk-logo-old.png</file>
+  </gresource>
+  <gresource prefix="/pixbufs">
+    <file>apple-red.png</file>
+    <file>background.jpg</file>
+    <file>gnome-applets.png</file>
+    <file>gnome-calendar.png</file>
+    <file>gnome-foot.png</file>
+    <file>gnome-gmush.png</file>
+    <file>gnome-gimp.png</file>
+    <file>gnome-gsame.png</file>
+    <file>gnu-keys.png</file>
+  </gresource>
+  <gresource prefix="/sources">
+    <file>application.c</file>
+    <file>appwindow.c</file>
+    <file>assistant.c</file>
+    <file>builder.c</file>
+    <file>button_box.c</file>
+    <file>changedisplay.c</file>
+    <file>clipboard.c</file>
+    <file>colorsel.c</file>
+    <file>combobox.c</file>
+    <file>css_accordion.c</file>
+    <file>css_basics.c</file>
+    <file>css_multiplebgs.c</file>
+    <file>css_pixbufs.c</file>
+    <file>css_shadows.c</file>
+    <file>dialog.c</file>
+    <file>drawingarea.c</file>
+    <file>editable_cells.c</file>
+    <file>entry_buffer.c</file>
+    <file>entry_completion.c</file>
+    <file>expander.c</file>
+    <file>hypertext.c</file>
+    <file>iconview.c</file>
+    <file>iconview_edit.c</file>
+    <file>images.c</file>
+    <file>infobar.c</file>
+    <file>links.c</file>
+    <file>list_store.c</file>
+    <file>menus.c</file>
+    <file>offscreen_window.c</file>
+    <file>offscreen_window2.c</file>
+    <file>overlay.c</file>
+    <file>panes.c</file>
+    <file>pickers.c</file>
+    <file>pixbufs.c</file>
+    <file>printing.c</file>
+    <file>rotated_text.c</file>
+    <file>search_entry.c</file>
+    <file>sizegroup.c</file>
+    <file>spinner.c</file>
+    <file>stock_browser.c</file>
+    <file>textview.c</file>
+    <file>textscroll.c</file>
+    <file>theming_style_classes.c</file>
+    <file>toolpalette.c</file>
+    <file>transparent.c</file>
+    <file>tree_store.c</file>
+    <file>ui_manager.c</file>
+  </gresource>
+  <gresource prefix="/textview">
+    <file>floppybuddy.gif</file>
+    <file>gtk-logo-old.png</file>
   </gresource>
 </gresources>

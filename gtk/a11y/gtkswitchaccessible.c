@@ -1,5 +1,4 @@
-/* GTK - The GIMP Toolkit
- *
+/* GTK+ - accessibility implementations
  * Copyright (C) 2010  Intel Corporation
  * Copyright (C) 2010  RedHat, Inc.
  *
@@ -25,6 +24,7 @@
 
 #include "config.h"
 
+#include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
 #include "gtkintl.h"
 #include "gtkswitchaccessible.h"
@@ -32,7 +32,7 @@
 
 static void atk_action_interface_init (AtkActionIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkSwitchAccessible, _gtk_switch_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkSwitchAccessible, gtk_switch_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init))
 
 static AtkStateSet *
@@ -41,7 +41,7 @@ gtk_switch_accessible_ref_state_set (AtkObject *accessible)
   AtkStateSet *state_set;
   GtkWidget *widget;
 
-  state_set = ATK_OBJECT_CLASS (_gtk_switch_accessible_parent_class)->ref_state_set (accessible);
+  state_set = ATK_OBJECT_CLASS (gtk_switch_accessible_parent_class)->ref_state_set (accessible);
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
   if (widget == NULL)
@@ -57,7 +57,7 @@ static void
 gtk_switch_accessible_initialize (AtkObject *accessible,
                                   gpointer   widget)
 {
-  ATK_OBJECT_CLASS (_gtk_switch_accessible_parent_class)->initialize (accessible, widget);
+  ATK_OBJECT_CLASS (gtk_switch_accessible_parent_class)->initialize (accessible, widget);
 
   atk_object_set_role (accessible, ATK_ROLE_TOGGLE_BUTTON);
   atk_object_set_name (accessible, C_("light switch widget", "Switch"));
@@ -65,7 +65,7 @@ gtk_switch_accessible_initialize (AtkObject *accessible,
 }
 
 static void
-_gtk_switch_accessible_class_init (GtkSwitchAccessibleClass *klass)
+gtk_switch_accessible_class_init (GtkSwitchAccessibleClass *klass)
 {
   AtkObjectClass *atk_class = ATK_OBJECT_CLASS (klass);
 
@@ -74,7 +74,7 @@ _gtk_switch_accessible_class_init (GtkSwitchAccessibleClass *klass)
 }
 
 static void
-_gtk_switch_accessible_init (GtkSwitchAccessible *self)
+gtk_switch_accessible_init (GtkSwitchAccessible *self)
 {
 }
 
@@ -88,10 +88,27 @@ static const gchar *
 gtk_switch_action_get_name (AtkAction *action,
                             gint       i)
 {
-  if (i != 0)
-    return NULL;
+  if (i == 0)
+    return "toggle";
+  return NULL;
+}
 
-  return "toggle";
+static const gchar *
+gtk_switch_action_get_localized_name (AtkAction *action,
+                                      gint       i)
+{
+  if (i == 0)
+    return C_("Action name", "Toggle");
+  return NULL;
+}
+
+static const gchar *
+gtk_switch_action_get_description (AtkAction *action,
+                                   gint       i)
+{
+  if (i == 0)
+    return C_("Action description", "Toggles the switch");
+  return NULL;
 }
 
 static gboolean
@@ -123,4 +140,6 @@ atk_action_interface_init (AtkActionIface *iface)
   iface->do_action = gtk_switch_action_do_action;
   iface->get_n_actions = gtk_switch_action_get_n_actions;
   iface->get_name = gtk_switch_action_get_name;
+  iface->get_localized_name = gtk_switch_action_get_localized_name;
+  iface->get_description = gtk_switch_action_get_description;
 }

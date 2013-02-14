@@ -21,7 +21,6 @@
 
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkstylecontextprivate.h"
-#include "gtksymboliccolorprivate.h"
 
 struct _GtkCssValue {
   GTK_CSS_VALUE_BASE

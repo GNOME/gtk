@@ -51,8 +51,10 @@
 #include "gtkscrollable.h"
 #include "gtktypebuiltins.h"
 #include "gtktexthandleprivate.h"
+#include "gtkstylecontextprivate.h"
+#include "gtkcssstylepropertyprivate.h"
 
-#include "a11y/gtktextviewaccessible.h"
+#include "a11y/gtktextviewaccessibleprivate.h"
 
 /**
  * SECTION:gtktextview
@@ -4092,7 +4094,7 @@ gtk_text_view_realize (GtkWidget *widget)
   window = gdk_window_new (gtk_widget_get_parent_window (widget),
                            &attributes, attributes_mask);
   gtk_widget_set_window (widget, window);
-  gdk_window_set_user_data (window, widget);
+  gtk_widget_register_window (widget, window);
 
   context = gtk_widget_get_style_context (widget);
 
@@ -4230,6 +4232,8 @@ gtk_text_view_style_updated (GtkWidget *widget)
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
   PangoContext *ltr_context, *rtl_context;
+  GtkStyleContext *style_context;
+  const GtkBitmask *changes;
 
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
@@ -4241,7 +4245,11 @@ gtk_text_view_style_updated (GtkWidget *widget)
       gtk_text_view_set_background (text_view);
     }
 
-  if (priv->layout && priv->layout->default_style)
+
+  style_context = gtk_widget_get_style_context (widget);
+  changes = _gtk_style_context_get_changes (style_context);
+  if ((changes == NULL || _gtk_css_style_property_changes_affect_font (changes)) &&
+      priv->layout && priv->layout->default_style)
     {
       gtk_text_view_set_attributes_from_style (text_view,
                                                priv->layout->default_style);
@@ -5210,24 +5218,31 @@ gtk_text_view_focus (GtkWidget        *widget,
 {
   GtkContainer *container;
   gboolean result;
-  
-  container = GTK_CONTAINER (widget);  
+
+  container = GTK_CONTAINER (widget);
 
   if (!gtk_widget_is_focus (widget) &&
       gtk_container_get_focus_child (container) == NULL)
     {
-      gtk_widget_grab_focus (widget);
-      return TRUE;
+      if (gtk_widget_get_can_focus (widget))
+        {
+          gtk_widget_grab_focus (widget);
+          return TRUE;
+        }
+
+      return FALSE;
     }
   else
     {
+      gboolean can_focus;
       /*
        * Unset CAN_FOCUS flag so that gtk_container_focus() allows
        * children to get the focus
        */
+      can_focus = gtk_widget_get_can_focus (widget);
       gtk_widget_set_can_focus (widget, FALSE);
       result = GTK_WIDGET_CLASS (gtk_text_view_parent_class)->focus (widget, direction);
-      gtk_widget_set_can_focus (widget, TRUE);
+      gtk_widget_set_can_focus (widget, can_focus);
 
       return result;
     }
@@ -6919,7 +6934,7 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
   if (values->font)
     pango_font_description_free (values->font);
 
-  values->font = pango_font_description_copy (gtk_style_context_get_font (context, state));
+  gtk_style_context_get (context, state, "font", &values->font, NULL);
 
   gtk_style_context_restore (context);
 }
@@ -8733,7 +8748,7 @@ text_window_realize (GtkTextWindow *win,
                                 &attributes, attributes_mask);
 
   gdk_window_show (win->window);
-  gdk_window_set_user_data (win->window, win->widget);
+  gtk_widget_register_window (win->widget, win->window);
   gdk_window_lower (win->window);
 
   attributes.x = 0;
@@ -8755,7 +8770,7 @@ text_window_realize (GtkTextWindow *win,
                                     attributes_mask);
 
   gdk_window_show (win->bin_window);
-  gdk_window_set_user_data (win->bin_window, win->widget);
+  gtk_widget_register_window (win->widget, win->bin_window);
 
   context = gtk_widget_get_style_context (widget);
   state = gtk_widget_get_state_flags (widget);
@@ -8806,8 +8821,8 @@ text_window_unrealize (GtkTextWindow *win)
                                         NULL);
     }
 
-  gdk_window_set_user_data (win->window, NULL);
-  gdk_window_set_user_data (win->bin_window, NULL);
+  gtk_widget_unregister_window (win->widget, win->window);
+  gtk_widget_unregister_window (win->widget, win->bin_window);
   gdk_window_destroy (win->bin_window);
   gdk_window_destroy (win->window);
   win->window = NULL;

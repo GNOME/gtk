@@ -458,7 +458,7 @@ gtk_switch_realize (GtkWidget *widget)
   priv->event_window = gdk_window_new (parent_window,
                                        &attributes,
                                        attributes_mask);
-  gdk_window_set_user_data (priv->event_window, widget);
+  gtk_widget_register_window (widget, priv->event_window);
 }
 
 static void
@@ -468,7 +468,7 @@ gtk_switch_unrealize (GtkWidget *widget)
 
   if (priv->event_window != NULL)
     {
-      gdk_window_set_user_data (priv->event_window, NULL);
+      gtk_widget_unregister_window (widget, priv->event_window);
       gdk_window_destroy (priv->event_window);
       priv->event_window = NULL;
     }
@@ -524,15 +524,12 @@ gtk_switch_draw (GtkWidget *widget,
   GtkStyleContext *context;
   GdkRectangle handle;
   PangoLayout *layout;
-  PangoFontDescription *desc;
-  const PangoFontDescription *style_desc;
   PangoRectangle rect;
   gint label_x, label_y;
   GtkBorder padding;
   GtkStateFlags state;
   gint focus_width, focus_pad;
   gint x, y, width, height;
-  gint font_size, style_font_size;
 
   gtk_widget_style_get (widget,
                         "focus-line-width", &focus_width,
@@ -585,20 +582,6 @@ gtk_switch_draw (GtkWidget *widget,
    */
   layout = gtk_widget_create_pango_layout (widget, C_("switch", "ON"));
 
-  /* FIXME: this should be really done in the theme, but overriding font size
-   * from it doesn't currently work. So we have to hardcode this here and
-   * below for the "OFF" label.
-   */
-  desc = pango_font_description_new ();
-
-  style_desc = gtk_style_context_get_font (context, state);
-  style_font_size = pango_font_description_get_size (style_desc);
-  font_size = MAX (style_font_size - 1 * PANGO_SCALE, ceil (style_font_size * PANGO_SCALE_SMALL));
-
-  pango_font_description_set_size (desc, font_size);
-
-  pango_layout_set_font_description (layout, desc);
-
   pango_layout_get_extents (layout, NULL, &rect);
   pango_extents_to_pixels (&rect, NULL);
 
@@ -613,7 +596,6 @@ gtk_switch_draw (GtkWidget *widget,
    * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
    */
   layout = gtk_widget_create_pango_layout (widget, C_("switch", "OFF"));
-  pango_layout_set_font_description (layout, desc);
 
   pango_layout_get_extents (layout, NULL, &rect);
   pango_extents_to_pixels (&rect, NULL);
@@ -635,8 +617,6 @@ gtk_switch_draw (GtkWidget *widget,
   gtk_style_context_restore (context);
 
   gtk_switch_paint_handle (widget, cr, &handle);
-
-  pango_font_description_free (desc);
 
   return FALSE;
 }

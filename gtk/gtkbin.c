@@ -56,7 +56,12 @@ static void gtk_bin_forall      (GtkContainer   *container,
 				 gpointer        callback_data);
 static GType gtk_bin_child_type (GtkContainer   *container);
 
-
+static void               gtk_bin_get_preferred_width             (GtkWidget           *widget,
+                                                                   gint                *minimum_width,
+                                                                   gint                *natural_width);
+static void               gtk_bin_get_preferred_height            (GtkWidget           *widget,
+                                                                   gint                *minimum_height,
+                                                                   gint                *natural_height);
 static void               gtk_bin_get_preferred_width_for_height  (GtkWidget           *widget,
                                                                    gint                 height,
                                                                    gint                *minimum_width,
@@ -65,6 +70,8 @@ static void               gtk_bin_get_preferred_height_for_width  (GtkWidget    
                                                                    gint                 width,
                                                                    gint                *minimum_height,
                                                                    gint                *natural_height);
+static void               gtk_bin_size_allocate                   (GtkWidget           *widget,
+                                                                   GtkAllocation       *allocation);
 
 G_DEFINE_ABSTRACT_TYPE (GtkBin, gtk_bin, GTK_TYPE_CONTAINER)
 
@@ -74,8 +81,11 @@ gtk_bin_class_init (GtkBinClass *class)
   GtkWidgetClass *widget_class = (GtkWidgetClass*) class;
   GtkContainerClass *container_class = (GtkContainerClass*) class;
 
+  widget_class->get_preferred_width = gtk_bin_get_preferred_width;
+  widget_class->get_preferred_height = gtk_bin_get_preferred_height;
   widget_class->get_preferred_width_for_height = gtk_bin_get_preferred_width_for_height;
   widget_class->get_preferred_height_for_width = gtk_bin_get_preferred_height_for_width;
+  widget_class->size_allocate = gtk_bin_size_allocate;
 
   container_class->add = gtk_bin_add;
   container_class->remove = gtk_bin_remove;
@@ -170,43 +180,59 @@ gtk_bin_forall (GtkContainer *container,
     (* callback) (priv->child, callback_data);
 }
 
-
-/* GtkBin widgets define the padding and borders independantly so
- * we cannot provide a generic get_size() for the same reason
- * we never implemented size_request() here.
- *
- * But for cases where the GtkBin class's padding is constant and
- * does not vary based on allocation (most cases), we can at least 
- * deduce a common code path for the get_width_for_height()/get_height_for_width()
- * cases by using the delta of the base size requsts.
- */
-static void
-get_child_padding_delta (GtkBin *bin,
-			 gint   *delta_h,
-			 gint   *delta_v)
+static int
+gtk_bin_get_effective_border_width (GtkBin *bin)
 {
+  if (GTK_CONTAINER_CLASS (GTK_BIN_GET_CLASS (bin))->_handle_border_width)
+    return 0;
+
+  return gtk_container_get_border_width (GTK_CONTAINER (bin));
+}
+
+static void
+gtk_bin_get_preferred_width (GtkWidget *widget,
+                             gint      *minimum_width,
+                             gint      *natural_width)
+{
+  GtkBin *bin = GTK_BIN (widget);
   GtkBinPrivate *priv = bin->priv;
-  gint hmin, vmin, hnat, vnat, child_hmin, child_vmin;
+  gint border_width;
 
-  /* we can't use gtk_widget_get_preferred_width() wrapper 
-   * because we want our "original" request, not any external
-   * adjustments from set_size_request() or whatever.  we have
-   * to ask for natural also because NULL isn't allowed for the
-   * direct vfuncs
-   */
-  GTK_WIDGET_GET_CLASS (bin)->get_preferred_width (GTK_WIDGET (bin), &hmin, &hnat);
-  GTK_WIDGET_GET_CLASS (bin)->adjust_size_request (GTK_WIDGET (bin), 
-						   GTK_ORIENTATION_HORIZONTAL, &hmin, &hnat);
+  if (priv->child && gtk_widget_get_visible (priv->child))
+    {
+      gint child_min, child_nat;
+      gtk_widget_get_preferred_width (priv->child,
+                                      &child_min, &child_nat);
+      *minimum_width = child_min;
+      *natural_width = child_nat;
+    }
 
-  GTK_WIDGET_GET_CLASS (bin)->get_preferred_height (GTK_WIDGET (bin), &vmin, &vnat);
-  GTK_WIDGET_GET_CLASS (bin)->adjust_size_request (GTK_WIDGET (bin), 
-						   GTK_ORIENTATION_VERTICAL, &vmin, &vnat);
+  border_width = gtk_bin_get_effective_border_width (bin);
+  *minimum_width += 2 * border_width;
+  *natural_width += 2 * border_width;
+}
 
-  gtk_widget_get_preferred_width (priv->child, &child_hmin, NULL);
-  gtk_widget_get_preferred_height (priv->child, &child_vmin, NULL);
+static void
+gtk_bin_get_preferred_height (GtkWidget *widget,
+                              gint      *minimum_height,
+                              gint      *natural_height)
+{
+  GtkBin *bin = GTK_BIN (widget);
+  GtkBinPrivate *priv = bin->priv;
+  gint border_width;
 
-  *delta_h = hmin - child_hmin;
-  *delta_v = vmin - child_vmin;
+  if (priv->child && gtk_widget_get_visible (priv->child))
+    {
+      gint child_min, child_nat;
+      gtk_widget_get_preferred_height (priv->child,
+                                       &child_min, &child_nat);
+      *minimum_height = child_min;
+      *natural_height = child_nat;
+    }
+
+  border_width = gtk_bin_get_effective_border_width (bin);
+  *minimum_height += 2 * border_width;
+  *natural_height += 2 * border_width;
 }
 
 static void 
@@ -217,24 +243,22 @@ gtk_bin_get_preferred_width_for_height (GtkWidget *widget,
 {
   GtkBin *bin = GTK_BIN (widget);
   GtkBinPrivate *priv = bin->priv;
-  gint    hdelta, vdelta, child_min, child_nat;
+  gint border_width;
 
-  if (priv->child)
+  border_width = gtk_bin_get_effective_border_width (bin);
+
+  if (priv->child && gtk_widget_get_visible (priv->child))
     {
-      get_child_padding_delta (bin, &hdelta, &vdelta);
-
-      gtk_widget_get_preferred_width_for_height (priv->child,
-                                                 height - vdelta,
+      gint child_min, child_nat;
+      gtk_widget_get_preferred_width_for_height (priv->child, height - 2 * border_width,
                                                  &child_min, &child_nat);
 
-      if (minimum_width)
-	*minimum_width = child_min + hdelta;
-      
-      if (natural_width)
-	*natural_width = child_nat + hdelta;
+      *minimum_width = child_min;
+      *natural_width = child_nat;
     }
-  else
-    GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, minimum_width, natural_width);
+
+  *minimum_width += 2 * border_width;
+  *natural_width += 2 * border_width;
 }
 
 static void
@@ -245,26 +269,46 @@ gtk_bin_get_preferred_height_for_width  (GtkWidget *widget,
 {
   GtkBin *bin = GTK_BIN (widget);
   GtkBinPrivate *priv = bin->priv;
-  gint    hdelta, vdelta, child_min, child_nat;
+  gint border_width;
 
-  if (priv->child)
+  border_width = gtk_bin_get_effective_border_width (bin);
+
+  if (priv->child && gtk_widget_get_visible (priv->child))
     {
-      get_child_padding_delta (bin, &hdelta, &vdelta);
-
-      gtk_widget_get_preferred_height_for_width (priv->child,
-                                                 width - hdelta,
+      gint child_min, child_nat;
+      gtk_widget_get_preferred_height_for_width (priv->child, width - 2 * border_width,
                                                  &child_min, &child_nat);
 
-      if (minimum_height)
-	*minimum_height = child_min + vdelta;
-      
-      if (natural_height)
-	*natural_height = child_nat + vdelta;
+      *minimum_height = child_min;
+      *natural_height = child_nat;
     }
-  else
-    GTK_WIDGET_GET_CLASS (widget)->get_preferred_height (widget, minimum_height, natural_height);
+
+  *minimum_height += 2 * border_width;
+  *natural_height += 2 * border_width;
 }
 
+static void
+gtk_bin_size_allocate (GtkWidget     *widget,
+                       GtkAllocation *allocation)
+{
+  GtkBin *bin = GTK_BIN (widget);
+  GtkBinPrivate *priv = bin->priv;
+
+  gtk_widget_set_allocation (widget, allocation);
+
+  if (priv->child && gtk_widget_get_visible (priv->child))
+    {
+      GtkAllocation child_allocation;
+      gint border_width = gtk_bin_get_effective_border_width (bin);
+
+      child_allocation.x = allocation->x + border_width;
+      child_allocation.y = allocation->y + border_width;
+      child_allocation.width = allocation->width - 2 * border_width;
+      child_allocation.height = allocation->height - 2 * border_width;
+
+      gtk_widget_size_allocate (priv->child, &child_allocation);
+    }
+}
 
 /**
  * gtk_bin_get_child:

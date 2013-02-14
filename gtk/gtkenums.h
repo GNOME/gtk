@@ -22,12 +22,12 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#ifndef __GTK_ENUMS_H__
+#define __GTK_ENUMS_H__
+
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_ENUMS_H__
-#define __GTK_ENUMS_H__
 
 #include <glib-object.h>
 
@@ -804,6 +804,23 @@ typedef enum
 } GtkDragResult;
 
 /**
+ * GtkSizeGroupMode:
+ * @GTK_SIZE_GROUP_NONE: group has no effect
+ * @GTK_SIZE_GROUP_HORIZONTAL: group affects horizontal requisition
+ * @GTK_SIZE_GROUP_VERTICAL: group affects vertical requisition
+ * @GTK_SIZE_GROUP_BOTH: group affects both horizontal and vertical requisition
+ *
+ * The mode of the size group determines the directions in which the size
+ * group affects the requested sizes of its component widgets.
+ **/
+typedef enum {
+  GTK_SIZE_GROUP_NONE,
+  GTK_SIZE_GROUP_HORIZONTAL,
+  GTK_SIZE_GROUP_VERTICAL,
+  GTK_SIZE_GROUP_BOTH
+} GtkSizeGroupMode;
+
+/**
  * GtkSizeRequestMode:
  * @GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH: Prefer height-for-width geometry management
  * @GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT: Prefer width-for-height geometry management
@@ -843,8 +860,12 @@ typedef enum
  * @GTK_STATE_FLAG_INCONSISTENT: Widget is inconsistent.
  * @GTK_STATE_FLAG_FOCUSED: Widget has the keyboard focus.
  * @GTK_STATE_FLAG_BACKDROP: Widget is in a background toplevel window.
+ * @GTK_STATE_FLAG_DIR_LTR: Widget is in left-to-right text direction. Since 3.8
+ * @GTK_STATE_FLAG_DIR_RTL: Widget is in right-to-left text direction. Since 3.8
  *
- * Describes a widget state.
+ * Describes a widget state. Widget states are used to match the widget
+ * against CSS pseudo-classes. Note that GTK extends the regular CSS
+ * classes and sometimes uses different names.
  */
 typedef enum
 {
@@ -855,7 +876,9 @@ typedef enum
   GTK_STATE_FLAG_INSENSITIVE  = 1 << 3,
   GTK_STATE_FLAG_INCONSISTENT = 1 << 4,
   GTK_STATE_FLAG_FOCUSED      = 1 << 5,
-  GTK_STATE_FLAG_BACKDROP     = 1 << 6
+  GTK_STATE_FLAG_BACKDROP     = 1 << 6,
+  GTK_STATE_FLAG_DIR_LTR      = 1 << 7,
+  GTK_STATE_FLAG_DIR_RTL      = 1 << 8
 } GtkStateFlags;
 
 /**

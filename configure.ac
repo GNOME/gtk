@@ -9,9 +9,9 @@
 # set GTK_BINARY_AGE and GTK_INTERFACE_AGE to 0.
 
 m4_define([gtk_major_version], [3])
-m4_define([gtk_minor_version], [6])
-m4_define([gtk_micro_version], [2])
-m4_define([gtk_interface_age], [2])
+m4_define([gtk_minor_version], [7])
+m4_define([gtk_micro_version], [9])
+m4_define([gtk_interface_age], [0])
 m4_define([gtk_binary_age],
           [m4_eval(100 * gtk_minor_version + gtk_micro_version)])
 m4_define([gtk_version],
@@ -24,10 +24,13 @@ AC_INIT([gtk+], [gtk_version],
         [http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2B],
         [gtk+])
 
-AC_CONFIG_HEADER([config.h])
+AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([gdk/gdktypes.h])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([build-aux])
+
+AC_CANONICAL_HOST
+AC_CANONICAL_TARGET
 
 # Define a string for the earliest version that this release has
 # backwards binary compatibility with for all interfaces a module
@@ -39,11 +42,11 @@ AC_CONFIG_AUX_DIR([build-aux])
 m4_define([gtk_binary_version], [3.0.0])
 
 # required versions of other packages
-m4_define([glib_required_version], [2.33.1])
-m4_define([pango_required_version], [1.30.0])
-m4_define([atk_required_version], [2.5.3])
+m4_define([glib_required_version], [2.35.3])
+m4_define([pango_required_version], [1.32.4])
+m4_define([atk_required_version], [2.7.5])
 m4_define([cairo_required_version], [1.10.0])
-m4_define([gdk_pixbuf_required_version], [2.26.0])
+m4_define([gdk_pixbuf_required_version], [2.27.1])
 m4_define([introspection_required_version], [1.32.0])
 GLIB_REQUIRED_VERSION=glib_required_version
 PANGO_REQUIRED_VERSION=pango_required_version
@@ -123,8 +126,8 @@ AC_SUBST([GAIL_LT_CURRENT_MINUS_AGE],[gail_lt_current_minus_age])
 
 # Checks for programs.
 AC_PROG_CC
+AX_PROG_CC_FOR_BUILD
 AC_PROG_CC_C_O
-AC_PROG_CC_STDC
 AC_PROG_MKDIR_P
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
@@ -134,8 +137,6 @@ GETTEXT_PACKAGE=gtk30
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE",
                    [The prefix for our gettext translation domains.])
-
-AC_CANONICAL_HOST
 
 MATH_LIB=-lm
 AC_MSG_CHECKING([for native Win32])
@@ -321,12 +322,6 @@ AC_ARG_ENABLE(quartz-relocation,
                               [enable bundle-based relocation functions])],
                               [quartz_relocation=yes])
 
-AC_ARG_ENABLE(wayland-cairo-gl,
-              AS_HELP_STRING([--enable-wayland-cairo-gl],
-                             [enable the use of Cairo GL in the Wayland backend]),
-              [enable_wayland_cairo_gl=yes])
-
-
 cairo_backends=
 backend_immodules=
 have_gio_unix=no
@@ -386,6 +381,7 @@ AC_SUBST(DISABLE_ON_QUARTZ)
 if test "x$enable_broadway_backend" = xyes; then
   GDK_BACKENDS="$GDK_BACKENDS broadway"
   cairo_backends="$cairo_backends cairo"
+  have_gio_unix=yes
   GDK_WINDOWING="$GDK_WINDOWING
 #define GDK_WINDOWING_BROADWAY"
   GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -lz"
@@ -395,22 +391,13 @@ else
 fi
 
 if test "x$enable_wayland_backend" = "xyes"; then
-  if test "x$enable_wayland_cairo_gl" = "xyes"; then
-    # Wayland can use cairo-gl
-    cairo_backends="$cairo_backends cairo-gl"
-    AC_DEFINE(GDK_WAYLAND_USE_EGL, [1], [Whether to use EGL in Wayland backend])
-  else
-    # For the cairo image backend
-    cairo_backends="$cairo_backends cairo"
-  fi
+  # For the cairo image backend
+  cairo_backends="$cairo_backends cairo"
   GDK_BACKENDS="$GDK_BACKENDS wayland"
   have_gio_unix=yes
   GDK_WINDOWING="$GDK_WINDOWING
 #define GDK_WINDOWING_WAYLAND"
-  WAYLAND_PACKAGES="wayland-client xkbcommon wayland-cursor"
-  if test "x$enable_wayland_cairo_gl" = "xyes"; then
-    WAYLAND_PACKAGES="$WAYLAND_PACKAGES wayland-egl egl"
-  fi
+  WAYLAND_PACKAGES="wayland-client >= 1.0.0 xkbcommon >= 0.2.0 wayland-cursor"
   AM_CONDITIONAL(USE_WAYLAND, true)
 else
   AM_CONDITIONAL(USE_WAYLAND, false)
@@ -573,7 +560,7 @@ if test "x$enable_rebuilds" = "xyes" && \
 fi
 AC_SUBST(REBUILD)
 
-AC_CHECK_FUNCS(lstat mkstemp flockfile getc_unlocked)
+AC_CHECK_FUNCS(lstat mkstemp)
 AC_CHECK_FUNCS(localtime_r)
 
 # _NL_TIME_FIRST_WEEKDAY is an enum and not a define
@@ -714,7 +701,6 @@ AM_PATH_GLIB_2_0(glib_required_version, :,
 *** GLIB is always available from ftp://ftp.gtk.org/pub/gtk/.]),
   gobject gmodule-no-export)
 
-dnl
 dnl Check for bind_textdomain_codeset, including -lintl if GLib brings it in.
 dnl
 gtk_save_LIBS=$LIBS
@@ -748,6 +734,19 @@ else
     AC_MSG_RESULT([no])
 fi
 
+#
+# Disable deprecation checks for all libraries we depend on on stable branches.
+# This is so newer versions of those libraries don't cause more warnings with
+# a stable GTK version.
+# We don't ever want to turn off deprecation warnings for master however, because
+# that's where we get rid of deprecated API we use.
+#
+if test m4_eval(gtk_minor_version % 2) = 0 ; then
+  AC_DEFINE_UNQUOTED(GLIB_DISABLE_DEPRECATION_WARNINGS, 1,
+                     [Disable deprecation warnings from glib])
+fi
+
+dnl
 saved_cflags="$CFLAGS"
 saved_ldflags="$LDFLAGS"
 
@@ -893,14 +892,32 @@ dnl Look for a host system's gdk-pixbuf-csource if we are cross-compiling
 
 AM_CONDITIONAL(CROSS_COMPILING, test $cross_compiling = yes)
 
-if test "x$cross_compiling" = xyes || test "x$enable_gtk2_dependency" = xyes; then
-  AC_PATH_PROG(GTK_UPDATE_ICON_CACHE, gtk-update-icon-cache, no)
-  if test x$GTK_UPDATE_ICON_CACHE = xno; then
-    REBUILD_PNGS=#
-  fi
-fi
+AS_IF([test "x$enable_gtk2_dependency" = xyes],
+      [AC_PATH_PROG(GTK_UPDATE_ICON_CACHE, gtk-update-icon-cache, no)
+       if test x$GTK_UPDATE_ICON_CACHE = xno; then
+         REBUILD_PNGS=#
+       fi],
 
-AM_CONDITIONAL(USE_EXTERNAL_ICON_CACHE, [test "x$cross_compiling" = xyes || test "x$enable_gtk2_dependency" = xyes])
+      [test "x$cross_compiling" = xyes],
+      [# If no GTK+2 dependency and cross compiling, we need to find a host gdk-pixbuf.
+       # pkg.m4 blocks all variable starting with PKG, so allow this one
+       m4_pattern_allow([PKG_CONFIG_FOR_BUILD])
+
+       AS_IF([test x$PKG_CONFIG_FOR_BUILD = x],
+             [AC_MSG_ERROR([You must define PKG_CONFIG_FOR_BUILD when cross compiling])])
+
+       AC_MSG_CHECKING([for native gdk-pixbuf])
+       AS_IF([AC_RUN_LOG([$PKG_CONFIG_FOR_BUILD --exists --print-errors gdk-pixbuf-2.0])],
+             [AC_MSG_RESULT([yes])],
+             [AC_MSG_ERROR([native gdk-pixbuf not found])])
+
+       NATIVE_GDKPIXBUF_CFLAGS=`$PKG_CONFIG_FOR_BUILD --cflags gdk-pixbuf-2.0`
+       NATIVE_GDKPIXBUF_LIBS=`$PKG_CONFIG_FOR_BUILD --libs gdk-pixbuf-2.0`
+       AC_SUBST(NATIVE_GDKPIXBUF_CFLAGS)
+       AC_SUBST(NATIVE_GDKPIXBUF_LIBS)]
+)
+
+AM_CONDITIONAL(USE_EXTERNAL_ICON_CACHE, [test "x$enable_gtk2_dependency" = xyes])
 
 AC_PATH_PROG(GDK_PIXBUF_CSOURCE, gdk-pixbuf-csource, no)
 
@@ -1222,6 +1239,7 @@ if test "$have_gio_unix" = "yes"; then
 else
   GDK_GIO_PACKAGE=gio-2.0
 fi
+AM_CONDITIONAL(HAVE_GIO_UNIX, test "$have_gio_unix" = "yes")
 
 # Check for Pango flags
 
@@ -1775,6 +1793,7 @@ gtk/makefile.msc
 gtk/gtkversion.h
 gtk/gtk-win32.rc
 gtk/a11y/Makefile
+gtk/native/Makefile
 gtk/tests/Makefile
 libgail-util/Makefile
 modules/Makefile

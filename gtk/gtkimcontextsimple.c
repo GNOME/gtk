@@ -371,26 +371,52 @@ check_quartz_special_cases (GtkIMContextSimple *context_simple,
                             gint                n_compose)
 {
   GtkIMContextSimplePrivate *priv = context_simple->priv;
+  guint value = 0;
 
-  if (n_compose == 2 &&
-      priv->compose_buffer[1] == GDK_KEY_space)
+  if (n_compose == 2)
     {
-      gunichar value = 0;
-
       switch (priv->compose_buffer[0])
         {
         case GDK_KEY_dead_doubleacute:
-          value = '"'; break;
-        }
+          switch (priv->compose_buffer[1])
+            {
+            case GDK_KEY_dead_doubleacute:
+            case GDK_KEY_space:
+              value = GDK_KEY_quotedbl; break;
 
-      if (value > 0)
-        {
-          gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), value);
-          priv->compose_buffer[0] = 0;
+            case 'a': value = GDK_KEY_adiaeresis; break;
+            case 'A': value = GDK_KEY_Adiaeresis; break;
+            case 'e': value = GDK_KEY_ediaeresis; break;
+            case 'E': value = GDK_KEY_Ediaeresis; break;
+            case 'i': value = GDK_KEY_idiaeresis; break;
+            case 'I': value = GDK_KEY_Idiaeresis; break;
+            case 'o': value = GDK_KEY_odiaeresis; break;
+            case 'O': value = GDK_KEY_Odiaeresis; break;
+            case 'u': value = GDK_KEY_udiaeresis; break;
+            case 'U': value = GDK_KEY_Udiaeresis; break;
+            case 'y': value = GDK_KEY_ydiaeresis; break;
+            case 'Y': value = GDK_KEY_Ydiaeresis; break;
+            }
+          break;
 
-          GTK_NOTE (MISC, g_print ("quartz: U+%04X\n", value));
-          return TRUE;
+        case GDK_KEY_dead_acute:
+          switch (priv->compose_buffer[1])
+            {
+            case 'c': value = GDK_KEY_ccedilla; break;
+            case 'C': value = GDK_KEY_Ccedilla; break;
+            }
+          break;
         }
+    }
+
+  if (value > 0)
+    {
+      gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple),
+                                         gdk_keyval_to_unicode (value));
+      priv->compose_buffer[0] = 0;
+
+      GTK_NOTE (MISC, g_print ("quartz: U+%04X\n", value));
+      return TRUE;
     }
 
   return FALSE;

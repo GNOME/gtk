@@ -28,16 +28,22 @@
 #include "gtkstylepropertiesprivate.h"
 #include "gtkthemingengine.h"
 
+#include "deprecated/gtksymboliccolor.h"
+
 G_DEFINE_TYPE (GtkCssCustomProperty, _gtk_css_custom_property, GTK_TYPE_CSS_STYLE_PROPERTY)
 
 static GType
 gtk_css_custom_property_get_specified_type (GParamSpec *pspec)
 {
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
   if (pspec->value_type == GDK_TYPE_RGBA ||
       pspec->value_type == GDK_TYPE_COLOR)
     return GTK_TYPE_SYMBOLIC_COLOR;
   else
     return pspec->value_type;
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 static GtkCssValue *
@@ -205,6 +211,8 @@ gtk_css_custom_property_create_initial_value (GParamSpec *pspec)
  * </note>
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: Code should use the default properties provided by CSS.
  **/
 void
 gtk_theming_engine_register_property (const gchar            *name_space,
@@ -254,6 +262,8 @@ gtk_theming_engine_register_property (const gchar            *name_space,
  * a theming engine, you want to use that function instead.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: Code should use the default properties provided by CSS.
  **/
 void
 gtk_style_properties_register_property (GtkStylePropertyParser  parse_func,
@@ -297,6 +307,9 @@ gtk_style_properties_register_property (GtkStylePropertyParser  parse_func,
  * Returns: %TRUE if the property is registered, %FALSE otherwise
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: This code could only look up custom properties and
+ *     those are deprecated.
  **/
 gboolean
 gtk_style_properties_lookup_property (const gchar             *property_name,

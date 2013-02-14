@@ -56,6 +56,9 @@ EXTRA_DIST += \
 	background-size-keywords.css \
 	background-size-keywords.ref.ui \
 	background-size-keywords.ui \
+	background-size-zero.css \
+	background-size-zero.ref.ui \
+	background-size-zero.ui \
 	background-window-transparent.css \
 	background-window-transparent.ref.ui \
 	background-window-transparent.ui \
@@ -63,6 +66,9 @@ EXTRA_DIST += \
 	border-color-default.css \
 	border-color-default.ref.ui \
 	border-color-default.ui \
+	border-half-pixel.css \
+	border-half-pixel.ref.ui \
+	border-half-pixel.ui \
 	border-image-ball-green.png \
 	border-image-ball-red.png \
 	border-image-ball-yellow.png \
@@ -146,6 +152,9 @@ EXTRA_DIST += \
 	entry-progress-coloring.css \
 	entry-progress-coloring.ref.ui \
 	entry-progress-coloring.ui \
+	font-sizes-names.css \
+	font-sizes-names.ref.ui \
+	font-sizes-names.ui \
 	green-20x20.png \
 	grid-empty-with-spacing.ref.ui \
 	grid-empty-with-spacing.ui \
@@ -176,6 +185,10 @@ EXTRA_DIST += \
 	label-attribute-preference.css \
 	label-attribute-preference.ref.ui \
 	label-attribute-preference.ui \
+	label-ellipsize-small.ref.ui \
+	label-ellipsize-small.ui \
+	label-ellipsize-with-big.ref.ui \
+	label-ellipsize-with-big.ui \
 	label-shadows.css \
 	label-shadows.ref.ui \
 	label-shadows.ui \
@@ -184,6 +197,8 @@ EXTRA_DIST += \
 	label-sizing.ui \
 	label-small-ellipsized.ref.ui \
 	label-small-ellipsized.ui \
+	label-width-chars-dont-shrink.ref.ui \
+	label-width-chars-dont-shrink.ui \
 	label-wrap-justify.ref.ui \
 	label-wrap-justify.ui \
 	linear-gradient.css \
@@ -194,16 +209,23 @@ EXTRA_DIST += \
 	misc-alignment.css \
 	misc-alignment.ref.ui \
 	misc-alignment.ui \
+	named-colors.css \
+	named-colors.ref.ui \
+	named-colors.ui \
 	no-colors.css \
 	no-colors.ref.ui \
 	no-colors.ui \
 	nonresizable-size.ref.ui \
 	nonresizable-size.ui \
+	notebook-childproperties.css \
 	notebook-childproperties.ui \
 	notebook-childproperties.ref.ui \
 	nth-child.css \
 	nth-child.ref.ui \
 	nth-child.ui \
+	opacity.css \
+	opacity.ui \
+	opacity.ref.ui \
 	paned-undersized.css \
 	paned-undersized.ref.ui \
 	paned-undersized.ui \
@@ -218,6 +240,13 @@ EXTRA_DIST += \
 	shorthand-entry-border.ui \
 	simple.ref.ui \
 	simple.ui \
+	sizegroups-basics.css \
+	sizegroups-basics.ui \
+	sizegroups-basics.ref.ui \
+	sizegroups-evolution-identity-page.ui \
+	sizegroups-evolution-identity-page.ref.ui \
+	sizegroups-get-preferred-null.ui \
+	sizegroups-get-preferred-null.ref.ui \
 	style-properties-nth-child.css \
 	style-properties-nth-child.ref.ui \
 	style-properties-nth-child.ui \
@@ -226,6 +255,12 @@ EXTRA_DIST += \
 	style-properties-only-child.ui \
 	toplevel-vs-popup.ref.ui \
 	toplevel-vs-popup.ui \
+	treeview-headers-hidden.ref.ui \
+	treeview-headers-hidden.ui \
 	unresolvable.css \
 	unresolvable.ref.ui \
-	unresolvable.ui
+	unresolvable.ui \
+	window-border-width.ref.ui \
+	window-border-width.ui
+
+-include $(top_srcdir)/git.mk

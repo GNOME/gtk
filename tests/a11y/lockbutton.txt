@@ -23,3 +23,4 @@ Click to prevent further changes
     image description: (null)
     <AtkAction>
     action 0 name: click
+    action 0 description: Clicks the button

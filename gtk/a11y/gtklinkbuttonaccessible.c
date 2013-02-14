@@ -1,4 +1,4 @@
-/* GAIL - The GNOME Accessibility Implementation Library
+/* GTK+ - accessibility implementations
  * Copyright 2011 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -197,11 +197,11 @@ gtk_link_button_accessible_get_hyperlink (AtkHyperlinkImpl *impl)
 
 static void atk_hypertext_impl_interface_init (AtkHyperlinkImplIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkLinkButtonAccessible, _gtk_link_button_accessible, GTK_TYPE_BUTTON_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkLinkButtonAccessible, gtk_link_button_accessible, GTK_TYPE_BUTTON_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_HYPERLINK_IMPL, atk_hypertext_impl_interface_init))
 
 static void
-_gtk_link_button_accessible_init (GtkLinkButtonAccessible *button)
+gtk_link_button_accessible_init (GtkLinkButtonAccessible *button)
 {
   button->priv = G_TYPE_INSTANCE_GET_PRIVATE (button,
                                               GTK_TYPE_LINK_BUTTON_ACCESSIBLE,
@@ -216,11 +216,11 @@ gtk_link_button_accessible_finalize (GObject *object)
   if (button->priv->link)
     g_object_unref (button->priv->link);
 
-  G_OBJECT_CLASS (_gtk_link_button_accessible_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_link_button_accessible_parent_class)->finalize (object);
 }
 
 static void
-_gtk_link_button_accessible_class_init (GtkLinkButtonAccessibleClass *klass)
+gtk_link_button_accessible_class_init (GtkLinkButtonAccessibleClass *klass)
 {
   G_OBJECT_CLASS (klass)->finalize = gtk_link_button_accessible_finalize;
 

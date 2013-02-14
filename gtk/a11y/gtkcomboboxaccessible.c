@@ -1,4 +1,4 @@
-/* GAIL - The GNOME Accessibility Implementation Library
+/* GTK+ - accessibility implementations
  * Copyright 2004 Sun Microsystems Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -17,6 +17,7 @@
 
 #include "config.h"
 
+#include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
 #include "gtkcomboboxaccessible.h"
 
@@ -30,7 +31,7 @@ struct _GtkComboBoxAccessiblePrivate
 static void atk_action_interface_init    (AtkActionIface    *iface);
 static void atk_selection_interface_init (AtkSelectionIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkComboBoxAccessible, _gtk_combo_box_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkComboBoxAccessible, gtk_combo_box_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_SELECTION, atk_selection_interface_init))
 
@@ -63,7 +64,7 @@ gtk_combo_box_accessible_initialize (AtkObject *obj,
   GtkComboBoxAccessible *accessible;
   AtkObject *popup;
 
-  ATK_OBJECT_CLASS (_gtk_combo_box_accessible_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gtk_combo_box_accessible_parent_class)->initialize (obj, data);
 
   combo_box = GTK_COMBO_BOX (data);
   accessible = GTK_COMBO_BOX_ACCESSIBLE (obj);
@@ -90,7 +91,7 @@ gtk_combo_box_accessible_finalize (GObject *object)
 
   g_free (combo_box->priv->name);
 
-  G_OBJECT_CLASS (_gtk_combo_box_accessible_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_combo_box_accessible_parent_class)->finalize (object);
 }
 
 static const gchar *
@@ -105,7 +106,7 @@ gtk_combo_box_accessible_get_name (AtkObject *obj)
   gint n_columns;
   gint i;
 
-  name = ATK_OBJECT_CLASS (_gtk_combo_box_accessible_parent_class)->get_name (obj);
+  name = ATK_OBJECT_CLASS (gtk_combo_box_accessible_parent_class)->get_name (obj);
   if (name)
     return name;
 
@@ -190,7 +191,7 @@ gtk_combo_box_accessible_ref_child (AtkObject *obj,
 }
 
 static void
-_gtk_combo_box_accessible_class_init (GtkComboBoxAccessibleClass *klass)
+gtk_combo_box_accessible_class_init (GtkComboBoxAccessibleClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
@@ -206,7 +207,7 @@ _gtk_combo_box_accessible_class_init (GtkComboBoxAccessibleClass *klass)
 }
 
 static void
-_gtk_combo_box_accessible_init (GtkComboBoxAccessible *combo_box)
+gtk_combo_box_accessible_init (GtkComboBoxAccessible *combo_box)
 {
   combo_box->priv = G_TYPE_INSTANCE_GET_PRIVATE (combo_box,
                                                  GTK_TYPE_COMBO_BOX_ACCESSIBLE,
@@ -299,10 +300,27 @@ static const gchar *
 gtk_combo_box_accessible_action_get_name (AtkAction *action,
                                           gint       i)
 {
-  if (i != 0)
-    return NULL;
+  if (i == 0)
+    return "press";
+  return NULL;
+}
 
-  return "press";
+static const gchar *
+gtk_combo_box_accessible_action_get_localized_name (AtkAction *action,
+                                                    gint       i)
+{
+  if (i == 0)
+    return C_("Action name", "Press");
+  return NULL;
+}
+
+static const gchar *
+gtk_combo_box_accessible_action_get_description (AtkAction *action,
+                                                 gint       i)
+{
+  if (i == 0)
+    return C_("Action description", "Presses the combobox");
+  return NULL;
 }
 
 static void
@@ -312,6 +330,8 @@ atk_action_interface_init (AtkActionIface *iface)
   iface->get_n_actions = gtk_combo_box_accessible_get_n_actions;
   iface->get_keybinding = gtk_combo_box_accessible_get_keybinding;
   iface->get_name = gtk_combo_box_accessible_action_get_name;
+  iface->get_localized_name = gtk_combo_box_accessible_action_get_localized_name;
+  iface->get_description = gtk_combo_box_accessible_action_get_description;
 }
 
 static gboolean

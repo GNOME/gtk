@@ -17,6 +17,7 @@
 
 #include "config.h"
 
+#include "gtkprivate.h"
 #include "gtkcssvalueprivate.h"
 
 #include "gtkcsscomputedvaluesprivate.h"
@@ -45,7 +46,7 @@ _gtk_css_value_alloc (const GtkCssValueClass *klass,
 GtkCssValue *
 _gtk_css_value_ref (GtkCssValue *value)
 {
-  g_return_val_if_fail (value != NULL, NULL);
+  gtk_internal_return_val_if_fail (value != NULL, NULL);
 
   g_atomic_int_add (&value->ref_count, 1);
 
@@ -93,10 +94,10 @@ _gtk_css_value_compute (GtkCssValue             *value,
 {
   GtkCssDependencies fallback;
 
-  g_return_val_if_fail (value != NULL, NULL);
-  g_return_val_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider), NULL);
-  g_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values), NULL);
-  g_return_val_if_fail (parent_values == NULL || GTK_IS_CSS_COMPUTED_VALUES (parent_values), NULL);
+  gtk_internal_return_val_if_fail (value != NULL, NULL);
+  gtk_internal_return_val_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider), NULL);
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values), NULL);
+  gtk_internal_return_val_if_fail (parent_values == NULL || GTK_IS_CSS_COMPUTED_VALUES (parent_values), NULL);
 
   if (dependencies == NULL)
     dependencies = &fallback;
@@ -109,8 +110,8 @@ gboolean
 _gtk_css_value_equal (const GtkCssValue *value1,
                       const GtkCssValue *value2)
 {
-  g_return_val_if_fail (value1 != NULL, FALSE);
-  g_return_val_if_fail (value2 != NULL, FALSE);
+  gtk_internal_return_val_if_fail (value1 != NULL, FALSE);
+  gtk_internal_return_val_if_fail (value2 != NULL, FALSE);
 
   if (value1 == value2)
     return TRUE;
@@ -141,8 +142,8 @@ _gtk_css_value_transition (GtkCssValue *start,
                            guint        property_id,
                            double       progress)
 {
-  g_return_val_if_fail (start != NULL, FALSE);
-  g_return_val_if_fail (end != NULL, FALSE);
+  gtk_internal_return_val_if_fail (start != NULL, FALSE);
+  gtk_internal_return_val_if_fail (end != NULL, FALSE);
 
   if (start->class != end->class)
     return NULL;
@@ -155,7 +156,7 @@ _gtk_css_value_to_string (const GtkCssValue *value)
 {
   GString *string;
 
-  g_return_val_if_fail (value != NULL, NULL);
+  gtk_internal_return_val_if_fail (value != NULL, NULL);
 
   string = g_string_new (NULL);
   _gtk_css_value_print (value, string);
@@ -175,8 +176,8 @@ void
 _gtk_css_value_print (const GtkCssValue *value,
                       GString           *string)
 {
-  g_return_if_fail (value != NULL);
-  g_return_if_fail (string != NULL);
+  gtk_internal_return_if_fail (value != NULL);
+  gtk_internal_return_if_fail (string != NULL);
 
   value->class->print (value, string);
 }

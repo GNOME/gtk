@@ -28,7 +28,9 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gio/gio.h>
+#ifdef G_OS_UNIX
 #include <gio/gdesktopappinfo.h>
+#endif
 #include <gtk.h>
 
 static gchar **args = NULL;
@@ -45,8 +47,10 @@ main (int argc, char *argv[])
   GOptionContext *context = NULL;
   gchar *summary;
   gchar *app_name;
+#ifdef G_OS_UNIX
   gchar *desktop_file_name;
-  GDesktopAppInfo *info;
+#endif
+  GAppInfo *info = NULL;
   GAppLaunchContext *launch_context;
   GList *l;
   GFile *f;
@@ -61,12 +65,10 @@ main (int argc, char *argv[])
 #endif
 #endif
 
-  g_type_init ();
-
   /* Translators: this message will appear immediately after the */
-  /* usage string - Usage: COMMAND [OPTION]... <THIS_MESSAGE>    */
+  /* usage string - Usage: COMMAND [OPTION]… <THIS_MESSAGE>    */
   context =
-    g_option_context_new (_("APPLICATION [URI...] - launch an APPLICATION with URI."));
+    g_option_context_new (_("APPLICATION [URI…] — launch an APPLICATION with URI."));
 
   /* Translators: this message will appear after the usage string */
   /* and before the list of options.                              */
@@ -107,12 +109,17 @@ main (int argc, char *argv[])
   gtk_init (&argc, &argv);
 
   app_name = *args;
+#ifdef G_OS_UNIX
   if (g_str_has_suffix (app_name, ".desktop"))
     desktop_file_name = g_strdup (app_name);
   else 
     desktop_file_name = g_strconcat (app_name, ".desktop", NULL);
-  info = g_desktop_app_info_new (desktop_file_name);
+  info = G_APP_INFO (g_desktop_app_info_new (desktop_file_name));
   g_free (desktop_file_name);
+#else
+#warning Please add support for creating AppInfo from id for your OS
+  g_printerr (_("Creating AppInfo from id not supported on non unix operating systems"));
+#endif
   args++;
 
   if (!info)
@@ -133,7 +140,7 @@ main (int argc, char *argv[])
     }
 
   launch_context = (GAppLaunchContext*) gdk_display_get_app_launch_context (gdk_display_get_default ());
-  if (!g_app_info_launch (G_APP_INFO (info), l, launch_context, &error))
+  if (!g_app_info_launch (info, l, launch_context, &error))
     {
        /* Translators: the first %s is the program name, the second one  */
        /* is the error message.                                          */

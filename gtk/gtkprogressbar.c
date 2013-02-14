@@ -75,9 +75,8 @@ struct _GtkProgressBarPrivate
   gdouble        fraction;
   gdouble        pulse_fraction;
 
-  gint           activity_pos;
+  double         activity_pos;
   guint          activity_blocks;
-  guint          activity_step;
 
   GtkOrientation orientation;
 
@@ -307,7 +306,6 @@ gtk_progress_bar_init (GtkProgressBar *pbar)
   priv->pulse_fraction = 0.1;
   priv->activity_pos = 0;
   priv->activity_dir = 1;
-  priv->activity_step = 3;
   priv->activity_blocks = 5;
   priv->ellipsize = PANGO_ELLIPSIZE_NONE;
   priv->show_text = FALSE;
@@ -425,68 +423,23 @@ gtk_progress_bar_real_update (GtkProgressBar *pbar)
 
   if (priv->activity_mode)
     {
-      GtkAllocation allocation;
-      GtkStyleContext *context;
-      GtkStateFlags state;
-      GtkBorder padding;
-      gint size;
-
-      gtk_widget_get_allocation (widget, &allocation);
-      context = gtk_widget_get_style_context (widget);
-      state = gtk_widget_get_state_flags (widget);
-      gtk_style_context_get_padding (context, state, &padding);
-
       /* advance the block */
-      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+      if (priv->activity_dir == 0)
         {
-          /* Update our activity step. */
-          priv->activity_step = allocation.width * priv->pulse_fraction;
-
-          size = MAX (2, allocation.width / priv->activity_blocks);
-
-          if (priv->activity_dir == 0)
+          priv->activity_pos += priv->pulse_fraction;
+          if (priv->activity_pos > 1.0)
             {
-              priv->activity_pos += priv->activity_step;
-              if (priv->activity_pos + size >= allocation.width - padding.left)
-                {
-                  priv->activity_pos = allocation.width - padding.left - size;
-                  priv->activity_dir = 1;
-                }
-            }
-          else
-            {
-              priv->activity_pos -= priv->activity_step;
-              if (priv->activity_pos <= padding.left)
-                {
-                  priv->activity_pos = padding.left;
-                  priv->activity_dir = 0;
-                }
+              priv->activity_pos = 1.0;
+              priv->activity_dir = 1;
             }
         }
       else
         {
-          /* Update our activity step. */
-          priv->activity_step = allocation.height * priv->pulse_fraction;
-
-          size = MAX (2, allocation.height / priv->activity_blocks);
-
-          if (priv->activity_dir == 0)
+          priv->activity_pos -= priv->pulse_fraction;
+          if (priv->activity_pos <= 0)
             {
-              priv->activity_pos += priv->activity_step;
-              if (priv->activity_pos + size >= allocation.height - padding.top)
-                {
-                  priv->activity_pos = allocation.height - padding.top - size;
-                  priv->activity_dir = 1;
-                }
-            }
-          else
-            {
-              priv->activity_pos -= priv->activity_step;
-              if (priv->activity_pos <= padding.top)
-                {
-                  priv->activity_pos = padding.top;
-                  priv->activity_dir = 0;
-                }
+              priv->activity_pos = 0;
+              priv->activity_dir = 0;
             }
         }
     }
@@ -556,15 +509,15 @@ gtk_progress_bar_get_preferred_width (GtkWidget *widget,
 
       if (priv->ellipsize)
         {
-	  const PangoFontDescription *font_desc;
           PangoContext *context;
           PangoFontMetrics *metrics;
           gint char_width;
 
           /* The minimum size for ellipsized text is ~ 3 chars */
           context = pango_layout_get_context (layout);
-          font_desc = gtk_style_context_get_font (style_context, state);
-          metrics = pango_context_get_metrics (context, font_desc, pango_context_get_language (context));
+          metrics = pango_context_get_metrics (context,
+                                               pango_context_get_font_description (context),
+                                               pango_context_get_language (context));
 
           char_width = pango_font_metrics_get_approximate_char_width (metrics);
           pango_font_metrics_unref (metrics);
@@ -651,7 +604,6 @@ static void
 gtk_progress_bar_act_mode_enter (GtkProgressBar *pbar)
 {
   GtkProgressBarPrivate *priv = pbar->priv;
-  GtkAllocation allocation;
   GtkStyleContext *context;
   GtkStateFlags state;
   GtkBorder padding;
@@ -677,14 +629,12 @@ gtk_progress_bar_act_mode_enter (GtkProgressBar *pbar)
     {
       if (!inverted)
         {
-          priv->activity_pos = padding.left;
+          priv->activity_pos = 0.0;
           priv->activity_dir = 0;
         }
       else
         {
-          gtk_widget_get_allocation (widget, &allocation);
-          priv->activity_pos = allocation.width - padding.left -
-                               (allocation.height - padding.top - padding.bottom);
+          priv->activity_pos = 1.0;
           priv->activity_dir = 1;
         }
     }
@@ -692,14 +642,12 @@ gtk_progress_bar_act_mode_enter (GtkProgressBar *pbar)
     {
       if (!inverted)
         {
-          priv->activity_pos = padding.top;
+          priv->activity_pos = 0.0;
           priv->activity_dir = 0;
         }
       else
         {
-          gtk_widget_get_allocation (widget, &allocation);
-          priv->activity_pos = allocation.height - padding.top -
-                               (allocation.width - padding.left - padding.right);
+          priv->activity_pos = 1.0;
           priv->activity_dir = 1;
         }
     }
@@ -712,17 +660,25 @@ gtk_progress_bar_get_activity (GtkProgressBar *pbar,
                                gint           *amount)
 {
   GtkProgressBarPrivate *priv = pbar->priv;
-  GtkAllocation allocation;
   GtkWidget *widget = GTK_WIDGET (pbar);
+  GtkStyleContext *context;
+  GtkAllocation allocation;
+  GtkStateFlags state;
+  GtkBorder padding;
+  int size;
 
-  *offset = priv->activity_pos;
-
+  context = gtk_widget_get_style_context (widget);
+  state = gtk_style_context_get_state (context);
   gtk_widget_get_allocation (widget, &allocation);
+  gtk_style_context_get_padding (context, state, &padding);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    *amount = MAX (2, allocation.width / priv->activity_blocks);
+    size = allocation.width - padding.left - padding.top;
   else
-    *amount = MAX (2, allocation.height / priv->activity_blocks);
+    size = allocation.height - padding.left - padding.top;
+
+  *amount = MAX (2, size / priv->activity_blocks);
+  *offset = priv->activity_pos * (size - *amount);
 }
 
 static void

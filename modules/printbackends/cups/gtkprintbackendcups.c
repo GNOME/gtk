@@ -1696,7 +1696,7 @@ typedef struct
   const gchar *member_uris;
   const gchar *location;
   const gchar *description;
-  const gchar *state_msg;
+  gchar *state_msg;
   const gchar *reason_msg;
   PrinterStateLevel reason_level;
   gint state;
@@ -1732,7 +1732,7 @@ cups_printer_handle_attribute (GtkPrintBackendCups *cups_backend,
   else if (strcmp (ippGetName (attr), "printer-info") == 0)
     info->description = ippGetString (attr, 0, NULL);
   else if (strcmp (ippGetName (attr), "printer-state-message") == 0)
-    info->state_msg = ippGetString (attr, 0, NULL);
+    info->state_msg = g_strdup (ippGetString (attr, 0, NULL));
   else if (strcmp (ippGetName (attr), "printer-state-reasons") == 0)
     /* Store most important reason to reason_msg and set
        its importance at printer_state_reason_level */
@@ -2130,8 +2130,8 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
 
           if (tmp_msg2 != NULL)
 	    {
+	      g_free (info->state_msg);
 	      info->state_msg = tmp_msg2;
-	      g_free (tmp_msg2);
 	    }
 	}
 
@@ -2159,14 +2159,18 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
           if (info->reason_level >= GTK_PRINTER_STATE_LEVEL_WARNING)
             {
               if (strlen (info->state_msg) == 0)
-                info->state_msg = reason_msg_desc;
+                {
+                  g_free (info->state_msg);
+                  info->state_msg = reason_msg_desc;
+                  reason_msg_desc = NULL;
+                }
               else
                 {
 		  gchar *tmp_msg = NULL;
 		  tmp_msg = g_strjoin (" ; ", info->state_msg,
 				       reason_msg_desc, NULL);
+                  g_free (info->state_msg);
                   info->state_msg = tmp_msg;
-		  g_free (tmp_msg);
                 }
             }
 	  if (reason_msg_desc != NULL)
@@ -2195,6 +2199,7 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
 
       /* The ref is held by GtkPrintBackend, in add_printer() */
       g_object_unref (printer);
+      g_free (info->state_msg);
       g_slice_free (PrinterSetupInfo, info);
 
       if (attr == NULL)
@@ -2205,7 +2210,8 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
      as inactive if it is in the list, emitting a printer_removed signal */
   if (removed_printer_checklist != NULL)
     {
-      g_list_free_full (removed_printer_checklist, (GDestroyNotify) mark_printer_inactive);
+      g_list_foreach (removed_printer_checklist, (GFunc) mark_printer_inactive, backend);
+      g_list_free (removed_printer_checklist);
       list_has_changed = TRUE;
     }
 
@@ -3164,7 +3170,7 @@ value_is_off (const char *value)
 static char *
 ppd_group_name (ppd_group_t *group)
 {
-  return group->text;
+  return group->name;
 }
 
 static int

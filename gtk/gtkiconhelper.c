@@ -325,7 +325,10 @@ _gtk_icon_helper_ensure_pixbuf (GtkIconHelper *self,
 
     case GTK_IMAGE_STOCK:
       icon_set = gtk_style_context_lookup_icon_set (context, self->priv->stock_id);
-      ensure_pixbuf_for_icon_set (self, context, icon_set);
+      if (icon_set != NULL)
+	ensure_pixbuf_for_icon_set (self, context, icon_set);
+      else
+	pixbuf = NULL;
       break;
 
     case GTK_IMAGE_ICON_SET:
@@ -410,7 +413,7 @@ _gtk_icon_helper_set_icon_name (GtkIconHelper *self,
   _gtk_icon_helper_clear (self);
 
   if (icon_name != NULL &&
-      g_strcmp0 (icon_name, "") != 0)
+      icon_name[0] != '\0')
     {
       self->priv->storage_type = GTK_IMAGE_ICON_NAME;
       self->priv->icon_name = g_strdup (icon_name);
@@ -466,7 +469,8 @@ _gtk_icon_helper_set_stock_id (GtkIconHelper *self,
 {
   _gtk_icon_helper_clear (self);
 
-  if (stock_id != NULL)
+  if (stock_id != NULL &&
+      stock_id[0] != '\0')
     {
       self->priv->storage_type = GTK_IMAGE_STOCK;
       self->priv->stock_id = g_strdup (stock_id);

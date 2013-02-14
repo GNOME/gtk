@@ -885,7 +885,7 @@ gtk_layout_realize (GtkWidget *widget)
   window = gdk_window_new (gtk_widget_get_parent_window (widget),
                            &attributes, attributes_mask);
   gtk_widget_set_window (widget, window);
-  gdk_window_set_user_data (window, widget);
+  gtk_widget_register_window (widget, window);
 
   gtk_widget_get_allocation (widget, &allocation);
 
@@ -899,7 +899,7 @@ gtk_layout_realize (GtkWidget *widget)
 
   priv->bin_window = gdk_window_new (window,
                                      &attributes, attributes_mask);
-  gdk_window_set_user_data (priv->bin_window, widget);
+  gtk_widget_register_window (widget, priv->bin_window);
   gtk_style_context_set_background (gtk_widget_get_style_context (widget), priv->bin_window);
 
   tmp_list = priv->children;
@@ -958,7 +958,7 @@ gtk_layout_unrealize (GtkWidget *widget)
   GtkLayout *layout = GTK_LAYOUT (widget);
   GtkLayoutPrivate *priv = layout->priv;
 
-  gdk_window_set_user_data (priv->bin_window, NULL);
+  gtk_widget_unregister_window (widget, priv->bin_window);
   gdk_window_destroy (priv->bin_window);
   priv->bin_window = NULL;
 

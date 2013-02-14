@@ -31,8 +31,6 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 
-#include "a11y/gtkscrollbaraccessible.h"
-
 
 /**
  * SECTION:gtkscrollbar
@@ -111,25 +109,17 @@ gtk_scrollbar_class_init (GtkScrollbarClass *class)
                                                                  FALSE,
                                                                  GTK_PARAM_READABLE));
 
-  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SCROLLBAR_ACCESSIBLE);
+  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_SCROLL_BAR);
 }
 
 static void
-gtk_scrollbar_init (GtkScrollbar *scrollbar)
+gtk_scrollbar_update_style (GtkScrollbar *scrollbar)
 {
-  GtkStyleContext *context;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (scrollbar));
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SCROLLBAR);
-}
-
-static void
-gtk_scrollbar_style_updated (GtkWidget *widget)
-{
-  GtkRange *range = GTK_RANGE (widget);
   gint slider_length;
   gboolean fixed_size;
   gboolean has_a, has_b, has_c, has_d;
+  GtkRange *range = GTK_RANGE (scrollbar);
+  GtkWidget *widget = GTK_WIDGET (scrollbar);
 
   gtk_widget_style_get (widget,
                         "min-slider-length", &slider_length,
@@ -144,7 +134,22 @@ gtk_scrollbar_style_updated (GtkWidget *widget)
   gtk_range_set_slider_size_fixed (range, fixed_size);
   _gtk_range_set_steppers (range,
                            has_a, has_b, has_c, has_d);
+}
 
+static void
+gtk_scrollbar_init (GtkScrollbar *scrollbar)
+{
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (scrollbar));
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SCROLLBAR);
+  gtk_scrollbar_update_style (scrollbar);
+}
+
+static void
+gtk_scrollbar_style_updated (GtkWidget *widget)
+{
+  gtk_scrollbar_update_style (GTK_SCROLLBAR (widget));
   GTK_WIDGET_CLASS (gtk_scrollbar_parent_class)->style_updated (widget);
 }
 

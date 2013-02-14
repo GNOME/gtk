@@ -25,6 +25,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtksizegroup-private.h"
+#include "gtksizerequestcacheprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcontainerprivate.h"
 
@@ -110,17 +111,11 @@
 
 struct _GtkSizeGroupPrivate
 {
-  GtkRequisition  minimum_req;
-  GtkRequisition  natural_req;
-
   GSList         *widgets;
 
   guint8          mode;
 
-  guint           have_width    : 1;
-  guint           have_height   : 1;
   guint           ignore_hidden : 1;
-  guint           visited       : 1;
 };
 
 enum {
@@ -138,15 +133,6 @@ static void gtk_size_group_get_property (GObject      *object,
 					 GValue       *value,
 					 GParamSpec   *pspec);
 
-static void add_group_to_closure  (GtkSizeGroup      *group,
-				   GtkSizeGroupMode   mode,
-				   GSList           **groups,
-				   GSList           **widgets);
-static void add_widget_to_closure (GtkWidget         *widget,
-				   GtkSizeGroupMode   mode,
-				   GSList           **groups,
-				   GSList           **widgets);
-
 /* GtkBuildable */
 static void gtk_size_group_buildable_init (GtkBuildableIface *iface);
 static gboolean gtk_size_group_buildable_custom_tag_start (GtkBuildable  *buildable,
@@ -161,67 +147,62 @@ static void gtk_size_group_buildable_custom_finished (GtkBuildable  *buildable,
 						      const gchar   *tagname,
 						      gpointer       user_data);
 
-static void
-mark_group_unvisited (GtkSizeGroup *group)
-{
-  group->priv->visited = FALSE;
-}
+G_STATIC_ASSERT (GTK_SIZE_GROUP_HORIZONTAL == (1 << GTK_ORIENTATION_HORIZONTAL));
+G_STATIC_ASSERT (GTK_SIZE_GROUP_VERTICAL == (1 << GTK_ORIENTATION_VERTICAL));
+G_STATIC_ASSERT (GTK_SIZE_GROUP_BOTH == (GTK_SIZE_GROUP_HORIZONTAL | GTK_SIZE_GROUP_VERTICAL));
 
 static void
-mark_widget_unvisited (GtkWidget *widget)
+add_widget_to_closure (GHashTable     *widgets,
+                       GHashTable     *groups,
+                       GtkWidget      *widget,
+		       GtkOrientation  orientation)
 {
-  _gtk_widget_set_sizegroup_visited (widget, FALSE);
-}
+  GSList *tmp_groups, *tmp_widgets;
+  gboolean hidden;
 
-static void
-add_group_to_closure (GtkSizeGroup    *group,
-		      GtkSizeGroupMode mode,
-		      GSList         **groups,
-		      GSList         **widgets)
-{
-  GtkSizeGroupPrivate *priv = group->priv;
-  GSList *tmp_widgets;
-  
-  *groups = g_slist_prepend (*groups, group);
-  priv->visited = TRUE;
+  if (g_hash_table_lookup (widgets, widget))
+    return;
 
-  tmp_widgets = priv->widgets;
-  while (tmp_widgets)
-    {
-      GtkWidget *tmp_widget = tmp_widgets->data;
-      
-      if (!_gtk_widget_get_sizegroup_visited (tmp_widget))
-	add_widget_to_closure (tmp_widget, mode, groups, widgets);
-      
-      tmp_widgets = tmp_widgets->next;
-    }
-}
+  g_hash_table_add (widgets, widget);
+  hidden = !gtk_widget_is_visible (widget);
 
-static void
-add_widget_to_closure (GtkWidget       *widget,
-		       GtkSizeGroupMode mode,
-		       GSList         **groups,
-		       GSList         **widgets)
-{
-  GSList *tmp_groups;
-
-  *widgets = g_slist_prepend (*widgets, widget);
-  _gtk_widget_set_sizegroup_visited (widget, TRUE);
-
-  tmp_groups = _gtk_widget_get_sizegroups (widget);
-  while (tmp_groups)
+  for (tmp_groups = _gtk_widget_get_sizegroups (widget); tmp_groups; tmp_groups = tmp_groups->next)
     {
       GtkSizeGroup        *tmp_group = tmp_groups->data;
       GtkSizeGroupPrivate *tmp_priv  = tmp_group->priv;
 
-      if ((tmp_priv->mode == GTK_SIZE_GROUP_BOTH || tmp_priv->mode == mode) &&
-	  !tmp_group->priv->visited)
-	add_group_to_closure (tmp_group, mode, groups, widgets);
+      if (g_hash_table_lookup (groups, tmp_group))
+        continue;
 
-      tmp_groups = tmp_groups->next;
+      if (tmp_priv->ignore_hidden && hidden)
+        continue;
+
+      if (!(tmp_priv->mode & (1 << orientation)))
+        continue;
+
+      g_hash_table_add (groups, tmp_group);
+
+      for (tmp_widgets = tmp_priv->widgets; tmp_widgets; tmp_widgets = tmp_widgets->next)
+        add_widget_to_closure (widgets, groups, tmp_widgets->data, orientation);
     }
 }
 
+GHashTable *
+_gtk_size_group_get_widget_peers (GtkWidget      *for_widget,
+                                  GtkOrientation  orientation)
+{
+  GHashTable *widgets, *groups;
+
+  widgets = g_hash_table_new (g_direct_hash, g_direct_equal);
+  groups = g_hash_table_new (g_direct_hash, g_direct_equal);
+
+  add_widget_to_closure (widgets, groups, for_widget, orientation);
+
+  g_hash_table_unref (groups);
+
+  return widgets;
+}
+                                     
 static void
 real_queue_resize (GtkWidget          *widget,
 		   GtkQueueResizeFlags flags)
@@ -229,8 +210,7 @@ real_queue_resize (GtkWidget          *widget,
   GtkWidget *container;
 
   _gtk_widget_set_alloc_needed (widget, TRUE);
-  _gtk_widget_set_width_request_needed (widget, TRUE);
-  _gtk_widget_set_height_request_needed (widget, TRUE);
+  _gtk_size_request_cache_clear (_gtk_widget_peek_request_cache (widget));
 
   container = gtk_widget_get_parent (widget);
   if (!container &&
@@ -247,34 +227,18 @@ real_queue_resize (GtkWidget          *widget,
 }
 
 static void
-reset_group_sizes (GSList *groups)
-{
-  GSList *tmp_list = groups;
-  while (tmp_list)
-    {
-      GtkSizeGroup *tmp_group = tmp_list->data;
-      GtkSizeGroupPrivate *tmp_priv = tmp_group->priv;
-
-      tmp_priv->have_width = FALSE;
-      tmp_priv->have_height = FALSE;
-
-      tmp_list = tmp_list->next;
-    }
-}
-
-static void
 queue_resize_on_widget (GtkWidget          *widget,
 			gboolean            check_siblings,
 			GtkQueueResizeFlags flags)
 {
   GtkWidget *parent = widget;
-  GSList *tmp_list;
 
   while (parent)
     {
       GSList *widget_groups;
-      GSList *groups;
-      GSList *widgets;
+      GHashTable *widgets;
+      GHashTableIter iter;
+      gpointer current;
       
       if (widget == parent && !check_siblings)
 	{
@@ -293,65 +257,45 @@ queue_resize_on_widget (GtkWidget          *widget,
 	  continue;
 	}
 
-      groups = NULL;
-      widgets = NULL;
-	  
-      add_widget_to_closure (parent, GTK_SIZE_GROUP_HORIZONTAL, &groups, &widgets);
-      g_slist_foreach (widgets, (GFunc)mark_widget_unvisited, NULL);
-      g_slist_foreach (groups, (GFunc)mark_group_unvisited, NULL);
+      widgets = _gtk_size_group_get_widget_peers (parent, GTK_ORIENTATION_HORIZONTAL);
 
-      reset_group_sizes (groups);
-	      
-      tmp_list = widgets;
-      while (tmp_list)
+      g_hash_table_iter_init (&iter, widgets);
+      while (g_hash_table_iter_next (&iter, &current, NULL))
 	{
-	  if (tmp_list->data == parent)
+	  if (current == parent)
 	    {
 	      if (widget == parent)
 		real_queue_resize (parent, flags);
 	    }
-	  else if (tmp_list->data == widget)
+	  else if (current == widget)
             {
               g_warning ("A container and its child are part of this SizeGroup");
             }
 	  else
-	    queue_resize_on_widget (tmp_list->data, FALSE, flags);
-
-	  tmp_list = tmp_list->next;
+	    queue_resize_on_widget (current, FALSE, flags);
 	}
       
-      g_slist_free (widgets);
-      g_slist_free (groups);
-	      
-      groups = NULL;
-      widgets = NULL;
-	      
-      add_widget_to_closure (parent, GTK_SIZE_GROUP_VERTICAL, &groups, &widgets);
-      g_slist_foreach (widgets, (GFunc)mark_widget_unvisited, NULL);
-      g_slist_foreach (groups, (GFunc)mark_group_unvisited, NULL);
+      g_hash_table_destroy (widgets);
+      
+      widgets = _gtk_size_group_get_widget_peers (parent, GTK_ORIENTATION_VERTICAL);
 
-      reset_group_sizes (groups);
-	      
-      tmp_list = widgets;
-      while (tmp_list)
+      g_hash_table_iter_init (&iter, widgets);
+      while (g_hash_table_iter_next (&iter, &current, NULL))
 	{
-	  if (tmp_list->data == parent)
+	  if (current == parent)
 	    {
 	      if (widget == parent)
 		real_queue_resize (parent, flags);
 	    }
-	  else if (tmp_list->data == widget)
+	  else if (current == widget)
             {
               g_warning ("A container and its child are part of this SizeGroup");
             }
 	  else
-	    queue_resize_on_widget (tmp_list->data, FALSE, flags);
-
-	  tmp_list = tmp_list->next;
+	    queue_resize_on_widget (current, FALSE, flags);
 	}
       
-      g_slist_free (widgets);
-      g_slist_free (groups);
+      g_hash_table_destroy (widgets);
 
       parent = gtk_widget_get_parent (parent);
     }
@@ -415,10 +359,7 @@ gtk_size_group_init (GtkSizeGroup *size_group)
 
   priv->widgets = NULL;
   priv->mode = GTK_SIZE_GROUP_HORIZONTAL;
-  priv->have_width = 0;
-  priv->have_height = 0;
-  priv->ignore_hidden = 0;
-  priv->visited  = FALSE;
+  priv->ignore_hidden = FALSE;
 }
 
 static void
@@ -695,141 +636,6 @@ gtk_size_group_get_widgets (GtkSizeGroup *size_group)
 {
   return size_group->priv->widgets;
 }
-
-static void
-compute_dimension (GtkWidget        *widget,
-		   GtkSizeGroupMode  mode,
-		   gint             *minimum, /* in-out */
-		   gint             *natural) /* in-out */
-{
-  GSList *widgets = NULL;
-  GSList *groups = NULL;
-  GSList *tmp_list;
-  gint    min_result = 0, nat_result = 0;
-
-  add_widget_to_closure (widget, mode, &groups, &widgets);
-  g_slist_foreach (widgets, (GFunc)mark_widget_unvisited, NULL);
-  g_slist_foreach (groups, (GFunc)mark_group_unvisited, NULL);
-
-  g_slist_foreach (widgets, (GFunc)g_object_ref, NULL);
-  
-  if (!groups)
-    {
-      min_result = *minimum;
-      nat_result = *natural;
-    }
-  else
-    {
-      GtkSizeGroup *group = groups->data;
-      GtkSizeGroupPrivate *priv = group->priv;
-
-      if (mode == GTK_SIZE_GROUP_HORIZONTAL && priv->have_width)
-	{
-	  min_result = priv->minimum_req.width;
-	  nat_result = priv->natural_req.width;
-	}
-      else if (mode == GTK_SIZE_GROUP_VERTICAL && priv->have_height)
-	{
-	  min_result = priv->minimum_req.height;
-	  nat_result = priv->natural_req.height;
-	}
-      else
-	{
-	  tmp_list = widgets;
-	  while (tmp_list)
-	    {
-	      GtkWidget *tmp_widget = tmp_list->data;
-	      gint min_dimension, nat_dimension;
-
-	      if (tmp_widget == widget)
-		{
-		  min_dimension = *minimum;
-		  nat_dimension = *natural;
-		}
-	      else
-		{
-		  if (mode == GTK_SIZE_GROUP_HORIZONTAL)
-		    gtk_widget_get_preferred_width (tmp_widget, &min_dimension, &nat_dimension);
-		  else
-		    gtk_widget_get_preferred_height (tmp_widget, &min_dimension, &nat_dimension);
-		}
-
-	      if (gtk_widget_get_mapped (tmp_widget) || !priv->ignore_hidden)
-		{
-		  min_result = MAX (min_result, min_dimension);
-		  nat_result = MAX (nat_result, nat_dimension);
-		}
-
-	      tmp_list = tmp_list->next;
-	    }
-
-	  tmp_list = groups;
-	  while (tmp_list)
-	    {
-	      GtkSizeGroup *tmp_group = tmp_list->data;
-              GtkSizeGroupPrivate *tmp_priv = tmp_group->priv;
-
-	      if (mode == GTK_SIZE_GROUP_HORIZONTAL)
-		{
-		  tmp_priv->have_width = TRUE;
-		  tmp_priv->minimum_req.width = min_result;
-		  tmp_priv->natural_req.width = nat_result;
-		}
-	      else
-		{
-		  tmp_priv->have_height = TRUE;
-		  tmp_priv->minimum_req.height = min_result;
-		  tmp_priv->natural_req.height = nat_result;
-		}
-	      
-	      tmp_list = tmp_list->next;
-	    }
-	}
-    }
-
-  g_slist_foreach (widgets, (GFunc)g_object_unref, NULL);
-
-  g_slist_free (widgets);
-  g_slist_free (groups);
-
-  *minimum = min_result;
-  *natural = nat_result;
-}
-
-/**
- * _gtk_size_group_bump_requisition:
- * @widget: a #GtkWidget
- * @mode: either %GTK_SIZE_GROUP_HORIZONTAL or %GTK_SIZE_GROUP_VERTICAL, depending
- *        on the dimension in which to bump the size.
- * @minimum: a pointer to the widget's minimum size
- * @natural: a pointer to the widget's natural size
- *
- * Refreshes the sizegroup while returning the groups requested
- * value in the dimension @mode.
- *
- * This function is used both to update sizegroup minimum and natural size 
- * information and widget minimum and natural sizes in multiple passes from 
- * the size request apis.
- */
-void
-_gtk_size_group_bump_requisition (GtkWidget        *widget,
-				  GtkSizeGroupMode  mode,
-				  gint             *minimum,
-				  gint             *natural)
-{
-  if (!_gtk_widget_get_sizegroup_bumping (widget))
-    {
-      /* Avoid recursion here */
-      _gtk_widget_set_sizegroup_bumping (widget, TRUE);
-
-      if (_gtk_widget_get_sizegroups (widget))
-	compute_dimension (widget, mode, minimum, natural);
-
-      _gtk_widget_set_sizegroup_bumping (widget, FALSE);
-    }
-}
-
-
 
 /**
  * _gtk_size_group_queue_resize:

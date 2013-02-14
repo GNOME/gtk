@@ -1,12 +1,13 @@
 include $(top_srcdir)/Makefile.decl
 
-noinst_LTLIBRARIES = libgail.la
+noinst_LTLIBRARIES = libgtka11y.la
 
-gail_c_sources =			\
-	gail.c				\
+gtka11y_c_sources =			\
+	gtkaccessibility.c		\
+	gtkaccessibilitymisc.c 		\
+	gtkaccessibilityutil.c		\
 	gtkarrowaccessible.c		\
 	gtkbooleancellaccessible.c	\
-	gtkboxaccessible.c		\
 	gtkbuttonaccessible.c		\
 	gtkcellaccessible.c		\
 	gtkcellaccessibleparent.c	\
@@ -22,6 +23,7 @@ gail_c_sources =			\
 	gtkimageaccessible.c		\
 	gtkimagecellaccessible.c	\
 	gtklabelaccessible.c		\
+	gtklevelbaraccessible.c \
 	gtklinkbuttonaccessible.c	\
 	gtklockbuttonaccessible.c	\
 	gtkmenuaccessible.c		\
@@ -37,7 +39,6 @@ gail_c_sources =			\
 	gtkrenderercellaccessible.c	\
 	gtkscaleaccessible.c		\
 	gtkscalebuttonaccessible.c	\
-	gtkscrollbaraccessible.c	\
 	gtkscrolledwindowaccessible.c	\
 	gtkspinbuttonaccessible.c	\
 	gtkspinneraccessible.c		\
@@ -49,20 +50,16 @@ gail_c_sources =			\
 	gtktoplevelaccessible.c		\
 	gtktreeviewaccessible.c		\
 	gtkwidgetaccessible.c		\
-	gtkwindowaccessible.c		\
-	gailutil.c			\
-	gailmisc.c
+	gtkwindowaccessible.c
 
-gail_private_h_sources =		\
-	gail.h				\
+gtka11yincludedir = $(includedir)/gtk-3.0/gtk/a11y
+gtka11yinclude_HEADERS =		\
 	gtkarrowaccessible.h		\
 	gtkbooleancellaccessible.h	\
-	gtkboxaccessible.h		\
 	gtkbuttonaccessible.h		\
 	gtkcellaccessible.h		\
 	gtkcellaccessibleparent.h	\
 	gtkcheckmenuitemaccessible.h	\
-	gtkcolorswatchaccessible.h	\
 	gtkcomboboxaccessible.h		\
 	gtkcontaineraccessible.h	\
 	gtkcontainercellaccessible.h	\
@@ -73,11 +70,12 @@ gail_private_h_sources =		\
 	gtkimageaccessible.h		\
 	gtkimagecellaccessible.h	\
 	gtklabelaccessible.h		\
+	gtklevelbaraccessible.h \
 	gtklinkbuttonaccessible.h	\
 	gtklockbuttonaccessible.h	\
 	gtkmenuaccessible.h		\
-	gtkmenushellaccessible.h	\
 	gtkmenuitemaccessible.h		\
+	gtkmenushellaccessible.h	\
 	gtknotebookaccessible.h		\
 	gtknotebookpageaccessible.h	\
 	gtkpanedaccessible.h		\
@@ -88,7 +86,6 @@ gail_private_h_sources =		\
 	gtkrenderercellaccessible.h	\
 	gtkscaleaccessible.h		\
 	gtkscalebuttonaccessible.h	\
-	gtkscrollbaraccessible.h	\
 	gtkscrolledwindowaccessible.h	\
 	gtkspinbuttonaccessible.h	\
 	gtkspinneraccessible.h		\
@@ -100,15 +97,25 @@ gail_private_h_sources =		\
 	gtktoplevelaccessible.h		\
 	gtktreeviewaccessible.h		\
 	gtkwidgetaccessible.h		\
-	gtkwindowaccessible.h		\
-	gailutil.h			\
-	gailmisc.h
+	gtkwindowaccessible.h
 
-libgail_la_SOURCES = 			\
-	$(gail_c_sources)		\
-	$(gail_private_h_sources)
+gtka11y_private_h_sources =		\
+	gtkaccessibility.h		\
+	gtkaccessibilitymisc.h		\
+	gtkaccessibilityutil.h		\
+	gtkcellaccessibleprivate.h	\
+	gtkcolorswatchaccessibleprivate.h \
+	gtkiconviewaccessibleprivate.h	\
+	gtklockbuttonaccessibleprivate.h \
+	gtktextviewaccessibleprivate.h  \
+	gtktreeviewaccessibleprivate.h	\
+	gtkwidgetaccessibleprivate.h
 
-libgail_la_CPPFLAGS = \
+libgtka11y_la_SOURCES = 		\
+	$(gtka11y_c_sources)		\
+	$(gtka11y_private_h_sources)
+
+libgtka11y_la_CPPFLAGS = 		\
 	-I$(top_srcdir)			\
 	-I$(top_srcdir)/gdk		\
 	-I$(top_builddir)/gdk		\
@@ -118,18 +125,18 @@ libgail_la_CPPFLAGS = \
 	-DGTK_COMPILATION		\
 	$(AM_CPPFLAGS)
 
-libgail_la_CFLAGS = \
-	$(GTK_DEP_CFLAGS)	\
-	$(GTK_DEBUG_FLAGS)	\
+libgtka11y_la_CFLAGS = 			\
+	$(GTK_DEP_CFLAGS)		\
+	$(GTK_DEBUG_FLAGS)		\
 	$(AM_CFLAGS)
 
-libgail_la_LIBADD =  \
-	$(GTK_DEP_LIBS)		\
+libgtka11y_la_LIBADD =  		\
+	$(GTK_DEP_LIBS)			\
 	$(INTLLIBS)
 
-libgail_la_LDFLAGS =    \
+libgtka11y_la_LDFLAGS =    		\
         $(LDFLAGS)
-		
+
 dist-hook: ../../build/win32/vs9/libgail.vcproj ../../build/win32/vs10/libgail.vcxproj ../../build/win32/vs10/libgail.vcxproj.filters
 
 ../../build/win32/vs9/libgail.vcproj: ../../build/win32/vs9/libgail.vcprojin
@@ -141,7 +148,7 @@ dist-hook: ../../build/win32/vs9/libgail.vcproj ../../build/win32/vs10/libgail.v
 	done >libgail.sourcefiles
 	$(CPP) -P - <$(top_srcdir)/build/win32/vs9/libgail.vcprojin >$@
 	rm libgail.sourcefiles
-	
+
 ../../build/win32/vs10/libgail.vcxproj: ../../build/win32/vs10/libgail.vcxprojin
 	for F in $(libgail_la_SOURCES); do \
 		case $$F in \

@@ -15,12 +15,12 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef __GTK_STYLE_PROPERTIES_H__
+#define __GTK_STYLE_PROPERTIES_H__
+
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
-
-#ifndef __GTK_STYLE_PROPERTIES_H__
-#define __GTK_STYLE_PROPERTIES_H__
 
 #include <glib-object.h>
 #include <gdk/gdk.h>
@@ -66,17 +66,21 @@ typedef gboolean (* GtkStylePropertyParser) (const gchar  *string,
 GType gtk_style_properties_get_type (void) G_GNUC_CONST;
 
 /* Next 2 are implemented in gtkcsscustomproperty.c */
+GDK_DEPRECATED_IN_3_8
 void     gtk_style_properties_register_property (GtkStylePropertyParser  parse_func,
                                                  GParamSpec             *pspec);
+GDK_DEPRECATED_IN_3_8
 gboolean gtk_style_properties_lookup_property   (const gchar             *property_name,
                                                  GtkStylePropertyParser  *parse_func,
                                                  GParamSpec             **pspec);
 
 GtkStyleProperties * gtk_style_properties_new (void);
 
+GDK_DEPRECATED_IN_3_8
 void               gtk_style_properties_map_color    (GtkStyleProperties *props,
                                                       const gchar        *name,
                                                       GtkSymbolicColor   *color);
+GDK_DEPRECATED_IN_3_8
 GtkSymbolicColor * gtk_style_properties_lookup_color (GtkStyleProperties *props,
                                                       const gchar        *name);
 

@@ -1034,7 +1034,7 @@ gtk_spin_button_realize (GtkWidget *widget)
 
   priv->down_panel = gdk_window_new (gtk_widget_get_window (widget),
                                      &attributes, attributes_mask);
-  gdk_window_set_user_data (priv->down_panel, widget);
+  gtk_widget_register_window (widget, priv->down_panel);
 
   /* create the right panel window */
   attributes.x = up_allocation.x;
@@ -1044,7 +1044,7 @@ gtk_spin_button_realize (GtkWidget *widget)
 
   priv->up_panel = gdk_window_new (gtk_widget_get_window (widget),
                                       &attributes, attributes_mask);
-  gdk_window_set_user_data (priv->up_panel, widget);
+  gtk_widget_register_window (widget, priv->up_panel);
 
   return_val = FALSE;
   g_signal_emit (spin_button, spinbutton_signals[OUTPUT], 0, &return_val);
@@ -1064,14 +1064,14 @@ gtk_spin_button_unrealize (GtkWidget *widget)
 
   if (priv->down_panel)
     {
-      gdk_window_set_user_data (priv->down_panel, NULL);
+      gtk_widget_unregister_window (widget, priv->down_panel);
       gdk_window_destroy (priv->down_panel);
       priv->down_panel = NULL;
     }
 
   if (priv->up_panel)
     {
-      gdk_window_set_user_data (priv->up_panel, NULL);
+      gtk_widget_unregister_window (widget, priv->up_panel);
       gdk_window_destroy (priv->up_panel);
       priv->up_panel = NULL;
     }

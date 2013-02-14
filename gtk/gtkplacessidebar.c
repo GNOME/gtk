@@ -500,7 +500,22 @@ special_directory_get_gicon (GUserDirectory directory)
 }
 
 static gboolean
-recent_is_supported (void)
+recent_files_setting_is_enabled (GtkPlacesSidebar *sidebar)
+{
+	GtkSettings *settings;
+	gboolean enabled;
+
+	if (gtk_widget_has_screen (GTK_WIDGET (sidebar)))
+		settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (sidebar)));
+	else
+		settings = gtk_settings_get_default ();
+
+	g_object_get (settings, "gtk-recent-files-enabled", &enabled, NULL);
+	return enabled;
+}
+
+static gboolean
+recent_scheme_is_supported (void)
 {
 	const char * const *supported;
 	int i;
@@ -516,6 +531,12 @@ recent_is_supported (void)
 		}
 	}
 	return FALSE;
+}
+
+static gboolean
+should_show_recent (GtkPlacesSidebar *sidebar)
+{
+	return recent_files_setting_is_enabled (sidebar) && recent_scheme_is_supported ();
 }
 
 static void
@@ -702,7 +723,7 @@ update_places (GtkPlacesSidebar *sidebar)
 	add_heading (sidebar, SECTION_COMPUTER,
 		     _("Places"));
 
-	if (recent_is_supported ()) {
+	if (should_show_recent (sidebar)) {
 		mount_uri = "recent:///"; /* No need to strdup */
 		icon = g_themed_icon_new ("document-open-recent-symbolic");
 		add_place (sidebar, PLACES_BUILT_IN,

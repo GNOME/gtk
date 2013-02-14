@@ -42,6 +42,7 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtksizerequest.h"
+#include "gtksizerequestcacheprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
 #include "gtkassistant.h"
@@ -1753,8 +1754,7 @@ _gtk_container_queue_resize_internal (GtkContainer *container,
   do
     {
       _gtk_widget_set_alloc_needed (widget, TRUE);
-      _gtk_widget_set_width_request_needed (widget, TRUE);
-      _gtk_widget_set_height_request_needed (widget, TRUE);
+      _gtk_size_request_cache_clear (_gtk_widget_peek_request_cache (widget));
 
       if (GTK_IS_RESIZE_CONTAINER (widget))
         break;
@@ -1918,32 +1918,11 @@ gtk_container_adjust_size_allocation (GtkWidget         *widget,
 
   container = GTK_CONTAINER (widget);
 
-  if (!GTK_CONTAINER_GET_CLASS (widget)->_handle_border_width)
+  if (GTK_CONTAINER_GET_CLASS (widget)->_handle_border_width)
     {
-      parent_class->adjust_size_allocation (widget, orientation,
-                                            minimum_size, natural_size, allocated_pos,
-                                            allocated_size);
-      return;
-    }
+      border_width = container->priv->border_width;
 
-  border_width = container->priv->border_width;
-
-  *allocated_size -= border_width * 2;
-
-  /* If we get a pathological too-small allocation to hold
-   * even the border width, leave all allocation to the actual
-   * widget, and leave x,y unchanged. (GtkWidget's min size is
-   * 1x1 if you're wondering why <1 and not <0)
-   *
-   * As long as we have space, set x,y properly.
-   */
-
-  if (*allocated_size < 1)
-    {
-      *allocated_size += border_width * 2;
-    }
-  else
-    {
+      *allocated_size -= border_width * 2;
       *allocated_pos += border_width;
       *minimum_size -= border_width * 2;
       *natural_size -= border_width * 2;
@@ -1989,27 +1968,17 @@ count_request_modes (GtkWidget        *widget,
 static GtkSizeRequestMode 
 gtk_container_get_request_mode (GtkWidget *widget)
 {
-  GtkContainer        *container = GTK_CONTAINER (widget);
-  GtkContainerPrivate *priv      = container->priv;
+  GtkContainer *container = GTK_CONTAINER (widget);
+  RequestModeCount count = { 0, 0 };
 
-  /* Recalculate the request mode of the children by majority
-   * vote whenever the internal content changes */
-  if (_gtk_widget_get_width_request_needed (widget) ||
-      _gtk_widget_get_height_request_needed (widget))
-    {
-      RequestModeCount count = { 0, 0 };
+  gtk_container_forall (container, (GtkCallback)count_request_modes, &count);
 
-      gtk_container_forall (container, (GtkCallback)count_request_modes, &count);
-
-      if (!count.hfw && !count.wfh)
-	priv->request_mode = GTK_SIZE_REQUEST_CONSTANT_SIZE;
-      else
-	priv->request_mode = count.wfh > count.hfw ? 
-	  GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT :
-	  GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
-    }
-
-  return priv->request_mode;
+  if (!count.hfw && !count.wfh)
+    return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+  else
+    return count.wfh > count.hfw ? 
+        GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT :
+	GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
 }
 
 /**

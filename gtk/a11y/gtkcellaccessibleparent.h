@@ -1,5 +1,4 @@
-/* GAIL - The GNOME Accessibility Implementation Library
- *
+/* GTK+ - accessibility implementations
  * Copyright 2001 Sun Microsystems Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -19,8 +18,12 @@
 #ifndef __GTK_CELL_ACCESSIBLE_PARENT_H__
 #define __GTK_CELL_ACCESSIBLE_PARENT_H__
 
+#if !defined (__GTK_A11Y_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk-a11y.h> can be included directly."
+#endif
+
 #include <atk/atk.h>
-#include "gtkcellaccessible.h"
+#include <gtk/a11y/gtkcellaccessible.h>
 
 G_BEGIN_DECLS
 
@@ -33,7 +36,7 @@ G_BEGIN_DECLS
  * implement atk_component_get_extents().
  */
 
-#define GTK_TYPE_CELL_ACCESSIBLE_PARENT            (_gtk_cell_accessible_parent_get_type ())
+#define GTK_TYPE_CELL_ACCESSIBLE_PARENT            (gtk_cell_accessible_parent_get_type ())
 #define GTK_IS_CELL_ACCESSIBLE_PARENT(obj)         G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CELL_ACCESSIBLE_PARENT)
 #define GTK_CELL_ACCESSIBLE_PARENT(obj)            G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CELL_ACCESSIBLE_PARENT, GtkCellAccessibleParent)
 #define GTK_CELL_ACCESSIBLE_PARENT_GET_IFACE(obj)  (G_TYPE_INSTANCE_GET_INTERFACE ((obj), GTK_TYPE_CELL_ACCESSIBLE_PARENT, GtkCellAccessibleParentIface))
@@ -70,31 +73,31 @@ struct _GtkCellAccessibleParentIface
                                  GtkCellAccessible       *cell);
 };
 
-GType    _gtk_cell_accessible_parent_get_type         (void);
+GType    gtk_cell_accessible_parent_get_type         (void);
 
-void     _gtk_cell_accessible_parent_get_cell_extents (GtkCellAccessibleParent *parent,
-                                                       GtkCellAccessible       *cell,
-                                                       gint                    *x,
-                                                       gint                    *y,
-                                                       gint                    *width,
-                                                       gint                    *height,
-                                                       AtkCoordType             coord_type);
-void     _gtk_cell_accessible_parent_get_cell_area    (GtkCellAccessibleParent *parent,
-                                                       GtkCellAccessible       *cell,
-                                                       GdkRectangle            *cell_rect);
-gboolean _gtk_cell_accessible_parent_grab_focus       (GtkCellAccessibleParent *parent,
-                                                       GtkCellAccessible       *cell);
-int      _gtk_cell_accessible_parent_get_child_index  (GtkCellAccessibleParent *parent,
-                                                       GtkCellAccessible       *cell);
+void     gtk_cell_accessible_parent_get_cell_extents (GtkCellAccessibleParent *parent,
+                                                      GtkCellAccessible       *cell,
+                                                      gint                    *x,
+                                                      gint                    *y,
+                                                      gint                    *width,
+                                                      gint                    *height,
+                                                      AtkCoordType             coord_type);
+void     gtk_cell_accessible_parent_get_cell_area    (GtkCellAccessibleParent *parent,
+                                                      GtkCellAccessible       *cell,
+                                                      GdkRectangle            *cell_rect);
+gboolean gtk_cell_accessible_parent_grab_focus       (GtkCellAccessibleParent *parent,
+                                                      GtkCellAccessible       *cell);
+int      gtk_cell_accessible_parent_get_child_index  (GtkCellAccessibleParent *parent,
+                                                      GtkCellAccessible       *cell);
 GtkCellRendererState
-         _gtk_cell_accessible_parent_get_renderer_state(GtkCellAccessibleParent *parent,
+         gtk_cell_accessible_parent_get_renderer_state(GtkCellAccessibleParent *parent,
                                                        GtkCellAccessible       *cell);
-void     _gtk_cell_accessible_parent_expand_collapse  (GtkCellAccessibleParent *parent,
-                                                       GtkCellAccessible       *cell);
-void     _gtk_cell_accessible_parent_activate         (GtkCellAccessibleParent *parent,
-                                                       GtkCellAccessible       *cell);
-void     _gtk_cell_accessible_parent_edit             (GtkCellAccessibleParent *parent,
-                                                       GtkCellAccessible       *cell);
+void     gtk_cell_accessible_parent_expand_collapse  (GtkCellAccessibleParent *parent,
+                                                      GtkCellAccessible       *cell);
+void     gtk_cell_accessible_parent_activate         (GtkCellAccessibleParent *parent,
+                                                      GtkCellAccessible       *cell);
+void     gtk_cell_accessible_parent_edit             (GtkCellAccessibleParent *parent,
+                                                      GtkCellAccessible       *cell);
 
 G_END_DECLS
 

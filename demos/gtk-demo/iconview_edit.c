@@ -7,7 +7,6 @@
 
 #include <gtk/gtk.h>
 #include <string.h>
-#include "demo-common.h"
 
 static GtkWidget *window = NULL;
 

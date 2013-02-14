@@ -126,8 +126,7 @@ GList *_gdk_broadway_screen_list_visuals (GdkScreen *screen);
 void _gdk_broadway_screen_size_changed (GdkScreen *screen, 
 					BroadwayInputScreenResizeNotify *msg);
 
-void _gdk_broadway_events_got_input      (GdkDisplay *display,
-					  BroadwayInputMsg *message);
+void _gdk_broadway_events_got_input      (BroadwayInputMsg *message);
 
 void _gdk_broadway_screen_init_root_window (GdkScreen *screen);
 void _gdk_broadway_screen_init_visuals (GdkScreen *screen);

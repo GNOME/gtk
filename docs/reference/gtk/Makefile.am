@@ -21,10 +21,20 @@ CFILE_GLOB=$(top_srcdir)/gtk/*.c
 # Header files to ignore when scanning
 IGNORE_HFILES=				\
 	fnmatch.h			\
+	gactionmuxer.h			\
+	gactionobserver.h		\
+	gactionobservable.h		\
 	gtk9slice.h			\
 	gtkanimationdescription.h	\
 	gtkdebug.h			\
+	gtkactionhelper.h		\
+	gtkapplicationprivate.h		\
 	gtkbuilderprivate.h		\
+	gtkcolorchooserprivate.h	\
+	gtkcoloreditorprivate.h		\
+	gtkcolorplaneprivate.h		\
+	gtkcolorscaleprivate.h		\
+	gtkcolorswatchprivate.h		\
 	gtkdndcursors.h			\
 	gtkentryprivate.h		\
 	gtkfilechooserdefault.h		\
@@ -45,6 +55,8 @@ IGNORE_HFILES=				\
 	gtkmarshal.h			\
 	gtkmenuprivate.h		\
 	gtkmnemonichash.h		\
+	gtkmodelmenu.h			\
+	gtkmodelmenuitem.h		\
 	gtkpathbar.h			\
 	gtkplugprivate.h		\
 	gtkprintbackend.h		\
@@ -142,6 +154,7 @@ content_files =					\
 	gtk-query-immodules-3.0.xml		\
 	gtk-update-icon-cache.xml		\
 	gtk-launch.xml				\
+	broadwayd.xml				\
 	visual_index.xml			\
 	getting_started.xml			\
 	overview.xml
@@ -415,7 +428,8 @@ EXTRA_DIST += version.xml.in gtk3.types.in
 man_MANS = 				\
 	gtk-query-immodules-3.0.1	\
 	gtk-update-icon-cache.1		\
-	gtk-launch.1
+	gtk-launch.1			\
+	broadwayd.1
 
 if ENABLE_MAN
 
@@ -448,6 +462,13 @@ endif
 MAINTAINERCLEANFILES = $(man_MANS) $(BUILT_SOURCES)
 
 EXTRA_DIST += $(man_MANS)
+
+if ENABLE_GTK_DOC
+TESTS_ENVIRONMENT = cd $(srcdir) && \
+  DOC_MODULE=$(DOC_MODULE) DOC_MAIN_SGML_FILE=$(DOC_MAIN_SGML_FILE) \
+  SRCDIR=$(abs_srcdir) BUILDDIR=$(abs_builddir)
+#TESTS = $(GTKDOC_CHECK)
+endif
 
 dist-hook-local: dist-local-check-mans-enabled all-local
 

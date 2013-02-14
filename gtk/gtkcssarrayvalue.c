@@ -51,28 +51,33 @@ gtk_css_value_array_compute (GtkCssValue             *value,
                              GtkCssDependencies      *dependencies)
 {
   GtkCssValue *result;
-  gboolean changed = FALSE;
-  guint i;
+  GtkCssValue *i_value;
+  guint i, j;
   GtkCssDependencies child_deps;
 
-  if (value->n_values == 0)
-    return _gtk_css_value_ref (value);
-
-  result = _gtk_css_array_value_new_from_array (value->values, value->n_values);
+  result = NULL;
   for (i = 0; i < value->n_values; i++)
     {
-      result->values[i] = _gtk_css_value_compute (value->values[i], property_id, provider, values, parent_values, &child_deps);
+      i_value =  _gtk_css_value_compute (value->values[i], property_id, provider, values, parent_values, &child_deps);
 
       *dependencies = _gtk_css_dependencies_union (*dependencies, child_deps);
 
-      changed |= (result->values[i] != value->values[i]);
+      if (result == NULL &&
+	  i_value != value->values[i])
+	{
+	  result = _gtk_css_array_value_new_from_array (value->values, value->n_values);
+	  for (j = 0; j < i; j++)
+	    _gtk_css_value_ref (result->values[j]);
+	}
+
+      if (result != NULL)
+	result->values[i] = i_value;
+      else
+	_gtk_css_value_unref (i_value);
     }
 
-  if (!changed)
-    {
-      _gtk_css_value_unref (result);
-      return _gtk_css_value_ref (value);
-    }
+  if (result == NULL)
+    return _gtk_css_value_ref (value);
 
   return result;
 }

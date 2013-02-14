@@ -214,6 +214,7 @@ struct _GdkWindowImplClass
   void         (* maximize)             (GdkWindow *window);
   void         (* unmaximize)           (GdkWindow *window);
   void         (* fullscreen)           (GdkWindow *window);
+  void         (* apply_fullscreen_mode) (GdkWindow *window);
   void         (* unfullscreen)         (GdkWindow *window);
   void         (* set_keep_above)       (GdkWindow *window,
 					 gboolean   setting);

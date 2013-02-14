@@ -1,4 +1,4 @@
-/* GAIL - The GNOME Accessibility Implementation Library
+/* GTK+ - accessibility implementations
  * Copyright 2001 Sun Microsystems Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -17,9 +17,10 @@
 
 #include "config.h"
 
+#include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
 #include "gtkcontainercellaccessible.h"
-#include "gtkcellaccessible.h"
+#include "gtkcellaccessibleprivate.h"
 #include "gtkcellaccessibleparent.h"
 
 static const struct {
@@ -37,10 +38,11 @@ static const struct {
   { ATK_STATE_EXPANDED,  GTK_CELL_RENDERER_EXPANDED,    FALSE },
 };
 
+static GtkCellRendererState gtk_cell_accessible_get_state (GtkCellAccessible *cell);
 static void atk_action_interface_init    (AtkActionIface    *iface);
 static void atk_component_interface_init (AtkComponentIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkCellAccessible, _gtk_cell_accessible, GTK_TYPE_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkCellAccessible, gtk_cell_accessible, GTK_TYPE_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init))
 
@@ -70,7 +72,7 @@ gtk_cell_accessible_object_finalize (GObject *obj)
         }
       g_object_unref (relation_set);
     }
-  G_OBJECT_CLASS (_gtk_cell_accessible_parent_class)->finalize (obj);
+  G_OBJECT_CLASS (gtk_cell_accessible_parent_class)->finalize (obj);
 }
 
 static gint
@@ -83,13 +85,13 @@ gtk_cell_accessible_get_index_in_parent (AtkObject *obj)
 
   parent = atk_object_get_parent (obj);
   if (GTK_IS_CONTAINER_CELL_ACCESSIBLE (parent))
-    return g_list_index (_gtk_container_cell_accessible_get_children (GTK_CONTAINER_CELL_ACCESSIBLE (parent)), obj);
+    return g_list_index (gtk_container_cell_accessible_get_children (GTK_CONTAINER_CELL_ACCESSIBLE (parent)), obj);
 
   parent = gtk_widget_get_accessible (gtk_accessible_get_widget (GTK_ACCESSIBLE (cell)));
   if (parent == NULL)
     return -1;
 
-  return _gtk_cell_accessible_parent_get_child_index (GTK_CELL_ACCESSIBLE_PARENT (parent), cell);
+  return gtk_cell_accessible_parent_get_child_index (GTK_CELL_ACCESSIBLE_PARENT (parent), cell);
 }
 
 static AtkStateSet *
@@ -110,7 +112,7 @@ gtk_cell_accessible_ref_state_set (AtkObject *accessible)
       return state_set;
     }
 
-  flags = _gtk_cell_accessible_get_state (cell_accessible);
+  flags = gtk_cell_accessible_get_state (cell_accessible);
 
   atk_state_set_add_state (state_set, ATK_STATE_FOCUSABLE);
   atk_state_set_add_state (state_set, ATK_STATE_SELECTABLE);
@@ -139,7 +141,7 @@ gtk_cell_accessible_ref_state_set (AtkObject *accessible)
 
 
 static void
-_gtk_cell_accessible_class_init (GtkCellAccessibleClass *klass)
+gtk_cell_accessible_class_init (GtkCellAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
   GObjectClass *g_object_class = G_OBJECT_CLASS (klass);
@@ -151,12 +153,12 @@ _gtk_cell_accessible_class_init (GtkCellAccessibleClass *klass)
 }
 
 static void
-_gtk_cell_accessible_init (GtkCellAccessible *cell)
+gtk_cell_accessible_init (GtkCellAccessible *cell)
 {
 }
 
 void
-_gtk_cell_accessible_initialise (GtkCellAccessible *cell,
+_gtk_cell_accessible_initialize (GtkCellAccessible *cell,
                                  GtkWidget         *widget,
                                  AtkObject         *parent)
 {
@@ -247,17 +249,34 @@ gtk_cell_accessible_action_get_name (AtkAction *action,
 }
 
 static const gchar *
+gtk_cell_accessible_action_get_localized_name (AtkAction *action,
+                                               gint       index)
+{
+  switch (index)
+    {
+    case 0:
+      return C_("Action name", "Expand or contract");
+    case 1:
+      return C_("Action name", "Edit");
+    case 2:
+      return C_("Action name", "Activate");
+    default:
+      return NULL;
+    }
+}
+
+static const gchar *
 gtk_cell_accessible_action_get_description (AtkAction *action,
                                             gint       index)
 {
   switch (index)
     {
     case 0:
-      return "expands or contracts the row in the tree view containing this cell";
+      return C_("Action description", "Expands or contracts the row in the tree view containing this cell");
     case 1:
-      return "creates a widget in which the contents of the cell can be edited";
+      return C_("Action description", "Creates a widget in which the contents of the cell can be edited");
     case 2:
-      return "activate the cell";
+      return C_("Action description", "Activates the cell");
     default:
       return NULL;
     }
@@ -286,11 +305,14 @@ gtk_cell_accessible_action_do_action (AtkAction *action,
   switch (index)
     {
     case 0:
-      _gtk_cell_accessible_parent_expand_collapse (parent, cell);
+      gtk_cell_accessible_parent_expand_collapse (parent, cell);
+      break;
     case 1:
-      _gtk_cell_accessible_parent_edit (parent, cell);
+      gtk_cell_accessible_parent_edit (parent, cell);
+      break;
     case 2:
-      _gtk_cell_accessible_parent_activate (parent, cell);
+      gtk_cell_accessible_parent_activate (parent, cell);
+      break;
     default:
       return FALSE;
     }
@@ -304,6 +326,7 @@ atk_action_interface_init (AtkActionIface *iface)
   iface->get_n_actions = gtk_cell_accessible_action_get_n_actions;
   iface->do_action = gtk_cell_accessible_action_do_action;
   iface->get_name = gtk_cell_accessible_action_get_name;
+  iface->get_localized_name = gtk_cell_accessible_action_get_localized_name;
   iface->get_description = gtk_cell_accessible_action_get_description;
   iface->get_keybinding = gtk_cell_accessible_action_get_keybinding;
 }
@@ -322,7 +345,7 @@ gtk_cell_accessible_get_extents (AtkComponent *component,
   cell = GTK_CELL_ACCESSIBLE (component);
   parent = gtk_widget_get_accessible (gtk_accessible_get_widget (GTK_ACCESSIBLE (cell)));
 
-  _gtk_cell_accessible_parent_get_cell_extents (GTK_CELL_ACCESSIBLE_PARENT (parent),
+  gtk_cell_accessible_parent_get_cell_extents (GTK_CELL_ACCESSIBLE_PARENT (parent),
                                                 cell,
                                                 x, y, width, height, coord_type);
 }
@@ -336,7 +359,7 @@ gtk_cell_accessible_grab_focus (AtkComponent *component)
   cell = GTK_CELL_ACCESSIBLE (component);
   parent = gtk_widget_get_accessible (gtk_accessible_get_widget (GTK_ACCESSIBLE (cell)));
 
-  return _gtk_cell_accessible_parent_grab_focus (GTK_CELL_ACCESSIBLE_PARENT (parent), cell);
+  return gtk_cell_accessible_parent_grab_focus (GTK_CELL_ACCESSIBLE_PARENT (parent), cell);
 }
 
 static void
@@ -346,16 +369,8 @@ atk_component_interface_init (AtkComponentIface *iface)
   iface->grab_focus = gtk_cell_accessible_grab_focus;
 }
 
-/**
- * _gtk_cell_accessible_get_state:
- * @cell: a #GtkCellAccessible
- *
- * Gets the state that would be used to render the area referenced by @cell.
- *
- * Returns: the #GtkCellRendererState for cell
- **/
-GtkCellRendererState
-_gtk_cell_accessible_get_state (GtkCellAccessible *cell)
+static GtkCellRendererState
+gtk_cell_accessible_get_state (GtkCellAccessible *cell)
 {
   AtkObject *parent;
 
@@ -365,11 +380,11 @@ _gtk_cell_accessible_get_state (GtkCellAccessible *cell)
   if (parent == NULL)
     return 0;
 
-  return _gtk_cell_accessible_parent_get_renderer_state (GTK_CELL_ACCESSIBLE_PARENT (parent), cell);
+  return gtk_cell_accessible_parent_get_renderer_state (GTK_CELL_ACCESSIBLE_PARENT (parent), cell);
 }
 
-/**
- * _gtk_cell_accessible_state_changed:
+/*
+ * gtk_cell_accessible_state_changed:
  * @cell: a #GtkCellAccessible
  * @added: the flags that were added from @cell
  * @removed: the flags that were removed from @cell
@@ -394,18 +409,18 @@ _gtk_cell_accessible_state_changed (GtkCellAccessible    *cell,
   for (i = 0; i < G_N_ELEMENTS (state_map); i++)
     {
       if (added & state_map[i].renderer_state)
-        atk_object_notify_state_change (object, 
+        atk_object_notify_state_change (object,
                                         state_map[i].atk_state,
                                         !state_map[i].invert);
       if (added & state_map[i].renderer_state)
-        atk_object_notify_state_change (object, 
+        atk_object_notify_state_change (object,
                                         state_map[i].atk_state,
                                         state_map[i].invert);
     }
 }
 
-/**
- * _gtk_cell_accessible_update_cache:
+/*
+ * gtk_cell_accessible_update_cache:
  * @cell: the cell that is changed
  *
  * Notifies the cell that the values in the data in the row that
@@ -413,7 +428,7 @@ _gtk_cell_accessible_state_changed (GtkCellAccessible    *cell,
  * cell_changed function of @cell is called to send update
  * notifications for the properties it takes from its cell
  * renderer.
- * 
+ *
  * Note that there is no higher granularity available about which
  * properties changed, so you will need to make do with this
  * function.
@@ -422,7 +437,7 @@ void
 _gtk_cell_accessible_update_cache (GtkCellAccessible *cell)
 {
   GtkCellAccessibleClass *klass;
-  
+
   g_return_if_fail (GTK_CELL_ACCESSIBLE (cell));
 
   klass = GTK_CELL_ACCESSIBLE_GET_CLASS (cell);
@@ -430,4 +445,3 @@ _gtk_cell_accessible_update_cache (GtkCellAccessible *cell)
   if (klass->update_cache)
     klass->update_cache (cell);
 }
-

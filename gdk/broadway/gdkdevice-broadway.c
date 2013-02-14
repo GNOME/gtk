@@ -156,7 +156,10 @@ gdk_broadway_device_query_state (GdkDevice        *device,
   GdkDisplay *display;
   GdkBroadwayDisplay *broadway_display;
   GdkScreen *screen;
-  gint device_root_x, device_root_y;
+  gint32 device_root_x, device_root_y;
+  gint32 mouse_toplevel_id;
+  GdkWindow *mouse_toplevel;
+  guint32 mask32;
 
   if (gdk_device_get_source (device) != GDK_SOURCE_MOUSE)
     return;
@@ -173,36 +176,12 @@ gdk_broadway_device_query_state (GdkDevice        *device,
       *root_window = gdk_screen_get_root_window (screen);
     }
 
-  if (broadway_display->output)
-    {
-      _gdk_broadway_display_consume_all_input (display);
-      if (root_x)
-	*root_x = broadway_display->future_root_x;
-      if (root_y)
-	*root_y = broadway_display->future_root_y;
-      /* TODO: Should really use future_x/y when we get configure events */
-      if (win_x)
-	*win_x = broadway_display->future_root_x - toplevel->x;
-      if (win_y)
-	*win_y = broadway_display->future_root_y - toplevel->y;
-      if (mask)
-	*mask = broadway_display->future_state;
-      if (child_window)
-	{
-	  if (gdk_window_get_window_type (toplevel) == GDK_WINDOW_ROOT)
-	    *child_window =
-	      g_hash_table_lookup (broadway_display->id_ht,
-				   GINT_TO_POINTER (broadway_display->future_mouse_in_toplevel));
-	  else
-	    *child_window = toplevel; /* No native children */
-	}
-      return;
-    }
-
-  /* Fallback when unconnected */
-
-  device_root_x = broadway_display->last_x;
-  device_root_y = broadway_display->last_y;
+  _gdk_broadway_server_query_mouse (broadway_display->server,
+				    &mouse_toplevel_id,
+				    &device_root_x,
+				    &device_root_y,
+				    &mask32);
+  mouse_toplevel = g_hash_table_lookup (broadway_display->id_ht, GINT_TO_POINTER (mouse_toplevel_id));
 
   if (root_x)
     *root_x = device_root_x;
@@ -213,12 +192,12 @@ gdk_broadway_device_query_state (GdkDevice        *device,
   if (win_y)
     *win_y = device_root_y - toplevel->y;
   if (mask)
-    *mask = broadway_display->last_state;
+    *mask = mask32;
   if (child_window)
     {
       if (gdk_window_get_window_type (toplevel) == GDK_WINDOW_ROOT)
 	{
-	  *child_window = broadway_display->mouse_in_toplevel;
+	  *child_window = mouse_toplevel;
 	  if (*child_window == NULL)
 	    *child_window = toplevel;
 	}
@@ -236,12 +215,9 @@ void
 _gdk_broadway_window_grab_check_destroy (GdkWindow *window)
 {
   GdkDisplay *display = gdk_window_get_display (window);
-  GdkBroadwayDisplay *broadway_display;
   GdkDeviceManager *device_manager;
   GdkDeviceGrabInfo *grab;
   GList *devices, *d;
-
-  broadway_display = GDK_BROADWAY_DISPLAY (display);
 
   device_manager = gdk_display_get_device_manager (display);
 
@@ -257,8 +233,6 @@ _gdk_broadway_window_grab_check_destroy (GdkWindow *window)
 	{
 	  grab->serial_end = grab->serial_start;
 	  grab->implicit_ungrab = TRUE;
-
-	  broadway_display->pointer_grab_window = NULL;
 	}
 
     }
@@ -290,29 +264,11 @@ gdk_broadway_device_grab (GdkDevice    *device,
   else
     {
       /* Device is a pointer */
-
-      if (broadway_display->pointer_grab_window != NULL &&
-	  time_ != 0 && broadway_display->pointer_grab_time > time_)
-	return GDK_GRAB_ALREADY_GRABBED;
-
-      if (time_ == 0)
-	time_ = broadway_display->last_seen_time;
-
-      broadway_display->pointer_grab_window = window;
-      broadway_display->pointer_grab_owner_events = owner_events;
-      broadway_display->pointer_grab_time = time_;
-
-      if (broadway_display->output)
-	{
-	  broadway_output_grab_pointer (broadway_display->output,
-					GDK_WINDOW_IMPL_BROADWAY (window->impl)->id,
-					owner_events);
-	  gdk_display_flush (display);
-	}
-
-      /* TODO: What about toplevel grab events if we're not connected? */
-
-      return GDK_GRAB_SUCCESS;
+      return _gdk_broadway_server_grab_pointer (broadway_display->server,
+						GDK_WINDOW_IMPL_BROADWAY (window->impl)->id,
+						owner_events,
+						event_mask,
+						time_);
     }
 }
 
@@ -340,31 +296,17 @@ gdk_broadway_device_ungrab (GdkDevice *device,
   else
     {
       /* Device is a pointer */
+      serial = _gdk_broadway_server_ungrab_pointer (broadway_display->server, time_);
 
-      if (broadway_display->pointer_grab_window != NULL &&
-	  time_ != 0 && broadway_display->pointer_grab_time > time_)
-	return;
-
-      /* TODO: What about toplevel grab events if we're not connected? */
-
-      if (broadway_display->output)
+      if (serial != 0)
 	{
-	  serial = broadway_output_ungrab_pointer (broadway_display->output);
-	  gdk_display_flush (display);
+	  grab = _gdk_display_get_last_device_grab (display, device);
+	  if (grab &&
+	      (time_ == GDK_CURRENT_TIME ||
+	       grab->time == GDK_CURRENT_TIME ||
+	       !TIME_IS_LATER (grab->time, time_)))
+	    grab->serial_end = serial;
 	}
-      else
-	{
-	  serial = broadway_display->saved_serial;
-	}
-
-      grab = _gdk_display_get_last_device_grab (display, device);
-      if (grab &&
-	  (time_ == GDK_CURRENT_TIME ||
-	   grab->time == GDK_CURRENT_TIME ||
-	   !TIME_IS_LATER (grab->time, time_)))
-	grab->serial_end = serial;
-
-      broadway_display->pointer_grab_window = NULL;
     }
 }
 
@@ -375,7 +317,6 @@ gdk_broadway_device_window_at_position (GdkDevice       *device,
 					GdkModifierType *mask,
 					gboolean         get_toplevel)
 {
-  gboolean res;
   GdkScreen *screen;
   GdkWindow *root_window;
   GdkWindow *window;

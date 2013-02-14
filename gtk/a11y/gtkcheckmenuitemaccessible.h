@@ -1,4 +1,4 @@
-/* GAIL - The GNOME Accessibility Implementation Library
+/* GTK+ - accessibility implementations
  * Copyright 2002 Sun Microsystems Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -18,11 +18,15 @@
 #ifndef __GTK_CHECK_MENU_ITEM_ACCESSIBLE_H__
 #define __GTK_CHECK_MENU_ITEM_ACCESSIBLE_H__
 
-#include "gtkmenuitemaccessible.h"
+#if !defined (__GTK_A11Y_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk-a11y.h> can be included directly."
+#endif
+
+#include <gtk/a11y/gtkmenuitemaccessible.h>
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_CHECK_MENU_ITEM_ACCESSIBLE              (_gtk_check_menu_item_accessible_get_type ())
+#define GTK_TYPE_CHECK_MENU_ITEM_ACCESSIBLE              (gtk_check_menu_item_accessible_get_type ())
 #define GTK_CHECK_MENU_ITEM_ACCESSIBLE(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CHECK_MENU_ITEM_ACCESSIBLE, GtkCheckMenuItemAccessible))
 #define GTK_CHECK_MENU_ITEM_ACCESSIBLE_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_CHECK_MENU_ITEM_ACCESSIBLE, GtkCheckMenuItemAccessibleClass))
 #define GTK_IS_CHECK_MENU_ITEM_ACCESSIBLE(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CHECK_MENU_ITEM_ACCESSIBLE))
@@ -45,7 +49,7 @@ struct _GtkCheckMenuItemAccessibleClass
   GtkMenuItemAccessibleClass parent_class;
 };
 
-GType _gtk_check_menu_item_accessible_get_type (void);
+GType gtk_check_menu_item_accessible_get_type (void);
 
 G_END_DECLS
 

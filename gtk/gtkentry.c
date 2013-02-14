@@ -2973,7 +2973,7 @@ realize_icon_info (GtkWidget            *widget,
   icon_info->window = gdk_window_new (gtk_widget_get_window (widget),
                                       &attributes,
                                       attributes_mask);
-  gdk_window_set_user_data (icon_info->window, widget);
+  gtk_widget_register_window (widget, icon_info->window);
 
   gtk_widget_queue_resize (widget);
 }
@@ -3100,7 +3100,7 @@ gtk_entry_realize (GtkWidget *widget)
                                     &attributes,
                                     attributes_mask);
 
-  gdk_window_set_user_data (priv->text_area, entry);
+  gtk_widget_register_window (widget, priv->text_area);
 
   if (attributes_mask & GDK_WA_CURSOR)
     g_object_unref (attributes.cursor);
@@ -3145,7 +3145,7 @@ gtk_entry_unrealize (GtkWidget *widget)
   
   if (priv->text_area)
     {
-      gdk_window_set_user_data (priv->text_area, NULL);
+      gtk_widget_unregister_window (widget, priv->text_area);
       gdk_window_destroy (priv->text_area);
       priv->text_area = NULL;
     }
@@ -3216,19 +3216,14 @@ gtk_entry_get_preferred_width (GtkWidget *widget,
   PangoFontMetrics *metrics;
   GtkBorder borders;
   PangoContext *context;
-  GtkStyleContext *style_context;
-  GtkStateFlags state;
   gint icon_widths = 0;
   gint icon_width, i;
   gint width;
 
   context = gtk_widget_get_pango_context (widget);
 
-  style_context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-
   metrics = pango_context_get_metrics (context,
-                                       gtk_style_context_get_font (style_context, state),
+                                       pango_context_get_font_description (context),
                                        pango_context_get_language (context));
 
   _gtk_entry_get_borders (entry, &borders);
@@ -3269,8 +3264,6 @@ gtk_entry_get_preferred_height (GtkWidget *widget,
   GtkEntryPrivate *priv = entry->priv;
   PangoFontMetrics *metrics;
   GtkBorder borders;
-  GtkStyleContext *style_context;
-  GtkStateFlags state;
   PangoContext *context;
   gint height;
   PangoLayout *layout;
@@ -3278,11 +3271,8 @@ gtk_entry_get_preferred_height (GtkWidget *widget,
   layout = gtk_entry_ensure_layout (entry, TRUE);
   context = gtk_widget_get_pango_context (widget);
 
-  style_context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-
   metrics = pango_context_get_metrics (context,
-                                       gtk_style_context_get_font (style_context, state),
+                                       pango_context_get_font_description (context),
 				       pango_context_get_language (context));
 
   priv->ascent = pango_font_metrics_get_ascent (metrics);
@@ -4874,8 +4864,6 @@ gtk_entry_style_updated (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_entry_parent_class)->style_updated (widget);
 
   gtk_entry_update_cached_style_values (entry);
-
-  gtk_entry_recompute (entry);
 
   icon_theme_changed (entry);
 }
@@ -6574,8 +6562,6 @@ gtk_entry_move_adjustments (GtkEntry *entry)
   GtkAdjustment *adjustment;
   PangoContext *context;
   PangoFontMetrics *metrics;
-  GtkStyleContext *style_context;
-  GtkStateFlags state;
   GtkBorder borders;
   gint x, layout_x;
   gint char_width;
@@ -6594,11 +6580,9 @@ gtk_entry_move_adjustments (GtkEntry *entry)
 
   /* Approximate width of a char, so user can see what is ahead/behind */
   context = gtk_widget_get_pango_context (widget);
-  style_context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
 
   metrics = pango_context_get_metrics (context,
-                                       gtk_style_context_get_font (style_context, state),
+                                       pango_context_get_font_description (context),
 				       pango_context_get_language (context));
   char_width = pango_font_metrics_get_approximate_char_width (metrics) / PANGO_SCALE;
 
@@ -8807,6 +8791,9 @@ gtk_entry_set_icon_tooltip_text (GtkEntry             *entry,
   icon_info->tooltip = tooltip ? g_markup_escape_text (tooltip, -1) : NULL;
 
   ensure_has_tooltip (entry);
+
+  g_object_notify (G_OBJECT (entry),
+                   icon_pos == GTK_ENTRY_ICON_PRIMARY ? "primary-icon-tooltip-text" : "secondary-icon-tooltip-text");
 }
 
 /**

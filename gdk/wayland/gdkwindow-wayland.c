@@ -66,15 +66,15 @@ struct _GdkWaylandWindowClass {
   GdkWindowClass parent_class;
 };
 
-G_DEFINE_TYPE (GdkWaylandWindow, _gdk_wayland_window, GDK_TYPE_WINDOW)
+G_DEFINE_TYPE (GdkWaylandWindow, gdk_wayland_window, GDK_TYPE_WINDOW)
 
 static void
-_gdk_wayland_window_class_init (GdkWaylandWindowClass *wayland_window_class)
+gdk_wayland_window_class_init (GdkWaylandWindowClass *wayland_window_class)
 {
 }
 
 static void
-_gdk_wayland_window_init (GdkWaylandWindow *wayland_window)
+gdk_wayland_window_init (GdkWaylandWindow *wayland_window)
 {
 }
 
@@ -132,6 +132,9 @@ struct _GdkWindowImplWayland
 
   struct wl_seat *grab_input_seat;
   guint32 grab_time;
+
+  gboolean fullscreen;
+  int saved_width, saved_height; /* before going fullscreen */
 };
 
 struct _GdkWindowImplWaylandClass
@@ -302,15 +305,9 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
 static const cairo_user_data_key_t gdk_wayland_cairo_key;
 
 typedef struct _GdkWaylandCairoSurfaceData {
-#ifdef GDK_WAYLAND_USE_EGL
-  EGLImageKHR image;
-  GLuint texture;
-  struct wl_egl_pixmap *pixmap;
-#else
   gpointer buf;
   size_t buf_length;
   struct wl_shm_pool *pool;
-#endif
   struct wl_buffer *buffer;
   GdkWaylandDisplay *display;
   int32_t width, height;
@@ -374,67 +371,6 @@ gdk_wayland_window_attach_image (GdkWindow *window)
   wl_surface_attach (impl->surface, data->buffer, dx, dy);
 }
 
-#ifdef GDK_WAYLAND_USE_EGL
-static void
-gdk_wayland_cairo_surface_destroy (void *p)
-{
-  GdkWaylandCairoSurfaceData *data = p;
-
-  data->display->destroy_image (data->display->egl_display, data->image);
-  cairo_device_acquire(data->display->cairo_device);
-  glDeleteTextures(1, &data->texture);
-  cairo_device_release(data->display->cairo_device);
-  if (data->buffer)
-    wl_buffer_destroy(data->buffer);
-  g_free(data);
-}
-
-static cairo_surface_t *
-gdk_wayland_create_cairo_surface (GdkWaylandDisplay *display,
-				  int width, int height)
-{
-  GdkWaylandCairoSurfaceData *data;
-  cairo_surface_t *surface;
-  cairo_status_t status;
-
-  data = g_new (GdkWaylandCairoSurfaceData, 1);
-  data->display = display;
-  data->buffer = NULL;
-  data->width = width;
-  data->height = height;
-  data->pixmap = wl_egl_pixmap_create(width, height, 0);
-  data->image =
-    display->create_image(display->egl_display, NULL, EGL_NATIVE_PIXMAP_KHR,
-			  (EGLClientBuffer) data->pixmap, NULL);
-
-  cairo_device_acquire(display->cairo_device);
-  glGenTextures(1, &data->texture);
-  glBindTexture(GL_TEXTURE_2D, data->texture);
-  display->image_target_texture_2d(GL_TEXTURE_2D, data->image);
-  cairo_device_release(display->cairo_device);
-
-  surface = cairo_gl_surface_create_for_texture(display->cairo_device,
-						CAIRO_CONTENT_COLOR_ALPHA,
-						data->texture, width, height);
-
-  cairo_surface_set_user_data (surface, &gdk_wayland_cairo_key,
-			       data, gdk_wayland_cairo_surface_destroy);
-
-  status = cairo_surface_status (surface);
-  if (status != CAIRO_STATUS_SUCCESS)
-    {
-      g_critical (G_STRLOC ": Unable to create Cairo GL surface: %s",
-                  cairo_status_to_string (status));
-
-    }
-
-  if (!data->buffer)
-    data->buffer =
-      wl_egl_pixmap_create_buffer(data->pixmap);
-
-  return surface;
-}
-#else
 static void
 gdk_wayland_cairo_surface_destroy (void *p)
 {
@@ -542,7 +478,6 @@ gdk_wayland_create_cairo_surface (GdkWaylandDisplay *display,
 
   return surface;
 }
-#endif
 
 /* On this first call this creates a double reference - the first reference
  * is held by the GdkWindowImplWayland struct - since unlike other backends
@@ -658,9 +593,16 @@ gdk_wayland_window_map (GdkWindow *window)
                                           _gdk_wayland_display_get_serial (wayland_display),
                                           parent->surface,
                                           window->x, window->y, 0);
-            } else {
-                wl_shell_surface_set_transient (impl->shell_surface, parent->surface,
-                                                window->x, window->y, 0);
+            }
+          else
+            {
+              guint32 flags = 0;
+
+              if (impl->hint == GDK_WINDOW_TYPE_HINT_TOOLTIP)
+                flags = WL_SHELL_SURFACE_TRANSIENT_INACTIVE;
+
+              wl_shell_surface_set_transient (impl->shell_surface, parent->surface,
+                                              window->x, window->y, flags);
             }
         }
       else
@@ -1335,15 +1277,38 @@ gdk_wayland_window_unmaximize (GdkWindow *window)
 static void
 gdk_wayland_window_fullscreen (GdkWindow *window)
 {
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
   if (GDK_WINDOW_DESTROYED (window))
     return;
+
+  if (impl->fullscreen)
+    return;
+
+  impl->saved_width = gdk_window_get_width (window);
+  impl->saved_height = gdk_window_get_height (window);
+  wl_shell_surface_set_fullscreen (impl->shell_surface,
+                                   WL_SHELL_SURFACE_FULLSCREEN_METHOD_DEFAULT,
+                                   0,
+                                   NULL);
+  impl->fullscreen = TRUE;
 }
 
 static void
 gdk_wayland_window_unfullscreen (GdkWindow *window)
 {
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
   if (GDK_WINDOW_DESTROYED (window))
     return;
+
+  if (!impl->fullscreen)
+    return;
+
+  wl_shell_surface_set_toplevel (impl->shell_surface);
+  gdk_wayland_window_configure (window, impl->saved_width, impl->saved_height,
+                                0);
+  impl->fullscreen = FALSE;
 }
 
 static void
@@ -1465,7 +1430,7 @@ gdk_wayland_window_begin_resize_drag (GdkWindow     *window,
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   wl_shell_surface_resize (impl->shell_surface,
-                           _gdk_wayland_device_get_wl_seat (device),
+                           gdk_wayland_device_get_wl_seat (device),
                            _gdk_wayland_display_get_serial (wayland_display),
                            grab_type);
 
@@ -1494,7 +1459,7 @@ gdk_wayland_window_begin_move_drag (GdkWindow *window,
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   wl_shell_surface_move (impl->shell_surface,
-                         _gdk_wayland_device_get_wl_seat (device),
+                         gdk_wayland_device_get_wl_seat (device),
                          _gdk_wayland_display_get_serial (wayland_display));
 
   /* This is needed since Wayland will absorb all the pointer events after the
@@ -1732,4 +1697,48 @@ _gdk_wayland_window_set_device_grabbed (GdkWindow      *window,
 
   impl->grab_input_seat = seat;
   impl->grab_time = time_;
+}
+
+/**
+ * gdk_wayland_window_get_wl_surface
+ * @window: (type GdkWaylandWindow): a #GdkWindow
+ *
+ * Returns the Wayland surface of a #GdkWindow
+ *
+ * Returns: (transfer none): a Wayland wl_surface
+ *
+ * Since: 3.8
+ */
+struct wl_surface *
+gdk_wayland_window_get_wl_surface (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl;
+
+  g_return_val_if_fail (GDK_IS_WAYLAND_WINDOW (window), NULL);
+
+  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  return impl->surface;
+}
+
+/**
+ * gdk_wayland_window_get_wl_shell_surface
+ * @window: (type GdkWaylandWindow): a #GdkWindow
+ *
+ * Returns the Wayland shell surface of a #GdkWindow
+ *
+ * Returns: (transfer none): a Wayland wl_shell_surface
+ *
+ * Since: 3.8
+ */
+struct wl_shell_surface *
+gdk_wayland_window_get_wl_shell_surface (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl;
+
+  g_return_val_if_fail (GDK_IS_WAYLAND_WINDOW (window), NULL);
+
+  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  return impl->shell_surface;
 }

@@ -24,6 +24,10 @@ G_BEGIN_DECLS
 
 gchar *_gtk_css_provider_get_theme_dir (void);
 
+void   _gtk_css_provider_load_named    (GtkCssProvider *provider,
+                                        const gchar    *name,
+                                        const gchar    *variant);
+
 G_END_DECLS
 
 #endif /* __GTK_CSS_PROVIDER_PRIVATE_H__ */

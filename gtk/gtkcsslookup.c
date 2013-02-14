@@ -24,17 +24,6 @@
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkstylepropertiesprivate.h"
 
-typedef struct {
-  GtkCssSection     *section;
-  GtkCssValue       *value;
-  GtkCssValue       *computed;
-} GtkCssLookupValue;
-
-struct _GtkCssLookup {
-  GtkBitmask        *missing;
-  GtkCssLookupValue  values[1];
-};
-
 GtkCssLookup *
 _gtk_css_lookup_new (const GtkBitmask *relevant)
 {
@@ -63,14 +52,6 @@ _gtk_css_lookup_free (GtkCssLookup *lookup)
 
   _gtk_bitmask_free (lookup->missing);
   g_free (lookup);
-}
-
-const GtkBitmask *
-_gtk_css_lookup_get_missing (const GtkCssLookup *lookup)
-{
-  g_return_val_if_fail (lookup != NULL, NULL);
-
-  return lookup->missing;
 }
 
 gboolean

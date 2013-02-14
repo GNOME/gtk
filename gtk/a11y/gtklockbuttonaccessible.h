@@ -1,4 +1,4 @@
-/* GAIL - The GNOME Accessibility Implementation Library
+/* GTK+ - accessibility implementations
  * Copyright 2001 Sun Microsystems Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -18,12 +18,16 @@
 #ifndef __GTK_LOCK_BUTTON_ACCESSIBLE_H__
 #define __GTK_LOCK_BUTTON_ACCESSIBLE_H__
 
-#include "gtkbuttonaccessible.h"
-#include "gtk/gtklockbutton.h"
+#if !defined (__GTK_A11Y_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk-a11y.h> can be included directly."
+#endif
+
+#include <gtk/gtk.h>
+#include <gtk/a11y/gtkbuttonaccessible.h>
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_LOCK_BUTTON_ACCESSIBLE                     (_gtk_lock_button_accessible_get_type ())
+#define GTK_TYPE_LOCK_BUTTON_ACCESSIBLE                     (gtk_lock_button_accessible_get_type ())
 #define GTK_LOCK_BUTTON_ACCESSIBLE(obj)                     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_LOCK_BUTTON_ACCESSIBLE, GtkLockButtonAccessible))
 #define GTK_LOCK_BUTTON_ACCESSIBLE_CLASS(klass)             (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_LOCK_BUTTON_ACCESSIBLE, GtkLockButtonAccessibleClass))
 #define GTK_IS_LOCK_BUTTON_ACCESSIBLE(obj)                  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_LOCK_BUTTON_ACCESSIBLE))
@@ -46,10 +50,7 @@ struct _GtkLockButtonAccessibleClass
   GtkButtonAccessibleClass parent_class;
 };
 
-GType _gtk_lock_button_accessible_get_type (void);
-
-void  _gtk_lock_button_accessible_name_changed (GtkLockButton *lockbutton);
-
+GType gtk_lock_button_accessible_get_type (void);
 
 G_END_DECLS
 

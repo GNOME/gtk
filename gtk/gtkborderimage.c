@@ -62,8 +62,8 @@ static void
 gtk_border_image_compute_border_size (GtkBorderImageSliceSize  sizes[3],
                                       double                   offset,
                                       double                   area_size,
-                                      int                      start_border_width,
-                                      int                      end_border_width,
+                                      double                   start_border_width,
+                                      double                   end_border_width,
                                       const GtkCssValue       *start_border,
                                       const GtkCssValue       *end_border)
 {
@@ -235,7 +235,7 @@ gtk_border_image_compute_slice_size (GtkBorderImageSliceSize sizes[3],
 
 void
 _gtk_border_image_render (GtkBorderImage   *image,
-                          GtkBorder        *border_width,
+                          const double      border_width[4],
                           cairo_t          *cr,
                           gdouble           x,
                           gdouble           y,
@@ -270,15 +270,15 @@ _gtk_border_image_render (GtkBorderImage   *image,
   gtk_border_image_compute_border_size (horizontal_border,
                                         x,
                                         width,
-                                        border_width->left,
-                                        border_width->right,
+                                        border_width[GTK_CSS_LEFT],
+                                        border_width[GTK_CSS_RIGHT],
                                         _gtk_css_border_value_get_left (image->width),
                                         _gtk_css_border_value_get_right (image->width));
   gtk_border_image_compute_border_size (vertical_border,
                                         y,
                                         height,
-                                        border_width->top,
-                                        border_width->bottom,
+                                        border_width[GTK_CSS_TOP],
+                                        border_width[GTK_CSS_BOTTOM],
                                         _gtk_css_border_value_get_top (image->width),
                                         _gtk_css_border_value_get_bottom(image->width));
   

@@ -227,16 +227,6 @@ enum {
 #define NUM_LINES 45
 #define NUM_CHARS 60
 
-#define SETTINGS_KEY_LAST_FOLDER_URI     "last-folder-uri"
-#define SETTINGS_KEY_LOCATION_MODE       "location-mode"
-#define SETTINGS_KEY_SHOW_HIDDEN         "show-hidden"
-#define SETTINGS_KEY_SHOW_SIZE_COLUMN    "show-size-column"
-#define SETTINGS_KEY_SORT_COLUMN         "sort-column"
-#define SETTINGS_KEY_SORT_ORDER          "sort-order"
-#define SETTINGS_KEY_WINDOW_POSITION     "window-position"
-#define SETTINGS_KEY_WINDOW_SIZE         "window-size"
-#define SETTINGS_KEY_STARTUP_MODE        "startup-mode"
-
 static void gtk_file_chooser_default_iface_init       (GtkFileChooserIface        *iface);
 static void gtk_file_chooser_embed_default_iface_init (GtkFileChooserEmbedIface   *iface);
 
@@ -262,8 +252,6 @@ static void     gtk_file_chooser_default_hierarchy_changed (GtkWidget          *
 static void     gtk_file_chooser_default_style_updated  (GtkWidget             *widget);
 static void     gtk_file_chooser_default_screen_changed (GtkWidget             *widget,
 							 GdkScreen             *previous_screen);
-static void     gtk_file_chooser_default_size_allocate  (GtkWidget             *widget,
-							 GtkAllocation         *allocation);
 
 static gboolean       gtk_file_chooser_default_set_current_folder 	   (GtkFileChooser    *chooser,
 									    GFile             *folder,
@@ -431,7 +419,6 @@ _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
   widget_class->hierarchy_changed = gtk_file_chooser_default_hierarchy_changed;
   widget_class->style_updated = gtk_file_chooser_default_style_updated;
   widget_class->screen_changed = gtk_file_chooser_default_screen_changed;
-  widget_class->size_allocate = gtk_file_chooser_default_size_allocate;
 
   signals[LOCATION_POPUP] =
     g_signal_new_class_handler (I_("location-popup"),
@@ -558,10 +545,6 @@ _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
   gtk_binding_entry_add_signal (binding_set,
 				GDK_KEY_v, GDK_CONTROL_MASK,
 				"location-popup-on-paste",
-				0);
-  gtk_binding_entry_add_signal (binding_set,
-		  		GDK_KEY_BackSpace, 0,
-				"up-folder",
 				0);
 
   add_normal_and_shifted_binding (binding_set,
@@ -1519,7 +1502,7 @@ copy_file_clear_cb (GtkClipboard *clipboard,
   g_slist_free (selected_files);
 }
 
-/* Callback used when the "Copy file's location" menu item is activated */
+/* Callback used when the "Copy file’s location" menu item is activated */
 static void
 copy_file_location_cb (GtkMenuItem           *item,
                        GtkFileChooserDefault *impl)
@@ -1761,7 +1744,7 @@ file_list_drag_motion_cb (GtkWidget             *widget,
   return TRUE;
 }
 
-/* Sensitizes the "Copy file's location" context menu item if there is actually
+/* Sensitizes the "Copy file’s location" context menu item if there is actually
  * a selection active.
  */
 static void
@@ -1830,7 +1813,7 @@ file_list_build_popup_menu (GtkFileChooserDefault *impl)
   impl->browse_files_popup_menu_visit_file_item		= file_list_add_image_menu_item (impl, GTK_STOCK_DIRECTORY, _("_Visit this file"),
 											 G_CALLBACK (visit_file_cb));
 
-  impl->browse_files_popup_menu_copy_file_location_item	= file_list_add_image_menu_item (impl, GTK_STOCK_COPY, _("_Copy file's location"),
+  impl->browse_files_popup_menu_copy_file_location_item	= file_list_add_image_menu_item (impl, GTK_STOCK_COPY, _("_Copy file’s location"),
 											 G_CALLBACK (copy_file_location_cb));
 
   impl->browse_files_popup_menu_add_shortcut_item	= file_list_add_image_menu_item (impl, GTK_STOCK_ADD, _("_Add to Bookmarks"),
@@ -2711,7 +2694,7 @@ browse_widgets_create (GtkFileChooserDefault *impl)
 
   /* Paned widget */
 
-  hpaned = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
+  hpaned = impl->browse_widgets_hpaned = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_widget_show (hpaned);
   gtk_box_pack_start (GTK_BOX (impl->browse_widgets_box), hpaned, TRUE, TRUE, 0);
 
@@ -2719,7 +2702,6 @@ browse_widgets_create (GtkFileChooserDefault *impl)
   gtk_paned_pack1 (GTK_PANED (hpaned), widget, FALSE, FALSE);
   widget = file_pane_create (impl, size_group);
   gtk_paned_pack2 (GTK_PANED (hpaned), widget, TRUE, FALSE);
-  gtk_paned_set_position (GTK_PANED (hpaned), 148);
   g_object_unref (size_group);
 }
 
@@ -3325,18 +3307,6 @@ cancel_all_operations (GtkFileChooserDefault *impl)
 
   pending_select_files_free (impl);
 
-  /* cancel all pending operations */
-  if (impl->pending_cancellables)
-    {
-      for (l = impl->pending_cancellables; l; l = l->next)
-        {
-	  GCancellable *cancellable = G_CANCELLABLE (l->data);
-	  g_cancellable_cancel (cancellable);
-        }
-      g_slist_free (impl->pending_cancellables);
-      impl->pending_cancellables = NULL;
-    }
-
   if (impl->reload_icon_cancellables)
     {
       for (l = impl->reload_icon_cancellables; l; l = l->next)
@@ -3375,6 +3345,12 @@ cancel_all_operations (GtkFileChooserDefault *impl)
     {
       g_cancellable_cancel (impl->should_respond_get_info_cancellable);
       impl->should_respond_get_info_cancellable = NULL;
+    }
+
+  if (impl->file_exists_get_info_cancellable)
+    {
+      g_cancellable_cancel (impl->file_exists_get_info_cancellable);
+      impl->file_exists_get_info_cancellable = NULL;
     }
 
   if (impl->update_from_entry_cancellable)
@@ -3611,13 +3587,6 @@ gtk_file_chooser_default_screen_changed (GtkWidget *widget,
 }
 
 static void
-gtk_file_chooser_default_size_allocate (GtkWidget     *widget,
-                                        GtkAllocation *allocation)
-{
-  GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->size_allocate (widget, allocation);
-}
-
-static void
 set_sort_column (GtkFileChooserDefault *impl)
 {
   GtkTreeSortable *sortable;
@@ -3634,17 +3603,6 @@ set_sort_column (GtkFileChooserDefault *impl)
 }
 
 static void
-settings_ensure (GtkFileChooserDefault *impl)
-{
-  if (impl->settings != NULL)
-    return;
-
-  impl->settings = g_settings_new_with_path ("org.gtk.Settings.FileChooser",
-                                             "/org/gtk/settings/file-chooser/");
-  g_settings_delay (impl->settings);
-}
-
-static void
 settings_load (GtkFileChooserDefault *impl)
 {
   LocationMode location_mode;
@@ -3653,15 +3611,18 @@ settings_load (GtkFileChooserDefault *impl)
   gint sort_column;
   GtkSortType sort_order;
   StartupMode startup_mode;
+  gint sidebar_width;
+  GSettings *settings;
 
-  settings_ensure (impl);
+  settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (impl));
 
-  location_mode = g_settings_get_enum (impl->settings, SETTINGS_KEY_LOCATION_MODE);
-  show_hidden = g_settings_get_boolean (impl->settings, SETTINGS_KEY_SHOW_HIDDEN);
-  show_size_column = g_settings_get_boolean (impl->settings, SETTINGS_KEY_SHOW_SIZE_COLUMN);
-  sort_column = g_settings_get_enum (impl->settings, SETTINGS_KEY_SORT_COLUMN);
-  sort_order = g_settings_get_enum (impl->settings, SETTINGS_KEY_SORT_ORDER);
-  startup_mode = g_settings_get_enum (impl->settings, SETTINGS_KEY_STARTUP_MODE);
+  location_mode = g_settings_get_enum (settings, SETTINGS_KEY_LOCATION_MODE);
+  show_hidden = g_settings_get_boolean (settings, SETTINGS_KEY_SHOW_HIDDEN);
+  show_size_column = g_settings_get_boolean (settings, SETTINGS_KEY_SHOW_SIZE_COLUMN);
+  sort_column = g_settings_get_enum (settings, SETTINGS_KEY_SORT_COLUMN);
+  sort_order = g_settings_get_enum (settings, SETTINGS_KEY_SORT_ORDER);
+  sidebar_width = g_settings_get_int (settings, SETTINGS_KEY_SIDEBAR_WIDTH);
+  startup_mode = g_settings_get_enum (settings, SETTINGS_KEY_STARTUP_MODE);
 
   location_mode_set (impl, location_mode, TRUE);
 
@@ -3672,67 +3633,36 @@ settings_load (GtkFileChooserDefault *impl)
 
   impl->sort_column = sort_column;
   impl->sort_order = sort_order;
+  impl->startup_mode = startup_mode;
+
   /* We don't call set_sort_column() here as the models may not have been
    * created yet.  The individual functions that create and set the models will
    * call set_sort_column() themselves.
    */
 
-  impl->startup_mode = startup_mode;
-}
-
-static void
-save_dialog_geometry (GtkFileChooserDefault *impl)
-{
-  GtkWindow *toplevel;
-  int x, y, width, height;
-
-  toplevel = get_toplevel (GTK_WIDGET (impl));
-
-  if (!(toplevel && GTK_IS_FILE_CHOOSER_DIALOG (toplevel)))
-    return;
-
-  gtk_window_get_position (toplevel, &x, &y);
-  gtk_window_get_size (toplevel, &width, &height);
-
-  g_settings_set (impl->settings, "window-position", "(ii)", x, y);
-  g_settings_set (impl->settings, "window-size", "(ii)", width, height);
+  gtk_paned_set_position (GTK_PANED (impl->browse_widgets_hpaned), sidebar_width);
 }
 
 static void
 settings_save (GtkFileChooserDefault *impl)
 {
-  char *current_folder_uri;
+  GSettings *settings;
 
-  settings_ensure (impl);
-
-  /* Current folder */
-
-  if (impl->current_folder)
-    current_folder_uri = g_file_get_uri (impl->current_folder);
-  else
-    current_folder_uri = "";
-
-  g_settings_set_string (impl->settings, SETTINGS_KEY_LAST_FOLDER_URI, current_folder_uri);
-
-  if (impl->current_folder)
-    g_free (current_folder_uri);
+  settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (impl));
 
   /* All the other state */
 
-  g_settings_set_enum (impl->settings, SETTINGS_KEY_LOCATION_MODE, impl->location_mode);
-  g_settings_set_boolean (impl->settings, SETTINGS_KEY_SHOW_HIDDEN,
+  g_settings_set_enum (settings, SETTINGS_KEY_LOCATION_MODE, impl->location_mode);
+  g_settings_set_boolean (settings, SETTINGS_KEY_SHOW_HIDDEN,
                           gtk_file_chooser_get_show_hidden (GTK_FILE_CHOOSER (impl)));
-  g_settings_set_boolean (impl->settings, SETTINGS_KEY_SHOW_SIZE_COLUMN, impl->show_size_column);
-  g_settings_set_enum (impl->settings, SETTINGS_KEY_SORT_COLUMN, impl->sort_column);
-  g_settings_set_enum (impl->settings, SETTINGS_KEY_SORT_ORDER, impl->sort_order);
-
-  save_dialog_geometry (impl);
+  g_settings_set_boolean (settings, SETTINGS_KEY_SHOW_SIZE_COLUMN, impl->show_size_column);
+  g_settings_set_enum (settings, SETTINGS_KEY_SORT_COLUMN, impl->sort_column);
+  g_settings_set_enum (settings, SETTINGS_KEY_SORT_ORDER, impl->sort_order);
+  g_settings_set_int (settings, SETTINGS_KEY_SIDEBAR_WIDTH,
+                     gtk_paned_get_position (GTK_PANED (impl->browse_widgets_hpaned)));
 
   /* Now apply the settings */
-  g_settings_apply (impl->settings);
-
-  g_object_unref (impl->settings);
-  impl->settings = NULL;
+  g_settings_apply (settings);
 }
 
 /* GtkWidget::realize method */
@@ -3746,29 +3676,6 @@ gtk_file_chooser_default_realize (GtkWidget *widget)
   GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->realize (widget);
 
   emit_default_size_changed (impl);
-}
-
-static GFile *
-get_file_for_last_folder_opened (GtkFileChooserDefault *impl)
-{
-  char *last_folder_uri;
-  GFile *file;
-
-  settings_ensure (impl);
-
-  last_folder_uri = g_settings_get_string (impl->settings, SETTINGS_KEY_LAST_FOLDER_URI);
-
-  /* If no last folder is set, we use the user's home directory, since
-   * this is the starting point for most documents.
-   */
-  if (last_folder_uri[0] == '\0')
-    file = g_file_new_for_path (g_get_home_dir ());
-  else
-    file = g_file_new_for_uri (last_folder_uri);
-
-  g_free (last_folder_uri);
-
-  return file;
 }
 
 /* Changes the current folder to $CWD */
@@ -4506,7 +4413,7 @@ file_system_model_got_thumbnail (GObject *object, GAsyncResult *res, gpointer da
   copy_attribute (info, queried, G_FILE_ATTRIBUTE_THUMBNAILING_FAILED);
   copy_attribute (info, queried, G_FILE_ATTRIBUTE_STANDARD_ICON);
 
-  _gtk_file_system_model_update_file (model, file, info, FALSE);
+  _gtk_file_system_model_update_file (model, file, info);
 
   g_object_unref (info);
 
@@ -5141,16 +5048,6 @@ gtk_file_chooser_default_get_current_folder (GtkFileChooser *chooser)
       impl->operation_mode == OPERATION_MODE_RECENT)
     return NULL;
  
-  if (impl->reload_state == RELOAD_EMPTY)
-    {
-      /* We are unmapped, or we had an error while loading the last folder.
-       * We'll return the folder used by the last invocation of the file chooser
-       * since once we get (re)mapped, we'll load *that* folder anyway unless
-       * the caller explicitly calls set_current_folder() on us.
-       */
-      return get_file_for_last_folder_opened (impl);
-    }
-
   if (impl->current_folder)
     return g_object_ref (impl->current_folder);
 
@@ -5676,7 +5573,7 @@ find_good_size_from_style (GtkWidget *widget,
 {
   GtkStyleContext *context;
   GtkStateFlags state;
-  int font_size;
+  double font_size;
   GdkScreen *screen;
   double resolution;
 
@@ -5693,8 +5590,8 @@ find_good_size_from_style (GtkWidget *widget,
   else
     resolution = 96.0; /* wheeee */
 
-  font_size = pango_font_description_get_size (gtk_style_context_get_font (context, state));
-  font_size = PANGO_PIXELS (font_size) * resolution / 72.0;
+  gtk_style_context_get (context, state, "font-size", &font_size, NULL);
+  font_size = font_size * resolution / 72.0 + 0.5;
 
   *width = font_size * NUM_CHARS;
   *height = font_size * NUM_LINES;
@@ -5708,13 +5605,14 @@ gtk_file_chooser_default_get_default_size (GtkFileChooserEmbed *chooser_embed,
   GtkFileChooserDefault *impl;
   GtkRequisition req;
   int x, y, width, height;
+  GSettings *settings;
 
   impl = GTK_FILE_CHOOSER_DEFAULT (chooser_embed);
 
-  settings_ensure (impl);
+  settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (impl));
 
-  g_settings_get (impl->settings, SETTINGS_KEY_WINDOW_POSITION, "(ii)", &x, &y);
-  g_settings_get (impl->settings, SETTINGS_KEY_WINDOW_SIZE, "(ii)", &width, &height);
+  g_settings_get (settings, SETTINGS_KEY_WINDOW_POSITION, "(ii)", &x, &y);
+  g_settings_get (settings, SETTINGS_KEY_WINDOW_SIZE, "(ii)", &width, &height);
 
   if (x >= 0 && y >= 0 && width > 0 && height > 0)
     {

@@ -81,8 +81,6 @@ main (int argc, char **argv)
   GtkPrintOperation *print;
   GtkPrintSettings *settings;
 
-  g_type_init ();
-
   settings = gtk_print_settings_new ();
   /* gtk_print_settings_set_printer (settings, "printer"); */
 

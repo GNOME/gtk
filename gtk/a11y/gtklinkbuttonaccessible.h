@@ -1,4 +1,4 @@
-/* GAIL - The GNOME Accessibility Implementation Library
+/* GTK+ - accessibility implementations
  * Copyright 2011 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -18,11 +18,15 @@
 #ifndef __GTK_LINK_BUTTON_ACCESSIBLE_H__
 #define __GTK_LINK_BUTTON_ACCESSIBLE_H__
 
-#include "gtkbuttonaccessible.h"
+#if !defined (__GTK_A11Y_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk-a11y.h> can be included directly."
+#endif
+
+#include <gtk/a11y/gtkbuttonaccessible.h>
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_LINK_BUTTON_ACCESSIBLE                (_gtk_link_button_accessible_get_type ())
+#define GTK_TYPE_LINK_BUTTON_ACCESSIBLE                (gtk_link_button_accessible_get_type ())
 #define GTK_LINK_BUTTON_ACCESSIBLE(obj)                (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_LINK_BUTTON_ACCESSIBLE, GtkLinkButtonAccessible))
 #define GTK_LINK_BUTTON_ACCESSIBLE_CLASS(klass)        (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_LINK_BUTTON_ACCESSIBLE, GtkLinkButtonAccessibleClass))
 #define GTK_IS_LINK_BUTTON_ACCESSIBLE(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_LINK_BUTTON_ACCESSIBLE))
@@ -45,7 +49,7 @@ struct _GtkLinkButtonAccessibleClass
   GtkButtonAccessibleClass parent_class;
 };
 
-GType _gtk_link_button_accessible_get_type (void);
+GType gtk_link_button_accessible_get_type (void);
 
 G_END_DECLS
 

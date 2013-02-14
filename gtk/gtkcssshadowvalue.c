@@ -22,10 +22,10 @@
 #include "gtkcssshadowvalueprivate.h"
 
 #include "gtkcairoblurprivate.h"
+#include "gtkcsscolorvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkstylecontextprivate.h"
-#include "gtksymboliccolorprivate.h"
 #include "gtkthemingengineprivate.h"
 #include "gtkpango.h"
 
@@ -271,7 +271,7 @@ _gtk_css_shadow_value_parse (GtkCssParser *parser)
       }
     else if (values[COLOR] == NULL)
       {
-        values[COLOR] = _gtk_css_symbolic_value_new (parser);
+        values[COLOR] = _gtk_css_color_value_parse (parser);
 
         if (values[COLOR] == NULL)
           goto fail;
@@ -287,9 +287,7 @@ _gtk_css_shadow_value_parse (GtkCssParser *parser)
   while (values[HOFFSET] == NULL || !value_is_done_parsing (parser));
 
   if (values[COLOR] == NULL)
-    values[COLOR] = _gtk_css_symbolic_value_new_take_symbolic_color (
-                      gtk_symbolic_color_ref (
-                        _gtk_symbolic_color_get_current_color ()));
+    values[COLOR] = _gtk_css_color_value_new_current_color ();
 
   return gtk_css_shadow_value_new (values[HOFFSET], values[VOFFSET],
                                    values[RADIUS], values[SPREAD],

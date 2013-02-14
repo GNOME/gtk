@@ -10,8 +10,6 @@
 #include <gtk/gtk.h>
 #include <stdlib.h> /* for exit() */
 
-#include "demo-common.h"
-
 static void easter_egg_callback (GtkWidget *button, gpointer data);
 
 static void
@@ -132,25 +130,9 @@ insert_text (GtkTextBuffer *buffer)
   GtkTextIter start, end;
   GdkPixbuf *pixbuf;
   GdkPixbuf *scaled;
-  char *filename;
 
-  /* demo_find_file() looks in the current directory first,
-   * so you can run gtk-demo without installing GTK, then looks
-   * in the location where the file is installed.
-   */
-  pixbuf = NULL;
-  filename = demo_find_file ("gtk-logo-rgb.gif", NULL);
-  if (filename)
-    {
-      pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
-      g_free (filename);
-    }
-
-  if (pixbuf == NULL)
-    {
-      g_printerr ("Failed to load image file gtk-logo-rgb.gif\n");
-      exit (1);
-    }
+  pixbuf = gdk_pixbuf_new_from_resource ("/textview/gtk-logo-old.png", NULL);
+  g_assert (pixbuf);
 
   scaled = gdk_pixbuf_scale_simple (pixbuf, 32, 32, GDK_INTERP_BILINEAR);
   g_object_unref (pixbuf);
@@ -453,9 +435,7 @@ attach_widgets (GtkTextView *text_view)
         }
       else if (i == 3)
         {
-          gchar *filename = demo_find_file ("floppybuddy.gif", NULL);
-          widget = gtk_image_new_from_file (filename);
-          g_free (filename);
+          widget = gtk_image_new_from_resource ("/textview/floppybuddy.gif");
         }
       else if (i == 4)
         {

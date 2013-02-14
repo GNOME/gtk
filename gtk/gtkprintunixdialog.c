@@ -1913,7 +1913,7 @@ selected_printer_changed (GtkTreeSelection   *selection,
       set_busy_cursor (dialog, TRUE);
       gtk_list_store_set (GTK_LIST_STORE (priv->printer_list),
                           g_object_get_data (G_OBJECT (printer), "gtk-print-tree-iter"),
-                          PRINTER_LIST_COL_STATE, _("Getting printer information..."),
+                          PRINTER_LIST_COL_STATE, _("Getting printer information…"),
                           -1);
       return;
     }
@@ -3326,7 +3326,7 @@ page_name_func (GtkCellLayout   *cell_layout,
       g_object_unref (page_setup);
     }
   else
-    g_object_set (cell, "text",  _("Manage Custom Sizes..."), NULL);
+    g_object_set (cell, "text",  _("Manage Custom Sizes…"), NULL);
 }
 
 static void
@@ -3712,8 +3712,7 @@ create_optional_page (GtkPrintUnixDialog  *dialog,
   gtk_container_set_border_width (GTK_CONTAINER (table), 12);
   gtk_widget_show (table);
 
-  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled),
-                                         table);
+  gtk_container_add (GTK_CONTAINER (scrolled), table);
   gtk_viewport_set_shadow_type (GTK_VIEWPORT (gtk_bin_get_child (GTK_BIN (scrolled))),
                                 GTK_SHADOW_NONE);
 
@@ -3743,8 +3742,7 @@ create_advanced_page (GtkPrintUnixDialog *dialog)
   gtk_container_set_border_width (GTK_CONTAINER (main_vbox), 12);
   gtk_widget_show (main_vbox);
 
-  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled),
-                                         main_vbox);
+  gtk_container_add (GTK_CONTAINER (scrolled), main_vbox);
   gtk_viewport_set_shadow_type (GTK_VIEWPORT (gtk_bin_get_child (GTK_BIN (scrolled))),
                                 GTK_SHADOW_NONE);
 

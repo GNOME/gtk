@@ -24,11 +24,12 @@
 
 #include "gtkstylecontextprivate.h"
 #include "gtkcontainerprivate.h"
+#include "gtkcsscolorvalueprivate.h"
+#include "gtkcsscornervalueprivate.h"
 #include "gtkcssenginevalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkdebug.h"
-#include "gtkgradientprivate.h"
 #include "gtkstylepropertiesprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkthemingengineprivate.h"
@@ -36,7 +37,6 @@
 #include "gtkwidget.h"
 #include "gtkwindow.h"
 #include "gtkprivate.h"
-#include "gtksymboliccolorprivate.h"
 #include "gtkiconfactory.h"
 #include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
@@ -44,6 +44,9 @@
 #include "gtkstyleproviderprivate.h"
 #include "gtksettings.h"
 #include "gtksettingsprivate.h"
+
+#include "deprecated/gtkgradientprivate.h"
+#include "deprecated/gtksymboliccolorprivate.h"
 
 /**
  * SECTION:gtkstylecontext
@@ -365,12 +368,10 @@ struct _GtkStyleContextPrivate
   GHashTable *style_data;
   GtkStyleInfo *info;
 
-  GtkTextDirection direction;
-
   GtkCssChange relevant_changes;
   GtkCssChange pending_changes;
 
-  guint invalidating_context : 1;
+  const GtkBitmask *invalidating_context;
   guint invalid : 1;
 };
 
@@ -712,13 +713,12 @@ gtk_style_context_init (GtkStyleContext *style_context)
                                             (GDestroyNotify) style_info_free,
                                             (GDestroyNotify) style_data_unref);
 
-  priv->direction = GTK_TEXT_DIR_LTR;
-
   priv->screen = gdk_screen_get_default ();
   priv->relevant_changes = GTK_CSS_CHANGE_ANY;
 
   /* Create default info store */
   priv->info = style_info_new ();
+  priv->info->state_flags = GTK_STATE_FLAG_DIR_LTR;
 
   gtk_style_context_set_cascade (style_context,
                                  _gtk_style_cascade_get_for_screen (priv->screen));
@@ -881,8 +881,10 @@ gtk_style_context_impl_set_property (GObject      *object,
                                     g_value_get_object (value));
       break;
     case PROP_DIRECTION:
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_style_context_set_direction (style_context,
                                        g_value_get_enum (value));
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_PARENT:
       gtk_style_context_set_parent (style_context,
@@ -912,7 +914,9 @@ gtk_style_context_impl_get_property (GObject    *object,
       g_value_set_object (value, priv->screen);
       break;
     case PROP_DIRECTION:
-      g_value_set_enum (value, priv->direction);
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+      g_value_set_enum (value, gtk_style_context_get_direction (style_context));
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_PARENT:
       g_value_set_object (value, priv->parent);
@@ -1478,9 +1482,18 @@ void
 gtk_style_context_set_state (GtkStyleContext *context,
                              GtkStateFlags    flags)
 {
+  GtkStateFlags old_flags;
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
+  old_flags = context->priv->info->state_flags;
+  if (old_flags == flags)
+    return;
+
   context->priv->info->state_flags = flags;
+
+  if (((old_flags ^ flags) & (GTK_STATE_FLAG_DIR_LTR | GTK_STATE_FLAG_DIR_RTL)) &&
+      !gtk_style_context_is_saved (context))
+    g_object_notify (G_OBJECT (context), "direction");
   
   gtk_style_context_queue_invalidate_internal (context, GTK_CSS_CHANGE_STATE);
 }
@@ -2220,17 +2233,6 @@ _gtk_style_context_peek_property (GtkStyleContext *context,
   return _gtk_css_computed_values_get_value (data->store, property_id);
 }
 
-double
-_gtk_style_context_get_number (GtkStyleContext *context,
-                               guint            property_id,
-                               double           one_hundred_percent)
-{
-  GtkCssValue *value;
-  
-  value = _gtk_style_context_peek_property (context, property_id);
-  return _gtk_css_number_value_get (value, one_hundred_percent);
-}
-
 const GValue *
 _gtk_style_context_peek_style_property (GtkStyleContext *context,
                                         GType            widget_type,
@@ -2282,6 +2284,8 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
                                                  widget_path,
                                                  state, pspec, &pcache->value))
         {
+          G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
           /* Resolve symbolic colors to GdkColor/GdkRGBA */
           if (G_VALUE_TYPE (&pcache->value) == GTK_TYPE_SYMBOLIC_COLOR)
             {
@@ -2297,7 +2301,7 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
               else
                 g_value_init (&pcache->value, GDK_TYPE_COLOR);
 
-              if (_gtk_style_context_resolve_color (context, color, &rgba, NULL))
+              if (_gtk_style_context_resolve_color (context, _gtk_symbolic_color_get_css_value (color), &rgba, NULL))
                 {
                   if (G_PARAM_SPEC_VALUE_TYPE (pspec) == GDK_TYPE_RGBA)
                     g_value_set_boxed (&pcache->value, &rgba);
@@ -2317,6 +2321,8 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
 
               gtk_symbolic_color_unref (color);
             }
+
+          G_GNUC_END_IGNORE_DEPRECATIONS;
 
           if (priv->widget)
             gtk_widget_path_free (widget_path);
@@ -2620,19 +2626,38 @@ gtk_style_context_get_screen (GtkStyleContext *context)
  * call this yourself.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: Use gtk_style_context_set_state() with
+ *   #GTK_STATE_FLAG_DIR_LTR and #GTK_STATE_FLAG_DIR_RTL
+ *   instead.
  **/
 void
 gtk_style_context_set_direction (GtkStyleContext  *context,
                                  GtkTextDirection  direction)
 {
-  GtkStyleContextPrivate *priv;
+  GtkStateFlags state;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  priv = context->priv;
-  priv->direction = direction;
+  state = gtk_style_context_get_state (context);
+  state &= ~(GTK_STATE_FLAG_DIR_LTR | GTK_STATE_FLAG_DIR_RTL);
 
-  g_object_notify (G_OBJECT (context), "direction");
+  switch (direction)
+    {
+    case GTK_TEXT_DIR_LTR:
+      state |= GTK_STATE_FLAG_DIR_LTR;
+      break;
+
+    case GTK_TEXT_DIR_RTL:
+      state |= GTK_STATE_FLAG_DIR_RTL;
+      break;
+
+    case GTK_TEXT_DIR_NONE:
+    default:
+      break;
+    }
+
+  gtk_style_context_set_state (context, state);
 }
 
 /**
@@ -2644,16 +2669,26 @@ gtk_style_context_set_direction (GtkStyleContext  *context,
  * Returns: the widget direction
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: Use gtk_style_context_get_state() and
+ *   check for #GTK_STATE_FLAG_DIR_LTR and
+ *   #GTK_STATE_FLAG_DIR_RTL instead.
  **/
 GtkTextDirection
 gtk_style_context_get_direction (GtkStyleContext *context)
 {
-  GtkStyleContextPrivate *priv;
+  GtkStateFlags state;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), GTK_TEXT_DIR_LTR);
 
-  priv = context->priv;
-  return priv->direction;
+  state = gtk_style_context_get_state (context);
+
+  if (state & GTK_STATE_FLAG_DIR_LTR)
+    return GTK_TEXT_DIR_LTR;
+  else if (state & GTK_STATE_FLAG_DIR_RTL)
+    return GTK_TEXT_DIR_RTL;
+  else
+    return GTK_TEXT_DIR_NONE;
 }
 
 /**
@@ -2701,28 +2736,9 @@ gtk_style_context_get_junction_sides (GtkStyleContext *context)
   return context->priv->info->junction_sides;
 }
 
-GtkCssValue *
-_gtk_style_context_resolve_color_value (GtkStyleContext    *context,
-                                        GtkCssValue        *current,
-                                        GtkCssDependencies  current_deps,
-					GtkCssValue        *color,
-                                        GtkCssDependencies *dependencies)
-{
-  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), FALSE);
-  g_return_val_if_fail (current != NULL, FALSE);
-  g_return_val_if_fail (color != NULL, FALSE);
-
-  return _gtk_symbolic_color_resolve_full ((GtkSymbolicColor *) color,
-                                           GTK_STYLE_PROVIDER_PRIVATE (context->priv->cascade),
-                                           current,
-                                           current_deps,
-                                           dependencies);
-}
-
-
 gboolean
 _gtk_style_context_resolve_color (GtkStyleContext    *context,
-                                  GtkSymbolicColor   *color,
+                                  GtkCssValue        *color,
                                   GdkRGBA            *result,
                                   GtkCssDependencies *dependencies)
 {
@@ -2732,11 +2748,11 @@ _gtk_style_context_resolve_color (GtkStyleContext    *context,
   g_return_val_if_fail (color != NULL, FALSE);
   g_return_val_if_fail (result != NULL, FALSE);
 
-  val = _gtk_symbolic_color_resolve_full (color,
-                                          GTK_STYLE_PROVIDER_PRIVATE (context->priv->cascade),
-                                          _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR),
-                                          GTK_CSS_DEPENDS_ON_COLOR,
-                                          dependencies);
+  val = _gtk_css_color_value_resolve (color,
+                                      GTK_STYLE_PROVIDER_PRIVATE (context->priv->cascade),
+                                      _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR),
+                                      GTK_CSS_DEPENDS_ON_COLOR,
+                                      dependencies);
   if (val == NULL)
     return FALSE;
 
@@ -2760,17 +2776,17 @@ gtk_style_context_lookup_color (GtkStyleContext *context,
                                 const gchar     *color_name,
                                 GdkRGBA         *color)
 {
-  GtkSymbolicColor *sym_color;
+  GtkCssValue *value;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), FALSE);
   g_return_val_if_fail (color_name != NULL, FALSE);
   g_return_val_if_fail (color != NULL, FALSE);
 
-  sym_color = _gtk_style_provider_private_get_color (GTK_STYLE_PROVIDER_PRIVATE (context->priv->cascade), color_name);
-  if (sym_color == NULL)
+  value = _gtk_style_provider_private_get_color (GTK_STYLE_PROVIDER_PRIVATE (context->priv->cascade), color_name);
+  if (value == NULL)
     return FALSE;
 
-  return _gtk_style_context_resolve_color (context, sym_color, color, NULL);
+  return _gtk_style_context_resolve_color (context, value, color, NULL);
 }
 
 /**
@@ -2962,6 +2978,9 @@ gtk_style_context_update_cache (GtkStyleContext  *context,
   GHashTableIter iter;
   gpointer key, value;
 
+  if (_gtk_bitmask_is_empty (parent_changes))
+    return;
+
   priv = context->priv;
 
   g_hash_table_iter_init (&iter, priv->style_data);
@@ -2971,19 +2990,18 @@ gtk_style_context_update_cache (GtkStyleContext  *context,
       StyleData *data = value;
       GtkBitmask *changes;
 
-      changes = _gtk_bitmask_copy (parent_changes);
-      changes = _gtk_bitmask_intersect (changes, data->store->depends_on_parent);
-      if (_gtk_bitmask_get (changes, GTK_CSS_PROPERTY_COLOR))
-        changes = _gtk_bitmask_union (changes, data->store->depends_on_color);
-      if (_gtk_bitmask_get (changes, GTK_CSS_PROPERTY_FONT_SIZE))
-        changes = _gtk_bitmask_union (changes, data->store->depends_on_font_size);
+      changes = _gtk_css_computed_values_compute_dependencies (data->store, parent_changes);
 
-      build_properties (context, data->store, info, changes);
+      if (!_gtk_bitmask_is_empty (changes))
+	build_properties (context, data->store, info, changes);
+
+      _gtk_bitmask_free (changes);
     }
 }
 
 static void
-gtk_style_context_do_invalidate (GtkStyleContext *context)
+gtk_style_context_do_invalidate (GtkStyleContext  *context,
+                                 const GtkBitmask *changes)
 {
   GtkStyleContextPrivate *priv;
 
@@ -2995,11 +3013,11 @@ gtk_style_context_do_invalidate (GtkStyleContext *context)
   if (priv->invalidating_context)
     return;
 
-  priv->invalidating_context = TRUE;
+  priv->invalidating_context = changes;
 
   g_signal_emit (context, signals[CHANGED], 0);
 
-  priv->invalidating_context = FALSE;
+  priv->invalidating_context = NULL;
 }
 
 static GtkBitmask *
@@ -3170,12 +3188,7 @@ _gtk_style_context_validate (GtkStyleContext  *context,
     }
   else
     {
-      changes = _gtk_bitmask_copy (parent_changes);
-      changes = _gtk_bitmask_intersect (changes, current->store->depends_on_parent);
-      if (_gtk_bitmask_get (changes, GTK_CSS_PROPERTY_COLOR))
-        changes = _gtk_bitmask_union (changes, current->store->depends_on_color);
-      if (_gtk_bitmask_get (changes, GTK_CSS_PROPERTY_FONT_SIZE))
-        changes = _gtk_bitmask_union (changes, current->store->depends_on_font_size);
+      changes = _gtk_css_computed_values_compute_dependencies (current->store, parent_changes);
 
       gtk_style_context_update_cache (context, parent_changes);
     }
@@ -3193,8 +3206,8 @@ _gtk_style_context_validate (GtkStyleContext  *context,
       _gtk_bitmask_free (animation_changes);
     }
 
-  if (!_gtk_bitmask_is_empty (changes))
-    gtk_style_context_do_invalidate (context);
+  if (!_gtk_bitmask_is_empty (changes) || (change & GTK_CSS_CHANGE_FORCE_INVALIDATE))
+    gtk_style_context_do_invalidate (context, changes);
 
   change = _gtk_css_change_for_child (change);
   for (list = priv->children; list; list = list->next)
@@ -3243,10 +3256,25 @@ _gtk_style_context_queue_invalidate (GtkStyleContext *context,
 void
 gtk_style_context_invalidate (GtkStyleContext *context)
 {
+  GtkBitmask *changes;
+
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   gtk_style_context_clear_cache (context);
-  gtk_style_context_do_invalidate (context);
+
+  changes = _gtk_bitmask_new ();
+  changes = _gtk_bitmask_invert_range (changes,
+                                       0,
+                                       _gtk_css_style_property_get_n_properties ());
+  gtk_style_context_do_invalidate (context, changes);
+  _gtk_bitmask_free (changes);
+}
+
+static gboolean
+corner_value_is_right_angle (GtkCssValue *value)
+{
+  return _gtk_css_corner_value_get_x (value, 100) <= 0.0 &&
+         _gtk_css_corner_value_get_y (value, 100) <= 0.0;
 }
 
 /**
@@ -3263,31 +3291,33 @@ void
 gtk_style_context_set_background (GtkStyleContext *context,
                                   GdkWindow       *window)
 {
-  GtkStateFlags state;
-  cairo_pattern_t *pattern;
-  GdkRGBA *color;
+  const GdkRGBA *color;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  state = gtk_style_context_get_state (context);
-  gtk_style_context_get (context, state,
-                         "background-image", &pattern,
-                         NULL);
-  if (pattern)
-    {
-      gdk_window_set_background_pattern (window, pattern);
-      cairo_pattern_destroy (pattern);
-      return;
-    }
+  /* This is a sophisitcated optimization.
+   * If we know the GDK window's background will be opaque, we mark
+   * it as opaque. This is so GDK can do all the optimizations it does
+   * for opaque windows and be fast.
+   * This is mainly used when scrolling.
+   *
+   * We could indeed just set black instead of the color we have.
+   */
+  color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
 
-  gtk_style_context_get (context, state,
-                         "background-color", &color,
-                         NULL);
-  if (color)
+  if (color->alpha >= 1.0 &&
+      corner_value_is_right_angle (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS)) &&
+      corner_value_is_right_angle (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS)) &&
+      corner_value_is_right_angle (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS)) &&
+      corner_value_is_right_angle (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS)))
     {
       gdk_window_set_background_rgba (window, color);
-      gdk_rgba_free (color);
+    }
+  else
+    {
+      GdkRGBA transparent = { 0.0, 0.0, 0.0, 0.0 };
+      gdk_window_set_background_rgba (window, &transparent);
     }
 }
 
@@ -3497,6 +3527,9 @@ gtk_style_context_get_margin (GtkStyleContext *context,
  *          freed.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.8: Use gtk_style_context_get() for "font" or
+ *     subproperties instead.
  **/
 const PangoFontDescription *
 gtk_style_context_get_font (GtkStyleContext *context,
@@ -3504,7 +3537,7 @@ gtk_style_context_get_font (GtkStyleContext *context,
 {
   GtkStyleContextPrivate *priv;
   StyleData *data;
-  PangoFontDescription *description;
+  PangoFontDescription *description, *previous;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
 
@@ -3515,15 +3548,24 @@ gtk_style_context_get_font (GtkStyleContext *context,
 
   /* Yuck, fonts are created on-demand but we don't return a ref.
    * Do bad things to achieve this requirement */
-  description = g_object_get_data (G_OBJECT (data->store), "font-cache-for-get_font");
-  if (description == NULL)
+  gtk_style_context_get (context, state, "font", &description, NULL);
+  
+  previous = g_object_get_data (G_OBJECT (data->store), "font-cache-for-get_font");
+
+  if (previous)
     {
-      gtk_style_context_get (context, state, "font", &description, NULL);
+      pango_font_description_merge (previous, description, TRUE);
+      pango_font_description_free (description);
+      description = previous;
+    }
+  else
+    {
       g_object_set_data_full (G_OBJECT (data->store),
                               "font-cache-for-get_font",
                               description,
                               (GDestroyNotify) pango_font_description_free);
     }
+
   return description;
 }
 
@@ -4528,6 +4570,26 @@ gtk_draw_insertion_cursor (GtkWidget          *widget,
                          is_primary,
                          (direction == GTK_TEXT_DIR_RTL) ? PANGO_DIRECTION_RTL : PANGO_DIRECTION_LTR,
                          draw_arrow);
+}
+
+/**
+ * _gtk_style_context_get_changes:
+ * @context: the context to query
+ *
+ * Queries the context for the changes for the currently executing
+ * GtkStyleContext::invalidate signal. If no signal is currently
+ * emitted, this function returns %NULL.
+ *
+ * FIXME 4.0: Make this part of the signal.
+ *
+ * Returns: %NULL or the currently invalidating changes
+ **/
+const GtkBitmask *
+_gtk_style_context_get_changes (GtkStyleContext *context)
+{
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
+
+  return context->priv->invalidating_context;
 }
 
 static AtkAttributeSet *

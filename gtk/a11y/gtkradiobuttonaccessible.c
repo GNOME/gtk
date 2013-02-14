@@ -1,4 +1,4 @@
-/* GAIL - The GNOME Accessibility Implementation Library
+/* GTK+ - accessibility implementations
  * Copyright 2001 Sun Microsystems Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -26,13 +26,13 @@ struct _GtkRadioButtonAccessiblePrivate
 };
 
 
-G_DEFINE_TYPE (GtkRadioButtonAccessible, _gtk_radio_button_accessible, GTK_TYPE_TOGGLE_BUTTON_ACCESSIBLE)
+G_DEFINE_TYPE (GtkRadioButtonAccessible, gtk_radio_button_accessible, GTK_TYPE_TOGGLE_BUTTON_ACCESSIBLE)
 
 static void
 gtk_radio_button_accessible_initialize (AtkObject *accessible,
                                         gpointer   data)
 {
-  ATK_OBJECT_CLASS (_gtk_radio_button_accessible_parent_class)->initialize (accessible, data);
+  ATK_OBJECT_CLASS (gtk_radio_button_accessible_parent_class)->initialize (accessible, data);
 
   accessible->role = ATK_ROLE_RADIO_BUTTON;
 }
@@ -51,7 +51,7 @@ gtk_radio_button_accessible_ref_relation_set (AtkObject *obj)
 
   radio_button = GTK_RADIO_BUTTON_ACCESSIBLE (obj);
 
-  relation_set = ATK_OBJECT_CLASS (_gtk_radio_button_accessible_parent_class)->ref_relation_set (obj);
+  relation_set = ATK_OBJECT_CLASS (gtk_radio_button_accessible_parent_class)->ref_relation_set (obj);
 
   /* If the radio button'group has changed remove the relation */
   list = gtk_radio_button_get_group (GTK_RADIO_BUTTON (widget));
@@ -103,7 +103,7 @@ gtk_radio_button_accessible_ref_relation_set (AtkObject *obj)
 }
 
 static void
-_gtk_radio_button_accessible_class_init (GtkRadioButtonAccessibleClass *klass)
+gtk_radio_button_accessible_class_init (GtkRadioButtonAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
@@ -114,7 +114,7 @@ _gtk_radio_button_accessible_class_init (GtkRadioButtonAccessibleClass *klass)
 }
 
 static void
-_gtk_radio_button_accessible_init (GtkRadioButtonAccessible *radio_button)
+gtk_radio_button_accessible_init (GtkRadioButtonAccessible *radio_button)
 {
   radio_button->priv = G_TYPE_INSTANCE_GET_PRIVATE (radio_button,
                                                     GTK_TYPE_RADIO_BUTTON_ACCESSIBLE,

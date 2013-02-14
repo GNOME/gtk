@@ -139,6 +139,7 @@ struct _GtkImagePrivate
   GdkPixbufAnimationIter *animation_iter;
 
   gchar                *filename;       /* Only used with GTK_IMAGE_ANIMATION, GTK_IMAGE_PIXBUF */
+  gchar                *resource_path;  /* Only used with GTK_IMAGE_PIXBUF */
 };
 
 
@@ -184,6 +185,7 @@ enum
   PROP_ICON_NAME,
   PROP_STORAGE_TYPE,
   PROP_GICON,
+  PROP_RESOURCE,
   PROP_USE_FALLBACK
 };
 
@@ -309,7 +311,22 @@ gtk_image_class_init (GtkImageClass *class)
                                                         P_("The GIcon being displayed"),
                                                         G_TYPE_ICON,
                                                         GTK_PARAM_READWRITE));
-  
+
+  /**
+   * GtkImage:resource:
+   *
+   * A path to a resource file to display.
+   *
+   * Since: 3.8
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_RESOURCE,
+                                   g_param_spec_string ("resource",
+                                                        P_("Resource"),
+                                                        P_("The resource path being displayed"),
+                                                        NULL,
+                                                        GTK_PARAM_READWRITE));
+
   g_object_class_install_property (gobject_class,
                                    PROP_STORAGE_TYPE,
                                    g_param_spec_enum ("storage-type",
@@ -418,6 +435,9 @@ gtk_image_set_property (GObject      *object,
       gtk_image_set_from_gicon (image, g_value_get_object (value),
 				icon_size);
       break;
+    case PROP_RESOURCE:
+      gtk_image_set_from_resource (image, g_value_get_string (value));
+      break;
 
     case PROP_USE_FALLBACK:
       _gtk_icon_helper_set_use_fallback (priv->icon_helper, g_value_get_boolean (value));
@@ -466,6 +486,9 @@ gtk_image_get_property (GObject     *object,
       break;
     case PROP_GICON:
       g_value_set_object (value, _gtk_icon_helper_peek_gicon (priv->icon_helper));
+      break;
+    case PROP_RESOURCE:
+      g_value_set_string (value, priv->resource_path);
       break;
     case PROP_USE_FALLBACK:
       g_value_set_boolean (value, _gtk_icon_helper_get_use_fallback (priv->icon_helper));
@@ -791,10 +814,12 @@ void
 gtk_image_set_from_resource (GtkImage    *image,
 			     const gchar *resource_path)
 {
-  GdkPixbuf *pixbuf = NULL;
-  GInputStream *stream;
+  GtkImagePrivate *priv;
+  GdkPixbufAnimation *animation;
 
   g_return_if_fail (GTK_IS_IMAGE (image));
+
+  priv = image->priv;
 
   g_object_freeze_notify (G_OBJECT (image));
 
@@ -806,14 +831,9 @@ gtk_image_set_from_resource (GtkImage    *image,
       return;
     }
 
-  stream = g_resources_open_stream (resource_path, 0, NULL);
-  if (stream != NULL)
-    {
-      pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, NULL);
-      g_object_unref (stream);
-    }
+  animation = gdk_pixbuf_animation_new_from_resource (resource_path, NULL);
 
-  if (pixbuf == NULL)
+  if (animation == NULL)
     {
       gtk_image_set_from_stock (image,
                                 GTK_STOCK_MISSING_IMAGE,
@@ -822,9 +842,16 @@ gtk_image_set_from_resource (GtkImage    *image,
       return;
     }
 
-  gtk_image_set_from_pixbuf (image, pixbuf);
+  priv->resource_path = g_strdup (resource_path);
 
-  g_object_unref (pixbuf);
+  if (gdk_pixbuf_animation_is_static_image (animation))
+    gtk_image_set_from_pixbuf (image, gdk_pixbuf_animation_get_static_image (animation));
+  else
+    gtk_image_set_from_animation (image, animation);
+
+  g_object_notify (G_OBJECT (image), "resource");
+
+  g_object_unref (animation);
 
   g_object_thaw_notify (G_OBJECT (image));
 }
@@ -1466,6 +1493,13 @@ gtk_image_reset (GtkImage *image)
       g_free (priv->filename);
       priv->filename = NULL;
       g_object_notify (G_OBJECT (image), "file");
+    }
+
+  if (priv->resource_path)
+    {
+      g_free (priv->resource_path);
+      priv->resource_path = NULL;
+      g_object_notify (G_OBJECT (image), "resource");
     }
 
   _gtk_icon_helper_clear (priv->icon_helper);

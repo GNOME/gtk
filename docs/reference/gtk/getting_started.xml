@@ -5,7 +5,7 @@
 <chapter id="gtk-getting-started" xmlns:xi="http://www.w3.org/2003/XInclude">
   <title>Getting Started with GTK+</title>
 
-  <para>This chapter is contains some tutorial information to get you
+  <para>This chapter contains some tutorial information to get you
   started with GTK+ programming. It assumes that you have GTK+, its
   dependencies and a C compiler installed and ready to use. If you
   need to build GTK+ itself first, refer to the

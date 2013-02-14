@@ -577,7 +577,7 @@ gtk_expander_realize (GtkWidget *widget)
 
   priv->event_window = gdk_window_new (gtk_widget_get_parent_window (widget),
                                        &attributes, attributes_mask);
-  gdk_window_set_user_data (priv->event_window, widget);
+  gtk_widget_register_window (widget, priv->event_window);
 }
 
 static void
@@ -587,7 +587,7 @@ gtk_expander_unrealize (GtkWidget *widget)
 
   if (priv->event_window)
     {
-      gdk_window_set_user_data (priv->event_window, NULL);
+      gtk_widget_unregister_window (widget, priv->event_window);
       gdk_window_destroy (priv->event_window);
       priv->event_window = NULL;
     }
@@ -1251,6 +1251,7 @@ get_next_site (GtkExpander      *expander,
         case GTK_DIR_RIGHT:
           return FOCUS_WIDGET;
         }
+      break;
     case FOCUS_WIDGET:
       switch (direction)
         {
@@ -1264,8 +1265,8 @@ get_next_site (GtkExpander      *expander,
           return FOCUS_LABEL;
         case GTK_DIR_RIGHT:
           return ltr ? FOCUS_LABEL : FOCUS_NONE;
-          break;
         }
+      break;
     case FOCUS_LABEL:
       switch (direction)
         {
@@ -1279,8 +1280,8 @@ get_next_site (GtkExpander      *expander,
           return FOCUS_CHILD;
         case GTK_DIR_RIGHT:
           return ltr ? FOCUS_CHILD : FOCUS_WIDGET;
-          break;
         }
+      break;
     case FOCUS_CHILD:
       switch (direction)
         {
@@ -1293,6 +1294,7 @@ get_next_site (GtkExpander      *expander,
         case GTK_DIR_RIGHT:
           return FOCUS_NONE;
         }
+      break;
     }
 
   g_assert_not_reached ();

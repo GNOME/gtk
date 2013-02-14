@@ -1014,7 +1014,7 @@ update_website (GtkAboutDialog *about)
       else
         {
           markup = g_strdup_printf ("<a href=\"%s\">%s</a>",
-                                    priv->website_url, _("Homepage"));
+                                    priv->website_url, _("Website"));
         }
 
       gtk_label_set_markup (GTK_LABEL (priv->website_label), markup);
@@ -2095,11 +2095,9 @@ text_view_new (GtkAboutDialog  *about,
   GdkColor color;
   GdkColor link_color;
   GdkColor visited_link_color;
-  gint size;
-  PangoFontDescription *font_desc;
   GtkAboutDialogPrivate *priv = about->priv;
-  GtkStyleContext *context;
-  GtkStateFlags state;
+  GtkTextIter start_iter, end_iter;
+  GtkTextTag *tag;
 
   gtk_widget_style_get (GTK_WIDGET (about),
                         "link-color", &style_link_color,
@@ -2128,14 +2126,11 @@ text_view_new (GtkAboutDialog  *about,
   gtk_text_view_set_editable (text_view, FALSE);
   gtk_text_view_set_wrap_mode (text_view, wrap_mode);
 
-  context = gtk_widget_get_style_context (view);
-  state = gtk_widget_get_state_flags (view);
-
-  size = pango_font_description_get_size (gtk_style_context_get_font (context, state));
-  font_desc = pango_font_description_new ();
-  pango_font_description_set_size (font_desc, size * PANGO_SCALE_SMALL);
-  gtk_widget_override_font (view, font_desc);
-  pango_font_description_free (font_desc);
+  gtk_text_buffer_get_start_iter (buffer, &start_iter);
+  gtk_text_buffer_get_start_iter (buffer, &end_iter);
+  tag = gtk_text_tag_new (NULL);
+  g_object_set (tag, "font-scale", PANGO_SCALE_SMALL, NULL);
+  gtk_text_buffer_apply_tag (buffer, tag, &start_iter, &end_iter);
 
   gtk_text_view_set_left_margin (text_view, 8);
   gtk_text_view_set_right_margin (text_view, 8);
@@ -2393,7 +2388,11 @@ create_credits_page (GtkAboutDialog *about)
   gtk_grid_set_row_spacing (GTK_GRID (grid), 2);
   gtk_widget_set_halign (grid, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (grid, GTK_ALIGN_START);
-  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (sw), grid);
+  gtk_container_add (GTK_CONTAINER (sw), grid);
+  gtk_style_context_add_class (gtk_widget_get_style_context (gtk_bin_get_child (GTK_BIN (sw))),
+                               GTK_STYLE_CLASS_VIEW);
+
+  row = 0;
 
   if (priv->authors != NULL)
     add_credits_section (about, GTK_GRID (grid), &row, _("Created by"), priv->authors);
@@ -2664,7 +2663,7 @@ gtk_about_dialog_get_license_type (GtkAboutDialog *about)
  * gtk_about_dialog_add_credit_section:
  * @about: A #GtkAboutDialog
  * @section_name: The name of the section
- * @people: The people who belong to that section
+ * @people: (array zero-terminated=1): The people who belong to that section
  *
  * Creates a new section in the Credits page.
  *

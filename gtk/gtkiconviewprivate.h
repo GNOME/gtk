@@ -115,6 +115,7 @@ struct _GtkIconViewPrivate
   guint dest_set : 1;
   guint reorderable : 1;
   guint empty_view_drop :1;
+  guint activate_on_single_click : 1;
 
   guint modify_selection_pressed : 1;
   guint extend_selection_pressed : 1;

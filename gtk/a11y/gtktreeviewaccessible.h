@@ -1,4 +1,4 @@
-/* GAIL - The GNOME Accessibility Implementation Library
+/* GTK+ - accessibility implementations
  * Copyright 2001 Sun Microsystems Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -18,12 +18,15 @@
 #ifndef __GTK_TREE_VIEW_ACCESSIBLE_H__
 #define __GTK_TREE_VIEW_ACCESSIBLE_H__
 
-#include "gtkcontaineraccessible.h"
-#include "gtktreeprivate.h"
+#if !defined (__GTK_A11Y_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk-a11y.h> can be included directly."
+#endif
+
+#include <gtk/a11y/gtkcontaineraccessible.h>
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_TREE_VIEW_ACCESSIBLE                  (_gtk_tree_view_accessible_get_type ())
+#define GTK_TYPE_TREE_VIEW_ACCESSIBLE                  (gtk_tree_view_accessible_get_type ())
 #define GTK_TREE_VIEW_ACCESSIBLE(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TREE_VIEW_ACCESSIBLE, GtkTreeViewAccessible))
 #define GTK_TREE_VIEW_ACCESSIBLE_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TREE_VIEW_ACCESSIBLE, GtkTreeViewAccessibleClass))
 #define GTK_IS_TREE_VIEW_ACCESSIBLE(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TREE_VIEW_ACCESSIBLE))
@@ -46,45 +49,7 @@ struct _GtkTreeViewAccessibleClass
   GtkContainerAccessibleClass parent_class;
 };
 
-GType _gtk_tree_view_accessible_get_type (void);
-
-/* called by treeview code */
-void            _gtk_tree_view_accessible_reorder       (GtkTreeView       *treeview);
-void            _gtk_tree_view_accessible_add           (GtkTreeView       *treeview,
-                                                         GtkRBTree         *tree,
-                                                         GtkRBNode         *node);
-void            _gtk_tree_view_accessible_remove        (GtkTreeView       *treeview,
-                                                         GtkRBTree         *tree,
-                                                         GtkRBNode         *node);
-void            _gtk_tree_view_accessible_changed       (GtkTreeView       *treeview,
-                                                         GtkRBTree         *tree,
-                                                         GtkRBNode         *node);
-
-
-void            _gtk_tree_view_accessible_add_column    (GtkTreeView       *treeview,
-                                                         GtkTreeViewColumn *column,
-                                                         guint              id);
-void            _gtk_tree_view_accessible_remove_column (GtkTreeView       *treeview,
-                                                         GtkTreeViewColumn *column,
-                                                         guint              id);
-void            _gtk_tree_view_accessible_reorder_column(GtkTreeView       *treeview,
-                                                         GtkTreeViewColumn *column);
-void            _gtk_tree_view_accessible_toggle_visibility
-                                                        (GtkTreeView       *treeview,
-                                                         GtkTreeViewColumn *column);
-void            _gtk_tree_view_accessible_update_focus_column
-                                                        (GtkTreeView       *treeview,
-                                                         GtkTreeViewColumn *old_focus,
-                                                         GtkTreeViewColumn *new_focus);
-
-void            _gtk_tree_view_accessible_add_state     (GtkTreeView       *treeview,
-                                                         GtkRBTree         *tree,
-                                                         GtkRBNode         *node,
-                                                         GtkCellRendererState state);
-void            _gtk_tree_view_accessible_remove_state  (GtkTreeView       *treeview,
-                                                         GtkRBTree         *tree,
-                                                         GtkRBNode         *node,
-                                                         GtkCellRendererState state);
+GType gtk_tree_view_accessible_get_type (void);
 
 G_END_DECLS
 

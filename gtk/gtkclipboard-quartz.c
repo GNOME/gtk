@@ -31,20 +31,30 @@
 #include "gtktextbuffer.h"
 #include "gtkselectionprivate.h"
 #include "gtkquartz.h"
-
+#include "../gdk/quartz/gdkquartz.h"
 
 enum {
   OWNER_CHANGE,
   LAST_SIGNAL
 };
 
+@interface GtkClipboardOwner : NSObject {
+  GtkClipboard *clipboard;
+  @public
+  gboolean setting_same_owner;
+}
+
+@end
+
 typedef struct _GtkClipboardClass GtkClipboardClass;
 
-struct _GtkClipboard 
+struct _GtkClipboard
 {
   GObject parent_instance;
 
   NSPasteboard *pasteboard;
+  GtkClipboardOwner *owner;
+  NSInteger change_count;
 
   GdkAtom selection;
 
@@ -76,16 +86,15 @@ struct _GtkClipboardClass
 			GdkEventOwnerChange *event);
 };
 
-@interface GtkClipboardOwner : NSObject {
-  GtkClipboard *clipboard;
+static void gtk_clipboard_class_init   (GtkClipboardClass   *class);
+static void gtk_clipboard_finalize     (GObject             *object);
+static void gtk_clipboard_owner_change (GtkClipboard        *clipboard,
+					GdkEventOwnerChange *event);
 
-  GtkClipboardGetFunc get_func;
-  GtkClipboardClearFunc clear_func;
-  gpointer user_data;
-  
-}
-
-@end
+static void          clipboard_unset      (GtkClipboard     *clipboard);
+static GtkClipboard *clipboard_peek       (GdkDisplay       *display,
+					   GdkAtom           selection,
+					   gboolean          only_if_exists);
 
 @implementation GtkClipboardOwner
 -(void)pasteboard:(NSPasteboard *)sender provideDataForType:(NSString *)type
@@ -117,12 +126,16 @@ struct _GtkClipboardClass
     }
 }
 
+/*  pasteboardChangedOwner is not called immediately, and it's not called
+ *  reliably. It is somehow documented in the apple api docs, but the docs
+ *  suck and don't really give clear instructions. Therefore we track
+ *  changeCount in several places below and clear the clipboard if it
+ *  changed.
+ */
 - (void)pasteboardChangedOwner:(NSPasteboard *)sender
 {
-  if (clear_func)
-    clear_func (clipboard, user_data);
-
-  [self release];
+  if (! setting_same_owner)
+    clipboard_unset (clipboard);
 }
 
 - (id)initWithClipboard:(GtkClipboard *)aClipboard
@@ -132,6 +145,7 @@ struct _GtkClipboardClass
   if (self) 
     {
       clipboard = aClipboard;
+      setting_same_owner = FALSE;
     }
 
   return self;
@@ -139,15 +153,6 @@ struct _GtkClipboardClass
 
 @end
 
-static void gtk_clipboard_class_init   (GtkClipboardClass   *class);
-static void gtk_clipboard_finalize     (GObject             *object);
-static void gtk_clipboard_owner_change (GtkClipboard        *clipboard,
-					GdkEventOwnerChange *event);
-
-static void          clipboard_unset      (GtkClipboard     *clipboard);
-static GtkClipboard *clipboard_peek       (GdkDisplay       *display,
-					   GdkAtom           selection,
-					   gboolean          only_if_exists);
 
 static const gchar clipboards_owned_key[] = "gtk-clipboards-owned";
 static GQuark clipboards_owned_key_id = 0;
@@ -331,10 +336,6 @@ gtk_clipboard_set_contents (GtkClipboard         *clipboard,
   NSSet *types;
   NSAutoreleasePool *pool;
 
-  pool = [[NSAutoreleasePool alloc] init];
-
-  owner = [[GtkClipboardOwner alloc] initWithClipboard:clipboard];
-
   if (!(clipboard->have_owner && have_owner) ||
       clipboard->user_data != user_data)
     {
@@ -349,17 +350,44 @@ gtk_clipboard_set_contents (GtkClipboard         *clipboard,
               clipboard->user_data != user_data)
             {
               (*clear_func) (clipboard, user_data);
-              [pool release];
               return FALSE;
             }
           else
             {
-              [pool release];
               return TRUE;
             }
         }
     }
 
+  pool = [[NSAutoreleasePool alloc] init];
+
+  types = _gtk_quartz_target_entries_to_pasteboard_types (targets, n_targets);
+
+  /*  call declareTypes before setting the clipboard members because
+   *  declareTypes might clear the clipboard
+   */
+  if (user_data && user_data == clipboard->user_data)
+    {
+      owner = [clipboard->owner retain];
+
+      owner->setting_same_owner = TRUE;
+      clipboard->change_count = [clipboard->pasteboard declareTypes: [types allObjects]
+                                                              owner: owner];
+      owner->setting_same_owner = FALSE;
+    }
+  else
+    {
+      owner = [[GtkClipboardOwner alloc] initWithClipboard:clipboard];
+
+      clipboard->change_count = [clipboard->pasteboard declareTypes: [types allObjects]
+                                                              owner: owner];
+    }
+
+  [owner release];
+  [types release];
+  [pool release];
+
+  clipboard->owner = owner;
   clipboard->user_data = user_data;
   clipboard->have_owner = have_owner;
   if (have_owner)
@@ -370,12 +398,6 @@ gtk_clipboard_set_contents (GtkClipboard         *clipboard,
   if (clipboard->target_list)
     gtk_target_list_unref (clipboard->target_list);
   clipboard->target_list = gtk_target_list_new (targets, n_targets);
-
-  types = _gtk_quartz_target_entries_to_pasteboard_types (targets, n_targets);
-
-  [clipboard->pasteboard declareTypes:[types allObjects] owner:owner];
-  [types release];
-  [pool release];
 
   return TRUE;
 }
@@ -420,6 +442,12 @@ gtk_clipboard_get_owner (GtkClipboard *clipboard)
 {
   g_return_val_if_fail (clipboard != NULL, NULL);
 
+  if (clipboard->change_count < [clipboard->pasteboard changeCount])
+    {
+      clipboard_unset (clipboard);
+      clipboard->change_count = [clipboard->pasteboard changeCount];
+    }
+
   if (clipboard->have_owner)
     return clipboard->user_data;
   else
@@ -448,7 +476,8 @@ clipboard_unset (GtkClipboard *clipboard)
   clipboard->n_storable_targets = -1;
   g_free (clipboard->storable_targets);
   clipboard->storable_targets = NULL;
-      
+
+  clipboard->owner = NULL;
   clipboard->get_func = NULL;
   clipboard->clear_func = NULL;
   clipboard->user_data = NULL;
@@ -473,6 +502,8 @@ clipboard_unset (GtkClipboard *clipboard)
 void
 gtk_clipboard_clear (GtkClipboard *clipboard)
 {
+  clipboard_unset (clipboard);
+
   [clipboard->pasteboard declareTypes:nil owner:nil];
 }
 
@@ -655,6 +686,12 @@ gtk_clipboard_wait_for_contents (GtkClipboard *clipboard,
 {
   NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
   GtkSelectionData *selection_data = NULL;
+
+  if (clipboard->change_count < [clipboard->pasteboard changeCount])
+    {
+      clipboard_unset (clipboard);
+      clipboard->change_count = [clipboard->pasteboard changeCount];
+    }
 
   if (target == gdk_atom_intern_static_string ("TARGETS")) 
     {
@@ -1002,11 +1039,74 @@ gtk_clipboard_set_can_store (GtkClipboard         *clipboard,
 void
 gtk_clipboard_store (GtkClipboard *clipboard)
 {
-  /* FIXME: Implement */
+  int i;
+  int n_targets = 0;
+  GtkTargetEntry *targets;
+
+  g_return_if_fail (GTK_IS_CLIPBOARD (clipboard));
+
+  if (!clipboard->target_list || !clipboard->get_func)
+    return;
+
+  /* We simply store all targets into the OS X clipboard. We should be
+   * using the functions gdk_display_supports_clipboard_persistence() and
+   * gdk_display_store_clipboard(), but since for OS X the clipboard support
+   * was implemented in GTK+ and not through GdkSelections, we do it this
+   * way. Doing this properly could be worthwhile to implement in the future.
+   */
+
+  targets = gtk_target_table_new_from_list (clipboard->target_list,
+                                            &n_targets);
+  for (i = 0; i < n_targets; i++)
+    {
+      GtkSelectionData selection_data;
+
+      /* in each loop iteration, check if the content is still
+       * there, because calling get_func() can do anything to
+       * the clipboard
+       */
+      if (!clipboard->target_list || !clipboard->get_func)
+        break;
+
+      memset (&selection_data, 0, sizeof (GtkSelectionData));
+
+      selection_data.selection = clipboard->selection;
+      selection_data.target = gdk_atom_intern_static_string (targets[i].target);
+      selection_data.display = gdk_display_get_default ();
+      selection_data.length = -1;
+
+      clipboard->get_func (clipboard, &selection_data,
+                           targets[i].info, clipboard->user_data);
+
+      if (selection_data.length >= 0)
+        _gtk_quartz_set_selection_data_for_pasteboard (clipboard->pasteboard,
+                                                       &selection_data);
+
+      g_free (selection_data.data);
+    }
+
+  if (targets)
+    gtk_target_table_free (targets, n_targets);
 }
 
 void
 _gtk_clipboard_store_all (void)
 {
-  /* FIXME: Implement */
+  GtkClipboard *clipboard;
+  GSList *displays, *list;
+
+  displays = gdk_display_manager_list_displays (gdk_display_manager_get ());
+
+  list = displays;
+  while (list)
+    {
+      GdkDisplay *display = list->data;
+
+      clipboard = clipboard_peek (display, GDK_SELECTION_CLIPBOARD, TRUE);
+
+      if (clipboard)
+        gtk_clipboard_store (clipboard);
+
+      list = list->next;
+    }
 }

@@ -22,12 +22,12 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#ifndef __GTK_PLUG_H__
+#define __GTK_PLUG_H__
+
 #if !defined (__GTKX_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtkx.h> can be included directly."
 #endif
-
-#ifndef __GTK_PLUG_H__
-#define __GTK_PLUG_H__
 
 #include <gdk/gdk.h>
 

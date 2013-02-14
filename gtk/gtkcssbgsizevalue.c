@@ -74,7 +74,7 @@ gtk_css_value_bg_size_equal (const GtkCssValue *value1,
                              const GtkCssValue *value2)
 {
   return value1->cover == value2->cover &&
-         value2->contain == value2->contain &&
+         value1->contain == value2->contain &&
          (value1->x == value2->x ||
           (value1->x != NULL && value2->x != NULL &&
            _gtk_css_value_equal (value1->x, value2->x))) &&
@@ -261,16 +261,33 @@ _gtk_css_bg_size_value_compute_size (const GtkCssValue *value,
   g_return_if_fail (value->class == &GTK_CSS_VALUE_BG_SIZE);
 
   if (value->contain || value->cover)
-    gtk_css_bg_size_compute_size_for_cover_contain (value->cover,
-                                                    image,
-                                                    area_width, area_height,
-                                                    out_width, out_height);
+    {
+      gtk_css_bg_size_compute_size_for_cover_contain (value->cover,
+                                                      image,
+                                                      area_width, area_height,
+                                                      out_width, out_height);
+    }
   else
-    _gtk_css_image_get_concrete_size (image,
-                                      /* note: 0 does the right thing here for 'auto' */
-                                      value->x ? _gtk_css_number_value_get (value->x, area_width) : 0,
-                                      value->y ? _gtk_css_number_value_get (value->y, area_height) : 0,
-                                      area_width, area_height,
-                                      out_width, out_height);
+    {
+      double x, y;
+
+      /* note: 0 does the right thing later for 'auto' */
+      x = value->x ? _gtk_css_number_value_get (value->x, area_width) : 0;
+      y = value->y ? _gtk_css_number_value_get (value->y, area_height) : 0;
+
+      if ((x <= 0 && value->x) ||
+          (y <= 0 && value->y))
+        {
+          *out_width = 0;
+          *out_height = 0;
+        }
+      else
+        {
+          _gtk_css_image_get_concrete_size (image,
+                                            x, y,
+                                            area_width, area_height,
+                                            out_width, out_height);
+        }
+    }
 }
 

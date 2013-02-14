@@ -176,7 +176,7 @@ const static struct {
   { 67, GDK_KEY_asterisk, GDK_KEY_KP_Multiply },
   { 69, GDK_KEY_plus, GDK_KEY_KP_Add },
   { 75, GDK_KEY_slash, GDK_KEY_KP_Divide },
-  { 76, 0x01000003, GDK_KEY_KP_Enter },
+  { 76, GDK_KEY_Return, GDK_KEY_KP_Enter },
   { 78, GDK_KEY_minus, GDK_KEY_KP_Subtract },
   { 81, GDK_KEY_equal, GDK_KEY_KP_Equal },
   { 82, GDK_KEY_0, GDK_KEY_KP_0 },

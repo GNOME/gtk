@@ -1,6 +1,7 @@
 # translation of gtk+-properties.HEAD.po to Latvian
 # Copyright (C) 2009 Free Software Foundation, Inc.
 #
+#
 # Raivis Dejus <orvils@gmail.com>, 2009.
 # Rudolfs <rudolfs.mazurs@gmail.com>, 2011.
 # Rūdofls Mazurs <rudolfs.mazurs@gmail.com>, 2011, 2012.
@@ -10,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-09-22 19:53+0300\n"
-"PO-Revision-Date: 2012-09-22 20:00+0300\n"
+"POT-Creation-Date: 2012-12-30 15:47+0200\n"
+"PO-Revision-Date: 2012-12-30 15:49+0200\n"
 "Last-Translator: Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>\n"
 "Language-Team: Latviešu <lata-l10n@googlegroups.com>\n"
 "Language: lv\n"
@@ -111,19 +112,19 @@ msgstr "Noklusētais displejs"
 msgid "The default display for GDK"
 msgstr "Noklusētais GDK displejs"
 
-#: ../gdk/gdkscreen.c:90
+#: ../gdk/gdkscreen.c:91
 msgid "Font options"
 msgstr "Fonta opcijas"
 
-#: ../gdk/gdkscreen.c:91
+#: ../gdk/gdkscreen.c:92
 msgid "The default font options for the screen"
 msgstr "Ekrāna noklusētā fonta opcijas"
 
-#: ../gdk/gdkscreen.c:98
+#: ../gdk/gdkscreen.c:99
 msgid "Font resolution"
 msgstr "Fonta izšķirtspēja"
 
-#: ../gdk/gdkscreen.c:99
+#: ../gdk/gdkscreen.c:100
 msgid "The resolution for fonts on the screen"
 msgstr "Ekrāna fontu izšķirtspēja"
 
@@ -163,11 +164,11 @@ msgstr "Ierīces ID"
 msgid "Device identifier"
 msgstr "Ierīces identifikators"
 
-#: ../gtk/a11y/gtkrenderercellaccessible.c:93
+#: ../gtk/a11y/gtkrenderercellaccessible.c:97
 msgid "Cell renderer"
 msgstr "Šūnas attēlotājs"
 
-#: ../gtk/a11y/gtkrenderercellaccessible.c:94
+#: ../gtk/a11y/gtkrenderercellaccessible.c:98
 msgid "The cell renderer represented by this accessible"
 msgstr "Šūnas attēlotājs, ko reprezentē šis pieejamības objekts"
 
@@ -261,9 +262,9 @@ msgstr "Priekšskatījuma teksts"
 msgid "The text to display in order to demonstrate the selected font"
 msgstr "Teksts, ko parādīt, lai demonstrētu izvēlēto fontu"
 
-#: ../gtk/deprecated/gtkhandlebox.c:224 ../gtk/gtkcombobox.c:1067
-#: ../gtk/gtkentry.c:890 ../gtk/gtkmenubar.c:216 ../gtk/gtkstatusbar.c:182
-#: ../gtk/gtktoolbar.c:630 ../gtk/gtkviewport.c:155
+#: ../gtk/deprecated/gtkhandlebox.c:224 ../gtk/gtkcombobox.c:1064
+#: ../gtk/gtkentry.c:890 ../gtk/gtkmenubar.c:213 ../gtk/gtkstatusbar.c:182
+#: ../gtk/gtktoolbar.c:628 ../gtk/gtkviewport.c:155
 msgid "Shadow type"
 msgstr "Ēnas tips"
 
@@ -354,8 +355,8 @@ msgstr "Kolonnu atstarpes"
 msgid "The amount of space between two consecutive columns"
 msgstr "Atstarpe starp divām secīgām kolonnām"
 
-#: ../gtk/deprecated/gtktable.c:227 ../gtk/gtkbox.c:253
-#: ../gtk/gtktoolbar.c:562 ../gtk/gtktoolitemgroup.c:1650
+#: ../gtk/deprecated/gtktable.c:227 ../gtk/gtkbox.c:250
+#: ../gtk/gtktoolbar.c:560 ../gtk/gtktoolitemgroup.c:1650
 msgid "Homogeneous"
 msgstr "Viendabīgs"
 
@@ -367,7 +368,7 @@ msgstr "Ja PATIESS, tabulas šūnas ir ar tādu pašu platumu/augstumu"
 msgid "Left attachment"
 msgstr "Kreisā piesaistne"
 
-#: ../gtk/deprecated/gtktable.c:236 ../gtk/gtkgrid.c:1421 ../gtk/gtkmenu.c:727
+#: ../gtk/deprecated/gtktable.c:236 ../gtk/gtkgrid.c:1421 ../gtk/gtkmenu.c:747
 msgid "The column number to attach the left side of the child to"
 msgstr "Kolonnas numurs, ko piesaistīt bērnam kreisajā pusē"
 
@@ -391,7 +392,7 @@ msgstr "Rindas numurs, ko piesaistīt bērna augšas logdaļai"
 msgid "Bottom attachment"
 msgstr "Apakšas piesaistne"
 
-#: ../gtk/deprecated/gtktable.c:257 ../gtk/gtkmenu.c:751
+#: ../gtk/deprecated/gtktable.c:257 ../gtk/gtkmenu.c:771
 msgid "The row number to attach the bottom of the child to"
 msgstr "Rindas numurs, ko piesaistīt bērna apakšas logdaļai"
 
@@ -598,7 +599,7 @@ msgid "The parameter for action invocations"
 msgstr "Parametri darbības izsaukšanai"
 
 #: ../gtk/gtkaction.c:220 ../gtk/gtkactiongroup.c:228 ../gtk/gtkprinter.c:123
-#: ../gtk/gtktextmark.c:126 ../gtk/gtkthemingengine.c:255
+#: ../gtk/gtktextmark.c:126 ../gtk/gtkthemingengine.c:258
 msgid "Name"
 msgstr "Nosaukums"
 
@@ -607,7 +608,7 @@ msgid "A unique name for the action."
 msgstr "Unikāls darbības nosaukums."
 
 #: ../gtk/gtkaction.c:239 ../gtk/gtkbutton.c:232 ../gtk/gtkexpander.c:288
-#: ../gtk/gtkframe.c:170 ../gtk/gtklabel.c:726 ../gtk/gtkmenuitem.c:429
+#: ../gtk/gtkframe.c:170 ../gtk/gtklabel.c:721 ../gtk/gtkmenuitem.c:430
 #: ../gtk/gtktoolbutton.c:239 ../gtk/gtktoolitemgroup.c:1597
 msgid "Label"
 msgstr "Iezīme"
@@ -652,7 +653,7 @@ msgstr "GIcon, ko attēlo"
 
 #: ../gtk/gtkaction.c:323 ../gtk/gtkcellrendererpixbuf.c:211
 #: ../gtk/gtkimage.c:291 ../gtk/gtkprinter.c:172 ../gtk/gtkstatusicon.c:247
-#: ../gtk/gtkwindow.c:783
+#: ../gtk/gtkwindow.c:773
 msgid "Icon Name"
 msgstr "Ikonas nosaukums"
 
@@ -716,7 +717,7 @@ msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr "Ja PATIESS, tukši izvēļņu starpnieki šai darbībai ir slēpti."
 
 #: ../gtk/gtkaction.c:379 ../gtk/gtkactiongroup.c:235
-#: ../gtk/gtkcellrenderer.c:296 ../gtk/gtkwidget.c:1025
+#: ../gtk/gtkcellrenderer.c:296 ../gtk/gtkwidget.c:1018
 msgid "Sensitive"
 msgstr "Jutīga"
 
@@ -726,7 +727,7 @@ msgstr "Vai darbība ir aktivēta."
 
 #: ../gtk/gtkaction.c:386 ../gtk/gtkactiongroup.c:242
 #: ../gtk/gtkstatusicon.c:298 ../gtk/gtktreeviewcolumn.c:247
-#: ../gtk/gtkwidget.c:1018
+#: ../gtk/gtkwidget.c:1011
 msgid "Visible"
 msgstr "Redzama"
 
@@ -920,8 +921,8 @@ msgid "The padding to insert at the right of the widget."
 msgstr "Papildinājums, ko ievietot labajā logdaļas pusē."
 
 #: ../gtk/gtkappchooserbutton.c:614
-msgid "Include an 'Other...' item"
-msgstr "Iekļaut “Cita vieta...” vienumu"
+msgid "Include an 'Other…' item"
+msgstr "Iekļaut “Cita vieta…” vienumu"
 
 #: ../gtk/gtkappchooserbutton.c:615
 msgid ""
@@ -963,51 +964,51 @@ msgstr "GFile"
 msgid "The GFile used by the app chooser dialog"
 msgstr "GFile, ko izmanto lietotnes selektora dialoglodziņš"
 
-#: ../gtk/gtkappchooserwidget.c:1023
+#: ../gtk/gtkappchooserwidget.c:1026
 msgid "Show default app"
 msgstr "Rādīt noklusēto lietotni"
 
-#: ../gtk/gtkappchooserwidget.c:1024
+#: ../gtk/gtkappchooserwidget.c:1027
 msgid "Whether the widget should show the default application"
 msgstr "Vai logdaļai jārāda noklusētā lietotne"
 
-#: ../gtk/gtkappchooserwidget.c:1038
+#: ../gtk/gtkappchooserwidget.c:1041
 msgid "Show recommended apps"
 msgstr "Rādīt ieteicamās lietotnes"
 
-#: ../gtk/gtkappchooserwidget.c:1039
+#: ../gtk/gtkappchooserwidget.c:1042
 msgid "Whether the widget should show recommended applications"
 msgstr "Vai logdaļām vajadzētu rādīt ieteicamās lietotnes"
 
-#: ../gtk/gtkappchooserwidget.c:1053
+#: ../gtk/gtkappchooserwidget.c:1056
 msgid "Show fallback apps"
 msgstr "Rādīt atkāpšanās lietotnes"
 
-#: ../gtk/gtkappchooserwidget.c:1054
+#: ../gtk/gtkappchooserwidget.c:1057
 msgid "Whether the widget should show fallback applications"
 msgstr "Vai logdaļām vajadzētu rādīt atkāpšanās lietotnes"
 
-#: ../gtk/gtkappchooserwidget.c:1066
+#: ../gtk/gtkappchooserwidget.c:1069
 msgid "Show other apps"
 msgstr "Rādīt citas lietotnes"
 
-#: ../gtk/gtkappchooserwidget.c:1067
+#: ../gtk/gtkappchooserwidget.c:1070
 msgid "Whether the widget should show other applications"
 msgstr "Vai logdaļai vajadzētu rādīt citas lietotnes"
 
-#: ../gtk/gtkappchooserwidget.c:1080
+#: ../gtk/gtkappchooserwidget.c:1083
 msgid "Show all apps"
 msgstr "Rādīt visas lietotnes"
 
-#: ../gtk/gtkappchooserwidget.c:1081
+#: ../gtk/gtkappchooserwidget.c:1084
 msgid "Whether the widget should show all applications"
 msgstr "Vai logdaļai vajadzētu rādīt visas lietotnes"
 
-#: ../gtk/gtkappchooserwidget.c:1095
+#: ../gtk/gtkappchooserwidget.c:1098
 msgid "Widget's default text"
 msgstr "Logdaļas noklusētais teksts"
 
-#: ../gtk/gtkappchooserwidget.c:1096
+#: ../gtk/gtkappchooserwidget.c:1099
 msgid "The default text appearing when there are no applications"
 msgstr "Noklusētais teksts, kas parādās, kad nav lietotņu"
 
@@ -1067,8 +1068,8 @@ msgstr "Bultas ēna"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "Ēnas parādīšanās ap bultu"
 
-#: ../gtk/gtkarrow.c:127 ../gtk/gtkcombobox.c:1051 ../gtk/gtkmenu.c:764
-#: ../gtk/gtkmenuitem.c:495
+#: ../gtk/gtkarrow.c:127 ../gtk/gtkcombobox.c:1048 ../gtk/gtkmenu.c:784
+#: ../gtk/gtkmenuitem.c:506
 msgid "Arrow Scaling"
 msgstr "Bultu mērogs"
 
@@ -1076,7 +1077,7 @@ msgstr "Bultu mērogs"
 msgid "Amount of space used up by arrow"
 msgstr "Bultiņu izmantotās vietas daudzums"
 
-#: ../gtk/gtkaspectframe.c:107 ../gtk/gtkwidget.c:1213
+#: ../gtk/gtkaspectframe.c:107 ../gtk/gtkwidget.c:1206
 msgid "Horizontal Alignment"
 msgstr "Horizontālā līdzināšana"
 
@@ -1084,7 +1085,7 @@ msgstr "Horizontālā līdzināšana"
 msgid "X alignment of the child"
 msgstr "Bērna X līdzināšana"
 
-#: ../gtk/gtkaspectframe.c:114 ../gtk/gtkwidget.c:1229
+#: ../gtk/gtkaspectframe.c:114 ../gtk/gtkwidget.c:1222
 msgid "Vertical Alignment"
 msgstr "Vertikālā līdzināšana"
 
@@ -1227,34 +1228,34 @@ msgstr "Neviendabīgs"
 msgid "If TRUE, the child will not be subject to homogeneous sizing"
 msgstr "Ja PATIESS, bērns netiks pakļauts viendabīgai izmēra maiņai"
 
-#: ../gtk/gtkbox.c:243 ../gtk/gtkcellareabox.c:315 ../gtk/gtkexpander.c:312
-#: ../gtk/gtkiconview.c:517 ../gtk/gtktreeviewcolumn.c:282
+#: ../gtk/gtkbox.c:240 ../gtk/gtkcellareabox.c:315 ../gtk/gtkexpander.c:312
+#: ../gtk/gtkiconview.c:512 ../gtk/gtktreeviewcolumn.c:282
 msgid "Spacing"
 msgstr "Atstarpe"
 
-#: ../gtk/gtkbox.c:244
+#: ../gtk/gtkbox.c:241
 msgid "The amount of space between children"
 msgstr "Atstarpes lielums starp bērniem"
 
-#: ../gtk/gtkbox.c:254
+#: ../gtk/gtkbox.c:251
 msgid "Whether the children should all be the same size"
 msgstr "Vai visiem bērniem jābūt ar vienādu izmēru"
 
-#: ../gtk/gtkbox.c:274 ../gtk/gtkcellareabox.c:335 ../gtk/gtktoolbar.c:554
+#: ../gtk/gtkbox.c:271 ../gtk/gtkcellareabox.c:335 ../gtk/gtktoolbar.c:552
 #: ../gtk/gtktoolitemgroup.c:1657 ../gtk/gtktoolpalette.c:1075
 #: ../gtk/gtktreeviewcolumn.c:338
 msgid "Expand"
 msgstr "Izvērst"
 
-#: ../gtk/gtkbox.c:275
+#: ../gtk/gtkbox.c:272
 msgid "Whether the child should receive extra space when the parent grows"
 msgstr "Vai bērnam būtu jāsaņem papildus vieta, ja vecāks pieaug"
 
-#: ../gtk/gtkbox.c:291 ../gtk/gtktoolitemgroup.c:1664
+#: ../gtk/gtkbox.c:288 ../gtk/gtktoolitemgroup.c:1664
 msgid "Fill"
 msgstr "Aizpildīt"
 
-#: ../gtk/gtkbox.c:292
+#: ../gtk/gtkbox.c:289
 msgid ""
 "Whether extra space given to the child should be allocated to the child or "
 "used as padding"
@@ -1262,21 +1263,21 @@ msgstr ""
 "Vai papildu piešķirtā vieta bērnam būtu jāpiešķir bērnam vai jālieto kā "
 "papildinājums"
 
-#: ../gtk/gtkbox.c:299 ../gtk/gtktrayicon-x11.c:167
+#: ../gtk/gtkbox.c:296 ../gtk/gtktrayicon-x11.c:167
 msgid "Padding"
 msgstr "Papildinājums"
 
-#: ../gtk/gtkbox.c:300
+#: ../gtk/gtkbox.c:297
 msgid "Extra space to put between the child and its neighbors, in pixels"
 msgstr ""
 "Papildu atstarpe, kuru novietot starp bērnu un tā kaimiņiem, izteikta "
 "pikseļos"
 
-#: ../gtk/gtkbox.c:306
+#: ../gtk/gtkbox.c:303
 msgid "Pack type"
 msgstr "Pakas tips"
 
-#: ../gtk/gtkbox.c:307
+#: ../gtk/gtkbox.c:304
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -1284,20 +1285,20 @@ msgstr ""
 "GtkPackType norāda, vai bērns pieblīvēts ar atsauci uz sākuma vai beigu "
 "vecāku"
 
-#: ../gtk/gtkbox.c:313 ../gtk/gtknotebook.c:767 ../gtk/gtkpaned.c:348
+#: ../gtk/gtkbox.c:310 ../gtk/gtknotebook.c:768 ../gtk/gtkpaned.c:348
 #: ../gtk/gtktoolitemgroup.c:1678
 msgid "Position"
 msgstr "Novietojums"
 
-#: ../gtk/gtkbox.c:314 ../gtk/gtknotebook.c:768
+#: ../gtk/gtkbox.c:311 ../gtk/gtknotebook.c:769
 msgid "The index of the child in the parent"
 msgstr "Bērna indekss vecākā"
 
-#: ../gtk/gtkbuilder.c:305
+#: ../gtk/gtkbuilder.c:307
 msgid "Translation Domain"
 msgstr "Tulkošanas domēns"
 
-#: ../gtk/gtkbuilder.c:306
+#: ../gtk/gtkbuilder.c:308
 msgid "The translation domain used by gettext"
 msgstr "Tulkošanas domēns, kuru izmanto gettext"
 
@@ -1307,13 +1308,13 @@ msgid ""
 "widget"
 msgstr "Iezīmes logdaļas teksts pogā, ja poga satur iezīmes logdaļu"
 
-#: ../gtk/gtkbutton.c:240 ../gtk/gtkexpander.c:296 ../gtk/gtklabel.c:747
-#: ../gtk/gtkmenuitem.c:444 ../gtk/gtktoolbutton.c:246
+#: ../gtk/gtkbutton.c:240 ../gtk/gtkexpander.c:296 ../gtk/gtklabel.c:742
+#: ../gtk/gtkmenuitem.c:445 ../gtk/gtktoolbutton.c:246
 msgid "Use underline"
 msgstr "Lietot pasvītrošanu"
 
-#: ../gtk/gtkbutton.c:241 ../gtk/gtkexpander.c:297 ../gtk/gtklabel.c:748
-#: ../gtk/gtkmenuitem.c:445
+#: ../gtk/gtkbutton.c:241 ../gtk/gtkexpander.c:297 ../gtk/gtklabel.c:743
+#: ../gtk/gtkmenuitem.c:446
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -1332,7 +1333,7 @@ msgstr ""
 "Ja iestatīts, iezīme tiek lietota, lai izvēlētos krājuma vienumu tā vietā, "
 "lai parādītu"
 
-#: ../gtk/gtkbutton.c:256 ../gtk/gtkcombobox.c:857
+#: ../gtk/gtkbutton.c:256 ../gtk/gtkcombobox.c:854
 #: ../gtk/gtkfilechooserbutton.c:425
 msgid "Focus on click"
 msgstr "Fokuss uz klikšķa"
@@ -1811,7 +1812,7 @@ msgstr "Teksta kolonna"
 msgid "A column in the data source model to get the strings from"
 msgstr "Kolonna datu avota modelī, no kuras iegūt virknes"
 
-#: ../gtk/gtkcellrenderercombo.c:169 ../gtk/gtkcombobox.c:924
+#: ../gtk/gtkcellrenderercombo.c:169 ../gtk/gtkcombobox.c:921
 msgid "Has Entry"
 msgstr "Ir ieraksts"
 
@@ -1879,7 +1880,7 @@ msgstr ""
 "Vai renderētajam pikseļu buferim vajadzētu būt krāsotam atbilstoši stāvoklim"
 
 #: ../gtk/gtkcellrendererpixbuf.c:245 ../gtk/gtkimage.c:308
-#: ../gtk/gtkwindow.c:729
+#: ../gtk/gtkwindow.c:719
 msgid "Icon"
 msgstr "Ikona"
 
@@ -1889,7 +1890,7 @@ msgstr "Progresa joslas vērtība"
 
 #: ../gtk/gtkcellrendererprogress.c:154 ../gtk/gtkcellrenderertext.c:255
 #: ../gtk/gtkentrybuffer.c:350 ../gtk/gtkentry.c:841
-#: ../gtk/gtkmessagedialog.c:230 ../gtk/gtkprogressbar.c:174
+#: ../gtk/gtkmessagedialog.c:230 ../gtk/gtkprogressbar.c:173
 #: ../gtk/gtktextbuffer.c:219
 msgid "Text"
 msgstr "Teksts"
@@ -1930,12 +1931,12 @@ msgstr "Teksta līdzināšana gar y asi"
 msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "Vertikālā teksta līdzināšana, no 0 (augšas) līdz 1 (apakšai)."
 
-#: ../gtk/gtkcellrendererprogress.c:224 ../gtk/gtkprogressbar.c:150
-#: ../gtk/gtkrange.c:432
+#: ../gtk/gtkcellrendererprogress.c:224 ../gtk/gtklevelbar.c:991
+#: ../gtk/gtkprogressbar.c:149 ../gtk/gtkrange.c:432
 msgid "Inverted"
 msgstr "Apgriezts"
 
-#: ../gtk/gtkcellrendererprogress.c:225 ../gtk/gtkprogressbar.c:151
+#: ../gtk/gtkcellrendererprogress.c:225 ../gtk/gtkprogressbar.c:150
 msgid "Invert the direction in which the progress bar grows"
 msgstr "Apgriezt virzienu, kurā pieaug progresa josla"
 
@@ -1956,7 +1957,7 @@ msgstr "Kāpinājuma koeficients"
 msgid "The acceleration rate when you hold down a button"
 msgstr "Paātrinājuma koeficients, kad jūs turat nospiestu pogu"
 
-#: ../gtk/gtkcellrendererspin.c:143 ../gtk/gtkscale.c:294
+#: ../gtk/gtkcellrendererspin.c:143 ../gtk/gtkscale.c:309
 #: ../gtk/gtkspinbutton.c:354
 msgid "Digits"
 msgstr "Cipari"
@@ -1966,7 +1967,7 @@ msgid "The number of decimal places to display"
 msgstr "Parādāmo zīmju skaitu aiz komata"
 
 #: ../gtk/gtkcellrendererspinner.c:125 ../gtk/gtkcheckmenuitem.c:120
-#: ../gtk/gtkmenu.c:554 ../gtk/gtkspinner.c:114 ../gtk/gtkswitch.c:834
+#: ../gtk/gtkmenu.c:554 ../gtk/gtkspinner.c:114 ../gtk/gtkswitch.c:814
 #: ../gtk/gtktoggleaction.c:131 ../gtk/gtktogglebutton.c:173
 #: ../gtk/gtktoggletoolbutton.c:125
 msgid "Active"
@@ -1997,7 +1998,7 @@ msgid "Marked up text to render"
 msgstr "Marķētais teksts, ko attēlot"
 
 #: ../gtk/gtkcellrenderertext.c:271 ../gtk/gtkentry.c:1410
-#: ../gtk/gtklabel.c:733
+#: ../gtk/gtklabel.c:728
 msgid "Attributes"
 msgstr "Atribūti"
 
@@ -2068,12 +2069,12 @@ msgid "Foreground color as a GdkRGBA"
 msgstr "Priekšplāna krāsa kā GdkRGBA"
 
 #: ../gtk/gtkcellrenderertext.c:364 ../gtk/gtkentry.c:755
-#: ../gtk/gtktexttag.c:296 ../gtk/gtktextview.c:702
+#: ../gtk/gtktexttag.c:296 ../gtk/gtktextview.c:704
 msgid "Editable"
 msgstr "Rediģējams"
 
 #: ../gtk/gtkcellrenderertext.c:365 ../gtk/gtktexttag.c:297
-#: ../gtk/gtktextview.c:703
+#: ../gtk/gtktextview.c:705
 msgid "Whether the text can be modified by the user"
 msgstr "Vai tekstu var modificēt lietotājs"
 
@@ -2179,8 +2180,8 @@ msgstr ""
 "Valoda, kādā šis teksts ir, kā ISO kods. Pango var lietot šo kā padomu, kad "
 "renderē tekstu. Ja jūs nesaprotat šo parametru, jums visdrīzāk to nevajag"
 
-#: ../gtk/gtkcellrenderertext.c:514 ../gtk/gtklabel.c:858
-#: ../gtk/gtkprogressbar.c:218
+#: ../gtk/gtkcellrenderertext.c:514 ../gtk/gtklabel.c:853
+#: ../gtk/gtkprogressbar.c:217
 msgid "Ellipsize"
 msgstr "Īsināt ar daudzpunkti"
 
@@ -2193,15 +2194,15 @@ msgstr ""
 "nepietiek vietas, lai attēlotu visu virkni"
 
 #: ../gtk/gtkcellrenderertext.c:534 ../gtk/gtkfilechooserbutton.c:453
-#: ../gtk/gtklabel.c:879
+#: ../gtk/gtklabel.c:874
 msgid "Width In Characters"
 msgstr "Platums rakstzīmēs"
 
-#: ../gtk/gtkcellrenderertext.c:535 ../gtk/gtklabel.c:880
+#: ../gtk/gtkcellrenderertext.c:535 ../gtk/gtklabel.c:875
 msgid "The desired width of the label, in characters"
 msgstr "Izvēlētais iezīmes platums, izteikts rakstzīmēs"
 
-#: ../gtk/gtkcellrenderertext.c:559 ../gtk/gtklabel.c:940
+#: ../gtk/gtkcellrenderertext.c:559 ../gtk/gtklabel.c:935
 msgid "Maximum Width In Characters"
 msgstr "Maksimālais platums, izteikts rakstzīmēs"
 
@@ -2221,7 +2222,7 @@ msgstr ""
 "Kā sadalīt virkni vairākās rindās, ja šūnas attēlojumam nav pietiekami daudz "
 "vietas, lai attēlotu visu virkni"
 
-#: ../gtk/gtkcellrenderertext.c:598 ../gtk/gtkcombobox.c:746
+#: ../gtk/gtkcellrenderertext.c:598 ../gtk/gtkcombobox.c:743
 msgid "Wrap width"
 msgstr "Aplaušanas platums"
 
@@ -2428,14 +2429,14 @@ msgstr "CellView modelis"
 msgid "The model for cell view"
 msgstr "Šūnu skata modelis"
 
-#: ../gtk/gtkcellview.c:252 ../gtk/gtkcombobox.c:1010
-#: ../gtk/gtkentrycompletion.c:451 ../gtk/gtkiconview.c:642
+#: ../gtk/gtkcellview.c:252 ../gtk/gtkcombobox.c:1007
+#: ../gtk/gtkentrycompletion.c:451 ../gtk/gtkiconview.c:637
 #: ../gtk/gtktreemenu.c:332 ../gtk/gtktreeviewcolumn.c:426
 msgid "Cell Area"
 msgstr "Šūnas laukums"
 
-#: ../gtk/gtkcellview.c:253 ../gtk/gtkcombobox.c:1011
-#: ../gtk/gtkentrycompletion.c:452 ../gtk/gtkiconview.c:643
+#: ../gtk/gtkcellview.c:253 ../gtk/gtkcombobox.c:1008
+#: ../gtk/gtkentrycompletion.c:452 ../gtk/gtkiconview.c:638
 #: ../gtk/gtktreemenu.c:333 ../gtk/gtktreeviewcolumn.c:427
 msgid "The GtkCellArea used to layout cells"
 msgstr "GtkCellArea, ko izmanto, lai izkārtotu šūnas"
@@ -2560,7 +2561,7 @@ msgstr "RGBA krāsa"
 msgid "Color as RGBA"
 msgstr "Krāsa kā RGBA"
 
-#: ../gtk/gtkcolorswatch.c:778 ../gtk/gtklabel.c:796
+#: ../gtk/gtkcolorswatch.c:778 ../gtk/gtklabel.c:791
 msgid "Selectable"
 msgstr "Izvēlams"
 
@@ -2568,97 +2569,97 @@ msgstr "Izvēlams"
 msgid "Whether the swatch is selectable"
 msgstr "Vai krāsu var izvēlēties"
 
-#: ../gtk/gtkcombobox.c:729
+#: ../gtk/gtkcombobox.c:726
 msgid "ComboBox model"
 msgstr "Kombinētā lodziņa modelis"
 
-#: ../gtk/gtkcombobox.c:730
+#: ../gtk/gtkcombobox.c:727
 msgid "The model for the combo box"
 msgstr "Lauku saraksta modelis"
 
-#: ../gtk/gtkcombobox.c:747
+#: ../gtk/gtkcombobox.c:744
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Aplaušanas platums vienumu izklāšanai uz režģa"
 
-#: ../gtk/gtkcombobox.c:769 ../gtk/gtktreemenu.c:386
+#: ../gtk/gtkcombobox.c:766 ../gtk/gtktreemenu.c:386
 msgid "Row span column"
 msgstr "Rindas izvērsuma kolona"
 
-#: ../gtk/gtkcombobox.c:770 ../gtk/gtktreemenu.c:387
+#: ../gtk/gtkcombobox.c:767 ../gtk/gtktreemenu.c:387
 msgid "TreeModel column containing the row span values"
 msgstr "TreeModel kolonna, kas satur rindas savienojuma vērtības"
 
-#: ../gtk/gtkcombobox.c:791 ../gtk/gtktreemenu.c:407
+#: ../gtk/gtkcombobox.c:788 ../gtk/gtktreemenu.c:407
 msgid "Column span column"
 msgstr "Kolonnas savienotājkolonna"
 
-#: ../gtk/gtkcombobox.c:792 ../gtk/gtktreemenu.c:408
+#: ../gtk/gtkcombobox.c:789 ../gtk/gtktreemenu.c:408
 msgid "TreeModel column containing the column span values"
 msgstr "TreeModel kolonna, kas satur kolonnas savienojuma vērtības"
 
-#: ../gtk/gtkcombobox.c:813
+#: ../gtk/gtkcombobox.c:810
 msgid "Active item"
 msgstr "Aktīvais vienums"
 
-#: ../gtk/gtkcombobox.c:814
+#: ../gtk/gtkcombobox.c:811
 msgid "The item which is currently active"
 msgstr "Šobrīd aktīvais vienums"
 
-#: ../gtk/gtkcombobox.c:833 ../gtk/gtkuimanager.c:487
+#: ../gtk/gtkcombobox.c:830 ../gtk/gtkuimanager.c:487
 msgid "Add tearoffs to menus"
 msgstr "Pievienot pārcēlienus izvēlnēm"
 
-#: ../gtk/gtkcombobox.c:834
+#: ../gtk/gtkcombobox.c:831
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Vai izkrītošajām izvēlnēm vajadzētu pārceļamās izvēlnes vienumu"
 
-#: ../gtk/gtkcombobox.c:849 ../gtk/gtkentry.c:780
+#: ../gtk/gtkcombobox.c:846 ../gtk/gtkentry.c:780
 msgid "Has Frame"
 msgstr "Ir ietvars"
 
-#: ../gtk/gtkcombobox.c:850
+#: ../gtk/gtkcombobox.c:847
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Vai lauki sarakstā zīmē ietvaru ap bērnu"
 
-#: ../gtk/gtkcombobox.c:858
+#: ../gtk/gtkcombobox.c:855
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Vai kombinētais lodziņš sagrābj fokusu, kad uz to noklikšķina pele"
 
-#: ../gtk/gtkcombobox.c:873 ../gtk/gtkmenu.c:609
+#: ../gtk/gtkcombobox.c:870 ../gtk/gtkmenu.c:609
 msgid "Tearoff Title"
 msgstr "Pārcelšanas virsraksts"
 
-#: ../gtk/gtkcombobox.c:874
+#: ../gtk/gtkcombobox.c:871
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr "Logu pārvaldnieks var parādīt virsrakstu, kad uzvedne ir pārcelta"
 
-#: ../gtk/gtkcombobox.c:891
+#: ../gtk/gtkcombobox.c:888
 msgid "Popup shown"
 msgstr "Parādīts uznirstošais logs"
 
-#: ../gtk/gtkcombobox.c:892
+#: ../gtk/gtkcombobox.c:889
 msgid "Whether the combo's dropdown is shown"
 msgstr "Vai tiek rādīts kombinētā lodziņa izkrītošais saraksts"
 
-#: ../gtk/gtkcombobox.c:908
+#: ../gtk/gtkcombobox.c:905
 msgid "Button Sensitivity"
 msgstr "Pogu jutība"
 
-#: ../gtk/gtkcombobox.c:909
+#: ../gtk/gtkcombobox.c:906
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "Vai izkrītošā poga ir ir jutīga, kad modelis ir tukšs"
 
-#: ../gtk/gtkcombobox.c:925
+#: ../gtk/gtkcombobox.c:922
 msgid "Whether combo box has an entry"
 msgstr "Vai kombinētajam lodziņam ir ieraksti"
 
-#: ../gtk/gtkcombobox.c:940
+#: ../gtk/gtkcombobox.c:937
 msgid "Entry Text Column"
 msgstr "Ievades teksta kolonna"
 
-#: ../gtk/gtkcombobox.c:941
+#: ../gtk/gtkcombobox.c:938
 msgid ""
 "The column in the combo box's model to associate with strings from the entry "
 "if the combo was created with #GtkComboBox:has-entry = %TRUE"
@@ -2666,30 +2667,30 @@ msgstr ""
 "Kolonna kombinētā lodziņa modelī, ko asociēt ar virknēm no ieraksta, ja "
 "kombinētais lodziņš ir veidots ar #GtkComboBox:has-entry = %TRUE"
 
-#: ../gtk/gtkcombobox.c:958
+#: ../gtk/gtkcombobox.c:955
 msgid "ID Column"
 msgstr "ID kolonna"
 
-#: ../gtk/gtkcombobox.c:959
+#: ../gtk/gtkcombobox.c:956
 msgid ""
 "The column in the combo box's model that provides string IDs for the values "
 "in the model"
 msgstr ""
 "Kolonna kombinētā lodziņa modelī, kas nodrošina virknes ID vērtībām modelī"
 
-#: ../gtk/gtkcombobox.c:974
+#: ../gtk/gtkcombobox.c:971
 msgid "Active id"
 msgstr "Aktīvais id"
 
-#: ../gtk/gtkcombobox.c:975
+#: ../gtk/gtkcombobox.c:972
 msgid "The value of the id column for the active row"
 msgstr "ID kolonnas vērtība aktīvajai rindai"
 
-#: ../gtk/gtkcombobox.c:990
+#: ../gtk/gtkcombobox.c:987
 msgid "Popup Fixed Width"
 msgstr "Uznirstošā loga fiksēts platums"
 
-#: ../gtk/gtkcombobox.c:991
+#: ../gtk/gtkcombobox.c:988
 msgid ""
 "Whether the popup's width should be a fixed width matching the allocated "
 "width of the combo box"
@@ -2697,51 +2698,51 @@ msgstr ""
 "Vai uzvednes platumam vajadzētu būt fiksētam un tādam pašam, kā kombinētajam "
 "lodziņam."
 
-#: ../gtk/gtkcombobox.c:1017
+#: ../gtk/gtkcombobox.c:1014
 msgid "Appears as list"
 msgstr "Parādās kā saraksts"
 
-#: ../gtk/gtkcombobox.c:1018
+#: ../gtk/gtkcombobox.c:1015
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr "Vai izkrītošajiem jāizskatās kā sarakstiem nevis kā izvēlnēm"
 
-#: ../gtk/gtkcombobox.c:1034
+#: ../gtk/gtkcombobox.c:1031
 msgid "Arrow Size"
 msgstr "Bultas izmērs"
 
-#: ../gtk/gtkcombobox.c:1035
+#: ../gtk/gtkcombobox.c:1032
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Minimālais kombinētā lodziņa bultas izmērs"
 
-#: ../gtk/gtkcombobox.c:1052
+#: ../gtk/gtkcombobox.c:1049
 msgid "The amount of space used by the arrow"
 msgstr "Bultiņas izmantotās vietas apjoms"
 
-#: ../gtk/gtkcombobox.c:1068
+#: ../gtk/gtkcombobox.c:1065
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "Kāda tipa ēnu zīmēt ap kombinēto lodziņu"
 
-#: ../gtk/gtkcontainer.c:460
+#: ../gtk/gtkcontainer.c:461
 msgid "Resize mode"
 msgstr "Izmēru maiņas režīms"
 
-#: ../gtk/gtkcontainer.c:461
+#: ../gtk/gtkcontainer.c:462
 msgid "Specify how resize events are handled"
 msgstr "Norāda, kā izmēru maiņas notikumi tiek apstrādāti"
 
-#: ../gtk/gtkcontainer.c:468
+#: ../gtk/gtkcontainer.c:469
 msgid "Border width"
 msgstr "Robežas platums"
 
-#: ../gtk/gtkcontainer.c:469
+#: ../gtk/gtkcontainer.c:470
 msgid "The width of the empty border outside the containers children"
 msgstr "Tukšās robežas platums ārpus konteinera bērniem"
 
-#: ../gtk/gtkcontainer.c:477
+#: ../gtk/gtkcontainer.c:478
 msgid "Child"
 msgstr "Bērns"
 
-#: ../gtk/gtkcontainer.c:478
+#: ../gtk/gtkcontainer.c:479
 msgid "Can be used to add a new child to the container"
 msgstr "Var izmantot, lai pievienotu jaunu bērnu pie konteinera"
 
@@ -2753,35 +2754,51 @@ msgstr "Apakšīpašības"
 msgid "The list of subproperties"
 msgstr "Apakšīpašību saraksts"
 
-#: ../gtk/gtkcssstyleproperty.c:188
+#: ../gtk/gtkcssstyleproperty.c:275
 msgid "Animated"
 msgstr "Animēts"
 
-#: ../gtk/gtkcssstyleproperty.c:189
+#: ../gtk/gtkcssstyleproperty.c:276
 msgid "Set if the value can be animated"
 msgstr "Iestatīt, ja vērtības var animēt"
 
-#: ../gtk/gtkcssstyleproperty.c:195
+#: ../gtk/gtkcssstyleproperty.c:282
+msgid "Affects size"
+msgstr "Ietekmē izmēru"
+
+#: ../gtk/gtkcssstyleproperty.c:283
+msgid "Set if the value affects the sizing of elements"
+msgstr "Iestatīt, ja vērtība ietekmē elementu izmēurus"
+
+#: ../gtk/gtkcssstyleproperty.c:289
+msgid "Affects font"
+msgstr "Ietekmē fontu"
+
+#: ../gtk/gtkcssstyleproperty.c:290
+msgid "Set if the value affects the font"
+msgstr "Iestatīt, ja vērtība ietekmē fontu"
+
+#: ../gtk/gtkcssstyleproperty.c:296
 msgid "ID"
 msgstr "ID"
 
-#: ../gtk/gtkcssstyleproperty.c:196
+#: ../gtk/gtkcssstyleproperty.c:297
 msgid "The numeric id for quick access"
 msgstr "Skaitlisks id ātrai pieejai"
 
-#: ../gtk/gtkcssstyleproperty.c:202
+#: ../gtk/gtkcssstyleproperty.c:303
 msgid "Inherit"
 msgstr "Mantots"
 
-#: ../gtk/gtkcssstyleproperty.c:203
+#: ../gtk/gtkcssstyleproperty.c:304
 msgid "Set if the value is inherited by default"
 msgstr "Iestatīts, ja vērtība pēc noklusējuma tiek mantota"
 
-#: ../gtk/gtkcssstyleproperty.c:209
+#: ../gtk/gtkcssstyleproperty.c:310
 msgid "Initial value"
 msgstr "Sākotnējā vērtība"
 
-#: ../gtk/gtkcssstyleproperty.c:210
+#: ../gtk/gtkcssstyleproperty.c:311
 msgid "The initial specified value used for this property"
 msgstr "Norādītā sākotnējā vērtība, ko izmantot šai īpašībai"
 
@@ -2845,19 +2862,19 @@ msgstr "Teksta buferis"
 msgid "Text buffer object which actually stores entry text"
 msgstr "Teksta bufera objekts, kas faktiski glabā ieraksta tekstu"
 
-#: ../gtk/gtkentry.c:735 ../gtk/gtklabel.c:821
+#: ../gtk/gtkentry.c:735 ../gtk/gtklabel.c:816
 msgid "Cursor Position"
 msgstr "Kursora pozīcija"
 
-#: ../gtk/gtkentry.c:736 ../gtk/gtklabel.c:822
+#: ../gtk/gtkentry.c:736 ../gtk/gtklabel.c:817
 msgid "The current position of the insertion cursor in chars"
 msgstr "Pašreizējā ievietošanas kursora pozīcija rakstzīmēs"
 
-#: ../gtk/gtkentry.c:745 ../gtk/gtklabel.c:831
+#: ../gtk/gtkentry.c:745 ../gtk/gtklabel.c:826
 msgid "Selection Bound"
 msgstr "Izvēles ierobežojums"
 
-#: ../gtk/gtkentry.c:746 ../gtk/gtklabel.c:832
+#: ../gtk/gtkentry.c:746 ../gtk/gtklabel.c:827
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Pozīcija uz otru izvēles galu no kursora, izteikta rakstzīmēs"
@@ -2951,7 +2968,7 @@ msgstr "Vai apcirst vairāku rindu ielīmējumu uz vienu rindu."
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr "Kāda veida ēnas zīmēt ap ierakstu, kad ir iestatīts has-frame"
 
-#: ../gtk/gtkentry.c:906 ../gtk/gtktextview.c:782
+#: ../gtk/gtkentry.c:906 ../gtk/gtktextview.c:784
 msgid "Overwrite mode"
 msgstr "Pārrakstīšanas režīms"
 
@@ -3139,11 +3156,11 @@ msgstr "Primārās ikonas paskaidres marķējums"
 msgid "Secondary icon tooltip markup"
 msgstr "Sekundārās ikonas paskaidres marķējums"
 
-#: ../gtk/gtkentry.c:1338 ../gtk/gtktextview.c:810
+#: ../gtk/gtkentry.c:1338 ../gtk/gtktextview.c:812
 msgid "IM module"
 msgstr "TZ modulis"
 
-#: ../gtk/gtkentry.c:1339 ../gtk/gtktextview.c:811
+#: ../gtk/gtkentry.c:1339 ../gtk/gtktextview.c:813
 msgid "Which IM module should be used"
 msgstr "Kuru TZ moduli izmantot"
 
@@ -3155,23 +3172,23 @@ msgstr "Pabeigšana"
 msgid "The auxiliary completion object"
 msgstr "Pabeigšanas palīgobjekts"
 
-#: ../gtk/gtkentry.c:1375 ../gtk/gtkimcontext.c:332 ../gtk/gtktextview.c:828
+#: ../gtk/gtkentry.c:1375 ../gtk/gtkimcontext.c:332 ../gtk/gtktextview.c:830
 msgid "Purpose"
 msgstr "Nolūks"
 
-#: ../gtk/gtkentry.c:1376 ../gtk/gtkimcontext.c:333 ../gtk/gtktextview.c:829
+#: ../gtk/gtkentry.c:1376 ../gtk/gtkimcontext.c:333 ../gtk/gtktextview.c:831
 msgid "Purpose of the text field"
 msgstr "Teksta lauka nolūks"
 
-#: ../gtk/gtkentry.c:1392 ../gtk/gtkimcontext.c:340 ../gtk/gtktextview.c:845
+#: ../gtk/gtkentry.c:1392 ../gtk/gtkimcontext.c:340 ../gtk/gtktextview.c:847
 msgid "hints"
 msgstr "padomi"
 
-#: ../gtk/gtkentry.c:1393 ../gtk/gtkimcontext.c:341 ../gtk/gtktextview.c:846
+#: ../gtk/gtkentry.c:1393 ../gtk/gtkimcontext.c:341 ../gtk/gtktextview.c:848
 msgid "Hints for the text field behaviour"
 msgstr "Padomi teksta lauka uzvedībai"
 
-#: ../gtk/gtkentry.c:1411 ../gtk/gtklabel.c:734
+#: ../gtk/gtkentry.c:1411 ../gtk/gtklabel.c:729
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Stila atribūtu saraksts, kuru pielietot iezīmes tekstam"
 
@@ -3211,7 +3228,7 @@ msgstr "Minimālais atslēgas garums"
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Meklēšanas atslēgas minimālais garums, meklējot sakritības"
 
-#: ../gtk/gtkentrycompletion.c:347 ../gtk/gtkiconview.c:438
+#: ../gtk/gtkentrycompletion.c:347 ../gtk/gtkiconview.c:433
 msgid "Text column"
 msgstr "Teksta kolonna"
 
@@ -3295,11 +3312,11 @@ msgstr "Vai izvērsējs ir atvērts, atklājot bērna logdaļu"
 msgid "Text of the expander's label"
 msgstr "Izvērsēja iezīmes teksts"
 
-#: ../gtk/gtkexpander.c:304 ../gtk/gtklabel.c:740
+#: ../gtk/gtkexpander.c:304 ../gtk/gtklabel.c:735
 msgid "Use markup"
 msgstr "Lietot marķējumu"
 
-#: ../gtk/gtkexpander.c:305 ../gtk/gtklabel.c:741
+#: ../gtk/gtkexpander.c:305 ../gtk/gtklabel.c:736
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "Iezīmes teksts ietver XML marķējumu. Apskati pango_parse_markup()"
 
@@ -3337,12 +3354,12 @@ msgstr ""
 "Vai izvērsējs mainīs izmēru augšējā līmeņa logam, izvēršot vai sakļaujot"
 
 #: ../gtk/gtkexpander.c:353 ../gtk/gtktoolitemgroup.c:1632
-#: ../gtk/gtktreeview.c:1194
+#: ../gtk/gtktreeview.c:1195
 msgid "Expander Size"
 msgstr "Izvērsēja izmērs"
 
 #: ../gtk/gtkexpander.c:354 ../gtk/gtktoolitemgroup.c:1633
-#: ../gtk/gtktreeview.c:1195
+#: ../gtk/gtktreeview.c:1196
 msgid "Size of the expander arrow"
 msgstr "Izvērsēja bultas izmērs"
 
@@ -3607,135 +3624,135 @@ msgstr "Augstums"
 msgid "The number of rows that a child spans"
 msgstr "Rindu skaits, ko bērns izvērš"
 
-#: ../gtk/gtkiconview.c:401 ../gtk/gtktreeselection.c:130
+#: ../gtk/gtkiconview.c:396 ../gtk/gtktreeselection.c:130
 msgid "Selection mode"
 msgstr "Izvēlēšanās režīms"
 
-#: ../gtk/gtkiconview.c:402
+#: ../gtk/gtkiconview.c:397
 msgid "The selection mode"
 msgstr "Izvēlēšanās režīms"
 
-#: ../gtk/gtkiconview.c:420
+#: ../gtk/gtkiconview.c:415
 msgid "Pixbuf column"
 msgstr "Pikseļu bufera kolonna"
 
-#: ../gtk/gtkiconview.c:421
+#: ../gtk/gtkiconview.c:416
 msgid "Model column used to retrieve the icon pixbuf from"
 msgstr "Modeļa kolonna, ko izmanto, lai iegūtu ikonas pikseļu bufera formu"
 
-#: ../gtk/gtkiconview.c:439
+#: ../gtk/gtkiconview.c:434
 msgid "Model column used to retrieve the text from"
 msgstr "Modeļa kolonna, ko izmanto, lai iegūtu tekstu no formas "
 
-#: ../gtk/gtkiconview.c:458
+#: ../gtk/gtkiconview.c:453
 msgid "Markup column"
 msgstr "Marķējuma kolonna"
 
-#: ../gtk/gtkiconview.c:459
+#: ../gtk/gtkiconview.c:454
 msgid "Model column used to retrieve the text if using Pango markup"
 msgstr ""
 "Modeļa kolonna, izmantota teksta iegūšana, ja tiek izmantots Pango marķējums"
 
-#: ../gtk/gtkiconview.c:466
+#: ../gtk/gtkiconview.c:461
 msgid "Icon View Model"
 msgstr "Ikonu skata modelis"
 
-#: ../gtk/gtkiconview.c:467
+#: ../gtk/gtkiconview.c:462
 msgid "The model for the icon view"
 msgstr "Ikonu skata modelis"
 
-#: ../gtk/gtkiconview.c:483
+#: ../gtk/gtkiconview.c:478
 msgid "Number of columns"
 msgstr "Kolonnu skaits"
 
-#: ../gtk/gtkiconview.c:484
+#: ../gtk/gtkiconview.c:479
 msgid "Number of columns to display"
 msgstr "Rādāmo kolonnu skaits"
 
-#: ../gtk/gtkiconview.c:501
+#: ../gtk/gtkiconview.c:496
 msgid "Width for each item"
 msgstr "Katra elementa platums"
 
-#: ../gtk/gtkiconview.c:502
+#: ../gtk/gtkiconview.c:497
 msgid "The width used for each item"
 msgstr "Platums, kas lietots katram vienumam"
 
-#: ../gtk/gtkiconview.c:518
+#: ../gtk/gtkiconview.c:513
 msgid "Space which is inserted between cells of an item"
 msgstr "Atstarpe, kas ievietota starp vienuma šūnām"
 
-#: ../gtk/gtkiconview.c:533
+#: ../gtk/gtkiconview.c:528
 msgid "Row Spacing"
 msgstr "Rindu atstarpe"
 
-#: ../gtk/gtkiconview.c:534
+#: ../gtk/gtkiconview.c:529
 msgid "Space which is inserted between grid rows"
 msgstr "Atstarpe, kas ievietota starp režģa rindām"
 
-#: ../gtk/gtkiconview.c:549
+#: ../gtk/gtkiconview.c:544
 msgid "Column Spacing"
 msgstr "Kolonnu atstarpe"
 
-#: ../gtk/gtkiconview.c:550
+#: ../gtk/gtkiconview.c:545
 msgid "Space which is inserted between grid columns"
 msgstr "Atstarpe, kas ievietota starp režģa kolonnām"
 
-#: ../gtk/gtkiconview.c:565
+#: ../gtk/gtkiconview.c:560
 msgid "Margin"
 msgstr "Mala"
 
-#: ../gtk/gtkiconview.c:566
+#: ../gtk/gtkiconview.c:561
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "Atstarpe, kas ievietota ikonas skata malās"
 
-#: ../gtk/gtkiconview.c:581
+#: ../gtk/gtkiconview.c:576
 msgid "Item Orientation"
 msgstr "Vienuma novietojums"
 
-#: ../gtk/gtkiconview.c:582
+#: ../gtk/gtkiconview.c:577
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 "Kā teksts un ikona katrai sadaļai ir novietoti attiecība viens pret otru"
 
-#: ../gtk/gtkiconview.c:598 ../gtk/gtktreeview.c:1029
+#: ../gtk/gtkiconview.c:593 ../gtk/gtktreeview.c:1030
 #: ../gtk/gtktreeviewcolumn.c:373
 msgid "Reorderable"
 msgstr "Pārkārtojams"
 
-#: ../gtk/gtkiconview.c:599 ../gtk/gtktreeview.c:1030
+#: ../gtk/gtkiconview.c:594 ../gtk/gtktreeview.c:1031
 msgid "View is reorderable"
 msgstr "Skats ir pārkārtojams"
 
-#: ../gtk/gtkiconview.c:606 ../gtk/gtktreeview.c:1180
+#: ../gtk/gtkiconview.c:601 ../gtk/gtktreeview.c:1181
 msgid "Tooltip Column"
 msgstr "Paskaidres kolonna"
 
-#: ../gtk/gtkiconview.c:607
+#: ../gtk/gtkiconview.c:602
 msgid "The column in the model containing the tooltip texts for the items"
 msgstr "Kolonna modelī, kura satur vienumu tekstu paskaidres"
 
-#: ../gtk/gtkiconview.c:624
+#: ../gtk/gtkiconview.c:619
 msgid "Item Padding"
 msgstr "Vienuma papildinājums"
 
-#: ../gtk/gtkiconview.c:625
+#: ../gtk/gtkiconview.c:620
 msgid "Padding around icon view items"
 msgstr "Papildinājums ap ikonu skata vienumiem"
 
-#: ../gtk/gtkiconview.c:656
+#: ../gtk/gtkiconview.c:651
 msgid "Selection Box Color"
 msgstr "Izvēles kastes krāsa"
 
-#: ../gtk/gtkiconview.c:657
+#: ../gtk/gtkiconview.c:652
 msgid "Color of the selection box"
 msgstr "Izvēles kastes krāsa"
 
-#: ../gtk/gtkiconview.c:663
+#: ../gtk/gtkiconview.c:658
 msgid "Selection Box Alpha"
 msgstr "Izvēles kastes alfa"
 
-#: ../gtk/gtkiconview.c:664
+#: ../gtk/gtkiconview.c:659
 msgid "Opacity of the selection box"
 msgstr "Izvēles kastes caurspīdīgums"
 
@@ -3768,7 +3785,7 @@ msgstr "Ikonu kopa"
 msgid "Icon set to display"
 msgstr "Ikonu kopa, ko attēlot"
 
-#: ../gtk/gtkimage.c:249 ../gtk/gtkscalebutton.c:228 ../gtk/gtktoolbar.c:529
+#: ../gtk/gtkimage.c:249 ../gtk/gtkscalebutton.c:228 ../gtk/gtktoolbar.c:527
 #: ../gtk/gtktoolpalette.c:1013
 msgid "Icon size"
 msgstr "Ikonas izmērs"
@@ -3848,24 +3865,24 @@ msgid "Width of border around the action area"
 msgstr "Robežas platums ap darbības laukumu"
 
 #: ../gtk/gtkinvisible.c:101 ../gtk/gtkmountoperation.c:179
-#: ../gtk/gtkstatusicon.c:290 ../gtk/gtkstylecontext.c:442
-#: ../gtk/gtkwindow.c:791
+#: ../gtk/gtkstatusicon.c:290 ../gtk/gtkstylecontext.c:441
+#: ../gtk/gtkwindow.c:781
 msgid "Screen"
 msgstr "Ekrāns"
 
-#: ../gtk/gtkinvisible.c:102 ../gtk/gtkwindow.c:792
+#: ../gtk/gtkinvisible.c:102 ../gtk/gtkwindow.c:782
 msgid "The screen where this window will be displayed"
 msgstr "Ekrāns, kurā šis logs tiks parādīts"
 
-#: ../gtk/gtklabel.c:727
+#: ../gtk/gtklabel.c:722
 msgid "The text of the label"
 msgstr "Iezīmes teksts"
 
-#: ../gtk/gtklabel.c:755 ../gtk/gtktexttag.c:404 ../gtk/gtktextview.c:719
+#: ../gtk/gtklabel.c:750 ../gtk/gtktexttag.c:404 ../gtk/gtktextview.c:721
 msgid "Justification"
 msgstr "Abpusējā līdzināšana"
 
-#: ../gtk/gtklabel.c:756
+#: ../gtk/gtklabel.c:751
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -3874,11 +3891,11 @@ msgstr ""
 "Rindu līdzināšana iezīmes tekstā attiecībā vienai pret otru. Šis NEietekmē "
 "iezīmes līdzināšanu tās iedalīšanā. Tam apskati GtkMisc::xalign"
 
-#: ../gtk/gtklabel.c:764
+#: ../gtk/gtklabel.c:759
 msgid "Pattern"
 msgstr "Raksts"
 
-#: ../gtk/gtklabel.c:765
+#: ../gtk/gtklabel.c:760
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
@@ -3886,44 +3903,44 @@ msgstr ""
 "Virkne ar _ rakstzīmēm pozīcijās, kas atbilst pasvītrojamajām rakstzīmēm "
 "tekstā"
 
-#: ../gtk/gtklabel.c:772
+#: ../gtk/gtklabel.c:767
 msgid "Line wrap"
 msgstr "Rindu aplaušana"
 
-#: ../gtk/gtklabel.c:773
+#: ../gtk/gtklabel.c:768
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "Ja iestatīts, aplauzt rindas, ja teksts kļūst pārāk plašs"
 
-#: ../gtk/gtklabel.c:788
+#: ../gtk/gtklabel.c:783
 msgid "Line wrap mode"
 msgstr "Rindu aplaušanas režīms"
 
-#: ../gtk/gtklabel.c:789
+#: ../gtk/gtklabel.c:784
 msgid "If wrap is set, controls how linewrapping is done"
 msgstr "Ja aplaušana ir iestatīta, kontrolē, kā tiek veikta rindu aplaušana"
 
-#: ../gtk/gtklabel.c:797
+#: ../gtk/gtklabel.c:792
 msgid "Whether the label text can be selected with the mouse"
 msgstr "Vai iezīmes tekstu var izvēlēties ar peli"
 
-#: ../gtk/gtklabel.c:803
+#: ../gtk/gtklabel.c:798
 msgid "Mnemonic key"
 msgstr "Mnemonikas taustiņš"
 
-#: ../gtk/gtklabel.c:804
+#: ../gtk/gtklabel.c:799
 msgid "The mnemonic accelerator key for this label"
 msgstr "Mnemonikas paātrinātāja taustiņš šai iezīmei"
 
-#: ../gtk/gtklabel.c:812
+#: ../gtk/gtklabel.c:807
 msgid "Mnemonic widget"
 msgstr "Mnemonikas logdaļa"
 
-#: ../gtk/gtklabel.c:813
+#: ../gtk/gtklabel.c:808
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr ""
 "Logdaļa, kura jāaktivizē, kad iezīmes mnemonikas taustiņš tiek nospiests"
 
-#: ../gtk/gtklabel.c:859
+#: ../gtk/gtklabel.c:854
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string"
@@ -3931,31 +3948,31 @@ msgstr ""
 "Vēlamā vieta, kur virkni īsināt ar daudzpunkti, ja iezīmei nepietiek vietas, "
 "lai attēlotu visu virkni"
 
-#: ../gtk/gtklabel.c:900
+#: ../gtk/gtklabel.c:895
 msgid "Single Line Mode"
 msgstr "Vienas rindas režīms"
 
-#: ../gtk/gtklabel.c:901
+#: ../gtk/gtklabel.c:896
 msgid "Whether the label is in single line mode"
 msgstr "Vai iezīme ir vienas rindas režīmā"
 
-#: ../gtk/gtklabel.c:918
+#: ../gtk/gtklabel.c:913
 msgid "Angle"
 msgstr "Leņķis"
 
-#: ../gtk/gtklabel.c:919
+#: ../gtk/gtklabel.c:914
 msgid "Angle at which the label is rotated"
 msgstr "Iezīmes rotācijas leņķis"
 
-#: ../gtk/gtklabel.c:941
+#: ../gtk/gtklabel.c:936
 msgid "The desired maximum width of the label, in characters"
 msgstr "Vēlamais maksimālais etiķetes platums rakstīmēs"
 
-#: ../gtk/gtklabel.c:959
+#: ../gtk/gtklabel.c:954
 msgid "Track visited links"
 msgstr "Izsekot apmeklētās saites"
 
-#: ../gtk/gtklabel.c:960
+#: ../gtk/gtklabel.c:955
 msgid "Whether visited links should be tracked"
 msgstr "Vai apmeklētās saites vajadzētu izsekot"
 
@@ -3967,51 +3984,55 @@ msgstr "Izkārtojuma platums"
 msgid "The height of the layout"
 msgstr "Izkārtojuma augstums"
 
-#: ../gtk/gtklevelbar.c:872
+#: ../gtk/gtklevelbar.c:927
 msgid "Currently filled value level"
 msgstr "Pašlaik aizpildītais vērtības līmenis"
 
-#: ../gtk/gtklevelbar.c:873
+#: ../gtk/gtklevelbar.c:928
 msgid "Currently filled value level of the level bar"
 msgstr "Pašlaik aizpildītais vērtības līmenis līmeņa joslā"
 
-#: ../gtk/gtklevelbar.c:886
+#: ../gtk/gtklevelbar.c:941
 msgid "Minimum value level for the bar"
 msgstr "Minimālā vērtība joslai"
 
-#: ../gtk/gtklevelbar.c:887
+#: ../gtk/gtklevelbar.c:942
 msgid "Minimum value level that can be displayed by the bar"
 msgstr "Minimālais vērtības līmenis, ko var parādīt josla"
 
-#: ../gtk/gtklevelbar.c:900
+#: ../gtk/gtklevelbar.c:955
 msgid "Maximum value level for the bar"
 msgstr "Maksimālā vērtība joslai"
 
-#: ../gtk/gtklevelbar.c:901
+#: ../gtk/gtklevelbar.c:956
 msgid "Maximum value level that can be displayed by the bar"
 msgstr "Maksimālais vērtības līmenis, ko var parādīt josla"
 
-#: ../gtk/gtklevelbar.c:920
+#: ../gtk/gtklevelbar.c:975
 msgid "The mode of the value indicator"
 msgstr "Vērtības indikatora režīms"
 
-#: ../gtk/gtklevelbar.c:921
+#: ../gtk/gtklevelbar.c:976
 msgid "The mode of the value indicator displayed by the bar"
 msgstr "Vērtības indikatora režīms, ko attēlo josla"
 
-#: ../gtk/gtklevelbar.c:936
+#: ../gtk/gtklevelbar.c:992
+msgid "Invert the direction in which the level bar grows"
+msgstr "Apgriezt virzienu, kurā pieaug līmeņa josla"
+
+#: ../gtk/gtklevelbar.c:1006
 msgid "Minimum height for filling blocks"
 msgstr "Aizpildīšanas bloku minimālais augstums"
 
-#: ../gtk/gtklevelbar.c:937
+#: ../gtk/gtklevelbar.c:1007
 msgid "Minimum height for blocks that fill the bar"
 msgstr "Minimālais augstums blokiem, kas aizpilda joslu"
 
-#: ../gtk/gtklevelbar.c:950
+#: ../gtk/gtklevelbar.c:1020
 msgid "Minimum width for filling blocks"
 msgstr "Aizpildīšanas bloku minimālais platums"
 
-#: ../gtk/gtklevelbar.c:951
+#: ../gtk/gtklevelbar.c:1021
 msgid "Minimum width for blocks that fill the bar"
 msgstr "Minimālais platums blokiem, kas aizpilda joslu"
 
@@ -4080,67 +4101,63 @@ msgid ""
 "The tooltip to display when prompting the user cannot obtain authorization"
 msgstr "Paskaidre, ko parādīt, kad lietotājs nevar saņemt pilnvaru"
 
-#: ../gtk/gtkmenubar.c:190
+#: ../gtk/gtkmenubar.c:187
 msgid "Pack direction"
 msgstr "Pakas virziens"
 
-#: ../gtk/gtkmenubar.c:191
+#: ../gtk/gtkmenubar.c:188
 msgid "The pack direction of the menubar"
 msgstr "Izvēlnes joslas pakas virziens"
 
-#: ../gtk/gtkmenubar.c:207
+#: ../gtk/gtkmenubar.c:204
 msgid "Child Pack direction"
 msgstr "Bērna pakas virziens"
 
-#: ../gtk/gtkmenubar.c:208
+#: ../gtk/gtkmenubar.c:205
 msgid "The child pack direction of the menubar"
 msgstr "Izvēlnes joslas bērna pakas virziens"
 
-#: ../gtk/gtkmenubar.c:217
+#: ../gtk/gtkmenubar.c:214
 msgid "Style of bevel around the menubar"
 msgstr "Konusa stils ap izvēļņjoslu"
 
-#: ../gtk/gtkmenubar.c:224 ../gtk/gtktoolbar.c:588
+#: ../gtk/gtkmenubar.c:230 ../gtk/gtktoolbar.c:586
 msgid "Internal padding"
 msgstr "Iekšējā papildināšana"
 
-#: ../gtk/gtkmenubar.c:225
+#: ../gtk/gtkmenubar.c:231
 msgid "Amount of border space between the menubar shadow and the menu items"
 msgstr "Atstarpe starp izvēlnes joslas ēnu un izvēlnes vienumiem"
 
-#: ../gtk/gtkmenubutton.c:512
+#: ../gtk/gtkmenubutton.c:515
 msgid "popup"
 msgstr "uznirstošais logs"
 
-#: ../gtk/gtkmenubutton.c:513 ../gtk/gtkmenubutton.c:529
+#: ../gtk/gtkmenubutton.c:516
 msgid "The dropdown menu."
 msgstr "Izkrītošā izvēlne."
 
-#: ../gtk/gtkmenubutton.c:528
-msgid "menu"
-msgstr "izvēlne"
-
-#: ../gtk/gtkmenubutton.c:544
+#: ../gtk/gtkmenubutton.c:532
 msgid "menu-model"
 msgstr "izvēlnes-modelis"
 
-#: ../gtk/gtkmenubutton.c:545
+#: ../gtk/gtkmenubutton.c:533
 msgid "The dropdown menu's model."
 msgstr "Izkrītošās izvēlnes modelis."
 
-#: ../gtk/gtkmenubutton.c:558
+#: ../gtk/gtkmenubutton.c:546
 msgid "align-widget"
 msgstr "līdzināšanas-logdaļa"
 
-#: ../gtk/gtkmenubutton.c:559
+#: ../gtk/gtkmenubutton.c:547
 msgid "The parent widget which the menu should align with."
 msgstr "Vecāka logdaļa, gar kuru izvēlnei vajdzētu līdzināties."
 
-#: ../gtk/gtkmenubutton.c:573
+#: ../gtk/gtkmenubutton.c:561
 msgid "direction"
 msgstr "virziens"
 
-#: ../gtk/gtkmenubutton.c:574
+#: ../gtk/gtkmenubutton.c:562
 msgid "The direction the arrow should point."
 msgstr "Virziens, kurā bultai būtu jārāda."
 
@@ -4152,7 +4169,7 @@ msgstr "Pašlaik izvēlētais izvēlnes vienums"
 msgid "The accel group holding accelerators for the menu"
 msgstr "Paātrinājumu grupa, kas satur izvēlnes paātrinātājus"
 
-#: ../gtk/gtkmenu.c:584 ../gtk/gtkmenuitem.c:414
+#: ../gtk/gtkmenu.c:584 ../gtk/gtkmenuitem.c:415
 msgid "Accel Path"
 msgstr "Paātrinātāja ceļš"
 
@@ -4193,19 +4210,11 @@ msgstr "Monitors"
 msgid "The monitor the menu will be popped up on"
 msgstr "Monitors, uz kura parādīsies izvēlne"
 
-#: ../gtk/gtkmenu.c:646
-msgid "Vertical Padding"
-msgstr "Vertikālā papildināšana"
-
-#: ../gtk/gtkmenu.c:647
-msgid "Extra space at the top and bottom of the menu"
-msgstr "Papildu vieta izvēlnes augšā un apakšā"
-
-#: ../gtk/gtkmenu.c:669
+#: ../gtk/gtkmenu.c:660
 msgid "Reserve Toggle Size"
 msgstr "Rezervēt pārslēgšanas izmēru"
 
-#: ../gtk/gtkmenu.c:670
+#: ../gtk/gtkmenu.c:661
 msgid ""
 "A boolean that indicates whether the menu reserves space for toggles and "
 "icons"
@@ -4220,11 +4229,19 @@ msgstr "Horizontālā papildināšana"
 msgid "Extra space at the left and right edges of the menu"
 msgstr "Atstarpes apjoms, kādu pievienot pa labi un pa kreisi no izvēlnes"
 
-#: ../gtk/gtkmenu.c:685
+#: ../gtk/gtkmenu.c:695
+msgid "Vertical Padding"
+msgstr "Vertikālā papildināšana"
+
+#: ../gtk/gtkmenu.c:696
+msgid "Extra space at the top and bottom of the menu"
+msgstr "Papildu vieta izvēlnes augšā un apakšā"
+
+#: ../gtk/gtkmenu.c:705
 msgid "Vertical Offset"
 msgstr "Vertikālā nobīde"
 
-#: ../gtk/gtkmenu.c:686
+#: ../gtk/gtkmenu.c:706
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
@@ -4232,11 +4249,11 @@ msgstr ""
 "Kad izvēlne ir apakšizvēlne, novieto to pēc šī pikseļu skaita vertikālās "
 "nobīdes"
 
-#: ../gtk/gtkmenu.c:694
+#: ../gtk/gtkmenu.c:714
 msgid "Horizontal Offset"
 msgstr "Horizontālā nobīde"
 
-#: ../gtk/gtkmenu.c:695
+#: ../gtk/gtkmenu.c:715
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
@@ -4244,88 +4261,88 @@ msgstr ""
 "Kad izvēlne ir apakšizvēlne, novieto to pēc šī pikseļu skaita horizontālās "
 "nobīdes"
 
-#: ../gtk/gtkmenu.c:703
+#: ../gtk/gtkmenu.c:723
 msgid "Double Arrows"
 msgstr "Dubultās bultas"
 
-#: ../gtk/gtkmenu.c:704
+#: ../gtk/gtkmenu.c:724
 msgid "When scrolling, always show both arrows."
 msgstr "Kad ritina, vienmēr rādīt abas bultas."
 
-#: ../gtk/gtkmenu.c:717
+#: ../gtk/gtkmenu.c:737
 msgid "Arrow Placement"
 msgstr "Bultui novietojums"
 
-#: ../gtk/gtkmenu.c:718
+#: ../gtk/gtkmenu.c:738
 msgid "Indicates where scroll arrows should be placed"
 msgstr "Norāda, kur tiks novietotas ritināšanas bultas"
 
-#: ../gtk/gtkmenu.c:726
+#: ../gtk/gtkmenu.c:746
 msgid "Left Attach"
 msgstr "Kreisā piesaiste"
 
-#: ../gtk/gtkmenu.c:734
+#: ../gtk/gtkmenu.c:754
 msgid "Right Attach"
 msgstr "Labā piesaiste"
 
-#: ../gtk/gtkmenu.c:735
+#: ../gtk/gtkmenu.c:755
 msgid "The column number to attach the right side of the child to"
 msgstr "Kolonnas numurs, ko piesaistīt bērna labajai pusei"
 
-#: ../gtk/gtkmenu.c:742
+#: ../gtk/gtkmenu.c:762
 msgid "Top Attach"
 msgstr "Augšas piesaiste"
 
-#: ../gtk/gtkmenu.c:743
+#: ../gtk/gtkmenu.c:763
 msgid "The row number to attach the top of the child to"
 msgstr "Rindas numurs, ko piesaistīt bērna virsotnei"
 
-#: ../gtk/gtkmenu.c:750
+#: ../gtk/gtkmenu.c:770
 msgid "Bottom Attach"
 msgstr "Apakšas piesaiste"
 
-#: ../gtk/gtkmenu.c:765
+#: ../gtk/gtkmenu.c:785
 msgid "Arbitrary constant to scale down the size of the scroll arrow"
 msgstr "Patvaļīga konstante, par kādu samazināt ritināšanas bultas izmēru"
 
-#: ../gtk/gtkmenuitem.c:382
+#: ../gtk/gtkmenuitem.c:383
 msgid "Right Justified"
 msgstr "Labā līdzināšana"
 
-#: ../gtk/gtkmenuitem.c:383
+#: ../gtk/gtkmenuitem.c:384
 msgid ""
 "Sets whether the menu item appears justified at the right side of a menu bar"
 msgstr ""
 "Iestata, vai izvēlnes vienums ir līdzināts pie izvēlnes joslas labās malas"
 
-#: ../gtk/gtkmenuitem.c:397
+#: ../gtk/gtkmenuitem.c:398
 msgid "Submenu"
 msgstr "Apakšizvēlne"
 
-#: ../gtk/gtkmenuitem.c:398
+#: ../gtk/gtkmenuitem.c:399
 msgid "The submenu attached to the menu item, or NULL if it has none"
 msgstr ""
 "Apakšizvēlne piesaistīta pie izvēlnes vienuma, vai NULL, ja tai tai tādu nav"
 
-#: ../gtk/gtkmenuitem.c:415
+#: ../gtk/gtkmenuitem.c:416
 msgid "Sets the accelerator path of the menu item"
 msgstr "Iestata paātrinātāja ceļu izvēlnes vienumam"
 
-#: ../gtk/gtkmenuitem.c:430
+#: ../gtk/gtkmenuitem.c:431
 msgid "The text for the child label"
 msgstr "Bērna iezīmes teksts"
 
-#: ../gtk/gtkmenuitem.c:496
+#: ../gtk/gtkmenuitem.c:507
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
 msgstr ""
 "Bultas izmantotais vietas daudzums, relatīvs pret izvēlnes vienuma fonta "
 "izmēru"
 
-#: ../gtk/gtkmenuitem.c:509
+#: ../gtk/gtkmenuitem.c:520
 msgid "Width in Characters"
 msgstr "Platums rakstzīmēs"
 
-#: ../gtk/gtkmenuitem.c:510
+#: ../gtk/gtkmenuitem.c:521
 msgid "The minimum desired width of the menu item in characters"
 msgstr "Minimālais vēlamais izvēlnes vienumu platums, izteikts rakstzīmēs"
 
@@ -4433,7 +4450,7 @@ msgid ""
 msgstr ""
 "Atstarpes apmērs, kādu pievienot uz augšu un apakšu no logdaļas, pikseļos"
 
-#: ../gtk/gtkmountoperation.c:163 ../gtk/gtkstylecontext.c:465
+#: ../gtk/gtkmountoperation.c:163 ../gtk/gtkstylecontext.c:464
 msgid "Parent"
 msgstr "Vecāks"
 
@@ -4453,53 +4470,53 @@ msgstr "Vai mēs rādām dialoglodziņu"
 msgid "The screen where this window will be displayed."
 msgstr "Ekrāns, kurā šis logs tiks parādīts."
 
-#: ../gtk/gtknotebook.c:692
+#: ../gtk/gtknotebook.c:693
 msgid "Page"
 msgstr "Lapa"
 
-#: ../gtk/gtknotebook.c:693
+#: ../gtk/gtknotebook.c:694
 msgid "The index of the current page"
 msgstr "Pašreizējās lapas indekss"
 
-#: ../gtk/gtknotebook.c:701
+#: ../gtk/gtknotebook.c:702
 msgid "Tab Position"
 msgstr "Cilnes novietojums"
 
-#: ../gtk/gtknotebook.c:702
+#: ../gtk/gtknotebook.c:703
 msgid "Which side of the notebook holds the tabs"
 msgstr "Kurā bloknota pusē tiek novietotas cilnes"
 
-#: ../gtk/gtknotebook.c:709
+#: ../gtk/gtknotebook.c:710
 msgid "Show Tabs"
 msgstr "Rādīt cilnes"
 
-#: ../gtk/gtknotebook.c:710
+#: ../gtk/gtknotebook.c:711
 msgid "Whether tabs should be shown"
 msgstr "Vai jārāda cilnes"
 
-#: ../gtk/gtknotebook.c:716
+#: ../gtk/gtknotebook.c:717
 msgid "Show Border"
 msgstr "Rādīt robežu"
 
-#: ../gtk/gtknotebook.c:717
+#: ../gtk/gtknotebook.c:718
 msgid "Whether the border should be shown"
 msgstr "Vai būtu jārāda robežas"
 
-#: ../gtk/gtknotebook.c:723
+#: ../gtk/gtknotebook.c:724
 msgid "Scrollable"
 msgstr "Ritināma"
 
-#: ../gtk/gtknotebook.c:724
+#: ../gtk/gtknotebook.c:725
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Ja PATIESS, ritināšanas bultas tiek pievienotas, ja ir pārāk daudz "
 "ietilpināmo ciļņu"
 
-#: ../gtk/gtknotebook.c:730
+#: ../gtk/gtknotebook.c:731
 msgid "Enable Popup"
 msgstr "Aktivēt uznirstošo logu"
 
-#: ../gtk/gtknotebook.c:731
+#: ../gtk/gtknotebook.c:732
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -4507,166 +4524,166 @@ msgstr ""
 "Ja PATIESS, nospiežot labo peles pogu uz bloknota, tiek parādīta izvēlne, "
 "kuru varat lietot, lai pārietu uz lapu"
 
-#: ../gtk/gtknotebook.c:745
+#: ../gtk/gtknotebook.c:746
 msgid "Group Name"
 msgstr "Grupas nosaukums"
 
-#: ../gtk/gtknotebook.c:746
+#: ../gtk/gtknotebook.c:747
 msgid "Group name for tab drag and drop"
 msgstr "Grupas nosaukums cilnes vilkšanai un nomešanai"
 
-#: ../gtk/gtknotebook.c:753
+#: ../gtk/gtknotebook.c:754
 msgid "Tab label"
 msgstr "Cilnes iezīme"
 
-#: ../gtk/gtknotebook.c:754
+#: ../gtk/gtknotebook.c:755
 msgid "The string displayed on the child's tab label"
 msgstr "Virkne, kas parādīta bērna cilnes iezīmē"
 
-#: ../gtk/gtknotebook.c:760
+#: ../gtk/gtknotebook.c:761
 msgid "Menu label"
 msgstr "Izvēlnes iezīme"
 
-#: ../gtk/gtknotebook.c:761
+#: ../gtk/gtknotebook.c:762
 msgid "The string displayed in the child's menu entry"
 msgstr "Virkne, kas parādīta bērna izvēlnes ierakstā"
 
-#: ../gtk/gtknotebook.c:774
+#: ../gtk/gtknotebook.c:775
 msgid "Tab expand"
 msgstr "Cilne izvērsta"
 
-#: ../gtk/gtknotebook.c:775
+#: ../gtk/gtknotebook.c:776
 msgid "Whether to expand the child's tab"
 msgstr "Vai izvērst bērna cilni"
 
-#: ../gtk/gtknotebook.c:781
+#: ../gtk/gtknotebook.c:782
 msgid "Tab fill"
 msgstr "Cilnes aizpildījums"
 
-#: ../gtk/gtknotebook.c:782
+#: ../gtk/gtknotebook.c:783
 msgid "Whether the child's tab should fill the allocated area"
 msgstr "Vai bērna cilnei jāaizpilda piešķirtais lauks"
 
-#: ../gtk/gtknotebook.c:789
+#: ../gtk/gtknotebook.c:790
 msgid "Tab reorderable"
 msgstr "Ierakstāma cilne"
 
-#: ../gtk/gtknotebook.c:790
+#: ../gtk/gtknotebook.c:791
 msgid "Whether the tab is reorderable by user action"
 msgstr "Vai cilne ir ierakstāma ar lietotāja darbībām"
 
-#: ../gtk/gtknotebook.c:796
+#: ../gtk/gtknotebook.c:797
 msgid "Tab detachable"
 msgstr "Atdalāma cilne"
 
-#: ../gtk/gtknotebook.c:797
+#: ../gtk/gtknotebook.c:798
 msgid "Whether the tab is detachable"
 msgstr "Vai cilne ir atdalāma"
 
-#: ../gtk/gtknotebook.c:812 ../gtk/gtkscrollbar.c:102
+#: ../gtk/gtknotebook.c:813 ../gtk/gtkscrollbar.c:100
 msgid "Secondary backward stepper"
 msgstr "Papildu atpakaļ ritinātājs"
 
-#: ../gtk/gtknotebook.c:813
+#: ../gtk/gtknotebook.c:814
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr "Parādīt otru pretēji vērstu bultas pogu pretējā cilnes apgabala galā"
 
-#: ../gtk/gtknotebook.c:828 ../gtk/gtkscrollbar.c:109
+#: ../gtk/gtknotebook.c:829 ../gtk/gtkscrollbar.c:107
 msgid "Secondary forward stepper"
 msgstr "Papildu turp ritinātājs"
 
-#: ../gtk/gtknotebook.c:829
+#: ../gtk/gtknotebook.c:830
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr ""
 "Parādīt otru uz priekšu vērstu bultas pogu pretējā cilnes apgabala galā"
 
-#: ../gtk/gtknotebook.c:843 ../gtk/gtkscrollbar.c:88
+#: ../gtk/gtknotebook.c:844 ../gtk/gtkscrollbar.c:86
 msgid "Backward stepper"
 msgstr "Atpakaļ ritinātājs"
 
-#: ../gtk/gtknotebook.c:844 ../gtk/gtkscrollbar.c:89
+#: ../gtk/gtknotebook.c:845 ../gtk/gtkscrollbar.c:87
 msgid "Display the standard backward arrow button"
 msgstr "Parādīt standarta atpakaļvērstu bultu pogas"
 
-#: ../gtk/gtknotebook.c:858 ../gtk/gtkscrollbar.c:95
+#: ../gtk/gtknotebook.c:859 ../gtk/gtkscrollbar.c:93
 msgid "Forward stepper"
 msgstr "Turp ritinātājs"
 
-#: ../gtk/gtknotebook.c:859 ../gtk/gtkscrollbar.c:96
+#: ../gtk/gtknotebook.c:860 ../gtk/gtkscrollbar.c:94
 msgid "Display the standard forward arrow button"
 msgstr "Parādīt standarta uz priekšu vērstu bultu pogas"
 
-#: ../gtk/gtknotebook.c:873
+#: ../gtk/gtknotebook.c:874
 msgid "Tab overlap"
 msgstr "Cilnes pārklāšanās"
 
-#: ../gtk/gtknotebook.c:874
+#: ../gtk/gtknotebook.c:875
 msgid "Size of tab overlap area"
 msgstr "Cilnes pārklāšanās apgabala izmērs"
 
-#: ../gtk/gtknotebook.c:889
+#: ../gtk/gtknotebook.c:890
 msgid "Tab curvature"
 msgstr "Cilnes izliekums"
 
-#: ../gtk/gtknotebook.c:890
+#: ../gtk/gtknotebook.c:891
 msgid "Size of tab curvature"
 msgstr "Cilnes izliekuma izmērs"
 
-#: ../gtk/gtknotebook.c:906
+#: ../gtk/gtknotebook.c:907
 msgid "Arrow spacing"
 msgstr "Bultu atstarpe"
 
-#: ../gtk/gtknotebook.c:907
+#: ../gtk/gtknotebook.c:908
 msgid "Scroll arrow spacing"
 msgstr "Ritināšanas bultas atstarpe"
 
-#: ../gtk/gtknotebook.c:923
+#: ../gtk/gtknotebook.c:924
 msgid "Initial gap"
 msgstr "Sākotnējā sprauga"
 
-#: ../gtk/gtknotebook.c:924
+#: ../gtk/gtknotebook.c:925
 msgid "Initial gap before the first tab"
 msgstr "Sākotnējā sprauga pirms pirmās cilnes"
 
-#: ../gtk/gtknumerableicon.c:652
+#: ../gtk/gtknumerableicon.c:653
 msgid "Icon's count"
 msgstr "Ikonu skaits"
 
-#: ../gtk/gtknumerableicon.c:653
+#: ../gtk/gtknumerableicon.c:654
 msgid "The count of the emblem currently displayed"
 msgstr "Pašlaik attēloto emblēmu skaits"
 
-#: ../gtk/gtknumerableicon.c:659
+#: ../gtk/gtknumerableicon.c:660
 msgid "Icon's label"
 msgstr "Ikonas iezīme"
 
-#: ../gtk/gtknumerableicon.c:660
+#: ../gtk/gtknumerableicon.c:661
 msgid "The label to be displayed over the icon"
 msgstr "Iezīme, ko parāda virs ikonas"
 
-#: ../gtk/gtknumerableicon.c:666
+#: ../gtk/gtknumerableicon.c:667
 msgid "Icon's style context"
 msgstr "Ikonas stila konteksts"
 
-#: ../gtk/gtknumerableicon.c:667
+#: ../gtk/gtknumerableicon.c:668
 msgid "The style context to theme the icon appearance"
 msgstr "Stila konteksts, lai veidotu motīvu ikonu izskatam"
 
-#: ../gtk/gtknumerableicon.c:673
+#: ../gtk/gtknumerableicon.c:674
 msgid "Background icon"
 msgstr "Fona ikona"
 
-#: ../gtk/gtknumerableicon.c:674
+#: ../gtk/gtknumerableicon.c:675
 msgid "The icon for the number emblem background"
 msgstr "Ikona numura emblēmas fonam"
 
-#: ../gtk/gtknumerableicon.c:680
+#: ../gtk/gtknumerableicon.c:681
 msgid "Background icon name"
 msgstr "Fona ikonas nosaukums"
 
-#: ../gtk/gtknumerableicon.c:681
+#: ../gtk/gtknumerableicon.c:682
 msgid "The icon name for the number emblem background"
 msgstr "Ikonas nosaukums numura emblēmas fonam"
 
@@ -5072,36 +5089,36 @@ msgstr "Vai dialoglodziņš atbalsta izvēli"
 msgid "Whether the application has a selection"
 msgstr "Vai lietotnei ir izvēle"
 
-#: ../gtk/gtkprogressbar.c:158
+#: ../gtk/gtkprogressbar.c:157
 msgid "Fraction"
 msgstr "Daļa"
 
-#: ../gtk/gtkprogressbar.c:159
+#: ../gtk/gtkprogressbar.c:158
 msgid "The fraction of total work that has been completed"
 msgstr "Kopējā darba izpildītā daļa"
 
-#: ../gtk/gtkprogressbar.c:166
+#: ../gtk/gtkprogressbar.c:165
 msgid "Pulse Step"
 msgstr "Pulsa solis"
 
-#: ../gtk/gtkprogressbar.c:167
+#: ../gtk/gtkprogressbar.c:166
 msgid "The fraction of total progress to move the bouncing block when pulsed"
 msgstr ""
 "Daļiņa kopējā progresa, par kādu pārvietot lēkājošo bloku, kad dod impulsu"
 
-#: ../gtk/gtkprogressbar.c:175
+#: ../gtk/gtkprogressbar.c:174
 msgid "Text to be displayed in the progress bar"
 msgstr "Teksts, ko attēlot progresa joslā"
 
-#: ../gtk/gtkprogressbar.c:196
+#: ../gtk/gtkprogressbar.c:195
 msgid "Show text"
 msgstr "Rādīt tekstu"
 
-#: ../gtk/gtkprogressbar.c:197
+#: ../gtk/gtkprogressbar.c:196
 msgid "Whether the progress is shown as text."
 msgstr "Vai progress tiek parādīts kā teksts."
 
-#: ../gtk/gtkprogressbar.c:219
+#: ../gtk/gtkprogressbar.c:218
 msgid ""
 "The preferred place to ellipsize the string, if the progress bar does not "
 "have enough room to display the entire string, if at all."
@@ -5109,51 +5126,51 @@ msgstr ""
 "Vēlamā vieta, kur virkni īsināt ar daudzpunkti, ja progresa joslai nepietiek "
 "vietas, lai parādītu visu virkni, ja vispār."
 
-#: ../gtk/gtkprogressbar.c:226
+#: ../gtk/gtkprogressbar.c:225
 msgid "X spacing"
 msgstr "X atstarpes"
 
-#: ../gtk/gtkprogressbar.c:227
+#: ../gtk/gtkprogressbar.c:226
 msgid "Extra spacing applied to the width of a progress bar."
 msgstr "Papildu atstarpes, kas ir pielietotas progresa joslas platumam."
 
-#: ../gtk/gtkprogressbar.c:232
+#: ../gtk/gtkprogressbar.c:231
 msgid "Y spacing"
 msgstr "Y atstarpes"
 
-#: ../gtk/gtkprogressbar.c:233
+#: ../gtk/gtkprogressbar.c:232
 msgid "Extra spacing applied to the height of a progress bar."
 msgstr "Papildu atstarpes, kas ir pielietotas progresa joslas augstumam."
 
-#: ../gtk/gtkprogressbar.c:246
+#: ../gtk/gtkprogressbar.c:245
 msgid "Minimum horizontal bar width"
 msgstr "Minimālais horizontālās joslas platums"
 
-#: ../gtk/gtkprogressbar.c:247
+#: ../gtk/gtkprogressbar.c:246
 msgid "The minimum horizontal width of the progress bar"
 msgstr "Minimālais horizontālās progresa joslas platums"
 
-#: ../gtk/gtkprogressbar.c:259
+#: ../gtk/gtkprogressbar.c:258
 msgid "Minimum horizontal bar height"
 msgstr "Minimālais horizontālās joslas augstums"
 
-#: ../gtk/gtkprogressbar.c:260
+#: ../gtk/gtkprogressbar.c:259
 msgid "Minimum horizontal height of the progress bar"
 msgstr "Minimālais horizontālās progresa joslas augstums"
 
-#: ../gtk/gtkprogressbar.c:272
+#: ../gtk/gtkprogressbar.c:271
 msgid "Minimum vertical bar width"
 msgstr "Minimālais vertikālās joslas platums"
 
-#: ../gtk/gtkprogressbar.c:273
+#: ../gtk/gtkprogressbar.c:272
 msgid "The minimum vertical width of the progress bar"
 msgstr "Minimālais vertikālās progresa joslas platums"
 
-#: ../gtk/gtkprogressbar.c:285
+#: ../gtk/gtkprogressbar.c:284
 msgid "Minimum vertical bar height"
 msgstr "Minimālais vertikālās joslas augstums"
 
-#: ../gtk/gtkprogressbar.c:286
+#: ../gtk/gtkprogressbar.c:285
 msgid "The minimum vertical height of the progress bar"
 msgstr "Minimālais vertikālās progresa joslas augstums"
 
@@ -5263,7 +5280,7 @@ msgstr "Apaļotie cipari"
 msgid "The number of digits to round the value to."
 msgstr "Ciparu skaits, uz ko noapaļot vērtību."
 
-#: ../gtk/gtkrange.c:527 ../gtk/gtkswitch.c:868
+#: ../gtk/gtkrange.c:527 ../gtk/gtkswitch.c:848
 msgid "Slider Width"
 msgstr "Slīdņa platums"
 
@@ -5443,47 +5460,47 @@ msgstr "Ikonas"
 msgid "List of icon names"
 msgstr "Ikonu nosaukumu saraksts"
 
-#: ../gtk/gtkscale.c:295
+#: ../gtk/gtkscale.c:310
 msgid "The number of decimal places that are displayed in the value"
 msgstr "Zīmes aiz komata, kas tiek parādīta vērtībās"
 
-#: ../gtk/gtkscale.c:304
+#: ../gtk/gtkscale.c:319
 msgid "Draw Value"
 msgstr "Zīmēt vērtību"
 
-#: ../gtk/gtkscale.c:305
+#: ../gtk/gtkscale.c:320
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr "Vai pašreizējā vērtība tiek parādīta kā virkne blakus slīdnim"
 
-#: ../gtk/gtkscale.c:312
+#: ../gtk/gtkscale.c:327
 msgid "Has Origin"
 msgstr "Ir izcelsme"
 
-#: ../gtk/gtkscale.c:313
+#: ../gtk/gtkscale.c:328
 msgid "Whether the scale has an origin"
 msgstr "Vai skalai ir izcelsme"
 
-#: ../gtk/gtkscale.c:320
+#: ../gtk/gtkscale.c:335
 msgid "Value Position"
 msgstr "Vērtības novietojums"
 
-#: ../gtk/gtkscale.c:321
+#: ../gtk/gtkscale.c:336
 msgid "The position in which the current value is displayed"
 msgstr "Pozīcija, kurā pašreizējā vērtība tiek parādīta"
 
-#: ../gtk/gtkscale.c:328
+#: ../gtk/gtkscale.c:343
 msgid "Slider Length"
 msgstr "Slīdņa garums"
 
-#: ../gtk/gtkscale.c:329
+#: ../gtk/gtkscale.c:344
 msgid "Length of scale's slider"
 msgstr "Mēroga slīdņa garums"
 
-#: ../gtk/gtkscale.c:337
+#: ../gtk/gtkscale.c:352
 msgid "Value spacing"
 msgstr "Vērtības atstarpe"
 
-#: ../gtk/gtkscale.c:338
+#: ../gtk/gtkscale.c:353
 msgid "Space between value text and the slider/trough area"
 msgstr "Atstarpe starp vērtības tekstu un slīdņa/ieplakas laukumu"
 
@@ -5523,69 +5540,69 @@ msgstr "Kā vajadzētu noteikt satura izmēru"
 msgid "Vertical Scrollable Policy"
 msgstr "Vertikālās ritināmības politika"
 
-#: ../gtk/gtkscrollbar.c:72
+#: ../gtk/gtkscrollbar.c:70
 msgid "Minimum Slider Length"
 msgstr "Minimālais slīdņa garums"
 
-#: ../gtk/gtkscrollbar.c:73
+#: ../gtk/gtkscrollbar.c:71
 msgid "Minimum length of scrollbar slider"
 msgstr "Minimālais ritjoslas slīdņa garums"
 
-#: ../gtk/gtkscrollbar.c:81
+#: ../gtk/gtkscrollbar.c:79
 msgid "Fixed slider size"
 msgstr "Fiksēts slīdņa izmērs"
 
-#: ../gtk/gtkscrollbar.c:82
+#: ../gtk/gtkscrollbar.c:80
 msgid "Don't change slider size, just lock it to the minimum length"
 msgstr "Nemainīt slīdņa izmēru, tikai ieslēgt to minimālajā garumā"
 
-#: ../gtk/gtkscrollbar.c:103
+#: ../gtk/gtkscrollbar.c:101
 msgid ""
 "Display a second backward arrow button on the opposite end of the scrollbar"
 msgstr "Parādīt otru atpakaļvērstās bultas pogu pretējā ritjoslas galā"
 
-#: ../gtk/gtkscrollbar.c:110
+#: ../gtk/gtkscrollbar.c:108
 msgid ""
 "Display a second forward arrow button on the opposite end of the scrollbar"
 msgstr "Parādīt otru uz priekšu vērstās bultas pogu pretējā ritjoslas galā"
 
-#: ../gtk/gtkscrolledwindow.c:372
+#: ../gtk/gtkscrolledwindow.c:367
 msgid "Horizontal Adjustment"
 msgstr "Horizontālais noregulējums"
 
-#: ../gtk/gtkscrolledwindow.c:373
+#: ../gtk/gtkscrolledwindow.c:368
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "Horizontālās pozīcijas GtkAdjustment"
 
-#: ../gtk/gtkscrolledwindow.c:379
+#: ../gtk/gtkscrolledwindow.c:374
 msgid "Vertical Adjustment"
 msgstr "Vertikālais noregulējums"
 
-#: ../gtk/gtkscrolledwindow.c:380
+#: ../gtk/gtkscrolledwindow.c:375
 msgid "The GtkAdjustment for the vertical position"
 msgstr "Vertikālās pozīcijas GtkAdjustment"
 
-#: ../gtk/gtkscrolledwindow.c:386
+#: ../gtk/gtkscrolledwindow.c:381
 msgid "Horizontal Scrollbar Policy"
 msgstr "Horizontālās ritjoslas politika"
 
-#: ../gtk/gtkscrolledwindow.c:387
+#: ../gtk/gtkscrolledwindow.c:382
 msgid "When the horizontal scrollbar is displayed"
 msgstr "Vai horizontālā ritjosla tiek attēlota"
 
-#: ../gtk/gtkscrolledwindow.c:394
+#: ../gtk/gtkscrolledwindow.c:389
 msgid "Vertical Scrollbar Policy"
 msgstr "Vertikālās ritjoslas politika"
 
-#: ../gtk/gtkscrolledwindow.c:395
+#: ../gtk/gtkscrolledwindow.c:390
 msgid "When the vertical scrollbar is displayed"
 msgstr "Vai vertikālā ritjosla tiek attēlota"
 
-#: ../gtk/gtkscrolledwindow.c:403
+#: ../gtk/gtkscrolledwindow.c:398
 msgid "Window Placement"
 msgstr "Loga novietojums"
 
-#: ../gtk/gtkscrolledwindow.c:404
+#: ../gtk/gtkscrolledwindow.c:399
 msgid ""
 "Where the contents are located with respect to the scrollbars. This property "
 "only takes effect if \"window-placement-set\" is TRUE."
@@ -5593,11 +5610,11 @@ msgstr ""
 "Kur tiek novietots saturs attiecībā pret ritjoslu. Šī īpašība stājas spēkā "
 "tikai tad, ja \"window-placement-set\" ir PATIESS."
 
-#: ../gtk/gtkscrolledwindow.c:421
+#: ../gtk/gtkscrolledwindow.c:416
 msgid "Window Placement Set"
 msgstr "Logu novietojuma kopa"
 
-#: ../gtk/gtkscrolledwindow.c:422
+#: ../gtk/gtkscrolledwindow.c:417
 msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
 "contents with respect to the scrollbars."
@@ -5605,52 +5622,52 @@ msgstr ""
 "Vai \"window-placement\" vajadzētu tikt izmantotam, lai noteiktu satura "
 "atrašanās vietu attiecībā pret ritjoslām."
 
-#: ../gtk/gtkscrolledwindow.c:428
+#: ../gtk/gtkscrolledwindow.c:423
 msgid "Shadow Type"
 msgstr "Ēnas tips"
 
-#: ../gtk/gtkscrolledwindow.c:429
+#: ../gtk/gtkscrolledwindow.c:424
 msgid "Style of bevel around the contents"
 msgstr "Apmales stils ap saturu"
 
-#: ../gtk/gtkscrolledwindow.c:443
+#: ../gtk/gtkscrolledwindow.c:438
 msgid "Scrollbars within bevel"
 msgstr "Ritjoslas apmalēs"
 
-#: ../gtk/gtkscrolledwindow.c:444
+#: ../gtk/gtkscrolledwindow.c:439
 msgid "Place scrollbars within the scrolled window's bevel"
 msgstr "Novietot ritjoslas ritinātu logu apmales"
 
-#: ../gtk/gtkscrolledwindow.c:450
+#: ../gtk/gtkscrolledwindow.c:445
 msgid "Scrollbar spacing"
 msgstr "Ritjoslas atstarpe"
 
-#: ../gtk/gtkscrolledwindow.c:451
+#: ../gtk/gtkscrolledwindow.c:446
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr "Pikseļu skaits starp ritjoslām un ritināmo logu"
 
-#: ../gtk/gtkscrolledwindow.c:467
+#: ../gtk/gtkscrolledwindow.c:462
 msgid "Minimum Content Width"
 msgstr "Minimālais satura platums"
 
-#: ../gtk/gtkscrolledwindow.c:468
+#: ../gtk/gtkscrolledwindow.c:463
 msgid "The minimum width that the scrolled window will allocate to its content"
 msgstr "Minimālais platums, ko ritinātais logs piešķirs tā saturam"
 
-#: ../gtk/gtkscrolledwindow.c:482
+#: ../gtk/gtkscrolledwindow.c:477
 msgid "Minimum Content Height"
 msgstr "Minimālais satura augstums"
 
-#: ../gtk/gtkscrolledwindow.c:483
+#: ../gtk/gtkscrolledwindow.c:478
 msgid ""
 "The minimum height that the scrolled window will allocate to its content"
 msgstr "Minimālais augstums, ko ritinātais logs piešķirs tā saturam"
 
-#: ../gtk/gtkscrolledwindow.c:498
+#: ../gtk/gtkscrolledwindow.c:493
 msgid "Kinetic Scrolling"
 msgstr "Kinētiskā ritināšana"
 
-#: ../gtk/gtkscrolledwindow.c:499
+#: ../gtk/gtkscrolledwindow.c:494
 msgid "Kinetic scrolling mode."
 msgstr "Kinētiskās ritināšanas režīms."
 
@@ -5662,11 +5679,11 @@ msgstr "Zīmēt"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Vai atdalītājs tiek zīmēts vai tikai tukšums"
 
-#: ../gtk/gtksettings.c:360
+#: ../gtk/gtksettings.c:354
 msgid "Double Click Time"
 msgstr "Dubultklikšķa laiks"
 
-#: ../gtk/gtksettings.c:361
+#: ../gtk/gtksettings.c:355
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -5674,11 +5691,11 @@ msgstr ""
 "Maksimāli atļautais laiks starp diviem klikšķiem, lai to uzskatītu par "
 "dubultklikšķi (milisekundēs)"
 
-#: ../gtk/gtksettings.c:368
+#: ../gtk/gtksettings.c:362
 msgid "Double Click Distance"
 msgstr "Dubultklikšķa attālums"
 
-#: ../gtk/gtksettings.c:369
+#: ../gtk/gtksettings.c:363
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -5686,35 +5703,35 @@ msgstr ""
 "Maksimāli atļautais garums starp diviem klikšķiem, lai to uzskatītu par "
 "dubultklikšķi (pikseļos)"
 
-#: ../gtk/gtksettings.c:385
+#: ../gtk/gtksettings.c:379
 msgid "Cursor Blink"
 msgstr "Kursora mirgošana"
 
-#: ../gtk/gtksettings.c:386
+#: ../gtk/gtksettings.c:380
 msgid "Whether the cursor should blink"
 msgstr "Vai kursoram būtu jāmirgo"
 
-#: ../gtk/gtksettings.c:393
+#: ../gtk/gtksettings.c:387
 msgid "Cursor Blink Time"
 msgstr "Kursora mirgošanas laiks"
 
-#: ../gtk/gtksettings.c:394
+#: ../gtk/gtksettings.c:388
 msgid "Length of the cursor blink cycle, in milliseconds"
 msgstr "Kursora mirgošanas cikla garums, milisekundēs"
 
-#: ../gtk/gtksettings.c:413
+#: ../gtk/gtksettings.c:407
 msgid "Cursor Blink Timeout"
 msgstr "Kursora mirgošanas noildze"
 
-#: ../gtk/gtksettings.c:414
+#: ../gtk/gtksettings.c:408
 msgid "Time after which the cursor stops blinking, in seconds"
 msgstr "Laiks, pēc kura kursors beidz mirgot, sekundēs"
 
-#: ../gtk/gtksettings.c:421
+#: ../gtk/gtksettings.c:415
 msgid "Split Cursor"
 msgstr "Sadalītais kursors"
 
-#: ../gtk/gtksettings.c:422
+#: ../gtk/gtksettings.c:416
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -5722,153 +5739,153 @@ msgstr ""
 "Vai attēlot divus kursorus miksētiem no labās puses uz kreiso un otrādi "
 "tekstiem"
 
-#: ../gtk/gtksettings.c:429
+#: ../gtk/gtksettings.c:423
 msgid "Theme Name"
 msgstr "Motīva nosaukums"
 
-#: ../gtk/gtksettings.c:430
+#: ../gtk/gtksettings.c:424
 msgid "Name of theme to load"
 msgstr "Ielādējamā motīva nosaukums"
 
-#: ../gtk/gtksettings.c:442
+#: ../gtk/gtksettings.c:436
 msgid "Icon Theme Name"
 msgstr "Ikonu motīva nosaukums"
 
-#: ../gtk/gtksettings.c:443
+#: ../gtk/gtksettings.c:437
 msgid "Name of icon theme to use"
 msgstr "Lietojamā ikonu motīva nosaukums"
 
-#: ../gtk/gtksettings.c:451
+#: ../gtk/gtksettings.c:445
 msgid "Fallback Icon Theme Name"
 msgstr "Atkāpes ikonu motīva nosaukums"
 
-#: ../gtk/gtksettings.c:452
+#: ../gtk/gtksettings.c:446
 msgid "Name of a icon theme to fall back to"
 msgstr "Ikonu motīva nosaukums, uz kuru atkāpties"
 
-#: ../gtk/gtksettings.c:460
+#: ../gtk/gtksettings.c:454
 msgid "Key Theme Name"
 msgstr "Atslēgu motīva nosaukums"
 
-#: ../gtk/gtksettings.c:461
+#: ../gtk/gtksettings.c:455
 msgid "Name of key theme to load"
 msgstr "Ielādējamā atslēgu motīva nosaukums"
 
-#: ../gtk/gtksettings.c:469
+#: ../gtk/gtksettings.c:463
 msgid "Menu bar accelerator"
 msgstr "Izvēlnes joslas paātrinātājs"
 
-#: ../gtk/gtksettings.c:470
+#: ../gtk/gtksettings.c:464
 msgid "Keybinding to activate the menu bar"
 msgstr "Taustiņsasaiste, lai aktivizētu izvēlnes joslu"
 
-#: ../gtk/gtksettings.c:478
+#: ../gtk/gtksettings.c:472
 msgid "Drag threshold"
 msgstr "Vilkšanas aizture"
 
-#: ../gtk/gtksettings.c:479
+#: ../gtk/gtksettings.c:473
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "Pikseļu skaits, ko kursors var pakustēties, pirms vilkšanas"
 
-#: ../gtk/gtksettings.c:487
+#: ../gtk/gtksettings.c:481
 msgid "Font Name"
 msgstr "Fonta nosaukums"
 
-#: ../gtk/gtksettings.c:488
+#: ../gtk/gtksettings.c:482
 msgid "Name of default font to use"
 msgstr "Noklusētā fonta nosaukums"
 
-#: ../gtk/gtksettings.c:510
+#: ../gtk/gtksettings.c:504
 msgid "Icon Sizes"
 msgstr "Ikonu izmēri"
 
-#: ../gtk/gtksettings.c:511
+#: ../gtk/gtksettings.c:505
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
 msgstr "Ikonas izmēru saraksts (gtk-menu=16,16;gtk-button=20,20..."
 
-#: ../gtk/gtksettings.c:519
+#: ../gtk/gtksettings.c:513
 msgid "GTK Modules"
 msgstr "GTK moduļi"
 
-#: ../gtk/gtksettings.c:520
+#: ../gtk/gtksettings.c:514
 msgid "List of currently active GTK modules"
 msgstr "Pašlaik aktīvo GTK moduļu saraksts"
 
-#: ../gtk/gtksettings.c:528
+#: ../gtk/gtksettings.c:522
 msgid "Xft Antialias"
 msgstr "Xft nogludināšana"
 
-#: ../gtk/gtksettings.c:529
+#: ../gtk/gtksettings.c:523
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Vai nogludināt Xft fontus; 0=nē, 1=jā, -1=pēc noklusējuma"
 
-#: ../gtk/gtksettings.c:538
+#: ../gtk/gtksettings.c:532
 msgid "Xft Hinting"
 msgstr "Xft suflēšana"
 
-#: ../gtk/gtksettings.c:539
+#: ../gtk/gtksettings.c:533
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr "Vai suflēt Xft fontus; 0=nē, 1=jā, -1=pēc noklusējuma"
 
-#: ../gtk/gtksettings.c:548
+#: ../gtk/gtksettings.c:542
 msgid "Xft Hint Style"
 msgstr "Xft suflēšanas stils"
 
-#: ../gtk/gtksettings.c:549
+#: ../gtk/gtksettings.c:543
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr ""
 "Kādu suflēšanas pakāpi izmantot; nekādu suflēšanu, vieglas suflēšanu, vidēju "
 "suflēšanu, pilnu suflēšanu"
 
-#: ../gtk/gtksettings.c:558
+#: ../gtk/gtksettings.c:552
 msgid "Xft RGBA"
 msgstr "Xft RGBA"
 
-#: ../gtk/gtksettings.c:559
+#: ../gtk/gtksettings.c:553
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr "Apakšpikseļu gludināšanas tips; nekāds, rgb, bgr, vrgb, vbgr"
 
-#: ../gtk/gtksettings.c:568
+#: ../gtk/gtksettings.c:562
 msgid "Xft DPI"
 msgstr "Xft DPI"
 
-#: ../gtk/gtksettings.c:569
+#: ../gtk/gtksettings.c:563
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr ""
 "Xft izšķirtspēja 1024 * punktos/collās. -1, lai izmantotu noklusēto vērtību"
 
-#: ../gtk/gtksettings.c:578
+#: ../gtk/gtksettings.c:572
 msgid "Cursor theme name"
 msgstr "Kursora motīva nosaukums"
 
-#: ../gtk/gtksettings.c:579
+#: ../gtk/gtksettings.c:573
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
 msgstr ""
 "Nosaukums kursora motīvam, ko izmantot; vai NULL, lai izmantotu noklusēto "
 "motīvu"
 
-#: ../gtk/gtksettings.c:587
+#: ../gtk/gtksettings.c:581
 msgid "Cursor theme size"
 msgstr "Kursora motīva izmērs"
 
-#: ../gtk/gtksettings.c:588
+#: ../gtk/gtksettings.c:582
 msgid "Size to use for cursors, or 0 to use the default size"
 msgstr "Izmērs, ko izmatot kursoriem; vai 0, lai izmantotu noklusēto izmēru"
 
-#: ../gtk/gtksettings.c:597
+#: ../gtk/gtksettings.c:591
 msgid "Alternative button order"
 msgstr "Cita pogu secība"
 
-#: ../gtk/gtksettings.c:598
+#: ../gtk/gtksettings.c:592
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr "Vai pogām dialoglodziņos vajadzētu izmantot citu pogu secību"
 
-#: ../gtk/gtksettings.c:615
+#: ../gtk/gtksettings.c:609
 msgid "Alternative sort indicator direction"
 msgstr "Citas kārtošanas indikatora virziens"
 
-#: ../gtk/gtksettings.c:616
+#: ../gtk/gtksettings.c:610
 msgid ""
 "Whether the direction of the sort indicators in list and tree views is "
 "inverted compared to the default (where down means ascending)"
@@ -5876,22 +5893,22 @@ msgstr ""
 "Vai kārtošanas indikatoru virziens saraksta un koka skatos ir apgriezts, "
 "salīdzinot ar noklusēto (kur “uz leju” nozīmē augoši)"
 
-#: ../gtk/gtksettings.c:624
+#: ../gtk/gtksettings.c:618
 msgid "Show the 'Input Methods' menu"
 msgstr "Rādīt “Ievades metodes” izvēlni"
 
-#: ../gtk/gtksettings.c:625
+#: ../gtk/gtksettings.c:619
 msgid ""
 "Whether the context menus of entries and text views should offer to change "
 "the input method"
 msgstr ""
 "Vai ierakstu labā klikšķa izvēlnēs vajadzētu piedāvāt mainīt ievades metodi"
 
-#: ../gtk/gtksettings.c:633
+#: ../gtk/gtksettings.c:627
 msgid "Show the 'Insert Unicode Control Character' menu"
 msgstr "Rādīt “Ievietot unikoda kontroles rakstzīmi” izvēlni"
 
-#: ../gtk/gtksettings.c:634
+#: ../gtk/gtksettings.c:628
 msgid ""
 "Whether the context menus of entries and text views should offer to insert "
 "control characters"
@@ -5899,242 +5916,242 @@ msgstr ""
 "Vai ierakstu labā klikšķa izvēlnēs vajadzētu piedāvāt kontroles simbolu "
 "ievietošanu"
 
-#: ../gtk/gtksettings.c:642
+#: ../gtk/gtksettings.c:636
 msgid "Start timeout"
 msgstr "Sākuma noildze"
 
-#: ../gtk/gtksettings.c:643
+#: ../gtk/gtksettings.c:637
 msgid "Starting value for timeouts, when button is pressed"
 msgstr "Sākuma vērtība noildzēm, kad ir piespiesta poga"
 
-#: ../gtk/gtksettings.c:652
+#: ../gtk/gtksettings.c:646
 msgid "Repeat timeout"
 msgstr "Atkārtotā noildze"
 
-#: ../gtk/gtksettings.c:653
+#: ../gtk/gtksettings.c:647
 msgid "Repeat value for timeouts, when button is pressed"
 msgstr "Atkārtotā vērtība noildzēm, kad ir piespiesta poga"
 
-#: ../gtk/gtksettings.c:662
+#: ../gtk/gtksettings.c:656
 msgid "Expand timeout"
 msgstr "Izvēršanas noildze"
 
-#: ../gtk/gtksettings.c:663
+#: ../gtk/gtksettings.c:657
 msgid "Expand value for timeouts, when a widget is expanding a new region"
 msgstr "Izvēršanas vērtība noildzēm, kad logdaļa izvērš jaunu apgabalu"
 
-#: ../gtk/gtksettings.c:698
+#: ../gtk/gtksettings.c:695
 msgid "Color scheme"
 msgstr "Krāsu palete"
 
-#: ../gtk/gtksettings.c:699
+#: ../gtk/gtksettings.c:696
 msgid "A palette of named colors for use in themes"
 msgstr "Palete ar nosauktām krāsām, ko izmantot motīvos"
 
-#: ../gtk/gtksettings.c:708
+#: ../gtk/gtksettings.c:705
 msgid "Enable Animations"
 msgstr "Aktivēt animācijas"
 
-#: ../gtk/gtksettings.c:709
+#: ../gtk/gtksettings.c:706
 msgid "Whether to enable toolkit-wide animations."
 msgstr "Vai aktivēt rīkkopas animācijas."
 
-#: ../gtk/gtksettings.c:730
+#: ../gtk/gtksettings.c:727
 msgid "Enable Touchscreen Mode"
 msgstr "Aktivēt skārienjūtīgā ekrāna režīmu"
 
-#: ../gtk/gtksettings.c:731
+#: ../gtk/gtksettings.c:728
 msgid "When TRUE, there are no motion notify events delivered on this screen"
 msgstr "Ja PATIESS, uz šo ekrānu netiek nogādāti notikumi par kustību"
 
-#: ../gtk/gtksettings.c:748
+#: ../gtk/gtksettings.c:745
 msgid "Tooltip timeout"
 msgstr "Paskaidres noildze"
 
-#: ../gtk/gtksettings.c:749
+#: ../gtk/gtksettings.c:746
 msgid "Timeout before tooltip is shown"
 msgstr "Noildze pirms tiek rādīta paskaidre"
 
-#: ../gtk/gtksettings.c:774
+#: ../gtk/gtksettings.c:771
 msgid "Tooltip browse timeout"
 msgstr "Paskaidres pārlūkošanas noildze"
 
-#: ../gtk/gtksettings.c:775
+#: ../gtk/gtksettings.c:772
 msgid "Timeout before tooltip is shown when browse mode is enabled"
 msgstr ""
 "Noildze, pirms tiek parādīta paskaidre, kad aktivēts pārlūkošanas režīms"
 
-#: ../gtk/gtksettings.c:796
+#: ../gtk/gtksettings.c:793
 msgid "Tooltip browse mode timeout"
 msgstr "Paskadres pārlūkošanas režīma noildze"
 
-#: ../gtk/gtksettings.c:797
+#: ../gtk/gtksettings.c:794
 msgid "Timeout after which browse mode is disabled"
 msgstr "Noildze, pēc kuras pārlūkošanas režīms ir deaktivēts"
 
-#: ../gtk/gtksettings.c:816
+#: ../gtk/gtksettings.c:813
 msgid "Keynav Cursor Only"
 msgstr "Tikai taustnav kursors"
 
-#: ../gtk/gtksettings.c:817
+#: ../gtk/gtksettings.c:814
 msgid "When TRUE, there are only cursor keys available to navigate widgets"
 msgstr "Kad PATIESS, pa logdaļu var pārvietoties tikai ar kursora taustiņiem"
 
-#: ../gtk/gtksettings.c:834
+#: ../gtk/gtksettings.c:831
 msgid "Keynav Wrap Around"
 msgstr "Taustnav aplauzt apkārt"
 
-#: ../gtk/gtksettings.c:835
+#: ../gtk/gtksettings.c:832
 msgid "Whether to wrap around when keyboard-navigating widgets"
 msgstr "Vai aplauzt apkārt, kad pārvietojas pa logdaļu ar tastatūru"
 
-#: ../gtk/gtksettings.c:855
+#: ../gtk/gtksettings.c:852
 msgid "Error Bell"
 msgstr "Kļūdas zvans"
 
-#: ../gtk/gtksettings.c:856
+#: ../gtk/gtksettings.c:853
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
 msgstr ""
 "Kad PATIESS, tastatūras pārvietošanās un citas kļūdas izraisīs pīkstienu"
 
-#: ../gtk/gtksettings.c:873
+#: ../gtk/gtksettings.c:872
 msgid "Color Hash"
 msgstr "Krāsas juceklis"
 
-#: ../gtk/gtksettings.c:874
+#: ../gtk/gtksettings.c:873
 msgid "A hash table representation of the color scheme."
 msgstr "Krāsu paletes attēlojums jucekļa tabulā"
 
-#: ../gtk/gtksettings.c:882
+#: ../gtk/gtksettings.c:881
 msgid "Default file chooser backend"
 msgstr "Noklusētā datņu izvēlētāja aizmugure"
 
-#: ../gtk/gtksettings.c:883
+#: ../gtk/gtksettings.c:882
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "GtkFileChooser aizmugures nosaukums, ko lietot pēc noklusējuma"
 
-#: ../gtk/gtksettings.c:900
+#: ../gtk/gtksettings.c:899
 msgid "Default print backend"
 msgstr "Noklusētā printera aizmugure"
 
-#: ../gtk/gtksettings.c:901
+#: ../gtk/gtksettings.c:900
 msgid "List of the GtkPrintBackend backends to use by default"
 msgstr "Saraksts ar pēc noklusējuma izmantojamajām GtkPrintBackend aizmugurēm"
 
-#: ../gtk/gtksettings.c:924
+#: ../gtk/gtksettings.c:923
 msgid "Default command to run when displaying a print preview"
 msgstr "Noklusētā komanda, ko palaist, kad attēlo drukāšanas priekšskatījumu"
 
-#: ../gtk/gtksettings.c:925
+#: ../gtk/gtksettings.c:924
 msgid "Command to run when displaying a print preview"
 msgstr "Komanda, ko palaist, kad attēlo drukāšanas priekšskatījumu"
 
-#: ../gtk/gtksettings.c:941
+#: ../gtk/gtksettings.c:940
 msgid "Enable Mnemonics"
 msgstr "Aktivēt mnemonikas"
 
-#: ../gtk/gtksettings.c:942
+#: ../gtk/gtksettings.c:941
 msgid "Whether labels should have mnemonics"
 msgstr "Vai iezīmēm būtu jābūt mnemonikām"
 
-#: ../gtk/gtksettings.c:958
+#: ../gtk/gtksettings.c:957
 msgid "Enable Accelerators"
 msgstr "Aktivēt paātrinātājus"
 
-#: ../gtk/gtksettings.c:959
+#: ../gtk/gtksettings.c:958
 msgid "Whether menu items should have accelerators"
 msgstr "Vai izvēļņu elementiem vajadzētu būt paātrinātājiem"
 
-#: ../gtk/gtksettings.c:976
+#: ../gtk/gtksettings.c:975
 msgid "Recent Files Limit"
 msgstr "Neseno datņu limits"
 
-#: ../gtk/gtksettings.c:977
+#: ../gtk/gtksettings.c:976
 msgid "Number of recently used files"
 msgstr "Nesen izmantoto datņu skaits"
 
-#: ../gtk/gtksettings.c:997
+#: ../gtk/gtksettings.c:996
 msgid "Default IM module"
 msgstr "Noklusētais TZ modulis"
 
-#: ../gtk/gtksettings.c:998
+#: ../gtk/gtksettings.c:997
 msgid "Which IM module should be used by default"
 msgstr "Kuru TZ moduli lietot pēc noklusējuma"
 
-#: ../gtk/gtksettings.c:1016
+#: ../gtk/gtksettings.c:1015
 msgid "Recent Files Max Age"
 msgstr "Neseno datņu maksimālais vecums"
 
-#: ../gtk/gtksettings.c:1017
+#: ../gtk/gtksettings.c:1016
 msgid "Maximum age of recently used files, in days"
 msgstr "Maksimālais nesen izmantoto dokumentu vecums dienās"
 
-#: ../gtk/gtksettings.c:1026
+#: ../gtk/gtksettings.c:1025
 msgid "Fontconfig configuration timestamp"
 msgstr "Fontconfig konfigurācijas laika spiedogs"
 
-#: ../gtk/gtksettings.c:1027
+#: ../gtk/gtksettings.c:1026
 msgid "Timestamp of current fontconfig configuration"
 msgstr "Pašreizējās fontconfig konfigurācijas laika spiedogs"
 
-#: ../gtk/gtksettings.c:1049
+#: ../gtk/gtksettings.c:1048
 msgid "Sound Theme Name"
 msgstr "Skaņu motīva nosaukums"
 
-#: ../gtk/gtksettings.c:1050
+#: ../gtk/gtksettings.c:1049
 msgid "XDG sound theme name"
 msgstr "XDG skaņu motīva nosaukums"
 
 #. Translators: this means sounds that are played as feedback to user input
-#: ../gtk/gtksettings.c:1072
+#: ../gtk/gtksettings.c:1071
 msgid "Audible Input Feedback"
 msgstr "Dzirdamie ievades papildinājumi"
 
-#: ../gtk/gtksettings.c:1073
+#: ../gtk/gtksettings.c:1072
 msgid "Whether to play event sounds as feedback to user input"
 msgstr ""
 "Vai, kā atgriezenisko saiti lietotāja ievadam, atskaņot notikumu skaņas"
 
-#: ../gtk/gtksettings.c:1094
+#: ../gtk/gtksettings.c:1093
 msgid "Enable Event Sounds"
 msgstr "Aktivēt notikumu skaņas"
 
-#: ../gtk/gtksettings.c:1095
+#: ../gtk/gtksettings.c:1094
 msgid "Whether to play any event sounds at all"
 msgstr "Vai vispār atskaņot kāda notikuma skaņas"
 
-#: ../gtk/gtksettings.c:1110
+#: ../gtk/gtksettings.c:1109
 msgid "Enable Tooltips"
 msgstr "Aktivēt paskaidres"
 
-#: ../gtk/gtksettings.c:1111
+#: ../gtk/gtksettings.c:1110
 msgid "Whether tooltips should be shown on widgets"
 msgstr "Vai logdaļām rādīt paskaidres"
 
-#: ../gtk/gtksettings.c:1124
+#: ../gtk/gtksettings.c:1123
 msgid "Toolbar style"
 msgstr "Rīkjoslas stils"
 
-#: ../gtk/gtksettings.c:1125
+#: ../gtk/gtksettings.c:1124
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Vai noklusētās rīkjoslas ir tikai ar tekstu, tekstu un ikonām, tikai ikonām, "
 "u.t.t."
 
-#: ../gtk/gtksettings.c:1139
+#: ../gtk/gtksettings.c:1138
 msgid "Toolbar Icon Size"
 msgstr "Rīkjoslas ikonu izmērs"
 
-#: ../gtk/gtksettings.c:1140
+#: ../gtk/gtksettings.c:1139
 msgid "The size of icons in default toolbars."
 msgstr "Ikonu izmērs noklusētajās rīkjoslās."
 
-#: ../gtk/gtksettings.c:1157
+#: ../gtk/gtksettings.c:1156
 msgid "Auto Mnemonics"
 msgstr "Automātiskās mnemonikas"
 
-#: ../gtk/gtksettings.c:1158
+#: ../gtk/gtksettings.c:1157
 msgid ""
 "Whether mnemonics should be automatically shown and hidden when the user "
 "presses the mnemonic activator."
@@ -6142,80 +6159,80 @@ msgstr ""
 "Vai mnemonikas vajadzētu automātiski rādīt un slēpt, kad lietotājs piespiež "
 "mnemonikas aktivizētāju."
 
-#: ../gtk/gtksettings.c:1174
+#: ../gtk/gtksettings.c:1173
 msgid "Primary button warps slider"
 msgstr "Primārā poga pārvieto slīdni"
 
-#: ../gtk/gtksettings.c:1175
+#: ../gtk/gtksettings.c:1174
 msgid ""
 "Whether a primary click on the trough should warp the slider into position"
 msgstr ""
 "Vai primārajam klikšķim uz iepalkas vajadzētu pārvietot slīdni tajā pozīcijā"
 
-#: ../gtk/gtksettings.c:1191
+#: ../gtk/gtksettings.c:1190
 msgid "Visible Focus"
 msgstr "Redzams fokuss"
 
-#: ../gtk/gtksettings.c:1192
+#: ../gtk/gtksettings.c:1191
 msgid ""
 "Whether 'focus rectangles' should be hidden until the user starts to use the "
 "keyboard."
 msgstr ""
 "Vai “fokusa taisnstūri” būtu jāslēpj, līdz lietotājs sāk lietot tastatūru."
 
-#: ../gtk/gtksettings.c:1218
+#: ../gtk/gtksettings.c:1217
 msgid "Application prefers a dark theme"
 msgstr "Lietotne dod priekšroku tumšam motīvam"
 
-#: ../gtk/gtksettings.c:1219
+#: ../gtk/gtksettings.c:1218
 msgid "Whether the application prefers to have a dark theme."
 msgstr "Vai lietotne dod priekšroku tumšam motīvam."
 
-#: ../gtk/gtksettings.c:1234
+#: ../gtk/gtksettings.c:1233
 msgid "Show button images"
 msgstr "Rādīt pogu attēlus"
 
-#: ../gtk/gtksettings.c:1235
+#: ../gtk/gtksettings.c:1234
 msgid "Whether images should be shown on buttons"
 msgstr "Vai uz pogām rādīt attēlus"
 
-#: ../gtk/gtksettings.c:1243 ../gtk/gtksettings.c:1337
+#: ../gtk/gtksettings.c:1242 ../gtk/gtksettings.c:1336
 msgid "Select on focus"
 msgstr "Izvēlēties pie fokusēšanas"
 
-#: ../gtk/gtksettings.c:1244
+#: ../gtk/gtksettings.c:1243
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Vai izvēlēties ieraksta saturu, kad tas tiek fokusēts"
 
-#: ../gtk/gtksettings.c:1261
+#: ../gtk/gtksettings.c:1260
 msgid "Password Hint Timeout"
 msgstr "Paroles padoma noildze"
 
-#: ../gtk/gtksettings.c:1262
+#: ../gtk/gtksettings.c:1261
 msgid "How long to show the last input character in hidden entries"
 msgstr "Cik ilgi rādīt ievades rakstzīmes slēptajās ievadēs"
 
-#: ../gtk/gtksettings.c:1271
+#: ../gtk/gtksettings.c:1270
 msgid "Show menu images"
 msgstr "Rādīt izvēlnes attēlus"
 
-#: ../gtk/gtksettings.c:1272
+#: ../gtk/gtksettings.c:1271
 msgid "Whether images should be shown in menus"
 msgstr "Vai izvēlnēs rādīt attēlus"
 
-#: ../gtk/gtksettings.c:1280
+#: ../gtk/gtksettings.c:1279
 msgid "Delay before drop down menus appear"
 msgstr "Aizture pirms parādās nolaižamā izvēlnes"
 
-#: ../gtk/gtksettings.c:1281
+#: ../gtk/gtksettings.c:1280
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Aizture pirms parādās apakšizvēlnes josla"
 
-#: ../gtk/gtksettings.c:1298
+#: ../gtk/gtksettings.c:1297
 msgid "Scrolled Window Placement"
 msgstr "Ritinātā loga novietojums"
 
-#: ../gtk/gtksettings.c:1299
+#: ../gtk/gtksettings.c:1298
 msgid ""
 "Where the contents of scrolled windows are located with respect to the "
 "scrollbars, if not overridden by the scrolled window's own placement."
@@ -6223,72 +6240,72 @@ msgstr ""
 "Kur tiek novietots ritināmā loga saturs, attiecībā pret ritjoslām, ja nav "
 "pārrakstīts ar ritināmā loga paša novietojumu."
 
-#: ../gtk/gtksettings.c:1308
+#: ../gtk/gtksettings.c:1307
 msgid "Can change accelerators"
 msgstr "Var mainīt paātrinātājus"
 
-#: ../gtk/gtksettings.c:1309
+#: ../gtk/gtksettings.c:1308
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Vai var mainīt izvēļņu paātrinātājus, nospiežot taustiņu virs izvēlnes "
 "vienuma"
 
-#: ../gtk/gtksettings.c:1317
+#: ../gtk/gtksettings.c:1316
 msgid "Delay before submenus appear"
 msgstr "Aizture pirms parādās apakšizvēlne"
 
-#: ../gtk/gtksettings.c:1318
+#: ../gtk/gtksettings.c:1317
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Minimums laika, cik ilgi kursoram jāatrodas uz izvēlnes pirms parādās "
 "apakšizvēlne"
 
-#: ../gtk/gtksettings.c:1327
+#: ../gtk/gtksettings.c:1326
 msgid "Delay before hiding a submenu"
 msgstr "Aizture pirms apakšizvēlnes paslēpšanas"
 
-#: ../gtk/gtksettings.c:1328
+#: ../gtk/gtksettings.c:1327
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
 msgstr ""
 "Laiks pirms apakšizvēlnes paslēpšanas, kad kursors virzās pie apakšizvēlnes"
 
-#: ../gtk/gtksettings.c:1338
+#: ../gtk/gtksettings.c:1337
 msgid "Whether to select the contents of a selectable label when it is focused"
 msgstr "Vai izvēlēties izvēlamas iezīmes saturu, kad tā tiek fokusēta"
 
-#: ../gtk/gtksettings.c:1346
+#: ../gtk/gtksettings.c:1345
 msgid "Custom palette"
 msgstr "Pielāgota palete"
 
-#: ../gtk/gtksettings.c:1347
+#: ../gtk/gtksettings.c:1346
 msgid "Palette to use in the color selector"
 msgstr "Palete, ko lietot krāsu izvēlētājā"
 
-#: ../gtk/gtksettings.c:1355
+#: ../gtk/gtksettings.c:1354
 msgid "IM Preedit style"
 msgstr "TZ pirmsrediģēšanas stils"
 
-#: ../gtk/gtksettings.c:1356
+#: ../gtk/gtksettings.c:1355
 msgid "How to draw the input method preedit string"
 msgstr "Kā zīmēt ievades metodes pirmsrediģēšanas virkni"
 
-#: ../gtk/gtksettings.c:1365
+#: ../gtk/gtksettings.c:1364
 msgid "IM Status style"
 msgstr "TZ statusa stils"
 
-#: ../gtk/gtksettings.c:1366
+#: ../gtk/gtksettings.c:1365
 msgid "How to draw the input method statusbar"
 msgstr "Kā zīmēt ievades metodes statusa joslu"
 
-#: ../gtk/gtksettings.c:1375
+#: ../gtk/gtksettings.c:1374
 msgid "Desktop shell shows app menu"
 msgstr "Darbvirsmas čaula rāda lietotnes izvēlni"
 
-#: ../gtk/gtksettings.c:1376
+#: ../gtk/gtksettings.c:1375
 msgid ""
 "Set to TRUE if the desktop environment is displaying the app menu, FALSE if "
 "the app should display it itself."
@@ -6296,11 +6313,11 @@ msgstr ""
 "Ja iestatīts kā PATIESS, darbvirsmas vide rādīs lietotnes izvēlni; ja APLAMS "
 "— lietotnei pašai tā būs jārāda."
 
-#: ../gtk/gtksettings.c:1385
+#: ../gtk/gtksettings.c:1384
 msgid "Desktop shell shows the menubar"
 msgstr "Darbvirsmas čaula rāda izvēlnes joslu"
 
-#: ../gtk/gtksettings.c:1386
+#: ../gtk/gtksettings.c:1385
 msgid ""
 "Set to TRUE if the desktop environment is displaying the menubar, FALSE if "
 "the app should display it itself."
@@ -6308,11 +6325,11 @@ msgstr ""
 "Ja iestatīts kā PATIESS, darbvirsmas vide rādīs izvēlnes joslu; ja APLAMS — "
 "lietotnei pašai tā būs jārāda."
 
-#: ../gtk/gtksettings.c:1403
+#: ../gtk/gtksettings.c:1402
 msgid "Enable primary paste"
 msgstr "Aktivēt primāro ielīmēšanu"
 
-#: ../gtk/gtksettings.c:1404
+#: ../gtk/gtksettings.c:1403
 msgid ""
 "Whether a middle click on a mouse should paste the 'PRIMARY' clipboard "
 "content at the cursor location."
@@ -6320,11 +6337,11 @@ msgstr ""
 "Vai vidējam peles klikšķim vajadzētu ielīmēt “PRIMĀRĀS” starpliktuves saturu "
 "kursora pozīcijā."
 
-#: ../gtk/gtksizegroup.c:380 ../gtk/gtktreeselection.c:129
+#: ../gtk/gtksizegroup.c:324 ../gtk/gtktreeselection.c:129
 msgid "Mode"
 msgstr "Režīms"
 
-#: ../gtk/gtksizegroup.c:381
+#: ../gtk/gtksizegroup.c:325
 msgid ""
 "The directions in which the size group affects the requested sizes of its "
 "component widgets"
@@ -6332,11 +6349,11 @@ msgstr ""
 "Virzieni, kādos izmēra grupa ietekmē pieprasītos izmērus tā komponentu "
 "logdaļām"
 
-#: ../gtk/gtksizegroup.c:397
+#: ../gtk/gtksizegroup.c:341
 msgid "Ignore hidden"
 msgstr "Ignorēt slēpto"
 
-#: ../gtk/gtksizegroup.c:398
+#: ../gtk/gtksizegroup.c:342
 msgid ""
 "If TRUE, unmapped widgets are ignored when determining the size of the group"
 msgstr ""
@@ -6421,7 +6438,7 @@ msgstr "Vai statusa ikona ir iegulta"
 msgid "The orientation of the tray"
 msgstr "Paplātes novietojums"
 
-#: ../gtk/gtkstatusicon.c:358 ../gtk/gtkwidget.c:1126
+#: ../gtk/gtkstatusicon.c:358 ../gtk/gtkwidget.c:1119
 msgid "Has tooltip"
 msgstr "Ir paskaidre"
 
@@ -6429,15 +6446,15 @@ msgstr "Ir paskaidre"
 msgid "Whether this tray icon has a tooltip"
 msgstr "Vai paplātes ikonai ir paskaidre"
 
-#: ../gtk/gtkstatusicon.c:384 ../gtk/gtkwidget.c:1147
+#: ../gtk/gtkstatusicon.c:384 ../gtk/gtkwidget.c:1140
 msgid "Tooltip Text"
 msgstr "Paskaidres teksts"
 
-#: ../gtk/gtkstatusicon.c:385 ../gtk/gtkwidget.c:1148 ../gtk/gtkwidget.c:1169
+#: ../gtk/gtkstatusicon.c:385 ../gtk/gtkwidget.c:1141 ../gtk/gtkwidget.c:1162
 msgid "The contents of the tooltip for this widget"
 msgstr "Paskaidres saturs šai logdaļai"
 
-#: ../gtk/gtkstatusicon.c:408 ../gtk/gtkwidget.c:1168
+#: ../gtk/gtkstatusicon.c:408 ../gtk/gtkwidget.c:1161
 msgid "Tooltip markup"
 msgstr "Paskaidres marķējums"
 
@@ -6449,19 +6466,19 @@ msgstr "Palodzes ikonas paskaidres saturs"
 msgid "The title of this tray icon"
 msgstr "Šīs paplātes ikonas virsraksts"
 
-#: ../gtk/gtkstylecontext.c:443
+#: ../gtk/gtkstylecontext.c:442
 msgid "The associated GdkScreen"
 msgstr "Asociētais GdkScreen"
 
-#: ../gtk/gtkstylecontext.c:449
+#: ../gtk/gtkstylecontext.c:448
 msgid "Direction"
 msgstr "Virziens"
 
-#: ../gtk/gtkstylecontext.c:450 ../gtk/gtktexttag.c:287
+#: ../gtk/gtkstylecontext.c:449 ../gtk/gtktexttag.c:287
 msgid "Text direction"
 msgstr "Teksta virziens"
 
-#: ../gtk/gtkstylecontext.c:466
+#: ../gtk/gtkstylecontext.c:465
 msgid "The parent style context"
 msgstr "Vecāka stila konteksts"
 
@@ -6481,11 +6498,11 @@ msgstr "Vērtības tips"
 msgid "The value type returned by GtkStyleContext"
 msgstr "GtkStyleContext atgrieztās vērtības tips"
 
-#: ../gtk/gtkswitch.c:835
+#: ../gtk/gtkswitch.c:815
 msgid "Whether the switch is on or off"
 msgstr "Vai slēdzis ir ieslēgts vai izslēgts"
 
-#: ../gtk/gtkswitch.c:869
+#: ../gtk/gtkswitch.c:849
 msgid "The minimum width of the handle"
 msgstr "Minimālais tura platums"
 
@@ -6541,16 +6558,16 @@ msgstr ""
 "Saraksts ar mērķiem, ko šis buferis atbalsta starpliktuves kopēšanai un DND "
 "mērķiem"
 
-#: ../gtk/gtktexthandle.c:469 ../gtk/gtktexthandle.c:470
-#: ../gtk/gtkwidget.c:992
+#: ../gtk/gtktexthandle.c:470 ../gtk/gtktexthandle.c:471
+#: ../gtk/gtkwidget.c:985
 msgid "Parent widget"
 msgstr "Vecāka logdaļa"
 
-#: ../gtk/gtktexthandle.c:477 ../gtk/gtkwidget.c:1183
+#: ../gtk/gtktexthandle.c:478 ../gtk/gtkwidget.c:1176
 msgid "Window"
 msgstr "Logs"
 
-#: ../gtk/gtktexthandle.c:478
+#: ../gtk/gtktexthandle.c:479
 msgid "Window the coordinates are based upon"
 msgstr "Logs, uz kā ir balstītas koordinātas"
 
@@ -6634,7 +6651,7 @@ msgstr ""
 "izmēru. Šī īpašība piemērojas motīva izmaiņām utt., tāpēc tiek rekomendēta. "
 "Pango iepriekš nosaka dažus mērogus, tādas kā PANGO_SCALE_X_LARGE"
 
-#: ../gtk/gtktexttag.c:405 ../gtk/gtktextview.c:720
+#: ../gtk/gtktexttag.c:405 ../gtk/gtktextview.c:722
 msgid "Left, right, or center justification"
 msgstr "Pa labi, kreisi vai centrēts līdzinājums"
 
@@ -6651,7 +6668,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Kreisā mala"
 
-#: ../gtk/gtktexttag.c:432 ../gtk/gtktextview.c:729
+#: ../gtk/gtktexttag.c:432 ../gtk/gtktextview.c:731
 msgid "Width of the left margin in pixels"
 msgstr "Atkāpe no kreisās malas pikseļos"
 
@@ -6659,15 +6676,15 @@ msgstr "Atkāpe no kreisās malas pikseļos"
 msgid "Right margin"
 msgstr "Labā mala"
 
-#: ../gtk/gtktexttag.c:442 ../gtk/gtktextview.c:739
+#: ../gtk/gtktexttag.c:442 ../gtk/gtktextview.c:741
 msgid "Width of the right margin in pixels"
 msgstr "Atkāpe no labās puses pikseļos"
 
-#: ../gtk/gtktexttag.c:452 ../gtk/gtktextview.c:748
+#: ../gtk/gtktexttag.c:452 ../gtk/gtktextview.c:750
 msgid "Indent"
 msgstr "Atkāpe"
 
-#: ../gtk/gtktexttag.c:453 ../gtk/gtktextview.c:749
+#: ../gtk/gtktexttag.c:453 ../gtk/gtktextview.c:751
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Daudzums pikseļos, kādā veidot atkāpi rindkopai"
 
@@ -6683,7 +6700,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Pikseļi virs rindām"
 
-#: ../gtk/gtktexttag.c:474 ../gtk/gtktextview.c:673
+#: ../gtk/gtktexttag.c:474 ../gtk/gtktextview.c:675
 msgid "Pixels of blank space above paragraphs"
 msgstr "Tukšas vietas pikseļi virs rindkopām"
 
@@ -6691,7 +6708,7 @@ msgstr "Tukšas vietas pikseļi virs rindkopām"
 msgid "Pixels below lines"
 msgstr "Pikseļi zem rindām"
 
-#: ../gtk/gtktexttag.c:484 ../gtk/gtktextview.c:683
+#: ../gtk/gtktexttag.c:484 ../gtk/gtktextview.c:685
 msgid "Pixels of blank space below paragraphs"
 msgstr "Tukšas vietas pikseļi zem rindkopām"
 
@@ -6699,20 +6716,20 @@ msgstr "Tukšas vietas pikseļi zem rindkopām"
 msgid "Pixels inside wrap"
 msgstr "Pikseļu iekšpus aplaušanas"
 
-#: ../gtk/gtktexttag.c:494 ../gtk/gtktextview.c:693
+#: ../gtk/gtktexttag.c:494 ../gtk/gtktextview.c:695
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Pikseļu daudzums atstarpē starp aplauztām rindām rindkopā"
 
-#: ../gtk/gtktexttag.c:521 ../gtk/gtktextview.c:711
+#: ../gtk/gtktexttag.c:521 ../gtk/gtktextview.c:713
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Vai aplauzt rindas nekad, vārdu robežās vai rakstzīmju robežās"
 
-#: ../gtk/gtktexttag.c:530 ../gtk/gtktextview.c:758
+#: ../gtk/gtktexttag.c:530 ../gtk/gtktextview.c:760
 msgid "Tabs"
 msgstr "Tabulācijas"
 
-#: ../gtk/gtktexttag.c:531 ../gtk/gtktextview.c:759
+#: ../gtk/gtktexttag.c:531 ../gtk/gtktextview.c:761
 msgid "Custom tabs for this text"
 msgstr "Pašrocīgas tabulācijas šim tekstam"
 
@@ -6848,67 +6865,67 @@ msgstr "Rindkopas fona iestatījums"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Vai šī birka ietekmē rindkopas fona krāsu"
 
-#: ../gtk/gtktextview.c:672
+#: ../gtk/gtktextview.c:674
 msgid "Pixels Above Lines"
 msgstr "Pikseļi virs rindām"
 
-#: ../gtk/gtktextview.c:682
+#: ../gtk/gtktextview.c:684
 msgid "Pixels Below Lines"
 msgstr "Pikseļi zem rindām"
 
-#: ../gtk/gtktextview.c:692
+#: ../gtk/gtktextview.c:694
 msgid "Pixels Inside Wrap"
 msgstr "Pikseļu iekšpus aplaušanas"
 
-#: ../gtk/gtktextview.c:710
+#: ../gtk/gtktextview.c:712
 msgid "Wrap Mode"
 msgstr "Aplaušanas režīms"
 
-#: ../gtk/gtktextview.c:728
+#: ../gtk/gtktextview.c:730
 msgid "Left Margin"
 msgstr "Kreisā mala"
 
-#: ../gtk/gtktextview.c:738
+#: ../gtk/gtktextview.c:740
 msgid "Right Margin"
 msgstr "Labā mala"
 
-#: ../gtk/gtktextview.c:766
+#: ../gtk/gtktextview.c:768
 msgid "Cursor Visible"
 msgstr "Kursors redzams"
 
-#: ../gtk/gtktextview.c:767
+#: ../gtk/gtktextview.c:769
 msgid "If the insertion cursor is shown"
 msgstr "Vai ievietošanas kursors tiek parādīts"
 
-#: ../gtk/gtktextview.c:774
+#: ../gtk/gtktextview.c:776
 msgid "Buffer"
 msgstr "Buferis"
 
-#: ../gtk/gtktextview.c:775
+#: ../gtk/gtktextview.c:777
 msgid "The buffer which is displayed"
 msgstr "Attēlotais buferis"
 
-#: ../gtk/gtktextview.c:783
+#: ../gtk/gtktextview.c:785
 msgid "Whether entered text overwrites existing contents"
 msgstr "Vai ievadītais teksts pārrakstīsies pāri esošajam saturam"
 
-#: ../gtk/gtktextview.c:790
+#: ../gtk/gtktextview.c:792
 msgid "Accepts tab"
 msgstr "Pieņem tabulāciju"
 
-#: ../gtk/gtktextview.c:791
+#: ../gtk/gtktextview.c:793
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Vai Tab piespiešanas rezultātā tiks ievadīta tabulācijas rakstzīme"
 
-#: ../gtk/gtktextview.c:862
+#: ../gtk/gtktextview.c:864
 msgid "Error underline color"
 msgstr "Kļūdas pasvītrojuma krāsa"
 
-#: ../gtk/gtktextview.c:863
+#: ../gtk/gtktextview.c:865
 msgid "Color with which to draw error-indication underlines"
 msgstr "Krāsa, kādā zīmēt kļūdu norādošu pasvītrojumu"
 
-#: ../gtk/gtkthemingengine.c:256
+#: ../gtk/gtkthemingengine.c:259
 msgid "Theming engine name"
 msgstr "Motīva dziņa nosaukums"
 
@@ -6940,79 +6957,79 @@ msgstr "Zīmēt indikatoru"
 msgid "If the toggle part of the button is displayed"
 msgstr "Ja pogas pārslēgšanas daļa tiek parādīta"
 
-#: ../gtk/gtktoolbar.c:500 ../gtk/gtktoolpalette.c:1043
+#: ../gtk/gtktoolbar.c:498 ../gtk/gtktoolpalette.c:1043
 msgid "Toolbar Style"
 msgstr "Rīkjoslas stils"
 
-#: ../gtk/gtktoolbar.c:501
+#: ../gtk/gtktoolbar.c:499
 msgid "How to draw the toolbar"
 msgstr "Kā zīmēt rīkjoslu"
 
-#: ../gtk/gtktoolbar.c:508
+#: ../gtk/gtktoolbar.c:506
 msgid "Show Arrow"
 msgstr "Rādīt bultu"
 
-#: ../gtk/gtktoolbar.c:509
+#: ../gtk/gtktoolbar.c:507
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr "Vai jārāda bulta, ja rīkjosla neietilpst"
 
-#: ../gtk/gtktoolbar.c:530
+#: ../gtk/gtktoolbar.c:528
 msgid "Size of icons in this toolbar"
 msgstr "Šīs rīkjoslas ikonu izmērs"
 
-#: ../gtk/gtktoolbar.c:545 ../gtk/gtktoolpalette.c:1029
+#: ../gtk/gtktoolbar.c:543 ../gtk/gtktoolpalette.c:1029
 msgid "Icon size set"
 msgstr "Ikonu izmēra iestatīšana"
 
-#: ../gtk/gtktoolbar.c:546 ../gtk/gtktoolpalette.c:1030
+#: ../gtk/gtktoolbar.c:544 ../gtk/gtktoolpalette.c:1030
 msgid "Whether the icon-size property has been set"
 msgstr "Vai ir iestatīta ikonu izmēra vērtība"
 
-#: ../gtk/gtktoolbar.c:555
+#: ../gtk/gtktoolbar.c:553
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr "Vai vienumam būtu jāsaņem papildu vieta, kad rīkjosla aug"
 
-#: ../gtk/gtktoolbar.c:563 ../gtk/gtktoolitemgroup.c:1651
+#: ../gtk/gtktoolbar.c:561 ../gtk/gtktoolitemgroup.c:1651
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr "Vai vienumam vajadzētu būt vienādā izmērā ar līdzīgiem vienumiem"
 
-#: ../gtk/gtktoolbar.c:570
+#: ../gtk/gtktoolbar.c:568
 msgid "Spacer size"
 msgstr "Starpinātāja izmērs"
 
-#: ../gtk/gtktoolbar.c:571
+#: ../gtk/gtktoolbar.c:569
 msgid "Size of spacers"
 msgstr "Starpinātāju izmērs"
 
-#: ../gtk/gtktoolbar.c:589
+#: ../gtk/gtktoolbar.c:587
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "Robežas atstarpes apjoms starp rīkjoslas ēnu un pogām"
 
-#: ../gtk/gtktoolbar.c:597
+#: ../gtk/gtktoolbar.c:595
 msgid "Maximum child expand"
 msgstr "Maksimālā bērna izvēršana"
 
-#: ../gtk/gtktoolbar.c:598
+#: ../gtk/gtktoolbar.c:596
 msgid "Maximum amount of space an expandable item will be given"
 msgstr "Maksimālais vietas daudzums, kas tiks dots izvēršamam vienumam"
 
-#: ../gtk/gtktoolbar.c:606
+#: ../gtk/gtktoolbar.c:604
 msgid "Space style"
 msgstr "Atstarpes stils"
 
-#: ../gtk/gtktoolbar.c:607
+#: ../gtk/gtktoolbar.c:605
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "Vai atstarpes ir vertikālas līnijas vai tikai tukšumi"
 
-#: ../gtk/gtktoolbar.c:614
+#: ../gtk/gtktoolbar.c:612
 msgid "Button relief"
 msgstr "Pogas reljefs"
 
-#: ../gtk/gtktoolbar.c:615
+#: ../gtk/gtktoolbar.c:613
 msgid "Type of bevel around toolbar buttons"
 msgstr "Apmales tips ap rīkjoslas pogām"
 
-#: ../gtk/gtktoolbar.c:631
+#: ../gtk/gtktoolbar.c:629
 msgid "Style of bevel around the toolbar"
 msgstr "Apmales tips ap rīkjoslu"
 
@@ -7234,212 +7251,212 @@ msgstr "TreeModelSort modelis"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Modelis TreeModelSort, ko kārtot"
 
-#: ../gtk/gtktreeview.c:992
+#: ../gtk/gtktreeview.c:993
 msgid "TreeView Model"
 msgstr "TreeView modelis"
 
-#: ../gtk/gtktreeview.c:993
+#: ../gtk/gtktreeview.c:994
 msgid "The model for the tree view"
 msgstr "Koka skata modelis"
 
-#: ../gtk/gtktreeview.c:1005
+#: ../gtk/gtktreeview.c:1006
 msgid "Headers Visible"
 msgstr "Galveņu redzamība"
 
-#: ../gtk/gtktreeview.c:1006
+#: ../gtk/gtktreeview.c:1007
 msgid "Show the column header buttons"
 msgstr "Rādīt kolonnas galvenes pogas"
 
-#: ../gtk/gtktreeview.c:1013
+#: ../gtk/gtktreeview.c:1014
 msgid "Headers Clickable"
 msgstr "Galvenes klikšķināmas"
 
-#: ../gtk/gtktreeview.c:1014
+#: ../gtk/gtktreeview.c:1015
 msgid "Column headers respond to click events"
 msgstr "Kolonnu galvenes atbild klikšķu notikumiem"
 
-#: ../gtk/gtktreeview.c:1021
+#: ../gtk/gtktreeview.c:1022
 msgid "Expander Column"
 msgstr "Izvērsēja kolonna"
 
-#: ../gtk/gtktreeview.c:1022
+#: ../gtk/gtktreeview.c:1023
 msgid "Set the column for the expander column"
 msgstr "Iestatīt kolonnu kā izvērsēja kolonnu"
 
-#: ../gtk/gtktreeview.c:1037
+#: ../gtk/gtktreeview.c:1038
 msgid "Rules Hint"
 msgstr "Robežsvītru mājiens"
 
-#: ../gtk/gtktreeview.c:1038
+#: ../gtk/gtktreeview.c:1039
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "Iestatīt mājienu motīvu dzinējam, lai tas zīmētu rindas mainīgās krāsās"
 
-#: ../gtk/gtktreeview.c:1045
+#: ../gtk/gtktreeview.c:1046
 msgid "Enable Search"
 msgstr "Aktivizēt meklēšanu"
 
-#: ../gtk/gtktreeview.c:1046
+#: ../gtk/gtktreeview.c:1047
 msgid "View allows user to search through columns interactively"
 msgstr "Skats ļauj lietotājam interaktīvi meklēt cauri kolonnām"
 
-#: ../gtk/gtktreeview.c:1053
+#: ../gtk/gtktreeview.c:1054
 msgid "Search Column"
 msgstr "Meklēšanas kolonna"
 
-#: ../gtk/gtktreeview.c:1054
+#: ../gtk/gtktreeview.c:1055
 msgid "Model column to search through during interactive search"
 msgstr "Modeļa kolonna, kurai meklēt cauri interaktīvās meklēšanas laikā"
 
-#: ../gtk/gtktreeview.c:1074
+#: ../gtk/gtktreeview.c:1075
 msgid "Fixed Height Mode"
 msgstr "Fiksēta augstuma režīms"
 
-#: ../gtk/gtktreeview.c:1075
+#: ../gtk/gtktreeview.c:1076
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr ""
 "Paātrina GtkTreeView, pieņemot, ka visām rindām piemīt vienāds augstums"
 
-#: ../gtk/gtktreeview.c:1095
+#: ../gtk/gtktreeview.c:1096
 msgid "Hover Selection"
 msgstr "Virs novietošanas atlase"
 
-#: ../gtk/gtktreeview.c:1096
+#: ../gtk/gtktreeview.c:1097
 msgid "Whether the selection should follow the pointer"
 msgstr "Vai atlasei būtu jāseko rādītājam"
 
-#: ../gtk/gtktreeview.c:1115
+#: ../gtk/gtktreeview.c:1116
 msgid "Hover Expand"
 msgstr "Virs novietošanas izvēršana"
 
-#: ../gtk/gtktreeview.c:1116
+#: ../gtk/gtktreeview.c:1117
 msgid ""
 "Whether rows should be expanded/collapsed when the pointer moves over them"
 msgstr ""
 "Vai rindām vajadzētu izvērsties/sakļauties, kad peles kursors tām pāriet pāri"
 
-#: ../gtk/gtktreeview.c:1130
+#: ../gtk/gtktreeview.c:1131
 msgid "Show Expanders"
 msgstr "Rādīt izvērsējus"
 
-#: ../gtk/gtktreeview.c:1131
+#: ../gtk/gtktreeview.c:1132
 msgid "View has expanders"
 msgstr "Skatam ir izvērsēji"
 
-#: ../gtk/gtktreeview.c:1145
+#: ../gtk/gtktreeview.c:1146
 msgid "Level Indentation"
 msgstr "Līmeņa atkāpe"
 
-#: ../gtk/gtktreeview.c:1146
+#: ../gtk/gtktreeview.c:1147
 msgid "Extra indentation for each level"
 msgstr "Papildu atkāpe katram līmenim"
 
-#: ../gtk/gtktreeview.c:1155
+#: ../gtk/gtktreeview.c:1156
 msgid "Rubber Banding"
 msgstr "Elastīgā sasaiste"
 
-#: ../gtk/gtktreeview.c:1156
+#: ../gtk/gtktreeview.c:1157
 msgid ""
 "Whether to enable selection of multiple items by dragging the mouse pointer"
 msgstr "Vai aktivēt izvēlēšanos no vairākiem vienumiem, velkot peles rādītāju"
 
-#: ../gtk/gtktreeview.c:1163
+#: ../gtk/gtktreeview.c:1164
 msgid "Enable Grid Lines"
 msgstr "Aktivēt režģa līnijas"
 
-#: ../gtk/gtktreeview.c:1164
+#: ../gtk/gtktreeview.c:1165
 msgid "Whether grid lines should be drawn in the tree view"
 msgstr "Vai zīmēt koka režģa līnijas koka skatā"
 
-#: ../gtk/gtktreeview.c:1172
+#: ../gtk/gtktreeview.c:1173
 msgid "Enable Tree Lines"
 msgstr "Aktivēt koka līnijas"
 
-#: ../gtk/gtktreeview.c:1173
+#: ../gtk/gtktreeview.c:1174
 msgid "Whether tree lines should be drawn in the tree view"
 msgstr "Vai koka skatā zīmēt koka līnijas"
 
-#: ../gtk/gtktreeview.c:1181
+#: ../gtk/gtktreeview.c:1182
 msgid "The column in the model containing the tooltip texts for the rows"
 msgstr "Kolonna modelī, kas satur paskaidres tekstu rindām"
 
-#: ../gtk/gtktreeview.c:1203
+#: ../gtk/gtktreeview.c:1204
 msgid "Vertical Separator Width"
 msgstr "Vertikālā atdalītāja platums"
 
-#: ../gtk/gtktreeview.c:1204
+#: ../gtk/gtktreeview.c:1205
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Vertikālā atstarpe starp šūnām. Jābūt pāra skaitlim"
 
-#: ../gtk/gtktreeview.c:1212
+#: ../gtk/gtktreeview.c:1213
 msgid "Horizontal Separator Width"
 msgstr "Horizontālā atdalītāja platums"
 
-#: ../gtk/gtktreeview.c:1213
+#: ../gtk/gtktreeview.c:1214
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Horizontālā atstarpe starp šūnām. Jābūt pāra skaitlim"
 
-#: ../gtk/gtktreeview.c:1221
+#: ../gtk/gtktreeview.c:1222
 msgid "Allow Rules"
 msgstr "Atļaut robežsvītras"
 
-#: ../gtk/gtktreeview.c:1222
+#: ../gtk/gtktreeview.c:1223
 msgid "Allow drawing of alternating color rows"
 msgstr "Atļaut zīmēt mainīgu krāsu rindas"
 
-#: ../gtk/gtktreeview.c:1228
+#: ../gtk/gtktreeview.c:1229
 msgid "Indent Expanders"
 msgstr "Atkāpes izvērsējiem"
 
-#: ../gtk/gtktreeview.c:1229
+#: ../gtk/gtktreeview.c:1230
 msgid "Make the expanders indented"
 msgstr "Pielikt atkāpes izvērsējiem"
 
-#: ../gtk/gtktreeview.c:1235
+#: ../gtk/gtktreeview.c:1236
 msgid "Even Row Color"
 msgstr "Pāra rindu krāsa"
 
-#: ../gtk/gtktreeview.c:1236
+#: ../gtk/gtktreeview.c:1237
 msgid "Color to use for even rows"
 msgstr "Krāsa, kādu lietot pāra rindām"
 
-#: ../gtk/gtktreeview.c:1242
+#: ../gtk/gtktreeview.c:1243
 msgid "Odd Row Color"
 msgstr "Nepāra rindu krāsa"
 
-#: ../gtk/gtktreeview.c:1243
+#: ../gtk/gtktreeview.c:1244
 msgid "Color to use for odd rows"
 msgstr "Krāsa, kādu lietot nepāra rindām"
 
-#: ../gtk/gtktreeview.c:1249
+#: ../gtk/gtktreeview.c:1250
 msgid "Grid line width"
 msgstr "Režģa līniju platums"
 
-#: ../gtk/gtktreeview.c:1250
+#: ../gtk/gtktreeview.c:1251
 msgid "Width, in pixels, of the tree view grid lines"
 msgstr "Koka režģa līniju platums pikseļos"
 
-#: ../gtk/gtktreeview.c:1256
+#: ../gtk/gtktreeview.c:1257
 msgid "Tree line width"
 msgstr "Koka līniju platums"
 
-#: ../gtk/gtktreeview.c:1257
+#: ../gtk/gtktreeview.c:1258
 msgid "Width, in pixels, of the tree view lines"
 msgstr "Koka aplūkošanas līniju platums pikseļos"
 
-#: ../gtk/gtktreeview.c:1263
+#: ../gtk/gtktreeview.c:1264
 msgid "Grid line pattern"
 msgstr "Režģa līniju raksts"
 
-#: ../gtk/gtktreeview.c:1264
+#: ../gtk/gtktreeview.c:1265
 msgid "Dash pattern used to draw the tree view grid lines"
 msgstr "Svītru raksts, ko lietot zīmējot koka režģa līnijas"
 
-#: ../gtk/gtktreeview.c:1270
+#: ../gtk/gtktreeview.c:1271
 msgid "Tree line pattern"
 msgstr "Koka līniju raksts"
 
-#: ../gtk/gtktreeview.c:1271
+#: ../gtk/gtktreeview.c:1272
 msgid "Dash pattern used to draw the tree view lines"
 msgstr "Svītru raksts, ko lietot zīmējot koka skata līnijas"
 
@@ -7447,7 +7464,7 @@ msgstr "Svītru raksts, ko lietot zīmējot koka skata līnijas"
 msgid "Whether to display the column"
 msgstr "Vai rādīt kolonnu"
 
-#: ../gtk/gtktreeviewcolumn.c:255 ../gtk/gtkwindow.c:661
+#: ../gtk/gtktreeviewcolumn.c:255 ../gtk/gtkwindow.c:651
 msgid "Resizable"
 msgstr "Maināma izmēra"
 
@@ -7569,23 +7586,23 @@ msgstr "Izmantot simboliskās ikonas"
 msgid "Whether to use symbolic icons"
 msgstr "Vai izmantot simboliskās ikonas"
 
-#: ../gtk/gtkwidget.c:985
+#: ../gtk/gtkwidget.c:978
 msgid "Widget name"
 msgstr "Logdaļas nosaukums"
 
-#: ../gtk/gtkwidget.c:986
+#: ../gtk/gtkwidget.c:979
 msgid "The name of the widget"
 msgstr "Logdaļas nosaukums"
 
-#: ../gtk/gtkwidget.c:993
+#: ../gtk/gtkwidget.c:986
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "Vecāka logdaļa šai logdaļai. Jābūt konteinera logdaļai"
 
-#: ../gtk/gtkwidget.c:1000
+#: ../gtk/gtkwidget.c:993
 msgid "Width request"
 msgstr "Platuma pieprasījums"
 
-#: ../gtk/gtkwidget.c:1001
+#: ../gtk/gtkwidget.c:994
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
@@ -7593,11 +7610,11 @@ msgstr ""
 "Pārrakstīt logdaļas platuma pieprasījumu, vai -1, ja jālieto būtu dabīgais "
 "pieprasījums"
 
-#: ../gtk/gtkwidget.c:1009
+#: ../gtk/gtkwidget.c:1002
 msgid "Height request"
 msgstr "Augstuma pieprasījums"
 
-#: ../gtk/gtkwidget.c:1010
+#: ../gtk/gtkwidget.c:1003
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
@@ -7605,83 +7622,83 @@ msgstr ""
 "Pārrakstīt logdaļas augstuma pieprasījumu, vai -1 ja vajadzētu lietot "
 "dabisko pieprasījumu"
 
-#: ../gtk/gtkwidget.c:1019
+#: ../gtk/gtkwidget.c:1012
 msgid "Whether the widget is visible"
 msgstr "Vai logdaļa ir redzama"
 
-#: ../gtk/gtkwidget.c:1026
+#: ../gtk/gtkwidget.c:1019
 msgid "Whether the widget responds to input"
 msgstr "Vai logdaļa atbild uz ievadi"
 
-#: ../gtk/gtkwidget.c:1032
+#: ../gtk/gtkwidget.c:1025
 msgid "Application paintable"
 msgstr "Lietotne krāsojama"
 
-#: ../gtk/gtkwidget.c:1033
+#: ../gtk/gtkwidget.c:1026
 msgid "Whether the application will paint directly on the widget"
 msgstr "Vai lietotne krāsos tieši uz logdaļas"
 
-#: ../gtk/gtkwidget.c:1039
+#: ../gtk/gtkwidget.c:1032
 msgid "Can focus"
 msgstr "Var fokusēt"
 
-#: ../gtk/gtkwidget.c:1040
+#: ../gtk/gtkwidget.c:1033
 msgid "Whether the widget can accept the input focus"
 msgstr "Vai logdaļa var pieņemt ievades fokusu"
 
-#: ../gtk/gtkwidget.c:1046
+#: ../gtk/gtkwidget.c:1039
 msgid "Has focus"
 msgstr "Ir fokuss"
 
-#: ../gtk/gtkwidget.c:1047
+#: ../gtk/gtkwidget.c:1040
 msgid "Whether the widget has the input focus"
 msgstr "Vai logdaļai ir ievades fokuss"
 
-#: ../gtk/gtkwidget.c:1053
+#: ../gtk/gtkwidget.c:1046
 msgid "Is focus"
 msgstr "Ir fokuss"
 
-#: ../gtk/gtkwidget.c:1054
+#: ../gtk/gtkwidget.c:1047
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "Vai logdaļa ir fokusēta logdaļas augšējā līmenī"
 
-#: ../gtk/gtkwidget.c:1060
+#: ../gtk/gtkwidget.c:1053
 msgid "Can default"
 msgstr "Var būt noklusētā"
 
-#: ../gtk/gtkwidget.c:1061
+#: ../gtk/gtkwidget.c:1054
 msgid "Whether the widget can be the default widget"
 msgstr "Vai logdaļa var būt noklusētā logdaļa"
 
-#: ../gtk/gtkwidget.c:1067
+#: ../gtk/gtkwidget.c:1060
 msgid "Has default"
 msgstr "Ir noklusētā"
 
-#: ../gtk/gtkwidget.c:1068
+#: ../gtk/gtkwidget.c:1061
 msgid "Whether the widget is the default widget"
 msgstr "Vai logdaļa ir noklusētā logdaļa"
 
-#: ../gtk/gtkwidget.c:1074
+#: ../gtk/gtkwidget.c:1067
 msgid "Receives default"
 msgstr "Saņem noklusēto"
 
-#: ../gtk/gtkwidget.c:1075
+#: ../gtk/gtkwidget.c:1068
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr "Ja PATIESS, logdaļa saņems noklusēto darbību, kad tā tiek fokusēta"
 
-#: ../gtk/gtkwidget.c:1081
+#: ../gtk/gtkwidget.c:1074
 msgid "Composite child"
 msgstr "Salikts bērns"
 
-#: ../gtk/gtkwidget.c:1082
+#: ../gtk/gtkwidget.c:1075
 msgid "Whether the widget is part of a composite widget"
 msgstr "Vai logdaļa ir daļa no saliktas logdaļas"
 
-#: ../gtk/gtkwidget.c:1088
+#: ../gtk/gtkwidget.c:1081
 msgid "Style"
 msgstr "Stils"
 
-#: ../gtk/gtkwidget.c:1089
+#: ../gtk/gtkwidget.c:1082
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
@@ -7689,171 +7706,171 @@ msgstr ""
 "Logdaļas stils, kas satur informāciju par to, kā tā izskatīsies (krāsas, "
 "utt.)"
 
-#: ../gtk/gtkwidget.c:1095
+#: ../gtk/gtkwidget.c:1088
 msgid "Events"
 msgstr "Notikumi"
 
-#: ../gtk/gtkwidget.c:1096
+#: ../gtk/gtkwidget.c:1089
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr "Notikuma maska, kas nosaka, kāda veida GdkEvents ir šī logdaļa saņem"
 
-#: ../gtk/gtkwidget.c:1103
+#: ../gtk/gtkwidget.c:1096
 msgid "No show all"
 msgstr "Nerādīt visu"
 
-#: ../gtk/gtkwidget.c:1104
+#: ../gtk/gtkwidget.c:1097
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "Vai gtk_widget_show_all() nevajadzētu ietekmēt šo logdaļu"
 
-#: ../gtk/gtkwidget.c:1127
+#: ../gtk/gtkwidget.c:1120
 msgid "Whether this widget has a tooltip"
 msgstr "Vai logdaļai ir paskaidre"
 
-#: ../gtk/gtkwidget.c:1184
+#: ../gtk/gtkwidget.c:1177
 msgid "The widget's window if it is realized"
 msgstr "Logdaļas logs, ja realizēts"
 
-#: ../gtk/gtkwidget.c:1198
+#: ../gtk/gtkwidget.c:1191
 msgid "Double Buffered"
 msgstr "Dubulti buferēts"
 
-#: ../gtk/gtkwidget.c:1199
+#: ../gtk/gtkwidget.c:1192
 msgid "Whether the widget is double buffered"
 msgstr "Vai logdaļa tiek buferēta dubulti"
 
-#: ../gtk/gtkwidget.c:1214
+#: ../gtk/gtkwidget.c:1207
 msgid "How to position in extra horizontal space"
 msgstr "Kā novietot papildu horizontālo vietu"
 
-#: ../gtk/gtkwidget.c:1230
+#: ../gtk/gtkwidget.c:1223
 msgid "How to position in extra vertical space"
 msgstr "Kā novietot papildu vertikālo vietu"
 
-#: ../gtk/gtkwidget.c:1249
+#: ../gtk/gtkwidget.c:1242
 msgid "Margin on Left"
 msgstr "Mala pa kreisi"
 
-#: ../gtk/gtkwidget.c:1250
+#: ../gtk/gtkwidget.c:1243
 msgid "Pixels of extra space on the left side"
 msgstr "Papildu vietas pikseļi kreisajā pusē"
 
-#: ../gtk/gtkwidget.c:1270
+#: ../gtk/gtkwidget.c:1263
 msgid "Margin on Right"
 msgstr "Mala pa labi"
 
-#: ../gtk/gtkwidget.c:1271
+#: ../gtk/gtkwidget.c:1264
 msgid "Pixels of extra space on the right side"
 msgstr "Papildu vietas pikseļi labajā pusē"
 
-#: ../gtk/gtkwidget.c:1291
+#: ../gtk/gtkwidget.c:1284
 msgid "Margin on Top"
 msgstr "Mala augšpusē"
 
-#: ../gtk/gtkwidget.c:1292
+#: ../gtk/gtkwidget.c:1285
 msgid "Pixels of extra space on the top side"
 msgstr "Papildu vietas pikseļi virspusē"
 
-#: ../gtk/gtkwidget.c:1312
+#: ../gtk/gtkwidget.c:1305
 msgid "Margin on Bottom"
 msgstr "Mala apakšā"
 
-#: ../gtk/gtkwidget.c:1313
+#: ../gtk/gtkwidget.c:1306
 msgid "Pixels of extra space on the bottom side"
 msgstr "Papildu vietas pikseļi apakšpusē"
 
-#: ../gtk/gtkwidget.c:1330
+#: ../gtk/gtkwidget.c:1323
 msgid "All Margins"
 msgstr "Visas malas"
 
-#: ../gtk/gtkwidget.c:1331
+#: ../gtk/gtkwidget.c:1324
 msgid "Pixels of extra space on all four sides"
 msgstr "Papildu vietas pikseļi visās četrās pusēs"
 
-#: ../gtk/gtkwidget.c:1364
+#: ../gtk/gtkwidget.c:1357
 msgid "Horizontal Expand"
 msgstr "Horizontāli izvērsts"
 
-#: ../gtk/gtkwidget.c:1365
+#: ../gtk/gtkwidget.c:1358
 msgid "Whether widget wants more horizontal space"
 msgstr "Vai logdaļai vajag vairāk horizontālās vietas"
 
-#: ../gtk/gtkwidget.c:1379
+#: ../gtk/gtkwidget.c:1372
 msgid "Horizontal Expand Set"
 msgstr "Horizontālais izvērsums iestatīts"
 
-#: ../gtk/gtkwidget.c:1380
+#: ../gtk/gtkwidget.c:1373
 msgid "Whether to use the hexpand property"
 msgstr "Vai izmantot hexpand īpašību"
 
-#: ../gtk/gtkwidget.c:1394
+#: ../gtk/gtkwidget.c:1387
 msgid "Vertical Expand"
 msgstr "Vertikāli izvērsts"
 
-#: ../gtk/gtkwidget.c:1395
+#: ../gtk/gtkwidget.c:1388
 msgid "Whether widget wants more vertical space"
 msgstr "Vai logdaļai vajag vairāk vertikālās vietas"
 
-#: ../gtk/gtkwidget.c:1409
+#: ../gtk/gtkwidget.c:1402
 msgid "Vertical Expand Set"
 msgstr "Vertikālais izvērsums iestatīts"
 
-#: ../gtk/gtkwidget.c:1410
+#: ../gtk/gtkwidget.c:1403
 msgid "Whether to use the vexpand property"
 msgstr "Vai izmantot vexpand īpašību"
 
-#: ../gtk/gtkwidget.c:1424
+#: ../gtk/gtkwidget.c:1417
 msgid "Expand Both"
 msgstr "Izvērst abus"
 
-#: ../gtk/gtkwidget.c:1425
+#: ../gtk/gtkwidget.c:1418
 msgid "Whether widget wants to expand in both directions"
 msgstr "Vai izvērst logdaļu abos virzienos"
 
-#: ../gtk/gtkwidget.c:3146
+#: ../gtk/gtkwidget.c:3139
 msgid "Interior Focus"
 msgstr "Iekšējais fokuss"
 
-#: ../gtk/gtkwidget.c:3147
+#: ../gtk/gtkwidget.c:3140
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Vai zīmēt fokusa indikatoru logdaļu iekšpusē"
 
-#: ../gtk/gtkwidget.c:3153
+#: ../gtk/gtkwidget.c:3146
 msgid "Focus linewidth"
 msgstr "Fokusa līnijas platums"
 
-#: ../gtk/gtkwidget.c:3154
+#: ../gtk/gtkwidget.c:3147
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Fokusa indikatora līnijas platums pikseļos"
 
-#: ../gtk/gtkwidget.c:3160
+#: ../gtk/gtkwidget.c:3153
 msgid "Focus line dash pattern"
 msgstr "Fokusēt līnijas svītras rakstu"
 
-#: ../gtk/gtkwidget.c:3161
+#: ../gtk/gtkwidget.c:3154
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Lietotais svītras raksts, lai zīmētu fokusa indikatoru"
 
-#: ../gtk/gtkwidget.c:3166
+#: ../gtk/gtkwidget.c:3159
 msgid "Focus padding"
 msgstr "Fokusa papildināšana"
 
-#: ../gtk/gtkwidget.c:3167
+#: ../gtk/gtkwidget.c:3160
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "Platums pikseļos starp fokusa indikatoru un logdaļas “kasti”"
 
-#: ../gtk/gtkwidget.c:3172
+#: ../gtk/gtkwidget.c:3165
 msgid "Cursor color"
 msgstr "Kursora krāsa"
 
-#: ../gtk/gtkwidget.c:3173
+#: ../gtk/gtkwidget.c:3166
 msgid "Color with which to draw insertion cursor"
 msgstr "Krāsa, ar kuru zīmēt ievietošanas kursoru"
 
-#: ../gtk/gtkwidget.c:3178
+#: ../gtk/gtkwidget.c:3171
 msgid "Secondary cursor color"
 msgstr "Otrā kursora krāsa"
 
-#: ../gtk/gtkwidget.c:3179
+#: ../gtk/gtkwidget.c:3172
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -7861,43 +7878,43 @@ msgstr ""
 "Krāsa, kādā zīmēt sekundāro ievietojuma kursoru, kad rediģē jaukto no-labās-"
 "uz-kreiso un no-kreisās-uz-labo tekstu"
 
-#: ../gtk/gtkwidget.c:3184
+#: ../gtk/gtkwidget.c:3177
 msgid "Cursor line aspect ratio"
 msgstr "Kursora līnijas skata proporcija"
 
-#: ../gtk/gtkwidget.c:3185
+#: ../gtk/gtkwidget.c:3178
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Skata proporcija, ar kuru zīmēt ievietojuma kursoru"
 
-#: ../gtk/gtkwidget.c:3191
+#: ../gtk/gtkwidget.c:3184
 msgid "Window dragging"
 msgstr "Loga vilkšana"
 
-#: ../gtk/gtkwidget.c:3192
+#: ../gtk/gtkwidget.c:3185
 msgid "Whether windows can be dragged by clicking on empty areas"
 msgstr "Vai logu var vilkt, klikšķinot uz tukša laukuma"
 
-#: ../gtk/gtkwidget.c:3205
+#: ../gtk/gtkwidget.c:3198
 msgid "Unvisited Link Color"
 msgstr "Neapmeklēto saišu krāsa"
 
-#: ../gtk/gtkwidget.c:3206
+#: ../gtk/gtkwidget.c:3199
 msgid "Color of unvisited links"
 msgstr "Neapmeklēto saišu krāsa"
 
-#: ../gtk/gtkwidget.c:3219
+#: ../gtk/gtkwidget.c:3212
 msgid "Visited Link Color"
 msgstr "Apmeklēto saišu krāsa"
 
-#: ../gtk/gtkwidget.c:3220
+#: ../gtk/gtkwidget.c:3213
 msgid "Color of visited links"
 msgstr "Apmeklēto saišu krāsa"
 
-#: ../gtk/gtkwidget.c:3234
+#: ../gtk/gtkwidget.c:3227
 msgid "Wide Separators"
 msgstr "Platais atdalītājs"
 
-#: ../gtk/gtkwidget.c:3235
+#: ../gtk/gtkwidget.c:3228
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
@@ -7905,87 +7922,87 @@ msgstr ""
 "Vai atdalītājam ir konfigurējams platums un vajadzētu tikt zīmētam, "
 "izmantojot kasti, nevis līniju"
 
-#: ../gtk/gtkwidget.c:3249
+#: ../gtk/gtkwidget.c:3242
 msgid "Separator Width"
 msgstr "Atdalītāja platums"
 
-#: ../gtk/gtkwidget.c:3250
+#: ../gtk/gtkwidget.c:3243
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "Atdalītāja platums, ja wide-separators ir PATIESS"
 
-#: ../gtk/gtkwidget.c:3264
+#: ../gtk/gtkwidget.c:3257
 msgid "Separator Height"
 msgstr "Atdalītāja augstums"
 
-#: ../gtk/gtkwidget.c:3265
+#: ../gtk/gtkwidget.c:3258
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "Atdalītāja augstums, ja wide-separators ir PATIESS"
 
-#: ../gtk/gtkwidget.c:3279
+#: ../gtk/gtkwidget.c:3272
 msgid "Horizontal Scroll Arrow Length"
 msgstr "Horizontālo ritjoslu garums"
 
-#: ../gtk/gtkwidget.c:3280
+#: ../gtk/gtkwidget.c:3273
 msgid "The length of horizontal scroll arrows"
 msgstr "Horizontālo ritjoslu garums"
 
-#: ../gtk/gtkwidget.c:3294
+#: ../gtk/gtkwidget.c:3287
 msgid "Vertical Scroll Arrow Length"
 msgstr "Vertikālo ritjoslu garums"
 
-#: ../gtk/gtkwidget.c:3295
+#: ../gtk/gtkwidget.c:3288
 msgid "The length of vertical scroll arrows"
 msgstr "Vertikālo ritjoslu garums"
 
-#: ../gtk/gtkwidget.c:3301 ../gtk/gtkwidget.c:3302
+#: ../gtk/gtkwidget.c:3294 ../gtk/gtkwidget.c:3295
 msgid "Width of text selection handles"
 msgstr "Platums teksta izvēles turiem"
 
-#: ../gtk/gtkwidget.c:3307 ../gtk/gtkwidget.c:3308
+#: ../gtk/gtkwidget.c:3300 ../gtk/gtkwidget.c:3301
 msgid "Height of text selection handles"
 msgstr "Augstums teksta izvēles turiem"
 
-#: ../gtk/gtkwindow.c:619
+#: ../gtk/gtkwindow.c:609
 msgid "Window Type"
 msgstr "Loga tips"
 
-#: ../gtk/gtkwindow.c:620
+#: ../gtk/gtkwindow.c:610
 msgid "The type of the window"
 msgstr "Loga tips"
 
-#: ../gtk/gtkwindow.c:628
+#: ../gtk/gtkwindow.c:618
 msgid "Window Title"
 msgstr "Loga virsraksts"
 
-#: ../gtk/gtkwindow.c:629
+#: ../gtk/gtkwindow.c:619
 msgid "The title of the window"
 msgstr "Loga virsraksts"
 
-#: ../gtk/gtkwindow.c:636
+#: ../gtk/gtkwindow.c:626
 msgid "Window Role"
 msgstr "Loga loma"
 
-#: ../gtk/gtkwindow.c:637
+#: ../gtk/gtkwindow.c:627
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr "Unikāls identifikators logam, ko izmanto, atjaunojot sesiju"
 
-#: ../gtk/gtkwindow.c:653
+#: ../gtk/gtkwindow.c:643
 msgid "Startup ID"
 msgstr "Sākuma ID"
 
-#: ../gtk/gtkwindow.c:654
+#: ../gtk/gtkwindow.c:644
 msgid "Unique startup identifier for the window used by startup-notification"
 msgstr "Unikāls sākuma identifikators logam, ko izmanto startup-notification"
 
-#: ../gtk/gtkwindow.c:662
+#: ../gtk/gtkwindow.c:652
 msgid "If TRUE, users can resize the window"
 msgstr "Ja PATIESS, lietotāji var mainīt loga izmēru"
 
-#: ../gtk/gtkwindow.c:669
+#: ../gtk/gtkwindow.c:659
 msgid "Modal"
 msgstr "Modāls"
 
-#: ../gtk/gtkwindow.c:670
+#: ../gtk/gtkwindow.c:660
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -7993,92 +8010,92 @@ msgstr ""
 "Ja PATIESS, tad logs ir modāls (citi logi nav lietojami kamēr šis ir "
 "virspusē)"
 
-#: ../gtk/gtkwindow.c:677
+#: ../gtk/gtkwindow.c:667
 msgid "Window Position"
 msgstr "Loga novietojums"
 
-#: ../gtk/gtkwindow.c:678
+#: ../gtk/gtkwindow.c:668
 msgid "The initial position of the window"
 msgstr "Sākotnējais loga novietojums"
 
-#: ../gtk/gtkwindow.c:686
+#: ../gtk/gtkwindow.c:676
 msgid "Default Width"
 msgstr "Noklusētais platums"
 
-#: ../gtk/gtkwindow.c:687
+#: ../gtk/gtkwindow.c:677
 msgid "The default width of the window, used when initially showing the window"
 msgstr "Noklusētais loga platums, ko izmanto, kad pirmo reizi parāda logu"
 
-#: ../gtk/gtkwindow.c:696
+#: ../gtk/gtkwindow.c:686
 msgid "Default Height"
 msgstr "Noklusētais augstums"
 
-#: ../gtk/gtkwindow.c:697
+#: ../gtk/gtkwindow.c:687
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr "Noklusētais loga augstums, ko izmanto, kad pirmo reizi parāda logu"
 
-#: ../gtk/gtkwindow.c:706
+#: ../gtk/gtkwindow.c:696
 msgid "Destroy with Parent"
 msgstr "Iznīcināt ar vecāku"
 
-#: ../gtk/gtkwindow.c:707
+#: ../gtk/gtkwindow.c:697
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Vai šis logs būtu jāiznīcina, kad tiek iznīcināts vecāks"
 
-#: ../gtk/gtkwindow.c:721
+#: ../gtk/gtkwindow.c:711
 msgid "Hide the titlebar during maximization"
 msgstr "Maksimizējot slēpt virsraksta joslu"
 
-#: ../gtk/gtkwindow.c:722
+#: ../gtk/gtkwindow.c:712
 msgid "If this window's titlebar should be hidden when the window is maximized"
 msgstr "Vai būtu jāslēpj šī loga virsraksta josla, kad logs tiek maksimizēts"
 
-#: ../gtk/gtkwindow.c:730
+#: ../gtk/gtkwindow.c:720
 msgid "Icon for this window"
 msgstr "Ikona šim logam"
 
-#: ../gtk/gtkwindow.c:748
+#: ../gtk/gtkwindow.c:738
 msgid "Mnemonics Visible"
 msgstr "Mnemonikas redzamas"
 
-#: ../gtk/gtkwindow.c:749
+#: ../gtk/gtkwindow.c:739
 msgid "Whether mnemonics are currently visible in this window"
 msgstr "Vai mnemonikas ir pašlaik redzamas šajā logā"
 
-#: ../gtk/gtkwindow.c:767
+#: ../gtk/gtkwindow.c:757
 msgid "Focus Visible"
 msgstr "Kursors redzams"
 
-#: ../gtk/gtkwindow.c:768
+#: ../gtk/gtkwindow.c:758
 msgid "Whether focus rectangles are currently visible in this window"
 msgstr "Vai fokusa taisnstūri ir pašlaik redzami šajā logā"
 
-#: ../gtk/gtkwindow.c:784
+#: ../gtk/gtkwindow.c:774
 msgid "Name of the themed icon for this window"
 msgstr "Šī loga motīva ikonu motīva nosaukums"
 
-#: ../gtk/gtkwindow.c:799
+#: ../gtk/gtkwindow.c:789
 msgid "Is Active"
 msgstr "Ir aktīvs"
 
-#: ../gtk/gtkwindow.c:800
+#: ../gtk/gtkwindow.c:790
 msgid "Whether the toplevel is the current active window"
 msgstr "Vai augšējais līmenis ir pašreizējais aktīvais logs"
 
-#: ../gtk/gtkwindow.c:807
+#: ../gtk/gtkwindow.c:797
 msgid "Focus in Toplevel"
 msgstr "Fokusēties augšējā līmenī"
 
-#: ../gtk/gtkwindow.c:808
+#: ../gtk/gtkwindow.c:798
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "Vai ievades fokuss ir iekš šī GtkWindow"
 
-#: ../gtk/gtkwindow.c:815
+#: ../gtk/gtkwindow.c:805
 msgid "Type hint"
 msgstr "Tipa padoms"
 
-#: ../gtk/gtkwindow.c:816
+#: ../gtk/gtkwindow.c:806
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
@@ -8086,123 +8103,123 @@ msgstr ""
 "Padoms, lai palīdzētu darbvirsmas videi saprast, kas šis ir par logu un kā "
 "ar to apieties."
 
-#: ../gtk/gtkwindow.c:824
+#: ../gtk/gtkwindow.c:814
 msgid "Skip taskbar"
 msgstr "Izlaist uzdevumu joslu"
 
-#: ../gtk/gtkwindow.c:825
+#: ../gtk/gtkwindow.c:815
 msgid "TRUE if the window should not be in the task bar."
 msgstr "PATIESS, ja logam nevajadzētu atrasties uzdevumu joslā."
 
-#: ../gtk/gtkwindow.c:832
+#: ../gtk/gtkwindow.c:822
 msgid "Skip pager"
 msgstr "Izlaist peidžeri"
 
-#: ../gtk/gtkwindow.c:833
+#: ../gtk/gtkwindow.c:823
 msgid "TRUE if the window should not be in the pager."
 msgstr "PATIESS, ja logam nevajadzētu atrasties peidžerī."
 
-#: ../gtk/gtkwindow.c:840
+#: ../gtk/gtkwindow.c:830
 msgid "Urgent"
 msgstr "Steidzams"
 
-#: ../gtk/gtkwindow.c:841
+#: ../gtk/gtkwindow.c:831
 msgid "TRUE if the window should be brought to the user's attention."
 msgstr "PATIESS, ja logam vajadzētu piesaistīt lietotāja uzmanību."
 
-#: ../gtk/gtkwindow.c:855
+#: ../gtk/gtkwindow.c:845
 msgid "Accept focus"
 msgstr "Pieņemt fokusu"
 
-#: ../gtk/gtkwindow.c:856
+#: ../gtk/gtkwindow.c:846
 msgid "TRUE if the window should receive the input focus."
 msgstr "PATIESS, ja logam būtu jāsaņem ievades fokuss."
 
-#: ../gtk/gtkwindow.c:870
+#: ../gtk/gtkwindow.c:860
 msgid "Focus on map"
 msgstr "Fokuss uz kartes"
 
-#: ../gtk/gtkwindow.c:871
+#: ../gtk/gtkwindow.c:861
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "PATIESS, ja logam būtu jāsaņem ievades fokuss, kad tas tiek kartēts."
 
-#: ../gtk/gtkwindow.c:885
+#: ../gtk/gtkwindow.c:875
 msgid "Decorated"
 msgstr "Rotāts"
 
-#: ../gtk/gtkwindow.c:886
+#: ../gtk/gtkwindow.c:876
 msgid "Whether the window should be decorated by the window manager"
 msgstr "Vai loga pārvaldniekam būtu jādekorē logs"
 
-#: ../gtk/gtkwindow.c:900
+#: ../gtk/gtkwindow.c:890
 msgid "Deletable"
 msgstr "Dzēšams"
 
-#: ../gtk/gtkwindow.c:901
+#: ../gtk/gtkwindow.c:891
 msgid "Whether the window frame should have a close button"
 msgstr "Vai loga ietvaram vajadzīga loga aizvēršanas poga"
 
-#: ../gtk/gtkwindow.c:920
+#: ../gtk/gtkwindow.c:910
 msgid "Resize grip"
 msgstr "Izmēra maiņas rokturis"
 
-#: ../gtk/gtkwindow.c:921
+#: ../gtk/gtkwindow.c:911
 msgid "Specifies whether the window should have a resize grip"
 msgstr "Vai logam vajadzīgs izmēra maiņas rokturis"
 
-#: ../gtk/gtkwindow.c:935
+#: ../gtk/gtkwindow.c:925
 msgid "Resize grip is visible"
 msgstr "Izmēra maiņas rokturis redzams"
 
-#: ../gtk/gtkwindow.c:936
+#: ../gtk/gtkwindow.c:926
 msgid "Specifies whether the window's resize grip is visible."
 msgstr "Vai loga izmēra maiņas rokturis ir redzams."
 
-#: ../gtk/gtkwindow.c:952
+#: ../gtk/gtkwindow.c:942
 msgid "Gravity"
 msgstr "Gravitācija"
 
-#: ../gtk/gtkwindow.c:953
+#: ../gtk/gtkwindow.c:943
 msgid "The window gravity of the window"
 msgstr "Loga gravitācija"
 
-#: ../gtk/gtkwindow.c:970
+#: ../gtk/gtkwindow.c:960
 msgid "Transient for Window"
 msgstr "Pārejošs logam"
 
-#: ../gtk/gtkwindow.c:971
+#: ../gtk/gtkwindow.c:961
 msgid "The transient parent of the dialog"
 msgstr "Pārejošs dialoglodziņa vecāks"
 
-#: ../gtk/gtkwindow.c:991
+#: ../gtk/gtkwindow.c:981
 msgid "Attached to Widget"
 msgstr "Pievienots pie logdaļas"
 
-#: ../gtk/gtkwindow.c:992
+#: ../gtk/gtkwindow.c:982
 msgid "The widget where the window is attached"
 msgstr "Logdaļa, kurai ir piesaistīts logs"
 
-#: ../gtk/gtkwindow.c:1007
+#: ../gtk/gtkwindow.c:997
 msgid "Opacity for Window"
 msgstr "Loga necaurspīdība"
 
-#: ../gtk/gtkwindow.c:1008
+#: ../gtk/gtkwindow.c:998
 msgid "The opacity of the window, from 0 to 1"
 msgstr "Loga necaurspīdīgums no 0 līdz 1"
 
-#: ../gtk/gtkwindow.c:1018 ../gtk/gtkwindow.c:1019
+#: ../gtk/gtkwindow.c:1008 ../gtk/gtkwindow.c:1009
 msgid "Width of resize grip"
 msgstr "Izmēra maiņas roktura platums"
 
-#: ../gtk/gtkwindow.c:1024 ../gtk/gtkwindow.c:1025
+#: ../gtk/gtkwindow.c:1014 ../gtk/gtkwindow.c:1015
 msgid "Height of resize grip"
 msgstr "Izmēra maiņas roktura augstums"
 
-#: ../gtk/gtkwindow.c:1047
+#: ../gtk/gtkwindow.c:1037
 msgid "GtkApplication"
 msgstr "GtkApplication"
 
-#: ../gtk/gtkwindow.c:1048
+#: ../gtk/gtkwindow.c:1038
 msgid "The GtkApplication for the window"
 msgstr "GtkApplication logam"
 
@@ -8213,6 +8230,9 @@ msgstr "Krāsu profila nosaukums"
 #: ../modules/printbackends/cups/gtkprintercups.c:94
 msgid "The title of the color profile to use"
 msgstr "Lietojamā krāsu profila nosaukums"
+
+#~ msgid "menu"
+#~ msgstr "izvēlne"
 
 #~| msgid "Device type"
 #~ msgid "Specified type"

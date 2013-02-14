@@ -62,13 +62,11 @@ gtk_css_matcher_widget_path_get_state (const GtkCssMatcher *matcher)
 }
 
 static gboolean
-gtk_css_matcher_widget_path_has_name (const GtkCssMatcher *matcher,
-                                      const char          *name)
+gtk_css_matcher_widget_path_has_type (const GtkCssMatcher *matcher,
+                                      GType                type)
 {
   const GtkWidgetPath *siblings;
-  GType type;
-  
-  type = g_type_from_name (name);
+
   siblings = gtk_widget_path_iter_get_siblings (matcher->path.path, matcher->path.index);
   if (siblings && matcher->path.sibling_index != gtk_widget_path_iter_get_sibling_index (matcher->path.path, matcher->path.index))
     return g_type_is_a (gtk_widget_path_iter_get_object_type (siblings, matcher->path.sibling_index), type);
@@ -179,12 +177,13 @@ static const GtkCssMatcherClass GTK_CSS_MATCHER_WIDGET_PATH = {
   gtk_css_matcher_widget_path_get_parent,
   gtk_css_matcher_widget_path_get_previous,
   gtk_css_matcher_widget_path_get_state,
-  gtk_css_matcher_widget_path_has_name,
+  gtk_css_matcher_widget_path_has_type,
   gtk_css_matcher_widget_path_has_class,
   gtk_css_matcher_widget_path_has_id,
   gtk_css_matcher_widget_path_has_regions,
   gtk_css_matcher_widget_path_has_region,
   gtk_css_matcher_widget_path_has_position,
+  FALSE
 };
 
 gboolean
@@ -235,8 +234,8 @@ gtk_css_matcher_any_get_state (const GtkCssMatcher *matcher)
 }
 
 static gboolean
-gtk_css_matcher_any_has_name (const GtkCssMatcher *matcher,
-                              const char          *name)
+gtk_css_matcher_any_has_type (const GtkCssMatcher *matcher,
+                              GType                type)
 {
   return TRUE;
 }
@@ -282,12 +281,13 @@ static const GtkCssMatcherClass GTK_CSS_MATCHER_ANY = {
   gtk_css_matcher_any_get_parent,
   gtk_css_matcher_any_get_previous,
   gtk_css_matcher_any_get_state,
-  gtk_css_matcher_any_has_name,
+  gtk_css_matcher_any_has_type,
   gtk_css_matcher_any_has_class,
   gtk_css_matcher_any_has_id,
   gtk_css_matcher_any_has_regions,
   gtk_css_matcher_any_has_region,
   gtk_css_matcher_any_has_position,
+  TRUE
 };
 
 void
@@ -330,11 +330,11 @@ gtk_css_matcher_superset_get_state (const GtkCssMatcher *matcher)
 }
 
 static gboolean
-gtk_css_matcher_superset_has_name (const GtkCssMatcher *matcher,
-                                   const char          *name)
+gtk_css_matcher_superset_has_type (const GtkCssMatcher *matcher,
+                                   GType                type)
 {
   if (matcher->superset.relevant & GTK_CSS_CHANGE_NAME)
-    return _gtk_css_matcher_has_name (matcher->superset.subset, name);
+    return _gtk_css_matcher_has_type (matcher->superset.subset, type);
   else
     return TRUE;
 }
@@ -400,12 +400,13 @@ static const GtkCssMatcherClass GTK_CSS_MATCHER_SUPERSET = {
   gtk_css_matcher_superset_get_parent,
   gtk_css_matcher_superset_get_previous,
   gtk_css_matcher_superset_get_state,
-  gtk_css_matcher_superset_has_name,
+  gtk_css_matcher_superset_has_type,
   gtk_css_matcher_superset_has_class,
   gtk_css_matcher_superset_has_id,
   gtk_css_matcher_superset_has_regions,
   gtk_css_matcher_superset_has_region,
   gtk_css_matcher_superset_has_position,
+  FALSE
 };
 
 void

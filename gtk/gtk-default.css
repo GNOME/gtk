@@ -715,5 +715,17 @@ GtkCalendar.button:hover {
 }
 
 .spinner:active {
+   background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.916667)), to(transparent)),
+                     -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.833333)), to(transparent)),
+                     -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.75)), to(transparent)),
+                     -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.666667)), to(transparent)),
+                     -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.583333)), to(transparent)),
+                     -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.5)), to(transparent)),
+                     -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.416667)), to(transparent)),
+                     -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.333333)), to(transparent)),
+                     -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.25)), to(transparent)),
+                     -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.166667)), to(transparent)),
+                     -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.0833333)), to(transparent)),
+                     -gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent));
   animation: spinner 1s infinite linear;
 }

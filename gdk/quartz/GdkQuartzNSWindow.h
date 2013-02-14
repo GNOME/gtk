@@ -23,6 +23,7 @@
 @interface GdkQuartzNSWindow : NSWindow {
   BOOL    inMove;
   BOOL    inShowOrHide;
+  BOOL    initialPositionKnown;
 
   /* Manually triggered move/resize (not by the window manager) */
   BOOL    inManualMove;

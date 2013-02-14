@@ -22,123 +22,95 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-
-#define GDK_SETTINGS_N_ELEMENTS()       G_N_ELEMENTS (gdk_settings_map)
-#define GDK_SETTINGS_X_NAME(nth)        (gdk_settings_names + gdk_settings_map[nth].xsettings_offset)
-#define GDK_SETTINGS_GDK_NAME(nth)      (gdk_settings_names + gdk_settings_map[nth].gdk_offset)
-
-/* WARNING:
- * You will need to update gdk_settings_map when adding a
- * new setting, and make sure that checksettings does not
- * fail before committing
- */
-static const char gdk_settings_names[] =
-  "Net/DoubleClickTime\0"     "gtk-double-click-time\0"
-  "Net/DoubleClickDistance\0" "gtk-double-click-distance\0"
-  "Net/DndDragThreshold\0"    "gtk-dnd-drag-threshold\0"
-  "Net/CursorBlink\0"         "gtk-cursor-blink\0"
-  "Net/CursorBlinkTime\0"     "gtk-cursor-blink-time\0"
-  "Net/ThemeName\0"           "gtk-theme-name\0"
-  "Net/IconThemeName\0"       "gtk-icon-theme-name\0"
-  "Gtk/CanChangeAccels\0"     "gtk-can-change-accels\0"
-  "Gtk/ColorPalette\0"        "gtk-color-palette\0"
-  "Gtk/FontName\0"            "gtk-font-name\0"
-  "Gtk/IconSizes\0"           "gtk-icon-sizes\0"
-  "Gtk/KeyThemeName\0"        "gtk-key-theme-name\0"
-  "Gtk/ToolbarStyle\0"        "gtk-toolbar-style\0"
-  "Gtk/ToolbarIconSize\0"     "gtk-toolbar-icon-size\0"
-  "Gtk/IMPreeditStyle\0"      "gtk-im-preedit-style\0"
-  "Gtk/IMStatusStyle\0"       "gtk-im-status-style\0"
-  "Gtk/Modules\0"             "gtk-modules\0"
-  "Gtk/FileChooserBackend\0"  "gtk-file-chooser-backend\0"
-  "Gtk/ButtonImages\0"        "gtk-button-images\0"
-  "Gtk/MenuImages\0"          "gtk-menu-images\0"
-  "Gtk/MenuBarAccel\0"        "gtk-menu-bar-accel\0"
-  "Gtk/CursorThemeName\0"     "gtk-cursor-theme-name\0"
-  "Gtk/CursorThemeSize\0"     "gtk-cursor-theme-size\0"
-  "Gtk/ShowInputMethodMenu\0" "gtk-show-input-method-menu\0"
-  "Gtk/ShowUnicodeMenu\0"     "gtk-show-unicode-menu\0"
-  "Gtk/TimeoutInitial\0"      "gtk-timeout-initial\0"
-  "Gtk/TimeoutRepeat\0"       "gtk-timeout-repeat\0"
-  "Gtk/ColorScheme\0"         "gtk-color-scheme\0"
-  "Gtk/EnableAnimations\0"    "gtk-enable-animations\0"
-  "Xft/Antialias\0"           "gtk-xft-antialias\0"
-  "Xft/Hinting\0"             "gtk-xft-hinting\0"
-  "Xft/HintStyle\0"           "gtk-xft-hintstyle\0"
-  "Xft/RGBA\0"                "gtk-xft-rgba\0"
-  "Xft/DPI\0"                 "gtk-xft-dpi\0"
-  "Net/FallbackIconTheme\0"   "gtk-fallback-icon-theme\0"
-  "Gtk/TouchscreenMode\0"     "gtk-touchscreen-mode\0"
-  "Gtk/EnableAccels\0"        "gtk-enable-accels\0"
-  "Gtk/EnableMnemonics\0"     "gtk-enable-mnemonics\0"
-  "Gtk/ScrolledWindowPlacement\0" "gtk-scrolled-window-placement\0"
-  "Gtk/IMModule\0"            "gtk-im-module\0"
-  "Fontconfig/Timestamp\0"    "gtk-fontconfig-timestamp\0"
-  "Net/SoundThemeName\0"      "gtk-sound-theme-name\0"
-  "Net/EnableInputFeedbackSounds\0" "gtk-enable-input-feedback-sounds\0"
-  "Net/EnableEventSounds\0"   "gtk-enable-event-sounds\0"
-  "Gtk/CursorBlinkTimeout\0"  "gtk-cursor-blink-timeout\0"
-  "Gtk/AutoMnemonics\0"       "gtk-auto-mnemonics\0"
-  "Gtk/VisibleFocus\0"        "gtk-visible-focus\0"
-  "Gtk/ShellShowsAppMenu\0"   "gtk-shell-shows-app-menu\0"
-  "Gtk/ShellShowsMenubar\0"   "gtk-shell-shows-menubar\0"
-  "Gtk/EnablePrimaryPaste\0"  "gtk-enable-primary-paste\0";
-
-
-
-static const struct
-{
-  gint xsettings_offset;
-  gint gdk_offset;
+static const struct {
+  const char *xname, *gdkname;
 } gdk_settings_map[] = {
-  {    0,   20 },
-  {   42,   66 },
-  {   92,  113 },
-  {  136,  152 },
-  {  169,  189 },
-  {  211,  225 },
-  {  240,  258 },
-  {  278,  298 },
-  {  320,  337 },
-  {  355,  368 },
-  {  382,  396 },
-  {  411,  428 },
-  {  447,  464 },
-  {  482,  502 },
-  {  524,  543 },
-  {  564,  582 },
-  {  602,  614 },
-  {  626,  649 },
-  {  674,  691 },
-  {  709,  724 },
-  {  740,  757 },
-  {  776,  796 },
-  {  818,  838 },
-  {  860,  884 },
-  {  911,  931 },
-  {  953,  972 },
-  {  992, 1010 },
-  { 1029, 1045 },
-  { 1062, 1083 },
-  { 1105, 1119 },
-  { 1137, 1149 },
-  { 1165, 1179 },
-  { 1197, 1206 },
-  { 1219, 1227 },
-  { 1239, 1261 },
-  { 1285, 1305 },
-  { 1326, 1343 },
-  { 1361, 1381 },
-  { 1402, 1430 },
-  { 1460, 1473 },
-  { 1487, 1508 },
-  { 1533, 1552 },
-  { 1573, 1603 },
-  { 1636, 1658 },
-  { 1682, 1705 },
-  { 1730, 1748 },
-  { 1767, 1784 },
-  { 1802, 1824 },
-  { 1849, 1871 },
-  { 1895, 1918 }
+  {"Net/DoubleClickTime",     "gtk-double-click-time"},
+  {"Net/DoubleClickDistance", "gtk-double-click-distance"},
+  {"Net/DndDragThreshold",    "gtk-dnd-drag-threshold"},
+  {"Net/CursorBlink",         "gtk-cursor-blink"},
+  {"Net/CursorBlinkTime",     "gtk-cursor-blink-time"},
+  {"Net/ThemeName",           "gtk-theme-name"},
+  {"Net/IconThemeName",       "gtk-icon-theme-name"},
+  {"Gtk/CanChangeAccels",     "gtk-can-change-accels"},
+  {"Gtk/ColorPalette",        "gtk-color-palette"},
+  {"Gtk/FontName",            "gtk-font-name"},
+  {"Gtk/IconSizes",           "gtk-icon-sizes"},
+  {"Gtk/KeyThemeName",        "gtk-key-theme-name"},
+  {"Gtk/ToolbarStyle",        "gtk-toolbar-style"},
+  {"Gtk/ToolbarIconSize",     "gtk-toolbar-icon-size"},
+  {"Gtk/IMPreeditStyle",      "gtk-im-preedit-style"},
+  {"Gtk/IMStatusStyle",       "gtk-im-status-style"},
+  {"Gtk/Modules",             "gtk-modules"},
+  {"Gtk/FileChooserBackend",  "gtk-file-chooser-backend"},
+  {"Gtk/ButtonImages",        "gtk-button-images"},
+  {"Gtk/MenuImages",          "gtk-menu-images"},
+  {"Gtk/MenuBarAccel",        "gtk-menu-bar-accel"},
+  {"Gtk/CursorThemeName",     "gtk-cursor-theme-name"},
+  {"Gtk/CursorThemeSize",     "gtk-cursor-theme-size"},
+  {"Gtk/ShowInputMethodMenu", "gtk-show-input-method-menu"},
+  {"Gtk/ShowUnicodeMenu",     "gtk-show-unicode-menu"},
+  {"Gtk/TimeoutInitial",      "gtk-timeout-initial"},
+  {"Gtk/TimeoutRepeat",       "gtk-timeout-repeat"},
+  {"Gtk/ColorScheme",         "gtk-color-scheme"},
+  {"Gtk/EnableAnimations",    "gtk-enable-animations"},
+  {"Xft/Antialias",           "gtk-xft-antialias"},
+  {"Xft/Hinting",             "gtk-xft-hinting"},
+  {"Xft/HintStyle",           "gtk-xft-hintstyle"},
+  {"Xft/RGBA",                "gtk-xft-rgba"},
+  {"Xft/DPI",                 "gtk-xft-dpi"},
+  {"Net/FallbackIconTheme",   "gtk-fallback-icon-theme"},
+  {"Gtk/TouchscreenMode",     "gtk-touchscreen-mode"},
+  {"Gtk/EnableAccels",        "gtk-enable-accels"},
+  {"Gtk/EnableMnemonics",     "gtk-enable-mnemonics"},
+  {"Gtk/ScrolledWindowPlacement", "gtk-scrolled-window-placement"},
+  {"Gtk/IMModule",            "gtk-im-module"},
+  {"Fontconfig/Timestamp",    "gtk-fontconfig-timestamp"},
+  {"Net/SoundThemeName",      "gtk-sound-theme-name"},
+  {"Net/EnableInputFeedbackSounds", "gtk-enable-input-feedback-sounds"},
+  {"Net/EnableEventSounds",   "gtk-enable-event-sounds"},
+  {"Gtk/CursorBlinkTimeout",  "gtk-cursor-blink-timeout"},
+  {"Gtk/AutoMnemonics",       "gtk-auto-mnemonics"},
+  {"Gtk/VisibleFocus",        "gtk-visible-focus"},
+  {"Gtk/ShellShowsAppMenu",   "gtk-shell-shows-app-menu"},
+  {"Gtk/ShellShowsMenubar",   "gtk-shell-shows-menubar"},
+  {"Gtk/EnablePrimaryPaste",  "gtk-enable-primary-paste"},
+  {"Gtk/RecentFilesMaxAge",   "gtk-recent-files-max-age"},
+  {"Gtk/RecentFilesEnabled",  "gtk-recent-files-enabled"}
 };
+
+static const char *
+gdk_from_xsettings_name (const char *xname)
+{
+  static GHashTable *hash = NULL;
+  guint i;
+
+  if (G_UNLIKELY (hash == NULL))
+  {
+    hash = g_hash_table_new (g_str_hash, g_str_equal);
+
+    for (i = 0; i < G_N_ELEMENTS (gdk_settings_map); i++)
+      g_hash_table_insert (hash, (gpointer)gdk_settings_map[i].xname,
+                                 (gpointer)gdk_settings_map[i].gdkname);
+  }
+
+  return g_hash_table_lookup (hash, xname);
+}
+
+static const char *
+gdk_to_xsettings_name (const char *gdkname)
+{
+  static GHashTable *hash = NULL;
+  guint i;
+
+  if (G_UNLIKELY (hash == NULL))
+  {
+    hash = g_hash_table_new (g_str_hash, g_str_equal);
+
+    for (i = 0; i < G_N_ELEMENTS (gdk_settings_map); i++)
+      g_hash_table_insert (hash, (gpointer)gdk_settings_map[i].gdkname,
+                                 (gpointer)gdk_settings_map[i].xname);
+  }
+
+  return g_hash_table_lookup (hash, gdkname);
+}

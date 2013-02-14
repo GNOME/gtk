@@ -44,7 +44,7 @@ _gtk_style_provider_private_default_init (GtkStyleProviderPrivateInterface *ifac
 
 }
 
-GtkSymbolicColor *
+GtkCssValue *
 _gtk_style_provider_private_get_color (GtkStyleProviderPrivate *provider,
                                        const char              *name)
 {
@@ -123,5 +123,20 @@ _gtk_style_provider_private_changed (GtkStyleProviderPrivate *provider)
   g_return_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider));
 
   g_signal_emit (provider, signals[CHANGED], 0);
+}
+
+GtkSettings *
+_gtk_style_provider_private_get_settings (GtkStyleProviderPrivate *provider)
+{
+  GtkStyleProviderPrivateInterface *iface;
+
+  g_return_val_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider), NULL);
+
+  iface = GTK_STYLE_PROVIDER_PRIVATE_GET_INTERFACE (provider);
+
+  if (!iface->get_settings)
+    return NULL;
+
+  return iface->get_settings (provider);
 }
 

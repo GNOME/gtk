@@ -1369,15 +1369,14 @@ _gdk_x11_display_open (const gchar *display_name)
     XSynchronize (display_x11->xdisplay, True);
 
   class_hint = XAllocClassHint();
-  class_hint->res_name = g_get_prgname ();
-
+  class_hint->res_name = (char *) g_get_prgname ();
   class_hint->res_class = (char *)gdk_get_program_class ();
 
   /* XmbSetWMProperties sets the RESOURCE_NAME environment variable
    * from argv[0], so we just synthesize an argument array here.
    */
   argc = 1;
-  argv[0] = g_get_prgname ();
+  argv[0] = (char *) g_get_prgname ();
 
   XmbSetWMProperties (display_x11->xdisplay,
 		      display_x11->leader_window,

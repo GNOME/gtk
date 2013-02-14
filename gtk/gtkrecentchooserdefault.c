@@ -922,7 +922,7 @@ set_default_size (GtkRecentChooserDefault *impl)
   GtkScrolledWindow *scrollw;
   GtkWidget *widget;
   gint width, height;
-  gint font_size;
+  double font_size;
   GdkScreen *screen;
   gint monitor_num;
   GtkRequisition req;
@@ -935,11 +935,10 @@ set_default_size (GtkRecentChooserDefault *impl)
   state = gtk_widget_get_state_flags (widget);
 
   /* Size based on characters and the icon size */
-  font_size = pango_font_description_get_size (gtk_style_context_get_font (context, state));
-  font_size = PANGO_PIXELS (font_size);
+  gtk_style_context_get (context, state, "font-size", &font_size, NULL);
 
-  width = impl->icon_size + font_size * NUM_CHARS;
-  height = (impl->icon_size + font_size) * NUM_LINES;
+  width = impl->icon_size + font_size * NUM_CHARS + 0.5;
+  height = (impl->icon_size + font_size) * NUM_LINES + 0.5;
 
   /* Use at least the requisition size... */
   gtk_widget_get_preferred_size (widget, &req, NULL);

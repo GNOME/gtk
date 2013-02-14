@@ -1,4 +1,4 @@
-/* GAIL - The GNOME Accessibility Enabling Library
+/* GTK+ - accessibility implementations
  * Copyright 2001, 2002, 2003 Sun Microsystems Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -30,11 +30,11 @@ struct _GtkLabelAccessiblePrivate
 
 static void atk_text_interface_init (AtkTextIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkLabelAccessible, _gtk_label_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
+G_DEFINE_TYPE_WITH_CODE (GtkLabelAccessible, gtk_label_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init))
 
 static void
-_gtk_label_accessible_init (GtkLabelAccessible *label)
+gtk_label_accessible_init (GtkLabelAccessible *label)
 {
   label->priv = G_TYPE_INSTANCE_GET_PRIVATE (label,
                                              GTK_TYPE_LABEL_ACCESSIBLE,
@@ -48,7 +48,7 @@ gtk_label_accessible_initialize (AtkObject *obj,
   GtkWidget  *widget;
   GtkLabelAccessible *accessible;
 
-  ATK_OBJECT_CLASS (_gtk_label_accessible_parent_class)->initialize (obj, data);
+  ATK_OBJECT_CLASS (gtk_label_accessible_parent_class)->initialize (obj, data);
 
   accessible = GTK_LABEL_ACCESSIBLE (obj);
 
@@ -148,7 +148,7 @@ gtk_label_accessible_notify_gtk (GObject    *obj,
         g_signal_emit_by_name (atk_obj, "text-selection-changed");
     }
   else
-    GTK_WIDGET_ACCESSIBLE_CLASS (_gtk_label_accessible_parent_class)->notify_gtk (obj, pspec);
+    GTK_WIDGET_ACCESSIBLE_CLASS (gtk_label_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
 static void
@@ -158,7 +158,7 @@ gtk_label_accessible_finalize (GObject *object)
 
   g_free (accessible->priv->text);
 
-  G_OBJECT_CLASS (_gtk_label_accessible_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_label_accessible_parent_class)->finalize (object);
 }
 
 
@@ -174,7 +174,7 @@ gtk_label_accessible_ref_state_set (AtkObject *accessible)
   if (widget == NULL)
     return NULL;
 
-  state_set = ATK_OBJECT_CLASS (_gtk_label_accessible_parent_class)->ref_state_set (accessible);
+  state_set = ATK_OBJECT_CLASS (gtk_label_accessible_parent_class)->ref_state_set (accessible);
   atk_state_set_add_state (state_set, ATK_STATE_MULTI_LINE);
 
   return state_set;
@@ -192,7 +192,7 @@ gtk_label_accessible_ref_relation_set (AtkObject *obj)
   if (widget == NULL)
     return NULL;
 
-  relation_set = ATK_OBJECT_CLASS (_gtk_label_accessible_parent_class)->ref_relation_set (obj);
+  relation_set = ATK_OBJECT_CLASS (gtk_label_accessible_parent_class)->ref_relation_set (obj);
 
   if (!atk_relation_set_contains (relation_set, ATK_RELATION_LABEL_FOR))
     {
@@ -251,7 +251,7 @@ gtk_label_accessible_get_name (AtkObject *accessible)
 
   g_return_val_if_fail (GTK_IS_LABEL_ACCESSIBLE (accessible), NULL);
 
-  name = ATK_OBJECT_CLASS (_gtk_label_accessible_parent_class)->get_name (accessible);
+  name = ATK_OBJECT_CLASS (gtk_label_accessible_parent_class)->get_name (accessible);
   if (name != NULL)
     return name;
   else
@@ -272,7 +272,7 @@ gtk_label_accessible_get_name (AtkObject *accessible)
 }
 
 static void
-_gtk_label_accessible_class_init (GtkLabelAccessibleClass *klass)
+gtk_label_accessible_class_init (GtkLabelAccessibleClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);

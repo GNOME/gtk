@@ -1,4 +1,4 @@
-/* GAIL - The GNOME Accessibility Enabling Library
+/* GTK+ - accessibility implementations
  * Copyright 2001 Sun Microsystems Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -18,12 +18,16 @@
 #ifndef __GTK_CONTAINER_CELL_ACCESSIBLE_H__
 #define __GTK_CONTAINER_CELL_ACCESSIBLE_H__
 
+#if !defined (__GTK_A11Y_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk-a11y.h> can be included directly."
+#endif
+
 #include <atk/atk.h>
-#include "gtkcellaccessible.h"
+#include <gtk/a11y/gtkcellaccessible.h>
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_CONTAINER_CELL_ACCESSIBLE            (_gtk_container_cell_accessible_get_type ())
+#define GTK_TYPE_CONTAINER_CELL_ACCESSIBLE            (gtk_container_cell_accessible_get_type ())
 #define GTK_CONTAINER_CELL_ACCESSIBLE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CONTAINER_CELL_ACCESSIBLE, GtkContainerCellAccessible))
 #define GTK_CONTAINER_CELL_ACCESSIBLE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_CONTAINER_CELL_ACCESSIBLE, GtkContainerCellAccessibleClass))
 #define GTK_IS_CONTAINER_CELL_ACCESSIBLE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CONTAINER_CELL_ACCESSIBLE))
@@ -46,14 +50,14 @@ struct _GtkContainerCellAccessibleClass
   GtkCellAccessibleClass parent_class;
 };
 
-GType                       _gtk_container_cell_accessible_get_type     (void);
+GType                       gtk_container_cell_accessible_get_type     (void);
 
-GtkContainerCellAccessible *_gtk_container_cell_accessible_new          (void);
-void                        _gtk_container_cell_accessible_add_child    (GtkContainerCellAccessible *container,
-                                                                         GtkCellAccessible          *child);
-void                        _gtk_container_cell_accessible_remove_child (GtkContainerCellAccessible *container,
-                                                                         GtkCellAccessible          *child);
-GList                     *_gtk_container_cell_accessible_get_children  (GtkContainerCellAccessible *container);
+GtkContainerCellAccessible *gtk_container_cell_accessible_new          (void);
+void                        gtk_container_cell_accessible_add_child    (GtkContainerCellAccessible *container,
+                                                                        GtkCellAccessible          *child);
+void                        gtk_container_cell_accessible_remove_child (GtkContainerCellAccessible *container,
+                                                                        GtkCellAccessible          *child);
+GList                      *gtk_container_cell_accessible_get_children  (GtkContainerCellAccessible *container);
 
 G_END_DECLS
 

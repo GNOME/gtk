@@ -22,13 +22,13 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
-
 #ifndef __GTK_WINDOW_H__
 #define __GTK_WINDOW_H__
 
+
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
 
 #include <gtk/gtkapplication.h>
 #include <gtk/gtkaccelgroup.h>
@@ -138,8 +138,10 @@ void       gtk_window_set_attached_to          (GtkWindow           *window,
                                                 GtkWidget           *attach_widget);
 GDK_AVAILABLE_IN_3_4
 GtkWidget *gtk_window_get_attached_to          (GtkWindow           *window);
+GDK_DEPRECATED_IN_3_8_FOR(gtk_widget_set_opacity)
 void       gtk_window_set_opacity              (GtkWindow           *window, 
 						gdouble              opacity);
+GDK_DEPRECATED_IN_3_8_FOR(gtk_widget_get_opacity)
 gdouble    gtk_window_get_opacity              (GtkWindow           *window);
 void       gtk_window_set_type_hint            (GtkWindow           *window, 
 						GdkWindowTypeHint    hint);

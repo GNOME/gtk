@@ -355,6 +355,9 @@ gdk_window_maximize
 gdk_window_unmaximize
 gdk_window_fullscreen
 gdk_window_unfullscreen
+GdkFullscreenMode
+gdk_window_get_fullscreen_mode
+gdk_window_set_fullscreen_mode
 gdk_window_set_keep_above
 gdk_window_set_keep_below
 gdk_window_set_opacity
@@ -517,6 +520,7 @@ GdkWindowRedirect
 gdk_window_impl_get_type
 gdk_window_freeze_toplevel_updates_libgtk_only
 gdk_window_thaw_toplevel_updates_libgtk_only
+gdk_fullscreen_mode_get_type
 </SECTION>
 
 <SECTION>

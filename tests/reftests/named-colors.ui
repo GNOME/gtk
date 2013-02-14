@@ -1,0 +1,2264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkWindow" id="window1">
+    <property name="can_focus">False</property>
+    <property name="type">popup</property>
+    <child>
+      <object class="GtkGrid" id="grid0">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkLabel" id="label0">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color0</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label10">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color10</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">0</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label20">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color20</property>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="top_attach">0</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label30">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color30</property>
+          </object>
+          <packing>
+            <property name="left_attach">3</property>
+            <property name="top_attach">0</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label40">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color40</property>
+          </object>
+          <packing>
+            <property name="left_attach">4</property>
+            <property name="top_attach">0</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label50">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color50</property>
+          </object>
+          <packing>
+            <property name="left_attach">5</property>
+            <property name="top_attach">0</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label60">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color60</property>
+          </object>
+          <packing>
+            <property name="left_attach">6</property>
+            <property name="top_attach">0</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label70">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color70</property>
+          </object>
+          <packing>
+            <property name="left_attach">7</property>
+            <property name="top_attach">0</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label80">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color80</property>
+          </object>
+          <packing>
+            <property name="left_attach">8</property>
+            <property name="top_attach">0</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label90">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color90</property>
+          </object>
+          <packing>
+            <property name="left_attach">9</property>
+            <property name="top_attach">0</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label100">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color100</property>
+          </object>
+          <packing>
+            <property name="left_attach">10</property>
+            <property name="top_attach">0</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label110">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color110</property>
+          </object>
+          <packing>
+            <property name="left_attach">11</property>
+            <property name="top_attach">0</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label120">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color120</property>
+          </object>
+          <packing>
+            <property name="left_attach">12</property>
+            <property name="top_attach">0</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label130">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color130</property>
+          </object>
+          <packing>
+            <property name="left_attach">13</property>
+            <property name="top_attach">0</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label140">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color140</property>
+          </object>
+          <packing>
+            <property name="left_attach">14</property>
+            <property name="top_attach">0</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color1</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">1</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label11">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color11</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">1</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label21">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color21</property>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="top_attach">1</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label31">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color31</property>
+          </object>
+          <packing>
+            <property name="left_attach">3</property>
+            <property name="top_attach">1</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label41">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color41</property>
+          </object>
+          <packing>
+            <property name="left_attach">4</property>
+            <property name="top_attach">1</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label51">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color51</property>
+          </object>
+          <packing>
+            <property name="left_attach">5</property>
+            <property name="top_attach">1</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label61">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color61</property>
+          </object>
+          <packing>
+            <property name="left_attach">6</property>
+            <property name="top_attach">1</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label71">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color71</property>
+          </object>
+          <packing>
+            <property name="left_attach">7</property>
+            <property name="top_attach">1</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label81">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color81</property>
+          </object>
+          <packing>
+            <property name="left_attach">8</property>
+            <property name="top_attach">1</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label91">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color91</property>
+          </object>
+          <packing>
+            <property name="left_attach">9</property>
+            <property name="top_attach">1</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label101">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color101</property>
+          </object>
+          <packing>
+            <property name="left_attach">10</property>
+            <property name="top_attach">1</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label111">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color111</property>
+          </object>
+          <packing>
+            <property name="left_attach">11</property>
+            <property name="top_attach">1</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label121">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color121</property>
+          </object>
+          <packing>
+            <property name="left_attach">12</property>
+            <property name="top_attach">1</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label131">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color131</property>
+          </object>
+          <packing>
+            <property name="left_attach">13</property>
+            <property name="top_attach">1</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label141">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color141</property>
+          </object>
+          <packing>
+            <property name="left_attach">14</property>
+            <property name="top_attach">1</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label2">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color2</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">2</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label12">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color12</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">2</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label22">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color22</property>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="top_attach">2</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label32">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color32</property>
+          </object>
+          <packing>
+            <property name="left_attach">3</property>
+            <property name="top_attach">2</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label42">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color42</property>
+          </object>
+          <packing>
+            <property name="left_attach">4</property>
+            <property name="top_attach">2</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label52">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color52</property>
+          </object>
+          <packing>
+            <property name="left_attach">5</property>
+            <property name="top_attach">2</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label62">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color62</property>
+          </object>
+          <packing>
+            <property name="left_attach">6</property>
+            <property name="top_attach">2</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label72">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color72</property>
+          </object>
+          <packing>
+            <property name="left_attach">7</property>
+            <property name="top_attach">2</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label82">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color82</property>
+          </object>
+          <packing>
+            <property name="left_attach">8</property>
+            <property name="top_attach">2</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label92">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color92</property>
+          </object>
+          <packing>
+            <property name="left_attach">9</property>
+            <property name="top_attach">2</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label102">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color102</property>
+          </object>
+          <packing>
+            <property name="left_attach">10</property>
+            <property name="top_attach">2</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label112">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color112</property>
+          </object>
+          <packing>
+            <property name="left_attach">11</property>
+            <property name="top_attach">2</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label122">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color122</property>
+          </object>
+          <packing>
+            <property name="left_attach">12</property>
+            <property name="top_attach">2</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label132">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color132</property>
+          </object>
+          <packing>
+            <property name="left_attach">13</property>
+            <property name="top_attach">2</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label142">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color142</property>
+          </object>
+          <packing>
+            <property name="left_attach">14</property>
+            <property name="top_attach">2</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label3">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color3</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">3</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label13">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color13</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">3</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label23">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color23</property>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="top_attach">3</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label33">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color33</property>
+          </object>
+          <packing>
+            <property name="left_attach">3</property>
+            <property name="top_attach">3</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label43">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color43</property>
+          </object>
+          <packing>
+            <property name="left_attach">4</property>
+            <property name="top_attach">3</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label53">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color53</property>
+          </object>
+          <packing>
+            <property name="left_attach">5</property>
+            <property name="top_attach">3</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label63">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color63</property>
+          </object>
+          <packing>
+            <property name="left_attach">6</property>
+            <property name="top_attach">3</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label73">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color73</property>
+          </object>
+          <packing>
+            <property name="left_attach">7</property>
+            <property name="top_attach">3</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label83">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color83</property>
+          </object>
+          <packing>
+            <property name="left_attach">8</property>
+            <property name="top_attach">3</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label93">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color93</property>
+          </object>
+          <packing>
+            <property name="left_attach">9</property>
+            <property name="top_attach">3</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label103">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color103</property>
+          </object>
+          <packing>
+            <property name="left_attach">10</property>
+            <property name="top_attach">3</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label113">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color113</property>
+          </object>
+          <packing>
+            <property name="left_attach">11</property>
+            <property name="top_attach">3</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label123">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color123</property>
+          </object>
+          <packing>
+            <property name="left_attach">12</property>
+            <property name="top_attach">3</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label133">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color133</property>
+          </object>
+          <packing>
+            <property name="left_attach">13</property>
+            <property name="top_attach">3</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label143">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color143</property>
+          </object>
+          <packing>
+            <property name="left_attach">14</property>
+            <property name="top_attach">3</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label4">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color4</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">4</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label14">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color14</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">4</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label24">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color24</property>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="top_attach">4</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label34">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color34</property>
+          </object>
+          <packing>
+            <property name="left_attach">3</property>
+            <property name="top_attach">4</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label44">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color44</property>
+          </object>
+          <packing>
+            <property name="left_attach">4</property>
+            <property name="top_attach">4</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label54">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color54</property>
+          </object>
+          <packing>
+            <property name="left_attach">5</property>
+            <property name="top_attach">4</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label64">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color64</property>
+          </object>
+          <packing>
+            <property name="left_attach">6</property>
+            <property name="top_attach">4</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label74">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color74</property>
+          </object>
+          <packing>
+            <property name="left_attach">7</property>
+            <property name="top_attach">4</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label84">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color84</property>
+          </object>
+          <packing>
+            <property name="left_attach">8</property>
+            <property name="top_attach">4</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label94">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color94</property>
+          </object>
+          <packing>
+            <property name="left_attach">9</property>
+            <property name="top_attach">4</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label104">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color104</property>
+          </object>
+          <packing>
+            <property name="left_attach">10</property>
+            <property name="top_attach">4</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label114">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color114</property>
+          </object>
+          <packing>
+            <property name="left_attach">11</property>
+            <property name="top_attach">4</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label124">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color124</property>
+          </object>
+          <packing>
+            <property name="left_attach">12</property>
+            <property name="top_attach">4</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label134">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color134</property>
+          </object>
+          <packing>
+            <property name="left_attach">13</property>
+            <property name="top_attach">4</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label144">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color144</property>
+          </object>
+          <packing>
+            <property name="left_attach">14</property>
+            <property name="top_attach">4</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label5">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color5</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">5</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label15">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color15</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">5</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label25">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color25</property>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="top_attach">5</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label35">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color35</property>
+          </object>
+          <packing>
+            <property name="left_attach">3</property>
+            <property name="top_attach">5</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label45">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color45</property>
+          </object>
+          <packing>
+            <property name="left_attach">4</property>
+            <property name="top_attach">5</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label55">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color55</property>
+          </object>
+          <packing>
+            <property name="left_attach">5</property>
+            <property name="top_attach">5</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label65">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color65</property>
+          </object>
+          <packing>
+            <property name="left_attach">6</property>
+            <property name="top_attach">5</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label75">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color75</property>
+          </object>
+          <packing>
+            <property name="left_attach">7</property>
+            <property name="top_attach">5</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label85">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color85</property>
+          </object>
+          <packing>
+            <property name="left_attach">8</property>
+            <property name="top_attach">5</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label95">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color95</property>
+          </object>
+          <packing>
+            <property name="left_attach">9</property>
+            <property name="top_attach">5</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label105">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color105</property>
+          </object>
+          <packing>
+            <property name="left_attach">10</property>
+            <property name="top_attach">5</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label115">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color115</property>
+          </object>
+          <packing>
+            <property name="left_attach">11</property>
+            <property name="top_attach">5</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label125">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color125</property>
+          </object>
+          <packing>
+            <property name="left_attach">12</property>
+            <property name="top_attach">5</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label135">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color135</property>
+          </object>
+          <packing>
+            <property name="left_attach">13</property>
+            <property name="top_attach">5</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label145">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color145</property>
+          </object>
+          <packing>
+            <property name="left_attach">14</property>
+            <property name="top_attach">5</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label6">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color6</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">6</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label16">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color16</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">6</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label26">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color26</property>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="top_attach">6</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label36">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color36</property>
+          </object>
+          <packing>
+            <property name="left_attach">3</property>
+            <property name="top_attach">6</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label46">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color46</property>
+          </object>
+          <packing>
+            <property name="left_attach">4</property>
+            <property name="top_attach">6</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label56">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color56</property>
+          </object>
+          <packing>
+            <property name="left_attach">5</property>
+            <property name="top_attach">6</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label66">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color66</property>
+          </object>
+          <packing>
+            <property name="left_attach">6</property>
+            <property name="top_attach">6</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label76">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color76</property>
+          </object>
+          <packing>
+            <property name="left_attach">7</property>
+            <property name="top_attach">6</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label86">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color86</property>
+          </object>
+          <packing>
+            <property name="left_attach">8</property>
+            <property name="top_attach">6</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label96">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color96</property>
+          </object>
+          <packing>
+            <property name="left_attach">9</property>
+            <property name="top_attach">6</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label106">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color106</property>
+          </object>
+          <packing>
+            <property name="left_attach">10</property>
+            <property name="top_attach">6</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label116">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color116</property>
+          </object>
+          <packing>
+            <property name="left_attach">11</property>
+            <property name="top_attach">6</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label126">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color126</property>
+          </object>
+          <packing>
+            <property name="left_attach">12</property>
+            <property name="top_attach">6</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label136">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color136</property>
+          </object>
+          <packing>
+            <property name="left_attach">13</property>
+            <property name="top_attach">6</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label146">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color146</property>
+          </object>
+          <packing>
+            <property name="left_attach">14</property>
+            <property name="top_attach">6</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label7">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color7</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">7</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label17">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color17</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">7</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label27">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color27</property>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="top_attach">7</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label37">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color37</property>
+          </object>
+          <packing>
+            <property name="left_attach">3</property>
+            <property name="top_attach">7</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label47">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color47</property>
+          </object>
+          <packing>
+            <property name="left_attach">4</property>
+            <property name="top_attach">7</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label57">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color57</property>
+          </object>
+          <packing>
+            <property name="left_attach">5</property>
+            <property name="top_attach">7</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label67">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color67</property>
+          </object>
+          <packing>
+            <property name="left_attach">6</property>
+            <property name="top_attach">7</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label77">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color77</property>
+          </object>
+          <packing>
+            <property name="left_attach">7</property>
+            <property name="top_attach">7</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label87">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color87</property>
+          </object>
+          <packing>
+            <property name="left_attach">8</property>
+            <property name="top_attach">7</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label97">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color97</property>
+          </object>
+          <packing>
+            <property name="left_attach">9</property>
+            <property name="top_attach">7</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label107">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color107</property>
+          </object>
+          <packing>
+            <property name="left_attach">10</property>
+            <property name="top_attach">7</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label117">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color117</property>
+          </object>
+          <packing>
+            <property name="left_attach">11</property>
+            <property name="top_attach">7</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label127">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color127</property>
+          </object>
+          <packing>
+            <property name="left_attach">12</property>
+            <property name="top_attach">7</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label137">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color137</property>
+          </object>
+          <packing>
+            <property name="left_attach">13</property>
+            <property name="top_attach">7</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label147">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color147</property>
+          </object>
+          <packing>
+            <property name="left_attach">14</property>
+            <property name="top_attach">7</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label8">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color8</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">8</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label18">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color18</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">8</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label28">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color28</property>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="top_attach">8</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label38">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color38</property>
+          </object>
+          <packing>
+            <property name="left_attach">3</property>
+            <property name="top_attach">8</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label48">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color48</property>
+          </object>
+          <packing>
+            <property name="left_attach">4</property>
+            <property name="top_attach">8</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label58">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color58</property>
+          </object>
+          <packing>
+            <property name="left_attach">5</property>
+            <property name="top_attach">8</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label68">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color68</property>
+          </object>
+          <packing>
+            <property name="left_attach">6</property>
+            <property name="top_attach">8</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label78">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color78</property>
+          </object>
+          <packing>
+            <property name="left_attach">7</property>
+            <property name="top_attach">8</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label88">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color88</property>
+          </object>
+          <packing>
+            <property name="left_attach">8</property>
+            <property name="top_attach">8</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label98">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color98</property>
+          </object>
+          <packing>
+            <property name="left_attach">9</property>
+            <property name="top_attach">8</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label108">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color108</property>
+          </object>
+          <packing>
+            <property name="left_attach">10</property>
+            <property name="top_attach">8</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label118">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color118</property>
+          </object>
+          <packing>
+            <property name="left_attach">11</property>
+            <property name="top_attach">8</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label128">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color128</property>
+          </object>
+          <packing>
+            <property name="left_attach">12</property>
+            <property name="top_attach">8</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label138">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color138</property>
+          </object>
+          <packing>
+            <property name="left_attach">13</property>
+            <property name="top_attach">8</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label148">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color148</property>
+          </object>
+          <packing>
+            <property name="left_attach">14</property>
+            <property name="top_attach">8</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label9">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color9</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">9</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label19">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color19</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">9</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label29">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color29</property>
+          </object>
+          <packing>
+            <property name="left_attach">2</property>
+            <property name="top_attach">9</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label39">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color39</property>
+          </object>
+          <packing>
+            <property name="left_attach">3</property>
+            <property name="top_attach">9</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label49">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color49</property>
+          </object>
+          <packing>
+            <property name="left_attach">4</property>
+            <property name="top_attach">9</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label59">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color59</property>
+          </object>
+          <packing>
+            <property name="left_attach">5</property>
+            <property name="top_attach">9</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label69">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color69</property>
+          </object>
+          <packing>
+            <property name="left_attach">6</property>
+            <property name="top_attach">9</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label79">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color79</property>
+          </object>
+          <packing>
+            <property name="left_attach">7</property>
+            <property name="top_attach">9</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label89">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color89</property>
+          </object>
+          <packing>
+            <property name="left_attach">8</property>
+            <property name="top_attach">9</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label99">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color99</property>
+          </object>
+          <packing>
+            <property name="left_attach">9</property>
+            <property name="top_attach">9</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label109">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color109</property>
+          </object>
+          <packing>
+            <property name="left_attach">10</property>
+            <property name="top_attach">9</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label119">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color119</property>
+          </object>
+          <packing>
+            <property name="left_attach">11</property>
+            <property name="top_attach">9</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label129">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color129</property>
+          </object>
+          <packing>
+            <property name="left_attach">12</property>
+            <property name="top_attach">9</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label139">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color139</property>
+          </object>
+          <packing>
+            <property name="left_attach">13</property>
+            <property name="top_attach">9</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label149">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="label" translatable="yes">XXX</property>
+            <property name="name">color149</property>
+          </object>
+          <packing>
+            <property name="left_attach">14</property>
+            <property name="top_attach">9</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

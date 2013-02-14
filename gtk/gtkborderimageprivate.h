@@ -43,7 +43,7 @@ gboolean          _gtk_border_image_init             (GtkBorderImage       *imag
                                                       GtkThemingEngine     *engine);
 
 void              _gtk_border_image_render           (GtkBorderImage       *image,
-                                                      GtkBorder            *border_width,
+                                                      const double          border_width[4],
                                                       cairo_t              *cr,
                                                       gdouble               x,
                                                       gdouble               y,

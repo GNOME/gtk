@@ -1155,7 +1155,6 @@ test_treeview_column (void)
   GtkTreeViewColumn *column;
   GList *renderers;
   GObject *renderer;
-  gchar *text;
 
   builder = builder_new_from_string (buffer, -1, NULL);
   treeview = gtk_builder_get_object (builder, "treeview1");
@@ -1172,25 +1171,9 @@ test_treeview_column (void)
   g_assert (GTK_IS_CELL_RENDERER_TEXT (renderer));
   g_list_free (renderers);
 
-  gtk_widget_realize (GTK_WIDGET (treeview));
-
-  renderer = gtk_builder_get_object (builder, "renderer1");
-  g_object_get (renderer, "text", &text, NULL);
-  g_assert (text);
-  g_assert (strcmp (text, "25") == 0);
-  g_free (text);
-  
-  renderer = gtk_builder_get_object (builder, "renderer2");
-  g_object_get (renderer, "text", &text, NULL);
-  g_assert (text);
-  g_assert (strcmp (text, "John") == 0);
-  g_free (text);
-
-  gtk_widget_unrealize (GTK_WIDGET (treeview));
-
   window = gtk_builder_get_object (builder, "window1");
   gtk_widget_destroy (GTK_WIDGET (window));
-  
+
   g_object_unref (builder);
 }
 
@@ -1283,27 +1266,11 @@ test_combo_box (void)
     "    </child>"
     "  </object>"
     "</interface>";
-  GObject *window, *combobox, *renderer;
-  gchar *text;
+  GObject *window, *combobox;
 
   builder = builder_new_from_string (buffer, -1, NULL);
   combobox = gtk_builder_get_object (builder, "combobox1");
   g_assert (combobox);
-  gtk_widget_realize (GTK_WIDGET (combobox));
-
-  renderer = gtk_builder_get_object (builder, "renderer2");
-  g_assert (renderer);
-  g_object_get (renderer, "text", &text, NULL);
-  g_assert (text);
-  g_assert (strcmp (text, "Bar") == 0);
-  g_free (text);
-
-  renderer = gtk_builder_get_object (builder, "renderer1");
-  g_assert (renderer);
-  g_object_get (renderer, "text", &text, NULL);
-  g_assert (text);
-  g_assert (strcmp (text, "2") == 0);
-  g_free (text);
 
   window = gtk_builder_get_object (builder, "window1");
   gtk_widget_destroy (GTK_WIDGET (window));
@@ -1420,8 +1387,6 @@ test_cell_view (void)
   GObject *model, *window;
   GtkTreePath *path;
   GList *renderers;
-  GObject *renderer;
-  gchar *text;
   
   builder = builder_new_from_string (buffer, -1, NULL);
   cellview = gtk_builder_get_object (builder, "cellview1");
@@ -1438,18 +1403,9 @@ test_cell_view (void)
   renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (cellview));
   g_assert (renderers);
   g_assert (g_list_length (renderers) == 1);
-  
-  gtk_widget_realize (GTK_WIDGET (cellview));
-
-  renderer = g_list_nth_data (renderers, 0);
-  g_list_free (renderers);
-  g_assert (renderer);
-  g_object_get (renderer, "text", &text, NULL);
-  g_assert (strcmp (text, "test") == 0);
-  g_free (text);
-  gtk_tree_path_free (path);
 
   window = gtk_builder_get_object (builder, "window1");
+  g_assert (window);
   gtk_widget_destroy (GTK_WIDGET (window));
   
   g_object_unref (builder);
@@ -2715,6 +2671,56 @@ test_level_bar (void)
   g_object_unref (builder);
 }
 
+static GObject *external_object = NULL, *external_object_swapped = NULL;
+
+void
+on_button_clicked (GtkButton *button, GObject *data)
+{
+  external_object = data;
+}
+
+void
+on_button_clicked_swapped (GObject *data, GtkButton *button)
+{
+  external_object_swapped = data;
+}
+
+static void
+test_expose_object (void)
+{
+  GtkBuilder *builder;
+  GError *error = NULL;
+  GtkWidget *image;
+  GObject *obj;
+  const gchar buffer[] =
+    "<interface>"
+    "  <object class=\"GtkButton\" id=\"button\">"
+    "    <property name=\"image\">external_image</property>"
+    "    <signal name=\"clicked\" handler=\"on_button_clicked\" object=\"builder\" swapped=\"no\"/>"
+    "    <signal name=\"clicked\" handler=\"on_button_clicked_swapped\" object=\"builder\"/>"
+    "  </object>"
+    "</interface>";
+
+  image = gtk_image_new ();
+  builder = gtk_builder_new ();
+  gtk_builder_expose_object (builder, "external_image", G_OBJECT (image));
+  gtk_builder_expose_object (builder, "builder", G_OBJECT (builder));
+  gtk_builder_add_from_string (builder, buffer, -1, &error);
+  g_assert (error == NULL);
+
+  obj = gtk_builder_get_object (builder, "button");
+  g_assert (GTK_IS_BUTTON (obj));
+
+  g_assert (gtk_button_get_image (GTK_BUTTON (obj)) == image);
+
+  /* Connect signals and fake clicked event */
+  gtk_builder_connect_signals (builder, NULL);
+  gtk_button_clicked (GTK_BUTTON (obj));
+
+  g_assert (external_object == G_OBJECT (builder));
+  g_assert (external_object_swapped == G_OBJECT (builder));
+}
+
 int
 main (int argc, char **argv)
 {
@@ -2763,6 +2769,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/MessageDialog", test_message_dialog);
   g_test_add_func ("/Builder/GMenu", test_gmenu);
   g_test_add_func ("/Builder/LevelBar", test_level_bar);
+  g_test_add_func ("/Builder/Expose Object", test_expose_object);
 
   return g_test_run();
 }

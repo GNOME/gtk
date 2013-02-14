@@ -28,9 +28,14 @@ GdkWindow *_gdk_root = NULL;
 GdkOSXVersion
 gdk_quartz_osx_version (void)
 {
-  gint minor;
-  OSErr err = Gestalt (gestaltSystemVersionMinor, &minor);
-  g_return_val_if_fail (err == noErr, GDK_OSX_UNSUPPORTED);
+  static gint32 minor = GDK_OSX_UNSUPPORTED;
+
+  if (minor == GDK_OSX_UNSUPPORTED)
+    {
+      OSErr err = Gestalt (gestaltSystemVersionMinor, (SInt32*)&minor);
+
+      g_return_val_if_fail (err == noErr, GDK_OSX_UNSUPPORTED);
+    }
 
   if (minor < GDK_OSX_MIN)
     return GDK_OSX_UNSUPPORTED;

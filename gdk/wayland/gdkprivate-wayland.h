@@ -31,6 +31,7 @@
 
 #include <gdk/gdkcursor.h>
 #include <gdk/gdkprivate.h>
+#include <gdk/wayland/gdkwayland.h>
 #include <gdk/wayland/gdkdisplay-wayland.h>
 
 #include <xkbcommon/xkbcommon.h>
@@ -44,7 +45,6 @@
 #define GDK_WINDOW_DISPLAY(win)       (GDK_SCREEN_WAYLAND (GDK_WINDOW_SCREEN (win))->display)
 #define GDK_WINDOW_IS_WAYLAND(win)    (GDK_IS_WINDOW_IMPL_WAYLAND (((GdkWindow *)win)->impl))
 
-GType _gdk_wayland_window_get_type    (void);
 void _gdk_wayland_window_add_focus    (GdkWindow *window);
 void _gdk_wayland_window_remove_focus (GdkWindow *window);
 
@@ -128,10 +128,6 @@ GdkDeviceManager *_gdk_wayland_device_manager_new (GdkDisplay *display);
 void              _gdk_wayland_device_manager_add_device (GdkDeviceManager *device_manager,
 							  struct wl_seat *seat);
 
-struct wl_seat *_gdk_wayland_device_get_wl_seat (GdkDevice *device);
-struct wl_pointer *_gdk_wayland_device_get_wl_pointer (GdkDevice *device);
-struct wl_keyboard *_gdk_wayland_device_get_wl_keyboard (GdkDevice *device);
-
 GdkKeymap *_gdk_wayland_device_get_keymap (GdkDevice *device);
 
 void     _gdk_wayland_display_deliver_event (GdkDisplay *display, GdkEvent *event);
@@ -148,6 +144,10 @@ GdkWindow *_gdk_wayland_screen_create_root_window (GdkScreen *screen,
 						   int height);
 
 GdkScreen *_gdk_wayland_screen_new (GdkDisplay *display);
+void _gdk_wayland_screen_add_output (GdkScreen *scren,
+                                     struct wl_output *output);
+void _gdk_wayland_screen_remove_output (GdkScreen *screen,
+                                        struct wl_output *output);
 
 void _gdk_wayland_display_manager_add_display (GdkDisplayManager *manager,
 					       GdkDisplay        *display);

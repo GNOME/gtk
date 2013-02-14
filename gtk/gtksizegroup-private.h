@@ -37,11 +37,9 @@ typedef enum
   GTK_QUEUE_RESIZE_INVALIDATE_ONLY = 1 << 0
 } GtkQueueResizeFlags;
 
-void _gtk_size_group_bump_requisition (GtkWidget           *widget,
-                                       GtkSizeGroupMode     mode,
-                                       gint                *minimum,
-                                       gint                *natural);
-void _gtk_size_group_queue_resize     (GtkWidget           *widget,
-                                       GtkQueueResizeFlags  flags);
+GHashTable * _gtk_size_group_get_widget_peers (GtkWidget           *for_widget,
+                                               GtkOrientation       orientation);
+void _gtk_size_group_queue_resize             (GtkWidget           *widget,
+                                               GtkQueueResizeFlags  flags);
 
 #endif /* __GTK_SIZE_GROUP_PRIVATE_H__ */

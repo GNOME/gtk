@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 2 -*- */
+/* -*- Mode: C; c-file-style: "gnu"; tab-width: 8 -*- */
 
 /* GTK+: gtkfilechooserbutton.c
  * 
@@ -178,7 +178,8 @@ struct _GtkFileChooserButtonPrivate
   GtkTreeModel *filter_model;
 
   GtkFileSystem *fs;
-  GFile *old_file;
+  GFile *selection_while_inactive;
+  GFile *current_folder_while_inactive;
 
   gulong combo_box_changed_id;
   gulong dialog_file_activated_id;
@@ -206,9 +207,6 @@ struct _GtkFileChooserButtonPrivate
   /* Used for hiding/showing the dialog when the button is hidden */
   guint  active                       : 1;
 
-  /* Used to track whether we need to set a default current folder on ::map() */
-  guint  folder_has_been_set          : 1;
-
   guint  focus_on_click               : 1;
 };
 
@@ -230,6 +228,17 @@ enum
 
 /* GtkFileChooserIface Functions */
 static void     gtk_file_chooser_button_file_chooser_iface_init (GtkFileChooserIface *iface);
+static gboolean gtk_file_chooser_button_set_current_folder (GtkFileChooser    *chooser,
+							    GFile             *file,
+							    GError           **error);
+static GFile *gtk_file_chooser_button_get_current_folder (GtkFileChooser    *chooser);
+static gboolean gtk_file_chooser_button_select_file (GtkFileChooser *chooser,
+						     GFile          *file,
+						     GError        **error);
+static void gtk_file_chooser_button_unselect_file (GtkFileChooser *chooser,
+						   GFile          *file);
+static void gtk_file_chooser_button_unselect_all (GtkFileChooser *chooser);
+static GSList *gtk_file_chooser_button_get_files (GtkFileChooser *chooser);
 static gboolean gtk_file_chooser_button_add_shortcut_folder     (GtkFileChooser      *chooser,
 								 GFile               *file,
 								 GError             **error);
@@ -567,8 +576,174 @@ gtk_file_chooser_button_file_chooser_iface_init (GtkFileChooserIface *iface)
 {
   _gtk_file_chooser_delegate_iface_init (iface);
 
+  iface->set_current_folder = gtk_file_chooser_button_set_current_folder;
+  iface->get_current_folder = gtk_file_chooser_button_get_current_folder;
+  iface->select_file = gtk_file_chooser_button_select_file;
+  iface->unselect_file = gtk_file_chooser_button_unselect_file;
+  iface->unselect_all = gtk_file_chooser_button_unselect_all;
+  iface->get_files = gtk_file_chooser_button_get_files;
   iface->add_shortcut_folder = gtk_file_chooser_button_add_shortcut_folder;
   iface->remove_shortcut_folder = gtk_file_chooser_button_remove_shortcut_folder;
+}
+
+static gboolean
+gtk_file_chooser_button_set_current_folder (GtkFileChooser    *chooser,
+					    GFile             *file,
+					    GError           **error)
+{
+  GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (chooser);
+  GtkFileChooserButtonPrivate *priv = button->priv;
+  GtkFileChooser *delegate;
+
+  delegate = g_object_get_qdata (G_OBJECT (chooser),
+				 GTK_FILE_CHOOSER_DELEGATE_QUARK);
+
+  if (priv->active)
+    return gtk_file_chooser_set_current_folder_file (delegate, file, error);
+  else
+    {
+      if (priv->current_folder_while_inactive)
+	g_object_unref (priv->current_folder_while_inactive);
+
+      priv->current_folder_while_inactive = g_object_ref (file);
+
+      g_signal_emit_by_name (button, "current-folder-changed");
+
+      return TRUE;
+    }
+}
+
+static GFile *
+gtk_file_chooser_button_get_current_folder (GtkFileChooser *chooser)
+{
+  GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (chooser);
+  GtkFileChooserButtonPrivate *priv = button->priv;
+  GtkFileChooser *delegate;
+
+  delegate = g_object_get_qdata (G_OBJECT (chooser),
+				 GTK_FILE_CHOOSER_DELEGATE_QUARK);
+
+  if (priv->active)
+    return gtk_file_chooser_get_current_folder_file (delegate);
+  else
+    {
+      if (priv->current_folder_while_inactive)
+	return g_object_ref (priv->current_folder_while_inactive);
+      else
+	return NULL;
+    }
+}
+
+static gboolean
+gtk_file_chooser_button_select_file (GtkFileChooser *chooser,
+				     GFile          *file,
+				     GError        **error)
+{
+  GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (chooser);
+  GtkFileChooserButtonPrivate *priv = button->priv;
+  GtkFileChooser *delegate;
+
+  delegate = g_object_get_qdata (G_OBJECT (chooser),
+				 GTK_FILE_CHOOSER_DELEGATE_QUARK);
+
+  if (priv->active)
+    return gtk_file_chooser_select_file (delegate, file, error);
+  else
+    {
+      if (priv->selection_while_inactive)
+	g_object_unref (priv->selection_while_inactive);
+
+      priv->selection_while_inactive = g_object_ref (file);
+
+      g_signal_emit (button, file_chooser_button_signals[FILE_SET], 0);
+
+      return TRUE;
+    }
+}
+
+static void
+gtk_file_chooser_button_unselect_file (GtkFileChooser *chooser,
+				       GFile          *file)
+{
+  GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (chooser);
+  GtkFileChooserButtonPrivate *priv = button->priv;
+  GtkFileChooser *delegate;
+
+  delegate = g_object_get_qdata (G_OBJECT (chooser),
+				 GTK_FILE_CHOOSER_DELEGATE_QUARK);
+
+  if (priv->active)
+    gtk_file_chooser_unselect_file (delegate, file);
+  else
+    {
+      if (g_file_equal (priv->selection_while_inactive, file))
+	{
+	  if (priv->selection_while_inactive)
+	    {
+	      g_object_unref (priv->selection_while_inactive);
+	      priv->selection_while_inactive = NULL;
+	    }
+
+	  g_signal_emit (button, file_chooser_button_signals[FILE_SET], 0);
+	}
+    }
+}
+
+static void
+gtk_file_chooser_button_unselect_all (GtkFileChooser *chooser)
+{
+  GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (chooser);
+  GtkFileChooserButtonPrivate *priv = button->priv;
+  GtkFileChooser *delegate;
+
+  delegate = g_object_get_qdata (G_OBJECT (chooser),
+				 GTK_FILE_CHOOSER_DELEGATE_QUARK);
+
+  if (priv->active)
+    gtk_file_chooser_unselect_all (delegate);
+  else
+    {
+      if (priv->selection_while_inactive)
+	{
+	  g_object_unref (priv->selection_while_inactive);
+	  priv->selection_while_inactive = NULL;
+	}
+
+      g_signal_emit (button, file_chooser_button_signals[FILE_SET], 0);
+    }
+}
+
+static GSList *
+gtk_file_chooser_button_get_files (GtkFileChooser *chooser)
+{
+  GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (chooser);
+  GtkFileChooserButtonPrivate *priv = button->priv;
+  GtkFileChooser *delegate;
+
+  delegate = g_object_get_qdata (G_OBJECT (chooser),
+				 GTK_FILE_CHOOSER_DELEGATE_QUARK);
+
+  if (priv->active)
+    return gtk_file_chooser_get_files (delegate);
+  else
+    {
+      GSList *result;
+
+      result = NULL;
+
+      if (priv->selection_while_inactive)
+	result = g_slist_prepend (NULL, g_object_ref (priv->selection_while_inactive));
+      else if (gtk_file_chooser_get_action (GTK_FILE_CHOOSER (priv->dialog)) == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
+	{
+	  /* If there is no "real" selection in SELECT_FOLDER mode, then we'll just return
+	   * the current folder, since that is what GtkFileChooserDefault would do.
+	   */
+	  if (priv->current_folder_while_inactive)
+	    result = g_slist_prepend (NULL, g_object_ref (priv->current_folder_while_inactive));
+	}
+
+      return result;
+    }
 }
 
 static gboolean
@@ -675,7 +850,6 @@ gtk_file_chooser_button_constructor (GType                  type,
   GtkFileChooserButton *button;
   GtkFileChooserButtonPrivate *priv;
   GSList *list;
-  char *current_folder;
 
   object = G_OBJECT_CLASS (gtk_file_chooser_button_parent_class)->constructor (type,
 									       n_params,
@@ -705,13 +879,6 @@ gtk_file_chooser_button_constructor (GType                  type,
   else if (!gtk_window_get_title (GTK_WINDOW (priv->dialog)))
     {
       gtk_file_chooser_button_set_title (button, _(DEFAULT_TITLE));
-    }
-
-  current_folder = gtk_file_chooser_get_current_folder_uri (GTK_FILE_CHOOSER (priv->dialog));
-  if (current_folder != NULL)
-    {
-      priv->folder_has_been_set = TRUE;
-      g_free (current_folder);
     }
 
   g_signal_connect (priv->dialog, "delete-event",
@@ -914,8 +1081,11 @@ gtk_file_chooser_button_finalize (GObject *object)
   GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (object);
   GtkFileChooserButtonPrivate *priv = button->priv;
 
-  if (priv->old_file)
-    g_object_unref (priv->old_file);
+  if (priv->selection_while_inactive)
+    g_object_unref (priv->selection_while_inactive);
+
+  if (priv->current_folder_while_inactive)
+    g_object_unref (priv->current_folder_while_inactive);
 
   G_OBJECT_CLASS (gtk_file_chooser_button_parent_class)->finalize (object);
 }
@@ -1176,20 +1346,6 @@ gtk_file_chooser_button_hide (GtkWidget *widget)
 static void
 gtk_file_chooser_button_map (GtkWidget *widget)
 {
-  GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (widget);
-  GtkFileChooserButtonPrivate *priv = button->priv;
-
-  if (!priv->folder_has_been_set)
-    {
-      char *current_working_dir;
-
-      current_working_dir = g_get_current_dir ();
-      gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (widget), current_working_dir);
-      g_free (current_working_dir);
-
-      priv->folder_has_been_set = TRUE;
-    }
-
   GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->map (widget);
 }
 
@@ -2048,7 +2204,7 @@ model_add_other (GtkFileChooserButton *button)
   gtk_list_store_insert (store, &iter, pos);
   gtk_list_store_set (store, &iter,
 		      ICON_COLUMN, NULL,
-		      DISPLAY_NAME_COLUMN, _("Other..."),
+		      DISPLAY_NAME_COLUMN, _("Other…"),
 		      TYPE_COLUMN, ROW_TYPE_OTHER,
 		      DATA_COLUMN, NULL,
 		      IS_FOLDER_COLUMN, FALSE,
@@ -2469,6 +2625,35 @@ bookmarks_changed_cb (gpointer user_data)
   update_combo_box (user_data);
 }
 
+static void
+save_inactive_state (GtkFileChooserButton *button)
+{
+  GtkFileChooserButtonPrivate *priv = button->priv;
+
+  if (priv->current_folder_while_inactive)
+    g_object_unref (priv->current_folder_while_inactive);
+
+  if (priv->selection_while_inactive)
+    g_object_unref (priv->selection_while_inactive);
+
+  priv->current_folder_while_inactive = gtk_file_chooser_get_current_folder_file (GTK_FILE_CHOOSER (priv->dialog));
+  priv->selection_while_inactive = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (priv->dialog));
+}
+
+static void
+restore_inactive_state (GtkFileChooserButton *button)
+{
+  GtkFileChooserButtonPrivate *priv = button->priv;
+
+  if (priv->current_folder_while_inactive)
+    gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (priv->dialog), priv->current_folder_while_inactive, NULL);
+
+  if (priv->selection_while_inactive)
+    gtk_file_chooser_select_file (GTK_FILE_CHOOSER (priv->dialog), priv->selection_while_inactive, NULL);
+  else
+    gtk_file_chooser_unselect_all (GTK_FILE_CHOOSER (priv->dialog));
+}
+
 /* Dialog */
 static void
 open_dialog (GtkFileChooserButton *button)
@@ -2496,23 +2681,14 @@ open_dialog (GtkFileChooserButton *button)
 
   if (!priv->active)
     {
-      GSList *files;
-
       g_signal_handler_block (priv->dialog,
 			      priv->dialog_folder_changed_id);
       g_signal_handler_block (priv->dialog,
 			      priv->dialog_file_activated_id);
       g_signal_handler_block (priv->dialog,
 			      priv->dialog_selection_changed_id);
-      files = gtk_file_chooser_get_files (GTK_FILE_CHOOSER (priv->dialog));
-      if (files)
-	{
-	  if (files->data)
-	    priv->old_file = g_object_ref (files->data);
 
-	  g_slist_foreach (files, (GFunc) g_object_unref, NULL);
-	  g_slist_free (files);
-	}
+      restore_inactive_state (button);
 
       priv->active = TRUE;
     }
@@ -2591,9 +2767,6 @@ dialog_current_folder_changed_cb (GtkFileChooser *dialog,
 				  gpointer        user_data)
 {
   GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (user_data);
-  GtkFileChooserButtonPrivate *priv = button->priv;
-
-  priv->folder_has_been_set = TRUE;
 
   g_signal_emit_by_name (button, "current-folder-changed");
 }
@@ -2687,36 +2860,17 @@ dialog_response_cb (GtkDialog *dialog,
   if (response == GTK_RESPONSE_ACCEPT ||
       response == GTK_RESPONSE_OK)
     {
+      save_inactive_state (button);
+
       g_signal_emit_by_name (button, "current-folder-changed");
       g_signal_emit_by_name (button, "selection-changed");
 
       update_label_and_image (button);
       update_combo_box (button);
     }
-  else if (priv->old_file)
-    {
-      switch (gtk_file_chooser_get_action (GTK_FILE_CHOOSER (dialog)))
-	{
-	case GTK_FILE_CHOOSER_ACTION_OPEN:
-	  gtk_file_chooser_select_file (GTK_FILE_CHOOSER (dialog), priv->old_file,
-					NULL);
-	  break;
-	case GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER:
-	  gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (dialog),
-						    priv->old_file, NULL);
-	  break;
-	default:
-	  g_assert_not_reached ();
-	  break;
-	}
-    }
   else
-    gtk_file_chooser_unselect_all (GTK_FILE_CHOOSER (dialog));
-
-  if (priv->old_file)
     {
-      g_object_unref (priv->old_file);
-      priv->old_file = NULL;
+      restore_inactive_state (button);
     }
 
   if (priv->active)

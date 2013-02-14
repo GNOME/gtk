@@ -414,3 +414,30 @@ _gtk_file_chooser_extract_recent_folders (GList *infos)
 
   return result;
 }
+
+GSettings *
+_gtk_file_chooser_get_settings_for_widget (GtkWidget *widget)
+{
+  static GQuark file_chooser_settings_quark = 0;
+  GtkSettings *gtksettings;
+  GSettings *settings;
+
+  if (G_UNLIKELY (file_chooser_settings_quark == 0))
+    file_chooser_settings_quark = g_quark_from_static_string ("-gtk-file-chooser-settings");
+
+  gtksettings = gtk_widget_get_settings (widget);
+  settings = g_object_get_qdata (G_OBJECT (gtksettings), file_chooser_settings_quark);
+
+  if (G_UNLIKELY (settings == NULL))
+    {
+      settings = g_settings_new ("org.gtk.Settings.FileChooser");
+      g_settings_delay (settings);
+
+      g_object_set_qdata_full (G_OBJECT (gtksettings),
+                               file_chooser_settings_quark,
+                               settings,
+                               g_object_unref);
+    }
+
+  return settings;
+}

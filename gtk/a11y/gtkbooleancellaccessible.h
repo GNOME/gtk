@@ -1,4 +1,4 @@
-/* GAIL - The GNOME Accessibility Enabling Library
+/* GTK+ - accessibility implementations
  * Copyright 2001 Sun Microsystems Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -18,12 +18,16 @@
 #ifndef __GTK_BOOLEAN_CELL_ACCESSIBLE_H__
 #define __GTK_BOOLEAN_CELL_ACCESSIBLE_H__
 
+#if !defined (__GTK_A11Y_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk-a11y.h> can be included directly."
+#endif
+
 #include <atk/atk.h>
-#include "gtkrenderercellaccessible.h"
+#include <gtk/a11y/gtkrenderercellaccessible.h>
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_BOOLEAN_CELL_ACCESSIBLE            (_gtk_boolean_cell_accessible_get_type ())
+#define GTK_TYPE_BOOLEAN_CELL_ACCESSIBLE            (gtk_boolean_cell_accessible_get_type ())
 #define GTK_BOOLEAN_CELL_ACCESSIBLE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_BOOLEAN_CELL_ACCESSIBLE, GtkBooleanCellAccessible))
 #define GTK_BOOLEAN_CELL_ACCESSIBLE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GAIL_BOOLEAN_CELL, GtkBooleanCellAccessibleClass))
 #define GTK_IS_BOOLEAN_CELL_ACCESSIBLE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_BOOLEAN_CELL_ACCESSIBLE))
@@ -46,7 +50,7 @@ struct _GtkBooleanCellAccessibleClass
   GtkRendererCellAccessibleClass parent_class;
 };
 
-GType      _gtk_boolean_cell_accessible_get_type (void);
+GType      gtk_boolean_cell_accessible_get_type (void);
 
 G_END_DECLS
 

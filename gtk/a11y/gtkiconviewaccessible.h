@@ -1,4 +1,4 @@
-/* gtkiconview.c
+/* GTK+ - accessibility implementations
  * Copyright (C) 2002, 2004  Anders Carlsson <andersca@gnu.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -18,12 +18,16 @@
 #ifndef __GTK_ICON_VIEW_ACCESSIBLE_H__
 #define __GTK_ICON_VIEW_ACCESSIBLE_H__
 
-#include "gtkcontaineraccessible.h"
-#include "gtk/gtkiconview.h"
+#if !defined (__GTK_A11Y_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk-a11y.h> can be included directly."
+#endif
+
+#include <gtk/gtk.h>
+#include <gtk/a11y/gtkcontaineraccessible.h>
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_ICON_VIEW_ACCESSIBLE                  (_gtk_icon_view_accessible_get_type ())
+#define GTK_TYPE_ICON_VIEW_ACCESSIBLE                  (gtk_icon_view_accessible_get_type ())
 #define GTK_ICON_VIEW_ACCESSIBLE(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ICON_VIEW_ACCESSIBLE, GtkIconViewAccessible))
 #define GTK_ICON_VIEW_ACCESSIBLE_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_ICON_VIEW_ACCESSIBLE, GtkIconViewAccessibleClass))
 #define GTK_IS_ICON_VIEW_ACCESSIBLE(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_ICON_VIEW_ACCESSIBLE))
@@ -46,9 +50,7 @@ struct _GtkIconViewAccessibleClass
   GtkContainerAccessibleClass parent_class;
 };
 
-GType           _gtk_icon_view_accessible_get_type            (void);
-
-void            _gtk_icon_view_accessible_adjustment_changed  (GtkIconView            *icon_view);
+GType           gtk_icon_view_accessible_get_type            (void);
 
 G_END_DECLS
 

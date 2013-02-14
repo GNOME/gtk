@@ -19,7 +19,7 @@
 
 #include "gtkcssinheritvalueprivate.h"
 
-#include "gtkcssstylepropertyprivate.h"
+#include "gtkcssinitialvalueprivate.h"
 #include "gtkstylecontextprivate.h"
 
 struct _GtkCssValue {
@@ -48,7 +48,7 @@ gtk_css_value_inherit_compute (GtkCssValue             *value,
     }
   else
     {
-      return _gtk_css_value_compute (_gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (property_id)),
+      return _gtk_css_value_compute (_gtk_css_initial_value_get (),
                                      property_id,
                                      provider,
                                      values,

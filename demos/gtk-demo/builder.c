@@ -1,10 +1,9 @@
-/* Builder :: demo.ui
+/* Builder
  *
  * Demonstrates an interface loaded from a XML description.
  */
 
 #include <gtk/gtk.h>
-#include "demo-common.h"
 
 static GtkBuilder *builder;
 
@@ -38,14 +37,11 @@ do_builder (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
   GError *err = NULL;
-  gchar *filename;
 
   if (!window)
     {
       builder = gtk_builder_new ();
-      filename = demo_find_file ("demo.ui", NULL);
-      gtk_builder_add_from_file (builder, filename, &err);
-      g_free (filename);
+      gtk_builder_add_from_resource (builder, "/builder/demo.ui", &err);
       if (err)
         {
           g_error ("ERROR: %s\n", err->message);

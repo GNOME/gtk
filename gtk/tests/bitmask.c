@@ -74,6 +74,9 @@ gtk_bitmask_new_parse (const char *string)
 static const char *tests[] = {
                                                                                                                                    "0",
                                                                                                                                    "1",
+                                                                                                     "1000000000000000000000000000000",
+                                                                                                    "10000000000000000000000000000000",
+                                                                     "100000000000000000000000000000000000000000000000000000000000000",
                                                                     "1000000000000000000000000000000000000000000000000000000000000000",
                                                                    "10000000000000000000000000000000000000000000000000000000000000000",
   "1010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010",
@@ -234,6 +237,49 @@ test_intersect (void)
     }
 }
 
+static void
+test_intersect_hardcoded (void)
+{
+  GtkBitmask *left, *right, *intersection, *expected;
+  const char *left_str, *right_str;
+  guint left_len, right_len;
+  guint i, l, r;
+
+  for (l = 0; l < G_N_ELEMENTS (tests); l++)
+    {
+      for (r = 0; r < G_N_ELEMENTS (tests); r++)
+        {
+          left = masks[l];
+          right = masks[r];
+          left_str = tests[l];
+          right_str = tests[r];
+          left_len = strlen (tests[l]);
+          right_len = strlen (tests[r]);
+
+          expected = _gtk_bitmask_new ();
+          if (left_len > right_len)
+            left_str += left_len - right_len;
+          if (right_len > left_len)
+            right_str += right_len - left_len;
+          i = MIN (right_len, left_len);
+          while (i--)
+            {
+              expected = _gtk_bitmask_set (expected, i, left_str[0] == '1' && right_str[0] == '1');
+              right_str++;
+              left_str++;
+            }
+
+          intersection = _gtk_bitmask_intersect (_gtk_bitmask_copy (left), right);
+
+          assert_cmpmasks (intersection, expected);
+          g_assert_cmpint (_gtk_bitmask_is_empty (expected), ==, !_gtk_bitmask_intersects (left, right));
+
+          _gtk_bitmask_free (intersection);
+          _gtk_bitmask_free (expected);
+        }
+    }
+}
+
 #define SWAP(_a, _b) G_STMT_START{ \
   guint _tmp = _a; \
   _a = _b; \
@@ -328,6 +374,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/bitmask/set", test_set);
   g_test_add_func ("/bitmask/union", test_union);
   g_test_add_func ("/bitmask/intersect", test_intersect);
+  g_test_add_func ("/bitmask/intersect_hardcoded", test_intersect_hardcoded);
   g_test_add_func ("/bitmask/invert_range", test_invert_range);
 
   result = g_test_run ();

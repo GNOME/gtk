@@ -19,11 +19,14 @@
 
 #include "config.h"
 
+#define GDK_DISABLE_DEPRECATION_WARNINGS
+
 #include "gtkcssimagegradientprivate.h"
 
 #include "gtkcssprovider.h"
-#include "gtkgradientprivate.h"
-#include "gtksymboliccolorprivate.h"
+
+#include "deprecated/gtkgradientprivate.h"
+#include "deprecated/gtksymboliccolorprivate.h"
 
 G_DEFINE_TYPE (GtkCssImageGradient, _gtk_css_image_gradient, GTK_TYPE_CSS_IMAGE)
 
@@ -79,7 +82,7 @@ fade_pattern (cairo_pattern_t *pattern,
       cairo_pattern_add_color_stop_rgba (result, o, r, g, b, a * opacity);
     }
 
-  return pattern;
+  return result;
 }
 
 static cairo_pattern_t *
@@ -102,7 +105,7 @@ transition_pattern (cairo_pattern_t *start,
     {
     case CAIRO_PATTERN_TYPE_LINEAR:
       cairo_pattern_get_linear_points (start, &sx0, &sy0, &sx1, &sy1);
-      cairo_pattern_get_linear_points (start, &ex0, &ey0, &ex1, &ey1);
+      cairo_pattern_get_linear_points (end, &ex0, &ey0, &ex1, &ey1);
       result = cairo_pattern_create_linear ((1 - progress) * sx0 + progress * ex0,
                                             (1 - progress) * sx1 + progress * ex1,
                                             (1 - progress) * sy0 + progress * ey0,
@@ -110,7 +113,7 @@ transition_pattern (cairo_pattern_t *start,
       break;
     case CAIRO_PATTERN_TYPE_RADIAL:
       cairo_pattern_get_radial_circles (start, &sx0, &sy0, &sr0, &sx1, &sy1, &sr1);
-      cairo_pattern_get_radial_circles (start, &ex0, &ey0, &er0, &ex1, &ey1, &er1);
+      cairo_pattern_get_radial_circles (end, &ex0, &ey0, &er0, &ex1, &ey1, &er1);
       result = cairo_pattern_create_radial ((1 - progress) * sx0 + progress * ex0,
                                             (1 - progress) * sy0 + progress * ey0,
                                             (1 - progress) * sr0 + progress * er0,
@@ -128,7 +131,7 @@ transition_pattern (cairo_pattern_t *start,
       double so, sr, sg, sb, sa, eo, er, eg, eb, ea;
 
       cairo_pattern_get_color_stop_rgba (start, i, &so, &sr, &sg, &sb, &sa);
-      cairo_pattern_get_color_stop_rgba (start, i, &eo, &er, &eg, &eb, &ea);
+      cairo_pattern_get_color_stop_rgba (end, i, &eo, &er, &eg, &eb, &ea);
 
       cairo_pattern_add_color_stop_rgba (result,
                                          (1 - progress) * so + progress * eo,
@@ -474,7 +477,7 @@ _gtk_gradient_parse (GtkCssParser *parser)
           return NULL;
         }
 
-      color = _gtk_symbolic_color_new_take_value (_gtk_css_symbolic_value_new (parser));
+      color = _gtk_css_symbolic_value_new (parser);
       if (color == NULL)
         {
           gtk_gradient_unref (gradient);
