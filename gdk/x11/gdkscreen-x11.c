@@ -1095,6 +1095,7 @@ init_randr_support (GdkScreen *screen)
 {
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
 
+  /* NB: This is also needed for XSettings, so don't remove. */
   XSelectInput (GDK_SCREEN_XDISPLAY (screen),
                 x11_screen->xroot_window,
                 StructureNotifyMask);

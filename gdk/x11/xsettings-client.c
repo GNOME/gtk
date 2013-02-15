@@ -397,17 +397,6 @@ read_settings (XSettingsClient *client)
     g_hash_table_unref (old_list);
 }
 
-static void
-add_events (Display *display,
-	    Window   window,
-	    long     mask)
-{
-  XWindowAttributes attr;
-
-  XGetWindowAttributes (display, window, &attr);
-  XSelectInput (display, window, attr.your_event_mask | mask);
-}
-
 static Bool
 gdk_xsettings_watch (Window     window,
 		     Bool       is_start,
@@ -562,10 +551,6 @@ xsettings_client_new (GdkScreen *screen)
   client->selection_atom = atoms[0];
   client->xsettings_atom = atoms[1];
   client->manager_atom = atoms[2];
-
-  /* Select on StructureNotify so we get MANAGER events
-   */
-  add_events (client->display, gdk_x11_window_get_xid (gdk_screen_get_root_window (screen)), StructureNotifyMask);
 
   gdk_xsettings_watch (gdk_x11_window_get_xid (gdk_screen_get_root_window (screen)), True, client->screen);
 
