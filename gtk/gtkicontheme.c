@@ -1778,9 +1778,8 @@ choose_icon (GtkIconTheme       *icon_theme,
  * gtk_icon_info_load_icon(). (gtk_icon_theme_load_icon()
  * combines these two steps if all you need is the pixbuf.)
  * 
- * Return value: a #GtkIconInfo structure containing information
- * about the icon, or %NULL if the icon wasn't found. Free with
- * gtk_icon_info_free()
+ * Return value: (transfer full): a #GtkIconInfo object containing information
+ * about the icon, or %NULL if the icon wasn't found.
  *
  * Since: 2.4
  */
@@ -1856,9 +1855,8 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *icon_theme,
  * tries them all in the given order before falling back to 
  * inherited icon themes.
  * 
- * Return value: a #GtkIconInfo structure containing information
- * about the icon, or %NULL if the icon wasn't found. Free with
- * gtk_icon_info_free()
+ * Return value: (transfer full): a #GtkIconInfo object containing information
+ * about the icon, or %NULL if the icon wasn't found.
  *
  * Since: 2.12
  */
@@ -3074,6 +3072,8 @@ icon_info_new_builtin (BuiltinIcon *icon)
  * Return value: the new GtkIconInfo
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.8: Use g_object_ref()
  **/
 GtkIconInfo *
 gtk_icon_info_copy (GtkIconInfo *icon_info)
@@ -3091,6 +3091,8 @@ gtk_icon_info_copy (GtkIconInfo *icon_info)
  * Free a #GtkIconInfo and associated information
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.8: Use g_object_unref()
  **/
 void
 gtk_icon_info_free (GtkIconInfo *icon_info)
@@ -4290,7 +4292,7 @@ gtk_icon_info_load_symbolic_finish (GtkIconInfo   *icon_info,
 }
 
 /**
- * gtk_icon_info_load_symbolic_async:
+ * gtk_icon_info_load_symbolic_for_context_async:
  * @icon_info: a #GtkIconInfo structure from gtk_icon_theme_lookup_icon()
  * @context: a #GtkStyleContext
  * @cancellable: (allow-none): optional #GCancellable object,
@@ -4830,7 +4832,7 @@ _gtk_icon_theme_check_reload (GdkDisplay *display)
  * The icon can then be rendered into a pixbuf using
  * gtk_icon_info_load_icon().
  *
- * Return value: a #GtkIconInfo structure containing 
+ * Return value: (transfer full): a #GtkIconInfo structure containing 
  *     information about the icon, or %NULL if the icon 
  *     wasn't found. Free with gtk_icon_info_free()
  *
@@ -4949,7 +4951,7 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *icon_theme,
  *
  * Creates a #GtkIconInfo for a #GdkPixbuf.
  *
- * Returns: a #GtkIconInfo
+ * Return value: (transfer full): a #GtkIconInfo
  *
  * Since: 2.14
  */

@@ -192,7 +192,9 @@ void          gtk_icon_theme_add_builtin_icon      (const gchar *icon_name,
 					            GdkPixbuf   *pixbuf);
 
 GType                 gtk_icon_info_get_type           (void) G_GNUC_CONST;
+GDK_DEPRECATED_IN_3_8_FOR(g_object_ref)
 GtkIconInfo *         gtk_icon_info_copy               (GtkIconInfo  *icon_info);
+GDK_DEPRECATED_IN_3_8_FOR(g_object_unref)
 void                  gtk_icon_info_free               (GtkIconInfo  *icon_info);
 
 GtkIconInfo *         gtk_icon_info_new_for_pixbuf     (GtkIconTheme  *icon_theme,
