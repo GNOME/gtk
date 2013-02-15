@@ -4623,9 +4623,9 @@ static guint tick_callback_id;
  * then you will have to call gtk_widget_queue_resize() or
  * gtk_widget_queue_draw_area() yourself.
  *
- * gtk_frame_clock_get_frame_time() should generally be used for timing
+ * gdk_frame_clock_get_frame_time() should generally be used for timing
  * continuous animations and
- * gtk_frame_timings_get_predicted_presentation_time() if you are
+ * gdk_frame_timings_get_predicted_presentation_time() if you are
  * trying to display isolated frames particular times.
  *
  * This is a more convenient alternative to connecting directly to the
