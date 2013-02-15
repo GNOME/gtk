@@ -26,6 +26,7 @@
 #include "xsettings-client.h"
 
 #include <gdk/x11/gdkx11display.h>
+#include <gdk/x11/gdkx11property.h>
 #include <gdk/x11/gdkx11screen.h>
 #include <gdk/x11/gdkx11window.h>
 #include <gdk/x11/gdkscreen-x11.h>
@@ -55,9 +56,7 @@ struct _XSettingsClient
   Display *display;
 
   Window manager_window;
-  Atom manager_atom;
   Atom selection_atom;
-  Atom xsettings_atom;
 
   GHashTable *settings; /* string of GDK settings name => XSettingsSetting */
 };
@@ -368,16 +367,19 @@ read_settings (XSettingsClient *client)
 
   if (client->manager_window)
     {
-      gdk_x11_display_error_trap_push (gdk_screen_get_display (client->screen));
+      GdkDisplay *display = gdk_screen_get_display (client->screen);
+      Atom xsettings_atom = gdk_x11_get_xatom_by_name_for_display (display, "_XSETTINGS_SETTINGS");
+
+      gdk_x11_display_error_trap_push (display);
       result = XGetWindowProperty (client->display, client->manager_window,
-				   client->xsettings_atom, 0, LONG_MAX,
-				   False, client->xsettings_atom,
+				   xsettings_atom, 0, LONG_MAX,
+				   False, xsettings_atom,
 				   &type, &format, &n_items, &bytes_after, &data);
-      gdk_x11_display_error_trap_pop_ignored (gdk_screen_get_display (client->screen));
+      gdk_x11_display_error_trap_pop_ignored (display);
       
       if (result == Success && type != None)
 	{
-	  if (type != client->xsettings_atom)
+	  if (type != xsettings_atom)
 	    {
 	      fprintf (stderr, "Invalid type for XSETTINGS property");
 	    }
@@ -441,6 +443,7 @@ gdk_xsettings_client_event_filter (GdkXEvent *xevent,
 				   gpointer   data)
 {
   GdkScreen *screen = data;
+  GdkDisplay *display = gdk_screen_get_display (screen);
   XSettingsClient *client = GDK_X11_SCREEN (screen)->xsettings_client;
   XEvent *xev = xevent;
 
@@ -452,7 +455,7 @@ gdk_xsettings_client_event_filter (GdkXEvent *xevent,
   if (xev->xany.window == gdk_x11_window_get_xid (gdk_screen_get_root_window (screen)))
     {
       if (xev->xany.type == ClientMessage &&
-	  xev->xclient.message_type == client->manager_atom &&
+	  xev->xclient.message_type == gdk_x11_get_xatom_by_name_for_display (display, "MANAGER") &&
 	  xev->xclient.data.l[1] == client->selection_atom)
 	{
 	  check_manager_window (client);
@@ -528,8 +531,8 @@ xsettings_client_new (GdkScreen *screen)
 {
   XSettingsClient *client;
   char buffer[256];
-  char *atom_names[3];
-  Atom atoms[3];
+  char *atom_names[1];
+  Atom atoms[1];
   
   client = g_new (XSettingsClient, 1);
   if (!client)
@@ -543,14 +546,10 @@ xsettings_client_new (GdkScreen *screen)
 
   sprintf(buffer, "_XSETTINGS_S%d", gdk_x11_screen_get_screen_number (screen));
   atom_names[0] = buffer;
-  atom_names[1] = "_XSETTINGS_SETTINGS";
-  atom_names[2] = "MANAGER";
 
-  XInternAtoms (client->display, atom_names, 3, False, atoms);
+  XInternAtoms (client->display, atom_names, 1, False, atoms);
 
   client->selection_atom = atoms[0];
-  client->xsettings_atom = atoms[1];
-  client->manager_atom = atoms[2];
 
   gdk_xsettings_watch (gdk_x11_window_get_xid (gdk_screen_get_root_window (screen)), True, client->screen);
 
