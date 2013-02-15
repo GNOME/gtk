@@ -4655,7 +4655,7 @@ gtk_widget_add_tick_callback (GtkWidget       *widget,
                                      GDK_FRAME_CLOCK_PHASE_UPDATE);
     }
 
-  info = g_slice_new (GtkTickCallbackInfo);
+  info = g_slice_new0 (GtkTickCallbackInfo);
 
   info->refcount = 1;
   info->id = ++tick_callback_id;
