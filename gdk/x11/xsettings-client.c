@@ -411,14 +411,13 @@ add_events (Display *display,
 static Bool
 gdk_xsettings_watch (Window     window,
 		     Bool       is_start,
-		     long       mask,
 		     GdkScreen *screen);
 
 static void
 check_manager_window (XSettingsClient *client)
 {
   if (client->manager_window)
-    gdk_xsettings_watch (client->manager_window, False, 0, client->screen);
+    gdk_xsettings_watch (client->manager_window, False, client->screen);
 
   gdk_x11_display_grab (gdk_screen_get_display (client->screen));
 
@@ -434,9 +433,7 @@ check_manager_window (XSettingsClient *client)
 
   if (client->manager_window)
     {
-      if (!gdk_xsettings_watch (client->manager_window, True, 
-                                PropertyChangeMask | StructureNotifyMask,
-                                client->screen))
+      if (!gdk_xsettings_watch (client->manager_window, True,  client->screen))
 	{
 	  /* Inability to watch the window probably means that it was destroyed
 	   * after we ungrabbed
@@ -494,7 +491,6 @@ gdk_xsettings_client_event_filter (GdkXEvent *xevent,
 static Bool
 gdk_xsettings_watch (Window     window,
 		     Bool       is_start,
-		     long       mask,
 		     GdkScreen *screen)
 {
   GdkWindow *gdkwin;
@@ -571,8 +567,7 @@ xsettings_client_new (GdkScreen *screen)
    */
   add_events (client->display, gdk_x11_window_get_xid (gdk_screen_get_root_window (screen)), StructureNotifyMask);
 
-  gdk_xsettings_watch (gdk_x11_window_get_xid (gdk_screen_get_root_window (screen)), True, StructureNotifyMask,
-                       client->screen);
+  gdk_xsettings_watch (gdk_x11_window_get_xid (gdk_screen_get_root_window (screen)), True, client->screen);
 
   check_manager_window (client);
 
@@ -582,10 +577,9 @@ xsettings_client_new (GdkScreen *screen)
 void
 xsettings_client_destroy (XSettingsClient *client)
 {
-  gdk_xsettings_watch (gdk_x11_window_get_xid (gdk_screen_get_root_window (client->screen)),
-		       False, 0, client->screen);
+  gdk_xsettings_watch (gdk_x11_window_get_xid (gdk_screen_get_root_window (client->screen)), False, client->screen);
   if (client->manager_window)
-    gdk_xsettings_watch (client->manager_window, False, 0, client->screen);
+    gdk_xsettings_watch (client->manager_window, False, client->screen);
   
   if (client->settings)
     g_hash_table_unref (client->settings);
