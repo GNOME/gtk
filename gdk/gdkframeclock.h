@@ -82,6 +82,11 @@ GDK_AVAILABLE_IN_3_8
 void               gdk_frame_clock_request_phase (GdkFrameClock      *frame_clock,
                                                   GdkFrameClockPhase  phase);
 
+GDK_AVAILABLE_IN_3_8
+void               gdk_frame_clock_begin_updating (GdkFrameClock      *frame_clock);
+GDK_AVAILABLE_IN_3_8
+void               gdk_frame_clock_end_updating   (GdkFrameClock      *frame_clock);
+
 /* Frame history */
 GDK_AVAILABLE_IN_3_8
 gint64           gdk_frame_clock_get_frame_counter (GdkFrameClock *frame_clock);

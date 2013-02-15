@@ -739,9 +739,6 @@ gtk_style_context_update (GdkFrameClock  *clock,
                           GtkStyleContext *context)
 {
   _gtk_style_context_queue_invalidate (context, GTK_CSS_CHANGE_ANIMATE);
-
-  /* A little blech to request one more than we need */
-  gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_UPDATE);
 }
 
 static gboolean
@@ -762,6 +759,7 @@ gtk_style_context_disconnect_update (GtkStyleContext *context)
       g_signal_handler_disconnect (priv->frame_clock,
                                    priv->frame_clock_update_id);
       priv->frame_clock_update_id = 0;
+      gdk_frame_clock_end_updating (priv->frame_clock);
     }
 }
 
@@ -776,7 +774,7 @@ gtk_style_context_connect_update (GtkStyleContext *context)
                                                       "update",
                                                       G_CALLBACK (gtk_style_context_update),
                                                       context);
-      gdk_frame_clock_request_phase (priv->frame_clock, GDK_FRAME_CLOCK_PHASE_UPDATE);
+      gdk_frame_clock_begin_updating (priv->frame_clock);
     }
 }
 

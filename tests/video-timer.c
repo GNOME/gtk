@@ -350,8 +350,6 @@ on_update (GdkFrameClock *frame_clock,
 
       gtk_widget_queue_draw (window);
     }
-
-  gdk_frame_clock_request_phase (frame_clock, GDK_FRAME_CLOCK_PHASE_UPDATE);
 }
 
 static GOptionEntry options[] = {
@@ -393,7 +391,7 @@ main(int argc, char **argv)
   frame_clock = gtk_widget_get_frame_clock (window);
   g_signal_connect (frame_clock, "update",
                     G_CALLBACK (on_update), NULL);
-  gdk_frame_clock_request_phase (frame_clock, GDK_FRAME_CLOCK_PHASE_UPDATE);
+  gdk_frame_clock_begin_updating (frame_clock);
 
   gtk_main ();
 

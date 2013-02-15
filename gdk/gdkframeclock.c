@@ -285,7 +285,12 @@ gdk_frame_clock_get_frame_time (GdkFrameClock *frame_clock)
  * corresponding the requested phase will be emitted the next
  * time the frame clock processes. Multiple calls to
  * gdk_frame_clock_request_phase() will be combined togethe
- * and only one frame processed.
+ * and only one frame processed. If you are displaying animated
+ * content and want to continually request the
+ * %GDK_FRAME_CLOCK_PHASE_UPDATE phase for a period of time,
+ * you should use gdk_frame_clock_begin_updating() instead, since
+ * this allows GTK+ to adjust system parameters to get maximally
+ * smooth animations.
  *
  * Since: 3.8
  */
@@ -298,6 +303,43 @@ gdk_frame_clock_request_phase (GdkFrameClock      *frame_clock,
   GDK_FRAME_CLOCK_GET_CLASS (frame_clock)->request_phase (frame_clock, phase);
 }
 
+/**
+ * gdk_frame_clock_begin_updating:
+ * @frame_clock: a #GdkFrameClock
+ *
+ * Starts updates for an animation. Until a matching call to
+ * gdk_frame_clock_end_updating() is made, the frame clock will continually
+ * request a new frame with the %GDK_FRAME_CLOCK_PHASE_UPDATE phase.
+ * This function may be called multiple times and frames will be
+ * requested until gdk_frame_clock_end_updating() is called the same
+ * number of times.
+ *
+ * Since: 3.8
+ */
+void
+gdk_frame_clock_begin_updating (GdkFrameClock *frame_clock)
+{
+  g_return_if_fail (GDK_IS_FRAME_CLOCK (frame_clock));
+
+  GDK_FRAME_CLOCK_GET_CLASS (frame_clock)->begin_updating (frame_clock);
+}
+
+/**
+ * gdk_frame_clock_end_updating:
+ * @frame_clock: a #GdkFrameClock
+ *
+ * Stops updates for an animation. See the documentation for
+ * gdk_frame_clock_begin_updating().
+ *
+ * Since: 3.8
+ */
+void
+gdk_frame_clock_end_updating (GdkFrameClock *frame_clock)
+{
+  g_return_if_fail (GDK_IS_FRAME_CLOCK (frame_clock));
+
+  GDK_FRAME_CLOCK_GET_CLASS (frame_clock)->end_updating (frame_clock);
+}
 
 void
 _gdk_frame_clock_freeze (GdkFrameClock *clock)

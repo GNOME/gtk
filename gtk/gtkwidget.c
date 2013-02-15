@@ -4554,6 +4554,7 @@ unref_tick_callback_info (GtkWidget           *widget,
       g_signal_handlers_disconnect_by_func (frame_clock,
                                             (gpointer) gtk_widget_on_frame_clock_update,
                                             widget);
+      gdk_frame_clock_end_updating (frame_clock);
     }
 }
 
@@ -4596,10 +4597,6 @@ gtk_widget_on_frame_clock_update (GdkFrameClock *frame_clock,
       unref_tick_callback_info (widget, info, l);
       l = next;
     }
-
-  if (priv->tick_callbacks != NULL)
-    gdk_frame_clock_request_phase (frame_clock,
-                                   GDK_FRAME_CLOCK_PHASE_UPDATE);
 }
 
 static guint tick_callback_id;
@@ -4651,8 +4648,7 @@ gtk_widget_add_tick_callback (GtkWidget       *widget,
       g_signal_connect (frame_clock, "update",
                         G_CALLBACK (gtk_widget_on_frame_clock_update),
                         widget);
-      gdk_frame_clock_request_phase (frame_clock,
-                                     GDK_FRAME_CLOCK_PHASE_UPDATE);
+      gdk_frame_clock_begin_updating (frame_clock);
     }
 
   info = g_slice_new0 (GtkTickCallbackInfo);
@@ -4702,8 +4698,7 @@ gtk_widget_connect_frame_clock (GtkWidget     *widget,
       g_signal_connect (frame_clock, "update",
                         G_CALLBACK (gtk_widget_on_frame_clock_update),
                         widget);
-      gdk_frame_clock_request_phase (frame_clock,
-                                     GDK_FRAME_CLOCK_PHASE_UPDATE);
+      gdk_frame_clock_begin_updating (frame_clock);
     }
 
   if (priv->context)
@@ -4720,9 +4715,12 @@ gtk_widget_disconnect_frame_clock (GtkWidget     *widget,
     _gtk_container_stop_idle_sizer (GTK_CONTAINER (widget));
 
   if (priv->tick_callbacks)
-    g_signal_handlers_disconnect_by_func (frame_clock,
-                                          (gpointer) gtk_widget_on_frame_clock_update,
-                                          widget);
+    {
+      g_signal_handlers_disconnect_by_func (frame_clock,
+                                            (gpointer) gtk_widget_on_frame_clock_update,
+                                            widget);
+      gdk_frame_clock_end_updating (frame_clock);
+    }
 
   if (priv->context)
     gtk_style_context_set_frame_clock (priv->context, NULL);

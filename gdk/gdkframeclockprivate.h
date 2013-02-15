@@ -49,6 +49,8 @@ struct _GdkFrameClockClass
 
   void     (* request_phase)  (GdkFrameClock      *clock,
                                GdkFrameClockPhase  phase);
+  void     (* begin_updating) (GdkFrameClock      *clock);
+  void     (* end_updating)   (GdkFrameClock      *clock);
 
   void     (* freeze)         (GdkFrameClock *clock);
   void     (* thaw)           (GdkFrameClock *clock);

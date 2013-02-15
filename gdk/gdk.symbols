@@ -188,6 +188,8 @@ gdk_events_pending
 gdk_event_type_get_type
 gdk_filter_return_get_type
 gdk_flush
+gdk_frame_clock_begin_updating
+gdk_frame_clock_end_updating
 gdk_frame_clock_get_current_timings
 gdk_frame_clock_get_frame_counter
 gdk_frame_clock_get_frame_time
