@@ -407,10 +407,14 @@ gdk_xsettings_watch (Window     window,
 static void
 check_manager_window (XSettingsClient *client)
 {
+  GdkDisplay *display;
+
+  display = gdk_screen_get_display (client->screen);
+
   if (client->manager_window)
     gdk_xsettings_watch (client->manager_window, False, client->screen);
 
-  gdk_x11_display_grab (gdk_screen_get_display (client->screen));
+  gdk_x11_display_grab (display);
 
   client->manager_window = XGetSelectionOwner (client->display,
 					       client->selection_atom);
@@ -418,9 +422,9 @@ check_manager_window (XSettingsClient *client)
     XSelectInput (client->display, client->manager_window,
 		  PropertyChangeMask | StructureNotifyMask);
 
-  gdk_x11_display_ungrab (gdk_screen_get_display (client->screen));
+  gdk_x11_display_ungrab (display);
   
-  XFlush (client->display);
+  gdk_display_flush (display);
 
   if (client->manager_window)
     {
