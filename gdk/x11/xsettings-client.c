@@ -381,11 +381,11 @@ read_settings (XSettingsClient *client)
 	{
 	  if (type != xsettings_atom)
 	    {
-	      fprintf (stderr, "Invalid type for XSETTINGS property");
+	      g_warning ("Invalid type for XSETTINGS property: %s", gdk_x11_get_xatom_name_for_display (display, type));
 	    }
 	  else if (format != 8)
 	    {
-	      fprintf (stderr, "Invalid format for XSETTINGS property %d", format);
+	      g_warning ("Invalid format for XSETTINGS property: %d", format);
 	    }
 	  else
 	    client->settings = parse_settings (data, n_items);
