@@ -9969,6 +9969,26 @@ gtk_widget_has_screen (GtkWidget *widget)
   return (gtk_widget_get_screen_unchecked (widget) != NULL);
 }
 
+gint
+gtk_widget_get_scale_factor (GtkWidget *widget)
+{
+  GtkWidget *toplevel;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), 1);
+
+  if (gtk_widget_get_realized (widget))
+    return gdk_window_get_scale_factor (gtk_widget_get_window (widget));
+
+  toplevel = gtk_widget_get_toplevel (widget);
+  if (toplevel && toplevel != widget)
+    return gtk_widget_get_scale_factor (toplevel);
+
+  /* else fall back to something that is more likely to be right than
+   * just returning 1:
+   */
+  return gdk_screen_get_monitor_scale_factor (gtk_widget_get_screen (widget), 0);
+}
+
 /**
  * gtk_widget_get_display:
  * @widget: a #GtkWidget
