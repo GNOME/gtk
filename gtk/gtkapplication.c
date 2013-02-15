@@ -1418,16 +1418,22 @@ gtk_application_inhibit (GtkApplication             *application,
   GVariant *res;
   GError *error = NULL;
   guint cookie;
-  guint xid;
+  guint xid = 0;
 
   g_return_val_if_fail (GTK_IS_APPLICATION (application), 0);
   g_return_val_if_fail (!g_application_get_is_remote (G_APPLICATION (application)), 0);
   g_return_val_if_fail (application->priv->sm_proxy != NULL, 0);
 
   if (window != NULL)
-    xid = GDK_WINDOW_XID (gtk_widget_get_window (GTK_WIDGET (window)));
-  else
-    xid = 0;
+    {
+      GdkWindow *gdkwindow;
+
+      gdkwindow = gtk_widget_get_window (GTK_WIDGET (window));
+      if (gdkwindow == NULL)
+        g_warning ("Inhibit called with an unrealized window");
+      else
+        xid = GDK_WINDOW_XID (gdkwindow);
+    }
 
   res = g_dbus_proxy_call_sync (application->priv->sm_proxy,
                                 "Inhibit",
