@@ -530,9 +530,7 @@ XSettingsClient *
 xsettings_client_new (GdkScreen *screen)
 {
   XSettingsClient *client;
-  char buffer[256];
-  char *atom_names[1];
-  Atom atoms[1];
+  char *selection_atom_name;
   
   client = g_new (XSettingsClient, 1);
   if (!client)
@@ -544,12 +542,9 @@ xsettings_client_new (GdkScreen *screen)
   client->manager_window = None;
   client->settings = NULL;
 
-  sprintf(buffer, "_XSETTINGS_S%d", gdk_x11_screen_get_screen_number (screen));
-  atom_names[0] = buffer;
-
-  XInternAtoms (client->display, atom_names, 1, False, atoms);
-
-  client->selection_atom = atoms[0];
+  selection_atom_name = g_strdup_printf ("_XSETTINGS_S%d", gdk_x11_screen_get_screen_number (screen));
+  client->selection_atom = gdk_x11_get_xatom_by_name_for_display (gdk_screen_get_display (screen), selection_atom_name);
+  g_free (selection_atom_name);
 
   gdk_xsettings_watch (gdk_x11_window_get_xid (gdk_screen_get_root_window (screen)), True, client->screen);
 
