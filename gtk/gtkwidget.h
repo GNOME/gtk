@@ -848,6 +848,7 @@ GDK_AVAILABLE_IN_ALL
 GdkScreen *   gtk_widget_get_screen      (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL
 gboolean      gtk_widget_has_screen      (GtkWidget *widget);
+gdouble       gtk_widget_get_scale_factor (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL
 GdkDisplay *  gtk_widget_get_display     (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL
