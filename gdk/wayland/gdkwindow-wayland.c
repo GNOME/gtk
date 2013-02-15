@@ -130,6 +130,7 @@ struct _GdkWindowImplWayland
   GdkGeometry geometry_hints;
   GdkWindowHints geometry_mask;
 
+  GdkDevice *grab_device;
   struct wl_seat *grab_input_seat;
   guint32 grab_time;
 
@@ -563,15 +564,34 @@ gdk_wayland_window_map (GdkWindow *window)
   GdkWindowImplWayland *parent;
   GdkWaylandDisplay *wayland_display =
     GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+  GdkWindow *transient_for;
 
   if (!impl->mapped)
     {
-      if (impl->transient_for)
+      /* Popup menus can appear without a transient parent, which means they
+       * cannot be positioned properly on Wayland. This attempts to guess the
+       * surface they should be positioned with by finding the surface beneath
+       * the device that created the grab for the popup window */
+
+      if (!impl->transient_for && impl->hint == GDK_WINDOW_TYPE_HINT_POPUP_MENU)
+        {
+          transient_for = gdk_device_get_window_at_position (impl->grab_device, NULL, NULL);
+          transient_for = gdk_window_get_toplevel (transient_for);
+
+          /* start the popup at the position of the device that holds the grab */
+          gdk_window_get_device_position (transient_for,
+                                          impl->grab_device,
+                                          &window->x, &window->y, NULL);
+        }
+      else
+        transient_for = impl->transient_for;
+
+      if (transient_for)
         {
           struct wl_seat *grab_input_seat = NULL;
           GdkWindowImplWayland *tmp_impl;
 
-          parent = GDK_WINDOW_IMPL_WAYLAND (impl->transient_for->impl);
+          parent = GDK_WINDOW_IMPL_WAYLAND (transient_for->impl);
 
           /* Use the device that was used for the grab as the device for
            * the popup window setup - so this relies on GTK+ taking the
@@ -1677,6 +1697,7 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
 
 void
 _gdk_wayland_window_set_device_grabbed (GdkWindow      *window,
+                                        GdkDevice      *device,
                                         struct wl_seat *seat,
                                         guint32         time_)
 {
@@ -1686,6 +1707,7 @@ _gdk_wayland_window_set_device_grabbed (GdkWindow      *window,
 
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
+  impl->grab_device = device;
   impl->grab_input_seat = seat;
   impl->grab_time = time_;
 }

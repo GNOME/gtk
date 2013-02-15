@@ -155,6 +155,7 @@ void _gdk_wayland_display_manager_remove_display (GdkDisplayManager *manager,
 						  GdkDisplay        *display);
 
 void _gdk_wayland_window_set_device_grabbed (GdkWindow      *window,
+                                             GdkDevice      *device,
                                              struct wl_seat *seat,
                                              guint32         time_);
 
