@@ -63,7 +63,7 @@ static gint64 sleep_serial;
 static gint64 sleep_source_prepare_time;
 static GSource *sleep_source;
 
-gboolean
+static gboolean
 sleep_source_prepare (GSource *source,
                       gint    *timeout)
 {
@@ -72,7 +72,7 @@ sleep_source_prepare (GSource *source,
   return FALSE;
 }
 
-gboolean
+static gboolean
 sleep_source_check (GSource *source)
 {
   if (g_source_get_time (source) != sleep_source_prepare_time)
@@ -81,7 +81,7 @@ sleep_source_check (GSource *source)
   return FALSE;
 }
 
-gboolean
+static gboolean
 sleep_source_dispatch (GSource     *source,
                        GSourceFunc  callback,
                        gpointer     user_data)
