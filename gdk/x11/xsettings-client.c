@@ -40,6 +40,16 @@
 
 #include "gdksettings.c"
 
+/* Types of settings possible. Enum values correspond to
+ * protocol values.
+ */
+typedef enum 
+{
+  XSETTINGS_TYPE_INT     = 0,
+  XSETTINGS_TYPE_STRING  = 1,
+  XSETTINGS_TYPE_COLOR   = 2
+} XSettingsType;
+
 typedef struct _XSettingsBuffer  XSettingsBuffer;
 
 struct _XSettingsBuffer
@@ -543,7 +553,7 @@ gdk_xsettings_manager_window_filter (GdkXEvent *xevent,
 }
 
 XSettingsClient *
-xsettings_client_new (GdkScreen *screen)
+_gdk_x11_xsettings_client_new (GdkScreen *screen)
 {
   XSettingsClient *client;
   char *selection_atom_name;
@@ -568,7 +578,7 @@ xsettings_client_new (GdkScreen *screen)
 }
 
 void
-xsettings_client_destroy (XSettingsClient *client)
+_gdk_x11_xsettings_client_destroy (XSettingsClient *client)
 {
   gdk_window_remove_filter (gdk_screen_get_root_window (client->screen), gdk_xsettings_root_window_filter, client->screen);
   if (client->manager_window)
@@ -583,8 +593,8 @@ xsettings_client_destroy (XSettingsClient *client)
 }
 
 const GValue *
-xsettings_client_get_setting (XSettingsClient   *client,
-			      const char        *name)
+_gdk_x11_xsettings_client_get_setting (XSettingsClient   *client,
+		                       const char        *name)
 {
   return g_hash_table_lookup (client->settings, name);
 }

@@ -25,27 +25,11 @@
 
 #include <gdk/gdkscreen.h>
 
-/* Renames for GDK inclusion */
-
-#define xsettings_client_destroy         _gdk_x11_xsettings_client_destroy
-#define xsettings_client_get_setting     _gdk_x11_xsettings_client_get_setting
-#define xsettings_client_new             _gdk_x11_xsettings_client_new
-
 typedef struct _XSettingsClient XSettingsClient;
 
-/* Types of settings possible. Enum values correspond to
- * protocol values.
- */
-typedef enum 
-{
-  XSETTINGS_TYPE_INT     = 0,
-  XSETTINGS_TYPE_STRING  = 1,
-  XSETTINGS_TYPE_COLOR   = 2
-} XSettingsType;
-
-XSettingsClient *xsettings_client_new             (GdkScreen           *screen);
-void             xsettings_client_destroy         (XSettingsClient     *client);
-const GValue *   xsettings_client_get_setting     (XSettingsClient     *client,
-						   const char          *name);
+XSettingsClient *_gdk_x11_xsettings_client_new             (GdkScreen           *screen);
+void             _gdk_x11_xsettings_client_destroy         (XSettingsClient     *client);
+const GValue *   _gdk_x11_xsettings_client_get_setting     (XSettingsClient     *client,
+						            const char          *name);
 
 #endif /* XSETTINGS_CLIENT_H */

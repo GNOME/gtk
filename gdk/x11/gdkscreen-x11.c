@@ -135,7 +135,7 @@ _gdk_x11_screen_events_uninit (GdkScreen *screen)
 
   if (x11_screen->xsettings_client)
     {
-      xsettings_client_destroy (x11_screen->xsettings_client);
+      _gdk_x11_xsettings_client_destroy (x11_screen->xsettings_client);
       x11_screen->xsettings_client = NULL;
     }
 }
@@ -1336,7 +1336,7 @@ gdk_x11_screen_get_setting (GdkScreen   *screen,
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
   const GValue *setting;
 
-  setting = xsettings_client_get_setting (x11_screen->xsettings_client, name);
+  setting = _gdk_x11_xsettings_client_get_setting (x11_screen->xsettings_client, name);
   if (setting == NULL)
     goto out;
 
@@ -1557,7 +1557,7 @@ _gdk_x11_screen_init_events (GdkScreen *screen)
   /* Keep a flag to avoid extra notifies that we don't need
    */
   x11_screen->xsettings_in_init = TRUE;
-  x11_screen->xsettings_client = xsettings_client_new (screen);
+  x11_screen->xsettings_client = _gdk_x11_xsettings_client_new (screen);
   x11_screen->xsettings_in_init = FALSE;
 }
 
