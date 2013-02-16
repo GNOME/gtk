@@ -2384,10 +2384,12 @@ _gtk_scrolled_window_set_adjustment_value (GtkScrolledWindow *scrolled_window,
   return (*prev_value != value);
 }
 
-static void
-scrolled_window_deceleration_cb (GdkFrameClock     *frame_clock,
-                                 KineticScrollData *data)
+static gboolean
+scrolled_window_deceleration_cb (GtkWidget         *widdget,
+                                 GdkFrameClock     *frame_clock,
+                                 gpointer           user_data)
 {
+  KineticScrollData *data = user_data;
   GtkScrolledWindow *scrolled_window = data->scrolled_window;
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
   GtkAdjustment *hadjustment, *vadjustment;
@@ -2494,11 +2496,11 @@ scrolled_window_deceleration_cb (GdkFrameClock     *frame_clock,
         _gtk_scrolled_window_allocate_overshoot_window (scrolled_window);
     }
 
-  if (overshoot_x != 0 || overshoot_y != 0 ||
-      data->x_velocity != 0 || data->y_velocity != 0)
-    gdk_frame_clock_request_phase (frame_clock, GDK_FRAME_CLOCK_PHASE_UPDATE);
-  else
+  if (overshoot_x == 0 && overshoot_y == 0 &&
+      data->x_velocity == 0 && data->y_velocity == 0)
     gtk_scrolled_window_cancel_deceleration (scrolled_window);
+
+  return G_SOURCE_CONTINUE;
 }
 
 static void
@@ -2508,11 +2510,8 @@ gtk_scrolled_window_cancel_deceleration (GtkScrolledWindow *scrolled_window)
 
   if (priv->deceleration_id)
     {
-      GdkFrameClock *frame_clock;
-
-      frame_clock = gtk_widget_get_frame_clock (GTK_WIDGET (scrolled_window));
-      g_signal_handler_disconnect (frame_clock,
-                                   priv->deceleration_id);
+      gtk_widget_remove_tick_callback (GTK_WIDGET (scrolled_window),
+                                       priv->deceleration_id);
       priv->deceleration_id = 0;
     }
 }
@@ -2541,12 +2540,10 @@ gtk_scrolled_window_start_deceleration (GtkScrolledWindow *scrolled_window)
   data->vel_sine = sin (angle);
 
   scrolled_window->priv->deceleration_id =
-    g_signal_connect_data (frame_clock, "update",
-                           G_CALLBACK (scrolled_window_deceleration_cb),
-                           data,
-                           (GClosureNotify) g_free,
-                           0);
-  gdk_frame_clock_request_phase (frame_clock, GDK_FRAME_CLOCK_PHASE_UPDATE);
+    gtk_widget_add_tick_callback (GTK_WIDGET (scrolled_window),
+                                  scrolled_window_deceleration_cb,
+                                  data,
+                                  (GDestroyNotify) g_free);
 }
 
 static gboolean
