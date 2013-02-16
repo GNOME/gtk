@@ -53,7 +53,6 @@ struct _XSettingsBuffer
 struct _XSettingsClient
 {
   GdkScreen *screen;
-  Display *display;
 
   GdkWindow *manager_window;
   Atom selection_atom;
@@ -371,7 +370,7 @@ read_settings (XSettingsClient *client)
       Atom xsettings_atom = gdk_x11_get_xatom_by_name_for_display (display, "_XSETTINGS_SETTINGS");
 
       gdk_x11_display_error_trap_push (display);
-      result = XGetWindowProperty (client->display,
+      result = XGetWindowProperty (gdk_x11_display_get_xdisplay (display),
                                    gdk_x11_window_get_xid (client->manager_window),
 				   xsettings_atom, 0, LONG_MAX,
 				   False, xsettings_atom,
@@ -409,9 +408,11 @@ static void
 check_manager_window (XSettingsClient *client)
 {
   GdkDisplay *display;
+  Display *xdisplay;
   Window manager_window_xid;
 
   display = gdk_screen_get_display (client->screen);
+  xdisplay = gdk_x11_display_get_xdisplay (display);
 
   if (client->manager_window)
     {
@@ -421,14 +422,14 @@ check_manager_window (XSettingsClient *client)
 
   gdk_x11_display_grab (display);
 
-  manager_window_xid = XGetSelectionOwner (client->display,
+  manager_window_xid = XGetSelectionOwner (xdisplay,
 					   client->selection_atom);
   client->manager_window = gdk_x11_window_foreign_new_for_display (display,
                                                                    manager_window_xid);
   /* XXX: Can't use gdk_window_set_events() here because the first call to this
    * function happens too early in gdk_init() */
   if (client->manager_window)
-    XSelectInput (client->display,
+    XSelectInput (xdisplay,
                   gdk_x11_window_get_xid (client->manager_window),
                   PropertyChangeMask | StructureNotifyMask);
 
@@ -504,8 +505,6 @@ xsettings_client_new (GdkScreen *screen)
   if (!client)
     return NULL;
 
-  client->screen = screen;
-  client->display = gdk_x11_display_get_xdisplay (gdk_screen_get_display (screen));
   client->screen = screen;
   client->manager_window = None;
   client->settings = NULL;
