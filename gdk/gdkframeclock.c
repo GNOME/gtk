@@ -186,7 +186,7 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
                   G_TYPE_NONE, 0);
 
   /**
-   * GdkFrameClock::layout:
+   * GdkFrameClock::paint:
    * @clock: the frame clock emitting the signal
    *
    * This signal is emitted as the third step of toolkit and
