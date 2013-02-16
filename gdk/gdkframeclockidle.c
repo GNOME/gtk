@@ -55,8 +55,6 @@ struct _GdkFrameClockIdlePrivate
 static gboolean gdk_frame_clock_flush_idle (void *data);
 static gboolean gdk_frame_clock_paint_idle (void *data);
 
-static void gdk_frame_clock_idle_finalize             (GObject                *object);
-
 G_DEFINE_TYPE (GdkFrameClockIdle, gdk_frame_clock_idle, GDK_TYPE_FRAME_CLOCK)
 
 static gint64 sleep_serial;
@@ -121,18 +119,27 @@ gdk_frame_clock_idle_init (GdkFrameClockIdle *frame_clock_idle)
                                                         GdkFrameClockIdlePrivate);
   priv = frame_clock_idle->priv;
 
-  priv->timer = g_timer_new ();
   priv->freeze_count = 0;
 }
 
 static void
-gdk_frame_clock_idle_finalize (GObject *object)
+gdk_frame_clock_idle_dispose (GObject *object)
 {
   GdkFrameClockIdlePrivate *priv = GDK_FRAME_CLOCK_IDLE (object)->priv;
 
-  g_timer_destroy (priv->timer);
+  if (priv->flush_idle_id != 0)
+    {
+      g_source_remove (priv->flush_idle_id);
+      priv->flush_idle_id = 0;
+    }
 
-  G_OBJECT_CLASS (gdk_frame_clock_idle_parent_class)->finalize (object);
+  if (priv->paint_idle_id != 0)
+    {
+      g_source_remove (priv->paint_idle_id);
+      priv->paint_idle_id = 0;
+    }
+
+  G_OBJECT_CLASS (gdk_frame_clock_idle_parent_class)->dispose (object);
 }
 
 static gint64
@@ -478,7 +485,7 @@ gdk_frame_clock_idle_class_init (GdkFrameClockIdleClass *klass)
   GObjectClass *gobject_class = (GObjectClass*) klass;
   GdkFrameClockClass *frame_clock_class = (GdkFrameClockClass *)klass;
 
-  gobject_class->finalize     = gdk_frame_clock_idle_finalize;
+  gobject_class->dispose = gdk_frame_clock_idle_dispose;
 
   frame_clock_class->get_frame_time = gdk_frame_clock_idle_get_frame_time;
   frame_clock_class->request_phase = gdk_frame_clock_idle_request_phase;
