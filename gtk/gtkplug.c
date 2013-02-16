@@ -1092,8 +1092,6 @@ gtk_plug_realize (GtkWidget *widget)
 
   gtk_style_context_set_background (gtk_widget_get_style_context (widget),
                                     gdk_window);
-
-  gdk_window_enable_synchronized_configure (gdk_window);
 }
 
 static void
