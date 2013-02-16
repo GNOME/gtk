@@ -111,14 +111,14 @@ static void     gdk_window_x11_set_background     (GdkWindow      *window,
 
 static void        gdk_window_impl_x11_finalize   (GObject            *object);
 
-#define WINDOW_IS_TOPLEVEL_OR_FOREIGN(window) \
-  (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
-   GDK_WINDOW_TYPE (window) != GDK_WINDOW_OFFSCREEN)
+#define WINDOW_IS_TOPLEVEL_OR_FOREIGN(window)           \
+  (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TOPLEVEL ||   \
+   GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP ||       \
+   GDK_WINDOW_TYPE (window) == GDK_WINDOW_FOREIGN)
 
-#define WINDOW_IS_TOPLEVEL(window)		     \
-  (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
-   GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN && \
-   GDK_WINDOW_TYPE (window) != GDK_WINDOW_OFFSCREEN)
+#define WINDOW_IS_TOPLEVEL(window)                      \
+  (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TOPLEVEL ||   \
+   GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP)
 
 /* Return whether time1 is considered later than time2 as far as xserver
  * time is concerned.  Accounts for wraparound.
