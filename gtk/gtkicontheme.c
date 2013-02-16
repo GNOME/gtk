@@ -3064,7 +3064,7 @@ icon_info_new_builtin (BuiltinIcon *icon)
 }
 
 /**
- * gtk_icon_info_copy:
+ * gtk_icon_info_copy: (skip)
  * @icon_info: a #GtkIconInfo
  * 
  * Make a copy of a #GtkIconInfo.
@@ -3085,7 +3085,7 @@ gtk_icon_info_copy (GtkIconInfo *icon_info)
 }
 
 /**
- * gtk_icon_info_free:
+ * gtk_icon_info_free: (skip)
  * @icon_info: a #GtkIconInfo
  * 
  * Free a #GtkIconInfo and associated information
