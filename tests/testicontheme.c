@@ -231,7 +231,7 @@ main (int argc, char *argv[])
 	  if (display_name)
 	    g_print ("Display name: %s\n", display_name);
 	  
-	  gtk_icon_info_free (icon_info);
+	  g_object_unref (icon_info);
 	}
     }
   else

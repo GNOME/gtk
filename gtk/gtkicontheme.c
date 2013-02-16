@@ -1444,7 +1444,7 @@ ensure_lru_cache_space (GtkIconTheme *icon_theme)
 		    g_list_length (priv->info_cache_lru)));
 
       priv->info_cache_lru = g_list_delete_link (priv->info_cache_lru, l);
-      gtk_icon_info_free (icon_info);
+      g_object_unref (icon_info);
     }
 }
 
@@ -1465,7 +1465,7 @@ add_to_lru_cache (GtkIconTheme *icon_theme,
   ensure_lru_cache_space (icon_theme);
   /* prepend new info to LRU */
   priv->info_cache_lru = g_list_prepend (priv->info_cache_lru,
-					 gtk_icon_info_copy (icon_info));
+					 g_object_ref (icon_info));
 }
 
 static void
@@ -1500,7 +1500,7 @@ remove_from_lru_cache (GtkIconTheme *icon_theme,
 		    g_list_length (priv->info_cache_lru)));
 
       priv->info_cache_lru = g_list_remove (priv->info_cache_lru, icon_info);
-      gtk_icon_info_free (icon_info);
+      g_object_unref (icon_info);
     }
 }
 
@@ -1614,7 +1614,7 @@ choose_icon (GtkIconTheme       *icon_theme,
 		    icon_info->key.size, icon_info->key.flags,
 		    g_hash_table_size (priv->info_cache)));
 
-      icon_info = gtk_icon_info_copy (icon_info);
+      icon_info = g_object_ref (icon_info);
       remove_from_lru_cache (icon_theme, icon_info);
 
       return icon_info;
@@ -1937,7 +1937,7 @@ gtk_icon_theme_load_icon (GtkIconTheme         *icon_theme,
     }
 
   pixbuf = gtk_icon_info_load_icon (icon_info, error);
-  gtk_icon_info_free (icon_info);
+  g_object_unref (icon_info);
 
   return pixbuf;
 }
@@ -3117,7 +3117,7 @@ gtk_icon_info_finalize (GObject *object)
 
   if (icon_info->loadable)
     g_object_unref (icon_info->loadable);
-  g_slist_free_full (icon_info->emblem_infos, (GDestroyNotify) gtk_icon_info_free);
+  g_slist_free_full (icon_info->emblem_infos, (GDestroyNotify) g_object_unref);
   if (icon_info->pixbuf)
     g_object_unref (icon_info->pixbuf);
   if (icon_info->cache_pixbuf)
@@ -3509,7 +3509,7 @@ proxy_pixbuf_destroy (guchar *pixels, gpointer data)
   if (icon_theme != NULL)
     ensure_in_lru_cache (icon_theme, icon_info);
 
-  gtk_icon_info_free (icon_info);
+  g_object_unref (icon_info);
 }
 
 /**
@@ -3576,7 +3576,7 @@ gtk_icon_info_load_icon (GtkIconInfo *icon_info,
 			      gdk_pixbuf_get_height (icon_info->pixbuf),
 			      gdk_pixbuf_get_rowstride (icon_info->pixbuf),
 			      proxy_pixbuf_destroy,
-			      gtk_icon_info_copy (icon_info));
+			      g_object_ref (icon_info));
 
   return icon_info->proxy_pixbuf;
 }
@@ -3738,7 +3738,7 @@ proxy_symbolic_pixbuf_destroy (guchar *pixels, gpointer data)
   if (icon_theme != NULL)
     ensure_in_lru_cache (icon_theme, icon_info);
 
-  gtk_icon_info_free (icon_info);
+  g_object_unref (icon_info);
 }
 
 static GdkPixbuf *
@@ -3757,7 +3757,7 @@ symbolic_cache_get_proxy (SymbolicPixbufCache *symbolic_cache,
 			      gdk_pixbuf_get_height (symbolic_cache->pixbuf),
 			      gdk_pixbuf_get_rowstride (symbolic_cache->pixbuf),
 			      proxy_symbolic_pixbuf_destroy,
-			      gtk_icon_info_copy (icon_info));
+			      g_object_ref (icon_info));
 
   return symbolic_cache->proxy_pixbuf;
 }
@@ -4834,7 +4834,7 @@ _gtk_icon_theme_check_reload (GdkDisplay *display)
  *
  * Return value: (transfer full): a #GtkIconInfo structure containing 
  *     information about the icon, or %NULL if the icon 
- *     wasn't found. Free with gtk_icon_info_free()
+ *     wasn't found. Unref with g_object_unref()
  *
  * Since: 2.14
  */

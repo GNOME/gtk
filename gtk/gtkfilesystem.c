@@ -1165,7 +1165,7 @@ get_pixbuf_from_gicon (GIcon      *icon,
     return NULL;
 
   pixbuf = gtk_icon_info_load_icon (icon_info, error);
-  gtk_icon_info_free (icon_info);
+  g_object_unref (icon_info);
 
   return pixbuf;
 }

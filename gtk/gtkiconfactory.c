@@ -1569,7 +1569,7 @@ render_icon_name_pixbuf (GtkIconSource    *icon_source,
       if (info)
         {
           tmp_pixbuf = gtk_icon_info_load_icon (info, &error);
-          gtk_icon_info_free (info);
+          g_object_unref (info);
         }
       else
         tmp_pixbuf = NULL;

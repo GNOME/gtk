@@ -263,7 +263,7 @@ ensure_pixbuf_for_icon_name_or_gicon (GtkIconHelper *self,
   self->priv->rendered_pixbuf = ensure_stated_icon_from_info (self, context, info);
 
   if (info)
-    gtk_icon_info_free (info);
+    g_object_unref (info);
 }
 
 static void
