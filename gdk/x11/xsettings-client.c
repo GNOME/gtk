@@ -55,7 +55,7 @@ struct _XSettingsClient
   GdkScreen *screen;
   Display *display;
 
-  Window manager_window;
+  GdkWindow *manager_window;
   Atom selection_atom;
 
   GHashTable *settings; /* string of GDK settings name => XSettingsSetting */
@@ -371,7 +371,8 @@ read_settings (XSettingsClient *client)
       Atom xsettings_atom = gdk_x11_get_xatom_by_name_for_display (display, "_XSETTINGS_SETTINGS");
 
       gdk_x11_display_error_trap_push (display);
-      result = XGetWindowProperty (client->display, client->manager_window,
+      result = XGetWindowProperty (client->display,
+                                   gdk_x11_window_get_xid (client->manager_window),
 				   xsettings_atom, 0, LONG_MAX,
 				   False, xsettings_atom,
 				   &type, &format, &n_items, &bytes_after, &data);
@@ -401,15 +402,16 @@ read_settings (XSettingsClient *client)
 
 static Bool
 gdk_xsettings_watch (GdkScreen *screen,
-                     Window     window);
+                     GdkWindow *window);
 static Bool
 gdk_xsettings_unwatch (GdkScreen *screen,
-                       Window     window);
+                       GdkWindow *window);
 
 static void
 check_manager_window (XSettingsClient *client)
 {
   GdkDisplay *display;
+  Window manager_window_xid;
 
   display = gdk_screen_get_display (client->screen);
 
@@ -418,11 +420,16 @@ check_manager_window (XSettingsClient *client)
 
   gdk_x11_display_grab (display);
 
-  client->manager_window = XGetSelectionOwner (client->display,
-					       client->selection_atom);
+  manager_window_xid = XGetSelectionOwner (client->display,
+					   client->selection_atom);
+  client->manager_window = gdk_x11_window_foreign_new_for_display (display,
+                                                                   manager_window_xid);
+  /* XXX: Can't use gdk_window_set_events() here because the first call to this
+   * function happens too early in gdk_init() */
   if (client->manager_window)
-    XSelectInput (client->display, client->manager_window,
-		  PropertyChangeMask | StructureNotifyMask);
+    XSelectInput (client->display,
+                  gdk_x11_window_get_xid (client->manager_window),
+                  PropertyChangeMask | StructureNotifyMask);
 
   gdk_x11_display_ungrab (display);
   
@@ -435,7 +442,7 @@ check_manager_window (XSettingsClient *client)
 	  /* Inability to watch the window probably means that it was destroyed
 	   * after we ungrabbed
 	   */
-	  client->manager_window = None;
+	  client->manager_window = NULL;
 	  return;
 	}
     }
@@ -468,7 +475,7 @@ gdk_xsettings_client_event_filter (GdkXEvent *xevent,
 	  return GDK_FILTER_REMOVE;
 	}
     }
-  else if (xev->xany.window == client->manager_window)
+  else if (xev->xany.window == gdk_x11_window_get_xid (client->manager_window))
     {
       if (xev->xany.type == DestroyNotify)
 	{
@@ -488,51 +495,20 @@ gdk_xsettings_client_event_filter (GdkXEvent *xevent,
 
 static Bool
 gdk_xsettings_watch (GdkScreen *screen,
-                     Window     window)
+                     GdkWindow *window)
 {
-  GdkWindow *gdkwin;
-
-  gdkwin = gdk_x11_window_lookup_for_display (gdk_screen_get_display (screen), window);
-
-  if (gdkwin)
-    g_object_ref (gdkwin);
-  else
-    {
-      gdkwin = gdk_x11_window_foreign_new_for_display (gdk_screen_get_display (screen), window);
-      
-      /* gdk_window_foreign_new_for_display() can fail and return NULL if the
-       * window has already been destroyed.
-       */
-      if (!gdkwin)
-        return False;
-    }
-
-  gdk_window_add_filter (gdkwin, gdk_xsettings_client_event_filter, screen);
+  g_object_ref (window);
+  gdk_window_add_filter (window, gdk_xsettings_client_event_filter, screen);
 
   return True;
 }
 
 static Bool
 gdk_xsettings_unwatch (GdkScreen *screen,
-                       Window     window)
+                       GdkWindow *window)
 {
-  GdkWindow *gdkwin;
-
-  gdkwin = gdk_x11_window_lookup_for_display (gdk_screen_get_display (screen), window);
-
-  if (!gdkwin)
-    {
-      /* gdkwin should not be NULL here, since if starting the watch succeeded
-       * we have a reference on the window. It might mean that the caller didn't
-       * remove the watch when it got a DestroyNotify event. Or maybe the
-       * caller ignored the return value when starting the watch failed.
-       */
-      g_warning ("gdk_xsettings_unwatch(): Couldn't find window to unwatch");
-      return False;
-    }
-  
-  gdk_window_remove_filter (gdkwin, gdk_xsettings_client_event_filter, screen);
-  g_object_unref (gdkwin);
+  gdk_window_remove_filter (window, gdk_xsettings_client_event_filter, screen);
+  g_object_unref (window);
 
   return True;
 }
@@ -557,7 +533,7 @@ xsettings_client_new (GdkScreen *screen)
   client->selection_atom = gdk_x11_get_xatom_by_name_for_display (gdk_screen_get_display (screen), selection_atom_name);
   g_free (selection_atom_name);
 
-  gdk_xsettings_watch (screen, gdk_x11_window_get_xid (gdk_screen_get_root_window (screen)));
+  gdk_xsettings_watch (screen, gdk_screen_get_root_window (screen));
 
   check_manager_window (client);
 
@@ -567,7 +543,7 @@ xsettings_client_new (GdkScreen *screen)
 void
 xsettings_client_destroy (XSettingsClient *client)
 {
-  gdk_xsettings_unwatch (client->screen, gdk_x11_window_get_xid (gdk_screen_get_root_window (client->screen)));
+  gdk_xsettings_unwatch (client->screen, gdk_screen_get_root_window (client->screen));
   if (client->manager_window)
     gdk_xsettings_unwatch (client->screen, client->manager_window);
   
