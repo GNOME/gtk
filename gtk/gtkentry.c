@@ -3164,6 +3164,7 @@ gtk_entry_unrealize (GtkWidget *widget)
         {
           if (icon_info->window != NULL)
             {
+              gtk_widget_unregister_window (widget, icon_info->window);
               gdk_window_destroy (icon_info->window);
               icon_info->window = NULL;
             }
