@@ -24,19 +24,13 @@
 #define XSETTINGS_CLIENT_H
 
 #include <gdk/gdkscreen.h>
-#include <X11/Xlib.h>
 
 /* Renames for GDK inclusion */
 
 #define xsettings_client_destroy         _gdk_x11_xsettings_client_destroy
 #define xsettings_client_get_setting     _gdk_x11_xsettings_client_get_setting
 #define xsettings_client_new             _gdk_x11_xsettings_client_new
-#define xsettings_client_process_event   _gdk_x11_xsettings_client_process_event
-#define xsettings_setting_equal          _gdk_x11_xsettings_setting_equal
-#define xsettings_setting_free           _gdk_x11_xsettings_setting_free
 
-typedef struct _XSettingsColor   XSettingsColor;
-typedef struct _XSettingsSetting XSettingsSetting;
 typedef struct _XSettingsClient XSettingsClient;
 
 /* Types of settings possible. Enum values correspond to
@@ -49,30 +43,9 @@ typedef enum
   XSETTINGS_TYPE_COLOR   = 2
 } XSettingsType;
 
-struct _XSettingsColor
-{
-  unsigned short red, green, blue, alpha;
-};
-
-struct _XSettingsSetting
-{
-  XSettingsType type;
-  
-  union {
-    int v_int;
-    char *v_string;
-    XSettingsColor v_color;
-  } data;
-};
-
-void              xsettings_setting_free          (XSettingsSetting    *setting);
-int               xsettings_setting_equal         (XSettingsSetting    *setting_a,
-					           XSettingsSetting    *setting_b);
-
 XSettingsClient *xsettings_client_new             (GdkScreen           *screen);
 void             xsettings_client_destroy         (XSettingsClient     *client);
-const XSettingsSetting *
-                 xsettings_client_get_setting     (XSettingsClient     *client,
+const GValue *   xsettings_client_get_setting     (XSettingsClient     *client,
 						   const char          *name);
 
 #endif /* XSETTINGS_CLIENT_H */

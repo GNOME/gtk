@@ -63,7 +63,6 @@ struct _XSettingsClient
 static void
 gdk_xsettings_notify (const char       *name,
 		      GdkSettingAction  action,
-		      XSettingsSetting *setting,
 		      GdkScreen        *screen)
 {
   GdkEvent new_event;
@@ -81,12 +80,33 @@ gdk_xsettings_notify (const char       *name,
   gdk_event_put (&new_event);
 }
 
+static gboolean
+value_equal (const GValue *value_a,
+             const GValue *value_b)
+{
+  if (G_VALUE_TYPE (value_a) != G_VALUE_TYPE (value_b))
+    return FALSE;
+
+  switch (G_VALUE_TYPE (value_a))
+    {
+    case G_TYPE_INT:
+      return g_value_get_int (value_a) == g_value_get_int (value_b);
+    case XSETTINGS_TYPE_COLOR:
+      return gdk_rgba_equal (g_value_get_boxed (value_a), g_value_get_boxed (value_b));
+    case G_TYPE_STRING:
+      return g_str_equal (g_value_get_string (value_a), g_value_get_string (value_b));
+    default:
+      g_warning ("unable to compare values of type %s", g_type_name (G_VALUE_TYPE (value_a)));
+      return FALSE;
+    }
+}
+
 static void
 notify_changes (XSettingsClient *client,
 		GHashTable      *old_list)
 {
   GHashTableIter iter;
-  XSettingsSetting *setting, *old_setting;
+  GValue *setting, *old_setting;
   const char *name;
 
   if (client->settings != NULL)
@@ -97,9 +117,9 @@ notify_changes (XSettingsClient *client,
 	  old_setting = old_list ? g_hash_table_lookup (old_list, name) : NULL;
 
 	  if (old_setting == NULL)
-	    gdk_xsettings_notify (name, GDK_SETTING_ACTION_NEW, setting, client->screen);
-	  else if (!xsettings_setting_equal (setting, old_setting))
-	    gdk_xsettings_notify (name, GDK_SETTING_ACTION_CHANGED, setting, client->screen);
+	    gdk_xsettings_notify (name, GDK_SETTING_ACTION_NEW, client->screen);
+	  else if (!value_equal (setting, old_setting))
+	    gdk_xsettings_notify (name, GDK_SETTING_ACTION_CHANGED, client->screen);
 	    
 	  /* remove setting from old_list */
 	  if (old_setting != NULL)
@@ -112,7 +132,7 @@ notify_changes (XSettingsClient *client,
       /* old_list now contains only deleted settings */
       g_hash_table_iter_init (&iter, old_list);
       while (g_hash_table_iter_next (&iter, (gpointer *) &name, (gpointer*) &old_setting))
-	gdk_xsettings_notify (name, GDK_SETTING_ACTION_DELETED, NULL, client->screen);
+	gdk_xsettings_notify (name, GDK_SETTING_ACTION_DELETED, client->screen);
     }
 }
 
@@ -215,6 +235,15 @@ fetch_string (XSettingsBuffer  *buffer,
   return TRUE;
 }
 
+static void
+free_value (gpointer data)
+{
+  GValue *value = data;
+
+  g_value_unset (value);
+  g_free (value);
+}
+
 static GHashTable *
 parse_settings (unsigned char *data,
 		size_t         len)
@@ -224,7 +253,7 @@ parse_settings (unsigned char *data,
   CARD32 serial;
   CARD32 n_entries;
   CARD32 i;
-  XSettingsSetting *setting = NULL;
+  GValue *value = NULL;
   char *x_name = NULL;
   const char *gdk_name;
   
@@ -263,9 +292,6 @@ parse_settings (unsigned char *data,
       if (!fetch_card16 (&buffer, &name_len))
 	goto out;
 
-      setting = g_new (XSettingsSetting, 1);
-      setting->type = XSETTINGS_TYPE_INT; /* No allocated memory */
-
       if (!fetch_string (&buffer, name_len, &x_name) ||
           /* last change serial (we ignore it) */
           !fetch_card32 (&buffer, &v_int))
@@ -277,34 +303,55 @@ parse_settings (unsigned char *data,
 	  if (!fetch_card32 (&buffer, &v_int))
 	    goto out;
 
-	  setting->data.v_int = (INT32)v_int;
-          GDK_NOTE(SETTINGS, g_print("  %s = %d\n", x_name, (gint) setting->data.v_int));
+          value = g_new0 (GValue, 1);
+          g_value_init (value, G_TYPE_INT);
+          g_value_set_int (value, (gint32) v_int);
+
+          GDK_NOTE(SETTINGS, g_print("  %s = %d\n", x_name, (gint32) v_int));
 	  break;
 	case XSETTINGS_TYPE_STRING:
-	  if (!fetch_card32 (&buffer, &v_int) ||
-              !fetch_string (&buffer, v_int, &setting->data.v_string))
-	    goto out;
-	  
-          GDK_NOTE(SETTINGS, g_print("  %s = \"%s\"\n", x_name, setting->data.v_string));
+          {
+            char *s;
+
+            if (!fetch_card32 (&buffer, &v_int) ||
+                !fetch_string (&buffer, v_int, &s))
+              goto out;
+            
+            value = g_new0 (GValue, 1);
+            g_value_init (value, G_TYPE_STRING);
+            g_value_take_string (value, s);
+
+            GDK_NOTE(SETTINGS, g_print("  %s = \"%s\"\n", x_name, s));
+          }
 	  break;
 	case XSETTINGS_TYPE_COLOR:
-	  if (!fetch_ushort (&buffer, &setting->data.v_color.red) ||
-	      !fetch_ushort (&buffer, &setting->data.v_color.green) ||
-	      !fetch_ushort (&buffer, &setting->data.v_color.blue) ||
-	      !fetch_ushort (&buffer, &setting->data.v_color.alpha))
-	    goto out;
+          {
+            unsigned short red, green, blue, alpha;
+            GdkRGBA rgba;
 
-          GDK_NOTE(SETTINGS, g_print("  %s = #%02X%02X%02X%02X\n", x_name, 
-                                 setting->data.v_color.alpha, setting->data.v_color.red,
-                                 setting->data.v_color.green, setting->data.v_color.blue));
+            if (!fetch_ushort (&buffer, &red) ||
+                !fetch_ushort (&buffer, &green) ||
+                !fetch_ushort (&buffer, &blue) ||
+                !fetch_ushort (&buffer, &alpha))
+              goto out;
+
+            rgba.red = red / 65535.0;
+            rgba.green = green / 65535.0;
+            rgba.blue = blue / 65535.0;
+            rgba.alpha = alpha / 65535.0;
+
+            value = g_new0 (GValue, 1);
+            g_value_init (value, G_TYPE_STRING);
+            g_value_set_boxed (value, &rgba);
+
+            GDK_NOTE(SETTINGS, g_print("  %s = #%02X%02X%02X%02X\n", x_name, alpha,red, green, blue));
+          }
 	  break;
 	default:
 	  /* Quietly ignore unknown types */
           GDK_NOTE(SETTINGS, g_print("  %s = ignored (unknown type %u)\n", x_name, type));
 	  break;
 	}
-
-      setting->type = type;
 
       gdk_name = gdk_from_xsettings_name (x_name);
       g_free (x_name);
@@ -321,7 +368,7 @@ parse_settings (unsigned char *data,
           if (settings == NULL)
             settings = g_hash_table_new_full (g_str_hash, g_str_equal,
                                               NULL,
-                                              (GDestroyNotify) xsettings_setting_free);
+                                              free_value);
 
           if (g_hash_table_lookup (settings, gdk_name) != NULL)
             {
@@ -329,18 +376,18 @@ parse_settings (unsigned char *data,
               goto out;
             }
 
-          g_hash_table_insert (settings, (gpointer) gdk_name, setting);
+          g_hash_table_insert (settings, (gpointer) gdk_name, value);
         }
 
-      setting = NULL;
+      value = NULL;
     }
 
   return settings;
 
  out:
 
-  if (setting)
-    xsettings_setting_free (setting);
+  if (value)
+    free_value (value);
 
   if (settings)
     g_hash_table_unref (settings);
@@ -535,42 +582,10 @@ xsettings_client_destroy (XSettingsClient *client)
   g_free (client);
 }
 
-const XSettingsSetting *
+const GValue *
 xsettings_client_get_setting (XSettingsClient   *client,
 			      const char        *name)
 {
   return g_hash_table_lookup (client->settings, name);
-}
-
-int
-xsettings_setting_equal (XSettingsSetting *setting_a,
-			 XSettingsSetting *setting_b)
-{
-  if (setting_a->type != setting_b->type)
-    return 0;
-
-  switch (setting_a->type)
-    {
-    case XSETTINGS_TYPE_INT:
-      return setting_a->data.v_int == setting_b->data.v_int;
-    case XSETTINGS_TYPE_COLOR:
-      return (setting_a->data.v_color.red == setting_b->data.v_color.red &&
-	      setting_a->data.v_color.green == setting_b->data.v_color.green &&
-	      setting_a->data.v_color.blue == setting_b->data.v_color.blue &&
-	      setting_a->data.v_color.alpha == setting_b->data.v_color.alpha);
-    case XSETTINGS_TYPE_STRING:
-      return strcmp (setting_a->data.v_string, setting_b->data.v_string) == 0;
-    }
-
-  return 0;
-}
-
-void
-xsettings_setting_free (XSettingsSetting *setting)
-{
-  if (setting->type == XSETTINGS_TYPE_STRING)
-    g_free (setting->data.v_string);
-
-  g_free (setting);
 }
 

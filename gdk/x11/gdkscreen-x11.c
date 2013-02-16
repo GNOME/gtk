@@ -1329,86 +1329,32 @@ gdk_x11_screen_get_window_stack (GdkScreen *screen)
 }
 
 static gboolean
-check_transform (const gchar *xsettings_name,
-		 GType        src_type,
-		 GType        dest_type)
-{
-  if (!g_value_type_transformable (src_type, dest_type))
-    {
-      g_warning ("Cannot transform xsetting %s of type %s to type %s\n",
-		 xsettings_name,
-		 g_type_name (src_type),
-		 g_type_name (dest_type));
-      return FALSE;
-    }
-  else
-    return TRUE;
-}
-
-static gboolean
 gdk_x11_screen_get_setting (GdkScreen   *screen,
 			    const gchar *name,
 			    GValue      *value)
 {
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
-  const XSettingsSetting *setting;
-  gboolean success = FALSE;
-  GValue tmp_val = G_VALUE_INIT;
+  const GValue *setting;
 
   setting = xsettings_client_get_setting (x11_screen->xsettings_client, name);
   if (setting == NULL)
     goto out;
 
-  switch (setting->type)
+  if (!g_value_type_transformable (G_VALUE_TYPE (setting), G_VALUE_TYPE (value)))
     {
-    case XSETTINGS_TYPE_INT:
-      if (check_transform (name, G_TYPE_INT, G_VALUE_TYPE (value)))
-	{
-	  g_value_init (&tmp_val, G_TYPE_INT);
-	  g_value_set_int (&tmp_val, setting->data.v_int);
-	  g_value_transform (&tmp_val, value);
-
-	  success = TRUE;
-	}
-      break;
-    case XSETTINGS_TYPE_STRING:
-      if (check_transform (name, G_TYPE_STRING, G_VALUE_TYPE (value)))
-	{
-	  g_value_init (&tmp_val, G_TYPE_STRING);
-	  g_value_set_string (&tmp_val, setting->data.v_string);
-	  g_value_transform (&tmp_val, value);
-
-	  success = TRUE;
-	}
-      break;
-    case XSETTINGS_TYPE_COLOR:
-      if (!check_transform (name, GDK_TYPE_RGBA, G_VALUE_TYPE (value)))
-	{
-	  GdkRGBA rgba;
-
-	  g_value_init (&tmp_val, GDK_TYPE_RGBA);
-
-	  rgba.red = setting->data.v_color.red / 65535.0;
-	  rgba.green = setting->data.v_color.green / 65535.0;
-	  rgba.blue = setting->data.v_color.blue / 65535.0;
-	  rgba.alpha = setting->data.v_color.alpha / 65535.0;
-
-	  g_value_set_boxed (&tmp_val, &rgba);
-
-	  g_value_transform (&tmp_val, value);
-
-	  success = TRUE;
-	}
-      break;
+      g_warning ("Cannot transform xsetting %s of type %s to type %s\n",
+		 name,
+		 g_type_name (G_VALUE_TYPE (setting)),
+		 g_type_name (G_VALUE_TYPE (value)));
+      goto out;
     }
 
-  g_value_unset (&tmp_val);
+  g_value_transform (setting, value);
+
+  return TRUE;
 
  out:
-  if (success)
-    return TRUE;
-  else
-    return _gdk_x11_get_xft_setting (screen, name, value);
+  return _gdk_x11_get_xft_setting (screen, name, value);
 }
 
 static void
