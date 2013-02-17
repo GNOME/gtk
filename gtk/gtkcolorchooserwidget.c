@@ -296,6 +296,10 @@ remove_palette (GtkColorChooserWidget *cc)
   GList *children, *l;
   GtkWidget *widget;
 
+  if (cc->priv->current != NULL &&
+      gtk_widget_get_parent (GTK_WIDGET (cc->priv->current)) != cc->priv->custom)
+    cc->priv->current = NULL;
+
   children = gtk_container_get_children (GTK_CONTAINER (cc->priv->palette));
   for (l = children; l; l = l->next)
     {
