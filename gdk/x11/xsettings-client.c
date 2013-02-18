@@ -76,11 +76,7 @@ gdk_xsettings_notify (const char       *name,
 		      GdkScreen        *screen)
 {
   GdkEvent new_event;
-  GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
 
-  if (x11_screen->xsettings_in_init)
-    return;
-  
   new_event.type = GDK_SETTING;
   new_event.setting.window = gdk_screen_get_root_window (screen);
   new_event.setting.send_event = FALSE;
@@ -408,7 +404,8 @@ parse_settings (unsigned char *data,
 }
 
 static void
-read_settings (XSettingsClient *client)
+read_settings (XSettingsClient *client,
+               gboolean         do_notify)
 {
   Atom type;
   int format;
@@ -451,7 +448,8 @@ read_settings (XSettingsClient *client)
 	}
     }
 
-  notify_changes (client, old_list);
+  if (do_notify)
+    notify_changes (client, old_list);
   if (old_list)
     g_hash_table_unref (old_list);
 }
@@ -462,7 +460,8 @@ gdk_xsettings_manager_window_filter (GdkXEvent *xevent,
                                      gpointer   data);
 
 static void
-check_manager_window (XSettingsClient *client)
+check_manager_window (XSettingsClient *client,
+                      gboolean         notify_changes)
 {
   GdkDisplay *display;
   Display *xdisplay;
@@ -499,7 +498,7 @@ check_manager_window (XSettingsClient *client)
       gdk_window_add_filter (client->manager_window, gdk_xsettings_manager_window_filter, client->screen);
     }
       
-  read_settings (client);
+  read_settings (client, notify_changes);
 }
 
 static GdkFilterReturn
@@ -521,7 +520,7 @@ gdk_xsettings_root_window_filter (GdkXEvent *xevent,
       xev->xclient.message_type == gdk_x11_get_xatom_by_name_for_display (display, "MANAGER") &&
       xev->xclient.data.l[1] == client->selection_atom)
     {
-      check_manager_window (client);
+      check_manager_window (client, TRUE);
       return GDK_FILTER_REMOVE;
     }
   
@@ -539,13 +538,13 @@ gdk_xsettings_manager_window_filter (GdkXEvent *xevent,
 
   if (xev->xany.type == DestroyNotify)
     {
-      check_manager_window (client);
+      check_manager_window (client, TRUE);
       /* let GDK do its cleanup */
       return GDK_FILTER_CONTINUE; 
     }
   else if (xev->xany.type == PropertyNotify)
     {
-      read_settings (client);
+      read_settings (client, TRUE);
       return GDK_FILTER_REMOVE;
     }
   
@@ -572,7 +571,7 @@ _gdk_x11_xsettings_client_new (GdkScreen *screen)
 
   gdk_window_add_filter (gdk_screen_get_root_window (screen), gdk_xsettings_root_window_filter, screen);
 
-  check_manager_window (client);
+  check_manager_window (client, FALSE);
 
   return client;
 }

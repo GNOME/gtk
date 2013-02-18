@@ -69,7 +69,6 @@ struct _GdkX11Screen
    * fetch of window manager name
    */
   guint need_refetch_wm_name : 1;
-  guint xsettings_in_init : 1;
   guint is_composited : 1;
   guint xft_init : 1; /* Whether we've intialized these values yet */
   guint xft_antialias : 1;
