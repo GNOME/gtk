@@ -1473,6 +1473,7 @@ gdk_window_new (GdkWindow     *parent,
     {
       GdkFrameClock *frame_clock = g_object_new (GDK_TYPE_FRAME_CLOCK_IDLE, NULL);
       gdk_window_set_frame_clock (window, frame_clock);
+      g_object_unref (frame_clock);
     }
 
   native = FALSE;
@@ -1735,6 +1736,7 @@ gdk_window_reparent (GdkWindow *window,
         {
           GdkFrameClock *frame_clock = g_object_new (GDK_TYPE_FRAME_CLOCK_IDLE, NULL);
           gdk_window_set_frame_clock (window, frame_clock);
+          g_object_unref (frame_clock);
         }
     }
   else
