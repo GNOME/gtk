@@ -4577,6 +4577,8 @@ gtk_widget_on_frame_clock_update (GdkFrameClock *frame_clock,
   GtkWidgetPrivate *priv = widget->priv;
   GList *l;
 
+  g_object_ref (widget);
+
   for (l = priv->tick_callbacks; l;)
     {
       GtkTickCallbackInfo *info = l->data;
@@ -4597,6 +4599,8 @@ gtk_widget_on_frame_clock_update (GdkFrameClock *frame_clock,
       unref_tick_callback_info (widget, info, l);
       l = next;
     }
+
+  g_object_unref (widget);
 }
 
 static guint tick_callback_id;
