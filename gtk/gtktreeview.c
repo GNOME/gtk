@@ -3347,6 +3347,7 @@ gtk_tree_view_button_release_drag_column (GtkWidget      *widget,
 					 tree_view->priv->cur_reorder->left_column);
     }
   tree_view->priv->drag_column = NULL;
+  gtk_widget_unregister_window (widget, tree_view->priv->drag_window);
   gdk_window_destroy (tree_view->priv->drag_window);
   tree_view->priv->drag_window = NULL;
 
