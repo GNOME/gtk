@@ -31,6 +31,10 @@
 #include "gdkframeclockidle.h"
 #include "gdk.h"
 
+#ifdef G_OS_WIN32
+#include <windows.h>
+#endif
+
 #define FRAME_INTERVAL 16667 // microseconds
 
 struct _GdkFrameClockIdlePrivate
@@ -51,6 +55,9 @@ struct _GdkFrameClockIdlePrivate
   GdkFrameClockPhase phase;
 
   guint in_paint_idle : 1;
+#ifdef G_OS_WIN32
+  guint begin_period : 1;
+#endif
 };
 
 static gboolean gdk_frame_clock_flush_idle (void *data);
@@ -139,6 +146,14 @@ gdk_frame_clock_idle_dispose (GObject *object)
       g_source_remove (priv->paint_idle_id);
       priv->paint_idle_id = 0;
     }
+
+#ifdef G_OS_WIN32
+  if (priv->begin_period) 
+    {
+      timeEndPeriod(1);
+      priv->begin_period = FALSE;
+    }
+#endif
 
   G_OBJECT_CLASS (gdk_frame_clock_idle_parent_class)->dispose (object);
 }
@@ -474,6 +489,15 @@ gdk_frame_clock_idle_begin_updating (GdkFrameClock *clock)
   GdkFrameClockIdle *clock_idle = GDK_FRAME_CLOCK_IDLE (clock);
   GdkFrameClockIdlePrivate *priv = clock_idle->priv;
 
+#ifdef G_OS_WIN32
+  /* We need a higher resolution timer while doing animations */
+  if (priv->updating_count == 0 && !priv->begin_period)
+    {
+      timeBeginPeriod(1);
+      priv->begin_period = TRUE;
+    }
+#endif
+
   priv->updating_count++;
   maybe_start_idle (clock_idle);
 }
@@ -488,6 +512,14 @@ gdk_frame_clock_idle_end_updating (GdkFrameClock *clock)
 
   priv->updating_count--;
   maybe_stop_idle (clock_idle);
+
+#ifdef G_OS_WIN32
+  if (priv->updating_count == 0 && priv->begin_period)
+    {
+      timeEndPeriod(1);
+      priv->begin_period = FALSE;
+    }
+#endif
 }
 
 static void
