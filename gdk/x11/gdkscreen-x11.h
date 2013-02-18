@@ -56,7 +56,6 @@ struct _GdkX11Screen
   gint xft_dpi;
 
   /* Window manager */
-  GdkAtom cm_selection_atom;
   long last_wmspec_check_time;
   Window wmspec_check_window;
   char *window_manager_name;

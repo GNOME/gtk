@@ -434,25 +434,21 @@ gdk_x11_screen_get_screen_number (GdkScreen *screen)
   return GDK_X11_SCREEN (screen)->screen_num;
 }
 
+static Atom
+get_cm_atom (GdkX11Screen *x11_screen)
+{
+  return _gdk_x11_get_xatom_for_display_printf (x11_screen->display, "_NET_WM_CM_S%d", x11_screen->screen_num);
+}
+
 static gboolean
 check_is_composited (GdkDisplay *display,
 		     GdkX11Screen *x11_screen)
 {
-  Atom xselection = gdk_x11_atom_to_xatom_for_display (display, x11_screen->cm_selection_atom);
   Window xwindow;
   
-  xwindow = XGetSelectionOwner (GDK_DISPLAY_XDISPLAY (display), xselection);
+  xwindow = XGetSelectionOwner (GDK_DISPLAY_XDISPLAY (display), get_cm_atom (x11_screen));
 
   return xwindow != None;
-}
-
-static GdkAtom
-make_cm_atom (int screen_number)
-{
-  gchar *name = g_strdup_printf ("_NET_WM_CM_S%d", screen_number);
-  GdkAtom atom = gdk_atom_intern (name, FALSE);
-  g_free (name);
-  return atom;
 }
 
 static void
@@ -1076,9 +1072,8 @@ _gdk_x11_screen_setup (GdkScreen *screen)
 {
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
 
-  x11_screen->cm_selection_atom = make_cm_atom (x11_screen->screen_num);
   gdk_display_request_selection_notification (x11_screen->display,
-					      x11_screen->cm_selection_atom);
+					      gdk_x11_xatom_to_atom_for_display (x11_screen->display, get_cm_atom (x11_screen)));
   x11_screen->is_composited = check_is_composited (x11_screen->display, x11_screen);
 }
 
@@ -1194,10 +1189,8 @@ _gdk_x11_screen_process_owner_change (GdkScreen *screen,
 #ifdef HAVE_XFIXES
   XFixesSelectionNotifyEvent *selection_event = (XFixesSelectionNotifyEvent *)event;
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
-  Atom xcm_selection_atom = gdk_x11_atom_to_xatom_for_display (x11_screen->display,
-							       x11_screen->cm_selection_atom);
 
-  if (selection_event->selection == xcm_selection_atom)
+  if (selection_event->selection == get_cm_atom (x11_screen))
     {
       gboolean composited = selection_event->owner != None;
 

@@ -461,6 +461,26 @@ gdk_x11_get_xatom_by_name_for_display (GdkDisplay  *display,
 					    gdk_atom_intern (atom_name, FALSE));
 }
 
+Atom
+_gdk_x11_get_xatom_for_display_printf (GdkDisplay    *display,
+                                       const gchar   *format,
+                                       ...)
+{
+  va_list args;
+  char *atom_name;
+  Atom atom;
+
+  va_start (args, format);
+  atom_name = g_strdup_vprintf (format, args);
+  va_end (args);
+
+  atom = gdk_x11_get_xatom_by_name_for_display (display, atom_name);
+
+  g_free (atom_name);
+
+  return atom;
+}
+
 /**
  * gdk_x11_get_xatom_by_name:
  * @atom_name: a string

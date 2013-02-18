@@ -297,6 +297,10 @@ void _gdk_x11_precache_atoms (GdkDisplay          *display,
                               const gchar * const *atom_names,
                               gint                 n_atoms);
 
+Atom _gdk_x11_get_xatom_for_display_printf         (GdkDisplay    *display,
+                                                    const gchar   *format,
+                                                    ...) G_GNUC_PRINTF (2, 3);
+
 GdkFilterReturn
 _gdk_x11_dnd_filter (GdkXEvent *xev,
                      GdkEvent  *event,
