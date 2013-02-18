@@ -1,3 +1,11 @@
+Overview of Changes from GTK+ 2.24.15 to 2.24.16
+================================================
+
+* Bug fixes:
+ 694077 Make GtkItemFactory produce GtkSeparatorMenuItems
+ 645065 GtkFileChooserButton doesn't handle closing its dialog correctly
+        Reliably stop spinning when a GtkSpinButton is hidden
+
 Overview of Changes from GTK+ 2.24.14 to 2.24.15
 ================================================
 
