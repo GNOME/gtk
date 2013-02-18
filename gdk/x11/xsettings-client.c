@@ -29,6 +29,7 @@
 #include <gdk/x11/gdkx11property.h>
 #include <gdk/x11/gdkx11screen.h>
 #include <gdk/x11/gdkx11window.h>
+#include <gdk/x11/gdkprivate-x11.h>
 #include <gdk/x11/gdkscreen-x11.h>
 
 #include <gdkinternals.h>
@@ -65,7 +66,6 @@ struct _XSettingsClient
   GdkScreen *screen;
 
   GdkWindow *manager_window;
-  Atom selection_atom;
 
   GHashTable *settings; /* string of GDK settings name => XSettingsSetting */
 };
@@ -454,6 +454,12 @@ read_settings (XSettingsClient *client,
     g_hash_table_unref (old_list);
 }
 
+static Atom
+get_selection_atom (GdkScreen *screen)
+{
+  return _gdk_x11_get_xatom_for_display_printf (gdk_screen_get_display (screen), "_XSETTINGS_S%d", gdk_x11_screen_get_screen_number (screen));
+}
+
 static GdkFilterReturn
 gdk_xsettings_manager_window_filter (GdkXEvent *xevent,
                                      GdkEvent  *event,
@@ -478,8 +484,7 @@ check_manager_window (XSettingsClient *client,
 
   gdk_x11_display_grab (display);
 
-  manager_window_xid = XGetSelectionOwner (xdisplay,
-					   client->selection_atom);
+  manager_window_xid = XGetSelectionOwner (xdisplay, get_selection_atom (client->screen));
   client->manager_window = gdk_x11_window_foreign_new_for_display (display,
                                                                    manager_window_xid);
   /* XXX: Can't use gdk_window_set_events() here because the first call to this
@@ -518,7 +523,7 @@ gdk_xsettings_root_window_filter (GdkXEvent *xevent,
    */
   if (xev->xany.type == ClientMessage &&
       xev->xclient.message_type == gdk_x11_get_xatom_by_name_for_display (display, "MANAGER") &&
-      xev->xclient.data.l[1] == client->selection_atom)
+      xev->xclient.data.l[1] == get_selection_atom (client->screen))
     {
       check_manager_window (client, TRUE);
       return GDK_FILTER_REMOVE;
@@ -555,7 +560,6 @@ XSettingsClient *
 _gdk_x11_xsettings_client_new (GdkScreen *screen)
 {
   XSettingsClient *client;
-  char *selection_atom_name;
   
   client = g_new (XSettingsClient, 1);
   if (!client)
@@ -564,10 +568,6 @@ _gdk_x11_xsettings_client_new (GdkScreen *screen)
   client->screen = screen;
   client->manager_window = None;
   client->settings = NULL;
-
-  selection_atom_name = g_strdup_printf ("_XSETTINGS_S%d", gdk_x11_screen_get_screen_number (screen));
-  client->selection_atom = gdk_x11_get_xatom_by_name_for_display (gdk_screen_get_display (screen), selection_atom_name);
-  g_free (selection_atom_name);
 
   gdk_window_add_filter (gdk_screen_get_root_window (screen), gdk_xsettings_root_window_filter, screen);
 
