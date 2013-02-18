@@ -3744,36 +3744,40 @@ gtk_entry_draw (GtkWidget *widget,
   GtkEntryPrivate *priv = entry->priv;
   int i;
 
-  context = gtk_widget_get_style_context (widget);
-
-  /* Draw entry_bg, shadow, progress and focus */
-  gtk_entry_draw_frame (widget, context, cr);
-
-  /* Draw text and cursor */
-  cairo_save (cr);
-
-  gtk_cairo_transform_to_window (cr, widget, priv->text_area);
-
-  if (priv->dnd_position != -1)
-    gtk_entry_draw_cursor (GTK_ENTRY (widget), cr, CURSOR_DND);
-  
-  gtk_entry_draw_text (GTK_ENTRY (widget), cr);
-
-  /* When no text is being displayed at all, don't show the cursor */
-  if (gtk_entry_get_display_mode (entry) != DISPLAY_BLANK &&
-      gtk_widget_has_focus (widget) &&
-      priv->selection_bound == priv->current_pos && priv->cursor_visible)
-    gtk_entry_draw_cursor (GTK_ENTRY (widget), cr, CURSOR_STANDARD);
-
-  cairo_restore (cr);
-
-  /* Draw icons */
-  for (i = 0; i < MAX_ICONS; i++)
+  if (gtk_cairo_should_draw_window (cr,
+                                    gtk_widget_get_window (widget)))
     {
-      EntryIconInfo *icon_info = priv->icons[i];
+      context = gtk_widget_get_style_context (widget);
 
-      if (icon_info != NULL)
-        draw_icon (widget, cr, i);
+      /* Draw entry_bg, shadow, progress and focus */
+      gtk_entry_draw_frame (widget, context, cr);
+
+      /* Draw text and cursor */
+      cairo_save (cr);
+
+      gtk_cairo_transform_to_window (cr, widget, priv->text_area);
+
+      if (priv->dnd_position != -1)
+        gtk_entry_draw_cursor (GTK_ENTRY (widget), cr, CURSOR_DND);
+
+      gtk_entry_draw_text (GTK_ENTRY (widget), cr);
+
+      /* When no text is being displayed at all, don't show the cursor */
+      if (gtk_entry_get_display_mode (entry) != DISPLAY_BLANK &&
+          gtk_widget_has_focus (widget) &&
+          priv->selection_bound == priv->current_pos && priv->cursor_visible)
+        gtk_entry_draw_cursor (GTK_ENTRY (widget), cr, CURSOR_STANDARD);
+
+      cairo_restore (cr);
+
+      /* Draw icons */
+      for (i = 0; i < MAX_ICONS; i++)
+        {
+          EntryIconInfo *icon_info = priv->icons[i];
+
+          if (icon_info != NULL)
+            draw_icon (widget, cr, i);
+        }
     }
 
   return FALSE;
