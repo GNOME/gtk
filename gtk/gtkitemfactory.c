@@ -964,7 +964,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
   else if (type_id == quark_type_toggle_item)
     type = GTK_TYPE_CHECK_MENU_ITEM;
   else if (type_id == quark_type_separator_item)
-    type = GTK_TYPE_MENU_ITEM;
+    type = GTK_TYPE_SEPARATOR_MENU_ITEM;
   else if (type_id == quark_type_branch)
     type = GTK_TYPE_MENU_ITEM;
   else if (type_id == quark_type_last_branch)
