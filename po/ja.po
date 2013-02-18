@@ -11,14 +11,15 @@
 # Masato Hashimoto <cabezon.hashimoto@gmail.com>, 2010.
 # IWAI, Masaharu <iwaim.sub@gmail.com>, 2010.
 # Jiro Matsuzawa <jmatsuzawa@src.gnome.org>, 2011, 2012.
+# Shushi KUROSE <md81bird@hitaki.net>, 2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ gtk-3-2\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-01-19 19:42+0000\n"
-"PO-Revision-Date: 2012-08-21 12:20+0900\n"
-"Last-Translator: Jiro Matsuzawa <jmatsuzawa@src.gnome.org>\n"
+"POT-Creation-Date: 2013-02-18 10:38+0000\n"
+"PO-Revision-Date: 2013-02-16 01:14+0900\n"
+"Last-Translator: Shushi KUROSE <md81bird@hitaki.net>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -2553,7 +2554,7 @@ msgstr "色"
 #. It's a typographical term, as in "Binding and finishing"
 #: ../gtk/gtkprintunixdialog.c:3800
 msgid "Finishing"
-msgstr "完了"
+msgstr "仕上げ"
 
 #: ../gtk/gtkprintunixdialog.c:3810
 msgid "Some of the settings in the dialog conflict"
