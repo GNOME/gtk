@@ -29,7 +29,6 @@
 
 #include "config.h"
 #include <stdlib.h>
-#include <windows.h>
 
 #include "gdk.h"
 #include "gdkwindowimpl.h"
