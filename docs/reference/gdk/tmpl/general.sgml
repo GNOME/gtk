@@ -411,10 +411,3 @@ This macro is defined if GDK is configured to use the X11 backend.
 
 
 
-<!-- ##### MACRO GDK_WINDOWING_WIN32 ##### -->
-<para>
-This macro is defined if GDK is configured to use the Win32 backend.
-</para>
-
-
-

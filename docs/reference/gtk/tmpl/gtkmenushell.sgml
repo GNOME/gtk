@@ -79,6 +79,15 @@ This signal is emitted when a menu shell is deactivated.
 
 @menushell: the object which received the signal.
 
+<!-- ##### SIGNAL GtkMenuShell::insert ##### -->
+<para>
+
+</para>
+
+@menushell: the object which received the signal.
+@widget: 
+@arg1: 
+
 <!-- ##### SIGNAL GtkMenuShell::move-current ##### -->
 <para>
 An action signal which moves the current menu item in the direction 

@@ -212,7 +212,7 @@ gdk_offscreen_window_get_pixmap().
 <!-- ##### SECTION Image ##### -->
 
 
-<!-- ##### STRUCT GdkWindow ##### -->
+<!-- ##### TYPEDEF GdkWindow ##### -->
 <para>
 An opaque structure representing an onscreen drawable.
 Pointers to structures of type #GdkPixmap, #GdkBitmap,

@@ -29,7 +29,7 @@ types, they are not deprecated.
 <!-- ##### SECTION Image ##### -->
 
 
-<!-- ##### STRUCT GdkPixmap ##### -->
+<!-- ##### TYPEDEF GdkPixmap ##### -->
 <para>
 An opaque structure representing an offscreen drawable.
 Pointers to structures of type #GdkPixmap, #GdkBitmap,

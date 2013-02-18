@@ -264,6 +264,11 @@ GtkSettings instance for the default screen.
 
 </para>
 
+<!-- ##### ARG GtkSettings:gtk-primary-button-warps-slider ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkSettings:gtk-print-backends ##### -->
 <para>
 
