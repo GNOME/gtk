@@ -176,6 +176,9 @@ EXTRA_DIST += \
 	iconview-empty.css \
 	iconview-empty.ui \
 	iconview-empty.ref.ui \
+	image-load-from-file.css \
+	image-load-from-file.ref.ui \
+	image-load-from-file.ui \
 	info-bar-message-types.css \
 	info-bar-message-types.ref.ui \
 	info-bar-message-types.ui \
