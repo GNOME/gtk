@@ -23,6 +23,9 @@
   color: @fg_color;
   border-color: shade (@bg_color, 0.6);
   padding: 2px;
+  -GtkWindow-resize-grip-width: 0;
+  -GtkWindow-resize-grip-height: 0;
+  -GtkWindow-decoration-button-layout: 'icon:minimize,maximize,close';
 }
 
 GtkWindow, .button, .slider {
@@ -728,4 +731,74 @@ GtkCalendar.button:hover {
                      -gtk-gradient(radial, center center, 0, center center, 0.5, to(alpha(currentColor, 0.0833333)), to(transparent)),
                      -gtk-gradient(radial, center center, 0, center center, 0.5, to(currentColor), to(transparent));
   animation: spinner 1s infinite linear;
+}
+
+/* Client side decorations */
+.titlebar > GtkLabel:backdrop {
+  color: darker (@bg_color);
+  text-shadow: none;
+}
+
+.titlebar GtkLabel {
+  font: Sans Bold 10;
+  text-shadow: 1px 1px lighter (@bg_color);
+}
+
+.titlebar GtkButton:backdrop {
+  border-image: none;
+  background-image: none;
+}
+
+.titlebar GtkButton GtkLabel:backdrop {
+  text-shadow: none;
+  color: darker (@bg_color);
+}
+
+.titlebar GtkButton GtkLabel {
+  font: Sans Bold 12;
+  color: white;
+  text-shadow: 0px 1px darker (darker (@bg_color));
+}
+
+.titlebar GtkButton {
+  border-style: none;
+  border-color: darker (@bg_color);
+
+  background-image: -gtk-gradient (linear, center top, center bottom,
+       from (@bg_color),
+       color-stop (0.5, darker (@bg_color)),
+       to (@bg_color));
+}
+
+.titlebar GtkButton:first-child {
+  border-radius: 10px 0px 0px 0px;
+}
+
+.titlebar GtkButton:last-child {
+  border-radius: 0px 10px 0px 0px;
+}
+
+.titlebar:backdrop {
+  background-image: none;
+}
+
+.titlebar {
+  background-image: -gtk-gradient (linear, center top, center bottom,
+       from (white),
+       to (@bg_color));
+  border-radius: 10px 10px 0px 0px;
+}
+
+.window-border {
+  border-color: darker (@bg_color);
+  border-radius: 10px;
+  border-width: 0;
+  border-style: solid;
+}
+
+.window-outer-border {
+  border-color: transparent;
+  border-radius: 10px;
+  border-width: 10px 10px 10px 10px;
+  border-style: solid;
 }
