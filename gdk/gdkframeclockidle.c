@@ -247,7 +247,8 @@ maybe_start_idle (GdkFrameClockIdle *clock_idle)
                                                               (GDestroyNotify) g_object_unref);
         }
 
-      if (priv->paint_idle_id == 0 && RUN_PAINT_IDLE (priv))
+      if (!priv->in_paint_idle &&
+	  priv->paint_idle_id == 0 && RUN_PAINT_IDLE (priv))
         {
           priv->paint_idle_id = gdk_threads_add_timeout_full (GDK_PRIORITY_REDRAW,
                                                               min_interval,
