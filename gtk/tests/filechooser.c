@@ -37,6 +37,7 @@
 #include "gtk/gtkfilechooserdefault.h"
 #include "gtk/gtkfilechooserentry.h"
 
+#ifdef BROKEN_TESTS
 static void
 log_test (gboolean passed, const char *test_name, ...)
 {
@@ -77,6 +78,7 @@ set_filename_timeout_cb (gpointer data)
 
   return FALSE;
 }
+#endif
 
 
 static guint wait_for_idle_id = 0;
@@ -100,6 +102,7 @@ wait_for_idle (void)
     gtk_main_iteration ();
 }
 
+#ifdef BROKEN_TESTS
 static void
 test_set_filename (GtkFileChooserAction action,
 		   gboolean focus_button,
@@ -230,6 +233,7 @@ test_black_box_set_current_name (gconstpointer data)
 
   g_free (cwd);
 }
+#endif
 
 /* FIXME: fails in CREATE_FOLDER mode when FOLDER_NAME == "/" */
 
@@ -253,6 +257,7 @@ test_black_box_set_current_name (gconstpointer data)
  * http://bugzilla.gnome.org/show_bug.cgi?id=346058
  */
 
+#ifdef BROKEN_TESTS
 static void
 setup_set_filename_tests (void)
 {
@@ -288,6 +293,7 @@ setup_set_current_name_tests (void)
   for (i = 0; i < G_N_ELEMENTS (tests); i++)
     g_test_add_data_func (tests[i].test_name, &tests[i], test_black_box_set_current_name);
 }
+#endif
 
 typedef struct
 {
@@ -914,6 +920,7 @@ setup_file_chooser_button_tests (void)
     }
 }
 
+#ifdef BROKEN_TESTS
 struct confirm_overwrite_closure {
   GtkWidget *chooser;
   GtkWidget *accept_button;
@@ -1052,6 +1059,7 @@ test_confirm_overwrite (void)
   passed = passed && test_confirm_overwrite_for_path ("/etc/resolv.conf", TRUE); 
   g_assert (passed);
 }
+#endif
 
 static const GtkFileChooserAction open_actions[] = {
   GTK_FILE_CHOOSER_ACTION_OPEN,
@@ -1064,6 +1072,7 @@ static const GtkFileChooserAction save_actions[] = {
 };
 
 
+#ifdef BROKEN_TESTS
 static gboolean
 has_action (const GtkFileChooserAction *actions,
 	    int n_actions,
@@ -1116,7 +1125,7 @@ get_impl_from_dialog (GtkWidget *dialog)
 
   return impl;
 }
-#ifdef BROKEN_TESTS
+
 static gboolean
 test_widgets_for_current_action (GtkFileChooserDialog *dialog,
 				 GtkFileChooserAction  expected_action)
@@ -1439,7 +1448,6 @@ test_reload (void)
   log_test (passed, "test_reload(): set a folder explicitly before mapping");
   g_assert (passed);
 }
-#endif
 
 static gboolean
 test_button_folder_states_for_action (GtkFileChooserAction action, gboolean use_dialog, gboolean set_folder_on_dialog)
@@ -1668,6 +1676,7 @@ test_folder_switch_and_filters (void)
 
   log_test (passed, "test_folder_switch_and_filters(): all filter tests");
 }
+#endif
 
 int
 main (int    argc,
