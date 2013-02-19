@@ -650,7 +650,7 @@ lookup_immodule (gchar **immodules_list)
 	  gboolean found;
 	  gchar *context_id;
 	  found = g_hash_table_lookup_extended (contexts_hash, *immodules_list,
-						&context_id, NULL);
+						(gpointer *) &context_id, NULL);
 	  if (found)
 	    return context_id;
 	}
