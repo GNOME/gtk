@@ -236,7 +236,6 @@ x11_introspection_files = 		\
 	x11/gdkxftdefaults.c		\
 	x11/gdkxid.c			\
 	x11/xsettings-client.c		\
-	x11/xsettings-common.c		\
 	x11/gdkx.h			\
 	x11/gdkx11cursor.h		\
 	x11/gdkx11display.h		\
