@@ -479,6 +479,17 @@ test_position (GtkTreeView *tree_view,
 /* Testing scrolling to various positions with various alignments */
 
 static void
+ensure_layout (void)
+{
+        /* HACK: sleep for more than one frame, to give the paint clock
+         * time to prepare the new layout */
+        g_usleep (100 * 1000);
+
+	while (gtk_events_pending ())
+		gtk_main_iteration ();
+}
+
+static void
 scroll (ScrollFixture *fixture,
 	GtkTreePath   *path,
 	gboolean       use_align,
@@ -492,9 +503,7 @@ scroll (ScrollFixture *fixture,
 
 	gtk_widget_show_all (fixture->window);
 
-	while (gtk_events_pending ())
-		gtk_main_iteration ();
-
+        ensure_layout ();
 	test_position (GTK_TREE_VIEW (fixture->tree_view), path,
 		       use_align, row_align);
 }
@@ -561,9 +570,7 @@ scroll_after_realize (ScrollFixture *fixture,
 				      path, NULL,
 				      use_align, row_align, 0.0);
 
-	while (gtk_events_pending ())
-		gtk_main_iteration ();
-
+        ensure_layout ();
 	test_position (GTK_TREE_VIEW (fixture->tree_view), path,
 		       use_align, row_align);
 }
@@ -643,9 +650,7 @@ scroll_both_realize (ScrollFixture *fixture,
 				      path, NULL,
 				      use_align, row_align, 0.0);
 
-	while (gtk_events_pending ())
-		gtk_main_iteration ();
-
+        ensure_layout ();
 	test_position (GTK_TREE_VIEW (fixture->tree_view), path,
 		       use_align, row_align);
 }
@@ -812,8 +817,7 @@ scroll_new_row (ScrollFixture *fixture,
 				  column,
 				  TRUE);
 
-	while (gtk_events_pending ())
-		gtk_main_iteration ();
+        ensure_layout ();
 
 	/* Test position */
 	test_position (GTK_TREE_VIEW (fixture->tree_view), scroll_path,
@@ -865,8 +869,7 @@ scroll_new_row_tree (ScrollFixture *fixture,
 					      scroll_path, NULL, FALSE, 0.0, 0.0);
 		gtk_tree_path_free (scroll_path);
 
-		while (gtk_events_pending ())
-			gtk_main_iteration ();
+                ensure_layout ();
 
 		/* Test position, the scroll bar must be at the end */
 		g_assert (gtk_adjustment_get_value (vadjustment) == gtk_adjustment_get_upper (vadjustment) - gtk_adjustment_get_page_size (vadjustment));
@@ -1012,6 +1015,9 @@ test_bug93584 (ScrollFixture *fixture,
 
 	row = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (store), NULL);
 	row -= 20;
+
+	while (gtk_events_pending ())
+		gtk_main_iteration ();
 
 	path = gtk_tree_path_new_from_indices (row, -1);
 	scroll (fixture, path, TRUE, 0.5);
