@@ -1318,6 +1318,8 @@ gdk_x11_screen_get_setting (GdkScreen   *screen,
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
   const GValue *setting;
 
+  if (x11_screen->xsettings == NULL)
+    goto out;
   setting = g_hash_table_lookup (x11_screen->xsettings, name);
   if (setting == NULL)
     goto out;
