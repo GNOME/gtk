@@ -96,6 +96,8 @@ typedef void    (*GtkCallback)     (GtkWidget        *widget,
  *
  * Returns: %G_SOURCE_CONTINUE if the tick callback should continue to be called,
  *  %G_SOURCE_REMOVE if the tick callback should be removed.
+ *
+ * Since: 3.8
  */
 typedef gboolean (*GtkTickCallback) (GtkWidget     *widget,
                                      GdkFrameClock *frame_clock,
@@ -488,6 +490,7 @@ void	   gtk_widget_queue_draw_region   (GtkWidget	       *widget,
                                            const cairo_region_t*region);
 void	   gtk_widget_queue_resize	  (GtkWidget	       *widget);
 void	   gtk_widget_queue_resize_no_redraw (GtkWidget *widget);
+GDK_AVAILABLE_IN_3_8
 GdkFrameClock* gtk_widget_get_frame_clock (GtkWidget           *widget);
 
 GDK_DEPRECATED_IN_3_0_FOR(gtk_widget_get_preferred_size)
