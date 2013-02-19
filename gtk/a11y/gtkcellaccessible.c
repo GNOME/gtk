@@ -412,7 +412,7 @@ _gtk_cell_accessible_state_changed (GtkCellAccessible    *cell,
         atk_object_notify_state_change (object,
                                         state_map[i].atk_state,
                                         !state_map[i].invert);
-      if (added & state_map[i].renderer_state)
+      if (removed & state_map[i].renderer_state)
         atk_object_notify_state_change (object,
                                         state_map[i].atk_state,
                                         state_map[i].invert);
