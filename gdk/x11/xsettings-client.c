@@ -61,24 +61,15 @@ struct _XSettingsBuffer
   unsigned char *pos;
 };
 
-struct _XSettingsClient
-{
-  GdkScreen *screen;
-
-  GdkWindow *manager_window;
-
-  GHashTable *settings; /* string of GDK settings name => XSettingsSetting */
-};
-
 static void
-gdk_xsettings_notify (const char       *name,
-		      GdkSettingAction  action,
-		      GdkScreen        *screen)
+gdk_xsettings_notify (GdkX11Screen     *x11_screen,
+                      const char       *name,
+		      GdkSettingAction  action)
 {
   GdkEvent new_event;
 
   new_event.type = GDK_SETTING;
-  new_event.setting.window = gdk_screen_get_root_window (screen);
+  new_event.setting.window = gdk_screen_get_root_window (GDK_SCREEN (x11_screen));
   new_event.setting.send_event = FALSE;
   new_event.setting.action = action;
   new_event.setting.name = (char*) name;
@@ -108,24 +99,24 @@ value_equal (const GValue *value_a,
 }
 
 static void
-notify_changes (XSettingsClient *client,
-		GHashTable      *old_list)
+notify_changes (GdkX11Screen *x11_screen,
+		GHashTable   *old_list)
 {
   GHashTableIter iter;
   GValue *setting, *old_setting;
   const char *name;
 
-  if (client->settings != NULL)
+  if (x11_screen->xsettings != NULL)
     {
-      g_hash_table_iter_init (&iter, client->settings);
+      g_hash_table_iter_init (&iter, x11_screen->xsettings);
       while (g_hash_table_iter_next (&iter, (gpointer *) &name, (gpointer*) &setting))
 	{
 	  old_setting = old_list ? g_hash_table_lookup (old_list, name) : NULL;
 
 	  if (old_setting == NULL)
-	    gdk_xsettings_notify (name, GDK_SETTING_ACTION_NEW, client->screen);
+	    gdk_xsettings_notify (x11_screen, name, GDK_SETTING_ACTION_NEW);
 	  else if (!value_equal (setting, old_setting))
-	    gdk_xsettings_notify (name, GDK_SETTING_ACTION_CHANGED, client->screen);
+	    gdk_xsettings_notify (x11_screen, name, GDK_SETTING_ACTION_CHANGED);
 	    
 	  /* remove setting from old_list */
 	  if (old_setting != NULL)
@@ -138,7 +129,7 @@ notify_changes (XSettingsClient *client,
       /* old_list now contains only deleted settings */
       g_hash_table_iter_init (&iter, old_list);
       while (g_hash_table_iter_next (&iter, (gpointer *) &name, (gpointer*) &old_setting))
-	gdk_xsettings_notify (name, GDK_SETTING_ACTION_DELETED, client->screen);
+	gdk_xsettings_notify (x11_screen, name, GDK_SETTING_ACTION_DELETED);
     }
 }
 
@@ -404,8 +395,8 @@ parse_settings (unsigned char *data,
 }
 
 static void
-read_settings (XSettingsClient *client,
-               gboolean         do_notify)
+read_settings (GdkX11Screen *x11_screen,
+               gboolean      do_notify)
 {
   Atom type;
   int format;
@@ -414,18 +405,18 @@ read_settings (XSettingsClient *client,
   unsigned char *data;
   int result;
 
-  GHashTable *old_list = client->settings;
+  GHashTable *old_list = x11_screen->xsettings;
 
-  client->settings = NULL;
+  x11_screen->xsettings = NULL;
 
-  if (client->manager_window)
+  if (x11_screen->xsettings_manager_window)
     {
-      GdkDisplay *display = gdk_screen_get_display (client->screen);
+      GdkDisplay *display = x11_screen->display;
       Atom xsettings_atom = gdk_x11_get_xatom_by_name_for_display (display, "_XSETTINGS_SETTINGS");
 
       gdk_x11_display_error_trap_push (display);
       result = XGetWindowProperty (gdk_x11_display_get_xdisplay (display),
-                                   gdk_x11_window_get_xid (client->manager_window),
+                                   gdk_x11_window_get_xid (x11_screen->xsettings_manager_window),
 				   xsettings_atom, 0, LONG_MAX,
 				   False, xsettings_atom,
 				   &type, &format, &n_items, &bytes_after, &data);
@@ -442,22 +433,22 @@ read_settings (XSettingsClient *client,
 	      g_warning ("Invalid format for XSETTINGS property: %d", format);
 	    }
 	  else
-	    client->settings = parse_settings (data, n_items);
+	    x11_screen->xsettings = parse_settings (data, n_items);
 	  
 	  XFree (data);
 	}
     }
 
   if (do_notify)
-    notify_changes (client, old_list);
+    notify_changes (x11_screen, old_list);
   if (old_list)
     g_hash_table_unref (old_list);
 }
 
 static Atom
-get_selection_atom (GdkScreen *screen)
+get_selection_atom (GdkX11Screen *x11_screen)
 {
-  return _gdk_x11_get_xatom_for_display_printf (gdk_screen_get_display (screen), "_XSETTINGS_S%d", gdk_x11_screen_get_screen_number (screen));
+  return _gdk_x11_get_xatom_for_display_printf (x11_screen->display, "_XSETTINGS_S%d", x11_screen->screen_num);
 }
 
 static GdkFilterReturn
@@ -466,44 +457,44 @@ gdk_xsettings_manager_window_filter (GdkXEvent *xevent,
                                      gpointer   data);
 
 static void
-check_manager_window (XSettingsClient *client,
-                      gboolean         notify_changes)
+check_manager_window (GdkX11Screen *x11_screen,
+                      gboolean      notify_changes)
 {
   GdkDisplay *display;
   Display *xdisplay;
   Window manager_window_xid;
 
-  display = gdk_screen_get_display (client->screen);
+  display = x11_screen->display;
   xdisplay = gdk_x11_display_get_xdisplay (display);
 
-  if (client->manager_window)
+  if (x11_screen->xsettings_manager_window)
     {
-      gdk_window_remove_filter (client->manager_window, gdk_xsettings_manager_window_filter, client->screen);
-      g_object_unref (client->manager_window);
+      gdk_window_remove_filter (x11_screen->xsettings_manager_window, gdk_xsettings_manager_window_filter, x11_screen);
+      g_object_unref (x11_screen->xsettings_manager_window);
     }
 
   gdk_x11_display_grab (display);
 
-  manager_window_xid = XGetSelectionOwner (xdisplay, get_selection_atom (client->screen));
-  client->manager_window = gdk_x11_window_foreign_new_for_display (display,
+  manager_window_xid = XGetSelectionOwner (xdisplay, get_selection_atom (x11_screen));
+  x11_screen->xsettings_manager_window = gdk_x11_window_foreign_new_for_display (display,
                                                                    manager_window_xid);
   /* XXX: Can't use gdk_window_set_events() here because the first call to this
    * function happens too early in gdk_init() */
-  if (client->manager_window)
+  if (x11_screen->xsettings_manager_window)
     XSelectInput (xdisplay,
-                  gdk_x11_window_get_xid (client->manager_window),
+                  gdk_x11_window_get_xid (x11_screen->xsettings_manager_window),
                   PropertyChangeMask | StructureNotifyMask);
 
   gdk_x11_display_ungrab (display);
   
   gdk_display_flush (display);
 
-  if (client->manager_window)
+  if (x11_screen->xsettings_manager_window)
     {
-      gdk_window_add_filter (client->manager_window, gdk_xsettings_manager_window_filter, client->screen);
+      gdk_window_add_filter (x11_screen->xsettings_manager_window, gdk_xsettings_manager_window_filter, x11_screen);
     }
       
-  read_settings (client, notify_changes);
+  read_settings (x11_screen, notify_changes);
 }
 
 static GdkFilterReturn
@@ -511,9 +502,8 @@ gdk_xsettings_root_window_filter (GdkXEvent *xevent,
                                   GdkEvent  *event,
                                   gpointer   data)
 {
-  GdkScreen *screen = data;
-  XSettingsClient *client = GDK_X11_SCREEN (screen)->xsettings_client;
-  GdkDisplay *display = gdk_screen_get_display (screen);
+  GdkX11Screen *x11_screen = data;
+  GdkDisplay *display = x11_screen->display;
   XEvent *xev = xevent;
 
   /* The checks here will not unlikely cause us to reread
@@ -523,9 +513,9 @@ gdk_xsettings_root_window_filter (GdkXEvent *xevent,
    */
   if (xev->xany.type == ClientMessage &&
       xev->xclient.message_type == gdk_x11_get_xatom_by_name_for_display (display, "MANAGER") &&
-      xev->xclient.data.l[1] == get_selection_atom (client->screen))
+      xev->xclient.data.l[1] == get_selection_atom (x11_screen))
     {
-      check_manager_window (client, TRUE);
+      check_manager_window (x11_screen, TRUE);
       return GDK_FILTER_REMOVE;
     }
   
@@ -537,64 +527,47 @@ gdk_xsettings_manager_window_filter (GdkXEvent *xevent,
                                      GdkEvent  *event,
                                      gpointer   data)
 {
-  GdkScreen *screen = data;
-  XSettingsClient *client = GDK_X11_SCREEN (screen)->xsettings_client;
+  GdkX11Screen *x11_screen = data;
   XEvent *xev = xevent;
 
   if (xev->xany.type == DestroyNotify)
     {
-      check_manager_window (client, TRUE);
+      check_manager_window (x11_screen, TRUE);
       /* let GDK do its cleanup */
       return GDK_FILTER_CONTINUE; 
     }
   else if (xev->xany.type == PropertyNotify)
     {
-      read_settings (client, TRUE);
+      read_settings (x11_screen, TRUE);
       return GDK_FILTER_REMOVE;
     }
   
   return GDK_FILTER_CONTINUE;;
 }
 
-XSettingsClient *
-_gdk_x11_xsettings_client_new (GdkScreen *screen)
+void
+_gdk_x11_xsettings_init (GdkX11Screen *x11_screen)
 {
-  XSettingsClient *client;
-  
-  client = g_new (XSettingsClient, 1);
-  if (!client)
-    return NULL;
+  gdk_window_add_filter (gdk_screen_get_root_window (GDK_SCREEN (x11_screen)), gdk_xsettings_root_window_filter, x11_screen);
 
-  client->screen = screen;
-  client->manager_window = None;
-  client->settings = NULL;
-
-  gdk_window_add_filter (gdk_screen_get_root_window (screen), gdk_xsettings_root_window_filter, screen);
-
-  check_manager_window (client, FALSE);
-
-  return client;
+  check_manager_window (x11_screen, FALSE);
 }
 
 void
-_gdk_x11_xsettings_client_destroy (XSettingsClient *client)
+_gdk_x11_xsettings_finish (GdkX11Screen *x11_screen)
 {
-  gdk_window_remove_filter (gdk_screen_get_root_window (client->screen), gdk_xsettings_root_window_filter, client->screen);
-  if (client->manager_window)
+  gdk_window_remove_filter (gdk_screen_get_root_window (GDK_SCREEN (x11_screen)), gdk_xsettings_root_window_filter, x11_screen);
+  if (x11_screen->xsettings_manager_window)
     {
-      gdk_window_remove_filter (client->manager_window, gdk_xsettings_manager_window_filter, client->screen);
-      g_object_unref (client->manager_window);
+      gdk_window_remove_filter (x11_screen->xsettings_manager_window, gdk_xsettings_manager_window_filter, x11_screen);
+      g_object_unref (x11_screen->xsettings_manager_window);
+      x11_screen->xsettings_manager_window = NULL;
     }
   
-  if (client->settings)
-    g_hash_table_unref (client->settings);
-  g_free (client);
-}
-
-const GValue *
-_gdk_x11_xsettings_client_get_setting (XSettingsClient   *client,
-		                       const char        *name)
-{
-  return g_hash_table_lookup (client->settings, name);
+  if (x11_screen->xsettings)
+    {
+      g_hash_table_unref (x11_screen->xsettings);
+      x11_screen->xsettings = NULL;
+    }
 }
 

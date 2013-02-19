@@ -24,6 +24,7 @@
 #include "gdkscreen-x11.h"
 #include "gdkdisplay-x11.h"
 #include "gdkprivate-x11.h"
+#include "xsettings-client.h"
 
 #include <glib.h>
 
@@ -129,18 +130,6 @@ gdk_x11_screen_get_root_window (GdkScreen *screen)
 }
 
 static void
-_gdk_x11_screen_events_uninit (GdkScreen *screen)
-{
-  GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
-
-  if (x11_screen->xsettings_client)
-    {
-      _gdk_x11_xsettings_client_destroy (x11_screen->xsettings_client);
-      x11_screen->xsettings_client = NULL;
-    }
-}
-
-static void
 gdk_x11_screen_dispose (GObject *object)
 {
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (object);
@@ -155,7 +144,7 @@ gdk_x11_screen_dispose (GObject *object)
         }
     }
 
-  _gdk_x11_screen_events_uninit (GDK_SCREEN (object));
+  _gdk_x11_xsettings_finish (x11_screen);
 
   if (x11_screen->root_window)
     _gdk_window_destroy (x11_screen->root_window, TRUE);
@@ -1329,7 +1318,7 @@ gdk_x11_screen_get_setting (GdkScreen   *screen,
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
   const GValue *setting;
 
-  setting = _gdk_x11_xsettings_client_get_setting (x11_screen->xsettings_client, name);
+  setting = g_hash_table_lookup (x11_screen->xsettings, name);
   if (setting == NULL)
     goto out;
 
@@ -1540,14 +1529,6 @@ gdk_x11_screen_supports_net_wm_hint (GdkScreen *screen,
     }
 
   return FALSE;
-}
-
-void
-_gdk_x11_screen_init_events (GdkScreen *screen)
-{
-  GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
-
-  x11_screen->xsettings_client = _gdk_x11_xsettings_client_new (screen);
 }
 
 /**

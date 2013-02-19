@@ -23,13 +23,9 @@
 #ifndef XSETTINGS_CLIENT_H
 #define XSETTINGS_CLIENT_H
 
-#include <gdk/gdkscreen.h>
+#include <gdk/x11/gdkx11screen.h>
 
-typedef struct _XSettingsClient XSettingsClient;
-
-XSettingsClient *_gdk_x11_xsettings_client_new             (GdkScreen           *screen);
-void             _gdk_x11_xsettings_client_destroy         (XSettingsClient     *client);
-const GValue *   _gdk_x11_xsettings_client_get_setting     (XSettingsClient     *client,
-						            const char          *name);
+void _gdk_x11_xsettings_init            (GdkX11Screen        *x11_screen);
+void _gdk_x11_xsettings_finish          (GdkX11Screen        *x11_screen);
 
 #endif /* XSETTINGS_CLIENT_H */

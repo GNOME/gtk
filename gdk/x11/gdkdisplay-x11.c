@@ -1394,7 +1394,7 @@ _gdk_x11_display_open (const gchar *display_name)
    * structures in places
    */
   for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
-    _gdk_x11_screen_init_events (display_x11->screens[i]);
+    _gdk_x11_xsettings_init (GDK_X11_SCREEN (display_x11->screens[i]));
 
   /*set the default screen */
   display_x11->default_screen = display_x11->screens[DefaultScreen (display_x11->xdisplay)];

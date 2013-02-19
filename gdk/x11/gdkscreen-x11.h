@@ -25,7 +25,6 @@
 #include "gdkscreenprivate.h"
 #include "gdkx11screen.h"
 #include "gdkvisual.h"
-#include "xsettings-client.h"
 #include <X11/X.h>
 #include <X11/Xlib.h>
 
@@ -60,6 +59,11 @@ struct _GdkX11Screen
   Window wmspec_check_window;
   char *window_manager_name;
 
+  /* X Settings */
+  GdkWindow *xsettings_manager_window;
+  Atom xsettings_selection_atom;
+  GHashTable *xsettings; /* string of GDK settings name => GValue */
+
   /* TRUE if wmspec_check_window has changed since last
    * fetch of _NET_SUPPORTED
    */
@@ -83,9 +87,6 @@ struct _GdkX11Screen
   gint16 navailable_types;
   GHashTable *visual_hash;
   GdkVisual *rgba_visual;
-
-  /* X settings */
-  XSettingsClient *xsettings_client;
 
   /* cache for window->translate vfunc */
   GC subwindow_gcs[32];

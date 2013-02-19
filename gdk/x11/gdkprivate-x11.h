@@ -308,7 +308,6 @@ _gdk_x11_dnd_filter (GdkXEvent *xev,
 
 void _gdk_x11_screen_init_root_window (GdkScreen *screen);
 void _gdk_x11_screen_init_visuals     (GdkScreen *screen);
-void _gdk_x11_screen_init_events      (GdkScreen *screen);
 
 void _gdk_x11_cursor_update_theme (GdkCursor *cursor);
 void _gdk_x11_cursor_display_finalize (GdkDisplay *display);
