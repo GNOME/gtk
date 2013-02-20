@@ -1896,6 +1896,7 @@ _gtk_tree_view_accessible_add_state (GtkTreeView          *treeview,
                                      GtkCellRendererState  state)
 {
   GtkTreeViewAccessible *accessible;
+  GtkTreeViewColumn *single_column;
   AtkObject *obj;
   guint i;
 
@@ -1907,36 +1908,38 @@ _gtk_tree_view_accessible_add_state (GtkTreeView          *treeview,
 
   if (state == GTK_CELL_RENDERER_FOCUSED)
     {
-      GtkTreeViewColumn *focus_column;
-
-      focus_column = get_effective_focus_column (treeview, _gtk_tree_view_get_focus_column (treeview));
-
-      if (focus_column)
-        {
-          GtkCellAccessible *cell;
-
-          cell = peek_cell (accessible, tree, node, focus_column);
-          if (cell != NULL)
-            _gtk_cell_accessible_state_changed (cell, 0, state);
-          else
-            cell = create_cell (treeview, accessible, tree, node, focus_column);
-
-          g_signal_emit_by_name (accessible, "active-descendant-changed", cell);
-        }
-
-      return;
+      single_column = get_effective_focus_column (treeview, _gtk_tree_view_get_focus_column (treeview));
     }
+  else if (state == GTK_CELL_RENDERER_EXPANDED ||
+           state == GTK_CELL_RENDERER_EXPANDABLE)
+    {
+      single_column = gtk_tree_view_get_expander_column (treeview);
+    }
+  else
+    single_column = NULL;
 
-  for (i = 0; i < gtk_tree_view_get_n_columns (treeview); i++)
+  if (single_column)
     {
       GtkCellAccessible *cell = peek_cell (accessible,
                                            tree, node,
-                                           gtk_tree_view_get_column (treeview, i));
+                                           single_column);
 
-      if (cell == NULL)
-        continue;
+      if (cell != NULL)
+        _gtk_cell_accessible_state_changed (cell, state, 0);
+    }
+  else
+    {
+      for (i = 0; i < gtk_tree_view_get_n_columns (treeview); i++)
+        {
+          GtkCellAccessible *cell = peek_cell (accessible,
+                                               tree, node,
+                                               gtk_tree_view_get_column (treeview, i));
 
-      _gtk_cell_accessible_state_changed (cell, state, 0);
+          if (cell == NULL)
+            continue;
+
+          _gtk_cell_accessible_state_changed (cell, state, 0);
+        }
     }
 
   if (state == GTK_CELL_RENDERER_SELECTED)
@@ -1950,6 +1953,7 @@ _gtk_tree_view_accessible_remove_state (GtkTreeView          *treeview,
                                         GtkCellRendererState  state)
 {
   GtkTreeViewAccessible *accessible;
+  GtkTreeViewColumn *single_column;
   AtkObject *obj;
   guint i;
 
@@ -1961,33 +1965,38 @@ _gtk_tree_view_accessible_remove_state (GtkTreeView          *treeview,
 
   if (state == GTK_CELL_RENDERER_FOCUSED)
     {
-      GtkTreeViewColumn *focus_column;
-      
-      focus_column = get_effective_focus_column (treeview, _gtk_tree_view_get_focus_column (treeview));
-
-      if (focus_column)
-        {
-          GtkCellAccessible *cell = peek_cell (accessible,
-                                               tree, node,
-                                               focus_column);
-
-          if (cell != NULL)
-            _gtk_cell_accessible_state_changed (cell, 0, state);
-        }
-
-      return;
+      single_column = get_effective_focus_column (treeview, _gtk_tree_view_get_focus_column (treeview));
     }
+  else if (state == GTK_CELL_RENDERER_EXPANDED ||
+           state == GTK_CELL_RENDERER_EXPANDABLE)
+    {
+      single_column = gtk_tree_view_get_expander_column (treeview);
+    }
+  else
+    single_column = NULL;
 
-  for (i = 0; i < gtk_tree_view_get_n_columns (treeview); i++)
+  if (single_column)
     {
       GtkCellAccessible *cell = peek_cell (accessible,
                                            tree, node,
-                                           gtk_tree_view_get_column (treeview, i));
+                                           single_column);
 
-      if (cell == NULL)
-        continue;
+      if (cell != NULL)
+        _gtk_cell_accessible_state_changed (cell, 0, state);
+    }
+  else
+    {
+      for (i = 0; i < gtk_tree_view_get_n_columns (treeview); i++)
+        {
+          GtkCellAccessible *cell = peek_cell (accessible,
+                                               tree, node,
+                                               gtk_tree_view_get_column (treeview, i));
 
-      _gtk_cell_accessible_state_changed (cell, 0, state);
+          if (cell == NULL)
+            continue;
+
+          _gtk_cell_accessible_state_changed (cell, 0, state);
+        }
     }
 
   if (state == GTK_CELL_RENDERER_SELECTED)
