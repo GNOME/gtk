@@ -714,7 +714,6 @@ gtk_ui_manager_buildable_add_child (GtkBuildable  *buildable,
 
   pos = g_list_length (manager->private_data->action_groups);
 
-  g_object_ref (child);
   gtk_ui_manager_insert_action_group (manager,
 				      GTK_ACTION_GROUP (child),
 				      pos);
