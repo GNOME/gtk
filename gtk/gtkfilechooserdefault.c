@@ -6404,8 +6404,13 @@ show_and_select_files (GtkFileChooserDefault *impl,
   gboolean selected_a_file;
   GSList *walk;
 
+  g_assert (impl->load_state == LOAD_FINISHED);
+  g_assert (impl->browse_files_model != NULL);
+
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
   fsmodel = GTK_FILE_SYSTEM_MODEL (gtk_tree_view_get_model (GTK_TREE_VIEW (impl->browse_files_tree_view)));
+
+  g_assert (fsmodel == impl->browse_files_model);
 
   enabled_hidden = impl->show_hidden;
   removed_filters = (impl->current_filter == NULL);
