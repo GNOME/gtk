@@ -16,8 +16,6 @@
 #include <gtk/gtk.h>
 #include <math.h>
 
-#define FRAME_DELAY 50
-
 #define BACKGROUND_NAME "/pixbufs/background.jpg"
 
 static const char *image_names[] = {
@@ -88,14 +86,17 @@ draw_cb (GtkWidget *widget,
   return TRUE;
 }
 
-#define CYCLE_LEN 60
+#define CYCLE_TIME 3000000 /* 3 seconds */
 
-static int frame_num;
+static gint64 start_time;
 
-/* Timeout handler to regenerate the frame */
-static gint
-timeout (gpointer data)
+/* Handler to regenerate the frame */
+static gboolean
+on_tick (GtkWidget     *widget,
+         GdkFrameClock *frame_clock,
+         gpointer       data)
 {
+  gint64 current_time;
   double f;
   int i;
   double xmid, ymid;
@@ -104,7 +105,11 @@ timeout (gpointer data)
   gdk_pixbuf_copy_area (background, 0, 0, back_width, back_height,
                         frame, 0, 0);
 
-  f = (double) (frame_num % CYCLE_LEN) / CYCLE_LEN;
+  if (start_time == 0)
+    start_time = gdk_frame_clock_get_frame_time (frame_clock);
+
+  current_time = gdk_frame_clock_get_frame_time (frame_clock);
+  f = ((current_time - start_time) % CYCLE_TIME) / (double)CYCLE_TIME;
 
   xmid = back_width / 2.0;
   ymid = back_height / 2.0;
@@ -159,18 +164,7 @@ timeout (gpointer data)
 
   gtk_widget_queue_draw (da);
 
-  frame_num++;
   return G_SOURCE_CONTINUE;
-}
-
-static guint timeout_id;
-
-static void
-cleanup_callback (GObject   *object,
-                  gpointer   data)
-{
-  g_source_remove (timeout_id);
-  timeout_id = 0;
 }
 
 GtkWidget *
@@ -188,8 +182,6 @@ do_pixbufs (GtkWidget *do_widget)
 
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
-      g_signal_connect (window, "destroy",
-                        G_CALLBACK (cleanup_callback), NULL);
 
 
       error = NULL;
@@ -224,7 +216,7 @@ do_pixbufs (GtkWidget *do_widget)
 
           gtk_container_add (GTK_CONTAINER (window), da);
 
-          timeout_id = g_timeout_add (FRAME_DELAY, timeout, NULL);
+          gtk_widget_add_tick_callback (da, on_tick, NULL, NULL);
         }
     }
 

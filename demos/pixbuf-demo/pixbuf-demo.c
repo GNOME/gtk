@@ -25,8 +25,6 @@
 
 
 
-#define FRAME_DELAY 50
-
 #define BACKGROUND_NAME "background.jpg"
 
 static const char *image_names[] = {
@@ -93,14 +91,17 @@ draw_cb (GtkWidget *widget, cairo_t *cr, gpointer data)
 	return TRUE;
 }
 
-#define CYCLE_LEN 60
+#define CYCLE_TIME 3000000 /* 3 seconds */
 
-static int frame_num;
+static gint64 start_time;
 
-/* Timeout handler to regenerate the frame */
-static gint
-timeout (gpointer data)
+/* Handler to regenerate the frame */
+static gboolean
+on_tick (GtkWidget     *widget,
+         GdkFrameClock *frame_clock,
+         gpointer       data)
 {
+	gint64	current_time;
 	double f;
 	int i;
 	double xmid, ymid;
@@ -109,7 +110,11 @@ timeout (gpointer data)
 	gdk_pixbuf_copy_area (background, 0, 0, back_width, back_height,
 			      frame, 0, 0);
 
-	f = (double) (frame_num % CYCLE_LEN) / CYCLE_LEN;
+        if (start_time == 0)
+          start_time = gdk_frame_clock_get_frame_time (frame_clock);
+
+	current_time = gdk_frame_clock_get_frame_time (frame_clock);
+	f = ((current_time - start_time) % CYCLE_TIME) / (double)CYCLE_TIME;
 
 	xmid = back_width / 2.0;
 	ymid = back_height / 2.0;
@@ -163,19 +168,13 @@ timeout (gpointer data)
 
 	gtk_widget_queue_draw (da);
 
-	frame_num++;
-	return TRUE;
+	return G_SOURCE_CONTINUE;
 }
-
-static guint timeout_id;
 
 /* Destroy handler for the window */
 static void
 destroy_cb (GObject *object, gpointer data)
 {
-	g_source_remove (timeout_id);
-	timeout_id = 0;
-
 	gtk_main_quit ();
 }
 
@@ -208,7 +207,7 @@ main (int argc, char **argv)
 
 	gtk_container_add (GTK_CONTAINER (window), da);
 
-	timeout_id = gdk_threads_add_timeout (FRAME_DELAY, timeout, NULL);
+	gtk_widget_add_tick_callback (da, on_tick, NULL, NULL);
 
 	gtk_widget_show_all (window);
 	gtk_main ();
