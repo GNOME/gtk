@@ -1805,6 +1805,13 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * restore it. The signal emission takes care of calling cairo_save()
    * before and cairo_restore() after invoking the handler.
    *
+   * The signal handler will get a @cr with a clip region already set to the
+   * widget's dirty region, i.e. to the area that needs repainting.  Complicated
+   * widgets that want to avoid redrawing themselves completely can get the full
+   * extents of the clip region with gdk_cairo_get_clip_rectangle(), or they can
+   * get a finer-grained representation of the dirty region with
+   * cairo_copy_clip_rectangle_list().
+   *
    * Returns: %TRUE to stop other handlers from being invoked for the event.
    % %FALSE to propagate the event further.
    *
