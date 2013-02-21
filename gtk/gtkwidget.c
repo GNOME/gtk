@@ -66,6 +66,9 @@
 #include "gtktypebuiltins.h"
 #include "a11y/gtkwidgetaccessible.h"
 
+/* for the use of round() */
+#include "fallback-c89.c"
+
 /**
  * SECTION:gtkwidget
  * @Short_description: Base class for all widgets

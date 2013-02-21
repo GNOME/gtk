@@ -42,6 +42,9 @@
 
 #include <math.h>
 
+/* for the use of round() */
+#include "fallback-c89.c"
+
 #undef DEBUG_WINDOW_PRINTING
 
 
