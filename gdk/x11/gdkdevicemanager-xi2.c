@@ -59,10 +59,6 @@ G_DEFINE_TYPE_WITH_CODE (GdkX11DeviceManagerXI2, gdk_x11_device_manager_xi2, GDK
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_EVENT_TRANSLATOR,
                                                 gdk_x11_device_manager_xi2_event_translator_init))
 
-
-#define HAS_FOCUS(toplevel) ((toplevel)->has_focus || (toplevel)->has_pointer_focus)
-
-
 static void    gdk_x11_device_manager_xi2_constructed  (GObject      *object);
 static void    gdk_x11_device_manager_xi2_dispose      (GObject      *object);
 static void    gdk_x11_device_manager_xi2_set_property (GObject      *object,
