@@ -616,8 +616,6 @@ gtk_file_chooser_button_select_file (GtkFileChooser *chooser,
 
       priv->selection_while_inactive = g_object_ref (file);
 
-      g_signal_emit (button, file_chooser_button_signals[FILE_SET], 0);
-
       return TRUE;
     }
 }
@@ -644,8 +642,6 @@ gtk_file_chooser_button_unselect_file (GtkFileChooser *chooser,
 	      g_object_unref (priv->selection_while_inactive);
 	      priv->selection_while_inactive = NULL;
 	    }
-
-	  g_signal_emit (button, file_chooser_button_signals[FILE_SET], 0);
 	}
     }
 }
@@ -669,8 +665,6 @@ gtk_file_chooser_button_unselect_all (GtkFileChooser *chooser)
 	  g_object_unref (priv->selection_while_inactive);
 	  priv->selection_while_inactive = NULL;
 	}
-
-      g_signal_emit (button, file_chooser_button_signals[FILE_SET], 0);
     }
 }
 
