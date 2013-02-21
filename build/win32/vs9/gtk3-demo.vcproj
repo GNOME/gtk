@@ -204,7 +204,6 @@
 			<File RelativePath="..\..\..\demos\gtk-demo\stock_browser.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\textscroll.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\textview.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\theming_custom_css.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\theming_style_classes.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\toolpalette.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\transparent.c" />

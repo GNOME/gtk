@@ -211,7 +211,6 @@
     <ClCompile Include="..\..\..\demos\gtk-demo\stock_browser.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\textscroll.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\textview.c" />
-    <ClCompile Include="..\..\..\demos\gtk-demo\theming_custom_css.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\theming_style_classes.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\toolpalette.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\transparent.c" />
