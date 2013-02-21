@@ -42,7 +42,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="imm32.lib"
+				AdditionalDependencies="imm32.lib winmm.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
 				LinkIncremental="1"
 				ModuleDefinitionFile="$(IntDir)\gdk.def"
@@ -73,7 +73,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="imm32.lib"
+				AdditionalDependencies="imm32.lib winmm.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
 				LinkIncremental="1"
 				ModuleDefinitionFile="$(IntDir)\gdk.def"
@@ -108,7 +108,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="imm32.lib"
+				AdditionalDependencies="imm32.lib winmm.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
 				LinkIncremental="1"
 				ModuleDefinitionFile="$(IntDir)\gdk.def"
@@ -139,7 +139,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="imm32.lib"
+				AdditionalDependencies="imm32.lib winmm.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
 				LinkIncremental="1"
 				ModuleDefinitionFile="$(IntDir)\gdk.def"
