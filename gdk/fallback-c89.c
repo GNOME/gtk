@@ -42,3 +42,15 @@ isinf (double x)
   return (!_finite (x) && !_isnan (x));
 }
 #endif
+
+/* Workaround for round() for non-GCC/non-C99 compilers */
+#ifndef HAVE_ROUND
+static inline double
+round (double x)
+{
+  if (x >= 0)
+    return floor (x + 0.5);
+  else
+    return ceil (x - 0.5);
+}
+#endif
