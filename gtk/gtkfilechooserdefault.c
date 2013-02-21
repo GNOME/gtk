@@ -390,7 +390,7 @@ static void remove_bookmark_button_clicked_cb (GtkButton             *button,
 
 static void update_cell_renderer_attributes (GtkFileChooserDefault *impl);
 
-static void load_remove_timer (GtkFileChooserDefault *impl);
+static void load_remove_timer (GtkFileChooserDefault *impl, LoadState new_load_state);
 static void browse_files_center_selected_row (GtkFileChooserDefault *impl);
 
 static void location_button_toggled_cb (GtkToggleButton *toggle,
@@ -6241,9 +6241,9 @@ load_setup_timer (GtkFileChooserDefault *impl)
   impl->load_state = LOAD_PRELOAD;
 }
 
-/* Removes the load timeout and switches to the LOAD_FINISHED state */
+/* Removes the load timeout; changes the impl->load_state to the specified value. */
 static void
-load_remove_timer (GtkFileChooserDefault *impl)
+load_remove_timer (GtkFileChooserDefault *impl, LoadState new_load_state)
 {
   if (impl->load_timeout_id != 0)
     {
@@ -6251,12 +6251,16 @@ load_remove_timer (GtkFileChooserDefault *impl)
 
       g_source_remove (impl->load_timeout_id);
       impl->load_timeout_id = 0;
-      impl->load_state = LOAD_EMPTY;
     }
   else
     g_assert (impl->load_state == LOAD_EMPTY ||
 	      impl->load_state == LOAD_LOADING ||
 	      impl->load_state == LOAD_FINISHED);
+
+  g_assert (new_load_state == LOAD_EMPTY ||
+	    new_load_state == LOAD_LOADING ||
+	    new_load_state == LOAD_FINISHED);
+  impl->load_state = new_load_state;
 }
 
 /* Selects the first row in the file list */
@@ -6471,7 +6475,7 @@ browse_files_model_finished_loading_cb (GtkFileSystemModel    *model,
 
   if (impl->load_state == LOAD_PRELOAD)
     {
-      load_remove_timer (impl);
+      load_remove_timer (impl, LOAD_FINISHED);
       load_set_model (impl);
     }
   else if (impl->load_state == LOAD_LOADING)
@@ -6504,7 +6508,7 @@ static void
 stop_loading_and_clear_list_model (GtkFileChooserDefault *impl,
                                    gboolean remove_from_treeview)
 {
-  load_remove_timer (impl); /* This changes the state to LOAD_EMPTY */
+  load_remove_timer (impl, LOAD_EMPTY);
   
   if (impl->browse_files_model)
     {
