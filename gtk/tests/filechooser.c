@@ -421,7 +421,7 @@ test_file_chooser_button (gconstpointer data)
 	  gtk_button_clicked (GTK_BUTTON (children->data));
 	  g_list_free (children);
 
-	  wait_for_idle ();
+	  sleep_in_main_loop ();
 
 	  /* Give me the internal dialog, damnit */
 	  fc_dialog = g_object_get_qdata (G_OBJECT (fc_button), delegate_get_quark ());
