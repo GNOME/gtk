@@ -125,7 +125,24 @@ static void gdk_display_manager_get_property (GObject                *object,
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GdkDisplayManager, gdk_display_manager, G_TYPE_OBJECT)
+static void g_initable_iface_init (GInitableIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GdkDisplayManager, gdk_display_manager, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, g_initable_iface_init))
+
+static gboolean
+gdk_display_manager_initable_init (GInitable     *initable,
+                                   GCancellable  *cancellable,
+                                   GError       **error)
+{
+  return TRUE;
+}
+
+static void
+g_initable_iface_init (GInitableIface *iface)
+{
+  iface->init = gdk_display_manager_initable_init;
+}
 
 static void
 gdk_display_manager_class_init (GdkDisplayManagerClass *klass)
@@ -236,33 +253,31 @@ gdk_display_manager_get (void)
       backend = g_getenv ("GDK_BACKEND");
 #ifdef GDK_WINDOWING_QUARTZ
       if (backend == NULL || strcmp (backend, "quartz") == 0)
-        manager = g_object_new (gdk_quartz_display_manager_get_type (), NULL);
-      else
+        manager = g_initable_new (gdk_quartz_display_manager_get_type (), NULL, NULL, NULL);
 #endif
 #ifdef GDK_WINDOWING_WIN32
-      if (backend == NULL || strcmp (backend, "win32") == 0)
-        manager = g_object_new (gdk_win32_display_manager_get_type (), NULL);
-      else
+      if (!manager && (backend == NULL || strcmp (backend, "win32") == 0))
+        manager = g_initable_new (gdk_win32_display_manager_get_type (), NULL, NULL, NULL);
 #endif
 #ifdef GDK_WINDOWING_X11
-      if (backend == NULL || strcmp (backend, "x11") == 0)
-        manager = g_object_new (gdk_x11_display_manager_get_type (), NULL);
-      else
+      if (!manager && (backend == NULL || strcmp (backend, "x11") == 0))
+        manager = g_initable_new (gdk_x11_display_manager_get_type (), NULL, NULL, NULL);
 #endif
 #ifdef GDK_WINDOWING_WAYLAND
-      if (backend == NULL || strcmp (backend, "wayland") == 0)
-        manager = g_object_new (gdk_wayland_display_manager_get_type (), NULL);
-      else
+      if (!manager && (backend == NULL || strcmp (backend, "wayland") == 0))
+        manager = g_initable_new (gdk_wayland_display_manager_get_type (), NULL, NULL, NULL);
 #endif
 #ifdef GDK_WINDOWING_BROADWAY
-      if (backend == NULL || strcmp (backend, "broadway") == 0)
-        manager = g_object_new (gdk_broadway_display_manager_get_type (), NULL);
-      else
+      if (!manager && (backend == NULL || strcmp (backend, "broadway") == 0))
+        manager = g_initable_new (gdk_broadway_display_manager_get_type (), NULL, NULL, NULL);
 #endif
-      if (backend != NULL)
-        g_error ("Unsupported GDK backend: %s", backend);
-      else
-        g_error ("No GDK backend found");
+      if (!manager)
+        {
+          if (backend != NULL)
+            g_error ("Unsupported GDK backend: %s", backend);
+          else
+            g_error ("No GDK backend found");
+        }
     }
 
   return manager;
