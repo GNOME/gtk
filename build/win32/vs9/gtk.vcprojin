@@ -48,7 +48,7 @@
 				ModuleDefinitionFile="$(IntDir)\gtk.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
-				ImportLibrary="$(TargetDir)$(ProjectName)-$(GtkApiVersion).lib"
+				ImportLibrary="$(TargetDir)$(ProjectName)-$(ApiVersion).lib"
 				TargetMachine="1"
 			/>
 		</Configuration>
@@ -81,7 +81,7 @@
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				ImportLibrary="$(TargetDir)$(ProjectName)-$(GtkApiVersion).lib"
+				ImportLibrary="$(TargetDir)$(ProjectName)-$(ApiVersion).lib"
 				TargetMachine="1"
 			/>
 		</Configuration>
@@ -114,7 +114,7 @@
 				ModuleDefinitionFile="$(IntDir)\gtk.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
-				ImportLibrary="$(TargetDir)$(ProjectName)-$(GtkApiVersion).lib"
+				ImportLibrary="$(TargetDir)$(ProjectName)-$(ApiVersion).lib"
 				TargetMachine="17"
 			/>
 		</Configuration>
@@ -147,7 +147,7 @@
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				ImportLibrary="$(TargetDir)$(ProjectName)-$(GtkApiVersion).lib"
+				ImportLibrary="$(TargetDir)$(ProjectName)-$(ApiVersion).lib"
 				TargetMachine="17"
 			/>
 		</Configuration>
