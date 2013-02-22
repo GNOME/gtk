@@ -38,6 +38,8 @@ struct _GdkWaylandDisplayManager
 
   GHashTable *name_to_atoms;
   guint next_atom;
+
+  gboolean init_failed;
 };
 
 struct _GdkWaylandDisplayManagerClass
@@ -45,12 +47,44 @@ struct _GdkWaylandDisplayManagerClass
   GdkDisplayManagerClass parent_class;
 };
 
-G_DEFINE_TYPE (GdkWaylandDisplayManager, gdk_wayland_display_manager, GDK_TYPE_DISPLAY_MANAGER)
+static void g_initable_iface_init (GInitableIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GdkWaylandDisplayManager, gdk_wayland_display_manager, GDK_TYPE_DISPLAY_MANAGER,
+                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, g_initable_iface_init))
+
+static gboolean
+gdk_wayland_display_manager_initable_init (GInitable     *initable,
+                                           GCancellable  *cancellable,
+                                           GError       **error)
+{
+  struct wl_display *wl_display;
+
+  /* check that a connection to the default display is possible */
+  wl_display = wl_display_connect (gdk_get_display_arg_name ());
+
+  if (!wl_display)
+    {
+      GDK_WAYLAND_DISPLAY_MANAGER (initable)->init_failed = TRUE;
+      return FALSE;
+    }
+
+  wl_display_disconnect (wl_display);
+
+  return TRUE;
+}
+
+void
+g_initable_iface_init (GInitableIface *iface)
+{
+  iface->init = gdk_wayland_display_manager_initable_init;
+}
 
 static void
 gdk_wayland_display_manager_finalize (GObject *object)
 {
-  g_error ("A GdkWaylandDisplayManager object was finalized. This should not happen");
+  if (GDK_WAYLAND_DISPLAY_MANAGER (object)->init_failed == FALSE)
+    g_error ("A GdkWaylandDisplayManager object was finalized. This should not happen");
+
   G_OBJECT_CLASS (gdk_wayland_display_manager_parent_class)->finalize (object);
 }
 

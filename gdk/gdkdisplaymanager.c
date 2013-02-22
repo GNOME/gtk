@@ -259,13 +259,13 @@ gdk_display_manager_get (void)
       if (!manager && (backend == NULL || strcmp (backend, "win32") == 0))
         manager = g_initable_new (gdk_win32_display_manager_get_type (), NULL, NULL, NULL);
 #endif
-#ifdef GDK_WINDOWING_X11
-      if (!manager && (backend == NULL || strcmp (backend, "x11") == 0))
-        manager = g_initable_new (gdk_x11_display_manager_get_type (), NULL, NULL, NULL);
-#endif
 #ifdef GDK_WINDOWING_WAYLAND
       if (!manager && (backend == NULL || strcmp (backend, "wayland") == 0))
         manager = g_initable_new (gdk_wayland_display_manager_get_type (), NULL, NULL, NULL);
+#endif
+#ifdef GDK_WINDOWING_X11
+      if (!manager && (backend == NULL || strcmp (backend, "x11") == 0))
+        manager = g_initable_new (gdk_x11_display_manager_get_type (), NULL, NULL, NULL);
 #endif
 #ifdef GDK_WINDOWING_BROADWAY
       if (!manager && (backend == NULL || strcmp (backend, "broadway") == 0))
