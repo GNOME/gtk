@@ -3,7 +3,6 @@
 # Copyright (C) 2003, 2004, 2005 Miloslav Trmac <mitr@volny.cz>.
 # Copyright (C) 2006 Lukas Novotny <lukasnov@cvs.gnome.org>.
 # This file is distributed under the same license as the gtk+ package.
-#
 # Stanislav Brabec <utx@k332.feld.cvut.cz>, 1998.
 # Jiří Pavlovský <pavlovsk@ff.cuni.cz>, 1998.
 # Jiří Lebl <jirka@5z.com>, 2002.
@@ -19,8 +18,8 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-02-14 00:13+0000\n"
-"PO-Revision-Date: 2013-02-17 19:59+0100\n"
+"POT-Creation-Date: 2013-01-19 19:42+0000\n"
+"PO-Revision-Date: 2013-02-22 22:03+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -466,146 +465,6 @@ msgstr[0] "Otevírání %d položky"
 msgstr[1] "Otevírání %d položek"
 msgstr[2] "Otevírání %d položek"
 
-#: ../gtk/a11y/gtkbooleancellaccessible.c:43
-msgctxt "Action description"
-msgid "Toggles the cell"
-msgstr ""
-
-#: ../gtk/a11y/gtkbooleancellaccessible.c:63
-#: ../gtk/a11y/gtkswitchaccessible.c:101
-msgctxt "Action name"
-msgid "Toggle"
-msgstr ""
-
-#: ../gtk/a11y/gtkbuttonaccessible.c:341
-#: ../gtk/a11y/gtkmenuitemaccessible.c:436
-msgctxt "Action name"
-msgid "Click"
-msgstr ""
-
-#: ../gtk/a11y/gtkbuttonaccessible.c:350
-msgctxt "Action description"
-msgid "Clicks the button"
-msgstr ""
-
-#: ../gtk/a11y/gtkcellaccessible.c:258
-msgctxt "Action name"
-msgid "Expand or contract"
-msgstr ""
-
-#: ../gtk/a11y/gtkcellaccessible.c:260
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Edit"
-msgctxt "Action name"
-msgid "Edit"
-msgstr "_Upravit"
-
-#: ../gtk/a11y/gtkcellaccessible.c:262
-#: ../gtk/a11y/gtkcolorswatchaccessible.c:72
-#: ../gtk/a11y/gtkentryaccessible.c:1541
-#: ../gtk/a11y/gtkexpanderaccessible.c:281
-msgctxt "Action name"
-msgid "Activate"
-msgstr ""
-
-#: ../gtk/a11y/gtkcellaccessible.c:275
-msgctxt "Action description"
-msgid "Expands or contracts the row in the tree view containing this cell"
-msgstr ""
-
-#: ../gtk/a11y/gtkcellaccessible.c:277
-msgctxt "Action description"
-msgid "Creates a widget in which the contents of the cell can be edited"
-msgstr ""
-
-#: ../gtk/a11y/gtkcellaccessible.c:279
-msgctxt "Action description"
-msgid "Activates the cell"
-msgstr ""
-
-#: ../gtk/a11y/gtkcolorswatchaccessible.c:71
-#, fuzzy
-#| msgid "_Select"
-msgctxt "Action name"
-msgid "Select"
-msgstr "_Vybrat"
-
-#: ../gtk/a11y/gtkcolorswatchaccessible.c:73
-#, fuzzy
-#| msgid "_Customize"
-msgctxt "Action name"
-msgid "Customize"
-msgstr "_Upravit"
-
-#: ../gtk/a11y/gtkcolorswatchaccessible.c:84
-#, fuzzy
-#| msgid "Select a Color"
-msgctxt "Action description"
-msgid "Selects the color"
-msgstr "Vyberte barvu"
-
-#: ../gtk/a11y/gtkcolorswatchaccessible.c:85
-#, fuzzy
-#| msgid "Brightness of the color."
-msgctxt "Action description"
-msgid "Activates the color"
-msgstr "Jas barvy."
-
-#: ../gtk/a11y/gtkcolorswatchaccessible.c:86
-#, fuzzy
-#| msgid "Custom color %d: %s"
-msgctxt "Action description"
-msgid "Customizes the color"
-msgstr "Vlastní barva %d: %s"
-
-#: ../gtk/a11y/gtkcomboboxaccessible.c:313
-msgctxt "Action name"
-msgid "Press"
-msgstr ""
-
-#: ../gtk/a11y/gtkcomboboxaccessible.c:322
-#, fuzzy
-#| msgid "Decreases the volume"
-msgctxt "Action description"
-msgid "Presses the combobox"
-msgstr "Sníží hlasitost"
-
-#: ../gtk/a11y/gtkentryaccessible.c:1550
-msgctxt "Action description"
-msgid "Activates the entry"
-msgstr ""
-
-#: ../gtk/a11y/gtkexpanderaccessible.c:290
-msgctxt "Action description"
-msgid "Activates the expander"
-msgstr ""
-
-#: ../gtk/a11y/gtkmenuitemaccessible.c:445
-msgctxt "Action description"
-msgid "Clicks the menuitem"
-msgstr ""
-
-#: ../gtk/a11y/gtkscalebuttonaccessible.c:140
-msgctxt "Action description"
-msgid "Pops up the slider"
-msgstr ""
-
-#: ../gtk/a11y/gtkscalebuttonaccessible.c:142
-msgctxt "Action description"
-msgid "Dismisses the slider"
-msgstr ""
-
-#: ../gtk/a11y/gtkscalebuttonaccessible.c:170
-msgctxt "Action name"
-msgid "Popup"
-msgstr ""
-
-#: ../gtk/a11y/gtkscalebuttonaccessible.c:172
-msgctxt "Action name"
-msgid "Dismiss"
-msgstr ""
-
 #: ../gtk/a11y/gtkspinneraccessible.c:39
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
@@ -615,19 +474,14 @@ msgstr "Animace průběhu"
 msgid "Provides visual indication of progress"
 msgstr "Poskytuje vizuální indikaci průběhu"
 
-#: ../gtk/a11y/gtkswitchaccessible.c:63
+#: ../gtk/a11y/gtkswitchaccessible.c:62
 msgctxt "light switch widget"
 msgid "Switch"
 msgstr "Přepnout"
 
-#: ../gtk/a11y/gtkswitchaccessible.c:64
+#: ../gtk/a11y/gtkswitchaccessible.c:63
 msgid "Switches between on and off states"
 msgstr "Přepíná mezi stavem zapnuto a vypnuto"
-
-#: ../gtk/a11y/gtkswitchaccessible.c:110
-msgctxt "Action description"
-msgid "Toggles the switch"
-msgstr ""
 
 #: ../gtk/deprecated/gtkcolorsel.c:425
 msgid ""
@@ -836,7 +690,7 @@ msgstr "Nelze zobrazit odkaz"
 
 #: ../gtk/gtkaboutdialog.c:1017
 msgid "Website"
-msgstr ""
+msgstr "Webové stránky"
 
 #: ../gtk/gtkaboutdialog.c:1071
 #, c-format
@@ -930,8 +784,6 @@ msgid "Backslash"
 msgstr "Zpětné lomítko"
 
 #: ../gtk/gtkappchooserbutton.c:290
-#, fuzzy
-#| msgid "Other application..."
 msgid "Other application…"
 msgstr "Další aplikace…"
 
@@ -1174,8 +1026,6 @@ msgstr "Neplatné"
 #. * acelerator.
 #.
 #: ../gtk/gtkcellrendereraccel.c:416 ../gtk/gtkcellrendereraccel.c:747
-#, fuzzy
-#| msgid "New accelerator..."
 msgid "New accelerator…"
 msgstr "Nová klávesová zkratka…"
 
@@ -1397,7 +1247,7 @@ msgstr "Vlastní"
 msgid "Create custom color"
 msgstr "Vytvořit vlastní barvu"
 
-#: ../gtk/gtkcolorchooserwidget.c:542
+#: ../gtk/gtkcolorchooserwidget.c:543
 #, c-format
 msgid "Custom color %d: %s"
 msgstr "Vlastní barva %d: %s"
@@ -1478,8 +1328,6 @@ msgid "mm"
 msgstr "mm"
 
 #: ../gtk/gtkcustompaperunixdialog.c:605
-#, fuzzy
-#| msgid "Margins from Printer..."
 msgid "Margins from Printer…"
 msgstr "Okraje z tiskárny…"
 
@@ -1520,11 +1368,11 @@ msgstr "P_ravý:"
 msgid "Paper Margins"
 msgstr "Okraje papíru"
 
-#: ../gtk/gtkentry.c:9127 ../gtk/gtktextview.c:8598
+#: ../gtk/gtkentry.c:9127 ../gtk/gtktextview.c:8591
 msgid "Input _Methods"
 msgstr "Vstupní _metody"
 
-#: ../gtk/gtkentry.c:9141 ../gtk/gtktextview.c:8612
+#: ../gtk/gtkentry.c:9141 ../gtk/gtktextview.c:8605
 msgid "_Insert Unicode Control Character"
 msgstr "Vloži_t řídící znak Unicode"
 
@@ -1577,7 +1425,7 @@ msgstr "Funkce Caps Lock je zapnuta"
 msgid "Select a File"
 msgstr "Vyberte soubor"
 
-#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkfilechooserdefault.c:1825
+#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkfilechooserdefault.c:1820
 msgid "Desktop"
 msgstr "Pracovní plocha"
 
@@ -1585,9 +1433,7 @@ msgstr "Pracovní plocha"
 msgid "(None)"
 msgstr "(Žádný)"
 
-#: ../gtk/gtkfilechooserbutton.c:2202
-#, fuzzy
-#| msgid "Other..."
+#: ../gtk/gtkfilechooserbutton.c:2046
 msgid "Other…"
 msgstr "Jiné…"
 
@@ -1595,23 +1441,23 @@ msgstr "Jiné…"
 msgid "Type name of new folder"
 msgstr "Zadání názvu nové složky"
 
-#: ../gtk/gtkfilechooserdefault.c:954
+#: ../gtk/gtkfilechooserdefault.c:971
 msgid "Could not retrieve information about the file"
 msgstr "O souboru nelze získat informace"
 
-#: ../gtk/gtkfilechooserdefault.c:965
+#: ../gtk/gtkfilechooserdefault.c:982
 msgid "Could not add a bookmark"
 msgstr "Nelze přidat záložku"
 
-#: ../gtk/gtkfilechooserdefault.c:976
+#: ../gtk/gtkfilechooserdefault.c:993
 msgid "Could not remove bookmark"
 msgstr "Nelze odstranit záložku"
 
-#: ../gtk/gtkfilechooserdefault.c:987
+#: ../gtk/gtkfilechooserdefault.c:1004
 msgid "The folder could not be created"
 msgstr "Složku nelze vytvořit"
 
-#: ../gtk/gtkfilechooserdefault.c:1000
+#: ../gtk/gtkfilechooserdefault.c:1017
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1619,16 +1465,16 @@ msgstr ""
 "Složku nelze vytvořit, protože již existuje soubor se stejným názvem. Zkuste "
 "pro složku použít jiný název, nebo nejprve přejmenovat soubor."
 
-#: ../gtk/gtkfilechooserdefault.c:1014
+#: ../gtk/gtkfilechooserdefault.c:1031
 msgid "You need to choose a valid filename."
 msgstr "Vybraný název souboru musí být platný."
 
-#: ../gtk/gtkfilechooserdefault.c:1017
+#: ../gtk/gtkfilechooserdefault.c:1034
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "V %s nelze vytvořit soubor, jelikož se nejedná o složku"
 
-#: ../gtk/gtkfilechooserdefault.c:1029
+#: ../gtk/gtkfilechooserdefault.c:1046
 msgid ""
 "You may only select folders.  The item that you selected is not a folder; "
 "try using a different item."
@@ -1636,11 +1482,11 @@ msgstr ""
 "Vybrat lze pouze složky. Vybraná položka není složkou; zkuste použít jinou "
 "položku."
 
-#: ../gtk/gtkfilechooserdefault.c:1039
+#: ../gtk/gtkfilechooserdefault.c:1056
 msgid "Invalid file name"
 msgstr "Neplatný název souboru"
 
-#: ../gtk/gtkfilechooserdefault.c:1049
+#: ../gtk/gtkfilechooserdefault.c:1066
 msgid "The folder contents could not be displayed"
 msgstr "Obsah složky nelze zobrazit"
 
@@ -1648,210 +1494,208 @@ msgstr "Obsah složky nelze zobrazit"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1575
+#: ../gtk/gtkfilechooserdefault.c:1592
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s na %2$s"
 
-#: ../gtk/gtkfilechooserdefault.c:1724
+#: ../gtk/gtkfilechooserdefault.c:1741
 msgid "Search"
 msgstr "Hledat"
 
-#: ../gtk/gtkfilechooserdefault.c:1768 ../gtk/gtkfilechooserdefault.c:4996
+#: ../gtk/gtkfilechooserdefault.c:1765 ../gtk/gtkfilechooserdefault.c:4991
 msgid "Recently Used"
 msgstr "Naposledy použité"
 
-#: ../gtk/gtkfilechooserdefault.c:2369
+#: ../gtk/gtkfilechooserdefault.c:2364
 msgid "Select which types of files are shown"
 msgstr "Výběr zobrazených typů souborů"
 
-#: ../gtk/gtkfilechooserdefault.c:2728
+#: ../gtk/gtkfilechooserdefault.c:2723
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Přidá složku „%s“ mezi záložky"
 
-#: ../gtk/gtkfilechooserdefault.c:2772
+#: ../gtk/gtkfilechooserdefault.c:2767
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Přidá aktuální složku mezi záložky"
 
-#: ../gtk/gtkfilechooserdefault.c:2774
+#: ../gtk/gtkfilechooserdefault.c:2769
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Přidá zvolené složky mezi záložky"
 
-#: ../gtk/gtkfilechooserdefault.c:2812
+#: ../gtk/gtkfilechooserdefault.c:2807
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Odstraní záložku „%s“"
 
-#: ../gtk/gtkfilechooserdefault.c:2814
+#: ../gtk/gtkfilechooserdefault.c:2809
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "Záložka „%s“ nemůže být odstraněna"
 
-#: ../gtk/gtkfilechooserdefault.c:2821 ../gtk/gtkfilechooserdefault.c:3707
+#: ../gtk/gtkfilechooserdefault.c:2816 ../gtk/gtkfilechooserdefault.c:3702
 msgid "Remove the selected bookmark"
 msgstr "Odstraní zvolenou záložku"
 
-#: ../gtk/gtkfilechooserdefault.c:3385
+#: ../gtk/gtkfilechooserdefault.c:3380
 msgid "Remove"
 msgstr "Odstranit"
 
-#: ../gtk/gtkfilechooserdefault.c:3394
-#, fuzzy
-#| msgid "Rename..."
+#: ../gtk/gtkfilechooserdefault.c:3389
 msgid "Rename…"
 msgstr "Přejmenovat…"
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3558
+#: ../gtk/gtkfilechooserdefault.c:3553
 msgid "Places"
 msgstr "Místa"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3615
+#: ../gtk/gtkfilechooserdefault.c:3610
 msgid "_Places"
 msgstr "_Místa"
 
-#: ../gtk/gtkfilechooserdefault.c:3695
+#: ../gtk/gtkfilechooserdefault.c:3690
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Přidá zvolenou složku mezi záložky"
 
-#: ../gtk/gtkfilechooserdefault.c:3956
+#: ../gtk/gtkfilechooserdefault.c:3951
 msgid "Could not select file"
 msgstr "Nelze vybrat soubor"
 
-#: ../gtk/gtkfilechooserdefault.c:4181
+#: ../gtk/gtkfilechooserdefault.c:4176
 msgid "_Visit this file"
 msgstr "Podí_vat se na tento soubor"
 
-#: ../gtk/gtkfilechooserdefault.c:4184
+#: ../gtk/gtkfilechooserdefault.c:4179
 msgid "_Copy file’s location"
 msgstr "Kopírovat _umístění souboru"
 
-#: ../gtk/gtkfilechooserdefault.c:4187
+#: ../gtk/gtkfilechooserdefault.c:4182
 msgid "_Add to Bookmarks"
 msgstr "_Přidat mezi záložky"
 
-#: ../gtk/gtkfilechooserdefault.c:4194
+#: ../gtk/gtkfilechooserdefault.c:4189
 msgid "Show _Hidden Files"
 msgstr "Zobrazovat _skryté soubory"
 
-#: ../gtk/gtkfilechooserdefault.c:4197
+#: ../gtk/gtkfilechooserdefault.c:4192
 msgid "Show _Size Column"
 msgstr "Z_obrazovat sloupec Velikost"
 
-#: ../gtk/gtkfilechooserdefault.c:4422
+#: ../gtk/gtkfilechooserdefault.c:4417
 msgid "Files"
 msgstr "Soubory"
 
-#: ../gtk/gtkfilechooserdefault.c:4473
+#: ../gtk/gtkfilechooserdefault.c:4468
 msgid "Name"
 msgstr "Název"
 
-#: ../gtk/gtkfilechooserdefault.c:4496
+#: ../gtk/gtkfilechooserdefault.c:4491
 msgid "Size"
 msgstr "Velikost"
 
-#: ../gtk/gtkfilechooserdefault.c:4510
+#: ../gtk/gtkfilechooserdefault.c:4505
 msgid "Modified"
 msgstr "Změněno"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4603
+#: ../gtk/gtkfilechooserdefault.c:4598
 msgid "_Name:"
 msgstr "_Název:"
 
-#: ../gtk/gtkfilechooserdefault.c:4834
+#: ../gtk/gtkfilechooserdefault.c:4829
 msgid "Type a file name"
 msgstr "Zadání názvu souboru"
 
-#: ../gtk/gtkfilechooserdefault.c:4881 ../gtk/gtkfilechooserdefault.c:4892
+#: ../gtk/gtkfilechooserdefault.c:4876 ../gtk/gtkfilechooserdefault.c:4887
 msgid "Please select a folder below"
 msgstr "Vyberte prosím složku níže"
 
-#: ../gtk/gtkfilechooserdefault.c:4887
+#: ../gtk/gtkfilechooserdefault.c:4882
 msgid "Please type a file name"
 msgstr "Zadejte prosím název souboru"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:4958
+#: ../gtk/gtkfilechooserdefault.c:4953
 msgid "Create Fo_lder"
 msgstr "V_ytvořit složku"
 
-#: ../gtk/gtkfilechooserdefault.c:5006
+#: ../gtk/gtkfilechooserdefault.c:5001
 msgid "Search:"
 msgstr "Hledat:"
 
-#: ../gtk/gtkfilechooserdefault.c:5057
+#: ../gtk/gtkfilechooserdefault.c:5052
 msgid "_Location:"
 msgstr "_Umístění:"
 
-#: ../gtk/gtkfilechooserdefault.c:5507
+#: ../gtk/gtkfilechooserdefault.c:5502
 msgid "Save in _folder:"
 msgstr "U_ložit do složky:"
 
-#: ../gtk/gtkfilechooserdefault.c:5509
+#: ../gtk/gtkfilechooserdefault.c:5504
 msgid "Create in _folder:"
 msgstr "Vytvořit ve složc_e:"
 
-#: ../gtk/gtkfilechooserdefault.c:6521
+#: ../gtk/gtkfilechooserdefault.c:6597
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Nelze přečíst obsah %s"
 
-#: ../gtk/gtkfilechooserdefault.c:6525
+#: ../gtk/gtkfilechooserdefault.c:6601
 msgid "Could not read the contents of the folder"
 msgstr "Nelze přečíst obsah složky"
 
-#: ../gtk/gtkfilechooserdefault.c:6618 ../gtk/gtkfilechooserdefault.c:6686
-#: ../gtk/gtkfilechooserdefault.c:6866
+#: ../gtk/gtkfilechooserdefault.c:6694 ../gtk/gtkfilechooserdefault.c:6762
+#: ../gtk/gtkfilechooserdefault.c:6942
 msgid "Unknown"
 msgstr "Neznámé"
 
-#: ../gtk/gtkfilechooserdefault.c:6633
+#: ../gtk/gtkfilechooserdefault.c:6709
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6635
+#: ../gtk/gtkfilechooserdefault.c:6711
 msgid "Yesterday at %H:%M"
 msgstr "Včera v %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7337
+#: ../gtk/gtkfilechooserdefault.c:7413
 msgid "Cannot change to folder because it is not local"
 msgstr "Nelze přejít do složky, protože není místní"
 
-#: ../gtk/gtkfilechooserdefault.c:7934 ../gtk/gtkfilechooserdefault.c:7955
+#: ../gtk/gtkfilechooserdefault.c:8020 ../gtk/gtkfilechooserdefault.c:8041
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Zkratka %s již existuje"
 
-#: ../gtk/gtkfilechooserdefault.c:8045
+#: ../gtk/gtkfilechooserdefault.c:8131
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Zkratka %s neexistuje"
 
-#: ../gtk/gtkfilechooserdefault.c:8292 ../gtk/gtkprintunixdialog.c:548
+#: ../gtk/gtkfilechooserdefault.c:8377 ../gtk/gtkprintunixdialog.c:548
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Soubor nazvaný „%s“ již existuje. Chcete jej nahradit?"
 
-#: ../gtk/gtkfilechooserdefault.c:8295 ../gtk/gtkprintunixdialog.c:552
+#: ../gtk/gtkfilechooserdefault.c:8380 ../gtk/gtkprintunixdialog.c:552
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "V „%s“ již tento soubor existuje. Jeho nahrazení přepíše celý obsah."
 
-#: ../gtk/gtkfilechooserdefault.c:8300 ../gtk/gtkprintunixdialog.c:559
+#: ../gtk/gtkfilechooserdefault.c:8385 ../gtk/gtkprintunixdialog.c:559
 msgid "_Replace"
 msgstr "Na_hradit"
 
-#: ../gtk/gtkfilechooserdefault.c:9107
+#: ../gtk/gtkfilechooserdefault.c:9192
 msgid "Could not start the search process"
 msgstr "Nelze spustit proces hledání"
 
-#: ../gtk/gtkfilechooserdefault.c:9108
+#: ../gtk/gtkfilechooserdefault.c:9193
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1859,11 +1703,11 @@ msgstr ""
 "Program nebyl schopen vytvořit spojení s indexovacím démonem. Ujistěte se "
 "prosím, že běží."
 
-#: ../gtk/gtkfilechooserdefault.c:9122
+#: ../gtk/gtkfilechooserdefault.c:9207
 msgid "Could not send the search request"
 msgstr "Nelze odeslat vyhledávací požadavek"
 
-#: ../gtk/gtkfilechooserdefault.c:9732
+#: ../gtk/gtkfilechooserdefault.c:9817
 #, c-format
 msgid "Could not mount %s"
 msgstr "Nelze připojit %s"
@@ -1943,8 +1787,6 @@ msgid "Copy _Link Address"
 msgstr "Ko_pírovat adresu odkazu"
 
 #: ../gtk/gtk-launch.c:71
-#, fuzzy
-#| msgid "APPLICATION [URI...] - launch an APPLICATION with URI."
 msgid "APPLICATION [URI…] — launch an APPLICATION with URI."
 msgstr "APLIKACE [URI...] - spustit APLIKACI s URI."
 
@@ -1966,7 +1808,7 @@ msgstr "Chyba při analýze voleb příkazové řádky: %s\n"
 #: ../gtk/gtk-launch.c:89 ../gtk/gtk-launch.c:102
 #, c-format
 msgid "Try \"%s --help\" for more information."
-msgstr "Více informací viz „%s --help“."
+msgstr "Více informací viz \"%s --help\"."
 
 #. Translators: the %s is the program name. This error message
 #. means the user is calling gtk-launch without any argument.
@@ -1979,7 +1821,7 @@ msgstr "%s: chybí název aplikace"
 #, c-format
 msgid "Creating AppInfo from id not supported on non unix operating systems"
 msgstr ""
-"Vytvoření AppInfo z ID není podporováno na jiných než unixových systémech"
+"Vytváření AppInfo z ID není podporováno na jiných než unixových systémech"
 
 #. Translators: the first %s is the program name, the second one
 #. is the application name.
@@ -2209,10 +2051,8 @@ msgstr ""
 " Dolní: %s %s"
 
 #: ../gtk/gtkpagesetupunixdialog.c:845 ../gtk/gtkprintunixdialog.c:3329
-#, fuzzy
-#| msgid "Manage Custom Sizes"
 msgid "Manage Custom Sizes…"
-msgstr "Správa vlastních velikostí"
+msgstr "Správa vlastních velikostí…"
 
 #: ../gtk/gtkpagesetupunixdialog.c:896
 msgid "_Format for:"
@@ -2394,8 +2234,6 @@ msgid "Getting printer information failed"
 msgstr "Získávání informací o tiskárně selhalo"
 
 #: ../gtk/gtkprintunixdialog.c:1916
-#, fuzzy
-#| msgid "Getting printer information..."
 msgid "Getting printer information…"
 msgstr "Získávají se informace o tiskárně…"
 
@@ -2686,31 +2524,31 @@ msgstr "Z_a:"
 msgid "Job"
 msgstr "Úloha"
 
-#: ../gtk/gtkprintunixdialog.c:3751
+#: ../gtk/gtkprintunixdialog.c:3753
 msgid "Advanced"
 msgstr "Pokročilé"
 
 #. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3789
+#: ../gtk/gtkprintunixdialog.c:3791
 msgid "Image Quality"
 msgstr "Kvalita obrazu"
 
 #. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3793
+#: ../gtk/gtkprintunixdialog.c:3795
 msgid "Color"
 msgstr "Barva"
 
 #. Translators: this will appear as tab label in print dialog.
 #. It's a typographical term, as in "Binding and finishing"
-#: ../gtk/gtkprintunixdialog.c:3798
+#: ../gtk/gtkprintunixdialog.c:3800
 msgid "Finishing"
 msgstr "Dokončování"
 
-#: ../gtk/gtkprintunixdialog.c:3808
+#: ../gtk/gtkprintunixdialog.c:3810
 msgid "Some of the settings in the dialog conflict"
 msgstr "Některá nastavení v dialogu jsou v konfliktu"
 
-#: ../gtk/gtkprintunixdialog.c:3834
+#: ../gtk/gtkprintunixdialog.c:3836
 msgid "Print"
 msgstr "Tisk"
 
@@ -2799,15 +2637,15 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:1035 ../gtk/gtkrecentmanager.c:1048
-#: ../gtk/gtkrecentmanager.c:1185 ../gtk/gtkrecentmanager.c:1195
-#: ../gtk/gtkrecentmanager.c:1247 ../gtk/gtkrecentmanager.c:1256
-#: ../gtk/gtkrecentmanager.c:1271
+#: ../gtk/gtkrecentmanager.c:1010 ../gtk/gtkrecentmanager.c:1023
+#: ../gtk/gtkrecentmanager.c:1160 ../gtk/gtkrecentmanager.c:1170
+#: ../gtk/gtkrecentmanager.c:1222 ../gtk/gtkrecentmanager.c:1231
+#: ../gtk/gtkrecentmanager.c:1246
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Nelze nalézt položku s URI „%s“"
 
-#: ../gtk/gtkrecentmanager.c:2471
+#: ../gtk/gtkrecentmanager.c:2446
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr ""
