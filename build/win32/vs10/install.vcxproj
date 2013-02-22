@@ -113,6 +113,10 @@
       <Project>{29e3e814-1ba3-4ad7-a3a7-3669cb80a942}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+    <ProjectReference Include="gtk-demo-application.vcxproj">
+      <Project>{3281202a-cd26-4c67-b892-eb34bdbc612f}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
