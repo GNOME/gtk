@@ -9274,6 +9274,7 @@ gtk_tree_view_get_arrow_xrange (GtkTreeView *tree_view,
         total_width += gtk_tree_view_column_get_width (tmp_column);
     }
 
+  x_offset += (expander_size - expander_render_size);
 
   if (indent_expanders)
     {
