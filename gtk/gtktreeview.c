@@ -239,7 +239,6 @@ typedef enum {
 #define GTK_TREE_VIEW_PRIORITY_SCROLL_SYNC (GTK_TREE_VIEW_PRIORITY_VALIDATE + 2)
 #define GTK_TREE_VIEW_TIME_MS_PER_IDLE 30
 #define SCROLL_EDGE_SIZE 15
-#define EXPANDER_EXTRA_PADDING 4
 #define GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT 5000
 #define AUTO_EXPAND_TIMEOUT 500
 
@@ -2869,7 +2868,6 @@ gtk_tree_view_get_expander_size (GtkTreeView *tree_view)
   gtk_widget_style_get (GTK_WIDGET (tree_view),
 			"expander-size", &expander_size,
 			NULL);
-  expander_size += EXPANDER_EXTRA_PADDING;
 
   return expander_size;
 }
@@ -10092,7 +10090,7 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
   gtk_widget_style_get (widget,
                         "vertical-separator", &vertical_separator,
                         NULL);
-  expander_size = gtk_tree_view_get_expander_size (tree_view) - EXPANDER_EXTRA_PADDING;
+  expander_size = gtk_tree_view_get_expander_size (tree_view);
 
   if (! GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT))
     return;
