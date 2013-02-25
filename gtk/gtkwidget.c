@@ -4634,11 +4634,11 @@ static guint tick_callback_id;
  * gdk_frame_clock_get_frame_time() should generally be used for timing
  * continuous animations and
  * gdk_frame_timings_get_predicted_presentation_time() if you are
- * trying to display isolated frames particular times.
+ * trying to display isolated frames at particular times.
  *
  * This is a more convenient alternative to connecting directly to the
- * ::update signal of GdkFrameClock, since you don't have to worry about
- * when a #GdkFrameClock is assigned to a widget.
+ * #GdkFrameClock::update signal of #GdkFrameClock, since you don't
+ * have to worry about when a #GdkFrameClock is assigned to a widget.
  *
  * Returns: an id for the connection of this callback. Remove the callback
  *     by passing it to gtk_widget_remove_tick_callback()
@@ -5056,8 +5056,9 @@ gtk_widget_queue_resize_no_redraw (GtkWidget *widget)
  *
  * Unrealized widgets do not have a frame clock.
  *
- * Since: 3.0
  * Return value: (transfer none): a #GdkFrameClock (or #NULL if widget is unrealized)
+ *
+ * Since: 3.0
  */
 GdkFrameClock*
 gtk_widget_get_frame_clock (GtkWidget *widget)
