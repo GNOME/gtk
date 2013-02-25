@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-01-19 19:42+0000\n"
-"PO-Revision-Date: 2013-02-25 11:05+0300\n"
+"PO-Revision-Date: 2013-02-25 15:52+0300\n"
 "Last-Translator: Dimitris Spingos (Δημήτρης Σπίγγος) <dmtrs32@gmail.com>\n"
 "Language-Team: team@gnome.gr\n"
 "Language: el\n"
@@ -949,7 +949,7 @@ msgstr "calendar:MY"
 #.
 #: ../gtk/gtkcalendar.c:910
 msgid "calendar:week_start:0"
-msgstr "calendar:week_start:0"
+msgstr "ημερολόγιο:αρχή_εβδομάδας:0"
 
 #. Translators:  This is a text measurement template.
 #. * Translate it to the widest year text
@@ -1695,8 +1695,8 @@ msgstr "Υπάρχει ήδη αρχείο με το όνομα \"%s\". Θέλε
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
-"Το αρχείο υπάρχει ήδη στο \"%s\". Η αντικατάσταση του θα αντικαταστήσει και "
-"τα περιεχόμενα του."
+"Το αρχείο υπάρχει ήδη στο \"%s\". Η αντικατάσταση του θα αντικαταστήσει και τα "
+"περιεχόμενα του."
 
 #: ../gtk/gtkfilechooserdefault.c:8385 ../gtk/gtkprintunixdialog.c:559
 msgid "_Replace"
@@ -1800,7 +1800,7 @@ msgstr "Αντιγραφή διεύθυνσης _συνδέσμου"
 #: ../gtk/gtk-launch.c:71
 #| msgid "APPLICATION [URI...] - launch an APPLICATION with URI."
 msgid "APPLICATION [URI…] — launch an APPLICATION with URI."
-msgstr "ΕΦΑΡΜΟΓΗ [URI…] - εκτελέστε μια ΕΦΑΡΜΟΓΗ με URI."
+msgstr "ΕΦΑΡΜΟΓΗ [URI...] - εκτελέστε μια ΕΦΑΡΜΟΓΗ με URI."
 
 #. Translators: this message will appear after the usage string
 #. and before the list of options.
@@ -1968,7 +1968,7 @@ msgstr "Σ_υνθηματικό"
 
 #: ../gtk/gtkmountoperation.c:671
 msgid "Forget password _immediately"
-msgstr "Λησμόνηση του συνθηματικού _αμέσως"
+msgstr "Λησμόνηση του κωδικού _αμέσως"
 
 #: ../gtk/gtkmountoperation.c:681
 msgid "Remember password until you _logout"
@@ -3356,12 +3356,12 @@ msgstr "ZWNJ _Μη συνδετικό μηδενικού πλάτους"
 #: ../gtk/gtkuimanager.c:1781
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
-msgstr "Αναπάντεχη ετικέτα εκκίνησης '%s' στη γραμμή %d χαρακτήρας %d"
+msgstr "Αναπάντεχη ετικέτα εκκίνησης '%s' στη γραμμή %d χαρακτήρες %d"
 
 #: ../gtk/gtkuimanager.c:1871
 #, c-format
 msgid "Unexpected character data on line %d char %d"
-msgstr "Αναπάντεχα δεδομένα χαρακτήρων στη γραμμή %d χαρακτήρας %d"
+msgstr "Αναπάντεχα δεδομένα χαρακτήρων στη γραμμή %d χαρακτήρες %d"
 
 #: ../gtk/gtkuimanager.c:2694
 msgid "Empty"
@@ -4361,7 +4361,7 @@ msgstr "Inuktitut (μεταγραμμένα)"
 #. ID
 #: ../modules/input/imipa.c:143
 msgid "IPA"
-msgstr "IPA - Διεθνές φωνητικό αλφάβητο"
+msgstr "IPA"
 
 #. ID
 #: ../modules/input/immultipress.c:29
