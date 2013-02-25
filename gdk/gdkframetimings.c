@@ -106,7 +106,7 @@ gdk_frame_timings_get_frame_counter (GdkFrameTimings *timings)
 }
 
 /**
- * gdk_frame_timings_complete:
+ * gdk_frame_timings_get_complete:
  * @timings: a #GdkFrameTimings
  *
  * The timing information in a #GdkFrameTimings is filled in

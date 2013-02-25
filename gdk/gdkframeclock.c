@@ -280,6 +280,7 @@ gdk_frame_clock_get_frame_time (GdkFrameClock *frame_clock)
 /**
  * gdk_frame_clock_request_phase:
  * @frame_clock: a #GdkFrameClock
+ * @phase: the phase that is requested
  *
  * Asks the frame clock to run a particular phase. The signal
  * corresponding the requested phase will be emitted the next
