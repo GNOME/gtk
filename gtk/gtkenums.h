@@ -488,7 +488,6 @@ typedef enum
  *      The Ctrl key may be used to enlarge the selection, and Shift
  *      key to select between the focus and the child pointed to.
  *      Some widgets may also allow Click-drag to select a range of elements.
- * @GTK_SELECTION_EXTENDED: Deprecated, behaves identical to %GTK_SELECTION_MULTIPLE.
  *
  * Used to control what selections users are allowed to make.
  */
