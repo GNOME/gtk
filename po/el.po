@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-01-19 19:42+0000\n"
-"PO-Revision-Date: 2013-02-24 09:52+0300\n"
+"PO-Revision-Date: 2013-02-25 11:05+0300\n"
 "Last-Translator: Dimitris Spingos (Δημήτρης Σπίγγος) <dmtrs32@gmail.com>\n"
 "Language-Team: team@gnome.gr\n"
 "Language: el\n"
@@ -1695,8 +1695,8 @@ msgstr "Υπάρχει ήδη αρχείο με το όνομα \"%s\". Θέλε
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
-"Το αρχείο υπάρχει ήδη στο \"%s\". Η αντικατάσταση του θα αντικαταστήσει και τα "
-"περιεχόμενα του."
+"Το αρχείο υπάρχει ήδη στο \"%s\". Η αντικατάσταση του θα αντικαταστήσει και "
+"τα περιεχόμενα του."
 
 #: ../gtk/gtkfilechooserdefault.c:8385 ../gtk/gtkprintunixdialog.c:559
 msgid "_Replace"
@@ -3268,7 +3268,8 @@ msgstr "Το \"%s\" δεν είναι έγκυρο όνομα γνωρίσματ
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
-"Το \"%s\" δεν μπορεί να μετατραπεί σε τιμή του τύπου \"%s\" για το γνώρισμα \"%s\""
+"Το \"%s\" δεν μπορεί να μετατραπεί σε τιμή του τύπου \"%s\" για το γνώρισμα "
+"\"%s\""
 
 #: ../gtk/gtktextbufferserialize.c:1209
 #, c-format
