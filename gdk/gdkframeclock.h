@@ -58,7 +58,7 @@ typedef struct _GdkFrameClockClass         GdkFrameClockClass;
  * @GDK_FRAME_CLOCK_PHASE_AFTER_PAINT: corresponds to GdkFrameClock::after-paint. Should not be handled by applications.
  *
  * #GdkFrameClockPhase is used to represent the different paint clock
- * phases that can be requested. The element of the enumeration
+ * phases that can be requested. The elements of the enumeration
  * correspond to the signals of #GdkPaintClock.
  *
  * Since: 3.8

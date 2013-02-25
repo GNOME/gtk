@@ -20,7 +20,7 @@
 #include "gdkframeclockprivate.h"
 
 /**
- * SECTION:frametimings
+ * SECTION:gdkframetimings
  * @Short_description: Object holding timing information for a single frame
  * @Title: Frame timings
  *

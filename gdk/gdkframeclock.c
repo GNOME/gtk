@@ -30,7 +30,7 @@
 #include "gdkinternals.h"
 
 /**
- * SECTION:frameclock
+ * SECTION:gdkframeclock
  * @Short_description: Frame clock syncs painting to a window or display
  * @Title: Frame clock
  *
@@ -52,10 +52,10 @@
  * sense for the synchronization being implemented, the clock will
  * process a frame and emit signals for each phase that has been
  * requested. (See the signals of the #GdkFrameClock class for
- * documentation of the phases. GDK_FRAME_CLOCK_PHASE_UPDATE and the
- * ::update signal are most interesting for application writers, and
- * are used to update the animations, using the frame time given by
- * gdk_frame_clock_get_frame_time().
+ * documentation of the phases. %GDK_FRAME_CLOCK_PHASE_UPDATE and the
+ * #GdkFrameClock::update signal are most interesting for application
+ * writers, and are used to update the animations, using the frame time
+ * given by gdk_frame_clock_get_frame_time().
  *
  * The frame time is reported in microseconds and generally in the same
  * timescale as g_get_monotonic_time(), however, it is not the same
@@ -65,8 +65,8 @@
  * are called at a "similar" time get the same value. This means that
  * if different animations are timed by looking at the difference in
  * time between an initial value from gdk_frame_clock_get_frame_time()
- * and the value inside the ::update signal of the clock, they will
- * stay exactly synchronized.
+ * and the value inside the #GdkFrameClock::update signal of the clock,
+ * they will stay exactly synchronized.
  */
 
 G_DEFINE_ABSTRACT_TYPE (GdkFrameClock, gdk_frame_clock, G_TYPE_OBJECT)
@@ -174,7 +174,7 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
    * This signal is emitted as the second step of toolkit and
    * application processing of the frame. Any work to update
    * sizes and positions of application elements should be
-   * performed. GTK normally handles this internally.
+   * performed. GTK+ normally handles this internally.
    */
   signals[LAYOUT] =
     g_signal_new (g_intern_static_string ("layout"),
@@ -192,8 +192,8 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
    * This signal is emitted as the third step of toolkit and
    * application processing of the frame. The frame is
    * repainted. GDK normally handles this internally and
-   * produce expose events, which are turned into GTK
-   * GtkWidget::draw signals.
+   * produces expose events, which are turned into GTK+
+   * #GtkWidget::draw signals.
    */
   signals[PAINT] =
     g_signal_new (g_intern_static_string ("paint"),
@@ -284,7 +284,7 @@ gdk_frame_clock_get_frame_time (GdkFrameClock *frame_clock)
  * Asks the frame clock to run a particular phase. The signal
  * corresponding the requested phase will be emitted the next
  * time the frame clock processes. Multiple calls to
- * gdk_frame_clock_request_phase() will be combined togethe
+ * gdk_frame_clock_request_phase() will be combined together
  * and only one frame processed. If you are displaying animated
  * content and want to continually request the
  * %GDK_FRAME_CLOCK_PHASE_UPDATE phase for a period of time,
