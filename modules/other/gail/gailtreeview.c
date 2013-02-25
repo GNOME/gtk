@@ -555,7 +555,10 @@ gail_tree_view_real_notify_gtk (GObject             *obj,
 
       tree_model = gtk_tree_view_get_model (tree_view);
       if (gailview->tree_model)
-        disconnect_model_signals (gailview);
+        {
+          g_object_remove_weak_pointer (G_OBJECT (gailview->tree_model), (gpointer *)&gailview->tree_model);
+          disconnect_model_signals (gailview);
+        }
       clear_cached_data (gailview);
       gailview->tree_model = tree_model;
       /*
@@ -632,7 +635,10 @@ gail_tree_view_finalize (GObject	    *object)
     g_object_unref (view->summary);
 
   if (view->tree_model)
-    disconnect_model_signals (view);
+    {
+      g_object_remove_weak_pointer (G_OBJECT (view->tree_model), (gpointer *)&view->tree_model);
+      disconnect_model_signals (view);
+    }
 
   if (view->col_data)
     {
@@ -684,6 +690,7 @@ gail_tree_view_destroyed (GtkWidget *widget,
                                           widget);
   if (gailview->tree_model)
     {
+      g_object_remove_weak_pointer (G_OBJECT (gailview->tree_model), (gpointer *)&gailview->tree_model);
       disconnect_model_signals (gailview);
       gailview->tree_model = NULL;
     }
