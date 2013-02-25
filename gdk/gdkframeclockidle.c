@@ -35,7 +35,7 @@
 #include <windows.h>
 #endif
 
-#define FRAME_INTERVAL 16667 // microseconds
+#define FRAME_INTERVAL 16667 /* microseconds */
 
 struct _GdkFrameClockIdlePrivate
 {
@@ -365,7 +365,8 @@ gdk_frame_clock_paint_idle (void *data)
               /* We always emit ::before-paint and ::after-paint if
                * any of the intermediate phases are requested and
                * they don't get repeated if you freeze/thaw while
-               * in them. */
+               * in them.
+               */
               priv->requested &= ~GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
               g_signal_emit_by_name (G_OBJECT (clock), "before-paint");
               priv->phase = GDK_FRAME_CLOCK_PHASE_UPDATE;
@@ -547,7 +548,8 @@ gdk_frame_clock_idle_thaw (GdkFrameClock *clock)
       maybe_start_idle (clock_idle);
       /* If nothing is requested so we didn't start an idle, we need
        * to skip to the end of the state chain, since the idle won't
-       * run and do it for us. */
+       * run and do it for us.
+       */
       if (priv->paint_idle_id == 0)
         priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
 
