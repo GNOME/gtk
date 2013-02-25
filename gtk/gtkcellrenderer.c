@@ -429,7 +429,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 
   g_type_class_add_private (class, sizeof (GtkCellRendererPrivate));
 
-  _gtk_cell_renderer_class_set_accessible_type (class, GTK_TYPE_RENDERER_CELL_ACCESSIBLE);
+  gtk_cell_renderer_class_set_accessible_type (class, GTK_TYPE_RENDERER_CELL_ACCESSIBLE);
 }
 
 static void
@@ -1781,8 +1781,8 @@ gtk_cell_renderer_get_state (GtkCellRenderer      *cell,
   return state;
 }
 
-/*
- * _gtk_cell_renderer_class_set_accessible_type:
+/**
+ * gtk_cell_renderer_class_set_accessible_type:
  * @renderer_class: class to set the accessible type for
  * @type: The object type that implements the accessible for @widget_class.
  *     The type must be a subtype of #GtkRendererCellAccessible
@@ -1795,8 +1795,8 @@ gtk_cell_renderer_get_state (GtkCellRenderer      *cell,
  * renderers.
  **/
 void
-_gtk_cell_renderer_class_set_accessible_type (GtkCellRendererClass *renderer_class,
-                                              GType                 type)
+gtk_cell_renderer_class_set_accessible_type (GtkCellRendererClass *renderer_class,
+                                             GType                 type)
 {
   GtkCellRendererClassPrivate *priv;
 

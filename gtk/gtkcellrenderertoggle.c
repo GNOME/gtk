@@ -196,7 +196,7 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 
   g_type_class_add_private (object_class, sizeof (GtkCellRendererTogglePrivate));
 
-  _gtk_cell_renderer_class_set_accessible_type (cell_class, GTK_TYPE_BOOLEAN_CELL_ACCESSIBLE);
+  gtk_cell_renderer_class_set_accessible_type (cell_class, GTK_TYPE_BOOLEAN_CELL_ACCESSIBLE);
 }
 
 static void
