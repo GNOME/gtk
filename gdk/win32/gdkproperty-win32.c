@@ -155,7 +155,7 @@ gdk_property_change (GdkWindow    *window,
 {
   HGLOBAL hdata;
   gint i, size;
-  guchar *ucptr, *buf = NULL;
+  guchar *ucptr;
   wchar_t *wcptr, *p;
   glong wclen;
 
@@ -214,7 +214,7 @@ gdk_property_change (GdkWindow    *window,
 	      WIN32_API_FAILED ("GlobalAlloc");
 	      if (!CloseClipboard ())
 		WIN32_API_FAILED ("CloseClipboard");
-	      g_free (buf);
+	      g_free (wcptr);
 	      return;
 	    }
 
