@@ -5504,7 +5504,9 @@ set_grip_position (GtkWindow *window)
 
 /* _gtk_window_set_allocation:
  * @window: a #GtkWindow
- * @allocation: the new allocation
+ * @allocation: the original allocation for the window
+ * @allocation_out: @allocation taking decorations into
+ * consideration
  *
  * This function is like gtk_widget_set_allocation()
  * but does the necessary extra work to update
@@ -5513,12 +5515,21 @@ set_grip_position (GtkWindow *window)
  * Call this instead of gtk_widget_set_allocation()
  * when overriding ::size_allocate in a GtkWindow
  * subclass without chaining up.
+ *
+ * The @allocation parameter will be adjusted to
+ * reflect any internal decorations that the window
+ * may have. That revised allocation will then be
+ * returned in the @allocation_out parameter.
  */
 void
-_gtk_window_set_allocation (GtkWindow     *window,
-                            GtkAllocation *allocation)
+_gtk_window_set_allocation (GtkWindow           *window,
+                            const GtkAllocation *allocation,
+                            GtkAllocation       *allocation_out)
 {
   GtkWidget *widget = (GtkWidget *)window;
+
+  g_assert (allocation != NULL);
+  g_assert (allocation_out != NULL);
 
   gtk_widget_set_allocation (widget, allocation);
 
@@ -5539,6 +5550,8 @@ _gtk_window_set_allocation (GtkWindow     *window,
           set_grip_position (window);
         }
     }
+
+  *allocation_out = *allocation;
 }
 
 static void
@@ -5550,16 +5563,16 @@ gtk_window_size_allocate (GtkWidget     *widget,
   GtkWidget *child;
   guint border_width;
 
-  _gtk_window_set_allocation (window, allocation);
+  _gtk_window_set_allocation (window, allocation, &child_allocation);
 
   child = gtk_bin_get_child (&(window->bin));
   if (child && gtk_widget_get_visible (child))
     {
       border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
-      child_allocation.x = border_width;
-      child_allocation.y = border_width;
-      child_allocation.width = MAX (1, allocation->width - border_width * 2);
-      child_allocation.height = MAX (1, allocation->height - border_width * 2);
+      child_allocation.x += border_width;
+      child_allocation.y += border_width;
+      child_allocation.width = MAX (1, child_allocation.width - border_width * 2);
+      child_allocation.height = MAX (1, child_allocation.height - border_width * 2);
 
       gtk_widget_size_allocate (child, &child_allocation);
     }

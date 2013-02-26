@@ -66,8 +66,9 @@ void            _gtk_window_get_wmclass            (GtkWindow  *window,
                                                     gchar     **wmclass_name,
                                                     gchar     **wmclass_class);
 
-void            _gtk_window_set_allocation         (GtkWindow     *window,
-                                                    GtkAllocation *allocation);
+void            _gtk_window_set_allocation         (GtkWindow           *window,
+                                                    const GtkAllocation *allocation,
+                                                    GtkAllocation       *allocation_out);
 
 typedef void (*GtkWindowKeysForeachFunc) (GtkWindow      *window,
                                           guint           keyval,
