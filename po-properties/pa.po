@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2012-12-15 20:08+0000\n"
-"PO-Revision-Date: 2013-02-22 08:45+0000\n"
+"PO-Revision-Date: 2013-02-26 06:51+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
 "Language: pa\n"
@@ -912,7 +912,7 @@ msgstr "ਵਿਡਗਿਟ ਦੇ ਸੱਜੇ ਚਿਣ ਦਿਓ"
 #: ../gtk/gtkappchooserbutton.c:614
 #| msgid "Include an 'Other...' item"
 msgid "Include an 'Other…' item"
-msgstr "'ਹੋਰ…' ਆਈਟਮ ਸਮੇਤ"
+msgstr "'…ਹੋਰ' ਆਈਟਮ ਸਮੇਤ"
 
 #: ../gtk/gtkappchooserbutton.c:615
 msgid ""
