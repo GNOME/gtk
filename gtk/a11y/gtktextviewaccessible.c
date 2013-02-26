@@ -117,6 +117,11 @@ gtk_text_view_accessible_change_buffer (GtkTextViewAccessible *accessible,
   if (old_buffer)
     {
       g_signal_handlers_disconnect_matched (old_buffer, G_SIGNAL_MATCH_DATA, 0, 0, NULL, NULL, accessible);
+
+      g_signal_emit_by_name (accessible,
+                             "text-changed::delete",
+                             0,
+                             gtk_text_buffer_get_char_count (old_buffer));
     }
 
   if (new_buffer)
@@ -124,6 +129,11 @@ gtk_text_view_accessible_change_buffer (GtkTextViewAccessible *accessible,
       g_signal_connect_after (new_buffer, "insert-text", G_CALLBACK (insert_text_cb), accessible);
       g_signal_connect (new_buffer, "delete-range", G_CALLBACK (delete_range_cb), accessible);
       g_signal_connect_after (new_buffer, "mark-set", G_CALLBACK (mark_set_cb), accessible);
+
+      g_signal_emit_by_name (accessible,
+                             "text-changed::insert",
+                             0,
+                             gtk_text_buffer_get_char_count (new_buffer));
     }
 }
 
