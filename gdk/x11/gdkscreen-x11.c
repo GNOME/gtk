@@ -285,7 +285,7 @@ get_current_desktop (GdkScreen *screen)
                       &data_return);
 
   if (type == XA_CARDINAL && format == 32 && n_items > 0)
-    workspace = (int) data_return[0];
+    workspace = ((long *) data_return)[0];
 
   if (data_return)
     XFree (data_return);
