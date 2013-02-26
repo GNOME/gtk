@@ -441,7 +441,7 @@ gdk_frame_clock_paint_idle (void *data)
 #ifdef G_ENABLE_DEBUG
   if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
     {
-      if (timings->complete)
+      if (timings && timings->complete)
         _gdk_frame_clock_debug_print_timings (clock, timings);
     }
 #endif /* G_ENABLE_DEBUG */
