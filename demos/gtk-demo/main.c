@@ -9,8 +9,8 @@
 
 #include "demos.h"
 
-static GtkTextBuffer *info_buffer;
-static GtkTextBuffer *source_buffer;
+static GtkWidget *info_view;
+static GtkWidget *source_view;
 
 static gchar *current_file = NULL;
 
@@ -353,7 +353,7 @@ parse_chars (gchar     *text,
 
 /* While not as cool as c-mode, this will do as a quick attempt at highlighting */
 static void
-fontify (void)
+fontify (GtkTextBuffer *source_buffer)
 {
   GtkTextIter start_iter, next_iter, tmp_iter;
   gint state;
@@ -398,12 +398,11 @@ fontify (void)
     }
 }
 
-static GtkWidget *create_text (GtkTextBuffer **buffer, gboolean is_source);
+static GtkWidget *create_text (GtkWidget **text_view, gboolean is_source);
 
 static void
 add_data_tab (const gchar *demoname)
 {
-  GtkTextBuffer *buffer = NULL;
   gchar *resource_dir, *resource_name, *content_type;
   gchar **resources;
   GBytes *bytes;
@@ -440,8 +439,13 @@ add_data_tab (const gchar *demoname)
         }
       else if (g_content_type_is_a (content_type, "text/plain"))
         {
-          widget = create_text (&buffer, FALSE);
+          GtkTextBuffer *buffer;
+          GtkWidget *textview;
+
+          widget = create_text (&textview, FALSE);
+          buffer = gtk_text_buffer_new (NULL);
           gtk_text_buffer_set_text (buffer, g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes));
+          gtk_text_view_set_buffer (GTK_TEXT_VIEW (textview), buffer);
         }
       else
         {
@@ -476,6 +480,7 @@ void
 load_file (const gchar *demoname,
            const gchar *filename)
 {
+  GtkTextBuffer *info_buffer, *source_buffer;
   GtkTextIter start, end;
   char *resource_filename;
   GError *err = NULL;
@@ -495,11 +500,34 @@ load_file (const gchar *demoname,
   g_free (current_file);
   current_file = g_strdup (filename);
 
-  gtk_text_buffer_get_bounds (info_buffer, &start, &end);
-  gtk_text_buffer_delete (info_buffer, &start, &end);
+  info_buffer = gtk_text_buffer_new (NULL);
+  gtk_text_buffer_create_tag (info_buffer, "title",
+                              "font", "Sans 18",
+                              "pixels-below-lines", 10,
+                              NULL);
 
-  gtk_text_buffer_get_bounds (source_buffer, &start, &end);
-  gtk_text_buffer_delete (source_buffer, &start, &end);
+  source_buffer = gtk_text_buffer_new (NULL);
+  gtk_text_buffer_create_tag (source_buffer, "comment",
+                              "foreground", "DodgerBlue",
+                              NULL);
+  gtk_text_buffer_create_tag (source_buffer, "type",
+                              "foreground", "ForestGreen",
+                              NULL);
+  gtk_text_buffer_create_tag (source_buffer, "string",
+                              "foreground", "RosyBrown",
+                              "weight", PANGO_WEIGHT_BOLD,
+                              NULL);
+  gtk_text_buffer_create_tag (source_buffer, "control",
+                              "foreground", "purple",
+                              NULL);
+  gtk_text_buffer_create_tag (source_buffer, "preprocessor",
+                              "style", PANGO_STYLE_OBLIQUE,
+                              "foreground", "burlywood4",
+                              NULL);
+  gtk_text_buffer_create_tag (source_buffer, "function",
+                              "weight", PANGO_WEIGHT_BOLD,
+                              "foreground", "DarkGoldenrod4",
+                              NULL);
 
   resource_filename = g_strconcat ("/sources/", filename, NULL);
   bytes = g_resources_lookup_data (resource_filename, 0, &err);
@@ -629,9 +657,14 @@ load_file (const gchar *demoname,
         }
     }
 
-  fontify ();
+  fontify (source_buffer);
 
   g_strfreev (lines);
+
+  gtk_text_view_set_buffer (GTK_TEXT_VIEW (info_view), info_buffer);
+  g_object_unref (info_buffer);
+  gtk_text_view_set_buffer (GTK_TEXT_VIEW (source_view), source_buffer);
+  g_object_unref (source_buffer);
 }
 
 void
@@ -699,8 +732,8 @@ selection_cb (GtkTreeSelection *selection,
 }
 
 static GtkWidget *
-create_text (GtkTextBuffer **buffer,
-             gboolean        is_source)
+create_text (GtkWidget **view,
+             gboolean    is_source)
 {
   GtkWidget *scrolled_window;
   GtkWidget *text_view;
@@ -713,11 +746,9 @@ create_text (GtkTextBuffer **buffer,
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_window),
                                        GTK_SHADOW_IN);
 
-  text_view = gtk_text_view_new ();
+  *view = text_view = gtk_text_view_new ();
   g_object_set (text_view, "margin", 20, NULL);
 
-  *buffer = gtk_text_buffer_new (NULL);
-  gtk_text_view_set_buffer (GTK_TEXT_VIEW (text_view), *buffer);
   gtk_text_view_set_editable (GTK_TEXT_VIEW (text_view), FALSE);
   gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (text_view), FALSE);
 
@@ -899,42 +930,12 @@ main (int argc, char **argv)
   gtk_box_pack_start (GTK_BOX (hbox), notebook, TRUE, TRUE, 0);
 
   gtk_notebook_append_page (GTK_NOTEBOOK (notebook),
-                            create_text (&info_buffer, FALSE),
+                            create_text (&info_view, FALSE),
                             gtk_label_new_with_mnemonic ("_Info"));
 
-  gtk_text_buffer_create_tag (info_buffer, "title",
-                              "font", "Sans 18",
-                              "pixels-below-lines", 10,
-                              NULL);
-  g_object_unref (info_buffer);
-
   gtk_notebook_append_page (GTK_NOTEBOOK (notebook),
-                            create_text (&source_buffer, TRUE),
+                            create_text (&source_view, TRUE),
                             gtk_label_new_with_mnemonic ("_Source"));
-
-
-  gtk_text_buffer_create_tag (source_buffer, "comment",
-                              "foreground", "DodgerBlue",
-                              NULL);
-  gtk_text_buffer_create_tag (source_buffer, "type",
-                              "foreground", "ForestGreen",
-                              NULL);
-  gtk_text_buffer_create_tag (source_buffer, "string",
-                              "foreground", "RosyBrown",
-                              "weight", PANGO_WEIGHT_BOLD,
-                              NULL);
-  gtk_text_buffer_create_tag (source_buffer, "control",
-                              "foreground", "purple",
-                              NULL);
-  gtk_text_buffer_create_tag (source_buffer, "preprocessor",
-                              "style", PANGO_STYLE_OBLIQUE,
-                              "foreground", "burlywood4",
-                              NULL);
-  gtk_text_buffer_create_tag (source_buffer, "function",
-                              "weight", PANGO_WEIGHT_BOLD,
-                              "foreground", "DarkGoldenrod4",
-                              NULL);
-  g_object_unref (source_buffer);
 
   gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
   gtk_widget_show_all (window);
