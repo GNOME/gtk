@@ -1394,7 +1394,6 @@ drag_motion_callback (GtkTreeView *tree_view,
 	GtkTreeViewDropPosition pos;
 	int action;
 	GtkTreeIter iter;
-	char *uri;
 	gboolean res;
 
 	action = 0;
@@ -1412,8 +1411,6 @@ drag_motion_callback (GtkTreeView *tree_view,
 		goto out;
 	}
 
-	printf ("compute_drop_position(): path %d, pos %s\n", gtk_tree_path_get_indices (path)[0], pos_to_string (pos));
-
 	if (sidebar->drag_data_received &&
 	    sidebar->drag_data_info == GTK_TREE_MODEL_ROW) {
 		/* Dragging bookmarks always moves them to another position in the bookmarks list */
@@ -1424,23 +1421,44 @@ drag_motion_callback (GtkTreeView *tree_view,
 		 * create bookmarks out of the dragged URIs.
 		 */
 		if (sidebar->drag_list != NULL) {
-			GFile *dest_file;
+			SectionType section_type;
+			PlaceType place_type;
+			gboolean drop_as_bookmarks;
 
 			gtk_tree_model_get_iter (GTK_TREE_MODEL (sidebar->store),
 						 &iter, path);
 			gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store),
 					    &iter,
-					    PLACES_SIDEBAR_COLUMN_URI, &uri,
+					    PLACES_SIDEBAR_COLUMN_SECTION_TYPE, &section_type,
+					    PLACES_SIDEBAR_COLUMN_ROW_TYPE, &place_type,
 					    -1);
 
-			dest_file = g_file_new_for_uri (uri);
+			drop_as_bookmarks = FALSE;
 
-			emit_drag_action_requested (sidebar, context, dest_file, sidebar->drag_list, &action);
+			if (section_type == SECTION_BOOKMARKS) {
+				if (pos == GTK_TREE_VIEW_DROP_BEFORE || pos == GTK_TREE_VIEW_DROP_AFTER) {
+					action = GDK_ACTION_COPY;
+					drop_as_bookmarks = TRUE;
+				}
+			}
 
-			printf ("dragging URIs, dest_file = %s, action_requested = %d\n", uri, action);
+			if (!drop_as_bookmarks) {
+				char *uri;
+				GFile *dest_file;
 
-			g_object_unref (dest_file);
-			g_free (uri);
+				gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store),
+						    &iter,
+						    PLACES_SIDEBAR_COLUMN_URI, &uri,
+						    -1);
+
+				g_assert (uri != NULL);
+				dest_file = g_file_new_for_uri (uri);
+
+				emit_drag_action_requested (sidebar, context, dest_file, sidebar->drag_list, &action);
+
+				g_object_unref (dest_file);
+				g_free (uri);
+			}
 		}
 	}
 
@@ -1623,7 +1641,7 @@ drag_data_received_callback (GtkWidget *widget,
 		if (real_action > 0) {
 			char *uri;
 			GFile *dest_file;
-			gboolean dropped;
+			gboolean drop_as_bookmarks;
 
 			model = gtk_tree_view_get_model (tree_view);
 
@@ -1634,7 +1652,7 @@ drag_data_received_callback (GtkWidget *widget,
 					    PLACES_SIDEBAR_COLUMN_INDEX, &position,
 					    -1);
 
-			dropped = FALSE;
+			drop_as_bookmarks = FALSE;
 
 			uris = gtk_selection_data_get_uris (selection_data);
 			source_file_list = build_file_list_from_uris ((const char **) uris);
@@ -1652,11 +1670,11 @@ drag_data_received_callback (GtkWidget *widget,
 				    || tree_pos == GTK_TREE_VIEW_DROP_AFTER) {
 					drop_files_as_bookmarks (sidebar, source_file_list, position);
 					success = TRUE;
-					dropped = TRUE;
+					drop_as_bookmarks = TRUE;
 				}
 			}
 
-			if (!dropped) {
+			if (!drop_as_bookmarks) {
 				gtk_tree_model_get_iter (model, &iter, tree_path);
 				gtk_tree_model_get (model, &iter,
 						    PLACES_SIDEBAR_COLUMN_URI, &uri,
