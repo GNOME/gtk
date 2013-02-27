@@ -14098,7 +14098,7 @@ gtk_widget_register_window (GtkWidget    *widget,
   gdk_window_set_user_data (window, widget);
   priv->registered_windows = g_list_prepend (priv->registered_windows, window);
 
-  if (!gtk_widget_get_has_window (widget) && !gdk_window_has_native (window))
+  if (priv->window != window && !gdk_window_has_native (window))
     gdk_window_set_opacity (window,
 			    priv->norender_children ? 0.0 : 1.0);
 }
@@ -14231,8 +14231,8 @@ gtk_widget_propagate_alpha (GtkWidget *widget)
   parent = priv->parent;
 
   norender =
-    /* If this widget has an opacity group, never render it */
-    priv->opacity_group ||
+    /* If this widget has an opacity group and no window don't render it */
+    (priv->opacity_group && !gtk_widget_get_has_window (widget)) ||
     /* If the parent has norender_children, propagate that here */
     (parent != NULL && parent->priv->norender_children);
 
@@ -14252,14 +14252,12 @@ gtk_widget_propagate_alpha (GtkWidget *widget)
 	gdk_window_set_opacity (priv->window,
 				norender ? 0 : priv->alpha / 255.0);
     }
-  else /* !has_window */
+
+  for (l = priv->registered_windows; l != NULL; l = l->next)
     {
-      for (l = priv->registered_windows; l != NULL; l = l->next)
-	{
-	  GdkWindow *w = l->data;
-	  if (!gdk_window_has_native (w))
-	    gdk_window_set_opacity (w, norender_children ? 0.0 : 1.0);
-	}
+      GdkWindow *w = l->data;
+      if (w != priv->window && !gdk_window_has_native (w))
+	gdk_window_set_opacity (w, norender_children ? 0.0 : 1.0);
     }
 
   priv->norender = norender;
