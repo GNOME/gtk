@@ -2117,7 +2117,7 @@ gtk_range_draw (GtkWidget *widget,
 
       if (draw_trough)
         {
-          if (!priv->has_origin)
+          if (!priv->has_origin || !draw_slider)
             {
               gtk_render_background (context, cr,
                                      x, y, width, height);
