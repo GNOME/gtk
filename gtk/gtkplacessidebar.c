@@ -3822,7 +3822,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 			      G_TYPE_NONE, 4,
 			      GDK_TYPE_DRAG_CONTEXT,
 			      G_TYPE_OBJECT,
-			      G_TYPE_POINTER, /* FIXME: (GList *) is there something friendlier to language bindings? */
+			      G_TYPE_POINTER, /* GList of GFile */
 			      G_TYPE_POINTER  /* FIXME: (inout int) is there something friendlier to language bindings? */);
 
 	/**
@@ -3872,7 +3872,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 			      _gtk_marshal_VOID__OBJECT_POINTER_INT,
 			      G_TYPE_NONE, 3,
 			      G_TYPE_OBJECT,
-			      G_TYPE_POINTER, /* FIXME: (GList *) is there something friendlier to language bindings? */
+			      G_TYPE_POINTER, /* GList of GFile */
 			      G_TYPE_INT);
 
 	properties[PROP_LOCATION] =
