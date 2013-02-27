@@ -205,7 +205,7 @@ _gdk_win32_window_change_property (GdkWindow    *window,
 	  wclen++;		/* Terminating 0 */
 	  size = wclen * 2;
 	  for (i = 0; i < wclen; i++)
-	    if (wcptr[i] == '\n')
+	    if (wcptr[i] == '\n' && (i == 0 || wcptr[i - 1] != '\r'))
 	      size += 2;
 	  
 	  if (!(hdata = GlobalAlloc (GMEM_MOVEABLE, size)))
@@ -222,7 +222,7 @@ _gdk_win32_window_change_property (GdkWindow    *window,
 	  p = (wchar_t *) ucptr;
 	  for (i = 0; i < wclen; i++)
 	    {
-	      if (wcptr[i] == '\n')
+	      if (wcptr[i] == '\n' && (i == 0 || wcptr[i - 1] != '\r'))
 		*p++ = '\r';
 	      *p++ = wcptr[i];
 	    }
