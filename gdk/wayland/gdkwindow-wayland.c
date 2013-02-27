@@ -130,6 +130,7 @@ struct _GdkWindowImplWayland
   GdkGeometry geometry_hints;
   GdkWindowHints geometry_mask;
 
+  GdkDevice *grab_device;
   struct wl_seat *grab_input_seat;
   guint32 grab_time;
 
@@ -563,24 +564,51 @@ gdk_wayland_window_map (GdkWindow *window)
   GdkWindowImplWayland *parent;
   GdkWaylandDisplay *wayland_display =
     GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+  GdkWindow *transient_for;
 
   if (!impl->mapped)
     {
-      if (impl->transient_for)
+      /* Popup menus can appear without a transient parent, which means they
+       * cannot be positioned properly on Wayland. This attempts to guess the
+       * surface they should be positioned with by finding the surface beneath
+       * the device that created the grab for the popup window */
+
+      if (!impl->transient_for && impl->hint == GDK_WINDOW_TYPE_HINT_POPUP_MENU)
+        {
+          transient_for = gdk_device_get_window_at_position (impl->grab_device, NULL, NULL);
+          transient_for = gdk_window_get_toplevel (transient_for);
+
+          /* start the popup at the position of the device that holds the grab */
+          gdk_window_get_device_position (transient_for,
+                                          impl->grab_device,
+                                          &window->x, &window->y, NULL);
+        }
+      else
+        transient_for = impl->transient_for;
+
+      if (transient_for)
         {
           struct wl_seat *grab_input_seat = NULL;
+          GdkWindowImplWayland *tmp_impl;
 
-          parent = GDK_WINDOW_IMPL_WAYLAND (impl->transient_for->impl);
+          parent = GDK_WINDOW_IMPL_WAYLAND (transient_for->impl);
 
           /* Use the device that was used for the grab as the device for
            * the popup window setup - so this relies on GTK+ taking the
            * grab before showing the popup window.
            */
-          if (impl->grab_input_seat)
-            grab_input_seat = impl->grab_input_seat;
+          grab_input_seat = impl->grab_input_seat;
 
-          if (!grab_input_seat)
-            grab_input_seat = parent->grab_input_seat;
+          tmp_impl = parent;
+          while (!grab_input_seat)
+            {
+              grab_input_seat = tmp_impl->grab_input_seat;
+
+              if (tmp_impl->transient_for)
+                tmp_impl = GDK_WINDOW_IMPL_WAYLAND (tmp_impl->transient_for->impl);
+              else
+                break;
+            }
 
           if (grab_input_seat &&
               (impl->hint == GDK_WINDOW_TYPE_HINT_POPUP_MENU ||
@@ -1291,6 +1319,9 @@ gdk_wayland_window_fullscreen (GdkWindow *window)
                                    WL_SHELL_SURFACE_FULLSCREEN_METHOD_DEFAULT,
                                    0,
                                    NULL);
+
+  gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FULLSCREEN);
+
   impl->fullscreen = TRUE;
 }
 
@@ -1306,8 +1337,11 @@ gdk_wayland_window_unfullscreen (GdkWindow *window)
     return;
 
   wl_shell_surface_set_toplevel (impl->shell_surface);
+  gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FULLSCREEN, 0);
   gdk_wayland_window_configure (window, impl->saved_width, impl->saved_height,
                                 0);
+
+
   impl->fullscreen = FALSE;
 }
 
@@ -1466,21 +1500,6 @@ gdk_wayland_window_begin_move_drag (GdkWindow *window,
    * above function - FIXME: Is this always safe..?
    */
   gdk_device_ungrab (device, timestamp);
-}
-
-static void
-gdk_wayland_window_enable_synchronized_configure (GdkWindow *window)
-{
-}
-
-static void
-gdk_wayland_window_configure_finished (GdkWindow *window)
-{
-  if (!WINDOW_IS_TOPLEVEL (window))
-    return;
-
-  if (!GDK_IS_WINDOW_IMPL_WAYLAND (window->impl))
-    return;
 }
 
 static void
@@ -1666,8 +1685,6 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   impl_class->set_functions = gdk_wayland_window_set_functions;
   impl_class->begin_resize_drag = gdk_wayland_window_begin_resize_drag;
   impl_class->begin_move_drag = gdk_wayland_window_begin_move_drag;
-  impl_class->enable_synchronized_configure = gdk_wayland_window_enable_synchronized_configure;
-  impl_class->configure_finished = gdk_wayland_window_configure_finished;
   impl_class->set_opacity = gdk_wayland_window_set_opacity;
   impl_class->set_composited = gdk_wayland_window_set_composited;
   impl_class->destroy_notify = gdk_wayland_window_destroy_notify;
@@ -1686,6 +1703,7 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
 
 void
 _gdk_wayland_window_set_device_grabbed (GdkWindow      *window,
+                                        GdkDevice      *device,
                                         struct wl_seat *seat,
                                         guint32         time_)
 {
@@ -1695,6 +1713,7 @@ _gdk_wayland_window_set_device_grabbed (GdkWindow      *window,
 
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
+  impl->grab_device = device;
   impl->grab_input_seat = seat;
   impl->grab_time = time_;
 }

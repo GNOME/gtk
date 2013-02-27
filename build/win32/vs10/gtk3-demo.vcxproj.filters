@@ -143,9 +143,6 @@
     <ClCompile Include="..\..\..\demos\gtk-demo\textview.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\demos\gtk-demo\theming_custom_css.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\theming_style_classes.c">
       <Filter>Source Files</Filter>
     </ClCompile>

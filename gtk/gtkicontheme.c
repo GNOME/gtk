@@ -225,8 +225,15 @@ struct _SymbolicPixbufCache {
   SymbolicPixbufCache *next;
 };
 
+struct _GtkIconInfoClass
+{
+  GObjectClass parent_class;
+};
+
 struct _GtkIconInfo
 {
+  GObject parent_instance;
+
   /* Information about the source
    */
   IconInfoKey key;
@@ -255,8 +262,6 @@ struct _GtkIconInfo
   guint raw_coordinates : 1;
   guint forced_size     : 1;
   guint emblems_applied : 1;
-
-  guint ref_count;
 
   /* Cached information if we go ahead and try to load
    * the icon.
@@ -345,6 +350,7 @@ static void         do_theme_change   (GtkIconTheme     *icon_theme);
 static void     blow_themes               (GtkIconTheme    *icon_themes);
 static gboolean rescan_themes             (GtkIconTheme    *icon_themes);
 
+static GtkIconData *icon_data_dup      (GtkIconData     *icon_data);
 static void  icon_data_free            (GtkIconData     *icon_data);
 static void load_icon_data             (IconThemeDir    *dir,
 			                const char      *path,
@@ -1438,7 +1444,7 @@ ensure_lru_cache_space (GtkIconTheme *icon_theme)
 		    g_list_length (priv->info_cache_lru)));
 
       priv->info_cache_lru = g_list_delete_link (priv->info_cache_lru, l);
-      gtk_icon_info_free (icon_info);
+      g_object_unref (icon_info);
     }
 }
 
@@ -1459,7 +1465,7 @@ add_to_lru_cache (GtkIconTheme *icon_theme,
   ensure_lru_cache_space (icon_theme);
   /* prepend new info to LRU */
   priv->info_cache_lru = g_list_prepend (priv->info_cache_lru,
-					 gtk_icon_info_copy (icon_info));
+					 g_object_ref (icon_info));
 }
 
 static void
@@ -1494,7 +1500,7 @@ remove_from_lru_cache (GtkIconTheme *icon_theme,
 		    g_list_length (priv->info_cache_lru)));
 
       priv->info_cache_lru = g_list_remove (priv->info_cache_lru, icon_info);
-      gtk_icon_info_free (icon_info);
+      g_object_unref (icon_info);
     }
 }
 
@@ -1608,7 +1614,7 @@ choose_icon (GtkIconTheme       *icon_theme,
 		    icon_info->key.size, icon_info->key.flags,
 		    g_hash_table_size (priv->info_cache)));
 
-      icon_info = gtk_icon_info_copy (icon_info);
+      icon_info = g_object_ref (icon_info);
       remove_from_lru_cache (icon_theme, icon_info);
 
       return icon_info;
@@ -1772,9 +1778,8 @@ choose_icon (GtkIconTheme       *icon_theme,
  * gtk_icon_info_load_icon(). (gtk_icon_theme_load_icon()
  * combines these two steps if all you need is the pixbuf.)
  * 
- * Return value: a #GtkIconInfo structure containing information
- * about the icon, or %NULL if the icon wasn't found. Free with
- * gtk_icon_info_free()
+ * Return value: (transfer full): a #GtkIconInfo object containing information
+ * about the icon, or %NULL if the icon wasn't found.
  *
  * Since: 2.4
  */
@@ -1850,9 +1855,8 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *icon_theme,
  * tries them all in the given order before falling back to 
  * inherited icon themes.
  * 
- * Return value: a #GtkIconInfo structure containing information
- * about the icon, or %NULL if the icon wasn't found. Free with
- * gtk_icon_info_free()
+ * Return value: (transfer full): a #GtkIconInfo object containing information
+ * about the icon, or %NULL if the icon wasn't found.
  *
  * Since: 2.12
  */
@@ -1933,7 +1937,7 @@ gtk_icon_theme_load_icon (GtkIconTheme         *icon_theme,
     }
 
   pixbuf = gtk_icon_info_load_icon (icon_info, error);
-  gtk_icon_info_free (icon_info);
+  g_object_unref (icon_info);
 
   return pixbuf;
 }
@@ -2967,23 +2971,83 @@ icon_data_free (GtkIconData *icon_data)
   g_slice_free (GtkIconData, icon_data);
 }
 
+static GtkIconData *
+icon_data_dup (GtkIconData *icon_data)
+{
+  GtkIconData *dup = NULL;
+  if (icon_data)
+    {
+      dup = g_slice_new0 (GtkIconData);
+      *dup = *icon_data;
+      if (dup->n_attach_points > 0)
+	{
+	  dup->attach_points = g_memdup (dup->attach_points,
+					 sizeof (GdkPoint) * dup->n_attach_points);
+	}
+      dup->display_name = g_strdup (dup->display_name);
+    }
+
+  return dup;
+}
+
+
 /*
  * GtkIconInfo
  */
 
-G_DEFINE_BOXED_TYPE (GtkIconInfo, gtk_icon_info,
-                     gtk_icon_info_copy,
-                     gtk_icon_info_free)
+static void gtk_icon_info_class_init (GtkIconInfoClass *klass);
+
+G_DEFINE_TYPE (GtkIconInfo, gtk_icon_info, G_TYPE_OBJECT)
+
+static void
+gtk_icon_info_init (GtkIconInfo *icon_info)
+{
+  icon_info->scale = -1.;
+}
 
 static GtkIconInfo *
 icon_info_new (void)
 {
-  GtkIconInfo *icon_info = g_slice_new0 (GtkIconInfo);
+  return g_object_new (GTK_TYPE_ICON_INFO, NULL);
+}
 
-  icon_info->scale = -1.;
-  icon_info->ref_count = 1;
+/* This only copies whatever is needed to load the pixbuf, so that we can do
+ * a load in a thread without affecting the original IconInfo from the thread.
+ */
+static GtkIconInfo *
+icon_info_dup (GtkIconInfo *icon_info)
+{
+  GtkIconInfo *dup;
+  GSList *l;
 
-  return icon_info;
+  dup = icon_info_new ();
+
+  dup->filename = g_strdup (icon_info->filename);
+  if (icon_info->icon_file)
+    dup->icon_file = g_object_ref (icon_info->icon_file);
+  if (icon_info->loadable)
+    dup->loadable = g_object_ref (icon_info->loadable);
+
+  for (l = icon_info->emblem_infos; l != NULL; l = l->next)
+    {
+      dup->emblem_infos =
+	g_slist_append (dup->emblem_infos,
+			icon_info_dup (l->data));
+    }
+
+  if (icon_info->cache_pixbuf)
+    dup->cache_pixbuf = g_object_ref (icon_info->cache_pixbuf);
+
+  dup->data = icon_data_dup (icon_info->data);
+  dup->dir_type = icon_info->dir_type;
+  dup->dir_size = icon_info->dir_size;
+  dup->threshold = icon_info->threshold;
+  dup->desired_size = icon_info->desired_size;
+  dup->raw_coordinates = icon_info->raw_coordinates;
+  dup->forced_size = icon_info->forced_size;
+  dup->emblems_applied = icon_info->emblems_applied;
+
+  return dup;
 }
 
 static GtkIconInfo *
@@ -3000,7 +3064,7 @@ icon_info_new_builtin (BuiltinIcon *icon)
 }
 
 /**
- * gtk_icon_info_copy:
+ * gtk_icon_info_copy: (skip)
  * @icon_info: a #GtkIconInfo
  * 
  * Make a copy of a #GtkIconInfo.
@@ -3008,6 +3072,8 @@ icon_info_new_builtin (BuiltinIcon *icon)
  * Return value: the new GtkIconInfo
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.8: Use g_object_ref()
  **/
 GtkIconInfo *
 gtk_icon_info_copy (GtkIconInfo *icon_info)
@@ -3015,27 +3081,31 @@ gtk_icon_info_copy (GtkIconInfo *icon_info)
   
   g_return_val_if_fail (icon_info != NULL, NULL);
 
-  icon_info->ref_count++;
-
-  return icon_info;
+  return g_object_ref (icon_info);
 }
 
 /**
- * gtk_icon_info_free:
+ * gtk_icon_info_free: (skip)
  * @icon_info: a #GtkIconInfo
  * 
  * Free a #GtkIconInfo and associated information
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.8: Use g_object_unref()
  **/
 void
 gtk_icon_info_free (GtkIconInfo *icon_info)
 {
   g_return_if_fail (icon_info != NULL);
 
-  icon_info->ref_count--;
-  if (icon_info->ref_count > 0)
-    return;
+  g_object_unref (icon_info);
+}
+
+static void
+gtk_icon_info_finalize (GObject *object)
+{
+  GtkIconInfo *icon_info = (GtkIconInfo *) object;
 
   if (icon_info->in_cache)
     g_hash_table_remove (icon_info->in_cache->priv->info_cache, &icon_info->key);
@@ -3047,7 +3117,7 @@ gtk_icon_info_free (GtkIconInfo *icon_info)
 
   if (icon_info->loadable)
     g_object_unref (icon_info->loadable);
-  g_slist_free_full (icon_info->emblem_infos, (GDestroyNotify) gtk_icon_info_free);
+  g_slist_free_full (icon_info->emblem_infos, (GDestroyNotify) g_object_unref);
   if (icon_info->pixbuf)
     g_object_unref (icon_info->pixbuf);
   if (icon_info->cache_pixbuf)
@@ -3057,7 +3127,15 @@ gtk_icon_info_free (GtkIconInfo *icon_info)
 
   symbolic_pixbuf_cache_free (icon_info->symbolic_pixbuf_cache);
 
-  g_slice_free (GtkIconInfo, icon_info);
+  G_OBJECT_CLASS (gtk_icon_info_parent_class)->finalize (object);
+}
+
+static void
+gtk_icon_info_class_init (GtkIconInfoClass *klass)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  gobject_class->finalize = gtk_icon_info_finalize;
 }
 
 /**
@@ -3220,6 +3298,21 @@ apply_emblems (GtkIconInfo *info)
     }
 
   info->emblems_applied = TRUE;
+}
+
+/* If this returns TRUE, its safe to call
+   icon_info_ensure_scale_and_pixbuf without blocking */
+static gboolean
+icon_info_get_pixbuf_ready (GtkIconInfo *icon_info)
+{
+  if (icon_info->pixbuf &&
+      (icon_info->emblem_infos == NULL || icon_info->emblems_applied))
+    return TRUE;
+
+  if (icon_info->load_error)
+    return TRUE;
+
+  return FALSE;
 }
 
 /* This function contains the complicated logic for deciding
@@ -3416,7 +3509,7 @@ proxy_pixbuf_destroy (guchar *pixels, gpointer data)
   if (icon_theme != NULL)
     ensure_in_lru_cache (icon_theme, icon_info);
 
-  gtk_icon_info_free (icon_info);
+  g_object_unref (icon_info);
 }
 
 /**
@@ -3483,9 +3576,122 @@ gtk_icon_info_load_icon (GtkIconInfo *icon_info,
 			      gdk_pixbuf_get_height (icon_info->pixbuf),
 			      gdk_pixbuf_get_rowstride (icon_info->pixbuf),
 			      proxy_pixbuf_destroy,
-			      gtk_icon_info_copy (icon_info));
+			      g_object_ref (icon_info));
 
   return icon_info->proxy_pixbuf;
+}
+
+static void
+load_icon_thread  (GTask           *task,
+		   gpointer         source_object,
+		   gpointer         task_data,
+		   GCancellable    *cancellable)
+{
+  GtkIconInfo *dup = task_data;
+
+  icon_info_ensure_scale_and_pixbuf (dup, FALSE);
+  g_task_return_pointer (task, NULL, NULL);
+}
+
+/**
+ * gtk_icon_info_load_icon_async:
+ * @icon_info: a #GtkIconInfo structure from gtk_icon_theme_lookup_icon()
+ * @cancellable: (allow-none): optional #GCancellable object,
+ *     %NULL to ignore
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the
+ *     request is satisfied
+ * @user_data: (closure): the data to pass to callback function
+ *
+ * Asynchronously load, render and scale an icon previously looked up
+ * from the icon theme using gtk_icon_theme_lookup_icon().
+ *
+ * For more details, see gtk_icon_info_load_icon() which is the synchronous
+ * version of this call.
+ *
+ * Since: 3.8
+ **/
+void
+gtk_icon_info_load_icon_async (GtkIconInfo          *icon_info,
+			       GCancellable         *cancellable,
+			       GAsyncReadyCallback   callback,
+			       gpointer              user_data)
+{
+  GTask *task;
+  GdkPixbuf *pixbuf;
+  GtkIconInfo *dup;
+  GError *error = NULL;
+
+  task = g_task_new (icon_info, cancellable, callback, user_data);
+
+  if (icon_info_get_pixbuf_ready (icon_info))
+    {
+      pixbuf = gtk_icon_info_load_icon (icon_info, &error);
+      if (pixbuf == NULL)
+	g_task_return_error (task, error);
+      else
+	g_task_return_pointer (task, pixbuf, g_object_unref);
+      g_object_unref (task);
+    }
+  else
+    {
+      dup = icon_info_dup (icon_info);
+      g_task_set_task_data (task, dup, g_object_unref);
+      g_task_run_in_thread (task, load_icon_thread);
+      g_object_unref (task);
+    }
+}
+
+/**
+ * gtk_icon_info_load_icon_finish:
+ * @icon_info: a #GtkIconInfo structure from gtk_icon_theme_lookup_icon()
+ * @res: a #GAsyncResult
+ * @error: (allow-none): location to store error information on failure,
+ *     or %NULL.
+ *
+ * Finishes an async icon load, see gtk_icon_info_load_icon_async().
+ *
+ * Return value: (transfer full): the rendered icon; this may be a newly
+ *     created icon or a new reference to an internal icon, so you must
+ *     not modify the icon. Use g_object_unref() to release your reference
+ *     to the icon.
+ *
+ * Since: 3.8
+ **/
+GdkPixbuf *
+gtk_icon_info_load_icon_finish (GtkIconInfo          *icon_info,
+				GAsyncResult         *result,
+				GError              **error)
+{
+  GTask *task = G_TASK (result);
+  GtkIconInfo *dup;
+
+  g_return_val_if_fail (g_task_is_valid (result, icon_info), NULL);
+
+  dup = g_task_get_task_data (task);
+  if (dup == NULL || g_task_had_error (task))
+    return g_task_propagate_pointer (task, error);
+
+  /* We ran the thread and it was not cancelled */
+
+  /* Check if someone else updated the icon_info in between */
+  if (!icon_info_get_pixbuf_ready (icon_info))
+    {
+      /* If not, copy results from dup back to icon_info */
+
+      icon_info->emblems_applied = dup->emblems_applied;
+      icon_info->scale = dup->scale;
+      g_clear_object (&icon_info->pixbuf);
+      if (dup->pixbuf)
+	icon_info->pixbuf = g_object_ref (dup->pixbuf);
+      g_clear_error (&icon_info->load_error);
+      if (dup->load_error)
+	icon_info->load_error = g_error_copy (dup->load_error);
+    }
+
+  g_assert (icon_info_get_pixbuf_ready (icon_info));
+
+  /* This is now guaranteed to not block */
+  return gtk_icon_info_load_icon (icon_info, error);
 }
 
 static gchar *
@@ -3532,7 +3738,7 @@ proxy_symbolic_pixbuf_destroy (guchar *pixels, gpointer data)
   if (icon_theme != NULL)
     ensure_in_lru_cache (icon_theme, icon_info);
 
-  gtk_icon_info_free (icon_info);
+  g_object_unref (icon_info);
 }
 
 static GdkPixbuf *
@@ -3551,7 +3757,7 @@ symbolic_cache_get_proxy (SymbolicPixbufCache *symbolic_cache,
 			      gdk_pixbuf_get_height (symbolic_cache->pixbuf),
 			      gdk_pixbuf_get_rowstride (symbolic_cache->pixbuf),
 			      proxy_symbolic_pixbuf_destroy,
-			      gtk_icon_info_copy (icon_info));
+			      g_object_ref (icon_info));
 
   return symbolic_cache->proxy_pixbuf;
 }
@@ -3562,7 +3768,8 @@ _gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
 				       const GdkRGBA  *success_color,
 				       const GdkRGBA  *warning_color,
 				       const GdkRGBA  *error_color,
-                                       GError      **error)
+				       gboolean        use_cache,
+                                       GError        **error)
 {
   GInputStream *stream;
   GdkPixbuf *pixbuf;
@@ -3574,10 +3781,13 @@ _gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
   gchar *width, *height, *uri;
   SymbolicPixbufCache *symbolic_cache;
 
-  symbolic_cache = symbolic_pixbuf_cache_matches (icon_info->symbolic_pixbuf_cache,
-						  fg, success_color, warning_color, error_color);
-  if (symbolic_cache)
-    return symbolic_cache_get_proxy (symbolic_cache, icon_info);
+  if (use_cache)
+    {
+      symbolic_cache = symbolic_pixbuf_cache_matches (icon_info->symbolic_pixbuf_cache,
+						      fg, success_color, warning_color, error_color);
+      if (symbolic_cache)
+	return symbolic_cache_get_proxy (symbolic_cache, icon_info);
+    }
 
   /* css_fg can't possibly have failed, otherwise
    * that would mean we have a broken style */
@@ -3678,11 +3888,16 @@ _gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
 
   if (pixbuf != NULL)
     {
-      icon_info->symbolic_pixbuf_cache =
-	symbolic_pixbuf_cache_new (pixbuf, fg, success_color, warning_color, error_color,
-				   icon_info->symbolic_pixbuf_cache);
-
-      return symbolic_cache_get_proxy (icon_info->symbolic_pixbuf_cache, icon_info);
+      if (use_cache)
+	{
+	  icon_info->symbolic_pixbuf_cache =
+	    symbolic_pixbuf_cache_new (pixbuf, fg, success_color, warning_color, error_color,
+				       icon_info->symbolic_pixbuf_cache);
+	  g_object_unref (pixbuf);
+	  return symbolic_cache_get_proxy (icon_info->symbolic_pixbuf_cache, icon_info);
+	}
+      else
+	return pixbuf;
     }
 
   return NULL;
@@ -3756,6 +3971,7 @@ gtk_icon_info_load_symbolic (GtkIconInfo    *icon_info,
   return _gtk_icon_info_load_symbolic_internal (icon_info,
 						fg, success_color,
 						warning_color, error_color,
+						TRUE,
 						error);
 }
 
@@ -3842,7 +4058,330 @@ gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,
   return _gtk_icon_info_load_symbolic_internal (icon_info,
 						fgp, success_colorp,
 						warning_colorp, error_colorp,
+						TRUE,
 						error);
+}
+
+typedef struct {
+  gboolean is_symbolic;
+  GtkIconInfo *dup;
+  GdkRGBA fg;
+  gboolean fg_set;
+  GdkRGBA success_color;
+  gboolean success_color_set;
+  GdkRGBA warning_color;
+  gboolean warning_color_set;
+  GdkRGBA error_color;
+  gboolean error_color_set;
+} AsyncSymbolicData;
+
+static void
+async_symbolic_data_free (AsyncSymbolicData *data)
+{
+  if (data->dup)
+    g_object_unref (data->dup);
+  g_slice_free (AsyncSymbolicData, data);
+}
+
+static void
+async_load_no_symbolic_cb (GObject *source_object,
+			   GAsyncResult *res,
+			   gpointer user_data)
+{
+  GtkIconInfo *icon_info = GTK_ICON_INFO (source_object);
+  GTask *task = user_data;
+  GError *error = NULL;
+  GdkPixbuf *pixbuf;
+
+  pixbuf = gtk_icon_info_load_icon_finish (icon_info, res, &error);
+  if (pixbuf == NULL)
+    g_task_return_error (task, error);
+  else
+    g_task_return_pointer (task, pixbuf, g_object_unref);
+  g_object_unref (task);
+}
+
+static void
+load_symbolic_icon_thread  (GTask           *task,
+			    gpointer         source_object,
+			    gpointer         task_data,
+			    GCancellable    *cancellable)
+{
+  AsyncSymbolicData *data = task_data;
+  GError *error;
+  GdkPixbuf *pixbuf;
+
+  error = NULL;
+  pixbuf =
+    _gtk_icon_info_load_symbolic_internal (data->dup,
+					   data->fg_set ? &data->fg : NULL,
+					   data->success_color_set ? &data->success_color : NULL,
+					   data->warning_color_set ? &data->warning_color : NULL,
+					   data->error_color_set ? &data->error_color : NULL,
+					   FALSE,
+					   &error);
+  if (pixbuf == NULL)
+    g_task_return_error (task, error);
+  else
+    g_task_return_pointer (task, pixbuf, g_object_unref);
+}
+
+/**
+ * gtk_icon_info_load_symbolic_async:
+ * @icon_info: a #GtkIconInfo structure from gtk_icon_theme_lookup_icon()
+ * @fg: a #GdkRGBA representing the foreground color of the icon
+ * @success_color: (allow-none): a #GdkRGBA representing the warning color
+ *     of the icon or %NULL to use the default color
+ * @warning_color: (allow-none): a #GdkRGBA representing the warning color
+ *     of the icon or %NULL to use the default color
+ * @error_color: (allow-none): a #GdkRGBA representing the error color
+ *     of the icon or %NULL to use the default color (allow-none)
+ * @cancellable: (allow-none): optional #GCancellable object,
+ *     %NULL to ignore
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the
+ *     request is satisfied
+ * @user_data: (closure): the data to pass to callback function
+ *
+ * Asynchronously load, render and scale a symbolic icon previously looked up
+ * from the icon theme using gtk_icon_theme_lookup_icon().
+ *
+ * For more details, see gtk_icon_info_load_symbolic() which is the synchronous
+ * version of this call.
+ *
+ * Since: 3.8
+ **/
+void
+gtk_icon_info_load_symbolic_async (GtkIconInfo   *icon_info,
+				   const GdkRGBA *fg,
+				   const GdkRGBA *success_color,
+				   const GdkRGBA *warning_color,
+				   const GdkRGBA *error_color,
+				   GCancellable         *cancellable,
+				   GAsyncReadyCallback   callback,
+				   gpointer              user_data)
+{
+  GTask *task;
+  AsyncSymbolicData *data;
+  gchar *icon_uri;
+  SymbolicPixbufCache *symbolic_cache;
+  GdkPixbuf *pixbuf;
+
+  g_return_if_fail (icon_info != NULL);
+  g_return_if_fail (fg != NULL);
+
+  task = g_task_new (icon_info, cancellable, callback, user_data);
+
+  data = g_slice_new0 (AsyncSymbolicData);
+  g_task_set_task_data (task, data, (GDestroyNotify) async_symbolic_data_free);
+
+  icon_uri = NULL;
+  if (icon_info->icon_file)
+    icon_uri = g_file_get_uri (icon_info->icon_file);
+
+  data->is_symbolic = (icon_uri != NULL) && (g_str_has_suffix (icon_uri, "-symbolic.svg"));
+  g_free (icon_uri);
+
+  if (!data->is_symbolic)
+    {
+      gtk_icon_info_load_icon_async (icon_info, cancellable, async_load_no_symbolic_cb, g_object_ref (task));
+    }
+  else
+    {
+      symbolic_cache = symbolic_pixbuf_cache_matches (icon_info->symbolic_pixbuf_cache,
+						      fg, success_color, warning_color, error_color);
+      if (symbolic_cache)
+	{
+	  pixbuf = symbolic_cache_get_proxy (symbolic_cache, icon_info);
+	  g_task_return_pointer (task, pixbuf, g_object_unref);
+	}
+      else
+	{
+	  if (fg)
+	    {
+	      data->fg = *fg;
+	      data->fg_set = TRUE;
+	    }
+
+	  if (success_color)
+	    {
+	      data->success_color = *success_color;
+	      data->success_color_set = TRUE;
+	    }
+
+	  if (warning_color)
+	    {
+	      data->warning_color = *warning_color;
+	      data->warning_color_set = TRUE;
+	    }
+
+	  if (error_color)
+	    {
+	      data->error_color = *error_color;
+	      data->error_color_set = TRUE;
+	    }
+
+	  data->dup = icon_info_dup (icon_info);
+	  g_task_run_in_thread (task, load_symbolic_icon_thread);
+	}
+    }
+  g_object_unref (task);
+}
+
+/**
+ * gtk_icon_info_load_symbolic_finish:
+ * @icon_info: a #GtkIconInfo structure from gtk_icon_theme_lookup_icon()
+ * @res: a #GAsyncResult
+ * @was_symbolic: (out) (allow-none): a #gboolean, returns whether the
+ *     loaded icon was a symbolic one and whether the @fg color was
+ *     applied to it.
+ * @error: (allow-none): location to store error information on failure,
+ *     or %NULL.
+ *
+ * Finishes an async icon load, see gtk_icon_info_load_symbolic_async().
+ *
+ * Return value: (transfer full): the rendered icon; this may be a newly
+ *     created icon or a new reference to an internal icon, so you must
+ *     not modify the icon. Use g_object_unref() to release your reference
+ *     to the icon.
+ *
+ * Since: 3.8
+ **/
+GdkPixbuf *
+gtk_icon_info_load_symbolic_finish (GtkIconInfo   *icon_info,
+				    GAsyncResult  *result,
+				    gboolean      *was_symbolic,
+				    GError       **error)
+{
+  GTask *task = G_TASK (result);
+  AsyncSymbolicData *data = g_task_get_task_data (task);
+  SymbolicPixbufCache *symbolic_cache;
+  GdkPixbuf *pixbuf;
+
+  if (was_symbolic)
+    *was_symbolic = data->is_symbolic;
+
+  if (data->dup && !g_task_had_error (task))
+    {
+      pixbuf = g_task_propagate_pointer (task, NULL);
+
+      g_assert (pixbuf != NULL); /* we checked for !had_error above */
+
+      symbolic_cache = symbolic_pixbuf_cache_matches (icon_info->symbolic_pixbuf_cache,
+						      data->fg_set ? &data->fg : NULL,
+						      data->success_color_set ? &data->success_color : NULL,
+						      data->warning_color_set ? &data->warning_color : NULL,
+						      data->error_color_set ? &data->error_color : NULL);
+
+      if (symbolic_cache == NULL)
+	{
+	  symbolic_cache = icon_info->symbolic_pixbuf_cache =
+	    symbolic_pixbuf_cache_new (pixbuf,
+				       data->fg_set ? &data->fg : NULL,
+				       data->success_color_set ? &data->success_color : NULL,
+				       data->warning_color_set ? &data->warning_color : NULL,
+				       data->error_color_set ? &data->error_color : NULL,
+				       icon_info->symbolic_pixbuf_cache);
+	}
+
+      g_object_unref (pixbuf);
+
+      return symbolic_cache_get_proxy (symbolic_cache, icon_info);
+    }
+
+  return g_task_propagate_pointer (task, error);
+}
+
+/**
+ * gtk_icon_info_load_symbolic_for_context_async:
+ * @icon_info: a #GtkIconInfo structure from gtk_icon_theme_lookup_icon()
+ * @context: a #GtkStyleContext
+ * @cancellable: (allow-none): optional #GCancellable object,
+ *     %NULL to ignore
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the
+ *     request is satisfied
+ * @user_data: (closure): the data to pass to callback function
+ *
+ * Asynchronously load, render and scale a symbolic icon previously looked up
+ * from the icon theme using gtk_icon_theme_lookup_icon().
+ *
+ * For more details, see gtk_icon_info_load_symbolic_for_context() which is the synchronous
+ * version of this call.
+ *
+ * Since: 3.8
+ **/
+void
+gtk_icon_info_load_symbolic_for_context_async (GtkIconInfo      *icon_info,
+					       GtkStyleContext  *context,
+					       GCancellable     *cancellable,
+					       GAsyncReadyCallback callback,
+					       gpointer          user_data)
+{
+  GdkRGBA *color = NULL;
+  GdkRGBA fg;
+  GdkRGBA *fgp;
+  GdkRGBA success_color;
+  GdkRGBA *success_colorp;
+  GdkRGBA warning_color;
+  GdkRGBA *warning_colorp;
+  GdkRGBA error_color;
+  GdkRGBA *error_colorp;
+  GtkStateFlags state;
+
+  g_return_if_fail (icon_info != NULL);
+  g_return_if_fail (context != NULL);
+
+  fgp = success_colorp = warning_colorp = error_colorp = NULL;
+
+  state = gtk_style_context_get_state (context);
+  gtk_style_context_get (context, state, "color", &color, NULL);
+  if (color)
+    {
+      fg = *color;
+      fgp = &fg;
+      gdk_rgba_free (color);
+    }
+
+  if (gtk_style_context_lookup_color (context, "success_color", &success_color))
+    success_colorp = &success_color;
+
+  if (gtk_style_context_lookup_color (context, "warning_color", &warning_color))
+    warning_colorp = &warning_color;
+
+  if (gtk_style_context_lookup_color (context, "error_color", &error_color))
+    error_colorp = &error_color;
+
+  gtk_icon_info_load_symbolic_async (icon_info,
+				     fgp, success_colorp,
+				     warning_colorp, error_colorp,
+				     cancellable, callback, user_data);
+}
+
+/**
+ * gtk_icon_info_load_symbolic_for_context_finish:
+ * @icon_info: a #GtkIconInfo structure from gtk_icon_theme_lookup_icon()
+ * @res: a #GAsyncResult
+ * @was_symbolic: (out) (allow-none): a #gboolean, returns whether the
+ *     loaded icon was a symbolic one and whether the @fg color was
+ *     applied to it.
+ * @error: (allow-none): location to store error information on failure,
+ *     or %NULL.
+ *
+ * Finishes an async icon load, see gtk_icon_info_load_symbolic_for_context_async().
+ *
+ * Return value: (transfer full): the rendered icon; this may be a newly
+ *     created icon or a new reference to an internal icon, so you must
+ *     not modify the icon. Use g_object_unref() to release your reference
+ *     to the icon.
+ *
+ * Since: 3.8
+ **/
+GdkPixbuf *
+gtk_icon_info_load_symbolic_for_context_finish (GtkIconInfo      *icon_info,
+						GAsyncResult     *result,
+						gboolean         *was_symbolic,
+						GError          **error)
+{
+  return gtk_icon_info_load_symbolic_finish (icon_info, result, was_symbolic, error);
 }
 
 static GdkRGBA *
@@ -3930,6 +4469,7 @@ gtk_icon_info_load_symbolic_for_style (GtkIconInfo   *icon_info,
   return _gtk_icon_info_load_symbolic_internal (icon_info,
 						&fg, success_colorp,
 						warning_colorp, error_colorp,
+						TRUE,
 						error);
 }
 
@@ -4292,9 +4832,9 @@ _gtk_icon_theme_check_reload (GdkDisplay *display)
  * The icon can then be rendered into a pixbuf using
  * gtk_icon_info_load_icon().
  *
- * Return value: a #GtkIconInfo structure containing 
+ * Return value: (transfer full): a #GtkIconInfo structure containing 
  *     information about the icon, or %NULL if the icon 
- *     wasn't found. Free with gtk_icon_info_free()
+ *     wasn't found. Unref with g_object_unref()
  *
  * Since: 2.14
  */
@@ -4411,7 +4951,7 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *icon_theme,
  *
  * Creates a #GtkIconInfo for a #GdkPixbuf.
  *
- * Returns: a #GtkIconInfo
+ * Return value: (transfer full): a #GtkIconInfo
  *
  * Since: 2.14
  */

@@ -37,6 +37,7 @@
 #include "gtk/gtkfilechooserdefault.h"
 #include "gtk/gtkfilechooserentry.h"
 
+#ifdef BROKEN_TESTS
 static void
 log_test (gboolean passed, const char *test_name, ...)
 {
@@ -77,6 +78,7 @@ set_filename_timeout_cb (gpointer data)
 
   return FALSE;
 }
+#endif
 
 
 static guint wait_for_idle_id = 0;
@@ -100,6 +102,7 @@ wait_for_idle (void)
     gtk_main_iteration ();
 }
 
+#ifdef BROKEN_TESTS
 static void
 test_set_filename (GtkFileChooserAction action,
 		   gboolean focus_button,
@@ -230,6 +233,7 @@ test_black_box_set_current_name (gconstpointer data)
 
   g_free (cwd);
 }
+#endif
 
 /* FIXME: fails in CREATE_FOLDER mode when FOLDER_NAME == "/" */
 
@@ -253,6 +257,7 @@ test_black_box_set_current_name (gconstpointer data)
  * http://bugzilla.gnome.org/show_bug.cgi?id=346058
  */
 
+#ifdef BROKEN_TESTS
 static void
 setup_set_filename_tests (void)
 {
@@ -288,6 +293,7 @@ setup_set_current_name_tests (void)
   for (i = 0; i < G_N_ELEMENTS (tests); i++)
     g_test_add_data_func (tests[i].test_name, &tests[i], test_black_box_set_current_name);
 }
+#endif
 
 typedef struct
 {
@@ -376,6 +382,8 @@ test_file_chooser_button (gconstpointer data)
   GtkWidget *window;
   GtkWidget *fc_button;
   GtkWidget *fc_dialog;
+  int iterations;
+  int i;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
@@ -392,54 +400,66 @@ test_file_chooser_button (gconstpointer data)
   gtk_widget_show_all (window);
   wait_for_idle ();
 
+  /* If there is a dialog to be opened, we actually test going through it a
+   * couple of times.  This ensures that any state that the button frobs for
+   * each appearance of the dialog will make sense.
+   */
   if (setup->open_dialog)
+    iterations = 2;
+  else
+    iterations = 1;
+
+  for (i = 0; i < iterations; i++)
     {
-      GList *children;
+      if (setup->open_dialog)
+	{
+	  GList *children;
 
-      /* Hack our way into the file chooser button; get its GtkButton child and click it */
-      children = gtk_container_get_children (GTK_CONTAINER (fc_button));
-      g_assert (children && GTK_IS_BUTTON (children->data));
-      gtk_button_clicked (GTK_BUTTON (children->data));
-      g_list_free (children);
+	  /* Hack our way into the file chooser button; get its GtkButton child and click it */
+	  children = gtk_container_get_children (GTK_CONTAINER (fc_button));
+	  g_assert (children && GTK_IS_BUTTON (children->data));
+	  gtk_button_clicked (GTK_BUTTON (children->data));
+	  g_list_free (children);
 
-      wait_for_idle ();
+	  sleep_in_main_loop ();
 
-      /* Give me the internal dialog, damnit */
-      fc_dialog = g_object_get_qdata (G_OBJECT (fc_button), delegate_get_quark ());
-      g_assert (GTK_IS_FILE_CHOOSER (fc_dialog));
-      g_assert (GTK_IS_DIALOG (fc_dialog));
-    }
+	  /* Give me the internal dialog, damnit */
+	  fc_dialog = g_object_get_qdata (G_OBJECT (fc_button), delegate_get_quark ());
+	  g_assert (GTK_IS_FILE_CHOOSER (fc_dialog));
+	  g_assert (GTK_IS_DIALOG (fc_dialog));
+	}
 
-  /* Okay, now frob the button and its optional dialog */
+      /* Okay, now frob the button and its optional dialog */
 
-  if (setup->tweak_current_folder)
-    gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (fc_button), setup->tweak_current_folder);
+      if (setup->tweak_current_folder)
+	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (fc_button), setup->tweak_current_folder);
 
-  if (setup->tweak_filename)
-    gtk_file_chooser_select_filename (GTK_FILE_CHOOSER (fc_button), setup->tweak_filename);
+      if (setup->tweak_filename)
+	gtk_file_chooser_select_filename (GTK_FILE_CHOOSER (fc_button), setup->tweak_filename);
 
-  sleep_in_main_loop ();
+      sleep_in_main_loop ();
 
-  if (setup->open_dialog)
-    {
-      gtk_dialog_response (GTK_DIALOG (fc_dialog), setup->dialog_response);
-      wait_for_idle ();
-    }
+      if (setup->open_dialog)
+	{
+	  gtk_dialog_response (GTK_DIALOG (fc_dialog), setup->dialog_response);
+	  wait_for_idle ();
+	}
 
-  if (setup->final_current_folder)
-    {
-      char *folder = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (fc_button));
+      if (setup->final_current_folder)
+	{
+	  char *folder = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (fc_button));
 
-      g_assert_cmpstr (folder, ==, setup->final_current_folder);
-      g_free (folder);
-    }
+	  g_assert_cmpstr (folder, ==, setup->final_current_folder);
+	  g_free (folder);
+	}
 
-  if (setup->final_filename)
-    {
-      char *filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (fc_button));
+      if (setup->final_filename)
+	{
+	  char *filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (fc_button));
 
-      g_assert_cmpstr (filename, ==, setup->final_filename);
-      g_free (filename);
+	  g_assert_cmpstr (filename, ==, setup->final_filename);
+	  g_free (filename);
+	}
     }
 
   gtk_widget_destroy (window);
@@ -696,6 +716,81 @@ static FileChooserButtonTest button_tests[] =
       NULL			/* final_filename */
     },
 
+    /* OPEN tests with dialog, cancelled via closing the dialog (not by selecting the Cancel button) */
+
+    {
+      "open-dialog-close-1",
+      GTK_FILE_CHOOSER_ACTION_OPEN,
+      NULL,			/* initial_current_folder */
+      NULL, 			/* initial_filename */
+      TRUE,			/* open_dialog */
+      NULL,			/* tweak_current_folder */
+      NULL,			/* tweak_filename */
+      GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
+      NULL,			/* final_current_folder */
+      NULL			/* final_filename */
+    },
+    {
+      "open-dialog-close-2",
+      GTK_FILE_CHOOSER_ACTION_OPEN,
+      NULL,			/* initial_current_folder */
+      FILE_NAME,		/* initial_filename */
+      TRUE,			/* open_dialog */
+      NULL,			/* tweak_current_folder */
+      NULL,			/* tweak_filename */
+      GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
+      NULL,			/* final_current_folder */
+      FILE_NAME			/* final_filename */
+    },
+    {
+      "open-dialog-close-3",
+      GTK_FILE_CHOOSER_ACTION_OPEN,
+      FOLDER_NAME,		/* initial_current_folder */
+      NULL,			/* initial_filename */
+      TRUE,			/* open_dialog */
+      NULL,			/* tweak_current_folder */
+      NULL,			/* tweak_filename */
+      GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
+      FOLDER_NAME,		/* final_current_folder */
+      NULL			/* final_filename */
+    },
+    {
+      "open-dialog-close-4",
+      GTK_FILE_CHOOSER_ACTION_OPEN,
+      NULL,			/* initial_current_folder */
+      NULL,			/* initial_filename */
+      TRUE,			/* open_dialog */
+      NULL,			/* tweak_current_folder */
+      FILE_NAME,		/* tweak_filename */
+      GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
+      NULL,			/* final_current_folder */
+      NULL			/* final_filename */
+    },
+    {
+      "open-dialog-close-5",
+      GTK_FILE_CHOOSER_ACTION_OPEN,
+      NULL,			/* initial_current_folder */
+      FILE_NAME,		/* initial_filename */
+      TRUE,			/* open_dialog */
+      NULL,			/* tweak_current_folder */
+      FILE_NAME_2,		/* tweak_filename */
+      GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
+      NULL,			/* final_current_folder */
+      FILE_NAME			/* final_filename */
+    },
+    {
+      "open-dialog-close-6",
+      GTK_FILE_CHOOSER_ACTION_OPEN,
+      FOLDER_NAME,		/* initial_current_folder */
+      NULL,			/* initial_filename */
+      TRUE,			/* open_dialog */
+      NULL,			/* tweak_current_folder */
+      FILE_NAME_2,		/* tweak_filename */
+      GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
+      FOLDER_NAME,		/* final_current_folder */
+      NULL			/* final_filename */
+    },
+
     /* SELECT_FOLDER tests with dialog, cancelled */
 
     {
@@ -768,7 +863,7 @@ static FileChooserButtonTest button_tests[] =
       FOLDER_NAME_2,		/* tweak_filename */
       GTK_RESPONSE_CANCEL,	/* dialog_response */
       NULL,			/* final_current_folder */
-      FOLDER_NAME			/* final_filename */
+      FOLDER_NAME		/* final_filename */
     },
     {
       "select-folder-dialog-cancel-7",
@@ -791,6 +886,105 @@ static FileChooserButtonTest button_tests[] =
       NULL,			/* tweak_current_folder */
       FOLDER_NAME_2,		/* tweak_filename */
       GTK_RESPONSE_CANCEL,	/* dialog_response */
+      NULL,			/* final_current_folder */
+      FOLDER_NAME		/* final_filename */
+    },
+
+    /* SELECT_FOLDER tests with dialog, cancelled via closing the dialog (not selecting the Cancel button) */
+
+    {
+      "select-folder-dialog-close-1",
+      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+      NULL,			/* initial_current_folder */
+      NULL, 			/* initial_filename */
+      TRUE,			/* open_dialog */
+      NULL,			/* tweak_current_folder */
+      NULL,			/* tweak_filename */
+      GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
+      NULL,			/* final_current_folder */
+      NULL			/* final_filename */
+    },
+    {
+      "select-folder-dialog-close-2",
+      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+      NULL,			/* initial_current_folder */
+      FOLDER_NAME,		/* initial_filename */
+      TRUE,			/* open_dialog */
+      NULL,			/* tweak_current_folder */
+      NULL,			/* tweak_filename */
+      GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
+      NULL,			/* final_current_folder */
+      FOLDER_NAME		/* final_filename */
+    },
+    {
+      "select-folder-dialog-close-3",
+      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+      FOLDER_NAME,		/* initial_current_folder */
+      NULL,			/* initial_filename */
+      TRUE,			/* open_dialog */
+      NULL,			/* tweak_current_folder */
+      NULL,			/* tweak_filename */
+      GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
+      FOLDER_NAME,		/* final_current_folder */
+      NULL			/* final_filename */
+    },
+    {
+      "select-folder-dialog-close-4",
+      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+      FOLDER_NAME,		/* initial_current_folder */
+      NULL,			/* initial_filename */
+      TRUE,			/* open_dialog */
+      NULL,			/* tweak_current_folder */
+      NULL,			/* tweak_filename */
+      GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
+      NULL,			/* final_current_folder */
+      FOLDER_NAME		/* final_filename */
+    },
+    {
+      "select-folder-dialog-close-5",
+      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+      NULL,			/* initial_current_folder */
+      NULL,			/* initial_filename */
+      TRUE,			/* open_dialog */
+      NULL,			/* tweak_current_folder */
+      FOLDER_NAME,		/* tweak_filename */
+      GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
+      NULL,			/* final_current_folder */
+      NULL			/* final_filename */
+    },
+    {
+      "select-folder-dialog-close-6",
+      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+      NULL,			/* initial_current_folder */
+      FOLDER_NAME,		/* initial_filename */
+      TRUE,			/* open_dialog */
+      NULL,			/* tweak_current_folder */
+      FOLDER_NAME_2,		/* tweak_filename */
+      GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
+      NULL,			/* final_current_folder */
+      FOLDER_NAME		/* final_filename */
+    },
+    {
+      "select-folder-dialog-close-7",
+      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+      FOLDER_NAME,		/* initial_current_folder */
+      NULL,			/* initial_filename */
+      TRUE,			/* open_dialog */
+      NULL,			/* tweak_current_folder */
+      FOLDER_NAME_2,		/* tweak_filename */
+      GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
+      FOLDER_NAME,		/* final_current_folder */
+      NULL			/* final_filename */
+    },
+    {
+      "select-folder-dialog-close-8",
+      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+      FOLDER_NAME,		/* initial_current_folder */
+      NULL,			/* initial_filename */
+      TRUE,			/* open_dialog */
+      NULL,			/* tweak_current_folder */
+      FOLDER_NAME_2,		/* tweak_filename */
+      GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
       NULL,			/* final_current_folder */
       FOLDER_NAME		/* final_filename */
     },
@@ -914,6 +1108,7 @@ setup_file_chooser_button_tests (void)
     }
 }
 
+#ifdef BROKEN_TESTS
 struct confirm_overwrite_closure {
   GtkWidget *chooser;
   GtkWidget *accept_button;
@@ -1052,6 +1247,7 @@ test_confirm_overwrite (void)
   passed = passed && test_confirm_overwrite_for_path ("/etc/resolv.conf", TRUE); 
   g_assert (passed);
 }
+#endif
 
 static const GtkFileChooserAction open_actions[] = {
   GTK_FILE_CHOOSER_ACTION_OPEN,
@@ -1064,6 +1260,7 @@ static const GtkFileChooserAction save_actions[] = {
 };
 
 
+#ifdef BROKEN_TESTS
 static gboolean
 has_action (const GtkFileChooserAction *actions,
 	    int n_actions,
@@ -1116,7 +1313,7 @@ get_impl_from_dialog (GtkWidget *dialog)
 
   return impl;
 }
-#ifdef BROKEN_TESTS
+
 static gboolean
 test_widgets_for_current_action (GtkFileChooserDialog *dialog,
 				 GtkFileChooserAction  expected_action)
@@ -1439,7 +1636,6 @@ test_reload (void)
   log_test (passed, "test_reload(): set a folder explicitly before mapping");
   g_assert (passed);
 }
-#endif
 
 static gboolean
 test_button_folder_states_for_action (GtkFileChooserAction action, gboolean use_dialog, gboolean set_folder_on_dialog)
@@ -1668,6 +1864,7 @@ test_folder_switch_and_filters (void)
 
   log_test (passed, "test_folder_switch_and_filters(): all filter tests");
 }
+#endif
 
 int
 main (int    argc,

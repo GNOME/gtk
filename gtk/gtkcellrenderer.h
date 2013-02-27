@@ -269,7 +269,7 @@ GtkStateFlags   gtk_cell_renderer_get_state       (GtkCellRenderer      *cell,
                                                    GtkWidget            *widget,
                                                    GtkCellRendererState  cell_state);
 
-void            _gtk_cell_renderer_class_set_accessible_type 
+void            gtk_cell_renderer_class_set_accessible_type 
                                                   (GtkCellRendererClass *renderer_class,
                                                    GType                 type);
 GType           _gtk_cell_renderer_get_accessible_type

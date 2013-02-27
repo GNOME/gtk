@@ -67,6 +67,7 @@ struct _GdkWaylandScreenClass
 
 struct _GdkWaylandMonitor
 {
+  struct wl_output *output;
   GdkRectangle  geometry;
   int		width_mm;
   int		height_mm;
@@ -589,13 +590,27 @@ _gdk_wayland_screen_add_output (GdkScreen *screen,
   GdkWaylandScreen *screen_wayland = GDK_WAYLAND_SCREEN (screen);
   GdkWaylandMonitor *monitor = g_new0(GdkWaylandMonitor, 1);
 
+  monitor->output = output;
   g_ptr_array_add(screen_wayland->monitors, monitor);
 
   wl_output_add_listener(output, &output_listener, monitor);
 }
 
 void
-_gdk_wayland_screen_remove_output (GdkScreen *screen,
-                                   struct wl_output *output)
+_gdk_wayland_screen_remove_output_by_id (GdkScreen *screen,
+                                         guint32    id)
 {
+  GdkWaylandScreen *screen_wayland = GDK_WAYLAND_SCREEN (screen);
+  int i;
+
+  for (i = 0; i < screen_wayland->monitors->len; i++)
+    {
+      GdkWaylandMonitor *monitor = screen_wayland->monitors->pdata[i];
+
+      if (wl_proxy_get_id ((struct wl_proxy *)monitor->output) == id)
+        {
+          g_ptr_array_remove (screen_wayland->monitors, monitor);
+          break;
+        }
+    }
 }

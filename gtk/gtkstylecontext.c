@@ -358,20 +358,21 @@ struct _GtkStyleContextPrivate
 
   GtkStyleCascade *cascade;
 
-  GtkStyleContext *animation_list_prev;
-  GtkStyleContext *animation_list_next;
-
   GtkStyleContext *parent;
   GSList *children;
-  GtkWidget *widget;            
+  GtkWidget *widget;
   GtkWidgetPath *widget_path;
   GHashTable *style_data;
   GtkStyleInfo *info;
+
+  GdkFrameClock *frame_clock;
+  guint frame_clock_update_id;
 
   GtkCssChange relevant_changes;
   GtkCssChange pending_changes;
 
   const GtkBitmask *invalidating_context;
+  guint animating : 1;
   guint invalid : 1;
 };
 
@@ -379,6 +380,7 @@ enum {
   PROP_0,
   PROP_SCREEN,
   PROP_DIRECTION,
+  PROP_FRAME_CLOCK,
   PROP_PARENT
 };
 
@@ -388,8 +390,6 @@ enum {
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
-static GtkStyleContext *_running_animations = NULL;
-guint _running_animations_timer_id = 0;
 
 static void gtk_style_context_finalize (GObject *object);
 
@@ -403,6 +403,9 @@ static void gtk_style_context_impl_get_property (GObject      *object,
                                                  GParamSpec   *pspec);
 static StyleData *style_data_lookup             (GtkStyleContext *context);
 
+
+static void gtk_style_context_disconnect_update (GtkStyleContext *context);
+static void gtk_style_context_connect_update    (GtkStyleContext *context);
 
 G_DEFINE_TYPE (GtkStyleContext, gtk_style_context, G_TYPE_OBJECT)
 
@@ -441,6 +444,13 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
                                                         P_("Screen"),
                                                         P_("The associated GdkScreen"),
                                                         GDK_TYPE_SCREEN,
+                                                        GTK_PARAM_READWRITE));
+  g_object_class_install_property (object_class,
+                                   PROP_FRAME_CLOCK,
+                                   g_param_spec_object ("paint-clock",
+                                                        P_("FrameClock"),
+                                                        P_("The associated GdkFrameClock"),
+                                                        GDK_TYPE_FRAME_CLOCK,
                                                         GTK_PARAM_READWRITE));
   g_object_class_install_property (object_class,
                                    PROP_DIRECTION,
@@ -724,19 +734,11 @@ gtk_style_context_init (GtkStyleContext *style_context)
                                  _gtk_style_cascade_get_for_screen (priv->screen));
 }
 
-static gboolean
-gtk_style_context_do_animations (gpointer unused)
+static void
+gtk_style_context_update (GdkFrameClock  *clock,
+                          GtkStyleContext *context)
 {
-  GtkStyleContext *context;
-
-  for (context = _running_animations;
-       context != NULL;
-       context = context->priv->animation_list_next)
-    {
-      _gtk_style_context_queue_invalidate (context, GTK_CSS_CHANGE_ANIMATE);
-    }
-
-  return TRUE;
+  _gtk_style_context_queue_invalidate (context, GTK_CSS_CHANGE_ANIMATE);
 }
 
 static gboolean
@@ -744,8 +746,36 @@ gtk_style_context_is_animating (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv = context->priv;
 
-  return priv->animation_list_prev != NULL
-      || _running_animations == context;
+  return priv->animating;
+}
+
+static void
+gtk_style_context_disconnect_update (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv = context->priv;
+
+  if (priv->frame_clock && priv->frame_clock_update_id)
+    {
+      g_signal_handler_disconnect (priv->frame_clock,
+                                   priv->frame_clock_update_id);
+      priv->frame_clock_update_id = 0;
+      gdk_frame_clock_end_updating (priv->frame_clock);
+    }
+}
+
+static void
+gtk_style_context_connect_update (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv = context->priv;
+
+  if (priv->frame_clock && priv->frame_clock_update_id == 0)
+    {
+      priv->frame_clock_update_id = g_signal_connect (priv->frame_clock,
+                                                      "update",
+                                                      G_CALLBACK (gtk_style_context_update),
+                                                      context);
+      gdk_frame_clock_begin_updating (priv->frame_clock);
+    }
 }
 
 static void
@@ -756,25 +786,9 @@ gtk_style_context_stop_animating (GtkStyleContext *context)
   if (!gtk_style_context_is_animating (context))
     return;
 
-  if (priv->animation_list_prev == NULL)
-    {
-      _running_animations = priv->animation_list_next;
+  priv->animating = FALSE;
 
-      if (_running_animations == NULL)
-        {
-          /* we were the last animation */
-          g_source_remove (_running_animations_timer_id);
-          _running_animations_timer_id = 0;
-        }
-    }
-  else
-    priv->animation_list_prev->priv->animation_list_next = priv->animation_list_next;
-
-  if (priv->animation_list_next)
-    priv->animation_list_next->priv->animation_list_prev = priv->animation_list_prev;
-
-  priv->animation_list_next = NULL;
-  priv->animation_list_prev = NULL;
+  gtk_style_context_disconnect_update (context);
 }
 
 static void
@@ -785,19 +799,9 @@ gtk_style_context_start_animating (GtkStyleContext *context)
   if (gtk_style_context_is_animating (context))
     return;
 
-  if (_running_animations == NULL)
-    {
-      _running_animations_timer_id = gdk_threads_add_timeout (25,
-                                                              gtk_style_context_do_animations,
-                                                              NULL);
-      _running_animations = context;
-    }
-  else
-    {
-      priv->animation_list_next = _running_animations;
-      _running_animations->priv->animation_list_prev = context;
-      _running_animations = context;
-    }
+  priv->animating = TRUE;
+
+  gtk_style_context_connect_update (context);
 }
 
 static gboolean
@@ -886,6 +890,10 @@ gtk_style_context_impl_set_property (GObject      *object,
                                        g_value_get_enum (value));
       G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
+    case PROP_FRAME_CLOCK:
+      gtk_style_context_set_frame_clock (style_context,
+                                         g_value_get_object (value));
+      break;
     case PROP_PARENT:
       gtk_style_context_set_parent (style_context,
                                     g_value_get_object (value));
@@ -917,6 +925,9 @@ gtk_style_context_impl_get_property (GObject    *object,
       G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       g_value_set_enum (value, gtk_style_context_get_direction (style_context));
       G_GNUC_END_IGNORE_DEPRECATIONS;
+      break;
+    case PROP_FRAME_CLOCK:
+      g_value_set_object (value, priv->frame_clock);
       break;
     case PROP_PARENT:
       g_value_set_object (value, priv->parent);
@@ -2612,6 +2623,70 @@ gtk_style_context_get_screen (GtkStyleContext *context)
 
   priv = context->priv;
   return priv->screen;
+}
+
+/**
+ * gtk_style_context_set_frame_clock:
+ * @context: a #GdkFrameClock
+ * @frame_clock: a #GdkFrameClock
+ *
+ * Attaches @context to the given frame clock.
+ *
+ * The frame clock is used for the timing of animations.
+ *
+ * If you are using a #GtkStyleContext returned from
+ * gtk_widget_get_style_context(), you do not need to
+ * call this yourself.
+ *
+ * Since: 3.8
+ **/
+void
+gtk_style_context_set_frame_clock (GtkStyleContext *context,
+                                   GdkFrameClock   *frame_clock)
+{
+  GtkStyleContextPrivate *priv;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (frame_clock == NULL || GDK_IS_FRAME_CLOCK (frame_clock));
+
+  priv = context->priv;
+  if (priv->frame_clock == frame_clock)
+    return;
+
+  if (priv->animating)
+    gtk_style_context_disconnect_update (context);
+
+  if (priv->frame_clock)
+    g_object_unref (priv->frame_clock);
+  priv->frame_clock = frame_clock;
+  if (priv->frame_clock)
+    g_object_ref (priv->frame_clock);
+
+  if (priv->animating)
+    gtk_style_context_connect_update (context);
+
+  g_object_notify (G_OBJECT (context), "paint-clock");
+}
+
+/**
+ * gtk_style_context_get_frame_clock:
+ * @context: a #GtkStyleContext
+ *
+ * Returns the #GdkFrameClock to which @context is attached.
+ *
+ * Returns: (transfer none): a #GdkFrameClock, or %NULL
+ *  if @context does not have an attached frame clock.
+ * Since: 3.8
+ **/
+GdkFrameClock *
+gtk_style_context_get_frame_clock (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
+
+  priv = context->priv;
+  return priv->frame_clock;
 }
 
 /**

@@ -61,7 +61,6 @@ struct _GdkWaylandDisplay
   struct wl_compositor *compositor;
   struct wl_shm *shm;
   struct wl_shell *shell;
-  struct wl_output *output;
   struct wl_input_device *input_device;
   struct wl_data_device_manager *data_device_manager;
 

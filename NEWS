@@ -1,3 +1,64 @@
+Overview of Changes in GTK+ 3.7.10
+==================================
+
+* We now support the Window Manager frame synchronization protocol draft (when
+  running under a WM that supports it). This means applications will throttle
+  their drawing cycle to what the compositor is drawing, and the compositor
+  will never render half-updated windows, for seamless resizing and improved
+  smoothness in drawing.
+  See https://mail.gnome.org/archives/wm-spec-list/2013-January/msg00000.html
+  and the articles at http://blog.fishsoup.net/ for more details.
+
+* We now support setting an opacity to any GtkWidget, not just toplevels:
+  gtk_window_set_opacity has been deprecated in favor of gtk_widget_set_opacity.
+
+* GtkIconTheme gained asynchronous loaders for GtkIconInfo objects
+
+* GtkIconInfo has changed from being a boxed type to a GObject. This
+  is technically an ABI change, but basically all existing code
+  will keep working if its used as a boxed type, and its not
+  possible to instantiate GtkIconInfos outside Gtk, so this is not
+  expected to be a big problem.
+
+* Bugs fixed:
+ 590325 gtkbuilder needs a public policy about extension name
+ 673243 GtkRadioMenuItem accelerators no longer appear
+ 681578 gtk-demo: demo.ui is outdated
+ 683311 Leak in GtkIconViewAccessible
+ 685460 Add frame synchronization to GTK+
+ 687842 Support partially transparent widgets
+ 690247 multiple context in a immodule can't be selected
+ 692411 Slave device tracking goes wrong when there are no GDK_DEVICE_TYPE_SLAVE
+ 692728 wayland evet source doesn't handle poll err/hup
+ 693251 wayland: fix the direction of scrolling
+ 693253 wayland: remove debug message
+ 693256 wayland: use the GdkCursorType enum information to lookup the cursor name
+ 693257 wayland: avoid returning NULL when getting a cursor
+ 693313 Improve tooltip support
+ 693338 wayland: skip pointer and keyboard events without a surface
+ 693400 gtkcellrenderertext: Sink floating entry before using as signal argument
+ 693709 Hide recently used if it is turned off in the control center
+ 693724 Add a gtk-recent-files-enabled GtkSetting
+ 693802 Add async GtkIconInfo loaders
+ 693912 wayland: look further through the hierarchy for the surface with the grab
+ 693913 wayland: attempt to determine the possible parent surface for popups
+ 693934 Add gdk_frame_clock_begin/end_updating()
+ 694022 GtkViewport: annotate the adjustment args of the constructor
+ 694075 GtkAccelLabel: Don't show "+" if there's no more keys to add
+        Added scroll and touch events to GtkToolPalette
+
+* Translation updates:
+ Arabic
+ Catalan
+ Catalan (Valencian)
+ Czech
+ Japanese
+ Kazakh
+ Lithuanian
+ Malayalam
+ Polish
+ Serbian
+
 Overview of Changes in GTK+ 3.7.8
 =================================
 

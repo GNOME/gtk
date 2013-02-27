@@ -39,6 +39,8 @@ GList *  _gtk_container_focus_sort             (GtkContainer     *container,
                                                 GtkWidget        *old_focus);
 gboolean _gtk_container_get_reallocate_redraws (GtkContainer *container);
 
+void      _gtk_container_stop_idle_sizer        (GtkContainer *container);
+void      _gtk_container_maybe_start_idle_sizer (GtkContainer *container);
 
 G_END_DECLS
 

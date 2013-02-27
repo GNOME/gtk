@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="libgail"
+	Name="gtka11y"
 	ProjectGUID="{F756B0DB-40A1-4E9F-BE1F-8F02CB86EA46}"
-	RootNamespace="libgail"
+	RootNamespace="gtka11y"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -115,7 +115,7 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
-#include "libgail.sourcefiles"
+#include "gtka11y.sourcefiles"
 		</Filter>
 		<Filter
 			Name="Headers"

@@ -95,6 +95,7 @@ gdk_registry_handle_global(void *data, struct wl_registry *registry, uint32_t id
   GdkWaylandDisplay *display_wayland = data;
   GdkDisplay *gdk_display = GDK_DISPLAY_OBJECT (data);
   struct wl_seat *seat;
+  struct wl_output *output;
 
   if (strcmp(interface, "wl_compositor") == 0) {
     display_wayland->compositor =
@@ -109,9 +110,9 @@ gdk_registry_handle_global(void *data, struct wl_registry *registry, uint32_t id
     display_wayland->shell =
 	wl_registry_bind(display_wayland->wl_registry, id, &wl_shell_interface, 1);
   } else if (strcmp(interface, "wl_output") == 0) {
-    display_wayland->output =
+    output =
       wl_registry_bind(display_wayland->wl_registry, id, &wl_output_interface, 1);
-    _gdk_wayland_screen_add_output(display_wayland->screen, display_wayland->output);
+    _gdk_wayland_screen_add_output(display_wayland->screen, output);
   } else if (strcmp(interface, "wl_seat") == 0) {
     seat = wl_registry_bind(display_wayland->wl_registry, id, &wl_seat_interface, 1);
     _gdk_wayland_device_manager_add_device (gdk_display->device_manager,
@@ -124,9 +125,14 @@ gdk_registry_handle_global(void *data, struct wl_registry *registry, uint32_t id
 }
 
 static void
-gdk_registry_handle_global_remove(void *data,
-                                  struct wl_registry *registry, uint32_t name)
+gdk_registry_handle_global_remove(void               *data,
+                                  struct wl_registry *registry,
+                                  uint32_t            id)
 {
+  GdkWaylandDisplay *display_wayland = data;
+
+  /* We don't know what this item is - try as an output */
+  _gdk_wayland_screen_remove_output_by_id (display_wayland->screen, id);
 }
 
 static const struct wl_registry_listener registry_listener = {

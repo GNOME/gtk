@@ -228,7 +228,7 @@ swatch_draw (GtkWidget *widget,
           g_object_unref (pixbuf);
         }
 
-      gtk_icon_info_free (icon_info);
+      g_object_unref (icon_info);
     }
 
   cairo_restore (cr);

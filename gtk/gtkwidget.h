@@ -87,6 +87,23 @@ typedef void    (*GtkCallback)     (GtkWidget        *widget,
 				    gpointer          data);
 
 /**
+ * GtkTickCallback:
+ * @widget: the widget
+ * @frame_clock: the frame clock for the widget (same as calling gtk_widget_get_frame_clock())
+ * @user_data: user data passed to gtk_widget_add_tick_callback().
+ *
+ * Callback type for adding a function to update animations. See gtk_widget_add_tick_callback().
+ *
+ * Returns: %G_SOURCE_CONTINUE if the tick callback should continue to be called,
+ *  %G_SOURCE_REMOVE if the tick callback should be removed.
+ *
+ * Since: 3.8
+ */
+typedef gboolean (*GtkTickCallback) (GtkWidget     *widget,
+                                     GdkFrameClock *frame_clock,
+                                     gpointer       user_data);
+
+/**
  * GtkRequisition:
  * @width: the widget's desired width
  * @height: the widget's desired height
@@ -473,6 +490,9 @@ void	   gtk_widget_queue_draw_region   (GtkWidget	       *widget,
                                            const cairo_region_t*region);
 void	   gtk_widget_queue_resize	  (GtkWidget	       *widget);
 void	   gtk_widget_queue_resize_no_redraw (GtkWidget *widget);
+GDK_AVAILABLE_IN_3_8
+GdkFrameClock* gtk_widget_get_frame_clock (GtkWidget           *widget);
+
 GDK_DEPRECATED_IN_3_0_FOR(gtk_widget_get_preferred_size)
 void       gtk_widget_size_request        (GtkWidget           *widget,
                                            GtkRequisition      *requisition);
@@ -902,6 +922,18 @@ GDK_AVAILABLE_IN_3_6
 void                    gtk_widget_insert_action_group                  (GtkWidget    *widget,
                                                                          const gchar  *name,
                                                                          GActionGroup *group);
+
+
+
+GDK_AVAILABLE_IN_3_8
+guint gtk_widget_add_tick_callback (GtkWidget       *widget,
+                                    GtkTickCallback  callback,
+                                    gpointer         user_data,
+                                    GDestroyNotify   notify);
+
+GDK_AVAILABLE_IN_3_8
+void gtk_widget_remove_tick_callback (GtkWidget       *widget,
+                                      guint            id);
 
 G_END_DECLS
 

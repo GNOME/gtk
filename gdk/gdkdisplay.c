@@ -307,7 +307,11 @@ gdk_display_get_event (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
+  if (display->event_pause_count > 0)
+    return NULL;
+
   GDK_DISPLAY_GET_CLASS (display)->queue_events (display);
+
   return _gdk_event_unqueue (display);
 }
 
@@ -2001,6 +2005,38 @@ gdk_display_notify_startup_complete (GdkDisplay  *display,
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
   GDK_DISPLAY_GET_CLASS (display)->notify_startup_complete (display, startup_id);
+}
+
+void
+_gdk_display_pause_events (GdkDisplay *display)
+{
+  display->event_pause_count++;
+}
+
+void
+_gdk_display_unpause_events (GdkDisplay *display)
+{
+  g_return_if_fail (display->event_pause_count > 0);
+
+  display->event_pause_count--;
+}
+
+void
+_gdk_display_flush_events (GdkDisplay *display)
+{
+  display->flushing_events = TRUE;
+
+  while (TRUE)
+    {
+      GdkEvent *event = _gdk_event_unqueue (display);
+      if (event == NULL)
+        break;
+
+      _gdk_event_emit (event);
+      gdk_event_free (event);
+    }
+
+  display->flushing_events = FALSE;
 }
 
 void

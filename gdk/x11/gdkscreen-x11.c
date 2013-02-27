@@ -24,6 +24,7 @@
 #include "gdkscreen-x11.h"
 #include "gdkdisplay-x11.h"
 #include "gdkprivate-x11.h"
+#include "xsettings-client.h"
 
 #include <glib.h>
 
@@ -46,8 +47,6 @@
 #ifdef HAVE_XFIXES
 #include <X11/extensions/Xfixes.h>
 #endif
-
-#include "gdksettings.c"
 
 static void         gdk_x11_screen_dispose     (GObject		  *object);
 static void         gdk_x11_screen_finalize    (GObject		  *object);
@@ -131,18 +130,6 @@ gdk_x11_screen_get_root_window (GdkScreen *screen)
 }
 
 static void
-_gdk_x11_screen_events_uninit (GdkScreen *screen)
-{
-  GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
-
-  if (x11_screen->xsettings_client)
-    {
-      xsettings_client_destroy (x11_screen->xsettings_client);
-      x11_screen->xsettings_client = NULL;
-    }
-}
-
-static void
 gdk_x11_screen_dispose (GObject *object)
 {
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (object);
@@ -157,7 +144,7 @@ gdk_x11_screen_dispose (GObject *object)
         }
     }
 
-  _gdk_x11_screen_events_uninit (GDK_SCREEN (object));
+  _gdk_x11_xsettings_finish (x11_screen);
 
   if (x11_screen->root_window)
     _gdk_window_destroy (x11_screen->root_window, TRUE);
@@ -298,7 +285,7 @@ get_current_desktop (GdkScreen *screen)
                       &data_return);
 
   if (type == XA_CARDINAL && format == 32 && n_items > 0)
-    workspace = (int) data_return[0];
+    workspace = ((long *) data_return)[0];
 
   if (data_return)
     XFree (data_return);
@@ -436,25 +423,21 @@ gdk_x11_screen_get_screen_number (GdkScreen *screen)
   return GDK_X11_SCREEN (screen)->screen_num;
 }
 
+static Atom
+get_cm_atom (GdkX11Screen *x11_screen)
+{
+  return _gdk_x11_get_xatom_for_display_printf (x11_screen->display, "_NET_WM_CM_S%d", x11_screen->screen_num);
+}
+
 static gboolean
 check_is_composited (GdkDisplay *display,
 		     GdkX11Screen *x11_screen)
 {
-  Atom xselection = gdk_x11_atom_to_xatom_for_display (display, x11_screen->cm_selection_atom);
   Window xwindow;
   
-  xwindow = XGetSelectionOwner (GDK_DISPLAY_XDISPLAY (display), xselection);
+  xwindow = XGetSelectionOwner (GDK_DISPLAY_XDISPLAY (display), get_cm_atom (x11_screen));
 
   return xwindow != None;
-}
-
-static GdkAtom
-make_cm_atom (int screen_number)
-{
-  gchar *name = g_strdup_printf ("_NET_WM_CM_S%d", screen_number);
-  GdkAtom atom = gdk_atom_intern (name, FALSE);
-  g_free (name);
-  return atom;
 }
 
 static void
@@ -1078,9 +1061,8 @@ _gdk_x11_screen_setup (GdkScreen *screen)
 {
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
 
-  x11_screen->cm_selection_atom = make_cm_atom (x11_screen->screen_num);
   gdk_display_request_selection_notification (x11_screen->display,
-					      x11_screen->cm_selection_atom);
+					      gdk_x11_xatom_to_atom_for_display (x11_screen->display, get_cm_atom (x11_screen)));
   x11_screen->is_composited = check_is_composited (x11_screen->display, x11_screen);
 }
 
@@ -1097,6 +1079,7 @@ init_randr_support (GdkScreen *screen)
 {
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
 
+  /* NB: This is also needed for XSettings, so don't remove. */
   XSelectInput (GDK_SCREEN_XDISPLAY (screen),
                 x11_screen->xroot_window,
                 StructureNotifyMask);
@@ -1195,10 +1178,8 @@ _gdk_x11_screen_process_owner_change (GdkScreen *screen,
 #ifdef HAVE_XFIXES
   XFixesSelectionNotifyEvent *selection_event = (XFixesSelectionNotifyEvent *)event;
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
-  Atom xcm_selection_atom = gdk_x11_atom_to_xatom_for_display (x11_screen->display,
-							       x11_screen->cm_selection_atom);
 
-  if (selection_event->selection == xcm_selection_atom)
+  if (selection_event->selection == get_cm_atom (x11_screen))
     {
       gboolean composited = selection_event->owner != None;
 
@@ -1330,96 +1311,34 @@ gdk_x11_screen_get_window_stack (GdkScreen *screen)
 }
 
 static gboolean
-check_transform (const gchar *xsettings_name,
-		 GType        src_type,
-		 GType        dest_type)
-{
-  if (!g_value_type_transformable (src_type, dest_type))
-    {
-      g_warning ("Cannot transform xsetting %s of type %s to type %s\n",
-		 xsettings_name,
-		 g_type_name (src_type),
-		 g_type_name (dest_type));
-      return FALSE;
-    }
-  else
-    return TRUE;
-}
-
-static gboolean
 gdk_x11_screen_get_setting (GdkScreen   *screen,
 			    const gchar *name,
 			    GValue      *value)
 {
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
-  const char *xsettings_name = NULL;
-  XSettingsResult result;
-  XSettingsSetting *setting = NULL;
-  gboolean success = FALSE;
-  GValue tmp_val = G_VALUE_INIT;
+  const GValue *setting;
 
-  xsettings_name = gdk_to_xsettings_name (name);
-  if (!xsettings_name)
+  if (x11_screen->xsettings == NULL)
+    goto out;
+  setting = g_hash_table_lookup (x11_screen->xsettings, name);
+  if (setting == NULL)
     goto out;
 
-  result = xsettings_client_get_setting (x11_screen->xsettings_client,
-					 xsettings_name, &setting);
-  if (result != XSETTINGS_SUCCESS)
-    goto out;
-
-  switch (setting->type)
+  if (!g_value_type_transformable (G_VALUE_TYPE (setting), G_VALUE_TYPE (value)))
     {
-    case XSETTINGS_TYPE_INT:
-      if (check_transform (xsettings_name, G_TYPE_INT, G_VALUE_TYPE (value)))
-	{
-	  g_value_init (&tmp_val, G_TYPE_INT);
-	  g_value_set_int (&tmp_val, setting->data.v_int);
-	  g_value_transform (&tmp_val, value);
-
-	  success = TRUE;
-	}
-      break;
-    case XSETTINGS_TYPE_STRING:
-      if (check_transform (xsettings_name, G_TYPE_STRING, G_VALUE_TYPE (value)))
-	{
-	  g_value_init (&tmp_val, G_TYPE_STRING);
-	  g_value_set_string (&tmp_val, setting->data.v_string);
-	  g_value_transform (&tmp_val, value);
-
-	  success = TRUE;
-	}
-      break;
-    case XSETTINGS_TYPE_COLOR:
-      if (!check_transform (xsettings_name, GDK_TYPE_RGBA, G_VALUE_TYPE (value)))
-	{
-	  GdkRGBA rgba;
-
-	  g_value_init (&tmp_val, GDK_TYPE_RGBA);
-
-	  rgba.red = setting->data.v_color.red / 65535.0;
-	  rgba.green = setting->data.v_color.green / 65535.0;
-	  rgba.blue = setting->data.v_color.blue / 65535.0;
-	  rgba.alpha = setting->data.v_color.alpha / 65535.0;
-
-	  g_value_set_boxed (&tmp_val, &rgba);
-
-	  g_value_transform (&tmp_val, value);
-
-	  success = TRUE;
-	}
-      break;
+      g_warning ("Cannot transform xsetting %s of type %s to type %s\n",
+		 name,
+		 g_type_name (G_VALUE_TYPE (setting)),
+		 g_type_name (G_VALUE_TYPE (value)));
+      goto out;
     }
 
-  g_value_unset (&tmp_val);
+  g_value_transform (setting, value);
+
+  return TRUE;
 
  out:
-  if (setting)
-    xsettings_setting_free (setting);
-
-  if (success)
-    return TRUE;
-  else
-    return _gdk_x11_get_xft_setting (screen, name, value);
+  return _gdk_x11_get_xft_setting (screen, name, value);
 }
 
 static void
@@ -1612,138 +1531,6 @@ gdk_x11_screen_supports_net_wm_hint (GdkScreen *screen,
     }
 
   return FALSE;
-}
-
-static void
-refcounted_grab_server (Display *xdisplay)
-{
-  GdkDisplay *display = gdk_x11_lookup_xdisplay (xdisplay);
-
-  gdk_x11_display_grab (display);
-}
-
-static void
-refcounted_ungrab_server (Display *xdisplay)
-{
-  GdkDisplay *display = gdk_x11_lookup_xdisplay (xdisplay);
-
-  gdk_x11_display_ungrab (display);
-}
-
-static GdkFilterReturn
-gdk_xsettings_client_event_filter (GdkXEvent *xevent,
-				   GdkEvent  *event,
-				   gpointer   data)
-{
-  GdkX11Screen *screen = data;
-
-  if (xsettings_client_process_event (screen->xsettings_client, (XEvent *)xevent))
-    return GDK_FILTER_REMOVE;
-  else
-    return GDK_FILTER_CONTINUE;
-}
-
-static Bool
-gdk_xsettings_watch_cb (Window   window,
-			Bool	 is_start,
-			long     mask,
-			void    *cb_data)
-{
-  GdkWindow *gdkwin;
-  GdkScreen *screen = cb_data;
-
-  gdkwin = gdk_x11_window_lookup_for_display (gdk_screen_get_display (screen), window);
-
-  if (is_start)
-    {
-      if (gdkwin)
-	g_object_ref (gdkwin);
-      else
-	{
-	  gdkwin = gdk_x11_window_foreign_new_for_display (gdk_screen_get_display (screen), window);
-	  
-	  /* gdk_window_foreign_new_for_display() can fail and return NULL if the
-	   * window has already been destroyed.
-	   */
-	  if (!gdkwin)
-	    return False;
-	}
-
-      gdk_window_add_filter (gdkwin, gdk_xsettings_client_event_filter, screen);
-    }
-  else
-    {
-      if (!gdkwin)
-	{
-	  /* gdkwin should not be NULL here, since if starting the watch succeeded
-	   * we have a reference on the window. It might mean that the caller didn't
-	   * remove the watch when it got a DestroyNotify event. Or maybe the
-	   * caller ignored the return value when starting the watch failed.
-	   */
-	  g_warning ("gdk_xsettings_watch_cb(): Couldn't find window to unwatch");
-	  return False;
-	}
-      
-      gdk_window_remove_filter (gdkwin, gdk_xsettings_client_event_filter, screen);
-      g_object_unref (gdkwin);
-    }
-
-  return True;
-}
-
-static void
-gdk_xsettings_notify_cb (const char       *name,
-			 XSettingsAction   action,
-			 XSettingsSetting *setting,
-			 void             *data)
-{
-  GdkEvent new_event;
-  GdkScreen *screen = data;
-  GdkX11Screen *x11_screen = data;
-
-  if (x11_screen->xsettings_in_init)
-    return;
-  
-  new_event.type = GDK_SETTING;
-  new_event.setting.window = gdk_screen_get_root_window (screen);
-  new_event.setting.send_event = FALSE;
-  new_event.setting.name = (char*) gdk_from_xsettings_name (name);
-
-  if (!new_event.setting.name)
-    return;
-  
-  switch (action)
-    {
-    case XSETTINGS_ACTION_NEW:
-      new_event.setting.action = GDK_SETTING_ACTION_NEW;
-      break;
-    case XSETTINGS_ACTION_CHANGED:
-      new_event.setting.action = GDK_SETTING_ACTION_CHANGED;
-      break;
-    case XSETTINGS_ACTION_DELETED:
-      new_event.setting.action = GDK_SETTING_ACTION_DELETED;
-      break;
-    }
-
-  gdk_event_put (&new_event);
-}
-
-void
-_gdk_x11_screen_init_events (GdkScreen *screen)
-{
-  GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
-
-  /* Keep a flag to avoid extra notifies that we don't need
-   */
-  x11_screen->xsettings_in_init = TRUE;
-  x11_screen->xsettings_client = xsettings_client_new_with_grab_funcs (x11_screen->xdisplay,
-						                       x11_screen->screen_num,
-						                       gdk_xsettings_notify_cb,
-						                       gdk_xsettings_watch_cb,
-						                       screen,
-                                                                       refcounted_grab_server,
-                                                                       refcounted_ungrab_server);
-  x11_screen->xsettings_in_init = FALSE;
 }
 
 /**

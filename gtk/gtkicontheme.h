@@ -29,6 +29,11 @@
 G_BEGIN_DECLS
 
 #define GTK_TYPE_ICON_INFO              (gtk_icon_info_get_type ())
+#define GTK_ICON_INFO(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ICON_INFO, GtkIconInfo))
+#define GTK_ICON_INFO_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_ICON_INFO, GtkIconInfoClass))
+#define GTK_IS_ICON_INFO(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_ICON_INFO))
+#define GTK_IS_ICON_INFO_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ICON_INFO))
+#define GTK_ICON_INFO_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ICON_INFO, GtkIconInfoClass))
 
 #define GTK_TYPE_ICON_THEME             (gtk_icon_theme_get_type ())
 #define GTK_ICON_THEME(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_ICON_THEME, GtkIconTheme))
@@ -44,6 +49,7 @@ G_BEGIN_DECLS
  * an icon theme.
  */
 typedef struct _GtkIconInfo         GtkIconInfo;
+typedef struct _GtkIconInfoClass    GtkIconInfoClass;
 typedef struct _GtkIconTheme        GtkIconTheme;
 typedef struct _GtkIconThemeClass   GtkIconThemeClass;
 typedef struct _GtkIconThemePrivate GtkIconThemePrivate;
@@ -186,7 +192,9 @@ void          gtk_icon_theme_add_builtin_icon      (const gchar *icon_name,
 					            GdkPixbuf   *pixbuf);
 
 GType                 gtk_icon_info_get_type           (void) G_GNUC_CONST;
+GDK_DEPRECATED_IN_3_8_FOR(g_object_ref)
 GtkIconInfo *         gtk_icon_info_copy               (GtkIconInfo  *icon_info);
+GDK_DEPRECATED_IN_3_8_FOR(g_object_unref)
 void                  gtk_icon_info_free               (GtkIconInfo  *icon_info);
 
 GtkIconInfo *         gtk_icon_info_new_for_pixbuf     (GtkIconTheme  *icon_theme,
@@ -197,6 +205,15 @@ const gchar *         gtk_icon_info_get_filename       (GtkIconInfo   *icon_info
 GdkPixbuf *           gtk_icon_info_get_builtin_pixbuf (GtkIconInfo   *icon_info);
 GdkPixbuf *           gtk_icon_info_load_icon          (GtkIconInfo   *icon_info,
 							GError       **error);
+GDK_AVAILABLE_IN_3_8
+void                  gtk_icon_info_load_icon_async   (GtkIconInfo          *icon_info,
+						       GCancellable         *cancellable,
+						       GAsyncReadyCallback   callback,
+						       gpointer              user_data);
+GDK_AVAILABLE_IN_3_8
+GdkPixbuf *           gtk_icon_info_load_icon_finish  (GtkIconInfo          *icon_info,
+						       GAsyncResult         *res,
+						       GError              **error);
 GdkPixbuf *           gtk_icon_info_load_symbolic      (GtkIconInfo   *icon_info,
                                                         const GdkRGBA *fg,
                                                         const GdkRGBA *success_color,
@@ -204,10 +221,35 @@ GdkPixbuf *           gtk_icon_info_load_symbolic      (GtkIconInfo   *icon_info
                                                         const GdkRGBA *error_color,
                                                         gboolean      *was_symbolic,
                                                         GError       **error);
+GDK_AVAILABLE_IN_3_8
+void                  gtk_icon_info_load_symbolic_async (GtkIconInfo   *icon_info,
+							 const GdkRGBA *fg,
+							 const GdkRGBA *success_color,
+							 const GdkRGBA *warning_color,
+							 const GdkRGBA *error_color,
+							 GCancellable         *cancellable,
+							 GAsyncReadyCallback   callback,
+							 gpointer              user_data);
+GDK_AVAILABLE_IN_3_8
+GdkPixbuf *           gtk_icon_info_load_symbolic_finish (GtkIconInfo   *icon_info,
+							  GAsyncResult         *res,
+							  gboolean      *was_symbolic,
+							  GError       **error);
 GdkPixbuf *           gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,
                                                                GtkStyleContext  *context,
                                                                gboolean         *was_symbolic,
                                                                GError          **error);
+GDK_AVAILABLE_IN_3_8
+void                  gtk_icon_info_load_symbolic_for_context_async (GtkIconInfo      *icon_info,
+								     GtkStyleContext  *context,
+								     GCancellable     *cancellable,
+								     GAsyncReadyCallback callback,
+								     gpointer          user_data);
+GDK_AVAILABLE_IN_3_8
+GdkPixbuf *           gtk_icon_info_load_symbolic_for_context_finish (GtkIconInfo      *icon_info,
+								      GAsyncResult     *res,
+								      gboolean         *was_symbolic,
+								      GError          **error);
 GDK_DEPRECATED_IN_3_0_FOR(gtk_icon_info_load_symbol_for_context)
 GdkPixbuf *           gtk_icon_info_load_symbolic_for_style  (GtkIconInfo   *icon_info,
                                                               GtkStyle      *style,

@@ -97,20 +97,3 @@ gdk_from_xsettings_name (const char *xname)
   return g_hash_table_lookup (hash, xname);
 }
 
-static const char *
-gdk_to_xsettings_name (const char *gdkname)
-{
-  static GHashTable *hash = NULL;
-  guint i;
-
-  if (G_UNLIKELY (hash == NULL))
-  {
-    hash = g_hash_table_new (g_str_hash, g_str_equal);
-
-    for (i = 0; i < G_N_ELEMENTS (gdk_settings_map); i++)
-      g_hash_table_insert (hash, (gpointer)gdk_settings_map[i].gdkname,
-                                 (gpointer)gdk_settings_map[i].xname);
-  }
-
-  return g_hash_table_lookup (hash, gdkname);
-}

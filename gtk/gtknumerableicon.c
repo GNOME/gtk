@@ -215,7 +215,7 @@ draw_from_gicon (GtkNumerableIcon *self)
     return NULL;
 
   pixbuf = gtk_icon_info_load_icon (info, NULL);
-  gtk_icon_info_free (info);
+  g_object_unref (info);
 
   if (pixbuf == NULL)
     return NULL;

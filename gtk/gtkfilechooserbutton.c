@@ -655,8 +655,6 @@ gtk_file_chooser_button_select_file (GtkFileChooser *chooser,
 
       priv->selection_while_inactive = g_object_ref (file);
 
-      g_signal_emit (button, file_chooser_button_signals[FILE_SET], 0);
-
       return TRUE;
     }
 }
@@ -683,8 +681,6 @@ gtk_file_chooser_button_unselect_file (GtkFileChooser *chooser,
 	      g_object_unref (priv->selection_while_inactive);
 	      priv->selection_while_inactive = NULL;
 	    }
-
-	  g_signal_emit (button, file_chooser_button_signals[FILE_SET], 0);
 	}
     }
 }
@@ -708,8 +704,6 @@ gtk_file_chooser_button_unselect_all (GtkFileChooser *chooser)
 	  g_object_unref (priv->selection_while_inactive);
 	  priv->selection_while_inactive = NULL;
 	}
-
-      g_signal_emit (button, file_chooser_button_signals[FILE_SET], 0);
     }
 }
 
@@ -2357,13 +2351,13 @@ static void
 update_combo_box (GtkFileChooserButton *button)
 {
   GtkFileChooserButtonPrivate *priv = button->priv;
-  GSList *files;
+  GFile *file;
   GtkTreeIter iter;
   gboolean row_found;
 
   gtk_tree_model_get_iter_first (priv->filter_model, &iter);
 
-  files = gtk_file_chooser_get_files (GTK_FILE_CHOOSER (priv->dialog));
+  file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (priv->dialog));
 
   row_found = FALSE;
 
@@ -2386,9 +2380,7 @@ update_combo_box (GtkFileChooserButton *button)
 	case ROW_TYPE_SHORTCUT:
 	case ROW_TYPE_BOOKMARK:
 	case ROW_TYPE_CURRENT_FOLDER:
-	  row_found = (files &&
-		       files->data &&
-		       g_file_equal (data, files->data));
+	  row_found = (file && g_file_equal (data, file));
 	  break;
 	case ROW_TYPE_VOLUME:
 	  {
@@ -2397,9 +2389,7 @@ update_combo_box (GtkFileChooserButton *button)
 	    base_file = _gtk_file_system_volume_get_root (data);
             if (base_file)
               {
-	        row_found = (files &&
-			     files->data &&
-			     g_file_equal (base_file, files->data));
+	        row_found = (file && g_file_equal (base_file, file));
 		g_object_unref (base_file);
               }
 	  }
@@ -2421,12 +2411,12 @@ update_combo_box (GtkFileChooserButton *button)
   while (!row_found && gtk_tree_model_iter_next (priv->filter_model, &iter));
 
   /* If it hasn't been found already, update & select the current-folder row. */
-  if (!row_found && files && files->data)
+  if (!row_found && file)
     {
       GtkTreeIter filter_iter;
       gint pos;
     
-      model_update_current_folder (button, files->data);
+      model_update_current_folder (button, file);
       gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter_model));
 
       pos = model_get_type_position (button, ROW_TYPE_CURRENT_FOLDER);
@@ -2440,8 +2430,8 @@ update_combo_box (GtkFileChooserButton *button)
       g_signal_handler_unblock (priv->combo_box, priv->combo_box_changed_id);
     }
 
-  g_slist_foreach (files, (GFunc) g_object_unref, NULL);
-  g_slist_free (files);
+  if (file)
+    g_object_unref (file);
 }
 
 /* Button */
@@ -2487,9 +2477,9 @@ update_label_and_image (GtkFileChooserButton *button)
 {
   GtkFileChooserButtonPrivate *priv = button->priv;
   gchar *label_text;
-  GSList *files;
+  GFile *file;
 
-  files = gtk_file_chooser_get_files (GTK_FILE_CHOOSER (priv->dialog));
+  file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (priv->dialog));
   label_text = NULL;
 
   if (priv->update_button_cancellable)
@@ -2498,12 +2488,9 @@ update_label_and_image (GtkFileChooserButton *button)
       priv->update_button_cancellable = NULL;
     }
 
-  if (files && files->data)
+  if (file)
     {
-      GFile *file;
       GtkFileSystemVolume *volume = NULL;
-
-      file = files->data;
 
       volume = _gtk_file_system_get_volume_for_file (priv->fs, file);
       if (volume)
@@ -2554,10 +2541,10 @@ update_label_and_image (GtkFileChooserButton *button)
           if (pixbuf)
             g_object_unref (pixbuf);
         }
+
+      g_object_unref (file);
     }
 out:
-  g_slist_foreach (files, (GFunc) g_object_unref, NULL);
-  g_slist_free (files);
 
   if (label_text)
     {

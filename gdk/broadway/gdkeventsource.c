@@ -61,7 +61,11 @@ gdk_event_source_prepare (GSource *source,
   gdk_threads_enter ();
 
   *timeout = -1;
-  retval = (_gdk_event_queue_find_first (display) != NULL);
+
+  if (display->event_pause_count > 0)
+    retval = FALSE;
+  else
+    retval = (_gdk_event_queue_find_first (display) != NULL);
 
   gdk_threads_leave ();
 
@@ -76,7 +80,9 @@ gdk_event_source_check (GSource *source)
 
   gdk_threads_enter ();
 
-  if (event_source->event_poll_fd.revents & G_IO_IN)
+  if (event_source->display->event_pause_count > 0)
+    retval = FALSE;
+  else if (event_source->event_poll_fd.revents & G_IO_IN)
     retval = (_gdk_event_queue_find_first (event_source->display) != NULL);
   else
     retval = FALSE;

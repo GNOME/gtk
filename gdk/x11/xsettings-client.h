@@ -23,57 +23,9 @@
 #ifndef XSETTINGS_CLIENT_H
 #define XSETTINGS_CLIENT_H
 
-#include <X11/Xlib.h>
-#include "xsettings-common.h"
+#include <gdk/x11/gdkx11screen.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
-typedef struct _XSettingsClient XSettingsClient;
-
-typedef enum 
-{
-  XSETTINGS_ACTION_NEW,
-  XSETTINGS_ACTION_CHANGED,
-  XSETTINGS_ACTION_DELETED
-} XSettingsAction;
-
-typedef void (*XSettingsNotifyFunc) (const char       *name,
-				     XSettingsAction   action,
-				     XSettingsSetting *setting,
-				     void             *cb_data);
-typedef Bool (*XSettingsWatchFunc)  (Window            window,
-				     Bool              is_start,
-				     long              mask,
-				     void             *cb_data);
-typedef void (*XSettingsGrabFunc)   (Display          *display);
-
-XSettingsClient *xsettings_client_new             (Display             *display,
-						   int                  screen,
-						   XSettingsNotifyFunc  notify,
-						   XSettingsWatchFunc   watch,
-						   void                *cb_data);
-XSettingsClient *xsettings_client_new_with_grab_funcs (Display             *display,
-						       int                  screen,
-						       XSettingsNotifyFunc  notify,
-						       XSettingsWatchFunc   watch,
-						       void                *cb_data,
-                                                       XSettingsGrabFunc    grab,
-                                                       XSettingsGrabFunc    ungrab);
-void             xsettings_client_set_grab_func   (XSettingsClient     *client,
-						   XSettingsGrabFunc    grab);
-void             xsettings_client_set_ungrab_func (XSettingsClient     *client,
-						   XSettingsGrabFunc    ungrab);
-void             xsettings_client_destroy         (XSettingsClient     *client);
-Bool             xsettings_client_process_event   (XSettingsClient     *client,
-						   XEvent              *xev);
-XSettingsResult  xsettings_client_get_setting     (XSettingsClient     *client,
-						   const char          *name,
-						   XSettingsSetting   **setting);
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+void _gdk_x11_xsettings_init            (GdkX11Screen        *x11_screen);
+void _gdk_x11_xsettings_finish          (GdkX11Screen        *x11_screen);
 
 #endif /* XSETTINGS_CLIENT_H */

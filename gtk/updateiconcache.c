@@ -574,6 +574,23 @@ maybe_cache_icon_data (Image       *image,
     }
 }
 
+/**
+ * Finds all dir separators and replaces them with '/'.
+ * This makes sure that only /-separated paths are written in cache files,
+ * maintaining compatibility with theme index files that use slashes as
+ * directory separators on all platforms.
+ */
+static void
+replace_backslashes_with_slashes (gchar *path)
+{
+  size_t i;
+  if (path == NULL)
+    return;
+  for (i = 0; path[i]; i++)
+    if (G_IS_DIR_SEPARATOR (path[i]))
+      path[i] = '/';
+}
+
 static GList *
 scan_directory (const gchar *base_path, 
 		const gchar *subdir, 
@@ -588,7 +605,7 @@ scan_directory (const gchar *base_path,
   gboolean dir_added = FALSE;
   guint dir_index = 0xffff;
   
-  dir_path = g_build_filename (base_path, subdir, NULL);
+  dir_path = g_build_path ("/", base_path, subdir, NULL);
 
   /* FIXME: Use the gerror */
   dir = g_dir_open (dir_path, 0, NULL);
@@ -607,13 +624,14 @@ scan_directory (const gchar *base_path,
       gchar *basename, *dot;
 
       path = g_build_filename (dir_path, name, NULL);
+
       retval = g_file_test (path, G_FILE_TEST_IS_DIR);
       if (retval)
 	{
 	  gchar *subsubdir;
 
 	  if (subdir)
-	    subsubdir = g_build_filename (subdir, name, NULL);
+	    subsubdir = g_build_path ("/", subdir, name, NULL);
 	  else
 	    subsubdir = g_strdup (name);
 	  directories = scan_directory (base_path, subsubdir, files, 
@@ -1736,6 +1754,7 @@ main (int argc, char **argv)
   if (!force_update && is_cache_up_to_date (path))
     return 0;
 
+  replace_backslashes_with_slashes (path);
   build_cache (path);
 
   if (strcmp (var_name, "-") != 0)

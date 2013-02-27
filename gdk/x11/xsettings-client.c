@@ -25,58 +25,102 @@
 
 #include "xsettings-client.h"
 
-#include <limits.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <gdk/x11/gdkx11display.h>
+#include <gdk/x11/gdkx11property.h>
+#include <gdk/x11/gdkx11screen.h>
+#include <gdk/x11/gdkx11window.h>
+#include <gdk/x11/gdkprivate-x11.h>
+#include <gdk/x11/gdkscreen-x11.h>
+
+#include <gdkinternals.h>
+
 #include <string.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xmd.h>		/* For CARD16 */
 
-struct _XSettingsClient
+#include "gdksettings.c"
+
+/* Types of settings possible. Enum values correspond to
+ * protocol values.
+ */
+typedef enum 
 {
-  Display *display;
-  int screen;
-  XSettingsNotifyFunc notify;
-  XSettingsWatchFunc watch;
-  void *cb_data;
+  XSETTINGS_TYPE_INT     = 0,
+  XSETTINGS_TYPE_STRING  = 1,
+  XSETTINGS_TYPE_COLOR   = 2
+} XSettingsType;
 
-  XSettingsGrabFunc grab;
-  XSettingsGrabFunc ungrab;
+typedef struct _XSettingsBuffer  XSettingsBuffer;
 
-  Window manager_window;
-  Atom manager_atom;
-  Atom selection_atom;
-  Atom xsettings_atom;
-
-  XSettingsList *settings;
+struct _XSettingsBuffer
+{
+  char byte_order;
+  size_t len;
+  unsigned char *data;
+  unsigned char *pos;
 };
 
 static void
-notify_changes (XSettingsClient *client,
-		XSettingsList   *old_list)
+gdk_xsettings_notify (GdkX11Screen     *x11_screen,
+                      const char       *name,
+		      GdkSettingAction  action)
+{
+  GdkEvent new_event;
+
+  new_event.type = GDK_SETTING;
+  new_event.setting.window = gdk_screen_get_root_window (GDK_SCREEN (x11_screen));
+  new_event.setting.send_event = FALSE;
+  new_event.setting.action = action;
+  new_event.setting.name = (char*) name;
+
+  gdk_event_put (&new_event);
+}
+
+static gboolean
+value_equal (const GValue *value_a,
+             const GValue *value_b)
+{
+  if (G_VALUE_TYPE (value_a) != G_VALUE_TYPE (value_b))
+    return FALSE;
+
+  switch (G_VALUE_TYPE (value_a))
+    {
+    case G_TYPE_INT:
+      return g_value_get_int (value_a) == g_value_get_int (value_b);
+    case XSETTINGS_TYPE_COLOR:
+      return gdk_rgba_equal (g_value_get_boxed (value_a), g_value_get_boxed (value_b));
+    case G_TYPE_STRING:
+      return g_str_equal (g_value_get_string (value_a), g_value_get_string (value_b));
+    default:
+      g_warning ("unable to compare values of type %s", g_type_name (G_VALUE_TYPE (value_a)));
+      return FALSE;
+    }
+}
+
+static void
+notify_changes (GdkX11Screen *x11_screen,
+		GHashTable   *old_list)
 {
   GHashTableIter iter;
-  XSettingsSetting *setting, *old_setting;
+  GValue *setting, *old_setting;
+  const char *name;
 
-  if (!client->notify)
-    return;
-
-  if (client->settings != NULL)
+  if (x11_screen->xsettings != NULL)
     {
-      g_hash_table_iter_init (&iter, client->settings);
-      while (g_hash_table_iter_next (&iter, NULL, (gpointer*) &setting))
+      g_hash_table_iter_init (&iter, x11_screen->xsettings);
+      while (g_hash_table_iter_next (&iter, (gpointer *) &name, (gpointer*) &setting))
 	{
-	  old_setting = xsettings_list_lookup (old_list, setting->name);
+	  old_setting = old_list ? g_hash_table_lookup (old_list, name) : NULL;
 
 	  if (old_setting == NULL)
-	    client->notify (setting->name, XSETTINGS_ACTION_NEW, setting, client->cb_data);
-	  else if (!xsettings_setting_equal (setting, old_setting))
-	    client->notify (setting->name, XSETTINGS_ACTION_CHANGED, setting, client->cb_data);
+	    gdk_xsettings_notify (x11_screen, name, GDK_SETTING_ACTION_NEW);
+	  else if (!value_equal (setting, old_setting))
+	    gdk_xsettings_notify (x11_screen, name, GDK_SETTING_ACTION_CHANGED);
 	    
 	  /* remove setting from old_list */
 	  if (old_setting != NULL)
-	    g_hash_table_remove (old_list, setting->name);
+	    g_hash_table_remove (old_list, name);
 	}
     }
 
@@ -84,270 +128,275 @@ notify_changes (XSettingsClient *client,
     {
       /* old_list now contains only deleted settings */
       g_hash_table_iter_init (&iter, old_list);
-      while (g_hash_table_iter_next (&iter, NULL, (gpointer*) &old_setting))
-	client->notify (old_setting->name, XSETTINGS_ACTION_DELETED, NULL, client->cb_data);
+      while (g_hash_table_iter_next (&iter, (gpointer *) &name, (gpointer*) &old_setting))
+	gdk_xsettings_notify (x11_screen, name, GDK_SETTING_ACTION_DELETED);
     }
 }
 
-static int
-ignore_errors (Display *display, XErrorEvent *event)
-{
-  return True;
-}
-
-static char local_byte_order = '\0';
-
 #define BYTES_LEFT(buffer) ((buffer)->data + (buffer)->len - (buffer)->pos)
 
-static XSettingsResult
+#define return_if_fail_bytes(buffer, n_bytes) G_STMT_START{ \
+  if (BYTES_LEFT (buffer) < (n_bytes)) \
+    { \
+      g_warning ("Invalid XSETTINGS property (read off end: Expected %u bytes, only %ld left", \
+                 (n_bytes), BYTES_LEFT (buffer)); \
+      return FALSE; \
+    } \
+}G_STMT_END
+
+static gboolean
 fetch_card16 (XSettingsBuffer *buffer,
 	      CARD16          *result)
 {
   CARD16 x;
 
-  if (BYTES_LEFT (buffer) < 2)
-    return XSETTINGS_ACCESS;
+  return_if_fail_bytes (buffer, 2);
 
   x = *(CARD16 *)buffer->pos;
   buffer->pos += 2;
   
-  if (buffer->byte_order == local_byte_order)
-    *result = x;
+  if (buffer->byte_order == MSBFirst)
+    *result = GUINT16_FROM_BE (x);
   else
-    *result = (x << 8) | (x >> 8);
+    *result = GUINT16_FROM_LE (x);
 
-  return XSETTINGS_SUCCESS;
+  return TRUE;
 }
 
-static XSettingsResult
+static gboolean
 fetch_ushort (XSettingsBuffer *buffer,
 	      unsigned short  *result) 
 {
   CARD16 x;
-  XSettingsResult r;  
+  gboolean r;  
 
   r = fetch_card16 (buffer, &x);
-  if (r == XSETTINGS_SUCCESS)
+  if (r)
     *result = x;
 
   return r;
 }
 
-static XSettingsResult
+static gboolean
 fetch_card32 (XSettingsBuffer *buffer,
 	      CARD32          *result)
 {
   CARD32 x;
 
-  if (BYTES_LEFT (buffer) < 4)
-    return XSETTINGS_ACCESS;
+  return_if_fail_bytes (buffer, 4);
 
   x = *(CARD32 *)buffer->pos;
   buffer->pos += 4;
   
-  if (buffer->byte_order == local_byte_order)
-    *result = x;
+  if (buffer->byte_order == MSBFirst)
+    *result = GUINT32_FROM_BE (x);
   else
-    *result = (x << 24) | ((x & 0xff00) << 8) | ((x & 0xff0000) >> 8) | (x >> 24);
+    *result = GUINT32_FROM_LE (x);
   
-  return XSETTINGS_SUCCESS;
+  return TRUE;
 }
 
-static XSettingsResult
+static gboolean
 fetch_card8 (XSettingsBuffer *buffer,
 	     CARD8           *result)
 {
-  if (BYTES_LEFT (buffer) < 1)
-    return XSETTINGS_ACCESS;
+  return_if_fail_bytes (buffer, 1);
 
   *result = *(CARD8 *)buffer->pos;
   buffer->pos += 1;
 
-  return XSETTINGS_SUCCESS;
+  return TRUE;
 }
 
 #define XSETTINGS_PAD(n,m) ((n + m - 1) & (~(m-1)))
 
-static XSettingsList *
+static gboolean
+fetch_string (XSettingsBuffer  *buffer,
+              guint             length,
+              char            **result)
+{
+  guint pad_len;
+
+  pad_len = XSETTINGS_PAD (length, 4);
+  if (pad_len < length) /* guard against overflow */
+    {
+      g_warning ("Invalid XSETTINGS property (overflow in string length)");
+      return FALSE;
+    }
+
+  return_if_fail_bytes (buffer, pad_len);
+
+  *result = g_strndup ((char *) buffer->pos, length);
+  buffer->pos += pad_len;
+
+  return TRUE;
+}
+
+static void
+free_value (gpointer data)
+{
+  GValue *value = data;
+
+  g_value_unset (value);
+  g_free (value);
+}
+
+static GHashTable *
 parse_settings (unsigned char *data,
 		size_t         len)
 {
   XSettingsBuffer buffer;
-  XSettingsResult result = XSETTINGS_SUCCESS;
-  XSettingsList *settings = NULL;
+  GHashTable *settings = NULL;
   CARD32 serial;
   CARD32 n_entries;
   CARD32 i;
-  XSettingsSetting *setting = NULL;
+  GValue *value = NULL;
+  char *x_name = NULL;
+  const char *gdk_name;
   
-  local_byte_order = xsettings_byte_order ();
-
   buffer.pos = buffer.data = data;
   buffer.len = len;
   
-  result = fetch_card8 (&buffer, (unsigned char *)&buffer.byte_order);
+  if (!fetch_card8 (&buffer, (unsigned char *)&buffer.byte_order))
+    goto out;
+
   if (buffer.byte_order != MSBFirst &&
       buffer.byte_order != LSBFirst)
     {
-      fprintf (stderr, "Invalid byte order in XSETTINGS property\n");
-      result = XSETTINGS_FAILED;
+      g_warning ("Invalid XSETTINGS property (unknown byte order %u)", buffer.byte_order);
       goto out;
     }
 
   buffer.pos += 3;
 
-  result = fetch_card32 (&buffer, &serial);
-  if (result != XSETTINGS_SUCCESS)
+  if (!fetch_card32 (&buffer, &serial) ||
+      !fetch_card32 (&buffer, &n_entries))
     goto out;
 
-  result = fetch_card32 (&buffer, &n_entries);
-  if (result != XSETTINGS_SUCCESS)
-    goto out;
+  GDK_NOTE(SETTINGS, g_print("reading %u settings (serial %u byte order %u)\n", n_entries, serial, buffer.byte_order));
 
   for (i = 0; i < n_entries; i++)
     {
       CARD8 type;
       CARD16 name_len;
       CARD32 v_int;
-      size_t pad_len;
       
-      result = fetch_card8 (&buffer, &type);
-      if (result != XSETTINGS_SUCCESS)
+      if (!fetch_card8 (&buffer, &type))
 	goto out;
 
       buffer.pos += 1;
 
-      result = fetch_card16 (&buffer, &name_len);
-      if (result != XSETTINGS_SUCCESS)
+      if (!fetch_card16 (&buffer, &name_len))
 	goto out;
 
-      pad_len = XSETTINGS_PAD(name_len, 4);
-      if (BYTES_LEFT (&buffer) < pad_len)
-	{
-	  result = XSETTINGS_ACCESS;
-	  goto out;
-	}
-
-      setting = malloc (sizeof *setting);
-      if (!setting)
-	{
-	  result = XSETTINGS_NO_MEM;
-	  goto out;
-	}
-      setting->type = XSETTINGS_TYPE_INT; /* No allocated memory */
-
-      setting->name = malloc (name_len + 1);
-      if (!setting->name)
-	{
-	  result = XSETTINGS_NO_MEM;
-	  goto out;
-	}
-
-      memcpy (setting->name, buffer.pos, name_len);
-      setting->name[name_len] = '\0';
-      buffer.pos += pad_len;
-
-      result = fetch_card32 (&buffer, &v_int);
-      if (result != XSETTINGS_SUCCESS)
+      if (!fetch_string (&buffer, name_len, &x_name) ||
+          /* last change serial (we ignore it) */
+          !fetch_card32 (&buffer, &v_int))
 	goto out;
-      setting->last_change_serial = v_int;
 
       switch (type)
 	{
 	case XSETTINGS_TYPE_INT:
-	  result = fetch_card32 (&buffer, &v_int);
-	  if (result != XSETTINGS_SUCCESS)
+	  if (!fetch_card32 (&buffer, &v_int))
 	    goto out;
 
-	  setting->data.v_int = (INT32)v_int;
+          value = g_new0 (GValue, 1);
+          g_value_init (value, G_TYPE_INT);
+          g_value_set_int (value, (gint32) v_int);
+
+          GDK_NOTE(SETTINGS, g_print("  %s = %d\n", x_name, (gint32) v_int));
 	  break;
 	case XSETTINGS_TYPE_STRING:
-	  result = fetch_card32 (&buffer, &v_int);
-	  if (result != XSETTINGS_SUCCESS)
-	    goto out;
+          {
+            char *s;
 
-	  pad_len = XSETTINGS_PAD (v_int, 4);
-	  if (v_int + 1 == 0 || /* Guard against wrap-around */
-	      BYTES_LEFT (&buffer) < pad_len)
-	    {
-	      result = XSETTINGS_ACCESS;
-	      goto out;
-	    }
+            if (!fetch_card32 (&buffer, &v_int) ||
+                !fetch_string (&buffer, v_int, &s))
+              goto out;
+            
+            value = g_new0 (GValue, 1);
+            g_value_init (value, G_TYPE_STRING);
+            g_value_take_string (value, s);
 
-	  setting->data.v_string = malloc (v_int + 1);
-	  if (!setting->data.v_string)
-	    {
-	      result = XSETTINGS_NO_MEM;
-	      goto out;
-	    }
-	  
-	  memcpy (setting->data.v_string, buffer.pos, v_int);
-	  setting->data.v_string[v_int] = '\0';
-	  buffer.pos += pad_len;
-
+            GDK_NOTE(SETTINGS, g_print("  %s = \"%s\"\n", x_name, s));
+          }
 	  break;
 	case XSETTINGS_TYPE_COLOR:
-	  result = fetch_ushort (&buffer, &setting->data.v_color.red);
-	  if (result != XSETTINGS_SUCCESS)
-	    goto out;
-	  result = fetch_ushort (&buffer, &setting->data.v_color.green);
-	  if (result != XSETTINGS_SUCCESS)
-	    goto out;
-	  result = fetch_ushort (&buffer, &setting->data.v_color.blue);
-	  if (result != XSETTINGS_SUCCESS)
-	    goto out;
-	  result = fetch_ushort (&buffer, &setting->data.v_color.alpha);
-	  if (result != XSETTINGS_SUCCESS)
-	    goto out;
+          {
+            unsigned short red, green, blue, alpha;
+            GdkRGBA rgba;
 
+            if (!fetch_ushort (&buffer, &red) ||
+                !fetch_ushort (&buffer, &green) ||
+                !fetch_ushort (&buffer, &blue) ||
+                !fetch_ushort (&buffer, &alpha))
+              goto out;
+
+            rgba.red = red / 65535.0;
+            rgba.green = green / 65535.0;
+            rgba.blue = blue / 65535.0;
+            rgba.alpha = alpha / 65535.0;
+
+            value = g_new0 (GValue, 1);
+            g_value_init (value, G_TYPE_STRING);
+            g_value_set_boxed (value, &rgba);
+
+            GDK_NOTE(SETTINGS, g_print("  %s = #%02X%02X%02X%02X\n", x_name, alpha,red, green, blue));
+          }
 	  break;
 	default:
 	  /* Quietly ignore unknown types */
+          GDK_NOTE(SETTINGS, g_print("  %s = ignored (unknown type %u)\n", x_name, type));
 	  break;
 	}
 
-      setting->type = type;
+      gdk_name = gdk_from_xsettings_name (x_name);
+      g_free (x_name);
+      x_name = NULL;
 
-      result = xsettings_list_insert (&settings, setting);
-      if (result != XSETTINGS_SUCCESS)
-	goto out;
+      if (gdk_name == NULL)
+        {
+          GDK_NOTE(SETTINGS, g_print("    ==> unknown to GTK\n"));
+        }
+      else
+        {
+          GDK_NOTE(SETTINGS, g_print("    ==> storing as '%s'\n", gdk_name));
 
-      setting = NULL;
-    }
+          if (settings == NULL)
+            settings = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                              NULL,
+                                              free_value);
 
- out:
+          if (g_hash_table_lookup (settings, gdk_name) != NULL)
+            {
+              g_warning ("Invalid XSETTINGS property (Duplicate entry for '%s')", gdk_name);
+              goto out;
+            }
 
-  if (result != XSETTINGS_SUCCESS)
-    {
-      switch (result)
-	{
-	case XSETTINGS_NO_MEM:
-	  fprintf(stderr, "Out of memory reading XSETTINGS property\n");
-	  break;
-	case XSETTINGS_ACCESS:
-	  fprintf(stderr, "Invalid XSETTINGS property (read off end)\n");
-	  break;
-	case XSETTINGS_DUPLICATE_ENTRY:
-	  fprintf (stderr, "Duplicate XSETTINGS entry for '%s'\n", setting->name);
-	case XSETTINGS_FAILED:
-	case XSETTINGS_SUCCESS:
-	case XSETTINGS_NO_ENTRY:
-	  break;
-	}
+          g_hash_table_insert (settings, (gpointer) gdk_name, value);
+        }
 
-      if (setting)
-	xsettings_setting_free (setting);
-
-      xsettings_list_free (settings);
-      settings = NULL;
-
+      value = NULL;
     }
 
   return settings;
+
+ out:
+
+  if (value)
+    free_value (value);
+
+  if (settings)
+    g_hash_table_unref (settings);
+
+  g_free (x_name);
+
+  return NULL;
 }
 
 static void
-read_settings (XSettingsClient *client)
+read_settings (GdkX11Screen *x11_screen,
+               gboolean      do_notify)
 {
   Atom type;
   int format;
@@ -356,234 +405,169 @@ read_settings (XSettingsClient *client)
   unsigned char *data;
   int result;
 
-  int (*old_handler) (Display *, XErrorEvent *);
-  
-  XSettingsList *old_list = client->settings;
+  GHashTable *old_list = x11_screen->xsettings;
 
-  client->settings = NULL;
+  x11_screen->xsettings = NULL;
 
-  if (client->manager_window)
+  if (x11_screen->xsettings_manager_window)
     {
-      old_handler = XSetErrorHandler (ignore_errors);
-      result = XGetWindowProperty (client->display, client->manager_window,
-				   client->xsettings_atom, 0, LONG_MAX,
-				   False, client->xsettings_atom,
+      GdkDisplay *display = x11_screen->display;
+      Atom xsettings_atom = gdk_x11_get_xatom_by_name_for_display (display, "_XSETTINGS_SETTINGS");
+
+      gdk_x11_display_error_trap_push (display);
+      result = XGetWindowProperty (gdk_x11_display_get_xdisplay (display),
+                                   gdk_x11_window_get_xid (x11_screen->xsettings_manager_window),
+				   xsettings_atom, 0, LONG_MAX,
+				   False, xsettings_atom,
 				   &type, &format, &n_items, &bytes_after, &data);
-      XSetErrorHandler (old_handler);
+      gdk_x11_display_error_trap_pop_ignored (display);
       
       if (result == Success && type != None)
 	{
-	  if (type != client->xsettings_atom)
+	  if (type != xsettings_atom)
 	    {
-	      fprintf (stderr, "Invalid type for XSETTINGS property");
+	      g_warning ("Invalid type for XSETTINGS property: %s", gdk_x11_get_xatom_name_for_display (display, type));
 	    }
 	  else if (format != 8)
 	    {
-	      fprintf (stderr, "Invalid format for XSETTINGS property %d", format);
+	      g_warning ("Invalid format for XSETTINGS property: %d", format);
 	    }
 	  else
-	    client->settings = parse_settings (data, n_items);
+	    x11_screen->xsettings = parse_settings (data, n_items);
 	  
 	  XFree (data);
 	}
     }
 
-  notify_changes (client, old_list);
-  xsettings_list_free (old_list);
+  if (do_notify)
+    notify_changes (x11_screen, old_list);
+  if (old_list)
+    g_hash_table_unref (old_list);
 }
 
-static void
-add_events (Display *display,
-	    Window   window,
-	    long     mask)
+static Atom
+get_selection_atom (GdkX11Screen *x11_screen)
 {
-  XWindowAttributes attr;
-
-  XGetWindowAttributes (display, window, &attr);
-  XSelectInput (display, window, attr.your_event_mask | mask);
+  return _gdk_x11_get_xatom_for_display_printf (x11_screen->display, "_XSETTINGS_S%d", x11_screen->screen_num);
 }
 
+static GdkFilterReturn
+gdk_xsettings_manager_window_filter (GdkXEvent *xevent,
+                                     GdkEvent  *event,
+                                     gpointer   data);
+
 static void
-check_manager_window (XSettingsClient *client)
+check_manager_window (GdkX11Screen *x11_screen,
+                      gboolean      notify_changes)
 {
-  if (client->manager_window && client->watch)
-    client->watch (client->manager_window, False, 0, client->cb_data);
+  GdkDisplay *display;
+  Display *xdisplay;
+  Window manager_window_xid;
 
-  if (client->grab)
-    client->grab (client->display);
-  else
-    XGrabServer (client->display);
+  display = x11_screen->display;
+  xdisplay = gdk_x11_display_get_xdisplay (display);
 
-  client->manager_window = XGetSelectionOwner (client->display,
-					       client->selection_atom);
-  if (client->manager_window)
-    XSelectInput (client->display, client->manager_window,
-		  PropertyChangeMask | StructureNotifyMask);
-
-  if (client->ungrab)
-    client->ungrab (client->display);
-  else
-    XUngrabServer (client->display);
-  
-  XFlush (client->display);
-
-  if (client->manager_window && client->watch)
+  if (x11_screen->xsettings_manager_window)
     {
-      if (!client->watch (client->manager_window, True, 
-			  PropertyChangeMask | StructureNotifyMask,
-			  client->cb_data))
-	{
-	  /* Inability to watch the window probably means that it was destroyed
-	   * after we ungrabbed
-	   */
-	  client->manager_window = None;
-	  return;
-	}
+      gdk_window_remove_filter (x11_screen->xsettings_manager_window, gdk_xsettings_manager_window_filter, x11_screen);
+      g_object_unref (x11_screen->xsettings_manager_window);
+    }
+
+  gdk_x11_display_grab (display);
+
+  manager_window_xid = XGetSelectionOwner (xdisplay, get_selection_atom (x11_screen));
+  x11_screen->xsettings_manager_window = gdk_x11_window_foreign_new_for_display (display,
+                                                                   manager_window_xid);
+  /* XXX: Can't use gdk_window_set_events() here because the first call to this
+   * function happens too early in gdk_init() */
+  if (x11_screen->xsettings_manager_window)
+    XSelectInput (xdisplay,
+                  gdk_x11_window_get_xid (x11_screen->xsettings_manager_window),
+                  PropertyChangeMask | StructureNotifyMask);
+
+  gdk_x11_display_ungrab (display);
+  
+  gdk_display_flush (display);
+
+  if (x11_screen->xsettings_manager_window)
+    {
+      gdk_window_add_filter (x11_screen->xsettings_manager_window, gdk_xsettings_manager_window_filter, x11_screen);
     }
       
-  
-  read_settings (client);
+  read_settings (x11_screen, notify_changes);
 }
 
-XSettingsClient *
-xsettings_client_new (Display             *display,
-		      int                  screen,
-		      XSettingsNotifyFunc  notify,
-		      XSettingsWatchFunc   watch,
-		      void                *cb_data)
+static GdkFilterReturn
+gdk_xsettings_root_window_filter (GdkXEvent *xevent,
+                                  GdkEvent  *event,
+                                  gpointer   data)
 {
-  return xsettings_client_new_with_grab_funcs (display, screen, notify, watch, cb_data,
-                                               NULL, NULL);
-}
+  GdkX11Screen *x11_screen = data;
+  GdkDisplay *display = x11_screen->display;
+  XEvent *xev = xevent;
 
-XSettingsClient *
-xsettings_client_new_with_grab_funcs (Display             *display,
-		                      int                  screen,
-		                      XSettingsNotifyFunc  notify,
-		                      XSettingsWatchFunc   watch,
-		                      void                *cb_data,
-		                      XSettingsGrabFunc    grab,
-		                      XSettingsGrabFunc    ungrab)
-{
-  XSettingsClient *client;
-  char buffer[256];
-  char *atom_names[3];
-  Atom atoms[3];
-  
-  client = malloc (sizeof *client);
-  if (!client)
-    return NULL;
-
-  client->display = display;
-  client->screen = screen;
-  client->notify = notify;
-  client->watch = watch;
-  client->cb_data = cb_data;
-  client->grab = grab;
-  client->ungrab = ungrab;
-  client->manager_window = None;
-  client->settings = NULL;
-
-  sprintf(buffer, "_XSETTINGS_S%d", screen);
-  atom_names[0] = buffer;
-  atom_names[1] = "_XSETTINGS_SETTINGS";
-  atom_names[2] = "MANAGER";
-
-  XInternAtoms (display, atom_names, 3, False, atoms);
-
-  client->selection_atom = atoms[0];
-  client->xsettings_atom = atoms[1];
-  client->manager_atom = atoms[2];
-
-  /* Select on StructureNotify so we get MANAGER events
-   */
-  add_events (display, RootWindow (display, screen), StructureNotifyMask);
-
-  if (client->watch)
-    client->watch (RootWindow (display, screen), True, StructureNotifyMask,
-		   client->cb_data);
-
-  check_manager_window (client);
-
-  return client;
-}
-
-
-void
-xsettings_client_set_grab_func   (XSettingsClient      *client,
-				  XSettingsGrabFunc     grab)
-{
-  client->grab = grab;
-}
-
-void
-xsettings_client_set_ungrab_func (XSettingsClient      *client,
-				  XSettingsGrabFunc     ungrab)
-{
-  client->ungrab = ungrab;
-}
-
-void
-xsettings_client_destroy (XSettingsClient *client)
-{
-  if (client->watch)
-    client->watch (RootWindow (client->display, client->screen),
-		   False, 0, client->cb_data);
-  if (client->manager_window && client->watch)
-    client->watch (client->manager_window, False, 0, client->cb_data);
-  
-  xsettings_list_free (client->settings);
-  free (client);
-}
-
-XSettingsResult
-xsettings_client_get_setting (XSettingsClient   *client,
-			      const char        *name,
-			      XSettingsSetting **setting)
-{
-  XSettingsSetting *search = xsettings_list_lookup (client->settings, name);
-  if (search)
-    {
-      *setting = xsettings_setting_copy (search);
-      return *setting ? XSETTINGS_SUCCESS : XSETTINGS_NO_MEM;
-    }
-  else
-    return XSETTINGS_NO_ENTRY;
-}
-
-Bool
-xsettings_client_process_event (XSettingsClient *client,
-				XEvent          *xev)
-{
   /* The checks here will not unlikely cause us to reread
    * the properties from the manager window a number of
    * times when the manager changes from A->B. But manager changes
    * are going to be pretty rare.
    */
-  if (xev->xany.window == RootWindow (client->display, client->screen))
+  if (xev->xany.type == ClientMessage &&
+      xev->xclient.message_type == gdk_x11_get_xatom_by_name_for_display (display, "MANAGER") &&
+      xev->xclient.data.l[1] == get_selection_atom (x11_screen))
     {
-      if (xev->xany.type == ClientMessage &&
-	  xev->xclient.message_type == client->manager_atom &&
-	  xev->xclient.data.l[1] == client->selection_atom)
-	{
-	  check_manager_window (client);
-	  return True;
-	}
-    }
-  else if (xev->xany.window == client->manager_window)
-    {
-      if (xev->xany.type == DestroyNotify)
-	{
-	  check_manager_window (client);
-          /* let GDK do its cleanup */
-	  return False; 
-	}
-      else if (xev->xany.type == PropertyNotify)
-	{
-	  read_settings (client);
-	  return True;
-	}
+      check_manager_window (x11_screen, TRUE);
+      return GDK_FILTER_REMOVE;
     }
   
-  return False;
+  return GDK_FILTER_CONTINUE;
 }
+
+static GdkFilterReturn
+gdk_xsettings_manager_window_filter (GdkXEvent *xevent,
+                                     GdkEvent  *event,
+                                     gpointer   data)
+{
+  GdkX11Screen *x11_screen = data;
+  XEvent *xev = xevent;
+
+  if (xev->xany.type == DestroyNotify)
+    {
+      check_manager_window (x11_screen, TRUE);
+      /* let GDK do its cleanup */
+      return GDK_FILTER_CONTINUE; 
+    }
+  else if (xev->xany.type == PropertyNotify)
+    {
+      read_settings (x11_screen, TRUE);
+      return GDK_FILTER_REMOVE;
+    }
+  
+  return GDK_FILTER_CONTINUE;;
+}
+
+void
+_gdk_x11_xsettings_init (GdkX11Screen *x11_screen)
+{
+  gdk_window_add_filter (gdk_screen_get_root_window (GDK_SCREEN (x11_screen)), gdk_xsettings_root_window_filter, x11_screen);
+
+  check_manager_window (x11_screen, FALSE);
+}
+
+void
+_gdk_x11_xsettings_finish (GdkX11Screen *x11_screen)
+{
+  gdk_window_remove_filter (gdk_screen_get_root_window (GDK_SCREEN (x11_screen)), gdk_xsettings_root_window_filter, x11_screen);
+  if (x11_screen->xsettings_manager_window)
+    {
+      gdk_window_remove_filter (x11_screen->xsettings_manager_window, gdk_xsettings_manager_window_filter, x11_screen);
+      g_object_unref (x11_screen->xsettings_manager_window);
+      x11_screen->xsettings_manager_window = NULL;
+    }
+  
+  if (x11_screen->xsettings)
+    {
+      g_hash_table_unref (x11_screen->xsettings);
+      x11_screen->xsettings = NULL;
+    }
+}
+

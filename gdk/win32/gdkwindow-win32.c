@@ -27,7 +27,6 @@
 
 #include "config.h"
 #include <stdlib.h>
-#include <windows.h>
 
 #include "gdk.h"
 #include "gdkwindowimpl.h"
@@ -3249,18 +3248,6 @@ gdk_win32_window_lookup_for_display (GdkDisplay *display,
 }
 
 static void
-gdk_win32_window_enable_synchronized_configure (GdkWindow *window)
-{
-  /* nothing - no window manager to cooperate with */
-}
-
-static void
-gdk_win32_window_configure_finished (GdkWindow *window)
-{
-  /* nothing - no window manager to cooperate with */
-}
-
-static void
 gdk_win32_window_set_opacity (GdkWindow *window,
 			gdouble    opacity)
 {
@@ -3618,8 +3605,6 @@ gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
 
   impl_class->begin_resize_drag = gdk_win32_window_begin_resize_drag;
   impl_class->begin_move_drag = gdk_win32_window_begin_move_drag;
-  impl_class->enable_synchronized_configure = gdk_win32_window_enable_synchronized_configure;
-  impl_class->configure_finished = gdk_win32_window_configure_finished;
   impl_class->set_opacity = gdk_win32_window_set_opacity;
   //impl_class->set_composited = gdk_win32_window_set_composited;
   impl_class->destroy_notify = gdk_win32_window_destroy_notify;

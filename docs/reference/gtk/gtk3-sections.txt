@@ -4768,6 +4768,7 @@ GtkCellRendererState
 GtkCellRendererMode
 GtkCellRenderer
 GtkCellRendererClass
+gtk_cell_renderer_class_set_accessible_type
 gtk_cell_renderer_get_aligned_area
 gtk_cell_renderer_get_size
 gtk_cell_renderer_render
@@ -5177,6 +5178,10 @@ gtk_widget_draw
 gtk_widget_queue_draw
 gtk_widget_queue_resize
 gtk_widget_queue_resize_no_redraw
+gtk_widget_get_frame_clock
+GtkTickCallback
+gtk_widget_add_tick_callback
+gtk_widget_remove_tick_callback
 gtk_widget_size_request
 gtk_widget_get_child_requisition
 gtk_widget_size_allocate
@@ -5304,6 +5309,8 @@ gtk_widget_get_has_tooltip
 gtk_widget_set_has_tooltip
 gtk_widget_trigger_tooltip_query
 gtk_widget_get_window
+gtk_widget_register_window
+gtk_widget_unregister_window
 gtk_cairo_should_draw_window
 gtk_cairo_transform_to_window
 gtk_widget_get_allocated_width
@@ -5347,6 +5354,11 @@ gtk_widget_get_requisition
 gtk_widget_device_is_shadowed
 gtk_widget_get_modifier_mask
 gtk_widget_insert_action_group
+gtk_widget_add_tick_callback
+gtk_widget_remove_tick_callback
+gtk_widget_get_frame_clock
+gtk_widget_get_opacity
+gtk_widget_set_opacity
 
 <SUBSECTION>
 gtk_widget_get_path
@@ -5828,6 +5840,7 @@ gtk_style_context_get_parent
 gtk_style_context_get_path
 gtk_style_context_get_property
 gtk_style_context_get_screen
+gtk_style_context_get_frame_clock
 gtk_style_context_get_state
 gtk_style_context_get_style
 gtk_style_context_get_style_property
@@ -5869,6 +5882,7 @@ gtk_style_context_remove_region
 gtk_style_context_has_region
 gtk_style_context_list_regions
 gtk_style_context_set_screen
+gtk_style_context_set_frame_clock
 gtk_style_context_set_state
 
 <SUBSECTION>
@@ -6506,9 +6520,15 @@ gtk_icon_info_get_base_size
 gtk_icon_info_get_filename
 gtk_icon_info_get_builtin_pixbuf
 gtk_icon_info_load_icon
+gtk_icon_info_load_icon_async
+gtk_icon_info_load_icon_finish
 gtk_icon_info_load_symbolic
+gtk_icon_info_load_symbolic_async
+gtk_icon_info_load_symbolic_finish
 gtk_icon_info_load_symbolic_for_style
 gtk_icon_info_load_symbolic_for_context
+gtk_icon_info_load_symbolic_for_context_async
+gtk_icon_info_load_symbolic_for_context_finish
 gtk_icon_info_set_raw_coordinates
 gtk_icon_info_get_embedded_rect
 gtk_icon_info_get_attach_points

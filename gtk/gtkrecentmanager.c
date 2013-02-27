@@ -1944,7 +1944,7 @@ get_icon_for_mime_type (const char *mime_type,
     return NULL;
 
   pixbuf = gtk_icon_info_load_icon (info, NULL);
-  gtk_icon_info_free (info);
+  g_object_unref (info);
 
   return pixbuf;
 }

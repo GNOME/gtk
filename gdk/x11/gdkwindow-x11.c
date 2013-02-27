@@ -32,6 +32,7 @@
 #include "gdkvisualprivate.h"
 #include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
+#include "gdkframeclockprivate.h"
 #include "gdkasync.h"
 #include "gdkeventsource.h"
 #include "gdkdisplay-x11.h"
@@ -110,14 +111,14 @@ static void     gdk_window_x11_set_background     (GdkWindow      *window,
 
 static void        gdk_window_impl_x11_finalize   (GObject            *object);
 
-#define WINDOW_IS_TOPLEVEL_OR_FOREIGN(window) \
-  (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
-   GDK_WINDOW_TYPE (window) != GDK_WINDOW_OFFSCREEN)
+#define WINDOW_IS_TOPLEVEL_OR_FOREIGN(window)           \
+  (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TOPLEVEL ||   \
+   GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP ||       \
+   GDK_WINDOW_TYPE (window) == GDK_WINDOW_FOREIGN)
 
-#define WINDOW_IS_TOPLEVEL(window)		     \
-  (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
-   GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN && \
-   GDK_WINDOW_TYPE (window) != GDK_WINDOW_OFFSCREEN)
+#define WINDOW_IS_TOPLEVEL(window)                      \
+  (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TOPLEVEL ||   \
+   GDK_WINDOW_TYPE (window) == GDK_WINDOW_TEMP)
 
 /* Return whether time1 is considered later than time2 as far as xserver
  * time is concerned.  Accounts for wraparound.
@@ -199,6 +200,234 @@ _gdk_x11_window_update_size (GdkWindowImplX11 *impl)
     }
 }
 
+static void
+set_sync_counter(Display     *display,
+		 XSyncCounter counter,
+                 gint64       value)
+{
+    XSyncValue sync_value;
+
+    XSyncIntsToValue(&sync_value,
+                     value & G_GINT64_CONSTANT(0xFFFFFFFF),
+                     value >> 32);
+    XSyncSetCounter(display, counter, sync_value);
+}
+
+static void
+window_pre_damage (GdkWindow *window)
+{
+  GdkWindow *toplevel_window = gdk_window_get_toplevel (window);
+  GdkWindowImplX11 *impl;
+
+  if (!toplevel_window || !WINDOW_IS_TOPLEVEL (toplevel_window))
+    return;
+
+  impl = GDK_WINDOW_IMPL_X11 (toplevel_window->impl);
+
+  if (impl->toplevel->in_frame &&
+      impl->toplevel->current_counter_value % 2 == 0)
+    {
+      impl->toplevel->current_counter_value += 1;
+      set_sync_counter(GDK_WINDOW_XDISPLAY (impl->wrapper),
+		       impl->toplevel->extended_update_counter,
+		       impl->toplevel->current_counter_value);
+    }
+}
+
+static void
+on_surface_changed (void *data)
+{
+  GdkWindow *window = data;
+
+  window_pre_damage (window);
+}
+
+/* We want to know when cairo drawing causes damage to the window,
+ * so we engage in the _NET_WM_FRAME_DRAWN protocol with the
+ * window only when there actually is drawing. To do that we use
+ * a technique (hack) suggested by Uli Schlachter - if we set
+ * a dummy "mime data" on the cairo surface (this facility is
+ * used to attach JPEG data to an imager), then cairo wil flush
+ * and remove the mime data before making any changes to the window.
+ */
+
+static void
+hook_surface_changed (GdkWindow *window)
+{
+  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
+
+  if (impl->cairo_surface)
+    cairo_surface_set_mime_data (impl->cairo_surface,
+                                 "x-gdk/change-notify",
+                                 (unsigned char *)"X",
+                                 1,
+                                 on_surface_changed,
+                                 window);
+}
+
+static void
+unhook_surface_changed (GdkWindow *window)
+{
+  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
+
+  if (impl->cairo_surface)
+    cairo_surface_set_mime_data (impl->cairo_surface,
+                                 "x-gdk/change-notify",
+                                 NULL, 0,
+                                 NULL, NULL);
+}
+
+static void
+gdk_x11_window_predict_presentation_time (GdkWindow *window)
+{
+  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
+  GdkFrameClock *clock;
+  GdkFrameTimings *timings;
+  gint64 presentation_time;
+  gint64 refresh_interval;
+
+  if (!WINDOW_IS_TOPLEVEL (window))
+    return;
+
+  clock = gdk_window_get_frame_clock (window);
+
+  timings = gdk_frame_clock_get_current_timings (clock);
+
+  gdk_frame_clock_get_refresh_info (clock,
+                                    timings->frame_time,
+                                    &refresh_interval, &presentation_time);
+
+  if (presentation_time != 0)
+    {
+      if (timings->slept_before)
+        {
+          presentation_time += refresh_interval;
+        }
+      else
+        {
+          if (presentation_time < timings->frame_time + refresh_interval / 2)
+            presentation_time += refresh_interval;
+        }
+    }
+  else
+    {
+      if (timings->slept_before)
+        presentation_time = timings->frame_time + refresh_interval + refresh_interval / 2;
+      else
+        presentation_time = timings->frame_time + refresh_interval;
+    }
+
+  if (presentation_time < impl->toplevel->throttled_presentation_time)
+    presentation_time = impl->toplevel->throttled_presentation_time;
+
+  timings->predicted_presentation_time = presentation_time;
+}
+
+static void
+gdk_x11_window_begin_frame (GdkWindow *window)
+{
+  GdkWindowImplX11 *impl;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  impl = GDK_WINDOW_IMPL_X11 (window->impl);
+
+  if (!WINDOW_IS_TOPLEVEL (window) ||
+      impl->toplevel->extended_update_counter == None)
+    return;
+
+  impl->toplevel->in_frame = TRUE;
+
+  if (impl->toplevel->configure_counter_value != 0 &&
+      impl->toplevel->configure_counter_value_is_extended)
+    {
+      impl->toplevel->current_counter_value = impl->toplevel->configure_counter_value;
+      if ((impl->toplevel->current_counter_value % 2) == 1)
+        impl->toplevel->current_counter_value += 1;
+
+      impl->toplevel->configure_counter_value = 0;
+
+      window_pre_damage (window);
+    }
+  else
+    {
+      hook_surface_changed (window);
+    }
+}
+
+static void
+gdk_x11_window_end_frame (GdkWindow *window)
+{
+  GdkFrameClock *clock;
+  GdkFrameTimings *timings;
+  GdkWindowImplX11 *impl;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  impl = GDK_WINDOW_IMPL_X11 (window->impl);
+
+  if (!WINDOW_IS_TOPLEVEL (window) ||
+      impl->toplevel->extended_update_counter == None ||
+      !impl->toplevel->in_frame)
+    return;
+
+  clock = gdk_window_get_frame_clock (window);
+  timings = gdk_frame_clock_get_current_timings (clock);
+
+  impl->toplevel->in_frame = FALSE;
+
+  if (impl->toplevel->current_counter_value % 2 == 1)
+    {
+#ifdef G_ENABLE_DEBUG
+      if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
+        {
+          XImage *image = XGetImage (GDK_WINDOW_XDISPLAY (window),
+                                     GDK_WINDOW_XID (window),
+                                     0, 0, 1, 1,
+                                     (1 << 24) - 1,
+                                     ZPixmap);
+          XDestroyImage (image);
+        }
+#endif /* G_ENABLE_DEBUG */
+
+      /* An increment of 3 means that the frame was not drawn as fast as possible,
+       * but rather at a particular time. This can trigger different handling from
+       * the compositor.
+       */
+      if (timings->slept_before)
+        impl->toplevel->current_counter_value += 3;
+      else
+        impl->toplevel->current_counter_value += 1;
+
+      set_sync_counter(GDK_WINDOW_XDISPLAY (impl->wrapper),
+		       impl->toplevel->extended_update_counter,
+		       impl->toplevel->current_counter_value);
+
+      if (gdk_x11_screen_supports_net_wm_hint (gdk_window_get_screen (window),
+					       gdk_atom_intern_static_string ("_NET_WM_FRAME_DRAWN")))
+        {
+          impl->toplevel->frame_pending = TRUE;
+          _gdk_frame_clock_freeze (gdk_window_get_frame_clock (window));
+          timings->cookie = impl->toplevel->current_counter_value;
+        }
+    }
+
+  unhook_surface_changed (window);
+
+  if (impl->toplevel->configure_counter_value != 0 &&
+      !impl->toplevel->configure_counter_value_is_extended)
+    {
+      set_sync_counter (GDK_WINDOW_XDISPLAY (window),
+                        impl->toplevel->update_counter,
+                        impl->toplevel->configure_counter_value);
+
+      impl->toplevel->configure_counter_value = 0;
+    }
+
+  if (!impl->toplevel->frame_pending)
+    timings->complete = TRUE;
+}
+
 /*****************************************************
  * X11 specific implementations of generic functions *
  *****************************************************/
@@ -242,6 +471,9 @@ gdk_x11_ref_cairo_surface (GdkWindow *window)
       if (impl->cairo_surface)
 	cairo_surface_set_user_data (impl->cairo_surface, &gdk_x11_cairo_key,
 				     impl, gdk_x11_cairo_surface_destroy);
+
+      if (WINDOW_IS_TOPLEVEL (window) && impl->toplevel->in_frame)
+        hook_surface_changed (window);
     }
   else
     cairo_surface_reference (impl->cairo_surface);
@@ -260,6 +492,9 @@ gdk_window_impl_x11_finalize (GObject *object)
   impl = GDK_WINDOW_IMPL_X11 (object);
 
   wrapper = impl->wrapper;
+
+  if (WINDOW_IS_TOPLEVEL (wrapper) && impl->toplevel->in_frame)
+    unhook_surface_changed (wrapper);
 
   _gdk_x11_window_grab_check_destroy (wrapper);
 
@@ -602,29 +837,32 @@ ensure_sync_counter (GdkWindow *window)
     {
       GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
       GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (window);
-      GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
 
-      if (toplevel && impl->use_synchronized_configure &&
+      if (toplevel &&
 	  toplevel->update_counter == None &&
 	  GDK_X11_DISPLAY (display)->use_sync)
 	{
 	  Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
 	  XSyncValue value;
 	  Atom atom;
+	  XID counters[2];
 
 	  XSyncIntToValue (&value, 0);
 	  
 	  toplevel->update_counter = XSyncCreateCounter (xdisplay, value);
+	  toplevel->extended_update_counter = XSyncCreateCounter (xdisplay, value);
 	  
 	  atom = gdk_x11_get_xatom_by_name_for_display (display,
 							"_NET_WM_SYNC_REQUEST_COUNTER");
-	  
+
+	  counters[0] = toplevel->update_counter;
+	  counters[1] = toplevel->extended_update_counter;
 	  XChangeProperty (xdisplay, GDK_WINDOW_XID (window),
 			   atom, XA_CARDINAL,
 			   32, PropModeReplace,
-			   (guchar *)&toplevel->update_counter, 1);
+			   (guchar *)counters, 2);
 	  
-	  XSyncIntToValue (&toplevel->current_counter_value, 0);
+	  toplevel->current_counter_value = 0;
 	}
     }
 #endif
@@ -698,6 +936,44 @@ setup_toplevel_window (GdkWindow *window,
     gdk_x11_window_set_user_time (window, GDK_X11_DISPLAY (x11_screen->display)->user_time);
 
   ensure_sync_counter (window);
+
+  /* Start off in a frozen state - we'll finish this when we first paint */
+  gdk_x11_window_begin_frame (window);
+}
+
+static void
+on_frame_clock_before_paint (GdkFrameClock *clock,
+                             GdkWindow     *window)
+{
+  gdk_x11_window_predict_presentation_time (window);
+  gdk_x11_window_begin_frame (window);
+}
+
+static void
+on_frame_clock_after_paint (GdkFrameClock *clock,
+                            GdkWindow     *window)
+{
+  gdk_x11_window_end_frame (window);
+
+}
+
+static void
+connect_frame_clock (GdkWindow *window)
+{
+  GdkWindowImplX11 *impl;
+
+  impl = GDK_WINDOW_IMPL_X11 (window->impl);
+  if (WINDOW_IS_TOPLEVEL (window) && !impl->frame_clock_connected)
+    {
+      GdkFrameClock *frame_clock = gdk_window_get_frame_clock (window);
+
+      g_signal_connect (frame_clock, "before-paint",
+                        G_CALLBACK (on_frame_clock_before_paint), window);
+      g_signal_connect (frame_clock, "after-paint",
+                        G_CALLBACK (on_frame_clock_after_paint), window);
+
+      impl->frame_clock_connected = TRUE;
+    }
 }
 
 void
@@ -856,6 +1132,11 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
   gdk_x11_event_source_select_events ((GdkEventSource *) display_x11->event_source,
                                       GDK_WINDOW_XID (window), event_mask,
                                       StructureNotifyMask | PropertyChangeMask);
+
+  connect_frame_clock (window);
+
+  if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD)
+    gdk_window_freeze_toplevel_updates_libgtk_only (window);
 }
 
 static GdkEventMask
@@ -1001,7 +1282,7 @@ gdk_toplevel_x11_free_contents (GdkDisplay *display,
 			   toplevel->update_counter);
       toplevel->update_counter = None;
 
-      XSyncIntToValue (&toplevel->current_counter_value, 0);
+      toplevel->current_counter_value = 0;
     }
 #endif
 }
@@ -1473,6 +1754,8 @@ window_x11_move (GdkWindow *window,
 
   if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD)
     {
+      /* The window isn't actually damaged, but it's parent is */
+      window_pre_damage (window);
       _gdk_x11_window_move_resize_child (window,
                                          x, y,
                                          window->width, window->height);
@@ -1501,6 +1784,8 @@ window_x11_resize (GdkWindow *window,
 
   if (height < 1)
     height = 1;
+
+  window_pre_damage (window);
 
   if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD)
     {
@@ -1544,6 +1829,8 @@ window_x11_move_resize (GdkWindow *window,
 
   if (height < 1)
     height = 1;
+
+  window_pre_damage (window);
 
   if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD)
     {
@@ -1613,6 +1900,12 @@ gdk_window_x11_reparent (GdkWindow *window,
 		   new_parent->abs_x + x, new_parent->abs_y + y);
   _gdk_x11_window_tmp_reset_parent_bg (window);
   _gdk_x11_window_tmp_reset_bg (window, TRUE);
+
+  if (WINDOW_IS_TOPLEVEL (window))
+    connect_frame_clock (window);
+  else
+    /* old frame clock was disposed, our signal handlers removed */
+    impl->frame_clock_connected = FALSE;
 
   if (GDK_WINDOW_TYPE (new_parent) == GDK_WINDOW_FOREIGN)
     new_parent = gdk_screen_get_root_window (GDK_WINDOW_SCREEN (window));
@@ -4817,59 +5110,6 @@ gdk_x11_window_begin_move_drag (GdkWindow *window,
     emulate_move_drag (window, device, button, root_x, root_y, timestamp);
 }
 
-static void
-gdk_x11_window_enable_synchronized_configure (GdkWindow *window)
-{
-  GdkWindowImplX11 *impl;
-
-  if (!GDK_IS_WINDOW_IMPL_X11 (window->impl))
-    return;
-  
-  impl = GDK_WINDOW_IMPL_X11 (window->impl);
-	  
-  if (!impl->use_synchronized_configure)
-    {
-      /* This basically means you want to do fancy X specific stuff, so
-	 ensure we have a native window */
-      gdk_window_ensure_native (window);
-
-      impl->use_synchronized_configure = TRUE;
-      ensure_sync_counter (window);
-    }
-}
-
-static void
-gdk_x11_window_configure_finished (GdkWindow *window)
-{
-  GdkWindowImplX11 *impl;
-
-  if (!WINDOW_IS_TOPLEVEL (window))
-    return;
-  
-  impl = GDK_WINDOW_IMPL_X11 (window->impl);
-  if (!impl->use_synchronized_configure)
-    return;
-  
-#ifdef HAVE_XSYNC
-  if (!GDK_WINDOW_DESTROYED (window))
-    {
-      GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
-      GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (window);
-
-      if (toplevel && toplevel->update_counter != None &&
-	  GDK_X11_DISPLAY (display)->use_sync &&
-	  !XSyncValueIsZero (toplevel->current_counter_value))
-	{
-	  XSyncSetCounter (GDK_WINDOW_XDISPLAY (window), 
-			   toplevel->update_counter,
-			   toplevel->current_counter_value);
-	  
-	  XSyncIntToValue (&toplevel->current_counter_value, 0);
-	}
-    }
-#endif
-}
-
 static gboolean
 gdk_x11_window_beep (GdkWindow *window)
 {
@@ -5141,8 +5381,6 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->set_functions = gdk_x11_window_set_functions;
   impl_class->begin_resize_drag = gdk_x11_window_begin_resize_drag;
   impl_class->begin_move_drag = gdk_x11_window_begin_move_drag;
-  impl_class->enable_synchronized_configure = gdk_x11_window_enable_synchronized_configure;
-  impl_class->configure_finished = gdk_x11_window_configure_finished;
   impl_class->set_opacity = gdk_x11_window_set_opacity;
   impl_class->set_composited = gdk_x11_window_set_composited;
   impl_class->destroy_notify = gdk_x11_window_destroy_notify;

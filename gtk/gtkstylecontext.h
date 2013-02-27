@@ -836,6 +836,13 @@ void        gtk_style_context_set_screen (GtkStyleContext *context,
                                           GdkScreen       *screen);
 GdkScreen * gtk_style_context_get_screen (GtkStyleContext *context);
 
+GDK_AVAILABLE_IN_3_8
+void           gtk_style_context_set_frame_clock (GtkStyleContext *context,
+                                                  GdkFrameClock   *frame_clock);
+GDK_AVAILABLE_IN_3_8
+GdkFrameClock *gtk_style_context_get_frame_clock (GtkStyleContext *context);
+
+
 GDK_DEPRECATED_IN_3_8_FOR(gtk_style_context_set_state)
 void             gtk_style_context_set_direction (GtkStyleContext  *context,
                                                   GtkTextDirection  direction);

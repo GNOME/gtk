@@ -72,7 +72,7 @@ struct _GdkWindowImplX11
   guint no_bg : 1;        /* Set when the window background is temporarily
                            * unset during resizing and scaling */
   guint override_redirect : 1;
-  guint use_synchronized_configure : 1;
+  guint frame_clock_connected : 1;
 
   cairo_surface_t *cairo_surface;
 
@@ -126,7 +126,17 @@ struct _GdkToplevelX11
   /* Set if the WM is presenting us as focused, i.e. with active decorations
    */
   guint have_focused : 1;
-  
+
+  guint in_frame : 1;
+
+  /* If we're expecting a response from the compositor after painting a frame */
+  guint frame_pending : 1;
+
+  /* Whether pending_counter_value/configure_counter_value are updates
+   * to the extended update counter */
+  guint pending_counter_value_is_extended : 1;
+  guint configure_counter_value_is_extended : 1;
+
   gulong map_serial;	/* Serial of last transition from unmapped */
   
   cairo_surface_t *icon_pixmap;
@@ -144,11 +154,17 @@ struct _GdkToplevelX11
  
 #ifdef HAVE_XSYNC
   XID update_counter;
-  XSyncValue pending_counter_value; /* latest _NET_WM_SYNC_REQUEST value received */
-  XSyncValue current_counter_value; /* Latest _NET_WM_SYNC_REQUEST value received
-				     * where we have also seen the corresponding
-				     * ConfigureNotify
-				     */
+  XID extended_update_counter;
+  gint64 pending_counter_value; /* latest _NET_WM_SYNC_REQUEST value received */
+  gint64 configure_counter_value; /* Latest _NET_WM_SYNC_REQUEST value received
+				 * where we have also seen the corresponding
+				 * ConfigureNotify
+				 */
+  gint64 current_counter_value;
+
+  /* After a _NET_WM_FRAME_DRAWN message, this is the soonest that we think
+   * frame after will be presented */
+  gint64 throttled_presentation_time;
 #endif
 };
 

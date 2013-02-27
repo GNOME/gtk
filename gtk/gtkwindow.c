@@ -422,9 +422,11 @@ static GtkKeyHash *gtk_window_get_key_hash        (GtkWindow   *window);
 static void        gtk_window_free_key_hash       (GtkWindow   *window);
 static void	   gtk_window_on_composited_changed (GdkScreen *screen,
 						     GtkWindow *window);
+#ifdef GDK_WINDOWING_X11
 static void        gtk_window_on_theme_variant_changed (GtkSettings *settings,
                                                         GParamSpec  *pspec,
                                                         GtkWindow   *window);
+#endif
 static void        gtk_window_set_theme_variant         (GtkWindow  *window);
 
 static GSList      *toplevel_list = NULL;
@@ -5164,7 +5166,6 @@ gtk_window_realize (GtkWidget *widget)
 
       gtk_style_context_set_background (gtk_widget_get_style_context (widget), gdk_window);
 
-      gdk_window_enable_synchronized_configure (gdk_window);
       return;
     }
 
@@ -5237,8 +5238,6 @@ gtk_window_realize (GtkWidget *widget)
 
   gdk_window = gdk_window_new (parent_window, &attributes, attributes_mask);
   gtk_widget_set_window (widget, gdk_window);
-
-  gdk_window_enable_synchronized_configure (gdk_window);
 
   gtk_widget_register_window (widget, gdk_window);
 
@@ -5580,7 +5579,6 @@ gtk_window_configure_event (GtkWidget         *widget,
       if (GTK_WIDGET_CLASS (gtk_window_parent_class)->configure_event)
   	return GTK_WIDGET_CLASS (gtk_window_parent_class)->configure_event (widget, event);
 
-      gdk_window_configure_finished (gtk_widget_get_window (widget));
       return FALSE;
     }
 
@@ -5614,7 +5612,6 @@ gtk_window_configure_event (GtkWidget         *widget,
       (allocation.width == event->width &&
        allocation.height == event->height))
     {
-      gdk_window_configure_finished (gtk_widget_get_window (widget));
       return TRUE;
     }
 
@@ -7153,10 +7150,6 @@ gtk_window_move_resize (GtkWindow *window)
       set_grip_position (window);
       update_grip_visibility (window);
 
-      gdk_window_process_updates (gdk_window, TRUE);
-
-      gdk_window_configure_finished (gdk_window);
-
       /* If the configure request changed, it means that
        * we either:
        *   1) coincidentally changed hints or widget properties
@@ -8345,6 +8338,7 @@ gtk_window_set_theme_variant (GtkWindow *window)
 #endif
 }
 
+#ifdef GDK_WINDOWING_X11
 static void
 gtk_window_on_theme_variant_changed (GtkSettings *settings,
                                      GParamSpec  *pspec,
@@ -8353,6 +8347,7 @@ gtk_window_on_theme_variant_changed (GtkSettings *settings,
   if (window->priv->type == GTK_WINDOW_TOPLEVEL)
     gtk_window_set_theme_variant (window);
 }
+#endif
 
 static void
 gtk_window_on_composited_changed (GdkScreen *screen,

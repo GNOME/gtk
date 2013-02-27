@@ -6,8 +6,8 @@
 
 /* This CSS resets all properties to their defaults values
  *    and overrides all user settings and the theme in use */
-@import url("reset.css");
-@import url("cssview.css");
+@import url("resource://css_pixbufs/reset.css");
+@import url("resource://css_pixbufs/cssview.css");
 
 @keyframes move-the-image {
 0% { background-position: 50.00% 75.00%, 67.68% 67.68%, 75.00% 50.00%, 67.68% 32.32%, 50.00% 25.00%, 32.32% 32.32%, 25.00% 50.00%, 32.32% 67.68%, 0% 0%; }
@@ -51,15 +51,15 @@
 }
 
 GtkWindow {
-    background-image: url("apple-red.png"),
-                      url("gnome-applets.png"),
-                      url("gnome-calendar.png"),
-                      url("gnome-foot.png"),
-                      url("gnome-gmush.png"),
-                      url("gnome-gimp.png"),
-                      url("gnome-gsame.png"),
-                      url("gnu-keys.png"),
-                      url("background.jpg");
+    background-image: url("resource://css_pixbufs/apple-red.png"),
+                      url("resource://css_pixbufs/gnome-applets.png"),
+                      url("resource://css_pixbufs/gnome-calendar.png"),
+                      url("resource://css_pixbufs/gnome-foot.png"),
+                      url("resource://css_pixbufs/gnome-gmush.png"),
+                      url("resource://css_pixbufs/gnome-gimp.png"),
+                      url("resource://css_pixbufs/gnome-gsame.png"),
+                      url("resource://css_pixbufs/gnu-keys.png"),
+                      url("resource://css_pixbufs/background.jpg");
     background-position: 50.00% 75.00%, 67.68% 67.68%, 75.00% 50.00%, 67.68% 32.32%, 50.00% 25.00%, 32.32% 32.32%, 25.00% 50.00%, 32.32% 67.68%, 0% 0%;
     background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat;
     animation: move-the-image infinite linear 3s, size-the-image infinite alternate ease-in-out 0.75s;

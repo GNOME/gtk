@@ -16,10 +16,12 @@ EXTRA_DIST += \
 	gtk.vcxproj.filtersin \
 	gtk3-demo.vcxproj \
 	gtk3-demo.vcxproj.filters \
-	libgail.vcxproj \
-	libgail.vcxproj.filters \
-	libgail.vcxprojin \
-	libgail.vcxproj.filtersin \
+	gtk3-demo-application.vcxproj \
+	gtk3-demo-application.vcxproj.filters \
+	gtka11y.vcxproj \
+	gtka11y.vcxproj.filters \
+	gtka11y.vcxprojin \
+	gtka11y.vcxproj.filtersin \
 	gailutil.vcxproj \
 	gailutil.vcxproj.filters \
 	install.vcxproj

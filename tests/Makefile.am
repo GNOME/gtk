@@ -25,9 +25,12 @@ testsocket_programs = testsocket testsocket_child
 endif
 
 noinst_PROGRAMS =  $(TEST_PROGS)	\
+	animated-resizing		\
+	motion-compression		\
 	simple				\
 	flicker				\
 	print-editor			\
+	video-timer			\
 	testaccel			\
 	testadjustsize			\
 	testappchooser			\
@@ -149,9 +152,12 @@ endif
 
 endif
 
+animated_resizing_DEPENDENCIES = $(TEST_DEPS)
 flicker_DEPENDENCIES = $(TEST_DEPS)
+motion_compression_DEPENDENCIES = $(TEST_DEPS)
 simple_DEPENDENCIES = $(TEST_DEPS)
 print_editor_DEPENDENCIES = $(TEST_DEPS)
+video_timer_DEPENDENCIES = $(TEST_DEPS)
 testheightforwidth_DEPENDENCIES = $(TEST_DEPS)
 testicontheme_DEPENDENCIES = $(TEST_DEPS)
 testiconview_DEPENDENCIES = $(TEST_DEPS)
@@ -248,6 +254,16 @@ testpixbuf_color_DEPENDENCIES = $(TEST_DEPS)
 testpixbuf_scale_DEPENDENCIES = $(TEST_DEPS)
 testgmenu_DEPENDENCIES = $(TEST_DEPS)
 testlogout_DEPENDENCIES = $(TEST_DEPS)
+
+animated_resizing_SOURCES = 	\
+	animated-resizing.c	\
+	variable.c		\
+	variable.h
+
+video_timer_SOURCES = 	\
+	video-timer.c	\
+	variable.c	\
+	variable.h
 
 testboxcss_SOURCES =	\
 	testboxcss.c	\

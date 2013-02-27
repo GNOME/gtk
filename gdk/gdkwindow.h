@@ -32,6 +32,7 @@
 #include <gdk/gdkversionmacros.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkevents.h>
+#include <gdk/gdkframeclock.h>
 
 G_BEGIN_DECLS
 
@@ -883,7 +884,9 @@ void       gdk_window_constrain_size      (GdkGeometry  *geometry,
                                            gint         *new_width,
                                            gint         *new_height);
 
+GDK_DEPRECATED_IN_3_8
 void gdk_window_enable_synchronized_configure (GdkWindow *window);
+GDK_DEPRECATED_IN_3_8
 void gdk_window_configure_finished            (GdkWindow *window);
 
 GdkWindow *gdk_get_default_root_window (void);
@@ -900,6 +903,10 @@ void       gdk_window_geometry_changed         (GdkWindow     *window);
 void       gdk_window_set_support_multidevice (GdkWindow *window,
                                                gboolean   support_multidevice);
 gboolean   gdk_window_get_support_multidevice (GdkWindow *window);
+
+/* Frame clock */
+GDK_AVAILABLE_IN_3_8
+GdkFrameClock* gdk_window_get_frame_clock      (GdkWindow     *window);
 
 G_END_DECLS
 

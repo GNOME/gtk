@@ -1294,20 +1294,6 @@ gdk_broadway_window_begin_move_drag (GdkWindow *window,
 
 }
 
-static void
-gdk_broadway_window_enable_synchronized_configure (GdkWindow *window)
-{
-  if (!GDK_IS_WINDOW_IMPL_BROADWAY (window->impl))
-    return;
-}
-
-static void
-gdk_broadway_window_configure_finished (GdkWindow *window)
-{
-  if (!WINDOW_IS_TOPLEVEL (window))
-    return;
-}
-
 static gboolean
 gdk_broadway_window_beep (GdkWindow *window)
 {
@@ -1499,8 +1485,6 @@ gdk_window_impl_broadway_class_init (GdkWindowImplBroadwayClass *klass)
   impl_class->set_functions = gdk_broadway_window_set_functions;
   impl_class->begin_resize_drag = gdk_broadway_window_begin_resize_drag;
   impl_class->begin_move_drag = gdk_broadway_window_begin_move_drag;
-  impl_class->enable_synchronized_configure = gdk_broadway_window_enable_synchronized_configure;
-  impl_class->configure_finished = gdk_broadway_window_configure_finished;
   impl_class->set_opacity = gdk_broadway_window_set_opacity;
   impl_class->set_composited = gdk_broadway_window_set_composited;
   impl_class->destroy_notify = gdk_broadway_window_destroy_notify;

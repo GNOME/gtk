@@ -3330,9 +3330,12 @@ gdk_event_prepare (GSource *source,
 
   *timeout = -1;
 
-  retval = (_gdk_event_queue_find_first (_gdk_display) != NULL ||
-	    (modal_win32_dialog == NULL &&
-	     GetQueueStatus (QS_ALLINPUT) != 0));
+  if (display->event_pause_count > 0)
+    retval = FALSE;
+  else
+    retval = (_gdk_event_queue_find_first (_gdk_display) != NULL ||
+              (modal_win32_dialog == NULL &&
+               GetQueueStatus (QS_ALLINPUT) != 0));
 
   gdk_threads_leave ();
 
@@ -3346,16 +3349,14 @@ gdk_event_check (GSource *source)
   
   gdk_threads_enter ();
 
-  if (event_poll_fd.revents & G_IO_IN)
-    {
-      retval = (_gdk_event_queue_find_first (_gdk_display) != NULL ||
-		(modal_win32_dialog == NULL &&
-		 GetQueueStatus (QS_ALLINPUT) != 0));
-    }
+  if (display->event_pause_count > 0)
+    retval = FALSE;
+  else if (event_poll_fd.revents & G_IO_IN)
+    retval = (_gdk_event_queue_find_first (_gdk_display) != NULL ||
+              (modal_win32_dialog == NULL &&
+               GetQueueStatus (QS_ALLINPUT) != 0));
   else
-    {
-      retval = FALSE;
-    }
+    retval = FALSE;
 
   gdk_threads_leave ();
 

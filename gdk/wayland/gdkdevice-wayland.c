@@ -261,6 +261,7 @@ gdk_wayland_device_grab (GdkDevice    *device,
        * compositor.
        */
       _gdk_wayland_window_set_device_grabbed (window,
+                                              device,
                                               wayland_device->wl_seat,
                                               time_);
     }
@@ -292,6 +293,7 @@ gdk_wayland_device_ungrab (GdkDevice *device,
 
       if (wayland_device->pointer_grab_window)
         _gdk_wayland_window_set_device_grabbed (wayland_device->pointer_grab_window,
+                                                NULL,
                                                 NULL,
                                                 0);
     }

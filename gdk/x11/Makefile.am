@@ -53,9 +53,7 @@ libgdk_x11_la_SOURCES = 	\
 	gdkx.h			\
 	gdkprivate-x11.h	\
 	xsettings-client.h	\
-	xsettings-client.c	\
-	xsettings-common.h	\
-	xsettings-common.c
+	xsettings-client.c
 
 libgdkinclude_HEADERS = 	\
 	gdkx.h

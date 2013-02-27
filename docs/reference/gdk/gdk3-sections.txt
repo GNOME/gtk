@@ -404,6 +404,7 @@ gdk_window_process_updates
 gdk_window_set_debug_updates
 gdk_window_enable_synchronized_configure
 gdk_window_configure_finished
+gdk_window_get_frame_clock
 
 <SUBSECTION>
 gdk_window_set_user_data
@@ -988,6 +989,7 @@ gdk_x11_window_set_hide_titlebar_when_maximized
 gdk_x11_window_set_theme_variant
 gdk_x11_window_set_user_time
 gdk_x11_window_move_to_current_desktop
+gdk_x11_window_set_utf8_property
 gdk_x11_get_default_root_xwindow
 gdk_x11_get_default_screen
 gdk_x11_get_default_xdisplay
@@ -1153,4 +1155,39 @@ gdk_app_launch_context_get_type
 gdk_test_render_sync
 gdk_test_simulate_button
 gdk_test_simulate_key
+</SECTION>
+
+<SECTION>
+<TITLE>GdkFrameClock</TITLE>
+<FILE>gdkframeclock</FILE>
+GdkFrameClock
+gdk_frame_clock_get_frame_time
+GdkFrameClockPhase
+gdk_frame_clock_request_phase
+gdk_frame_clock_begin_updating
+gdk_frame_clock_end_updating
+gdk_frame_clock_get_frame_counter
+gdk_frame_clock_get_history_start
+gdk_frame_clock_get_timings
+gdk_frame_clock_get_current_timings
+gdk_frame_clock_get_refresh_info
+<SUBSECTION Private>
+GdkFrameClockPrivate
+gdk_frame_clock_get_type
+</SECTION>
+
+<SECTION>
+<TITLE>GdkFrameTimings</TITLE>
+<FILE>gdkframetimings</FILE>
+GdkFrameTimings
+gdk_frame_timings_ref
+gdk_frame_timings_unref
+gdk_frame_timings_get_frame_counter
+gdk_frame_timings_get_complete
+gdk_frame_timings_get_frame_time
+gdk_frame_timings_get_presentation_time
+gdk_frame_timings_get_refresh_interval
+gdk_frame_timings_get_predicted_presentation_time
+<SUBSECTION Private>
+gdk_frame_get_type
 </SECTION>

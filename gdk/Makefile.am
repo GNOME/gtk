@@ -75,11 +75,13 @@ gdk_public_h_sources = 				\
 	gdkdisplaymanager.h			\
 	gdkdnd.h				\
 	gdkevents.h				\
+	gdkframetimings.h			\
 	gdkkeys.h				\
 	gdkkeysyms.h				\
 	gdkkeysyms-compat.h			\
 	gdkmain.h				\
 	gdkpango.h				\
+	gdkframeclock.h				\
 	gdkpixbuf.h				\
 	gdkprivate.h				\
 	gdkproperty.h				\
@@ -101,6 +103,8 @@ gdk_private_headers = 				\
 	gdkdisplaymanagerprivate.h		\
 	gdkdisplayprivate.h			\
 	gdkdndprivate.h				\
+	gdkframeclockidle.h			\
+	gdkframeclockprivate.h			\
 	gdkscreenprivate.h			\
 	gdkinternals.h				\
 	gdkintl.h				\
@@ -121,10 +125,13 @@ gdk_c_sources = 				\
 	gdkdisplaymanager.c			\
 	gdkdnd.c				\
 	gdkevents.c     			\
+	gdkframetimings.c			\
 	gdkglobals.c				\
 	gdkkeys.c				\
 	gdkkeyuni.c				\
 	gdkoffscreenwindow.c			\
+	gdkframeclock.c				\
+	gdkframeclockidle.c			\
 	gdkpango.c				\
 	gdkpixbuf-drawable.c			\
 	gdkrectangle.c				\
@@ -229,7 +236,6 @@ x11_introspection_files = 		\
 	x11/gdkxftdefaults.c		\
 	x11/gdkxid.c			\
 	x11/xsettings-client.c		\
-	x11/xsettings-common.c		\
 	x11/gdkx.h			\
 	x11/gdkx11cursor.h		\
 	x11/gdkx11display.h		\

@@ -369,10 +369,18 @@ gtk_text_handle_finalize (GObject *object)
     g_object_unref (priv->relative_to);
 
   if (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].window)
-    gdk_window_destroy (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].window);
+    {
+      gtk_widget_unregister_window (priv->parent,
+				    priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].window);
+      gdk_window_destroy (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].window);
+    }
 
   if (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].window)
-    gdk_window_destroy (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].window);
+    {
+      gtk_widget_unregister_window (priv->parent,
+				    priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].window);
+      gdk_window_destroy (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].window);
+    }
 
   if (g_signal_handler_is_connected (priv->parent, priv->draw_signal_id))
     g_signal_handler_disconnect (priv->parent, priv->draw_signal_id);
@@ -527,7 +535,11 @@ _gtk_text_handle_set_relative_to (GtkTextHandle *handle,
 
   if (priv->relative_to)
     {
+      gtk_widget_unregister_window (priv->parent,
+				    priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].window);
       gdk_window_destroy (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_START].window);
+      gtk_widget_unregister_window (priv->parent,
+				    priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].window);
       gdk_window_destroy (priv->windows[GTK_TEXT_HANDLE_POSITION_SELECTION_END].window);
       g_object_unref (priv->relative_to);
     }

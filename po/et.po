@@ -7,7 +7,7 @@
 #
 # Lauris Kaplinski <lauris ariman ee>, 1999.
 # Tõivo Leedjärv <toivo linux ee>, 2002–2004.
-# Priit Laes <amd tt ee>, 2004, 2005.
+# Priit Laes <plaes plaes org>, 2004, 2005, 2013.
 # Ivar Smolin <okul linux ee>, 2005–2011.
 # Mattias Põldaru <mahfiaz@gmail.com>, 2009–2010, 2012.
 #
@@ -16,9 +16,9 @@ msgstr ""
 "Project-Id-Version: gtk+ MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-12-18 07:50+0000\n"
-"PO-Revision-Date: 2012-12-08 00:49+0300\n"
-"Last-Translator: Mattias Põldaru <mahfiaz@gmail.com>\n"
+"POT-Creation-Date: 2013-01-19 19:42+0000\n"
+"PO-Revision-Date: 2013-02-27 10:22+0300\n"
+"Last-Translator: Priit Laes <plaes+gi18n@plaes.org>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "Language: et\n"
 "MIME-Version: 1.0\n"
@@ -556,8 +556,8 @@ msgstr "_Litsents"
 msgid "Could not show link"
 msgstr "Linki pole võimalik kuvada"
 
-msgid "Homepage"
-msgstr "Koduleht"
+msgid "Website"
+msgstr "Veebileht"
 
 #, c-format
 msgid "About %s"
@@ -3856,3 +3856,6 @@ msgstr "testväljund.%s"
 
 msgid "Print to Test Printer"
 msgstr "Printimine testprinterisse"
+
+#~ msgid "Homepage"
+#~ msgstr "Koduleht"

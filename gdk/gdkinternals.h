@@ -82,7 +82,9 @@ typedef enum {
   GDK_DEBUG_MULTIHEAD     = 1 <<  7,
   GDK_DEBUG_XINERAMA      = 1 <<  8,
   GDK_DEBUG_DRAW          = 1 <<  9,
-  GDK_DEBUG_EVENTLOOP     = 1 << 10
+  GDK_DEBUG_EVENTLOOP     = 1 << 10,
+  GDK_DEBUG_FRAMES        = 1 << 11,
+  GDK_DEBUG_SETTINGS      = 1 << 12
 } GdkDebugFlag;
 
 typedef enum {
@@ -265,6 +267,8 @@ struct _GdkWindow
   gulong device_changed_handler_id;
 
   guint num_offscreen_children;
+
+  GdkFrameClock *frame_clock; /* NULL to use from parent or default */
 };
 
 #define GDK_WINDOW_TYPE(d) (((GDK_WINDOW (d)))->window_type)
@@ -298,6 +302,9 @@ GList* _gdk_event_queue_insert_after (GdkDisplay *display,
 GList* _gdk_event_queue_insert_before(GdkDisplay *display,
                                       GdkEvent   *after_event,
                                       GdkEvent   *event);
+
+void    _gdk_event_queue_handle_motion_compression (GdkDisplay *display);
+
 void   _gdk_event_button_generate    (GdkDisplay *display,
                                       GdkEvent   *event);
 
@@ -422,7 +429,6 @@ void       _gdk_offscreen_window_new                 (GdkWindow     *window,
 cairo_surface_t * _gdk_offscreen_window_create_surface (GdkWindow *window,
                                                         gint       width,
                                                         gint       height);
-
 
 G_END_DECLS
 

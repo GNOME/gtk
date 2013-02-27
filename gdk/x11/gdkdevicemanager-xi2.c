@@ -1569,22 +1569,25 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
     case XI_FocusIn:
     case XI_FocusOut:
       {
-        XIEnterEvent *xev = (XIEnterEvent *) ev;
-        GdkDevice *device, *source_device;
+        if (window)
+          {
+            XIEnterEvent *xev = (XIEnterEvent *) ev;
+            GdkDevice *device, *source_device;
 
-        device = g_hash_table_lookup (device_manager->id_table,
-                                      GINT_TO_POINTER (xev->deviceid));
+            device = g_hash_table_lookup (device_manager->id_table,
+                                          GINT_TO_POINTER (xev->deviceid));
 
-        source_device = g_hash_table_lookup (device_manager->id_table,
-                                             GUINT_TO_POINTER (xev->sourceid));
+            source_device = g_hash_table_lookup (device_manager->id_table,
+                                                 GUINT_TO_POINTER (xev->sourceid));
 
-        _gdk_device_manager_core_handle_focus (window,
-                                               xev->event,
-                                               device,
-                                               source_device,
-                                               (ev->evtype == XI_FocusIn) ? TRUE : FALSE,
-                                               xev->detail,
-                                               xev->mode);
+            _gdk_device_manager_core_handle_focus (window,
+                                                   xev->event,
+                                                   device,
+                                                   source_device,
+                                                   (ev->evtype == XI_FocusIn) ? TRUE : FALSE,
+                                                   xev->detail,
+                                                   xev->mode);
+          }
 
         return_val = FALSE;
       }
