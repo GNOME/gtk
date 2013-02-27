@@ -1444,20 +1444,20 @@ drag_motion_callback (GtkTreeView *tree_view,
 
 			if (!drop_as_bookmarks) {
 				char *uri;
-				GFile *dest_file;
 
 				gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store),
 						    &iter,
 						    PLACES_SIDEBAR_COLUMN_URI, &uri,
 						    -1);
 
-				g_assert (uri != NULL);
-				dest_file = g_file_new_for_uri (uri);
+				if (uri != NULL) {
+					GFile *dest_file = g_file_new_for_uri (uri);
 
-				emit_drag_action_requested (sidebar, context, dest_file, sidebar->drag_list, &action);
+					emit_drag_action_requested (sidebar, context, dest_file, sidebar->drag_list, &action);
 
-				g_object_unref (dest_file);
-				g_free (uri);
+					g_object_unref (dest_file);
+					g_free (uri);
+				} /* uri may be NULL for unmounted volumes, for example, so we don't allow drops there */
 			}
 		}
 	}
