@@ -1328,6 +1328,20 @@ compute_drop_position (GtkTreeView             *tree_view,
 		}
 	}
 
+	/* Disallow drops on recent:/// */
+	if (place_type == PLACES_BUILT_IN) {
+		char *uri;
+
+		gtk_tree_model_get (model, &iter,
+				    PLACES_SIDEBAR_COLUMN_URI, &uri,
+				    -1);
+
+		if (strcmp (uri, "recent:///") == 0)
+			drop_possible = FALSE;
+
+		g_free (uri);
+	}
+
 	if (!drop_possible) {
 		gtk_tree_path_free (*path);
 		*path = NULL;
