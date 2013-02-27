@@ -23,7 +23,7 @@
 			Name="Debug|Win32"
 			InheritedPropertySheets=".\gtk+.vsprops"
 			ConfigurationType="1"
-			CharacterSet="1"
+			CharacterSet="2"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -51,8 +51,8 @@
 			Name="Release|Win32"
 			InheritedPropertySheets=".\gtk+.vsprops"
 			ConfigurationType="1"
-			CharacterSet="1"
-			WholeProgramOptimization="1"
+			CharacterSet="2"
+			WholeProgramOptimization="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -82,7 +82,7 @@
 			Name="Debug|x64"
 			InheritedPropertySheets=".\gtk+.vsprops"
 			ConfigurationType="1"
-			CharacterSet="1"
+			CharacterSet="2"
 			>
 			<Tool
 				Name="VCMIDLTool"
@@ -111,8 +111,8 @@
 			Name="Release|x64"
 			InheritedPropertySheets=".\gtk+.vsprops"
 			ConfigurationType="1"
-			CharacterSet="1"
-			WholeProgramOptimization="1"
+			CharacterSet="2"
+			WholeProgramOptimization="0"
 			>
 			<Tool
 				Name="VCMIDLTool"
