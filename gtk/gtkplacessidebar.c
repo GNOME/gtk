@@ -1370,18 +1370,6 @@ free_drag_data (GtkPlacesSidebar *sidebar)
 	}
 }
 
-static const char *
-pos_to_string (GtkTreeViewDropPosition pos)
-{
-	switch (pos) {
-	case GTK_TREE_VIEW_DROP_BEFORE:         return "BEFORE";
-	case GTK_TREE_VIEW_DROP_AFTER:          return "AFTER";
-	case GTK_TREE_VIEW_DROP_INTO_OR_BEFORE: return "INTO_OR_BEFORE";
-	case GTK_TREE_VIEW_DROP_INTO_OR_AFTER:  return "INTO_OR_AFTER";
-	default: return "INVALID";
-	}
-}
-
 static gboolean
 drag_motion_callback (GtkTreeView *tree_view,
 		      GdkDragContext *context,
