@@ -158,11 +158,10 @@ struct _GtkPlacesSidebarClass {
 	void (* show_error_message)    (GtkPlacesSidebar *sidebar,
 				        const char       *primary,
 				        const char       *secondary);
-	void (* drag_action_requested) (GtkPlacesSidebar *sidebar,
-					GdkDragContext   *context,
-					GFile            *dest_file,
-					GList            *source_file_list,
-					int              *action);
+	GdkDragAction (* drag_action_requested) (GtkPlacesSidebar *sidebar,
+						 GdkDragContext   *context,
+						 GFile            *dest_file,
+						 GList            *source_file_list);
 	GdkDragAction (* drag_action_ask) (GtkPlacesSidebar *sidebar,
 					   GdkDragAction     actions);
 	void (* drag_perform_drop) (GtkPlacesSidebar     *sidebar,
@@ -326,18 +325,23 @@ emit_show_error_message (GtkPlacesSidebar *sidebar, const char *primary, const c
 		       primary, secondary);
 }
 
-static void
+static GdkDragAction
 emit_drag_action_requested (GtkPlacesSidebar *sidebar,
 			    GdkDragContext *context,
 			    GFile *dest_file,
-			    GList *source_file_list,
-			    int *action)
+			    GList *source_file_list)
 {
+	GdkDragAction ret_action;
+
+	ret_action = 0;
+
 	g_signal_emit (sidebar, places_sidebar_signals[DRAG_ACTION_REQUESTED], 0,
 		       context,
 		       dest_file,
 		       source_file_list,
-		       action);
+		       &ret_action);
+
+	return ret_action;
 }
 
 static GdkDragAction
@@ -1455,7 +1459,7 @@ drag_motion_callback (GtkTreeView *tree_view,
 				if (uri != NULL) {
 					GFile *dest_file = g_file_new_for_uri (uri);
 
-					emit_drag_action_requested (sidebar, context, dest_file, sidebar->drag_list, &action);
+					action = emit_drag_action_requested (sidebar, context, dest_file, sidebar->drag_list);
 
 					g_object_unref (dest_file);
 					g_free (uri);
@@ -3802,7 +3806,6 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 	 * @context: #GdkDragContext with information about the drag operation
 	 * @dest_file: #GFile with the tentative location that is being hovered for a drop
 	 * @source_file_list: (element-type GFile) (transfer none): List of #GFile that are being dragged
-	 * @action: Location in which to store the drag action here
 	 *
 	 * When the user starts a drag-and-drop operation and the sidebar needs
 	 * to ask the application for which drag action to perform, then the
@@ -3811,19 +3814,26 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 	 * The application can evaluate the @context for customary actions, or
 	 * it can check the type of the files indicated by @source_file_list against the
 	 * possible actions for the destination @dest_file.
+	 *
+	 * The drag action to use must be the return value of the signal handler.
+	 *
+	 * Return value: The drag action to use, for example, #GDK_ACTION_COPY
+	 * or #GDK_ACTION_MOVE, or 0 if no action is allowed here (i.e. drops
+	 * are not allowed in the specified @dest_file).
+	 *
+	 * Since: 3.8
 	 */
 	places_sidebar_signals [DRAG_ACTION_REQUESTED] =
 		g_signal_new (I_("drag-action-requested"),
 			      G_OBJECT_CLASS_TYPE (gobject_class),
-			      G_SIGNAL_RUN_FIRST,
+			      G_SIGNAL_RUN_LAST,
 			      G_STRUCT_OFFSET (GtkPlacesSidebarClass, drag_action_requested),
 			      NULL, NULL,
-			      _gtk_marshal_VOID__OBJECT_OBJECT_POINTER_POINTER,
-			      G_TYPE_NONE, 4,
+			      _gtk_marshal_INT__OBJECT_OBJECT_POINTER,
+			      G_TYPE_INT, 3,
 			      GDK_TYPE_DRAG_CONTEXT,
 			      G_TYPE_OBJECT,
-			      G_TYPE_POINTER, /* GList of GFile */
-			      G_TYPE_POINTER  /* FIXME: (inout int) is there something friendlier to language bindings? */);
+			      G_TYPE_POINTER /* GList of GFile */ );
 
 	/**
 	 * GtkPlacesSidebar::drag-action-ask:
