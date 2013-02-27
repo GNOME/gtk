@@ -38,6 +38,13 @@ GtkTreeView.view.expander:selected:hover {
   color: @text_color;
 }
 
+GtkTreeView.dnd {
+    border-color: @internal_element_color;
+    border-radius: 0;
+    border-width: 1px;
+    border-style: solid;
+}
+
 *:insensitive {
   border-color: shade (@bg_color, 0.7);
   background-color: shade (@bg_color, 0.9);
