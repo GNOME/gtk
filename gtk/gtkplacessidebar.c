@@ -2176,7 +2176,7 @@ remove_selected_bookmarks (GtkPlacesSidebar *sidebar)
 			    -1);
 
 	file = g_file_new_for_uri (uri);
-	_gtk_bookmarks_manager_remove_bookmark (sidebar->bookmarks_manager, file, NULL); /* NULL-GError */
+	_gtk_bookmarks_manager_remove_bookmark (sidebar->bookmarks_manager, file, NULL);
 
 	g_object_unref (file);
 	g_free (uri);
