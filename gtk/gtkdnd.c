@@ -360,7 +360,7 @@ gtk_drag_get_ipc_widget_for_screen (GdkScreen *screen)
       result = gtk_window_new (GTK_WINDOW_POPUP);
       gtk_window_set_screen (GTK_WINDOW (result), screen);
       gtk_window_resize (GTK_WINDOW (result), 1, 1);
-      gtk_window_move (GTK_WINDOW (result), -100, -100);
+      gtk_window_move (GTK_WINDOW (result), -99, -99);
       gtk_widget_show (result);
     }  
 
