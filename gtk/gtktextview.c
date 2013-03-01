@@ -9091,8 +9091,12 @@ text_window_scroll        (GtkTextWindow *win,
                            gint           dx,
                            gint           dy)
 {
+  GtkTextView *view = GTK_TEXT_VIEW (win->widget);
+  GtkTextViewPrivate *priv = view->priv;
+
   if (dx != 0 || dy != 0)
     {
+      gtk_bubble_window_popdown (GTK_BUBBLE_WINDOW (priv->selection_bubble));
       gdk_window_scroll (win->bin_window, dx, dy);
     }
 }
