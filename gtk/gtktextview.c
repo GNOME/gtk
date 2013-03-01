@@ -5153,9 +5153,22 @@ gtk_text_view_draw (GtkWidget *widget,
 {
   GSList *tmp_list;
   GdkWindow *window;
-  
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (widget);
+
   if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
-    gtk_text_view_draw_focus (widget, cr);
+    {
+      gtk_style_context_save (context);
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
+      gtk_render_background (context, cr,
+			     0, 0,
+			     gtk_widget_get_allocated_width (widget),
+			     gtk_widget_get_allocated_height (widget));
+      gtk_style_context_restore (context);
+
+      gtk_text_view_draw_focus (widget, cr);
+    }
 
   window = gtk_text_view_get_window (GTK_TEXT_VIEW (widget),
                                      GTK_TEXT_WINDOW_TEXT);
