@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-01-19 19:42+0000\n"
-"PO-Revision-Date: 2013-02-18 11:53+0200\n"
+"PO-Revision-Date: 2013-03-01 11:37+0200\n"
 "Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <gnom@prevod.org>\n"
 "Language: sr\n"
@@ -690,7 +690,7 @@ msgstr "Не могу да прикажем везу"
 
 #: ../gtk/gtkaboutdialog.c:1017
 msgid "Website"
-msgstr "Веб страница"
+msgstr "Веб сајт"
 
 #: ../gtk/gtkaboutdialog.c:1071
 #, c-format
