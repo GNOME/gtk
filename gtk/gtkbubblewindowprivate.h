@@ -22,7 +22,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_BUBBLE_WINDOW           (gtk_bubble_window_get_type ())
+#define GTK_TYPE_BUBBLE_WINDOW           (_gtk_bubble_window_get_type ())
 #define GTK_BUBBLE_WINDOW(o)             (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_BUBBLE_WINDOW, GtkBubbleWindow))
 #define GTK_BUBBLE_WINDOW_CLASS(c)       (G_TYPE_CHECK_CLASS_CAST ((c), GTK_TYPE_BUBBLE_WINDOW, GtkBubbleWindowClass))
 #define GTK_IS_BUBBLE_WINDOW(o)          (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_BUBBLE_WINDOW))
@@ -37,7 +37,7 @@ struct _GtkBubbleWindow
   GtkWindow parent_instance;
 
   /*< private >*/
-  gpointer _priv;
+  gpointer priv;
 };
 
 struct _GtkBubbleWindowClass
@@ -45,36 +45,36 @@ struct _GtkBubbleWindowClass
   GtkWindowClass parent_class;
 };
 
-GType       gtk_bubble_window_get_type       (void) G_GNUC_CONST;
+GType       _gtk_bubble_window_get_type        (void) G_GNUC_CONST;
 
-GtkWidget * gtk_bubble_window_new            (void);
+GtkWidget * _gtk_bubble_window_new             (void);
 
-void        gtk_bubble_window_set_relative_to (GtkBubbleWindow *window,
-                                               GdkWindow       *relative_to);
-GdkWindow * gtk_bubble_window_get_relative_to (GtkBubbleWindow *window);
+void        _gtk_bubble_window_set_relative_to (GtkBubbleWindow *window,
+                                                GdkWindow       *relative_to);
+GdkWindow * _gtk_bubble_window_get_relative_to (GtkBubbleWindow *window);
 
-void        gtk_bubble_window_set_pointing_to (GtkBubbleWindow       *window,
-                                               cairo_rectangle_int_t *rect);
-gboolean    gtk_bubble_window_get_pointing_to (GtkBubbleWindow       *window,
-                                               cairo_rectangle_int_t *rect);
-void        gtk_bubble_window_set_position    (GtkBubbleWindow       *window,
-                                               GtkPositionType        position);
+void        _gtk_bubble_window_set_pointing_to (GtkBubbleWindow       *window,
+                                                cairo_rectangle_int_t *rect);
+gboolean    _gtk_bubble_window_get_pointing_to (GtkBubbleWindow       *window,
+                                                cairo_rectangle_int_t *rect);
+void        _gtk_bubble_window_set_position    (GtkBubbleWindow       *window,
+                                                GtkPositionType        position);
 
 GtkPositionType
-            gtk_bubble_window_get_position    (GtkBubbleWindow       *window);
+            _gtk_bubble_window_get_position    (GtkBubbleWindow       *window);
 
-void        gtk_bubble_window_popup           (GtkBubbleWindow       *window,
-                                               GdkWindow             *relative_to,
-                                               cairo_rectangle_int_t *pointing_to,
-                                               GtkPositionType        position);
+void        _gtk_bubble_window_popup           (GtkBubbleWindow       *window,
+                                                GdkWindow             *relative_to,
+                                                cairo_rectangle_int_t *pointing_to,
+                                                GtkPositionType        position);
 
-void        gtk_bubble_window_popdown         (GtkBubbleWindow       *window);
+void        _gtk_bubble_window_popdown         (GtkBubbleWindow       *window);
 
-gboolean    gtk_bubble_window_grab            (GtkBubbleWindow       *window,
-                                               GdkDevice             *device,
-                                               guint32                activate_time);
+gboolean    _gtk_bubble_window_grab            (GtkBubbleWindow       *window,
+                                                GdkDevice             *device,
+                                                guint32                activate_time);
 
-void        gtk_bubble_window_ungrab          (GtkBubbleWindow       *window);
+void        _gtk_bubble_window_ungrab          (GtkBubbleWindow       *window);
 
 G_END_DECLS
 

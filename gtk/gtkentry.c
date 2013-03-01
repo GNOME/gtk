@@ -9293,7 +9293,7 @@ activate_bubble_cb (GtkWidget *item,
 {
   const gchar *signal = g_object_get_data (G_OBJECT (item), "gtk-signal");
   g_signal_emit_by_name (entry, signal);
-  gtk_bubble_window_popdown (GTK_BUBBLE_WINDOW (entry->priv->selection_bubble));
+  _gtk_bubble_window_popdown (GTK_BUBBLE_WINDOW (entry->priv->selection_bubble));
 }
 
 static void
@@ -9337,7 +9337,7 @@ bubble_targets_received (GtkClipboard     *clipboard,
   if (priv->selection_bubble)
     gtk_widget_destroy (priv->selection_bubble);
 
-  priv->selection_bubble = gtk_bubble_window_new ();
+  priv->selection_bubble = _gtk_bubble_window_new ();
   toolbar = GTK_WIDGET (gtk_toolbar_new ());
   gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), GTK_TOOLBAR_TEXT);
   gtk_toolbar_set_show_arrow (GTK_TOOLBAR (toolbar), FALSE);
@@ -9383,8 +9383,8 @@ bubble_targets_received (GtkClipboard     *clipboard,
       rect.width = 0;
     }
 
-  gtk_bubble_window_popup (GTK_BUBBLE_WINDOW (priv->selection_bubble),
-                           priv->text_area, &rect, GTK_POS_TOP);
+  _gtk_bubble_window_popup (GTK_BUBBLE_WINDOW (priv->selection_bubble),
+                            priv->text_area, &rect, GTK_POS_TOP);
 
   priv->selection_bubble_timeout_id = 0;
 }
@@ -9409,7 +9409,7 @@ gtk_entry_selection_bubble_popup_unset (GtkEntry *entry)
   priv = entry->priv;
 
   if (priv->selection_bubble)
-    gtk_bubble_window_popdown (GTK_BUBBLE_WINDOW (priv->selection_bubble));
+    _gtk_bubble_window_popdown (GTK_BUBBLE_WINDOW (priv->selection_bubble));
 
   if (priv->selection_bubble_timeout_id)
     {
