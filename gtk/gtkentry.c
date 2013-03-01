@@ -223,7 +223,7 @@ struct _GtkEntryPrivate
   guint         truncate_multiline      : 1;
   guint         cursor_handle_dragged   : 1;
   guint         selection_handle_dragged : 1;
-  guint         populate_toolbar        : 1;
+  guint         populate_all            : 1;
 };
 
 struct _EntryIconInfo
@@ -321,7 +321,7 @@ enum {
   PROP_INPUT_PURPOSE,
   PROP_INPUT_HINTS,
   PROP_ATTRIBUTES,
-  PROP_POPULATE_TOOLBAR
+  PROP_POPULATE_ALL
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -1425,18 +1425,17 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                        PANGO_TYPE_ATTR_LIST,
                                                        GTK_PARAM_READWRITE));
 
-  /** GtkEntry:populate-toolbar:
+  /** GtkEntry:populate-all:
    *
-   * If ::populate-toolbar is %TRUE, the #GtkEntry::populate-popup
-   * signal is also emitted for touch popups. In this case, the container
-   * is a #GtkToolbar.
+   * If ::populate-all is %TRUE, the #GtkEntry::populate-popup
+   * signal is also emitted for touch popups.
    *
    * Since: 3.8
    */
   g_object_class_install_property (gobject_class,
-                                   PROP_POPULATE_TOOLBAR,
-                                   g_param_spec_boolean ("populate-toolbar",
-                                                         P_("Populate toolbar"),
+                                   PROP_POPULATE_ALL,
+                                   g_param_spec_boolean ("populate-all",
+                                                         P_("Populate all"),
                                                          P_("Whether to emit ::populate-popup for touch popups"),
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
@@ -1499,17 +1498,20 @@ gtk_entry_class_init (GtkEntryClass *class)
   /**
    * GtkEntry::populate-popup:
    * @entry: The entry on which the signal is emitted
-   * @popup: the menu or toolbar that is being populated
+   * @popup: the container that is being populated
    *
    * The ::populate-popup signal gets emitted before showing the
    * context menu of the entry.
    *
    * If you need to add items to the context menu, connect
-   * to this signal and append your items to the @widget.
+   * to this signal and append your items to the @widget, which
+   * will be a #GtkMenu in this case.
    *
-   * If #GtkEntry::populate-toolbar is %TRUE, this signal will
+   * If #GtkEntry::populate-all is %TRUE, this signal will
    * also be emitted to populate touch popups. In this case,
-   * @widget will be a toolbar instead of a menu.
+   * @widget will be a different container, e.g. a #GtkToolbar.
+   * The signal handler should not make assumptions about the
+   * type of @widget.
    */
   signals[POPULATE_POPUP] =
     g_signal_new (I_("populate-popup"),
@@ -2261,8 +2263,8 @@ gtk_entry_set_property (GObject         *object,
       gtk_entry_set_attributes (entry, g_value_get_boxed (value));
       break;
 
-    case PROP_POPULATE_TOOLBAR:
-      entry->priv->populate_toolbar = g_value_get_boolean (value);
+    case PROP_POPULATE_ALL:
+      entry->priv->populate_all = g_value_get_boolean (value);
       break;
 
     case PROP_SCROLL_OFFSET:
@@ -2501,8 +2503,8 @@ gtk_entry_get_property (GObject         *object,
       g_value_set_boxed (value, priv->attrs);
       break;
 
-    case PROP_POPULATE_TOOLBAR:
-      g_value_set_boolean (value, priv->populate_toolbar);
+    case PROP_POPULATE_ALL:
+      g_value_set_boolean (value, priv->populate_all);
       break;
 
     default:
@@ -9356,7 +9358,7 @@ bubble_targets_received (GtkClipboard     *clipboard,
   append_bubble_action (entry, toolbar, GTK_STOCK_PASTE, "paste-clipboard",
                         priv->editable && has_clipboard);
 
-  if (priv->populate_toolbar)
+  if (priv->populate_all)
     g_signal_emit (entry, signals[POPULATE_POPUP], 0, toolbar);
 
   gtk_widget_get_allocation (GTK_WIDGET (entry), &allocation);
