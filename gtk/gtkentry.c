@@ -1428,7 +1428,8 @@ gtk_entry_class_init (GtkEntryClass *class)
   /** GtkEntry:populate-toolbar:
    *
    * If ::populate-toolbar is %TRUE, the #GtkEntry::populate-popup
-   * signal is also emitted for touch popups.
+   * signal is also emitted for touch popups. In this case, the container
+   * is a #GtkToolbar.
    *
    * Since: 3.8
    */
