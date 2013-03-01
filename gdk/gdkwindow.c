@@ -271,9 +271,10 @@ print_region (cairo_region_t *region)
 	}
       else
 	{
+	  int i;
 	  cairo_region_get_extents (region, &r);
 	  g_string_append_printf (s, "extent: %dx%d @%d,%d, details: ", r.width, r.height, r.x, r.y);
-	  for (int i = 0; i < num; i++)
+	  for (i = 0; i < num; i++)
 	    {
 	      g_string_append_printf (s, "[%dx%d @%d,%d]", r.width, r.height, r.x, r.y);
 	      if (i != num -1)
@@ -9990,6 +9991,10 @@ gdk_window_print (GdkWindow *window,
 
   g_print (" abs[%d,%d]",
 	   window->abs_x, window->abs_y);
+
+  if (window->alpha != 255)
+    g_print (" alpha[%d]",
+	   window->alpha);
 
   s = print_region (window->clip_region);
   g_print (" clipbox[%s]", s);
