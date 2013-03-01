@@ -157,7 +157,7 @@ gdk_broadway_device_query_state (GdkDevice        *device,
   GdkBroadwayDisplay *broadway_display;
   GdkScreen *screen;
   gint32 device_root_x, device_root_y;
-  gint32 mouse_toplevel_id;
+  guint32 mouse_toplevel_id;
   GdkWindow *mouse_toplevel;
   guint32 mask32;
 
@@ -181,7 +181,7 @@ gdk_broadway_device_query_state (GdkDevice        *device,
 				    &device_root_x,
 				    &device_root_y,
 				    &mask32);
-  mouse_toplevel = g_hash_table_lookup (broadway_display->id_ht, GINT_TO_POINTER (mouse_toplevel_id));
+  mouse_toplevel = g_hash_table_lookup (broadway_display->id_ht, GUINT_TO_POINTER (mouse_toplevel_id));
 
   if (root_x)
     *root_x = device_root_x;
