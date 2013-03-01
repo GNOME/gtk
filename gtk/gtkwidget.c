@@ -14230,21 +14230,25 @@ gtk_widget_propagate_alpha (GtkWidget *widget)
 
   parent = priv->parent;
 
-  norender =
-    /* If this widget has an opacity group and no window don't render it */
-    (priv->opacity_group && !gtk_widget_get_has_window (widget)) ||
-    /* If the parent has norender_children, propagate that here */
-    (parent != NULL && parent->priv->norender_children);
+  /* Norender affects only windowed widget and means don't render widget->window in the
+     normal fashion.
+     We only set this if the parent has norender_children, because:
+     a) For an opacity group (that does not have a norender_children parent) we still
+     need to render the window or we will never get an expose event.
+     b) For alpha we set the opacity of window->widget directly, so no other
+     work is needed.
+  */
+  norender = (parent != NULL && parent->priv->norender_children);
 
-  /* Windowed widget children should norender if: */
+  /* windows under this widget should not render if:
+     a) This widget has an opacity group
+     b) This widget has alpha and is no-windowed (otherwise we'd set alpha on widget->window)
+     c) This widget has norender but is no-windowed (a windowed widget would "swallow" the norender)
+  */
   norender_children =
-    /* The widget is no_window (otherwise its enought to mark it norender/alpha), and */
-    !gtk_widget_get_has_window (widget) &&
-     ( /* norender is set, or */
-      norender ||
-      /* widget has an alpha */
-      priv->alpha != 255
-       );
+    priv->opacity_group ||
+    (!gtk_widget_get_has_window (widget) &&
+     ( norender || priv->alpha != 255));
 
   if (gtk_widget_get_has_window (widget))
     {
