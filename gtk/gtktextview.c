@@ -866,7 +866,8 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   /** GtkTextView:populate-toolbar:
    *
    * If ::populate-toolbar is %TRUE, the #GtkTextView::populate-popup
-   * signal is also emitted for touch popups.
+   * signal is also emitted for touch popups. In this case, the
+   * container is a #GtkToolbar.
    *
    * Since: 3.8
    */
