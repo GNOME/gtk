@@ -4885,15 +4885,18 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *icon_theme,
     {
       GIcon *base, *emblem;
       GList *list, *l;
-      GtkIconInfo *emblem_info;
+      GtkIconInfo *base_info, *emblem_info;
 
       if (GTK_IS_NUMERABLE_ICON (icon))
         _gtk_numerable_icon_set_background_icon_size (GTK_NUMERABLE_ICON (icon), size / 2);
 
       base = g_emblemed_icon_get_icon (G_EMBLEMED_ICON (icon));
-      info = gtk_icon_theme_lookup_by_gicon (icon_theme, base, size, flags);
-      if (info)
+      base_info = gtk_icon_theme_lookup_by_gicon (icon_theme, base, size, flags);
+      if (base_info)
         {
+          info = icon_info_dup (base_info);
+          g_object_unref (base_info);
+
           list = g_emblemed_icon_get_emblems (G_EMBLEMED_ICON (icon));
           for (l = list; l; l = l->next)
             {
