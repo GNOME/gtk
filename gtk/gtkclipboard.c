@@ -614,28 +614,10 @@ gtk_clipboard_set_contents (GtkClipboard         *clipboard,
 	{
 	  clipboard_unset (clipboard);
 
-	  if (clipboard->get_func)
-	    {
-	      /* Calling unset() caused the clipboard contents to be reset!
-	       * Avoid leaking and return 
-	       */
-	      if (!(clipboard->have_owner && have_owner) ||
-		  clipboard->user_data != user_data)
-		{
-		  (*clear_func) (clipboard, user_data);
-		  return FALSE;
-		}
-	      else
-		return TRUE;
-	    }
-	  else
-	    {
-	      clipboard->user_data = user_data;
-	      clipboard->have_owner = have_owner;
-	      if (have_owner)
-		clipboard_add_owner_notify (clipboard);
-	    }
-	  
+	  clipboard->user_data = user_data;
+	  clipboard->have_owner = have_owner;
+	  if (have_owner)
+	      clipboard_add_owner_notify (clipboard);
  	}
 
       clipboard->get_func = get_func;
