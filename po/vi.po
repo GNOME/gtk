@@ -2,7 +2,7 @@
 # Copyright © 2010 GNOME i18n Project for Vietnamese.
 # Hoang Ngoc Tu <hntu@gmx.de>, 2000-2002.
 # Joern v. Kattchee <kattchee@cs.tu-berlin.de>, 2000-2002.
-# Nguyễn Thái Ngọc Duy <pclouds@gmail.com>, 2002-2004,2007-2009,2011-2012.
+# Nguyễn Thái Ngọc Duy <pclouds@gmail.com>, 2002-2004,2007-2009,2011-2013.
 # Clytie Siddall <clytie@riverland.net.au>, 2005-2010.
 #
 msgid ""
@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-01-19 19:42+0000\n"
-"PO-Revision-Date: 2013-03-02 09:49+0700\n"
+"PO-Revision-Date: 2013-03-02 10:03+0700\n"
 "Last-Translator: Nguyễn Thái Ngọc Duy <pclouds@gmail.com>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
 "Language: vi\n"
@@ -39,7 +39,7 @@ msgstr "Hạng chương trình như được dùng bởi bộ quản lý cửa s
 #. Placeholder in --class=CLASS in --help output
 #: ../gdk/gdk.c:204
 msgid "CLASS"
-msgstr "HẠNG"
+msgstr "LỚP"
 
 #. Description of --name=NAME in --help output
 #: ../gdk/gdk.c:206
@@ -94,7 +94,7 @@ msgstr "Các cờ gỡ lỗi GDK cần bỏ đặt"
 #: ../gdk/keyname-table.h:3952
 msgctxt "keyboard label"
 msgid "BackSpace"
-msgstr "BackSpace"
+msgstr "Xoá lùi"
 
 #: ../gdk/keyname-table.h:3953
 msgctxt "keyboard label"
@@ -311,17 +311,17 @@ msgstr "Phát"
 #: ../gdk/keyname-table.h:3997
 msgctxt "keyboard label"
 msgid "XF86AudioStop"
-msgstr "Dừng"
+msgstr "Dừng phát"
 
 #: ../gdk/keyname-table.h:3998
 msgctxt "keyboard label"
 msgid "XF86AudioNext"
-msgstr "Tới"
+msgstr "Tiếng tới"
 
 #: ../gdk/keyname-table.h:3999
 msgctxt "keyboard label"
 msgid "XF86AudioPrev"
-msgstr "Lùi"
+msgstr "Tiếng lùi"
 
 #: ../gdk/keyname-table.h:4000
 msgctxt "keyboard label"
@@ -681,7 +681,7 @@ msgstr "Không thể hiện liên kết"
 
 #: ../gtk/gtkaboutdialog.c:1017
 msgid "Website"
-msgstr ""
+msgstr "Trang Web"
 
 #: ../gtk/gtkaboutdialog.c:1071
 #, c-format
@@ -775,10 +775,8 @@ msgid "Backslash"
 msgstr "Gạch chéo ngược"
 
 #: ../gtk/gtkappchooserbutton.c:290
-#, fuzzy
-#| msgid "Other application..."
 msgid "Other application…"
-msgstr "Ứng dụng khác..."
+msgstr "Ứng dụng khác…"
 
 #: ../gtk/gtkappchooserdialog.c:137
 msgid "Failed to look for applications online"
@@ -1019,10 +1017,8 @@ msgstr "Không hợp lệ"
 #. * acelerator.
 #.
 #: ../gtk/gtkcellrendereraccel.c:416 ../gtk/gtkcellrendereraccel.c:747
-#, fuzzy
-#| msgid "New accelerator..."
 msgid "New accelerator…"
-msgstr "Phím tắt mới..."
+msgstr "Phím tắt mới…"
 
 #: ../gtk/gtkcellrendererprogress.c:372 ../gtk/gtkcellrendererprogress.c:462
 #, c-format
@@ -1323,10 +1319,8 @@ msgid "mm"
 msgstr "mm"
 
 #: ../gtk/gtkcustompaperunixdialog.c:605
-#, fuzzy
-#| msgid "Margins from Printer..."
 msgid "Margins from Printer…"
-msgstr "Lề từ máy in..."
+msgstr "Lề từ máy in…"
 
 #: ../gtk/gtkcustompaperunixdialog.c:771
 #, c-format
@@ -1347,7 +1341,7 @@ msgstr "Cỡ giấy"
 
 #: ../gtk/gtkcustompaperunixdialog.c:1140
 msgid "_Top:"
-msgstr "_Trên"
+msgstr "_Trên:"
 
 #: ../gtk/gtkcustompaperunixdialog.c:1151
 msgid "_Bottom:"
@@ -1367,7 +1361,7 @@ msgstr "Lề giấy"
 
 #: ../gtk/gtkentry.c:9127 ../gtk/gtktextview.c:8591
 msgid "Input _Methods"
-msgstr "Cách _gõ"
+msgstr "Kiểu _gõ"
 
 #: ../gtk/gtkentry.c:9141 ../gtk/gtktextview.c:8605
 msgid "_Insert Unicode Control Character"
@@ -1431,10 +1425,8 @@ msgid "(None)"
 msgstr "(Không có)"
 
 #: ../gtk/gtkfilechooserbutton.c:2046
-#, fuzzy
-#| msgid "Other..."
 msgid "Other…"
-msgstr "Khác..."
+msgstr "Khác…"
 
 #: ../gtk/gtkfilechooserdefault.c:152
 msgid "Type name of new folder"
@@ -1544,10 +1536,8 @@ msgid "Remove"
 msgstr "Gỡ bỏ"
 
 #: ../gtk/gtkfilechooserdefault.c:3389
-#, fuzzy
-#| msgid "_Rename"
 msgid "Rename…"
-msgstr "Đổ_i tên"
+msgstr "Đổi tên…"
 
 #. Accessible object name for the file chooser's shortcuts pane
 #: ../gtk/gtkfilechooserdefault.c:3553
@@ -1790,10 +1780,8 @@ msgid "Copy _Link Address"
 msgstr "Chép địa chỉ _liên kết"
 
 #: ../gtk/gtk-launch.c:71
-#, fuzzy
-#| msgid "APPLICATION [URI...] - launch an APPLICATION with URI."
 msgid "APPLICATION [URI…] — launch an APPLICATION with URI."
-msgstr "ỨNG-DỤNG [URI...] - chạy ứng dụng ỨNG-DỤNG với URI."
+msgstr "ỨNG-DỤNG [URI…] - chạy ứng dụng ỨNG-DỤNG với URI."
 
 #. Translators: this message will appear after the usage string
 #. and before the list of options.
@@ -1825,7 +1813,7 @@ msgstr "%s: thiếu tên ứng dụng"
 #: ../gtk/gtk-launch.c:121
 #, c-format
 msgid "Creating AppInfo from id not supported on non unix operating systems"
-msgstr ""
+msgstr "Tạo AppInfo từ id không được hỗ trợ trên hệ điều hành phi-unix"
 
 #. Translators: the first %s is the program name, the second one
 #. is the application name.
@@ -2056,10 +2044,8 @@ msgstr ""
 " Dưới: %s %s"
 
 #: ../gtk/gtkpagesetupunixdialog.c:845 ../gtk/gtkprintunixdialog.c:3329
-#, fuzzy
-#| msgid "Manage Custom Sizes"
 msgid "Manage Custom Sizes…"
-msgstr "Quản lý kích cỡ riêng"
+msgstr "Quản lý kích cỡ riêng…"
 
 #: ../gtk/gtkpagesetupunixdialog.c:896
 msgid "_Format for:"
@@ -2158,16 +2144,16 @@ msgstr "Kết thúc với lỗi"
 #: ../gtk/gtkprintoperation.c:2349
 #, c-format
 msgid "Preparing %d"
-msgstr "Đang chuẩn bị %d..."
+msgstr "Chuẩn bị %d"
 
 #: ../gtk/gtkprintoperation.c:2351 ../gtk/gtkprintoperation.c:2983
 msgid "Preparing"
-msgstr "Đang chuẩn bị..."
+msgstr "Chuẩn bị"
 
 #: ../gtk/gtkprintoperation.c:2354
 #, c-format
 msgid "Printing %d"
-msgstr "Đang in %d..."
+msgstr "In %d"
 
 #: ../gtk/gtkprintoperation.c:3013
 msgid "Error creating print preview"
@@ -2241,10 +2227,8 @@ msgid "Getting printer information failed"
 msgstr "Lỗi lấy thông tin máy in"
 
 #: ../gtk/gtkprintunixdialog.c:1916
-#, fuzzy
-#| msgid "Getting printer information..."
 msgid "Getting printer information…"
-msgstr "Đang lấy thông tin máy in..."
+msgstr "Đang lấy thông tin máy in…"
 
 #: ../gtk/gtkprintunixdialog.c:2184
 msgid "Printer"
@@ -2482,7 +2466,7 @@ msgstr "_Bây giờ"
 
 #: ../gtk/gtkprintunixdialog.c:3603
 msgid "A_t:"
-msgstr "_Tại:"
+msgstr "_Lúc:"
 
 #. Translators: Ability to parse the am/pm format depends on actual locale.
 #. * You can remove the am/pm values below for your locale if they are not
@@ -2551,7 +2535,7 @@ msgstr "Màu"
 #. It's a typographical term, as in "Binding and finishing"
 #: ../gtk/gtkprintunixdialog.c:3800
 msgid "Finishing"
-msgstr "Đang kết thúc"
+msgstr "Kết thúc"
 
 #: ../gtk/gtkprintunixdialog.c:3810
 msgid "Some of the settings in the dialog conflict"
@@ -2592,7 +2576,7 @@ msgstr "Gỡ bỏ _ra danh sách"
 
 #: ../gtk/gtkrecentchooserdefault.c:1796
 msgid "_Clear List"
-msgstr "_Xóa danh sách"
+msgstr "_Xóa trắng danh sách"
 
 #: ../gtk/gtkrecentchooserdefault.c:1810
 msgid "Show _Private Resources"
@@ -2716,7 +2700,7 @@ msgstr "_CD-ROM"
 #: ../gtk/gtkstock.c:338
 msgctxt "Stock label"
 msgid "_Clear"
-msgstr "_Xoá"
+msgstr "_Xoá trắng"
 
 #: ../gtk/gtkstock.c:339
 msgctxt "Stock label"
