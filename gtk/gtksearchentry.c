@@ -74,7 +74,7 @@ search_entry_changed_cb (GtkEntry *entry,
 
   if (str == NULL || *str == '\0')
     {
-      icon_name = "edit-find-symbolic";
+      icon_name = NULL;
       active = FALSE;
     }
   else
@@ -100,6 +100,12 @@ gtk_search_entry_init (GtkSearchEntry *entry)
                     G_CALLBACK (search_entry_changed_cb), NULL);
   g_signal_connect (entry, "icon-release",
                     G_CALLBACK (search_entry_clear_cb), NULL);
+
+  g_object_set (entry,
+                "primary-icon-name", "edit-find-symbolic",
+                "primary-icon-activatable", FALSE,
+                "primary-icon-sensitive", FALSE,
+                NULL);
 
   search_entry_changed_cb (GTK_ENTRY (entry), NULL);
 }
