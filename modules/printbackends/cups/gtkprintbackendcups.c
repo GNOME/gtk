@@ -2067,15 +2067,11 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
         }
 
       /* remove name from checklist if it was found */
-      if (removed_printer_checklist != NULL)
-      {
-	   if (node = g_list_find_custom (removed_printer_checklist,
-					  info->printer_name,
-					  (GCompareFunc) find_printer))
-		removed_printer_checklist =
-		     g_list_delete_link (removed_printer_checklist,
-					 node);
-      }
+      node = g_list_find_custom (removed_printer_checklist,
+				 info->printer_name,
+				 (GCompareFunc) find_printer);
+      removed_printer_checklist = g_list_delete_link (removed_printer_checklist,
+						      node);
 
       printer = gtk_print_backend_find_printer (backend, info->printer_name);
       if (!printer)
