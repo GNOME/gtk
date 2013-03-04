@@ -1,3 +1,17 @@
+Overview of Changes from GTK+ 2.24.16 to 2.24.17
+================================================
+
+* Bug fixes:
+ GtkFileChooserButton fixes:
+  - Don't emit file-set signal when the change is not the result
+    of a user action
+  - Don't ever use gtk_file_chooser_get_files
+  - Ensure internal consistency when clearing a model
+ 690247 multiple context in a immodule can't be selected
+ 692955 GtkIconCache fails to load non-builtin icons
+ 694742 Fix possible memory leak when GlobalAlloc() fails
+
+
 Overview of Changes from GTK+ 2.24.15 to 2.24.16
 ================================================
 
