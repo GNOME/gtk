@@ -4482,7 +4482,7 @@ msgstr "มีปัญหากับเครื่องพิมพ์ '%s'"
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2123
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "หยุดพัก ; ไม่รับงานพิมพ์"
 
 #. Translators: this is a printer status.

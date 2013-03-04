@@ -3943,7 +3943,7 @@ msgstr "Z drukarkaju \"%s\" uźnikła prablema."
 
 #. Translators: this is a printer status.
 #: modules/printbackends/cups/gtkprintbackendcups.c:1995
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "Prypyniena. Admaŭlaje zadańni"
 
 #. Translators: this is a printer status.

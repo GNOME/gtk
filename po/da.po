@@ -4547,7 +4547,7 @@ msgstr "Der er et problem på printeren \"%s\"."
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2123
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "På pause ; afviser job"
 
 #. Translators: this is a printer status.

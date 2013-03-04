@@ -4555,7 +4555,7 @@ msgstr "Há um problema na impressora \"%s\"."
 # Esse parece ser um status da impressora
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2123
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "Pausada ; Rejeitando trabalhos"
 
 #. Translators: this is a printer status.

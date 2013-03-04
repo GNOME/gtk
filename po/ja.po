@@ -4518,7 +4518,7 @@ msgstr "プリンター '%s' で問題が発生しました。"
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2123
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "一時停止中 (印刷ジョブを破棄しています)"
 
 #. Translators: this is a printer status.

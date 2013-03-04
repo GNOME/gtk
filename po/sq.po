@@ -4031,7 +4031,7 @@ msgstr "Ka një problem me printerin '%s'."
 
 #. Translators: this is a printer status.
 #: modules/printbackends/cups/gtkprintbackendcups.c:1995
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "Pezulluar ; Duke refuzuar punët"
 
 #. Translators: this is a printer status.

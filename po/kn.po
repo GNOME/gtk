@@ -4601,7 +4601,7 @@ msgstr "'%s' ಮುದ್ರಕಕ್ಕೆ ಒಂದು ತೊಂದರೆ ಎ�
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2123
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "ತಾತ್ಕಾಲಿಕ ಸ್ಥಗಿತ; ಕೆಲಸವು ತಿರಸ್ಕರಿಸಲ್ಪಟ್ಟಿದೆ"
 
 #. Translators: this is a printer status.

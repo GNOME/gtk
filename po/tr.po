@@ -4163,7 +4163,7 @@ msgstr "Yazıcı '%s' ile ilgli bir sorun var."
 
 #. Translators: this is a printer status.
 #: modules/printbackends/cups/gtkprintbackendcups.c:1995
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "Duraklatıldı ; İşler Reddediliyor"
 
 #. Translators: this is a printer status.

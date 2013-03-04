@@ -4698,7 +4698,7 @@ msgstr "'%s' bastırıcısınen bir mesele bar."
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2044
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "Tınışlandı ; İşler Red Etile"
 
 #. Translators: this is a printer status.

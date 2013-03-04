@@ -4517,7 +4517,7 @@ msgstr "ముద్రకం '%s' నందు ఒక సమస్యవుం�
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2123
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "నిలిపివేయబడింది ; కార్యములను తిరస్కరిస్తోంది"
 
 #. Translators: this is a printer status.

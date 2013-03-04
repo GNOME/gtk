@@ -10155,7 +10155,7 @@ msgstr ""
 #~ msgid "There is a problem on printer '%s'."
 #~ msgstr "« %s » wa kiniema ka yita sala ko."
 
-#~ msgid "Paused ; Rejecting Jobs"
+#~ msgid "Paused; Rejecting Jobs"
 #~ msgstr "diingamene ; mu sieenga bisalu"
 
 #~ msgid "Two Sided"

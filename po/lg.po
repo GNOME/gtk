@@ -4006,7 +4006,7 @@ msgstr "Pulinta '%s' eriko kiremya."
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1999
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "Eyimirizidwamu ; Tekkiriza mirimu"
 
 #. Translators: this is a printer status.

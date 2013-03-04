@@ -4174,7 +4174,7 @@ msgstr "Imprimanta „%s” are o problemă."
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1999
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "Oprit momentan. Se refuză sarcini de tipărire"
 
 #. Translators: this is a printer status.

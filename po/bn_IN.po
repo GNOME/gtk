@@ -4574,7 +4574,7 @@ msgstr "'%s' প্রিন্টারে কিছু সমস্যা দ�
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2123
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "স্থগিত ; কাজ প্রত্যাখ্যান করা হচ্ছে"
 
 #. Translators: this is a printer status.

@@ -4169,7 +4169,7 @@ msgstr "Daar is 'n probleem by drukker '%s'."
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1999
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "Wagtend ; weier tans take"
 
 #. Translators: this is a printer status.

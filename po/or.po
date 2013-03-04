@@ -4534,7 +4534,7 @@ msgstr "ମୂଦ୍ରଣୀ '%s'ରେ ଗୋଟିଏ ସମସ୍ୟା ଅ�
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2044
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "ବିରତି ; କାର୍ଯ୍ୟକୁ ଅସ୍ୱୀକାର କରୁଅଛି"
 
 #. Translators: this is a printer status.

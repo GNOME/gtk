@@ -4544,7 +4544,7 @@ msgstr "Tulostimella ”%s” on ongelma."
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2123
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "Pysäytetty; työt hylätään"
 
 #. Translators: this is a printer status.

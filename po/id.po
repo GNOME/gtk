@@ -4511,7 +4511,7 @@ msgstr "Ada masalah pada pencetak '%s'."
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2123
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "Jeda ; Menolak Tugas"
 
 #. Translators: this is a printer status.

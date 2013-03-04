@@ -3966,7 +3966,7 @@ msgstr "'%s' տպիչի հետ խնդիր կա։"
 
 #. Translators: this is a printer status.
 #: modules/printbackends/cups/gtkprintbackendcups.c:1995
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "Դադարեցված է․ Մերժված Աշխատանքներ"
 
 #. Translators: this is a printer status.

@@ -3915,7 +3915,7 @@ msgstr "ပုံနှိုပ်စက် '%s' ပေါ်မှာ ပြ�
 
 #. Translators: this is a printer status.
 #: modules/printbackends/cups/gtkprintbackendcups.c:1995
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "ခေတ္တရပ်နားထားတယ်၊ လုပ်ငန်းများကို ပယ်ချနေတယ်"
 
 #. Translators: this is a printer status.

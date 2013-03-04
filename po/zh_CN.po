@@ -4620,7 +4620,7 @@ msgstr "打印机“%s”可能有问题。"
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2123
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "暂停，拒绝任务"
 
 #. Translators: this is a printer status.

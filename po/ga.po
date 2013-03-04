@@ -3914,7 +3914,7 @@ msgstr "Tá fadhb ann le printéir '%s'."
 
 #. Translators: this is a printer status.
 #: modules/printbackends/cups/gtkprintbackendcups.c:1995
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "Ar Sos ; Jabanna á nDiúltú"
 
 #. Translators: this is a printer status.

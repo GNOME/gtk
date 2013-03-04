@@ -3620,7 +3620,7 @@ msgid "There is a problem on printer '%s'."
 msgstr "Printeriga '%s on probleem."
 
 #. Translators: this is a printer status.
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "Pausitud, printimistööde tagasilükkamine"
 
 #. Translators: this is a printer status.

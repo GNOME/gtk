@@ -5113,7 +5113,7 @@ msgstr "« %s » wa kiniema ka yita sala ko."
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1994
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "diingamene ; mu sieenga bisalu"
 
 #. Translators: this is a printer status.

@@ -4504,7 +4504,7 @@ msgstr "Ar printeri “%s” ir kāda problēma."
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2123
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "Pauzēts ; nepieņem darbus"
 
 #. Translators: this is a printer status.

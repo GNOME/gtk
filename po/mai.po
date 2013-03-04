@@ -3920,7 +3920,7 @@ msgstr "मुद्रक '%s' मे समस्या अछि."
 
 #. Translators: this is a printer status.
 #: modules/printbackends/cups/gtkprintbackendcups.c:1995
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "रूकल ; काज छोड़ि रहल अछि"
 
 #. Translators: this is a printer status.

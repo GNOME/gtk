@@ -4512,7 +4512,7 @@ msgstr "چاپگر «%s» مشکلی دارد."
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2123
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "مکث؛ در حال رد کردن کار‌ها"
 
 #. Translators: this is a printer status.

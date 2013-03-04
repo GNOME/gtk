@@ -4988,7 +4988,7 @@ msgstr "𐑞𐑺 𐑦𐑟 𐑩 𐑐𐑮𐑪𐑚𐑤𐑩𐑥 𐑪𐑯 𐑐𐑮�
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1994
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "𐑐𐑷𐑟𐑛 ; 𐑮𐑦𐑡𐑧𐑒𐑑𐑦𐑙 𐑡𐑪𐑚𐑟"
 
 #. Translators: this is a printer status.

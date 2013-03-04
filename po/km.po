@@ -4484,7 +4484,7 @@ msgstr "មាន​បញ្ហា​​​នៅ​លើ​ម៉ាស៊ី
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2123
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "បាន​ផ្អាក ច្រានចោល​ការងារ"
 
 #. Translators: this is a printer status.

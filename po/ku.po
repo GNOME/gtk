@@ -3928,7 +3928,7 @@ msgstr "Di çapera '%s' de pirsgirêk heye."
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1995
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "Sekinî ; Peywiran napejirîne"
 
 #. Translators: this is a printer status.

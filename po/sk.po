@@ -4546,7 +4546,7 @@ msgstr "Na tlačiarni „%s“ sa vyskytol problém."
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2123
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "Pozastavená, odmieta úlohy"
 
 #. Translators: this is a printer status.

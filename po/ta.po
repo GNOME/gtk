@@ -4518,7 +4518,7 @@ msgstr "அச்சடிப்பியில் ஒரு பிழை இர
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2123
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "நிறுதப்பட்டது ; வேலைகளை ஏற்க மறுக்கிறது"
 
 #. Translators: this is a printer status.

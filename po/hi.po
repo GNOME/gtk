@@ -4569,7 +4569,7 @@ msgstr "मुद्रक '%s' में समस्या है."
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2123
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "रूका हुआ ; कार्य छोड़ रहा है"
 
 #. Translators: this is a printer status.

@@ -4511,7 +4511,7 @@ msgstr "छपाईयंत्र '%s' वरील अडचण."
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2123
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "स्तब्ध ; कार्य नकारत आहे"
 
 #. Translators: this is a printer status.

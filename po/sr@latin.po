@@ -4526,7 +4526,7 @@ msgstr "Došlo je do problema na štampaču „%s“."
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2123
-msgid "Paused ; Rejecting Jobs"
+msgid "Paused; Rejecting Jobs"
 msgstr "Zaustavljen ; Odbija poslove"
 
 #. Translators: this is a printer status.

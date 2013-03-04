@@ -2226,7 +2226,7 @@ set_info_state_message (PrinterSetupInfo *info)
       gchar *tmp_msg2 = NULL;
       if (info->is_paused && !info->is_accepting_jobs)
         /* Translators: this is a printer status. */
-        tmp_msg2 = g_strdup ( N_("Paused ; Rejecting Jobs"));
+        tmp_msg2 = g_strdup ( N_("Paused; Rejecting Jobs"));
       if (info->is_paused && info->is_accepting_jobs)
         /* Translators: this is a printer status. */
         tmp_msg2 = g_strdup ( N_("Paused"));
@@ -2273,7 +2273,7 @@ set_info_state_message (PrinterSetupInfo *info)
           else
             {
               gchar *tmp_msg = NULL;
-              tmp_msg = g_strjoin (" ; ", info->state_msg,
+              tmp_msg = g_strjoin ("; ", info->state_msg,
                                    reason_msg_desc, NULL);
               g_free (info->state_msg);
               info->state_msg = tmp_msg;
