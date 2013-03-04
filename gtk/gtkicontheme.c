@@ -3027,6 +3027,8 @@ icon_info_dup (GtkIconInfo *icon_info)
     dup->icon_file = g_object_ref (icon_info->icon_file);
   if (icon_info->loadable)
     dup->loadable = g_object_ref (icon_info->loadable);
+  if (icon_info->pixbuf)
+    dup->pixbuf = g_object_ref (icon_info->pixbuf);
 
   for (l = icon_info->emblem_infos; l != NULL; l = l->next)
     {
@@ -4906,9 +4908,11 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *icon_theme,
               if (emblem_info)
                 info->emblem_infos = g_slist_prepend (info->emblem_infos, emblem_info);
             }
-        }
 
-      return info;
+          return info;
+        }
+      else
+        return NULL;
     }
   else if (GDK_IS_PIXBUF (icon))
     {
