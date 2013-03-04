@@ -198,6 +198,9 @@ gtk_bin_get_preferred_width (GtkWidget *widget,
   GtkBinPrivate *priv = bin->priv;
   gint border_width;
 
+  *minimum_width = 0;
+  *natural_width = 0;
+
   if (priv->child && gtk_widget_get_visible (priv->child))
     {
       gint child_min, child_nat;
@@ -220,6 +223,9 @@ gtk_bin_get_preferred_height (GtkWidget *widget,
   GtkBin *bin = GTK_BIN (widget);
   GtkBinPrivate *priv = bin->priv;
   gint border_width;
+
+  *minimum_height = 0;
+  *natural_height = 0;
 
   if (priv->child && gtk_widget_get_visible (priv->child))
     {
@@ -244,6 +250,9 @@ gtk_bin_get_preferred_width_for_height (GtkWidget *widget,
   GtkBin *bin = GTK_BIN (widget);
   GtkBinPrivate *priv = bin->priv;
   gint border_width;
+
+  *minimum_width = 0;
+  *natural_width = 0;
 
   border_width = gtk_bin_get_effective_border_width (bin);
 
@@ -270,6 +279,9 @@ gtk_bin_get_preferred_height_for_width  (GtkWidget *widget,
   GtkBin *bin = GTK_BIN (widget);
   GtkBinPrivate *priv = bin->priv;
   gint border_width;
+
+  *minimum_height = 0;
+  *natural_height = 0;
 
   border_width = gtk_bin_get_effective_border_width (bin);
 
