@@ -266,7 +266,7 @@ typedef enum
 /**
  * GtkMessageType:
  * @GTK_MESSAGE_INFO: Informational message
- * @GTK_MESSAGE_WARNING: Nonfatal warning message
+ * @GTK_MESSAGE_WARNING: Non-fatal warning message
  * @GTK_MESSAGE_QUESTION: Question requiring a choice
  * @GTK_MESSAGE_ERROR: Fatal error message
  * @GTK_MESSAGE_OTHER: None of the above, doesn't get an icon
@@ -674,7 +674,7 @@ typedef enum
  * @GTK_PACK_DIRECTION_TTB: Widgets are packed top-to-bottom
  * @GTK_PACK_DIRECTION_BTT: Widgets are packed bottom-to-top
  *
- * Determines how widgets should be packed insided menubars
+ * Determines how widgets should be packed inside menubars
  * and menuitems contained in menubars.
  */
 typedef enum
@@ -823,7 +823,7 @@ typedef enum {
  * GtkSizeRequestMode:
  * @GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH: Prefer height-for-width geometry management
  * @GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT: Prefer width-for-height geometry management
- * @GTK_SIZE_REQUEST_CONSTANT_SIZE: Dont trade height-for-width or width-for-height
+ * @GTK_SIZE_REQUEST_CONSTANT_SIZE: Don't trade height-for-width or width-for-height
  * 
  * Specifies a preference for height-for-width or
  * width-for-height geometry management.
@@ -935,7 +935,7 @@ typedef enum {
  * @GTK_BORDER_STYLE_HIDDEN: Same as @GTK_BORDER_STYLE_NONE
  * @GTK_BORDER_STYLE_DOTTED: A series of round dots
  * @GTK_BORDER_STYLE_DASHED: A series of square-ended dashes
- * @GTK_BORDER_STYLE_DOUBLE: Two parrallel lines with some space between them
+ * @GTK_BORDER_STYLE_DOUBLE: Two parallel lines with some space between them
  * @GTK_BORDER_STYLE_GROOVE: Looks as if it were carved in the canvas
  * @GTK_BORDER_STYLE_RIDGE: Looks as if it were coming out of the canvas
  *
