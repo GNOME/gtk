@@ -87,6 +87,20 @@ static GtkCupsRequestStateFunc get_states[] = {
 #define ippSetState(ipp_request, ipp_state) ipp_request->state = ipp_state
 #define ippGetString(attr, index, foo) attr->values[index].string.text
 #define ippGetCount(attr) attr->num_values
+
+int
+ippSetVersion (ipp_t *ipp,
+               int    major,
+               int    minor)
+{
+  if (!ipp || major < 0 || minor < 0)
+    return 0;
+
+  ipp->request.any.version[0] = major;
+  ipp->request.any.version[1] = minor;
+
+  return 1;
+}
 #endif
 
 static void
@@ -656,6 +670,13 @@ gtk_cups_request_encode_option (GtkCupsRequest *request,
     }
 }
 				
+void
+gtk_cups_request_set_ipp_version (GtkCupsRequest     *request,
+				  gint                major,
+				  gint                minor)
+{
+  ippSetVersion (request->ipp_request, major, minor);
+}
 
 static void
 _connect (GtkCupsRequest *request)
