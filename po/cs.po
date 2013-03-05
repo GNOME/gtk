@@ -1808,7 +1808,7 @@ msgstr "Chyba při analýze voleb příkazové řádky: %s\n"
 #: ../gtk/gtk-launch.c:89 ../gtk/gtk-launch.c:102
 #, c-format
 msgid "Try \"%s --help\" for more information."
-msgstr "Více informací viz \"%s --help\"."
+msgstr "Více informací viz „%s --help“."
 
 #. Translators: the %s is the program name. This error message
 #. means the user is calling gtk-launch without any argument.
