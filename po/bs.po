@@ -2376,7 +2376,6 @@ msgstr "_Vrh"
 
 #. This is a navigation label as in "go back"
 #: gtk/gtkstock.c:353
-#, fuzzy
 msgctxt "Stock label, navigation"
 msgid "_Back"
 msgstr "_Nazad"
@@ -2631,7 +2630,6 @@ msgid "_Properties"
 msgstr "_Osobine"
 
 #: gtk/gtkstock.c:413
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Quit"
 msgstr "_Izađi"
