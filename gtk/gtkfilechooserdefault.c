@@ -1854,7 +1854,7 @@ shortcuts_append_bookmarks (GtkFileChooserDefault *impl,
 
       file = bookmarks->data;
 
-      if (impl->local_only && _gtk_file_is_path_not_local (file))
+      if (impl->local_only && !_gtk_file_has_native_path (file))
 	continue;
 
       if (shortcut_find_position (impl, file) != -1)
@@ -1976,16 +1976,16 @@ shortcuts_add_volumes (GtkFileChooserDefault *impl)
 	  if (_gtk_file_system_volume_is_mounted (volume))
 	    {
 	      GFile *base_file;
-              gboolean base_is_not_local = FALSE;
+              gboolean base_has_native_path = FALSE;
 
 	      base_file = _gtk_file_system_volume_get_root (volume);
               if (base_file != NULL)
                 {
-                  base_is_not_local = _gtk_file_is_path_not_local (base_file);
+                  base_has_native_path = _gtk_file_has_native_path (base_file);
                   g_object_unref (base_file);
                 }
 
-              if (base_is_not_local)
+              if (!base_has_native_path)
                 continue;
 	    }
 	}
@@ -7338,7 +7338,7 @@ gtk_file_chooser_default_update_current_folder (GtkFileChooser    *chooser,
 
   operation_mode_set (impl, OPERATION_MODE_BROWSE);
 
-  if (impl->local_only && _gtk_file_is_path_not_local (file))
+  if (impl->local_only && !_gtk_file_has_native_path (file))
     {
       g_set_error_literal (error,
                            GTK_FILE_CHOOSER_ERROR,
