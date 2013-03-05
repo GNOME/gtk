@@ -35,6 +35,7 @@
 G_BEGIN_DECLS
 
 #define SETTINGS_KEY_LOCATION_MODE       "location-mode"
+#define SETTINGS_KEY_CLICK_POLICY        "click-policy"
 #define SETTINGS_KEY_SHOW_HIDDEN         "show-hidden"
 #define SETTINGS_KEY_SHOW_SIZE_COLUMN    "show-size-column"
 #define SETTINGS_KEY_SORT_COLUMN         "sort-column"
@@ -289,6 +290,7 @@ struct _GtkFileChooserDefault
   guint use_preview_label : 1;
   guint select_multiple : 1;
   guint show_hidden : 1;
+  guint single_click_activate : 1;
   guint do_overwrite_confirmation : 1;
   guint list_sort_ascending : 1;
   guint changing_folder : 1;
@@ -299,6 +301,7 @@ struct _GtkFileChooserDefault
   guint has_recent: 1;
   guint show_size_column : 1;
   guint create_folders : 1;
+  guint has_busy_cursor : 1;
 
 #if 0
   guint shortcuts_drag_outside : 1;

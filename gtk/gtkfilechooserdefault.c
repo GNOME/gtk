@@ -195,6 +195,12 @@ typedef enum {
   SHORTCUT_TYPE_RECENT
 } ShortcutType;
 
+enum
+{
+  CLICK_POLICY_SINGLE,
+  CLICK_POLICY_DOUBLE
+};
+
 #define MODEL_ATTRIBUTES "standard::name,standard::type,standard::display-name," \
                          "standard::is-hidden,standard::is-backup,standard::size," \
                          "standard::content-type,time::modified"
@@ -732,6 +738,7 @@ _gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
   impl->sort_order = GTK_SORT_ASCENDING;
   impl->recent_manager = gtk_recent_manager_get_default ();
   impl->create_folders = TRUE;
+  impl->single_click_activate = FALSE;
 
   gtk_orientable_set_orientation (GTK_ORIENTABLE (impl),
                                   GTK_ORIENTATION_VERTICAL);
@@ -4320,6 +4327,43 @@ list_button_press_event_cb (GtkWidget             *widget,
   return TRUE;
 }
 
+/* When single-click is enabled, display a hand when cursor
+ * is above a file */
+static gboolean
+list_motion_cb (GtkWidget *widget,
+                GdkEventMotion *event,
+                GtkFileChooserDefault *impl)
+{
+  static GdkCursor *hand_cursor = NULL;
+  GdkDisplay *current_display;
+
+  if (!impl->single_click_activate || impl->has_busy_cursor)
+    return FALSE;
+
+  current_display = gtk_widget_get_display (widget);
+  g_assert (current_display != NULL);
+
+  if (hand_cursor != NULL &&
+      gdk_cursor_get_display (hand_cursor) != current_display)
+  {
+    g_object_unref (hand_cursor);
+    hand_cursor = NULL;
+  }
+
+  if (hand_cursor == NULL)
+    hand_cursor = gdk_cursor_new_for_display (current_display,
+                                              GDK_HAND2);
+
+  if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (widget),
+                                     event->x, event->y,
+                                     NULL, NULL, NULL, NULL))
+    gdk_window_set_cursor (gtk_widget_get_window (widget), hand_cursor);
+  else
+    gdk_window_set_cursor (gtk_widget_get_window (widget), NULL);
+
+  return FALSE;
+}
+
 typedef struct {
   OperationMode operation_mode;
   gint general_column;
@@ -4438,6 +4482,8 @@ create_file_list (GtkFileChooserDefault *impl)
 		    G_CALLBACK (list_popup_menu_cb), impl);
   g_signal_connect (impl->browse_files_tree_view, "button-press-event",
 		    G_CALLBACK (list_button_press_event_cb), impl);
+  g_signal_connect (impl->browse_files_tree_view, "motion_notify_event",
+                    G_CALLBACK (list_motion_cb), impl);
 
   g_signal_connect (impl->browse_files_tree_view, "drag-data-received",
                     G_CALLBACK (file_list_drag_data_received_cb), impl);
@@ -6016,6 +6062,7 @@ settings_load (GtkFileChooserDefault *impl)
   LocationMode location_mode;
   gboolean show_hidden;
   gboolean show_size_column;
+  int click_policy
   gint sort_column;
   GtkSortType sort_order;
   gint sidebar_width;
@@ -6024,6 +6071,7 @@ settings_load (GtkFileChooserDefault *impl)
   settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (impl));
 
   location_mode = g_settings_get_enum (settings, SETTINGS_KEY_LOCATION_MODE);
+  click_policy = g_settings_get_enum (impl->settings, SETTINGS_KEY_CLICK_POLICY);
   show_hidden = g_settings_get_boolean (settings, SETTINGS_KEY_SHOW_HIDDEN);
   show_size_column = g_settings_get_boolean (settings, SETTINGS_KEY_SHOW_SIZE_COLUMN);
   sort_column = g_settings_get_enum (settings, SETTINGS_KEY_SORT_COLUMN);
@@ -6033,6 +6081,10 @@ settings_load (GtkFileChooserDefault *impl)
   location_mode_set (impl, location_mode, TRUE);
 
   gtk_file_chooser_set_show_hidden (GTK_FILE_CHOOSER (impl), show_hidden);
+
+  impl->single_click_activate = click_policy == CLICK_POLICY_SINGLE;
+  _gtk_tree_view_set_single_click_activate (GTK_TREE_VIEW (impl->browse_files_tree_view), 
+                                            impl->single_click_activate);
 
   impl->show_size_column = show_size_column;
   gtk_tree_view_column_set_visible (impl->list_size_column, show_size_column);
@@ -6258,6 +6310,8 @@ set_busy_cursor (GtkFileChooserDefault *impl,
 
   if (cursor)
     g_object_unref (cursor);
+
+  impl->has_busy_cursor = busy;
 }
 
 /* Creates a sort model to wrap the file system model and sets it on the tree view */
