@@ -519,6 +519,12 @@ static void               gtk_label_get_preferred_height_for_width  (GtkWidget  
                                                                      gint                 width,
                                                                      gint                *minimum_height,
                                                                      gint                *natural_height);
+static void    gtk_label_get_preferred_height_and_baseline_for_width (GtkWidget          *widget,
+								      gint                width,
+								      gint               *minimum_height,
+								      gint               *natural_height,
+								      gint               *minimum_baseline,
+								      gint               *natural_baseline);
 
 static GtkBuildableIface *buildable_parent_iface = NULL;
 
@@ -585,6 +591,7 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->get_preferred_height = gtk_label_get_preferred_height;
   widget_class->get_preferred_width_for_height = gtk_label_get_preferred_width_for_height;
   widget_class->get_preferred_height_for_width = gtk_label_get_preferred_height_for_width;
+  widget_class->get_preferred_height_and_baseline_for_width = gtk_label_get_preferred_height_and_baseline_for_width;
 
   class->move_cursor = gtk_label_move_cursor;
   class->copy_clipboard = gtk_label_copy_clipboard;
@@ -3462,15 +3469,18 @@ gtk_label_get_request_mode (GtkWidget *widget)
     return GTK_SIZE_REQUEST_CONSTANT_SIZE;
 }
 
+
 static void
 get_size_for_allocation (GtkLabel        *label,
                          GtkOrientation   orientation,
                          gint             allocation,
                          gint            *minimum_size,
-                         gint            *natural_size)
+                         gint            *natural_size,
+			 gint            *minimum_baseline,
+                         gint            *natural_baseline)
 {
   PangoLayout *layout;
-  gint text_height;
+  gint text_height, baseline;
 
   layout = gtk_label_get_measuring_layout (label, NULL, allocation * PANGO_SCALE);
 
@@ -3481,6 +3491,16 @@ get_size_for_allocation (GtkLabel        *label,
 
   if (natural_size)
     *natural_size = text_height;
+
+  if (minimum_baseline || natural_baseline)
+    {
+      baseline = pango_layout_get_baseline (layout) / PANGO_SCALE;
+      if (minimum_baseline)
+	*minimum_baseline = baseline;
+
+      if (natural_baseline)
+	*natural_baseline = baseline;
+    }
 
   g_object_unref (layout);
 }
@@ -3578,13 +3598,21 @@ static void
 gtk_label_get_preferred_size (GtkWidget      *widget,
                               GtkOrientation  orientation,
                               gint           *minimum_size,
-                              gint           *natural_size)
+                              gint           *natural_size,
+			      gint           *minimum_baseline,
+			      gint           *natural_baseline)
 {
   GtkLabel      *label = GTK_LABEL (widget);
   GtkLabelPrivate  *priv = label->priv;
   PangoRectangle widest_rect;
   PangoRectangle smallest_rect;
   GtkBorder border;
+
+  if (minimum_baseline)
+    *minimum_baseline = -1;
+
+  if (natural_baseline)
+    *natural_baseline = -1;
 
   gtk_label_get_preferred_layout_size (label, &smallest_rect, &widest_rect);
 
@@ -3640,7 +3668,8 @@ gtk_label_get_preferred_size (GtkWidget      *widget,
           get_size_for_allocation (label,
                                    GTK_ORIENTATION_VERTICAL,
                                    smallest_rect.height,
-                                   minimum_size, natural_size);
+                                   minimum_size, natural_size,
+				   NULL, NULL);
 
         }
       else
@@ -3667,7 +3696,16 @@ gtk_label_get_preferred_size (GtkWidget      *widget,
           get_size_for_allocation (label,
                                    GTK_ORIENTATION_HORIZONTAL,
                                    widest_rect.width,
-                                   minimum_size, natural_size);
+                                   minimum_size, natural_size,
+				   minimum_baseline, natural_baseline);
+
+	  if (priv->angle == 180)
+	    {
+	      if (minimum_baseline)
+		*minimum_baseline = *minimum_size - *minimum_baseline;
+	      if (natural_baseline)
+		*natural_baseline = *natural_size - *natural_baseline;
+	    }
         }
       else
         {
@@ -3680,6 +3718,12 @@ gtk_label_get_preferred_size (GtkWidget      *widget,
 
       *minimum_size += border.top + border.bottom;
       *natural_size += border.top + border.bottom;
+
+      if (minimum_baseline && *minimum_baseline != -1)
+	*minimum_baseline += border.top;
+
+      if (natural_baseline && *natural_baseline != -1)
+	*natural_baseline += border.top;
     }
 }
 
@@ -3688,7 +3732,7 @@ gtk_label_get_preferred_width (GtkWidget *widget,
                                gint      *minimum_size,
                                gint      *natural_size)
 {
-  gtk_label_get_preferred_size (widget, GTK_ORIENTATION_HORIZONTAL, minimum_size, natural_size);
+  gtk_label_get_preferred_size (widget, GTK_ORIENTATION_HORIZONTAL, minimum_size, natural_size, NULL, NULL);
 }
 
 static void
@@ -3696,7 +3740,7 @@ gtk_label_get_preferred_height (GtkWidget *widget,
                                 gint      *minimum_size,
                                 gint      *natural_size)
 {
-  gtk_label_get_preferred_size (widget, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
+  gtk_label_get_preferred_size (widget, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size, NULL, NULL);
 }
 
 static void
@@ -3719,7 +3763,8 @@ gtk_label_get_preferred_width_for_height (GtkWidget *widget,
 
       get_size_for_allocation (label, GTK_ORIENTATION_VERTICAL,
                                MAX (1, height - border.top - border.bottom),
-                               minimum_width, natural_width);
+                               minimum_width, natural_width,
+			       NULL, NULL);
 
       if (minimum_width)
         *minimum_width += border.right + border.left;
@@ -3732,15 +3777,17 @@ gtk_label_get_preferred_width_for_height (GtkWidget *widget,
 }
 
 static void
-gtk_label_get_preferred_height_for_width (GtkWidget *widget,
-                                          gint       width,
-                                          gint      *minimum_height,
-                                          gint      *natural_height)
+gtk_label_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
+						       gint       width,
+						       gint      *minimum_height,
+						       gint      *natural_height,
+						       gint      *minimum_baseline,
+						       gint      *natural_baseline)
 {
   GtkLabel *label = GTK_LABEL (widget);
   GtkLabelPrivate *priv = label->priv;
 
-  if (priv->wrap && (priv->angle == 0 || priv->angle == 180 || priv->angle == 360))
+  if (width != -1 && priv->wrap && (priv->angle == 0 || priv->angle == 180 || priv->angle == 360))
     {
       GtkBorder border;
 
@@ -3751,7 +3798,13 @@ gtk_label_get_preferred_height_for_width (GtkWidget *widget,
 
       get_size_for_allocation (label, GTK_ORIENTATION_HORIZONTAL,
                                MAX (1, width - border.left - border.right),
-                               minimum_height, natural_height);
+                               minimum_height, natural_height,
+			       minimum_baseline, natural_baseline);
+
+      if (minimum_baseline && *minimum_baseline >= 0)
+	*minimum_baseline += border.top;
+      if (natural_baseline && *natural_baseline >= 0)
+	*natural_baseline += border.top;
 
       if (minimum_height)
         *minimum_height += border.top + border.bottom;
@@ -3760,7 +3813,18 @@ gtk_label_get_preferred_height_for_width (GtkWidget *widget,
         *natural_height += border.top + border.bottom;
     }
   else
-    GTK_WIDGET_GET_CLASS (widget)->get_preferred_height (widget, minimum_height, natural_height);
+    gtk_label_get_preferred_size (widget, GTK_ORIENTATION_VERTICAL, minimum_height, natural_height, minimum_baseline, natural_baseline);
+}
+
+static void
+gtk_label_get_preferred_height_for_width (GtkWidget *widget,
+                                          gint       width,
+                                          gint      *minimum_height,
+                                          gint      *natural_height)
+{
+  return gtk_label_get_preferred_height_and_baseline_for_width (widget, width,
+								minimum_height, natural_height,
+								NULL, NULL);
 }
 
 static void
@@ -3855,6 +3919,7 @@ get_layout_location (GtkLabel  *label,
   gint req_height;
   gfloat xalign, yalign;
   PangoRectangle logical;
+  gint baseline, layout_baseline, baseline_offset;
 
   misc   = GTK_MISC (label);
   widget = GTK_WIDGET (label);
@@ -3887,6 +3952,15 @@ get_layout_location (GtkLabel  *label,
 
   x = floor (allocation.x + border.left + xalign * (allocation.width - req_width) - logical.x);
 
+  baseline_offset = 0;
+  baseline = gtk_widget_get_allocated_baseline (widget);
+  if (baseline >= 0 && !priv->have_transform)
+    {
+      layout_baseline = pango_layout_get_baseline (priv->layout) / PANGO_SCALE;
+      baseline_offset = baseline - layout_baseline;
+      yalign = 0.0; /* Can't support yalign while baseline aligning */
+    }
+
   /* bgo#315462 - For single-line labels, *do* align the requisition with
    * respect to the allocation, even if we are under-allocated.  For multi-line
    * labels, always show the top of the text when they are under-allocated.  The
@@ -3901,9 +3975,9 @@ get_layout_location (GtkLabel  *label,
    *   middle".  You want to read the first line, at least, to get some context.
    */
   if (pango_layout_get_line_count (priv->layout) == 1)
-    y = floor (allocation.y + border.top + (allocation.height - req_height) * yalign) - logical.y;
+    y = floor (allocation.y + border.top + (allocation.height - req_height) * yalign) - logical.y + baseline_offset;
   else
-    y = floor (allocation.y + border.top + MAX ((allocation.height - req_height) * yalign, 0)) - logical.y;
+    y = floor (allocation.y + border.top + MAX ((allocation.height - req_height) * yalign, 0)) - logical.y + baseline_offset;
 
   if (xp)
     *xp = x;
