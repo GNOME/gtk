@@ -1931,7 +1931,7 @@ model_add_volumes (GtkFileChooserButton *button,
               base_file = _gtk_file_system_volume_get_root (volume);
               if (base_file != NULL)
                 {
-                  if (!g_file_is_native (base_file))
+                  if (!_gtk_file_has_native_path (base_file))
                     {
                       g_object_unref (base_file);
                       continue;
@@ -1991,7 +1991,7 @@ model_add_bookmarks (GtkFileChooserButton *button,
 
       file = l->data;
 
-      if (g_file_is_native (file))
+      if (_gtk_file_has_native_path (file))
 	{
 	  gtk_list_store_insert (store, &iter, pos);
 	  gtk_list_store_set (store, &iter,
@@ -2213,7 +2213,7 @@ test_if_file_is_visible (GtkFileSystem *fs,
   if (!file)
     return FALSE;
 
-  if (local_only && !g_file_is_native (file))
+  if (local_only && !_gtk_file_has_native_path (file))
     return FALSE;
 
   if (!is_folder)
@@ -2266,7 +2266,7 @@ filter_model_visible_func (GtkTreeModel *model,
 
 		if (base_file)
 		  {
-		    if (!g_file_is_native (base_file))
+		    if (!_gtk_file_has_native_path (base_file))
 		      retval = FALSE;
                     g_object_unref (base_file);
 		  }
@@ -2786,7 +2786,7 @@ dialog_notify_cb (GObject    *dialog,
 
 	  /* If the path isn't local but we're in local-only mode now, remove
 	   * the custom-folder row */
-	  if (data && g_file_is_native (G_FILE (data)) &&
+	  if (data && !_gtk_file_has_native_path (G_FILE (data)) &&
 	      gtk_file_chooser_get_local_only (GTK_FILE_CHOOSER (priv->dialog)))
 	    {
 	      pos--;
