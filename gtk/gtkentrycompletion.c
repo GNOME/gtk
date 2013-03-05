@@ -1929,12 +1929,6 @@ gtk_entry_completion_set_inline_completion (GtkEntryCompletion *completion,
     {
       completion->priv->inline_completion = inline_completion;
 
-      if (completion->priv->entry)
-        {
-          disconnect_completion_signals (completion);
-          connect_completion_signals (completion);
-        }
-
       g_object_notify (G_OBJECT (completion), "inline-completion");
     }
 }
@@ -1978,12 +1972,6 @@ gtk_entry_completion_set_popup_completion (GtkEntryCompletion *completion,
   if (completion->priv->popup_completion != popup_completion)
     {
       completion->priv->popup_completion = popup_completion;
-
-      if (completion->priv->entry)
-        {
-          disconnect_completion_signals (completion);
-          connect_completion_signals (completion);
-        }
 
       g_object_notify (G_OBJECT (completion), "popup-completion");
     }
@@ -2217,6 +2205,9 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
 {
   gint matches, actions = 0;
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (user_data);
+
+  if (!completion->priv->popup_completion)
+    return FALSE;
 
   if (event->keyval == GDK_KEY_Return ||
       event->keyval == GDK_KEY_KP_Enter ||
@@ -2500,6 +2491,9 @@ gtk_entry_completion_changed (GtkWidget *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   GdkDevice *device;
 
+  if (!completion->priv->popup_completion)
+    return;
+
   /* (re)install completion timeout */
   if (completion->priv->completion_timeout)
     g_source_remove (completion->priv->completion_timeout);
@@ -2545,19 +2539,23 @@ static void
 clear_completion_callback (GtkEntry   *entry,
                            GParamSpec *pspec)
 {
+  GtkEntryCompletion *completion = gtk_entry_get_completion (entry);
+      
+  if (!completion->priv->inline_completion)
+    return;
+
   if (pspec->name == I_("cursor-position") ||
       pspec->name == I_("selection-bound"))
-    {
-      GtkEntryCompletion *completion = gtk_entry_get_completion (entry);
-      
-      completion->priv->has_completion = FALSE;
-    }
+    completion->priv->has_completion = FALSE;
 }
 
 static gboolean
 accept_completion_callback (GtkEntry *entry)
 {
   GtkEntryCompletion *completion = gtk_entry_get_completion (entry);
+
+  if (!completion->priv->inline_completion)
+    return FALSE;
 
   if (completion->priv->has_completion)
     gtk_editable_set_position (GTK_EDITABLE (entry),
@@ -2573,6 +2571,9 @@ completion_insert_text_callback (GtkEntry           *entry,
                                  gint                position,
                                  GtkEntryCompletion *completion)
 {
+  if (!completion->priv->inline_completion)
+    return;
+
   /* idle to update the selection based on the file list */
   if (completion->priv->check_completion_idle == NULL)
     {
@@ -2588,27 +2589,21 @@ completion_insert_text_callback (GtkEntry           *entry,
 static void
 connect_completion_signals (GtkEntryCompletion *completion)
 {
-  if (completion->priv->popup_completion)
-    {
-      completion->priv->changed_id =
-        g_signal_connect (completion->priv->entry, "changed",
-                          G_CALLBACK (gtk_entry_completion_changed), completion);
-      g_signal_connect (completion->priv->entry, "key-press-event",
-                        G_CALLBACK (gtk_entry_completion_key_press), completion);
-    }
+  completion->priv->changed_id =
+    g_signal_connect (completion->priv->entry, "changed",
+                      G_CALLBACK (gtk_entry_completion_changed), completion);
+  g_signal_connect (completion->priv->entry, "key-press-event",
+                    G_CALLBACK (gtk_entry_completion_key_press), completion);
 
-  if (completion->priv->inline_completion)
-    {
-      completion->priv->insert_text_id =
-        g_signal_connect (completion->priv->entry, "insert-text",
-                          G_CALLBACK (completion_insert_text_callback), completion);
-      g_signal_connect (completion->priv->entry, "notify",
-                        G_CALLBACK (clear_completion_callback), completion);
-      g_signal_connect (completion->priv->entry, "activate",
-                        G_CALLBACK (accept_completion_callback), completion);
-      g_signal_connect (completion->priv->entry, "focus-out-event",
-                        G_CALLBACK (accept_completion_callback), completion);
-    }
+    completion->priv->insert_text_id =
+      g_signal_connect (completion->priv->entry, "insert-text",
+                        G_CALLBACK (completion_insert_text_callback), completion);
+    g_signal_connect (completion->priv->entry, "notify",
+                      G_CALLBACK (clear_completion_callback), completion);
+    g_signal_connect (completion->priv->entry, "activate",
+                      G_CALLBACK (accept_completion_callback), completion);
+    g_signal_connect (completion->priv->entry, "focus-out-event",
+                      G_CALLBACK (accept_completion_callback), completion);
 }
 
 static void
