@@ -89,6 +89,9 @@ gboolean    gtk_box_get_homogeneous     (GtkBox         *box);
 void        gtk_box_set_spacing         (GtkBox         *box,
                                          gint            spacing);
 gint        gtk_box_get_spacing         (GtkBox         *box);
+void        gtk_box_set_baseline_position (GtkBox             *box,
+					   GtkBaselinePosition position);
+GtkBaselinePosition gtk_box_get_baseline_position (GtkBox         *box);
 
 void        gtk_box_reorder_child       (GtkBox         *box,
                                          GtkWidget      *child,
