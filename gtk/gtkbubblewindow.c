@@ -94,6 +94,9 @@ _gtk_bubble_window_init (GtkBubbleWindow *window)
 
   if (visual)
     gtk_widget_set_visual (widget, visual);
+
+  gtk_style_context_add_class (gtk_widget_get_style_context (widget),
+                               GTK_STYLE_CLASS_OSD);
 }
 
 static GObject *
