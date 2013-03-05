@@ -1928,16 +1928,15 @@ _gtk_file_info_consider_as_directory (GFileInfo *info)
 }
 
 gboolean
-_gtk_file_is_path_not_local (GFile *file)
+_gtk_file_has_native_path (GFile *file)
 {
   char *local_file_path;
-  gboolean is_not_local;
+  gboolean has_native_path;
 
-  /* Don't use is_native(), as we want to support fuse paths if available */
+  /* Don't use g_file_is_native(), as we want to support FUSE paths if available */
   local_file_path = g_file_get_path (file);
-  is_not_local = (local_file_path == NULL);
+  has_native_path = (local_file_path != NULL);
   g_free (local_file_path);
 
-  return is_not_local;
+  return has_native_path;
 }
-
