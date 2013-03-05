@@ -33,9 +33,19 @@
     <value nick='descending' value='1'/>
   </enum>
 
+  <enum id="org.gtk.Settings.FileChooser.ClickPolicy">
+    <value nick="single" value="0"/>
+    <value nick="double" value="1"/>
+  </enum>
+
   <schema id='org.gtk.Settings.FileChooser' path='/org/gtk/settings/file-chooser/'>
     <key name='last-folder-uri' type='s'>
       <default>""</default>
+    </key>
+    <key name="click-policy" enum="org.gtk.Settings.FileChooser.ClickPolicy">
+      <default>'double'</default>
+      <summary>Type of click used to launch/open files</summary>
+      <description>Possible values are "single" to launch files on a single click,  or "double" to launch them on a double click.</description>
     </key>
     <key name='location-mode' enum='org.gtk.Settings.FileChooser.LocationMode'>
       <default>'path-bar'</default>
