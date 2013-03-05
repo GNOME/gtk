@@ -51,6 +51,7 @@ G_BEGIN_DECLS
  *     or top
  * @GTK_ALIGN_CENTER: center natural width of widget inside the
  *     allocation
+ * @GTK_ALIGN_BASELINE: align the widget according to the baseline. Since 3.10.
  *
  * Controls how a widget deals with extra space in a single (x or y)
  * dimension.
@@ -64,13 +65,18 @@ G_BEGIN_DECLS
  *
  * Note that in horizontal context @GTK_ALIGN_START and @GTK_ALIGN_END
  * are interpreted relative to text direction.
+ *
+ * GTK_ALIGN_BASELINE support for it is optional for containers and widgets, and
+ * it is only supported for vertical alignment.  When its not supported by
+ * a child or a container it is treated as @GTK_ALIGN_FILL.
  */
 typedef enum
 {
   GTK_ALIGN_FILL,
   GTK_ALIGN_START,
   GTK_ALIGN_END,
-  GTK_ALIGN_CENTER
+  GTK_ALIGN_CENTER,
+  GTK_ALIGN_BASELINE
 } GtkAlign;
 
 
