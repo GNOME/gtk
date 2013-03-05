@@ -1,3 +1,55 @@
+Overview of Changes in GTK+ 3.7.12
+==================================
+
+* We now support touch friendly popups on entries and text views
+  in place of context menus, on touch devices
+
+* The print dialog now shows printers that are discovered
+  using avahi, if configured with --enable-avahi-browsing
+
+* Bugs fixed:
+ 650424 treeview: expander is not easily themable
+ 674207 window: Compiler warning when not building on X11
+ 675333 Cannot forget association in Open With dialog: program...
+ 688956 Print dialog needs to support Bonjour broadcasting of ...
+ 691426 get_current_desktop does not interpret property data c...
+ 692955 GtkIconCache fails to load non-builtin icons
+ 693995 GkColorChooserWidget crashes in select_swatch if palet...
+ 694059 GtkTreeView accessible object:state-changed-expanded e...
+ 694162 Memory leaks due to extra ref in gtk_ui_manager_builda...
+ 694217 drag&drop half-broken – items get stuck while dragging
+ 694274 wayland: don't attempt to unqueue events when events a...
+ 694302 Convert pixbuf animation demo (both copies) to GdkFram...
+ 694395 Remove unused code
+ 694406 Excessive amount of accessible text events when changi...
+ 694451 Containers shouldn't special case RTL positions
+ 694732 gdk: prevent NULL pointer access when debugging is ena...
+ 694742 Fix possible memory leak when GlobalAlloc() fails
+ 694924 Dead code in GtkClipboard
+ 694925 non-expose based draw() doesn't render window background
+ 694968 GtkIconTheme: fix failed assertion when asynchrnously ...
+ 694990 use primary icon slot for search icon
+ 695131 gtkbin: initialize minimum and natural size to zero fo...
+
+Translation updates:
+ Brazilian Portuguese
+ Czech
+ Estonian
+ German
+ Greek
+ Gujarati
+ Lithuanian
+ Polish
+ Punjabi
+ Russian
+ Serbian
+ Simplified Chinese
+ Slovenian
+ Spanish
+ Traditional Chinese
+ Vietnamese
+
+
 Overview of Changes in GTK+ 3.7.10
 ==================================
 
