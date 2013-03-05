@@ -1926,6 +1926,14 @@ _gtk_tree_view_accessible_add_state (GtkTreeView          *treeview,
 
       if (cell != NULL)
         _gtk_cell_accessible_state_changed (cell, state, 0);
+
+      if (state == GTK_CELL_RENDERER_FOCUSED)
+        {
+          if (cell == NULL)
+            cell = create_cell (treeview, accessible, tree, node, single_column);
+          
+          g_signal_emit_by_name (accessible, "active-descendant-changed", cell);
+        }
     }
   else
     {
