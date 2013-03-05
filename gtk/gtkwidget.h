@@ -760,6 +760,7 @@ GtkAlign gtk_widget_get_halign        (GtkWidget *widget);
 void     gtk_widget_set_halign        (GtkWidget *widget,
                                        GtkAlign   align);
 GtkAlign gtk_widget_get_valign        (GtkWidget *widget);
+GtkAlign gtk_widget_get_valign_with_baseline (GtkWidget *widget);
 void     gtk_widget_set_valign        (GtkWidget *widget,
                                        GtkAlign   align);
 gint     gtk_widget_get_margin_left   (GtkWidget *widget);

@@ -5604,6 +5604,7 @@ adjust_for_align (GtkAlign  align,
 {
   switch (align)
     {
+    case GTK_ALIGN_BASELINE:
     case GTK_ALIGN_FILL:
       /* change nothing */
       break;
@@ -13206,6 +13207,13 @@ gtk_widget_set_halign (GtkWidget *widget,
   g_object_notify (G_OBJECT (widget), "halign");
 }
 
+GtkAlign
+gtk_widget_get_valign_with_baseline (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), GTK_ALIGN_FILL);
+  return _gtk_widget_get_aux_info_or_defaults (widget)->valign;
+}
+
 /**
  * gtk_widget_get_valign:
  * @widget: a #GtkWidget
@@ -13217,8 +13225,12 @@ gtk_widget_set_halign (GtkWidget *widget,
 GtkAlign
 gtk_widget_get_valign (GtkWidget *widget)
 {
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), GTK_ALIGN_FILL);
-  return _gtk_widget_get_aux_info_or_defaults (widget)->valign;
+  GtkAlign align;
+
+  align = gtk_widget_get_valign_with_baseline (widget);
+  if (align == GTK_ALIGN_BASELINE)
+    return GTK_ALIGN_FILL;
+  return align;
 }
 
 /**
