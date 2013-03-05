@@ -127,6 +127,20 @@ typedef enum
 } GtkAttachOptions;
 
 /**
+ * GtkBaselinePosition:
+ * @GTK_BASELINE_POSITION_TOP:
+ * @GTK_BASELINE_POSITION_CENTER:
+ * @GTK_BASELINE_POSITION_BOTTOM:
+ *
+ */
+typedef enum
+{
+  GTK_BASELINE_POSITION_TOP,
+  GTK_BASELINE_POSITION_CENTER,
+  GTK_BASELINE_POSITION_BOTTOM
+} GtkBaselinePosition;
+
+/**
  * GtkButtonBoxStyle:
  * @GTK_BUTTONBOX_DEFAULT_STYLE: Default packing.
  * @GTK_BUTTONBOX_SPREAD: Buttons are evenly spread across the box.
