@@ -309,12 +309,17 @@ static void     gtk_container_adjust_size_request  (GtkWidget         *widget,
                                                     GtkOrientation     orientation,
                                                     gint              *minimum_size,
                                                     gint              *natural_size);
+static void     gtk_container_adjust_baseline_request (GtkWidget      *widget,
+						       gint           *minimum_baseline,
+						       gint           *natural_baseline);
 static void     gtk_container_adjust_size_allocation (GtkWidget       *widget,
                                                       GtkOrientation   orientation,
                                                       gint            *minimum_size,
                                                       gint            *natural_size,
                                                       gint            *allocated_pos,
                                                       gint            *allocated_size);
+static void     gtk_container_adjust_baseline_allocation (GtkWidget      *widget,
+							  gint           *baseline);
 static GtkSizeRequestMode gtk_container_get_request_mode (GtkWidget   *widget);
 
 static gchar* gtk_container_child_default_composite_name (GtkContainer *container,
@@ -444,7 +449,9 @@ gtk_container_class_init (GtkContainerClass *class)
   widget_class->focus = gtk_container_focus;
 
   widget_class->adjust_size_request = gtk_container_adjust_size_request;
+  widget_class->adjust_baseline_request = gtk_container_adjust_baseline_request;
   widget_class->adjust_size_allocation = gtk_container_adjust_size_allocation;
+  widget_class->adjust_baseline_allocation = gtk_container_adjust_baseline_allocation;
   widget_class->get_request_mode = gtk_container_get_request_mode;
 
   class->add = gtk_container_add_unimplemented;
@@ -1918,6 +1925,28 @@ gtk_container_adjust_size_request (GtkWidget         *widget,
 }
 
 static void
+gtk_container_adjust_baseline_request (GtkWidget         *widget,
+				       gint              *minimum_baseline,
+				       gint              *natural_baseline)
+{
+  GtkContainer *container;
+
+  container = GTK_CONTAINER (widget);
+
+  if (GTK_CONTAINER_GET_CLASS (widget)->_handle_border_width)
+    {
+      int border_width;
+
+      border_width = container->priv->border_width;
+
+      *minimum_baseline += border_width;
+      *natural_baseline += border_width;
+    }
+
+  parent_class->adjust_baseline_request (widget, minimum_baseline, natural_baseline);
+}
+
+static void
 gtk_container_adjust_size_allocation (GtkWidget         *widget,
                                       GtkOrientation     orientation,
                                       gint              *minimum_size,
@@ -1951,6 +1980,27 @@ gtk_container_adjust_size_allocation (GtkWidget         *widget,
                                         minimum_size, natural_size, allocated_pos,
                                         allocated_size);
 }
+
+static void
+gtk_container_adjust_baseline_allocation (GtkWidget         *widget,
+					  gint              *baseline)
+{
+  GtkContainer *container;
+  int border_width;
+
+  container = GTK_CONTAINER (widget);
+
+  if (GTK_CONTAINER_GET_CLASS (widget)->_handle_border_width)
+    {
+      border_width = container->priv->border_width;
+
+      if (*baseline >= 0)
+	*baseline -= border_width;
+    }
+
+  parent_class->adjust_baseline_allocation (widget, baseline);
+}
+
 
 typedef struct {
   gint hfw;

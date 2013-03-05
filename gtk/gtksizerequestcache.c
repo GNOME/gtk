@@ -67,7 +67,9 @@ _gtk_size_request_cache_commit (SizeRequestCache *cache,
                                 GtkOrientation    orientation,
                                 gint              for_size,
                                 gint              minimum_size,
-                                gint              natural_size)
+                                gint              natural_size,
+				gint              minimum_baseline,
+				gint              natural_baseline)
 {
   SizeRequest **cached_sizes;
   SizeRequest  *cached_size;
@@ -78,6 +80,8 @@ _gtk_size_request_cache_commit (SizeRequestCache *cache,
     {
       cache->cached_size[orientation].minimum_size = minimum_size;
       cache->cached_size[orientation].natural_size = natural_size;
+      cache->cached_size[orientation].minimum_baseline = minimum_baseline;
+      cache->cached_size[orientation].natural_baseline = natural_baseline;
       cache->flags[orientation].cached_size_valid = TRUE;
       return;
     }
@@ -92,7 +96,9 @@ _gtk_size_request_cache_commit (SizeRequestCache *cache,
   for (i = 0; i < n_sizes; i++)
     {
       if (cached_sizes[i]->cached_size.minimum_size == minimum_size &&
-	  cached_sizes[i]->cached_size.natural_size == natural_size)
+	  cached_sizes[i]->cached_size.natural_size == natural_size &&
+	  cached_sizes[i]->cached_size.minimum_baseline == minimum_baseline &&
+	  cached_sizes[i]->cached_size.natural_baseline == natural_baseline)
 	{
 	  cached_sizes[i]->lower_for_size = MIN (cached_sizes[i]->lower_for_size, for_size);
 	  cached_sizes[i]->upper_for_size = MAX (cached_sizes[i]->upper_for_size, for_size);
@@ -125,6 +131,8 @@ _gtk_size_request_cache_commit (SizeRequestCache *cache,
   cached_size->upper_for_size = for_size;
   cached_size->cached_size.minimum_size = minimum_size;
   cached_size->cached_size.natural_size = natural_size;
+  cached_size->cached_size.minimum_baseline = minimum_baseline;
+  cached_size->cached_size.natural_baseline = natural_baseline;
 }
 
 /* looks for a cached size request for this for_size.
@@ -137,7 +145,9 @@ _gtk_size_request_cache_lookup (SizeRequestCache *cache,
                                 GtkOrientation    orientation,
                                 gint              for_size,
                                 gint             *minimum,
-                                gint             *natural)
+                                gint             *natural,
+				gint             *minimum_baseline,
+				gint             *natural_baseline)
 {
   CachedSize *result = NULL;
 
@@ -168,6 +178,8 @@ _gtk_size_request_cache_lookup (SizeRequestCache *cache,
     {
       *minimum = result->minimum_size;
       *natural = result->natural_size;
+      *minimum_baseline = result->minimum_baseline;
+      *natural_baseline = result->natural_baseline;
       return TRUE;
     }
   else

@@ -41,6 +41,8 @@ G_BEGIN_DECLS
 typedef struct {
   gint minimum_size;
   gint natural_size;
+  gint minimum_baseline;
+  gint natural_baseline;
 } CachedSize;
 
 typedef struct
@@ -72,12 +74,16 @@ void            _gtk_size_request_cache_commit                  (SizeRequestCach
                                                                  GtkOrientation          orientation,
                                                                  gint                    for_size,
                                                                  gint                    minimum_size,
-                                                                 gint                    natural_size);
+                                                                 gint                    natural_size,
+                                                                 gint                    minimum_baseline,
+                                                                 gint                    natural_baseline);
 gboolean        _gtk_size_request_cache_lookup                  (SizeRequestCache       *cache,
                                                                  GtkOrientation          orientation,
                                                                  gint                    for_size,
                                                                  gint                   *minimum,
-                                                                 gint                   *natural);
+                                                                 gint                   *natural,
+                                                                 gint                   *minimum_baseline,
+                                                                 gint                   *natural_baseline);
 
 G_END_DECLS
 
