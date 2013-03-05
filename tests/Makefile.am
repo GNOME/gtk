@@ -36,6 +36,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testappchooser			\
 	testappchooserbutton		\
 	testassistant			\
+	testbaseline			\
 	testbbox			\
 	testboxcss                      \
 	testbuttons			\
@@ -164,6 +165,7 @@ testiconview_DEPENDENCIES = $(TEST_DEPS)
 testaccel_DEPENDENCIES = $(TEST_DEPS)
 testadjustsize_DEPENDENCIES = $(TEST_DEPS)
 testassistant_DEPENDENCIES = $(TEST_DEPS)
+testbaseline_DEPENDENCIES = $(TEST_DEPS)
 testbbox_DEPENDENCIES = $(TEST_DEPS)
 testbuttons_DEPENDENCIES = $(TEST_DEPS)
 testcairo_DEPENDENCIES = $(TEST_DEPS)
@@ -353,6 +355,9 @@ testmerge_SOURCES = 		\
 
 testactions_SOURCES = 		\
 	testactions.c
+
+testbaseline_SOURCES = 		\
+	testbaseline.c
 
 testbbox_SOURCES = 		\
 	testbbox.c
