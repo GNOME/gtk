@@ -315,7 +315,7 @@ msgid ""
 "A boolean value indicating whether the handlebox's child is attached or "
 "detached."
 msgstr ""
-"Booleovská hodnota značící, zda potomek úchytu je připojen nebo odpojen."
+"Pravdivostní hodnota značící, zda potomek úchytu je připojen nebo odpojen."
 
 #: ../gtk/deprecated/gtkstyle.c:474
 msgid "Style context"
