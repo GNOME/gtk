@@ -3445,7 +3445,12 @@ gtk_entry_expose (GtkWidget      *widget,
   GtkStateType state;
   GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
 
-  state = gtk_widget_get_state (widget);
+  gtk_widget_style_get (widget, "state-hint", &state_hint, NULL);
+  if (state_hint)
+    state = gtk_widget_has_focus (widget) ?
+      GTK_STATE_ACTIVE : gtk_widget_get_state (widget);
+  else
+    state = gtk_widget_get_state(widget);
 
   if (widget->window == event->window)
     {
@@ -3492,7 +3497,7 @@ gtk_entry_expose (GtkWidget      *widget,
               height = gdk_window_get_height (icon_info->window);
 
               gtk_paint_flat_box (widget->style, icon_info->window,
-                                  state, GTK_SHADOW_NONE,
+                                  gtk_widget_get_state (widget), GTK_SHADOW_NONE,
                                   NULL, widget, "entry_bg",
                                   0, 0, width, height);
 
