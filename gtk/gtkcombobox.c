@@ -2040,6 +2040,19 @@ popup_grab_on_window (GdkWindow *window,
   return FALSE;
 }
 
+static gboolean
+gtk_combo_box_grab_broken_event (GtkWidget          *widget,
+                                 GdkEventGrabBroken *event,
+                                 gpointer            user_data)
+{
+  GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
+
+  if (event->grab_window == NULL)
+    gtk_combo_box_popdown (combo_box);
+
+  return TRUE;
+}
+
 /**
  * gtk_combo_box_popup:
  * @combo_box: a #GtkComboBox
@@ -2129,6 +2142,11 @@ gtk_combo_box_real_popup (GtkComboBox *combo_box)
     }
 
   gtk_grab_add (priv->popup_window);
+
+  g_signal_connect (priv->popup_window,
+                    "grab-broken-event",
+                    G_CALLBACK (gtk_combo_box_grab_broken_event),
+                    combo_box);
 }
 
 static gboolean
@@ -2158,6 +2176,7 @@ void
 gtk_combo_box_popdown (GtkComboBox *combo_box)
 {
   GtkComboBoxPrivate *priv = combo_box->priv;
+  GdkDisplay *display;
 
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
 
@@ -2171,6 +2190,11 @@ gtk_combo_box_popdown (GtkComboBox *combo_box)
     return;
 
   gtk_grab_remove (priv->popup_window);
+
+  display = gtk_widget_get_display (GTK_WIDGET (combo_box));
+  gdk_display_pointer_ungrab (display, GDK_CURRENT_TIME);
+  gdk_display_keyboard_ungrab (display, GDK_CURRENT_TIME);
+
   gtk_widget_hide_all (priv->popup_window);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->button),
                                 FALSE);
