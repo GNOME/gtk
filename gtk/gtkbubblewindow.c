@@ -216,50 +216,166 @@ gtk_bubble_window_get_pointed_to_coords (GtkBubbleWindow       *window,
 }
 
 static void
-gtk_bubble_window_apply_tail_path (GtkBubbleWindow *window,
-                                   cairo_t         *cr,
-                                   GtkAllocation   *allocation)
+gtk_bubble_window_get_gap_coords (GtkBubbleWindow *window,
+                                  gint            *initial_x_out,
+                                  gint            *initial_y_out,
+                                  gint            *tip_x_out,
+                                  gint            *tip_y_out,
+                                  gint            *final_x_out,
+                                  gint            *final_y_out,
+                                  GtkPositionType *gap_side_out)
 {
   GtkBubbleWindowPrivate *priv = window->priv;
   gint base, tip, x, y;
+  gint initial_x, initial_y;
+  gint tip_x, tip_y;
+  gint final_x, final_y;
+  GtkPositionType gap_side;
+  GtkAllocation allocation;
 
   gtk_bubble_window_get_pointed_to_coords (window, &x, &y, NULL);
+  gtk_widget_get_allocation (GTK_WIDGET (window), &allocation);
+
+  base = tip = 0;
+  gap_side = GTK_POS_LEFT;
 
   if (priv->final_position == GTK_POS_BOTTOM ||
       priv->final_position == GTK_POS_RIGHT)
     {
       base = TAIL_HEIGHT;
       tip = 0;
+
+      gap_side = (priv->final_position == GTK_POS_BOTTOM) ? GTK_POS_TOP : GTK_POS_LEFT;
     }
   else if (priv->final_position == GTK_POS_TOP)
     {
-      base = allocation->height - TAIL_HEIGHT;
-      tip = allocation->height;
+      base = allocation.height - TAIL_HEIGHT;
+      tip = allocation.height;
+      gap_side = GTK_POS_BOTTOM;
     }
   else if (priv->final_position == GTK_POS_LEFT)
     {
-      base = allocation->width - TAIL_HEIGHT;
-      tip = allocation->width;
+      base = allocation.width - TAIL_HEIGHT;
+      tip = allocation.width;
+      gap_side = GTK_POS_RIGHT;
     }
 
   if (POS_IS_VERTICAL (priv->final_position))
     {
-      cairo_move_to (cr, CLAMP (x - priv->win_x - TAIL_GAP_WIDTH / 2,
-                                0, allocation->width - TAIL_GAP_WIDTH), base);
-      cairo_line_to (cr, CLAMP (x - priv->win_x, 0, allocation->width), tip);
-      cairo_line_to (cr, CLAMP (x - priv->win_x + TAIL_GAP_WIDTH / 2,
-                                TAIL_GAP_WIDTH, allocation->width), base);
+      initial_x = CLAMP (x - priv->win_x - TAIL_GAP_WIDTH / 2,
+                         0, allocation.width - TAIL_GAP_WIDTH);
+      initial_y = base;
+
+      tip_x = CLAMP (x - priv->win_x, 0, allocation.width);
+      tip_y = tip;
+
+      final_x = CLAMP (x - priv->win_x + TAIL_GAP_WIDTH / 2,
+                       TAIL_GAP_WIDTH, allocation.width);
+      final_y = base;
     }
   else
     {
-      cairo_move_to (cr, base,
-                     CLAMP (y - priv->win_y - TAIL_GAP_WIDTH / 2,
-                            0, allocation->height - TAIL_GAP_WIDTH));
-      cairo_line_to (cr, tip, CLAMP (y - priv->win_y, 0, allocation->height));
-      cairo_line_to (cr, base,
-                     CLAMP (y - priv->win_y + TAIL_GAP_WIDTH / 2,
-                            TAIL_GAP_WIDTH, allocation->height));
+      initial_x = base;
+      initial_y = CLAMP (y - priv->win_y - TAIL_GAP_WIDTH / 2,
+                         0, allocation.height - TAIL_GAP_WIDTH);
+
+      tip_x = tip;
+      tip_y = CLAMP (y - priv->win_y, 0, allocation.height);
+
+      final_x = base;
+      final_y = CLAMP (y - priv->win_y + TAIL_GAP_WIDTH / 2,
+                       TAIL_GAP_WIDTH, allocation.height);
     }
+
+  if (initial_x_out)
+    *initial_x_out = initial_x;
+  if (initial_y_out)
+    *initial_y_out = initial_y;
+
+  if (tip_x_out)
+    *tip_x_out = tip_x;
+  if (tip_y_out)
+    *tip_y_out = tip_y;
+
+  if (final_x_out)
+    *final_x_out = final_x;
+  if (final_y_out)
+    *final_y_out = final_y;
+
+  if (gap_side_out)
+    *gap_side_out = gap_side;
+}
+
+static void
+gtk_bubble_window_get_rect_coords (GtkBubbleWindow *window,
+                                   gint            *x1_out,
+                                   gint            *y1_out,
+                                   gint            *x2_out,
+                                   gint            *y2_out)
+{
+  GtkBubbleWindowPrivate *priv = window->priv;
+  gint x1, x2, y1, y2;
+  GtkAllocation allocation;
+
+  x1 = y1 = x2 = y2 = 0;
+  gtk_widget_get_allocation (GTK_WIDGET (window), &allocation);
+
+  if (priv->final_position == GTK_POS_TOP)
+    {
+      x1 = 0;
+      y1 = 0;
+      x2 = allocation.width;
+      y2 = allocation.height - TAIL_HEIGHT;
+    }
+  else if (priv->final_position == GTK_POS_BOTTOM)
+    {
+      x1 = 0;
+      y1 = TAIL_HEIGHT;
+      x2 = allocation.width;
+      y2 = allocation.height;
+    }
+  else if (priv->final_position == GTK_POS_LEFT)
+    {
+      x1 = 0;
+      y1 = 0;
+      x2 = allocation.width - TAIL_HEIGHT;
+      y2 = allocation.height;
+    }
+  else if (priv->final_position == GTK_POS_RIGHT)
+    {
+      x1 = TAIL_HEIGHT;
+      y1 = 0;
+      x2 = allocation.width;
+      y2 = allocation.height;
+    }
+
+  if (x1_out)
+    *x1_out = x1;
+  if (y1_out)
+    *y1_out = y1;
+  if (x2_out)
+    *x2_out = x2;
+  if (y2_out)
+    *y2_out = y2;
+}
+
+static void
+gtk_bubble_window_apply_tail_path (GtkBubbleWindow *window,
+                                   cairo_t         *cr)
+{
+  gint initial_x, initial_y;
+  gint tip_x, tip_y;
+  gint final_x, final_y;
+
+  gtk_bubble_window_get_gap_coords (window,
+                                    &initial_x, &initial_y,
+                                    &tip_x, &tip_y,
+                                    &final_x, &final_y,
+                                    NULL);
+
+  cairo_move_to (cr, initial_x, initial_y);
+  cairo_line_to (cr, tip_x, tip_y);
+  cairo_line_to (cr, final_x, final_y);
 }
 
 static void
@@ -268,39 +384,41 @@ gtk_bubble_window_apply_border_path (GtkBubbleWindow *window,
 {
   GtkBubbleWindowPrivate *priv;
   GtkAllocation allocation;
+  gint x1, y1, x2, y2;
 
   priv = window->priv;
   gtk_widget_get_allocation (GTK_WIDGET (window), &allocation);
 
-  gtk_bubble_window_apply_tail_path (window, cr, &allocation);
+  gtk_bubble_window_apply_tail_path (window, cr);
+  gtk_bubble_window_get_rect_coords (window, &x1, &y1, &x2, &y2);
 
   if (priv->final_position == GTK_POS_TOP)
     {
-      cairo_line_to (cr, allocation.width, allocation.height - TAIL_HEIGHT);
-      cairo_line_to (cr, allocation.width, 0);
-      cairo_line_to (cr, 0, 0);
-      cairo_line_to (cr, 0, allocation.height - TAIL_HEIGHT);
+      cairo_line_to (cr, x2, y2);
+      cairo_line_to (cr, x2, y1);
+      cairo_line_to (cr, x1, y1);
+      cairo_line_to (cr, x1, y2);
     }
   else if (priv->final_position == GTK_POS_BOTTOM)
     {
-      cairo_line_to (cr, allocation.width, TAIL_HEIGHT);
-      cairo_line_to (cr, allocation.width, allocation.height);
-      cairo_line_to (cr, 0, allocation.height);
-      cairo_line_to (cr, 0, TAIL_HEIGHT);
+      cairo_line_to (cr, x2, y1);
+      cairo_line_to (cr, x2, y2);
+      cairo_line_to (cr, x1, y2);
+      cairo_line_to (cr, x1, y1);
     }
   else if (priv->final_position == GTK_POS_LEFT)
     {
-      cairo_line_to (cr, allocation.width - TAIL_HEIGHT, allocation.height);
-      cairo_line_to (cr, 0, allocation.height);
-      cairo_line_to (cr, 0, 0);
-      cairo_line_to (cr, allocation.width - TAIL_HEIGHT, 0);
+      cairo_line_to (cr, x2, y2);
+      cairo_line_to (cr, x1, y2);
+      cairo_line_to (cr, x1, y1);
+      cairo_line_to (cr, x2, y1);
     }
   else if (priv->final_position == GTK_POS_RIGHT)
     {
-      cairo_line_to (cr, TAIL_HEIGHT, 0);
-      cairo_line_to (cr, allocation.width, 0);
-      cairo_line_to (cr, allocation.width, allocation.height);
-      cairo_line_to (cr, TAIL_HEIGHT, allocation.height);
+      cairo_line_to (cr, x1, y1);
+      cairo_line_to (cr, x2, y1);
+      cairo_line_to (cr, x2, y2);
+      cairo_line_to (cr, x1, y2);
     }
 
   cairo_close_path (cr);
@@ -401,14 +519,17 @@ gtk_bubble_window_draw (GtkWidget *widget,
   GtkStyleContext *context;
   GtkAllocation allocation;
   GtkWidget *child;
-  GdkRGBA *border;
+  GtkBorder border;
+  GdkRGBA border_color;
+  gint rect_x1, rect_x2, rect_y1, rect_y2;
+  gint initial_x, initial_y, final_x, final_y;
+  gint gap_start, gap_end;
+  GtkPositionType gap_side;
+  GtkStateFlags state;
 
-  cairo_save (cr);
   context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
   gtk_widget_get_allocation (widget, &allocation);
-
-  gtk_render_background (context, cr, 0, 0,
-                         allocation.width, allocation.height);
 
   if (gtk_widget_is_composited (widget))
     {
@@ -417,30 +538,72 @@ gtk_bubble_window_draw (GtkWidget *widget,
       cairo_set_source_rgba (cr, 0, 0, 0, 0);
       cairo_paint (cr);
       cairo_restore (cr);
-
-      gtk_bubble_window_apply_border_path (GTK_BUBBLE_WINDOW (widget), cr);
-      cairo_clip (cr);
     }
 
-  gtk_render_background (context, cr, 0, 0,
+  gtk_bubble_window_get_rect_coords (GTK_BUBBLE_WINDOW (widget),
+                                     &rect_x1, &rect_y1,
+                                     &rect_x2, &rect_y2);
+
+  /* Render the rect background */
+  gtk_render_background (context, cr,
+                         rect_x1, rect_y1,
+                         rect_x2 - rect_x1, rect_y2 - rect_y1);
+
+  gtk_bubble_window_get_gap_coords (GTK_BUBBLE_WINDOW (widget),
+                                    &initial_x, &initial_y,
+                                    NULL, NULL,
+                                    &final_x, &final_y,
+                                    &gap_side);
+
+  if (POS_IS_VERTICAL (gap_side))
+    {
+      gap_start = initial_x;
+      gap_end = final_x;
+    }
+  else
+    {
+      gap_start = initial_y;
+      gap_end = final_y;
+    }
+
+  /* Now render the frame, without the gap for the arrow tip */
+  gtk_render_frame_gap (context, cr,
+                        rect_x1, rect_y1,
+                        rect_x2 - rect_x1, rect_y2 - rect_y1,
+                        gap_side,
+                        gap_start, gap_end);
+
+  /* Clip to the arrow shape */
+  cairo_save (cr);
+
+  gtk_bubble_window_apply_tail_path (GTK_BUBBLE_WINDOW (widget), cr);
+  cairo_clip (cr);
+
+  /* Render the arrow background */
+  gtk_render_background (context, cr,
+                         0, 0,
                          allocation.width, allocation.height);
 
-  gtk_style_context_get (context, gtk_widget_get_state_flags (widget),
-                         GTK_STYLE_PROPERTY_BORDER_COLOR, &border,
-                         NULL);
+  /* Render the border of the arrow tip */
+  gtk_style_context_get_border (context, state, &border);
 
-  gtk_bubble_window_apply_border_path (GTK_BUBBLE_WINDOW (widget), cr);
-  gdk_cairo_set_source_rgba (cr, border);
-  cairo_stroke (cr);
+  if (border.bottom > 0)
+    {
+      gtk_style_context_get_border_color (context, state, &border_color);
+      gtk_bubble_window_apply_tail_path (GTK_BUBBLE_WINDOW (widget), cr);
+      gdk_cairo_set_source_rgba (cr, &border_color);
+
+      cairo_set_line_width (cr, border.bottom);
+      cairo_stroke (cr);
+    }
+
+  /* We're done */
+  cairo_restore (cr);
 
   child = gtk_bin_get_child (GTK_BIN (widget));
 
   if (child)
     gtk_container_propagate_draw (GTK_CONTAINER (widget), child, cr);
-
-  cairo_restore (cr);
-
-  gdk_rgba_free (border);
 
   return TRUE;
 }
