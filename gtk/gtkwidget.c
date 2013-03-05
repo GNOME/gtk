@@ -95,6 +95,7 @@
  *   <listitem>#GtkWidgetClass.get_preferred_height()</listitem>
  *   <listitem>#GtkWidgetClass.get_preferred_height_for_width()</listitem>
  *   <listitem>#GtkWidgetClass.get_preferred_width_for_height()</listitem>
+ *   <listitem>#GtkWidgetClass.get_preferred_height_and_baseline_for_width()</listitem>
  * </itemizedlist>
  *
  * There are some important things to keep in mind when implementing
@@ -222,6 +223,26 @@
  * container, you <emphasis>must</emphasis> use the wrapper APIs.
  * Otherwise, you would not properly consider widget margins,
  * #GtkSizeGroup, and so forth.
+ *
+ * Since 3.10 Gtk+ also supports baseline vertical alignment of widgets. This
+ * means that widgets are positioned such that the typographical baseline of
+ * widgets in the same row are aligned. This happens if a widget supports baselines,
+ * has a vertical alignment of %GTK_ALIGN_BASELINE, and is inside a container
+ * that supports baselines and has a natural "row" that it aligns to the baseline,
+ * or a baseline assigned to it by the grandparent.
+ *
+ * Baseline alignment support for a widget is done by the #GtkWidgetClass.get_preferred_height_and_baseline_for_width()
+ * virtual function. It allows you to report a baseline in combination with the
+ * minimum and natural height. If there is no baseline you can return -1 to indicate
+ * this. The default implementation of this virtual function calls into the
+ * #GtkWidgetClass.get_preferred_height() and #GtkWidgetClass.get_preferred_height_for_width(),
+ * so if baselines are not supported it doesn't need to be implemented.
+ *
+ * If a widget ends up baseline aligned it will be allocated all the space in the parent
+ * as if it was %GTK_ALIGN_FILL, but the selected baseline can be found via gtk_widget_get_allocated_baseline().
+ * If this has a value other than -1 you need to align the widget such that the baseline
+ * appears at the position.
+ *
  * </para>
  * </refsect2>
  * <refsect2 id="style-properties">
@@ -395,6 +416,7 @@ struct _GtkWidgetPrivate
 
   /* The widget's allocated size */
   GtkAllocation allocation;
+  gint allocated_baseline;
 
   /* The widget's requested sizes */
   SizeRequestCache requests;
@@ -689,6 +711,12 @@ static void             gtk_widget_real_get_width               (GtkWidget      
 static void             gtk_widget_real_get_height              (GtkWidget         *widget,
                                                                  gint              *minimum_size,
                                                                  gint              *natural_size);
+static void  gtk_widget_real_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
+									  gint       width,
+									  gint      *minimum_height,
+									  gint      *natural_height,
+									  gint      *minimum_baseline,
+									  gint      *natural_baseline);
 
 static void             gtk_widget_queue_tooltip_query          (GtkWidget *widget);
 
@@ -697,12 +725,17 @@ static void             gtk_widget_real_adjust_size_request     (GtkWidget      
                                                                  GtkOrientation     orientation,
                                                                  gint              *minimum_size,
                                                                  gint              *natural_size);
+static void             gtk_widget_real_adjust_baseline_request (GtkWidget         *widget,
+								 gint              *minimum_baseline,
+								 gint              *natural_baseline);
 static void             gtk_widget_real_adjust_size_allocation  (GtkWidget         *widget,
                                                                  GtkOrientation     orientation,
                                                                  gint              *minimum_size,
                                                                  gint              *natural_size,
                                                                  gint              *allocated_pos,
                                                                  gint              *allocated_size);
+static void             gtk_widget_real_adjust_baseline_allocation (GtkWidget         *widget,
+								    gint              *baseline);
 
 static void gtk_widget_set_usize_internal (GtkWidget          *widget,
 					   gint                width,
@@ -984,6 +1017,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->get_preferred_height = gtk_widget_real_get_height;
   klass->get_preferred_width_for_height = gtk_widget_real_get_width_for_height;
   klass->get_preferred_height_for_width = gtk_widget_real_get_height_for_width;
+  klass->get_preferred_height_and_baseline_for_width = gtk_widget_real_get_preferred_height_and_baseline_for_width;
   klass->state_changed = NULL;
   klass->state_flags_changed = gtk_widget_real_state_flags_changed;
   klass->parent_set = NULL;
@@ -1043,7 +1077,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->get_accessible = gtk_widget_real_get_accessible;
 
   klass->adjust_size_request = gtk_widget_real_adjust_size_request;
+  klass->adjust_baseline_request = gtk_widget_real_adjust_baseline_request;
   klass->adjust_size_allocation = gtk_widget_real_adjust_size_allocation;
+  klass->adjust_baseline_allocation = gtk_widget_real_adjust_baseline_allocation;
 
   g_object_class_install_property (gobject_class,
 				   PROP_NAME,
@@ -5189,22 +5225,31 @@ gtk_widget_invalidate_widget_windows (GtkWidget *widget,
 }
 
 /**
- * gtk_widget_size_allocate:
+ * gtk_widget_size_allocate_with_baseline:
  * @widget: a #GtkWidget
  * @allocation: position and size to be allocated to @widget
+ * @baseline: The baseline of the child, or -1
  *
- * This function is only used by #GtkContainer subclasses, to assign a size
- * and position to their child widgets.
+ * This function is only used by #GtkContainer subclasses, to assign a size,
+ * position and (optionally) baseline to their child widgets.
  *
- * In this function, the allocation may be adjusted. It will be forced
- * to a 1x1 minimum size, and the adjust_size_allocation virtual
- * method on the child will be used to adjust the allocation. Standard
- * adjustments include removing the widget's margins, and applying the
- * widget's #GtkWidget:halign and #GtkWidget:valign properties.
+ * In this function, the allocation and baseline may be adjusted. It
+ * will be forced to a 1x1 minimum size, and the
+ * adjust_size_allocation virtual and adjust_baseline_allocation
+ * methods on the child will be used to adjust the allocation and
+ * baseline. Standard adjustments include removing the widget's
+ * margins, and applying the widget's #GtkWidget:halign and
+ * #GtkWidget:valign properties.
+ *
+ * If the child widget does not have a valign of %GTK_ALIGN_BASELINE the
+ * baseline argument is ignored and -1 is used instead.
+ *
+ * Since: 3.10
  **/
 void
-gtk_widget_size_allocate (GtkWidget	*widget,
-			  GtkAllocation *allocation)
+gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
+					GtkAllocation *allocation,
+					gint           baseline)
 {
   GtkWidgetPrivate *priv;
   GdkRectangle real_allocation;
@@ -5212,9 +5257,11 @@ gtk_widget_size_allocate (GtkWidget	*widget,
   GdkRectangle adjusted_allocation;
   gboolean alloc_needed;
   gboolean size_changed;
+  gboolean baseline_changed;
   gboolean position_changed;
   gint natural_width, natural_height, dummy;
   gint min_width, min_height;
+  gint old_baseline;
 
   priv = widget->priv;
 
@@ -5241,17 +5288,27 @@ gtk_widget_size_allocate (GtkWidget	*widget,
 	}
 
       name = g_type_name (G_OBJECT_TYPE (G_OBJECT (widget)));
-      g_print ("gtk_widget_size_allocate: %*s%s %d %d\n",
+      g_print ("gtk_widget_size_allocate: %*s%s %d %d",
 	       2 * depth, " ", name,
 	       allocation->width, allocation->height);
+      if (baseline != -1)
+	g_print (" baseline: %d", baseline);
+      g_print ("\n");
     }
 #endif /* G_ENABLE_DEBUG */
+
+  /* Never pass a baseline to a child unless it requested it.
+     This means containers don't have to manually check for this. */
+  if (baseline != -1 &&
+      gtk_widget_get_valign_with_baseline (widget) != GTK_ALIGN_BASELINE)
+    baseline = -1;
 
   alloc_needed = priv->alloc_needed;
   /* Preserve request/allocate ordering */
   priv->alloc_needed = FALSE;
 
   old_allocation = priv->allocation;
+  old_baseline = priv->allocated_baseline;
   real_allocation = *allocation;
 
   adjusted_allocation = real_allocation;
@@ -5301,6 +5358,9 @@ gtk_widget_size_allocate (GtkWidget	*widget,
 							 &natural_height,
 							 &adjusted_allocation.y,
 							 &adjusted_allocation.height);
+  if (baseline >= 0)
+    GTK_WIDGET_GET_CLASS (widget)->adjust_baseline_allocation (widget,
+							       &baseline);
 
   if (adjusted_allocation.x < real_allocation.x ||
       adjusted_allocation.y < real_allocation.y ||
@@ -5330,14 +5390,16 @@ gtk_widget_size_allocate (GtkWidget	*widget,
   real_allocation.width = MAX (real_allocation.width, 1);
   real_allocation.height = MAX (real_allocation.height, 1);
 
+  baseline_changed = old_baseline != baseline;
   size_changed = (old_allocation.width != real_allocation.width ||
 		  old_allocation.height != real_allocation.height);
   position_changed = (old_allocation.x != real_allocation.x ||
 		      old_allocation.y != real_allocation.y);
 
-  if (!alloc_needed && !size_changed && !position_changed)
+  if (!alloc_needed && !size_changed && !position_changed && !baseline_changed)
     goto out;
 
+  priv->allocated_baseline = baseline;
   g_signal_emit (widget, widget_signals[SIZE_ALLOCATE], 0, &real_allocation);
 
   /* Size allocation is god... after consulting god, no further requests or allocations are needed */
@@ -5356,7 +5418,7 @@ gtk_widget_size_allocate (GtkWidget	*widget,
 	  cairo_region_destroy (invalidate);
 	}
 
-      if (size_changed)
+      if (size_changed || baseline_changed)
 	{
 	  if (priv->redraw_on_alloc)
 	    {
@@ -5371,7 +5433,7 @@ gtk_widget_size_allocate (GtkWidget	*widget,
 	}
     }
 
-  if ((size_changed || position_changed) && priv->parent &&
+  if ((size_changed || position_changed || baseline_changed) && priv->parent &&
       gtk_widget_get_realized (priv->parent) && _gtk_container_get_reallocate_redraws (GTK_CONTAINER (priv->parent)))
     {
       cairo_region_t *invalidate = cairo_region_create_rectangle (&priv->parent->priv->allocation);
@@ -5381,6 +5443,31 @@ gtk_widget_size_allocate (GtkWidget	*widget,
 
 out:
   gtk_widget_pop_verify_invariants (widget);
+}
+
+
+/**
+ * gtk_widget_size_allocate:
+ * @widget: a #GtkWidget
+ * @allocation: position and size to be allocated to @widget
+ *
+ * This function is only used by #GtkContainer subclasses, to assign a size
+ * and position to their child widgets.
+ *
+ * In this function, the allocation may be adjusted. It will be forced
+ * to a 1x1 minimum size, and the adjust_size_allocation virtual
+ * method on the child will be used to adjust the allocation. Standard
+ * adjustments include removing the widget's margins, and applying the
+ * widget's #GtkWidget:halign and #GtkWidget:valign properties.
+ *
+ * For baseline support in containers you need to use gtk_widget_size_allocate_with_baseline()
+ * instead.
+ **/
+void
+gtk_widget_size_allocate (GtkWidget	*widget,
+			  GtkAllocation *allocation)
+{
+  gtk_widget_size_allocate_with_baseline (widget, allocation, -1);
 }
 
 /**
@@ -5673,6 +5760,18 @@ gtk_widget_real_adjust_size_allocation (GtkWidget         *widget,
       adjust_for_align (effective_align (aux_info->valign, GTK_TEXT_DIR_NONE),
                         natural_size, allocated_pos, allocated_size);
     }
+}
+
+static void
+gtk_widget_real_adjust_baseline_allocation (GtkWidget         *widget,
+					    gint              *baseline)
+{
+  const GtkWidgetAuxInfo *aux_info;
+
+  aux_info = _gtk_widget_get_aux_info_or_defaults (widget);
+
+  if (baseline >= 0)
+    *baseline -= aux_info->margin.top;
 }
 
 static gboolean
@@ -11016,6 +11115,28 @@ gtk_widget_real_adjust_size_request (GtkWidget         *widget,
     }
 }
 
+static void
+gtk_widget_real_adjust_baseline_request (GtkWidget         *widget,
+					 gint              *minimum_baseline,
+					 gint              *natural_baseline)
+{
+  const GtkWidgetAuxInfo *aux_info;
+
+  aux_info =_gtk_widget_get_aux_info_or_defaults (widget);
+
+  if (aux_info->height >= 0)
+    {
+      /* No baseline support for explicitly set height */
+      *minimum_baseline = -1;
+      *natural_baseline = -1;
+    }
+  else
+    {
+      *minimum_baseline += aux_info->margin.top;
+      *natural_baseline += aux_info->margin.top;
+    }
+}
+
 /**
  * _gtk_widget_peek_request_cache:
  *
@@ -13166,6 +13287,25 @@ gtk_widget_real_get_width_for_height (GtkWidget *widget,
   GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, minimum_width, natural_width);
 }
 
+static void
+gtk_widget_real_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
+							     gint       width,
+							     gint      *minimum_height,
+							     gint      *natural_height,
+							     gint      *minimum_baseline,
+							     gint      *natural_baseline)
+{
+  if (width == -1)
+    GTK_WIDGET_GET_CLASS (widget)->get_preferred_height (widget, minimum_height, natural_height);
+  else
+    GTK_WIDGET_GET_CLASS (widget)->get_preferred_height_for_width (widget, width, minimum_height, natural_height);
+
+  if (minimum_baseline)
+    *minimum_baseline = -1;
+  if (natural_baseline)
+    *natural_baseline = -1;
+}
+
 /**
  * gtk_widget_get_halign:
  * @widget: a #GtkWidget
@@ -13207,6 +13347,15 @@ gtk_widget_set_halign (GtkWidget *widget,
   g_object_notify (G_OBJECT (widget), "halign");
 }
 
+/**
+ * gtk_widget_get_valign_with_baseline:
+ * @widget: a #GtkWidget
+ *
+ * Gets the value of the #GtkWidget:valign property, including
+ * %GTK_ALIGN_BASELINE.
+ *
+ * Returns: the vertical alignment of @widget
+ */
 GtkAlign
 gtk_widget_get_valign_with_baseline (GtkWidget *widget)
 {
@@ -13220,7 +13369,12 @@ gtk_widget_get_valign_with_baseline (GtkWidget *widget)
  *
  * Gets the value of the #GtkWidget:valign property.
  *
- * Returns: the vertical alignment of @widget
+ * For backwards compatibility reasons this method will never return
+ * %GTK_ALIGN_BASELINE, but instead it will convert it to
+ * %GTK_ALIGN_FILL. If your widget want to support baseline aligned
+ * children it must use gtk_widget_get_valign_with_baseline().
+ *
+ * Returns: the vertical alignment of @widget, ignoring baseline alignment
  */
 GtkAlign
 gtk_widget_get_valign (GtkWidget *widget)
@@ -14005,6 +14159,25 @@ gtk_widget_get_allocated_height (GtkWidget *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
   return widget->priv->allocation.height;
+}
+
+/**
+ * gtk_widget_get_allocated_baseline:
+ * @widget: the widget to query
+ *
+ * Returns the baseline that has currently been allocated to @widget.
+ * This function is intended to be used when implementing handlers
+ * for the #GtkWidget::draw function, and when allocating child
+ * widgets in #GtkWidget::size_allocate.
+ *
+ * Returns: the baseline of the @widget, or -1 if none
+ **/
+int
+gtk_widget_get_allocated_baseline (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
+
+  return widget->priv->allocated_baseline;
 }
 
 /**
