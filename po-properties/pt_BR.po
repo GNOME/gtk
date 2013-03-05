@@ -1,4 +1,4 @@
-# Brazilian Portuguese translation of the GTK+.
+# Brazilian Portuguese translation of the GTK+-Properties.
 # Copyright (C) 1999, 2004-2009, 2013 the GTK+ authors.
 # This file is distributed under the same license as the GTK+ package.
 # Alex Sandro Queiroz e Silva <asandro@lcg.dc.ufc.br>, 1999.
