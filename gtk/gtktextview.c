@@ -9101,7 +9101,8 @@ text_window_scroll        (GtkTextWindow *win,
 
   if (dx != 0 || dy != 0)
     {
-      _gtk_bubble_window_popdown (GTK_BUBBLE_WINDOW (priv->selection_bubble));
+      if (priv->selection_bubble)
+        _gtk_bubble_window_popdown (GTK_BUBBLE_WINDOW (priv->selection_bubble));
       gdk_window_scroll (win->bin_window, dx, dy);
     }
 }
