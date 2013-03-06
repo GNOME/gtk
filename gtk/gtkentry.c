@@ -2901,7 +2901,7 @@ _gtk_entry_get_display_text (GtkEntry *entry,
   text = gtk_entry_buffer_get_text (get_buffer (entry));
   length = gtk_entry_buffer_get_length (get_buffer (entry));
 
-  if (end_pos < 0)
+  if (end_pos < 0 || end_pos > length)
     end_pos = length;
   if (start_pos > length)
     start_pos = length;
