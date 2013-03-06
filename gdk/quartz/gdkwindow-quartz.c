@@ -2722,9 +2722,11 @@ gdk_window_set_decorations (GdkWindow       *window,
            * NSTitledWindowMask. This behaved extremely oddly when
            * conditionalized upon that and since it has no side effects (i.e.
            * if NSTitledWindowMask is not requested, the title will not be
-           * displayed) just do it unconditionally.
+           * displayed) just do it unconditionally. We also must null check
+           * 'title' before setting it to avoid crashing.
            */
-          [impl->toplevel setTitle:title];
+          if (title)
+            [impl->toplevel setTitle:title];
         }
       else
         {
@@ -2744,7 +2746,8 @@ gdk_window_set_decorations (GdkWindow       *window,
                                                                  screen:screen];
           [impl->toplevel setHasShadow: window_type_hint_to_shadow (impl->type_hint)];
           [impl->toplevel setLevel: window_type_hint_to_level (impl->type_hint)];
-          [impl->toplevel setTitle:title];
+          if (title)
+            [impl->toplevel setTitle:title];
           [impl->toplevel setBackgroundColor:bg];
           [impl->toplevel setHidesOnDeactivate: window_type_hint_to_hides_on_deactivate (impl->type_hint)];
           [impl->toplevel setContentView:old_view];
