@@ -307,7 +307,21 @@ gtk_label_accessible_get_text (AtkText *atk_text,
   text = gtk_label_get_text (GTK_LABEL (widget));
 
   if (text)
-    return g_utf8_substring (text, start_pos, end_pos > -1 ? end_pos : g_utf8_strlen (text, -1));
+    {
+      guint length;
+      const gchar *start, *end;
+
+      length = g_utf8_strlen (text, -1);
+      if (end_pos < 0 || end_pos > length)
+        end_pos = length;
+      if (start_pos > length)
+        start_pos = length;
+      if (end_pos <= start_pos)
+        return g_strdup ("");
+      start = g_utf8_offset_to_pointer (text, start_pos);
+      end = g_utf8_offset_to_pointer (start, end_pos - start_pos);
+      return g_strndup (start, end - start);
+    }
 
   return NULL;
 }
