@@ -3330,7 +3330,7 @@ gdk_event_prepare (GSource *source,
 
   *timeout = -1;
 
-  if (display->event_pause_count > 0)
+  if (_gdk_display->event_pause_count > 0)
     retval = FALSE;
   else
     retval = (_gdk_event_queue_find_first (_gdk_display) != NULL ||
@@ -3349,7 +3349,7 @@ gdk_event_check (GSource *source)
   
   gdk_threads_enter ();
 
-  if (display->event_pause_count > 0)
+  if (_gdk_display->event_pause_count > 0)
     retval = FALSE;
   else if (event_poll_fd.revents & G_IO_IN)
     retval = (_gdk_event_queue_find_first (_gdk_display) != NULL ||
