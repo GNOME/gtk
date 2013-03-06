@@ -2331,6 +2331,19 @@ popup_grab_on_window (GdkWindow *window,
   return TRUE;
 }
 
+static gboolean
+gtk_combo_box_grab_broken_event (GtkWidget          *widget,
+                                 GdkEventGrabBroken *event,
+                                 gpointer            user_data)
+{
+  GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
+
+  if (event->grab_window == NULL)
+    gtk_combo_box_popdown (combo_box);
+
+  return TRUE;
+}
+
 /**
  * gtk_combo_box_popup:
  * @combo_box: a #GtkComboBox
@@ -2455,6 +2468,11 @@ gtk_combo_box_popup_for_device (GtkComboBox *combo_box,
   gtk_device_grab_add (priv->popup_window, pointer, TRUE);
   priv->grab_pointer = pointer;
   priv->grab_keyboard = keyboard;
+
+  g_signal_connect (priv->popup_window,
+                    "grab-broken-event",
+                    G_CALLBACK (gtk_combo_box_grab_broken_event),
+                    combo_box);
 }
 
 static void
@@ -2520,6 +2538,10 @@ gtk_combo_box_popdown (GtkComboBox *combo_box)
 
   if (!gtk_widget_get_realized (GTK_WIDGET (combo_box)))
     return;
+
+  if (priv->grab_keyboard)
+    gdk_device_ungrab (priv->grab_keyboard, GDK_CURRENT_TIME);
+  gdk_device_ungrab (priv->grab_pointer, GDK_CURRENT_TIME);
 
   gtk_device_grab_remove (priv->popup_window, priv->grab_pointer);
   gtk_widget_hide (priv->popup_window);
