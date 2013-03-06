@@ -1298,12 +1298,10 @@ GtkFileSystemVolume *
 _gtk_file_system_get_volume_for_file (GtkFileSystem *file_system,
 				      GFile         *file)
 {
-  GtkFileSystemPrivate *priv;
   GMount *mount;
 
   DEBUG ("get_volume_for_file");
 
-  priv = GTK_FILE_SYSTEM_GET_PRIVATE (file_system);
   mount = g_file_find_enclosing_mount (file, NULL, NULL);
 
   if (!mount && g_file_is_native (file))

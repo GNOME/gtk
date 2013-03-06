@@ -1426,11 +1426,9 @@ button_drag_data_get_cb (GtkWidget          *widget,
 			 gpointer            data)
 {
   ButtonData *button_data;
-  GtkPathBar *path_bar;
   char *uris[2];
 
   button_data = data;
-  path_bar = GTK_PATH_BAR (widget->parent); /* the button's parent *is* the path bar */
 
   uris[0] = g_file_get_uri (button_data->file);
   uris[1] = NULL;
@@ -1701,12 +1699,9 @@ _gtk_path_bar_set_file (GtkPathBar         *path_bar,
 			GError            **error)
 {
   struct SetFileInfo *info;
-  gboolean result;
 
   g_return_val_if_fail (GTK_IS_PATH_BAR (path_bar), FALSE);
   g_return_val_if_fail (G_IS_FILE (file), FALSE);
-
-  result = TRUE;
 
   /* Check whether the new path is already present in the pathbar as buttons.
    * This could be a parent directory or a previous selected subdirectory.
