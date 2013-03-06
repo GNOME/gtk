@@ -637,7 +637,7 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
                                                         cups_printer->hostname,
                                                         cups_printer->device_uri,
                                                         GTK_PRINT_BACKEND_CUPS (print_backend)->username);
-          g_snprintf (printer_absolute_uri, HTTP_MAX_URI, cups_printer->printer_uri);
+          g_snprintf (printer_absolute_uri, HTTP_MAX_URI, "%s", cups_printer->printer_uri);
         }
       else
         {
