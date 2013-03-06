@@ -16,6 +16,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gailutil", "gailutil.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "install", "install.vcxproj", "{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FB}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gengir", "gengir.vcxproj", "{2093D218-190E-4194-9421-3BA7CBF33B15}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -88,6 +90,10 @@ Global
 		{3281202A-CD26-4C67-B892-EB34BDBC612F}.Release|Win32.Build.0 = Release|Win32
 		{3281202A-CD26-4C67-B892-EB34BDBC612F}.Release|x64.ActiveCfg = Release|x64
 		{3281202A-CD26-4C67-B892-EB34BDBC612F}.Release|x64.Build.0 = Release|x64
+		{2093D218-190E-4194-9421-3BA7CBF33B15}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2093D218-190E-4194-9421-3BA7CBF33B15}.Debug|x64.ActiveCfg = Debug|x64
+		{2093D218-190E-4194-9421-3BA7CBF33B15}.Release|Win32.ActiveCfg = Release|Win32
+		{2093D218-190E-4194-9421-3BA7CBF33B15}.Release|x64.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
