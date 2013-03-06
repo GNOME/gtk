@@ -577,7 +577,12 @@ gtk_spin_button_realize (GtkWidget *widget)
 
   return_val = FALSE;
   g_signal_emit (spin_button, spinbutton_signals[OUTPUT], 0, &return_val);
-  if (return_val == FALSE)
+
+  /* If output wasn't processed explicitly by the method connected to the
+   * 'output' signal; and if we don't have any explicit 'text' set initially,
+   * fallback to the default output. */
+  if (!return_val &&
+      (spin_button->numeric || gtk_entry_get_text (GTK_ENTRY (spin_button)) == NULL))
     gtk_spin_button_default_output (spin_button);
 
   gtk_widget_queue_resize (GTK_WIDGET (spin_button));
