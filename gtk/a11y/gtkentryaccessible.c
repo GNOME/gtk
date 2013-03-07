@@ -572,9 +572,17 @@ gtk_entry_accessible_notify_gtk (GObject    *obj,
           gchar *text;
           text = gtk_entry_get_icon_tooltip_text (gtk_entry,
                                                     GTK_ENTRY_ICON_PRIMARY);
-          atk_object_set_description (priv->icons[GTK_ENTRY_ICON_PRIMARY],
+          if (text)
+            {
+              atk_object_set_description (priv->icons[GTK_ENTRY_ICON_PRIMARY],
                                       text);
-          g_free (text);
+              g_free (text);
+            }
+          else
+            {
+              atk_object_set_description (priv->icons[GTK_ENTRY_ICON_PRIMARY],
+                                      "");
+            }
         }
     }
   else if (g_strcmp0 (pspec->name, "secondary-icon-tooltip-text") == 0)
@@ -584,9 +592,17 @@ gtk_entry_accessible_notify_gtk (GObject    *obj,
           gchar *text;
           text = gtk_entry_get_icon_tooltip_text (gtk_entry,
                                                     GTK_ENTRY_ICON_SECONDARY);
-          atk_object_set_description (priv->icons[GTK_ENTRY_ICON_SECONDARY],
+          if (text)
+            {
+              atk_object_set_description (priv->icons[GTK_ENTRY_ICON_SECONDARY],
                                       text);
-          g_free (text);
+              g_free (text);
+            }
+          else
+            {
+              atk_object_set_description (priv->icons[GTK_ENTRY_ICON_PRIMARY],
+                                      "");
+            }
         }
     }
   else if (g_strcmp0 (pspec->name, "primary-icon-activatable") == 0)
