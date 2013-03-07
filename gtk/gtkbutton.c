@@ -178,6 +178,12 @@ static void gtk_button_get_preferred_height_for_width  (GtkWidget           *wid
                                                         gint                 for_size,
                                                         gint                *minimum_size,
                                                         gint                *natural_size);
+static void gtk_button_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
+								    gint       width,
+								    gint      *minimum_size,
+								    gint      *natural_size,
+								    gint      *minimum_baseline,
+								    gint      *natural_baseline);
   
 static guint button_signals[LAST_SIGNAL] = { 0 };
 
@@ -206,6 +212,7 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class->get_preferred_height = gtk_button_get_preferred_height;
   widget_class->get_preferred_width_for_height = gtk_button_get_preferred_width_for_height;
   widget_class->get_preferred_height_for_width = gtk_button_get_preferred_height_for_width;
+  widget_class->get_preferred_height_and_baseline_for_width = gtk_button_get_preferred_height_and_baseline_for_width;
   widget_class->destroy = gtk_button_destroy;
   widget_class->screen_changed = gtk_button_screen_changed;
   widget_class->realize = gtk_button_realize;
@@ -1160,10 +1167,15 @@ gtk_button_construct_child (GtkButton *button)
       else
 	box = gtk_box_new (GTK_ORIENTATION_VERTICAL, image_spacing);
 
+      gtk_widget_set_valign (image, GTK_ALIGN_BASELINE);
+      gtk_widget_set_valign (box, GTK_ALIGN_BASELINE);
+
       if (priv->align_set)
 	align = gtk_alignment_new (priv->xalign, priv->yalign, 0.0, 0.0);
       else
 	align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+
+      gtk_widget_set_valign (align, GTK_ALIGN_BASELINE);
 
       if (priv->image_position == GTK_POS_LEFT ||
 	  priv->image_position == GTK_POS_TOP)
@@ -1181,6 +1193,8 @@ gtk_button_construct_child (GtkButton *button)
             }
           else
             label = gtk_label_new (label_text);
+
+	  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
 
 	  if (priv->image_position == GTK_POS_RIGHT ||
 	      priv->image_position == GTK_POS_BOTTOM)
@@ -1205,6 +1219,8 @@ gtk_button_construct_child (GtkButton *button)
     }
   else
     label = gtk_label_new (priv->label_text);
+
+  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
 
   if (priv->align_set)
     gtk_misc_set_alignment (GTK_MISC (label), priv->xalign, priv->yalign);
@@ -1594,6 +1610,7 @@ gtk_button_size_allocate (GtkWidget     *widget,
   GtkBorder border;
   gint focus_width;
   gint focus_pad;
+  gint baseline;
 
   context = gtk_widget_get_style_context (widget);
 
@@ -1645,6 +1662,10 @@ gtk_button_size_allocate (GtkWidget     *widget,
 	  child_allocation.height = child_allocation.height - (focus_width + focus_pad) * 2;
 	}
 
+      baseline = gtk_widget_get_allocated_baseline (widget);
+      if (baseline != -1)
+	baseline -= child_allocation.y - allocation->y;
+
       if (priv->depressed)
 	{
 	  gint child_displacement_x;
@@ -1661,7 +1682,7 @@ gtk_button_size_allocate (GtkWidget     *widget,
       child_allocation.width  = MAX (1, child_allocation.width);
       child_allocation.height = MAX (1, child_allocation.height);
 
-      gtk_widget_size_allocate (child, &child_allocation);
+      gtk_widget_size_allocate_with_baseline (child, &child_allocation, baseline);
     }
 }
 
@@ -2074,7 +2095,9 @@ gtk_button_get_size (GtkWidget      *widget,
 		     GtkOrientation  orientation,
                      gint            for_size,
 		     gint           *minimum_size,
-		     gint           *natural_size)
+		     gint           *natural_size,
+		     gint           *minimum_baseline,
+		     gint           *natural_baseline)
 {
   GtkButton *button = GTK_BUTTON (widget);
   GtkStyleContext *context;
@@ -2085,6 +2108,7 @@ gtk_button_get_size (GtkWidget      *widget,
   gint focus_width;
   gint focus_pad;
   gint minimum, natural;
+  gint top_offset;
 
   context = gtk_widget_get_style_context (widget);
 
@@ -2094,6 +2118,8 @@ gtk_button_get_size (GtkWidget      *widget,
                                "focus-line-width", &focus_width,
                                "focus-padding", &focus_pad,
                                NULL);
+
+  top_offset = 0;
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -2108,9 +2134,14 @@ gtk_button_get_size (GtkWidget      *widget,
       minimum = padding.top + padding.bottom +
         border.top + border.bottom;
 
+      top_offset = padding.top + border.top + focus_width + focus_pad;
+
       if (gtk_widget_get_can_default (GTK_WIDGET (widget)))
-	minimum += default_border.top + default_border.bottom;
-    }  
+	{
+	  minimum += default_border.top + default_border.bottom;
+	  top_offset += default_border.top;
+	}
+    }
 
   minimum += 2 * (focus_width + focus_pad);
   natural = minimum;
@@ -2119,11 +2150,17 @@ gtk_button_get_size (GtkWidget      *widget,
       gtk_widget_get_visible (child))
     {
       gint child_min, child_nat;
+      gint child_min_baseline = -1, child_nat_baseline = -1;
 
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
 	gtk_widget_get_preferred_width (child, &child_min, &child_nat);
       else
-	gtk_widget_get_preferred_height (child, &child_min, &child_nat);
+	gtk_widget_get_preferred_height_and_baseline_for_width (child, -1, &child_min, &child_nat, &child_min_baseline, &child_nat_baseline);
+
+      if (minimum_baseline && child_min_baseline >= 0)
+	*minimum_baseline = child_min_baseline + top_offset;
+      if (natural_baseline && child_nat_baseline >= 0)
+	*natural_baseline = child_nat_baseline + top_offset;
 
       minimum += child_min;
       natural += child_nat;
@@ -2141,7 +2178,7 @@ gtk_button_get_preferred_width (GtkWidget *widget,
                                 gint      *minimum_size,
                                 gint      *natural_size)
 {
-  gtk_button_get_size (widget, GTK_ORIENTATION_HORIZONTAL, -1, minimum_size, natural_size);
+  gtk_button_get_size (widget, GTK_ORIENTATION_HORIZONTAL, -1, minimum_size, natural_size, NULL, NULL);
 }
 
 static void 
@@ -2149,7 +2186,7 @@ gtk_button_get_preferred_height (GtkWidget *widget,
                                  gint      *minimum_size,
                                  gint      *natural_size)
 {
-  gtk_button_get_size (widget, GTK_ORIENTATION_VERTICAL, -1, minimum_size, natural_size);
+  gtk_button_get_size (widget, GTK_ORIENTATION_VERTICAL, -1, minimum_size, natural_size, NULL, NULL);
 }
 
 static void 
@@ -2158,7 +2195,7 @@ gtk_button_get_preferred_width_for_height (GtkWidget *widget,
                                            gint      *minimum_size,
                                            gint      *natural_size)
 {
-  gtk_button_get_size (widget, GTK_ORIENTATION_HORIZONTAL, for_size, minimum_size, natural_size);
+  gtk_button_get_size (widget, GTK_ORIENTATION_HORIZONTAL, for_size, minimum_size, natural_size, NULL, NULL);
 }
 
 static void 
@@ -2167,7 +2204,18 @@ gtk_button_get_preferred_height_for_width (GtkWidget *widget,
                                            gint      *minimum_size,
                                            gint      *natural_size)
 {
-  gtk_button_get_size (widget, GTK_ORIENTATION_VERTICAL, for_size, minimum_size, natural_size);
+  gtk_button_get_size (widget, GTK_ORIENTATION_VERTICAL, for_size, minimum_size, natural_size, NULL, NULL);
+}
+
+static void
+gtk_button_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
+							gint       width,
+							gint      *minimum_size,
+							gint      *natural_size,
+							gint      *minimum_baseline,
+							gint      *natural_baseline)
+{
+  gtk_button_get_size (widget, GTK_ORIENTATION_VERTICAL, width, minimum_size, natural_size, minimum_baseline, natural_baseline);
 }
 
 /**
