@@ -326,6 +326,9 @@ static void     fs_bookmarks_changed_cb          (GtkFileSystem  *fs,
 
 static void     combo_box_changed_cb             (GtkComboBox    *combo_box,
 						  gpointer        user_data);
+static void     combo_box_notify_popup_shown_cb  (GObject        *object,
+						  GParamSpec     *pspec,
+						  gpointer        user_data);
 
 static void     button_clicked_cb                (GtkButton      *real_button,
 						  gpointer        user_data);
@@ -531,9 +534,12 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
 					G_TYPE_POINTER	 /* CANCELLABLE_COLUMN */));
 
   priv->combo_box = gtk_combo_box_new ();
-  priv->combo_box_changed_id =
-    g_signal_connect (priv->combo_box, "changed",
-		      G_CALLBACK (combo_box_changed_cb), button);
+  priv->combo_box_changed_id = g_signal_connect (priv->combo_box, "changed",
+						 G_CALLBACK (combo_box_changed_cb), button);
+
+  g_signal_connect (priv->combo_box, "notify::popup-shown",
+		    G_CALLBACK (combo_box_notify_popup_shown_cb), button);
+
   gtk_box_pack_start (GTK_BOX (button), priv->combo_box, TRUE, TRUE, 0);
   gtk_widget_set_halign (priv->combo_box, GTK_ALIGN_FILL);
 
@@ -2341,6 +2347,34 @@ filter_model_visible_func (GtkTreeModel *model,
 	  }
       }
       break;
+    case ROW_TYPE_EMPTY_SELECTION:
+      {
+	gboolean popup_shown;
+
+	g_object_get (priv->combo_box,
+		      "popup-shown", &popup_shown,
+		      NULL);
+
+	if (popup_shown)
+	  retval = FALSE;
+	else
+	  {
+	    GFile *selected;
+
+	    /* When the combo box is not popped up... */
+
+	    selected = get_selected_file (button);
+	    if (selected)
+	      retval = FALSE; /* ... nonempty selection means the ROW_TYPE_EMPTY_SELECTION is *not* visible... */
+	    else
+	      retval = TRUE;  /* ... and empty selection means the ROW_TYPE_EMPTY_SELECTION *is* visible */
+
+	    if (selected)
+	      g_object_unref (selected);
+	  }
+
+	break;
+      }
     default:
       retval = TRUE;
       break;
@@ -2382,7 +2416,22 @@ combo_box_row_separator_func (GtkTreeModel *model,
   return (type == ROW_TYPE_BOOKMARK_SEPARATOR ||
 	  type == ROW_TYPE_CURRENT_FOLDER_SEPARATOR ||
 	  type == ROW_TYPE_OTHER_SEPARATOR);
-}			  
+}
+
+static void
+select_combo_box_row_no_notify (GtkFileChooserButton *button, int pos)
+{
+  GtkFileChooserButtonPrivate *priv = button->priv;
+  GtkTreeIter iter, filter_iter;
+  
+  gtk_tree_model_iter_nth_child (priv->model, &iter, NULL, pos);
+  gtk_tree_model_filter_convert_child_iter_to_iter (GTK_TREE_MODEL_FILTER (priv->filter_model),
+						    &filter_iter, &iter);
+
+  g_signal_handler_block (priv->combo_box, priv->combo_box_changed_id);
+  gtk_combo_box_set_active_iter (GTK_COMBO_BOX (priv->combo_box), &filter_iter);
+  g_signal_handler_unblock (priv->combo_box, priv->combo_box_changed_id);
+}
 
 static void
 update_combo_box (GtkFileChooserButton *button)
@@ -2450,14 +2499,11 @@ update_combo_box (GtkFileChooserButton *button)
   if (!row_found)
     {
       gint pos;
-      GtkTreeIter filter_iter;
 
       /* If it hasn't been found already, update & select the current-folder row. */
       if (file)
 	{
 	  model_update_current_folder (button, file);
-	  gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter_model));
-
 	  pos = model_get_type_position (button, ROW_TYPE_CURRENT_FOLDER);
 	}
       else
@@ -2467,13 +2513,9 @@ update_combo_box (GtkFileChooserButton *button)
 	  pos = model_get_type_position (button, ROW_TYPE_EMPTY_SELECTION);
 	}
 
-      gtk_tree_model_iter_nth_child (priv->model, &iter, NULL, pos);
-      gtk_tree_model_filter_convert_child_iter_to_iter (GTK_TREE_MODEL_FILTER (priv->filter_model),
-							&filter_iter, &iter);
+      gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter_model));
 
-      g_signal_handler_block (priv->combo_box, priv->combo_box_changed_id);
-      gtk_combo_box_set_active_iter (GTK_COMBO_BOX (priv->combo_box), &filter_iter);
-      g_signal_handler_unblock (priv->combo_box, priv->combo_box_changed_id);
+      select_combo_box_row_no_notify (button, pos);
     }
 
   if (file)
@@ -2761,21 +2803,17 @@ combo_box_changed_cb (GtkComboBox *combo_box,
 	case ROW_TYPE_SHORTCUT:
 	case ROW_TYPE_BOOKMARK:
 	case ROW_TYPE_CURRENT_FOLDER:
-	  gtk_file_chooser_unselect_all (GTK_FILE_CHOOSER (priv->dialog));
 	  if (data)
-	    gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (priv->dialog),
-						      data, NULL);
+	    gtk_file_chooser_button_set_current_folder (GTK_FILE_CHOOSER (button), data, NULL);
 	  break;
 	case ROW_TYPE_VOLUME:
 	  {
 	    GFile *base_file;
 
-	    gtk_file_chooser_unselect_all (GTK_FILE_CHOOSER (priv->dialog));
 	    base_file = _gtk_file_system_volume_get_root (data);
 	    if (base_file)
 	      {
-		gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (priv->dialog),
-							  base_file, NULL);
+		gtk_file_chooser_button_set_current_folder (GTK_FILE_CHOOSER (button), base_file, NULL);
 		g_object_unref (base_file);
 	      }
 	  }
@@ -2786,6 +2824,50 @@ combo_box_changed_cb (GtkComboBox *combo_box,
 	default:
 	  break;
 	}
+    }
+}
+
+/* Calback for the "notify::popup-shown" signal on the combo box.
+ * When the combo is popped up, we don't want the ROW_TYPE_EMPTY_SELECTION to be visible
+ * at all; otherwise we would be showing a "(None)" item in the combo box's popup.
+ *
+ * However, when the combo box is *not* popped up, we want the empty-selection row
+ * to be visible depending on the selection.
+ *
+ * Since all that is done through the filter_model_visible_func(), this means
+ * that we need to refilter the model when the combo box pops up - hence the
+ * present signal handler.
+ */
+static void
+combo_box_notify_popup_shown_cb (GObject    *object,
+				 GParamSpec *pspec,
+				 gpointer    user_data)
+{
+  GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (user_data);
+  GtkFileChooserButtonPrivate *priv = button->priv;
+  gboolean popup_shown;
+
+  g_object_get (priv->combo_box,
+		"popup-shown", &popup_shown,
+		NULL);
+
+  /* Indicate that the ROW_TYPE_EMPTY_SELECTION will change visibility... */
+  gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter_model));
+
+  /* If the combo box popup got dismissed, go back to showing the ROW_TYPE_EMPTY_SELECTION if needed */
+  if (!popup_shown)
+    {
+      GFile *selected = get_selected_file (button);
+
+      if (!selected)
+	{
+	  int pos;
+
+	  pos = model_get_type_position (button, ROW_TYPE_EMPTY_SELECTION);
+	  select_combo_box_row_no_notify (button, pos);
+	}
+      else
+	g_object_unref (selected);
     }
 }
 
