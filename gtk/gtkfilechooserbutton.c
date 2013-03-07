@@ -154,6 +154,7 @@ typedef enum
   ROW_TYPE_CURRENT_FOLDER,
   ROW_TYPE_OTHER_SEPARATOR,
   ROW_TYPE_OTHER,
+  ROW_TYPE_EMPTY_SELECTION,
 
   ROW_TYPE_INVALID = -1
 }
@@ -288,8 +289,9 @@ static gint          model_get_type_position      (GtkFileChooserButton *button,
 						   RowType               row_type);
 static void          model_free_row_data          (GtkFileChooserButton *button,
 						   GtkTreeIter          *iter);
-static inline void   model_add_special            (GtkFileChooserButton *button);
-static inline void   model_add_other              (GtkFileChooserButton *button);
+static void          model_add_special            (GtkFileChooserButton *button);
+static void          model_add_other              (GtkFileChooserButton *button);
+static void          model_add_empty_selection    (GtkFileChooserButton *button);
 static void          model_add_volumes            (GtkFileChooserButton *button,
 						   GSList               *volumes);
 static void          model_add_bookmarks          (GtkFileChooserButton *button,
@@ -521,12 +523,12 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   /* Keep in sync with columns enum, line 88 */
   priv->model =
     GTK_TREE_MODEL (gtk_list_store_new (NUM_COLUMNS,
-					GDK_TYPE_PIXBUF, /* Icon */
-					G_TYPE_STRING,	 /* Display Name */
-					G_TYPE_CHAR,	 /* Row Type */
-					G_TYPE_POINTER	 /* Volume || Path */,
-					G_TYPE_BOOLEAN   /* Is Folder? */,
-					G_TYPE_POINTER	 /* cancellable */));
+					GDK_TYPE_PIXBUF, /* ICON_COLUMN */
+					G_TYPE_STRING,	 /* DISPLAY_NAME_COLUMN */
+					G_TYPE_CHAR,	 /* TYPE_COLUMN */
+					G_TYPE_POINTER	 /* DATA_COLUMN (Volume || Path) */,
+					G_TYPE_BOOLEAN   /* IS_FOLDER_COLUMN */,
+					G_TYPE_POINTER	 /* CANCELLABLE_COLUMN */));
 
   priv->combo_box = gtk_combo_box_new ();
   priv->combo_box_changed_id =
@@ -921,6 +923,8 @@ gtk_file_chooser_button_constructor (GType                  type,
   g_slist_free (list);
 
   model_add_other (button);
+
+  model_add_empty_selection (button);
 
   priv->filter_model = gtk_tree_model_filter_new (priv->model, NULL);
   gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (priv->filter_model),
@@ -1739,6 +1743,11 @@ model_get_type_position (GtkFileChooserButton *button,
   if (row_type == ROW_TYPE_OTHER)
     return retval;
 
+  retval++;
+
+  if (row_type == ROW_TYPE_EMPTY_SELECTION)
+    return retval;
+
   g_assert_not_reached ();
   return -1;
 }
@@ -1846,7 +1855,7 @@ out:
     g_object_unref (model_cancellable);
 }
 
-static inline void
+static void
 model_add_special (GtkFileChooserButton *button)
 {
   const gchar *homedir;
@@ -2182,7 +2191,7 @@ model_update_current_folder (GtkFileChooserButton *button,
     }
 }
 
-static inline void
+static void
 model_add_other (GtkFileChooserButton *button)
 {
   GtkListStore *store;
@@ -2208,6 +2217,26 @@ model_add_other (GtkFileChooserButton *button)
 		      ICON_COLUMN, NULL,
 		      DISPLAY_NAME_COLUMN, _("Other…"),
 		      TYPE_COLUMN, ROW_TYPE_OTHER,
+		      DATA_COLUMN, NULL,
+		      IS_FOLDER_COLUMN, FALSE,
+		      -1);
+}
+
+static void
+model_add_empty_selection (GtkFileChooserButton *button)
+{
+  GtkListStore *store;
+  GtkTreeIter iter;
+  gint pos;
+  
+  store = GTK_LIST_STORE (button->priv->model);
+  pos = model_get_type_position (button, ROW_TYPE_EMPTY_SELECTION);
+
+  gtk_list_store_insert (store, &iter, pos);
+  gtk_list_store_set (store, &iter,
+		      ICON_COLUMN, NULL,
+		      DISPLAY_NAME_COLUMN, _(FALLBACK_DISPLAY_NAME),
+		      TYPE_COLUMN, ROW_TYPE_EMPTY_SELECTION,
 		      DATA_COLUMN, NULL,
 		      IS_FOLDER_COLUMN, FALSE,
 		      -1);
@@ -2240,7 +2269,7 @@ model_remove_rows (GtkFileChooserButton *button,
 }
 
 /* Filter Model */
-static inline gboolean
+static gboolean
 test_if_file_is_visible (GtkFileSystem *fs,
 			 GFile         *file,
 			 gboolean       local_only,
@@ -2418,18 +2447,27 @@ update_combo_box (GtkFileChooserButton *button)
     }
   while (!row_found && gtk_tree_model_iter_next (priv->filter_model, &iter));
 
-  /* If it hasn't been found already, update & select the current-folder row. */
-  if (!row_found && file)
+  if (!row_found)
     {
-      GtkTreeIter filter_iter;
       gint pos;
-    
-      model_update_current_folder (button, file);
-      gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter_model));
+      GtkTreeIter filter_iter;
 
-      pos = model_get_type_position (button, ROW_TYPE_CURRENT_FOLDER);
+      /* If it hasn't been found already, update & select the current-folder row. */
+      if (file)
+	{
+	  model_update_current_folder (button, file);
+	  gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter_model));
+
+	  pos = model_get_type_position (button, ROW_TYPE_CURRENT_FOLDER);
+	}
+      else
+	{
+	  /* No selection; switch to that row */
+
+	  pos = model_get_type_position (button, ROW_TYPE_EMPTY_SELECTION);
+	}
+
       gtk_tree_model_iter_nth_child (priv->model, &iter, NULL, pos);
-
       gtk_tree_model_filter_convert_child_iter_to_iter (GTK_TREE_MODEL_FILTER (priv->filter_model),
 							&filter_iter, &iter);
 
