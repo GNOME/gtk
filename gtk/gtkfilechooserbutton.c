@@ -946,6 +946,9 @@ gtk_file_chooser_button_constructor (GType                  type,
     g_signal_connect (priv->fs, "bookmarks-changed",
 		      G_CALLBACK (fs_bookmarks_changed_cb), object);
 
+  update_label_and_image (button);
+  update_combo_box (button);
+
   return object;
 }
 
