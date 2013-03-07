@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-01-19 19:42+0000\n"
-"PO-Revision-Date: 2013-02-01 23:52+0600\n"
+"PO-Revision-Date: 2013-03-06 21:38+0600\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -677,7 +677,7 @@ msgstr "Сілтемені көрсету мүмкін емес"
 
 #: ../gtk/gtkaboutdialog.c:1017
 msgid "Website"
-msgstr "Вебсайт"
+msgstr "Веб сайт"
 
 #: ../gtk/gtkaboutdialog.c:1071
 #, c-format
@@ -4501,8 +4501,8 @@ msgstr "'%s' принтерімен мәселелер бар."
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2123
-msgid "Paused; Rejecting Jobs"
-msgstr "Аялдатылған; Тапсырмаларды тайдыру"
+msgid "Paused ; Rejecting Jobs"
+msgstr "Аялдатылған ; Тапсырмаларды тайдыру"
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2129
