@@ -2982,9 +2982,6 @@ dialog_response_cb (GtkDialog *dialog,
 
       g_signal_emit_by_name (button, "current-folder-changed");
       g_signal_emit_by_name (button, "selection-changed");
-
-      update_label_and_image (button);
-      update_combo_box (button);
     }
   else
     {
@@ -3001,6 +2998,9 @@ dialog_response_cb (GtkDialog *dialog,
 				priv->dialog_selection_changed_id);
       priv->active = FALSE;
     }
+
+  update_label_and_image (button);
+  update_combo_box (button);
 
   gtk_widget_set_sensitive (priv->combo_box, TRUE);
   gtk_widget_hide (priv->dialog);
