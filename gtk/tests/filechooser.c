@@ -16,9 +16,7 @@
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
+ * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /* TODO:
@@ -29,8 +27,6 @@
  * - More tests!
  */
 
-#define GTK_FILE_SYSTEM_ENABLE_UNSUPPORTED
-#undef GTK_DISABLE_DEPRECATED
 #define SLEEP_DURATION  100
 
 #include "config.h"
@@ -122,6 +118,7 @@ wait_for_idle (void)
     gtk_main_iteration ();
 }
 
+#ifdef BROKEN_TESTS
 static void
 test_set_filename (GtkFileChooserAction action,
 		   gboolean focus_button,
@@ -252,6 +249,7 @@ test_black_box_set_current_name (gconstpointer data)
 
   g_free (cwd);
 }
+#endif
 
 /* FIXME: fails in CREATE_FOLDER mode when FOLDER_NAME == "/" */
 
@@ -275,6 +273,7 @@ test_black_box_set_current_name (gconstpointer data)
  * http://bugzilla.gnome.org/show_bug.cgi?id=346058
  */
 
+#ifdef BROKEN_TESTS
 static void
 setup_set_filename_tests (void)
 {
@@ -310,6 +309,7 @@ setup_set_current_name_tests (void)
   for (i = 0; i < G_N_ELEMENTS (tests); i++)
     g_test_add_data_func (tests[i].test_name, &tests[i], test_black_box_set_current_name);
 }
+#endif
 
 typedef struct
 {
@@ -1242,6 +1242,7 @@ setup_file_chooser_button_tests (void)
     }
 }
 
+#ifdef BROKEN_TESTS
 struct confirm_overwrite_closure {
   GtkWidget *chooser;
   GtkWidget *accept_button;
@@ -1380,6 +1381,7 @@ test_confirm_overwrite (void)
   passed = passed && test_confirm_overwrite_for_path ("/etc/resolv.conf", TRUE); 
   g_assert (passed);
 }
+#endif
 
 static const GtkFileChooserAction open_actions[] = {
   GTK_FILE_CHOOSER_ACTION_OPEN,
@@ -1392,6 +1394,7 @@ static const GtkFileChooserAction save_actions[] = {
 };
 
 
+#ifdef BROKEN_TESTS
 static gboolean
 has_action (const GtkFileChooserAction *actions,
 	    int n_actions,
@@ -1428,7 +1431,7 @@ get_impl_from_dialog (GtkWidget *dialog)
 
   return impl;
 }
-#ifdef BROKEN_TESTS
+
 static gboolean
 test_widgets_for_current_action (GtkFileChooserDialog *dialog,
 				 GtkFileChooserAction  expected_action)
@@ -1692,7 +1695,6 @@ test_reload_sequence (gboolean set_folder_before_map)
   passed = passed && (impl->current_folder != NULL
 		      && impl->browse_files_model != NULL
 		      && (impl->load_state == LOAD_PRELOAD || impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
-		      && impl->reload_state == RELOAD_WAS_UNMAPPED
 		      && (impl->load_state == LOAD_PRELOAD ? (impl->load_timeout_id != 0) : TRUE)
 		      && ((impl->load_state == LOAD_LOADING || impl->load_state == LOAD_FINISHED)
 			  ? (impl->load_timeout_id == 0 && impl->sort_model != NULL)
@@ -1752,7 +1754,6 @@ test_reload (void)
   log_test (passed, "test_reload(): set a folder explicitly before mapping");
   g_assert (passed);
 }
-#endif
 
 static gboolean
 test_button_folder_states_for_action (GtkFileChooserAction action, gboolean use_dialog, gboolean set_folder_on_dialog)
@@ -1981,6 +1982,7 @@ test_folder_switch_and_filters (void)
 
   log_test (passed, "test_folder_switch_and_filters(): all filter tests");
 }
+#endif
 
 extern void pixbuf_init (void);
 
