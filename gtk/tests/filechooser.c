@@ -358,18 +358,6 @@ make_button_test_name (FileChooserButtonTest *t)
 #endif
 }
 
-/* Copied from gtkfilechooserutils.c:_gtk_file_chooser_delegate_get_quark() */
-static GQuark
-delegate_get_quark (void)
-{
-  static GQuark quark = 0;
-
-  if (G_UNLIKELY (quark == 0))
-    quark = g_quark_from_static_string ("gtk-file-chooser-delegate");
-
-  return quark;
-}
-
 static gboolean
 sleep_timeout_cb (gpointer data)
 {
@@ -503,6 +491,19 @@ get_expected_shown_filename (GtkFileChooserAction action, const char *folder_nam
     return filename;
 }
 
+static GtkWidget *
+get_file_chooser_dialog_from_button (GtkFileChooserButton *button)
+{
+  GtkWidget *fc_dialog;
+
+  /* Give me the internal dialog, damnit */
+  fc_dialog = g_object_get_qdata (G_OBJECT (button), g_quark_from_static_string ("gtk-file-chooser-delegate"));
+  g_assert (GTK_IS_FILE_CHOOSER (fc_dialog));
+  g_assert (GTK_IS_DIALOG (fc_dialog));
+
+  return fc_dialog;
+}
+
 static void
 test_file_chooser_button (gconstpointer data)
 {
@@ -554,10 +555,7 @@ test_file_chooser_button (gconstpointer data)
 
 	  sleep_in_main_loop ();
 
-	  /* Give me the internal dialog, damnit */
-	  fc_dialog = g_object_get_qdata (G_OBJECT (fc_button), delegate_get_quark ());
-	  g_assert (GTK_IS_FILE_CHOOSER (fc_dialog));
-	  g_assert (GTK_IS_DIALOG (fc_dialog));
+	  fc_dialog = get_file_chooser_dialog_from_button (GTK_FILE_CHOOSER_BUTTON (fc_button));
 	}
 
       /* Okay, now frob the button and its optional dialog */
@@ -597,6 +595,105 @@ test_file_chooser_button (gconstpointer data)
     }
 
   gtk_widget_destroy (window);
+}
+
+static int
+find_accessible_action_num (AtkObject *object, const char *action_name)
+{
+  AtkAction *action_a;
+  int num_actions;
+  int i;
+
+  action_a = ATK_ACTION (object);
+
+  num_actions = atk_action_get_n_actions (action_a);
+
+  for (i = 0; i < num_actions; i++)
+    if (strcmp (atk_action_get_name (action_a, i), action_name) == 0)
+      return i;
+
+  return -1;
+}
+
+static void
+do_accessible_action (AtkObject *object, const char *action_name)
+{
+  int action_num;
+
+  action_num = find_accessible_action_num (object, action_name);
+  g_assert (action_num != -1);
+
+  atk_action_do_action (ATK_ACTION (object), action_num);
+}
+
+static void
+test_file_chooser_button_combo_box_1 (void)
+{
+  GtkWidget *window;
+  GtkWidget *fc_button;
+  GtkWidget *combo_box;
+  AtkObject *combo_box_a;
+  AtkObject *menu_a;
+  int num_items;
+  int other_index;
+  AtkObject *item_a;
+  GtkWidget *fc_dialog;
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+  fc_button = gtk_file_chooser_button_new ("Select a folder", GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+  gtk_container_add (GTK_CONTAINER (window), fc_button);
+
+  gtk_file_chooser_select_filename (GTK_FILE_CHOOSER (fc_button), FOLDER_NAME);
+
+  gtk_widget_show_all (window);
+
+  /* Get the accessible for the combo box */
+
+  combo_box = find_child_widget_with_atk_role (GTK_WIDGET (fc_button), ATK_ROLE_COMBO_BOX);
+  combo_box_a = gtk_widget_get_accessible (combo_box);
+
+  /* Press the combo box to bring up the menu */
+
+  do_accessible_action (combo_box_a, "press");
+  sleep_in_main_loop (); /* have to wait because bringing up the menu is asynchronous... */
+
+  /* Get the menu from the combo box; it's the first child */
+
+  menu_a = atk_object_ref_accessible_child (combo_box_a, 0);
+  g_assert (atk_object_get_role (menu_a) == ATK_ROLE_MENU);
+
+  /* Check that the last item in the menu is the "Other…" one */
+
+  num_items = atk_object_get_n_accessible_children (menu_a);
+  g_assert (num_items > 0);
+
+  other_index = num_items - 1;
+
+  item_a = atk_object_ref_accessible_child (menu_a, other_index);
+  g_assert_cmpstr (atk_object_get_name (item_a), ==, "Other…");  /* FIXME: how do we translate this? */
+
+  /* Activate the item */
+
+  do_accessible_action (item_a, "click");
+
+  /* Cancel the dialog */
+
+  sleep_in_main_loop ();
+  fc_dialog = get_file_chooser_dialog_from_button (GTK_FILE_CHOOSER_BUTTON (fc_button));
+
+  gtk_dialog_response (GTK_DIALOG (fc_dialog), GTK_RESPONSE_CANCEL);
+
+  /* Now check the selection in the combo box */
+  check_that_basename_is_shown (GTK_FILE_CHOOSER_BUTTON (fc_button), FOLDER_NAME);
+
+  gtk_widget_destroy (window);
+}
+
+static void
+setup_file_chooser_button_combo_box_tests (void)
+{
+  g_test_add_func ("/GtkFileChooserButton/combo_box-1", test_file_chooser_button_combo_box_1);
 }
 
 static FileChooserButtonTest button_tests[] =
@@ -1240,6 +1337,8 @@ setup_file_chooser_button_tests (void)
       g_test_add_data_func (test_name, &button_tests[i], test_file_chooser_button);
       g_free (test_name);
     }
+
+  setup_file_chooser_button_combo_box_tests ();
 }
 
 #ifdef BROKEN_TESTS
