@@ -138,7 +138,8 @@ pk_search_mime_async (GtkAppChooserOnline *obj,
 
 #ifdef GDK_WINDOWING_X11
   window = gtk_widget_get_window (GTK_WIDGET (parent));
-  xid = GDK_WINDOW_XID (window);
+  if (GDK_IS_X11_WINDOW (window))
+    xid = GDK_WINDOW_XID (window);
 #endif
 
   mime_types[0] = content_type;
