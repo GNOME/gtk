@@ -66,7 +66,7 @@ typedef enum
 /**
  * GdkDragProtocol:
  * @GDK_DRAG_PROTO_NONE: no protocol.
- * @GDK_DRAG_PROTO_MOTIF: The Motif DND protocol.
+ * @GDK_DRAG_PROTO_MOTIF: The Motif DND protocol. No longer supported
  * @GDK_DRAG_PROTO_XDND: The Xdnd protocol.
  * @GDK_DRAG_PROTO_ROOTWIN: An extension to the Xdnd protocol for
  *  unclaimed root window drops.

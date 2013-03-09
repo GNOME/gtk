@@ -185,8 +185,6 @@ typedef gboolean (* GtkDragDestCallback) (GtkWidget      *widget,
 /* Enumeration for some targets we handle internally */
 
 enum {
-  TARGET_MOTIF_SUCCESS = 0x40000000,
-  TARGET_MOTIF_FAILURE,
   TARGET_DELETE
 };
 
@@ -1200,12 +1198,6 @@ gtk_drag_finish (GdkDragContext *context,
     {
       target = gdk_atom_intern_static_string ("DELETE");
     }
-  else if (gdk_drag_context_get_protocol (context) == GDK_DRAG_PROTO_MOTIF)
-    {
-      target = gdk_atom_intern_static_string (success ? 
-					      "XmTRANSFER_SUCCESS" : 
-					      "XmTRANSFER_FAILURE");
-    }
 
   if (target != GDK_NONE)
     {
@@ -1781,8 +1773,6 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
 	else if (event->type == GDK_DROP_START && !info->proxy_source)
 	  {
 	    gdk_drop_reply (context, found, event->dnd.time);
-            if ((gdk_drag_context_get_protocol (context) == GDK_DRAG_PROTO_MOTIF) && !found)
-	      gtk_drag_finish (context, FALSE, FALSE, event->dnd.time);
 	  }
       }
       break;
@@ -3575,7 +3565,7 @@ _gtk_drag_source_handle_event (GtkWidget *widget,
 		  {
 		    gboolean result = gdk_drag_context_get_selected_action (context) != 0;
 		    
-		    /* Aha - we can finally pass the MOTIF DROP on... */
+		    /* Aha - we can finally pass the DROP on... */
 		    gdk_drop_reply (info->proxy_dest->context, result, info->proxy_dest->proxy_drop_time);
 		    if (result)
 		      gdk_drag_drop (info->context, info->proxy_dest->proxy_drop_time);
@@ -3662,18 +3652,6 @@ gtk_drag_source_check_selection (GtkDragSourceInfo *info,
 				pair->target,
 				pair->info);
       tmp_list = tmp_list->next;
-    }
-  
-  if (gdk_drag_context_get_protocol (info->context) == GDK_DRAG_PROTO_MOTIF)
-    {
-      gtk_selection_add_target (info->ipc_widget,
-				selection,
-				gdk_atom_intern_static_string ("XmTRANSFER_SUCCESS"),
-				TARGET_MOTIF_SUCCESS);
-      gtk_selection_add_target (info->ipc_widget,
-				selection,
-				gdk_atom_intern_static_string ("XmTRANSFER_FAILURE"),
-				TARGET_MOTIF_FAILURE);
     }
 
   gtk_selection_add_target (info->ipc_widget,
@@ -3920,14 +3898,6 @@ gtk_drag_selection_get (GtkWidget        *widget,
       g_signal_emit_by_name (info->widget,
 			     "drag-data-delete", 
 			     info->context);
-      gtk_selection_data_set (selection_data, null_atom, 8, NULL, 0);
-      break;
-    case TARGET_MOTIF_SUCCESS:
-      gtk_drag_drop_finished (info, GTK_DRAG_RESULT_SUCCESS, time);
-      gtk_selection_data_set (selection_data, null_atom, 8, NULL, 0);
-      break;
-    case TARGET_MOTIF_FAILURE:
-      gtk_drag_drop_finished (info, GTK_DRAG_RESULT_NO_TARGET, time);
       gtk_selection_data_set (selection_data, null_atom, 8, NULL, 0);
       break;
     default:
