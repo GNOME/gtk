@@ -18,6 +18,7 @@
 # Gabriel F. Vilar <cogumm@gmail.com>, 2011.
 # Jonh Wendell <jwendell@gnome.org>, 2009, 2010, 2012.
 # Rafael Ferreira <rafael.f.f1@gmail.com>, 2013.
+# Enrico Nicoletto <liverig@gmail.com>, 2013.
 #
 msgid ""
 msgstr ""
@@ -3995,22 +3996,22 @@ msgstr "f"
 #: ../gtk/paper_names_offsets.c:119
 msgctxt "paper size"
 msgid "FanFold European"
-msgstr "FanFold europeu"
+msgstr "Formulário contínuo europeu"
 
 #: ../gtk/paper_names_offsets.c:120
 msgctxt "paper size"
 msgid "FanFold US"
-msgstr "FanFold US"
+msgstr "Formulário contínuo dos E.U.A"
 
 #: ../gtk/paper_names_offsets.c:121
 msgctxt "paper size"
 msgid "FanFold German Legal"
-msgstr "FanFold alemão legal"
+msgstr "Formulário contínuo ofício alemão"
 
 #: ../gtk/paper_names_offsets.c:122
 msgctxt "paper size"
 msgid "Government Legal"
-msgstr "Governo (legal)"
+msgstr "Governo (ofício)"
 
 #: ../gtk/paper_names_offsets.c:123
 msgctxt "paper size"
@@ -4040,7 +4041,7 @@ msgstr "Índice 5x8"
 #: ../gtk/paper_names_offsets.c:128
 msgctxt "paper size"
 msgid "Invoice"
-msgstr "Invoice"
+msgstr "Fatura"
 
 #: ../gtk/paper_names_offsets.c:129
 msgctxt "paper size"
@@ -4050,27 +4051,27 @@ msgstr "Tablóide"
 #: ../gtk/paper_names_offsets.c:130
 msgctxt "paper size"
 msgid "US Legal"
-msgstr "US legal"
+msgstr "Ofício dos E.U.A"
 
 #: ../gtk/paper_names_offsets.c:131
 msgctxt "paper size"
 msgid "US Legal Extra"
-msgstr "US legal extra"
+msgstr "Ofício extra dos E.U.A"
 
 #: ../gtk/paper_names_offsets.c:132
 msgctxt "paper size"
 msgid "US Letter"
-msgstr "US carta"
+msgstr "Carta dos E.U.A"
 
 #: ../gtk/paper_names_offsets.c:133
 msgctxt "paper size"
 msgid "US Letter Extra"
-msgstr "US carta extra"
+msgstr "Carta extra dos E.U.A"
 
 #: ../gtk/paper_names_offsets.c:134
 msgctxt "paper size"
 msgid "US Letter Plus"
-msgstr "US carta plus"
+msgstr "Carta plus dos E.U.A"
 
 #: ../gtk/paper_names_offsets.c:135
 msgctxt "paper size"
