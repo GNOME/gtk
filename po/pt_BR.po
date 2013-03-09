@@ -4965,19 +4965,3 @@ msgstr "Imprimir para testar impressora"
 
 #~ msgid "_Remove"
 #~ msgstr "_Remover"
-
-#~ msgid "Error creating folder '%s': %s"
-#~ msgstr "Erro ao criar a pasta \"%s\": %s"
-
-#~ msgid "Unable to find include file: \"%s\""
-#~ msgstr "Não foi possível localizar o arquivo de include: \"%s\""
-
-#~ msgid "Unable to locate theme engine in module_path: \"%s\","
-#~ msgstr ""
-#~ "Não foi possível localizar a ferramenta de temas no module_path: \"%s\","
-
-#~ msgid "Gdk debugging flags to set"
-#~ msgstr "Opções de depuração do Gdk a serem ativadas"
-
-#~ msgid "Gdk debugging flags to unset"
-#~ msgstr "Opções de depuração do Gdk a serem desativadas"
