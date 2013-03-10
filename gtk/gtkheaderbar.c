@@ -878,11 +878,11 @@ gtk_header_bar_forall (GtkContainer *container,
         (* callback) (priv->label, callback_data);
     }
 
-  children = g_list_last (priv->children);
+  children = priv->children;
   while (children)
     {
       child = children->data;
-      children = children->prev;
+      children = children->next;
       if (child->pack_type == GTK_PACK_END)
         (* callback) (child->widget, callback_data);
     }
