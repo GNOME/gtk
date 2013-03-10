@@ -6117,6 +6117,12 @@ gtk_window_state_event (GtkWidget           *widget,
         gtk_widget_set_visible (priv->title_box, !priv->fullscreen);
     }
 
+  if (event->changed_mask & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED))
+    {
+      update_window_buttons (window);
+      gtk_widget_queue_draw (window);
+    }
+
   return FALSE;
 }
 
