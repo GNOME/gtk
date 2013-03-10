@@ -257,6 +257,7 @@ gtk_public_h_sources = 		\
 	gtkfontchooserwidget.h	\
 	gtkframe.h		\
 	gtkgrid.h		\
+	gtkheaderbar.h		\
 	gtkiconfactory.h	\
 	gtkicontheme.h		\
 	gtkiconview.h		\
@@ -729,6 +730,7 @@ gtk_base_c_sources = 		\
 	gtkfontchooserwidget.c	\
 	gtkframe.c		\
 	gtkgrid.c		\
+	gtkheaderbar.c		\
 	gtkhsla.c		\
 	gtkiconcache.c		\
 	gtkiconcachevalidator.c	\
