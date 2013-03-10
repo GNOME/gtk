@@ -24,6 +24,7 @@
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
+#include "gtkcontainerprivate.h"
 #include "a11y/gtkcontaineraccessible.h"
 
 #include <string.h>
@@ -946,6 +947,55 @@ gtk_header_bar_set_child_property (GtkContainer *container,
     }
 }
 
+static GtkWidgetPath *
+gtk_header_bar_get_path_for_child (GtkContainer *container,
+                                   GtkWidget    *child)
+{
+  GtkHeaderBar *bar = GTK_HEADER_BAR (container);
+  GtkWidgetPath *path, *sibling_path;
+  GList *list, *children;
+
+  path = _gtk_widget_create_path (GTK_WIDGET (container));
+
+  if (gtk_widget_get_visible (child))
+    {
+      gint i, position;
+
+      sibling_path = gtk_widget_path_new ();
+
+      /* get_all_children works in reverse (!) visible order */
+      children = _gtk_container_get_all_children (container);
+      if (gtk_widget_get_direction (GTK_WIDGET (bar)) == GTK_TEXT_DIR_LTR)
+        children = g_list_reverse (children);
+
+      position = -1;
+      i = 0;
+      for (list = children; list; list = list->next)
+        {
+          if (!gtk_widget_get_visible (list->data))
+            continue;
+
+          gtk_widget_path_append_for_widget (sibling_path, list->data);
+
+          if (list->data == child)
+            position = i;
+          i++;
+        }
+      g_list_free (children);
+
+      if (position >= 0)
+        gtk_widget_path_append_with_siblings (path, sibling_path, position);
+      else
+        gtk_widget_path_append_for_widget (path, child);
+
+      gtk_widget_path_unref (sibling_path);
+    }
+  else
+    gtk_widget_path_append_for_widget (path, child);
+
+  return path;
+}
+
 static gboolean
 gtk_header_bar_button_press (GtkWidget      *toolbar,
                              GdkEventButton *event)
@@ -1101,6 +1151,7 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
   container_class->child_type = gtk_header_bar_child_type;
   container_class->set_child_property = gtk_header_bar_set_child_property;
   container_class->get_child_property = gtk_header_bar_get_child_property;
+  container_class->get_path_for_child = gtk_header_bar_get_path_for_child;
   gtk_container_class_handle_border_width (container_class);
 
   gtk_container_class_install_child_property (container_class,
