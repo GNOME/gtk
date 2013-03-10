@@ -5862,14 +5862,19 @@ get_decoration_borders (GtkWidget *widget,
 
   if (window_border)
     {
-      gtk_style_context_save (context);
       window = gtk_widget_get_window (widget);
       if (window != NULL && (gdk_window_get_state (window) & GDK_WINDOW_STATE_MAXIMIZED) != 0)
-        gtk_style_context_add_class (context, "window-border-maximized");
+        {
+           GtkBorder empty = { 0 };
+           *window_border = empty;
+         }
       else
-        gtk_style_context_add_class (context, "window-border");
-      gtk_style_context_get_border (context, state, window_border);
-      gtk_style_context_restore (context);
+        {
+          gtk_style_context_save (context);
+          gtk_style_context_add_class (context, "window-border");
+          gtk_style_context_get_border (context, state, window_border);
+          gtk_style_context_restore (context);
+        }
     }
 }
 
@@ -8755,12 +8760,10 @@ gtk_window_draw (GtkWidget *widget,
       if (priv->client_decorated &&
           priv->decorated &&
           priv->type == GTK_WINDOW_TOPLEVEL &&
-          !priv->fullscreen)
+          !priv->fullscreen &&
+          !(gdk_window_get_state (gtk_widget_get_window (widget)) & GDK_WINDOW_STATE_MAXIMIZED))
         {
-          if (gdk_window_get_state (gtk_widget_get_window (widget)) & GDK_WINDOW_STATE_MAXIMIZED)
-            gtk_style_context_add_class (context, "window-border-maximized");
-          else
-            gtk_style_context_add_class (context, "window-border");
+          gtk_style_context_add_class (context, "window-border");
           gtk_widget_get_allocation (widget, &allocation);
           gtk_render_background (context, cr,
                                  window_border.left,
