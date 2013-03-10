@@ -49,9 +49,9 @@
 #include "gtkintl.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
-#include "gtklabel.h"
 #include "gtkbox.h"
 #include "gtkbutton.h"
+#include "gtkheaderbar.h"
 #include "a11y/gtkwindowaccessible.h"
 
 #include "deprecated/gtkstyle.h"
@@ -142,7 +142,6 @@ struct _GtkWindowPrivate
   guint    auto_mnemonics_timeout_id;
 
   GtkWidget *title_box;
-  GtkWidget *title_label;
   GtkWidget *title_min_button;
   GtkWidget *title_max_button;
   GtkWidget *title_close_button;
@@ -1758,13 +1757,10 @@ gtk_window_set_title (GtkWindow   *window,
   priv->title = new_title;
 
   if (gtk_widget_get_realized (widget))
-    {
-      gdk_window_set_title (gtk_widget_get_window (widget),
-                            priv->title);
-    }
+    gdk_window_set_title (gtk_widget_get_window (widget), priv->title);
 
-  if (priv->title_label)
-    gtk_label_set_text (GTK_LABEL (priv->title_label), priv->title);
+  if (priv->title_box)
+    gtk_header_bar_set_title (GTK_HEADER_BAR (priv->title_box), priv->title);
 
   g_object_notify (G_OBJECT (window), "title");
 }
@@ -4946,9 +4942,7 @@ update_window_buttons (GtkWindow *window)
             gtk_widget_hide (priv->title_close_button);
         }
 
-      if (priv->title_label != NULL)
-        gtk_widget_show (priv->title_label);
-
+#if 0
       if (priv->title_box != NULL)
         {
           gtk_widget_show (priv->title_box);
@@ -4963,7 +4957,7 @@ update_window_buttons (GtkWindow *window)
                 gtk_box_reorder_child (GTK_BOX (priv->title_box), priv->title_close_button, 0);
             }
         }
-
+#endif
       g_strfreev (tokens);
       g_free (layout_desc);
     }
@@ -5015,39 +5009,37 @@ create_decoration (GtkWidget *widget)
 
   if (priv->type != GTK_WINDOW_POPUP)
     {
-      priv->title_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+      priv->title_box = gtk_header_bar_new ();
+      g_object_set (priv->title_box,
+                    "spacing", 0,
+                    "hpadding", 0,
+                    "vpadding", 0,
+                    NULL);
       context = gtk_widget_get_style_context (priv->title_box);
       gtk_style_context_add_class (context, "titlebar");
       gtk_widget_set_parent (priv->title_box, GTK_WIDGET (window));
 
-      priv->title_label = gtk_label_new (NULL);
       if (priv->title)
         title = priv->title;
       else
         title = get_default_title (); /* copied from X backend */
-      gtk_label_set_markup (GTK_LABEL (priv->title_label), title);
-      gtk_label_set_ellipsize (GTK_LABEL (priv->title_label), PANGO_ELLIPSIZE_END);
-      gtk_box_pack_start (GTK_BOX (priv->title_box),
-                          priv->title_label, TRUE, TRUE, 0);
+      gtk_header_bar_set_title (GTK_HEADER_BAR (priv->title_box), title);
 
       priv->title_close_button = gtk_button_new_with_label ("×");
       gtk_widget_set_can_focus (priv->title_close_button, FALSE);
-      gtk_box_pack_end (GTK_BOX (priv->title_box), priv->title_close_button,
-                        FALSE, FALSE, 0);
+      gtk_header_bar_pack_end (GTK_HEADER_BAR (priv->title_box), priv->title_close_button);
       g_signal_connect (priv->title_close_button, "clicked",
                         G_CALLBACK (gtk_window_title_close_clicked), window);
 
       priv->title_max_button = gtk_button_new_with_label ("\342\226\253");
       gtk_widget_set_can_focus (priv->title_max_button, FALSE);
-      gtk_box_pack_end (GTK_BOX (priv->title_box), priv->title_max_button,
-                        FALSE, FALSE, 0);
+      gtk_header_bar_pack_end (GTK_HEADER_BAR (priv->title_box), priv->title_max_button);
       g_signal_connect (priv->title_max_button, "clicked",
                         G_CALLBACK (gtk_window_title_max_clicked), window);
 
       priv->title_min_button = gtk_button_new_with_label ("_");
       gtk_widget_set_can_focus (priv->title_min_button, FALSE);
-      gtk_box_pack_end (GTK_BOX (priv->title_box), priv->title_min_button,
-                        FALSE, FALSE, 0);
+      gtk_header_bar_pack_end (GTK_HEADER_BAR (priv->title_box), priv->title_min_button);
       g_signal_connect (priv->title_min_button, "clicked",
                         G_CALLBACK (gtk_window_title_min_clicked), window);
 
@@ -6120,7 +6112,7 @@ gtk_window_state_event (GtkWidget           *widget,
   if (event->changed_mask & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED))
     {
       update_window_buttons (window);
-      gtk_widget_queue_draw (window);
+      gtk_widget_queue_draw (GTK_WIDGET (window));
     }
 
   return FALSE;
