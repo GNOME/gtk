@@ -4961,19 +4961,21 @@ create_decoration (GtkWidget *widget)
                           priv->title_label, TRUE, TRUE, 0);
 
       priv->title_close_button = gtk_button_new_with_label ("×");
+      gtk_widget_set_can_focus (priv->title_close_button, FALSE);
       gtk_box_pack_end (GTK_BOX (priv->title_box), priv->title_close_button,
                         FALSE, FALSE, 0);
       g_signal_connect (priv->title_close_button, "clicked",
                         G_CALLBACK (gtk_window_title_close_clicked), window);
 
       priv->title_max_button = gtk_button_new_with_label ("\342\226\253");
-
+      gtk_widget_set_can_focus (priv->title_max_button, FALSE);
       gtk_box_pack_end (GTK_BOX (priv->title_box), priv->title_max_button,
                         FALSE, FALSE, 0);
       g_signal_connect (priv->title_max_button, "clicked",
                         G_CALLBACK (gtk_window_title_max_clicked), window);
 
       priv->title_min_button = gtk_button_new_with_label ("_");
+      gtk_widget_set_can_focus (priv->title_min_button, FALSE);
       gtk_box_pack_end (GTK_BOX (priv->title_box), priv->title_min_button,
                         FALSE, FALSE, 0);
       g_signal_connect (priv->title_min_button, "clicked",
