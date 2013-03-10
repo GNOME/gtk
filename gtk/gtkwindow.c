@@ -147,6 +147,8 @@ struct _GtkWindowPrivate
   GtkWidget *title_max_button;
   GtkWidget *title_close_button;
 
+  GdkCursor *default_cursor;
+
   /* The following flags are initially TRUE (before a window is mapped).
    * They cause us to compute a configure request that involves
    * default-only parameters. Once mapped, we set them to FALSE.
@@ -256,6 +258,22 @@ enum {
   LAST_ARG
 };
 
+/* Must be kept in sync with GdkWindowEdge ! */
+typedef enum
+{
+  GTK_WINDOW_REGION_EDGE_NW,
+  GTK_WINDOW_REGION_EDGE_N,
+  GTK_WINDOW_REGION_EDGE_NE,
+  GTK_WINDOW_REGION_EDGE_W,
+  GTK_WINDOW_REGION_EDGE_E,
+  GTK_WINDOW_REGION_EDGE_SW,
+  GTK_WINDOW_REGION_EDGE_S,
+  GTK_WINDOW_REGION_EDGE_SE,
+  GTK_WINDOW_REGION_CONTENT,
+  GTK_WINDOW_REGION_TITLE,
+  GTK_WINDOW_REGION_EDGE
+} GtkWindowRegion;
+
 typedef struct
 {
   GList     *icon_list;
@@ -355,6 +373,8 @@ static gint gtk_window_enter_notify_event (GtkWidget         *widget,
 					   GdkEventCrossing  *event);
 static gint gtk_window_leave_notify_event (GtkWidget         *widget,
 					   GdkEventCrossing  *event);
+static gint gtk_window_motion_notify_event (GtkWidget        *widget,
+					    GdkEventMotion   *event);
 static gint gtk_window_focus_in_event     (GtkWidget         *widget,
 					   GdkEventFocus     *event);
 static gint gtk_window_focus_out_event    (GtkWidget         *widget,
@@ -438,6 +458,7 @@ static void     resize_grip_create_window             (GtkWindow    *window);
 static void     resize_grip_destroy_window            (GtkWindow    *window);
 static void     update_grip_visibility                (GtkWindow    *window);
 static void     update_window_buttons                 (GtkWindow    *window);
+static void     update_cursor_at_position             (GtkWidget *widget, gint x, gint y);
 
 static void        gtk_window_notify_keys_changed (GtkWindow   *window);
 static GtkKeyHash *gtk_window_get_key_hash        (GtkWindow   *window);
@@ -451,6 +472,9 @@ static void        gtk_window_on_theme_variant_changed (GtkSettings *settings,
 #endif
 static void        gtk_window_set_theme_variant         (GtkWindow  *window);
 
+static void        window_cursor_changed       (GdkWindow  *window,
+                                                GParamSpec *pspec,
+                                                GtkWidget  *widget);
 
 static void gtk_window_get_preferred_width (GtkWidget *widget,
                                             gint      *minimum_size,
@@ -618,6 +642,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->key_release_event = gtk_window_key_release_event;
   widget_class->enter_notify_event = gtk_window_enter_notify_event;
   widget_class->leave_notify_event = gtk_window_leave_notify_event;
+  widget_class->motion_notify_event = gtk_window_motion_notify_event;
   widget_class->focus_in_event = gtk_window_focus_in_event;
   widget_class->button_press_event = gtk_window_button_press_event;
   widget_class->focus_out_event = gtk_window_focus_out_event;
@@ -1034,6 +1059,13 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                                 P_("Decorated button layout"),
                                                                 "minimize,maximize,close",
                                                                 GTK_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_int ("decoration-resize-handle",
+                                                             P_("Decoration resize handle size"),
+                                                             P_("Decoration resize handle size"),
+                                                             0, G_MAXINT,
+                                                             20, GTK_PARAM_READWRITE));
 
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("resize-grip-width",
@@ -5507,6 +5539,10 @@ gtk_window_realize (GtkWidget *widget)
 			    GDK_LEAVE_NOTIFY_MASK |
 			    GDK_FOCUS_CHANGE_MASK |
 			    GDK_STRUCTURE_MASK);
+
+  if (priv->decorated && priv->client_decorated && priv->type != GTK_WINDOW_POPUP)
+    attributes.event_mask |= GDK_POINTER_MOTION_MASK;
+
   attributes.type_hint = priv->type_hint;
 
   attributes_mask |= GDK_WA_VISUAL | GDK_WA_TYPE_HINT;
@@ -5584,9 +5620,14 @@ gtk_window_realize (GtkWidget *widget)
     }
 #endif
 
+  /* get the default cursor */
+  priv->default_cursor = gdk_window_get_cursor (gdk_window);
+  g_signal_connect (G_OBJECT (gdk_window), "notify::cursor",
+                    G_CALLBACK (window_cursor_changed), widget);
+
   /* Icons */
   gtk_window_realize_icon (window);
-  
+
   if (priv->has_resize_grip)
     resize_grip_create_window (window);
 }
@@ -5877,10 +5918,8 @@ _gtk_window_set_allocation (GtkWindow           *window,
                                        NULL,
                                        &title_height);
 
-      title_allocation.x = title_border.left +
-                           window_border.left;
-      title_allocation.y = title_border.top +
-                           window_border.top;
+      title_allocation.x = title_border.left + window_border.left;
+      title_allocation.y = title_border.top + window_border.top;
       title_allocation.width =
         MAX (1, (gint) allocation->width -
              title_border.left - title_border.right -
@@ -6378,13 +6417,12 @@ gboolean
 gtk_window_propagate_key_event (GtkWindow        *window,
                                 GdkEventKey      *event)
 {
-  GtkWindowPrivate *priv;
+  GtkWindowPrivate *priv = window->priv;
   gboolean handled = FALSE;
   GtkWidget *widget, *focus;
 
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
 
-  priv = window->priv;
   widget = GTK_WIDGET (window);
 
   focus = priv->focus_widget;
@@ -6455,11 +6493,173 @@ gtk_window_key_release_event (GtkWidget   *widget,
   return handled;
 }
 
+static GtkWindowRegion
+get_region_type (GtkWindow *window, gint x, gint y)
+{
+  GtkWindowPrivate *priv = window->priv;
+  GtkWidget *widget = GTK_WIDGET (window);
+  gint title_height;
+  gint resize_handle = 0;
+  GtkBorder window_border;
+
+  title_height = gtk_widget_get_allocated_height (priv->title_box);
+  get_decoration_borders (widget, NULL, &window_border);
+  gtk_widget_style_get (widget,
+                        "decoration-resize-handle", &resize_handle,
+                        NULL);
+
+  if (x < window_border.left)
+    {
+      if (y < window_border.top + MAX (title_height, resize_handle))
+        return GTK_WINDOW_REGION_EDGE_NW;
+      else if (y > gtk_widget_get_allocated_height (widget) - window_border.bottom - resize_handle)
+        return GTK_WINDOW_REGION_EDGE_SW;
+      else
+        return GTK_WINDOW_REGION_EDGE_W;
+    }
+  else if (x > gtk_widget_get_allocated_width (widget) - window_border.right)
+    {
+      if (y < window_border.top + MAX (title_height, resize_handle))
+        return GTK_WINDOW_REGION_EDGE_NE;
+      else if (y > gtk_widget_get_allocated_height (widget) - window_border.bottom - resize_handle)
+        return GTK_WINDOW_REGION_EDGE_SE;
+      else
+        return GTK_WINDOW_REGION_EDGE_E;
+    }
+  else if (y < window_border.top)
+    {
+      if (x < window_border.left + resize_handle)
+        return GTK_WINDOW_REGION_EDGE_NW;
+      else if (x > gtk_widget_get_allocated_width (widget) - window_border.right - resize_handle)
+        return GTK_WINDOW_REGION_EDGE_NE;
+      else
+        return GTK_WINDOW_REGION_EDGE_N;
+    }
+  else if (y > gtk_widget_get_allocated_height (widget) - window_border.bottom)
+    {
+      if (x < window_border.left + resize_handle)
+        return GTK_WINDOW_REGION_EDGE_SW;
+      else if (x > gtk_widget_get_allocated_width (widget) - window_border.right - resize_handle)
+        return GTK_WINDOW_REGION_EDGE_SE;
+      else
+        return GTK_WINDOW_REGION_EDGE_S;
+    }
+  else
+    {
+      if (y < window_border.top + title_height)
+        return GTK_WINDOW_REGION_TITLE;
+      else
+        return GTK_WINDOW_REGION_CONTENT;
+    }
+}
+
+static GtkWindowRegion
+get_active_region_type (GtkWindow *window, gint x, gint y)
+{
+  GtkWindowPrivate *priv = window->priv;
+  GtkWidget *widget = GTK_WIDGET (window);
+  GtkWindowRegion region;
+  gboolean resize_h, resize_v;
+  gint state;
+  GtkBorder window_border;
+
+  region = get_region_type (window, x, y);
+  get_decoration_borders (widget, NULL, &window_border);
+
+  state = gdk_window_get_state (gtk_widget_get_window (widget));
+  if (!priv->resizable || (state & GDK_WINDOW_STATE_MAXIMIZED))
+    {
+      resize_h = resize_v = FALSE;
+    }
+  else
+    {
+      resize_h = resize_v = TRUE;
+      if (priv->geometry_info)
+        {
+          GdkGeometry *geometry = &priv->geometry_info->geometry;
+          GdkWindowHints flags = priv->geometry_info->mask;
+
+          if ((flags & GDK_HINT_MIN_SIZE) && (flags & GDK_HINT_MAX_SIZE))
+            {
+              resize_h = geometry->min_width != geometry->max_width;
+              resize_v = geometry->min_height != geometry->max_height;
+            }
+        }
+    }
+
+  switch (region)
+    {
+    case GTK_WINDOW_REGION_EDGE_N:
+    case GTK_WINDOW_REGION_EDGE_S:
+      if (resize_v)
+        return region;
+      else
+        return GTK_WINDOW_REGION_EDGE;
+      break;
+
+    case GTK_WINDOW_REGION_EDGE_W:
+    case GTK_WINDOW_REGION_EDGE_E:
+      if (resize_h)
+        return region;
+      else
+        return GTK_WINDOW_REGION_EDGE;
+      break;
+
+    case GTK_WINDOW_REGION_EDGE_NW:
+      if (resize_h && resize_v)
+        return region;
+      else if (resize_h && x < window_border.left)
+        return GTK_WINDOW_REGION_EDGE_W;
+      else if (resize_v && y < window_border.top)
+        return GTK_WINDOW_REGION_EDGE_N;
+      else
+        return GTK_WINDOW_REGION_EDGE;
+      break;
+
+    case GTK_WINDOW_REGION_EDGE_NE:
+      if (resize_h && resize_v)
+        return region;
+      else if (resize_h && x > gtk_widget_get_allocated_width (widget) - window_border.right)
+        return GTK_WINDOW_REGION_EDGE_E;
+      else if (resize_v && y < window_border.top)
+        return GTK_WINDOW_REGION_EDGE_N;
+      else
+        return GTK_WINDOW_REGION_EDGE;
+      break;
+
+    case GTK_WINDOW_REGION_EDGE_SW:
+      if (resize_h && resize_v)
+        return region;
+      else if (resize_h && x < window_border.left)
+        return GTK_WINDOW_REGION_EDGE_W;
+      else if (resize_v && y > gtk_widget_get_allocated_height (widget) - window_border.bottom)
+        return GTK_WINDOW_REGION_EDGE_N;
+      else
+        return GTK_WINDOW_REGION_EDGE;
+      break;
+
+    case GTK_WINDOW_REGION_EDGE_SE:
+      if (resize_h && resize_v)
+        return region;
+      else if (resize_h && x > gtk_widget_get_allocated_width (widget) - window_border.right)
+        return GTK_WINDOW_REGION_EDGE_E;
+      else if (resize_v && y > gtk_widget_get_allocated_height (widget) - window_border.bottom)
+        return GTK_WINDOW_REGION_EDGE_S;
+      else
+        return GTK_WINDOW_REGION_EDGE;
+      break;
+
+    default:
+      return region;
+    }
+}
+
 static gint
 gtk_window_button_press_event (GtkWidget *widget,
                                GdkEventButton *event)
 {
-  GtkWindowPrivate *priv = GTK_WINDOW (widget)->priv;
+  GtkWindow *window = GTK_WINDOW (widget);
+  GtkWindowPrivate *priv = window->priv;
   GdkWindowEdge edge;
 
   if (event->window == priv->grip_window)
@@ -6477,29 +6677,52 @@ gtk_window_button_press_event (GtkWidget *widget,
     }
   else if (priv->client_decorated &&
            priv->decorated &&
-           priv->title_box &&
            !priv->fullscreen)
     {
-      GtkAllocation allocation;
-      int border_width;
+      gint x = event->x;
+      gint y = event->y;
+      GtkWindowRegion region = get_active_region_type (window, x, y);
 
-      gtk_widget_get_allocation (priv->title_box, &allocation);
-      border_width =
-        gtk_container_get_border_width (GTK_CONTAINER (priv->title_box));
-
-      if (allocation.x - border_width <= event->x &&
-          event->x < allocation.x + border_width + allocation.width &&
-          allocation.y - border_width <= event->y &&
-          event->y < allocation.y + border_width + allocation.height)
+      if (event->type == GDK_BUTTON_PRESS)
         {
-          gdk_window_begin_move_drag_for_device (gtk_widget_get_window(widget),
-                                                 gdk_event_get_device((GdkEvent *) event),
-                                                 event->button,
-                                                 event->x_root,
-                                                 event->y_root,
-                                                 event->time);
+          if (event->button == GDK_BUTTON_PRIMARY)
+            {
+              switch (region)
+                {
+                case GTK_WINDOW_REGION_TITLE:
+                case GTK_WINDOW_REGION_CONTENT:
+                case GTK_WINDOW_REGION_EDGE:
+                  gdk_window_begin_move_drag_for_device (gtk_widget_get_window (widget),
+                                                         gdk_event_get_device ((GdkEvent *) event),
+                                                         event->button,
+                                                         event->x_root,
+                                                         event->y_root,
+                                                         event->time);
+                  break;
 
-          return TRUE;
+                default:
+                  gdk_window_begin_resize_drag_for_device (gtk_widget_get_window (widget),
+                                                           (GdkWindowEdge)region,
+                                                           gdk_event_get_device ((GdkEvent *) event),
+
+                                                           event->button,
+                                                           event->x_root,
+                                                           event->y_root,
+                                                           event->time);
+                  break;
+                }
+
+              return TRUE;
+            }
+        }
+      else if (event->type == GDK_2BUTTON_PRESS)
+        {
+          if (region == GTK_WINDOW_REGION_TITLE)
+            {
+              gtk_window_title_max_clicked (widget, widget);
+
+              return TRUE;
+            }
         }
     }
 
@@ -6522,6 +6745,18 @@ static gint
 gtk_window_enter_notify_event (GtkWidget        *widget,
 			       GdkEventCrossing *event)
 {
+  GtkWindowPrivate *priv = GTK_WINDOW (widget)->priv;
+
+  if (priv->decorated && priv->client_decorated)
+    {
+      gint x, y;
+      GdkWindow *gdk_window;
+
+      gdk_window = gtk_widget_get_window (widget);
+      gdk_window_get_pointer (gdk_window, &x, &y, NULL);
+      update_cursor_at_position (widget, x, y);
+    }
+
   return FALSE;
 }
 
@@ -6529,6 +6764,25 @@ static gint
 gtk_window_leave_notify_event (GtkWidget        *widget,
 			       GdkEventCrossing *event)
 {
+  return FALSE;
+}
+
+static gboolean
+gtk_window_motion_notify_event (GtkWidget       *widget,
+                                GdkEventMotion  *event)
+{
+  GtkWindowPrivate *priv = GTK_WINDOW (widget)->priv;
+
+  if (priv->decorated && priv->client_decorated)
+    {
+      gint x, y;
+      GdkWindow *gdk_window;
+
+      gdk_window = gtk_widget_get_window (widget);
+      gdk_window_get_pointer (gdk_window, &x, &y, NULL);
+      update_cursor_at_position (widget, x, y);
+    }
+
   return FALSE;
 }
 
@@ -6886,6 +7140,97 @@ gtk_window_real_set_focus (GtkWindow *window,
       g_object_unref (focus);
     }
 }
+
+static void
+window_cursor_changed (GdkWindow  *window,
+                       GParamSpec *pspec,
+                       GtkWidget  *widget)
+{
+  GTK_WINDOW (widget)->priv->default_cursor = gdk_window_get_cursor (window);
+}
+
+static void
+update_cursor_at_position (GtkWidget *widget, gint x, gint y)
+{
+  GtkWindow *window = GTK_WINDOW (widget);
+  GtkWindowPrivate *priv = window->priv;
+  GtkWindowRegion region;
+  GdkCursorType cursor_type;
+  GdkCursor *cursor;
+  GdkWindowState state;
+  gboolean use_default = FALSE;
+  GdkWindow *gdk_window;
+
+  region = get_active_region_type (window, x, y);
+
+  state = gdk_window_get_state (gtk_widget_get_window (widget));
+
+  if ((state & GDK_WINDOW_STATE_MAXIMIZED) || !priv->resizable)
+    {
+      use_default = TRUE;
+    }
+  else
+    {
+      switch (region)
+        {
+        case GTK_WINDOW_REGION_EDGE_NW:
+          cursor_type = GDK_TOP_LEFT_CORNER;
+          break;
+
+        case GTK_WINDOW_REGION_EDGE_N:
+          cursor_type = GDK_TOP_SIDE;
+          break;
+
+        case GTK_WINDOW_REGION_EDGE_NE:
+          cursor_type = GDK_TOP_RIGHT_CORNER;
+          break;
+
+        case GTK_WINDOW_REGION_EDGE_W:
+          cursor_type = GDK_LEFT_SIDE;
+          break;
+
+        case GTK_WINDOW_REGION_EDGE_E:
+          cursor_type = GDK_RIGHT_SIDE;
+          break;
+
+        case GTK_WINDOW_REGION_EDGE_SW:
+          cursor_type = GDK_BOTTOM_LEFT_CORNER;
+          break;
+
+        case GTK_WINDOW_REGION_EDGE_S:
+          cursor_type = GDK_BOTTOM_SIDE;
+          break;
+
+        case GTK_WINDOW_REGION_EDGE_SE:
+          cursor_type = GDK_BOTTOM_RIGHT_CORNER;
+          break;
+
+        default:
+          use_default = TRUE;
+          break;
+        }
+    }
+
+  gdk_window = gtk_widget_get_window (widget);
+  g_signal_handlers_disconnect_by_func (G_OBJECT (gdk_window),
+                                        G_CALLBACK (window_cursor_changed),
+                                        widget);
+
+  if (use_default)
+    {
+      gdk_window_set_cursor (gdk_window, priv->default_cursor);
+    }
+  else
+    {
+      cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), cursor_type);
+      gdk_window_set_cursor (gdk_window, cursor);
+    }
+
+  g_signal_connect (G_OBJECT (gdk_window), "notify::cursor",
+                    G_CALLBACK (window_cursor_changed), widget);
+}
+
+
 
 static void
 gtk_window_get_preferred_width (GtkWidget *widget,
@@ -8301,7 +8646,7 @@ gtk_window_draw (GtkWidget *widget,
     {
       gtk_style_context_save (context);
       gtk_style_context_add_class (context, "titlebar");
-      gtk_widget_get_allocation (priv->title_box, &allocation);  
+      gtk_widget_get_allocation (priv->title_box, &allocation);
 
       /* Why do these subtract ? */
       gtk_render_background (context, cr,
