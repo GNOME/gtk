@@ -435,6 +435,7 @@ static void     gtk_window_unrealize_icon             (GtkWindow    *window);
 static void     resize_grip_create_window             (GtkWindow    *window);
 static void     resize_grip_destroy_window            (GtkWindow    *window);
 static void     update_grip_visibility                (GtkWindow    *window);
+static void     update_window_buttons                 (GtkWindow    *window);
 
 static void        gtk_window_notify_keys_changed (GtkWindow   *window);
 static GtkKeyHash *gtk_window_get_key_hash        (GtkWindow   *window);
@@ -2901,6 +2902,8 @@ gtk_window_set_type_hint (GtkWindow           *window,
 
   priv->reset_type_hint = TRUE;
   priv->gdk_type_hint = hint;
+
+  update_window_buttons (window);
 }
 
 /**
@@ -3414,6 +3417,9 @@ gtk_window_set_decorated (GtkWindow *window,
                                     0);
     }
 
+  update_window_buttons (window);
+  gtk_widget_queue_resize (GTK_WIDGET (window));
+
   g_object_notify (G_OBJECT (window), "decorated");
 }
 
@@ -3480,6 +3486,8 @@ gtk_window_set_deletable (GtkWindow *window,
         gdk_window_set_functions (gdk_window,
 				  GDK_FUNC_ALL | GDK_FUNC_CLOSE);
     }
+
+  update_window_buttons (window);
 
   g_object_notify (G_OBJECT (window), "deletable");  
 }
@@ -4855,6 +4863,52 @@ get_default_title (void)
 }
 
 static void
+update_window_buttons (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = window->priv;
+
+  if (priv->client_decorated)
+    {
+      if (priv->title_box != NULL)
+        gtk_widget_show (priv->title_box);
+
+      if (priv->title_min_button != NULL)
+        {
+          if (priv->gdk_type_hint == GDK_WINDOW_TYPE_HINT_NORMAL)
+            gtk_widget_show (priv->title_min_button);
+          else
+            gtk_widget_hide (priv->title_min_button);
+        }
+
+      if (priv->title_max_button != NULL)
+        {
+          if (priv->resizable &&
+              priv->gdk_type_hint == GDK_WINDOW_TYPE_HINT_NORMAL)
+            gtk_widget_show (priv->title_max_button);
+          else
+            gtk_widget_hide (priv->title_max_button);
+        }
+
+     if (priv->title_close_button != NULL)
+        {
+          if (priv->deletable &&
+              priv->gdk_type_hint == GDK_WINDOW_TYPE_HINT_NORMAL)
+            gtk_widget_show_all (priv->title_close_button);
+          else
+            gtk_widget_hide (priv->title_close_button);
+        }
+
+      if (priv->title_label != NULL)
+        gtk_widget_show (priv->title_label);
+    }
+  else
+    {
+      if (priv->title_box != NULL)
+        gtk_widget_hide (priv->title_box);
+    }
+}
+
+static void
 create_decoration (GtkWidget *widget)
 {
   GtkWindow *window = GTK_WINDOW (widget);
@@ -4926,6 +4980,8 @@ create_decoration (GtkWidget *widget)
                     G_CALLBACK (gtk_window_title_close_clicked), window);
 
   gtk_widget_show_all (priv->title_box);
+
+  update_window_buttons (window);
 }
 
 static void
@@ -5931,6 +5987,12 @@ gtk_window_state_event (GtkWidget           *widget,
         (event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN) ? 1 : 0;
       if (priv->title_box)
         gtk_widget_set_visible (priv->title_box, !priv->fullscreen);
+    }
+
+  if (event->changed_mask & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED))
+    {
+      update_window_buttons (window);
+      gtk_widget_queue_draw (GTK_WIDGET (window));
     }
 
   return FALSE;
@@ -8735,6 +8797,7 @@ gtk_window_set_resizable (GtkWindow *window,
       priv->resizable = resizable;
 
       update_grip_visibility (window);
+      update_window_buttons (window);
 
       gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
 
