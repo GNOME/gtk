@@ -4956,6 +4956,7 @@ create_decoration (GtkWidget *widget)
       else
         title = get_default_title (); /* copied from X backend */
       gtk_label_set_markup (GTK_LABEL (priv->title_label), title);
+      gtk_label_set_ellipsize (GTK_LABEL (priv->title_label), PANGO_ELLIPSIZE_END);
       gtk_box_pack_start (GTK_BOX (priv->title_box),
                           priv->title_label, TRUE, TRUE, 0);
 
