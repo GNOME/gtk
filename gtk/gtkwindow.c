@@ -1029,6 +1029,13 @@ gtk_window_class_init (GtkWindowClass *klass)
   /* Style properties.
    */
   gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_string ("decoration-button-layout",
+                                                                P_("Decorated button layout"),
+                                                                P_("Decorated button layout"),
+                                                                "minimize,maximize,close",
+                                                                GTK_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("resize-grip-width",
                                                              P_("Width of resize grip"),
                                                              P_("Width of resize grip"),
@@ -4865,12 +4872,22 @@ update_window_buttons (GtkWindow *window)
 
   if (priv->client_decorated)
     {
+      gchar *layout_desc;
+      gchar **tokens;
+      gint i;
+
+      gtk_widget_style_get (GTK_WIDGET (window),
+                            "decoration-button-layout", &layout_desc,
+                            NULL);
+      tokens = g_strsplit (layout_desc, ",", -1);
+
       if (priv->title_box != NULL)
         gtk_widget_show (priv->title_box);
 
       if (priv->title_min_button != NULL)
         {
-          if (priv->gdk_type_hint == GDK_WINDOW_TYPE_HINT_NORMAL)
+          if (strstr (layout_desc, "minimize") &&
+              priv->gdk_type_hint == GDK_WINDOW_TYPE_HINT_NORMAL)
             gtk_widget_show (priv->title_min_button);
           else
             gtk_widget_hide (priv->title_min_button);
@@ -4879,6 +4896,7 @@ update_window_buttons (GtkWindow *window)
       if (priv->title_max_button != NULL)
         {
           if (priv->resizable &&
+              strstr (layout_desc, "maximize") &&
               priv->gdk_type_hint == GDK_WINDOW_TYPE_HINT_NORMAL)
             gtk_widget_show (priv->title_max_button);
           else
@@ -4888,6 +4906,7 @@ update_window_buttons (GtkWindow *window)
      if (priv->title_close_button != NULL)
         {
           if (priv->deletable &&
+              strstr (layout_desc, "close") &&
               priv->gdk_type_hint == GDK_WINDOW_TYPE_HINT_NORMAL)
             gtk_widget_show_all (priv->title_close_button);
           else
@@ -4896,6 +4915,19 @@ update_window_buttons (GtkWindow *window)
 
       if (priv->title_label != NULL)
         gtk_widget_show (priv->title_label);
+
+      for (i = 0; tokens[i] != 0; i++)
+        {
+          if (strcmp (tokens[i], "minimize") == 0)
+            gtk_box_reorder_child (GTK_BOX (priv->title_box), priv->title_min_button, 0);
+          else if (strcmp (tokens[i], "maximize") == 0)
+            gtk_box_reorder_child (GTK_BOX (priv->title_box), priv->title_max_button, 0);
+          else if (strcmp (tokens[i], "close") == 0)
+            gtk_box_reorder_child (GTK_BOX (priv->title_box), priv->title_close_button, 0);
+        }
+
+      g_strfreev (tokens);
+      g_free (layout_desc);
     }
   else
     {
