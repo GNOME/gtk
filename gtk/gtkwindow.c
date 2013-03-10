@@ -146,6 +146,7 @@ struct _GtkWindowPrivate
   GtkWidget *title_min_button;
   GtkWidget *title_max_button;
   GtkWidget *title_close_button;
+  GtkWidget *popup_menu;
 
   GdkCursor *default_cursor;
 
@@ -473,6 +474,9 @@ static void        gtk_window_set_theme_variant         (GtkWindow  *window);
 static void        window_cursor_changed       (GdkWindow  *window,
                                                 GParamSpec *pspec,
                                                 GtkWidget  *widget);
+static gboolean    gtk_window_popup_menu       (GtkWidget      *widget);
+static void        gtk_window_do_popup         (GtkWindow      *window,
+                                                GdkEventButton *event);
 
 static void gtk_window_get_preferred_width (GtkWidget *widget,
                                             gint      *minimum_size,
@@ -651,6 +655,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->direction_changed = gtk_window_direction_changed;
   widget_class->state_changed = gtk_window_state_changed;
   widget_class->style_updated = gtk_window_style_updated;
+  widget_class->popup_menu = gtk_window_popup_menu;
   widget_class->get_preferred_width = gtk_window_get_preferred_width;
   widget_class->get_preferred_width_for_height = gtk_window_get_preferred_width_for_height;
   widget_class->get_preferred_height = gtk_window_get_preferred_height;
@@ -5741,6 +5746,12 @@ gtk_window_unrealize (GtkWidget *widget)
       info->last.flags = 0;
     }
 
+  if (priv->popup_menu)
+    {
+      gtk_widget_destroy (priv->popup_menu);
+      priv->popup_menu = NULL;
+    }
+
   /* Icons */
   gtk_window_unrealize_icon (window);
 
@@ -6803,6 +6814,12 @@ gtk_window_button_press_event (GtkWidget *widget,
 
               return TRUE;
             }
+          else if (event->button == GDK_BUTTON_SECONDARY)
+            {
+              gtk_window_do_popup (window, event);
+
+              return TRUE;
+            }
         }
       else if (event->type == GDK_2BUTTON_PRESS)
         {
@@ -7581,6 +7598,117 @@ _gtk_window_unset_focus_and_default (GtkWindow *window,
   
   g_object_unref (widget);
   g_object_unref (window);
+}
+
+static void
+popup_menu_detach (GtkWidget *widget,
+                   GtkMenu   *menu)
+{
+  GTK_WINDOW (widget)->priv->popup_menu = NULL;
+}
+
+static void
+popup_position_func (GtkMenu   *menu,
+                     gint      *x,
+                     gint      *y,
+                     gboolean  *push_in,
+                     gpointer   user_data)
+{
+}
+
+static void
+minimize_window_clicked (GtkMenuItem *menuitem,
+                         gpointer     user_data)
+{
+  GtkWindow *window = (GtkWindow *)user_data;
+
+  gtk_window_title_min_clicked (GTK_WIDGET (window), window);
+}
+
+static void
+maximize_window_clicked (GtkMenuItem *menuitem,
+                         gpointer     user_data)
+{
+  GtkWindow *window = (GtkWindow *)user_data;
+
+  gtk_window_title_max_clicked (GTK_WIDGET (window), window);
+}
+
+static void
+close_window_clicked (GtkMenuItem *menuitem,
+                      gpointer     user_data)
+{
+  GtkWindow *window = (GtkWindow *)user_data;
+
+  send_delete_event (window);
+}
+
+static void
+gtk_window_do_popup (GtkWindow      *window,
+                     GdkEventButton *event)
+{
+  GtkWindowPrivate *priv = window->priv;
+  GdkWindowState state = gdk_window_get_state (gtk_widget_get_window (GTK_WIDGET (window)));
+  GtkWidget *menuitem;
+
+  if (priv->popup_menu)
+    gtk_widget_destroy (priv->popup_menu);
+
+  priv->popup_menu = gtk_menu_new ();
+  gtk_menu_attach_to_widget (GTK_MENU (priv->popup_menu),
+                             GTK_WIDGET (window),
+                             popup_menu_detach);
+
+  menuitem = gtk_menu_item_new_with_label (_("Minimize"));
+  gtk_widget_show (menuitem);
+  if (priv->gdk_type_hint != GDK_WINDOW_TYPE_HINT_NORMAL)
+    gtk_widget_set_sensitive (menuitem, FALSE);
+  g_signal_connect (G_OBJECT (menuitem),
+                    "activate",
+                    G_CALLBACK (minimize_window_clicked), window);
+  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
+
+  menuitem = gtk_menu_item_new_with_label (state & GDK_WINDOW_STATE_MAXIMIZED ? _("Unmaximize") : _("Maximize"));
+  gtk_widget_show (menuitem);
+  if (!priv->resizable ||
+      priv->gdk_type_hint != GDK_WINDOW_TYPE_HINT_NORMAL)
+    gtk_widget_set_sensitive (menuitem, FALSE);
+  g_signal_connect (G_OBJECT (menuitem),
+                    "activate",
+                    G_CALLBACK (maximize_window_clicked), window);
+  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
+
+  menuitem = gtk_separator_menu_item_new ();
+  gtk_widget_show (menuitem);
+  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
+
+  menuitem = gtk_image_menu_item_new_with_label (_("Close"));
+  gtk_widget_show (menuitem);
+  if (!priv->deletable)
+    gtk_widget_set_sensitive (menuitem, FALSE);
+  g_signal_connect (G_OBJECT (menuitem),
+                    "activate",
+                    G_CALLBACK (close_window_clicked), window);
+  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
+
+  if (event)
+    gtk_menu_popup (GTK_MENU (priv->popup_menu),
+                    NULL, NULL,
+                    NULL, NULL,
+                    event->button, event->time);
+  else
+    gtk_menu_popup (GTK_MENU (priv->popup_menu),
+                    NULL, NULL,
+                    popup_position_func, window,
+                    0, gtk_get_current_event_time ());
+}
+
+static gboolean
+gtk_window_popup_menu (GtkWidget *widget)
+{
+  gtk_window_do_popup (GTK_WINDOW (widget), NULL);
+
+  return TRUE;
 }
 
 /*********************************
