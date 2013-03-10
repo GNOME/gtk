@@ -8838,14 +8838,15 @@ gtk_window_draw (GtkWidget *widget,
   gboolean ret = FALSE;
   GtkAllocation allocation;
   GtkBorder title_border = { 0 };
-  GtkBorder window_border = {};
+  GtkBorder inner_border = { 0 };
+  GtkBorder outer_border = { 0 };
 
   context = gtk_widget_get_style_context (widget);
 
   if (priv->title_box != NULL)
-    get_decoration_borders (widget, &title_border, &window_border, NULL);
+    get_decoration_borders (widget, &title_border, &inner_border, &outer_border);
   else
-    get_decoration_borders (widget, NULL, &window_border, NULL);
+    get_decoration_borders (widget, NULL, &inner_border, &outer_border);
 
   if (!gtk_widget_get_app_paintable (widget) &&
       gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
@@ -8859,17 +8860,24 @@ gtk_window_draw (GtkWidget *widget,
           !priv->fullscreen &&
           !(gdk_window_get_state (gtk_widget_get_window (widget)) & GDK_WINDOW_STATE_MAXIMIZED))
         {
-          gtk_style_context_add_class (context, "window-border");
           gtk_widget_get_allocation (widget, &allocation);
+          gtk_style_context_add_class (context, "window-border");
           gtk_render_background (context, cr,
-                                 window_border.left,
-                                 window_border.top,
+                                 inner_border.left + outer_border.left,
+                                 inner_border.top + outer_border.top,
                                  allocation.width -
-                                 (window_border.left +
-                                  window_border.right),
+                                 (inner_border.left + inner_border.right +
+                                  outer_border.left + outer_border.right),
                                  allocation.height -
-                                 (window_border.top +
-                                  window_border.bottom));
+                                 (inner_border.top + inner_border.bottom +
+                                  outer_border.top + outer_border.bottom));
+          gtk_render_frame (context, cr,
+                            outer_border.left,
+                            outer_border.top,
+                            allocation.width - (outer_border.left + outer_border.right),
+                            allocation.height - (outer_border.top + outer_border.bottom));
+          gtk_style_context_remove_class (context, "window-border");
+          gtk_style_context_add_class (context, "window-outer-border");
           gtk_render_frame (context, cr,
                             0, 0, allocation.width, allocation.height);
         }
