@@ -7595,16 +7595,21 @@ gtk_window_do_popup (GtkWindow      *window,
 
   menuitem = gtk_menu_item_new_with_label (_("Minimize"));
   gtk_widget_show (menuitem);
+  if (priv->gdk_type_hint != GDK_WINDOW_TYPE_HINT_NORMAL)
+    gtk_widget_set_sensitive (menuitem, FALSE);
   g_signal_connect (G_OBJECT (menuitem),
                     "activate",
                     G_CALLBACK (minimize_window_clicked), window);
   gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
 
   menuitem = gtk_menu_item_new_with_label (state & GDK_WINDOW_STATE_MAXIMIZED ? _("Unmaximize") : _("Maximize"));
+  gtk_widget_show (menuitem);
+  if (!priv->resizable ||
+      priv->gdk_type_hint != GDK_WINDOW_TYPE_HINT_NORMAL)
+    gtk_widget_set_sensitive (menuitem, FALSE);
   g_signal_connect (G_OBJECT (menuitem),
                     "activate",
                     G_CALLBACK (maximize_window_clicked), window);
-  gtk_widget_show (menuitem);
   gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
 
   menuitem = gtk_separator_menu_item_new ();
@@ -7613,6 +7618,8 @@ gtk_window_do_popup (GtkWindow      *window,
 
   menuitem = gtk_image_menu_item_new_with_label (_("Close"));
   gtk_widget_show (menuitem);
+  if (!priv->deletable)
+    gtk_widget_set_sensitive (menuitem, FALSE);
   g_signal_connect (G_OBJECT (menuitem),
                     "activate",
                     G_CALLBACK (close_window_clicked), window);
