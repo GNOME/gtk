@@ -235,6 +235,7 @@
       <xi:include href="xml/gtknotebook.xml" />
       <xi:include href="xml/gtkexpander.xml" />
       <xi:include href="xml/gtkoverlay.xml" />
+      <xi:include href="xml/gtkheaderbar.xml" />
       <xi:include href="xml/gtkorientable.xml" />
     </chapter>
 
