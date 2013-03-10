@@ -324,13 +324,6 @@ gdk_wayland_window_attach_image (GdkWindow *window)
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  /* The "drawn to" Cairo surface is the same as the Cairo surface from which
-   * we are driving the buffer for the Wayland surface. Therefore we don't
-   * need to do anything here
-   */
-  if (impl->server_surface == impl->cairo_surface)
-    return;
-
   /* The wayland surface is attached to a buffer that is from the old "drawn
    * to" surface. Unref the surface and restore the state.
    */
