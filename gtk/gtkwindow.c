@@ -143,6 +143,8 @@ struct _GtkWindowPrivate
 
   GtkWidget *title_box;
   GtkWidget *title_label;
+  GtkWidget *title_min_button;
+  GtkWidget *title_max_button;
   GtkWidget *title_close_button;
 
   /* The following flags are initially TRUE (before a window is mapped).
@@ -1155,6 +1157,26 @@ gtk_window_class_init (GtkWindowClass *klass)
   add_tab_bindings (binding_set, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_WINDOW_ACCESSIBLE);
+}
+
+static void
+gtk_window_title_min_clicked (GtkWidget *widget, gpointer data)
+{
+  GtkWindow *window = (GtkWindow *)data;
+
+  gtk_window_iconify (window);
+}
+
+static void
+gtk_window_title_max_clicked (GtkWidget *widget, gpointer data)
+{
+  GtkWindow *window = (GtkWindow *)data;
+  GdkWindowState state = gdk_window_get_state (gtk_widget_get_window (widget));
+
+  if (state & GDK_WINDOW_STATE_MAXIMIZED)
+    gtk_window_unmaximize (window);
+  else
+    gtk_window_maximize (window);
 }
 
 static void
@@ -4873,7 +4895,7 @@ create_decoration (GtkWidget *widget)
 
   if (priv->type != GTK_WINDOW_POPUP)
     {
-      priv->title_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+      priv->title_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       context = gtk_widget_get_style_context (priv->title_box);
       gtk_style_context_add_class (context, "titlebar");
       gtk_widget_set_parent (priv->title_box, GTK_WIDGET (window));
@@ -4892,6 +4914,20 @@ create_decoration (GtkWidget *widget)
                         FALSE, FALSE, 0);
       g_signal_connect (priv->title_close_button, "clicked",
                         G_CALLBACK (gtk_window_title_close_clicked), window);
+
+      priv->title_max_button = gtk_button_new_with_label ("\342\226\253");
+
+      gtk_box_pack_end (GTK_BOX (priv->title_box), priv->title_max_button,
+                        FALSE, FALSE, 0);
+      g_signal_connect (priv->title_max_button, "clicked",
+                        G_CALLBACK (gtk_window_title_max_clicked), window);
+
+      priv->title_min_button = gtk_button_new_with_label ("_");
+      gtk_box_pack_end (GTK_BOX (priv->title_box), priv->title_min_button,
+                        FALSE, FALSE, 0);
+      g_signal_connect (priv->title_min_button, "clicked",
+                        G_CALLBACK (gtk_window_title_min_clicked), window);
+
       gtk_widget_show_all (priv->title_box);
     }
 }
