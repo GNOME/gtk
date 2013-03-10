@@ -36,7 +36,6 @@
 #include <sys/mman.h>
 #include <errno.h>
 
-#include <wayland-egl.h>
 
 #define WINDOW_IS_TOPLEVEL_OR_FOREIGN(window) \
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
