@@ -4917,9 +4917,6 @@ update_window_buttons (GtkWindow *window)
                             NULL);
       tokens = g_strsplit (layout_desc, ",", -1);
 
-      if (priv->title_box != NULL)
-        gtk_widget_show (priv->title_box);
-
       if (priv->title_min_button != NULL)
         {
           if (strstr (layout_desc, "minimize") &&
@@ -4952,14 +4949,19 @@ update_window_buttons (GtkWindow *window)
       if (priv->title_label != NULL)
         gtk_widget_show (priv->title_label);
 
-      for (i = 0; tokens[i] != 0; i++)
+      if (priv->title_box != NULL)
         {
-          if (strcmp (tokens[i], "minimize") == 0)
-            gtk_box_reorder_child (GTK_BOX (priv->title_box), priv->title_min_button, 0);
-          else if (strcmp (tokens[i], "maximize") == 0)
-            gtk_box_reorder_child (GTK_BOX (priv->title_box), priv->title_max_button, 0);
-          else if (strcmp (tokens[i], "close") == 0)
-            gtk_box_reorder_child (GTK_BOX (priv->title_box), priv->title_close_button, 0);
+          gtk_widget_show (priv->title_box);
+
+          for (i = 0; tokens[i] != 0; i++)
+            {
+              if (strcmp (tokens[i], "minimize") == 0)
+                gtk_box_reorder_child (GTK_BOX (priv->title_box), priv->title_min_button, 0);
+              else if (strcmp (tokens[i], "maximize") == 0)
+                gtk_box_reorder_child (GTK_BOX (priv->title_box), priv->title_max_button, 0);
+              else if (strcmp (tokens[i], "close") == 0)
+                gtk_box_reorder_child (GTK_BOX (priv->title_box), priv->title_close_button, 0);
+            }
         }
 
       g_strfreev (tokens);
@@ -5919,8 +5921,9 @@ _gtk_window_set_allocation (GtkWindow           *window,
 
   if (priv->client_decorated && priv->decorated &&
       priv->title_box &&
-      gtk_widget_get_visual(priv->title_box) &&
-      !priv->fullscreen)
+      gtk_widget_get_visual (priv->title_box) &&
+      !priv->fullscreen &&
+      priv->type != GTK_WINDOW_POPUP)
     {
       GtkAllocation title_allocation;
 
@@ -5939,7 +5942,10 @@ _gtk_window_set_allocation (GtkWindow           *window,
       gtk_widget_size_allocate (priv->title_box, &title_allocation);
     }
 
-  if (priv->client_decorated && priv->decorated && !priv->fullscreen)
+  if (priv->client_decorated &&
+      priv->decorated &&
+      !priv->fullscreen &&
+      priv->type != GTK_WINDOW_POPUP)
     {
       child_allocation.x += window_border.left;
       child_allocation.y += window_border.top +
@@ -6508,11 +6514,12 @@ get_region_type (GtkWindow *window, gint x, gint y)
 {
   GtkWindowPrivate *priv = window->priv;
   GtkWidget *widget = GTK_WIDGET (window);
-  gint title_height;
+  gint title_height = 0;
   gint resize_handle = 0;
   GtkBorder window_border;
 
-  title_height = gtk_widget_get_allocated_height (priv->title_box);
+  if (priv->title_box)
+    title_height = gtk_widget_get_allocated_height (priv->title_box);
   get_decoration_borders (widget, NULL, &window_border);
   gtk_widget_style_get (widget,
                         "decoration-resize-handle", &resize_handle,
