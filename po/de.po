@@ -32,16 +32,18 @@ msgstr ""
 "Project-Id-Version: GTK+ master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-02-05 18:40+0000\n"
-"PO-Revision-Date: 2013-02-05 23:26+0100\n"
-"Last-Translator: Benjamin Steinwender <b@stbe.at>\n"
+"POT-Creation-Date: 2013-03-08 10:24+0000\n"
+"PO-Revision-Date: 2013-03-08 16:33+0100\n"
+"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
-"Language: de_DE\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.5.5\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Generator: Gtranslator 2.91.5\n"
 
 #: ../gdk/gdk.c:155
 #, c-format
@@ -1345,9 +1347,10 @@ msgstr "Zoll"
 msgid "mm"
 msgstr "mm"
 
+# CHECK
 #: ../gtk/gtkcustompaperunixdialog.c:605
 msgid "Margins from Printer…"
-msgstr "Druckerränder …"
+msgstr "Ränder des Druckers …"
 
 #: ../gtk/gtkcustompaperunixdialog.c:771
 #, c-format
@@ -1445,7 +1448,7 @@ msgstr "Datei auswählen"
 
 #: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkfilechooserdefault.c:1820
 msgid "Desktop"
-msgstr "Desktop"
+msgstr "Schreibtisch"
 
 #: ../gtk/gtkfilechooserbutton.c:106
 msgid "(None)"
@@ -1847,8 +1850,8 @@ msgstr "%s: Anwendungsname fehlt"
 #, c-format
 msgid "Creating AppInfo from id not supported on non unix operating systems"
 msgstr ""
-"Erzeugen der Anwendungsinformation aus der Kennung wird auf nicht-UNIX-"
-"Betriebsystemen nicht unterstützt"
+"Erstellung der AppInfo-Kennung wird auf unixoiden Betriebssystemen nicht "
+"unterstützt"
 
 #. Translators: the first %s is the program name, the second one
 #. is the application name.
@@ -2090,9 +2093,11 @@ msgstr "Benutzerdefinierte Größen verwalten …"
 msgid "_Format for:"
 msgstr "_Format für:"
 
+# Auch wenn im Original die Tastenkürzel kollidieren (_Preferences),
+# wir verwenden Ei_genschaften.
 #: ../gtk/gtkpagesetupunixdialog.c:917 ../gtk/gtkprintunixdialog.c:3477
 msgid "_Paper size:"
-msgstr "_Papiergröße:"
+msgstr "Ei_genschaften:"
 
 #: ../gtk/gtkpagesetupunixdialog.c:946
 msgid "_Orientation:"
@@ -2498,7 +2503,7 @@ msgstr "_Abrechnungsinfo:"
 # CHECK
 #: ../gtk/gtkprintunixdialog.c:3587
 msgid "Print Document"
-msgstr "Dokument drucken"
+msgstr "Druckauftrag ausführen"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
@@ -4565,7 +4570,7 @@ msgstr "Es besteht ein Problem mit dem Drucker »%s«."
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2123
-msgid "Paused; Rejecting Jobs"
+msgid "Paused ; Rejecting Jobs"
 msgstr "Pausiert; Aufträge werden abgewiesen"
 
 #. Translators: this is a printer status.
