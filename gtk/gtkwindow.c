@@ -142,6 +142,7 @@ struct _GtkWindowPrivate
   guint    auto_mnemonics_timeout_id;
 
   GtkWidget *title_box;
+  GtkWidget *title_icon;
   GtkWidget *title_min_button;
   GtkWidget *title_max_button;
   GtkWidget *title_close_button;
@@ -3618,6 +3619,37 @@ icon_list_from_theme (GtkWidget    *widget,
 }
 
 static void
+set_title_icon (GtkWindow *window, GList *list)
+{
+  GtkWindowPrivate *priv = window->priv;
+
+  if (priv->title_icon && list != NULL)
+    {
+      GdkPixbuf *pixbuf, *best;
+      GList *l;
+
+      best = NULL;
+      for (l = list; l; l = l->next)
+        {
+          pixbuf = list->data;
+          if (gdk_pixbuf_get_width (pixbuf) <= 20)
+            {
+              best = g_object_ref (pixbuf);
+              break;
+            }
+        }
+
+      if (best == NULL)
+        best = gdk_pixbuf_scale_simple (GDK_PIXBUF (list->data), 20, 20, GDK_INTERP_BILINEAR);
+
+      gtk_image_set_from_pixbuf (GTK_IMAGE (priv->title_icon), best);
+      g_object_unref (best);
+
+      gtk_widget_show (priv->title_icon);
+    }
+}
+
+static void
 gtk_window_realize_icon (GtkWindow *window)
 {
   GtkWindowPrivate *priv = window->priv;
@@ -3677,13 +3709,14 @@ gtk_window_realize_icon (GtkWindow *window)
     {
       icon_list = icon_list_from_theme (widget, default_icon_name);
       info->using_default_icon = TRUE;
-      info->using_themed_icon = TRUE;  
+      info->using_themed_icon = TRUE;
     }
 
   info->realized = TRUE;
 
   gdk_window_set_icon_list (gtk_widget_get_window (widget), icon_list);
-  
+  set_title_icon (window, icon_list);
+
   if (info->using_themed_icon) 
     {
       GtkIconTheme *icon_theme;
@@ -4901,12 +4934,22 @@ update_window_buttons (GtkWindow *window)
 {
   GtkWindowPrivate *priv = window->priv;
 
-  if (priv->client_decorated)
+  if (priv->decorated &&
+      priv->client_decorated &&
+      priv->title_box != NULL)
     {
       gchar *layout_desc;
       gchar **tokens, **t;
       gint i, j;
+      GdkPixbuf *icon = NULL;
 
+      if (priv->title_icon)
+        {
+          icon = gtk_image_get_pixbuf (GTK_IMAGE (priv->title_icon));
+          g_object_ref (icon);
+          gtk_widget_destroy (priv->title_icon);
+          priv->title_icon = NULL;
+        }
       if (priv->title_min_button)
         {
           gtk_widget_destroy (priv->title_min_button);
@@ -4938,46 +4981,62 @@ update_window_buttons (GtkWindow *window)
               t = g_strsplit (tokens[i], ",", -1);
               for (j = 0; t[j]; j++)
                 {
-                  if (strcmp (t[j], "minimize") == 0 &&
+                  GtkWidget *button = NULL;
+
+                  if (strcmp (t[j], "icon") == 0)
+                    {
+                      button = gtk_image_new ();
+                      gtk_widget_set_size_request (button, 20, 20);
+                      gtk_widget_show (button);
+                      if (icon != NULL)
+                        {
+                          gtk_image_set_from_pixbuf (GTK_IMAGE (button), icon);
+                          g_object_unref (icon);
+                        }
+                      else
+                        gtk_widget_hide (button);
+
+                      priv->title_icon = button;
+                    }
+                  else if (strcmp (t[j], "minimize") == 0 &&
                       priv->gdk_type_hint == GDK_WINDOW_TYPE_HINT_NORMAL)
                     {
-                      priv->title_min_button = gtk_button_new_with_label ("_");
-                      gtk_widget_set_can_focus (priv->title_min_button, FALSE);
-                      gtk_widget_show (priv->title_min_button);
-                      g_signal_connect (priv->title_min_button, "clicked",
+                      button = gtk_button_new_with_label ("_");
+                      gtk_widget_set_can_focus (button, FALSE);
+                      gtk_widget_show (button);
+                      g_signal_connect (button, "clicked",
                                         G_CALLBACK (gtk_window_title_min_clicked), window);
-                      if (i == 0)
-                        gtk_header_bar_pack_start (GTK_HEADER_BAR (priv->title_box), priv->title_min_button);
-                      else
-                        gtk_header_bar_pack_end (GTK_HEADER_BAR (priv->title_box), priv->title_min_button);
+                      priv->title_min_button = button;
                     }
                   else if (strcmp (t[j], "maximize") == 0 &&
                            priv->resizable &&
                            priv->gdk_type_hint == GDK_WINDOW_TYPE_HINT_NORMAL)
                     {
-                      priv->title_max_button = gtk_button_new_with_label ("\342\226\253");
-                      gtk_widget_set_can_focus (priv->title_max_button, FALSE);
-                      gtk_widget_show (priv->title_max_button);
-                      g_signal_connect (priv->title_max_button, "clicked",
+                      button = gtk_button_new_with_label ("\342\226\253");
+                      gtk_widget_set_can_focus (button, FALSE);
+                      gtk_widget_show (button);
+                      g_signal_connect (button, "clicked",
                                         G_CALLBACK (gtk_window_title_max_clicked), window);
-                      if (i == 0)
-                        gtk_header_bar_pack_start (GTK_HEADER_BAR (priv->title_box), priv->title_max_button);
-                      else
-                        gtk_header_bar_pack_end (GTK_HEADER_BAR (priv->title_box), priv->title_max_button);
+                      priv->title_max_button = button;
                     }
                   else if (strcmp (t[j], "close") == 0 &&
                            priv->deletable &&
                            priv->gdk_type_hint == GDK_WINDOW_TYPE_HINT_NORMAL)
                     {
-                      priv->title_close_button = gtk_button_new_with_label ("×");
-                      gtk_widget_set_can_focus (priv->title_close_button, FALSE);
-                      gtk_widget_show (priv->title_close_button);
-                      g_signal_connect (priv->title_close_button, "clicked",
+                      button = gtk_button_new_with_label ("×");
+                      gtk_widget_set_can_focus (button, FALSE);
+                      gtk_widget_show (button);
+                      g_signal_connect (button, "clicked",
                                         G_CALLBACK (gtk_window_title_close_clicked), window);
+                      priv->title_close_button = button;
+                    }
+
+                  if (button)
+                    {
                       if (i == 0)
-                        gtk_header_bar_pack_start (GTK_HEADER_BAR (priv->title_box), priv->title_close_button);
+                        gtk_header_bar_pack_start (GTK_HEADER_BAR (priv->title_box), button);
                       else
-                        gtk_header_bar_pack_end (GTK_HEADER_BAR (priv->title_box), priv->title_close_button);
+                        gtk_header_bar_pack_end (GTK_HEADER_BAR (priv->title_box), button);
                     }
                 }
               g_strfreev (t);
