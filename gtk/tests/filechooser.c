@@ -1388,6 +1388,99 @@ static FileChooserButtonTest button_tests[] =
       FOLDER_NAME_2		/* final_filename */
     },
 
+    /* Unselection tests */
+    {
+      "unselect-all-1",
+      GTK_FILE_CHOOSER_ACTION_OPEN,
+      NULL,			/* initial_current_folder */
+      NULL,			/* initial_filename */
+      FALSE,			/* open_dialog */
+      NULL,			/* tweak_current_folder */
+      NULL,			/* tweak_filename */
+      0,			/* dialog_response */
+      TRUE,			/* unselect_all */
+      NULL,			/* final_current_folder */
+      NULL			/* final_filename */
+    },
+    {
+      "unselect-all-2",
+      GTK_FILE_CHOOSER_ACTION_OPEN,
+      NULL,			/* initial_current_folder */
+      FILE_NAME,		/* initial_filename */
+      FALSE,			/* open_dialog */
+      NULL,			/* tweak_current_folder */
+      NULL,			/* tweak_filename */
+      0,			/* dialog_response */
+      TRUE,			/* unselect_all */
+      NULL,			/* final_current_folder */
+      NULL			/* final_filename */
+    },
+    {
+      "unselect-all-3",
+      GTK_FILE_CHOOSER_ACTION_OPEN,
+      NULL,			/* initial_current_folder */
+      FILE_NAME,		/* initial_filename */
+      FALSE,			/* open_dialog */
+      NULL,			/* tweak_current_folder */
+      FILE_NAME_2,		/* tweak_filename */
+      0,			/* dialog_response */
+      TRUE,			/* unselect_all */
+      NULL,			/* final_current_folder */
+      NULL			/* final_filename */
+    },
+    {
+      "unselect-all-4",
+      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+      NULL,			/* initial_current_folder */
+      NULL,			/* initial_filename */
+      FALSE,			/* open_dialog */
+      NULL,			/* tweak_current_folder */
+      NULL,			/* tweak_filename */
+      0,			/* dialog_response */
+      TRUE,			/* unselect_all */
+      NULL,			/* final_current_folder */
+      NULL			/* final_filename */
+    },
+    {
+      "unselect-all-4",
+      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+      FOLDER_NAME,		/* initial_current_folder */
+      NULL,			/* initial_filename */
+      FALSE,			/* open_dialog */
+      NULL,			/* tweak_current_folder */
+      NULL,			/* tweak_filename */
+      0,			/* dialog_response */
+      TRUE,			/* unselect_all */
+      NULL,			/* final_current_folder */
+      NULL			/* final_filename */
+    },
+    {
+      "unselect-all-5",
+      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+      NULL,			/* initial_current_folder */
+      FOLDER_NAME,		/* initial_filename */
+      FALSE,			/* open_dialog */
+      NULL,			/* tweak_current_folder */
+      NULL,			/* tweak_filename */
+      0,			/* dialog_response */
+      TRUE,			/* unselect_all */
+      NULL,			/* final_current_folder */
+      NULL			/* final_filename */
+    },
+    {
+      "unselect-all-6",
+      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+      NULL,			/* initial_current_folder */
+      FOLDER_NAME,		/* initial_filename */
+      FALSE,			/* open_dialog */
+      NULL,			/* tweak_current_folder */
+      FOLDER_NAME_2,		/* tweak_filename */
+      0,			/* dialog_response */
+      TRUE,			/* unselect_all */
+      NULL,			/* final_current_folder */
+      NULL			/* final_filename */
+    },
+
   };
 
 static void
