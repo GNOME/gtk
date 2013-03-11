@@ -3456,6 +3456,9 @@ gtk_window_set_decorated (GtkWindow *window,
                                     0);
     }
 
+  update_window_buttons (window);
+  gtk_widget_queue_resize (GTK_WIDGET (window));
+
   g_object_notify (G_OBJECT (window), "decorated");
 }
 
@@ -4946,7 +4949,8 @@ update_window_buttons (GtkWindow *window)
       if (priv->title_icon)
         {
           icon = gtk_image_get_pixbuf (GTK_IMAGE (priv->title_icon));
-          g_object_ref (icon);
+          if (icon)
+            g_object_ref (icon);
           gtk_widget_destroy (priv->title_icon);
           priv->title_icon = NULL;
         }
@@ -5044,6 +5048,8 @@ update_window_buttons (GtkWindow *window)
           g_strfreev (tokens);
         }
       g_free (layout_desc);
+
+      gtk_widget_show (priv->title_box);
     }
   else
     {
@@ -6870,7 +6876,7 @@ gtk_window_enter_notify_event (GtkWidget        *widget,
 {
   GtkWindowPrivate *priv = GTK_WINDOW (widget)->priv;
 
-  if (priv->decorated && priv->client_decorated)
+  if (priv->client_decorated)
     {
       gint x, y;
       GdkWindow *gdk_window;
@@ -6896,7 +6902,7 @@ gtk_window_motion_notify_event (GtkWidget       *widget,
 {
   GtkWindowPrivate *priv = GTK_WINDOW (widget)->priv;
 
-  if (priv->decorated && priv->client_decorated)
+  if (priv->client_decorated)
     {
       gint x, y;
       GdkWindow *gdk_window;
@@ -7288,7 +7294,7 @@ update_cursor_at_position (GtkWidget *widget, gint x, gint y)
 
   state = gdk_window_get_state (gtk_widget_get_window (widget));
 
-  if ((state & GDK_WINDOW_STATE_MAXIMIZED) || !priv->resizable)
+  if ((state & GDK_WINDOW_STATE_MAXIMIZED) || !priv->resizable || !priv->decorated)
     {
       use_default = TRUE;
     }
@@ -8889,7 +8895,7 @@ gtk_window_draw (GtkWidget *widget,
       gtk_style_context_restore (context);
     }
 
-  if (priv->title_box && !priv->fullscreen)
+  if (priv->title_box && gtk_widget_get_visible (priv->title_box))
     {
       gtk_style_context_save (context);
       gtk_style_context_add_class (context, "titlebar");
