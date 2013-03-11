@@ -2781,7 +2781,7 @@ combo_box_changed_cb (GtkComboBox *combo_box,
 	case ROW_TYPE_BOOKMARK:
 	case ROW_TYPE_CURRENT_FOLDER:
 	  if (data)
-	    gtk_file_chooser_button_set_current_folder (GTK_FILE_CHOOSER (button), data, NULL);
+	    gtk_file_chooser_button_select_file (GTK_FILE_CHOOSER (button), data, NULL);
 	  break;
 	case ROW_TYPE_VOLUME:
 	  {
@@ -2790,7 +2790,7 @@ combo_box_changed_cb (GtkComboBox *combo_box,
 	    base_file = _gtk_file_system_volume_get_root (data);
 	    if (base_file)
 	      {
-		gtk_file_chooser_button_set_current_folder (GTK_FILE_CHOOSER (button), base_file, NULL);
+		gtk_file_chooser_button_select_file (GTK_FILE_CHOOSER (button), base_file, NULL);
 		g_object_unref (base_file);
 	      }
 	  }
