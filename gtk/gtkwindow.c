@@ -6882,7 +6882,9 @@ gtk_window_enter_notify_event (GtkWidget        *widget,
       GdkWindow *gdk_window;
 
       gdk_window = gtk_widget_get_window (widget);
-      gdk_window_get_pointer (gdk_window, &x, &y, NULL);
+      gdk_window_get_device_position (gdk_window,
+                                      gdk_event_get_device ((GdkEvent*)event),
+                                      &x, &y, NULL);
       update_cursor_at_position (widget, x, y);
     }
 
@@ -6908,7 +6910,9 @@ gtk_window_motion_notify_event (GtkWidget       *widget,
       GdkWindow *gdk_window;
 
       gdk_window = gtk_widget_get_window (widget);
-      gdk_window_get_pointer (gdk_window, &x, &y, NULL);
+      gdk_window_get_device_position (gdk_window,
+                                      gdk_event_get_device ((GdkEvent*)event),
+                                      &x, &y, NULL);
       update_cursor_at_position (widget, x, y);
     }
 
