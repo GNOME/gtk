@@ -905,6 +905,12 @@ gtk_header_bar_get_child_property (GtkContainer *container,
   Child *child;
 
   l = find_child_link (GTK_HEADER_BAR (container), widget);
+  if (l == NULL)
+    {
+      g_param_value_set_default (pspec, value);
+      return;
+    }
+
   child = l->data;
 
   switch (property_id)
