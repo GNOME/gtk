@@ -590,6 +590,8 @@ test_file_chooser_button (gconstpointer data)
 	{
 	  gtk_dialog_response (GTK_DIALOG (fc_dialog), setup->dialog_response);
 	  wait_for_idle ();
+
+	  gtk_window_resize (GTK_WINDOW (fc_dialog), 500, 500);
 	}
 
       if (setup->final_current_folder)
