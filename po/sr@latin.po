@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-01-19 19:42+0000\n"
-"PO-Revision-Date: 2013-03-01 11:37+0200\n"
+"PO-Revision-Date: 2013-03-11 11:31+0200\n"
 "Last-Translator: Miroslav Nikolić <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <gnom@prevod.org>\n"
 "Language: sr\n"
@@ -690,7 +690,7 @@ msgstr "Ne mogu da prikažem vezu"
 
 #: ../gtk/gtkaboutdialog.c:1017
 msgid "Website"
-msgstr "Veb sajt"
+msgstr "Veb stranica"
 
 #: ../gtk/gtkaboutdialog.c:1071
 #, c-format
@@ -4526,7 +4526,7 @@ msgstr "Došlo je do problema na štampaču „%s“."
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2123
-msgid "Paused; Rejecting Jobs"
+msgid "Paused ; Rejecting Jobs"
 msgstr "Zaustavljen ; Odbija poslove"
 
 #. Translators: this is a printer status.
