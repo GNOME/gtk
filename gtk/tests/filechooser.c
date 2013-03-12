@@ -318,6 +318,10 @@ typedef struct
   const char *initial_current_folder;
   const char *initial_filename;
   gboolean open_dialog;
+  enum {
+    BUTTON,
+    DIALOG
+  } what_to_tweak;
   const char *tweak_current_folder;
   const char *tweak_filename;
   gint dialog_response;
@@ -680,6 +684,8 @@ test_file_chooser_button (gconstpointer data)
 
   for (i = 0; i < iterations; i++)
     {
+      GtkFileChooser *chooser_to_tweak;
+
       if (setup->open_dialog)
 	{
 	  GList *children;
@@ -695,33 +701,46 @@ test_file_chooser_button (gconstpointer data)
 	  fc_dialog = get_file_chooser_dialog_from_button (GTK_FILE_CHOOSER_BUTTON (w.fc_button));
 	}
 
-      /* Okay, now frob the button and its optional dialog */
+      if (setup->what_to_tweak == BUTTON)
+	chooser_to_tweak = GTK_FILE_CHOOSER (w.fc_button);
+      else if (setup->what_to_tweak == DIALOG)
+	chooser_to_tweak = GTK_FILE_CHOOSER (fc_dialog);
+      else
+	g_assert_not_reached ();
+
+      /* Okay, now frob the button or its optional dialog */
 
       if (setup->tweak_current_folder)
 	{
-	  signal_watcher_watch_signal (watcher, "current-folder-changed");
+	  if (setup->what_to_tweak == BUTTON)
+	    signal_watcher_watch_signal (watcher, "current-folder-changed");
 
-	  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (w.fc_button), setup->tweak_current_folder);
+	  gtk_file_chooser_set_current_folder (chooser_to_tweak, setup->tweak_current_folder);
 
-	  g_assert (signal_watcher_expect (watcher, "current-folder-changed"));
+	  if (setup->what_to_tweak == BUTTON)
+	    g_assert (signal_watcher_expect (watcher, "current-folder-changed"));
 	}
 
       if (setup->tweak_filename)
 	{
-	  signal_watcher_watch_signal (watcher, "selection-changed");
+	  if (setup->what_to_tweak == BUTTON)
+	    signal_watcher_watch_signal (watcher, "selection-changed");
 
-	  gtk_file_chooser_select_filename (GTK_FILE_CHOOSER (w.fc_button), setup->tweak_filename);
+	  gtk_file_chooser_select_filename (chooser_to_tweak, setup->tweak_filename);
 
-	  g_assert (signal_watcher_expect (watcher, "selection-changed"));
+	  if (setup->what_to_tweak == BUTTON)
+	    g_assert (signal_watcher_expect (watcher, "selection-changed"));
 	}
 
       if (setup->unselect_all)
 	{
-	  signal_watcher_watch_signal (watcher, "selection-changed");
+	  if (setup->what_to_tweak == BUTTON)
+	    signal_watcher_watch_signal (watcher, "selection-changed");
 
-	  gtk_file_chooser_unselect_all (GTK_FILE_CHOOSER (w.fc_button));
+	  gtk_file_chooser_unselect_all (chooser_to_tweak);
 
-	  g_assert (signal_watcher_expect (watcher, "selection-changed"));
+	  if (setup->what_to_tweak == BUTTON)
+	    g_assert (signal_watcher_expect (watcher, "selection-changed"));
 	}
 
       wait_for_idle ();
@@ -863,6 +882,7 @@ static FileChooserButtonTest button_tests[] =
       NULL,			/* initial_current_folder */
       NULL, 			/* initial_filename */
       FALSE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       NULL,			/* tweak_filename */
       0,			/* dialog_response */
@@ -876,6 +896,7 @@ static FileChooserButtonTest button_tests[] =
       NULL,			/* initial_current_folder */
       FILE_NAME, 		/* initial_filename */
       FALSE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       NULL,			/* tweak_filename */
       0,			/* dialog_response */
@@ -889,6 +910,7 @@ static FileChooserButtonTest button_tests[] =
       NULL,			/* initial_current_folder */
       NULL,	 		/* initial_filename */
       FALSE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       FILE_NAME,		/* tweak_filename */
       0,			/* dialog_response */
@@ -902,6 +924,7 @@ static FileChooserButtonTest button_tests[] =
       NULL,			/* initial_current_folder */
       FILE_NAME, 		/* initial_filename */
       FALSE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       FILE_NAME_2,		/* tweak_filename */
       0,			/* dialog_response */
@@ -915,6 +938,7 @@ static FileChooserButtonTest button_tests[] =
       FOLDER_NAME,		/* initial_current_folder */
       NULL,	 		/* initial_filename */
       FALSE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       NULL,			/* tweak_filename */
       0,			/* dialog_response */
@@ -928,6 +952,7 @@ static FileChooserButtonTest button_tests[] =
       FOLDER_NAME,		/* initial_current_folder */
       NULL,	 		/* initial_filename */
       FALSE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       FOLDER_NAME_2,		/* tweak_current_folder */
       NULL,			/* tweak_filename */
       0,			/* dialog_response */
@@ -944,6 +969,7 @@ static FileChooserButtonTest button_tests[] =
       NULL,			/* initial_current_folder */
       NULL, 			/* initial_filename */
       FALSE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       NULL,			/* tweak_filename */
       0,			/* dialog_response */
@@ -957,6 +983,7 @@ static FileChooserButtonTest button_tests[] =
       NULL,			/* initial_current_folder */
       FOLDER_NAME, 		/* initial_filename */
       FALSE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       NULL,			/* tweak_filename */
       0,			/* dialog_response */
@@ -970,6 +997,7 @@ static FileChooserButtonTest button_tests[] =
       NULL,			/* initial_current_folder */
       FOLDER_NAME, 		/* initial_filename */
       FALSE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       FOLDER_NAME_2,		/* tweak_filename */
       0,			/* dialog_response */
@@ -983,6 +1011,7 @@ static FileChooserButtonTest button_tests[] =
       FOLDER_NAME,		/* initial_current_folder */
       NULL,	 		/* initial_filename */
       FALSE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       NULL,			/* tweak_filename */
       0,			/* dialog_response */
@@ -996,6 +1025,7 @@ static FileChooserButtonTest button_tests[] =
       FOLDER_NAME,		/* initial_current_folder */
       NULL,	 		/* initial_filename */
       FALSE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       NULL,			/* tweak_filename */
       0,			/* dialog_response */
@@ -1009,6 +1039,7 @@ static FileChooserButtonTest button_tests[] =
       FOLDER_NAME,		/* initial_current_folder */
       NULL,	 		/* initial_filename */
       FALSE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       FOLDER_NAME_2,		/* tweak_current_folder */
       NULL,			/* tweak_filename */
       0,			/* dialog_response */
@@ -1022,6 +1053,7 @@ static FileChooserButtonTest button_tests[] =
       FOLDER_NAME,		/* initial_current_folder */
       NULL,	 		/* initial_filename */
       FALSE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       FOLDER_NAME_2,		/* tweak_current_folder */
       NULL,			/* tweak_filename */
       0,			/* dialog_response */
@@ -1035,6 +1067,7 @@ static FileChooserButtonTest button_tests[] =
       FOLDER_NAME,		/* initial_current_folder */
       NULL,	 		/* initial_filename */
       FALSE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       FOLDER_NAME_2,		/* tweak_filename */
       0,			/* dialog_response */
@@ -1043,14 +1076,29 @@ static FileChooserButtonTest button_tests[] =
       FOLDER_NAME_2		/* final_filename */
     },
 
-    /* OPEN tests with dialog, cancelled */
+    /* OPEN tests with dialog, cancelled
+     *
+     * Test names are "open-dialog-cancel-A-B", where A and B can be:
+     *
+     *   A:
+     *      ni - no initial filename
+     *       i - initial filename
+     *      nf - no initial folder
+     *       f - initial folder
+     *
+     *   B:
+     *      nt - no tweaks
+     *       b - tweak button
+     *       d - tweak dialog
+     */
 
     {
-      "open-dialog-cancel-1",
+      "open-dialog-cancel-ni-nt",
       GTK_FILE_CHOOSER_ACTION_OPEN,
       NULL,			/* initial_current_folder */
       NULL, 			/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       NULL,			/* tweak_filename */
       GTK_RESPONSE_CANCEL,	/* dialog_response */
@@ -1059,37 +1107,26 @@ static FileChooserButtonTest button_tests[] =
       NULL			/* final_filename */
     },
     {
-      "open-dialog-cancel-2",
+      "open-dialog-cancel-ni-b",
       GTK_FILE_CHOOSER_ACTION_OPEN,
       NULL,			/* initial_current_folder */
-      FILE_NAME,		/* initial_filename */
+      NULL, 			/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
-      NULL,			/* tweak_filename */
+      FILE_NAME,		/* tweak_filename */
       GTK_RESPONSE_CANCEL,	/* dialog_response */
       FALSE,			/* unselect_all */
       NULL,			/* final_current_folder */
       FILE_NAME			/* final_filename */
     },
     {
-      "open-dialog-cancel-3",
-      GTK_FILE_CHOOSER_ACTION_OPEN,
-      FOLDER_NAME,		/* initial_current_folder */
-      NULL,			/* initial_filename */
-      TRUE,			/* open_dialog */
-      NULL,			/* tweak_current_folder */
-      NULL,			/* tweak_filename */
-      GTK_RESPONSE_CANCEL,	/* dialog_response */
-      FALSE,			/* unselect_all */
-      FOLDER_NAME,		/* final_current_folder */
-      NULL			/* final_filename */
-    },
-    {
-      "open-dialog-cancel-4",
+      "open-dialog-cancel-ni-d",
       GTK_FILE_CHOOSER_ACTION_OPEN,
       NULL,			/* initial_current_folder */
-      NULL,			/* initial_filename */
+      NULL, 			/* initial_filename */
       TRUE,			/* open_dialog */
+      DIALOG,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       FILE_NAME,		/* tweak_filename */
       GTK_RESPONSE_CANCEL,	/* dialog_response */
@@ -1098,11 +1135,40 @@ static FileChooserButtonTest button_tests[] =
       NULL			/* final_filename */
     },
     {
-      "open-dialog-cancel-5",
+      "open-dialog-cancel-i-nt",
       GTK_FILE_CHOOSER_ACTION_OPEN,
       NULL,			/* initial_current_folder */
       FILE_NAME,		/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
+      NULL,			/* tweak_current_folder */
+      NULL,			/* tweak_filename */
+      GTK_RESPONSE_CANCEL,	/* dialog_response */
+      FALSE,			/* unselect_all */
+      NULL,			/* final_current_folder */
+      FILE_NAME			/* final_filename */
+    },
+    {
+      "open-dialog-cancel-i-b",
+      GTK_FILE_CHOOSER_ACTION_OPEN,
+      NULL,			/* initial_current_folder */
+      FILE_NAME,		/* initial_filename */
+      TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
+      NULL,			/* tweak_current_folder */
+      FILE_NAME_2,		/* tweak_filename */
+      GTK_RESPONSE_CANCEL,	/* dialog_response */
+      FALSE,			/* unselect_all */
+      NULL,			/* final_current_folder */
+      FILE_NAME_2		/* final_filename */
+    },
+    {
+      "open-dialog-cancel-i-d",
+      GTK_FILE_CHOOSER_ACTION_OPEN,
+      NULL,			/* initial_current_folder */
+      FILE_NAME,		/* initial_filename */
+      TRUE,			/* open_dialog */
+      DIALOG,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       FILE_NAME_2,		/* tweak_filename */
       GTK_RESPONSE_CANCEL,	/* dialog_response */
@@ -1111,13 +1177,84 @@ static FileChooserButtonTest button_tests[] =
       FILE_NAME			/* final_filename */
     },
     {
-      "open-dialog-cancel-6",
+      "open-dialog-cancel-nf-nt",
+      GTK_FILE_CHOOSER_ACTION_OPEN,
+      NULL,			/* initial_current_folder */
+      NULL, 			/* initial_filename */
+      TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
+      NULL,			/* tweak_current_folder */
+      NULL,			/* tweak_filename */
+      GTK_RESPONSE_CANCEL,	/* dialog_response */
+      FALSE,			/* unselect_all */
+      NULL,			/* final_current_folder */
+      NULL			/* final_filename */
+    },
+    {
+      "open-dialog-cancel-nf-b",
+      GTK_FILE_CHOOSER_ACTION_OPEN,
+      NULL,			/* initial_current_folder */
+      NULL,			/* initial_filename */
+      TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
+      FOLDER_NAME,		/* tweak_current_folder */
+      NULL,			/* tweak_filename */
+      GTK_RESPONSE_CANCEL,	/* dialog_response */
+      FALSE,			/* unselect_all */
+      FOLDER_NAME,		/* final_current_folder */
+      NULL			/* final_filename */
+    },
+    {
+      "open-dialog-cancel-nf-d",
+      GTK_FILE_CHOOSER_ACTION_OPEN,
+      NULL,			/* initial_current_folder */
+      NULL,			/* initial_filename */
+      TRUE,			/* open_dialog */
+      DIALOG,			/* what_to_tweak */
+      FOLDER_NAME,		/* tweak_current_folder */
+      NULL,			/* tweak_filename */
+      GTK_RESPONSE_CANCEL,	/* dialog_response */
+      FALSE,			/* unselect_all */
+      NULL,			/* final_current_folder */
+      NULL			/* final_filename */
+    },
+    {
+      "open-dialog-cancel-f-nt",
       GTK_FILE_CHOOSER_ACTION_OPEN,
       FOLDER_NAME,		/* initial_current_folder */
       NULL,			/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
-      FILE_NAME_2,		/* tweak_filename */
+      NULL,			/* tweak_filename */
+      GTK_RESPONSE_CANCEL,	/* dialog_response */
+      FALSE,			/* unselect_all */
+      FOLDER_NAME,		/* final_current_folder */
+      NULL			/* final_filename */
+    },
+    {
+      "open-dialog-cancel-f-b",
+      GTK_FILE_CHOOSER_ACTION_OPEN,
+      FOLDER_NAME,		/* initial_current_folder */
+      NULL,			/* initial_filename */
+      TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
+      FOLDER_NAME_2,		/* tweak_current_folder */
+      NULL,			/* tweak_filename */
+      GTK_RESPONSE_CANCEL,	/* dialog_response */
+      FALSE,			/* unselect_all */
+      FOLDER_NAME_2,		/* final_current_folder */
+      NULL			/* final_filename */
+    },
+    {
+      "open-dialog-cancel-f-d",
+      GTK_FILE_CHOOSER_ACTION_OPEN,
+      FOLDER_NAME,		/* initial_current_folder */
+      NULL,			/* initial_filename */
+      TRUE,			/* open_dialog */
+      DIALOG,			/* what_to_tweak */
+      FOLDER_NAME_2,		/* tweak_current_folder */
+      NULL,			/* tweak_filename */
       GTK_RESPONSE_CANCEL,	/* dialog_response */
       FALSE,			/* unselect_all */
       FOLDER_NAME,		/* final_current_folder */
@@ -1127,11 +1264,12 @@ static FileChooserButtonTest button_tests[] =
     /* OPEN tests with dialog, cancelled via closing the dialog (not by selecting the Cancel button) */
 
     {
-      "open-dialog-close-1",
+      "open-dialog-close-ni-nt",
       GTK_FILE_CHOOSER_ACTION_OPEN,
       NULL,			/* initial_current_folder */
       NULL, 			/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       NULL,			/* tweak_filename */
       GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
@@ -1140,37 +1278,26 @@ static FileChooserButtonTest button_tests[] =
       NULL			/* final_filename */
     },
     {
-      "open-dialog-close-2",
+      "open-dialog-close-ni-b",
       GTK_FILE_CHOOSER_ACTION_OPEN,
       NULL,			/* initial_current_folder */
-      FILE_NAME,		/* initial_filename */
+      NULL, 			/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
-      NULL,			/* tweak_filename */
+      FILE_NAME,		/* tweak_filename */
       GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
       FALSE,			/* unselect_all */
       NULL,			/* final_current_folder */
       FILE_NAME			/* final_filename */
     },
     {
-      "open-dialog-close-3",
-      GTK_FILE_CHOOSER_ACTION_OPEN,
-      FOLDER_NAME,		/* initial_current_folder */
-      NULL,			/* initial_filename */
-      TRUE,			/* open_dialog */
-      NULL,			/* tweak_current_folder */
-      NULL,			/* tweak_filename */
-      GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
-      FALSE,			/* unselect_all */
-      FOLDER_NAME,		/* final_current_folder */
-      NULL			/* final_filename */
-    },
-    {
-      "open-dialog-close-4",
+      "open-dialog-close-ni-d",
       GTK_FILE_CHOOSER_ACTION_OPEN,
       NULL,			/* initial_current_folder */
-      NULL,			/* initial_filename */
+      NULL, 			/* initial_filename */
       TRUE,			/* open_dialog */
+      DIALOG,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       FILE_NAME,		/* tweak_filename */
       GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
@@ -1179,11 +1306,40 @@ static FileChooserButtonTest button_tests[] =
       NULL			/* final_filename */
     },
     {
-      "open-dialog-close-5",
+      "open-dialog-close-i-nt",
       GTK_FILE_CHOOSER_ACTION_OPEN,
       NULL,			/* initial_current_folder */
       FILE_NAME,		/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
+      NULL,			/* tweak_current_folder */
+      NULL,			/* tweak_filename */
+      GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
+      FALSE,			/* unselect_all */
+      NULL,			/* final_current_folder */
+      FILE_NAME			/* final_filename */
+    },
+    {
+      "open-dialog-close-i-b",
+      GTK_FILE_CHOOSER_ACTION_OPEN,
+      NULL,			/* initial_current_folder */
+      FILE_NAME,		/* initial_filename */
+      TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
+      NULL,			/* tweak_current_folder */
+      FILE_NAME_2,		/* tweak_filename */
+      GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
+      FALSE,			/* unselect_all */
+      NULL,			/* final_current_folder */
+      FILE_NAME_2		/* final_filename */
+    },
+    {
+      "open-dialog-close-i-d",
+      GTK_FILE_CHOOSER_ACTION_OPEN,
+      NULL,			/* initial_current_folder */
+      FILE_NAME,		/* initial_filename */
+      TRUE,			/* open_dialog */
+      DIALOG,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       FILE_NAME_2,		/* tweak_filename */
       GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
@@ -1192,13 +1348,84 @@ static FileChooserButtonTest button_tests[] =
       FILE_NAME			/* final_filename */
     },
     {
-      "open-dialog-close-6",
+      "open-dialog-close-nf-nt",
+      GTK_FILE_CHOOSER_ACTION_OPEN,
+      NULL,			/* initial_current_folder */
+      NULL, 			/* initial_filename */
+      TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
+      NULL,			/* tweak_current_folder */
+      NULL,			/* tweak_filename */
+      GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
+      FALSE,			/* unselect_all */
+      NULL,			/* final_current_folder */
+      NULL			/* final_filename */
+    },
+    {
+      "open-dialog-close-nf-b",
+      GTK_FILE_CHOOSER_ACTION_OPEN,
+      NULL,			/* initial_current_folder */
+      NULL,			/* initial_filename */
+      TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
+      FOLDER_NAME,		/* tweak_current_folder */
+      NULL,			/* tweak_filename */
+      GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
+      FALSE,			/* unselect_all */
+      FOLDER_NAME,		/* final_current_folder */
+      NULL			/* final_filename */
+    },
+    {
+      "open-dialog-close-nf-d",
+      GTK_FILE_CHOOSER_ACTION_OPEN,
+      NULL,			/* initial_current_folder */
+      NULL,			/* initial_filename */
+      TRUE,			/* open_dialog */
+      DIALOG,			/* what_to_tweak */
+      FOLDER_NAME,		/* tweak_current_folder */
+      NULL,			/* tweak_filename */
+      GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
+      FALSE,			/* unselect_all */
+      NULL,			/* final_current_folder */
+      NULL			/* final_filename */
+    },
+    {
+      "open-dialog-close-f-nt",
       GTK_FILE_CHOOSER_ACTION_OPEN,
       FOLDER_NAME,		/* initial_current_folder */
       NULL,			/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
-      FILE_NAME_2,		/* tweak_filename */
+      NULL,			/* tweak_filename */
+      GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
+      FALSE,			/* unselect_all */
+      FOLDER_NAME,		/* final_current_folder */
+      NULL			/* final_filename */
+    },
+    {
+      "open-dialog-close-f-b",
+      GTK_FILE_CHOOSER_ACTION_OPEN,
+      FOLDER_NAME,		/* initial_current_folder */
+      NULL,			/* initial_filename */
+      TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
+      FOLDER_NAME_2,		/* tweak_current_folder */
+      NULL,			/* tweak_filename */
+      GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
+      FALSE,			/* unselect_all */
+      FOLDER_NAME_2,		/* final_current_folder */
+      NULL			/* final_filename */
+    },
+    {
+      "open-dialog-close-f-d",
+      GTK_FILE_CHOOSER_ACTION_OPEN,
+      FOLDER_NAME,		/* initial_current_folder */
+      NULL,			/* initial_filename */
+      TRUE,			/* open_dialog */
+      DIALOG,			/* what_to_tweak */
+      FOLDER_NAME_2,		/* tweak_current_folder */
+      NULL,			/* tweak_filename */
       GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
       FALSE,			/* unselect_all */
       FOLDER_NAME,		/* final_current_folder */
@@ -1213,6 +1440,7 @@ static FileChooserButtonTest button_tests[] =
       NULL,			/* initial_current_folder */
       NULL, 			/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       NULL,			/* tweak_filename */
       GTK_RESPONSE_CANCEL,	/* dialog_response */
@@ -1226,6 +1454,7 @@ static FileChooserButtonTest button_tests[] =
       NULL,			/* initial_current_folder */
       FOLDER_NAME,		/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       NULL,			/* tweak_filename */
       GTK_RESPONSE_CANCEL,	/* dialog_response */
@@ -1239,6 +1468,7 @@ static FileChooserButtonTest button_tests[] =
       FOLDER_NAME,		/* initial_current_folder */
       NULL,			/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       NULL,			/* tweak_filename */
       GTK_RESPONSE_CANCEL,	/* dialog_response */
@@ -1252,6 +1482,7 @@ static FileChooserButtonTest button_tests[] =
       FOLDER_NAME,		/* initial_current_folder */
       NULL,			/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       NULL,			/* tweak_filename */
       GTK_RESPONSE_CANCEL,	/* dialog_response */
@@ -1265,6 +1496,7 @@ static FileChooserButtonTest button_tests[] =
       NULL,			/* initial_current_folder */
       NULL,			/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       FOLDER_NAME,		/* tweak_filename */
       GTK_RESPONSE_CANCEL,	/* dialog_response */
@@ -1278,6 +1510,7 @@ static FileChooserButtonTest button_tests[] =
       NULL,			/* initial_current_folder */
       FOLDER_NAME,		/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       FOLDER_NAME_2,		/* tweak_filename */
       GTK_RESPONSE_CANCEL,	/* dialog_response */
@@ -1291,6 +1524,7 @@ static FileChooserButtonTest button_tests[] =
       FOLDER_NAME,		/* initial_current_folder */
       NULL,			/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       FOLDER_NAME_2,		/* tweak_filename */
       GTK_RESPONSE_CANCEL,	/* dialog_response */
@@ -1304,6 +1538,7 @@ static FileChooserButtonTest button_tests[] =
       FOLDER_NAME,		/* initial_current_folder */
       NULL,			/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       FOLDER_NAME_2,		/* tweak_filename */
       GTK_RESPONSE_CANCEL,	/* dialog_response */
@@ -1320,6 +1555,7 @@ static FileChooserButtonTest button_tests[] =
       NULL,			/* initial_current_folder */
       NULL, 			/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       NULL,			/* tweak_filename */
       GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
@@ -1333,6 +1569,7 @@ static FileChooserButtonTest button_tests[] =
       NULL,			/* initial_current_folder */
       FOLDER_NAME,		/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       NULL,			/* tweak_filename */
       GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
@@ -1346,6 +1583,7 @@ static FileChooserButtonTest button_tests[] =
       FOLDER_NAME,		/* initial_current_folder */
       NULL,			/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       NULL,			/* tweak_filename */
       GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
@@ -1359,6 +1597,7 @@ static FileChooserButtonTest button_tests[] =
       FOLDER_NAME,		/* initial_current_folder */
       NULL,			/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       NULL,			/* tweak_filename */
       GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
@@ -1372,6 +1611,7 @@ static FileChooserButtonTest button_tests[] =
       NULL,			/* initial_current_folder */
       NULL,			/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       FOLDER_NAME,		/* tweak_filename */
       GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
@@ -1385,6 +1625,7 @@ static FileChooserButtonTest button_tests[] =
       NULL,			/* initial_current_folder */
       FOLDER_NAME,		/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       FOLDER_NAME_2,		/* tweak_filename */
       GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
@@ -1398,6 +1639,7 @@ static FileChooserButtonTest button_tests[] =
       FOLDER_NAME,		/* initial_current_folder */
       NULL,			/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       FOLDER_NAME_2,		/* tweak_filename */
       GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
@@ -1411,6 +1653,7 @@ static FileChooserButtonTest button_tests[] =
       FOLDER_NAME,		/* initial_current_folder */
       NULL,			/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       FOLDER_NAME_2,		/* tweak_filename */
       GTK_RESPONSE_DELETE_EVENT,/* dialog_response */
@@ -1427,6 +1670,7 @@ static FileChooserButtonTest button_tests[] =
       NULL,			/* initial_current_folder */
       NULL,			/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       FILE_NAME,		/* tweak_filename */
       GTK_RESPONSE_ACCEPT,	/* dialog_response */
@@ -1440,6 +1684,7 @@ static FileChooserButtonTest button_tests[] =
       NULL,			/* initial_current_folder */
       FILE_NAME,		/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       NULL,			/* tweak_filename */
       GTK_RESPONSE_ACCEPT,	/* dialog_response */
@@ -1453,6 +1698,7 @@ static FileChooserButtonTest button_tests[] =
       NULL,			/* initial_current_folder */
       FILE_NAME,		/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       FILE_NAME_2,		/* tweak_filename */
       GTK_RESPONSE_ACCEPT,	/* dialog_response */
@@ -1466,6 +1712,7 @@ static FileChooserButtonTest button_tests[] =
       FOLDER_NAME,		/* initial_current_folder */
       NULL,			/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       FILE_NAME,		/* tweak_filename */
       GTK_RESPONSE_ACCEPT,	/* dialog_response */
@@ -1482,6 +1729,7 @@ static FileChooserButtonTest button_tests[] =
       NULL,			/* initial_current_folder */
       FOLDER_NAME,		/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       NULL,			/* tweak_filename */
       GTK_RESPONSE_ACCEPT,	/* dialog_response */
@@ -1495,6 +1743,7 @@ static FileChooserButtonTest button_tests[] =
       FOLDER_NAME,		/* initial_current_folder */
       NULL,			/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       NULL,			/* tweak_filename */
       GTK_RESPONSE_ACCEPT,	/* dialog_response */
@@ -1508,6 +1757,7 @@ static FileChooserButtonTest button_tests[] =
       NULL,			/* initial_current_folder */
       FOLDER_NAME,		/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       FOLDER_NAME_2,		/* tweak_filename */
       GTK_RESPONSE_ACCEPT,	/* dialog_response */
@@ -1521,6 +1771,7 @@ static FileChooserButtonTest button_tests[] =
       FOLDER_NAME,		/* initial_current_folder */
       NULL,			/* initial_filename */
       TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       FOLDER_NAME_2,		/* tweak_filename */
       GTK_RESPONSE_ACCEPT,	/* dialog_response */
@@ -1536,6 +1787,7 @@ static FileChooserButtonTest button_tests[] =
       NULL,			/* initial_current_folder */
       NULL,			/* initial_filename */
       FALSE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       NULL,			/* tweak_filename */
       0,			/* dialog_response */
@@ -1549,6 +1801,7 @@ static FileChooserButtonTest button_tests[] =
       NULL,			/* initial_current_folder */
       FILE_NAME,		/* initial_filename */
       FALSE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       NULL,			/* tweak_filename */
       0,			/* dialog_response */
@@ -1562,6 +1815,7 @@ static FileChooserButtonTest button_tests[] =
       NULL,			/* initial_current_folder */
       FILE_NAME,		/* initial_filename */
       FALSE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       FILE_NAME_2,		/* tweak_filename */
       0,			/* dialog_response */
@@ -1575,6 +1829,7 @@ static FileChooserButtonTest button_tests[] =
       NULL,			/* initial_current_folder */
       NULL,			/* initial_filename */
       FALSE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       NULL,			/* tweak_filename */
       0,			/* dialog_response */
@@ -1588,6 +1843,7 @@ static FileChooserButtonTest button_tests[] =
       NULL,			/* initial_current_folder */
       FOLDER_NAME,		/* initial_filename */
       FALSE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       NULL,			/* tweak_filename */
       0,			/* dialog_response */
@@ -1601,6 +1857,7 @@ static FileChooserButtonTest button_tests[] =
       NULL,			/* initial_current_folder */
       FOLDER_NAME,		/* initial_filename */
       FALSE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
       FOLDER_NAME_2,		/* tweak_filename */
       0,			/* dialog_response */
