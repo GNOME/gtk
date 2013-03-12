@@ -183,8 +183,6 @@ struct _GtkFileChooserButtonPrivate
   GFile *current_folder_while_inactive;
 
   gulong combo_box_changed_id;
-  gulong dialog_folder_changed_id;
-  gulong dialog_selection_changed_id;
   gulong fs_volumes_changed_id;
   gulong fs_bookmarks_changed_id;
 
@@ -210,22 +208,6 @@ struct _GtkFileChooserButtonPrivate
 
   /* Whether the next async callback from GIO should emit the "selection-changed" signal */
   guint  is_changing_selection        : 1;
-
-  /* When GtkFileChooserButton's dialog is not active, any modifications to the
-   * dialog's state (as done by the calling program) will be reflected in the
-   * button immediately - the following two flags will be FALSE.
-   *
-   * But when the dialog is active, we only want the button to reflect
-   * modifications in the dialog's state if those modifications *are done by the
-   * calling program*, not by the user in the dialog.  So if the program calls
-   * gtk_file_chooser_select_file() while the dialog is active, that state will
-   * need to be reflected in the button, and either of these flags will be TRUE.
-   * But if the user frobs the dialog, we don't want the button to change its
-   * state until the user actually confirms the dialog and dismisses it; in this
-   * case, the flags will be FALSE.
-   */
-  guint folder_change_needs_notification    : 1;
-  guint selection_change_needs_notification : 1;
 };
 
 
@@ -352,10 +334,6 @@ static void     button_clicked_cb                (GtkButton      *real_button,
 						  gpointer        user_data);
 
 static void     dialog_update_preview_cb         (GtkFileChooser *dialog,
-						  gpointer        user_data);
-static void     dialog_selection_changed_cb      (GtkFileChooser *dialog,
-						  gpointer        user_data);
-static void     dialog_current_folder_changed_cb (GtkFileChooser *dialog,
 						  gpointer        user_data);
 static void     dialog_notify_cb                 (GObject        *dialog,
 						  GParamSpec     *pspec,
@@ -626,29 +604,20 @@ gtk_file_chooser_button_set_current_folder (GtkFileChooser    *chooser,
 {
   GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (chooser);
   GtkFileChooserButtonPrivate *priv = button->priv;
-  GtkFileChooser *delegate;
 
-  delegate = g_object_get_qdata (G_OBJECT (chooser),
-				 GTK_FILE_CHOOSER_DELEGATE_QUARK);
+  if (priv->current_folder_while_inactive)
+    g_object_unref (priv->current_folder_while_inactive);
+
+  priv->current_folder_while_inactive = g_object_ref (file);
+
+  update_combo_box (button);
+
+  g_signal_emit_by_name (button, "current-folder-changed");
 
   if (priv->active)
-    {
-      priv->folder_change_needs_notification = TRUE;
-      return gtk_file_chooser_set_current_folder_file (delegate, file, error);
-    }
-  else
-    {
-      if (priv->current_folder_while_inactive)
-	g_object_unref (priv->current_folder_while_inactive);
+    gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (priv->dialog), file, NULL);
 
-      priv->current_folder_while_inactive = g_object_ref (file);
-
-      update_combo_box (button);
-
-      g_signal_emit_by_name (button, "current-folder-changed");
-
-      return TRUE;
-    }
+  return TRUE;
 }
 
 static GFile *
@@ -656,20 +625,11 @@ gtk_file_chooser_button_get_current_folder (GtkFileChooser *chooser)
 {
   GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (chooser);
   GtkFileChooserButtonPrivate *priv = button->priv;
-  GtkFileChooser *delegate;
 
-  delegate = g_object_get_qdata (G_OBJECT (chooser),
-				 GTK_FILE_CHOOSER_DELEGATE_QUARK);
-
-  if (priv->active)
-    return gtk_file_chooser_get_current_folder_file (delegate);
+  if (priv->current_folder_while_inactive)
+    return g_object_ref (priv->current_folder_while_inactive);
   else
-    {
-      if (priv->current_folder_while_inactive)
-	return g_object_ref (priv->current_folder_while_inactive);
-      else
-	return NULL;
-    }
+    return NULL;
 }
 
 static gboolean
@@ -679,30 +639,38 @@ gtk_file_chooser_button_select_file (GtkFileChooser *chooser,
 {
   GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (chooser);
   GtkFileChooserButtonPrivate *priv = button->priv;
-  GtkFileChooser *delegate;
 
-  delegate = g_object_get_qdata (G_OBJECT (chooser),
-				 GTK_FILE_CHOOSER_DELEGATE_QUARK);
+  if (priv->selection_while_inactive)
+    g_object_unref (priv->selection_while_inactive);
+
+  priv->selection_while_inactive = g_object_ref (file);
+
+  priv->is_changing_selection = TRUE;
+
+  update_label_and_image (button);
+  update_combo_box (button);
 
   if (priv->active)
+    gtk_file_chooser_select_file (GTK_FILE_CHOOSER (priv->dialog), file, NULL);
+
+  return TRUE;
+}
+
+static void
+unselect_current_file (GtkFileChooserButton *button)
+{
+  GtkFileChooserButtonPrivate *priv = button->priv;
+
+  if (priv->selection_while_inactive)
     {
-      priv->selection_change_needs_notification = TRUE;
-      return gtk_file_chooser_select_file (delegate, file, error);
+      g_object_unref (priv->selection_while_inactive);
+      priv->selection_while_inactive = NULL;
     }
-  else
-    {
-      if (priv->selection_while_inactive)
-	g_object_unref (priv->selection_while_inactive);
 
-      priv->selection_while_inactive = g_object_ref (file);
+  priv->is_changing_selection = TRUE;
 
-      priv->is_changing_selection = TRUE;
-
-      update_label_and_image (button);
-      update_combo_box (button);
-
-      return TRUE;
-    }
+  update_label_and_image (button);
+  update_combo_box (button);
 }
 
 static void
@@ -711,29 +679,12 @@ gtk_file_chooser_button_unselect_file (GtkFileChooser *chooser,
 {
   GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (chooser);
   GtkFileChooserButtonPrivate *priv = button->priv;
-  GtkFileChooser *delegate;
 
-  delegate = g_object_get_qdata (G_OBJECT (chooser),
-				 GTK_FILE_CHOOSER_DELEGATE_QUARK);
+  if (g_file_equal (priv->selection_while_inactive, file))
+    unselect_current_file (button);
 
   if (priv->active)
-    gtk_file_chooser_unselect_file (delegate, file);
-  else
-    {
-      if (g_file_equal (priv->selection_while_inactive, file))
-	{
-	  if (priv->selection_while_inactive)
-	    {
-	      g_object_unref (priv->selection_while_inactive);
-	      priv->selection_while_inactive = NULL;
-	    }
-
-	  priv->is_changing_selection = TRUE;
-
-	  update_label_and_image (button);
-	  update_combo_box (button);
-	}
-    }
+    gtk_file_chooser_unselect_file (GTK_FILE_CHOOSER (priv->dialog), file);
 }
 
 static void
@@ -741,56 +692,49 @@ gtk_file_chooser_button_unselect_all (GtkFileChooser *chooser)
 {
   GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (chooser);
   GtkFileChooserButtonPrivate *priv = button->priv;
-  GtkFileChooser *delegate;
 
-  delegate = g_object_get_qdata (G_OBJECT (chooser),
-				 GTK_FILE_CHOOSER_DELEGATE_QUARK);
+  unselect_current_file (button);
 
   if (priv->active)
-    gtk_file_chooser_unselect_all (delegate);
-  else
-    {
-      if (priv->selection_while_inactive)
-	{
-	  g_object_unref (priv->selection_while_inactive);
-	  priv->selection_while_inactive = NULL;
-	}
-
-      update_label_and_image (button);
-      update_combo_box (button);
-    }
+    gtk_file_chooser_unselect_all (GTK_FILE_CHOOSER (priv->dialog));
 }
 
 static GFile *
 get_selected_file (GtkFileChooserButton *button)
 {
   GtkFileChooserButtonPrivate *priv = button->priv;
+  GFile *retval;
 
-  if (priv->active)
-    return gtk_file_chooser_get_file (GTK_FILE_CHOOSER (priv->dialog));
-  else
+  retval = NULL;
+
+  if (priv->selection_while_inactive)
+    retval = priv->selection_while_inactive;
+  else if (gtk_file_chooser_get_action (GTK_FILE_CHOOSER (priv->dialog)) == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     {
-      if (priv->selection_while_inactive)
-	return g_object_ref (priv->selection_while_inactive);
-      else if (gtk_file_chooser_get_action (GTK_FILE_CHOOSER (priv->dialog)) == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
-	{
-	  /* If there is no "real" selection in SELECT_FOLDER mode, then we'll just return
-	   * the current folder, since that is what GtkFileChooserDefault would do.
-	   */
-	  if (priv->current_folder_while_inactive)
-	    return g_object_ref (priv->current_folder_while_inactive);
-	}
+      /* If there is no "real" selection in SELECT_FOLDER mode, then we'll just return
+       * the current folder, since that is what GtkFileChooserDefault would do.
+       */
+      if (priv->current_folder_while_inactive)
+	retval = priv->current_folder_while_inactive;
     }
 
-  return NULL;
+  if (retval)
+    return g_object_ref (retval);
+  else
+    return NULL;
 }
 
 static GSList *
 gtk_file_chooser_button_get_files (GtkFileChooser *chooser)
 {
   GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (chooser);
+  GFile *file;
 
-  return g_slist_prepend (NULL, get_selected_file (button));
+  file = get_selected_file (button);
+  if (file)
+    return g_slist_prepend (NULL, file);
+  else
+    return NULL;
 }
 
 static gboolean
@@ -936,12 +880,7 @@ gtk_file_chooser_button_constructor (GType                  type,
   /* This is used, instead of the standard delegate, to ensure that signals are only
    * delegated when the OK button is pressed. */
   g_object_set_qdata (object, GTK_FILE_CHOOSER_DELEGATE_QUARK, priv->dialog);
-  priv->dialog_folder_changed_id =
-    g_signal_connect (priv->dialog, "current-folder-changed",
-		      G_CALLBACK (dialog_current_folder_changed_cb), object);
-  priv->dialog_selection_changed_id =
-    g_signal_connect (priv->dialog, "selection-changed",
-		      G_CALLBACK (dialog_selection_changed_cb), object);
+
   g_signal_connect (priv->dialog, "update-preview",
 		    G_CALLBACK (dialog_update_preview_cb), object);
   g_signal_connect (priv->dialog, "notify",
@@ -2925,60 +2864,6 @@ button_clicked_cb (GtkButton *real_button,
 }
 
 /* Dialog */
-
-static void
-dialog_current_folder_changed_cb (GtkFileChooser *dialog,
-				  gpointer        user_data)
-{
-  GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (user_data);
-  GtkFileChooserButtonPrivate *priv = button->priv;
-  gboolean update_from_dialog;
-
-  if (!priv->active)
-    update_from_dialog = TRUE;
-  else if (priv->folder_change_needs_notification)
-    update_from_dialog = TRUE;
-  else
-    update_from_dialog = FALSE;
-
-  priv->folder_change_needs_notification = FALSE;
-
-  if (update_from_dialog)
-    {
-      save_inactive_state (button);
-
-      update_label_and_image (button);
-      update_combo_box (button);
-      g_signal_emit_by_name (button, "current-folder-changed");
-    }
-}
-
-static void
-dialog_selection_changed_cb (GtkFileChooser *dialog,
-			     gpointer        user_data)
-{
-  GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (user_data);
-  GtkFileChooserButtonPrivate *priv = button->priv;
-  gboolean update_from_dialog;
-
-  if (!priv->active)
-    update_from_dialog = TRUE;
-  else if (priv->selection_change_needs_notification)
-    update_from_dialog = TRUE;
-  else
-    update_from_dialog = FALSE;
-
-  priv->selection_change_needs_notification = FALSE;
-
-  if (update_from_dialog)
-    {
-      save_inactive_state (button);
-
-      update_label_and_image (button);
-      update_combo_box (button);
-      g_signal_emit_by_name (button, "selection-changed");
-    }
-}
 
 static void
 dialog_update_preview_cb (GtkFileChooser *dialog,
