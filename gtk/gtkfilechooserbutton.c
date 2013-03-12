@@ -168,6 +168,9 @@ struct _GtkFileChooserButtonPrivate
   guint  active                       : 1;
 
   guint  focus_on_click               : 1;
+
+  /* Whether the next async callback from GIO should emit the "selection-changed" signal */
+  guint  is_changing_selection        : 1;
 };
 
 
@@ -555,6 +558,18 @@ gtk_file_chooser_button_file_chooser_iface_init (GtkFileChooserIface *iface)
   iface->remove_shortcut_folder = gtk_file_chooser_button_remove_shortcut_folder;
 }
 
+static void
+emit_selection_changed_if_changing_selection (GtkFileChooserButton *button)
+{
+  GtkFileChooserButtonPrivate *priv = button->priv;
+
+  if (priv->is_changing_selection)
+    {
+      priv->is_changing_selection = FALSE;
+      g_signal_emit_by_name (button, "selection-changed");
+    }
+}
+
 static gboolean
 gtk_file_chooser_button_set_current_folder (GtkFileChooser    *chooser,
 					    GFile             *file,
@@ -626,6 +641,8 @@ gtk_file_chooser_button_select_file (GtkFileChooser *chooser,
 
       priv->selection_while_inactive = g_object_ref (file);
 
+      priv->is_changing_selection = TRUE;
+
       update_label_and_image (button);
       update_combo_box (button);
 
@@ -655,6 +672,8 @@ gtk_file_chooser_button_unselect_file (GtkFileChooser *chooser,
 	      g_object_unref (priv->selection_while_inactive);
 	      priv->selection_while_inactive = NULL;
 	    }
+
+	  priv->is_changing_selection = TRUE;
 
 	  update_label_and_image (button);
 	  update_combo_box (button);
@@ -2533,6 +2552,8 @@ update_label_get_info_cb (GCancellable *cancellable,
     g_object_unref (pixbuf);
 
 out:
+  emit_selection_changed_if_changing_selection (button);
+
   g_object_unref (button);
   g_object_unref (cancellable);
 }
@@ -2543,10 +2564,12 @@ update_label_and_image (GtkFileChooserButton *button)
   GtkFileChooserButtonPrivate *priv = button->priv;
   gchar *label_text;
   GFile *file;
+  gboolean done_changing_selection;
 
   file = get_selected_file (button);
 
   label_text = NULL;
+  done_changing_selection = FALSE;
 
   if (priv->update_button_cancellable)
     {
@@ -2584,7 +2607,10 @@ update_label_and_image (GtkFileChooserButton *button)
           _gtk_file_system_volume_unref (volume);
 
           if (label_text)
+	    {
+	      done_changing_selection = TRUE;
 	      goto out;
+	    }
         }
 
       if (g_file_is_native (file))
@@ -2606,8 +2632,16 @@ update_label_and_image (GtkFileChooserButton *button)
           gtk_image_set_from_pixbuf (GTK_IMAGE (priv->image), pixbuf);
           if (pixbuf)
             g_object_unref (pixbuf);
+
+	  done_changing_selection = TRUE;
         }
     }
+  else
+    {
+      /* We know the selection is empty */
+      done_changing_selection = TRUE;
+    }
+
 out:
 
   if (file)
@@ -2623,6 +2657,9 @@ out:
       gtk_label_set_text (GTK_LABEL (priv->label), _(FALLBACK_DISPLAY_NAME));
       gtk_image_set_from_pixbuf (GTK_IMAGE (priv->image), NULL);
     }
+
+  if (done_changing_selection)
+    emit_selection_changed_if_changing_selection (button);
 }
 
 
