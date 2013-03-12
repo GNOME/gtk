@@ -1982,7 +1982,10 @@ gtk_label_set_text_internal (GtkLabel *label,
   GtkLabelPrivate *priv = label->priv;
 
   if (g_strcmp0 (priv->text, str) == 0)
-    return;
+    {
+      g_free (str);
+      return;
+    }
 
   g_free (priv->text);
   priv->text = str;
