@@ -680,10 +680,10 @@ gtk_file_chooser_button_unselect_all (GtkFileChooser *chooser)
 	{
 	  g_object_unref (priv->selection_while_inactive);
 	  priv->selection_while_inactive = NULL;
-
-	  update_label_and_image (button);
-	  update_combo_box (button);
 	}
+
+      update_label_and_image (button);
+      update_combo_box (button);
     }
 }
 

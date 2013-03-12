@@ -1442,19 +1442,6 @@ static FileChooserButtonTest button_tests[] =
       NULL			/* final_filename */
     },
     {
-      "unselect-all-4",
-      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-      FOLDER_NAME,		/* initial_current_folder */
-      NULL,			/* initial_filename */
-      FALSE,			/* open_dialog */
-      NULL,			/* tweak_current_folder */
-      NULL,			/* tweak_filename */
-      0,			/* dialog_response */
-      TRUE,			/* unselect_all */
-      NULL,			/* final_current_folder */
-      NULL			/* final_filename */
-    },
-    {
       "unselect-all-5",
       GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
       NULL,			/* initial_current_folder */
