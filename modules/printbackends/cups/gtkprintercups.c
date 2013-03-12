@@ -114,7 +114,7 @@ gtk_printer_cups_init (GtkPrinterCups *printer)
   printer->remote_cups_connection_test = NULL;
   printer->auth_info_required = NULL;
   printer->default_number_up = 1;
-#ifdef HAVE_AVAHI_BROWSING
+#ifdef HAVE_CUPS_API_1_6
   printer->avahi_browsed = FALSE;
   printer->avahi_name = NULL;
   printer->avahi_type = NULL;
@@ -160,7 +160,7 @@ gtk_printer_cups_finalize (GObject *object)
     g_object_unref (printer->colord_profile);
 #endif
 
-#ifdef HAVE_AVAHI_BROWSING
+#ifdef HAVE_CUPS_API_1_6
   g_free (printer->avahi_name);
   g_free (printer->avahi_type);
   g_free (printer->avahi_domain);

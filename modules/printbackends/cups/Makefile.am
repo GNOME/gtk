@@ -12,7 +12,6 @@ AM_CPPFLAGS = \
 	-I$(top_builddir)/gdk				\
 	$(CUPS_CFLAGS)					\
 	$(COLORD_CFLAGS)				\
-	$(AVAHI_CFLAGS)					\
 	-DGTK_COMPILATION				\
 	-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED		\
 	$(GTK_DEP_CFLAGS)				\
@@ -38,6 +37,6 @@ noinst_HEADERS =			\
 	gtkcupsutils.h
 
 libprintbackend_cups_la_LDFLAGS =  -avoid-version -module $(no_undefined)
-libprintbackend_cups_la_LIBADD = $(LDADDS) $(CUPS_LIBS) $(AVAHI_LIBS)
+libprintbackend_cups_la_LIBADD = $(LDADDS) $(CUPS_LIBS)
 
 -include $(top_srcdir)/git.mk
