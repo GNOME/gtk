@@ -207,6 +207,7 @@ EXTRA_DIST += \
 	linear-gradient.css \
 	linear-gradient.ref.ui \
 	linear-gradient.ui \
+	marble.xpm \
 	messagedialog-secondarytext.ui \
 	messagedialog-secondarytext.ref.ui \
 	misc-alignment.css \

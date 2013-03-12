@@ -1,3 +1,7 @@
-#reference {
+#reference1 {
   background: lime;
+}
+
+#reference2 {
+  background: url("marble.xpm") no-repeat;
 }
