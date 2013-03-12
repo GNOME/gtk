@@ -522,7 +522,7 @@ create_window_and_file_chooser_button (GtkFileChooserAction action)
   gtk_container_add (GTK_CONTAINER (w.window), w.fc_button);
 
   return w;
-}  
+}
 
 static void
 test_file_chooser_button (gconstpointer data)
@@ -1605,7 +1605,7 @@ test_confirm_overwrite_for_path (const char *path, gboolean append_extension)
   filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (closure.chooser));
   passed = passed && filename && (strcmp (filename, path) == 0);
   g_free (filename);
-  
+
   gtk_widget_destroy (closure.chooser);
 
   passed = passed && (1 == closure.confirm_overwrite_signal_emitted);
@@ -1621,9 +1621,9 @@ test_confirm_overwrite (void)
   gboolean passed = TRUE;
 
   /* first test for a file we know will always exist */
-  passed = passed && test_confirm_overwrite_for_path ("/etc/passwd", FALSE); 
+  passed = passed && test_confirm_overwrite_for_path ("/etc/passwd", FALSE);
   g_assert (passed);
-  passed = passed && test_confirm_overwrite_for_path ("/etc/resolv.conf", TRUE); 
+  passed = passed && test_confirm_overwrite_for_path ("/etc/resolv.conf", TRUE);
   g_assert (passed);
 }
 #endif
