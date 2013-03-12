@@ -390,6 +390,7 @@ else
   AM_CONDITIONAL(USE_BROADWAY, false)
 fi
 
+DISABLE_ON_WAYLAND=''
 if test "x$enable_wayland_backend" = "xyes"; then
   # For the cairo image backend
   cairo_backends="$cairo_backends cairo"
@@ -397,11 +398,13 @@ if test "x$enable_wayland_backend" = "xyes"; then
   have_gio_unix=yes
   GDK_WINDOWING="$GDK_WINDOWING
 #define GDK_WINDOWING_WAYLAND"
+  DISABLE_ON_WAYLAND='%'
   WAYLAND_PACKAGES="wayland-client >= 1.0.0 xkbcommon >= 0.2.0 wayland-cursor"
   AM_CONDITIONAL(USE_WAYLAND, true)
 else
   AM_CONDITIONAL(USE_WAYLAND, false)
 fi
+AC_SUBST(DISABLE_ON_WAYLAND)
 
 # strip leading space
 GDK_BACKENDS=${GDK_BACKENDS#* }
