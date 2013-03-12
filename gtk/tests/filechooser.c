@@ -369,15 +369,8 @@ sleep_timeout_cb (gpointer data)
 static void
 sleep_in_main_loop (void)
 {
-  /* process all pending idles and events */
-  while (g_main_context_pending (NULL))
-    g_main_context_iteration (NULL, FALSE);
-  /* sleeping probably isn't strictly necessary here */
   gdk_threads_add_timeout_full (G_MAXINT, 250, sleep_timeout_cb, NULL, NULL);
   gtk_main ();
-  /* process any pending idles or events that arrived during sleep */
-  while (g_main_context_pending (NULL))
-    g_main_context_iteration (NULL, FALSE);
 }
 
 static void
@@ -524,16 +517,139 @@ create_window_and_file_chooser_button (GtkFileChooserAction action)
   return w;
 }
 
+typedef struct
+{
+  GObject *object;
+  GHashTable *signals;
+  gboolean in_main_loop;
+} SignalWatcher;
+
+typedef struct
+{
+  SignalWatcher *watcher;
+  char *signal_name;
+  gulong id;
+  gboolean emitted;
+} SignalConnection;
+
+static SignalWatcher *
+signal_watcher_new (GObject *object)
+{
+  SignalWatcher *watcher = g_new0 (SignalWatcher, 1);
+
+  watcher->object = g_object_ref (object);
+  watcher->signals = g_hash_table_new (g_str_hash, g_str_equal);
+
+  return watcher;
+}
+
+static void
+dummy_callback (GObject *object)
+{
+  /* nothing */
+}
+
+static void
+marshal_notify_cb (gpointer data, GClosure *closure)
+{
+  if (data)
+    {
+      SignalConnection *conn;
+
+      conn = data;
+      conn->emitted = TRUE;
+
+      if (conn->watcher->in_main_loop)
+	{
+	  gtk_main_quit ();
+	  conn->watcher->in_main_loop = FALSE;
+	}
+    }
+}
+
+static void
+signal_watcher_watch_signal (SignalWatcher *watcher, const char *signal_name)
+{
+  SignalConnection *conn;
+
+  conn = g_hash_table_lookup (watcher->signals, signal_name);
+  if (!conn)
+    {
+      GClosure *closure;
+
+      conn = g_new0 (SignalConnection, 1);
+      conn->watcher = watcher;
+      conn->signal_name = g_strdup (signal_name);
+
+      closure = g_cclosure_new (G_CALLBACK (dummy_callback), NULL, NULL);
+      g_closure_add_marshal_guards (closure, conn, marshal_notify_cb, NULL, marshal_notify_cb);
+      conn->id = g_signal_connect_closure (watcher->object, signal_name, closure, FALSE);
+      conn->emitted = FALSE;
+
+      g_hash_table_insert (watcher->signals, conn->signal_name, conn);
+    }
+  else
+    conn->emitted = FALSE;
+}
+
+static gboolean
+signal_watcher_expect (SignalWatcher *watcher, const char *signal_name)
+{
+  SignalConnection *conn;
+  gboolean emitted;
+
+  conn = g_hash_table_lookup (watcher->signals, signal_name);
+  g_assert (conn != NULL);
+
+  if (!conn->emitted)
+    {
+      gdk_threads_add_timeout_full (G_MAXINT, 1000, sleep_timeout_cb, NULL, NULL);
+      watcher->in_main_loop = TRUE;
+      gtk_main ();
+      watcher->in_main_loop = FALSE;
+    }
+
+  emitted = conn->emitted;
+  conn->emitted = FALSE;
+
+  return emitted;
+}
+
+static void
+destroy_connection (gpointer key, gpointer value, gpointer user_data)
+{
+  SignalConnection *conn;
+
+  conn = value;
+  g_signal_handler_disconnect (conn->watcher->object, conn->id);
+  g_free (conn->signal_name);
+  g_free (conn);
+}
+
+static void
+signal_watcher_destroy (SignalWatcher *watcher)
+{
+  g_hash_table_foreach (watcher->signals, destroy_connection, NULL);
+  g_hash_table_destroy (watcher->signals);
+  g_object_unref (watcher->object);
+  g_free (watcher);
+}
+
 static void
 test_file_chooser_button (gconstpointer data)
 {
   const FileChooserButtonTest *setup = data;
   WindowAndButton w;
+  SignalWatcher *watcher;
   GtkWidget *fc_dialog;
   int iterations;
   int i;
 
   w = create_window_and_file_chooser_button (setup->action);
+
+  watcher = signal_watcher_new (G_OBJECT (w.fc_button));
+  signal_watcher_watch_signal (watcher, "current-folder-changed");
+  signal_watcher_watch_signal (watcher, "selection-changed");
 
   if (setup->initial_current_folder)
     gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (w.fc_button), setup->initial_current_folder);
@@ -542,7 +658,13 @@ test_file_chooser_button (gconstpointer data)
     gtk_file_chooser_select_filename (GTK_FILE_CHOOSER (w.fc_button), setup->initial_filename);
 
   gtk_widget_show_all (w.window);
-  sleep_in_main_loop ();
+  wait_for_idle ();
+
+  if (setup->initial_current_folder)
+    g_assert (signal_watcher_expect (watcher, "current-folder-changed"));
+
+  if (setup->initial_filename)
+    g_assert (signal_watcher_expect (watcher, "selection-changed"));
 
   check_that_basename_is_shown (GTK_FILE_CHOOSER_BUTTON (w.fc_button),
 				get_expected_shown_filename (setup->action, setup->initial_current_folder, setup->initial_filename));
@@ -568,7 +690,7 @@ test_file_chooser_button (gconstpointer data)
 	  gtk_button_clicked (GTK_BUTTON (children->data));
 	  g_list_free (children);
 
-	  sleep_in_main_loop ();
+	  wait_for_idle ();
 
 	  fc_dialog = get_file_chooser_dialog_from_button (GTK_FILE_CHOOSER_BUTTON (w.fc_button));
 	}
@@ -576,15 +698,33 @@ test_file_chooser_button (gconstpointer data)
       /* Okay, now frob the button and its optional dialog */
 
       if (setup->tweak_current_folder)
-	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (w.fc_button), setup->tweak_current_folder);
+	{
+	  signal_watcher_watch_signal (watcher, "current-folder-changed");
+
+	  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (w.fc_button), setup->tweak_current_folder);
+
+	  g_assert (signal_watcher_expect (watcher, "current-folder-changed"));
+	}
 
       if (setup->tweak_filename)
-	gtk_file_chooser_select_filename (GTK_FILE_CHOOSER (w.fc_button), setup->tweak_filename);
+	{
+	  signal_watcher_watch_signal (watcher, "selection-changed");
+
+	  gtk_file_chooser_select_filename (GTK_FILE_CHOOSER (w.fc_button), setup->tweak_filename);
+
+	  g_assert (signal_watcher_expect (watcher, "selection-changed"));
+	}
 
       if (setup->unselect_all)
-	gtk_file_chooser_unselect_all (GTK_FILE_CHOOSER (w.fc_button));
+	{
+	  signal_watcher_watch_signal (watcher, "selection-changed");
 
-      sleep_in_main_loop ();
+	  gtk_file_chooser_unselect_all (GTK_FILE_CHOOSER (w.fc_button));
+
+	  g_assert (signal_watcher_expect (watcher, "selection-changed"));
+	}
+
+      wait_for_idle ();
 
       if (setup->open_dialog)
 	{
@@ -614,6 +754,7 @@ test_file_chooser_button (gconstpointer data)
 				    get_expected_shown_filename (setup->action, setup->final_current_folder, setup->final_filename));
     }
 
+  signal_watcher_destroy (watcher);
   gtk_widget_destroy (w.window);
 }
 
