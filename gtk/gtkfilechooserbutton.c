@@ -1,7 +1,7 @@
 /* -*- Mode: C; c-file-style: "gnu"; tab-width: 8 -*- */
 
 /* GTK+: gtkfilechooserbutton.c
- * 
+ *
  * Copyright (c) 2004 James M. Cape <jcape@ignore-your.tv>
  *
  * This library is free software; you can redistribute it and/or
@@ -396,7 +396,7 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
 
   /**
    * GtkFileChooserButton:dialog:
-   * 
+   *
    * Instance of the #GtkFileChooserDialog associated with the button.
    *
    * Since: 2.6
@@ -411,7 +411,7 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
 
   /**
    * GtkFileChooserButton:focus-on-click:
-   * 
+   *
    * Whether the #GtkFileChooserButton button grabs focus when it is clicked
    * with the mouse.
    *
@@ -424,10 +424,10 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
 							 P_("Whether the button grabs focus when it is clicked with the mouse"),
 							 TRUE,
 							 GTK_PARAM_READWRITE));
-  
+
   /**
    * GtkFileChooserButton:title:
-   * 
+   *
    * Title to put on the #GtkFileChooserDialog associated with the button.
    *
    * Since: 2.6
@@ -441,7 +441,7 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
 
   /**
    * GtkFileChooserButton:width-chars:
-   * 
+   *
    * The width of the entry and label inside the button, in characters.
    *
    * Since: 2.6
@@ -944,7 +944,7 @@ gtk_file_chooser_button_constructor (GType                  type,
   /* set up the action for a user-provided dialog, this also updates
    * the label, image and combobox
    */
-  g_object_set (object, 
+  g_object_set (object,
 		"action", gtk_file_chooser_get_action (GTK_FILE_CHOOSER (priv->dialog)),
 		NULL);
 
@@ -1292,7 +1292,7 @@ gtk_file_chooser_button_drag_data_received (GtkWidget	     *widget,
 	struct DndSelectFolderData *info;
 
 	uris = gtk_selection_data_get_uris (data);
-	
+
 	if (uris == NULL)
 	  break;
 
@@ -1436,7 +1436,7 @@ change_icon_theme_get_info_cb (GCancellable *cancellable,
       width = MAX (width, gdk_pixbuf_get_width (pixbuf));
 
       path = gtk_tree_row_reference_get_path (data->row_ref);
-      if (path) 
+      if (path)
         {
           gtk_tree_model_get_iter (data->button->priv->model, &iter, path);
           gtk_tree_path_free (path);
@@ -1516,8 +1516,8 @@ change_icon_theme (GtkFileChooserButton *button)
 		{
 		  GtkTreePath *path;
 		  GCancellable *cancellable;
-		  struct ChangeIconThemeData *info;		  
-		  
+		  struct ChangeIconThemeData *info;
+
 		  info = g_new0 (struct ChangeIconThemeData, 1);
 		  info->button = g_object_ref (button);
 		  path = gtk_tree_model_get_path (priv->model, &iter);
@@ -1864,7 +1864,7 @@ model_add_special_get_info_cb (GCancellable *cancellable,
   		        DISPLAY_NAME_COLUMN, g_file_info_get_display_name (info),
 		        -1);
   g_free (name);
-   
+
 out:
   g_object_unref (data->button);
   gtk_tree_row_reference_free (data->row_ref);
@@ -2085,7 +2085,7 @@ model_add_bookmarks (GtkFileChooserButton *button,
 	    label = _gtk_file_chooser_label_for_file (file);
 
 	  icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (button)));
-	  pixbuf = gtk_icon_theme_load_icon (icon_theme, "folder-remote", 
+	  pixbuf = gtk_icon_theme_load_icon (icon_theme, "folder-remote",
 					     button->priv->icon_size, 0, NULL);
 
 	  gtk_list_store_insert (store, &iter, pos);
@@ -2105,7 +2105,7 @@ model_add_bookmarks (GtkFileChooserButton *button,
       pos++;
     }
 
-  if (button->priv->n_bookmarks > 0 && 
+  if (button->priv->n_bookmarks > 0 &&
       !button->priv->has_bookmark_separator)
     {
       pos = model_get_type_position (button, ROW_TYPE_BOOKMARK_SEPARATOR);
@@ -2190,10 +2190,10 @@ model_update_current_folder (GtkFileChooserButton *button,
       icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (button)));
 
       if (g_file_is_native (file))
-	  pixbuf = gtk_icon_theme_load_icon (icon_theme, "folder", 
+	  pixbuf = gtk_icon_theme_load_icon (icon_theme, "folder",
 					     button->priv->icon_size, 0, NULL);
       else
-	  pixbuf = gtk_icon_theme_load_icon (icon_theme, "folder-remote", 
+	  pixbuf = gtk_icon_theme_load_icon (icon_theme, "folder-remote",
 					     button->priv->icon_size, 0, NULL);
 
       gtk_list_store_set (store, &iter,
@@ -2215,7 +2215,7 @@ model_add_other (GtkFileChooserButton *button)
   GtkListStore *store;
   GtkTreeIter iter;
   gint pos;
-  
+
   store = GTK_LIST_STORE (button->priv->model);
   pos = model_get_type_position (button, ROW_TYPE_OTHER_SEPARATOR);
 
@@ -2246,7 +2246,7 @@ model_add_empty_selection (GtkFileChooserButton *button)
   GtkListStore *store;
   GtkTreeIter iter;
   gint pos;
-  
+
   store = GTK_LIST_STORE (button->priv->model);
   pos = model_get_type_position (button, ROW_TYPE_EMPTY_SELECTION);
 
@@ -2435,7 +2435,7 @@ select_combo_box_row_no_notify (GtkFileChooserButton *button, int pos)
 {
   GtkFileChooserButtonPrivate *priv = button->priv;
   GtkTreeIter iter, filter_iter;
-  
+
   gtk_tree_model_iter_nth_child (priv->model, &iter, NULL, pos);
   gtk_tree_model_filter_convert_child_iter_to_iter (GTK_TREE_MODEL_FILTER (priv->filter_model),
 						    &filter_iter, &iter);
@@ -2471,7 +2471,7 @@ update_combo_box (GtkFileChooserButton *button)
 			  TYPE_COLUMN, &type,
 			  DATA_COLUMN, &data,
 			  -1);
-    
+
       switch (type)
 	{
 	case ROW_TYPE_SPECIAL:
@@ -2781,7 +2781,7 @@ open_dialog (GtkFileChooserButton *button)
           if (GTK_WINDOW (toplevel) != gtk_window_get_transient_for (GTK_WINDOW (priv->dialog)))
  	    gtk_window_set_transient_for (GTK_WINDOW (priv->dialog),
 					  GTK_WINDOW (toplevel));
-	      
+
 	  gtk_window_set_modal (GTK_WINDOW (priv->dialog),
 				gtk_window_get_modal (GTK_WINDOW (toplevel)));
 	}
@@ -3063,11 +3063,11 @@ dialog_response_cb (GtkDialog *dialog,
  * gtk_file_chooser_button_new:
  * @title: the title of the browse dialog.
  * @action: the open mode for the widget.
- * 
+ *
  * Creates a new file-selecting button widget.
- * 
+ *
  * Returns: a new button widget.
- * 
+ *
  * Since: 2.6
  **/
 GtkWidget *
@@ -3143,9 +3143,9 @@ gtk_file_chooser_button_new_with_dialog (GtkWidget *dialog)
  * gtk_file_chooser_button_set_title:
  * @button: the button widget to modify.
  * @title: the new browse dialog title.
- * 
+ *
  * Modifies the @title of the browse dialog used by @button.
- * 
+ *
  * Since: 2.6
  **/
 void
@@ -3161,12 +3161,12 @@ gtk_file_chooser_button_set_title (GtkFileChooserButton *button,
 /**
  * gtk_file_chooser_button_get_title:
  * @button: the button widget to examine.
- * 
+ *
  * Retrieves the title of the browse dialog used by @button. The returned value
  * should not be modified or freed.
- * 
+ *
  * Returns: a pointer to the browse dialog's title.
- * 
+ *
  * Since: 2.6
  **/
 const gchar *
@@ -3180,11 +3180,11 @@ gtk_file_chooser_button_get_title (GtkFileChooserButton *button)
 /**
  * gtk_file_chooser_button_get_width_chars:
  * @button: the button widget to examine.
- * 
+ *
  * Retrieves the width in characters of the @button widget's entry and/or label.
- * 
+ *
  * Returns: an integer width (in characters) that the button will use to size itself.
- * 
+ *
  * Since: 2.6
  **/
 gint
@@ -3199,9 +3199,9 @@ gtk_file_chooser_button_get_width_chars (GtkFileChooserButton *button)
  * gtk_file_chooser_button_set_width_chars:
  * @button: the button widget to examine.
  * @n_chars: the new width, in characters.
- * 
+ *
  * Sets the width (in characters) that @button will use to @n_chars.
- * 
+ *
  * Since: 2.6
  **/
 void
@@ -3218,7 +3218,7 @@ gtk_file_chooser_button_set_width_chars (GtkFileChooserButton *button,
  * gtk_file_chooser_button_set_focus_on_click:
  * @button: a #GtkFileChooserButton
  * @focus_on_click: whether the button grabs focus when clicked with the mouse
- * 
+ *
  * Sets whether the button will grab focus when it is clicked with the mouse.
  * Making mouse clicks not grab focus is useful in places like toolbars where
  * you don't want the keyboard focus removed from the main area of the
@@ -3243,7 +3243,7 @@ gtk_file_chooser_button_set_focus_on_click (GtkFileChooserButton *button,
       priv->focus_on_click = focus_on_click;
       gtk_button_set_focus_on_click (GTK_BUTTON (priv->button), focus_on_click);
       gtk_combo_box_set_focus_on_click (GTK_COMBO_BOX (priv->combo_box), focus_on_click);
-      
+
       g_object_notify (G_OBJECT (button), "focus-on-click");
     }
 }
@@ -3251,7 +3251,7 @@ gtk_file_chooser_button_set_focus_on_click (GtkFileChooserButton *button,
 /**
  * gtk_file_chooser_button_get_focus_on_click:
  * @button: a #GtkFileChooserButton
- * 
+ *
  * Returns whether the button grabs focus when it is clicked with the mouse.
  * See gtk_file_chooser_button_set_focus_on_click().
  *
@@ -3264,7 +3264,7 @@ gboolean
 gtk_file_chooser_button_get_focus_on_click (GtkFileChooserButton *button)
 {
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER_BUTTON (button), FALSE);
-  
+
   return button->priv->focus_on_click;
 }
 
