@@ -128,6 +128,7 @@ test_set_filename (GtkFileChooserAction action,
 {
   GtkWidget *chooser;
   struct test_set_filename_closure closure;
+  guint timeout_id;
 
   chooser = gtk_file_chooser_dialog_new ("hello", NULL, action,
 					 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -141,8 +142,9 @@ test_set_filename (GtkFileChooserAction action,
 
   (* set_filename_fn) (GTK_FILE_CHOOSER (chooser), data);
 
-  gdk_threads_add_timeout_full (G_MAXINT, SLEEP_DURATION, set_filename_timeout_cb, &closure, NULL);
+  timeout_id = gdk_threads_add_timeout_full (G_MAXINT, SLEEP_DURATION, set_filename_timeout_cb, &closure, NULL);
   gtk_dialog_run (GTK_DIALOG (chooser));
+  g_source_remove (timeout_id);
 
   (* compare_filename_fn) (GTK_FILE_CHOOSER (chooser), data);
 
@@ -373,8 +375,11 @@ sleep_timeout_cb (gpointer data)
 static void
 sleep_in_main_loop (void)
 {
-  gdk_threads_add_timeout_full (G_MAXINT, 250, sleep_timeout_cb, NULL, NULL);
+  guint timeout_id;
+
+  timeout_id = gdk_threads_add_timeout_full (G_MAXINT, 250, sleep_timeout_cb, NULL, NULL);
   gtk_main ();
+  g_source_remove (timeout_id);
 }
 
 static void
@@ -607,10 +612,15 @@ signal_watcher_expect (SignalWatcher *watcher, const char *signal_name, char *un
 
   if (!conn->emitted)
     {
-      gdk_threads_add_timeout_full (G_MAXINT, 1000, sleep_timeout_cb, NULL, NULL);
+      guint timeout_id;
+      
+      timeout_id = gdk_threads_add_timeout_full (G_MAXINT, 1000, sleep_timeout_cb, NULL, NULL);
+
       watcher->in_main_loop = TRUE;
       gtk_main ();
       watcher->in_main_loop = FALSE;
+
+      g_source_remove (timeout_id);
     }
 
   emitted = conn->emitted;
@@ -1780,6 +1790,7 @@ test_confirm_overwrite_for_path (const char *path, gboolean append_extension)
   gboolean passed;
   struct confirm_overwrite_closure closure;
   char *filename;
+  guint timeout_id;
 
   passed = TRUE;
 
@@ -1825,8 +1836,9 @@ test_confirm_overwrite_for_path (const char *path, gboolean append_extension)
       gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (closure.chooser), path);
     }
 
-  gdk_threads_add_timeout_full (G_MAXINT, SLEEP_DURATION, confirm_overwrite_timeout_cb, &closure, NULL);
+  timeout_id = gdk_threads_add_timeout_full (G_MAXINT, SLEEP_DURATION, confirm_overwrite_timeout_cb, &closure, NULL);
   gtk_dialog_run (GTK_DIALOG (closure.chooser));
+  g_source_remove (timeout_id);
 
   filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (closure.chooser));
   passed = passed && filename && (strcmp (filename, path) == 0);
