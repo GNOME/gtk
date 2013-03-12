@@ -183,7 +183,6 @@ struct _GtkFileChooserButtonPrivate
   GFile *current_folder_while_inactive;
 
   gulong combo_box_changed_id;
-  gulong dialog_file_activated_id;
   gulong dialog_folder_changed_id;
   gulong dialog_selection_changed_id;
   gulong fs_volumes_changed_id;
@@ -211,6 +210,22 @@ struct _GtkFileChooserButtonPrivate
 
   /* Whether the next async callback from GIO should emit the "selection-changed" signal */
   guint  is_changing_selection        : 1;
+
+  /* When GtkFileChooserButton's dialog is not active, any modifications to the
+   * dialog's state (as done by the calling program) will be reflected in the
+   * button immediately - the following two flags will be FALSE.
+   *
+   * But when the dialog is active, we only want the button to reflect
+   * modifications in the dialog's state if those modifications *are done by the
+   * calling program*, not by the user in the dialog.  So if the program calls
+   * gtk_file_chooser_select_file() while the dialog is active, that state will
+   * need to be reflected in the button, and either of these flags will be TRUE.
+   * But if the user frobs the dialog, we don't want the button to change its
+   * state until the user actually confirms the dialog and dismisses it; in this
+   * case, the flags will be FALSE.
+   */
+  guint folder_change_needs_notification    : 1;
+  guint selection_change_needs_notification : 1;
 };
 
 
@@ -339,8 +354,6 @@ static void     button_clicked_cb                (GtkButton      *real_button,
 static void     dialog_update_preview_cb         (GtkFileChooser *dialog,
 						  gpointer        user_data);
 static void     dialog_selection_changed_cb      (GtkFileChooser *dialog,
-						  gpointer        user_data);
-static void     dialog_file_activated_cb         (GtkFileChooser *dialog,
 						  gpointer        user_data);
 static void     dialog_current_folder_changed_cb (GtkFileChooser *dialog,
 						  gpointer        user_data);
@@ -619,7 +632,10 @@ gtk_file_chooser_button_set_current_folder (GtkFileChooser    *chooser,
 				 GTK_FILE_CHOOSER_DELEGATE_QUARK);
 
   if (priv->active)
-    return gtk_file_chooser_set_current_folder_file (delegate, file, error);
+    {
+      priv->folder_change_needs_notification = TRUE;
+      return gtk_file_chooser_set_current_folder_file (delegate, file, error);
+    }
   else
     {
       if (priv->current_folder_while_inactive)
@@ -669,7 +685,10 @@ gtk_file_chooser_button_select_file (GtkFileChooser *chooser,
 				 GTK_FILE_CHOOSER_DELEGATE_QUARK);
 
   if (priv->active)
-    return gtk_file_chooser_select_file (delegate, file, error);
+    {
+      priv->selection_change_needs_notification = TRUE;
+      return gtk_file_chooser_select_file (delegate, file, error);
+    }
   else
     {
       if (priv->selection_while_inactive)
@@ -920,9 +939,6 @@ gtk_file_chooser_button_constructor (GType                  type,
   priv->dialog_folder_changed_id =
     g_signal_connect (priv->dialog, "current-folder-changed",
 		      G_CALLBACK (dialog_current_folder_changed_cb), object);
-  priv->dialog_file_activated_id =
-    g_signal_connect (priv->dialog, "file-activated",
-		      G_CALLBACK (dialog_file_activated_cb), object);
   priv->dialog_selection_changed_id =
     g_signal_connect (priv->dialog, "selection-changed",
 		      G_CALLBACK (dialog_selection_changed_cb), object);
@@ -2796,15 +2812,7 @@ open_dialog (GtkFileChooserButton *button)
 
   if (!priv->active)
     {
-      g_signal_handler_block (priv->dialog,
-			      priv->dialog_folder_changed_id);
-      g_signal_handler_block (priv->dialog,
-			      priv->dialog_file_activated_id);
-      g_signal_handler_block (priv->dialog,
-			      priv->dialog_selection_changed_id);
-
       restore_inactive_state (button);
-
       priv->active = TRUE;
     }
 
@@ -2917,29 +2925,59 @@ button_clicked_cb (GtkButton *real_button,
 }
 
 /* Dialog */
+
 static void
 dialog_current_folder_changed_cb (GtkFileChooser *dialog,
 				  gpointer        user_data)
 {
   GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (user_data);
+  GtkFileChooserButtonPrivate *priv = button->priv;
+  gboolean update_from_dialog;
 
-  g_signal_emit_by_name (button, "current-folder-changed");
-}
+  if (!priv->active)
+    update_from_dialog = TRUE;
+  else if (priv->folder_change_needs_notification)
+    update_from_dialog = TRUE;
+  else
+    update_from_dialog = FALSE;
 
-static void
-dialog_file_activated_cb (GtkFileChooser *dialog,
-			  gpointer        user_data)
-{
-  g_signal_emit_by_name (user_data, "file-activated");
+  priv->folder_change_needs_notification = FALSE;
+
+  if (update_from_dialog)
+    {
+      save_inactive_state (button);
+
+      update_label_and_image (button);
+      update_combo_box (button);
+      g_signal_emit_by_name (button, "current-folder-changed");
+    }
 }
 
 static void
 dialog_selection_changed_cb (GtkFileChooser *dialog,
 			     gpointer        user_data)
 {
-  update_label_and_image (user_data);
-  update_combo_box (user_data);
-  g_signal_emit_by_name (user_data, "selection-changed");
+  GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (user_data);
+  GtkFileChooserButtonPrivate *priv = button->priv;
+  gboolean update_from_dialog;
+
+  if (!priv->active)
+    update_from_dialog = TRUE;
+  else if (priv->selection_change_needs_notification)
+    update_from_dialog = TRUE;
+  else
+    update_from_dialog = FALSE;
+
+  priv->selection_change_needs_notification = FALSE;
+
+  if (update_from_dialog)
+    {
+      save_inactive_state (button);
+
+      update_label_and_image (button);
+      update_combo_box (button);
+      g_signal_emit_by_name (button, "selection-changed");
+    }
 }
 
 static void
@@ -3026,15 +3064,7 @@ dialog_response_cb (GtkDialog *dialog,
     }
 
   if (priv->active)
-    {
-      g_signal_handler_unblock (priv->dialog,
-				priv->dialog_folder_changed_id);
-      g_signal_handler_unblock (priv->dialog,
-				priv->dialog_file_activated_id);
-      g_signal_handler_unblock (priv->dialog,
-				priv->dialog_selection_changed_id);
-      priv->active = FALSE;
-    }
+    priv->active = FALSE;
 
   update_label_and_image (button);
   update_combo_box (button);
