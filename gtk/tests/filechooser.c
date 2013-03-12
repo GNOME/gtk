@@ -597,7 +597,7 @@ signal_watcher_watch_signal (SignalWatcher *watcher, const char *signal_name)
 }
 
 static gboolean
-signal_watcher_expect (SignalWatcher *watcher, const char *signal_name)
+signal_watcher_expect (SignalWatcher *watcher, const char *signal_name, char *unused_description)
 {
   SignalConnection *conn;
   gboolean emitted;
@@ -664,10 +664,10 @@ test_file_chooser_button_with_response (const FileChooserButtonTest *setup, gint
   wait_for_idle ();
 
   if (setup->initial_current_folder)
-    g_assert (signal_watcher_expect (watcher, "current-folder-changed"));
+    g_assert (signal_watcher_expect (watcher, "current-folder-changed", "initial current folder"));
 
   if (setup->initial_filename)
-    g_assert (signal_watcher_expect (watcher, "selection-changed"));
+    g_assert (signal_watcher_expect (watcher, "selection-changed", "initial filename"));
 
   check_that_basename_is_shown (GTK_FILE_CHOOSER_BUTTON (w.fc_button),
 				get_expected_shown_filename (setup->action, setup->initial_current_folder, setup->initial_filename));
@@ -717,7 +717,7 @@ test_file_chooser_button_with_response (const FileChooserButtonTest *setup, gint
 	  gtk_file_chooser_set_current_folder (chooser_to_tweak, setup->tweak_current_folder);
 
 	  if (setup->what_to_tweak == BUTTON)
-	    g_assert (signal_watcher_expect (watcher, "current-folder-changed"));
+	    g_assert (signal_watcher_expect (watcher, "current-folder-changed", "tweak current folder in button"));
 	}
 
       if (setup->tweak_filename)
@@ -728,7 +728,7 @@ test_file_chooser_button_with_response (const FileChooserButtonTest *setup, gint
 	  gtk_file_chooser_select_filename (chooser_to_tweak, setup->tweak_filename);
 
 	  if (setup->what_to_tweak == BUTTON)
-	    g_assert (signal_watcher_expect (watcher, "selection-changed"));
+	    g_assert (signal_watcher_expect (watcher, "selection-changed", "tweak filename in button"));
 	}
 
       if (setup->unselect_all)
@@ -739,7 +739,7 @@ test_file_chooser_button_with_response (const FileChooserButtonTest *setup, gint
 	  gtk_file_chooser_unselect_all (chooser_to_tweak);
 
 	  if (setup->what_to_tweak == BUTTON)
-	    g_assert (signal_watcher_expect (watcher, "selection-changed"));
+	    g_assert (signal_watcher_expect (watcher, "selection-changed", "tweak unselect_all in button"));
 	}
 
       wait_for_idle ();
