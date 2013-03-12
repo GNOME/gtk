@@ -2533,6 +2533,7 @@ avahi_resolver_found_cb (GaServiceResolver  *resolver,
 {
   GtkPrintBackendCups *backend = GTK_PRINT_BACKEND_CUPS (user_data);
   AvahiStringList     *item;
+  const gchar         *protocol_string;
   gchar                host[AVAHI_ADDRESS_STR_MAX];
   gchar               *suffix = NULL;
   gchar               *printer_uri;
@@ -2546,9 +2547,14 @@ avahi_resolver_found_cb (GaServiceResolver  *resolver,
   if (suffix)
     {
       if (g_strcmp0 (type, "_ipp._tcp") == 0)
-        printer_uri = g_strdup_printf ("ipp://%s:%u/%s", host, port, suffix);
+        protocol_string = "ipp";
       else
-        printer_uri = g_strdup_printf ("ipps://%s:%u/%s", host, port, suffix);
+        protocol_string = "ipps";
+
+      if (protocol == GA_PROTOCOL_INET6)
+        printer_uri = g_strdup_printf ("%s://[%s]:%u/%s", protocol_string, host, port, suffix);
+      else
+        printer_uri = g_strdup_printf ("%s://%s:%u/%s", protocol_string, host, port, suffix);
 
       cups_request_avahi_printer_info (printer_uri,
                                        host,
