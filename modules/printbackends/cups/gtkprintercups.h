@@ -75,7 +75,7 @@ struct _GtkPrinterCups
   gchar        *colord_title;
   gchar        *colord_qualifier;
 #endif
-#ifdef HAVE_AVAHI_BROWSING
+#ifdef HAVE_CUPS_API_1_6
   gboolean  avahi_browsed;
   gchar    *avahi_name;
   gchar    *avahi_type;

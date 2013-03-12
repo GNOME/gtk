@@ -1455,45 +1455,6 @@ else
   fi
 fi
 
-# Check for Avahi flags
-AC_ARG_ENABLE(avahi-browsing,
-              [AS_HELP_STRING([--disable-avahi-browsing],
-                              [disable avahi browsing of printers])],,
-              [enable_avahi_browsing=auto])
-
-have_avahi_browsing=no
-if test "x$enable_avahi_browsing" != "xno" -a \
-        "x$have_cups_api_1_6" = "xyes"; then
-  AC_MSG_CHECKING([avahi-gobject])
-
-  if $PKG_CONFIG --exists avahi-gobject ; then
-    AVAHI_CFLAGS=`$PKG_CONFIG --cflags avahi-gobject`
-    AC_SUBST(AVAHI_CFLAGS)
-    AVAHI_LIBS=`$PKG_CONFIG --libs avahi-gobject`
-    AC_SUBST(AVAHI_LIBS)
-    have_avahi_gobject=yes
-    AC_MSG_RESULT([yes])
-  else
-    AC_MSG_RESULT([no])
-  fi
-
-  if test "x$have_avahi_gobject" = "xyes" ; then
-    AC_DEFINE([HAVE_AVAHI_BROWSING], [1], [Define to 1 if avahi-gobject available])
-    have_avahi_browsing=yes
-  else
-    AC_MSG_ERROR([
-*** avahi-gobject not found. avahi-gobject is required to build GTK+ with support
-*** for avahi browsed printers when using CUPS 1.6.
-])
-  fi
-else
-  if test "x$enable_avahi_browsing" = "xyes"; then
-    AC_MSG_ERROR([
-*** Avahi browsing support requested but CUPS 1.6 not found.
-])
-  fi
-fi
-
 # Checks to see if we should compile with PAPI backend for GTK+
 #
 
@@ -1870,7 +1831,6 @@ echo "        Dynamic modules:      $build_dynamic_modules"
 echo "        Included immodules:   $included_immodules"
 echo "        PackageKit support:   $build_packagekit"
 echo "        colord support:       $have_colord"
-echo "        Avahi browsing:       $have_avahi_browsing"
 echo "        Introspection:        $found_introspection"
 echo "        Debugging:            $enable_debug"
 echo "        Documentation:        $enable_gtk_doc"
