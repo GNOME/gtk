@@ -1280,7 +1280,7 @@ static FileChooserButtonTest button_tests[] =
     /* SELECT_FOLDER tests with dialog, cancelled */
 
     {
-      "select-folder-dialog-cancel-1",
+      "select-folder-dialog-cancel-ni-nt",
       GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
       NULL,			/* initial_current_folder */
       NULL, 			/* initial_filename */
@@ -1294,49 +1294,7 @@ static FileChooserButtonTest button_tests[] =
       NULL			/* final_filename */
     },
     {
-      "select-folder-dialog-cancel-2",
-      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-      NULL,			/* initial_current_folder */
-      FOLDER_NAME,		/* initial_filename */
-      TRUE,			/* open_dialog */
-      BUTTON,			/* what_to_tweak */
-      NULL,			/* tweak_current_folder */
-      NULL,			/* tweak_filename */
-      GTK_RESPONSE_CANCEL,	/* dialog_response */
-      FALSE,			/* unselect_all */
-      NULL,			/* final_current_folder */
-      FOLDER_NAME		/* final_filename */
-    },
-    {
-      "select-folder-dialog-cancel-3",
-      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-      FOLDER_NAME,		/* initial_current_folder */
-      NULL,			/* initial_filename */
-      TRUE,			/* open_dialog */
-      BUTTON,			/* what_to_tweak */
-      NULL,			/* tweak_current_folder */
-      NULL,			/* tweak_filename */
-      GTK_RESPONSE_CANCEL,	/* dialog_response */
-      FALSE,			/* unselect_all */
-      FOLDER_NAME,		/* final_current_folder */
-      NULL			/* final_filename */
-    },
-    {
-      "select-folder-dialog-cancel-4",
-      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-      FOLDER_NAME,		/* initial_current_folder */
-      NULL,			/* initial_filename */
-      TRUE,			/* open_dialog */
-      BUTTON,			/* what_to_tweak */
-      NULL,			/* tweak_current_folder */
-      NULL,			/* tweak_filename */
-      GTK_RESPONSE_CANCEL,	/* dialog_response */
-      FALSE,			/* unselect_all */
-      NULL,			/* final_current_folder */
-      FOLDER_NAME		/* final_filename */
-    },
-    {
-      "select-folder-dialog-cancel-5",
+      "select-folder-dialog-cancel-ni-b",
       GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
       NULL,			/* initial_current_folder */
       NULL,			/* initial_filename */
@@ -1347,10 +1305,38 @@ static FileChooserButtonTest button_tests[] =
       GTK_RESPONSE_CANCEL,	/* dialog_response */
       FALSE,			/* unselect_all */
       NULL,			/* final_current_folder */
+      FOLDER_NAME		/* final_filename */
+    },
+    {
+      "select-folder-dialog-cancel-ni-d",
+      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+      NULL,			/* initial_current_folder */
+      NULL, 			/* initial_filename */
+      TRUE,			/* open_dialog */
+      DIALOG,			/* what_to_tweak */
+      NULL,			/* tweak_current_folder */
+      FOLDER_NAME,		/* tweak_filename */
+      GTK_RESPONSE_CANCEL,	/* dialog_response */
+      FALSE,			/* unselect_all */
+      NULL,			/* final_current_folder */
       NULL			/* final_filename */
     },
     {
-      "select-folder-dialog-cancel-6",
+      "select-folder-dialog-cancel-i-nt",
+      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+      NULL,			/* initial_current_folder */
+      FOLDER_NAME,		/* initial_filename */
+      TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
+      NULL,			/* tweak_current_folder */
+      NULL,			/* tweak_filename */
+      GTK_RESPONSE_CANCEL,	/* dialog_response */
+      FALSE,			/* unselect_all */
+      NULL,			/* final_current_folder */
+      FOLDER_NAME		/* final_filename */
+    },
+    {
+      "select-folder-dialog-cancel-i-b",
       GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
       NULL,			/* initial_current_folder */
       FOLDER_NAME,		/* initial_filename */
@@ -1361,24 +1347,108 @@ static FileChooserButtonTest button_tests[] =
       GTK_RESPONSE_CANCEL,	/* dialog_response */
       FALSE,			/* unselect_all */
       NULL,			/* final_current_folder */
+      FOLDER_NAME_2		/* final_filename */
+    },
+    {
+      "select-folder-dialog-cancel-i-d",
+      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+      NULL,			/* initial_current_folder */
+      FOLDER_NAME,		/* initial_filename */
+      TRUE,			/* open_dialog */
+      DIALOG,			/* what_to_tweak */
+      NULL,			/* tweak_current_folder */
+      FOLDER_NAME_2,		/* tweak_filename */
+      GTK_RESPONSE_CANCEL,	/* dialog_response */
+      FALSE,			/* unselect_all */
+      NULL,			/* final_current_folder */
       FOLDER_NAME		/* final_filename */
     },
     {
-      "select-folder-dialog-cancel-7",
+      "select-folder-dialog-cancel-nf-nt",
       GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-      FOLDER_NAME,		/* initial_current_folder */
-      NULL,			/* initial_filename */
+      NULL,			/* initial_current_folder */
+      NULL, 			/* initial_filename */
       TRUE,			/* open_dialog */
       BUTTON,			/* what_to_tweak */
       NULL,			/* tweak_current_folder */
-      FOLDER_NAME_2,		/* tweak_filename */
+      NULL,			/* tweak_filename */
+      GTK_RESPONSE_CANCEL,	/* dialog_response */
+      FALSE,			/* unselect_all */
+      NULL,			/* final_current_folder */
+      NULL			/* final_filename */
+    },
+    {
+      "select-folder-dialog-cancel-nf-b",
+      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+      NULL,			/* initial_current_folder */
+      NULL,			/* initial_filename */
+      TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
+      FOLDER_NAME,		/* tweak_current_folder */
+      NULL,			/* tweak_filename */
       GTK_RESPONSE_CANCEL,	/* dialog_response */
       FALSE,			/* unselect_all */
       FOLDER_NAME,		/* final_current_folder */
       NULL			/* final_filename */
     },
     {
-      "select-folder-dialog-cancel-8",
+      "select-folder-dialog-cancel-nf-d",
+      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+      NULL,			/* initial_current_folder */
+      NULL,			/* initial_filename */
+      TRUE,			/* open_dialog */
+      DIALOG,			/* what_to_tweak */
+      FOLDER_NAME,		/* tweak_current_folder */
+      NULL,			/* tweak_filename */
+      GTK_RESPONSE_CANCEL,	/* dialog_response */
+      FALSE,			/* unselect_all */
+      NULL,			/* final_current_folder */
+      NULL			/* final_filename */
+    },
+    {
+      "select-folder-dialog-cancel-f-nt",
+      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+      FOLDER_NAME,		/* initial_current_folder */
+      NULL,			/* initial_filename */
+      TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
+      NULL,			/* tweak_current_folder */
+      NULL,			/* tweak_filename */
+      GTK_RESPONSE_CANCEL,	/* dialog_response */
+      FALSE,			/* unselect_all */
+      FOLDER_NAME,		/* final_current_folder */
+      NULL			/* final_filename */
+    },
+    {
+      "select-folder-dialog-cancel-f-nt-2",
+      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+      FOLDER_NAME,		/* initial_current_folder */
+      NULL,			/* initial_filename */
+      TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
+      NULL,			/* tweak_current_folder */
+      NULL,			/* tweak_filename */
+      GTK_RESPONSE_CANCEL,	/* dialog_response */
+      FALSE,			/* unselect_all */
+      NULL,			/* final_current_folder */
+      FOLDER_NAME		/* final_filename */
+    },
+    {
+      "select-folder-dialog-cancel-f-b",
+      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+      FOLDER_NAME,		/* initial_current_folder */
+      NULL,			/* initial_filename */
+      TRUE,			/* open_dialog */
+      BUTTON,			/* what_to_tweak */
+      FOLDER_NAME_2,		/* tweak_current_folder */
+      NULL,			/* tweak_filename */
+      GTK_RESPONSE_CANCEL,	/* dialog_response */
+      FALSE,			/* unselect_all */
+      FOLDER_NAME_2,		/* final_current_folder */
+      NULL			/* final_filename */
+    },
+    {
+      "select-folder-dialog-cancel-f-b-2",
       GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
       FOLDER_NAME,		/* initial_current_folder */
       NULL,			/* initial_filename */
@@ -1389,7 +1459,35 @@ static FileChooserButtonTest button_tests[] =
       GTK_RESPONSE_CANCEL,	/* dialog_response */
       FALSE,			/* unselect_all */
       NULL,			/* final_current_folder */
-      FOLDER_NAME		/* final_filename */
+      FOLDER_NAME_2		/* final_filename */
+    },
+    {
+      "select-folder-dialog-cancel-f-d",
+      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+      FOLDER_NAME,		/* initial_current_folder */
+      NULL,			/* initial_filename */
+      TRUE,			/* open_dialog */
+      DIALOG,			/* what_to_tweak */
+      FOLDER_NAME_2,		/* tweak_current_folder */
+      NULL,			/* tweak_filename */
+      GTK_RESPONSE_CANCEL,	/* dialog_response */
+      FALSE,			/* unselect_all */
+      FOLDER_NAME,		/* final_current_folder */
+      NULL			/* final_filename */
+    },
+    {
+      "select-folder-dialog-cancel-f-d-2",
+      GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+      FOLDER_NAME,		/* initial_current_folder */
+      NULL,			/* initial_filename */
+      TRUE,			/* open_dialog */
+      DIALOG,			/* what_to_tweak */
+      NULL,			/* tweak_current_folder */
+      FOLDER_NAME_2,		/* tweak_filename */
+      GTK_RESPONSE_CANCEL,	/* dialog_response */
+      FALSE,			/* unselect_all */
+      FOLDER_NAME,		/* final_current_folder */
+      NULL			/* final_filename */
     },
 
     /* OPEN tests with dialog */
