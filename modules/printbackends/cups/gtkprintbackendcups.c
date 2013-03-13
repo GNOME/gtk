@@ -149,6 +149,7 @@ struct _GtkPrintBackendCups
   GaServiceBrowser  *avahi_ipp_browser;
   GaServiceBrowser  *avahi_ipps_browser;
   GaClient          *avahi_client;
+  GCancellable      *avahi_cancellable;
 #endif
 };
 
@@ -2334,6 +2335,8 @@ avahi_data_free (GtkPrintBackendCups *cups_backend)
 {
   if (cups_backend)
     {
+      g_cancellable_cancel (cups_backend->avahi_cancellable);
+      g_clear_object (&cups_backend->avahi_cancellable);
       g_clear_pointer (&cups_backend->avahi_default_printer, g_free);
       g_list_free_full (cups_backend->avahi_resolvers, g_object_unref);
       cups_backend->avahi_resolvers = NULL;
@@ -2517,6 +2520,52 @@ cups_request_avahi_printer_info (const gchar         *printer_uri,
     }
 }
 
+typedef struct
+{
+  gchar               *printer_uri;
+  gchar               *host;
+  gint                 port;
+  gchar               *name;
+  gchar               *type;
+  gchar               *domain;
+  GtkPrintBackendCups *backend;
+} AvahiConnectionTestData;
+
+static void
+avahi_connection_test_cb (GObject      *source_object,
+                          GAsyncResult *res,
+                          gpointer      user_data)
+{
+  AvahiConnectionTestData *data = (AvahiConnectionTestData *) user_data;
+  GSocketConnection       *connection;
+
+  connection = g_socket_client_connect_to_host_finish (G_SOCKET_CLIENT (source_object),
+                                                       res,
+                                                       &error);
+  g_object_unref (source_object);
+
+  if (connection != NULL)
+    {
+      g_io_stream_close (G_IO_STREAM (connection), NULL, NULL);
+      g_object_unref (connection);
+
+      cups_request_avahi_printer_info (data->printer_uri,
+                                       data->host,
+                                       data->port,
+                                       data->name,
+                                       data->type,
+                                       data->domain,
+                                       data->backend);
+    }
+
+  g_free (data->printer_uri);
+  g_free (data->host);
+  g_free (data->name);
+  g_free (data->type);
+  g_free (data->domain);
+  g_free (data);
+}
+
 static void
 avahi_resolver_found_cb (GaServiceResolver  *resolver,
                          int                 interface,
@@ -2531,12 +2580,12 @@ avahi_resolver_found_cb (GaServiceResolver  *resolver,
                          glong               flags,
                          gpointer           *user_data)
 {
-  GtkPrintBackendCups *backend = GTK_PRINT_BACKEND_CUPS (user_data);
-  AvahiStringList     *item;
-  const gchar         *protocol_string;
-  gchar                host[AVAHI_ADDRESS_STR_MAX];
-  gchar               *suffix = NULL;
-  gchar               *printer_uri;
+  AvahiConnectionTestData *data;
+  GtkPrintBackendCups     *backend = GTK_PRINT_BACKEND_CUPS (user_data);
+  AvahiStringList         *item;
+  const gchar             *protocol_string;
+  gchar                    host[AVAHI_ADDRESS_STR_MAX];
+  gchar                   *suffix = NULL;
 
   avahi_address_snprint (host, sizeof (host), address);
 
@@ -2551,20 +2600,28 @@ avahi_resolver_found_cb (GaServiceResolver  *resolver,
       else
         protocol_string = "ipps";
 
+      data = g_new0 (AvahiConnectionTestData, 1);
+
       if (protocol == GA_PROTOCOL_INET6)
-        printer_uri = g_strdup_printf ("%s://[%s]:%u/%s", protocol_string, host, port, suffix);
+        data->printer_uri = g_strdup_printf ("%s://[%s]:%u/%s", protocol_string, host, port, suffix);
       else
-        printer_uri = g_strdup_printf ("%s://%s:%u/%s", protocol_string, host, port, suffix);
+        data->printer_uri = g_strdup_printf ("%s://%s:%u/%s", protocol_string, host, port, suffix);
 
-      cups_request_avahi_printer_info (printer_uri,
-                                       host,
-                                       port,
-                                       name,
-                                       type,
-                                       domain,
-                                       backend);
+      data->host = g_strdup (host);
+      data->port = port;
+      data->name = g_strdup (name);
+      data->type = g_strdup (type);
+      data->domain = g_strdup (domain);
+      data->backend = backend;
 
-      g_free (printer_uri);
+      /* It can happen that the address is not reachable */
+      g_socket_client_connect_to_host_async (g_socket_client_new (),
+                                             host,
+                                             port,
+                                             backend->avahi_cancellable,
+                                             avahi_connection_test_cb,
+                                             data);
+
       g_free (suffix);
     }
 }
@@ -2781,6 +2838,10 @@ avahi_request_printer_list (GtkPrintBackendCups *cups_backend)
                                error->message));
           g_clear_object (&cups_backend->avahi_client);
           g_clear_error (&error);
+        }
+      else
+        {
+          cups_backend->avahi_cancellable = g_cancellable_new ();
         }
     }
 }
