@@ -13238,7 +13238,8 @@ gtk_tree_view_real_set_cursor (GtkTreeView     *tree_view,
                                            GTK_CELL_RENDERER_FOCUSED);
     }
 
-  g_signal_emit (tree_view, tree_view_signals[CURSOR_CHANGED], 0);
+  if (!gtk_widget_in_destruction (GTK_WIDGET (tree_view)))
+    g_signal_emit (tree_view, tree_view_signals[CURSOR_CHANGED], 0);
 }
 
 /**
