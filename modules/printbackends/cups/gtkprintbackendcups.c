@@ -2541,7 +2541,7 @@ avahi_connection_test_cb (GObject      *source_object,
 
   connection = g_socket_client_connect_to_host_finish (G_SOCKET_CLIENT (source_object),
                                                        res,
-                                                       &error);
+                                                       NULL);
   g_object_unref (source_object);
 
   if (connection != NULL)
