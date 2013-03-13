@@ -1431,8 +1431,10 @@ gtk_application_inhibit (GtkApplication             *application,
       gdkwindow = gtk_widget_get_window (GTK_WIDGET (window));
       if (gdkwindow == NULL)
         g_warning ("Inhibit called with an unrealized window");
-      else
+#ifdef GDK_WINDOWING_X11
+      else if (GDK_IS_X11_WINDOW (gdkwindow))
         xid = GDK_WINDOW_XID (gdkwindow);
+#endif
     }
 
   res = g_dbus_proxy_call_sync (application->priv->sm_proxy,
