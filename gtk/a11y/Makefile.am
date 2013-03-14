@@ -106,6 +106,7 @@ gtka11y_private_h_sources =		\
 	gtkcellaccessibleprivate.h	\
 	gtkcolorswatchaccessibleprivate.h \
 	gtkiconviewaccessibleprivate.h	\
+	gtklabelaccessibleprivate.h 	\
 	gtklockbuttonaccessibleprivate.h \
 	gtktextviewaccessibleprivate.h  \
 	gtktreeviewaccessibleprivate.h	\

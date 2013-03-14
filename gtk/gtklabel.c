@@ -52,7 +52,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkmain.h"
 
-#include "a11y/gtklabelaccessible.h"
+#include "a11y/gtklabelaccessibleprivate.h"
 
 /* this is in case rint() is not provided by the compiler, 
  * such as in the case of C89 compilers, like MSVC
@@ -1987,8 +1987,11 @@ gtk_label_set_text_internal (GtkLabel *label,
       return;
     }
 
+  _gtk_label_accessible_text_deleted (label);
   g_free (priv->text);
   priv->text = str;
+
+  _gtk_label_accessible_text_inserted (label);
 
   gtk_label_select_region_index (label, 0, 0);
 }
