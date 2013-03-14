@@ -19,11 +19,11 @@
 
 #include <gtk/gtk.h>
 #include <gtk/gtkpango.h>
+#include "gtkwidgetprivate.h"
 #include "gtklabelaccessible.h"
 
 struct _GtkLabelAccessiblePrivate
 {
-  gchar *text;
   gint cursor_position;
   gint selection_bound;
 };
@@ -46,15 +46,10 @@ gtk_label_accessible_initialize (AtkObject *obj,
                                  gpointer   data)
 {
   GtkWidget  *widget;
-  GtkLabelAccessible *accessible;
 
   ATK_OBJECT_CLASS (gtk_label_accessible_parent_class)->initialize (obj, data);
 
-  accessible = GTK_LABEL_ACCESSIBLE (obj);
-
   widget = GTK_WIDGET (data);
-
-  accessible->priv->text = g_strdup (gtk_label_get_text (GTK_LABEL (widget)));
 
   /*
    * Check whether ancestor of GtkLabel is a GtkButton and if so
@@ -97,6 +92,45 @@ check_for_selection_change (GtkLabelAccessible *accessible,
   return ret_val;
 }
 
+void
+_gtk_label_accessible_text_deleted (GtkLabel *label)
+{
+  AtkObject *obj;
+  const char *text;
+  guint length;
+
+  obj = _gtk_widget_peek_accessible (GTK_WIDGET (label));
+  if (obj == NULL)
+    return;
+
+  text = gtk_label_get_text (label);
+  length = g_utf8_strlen (text, -1);
+  if (length > 0)
+    g_signal_emit_by_name (obj, "text-changed::delete", 0, length);
+}
+
+void
+_gtk_label_accessible_text_inserted (GtkLabel *label)
+{
+  AtkObject *obj;
+  const char *text;
+  guint length;
+
+  obj = _gtk_widget_peek_accessible (GTK_WIDGET (label));
+  if (obj == NULL)
+    return;
+
+  text = gtk_label_get_text (label);
+  length = g_utf8_strlen (text, -1);
+  if (length > 0)
+    g_signal_emit_by_name (obj, "text-changed::insert", 0, length);
+
+  if (obj->name == NULL)
+    /* The label has changed so notify a change in accessible-name */
+    g_object_notify (G_OBJECT (obj), "accessible-name");
+
+  g_signal_emit_by_name (obj, "visible-data-changed");
+}
 
 static void
 gtk_label_accessible_notify_gtk (GObject    *obj,
@@ -105,37 +139,10 @@ gtk_label_accessible_notify_gtk (GObject    *obj,
   GtkWidget *widget = GTK_WIDGET (obj);
   AtkObject* atk_obj = gtk_widget_get_accessible (widget);
   GtkLabelAccessible *accessible;
-  gint length;
 
   accessible = GTK_LABEL_ACCESSIBLE (atk_obj);
 
-  if (g_strcmp0 (pspec->name, "label") == 0)
-    {
-      const gchar *text;
-
-      text = gtk_label_get_text (GTK_LABEL (widget));
-      if (g_strcmp0 (accessible->priv->text, text) == 0)
-        return;
-
-      /* Create a delete text and an insert text signal */
-      length = g_utf8_strlen (accessible->priv->text, -1);
-      if (length > 0)
-        g_signal_emit_by_name (atk_obj, "text-changed::delete", 0, length);
-
-      g_free (accessible->priv->text);
-      accessible->priv->text = g_strdup (text);
-
-      length = g_utf8_strlen (accessible->priv->text, -1);
-      if (length > 0)
-        g_signal_emit_by_name (atk_obj, "text-changed::insert", 0, length);
-
-      if (atk_obj->name == NULL)
-        /* The label has changed so notify a change in accessible-name */
-        g_object_notify (G_OBJECT (atk_obj), "accessible-name");
-
-      g_signal_emit_by_name (atk_obj, "visible-data-changed");
-    }
-  else if (g_strcmp0 (pspec->name, "cursor-position") == 0)
+  if (g_strcmp0 (pspec->name, "cursor-position") == 0)
     {
       g_signal_emit_by_name (atk_obj, "text-caret-moved",
                              _gtk_label_get_cursor_position (GTK_LABEL (widget)));
@@ -150,17 +157,6 @@ gtk_label_accessible_notify_gtk (GObject    *obj,
   else
     GTK_WIDGET_ACCESSIBLE_CLASS (gtk_label_accessible_parent_class)->notify_gtk (obj, pspec);
 }
-
-static void
-gtk_label_accessible_finalize (GObject *object)
-{
-  GtkLabelAccessible *accessible = GTK_LABEL_ACCESSIBLE (object);
-
-  g_free (accessible->priv->text);
-
-  G_OBJECT_CLASS (gtk_label_accessible_parent_class)->finalize (object);
-}
-
 
 /* atkobject.h */
 
@@ -274,11 +270,8 @@ gtk_label_accessible_get_name (AtkObject *accessible)
 static void
 gtk_label_accessible_class_init (GtkLabelAccessibleClass *klass)
 {
-  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
-  GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
-
-  gobject_class->finalize = gtk_label_accessible_finalize;
+  GtkWidgetAccessibleClass *widget_class = GTK_WIDGET_ACCESSIBLE_CLASS (klass);
 
   widget_class->notify_gtk = gtk_label_accessible_notify_gtk;
 
