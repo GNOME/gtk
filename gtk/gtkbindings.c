@@ -1557,7 +1557,7 @@ gtk_bindings_activate_list (GObject  *object,
           handled = binding_activate (binding_set, entries,
                                       object, is_release,
                                       &unbound);
-          if (handled)
+          if (handled || unbound)
             break;
         }
 
@@ -1584,6 +1584,8 @@ gtk_bindings_activate_list (GObject  *object,
           handled = binding_activate (binding_set, entries,
                                       object, is_release,
                                       &unbound);
+          if (unbound)
+            break;
         }
 
       if (unbound)
