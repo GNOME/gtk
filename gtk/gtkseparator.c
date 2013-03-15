@@ -167,16 +167,9 @@ gtk_separator_get_preferred_size (GtkWidget      *widget,
 {
   GtkSeparator *separator = GTK_SEPARATOR (widget);
   GtkSeparatorPrivate *private = separator->priv;
-  GtkStyleContext *context;
-  GtkStateFlags state;
-  GtkBorder border;
   gboolean wide_sep;
   gint     sep_width;
   gint     sep_height;
-
-  context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-  gtk_style_context_get_border (context, state, &border);
 
   gtk_widget_style_get (widget,
                         "wide-separators",  &wide_sep,
@@ -190,11 +183,11 @@ gtk_separator_get_preferred_size (GtkWidget      *widget,
     }
   else if (orientation == GTK_ORIENTATION_VERTICAL)
     {
-      *minimum = *natural = wide_sep ? sep_height : border.top;
+      *minimum = *natural = wide_sep ? sep_height : 1;
     }
   else
     {
-      *minimum = *natural = wide_sep ? sep_width : border.left;
+      *minimum = *natural = wide_sep ? sep_width : 1;
     }
 }
 
@@ -220,26 +213,21 @@ gtk_separator_draw (GtkWidget *widget,
 {
   GtkSeparator *separator = GTK_SEPARATOR (widget);
   GtkSeparatorPrivate *private = separator->priv;
-  GtkStateFlags state;
   GtkStyleContext *context;
-  GtkBorder padding;
   gboolean wide_separators;
   gint separator_width;
   gint separator_height;
   int width, height;
 
-  context = gtk_widget_get_style_context (widget);
   gtk_widget_style_get (widget,
                         "wide-separators",  &wide_separators,
                         "separator-width",  &separator_width,
                         "separator-height", &separator_height,
                         NULL);
 
-  state = gtk_widget_get_state_flags (widget);
+  context = gtk_widget_get_style_context (widget);
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
-
-  gtk_style_context_get_padding (context, state, &padding);
 
   if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -249,8 +237,8 @@ gtk_separator_draw (GtkWidget *widget,
                           width, separator_height);
       else
         gtk_render_line (context, cr,
-                         0, (height - padding.top) / 2,
-                         width - 1, (height - padding.top) / 2);
+                         0, height / 2,
+                         width - 1, height / 2);
     }
   else
     {
@@ -260,8 +248,8 @@ gtk_separator_draw (GtkWidget *widget,
                           separator_width, height);
       else
         gtk_render_line (context, cr,
-                         (width - padding.left) / 2, 0,
-                         (width - padding.left) / 2, height - 1);
+                         width / 2, 0,
+                         width / 2, height - 1);
     }
 
   return FALSE;
