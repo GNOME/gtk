@@ -179,6 +179,8 @@
 #error "GDK_VERSION_MIN_REQUIRED must be >= GDK_VERSION_3_0"
 #endif
 
+#define GDK_AVAILABLE_IN_ALL
+
 /* XXX: Every new stable minor release should add a set of macros here */
 
 #if GDK_VERSION_MIN_REQUIRED >= GDK_VERSION_3_0
