@@ -89,43 +89,60 @@ typedef enum
 } GdkDragProtocol;
 
 
+GDK_AVAILABLE_IN_ALL
 GType            gdk_drag_context_get_type             (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 void             gdk_drag_context_set_device           (GdkDragContext *context,
                                                         GdkDevice      *device);
+GDK_AVAILABLE_IN_ALL
 GdkDevice *      gdk_drag_context_get_device           (GdkDragContext *context);
 
+GDK_AVAILABLE_IN_ALL
 GList           *gdk_drag_context_list_targets         (GdkDragContext *context);
+GDK_AVAILABLE_IN_ALL
 GdkDragAction    gdk_drag_context_get_actions          (GdkDragContext *context);
+GDK_AVAILABLE_IN_ALL
 GdkDragAction    gdk_drag_context_get_suggested_action (GdkDragContext *context);
+GDK_AVAILABLE_IN_ALL
 GdkDragAction    gdk_drag_context_get_selected_action  (GdkDragContext *context);
 
+GDK_AVAILABLE_IN_ALL
 GdkWindow       *gdk_drag_context_get_source_window    (GdkDragContext *context);
+GDK_AVAILABLE_IN_ALL
 GdkWindow       *gdk_drag_context_get_dest_window      (GdkDragContext *context);
+GDK_AVAILABLE_IN_ALL
 GdkDragProtocol  gdk_drag_context_get_protocol         (GdkDragContext *context);
 
 /* Destination side */
 
+GDK_AVAILABLE_IN_ALL
 void             gdk_drag_status        (GdkDragContext   *context,
                                          GdkDragAction     action,
                                          guint32           time_);
+GDK_AVAILABLE_IN_ALL
 void             gdk_drop_reply         (GdkDragContext   *context,
                                          gboolean          accepted,
                                          guint32           time_);
+GDK_AVAILABLE_IN_ALL
 void             gdk_drop_finish        (GdkDragContext   *context,
                                          gboolean          success,
                                          guint32           time_);
+GDK_AVAILABLE_IN_ALL
 GdkAtom          gdk_drag_get_selection (GdkDragContext   *context);
 
 /* Source side */
 
+GDK_AVAILABLE_IN_ALL
 GdkDragContext * gdk_drag_begin            (GdkWindow      *window,
                                             GList          *targets);
 
+GDK_AVAILABLE_IN_ALL
 GdkDragContext * gdk_drag_begin_for_device (GdkWindow      *window,
                                             GdkDevice      *device,
                                             GList          *targets);
 
+GDK_AVAILABLE_IN_ALL
 void    gdk_drag_find_window_for_screen   (GdkDragContext   *context,
                                            GdkWindow        *drag_window,
                                            GdkScreen        *screen,
@@ -134,6 +151,7 @@ void    gdk_drag_find_window_for_screen   (GdkDragContext   *context,
                                            GdkWindow       **dest_window,
                                            GdkDragProtocol  *protocol);
 
+GDK_AVAILABLE_IN_ALL
 gboolean        gdk_drag_motion      (GdkDragContext *context,
                                       GdkWindow      *dest_window,
                                       GdkDragProtocol protocol,
@@ -142,10 +160,13 @@ gboolean        gdk_drag_motion      (GdkDragContext *context,
                                       GdkDragAction   suggested_action,
                                       GdkDragAction   possible_actions,
                                       guint32         time_);
+GDK_AVAILABLE_IN_ALL
 void            gdk_drag_drop        (GdkDragContext *context,
                                       guint32         time_);
+GDK_AVAILABLE_IN_ALL
 void            gdk_drag_abort       (GdkDragContext *context,
                                       guint32         time_);
+GDK_AVAILABLE_IN_ALL
 gboolean        gdk_drag_drop_succeeded (GdkDragContext *context);
 
 G_END_DECLS

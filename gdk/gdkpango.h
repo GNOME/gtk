@@ -23,13 +23,16 @@
 #endif
 
 #include <gdk/gdktypes.h>
+#include <gdk/gdkversionmacros.h>
 
 G_BEGIN_DECLS
 
 /************************************************************************/
 
+GDK_AVAILABLE_IN_ALL
 PangoContext *gdk_pango_context_get_for_screen (GdkScreen    *screen);
 #ifndef GDK_MULTIHEAD_SAFE
+GDK_AVAILABLE_IN_ALL
 PangoContext *gdk_pango_context_get            (void);
 #endif
 
@@ -40,11 +43,13 @@ PangoContext *gdk_pango_context_get            (void);
  * draw with the region as clip, only the given ranges are drawn.
  */
 
+GDK_AVAILABLE_IN_ALL
 cairo_region_t    *gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
                                                      gint             x_origin,
                                                      gint             y_origin,
                                                      const gint      *index_ranges,
                                                      gint             n_ranges);
+GDK_AVAILABLE_IN_ALL
 cairo_region_t    *gdk_pango_layout_get_clip_region      (PangoLayout     *layout,
                                                      gint             x_origin,
                                                      gint             y_origin,

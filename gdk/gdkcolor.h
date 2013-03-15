@@ -31,6 +31,7 @@
 
 #include <cairo.h>
 #include <gdk/gdktypes.h>
+#include <gdk/gdkversionmacros.h>
 
 G_BEGIN_DECLS
 
@@ -58,17 +59,24 @@ struct _GdkColor
 
 #define GDK_TYPE_COLOR (gdk_color_get_type ())
 
+GDK_AVAILABLE_IN_ALL
 GType     gdk_color_get_type (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 GdkColor *gdk_color_copy      (const GdkColor *color);
+GDK_AVAILABLE_IN_ALL
 void      gdk_color_free      (GdkColor       *color);
 
+GDK_AVAILABLE_IN_ALL
 guint     gdk_color_hash      (const GdkColor *color);
+GDK_AVAILABLE_IN_ALL
 gboolean  gdk_color_equal     (const GdkColor *colora,
                                const GdkColor *colorb);
 
+GDK_AVAILABLE_IN_ALL
 gboolean  gdk_color_parse     (const gchar    *spec,
                                GdkColor       *color);
+GDK_AVAILABLE_IN_ALL
 gchar *   gdk_color_to_string (const GdkColor *color);
 
 

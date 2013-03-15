@@ -33,6 +33,7 @@ typedef struct _GdkX11DeviceManagerXI GdkX11DeviceManagerXI;
 typedef struct _GdkX11DeviceManagerXIClass GdkX11DeviceManagerXIClass;
 
 
+GDK_AVAILABLE_IN_ALL
 GType gdk_x11_device_manager_xi_get_type (void) G_GNUC_CONST;
 
 

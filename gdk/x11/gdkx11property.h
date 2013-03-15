@@ -37,18 +37,26 @@
 G_BEGIN_DECLS
 
 /* Functions to get the X Atom equivalent to the GdkAtom */
+GDK_AVAILABLE_IN_ALL
 Atom                  gdk_x11_atom_to_xatom_for_display (GdkDisplay  *display,
                                                          GdkAtom      atom);
+GDK_AVAILABLE_IN_ALL
 GdkAtom               gdk_x11_xatom_to_atom_for_display (GdkDisplay  *display,
                                                          Atom         xatom);
+GDK_AVAILABLE_IN_ALL
 Atom                  gdk_x11_get_xatom_by_name_for_display (GdkDisplay  *display,
                                                              const gchar *atom_name);
+GDK_AVAILABLE_IN_ALL
 const gchar *         gdk_x11_get_xatom_name_for_display (GdkDisplay  *display,
                                                           Atom         xatom);
 #ifndef GDK_MULTIHEAD_SAFE
+GDK_AVAILABLE_IN_ALL
 Atom                  gdk_x11_atom_to_xatom     (GdkAtom      atom);
+GDK_AVAILABLE_IN_ALL
 GdkAtom               gdk_x11_xatom_to_atom     (Atom         xatom);
+GDK_AVAILABLE_IN_ALL
 Atom                  gdk_x11_get_xatom_by_name (const gchar *atom_name);
+GDK_AVAILABLE_IN_ALL
 const gchar *         gdk_x11_get_xatom_name    (Atom         xatom);
 #endif
 

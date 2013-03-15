@@ -42,10 +42,14 @@ typedef struct _GdkWaylandDeviceClass GdkWaylandDeviceClass;
 #define GDK_IS_WAYLAND_DEVICE_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE ((c), GDK_TYPE_WAYLAND_DEVICE))
 #define GDK_WAYLAND_DEVICE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GDK_TYPE_WAYLAND_DEVICE, GdkWaylandDeviceClass))
 
+GDK_AVAILABLE_IN_ALL
 GType                gdk_wayland_device_get_type            (void);
 
+GDK_AVAILABLE_IN_ALL
 struct wl_seat      *gdk_wayland_device_get_wl_seat         (GdkDevice *device);
+GDK_AVAILABLE_IN_ALL
 struct wl_pointer   *gdk_wayland_device_get_wl_pointer      (GdkDevice *device);
+GDK_AVAILABLE_IN_ALL
 struct wl_keyboard  *gdk_wayland_device_get_wl_keyboard     (GdkDevice *device);
 
 

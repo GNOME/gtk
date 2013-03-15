@@ -30,6 +30,7 @@
 #endif
 
 #include <gdk/gdktypes.h>
+#include <gdk/gdkversionmacros.h>
 
 G_BEGIN_DECLS
 
@@ -51,12 +52,16 @@ typedef enum
 } GdkPropMode;
 
 
+GDK_AVAILABLE_IN_ALL
 GdkAtom gdk_atom_intern (const gchar *atom_name,
                          gboolean     only_if_exists);
+GDK_AVAILABLE_IN_ALL
 GdkAtom gdk_atom_intern_static_string (const gchar *atom_name);
+GDK_AVAILABLE_IN_ALL
 gchar*  gdk_atom_name   (GdkAtom      atom);
 
 
+GDK_AVAILABLE_IN_ALL
 gboolean gdk_property_get    (GdkWindow     *window,
                               GdkAtom        property,
                               GdkAtom        type,
@@ -67,6 +72,7 @@ gboolean gdk_property_get    (GdkWindow     *window,
                               gint          *actual_format,
                               gint          *actual_length,
                               guchar       **data);
+GDK_AVAILABLE_IN_ALL
 void     gdk_property_change (GdkWindow     *window,
                               GdkAtom        property,
                               GdkAtom        type,
@@ -74,9 +80,11 @@ void     gdk_property_change (GdkWindow     *window,
                               GdkPropMode    mode,
                               const guchar  *data,
                               gint           nelements);
+GDK_AVAILABLE_IN_ALL
 void     gdk_property_delete (GdkWindow     *window,
                               GdkAtom        property);
 
+GDK_AVAILABLE_IN_ALL
 gint   gdk_text_property_to_utf8_list_for_display (GdkDisplay     *display,
                                                    GdkAtom         encoding,
                                                    gint            format,
@@ -84,6 +92,7 @@ gint   gdk_text_property_to_utf8_list_for_display (GdkDisplay     *display,
                                                    gint            length,
                                                    gchar        ***list);
 
+GDK_AVAILABLE_IN_ALL
 gchar *gdk_utf8_to_string_target                  (const gchar    *str);
 
 G_END_DECLS

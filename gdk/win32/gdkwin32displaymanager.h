@@ -40,6 +40,7 @@ typedef struct _GdkWin32DisplayManagerClass GdkWin32DisplayManagerClass;
 #define GDK_IS_WIN32_DISPLAY_MANAGER_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WIN32_DISPLAY_MANAGER))
 #define GDK_WIN32_DISPLAY_MANAGER_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WIN32_DISPLAY_MANAGER, GdkWin32DisplayManagerClass))
 
+GDK_AVAILABLE_IN_ALL
 GType      gdk_win32_display_manager_get_type            (void);
 
 G_END_DECLS

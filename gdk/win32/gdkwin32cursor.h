@@ -47,6 +47,7 @@ typedef GdkCursor GdkWin32Cursor;
 #endif
 typedef struct _GdkWin32CursorClass GdkWin32CursorClass;
 
+GDK_AVAILABLE_IN_ALL
 GType    gdk_win32_cursor_get_type          (void);
 
 G_END_DECLS

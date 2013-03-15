@@ -40,6 +40,7 @@ typedef GdkDragContext GdkX11DragContext;
 #endif
 typedef struct _GdkX11DragContextClass GdkX11DragContextClass;
 
+GDK_AVAILABLE_IN_ALL
 GType    gdk_x11_drag_context_get_type (void);
 
 G_END_DECLS

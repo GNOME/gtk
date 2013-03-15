@@ -30,6 +30,7 @@
 #endif
 
 #include <gdk/gdktypes.h>
+#include <gdk/gdkversionmacros.h>
 
 G_BEGIN_DECLS
 
@@ -43,17 +44,24 @@ struct _GdkRGBA
 
 #define GDK_TYPE_RGBA (gdk_rgba_get_type ())
 
+GDK_AVAILABLE_IN_ALL
 GType     gdk_rgba_get_type  (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 GdkRGBA * gdk_rgba_copy      (const GdkRGBA *rgba);
+GDK_AVAILABLE_IN_ALL
 void      gdk_rgba_free      (GdkRGBA       *rgba);
 
+GDK_AVAILABLE_IN_ALL
 guint     gdk_rgba_hash      (gconstpointer  p);
+GDK_AVAILABLE_IN_ALL
 gboolean  gdk_rgba_equal     (gconstpointer  p1,
                               gconstpointer  p2);
 
+GDK_AVAILABLE_IN_ALL
 gboolean  gdk_rgba_parse     (GdkRGBA       *rgba,
                               const gchar   *spec);
+GDK_AVAILABLE_IN_ALL
 gchar *   gdk_rgba_to_string (const GdkRGBA *rgba);
 
 

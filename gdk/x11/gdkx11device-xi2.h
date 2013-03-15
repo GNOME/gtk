@@ -32,6 +32,7 @@ G_BEGIN_DECLS
 typedef struct _GdkX11DeviceXI2 GdkX11DeviceXI2;
 typedef struct _GdkX11DeviceXI2Class GdkX11DeviceXI2Class;
 
+GDK_AVAILABLE_IN_ALL
 GType gdk_x11_device_xi2_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS

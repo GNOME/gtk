@@ -50,14 +50,19 @@ typedef GdkScreen GdkX11Screen;
 #endif
 typedef struct _GdkX11ScreenClass GdkX11ScreenClass;
 
+GDK_AVAILABLE_IN_ALL
 GType    gdk_x11_screen_get_type          (void);
 
+GDK_AVAILABLE_IN_ALL
 Screen * gdk_x11_screen_get_xscreen       (GdkScreen   *screen);
+GDK_AVAILABLE_IN_ALL
 int      gdk_x11_screen_get_screen_number (GdkScreen   *screen);
 
+GDK_AVAILABLE_IN_ALL
 const char* gdk_x11_screen_get_window_manager_name (GdkScreen *screen);
 
 #ifndef GDK_MULTIHEAD_SAFE
+GDK_AVAILABLE_IN_ALL
 gint     gdk_x11_get_default_screen       (void);
 #endif
 
@@ -91,9 +96,11 @@ gint     gdk_x11_get_default_screen       (void);
  */
 #define GDK_SCREEN_XNUMBER(screen) (gdk_x11_screen_get_screen_number (screen))
 
+GDK_AVAILABLE_IN_ALL
 gboolean gdk_x11_screen_supports_net_wm_hint (GdkScreen *screen,
                                               GdkAtom    property);
 
+GDK_AVAILABLE_IN_ALL
 XID      gdk_x11_screen_get_monitor_output   (GdkScreen *screen,
                                               gint       monitor_num);
 

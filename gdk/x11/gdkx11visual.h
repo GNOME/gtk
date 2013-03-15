@@ -50,12 +50,15 @@ typedef GdkVisual GdkX11Visual;
 #endif
 typedef struct _GdkX11VisualClass GdkX11VisualClass;
 
+GDK_AVAILABLE_IN_ALL
 GType    gdk_x11_visual_get_type          (void);
 
+GDK_AVAILABLE_IN_ALL
 Visual * gdk_x11_visual_get_xvisual       (GdkVisual   *visual);
 
 #define GDK_VISUAL_XVISUAL(visual)    (gdk_x11_visual_get_xvisual (visual))
 
+GDK_AVAILABLE_IN_ALL
 GdkVisual* gdk_x11_screen_lookup_visual (GdkScreen *screen,
                                          VisualID   xvisualid);
 

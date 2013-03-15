@@ -37,6 +37,7 @@ G_BEGIN_DECLS
         #define GDK_IS_APP_LAUNCH_CONTEXT(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GDK_TYPE_APP_LAUNCH_CONTEXT))
 
 
+GDK_AVAILABLE_IN_ALL
 GType                gdk_app_launch_context_get_type      (void);
 
 GDK_DEPRECATED_IN_3_0_FOR(gdk_display_get_app_launch_context)
@@ -44,14 +45,19 @@ GdkAppLaunchContext *gdk_app_launch_context_new           (void);
 GDK_DEPRECATED_IN_3_0_FOR(gdk_display_get_app_launch_context)
 void                 gdk_app_launch_context_set_display   (GdkAppLaunchContext *context,
                                                            GdkDisplay          *display);
+GDK_AVAILABLE_IN_ALL
 void                 gdk_app_launch_context_set_screen    (GdkAppLaunchContext *context,
                                                            GdkScreen           *screen);
+GDK_AVAILABLE_IN_ALL
 void                 gdk_app_launch_context_set_desktop   (GdkAppLaunchContext *context,
                                                            gint                 desktop);
+GDK_AVAILABLE_IN_ALL
 void                 gdk_app_launch_context_set_timestamp (GdkAppLaunchContext *context,
                                                            guint32              timestamp);
+GDK_AVAILABLE_IN_ALL
 void                 gdk_app_launch_context_set_icon      (GdkAppLaunchContext *context,
                                                            GIcon               *icon);
+GDK_AVAILABLE_IN_ALL
 void                 gdk_app_launch_context_set_icon_name (GdkAppLaunchContext *context,
                                                            const char          *icon_name);
 

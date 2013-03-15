@@ -50,40 +50,55 @@ typedef struct _GdkX11DisplayClass GdkX11DisplayClass;
 #define GDK_IS_X11_DISPLAY_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_X11_DISPLAY))
 #define GDK_X11_DISPLAY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_X11_DISPLAY, GdkX11DisplayClass))
 
+GDK_AVAILABLE_IN_ALL
 GType      gdk_x11_display_get_type            (void);
 
+GDK_AVAILABLE_IN_ALL
 Display *gdk_x11_display_get_xdisplay     (GdkDisplay  *display);
 
 #define GDK_DISPLAY_XDISPLAY(display) (gdk_x11_display_get_xdisplay (display))
 
+GDK_AVAILABLE_IN_ALL
 guint32       gdk_x11_display_get_user_time (GdkDisplay *display);
 
+GDK_AVAILABLE_IN_ALL
 const gchar * gdk_x11_display_get_startup_notification_id         (GdkDisplay *display);
+GDK_AVAILABLE_IN_ALL
 void          gdk_x11_display_set_startup_notification_id         (GdkDisplay  *display,
                                                                    const gchar *startup_id);
 
+GDK_AVAILABLE_IN_ALL
 void          gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
                                                 const gchar *theme,
                                                 const gint   size);
 
+GDK_AVAILABLE_IN_ALL
 void gdk_x11_display_broadcast_startup_message (GdkDisplay *display,
                                                 const char *message_type,
                                                 ...) G_GNUC_NULL_TERMINATED;
 
+GDK_AVAILABLE_IN_ALL
 GdkDisplay   *gdk_x11_lookup_xdisplay (Display *xdisplay);
 
+GDK_AVAILABLE_IN_ALL
 void        gdk_x11_display_grab              (GdkDisplay *display);
+GDK_AVAILABLE_IN_ALL
 void        gdk_x11_display_ungrab            (GdkDisplay *display);
 
+GDK_AVAILABLE_IN_ALL
 void                           gdk_x11_display_error_trap_push        (GdkDisplay *display);
 /* warn unused because you could use pop_ignored otherwise */
+GDK_AVAILABLE_IN_ALL
 G_GNUC_WARN_UNUSED_RESULT gint gdk_x11_display_error_trap_pop         (GdkDisplay *display);
+GDK_AVAILABLE_IN_ALL
 void                           gdk_x11_display_error_trap_pop_ignored (GdkDisplay *display);
 
+GDK_AVAILABLE_IN_ALL
 void        gdk_x11_register_standard_event_type (GdkDisplay *display,
                                                   gint        event_base,
                                                   gint        n_events);
 
+GDK_AVAILABLE_IN_ALL
 void        gdk_x11_set_sm_client_id (const gchar *sm_client_id);
 
 

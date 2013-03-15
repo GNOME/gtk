@@ -47,6 +47,7 @@ typedef GdkWindow GdkWin32Window;
 #endif
 typedef struct _GdkWin32WindowClass GdkWin32WindowClass;
 
+GDK_AVAILABLE_IN_ALL
 GType    gdk_win32_window_get_type          (void);
 
 G_END_DECLS

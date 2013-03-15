@@ -38,26 +38,43 @@ G_BEGIN_DECLS
 #define GDK_IS_SCREEN(object)      (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_SCREEN))
 
 
+GDK_AVAILABLE_IN_ALL
 GType        gdk_screen_get_type              (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 GdkVisual *  gdk_screen_get_system_visual     (GdkScreen   *screen);
+GDK_AVAILABLE_IN_ALL
 GdkVisual *  gdk_screen_get_rgba_visual       (GdkScreen   *screen);
+GDK_AVAILABLE_IN_ALL
 gboolean     gdk_screen_is_composited         (GdkScreen   *screen);
 
+GDK_AVAILABLE_IN_ALL
 GdkWindow *  gdk_screen_get_root_window       (GdkScreen   *screen);
+GDK_AVAILABLE_IN_ALL
 GdkDisplay * gdk_screen_get_display           (GdkScreen   *screen);
+GDK_AVAILABLE_IN_ALL
 gint         gdk_screen_get_number            (GdkScreen   *screen);
+GDK_AVAILABLE_IN_ALL
 gint         gdk_screen_get_width             (GdkScreen   *screen);
+GDK_AVAILABLE_IN_ALL
 gint         gdk_screen_get_height            (GdkScreen   *screen);
+GDK_AVAILABLE_IN_ALL
 gint         gdk_screen_get_width_mm          (GdkScreen   *screen);
+GDK_AVAILABLE_IN_ALL
 gint         gdk_screen_get_height_mm         (GdkScreen   *screen);
 
+GDK_AVAILABLE_IN_ALL
 GList *      gdk_screen_list_visuals          (GdkScreen   *screen);
+GDK_AVAILABLE_IN_ALL
 GList *      gdk_screen_get_toplevel_windows  (GdkScreen   *screen);
+GDK_AVAILABLE_IN_ALL
 gchar *      gdk_screen_make_display_name     (GdkScreen   *screen);
 
+GDK_AVAILABLE_IN_ALL
 gint         gdk_screen_get_n_monitors        (GdkScreen    *screen);
+GDK_AVAILABLE_IN_ALL
 gint         gdk_screen_get_primary_monitor   (GdkScreen    *screen);
+GDK_AVAILABLE_IN_ALL
 void         gdk_screen_get_monitor_geometry  (GdkScreen    *screen,
                                                gint          monitor_num,
                                                GdkRectangle *dest);
@@ -66,33 +83,46 @@ void         gdk_screen_get_monitor_workarea  (GdkScreen    *screen,
                                                gint          monitor_num,
                                                GdkRectangle *dest);
 
+GDK_AVAILABLE_IN_ALL
 gint          gdk_screen_get_monitor_at_point  (GdkScreen *screen,
                                                 gint       x,
                                                 gint       y);
+GDK_AVAILABLE_IN_ALL
 gint          gdk_screen_get_monitor_at_window (GdkScreen *screen,
                                                 GdkWindow *window);
+GDK_AVAILABLE_IN_ALL
 gint          gdk_screen_get_monitor_width_mm  (GdkScreen *screen,
                                                 gint       monitor_num);
+GDK_AVAILABLE_IN_ALL
 gint          gdk_screen_get_monitor_height_mm (GdkScreen *screen,
                                                 gint       monitor_num);
+GDK_AVAILABLE_IN_ALL
 gchar *       gdk_screen_get_monitor_plug_name (GdkScreen *screen,
                                                 gint       monitor_num);
 
+GDK_AVAILABLE_IN_ALL
 GdkScreen *gdk_screen_get_default (void);
 
+GDK_AVAILABLE_IN_ALL
 gboolean   gdk_screen_get_setting (GdkScreen   *screen,
                                    const gchar *name,
                                    GValue      *value);
 
+GDK_AVAILABLE_IN_ALL
 void                        gdk_screen_set_font_options (GdkScreen                  *screen,
                                                          const cairo_font_options_t *options);
+GDK_AVAILABLE_IN_ALL
 const cairo_font_options_t *gdk_screen_get_font_options (GdkScreen                  *screen);
 
+GDK_AVAILABLE_IN_ALL
 void    gdk_screen_set_resolution (GdkScreen *screen,
                                    gdouble    dpi);
+GDK_AVAILABLE_IN_ALL
 gdouble gdk_screen_get_resolution (GdkScreen *screen);
 
+GDK_AVAILABLE_IN_ALL
 GdkWindow *gdk_screen_get_active_window (GdkScreen *screen);
+GDK_AVAILABLE_IN_ALL
 GList     *gdk_screen_get_window_stack  (GdkScreen *screen);
 
 G_END_DECLS

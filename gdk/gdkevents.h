@@ -1186,24 +1186,36 @@ union _GdkEvent
   GdkEventGrabBroken        grab_broken;
 };
 
+GDK_AVAILABLE_IN_ALL
 GType     gdk_event_get_type            (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 gboolean  gdk_events_pending	 	(void);
+GDK_AVAILABLE_IN_ALL
 GdkEvent* gdk_event_get			(void);
 
+GDK_AVAILABLE_IN_ALL
 GdkEvent* gdk_event_peek                (void);
+GDK_AVAILABLE_IN_ALL
 void      gdk_event_put	 		(const GdkEvent *event);
 
+GDK_AVAILABLE_IN_ALL
 GdkEvent* gdk_event_new                 (GdkEventType    type);
+GDK_AVAILABLE_IN_ALL
 GdkEvent* gdk_event_copy     		(const GdkEvent *event);
+GDK_AVAILABLE_IN_ALL
 void	  gdk_event_free     		(GdkEvent 	*event);
 
+GDK_AVAILABLE_IN_ALL
 guint32   gdk_event_get_time            (const GdkEvent  *event);
+GDK_AVAILABLE_IN_ALL
 gboolean  gdk_event_get_state           (const GdkEvent  *event,
                                          GdkModifierType *state);
+GDK_AVAILABLE_IN_ALL
 gboolean  gdk_event_get_coords		(const GdkEvent  *event,
 					 gdouble	 *x_win,
 					 gdouble	 *y_win);
+GDK_AVAILABLE_IN_ALL
 gboolean  gdk_event_get_root_coords	(const GdkEvent *event,
 					 gdouble	*x_root,
 					 gdouble	*y_root);
@@ -1227,46 +1239,61 @@ gboolean  gdk_event_get_scroll_deltas   (const GdkEvent *event,
                                          gdouble         *delta_x,
                                          gdouble         *delta_y);
 
+GDK_AVAILABLE_IN_ALL
 gboolean  gdk_event_get_axis            (const GdkEvent  *event,
                                          GdkAxisUse       axis_use,
                                          gdouble         *value);
+GDK_AVAILABLE_IN_ALL
 void       gdk_event_set_device         (GdkEvent        *event,
                                          GdkDevice       *device);
+GDK_AVAILABLE_IN_ALL
 GdkDevice* gdk_event_get_device         (const GdkEvent  *event);
+GDK_AVAILABLE_IN_ALL
 void       gdk_event_set_source_device  (GdkEvent        *event,
                                          GdkDevice       *device);
+GDK_AVAILABLE_IN_ALL
 GdkDevice* gdk_event_get_source_device  (const GdkEvent  *event);
+GDK_AVAILABLE_IN_ALL
 void       gdk_event_request_motions    (const GdkEventMotion *event);
 GDK_AVAILABLE_IN_3_4
 gboolean   gdk_event_triggers_context_menu (const GdkEvent *event);
 
+GDK_AVAILABLE_IN_ALL
 gboolean  gdk_events_get_distance       (GdkEvent        *event1,
                                          GdkEvent        *event2,
                                          gdouble         *distance);
+GDK_AVAILABLE_IN_ALL
 gboolean  gdk_events_get_angle          (GdkEvent        *event1,
                                          GdkEvent        *event2,
                                          gdouble         *angle);
+GDK_AVAILABLE_IN_ALL
 gboolean  gdk_events_get_center         (GdkEvent        *event1,
                                          GdkEvent        *event2,
                                          gdouble         *x,
                                          gdouble         *y);
 
+GDK_AVAILABLE_IN_ALL
 void	  gdk_event_handler_set 	(GdkEventFunc    func,
 					 gpointer        data,
 					 GDestroyNotify  notify);
 
+GDK_AVAILABLE_IN_ALL
 void       gdk_event_set_screen         (GdkEvent        *event,
                                          GdkScreen       *screen);
+GDK_AVAILABLE_IN_ALL
 GdkScreen *gdk_event_get_screen         (const GdkEvent  *event);
 
 GDK_AVAILABLE_IN_3_4
 GdkEventSequence *gdk_event_get_event_sequence (const GdkEvent *event);
 
+GDK_AVAILABLE_IN_ALL
 void	  gdk_set_show_events		(gboolean	 show_events);
+GDK_AVAILABLE_IN_ALL
 gboolean  gdk_get_show_events		(void);
 
 #ifndef GDK_MULTIHEAD_SAFE
 
+GDK_AVAILABLE_IN_ALL
 gboolean gdk_setting_get                           (const gchar *name,
                                                     GValue          *value);
 

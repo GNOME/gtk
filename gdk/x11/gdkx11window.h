@@ -50,9 +50,12 @@ typedef GdkWindow GdkX11Window;
 #endif
 typedef struct _GdkX11WindowClass GdkX11WindowClass;
 
+GDK_AVAILABLE_IN_ALL
 GType    gdk_x11_window_get_type          (void);
 
+GDK_AVAILABLE_IN_ALL
 Window   gdk_x11_window_get_xid           (GdkWindow   *window);
+GDK_AVAILABLE_IN_ALL
 void     gdk_x11_window_set_user_time     (GdkWindow   *window,
                                            guint32      timestamp);
 GDK_AVAILABLE_IN_3_4
@@ -65,6 +68,7 @@ void     gdk_x11_window_set_theme_variant (GdkWindow   *window,
 GDK_AVAILABLE_IN_3_4
 void     gdk_x11_window_set_hide_titlebar_when_maximized (GdkWindow *window,
                                                           gboolean   hide_titlebar_when_maximized);
+GDK_AVAILABLE_IN_ALL
 void     gdk_x11_window_move_to_current_desktop (GdkWindow   *window);
 
 /**
@@ -87,10 +91,13 @@ void     gdk_x11_window_move_to_current_desktop (GdkWindow   *window);
  */
 #define GDK_WINDOW_XID(win)           (gdk_x11_window_get_xid (win))
 
+GDK_AVAILABLE_IN_ALL
 guint32       gdk_x11_get_server_time  (GdkWindow       *window);
 
+GDK_AVAILABLE_IN_ALL
 GdkWindow  *gdk_x11_window_foreign_new_for_display (GdkDisplay *display,
                                                     Window      window);
+GDK_AVAILABLE_IN_ALL
 GdkWindow  *gdk_x11_window_lookup_for_display      (GdkDisplay *display,
                                                     Window      window);
 

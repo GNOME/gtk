@@ -53,6 +53,7 @@ typedef enum
   GDK_OSX_NEW = 99
 } GdkOSXVersion;
 
+GDK_AVAILABLE_IN_ALL
 GdkOSXVersion gdk_quartz_osx_version (void);
 
 GdkAtom   gdk_quartz_pasteboard_type_to_atom_libgtk_only        (NSString       *type);

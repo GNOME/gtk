@@ -47,6 +47,7 @@ typedef GdkCursor GdkBroadwayCursor;
 #endif
 typedef struct _GdkBroadwayCursorClass GdkBroadwayCursorClass;
 
+GDK_AVAILABLE_IN_ALL
 GType    gdk_broadway_cursor_get_type          (void);
 
 G_END_DECLS

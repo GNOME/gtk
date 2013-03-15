@@ -38,6 +38,7 @@ typedef GdkVisual GdkBroadwayVisual;
 typedef struct _GdkBroadwayVisualClass GdkBroadwayVisualClass;
 
 
+GDK_AVAILABLE_IN_ALL
 GType gdk_broadway_visual_get_type (void);
 
 G_END_DECLS

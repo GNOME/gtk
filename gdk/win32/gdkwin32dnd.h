@@ -40,6 +40,7 @@ typedef GdkDragContext GdkWin32DragContext;
 #endif
 typedef struct _GdkWin32DragContextClass GdkWin32DragContextClass;
 
+GDK_AVAILABLE_IN_ALL
 GType    gdk_win32_drag_context_get_type (void);
 
 G_END_DECLS

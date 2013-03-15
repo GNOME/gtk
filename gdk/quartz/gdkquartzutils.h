@@ -28,7 +28,9 @@
 
 G_BEGIN_DECLS
 
+GDK_AVAILABLE_IN_ALL
 NSImage  *gdk_quartz_pixbuf_to_ns_image_libgtk_only             (GdkPixbuf      *pixbuf);
+GDK_AVAILABLE_IN_ALL
 NSEvent  *gdk_quartz_event_get_nsevent                          (GdkEvent       *event);
 
 G_END_DECLS

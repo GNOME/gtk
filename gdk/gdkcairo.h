@@ -30,26 +30,34 @@
 
 G_BEGIN_DECLS
 
+GDK_AVAILABLE_IN_ALL
 cairo_t  * gdk_cairo_create             (GdkWindow          *window);
+GDK_AVAILABLE_IN_ALL
 gboolean   gdk_cairo_get_clip_rectangle (cairo_t            *cr,
                                          GdkRectangle       *rect);
 
+GDK_AVAILABLE_IN_ALL
 void       gdk_cairo_set_source_rgba    (cairo_t              *cr,
                                          const GdkRGBA        *rgba);
+GDK_AVAILABLE_IN_ALL
 void       gdk_cairo_set_source_pixbuf  (cairo_t              *cr,
                                          const GdkPixbuf      *pixbuf,
                                          gdouble               pixbuf_x,
                                          gdouble               pixbuf_y);
+GDK_AVAILABLE_IN_ALL
 void       gdk_cairo_set_source_window  (cairo_t              *cr,
                                          GdkWindow            *window,
                                          gdouble               x,
                                          gdouble               y);
 
+GDK_AVAILABLE_IN_ALL
 void       gdk_cairo_rectangle          (cairo_t              *cr,
                                          const GdkRectangle   *rectangle);
+GDK_AVAILABLE_IN_ALL
 void       gdk_cairo_region             (cairo_t              *cr,
                                          const cairo_region_t *region);
 
+GDK_AVAILABLE_IN_ALL
 cairo_region_t *
            gdk_cairo_region_create_from_surface
                                         (cairo_surface_t      *surface);

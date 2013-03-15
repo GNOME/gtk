@@ -42,6 +42,7 @@ typedef GdkCursor GdkQuartzCursor;
 #endif
 typedef struct _GdkQuartzCursorClass GdkQuartzCursorClass;
 
+GDK_AVAILABLE_IN_ALL
 GType gdk_quartz_cursor_get_type (void);
 
 G_END_DECLS

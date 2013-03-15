@@ -43,6 +43,7 @@ typedef GdkDisplay GdkQuartzDisplay;
 typedef struct _GdkQuartzDisplayClass GdkQuartzDisplayClass;
 
 
+GDK_AVAILABLE_IN_ALL
 GType gdk_quartz_display_get_type (void);
 
 G_END_DECLS

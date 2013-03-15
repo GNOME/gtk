@@ -30,6 +30,7 @@
 #endif
 
 #include <gdk/gdktypes.h>
+#include <gdk/gdkversionmacros.h>
 
 G_BEGIN_DECLS
 
@@ -152,18 +153,22 @@ G_BEGIN_DECLS
  */
 
 #ifndef GDK_MULTIHEAD_SAFE
+GDK_AVAILABLE_IN_ALL
 gboolean   gdk_selection_owner_set (GdkWindow	 *owner,
 				    GdkAtom	  selection,
 				    guint32	  time_,
 				    gboolean      send_event);
+GDK_AVAILABLE_IN_ALL
 GdkWindow* gdk_selection_owner_get (GdkAtom	  selection);
 #endif/* GDK_MULTIHEAD_SAFE */
 
+GDK_AVAILABLE_IN_ALL
 gboolean   gdk_selection_owner_set_for_display (GdkDisplay *display,
 						GdkWindow  *owner,
 						GdkAtom     selection,
 						guint32     time_,
 						gboolean    send_event);
+GDK_AVAILABLE_IN_ALL
 GdkWindow *gdk_selection_owner_get_for_display (GdkDisplay *display,
 						GdkAtom     selection);
 
@@ -181,21 +186,25 @@ GdkWindow *gdk_selection_owner_get_for_display (GdkDisplay *display,
  * Retrieves the contents of a selection in a given
  * form.
  */
+GDK_AVAILABLE_IN_ALL
 void	   gdk_selection_convert   (GdkWindow	 *requestor,
 				    GdkAtom	  selection,
 				    GdkAtom	  target,
 				    guint32	  time_);
+GDK_AVAILABLE_IN_ALL
 gint       gdk_selection_property_get (GdkWindow  *requestor,
 				       guchar	 **data,
 				       GdkAtom	  *prop_type,
 				       gint	  *prop_format);
 
+GDK_AVAILABLE_IN_ALL
 void	   gdk_selection_send_notify (GdkWindow      *requestor,
 				      GdkAtom	      selection,
 				      GdkAtom	      target,
 				      GdkAtom	      property,
 				      guint32	      time_);
 
+GDK_AVAILABLE_IN_ALL
 void       gdk_selection_send_notify_for_display (GdkDisplay      *display,
 						  GdkWindow       *requestor,
 						  GdkAtom     	   selection,

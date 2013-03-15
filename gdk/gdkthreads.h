@@ -30,11 +30,12 @@
 #endif
 
 #include <gdk/gdktypes.h>
+#include <gdk/gdkversionmacros.h>
 
 G_BEGIN_DECLS
 
 #if defined(GDK_COMPILATION) || defined(GTK_COMPILATION)
-#define GDK_THREADS_DEPRECATED
+#define GDK_THREADS_DEPRECATED _GDK_EXTERN
 #else
 #define GDK_THREADS_DEPRECATED GDK_DEPRECATED_IN_3_6
 #endif
@@ -49,25 +50,31 @@ GDK_THREADS_DEPRECATED
 void     gdk_threads_set_lock_functions       (GCallback enter_fn,
                                                GCallback leave_fn);
 
+GDK_AVAILABLE_IN_ALL
 guint    gdk_threads_add_idle_full            (gint           priority,
                                                GSourceFunc    function,
                                                gpointer       data,
                                                GDestroyNotify notify);
+GDK_AVAILABLE_IN_ALL
 guint    gdk_threads_add_idle                 (GSourceFunc    function,
                                                gpointer       data);
+GDK_AVAILABLE_IN_ALL
 guint    gdk_threads_add_timeout_full         (gint           priority,
                                                guint          interval,
                                                GSourceFunc    function,
                                                gpointer       data,
                                                GDestroyNotify notify);
+GDK_AVAILABLE_IN_ALL
 guint    gdk_threads_add_timeout              (guint          interval,
                                                GSourceFunc    function,
                                                gpointer       data);
+GDK_AVAILABLE_IN_ALL
 guint    gdk_threads_add_timeout_seconds_full (gint           priority,
                                                guint          interval,
                                                GSourceFunc    function,
                                                gpointer       data,
                                                GDestroyNotify notify);
+GDK_AVAILABLE_IN_ALL
 guint    gdk_threads_add_timeout_seconds      (guint          interval,
                                                GSourceFunc    function,
                                                gpointer       data);

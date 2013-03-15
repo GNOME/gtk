@@ -40,6 +40,7 @@ typedef struct _GdkWin32KeymapClass GdkWin32KeymapClass;
 #define GDK_IS_WIN32_KEYMAP_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WIN32_KEYMAP))
 #define GDK_WIN32_KEYMAP_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WIN32_KEYMAP, GdkWin32KeymapClass))
 
+GDK_AVAILABLE_IN_ALL
 GType gdk_win32_keymap_get_type (void);
 
 G_END_DECLS

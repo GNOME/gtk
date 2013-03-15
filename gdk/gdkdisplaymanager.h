@@ -40,13 +40,19 @@ G_BEGIN_DECLS
 #define GDK_IS_DISPLAY_MANAGER(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DISPLAY_MANAGER))
 
 
+GDK_AVAILABLE_IN_ALL
 GType              gdk_display_manager_get_type            (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 GdkDisplayManager *gdk_display_manager_get                 (void);
+GDK_AVAILABLE_IN_ALL
 GdkDisplay *       gdk_display_manager_get_default_display (GdkDisplayManager *manager);
+GDK_AVAILABLE_IN_ALL
 void               gdk_display_manager_set_default_display (GdkDisplayManager *manager,
                                                             GdkDisplay        *display);
+GDK_AVAILABLE_IN_ALL
 GSList *           gdk_display_manager_list_displays       (GdkDisplayManager *manager);
+GDK_AVAILABLE_IN_ALL
 GdkDisplay *       gdk_display_manager_open_display        (GdkDisplayManager *manager,
                                                             const gchar       *name);
 

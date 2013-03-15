@@ -36,6 +36,7 @@ G_BEGIN_DECLS
 typedef struct _GdkQuartzDeviceCore GdkQuartzDeviceCore;
 typedef struct _GdkQuartzDeviceCoreClass GdkQuartzDeviceCoreClass;
 
+GDK_AVAILABLE_IN_ALL
 GType gdk_quartz_device_core_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS

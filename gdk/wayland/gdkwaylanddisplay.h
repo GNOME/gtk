@@ -42,11 +42,16 @@ typedef struct _GdkWaylandDisplayClass GdkWaylandDisplayClass;
 #define GDK_IS_WAYLAND_DISPLAY_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WAYLAND_DISPLAY))
 #define GDK_WAYLAND_DISPLAY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WAYLAND_DISPLAY, GdkWaylandDisplayClass))
 
+GDK_AVAILABLE_IN_ALL
 GType                   gdk_wayland_display_get_type            (void);
 
+GDK_AVAILABLE_IN_ALL
 struct wl_display      *gdk_wayland_display_get_wl_display      (GdkDisplay *display);
+GDK_AVAILABLE_IN_ALL
 struct wl_compositor   *gdk_wayland_display_get_wl_compositor   (GdkDisplay *display);
+GDK_AVAILABLE_IN_ALL
 struct wl_shell        *gdk_wayland_display_get_wl_shell        (GdkDisplay *display);
+GDK_AVAILABLE_IN_3_10
 void                    gdk_wayland_display_set_cursor_theme    (GdkDisplay  *display,
                                                                  const gchar *theme,
                                                                  gint         size);

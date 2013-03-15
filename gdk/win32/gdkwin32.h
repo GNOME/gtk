@@ -77,26 +77,36 @@ G_BEGIN_DECLS
 
 
 /* Return true if the GdkWindow is a win32 implemented window */
+GDK_AVAILABLE_IN_ALL
 gboolean      gdk_win32_window_is_win32 (GdkWindow *window);
+GDK_AVAILABLE_IN_ALL
 HWND          gdk_win32_window_get_impl_hwnd (GdkWindow *window);
 
 /* Return the Gdk* for a particular HANDLE */
+GDK_AVAILABLE_IN_ALL
 gpointer      gdk_win32_handle_table_lookup (HWND handle);
 /* Translate from window to Windows handle */
+GDK_AVAILABLE_IN_ALL
 HGDIOBJ       gdk_win32_window_get_handle (GdkWindow *window);
 
+GDK_AVAILABLE_IN_ALL
 void          gdk_win32_selection_add_targets (GdkWindow  *owner,
 					       GdkAtom     selection,
 					       gint	   n_targets,
 					       GdkAtom    *targets);
 
 /* For internal GTK use only */
+GDK_AVAILABLE_IN_ALL
 GdkPixbuf    *gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon);
+GDK_AVAILABLE_IN_ALL
 HICON         gdk_win32_pixbuf_to_hicon_libgtk_only (GdkPixbuf *pixbuf);
+GDK_AVAILABLE_IN_ALL
 void          gdk_win32_set_modal_dialog_libgtk_only (HWND window);
 
+GDK_AVAILABLE_IN_ALL
 GdkWindow *   gdk_win32_window_foreign_new_for_display (GdkDisplay *display,
                                                         HWND        anid);
+GDK_AVAILABLE_IN_ALL
 GdkWindow *   gdk_win32_window_lookup_for_display (GdkDisplay *display,
                                                    HWND        anid);
 

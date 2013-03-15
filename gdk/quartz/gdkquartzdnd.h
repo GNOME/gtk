@@ -42,8 +42,10 @@ typedef GdkDragContext GdkQuartzDragContext;
 typedef struct _GdkQuartzDragContextClass GdkQuartzDragContextClass;
 
 
+GDK_AVAILABLE_IN_ALL
 GType     gdk_quartz_drag_context_get_type (void);
 
+GDK_AVAILABLE_IN_ALL
 id        gdk_quartz_drag_context_get_dragging_info_libgtk_only (GdkDragContext *context);
 
 G_END_DECLS

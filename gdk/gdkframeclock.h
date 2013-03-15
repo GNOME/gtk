@@ -74,6 +74,7 @@ typedef enum {
   GDK_FRAME_CLOCK_PHASE_AFTER_PAINT   = 1 << 6
 } GdkFrameClockPhase;
 
+GDK_AVAILABLE_IN_3_8
 GType    gdk_frame_clock_get_type             (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_3_8

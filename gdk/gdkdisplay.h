@@ -40,15 +40,20 @@ G_BEGIN_DECLS
 #define GDK_DISPLAY_OBJECT(object)    GDK_DISPLAY(object)
 #endif
 
+GDK_AVAILABLE_IN_ALL
 GType       gdk_display_get_type (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GdkDisplay *gdk_display_open                (const gchar *display_name);
 
+GDK_AVAILABLE_IN_ALL
 const gchar * gdk_display_get_name         (GdkDisplay *display);
 
 GDK_DEPRECATED_IN_3_10
 gint        gdk_display_get_n_screens      (GdkDisplay  *display);
+GDK_AVAILABLE_IN_ALL
 GdkScreen * gdk_display_get_screen         (GdkDisplay  *display,
                                             gint         screen_num);
+GDK_AVAILABLE_IN_ALL
 GdkScreen * gdk_display_get_default_screen (GdkDisplay  *display);
 
 #ifndef GDK_MULTIDEVICE_SAFE
@@ -62,29 +67,42 @@ GDK_DEPRECATED_IN_3_0_FOR(gdk_display_device_is_grabbed)
 gboolean    gdk_display_pointer_is_grabbed (GdkDisplay  *display);
 #endif /* GDK_MULTIDEVICE_SAFE */
 
+GDK_AVAILABLE_IN_ALL
 gboolean    gdk_display_device_is_grabbed  (GdkDisplay  *display,
                                             GdkDevice   *device);
+GDK_AVAILABLE_IN_ALL
 void        gdk_display_beep               (GdkDisplay  *display);
+GDK_AVAILABLE_IN_ALL
 void        gdk_display_sync               (GdkDisplay  *display);
+GDK_AVAILABLE_IN_ALL
 void        gdk_display_flush              (GdkDisplay  *display);
 
+GDK_AVAILABLE_IN_ALL
 void        gdk_display_close                  (GdkDisplay  *display);
+GDK_AVAILABLE_IN_ALL
 gboolean    gdk_display_is_closed          (GdkDisplay  *display);
 
 GDK_DEPRECATED_IN_3_0_FOR(gdk_device_manager_list_devices)
 GList *     gdk_display_list_devices       (GdkDisplay  *display);
 
+GDK_AVAILABLE_IN_ALL
 GdkEvent* gdk_display_get_event  (GdkDisplay     *display);
+GDK_AVAILABLE_IN_ALL
 GdkEvent* gdk_display_peek_event (GdkDisplay     *display);
+GDK_AVAILABLE_IN_ALL
 void      gdk_display_put_event  (GdkDisplay     *display,
                                   const GdkEvent *event);
+GDK_AVAILABLE_IN_ALL
 gboolean  gdk_display_has_pending (GdkDisplay  *display);
 
+GDK_AVAILABLE_IN_ALL
 void gdk_display_set_double_click_time     (GdkDisplay   *display,
                                             guint         msec);
+GDK_AVAILABLE_IN_ALL
 void gdk_display_set_double_click_distance (GdkDisplay   *display,
                                             guint         distance);
 
+GDK_AVAILABLE_IN_ALL
 GdkDisplay *gdk_display_get_default (void);
 
 #ifndef GDK_MULTIDEVICE_SAFE
@@ -105,36 +123,52 @@ void             gdk_display_warp_pointer          (GdkDisplay             *disp
                                                     gint                   y);
 #endif /* GDK_MULTIDEVICE_SAFE */
 
+GDK_AVAILABLE_IN_ALL
 GdkDisplay *gdk_display_open_default_libgtk_only (void);
 
+GDK_AVAILABLE_IN_ALL
 gboolean gdk_display_supports_cursor_alpha     (GdkDisplay    *display);
+GDK_AVAILABLE_IN_ALL
 gboolean gdk_display_supports_cursor_color     (GdkDisplay    *display);
+GDK_AVAILABLE_IN_ALL
 guint    gdk_display_get_default_cursor_size   (GdkDisplay    *display);
+GDK_AVAILABLE_IN_ALL
 void     gdk_display_get_maximal_cursor_size   (GdkDisplay    *display,
                                                 guint         *width,
                                                 guint         *height);
 
+GDK_AVAILABLE_IN_ALL
 GdkWindow *gdk_display_get_default_group       (GdkDisplay *display); 
 
+GDK_AVAILABLE_IN_ALL
 gboolean gdk_display_supports_selection_notification (GdkDisplay *display);
+GDK_AVAILABLE_IN_ALL
 gboolean gdk_display_request_selection_notification  (GdkDisplay *display,
                                                       GdkAtom     selection);
 
+GDK_AVAILABLE_IN_ALL
 gboolean gdk_display_supports_clipboard_persistence (GdkDisplay    *display);
+GDK_AVAILABLE_IN_ALL
 void     gdk_display_store_clipboard                (GdkDisplay    *display,
                                                      GdkWindow     *clipboard_window,
                                                      guint32        time_,
                                                      const GdkAtom *targets,
                                                      gint           n_targets);
 
+GDK_AVAILABLE_IN_ALL
 gboolean gdk_display_supports_shapes           (GdkDisplay    *display);
+GDK_AVAILABLE_IN_ALL
 gboolean gdk_display_supports_input_shapes     (GdkDisplay    *display);
+GDK_AVAILABLE_IN_ALL
 gboolean gdk_display_supports_composite        (GdkDisplay    *display);
+GDK_AVAILABLE_IN_ALL
 void     gdk_display_notify_startup_complete   (GdkDisplay    *display,
                                                 const gchar   *startup_id);
 
+GDK_AVAILABLE_IN_ALL
 GdkDeviceManager * gdk_display_get_device_manager (GdkDisplay *display);
 
+GDK_AVAILABLE_IN_ALL
 GdkAppLaunchContext *gdk_display_get_app_launch_context (GdkDisplay *display);
 
 G_END_DECLS

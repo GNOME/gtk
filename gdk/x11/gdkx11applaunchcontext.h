@@ -40,6 +40,7 @@ typedef GdkAppLaunchContext GdkX11AppLaunchContext;
 #endif
 typedef struct _GdkX11AppLaunchContextClass GdkX11AppLaunchContextClass;
 
+GDK_AVAILABLE_IN_ALL
 GType    gdk_x11_app_launch_context_get_type (void);
 
 G_END_DECLS

@@ -42,9 +42,12 @@ typedef GdkWindow GdkQuartzWindow;
 #endif
 typedef struct _GdkQuartzWindowClass GdkQuartzWindowClass;
 
+GDK_AVAILABLE_IN_ALL
 GType     gdk_quartz_window_get_type     (void);
 
+GDK_AVAILABLE_IN_ALL
 NSWindow *gdk_quartz_window_get_nswindow (GdkWindow *window);
+GDK_AVAILABLE_IN_ALL
 NSView   *gdk_quartz_window_get_nsview   (GdkWindow *window);
 
 G_END_DECLS

@@ -47,6 +47,7 @@ typedef GdkScreen GdkWin32Screen;
 #endif
 typedef struct _GdkWin32ScreenClass GdkWin32ScreenClass;
 
+GDK_AVAILABLE_IN_ALL
 GType    gdk_win32_screen_get_type          (void);
 
 G_END_DECLS
