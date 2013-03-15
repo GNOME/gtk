@@ -91,17 +91,17 @@ struct _GdkWaylandDeviceClass
 
 G_DEFINE_TYPE (GdkWaylandDevice, gdk_wayland_device, GDK_TYPE_DEVICE)
 
-#define GDK_TYPE_DEVICE_MANAGER_CORE         (gdk_device_manager_core_get_type ())
-#define GDK_DEVICE_MANAGER_CORE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GDK_TYPE_DEVICE_MANAGER_CORE, GdkDeviceManagerCore))
-#define GDK_DEVICE_MANAGER_CORE_CLASS(c)     (G_TYPE_CHECK_CLASS_CAST ((c), GDK_TYPE_DEVICE_MANAGER_CORE, GdkDeviceManagerCoreClass))
-#define GDK_IS_DEVICE_MANAGER_CORE(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GDK_TYPE_DEVICE_MANAGER_CORE))
-#define GDK_IS_DEVICE_MANAGER_CORE_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE ((c), GDK_TYPE_DEVICE_MANAGER_CORE))
-#define GDK_DEVICE_MANAGER_CORE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GDK_TYPE_DEVICE_MANAGER_CORE, GdkDeviceManagerCoreClass))
+#define GDK_TYPE_WAYLAND_DEVICE_MANAGER        (gdk_wayland_device_manager_get_type ())
+#define GDK_WAYLAND_DEVICE_MANAGER(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GDK_TYPE_WAYLAND_DEVICE_MANAGER, GdkWaylandDeviceManager))
+#define GDK_WAYLAND_DEVICE_MANAGER_CLASS(c)     (G_TYPE_CHECK_CLASS_CAST ((c), GDK_TYPE_WAYLAND_DEVICE_MANAGER, GdkWaylandDeviceManagerClass))
+#define GDK_IS_WAYLAND_DEVICE_MANAGER(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GDK_TYPE_WAYLAND_DEVICE_MANAGER))
+#define GDK_IS_WAYLAND_DEVICE_MANAGER_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE ((c), GDK_TYPE_WAYLAND_DEVICE_MANAGER))
+#define GDK_WAYLAND_DEVICE_MANAGER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GDK_TYPE_WAYLAND_DEVICE_MANAGER, GdkWaylandDeviceManagerClass))
 
-typedef struct _GdkDeviceManagerCore GdkDeviceManagerCore;
-typedef struct _GdkDeviceManagerCoreClass GdkDeviceManagerCoreClass;
+typedef struct _GdkWaylandDeviceManager GdkWaylandDeviceManager;
+typedef struct _GdkWaylandDeviceManagerClass GdkWaylandDeviceManagerClass;
 
-struct _GdkDeviceManagerCore
+struct _GdkWaylandDeviceManager
 {
   GdkDeviceManager parent_object;
   GdkDevice *core_pointer;
@@ -109,13 +109,13 @@ struct _GdkDeviceManagerCore
   GList *devices;
 };
 
-struct _GdkDeviceManagerCoreClass
+struct _GdkWaylandDeviceManagerClass
 {
   GdkDeviceManagerClass parent_class;
 };
 
-G_DEFINE_TYPE (GdkDeviceManagerCore,
-	       gdk_device_manager_core, GDK_TYPE_DEVICE_MANAGER)
+G_DEFINE_TYPE (GdkWaylandDeviceManager,
+	       gdk_wayland_device_manager, GDK_TYPE_DEVICE_MANAGER)
 
 static gboolean
 gdk_wayland_device_get_history (GdkDevice      *device,
@@ -1065,8 +1065,8 @@ seat_handle_capabilities(void *data, struct wl_seat *seat,
                          enum wl_seat_capability caps)
 {
   GdkWaylandDeviceData *device = data;
-  GdkDeviceManagerCore *device_manager_core =
-    GDK_DEVICE_MANAGER_CORE(device->device_manager);
+  GdkWaylandDeviceManager *device_manager =
+    GDK_WAYLAND_DEVICE_MANAGER(device->device_manager);
 
   if ((caps & WL_SEAT_CAPABILITY_POINTER) && !device->wl_pointer)
     {
@@ -1086,16 +1086,16 @@ seat_handle_capabilities(void *data, struct wl_seat *seat,
                                       NULL);
       GDK_WAYLAND_DEVICE (device->pointer)->device = device;
 
-      device_manager_core->devices =
-        g_list_prepend (device_manager_core->devices, device->pointer);
+      device_manager->devices =
+        g_list_prepend (device_manager->devices, device->pointer);
     }
   else if (!(caps & WL_SEAT_CAPABILITY_POINTER) && device->wl_pointer)
     {
       wl_pointer_destroy(device->wl_pointer);
       device->wl_pointer = NULL;
 
-      device_manager_core->devices =
-        g_list_remove (device_manager_core->devices, device->pointer);
+      device_manager->devices =
+        g_list_remove (device_manager->devices, device->pointer);
 
       g_object_unref (device->pointer);
       device->pointer = NULL;
@@ -1119,16 +1119,16 @@ seat_handle_capabilities(void *data, struct wl_seat *seat,
                                        NULL);
       GDK_WAYLAND_DEVICE (device->keyboard)->device = device;
 
-      device_manager_core->devices =
-        g_list_prepend (device_manager_core->devices, device->keyboard);
+      device_manager->devices =
+        g_list_prepend (device_manager->devices, device->keyboard);
     }
   else if (!(caps & WL_SEAT_CAPABILITY_KEYBOARD) && device->wl_keyboard) 
     {
       wl_keyboard_destroy(device->wl_keyboard);
       device->wl_keyboard = NULL;
 
-      device_manager_core->devices =
-        g_list_remove (device_manager_core->devices, device->keyboard);
+      device_manager->devices =
+        g_list_remove (device_manager->devices, device->keyboard);
 
       g_object_unref (device->keyboard);
       device->keyboard = NULL;
@@ -1183,43 +1183,43 @@ free_device (gpointer data)
 }
 
 static void
-gdk_device_manager_core_finalize (GObject *object)
+gdk_wayland_device_manager_finalize (GObject *object)
 {
-  GdkDeviceManagerCore *device_manager_core;
+  GdkWaylandDeviceManager *device_manager;
 
-  device_manager_core = GDK_DEVICE_MANAGER_CORE (object);
+  device_manager = GDK_WAYLAND_DEVICE_MANAGER (object);
 
-  g_list_free_full (device_manager_core->devices, free_device);
+  g_list_free_full (device_manager->devices, free_device);
 
-  G_OBJECT_CLASS (gdk_device_manager_core_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gdk_wayland_device_manager_parent_class)->finalize (object);
 }
 
 static GList *
-gdk_device_manager_core_list_devices (GdkDeviceManager *device_manager,
+gdk_wayland_device_manager_list_devices (GdkDeviceManager *device_manager,
                                       GdkDeviceType     type)
 {
-  GdkDeviceManagerCore *device_manager_core;
+  GdkWaylandDeviceManager *wayland_device_manager;
   GList *devices = NULL;
 
   if (type == GDK_DEVICE_TYPE_MASTER)
     {
-      device_manager_core = (GdkDeviceManagerCore *) device_manager;
-      devices = g_list_copy(device_manager_core->devices);
+      wayland_device_manager = (GdkWaylandDeviceManager *) device_manager;
+      devices = g_list_copy(wayland_device_manager->devices);
     }
 
   return devices;
 }
 
 static GdkDevice *
-gdk_device_manager_core_get_client_pointer (GdkDeviceManager *device_manager)
+gdk_wayland_device_manager_get_client_pointer (GdkDeviceManager *device_manager)
 {
-  GdkDeviceManagerCore *device_manager_core;
+  GdkWaylandDeviceManager *wayland_device_manager;
   GList *l;
 
-  device_manager_core = (GdkDeviceManagerCore *) device_manager;
+  wayland_device_manager = (GdkWaylandDeviceManager *) device_manager;
 
   /* Find the first pointer device */
-  for (l = device_manager_core->devices; l != NULL; l = l->next)
+  for (l = wayland_device_manager->devices; l != NULL; l = l->next)
     {
       GdkDevice *device = l->data;
 
@@ -1231,25 +1231,25 @@ gdk_device_manager_core_get_client_pointer (GdkDeviceManager *device_manager)
 }
 
 static void
-gdk_device_manager_core_class_init (GdkDeviceManagerCoreClass *klass)
+gdk_wayland_device_manager_class_init (GdkWaylandDeviceManagerClass *klass)
 {
   GdkDeviceManagerClass *device_manager_class = GDK_DEVICE_MANAGER_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = gdk_device_manager_core_finalize;
-  device_manager_class->list_devices = gdk_device_manager_core_list_devices;
-  device_manager_class->get_client_pointer = gdk_device_manager_core_get_client_pointer;
+  object_class->finalize = gdk_wayland_device_manager_finalize;
+  device_manager_class->list_devices = gdk_wayland_device_manager_list_devices;
+  device_manager_class->get_client_pointer = gdk_wayland_device_manager_get_client_pointer;
 }
 
 static void
-gdk_device_manager_core_init (GdkDeviceManagerCore *device_manager)
+gdk_wayland_device_manager_init (GdkWaylandDeviceManager *device_manager)
 {
 }
 
 GdkDeviceManager *
 _gdk_wayland_device_manager_new (GdkDisplay *display)
 {
-  return g_object_new (GDK_TYPE_DEVICE_MANAGER_CORE,
+  return g_object_new (GDK_TYPE_WAYLAND_DEVICE_MANAGER,
                        "display", display,
                        NULL);
 }
