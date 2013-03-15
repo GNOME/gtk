@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-03-12 22:06+0000\n"
-"PO-Revision-Date: 2013-03-13 17:08+0100\n"
+"PO-Revision-Date: 2013-03-15 12:42+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -1337,12 +1337,12 @@ msgstr "Apuntando a"
 
 #: ../gtk/gtkbubblewindow.c:860
 msgid "Rectangle the bubble window points to"
-msgstr "Rectángulo al que apunta la burbuja"
+msgstr "Rectángulo al que apunta la burbuja"
 
 #: ../gtk/gtkbubblewindow.c:867
 #| msgid "Position of mark on the ruler"
 msgid "Position to place the bubble window"
-msgstr "Posición que colocar en la burbuja"
+msgstr "Posición en la que colocar en la burbuja"
 
 #: ../gtk/gtkbuilder.c:307
 msgid "Translation Domain"
@@ -3282,8 +3282,7 @@ msgstr "Poblar todos"
 
 #: ../gtk/gtkentry.c:1439 ../gtk/gtktextview.c:877
 msgid "Whether to emit ::populate-popup for touch popups"
-msgstr ""
-"Indica si se debe emitir ::populate-popup para los menús emergentes táctiles"
+msgstr "Indica si se debe emitir ::populate-popup para las burbujas táctiles"
 
 #: ../gtk/gtkentry.c:1453
 msgid "Icon Prelight"
