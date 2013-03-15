@@ -238,6 +238,8 @@ EXTRA_DIST += \
 	reset-to-defaults.css \
 	rotated-layout.ref.ui \
 	rotated-layout.ui \
+	separator-size.ref.ui \ 
+	separator-size.ui \ 
 	shorthand-entry-border.css \
 	shorthand-entry-border.ref.ui \
 	shorthand-entry-border.ui \
