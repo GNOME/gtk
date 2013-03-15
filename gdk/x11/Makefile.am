@@ -4,13 +4,14 @@ include $(top_srcdir)/Makefile.decl
 libgdkincludedir = $(includedir)/gtk-3.0/gdk
 libgdkx11includedir = $(includedir)/gtk-3.0/gdk/x11
 
-AM_CPPFLAGS = 			\
-	-DG_LOG_DOMAIN=\"Gdk\"	\
-	-DGDK_COMPILATION	\
-	-I$(top_srcdir)		\
-	-I$(top_srcdir)/gdk	\
-	-I$(top_builddir)/gdk	\
-	$(GTK_DEBUG_FLAGS) 	\
+AM_CPPFLAGS = 				\
+	-DG_LOG_DOMAIN=\"Gdk\"		\
+	-DGDK_COMPILATION		\
+	-I$(top_srcdir)			\
+	-I$(top_srcdir)/gdk		\
+	-I$(top_builddir)/gdk		\
+	$(GDK_HIDDEN_VISIBILITY_CFLAGS) \
+	$(GTK_DEBUG_FLAGS) 		\
 	$(GDK_DEP_CFLAGS)
 
 LDADDS = $(GDK_DEP_LIBS)

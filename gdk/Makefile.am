@@ -144,11 +144,11 @@ gdk_c_sources = 				\
 	gdkwindowimpl.c
 
 gdk_built_sources = 				\
+	gdkenumtypes.h				\
 	gdkenumtypes.c				\
 	gdkmarshalers.h 			\
 	gdkmarshalers.c				\
-	gdkversionmacros.h			\
-	gdkenumtypes.h
+	gdkversionmacros.h
 
 #
 # setup GDK sources and their dependencies
@@ -166,6 +166,7 @@ common_sources = 		\
 	gdkmarshalers.h
 
 libgdk_3_la_SOURCES = $(common_sources)
+libgdk_3_la_CFLAGS = $(AM_CFLAGS) $(GDK_HIDDEN_VISIBILITY_CFLAGS)
 libgdk_3_la_LIBADD = $(GDK_DEP_LIBS)
 libgdk_3_la_LDFLAGS = $(LDADD)
 
