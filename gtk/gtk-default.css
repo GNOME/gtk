@@ -23,6 +23,9 @@
   color: @fg_color;
   border-color: shade (@bg_color, 0.6);
   padding: 2px;
+  -GtkWindow-resize-grip-width: 0;
+  -GtkWindow-resize-grip-height: 0;
+  -GtkWindow-decoration-button-layout: 'icon:minimize,maximize,close';
 }
 
 GtkWindow, .button, .slider {
@@ -767,6 +770,14 @@ GtkCalendar.button:hover {
        to (@bg_color));
 }
 
+.titlebar GtkButton:first-child {
+  border-radius: 10px 0px 0px 0px;
+}
+
+.titlebar GtkButton:last-child {
+  border-radius: 0px 10px 0px 0px;
+}
+
 .titlebar:backdrop {
   background-image: none;
 }
@@ -780,14 +791,14 @@ GtkCalendar.button:hover {
 
 .window-border {
   border-color: darker (@bg_color);
-  border-radius: 5px;
-  border-width: 3px 3px 3px 3px;
+  border-radius: 10px;
+  border-width: 0;
   border-style: solid;
 }
 
-.window-border-bar {
+.window-outer-border {
+  border-color: transparent;
+  border-radius: 10px;
+  border-width: 10px 10px 10px 10px;
   border-style: solid;
-  border-width: 1px 1px 2px 1px;
-  border-color: darker (@bg_color);
-  border-radius: 5px 5px 0px 0px;
 }
