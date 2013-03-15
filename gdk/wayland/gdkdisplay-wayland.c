@@ -272,7 +272,7 @@ gdk_wayland_display_flush (GdkDisplay *display)
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
   if (!display->closed)
-    wl_display_flush(GDK_WAYLAND_DISPLAY (display)->wl_display);;
+    wl_display_flush(GDK_WAYLAND_DISPLAY (display)->wl_display);
 }
 
 static gboolean

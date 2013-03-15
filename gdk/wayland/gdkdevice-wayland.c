@@ -1420,7 +1420,7 @@ data_source_send (void                  *data,
                   const char            *mime_type,
                   int32_t                fd)
 {
-  GdkWaylandSelectionOffer *offer = (GdkWaylandSelectionOffer *)data;;
+  GdkWaylandSelectionOffer *offer = (GdkWaylandSelectionOffer *)data;
   gchar *buf;
   gssize len, bytes_written = 0;
 
