@@ -107,11 +107,11 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
                           GTK_PARAM_READWRITE));
 
   /**
-   * GtkFontChooserWidget::font-activated:
+   * GtkFontChooser::font-activated:
    * @self: the object which received the signal
    * @fontname: the font name
    *
-   * Emitted when a font is activated from the widget's list.
+   * Emitted when a font is activated.
    * This usually happens when the user double clicks an item,
    * or an item is selected and the user presses one of the keys
    * Space, Shift+Space, Return or Enter.
