@@ -30,6 +30,10 @@
 #define GDK_MINOR_VERSION (@GTK_MINOR_VERSION@)
 #define GDK_MICRO_VERSION (@GTK_MICRO_VERSION@)
 
+#ifndef _GDK_EXTERN
+#define _GDK_EXTERN extern
+#endif
+
 /**
  * GDK_DISABLE_DEPRECATION_WARNINGS:
  *
@@ -39,13 +43,13 @@
  */
 
 #ifdef GDK_DISABLE_DEPRECATION_WARNINGS
-#define GDK_DEPRECATED
-#define GDK_DEPRECATED_FOR(f)
-#define GDK_UNAVAILABLE(maj,min)
+#define GDK_DEPRECATED _GDK_EXTERN
+#define GDK_DEPRECATED_FOR(f) _GDK_EXTERN
+#define GDK_UNAVAILABLE(maj,min) _GDK_EXTERN
 #else
-#define GDK_DEPRECATED G_DEPRECATED
-#define GDK_DEPRECATED_FOR(f) G_DEPRECATED_FOR(f)
-#define GDK_UNAVAILABLE(maj,min) G_UNAVAILABLE(maj,min)
+#define GDK_DEPRECATED G_DEPRECATED _GDK_EXTERN
+#define GDK_DEPRECATED_FOR(f) G_DEPRECATED_FOR(f) _GDK_EXTERN
+#define GDK_UNAVAILABLE(maj,min) G_UNAVAILABLE(maj,min) _GDK_EXTERN
 #endif
 
 /* XXX: Every new stable minor release bump should add a macro here */
@@ -179,7 +183,7 @@
 #error "GDK_VERSION_MIN_REQUIRED must be >= GDK_VERSION_3_0"
 #endif
 
-#define GDK_AVAILABLE_IN_ALL
+#define GDK_AVAILABLE_IN_ALL                  _GDK_EXTERN
 
 /* XXX: Every new stable minor release should add a set of macros here */
 
@@ -187,84 +191,84 @@
 # define GDK_DEPRECATED_IN_3_0                GDK_DEPRECATED
 # define GDK_DEPRECATED_IN_3_0_FOR(f)         GDK_DEPRECATED_FOR(f)
 #else
-# define GDK_DEPRECATED_IN_3_0
-# define GDK_DEPRECATED_IN_3_0_FOR(f)
+# define GDK_DEPRECATED_IN_3_0                _GDK_EXTERN
+# define GDK_DEPRECATED_IN_3_0_FOR(f)         _GDK_EXTERN
 #endif
 
 #if GDK_VERSION_MAX_ALLOWED < GDK_VERSION_3_0
 # define GDK_AVAILABLE_IN_3_0                 GDK_UNAVAILABLE(3, 0)
 #else
-# define GDK_AVAILABLE_IN_3_0
+# define GDK_AVAILABLE_IN_3_0                 _GDK_EXTERN
 #endif
 
 #if GDK_VERSION_MIN_REQUIRED >= GDK_VERSION_3_2
 # define GDK_DEPRECATED_IN_3_2                GDK_DEPRECATED
 # define GDK_DEPRECATED_IN_3_2_FOR(f)         GDK_DEPRECATED_FOR(f)
 #else
-# define GDK_DEPRECATED_IN_3_2
-# define GDK_DEPRECATED_IN_3_2_FOR(f)
+# define GDK_DEPRECATED_IN_3_2                _GDK_EXTERN
+# define GDK_DEPRECATED_IN_3_2_FOR(f)         _GDK_EXTERN
 #endif
 
 #if GDK_VERSION_MAX_ALLOWED < GDK_VERSION_3_2
 # define GDK_AVAILABLE_IN_3_2                 GDK_UNAVAILABLE(3, 2)
 #else
-# define GDK_AVAILABLE_IN_3_2
+# define GDK_AVAILABLE_IN_3_2                 _GDK_EXTERN
 #endif
 
 #if GDK_VERSION_MIN_REQUIRED >= GDK_VERSION_3_4
 # define GDK_DEPRECATED_IN_3_4                GDK_DEPRECATED
 # define GDK_DEPRECATED_IN_3_4_FOR(f)         GDK_DEPRECATED_FOR(f)
 #else
-# define GDK_DEPRECATED_IN_3_4
-# define GDK_DEPRECATED_IN_3_4_FOR(f)
+# define GDK_DEPRECATED_IN_3_4                _GDK_EXTERN
+# define GDK_DEPRECATED_IN_3_4_FOR(f)         _GDK_EXTERN
 #endif
 
 #if GDK_VERSION_MAX_ALLOWED < GDK_VERSION_3_4
 # define GDK_AVAILABLE_IN_3_4                 GDK_UNAVAILABLE(3, 4)
 #else
-# define GDK_AVAILABLE_IN_3_4
+# define GDK_AVAILABLE_IN_3_4                 _GDK_EXTERN
 #endif
 
 #if GDK_VERSION_MIN_REQUIRED >= GDK_VERSION_3_6
 # define GDK_DEPRECATED_IN_3_6                GDK_DEPRECATED
 # define GDK_DEPRECATED_IN_3_6_FOR(f)         GDK_DEPRECATED_FOR(f)
 #else
-# define GDK_DEPRECATED_IN_3_6
-# define GDK_DEPRECATED_IN_3_6_FOR(f)
+# define GDK_DEPRECATED_IN_3_6                _GDK_EXTERN
+# define GDK_DEPRECATED_IN_3_6_FOR(f)         _GDK_EXTERN
 #endif
 
 #if GDK_VERSION_MAX_ALLOWED < GDK_VERSION_3_6
 # define GDK_AVAILABLE_IN_3_6                 GDK_UNAVAILABLE(3, 6)
 #else
-# define GDK_AVAILABLE_IN_3_6
+# define GDK_AVAILABLE_IN_3_6                 _GDK_EXTERN
 #endif
 
 #if GDK_VERSION_MIN_REQUIRED >= GDK_VERSION_3_8
 # define GDK_DEPRECATED_IN_3_8                GDK_DEPRECATED
 # define GDK_DEPRECATED_IN_3_8_FOR(f)         GDK_DEPRECATED_FOR(f)
 #else
-# define GDK_DEPRECATED_IN_3_8
-# define GDK_DEPRECATED_IN_3_8_FOR(f)
+# define GDK_DEPRECATED_IN_3_8                _GDK_EXTERN
+# define GDK_DEPRECATED_IN_3_8_FOR(f)         _GDK_EXTERN
 #endif
 
 #if GDK_VERSION_MAX_ALLOWED < GDK_VERSION_3_8
 # define GDK_AVAILABLE_IN_3_8                 GDK_UNAVAILABLE(3, 8)
 #else
-# define GDK_AVAILABLE_IN_3_8
+# define GDK_AVAILABLE_IN_3_8                 _GDK_EXTERN
 #endif
 
 #if GDK_VERSION_MIN_REQUIRED >= GDK_VERSION_3_10
 # define GDK_DEPRECATED_IN_3_10               GDK_DEPRECATED
 # define GDK_DEPRECATED_IN_3_10_FOR(f)        GDK_DEPRECATED_FOR(f)
 #else
-# define GDK_DEPRECATED_IN_3_10
-# define GDK_DEPRECATED_IN_3_10_FOR(f)
+# define GDK_DEPRECATED_IN_3_10               _GDK_EXTERN
+# define GDK_DEPRECATED_IN_3_10_FOR(f)        _GDK_EXTERN
 #endif
 
 #if GDK_VERSION_MAX_ALLOWED < GDK_VERSION_3_10
 # define GDK_AVAILABLE_IN_3_10                GDK_UNAVAILABLE(3, 10)
 #else
-# define GDK_AVAILABLE_IN_3_10
+# define GDK_AVAILABLE_IN_3_10                _GDK_EXTERN
 #endif
 
 #endif  /* __GDK_VERSION_MACROS_H__ */
