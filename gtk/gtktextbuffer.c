@@ -389,7 +389,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
    * Note that if your handler runs before the default handler it must not 
    * invalidate the @start and @end iters (or has to revalidate them). 
    * The default signal handler revalidates the @start and @end iters to 
-   * both point point to the location where text was deleted. Handlers
+   * both point to the location where text was deleted. Handlers
    * which run after the default handler (see g_signal_connect_after())
    * do not have access to the deleted text.
    * 
