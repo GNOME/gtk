@@ -1295,15 +1295,54 @@ gdk_wayland_window_unstick (GdkWindow *window)
 static void
 gdk_wayland_window_maximize (GdkWindow *window)
 {
-  if (GDK_WINDOW_DESTROYED (window))
+  GdkWindowImplWayland *impl;
+
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
+
+  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  if (GDK_WINDOW_IS_MAPPED (window))
+    {
+      if (impl->surface)
+        {
+          impl->saved_width = gdk_window_get_width (window);
+          impl->saved_height = gdk_window_get_height (window);
+
+          if (impl->shell_surface)
+            wl_shell_surface_set_maximized (impl->shell_surface, NULL);
+        }
+
+      gdk_synthesize_window_state (window,
+                                   0,
+                                   GDK_WINDOW_STATE_MAXIMIZED);
+    }
 }
 
 static void
 gdk_wayland_window_unmaximize (GdkWindow *window)
 {
-  if (GDK_WINDOW_DESTROYED (window))
+  GdkWindowImplWayland *impl;
+
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
+
+  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  if (GDK_WINDOW_IS_MAPPED (window))
+    {
+      if (impl->surface)
+        {
+          if (impl->shell_surface)
+            wl_shell_surface_set_toplevel (impl->shell_surface);
+        }
+
+      gdk_synthesize_window_state (window,
+                                   GDK_WINDOW_STATE_MAXIMIZED,
+                                   0);
+    }
 }
 
 static void
