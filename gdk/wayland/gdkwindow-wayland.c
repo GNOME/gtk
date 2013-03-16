@@ -115,6 +115,8 @@ struct _GdkWindowImplWayland
    */
   cairo_surface_t *server_surface;
 
+  gchar *title;
+
   uint32_t resize_edges;
 
   int focus_count;
@@ -281,6 +283,8 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
     }
 
   g_object_ref (window);
+
+  impl->title = NULL;
 
   switch (GDK_WINDOW_TYPE (window))
     {
@@ -727,6 +731,9 @@ gdk_wayland_window_show (GdkWindow *window, gboolean already_mapped)
 
   if (impl->cairo_surface)
     gdk_wayland_window_attach_image (window);
+
+  if (impl->shell_surface && impl->title)
+    wl_shell_surface_set_title (impl->shell_surface, impl->title);
 }
 
 static void
@@ -1158,10 +1165,15 @@ static void
 gdk_wayland_window_set_title (GdkWindow   *window,
 			      const gchar *title)
 {
+  GdkWindowImplWayland *impl;
   g_return_if_fail (title != NULL);
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
+
+  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  impl->title = strdup (title);
 }
 
 static void
