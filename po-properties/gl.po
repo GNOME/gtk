@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-properties-gl-77816____.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-13 10:23+0100\n"
-"PO-Revision-Date: 2013-03-13 10:26+0200\n"
+"POT-Creation-Date: 2013-03-17 23:24+0100\n"
+"PO-Revision-Date: 2013-03-17 23:26+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -1318,7 +1318,7 @@ msgstr "Relativo a"
 
 #: ../gtk/gtkbubblewindow.c:853
 msgid "Window the bubble window points to"
-msgstr ""
+msgstr "Xanela á que apunta a xanela"
 
 #: ../gtk/gtkbubblewindow.c:859
 msgid "Pointing to"
@@ -1326,11 +1326,11 @@ msgstr "Apuntando a"
 
 #: ../gtk/gtkbubblewindow.c:860
 msgid "Rectangle the bubble window points to"
-msgstr ""
+msgstr "Rectángulo ao que apunta a burbulla"
 
 #: ../gtk/gtkbubblewindow.c:867
 msgid "Position to place the bubble window"
-msgstr ""
+msgstr "Posición onde colocar a burbulla"
 
 #: ../gtk/gtkbuilder.c:307
 msgid "Translation Domain"
