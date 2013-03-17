@@ -6073,7 +6073,9 @@ _gtk_window_set_allocation (GtkWindow           *window,
                             title_border.top +
                             title_border.bottom;
       child_allocation.width -= window_border.left + window_border.right;
-      child_allocation.height -= child_allocation.y + window_border.bottom;
+      child_allocation.height -= window_border.top + window_border.bottom +
+                                title_border.top + title_border.bottom +
+                                title_height;
     }
 
   if (gtk_widget_get_realized (widget))
