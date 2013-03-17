@@ -8529,7 +8529,7 @@ create_properties (GtkWidget *widget)
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 1);
       gtk_container_add (GTK_CONTAINER (window), vbox);
             
-      label = gtk_label_new ("This is just a dumb test to test properties.\nIf you need a generic module, get GLE.");
+      label = gtk_label_new ("This is just a dumb test to test properties.\nIf you need a generic module, get gtkparasite.");
       gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
       
       button = gtk_button_new_with_label ("Query properties");
