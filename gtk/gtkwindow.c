@@ -6046,16 +6046,18 @@ _gtk_window_set_allocation (GtkWindow           *window,
     {
       GtkAllocation title_allocation;
 
-      gtk_widget_get_preferred_height (priv->title_box,
-                                       NULL,
-                                       &title_height);
-
       title_allocation.x = title_border.left + window_border.left;
       title_allocation.y = title_border.top + window_border.top;
       title_allocation.width =
         MAX (1, (gint) allocation->width -
              title_border.left - title_border.right -
              window_border.left - window_border.right);
+
+      gtk_widget_get_preferred_height_for_width (priv->title_box,
+                                                 title_allocation.width,
+                                                 NULL,
+                                                 &title_height);
+
       title_allocation.height = title_height;
 
       gtk_widget_size_allocate (priv->title_box, &title_allocation);
