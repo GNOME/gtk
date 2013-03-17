@@ -4855,16 +4855,26 @@ create_decoration (GtkWidget *widget)
     return;
 
 #ifdef GDK_WINDOWING_WAYLAND
-  if (!GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
-    return;
-#else
-  return;
+  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
+    priv->client_decorated = TRUE;
 #endif
 
-  if (!priv->decorated)
-    return;
+  if (!priv->client_decorated &&
+      g_strcmp0 (g_getenv ("GTK_CSD"),"1") == 0)
+    {
+      GdkVisual *visual;
 
-  priv->client_decorated = TRUE;
+      /* We need a visual with alpha */
+      visual = gdk_screen_get_rgba_visual (gtk_widget_get_screen (widget));
+      if (visual)
+        {
+          gtk_widget_set_visual (widget, visual);
+          priv->client_decorated = TRUE;
+        }
+    }
+
+  if (!priv->client_decorated)
+    return;
 
   priv->title_box = gtk_header_bar_new ();
   g_object_set (priv->title_box,
