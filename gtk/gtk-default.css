@@ -792,7 +792,7 @@ GtkCalendar.button:hover {
 .window-border {
   border-color: darker (@bg_color);
   border-radius: 10px;
-  border-width: 0;
+  border-width: 2px;
   border-style: solid;
 }
 
