@@ -555,7 +555,7 @@ gtk_font_button_init (GtkFontButton *font_button)
   font_button->priv->use_size = FALSE;
   font_button->priv->show_style = TRUE;
   font_button->priv->show_size = TRUE;
-  font_button->priv->show_preview_entry = FALSE;
+  font_button->priv->show_preview_entry = TRUE;
   font_button->priv->font_dialog = NULL;
   font_button->priv->font_family = NULL;
   font_button->priv->font_face = NULL;
