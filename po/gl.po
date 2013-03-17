@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922___.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-15 11:12+0100\n"
-"PO-Revision-Date: 2013-03-13 10:23+0200\n"
+"POT-Creation-Date: 2013-03-17 23:21+0100\n"
+"PO-Revision-Date: 2013-03-17 23:22+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -497,7 +497,7 @@ msgstr "Editar"
 
 #: ../gtk/a11y/gtkcellaccessible.c:262
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:72
-#: ../gtk/a11y/gtkentryaccessible.c:1541
+#: ../gtk/a11y/gtkentryaccessible.c:1557
 #: ../gtk/a11y/gtkexpanderaccessible.c:281
 msgctxt "Action name"
 msgid "Activate"
@@ -553,7 +553,7 @@ msgctxt "Action description"
 msgid "Presses the combobox"
 msgstr "Preme a caixa de verificación"
 
-#: ../gtk/a11y/gtkentryaccessible.c:1550
+#: ../gtk/a11y/gtkentryaccessible.c:1566
 msgctxt "Action description"
 msgid "Activates the entry"
 msgstr "Activa a entrada"
@@ -1900,12 +1900,12 @@ msgid "System (%s)"
 msgstr "Sistema (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6144
+#: ../gtk/gtklabel.c:6167
 msgid "_Open Link"
 msgstr "_Abrir ligazón"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6156
+#: ../gtk/gtklabel.c:6179
 msgid "Copy _Link Address"
 msgstr "Copiar enderezo da _ligazón"
 
@@ -3517,6 +3517,22 @@ msgstr "Volume máximo"
 msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
+
+#: ../gtk/gtkwindow.c:7703
+msgid "Minimize"
+msgstr "Minimizar"
+
+#: ../gtk/gtkwindow.c:7712
+msgid "Unmaximize"
+msgstr "Restaurar"
+
+#: ../gtk/gtkwindow.c:7712
+msgid "Maximize"
+msgstr "Maximizar"
+
+#: ../gtk/gtkwindow.c:7726
+msgid "Close"
+msgstr "Pechar"
 
 #: ../gtk/paper_names_offsets.c:4
 msgctxt "paper size"
