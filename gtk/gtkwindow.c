@@ -5106,7 +5106,7 @@ create_decoration (GtkWidget *widget)
 #endif
 
   if (!priv->client_decorated &&
-      g_strcmp0 (g_getenv ("GTK_CSD"),"1") == 0)
+      g_strcmp0 (g_getenv ("GTK_CSD"), "1") == 0)
     {
       GdkVisual *visual;
 
