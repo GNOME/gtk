@@ -8898,27 +8898,6 @@ gtk_window_draw (GtkWidget *widget,
       gtk_style_context_restore (context);
     }
 
-  if (priv->title_box != NULL && gtk_widget_get_visible (priv->title_box))
-    {
-      gtk_style_context_save (context);
-      gtk_style_context_add_class (context, "titlebar");
-      gtk_widget_get_allocation (priv->title_box, &allocation);
-
-      /* Why do these subtract ? */
-      gtk_render_background (context, cr,
-			     allocation.x - title_border.left,
-			     allocation.y - title_border.top,
-			     allocation.width + title_border.left + title_border.right,
-			     allocation.height + title_border.top + title_border.left);
-      gtk_render_frame (context, cr,
-			allocation.x - title_border.left,
-			allocation.y - title_border.top,
-			allocation.width + title_border.left + title_border.right,
-			allocation.height + title_border.top + title_border.left);
-
-      gtk_style_context_restore (context);
-    }
-
   if (GTK_WIDGET_CLASS (gtk_window_parent_class)->draw)
     ret = GTK_WIDGET_CLASS (gtk_window_parent_class)->draw (widget, cr);
 
