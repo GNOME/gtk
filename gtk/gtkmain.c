@@ -849,7 +849,7 @@ gtk_get_option_group (gboolean open_default_display)
  * @argv: (array length=argc) (inout) (allow-none): Address of the
  *     <parameter>argv</parameter> parameter of main(), or %NULL. Any options
  *     understood by GTK+ are stripped before return.
- * @parameter_string: a string which is displayed in
+ * @parameter_string: (allow-none): a string which is displayed in
  *    the first line of <option>--help</option> output, after
  *    <literal><replaceable>programname</replaceable> [OPTION...]</literal>
  * @entries: (array zero-terminated=1): a %NULL-terminated array
