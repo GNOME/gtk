@@ -409,7 +409,6 @@ client_fill_cb (GObject *source_object,
       guint32 size;
       gsize count, remaining;
       guint8 *buffer;
-      BroadwayRequest request;
 
       buffer = (guint8 *)g_buffered_input_stream_peek_buffer (client->in, &count);
 
@@ -417,14 +416,10 @@ client_fill_cb (GObject *source_object,
       while (remaining >= sizeof (guint32))
 	{
 	  memcpy (&size, buffer, sizeof (guint32));
-	  
+
 	  if (size <= remaining)
 	    {
-	      g_assert (size >= sizeof (BroadwayRequestBase));
-	      g_assert (size <= sizeof (BroadwayRequest));
-
-	      memcpy (&request, buffer, size);
-	      client_handle_request (client, &request);
+	      client_handle_request (client, (BroadwayRequest *)buffer);
 
 	      remaining -= size;
 	      buffer += size;
