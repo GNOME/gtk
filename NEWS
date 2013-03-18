@@ -1,3 +1,55 @@
+Overview of Changes in GTK+ 3.7.14
+==================================
+
+* A lot of filechooser button fixes
+
+* Bugs fixed:
+ 586367 In local_only mode, file chooser should return native...
+ 671939 crash on exit
+ 674759 GtkLabel: wrong value of "mnemonic-keyval" when "use-...
+ 691040 selection is reported incorrectly in file chooser button
+ 694339 Fix build of GTK+ on Windows
+ 695200 Switching apps while a combobox open makes the parent...
+ 695278 Avoid passing a NULL title to setTitle
+ 695304 GtkTextView: don't popdown a bubble if we don't have one
+ 695312 Initial 'text' set in the non-numeric-only GtkSpinBut...
+ 695375 GtkEntryAccessible: also handle entry icon tooltip NU...
+ 695391 wayland documentation section id is "gtk-osx"
+ 695473 treeview: fix a critical warning
+ 695482 Universal Access panel appears jumbled and horrible a...
+ 695682 Cannot build docs for wayland-only build
+ 695714 Getting of printer info can hang
+ 695715 Use DBus calls instead of Avahi API
+ 695772 Different appearance of menus within Audacious
+ 695783 GtkApplication: Allow passing windows on non-X11 targets
+ 695874 GtkFontChooser docs
+ 695948 GtkFontButton sets wrong show-preview-entry
+
+* Translation updates:
+ Arabic
+ Assamese
+ Belarusian
+ Brazilian Portuguese
+ Catalan
+ Danish
+ Finnish
+ French
+ Galician
+ German
+ Greek
+ Indonesian
+ Kazakh
+ Lithuanian
+ Korean
+ Polish
+ Portuguese
+ Punjabi
+ Serbian
+ Slovenian
+ Spanish
+ Uyghur
+
+
 Overview of Changes in GTK+ 3.7.12
 ==================================
 
