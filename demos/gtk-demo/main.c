@@ -403,7 +403,7 @@ static GtkWidget *create_text (GtkWidget **text_view, gboolean is_source);
 static void
 add_data_tab (const gchar *demoname)
 {
-  gchar *resource_dir, *resource_name, *content_type;
+  gchar *resource_dir, *resource_name, *content_type, *content_mime;
   gchar **resources;
   GBytes *bytes;
   GtkWidget *widget, *label;
@@ -427,17 +427,20 @@ add_data_tab (const gchar *demoname)
                                            g_bytes_get_data (bytes, NULL),
                                            g_bytes_get_size (bytes),
                                            NULL);
+      content_mime = g_content_type_get_mime_type (content_type);
 
       /* In theory we should look at all the mime types gdk-pixbuf supports
        * and go from there, but we know what file types we've added.
        */
-      if (g_content_type_is_a (content_type, "image/png") ||
-          g_content_type_is_a (content_type, "image/gif") ||
-          g_content_type_is_a (content_type, "image/jpeg"))
+      if (g_content_type_is_a (content_mime, "image/png") ||
+          g_content_type_is_a (content_mime, "image/gif") ||
+          g_content_type_is_a (content_mime, "image/jpeg"))
         {
           widget = gtk_image_new_from_resource (resource_name);
         }
-      else if (g_content_type_is_a (content_type, "text/plain"))
+      else if (g_content_type_is_a (content_mime, "text/plain") ||
+               g_content_type_is_a (content_mime, "application/x-ext-ui") ||
+               g_content_type_is_a (content_mime, "text/css"))
         {
           GtkTextBuffer *buffer;
           GtkWidget *textview;
@@ -449,7 +452,8 @@ add_data_tab (const gchar *demoname)
         }
       else
         {
-          g_warning ("Don't know how to display resource '%s' of type '%s'\n", resource_name, content_type);
+
+          g_warning ("Don't know how to display resource '%s' of type '%s'\n", resource_name, content_mime);
           widget = NULL;
         }
 
@@ -458,6 +462,7 @@ add_data_tab (const gchar *demoname)
       gtk_widget_show (label);
       gtk_notebook_append_page (GTK_NOTEBOOK (notebook), widget, label);
 
+      g_free (content_mime);
       g_free (content_type);
       g_free (resource_name);
       g_bytes_unref (bytes);
