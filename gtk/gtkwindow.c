@@ -5094,6 +5094,9 @@ create_decoration (GtkWidget *widget)
   if (priv->client_decorated)
     return;
 
+  if (!priv->decorated)
+    return;
+
   if (priv->type == GTK_WINDOW_POPUP)
     return;
 
