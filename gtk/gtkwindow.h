@@ -348,6 +348,7 @@ gboolean gtk_window_resize_grip_is_visible (GtkWindow    *window);
 gboolean gtk_window_get_resize_grip_area   (GtkWindow    *window,
                                             GdkRectangle *rect);
 
+GDK_AVAILABLE_IN_3_10
 void     gtk_window_set_titlebar           (GtkWindow    *window,
                                             GtkWidget    *titlebar);
 
