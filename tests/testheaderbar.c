@@ -1,7 +1,24 @@
 #include <gtk/gtk.h>
 
 static const gchar css[] =
- ".header { -GtkWidget-window-dragging: true; }";
+ ".background { "
+ " background-image: -gtk-gradient (linear, center top, center bottom, "
+ "      from (red), "
+ "      to (blue)); "
+ " border-radius: 10px 10px 0px 0px; "
+ " border-width: 0px; "
+ "}"
+ ".titlebar:backdrop { "
+ " background-image: none; "
+ " background-color: @bg_color; "
+ " border-radius: 10px 10px 0px 0px; "
+ "}"
+ ".titlebar { "
+ " background-image: -gtk-gradient (linear, center top, center bottom, "
+ "      from (white), "
+ "      to (@bg_color)); "
+ " border-radius: 10px 10px 0px 0px; "
+ "}";
 
 int
 main (int argc, char *argv[])
@@ -18,13 +35,8 @@ main (int argc, char *argv[])
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-  gtk_widget_realize (window);
-  gdk_window_set_decorations (gtk_widget_get_window (window),
-                              GDK_DECOR_BORDER);
-
   header = gtk_header_bar_new ();
-  gtk_style_context_add_class (gtk_widget_get_style_context (header),
-                               "header");
+  gtk_style_context_add_class (gtk_widget_get_style_context (header), "titlebar");
   provider = gtk_css_provider_new ();
   gtk_css_provider_load_from_data (provider, css, -1, NULL);
   gtk_style_context_add_provider_for_screen (gtk_widget_get_screen (window),
@@ -38,23 +50,22 @@ main (int argc, char *argv[])
 
   gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);
 
+  gtk_window_set_titlebar (GTK_WINDOW (window), header);
+
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-
   gtk_container_add (GTK_CONTAINER (window), box);
-
-  gtk_box_pack_start (GTK_BOX (box), header, FALSE, FALSE, 0);
 
   footer = gtk_header_bar_new ();
   gtk_header_bar_pack_start (GTK_HEADER_BAR (footer), gtk_button_new_with_label ("Start"));
   gtk_header_bar_set_custom_title (GTK_HEADER_BAR (footer), gtk_check_button_new_with_label ("Middle"));
-  gtk_header_bar_pack_end (GTK_HEADER_BAR (footer), gtk_button_new_with_label ("End"));
+  gtk_header_bar_pack_end (GTK_HEADER_BAR (footer), gtk_button_new_with_label ("End 1"));
+  gtk_header_bar_pack_end (GTK_HEADER_BAR (footer), gtk_button_new_with_label ("End 2"));
   gtk_box_pack_end (GTK_BOX (box), footer, FALSE, FALSE, 0);
 
   content = gtk_image_new_from_icon_name ("start-here-symbolic", GTK_ICON_SIZE_DIALOG);
   gtk_image_set_pixel_size (GTK_IMAGE (content), 512);
 
   gtk_box_pack_start (GTK_BOX (box), content, FALSE, TRUE, 0);
-
 
   gtk_widget_show_all (window);
 
