@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: as\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-03-12 22:05+0000\n"
-"PO-Revision-Date: 2013-03-15 15:09+0530\n"
+"POT-Creation-Date: 2013-03-17 16:33+0000\n"
+"PO-Revision-Date: 2013-03-18 16:09+0530\n"
 "Last-Translator: Nilamdyuti Goswami <ngoswami@redhat.com>\n"
 "Language-Team: Assamese <kde-i18n-doc@kde.org>\n"
 "Language: as_IN\n"
@@ -484,8 +484,6 @@ msgid "Expand or contract"
 msgstr "বৃদ্ধি কৰক অথবা সংকোচন কৰক"
 
 #: ../gtk/a11y/gtkcellaccessible.c:260
-#| msgctxt "Stock label"
-#| msgid "_Edit"
 msgctxt "Action name"
 msgid "Edit"
 msgstr "সম্পাদনা"
@@ -514,31 +512,26 @@ msgid "Activates the cell"
 msgstr "কোষ সক্ৰিয় কৰে"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:71
-#| msgid "_Select"
 msgctxt "Action name"
 msgid "Select"
 msgstr "বাছক"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:73
-#| msgid "_Customize"
 msgctxt "Action name"
 msgid "Customize"
 msgstr "স্বনিৰ্বাচন কৰক"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:84
-#| msgid "Select a Color"
 msgctxt "Action description"
 msgid "Selects the color"
 msgstr "ৰঙ নিৰ্বাচন কৰে"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:85
-#| msgid "Brightness of the color."
 msgctxt "Action description"
 msgid "Activates the color"
 msgstr "ৰঙ সক্ৰিয় কৰে"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:86
-#| msgid "Custom color %d: %s"
 msgctxt "Action description"
 msgid "Customizes the color"
 msgstr "ৰঙ স্বনিৰ্বাচন কৰে"
@@ -549,7 +542,6 @@ msgid "Press"
 msgstr "টিপক"
 
 #: ../gtk/a11y/gtkcomboboxaccessible.c:322
-#| msgid "Decreases the volume"
 msgctxt "Action description"
 msgid "Presses the combobox"
 msgstr "কম্বোবাকচ টিপে"
@@ -984,7 +976,7 @@ msgstr "আনুষংগিক এপ্লিকেচনসমূহ"
 msgid "Other Applications"
 msgstr "অন্য এপ্লিকেচনসমূহ"
 
-#: ../gtk/gtkapplication.c:1563
+#: ../gtk/gtkapplication.c:1565
 #, c-format
 msgid ""
 "%s cannot quit at this time:\n"
@@ -1901,12 +1893,12 @@ msgid "System (%s)"
 msgstr "চিস্টেম (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6141
+#: ../gtk/gtklabel.c:6144
 msgid "_Open Link"
 msgstr "সংযোগ খোলক (_O)"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6153
+#: ../gtk/gtklabel.c:6156
 msgid "Copy _Link Address"
 msgstr "সংযোগ ঠিকনা নকল কৰক (  )"
 
@@ -2309,7 +2301,7 @@ msgstr "কাগজ নাই"
 
 #. Translators: this is a printer status.
 #: ../gtk/gtkprintoperation-win32.c:613
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2232
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2286
 msgid "Paused"
 msgstr "বিৰাম দিয়া হৈছে"
 
@@ -2436,42 +2428,42 @@ msgstr "সাধাৰণ"
 #. * multiple pages on a sheet when printing
 #.
 #: ../gtk/gtkprintunixdialog.c:3058
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4461
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4622
 msgid "Left to right, top to bottom"
 msgstr "বাওঁ ফালৰ পৰা সোঁ ফাললৈ, ওপৰৰ পৰা তললৈ"
 
 #: ../gtk/gtkprintunixdialog.c:3058
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4461
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4622
 msgid "Left to right, bottom to top"
 msgstr "বাওঁ ফালৰ পৰা সোঁ ফাললৈ, তলৰ পৰা ওপৰলৈ"
 
 #: ../gtk/gtkprintunixdialog.c:3059
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4462
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4623
 msgid "Right to left, top to bottom"
 msgstr "সোঁ ফালৰ পৰা বাওঁ ফাললৈ, ওপৰৰ পৰা তললৈ"
 
 #: ../gtk/gtkprintunixdialog.c:3059
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4462
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4623
 msgid "Right to left, bottom to top"
 msgstr "সোঁ ফালৰ পৰা বাওঁ ফাললৈ, তলৰ পৰা ওপৰলৈ"
 
 #: ../gtk/gtkprintunixdialog.c:3060
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4463
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4624
 msgid "Top to bottom, left to right"
 msgstr "ওপৰৰ পৰা তললৈ, বাওঁ ফালৰ পৰা সোঁ ফাললৈ"
 
 #: ../gtk/gtkprintunixdialog.c:3060
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4463
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4624
 msgid "Top to bottom, right to left"
 msgstr "ওপৰৰ পৰা তললৈ, সোঁ ফালৰ পৰা বাওঁ ফাললৈ"
 
 #: ../gtk/gtkprintunixdialog.c:3061
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4464
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4625
 msgid "Bottom to top, left to right"
 msgstr "তলৰ পৰা ওপৰলৈ, বাওঁ ফালৰ পৰা সোঁ ফাললৈ"
 
 #: ../gtk/gtkprintunixdialog.c:3061
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4464
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4625
 msgid "Bottom to top, right to left"
 msgstr "তলৰ পৰা ওপৰলৈ, সোঁ ফালৰ পৰা বাওঁ ফাললৈ"
 
@@ -2479,7 +2471,7 @@ msgstr "তলৰ পৰা ওপৰলৈ, সোঁ ফালৰ পৰা �
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: ../gtk/gtkprintunixdialog.c:3065 ../gtk/gtkprintunixdialog.c:3078
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4541
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4702
 msgid "Page Ordering"
 msgstr "পৃষ্ঠা শৃংখলাবদ্ধ কৰা"
 
@@ -3512,6 +3504,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
+#: ../gtk/gtkwindow.c:7703
+msgid "Minimize"
+msgstr "সৰু কৰক"
+
+#: ../gtk/gtkwindow.c:7712
+msgid "Unmaximize"
+msgstr "সৰু কৰক"
+
+#: ../gtk/gtkwindow.c:7712
+msgid "Maximize"
+msgstr "ডাঙৰ কৰক"
+
+#: ../gtk/gtkwindow.c:7726
+#| msgctxt "Stock label"
+#| msgid "_Close"
+msgid "Close"
+msgstr "বন্ধ কৰক"
+
 #: ../gtk/paper_names_offsets.c:4
 msgctxt "paper size"
 msgid "asme_f"
@@ -4493,325 +4503,325 @@ msgstr "ভিয়েতনামি (VIQR)"
 msgid "X Input Method"
 msgstr "X নিবেশ পদ্ধতি"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:948
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1163
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1002
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1217
 msgid "Username:"
 msgstr "ব্যৱহাৰকৰোঁতাৰ নাম:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:949
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1172
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1003
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1226
 msgid "Password:"
 msgstr "পাছৱাৰ্ড:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:988
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1185
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1042
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1239
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
 msgstr "আলেখ্যন '%s' ক মূদ্ৰক %s ত মূদ্ৰণ কৰিবলৈ প্ৰমাণীকৰণৰ প্ৰয়োজন"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:990
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1044
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "%s ত এখন আলেখ্যন মূদ্ৰণ কৰিবলৈ প্ৰমাণীকণৰ প্ৰয়োজন"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:994
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1048
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
 msgstr "কাৰ্য্য '%s' ৰ গুণসমূহ পাবলৈ প্ৰমাণীকৰণৰ প্ৰয়োজন"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:996
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1050
 msgid "Authentication is required to get attributes of a job"
 msgstr "এটা কাৰ্য্যৰ গুণ পাবলৈ প্ৰমাণীকৰণৰ প্ৰয়োজন"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1000
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1054
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "মূদ্ৰক '%s' ৰ গুণসমূহ পাবলৈ প্ৰমাণীকৰণৰ প্ৰয়োজন"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1002
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1056
 msgid "Authentication is required to get attributes of a printer"
 msgstr "মূদ্ৰকৰ গুণসমূহ পাবলৈ প্ৰমাণীকৰণৰ প্ৰয়োজন"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1005
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1059
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "%s ৰ অবিকল্পিত মূদ্ৰক পাবলৈ প্ৰমাণীকৰণৰ প্ৰয়োজন"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1008
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1062
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "%s ৰ পৰা মূদ্ৰকসমূহ পাবলৈ প্ৰমাণীকৰণৰ প্ৰয়োজন"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1013
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1067
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "%s ৰ ফাইল পাবলৈ প্ৰমাণীকৰণৰ প্ৰয়োজন"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1015
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1069
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "%s ত প্ৰমাণীকৰণৰ প্ৰয়োজন"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1157
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1211
 msgid "Domain:"
 msgstr "ডোমেইন (_D):"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1187
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1241
 #, c-format
 msgid "Authentication is required to print document '%s'"
 msgstr "দস্তাবাজ '%s' ক প্ৰিন্ট কৰিবলে প্ৰমাণীকৰনৰ প্ৰয়োজন"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1192
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1246
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr "এইখন দস্তাবাজক প্ৰিন্টাৰ %s ত প্ৰিন্ট কৰিবলে প্ৰমানীকৰনৰ প্ৰয়োজন"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1194
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1248
 msgid "Authentication is required to print this document"
 msgstr "এইখন দস্তাবেজ প্ৰিন্ট কৰিবলে প্ৰমাণীকৰনৰ প্ৰয়োজন"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1756
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1810
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "'%s' মূদ্ৰকত ট'নাৰ কম।"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1757
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1811
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "'%s' মূদ্ৰকত ট'নাৰ নাই।"
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1759
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1813
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr "'%s' মূদ্ৰকত ডেভেল'পাৰ কম।"
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1761
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1815
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr "'%s' মূদ্ৰকত ডেভেল'পাৰ নাই।"
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1763
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1817
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr "'%s' মূদ্ৰকত অতি কমেও এটা মাৰ্কাৰৰ যোগান কম।"
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1765
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1819
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr "'%s' মূদ্ৰকত অতি কমেও এটা মাৰ্কাৰ নাই।"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1766
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1820
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr "'%s' মূদ্ৰকত ঢাকনী খোলা।"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1767
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1821
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr "'%s' মূদ্ৰকত দুৱাৰ খোলা।"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1768
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1822
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "'%s' মূদ্ৰকত কাকত কম।"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1769
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1823
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "'%s' মূদ্ৰকত কাকত নাই।"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1770
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1824
 #, c-format
 msgid "Printer '%s' is currently offline."
 msgstr "'%s' প্ৰিন্টাৰ বৰ্ত্তমানে অফ-লাইন।"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1771
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1825
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "মূদ্ৰক '%s' ত এটা সমস্যা হৈছে।"
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2229
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2283
 msgid "Paused; Rejecting Jobs"
 msgstr "ৰখোৱা হৈছে ; কাৰ্য্য গ্ৰহণ কৰা হোৱা নাই"
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2235
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2289
 msgid "Rejecting Jobs"
 msgstr "কাৰ্য্য গ্ৰহণ কৰা হোৱা নাই"
 
 #. Translators: this string connects multiple printer states together.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2277
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2331
 msgid "; "
 msgstr ";"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3684
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3845
 msgid "Two Sided"
 msgstr "দ্বিপাৰ্শ্বিক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3685
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3846
 msgid "Paper Type"
 msgstr "কাগজৰ ধৰণ"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3686
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3847
 msgid "Paper Source"
 msgstr "কাগজৰ উৎস"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3848
 msgid "Output Tray"
 msgstr "নিৰ্গমৰ ডলা"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3688
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3849
 msgid "Resolution"
 msgstr "বিশ্লেষণ"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3689
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3850
 msgid "GhostScript pre-filtering"
 msgstr "GhostScript প্ৰি-ফিল্টাৰিং"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3698
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3859
 msgid "One Sided"
 msgstr "একপাক্ষিক"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3700
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3861
 msgid "Long Edge (Standard)"
 msgstr "দীৰ্ঘ প্ৰান্ত (প্ৰমিত মান)"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3702
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3863
 msgid "Short Edge (Flip)"
 msgstr "ক্ষুদ্ৰ প্ৰান্ত (উলট)"
 
 #. Translators: this is an option of "Paper Source"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3704
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3706
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3714
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3865
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3867
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3875
 msgid "Auto Select"
 msgstr "স্বয়ং বাছক"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3708
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3710
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3712
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3716
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4204
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3869
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3871
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3873
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3877
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4365
 msgid "Printer Default"
 msgstr "মুদ্ৰক অবিকল্পিত"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3718
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3879
 msgid "Embed GhostScript fonts only"
 msgstr "শুধুমাত্ৰ GhostScript ফন্ট এমবেড কৰা হ'ব"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3720
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3881
 msgid "Convert to PS level 1"
 msgstr "PS লেভেল ১এ ৰূপান্তৰ কৰা হ'ব"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3722
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3883
 msgid "Convert to PS level 2"
 msgstr "PS লেভেল ২এ ৰূপান্তৰ কৰা হ'ব"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3724
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3885
 msgid "No pre-filtering"
 msgstr "প্ৰি-ফিল্টাৰিং বিহীন"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3733
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3894
 msgid "Miscellaneous"
 msgstr "বিবিধ"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4456
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4617
 msgid "Urgent"
 msgstr "অতি আৱশ্যক"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4456
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4617
 msgid "High"
 msgstr "তীব্ৰ"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4456
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4617
 msgid "Medium"
 msgstr "মধ্যমীয়া"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4456
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4617
 msgid "Low"
 msgstr "নিম্ন"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4486
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4647
 msgid "Job Priority"
 msgstr "কাৰ্য্যৰ শ্ৰেষ্ঠতা"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4497
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4658
 msgid "Billing Info"
 msgstr "সাধনীৰ তথ্য"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4512
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4673
 msgid "None"
 msgstr "একো নাই"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4512
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4673
 msgid "Classified"
 msgstr "শ্ৰেণীভুক্ত"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4512
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4673
 msgid "Confidential"
 msgstr "গুপুত"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4512
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4673
 msgid "Secret"
 msgstr "গোপণীয়"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4512
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4673
 msgid "Standard"
 msgstr "মানদণ্ড স্বৰূপ"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4512
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4673
 msgid "Top Secret"
 msgstr "পৰম গোপণীয়"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4512
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4673
 msgid "Unclassified"
 msgstr "শ্ৰেণীভুক্ত নকৰা"
 
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4523
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4684
 msgid "Pages per Sheet"
 msgstr "প্ৰতিটো পাতৰ পৃষ্ঠা"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4583
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4744
 msgid "Before"
 msgstr "আগৰ"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4598
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4759
 msgid "After"
 msgstr "পিছৰ"
 
@@ -4819,14 +4829,14 @@ msgstr "পিছৰ"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4618
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4779
 msgid "Print at"
 msgstr "-ইয়াত মুদ্ৰণ"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4629
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4790
 msgid "Print at time"
 msgstr "এই সময়ত মুদ্ৰণ কৰক"
 
@@ -4834,17 +4844,17 @@ msgstr "এই সময়ত মুদ্ৰণ কৰক"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4664
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4825
 #, c-format
 msgid "Custom %sx%s"
 msgstr "নিজৰ পছন্দৰ %sx%s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4745
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4906
 msgid "Printer Profile"
 msgstr "প্ৰিন্টাৰ আলেখ্য"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4752
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4913
 msgid "Unavailable"
 msgstr "উপলব্ধ নাই"
 
