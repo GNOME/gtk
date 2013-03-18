@@ -62,6 +62,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testgiconpixbuf			\
 	testgrid			\
 	testgtk				\
+	testheaderbar			\
 	testheightforwidth		\
 	testiconview			\
 	testiconview-keynav		\
@@ -189,6 +190,7 @@ testgeometry_DEPENDENCIES = $(TEST_DEPS)
 testgiconpixbuf = $(TEST_DEPS)
 testgrid_DEPENDENCIES = $(TEST_DEPS)
 testgtk_DEPENDENCIES = $(TEST_DEPS)
+testheaderbar_DEPENDENCIES = $(TEST_DEPS)
 testinput_DEPENDENCIES = $(TEST_DEPS)
 testimage_DEPENDENCIES = $(TEST_DEPS)
 testkineticscrolling_DEPENDENCIES = $(TEST_DEPS)
