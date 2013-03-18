@@ -5090,7 +5090,7 @@ create_decoration (GtkWidget *widget)
   GtkStyleContext *context;
   const gchar *title;
 
-  /* Clien decorations already created */
+  /* Client decorations already created */
   if (priv->client_decorated)
     return;
 
