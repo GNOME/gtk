@@ -200,6 +200,7 @@ struct _GtkWindowPrivate
                                             */
   guint    gravity                   : 5; /* GdkGravity */
   guint    client_decorated          : 1; /* Decorations drawn client-side */
+  guint    custom_title              : 1; /* app-provided titlebar */
   guint    fullscreen                : 1;
 
 };
@@ -3414,6 +3415,35 @@ gtk_window_set_geometry_hints (GtkWindow       *window,
   gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
 }
 
+void
+gtk_window_set_titlebar (GtkWindow *window,
+                         GtkWidget *titlebar)
+{
+  GtkWidget *widget = GTK_WIDGET (window);
+  GtkWindowPrivate *priv = window->priv;
+  GdkVisual *visual;
+
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  if (priv->title_box != NULL)
+    {
+      gtk_widget_unparent (priv->title_box);
+      priv->title_box = NULL;
+      priv->title_icon = NULL;
+      priv->title_min_button = NULL;
+      priv->title_max_button = NULL;
+      priv->title_close_button = NULL;
+    }
+
+  priv->custom_title = TRUE;
+  priv->title_box = titlebar;
+  gtk_widget_set_parent (priv->title_box, widget);
+
+  visual = gdk_screen_get_rgba_visual (gtk_widget_get_screen (widget));
+  if (visual)
+    gtk_widget_set_visual (widget, visual);
+}
+
 /**
  * gtk_window_set_decorated:
  * @window: a #GtkWindow
@@ -3453,12 +3483,17 @@ gtk_window_set_decorated (GtkWindow *window,
   gdk_window = gtk_widget_get_window (GTK_WIDGET (window));
   if (gdk_window)
     {
-      if (priv->decorated && !priv->client_decorated)
-        gdk_window_set_decorations (gdk_window,
-                                    GDK_DECOR_ALL);
+      if (priv->decorated)
+        {
+          if (priv->client_decorated)
+            gdk_window_set_decorations (gdk_window, 0);
+          else if (priv->custom_title)
+            gdk_window_set_decorations (gdk_window, GDK_DECOR_BORDER);
+          else
+            gdk_window_set_decorations (gdk_window, GDK_DECOR_ALL);
+        }
       else
-        gdk_window_set_decorations (gdk_window,
-                                    0);
+        gdk_window_set_decorations (gdk_window, 0);
     }
 
   update_window_buttons (window);
@@ -4942,6 +4977,9 @@ update_window_buttons (GtkWindow *window)
 {
   GtkWindowPrivate *priv = window->priv;
 
+  if (priv->custom_title)
+    return;
+
   if (priv->decorated &&
       priv->client_decorated &&
       priv->title_box != NULL)
@@ -5122,23 +5160,26 @@ create_decoration (GtkWidget *widget)
   if (!priv->client_decorated)
     return;
 
-  priv->title_box = gtk_header_bar_new ();
-  g_object_set (priv->title_box,
-                "spacing", 0,
-                "hpadding", 0,
-                "vpadding", 0,
-                NULL);
-  context = gtk_widget_get_style_context (priv->title_box);
-  gtk_style_context_add_class (context, "titlebar");
-  gtk_widget_set_parent (priv->title_box, GTK_WIDGET (window));
+  if (priv->title_box == NULL)
+    {
+      priv->title_box = gtk_header_bar_new ();
+      g_object_set (priv->title_box,
+                    "spacing", 0,
+                    "hpadding", 0,
+                    "vpadding", 0,
+                    NULL);
+      context = gtk_widget_get_style_context (priv->title_box);
+      gtk_style_context_add_class (context, "titlebar");
+      gtk_widget_set_parent (priv->title_box, GTK_WIDGET (window));
 
-  if (priv->title)
-    title = priv->title;
-  else
-    title = get_default_title ();
-  gtk_header_bar_set_title (GTK_HEADER_BAR (priv->title_box), title);
+      if (priv->title)
+        title = priv->title;
+      else
+        title = get_default_title ();
+      gtk_header_bar_set_title (GTK_HEADER_BAR (priv->title_box), title);
 
-  gtk_widget_show_all (priv->title_box);
+      gtk_widget_show_all (priv->title_box);
+    }
 
   update_window_buttons (window);
 }
@@ -5630,7 +5671,8 @@ gtk_window_realize (GtkWidget *widget)
 			    GDK_FOCUS_CHANGE_MASK |
 			    GDK_STRUCTURE_MASK);
 
-  if (priv->decorated && priv->client_decorated)
+  if (priv->decorated &&
+      (priv->client_decorated || priv->custom_title))
     attributes.event_mask |= GDK_POINTER_MOTION_MASK;
 
   attributes.type_hint = priv->type_hint;
@@ -5663,6 +5705,8 @@ gtk_window_realize (GtkWidget *widget)
   
   if (!priv->decorated || priv->client_decorated)
     gdk_window_set_decorations (gdk_window, 0);
+  else if (priv->custom_title)
+    gdk_window_set_decorations (gdk_window, GDK_DECOR_BORDER);
   
   if (!priv->deletable)
     gdk_window_set_functions (gdk_window, GDK_FUNC_ALL | GDK_FUNC_CLOSE);
@@ -6028,10 +6072,12 @@ _gtk_window_set_allocation (GtkWindow           *window,
 
   gtk_widget_set_allocation (widget, allocation);
 
-  if (priv->title_box != NULL)
+  if (priv->title_box != NULL && priv->client_decorated)
     get_decoration_borders (widget, &title_border, &window_border, NULL);
-  else
+  else if (priv->client_decorated)
     get_decoration_borders (widget, NULL, &window_border, NULL);
+  else if (priv->title_box != NULL)
+    get_decoration_borders (widget, &title_border, NULL, NULL);
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
 
@@ -6043,7 +6089,6 @@ _gtk_window_set_allocation (GtkWindow           *window,
   child_allocation.height = MAX (1, child_allocation.height - border_width * 2);
 
   if (priv->title_box != NULL &&
-      priv->client_decorated &&
       priv->decorated &&
       !priv->fullscreen)
     {
@@ -6066,8 +6111,7 @@ _gtk_window_set_allocation (GtkWindow           *window,
       gtk_widget_size_allocate (priv->title_box, &title_allocation);
     }
 
-  if (priv->client_decorated &&
-      priv->decorated &&
+  if (priv->decorated &&
       !priv->fullscreen)
     {
       child_allocation.x += window_border.left;
@@ -6650,10 +6694,13 @@ get_region_type (GtkWindow *window, gint x, gint y)
   if (priv->title_box)
     title_height = gtk_widget_get_allocated_height (priv->title_box);
 
-  get_decoration_borders (widget, NULL, &window_border, NULL);
-  gtk_widget_style_get (widget,
-                        "decoration-resize-handle", &resize_handle,
-                        NULL);
+  if (priv->client_decorated)
+    {
+      get_decoration_borders (widget, NULL, &window_border, NULL);
+      gtk_widget_style_get (widget,
+                            "decoration-resize-handle", &resize_handle,
+                            NULL);
+    }
 
   if (x < window_border.left)
     {
@@ -6708,10 +6755,11 @@ get_active_region_type (GtkWindow *window, gint x, gint y)
   GtkWindowRegion region;
   gboolean resize_h, resize_v;
   gint state;
-  GtkBorder window_border;
+  GtkBorder window_border = { 0 };
 
   region = get_region_type (window, x, y);
-  get_decoration_borders (widget, NULL, &window_border, NULL);
+  if (priv->client_decorated)
+    get_decoration_borders (widget, NULL, &window_border, NULL);
 
   state = gdk_window_get_state (gtk_widget_get_window (widget));
   if (!priv->resizable || (state & GDK_WINDOW_STATE_MAXIMIZED))
@@ -6822,8 +6870,7 @@ gtk_window_button_press_event (GtkWidget *widget,
 
       return TRUE;
     }
-  else if (priv->client_decorated &&
-           priv->decorated &&
+  else if (priv->decorated &&
            priv->title_box != NULL &&
            !priv->fullscreen)
     {
@@ -7093,8 +7140,8 @@ gtk_window_forall (GtkContainer *container,
   if (child != NULL)
     (* callback) (child, callback_data);
 
-  if (include_internals &&
-      priv->title_box != NULL)
+  if (priv->title_box != NULL &&
+      (priv->custom_title || include_internals))
     (* callback) (priv->title_box, callback_data);
 }
 
@@ -7387,8 +7434,7 @@ gtk_window_get_preferred_width (GtkWidget *widget,
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
 
-  if (priv->client_decorated &&
-      priv->decorated &&
+  if (priv->decorated &&
       !priv->fullscreen)
     {
       if (priv->title_box != NULL)
@@ -7397,7 +7443,7 @@ gtk_window_get_preferred_width (GtkWidget *widget,
                                           &title_min, &title_nat);
           get_decoration_borders (widget, &title_border, &window_border, NULL);
         }
-      else
+      else if (priv->client_decorated)
         {
           get_decoration_borders (widget, NULL, &window_border, NULL);
         }
@@ -7445,8 +7491,7 @@ gtk_window_get_preferred_width_for_height (GtkWidget *widget,
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
 
-  if (priv->client_decorated &&
-      priv->decorated &&
+  if (priv->decorated &&
       !priv->fullscreen)
     {
       if (priv->title_box != NULL)
@@ -7456,7 +7501,7 @@ gtk_window_get_preferred_width_for_height (GtkWidget *widget,
                                                      &title_min, &title_nat);
           get_decoration_borders (widget, &title_border, &window_border, NULL);
         }
-      else
+      else if (priv->client_decorated)
         {
           get_decoration_borders (widget, NULL, &window_border, NULL);
         }
@@ -7507,8 +7552,7 @@ gtk_window_get_preferred_height (GtkWidget *widget,
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
 
-  if (priv->client_decorated &&
-      priv->decorated &&
+  if (priv->decorated &&
       !priv->fullscreen)
     {
       if (priv->title_box != NULL)
@@ -7518,7 +7562,7 @@ gtk_window_get_preferred_height (GtkWidget *widget,
                                            &title_height);
           get_decoration_borders (widget, &title_border, &window_border, NULL);
         }
-      else
+      else if (priv->client_decorated)
         {
           get_decoration_borders (widget, NULL, &window_border, NULL);
         }
@@ -7567,8 +7611,7 @@ gtk_window_get_preferred_height_for_width (GtkWidget *widget,
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
 
-  if (priv->client_decorated &&
-      priv->decorated &&
+  if (priv->decorated &&
       !priv->fullscreen)
     {
       if (priv->title_box != NULL)
@@ -7579,7 +7622,7 @@ gtk_window_get_preferred_height_for_width (GtkWidget *widget,
                                                      &title_height);
           get_decoration_borders (widget, &title_border, &window_border, NULL);
         }
-      else
+      else if (priv->client_decorated)
         {
           get_decoration_borders (widget, NULL, &window_border, NULL);
         }
