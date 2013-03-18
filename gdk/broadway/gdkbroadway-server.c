@@ -550,7 +550,7 @@ create_random_shm (char *name)
 static const cairo_user_data_key_t gdk_broadway_shm_cairo_key;
 
 typedef struct {
-  char name[34];
+  char name[36];
   void *data;
   gsize data_size;
 } BroadwayShmSurfaceData;
@@ -610,7 +610,7 @@ _gdk_broadway_server_window_update (GdkBroadwayServer *server,
   g_assert (data != NULL);
 
   msg.id = id;
-  memcpy (msg.name, data->name, 34);
+  memcpy (msg.name, data->name, 36);
   msg.width = cairo_image_surface_get_width (surface);
   msg.height = cairo_image_surface_get_height (surface);
 

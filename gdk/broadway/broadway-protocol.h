@@ -160,7 +160,7 @@ typedef struct {
 typedef struct {
   BroadwayRequestBase base;
   guint32 id;
-  char name[34];
+  char name[36];
   guint32 width;
   guint32 height;
 } BroadwayRequestUpdate;
