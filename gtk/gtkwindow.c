@@ -8850,6 +8850,8 @@ gtk_window_draw (GtkWidget *widget,
 
   context = gtk_widget_get_style_context (widget);
 
+  gtk_widget_get_allocation (widget, &allocation);
+
   if (priv->title_box != NULL)
     get_decoration_borders (widget, &title_border, &inner_border, &outer_border);
   else
@@ -8859,7 +8861,6 @@ gtk_window_draw (GtkWidget *widget,
       gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
     {
       gtk_style_context_save (context);
-
       gtk_style_context_add_class (context, GTK_STYLE_CLASS_BACKGROUND);
 
       if (priv->client_decorated &&
@@ -8867,7 +8868,6 @@ gtk_window_draw (GtkWidget *widget,
           !priv->fullscreen &&
           !(gdk_window_get_state (gtk_widget_get_window (widget)) & GDK_WINDOW_STATE_MAXIMIZED))
         {
-          gtk_widget_get_allocation (widget, &allocation);
           gtk_style_context_add_class (context, "window-border");
           gtk_render_background (context, cr,
                                  inner_border.left + outer_border.left,
@@ -8890,7 +8890,6 @@ gtk_window_draw (GtkWidget *widget,
         }
       else
         {
-          gtk_widget_get_allocation (widget, &allocation);
           gtk_render_background (context, cr,
                                  0, 0, allocation.width, allocation.height);
         }
