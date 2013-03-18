@@ -51,6 +51,7 @@ struct _GtkHeaderBarPrivate
   gchar *title;
   GtkWidget *label;
   GtkWidget *custom_title;
+  GdkWindow *event_window;
   gint spacing;
   gint hpadding;
   gint vpadding;
@@ -462,6 +463,13 @@ gtk_header_bar_size_allocate (GtkWidget     *widget,
   GtkBorder css_borders;
 
   gtk_widget_set_allocation (widget, allocation);
+
+  if (gtk_widget_get_realized (widget))
+    gdk_window_move_resize (priv->event_window,
+                            allocation->x,
+                            allocation->y,
+                            allocation->width,
+                            allocation->height);
 
   direction = gtk_widget_get_direction (widget);
   nvis_children = count_visible_children (bar);
@@ -1020,6 +1028,112 @@ gtk_header_bar_get_path_for_child (GtkContainer *container,
   return path;
 }
 
+static gboolean
+gtk_header_bar_button_press (GtkWidget      *widget,
+                             GdkEventButton *event)
+{
+  GtkWidget *window;
+  gboolean window_drag = FALSE;
+
+  if (event->type != GDK_BUTTON_PRESS)
+    return FALSE;
+
+  window = gtk_widget_get_toplevel (widget);
+
+  if (window)
+    {
+      gtk_widget_style_get (widget,
+                            "window-dragging", &window_drag,
+                            NULL);
+
+      if (window_drag)
+        {
+          gtk_window_begin_move_drag (GTK_WINDOW (window),
+                                      event->button,
+                                      event->x_root,
+                                      event->y_root,
+                                      event->time);
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+static void
+gtk_header_bar_realize (GtkWidget *widget)
+{
+  GtkHeaderBar *bar = GTK_HEADER_BAR (widget);
+  GtkHeaderBarPrivate *priv = bar->priv;
+  GtkAllocation allocation;
+  GdkWindow *window;
+  GdkWindowAttr attributes;
+  gint attributes_mask;
+
+  gtk_widget_get_allocation (widget, &allocation);
+  gtk_widget_set_realized (widget, TRUE);
+
+  attributes.window_type = GDK_WINDOW_CHILD;
+  attributes.x = allocation.x;
+  attributes.y = allocation.y;
+  attributes.width = allocation.width;
+  attributes.height = allocation.height;
+  attributes.wclass = GDK_INPUT_ONLY;
+  attributes.event_mask = gtk_widget_get_events (widget);
+  attributes.event_mask |= (GDK_BUTTON_PRESS_MASK |
+                            GDK_BUTTON_RELEASE_MASK |
+                            GDK_TOUCH_MASK);
+  attributes_mask = GDK_WA_X | GDK_WA_Y;
+
+  window = gtk_widget_get_parent_window (widget);
+  gtk_widget_set_window (widget, window);
+  g_object_ref (window);
+
+  priv->event_window = gdk_window_new (window,
+                                       &attributes, attributes_mask);
+  gtk_widget_register_window (widget, priv->event_window);
+}
+
+static void
+gtk_header_bar_unrealize (GtkWidget *widget)
+{
+  GtkHeaderBar *bar = GTK_HEADER_BAR (widget);
+  GtkHeaderBarPrivate *priv = bar->priv;
+
+  if (priv->event_window)
+    {
+      gtk_widget_unregister_window (widget, priv->event_window);
+      gdk_window_destroy (priv->event_window);
+      priv->event_window = NULL;
+    }
+
+  GTK_WIDGET_CLASS (gtk_header_bar_parent_class)->unrealize (widget);
+}
+
+static void
+gtk_header_bar_map (GtkWidget *widget)
+{
+  GtkHeaderBar *bar = GTK_HEADER_BAR (widget);
+  GtkHeaderBarPrivate *priv = bar->priv;
+
+  GTK_WIDGET_CLASS (gtk_header_bar_parent_class)->map (widget);
+
+  if (priv->event_window)
+    gdk_window_show_unraised (priv->event_window);
+}
+
+static void
+gtk_header_bar_unmap (GtkWidget *widget)
+{
+  GtkHeaderBar *bar = GTK_HEADER_BAR (widget);
+  GtkHeaderBarPrivate *priv = bar->priv;
+
+  if (priv->event_window)
+    gdk_window_hide (priv->event_window);
+
+  GTK_WIDGET_CLASS (gtk_header_bar_parent_class)->unmap (widget);
+}
+
 static gint
 gtk_header_bar_draw (GtkWidget *widget,
                      cairo_t   *cr)
@@ -1056,6 +1170,11 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
   widget_class->get_preferred_height = gtk_header_bar_get_preferred_height;
   widget_class->get_preferred_height_for_width = gtk_header_bar_get_preferred_height_for_width;
   widget_class->get_preferred_width_for_height = gtk_header_bar_get_preferred_width_for_height;
+  widget_class->button_press_event = gtk_header_bar_button_press;
+  widget_class->realize = gtk_header_bar_realize;
+  widget_class->unrealize = gtk_header_bar_unrealize;
+  widget_class->map = gtk_header_bar_map;
+  widget_class->unmap = gtk_header_bar_unmap;
   widget_class->draw = gtk_header_bar_draw;
 
   container_class->add = gtk_header_bar_add;
