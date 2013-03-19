@@ -4997,6 +4997,7 @@ update_window_buttons (GtkWindow *window)
 
   if (priv->decorated &&
       priv->client_decorated &&
+      !priv->fullscreen &&
       priv->title_box != NULL)
     {
       gchar *layout_desc;
@@ -6260,8 +6261,6 @@ gtk_window_state_event (GtkWidget           *widget,
     {
       priv->fullscreen =
         (event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN) ? 1 : 0;
-      if (priv->title_box)
-        gtk_widget_set_visible (priv->title_box, !priv->fullscreen);
     }
 
   if (event->changed_mask & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED))
