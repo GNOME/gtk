@@ -590,8 +590,11 @@ void                  gtk_widget_set_name               (GtkWidget    *widget,
 							 const gchar  *name);
 const gchar *         gtk_widget_get_name               (GtkWidget    *widget);
 
+GDK_DEPRECATED_IN_3_0_FOR(gtk_widget_set_state_flags)
 void                  gtk_widget_set_state              (GtkWidget    *widget,
 							 GtkStateType  state);
+
+GDK_DEPRECATED_IN_3_0_FOR(gtk_widget_get_state_flags)
 GtkStateType          gtk_widget_get_state              (GtkWidget    *widget);
 
 void                  gtk_widget_set_state_flags        (GtkWidget     *widget,
@@ -665,6 +668,7 @@ void                  gtk_widget_get_allocation         (GtkWidget     *widget,
 void                  gtk_widget_set_allocation         (GtkWidget     *widget,
                                                          const GtkAllocation *allocation);
 
+GDK_DEPRECATED_IN_3_0_FOR(gtk_widget_get_preferred_width and gtk_widget_get_preferred_height)
 void                  gtk_widget_get_requisition        (GtkWidget     *widget,
                                                          GtkRequisition *requisition);
 
