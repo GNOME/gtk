@@ -136,7 +136,10 @@ struct _GdkWindowImplWayland
   guint32 grab_time;
 
   gboolean fullscreen;
-  int saved_width, saved_height; /* before going fullscreen */
+  struct
+    {
+      int width, height;
+    } saved_fullscreen, saved_maximized;
 };
 
 struct _GdkWindowImplWaylandClass
@@ -1307,8 +1310,8 @@ gdk_wayland_window_maximize (GdkWindow *window)
     {
       if (impl->surface)
         {
-          impl->saved_width = gdk_window_get_width (window);
-          impl->saved_height = gdk_window_get_height (window);
+          impl->saved_maximized.width = gdk_window_get_width (window);
+          impl->saved_maximized.height = gdk_window_get_height (window);
 
           if (impl->shell_surface)
             wl_shell_surface_set_maximized (impl->shell_surface, NULL);
@@ -1342,6 +1345,11 @@ gdk_wayland_window_unmaximize (GdkWindow *window)
       gdk_synthesize_window_state (window,
                                    GDK_WINDOW_STATE_MAXIMIZED,
                                    0);
+
+      gdk_wayland_window_configure (window,
+                                    impl->saved_maximized.width,
+                                    impl->saved_maximized.height,
+                                    0);
     }
 }
 
@@ -1356,8 +1364,8 @@ gdk_wayland_window_fullscreen (GdkWindow *window)
   if (impl->fullscreen)
     return;
 
-  impl->saved_width = gdk_window_get_width (window);
-  impl->saved_height = gdk_window_get_height (window);
+  impl->saved_fullscreen.width = gdk_window_get_width (window);
+  impl->saved_fullscreen.height = gdk_window_get_height (window);
   wl_shell_surface_set_fullscreen (impl->shell_surface,
                                    WL_SHELL_SURFACE_FULLSCREEN_METHOD_DEFAULT,
                                    0,
@@ -1381,9 +1389,10 @@ gdk_wayland_window_unfullscreen (GdkWindow *window)
 
   wl_shell_surface_set_toplevel (impl->shell_surface);
   gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FULLSCREEN, 0);
-  gdk_wayland_window_configure (window, impl->saved_width, impl->saved_height,
+  gdk_wayland_window_configure (window,
+                                impl->saved_fullscreen.width,
+                                impl->saved_fullscreen.height,
                                 0);
-
 
   impl->fullscreen = FALSE;
 }
