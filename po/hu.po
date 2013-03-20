@@ -6,22 +6,21 @@
 # Andras Timar <timar at gnome dot hu>, 2002.
 # Laszlo Dvornik <dvornik at gnome dot hu>, 2004, 2005.
 # Gabor Kelemen <kelemeng at gnome dot hu>, 2004, 2005, 2007, 2008, 2009, 2010, 2011, 2012, 2013.
-# Balázs Úr <urbalazs at gmail dot com>, 2012, 2013.
+# Balázs Úr <urbalazs at gmail dot com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
-"%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-03-18 11:46+0000\n"
-"PO-Revision-Date: 2013-03-20 22:14+0100\n"
-"Last-Translator: Balázs Úr <urbalazs at gmail dot com>\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-03-21 00:31+0100\n"
+"PO-Revision-Date: 2013-03-21 00:30+0100\n"
+"Last-Translator: Gabor Kelemen <kelemeng at gnome dot hu>\n"
 "Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.2\n"
+"X-Generator: Lokalize 1.4\n"
 
 #: ../gdk/gdk.c:157
 #, c-format
@@ -477,16 +476,14 @@ msgstr "Kattintás"
 #: ../gtk/a11y/gtkbuttonaccessible.c:350
 msgctxt "Action description"
 msgid "Clicks the button"
-msgstr "Kattintja a gombot"
+msgstr "Kattintás a gombra"
 
 #: ../gtk/a11y/gtkcellaccessible.c:258
 msgctxt "Action name"
 msgid "Expand or contract"
-msgstr "Kinyitás vagy összecsukás"
+msgstr "Kibontás vagy összehúzás"
 
 #: ../gtk/a11y/gtkcellaccessible.c:260
-#| msgctxt "Stock label"
-#| msgid "_Edit"
 msgctxt "Action name"
 msgid "Edit"
 msgstr "Szerkesztés"
@@ -502,7 +499,7 @@ msgstr "Aktiválás"
 #: ../gtk/a11y/gtkcellaccessible.c:275
 msgctxt "Action description"
 msgid "Expands or contracts the row in the tree view containing this cell"
-msgstr "Kinyitja vagy összecsukja a sort a cellát tartalmazó fa nézetben"
+msgstr "Kibontja vagy összehúzza a fanézetben a cellát tartalmazó sort"
 
 #: ../gtk/a11y/gtkcellaccessible.c:277
 msgctxt "Action description"
@@ -515,34 +512,29 @@ msgid "Activates the cell"
 msgstr "Aktiválja a cellát"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:71
-#| msgid "_Select"
 msgctxt "Action name"
 msgid "Select"
 msgstr "Kiválasztás"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:73
-#| msgid "_Customize"
 msgctxt "Action name"
 msgid "Customize"
-msgstr "Testreszabás"
+msgstr "Személyre szabás"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:84
-#| msgid "Select a Color"
 msgctxt "Action description"
 msgid "Selects the color"
 msgstr "Kiválasztja a színt"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:85
-#| msgid "Brightness of the color."
 msgctxt "Action description"
 msgid "Activates the color"
 msgstr "Aktiválja a színt"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:86
-#| msgid "Custom color %d: %s"
 msgctxt "Action description"
 msgid "Customizes the color"
-msgstr "Testre szabja a színt"
+msgstr "Személyre szabja a színt"
 
 #: ../gtk/a11y/gtkcomboboxaccessible.c:313
 msgctxt "Action name"
@@ -550,10 +542,9 @@ msgid "Press"
 msgstr "Megnyomás"
 
 #: ../gtk/a11y/gtkcomboboxaccessible.c:322
-#| msgid "Decreases the volume"
 msgctxt "Action description"
 msgid "Presses the combobox"
-msgstr "Megnyomja a legördülő menüt"
+msgstr "Megnyomja a kombinált listamezőt"
 
 #: ../gtk/a11y/gtkentryaccessible.c:1566
 msgctxt "Action description"
@@ -563,17 +554,17 @@ msgstr "Aktiválja a bejegyzést"
 #: ../gtk/a11y/gtkexpanderaccessible.c:290
 msgctxt "Action description"
 msgid "Activates the expander"
-msgstr "Aktiválja a kinyitót"
+msgstr "Aktiválja a kiterjesztőt"
 
 #: ../gtk/a11y/gtkmenuitemaccessible.c:445
 msgctxt "Action description"
 msgid "Clicks the menuitem"
-msgstr "Kattintja a menüelemet"
+msgstr "A menüelemre kattint"
 
 #: ../gtk/a11y/gtkscalebuttonaccessible.c:140
 msgctxt "Action description"
 msgid "Pops up the slider"
-msgstr "Felugrasztja a csúszkát"
+msgstr "Megjeleníti a csúszkát"
 
 #: ../gtk/a11y/gtkscalebuttonaccessible.c:142
 msgctxt "Action description"
@@ -583,7 +574,7 @@ msgstr "Eltünteti a csúszkát"
 #: ../gtk/a11y/gtkscalebuttonaccessible.c:170
 msgctxt "Action name"
 msgid "Popup"
-msgstr "Felugrás"
+msgstr "Megjelenítés"
 
 #: ../gtk/a11y/gtkscalebuttonaccessible.c:172
 msgctxt "Action name"
