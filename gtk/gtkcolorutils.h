@@ -35,11 +35,14 @@
 #endif
 
 #include <glib.h>
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 
+GDK_AVAILABLE_IN_ALL
 void gtk_hsv_to_rgb (gdouble  h, gdouble  s, gdouble  v,
                      gdouble *r, gdouble *g, gdouble *b);
+GDK_AVAILABLE_IN_ALL
 void gtk_rgb_to_hsv (gdouble  r, gdouble  g, gdouble  b,
                      gdouble *h, gdouble *s, gdouble *v);
 

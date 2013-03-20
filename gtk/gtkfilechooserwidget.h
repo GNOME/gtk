@@ -57,7 +57,9 @@ struct _GtkFileChooserWidgetClass
   void (*_gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType      gtk_file_chooser_widget_get_type         (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_file_chooser_widget_new              (GtkFileChooserAction  action);
 
 G_END_DECLS

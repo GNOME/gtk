@@ -69,17 +69,24 @@ struct _GtkToggleActionClass
   void (*_gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType            gtk_toggle_action_get_type          (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkToggleAction *gtk_toggle_action_new               (const gchar     *name,
                                                       const gchar     *label,
                                                       const gchar     *tooltip,
                                                       const gchar     *stock_id);
+GDK_AVAILABLE_IN_ALL
 void             gtk_toggle_action_toggled           (GtkToggleAction *action);
+GDK_AVAILABLE_IN_ALL
 void             gtk_toggle_action_set_active        (GtkToggleAction *action,
                                                       gboolean         is_active);
+GDK_AVAILABLE_IN_ALL
 gboolean         gtk_toggle_action_get_active        (GtkToggleAction *action);
+GDK_AVAILABLE_IN_ALL
 void             gtk_toggle_action_set_draw_as_radio (GtkToggleAction *action,
                                                       gboolean         draw_as_radio);
+GDK_AVAILABLE_IN_ALL
 gboolean         gtk_toggle_action_get_draw_as_radio (GtkToggleAction *action);
 
 /* private */

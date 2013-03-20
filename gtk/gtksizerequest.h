@@ -47,6 +47,7 @@ struct _GtkRequestedSize
 
 
 /* General convenience function to aid in allocating natural sizes */
+GDK_AVAILABLE_IN_ALL
 gint                gtk_distribute_natural_allocation               (gint              extra_space,
                                                                      guint             n_requested_sizes,
                                                                      GtkRequestedSize *sizes);

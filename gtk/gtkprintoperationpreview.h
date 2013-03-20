@@ -66,11 +66,15 @@ struct _GtkPrintOperationPreviewIface
   void (*_gtk_reserved8) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType   gtk_print_operation_preview_get_type       (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 void     gtk_print_operation_preview_render_page (GtkPrintOperationPreview *preview,
 						  gint                      page_nr);
+GDK_AVAILABLE_IN_ALL
 void     gtk_print_operation_preview_end_preview (GtkPrintOperationPreview *preview);
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_print_operation_preview_is_selected (GtkPrintOperationPreview *preview,
 						  gint                      page_nr);
 

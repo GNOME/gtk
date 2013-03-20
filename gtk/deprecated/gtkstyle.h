@@ -366,6 +366,7 @@ struct _GtkStyleClass
   void (*_gtk_reserved11) (void);
 };
 
+GDK_DEPRECATED_IN_3_0
 GType     gtk_style_get_type                 (void) G_GNUC_CONST;
 GDK_DEPRECATED_IN_3_0_FOR(GtkStyleContext)
 GtkStyle* gtk_style_new                      (void);

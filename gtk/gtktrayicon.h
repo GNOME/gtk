@@ -51,6 +51,7 @@ struct _GtkTrayIconClass
   void (*_gtk_reserved4);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType          gtk_tray_icon_get_type         (void) G_GNUC_CONST;
 
 GtkTrayIcon   *_gtk_tray_icon_new_for_screen  (GdkScreen   *screen,

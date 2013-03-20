@@ -66,12 +66,15 @@ struct _GtkAspectFrameClass
 };
 
 
+GDK_AVAILABLE_IN_ALL
 GType      gtk_aspect_frame_get_type   (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_aspect_frame_new        (const gchar     *label,
 					gfloat           xalign,
 					gfloat           yalign,
 					gfloat           ratio,
 					gboolean         obey_child);
+GDK_AVAILABLE_IN_ALL
 void       gtk_aspect_frame_set        (GtkAspectFrame  *aspect_frame,
 					gfloat           xalign,
 					gfloat           yalign,

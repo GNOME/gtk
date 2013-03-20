@@ -202,14 +202,20 @@ typedef void     (*GtkTreeViewSearchPositionFunc) (GtkTreeView  *tree_view,
 
 
 /* Creators */
+GDK_AVAILABLE_IN_ALL
 GType                  gtk_tree_view_get_type                      (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkWidget             *gtk_tree_view_new                           (void);
+GDK_AVAILABLE_IN_ALL
 GtkWidget             *gtk_tree_view_new_with_model                (GtkTreeModel              *model);
 
 /* Accessors */
+GDK_AVAILABLE_IN_ALL
 GtkTreeModel          *gtk_tree_view_get_model                     (GtkTreeView               *tree_view);
+GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_set_model                     (GtkTreeView               *tree_view,
 								    GtkTreeModel              *model);
+GDK_AVAILABLE_IN_ALL
 GtkTreeSelection      *gtk_tree_view_get_selection                 (GtkTreeView               *tree_view);
 
 GDK_DEPRECATED_IN_3_0_FOR(gtk_scrollable_get_hadjustment)
@@ -224,15 +230,22 @@ void                   gtk_tree_view_set_vadjustment               (GtkTreeView 
 								    GtkAdjustment             *adjustment);
 
 
+GDK_AVAILABLE_IN_ALL
 gboolean               gtk_tree_view_get_headers_visible           (GtkTreeView               *tree_view);
+GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_set_headers_visible           (GtkTreeView               *tree_view,
 								    gboolean                   headers_visible);
+GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_columns_autosize              (GtkTreeView               *tree_view);
+GDK_AVAILABLE_IN_ALL
 gboolean               gtk_tree_view_get_headers_clickable         (GtkTreeView *tree_view);
+GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_set_headers_clickable         (GtkTreeView               *tree_view,
 								    gboolean                   setting);
+GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_set_rules_hint                (GtkTreeView               *tree_view,
 								    gboolean                   setting);
+GDK_AVAILABLE_IN_ALL
 gboolean               gtk_tree_view_get_rules_hint                (GtkTreeView               *tree_view);
 GDK_AVAILABLE_IN_3_8
 gboolean               gtk_tree_view_get_activate_on_single_click  (GtkTreeView               *tree_view);
@@ -241,18 +254,23 @@ void                   gtk_tree_view_set_activate_on_single_click  (GtkTreeView 
 								    gboolean                   single);
 
 /* Column funtions */
+GDK_AVAILABLE_IN_ALL
 gint                   gtk_tree_view_append_column                 (GtkTreeView               *tree_view,
 								    GtkTreeViewColumn         *column);
+GDK_AVAILABLE_IN_ALL
 gint                   gtk_tree_view_remove_column                 (GtkTreeView               *tree_view,
 								    GtkTreeViewColumn         *column);
+GDK_AVAILABLE_IN_ALL
 gint                   gtk_tree_view_insert_column                 (GtkTreeView               *tree_view,
 								    GtkTreeViewColumn         *column,
 								    gint                       position);
+GDK_AVAILABLE_IN_ALL
 gint                   gtk_tree_view_insert_column_with_attributes (GtkTreeView               *tree_view,
 								    gint                       position,
 								    const gchar               *title,
 								    GtkCellRenderer           *cell,
 								    ...) G_GNUC_NULL_TERMINATED;
+GDK_AVAILABLE_IN_ALL
 gint                   gtk_tree_view_insert_column_with_data_func  (GtkTreeView               *tree_view,
 								    gint                       position,
 								    const gchar               *title,
@@ -263,66 +281,89 @@ gint                   gtk_tree_view_insert_column_with_data_func  (GtkTreeView 
 
 GDK_AVAILABLE_IN_3_4
 guint                  gtk_tree_view_get_n_columns                 (GtkTreeView               *tree_view);
+GDK_AVAILABLE_IN_ALL
 GtkTreeViewColumn     *gtk_tree_view_get_column                    (GtkTreeView               *tree_view,
 								    gint                       n);
+GDK_AVAILABLE_IN_ALL
 GList                 *gtk_tree_view_get_columns                   (GtkTreeView               *tree_view);
+GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_move_column_after             (GtkTreeView               *tree_view,
 								    GtkTreeViewColumn         *column,
 								    GtkTreeViewColumn         *base_column);
+GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_set_expander_column           (GtkTreeView               *tree_view,
 								    GtkTreeViewColumn         *column);
+GDK_AVAILABLE_IN_ALL
 GtkTreeViewColumn     *gtk_tree_view_get_expander_column           (GtkTreeView               *tree_view);
+GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_set_column_drag_function      (GtkTreeView               *tree_view,
 								    GtkTreeViewColumnDropFunc  func,
 								    gpointer                   user_data,
 								    GDestroyNotify             destroy);
 
 /* Actions */
+GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_scroll_to_point               (GtkTreeView               *tree_view,
 								    gint                       tree_x,
 								    gint                       tree_y);
+GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_scroll_to_cell                (GtkTreeView               *tree_view,
 								    GtkTreePath               *path,
 								    GtkTreeViewColumn         *column,
 								    gboolean                   use_align,
 								    gfloat                     row_align,
 								    gfloat                     col_align);
+GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_row_activated                 (GtkTreeView               *tree_view,
 								    GtkTreePath               *path,
 								    GtkTreeViewColumn         *column);
+GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_expand_all                    (GtkTreeView               *tree_view);
+GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_collapse_all                  (GtkTreeView               *tree_view);
+GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_expand_to_path                (GtkTreeView               *tree_view,
 								    GtkTreePath               *path);
+GDK_AVAILABLE_IN_ALL
 gboolean               gtk_tree_view_expand_row                    (GtkTreeView               *tree_view,
 								    GtkTreePath               *path,
 								    gboolean                   open_all);
+GDK_AVAILABLE_IN_ALL
 gboolean               gtk_tree_view_collapse_row                  (GtkTreeView               *tree_view,
 								    GtkTreePath               *path);
+GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_map_expanded_rows             (GtkTreeView               *tree_view,
 								    GtkTreeViewMappingFunc     func,
 								    gpointer                   data);
+GDK_AVAILABLE_IN_ALL
 gboolean               gtk_tree_view_row_expanded                  (GtkTreeView               *tree_view,
 								    GtkTreePath               *path);
+GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_set_reorderable               (GtkTreeView               *tree_view,
 								    gboolean                   reorderable);
+GDK_AVAILABLE_IN_ALL
 gboolean               gtk_tree_view_get_reorderable               (GtkTreeView               *tree_view);
+GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_set_cursor                    (GtkTreeView               *tree_view,
 								    GtkTreePath               *path,
 								    GtkTreeViewColumn         *focus_column,
 								    gboolean                   start_editing);
+GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_set_cursor_on_cell            (GtkTreeView               *tree_view,
 								    GtkTreePath               *path,
 								    GtkTreeViewColumn         *focus_column,
 								    GtkCellRenderer           *focus_cell,
 								    gboolean                   start_editing);
+GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_get_cursor                    (GtkTreeView               *tree_view,
 								    GtkTreePath              **path,
 								    GtkTreeViewColumn        **focus_column);
 
 
 /* Layout information */
+GDK_AVAILABLE_IN_ALL
 GdkWindow             *gtk_tree_view_get_bin_window                (GtkTreeView               *tree_view);
+GDK_AVAILABLE_IN_ALL
 gboolean               gtk_tree_view_get_path_at_pos               (GtkTreeView               *tree_view,
 								    gint                       x,
 								    gint                       y,
@@ -330,19 +371,24 @@ gboolean               gtk_tree_view_get_path_at_pos               (GtkTreeView 
 								    GtkTreeViewColumn        **column,
 								    gint                      *cell_x,
 								    gint                      *cell_y);
+GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_get_cell_area                 (GtkTreeView               *tree_view,
 								    GtkTreePath               *path,
 								    GtkTreeViewColumn         *column,
 								    GdkRectangle              *rect);
+GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_get_background_area           (GtkTreeView               *tree_view,
 								    GtkTreePath               *path,
 								    GtkTreeViewColumn         *column,
 								    GdkRectangle              *rect);
+GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_get_visible_rect              (GtkTreeView               *tree_view,
 								    GdkRectangle              *visible_rect);
+GDK_AVAILABLE_IN_ALL
 gboolean               gtk_tree_view_get_visible_range             (GtkTreeView               *tree_view,
 								    GtkTreePath              **start_path,
 								    GtkTreePath              **end_path);
+GDK_AVAILABLE_IN_ALL
 gboolean               gtk_tree_view_is_blank_at_pos               (GtkTreeView               *tree_view,
                                                                     gint                       x,
                                                                     gint                       y,
@@ -352,82 +398,106 @@ gboolean               gtk_tree_view_is_blank_at_pos               (GtkTreeView 
                                                                     gint                      *cell_y);
 
 /* Drag-and-Drop support */
+GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_enable_model_drag_source      (GtkTreeView               *tree_view,
 								    GdkModifierType            start_button_mask,
 								    const GtkTargetEntry      *targets,
 								    gint                       n_targets,
 								    GdkDragAction              actions);
+GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_enable_model_drag_dest        (GtkTreeView               *tree_view,
 								    const GtkTargetEntry      *targets,
 								    gint                       n_targets,
 								    GdkDragAction              actions);
+GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_unset_rows_drag_source        (GtkTreeView               *tree_view);
+GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_unset_rows_drag_dest          (GtkTreeView               *tree_view);
 
 
 /* These are useful to implement your own custom stuff. */
+GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_set_drag_dest_row             (GtkTreeView               *tree_view,
 								    GtkTreePath               *path,
 								    GtkTreeViewDropPosition    pos);
+GDK_AVAILABLE_IN_ALL
 void                   gtk_tree_view_get_drag_dest_row             (GtkTreeView               *tree_view,
 								    GtkTreePath              **path,
 								    GtkTreeViewDropPosition   *pos);
+GDK_AVAILABLE_IN_ALL
 gboolean               gtk_tree_view_get_dest_row_at_pos           (GtkTreeView               *tree_view,
 								    gint                       drag_x,
 								    gint                       drag_y,
 								    GtkTreePath              **path,
 								    GtkTreeViewDropPosition   *pos);
+GDK_AVAILABLE_IN_ALL
 cairo_surface_t       *gtk_tree_view_create_row_drag_icon          (GtkTreeView               *tree_view,
 								    GtkTreePath               *path);
 
 /* Interactive search */
+GDK_AVAILABLE_IN_ALL
 void                       gtk_tree_view_set_enable_search     (GtkTreeView                *tree_view,
 								gboolean                    enable_search);
+GDK_AVAILABLE_IN_ALL
 gboolean                   gtk_tree_view_get_enable_search     (GtkTreeView                *tree_view);
+GDK_AVAILABLE_IN_ALL
 gint                       gtk_tree_view_get_search_column     (GtkTreeView                *tree_view);
+GDK_AVAILABLE_IN_ALL
 void                       gtk_tree_view_set_search_column     (GtkTreeView                *tree_view,
 								gint                        column);
+GDK_AVAILABLE_IN_ALL
 GtkTreeViewSearchEqualFunc gtk_tree_view_get_search_equal_func (GtkTreeView                *tree_view);
+GDK_AVAILABLE_IN_ALL
 void                       gtk_tree_view_set_search_equal_func (GtkTreeView                *tree_view,
 								GtkTreeViewSearchEqualFunc  search_equal_func,
 								gpointer                    search_user_data,
 								GDestroyNotify              search_destroy);
 
+GDK_AVAILABLE_IN_ALL
 GtkEntry                     *gtk_tree_view_get_search_entry         (GtkTreeView                   *tree_view);
+GDK_AVAILABLE_IN_ALL
 void                          gtk_tree_view_set_search_entry         (GtkTreeView                   *tree_view,
 								      GtkEntry                      *entry);
+GDK_AVAILABLE_IN_ALL
 GtkTreeViewSearchPositionFunc gtk_tree_view_get_search_position_func (GtkTreeView                   *tree_view);
+GDK_AVAILABLE_IN_ALL
 void                          gtk_tree_view_set_search_position_func (GtkTreeView                   *tree_view,
 								      GtkTreeViewSearchPositionFunc  func,
 								      gpointer                       data,
 								      GDestroyNotify                 destroy);
 
 /* Convert between the different coordinate systems */
+GDK_AVAILABLE_IN_ALL
 void gtk_tree_view_convert_widget_to_tree_coords       (GtkTreeView *tree_view,
 							gint         wx,
 							gint         wy,
 							gint        *tx,
 							gint        *ty);
+GDK_AVAILABLE_IN_ALL
 void gtk_tree_view_convert_tree_to_widget_coords       (GtkTreeView *tree_view,
 							gint         tx,
 							gint         ty,
 							gint        *wx,
 							gint        *wy);
+GDK_AVAILABLE_IN_ALL
 void gtk_tree_view_convert_widget_to_bin_window_coords (GtkTreeView *tree_view,
 							gint         wx,
 							gint         wy,
 							gint        *bx,
 							gint        *by);
+GDK_AVAILABLE_IN_ALL
 void gtk_tree_view_convert_bin_window_to_widget_coords (GtkTreeView *tree_view,
 							gint         bx,
 							gint         by,
 							gint        *wx,
 							gint        *wy);
+GDK_AVAILABLE_IN_ALL
 void gtk_tree_view_convert_tree_to_bin_window_coords   (GtkTreeView *tree_view,
 							gint         tx,
 							gint         ty,
 							gint        *bx,
 							gint        *by);
+GDK_AVAILABLE_IN_ALL
 void gtk_tree_view_convert_bin_window_to_tree_coords   (GtkTreeView *tree_view,
 							gint         bx,
 							gint         by,
@@ -446,49 +516,71 @@ void gtk_tree_view_set_destroy_count_func (GtkTreeView             *tree_view,
 					   gpointer                 data,
 					   GDestroyNotify           destroy);
 
+GDK_AVAILABLE_IN_ALL
 void     gtk_tree_view_set_fixed_height_mode (GtkTreeView          *tree_view,
 					      gboolean              enable);
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_tree_view_get_fixed_height_mode (GtkTreeView          *tree_view);
+GDK_AVAILABLE_IN_ALL
 void     gtk_tree_view_set_hover_selection   (GtkTreeView          *tree_view,
 					      gboolean              hover);
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_tree_view_get_hover_selection   (GtkTreeView          *tree_view);
+GDK_AVAILABLE_IN_ALL
 void     gtk_tree_view_set_hover_expand      (GtkTreeView          *tree_view,
 					      gboolean              expand);
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_tree_view_get_hover_expand      (GtkTreeView          *tree_view);
+GDK_AVAILABLE_IN_ALL
 void     gtk_tree_view_set_rubber_banding    (GtkTreeView          *tree_view,
 					      gboolean              enable);
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_tree_view_get_rubber_banding    (GtkTreeView          *tree_view);
 
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_tree_view_is_rubber_banding_active (GtkTreeView       *tree_view);
 
+GDK_AVAILABLE_IN_ALL
 GtkTreeViewRowSeparatorFunc gtk_tree_view_get_row_separator_func (GtkTreeView               *tree_view);
+GDK_AVAILABLE_IN_ALL
 void                        gtk_tree_view_set_row_separator_func (GtkTreeView                *tree_view,
 								  GtkTreeViewRowSeparatorFunc func,
 								  gpointer                    data,
 								  GDestroyNotify              destroy);
 
+GDK_AVAILABLE_IN_ALL
 GtkTreeViewGridLines        gtk_tree_view_get_grid_lines         (GtkTreeView                *tree_view);
+GDK_AVAILABLE_IN_ALL
 void                        gtk_tree_view_set_grid_lines         (GtkTreeView                *tree_view,
 								  GtkTreeViewGridLines        grid_lines);
+GDK_AVAILABLE_IN_ALL
 gboolean                    gtk_tree_view_get_enable_tree_lines  (GtkTreeView                *tree_view);
+GDK_AVAILABLE_IN_ALL
 void                        gtk_tree_view_set_enable_tree_lines  (GtkTreeView                *tree_view,
 								  gboolean                    enabled);
+GDK_AVAILABLE_IN_ALL
 void                        gtk_tree_view_set_show_expanders     (GtkTreeView                *tree_view,
 								  gboolean                    enabled);
+GDK_AVAILABLE_IN_ALL
 gboolean                    gtk_tree_view_get_show_expanders     (GtkTreeView                *tree_view);
+GDK_AVAILABLE_IN_ALL
 void                        gtk_tree_view_set_level_indentation  (GtkTreeView                *tree_view,
 								  gint                        indentation);
+GDK_AVAILABLE_IN_ALL
 gint                        gtk_tree_view_get_level_indentation  (GtkTreeView                *tree_view);
 
 /* Convenience functions for setting tooltips */
+GDK_AVAILABLE_IN_ALL
 void          gtk_tree_view_set_tooltip_row    (GtkTreeView       *tree_view,
 						GtkTooltip        *tooltip,
 						GtkTreePath       *path);
+GDK_AVAILABLE_IN_ALL
 void          gtk_tree_view_set_tooltip_cell   (GtkTreeView       *tree_view,
 						GtkTooltip        *tooltip,
 						GtkTreePath       *path,
 						GtkTreeViewColumn *column,
 						GtkCellRenderer   *cell);
+GDK_AVAILABLE_IN_ALL
 gboolean      gtk_tree_view_get_tooltip_context(GtkTreeView       *tree_view,
 						gint              *x,
 						gint              *y,
@@ -496,8 +588,10 @@ gboolean      gtk_tree_view_get_tooltip_context(GtkTreeView       *tree_view,
 						GtkTreeModel     **model,
 						GtkTreePath      **path,
 						GtkTreeIter       *iter);
+GDK_AVAILABLE_IN_ALL
 void          gtk_tree_view_set_tooltip_column (GtkTreeView       *tree_view,
 					        gint               column);
+GDK_AVAILABLE_IN_ALL
 gint          gtk_tree_view_get_tooltip_column (GtkTreeView       *tree_view);
 
 G_END_DECLS

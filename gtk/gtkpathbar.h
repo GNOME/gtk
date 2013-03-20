@@ -52,6 +52,7 @@ struct _GtkPathBarClass
 			 gboolean     child_is_hidden);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType    gtk_path_bar_get_type (void) G_GNUC_CONST;
 void     _gtk_path_bar_set_file_system (GtkPathBar         *path_bar,
 					GtkFileSystem      *file_system);

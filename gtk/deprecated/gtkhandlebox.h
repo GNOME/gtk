@@ -74,6 +74,7 @@ struct _GtkHandleBoxClass
 };
 
 
+GDK_DEPRECATED_IN_3_4
 GType         gtk_handle_box_get_type             (void) G_GNUC_CONST;
 GDK_DEPRECATED_IN_3_4
 GtkWidget*    gtk_handle_box_new                  (void);

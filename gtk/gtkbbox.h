@@ -66,13 +66,19 @@ struct _GtkButtonBoxClass
 };
 
 
+GDK_AVAILABLE_IN_ALL
 GType             gtk_button_box_get_type            (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkWidget       * gtk_button_box_new                 (GtkOrientation     orientation);
+GDK_AVAILABLE_IN_ALL
 GtkButtonBoxStyle gtk_button_box_get_layout          (GtkButtonBox      *widget);
+GDK_AVAILABLE_IN_ALL
 void              gtk_button_box_set_layout          (GtkButtonBox      *widget,
                                                       GtkButtonBoxStyle  layout_style);
+GDK_AVAILABLE_IN_ALL
 gboolean          gtk_button_box_get_child_secondary (GtkButtonBox      *widget,
                                                       GtkWidget         *child);
+GDK_AVAILABLE_IN_ALL
 void              gtk_button_box_set_child_secondary (GtkButtonBox      *widget,
                                                       GtkWidget         *child,
                                                       gboolean           is_secondary);

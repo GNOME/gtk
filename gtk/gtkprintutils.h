@@ -18,7 +18,7 @@
 #ifndef __GTK_PRINT_UTILS_H__
 #define __GTK_PRINT_UTILS_H__
 
-
+#include <gdk/gdk.h>
 #include "gtkenums.h"
 
 

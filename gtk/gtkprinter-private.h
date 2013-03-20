@@ -46,6 +46,7 @@ cairo_surface_t *    _gtk_printer_create_cairo_surface      (GtkPrinter         
 GHashTable *         _gtk_printer_get_custom_widgets        (GtkPrinter          *printer);
 
 /* GtkPrintJob private methods: */
+GDK_AVAILABLE_IN_ALL
 void gtk_print_job_set_status (GtkPrintJob   *job,
 			       GtkPrintStatus status);
 

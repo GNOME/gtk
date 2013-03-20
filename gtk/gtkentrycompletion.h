@@ -22,6 +22,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
+#include <gdk/gdk.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtkliststore.h>
 #include <gtk/gtkcellarea.h>
@@ -95,58 +96,85 @@ struct _GtkEntryCompletionClass
 };
 
 /* core */
+GDK_AVAILABLE_IN_ALL
 GType               gtk_entry_completion_get_type               (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkEntryCompletion *gtk_entry_completion_new                    (void);
+GDK_AVAILABLE_IN_ALL
 GtkEntryCompletion *gtk_entry_completion_new_with_area          (GtkCellArea                 *area);
 
+GDK_AVAILABLE_IN_ALL
 GtkWidget          *gtk_entry_completion_get_entry              (GtkEntryCompletion          *completion);
 
+GDK_AVAILABLE_IN_ALL
 void                gtk_entry_completion_set_model              (GtkEntryCompletion          *completion,
                                                                  GtkTreeModel                *model);
+GDK_AVAILABLE_IN_ALL
 GtkTreeModel       *gtk_entry_completion_get_model              (GtkEntryCompletion          *completion);
 
+GDK_AVAILABLE_IN_ALL
 void                gtk_entry_completion_set_match_func         (GtkEntryCompletion          *completion,
                                                                  GtkEntryCompletionMatchFunc  func,
                                                                  gpointer                     func_data,
                                                                  GDestroyNotify               func_notify);
+GDK_AVAILABLE_IN_ALL
 void                gtk_entry_completion_set_minimum_key_length (GtkEntryCompletion          *completion,
                                                                  gint                         length);
+GDK_AVAILABLE_IN_ALL
 gint                gtk_entry_completion_get_minimum_key_length (GtkEntryCompletion          *completion);
 GDK_AVAILABLE_IN_3_4
 gchar *             gtk_entry_completion_compute_prefix         (GtkEntryCompletion          *completion,
                                                                  const char                  *key);
+GDK_AVAILABLE_IN_ALL
 void                gtk_entry_completion_complete               (GtkEntryCompletion          *completion);
+GDK_AVAILABLE_IN_ALL
 void                gtk_entry_completion_insert_prefix          (GtkEntryCompletion          *completion);
 
+GDK_AVAILABLE_IN_ALL
 void                gtk_entry_completion_insert_action_text     (GtkEntryCompletion          *completion,
                                                                  gint                         index_,
                                                                  const gchar                 *text);
+GDK_AVAILABLE_IN_ALL
 void                gtk_entry_completion_insert_action_markup   (GtkEntryCompletion          *completion,
                                                                  gint                         index_,
                                                                  const gchar                 *markup);
+GDK_AVAILABLE_IN_ALL
 void                gtk_entry_completion_delete_action          (GtkEntryCompletion          *completion,
                                                                  gint                         index_);
 
+GDK_AVAILABLE_IN_ALL
 void                gtk_entry_completion_set_inline_completion  (GtkEntryCompletion          *completion,
                                                                  gboolean                     inline_completion);
+GDK_AVAILABLE_IN_ALL
 gboolean            gtk_entry_completion_get_inline_completion  (GtkEntryCompletion          *completion);
+GDK_AVAILABLE_IN_ALL
 void                gtk_entry_completion_set_inline_selection  (GtkEntryCompletion          *completion,
                                                                  gboolean                     inline_selection);
+GDK_AVAILABLE_IN_ALL
 gboolean            gtk_entry_completion_get_inline_selection  (GtkEntryCompletion          *completion);
+GDK_AVAILABLE_IN_ALL
 void                gtk_entry_completion_set_popup_completion   (GtkEntryCompletion          *completion,
                                                                  gboolean                     popup_completion);
+GDK_AVAILABLE_IN_ALL
 gboolean            gtk_entry_completion_get_popup_completion   (GtkEntryCompletion          *completion);
+GDK_AVAILABLE_IN_ALL
 void                gtk_entry_completion_set_popup_set_width    (GtkEntryCompletion          *completion,
                                                                  gboolean                     popup_set_width);
+GDK_AVAILABLE_IN_ALL
 gboolean            gtk_entry_completion_get_popup_set_width    (GtkEntryCompletion          *completion);
+GDK_AVAILABLE_IN_ALL
 void                gtk_entry_completion_set_popup_single_match (GtkEntryCompletion          *completion,
                                                                  gboolean                     popup_single_match);
+GDK_AVAILABLE_IN_ALL
 gboolean            gtk_entry_completion_get_popup_single_match (GtkEntryCompletion          *completion);
 
+GDK_AVAILABLE_IN_ALL
 const gchar         *gtk_entry_completion_get_completion_prefix (GtkEntryCompletion *completion);
 /* convenience */
+GDK_AVAILABLE_IN_ALL
 void                gtk_entry_completion_set_text_column        (GtkEntryCompletion          *completion,
                                                                  gint                         column);
+GDK_AVAILABLE_IN_ALL
 gint                gtk_entry_completion_get_text_column        (GtkEntryCompletion          *completion);
 
 G_END_DECLS

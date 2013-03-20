@@ -61,20 +61,26 @@ struct _GtkCellAreaBoxClass
   void (*_gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType        gtk_cell_area_box_get_type    (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 GtkCellArea *gtk_cell_area_box_new         (void);
+GDK_AVAILABLE_IN_ALL
 void         gtk_cell_area_box_pack_start  (GtkCellAreaBox  *box,
                                             GtkCellRenderer *renderer,
                                             gboolean         expand,
                                             gboolean         align,
                                             gboolean         fixed);
+GDK_AVAILABLE_IN_ALL
 void         gtk_cell_area_box_pack_end    (GtkCellAreaBox  *box,
                                             GtkCellRenderer *renderer,
                                             gboolean         expand,
                                             gboolean         align,
                                             gboolean         fixed);
+GDK_AVAILABLE_IN_ALL
 gint         gtk_cell_area_box_get_spacing (GtkCellAreaBox  *box);
+GDK_AVAILABLE_IN_ALL
 void         gtk_cell_area_box_set_spacing (GtkCellAreaBox  *box,
                                             gint             spacing);
 

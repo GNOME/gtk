@@ -23,6 +23,7 @@
 #endif
 
 #include <glib-object.h>
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 
@@ -90,40 +91,52 @@ struct _GtkEntryBufferClass
   void (*_gtk_reserved8) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType                     gtk_entry_buffer_get_type               (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 GtkEntryBuffer*           gtk_entry_buffer_new                    (const gchar     *initial_chars,
                                                                    gint             n_initial_chars);
 
+GDK_AVAILABLE_IN_ALL
 gsize                     gtk_entry_buffer_get_bytes              (GtkEntryBuffer  *buffer);
 
+GDK_AVAILABLE_IN_ALL
 guint                     gtk_entry_buffer_get_length             (GtkEntryBuffer  *buffer);
 
+GDK_AVAILABLE_IN_ALL
 const gchar*              gtk_entry_buffer_get_text               (GtkEntryBuffer  *buffer);
 
+GDK_AVAILABLE_IN_ALL
 void                      gtk_entry_buffer_set_text               (GtkEntryBuffer  *buffer,
                                                                    const gchar     *chars,
                                                                    gint             n_chars);
 
+GDK_AVAILABLE_IN_ALL
 void                      gtk_entry_buffer_set_max_length         (GtkEntryBuffer  *buffer,
                                                                    gint             max_length);
 
+GDK_AVAILABLE_IN_ALL
 gint                      gtk_entry_buffer_get_max_length         (GtkEntryBuffer  *buffer);
 
+GDK_AVAILABLE_IN_ALL
 guint                     gtk_entry_buffer_insert_text            (GtkEntryBuffer  *buffer,
                                                                    guint            position,
                                                                    const gchar     *chars,
                                                                    gint             n_chars);
 
+GDK_AVAILABLE_IN_ALL
 guint                     gtk_entry_buffer_delete_text            (GtkEntryBuffer  *buffer,
                                                                    guint            position,
                                                                    gint             n_chars);
 
+GDK_AVAILABLE_IN_ALL
 void                      gtk_entry_buffer_emit_inserted_text     (GtkEntryBuffer  *buffer,
                                                                    guint            position,
                                                                    const gchar     *chars,
                                                                    guint            n_chars);
 
+GDK_AVAILABLE_IN_ALL
 void                      gtk_entry_buffer_emit_deleted_text      (GtkEntryBuffer  *buffer,
                                                                    guint            position,
                                                                    guint            n_chars);

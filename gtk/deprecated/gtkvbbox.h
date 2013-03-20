@@ -55,6 +55,7 @@ struct _GtkVButtonBoxClass
 };
 
 
+GDK_DEPRECATED_IN_3_2
 GType      gtk_vbutton_box_get_type (void) G_GNUC_CONST;
 GDK_DEPRECATED_IN_3_2_FOR(gtk_button_box_new)
 GtkWidget *gtk_vbutton_box_new      (void);

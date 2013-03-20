@@ -42,6 +42,7 @@ typedef enum
   GTK_CSS_PROVIDER_ERROR_UNKNOWN_VALUE
 } GtkCssProviderError;
 
+GDK_AVAILABLE_IN_ALL
 GQuark gtk_css_provider_error_quark (void);
 
 typedef struct _GtkCssProvider GtkCssProvider;
@@ -68,26 +69,33 @@ struct _GtkCssProviderClass
   void (*_gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType gtk_css_provider_get_type (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 GtkCssProvider * gtk_css_provider_new (void);
 
 GDK_AVAILABLE_IN_3_2
 char *           gtk_css_provider_to_string      (GtkCssProvider  *provider);
 
+GDK_AVAILABLE_IN_ALL
 gboolean         gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
                                                   const gchar     *data,
                                                   gssize           length,
                                                   GError         **error);
+GDK_AVAILABLE_IN_ALL
 gboolean         gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
                                                   GFile           *file,
                                                   GError         **error);
+GDK_AVAILABLE_IN_ALL
 gboolean         gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
                                                   const gchar     *path,
                                                   GError         **error);
 
+GDK_AVAILABLE_IN_ALL
 GtkCssProvider * gtk_css_provider_get_default (void);
 
+GDK_AVAILABLE_IN_ALL
 GtkCssProvider * gtk_css_provider_get_named (const gchar *name,
                                              const gchar *variant);
 

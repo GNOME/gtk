@@ -27,6 +27,7 @@
 
 G_BEGIN_DECLS
 
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_show_uri  (GdkScreen   *screen,
                         const gchar *uri,
                         guint32      timestamp,

@@ -70,11 +70,16 @@ struct _GtkSocketClass
   void (*_gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType      gtk_socket_get_type        (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_socket_new             (void);
+GDK_AVAILABLE_IN_ALL
 void       gtk_socket_add_id          (GtkSocket *socket_,
                                        Window     window);
+GDK_AVAILABLE_IN_ALL
 Window     gtk_socket_get_id          (GtkSocket *socket_);
+GDK_AVAILABLE_IN_ALL
 GdkWindow *gtk_socket_get_plug_window (GtkSocket *socket_);
 
 G_END_DECLS

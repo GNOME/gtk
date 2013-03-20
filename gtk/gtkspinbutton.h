@@ -137,70 +137,95 @@ struct _GtkSpinButtonClass
 };
 
 
+GDK_AVAILABLE_IN_ALL
 GType		gtk_spin_button_get_type	   (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 void		gtk_spin_button_configure	   (GtkSpinButton  *spin_button,
 						    GtkAdjustment  *adjustment,
 						    gdouble	    climb_rate,
 						    guint	    digits);
 
+GDK_AVAILABLE_IN_ALL
 GtkWidget*	gtk_spin_button_new		   (GtkAdjustment  *adjustment,
 						    gdouble	    climb_rate,
 						    guint	    digits);
 
+GDK_AVAILABLE_IN_ALL
 GtkWidget*	gtk_spin_button_new_with_range	   (gdouble  min,
 						    gdouble  max,
 						    gdouble  step);
 
+GDK_AVAILABLE_IN_ALL
 void		gtk_spin_button_set_adjustment	   (GtkSpinButton  *spin_button,
 						    GtkAdjustment  *adjustment);
 
+GDK_AVAILABLE_IN_ALL
 GtkAdjustment*	gtk_spin_button_get_adjustment	   (GtkSpinButton  *spin_button);
 
+GDK_AVAILABLE_IN_ALL
 void		gtk_spin_button_set_digits	   (GtkSpinButton  *spin_button,
 						    guint	    digits);
+GDK_AVAILABLE_IN_ALL
 guint           gtk_spin_button_get_digits         (GtkSpinButton  *spin_button);
 
+GDK_AVAILABLE_IN_ALL
 void		gtk_spin_button_set_increments	   (GtkSpinButton  *spin_button,
 						    gdouble         step,
 						    gdouble         page);
+GDK_AVAILABLE_IN_ALL
 void            gtk_spin_button_get_increments     (GtkSpinButton  *spin_button,
 						    gdouble        *step,
 						    gdouble        *page);
 
+GDK_AVAILABLE_IN_ALL
 void		gtk_spin_button_set_range	   (GtkSpinButton  *spin_button,
 						    gdouble         min,
 						    gdouble         max);
+GDK_AVAILABLE_IN_ALL
 void            gtk_spin_button_get_range          (GtkSpinButton  *spin_button,
 						    gdouble        *min,
 						    gdouble        *max);
 
+GDK_AVAILABLE_IN_ALL
 gdouble		gtk_spin_button_get_value          (GtkSpinButton  *spin_button);
 
+GDK_AVAILABLE_IN_ALL
 gint		gtk_spin_button_get_value_as_int   (GtkSpinButton  *spin_button);
 
+GDK_AVAILABLE_IN_ALL
 void		gtk_spin_button_set_value	   (GtkSpinButton  *spin_button,
 						    gdouble	    value);
 
+GDK_AVAILABLE_IN_ALL
 void		gtk_spin_button_set_update_policy  (GtkSpinButton  *spin_button,
 						    GtkSpinButtonUpdatePolicy  policy);
+GDK_AVAILABLE_IN_ALL
 GtkSpinButtonUpdatePolicy gtk_spin_button_get_update_policy (GtkSpinButton *spin_button);
 
+GDK_AVAILABLE_IN_ALL
 void		gtk_spin_button_set_numeric	   (GtkSpinButton  *spin_button,
 						    gboolean	    numeric);
+GDK_AVAILABLE_IN_ALL
 gboolean        gtk_spin_button_get_numeric        (GtkSpinButton  *spin_button);
 
+GDK_AVAILABLE_IN_ALL
 void		gtk_spin_button_spin		   (GtkSpinButton  *spin_button,
 						    GtkSpinType     direction,
 						    gdouble	    increment);
 
+GDK_AVAILABLE_IN_ALL
 void		gtk_spin_button_set_wrap	   (GtkSpinButton  *spin_button,
 						    gboolean	    wrap);
+GDK_AVAILABLE_IN_ALL
 gboolean        gtk_spin_button_get_wrap           (GtkSpinButton  *spin_button);
 
+GDK_AVAILABLE_IN_ALL
 void		gtk_spin_button_set_snap_to_ticks  (GtkSpinButton  *spin_button,
 						    gboolean	    snap_to_ticks);
+GDK_AVAILABLE_IN_ALL
 gboolean        gtk_spin_button_get_snap_to_ticks  (GtkSpinButton  *spin_button);
+GDK_AVAILABLE_IN_ALL
 void            gtk_spin_button_update             (GtkSpinButton  *spin_button);
 
 /* private */

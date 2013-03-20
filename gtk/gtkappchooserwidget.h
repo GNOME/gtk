@@ -70,32 +70,46 @@ struct _GtkAppChooserWidgetClass {
   gpointer padding[16];
 };
 
+GDK_AVAILABLE_IN_ALL
 GType         gtk_app_chooser_widget_get_type             (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 GtkWidget *   gtk_app_chooser_widget_new                  (const gchar         *content_type);
 
+GDK_AVAILABLE_IN_ALL
 void          gtk_app_chooser_widget_set_show_default     (GtkAppChooserWidget *self,
                                                            gboolean             setting);
+GDK_AVAILABLE_IN_ALL
 gboolean      gtk_app_chooser_widget_get_show_default     (GtkAppChooserWidget *self);
 
+GDK_AVAILABLE_IN_ALL
 void          gtk_app_chooser_widget_set_show_recommended (GtkAppChooserWidget *self,
                                                            gboolean             setting);
+GDK_AVAILABLE_IN_ALL
 gboolean      gtk_app_chooser_widget_get_show_recommended (GtkAppChooserWidget *self);
 
+GDK_AVAILABLE_IN_ALL
 void          gtk_app_chooser_widget_set_show_fallback    (GtkAppChooserWidget *self,
                                                            gboolean             setting);
+GDK_AVAILABLE_IN_ALL
 gboolean      gtk_app_chooser_widget_get_show_fallback    (GtkAppChooserWidget *self);
 
+GDK_AVAILABLE_IN_ALL
 void          gtk_app_chooser_widget_set_show_other       (GtkAppChooserWidget *self,
                                                            gboolean             setting);
+GDK_AVAILABLE_IN_ALL
 gboolean      gtk_app_chooser_widget_get_show_other       (GtkAppChooserWidget *self);
 
+GDK_AVAILABLE_IN_ALL
 void          gtk_app_chooser_widget_set_show_all         (GtkAppChooserWidget *self,
                                                            gboolean             setting);
+GDK_AVAILABLE_IN_ALL
 gboolean      gtk_app_chooser_widget_get_show_all         (GtkAppChooserWidget *self);
 
+GDK_AVAILABLE_IN_ALL
 void          gtk_app_chooser_widget_set_default_text     (GtkAppChooserWidget *self,
                                                            const gchar         *text);
+GDK_AVAILABLE_IN_ALL
 const gchar * gtk_app_chooser_widget_get_default_text     (GtkAppChooserWidget *self);
 
 G_END_DECLS

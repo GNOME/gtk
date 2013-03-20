@@ -71,11 +71,16 @@ struct _GtkColorButtonClass {
 };
 
 
+GDK_AVAILABLE_IN_ALL
 GType        gtk_color_button_get_type      (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkWidget *  gtk_color_button_new           (void);
+GDK_AVAILABLE_IN_ALL
 GtkWidget *  gtk_color_button_new_with_rgba (const GdkRGBA  *rgba);
+GDK_AVAILABLE_IN_ALL
 void         gtk_color_button_set_title     (GtkColorButton *button,
                                              const gchar    *title);
+GDK_AVAILABLE_IN_ALL
 const gchar *gtk_color_button_get_title     (GtkColorButton *button);
 
 GDK_DEPRECATED_IN_3_4_FOR(gtk_color_button_new_with_rgba)

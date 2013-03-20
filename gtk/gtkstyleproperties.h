@@ -63,6 +63,7 @@ typedef gboolean (* GtkStylePropertyParser) (const gchar  *string,
                                              GValue       *value,
                                              GError      **error);
 
+GDK_AVAILABLE_IN_ALL
 GType gtk_style_properties_get_type (void) G_GNUC_CONST;
 
 /* Next 2 are implemented in gtkcsscustomproperty.c */
@@ -74,6 +75,7 @@ gboolean gtk_style_properties_lookup_property   (const gchar             *proper
                                                  GtkStylePropertyParser  *parse_func,
                                                  GParamSpec             **pspec);
 
+GDK_AVAILABLE_IN_ALL
 GtkStyleProperties * gtk_style_properties_new (void);
 
 GDK_DEPRECATED_IN_3_8
@@ -84,34 +86,43 @@ GDK_DEPRECATED_IN_3_8
 GtkSymbolicColor * gtk_style_properties_lookup_color (GtkStyleProperties *props,
                                                       const gchar        *name);
 
+GDK_AVAILABLE_IN_ALL
 void     gtk_style_properties_set_property (GtkStyleProperties *props,
                                             const gchar        *property,
                                             GtkStateFlags       state,
                                             const GValue       *value);
+GDK_AVAILABLE_IN_ALL
 void     gtk_style_properties_set_valist   (GtkStyleProperties *props,
                                             GtkStateFlags       state,
                                             va_list             args);
+GDK_AVAILABLE_IN_ALL
 void     gtk_style_properties_set          (GtkStyleProperties *props,
                                             GtkStateFlags       state,
                                             ...) G_GNUC_NULL_TERMINATED;
 
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_style_properties_get_property (GtkStyleProperties *props,
                                             const gchar        *property,
                                             GtkStateFlags       state,
                                             GValue             *value);
+GDK_AVAILABLE_IN_ALL
 void     gtk_style_properties_get_valist   (GtkStyleProperties *props,
                                             GtkStateFlags       state,
                                             va_list             args);
+GDK_AVAILABLE_IN_ALL
 void     gtk_style_properties_get          (GtkStyleProperties *props,
                                             GtkStateFlags       state,
                                             ...) G_GNUC_NULL_TERMINATED;
 
+GDK_AVAILABLE_IN_ALL
 void     gtk_style_properties_unset_property (GtkStyleProperties *props,
                                               const gchar        *property,
                                               GtkStateFlags       state);
 
+GDK_AVAILABLE_IN_ALL
 void     gtk_style_properties_clear          (GtkStyleProperties  *props);
 
+GDK_AVAILABLE_IN_ALL
 void     gtk_style_properties_merge          (GtkStyleProperties       *props,
                                               const GtkStyleProperties *props_to_merge,
                                               gboolean                  replace);

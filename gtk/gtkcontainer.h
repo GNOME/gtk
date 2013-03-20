@@ -105,34 +105,48 @@ struct _GtkContainerClass
 
 /* Application-level methods */
 
+GDK_AVAILABLE_IN_ALL
 GType   gtk_container_get_type		 (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 void    gtk_container_set_border_width	 (GtkContainer	   *container,
 					  guint		    border_width);
+GDK_AVAILABLE_IN_ALL
 guint   gtk_container_get_border_width   (GtkContainer     *container);
+GDK_AVAILABLE_IN_ALL
 void    gtk_container_add		 (GtkContainer	   *container,
 					  GtkWidget	   *widget);
+GDK_AVAILABLE_IN_ALL
 void    gtk_container_remove		 (GtkContainer	   *container,
 					  GtkWidget	   *widget);
 
+GDK_AVAILABLE_IN_ALL
 void    gtk_container_set_resize_mode    (GtkContainer     *container,
 					  GtkResizeMode     resize_mode);
+GDK_AVAILABLE_IN_ALL
 GtkResizeMode gtk_container_get_resize_mode (GtkContainer     *container);
 
+GDK_AVAILABLE_IN_ALL
 void    gtk_container_check_resize       (GtkContainer     *container);
 
+GDK_AVAILABLE_IN_ALL
 void     gtk_container_foreach      (GtkContainer       *container,
 				     GtkCallback         callback,
 				     gpointer            callback_data);
+GDK_AVAILABLE_IN_ALL
 GList*   gtk_container_get_children     (GtkContainer       *container);
 
+GDK_AVAILABLE_IN_ALL
 void     gtk_container_propagate_draw   (GtkContainer   *container,
 					 GtkWidget      *child,
 					 cairo_t        *cr);
 
+GDK_AVAILABLE_IN_ALL
 void     gtk_container_set_focus_chain  (GtkContainer   *container,
                                          GList          *focusable_widgets);
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_container_get_focus_chain  (GtkContainer   *container,
 					 GList         **focusable_widgets);
+GDK_AVAILABLE_IN_ALL
 void     gtk_container_unset_focus_chain (GtkContainer  *container);
 
 #define GTK_IS_RESIZE_CONTAINER(widget) (GTK_IS_CONTAINER (widget) && \
@@ -140,55 +154,74 @@ void     gtk_container_unset_focus_chain (GtkContainer  *container);
 
 /* Widget-level methods */
 
+GDK_AVAILABLE_IN_ALL
 void   gtk_container_set_reallocate_redraws (GtkContainer    *container,
 					     gboolean         needs_redraws);
+GDK_AVAILABLE_IN_ALL
 void   gtk_container_set_focus_child	   (GtkContainer     *container,
 					    GtkWidget	     *child);
+GDK_AVAILABLE_IN_ALL
 GtkWidget *
        gtk_container_get_focus_child	   (GtkContainer     *container);
+GDK_AVAILABLE_IN_ALL
 void   gtk_container_set_focus_vadjustment (GtkContainer     *container,
 					    GtkAdjustment    *adjustment);
+GDK_AVAILABLE_IN_ALL
 GtkAdjustment *gtk_container_get_focus_vadjustment (GtkContainer *container);
+GDK_AVAILABLE_IN_ALL
 void   gtk_container_set_focus_hadjustment (GtkContainer     *container,
 					    GtkAdjustment    *adjustment);
+GDK_AVAILABLE_IN_ALL
 GtkAdjustment *gtk_container_get_focus_hadjustment (GtkContainer *container);
 
+GDK_AVAILABLE_IN_ALL
 void    gtk_container_resize_children      (GtkContainer     *container);
 
+GDK_AVAILABLE_IN_ALL
 GType   gtk_container_child_type	   (GtkContainer     *container);
 
 
+GDK_AVAILABLE_IN_ALL
 void         gtk_container_class_install_child_property (GtkContainerClass *cclass,
 							 guint		    property_id,
 							 GParamSpec	   *pspec);
+GDK_AVAILABLE_IN_ALL
 GParamSpec*  gtk_container_class_find_child_property	(GObjectClass	   *cclass,
 							 const gchar	   *property_name);
+GDK_AVAILABLE_IN_ALL
 GParamSpec** gtk_container_class_list_child_properties	(GObjectClass	   *cclass,
 							 guint		   *n_properties);
+GDK_AVAILABLE_IN_ALL
 void         gtk_container_add_with_properties		(GtkContainer	   *container,
 							 GtkWidget	   *widget,
 							 const gchar	   *first_prop_name,
 							 ...) G_GNUC_NULL_TERMINATED;
+GDK_AVAILABLE_IN_ALL
 void         gtk_container_child_set			(GtkContainer	   *container,
 							 GtkWidget	   *child,
 							 const gchar	   *first_prop_name,
 							 ...) G_GNUC_NULL_TERMINATED;
+GDK_AVAILABLE_IN_ALL
 void         gtk_container_child_get			(GtkContainer	   *container,
 							 GtkWidget	   *child,
 							 const gchar	   *first_prop_name,
 							 ...) G_GNUC_NULL_TERMINATED;
+GDK_AVAILABLE_IN_ALL
 void         gtk_container_child_set_valist		(GtkContainer	   *container,
 							 GtkWidget	   *child,
 							 const gchar	   *first_property_name,
 							 va_list	    var_args);
+GDK_AVAILABLE_IN_ALL
 void         gtk_container_child_get_valist		(GtkContainer	   *container,
 							 GtkWidget	   *child,
 							 const gchar	   *first_property_name,
 							 va_list	    var_args);
+GDK_AVAILABLE_IN_ALL
 void	     gtk_container_child_set_property		(GtkContainer	   *container,
 							 GtkWidget	   *child,
 							 const gchar	   *property_name,
 							 const GValue	   *value);
+GDK_AVAILABLE_IN_ALL
 void	     gtk_container_child_get_property		(GtkContainer	   *container,
 							 GtkWidget	   *child,
 							 const gchar	   *property_name,
@@ -213,12 +246,15 @@ void gtk_container_child_notify (GtkContainer *container,
     G_OBJECT_WARN_INVALID_PSPEC ((object), "child property id", (property_id), (pspec))
 
 
+GDK_AVAILABLE_IN_ALL
 void    gtk_container_forall		     (GtkContainer *container,
 					      GtkCallback   callback,
 					      gpointer	    callback_data);
 
+GDK_AVAILABLE_IN_ALL
 void    gtk_container_class_handle_border_width (GtkContainerClass *klass);
 
+GDK_AVAILABLE_IN_ALL
 GtkWidgetPath * gtk_container_get_path_for_child (GtkContainer      *container,
                                                   GtkWidget         *child);
 

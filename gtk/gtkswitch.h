@@ -80,12 +80,16 @@ struct _GtkSwitchClass
   void (* _switch_padding_6) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType gtk_switch_get_type (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 GtkWidget *     gtk_switch_new          (void);
 
+GDK_AVAILABLE_IN_ALL
 void            gtk_switch_set_active   (GtkSwitch *sw,
                                          gboolean   is_active);
+GDK_AVAILABLE_IN_ALL
 gboolean        gtk_switch_get_active   (GtkSwitch *sw);
 
 G_END_DECLS

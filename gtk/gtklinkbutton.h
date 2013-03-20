@@ -80,17 +80,24 @@ struct _GtkLinkButtonClass
   void (*_gtk_padding4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType                 gtk_link_button_get_type          (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 GtkWidget *           gtk_link_button_new               (const gchar   *uri);
+GDK_AVAILABLE_IN_ALL
 GtkWidget *           gtk_link_button_new_with_label    (const gchar   *uri,
 						         const gchar   *label);
 
+GDK_AVAILABLE_IN_ALL
 const gchar *         gtk_link_button_get_uri           (GtkLinkButton *link_button);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_link_button_set_uri           (GtkLinkButton *link_button,
 						         const gchar   *uri);
 
+GDK_AVAILABLE_IN_ALL
 gboolean              gtk_link_button_get_visited       (GtkLinkButton *link_button);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_link_button_set_visited       (GtkLinkButton *link_button,
                                                          gboolean       visited);
 

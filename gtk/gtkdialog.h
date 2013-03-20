@@ -129,51 +129,68 @@ struct _GtkDialogClass
 };
 
 
+GDK_AVAILABLE_IN_ALL
 GType      gtk_dialog_get_type (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_dialog_new      (void);
 
+GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_dialog_new_with_buttons (const gchar     *title,
                                         GtkWindow       *parent,
                                         GtkDialogFlags   flags,
                                         const gchar     *first_button_text,
                                         ...) G_GNUC_NULL_TERMINATED;
 
+GDK_AVAILABLE_IN_ALL
 void       gtk_dialog_add_action_widget (GtkDialog   *dialog,
                                          GtkWidget   *child,
                                          gint         response_id);
+GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_dialog_add_button        (GtkDialog   *dialog,
                                          const gchar *button_text,
                                          gint         response_id);
+GDK_AVAILABLE_IN_ALL
 void       gtk_dialog_add_buttons       (GtkDialog   *dialog,
                                          const gchar *first_button_text,
                                          ...) G_GNUC_NULL_TERMINATED;
 
+GDK_AVAILABLE_IN_ALL
 void gtk_dialog_set_response_sensitive (GtkDialog *dialog,
                                         gint       response_id,
                                         gboolean   setting);
+GDK_AVAILABLE_IN_ALL
 void gtk_dialog_set_default_response   (GtkDialog *dialog,
                                         gint       response_id);
+GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_dialog_get_widget_for_response (GtkDialog *dialog,
                                                gint       response_id);
+GDK_AVAILABLE_IN_ALL
 gint gtk_dialog_get_response_for_widget (GtkDialog *dialog,
                                          GtkWidget *widget);
 
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_alternative_dialog_button_order (GdkScreen *screen);
+GDK_AVAILABLE_IN_ALL
 void     gtk_dialog_set_alternative_button_order (GtkDialog *dialog,
                                                   gint       first_response_id,
                                                   ...);
+GDK_AVAILABLE_IN_ALL
 void     gtk_dialog_set_alternative_button_order_from_array (GtkDialog *dialog,
                                                              gint       n_params,
                                                              gint      *new_order);
 
 /* Emit response signal */
+GDK_AVAILABLE_IN_ALL
 void gtk_dialog_response           (GtkDialog *dialog,
                                     gint       response_id);
 
 /* Returns response_id */
+GDK_AVAILABLE_IN_ALL
 gint gtk_dialog_run                (GtkDialog *dialog);
 
+GDK_AVAILABLE_IN_ALL
 GtkWidget * gtk_dialog_get_action_area  (GtkDialog *dialog);
+GDK_AVAILABLE_IN_ALL
 GtkWidget * gtk_dialog_get_content_area (GtkDialog *dialog);
 
 G_END_DECLS

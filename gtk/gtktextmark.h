@@ -85,17 +85,25 @@ struct _GtkTextMarkClass
   void (*_gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType                 gtk_text_mark_get_type         (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 GtkTextMark          *gtk_text_mark_new              (const gchar *name,
                                                       gboolean     left_gravity);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_text_mark_set_visible      (GtkTextMark *mark,
                                                       gboolean     setting);
+GDK_AVAILABLE_IN_ALL
 gboolean              gtk_text_mark_get_visible      (GtkTextMark *mark);
 
+GDK_AVAILABLE_IN_ALL
 const gchar *         gtk_text_mark_get_name         (GtkTextMark *mark);
+GDK_AVAILABLE_IN_ALL
 gboolean              gtk_text_mark_get_deleted      (GtkTextMark *mark);
+GDK_AVAILABLE_IN_ALL
 GtkTextBuffer*        gtk_text_mark_get_buffer       (GtkTextMark *mark);
+GDK_AVAILABLE_IN_ALL
 gboolean              gtk_text_mark_get_left_gravity (GtkTextMark *mark);
 
 G_END_DECLS

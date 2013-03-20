@@ -197,59 +197,92 @@ typedef enum
   GTK_PRINT_ERROR_INVALID_FILE
 } GtkPrintError;
 
+GDK_AVAILABLE_IN_ALL
 GQuark gtk_print_error_quark (void);
 
+GDK_AVAILABLE_IN_ALL
 GType                   gtk_print_operation_get_type               (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkPrintOperation *     gtk_print_operation_new                    (void);
+GDK_AVAILABLE_IN_ALL
 void                    gtk_print_operation_set_default_page_setup (GtkPrintOperation  *op,
                                                                     GtkPageSetup       *default_page_setup);
+GDK_AVAILABLE_IN_ALL
 GtkPageSetup *          gtk_print_operation_get_default_page_setup (GtkPrintOperation  *op);
+GDK_AVAILABLE_IN_ALL
 void                    gtk_print_operation_set_print_settings     (GtkPrintOperation  *op,
                                                                     GtkPrintSettings   *print_settings);
+GDK_AVAILABLE_IN_ALL
 GtkPrintSettings *      gtk_print_operation_get_print_settings     (GtkPrintOperation  *op);
+GDK_AVAILABLE_IN_ALL
 void                    gtk_print_operation_set_job_name           (GtkPrintOperation  *op,
                                                                     const gchar        *job_name);
+GDK_AVAILABLE_IN_ALL
 void                    gtk_print_operation_set_n_pages            (GtkPrintOperation  *op,
                                                                     gint                n_pages);
+GDK_AVAILABLE_IN_ALL
 void                    gtk_print_operation_set_current_page       (GtkPrintOperation  *op,
                                                                     gint                current_page);
+GDK_AVAILABLE_IN_ALL
 void                    gtk_print_operation_set_use_full_page      (GtkPrintOperation  *op,
                                                                     gboolean            full_page);
+GDK_AVAILABLE_IN_ALL
 void                    gtk_print_operation_set_unit               (GtkPrintOperation  *op,
                                                                     GtkUnit             unit);
+GDK_AVAILABLE_IN_ALL
 void                    gtk_print_operation_set_export_filename    (GtkPrintOperation  *op,
                                                                     const gchar        *filename);
+GDK_AVAILABLE_IN_ALL
 void                    gtk_print_operation_set_track_print_status (GtkPrintOperation  *op,
                                                                     gboolean            track_status);
+GDK_AVAILABLE_IN_ALL
 void                    gtk_print_operation_set_show_progress      (GtkPrintOperation  *op,
                                                                     gboolean            show_progress);
+GDK_AVAILABLE_IN_ALL
 void                    gtk_print_operation_set_allow_async        (GtkPrintOperation  *op,
                                                                     gboolean            allow_async);
+GDK_AVAILABLE_IN_ALL
 void                    gtk_print_operation_set_custom_tab_label   (GtkPrintOperation  *op,
                                                                     const gchar        *label);
+GDK_AVAILABLE_IN_ALL
 GtkPrintOperationResult gtk_print_operation_run                    (GtkPrintOperation  *op,
                                                                     GtkPrintOperationAction action,
                                                                     GtkWindow          *parent,
                                                                     GError            **error);
+GDK_AVAILABLE_IN_ALL
 void                    gtk_print_operation_get_error              (GtkPrintOperation  *op,
                                                                     GError            **error);
+GDK_AVAILABLE_IN_ALL
 GtkPrintStatus          gtk_print_operation_get_status             (GtkPrintOperation  *op);
+GDK_AVAILABLE_IN_ALL
 const gchar *           gtk_print_operation_get_status_string      (GtkPrintOperation  *op);
+GDK_AVAILABLE_IN_ALL
 gboolean                gtk_print_operation_is_finished            (GtkPrintOperation  *op);
+GDK_AVAILABLE_IN_ALL
 void                    gtk_print_operation_cancel                 (GtkPrintOperation  *op);
+GDK_AVAILABLE_IN_ALL
 void                    gtk_print_operation_draw_page_finish       (GtkPrintOperation  *op);
+GDK_AVAILABLE_IN_ALL
 void                    gtk_print_operation_set_defer_drawing      (GtkPrintOperation  *op);
+GDK_AVAILABLE_IN_ALL
 void                    gtk_print_operation_set_support_selection  (GtkPrintOperation  *op,
                                                                     gboolean            support_selection);
+GDK_AVAILABLE_IN_ALL
 gboolean                gtk_print_operation_get_support_selection  (GtkPrintOperation  *op);
+GDK_AVAILABLE_IN_ALL
 void                    gtk_print_operation_set_has_selection      (GtkPrintOperation  *op,
                                                                     gboolean            has_selection);
+GDK_AVAILABLE_IN_ALL
 gboolean                gtk_print_operation_get_has_selection      (GtkPrintOperation  *op);
+GDK_AVAILABLE_IN_ALL
 void                    gtk_print_operation_set_embed_page_setup   (GtkPrintOperation  *op,
                                                                     gboolean            embed);
+GDK_AVAILABLE_IN_ALL
 gboolean                gtk_print_operation_get_embed_page_setup   (GtkPrintOperation  *op);
+GDK_AVAILABLE_IN_ALL
 gint                    gtk_print_operation_get_n_pages_to_print   (GtkPrintOperation  *op);
 
+GDK_AVAILABLE_IN_ALL
 GtkPageSetup           *gtk_print_run_page_setup_dialog            (GtkWindow          *parent,
                                                                     GtkPageSetup       *page_setup,
                                                                     GtkPrintSettings   *settings);
@@ -269,6 +302,7 @@ GtkPageSetup           *gtk_print_run_page_setup_dialog            (GtkWindow   
 typedef void  (* GtkPageSetupDoneFunc) (GtkPageSetup *page_setup,
                                         gpointer      data);
 
+GDK_AVAILABLE_IN_ALL
 void                    gtk_print_run_page_setup_dialog_async      (GtkWindow            *parent,
                                                                     GtkPageSetup         *page_setup,
                                                                     GtkPrintSettings     *settings,

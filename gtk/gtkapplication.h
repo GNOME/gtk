@@ -61,16 +61,21 @@ struct _GtkApplicationClass
   gpointer padding[12];
 };
 
+GDK_AVAILABLE_IN_ALL
 GType            gtk_application_get_type      (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 GtkApplication * gtk_application_new           (const gchar       *application_id,
                                                 GApplicationFlags  flags);
 
+GDK_AVAILABLE_IN_ALL
 void             gtk_application_add_window    (GtkApplication    *application,
                                                 GtkWindow         *window);
 
+GDK_AVAILABLE_IN_ALL
 void             gtk_application_remove_window (GtkApplication    *application,
                                                 GtkWindow         *window);
+GDK_AVAILABLE_IN_ALL
 GList *          gtk_application_get_windows   (GtkApplication    *application);
 
 GDK_AVAILABLE_IN_3_4

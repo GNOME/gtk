@@ -63,14 +63,18 @@ struct _GtkGridClass
   void (*_gtk_reserved8) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType      gtk_grid_get_type               (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_grid_new                    (void);
+GDK_AVAILABLE_IN_ALL
 void       gtk_grid_attach                 (GtkGrid         *grid,
                                             GtkWidget       *child,
                                             gint             left,
                                             gint             top,
                                             gint             width,
                                             gint             height);
+GDK_AVAILABLE_IN_ALL
 void       gtk_grid_attach_next_to         (GtkGrid         *grid,
                                             GtkWidget       *child,
                                             GtkWidget       *sibling,
@@ -97,17 +101,25 @@ GDK_AVAILABLE_IN_3_2
 void       gtk_grid_insert_next_to         (GtkGrid         *grid,
                                             GtkWidget       *sibling,
                                             GtkPositionType  side);
+GDK_AVAILABLE_IN_ALL
 void       gtk_grid_set_row_homogeneous    (GtkGrid         *grid,
                                             gboolean         homogeneous);
+GDK_AVAILABLE_IN_ALL
 gboolean   gtk_grid_get_row_homogeneous    (GtkGrid         *grid);
+GDK_AVAILABLE_IN_ALL
 void       gtk_grid_set_row_spacing        (GtkGrid         *grid,
                                             guint            spacing);
+GDK_AVAILABLE_IN_ALL
 guint      gtk_grid_get_row_spacing        (GtkGrid         *grid);
+GDK_AVAILABLE_IN_ALL
 void       gtk_grid_set_column_homogeneous (GtkGrid         *grid,
                                             gboolean         homogeneous);
+GDK_AVAILABLE_IN_ALL
 gboolean   gtk_grid_get_column_homogeneous (GtkGrid         *grid);
+GDK_AVAILABLE_IN_ALL
 void       gtk_grid_set_column_spacing     (GtkGrid         *grid,
                                             guint            spacing);
+GDK_AVAILABLE_IN_ALL
 guint      gtk_grid_get_column_spacing     (GtkGrid         *grid);
 GDK_AVAILABLE_IN_3_10
 void       gtk_grid_set_row_baseline_position (GtkGrid      *grid,

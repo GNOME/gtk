@@ -68,18 +68,25 @@ struct _GtkIconFactoryClass
   void (*_gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType           gtk_icon_factory_get_type (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkIconFactory* gtk_icon_factory_new      (void);
+GDK_AVAILABLE_IN_ALL
 void            gtk_icon_factory_add      (GtkIconFactory *factory,
                                            const gchar    *stock_id,
                                            GtkIconSet     *icon_set);
+GDK_AVAILABLE_IN_ALL
 GtkIconSet*     gtk_icon_factory_lookup   (GtkIconFactory *factory,
                                            const gchar    *stock_id);
 
 /* Manage the default icon factory stack */
 
+GDK_AVAILABLE_IN_ALL
 void        gtk_icon_factory_add_default     (GtkIconFactory  *factory);
+GDK_AVAILABLE_IN_ALL
 void        gtk_icon_factory_remove_default  (GtkIconFactory  *factory);
+GDK_AVAILABLE_IN_ALL
 GtkIconSet* gtk_icon_factory_lookup_default  (const gchar     *stock_id);
 
 /* Get preferred real size from registered semantic size.  Note that
@@ -94,31 +101,43 @@ GtkIconSet* gtk_icon_factory_lookup_default  (const gchar     *stock_id);
  */
 
 #ifndef GDK_MULTIHEAD_SAFE
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_icon_size_lookup              (GtkIconSize  size,
 					    gint        *width,
 					    gint        *height);
 #endif /* GDK_MULTIHEAD_SAFE */
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_icon_size_lookup_for_settings (GtkSettings *settings,
 					    GtkIconSize  size,
 					    gint        *width,
 					    gint        *height);
 
+GDK_AVAILABLE_IN_ALL
 GtkIconSize           gtk_icon_size_register       (const gchar *name,
                                                     gint         width,
                                                     gint         height);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_icon_size_register_alias (const gchar *alias,
                                                     GtkIconSize  target);
+GDK_AVAILABLE_IN_ALL
 GtkIconSize           gtk_icon_size_from_name      (const gchar *name);
+GDK_AVAILABLE_IN_ALL
 const gchar*          gtk_icon_size_get_name       (GtkIconSize  size);
 
 /* Icon sets */
 
+GDK_AVAILABLE_IN_ALL
 GType       gtk_icon_set_get_type        (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkIconSet* gtk_icon_set_new             (void);
+GDK_AVAILABLE_IN_ALL
 GtkIconSet* gtk_icon_set_new_from_pixbuf (GdkPixbuf       *pixbuf);
 
+GDK_AVAILABLE_IN_ALL
 GtkIconSet* gtk_icon_set_ref             (GtkIconSet      *icon_set);
+GDK_AVAILABLE_IN_ALL
 void        gtk_icon_set_unref           (GtkIconSet      *icon_set);
+GDK_AVAILABLE_IN_ALL
 GtkIconSet* gtk_icon_set_copy            (GtkIconSet      *icon_set);
 
 GDK_DEPRECATED_IN_3_0_FOR(gtk_icon_set_render_icon_pixbuf)
@@ -130,46 +149,70 @@ GdkPixbuf*  gtk_icon_set_render_icon     (GtkIconSet      *icon_set,
                                           GtkWidget       *widget,
                                           const gchar     *detail);
 
+GDK_AVAILABLE_IN_ALL
 void           gtk_icon_set_add_source   (GtkIconSet          *icon_set,
                                           const GtkIconSource *source);
 
+GDK_AVAILABLE_IN_ALL
 void           gtk_icon_set_get_sizes    (GtkIconSet          *icon_set,
                                           GtkIconSize        **sizes,
                                           gint                *n_sizes);
 
+GDK_AVAILABLE_IN_ALL
 GType          gtk_icon_source_get_type                 (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkIconSource* gtk_icon_source_new                      (void);
+GDK_AVAILABLE_IN_ALL
 GtkIconSource* gtk_icon_source_copy                     (const GtkIconSource *source);
+GDK_AVAILABLE_IN_ALL
 void           gtk_icon_source_free                     (GtkIconSource       *source);
 
+GDK_AVAILABLE_IN_ALL
 void           gtk_icon_source_set_filename             (GtkIconSource       *source,
                                                          const gchar         *filename);
+GDK_AVAILABLE_IN_ALL
 void           gtk_icon_source_set_icon_name            (GtkIconSource       *source,
                                                          const gchar         *icon_name);
+GDK_AVAILABLE_IN_ALL
 void           gtk_icon_source_set_pixbuf               (GtkIconSource       *source,
                                                          GdkPixbuf           *pixbuf);
 
+GDK_AVAILABLE_IN_ALL
 const gchar *    gtk_icon_source_get_filename             (const GtkIconSource *source);
+GDK_AVAILABLE_IN_ALL
 const gchar *    gtk_icon_source_get_icon_name            (const GtkIconSource *source);
+GDK_AVAILABLE_IN_ALL
 GdkPixbuf*       gtk_icon_source_get_pixbuf               (const GtkIconSource *source);
 
+GDK_AVAILABLE_IN_ALL
 void             gtk_icon_source_set_direction_wildcarded (GtkIconSource       *source,
                                                            gboolean             setting);
+GDK_AVAILABLE_IN_ALL
 void             gtk_icon_source_set_state_wildcarded     (GtkIconSource       *source,
                                                            gboolean             setting);
+GDK_AVAILABLE_IN_ALL
 void             gtk_icon_source_set_size_wildcarded      (GtkIconSource       *source,
                                                            gboolean             setting);
+GDK_AVAILABLE_IN_ALL
 gboolean         gtk_icon_source_get_size_wildcarded      (const GtkIconSource *source);
+GDK_AVAILABLE_IN_ALL
 gboolean         gtk_icon_source_get_state_wildcarded     (const GtkIconSource *source);
+GDK_AVAILABLE_IN_ALL
 gboolean         gtk_icon_source_get_direction_wildcarded (const GtkIconSource *source);
+GDK_AVAILABLE_IN_ALL
 void             gtk_icon_source_set_direction            (GtkIconSource       *source,
                                                            GtkTextDirection     direction);
+GDK_AVAILABLE_IN_ALL
 void             gtk_icon_source_set_state                (GtkIconSource       *source,
                                                            GtkStateType         state);
+GDK_AVAILABLE_IN_ALL
 void             gtk_icon_source_set_size                 (GtkIconSource       *source,
                                                            GtkIconSize          size);
+GDK_AVAILABLE_IN_ALL
 GtkTextDirection gtk_icon_source_get_direction            (const GtkIconSource *source);
+GDK_AVAILABLE_IN_ALL
 GtkStateType     gtk_icon_source_get_state                (const GtkIconSource *source);
+GDK_AVAILABLE_IN_ALL
 GtkIconSize      gtk_icon_source_get_size                 (const GtkIconSource *source);
 
 

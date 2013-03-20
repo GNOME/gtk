@@ -76,22 +76,32 @@ struct _GtkScaleButtonClass
   void (*_gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType            gtk_scale_button_get_type         (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkWidget *      gtk_scale_button_new              (GtkIconSize      size,
                                                     gdouble          min,
                                                     gdouble          max,
                                                     gdouble          step,
                                                     const gchar    **icons);
+GDK_AVAILABLE_IN_ALL
 void             gtk_scale_button_set_icons        (GtkScaleButton  *button,
                                                     const gchar    **icons);
+GDK_AVAILABLE_IN_ALL
 gdouble          gtk_scale_button_get_value        (GtkScaleButton  *button);
+GDK_AVAILABLE_IN_ALL
 void             gtk_scale_button_set_value        (GtkScaleButton  *button,
                                                     gdouble          value);
+GDK_AVAILABLE_IN_ALL
 GtkAdjustment *  gtk_scale_button_get_adjustment   (GtkScaleButton  *button);
+GDK_AVAILABLE_IN_ALL
 void             gtk_scale_button_set_adjustment   (GtkScaleButton  *button,
                                                     GtkAdjustment   *adjustment);
+GDK_AVAILABLE_IN_ALL
 GtkWidget *      gtk_scale_button_get_plus_button  (GtkScaleButton  *button);
+GDK_AVAILABLE_IN_ALL
 GtkWidget *      gtk_scale_button_get_minus_button (GtkScaleButton  *button);
+GDK_AVAILABLE_IN_ALL
 GtkWidget *      gtk_scale_button_get_popup        (GtkScaleButton  *button);
 
 G_END_DECLS

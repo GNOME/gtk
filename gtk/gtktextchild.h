@@ -71,11 +71,15 @@ struct _GtkTextChildAnchorClass
   void (*_gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType               gtk_text_child_anchor_get_type    (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 GtkTextChildAnchor* gtk_text_child_anchor_new         (void);
 
+GDK_AVAILABLE_IN_ALL
 GList*              gtk_text_child_anchor_get_widgets (GtkTextChildAnchor *anchor);
+GDK_AVAILABLE_IN_ALL
 gboolean            gtk_text_child_anchor_get_deleted (GtkTextChildAnchor *anchor);
 
 G_END_DECLS

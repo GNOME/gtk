@@ -63,20 +63,27 @@ struct _GtkActivatableIface
 };
 
 
+GDK_AVAILABLE_IN_ALL
 GType      gtk_activatable_get_type                   (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 void       gtk_activatable_sync_action_properties     (GtkActivatable *activatable,
 						       GtkAction      *action);
 
+GDK_AVAILABLE_IN_ALL
 void       gtk_activatable_set_related_action         (GtkActivatable *activatable,
 						       GtkAction      *action);
+GDK_AVAILABLE_IN_ALL
 GtkAction *gtk_activatable_get_related_action         (GtkActivatable *activatable);
 
+GDK_AVAILABLE_IN_ALL
 void       gtk_activatable_set_use_action_appearance  (GtkActivatable *activatable,
 						       gboolean        use_appearance);
+GDK_AVAILABLE_IN_ALL
 gboolean   gtk_activatable_get_use_action_appearance  (GtkActivatable *activatable);
 
 /* For use in activatable implementations */
+GDK_AVAILABLE_IN_ALL
 void       gtk_activatable_do_set_related_action      (GtkActivatable *activatable,
 						       GtkAction      *action);
 

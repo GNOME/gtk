@@ -86,37 +86,54 @@ struct _GtkToolbarClass
   void (*_gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType           gtk_toolbar_get_type                (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkWidget *     gtk_toolbar_new                     (void);
 
+GDK_AVAILABLE_IN_ALL
 void            gtk_toolbar_insert                  (GtkToolbar      *toolbar,
 						     GtkToolItem     *item,
 						     gint             pos);
 
+GDK_AVAILABLE_IN_ALL
 gint            gtk_toolbar_get_item_index          (GtkToolbar      *toolbar,
 						     GtkToolItem     *item);
+GDK_AVAILABLE_IN_ALL
 gint            gtk_toolbar_get_n_items             (GtkToolbar      *toolbar);
+GDK_AVAILABLE_IN_ALL
 GtkToolItem *   gtk_toolbar_get_nth_item            (GtkToolbar      *toolbar,
 						     gint             n);
 
+GDK_AVAILABLE_IN_ALL
 gboolean        gtk_toolbar_get_show_arrow          (GtkToolbar      *toolbar);
+GDK_AVAILABLE_IN_ALL
 void            gtk_toolbar_set_show_arrow          (GtkToolbar      *toolbar,
 						     gboolean         show_arrow);
 
+GDK_AVAILABLE_IN_ALL
 GtkToolbarStyle gtk_toolbar_get_style               (GtkToolbar      *toolbar);
+GDK_AVAILABLE_IN_ALL
 void            gtk_toolbar_set_style               (GtkToolbar      *toolbar,
 						     GtkToolbarStyle  style);
+GDK_AVAILABLE_IN_ALL
 void            gtk_toolbar_unset_style             (GtkToolbar      *toolbar);
 
+GDK_AVAILABLE_IN_ALL
 GtkIconSize     gtk_toolbar_get_icon_size           (GtkToolbar      *toolbar);
+GDK_AVAILABLE_IN_ALL
 void            gtk_toolbar_set_icon_size           (GtkToolbar      *toolbar,
                                                      GtkIconSize      icon_size);
+GDK_AVAILABLE_IN_ALL
 void            gtk_toolbar_unset_icon_size         (GtkToolbar      *toolbar);
 
+GDK_AVAILABLE_IN_ALL
 GtkReliefStyle  gtk_toolbar_get_relief_style        (GtkToolbar      *toolbar);
+GDK_AVAILABLE_IN_ALL
 gint            gtk_toolbar_get_drop_index          (GtkToolbar      *toolbar,
 						     gint             x,
 						     gint             y);
+GDK_AVAILABLE_IN_ALL
 void            gtk_toolbar_set_drop_highlight_item (GtkToolbar      *toolbar,
 						     GtkToolItem     *tool_item,
 						     gint             index_);

@@ -54,13 +54,19 @@ struct _GtkPrinterOptionWidgetClass
   void (*_gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType	     gtk_printer_option_widget_get_type           (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 GtkWidget   *gtk_printer_option_widget_new                (GtkPrinterOption       *source);
+GDK_AVAILABLE_IN_ALL
 void         gtk_printer_option_widget_set_source         (GtkPrinterOptionWidget *setting,
 		 					   GtkPrinterOption       *source);
+GDK_AVAILABLE_IN_ALL
 gboolean     gtk_printer_option_widget_has_external_label (GtkPrinterOptionWidget *setting);
+GDK_AVAILABLE_IN_ALL
 GtkWidget   *gtk_printer_option_widget_get_external_label (GtkPrinterOptionWidget *setting);
+GDK_AVAILABLE_IN_ALL
 const gchar *gtk_printer_option_widget_get_value          (GtkPrinterOptionWidget *setting);
 
 G_END_DECLS

@@ -83,34 +83,54 @@ struct _GtkActionClass
   void (*_gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType        gtk_action_get_type               (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkAction   *gtk_action_new                    (const gchar *name,
 						const gchar *label,
 						const gchar *tooltip,
 						const gchar *stock_id);
+GDK_AVAILABLE_IN_ALL
 const gchar* gtk_action_get_name               (GtkAction     *action);
+GDK_AVAILABLE_IN_ALL
 gboolean     gtk_action_is_sensitive           (GtkAction     *action);
+GDK_AVAILABLE_IN_ALL
 gboolean     gtk_action_get_sensitive          (GtkAction     *action);
+GDK_AVAILABLE_IN_ALL
 void         gtk_action_set_sensitive          (GtkAction     *action,
 						gboolean       sensitive);
+GDK_AVAILABLE_IN_ALL
 gboolean     gtk_action_is_visible             (GtkAction     *action);
+GDK_AVAILABLE_IN_ALL
 gboolean     gtk_action_get_visible            (GtkAction     *action);
+GDK_AVAILABLE_IN_ALL
 void         gtk_action_set_visible            (GtkAction     *action,
 						gboolean       visible);
+GDK_AVAILABLE_IN_ALL
 void         gtk_action_activate               (GtkAction     *action);
+GDK_AVAILABLE_IN_ALL
 GtkWidget *  gtk_action_create_icon            (GtkAction     *action,
 						GtkIconSize    icon_size);
+GDK_AVAILABLE_IN_ALL
 GtkWidget *  gtk_action_create_menu_item       (GtkAction     *action);
+GDK_AVAILABLE_IN_ALL
 GtkWidget *  gtk_action_create_tool_item       (GtkAction     *action);
+GDK_AVAILABLE_IN_ALL
 GtkWidget *  gtk_action_create_menu            (GtkAction     *action);
+GDK_AVAILABLE_IN_ALL
 GSList *     gtk_action_get_proxies            (GtkAction     *action);
+GDK_AVAILABLE_IN_ALL
 void         gtk_action_connect_accelerator    (GtkAction     *action);
+GDK_AVAILABLE_IN_ALL
 void         gtk_action_disconnect_accelerator (GtkAction     *action);
+GDK_AVAILABLE_IN_ALL
 const gchar *gtk_action_get_accel_path         (GtkAction     *action);
+GDK_AVAILABLE_IN_ALL
 GClosure    *gtk_action_get_accel_closure      (GtkAction     *action);
+GDK_AVAILABLE_IN_ALL
 void         gtk_action_block_activate         (GtkAction     *action);
+GDK_AVAILABLE_IN_ALL
 void         gtk_action_unblock_activate       (GtkAction     *action);
-
 
 void         _gtk_action_add_to_proxy_list     (GtkAction     *action,
 						GtkWidget     *proxy);
@@ -121,43 +141,65 @@ void         _gtk_action_remove_from_proxy_list(GtkAction     *action,
 void         _gtk_action_emit_activate         (GtkAction     *action);
 
 /* protected ... for use by action groups */
+GDK_AVAILABLE_IN_ALL
 void         gtk_action_set_accel_path         (GtkAction     *action,
 						const gchar   *accel_path);
+GDK_AVAILABLE_IN_ALL
 void         gtk_action_set_accel_group        (GtkAction     *action,
 						GtkAccelGroup *accel_group);
 void         _gtk_action_sync_menu_visible     (GtkAction     *action,
 						GtkWidget     *proxy,
 						gboolean       empty);
 
+GDK_AVAILABLE_IN_ALL
 void                  gtk_action_set_label              (GtkAction   *action,
                                                          const gchar *label);
+GDK_AVAILABLE_IN_ALL
 const gchar *         gtk_action_get_label              (GtkAction   *action);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_action_set_short_label        (GtkAction   *action,
                                                          const gchar *short_label);
+GDK_AVAILABLE_IN_ALL
 const gchar *         gtk_action_get_short_label        (GtkAction   *action);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_action_set_tooltip            (GtkAction   *action,
                                                          const gchar *tooltip);
+GDK_AVAILABLE_IN_ALL
 const gchar *         gtk_action_get_tooltip            (GtkAction   *action);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_action_set_stock_id           (GtkAction   *action,
                                                          const gchar *stock_id);
+GDK_AVAILABLE_IN_ALL
 const gchar *         gtk_action_get_stock_id           (GtkAction   *action);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_action_set_gicon              (GtkAction   *action,
                                                          GIcon       *icon);
+GDK_AVAILABLE_IN_ALL
 GIcon                *gtk_action_get_gicon              (GtkAction   *action);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_action_set_icon_name          (GtkAction   *action,
                                                          const gchar *icon_name);
+GDK_AVAILABLE_IN_ALL
 const gchar *         gtk_action_get_icon_name          (GtkAction   *action);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_action_set_visible_horizontal (GtkAction   *action,
                                                          gboolean     visible_horizontal);
+GDK_AVAILABLE_IN_ALL
 gboolean              gtk_action_get_visible_horizontal (GtkAction   *action);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_action_set_visible_vertical   (GtkAction   *action,
                                                          gboolean     visible_vertical);
+GDK_AVAILABLE_IN_ALL
 gboolean              gtk_action_get_visible_vertical   (GtkAction   *action);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_action_set_is_important       (GtkAction   *action,
                                                          gboolean     is_important);
+GDK_AVAILABLE_IN_ALL
 gboolean              gtk_action_get_is_important       (GtkAction   *action);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_action_set_always_show_image  (GtkAction   *action,
                                                          gboolean     always_show);
+GDK_AVAILABLE_IN_ALL
 gboolean              gtk_action_get_always_show_image  (GtkAction   *action);
 
 

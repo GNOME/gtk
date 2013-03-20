@@ -64,37 +64,54 @@ struct _GtkExpanderClass
   void (*_gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType                 gtk_expander_get_type            (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 GtkWidget            *gtk_expander_new                 (const gchar *label);
+GDK_AVAILABLE_IN_ALL
 GtkWidget            *gtk_expander_new_with_mnemonic   (const gchar *label);
 
+GDK_AVAILABLE_IN_ALL
 void                  gtk_expander_set_expanded        (GtkExpander *expander,
                                                         gboolean     expanded);
+GDK_AVAILABLE_IN_ALL
 gboolean              gtk_expander_get_expanded        (GtkExpander *expander);
 
 /* Spacing between the expander/label and the child */
+GDK_AVAILABLE_IN_ALL
 void                  gtk_expander_set_spacing         (GtkExpander *expander,
                                                         gint         spacing);
+GDK_AVAILABLE_IN_ALL
 gint                  gtk_expander_get_spacing         (GtkExpander *expander);
 
+GDK_AVAILABLE_IN_ALL
 void                  gtk_expander_set_label           (GtkExpander *expander,
                                                         const gchar *label);
+GDK_AVAILABLE_IN_ALL
 const gchar *         gtk_expander_get_label           (GtkExpander *expander);
 
+GDK_AVAILABLE_IN_ALL
 void                  gtk_expander_set_use_underline   (GtkExpander *expander,
                                                         gboolean     use_underline);
+GDK_AVAILABLE_IN_ALL
 gboolean              gtk_expander_get_use_underline   (GtkExpander *expander);
 
+GDK_AVAILABLE_IN_ALL
 void                  gtk_expander_set_use_markup      (GtkExpander *expander,
                                                         gboolean    use_markup);
+GDK_AVAILABLE_IN_ALL
 gboolean              gtk_expander_get_use_markup      (GtkExpander *expander);
 
+GDK_AVAILABLE_IN_ALL
 void                  gtk_expander_set_label_widget    (GtkExpander *expander,
 						        GtkWidget   *label_widget);
+GDK_AVAILABLE_IN_ALL
 GtkWidget            *gtk_expander_get_label_widget    (GtkExpander *expander);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_expander_set_label_fill      (GtkExpander *expander,
 						        gboolean     label_fill);
+GDK_AVAILABLE_IN_ALL
 gboolean              gtk_expander_get_label_fill      (GtkExpander *expander);
 GDK_AVAILABLE_IN_3_2
 void                  gtk_expander_set_resize_toplevel (GtkExpander *expander,

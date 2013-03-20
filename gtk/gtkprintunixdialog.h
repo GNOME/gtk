@@ -59,35 +59,54 @@ struct _GtkPrintUnixDialogClass
   void (*_gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType                gtk_print_unix_dialog_get_type                (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkWidget *          gtk_print_unix_dialog_new                     (const gchar *title,
                                                                     GtkWindow   *parent);
 
+GDK_AVAILABLE_IN_ALL
 void                 gtk_print_unix_dialog_set_page_setup          (GtkPrintUnixDialog *dialog,
 								    GtkPageSetup       *page_setup);
+GDK_AVAILABLE_IN_ALL
 GtkPageSetup *       gtk_print_unix_dialog_get_page_setup          (GtkPrintUnixDialog *dialog);
+GDK_AVAILABLE_IN_ALL
 void                 gtk_print_unix_dialog_set_current_page        (GtkPrintUnixDialog *dialog,
 								    gint                current_page);
+GDK_AVAILABLE_IN_ALL
 gint                 gtk_print_unix_dialog_get_current_page        (GtkPrintUnixDialog *dialog);
+GDK_AVAILABLE_IN_ALL
 void                 gtk_print_unix_dialog_set_settings            (GtkPrintUnixDialog *dialog,
 								    GtkPrintSettings   *settings);
+GDK_AVAILABLE_IN_ALL
 GtkPrintSettings *   gtk_print_unix_dialog_get_settings            (GtkPrintUnixDialog *dialog);
+GDK_AVAILABLE_IN_ALL
 GtkPrinter *         gtk_print_unix_dialog_get_selected_printer    (GtkPrintUnixDialog *dialog);
+GDK_AVAILABLE_IN_ALL
 void                 gtk_print_unix_dialog_add_custom_tab          (GtkPrintUnixDialog *dialog,
 								    GtkWidget          *child,
 								    GtkWidget          *tab_label);
+GDK_AVAILABLE_IN_ALL
 void                 gtk_print_unix_dialog_set_manual_capabilities (GtkPrintUnixDialog *dialog,
 								    GtkPrintCapabilities capabilities);
+GDK_AVAILABLE_IN_ALL
 GtkPrintCapabilities gtk_print_unix_dialog_get_manual_capabilities (GtkPrintUnixDialog  *dialog);
+GDK_AVAILABLE_IN_ALL
 void                 gtk_print_unix_dialog_set_support_selection   (GtkPrintUnixDialog  *dialog,
 								    gboolean             support_selection);
+GDK_AVAILABLE_IN_ALL
 gboolean             gtk_print_unix_dialog_get_support_selection   (GtkPrintUnixDialog  *dialog);
+GDK_AVAILABLE_IN_ALL
 void                 gtk_print_unix_dialog_set_has_selection       (GtkPrintUnixDialog  *dialog,
 								    gboolean             has_selection);
+GDK_AVAILABLE_IN_ALL
 gboolean             gtk_print_unix_dialog_get_has_selection       (GtkPrintUnixDialog  *dialog);
+GDK_AVAILABLE_IN_ALL
 void                 gtk_print_unix_dialog_set_embed_page_setup    (GtkPrintUnixDialog *dialog,
 								    gboolean            embed);
+GDK_AVAILABLE_IN_ALL
 gboolean             gtk_print_unix_dialog_get_embed_page_setup    (GtkPrintUnixDialog *dialog);
+GDK_AVAILABLE_IN_ALL
 gboolean             gtk_print_unix_dialog_get_page_setup_set      (GtkPrintUnixDialog *dialog);
 
 G_END_DECLS

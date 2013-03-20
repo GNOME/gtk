@@ -90,6 +90,7 @@ G_BEGIN_DECLS
  *                     is the top left of the layout
  * widgets           - list of widgets that need exposing
  */
+GDK_AVAILABLE_IN_ALL
 void gtk_text_layout_draw (GtkTextLayout        *layout,
                            GtkWidget            *widget,
                            cairo_t              *cr,

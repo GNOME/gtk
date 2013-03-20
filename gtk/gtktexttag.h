@@ -98,11 +98,16 @@ struct _GtkTextTagClass
   void (*_gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType        gtk_text_tag_get_type     (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkTextTag  *gtk_text_tag_new          (const gchar       *name);
+GDK_AVAILABLE_IN_ALL
 gint         gtk_text_tag_get_priority (GtkTextTag        *tag);
+GDK_AVAILABLE_IN_ALL
 void         gtk_text_tag_set_priority (GtkTextTag        *tag,
                                         gint               priority);
+GDK_AVAILABLE_IN_ALL
 gboolean     gtk_text_tag_event        (GtkTextTag        *tag,
                                         GObject           *event_object,
                                         GdkEvent          *event,

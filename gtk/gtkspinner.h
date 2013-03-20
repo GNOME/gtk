@@ -61,9 +61,13 @@ struct _GtkSpinnerClass
   void (*_gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType      gtk_spinner_get_type  (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_spinner_new (void);
+GDK_AVAILABLE_IN_ALL
 void       gtk_spinner_start      (GtkSpinner *spinner);
+GDK_AVAILABLE_IN_ALL
 void       gtk_spinner_stop       (GtkSpinner *spinner);
 
 G_END_DECLS

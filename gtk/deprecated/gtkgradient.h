@@ -31,6 +31,7 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_GRADIENT (gtk_gradient_get_type ())
 
+GDK_DEPRECATED_IN_3_8
 GType         gtk_gradient_get_type       (void) G_GNUC_CONST;
 
 GDK_DEPRECATED_IN_3_8

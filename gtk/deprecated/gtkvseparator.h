@@ -61,6 +61,7 @@ struct _GtkVSeparatorClass
 };
 
 
+GDK_DEPRECATED_IN_3_2
 GType      gtk_vseparator_get_type (void) G_GNUC_CONST;
 GDK_DEPRECATED_IN_3_2_FOR(gtk_separator_new)
 GtkWidget* gtk_vseparator_new      (void);

@@ -130,40 +130,51 @@ struct _GtkBuildableIface
 };
 
 
+GDK_AVAILABLE_IN_ALL
 GType     gtk_buildable_get_type               (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 void      gtk_buildable_set_name               (GtkBuildable        *buildable,
 						const gchar         *name);
+GDK_AVAILABLE_IN_ALL
 const gchar * gtk_buildable_get_name           (GtkBuildable        *buildable);
+GDK_AVAILABLE_IN_ALL
 void      gtk_buildable_add_child              (GtkBuildable        *buildable,
 						GtkBuilder          *builder,
 						GObject             *child,
 						const gchar         *type);
+GDK_AVAILABLE_IN_ALL
 void      gtk_buildable_set_buildable_property (GtkBuildable        *buildable,
 						GtkBuilder          *builder,
 						const gchar         *name,
 						const GValue        *value);
+GDK_AVAILABLE_IN_ALL
 GObject * gtk_buildable_construct_child        (GtkBuildable        *buildable,
 						GtkBuilder          *builder,
 						const gchar         *name);
+GDK_AVAILABLE_IN_ALL
 gboolean  gtk_buildable_custom_tag_start       (GtkBuildable        *buildable,
 						GtkBuilder          *builder,
 						GObject             *child,
 						const gchar         *tagname,
 						GMarkupParser       *parser,
 						gpointer            *data);
+GDK_AVAILABLE_IN_ALL
 void      gtk_buildable_custom_tag_end         (GtkBuildable        *buildable,
 						GtkBuilder          *builder,
 						GObject             *child,
 						const gchar         *tagname,
 						gpointer            *data);
+GDK_AVAILABLE_IN_ALL
 void      gtk_buildable_custom_finished        (GtkBuildable        *buildable,
 						GtkBuilder          *builder,
 						GObject             *child,
 						const gchar         *tagname,
 						gpointer             data);
+GDK_AVAILABLE_IN_ALL
 void      gtk_buildable_parser_finished        (GtkBuildable        *buildable,
 						GtkBuilder          *builder);
+GDK_AVAILABLE_IN_ALL
 GObject * gtk_buildable_get_internal_child     (GtkBuildable        *buildable,
 						GtkBuilder          *builder,
 						const gchar         *childname);

@@ -58,13 +58,18 @@ struct _GtkIMMulticontextClass
   void (*_gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType         gtk_im_multicontext_get_type (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkIMContext *gtk_im_multicontext_new      (void);
 
+GDK_AVAILABLE_IN_ALL
 void          gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
 						    GtkMenuShell      *menushell);
+GDK_AVAILABLE_IN_ALL
 const char  * gtk_im_multicontext_get_context_id   (GtkIMMulticontext *context);
 
+GDK_AVAILABLE_IN_ALL
 void          gtk_im_multicontext_set_context_id   (GtkIMMulticontext *context,
                                                     const char        *context_id);
  

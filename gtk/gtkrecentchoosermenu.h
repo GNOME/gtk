@@ -58,12 +58,17 @@ struct _GtkRecentChooserMenuClass
   void (* gtk_recent4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType      gtk_recent_chooser_menu_get_type         (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_recent_chooser_menu_new              (void);
+GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_recent_chooser_menu_new_for_manager  (GtkRecentManager     *manager);
 
+GDK_AVAILABLE_IN_ALL
 gboolean   gtk_recent_chooser_menu_get_show_numbers (GtkRecentChooserMenu *menu);
+GDK_AVAILABLE_IN_ALL
 void       gtk_recent_chooser_menu_set_show_numbers (GtkRecentChooserMenu *menu,
 						     gboolean              show_numbers);
 

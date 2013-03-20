@@ -30,6 +30,7 @@
 #endif
 
 #include <glib.h>
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 
@@ -63,7 +64,9 @@ typedef enum {
 
 #endif /* G_ENABLE_DEBUG */
 
+GDK_AVAILABLE_IN_ALL
 guint gtk_get_debug_flags (void);
+GDK_AVAILABLE_IN_ALL
 void  gtk_set_debug_flags  (guint flags);
 
 G_END_DECLS

@@ -55,6 +55,7 @@ struct _GtkVBoxClass
 };
 
 
+GDK_DEPRECATED_IN_3_2
 GType       gtk_vbox_get_type (void) G_GNUC_CONST;
 GDK_DEPRECATED_IN_3_2_FOR(gtk_box_new)
 GtkWidget * gtk_vbox_new      (gboolean homogeneous,

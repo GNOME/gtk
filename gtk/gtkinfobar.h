@@ -80,35 +80,48 @@ struct _GtkInfoBarClass
   void (*_gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType          gtk_info_bar_get_type               (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkWidget     *gtk_info_bar_new                    (void);
 
+GDK_AVAILABLE_IN_ALL
 GtkWidget     *gtk_info_bar_new_with_buttons       (const gchar    *first_button_text,
                                                     ...);
 
+GDK_AVAILABLE_IN_ALL
 GtkWidget     *gtk_info_bar_get_action_area        (GtkInfoBar     *info_bar);
+GDK_AVAILABLE_IN_ALL
 GtkWidget     *gtk_info_bar_get_content_area       (GtkInfoBar     *info_bar);
+GDK_AVAILABLE_IN_ALL
 void           gtk_info_bar_add_action_widget      (GtkInfoBar     *info_bar,
                                                     GtkWidget      *child,
                                                     gint            response_id);
+GDK_AVAILABLE_IN_ALL
 GtkWidget     *gtk_info_bar_add_button             (GtkInfoBar     *info_bar,
                                                     const gchar    *button_text,
                                                     gint            response_id);
+GDK_AVAILABLE_IN_ALL
 void           gtk_info_bar_add_buttons            (GtkInfoBar     *info_bar,
                                                     const gchar    *first_button_text,
                                                     ...);
+GDK_AVAILABLE_IN_ALL
 void           gtk_info_bar_set_response_sensitive (GtkInfoBar     *info_bar,
                                                     gint            response_id,
                                                     gboolean        setting);
+GDK_AVAILABLE_IN_ALL
 void           gtk_info_bar_set_default_response   (GtkInfoBar     *info_bar,
                                                     gint            response_id);
 
 /* Emit response signal */
+GDK_AVAILABLE_IN_ALL
 void           gtk_info_bar_response               (GtkInfoBar     *info_bar,
                                                     gint            response_id);
 
+GDK_AVAILABLE_IN_ALL
 void           gtk_info_bar_set_message_type       (GtkInfoBar     *info_bar,
                                                     GtkMessageType  message_type);
+GDK_AVAILABLE_IN_ALL
 GtkMessageType gtk_info_bar_get_message_type       (GtkInfoBar     *info_bar);
 
 G_END_DECLS

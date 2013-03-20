@@ -71,20 +71,31 @@ struct _GtkCheckMenuItemClass
 };
 
 
+GDK_AVAILABLE_IN_ALL
 GType	   gtk_check_menu_item_get_type	         (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_check_menu_item_new               (void);
+GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_check_menu_item_new_with_label    (const gchar      *label);
+GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_check_menu_item_new_with_mnemonic (const gchar      *label);
+GDK_AVAILABLE_IN_ALL
 void       gtk_check_menu_item_set_active        (GtkCheckMenuItem *check_menu_item,
 						  gboolean          is_active);
+GDK_AVAILABLE_IN_ALL
 gboolean   gtk_check_menu_item_get_active        (GtkCheckMenuItem *check_menu_item);
+GDK_AVAILABLE_IN_ALL
 void       gtk_check_menu_item_toggled           (GtkCheckMenuItem *check_menu_item);
+GDK_AVAILABLE_IN_ALL
 void       gtk_check_menu_item_set_inconsistent  (GtkCheckMenuItem *check_menu_item,
 						  gboolean          setting);
+GDK_AVAILABLE_IN_ALL
 gboolean   gtk_check_menu_item_get_inconsistent  (GtkCheckMenuItem *check_menu_item);
+GDK_AVAILABLE_IN_ALL
 void       gtk_check_menu_item_set_draw_as_radio (GtkCheckMenuItem *check_menu_item,
 						  gboolean          draw_as_radio);
+GDK_AVAILABLE_IN_ALL
 gboolean   gtk_check_menu_item_get_draw_as_radio (GtkCheckMenuItem *check_menu_item);
 
 

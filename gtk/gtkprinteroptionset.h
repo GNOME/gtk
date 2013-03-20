@@ -28,6 +28,7 @@
 #endif
 
 #include <glib-object.h>
+#include <gdk/gdk.h>
 #include "gtkprinteroption.h"
 
 G_BEGIN_DECLS
@@ -66,20 +67,29 @@ typedef void (*GtkPrinterOptionSetFunc) (GtkPrinterOption  *option,
 					 gpointer           user_data);
 
 
+GDK_AVAILABLE_IN_ALL
 GType   gtk_printer_option_set_get_type       (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 GtkPrinterOptionSet *gtk_printer_option_set_new              (void);
+GDK_AVAILABLE_IN_ALL
 void                 gtk_printer_option_set_add              (GtkPrinterOptionSet     *set,
 							      GtkPrinterOption        *option);
+GDK_AVAILABLE_IN_ALL
 void                 gtk_printer_option_set_remove           (GtkPrinterOptionSet     *set,
 							      GtkPrinterOption        *option);
+GDK_AVAILABLE_IN_ALL
 GtkPrinterOption *   gtk_printer_option_set_lookup           (GtkPrinterOptionSet     *set,
 							      const char              *name);
+GDK_AVAILABLE_IN_ALL
 void                 gtk_printer_option_set_foreach          (GtkPrinterOptionSet     *set,
 							      GtkPrinterOptionSetFunc  func,
 							      gpointer                 user_data);
+GDK_AVAILABLE_IN_ALL
 void                 gtk_printer_option_set_clear_conflicts  (GtkPrinterOptionSet     *set);
+GDK_AVAILABLE_IN_ALL
 GList *              gtk_printer_option_set_get_groups       (GtkPrinterOptionSet     *set);
+GDK_AVAILABLE_IN_ALL
 void                 gtk_printer_option_set_foreach_in_group (GtkPrinterOptionSet     *set,
 							      const char              *group,
 							      GtkPrinterOptionSetFunc  func,

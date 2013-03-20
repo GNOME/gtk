@@ -65,12 +65,18 @@ struct _GtkEventBoxClass
   void (*_gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType      gtk_event_box_get_type           (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_event_box_new                (void);
+GDK_AVAILABLE_IN_ALL
 gboolean   gtk_event_box_get_visible_window (GtkEventBox *event_box);
+GDK_AVAILABLE_IN_ALL
 void       gtk_event_box_set_visible_window (GtkEventBox *event_box,
                                              gboolean     visible_window);
+GDK_AVAILABLE_IN_ALL
 gboolean   gtk_event_box_get_above_child    (GtkEventBox *event_box);
+GDK_AVAILABLE_IN_ALL
 void       gtk_event_box_set_above_child    (GtkEventBox *event_box,
                                              gboolean     above_child);
 

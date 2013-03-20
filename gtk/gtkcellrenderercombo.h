@@ -57,7 +57,9 @@ struct _GtkCellRendererComboClass
   void (*_gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType            gtk_cell_renderer_combo_get_type (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkCellRenderer *gtk_cell_renderer_combo_new      (void);
 
 G_END_DECLS

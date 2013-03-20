@@ -70,23 +70,30 @@ struct _GtkLayoutClass
   void (*_gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType          gtk_layout_get_type        (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkWidget*     gtk_layout_new             (GtkAdjustment *hadjustment,
 				           GtkAdjustment *vadjustment);
+GDK_AVAILABLE_IN_ALL
 GdkWindow*     gtk_layout_get_bin_window  (GtkLayout     *layout);
+GDK_AVAILABLE_IN_ALL
 void           gtk_layout_put             (GtkLayout     *layout,
 		                           GtkWidget     *child_widget,
 		                           gint           x,
 		                           gint           y);
 
+GDK_AVAILABLE_IN_ALL
 void           gtk_layout_move            (GtkLayout     *layout,
 		                           GtkWidget     *child_widget,
 		                           gint           x,
 		                           gint           y);
 
+GDK_AVAILABLE_IN_ALL
 void           gtk_layout_set_size        (GtkLayout     *layout,
 			                   guint          width,
 			                   guint          height);
+GDK_AVAILABLE_IN_ALL
 void           gtk_layout_get_size        (GtkLayout     *layout,
 					   guint         *width,
 					   guint         *height);

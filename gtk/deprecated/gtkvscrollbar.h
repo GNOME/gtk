@@ -61,6 +61,7 @@ struct _GtkVScrollbarClass
 };
 
 
+GDK_DEPRECATED_IN_3_2
 GType      gtk_vscrollbar_get_type (void) G_GNUC_CONST;
 GDK_DEPRECATED_IN_3_2_FOR(gtk_scrollbar_new)
 GtkWidget* gtk_vscrollbar_new      (GtkAdjustment *adjustment);

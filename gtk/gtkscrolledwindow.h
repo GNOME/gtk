@@ -81,39 +81,58 @@ struct _GtkScrolledWindowClass
 };
 
 
+GDK_AVAILABLE_IN_ALL
 GType          gtk_scrolled_window_get_type          (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkWidget*     gtk_scrolled_window_new               (GtkAdjustment     *hadjustment,
 						      GtkAdjustment     *vadjustment);
+GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_set_hadjustment   (GtkScrolledWindow *scrolled_window,
 						      GtkAdjustment     *hadjustment);
+GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_set_vadjustment   (GtkScrolledWindow *scrolled_window,
 						      GtkAdjustment     *vadjustment);
+GDK_AVAILABLE_IN_ALL
 GtkAdjustment* gtk_scrolled_window_get_hadjustment   (GtkScrolledWindow *scrolled_window);
+GDK_AVAILABLE_IN_ALL
 GtkAdjustment* gtk_scrolled_window_get_vadjustment   (GtkScrolledWindow *scrolled_window);
+GDK_AVAILABLE_IN_ALL
 GtkWidget*     gtk_scrolled_window_get_hscrollbar    (GtkScrolledWindow *scrolled_window);
+GDK_AVAILABLE_IN_ALL
 GtkWidget*     gtk_scrolled_window_get_vscrollbar    (GtkScrolledWindow *scrolled_window);
+GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_set_policy        (GtkScrolledWindow *scrolled_window,
 						      GtkPolicyType      hscrollbar_policy,
 						      GtkPolicyType      vscrollbar_policy);
+GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_get_policy        (GtkScrolledWindow *scrolled_window,
 						      GtkPolicyType     *hscrollbar_policy,
 						      GtkPolicyType     *vscrollbar_policy);
+GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_set_placement     (GtkScrolledWindow *scrolled_window,
 						      GtkCornerType      window_placement);
+GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_unset_placement   (GtkScrolledWindow *scrolled_window);
 
+GDK_AVAILABLE_IN_ALL
 GtkCornerType  gtk_scrolled_window_get_placement     (GtkScrolledWindow *scrolled_window);
+GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_set_shadow_type   (GtkScrolledWindow *scrolled_window,
 						      GtkShadowType      type);
+GDK_AVAILABLE_IN_ALL
 GtkShadowType  gtk_scrolled_window_get_shadow_type   (GtkScrolledWindow *scrolled_window);
 GDK_DEPRECATED_IN_3_8_FOR(gtk_container_add)
 void	       gtk_scrolled_window_add_with_viewport (GtkScrolledWindow *scrolled_window,
 						      GtkWidget		*child);
 
+GDK_AVAILABLE_IN_ALL
 gint           gtk_scrolled_window_get_min_content_width  (GtkScrolledWindow *scrolled_window);
+GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_set_min_content_width  (GtkScrolledWindow *scrolled_window,
                                                            gint               width);
+GDK_AVAILABLE_IN_ALL
 gint           gtk_scrolled_window_get_min_content_height (GtkScrolledWindow *scrolled_window);
+GDK_AVAILABLE_IN_ALL
 void           gtk_scrolled_window_set_min_content_height (GtkScrolledWindow *scrolled_window,
                                                            gint               height);
 GDK_AVAILABLE_IN_3_4

@@ -55,6 +55,7 @@ struct _GtkVPanedClass
 };
 
 
+GDK_DEPRECATED_IN_3_2
 GType       gtk_vpaned_get_type (void) G_GNUC_CONST;
 GDK_DEPRECATED_IN_3_2_FOR(gtk_paned_new)
 GtkWidget * gtk_vpaned_new      (void);

@@ -80,6 +80,7 @@ typedef enum
   GTK_BUILDER_ERROR_TEMPLATE_MISMATCH
 } GtkBuilderError;
 
+GDK_AVAILABLE_IN_ALL
 GQuark gtk_builder_error_quark (void);
 
 struct _GtkBuilder
@@ -107,19 +108,25 @@ struct _GtkBuilderClass
   void (*_gtk_reserved8) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType        gtk_builder_get_type                (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkBuilder*  gtk_builder_new                     (void);
 
+GDK_AVAILABLE_IN_ALL
 guint        gtk_builder_add_from_file           (GtkBuilder    *builder,
                                                   const gchar   *filename,
                                                   GError       **error);
+GDK_AVAILABLE_IN_ALL
 guint        gtk_builder_add_from_resource       (GtkBuilder    *builder,
                                                   const gchar   *resource_path,
                                                   GError       **error);
+GDK_AVAILABLE_IN_ALL
 guint        gtk_builder_add_from_string         (GtkBuilder    *builder,
                                                   const gchar   *buffer,
                                                   gsize          length,
                                                   GError       **error);
+GDK_AVAILABLE_IN_ALL
 guint        gtk_builder_add_objects_from_file   (GtkBuilder    *builder,
                                                   const gchar   *filename,
                                                   gchar        **object_ids,
@@ -129,34 +136,44 @@ guint        gtk_builder_add_objects_from_resource(GtkBuilder    *builder,
                                                   const gchar   *resource_path,
                                                   gchar        **object_ids,
                                                   GError       **error);
+GDK_AVAILABLE_IN_ALL
 guint        gtk_builder_add_objects_from_string (GtkBuilder    *builder,
                                                   const gchar   *buffer,
                                                   gsize          length,
                                                   gchar        **object_ids,
                                                   GError       **error);
+GDK_AVAILABLE_IN_ALL
 GObject*     gtk_builder_get_object              (GtkBuilder    *builder,
                                                   const gchar   *name);
+GDK_AVAILABLE_IN_ALL
 GSList*      gtk_builder_get_objects             (GtkBuilder    *builder);
 GDK_AVAILABLE_IN_3_8
 void         gtk_builder_expose_object           (GtkBuilder    *builder,
                                                   const gchar   *name,
                                                   GObject       *object);
+GDK_AVAILABLE_IN_ALL
 void         gtk_builder_connect_signals         (GtkBuilder    *builder,
 						  gpointer       user_data);
+GDK_AVAILABLE_IN_ALL
 void         gtk_builder_connect_signals_full    (GtkBuilder    *builder,
                                                   GtkBuilderConnectFunc func,
 						  gpointer       user_data);
+GDK_AVAILABLE_IN_ALL
 void         gtk_builder_set_translation_domain  (GtkBuilder   	*builder,
                                                   const gchar  	*domain);
+GDK_AVAILABLE_IN_ALL
 const gchar* gtk_builder_get_translation_domain  (GtkBuilder   	*builder);
+GDK_AVAILABLE_IN_ALL
 GType        gtk_builder_get_type_from_name      (GtkBuilder   	*builder,
                                                   const char   	*type_name);
 
+GDK_AVAILABLE_IN_ALL
 gboolean     gtk_builder_value_from_string       (GtkBuilder    *builder,
 						  GParamSpec   	*pspec,
                                                   const gchar  	*string,
                                                   GValue       	*value,
 						  GError       **error);
+GDK_AVAILABLE_IN_ALL
 gboolean     gtk_builder_value_from_string_type  (GtkBuilder    *builder,
 						  GType        	 type,
                                                   const gchar  	*string,

@@ -62,12 +62,17 @@ struct _GtkToggleToolButtonClass
   void (* _gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType        gtk_toggle_tool_button_get_type       (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkToolItem *gtk_toggle_tool_button_new            (void);
+GDK_AVAILABLE_IN_ALL
 GtkToolItem *gtk_toggle_tool_button_new_from_stock (const gchar *stock_id);
 
+GDK_AVAILABLE_IN_ALL
 void         gtk_toggle_tool_button_set_active     (GtkToggleToolButton *button,
 						    gboolean             is_active);
+GDK_AVAILABLE_IN_ALL
 gboolean     gtk_toggle_tool_button_get_active     (GtkToggleToolButton *button);
 
 G_END_DECLS

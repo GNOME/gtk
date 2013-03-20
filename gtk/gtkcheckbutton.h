@@ -66,9 +66,13 @@ struct _GtkCheckButtonClass
 };
 
 
+GDK_AVAILABLE_IN_ALL
 GType      gtk_check_button_get_type       (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_check_button_new               (void);
+GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_check_button_new_with_label    (const gchar *label);
+GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_check_button_new_with_mnemonic (const gchar *label);
 
 void _gtk_check_button_get_props (GtkCheckButton *check_button,

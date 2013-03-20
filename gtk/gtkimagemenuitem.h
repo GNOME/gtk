@@ -67,21 +67,33 @@ struct _GtkImageMenuItemClass
 };
 
 
+GDK_AVAILABLE_IN_ALL
 GType	   gtk_image_menu_item_get_type          (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_menu_item_new               (void);
+GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_menu_item_new_with_label    (const gchar      *label);
+GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_menu_item_new_with_mnemonic (const gchar      *label);
+GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_menu_item_new_from_stock    (const gchar      *stock_id,
                                                   GtkAccelGroup    *accel_group);
+GDK_AVAILABLE_IN_ALL
 void       gtk_image_menu_item_set_always_show_image (GtkImageMenuItem *image_menu_item,
                                                       gboolean          always_show);
+GDK_AVAILABLE_IN_ALL
 gboolean   gtk_image_menu_item_get_always_show_image (GtkImageMenuItem *image_menu_item);
+GDK_AVAILABLE_IN_ALL
 void       gtk_image_menu_item_set_image         (GtkImageMenuItem *image_menu_item,
                                                   GtkWidget        *image);
+GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_menu_item_get_image         (GtkImageMenuItem *image_menu_item);
+GDK_AVAILABLE_IN_ALL
 void       gtk_image_menu_item_set_use_stock     (GtkImageMenuItem *image_menu_item,
 						  gboolean          use_stock);
+GDK_AVAILABLE_IN_ALL
 gboolean   gtk_image_menu_item_get_use_stock     (GtkImageMenuItem *image_menu_item);
+GDK_AVAILABLE_IN_ALL
 void       gtk_image_menu_item_set_accel_group   (GtkImageMenuItem *image_menu_item, 
 						  GtkAccelGroup    *accel_group);
 

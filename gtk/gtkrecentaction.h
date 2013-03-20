@@ -59,17 +59,22 @@ struct _GtkRecentActionClass
   void (*_gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType      gtk_recent_action_get_type         (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkAction *gtk_recent_action_new              (const gchar      *name,
                                                const gchar      *label,
                                                const gchar      *tooltip,
                                                const gchar      *stock_id);
+GDK_AVAILABLE_IN_ALL
 GtkAction *gtk_recent_action_new_for_manager  (const gchar      *name,
                                                const gchar      *label,
                                                const gchar      *tooltip,
                                                const gchar      *stock_id,
                                                GtkRecentManager *manager);
+GDK_AVAILABLE_IN_ALL
 gboolean   gtk_recent_action_get_show_numbers (GtkRecentAction  *action);
+GDK_AVAILABLE_IN_ALL
 void       gtk_recent_action_set_show_numbers (GtkRecentAction  *action,
                                                gboolean          show_numbers);
 

@@ -61,12 +61,15 @@ struct _GtkRecentChooserDialogClass
 };
 
 
+GDK_AVAILABLE_IN_ALL
 GType      gtk_recent_chooser_dialog_get_type        (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_recent_chooser_dialog_new             (const gchar      *title,
 					              GtkWindow        *parent,
 					              const gchar      *first_button_text,
 					              ...) G_GNUC_NULL_TERMINATED;
+GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_recent_chooser_dialog_new_for_manager (const gchar      *title,
 						      GtkWindow        *parent,
 						      GtkRecentManager *manager,

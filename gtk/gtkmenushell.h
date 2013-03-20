@@ -86,30 +86,44 @@ struct _GtkMenuShellClass
 };
 
 
+GDK_AVAILABLE_IN_ALL
 GType    gtk_menu_shell_get_type       (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 void     gtk_menu_shell_append         (GtkMenuShell *menu_shell,
                                         GtkWidget    *child);
+GDK_AVAILABLE_IN_ALL
 void     gtk_menu_shell_prepend        (GtkMenuShell *menu_shell,
                                         GtkWidget    *child);
+GDK_AVAILABLE_IN_ALL
 void     gtk_menu_shell_insert         (GtkMenuShell *menu_shell,
                                         GtkWidget    *child,
                                         gint          position);
+GDK_AVAILABLE_IN_ALL
 void     gtk_menu_shell_deactivate     (GtkMenuShell *menu_shell);
+GDK_AVAILABLE_IN_ALL
 void     gtk_menu_shell_select_item    (GtkMenuShell *menu_shell,
                                         GtkWidget    *menu_item);
+GDK_AVAILABLE_IN_ALL
 void     gtk_menu_shell_deselect       (GtkMenuShell *menu_shell);
+GDK_AVAILABLE_IN_ALL
 void     gtk_menu_shell_activate_item  (GtkMenuShell *menu_shell,
                                         GtkWidget    *menu_item,
                                         gboolean      force_deactivate);
+GDK_AVAILABLE_IN_ALL
 void     gtk_menu_shell_select_first   (GtkMenuShell *menu_shell,
                                         gboolean      search_sensitive);
+GDK_AVAILABLE_IN_ALL
 void     gtk_menu_shell_cancel         (GtkMenuShell *menu_shell);
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_menu_shell_get_take_focus (GtkMenuShell *menu_shell);
+GDK_AVAILABLE_IN_ALL
 void     gtk_menu_shell_set_take_focus (GtkMenuShell *menu_shell,
                                         gboolean      take_focus);
 
+GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_menu_shell_get_selected_item (GtkMenuShell *menu_shell);
+GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_menu_shell_get_parent_shell  (GtkMenuShell *menu_shell);
 
 GDK_AVAILABLE_IN_3_6

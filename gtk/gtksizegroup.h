@@ -58,19 +58,28 @@ struct _GtkSizeGroupClass
   void (*_gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType            gtk_size_group_get_type      (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 GtkSizeGroup *   gtk_size_group_new           (GtkSizeGroupMode  mode);
+GDK_AVAILABLE_IN_ALL
 void             gtk_size_group_set_mode      (GtkSizeGroup     *size_group,
 					       GtkSizeGroupMode  mode);
+GDK_AVAILABLE_IN_ALL
 GtkSizeGroupMode gtk_size_group_get_mode      (GtkSizeGroup     *size_group);
+GDK_AVAILABLE_IN_ALL
 void             gtk_size_group_set_ignore_hidden (GtkSizeGroup *size_group,
 						   gboolean      ignore_hidden);
+GDK_AVAILABLE_IN_ALL
 gboolean         gtk_size_group_get_ignore_hidden (GtkSizeGroup *size_group);
+GDK_AVAILABLE_IN_ALL
 void             gtk_size_group_add_widget    (GtkSizeGroup     *size_group,
 					       GtkWidget        *widget);
+GDK_AVAILABLE_IN_ALL
 void             gtk_size_group_remove_widget (GtkSizeGroup     *size_group,
 					       GtkWidget        *widget);
+GDK_AVAILABLE_IN_ALL
 GSList *         gtk_size_group_get_widgets   (GtkSizeGroup     *size_group);
 
 G_END_DECLS

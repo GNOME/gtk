@@ -113,12 +113,15 @@ struct _GtkMenuClass
 };
 
 
+GDK_AVAILABLE_IN_ALL
 GType	   gtk_menu_get_type		  (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_menu_new			  (void);
 GDK_AVAILABLE_IN_3_4
 GtkWidget* gtk_menu_new_from_model        (GMenuModel *model);
 
 /* Display the menu onscreen */
+GDK_AVAILABLE_IN_ALL
 void	   gtk_menu_popup		  (GtkMenu	       *menu,
 					   GtkWidget	       *parent_menu_shell,
 					   GtkWidget	       *parent_menu_item,
@@ -126,6 +129,7 @@ void	   gtk_menu_popup		  (GtkMenu	       *menu,
 					   gpointer		data,
 					   guint		button,
 					   guint32		activate_time);
+GDK_AVAILABLE_IN_ALL
 void       gtk_menu_popup_for_device      (GtkMenu             *menu,
                                            GdkDevice           *device,
                                            GtkWidget           *parent_menu_shell,
@@ -139,60 +143,78 @@ void       gtk_menu_popup_for_device      (GtkMenu             *menu,
 /* Position the menu according to its position function. Called
  * from gtkmenuitem.c when a menu-item changes its allocation
  */
+GDK_AVAILABLE_IN_ALL
 void	   gtk_menu_reposition		  (GtkMenu	       *menu);
 
+GDK_AVAILABLE_IN_ALL
 void	   gtk_menu_popdown		  (GtkMenu	       *menu);
 
 /* Keep track of the last menu item selected. (For the purposes
  * of the option menu
  */
+GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_menu_get_active		  (GtkMenu	       *menu);
+GDK_AVAILABLE_IN_ALL
 void	   gtk_menu_set_active		  (GtkMenu	       *menu,
 					   guint		index);
 
 /* set/get the accelerator group that holds global accelerators (should
  * be added to the corresponding toplevel with gtk_window_add_accel_group().
  */
+GDK_AVAILABLE_IN_ALL
 void	       gtk_menu_set_accel_group	  (GtkMenu	       *menu,
 					   GtkAccelGroup       *accel_group);
+GDK_AVAILABLE_IN_ALL
 GtkAccelGroup* gtk_menu_get_accel_group	  (GtkMenu	       *menu);
+GDK_AVAILABLE_IN_ALL
 void           gtk_menu_set_accel_path    (GtkMenu             *menu,
 					   const gchar         *accel_path);
+GDK_AVAILABLE_IN_ALL
 const gchar*   gtk_menu_get_accel_path    (GtkMenu             *menu);
 
 /* A reference count is kept for a widget when it is attached to
  * a particular widget. This is typically a menu item; it may also
  * be a widget with a popup menu - for instance, the Notebook widget.
  */
+GDK_AVAILABLE_IN_ALL
 void	   gtk_menu_attach_to_widget	  (GtkMenu	       *menu,
 					   GtkWidget	       *attach_widget,
 					   GtkMenuDetachFunc	detacher);
+GDK_AVAILABLE_IN_ALL
 void	   gtk_menu_detach		  (GtkMenu	       *menu);
 
 /* This should be dumped in favor of data set when the menu is popped
  * up - that is currently in the ItemFactory code, but should be
  * in the Menu code.
  */
+GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_menu_get_attach_widget	  (GtkMenu	       *menu);
 
+GDK_AVAILABLE_IN_ALL
 void       gtk_menu_set_tearoff_state     (GtkMenu             *menu,
 					   gboolean             torn_off);
+GDK_AVAILABLE_IN_ALL
 gboolean   gtk_menu_get_tearoff_state     (GtkMenu             *menu);
 
 /* This sets the window manager title for the window that
  * appears when a menu is torn off
  */
+GDK_AVAILABLE_IN_ALL
 void          gtk_menu_set_title          (GtkMenu             *menu,
                                            const gchar         *title);
+GDK_AVAILABLE_IN_ALL
 const gchar * gtk_menu_get_title          (GtkMenu             *menu);
 
+GDK_AVAILABLE_IN_ALL
 void       gtk_menu_reorder_child         (GtkMenu             *menu,
                                            GtkWidget           *child,
                                            gint                position);
 
+GDK_AVAILABLE_IN_ALL
 void	   gtk_menu_set_screen		  (GtkMenu	       *menu,
 					   GdkScreen	       *screen);
 
+GDK_AVAILABLE_IN_ALL
 void       gtk_menu_attach                (GtkMenu             *menu,
                                            GtkWidget           *child,
                                            guint                left_attach,
@@ -200,13 +222,18 @@ void       gtk_menu_attach                (GtkMenu             *menu,
                                            guint                top_attach,
                                            guint                bottom_attach);
 
+GDK_AVAILABLE_IN_ALL
 void       gtk_menu_set_monitor           (GtkMenu             *menu,
                                            gint                 monitor_num);
+GDK_AVAILABLE_IN_ALL
 gint       gtk_menu_get_monitor           (GtkMenu             *menu);
+GDK_AVAILABLE_IN_ALL
 GList*     gtk_menu_get_for_attach_widget (GtkWidget           *widget); 
 
+GDK_AVAILABLE_IN_ALL
 void     gtk_menu_set_reserve_toggle_size (GtkMenu  *menu,
                                           gboolean   reserve_toggle_size);
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_menu_get_reserve_toggle_size (GtkMenu  *menu);
 
 

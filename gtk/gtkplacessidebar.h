@@ -77,31 +77,45 @@ typedef enum {
   GTK_PLACES_OPEN_NEW_WINDOW = 1 << 2
 } GtkPlacesOpenFlags;
 
+GDK_AVAILABLE_IN_3_10
 GType              gtk_places_sidebar_get_type                   (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_3_10
 GtkWidget *        gtk_places_sidebar_new                        (void);
 
+GDK_AVAILABLE_IN_3_10
 GtkPlacesOpenFlags gtk_places_sidebar_get_open_flags             (GtkPlacesSidebar   *sidebar);
+GDK_AVAILABLE_IN_3_10
 void               gtk_places_sidebar_set_open_flags             (GtkPlacesSidebar   *sidebar,
                                                                   GtkPlacesOpenFlags  flags);
 
+GDK_AVAILABLE_IN_3_10
 GFile *            gtk_places_sidebar_get_location               (GtkPlacesSidebar   *sidebar);
+GDK_AVAILABLE_IN_3_10
 void               gtk_places_sidebar_set_location               (GtkPlacesSidebar   *sidebar,
                                                                   GFile              *location);
 
+GDK_AVAILABLE_IN_3_10
 gboolean           gtk_places_sidebar_get_show_desktop           (GtkPlacesSidebar   *sidebar);
+GDK_AVAILABLE_IN_3_10
 void               gtk_places_sidebar_set_show_desktop           (GtkPlacesSidebar   *sidebar,
                                                                   gboolean            show_desktop);
 
+GDK_AVAILABLE_IN_3_10
 gboolean           gtk_places_sidebar_get_show_connect_to_server (GtkPlacesSidebar   *sidebar);
+GDK_AVAILABLE_IN_3_10
 void               gtk_places_sidebar_set_show_connect_to_server (GtkPlacesSidebar   *sidebar,
                                                                   gboolean            show_connect_to_server);
 
+GDK_AVAILABLE_IN_3_10
 void               gtk_places_sidebar_add_shortcut               (GtkPlacesSidebar   *sidebar,
                                                                   GFile              *location);
+GDK_AVAILABLE_IN_3_10
 void               gtk_places_sidebar_remove_shortcut            (GtkPlacesSidebar   *sidebar,
                                                                   GFile              *location);
+GDK_AVAILABLE_IN_3_10
 GSList *           gtk_places_sidebar_list_shortcuts             (GtkPlacesSidebar   *sidebar);
 
+GDK_AVAILABLE_IN_3_10
 GFile *            gtk_places_sidebar_get_nth_bookmark           (GtkPlacesSidebar   *sidebar,
                                                                   gint                n);
 

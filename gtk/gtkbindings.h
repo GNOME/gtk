@@ -141,39 +141,50 @@ struct _GtkBindingSignal
   GtkBindingArg    *args;
 };
 
+GDK_AVAILABLE_IN_ALL
 GtkBindingSet *gtk_binding_set_new           (const gchar         *set_name);
+GDK_AVAILABLE_IN_ALL
 GtkBindingSet *gtk_binding_set_by_class      (gpointer             object_class);
+GDK_AVAILABLE_IN_ALL
 GtkBindingSet *gtk_binding_set_find          (const gchar         *set_name);
 
+GDK_AVAILABLE_IN_ALL
 gboolean       gtk_bindings_activate         (GObject             *object,
                                               guint                keyval,
                                               GdkModifierType      modifiers);
+GDK_AVAILABLE_IN_ALL
 gboolean       gtk_bindings_activate_event   (GObject             *object,
                                               GdkEventKey         *event);
+GDK_AVAILABLE_IN_ALL
 gboolean       gtk_binding_set_activate      (GtkBindingSet       *binding_set,
                                               guint                keyval,
                                               GdkModifierType      modifiers,
                                               GObject             *object);
 
+GDK_AVAILABLE_IN_ALL
 void           gtk_binding_entry_skip        (GtkBindingSet       *binding_set,
                                               guint                keyval,
                                               GdkModifierType      modifiers);
+GDK_AVAILABLE_IN_ALL
 void           gtk_binding_entry_add_signal  (GtkBindingSet       *binding_set,
                                               guint                keyval,
                                               GdkModifierType      modifiers,
                                               const gchar         *signal_name,
                                               guint                n_args,
                                               ...);
+GDK_AVAILABLE_IN_ALL
 void           gtk_binding_entry_add_signall (GtkBindingSet       *binding_set,
                                               guint                keyval,
                                               GdkModifierType      modifiers,
                                               const gchar         *signal_name,
                                               GSList              *binding_args);
 
+GDK_AVAILABLE_IN_ALL
 GTokenType     gtk_binding_entry_add_signal_from_string
                                              (GtkBindingSet       *binding_set,
                                               const gchar         *signal_desc);
 
+GDK_AVAILABLE_IN_ALL
 void           gtk_binding_entry_remove      (GtkBindingSet       *binding_set,
                                               guint                keyval,
                                               GdkModifierType      modifiers);

@@ -76,58 +76,89 @@ struct _GtkPrintJobClass
   void (*_gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType                    gtk_print_job_get_type               (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkPrintJob             *gtk_print_job_new                    (const gchar              *title,
 							       GtkPrinter               *printer,
 							       GtkPrintSettings         *settings,
 							       GtkPageSetup             *page_setup);
+GDK_AVAILABLE_IN_ALL
 GtkPrintSettings        *gtk_print_job_get_settings           (GtkPrintJob              *job);
+GDK_AVAILABLE_IN_ALL
 GtkPrinter              *gtk_print_job_get_printer            (GtkPrintJob              *job);
+GDK_AVAILABLE_IN_ALL
 const gchar *            gtk_print_job_get_title              (GtkPrintJob              *job);
+GDK_AVAILABLE_IN_ALL
 GtkPrintStatus           gtk_print_job_get_status             (GtkPrintJob              *job);
+GDK_AVAILABLE_IN_ALL
 gboolean                 gtk_print_job_set_source_file        (GtkPrintJob              *job,
 							       const gchar              *filename,
 							       GError                  **error);
+GDK_AVAILABLE_IN_ALL
 cairo_surface_t         *gtk_print_job_get_surface            (GtkPrintJob              *job,
 							       GError                  **error);
+GDK_AVAILABLE_IN_ALL
 void                     gtk_print_job_set_track_print_status (GtkPrintJob              *job,
 							       gboolean                  track_status);
+GDK_AVAILABLE_IN_ALL
 gboolean                 gtk_print_job_get_track_print_status (GtkPrintJob              *job);
+GDK_AVAILABLE_IN_ALL
 void                     gtk_print_job_send                   (GtkPrintJob              *job,
 							       GtkPrintJobCompleteFunc   callback,
 							       gpointer                  user_data,
 							       GDestroyNotify            dnotify);
 
+GDK_AVAILABLE_IN_ALL
 GtkPrintPages     gtk_print_job_get_pages       (GtkPrintJob       *job);
+GDK_AVAILABLE_IN_ALL
 void              gtk_print_job_set_pages       (GtkPrintJob       *job,
                                                  GtkPrintPages      pages);
+GDK_AVAILABLE_IN_ALL
 GtkPageRange *    gtk_print_job_get_page_ranges (GtkPrintJob       *job,
                                                  gint              *n_ranges);
+GDK_AVAILABLE_IN_ALL
 void              gtk_print_job_set_page_ranges (GtkPrintJob       *job,
                                                  GtkPageRange      *ranges,
                                                  gint               n_ranges);
+GDK_AVAILABLE_IN_ALL
 GtkPageSet        gtk_print_job_get_page_set    (GtkPrintJob       *job);
+GDK_AVAILABLE_IN_ALL
 void              gtk_print_job_set_page_set    (GtkPrintJob       *job,
                                                  GtkPageSet         page_set);
+GDK_AVAILABLE_IN_ALL
 gint              gtk_print_job_get_num_copies  (GtkPrintJob       *job);
+GDK_AVAILABLE_IN_ALL
 void              gtk_print_job_set_num_copies  (GtkPrintJob       *job,
                                                  gint               num_copies);
+GDK_AVAILABLE_IN_ALL
 gdouble           gtk_print_job_get_scale       (GtkPrintJob       *job);
+GDK_AVAILABLE_IN_ALL
 void              gtk_print_job_set_scale       (GtkPrintJob       *job,
                                                  gdouble            scale);
+GDK_AVAILABLE_IN_ALL
 guint             gtk_print_job_get_n_up        (GtkPrintJob       *job);
+GDK_AVAILABLE_IN_ALL
 void              gtk_print_job_set_n_up        (GtkPrintJob       *job,
                                                  guint              n_up);
+GDK_AVAILABLE_IN_ALL
 GtkNumberUpLayout gtk_print_job_get_n_up_layout (GtkPrintJob       *job);
+GDK_AVAILABLE_IN_ALL
 void              gtk_print_job_set_n_up_layout (GtkPrintJob       *job,
                                                  GtkNumberUpLayout  layout);
+GDK_AVAILABLE_IN_ALL
 gboolean          gtk_print_job_get_rotate      (GtkPrintJob       *job);
+GDK_AVAILABLE_IN_ALL
 void              gtk_print_job_set_rotate      (GtkPrintJob       *job,
                                                  gboolean           rotate);
+GDK_AVAILABLE_IN_ALL
 gboolean          gtk_print_job_get_collate     (GtkPrintJob       *job);
+GDK_AVAILABLE_IN_ALL
 void              gtk_print_job_set_collate     (GtkPrintJob       *job,
                                                  gboolean           collate);
+GDK_AVAILABLE_IN_ALL
 gboolean          gtk_print_job_get_reverse     (GtkPrintJob       *job);
+GDK_AVAILABLE_IN_ALL
 void              gtk_print_job_set_reverse     (GtkPrintJob       *job,
                                                  gboolean           reverse);
 

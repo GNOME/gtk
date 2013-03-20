@@ -67,8 +67,10 @@ struct _GtkBinClass
 };
 
 
+GDK_AVAILABLE_IN_ALL
 GType      gtk_bin_get_type  (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_bin_get_child (GtkBin *bin);
 
 void       _gtk_bin_set_child (GtkBin    *bin,

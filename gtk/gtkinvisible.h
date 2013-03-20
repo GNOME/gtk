@@ -64,12 +64,17 @@ struct _GtkInvisibleClass
   void (*_gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType gtk_invisible_get_type (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_invisible_new            (void);
+GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_invisible_new_for_screen (GdkScreen    *screen);
+GDK_AVAILABLE_IN_ALL
 void	   gtk_invisible_set_screen	(GtkInvisible *invisible,
 					 GdkScreen    *screen);
+GDK_AVAILABLE_IN_ALL
 GdkScreen* gtk_invisible_get_screen	(GtkInvisible *invisible);
 
 G_END_DECLS

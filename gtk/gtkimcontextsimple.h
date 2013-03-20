@@ -59,9 +59,12 @@ struct _GtkIMContextSimpleClass
   GtkIMContextClass parent_class;
 };
 
+GDK_AVAILABLE_IN_ALL
 GType         gtk_im_context_simple_get_type  (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkIMContext *gtk_im_context_simple_new       (void);
 
+GDK_AVAILABLE_IN_ALL
 void          gtk_im_context_simple_add_table (GtkIMContextSimple *context_simple,
 					       guint16            *data,
 					       gint                max_seq_len,

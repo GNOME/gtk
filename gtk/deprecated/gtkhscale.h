@@ -55,6 +55,7 @@ struct _GtkHScaleClass
 };
 
 
+GDK_DEPRECATED_IN_3_2
 GType      gtk_hscale_get_type       (void) G_GNUC_CONST;
 GDK_DEPRECATED_IN_3_2_FOR(gtk_scale_new)
 GtkWidget* gtk_hscale_new            (GtkAdjustment *adjustment);

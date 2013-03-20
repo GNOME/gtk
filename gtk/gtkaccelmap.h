@@ -58,33 +58,48 @@ typedef void (*GtkAccelMapForeach)		(gpointer	 data,
 
 /* --- public API --- */
 
+GDK_AVAILABLE_IN_ALL
 void	   gtk_accel_map_add_entry	(const gchar		*accel_path,
 					 guint			 accel_key,
 					 GdkModifierType         accel_mods);
+GDK_AVAILABLE_IN_ALL
 gboolean   gtk_accel_map_lookup_entry	(const gchar		*accel_path,
 					 GtkAccelKey		*key);
+GDK_AVAILABLE_IN_ALL
 gboolean   gtk_accel_map_change_entry	(const gchar		*accel_path,
 					 guint			 accel_key,
 					 GdkModifierType	 accel_mods,
 					 gboolean		 replace);
+GDK_AVAILABLE_IN_ALL
 void	   gtk_accel_map_load		(const gchar		*file_name);
+GDK_AVAILABLE_IN_ALL
 void	   gtk_accel_map_save		(const gchar		*file_name);
+GDK_AVAILABLE_IN_ALL
 void	   gtk_accel_map_foreach	(gpointer		 data,
 					 GtkAccelMapForeach	 foreach_func);
+GDK_AVAILABLE_IN_ALL
 void	   gtk_accel_map_load_fd	(gint			 fd);
+GDK_AVAILABLE_IN_ALL
 void	   gtk_accel_map_load_scanner	(GScanner		*scanner);
+GDK_AVAILABLE_IN_ALL
 void	   gtk_accel_map_save_fd	(gint			 fd);
 
+GDK_AVAILABLE_IN_ALL
 void       gtk_accel_map_lock_path      (const gchar            *accel_path);
+GDK_AVAILABLE_IN_ALL
 void       gtk_accel_map_unlock_path    (const gchar            *accel_path);
 
 /* --- filter functions --- */
+GDK_AVAILABLE_IN_ALL
 void	gtk_accel_map_add_filter	 (const gchar		*filter_pattern);
+GDK_AVAILABLE_IN_ALL
 void	gtk_accel_map_foreach_unfiltered (gpointer		 data,
 					  GtkAccelMapForeach	 foreach_func);
 
 /* --- notification --- */
+GDK_AVAILABLE_IN_ALL
 GType        gtk_accel_map_get_type (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkAccelMap *gtk_accel_map_get      (void);
 
 

@@ -58,10 +58,14 @@ struct _GtkSeparatorToolItemClass
   void (* _gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType        gtk_separator_tool_item_get_type (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkToolItem *gtk_separator_tool_item_new      (void);
 
+GDK_AVAILABLE_IN_ALL
 gboolean     gtk_separator_tool_item_get_draw (GtkSeparatorToolItem *item);
+GDK_AVAILABLE_IN_ALL
 void         gtk_separator_tool_item_set_draw (GtkSeparatorToolItem *item,
 					       gboolean              draw);
 

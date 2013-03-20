@@ -64,28 +64,43 @@ struct _GtkToolButtonClass
   void (* _gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType        gtk_tool_button_get_type       (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkToolItem *gtk_tool_button_new            (GtkWidget   *icon_widget,
 					     const gchar *label);
+GDK_AVAILABLE_IN_ALL
 GtkToolItem *gtk_tool_button_new_from_stock (const gchar *stock_id);
 
+GDK_AVAILABLE_IN_ALL
 void                  gtk_tool_button_set_label         (GtkToolButton *button,
 							 const gchar   *label);
+GDK_AVAILABLE_IN_ALL
 const gchar *         gtk_tool_button_get_label         (GtkToolButton *button);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_tool_button_set_use_underline (GtkToolButton *button,
 							 gboolean       use_underline);
+GDK_AVAILABLE_IN_ALL
 gboolean              gtk_tool_button_get_use_underline (GtkToolButton *button);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_tool_button_set_stock_id      (GtkToolButton *button,
 							 const gchar   *stock_id);
+GDK_AVAILABLE_IN_ALL
 const gchar *         gtk_tool_button_get_stock_id      (GtkToolButton *button);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_tool_button_set_icon_name     (GtkToolButton *button,
 							 const gchar   *icon_name);
+GDK_AVAILABLE_IN_ALL
 const gchar *         gtk_tool_button_get_icon_name     (GtkToolButton *button);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_tool_button_set_icon_widget   (GtkToolButton *button,
 							 GtkWidget     *icon_widget);
+GDK_AVAILABLE_IN_ALL
 GtkWidget *           gtk_tool_button_get_icon_widget   (GtkToolButton *button);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_tool_button_set_label_widget  (GtkToolButton *button,
 							 GtkWidget     *label_widget);
+GDK_AVAILABLE_IN_ALL
 GtkWidget *           gtk_tool_button_get_label_widget  (GtkToolButton *button);
 
 

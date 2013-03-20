@@ -29,42 +29,58 @@
 G_BEGIN_DECLS
 
 /* --- Gtk+ Test Utility API --- */
+GDK_AVAILABLE_IN_ALL
 void            gtk_test_init                   (int            *argcp,
                                                  char         ***argvp,
                                                  ...);
+GDK_AVAILABLE_IN_ALL
 void            gtk_test_register_all_types     (void);
+GDK_AVAILABLE_IN_ALL
 const GType*    gtk_test_list_all_types         (guint          *n_types);
+GDK_AVAILABLE_IN_ALL
 GtkWidget*      gtk_test_find_widget            (GtkWidget      *widget,
                                                  const gchar    *label_pattern,
                                                  GType           widget_type);
+GDK_AVAILABLE_IN_ALL
 GtkWidget*      gtk_test_create_widget          (GType           widget_type,
                                                  const gchar    *first_property_name,
                                                  ...);
+GDK_AVAILABLE_IN_ALL
 GtkWidget*      gtk_test_create_simple_window   (const gchar    *window_title,
                                                  const gchar    *dialog_text);
+GDK_AVAILABLE_IN_ALL
 GtkWidget*      gtk_test_display_button_window  (const gchar    *window_title,
                                                  const gchar    *dialog_text,
                                                  ...); /* NULL terminated list of (label, &int) pairs */
+GDK_AVAILABLE_IN_ALL
 void            gtk_test_slider_set_perc        (GtkWidget      *widget, /* GtkRange-alike */
                                                  double          percentage);
+GDK_AVAILABLE_IN_ALL
 double          gtk_test_slider_get_value       (GtkWidget      *widget);
+GDK_AVAILABLE_IN_ALL
 gboolean        gtk_test_spin_button_click      (GtkSpinButton  *spinner,
                                                  guint           button,
                                                  gboolean        upwards);
+GDK_AVAILABLE_IN_ALL
 gboolean        gtk_test_widget_click           (GtkWidget      *widget,
                                                  guint           button,
                                                  GdkModifierType modifiers);
+GDK_AVAILABLE_IN_ALL
 gboolean        gtk_test_widget_send_key        (GtkWidget      *widget,
                                                  guint           keyval,
                                                  GdkModifierType modifiers);
 /* operate on GtkEntry, GtkText, GtkTextView or GtkLabel */
+GDK_AVAILABLE_IN_ALL
 void            gtk_test_text_set               (GtkWidget      *widget,
                                                  const gchar    *string);
+GDK_AVAILABLE_IN_ALL
 gchar*          gtk_test_text_get               (GtkWidget      *widget);
 
 /* --- Gtk+ Test low-level API --- */
+GDK_AVAILABLE_IN_ALL
 GtkWidget*      gtk_test_find_sibling           (GtkWidget      *base_widget,
                                                  GType           widget_type);
+GDK_AVAILABLE_IN_ALL
 GtkWidget*      gtk_test_find_label             (GtkWidget      *widget,
                                                  const gchar    *label_pattern);
 G_END_DECLS

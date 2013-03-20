@@ -59,21 +59,28 @@ struct _GtkStockItem
   gchar *translation_domain;
 };
 
+GDK_AVAILABLE_IN_ALL
 void     gtk_stock_add        (const GtkStockItem  *items,
                                guint                n_items);
+GDK_AVAILABLE_IN_ALL
 void     gtk_stock_add_static (const GtkStockItem  *items,
                                guint                n_items);
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_stock_lookup     (const gchar         *stock_id,
                                GtkStockItem        *item);
 
 /* Should free the list (and free each string in it also).
  * This function is only useful for GUI builders and such.
  */
+GDK_AVAILABLE_IN_ALL
 GSList*  gtk_stock_list_ids  (void);
 
+GDK_AVAILABLE_IN_ALL
 GtkStockItem *gtk_stock_item_copy (const GtkStockItem *item);
+GDK_AVAILABLE_IN_ALL
 void          gtk_stock_item_free (GtkStockItem       *item);
 
+GDK_AVAILABLE_IN_ALL
 void          gtk_stock_set_translate_func (const gchar      *domain,
 					    GtkTranslateFunc  func,
 					    gpointer          data,

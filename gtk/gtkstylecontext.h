@@ -748,41 +748,55 @@ struct _GtkStyleContextClass
  */
 #define GTK_STYLE_REGION_TAB "tab"
 
+GDK_AVAILABLE_IN_ALL
 GType gtk_style_context_get_type (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 GtkStyleContext * gtk_style_context_new (void);
 
+GDK_AVAILABLE_IN_ALL
 void gtk_style_context_add_provider_for_screen    (GdkScreen        *screen,
                                                    GtkStyleProvider *provider,
                                                    guint             priority);
+GDK_AVAILABLE_IN_ALL
 void gtk_style_context_remove_provider_for_screen (GdkScreen        *screen,
                                                    GtkStyleProvider *provider);
 
+GDK_AVAILABLE_IN_ALL
 void gtk_style_context_add_provider    (GtkStyleContext  *context,
                                         GtkStyleProvider *provider,
                                         guint             priority);
 
+GDK_AVAILABLE_IN_ALL
 void gtk_style_context_remove_provider (GtkStyleContext  *context,
                                         GtkStyleProvider *provider);
 
+GDK_AVAILABLE_IN_ALL
 void gtk_style_context_save    (GtkStyleContext *context);
+GDK_AVAILABLE_IN_ALL
 void gtk_style_context_restore (GtkStyleContext *context);
 
+GDK_AVAILABLE_IN_ALL
 GtkCssSection * gtk_style_context_get_section (GtkStyleContext *context,
                                                const gchar     *property);
+GDK_AVAILABLE_IN_ALL
 void gtk_style_context_get_property (GtkStyleContext *context,
                                      const gchar     *property,
                                      GtkStateFlags    state,
                                      GValue          *value);
+GDK_AVAILABLE_IN_ALL
 void gtk_style_context_get_valist   (GtkStyleContext *context,
                                      GtkStateFlags    state,
                                      va_list          args);
+GDK_AVAILABLE_IN_ALL
 void gtk_style_context_get          (GtkStyleContext *context,
                                      GtkStateFlags    state,
                                      ...) G_GNUC_NULL_TERMINATED;
 
+GDK_AVAILABLE_IN_ALL
 void          gtk_style_context_set_state    (GtkStyleContext *context,
                                               GtkStateFlags    flags);
+GDK_AVAILABLE_IN_ALL
 GtkStateFlags gtk_style_context_get_state    (GtkStyleContext *context);
 
 GDK_DEPRECATED_IN_3_6
@@ -790,50 +804,68 @@ gboolean      gtk_style_context_state_is_running (GtkStyleContext *context,
                                                   GtkStateType     state,
                                                   gdouble         *progress);
 
+GDK_AVAILABLE_IN_ALL
 void          gtk_style_context_set_path     (GtkStyleContext *context,
                                               GtkWidgetPath   *path);
+GDK_AVAILABLE_IN_ALL
 const GtkWidgetPath * gtk_style_context_get_path (GtkStyleContext *context);
 GDK_AVAILABLE_IN_3_4
 void          gtk_style_context_set_parent   (GtkStyleContext *context,
                                               GtkStyleContext *parent);
+GDK_AVAILABLE_IN_ALL
 GtkStyleContext *gtk_style_context_get_parent (GtkStyleContext *context);
 
+GDK_AVAILABLE_IN_ALL
 GList *  gtk_style_context_list_classes (GtkStyleContext *context);
 
+GDK_AVAILABLE_IN_ALL
 void     gtk_style_context_add_class    (GtkStyleContext *context,
                                          const gchar     *class_name);
+GDK_AVAILABLE_IN_ALL
 void     gtk_style_context_remove_class (GtkStyleContext *context,
                                          const gchar     *class_name);
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_style_context_has_class    (GtkStyleContext *context,
                                          const gchar     *class_name);
 
+GDK_AVAILABLE_IN_ALL
 GList *  gtk_style_context_list_regions (GtkStyleContext *context);
 
+GDK_AVAILABLE_IN_ALL
 void     gtk_style_context_add_region    (GtkStyleContext    *context,
                                           const gchar        *region_name,
                                           GtkRegionFlags      flags);
+GDK_AVAILABLE_IN_ALL
 void     gtk_style_context_remove_region (GtkStyleContext    *context,
                                           const gchar        *region_name);
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_style_context_has_region    (GtkStyleContext    *context,
                                           const gchar        *region_name,
                                           GtkRegionFlags     *flags_return);
 
+GDK_AVAILABLE_IN_ALL
 void gtk_style_context_get_style_property (GtkStyleContext *context,
                                            const gchar     *property_name,
                                            GValue          *value);
+GDK_AVAILABLE_IN_ALL
 void gtk_style_context_get_style_valist   (GtkStyleContext *context,
                                            va_list          args);
+GDK_AVAILABLE_IN_ALL
 void gtk_style_context_get_style          (GtkStyleContext *context,
                                            ...);
 
+GDK_AVAILABLE_IN_ALL
 GtkIconSet * gtk_style_context_lookup_icon_set (GtkStyleContext *context,
                                                 const gchar     *stock_id);
+GDK_AVAILABLE_IN_ALL
 GdkPixbuf  * gtk_icon_set_render_icon_pixbuf   (GtkIconSet      *icon_set,
                                                 GtkStyleContext *context,
                                                 GtkIconSize      size);
 
+GDK_AVAILABLE_IN_ALL
 void        gtk_style_context_set_screen (GtkStyleContext *context,
                                           GdkScreen       *screen);
+GDK_AVAILABLE_IN_ALL
 GdkScreen * gtk_style_context_get_screen (GtkStyleContext *context);
 
 GDK_AVAILABLE_IN_3_8
@@ -849,10 +881,13 @@ void             gtk_style_context_set_direction (GtkStyleContext  *context,
 GDK_DEPRECATED_IN_3_8_FOR(gtk_style_context_get_state)
 GtkTextDirection gtk_style_context_get_direction (GtkStyleContext  *context);
 
+GDK_AVAILABLE_IN_ALL
 void             gtk_style_context_set_junction_sides (GtkStyleContext  *context,
                                                        GtkJunctionSides  sides);
+GDK_AVAILABLE_IN_ALL
 GtkJunctionSides gtk_style_context_get_junction_sides (GtkStyleContext  *context);
 
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_style_context_lookup_color (GtkStyleContext *context,
                                          const gchar     *color_name,
                                          GdkRGBA         *color);
@@ -879,12 +914,15 @@ GDK_DEPRECATED_IN_3_6
 void gtk_style_context_pop_animatable_region  (GtkStyleContext *context);
 
 /* Some helper functions to retrieve most common properties */
+GDK_AVAILABLE_IN_ALL
 void gtk_style_context_get_color            (GtkStyleContext *context,
                                              GtkStateFlags    state,
                                              GdkRGBA         *color);
+GDK_AVAILABLE_IN_ALL
 void gtk_style_context_get_background_color (GtkStyleContext *context,
                                              GtkStateFlags    state,
                                              GdkRGBA         *color);
+GDK_AVAILABLE_IN_ALL
 void gtk_style_context_get_border_color     (GtkStyleContext *context,
                                              GtkStateFlags    state,
                                              GdkRGBA         *color);
@@ -893,76 +931,92 @@ GDK_DEPRECATED_IN_3_8_FOR(gtk_style_context_get)
 const PangoFontDescription *
      gtk_style_context_get_font             (GtkStyleContext *context,
                                              GtkStateFlags    state);
+GDK_AVAILABLE_IN_ALL
 void gtk_style_context_get_border           (GtkStyleContext *context,
                                              GtkStateFlags    state,
                                              GtkBorder       *border);
+GDK_AVAILABLE_IN_ALL
 void gtk_style_context_get_padding          (GtkStyleContext *context,
                                              GtkStateFlags    state,
                                              GtkBorder       *padding);
+GDK_AVAILABLE_IN_ALL
 void gtk_style_context_get_margin           (GtkStyleContext *context,
                                              GtkStateFlags    state,
                                              GtkBorder       *margin);
 
+GDK_AVAILABLE_IN_ALL
 void gtk_style_context_invalidate           (GtkStyleContext *context);
+GDK_AVAILABLE_IN_ALL
 void gtk_style_context_reset_widgets        (GdkScreen       *screen);
 
+GDK_AVAILABLE_IN_ALL
 void gtk_style_context_set_background       (GtkStyleContext *context,
                                              GdkWindow       *window);
 
 /* Paint methods */
+GDK_AVAILABLE_IN_ALL
 void        gtk_render_check       (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     gdouble              x,
                                     gdouble              y,
                                     gdouble              width,
                                     gdouble              height);
+GDK_AVAILABLE_IN_ALL
 void        gtk_render_option      (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     gdouble              x,
                                     gdouble              y,
                                     gdouble              width,
                                     gdouble              height);
+GDK_AVAILABLE_IN_ALL
 void        gtk_render_arrow       (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     gdouble              angle,
                                     gdouble              x,
                                     gdouble              y,
                                     gdouble              size);
+GDK_AVAILABLE_IN_ALL
 void        gtk_render_background  (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     gdouble              x,
                                     gdouble              y,
                                     gdouble              width,
                                     gdouble              height);
+GDK_AVAILABLE_IN_ALL
 void        gtk_render_frame       (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     gdouble              x,
                                     gdouble              y,
                                     gdouble              width,
                                     gdouble              height);
+GDK_AVAILABLE_IN_ALL
 void        gtk_render_expander    (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     gdouble              x,
                                     gdouble              y,
                                     gdouble              width,
                                     gdouble              height);
+GDK_AVAILABLE_IN_ALL
 void        gtk_render_focus       (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     gdouble              x,
                                     gdouble              y,
                                     gdouble              width,
                                     gdouble              height);
+GDK_AVAILABLE_IN_ALL
 void        gtk_render_layout      (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     gdouble              x,
                                     gdouble              y,
                                     PangoLayout         *layout);
+GDK_AVAILABLE_IN_ALL
 void        gtk_render_line        (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     gdouble              x0,
                                     gdouble              y0,
                                     gdouble              x1,
                                     gdouble              y1);
+GDK_AVAILABLE_IN_ALL
 void        gtk_render_slider      (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     gdouble              x,
@@ -970,6 +1024,7 @@ void        gtk_render_slider      (GtkStyleContext     *context,
                                     gdouble              width,
                                     gdouble              height,
                                     GtkOrientation       orientation);
+GDK_AVAILABLE_IN_ALL
 void        gtk_render_frame_gap   (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     gdouble              x,
@@ -979,6 +1034,7 @@ void        gtk_render_frame_gap   (GtkStyleContext     *context,
                                     GtkPositionType      gap_side,
                                     gdouble              xy0_gap,
                                     gdouble              xy1_gap);
+GDK_AVAILABLE_IN_ALL
 void        gtk_render_extension   (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     gdouble              x,
@@ -986,18 +1042,21 @@ void        gtk_render_extension   (GtkStyleContext     *context,
                                     gdouble              width,
                                     gdouble              height,
                                     GtkPositionType      gap_side);
+GDK_AVAILABLE_IN_ALL
 void        gtk_render_handle      (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     gdouble              x,
                                     gdouble              y,
                                     gdouble              width,
                                     gdouble              height);
+GDK_AVAILABLE_IN_ALL
 void        gtk_render_activity    (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     gdouble              x,
                                     gdouble              y,
                                     gdouble              width,
                                     gdouble              height);
+GDK_AVAILABLE_IN_ALL
 GdkPixbuf * gtk_render_icon_pixbuf (GtkStyleContext     *context,
                                     const GtkIconSource *source,
                                     GtkIconSize          size);

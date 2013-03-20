@@ -67,15 +67,21 @@ struct _GtkMenuBarClass
 };
 
 
+GDK_AVAILABLE_IN_ALL
 GType      gtk_menu_bar_get_type        (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_menu_bar_new             (void);
 GDK_AVAILABLE_IN_3_4
 GtkWidget* gtk_menu_bar_new_from_model  (GMenuModel *model);
 
+GDK_AVAILABLE_IN_ALL
 GtkPackDirection gtk_menu_bar_get_pack_direction (GtkMenuBar       *menubar);
+GDK_AVAILABLE_IN_ALL
 void             gtk_menu_bar_set_pack_direction (GtkMenuBar       *menubar,
 						  GtkPackDirection  pack_dir);
+GDK_AVAILABLE_IN_ALL
 GtkPackDirection gtk_menu_bar_get_child_pack_direction (GtkMenuBar       *menubar);
+GDK_AVAILABLE_IN_ALL
 void             gtk_menu_bar_set_child_pack_direction (GtkMenuBar       *menubar,
 							GtkPackDirection  child_pack_dir);
 

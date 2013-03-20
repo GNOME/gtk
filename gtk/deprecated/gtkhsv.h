@@ -77,6 +77,7 @@ struct _GtkHSVClass
 };
 
 
+GDK_DEPRECATED_IN_3_4
 GType      gtk_hsv_get_type     (void) G_GNUC_CONST;
 GDK_DEPRECATED_IN_3_4
 GtkWidget* gtk_hsv_new          (void);

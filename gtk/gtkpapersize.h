@@ -24,6 +24,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
+#include <gdk/gdk.h>
 #include <gtk/gtkenums.h>
 
 
@@ -83,54 +84,76 @@ typedef struct _GtkPaperSize GtkPaperSize;
  */
 #define GTK_PAPER_NAME_LEGAL "na_legal"
 
+GDK_AVAILABLE_IN_ALL
 GType gtk_paper_size_get_type (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 GtkPaperSize *gtk_paper_size_new          (const gchar  *name);
+GDK_AVAILABLE_IN_ALL
 GtkPaperSize *gtk_paper_size_new_from_ppd (const gchar  *ppd_name,
 					   const gchar  *ppd_display_name,
 					   gdouble       width,
 					   gdouble       height);
+GDK_AVAILABLE_IN_ALL
 GtkPaperSize *gtk_paper_size_new_custom   (const gchar  *name,
 					   const gchar  *display_name,
 					   gdouble       width,
 					   gdouble       height,
 					   GtkUnit       unit);
+GDK_AVAILABLE_IN_ALL
 GtkPaperSize *gtk_paper_size_copy         (GtkPaperSize *other);
+GDK_AVAILABLE_IN_ALL
 void          gtk_paper_size_free         (GtkPaperSize *size);
+GDK_AVAILABLE_IN_ALL
 gboolean      gtk_paper_size_is_equal     (GtkPaperSize *size1,
 					   GtkPaperSize *size2);
 
+GDK_AVAILABLE_IN_ALL
 GList        *gtk_paper_size_get_paper_sizes (gboolean include_custom);
 
 /* The width is always the shortest side, measure in mm */
+GDK_AVAILABLE_IN_ALL
 const gchar *gtk_paper_size_get_name         (GtkPaperSize *size);
+GDK_AVAILABLE_IN_ALL
 const gchar *gtk_paper_size_get_display_name (GtkPaperSize *size);
+GDK_AVAILABLE_IN_ALL
 const gchar *gtk_paper_size_get_ppd_name     (GtkPaperSize *size);
 
+GDK_AVAILABLE_IN_ALL
 gdouble  gtk_paper_size_get_width        (GtkPaperSize *size, GtkUnit unit);
+GDK_AVAILABLE_IN_ALL
 gdouble  gtk_paper_size_get_height       (GtkPaperSize *size, GtkUnit unit);
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_paper_size_is_custom        (GtkPaperSize *size);
 
 /* Only for custom sizes: */
+GDK_AVAILABLE_IN_ALL
 void    gtk_paper_size_set_size                  (GtkPaperSize *size, 
                                                   gdouble       width, 
                                                   gdouble       height, 
                                                   GtkUnit       unit);
 
+GDK_AVAILABLE_IN_ALL
 gdouble gtk_paper_size_get_default_top_margin    (GtkPaperSize *size,
 						  GtkUnit       unit);
+GDK_AVAILABLE_IN_ALL
 gdouble gtk_paper_size_get_default_bottom_margin (GtkPaperSize *size,
 						  GtkUnit       unit);
+GDK_AVAILABLE_IN_ALL
 gdouble gtk_paper_size_get_default_left_margin   (GtkPaperSize *size,
 						  GtkUnit       unit);
+GDK_AVAILABLE_IN_ALL
 gdouble gtk_paper_size_get_default_right_margin  (GtkPaperSize *size,
 						  GtkUnit       unit);
 
+GDK_AVAILABLE_IN_ALL
 const gchar *gtk_paper_size_get_default (void);
 
+GDK_AVAILABLE_IN_ALL
 GtkPaperSize *gtk_paper_size_new_from_key_file (GKeyFile    *key_file,
 					        const gchar *group_name,
 					        GError     **error);
+GDK_AVAILABLE_IN_ALL
 void     gtk_paper_size_to_key_file            (GtkPaperSize *size,
 					        GKeyFile     *key_file,
 					        const gchar  *group_name);

@@ -63,38 +63,56 @@ struct _GtkToolItemGroupClass
   void (*_gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType                 gtk_tool_item_group_get_type          (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkWidget*            gtk_tool_item_group_new               (const gchar        *label);
 
+GDK_AVAILABLE_IN_ALL
 void                  gtk_tool_item_group_set_label         (GtkToolItemGroup   *group,
                                                              const gchar        *label);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_tool_item_group_set_label_widget  (GtkToolItemGroup   *group,
                                                              GtkWidget          *label_widget);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_tool_item_group_set_collapsed      (GtkToolItemGroup  *group,
                                                              gboolean            collapsed);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_tool_item_group_set_ellipsize     (GtkToolItemGroup   *group,
                                                              PangoEllipsizeMode  ellipsize);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_tool_item_group_set_header_relief (GtkToolItemGroup   *group,
                                                              GtkReliefStyle      style);
 
+GDK_AVAILABLE_IN_ALL
 const gchar *         gtk_tool_item_group_get_label         (GtkToolItemGroup   *group);
+GDK_AVAILABLE_IN_ALL
 GtkWidget            *gtk_tool_item_group_get_label_widget  (GtkToolItemGroup   *group);
+GDK_AVAILABLE_IN_ALL
 gboolean              gtk_tool_item_group_get_collapsed     (GtkToolItemGroup   *group);
+GDK_AVAILABLE_IN_ALL
 PangoEllipsizeMode    gtk_tool_item_group_get_ellipsize     (GtkToolItemGroup   *group);
+GDK_AVAILABLE_IN_ALL
 GtkReliefStyle        gtk_tool_item_group_get_header_relief (GtkToolItemGroup   *group);
 
+GDK_AVAILABLE_IN_ALL
 void                  gtk_tool_item_group_insert            (GtkToolItemGroup   *group,
                                                              GtkToolItem        *item,
                                                              gint                position);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_tool_item_group_set_item_position (GtkToolItemGroup   *group,
                                                              GtkToolItem        *item,
                                                              gint                position);
+GDK_AVAILABLE_IN_ALL
 gint                  gtk_tool_item_group_get_item_position (GtkToolItemGroup   *group,
                                                              GtkToolItem        *item);
 
+GDK_AVAILABLE_IN_ALL
 guint                 gtk_tool_item_group_get_n_items       (GtkToolItemGroup   *group);
+GDK_AVAILABLE_IN_ALL
 GtkToolItem*          gtk_tool_item_group_get_nth_item      (GtkToolItemGroup   *group,
                                                              guint               index);
+GDK_AVAILABLE_IN_ALL
 GtkToolItem*          gtk_tool_item_group_get_drop_item     (GtkToolItemGroup   *group,
                                                              gint                x,
                                                              gint                y);

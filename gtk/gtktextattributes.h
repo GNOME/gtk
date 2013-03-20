@@ -166,13 +166,19 @@ struct _GtkTextAttributes
   guint padding[3];
 };
 
+GDK_AVAILABLE_IN_ALL
 GtkTextAttributes* gtk_text_attributes_new         (void);
+GDK_AVAILABLE_IN_ALL
 GtkTextAttributes* gtk_text_attributes_copy        (GtkTextAttributes *src);
+GDK_AVAILABLE_IN_ALL
 void               gtk_text_attributes_copy_values (GtkTextAttributes *src,
                                                     GtkTextAttributes *dest);
+GDK_AVAILABLE_IN_ALL
 void               gtk_text_attributes_unref       (GtkTextAttributes *values);
+GDK_AVAILABLE_IN_ALL
 GtkTextAttributes *gtk_text_attributes_ref         (GtkTextAttributes *values);
 
+GDK_AVAILABLE_IN_ALL
 GType              gtk_text_attributes_get_type    (void) G_GNUC_CONST;
 
 

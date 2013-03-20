@@ -52,19 +52,23 @@ struct _GtkTreeDragSourceIface
                                          GtkTreePath       *path);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType           gtk_tree_drag_source_get_type   (void) G_GNUC_CONST;
 
 /* Returns whether the given row can be dragged */
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_tree_drag_source_row_draggable    (GtkTreeDragSource *drag_source,
                                                 GtkTreePath       *path);
 
 /* Deletes the given row, or returns FALSE if it can't */
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_tree_drag_source_drag_data_delete (GtkTreeDragSource *drag_source,
                                                 GtkTreePath       *path);
 
 /* Fills in selection_data with type selection_data->target based on
  * the row denoted by path, returns TRUE if it does anything
  */
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_tree_drag_source_drag_data_get    (GtkTreeDragSource *drag_source,
                                                 GtkTreePath       *path,
                                                 GtkSelectionData  *selection_data);
@@ -92,17 +96,20 @@ struct _GtkTreeDragDestIface
 				       GtkSelectionData  *selection_data);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType           gtk_tree_drag_dest_get_type   (void) G_GNUC_CONST;
 
 /* Inserts a row before dest which contains data in selection_data,
  * or returns FALSE if it can't
  */
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_tree_drag_dest_drag_data_received (GtkTreeDragDest   *drag_dest,
 						GtkTreePath       *dest,
 						GtkSelectionData  *selection_data);
 
 
 /* Returns TRUE if we can drop before path; path may not exist. */
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_tree_drag_dest_row_drop_possible  (GtkTreeDragDest   *drag_dest,
 						GtkTreePath       *dest_path,
 						GtkSelectionData  *selection_data);
@@ -111,9 +118,11 @@ gboolean gtk_tree_drag_dest_row_drop_possible  (GtkTreeDragDest   *drag_dest,
 /* The selection data would normally have target type GTK_TREE_MODEL_ROW in this
  * case. If the target is wrong these functions return FALSE.
  */
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_tree_set_row_drag_data            (GtkSelectionData  *selection_data,
 						GtkTreeModel      *tree_model,
 						GtkTreePath       *path);
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_tree_get_row_drag_data            (GtkSelectionData  *selection_data,
 						GtkTreeModel     **tree_model,
 						GtkTreePath      **path);

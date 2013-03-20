@@ -60,25 +60,40 @@ struct _GtkCellViewClass
   void (*_gtk_reserved4) (void);
 };
 
+GDK_AVAILABLE_IN_ALL
 GType             gtk_cell_view_get_type                (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkWidget        *gtk_cell_view_new                     (void);
+GDK_AVAILABLE_IN_ALL
 GtkWidget        *gtk_cell_view_new_with_context        (GtkCellArea        *area,
                                                          GtkCellAreaContext *context);
+GDK_AVAILABLE_IN_ALL
 GtkWidget        *gtk_cell_view_new_with_text           (const gchar     *text);
+GDK_AVAILABLE_IN_ALL
 GtkWidget        *gtk_cell_view_new_with_markup         (const gchar     *markup);
+GDK_AVAILABLE_IN_ALL
 GtkWidget        *gtk_cell_view_new_with_pixbuf         (GdkPixbuf       *pixbuf);
+GDK_AVAILABLE_IN_ALL
 void              gtk_cell_view_set_model               (GtkCellView     *cell_view,
                                                          GtkTreeModel    *model);
+GDK_AVAILABLE_IN_ALL
 GtkTreeModel     *gtk_cell_view_get_model               (GtkCellView     *cell_view);
+GDK_AVAILABLE_IN_ALL
 void              gtk_cell_view_set_displayed_row       (GtkCellView     *cell_view,
                                                          GtkTreePath     *path);
+GDK_AVAILABLE_IN_ALL
 GtkTreePath      *gtk_cell_view_get_displayed_row       (GtkCellView     *cell_view);
+GDK_AVAILABLE_IN_ALL
 void              gtk_cell_view_set_background_rgba     (GtkCellView     *cell_view,
                                                          const GdkRGBA   *rgba);
+GDK_AVAILABLE_IN_ALL
 gboolean          gtk_cell_view_get_draw_sensitive      (GtkCellView     *cell_view);
+GDK_AVAILABLE_IN_ALL
 void              gtk_cell_view_set_draw_sensitive      (GtkCellView     *cell_view,
                                                          gboolean         draw_sensitive);
+GDK_AVAILABLE_IN_ALL
 gboolean          gtk_cell_view_get_fit_model           (GtkCellView     *cell_view);
+GDK_AVAILABLE_IN_ALL
 void              gtk_cell_view_set_fit_model           (GtkCellView     *cell_view,
                                                          gboolean         fit_model);
 

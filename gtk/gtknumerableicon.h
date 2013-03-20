@@ -56,30 +56,43 @@ struct _GtkNumerableIconClass {
   gpointer padding[16];
 };
 
+GDK_AVAILABLE_IN_ALL
 GType             gtk_numerable_icon_get_type                 (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 GIcon *           gtk_numerable_icon_new                      (GIcon            *base_icon);
+GDK_AVAILABLE_IN_ALL
 GIcon *           gtk_numerable_icon_new_with_style_context   (GIcon            *base_icon,
                                                                GtkStyleContext  *context);
 
+GDK_AVAILABLE_IN_ALL
 GtkStyleContext * gtk_numerable_icon_get_style_context        (GtkNumerableIcon *self);
+GDK_AVAILABLE_IN_ALL
 void              gtk_numerable_icon_set_style_context        (GtkNumerableIcon *self,
                                                                GtkStyleContext  *style);
 
+GDK_AVAILABLE_IN_ALL
 gint              gtk_numerable_icon_get_count                (GtkNumerableIcon *self);
+GDK_AVAILABLE_IN_ALL
 void              gtk_numerable_icon_set_count                (GtkNumerableIcon *self,
                                                                gint count);
 
+GDK_AVAILABLE_IN_ALL
 const gchar *     gtk_numerable_icon_get_label                (GtkNumerableIcon *self);
+GDK_AVAILABLE_IN_ALL
 void              gtk_numerable_icon_set_label                (GtkNumerableIcon *self,
                                                                const gchar      *label);
 
+GDK_AVAILABLE_IN_ALL
 void              gtk_numerable_icon_set_background_gicon     (GtkNumerableIcon *self,
                                                                GIcon            *icon);
+GDK_AVAILABLE_IN_ALL
 GIcon *           gtk_numerable_icon_get_background_gicon     (GtkNumerableIcon *self);
 
+GDK_AVAILABLE_IN_ALL
 void              gtk_numerable_icon_set_background_icon_name (GtkNumerableIcon *self,
                                                                const gchar      *icon_name);
+GDK_AVAILABLE_IN_ALL
 const gchar *     gtk_numerable_icon_get_background_icon_name (GtkNumerableIcon *self);
 
 G_END_DECLS

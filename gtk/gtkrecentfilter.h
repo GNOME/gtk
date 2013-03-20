@@ -24,6 +24,7 @@
 #endif
 
 #include <glib-object.h>
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 
@@ -92,31 +93,44 @@ struct _GtkRecentFilterInfo
   gint age;
 };
 
+GDK_AVAILABLE_IN_ALL
 GType                 gtk_recent_filter_get_type (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 GtkRecentFilter *     gtk_recent_filter_new      (void);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_recent_filter_set_name (GtkRecentFilter *filter,
 						  const gchar     *name);
+GDK_AVAILABLE_IN_ALL
 const gchar *         gtk_recent_filter_get_name (GtkRecentFilter *filter);
 
+GDK_AVAILABLE_IN_ALL
 void gtk_recent_filter_add_mime_type      (GtkRecentFilter      *filter,
 					   const gchar          *mime_type);
+GDK_AVAILABLE_IN_ALL
 void gtk_recent_filter_add_pattern        (GtkRecentFilter      *filter,
 					   const gchar          *pattern);
+GDK_AVAILABLE_IN_ALL
 void gtk_recent_filter_add_pixbuf_formats (GtkRecentFilter      *filter);
+GDK_AVAILABLE_IN_ALL
 void gtk_recent_filter_add_application    (GtkRecentFilter      *filter,
 					   const gchar          *application);
+GDK_AVAILABLE_IN_ALL
 void gtk_recent_filter_add_group          (GtkRecentFilter      *filter,
 					   const gchar          *group);
+GDK_AVAILABLE_IN_ALL
 void gtk_recent_filter_add_age            (GtkRecentFilter      *filter,
 					   gint                  days);
+GDK_AVAILABLE_IN_ALL
 void gtk_recent_filter_add_custom         (GtkRecentFilter      *filter,
 					   GtkRecentFilterFlags  needed,
 					   GtkRecentFilterFunc   func,
 					   gpointer              data,
 					   GDestroyNotify        data_destroy);
 
+GDK_AVAILABLE_IN_ALL
 GtkRecentFilterFlags gtk_recent_filter_get_needed (GtkRecentFilter           *filter);
+GDK_AVAILABLE_IN_ALL
 gboolean             gtk_recent_filter_filter     (GtkRecentFilter           *filter,
 						   const GtkRecentFilterInfo *filter_info);
 

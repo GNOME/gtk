@@ -67,9 +67,12 @@ struct _GtkArrowClass
 };
 
 
+GDK_AVAILABLE_IN_ALL
 GType      gtk_arrow_get_type   (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_arrow_new        (GtkArrowType   arrow_type,
 				 GtkShadowType  shadow_type);
+GDK_AVAILABLE_IN_ALL
 void       gtk_arrow_set        (GtkArrow      *arrow,
 				 GtkArrowType   arrow_type,
 				 GtkShadowType  shadow_type);

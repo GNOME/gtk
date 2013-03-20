@@ -74,11 +74,17 @@ struct _GtkButtonClass
 };
 
 
+GDK_AVAILABLE_IN_ALL
 GType          gtk_button_get_type          (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkWidget*     gtk_button_new               (void);
+GDK_AVAILABLE_IN_ALL
 GtkWidget*     gtk_button_new_with_label    (const gchar    *label);
+GDK_AVAILABLE_IN_ALL
 GtkWidget*     gtk_button_new_from_stock    (const gchar    *stock_id);
+GDK_AVAILABLE_IN_ALL
 GtkWidget*     gtk_button_new_with_mnemonic (const gchar    *label);
+GDK_AVAILABLE_IN_ALL
 void           gtk_button_clicked           (GtkButton      *button);
 GDK_DEPRECATED
 void           gtk_button_pressed           (GtkButton      *button);
@@ -89,32 +95,48 @@ void           gtk_button_enter             (GtkButton      *button);
 GDK_DEPRECATED
 void           gtk_button_leave             (GtkButton      *button);
 
+GDK_AVAILABLE_IN_ALL
 void                  gtk_button_set_relief         (GtkButton      *button,
 						     GtkReliefStyle  newstyle);
+GDK_AVAILABLE_IN_ALL
 GtkReliefStyle        gtk_button_get_relief         (GtkButton      *button);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_button_set_label          (GtkButton      *button,
 						     const gchar    *label);
+GDK_AVAILABLE_IN_ALL
 const gchar *         gtk_button_get_label          (GtkButton      *button);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_button_set_use_underline  (GtkButton      *button,
 						     gboolean        use_underline);
+GDK_AVAILABLE_IN_ALL
 gboolean              gtk_button_get_use_underline  (GtkButton      *button);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_button_set_use_stock      (GtkButton      *button,
 						     gboolean        use_stock);
+GDK_AVAILABLE_IN_ALL
 gboolean              gtk_button_get_use_stock      (GtkButton      *button);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_button_set_focus_on_click (GtkButton      *button,
 						     gboolean        focus_on_click);
+GDK_AVAILABLE_IN_ALL
 gboolean              gtk_button_get_focus_on_click (GtkButton      *button);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_button_set_alignment      (GtkButton      *button,
 						     gfloat          xalign,
 						     gfloat          yalign);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_button_get_alignment      (GtkButton      *button,
 						     gfloat         *xalign,
 						     gfloat         *yalign);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_button_set_image          (GtkButton      *button,
 					             GtkWidget      *image);
+GDK_AVAILABLE_IN_ALL
 GtkWidget*            gtk_button_get_image          (GtkButton      *button);
+GDK_AVAILABLE_IN_ALL
 void                  gtk_button_set_image_position (GtkButton      *button,
 						     GtkPositionType position);
+GDK_AVAILABLE_IN_ALL
 GtkPositionType       gtk_button_get_image_position (GtkButton      *button);
 GDK_AVAILABLE_IN_3_6
 void                  gtk_button_set_always_show_image (GtkButton   *button,
@@ -122,6 +144,7 @@ void                  gtk_button_set_always_show_image (GtkButton   *button,
 GDK_AVAILABLE_IN_3_6
 gboolean              gtk_button_get_always_show_image (GtkButton   *button);
 
+GDK_AVAILABLE_IN_ALL
 GdkWindow*            gtk_button_get_event_window   (GtkButton      *button);
 
 

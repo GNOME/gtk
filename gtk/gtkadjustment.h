@@ -73,7 +73,9 @@ struct _GtkAdjustmentClass
 };
 
 
+GDK_AVAILABLE_IN_ALL
 GType      gtk_adjustment_get_type              (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkAdjustment*   gtk_adjustment_new             (gdouble          value,
                                                  gdouble          lower,
                                                  gdouble          upper,
@@ -81,31 +83,47 @@ GtkAdjustment*   gtk_adjustment_new             (gdouble          value,
                                                  gdouble          page_increment,
                                                  gdouble          page_size);
 
+GDK_AVAILABLE_IN_ALL
 void       gtk_adjustment_changed               (GtkAdjustment   *adjustment);
+GDK_AVAILABLE_IN_ALL
 void       gtk_adjustment_value_changed         (GtkAdjustment   *adjustment);
+GDK_AVAILABLE_IN_ALL
 void       gtk_adjustment_clamp_page            (GtkAdjustment   *adjustment,
                                                  gdouble          lower,
                                                  gdouble          upper);
 
+GDK_AVAILABLE_IN_ALL
 gdouble    gtk_adjustment_get_value             (GtkAdjustment   *adjustment);
+GDK_AVAILABLE_IN_ALL
 void       gtk_adjustment_set_value             (GtkAdjustment   *adjustment,
                                                  gdouble          value);
+GDK_AVAILABLE_IN_ALL
 gdouble    gtk_adjustment_get_lower             (GtkAdjustment   *adjustment);
+GDK_AVAILABLE_IN_ALL
 void       gtk_adjustment_set_lower             (GtkAdjustment   *adjustment,
                                                  gdouble          lower);
+GDK_AVAILABLE_IN_ALL
 gdouble    gtk_adjustment_get_upper             (GtkAdjustment   *adjustment);
+GDK_AVAILABLE_IN_ALL
 void       gtk_adjustment_set_upper             (GtkAdjustment   *adjustment,
                                                  gdouble          upper);
+GDK_AVAILABLE_IN_ALL
 gdouble    gtk_adjustment_get_step_increment    (GtkAdjustment   *adjustment);
+GDK_AVAILABLE_IN_ALL
 void       gtk_adjustment_set_step_increment    (GtkAdjustment   *adjustment,
                                                  gdouble          step_increment);
+GDK_AVAILABLE_IN_ALL
 gdouble    gtk_adjustment_get_page_increment    (GtkAdjustment   *adjustment);
+GDK_AVAILABLE_IN_ALL
 void       gtk_adjustment_set_page_increment    (GtkAdjustment   *adjustment,
                                                  gdouble          page_increment);
+GDK_AVAILABLE_IN_ALL
 gdouble    gtk_adjustment_get_page_size         (GtkAdjustment   *adjustment);
+GDK_AVAILABLE_IN_ALL
 void       gtk_adjustment_set_page_size         (GtkAdjustment   *adjustment,
                                                  gdouble          page_size);
 
+GDK_AVAILABLE_IN_ALL
 void       gtk_adjustment_configure             (GtkAdjustment   *adjustment,
                                                  gdouble          value,
                                                  gdouble          lower,

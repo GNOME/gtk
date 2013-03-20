@@ -98,24 +98,31 @@ struct _GtkTreeSortableIface
 };
 
 
+GDK_AVAILABLE_IN_ALL
 GType    gtk_tree_sortable_get_type              (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 void     gtk_tree_sortable_sort_column_changed   (GtkTreeSortable        *sortable);
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_tree_sortable_get_sort_column_id    (GtkTreeSortable        *sortable,
 						  gint                   *sort_column_id,
 						  GtkSortType            *order);
+GDK_AVAILABLE_IN_ALL
 void     gtk_tree_sortable_set_sort_column_id    (GtkTreeSortable        *sortable,
 						  gint                    sort_column_id,
 						  GtkSortType             order);
+GDK_AVAILABLE_IN_ALL
 void     gtk_tree_sortable_set_sort_func         (GtkTreeSortable        *sortable,
 						  gint                    sort_column_id,
 						  GtkTreeIterCompareFunc  sort_func,
 						  gpointer                user_data,
 						  GDestroyNotify          destroy);
+GDK_AVAILABLE_IN_ALL
 void     gtk_tree_sortable_set_default_sort_func (GtkTreeSortable        *sortable,
 						  GtkTreeIterCompareFunc  sort_func,
 						  gpointer                user_data,
 						  GDestroyNotify          destroy);
+GDK_AVAILABLE_IN_ALL
 gboolean gtk_tree_sortable_has_default_sort_func (GtkTreeSortable        *sortable);
 
 G_END_DECLS

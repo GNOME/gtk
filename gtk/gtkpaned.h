@@ -75,28 +75,39 @@ struct _GtkPanedClass
 };
 
 
+GDK_AVAILABLE_IN_ALL
 GType       gtk_paned_get_type     (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_ALL
 GtkWidget * gtk_paned_new          (GtkOrientation orientation);
+GDK_AVAILABLE_IN_ALL
 void        gtk_paned_add1         (GtkPaned       *paned,
                                     GtkWidget      *child);
+GDK_AVAILABLE_IN_ALL
 void        gtk_paned_add2         (GtkPaned       *paned,
                                     GtkWidget      *child);
+GDK_AVAILABLE_IN_ALL
 void        gtk_paned_pack1        (GtkPaned       *paned,
                                     GtkWidget      *child,
                                     gboolean        resize,
                                     gboolean        shrink);
+GDK_AVAILABLE_IN_ALL
 void        gtk_paned_pack2        (GtkPaned       *paned,
                                     GtkWidget      *child,
                                     gboolean        resize,
                                     gboolean        shrink);
 
+GDK_AVAILABLE_IN_ALL
 gint        gtk_paned_get_position (GtkPaned       *paned);
+GDK_AVAILABLE_IN_ALL
 void        gtk_paned_set_position (GtkPaned       *paned,
                                     gint            position);
 
+GDK_AVAILABLE_IN_ALL
 GtkWidget * gtk_paned_get_child1   (GtkPaned       *paned);
+GDK_AVAILABLE_IN_ALL
 GtkWidget * gtk_paned_get_child2   (GtkPaned       *paned);
 
+GDK_AVAILABLE_IN_ALL
 GdkWindow * gtk_paned_get_handle_window (GtkPaned  *paned);
 
 
