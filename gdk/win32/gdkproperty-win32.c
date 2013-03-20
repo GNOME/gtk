@@ -150,6 +150,7 @@ _gdk_win32_window_change_property (GdkWindow    *window,
   guchar *ucptr;
   wchar_t *wcptr, *p;
   glong wclen;
+  GError *err = NULL;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -193,7 +194,13 @@ _gdk_win32_window_change_property (GdkWindow    *window,
 	      return;
 	    }
 
-	  wcptr = g_utf8_to_utf16 ((char *) data, nelements, NULL, &wclen, NULL);
+	  wcptr = g_utf8_to_utf16 ((char *) data, nelements, NULL, &wclen, &err);
+          if (err != NULL)
+            {
+              g_warning ("Failed to convert utf8: %s", err->message);
+              g_clear_error (&err);
+              return;
+            }
 
 	  wclen++;		/* Terminating 0 */
 	  size = wclen * 2;
