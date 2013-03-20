@@ -34,6 +34,40 @@
 #include "gdkkeysprivate.h"
 #include "gdkprivate-wayland.h"
 
+/**
+ * SECTION:wayland_interaction
+ * @Short_description: Wayland backend-specific functions
+ * @Title: Wayland Interaction
+ *
+ * The functions in this section are specific to the GDK Wayland backend.
+ * To use them, you need to include the <literal>&lt;gdk/gdkwayland.h&gt;</literal>
+ * header and use the Wayland-specific pkg-config files to build your
+ * application (either <literal>gdk-wayland-3.0</literal> or
+ * <literal>gtk+-wayland-3.0</literal>).
+ *
+ * To make your code compile with other GDK backends, guard backend-specific
+ * calls by an ifdef as follows. Since GDK may be built with multiple
+ * backends, you should also check for the backend that is in use (e.g. by
+ * using the GDK_IS_WAYLAND_DISPLAY() macro).
+ * |[
+ * #ifdef GDK_WINDOWING_WAYLAND
+ *   if (GDK_IS_WAYLAND_DISPLAY (display))
+ *     {
+ *       /&ast; make Wayland-specific calls here &ast;/
+ *     }
+ *   else
+ * #endif
+ * #ifdef GDK_WINDOWING_X11
+ *   if (GDK_IS_X11_DISPLAY (display))
+ *     {
+ *       /&ast; make X11-specific calls here &ast;/
+ *     }
+ *   else
+ * #endif
+ *   g_error ("Unsupported GDK backend");
+ * ]|
+ */
+
 static void _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *wayland_display);
 
 G_DEFINE_TYPE (GdkWaylandDisplay, gdk_wayland_display, GDK_TYPE_DISPLAY)

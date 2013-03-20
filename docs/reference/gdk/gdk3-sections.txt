@@ -52,6 +52,7 @@ gdk_error_trap_pop_ignored
 GDK_WINDOWING_X11
 GDK_WINDOWING_WIN32
 GDK_WINDOWING_QUARTZ
+GDK_WINDOWING_WAYLAND
 
 <SUBSECTION>
 GDK_VERSION_3_0
@@ -1126,6 +1127,54 @@ gdk_x11_screen_get_type
 gdk_x11_visual_get_type
 gdk_x11_window_get_type
 gdk_window_impl_x11_get_type
+</SECTION>
+
+<SECTION>
+<INCLUDE>gdk/gdkwayland.h</INCLUDE>
+<TITLE>Wayland Interaction</TITLE>
+<FILE>wayland_interaction</FILE>
+gdk_wayland_device_get_wl_keyboard
+gdk_wayland_device_get_wl_pointer
+gdk_wayland_device_get_wl_seat
+gdk_wayland_display_get_wl_compositor
+gdk_wayland_display_get_wl_display
+gdk_wayland_display_get_wl_shell
+gdk_wayland_window_get_wl_shell_surface
+gdk_wayland_window_get_wl_surface
+gdk_wayland_window_set_use_custom_surface
+
+<SUBSECTION Standard>
+GDK_TYPE_WAYLAND_DEVICE
+GDK_WAYLAND_DEVICE
+GDK_WAYLAND_DEVICE_CLASS
+GDK_WAYLAND_DEVICE_GET_CLASS
+GDK_IS_WAYLAND_DEVICE
+GDK_IS_WAYLAND_DEVICE_CLASS
+GDK_TYPE_WAYLAND_DISPLAY
+GDK_WAYLAND_DISPLAY
+GDK_WAYLAND_DISPLAY_CLASS
+GDK_WAYLAND_DISPLAY_GET_CLASS
+GDK_IS_WAYLAND_DISPLAY
+GDK_IS_WAYLAND_DISPLAY_CLASS
+GDK_TYPE_WAYLAND_DISPLAY_MANAGER
+GDK_WAYLAND_DISPLAY_MANAGER
+GDK_WAYLAND_DISPLAY_MANAGER_CLASS
+GDK_WAYLAND_DISPLAY_MANAGER_GET_CLASS
+GDK_IS_WAYLAND_DISPLAY_MANAGER
+GDK_IS_WAYLAND_DISPLAY_MANAGER_CLASS
+GDK_TYPE_WAYLAND_WINDOW
+GDK_WAYLAND_WINDOW
+GDK_WAYLAND_WINDOW_CLASS
+GDK_WAYLAND_WINDOW_GET_CLASS
+GDK_IS_WAYLAND_WINDOW
+GDK_IS_WAYLAND_WINDOW_CLASS
+
+<SUBSECTION Private>
+gdk_wayland_device_get_type
+gdk_wayland_display_get_type
+gdk_wayland_display_manager_get_type
+gdk_wayland_window_get_type
+
 </SECTION>
 
 <SECTION>
