@@ -1,4 +1,5 @@
 /*** BEGIN file-header ***/
+#include "config.h"
 #include "gtk.h"
 #include "gtkprivate.h"
 #include "gtkprivatetypebuiltins.h"
