@@ -1227,6 +1227,8 @@ gtk_header_bar_pack_start
 gtk_header_bar_pack_end
 gtk_header_bar_set_title
 gtk_header_bar_get_title
+gtk_header_bar_set_subtitle
+gtk_header_bar_get_subtitle
 gtk_header_bar_set_custom_title
 gtk_header_bar_get_custom_title
 gtk_hpaned_get_type

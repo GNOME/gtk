@@ -49,7 +49,11 @@
 struct _GtkHeaderBarPrivate
 {
   gchar *title;
-  GtkWidget *label;
+  gchar *subtitle;
+  GtkWidget *title_label;
+  GtkWidget *subtitle_label;
+  GtkWidget *label_box;
+  GtkWidget *label_sizing_box;
   GtkWidget *custom_title;
   gint spacing;
   gint hpadding;
@@ -68,6 +72,7 @@ struct _Child
 enum {
   PROP_0,
   PROP_TITLE,
+  PROP_SUBTITLE,
   PROP_CUSTOM_TITLE,
   PROP_SPACING,
   PROP_HPADDING,
@@ -97,6 +102,18 @@ boldify_label (GtkWidget *label)
 }
 
 static void
+smallify_label (GtkWidget *label)
+{
+  PangoAttrList *attrs;
+  attrs = pango_attr_list_new ();
+  pango_attr_list_insert (attrs, pango_attr_scale_new (PANGO_SCALE_SMALL));
+  gtk_label_set_attributes (GTK_LABEL (label), attrs);
+  pango_attr_list_unref (attrs);
+
+  gtk_style_context_add_class (gtk_widget_get_style_context (label), "dim-label");
+}
+
+static void
 get_css_padding_and_border (GtkWidget *widget,
                             GtkBorder *border)
 {
@@ -116,20 +133,61 @@ get_css_padding_and_border (GtkWidget *widget,
 }
 
 static void
-construct_label (GtkHeaderBar *bar)
+init_sizing_box (GtkHeaderBar *bar)
+{
+  GtkHeaderBarPrivate *priv = bar->priv;
+  GtkWidget *w;
+
+  /* We use this box to always request size for the two labels (title
+   * and subtitle) as if they were always visible, but then allocate
+   * the real label box with its actual size, to keep it center-aligned
+   * in case we have only the title.
+   */
+  priv->label_sizing_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+
+  w = gtk_label_new (NULL);
+  boldify_label (w);
+  gtk_box_pack_start (GTK_BOX (priv->label_sizing_box), w, FALSE, FALSE, 0);
+  gtk_label_set_line_wrap (GTK_LABEL (w), FALSE);
+  gtk_label_set_single_line_mode (GTK_LABEL (w), TRUE);
+  gtk_label_set_ellipsize (GTK_LABEL (w), PANGO_ELLIPSIZE_END);
+
+  w = gtk_label_new (NULL);
+  smallify_label (w);
+  gtk_box_pack_start (GTK_BOX (priv->label_sizing_box), w, FALSE, FALSE, 0);
+  gtk_label_set_line_wrap (GTK_LABEL (w), FALSE);
+  gtk_label_set_single_line_mode (GTK_LABEL (w), TRUE);
+  gtk_label_set_ellipsize (GTK_LABEL (w), PANGO_ELLIPSIZE_END);
+
+  gtk_widget_show_all (priv->label_sizing_box);
+}
+
+static void
+construct_label_box (GtkHeaderBar *bar)
 {
   GtkHeaderBarPrivate *priv = bar->priv;
 
-  g_assert (priv->label == NULL);
+  g_assert (priv->label_box == NULL);
 
-  priv->label = gtk_label_new (priv->title);
-  boldify_label (priv->label);
-  gtk_widget_set_parent (priv->label, GTK_WIDGET (bar));
-  gtk_widget_set_valign (priv->label, GTK_ALIGN_CENTER);
-  gtk_label_set_line_wrap (GTK_LABEL (priv->label), FALSE);
-  gtk_label_set_single_line_mode (GTK_LABEL (priv->label), TRUE);
-  gtk_label_set_ellipsize (GTK_LABEL (priv->label), PANGO_ELLIPSIZE_END);
-  gtk_widget_show (priv->label);
+  priv->label_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_widget_set_parent (priv->label_box, GTK_WIDGET (bar));
+  gtk_widget_set_valign (priv->label_box, GTK_ALIGN_CENTER);
+  gtk_widget_show (priv->label_box);
+
+  priv->title_label = gtk_label_new (priv->title);
+  boldify_label (priv->title_label);
+  gtk_label_set_line_wrap (GTK_LABEL (priv->title_label), FALSE);
+  gtk_label_set_single_line_mode (GTK_LABEL (priv->title_label), TRUE);
+  gtk_label_set_ellipsize (GTK_LABEL (priv->title_label), PANGO_ELLIPSIZE_END);
+  gtk_box_pack_start (GTK_BOX (priv->label_box), priv->title_label, FALSE, FALSE, 0);
+  gtk_widget_show (priv->title_label);
+
+  priv->subtitle_label = gtk_label_new (priv->subtitle);
+  smallify_label (priv->subtitle_label);
+  gtk_label_set_line_wrap (GTK_LABEL (priv->subtitle_label), FALSE);
+  gtk_label_set_single_line_mode (GTK_LABEL (priv->subtitle_label), TRUE);
+  gtk_label_set_ellipsize (GTK_LABEL (priv->subtitle_label), PANGO_ELLIPSIZE_END);
+  gtk_box_pack_start (GTK_BOX (priv->label_box), priv->subtitle_label, FALSE, FALSE, 0);
 }
 
 static void
@@ -145,13 +203,15 @@ gtk_header_bar_init (GtkHeaderBar *bar)
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (bar), FALSE);
 
   priv->title = NULL;
+  priv->subtitle = NULL;
   priv->custom_title = NULL;
   priv->children = NULL;
   priv->spacing = DEFAULT_SPACING;
   priv->hpadding = DEFAULT_HPADDING;
   priv->vpadding = DEFAULT_VPADDING;
 
-  construct_label (bar);
+  init_sizing_box (bar);
+  construct_label_box (bar);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (bar));
   gtk_style_context_add_class (context, "header-bar");
@@ -230,9 +290,9 @@ gtk_header_bar_get_size (GtkWidget      *widget,
         nvis_children += 1;
     }
 
-  if (priv->label != NULL)
+  if (priv->label_box != NULL)
     {
-      if (add_child_size (priv->label, orientation, &minimum, &natural))
+      if (add_child_size (priv->label_sizing_box, orientation, &minimum, &natural))
         nvis_children += 1;
     }
 
@@ -304,7 +364,23 @@ gtk_header_bar_compute_size_for_orientation (GtkWidget *widget,
         }
     }
 
-  /* FIXME label size */
+  if (priv->label_box != NULL &&
+      gtk_widget_get_visible (priv->label_box))
+    {
+      gtk_widget_get_preferred_width (priv->label_sizing_box,
+                                      &child_size, &child_natural);
+      required_size += child_size;
+      required_natural += child_natural;
+    }
+
+  if (priv->custom_title != NULL &&
+      gtk_widget_get_visible (priv->custom_title))
+    {
+      gtk_widget_get_preferred_width (priv->custom_title,
+                                      &child_size, &child_natural);
+      required_size += child_size;
+      required_natural += child_natural;
+    }
 
   if (nvis_children > 0)
     {
@@ -404,6 +480,24 @@ gtk_header_bar_compute_size_for_opposing_orientation (GtkWidget *widget,
           computed_natural = MAX (computed_natural, child_natural);
         }
       i += 1;
+    }
+
+  if (priv->label_box != NULL &&
+      gtk_widget_get_visible (priv->label_box))
+    {
+      gtk_widget_get_preferred_height (priv->label_sizing_box,
+                                       &child_minimum, &child_natural);
+      computed_minimum = MAX (computed_minimum, child_minimum);
+      computed_natural = MAX (computed_natural, child_natural);
+    }
+
+  if (priv->custom_title != NULL &&
+      gtk_widget_get_visible (priv->custom_title))
+    {
+      gtk_widget_get_preferred_height (priv->custom_title,
+                                       &child_minimum, &child_natural);
+      computed_minimum = MAX (computed_minimum, child_minimum);
+      computed_natural = MAX (computed_natural, child_natural);
     }
 
   get_css_padding_and_border (widget, &css_borders);
@@ -509,7 +603,7 @@ gtk_header_bar_size_allocate (GtkWidget     *widget,
     }
   else
     {
-      gtk_widget_get_preferred_width_for_height (priv->label,
+      gtk_widget_get_preferred_width_for_height (priv->label_box,
                                                  height,
                                                  &title_minimum_size,
                                                  &title_natural_size);
@@ -521,12 +615,12 @@ gtk_header_bar_size_allocate (GtkWidget     *widget,
   side[0] = side[1] = 0;
   for (packing = GTK_PACK_START; packing <= GTK_PACK_END; packing++)
     {
-      child_allocation.y = allocation->y + priv->vpadding;
+      child_allocation.y = allocation->y + priv->vpadding + css_borders.top;
       child_allocation.height = height;
       if (packing == GTK_PACK_START)
-        x = allocation->x + priv->hpadding;
+        x = allocation->x + priv->hpadding + css_borders.left;
       else
-        x = allocation->x + allocation->width - priv->hpadding;
+        x = allocation->x + allocation->width - priv->hpadding - css_borders.right;
 
       if (packing == GTK_PACK_START)
 	{
@@ -580,7 +674,7 @@ gtk_header_bar_size_allocate (GtkWidget     *widget,
         }
     }
 
-  child_allocation.y = allocation->y + priv->vpadding;
+  child_allocation.y = allocation->y + priv->vpadding + css_borders.top;
   child_allocation.height = height;
 
   width = MAX (side[0], side[1]);
@@ -606,7 +700,7 @@ gtk_header_bar_size_allocate (GtkWidget     *widget,
   if (priv->custom_title)
     gtk_widget_size_allocate (priv->custom_title, &child_allocation);
   else
-    gtk_widget_size_allocate (priv->label, &child_allocation);
+    gtk_widget_size_allocate (priv->label_box, &child_allocation);
 }
 
 /**
@@ -625,7 +719,7 @@ gtk_header_bar_set_title (GtkHeaderBar *bar,
                           const gchar  *title)
 {
   GtkHeaderBarPrivate *priv;
-  char *new_title;
+  gchar *new_title;
 
   g_return_if_fail (GTK_IS_HEADER_BAR (bar));
 
@@ -635,9 +729,9 @@ gtk_header_bar_set_title (GtkHeaderBar *bar,
   g_free (priv->title);
   priv->title = new_title;
 
-  if (priv->label != NULL)
+  if (priv->title_label != NULL)
     {
-      gtk_label_set_label (GTK_LABEL (priv->label), priv->title);
+      gtk_label_set_label (GTK_LABEL (priv->title_label), priv->title);
       gtk_widget_queue_resize (GTK_WIDGET (bar));
     }
 
@@ -662,6 +756,61 @@ gtk_header_bar_get_title (GtkHeaderBar *bar)
   g_return_val_if_fail (GTK_IS_HEADER_BAR (bar), NULL);
 
   return bar->priv->title;
+}
+
+/**
+ * gtk_header_bar_set_subtitle:
+ * @bar: a #GtkHeaderBar
+ * @subtitle: (allow-none): a subtitle
+ *
+ * Sets the subtitle of the #GtkHeaderBar. The title should give a user
+ * an additional detail to help him identify the current view.
+ *
+ * Since: 3.10
+ */
+void
+gtk_header_bar_set_subtitle (GtkHeaderBar *bar,
+                             const gchar  *subtitle)
+{
+  GtkHeaderBarPrivate *priv;
+  gchar *new_subtitle;
+
+  g_return_if_fail (GTK_IS_HEADER_BAR (bar));
+
+  priv = bar->priv;
+
+  new_subtitle = g_strdup (subtitle);
+  g_free (priv->subtitle);
+  priv->subtitle = new_subtitle;
+
+  if (priv->subtitle_label != NULL)
+    {
+      gtk_label_set_label (GTK_LABEL (priv->subtitle_label), priv->subtitle);
+      gtk_widget_set_visible (priv->subtitle_label, priv->subtitle != NULL);
+      gtk_widget_queue_resize (GTK_WIDGET (bar));
+    }
+
+  g_object_notify (G_OBJECT (bar), "subtitle");
+}
+
+/**
+ * gtk_header_bar_get_subtitle:
+ * @bar: a #GtkHeaderBar
+ *
+ * Retrieves the subtitle of the header. See gtk_header_bar_set_subtitle().
+ *
+ * Return value: the subtitle of the header, or %NULL if none has
+ *    been set explicitely. The returned string is owned by the widget
+ *    and must not be modified or freed.
+ *
+ * Since: 3.10
+ */
+const gchar *
+gtk_header_bar_get_subtitle (GtkHeaderBar *bar)
+{
+  g_return_val_if_fail (GTK_IS_HEADER_BAR (bar), NULL);
+
+  return bar->priv->subtitle;
 }
 
 /**
@@ -708,19 +857,21 @@ gtk_header_bar_set_custom_title (GtkHeaderBar *bar,
       gtk_widget_set_valign (priv->custom_title, GTK_ALIGN_CENTER);
       gtk_widget_show (title_widget);
 
-      if (priv->label != NULL)
+      if (priv->label_box != NULL)
         {
-          GtkWidget *label = priv->label;
+          GtkWidget *label_box = priv->label_box;
 
-          priv->label = NULL;
-          gtk_widget_unparent (label);
+          priv->label_box = NULL;
+          priv->title_label = NULL;
+          priv->subtitle_label = NULL;
+          gtk_widget_unparent (label_box);
         }
 
     }
   else
     {
-      if (priv->label == NULL)
-        construct_label (bar);
+      if (priv->label_box == NULL)
+        construct_label_box (bar);
     }
 
   gtk_widget_queue_resize (GTK_WIDGET (bar));
@@ -754,6 +905,7 @@ gtk_header_bar_finalize (GObject *object)
   GtkHeaderBar *bar = GTK_HEADER_BAR (object);
 
   g_free (bar->priv->title);
+  g_free (bar->priv->subtitle);
 
   G_OBJECT_CLASS (gtk_header_bar_parent_class)->finalize (object);
 }
@@ -771,6 +923,10 @@ gtk_header_bar_get_property (GObject    *object,
     {
     case PROP_TITLE:
       g_value_set_string (value, priv->title);
+      break;
+
+    case PROP_SUBTITLE:
+      g_value_set_string (value, priv->subtitle);
       break;
 
     case PROP_CUSTOM_TITLE:
@@ -808,6 +964,10 @@ gtk_header_bar_set_property (GObject      *object,
     {
     case PROP_TITLE:
       gtk_header_bar_set_title (bar, g_value_get_string (value));
+      break;
+
+    case PROP_SUBTITLE:
+      gtk_header_bar_set_subtitle (bar, g_value_get_string (value));
       break;
 
     case PROP_CUSTOM_TITLE:
@@ -923,8 +1083,8 @@ gtk_header_bar_forall (GtkContainer *container,
   if (priv->custom_title != NULL)
     (* callback) (priv->custom_title, callback_data);
 
-  if (include_internals && priv->label != NULL)
-    (* callback) (priv->label, callback_data);
+  if (include_internals && priv->label_box != NULL)
+    (* callback) (priv->label_box, callback_data);
 
   children = priv->children;
   while (children)
@@ -1118,6 +1278,14 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
                                    g_param_spec_string ("title",
                                                         P_("Title"),
                                                         P_("The title to display"),
+                                                        NULL,
+                                                        G_PARAM_READWRITE));
+
+  g_object_class_install_property (object_class,
+                                   PROP_SUBTITLE,
+                                   g_param_spec_string ("subtitle",
+                                                        P_("Subitle"),
+                                                        P_("The subtitle to display"),
                                                         NULL,
                                                         G_PARAM_READWRITE));
 
