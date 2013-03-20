@@ -330,6 +330,8 @@ gtk_buildable_get_type
 gtk_buildable_parser_finished
 gtk_buildable_set_buildable_property
 gtk_buildable_set_name
+gtk_builder_add_callback_symbol
+gtk_builder_add_callback_symbols
 gtk_builder_add_from_file
 gtk_builder_add_from_resource
 gtk_builder_add_from_string
@@ -346,6 +348,7 @@ gtk_builder_get_objects
 gtk_builder_get_translation_domain
 gtk_builder_get_type_from_name
 gtk_builder_get_type
+gtk_builder_lookup_callback_symbol
 gtk_builder_new
 gtk_builder_set_translation_domain
 gtk_builder_value_from_string

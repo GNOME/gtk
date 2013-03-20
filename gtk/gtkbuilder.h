@@ -167,6 +167,19 @@ gboolean     gtk_builder_value_from_string_type  (GtkBuilder    *builder,
                                                   GValue       	*value,
 						  GError       **error);
 
+GDK_AVAILABLE_IN_3_10
+void         gtk_builder_add_callback_symbol     (GtkBuilder    *builder,
+						  const gchar   *callback_name,
+						  GCallback      callback_symbol);
+GDK_AVAILABLE_IN_3_10
+void         gtk_builder_add_callback_symbols    (GtkBuilder    *builder,
+						  const gchar   *first_callback_name,
+						  GCallback      first_callback_symbol,
+						  ...) G_GNUC_NULL_TERMINATED;
+GDK_AVAILABLE_IN_3_10
+GCallback    gtk_builder_lookup_callback_symbol  (GtkBuilder    *builder,
+						  const gchar   *callback_name);
+
 /**
  * GTK_BUILDER_WARN_INVALID_CHILD_TYPE:
  * @object: the #GtkBuildable on which the warning ocurred

@@ -270,6 +270,7 @@ struct _GtkBuilderPrivate
 {
   gchar *domain;
   GHashTable *objects;
+  GHashTable *callbacks;
   GSList *delayed_properties;
   GSList *signals;
   gchar *filename;
@@ -1390,11 +1391,22 @@ gtk_builder_connect_signals_default (GtkBuilder    *builder,
 {
   GCallback func;
   connect_args *args = (connect_args*)user_data;
-  
-  if (!g_module_symbol (args->module, handler_name, (gpointer)&func))
+
+  func = gtk_builder_lookup_callback_symbol (builder, handler_name);
+
+  if (!func)
     {
-      g_warning ("Could not find signal handler '%s'", handler_name);
-      return;
+      /* Only error out for missing GModule support if we've not
+       * found the symbols explicitly added with gtk_builder_add_callback_symbol()
+       */
+      if (args->module == NULL)
+	g_error ("gtk_builder_connect_signals() requires working GModule");
+  
+      if (!g_module_symbol (args->module, handler_name, (gpointer)&func))
+	{
+	  g_warning ("Could not find signal handler '%s'", handler_name);
+	  return;
+	}
     }
 
   if (connect_object)
@@ -1410,14 +1422,20 @@ gtk_builder_connect_signals_default (GtkBuilder    *builder,
  * @user_data: a pointer to a structure sent in as user data to all signals
  *
  * This method is a simpler variation of gtk_builder_connect_signals_full().
- * It uses #GModule's introspective features (by opening the module %NULL) 
+ * It uses symbols explicitly added to @builder with prior calls to
+ * gtk_builder_add_callback_symbol(). In the case that symbols are not
+ * explicitly added; it uses #GModule's introspective features (by opening the module %NULL) 
  * to look at the application's symbol table. From here it tries to match
  * the signal handler names given in the interface description with
  * symbols in the application and connects the signals. Note that this
  * function can only be called once, subsequent calls will do nothing.
  * 
- * Note that this function will not work correctly if #GModule is not
- * supported on the platform.
+ * Note that unless gtk_builder_add_callback_symbol() is called for
+ * all signal callbacks which are referenced by the loaded XML, this 
+ * function will require that #GModule be supported on the platform.
+ * 
+ * If you rely on #GModule support to lookup callbacks in the symbol table,
+ * the following details should be noted:
  *
  * When compiling applications for Windows, you must declare signal callbacks
  * with #G_MODULE_EXPORT, or they will not be put in the symbol table.
@@ -1435,17 +1453,17 @@ gtk_builder_connect_signals (GtkBuilder *builder,
   
   g_return_if_fail (GTK_IS_BUILDER (builder));
   
-  if (!g_module_supported ())
-    g_error ("gtk_builder_connect_signals() requires working GModule");
-
   args = g_slice_new0 (connect_args);
-  args->module = g_module_open (NULL, G_MODULE_BIND_LAZY);
   args->data = user_data;
+
+  if (g_module_supported ())
+    args->module = g_module_open (NULL, G_MODULE_BIND_LAZY);
   
   gtk_builder_connect_signals_full (builder,
                                     gtk_builder_connect_signals_default,
                                     args);
-  g_module_close (args->module);
+  if (args->module)
+    g_module_close (args->module);
 
   g_slice_free (connect_args, args);
 }
@@ -2121,4 +2139,109 @@ _gtk_builder_get_absolute_filename (GtkBuilder *builder, const gchar *string)
   g_free (dirname);
   
   return filename;
+}
+
+/**
+ * gtk_builder_add_callback_symbol:
+ * @builder: a #GtkBuilder
+ * @callback_name: The name of the callback, as expected in the XML
+ * @callback_symbol: (scope async): The callback pointer
+ *
+ * Adds the @callback_symbol to the scope of @builder under the given @callback_name.
+ *
+ * Using this function overrides the behavior of gtk_builder_connect_signals()
+ * for any callback symbols that are added. Using this method allows for better
+ * encapsulation as it does not require that callback symbols be declared in
+ * the global namespace.
+ *
+ * Since: 3.10
+ */
+void
+gtk_builder_add_callback_symbol (GtkBuilder    *builder,
+				 const gchar   *callback_name,
+				 GCallback      callback_symbol)
+{
+  g_return_if_fail (GTK_IS_BUILDER (builder));
+  g_return_if_fail (callback_name && callback_name[0]);
+  g_return_if_fail (callback_symbol != NULL);
+
+  if (!builder->priv->callbacks)
+    builder->priv->callbacks = g_hash_table_new_full (g_str_hash, g_str_equal,
+						      g_free, NULL);
+
+  g_hash_table_insert (builder->priv->callbacks, g_strdup (callback_name), callback_symbol);
+}
+
+/**
+ * gtk_builder_add_callback_symbols:
+ * @builder: a #GtkBuilder
+ * @first_callback_name: The name of the callback, as expected in the XML
+ * @first_callback_symbol: (scope async): The callback pointer
+ * @...: A list of callback name and callback symbol pairs terminated with %NULL
+ *
+ * A convenience function to add many callbacks instead of calling
+ * gtk_builder_add_callback_symbol() for each symbol.
+ *
+ * Since: 3.10
+ */
+void
+gtk_builder_add_callback_symbols (GtkBuilder    *builder,
+				  const gchar   *first_callback_name,
+				  GCallback      first_callback_symbol,
+				  ...)
+{
+  va_list var_args;
+  const gchar *callback_name;
+  GCallback callback_symbol;
+
+  g_return_if_fail (GTK_IS_BUILDER (builder));
+  g_return_if_fail (first_callback_name && first_callback_name[0]);
+  g_return_if_fail (first_callback_symbol != NULL);
+
+  callback_name = first_callback_name;
+  callback_symbol = first_callback_symbol;
+
+  va_start (var_args, first_callback_symbol);
+
+  do {
+
+    gtk_builder_add_callback_symbol (builder, callback_name, callback_symbol);
+
+    callback_name = va_arg (var_args, const gchar*);
+
+    if (callback_name)
+      callback_symbol = va_arg (var_args, GCallback);
+
+  } while (callback_name != NULL);
+
+  va_end (var_args);
+}
+
+/**
+ * gtk_builder_lookup_callback_symbol:
+ * @builder: a #GtkBuilder
+ * @callback_name: The name of the callback
+ *
+ * Fetches a symbol previously added to @builder
+ * with gtk_builder_add_callback_symbols()
+ *
+ * This function is intended for possible use in language bindings
+ * or for any case that one might be cusomizing signal connections
+ * using gtk_builder_connect_signals_full()
+ *
+ * Returns: The callback symbol in @builder for @callback_name, or %NULL
+ *
+ * Since: 3.10
+ */
+GCallback
+gtk_builder_lookup_callback_symbol (GtkBuilder    *builder,
+				    const gchar   *callback_name)
+{
+  g_return_val_if_fail (GTK_IS_BUILDER (builder), NULL);
+  g_return_val_if_fail (callback_name && callback_name[0], NULL);
+
+  if (!builder->priv->callbacks)
+    return NULL;
+
+  return g_hash_table_lookup (builder->priv->callbacks, callback_name);
 }
