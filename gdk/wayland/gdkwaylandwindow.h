@@ -47,6 +47,8 @@ GType                    gdk_wayland_window_get_type             (void);
 struct wl_surface       *gdk_wayland_window_get_wl_surface       (GdkWindow *window);
 struct wl_shell_surface *gdk_wayland_window_get_wl_shell_surface (GdkWindow *window);
 
+void                     gdk_wayland_window_set_use_custom_surface (GdkWindow *window);
+
 G_END_DECLS
 
 #endif /* __GDK_WAYLAND_WINDOW_H__ */

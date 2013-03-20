@@ -140,6 +140,8 @@ struct _GdkWindowImplWayland
     {
       int width, height;
     } saved_fullscreen, saved_maximized;
+
+  gboolean use_custom_surface;
 };
 
 struct _GdkWindowImplWaylandClass
@@ -565,13 +567,13 @@ gdk_wayland_window_map (GdkWindow *window)
     GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   GdkWindow *transient_for;
 
-  if (!impl->mapped)
+  if (!impl->mapped && !impl->use_custom_surface)
     {
       /* Popup menus can appear without a transient parent, which means they
        * cannot be positioned properly on Wayland. This attempts to guess the
        * surface they should be positioned with by finding the surface beneath
-       * the device that created the grab for the popup window */
-
+       * the device that created the grab for the popup window
+       */
       if (!impl->transient_for && impl->hint == GDK_WINDOW_TYPE_HINT_POPUP_MENU)
         {
           transient_for = gdk_device_get_window_at_position (impl->grab_device, NULL, NULL);
@@ -710,15 +712,21 @@ gdk_wayland_window_show (GdkWindow *window, gboolean already_mapped)
       XSERVER_TIME_IS_LATER (display_wayland->user_time, impl->user_time))
     gdk_wayland_window_set_user_time (window, impl->user_time);
 
-  impl->surface = wl_compositor_create_surface(display_wayland->compositor);
-  wl_surface_set_user_data(impl->surface, window);
+  if (!impl->surface)
+    {
+      impl->surface = wl_compositor_create_surface(display_wayland->compositor);
+      wl_surface_set_user_data(impl->surface, window);
+    }
 
-  impl->shell_surface = wl_shell_get_shell_surface (display_wayland->shell,
-                                                    impl->surface);
-  wl_shell_surface_add_listener(impl->shell_surface,
-                                &shell_surface_listener, window);
+  if (!impl->use_custom_surface && display_wayland->shell)
+    {
+      impl->shell_surface = wl_shell_get_shell_surface (display_wayland->shell,
+                                                        impl->surface);
+      wl_shell_surface_add_listener(impl->shell_surface,
+                                    &shell_surface_listener, window);
+    }
 
-  gdk_window_set_type_hint (window, impl->hint);  
+  gdk_window_set_type_hint (window, impl->hint);
 
   _gdk_make_event (window, GDK_MAP, NULL, FALSE);
   event = _gdk_make_event (window, GDK_VISIBILITY_NOTIFY, NULL, FALSE);
@@ -740,10 +748,17 @@ gdk_wayland_window_hide (GdkWindow *window)
     {
       if (impl->shell_surface)
         wl_shell_surface_destroy(impl->shell_surface);
-      if (impl->surface)
-        wl_surface_destroy(impl->surface);
+      if (impl->use_custom_surface)
+        {
+          wl_surface_attach (impl->surface, NULL, 0, 0);
+          wl_surface_commit (impl->surface);
+        }
+      else if (impl->surface)
+        {
+          wl_surface_destroy(impl->surface);
+          impl->surface = NULL;
+        }
       impl->shell_surface = NULL;
-      impl->surface = NULL;
       cairo_surface_destroy(impl->server_surface);
       impl->server_surface = NULL;
       impl->mapped = FALSE;
@@ -769,10 +784,17 @@ gdk_window_wayland_withdraw (GdkWindow *window)
         {
           if (impl->shell_surface)
             wl_shell_surface_destroy(impl->shell_surface);
-          if (impl->surface)
-            wl_surface_destroy(impl->surface);
+          if (impl->use_custom_surface)
+            {
+              wl_surface_attach (impl->surface, NULL, 0, 0);
+              wl_surface_commit (impl->surface);
+            }
+          else if (impl->surface)
+            {
+              wl_surface_destroy(impl->surface);
+              impl->surface = NULL;
+            }
           impl->shell_surface = NULL;
-          impl->surface = NULL;
           cairo_surface_destroy(impl->server_surface);
           impl->server_surface = NULL;
           impl->mapped = FALSE;
@@ -1364,8 +1386,12 @@ gdk_wayland_window_fullscreen (GdkWindow *window)
   if (impl->fullscreen)
     return;
 
+  if (!impl->shell_surface)
+    return;
+
   impl->saved_fullscreen.width = gdk_window_get_width (window);
   impl->saved_fullscreen.height = gdk_window_get_height (window);
+    
   wl_shell_surface_set_fullscreen (impl->shell_surface,
                                    WL_SHELL_SURFACE_FULLSCREEN_METHOD_DEFAULT,
                                    0,
@@ -1385,6 +1411,9 @@ gdk_wayland_window_unfullscreen (GdkWindow *window)
     return;
 
   if (!impl->fullscreen)
+    return;
+
+  if (!impl->shell_surface)
     return;
 
   wl_shell_surface_set_toplevel (impl->shell_surface);
@@ -1515,6 +1544,9 @@ gdk_wayland_window_begin_resize_drag (GdkWindow     *window,
 
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
+  if (!impl->shell_surface)
+    return;
+    
   wl_shell_surface_resize (impl->shell_surface,
                            gdk_wayland_device_get_wl_seat (device),
                            _gdk_wayland_display_get_serial (wayland_display),
@@ -1543,6 +1575,9 @@ gdk_wayland_window_begin_move_drag (GdkWindow *window,
     return;
 
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  if (!impl->shell_surface)
+    return;
 
   wl_shell_surface_move (impl->shell_surface,
                          gdk_wayland_device_get_wl_seat (device),
@@ -1812,4 +1847,70 @@ gdk_wayland_window_get_wl_shell_surface (GdkWindow *window)
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   return impl->shell_surface;
+}
+
+/**
+ * gdk_wayland_window_set_use_custom_surface:
+ * @window: (type GdkWaylandWindow): a #GdkWindow
+ *
+ * Marks a #GdkWindow as a custom Wayland surface. The application is
+ * expected to register the surface as some type of surface using
+ * some Wayland interface.
+ *
+ * Agood example would be writing a panel or on-screen-keyboard as an
+ * out-of-process helper - as opposed to having those in the compositor
+ * process. In this case the underlying surface isn't a wl_shell
+ * surface and the panel or OSK client need to identify the wl_surface
+ * as a panel or OSK to the compositor. The assumption is that the
+ * compositor will expose a private interface to the special client
+ * that lets the client identify the wl_surface as a panel or such.
+ *
+ * This function should be called before a #GdkWindow is shown. This is
+ * best done by connecting to the #GtkWidget::realized signal:
+ *
+ * <informalexample>
+ * <programlisting>
+ *   static void
+ *   widget_realize_cb (GtkWidget *widget)
+ *   {
+ *     GdkWindow *window;
+ *     struct wl_surface *surface;
+ *     struct input_panel_surface *ip_surface;
+ *
+ *     window = gtk_widget_get_window (widget);
+ *     gdk_wayland_window_set_custom_surface (window);
+ *
+ *     surface = gdk_wayland_window_get_wl_surface (window);
+ *     ip_surface = input_panel_get_input_panel_surface (input_panel, surface);
+ *     input_panel_surface_set_panel (ip_surface);
+ *   }
+ *
+ *   static void
+ *   setup_window (GtkWindow *window)
+ *   {
+ *     g_signal_connect (window, "realize", G_CALLBACK (widget_realize_cb), NULL);
+ *   }
+ * </programlisting>
+ * </informalexample>
+ *
+ * Since: 3.10
+ */
+void
+gdk_wayland_window_set_use_custom_surface (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl;
+  GdkWaylandDisplay *display;
+
+  g_return_if_fail (GDK_IS_WAYLAND_WINDOW (window));
+
+  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  if (!impl->surface)
+    {
+      display = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+      impl->surface = wl_compositor_create_surface (display->compositor);
+      wl_surface_set_user_data (impl->surface, window);
+    }
+
+  impl->use_custom_surface = TRUE;
 }
