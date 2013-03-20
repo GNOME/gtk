@@ -682,12 +682,11 @@ gtk_header_bar_set_custom_title (GtkHeaderBar *bar,
 
       priv->custom_title = NULL;
       gtk_widget_unparent (custom);
-      g_object_unref (custom);
     }
 
   if (title_widget)
     {
-      priv->custom_title = g_object_ref (title_widget);
+      priv->custom_title = title_widget;
 
       gtk_widget_hide (priv->label);
 
@@ -724,6 +723,16 @@ gtk_header_bar_get_custom_title (GtkHeaderBar *bar)
   g_return_val_if_fail (GTK_IS_HEADER_BAR (bar), NULL);
 
   return bar->priv->custom_title;
+}
+
+static void
+gtk_header_bar_finalize (GObject *object)
+{
+  GtkHeaderBar *bar = GTK_HEADER_BAR (object);
+
+  g_free (bar->priv->title);
+
+  G_OBJECT_CLASS (gtk_header_bar_parent_class)->finalize (object);
 }
 
 static void
@@ -1048,6 +1057,7 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (class);
 
+  object_class->finalize = gtk_header_bar_finalize;
   object_class->get_property = gtk_header_bar_get_property;
   object_class->set_property = gtk_header_bar_set_property;
 
