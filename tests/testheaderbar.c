@@ -36,6 +36,21 @@ change_title (GtkButton *button, gpointer data)
     }
 }
 
+static void
+change_subtitle (GtkButton *button, gpointer data)
+{
+  GtkWidget *headerbar = GTK_WIDGET (data);
+
+  if (gtk_header_bar_get_subtitle (GTK_HEADER_BAR (headerbar)) == NULL)
+    {
+      gtk_header_bar_set_subtitle (GTK_HEADER_BAR (headerbar), "(subtle subtitle)");
+    }
+  else
+    {
+      gtk_header_bar_set_subtitle (GTK_HEADER_BAR (headerbar), NULL);
+    }
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -76,7 +91,9 @@ main (int argc, char *argv[])
   g_signal_connect (button, "clicked", G_CALLBACK (change_title), footer);
   gtk_header_bar_pack_start (GTK_HEADER_BAR (footer), button);
   gtk_header_bar_set_custom_title (GTK_HEADER_BAR (footer), gtk_check_button_new_with_label ("Middle"));
-  gtk_header_bar_pack_end (GTK_HEADER_BAR (footer), gtk_button_new_with_label ("End 1"));
+  button = gtk_button_new_with_label ("End 1");
+  g_signal_connect (button, "clicked", G_CALLBACK (change_subtitle), header);
+  gtk_header_bar_pack_end (GTK_HEADER_BAR (footer), button);
   gtk_header_bar_pack_end (GTK_HEADER_BAR (footer), gtk_button_new_with_label ("End 2"));
   gtk_box_pack_end (GTK_BOX (box), footer, FALSE, FALSE, 0);
 
