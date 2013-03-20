@@ -52,6 +52,7 @@ AM_CPPFLAGS =						\
 	-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED		\
 	$(GMODULE_CFLAGS)				\
 	$(GTK_DEBUG_FLAGS)				\
+	$(GDK_HIDDEN_VISIBILITY_CFLAGS)			\
 	$(GTK_DEP_CFLAGS)				\
 	$(INCLUDED_IMMODULE_DEFINE)
 
@@ -1204,10 +1205,11 @@ gtkprivatetypebuiltins.c: @REBUILD@ $(gtk_private_type_h_sources)  gtkprivatetyp
 
 gtktypefuncs.c: @REBUILD@ stamp-gtktypebuiltins.h stamp-gtkprivatetypebuiltins.h $(top_srcdir)/gtk/*.h $(top_srcdir)/gtk/deprecated/*.h $(top_srcdir)/gdk/*.h Makefile
 	$(AM_V_GEN) echo '#include <gtk/gtkx.h>' > xgen-gtfsrc.c && \
+	  echo 'G_GNUC_BEGIN_IGNORE_DEPRECATIONS' > xgen-gtf && \
 	  ${CPP} $(DEFS) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) xgen-gtfsrc.c | \
 	  $(GREP) -o '\bg[td]k_[a-zA-Z0-9_]*_get_type\b' | \
 	  sort | uniq | \
-	  $(SED) '{ s/^/*tp++ = /; s/$$/();/; s/^.*\(gdk_x11\|gtk_plug_\|gtk_socket_\).*$$/#ifdef GDK_WINDOWING_X11\n&\n#endif/; }' > xgen-gtf \
+	  $(SED) '{ s/^/*tp++ = /; s/$$/();/; s/^.*\(gdk_x11\|gtk_plug_\|gtk_socket_\).*$$/#ifdef GDK_WINDOWING_X11\n&\n#endif/; }' >> xgen-gtf \
 	&& cp xgen-gtf $@ && rm -f xgen-gtf
 gtktestutils.c: gtktypefuncs.c
 
