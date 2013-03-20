@@ -22,7 +22,7 @@ int
 main (int    argc,
       char **argv)
 {
-  GtkWidget *window, *label, *button;
+  GtkWidget *window, *label, *entry, *button;
   GtkWidget *vbox, *hbox;
   PangoFontDescription *font;
   int i, j;
@@ -55,6 +55,20 @@ main (int    argc,
 
 	gtk_container_add (GTK_CONTAINER (hbox), label);
       }
+
+      for (i = 0; i < 3; i++) {
+	entry = gtk_entry_new ();
+	gtk_entry_set_text (GTK_ENTRY (entry), "A string XYyj,Ö...");
+
+	font = pango_font_description_new ();
+	pango_font_description_set_size (font, 9*(i+1)* 1024);
+	gtk_widget_override_font (entry, font);
+
+	gtk_widget_set_valign (entry, j);
+
+	gtk_container_add (GTK_CONTAINER (hbox), entry);
+      }
+
     }
 
   for (j = 0; j < 2; j++)
