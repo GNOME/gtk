@@ -20,6 +20,22 @@ static const gchar css[] =
  " border-radius: 10px 10px 0px 0px; "
  "}";
 
+static void
+change_title (GtkButton *button, gpointer data)
+{
+  GtkWidget *headerbar = GTK_WIDGET (data);
+
+  if (gtk_header_bar_get_custom_title (GTK_HEADER_BAR (headerbar)) == NULL)
+    {
+      gtk_header_bar_set_custom_title (GTK_HEADER_BAR (headerbar), gtk_check_button_new_with_label ("Middle"));
+    }
+  else
+    {
+      gtk_header_bar_set_custom_title (GTK_HEADER_BAR (headerbar), NULL);
+      gtk_header_bar_set_title (GTK_HEADER_BAR (headerbar), "Middle");
+    }
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -56,7 +72,9 @@ main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (window), box);
 
   footer = gtk_header_bar_new ();
-  gtk_header_bar_pack_start (GTK_HEADER_BAR (footer), gtk_button_new_with_label ("Start"));
+  button = gtk_button_new_with_label ("Start");
+  g_signal_connect (button, "clicked", G_CALLBACK (change_title), footer);
+  gtk_header_bar_pack_start (GTK_HEADER_BAR (footer), button);
   gtk_header_bar_set_custom_title (GTK_HEADER_BAR (footer), gtk_check_button_new_with_label ("Middle"));
   gtk_header_bar_pack_end (GTK_HEADER_BAR (footer), gtk_button_new_with_label ("End 1"));
   gtk_header_bar_pack_end (GTK_HEADER_BAR (footer), gtk_button_new_with_label ("End 2"));
