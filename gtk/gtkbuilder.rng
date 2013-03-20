@@ -11,6 +11,7 @@
         <choice>
           <ref name="requires"/>
           <ref name="object"/>
+          <ref name="template"/>
           <ref name="menu"/>
         </choice>
       </zeroOrMore>
@@ -44,6 +45,24 @@
           <text/>
         </attribute>
       </optional>
+      <zeroOrMore>
+        <choice>
+          <ref name="property"/>
+          <ref name="signal"/>
+          <ref name="child"/>
+          <ref name="ANY"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="template">
+    <element name="template">
+      <attribute name="class">
+        <text/>
+      </attribute>
+      <attribute name="parent">
+        <text/>
+      </attribute>
       <zeroOrMore>
         <choice>
           <ref name="property"/>

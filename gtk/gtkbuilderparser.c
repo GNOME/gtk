@@ -187,14 +187,27 @@ builder_construct (ParserData  *data,
 
   g_assert (object_info != NULL);
 
-  if (object_info->object)
+  if (object_info->object && object_info->applied_properties)
     return object_info->object;
 
   object_info->properties = g_slist_reverse (object_info->properties);
 
-  object = _gtk_builder_construct (data->builder, object_info, error);
-  if (!object)
-    return NULL;
+  if (object_info->object == NULL)
+    {
+      object = _gtk_builder_construct (data->builder, object_info, error);
+      if (!object)
+	return NULL;
+    }
+  else
+    {
+      /* We're building a template, the object is already set and
+       * we just want to resolve the properties at the right time
+       */
+      object = object_info->object;
+      _gtk_builder_apply_properties (data->builder, object_info, error);
+    }
+
+  object_info->applied_properties = TRUE;
 
   g_assert (G_IS_OBJECT (object));
 
@@ -412,6 +425,92 @@ parse_object (GMarkupParseContext  *context,
 }
 
 static void
+parse_template (GMarkupParseContext  *context,
+		ParserData           *data,
+		const gchar          *element_name,
+		const gchar         **names,
+		const gchar         **values,
+		GError              **error)
+{
+  ObjectInfo *object_info;
+  int i;
+  gchar *object_class = NULL;
+  gint line, line2;
+  GType template_type = _gtk_builder_get_template_type (data->builder);
+  GType parsed_type;
+
+  if (template_type == 0)
+    {
+      g_set_error (error,
+		   GTK_BUILDER_ERROR,
+		   GTK_BUILDER_ERROR_UNHANDLED_TAG,
+		   "Encountered template definition but not parsing a template.");
+      return;
+    }
+  else if (state_peek (data) != NULL)
+    {
+      g_set_error (error,
+		   GTK_BUILDER_ERROR,
+		   GTK_BUILDER_ERROR_UNHANDLED_TAG,
+		   "Encountered template definition that is not at the top level.");
+      return;
+    }
+
+  for (i = 0; names[i] != NULL; i++)
+    {
+      if (strcmp (names[i], "class") == 0)
+        object_class = g_strdup (values[i]);
+      else if (strcmp (names[i], "parent") == 0)
+        /* Ignore 'parent' attribute, however it's needed by Glade */;
+      else
+	{
+	  error_invalid_attribute (data, element_name, names[i], error);
+	  return;
+	}
+    }
+
+  if (!object_class)
+    {
+      error_missing_attribute (data, element_name, "class", error);
+      return;
+    }
+
+  parsed_type = g_type_from_name (object_class);
+  if (template_type != parsed_type)
+    {
+      g_set_error (error,
+		   GTK_BUILDER_ERROR,
+		   GTK_BUILDER_ERROR_TEMPLATE_MISMATCH,
+		   "Parsed template definition for type `%s', expected type `%s'.",
+		   object_class, g_type_name (template_type));
+      return;
+    }
+
+  ++data->cur_object_level;
+
+  object_info = g_slice_new0 (ObjectInfo);
+  object_info->class_name = object_class;
+  object_info->id = g_strdup (object_class);
+  object_info->object = gtk_builder_get_object (data->builder, object_class);
+  state_push (data, object_info);
+  object_info->tag.name = element_name;
+
+  g_markup_parse_context_get_position (context, &line, NULL);
+  line2 = GPOINTER_TO_INT (g_hash_table_lookup (data->object_ids, object_class));
+  if (line2 != 0)
+    {
+      g_set_error (error, GTK_BUILDER_ERROR,
+                   GTK_BUILDER_ERROR_DUPLICATE_ID,
+                   _("Duplicate object ID '%s' on line %d (previously on line %d)"),
+                   object_class, line, line2);
+      return;
+    }
+
+  g_hash_table_insert (data->object_ids, g_strdup (object_class), GINT_TO_POINTER (line));
+}
+
+
+static void
 free_object_info (ObjectInfo *info)
 {
   /* Do not free the signal items, which GtkBuilder takes ownership of */
@@ -446,7 +545,9 @@ parse_child (ParserData   *data,
   guint i;
 
   object_info = state_peek_info (data, ObjectInfo);
-  if (!object_info || strcmp (object_info->tag.name, "object") != 0)
+  if (!object_info ||
+      !(strcmp (object_info->tag.name, "object") == 0 ||
+	strcmp (object_info->tag.name, "template") == 0))
     {
       error_invalid_tag (data, element_name, NULL, error);
       return;
@@ -493,7 +594,9 @@ parse_property (ParserData   *data,
   int i;
 
   object_info = state_peek_info (data, ObjectInfo);
-  if (!object_info || strcmp (object_info->tag.name, "object") != 0)
+  if (!object_info || 
+      !(strcmp (object_info->tag.name, "object") == 0 ||
+	strcmp (object_info->tag.name, "template") == 0))
     {
       error_invalid_tag (data, element_name, NULL, error);
       return;
@@ -566,7 +669,9 @@ parse_signal (ParserData   *data,
   int i;
 
   object_info = state_peek_info (data, ObjectInfo);
-  if (!object_info || strcmp (object_info->tag.name, "object") != 0)
+  if (!object_info ||
+      !(strcmp (object_info->tag.name, "object") == 0 ||
+	strcmp (object_info->tag.name, "template") == 0))
     {
       error_invalid_tag (data, element_name, NULL, error);
       return;
@@ -784,7 +889,8 @@ parse_custom (GMarkupParseContext *context,
   if (!parent_info)
     return FALSE;
 
-  if (strcmp (parent_info->tag.name, "object") == 0)
+  if (strcmp (parent_info->tag.name, "object") == 0 ||
+      strcmp (parent_info->tag.name, "template") == 0)
     {
       ObjectInfo* object_info = (ObjectInfo*)parent_info;
       if (!object_info->object)
@@ -877,6 +983,8 @@ start_element (GMarkupParseContext *context,
     parse_requires (data, element_name, names, values, error);
   else if (strcmp (element_name, "object") == 0)
     parse_object (context, data, element_name, names, values, error);
+  else if (strcmp (element_name, "template") == 0)
+    parse_template (context, data, element_name, names, values, error);
   else if (data->requested_objects && !data->inside_requested_object)
     {
       /* If outside a requested object, simply ignore this tag */
@@ -972,7 +1080,8 @@ end_element (GMarkupParseContext *context,
     {
       _gtk_builder_menu_end (data);
     }
-  else if (strcmp (element_name, "object") == 0)
+  else if (strcmp (element_name, "object") == 0 ||
+	   strcmp (element_name, "template") == 0)
     {
       ObjectInfo *object_info = state_pop_info (data, ObjectInfo);
       ChildInfo* child_info = state_peek_info (data, ChildInfo);
@@ -1012,7 +1121,8 @@ end_element (GMarkupParseContext *context,
       CommonInfo *info = state_peek_info (data, CommonInfo);
 
       /* Normal properties */
-      if (strcmp (info->tag.name, "object") == 0)
+      if (strcmp (info->tag.name, "object") == 0 ||
+	  strcmp (info->tag.name, "template") == 0)
         {
           ObjectInfo *object_info = (ObjectInfo*)info;
 
@@ -1101,7 +1211,8 @@ text (GMarkupParseContext *context,
 static void
 free_info (CommonInfo *info)
 {
-  if (strcmp (info->tag.name, "object") == 0)
+  if (strcmp (info->tag.name, "object") == 0 ||
+      strcmp (info->tag.name, "template") == 0)
     free_object_info ((ObjectInfo *)info);
   else if (strcmp (info->tag.name, "child") == 0)
     free_child_info ((ChildInfo *)info);

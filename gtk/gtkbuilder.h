@@ -59,6 +59,9 @@ typedef struct _GtkBuilderPrivate GtkBuilderPrivate;
  * @GTK_BUILDER_ERROR_VERSION_MISMATCH: The input file requires a newer version
  *  of GTK+.
  * @GTK_BUILDER_ERROR_DUPLICATE_ID: An object id occurred twice.
+ * @GTK_BUILDER_ERROR_OBJECT_TYPE_REFUSED: A specified object type is of the same type or
+ *  derived from the type of the composite class being extended with builder XML.
+ * @GTK_BUILDER_ERROR_TEMPLATE_MISMATCH: The wrong type was specified in a composite class's template XML
  *
  * Error codes that identify various errors that can occur while using
  * #GtkBuilder.
@@ -73,7 +76,9 @@ typedef enum
   GTK_BUILDER_ERROR_MISSING_PROPERTY_VALUE,
   GTK_BUILDER_ERROR_INVALID_VALUE,
   GTK_BUILDER_ERROR_VERSION_MISMATCH,
-  GTK_BUILDER_ERROR_DUPLICATE_ID
+  GTK_BUILDER_ERROR_DUPLICATE_ID,
+  GTK_BUILDER_ERROR_OBJECT_TYPE_REFUSED,
+  GTK_BUILDER_ERROR_TEMPLATE_MISMATCH
 } GtkBuilderError;
 
 GQuark gtk_builder_error_quark (void);

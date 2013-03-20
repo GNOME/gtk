@@ -1,6 +1,6 @@
 start = element interface {
   attribute domain { text } ?,
-  ( requires | object | menu ) *
+  ( requires | object | template | menu ) *
 }
 
 requires = element requires {
@@ -13,6 +13,12 @@ object = element object {
   attribute class { text },
   attribute type-func { text } ?,
   attribute constructor { text } ?,
+  (property | signal | child | ANY) *
+}
+
+template = element template {
+  attribute class { text },
+  attribute parent { text },
   (property | signal | child | ANY) *
 }
 
@@ -76,7 +82,7 @@ section = element section {
   (attribute_ | item | submenu | section) *
 }
 
-ANY = element * - (interface | requires | object | property | signal | child | menu | item | attribute | link | submenu | section) {
+ANY = element * - (interface | requires | object | template | property | signal | child | menu | item | attribute | link | submenu | section) {
   attribute * { text } *,
   (ALL * & text ?)
 }

@@ -275,6 +275,7 @@ struct _GtkBuilderPrivate
   GSList *signals;
   gchar *filename;
   gchar *resource_prefix;
+  GType template_type;
 };
 
 G_DEFINE_TYPE (GtkBuilder, gtk_builder, G_TYPE_OBJECT)
@@ -459,8 +460,9 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
                             GType        object_type,
                             const gchar *object_name,
                             GSList      *properties,
+			    GParamFlags  filter_flags,
                             GArray      **parameters,
-                            GArray      **construct_parameters)
+                            GArray      **filtered_parameters)
 {
   GSList *l;
   GParamSpec *pspec;
@@ -471,8 +473,10 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
   oclass = g_type_class_ref (object_type);
   g_assert (oclass != NULL);
 
-  *parameters = g_array_new (FALSE, FALSE, sizeof (GParameter));
-  *construct_parameters = g_array_new (FALSE, FALSE, sizeof (GParameter));
+  if (parameters)
+    *parameters = g_array_new (FALSE, FALSE, sizeof (GParameter));
+  if (filtered_parameters)
+    *filtered_parameters = g_array_new (FALSE, FALSE, sizeof (GParameter));
 
   for (l = properties; l; l = l->next)
     {
@@ -530,10 +534,16 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
           continue;
         }
 
-      if (pspec->flags & (G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY))
-        g_array_append_val (*construct_parameters, parameter);
+      if (pspec->flags & filter_flags)
+	{
+	  if (filtered_parameters)
+	    g_array_append_val (*filtered_parameters, parameter);
+	}
       else
-        g_array_append_val (*parameters, parameter);
+	{
+	  if (parameters)
+	    g_array_append_val (*parameters, parameter);
+	}
     }
 
   g_type_class_unref (oclass);
@@ -619,10 +629,22 @@ _gtk_builder_construct (GtkBuilder *builder,
 		   info->class_name);
       return NULL;
     }
+  else if (builder->priv->template_type != 0 &&
+	   g_type_is_a (object_type, builder->priv->template_type))
+    {
+      g_set_error (error,
+		   GTK_BUILDER_ERROR,
+		   GTK_BUILDER_ERROR_OBJECT_TYPE_REFUSED,
+		   "Refused to build object of type `%s' because it "
+		   "conforms to the template type `%s', avoiding infinite recursion.",
+		   info->class_name, g_type_name (builder->priv->template_type));
+      return NULL;
+    }
 
   gtk_builder_get_parameters (builder, object_type,
                               info->id,
                               info->properties,
+			      (G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY),
                               &parameters,
                               &construct_parameters);
 
@@ -732,6 +754,61 @@ _gtk_builder_construct (GtkBuilder *builder,
   g_object_unref (obj);
   
   return obj;
+}
+
+void
+_gtk_builder_apply_properties (GtkBuilder *builder,
+			       ObjectInfo *info,
+			       GError **error)
+{
+  GArray *parameters;
+  GType object_type;
+  GtkBuildableIface *iface;
+  GtkBuildable *buildable;
+  gboolean custom_set_property;
+  gint i;
+
+  g_assert (info->object != NULL);
+  g_assert (info->class_name != NULL);
+  object_type = gtk_builder_get_type_from_name (builder, info->class_name);
+
+  /* Fetch all properties that are not construct-only */
+  gtk_builder_get_parameters (builder, object_type,
+                              info->id,
+                              info->properties,
+			      G_PARAM_CONSTRUCT_ONLY,
+                              &parameters, NULL);
+
+  custom_set_property = FALSE;
+  buildable = NULL;
+  iface = NULL;
+  if (GTK_IS_BUILDABLE (info->object))
+    {
+      buildable = GTK_BUILDABLE (info->object);
+      iface = GTK_BUILDABLE_GET_IFACE (info->object);
+      if (iface->set_buildable_property)
+        custom_set_property = TRUE;
+    }
+
+  for (i = 0; i < parameters->len; i++)
+    {
+      GParameter *param = &g_array_index (parameters, GParameter, i);
+      if (custom_set_property)
+        iface->set_buildable_property (buildable, builder, param->name, &param->value);
+      else
+        g_object_set_property (info->object, param->name, &param->value);
+
+#if G_ENABLE_DEBUG
+      if (gtk_get_debug_flags () & GTK_DEBUG_BUILDER)
+        {
+          gchar *str = g_strdup_value_contents ((const GValue*)&param->value);
+          g_print ("set %s: %s = %s\n", info->id, param->name, str);
+          g_free (str);
+        }
+#endif      
+      g_value_unset (&param->value);
+    }
+  g_array_free (parameters, TRUE);
 }
 
 void
@@ -977,6 +1054,48 @@ gtk_builder_add_objects_from_file (GtkBuilder   *builder,
                                     &tmp_error);
 
   g_free (buffer);
+
+  if (tmp_error != NULL)
+    {
+      g_propagate_error (error, tmp_error);
+      return 0;
+    }
+
+  return 1;
+}
+
+/* Main private entry point for building composite container
+ * components from template XML
+ */
+guint
+_gtk_builder_extend_with_template (GtkBuilder    *builder,
+				   GtkWidget     *widget,
+				   GType          template_type,
+				   const gchar   *buffer,
+				   gsize          length,
+				   GError       **error)
+{
+  GError *tmp_error;
+
+  g_return_val_if_fail (GTK_IS_BUILDER (builder), 0);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
+  g_return_val_if_fail (g_type_name (template_type) != NULL, 0);
+  g_return_val_if_fail (g_type_is_a (G_OBJECT_TYPE (widget), template_type), 0);
+  g_return_val_if_fail (buffer && buffer[0], 0);
+
+  tmp_error = NULL;
+
+  g_free (builder->priv->filename);
+  g_free (builder->priv->resource_prefix);
+  builder->priv->filename = g_strdup (".");
+  builder->priv->resource_prefix = NULL;
+  builder->priv->template_type = template_type;
+
+  gtk_builder_expose_object (builder, g_type_name (template_type), G_OBJECT (widget));
+  _gtk_builder_parser_parse_buffer (builder, "<input>",
+                                    buffer, length,
+                                    NULL,
+                                    &tmp_error);
 
   if (tmp_error != NULL)
     {
@@ -2139,6 +2258,12 @@ _gtk_builder_get_absolute_filename (GtkBuilder *builder, const gchar *string)
   g_free (dirname);
   
   return filename;
+}
+
+GType
+_gtk_builder_get_template_type (GtkBuilder *builder)
+{
+  return builder->priv->template_type;
 }
 
 /**

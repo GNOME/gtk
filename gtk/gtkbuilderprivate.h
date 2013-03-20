@@ -38,6 +38,7 @@ typedef struct {
   GSList *signals;
   GObject *object;
   CommonInfo *parent;
+  gboolean applied_properties;
 } ObjectInfo;
 
 typedef struct {
@@ -121,6 +122,9 @@ void _gtk_builder_parser_parse_buffer (GtkBuilder *builder,
 GObject * _gtk_builder_construct (GtkBuilder *builder,
                                   ObjectInfo *info,
 				  GError    **error);
+void      _gtk_builder_apply_properties (GtkBuilder *builder,
+					 ObjectInfo *info,
+					 GError **error);
 void      _gtk_builder_add_object (GtkBuilder  *builder,
                                    const gchar *id,
                                    GObject     *object);
@@ -159,5 +163,12 @@ void      _gtk_builder_menu_start (ParserData   *parser_data,
                                    GError      **error);
 void      _gtk_builder_menu_end   (ParserData  *parser_data);
 
+GType     _gtk_builder_get_template_type (GtkBuilder *builder);
+guint     _gtk_builder_extend_with_template (GtkBuilder    *builder,
+					     GtkWidget     *widget,
+					     GType          template_type,
+					     const gchar   *buffer,
+					     gsize          length,
+					     GError       **error);
 
 #endif /* __GTK_BUILDER_PRIVATE_H__ */
