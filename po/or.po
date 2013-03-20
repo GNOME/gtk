@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-03-13 21:15+0000\n"
-"PO-Revision-Date: 2013-03-15 16:59+0530\n"
+"PO-Revision-Date: 2013-03-20 19:35+0530\n"
 "Last-Translator: Manoj Kumar Giri <mgiri@redhat.com>\n"
 "Language-Team: Oriya <oriya-it@googlegroups.com>\n"
 "Language: or\n"
@@ -433,7 +433,7 @@ msgstr "ଜିଡିଆଇ ଅନୁରୋଧ ମିଶାନ୍ତୁ ନାହ
 #. Description of --no-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:55
 msgid "Don't use the Wintab API for tablet support"
-msgstr "ଫଳକ ସହାୟତା ପାଇଁ ୱିନଟ୍ଯାବ ଏ.ପି.ଆଇ. ବ୍ଯବହାର କରନ୍ତୁ ନାହିଁ"
+msgstr "ଫଳକ ସହାୟତା ପାଇଁ ୱିନଟ୍ଯାବ  API ବ୍ଯବହାର କରନ୍ତୁ ନାହିଁ"
 
 #. Description of --ignore-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:57
