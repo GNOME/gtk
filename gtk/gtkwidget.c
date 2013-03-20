@@ -7145,7 +7145,7 @@ gtk_widget_real_style_updated (GtkWidget *widget)
 
       if (widget->priv->anchored)
         {
-          if (changes && _gtk_css_style_property_changes_affect_size (changes))
+          if (changes == NULL || _gtk_css_style_property_changes_affect_size (changes))
             gtk_widget_queue_resize (widget);
           else
             gtk_widget_queue_draw (widget);
