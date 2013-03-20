@@ -36,7 +36,6 @@ G_BEGIN_DECLS
 
 #define GTK_BUILDER_ERROR                (gtk_builder_error_quark ())
 
-typedef struct _GtkBuilder        GtkBuilder;
 typedef struct _GtkBuilderClass   GtkBuilderClass;
 typedef struct _GtkBuilderPrivate GtkBuilderPrivate;
 
@@ -107,14 +106,6 @@ struct _GtkBuilderClass
   void (*_gtk_reserved7) (void);
   void (*_gtk_reserved8) (void);
 };
-
-typedef void (*GtkBuilderConnectFunc) (GtkBuilder    *builder,
-				       GObject       *object,
-				       const gchar   *signal_name,
-				       const gchar   *handler_name,
-				       GObject       *connect_object,
-				       GConnectFlags  flags,
-				       gpointer       user_data);
 
 GType        gtk_builder_get_type                (void) G_GNUC_CONST;
 GtkBuilder*  gtk_builder_new                     (void);

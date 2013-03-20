@@ -216,6 +216,10 @@
  * <link linkend="GtkFileFilter-BUILDER-UI">GtkFileFilter</link>,
  * <link linkend="GtkTextTagTable-BUILDER-UI">GtkTextTagTable</link>.
  * </para>
+ * <para>
+ * Additionally, since 3.10 a special &lt;template&gt; tag has been added to the format
+ * allowing one to <link linkend="GtkWidget-BUILDER-TEMPLATES">define a widget class's components</link>.
+ * </para>
  * </refsect2>
  * <refsect2>
  * <title>Embedding other XML</title>

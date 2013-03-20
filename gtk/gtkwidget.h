@@ -943,6 +943,79 @@ GDK_AVAILABLE_IN_3_8
 void gtk_widget_remove_tick_callback (GtkWidget       *widget,
                                       guint            id);
 
+/**
+ * gtk_widget_class_bind_callback:
+ * @widget_class: a #GtkWidgetClass
+ * @callback: the callback symbol
+ *
+ * Shorthand for gtk_widget_class_declare_callback(), adds a symbol
+ * by it's own name to the @widget_class.
+ *
+ * Since: 3.10
+ */
+#define gtk_widget_class_bind_callback(widget_class, callback)		\
+  gtk_widget_class_declare_callback (GTK_WIDGET_CLASS (widget_class),	\
+				     #callback, G_CALLBACK(callback))
+
+/**
+ * gtk_widget_class_bind_child:
+ * @widget_class: a #GtkWidgetClass
+ * @private_data_type: the type of this widget class's instance private data
+ * @member_name: name of the instance private member on @private_data_type
+ *
+ * Shorthand for gtk_widget_class_automate_child(). This macro assumes that
+ * the @member_name is the name of the component instance to lookup as specified
+ * in the composite template.
+ *
+ * Since: 3.10
+ */
+#define gtk_widget_class_bind_child(widget_class, private_data_type, member_name) \
+  gtk_widget_class_automate_child (widget_class, #member_name, FALSE,	\
+				   G_STRUCT_OFFSET (private_data_type, member_name))
+
+/**
+ * gtk_widget_class_bind_child_internal:
+ * @widget_class: a #GtkWidgetClass
+ * @private_data_type: the type name of this widget class's instance private data
+ * @member_name: name of the instance private member on @private_data_type
+ *
+ * Shorthand for gtk_widget_class_automate_child(). Essentially the same as
+ * gtk_widget_class_bind_child() except that it will export the child as
+ * an internal child.
+ *
+ * Since: 3.10
+ */
+#define gtk_widget_class_bind_child_internal(widget_class, private_data_type, member_name) \
+  gtk_widget_class_automate_child (widget_class, #member_name, TRUE,	\
+				   G_STRUCT_OFFSET (private_data_type, member_name))
+
+GDK_AVAILABLE_IN_3_10
+void    gtk_widget_init_template                    (GtkWidget    *widget);
+GDK_AVAILABLE_IN_3_10
+GObject *gtk_widget_get_automated_child             (GtkWidget         *widget,
+						     GType                 widget_type,
+						     const gchar          *name);
+GDK_AVAILABLE_IN_3_10
+void    gtk_widget_class_set_template               (GtkWidgetClass    *widget_class,
+						     GBytes               *template_bytes);
+GDK_AVAILABLE_IN_3_10
+void    gtk_widget_class_set_template_from_resource (GtkWidgetClass    *widget_class,
+						     const gchar          *resource_name);
+GDK_AVAILABLE_IN_3_10
+void    gtk_widget_class_declare_callback           (GtkWidgetClass    *widget_class,
+						     const gchar          *callback_name,
+						     GCallback             callback_symbol);
+GDK_AVAILABLE_IN_3_10
+void    gtk_widget_class_set_connect_func           (GtkWidgetClass    *widget_class,
+						     GtkBuilderConnectFunc connect_func,
+						     gpointer              connect_data,
+						     GDestroyNotify        connect_data_destroy);
+GDK_AVAILABLE_IN_3_10
+void    gtk_widget_class_automate_child             (GtkWidgetClass    *widget_class,
+						     const gchar          *name,
+						     gboolean              internal_child,
+						     gssize                struct_offset);
+
 G_END_DECLS
 
 #endif /* __GTK_WIDGET_H__ */

@@ -299,6 +299,69 @@
  * </example>
  * </para>
  * </refsect2>
+ * <refsect2 id="GtkWidget-BUILDER-TEMPLATES">
+ * <title>Building composite widgets from template XML</title>
+ * <para>
+ * GtkWidget exposes some facilities to automate the proceedure
+ * of creating composite widgets using #GtkBuilder interface description
+ * language.
+ * </para>
+ * <para>
+ * To create composite widgets with #GtkBuilder XML, one must associate
+ * the interface description with the widget class at class initialization
+ * time using gtk_widget_class_set_template().
+ * </para>
+ * <para>
+ * The interface description semantics expected in composite template descriptions
+ * is slightly different from regulare #GtkBuilder XML.
+ * </para>
+ * <para>
+ * Unlike regular interface descriptions, gtk_widget_class_set_template() will expect a
+ * &lt;template&gt; tag as a direct child of the toplevel &lt;interface&gt;
+ * tag. The &lt;template&gt; tag must specify the "class" attribute which
+ * must be the type name of the widget. Optionally, the "parent" attribute
+ * may be specified to specify the direct parent type of the widget type, this
+ * is ignored by the GtkBuilder but required for Glade to introspect what kind
+ * of properties and internal children exist for a given type when the actual
+ * type does not exist.
+ * </para>
+ * <para>
+ * The XML which is contained inside the &lt;template&gt; tag behaves as if
+ * it were added to the &lt;object&gt; tag defining @widget itself. You may set
+ * properties on @widget by inserting &lt;property&gt; tags into the &lt;template&gt; 
+ * tag, and also add &lt;child&gt; tags to add children and extend @widget in the
+ * normal way you would with &lt;object&gt; tags.
+ * </para>
+ * <para>
+ * Additionally, &lt;object&gt; tags can also be added before and
+ * after the initial &lt;template&gt; tag in the normal way, allowing
+ * one to define auxilary objects which might be referenced by other
+ * widgets declared as children of the &lt;template&gt; tag.
+ * </para>
+ * <para>
+ * <example>
+ * <title>A GtkBuilder Template Definition</title>
+ * <programlisting><![CDATA[
+ * <interface>
+ *   <template class="FooWidget" parent="GtkBox">
+ *     <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+ *     <property name="spacing">4</property>
+ *     <child>
+ *       <object class="GtkButton" id="hello_button">
+ *         <property name="label">Hello World</property>
+ *       </object>
+ *     </child>
+ *     <child>
+ *       <object class="GtkButton" id="goodbye_button">
+ *         <property name="label">Goodbye World</property>
+ *       </object>
+ *     </child>
+ *   </template>
+ * </interface>
+ * ]]></programlisting>
+ * </example>
+ * </para>
+ * </refsect2>
  */
 
 /* Add flags here that should not be propagated to children. By default,
@@ -311,6 +374,26 @@
 #define WIDGET_CLASS(w)	 GTK_WIDGET_GET_CLASS (w)
 
 #define GTK_STATE_FLAGS_BITS 9
+
+typedef struct {
+  gchar               *name;           /* Name of the template automatic child */
+  gboolean             internal_child; /* Whether the automatic widget should be exported as an <internal-child> */
+  gssize               offset;         /* Instance private data offset where to set the automatic child (or -1) */
+} AutomaticChildClass;
+
+typedef struct {
+  gchar     *callback_name;
+  GCallback  callback_symbol;
+} CallbackSymbol;
+
+typedef struct {
+  GBytes               *data;
+  GSList               *children;
+  GSList               *callbacks;
+  GtkBuilderConnectFunc connect_func;
+  gpointer              connect_data;
+  GDestroyNotify        destroy_notify;
+} GtkWidgetTemplate;
 
 struct _GtkWidgetPrivate
 {
@@ -415,6 +498,10 @@ struct _GtkWidgetPrivate
   /* Animations and other things to update on clock ticks */
   GList *tick_callbacks;
 
+  /* A hash by GType key, containing hash tables by widget name
+   */
+  GHashTable *auto_children;
+
 #ifdef G_ENABLE_DEBUG
   /* Number of gtk_widget_push_verify_invariants () */
   guint verifying_invariants_count;
@@ -425,6 +512,7 @@ struct _GtkWidgetClassPrivate
 {
   GType accessible_type;
   AtkRole accessible_role;
+  GtkWidgetTemplate *template;
 };
 
 enum {
@@ -704,6 +792,24 @@ static void             gtk_widget_real_adjust_size_allocation  (GtkWidget      
                                                                  gint              *allocated_pos,
                                                                  gint              *allocated_size);
 
+/* --- functions dealing with template data structures --- */
+static AutomaticChildClass  *automatic_child_class_new          (const gchar          *name,
+								 gboolean              internal_child,
+								 gssize                offset);
+static void                  automatic_child_class_free         (AutomaticChildClass  *child_class);
+static CallbackSymbol       *callback_symbol_new                (const gchar          *name,
+								 GCallback             callback);
+static void                  callback_symbol_free               (CallbackSymbol       *callback);
+static void                  template_data_free                 (GtkWidgetTemplate    *template_data);
+static GHashTable           *get_auto_child_hash                (GtkWidget            *widget,
+								 GType                 type,
+								 gboolean              create);
+static gboolean              setup_automatic_child              (GtkWidgetTemplate    *template_data,
+								 GType                 class_type,
+								 AutomaticChildClass  *child_class,
+								 GtkWidget            *widget,
+								 GtkBuilder           *builder);
+
 static void gtk_widget_set_usize_internal (GtkWidget          *widget,
 					   gint                width,
 					   gint                height,
@@ -811,6 +917,7 @@ gtk_widget_base_class_init (gpointer g_class)
   GtkWidgetClass *klass = g_class;
 
   klass->priv = G_TYPE_CLASS_GET_PRIVATE (g_class, GTK_TYPE_WIDGET, GtkWidgetClassPrivate);
+  klass->priv->template = NULL;
 }
 
 static void
@@ -3420,6 +3527,8 @@ gtk_widget_base_class_finalize (GtkWidgetClass *klass)
       g_param_spec_unref (pspec);
     }
   g_list_free (list);
+
+  template_data_free (klass->priv->template);
 }
 
 static void
@@ -10798,6 +10907,81 @@ gtk_widget_dispose (GObject *object)
   G_OBJECT_CLASS (gtk_widget_parent_class)->dispose (object);
 }
 
+#ifdef G_ENABLE_DEBUG
+typedef struct {
+  AutomaticChildClass *child_class;
+  GType                widget_type;
+  GObject             *object;
+  gboolean             did_finalize;
+} FinalizeAssertion;
+
+static void
+finalize_assertion_weak_ref (gpointer data,
+			     GObject *where_the_object_was)
+{
+  FinalizeAssertion *assertion = (FinalizeAssertion *)data;
+  assertion->did_finalize = TRUE;
+}
+
+static FinalizeAssertion *
+finalize_assertion_new (GtkWidget           *widget,
+			GType                widget_type,
+			AutomaticChildClass *child_class)
+{
+  FinalizeAssertion *assertion = NULL;
+  GObject           *object;
+
+  object = gtk_widget_get_automated_child (widget, widget_type, child_class->name);
+
+  /* We control the hash table entry, the object should never be NULL
+   */
+  g_assert (object);
+  if (!G_IS_OBJECT (object))
+    g_critical ("Automated component `%s' of class `%s' seems to have been prematurely finalized",
+		child_class->name, g_type_name (widget_type));
+  else
+    {
+      assertion = g_slice_new0 (FinalizeAssertion);
+      assertion->child_class = child_class;
+      assertion->widget_type = widget_type;
+      assertion->object = object;
+
+      g_object_weak_ref (object, finalize_assertion_weak_ref, assertion);
+    }
+
+  return assertion;
+}
+
+static GSList *
+build_finalize_assertion_list (GtkWidget *widget)
+{
+  GType class_type;
+  GtkWidgetClass *class;
+  GSList *l, *list = NULL;
+
+  for (class = GTK_WIDGET_GET_CLASS (widget);
+       GTK_IS_WIDGET_CLASS (class);
+       class = g_type_class_peek_parent (class))
+    {
+      if (!class->priv->template)
+	continue;
+
+      class_type = G_OBJECT_CLASS_TYPE (class);
+
+      for (l = class->priv->template->children; l; l = l->next)
+	{
+	  AutomaticChildClass *child_class = l->data;
+	  FinalizeAssertion *assertion;
+
+	  assertion = finalize_assertion_new (widget, class_type, child_class);
+	  list = g_slist_prepend (list, assertion);
+	}
+    }
+
+  return list;
+}
+#endif /* G_ENABLE_DEBUG */
+
 static void
 gtk_widget_real_destroy (GtkWidget *object)
 {
@@ -10805,6 +10989,77 @@ gtk_widget_real_destroy (GtkWidget *object)
   GtkWidget *widget = GTK_WIDGET (object);
   GtkWidgetPrivate *priv = widget->priv;
   GList *l;
+
+  if (priv->auto_children)
+    {
+      GType class_type;
+      GtkWidgetClass *class;
+      GSList *l;
+
+#ifdef G_ENABLE_DEBUG
+      GSList *assertions = NULL;
+
+      /* Note, GTK_WIDGET_ASSERT_COMPONENTS is very useful
+       * to catch ref counting bugs, but can only be used in
+       * test cases which simply create and destroy a composite
+       * widget.
+       *
+       * This is because some API can expose components explicitly,
+       * and so we cannot assert that a component is expected to finalize
+       * in a full application ecosystem.
+       */
+      if (g_getenv ("GTK_WIDGET_ASSERT_COMPONENTS") != NULL)
+	assertions = build_finalize_assertion_list (widget);
+#endif /* G_ENABLE_DEBUG */
+
+      /* Release references to all automated children */
+      g_hash_table_destroy (priv->auto_children);
+      priv->auto_children = NULL;
+
+#ifdef G_ENABLE_DEBUG
+      for (l = assertions; l; l = l->next)
+	{
+	  FinalizeAssertion *assertion = l->data;
+
+	  if (!assertion->did_finalize)
+	    g_critical ("Automated component `%s' of class `%s' did not finalize in gtk_widget_destroy(). "
+			"Current reference count is %d",
+			assertion->child_class->name,
+			g_type_name (assertion->widget_type),
+			assertion->object->ref_count);
+
+	  g_slice_free (FinalizeAssertion, assertion);
+	}
+      g_slist_free (assertions);
+#endif /* G_ENABLE_DEBUG */
+
+      /* Set any automatic private data pointers to NULL */
+      for (class = GTK_WIDGET_GET_CLASS (widget);
+	   GTK_IS_WIDGET_CLASS (class);
+	   class = g_type_class_peek_parent (class))
+	{
+	  if (!class->priv->template)
+	    continue;
+
+	  class_type = G_OBJECT_CLASS_TYPE (class);
+
+	  for (l = class->priv->template->children; l; l = l->next)
+	    {
+	      AutomaticChildClass *child_class = l->data;
+
+	      if (child_class->offset >= 0)
+		{
+		  gpointer class_private;
+		  GObject **destination;
+
+		  /* Nullify instance private data for internal children */
+		  class_private = G_TYPE_INSTANCE_GET_PRIVATE (widget, class_type, gpointer);
+		  destination = G_STRUCT_MEMBER_P (class_private, child_class->offset);
+		  *destination = NULL;
+		}
+	    }
+	}
+    }
 
   if (GTK_WIDGET_GET_CLASS (widget)->priv->accessible_type != GTK_TYPE_ACCESSIBLE)
     {
@@ -12603,8 +12858,40 @@ gtk_widget_buildable_get_internal_child (GtkBuildable *buildable,
 					 GtkBuilder   *builder,
 					 const gchar  *childname)
 {
+  GtkWidgetClass *class;
+  GSList *l;
+  GType internal_child_type = 0;
+
   if (strcmp (childname, "accessible") == 0)
     return G_OBJECT (gtk_widget_get_accessible (GTK_WIDGET (buildable)));
+
+  /* Find a widget type which has declared an automated child as internal by
+   * the name 'childname', if any.
+   */
+  for (class = GTK_WIDGET_GET_CLASS (buildable);
+       GTK_IS_WIDGET_CLASS (class);
+       class = g_type_class_peek_parent (class))
+    {
+      GtkWidgetTemplate *template = class->priv->template;
+
+      if (!template)
+	continue;
+
+      for (l = template->children; l && internal_child_type == 0; l = l->next)
+	{
+	  AutomaticChildClass *child_class = l->data;
+
+	  if (child_class->internal_child && strcmp (childname, child_class->name) == 0)
+	    internal_child_type = G_OBJECT_CLASS_TYPE (class);
+	}
+    }
+
+  /* Now return the 'internal-child' from the class which declared it, note
+   * that gtk_widget_get_automated_child() an API used to access objects
+   * which are in the private scope of a given class.
+   */
+  if (internal_child_type != 0)
+    return gtk_widget_get_automated_child (GTK_WIDGET (buildable), internal_child_type, childname);
 
   return NULL;
 }
@@ -14893,4 +15180,469 @@ gtk_widget_insert_action_group (GtkWidget    *widget,
     g_action_muxer_insert (muxer, name, group);
   else
     g_action_muxer_remove (muxer, name);
+}
+
+/****************************************************************
+ *                 GtkBuilder automated templates               *
+ ****************************************************************/
+static AutomaticChildClass *
+automatic_child_class_new (const gchar         *name,
+			   gboolean             internal_child,
+			   gssize               offset)
+{
+  AutomaticChildClass *child_class = g_slice_new0 (AutomaticChildClass);
+
+  child_class->name = g_strdup (name);
+  child_class->internal_child = internal_child;
+  child_class->offset = offset;
+
+  return child_class;
+}
+
+static void
+automatic_child_class_free (AutomaticChildClass *child_class)
+{
+  if (child_class)
+    {
+      g_free (child_class->name);
+      g_slice_free (AutomaticChildClass, child_class);
+    }
+}
+
+static CallbackSymbol *
+callback_symbol_new (const gchar *name,
+		     GCallback    callback)
+{
+  CallbackSymbol *cb = g_slice_new0 (CallbackSymbol);
+
+  cb->callback_name = g_strdup (name);
+  cb->callback_symbol = callback;
+
+  return cb;
+}
+
+static void
+callback_symbol_free (CallbackSymbol *callback)
+{
+  if (callback)
+    {
+      g_free (callback->callback_name);
+      g_slice_free (CallbackSymbol, callback);
+    }
+}
+
+static void
+template_data_free (GtkWidgetTemplate *template_data)
+{
+  if (template_data)
+    {
+      g_bytes_unref (template_data->data);
+      g_slist_free_full (template_data->children, (GDestroyNotify)automatic_child_class_free);
+      g_slist_free_full (template_data->callbacks, (GDestroyNotify)callback_symbol_free);
+
+      if (template_data->connect_data &&
+	  template_data->destroy_notify)
+	template_data->destroy_notify (template_data->connect_data);
+
+      g_slice_free (GtkWidgetTemplate, template_data);
+    }
+}
+
+static GHashTable *
+get_auto_child_hash (GtkWidget        *widget,
+		     GType                type,
+		     gboolean             create)
+{
+  GHashTable *auto_child_hash;
+
+  if (widget->priv->auto_children == NULL)
+    {
+      if (!create)
+	return NULL;
+
+      widget->priv->auto_children =
+	g_hash_table_new_full (g_direct_hash,
+			       g_direct_equal,
+			       NULL,
+			       (GDestroyNotify)g_hash_table_destroy);
+    }
+
+  auto_child_hash =
+    g_hash_table_lookup (widget->priv->auto_children, GSIZE_TO_POINTER (type));
+
+  if (!auto_child_hash && create)
+    {
+      auto_child_hash = g_hash_table_new_full (g_str_hash,
+					       g_str_equal,
+					       NULL,
+					       (GDestroyNotify)g_object_unref);
+
+      g_hash_table_insert (widget->priv->auto_children,
+			   GSIZE_TO_POINTER (type),
+			   auto_child_hash);
+    }
+
+  return auto_child_hash;
+}
+
+static gboolean
+setup_automatic_child (GtkWidgetTemplate *template_data,
+		       GType                 class_type,
+		       AutomaticChildClass  *child_class,
+		       GtkWidget         *widget,
+		       GtkBuilder           *builder)
+{
+  GHashTable *auto_child_hash;
+  GObject    *object;
+
+  object = gtk_builder_get_object (builder, child_class->name);
+  if (!object)
+    {
+      g_critical ("Unable to retrieve object '%s' from class template for type '%s' while building a '%s'",
+		  child_class->name, g_type_name (class_type), G_OBJECT_TYPE_NAME (widget));
+      return FALSE;
+    }
+
+  /* Insert into the hash so that it can be fetched with
+   * gtk_widget_get_automated_child() and also in automated
+   * implementations of GtkBuildable.get_internal_child()
+   */
+  auto_child_hash = get_auto_child_hash (widget, class_type, TRUE);
+  g_hash_table_insert (auto_child_hash, child_class->name, g_object_ref (object));
+
+  if (child_class->offset >= 0)
+    {
+      gpointer class_private;
+      GObject **destination;
+
+      /* Assign 'object' to the specified offset in the instance private data */
+      class_private = G_TYPE_INSTANCE_GET_PRIVATE (widget, class_type, gpointer);
+      destination = G_STRUCT_MEMBER_P (class_private, child_class->offset);
+      *destination = object;
+    }
+
+  return TRUE;
+}
+
+/**
+ * gtk_widget_init_template:
+ * @widget: a #GtkWidget
+ *
+ * Creates and initializes child widgets defined in templates. This
+ * function must be called in the instance initializer for any
+ * class which assigned itself a template using gtk_widget_class_set_template()
+ *
+ * It is important to call this function in the instance initializer
+ * of a #GtkWidget subclass and not in #GObject.constructed() or
+ * #GObject.constructor() for two reasons.
+ *
+ * One reason is that generally derived widgets will assume that parent
+ * class composite widgets have been created in their instance
+ * initializers.
+ *
+ * Another reason is that when calling g_object_new() on a widget with
+ * composite templates, it's important to build the composite widgets
+ * before the construct properties are set. Properties passed to g_object_new()
+ * should take precedence over properties set in the private template XML.
+ *
+ * Since: 3.10
+ */
+void
+gtk_widget_init_template (GtkWidget *widget)
+{
+  GtkWidgetTemplate *template;
+  GtkBuilder *builder;
+  GError *error = NULL;
+  GObject *object;
+  GSList *l;
+  GType class_type;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  object = G_OBJECT (widget);
+  class_type = G_OBJECT_TYPE (widget);
+
+  template = GTK_WIDGET_GET_CLASS (widget)->priv->template;
+  g_return_if_fail (template != NULL);
+
+  builder = gtk_builder_new ();
+
+  /* Add any callback symbols declared for this GType to the GtkBuilder namespace */
+  for (l = template->callbacks; l; l = l->next)
+    {
+      CallbackSymbol *callback = l->data;
+
+      gtk_builder_add_callback_symbol (builder, callback->callback_name, callback->callback_symbol);
+    }
+
+  /* This will build the template XML as children to the widget instance, also it
+   * will validate that the template is created for the correct GType and assert that
+   * there is no infinate recursion.
+   */
+  if (!_gtk_builder_extend_with_template (builder, widget, class_type,
+					  (const gchar *)g_bytes_get_data (template->data, NULL),
+					  g_bytes_get_size (template->data),
+					  &error))
+    {
+      g_critical ("Error building template class '%s' for an instance of type '%s': %s",
+		  g_type_name (class_type), G_OBJECT_TYPE_NAME (object), error->message);
+      g_error_free (error);
+
+      /* This should never happen, if the template XML cannot be built
+       * then it is a critical programming error.
+       */
+      g_object_unref (builder);
+      return;
+    }
+
+  /* Build the automatic child data
+   */
+  for (l = template->children; l; l = l->next)
+    {
+      AutomaticChildClass *child_class = l->data;
+
+      /* This will setup the pointer of an automated child, and cause
+       * it to be available in any GtkBuildable.get_internal_child()
+       * invocations which may follow by reference in child classes.
+       */
+      if (!setup_automatic_child (template,
+				  class_type,
+				  child_class,
+				  widget,
+				  builder))
+	{
+	  g_object_unref (builder);
+	  return;
+	}
+    }
+
+  /* Connect signals. All signal data from a template receive the 
+   * template instance as user data automatically.
+   *
+   * A GtkBuilderConnectFunc can be provided to gtk_widget_class_set_signal_connect_func()
+   * in order for templates to be usable by bindings.
+   */
+  if (template->connect_func)
+    gtk_builder_connect_signals_full (builder, template->connect_func, template->connect_data);
+  else
+    gtk_builder_connect_signals (builder, object);
+
+  g_object_unref (builder);
+}
+
+/**
+ * gtk_widget_class_set_template:
+ * @widget_class: A #GtkWidgetClass
+ * @template_bytes: A #GBytes holding the #GtkBuilder XML 
+ *
+ * This should be called at class initialization time to specify
+ * the GtkBuilder XML to be used to extend a widget.
+ *
+ * For convenience, gtk_widget_class_set_template_from_resource() is also provided.
+ *
+ * <note><para>Any class that installs templates must call gtk_widget_init_template()
+ * in the widget's instance initializer</para></note>
+ *
+ * Since: 3.10
+ */
+void
+gtk_widget_class_set_template (GtkWidgetClass    *widget_class,
+			       GBytes            *template_bytes)
+{
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
+  g_return_if_fail (widget_class->priv->template == NULL);
+  g_return_if_fail (template_bytes != NULL);
+
+  widget_class->priv->template = g_slice_new0 (GtkWidgetTemplate);
+  widget_class->priv->template->data = g_bytes_ref (template_bytes);
+}
+
+/**
+ * gtk_widget_class_set_template_from_resource:
+ * @widget_class: A #GtkWidgetClass
+ * @resource_name: The name of the resource to load the template from
+ *
+ * A convenience function to call gtk_widget_class_set_template().
+ *
+ * <note><para>Any class that installs templates must call gtk_widget_init_template()
+ * in the widget's instance initializer</para></note>
+ *
+ * Since: 3.10
+ */
+void
+gtk_widget_class_set_template_from_resource (GtkWidgetClass    *widget_class,
+					     const gchar       *resource_name)
+{
+  GError *error = NULL;
+  GBytes *bytes = NULL;
+
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
+  g_return_if_fail (widget_class->priv->template == NULL);
+  g_return_if_fail (resource_name && resource_name[0]);
+
+  /* This is a hack, because class initializers now access resources
+   * and GIR/gtk-doc initializes classes without initializing GTK+,
+   * we ensure that our base resources are registered here and
+   * avoid warnings which building GIRs/documentation.
+   */
+  _gtk_ensure_resources ();
+
+  bytes = g_resources_lookup_data (resource_name, 0, &error);
+  if (!bytes)
+    {
+      g_critical ("Unable to load resource for composite template for type '%s': %s",
+		  G_OBJECT_CLASS_NAME (widget_class), error->message);
+      g_error_free (error);
+      return;
+    }
+
+  gtk_widget_class_set_template (widget_class, bytes);
+  g_bytes_unref (bytes);
+}
+
+/**
+ * gtk_widget_class_declare_callback:
+ * @widget_class: A #GtkWidgetClass
+ * @callback_name: The name of the callback as expected in the template XML
+ * @callback_symbol: (scope async): The callback symbol
+ *
+ * Declares a @callback_symbol to handle @callback_name from the template XML
+ * defined for @widget_type. See gtk_builder_add_callback_symbol().
+ *
+ * <note><para>This must be called from a composite widget classes class
+ * initializer after calling gtk_widget_class_set_template()</para></note>
+ *
+ * Since: 3.10
+ */
+void
+gtk_widget_class_declare_callback (GtkWidgetClass    *widget_class,
+				   const gchar       *callback_name,
+				   GCallback          callback_symbol)
+{
+  CallbackSymbol *cb;
+
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
+  g_return_if_fail (widget_class->priv->template != NULL);
+  g_return_if_fail (callback_name && callback_name[0]);
+  g_return_if_fail (callback_symbol != NULL);
+
+  cb = callback_symbol_new (callback_name, callback_symbol);
+  widget_class->priv->template->callbacks = g_slist_prepend (widget_class->priv->template->callbacks, cb);
+}
+
+/**
+ * gtk_widget_class_set_connect_func:
+ * @widget_class: A #GtkWidgetClass
+ * @connect_func: The #GtkBuilderConnectFunc to use when connecting signals in the class template
+ * @connect_data: The data to pass to @connect_func
+ * @connect_data_destroy: The #GDestroyNotify to free @connect_data, this will only be used at
+ *                        class finalization time, when no classes of type @widget_type are in use anymore.
+ *
+ * For use in lanuage bindings, this will override the default #GtkBuilderConnectFunc to be
+ * used when parsing GtkBuilder xml from this class's template data.
+ *
+ * <note><para>This must be called from a composite widget classes class
+ * initializer after calling gtk_widget_class_set_template()</para></note>
+ *
+ * Since: 3.10
+ */
+void
+gtk_widget_class_set_connect_func (GtkWidgetClass    *widget_class,
+				   GtkBuilderConnectFunc connect_func,
+				   gpointer              connect_data,
+				   GDestroyNotify        connect_data_destroy)
+{
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
+  g_return_if_fail (widget_class->priv->template != NULL);
+
+  /* Defensive, destroy any previously set data */
+  if (widget_class->priv->template->connect_data &&
+      widget_class->priv->template->destroy_notify)
+    widget_class->priv->template->destroy_notify (widget_class->priv->template->connect_data);
+
+  widget_class->priv->template->connect_func   = connect_func;
+  widget_class->priv->template->connect_data   = connect_data;
+  widget_class->priv->template->destroy_notify = connect_data_destroy;
+}
+
+/**
+ * gtk_widget_class_automate_child:
+ * @widget_class: A #GtkWidgetClass
+ * @name: The "id" of the child defined in the template XML
+ * @internal_child: Whether the child should be accessible as an "internal-child"
+ *                  when this class is used in GtkBuilder XML
+ * @struct_offset: The structure offset into the composite widget's instance private structure
+ *                 where the automated child pointer should be set, or -1 to not assign the pointer.
+ *
+ * Automatically assign an object declared in the class template XML to be set to a location
+ * on a freshly built instance's private data, or alternatively accessible via gtk_widget_get_automated_child().
+ *
+ * An explicit strong reference will be held automatically for the duration of your
+ * instance's life cycle, it will be released automatically when #GObjectClass.dispose() runs
+ * on your instance and if a @struct_offset that is >= 0 is specified, then the automatic location
+ * in your instance private data will be set to %NULL. You can however access an automated child
+ * pointer the first time your classes #GObjectClass.dispose() runs, or alternatively in
+ * #GtkWidgetClass.destroy().
+ *
+ * If @internal_child is specified, #GtkBuildableIface.get_internal_child() will be automatically
+ * implemented by the #GtkWidget class so there is no need to implement it manually.
+ *
+ * <note><para>This must be called from a composite widget classes class
+ * initializer after calling gtk_widget_class_set_template()</para></note>
+ *
+ * Since: 3.10
+ */
+void
+gtk_widget_class_automate_child (GtkWidgetClass    *widget_class,
+				 const gchar       *name,
+				 gboolean           internal_child,
+				 gssize             struct_offset)
+{
+  AutomaticChildClass *child_class;
+
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
+  g_return_if_fail (widget_class->priv->template != NULL);
+  g_return_if_fail (name && name[0]);
+
+  child_class = automatic_child_class_new (name,
+					   internal_child,
+					   struct_offset);
+  widget_class->priv->template->children =
+    g_slist_prepend (widget_class->priv->template->children, child_class);
+}
+
+/**
+ * gtk_widget_get_automated_child:
+ * @widget: A #GtkWidget
+ * @widget_type: The #GType to get an automated child for
+ * @name: The "id" of the child defined in the template XML
+ *
+ * Fetch an object build from the template XML for @widget_type in this @widget instance.
+ *
+ * This will only report children which were previously declared with gtk_widget_class_automate_child().
+ *
+ * This function is only meant to be called for code which is private to the @widget_type which
+ * declared the child and is meant for language bindings which cannot easily make use
+ * of the GObject structure offsets.
+ *
+ * Returns: (transfer none): The object built in the template XML with the id @name
+ */
+GObject *
+gtk_widget_get_automated_child (GtkWidget         *widget,
+				GType              widget_type,
+				const gchar       *name)
+{
+  GHashTable *auto_child_hash;
+  GObject *ret = NULL;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_return_val_if_fail (g_type_name (widget_type) != NULL, NULL);
+  g_return_val_if_fail (name && name[0], NULL);
+
+  auto_child_hash = get_auto_child_hash (widget, widget_type, FALSE);
+
+  if (auto_child_hash)
+    ret = g_hash_table_lookup (auto_child_hash, name);
+
+  return ret;
 }

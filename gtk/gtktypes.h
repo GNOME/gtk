@@ -32,6 +32,7 @@
 G_BEGIN_DECLS
 
 typedef struct _GtkAdjustment          GtkAdjustment;
+typedef struct _GtkBuilder             GtkBuilder;
 typedef struct _GtkClipboard	       GtkClipboard;
 typedef struct _GtkIconSet             GtkIconSet;
 typedef struct _GtkIconSource          GtkIconSource;
@@ -50,6 +51,14 @@ typedef struct _GtkWindow              GtkWindow;
 typedef gboolean (*GtkRcPropertyParser) (const GParamSpec *pspec,
                                          const GString    *rc_string,
                                          GValue           *property_value);
+
+typedef void (*GtkBuilderConnectFunc) (GtkBuilder    *builder,
+				       GObject       *object,
+				       const gchar   *signal_name,
+				       const gchar   *handler_name,
+				       GObject       *connect_object,
+				       GConnectFlags  flags,
+				       gpointer       user_data);
 
 G_END_DECLS
 

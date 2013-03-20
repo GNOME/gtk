@@ -5385,6 +5385,18 @@ gtk_widget_set_vexpand_set
 gtk_widget_queue_compute_expand
 gtk_widget_compute_expand
 
+<SUBSECTION Templates>
+gtk_widget_init_template
+gtk_widget_class_set_template
+gtk_widget_class_set_template_from_resource
+gtk_widget_get_automated_child
+gtk_widget_class_bind_child
+gtk_widget_class_bind_child_internal
+gtk_widget_class_automate_child
+gtk_widget_class_bind_callback
+gtk_widget_class_declare_callback
+gtk_widget_class_set_connect_func
+
 <SUBSECTION Standard>
 GTK_WIDGET
 GTK_IS_WIDGET
