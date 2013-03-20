@@ -116,6 +116,23 @@ get_css_padding_and_border (GtkWidget *widget,
 }
 
 static void
+construct_label (GtkHeaderBar *bar)
+{
+  GtkHeaderBarPrivate *priv = bar->priv;
+
+  g_assert (priv->label == NULL);
+
+  priv->label = gtk_label_new (priv->title);
+  boldify_label (priv->label);
+  gtk_widget_set_parent (priv->label, GTK_WIDGET (bar));
+  gtk_widget_set_valign (priv->label, GTK_ALIGN_CENTER);
+  gtk_label_set_line_wrap (GTK_LABEL (priv->label), FALSE);
+  gtk_label_set_single_line_mode (GTK_LABEL (priv->label), TRUE);
+  gtk_label_set_ellipsize (GTK_LABEL (priv->label), PANGO_ELLIPSIZE_END);
+  gtk_widget_show (priv->label);
+}
+
+static void
 gtk_header_bar_init (GtkHeaderBar *bar)
 {
   GtkStyleContext *context;
@@ -127,21 +144,14 @@ gtk_header_bar_init (GtkHeaderBar *bar)
   gtk_widget_set_has_window (GTK_WIDGET (bar), FALSE);
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (bar), FALSE);
 
-  priv->label = gtk_label_new ("");
-  boldify_label (priv->label);
-  gtk_widget_set_parent (priv->label, GTK_WIDGET (bar));
-  gtk_widget_set_valign (priv->label, GTK_ALIGN_CENTER);
-  gtk_label_set_line_wrap (GTK_LABEL (priv->label), FALSE);
-  gtk_label_set_single_line_mode (GTK_LABEL (priv->label), TRUE);
-  gtk_label_set_ellipsize (GTK_LABEL (priv->label), PANGO_ELLIPSIZE_END);
-  gtk_widget_show (priv->label);
-
   priv->title = NULL;
   priv->custom_title = NULL;
   priv->children = NULL;
   priv->spacing = DEFAULT_SPACING;
   priv->hpadding = DEFAULT_HPADDING;
   priv->vpadding = DEFAULT_VPADDING;
+
+  construct_label (bar);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (bar));
   gtk_style_context_add_class (context, "header-bar");
@@ -220,10 +230,13 @@ gtk_header_bar_get_size (GtkWidget      *widget,
         nvis_children += 1;
     }
 
-  if (add_child_size (priv->label, orientation, &minimum, &natural))
-    nvis_children += 1;
+  if (priv->label != NULL)
+    {
+      if (add_child_size (priv->label, orientation, &minimum, &natural))
+        nvis_children += 1;
+    }
 
-  if (priv->custom_title)
+  if (priv->custom_title != NULL)
     {
       if (add_child_size (priv->custom_title, orientation, &minimum, &natural))
         nvis_children += 1;
@@ -622,8 +635,11 @@ gtk_header_bar_set_title (GtkHeaderBar *bar,
   g_free (priv->title);
   priv->title = new_title;
 
-  gtk_label_set_label (GTK_LABEL (priv->label), priv->title);
-  gtk_widget_queue_resize (GTK_WIDGET (bar));
+  if (priv->label != NULL)
+    {
+      gtk_label_set_label (GTK_LABEL (priv->label), priv->title);
+      gtk_widget_queue_resize (GTK_WIDGET (bar));
+    }
 
   g_object_notify (G_OBJECT (bar), "title");
 }
@@ -684,20 +700,27 @@ gtk_header_bar_set_custom_title (GtkHeaderBar *bar,
       gtk_widget_unparent (custom);
     }
 
-  if (title_widget)
+  if (title_widget != NULL)
     {
       priv->custom_title = title_widget;
 
-      gtk_widget_hide (priv->label);
-
       gtk_widget_set_parent (priv->custom_title, GTK_WIDGET (bar));
       gtk_widget_set_valign (priv->custom_title, GTK_ALIGN_CENTER);
-
       gtk_widget_show (title_widget);
+
+      if (priv->label != NULL)
+        {
+          GtkWidget *label = priv->label;
+
+          priv->label = NULL;
+          gtk_widget_unparent (label);
+        }
+
     }
   else
     {
-      gtk_widget_show (priv->label);
+      if (priv->label == NULL)
+        construct_label (bar);
     }
 
   gtk_widget_queue_resize (GTK_WIDGET (bar));
@@ -897,13 +920,11 @@ gtk_header_bar_forall (GtkContainer *container,
         (* callback) (child->widget, callback_data);
     }
 
-  if (include_internals)
-    {
-      if (priv->custom_title)
-        (* callback) (priv->custom_title, callback_data);
-      else
-        (* callback) (priv->label, callback_data);
-    }
+  if (priv->custom_title != NULL)
+    (* callback) (priv->custom_title, callback_data);
+
+  if (include_internals && priv->label != NULL)
+    (* callback) (priv->label, callback_data);
 
   children = priv->children;
   while (children)
