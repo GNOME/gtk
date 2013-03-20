@@ -23,23 +23,6 @@ copy $(Configuration)\$(Platform)\bin\*.dll $(CopyDir)\bin
 copy $(Configuration)\$(Platform)\bin\*.exe $(CopyDir)\bin
 
 
-mkdir $(CopyDir)\share\gtk-$(ApiVersion)\demo
-
-copy ..\..\..\demos\gtk-demo\*.c $(CopyDir)\share\gtk-$(ApiVersion)\demo
-
-copy ..\..\..\demos\gtk-demo\*.css $(CopyDir)\share\gtk-$(ApiVersion)\demo
-
-copy ..\..\..\demos\gtk-demo\*.h $(CopyDir)\share\gtk-$(ApiVersion)\demo
-
-copy ..\..\..\demos\gtk-demo\*.ui $(CopyDir)\share\gtk-$(ApiVersion)\demo
-
-copy ..\..\..\demos\gtk-demo\*.jpg $(CopyDir)\share\gtk-$(ApiVersion)\demo
-
-copy ..\..\..\demos\gtk-demo\*.png $(CopyDir)\share\gtk-$(ApiVersion)\demo
-
-copy ..\..\..\demos\gtk-demo\*.gif $(CopyDir)\share\gtk-$(ApiVersion)\demo
-
-
 mkdir $(CopyDir)\lib
 
 copy $(Configuration)\$(Platform)\bin\*-$(ApiVersion).lib $(CopyDir)\lib

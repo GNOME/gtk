@@ -79,16 +79,6 @@ mkdir $(CopyDir)\bin&#x0D;&#x0A;
 copy $(ConfigurationName)\$(PlatformName)\bin\*.dll $(CopyDir)\bin&#x0D;&#x0A;
 copy $(ConfigurationName)\$(PlatformName)\bin\*.exe $(CopyDir)\bin&#x0D;&#x0A;
 
-mkdir $(CopyDir)\share\gtk-$(ApiVersion)\demo&#x0D;&#x0A;
-
-copy ..\..\..\demos\gtk-demo\*.c $(CopyDir)\share\gtk-$(ApiVersion)\demo&#x0D;&#x0A;
-copy ..\..\..\demos\gtk-demo\*.css $(CopyDir)\share\gtk-$(ApiVersion)\demo&#x0D;&#x0A;
-copy ..\..\..\demos\gtk-demo\*.h $(CopyDir)\share\gtk-$(ApiVersion)\demo&#x0D;&#x0A;
-copy ..\..\..\demos\gtk-demo\*.ui $(CopyDir)\share\gtk-$(ApiVersion)\demo&#x0D;&#x0A;
-copy ..\..\..\demos\gtk-demo\*.jpg $(CopyDir)\share\gtk-$(ApiVersion)\demo&#x0D;&#x0A;
-copy ..\..\..\demos\gtk-demo\*.png $(CopyDir)\share\gtk-$(ApiVersion)\demo&#x0D;&#x0A;
-copy ..\..\..\demos\gtk-demo\*.gif $(CopyDir)\share\gtk-$(ApiVersion)\demo&#x0D;&#x0A;
-
 mkdir $(CopyDir)\lib&#x0D;&#x0A;
 copy $(ConfigurationName)\$(PlatformName)\bin\*-$(ApiVersion).lib $(CopyDir)\lib&#x0D;&#x0A;
 
