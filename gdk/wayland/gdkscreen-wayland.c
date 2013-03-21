@@ -21,6 +21,7 @@
 #include <string.h>
 
 #include <glib.h>
+#include <gio/gio.h>
 #include "gdkscreenprivate.h"
 #include "gdkvisualprivate.h"
 #include "gdkdisplay.h"
@@ -56,6 +57,8 @@ struct _GdkWaylandScreen
   /* Xinerama/RandR 1.2 */
   GPtrArray *monitors;
   gint       primary_monitor;
+
+  GHashTable *settings;
 };
 
 struct _GdkWaylandScreenClass
@@ -132,6 +135,8 @@ gdk_wayland_screen_finalize (GObject *object)
   g_object_unref (screen_wayland->visual);
 
   deinit_multihead (GDK_SCREEN (object));
+
+  g_hash_table_destroy (screen_wayland->settings);
 
   G_OBJECT_CLASS (_gdk_wayland_screen_parent_class)->finalize (object);
 }
@@ -274,35 +279,191 @@ gdk_wayland_screen_broadcast_client_message (GdkScreen *screen,
 {
 }
 
+typedef struct _TranslationEntry TranslationEntry;
+struct _TranslationEntry {
+  const gchar *schema;
+  const gchar *key;
+  const gchar *setting;
+  GType type;
+  const gchar *default_string;
+  gint default_int;
+};
+
+static TranslationEntry translations[] = {
+  { "org.gnome.desktop.interface", "gtk-theme", "gtk-theme-name" , G_TYPE_STRING, "Adwaita", 0 },
+  { "org.gnome.desktop.interface", "icon-theme", "gtk-icon-theme-name", G_TYPE_STRING, "gnome", 0 },
+  { "org.gnome.desktop.interface", "cursor-theme", "gtk-cursor-theme-name", G_TYPE_STRING, "Adwaita", 0 },
+  { "org.gnome.desktop.interface", "font-name", "gtk-font-name", G_TYPE_STRING, "Cantarell 11", 0 },
+  { "org.gnome.desktop.interface", "cursor-blink", "gtk-cursor-blink", G_TYPE_BOOLEAN, NULL, 1 },
+  { "org.gnome.desktop.interface", "cursor-blink-time", "gtk-cursor-blink-time", G_TYPE_INT, NULL, 1200 },
+  { "org.gnome.desktop.interface", "cursor-blink-timeout", "gtk-cursor-blink-timeout", G_TYPE_INT, NULL, 3600 },
+  { "org.gnome.desktop.interface", "menus-have-icons", "gtk-menu-images", G_TYPE_BOOLEAN, NULL, 0 },
+  { "org.gnome.desktop.interface", "buttons-have-icons", "gtk-button-images", G_TYPE_BOOLEAN, NULL, 0 },
+  { "org.gnome.desktop.interface", "gtk-im-module", "gtk-im-module", G_TYPE_STRING, "simple", 0 },
+  { "org.gnome.desktop.interface", "enable-animations", "gtk-enable-animations", G_TYPE_BOOLEAN, NULL, 1 },
+  { "org.gnome.desktop.interface", "show-input-method-menu", "gtk-show-input-method-menu", G_TYPE_BOOLEAN, NULL, 0 },
+  { "org.gnome.desktop.interface", "show-unicode-menu", "gtk-show-unicode-menu", G_TYPE_BOOLEAN, NULL, 0 },
+  { "org.gnome.desktop.interface", "automatic-mnemonics", "gtk-auto-mnemonics", G_TYPE_BOOLEAN, NULL, 1 },
+  { "org.gnome.settings-daemon.peripherals.mouse", "double-click", "gtk-double-click-time", G_TYPE_INT, NULL, 250 },
+  { "org.gnome.settings-daemon.peripherals.mouse", "drag-threshold", "gtk-dnd-drag-threshold", G_TYPE_INT, NULL, 8 },
+  { "org.gnome.desktop.sound", "theme-name", "gtk-sound-theme-name", G_TYPE_STRING, "freedesktop", 0 },
+  { "org.gnome.desktop.sound", "event-sounds", "gtk-enable-event-sounds", G_TYPE_BOOLEAN, NULL, 1 },
+  { "org.gnome.desktop.sound", "input-feedback-sounds", "gtk-enable-input-feedback-sounds", G_TYPE_BOOLEAN, NULL, 0 }
+};
+
+static TranslationEntry *
+find_translation_entry_by_key (GSettings *settings, const gchar *key)
+{
+  guint i;
+  gchar *schema;
+
+  g_object_get (settings, "schema", &schema, NULL);
+
+  for (i = 0; i < G_N_ELEMENTS (translations); i++)
+    {
+      if (g_str_equal (schema, translations[i].schema) &&
+          g_str_equal (key, translations[i].key))
+        {
+          g_free (schema);
+          return &translations[i];
+        }
+    }
+
+  g_free (schema);
+
+  return NULL;
+}
+
+static TranslationEntry *
+find_translation_entry_by_setting (const gchar *setting)
+{
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (translations); i++)
+    {
+      if (g_str_equal (setting, translations[i].setting))
+        return &translations[i];
+    }
+
+  return NULL;
+}
+
+static void
+settings_changed (GSettings   *settings,
+                  const gchar *key,
+                  GdkScreen   *screen)
+{
+  TranslationEntry *entry;
+
+  entry = find_translation_entry_by_key (settings, key);
+
+  if (entry != NULL)
+    {
+      GdkEvent event;
+      event.type = GDK_SETTING;
+      event.setting.window = gdk_screen_get_root_window (screen);
+      event.setting.send_event = FALSE;
+      event.setting.action = GDK_SETTING_ACTION_CHANGED;
+      event.setting.name = (gchar *)entry->setting;
+      gdk_event_put (&event);
+    }
+}
+
+static void
+init_settings (GdkScreen *screen)
+{
+  GdkWaylandScreen *screen_wayland = GDK_WAYLAND_SCREEN (screen);
+  GSettingsSchemaSource *source;
+  GSettingsSchema *schema;
+  GSettings *settings;
+  gint i;
+
+  screen_wayland->settings = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, g_object_unref);
+
+  source = g_settings_schema_source_get_default ();
+
+  for (i = 0; i < G_N_ELEMENTS (translations); i++)
+    {
+      if (g_hash_table_lookup (screen_wayland->settings, (gpointer)translations[i].schema) != NULL)
+        continue;
+
+      schema = g_settings_schema_source_lookup (source, translations[i].schema, FALSE);
+      if (schema != NULL)
+        {
+          settings = g_settings_new_full (schema, NULL, NULL);
+          g_signal_connect (settings, "changed",
+                            G_CALLBACK (settings_changed), screen);
+          g_hash_table_insert (screen_wayland->settings, (gpointer)translations[i].schema, settings);
+          g_settings_schema_unref (schema);
+        }
+    }
+}
+
+static void
+set_value_from_entry (GdkScreen        *screen,
+                      TranslationEntry *entry,
+                      GValue           *value)
+{
+  GdkWaylandScreen *screen_wayland = GDK_WAYLAND_SCREEN (screen);
+  GSettings *settings;
+
+  settings = (GSettings *)g_hash_table_lookup (screen_wayland->settings, entry->schema);
+  if (settings != NULL)
+    {
+      gchar *s;
+      switch (entry->type)
+        {
+        case G_TYPE_STRING:
+          s = g_settings_get_string (settings, entry->key);
+          g_value_set_string (value, s);
+          g_free (s);
+          break;
+        case G_TYPE_INT:
+          g_value_set_int (value, g_settings_get_int (settings, entry->key));
+          break;
+        case G_TYPE_BOOLEAN:
+          g_value_set_boolean (value, g_settings_get_boolean (settings, entry->key));
+          break;
+        default:
+          g_assert_not_reached ();
+        }
+    }
+  else
+    {
+      switch (entry->type)
+        {
+        case G_TYPE_STRING:
+          g_value_set_static_string (value, entry->default_string);
+          break;
+        case G_TYPE_INT:
+          g_value_set_int (value, entry->default_int);
+          break;
+        case G_TYPE_BOOLEAN:
+          g_value_set_boolean (value, entry->default_int);
+          break;
+        default:
+          g_assert_not_reached ();
+        }
+    }
+}
+
 static gboolean
 gdk_wayland_screen_get_setting (GdkScreen   *screen,
 				const gchar *name,
 				GValue      *value)
 {
+  TranslationEntry *entry;
+
   g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
 
-  if (strcmp ("gtk-theme-name", name) == 0)
+  entry = find_translation_entry_by_setting (name);
+  if (entry != NULL)
     {
-      const gchar *s = "Adwaita";
-      GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : %s\n", name, s));
-      g_value_set_static_string (value, s);
+      set_value_from_entry (screen, entry, value);
       return TRUE;
-    }
-  if (strcmp ("gtk-cursor-theme-name", name) == 0)
-    {
-      const gchar *s = "Adwaita";
-      GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : %s\n", name, s));
-      g_value_set_static_string (value, s);
-      return TRUE;
-    }
-  else if (strcmp ("gtk-icon-theme-name", name) == 0)
-    {
-      const gchar *s = "gnome";
-      GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : %s\n", name, s));
-      g_value_set_static_string (value, s);
-      return TRUE;
-    }
-  else if (strcmp ("gtk-double-click-time", name) == 0)
+   }
+
+  if (strcmp ("gtk-double-click-time", name) == 0)
     {
       gint i = 250;
       GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : %d\n", name, i));
@@ -332,13 +493,13 @@ gdk_wayland_screen_get_setting (GdkScreen   *screen,
   else if (strcmp ("gtk-alternative-button-order", name) == 0)
     {
       GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : TRUE\n", name));
-      g_value_set_boolean (value, TRUE);
+      g_value_set_boolean (value, FALSE);
       return TRUE;
     }
   else if (strcmp ("gtk-alternative-sort-arrows", name) == 0)
     {
       GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : TRUE\n", name));
-      g_value_set_boolean (value, TRUE);
+      g_value_set_boolean (value, FALSE);
       return TRUE;
     }
   else if (strcmp ("gtk-xft-dpi", name) == 0)
@@ -490,6 +651,7 @@ _gdk_wayland_screen_new (GdkDisplay *display)
 					    screen_wayland->height);
 
   init_multihead (screen);
+  init_settings (screen);
 
   return screen;
 }
