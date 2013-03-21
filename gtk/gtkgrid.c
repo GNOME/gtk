@@ -101,6 +101,7 @@ struct _GtkGridPrivate
   GList *row_properties;
 
   GtkOrientation orientation;
+  gint baseline_row;
 
   GtkGridLineData linedata[2];
 };
@@ -149,7 +150,8 @@ enum
   PROP_ROW_SPACING,
   PROP_COLUMN_SPACING,
   PROP_ROW_HOMOGENEOUS,
-  PROP_COLUMN_HOMOGENEOUS
+  PROP_COLUMN_HOMOGENEOUS,
+  PROP_BASELINE_ROW
 };
 
 enum
@@ -196,6 +198,10 @@ gtk_grid_get_property (GObject    *object,
 
     case PROP_COLUMN_HOMOGENEOUS:
       g_value_set_boolean (value, ROWS (priv)->homogeneous);
+      break;
+
+    case PROP_BASELINE_ROW:
+      g_value_set_int (value, priv->baseline_row);
       break;
 
     default:
@@ -247,6 +253,10 @@ gtk_grid_set_property (GObject      *object,
 
     case PROP_COLUMN_HOMOGENEOUS:
       gtk_grid_set_column_homogeneous (grid, g_value_get_boolean (value));
+      break;
+
+    case PROP_BASELINE_ROW:
+      gtk_grid_set_baseline_row (grid, g_value_get_int (value));
       break;
 
     default:
@@ -375,6 +385,7 @@ gtk_grid_init (GtkGrid *grid)
 
   priv->children = NULL;
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
+  priv->baseline_row = 0;
 
   priv->linedata[0].spacing = 0;
   priv->linedata[1].spacing = 0;
@@ -931,6 +942,8 @@ gtk_grid_request_spanning (GtkGridRequest *request,
 static void
 gtk_grid_request_compute_expand (GtkGridRequest *request,
                                  GtkOrientation  orientation,
+				 gint            min,
+				 gint            max,
                                  gint           *nonempty_lines,
                                  gint           *expand_lines)
 {
@@ -947,7 +960,10 @@ gtk_grid_request_compute_expand (GtkGridRequest *request,
 
   lines = &request->lines[orientation];
 
-  for (i = 0; i < lines->max - lines->min; i++)
+  min = MAX (min, lines->min);
+  max = MIN (max, lines->max);
+
+  for (i = min - lines->min; i < max - lines->min; i++)
     {
       lines->lines[i].need_expand = FALSE;
       lines->lines[i].expand = FALSE;
@@ -964,6 +980,9 @@ gtk_grid_request_compute_expand (GtkGridRequest *request,
       attach = &child->attach[orientation];
       if (attach->span != 1)
         continue;
+
+      if (attach->pos >= max || attach->pos < min)
+	continue;
 
       line = &lines->lines[attach->pos - lines->min];
       line->empty = FALSE;
@@ -986,17 +1005,25 @@ gtk_grid_request_compute_expand (GtkGridRequest *request,
       for (i = 0; i < attach->span; i++)
         {
           line = &lines->lines[attach->pos - lines->min + i];
+
+          if (line->expand)
+            has_expand = TRUE;
+
+	  if (attach->pos + i >= max || attach->pos + 1 < min)
+	    continue;
+
           if (line->empty)
             line->expand = TRUE;
           line->empty = FALSE;
-          if (line->expand)
-            has_expand = TRUE;
         }
 
       if (!has_expand && gtk_widget_compute_expand (child->widget, orientation))
         {
           for (i = 0; i < attach->span; i++)
             {
+	      if (attach->pos + i >= max || attach->pos + 1 < min)
+		continue;
+
               line = &lines->lines[attach->pos - lines->min + i];
               line->need_expand = TRUE;
             }
@@ -1005,7 +1032,7 @@ gtk_grid_request_compute_expand (GtkGridRequest *request,
 
   empty = 0;
   expand = 0;
-  for (i = 0; i < lines->max - lines->min; i++)
+  for (i = min - lines->min; i < max - lines->min; i++)
     {
       line = &lines->lines[i];
 
@@ -1020,7 +1047,7 @@ gtk_grid_request_compute_expand (GtkGridRequest *request,
     }
 
   if (nonempty_lines)
-    *nonempty_lines = lines->max - lines->min - empty;
+    *nonempty_lines = max - min - empty;
 
   if (expand_lines)
     *expand_lines = expand;
@@ -1032,7 +1059,9 @@ static void
 gtk_grid_request_sum (GtkGridRequest *request,
                       GtkOrientation  orientation,
                       gint           *minimum,
-                      gint           *natural)
+                      gint           *natural,
+		      gint           *minimum_baseline,
+		      gint           *natural_baseline)
 {
   GtkGridPrivate *priv = request->grid->priv;
   GtkGridLineData *linedata;
@@ -1041,23 +1070,40 @@ gtk_grid_request_sum (GtkGridRequest *request,
   gint min, nat;
   gint nonempty;
 
-  gtk_grid_request_compute_expand (request, orientation, &nonempty, NULL);
+  gtk_grid_request_compute_expand (request, orientation, G_MININT, G_MAXINT, &nonempty, NULL);
 
   linedata = &priv->linedata[orientation];
   lines = &request->lines[orientation];
 
   min = 0;
   nat = 0;
-  if (nonempty > 0)
-    {
-      min = (nonempty - 1) * linedata->spacing;
-      nat = (nonempty - 1) * linedata->spacing;
-    }
-
   for (i = 0; i < lines->max - lines->min; i++)
     {
+      if (orientation == GTK_ORIENTATION_VERTICAL &&
+	  lines->min + i == priv->baseline_row &&
+	  lines->lines[i].minimum_above != -1)
+	{
+	  if (minimum_baseline)
+	    *minimum_baseline = min + lines->lines[i].minimum_above;
+	  if (natural_baseline)
+	    *natural_baseline = nat + lines->lines[i].natural_above;
+	}
+
       min += lines->lines[i].minimum;
       nat += lines->lines[i].natural;
+
+      if (!lines->lines[i].empty)
+	{
+	  min += linedata->spacing;
+	  nat += linedata->spacing;
+	}
+    }
+
+  /* Remove last spacing, if any was applied */
+  if (nonempty > 0)
+    {
+      min -= linedata->spacing;
+      nat -= linedata->spacing;
     }
 
   if (minimum)
@@ -1083,6 +1129,77 @@ gtk_grid_request_run (GtkGridRequest *request,
   gtk_grid_request_homogeneous (request, orientation);
 }
 
+static void
+gtk_grid_distribute_non_homogeneous (GtkGridLines *lines,
+				     gint nonempty,
+				     gint expand,
+				     gint size,
+				     gint min,
+				     gint max)
+{
+  GtkRequestedSize *sizes;
+  GtkGridLine *line;
+  gint extra;
+  gint rest;
+  int i, j;
+
+  if (nonempty == 0)
+    return;
+
+  sizes = g_newa (GtkRequestedSize, nonempty);
+
+  j = 0;
+  for (i = min - lines->min; i < max - lines->min; i++)
+    {
+      line = &lines->lines[i];
+      if (line->empty)
+	continue;
+
+      size -= line->minimum;
+
+      sizes[j].minimum_size = line->minimum;
+      sizes[j].natural_size = line->natural;
+      sizes[j].data = line;
+      j++;
+    }
+
+  size = gtk_distribute_natural_allocation (MAX (0, size), nonempty, sizes);
+
+  if (expand > 0)
+    {
+      extra = size / expand;
+      rest = size % expand;
+    }
+  else
+    {
+      extra = 0;
+      rest = 0;
+    }
+
+  j = 0;
+  for (i = min - lines->min; i < max - lines->min; i++)
+    {
+      line = &lines->lines[i];
+      if (line->empty)
+	continue;
+
+      g_assert (line == sizes[j].data);
+
+      line->allocation = sizes[j].minimum_size;
+      if (line->expand)
+	{
+	  line->allocation += extra;
+	  if (rest > 0)
+	    {
+	      line->allocation += 1;
+	      rest -= 1;
+	    }
+	}
+
+      j++;
+    }
+}
+
 /* Requires that the minimum and natural fields of lines
  * have been set, computes the allocation field of lines
  * by distributing total_size among lines.
@@ -1096,29 +1213,75 @@ gtk_grid_request_allocate (GtkGridRequest *request,
   GtkGridLineData *linedata;
   GtkGridLines *lines;
   GtkGridLine *line;
-  gint nonempty;
-  gint expand;
-  gint i, j;
-  GtkRequestedSize *sizes;
+  gint nonempty1, nonempty2;
+  gint expand1, expand2;
+  gint i;
   GtkBaselinePosition baseline_pos;
-  gint extra;
+  gint baseline;
+  gint extra, extra2;
   gint rest;
-  gint size;
-
-  gtk_grid_request_compute_expand (request, orientation, &nonempty, &expand);
-
-  if (nonempty == 0)
-    return;
+  gint size1, size2;
+  gint split, split_pos;
 
   linedata = &priv->linedata[orientation];
   lines = &request->lines[orientation];
 
-  size = total_size - (nonempty - 1) * linedata->spacing;
+  baseline = gtk_widget_get_allocated_baseline (GTK_WIDGET (request->grid));
+
+  if (orientation == GTK_ORIENTATION_VERTICAL && baseline != -1 &&
+      priv->baseline_row >= lines->min && priv->baseline_row < lines->max &&
+      lines->lines[priv->baseline_row - lines->min].minimum_above != -1)
+    {
+      split = priv->baseline_row;
+      split_pos = baseline - lines->lines[priv->baseline_row - lines->min].minimum_above;
+      gtk_grid_request_compute_expand (request, orientation, lines->min, split, &nonempty1, &expand1);
+      gtk_grid_request_compute_expand (request, orientation, split, lines->max, &nonempty2, &expand2);
+
+      if (nonempty2 > 0)
+	{
+	  size1 = split_pos - (nonempty1) * linedata->spacing;
+	  size2 = (total_size - split_pos) - (nonempty2 - 1) * linedata->spacing;
+	}
+      else
+	{
+	  size1 = total_size - (nonempty1 - 1) * linedata->spacing;
+	  size2 = 0;
+	}
+    }
+  else
+    {
+      gtk_grid_request_compute_expand (request, orientation, lines->min, lines->max, &nonempty1, &expand1);
+      nonempty2 = expand2 = 0;
+      split = lines->max;
+
+      size1 = total_size - (nonempty1 - 1) * linedata->spacing;
+      size2 = 0;
+    }
+
+  if (nonempty1 == 0 && nonempty2 == 0)
+    return;
 
   if (linedata->homogeneous)
     {
-      extra = size / nonempty;
-      rest = size % nonempty;
+      if (nonempty1 > 0)
+	{
+	  extra = size1 / nonempty1;
+	  rest = size1 % nonempty1;
+	}
+      else
+	{
+	  extra = 0;
+	  rest = 0;
+	}
+      if (nonempty2 > 0)
+	{
+	  extra2 = size2 / nonempty2;
+	  if (extra2 < extra || nonempty1 == 0)
+	    {
+	      extra = extra2;
+	      rest = size2 % nonempty2;
+	    }
+	}
 
       for (i = 0; i < lines->max - lines->min; i++)
         {
@@ -1136,81 +1299,50 @@ gtk_grid_request_allocate (GtkGridRequest *request,
     }
   else
     {
-      sizes = g_newa (GtkRequestedSize, nonempty);
+      gtk_grid_distribute_non_homogeneous (lines,
+					   nonempty1,
+					   expand1,
+					   size1,
+					   lines->min,
+					   split);
+      gtk_grid_distribute_non_homogeneous (lines,
+					   nonempty2,
+					   expand2,
+					   size2,
+					   split,
+					   lines->max);
+    }
 
-      j = 0;
-      for (i = 0; i < lines->max - lines->min; i++)
-        {
-          line = &lines->lines[i];
-          if (line->empty)
-            continue;
+  for (i = 0; i < lines->max - lines->min; i++)
+    {
+      line = &lines->lines[i];
+      if (line->empty)
+	continue;
 
-          size -= line->minimum;
+      if (line->minimum_above != -1)
+	{
+	  /* Note: This is overridden in gtk_grid_request_position for the allocated baseline */
+	  baseline_pos = gtk_grid_get_row_baseline_position (request->grid, i + lines->min);
 
-          sizes[j].minimum_size = line->minimum;
-          sizes[j].natural_size = line->natural;
-          sizes[j].data = line;
-          j++;
-        }
-
-      size = gtk_distribute_natural_allocation (MAX (0, size), nonempty, sizes);
-
-      if (expand > 0)
-        {
-          extra = size / expand;
-          rest = size % expand;
-        }
-      else
-        {
-          extra = 0;
-          rest = 0;
-        }
-
-      j = 0;
-      for (i = 0; i < lines->max - lines->min; i++)
-        {
-          line = &lines->lines[i];
-          if (line->empty)
-            continue;
-
-          g_assert (line == sizes[j].data);
-
-          line->allocation = sizes[j].minimum_size;
-          if (line->expand)
-            {
-              line->allocation += extra;
-              if (rest > 0)
-                {
-                  line->allocation += 1;
-                  rest -= 1;
-                }
-            }
-	  if (line->minimum_above != -1)
+	  switch (baseline_pos)
 	    {
-	      baseline_pos = gtk_grid_get_row_baseline_position (request->grid, i + lines->min);
-
-	      switch (baseline_pos)
-		{
-		case GTK_BASELINE_POSITION_TOP:
-		  line->allocated_baseline =
-		    line->minimum_above;
-		  break;
-		case GTK_BASELINE_POSITION_CENTER:
-		  line->allocated_baseline =
-		    line->minimum_above +
-		    (line->allocation - (line->minimum_above + line->minimum_below)) / 2;
-		  break;
-		case GTK_BASELINE_POSITION_BOTTOM:
-		  line->allocated_baseline =
-		    line->allocation - line->minimum_below;
-		  break;
-		}
+	    case GTK_BASELINE_POSITION_TOP:
+	      line->allocated_baseline =
+		line->minimum_above;
+	      break;
+	    case GTK_BASELINE_POSITION_CENTER:
+	      line->allocated_baseline =
+		line->minimum_above +
+		(line->allocation - (line->minimum_above + line->minimum_below)) / 2;
+	      break;
+	    case GTK_BASELINE_POSITION_BOTTOM:
+	      line->allocated_baseline =
+		line->allocation - line->minimum_below;
+	      break;
 	    }
-	  else
-	    line->allocated_baseline = -1;
-
-          j++;
-        }
+	}
+      else
+	line->allocated_baseline = -1;
     }
 }
 
@@ -1224,20 +1356,46 @@ gtk_grid_request_position (GtkGridRequest *request,
   GtkGridLineData *linedata;
   GtkGridLines *lines;
   GtkGridLine *line;
-  gint position;
-  gint i;
+  gint position, old_position;
+  int allocated_baseline;
+  gint i, j;
 
   linedata = &priv->linedata[orientation];
   lines = &request->lines[orientation];
+
+  allocated_baseline = gtk_widget_get_allocated_baseline (GTK_WIDGET(request->grid));
 
   position = 0;
   for (i = 0; i < lines->max - lines->min; i++)
     {
       line = &lines->lines[i];
+
+      if (orientation == GTK_ORIENTATION_VERTICAL &&
+	  i + lines->min == priv->baseline_row &&
+	  allocated_baseline != -1 &&
+	  lines->lines[i].minimum_above != -1)
+	{
+	  old_position = position;
+	  position = allocated_baseline - line->minimum_above;
+
+	  /* Back-patch previous rows */
+	  for (j = 0; j < i; j++)
+	    {
+	      if (!lines->lines[j].empty)
+		lines->lines[j].position += position - old_position;
+	    }
+	}
+
       if (!line->empty)
         {
           line->position = position;
           position += line->allocation + linedata->spacing;
+
+	  if (orientation == GTK_ORIENTATION_VERTICAL &&
+	      i + lines->min == priv->baseline_row &&
+	      allocated_baseline != -1 &&
+	      lines->lines[i].minimum_above != -1)
+	    line->allocated_baseline = allocated_baseline - line->position;
         }
     }
 }
@@ -1246,7 +1404,9 @@ static void
 gtk_grid_get_size (GtkGrid        *grid,
                    GtkOrientation  orientation,
                    gint           *minimum,
-                   gint           *natural)
+                   gint           *natural,
+		   gint           *minimum_baseline,
+		   gint           *natural_baseline)
 {
   GtkGridRequest request;
   GtkGridLines *lines;
@@ -1256,6 +1416,12 @@ gtk_grid_get_size (GtkGrid        *grid,
 
   if (natural)
     *natural = 0;
+
+  if (minimum_baseline)
+    *minimum_baseline = -1;
+
+  if (natural_baseline)
+    *natural_baseline = -1;
 
   if (grid->priv->children == NULL)
     return;
@@ -1267,7 +1433,8 @@ gtk_grid_get_size (GtkGrid        *grid,
   memset (lines->lines, 0, (lines->max - lines->min) * sizeof (GtkGridLine));
 
   gtk_grid_request_run (&request, orientation, FALSE);
-  gtk_grid_request_sum (&request, orientation, minimum, natural);
+  gtk_grid_request_sum (&request, orientation, minimum, natural,
+			minimum_baseline, natural_baseline);
 }
 
 static void
@@ -1275,7 +1442,9 @@ gtk_grid_get_size_for_size (GtkGrid        *grid,
                             GtkOrientation  orientation,
                             gint            size,
                             gint           *minimum,
-                            gint           *natural)
+                            gint           *natural,
+			    gint           *minimum_baseline,
+                            gint           *natural_baseline)
 {
   GtkGridRequest request;
   GtkGridLines *lines;
@@ -1286,6 +1455,12 @@ gtk_grid_get_size_for_size (GtkGrid        *grid,
 
   if (natural)
     *natural = 0;
+
+  if (minimum_baseline)
+    *minimum_baseline = -1;
+
+  if (natural_baseline)
+    *natural_baseline = -1;
 
   if (grid->priv->children == NULL)
     return;
@@ -1300,11 +1475,11 @@ gtk_grid_get_size_for_size (GtkGrid        *grid,
   memset (lines->lines, 0, (lines->max - lines->min) * sizeof (GtkGridLine));
 
   gtk_grid_request_run (&request, 1 - orientation, FALSE);
-  gtk_grid_request_sum (&request, 1 - orientation, &min_size, NULL);
+  gtk_grid_request_sum (&request, 1 - orientation, &min_size, NULL, NULL, NULL);
   gtk_grid_request_allocate (&request, 1 - orientation, MAX (size, min_size));
 
   gtk_grid_request_run (&request, orientation, TRUE);
-  gtk_grid_request_sum (&request, orientation, minimum, natural);
+  gtk_grid_request_sum (&request, orientation, minimum, natural, minimum_baseline, natural_baseline);
 }
 
 static void
@@ -1315,9 +1490,9 @@ gtk_grid_get_preferred_width (GtkWidget *widget,
   GtkGrid *grid = GTK_GRID (widget);
 
   if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT)
-    gtk_grid_get_size_for_size (grid, GTK_ORIENTATION_HORIZONTAL, 0, minimum, natural);
+    gtk_grid_get_size_for_size (grid, GTK_ORIENTATION_HORIZONTAL, 0, minimum, natural, NULL, NULL);
   else
-    gtk_grid_get_size (grid, GTK_ORIENTATION_HORIZONTAL, minimum, natural);
+    gtk_grid_get_size (grid, GTK_ORIENTATION_HORIZONTAL, minimum, natural, NULL, NULL);
 }
 
 static void
@@ -1328,9 +1503,9 @@ gtk_grid_get_preferred_height (GtkWidget *widget,
   GtkGrid *grid = GTK_GRID (widget);
 
   if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
-    gtk_grid_get_size_for_size (grid, GTK_ORIENTATION_VERTICAL, 0, minimum, natural);
+    gtk_grid_get_size_for_size (grid, GTK_ORIENTATION_VERTICAL, 0, minimum, natural, NULL, NULL);
   else
-    gtk_grid_get_size (grid, GTK_ORIENTATION_VERTICAL, minimum, natural);
+    gtk_grid_get_size (grid, GTK_ORIENTATION_VERTICAL, minimum, natural, NULL, NULL);
 }
 
 static void
@@ -1342,9 +1517,9 @@ gtk_grid_get_preferred_width_for_height (GtkWidget *widget,
   GtkGrid *grid = GTK_GRID (widget);
 
   if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT)
-    gtk_grid_get_size_for_size (grid, GTK_ORIENTATION_HORIZONTAL, height, minimum, natural);
+    gtk_grid_get_size_for_size (grid, GTK_ORIENTATION_HORIZONTAL, height, minimum, natural, NULL, NULL);
   else
-    gtk_grid_get_size (grid, GTK_ORIENTATION_HORIZONTAL, minimum, natural);
+    gtk_grid_get_size (grid, GTK_ORIENTATION_HORIZONTAL, minimum, natural, NULL, NULL);
 }
 
 static void
@@ -1356,10 +1531,27 @@ gtk_grid_get_preferred_height_for_width (GtkWidget *widget,
   GtkGrid *grid = GTK_GRID (widget);
 
   if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
-    gtk_grid_get_size_for_size (grid, GTK_ORIENTATION_VERTICAL, width, minimum, natural);
+    gtk_grid_get_size_for_size (grid, GTK_ORIENTATION_VERTICAL, width, minimum, natural, NULL, NULL);
   else
-    gtk_grid_get_size (grid, GTK_ORIENTATION_VERTICAL, minimum, natural);
+    gtk_grid_get_size (grid, GTK_ORIENTATION_VERTICAL, minimum, natural, NULL, NULL);
 }
+
+static void
+gtk_grid_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
+						      gint       width,
+						      gint      *minimum,
+						      gint      *natural,
+						      gint      *minimum_baseline,
+						      gint      *natural_baseline)
+{
+  GtkGrid *grid = GTK_GRID (widget);
+
+  if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH && width != -1)
+    gtk_grid_get_size_for_size (grid, GTK_ORIENTATION_VERTICAL, width, minimum, natural, minimum_baseline, natural_baseline);
+  else
+    gtk_grid_get_size (grid, GTK_ORIENTATION_VERTICAL, minimum, natural, minimum_baseline, natural_baseline);
+}
+
 
 static void
 allocate_child (GtkGridRequest *request,
@@ -1467,6 +1659,7 @@ gtk_grid_size_allocate (GtkWidget     *widget,
   gtk_grid_request_run (&request, 1 - orientation, FALSE);
   gtk_grid_request_allocate (&request, 1 - orientation, GET_SIZE (allocation, 1 - orientation));
   gtk_grid_request_run (&request, orientation, TRUE);
+
   gtk_grid_request_allocate (&request, orientation, GET_SIZE (allocation, orientation));
 
   gtk_grid_request_position (&request, 0);
@@ -1491,6 +1684,7 @@ gtk_grid_class_init (GtkGridClass *class)
   widget_class->get_preferred_height = gtk_grid_get_preferred_height;
   widget_class->get_preferred_width_for_height = gtk_grid_get_preferred_width_for_height;
   widget_class->get_preferred_height_for_width = gtk_grid_get_preferred_height_for_width;
+  widget_class->get_preferred_height_and_baseline_for_width = gtk_grid_get_preferred_height_and_baseline_for_width;
 
   container_class->add = gtk_grid_add;
   container_class->remove = gtk_grid_remove;
@@ -1529,6 +1723,13 @@ gtk_grid_class_init (GtkGridClass *class)
                           P_("If TRUE, the columns are all the same width"),
                           FALSE,
                           GTK_PARAM_READWRITE));
+
+  g_object_class_install_property (object_class, PROP_BASELINE_ROW,
+    g_param_spec_int ("baseline-row",
+                      P_("Baseline Row"),
+                      P_("The row to align the to the baseline when valign is GTK_ALIGN_BASELINE"),
+                      0, G_MAXINT, 0,
+                      GTK_PARAM_READWRITE));
 
   gtk_container_class_install_child_property (container_class, CHILD_PROP_LEFT_ATTACH,
     g_param_spec_int ("left-attach",
@@ -1788,7 +1989,7 @@ gtk_grid_insert_row (GtkGrid *grid,
   for (list = priv->row_properties; list != NULL; list = list->next)
     {
       GtkGridRowProperties *prop = list->data;
-      
+
       if (prop->row >= position)
 	prop->row += 1;
     }
@@ -2163,4 +2364,39 @@ gtk_grid_get_row_baseline_position (GtkGrid      *grid,
   props = get_row_properties_or_default (grid, row);
 
   return props->baseline_position;
+}
+
+void
+gtk_grid_set_baseline_row (GtkGrid *grid,
+			   gint     row)
+{
+  GtkGridPrivate *priv;
+
+  g_return_if_fail (GTK_IS_GRID (grid));
+
+  priv =  grid->priv;
+
+  if (priv->baseline_row != row)
+    {
+      priv->baseline_row = row;
+
+      if (gtk_widget_get_visible (GTK_WIDGET (grid)))
+	{
+	  gtk_widget_queue_resize (GTK_WIDGET (grid));
+	  //gtk_widget_queue_resize (gtk_widget_get_parent (GTK_WIDGET (grid)));
+	}
+      g_object_notify (G_OBJECT (grid), "baseline-row");
+    }
+}
+
+gint
+gtk_grid_get_baseline_row (GtkGrid         *grid)
+{
+  GtkGridPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_GRID (grid), 0);
+
+  priv = grid->priv;
+
+  return priv->baseline_row;
 }

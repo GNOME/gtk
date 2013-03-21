@@ -108,6 +108,10 @@ void       gtk_grid_set_row_baseline_position (GtkGrid      *grid,
 					       GtkBaselinePosition pos);
 GtkBaselinePosition gtk_grid_get_row_baseline_position (GtkGrid      *grid,
 							gint          row);
+void       gtk_grid_set_baseline_row       (GtkGrid         *grid,
+					    gint             row);
+gint       gtk_grid_get_baseline_row       (GtkGrid         *grid);
+
 
 G_END_DECLS
 
