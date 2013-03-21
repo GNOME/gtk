@@ -5375,7 +5375,7 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
 	  cairo_region_destroy (invalidate);
 	}
 
-      if (size_changed)
+      if (size_changed || baseline_changed)
 	{
 	  if (priv->redraw_on_alloc)
 	    {
