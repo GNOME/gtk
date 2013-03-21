@@ -96,7 +96,6 @@ selected_cb (GtkButton *button,
              GtkDialog *dialog)
 {
   save_color (GTK_COLOR_CHOOSER_DIALOG (dialog));
-  gtk_dialog_response (dialog, GTK_RESPONSE_OK);
 }
 
 static void
@@ -152,8 +151,7 @@ gtk_color_chooser_dialog_init (GtkColorChooserDialog *cc)
                     G_CALLBACK (selected_cb), dialog);
   gtk_widget_set_can_default (priv->select_button, TRUE);
   gtk_widget_show (priv->select_button);
-  gtk_box_pack_end (GTK_BOX (gtk_dialog_get_action_area (dialog)),
-                    priv->select_button, FALSE, TRUE, 0);
+  gtk_dialog_add_action_widget (dialog, priv->select_button, GTK_RESPONSE_OK);
   gtk_widget_grab_default (priv->select_button);
 
   gtk_dialog_set_alternative_button_order (dialog,
