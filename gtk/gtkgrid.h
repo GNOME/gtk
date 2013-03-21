@@ -103,7 +103,11 @@ gboolean   gtk_grid_get_column_homogeneous (GtkGrid         *grid);
 void       gtk_grid_set_column_spacing     (GtkGrid         *grid,
                                             guint            spacing);
 guint      gtk_grid_get_column_spacing     (GtkGrid         *grid);
-
+void       gtk_grid_set_row_baseline_position (GtkGrid      *grid,
+					       gint          row,
+					       GtkBaselinePosition pos);
+GtkBaselinePosition gtk_grid_get_row_baseline_position (GtkGrid      *grid,
+							gint          row);
 
 G_END_DECLS
 
