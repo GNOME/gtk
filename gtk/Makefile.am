@@ -1095,6 +1095,9 @@ DND_CURSORS = \
 	cursor_dnd_move.png				\
 	cursor_dnd_none.png
 
+COMPOSITE_TEMPLATES = \
+	gtkdialog.ui
+
 #
 # rules to generate built sources
 #
@@ -1139,7 +1142,7 @@ gtktypebuiltins.c: @REBUILD@ $(gtk_public_h_sources) $(deprecated_h_sources) gtk
 gtkresources.h: gtk.gresource.xml
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $(srcdir)/gtk.gresource.xml \
 		--target=$@ --sourcedir=$(srcdir) --c-name _gtk --generate-header --manual-register
-gtkresources.c: gtk.gresource.xml gtk-default.css gtk-win32.css gtk-win32-xp.css gtk-win32-base.css gtk-win32-classic.css $(DND_CURSORS)
+gtkresources.c: gtk.gresource.xml gtk-default.css gtk-win32.css gtk-win32-xp.css gtk-win32-base.css gtk-win32-classic.css $(DND_CURSORS) $(COMPOSITE_TEMPLATES)
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $(srcdir)/gtk.gresource.xml \
 		--target=$@ --sourcedir=$(srcdir) --c-name _gtk --generate-source --manual-register
 

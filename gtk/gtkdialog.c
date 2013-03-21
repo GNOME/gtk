@@ -195,9 +195,6 @@ static ResponseData * get_response_data          (GtkWidget    *widget,
                                                   gboolean      create);
 
 static void      gtk_dialog_buildable_interface_init     (GtkBuildableIface *iface);
-static GObject * gtk_dialog_buildable_get_internal_child (GtkBuildable  *buildable,
-                                                          GtkBuilder    *builder,
-                                                          const gchar   *childname);
 static gboolean  gtk_dialog_buildable_custom_tag_start   (GtkBuildable  *buildable,
                                                           GtkBuilder    *builder,
                                                           GObject       *child,
@@ -331,8 +328,14 @@ gtk_dialog_class_init (GtkDialogClass *class)
                                                              GTK_PARAM_READABLE));
 
   binding_set = gtk_binding_set_by_class (class);
-
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0, "close", 0);
+
+  /* Bind class to template
+   */
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/gtkdialog.ui");
+  gtk_widget_class_bind_child_internal (widget_class, GtkDialogPrivate, vbox);
+  gtk_widget_class_bind_child_internal (widget_class, GtkDialogPrivate, action_area);
+  gtk_widget_class_bind_callback (widget_class, gtk_dialog_delete_event_handler);
 }
 
 static void
@@ -350,7 +353,6 @@ update_spacings (GtkDialog *dialog)
                         "button-spacing", &button_spacing,
                         "action-area-border", &action_area_border,
                         NULL);
-
   
   gtk_container_set_border_width (GTK_CONTAINER (priv->vbox),
                                   content_area_border);
@@ -368,38 +370,11 @@ update_spacings (GtkDialog *dialog)
 static void
 gtk_dialog_init (GtkDialog *dialog)
 {
-  GtkDialogPrivate *priv;
-
   dialog->priv = G_TYPE_INSTANCE_GET_PRIVATE (dialog,
                                               GTK_TYPE_DIALOG,
                                               GtkDialogPrivate);
-  priv = dialog->priv;
 
-  /* To avoid breaking old code that prevents destroy on delete event
-   * by connecting a handler, we have to have the FIRST signal
-   * connection on the dialog.
-   */
-  g_signal_connect (dialog,
-                    "delete-event",
-                    G_CALLBACK (gtk_dialog_delete_event_handler),
-                    NULL);
-
-  priv->vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_container_add (GTK_CONTAINER (dialog), priv->vbox);
-  gtk_widget_show (priv->vbox);
-
-  priv->action_area = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
-
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (priv->action_area),
-                             GTK_BUTTONBOX_END);
-
-  gtk_box_pack_end (GTK_BOX (priv->vbox), priv->action_area,
-                    FALSE, TRUE, 0);
-  gtk_widget_show (priv->action_area);
-
-  gtk_window_set_type_hint (GTK_WINDOW (dialog),
-			    GDK_WINDOW_TYPE_HINT_DIALOG);
-  gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_CENTER_ON_PARENT);
+  gtk_widget_init_template (GTK_WIDGET (dialog));
 
   update_spacings (dialog);
 }
@@ -410,26 +385,8 @@ static void
 gtk_dialog_buildable_interface_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
-  iface->get_internal_child = gtk_dialog_buildable_get_internal_child;
   iface->custom_tag_start = gtk_dialog_buildable_custom_tag_start;
   iface->custom_finished = gtk_dialog_buildable_custom_finished;
-}
-
-static GObject *
-gtk_dialog_buildable_get_internal_child (GtkBuildable *buildable,
-					 GtkBuilder   *builder,
-					 const gchar  *childname)
-{
-  GtkDialogPrivate *priv = GTK_DIALOG (buildable)->priv;
-
-  if (strcmp (childname, "vbox") == 0)
-    return G_OBJECT (priv->vbox);
-  else if (strcmp (childname, "action_area") == 0)
-    return G_OBJECT (priv->action_area);
-
-  return parent_buildable_iface->get_internal_child (buildable,
-                                                     builder,
-                                                     childname);
 }
 
 static gboolean

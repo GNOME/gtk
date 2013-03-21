@@ -78,6 +78,10 @@ builder_SOURCES			 = builder.c
 builder_LDADD			 = $(progs_ldadd)
 builder_LDFLAGS			 = -export-dynamic
 
+TEST_PROGS			+= templates
+templates_SOURCES		 = templates.c
+templates_LDADD			 = $(progs_ldadd)
+
 if OS_UNIX
 #TEST_PROGS			+= defaultvalue
 #defaultvalue_SOURCES		 = defaultvalue.c
