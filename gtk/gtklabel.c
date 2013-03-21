@@ -4597,6 +4597,8 @@ gtk_label_button_press (GtkWidget      *widget,
         {
           info->link_clicked = 1;
           gtk_widget_queue_draw (widget);
+          if (!info->selectable)
+            return TRUE;
         }
     }
 
