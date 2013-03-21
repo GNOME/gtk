@@ -65,6 +65,68 @@ G_DEFINE_TYPE (GdkWaylandCursor, _gdk_wayland_cursor, GDK_TYPE_CURSOR)
 
 static guint theme_serial = 0;
 
+struct cursor_cache_key
+{
+  GdkCursorType type;
+  const char *name;
+};
+
+static void
+add_to_cache (GdkWaylandDisplay *display, GdkWaylandCursor *cursor)
+{
+  display->cursor_cache = g_slist_prepend (display->cursor_cache, cursor);
+
+  g_object_ref (cursor);
+}
+
+static gint
+cache_compare_func (gconstpointer listelem,
+                    gconstpointer target)
+{
+  GdkWaylandCursor *cursor = (GdkWaylandCursor *) listelem;
+  struct cursor_cache_key* key = (struct cursor_cache_key *) target;
+
+  if (cursor->cursor.type != key->type)
+    return 1; /* No match */
+
+  /* Elements marked as pixmap must be named cursors
+   * (since we don't store normal pixmap cursors
+   */
+  if (key->type == GDK_CURSOR_IS_PIXMAP)
+    return strcmp (key->name, cursor->name);
+
+  return 0; /* Match */
+}
+
+static GdkWaylandCursor*
+find_in_cache (GdkWaylandDisplay *display,
+               GdkCursorType      type,
+               const char        *name)
+{
+  GSList* res;
+  struct cursor_cache_key key;
+
+  key.type = type;
+  key.name = name;
+
+  res = g_slist_find_custom (display->cursor_cache, &key, cache_compare_func);
+
+  if (res)
+    return (GdkWaylandCursor *) res->data;
+
+  return NULL;
+}
+
+/* Called by gdk_wayland_display_finalize to flush any cached cursors
+ * for a dead display.
+ */
+void
+_gdk_wayland_display_finalize_cursors (GdkWaylandDisplay *display)
+{
+  g_slist_foreach (display->cursor_cache, (GFunc) g_object_unref, NULL);
+  g_slist_free (display->cursor_cache);
+}
+
 static void
 gdk_wayland_cursor_finalize (GObject *object)
 {
@@ -281,6 +343,15 @@ _gdk_wayland_display_get_cursor_for_name (GdkDisplay  *display,
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
+  private = find_in_cache (wayland_display, GDK_CURSOR_IS_PIXMAP, name);
+  if (private)
+    {
+      /* Cache had it, add a ref for this user */
+      g_object_ref (private);
+
+      return (GdkCursor*) private;
+    }
+
   private = g_object_new (GDK_TYPE_WAYLAND_CURSOR,
                           "cursor-type", GDK_CURSOR_IS_PIXMAP,
                           "display", display,
@@ -318,6 +389,8 @@ _gdk_wayland_display_get_cursor_for_name (GdkDisplay  *display,
   private->height = cursor->images[0]->height;
 
   private->buffer = wl_cursor_image_get_buffer(cursor->images[0]);
+
+  add_to_cache (wayland_display, private);
 
   return GDK_CURSOR (private);
 }

@@ -204,6 +204,8 @@ gdk_wayland_display_finalize (GObject *object)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (object);
 
+  _gdk_wayland_display_finalize_cursors (display_wayland);
+
   /* Keymap */
   if (display_wayland->keymap)
     g_object_unref (display_wayland->keymap);
