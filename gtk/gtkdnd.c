@@ -185,7 +185,7 @@ typedef gboolean (* GtkDragDestCallback) (GtkWidget      *widget,
 /* Enumeration for some targets we handle internally */
 
 enum {
-  TARGET_DELETE
+  TARGET_DELETE = 0x40000002
 };
 
 /* Forward declarations */
