@@ -5137,6 +5137,22 @@ update_window_buttons (GtkWindow *window)
 }
 
 static void
+set_client_decorated (GtkWidget *widget,
+                      gboolean value)
+{
+  GtkStyleContext *context;
+  GtkWindowPrivate *priv = GTK_WINDOW (widget)->priv;
+
+  context = gtk_widget_get_style_context (widget);
+  priv->client_decorated = value;
+
+  if (value)
+    gtk_style_context_add_class (context, "client-decorated");
+  else
+    gtk_style_context_remove_class (context, "client-decorated");
+}
+
+static void
 create_decoration (GtkWidget *widget)
 {
   GtkWindow *window = GTK_WINDOW (widget);
@@ -5156,7 +5172,7 @@ create_decoration (GtkWidget *widget)
 
 #ifdef GDK_WINDOWING_WAYLAND
   if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
-    priv->client_decorated = TRUE;
+    set_client_decorated (widget, TRUE);
 #endif
 
   if (!priv->client_decorated &&
@@ -5169,7 +5185,7 @@ create_decoration (GtkWidget *widget)
       if (visual)
         {
           gtk_widget_set_visual (widget, visual);
-          priv->client_decorated = TRUE;
+          set_client_decorated (widget, TRUE);
         }
     }
 
