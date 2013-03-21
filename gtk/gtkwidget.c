@@ -6383,6 +6383,26 @@ _gtk_widget_draw_internal (GtkWidget *widget,
                      0, cr,
                      &result);
 
+#ifdef G_ENABLE_DEBUG
+      if (G_UNLIKELY (gtk_get_debug_flags () & GTK_DEBUG_BASELINES))
+	{
+	  gint baseline = gtk_widget_get_allocated_baseline (widget);
+	  gint width = gtk_widget_get_allocated_width (widget);
+
+	  if (baseline != -1)
+	    {
+	      cairo_save (cr);
+	      cairo_new_path (cr);
+	      cairo_move_to (cr, 0, baseline+0.5);
+	      cairo_line_to (cr, width, baseline+0.5);
+	      cairo_set_line_width (cr, 1.0);
+	      cairo_set_source_rgba (cr, 1.0, 0, 0, 0.25);
+	      cairo_stroke (cr);
+	      cairo_restore (cr);
+	    }
+	}
+#endif
+
       if (cairo_status (cr) &&
           _gtk_cairo_get_event (cr))
         {
