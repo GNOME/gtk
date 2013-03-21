@@ -483,6 +483,10 @@ swatch_button_press (GtkWidget      *widget,
       g_signal_emit (swatch, signals[ACTIVATE], 0);
       return TRUE;
     }
+  else if (event->button == GDK_BUTTON_PRIMARY)
+    {
+      return TRUE;
+    }
 
   return FALSE;
 }
