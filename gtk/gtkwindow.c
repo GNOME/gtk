@@ -6933,17 +6933,13 @@ gtk_window_button_press_event (GtkWidget      *widget,
                 case GTK_WINDOW_REGION_TITLE:
                 case GTK_WINDOW_REGION_CONTENT:
                 case GTK_WINDOW_REGION_EDGE:
-                  if (!maximized)
-                    {
-                      gdk_window_begin_move_drag_for_device (gdk_window,
-                                                             gdk_event_get_device ((GdkEvent *) event),
-                                                             event->button,
-                                                             event->x_root,
-                                                             event->y_root,
-                                                             event->time);
-                      return TRUE;
-                    }
-                  break;
+                   gdk_window_begin_move_drag_for_device (gdk_window,
+                                                          gdk_event_get_device ((GdkEvent *) event),
+                                                          event->button,
+                                                          event->x_root,
+                                                          event->y_root,
+                                                          event->time);
+                  return TRUE;
 
                 default:
                   if (!maximized)
