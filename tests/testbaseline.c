@@ -22,7 +22,7 @@ int
 main (int    argc,
       char **argv)
 {
-  GtkWidget *window, *label, *entry, *button;
+  GtkWidget *window, *label, *entry, *button, *grid;
   GtkWidget *vbox, *hbox;
   PangoFontDescription *font;
   int i, j;
@@ -114,6 +114,66 @@ main (int    argc,
 	  gtk_container_add (GTK_CONTAINER (hbox), button);
 	}
     }
+
+  grid = gtk_grid_new ();
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 8);
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 8);
+
+  for (j = 0; j < 3; j++)
+    {
+      if (j != 1)
+	label = gtk_label_new ("Baseline:");
+      else
+	label = gtk_label_new ("Normal:");
+
+      gtk_grid_attach (GTK_GRID (grid),
+		       label,
+		       0, j,
+		       1, 1);
+
+      gtk_widget_set_vexpand (label, TRUE);
+
+      for (i = 0; i < 3; i++)
+	{
+	  label = gtk_label_new ("Xyjg,Ö.");
+
+	  font = pango_font_description_new ();
+	  pango_font_description_set_size (font, 7*(i+1)* 1024);
+	  gtk_widget_override_font (label, font);
+
+	  if (j != 1)
+	    gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+
+	  gtk_grid_attach (GTK_GRID (grid),
+			   label,
+			   i+1, j,
+			   1, 1);
+	}
+
+      for (i = 0; i < 3; i++)
+	{
+	  button = gtk_button_new_with_label ("│Xyj,Ö");
+
+	  gtk_button_set_image (GTK_BUTTON (button),
+				gtk_image_new_from_icon_name ("face-sad", GTK_ICON_SIZE_BUTTON));
+	  gtk_button_set_always_show_image (GTK_BUTTON (button), TRUE);
+
+	  font = pango_font_description_new ();
+	  pango_font_description_set_size (font, 7*(i+1)* 1024);
+	  gtk_widget_override_font (button, font);
+
+	  if (j != 1)
+	    gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
+
+	  gtk_grid_attach (GTK_GRID (grid),
+			   button,
+			   i+4, j,
+			   1, 1);
+	}
+
+    }
+
+  gtk_container_add (GTK_CONTAINER (vbox), grid);
 
   gtk_widget_show_all (window);
 
