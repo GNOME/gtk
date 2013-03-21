@@ -55,7 +55,7 @@ struct _GdkWaylandDeviceData
 
   GdkDevice *pointer;
   GdkDevice *keyboard;
-
+  GdkCursor *cursor;
   GdkKeymap *keymap;
 
   GdkModifierType modifiers;
@@ -155,27 +155,30 @@ gdk_wayland_device_set_window_cursor (GdkDevice *device,
   struct wl_buffer *buffer;
   int x, y, w, h;
 
-  if (cursor)
-    g_object_ref (cursor);
-
   /* Setting the cursor to NULL means that we should use the default cursor */
   if (!cursor)
     {
       /* FIXME: Is this the best sensible default ? */
       cursor = _gdk_wayland_display_get_cursor_for_type (device->display,
-                                                         GDK_LEFT_PTR);
+                                                             GDK_LEFT_PTR);
     }
 
-  buffer = _gdk_wayland_cursor_get_buffer (cursor, &x, &y, &w, &h);
+  if (cursor == wd->cursor)
+    return;
+
+  if (wd->cursor)
+    g_object_unref (wd->cursor);
+
+  wd->cursor = g_object_ref (cursor);
+
+  buffer = _gdk_wayland_cursor_get_buffer (wd->cursor, &x, &y, &w, &h);
   wl_pointer_set_cursor (wd->wl_pointer,
                          wd->enter_serial,
                          wd->pointer_surface,
                          x, y);
   wl_surface_attach (wd->pointer_surface, buffer, 0, 0);
   wl_surface_damage (wd->pointer_surface,  0, 0, w, h);
-  wl_surface_commit(wd->pointer_surface);
-
-  g_object_unref (cursor);
+  wl_surface_commit (wd->pointer_surface);
 }
 
 static void
