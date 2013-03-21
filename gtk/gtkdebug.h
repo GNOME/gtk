@@ -47,7 +47,8 @@ typedef enum {
   GTK_DEBUG_PRINTING        = 1 << 10,
   GTK_DEBUG_BUILDER         = 1 << 11,
   GTK_DEBUG_SIZE_REQUEST    = 1 << 12,
-  GTK_DEBUG_NO_CSS_CACHE    = 1 << 13
+  GTK_DEBUG_NO_CSS_CACHE    = 1 << 13,
+  GTK_DEBUG_BASELINES       = 1 << 14
 } GtkDebugFlag;
 
 #ifdef G_ENABLE_DEBUG
