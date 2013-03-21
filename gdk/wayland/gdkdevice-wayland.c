@@ -76,6 +76,7 @@ struct _GdkWaylandDeviceData
   GdkWaylandSelectionOffer *selection_offer_out;
 
   struct wl_surface *pointer_surface;
+  int hotspot_x, hotspot_y;
 };
 
 struct _GdkWaylandDevice
@@ -172,9 +173,12 @@ gdk_wayland_device_set_window_cursor (GdkDevice *device,
                          _gdk_wayland_display_get_serial (wayland_display),
                          wd->pointer_surface,
                          x, y);
-  wl_surface_attach (wd->pointer_surface, buffer, 0, 0);
+  wl_surface_attach (wd->pointer_surface, buffer, wd->hotspot_x - x, wd->hotspot_y - y);
   wl_surface_damage (wd->pointer_surface,  0, 0, w, h);
   wl_surface_commit(wd->pointer_surface);
+
+  wd->hotspot_x = x;
+  wd->hotspot_y = y;
 
   g_object_unref (cursor);
 }
