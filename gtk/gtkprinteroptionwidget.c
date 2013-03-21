@@ -152,6 +152,8 @@ gtk_printer_option_widget_finalize (GObject *object)
   
   if (priv->source)
     {
+      g_signal_handler_disconnect (priv->source,
+				   priv->source_changed_handler);
       g_object_unref (priv->source);
       priv->source = NULL;
     }
