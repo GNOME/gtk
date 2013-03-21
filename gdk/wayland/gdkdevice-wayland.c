@@ -622,6 +622,12 @@ pointer_handle_leave (void              *data,
                        device, device->pointer_focus));
 
   g_object_unref(device->pointer_focus);
+  if (device->cursor)
+    {
+      g_object_unref (device->cursor);
+      device->cursor = NULL;
+    }
+
   device->pointer_focus = NULL;
 }
 
