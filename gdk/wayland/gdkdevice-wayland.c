@@ -64,6 +64,7 @@ struct _GdkWaylandDeviceData
   struct wl_data_device *data_device;
   double surface_x, surface_y;
   uint32_t time;
+  uint32_t enter_serial;
   GdkWindow *pointer_grab_window;
   uint32_t pointer_grab_time;
   guint32 repeat_timer;
@@ -76,7 +77,6 @@ struct _GdkWaylandDeviceData
   GdkWaylandSelectionOffer *selection_offer_out;
 
   struct wl_surface *pointer_surface;
-  int hotspot_x, hotspot_y;
 };
 
 struct _GdkWaylandDevice
@@ -152,8 +152,6 @@ gdk_wayland_device_set_window_cursor (GdkDevice *device,
                                       GdkCursor *cursor)
 {
   GdkWaylandDeviceData *wd = GDK_WAYLAND_DEVICE(device)->device;
-  GdkWaylandDisplay *wayland_display =
-    GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   struct wl_buffer *buffer;
   int x, y, w, h;
 
@@ -170,15 +168,12 @@ gdk_wayland_device_set_window_cursor (GdkDevice *device,
 
   buffer = _gdk_wayland_cursor_get_buffer (cursor, &x, &y, &w, &h);
   wl_pointer_set_cursor (wd->wl_pointer,
-                         _gdk_wayland_display_get_serial (wayland_display),
+                         wd->enter_serial,
                          wd->pointer_surface,
                          x, y);
-  wl_surface_attach (wd->pointer_surface, buffer, wd->hotspot_x - x, wd->hotspot_y - y);
+  wl_surface_attach (wd->pointer_surface, buffer, 0, 0);
   wl_surface_damage (wd->pointer_surface,  0, 0, w, h);
   wl_surface_commit(wd->pointer_surface);
-
-  wd->hotspot_x = x;
-  wd->hotspot_y = y;
 
   g_object_unref (cursor);
 }
@@ -579,6 +574,7 @@ pointer_handle_enter (void              *data,
 
   device->surface_x = wl_fixed_to_double (sx);
   device->surface_y = wl_fixed_to_double (sy);
+  device->enter_serial = serial;
 
   _gdk_wayland_display_deliver_event (device->display, event);
 
