@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922___.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-17 23:21+0100\n"
+"POT-Creation-Date: 2013-03-21 19:18+0100\n"
 "PO-Revision-Date: 2013-03-17 23:22+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
@@ -751,7 +751,7 @@ msgstr ""
 #. * since we want to save the color first
 #.
 #: ../gtk/deprecated/gtkcolorseldialog.c:201 ../gtk/gtkappchooserdialog.c:509
-#: ../gtk/gtkcolorchooserdialog.c:150 ../gtk/gtkfontchooserdialog.c:174
+#: ../gtk/gtkcolorchooserdialog.c:149 ../gtk/gtkfontchooserdialog.c:174
 #: ../gtk/gtkprinteroptionwidget.c:550
 msgid "_Select"
 msgstr "_Seleccionar"
@@ -1161,7 +1161,7 @@ msgstr "%d %%"
 msgid "Pick a Color"
 msgstr "Escolla unha cor"
 
-#: ../gtk/gtkcolorchooserdialog.c:164
+#: ../gtk/gtkcolorchooserdialog.c:162
 msgid "Select a Color"
 msgstr "Seleccionar unha cor"
 
@@ -3518,19 +3518,19 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:7703
+#: ../gtk/gtkwindow.c:7789
 msgid "Minimize"
 msgstr "Minimizar"
 
-#: ../gtk/gtkwindow.c:7712
+#: ../gtk/gtkwindow.c:7798
 msgid "Unmaximize"
 msgstr "Restaurar"
 
-#: ../gtk/gtkwindow.c:7712
+#: ../gtk/gtkwindow.c:7798
 msgid "Maximize"
 msgstr "Maximizar"
 
-#: ../gtk/gtkwindow.c:7726
+#: ../gtk/gtkwindow.c:7812
 msgid "Close"
 msgstr "Pechar"
 
