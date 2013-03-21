@@ -6930,8 +6930,10 @@ gtk_window_button_press_event (GtkWidget      *widget,
             {
               switch (region)
                 {
-                case GTK_WINDOW_REGION_TITLE:
                 case GTK_WINDOW_REGION_CONTENT:
+                  /* do nothing */
+                  break;
+                case GTK_WINDOW_REGION_TITLE:
                 case GTK_WINDOW_REGION_EDGE:
                    gdk_window_begin_move_drag_for_device (gdk_window,
                                                           gdk_event_get_device ((GdkEvent *) event),
