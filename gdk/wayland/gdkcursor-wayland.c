@@ -133,6 +133,8 @@ gdk_wayland_cursor_finalize (GObject *object)
   GdkWaylandCursor *cursor = GDK_WAYLAND_CURSOR (object);
 
   g_free (cursor->name);
+  if (cursor->cursor.type == GDK_CURSOR_IS_PIXMAP)
+    wl_buffer_destroy (cursor->buffer);
 
   G_OBJECT_CLASS (_gdk_wayland_cursor_parent_class)->finalize (object);
 }
@@ -177,29 +179,27 @@ _gdk_wayland_cursor_init (GdkWaylandCursor *cursor)
 {
 }
 
-/* Use to implement from_pixbuf below */
-#if 0
+/* Used to implement from_pixbuf below */
 static void
-set_pixbuf (GdkWaylandCursor *cursor, GdkPixbuf *pixbuf)
+set_pixbuf (gpointer argb_pixels, int width, int height, GdkPixbuf *pixbuf)
 {
   int stride, i, n_channels;
-  unsigned char *pixels, *end, *argb_pixels, *s, *d;
+  unsigned char *pixels, *end, *s, *d;
 
   stride = gdk_pixbuf_get_rowstride(pixbuf);
   pixels = gdk_pixbuf_get_pixels(pixbuf);
   n_channels = gdk_pixbuf_get_n_channels(pixbuf);
-  argb_pixels = cursor->map;
 
 #define MULT(_d,c,a,t) \
 	do { t = c * a + 0x7f; _d = ((t >> 8) + t) >> 8; } while (0)
 
   if (n_channels == 4)
     {
-      for (i = 0; i < cursor->height; i++)
+      for (i = 0; i < height; i++)
 	{
 	  s = pixels + i * stride;
-	  end = s + cursor->width * 4;
-	  d = argb_pixels + i * cursor->width * 4;
+          end = s + width * 4;
+          d = argb_pixels + i * width * 4;
 	  while (s < end)
 	    {
 	      unsigned int t;
@@ -215,11 +215,11 @@ set_pixbuf (GdkWaylandCursor *cursor, GdkPixbuf *pixbuf)
     }
   else if (n_channels == 3)
     {
-      for (i = 0; i < cursor->height; i++)
+      for (i = 0; i < height; i++)
 	{
 	  s = pixels + i * stride;
-	  end = s + cursor->width * 3;
-	  d = argb_pixels + i * cursor->width * 4;
+          end = s + width * 3;
+          d = argb_pixels + i * width * 4;
 	  while (s < end)
 	    {
 	      d[0] = s[2];
@@ -232,84 +232,6 @@ set_pixbuf (GdkWaylandCursor *cursor, GdkPixbuf *pixbuf)
 	}
     }
 }
-
-static GdkCursor *
-create_cursor(GdkWaylandDisplay *display, GdkPixbuf *pixbuf, int x, int y)
-{
-  GdkWaylandCursor *cursor;
-  int stride, fd;
-  char *filename;
-  GError *error = NULL;
-  struct wl_shm_pool *pool;
-
-  cursor = g_object_new (GDK_TYPE_WAYLAND_CURSOR,
-			 "cursor-type", GDK_CURSOR_IS_PIXMAP,
-			 "display", display,
-			 NULL);
-  cursor->name = NULL;
-  cursor->serial = theme_serial;
-  cursor->x = x;
-  cursor->y = y;
-  if (pixbuf)
-    {
-      cursor->width = gdk_pixbuf_get_width (pixbuf);
-      cursor->height = gdk_pixbuf_get_height (pixbuf);
-    }
-  else
-    {
-      cursor->width = 1;
-      cursor->height = 1;
-    }
-
-  stride = cursor->width * 4;
-  cursor->size = stride * cursor->height;
-
-  fd = g_file_open_tmp("wayland-shm-XXXXXX", &filename, &error);
-  if (fd < 0)
-    {
-      g_critical (G_STRLOC ": Error opening temporary file for buffer: %s",
-                  error->message);
-      g_error_free (error);
-      return NULL;
-  }
-
-  unlink (filename);
-  g_free (filename);
-
-  if (ftruncate(fd, cursor->size) < 0)
-    {
-      g_critical (G_STRLOC ": Error truncating file for buffer: %s",
-                  g_strerror (errno));
-      close(fd);
-      return NULL;
-    }
-
-  cursor->map = mmap(NULL, cursor->size,
-                     PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-  if (cursor->map == MAP_FAILED)
-    {
-      g_critical (G_STRLOC ": Error mmap'ing file for buffer: %s",
-                  g_strerror (errno));
-      close(fd);
-      return NULL;
-    }
-
-  if (pixbuf)
-    set_pixbuf (cursor, pixbuf);
-  else
-    memset (cursor->map, 0, 4);
-
-  cursor->buffer = wl_shm_create_buffer(display->shm,
-					fd,
-					cursor->width,
-					cursor->height,
-					stride, WL_SHM_FORMAT_ARGB8888);
-
-  close(fd);
-
- return GDK_CURSOR (cursor);
-}
-#endif
 
 GdkCursor *
 _gdk_wayland_display_get_cursor_for_type (GdkDisplay    *display,
@@ -395,29 +317,65 @@ _gdk_wayland_display_get_cursor_for_name (GdkDisplay  *display,
   return GDK_CURSOR (private);
 }
 
-/* TODO: Needs implementing */
 GdkCursor *
 _gdk_wayland_display_get_cursor_for_pixbuf (GdkDisplay *display,
 					    GdkPixbuf  *pixbuf,
 					    gint        x,
 					    gint        y)
 {
-  GdkWaylandCursor *private;
+  GdkWaylandCursor *cursor;
+  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (display);
+  int stride;
+  size_t size;
+  gpointer data;
+  struct wl_shm_pool *pool;
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
   g_return_val_if_fail (0 <= x && x < gdk_pixbuf_get_width (pixbuf), NULL);
   g_return_val_if_fail (0 <= y && y < gdk_pixbuf_get_height (pixbuf), NULL);
 
-  private = g_object_new (GDK_TYPE_WAYLAND_CURSOR,
-                          "cursor-type", GDK_CURSOR_IS_PIXMAP,
-                          "display", display,
-                          NULL);
+  cursor = g_object_new (GDK_TYPE_WAYLAND_CURSOR,
+			 "cursor-type", GDK_CURSOR_IS_PIXMAP,
+			 "display", wayland_display,
+			 NULL);
+  cursor->name = NULL;
+  cursor->serial = theme_serial;
+  cursor->hotspot_x = x;
+  cursor->hotspot_y = y;
 
-  private->name = NULL;
-  private->serial = theme_serial;
+  if (pixbuf)
+    {
+      cursor->width = gdk_pixbuf_get_width (pixbuf);
+      cursor->height = gdk_pixbuf_get_height (pixbuf);
+    }
+  else
+    {
+      cursor->width = 1;
+      cursor->height = 1;
+    }
 
-  return GDK_CURSOR (private);
+  pool = _create_shm_pool (wayland_display->shm,
+                           cursor->width,
+                           cursor->height,
+                           &size,
+                           &data);
+
+  if (pixbuf)
+    set_pixbuf (data, cursor->width, cursor->height, pixbuf);
+  else
+    memset (data, 0, 4);
+
+  stride = cursor->width * 4;
+  cursor->buffer = wl_shm_pool_create_buffer (pool, 0,
+					cursor->width,
+					cursor->height,
+					stride,
+					WL_SHM_FORMAT_ARGB8888);
+
+  wl_shm_pool_destroy (pool);
+
+  return GDK_CURSOR (cursor);
 }
 
 void

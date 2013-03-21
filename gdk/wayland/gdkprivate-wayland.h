@@ -164,4 +164,10 @@ void _gdk_wayland_window_set_device_grabbed (GdkWindow      *window,
 guint32 _gdk_wayland_display_get_serial (GdkWaylandDisplay *wayland_display);
 void _gdk_wayland_display_update_serial (GdkWaylandDisplay *wayland_display, guint32 serial);
 
+struct wl_shm_pool * _create_shm_pool (struct wl_shm *shm,
+                                      int             width,
+                                      int             height,
+                                      size_t         *buf_length,
+                                      void          **data_out);
+
 #endif /* __GDK_PRIVATE_WAYLAND_H__ */

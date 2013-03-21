@@ -387,7 +387,7 @@ gdk_wayland_cairo_surface_destroy (void *p)
 }
 
 
-static struct wl_shm_pool *
+struct wl_shm_pool *
 _create_shm_pool (struct wl_shm  *shm,
                   int             width,
                   int             height,
