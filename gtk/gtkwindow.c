@@ -8956,7 +8956,7 @@ gtk_window_draw (GtkWidget *widget,
       gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
     {
       gtk_style_context_save (context);
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_BACKGROUND);
+      gtk_style_context_add_class (context, "window-content");
 
       if (priv->client_decorated &&
           priv->decorated &&
