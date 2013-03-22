@@ -70,6 +70,7 @@ struct _GdkWaylandDeviceData
   guint32 repeat_timer;
   guint32 repeat_key;
   guint32 repeat_count;
+  GSettings *keyboard_settings;
 
   DataOffer *drag_offer;
   DataOffer *selection_offer;
@@ -938,10 +939,22 @@ get_key_repeat (GdkWaylandDeviceData *device,
                 guint                *delay,
                 guint                *interval)
 {
-  *delay = 400;
-  *interval = 80;
+  gboolean repeat;
 
-  return TRUE;
+  if (device->keyboard_settings)
+    {
+      repeat = g_settings_get_boolean (device->keyboard_settings, "repeat");
+      *delay = g_settings_get_uint (device->keyboard_settings, "delay");
+      *interval = g_settings_get_uint (device->keyboard_settings, "repeat-interval");
+    }
+  else
+    {
+      repeat = TRUE;
+      *delay = 400;
+      *interval = 80;
+    }
+
+  return repeat;
 }
 
 static gboolean
@@ -1165,6 +1178,21 @@ static const struct wl_seat_listener seat_listener = {
     seat_handle_capabilities,
 };
 
+static void
+init_settings (GdkWaylandDeviceData *device)
+{
+  GSettingsSchemaSource *source;
+  GSettingsSchema *schema;
+
+  source = g_settings_schema_source_get_default ();
+  schema = g_settings_schema_source_lookup (source, "org.gnome.settings-daemon.peripherals.keyboard", FALSE);
+  if (schema != NULL)
+    {
+      device->keyboard_settings = g_settings_new_full (schema, NULL, NULL);
+      g_settings_schema_unref (schema);
+    }
+}
+
 void
 _gdk_wayland_device_manager_add_device (GdkDeviceManager *device_manager,
 					struct wl_seat *wl_seat)
@@ -1194,6 +1222,8 @@ _gdk_wayland_device_manager_add_device (GdkDeviceManager *device_manager,
 
   device->pointer_surface =
     wl_compositor_create_surface (display_wayland->compositor);
+
+  init_settings (device);
 }
 
 static void
