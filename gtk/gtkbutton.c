@@ -1651,6 +1651,10 @@ gtk_button_size_allocate (GtkWidget     *widget,
 	  child_allocation.height = child_allocation.height - (focus_width + focus_pad) * 2;
 	}
 
+      baseline = gtk_widget_get_allocated_baseline (widget);
+      if (baseline != -1)
+	baseline -= child_allocation.y - allocation->y;
+
       if (priv->depressed)
 	{
 	  gint child_displacement_x;
@@ -1667,9 +1671,6 @@ gtk_button_size_allocate (GtkWidget     *widget,
       child_allocation.width  = MAX (1, child_allocation.width);
       child_allocation.height = MAX (1, child_allocation.height);
 
-      baseline = gtk_widget_get_allocated_baseline (widget);
-      if (baseline != -1)
-	baseline -= child_allocation.y - allocation->y;
       gtk_widget_size_allocate_with_baseline (child, &child_allocation, baseline);
     }
 }
