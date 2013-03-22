@@ -934,6 +934,17 @@ translate_keyboard_string (GdkEventKey *event)
 }
 
 static gboolean
+get_key_repeat (GdkWaylandDeviceData *device,
+                guint                *delay,
+                guint                *interval)
+{
+  *delay = 400;
+  *interval = 80;
+
+  return TRUE;
+}
+
+static gboolean
 deliver_key_event(GdkWaylandDeviceData *device,
                   uint32_t time, uint32_t key, uint32_t state)
 {
@@ -941,6 +952,7 @@ deliver_key_event(GdkWaylandDeviceData *device,
   struct xkb_state *xkb_state;
   GdkKeymap *keymap;
   xkb_keysym_t sym;
+  guint delay, interval;
 
   keymap = device->keymap;
   xkb_state = _gdk_wayland_keymap_get_xkb_state (keymap);
@@ -971,6 +983,9 @@ deliver_key_event(GdkWaylandDeviceData *device,
                        event->key.hardware_keycode, event->key.keyval,
                        event->key.string, event->key.state));
 
+  if (!get_key_repeat (device, &delay, &interval))
+    return FALSE;
+
   device->repeat_count++;
   device->repeat_key = key;
 
@@ -993,11 +1008,11 @@ deliver_key_event(GdkWaylandDeviceData *device,
         }
 
       device->repeat_timer =
-        gdk_threads_add_timeout (400, keyboard_repeat, device);
+        gdk_threads_add_timeout (delay, keyboard_repeat, device);
       return TRUE;
     case 2:
       device->repeat_timer =
-        gdk_threads_add_timeout (80, keyboard_repeat, device);
+        gdk_threads_add_timeout (interval, keyboard_repeat, device);
       return FALSE;
     default:
       return TRUE;
