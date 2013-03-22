@@ -54,6 +54,7 @@ struct _GdkWaylandCursor
   int hotspot_x, hotspot_y;
   int width, height;
   struct wl_buffer *buffer;
+  gboolean free_buffer;
 };
 
 struct _GdkWaylandCursorClass
@@ -133,7 +134,7 @@ gdk_wayland_cursor_finalize (GObject *object)
   GdkWaylandCursor *cursor = GDK_WAYLAND_CURSOR (object);
 
   g_free (cursor->name);
-  if (cursor->cursor.type == GDK_CURSOR_IS_PIXMAP)
+  if (cursor->free_buffer)
     wl_buffer_destroy (cursor->buffer);
 
   G_OBJECT_CLASS (_gdk_wayland_cursor_parent_class)->finalize (object);
@@ -311,6 +312,7 @@ _gdk_wayland_display_get_cursor_for_name (GdkDisplay  *display,
   private->height = cursor->images[0]->height;
 
   private->buffer = wl_cursor_image_get_buffer(cursor->images[0]);
+  private->free_buffer = FALSE;
 
   add_to_cache (wayland_display, private);
 
@@ -372,6 +374,7 @@ _gdk_wayland_display_get_cursor_for_pixbuf (GdkDisplay *display,
 					cursor->height,
 					stride,
 					WL_SHM_FORMAT_ARGB8888);
+  cursor->free_buffer = FALSE;
 
   wl_shm_pool_destroy (pool);
 
