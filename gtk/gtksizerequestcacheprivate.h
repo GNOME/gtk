@@ -41,21 +41,35 @@ G_BEGIN_DECLS
 typedef struct {
   gint minimum_size;
   gint natural_size;
+} CachedSizeX;
+
+typedef struct {
+  gint minimum_size;
+  gint natural_size;
   gint minimum_baseline;
   gint natural_baseline;
-} CachedSize;
+} CachedSizeY;
 
 typedef struct
 {
   gint       lower_for_size; /* The minimum for_size with the same result */
   gint       upper_for_size; /* The maximum for_size with the same result */
-  CachedSize cached_size;
-} SizeRequest;
+  CachedSizeX cached_size;
+} SizeRequestX;
+
+typedef struct
+{
+  gint       lower_for_size; /* The minimum for_size with the same result */
+  gint       upper_for_size; /* The maximum for_size with the same result */
+  CachedSizeY cached_size;
+} SizeRequestY;
 
 typedef struct {
-  SizeRequest **requests[2];
+  SizeRequestX **requests_x;
+  SizeRequestY **requests_y;
 
-  CachedSize  cached_size[2];
+  CachedSizeX  cached_size_x;
+  CachedSizeY  cached_size_y;
 
   GtkSizeRequestMode request_mode   : 3;
   guint       request_mode_valid    : 1;
