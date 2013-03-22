@@ -293,6 +293,7 @@ static TranslationEntry translations[] = {
   { "org.gnome.desktop.interface", "gtk-theme", "gtk-theme-name" , G_TYPE_STRING, "Adwaita", 0 },
   { "org.gnome.desktop.interface", "icon-theme", "gtk-icon-theme-name", G_TYPE_STRING, "gnome", 0 },
   { "org.gnome.desktop.interface", "cursor-theme", "gtk-cursor-theme-name", G_TYPE_STRING, "Adwaita", 0 },
+  { "org.gnome.desktop.interface", "cursor-size", "gtk-cursor-theme-size", G_TYPE_INT, NULL, 32 },
   { "org.gnome.desktop.interface", "font-name", "gtk-font-name", G_TYPE_STRING, "Cantarell 11", 0 },
   { "org.gnome.desktop.interface", "cursor-blink", "gtk-cursor-blink", G_TYPE_BOOLEAN, NULL, 1 },
   { "org.gnome.desktop.interface", "cursor-blink-time", "gtk-cursor-blink-time", G_TYPE_INT, NULL, 1200 },
