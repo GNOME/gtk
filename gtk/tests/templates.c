@@ -56,6 +56,16 @@ test_message_dialog_basic (void)
 }
 
 static void
+test_about_dialog_basic (void)
+{
+  GtkWidget *dialog;
+
+  dialog = gtk_about_dialog_new ();
+  g_assert (GTK_IS_ABOUT_DIALOG (dialog));
+  gtk_widget_destroy (dialog);
+}
+
+static void
 test_info_bar_basic (void)
 {
   GtkWidget *infobar;
@@ -80,6 +90,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Template/GtkDialog/Basic", test_dialog_basic);
   g_test_add_func ("/Template/GtkDialog/OverrideProperty", test_dialog_override_property);
   g_test_add_func ("/Template/GtkMessageDialog/Basic", test_message_dialog_basic);
+  g_test_add_func ("/Template/GtkAboutDialog/Basic", test_about_dialog_basic);
   g_test_add_func ("/Template/GtkInfoBar/Basic", test_info_bar_basic);
 
   return g_test_run();

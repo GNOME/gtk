@@ -1095,10 +1095,11 @@ DND_CURSORS = \
 	cursor_dnd_move.png				\
 	cursor_dnd_none.png
 
-COMPOSITE_TEMPLATES =		\
-	gtkdialog.ui		\
-	gtkmessagedialog.ui	\
-	gtkinfobar.ui
+COMPOSITE_TEMPLATES =			\
+	gtkaboutdialog.ui		\
+	gtkdialog.ui			\
+	gtkinfobar.ui			\
+	gtkmessagedialog.ui
 
 #
 # rules to generate built sources
