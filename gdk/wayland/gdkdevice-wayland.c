@@ -1075,6 +1075,8 @@ keyboard_handle_modifiers (void               *data,
   device->modifiers = mods_depressed | mods_latched | mods_locked;
 
   xkb_state_update_mask (xkb_state, mods_depressed, mods_latched, mods_locked, group, 0, 0);
+
+  g_signal_emit_by_name (keymap, "state-changed");
 }
 
 static const struct wl_pointer_listener pointer_listener = {
