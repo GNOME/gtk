@@ -97,6 +97,10 @@ main (int    argc,
 	gtk_container_add (GTK_CONTAINER (hbox), entry);
       }
 
+      spin = gtk_spin_button_new (NULL, 0, 1);
+      gtk_orientable_set_orientation (GTK_ORIENTABLE (spin), GTK_ORIENTATION_VERTICAL);
+      gtk_widget_set_valign (spin, aligns[j]);
+      gtk_container_add (GTK_CONTAINER (hbox), spin);
     }
 
   for (j = 0; j < 2; j++)
