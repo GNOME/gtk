@@ -34,7 +34,7 @@ G_GNUC_INTERNAL
 GType                   gtk_model_menu_item_get_type                    (void) G_GNUC_CONST;
 
 G_GNUC_INTERNAL
-GtkMenuItem *           gtk_model_menu_item_new                         (GMenuModel        *model,
+GtkWidget *             gtk_model_menu_item_new                         (GMenuModel        *model,
                                                                          gint               item_index,
                                                                          const gchar       *action_namespace);
 

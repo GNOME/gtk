@@ -275,7 +275,7 @@ gtk_model_menu_item_class_init (GtkModelMenuItemClass *class)
                                                       0, 2, 0, G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 }
 
-GtkMenuItem *
+GtkWidget *
 gtk_model_menu_item_new (GMenuModel        *model,
                          gint               item_index,
                          const gchar       *action_namespace)
@@ -286,5 +286,5 @@ gtk_model_menu_item_new (GMenuModel        *model,
 
   gtk_model_menu_item_setup (item, model, item_index, action_namespace);
 
-  return GTK_MENU_ITEM (item);
+  return GTK_WIDGET (item);
 }

@@ -51,6 +51,7 @@
 #include "gtkmain.h"
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
+#include "gtkmodelmenuitem.h"
 
 #include "deprecated/gtktearoffmenuitem.h"
 
@@ -529,7 +530,10 @@ gtk_menu_shell_finalize (GObject *object)
 static void
 gtk_menu_shell_dispose (GObject *object)
 {
-  gtk_menu_shell_deactivate (GTK_MENU_SHELL (object));
+  GtkMenuShell *menu_shell = GTK_MENU_SHELL (object);
+
+  g_clear_pointer (&menu_shell->priv->tracker, gtk_menu_tracker_free);
+  gtk_menu_shell_deactivate (menu_shell);
 
   G_OBJECT_CLASS (gtk_menu_shell_parent_class)->dispose (object);
 }
@@ -2021,4 +2025,105 @@ gtk_menu_shell_get_parent_shell (GtkMenuShell *menu_shell)
   g_return_val_if_fail (GTK_IS_MENU_SHELL (menu_shell), NULL);
 
   return menu_shell->priv->parent_menu_shell;
+}
+
+static void
+gtk_menu_shell_tracker_insert_func (gint         position,
+                                    GMenuModel  *model,
+                                    gint         item_index,
+                                    const gchar *action_namespace,
+                                    gboolean     is_separator,
+                                    gpointer     user_data)
+{
+  GtkMenuShell *menu_shell = user_data;
+  GtkWidget *item;
+
+  if (is_separator)
+    {
+      gchar *label;
+
+      item = gtk_separator_menu_item_new ();
+
+      if (g_menu_model_get_item_attribute (model, item_index, G_MENU_ATTRIBUTE_LABEL, "s", &label))
+        {
+          gtk_menu_item_set_label (GTK_MENU_ITEM (item), label);
+          g_free (label);
+        }
+    }
+  else
+    item = gtk_model_menu_item_new (model, item_index, action_namespace);
+
+  gtk_menu_shell_insert (menu_shell, item, position);
+  gtk_widget_show (item);
+}
+
+static void
+gtk_menu_shell_tracker_remove_func (gint     position,
+                                    gpointer user_data)
+{
+  GtkMenuShell *menu_shell = user_data;
+  GtkWidget *child;
+
+  child = g_list_nth_data (menu_shell->priv->children, position);
+  /* We use destroy here because in the case of an item with a submenu,
+   * the attached-to from the submenu holds a ref on the item and a
+   * simple gtk_container_remove() isn't good enough to break that.
+   */
+  gtk_widget_destroy (child);
+}
+
+/**
+ * gtk_menu_shell_bind_model:
+ * @menu_shell: a #GtkMenuShell
+ * @model: (allow-none): the #GMenuModel to bind to or %NULL to remove
+ *   binding
+ * @action_namespace: (allow-none): the namespace for actions in @model
+ * @with_separators: %TRUE if toplevel items in @shell should have
+ *   separators between them
+ *
+ * Establishes a binding between a #GtkMenuShell and a #GMenuModel.
+ *
+ * The contents of @shell are removed and then refilled with menu items
+ * according to @model.  When @model changes, @shell is updated.
+ * Calling this function twice on @shell with different @model will
+ * cause the first binding to be replaced with a binding to the new
+ * model. If @model is %NULL then any previous binding is undone and
+ * all children are removed.
+ *
+ * @with_separators determines if toplevel items (eg: sections) have
+ * separators inserted between them.  This is typically desired for
+ * menus but doesn't make sense for menubars.
+ *
+ * If @action_namespace is non-%NULL then the effect is as if all
+ * actions mentioned in the @model have their names prefixed with the
+ * namespace, plus a dot.  For example, if the action "quit" is
+ * mentioned and @action_namespace is "app" then the effective action
+ * name is "app.quit".
+ *
+ * For most cases you are probably better off using
+ * gtk_menu_new_from_model() or gtk_menu_bar_new_from_model() or just
+ * directly passing the #GMenuModel to gtk_application_set_app_menu() or
+ * gtk_application_set_menu_bar().
+ *
+ * Since: 3.6
+ */
+void
+gtk_menu_shell_bind_model (GtkMenuShell *menu_shell,
+                           GMenuModel   *model,
+                           const gchar  *action_namespace,
+                           gboolean      with_separators)
+{
+  g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
+  g_return_if_fail (model == NULL || G_IS_MENU_MODEL (model));
+
+  g_clear_pointer (&menu_shell->priv->tracker, gtk_menu_tracker_free);
+
+  while (menu_shell->priv->children)
+    gtk_container_remove (GTK_CONTAINER (menu_shell), menu_shell->priv->children->data);
+
+  if (model)
+    menu_shell->priv->tracker = gtk_menu_tracker_new (model, with_separators, action_namespace,
+                                                      gtk_menu_shell_tracker_insert_func,
+                                                      gtk_menu_shell_tracker_remove_func,
+                                                      menu_shell);
 }

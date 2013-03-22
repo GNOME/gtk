@@ -22,7 +22,7 @@
 #include <gtk/gtkmenushell.h>
 #include <gtk/gtkmnemonichash.h>
 #include <gtk/gtkkeyhash.h>
-
+#include <gtk/gtkmenutracker.h>
 
 G_BEGIN_DECLS
 
@@ -38,6 +38,7 @@ struct _GtkMenuShellPrivate
   GList *children;
   GtkWidget *active_menu_item;
   GtkWidget *parent_menu_shell;
+  GtkMenuTracker *tracker;    // if bound to a GMenuModel
 
   guint button;
   guint32 activate_time;
