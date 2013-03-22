@@ -206,10 +206,6 @@ gdk_wayland_display_finalize (GObject *object)
 
   _gdk_wayland_display_finalize_cursors (display_wayland);
 
-  /* Keymap */
-  if (display_wayland->keymap)
-    g_object_unref (display_wayland->keymap);
-
   /* input GdkDevice list */
   g_list_free_full (display_wayland->input_devices, g_object_unref);
 
