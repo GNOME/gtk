@@ -39,6 +39,9 @@ struct _GtkButtonPrivate
   gfloat                 xalign;
   gfloat                 yalign;
 
+  /* This is only used by checkbox and subclasses */
+  gfloat                 baseline_align;
+
   guint                  activate_timeout;
   guint32                grab_time;
 
