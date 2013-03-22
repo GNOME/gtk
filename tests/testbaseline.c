@@ -145,6 +145,27 @@ main (int    argc,
 
 	  gtk_container_add (GTK_CONTAINER (hbox), button);
 	}
+
+      button = gtk_toggle_button_new_with_label ("│Xyj,Ö");
+      if (j == 0)
+	gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
+      gtk_container_add (GTK_CONTAINER (hbox), button);
+
+      button = gtk_toggle_button_new_with_label ("│Xyj,Ö");
+      gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (button), TRUE);
+      if (j == 0)
+	gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
+      gtk_container_add (GTK_CONTAINER (hbox), button);
+
+      button = gtk_check_button_new_with_label ("│Xyj,Ö");
+      if (j == 0)
+	gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
+      gtk_container_add (GTK_CONTAINER (hbox), button);
+
+      button = gtk_radio_button_new_with_label (NULL, "│Xyj,Ö");
+      if (j == 0)
+	gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
+      gtk_container_add (GTK_CONTAINER (hbox), button);
     }
 
   grid_hbox = hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
