@@ -42,6 +42,19 @@ test_dialog_override_property (void)
   gtk_widget_destroy (dialog);
 }
 
+static void
+test_message_dialog_basic (void)
+{
+  GtkWidget *dialog;
+
+  dialog = gtk_message_dialog_new (NULL, 0,
+				   GTK_MESSAGE_INFO,
+				   GTK_BUTTONS_CLOSE,
+				   "Do it hard !");
+  g_assert (GTK_IS_DIALOG (dialog));
+  gtk_widget_destroy (dialog);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -56,6 +69,7 @@ main (int argc, char **argv)
 
   g_test_add_func ("/Template/GtkDialog/Basic", test_dialog_basic);
   g_test_add_func ("/Template/GtkDialog/OverrideProperty", test_dialog_override_property);
+  g_test_add_func ("/Template/GtkMessageDialog/Basic", test_message_dialog_basic);
 
   return g_test_run();
 }

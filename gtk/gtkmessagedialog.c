@@ -123,10 +123,6 @@ static void gtk_message_dialog_get_property (GObject          *object,
 static void gtk_message_dialog_add_buttons  (GtkMessageDialog *message_dialog,
 					     GtkButtonsType    buttons);
 static void      gtk_message_dialog_buildable_interface_init     (GtkBuildableIface *iface);
-static GObject * gtk_message_dialog_buildable_get_internal_child (GtkBuildable  *buildable,
-                                                                  GtkBuilder    *builder,
-                                                                  const gchar   *childname);
-
 
 enum {
   PROP_0,
@@ -150,22 +146,9 @@ static void
 gtk_message_dialog_buildable_interface_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
-  iface->get_internal_child = gtk_message_dialog_buildable_get_internal_child;
   iface->custom_tag_start = parent_buildable_iface->custom_tag_start;
   iface->custom_finished = parent_buildable_iface->custom_finished;
 }
-
-static GObject *
-gtk_message_dialog_buildable_get_internal_child (GtkBuildable *buildable,
-                                                 GtkBuilder   *builder,
-                                                 const gchar  *childname)
-{
-  if (strcmp (childname, "message_area") == 0)
-    return G_OBJECT (gtk_message_dialog_get_message_area (GTK_MESSAGE_DIALOG (buildable)));
-
-  return parent_buildable_iface->get_internal_child (buildable, builder, childname);
-}
-
 
 static void
 gtk_message_dialog_class_init (GtkMessageDialogClass *class)
@@ -311,15 +294,19 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
 							GTK_TYPE_WIDGET,
 							GTK_PARAM_READABLE));
 
+  /* Setup Composite data */
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/gtkmessagedialog.ui");
+  gtk_widget_class_bind_child (widget_class, GtkMessageDialogPrivate, image);
+  gtk_widget_class_bind_child (widget_class, GtkMessageDialogPrivate, label);
+  gtk_widget_class_bind_child (widget_class, GtkMessageDialogPrivate, secondary_label);
+  gtk_widget_class_bind_child_internal (widget_class, GtkMessageDialogPrivate, message_area);
+
   g_type_class_add_private (gobject_class, sizeof (GtkMessageDialogPrivate));
 }
 
 static void
 gtk_message_dialog_init (GtkMessageDialog *dialog)
 {
-  GtkWidget *hbox;
-  GtkDialog *message_dialog = GTK_DIALOG (dialog);
-  GtkWidget *action_area, *content_area;
   GtkMessageDialogPrivate *priv;
 
   dialog->priv = G_TYPE_INSTANCE_GET_PRIVATE (dialog,
@@ -327,65 +314,13 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
                                               GtkMessageDialogPrivate);
   priv = dialog->priv;
 
-  content_area = gtk_dialog_get_content_area (message_dialog);
-  action_area = gtk_dialog_get_action_area (message_dialog);
-
-  gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-  gtk_window_set_title (GTK_WINDOW (dialog), "");
-  gtk_window_set_skip_taskbar_hint (GTK_WINDOW (dialog), TRUE);
-
   priv->has_primary_markup = FALSE;
   priv->has_secondary_text = FALSE;
-  priv->secondary_label = gtk_label_new (NULL);
-  gtk_widget_set_no_show_all (priv->secondary_label, TRUE);
+  priv->has_primary_markup = FALSE;
+  priv->has_secondary_text = FALSE;
 
-  priv->label = gtk_label_new (NULL);
-  priv->image = gtk_image_new_from_stock (NULL, GTK_ICON_SIZE_DIALOG);
-  g_object_set (priv->image, "use-fallback", TRUE, NULL);
-  gtk_widget_set_halign (priv->image, GTK_ALIGN_CENTER);
-  gtk_widget_set_valign (priv->image, GTK_ALIGN_START);
-
-  gtk_label_set_line_wrap  (GTK_LABEL (priv->label), TRUE);
-  gtk_label_set_selectable (GTK_LABEL (priv->label), TRUE);
-  gtk_widget_set_halign (priv->label, GTK_ALIGN_START);
-  gtk_widget_set_valign (priv->label, GTK_ALIGN_START);
-
-  gtk_label_set_line_wrap  (GTK_LABEL (priv->secondary_label), TRUE);
-  gtk_label_set_selectable (GTK_LABEL (priv->secondary_label), TRUE);
-  gtk_widget_set_halign (priv->secondary_label, GTK_ALIGN_START);
-  gtk_widget_set_valign (priv->secondary_label, GTK_ALIGN_START);
-
-  gtk_misc_set_alignment (GTK_MISC (priv->label), 0.0, 0.0);
-  gtk_misc_set_alignment (GTK_MISC (priv->secondary_label), 0.0, 0.0);
-
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-  priv->message_area = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
-
-  gtk_box_pack_start (GTK_BOX (priv->message_area), priv->label,
-                      FALSE, FALSE, 0);
-
-  gtk_box_pack_start (GTK_BOX (priv->message_area), priv->secondary_label,
-                      TRUE, TRUE, 0);
-
-  gtk_box_pack_start (GTK_BOX (hbox), priv->image,
-                      FALSE, FALSE, 0);
-
-  gtk_box_pack_start (GTK_BOX (hbox), priv->message_area,
-                      TRUE, TRUE, 0);
-
-  gtk_box_pack_start (GTK_BOX (content_area),
-                      hbox,
-                      FALSE, FALSE, 0);
-
-  gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-  gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
-  gtk_box_set_spacing (GTK_BOX (content_area), 14); /* 14 + 2 * 5 = 24 */
-  gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
-  gtk_box_set_spacing (GTK_BOX (action_area), 6);
-
+  gtk_widget_init_template (GTK_WIDGET (dialog));
   gtk_message_dialog_style_updated (GTK_WIDGET (dialog));
-
-  gtk_widget_show_all (hbox);
 }
 
 static void
