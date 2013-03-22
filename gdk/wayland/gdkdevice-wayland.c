@@ -983,10 +983,6 @@ deliver_key_event(GdkWaylandDeviceData *device,
         }
       return FALSE;
     }
-  else if (device->modifiers)
-    {
-      return FALSE;
-    }
   else switch (device->repeat_count)
     {
     case 1:
