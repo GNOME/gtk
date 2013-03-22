@@ -7,9 +7,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 3.1.0\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-20 19:06+0800\n"
-"PO-Revision-Date: 2013-03-20 19:07+0800\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
+"%2b&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2013-03-12 22:06+0000\n"
+"PO-Revision-Date: 2013-03-22 21:15+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Hong Kong) <community@linuxhall.org>\n"
 "Language: zh_TW\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.5.3\n"
+"X-Generator: Poedit 1.5.5\n"
 
 #: ../gdk/gdkapplaunchcontext.c:129 ../gdk/gdkcursor.c:134
 #: ../gdk/gdkdevicemanager.c:170
@@ -124,7 +125,7 @@ msgstr "字型解像度"
 msgid "The resolution for fonts on the screen"
 msgstr "螢幕上字型的解像度"
 
-#: ../gdk/gdkwindow.c:394 ../gdk/gdkwindow.c:395
+#: ../gdk/gdkwindow.c:391 ../gdk/gdkwindow.c:392
 msgid "Cursor"
 msgstr "游標"
 
@@ -690,7 +691,7 @@ msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr "當為 TRUE 時，代理此指令的空選單會被隱藏。"
 
 #: ../gtk/gtkaction.c:379 ../gtk/gtkactiongroup.c:235
-#: ../gtk/gtkcellrenderer.c:296 ../gtk/gtkwidget.c:1091
+#: ../gtk/gtkcellrenderer.c:296 ../gtk/gtkwidget.c:1088
 msgid "Sensitive"
 msgstr "有反應"
 
@@ -700,7 +701,7 @@ msgstr "本指令是否有效。"
 
 #: ../gtk/gtkaction.c:386 ../gtk/gtkactiongroup.c:242
 #: ../gtk/gtkstatusicon.c:298 ../gtk/gtktreeviewcolumn.c:245
-#: ../gtk/gtkwidget.c:1084
+#: ../gtk/gtkwidget.c:1081
 msgid "Visible"
 msgstr "可見的"
 
@@ -1038,7 +1039,7 @@ msgstr "箭頭縮放"
 msgid "Amount of space used up by arrow"
 msgstr "箭頭所佔空間大小"
 
-#: ../gtk/gtkaspectframe.c:107 ../gtk/gtkwidget.c:1279
+#: ../gtk/gtkaspectframe.c:107 ../gtk/gtkwidget.c:1276
 msgid "Horizontal Alignment"
 msgstr "水平對齊位置"
 
@@ -1046,7 +1047,7 @@ msgstr "水平對齊位置"
 msgid "X alignment of the child"
 msgstr "子元件的水平對齊位置"
 
-#: ../gtk/gtkaspectframe.c:114 ../gtk/gtkwidget.c:1295
+#: ../gtk/gtkaspectframe.c:114 ../gtk/gtkwidget.c:1292
 msgid "Vertical Alignment"
 msgstr "垂直對齊位置"
 
@@ -1247,24 +1248,26 @@ msgid "The index of the child in the parent"
 msgstr "子元件在母元件中的索引編號"
 
 #: ../gtk/gtkbubblewindow.c:852
+#| msgid "Related Action"
 msgid "Relative to"
 msgstr "相對於"
 
 #: ../gtk/gtkbubblewindow.c:853
 msgid "Window the bubble window points to"
-msgstr "氣泡視窗指向"
+msgstr "氣泡視窗指向的視窗"
 
 #: ../gtk/gtkbubblewindow.c:859
+#| msgid "Font scaling factor"
 msgid "Pointing to"
 msgstr "指向"
 
 #: ../gtk/gtkbubblewindow.c:860
 msgid "Rectangle the bubble window points to"
-msgstr "氣泡視窗的矩形指向"
+msgstr "氣泡視窗指向的矩形"
 
 #: ../gtk/gtkbubblewindow.c:867
 msgid "Position to place the bubble window"
-msgstr "放置氣泡視窗的位置"
+msgstr "放置氣泡視窗的地點"
 
 #: ../gtk/gtkbuilder.c:307
 msgid "Translation Domain"
@@ -3130,12 +3133,13 @@ msgid "A list of style attributes to apply to the text of the label"
 msgstr "標籤中的文字可以採用的樣式屬性清單"
 
 #: ../gtk/gtkentry.c:1438 ../gtk/gtktextview.c:876
+#, fuzzy
 msgid "Populate all"
-msgstr "全部填寫"
+msgstr "全選"
 
 #: ../gtk/gtkentry.c:1439 ../gtk/gtktextview.c:877
 msgid "Whether to emit ::populate-popup for touch popups"
-msgstr "是否在觸控彈出項發出 ::populate-popup"
+msgstr ""
 
 #: ../gtk/gtkentry.c:1453
 msgid "Icon Prelight"
@@ -3671,11 +3675,11 @@ msgstr "圖示檢視項目周圍的留空"
 
 #: ../gtk/gtkiconview.c:657 ../gtk/gtktreeview.c:1190
 msgid "Activate on Single Click"
-msgstr "點選即使用"
+msgstr "點選啟用"
 
 #: ../gtk/gtkiconview.c:658 ../gtk/gtktreeview.c:1191
 msgid "Activate row on a single click"
-msgstr "點選觸發列"
+msgstr "點選使用列"
 
 #: ../gtk/gtkiconview.c:671
 msgid "Selection Box Color"
@@ -3748,10 +3752,12 @@ msgid "GdkPixbufAnimation to display"
 msgstr "準備顯示的 GdkPixbufAnimation"
 
 #: ../gtk/gtkimage.c:325
+#| msgid "Input source"
 msgid "Resource"
 msgstr "資源"
 
 #: ../gtk/gtkimage.c:326
+#| msgid "The GIcon being displayed"
 msgid "The resource path being displayed"
 msgstr "要顯示的資源路徑"
 
@@ -6189,12 +6195,13 @@ msgid ""
 msgstr "當按下滑鼠中鍵時是否應貼上「PRIMARY」剪貼簿內容到游標位置。"
 
 #: ../gtk/gtksettings.c:1420
+#| msgid "Recent Files Max Age"
 msgid "Recent Files Enabled"
-msgstr "最近使用檔案已啟用"
+msgstr "啟用最近使用的檔案"
 
 #: ../gtk/gtksettings.c:1421
 msgid "Whether GTK+ remembers recent files"
-msgstr "GTK+ 是否記住最近使用檔案"
+msgstr "GTK+ 是否記住最近使用的檔案"
 
 #: ../gtk/gtksizegroup.c:324 ../gtk/gtktreeselection.c:129
 msgid "Mode"
@@ -6290,7 +6297,7 @@ msgstr "狀態圖示是否為內嵌"
 msgid "The orientation of the tray"
 msgstr "系統匣的方向"
 
-#: ../gtk/gtkstatusicon.c:358 ../gtk/gtkwidget.c:1192
+#: ../gtk/gtkstatusicon.c:358 ../gtk/gtkwidget.c:1189
 msgid "Has tooltip"
 msgstr "具有工具提示"
 
@@ -6298,15 +6305,15 @@ msgstr "具有工具提示"
 msgid "Whether this tray icon has a tooltip"
 msgstr "此系統匣圖示是否具有工具提示"
 
-#: ../gtk/gtkstatusicon.c:384 ../gtk/gtkwidget.c:1213
+#: ../gtk/gtkstatusicon.c:384 ../gtk/gtkwidget.c:1210
 msgid "Tooltip Text"
 msgstr "工具提示文字"
 
-#: ../gtk/gtkstatusicon.c:385 ../gtk/gtkwidget.c:1214 ../gtk/gtkwidget.c:1235
+#: ../gtk/gtkstatusicon.c:385 ../gtk/gtkwidget.c:1211 ../gtk/gtkwidget.c:1232
 msgid "The contents of the tooltip for this widget"
 msgstr "此視窗元件工具提示的內容"
 
-#: ../gtk/gtkstatusicon.c:408 ../gtk/gtkwidget.c:1234
+#: ../gtk/gtkstatusicon.c:408 ../gtk/gtkwidget.c:1231
 msgid "Tooltip markup"
 msgstr "工具提示標記"
 
@@ -6327,6 +6334,7 @@ msgid "FrameClock"
 msgstr "框架時脈"
 
 #: ../gtk/gtkstylecontext.c:452
+#| msgid "The associated GdkScreen"
 msgid "The associated GdkFrameClock"
 msgstr "已關連的 GdkFrameClock"
 
@@ -6415,11 +6423,11 @@ msgid ""
 msgstr "這個緩衝區支援剪貼簿貼上與拖放(DND)目的端的目標清單"
 
 #: ../gtk/gtktexthandle.c:526 ../gtk/gtktexthandle.c:527
-#: ../gtk/gtkwidget.c:1058
+#: ../gtk/gtkwidget.c:1055
 msgid "Parent widget"
 msgstr "母元件"
 
-#: ../gtk/gtktexthandle.c:534 ../gtk/gtkwidget.c:1249
+#: ../gtk/gtktexthandle.c:534 ../gtk/gtkwidget.c:1246
 msgid "Window"
 msgstr "視窗"
 
@@ -7418,377 +7426,379 @@ msgstr "使用符號圖示"
 msgid "Whether to use symbolic icons"
 msgstr "是否使用符號圖示"
 
-#: ../gtk/gtkwidget.c:1051
+#: ../gtk/gtkwidget.c:1048
 msgid "Widget name"
 msgstr "元件名稱"
 
-#: ../gtk/gtkwidget.c:1052
+#: ../gtk/gtkwidget.c:1049
 msgid "The name of the widget"
 msgstr "元件的名稱"
 
-#: ../gtk/gtkwidget.c:1059
+#: ../gtk/gtkwidget.c:1056
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "該元件的母元件，必須是容器元件"
 
-#: ../gtk/gtkwidget.c:1066
+#: ../gtk/gtkwidget.c:1063
 msgid "Width request"
 msgstr "指定闊度"
 
-#: ../gtk/gtkwidget.c:1067
+#: ../gtk/gtkwidget.c:1064
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
 msgstr "自行指定元件的闊度，使用 -1 則表示使用預設闊度"
 
-#: ../gtk/gtkwidget.c:1075
+#: ../gtk/gtkwidget.c:1072
 msgid "Height request"
 msgstr "指定高度"
 
-#: ../gtk/gtkwidget.c:1076
+#: ../gtk/gtkwidget.c:1073
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
 msgstr "自行指定元件的高度，使用 -1 則表示使用預設高度"
 
-#: ../gtk/gtkwidget.c:1085
+#: ../gtk/gtkwidget.c:1082
 msgid "Whether the widget is visible"
 msgstr "該元件是否可見"
 
-#: ../gtk/gtkwidget.c:1092
+#: ../gtk/gtkwidget.c:1089
 msgid "Whether the widget responds to input"
 msgstr "元件是否對輸入有反應"
 
-#: ../gtk/gtkwidget.c:1098
+#: ../gtk/gtkwidget.c:1095
 msgid "Application paintable"
 msgstr "應用程式可繪製"
 
-#: ../gtk/gtkwidget.c:1099
+#: ../gtk/gtkwidget.c:1096
 msgid "Whether the application will paint directly on the widget"
 msgstr "應用程式可以繪製"
 
-#: ../gtk/gtkwidget.c:1105
+#: ../gtk/gtkwidget.c:1102
 msgid "Can focus"
 msgstr "可接受焦點"
 
-#: ../gtk/gtkwidget.c:1106
+#: ../gtk/gtkwidget.c:1103
 msgid "Whether the widget can accept the input focus"
 msgstr "元件可否接受輸入焦點"
 
-#: ../gtk/gtkwidget.c:1112
+#: ../gtk/gtkwidget.c:1109
 msgid "Has focus"
 msgstr "獲得焦點"
 
-#: ../gtk/gtkwidget.c:1113
+#: ../gtk/gtkwidget.c:1110
 msgid "Whether the widget has the input focus"
 msgstr "元件是否在輸入焦點內"
 
-#: ../gtk/gtkwidget.c:1119
+#: ../gtk/gtkwidget.c:1116
 msgid "Is focus"
 msgstr "作為焦點"
 
-#: ../gtk/gtkwidget.c:1120
+#: ../gtk/gtkwidget.c:1117
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "是否該元件在頂端為自動取得焦點的元件"
 
-#: ../gtk/gtkwidget.c:1126
+#: ../gtk/gtkwidget.c:1123
 msgid "Can default"
 msgstr "可成為預設元件"
 
-#: ../gtk/gtkwidget.c:1127
+#: ../gtk/gtkwidget.c:1124
 msgid "Whether the widget can be the default widget"
 msgstr "該元件可否成為預設的視窗元件"
 
-#: ../gtk/gtkwidget.c:1133
+#: ../gtk/gtkwidget.c:1130
 msgid "Has default"
 msgstr "是預設元件"
 
-#: ../gtk/gtkwidget.c:1134
+#: ../gtk/gtkwidget.c:1131
 msgid "Whether the widget is the default widget"
 msgstr "該元件是否預設的視窗元件"
 
-#: ../gtk/gtkwidget.c:1140
+#: ../gtk/gtkwidget.c:1137
 msgid "Receives default"
 msgstr "接受預設設置"
 
-#: ../gtk/gtkwidget.c:1141
+#: ../gtk/gtkwidget.c:1138
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr "如設為定為‘TRUE’，該元件接受預設設置命令當成為焦點時"
 
-#: ../gtk/gtkwidget.c:1147
+#: ../gtk/gtkwidget.c:1144
 msgid "Composite child"
 msgstr "屬於組合元件"
 
-#: ../gtk/gtkwidget.c:1148
+#: ../gtk/gtkwidget.c:1145
 msgid "Whether the widget is part of a composite widget"
 msgstr "該元件是否組合元件的一部分"
 
-#: ../gtk/gtkwidget.c:1154
+#: ../gtk/gtkwidget.c:1151
 msgid "Style"
 msgstr "樣式"
 
-#: ../gtk/gtkwidget.c:1155
+#: ../gtk/gtkwidget.c:1152
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
 msgstr "元件的樣式，包括與外觀有關的資訊（例如色彩）。"
 
-#: ../gtk/gtkwidget.c:1161
+#: ../gtk/gtkwidget.c:1158
 msgid "Events"
 msgstr "事件"
 
-#: ../gtk/gtkwidget.c:1162
+#: ../gtk/gtkwidget.c:1159
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr "決定此元件會接受何種 GdkEvent 的事件遮罩"
 
-#: ../gtk/gtkwidget.c:1169
+#: ../gtk/gtkwidget.c:1166
 msgid "No show all"
 msgstr "不全部顯示"
 
-#: ../gtk/gtkwidget.c:1170
+#: ../gtk/gtkwidget.c:1167
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "是否 gtk_widget_show_all() 呼叫影響本元件"
 
-#: ../gtk/gtkwidget.c:1193
+#: ../gtk/gtkwidget.c:1190
 msgid "Whether this widget has a tooltip"
 msgstr "此視窗元件是否具有工具提示"
 
-#: ../gtk/gtkwidget.c:1250
+#: ../gtk/gtkwidget.c:1247
 msgid "The widget's window if it is realized"
 msgstr "調整大小後的視窗元件視窗"
 
-#: ../gtk/gtkwidget.c:1264
+#: ../gtk/gtkwidget.c:1261
 msgid "Double Buffered"
 msgstr "雙重緩衝"
 
-#: ../gtk/gtkwidget.c:1265
+#: ../gtk/gtkwidget.c:1262
 msgid "Whether the widget is double buffered"
 msgstr "此視窗元件是否使用雙重緩衝"
 
-#: ../gtk/gtkwidget.c:1280
+#: ../gtk/gtkwidget.c:1277
 msgid "How to position in extra horizontal space"
 msgstr "在額外的水平空間中如何定位"
 
-#: ../gtk/gtkwidget.c:1296
+#: ../gtk/gtkwidget.c:1293
 msgid "How to position in extra vertical space"
 msgstr "在額外的垂直空間中如何定位"
 
-#: ../gtk/gtkwidget.c:1315
+#: ../gtk/gtkwidget.c:1312
 msgid "Margin on Left"
 msgstr "左側邊界"
 
-#: ../gtk/gtkwidget.c:1316
+#: ../gtk/gtkwidget.c:1313
 msgid "Pixels of extra space on the left side"
 msgstr "左側額外空間的像素"
 
-#: ../gtk/gtkwidget.c:1336
+#: ../gtk/gtkwidget.c:1333
 msgid "Margin on Right"
 msgstr "右側邊界"
 
-#: ../gtk/gtkwidget.c:1337
+#: ../gtk/gtkwidget.c:1334
 msgid "Pixels of extra space on the right side"
 msgstr "右側額外空間的像素"
 
-#: ../gtk/gtkwidget.c:1357
+#: ../gtk/gtkwidget.c:1354
 msgid "Margin on Top"
 msgstr "頂端邊界"
 
-#: ../gtk/gtkwidget.c:1358
+#: ../gtk/gtkwidget.c:1355
 msgid "Pixels of extra space on the top side"
 msgstr "頂端額外空間的像素"
 
-#: ../gtk/gtkwidget.c:1378
+#: ../gtk/gtkwidget.c:1375
 msgid "Margin on Bottom"
 msgstr "底部邊界"
 
-#: ../gtk/gtkwidget.c:1379
+#: ../gtk/gtkwidget.c:1376
 msgid "Pixels of extra space on the bottom side"
 msgstr "底部額外空間的像素"
 
-#: ../gtk/gtkwidget.c:1396
+#: ../gtk/gtkwidget.c:1393
 msgid "All Margins"
 msgstr "所有邊界"
 
-#: ../gtk/gtkwidget.c:1397
+#: ../gtk/gtkwidget.c:1394
 msgid "Pixels of extra space on all four sides"
 msgstr "四個邊界額外空間的像素"
 
-#: ../gtk/gtkwidget.c:1430
+#: ../gtk/gtkwidget.c:1427
 msgid "Horizontal Expand"
 msgstr "水平擴展"
 
-#: ../gtk/gtkwidget.c:1431
+#: ../gtk/gtkwidget.c:1428
 msgid "Whether widget wants more horizontal space"
 msgstr "視窗元件是否要有更多水平空間"
 
-#: ../gtk/gtkwidget.c:1445
+#: ../gtk/gtkwidget.c:1442
 msgid "Horizontal Expand Set"
 msgstr "水平擴展設定"
 
-#: ../gtk/gtkwidget.c:1446
+#: ../gtk/gtkwidget.c:1443
 msgid "Whether to use the hexpand property"
 msgstr "是否使用 hexpand 屬性"
 
-#: ../gtk/gtkwidget.c:1460
+#: ../gtk/gtkwidget.c:1457
 msgid "Vertical Expand"
 msgstr "垂直擴展"
 
-#: ../gtk/gtkwidget.c:1461
+#: ../gtk/gtkwidget.c:1458
 msgid "Whether widget wants more vertical space"
 msgstr "視窗元件是否要有更多垂直空間"
 
-#: ../gtk/gtkwidget.c:1475
+#: ../gtk/gtkwidget.c:1472
 msgid "Vertical Expand Set"
 msgstr "垂直擴展設定"
 
-#: ../gtk/gtkwidget.c:1476
+#: ../gtk/gtkwidget.c:1473
 msgid "Whether to use the vexpand property"
 msgstr "是否使用 vexpand 屬性"
 
-#: ../gtk/gtkwidget.c:1490
+#: ../gtk/gtkwidget.c:1487
 msgid "Expand Both"
 msgstr "擴展兩者"
 
-#: ../gtk/gtkwidget.c:1491
+#: ../gtk/gtkwidget.c:1488
 msgid "Whether widget wants to expand in both directions"
 msgstr "視窗元件是否在兩個方向都擴展"
 
-#: ../gtk/gtkwidget.c:1508
+#: ../gtk/gtkwidget.c:1505
+#| msgid "Opacity for Window"
 msgid "Opacity for Widget"
-msgstr "視窗元件的透明度"
+msgstr "視窗的透明度"
 
-#: ../gtk/gtkwidget.c:1509
+#: ../gtk/gtkwidget.c:1506
+#| msgid "The opacity of the window, from 0 to 1"
 msgid "The opacity of the widget, from 0 to 1"
-msgstr "視窗元件的透明度，從 0 到 1"
+msgstr "視窗的透明度，從 0 到 1"
 
-#: ../gtk/gtkwidget.c:3238
+#: ../gtk/gtkwidget.c:3235
 msgid "Interior Focus"
 msgstr "在內部顯示焦點"
 
-#: ../gtk/gtkwidget.c:3239
+#: ../gtk/gtkwidget.c:3236
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "是否在視窗元件內部顯示焦點線"
 
-#: ../gtk/gtkwidget.c:3245
+#: ../gtk/gtkwidget.c:3242
 msgid "Focus linewidth"
 msgstr "焦點線闊度"
 
-#: ../gtk/gtkwidget.c:3246
+#: ../gtk/gtkwidget.c:3243
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "輸入焦點指示線的闊度，以像素為單位"
 
-#: ../gtk/gtkwidget.c:3252
+#: ../gtk/gtkwidget.c:3249
 msgid "Focus line dash pattern"
 msgstr "焦點線虛線樣式"
 
-#: ../gtk/gtkwidget.c:3253
+#: ../gtk/gtkwidget.c:3250
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "顯示輸入焦點指示線時使用的虛線樣式"
 
-#: ../gtk/gtkwidget.c:3258
+#: ../gtk/gtkwidget.c:3255
 msgid "Focus padding"
 msgstr "焦點指示線留邊"
 
-#: ../gtk/gtkwidget.c:3259
+#: ../gtk/gtkwidget.c:3256
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "輸入焦點指示線及視窗元件邊界之間的闊度，以像素為單位"
 
-#: ../gtk/gtkwidget.c:3264
+#: ../gtk/gtkwidget.c:3261
 msgid "Cursor color"
 msgstr "游標顏色"
 
-#: ../gtk/gtkwidget.c:3265
+#: ../gtk/gtkwidget.c:3262
 msgid "Color with which to draw insertion cursor"
 msgstr "繪畫游標使用的顏色"
 
-#: ../gtk/gtkwidget.c:3270
+#: ../gtk/gtkwidget.c:3267
 msgid "Secondary cursor color"
 msgstr "第二游標顏色"
 
-#: ../gtk/gtkwidget.c:3271
+#: ../gtk/gtkwidget.c:3268
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
 msgstr "當編輯混合右至左及左至右的文字時，繪畫第二個插入游標所使用的顏色。"
 
-#: ../gtk/gtkwidget.c:3276
+#: ../gtk/gtkwidget.c:3273
 msgid "Cursor line aspect ratio"
 msgstr "游標長寬比"
 
-#: ../gtk/gtkwidget.c:3277
+#: ../gtk/gtkwidget.c:3274
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "繪畫游標時使用的長寬比例"
 
-#: ../gtk/gtkwidget.c:3283
+#: ../gtk/gtkwidget.c:3280
 msgid "Window dragging"
 msgstr "視窗拖拉"
 
-#: ../gtk/gtkwidget.c:3284
+#: ../gtk/gtkwidget.c:3281
 msgid "Whether windows can be dragged by clicking on empty areas"
 msgstr "視窗是否可以在空白區域處點選來拖拉它"
 
-#: ../gtk/gtkwidget.c:3297
+#: ../gtk/gtkwidget.c:3294
 msgid "Unvisited Link Color"
 msgstr "未參訪連結色彩"
 
-#: ../gtk/gtkwidget.c:3298
+#: ../gtk/gtkwidget.c:3295
 msgid "Color of unvisited links"
 msgstr "尚未參訪連結的色彩"
 
-#: ../gtk/gtkwidget.c:3311
+#: ../gtk/gtkwidget.c:3308
 msgid "Visited Link Color"
 msgstr "已瀏覽連結顏色"
 
-#: ../gtk/gtkwidget.c:3312
+#: ../gtk/gtkwidget.c:3309
 msgid "Color of visited links"
 msgstr "已經瀏覽連結的色彩"
 
-#: ../gtk/gtkwidget.c:3326
+#: ../gtk/gtkwidget.c:3323
 msgid "Wide Separators"
 msgstr "寬分隔線"
 
-#: ../gtk/gtkwidget.c:3327
+#: ../gtk/gtkwidget.c:3324
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
 msgstr "分隔線是否有可設定的闊度以及是否使用方塊繪製"
 
-#: ../gtk/gtkwidget.c:3341
+#: ../gtk/gtkwidget.c:3338
 msgid "Separator Width"
 msgstr "分隔線闊度"
 
-#: ../gtk/gtkwidget.c:3342
+#: ../gtk/gtkwidget.c:3339
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "如果寬分隔線為 TRUE 時的分隔線闊度"
 
-#: ../gtk/gtkwidget.c:3356
+#: ../gtk/gtkwidget.c:3353
 msgid "Separator Height"
 msgstr "分隔線高度"
 
-#: ../gtk/gtkwidget.c:3357
+#: ../gtk/gtkwidget.c:3354
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "如果「寬分隔線」為 TRUE 時的分隔線高度"
 
-#: ../gtk/gtkwidget.c:3371
+#: ../gtk/gtkwidget.c:3368
 msgid "Horizontal Scroll Arrow Length"
 msgstr "水平捲動列箭頭長度"
 
-#: ../gtk/gtkwidget.c:3372
+#: ../gtk/gtkwidget.c:3369
 msgid "The length of horizontal scroll arrows"
 msgstr "水平捲動列箭頭的長度"
 
-#: ../gtk/gtkwidget.c:3386
+#: ../gtk/gtkwidget.c:3383
 msgid "Vertical Scroll Arrow Length"
 msgstr "垂直捲動列箭頭長度"
 
-#: ../gtk/gtkwidget.c:3387
+#: ../gtk/gtkwidget.c:3384
 msgid "The length of vertical scroll arrows"
 msgstr "垂直捲動列箭頭的長度"
 
-#: ../gtk/gtkwidget.c:3393 ../gtk/gtkwidget.c:3394
+#: ../gtk/gtkwidget.c:3390 ../gtk/gtkwidget.c:3391
 msgid "Width of text selection handles"
 msgstr "文字選擇區域處理的闊度"
 
-#: ../gtk/gtkwidget.c:3399 ../gtk/gtkwidget.c:3400
+#: ../gtk/gtkwidget.c:3396 ../gtk/gtkwidget.c:3397
 msgid "Height of text selection handles"
 msgstr "文字選擇區域處理的高度"
 
