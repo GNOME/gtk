@@ -1097,7 +1097,8 @@ DND_CURSORS = \
 
 COMPOSITE_TEMPLATES =		\
 	gtkdialog.ui		\
-	gtkmessagedialog.ui
+	gtkmessagedialog.ui	\
+	gtkinfobar.ui
 
 #
 # rules to generate built sources

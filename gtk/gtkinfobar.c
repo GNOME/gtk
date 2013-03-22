@@ -167,9 +167,6 @@ static void     gtk_info_bar_get_preferred_height         (GtkWidget *widget,
 static gboolean gtk_info_bar_draw                         (GtkWidget      *widget,
                                                            cairo_t        *cr);
 static void     gtk_info_bar_buildable_interface_init     (GtkBuildableIface *iface);
-static GObject *gtk_info_bar_buildable_get_internal_child (GtkBuildable  *buildable,
-                                                           GtkBuilder    *builder,
-                                                           const gchar   *childname);
 static gboolean  gtk_info_bar_buildable_custom_tag_start   (GtkBuildable  *buildable,
                                                             GtkBuilder    *builder,
                                                             GObject       *child,
@@ -530,6 +527,12 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
 
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0, "close", 0);
 
+  /* Bind class to template
+   */
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/gtkinfobar.ui");
+  gtk_widget_class_bind_child_internal (widget_class, GtkInfoBarPrivate, content_area);
+  gtk_widget_class_bind_child_internal (widget_class, GtkInfoBarPrivate, action_area);
+
   g_type_class_add_private (object_class, sizeof (GtkInfoBarPrivate));
 }
 
@@ -537,42 +540,19 @@ static void
 gtk_info_bar_init (GtkInfoBar *info_bar)
 {
   GtkWidget *widget = GTK_WIDGET (info_bar);
-  GtkWidget *content_area;
-  GtkWidget *action_area;
-
-  gtk_widget_push_composite_child ();
 
   info_bar->priv = G_TYPE_INSTANCE_GET_PRIVATE (info_bar,
                                                 GTK_TYPE_INFO_BAR,
                                                 GtkInfoBarPrivate);
 
-  content_area = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_widget_show (content_area);
-  gtk_box_pack_start (GTK_BOX (info_bar), content_area, TRUE, TRUE, 0);
-
-  action_area = gtk_button_box_new (GTK_ORIENTATION_VERTICAL);
-  gtk_widget_show (action_area);
-  gtk_button_box_set_layout (GTK_BUTTON_BOX (action_area), GTK_BUTTONBOX_END);
-  gtk_box_pack_start (GTK_BOX (info_bar), action_area, FALSE, TRUE, 0);
-
-  gtk_widget_set_app_paintable (widget, TRUE);
   gtk_widget_set_redraw_on_allocate (widget, TRUE);
-
-  info_bar->priv->content_area = content_area;
-  info_bar->priv->action_area = action_area;
-
-  /* set default spacings */
-  gtk_box_set_spacing (GTK_BOX (info_bar->priv->action_area), ACTION_AREA_DEFAULT_SPACING);
-  gtk_container_set_border_width (GTK_CONTAINER (info_bar->priv->action_area), ACTION_AREA_DEFAULT_BORDER);
-  gtk_box_set_spacing (GTK_BOX (info_bar->priv->content_area), CONTENT_AREA_DEFAULT_SPACING);
-  gtk_container_set_border_width (GTK_CONTAINER (info_bar->priv->content_area), CONTENT_AREA_DEFAULT_BORDER);
 
   /* message-type is a CONSTRUCT property, so we init to a value
    * different from its default to trigger its property setter
    * during construction */
   info_bar->priv->message_type = GTK_MESSAGE_OTHER;
 
-  gtk_widget_pop_composite_child ();
+  gtk_widget_init_template (GTK_WIDGET (info_bar));
 }
 
 static GtkBuildableIface *parent_buildable_iface;
@@ -581,24 +561,8 @@ static void
 gtk_info_bar_buildable_interface_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
-  iface->get_internal_child = gtk_info_bar_buildable_get_internal_child;
   iface->custom_tag_start = gtk_info_bar_buildable_custom_tag_start;
   iface->custom_finished = gtk_info_bar_buildable_custom_finished;
-}
-
-static GObject *
-gtk_info_bar_buildable_get_internal_child (GtkBuildable *buildable,
-                                           GtkBuilder   *builder,
-                                           const gchar  *childname)
-{
-  if (strcmp (childname, "content_area") == 0)
-    return G_OBJECT (GTK_INFO_BAR (buildable)->priv->content_area);
-  else if (strcmp (childname, "action_area") == 0)
-    return G_OBJECT (GTK_INFO_BAR (buildable)->priv->action_area);
-
-  return parent_buildable_iface->get_internal_child (buildable,
-                                                     builder,
-                                                     childname);
 }
 
 static gint
