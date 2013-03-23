@@ -297,7 +297,6 @@ _gdk_wayland_display_get_cursor_for_name (GdkDisplay  *display,
 {
   GdkWaylandCursor *private;
   GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (display);
-  struct wl_cursor *cursor;
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
