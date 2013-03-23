@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include <stdlib.h>
 #include "gdkdisplay-broadway.h"
 #include "gdkbroadwaydisplaymanager.h"
 #include "gdkprivate-broadway.h"
@@ -35,9 +36,53 @@ struct _GdkBroadwayDisplayManager
 
   GdkDisplay *default_display;
   GSList *displays;
+
+  gboolean init_failed;
 };
 
-G_DEFINE_TYPE (GdkBroadwayDisplayManager, gdk_broadway_display_manager, GDK_TYPE_DISPLAY_MANAGER)
+static void g_initable_iface_init (GInitableIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GdkBroadwayDisplayManager, gdk_broadway_display_manager, GDK_TYPE_DISPLAY_MANAGER,
+                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, g_initable_iface_init))
+
+static gboolean
+gdk_broadway_display_manager_initable_init (GInitable     *initable,
+                                            GCancellable  *cancellable,
+                                            GError       **error)
+{
+  const gchar *display_name;
+  gint port;
+  GdkBroadwayServer *server;
+
+  display_name = g_getenv ("BROADWAY_DISPLAY");
+
+  port = 0;
+  if (display_name != NULL)
+    {
+      if (*display_name == ':')
+        display_name++;
+      port = strtol(display_name, NULL, 10);
+    }
+  if (port == 0)
+    port = 1;
+
+  server = _gdk_broadway_server_new (port, NULL);
+  if (server == NULL)
+    {
+      GDK_BROADWAY_DISPLAY_MANAGER (initable)->init_failed = TRUE;
+      return FALSE;
+    }
+
+  g_object_unref (server);
+
+  return TRUE;
+}
+
+void
+g_initable_iface_init (GInitableIface *iface)
+{
+  iface->init = gdk_broadway_display_manager_initable_init;
+}
 
 static GdkDisplay *
 gdk_broadway_display_manager_open_display (GdkDisplayManager *manager,
@@ -94,7 +139,8 @@ gdk_broadway_display_manager_init (GdkBroadwayDisplayManager *manager)
 static void
 gdk_broadway_display_manager_finalize (GObject *object)
 {
-  g_error ("A GdkBroadwayDisplayManager object was finalized. This should not happen");
+  if (!GDK_BROADWAY_DISPLAY_MANAGER (object)->init_failed)
+    g_error ("A GdkBroadwayDisplayManager object was finalized. This should not happen");
   G_OBJECT_CLASS (gdk_broadway_display_manager_parent_class)->finalize (object);
 }
 
