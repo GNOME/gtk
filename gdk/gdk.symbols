@@ -101,6 +101,7 @@ gdk_display_is_closed
 gdk_display_keyboard_ungrab
 gdk_display_list_devices
 gdk_display_manager_get
+gdk_display_manager_peek
 gdk_display_manager_get_default_display
 gdk_display_manager_get_type
 gdk_display_manager_list_displays

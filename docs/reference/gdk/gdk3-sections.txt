@@ -171,6 +171,7 @@ GdkDisplayClass
 <TITLE>GdkDisplayManager</TITLE>
 GdkDisplayManager
 gdk_display_manager_get
+gdk_display_manager_peek
 gdk_display_manager_get_default_display
 gdk_display_manager_set_default_display
 gdk_display_manager_list_displays

@@ -289,6 +289,29 @@ static GdkDisplayManager *manager = NULL;
 GdkDisplayManager*
 gdk_display_manager_get (void)
 {
+  gdk_display_manager_peek ();
+
+  if (manager == NULL)
+    g_error ("No GDK backend found (%s)", allowed_backends);
+
+  return manager;
+}
+
+/**
+ * gdk_display_manager_peek:
+ *
+ * Gets the singleton #GdkDisplayManager object. If GDK could
+ * not be initialized, %NULL is returned.
+ *
+ * Returns: (transfer none): The global #GdkDisplayManager singleton,
+ *     or %NULL if GDK could not be initialized. gdk_parse_args(),
+ *     gdk_init(), or gdk_init_check() must have been called first
+ *
+ * Since: 3.10
+ */
+GdkDisplayManager *
+gdk_display_manager_peek (void)
+{
   if (manager == NULL)
     {
       const gchar *backend_list;
@@ -369,13 +392,7 @@ gdk_display_manager_get (void)
             }
 #endif
         }
-
       g_strfreev (backends);
-
-      if (manager == NULL)
-        g_error ("No GDK backend found (%s)", allowed_backends);
-
-      GDK_NOTE (MISC, if (manager) g_message ("Using %s", G_OBJECT_TYPE_NAME (manager)));
     }
 
   return manager;
