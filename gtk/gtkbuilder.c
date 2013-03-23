@@ -1355,12 +1355,6 @@ gtk_builder_get_translation_domain (GtkBuilder *builder)
  *
  * Add @object to the @builder object pool so it can be referenced just like any
  * other object built by builder.
- *
- * To make this function even more useful a new special entry point element
- * &lt;external-object&gt; is defined. It is similar to &lt;object&gt; but has 
- * to reference an external object exposed with this function.
- * This way you can change properties and even add children to an
- * external object using builder, not just reference it.
  * 
  * Since: 3.8
  **/
