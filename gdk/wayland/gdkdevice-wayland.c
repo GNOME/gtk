@@ -106,8 +106,6 @@ typedef struct _GdkWaylandDeviceManagerClass GdkWaylandDeviceManagerClass;
 struct _GdkWaylandDeviceManager
 {
   GdkDeviceManager parent_object;
-  GdkDevice *core_pointer;
-  GdkDevice *core_keyboard;
   GList *devices;
 };
 
