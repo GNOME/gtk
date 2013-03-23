@@ -2570,7 +2570,7 @@ gtk_label_set_markup_internal (GtkLabel    *label,
   /* Extract the text to display */
   if (!pango_parse_markup (str_for_display,
                            -1,
-                           0,
+                           with_uline ? '_' : 0,
                            &attrs,
                            &text,
                            NULL,
