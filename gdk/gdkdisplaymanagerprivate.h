@@ -64,6 +64,9 @@ struct _GdkDisplayManagerClass
                                        GdkDisplay        *display);
 };
 
+GdkDisplayManager *
+_gdk_display_manager_get_nocreate (void);
+
 G_END_DECLS
 
 #endif

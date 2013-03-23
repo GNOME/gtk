@@ -267,6 +267,8 @@ gdk_set_allowed_backends (const gchar *backends)
   allowed_backends = g_strdup (backends);
 }
 
+static GdkDisplayManager *manager = NULL;
+
 /**
  * gdk_display_manager_get:
  *
@@ -287,8 +289,6 @@ gdk_set_allowed_backends (const gchar *backends)
 GdkDisplayManager*
 gdk_display_manager_get (void)
 {
-  static GdkDisplayManager *manager = NULL;
-
   if (manager == NULL)
     {
       const gchar *backend_list;
@@ -378,6 +378,15 @@ gdk_display_manager_get (void)
       GDK_NOTE (MISC, if (manager) g_message ("Using %s", G_OBJECT_TYPE_NAME (manager)));
     }
 
+  return manager;
+}
+
+/* Used for cases where we don't actually want to instantiate a
+ * display manager if none exists.  Internal only.
+ */
+GdkDisplayManager *
+_gdk_display_manager_get_nocreate (void)
+{
   return manager;
 }
 

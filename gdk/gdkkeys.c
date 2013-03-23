@@ -203,9 +203,12 @@ gdk_keyval_convert_case (guint symbol,
                          guint *lower,
                          guint *upper)
 {
-  GdkDisplayManager *manager = gdk_display_manager_get ();
+  GdkDisplayManager *manager = _gdk_display_manager_get_nocreate ();
 
-  GDK_DISPLAY_MANAGER_GET_CLASS (manager)->keyval_convert_case (manager, symbol, lower, upper);
+  if (manager)
+    GDK_DISPLAY_MANAGER_GET_CLASS (manager)->keyval_convert_case (manager, symbol, lower, upper);
+  else
+    _gdk_display_manager_real_keyval_convert_case (NULL, symbol, lower, upper);
 }
 
 /**
