@@ -149,9 +149,6 @@ static void     gtk_assistant_get_child_property (GtkContainer      *container,
                                                   GParamSpec        *pspec);
 
 static void       gtk_assistant_buildable_interface_init     (GtkBuildableIface *iface);
-static GObject   *gtk_assistant_buildable_get_internal_child (GtkBuildable  *buildable,
-                                                              GtkBuilder    *builder,
-                                                              const gchar   *childname);
 static gboolean   gtk_assistant_buildable_custom_tag_start   (GtkBuildable  *buildable,
                                                               GtkBuilder    *builder,
                                                               GObject       *child,
@@ -172,6 +169,25 @@ static void       gtk_assistant_do_set_page_header_image     (GtkAssistant  *ass
 static void       gtk_assistant_do_set_page_side_image       (GtkAssistant  *assistant,
                                                               GtkWidget     *page,
                                                               GdkPixbuf     *pixbuf);
+
+static gboolean   assistant_sidebar_draw_cb                  (GtkWidget     *widget,
+							      cairo_t       *cr,
+							      gpointer       user_data);
+static void       on_assistant_close                         (GtkWidget     *widget,
+							      GtkAssistant  *assistant);
+static void       on_assistant_apply                         (GtkWidget     *widget,
+							      GtkAssistant  *assistant);
+static void       on_assistant_forward                       (GtkWidget     *widget,
+							      GtkAssistant  *assistant);
+static void       on_assistant_back                          (GtkWidget     *widget,
+							      GtkAssistant  *assistant);
+static void       on_assistant_cancel                        (GtkWidget     *widget,
+							      GtkAssistant  *assistant);
+static void       on_assistant_last                          (GtkWidget     *widget,
+							      GtkAssistant  *assistant);
+static void       assistant_remove_page_cb                   (GtkNotebook   *notebook,
+							      GtkWidget     *page,
+							      GtkAssistant  *assistant);
 
 GType             _gtk_assistant_accessible_get_type         (void);
 
@@ -409,6 +425,32 @@ gtk_assistant_class_init (GtkAssistantClass *class)
                                                                     P_("Whether all required fields on the page have been filled out"),
                                                                     FALSE,
                                                                     G_PARAM_READWRITE));
+
+  /* Bind class to template
+   */
+  gtk_widget_class_set_template_from_resource (widget_class,
+					       "/org/gtk/libgtk/gtkassistant.ui");
+
+  gtk_widget_class_bind_child_internal (widget_class, GtkAssistantPrivate, action_area);
+  gtk_widget_class_bind_child (widget_class, GtkAssistantPrivate, content);
+  gtk_widget_class_bind_child (widget_class, GtkAssistantPrivate, cancel);
+  gtk_widget_class_bind_child (widget_class, GtkAssistantPrivate, forward);
+  gtk_widget_class_bind_child (widget_class, GtkAssistantPrivate, back);
+  gtk_widget_class_bind_child (widget_class, GtkAssistantPrivate, apply);
+  gtk_widget_class_bind_child (widget_class, GtkAssistantPrivate, close);
+  gtk_widget_class_bind_child (widget_class, GtkAssistantPrivate, last);
+  gtk_widget_class_bind_child (widget_class, GtkAssistantPrivate, sidebar);
+  gtk_widget_class_bind_child (widget_class, GtkAssistantPrivate, button_size_group);
+  gtk_widget_class_bind_child (widget_class, GtkAssistantPrivate, title_size_group);
+
+  gtk_widget_class_bind_callback (widget_class, assistant_sidebar_draw_cb);
+  gtk_widget_class_bind_callback (widget_class, assistant_remove_page_cb);
+  gtk_widget_class_bind_callback (widget_class, on_assistant_close);
+  gtk_widget_class_bind_callback (widget_class, on_assistant_apply);
+  gtk_widget_class_bind_callback (widget_class, on_assistant_forward);
+  gtk_widget_class_bind_callback (widget_class, on_assistant_back);
+  gtk_widget_class_bind_callback (widget_class, on_assistant_cancel);
+  gtk_widget_class_bind_callback (widget_class, on_assistant_last);
 
   g_type_class_add_private (gobject_class, sizeof (GtkAssistantPrivate));
 }
@@ -953,115 +995,11 @@ static void
 gtk_assistant_init (GtkAssistant *assistant)
 {
   GtkAssistantPrivate *priv;
-  GtkStyleContext *context;
-  GtkWidget *main_box;
-  GtkWidget *content_box;
-  GtkWidget *sidebar_frame;
 
   assistant->priv = G_TYPE_INSTANCE_GET_PRIVATE (assistant,
                                                  GTK_TYPE_ASSISTANT,
                                                  GtkAssistantPrivate);
   priv = assistant->priv;
-
-  /* use border on inner panes instead */
-  gtk_container_set_border_width (GTK_CONTAINER (assistant), 0);
-
-  gtk_widget_push_composite_child ();
-
-  main_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-  priv->sidebar = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-
-  /* use a frame for the sidebar, and manually render a background
-   * in it. GtkFrame also gives us padding support for free.
-   */
-  sidebar_frame = gtk_frame_new (NULL);
-  context = gtk_widget_get_style_context (sidebar_frame);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SIDEBAR);
-
-  g_signal_connect (sidebar_frame, "draw",
-                    G_CALLBACK (assistant_sidebar_draw_cb), assistant);
-
-  content_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
-  gtk_container_set_border_width (GTK_CONTAINER (content_box), 12);
-  priv->content = gtk_notebook_new ();
-  gtk_notebook_set_show_border (GTK_NOTEBOOK (priv->content), FALSE);
-  gtk_notebook_set_show_tabs (GTK_NOTEBOOK (priv->content), FALSE);
-  priv->action_area = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-
-  g_signal_connect (priv->content, "remove",
-                    G_CALLBACK (assistant_remove_page_cb), assistant);
-
-  gtk_container_add (GTK_CONTAINER (sidebar_frame), priv->sidebar);
-  gtk_box_pack_start (GTK_BOX (main_box), sidebar_frame, FALSE, FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (main_box), content_box, TRUE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (content_box), priv->content, TRUE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (content_box), priv->action_area, FALSE, TRUE, 0);
-  gtk_widget_set_halign (priv->action_area, GTK_ALIGN_END);
-
-  gtk_widget_show_all (main_box);
-
-  gtk_widget_set_parent (main_box, GTK_WIDGET (assistant));
-  _gtk_bin_set_child (GTK_BIN (assistant), main_box);
-
-  priv->close   = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
-  priv->apply   = gtk_button_new_from_stock (GTK_STOCK_APPLY);
-  priv->forward = gtk_button_new_with_mnemonic (_("C_ontinue"));
-  gtk_button_set_image (GTK_BUTTON (priv->forward),
-      gtk_image_new_from_stock (GTK_STOCK_GO_FORWARD, GTK_ICON_SIZE_BUTTON));
-  priv->back    = gtk_button_new_with_mnemonic (_("Go _Back"));
-  gtk_button_set_image (GTK_BUTTON (priv->back),
-      gtk_image_new_from_stock (GTK_STOCK_GO_BACK, GTK_ICON_SIZE_BUTTON));
-  priv->cancel  = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
-  priv->last    = gtk_button_new_with_mnemonic (_("_Finish"));
-  gtk_button_set_image (GTK_BUTTON (priv->last),
-      gtk_image_new_from_stock (GTK_STOCK_GOTO_LAST, GTK_ICON_SIZE_BUTTON));
-  gtk_widget_set_can_default (priv->close, TRUE);
-  gtk_widget_set_can_default (priv->apply, TRUE);
-  gtk_widget_set_can_default (priv->forward, TRUE);
-
-  priv->button_size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-  gtk_size_group_add_widget (priv->button_size_group, priv->close);
-  gtk_size_group_add_widget (priv->button_size_group, priv->apply);
-  gtk_size_group_add_widget (priv->button_size_group, priv->forward);
-  gtk_size_group_add_widget (priv->button_size_group, priv->back);
-  gtk_size_group_add_widget (priv->button_size_group, priv->cancel);
-  gtk_size_group_add_widget (priv->button_size_group, priv->last);
-
-  gtk_widget_set_no_show_all (priv->close, TRUE);
-  gtk_widget_set_no_show_all (priv->apply, TRUE);
-  gtk_widget_set_no_show_all (priv->forward, TRUE);
-  gtk_widget_set_no_show_all (priv->back, TRUE);
-  gtk_widget_set_no_show_all (priv->cancel, TRUE);
-  gtk_widget_set_no_show_all (priv->last, TRUE);
-
-  if (!alternative_button_order (assistant))
-    {
-      gtk_box_pack_end (GTK_BOX (priv->action_area), priv->apply, FALSE, FALSE, 0);
-      gtk_box_pack_end (GTK_BOX (priv->action_area), priv->forward, FALSE, FALSE, 0);
-      gtk_box_pack_end (GTK_BOX (priv->action_area), priv->back, FALSE, FALSE, 0);
-      gtk_box_pack_end (GTK_BOX (priv->action_area), priv->last, FALSE, FALSE, 0);
-      gtk_box_pack_end (GTK_BOX (priv->action_area), priv->cancel, FALSE, FALSE, 0);
-      gtk_box_pack_end (GTK_BOX (priv->action_area), priv->close, FALSE, FALSE, 0);
-    }
-  else
-    {
-      gtk_box_pack_end (GTK_BOX (priv->action_area), priv->close, FALSE, FALSE, 0);
-      gtk_box_pack_end (GTK_BOX (priv->action_area), priv->cancel, FALSE, FALSE, 0);
-      gtk_box_pack_end (GTK_BOX (priv->action_area), priv->apply, FALSE, FALSE, 0);
-      gtk_box_pack_end (GTK_BOX (priv->action_area), priv->forward, FALSE, FALSE, 0);
-      gtk_box_pack_end (GTK_BOX (priv->action_area), priv->back, FALSE, FALSE, 0);
-      gtk_box_pack_end (GTK_BOX (priv->action_area), priv->last, FALSE, FALSE, 0);
-    }
-
-  gtk_widget_show (priv->forward);
-  gtk_widget_show (priv->back);
-  gtk_widget_show (priv->cancel);
-  gtk_widget_show (priv->action_area);
-
-  gtk_widget_pop_composite_child ();
-
-  priv->title_size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-
   priv->pages = NULL;
   priv->current_page = NULL;
   priv->visited_pages = NULL;
@@ -1070,18 +1008,20 @@ gtk_assistant_init (GtkAssistant *assistant)
   priv->forward_function_data = assistant;
   priv->forward_data_destroy = NULL;
 
-  g_signal_connect (G_OBJECT (priv->close), "clicked",
-                    G_CALLBACK (on_assistant_close), assistant);
-  g_signal_connect (G_OBJECT (priv->apply), "clicked",
-                    G_CALLBACK (on_assistant_apply), assistant);
-  g_signal_connect (G_OBJECT (priv->forward), "clicked",
-                    G_CALLBACK (on_assistant_forward), assistant);
-  g_signal_connect (G_OBJECT (priv->back), "clicked",
-                    G_CALLBACK (on_assistant_back), assistant);
-  g_signal_connect (G_OBJECT (priv->cancel), "clicked",
-                    G_CALLBACK (on_assistant_cancel), assistant);
-  g_signal_connect (G_OBJECT (priv->last), "clicked",
-                    G_CALLBACK (on_assistant_last), assistant);
+  gtk_widget_init_template (GTK_WIDGET (assistant));
+
+  if (alternative_button_order (assistant))
+    {
+      GList *buttons, *l;
+
+      /* Reverse the action area children for the alternative button order setting */
+      buttons = gtk_container_get_children (GTK_CONTAINER (priv->action_area));
+
+      for (l = buttons; l; l = l->next)
+	gtk_box_reorder_child (GTK_BOX (priv->action_area), GTK_WIDGET (l->data), -1);
+
+      g_list_free (buttons);
+    }
 }
 
 static void
@@ -1188,18 +1128,6 @@ gtk_assistant_destroy (GtkWidget *widget)
 
   if (priv->action_area)
     priv->action_area = NULL;
-
-  if (priv->button_size_group)
-    {
-      g_object_unref (priv->button_size_group);
-      priv->button_size_group = NULL;
-    }
-
-  if (priv->title_size_group)
-    {
-      g_object_unref (priv->title_size_group);
-      priv->title_size_group = NULL;
-    }
 
   if (priv->forward_function)
     {
@@ -1309,6 +1237,19 @@ static void
 gtk_assistant_add (GtkContainer *container,
                    GtkWidget    *page)
 {
+  /* A bit tricky here, GtkAssistant doesnt exactly play by 
+   * the rules by allowing gtk_container_add() to insert pages.
+   *
+   * For the first invocation (from the builder template invocation),
+   * let's make sure we add the actual direct container content properly.
+   */
+  if (!gtk_bin_get_child (GTK_BIN (container)))
+    {
+      gtk_widget_set_parent (page, GTK_WIDGET (container));
+      _gtk_bin_set_child (GTK_BIN (container), page);
+      return;
+    }
+
   gtk_assistant_append_page (GTK_ASSISTANT (container), page);
 }
 
@@ -2354,22 +2295,8 @@ static void
 gtk_assistant_buildable_interface_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
-  iface->get_internal_child = gtk_assistant_buildable_get_internal_child;
   iface->custom_tag_start = gtk_assistant_buildable_custom_tag_start;
   iface->custom_finished = gtk_assistant_buildable_custom_finished;
-}
-
-static GObject *
-gtk_assistant_buildable_get_internal_child (GtkBuildable *buildable,
-                                            GtkBuilder   *builder,
-                                            const gchar  *childname)
-{
-    if (strcmp (childname, "action_area") == 0)
-      return G_OBJECT (GTK_ASSISTANT (buildable)->priv->action_area);
-
-    return parent_buildable_iface->get_internal_child (buildable,
-                                                       builder,
-                                                       childname);
 }
 
 gboolean
