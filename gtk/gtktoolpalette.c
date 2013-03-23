@@ -216,6 +216,12 @@ gtk_tool_palette_init (GtkToolPalette *palette)
   palette->priv->style_set = FALSE;
 
   palette->priv->text_size_group = gtk_size_group_new (GTK_SIZE_GROUP_BOTH);
+
+  if (dnd_target_atom_item == GDK_NONE)
+    {
+      dnd_target_atom_item = gdk_atom_intern_static_string (dnd_targets[0].target);
+      dnd_target_atom_group = gdk_atom_intern_static_string (dnd_targets[1].target);
+    }
 }
 
 static void
@@ -1080,9 +1086,6 @@ gtk_tool_palette_class_init (GtkToolPaletteClass *cls)
                                                                     GTK_PARAM_READWRITE));
 
   g_type_class_add_private (cls, sizeof (GtkToolPalettePrivate));
-
-  dnd_target_atom_item = gdk_atom_intern_static_string (dnd_targets[0].target);
-  dnd_target_atom_group = gdk_atom_intern_static_string (dnd_targets[1].target);
 }
 
 /**
