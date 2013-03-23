@@ -213,6 +213,188 @@ random_menu_new (GRand *rand,
 }
 
 /* Test cases {{{1 */
+
+static void assert_menu_equality (GtkContainer *container, GMenuModel   *model);
+
+/* a bit complicated with the separators...
+ *
+ * with_separators are if subsections of this GMenuModel should have
+ * separators inserted between them (ie: in the same sense as the
+ * 'with_separators' argument to gtk_menu_shell_bind_model().
+ *
+ * needs_separator is true if this particular section needs to have a
+ * separator before it in the case that it is non-empty.  this will be
+ * defined for all subsections of a with_separators menu (except the
+ * first) or in case section_header is non-%NULL.
+ *
+ * section_header is the label that must be inside that separator, if it
+ * exists.  section_header is only non-%NULL if needs_separator is also
+ * TRUE.
+ */
+static void
+assert_section_equality (GSList      **children,
+                         gboolean      with_separators,
+                         gboolean      needs_separator,
+                         const gchar  *section_header,
+                         GMenuModel   *model)
+{
+  gboolean has_separator;
+  GSList *our_children;
+  gint i, n;
+
+  /* Assuming that we have the possibility of showing a separator, there
+   * are two valid situations:
+   *
+   *  - we have a separator and we have other children
+   *
+   *  - we have no separator and no children
+   *
+   * If we see a separator, we suppose that it is ours and that we will
+   * encounter children.  In the case that we have no children, the
+   * separator may not be ours but may rather belong to a later section.
+   *
+   * We therefore keep our own copy of the children GSList.  If we
+   * encounter children, we will delete the links that this section is
+   * responsible for and update the pass-by-reference value.  Otherwise,
+   * we will leave everything alone and let the separator be accounted
+   * for by a following section.
+   */
+  our_children = *children;
+  if (needs_separator && GTK_IS_SEPARATOR_MENU_ITEM (our_children->data))
+    {
+       /* We accounted for the separator, at least for now, so remove it
+       * from the list.
+       *
+       * We will check later if we should have actually had a separator
+       * and compare the result to has_separator.
+       */
+      our_children = our_children->next;
+      has_separator = TRUE;
+    }
+  else
+    has_separator = FALSE;
+
+  /* Now, iterate the model checking that the items in the GSList line
+   * up with our expectations. */
+  n = g_menu_model_get_n_items (model);
+  for (i = 0; i < n; i++)
+    {
+      GMenuModel *subsection;
+      GMenuModel *submenu;
+      gchar *label = NULL;
+
+      subsection = g_menu_model_get_item_link (model, i, G_MENU_LINK_SECTION);
+      submenu = g_menu_model_get_item_link (model, i, G_MENU_LINK_SUBMENU);
+      g_menu_model_get_item_attribute (model, i, G_MENU_ATTRIBUTE_LABEL, "s", &label);
+
+      if (subsection)
+        {
+          g_assert (!submenu);
+          assert_section_equality (&our_children,
+                                   FALSE,                                /* with_separators */
+                                   label || (with_separators && i > 0),  /* needs_separator */
+                                   label,                                /* section_header */
+                                   subsection);
+          g_object_unref (subsection);
+        }
+      else
+        {
+          GtkWidget *submenu_widget;
+          GtkMenuItem *item;
+
+          /* This is a normal item.  Make sure the label is right. */
+          item = our_children->data;
+          our_children = g_slist_remove (our_children, item);
+
+          /* get_label() returns "" when it ought to return NULL */
+          g_assert_cmpstr (gtk_menu_item_get_label (item), ==, label ? label : "");
+          submenu_widget = gtk_menu_item_get_submenu (item);
+
+          if (submenu)
+            {
+              g_assert (submenu_widget != NULL);
+              assert_menu_equality (GTK_CONTAINER (submenu_widget), submenu);
+              g_object_unref (submenu);
+            }
+          else
+            g_assert (!submenu_widget);
+        }
+
+      g_free (label);
+    }
+
+  /* If we found a separator but visited no children then the separator
+   * was not for us.  Patch that up.
+   */
+  if (has_separator && our_children == (*children)->next)
+    {
+      /* Rewind our_children to put the separator we tentatively
+       * consumed back into the list.
+       */
+      our_children = *children;
+      has_separator = FALSE;
+    }
+
+  if (our_children == *children)
+    /* If we had no children then we didn't really need a separator. */
+    needs_separator = FALSE;
+
+  g_assert (needs_separator == has_separator);
+
+  if (has_separator)
+    {
+      GtkWidget *contents;
+      const gchar *label;
+
+      /* We needed and had a separator and we visited a child.
+       *
+       * Make sure that separator was valid.
+       */
+      contents = gtk_bin_get_child ((*children)->data);
+      if (GTK_IS_LABEL (contents))
+        label = gtk_label_get_label (GTK_LABEL (contents));
+      else
+        label = "";
+
+      /* get_label() returns "" when it ought to return NULL */
+      g_assert_cmpstr (label, ==, section_header ? section_header : "");
+
+      /* our_children has already gone (possibly far) past *children, so
+       * we need to free up the link that we left behind for the
+       * separator in case we wanted to rewind.
+       */
+      g_slist_free_1 (*children);
+    }
+
+  *children = our_children;
+}
+
+/* We want to use a GSList here instead of a GList because the ->prev
+ * pointer updates cause trouble with the way we speculatively deal with
+ * separators by skipping over them and coming back to clean up later.
+ */
+static void
+get_children_into_slist (GtkWidget *widget,
+                         gpointer   user_data)
+{
+  GSList **list_ptr = user_data;
+
+  *list_ptr = g_slist_prepend (*list_ptr, widget);
+}
+
+static void
+assert_menu_equality (GtkContainer *container,
+                      GMenuModel   *model)
+{
+  GSList *children = NULL;
+
+  gtk_container_foreach (container, get_children_into_slist, &children);
+  children = g_slist_reverse (children);
+
+  assert_section_equality (&children, TRUE, FALSE, NULL, model);
+  g_assert (children == NULL);
+}
+
 static void
 test_bind_menu (void)
 {
@@ -227,14 +409,14 @@ test_bind_menu (void)
   model = random_menu_new (rand, TOP_ORDER);
   menu = gtk_menu_new_from_model (G_MENU_MODEL (model));
   g_object_ref_sink (menu);
+  assert_menu_equality (GTK_CONTAINER (menu), G_MENU_MODEL (model));
   for (i = 0; i < 100; i++)
     {
       random_menu_change (model, rand);
       while (g_main_context_iteration (NULL, FALSE));
-      g_print (".");
+      assert_menu_equality (GTK_CONTAINER (menu), G_MENU_MODEL (model));
     }
   g_object_unref (model);
-  gtk_widget_destroy (menu);
   g_object_unref (menu);
   g_rand_free (rand);
 }
