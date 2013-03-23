@@ -791,7 +791,7 @@ GtkSwitch.trough:active {
 /* Assistant */
 
 GtkAssistant .sidebar .highlight {
-    background-color: blue;
+    background-color: gray;
     font: bold;
 }
 
