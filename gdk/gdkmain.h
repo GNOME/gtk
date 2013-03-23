@@ -117,6 +117,9 @@ void gdk_flush (void);
 
 void gdk_disable_multidevice (void);
 
+GDK_AVAILABLE_IN_3_10
+void gdk_set_allowed_backends (const gchar *backends);
+
 G_END_DECLS
 
 #endif /* __GDK_MAIN_H__ */

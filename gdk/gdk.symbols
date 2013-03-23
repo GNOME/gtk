@@ -335,6 +335,7 @@ gdk_set_program_class
 gdk_set_show_events
 gdk_setting_action_get_type
 gdk_setting_get
+gdk_set_allowed_backends
 gdk_status_get_type
 gdk_synthesize_window_state
 gdk_test_render_sync

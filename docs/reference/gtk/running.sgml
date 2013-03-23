@@ -461,6 +461,9 @@ nevertheless.
       </varlistentry>
 
     </variablelist>
+    Since 3.10, this environment variable can contain a comma-separated list
+    of backend names, which are tried in order. The list may also contain
+    a *, which means: try all remaining backends.
     For more information about selecting backends, see the gdk_display_manager_get() function.
   </para>
 </formalpara>
