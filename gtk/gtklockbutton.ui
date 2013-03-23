@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="gtk30">
+  <!-- interface-requires gtk+ 3.6 -->
+  <template class="GtkLockButton" parent="GtkButton">
+    <property name="visible">True</property>
+    <property name="can_focus">True</property>
+    <property name="receives_default">True</property>
+    <child>
+      <object class="GtkBox" id="box">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">center</property>
+        <property name="valign">center</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkImage" id="image">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="stock">gtk-missing-image</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label_lock">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="no_show_all">True</property>
+            <property name="xalign">0</property>
+            <property name="label" translatable="yes">Lock</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label_unlock">
+            <property name="can_focus">False</property>
+            <property name="no_show_all">True</property>
+            <property name="xalign">0</property>
+            <property name="label" translatable="yes">Unlock</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GtkSizeGroup" id="label_group">
+    <property name="mode">both</property>
+    <widgets>
+      <widget name="label_lock"/>
+      <widget name="label_unlock"/>
+    </widgets>
+  </object>
+</interface>

@@ -1099,6 +1099,7 @@ COMPOSITE_TEMPLATES =			\
 	gtkaboutdialog.ui		\
 	gtkdialog.ui			\
 	gtkinfobar.ui			\
+	gtklockbutton.ui		\
 	gtkmessagedialog.ui
 
 #

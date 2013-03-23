@@ -14,6 +14,7 @@
     <file compressed="true">gtkaboutdialog.ui</file>
     <file compressed="true">gtkdialog.ui</file>
     <file compressed="true">gtkinfobar.ui</file>
+    <file compressed="true">gtklockbutton.ui</file>
     <file compressed="true">gtkmessagedialog.ui</file>
   </gresource>
 </gresources>

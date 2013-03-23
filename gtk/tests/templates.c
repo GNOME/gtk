@@ -75,6 +75,19 @@ test_info_bar_basic (void)
   gtk_widget_destroy (infobar);
 }
 
+static void
+test_lock_button_basic (void)
+{
+  GtkWidget *button;
+  GPermission *permission;
+
+  permission = g_simple_permission_new (TRUE);
+  button = gtk_lock_button_new (permission);
+  g_assert (GTK_IS_LOCK_BUTTON (button));
+  gtk_widget_destroy (button);
+  g_object_unref (permission);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -92,6 +105,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Template/GtkMessageDialog/Basic", test_message_dialog_basic);
   g_test_add_func ("/Template/GtkAboutDialog/Basic", test_about_dialog_basic);
   g_test_add_func ("/Template/GtkInfoBar/Basic", test_info_bar_basic);
+  g_test_add_func ("/Template/GtkLockButton/Basic", test_lock_button_basic);
 
   return g_test_run();
 }
