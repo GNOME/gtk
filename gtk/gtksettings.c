@@ -40,6 +40,10 @@
 #include <pango/pangofc-fontmap.h>
 #endif
 
+#ifdef GDK_WINDOWING_WAYLAND
+#include "wayland/gdkwayland.h"
+#endif
+
 #ifdef GDK_WINDOWING_QUARTZ
 #include "quartz/gdkquartz.h"
 #endif
@@ -2552,23 +2556,27 @@ settings_update_modules (GtkSettings *settings)
 static void
 settings_update_cursor_theme (GtkSettings *settings)
 {
-#ifdef GDK_WINDOWING_X11
-  GdkDisplay *display = gdk_screen_get_display (settings->priv->screen);
   gchar *theme = NULL;
   gint size = 0;
+  GdkDisplay *display = gdk_screen_get_display (settings->priv->screen);
 
+  g_object_get (settings,
+                "gtk-cursor-theme-name", &theme,
+                "gtk-cursor-theme-size", &size,
+                NULL);
+
+#ifdef GDK_WINDOWING_X11
   if (GDK_IS_X11_DISPLAY (display))
-    {
-      g_object_get (settings,
-                    "gtk-cursor-theme-name", &theme,
-                    "gtk-cursor-theme-size", &size,
-                    NULL);
-
-      gdk_x11_display_set_cursor_theme (display, theme, size);
-
-      g_free (theme);
-    }
+    gdk_x11_display_set_cursor_theme (display, theme, size);
+  else
 #endif
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (display))
+    gdk_wayland_display_set_cursor_theme (display, theme, size);
+  else
+#endif
+    g_warning ("unsupported GDK backend\n");
+  g_free (theme);
 }
 
 static void
