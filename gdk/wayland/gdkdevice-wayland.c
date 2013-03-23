@@ -963,12 +963,14 @@ deliver_key_event(GdkWaylandDeviceData *device,
 {
   GdkEvent *event;
   struct xkb_state *xkb_state;
+  struct xkb_keymap *xkb_keymap;
   GdkKeymap *keymap;
   xkb_keysym_t sym;
   guint delay, interval;
 
   keymap = device->keymap;
   xkb_state = _gdk_wayland_keymap_get_xkb_state (keymap);
+  xkb_keymap = _gdk_wayland_keymap_get_xkb_keymap (keymap);
 
   sym = xkb_state_key_get_one_sym (xkb_state, key);
 
@@ -995,6 +997,9 @@ deliver_key_event(GdkWaylandDeviceData *device,
                        "string %s, mods 0x%x",
                        event->key.hardware_keycode, event->key.keyval,
                        event->key.string, event->key.state));
+
+  if (!xkb_keymap_key_repeats (xkb_keymap, key))
+    return FALSE;
 
   if (!get_key_repeat (device, &delay, &interval))
     return FALSE;
