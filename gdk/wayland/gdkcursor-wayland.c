@@ -128,6 +128,41 @@ _gdk_wayland_display_finalize_cursors (GdkWaylandDisplay *display)
   g_slist_free (display->cursor_cache);
 }
 
+static gboolean
+set_cursor_from_theme (GdkWaylandCursor *cursor, struct wl_cursor_theme *theme)
+{
+  struct wl_cursor *c;
+
+  c = wl_cursor_theme_get_cursor (theme, cursor->name);
+  if (!c)
+    {
+      g_warning (G_STRLOC ": Unable to load %s from the cursor theme", cursor->name);
+
+      /* return the left_ptr cursor as a fallback */
+      c = wl_cursor_theme_get_cursor (theme, "left_ptr");
+
+      if (!c)
+        return FALSE;
+    }
+
+  cursor->hotspot_x = c->images[0]->hotspot_x;
+  cursor->hotspot_y = c->images[0]->hotspot_y;
+  cursor->width = c->images[0]->width;
+  cursor->height = c->images[0]->height;
+
+  cursor->buffer = wl_cursor_image_get_buffer(c->images[0]);
+  cursor->free_buffer = FALSE;
+
+  return TRUE;
+}
+
+void
+_gdk_wayland_display_update_cursors (GdkWaylandDisplay      *display,
+                                     struct wl_cursor_theme *theme)
+{
+  g_slist_foreach (display->cursor_cache, (GFunc) set_cursor_from_theme, theme);
+}
+
 static void
 gdk_wayland_cursor_finalize (GObject *object)
 {
@@ -286,33 +321,13 @@ _gdk_wayland_display_get_cursor_for_name (GdkDisplay  *display,
   if (!name || g_str_equal (name, "blank_cursor"))
     return GDK_CURSOR (private);
 
-  cursor = wl_cursor_theme_get_cursor (wayland_display->cursor_theme,
-                                       name);
-
-  if (!cursor)
-    {
-      g_warning (G_STRLOC ": Unable to load %s from the cursor theme", name);
-
-      /* return the left_ptr cursor as a fallback */
-      cursor = wl_cursor_theme_get_cursor (wayland_display->cursor_theme,
-                                           "left_ptr");
-
-      /* if the fallback failed to load, return a blank pointer */
-      if (!cursor)
-        return GDK_CURSOR (private);
-    }
+  if (!set_cursor_from_theme (private, wayland_display->cursor_theme))
+    return GDK_CURSOR (private);
 
   /* TODO: Do something clever so we can do animated cursors - move the
    * wl_pointer_set_cursor to a function here so that we can do the magic to
    * iterate through
    */
-  private->hotspot_x = cursor->images[0]->hotspot_x;
-  private->hotspot_y = cursor->images[0]->hotspot_y;
-  private->width = cursor->images[0]->width;
-  private->height = cursor->images[0]->height;
-
-  private->buffer = wl_cursor_image_get_buffer(cursor->images[0]);
-  private->free_buffer = FALSE;
 
   add_to_cache (wayland_display, private);
 

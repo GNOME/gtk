@@ -562,11 +562,36 @@ gdk_wayland_display_init (GdkWaylandDisplay *display)
   display->xkb_context = xkb_context_new (0);
 }
 
+void
+gdk_wayland_display_set_cursor_theme (GdkDisplay  *display,
+                                      const gchar *name,
+                                      gint         size)
+{
+  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY(display);
+  struct wl_cursor_theme *theme;
+
+  g_assert (wayland_display);
+  g_assert (wayland_display->shm);
+
+  theme = wl_cursor_theme_load (name, size, wayland_display->shm);
+  if (theme == NULL)
+    {
+      g_warning ("Failed to load cursor theme %s\n", name);
+      return;
+    }
+
+  _gdk_wayland_display_update_cursors (wayland_display, theme);
+
+  if (wayland_display->cursor_theme != NULL)
+    wl_cursor_theme_destroy (wayland_display->cursor_theme);
+  wayland_display->cursor_theme = theme;
+}
+
 static void
 _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *wayland_display)
 {
   guint size;
-  const gchar *theme_name;
+  const gchar *name;
   GValue v = G_VALUE_INIT;
 
   g_assert (wayland_display);
@@ -581,13 +606,12 @@ _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *wayland_display)
 
   g_value_init (&v, G_TYPE_STRING);
   if (gdk_setting_get ("gtk-cursor-theme-name", &v))
-    theme_name = g_value_get_string (&v);
+    name = g_value_get_string (&v);
   else
-    theme_name = "default";
+    name = "default";
 
-  wayland_display->cursor_theme = wl_cursor_theme_load (theme_name,
-                                                        size,
-                                                        wayland_display->shm);
+  gdk_wayland_display_set_cursor_theme (GDK_DISPLAY (wayland_display),
+                                        name, size);
   g_value_unset (&v);
 }
 
