@@ -1101,7 +1101,8 @@ COMPOSITE_TEMPLATES =			\
 	gtkdialog.ui			\
 	gtkinfobar.ui			\
 	gtklockbutton.ui		\
-	gtkmessagedialog.ui
+	gtkmessagedialog.ui		\
+	gtkscalebutton.ui
 
 #
 # rules to generate built sources
