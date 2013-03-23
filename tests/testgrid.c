@@ -284,15 +284,65 @@ scrolling (void)
 }
 
 static void
+insert_cb (GtkButton *button, GtkWidget *window)
+{
+  GtkGrid *g, *g1, *g2, *g3, *g4;
+  GtkWidget *child;
+  gboolean inserted;
+
+  g = GTK_GRID (gtk_bin_get_child (GTK_BIN (window)));
+  g1 = GTK_GRID (gtk_grid_get_child_at (g, 0, 0));
+  g2 = GTK_GRID (gtk_grid_get_child_at (g, 1, 0));
+  g3 = GTK_GRID (gtk_grid_get_child_at (g, 0, 1));
+  g4 = GTK_GRID (gtk_grid_get_child_at (g, 1, 1));
+
+  inserted = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (button), "inserted"));
+
+  if (inserted)
+    {
+      gtk_grid_remove_row (g1, 1);
+      gtk_grid_remove_column (g2, 1);
+      gtk_grid_remove_row (g3, 1);
+      gtk_grid_remove_column (g4, 1);
+    }
+  else
+    {
+      gtk_grid_insert_row (g1, 1);
+      gtk_grid_attach (g1, test_widget ("(0, 1)", "red"), 0, 1, 1, 1);
+      gtk_grid_attach (g1, test_widget ("(2, 1)", "red"), 2, 1, 1, 1);
+
+      gtk_grid_insert_column (g2, 1);
+      gtk_grid_attach (g2, test_widget ("(1, 0)", "red"), 1, 0, 1, 1);
+      gtk_grid_attach (g2, test_widget ("(1, 2)", "red"), 1, 2, 1, 1);
+
+      child = gtk_grid_get_child_at (g3, 0, 0);
+      gtk_grid_insert_next_to (g3, child, GTK_POS_BOTTOM);
+      gtk_grid_attach (g3, test_widget ("(0, 1)", "red"), 0, 1, 1, 1);
+      gtk_grid_attach (g3, test_widget ("(2, 1)", "red"), 2, 1, 1, 1);
+
+      child = gtk_grid_get_child_at (g4, 0, 0);
+      gtk_grid_insert_next_to (g4, child, GTK_POS_RIGHT);
+      gtk_grid_attach (g4, test_widget ("(1, 0)", "red"), 1, 0, 1, 1);
+      gtk_grid_attach (g4, test_widget ("(1, 2)", "red"), 1, 2, 1, 1);
+
+      gtk_widget_show_all (GTK_WIDGET (g));
+    }
+
+  gtk_button_set_label (button, inserted ? "Insert" : "Remove");
+  g_object_set_data (G_OBJECT (button), "inserted", GINT_TO_POINTER (!inserted));
+}
+
+static void
 insert (void)
 {
   GtkWidget *window;
   GtkWidget *g;
   GtkWidget *grid;
   GtkWidget *child;
+  GtkWidget *button;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_title (GTK_WINDOW (window), "Insertion");
+  gtk_window_set_title (GTK_WINDOW (window), "Insertion / Removal");
 
   g = gtk_grid_new ();
   gtk_grid_set_row_spacing (GTK_GRID (g), 10);
@@ -308,10 +358,6 @@ insert (void)
   gtk_grid_attach (GTK_GRID (grid), test_widget ("(2, 0)", "yellow"), 2, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), test_widget ("(2, 1)", "yellow"), 2, 1, 1, 1);
 
-  gtk_grid_insert_row (GTK_GRID (grid), 1);
-  gtk_grid_attach (GTK_GRID (grid), test_widget ("(0, 1)", "red"), 0, 1, 1, 1);
-  gtk_grid_attach (GTK_GRID (grid), test_widget ("(2, 1)", "red"), 2, 1, 1, 1);
-
   grid = gtk_grid_new ();
   gtk_grid_attach (GTK_GRID (g), grid, 1, 0, 1, 1);
 
@@ -320,10 +366,6 @@ insert (void)
   gtk_grid_attach (GTK_GRID (grid), test_widget ("(0, 1)", "green"), 0, 1, 2, 1);
   gtk_grid_attach (GTK_GRID (grid), test_widget ("(0, 2)", "yellow"), 0, 2, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), test_widget ("(1, 2)", "yellow"), 1, 2, 1, 1);
-
-  gtk_grid_insert_column (GTK_GRID (grid), 1);
-  gtk_grid_attach (GTK_GRID (grid), test_widget ("(1, 0)", "red"), 1, 0, 1, 1);
-  gtk_grid_attach (GTK_GRID (grid), test_widget ("(1, 2)", "red"), 1, 2, 1, 1);
 
   grid = gtk_grid_new ();
   gtk_grid_attach (GTK_GRID (g), grid, 0, 1, 1, 1);
@@ -335,10 +377,6 @@ insert (void)
   gtk_grid_attach (GTK_GRID (grid), test_widget ("(2, 0)", "yellow"), 2, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), test_widget ("(2, 1)", "yellow"), 2, 1, 1, 1);
 
-  gtk_grid_insert_next_to (GTK_GRID (grid), child, GTK_POS_BOTTOM);
-  gtk_grid_attach (GTK_GRID (grid), test_widget ("(0, 1)", "red"), 0, 1, 1, 1);
-  gtk_grid_attach (GTK_GRID (grid), test_widget ("(2, 1)", "red"), 2, 1, 1, 1);
-
   grid = gtk_grid_new ();
   gtk_grid_attach (GTK_GRID (g), grid, 1, 1, 1, 1);
 
@@ -349,9 +387,9 @@ insert (void)
   gtk_grid_attach (GTK_GRID (grid), test_widget ("(0, 2)", "yellow"), 0, 2, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), test_widget ("(1, 2)", "yellow"), 1, 2, 1, 1);
 
-  gtk_grid_insert_next_to (GTK_GRID (grid), child, GTK_POS_RIGHT);
-  gtk_grid_attach (GTK_GRID (grid), test_widget ("(1, 0)", "red"), 1, 0, 1, 1);
-  gtk_grid_attach (GTK_GRID (grid), test_widget ("(1, 2)", "red"), 1, 2, 1, 1);
+  button = gtk_button_new_with_label ("Insert");
+  g_signal_connect (button, "clicked", G_CALLBACK (insert_cb), window);
+  gtk_grid_attach (GTK_GRID (g), button, 0, 2, 2, 1);
 
   gtk_widget_show_all (window);
 }
