@@ -1685,6 +1685,57 @@ gtk_grid_insert_row (GtkGrid *grid,
 }
 
 /**
+ * gtk_grid_remove_row:
+ * @grid: a #GtkGrid
+ * @position: the position of the row to remove
+ *
+ * Removes a row from the grid.
+ *
+ * Children that are placed in this row are removed,
+ * spanning children that overlap this row have their
+ * height reduced by one, and children below the row
+ * are moved up.
+ *
+ * Since: 3.10
+ */
+void
+gtk_grid_remove_row (GtkGrid *grid,
+                     gint     position)
+{
+  GtkGridPrivate *priv;
+  GtkGridChild *child;
+  GList *list;
+  gint top, height;
+
+  g_return_if_fail (GTK_IS_GRID (grid));
+
+  priv = grid->priv;
+
+  list = priv->children;
+  while (list)
+    {
+      child = list->data;
+      list = list->next;
+
+      top = CHILD_TOP (child);
+      height = CHILD_HEIGHT (child);
+
+      if (top <= position && top + height > position)
+        height--;
+      if (top > position)
+        top--;
+
+      if (height <= 0)
+        gtk_container_remove (GTK_CONTAINER (grid), child->widget);
+      else
+        gtk_container_child_set (GTK_CONTAINER (grid), child->widget,
+                                 "height", height,
+                                 "top-attach", top,
+                                 NULL);
+    }
+}
+
+/**
  * gtk_grid_insert_column:
  * @grid: a #GtkGrid
  * @position: the position to insert the column at
@@ -1727,6 +1778,57 @@ gtk_grid_insert_column (GtkGrid *grid,
           CHILD_WIDTH (child) = width + 1;
           gtk_container_child_notify (GTK_CONTAINER (grid), child->widget, "width");
         }
+    }
+}
+
+/**
+ * gtk_grid_remove_column:
+ * @grid: a #GtkGrid
+ * @position: the position of the column to remove
+ *
+ * Removes a column from the grid.
+ *
+ * Children that are placed in this column are removed,
+ * spanning children that overlap this column have their
+ * width reduced by one, and children after the column
+ * are moved to the left.
+ *
+ * Since: 3.10
+ */
+void
+gtk_grid_remove_column (GtkGrid *grid,
+                        gint     position)
+{
+  GtkGridPrivate *priv;
+  GtkGridChild *child;
+  GList *list;
+  gint left, width;
+
+  g_return_if_fail (GTK_IS_GRID (grid));
+
+  priv = grid->priv;
+
+  list = priv->children;
+  while (list)
+    {
+      child = list->data;
+      list = list->next;
+
+      left = CHILD_LEFT (child);
+      width = CHILD_WIDTH (child);
+
+      if (left <= position && left + width > position)
+        width--;
+      if (left > position)
+        left--;
+
+      if (width <= 0)
+        gtk_container_remove (GTK_CONTAINER (grid), child->widget);
+      else
+        gtk_container_child_set (GTK_CONTAINER (grid), child->widget,
+                                 "width", width,
+                                 "left-attach", left,
+                                 NULL);
     }
 }
 

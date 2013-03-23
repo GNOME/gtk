@@ -7238,6 +7238,8 @@ gtk_grid_attach_next_to
 gtk_grid_get_child_at
 gtk_grid_insert_row
 gtk_grid_insert_column
+gtk_grid_remove_row
+gtk_grid_remove_column
 gtk_grid_insert_next_to
 gtk_grid_set_row_homogeneous
 gtk_grid_get_row_homogeneous
