@@ -129,6 +129,16 @@ test_app_chooser_widget_basic (void)
   gtk_widget_destroy (widget);
 }
 
+static void
+test_app_chooser_dialog_basic (void)
+{
+  GtkWidget *widget;
+
+  widget = gtk_app_chooser_dialog_new_for_content_type (NULL, 0, "text/plain");
+  g_assert (GTK_IS_APP_CHOOSER_DIALOG (widget));
+  gtk_widget_destroy (widget);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -151,6 +161,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Template/GtkScaleButton/Basic", test_scale_button_basic);
   g_test_add_func ("/Template/GtkStatusBar/Basic", test_statusbar_basic);
   g_test_add_func ("/Template/GtkAppChooserWidget/Basic", test_app_chooser_widget_basic);
+  g_test_add_func ("/Template/GtkAppChooserDialog/Basic", test_app_chooser_dialog_basic);
 
   return g_test_run();
 }

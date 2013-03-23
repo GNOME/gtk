@@ -1097,6 +1097,7 @@ DND_CURSORS = \
 
 COMPOSITE_TEMPLATES =			\
 	gtkaboutdialog.ui		\
+	gtkappchooserdialog.ui		\
 	gtkappchooserwidget.ui		\
 	gtkassistant.ui			\
 	gtkdialog.ui			\

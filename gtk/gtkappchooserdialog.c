@@ -68,6 +68,7 @@ struct _GtkAppChooserDialogPrivate {
   GtkWidget *label;
   GtkWidget *button;
   GtkWidget *online_button;
+  GtkWidget *inner_box;
 
   GtkWidget *open_label;
 
@@ -450,35 +451,14 @@ widget_populate_popup_cb (GtkAppChooserWidget *widget,
 }
 
 static void
-build_dialog_ui (GtkAppChooserDialog *self)
+construct_appchooser_widget (GtkAppChooserDialog *self)
 {
-  GtkWidget *vbox;
-  GtkWidget *vbox2;
-  GtkWidget *button, *w;
   GAppInfo *info;
 
-  gtk_container_set_border_width (GTK_CONTAINER (self), 5);
-
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
-  gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (self))), vbox, TRUE, TRUE, 0);
-  gtk_widget_show (vbox);
-
-  vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-  gtk_box_pack_start (GTK_BOX (vbox), vbox2, TRUE, TRUE, 0);
-  gtk_widget_show (vbox2);
-
-  self->priv->label = gtk_label_new ("");
-  gtk_widget_set_halign (self->priv->label, GTK_ALIGN_START);
-  gtk_widget_set_valign (self->priv->label, GTK_ALIGN_CENTER);
-  gtk_label_set_line_wrap (GTK_LABEL (self->priv->label), TRUE);
-  gtk_box_pack_start (GTK_BOX (vbox2), self->priv->label,
-                      FALSE, FALSE, 0);
-  gtk_widget_show (self->priv->label);
-
+  /* Need to build the appchooser widget after, because of the content-type construct-only property */
   self->priv->app_chooser_widget =
     gtk_app_chooser_widget_new (self->priv->content_type);
-  gtk_box_pack_start (GTK_BOX (vbox2), self->priv->app_chooser_widget, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (self->priv->inner_box), self->priv->app_chooser_widget, TRUE, TRUE, 0);
   gtk_widget_show (self->priv->app_chooser_widget);
 
   g_signal_connect (self->priv->app_chooser_widget, "application-selected",
@@ -490,32 +470,14 @@ build_dialog_ui (GtkAppChooserDialog *self)
   g_signal_connect (self->priv->app_chooser_widget, "populate-popup",
                     G_CALLBACK (widget_populate_popup_cb), self);
 
-  button = gtk_button_new_with_label (_("Show other applications"));
-  self->priv->show_more_button = button;
-  w = gtk_image_new_from_stock (GTK_STOCK_ADD,
-                                GTK_ICON_SIZE_BUTTON);
-  gtk_button_set_image (GTK_BUTTON (button), w);
-  gtk_box_pack_start (GTK_BOX (self->priv->app_chooser_widget), button, FALSE, FALSE, 6);
-  gtk_widget_show_all (button);
-
-  g_signal_connect (button, "clicked",
-                    G_CALLBACK (show_more_button_clicked_cb), self);
-
-  gtk_dialog_add_button (GTK_DIALOG (self),
-                         GTK_STOCK_CANCEL,
-                         GTK_RESPONSE_CANCEL);
-
-  self->priv->button = gtk_dialog_add_button (GTK_DIALOG (self),
-                                              _("_Select"),
-                                              GTK_RESPONSE_OK);
+  /* Add the custom button to the new appchooser */
+  gtk_box_pack_start (GTK_BOX (self->priv->app_chooser_widget),
+		      self->priv->show_more_button, FALSE, FALSE, 6);
 
   info = gtk_app_chooser_get_app_info (GTK_APP_CHOOSER (self->priv->app_chooser_widget));
   gtk_widget_set_sensitive (self->priv->button, info != NULL);
   if (info)
     g_object_unref (info);
-
-  gtk_dialog_set_default_response (GTK_DIALOG (self),
-                                   GTK_RESPONSE_OK);
 }
 
 static void
@@ -560,7 +522,7 @@ gtk_app_chooser_dialog_constructed (GObject *object)
   if (G_OBJECT_CLASS (gtk_app_chooser_dialog_parent_class)->constructed != NULL)
     G_OBJECT_CLASS (gtk_app_chooser_dialog_parent_class)->constructed (object);
 
-  build_dialog_ui (self);
+  construct_appchooser_widget (self);
   set_dialog_properties (self);
   ensure_online_button (self);
 }
@@ -650,6 +612,7 @@ gtk_app_chooser_dialog_iface_init (GtkAppChooserIface *iface)
 static void
 gtk_app_chooser_dialog_class_init (GtkAppChooserDialogClass *klass)
 {
+  GtkWidgetClass *widget_class;
   GObjectClass *gobject_class;
   GParamSpec *pspec;
 
@@ -690,6 +653,16 @@ gtk_app_chooser_dialog_class_init (GtkAppChooserDialogClass *klass)
                                G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
   g_object_class_install_property (gobject_class, PROP_HEADING, pspec);
 
+  /* Bind class to template
+   */
+  widget_class = GTK_WIDGET_CLASS (klass);
+  gtk_widget_class_set_template_from_resource (widget_class,
+					       "/org/gtk/libgtk/gtkappchooserdialog.ui");
+  gtk_widget_class_bind_child (widget_class, GtkAppChooserDialogPrivate, label);
+  gtk_widget_class_bind_child (widget_class, GtkAppChooserDialogPrivate, button);
+  gtk_widget_class_bind_child (widget_class, GtkAppChooserDialogPrivate, show_more_button);
+  gtk_widget_class_bind_child (widget_class, GtkAppChooserDialogPrivate, inner_box);
+  gtk_widget_class_bind_callback (widget_class, show_more_button_clicked_cb);
 
   g_type_class_add_private (klass, sizeof (GtkAppChooserDialogPrivate));
 }
@@ -700,11 +673,16 @@ gtk_app_chooser_dialog_init (GtkAppChooserDialog *self)
   self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self, GTK_TYPE_APP_CHOOSER_DIALOG,
                                             GtkAppChooserDialogPrivate);
 
+  gtk_widget_init_template (GTK_WIDGET (self));
+
   /* we can't override the class signal handler here, as it's a RUN_LAST;
    * we want our signal handler instead to be executed before any user code.
    */
   g_signal_connect (self, "response",
                     G_CALLBACK (gtk_app_chooser_dialog_response), NULL);
+
+  gtk_dialog_set_default_response (GTK_DIALOG (self),
+                                   GTK_RESPONSE_OK);
 }
 
 static void
