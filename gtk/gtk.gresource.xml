@@ -18,5 +18,6 @@
     <file compressed="true">gtklockbutton.ui</file>
     <file compressed="true">gtkmessagedialog.ui</file>
     <file compressed="true">gtkscalebutton.ui</file>
+    <file compressed="true">gtkstatusbar.ui</file>
   </gresource>
 </gresources>

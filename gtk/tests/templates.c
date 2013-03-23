@@ -109,6 +109,16 @@ test_scale_button_basic (void)
   gtk_widget_destroy (widget);
 }
 
+static void
+test_statusbar_basic (void)
+{
+  GtkWidget *widget;
+
+  widget = gtk_statusbar_new ();
+  g_assert (GTK_IS_STATUSBAR (widget));
+  gtk_widget_destroy (widget);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -129,6 +139,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Template/GtkLockButton/Basic", test_lock_button_basic);
   g_test_add_func ("/Template/GtkAssistant/Basic", test_assistant_basic);
   g_test_add_func ("/Template/GtkScaleButton/Basic", test_scale_button_basic);
+  g_test_add_func ("/Template/GtkStatusBar/Basic", test_statusbar_basic);
 
   return g_test_run();
 }

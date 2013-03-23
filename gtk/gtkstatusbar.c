@@ -34,7 +34,6 @@
 #include "gtkwindow.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include "gtkbuildable.h"
 #include "gtkorientable.h"
 #include "gtktypebuiltins.h"
 #include "a11y/gtkstatusbaraccessible.h"
@@ -80,6 +79,7 @@ struct _GtkStatusbarPrivate
 {
   GtkWidget     *frame;
   GtkWidget     *label;
+  GtkWidget     *message_area;
 
   GSList        *messages;
   GSList        *keys;
@@ -103,10 +103,6 @@ enum
   SIGNAL_LAST
 };
 
-static void     gtk_statusbar_buildable_interface_init    (GtkBuildableIface *iface);
-static GObject *gtk_statusbar_buildable_get_internal_child (GtkBuildable *buildable,
-                                                            GtkBuilder   *builder,
-                                                            const gchar  *childname);
 static void     gtk_statusbar_update            (GtkStatusbar      *statusbar,
 						 guint              context_id,
 						 const gchar       *text);
@@ -120,16 +116,12 @@ static void     gtk_statusbar_hierarchy_changed (GtkWidget         *widget,
 
 static guint              statusbar_signals[SIGNAL_LAST] = { 0 };
 
-G_DEFINE_TYPE_WITH_CODE (GtkStatusbar, gtk_statusbar, GTK_TYPE_BOX,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-                                                gtk_statusbar_buildable_interface_init));
+G_DEFINE_TYPE (GtkStatusbar, gtk_statusbar, GTK_TYPE_BOX);
 
 static void
 gtk_statusbar_class_init (GtkStatusbarClass *class)
 {
-  GtkWidgetClass *widget_class;
-
-  widget_class = (GtkWidgetClass *) class;
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
   widget_class->realize = gtk_statusbar_realize;
   widget_class->destroy = gtk_statusbar_destroy;
@@ -185,17 +177,22 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
                                                               GTK_SHADOW_IN,
                                                               GTK_PARAM_READABLE));
 
-   g_type_class_add_private (class, sizeof (GtkStatusbarPrivate));
+  /* Bind class to template
+   */
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/gtkstatusbar.ui");
+  gtk_widget_class_bind_child_internal (widget_class, GtkStatusbarPrivate, message_area);
+  gtk_widget_class_bind_child (widget_class, GtkStatusbarPrivate, frame);
+  gtk_widget_class_bind_child (widget_class, GtkStatusbarPrivate, label);
 
-   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_STATUSBAR_ACCESSIBLE);
+  g_type_class_add_private (class, sizeof (GtkStatusbarPrivate));
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_STATUSBAR_ACCESSIBLE);
 }
 
 static void
 gtk_statusbar_init (GtkStatusbar *statusbar)
 {
   GtkStatusbarPrivate *priv;
-  GtkBox *box = GTK_BOX (statusbar);
-  GtkWidget *message_area;
   GtkShadowType shadow_type;
 
   statusbar->priv = G_TYPE_INSTANCE_GET_PRIVATE (statusbar,
@@ -203,59 +200,16 @@ gtk_statusbar_init (GtkStatusbar *statusbar)
                                                  GtkStatusbarPrivate);
   priv = statusbar->priv;
 
-  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (box), TRUE);
-
-  gtk_box_set_spacing (box, 2);
-  gtk_box_set_homogeneous (box, FALSE);
-
-  gtk_widget_style_get (GTK_WIDGET (statusbar), "shadow-type", &shadow_type, NULL);
-
-  priv->frame = gtk_frame_new (NULL);
-  gtk_frame_set_shadow_type (GTK_FRAME (priv->frame), shadow_type);
-  gtk_box_pack_start (box, priv->frame, TRUE, TRUE, 0);
-  gtk_widget_show (priv->frame);
-
-  message_area = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
-  gtk_container_add (GTK_CONTAINER (priv->frame), message_area);
-  gtk_widget_show (message_area);
-
-  priv->label = gtk_label_new ("");
-  gtk_label_set_single_line_mode (GTK_LABEL (priv->label), TRUE);
-  gtk_widget_set_halign (priv->label, GTK_ALIGN_START);
-  gtk_widget_set_valign (priv->label, GTK_ALIGN_CENTER);
-  gtk_label_set_ellipsize (GTK_LABEL (priv->label), PANGO_ELLIPSIZE_END);
-  gtk_container_add (GTK_CONTAINER (message_area), priv->label);
-  gtk_widget_show (priv->label);
-
   priv->seq_context_id = 1;
   priv->seq_message_id = 1;
   priv->messages = NULL;
   priv->keys = NULL;
-}
 
-static GtkBuildableIface *parent_buildable_iface;
+  gtk_widget_init_template (GTK_WIDGET (statusbar));
 
-static void
-gtk_statusbar_buildable_interface_init (GtkBuildableIface *iface)
-{
-  parent_buildable_iface = g_type_interface_peek_parent (iface);
-  iface->get_internal_child = gtk_statusbar_buildable_get_internal_child;
-}
-
-static GObject *
-gtk_statusbar_buildable_get_internal_child (GtkBuildable *buildable,
-                                            GtkBuilder   *builder,
-                                            const gchar  *childname)
-{
-  GtkStatusbar *statusbar = GTK_STATUSBAR (buildable);
-  GtkStatusbarPrivate *priv = statusbar->priv;
-
-    if (strcmp (childname, "message_area") == 0)
-      return G_OBJECT (gtk_bin_get_child (GTK_BIN (priv->frame)));
-
-    return parent_buildable_iface->get_internal_child (buildable,
-                                                       builder,
-                                                       childname);
+  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (statusbar), TRUE);
+  gtk_widget_style_get (GTK_WIDGET (statusbar), "shadow-type", &shadow_type, NULL);
+  gtk_frame_set_shadow_type (GTK_FRAME (priv->frame), shadow_type);
 }
 
 /**
@@ -580,7 +534,7 @@ gtk_statusbar_get_message_area (GtkStatusbar *statusbar)
 
   priv = statusbar->priv;
 
-  return gtk_bin_get_child (GTK_BIN (priv->frame));
+  return priv->message_area;
 }
 
 static void
