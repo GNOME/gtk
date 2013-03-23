@@ -4676,30 +4676,30 @@ gtk_tree_view_draw_line (GtkTreeView         *tree_view,
                          
 static void
 gtk_tree_view_draw_grid_lines (GtkTreeView    *tree_view,
-			       cairo_t        *cr,
-			       gint            n_visible_columns)
+			       cairo_t        *cr)
 {
-  GList *list = tree_view->priv->columns;
-  gint i = 0;
+  GList *list;
+  GtkTreeViewColumn *last;
+  gboolean rtl;
   gint current_x = 0;
 
   if (tree_view->priv->grid_lines != GTK_TREE_VIEW_GRID_LINES_VERTICAL
       && tree_view->priv->grid_lines != GTK_TREE_VIEW_GRID_LINES_BOTH)
     return;
 
-  /* Only draw the lines for visible rows and columns */
-  for (list = tree_view->priv->columns; list; list = list->next, i++)
+  rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
+
+  for (list = (rtl ? g_list_last (tree_view->priv->columns) : g_list_first (tree_view->priv->columns)),
+       last = (rtl ? g_list_first (tree_view->priv->columns) : g_list_last (tree_view->priv->columns))->data;
+       list;
+       list = (rtl ? list->prev : list->next))
     {
       GtkTreeViewColumn *column = list->data;
 
-      /* We don't want a line for the last column */
-      if (i == n_visible_columns - 1)
-	break;
-
-      if (!gtk_tree_view_column_get_visible (column))
-	continue;
-
       current_x += gtk_tree_view_column_get_width (column);
+
+      /* We don't want a line for the last column */
+      if (column == last) break;
 
       gtk_tree_view_draw_line (tree_view, cr,
                                GTK_TREE_VIEW_GRID_LINE,
@@ -5357,7 +5357,7 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
   while (y_offset < clip.height);
 
 done:
-  gtk_tree_view_draw_grid_lines (tree_view, cr, n_visible_columns);
+  gtk_tree_view_draw_grid_lines (tree_view, cr);
 
   if (tree_view->priv->rubber_band_status == RUBBER_BAND_ACTIVE)
     gtk_tree_view_paint_rubber_band (tree_view, cr);
