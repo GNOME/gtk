@@ -1100,6 +1100,7 @@ COMPOSITE_TEMPLATES =			\
 	gtkappchooserdialog.ui		\
 	gtkappchooserwidget.ui		\
 	gtkassistant.ui			\
+	gtkcolorchooserdialog.ui	\
 	gtkdialog.ui			\
 	gtkinfobar.ui			\
 	gtklockbutton.ui		\

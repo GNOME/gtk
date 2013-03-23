@@ -139,6 +139,16 @@ test_app_chooser_dialog_basic (void)
   gtk_widget_destroy (widget);
 }
 
+static void
+test_color_chooser_dialog_basic (void)
+{
+  GtkWidget *widget;
+
+  widget = gtk_color_chooser_dialog_new (NULL, NULL);
+  g_assert (GTK_IS_COLOR_CHOOSER_DIALOG (widget));
+  gtk_widget_destroy (widget);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -162,6 +172,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Template/GtkStatusBar/Basic", test_statusbar_basic);
   g_test_add_func ("/Template/GtkAppChooserWidget/Basic", test_app_chooser_widget_basic);
   g_test_add_func ("/Template/GtkAppChooserDialog/Basic", test_app_chooser_dialog_basic);
+  g_test_add_func ("/Template/GtkColorChooserDialog/Basic", test_color_chooser_dialog_basic);
 
   return g_test_run();
 }

@@ -101,67 +101,11 @@ selected_cb (GtkButton *button,
 static void
 gtk_color_chooser_dialog_init (GtkColorChooserDialog *cc)
 {
-  GtkColorChooserDialogPrivate *priv;
-  GtkDialog *dialog = GTK_DIALOG (cc);
-  GtkWidget *action_area, *content_area;
-
   cc->priv = G_TYPE_INSTANCE_GET_PRIVATE (cc,
                                           GTK_TYPE_COLOR_CHOOSER_DIALOG,
                                           GtkColorChooserDialogPrivate);
-  priv = cc->priv;
 
-  content_area = gtk_dialog_get_content_area (dialog);
-  action_area = gtk_dialog_get_action_area (dialog);
-
-  gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-  gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
-  gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
-  gtk_box_set_spacing (GTK_BOX (action_area), 6);
-
-  gtk_widget_push_composite_child ();
-
-  gtk_window_set_resizable (GTK_WINDOW (cc), FALSE);
-
-  /* Create the content area */
-  priv->chooser = gtk_color_chooser_widget_new ();
-  gtk_container_set_border_width (GTK_CONTAINER (priv->chooser), 5);
-  gtk_widget_show (priv->chooser);
-  gtk_box_pack_start (GTK_BOX (content_area),
-                      priv->chooser, TRUE, TRUE, 0);
-
-  g_signal_connect (priv->chooser, "notify::rgba",
-                    G_CALLBACK (propagate_notify), cc);
-
-  g_signal_connect (priv->chooser, "notify::show-editor",
-                    G_CALLBACK (propagate_notify), cc);
-
-  g_signal_connect (priv->chooser, "color-activated",
-                    G_CALLBACK (color_activated_cb), cc);
-
-  /* Create the action area */
-  priv->cancel_button = gtk_dialog_add_button (dialog,
-                                               GTK_STOCK_CANCEL,
-                                               GTK_RESPONSE_CANCEL);
-
-  /* We emit the response for the Select button manually,
-   * since we want to save the color first
-   */
-  priv->select_button = gtk_button_new_from_stock (_("_Select"));
-  g_signal_connect (priv->select_button, "clicked",
-                    G_CALLBACK (selected_cb), dialog);
-  gtk_widget_set_can_default (priv->select_button, TRUE);
-  gtk_widget_show (priv->select_button);
-  gtk_dialog_add_action_widget (dialog, priv->select_button, GTK_RESPONSE_OK);
-  gtk_widget_grab_default (priv->select_button);
-
-  gtk_dialog_set_alternative_button_order (dialog,
-                                           GTK_RESPONSE_OK,
-                                           GTK_RESPONSE_CANCEL,
-                                           -1);
-
-  gtk_window_set_title (GTK_WINDOW (cc), _("Select a Color"));
-
-  gtk_widget_pop_composite_child ();
+  gtk_widget_init_template (GTK_WIDGET (cc));
 }
 
 static void
@@ -256,6 +200,16 @@ gtk_color_chooser_dialog_class_init (GtkColorChooserDialogClass *class)
       g_param_spec_boolean ("show-editor", P_("Show editor"), P_("Show editor"),
                             FALSE, GTK_PARAM_READWRITE));
 
+  /* Bind class to template
+   */
+  gtk_widget_class_set_template_from_resource (widget_class,
+					       "/org/gtk/libgtk/gtkcolorchooserdialog.ui");
+  gtk_widget_class_bind_child (widget_class, GtkColorChooserDialogPrivate, chooser);
+  gtk_widget_class_bind_child (widget_class, GtkColorChooserDialogPrivate, cancel_button);
+  gtk_widget_class_bind_child (widget_class, GtkColorChooserDialogPrivate, select_button);
+  gtk_widget_class_bind_callback (widget_class, selected_cb);
+  gtk_widget_class_bind_callback (widget_class, propagate_notify);
+  gtk_widget_class_bind_callback (widget_class, color_activated_cb);
 
   g_type_class_add_private (class, sizeof (GtkColorChooserDialogPrivate));
 }
