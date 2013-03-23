@@ -82,7 +82,9 @@ struct _GtkAppChooserWidgetPrivate {
   GtkWidget *program_list;
   GtkListStore *program_list_store;
 
+  GtkTreeViewColumn *column;
   GtkCellRenderer *padding_renderer;
+  GtkCellRenderer *secondary_padding;
 };
 
 enum {
@@ -799,95 +801,12 @@ gtk_app_chooser_widget_real_add_items (GtkAppChooserWidget *self)
 }
 
 static void
-gtk_app_chooser_widget_add_items (GtkAppChooserWidget *self)
+gtk_app_chooser_widget_initialize_items (GtkAppChooserWidget *self)
 {
-  GtkCellRenderer *renderer;
-  GtkTreeViewColumn *column;
-  GtkTreeModel *sort;
-
-  /* create list store */
-  self->priv->program_list_store = gtk_list_store_new (NUM_COLUMNS,
-                                                       G_TYPE_APP_INFO,
-                                                       G_TYPE_ICON,
-                                                       G_TYPE_STRING,
-                                                       G_TYPE_STRING,
-                                                       G_TYPE_STRING,
-                                                       G_TYPE_BOOLEAN,
-                                                       G_TYPE_BOOLEAN,
-                                                       G_TYPE_STRING,
-                                                       G_TYPE_BOOLEAN,
-                                                       G_TYPE_BOOLEAN);
-  sort = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (self->priv->program_list_store));
-
-  gtk_tree_view_set_model (GTK_TREE_VIEW (self->priv->program_list),
-                           GTK_TREE_MODEL (sort));
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (sort),
-                                        COLUMN_NAME,
-                                        GTK_SORT_ASCENDING);
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (sort),
-                                   COLUMN_NAME,
-                                   gtk_app_chooser_sort_func,
-                                   self, NULL);
-  gtk_tree_view_set_search_column (GTK_TREE_VIEW (self->priv->program_list),
-                                   COLUMN_NAME);
-  gtk_tree_view_set_search_equal_func (GTK_TREE_VIEW (self->priv->program_list),
-                                       gtk_app_chooser_search_equal_func,
-                                       NULL, NULL);
-
-  column = gtk_tree_view_column_new ();
-
   /* initial padding */
-  renderer = gtk_cell_renderer_text_new ();
-  gtk_tree_view_column_pack_start (column, renderer, FALSE);
-  g_object_set (renderer,
+  g_object_set (self->priv->padding_renderer,
                 "xpad", self->priv->show_all ? 0 : 6,
                 NULL);
-  self->priv->padding_renderer = renderer;
-
-  /* heading text renderer */
-  renderer = gtk_cell_renderer_text_new ();
-  gtk_tree_view_column_pack_start (column, renderer, FALSE);
-  gtk_tree_view_column_set_attributes (column, renderer,
-                                       "markup", COLUMN_HEADING_TEXT,
-                                       "visible", COLUMN_HEADING,
-                                       NULL);
-  g_object_set (renderer,
-                "ypad", 6,
-                "xpad", 0,
-                "wrap-width", 350,
-                "wrap-mode", PANGO_WRAP_WORD,
-                NULL);
-
-  /* padding renderer for non-heading cells */
-  renderer = gtk_cell_renderer_text_new ();
-  gtk_tree_view_column_pack_start (column, renderer, FALSE);
-  gtk_tree_view_column_set_cell_data_func (column, renderer,
-                                           padding_cell_renderer_func,
-                                           NULL, NULL);
-
-  /* app icon renderer */
-  renderer = gtk_cell_renderer_pixbuf_new ();
-  gtk_tree_view_column_pack_start (column, renderer, FALSE);
-  gtk_tree_view_column_set_attributes (column, renderer,
-                                       "gicon", COLUMN_GICON,
-                                       NULL);
-  g_object_set (renderer,
-                "stock-size", GTK_ICON_SIZE_MENU,
-                NULL);
-
-  /* app name renderer */
-  renderer = gtk_cell_renderer_text_new ();
-  gtk_tree_view_column_pack_start (column, renderer, TRUE);
-  gtk_tree_view_column_set_attributes (column, renderer,
-                                       "markup", COLUMN_DESC,
-                                       NULL);
-  g_object_set (renderer,
-                "ellipsize", PANGO_ELLIPSIZE_END,
-                "ellipsize-set", TRUE,
-                NULL);
-  
-  gtk_tree_view_column_set_sort_column_id (column, COLUMN_NAME);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (self->priv->program_list), column);
 
   /* populate the widget */
   gtk_app_chooser_widget_real_add_items (self);
@@ -975,7 +894,7 @@ gtk_app_chooser_widget_constructed (GObject *object)
   if (G_OBJECT_CLASS (gtk_app_chooser_widget_parent_class)->constructed != NULL)
     G_OBJECT_CLASS (gtk_app_chooser_widget_parent_class)->constructed (object);
 
-  gtk_app_chooser_widget_add_items (self);
+  gtk_app_chooser_widget_initialize_items (self);
 }
 
 static void
@@ -1002,6 +921,7 @@ gtk_app_chooser_widget_dispose (GObject *object)
 static void
 gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
 {
+  GtkWidgetClass *widget_class;
   GObjectClass *gobject_class;
   GParamSpec *pspec;
 
@@ -1160,48 +1080,59 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
                   G_TYPE_NONE,
                   2, GTK_TYPE_MENU, G_TYPE_APP_INFO);
 
+  /* Bind class to template
+   */
+  widget_class = GTK_WIDGET_CLASS (klass);
+  gtk_widget_class_set_template_from_resource (widget_class,
+					       "/org/gtk/libgtk/gtkappchooserwidget.ui");
+  gtk_widget_class_bind_child (widget_class, GtkAppChooserWidgetPrivate, program_list);
+  gtk_widget_class_bind_child (widget_class, GtkAppChooserWidgetPrivate, program_list_store);
+  gtk_widget_class_bind_child (widget_class, GtkAppChooserWidgetPrivate, column);
+  gtk_widget_class_bind_child (widget_class, GtkAppChooserWidgetPrivate, padding_renderer);
+  gtk_widget_class_bind_child (widget_class, GtkAppChooserWidgetPrivate, secondary_padding);
+  gtk_widget_class_bind_callback (widget_class, refresh_and_emit_app_selected);
+  gtk_widget_class_bind_callback (widget_class, program_list_selection_activated);
+  gtk_widget_class_bind_callback (widget_class, widget_button_press_event_cb);
+
   g_type_class_add_private (klass, sizeof (GtkAppChooserWidgetPrivate));
 }
 
 static void
 gtk_app_chooser_widget_init (GtkAppChooserWidget *self)
 {
-  GtkWidget *scrolled_window;
   GtkTreeSelection *selection;
+  GtkTreeModel *sort;
 
   self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self, GTK_TYPE_APP_CHOOSER_WIDGET,
                                             GtkAppChooserWidgetPrivate);
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (self), GTK_ORIENTATION_VERTICAL);
 
-  scrolled_window = gtk_scrolled_window_new (NULL, NULL);
-  gtk_widget_set_size_request (scrolled_window, 400, 300);
-  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_window),
-                                       GTK_SHADOW_IN);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
-                                  GTK_POLICY_NEVER,
-                                  GTK_POLICY_AUTOMATIC);
-  gtk_widget_show (scrolled_window);
+  gtk_widget_init_template (GTK_WIDGET (self));
 
-  self->priv->program_list = gtk_tree_view_new ();
-  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (self->priv->program_list),
-                                     FALSE);
-  gtk_container_add (GTK_CONTAINER (scrolled_window), self->priv->program_list);
-  gtk_box_pack_start (GTK_BOX (self), scrolled_window, TRUE, TRUE, 0);
-  gtk_widget_show (self->priv->program_list);
-
+  /* Various parts of the GtkTreeView code need custom code to setup, mostly
+   * because we lack signals to connect to, or properties to set.
+   */
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (self->priv->program_list));
-  gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
   gtk_tree_selection_set_select_function (selection, gtk_app_chooser_selection_func,
                                           self, NULL);
-  g_signal_connect_swapped (selection, "changed",
-                            G_CALLBACK (refresh_and_emit_app_selected),
-                            self);
-  g_signal_connect (self->priv->program_list, "row-activated",
-                    G_CALLBACK (program_list_selection_activated),
-                    self);
-  g_signal_connect (self->priv->program_list, "button-press-event",
-                    G_CALLBACK (widget_button_press_event_cb),
-                    self);
+
+  sort = gtk_tree_view_get_model (GTK_TREE_VIEW (self->priv->program_list));
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (sort),
+                                        COLUMN_NAME,
+                                        GTK_SORT_ASCENDING);
+  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (sort),
+                                   COLUMN_NAME,
+                                   gtk_app_chooser_sort_func,
+                                   self, NULL);
+
+  gtk_tree_view_set_search_column (GTK_TREE_VIEW (self->priv->program_list), COLUMN_NAME);
+  gtk_tree_view_set_search_equal_func (GTK_TREE_VIEW (self->priv->program_list),
+                                       gtk_app_chooser_search_equal_func,
+                                       NULL, NULL);
+
+  gtk_tree_view_column_set_cell_data_func (self->priv->column,
+					   self->priv->secondary_padding,
+                                           padding_cell_renderer_func,
+                                           NULL, NULL);
 }
 
 static GAppInfo *
