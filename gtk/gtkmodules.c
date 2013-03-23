@@ -517,8 +517,8 @@ display_opened_cb (GdkDisplayManager *display_manager,
 }
 
 void
-_gtk_modules_init (gint        *argc, 
-		   gchar     ***argv, 
+_gtk_modules_init (gint        *argc,
+		   gchar     ***argv,
 		   const gchar *gtk_modules_args)
 {
   GdkDisplayManager *display_manager;
@@ -526,7 +526,7 @@ _gtk_modules_init (gint        *argc,
 
   g_assert (gtk_argv == NULL);
 
-  if (argc && argv) 
+  if (argc && argv)
     {
       /* store argc and argv for later use in mod initialization */
       gtk_argc = *argc;
@@ -536,22 +536,26 @@ _gtk_modules_init (gint        *argc,
       gtk_argv [*argc] = NULL;
     }
 
-  display_manager = gdk_display_manager_get ();
-  default_display_opened = gdk_display_get_default () != NULL;
-  g_signal_connect (display_manager, "notify::default-display",
-		    G_CALLBACK (default_display_notify_cb), 
-		    NULL);
-  g_signal_connect (display_manager, "display-opened",
-		    G_CALLBACK (display_opened_cb), 
-		    NULL);
+  display_manager = gdk_display_manager_peek ();
+  if (display_manager != NULL)
+    {
+      default_display_opened = gdk_display_get_default () != NULL;
+      g_signal_connect (display_manager, "notify::default-display",
+                        G_CALLBACK (default_display_notify_cb),
+                        NULL);
+      g_signal_connect (display_manager, "display-opened",
+                        G_CALLBACK (display_opened_cb),
+                        NULL);
+    }
 
-  if (gtk_modules_args) {
-    /* Modules specified in the GTK_MODULES environment variable
-     * or on the command line are always loaded, so we'll just leak 
-     * the refcounts.
-     */
-    g_slist_free (load_modules (gtk_modules_args));
-  }
+  if (gtk_modules_args)
+    {
+      /* Modules specified in the GTK_MODULES environment variable
+       * or on the command line are always loaded, so we'll just leak
+       * the refcounts.
+       */
+      g_slist_free (load_modules (gtk_modules_args));
+    }
 }
 
 static void
