@@ -66,6 +66,11 @@ G_DEFINE_TYPE (GdkWaylandKeymap, _gdk_wayland_keymap, GDK_TYPE_KEYMAP)
 static void
 gdk_wayland_keymap_finalize (GObject *object)
 {
+  GdkWaylandKeymap *keymap = GDK_WAYLAND_KEYMAP (object);
+
+  xkb_keymap_unref (keymap->xkb_keymap);
+  xkb_state_unref (keymap->xkb_state);
+
   G_OBJECT_CLASS (_gdk_wayland_keymap_parent_class)->finalize (object);
 }
 
@@ -228,31 +233,34 @@ _gdk_wayland_keymap_new ()
   return GDK_KEYMAP (keymap);
 }
 
-GdkKeymap *
-_gdk_wayland_keymap_new_from_fd (uint32_t format,
-                                 uint32_t fd, uint32_t size)
+void
+_gdk_wayland_keymap_update_from_fd (GdkKeymap *keymap,
+                                    uint32_t   format,
+                                    uint32_t   fd,
+                                    uint32_t   size)
 {
-  GdkWaylandKeymap *keymap;
+  GdkWaylandKeymap *keymap_wayland = GDK_WAYLAND_KEYMAP (keymap);
   struct xkb_context *context;
   char *map_str;
-
-  keymap = g_object_new (_gdk_wayland_keymap_get_type(), NULL);
 
   context = xkb_context_new (0);
 
   map_str = mmap(NULL, size, PROT_READ, MAP_SHARED, fd, 0);
-  if (map_str == MAP_FAILED) {
-    close(fd);
-    return NULL;
+  if (map_str == MAP_FAILED)
+    {
+      close(fd);
+      return;
   }
 
-  keymap->xkb_keymap = xkb_keymap_new_from_string (context, map_str, format, 0);
+  xkb_keymap_unref (keymap_wayland->xkb_keymap);
+  keymap_wayland->xkb_keymap = xkb_keymap_new_from_string (context, map_str, format, 0);
   munmap (map_str, size);
   close (fd);
-  keymap->xkb_state = xkb_state_new (keymap->xkb_keymap);
-  xkb_context_unref (context);
 
-  return GDK_KEYMAP (keymap);
+  xkb_state_unref (keymap_wayland->xkb_state);
+  keymap_wayland->xkb_state = xkb_state_new (keymap_wayland->xkb_keymap);
+
+  xkb_context_unref (context);
 }
 
 struct xkb_keymap *_gdk_wayland_keymap_get_xkb_keymap (GdkKeymap *keymap)

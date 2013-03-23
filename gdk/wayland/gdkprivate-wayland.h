@@ -49,8 +49,10 @@ void _gdk_wayland_window_add_focus    (GdkWindow *window);
 void _gdk_wayland_window_remove_focus (GdkWindow *window);
 
 GdkKeymap *_gdk_wayland_keymap_new (void);
-GdkKeymap *_gdk_wayland_keymap_new_from_fd (uint32_t format,
-                                            uint32_t fd, uint32_t size);
+void       _gdk_wayland_keymap_update_from_fd (GdkKeymap *keymap,
+                                               uint32_t   format,
+                                               uint32_t   fd,
+                                               uint32_t   size);
 struct xkb_state *_gdk_wayland_keymap_get_xkb_state (GdkKeymap *keymap);
 struct xkb_keymap *_gdk_wayland_keymap_get_xkb_keymap (GdkKeymap *keymap);
 

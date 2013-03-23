@@ -777,10 +777,11 @@ keyboard_handle_keymap (void               *data,
                        uint32_t            size)
 {
   GdkWaylandDeviceData *device = data;
-  if (device->keymap)
-    g_object_unref (device->keymap);
 
-  device->keymap = _gdk_wayland_keymap_new_from_fd (format, fd, size);
+  _gdk_wayland_keymap_update_from_fd (device->keymap, format, fd, size);
+
+  g_signal_emit_by_name (device->keymap, "keys-changed");
+  g_signal_emit_by_name (device->keymap, "state-changed");
 }
 
 static void
