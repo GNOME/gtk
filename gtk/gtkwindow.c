@@ -150,6 +150,8 @@ struct _GtkWindowPrivate
 
   GdkCursor *default_cursor;
 
+  GdkWindow *content_window;
+
   /* The following flags are initially TRUE (before a window is mapped).
    * They cause us to compute a configure request that involves
    * default-only parameters. Once mapped, we set them to FALSE.
@@ -389,6 +391,8 @@ static void gtk_window_forall             (GtkContainer   *container,
 					   gboolean	include_internals,
 					   GtkCallback     callback,
 					   gpointer        callback_data);
+static void gtk_window_add                (GtkContainer     *container,
+                                           GtkWidget        *child);
 static gint gtk_window_focus              (GtkWidget        *widget,
 				           GtkDirectionType  direction);
 static void gtk_window_move_focus         (GtkWidget         *widget,
@@ -662,6 +666,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->get_preferred_height = gtk_window_get_preferred_height;
   widget_class->get_preferred_height_for_width = gtk_window_get_preferred_height_for_width;
 
+  container_class->add = gtk_window_add;
   container_class->check_resize = gtk_window_check_resize;
   container_class->forall = gtk_window_forall;
 
@@ -5631,11 +5636,16 @@ gtk_window_realize (GtkWidget *widget)
       gtk_widget_set_window (widget, gdk_window);
       gtk_widget_register_window (widget, gdk_window);
 
-      /* We don't need to set a background on the GdkWindow; with decorations
-       * we draw the background ourself
-       */
-      if (!priv->client_decorated)
-        gtk_style_context_set_background (gtk_widget_get_style_context (widget), gdk_window);
+      priv->content_window = gdk_window_new (gdk_window,
+                                             &attributes, attributes_mask);
+      gdk_window_show (priv->content_window);
+      gtk_widget_register_window (widget, priv->content_window);
+
+      gtk_style_context_set_background (gtk_widget_get_style_context (widget), priv->content_window);
+
+      if (gtk_bin_get_child (GTK_BIN (window)))
+        gtk_widget_set_parent_window (gtk_bin_get_child (GTK_BIN (window)),
+                                      priv->content_window);
 
       return;
     }
@@ -5718,14 +5728,30 @@ gtk_window_realize (GtkWidget *widget)
 
   gtk_widget_register_window (widget, gdk_window);
 
-  /* We don't need to set a background on the GdkWindow; with decorations
-   * we draw the background ourself
-   */
-  if (!priv->client_decorated)
-    {
-      context = gtk_widget_get_style_context (widget);
-      gtk_style_context_set_background (context, gdk_window);
-    }
+  attributes.x = allocation.x;
+  attributes.y = allocation.y;
+  attributes.width = allocation.width;
+  attributes.height = allocation.height;
+  attributes.window_type = GDK_WINDOW_CHILD;
+
+  attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK | GDK_STRUCTURE_MASK;
+
+  attributes.visual = gtk_widget_get_visual (widget);
+  attributes.wclass = GDK_INPUT_OUTPUT;
+
+  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
+
+  priv->content_window = gdk_window_new (gdk_window,
+                                         &attributes, attributes_mask);
+  gdk_window_show (priv->content_window);
+  gtk_widget_register_window (widget, priv->content_window);
+
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_set_background (context, priv->content_window);
+
+  if (gtk_bin_get_child (GTK_BIN (window)))
+    gtk_widget_set_parent_window (gtk_bin_get_child (GTK_BIN (window)),
+                                  priv->content_window);
 
   if (priv->transient_parent &&
       gtk_widget_get_realized (GTK_WIDGET (priv->transient_parent)))
@@ -5787,9 +5813,9 @@ gtk_window_realize (GtkWidget *widget)
 #endif
 
   /* get the default cursor */
-  priv->default_cursor = gdk_window_get_cursor (gdk_window);
   g_signal_connect (G_OBJECT (gdk_window), "notify::cursor",
                     G_CALLBACK (window_cursor_changed), widget);
+  window_cursor_changed (gdk_window, NULL, widget);
 
   /* Icons */
   gtk_window_realize_icon (window);
@@ -5836,6 +5862,10 @@ gtk_window_unrealize (GtkWidget *widget)
 
   if (priv->grip_window != NULL)
     resize_grip_destroy_window (window);
+
+  gtk_widget_unregister_window (widget, priv->content_window);
+  gdk_window_destroy (priv->content_window);
+  priv->content_window = NULL;
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->unrealize (widget);
 }
@@ -6113,12 +6143,10 @@ _gtk_window_set_allocation (GtkWindow           *window,
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
 
-  /* Apply border width */
-  child_allocation = *allocation;
-  child_allocation.x += border_width;
-  child_allocation.y += border_width;
-  child_allocation.width = MAX (1, child_allocation.width - border_width * 2);
-  child_allocation.height = MAX (1, child_allocation.height - border_width * 2);
+  child_allocation.x = 0;
+  child_allocation.y = 0;
+  child_allocation.width = allocation->width;
+  child_allocation.height = allocation->height;
 
   if (priv->title_box != NULL &&
       priv->decorated &&
@@ -6173,7 +6201,20 @@ _gtk_window_set_allocation (GtkWindow           *window,
           update_grip_visibility (window);
           set_grip_position (window);
         }
+
+      gdk_window_move_resize (priv->content_window,
+                              child_allocation.x,
+                              child_allocation.y,
+                              child_allocation.width,
+                              child_allocation.height);
+
     }
+
+  /* Apply border width */
+  child_allocation.x = border_width;
+  child_allocation.y = border_width;
+  child_allocation.width = MAX (1, child_allocation.width - border_width * 2);
+  child_allocation.height = MAX (1, child_allocation.height - border_width * 2);
 
   *allocation_out = child_allocation;
 }
@@ -7195,6 +7236,17 @@ gtk_window_forall (GtkContainer *container,
     (* callback) (priv->title_box, callback_data);
 }
 
+static void
+gtk_window_add (GtkContainer *container,
+                GtkWidget    *child)
+{
+  GtkWindowPrivate *priv = GTK_WINDOW (container)->priv;
+
+  gtk_widget_set_parent_window (child, priv->content_window);
+
+  GTK_CONTAINER_CLASS (gtk_window_parent_class)->add (container, child);
+}
+
 static gboolean
 gtk_window_focus (GtkWidget        *widget,
 		  GtkDirectionType  direction)
@@ -7377,7 +7429,12 @@ window_cursor_changed (GdkWindow  *window,
                        GParamSpec *pspec,
                        GtkWidget  *widget)
 {
-  GTK_WINDOW (widget)->priv->default_cursor = gdk_window_get_cursor (window);
+  GtkWindowPrivate *priv = GTK_WINDOW (widget)->priv;
+
+  priv->default_cursor = gdk_window_get_cursor (window);
+  if (priv->default_cursor == NULL)
+    priv->default_cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_LEFT_PTR);
+  gdk_window_set_cursor (priv->content_window, priv->default_cursor);
 }
 
 static void
@@ -8954,7 +9011,6 @@ gtk_window_draw (GtkWidget *widget,
       gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
     {
       gtk_style_context_save (context);
-      gtk_style_context_add_class (context, "window-content");
 
       if (priv->client_decorated &&
           priv->decorated &&
@@ -8980,14 +9036,20 @@ gtk_window_draw (GtkWidget *widget,
           gtk_style_context_add_class (context, "window-outer-border");
           gtk_render_frame (context, cr,
                             0, 0, allocation.width, allocation.height);
-        }
-      else
-        {
-          gtk_render_background (context, cr,
-                                 0, 0, allocation.width, allocation.height);
+          gtk_style_context_remove_class (context, "window-outer-border");
         }
 
       gtk_style_context_restore (context);
+    }
+
+  if (!gtk_widget_get_app_paintable (widget) &&
+      gtk_cairo_should_draw_window (cr, priv->content_window))
+    {
+      gint x, y;
+      gdk_window_get_position (priv->content_window, &x, &y);
+      gtk_render_background (context, cr, x, y,
+                             gdk_window_get_width (priv->content_window),
+                             gdk_window_get_height (priv->content_window));
     }
 
   if (GTK_WIDGET_CLASS (gtk_window_parent_class)->draw)
