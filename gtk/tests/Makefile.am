@@ -148,6 +148,7 @@ regression_tests_LDADD		 = $(progs_ldadd)
 TEST_PROGS			+= keyhash
 keyhash_SOURCES			 = keyhash.c \
 				   ../gtkkeyhash.c ../gtkkeyhash.h \
+				   ../gtkresources.c ../gtkresources.h \
 				   ../gtkprivate.c ../gtkprivate.h
 keyhash_LDADD			 = $(progs_ldadd)
 keyhash_CFLAGS			 = -DGTK_COMPILATION \

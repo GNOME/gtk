@@ -30,6 +30,7 @@
 #include "gdk/gdk.h"
 
 #include "gtkprivate.h"
+#include "gtkresources.h"
 
 
 #if !defined G_OS_WIN32 && !(defined GDK_WINDOWING_QUARTZ && defined QUARTZ_RELOCATION)
@@ -250,4 +251,19 @@ _gtk_translate_keyboard_accel_state (GdkKeymap       *keymap,
     }
 
   return retval;
+}
+
+static gpointer
+register_resources (gpointer data)
+{
+  _gtk_register_resource ();
+  return NULL;
+}
+
+void
+_gtk_ensure_resources (void)
+{
+  static GOnce register_resources_once = G_ONCE_INIT;
+
+  g_once (&register_resources_once, register_resources, NULL);
 }

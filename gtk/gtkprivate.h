@@ -59,6 +59,8 @@ gboolean      _gtk_fnmatch                (const char *pattern,
 
 gchar       * _gtk_get_lc_ctype           (void);
 
+void          _gtk_ensure_resources       (void);
+
 gboolean _gtk_boolean_handled_accumulator (GSignalInvocationHint *ihint,
                                            GValue                *return_accu,
                                            const GValue          *handler_return,
