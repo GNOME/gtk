@@ -610,7 +610,7 @@ gdk_window_broadway_set_device_cursor (GdkWindow *window,
     {
       _gdk_broadway_cursor_update_theme (cursor);
       g_hash_table_replace (impl->device_cursor,
-                            device, gdk_cursor_ref (cursor));
+                            device, g_object_ref (cursor));
     }
 
   if (!GDK_WINDOW_DESTROYED (window))
