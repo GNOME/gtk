@@ -30,19 +30,20 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ master\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-21 09:16+0100\n"
-"PO-Revision-Date: 2013-03-21 09:19+0100\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
+"%2b&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2013-03-20 23:44+0000\n"
+"PO-Revision-Date: 2013-03-21 09:40+0100\n"
 "Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
-"Language: \n"
+"Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.5.5\n"
 "X-Poedit-Language: German\n"
 "X-Poedit-Country: GERMANY\n"
-"X-Generator: Gtranslator 2.91.5\n"
 
 #: ../gdk/gdk.c:157
 #, c-format
@@ -481,13 +482,13 @@ msgstr[1] "%d Objekte werden geöffnet"
 #: ../gtk/a11y/gtkbooleancellaccessible.c:43
 msgctxt "Action description"
 msgid "Toggles the cell"
-msgstr ""
+msgstr "Schaltet das Feld um"
 
 #: ../gtk/a11y/gtkbooleancellaccessible.c:63
 #: ../gtk/a11y/gtkswitchaccessible.c:101
 msgctxt "Action name"
 msgid "Toggle"
-msgstr ""
+msgstr "Umschalten"
 
 #: ../gtk/a11y/gtkbuttonaccessible.c:341
 #: ../gtk/a11y/gtkmenuitemaccessible.c:436
@@ -503,7 +504,7 @@ msgstr "Klickt den Knopf an"
 #: ../gtk/a11y/gtkcellaccessible.c:258
 msgctxt "Action name"
 msgid "Expand or contract"
-msgstr ""
+msgstr "Erweitern oder verkleinern"
 
 #: ../gtk/a11y/gtkcellaccessible.c:260
 msgctxt "Action name"
@@ -512,7 +513,7 @@ msgstr "Bearbeiten"
 
 #: ../gtk/a11y/gtkcellaccessible.c:262
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:72
-#: ../gtk/a11y/gtkentryaccessible.c:1557
+#: ../gtk/a11y/gtkentryaccessible.c:1541
 #: ../gtk/a11y/gtkexpanderaccessible.c:281
 msgctxt "Action name"
 msgid "Activate"
@@ -522,16 +523,18 @@ msgstr "Aktivieren"
 msgctxt "Action description"
 msgid "Expands or contracts the row in the tree view containing this cell"
 msgstr ""
+"Erweitert oder verkleinert die Spalte in der Baumansicht in diesem Feld"
 
+# evtl. Widget mit Fenster übersetzen?
 #: ../gtk/a11y/gtkcellaccessible.c:277
 msgctxt "Action description"
 msgid "Creates a widget in which the contents of the cell can be edited"
-msgstr ""
+msgstr "Erzeugt ein Widget, das den Inhalt des Feldes verändern lässt"
 
 #: ../gtk/a11y/gtkcellaccessible.c:279
 msgctxt "Action description"
 msgid "Activates the cell"
-msgstr "Aktiviert die Zelle"
+msgstr "Aktiviert das Feld"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:71
 msgctxt "Action name"
@@ -546,7 +549,7 @@ msgstr "Anpassen"
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:84
 msgctxt "Action description"
 msgid "Selects the color"
-msgstr "Wählt die Farbe aus"
+msgstr "Farbe auswählen"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:85
 msgctxt "Action description"
@@ -561,48 +564,48 @@ msgstr "Passt die Farbe an"
 #: ../gtk/a11y/gtkcomboboxaccessible.c:313
 msgctxt "Action name"
 msgid "Press"
-msgstr "Drücken"
+msgstr "Klicken"
 
 #: ../gtk/a11y/gtkcomboboxaccessible.c:322
-#, fuzzy
 msgctxt "Action description"
 msgid "Presses the combobox"
-msgstr "Verringert die Lautstärke"
+msgstr "Klickt das Kombinationsfeld an"
 
-#: ../gtk/a11y/gtkentryaccessible.c:1566
+#: ../gtk/a11y/gtkentryaccessible.c:1550
 msgctxt "Action description"
 msgid "Activates the entry"
-msgstr "Aktiviert den Eintrag"
+msgstr "Eintrag aktivieren"
 
+# expander?
 #: ../gtk/a11y/gtkexpanderaccessible.c:290
 msgctxt "Action description"
 msgid "Activates the expander"
-msgstr ""
+msgstr "Aktiviert den Ausklapper"
 
 #: ../gtk/a11y/gtkmenuitemaccessible.c:445
 msgctxt "Action description"
 msgid "Clicks the menuitem"
-msgstr "Klickt den Menüeintrag an"
+msgstr "Klickt das Menüelement an"
 
 #: ../gtk/a11y/gtkscalebuttonaccessible.c:140
 msgctxt "Action description"
 msgid "Pops up the slider"
-msgstr ""
+msgstr "Aktiviert den Schieberegler"
 
 #: ../gtk/a11y/gtkscalebuttonaccessible.c:142
 msgctxt "Action description"
 msgid "Dismisses the slider"
-msgstr ""
+msgstr "Verwirft den Schieberegler"
 
 #: ../gtk/a11y/gtkscalebuttonaccessible.c:170
 msgctxt "Action name"
 msgid "Popup"
-msgstr ""
+msgstr "Dialog"
 
 #: ../gtk/a11y/gtkscalebuttonaccessible.c:172
 msgctxt "Action name"
 msgid "Dismiss"
-msgstr "Ablehnen"
+msgstr "Verwerfen"
 
 #: ../gtk/a11y/gtkspinneraccessible.c:39
 msgctxt "throbbing progress animation widget"
@@ -625,7 +628,7 @@ msgstr "Schaltet zwischen »an« und »aus« um"
 #: ../gtk/a11y/gtkswitchaccessible.c:110
 msgctxt "Action description"
 msgid "Toggles the switch"
-msgstr ""
+msgstr "Schaltet den Schalter um"
 
 #: ../gtk/deprecated/gtkcolorsel.c:425
 msgid ""
@@ -727,8 +730,8 @@ msgid ""
 "current by dragging it to the other color swatch alongside."
 msgstr ""
 "Die zuvor gewählte Farbe im Vergleich mit der Farbe, die Sie nun auswählen. "
-"Sie können diese Farbe auf einen Paletteneintrag ziehen, oder sie als aktuell "
-"auswählen, indem Sie sie auf den anderen Farbfleck daneben ziehen."
+"Sie können diese Farbe auf einen Paletteneintrag ziehen, oder sie als "
+"aktuell auswählen, indem Sie sie auf den anderen Farbfleck daneben ziehen."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1078
 msgid ""
@@ -758,15 +761,15 @@ msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
-"Klicken Sie auf diesen Paletteneintrag, um ihn zur aktuellen Farbe zu machen. "
-"Ziehen Sie einen Farbfleck auf diesen Eintrag oder klicken Sie mit rechts "
-"darauf und wählen Sie »Farbe hier speichern«, um ihn zu ändern."
+"Klicken Sie auf diesen Paletteneintrag, um ihn zur aktuellen Farbe zu "
+"machen. Ziehen Sie einen Farbfleck auf diesen Eintrag oder klicken Sie mit "
+"rechts darauf und wählen Sie »Farbe hier speichern«, um ihn zu ändern."
 
 #. We emit the response for the Select button manually,
 #. * since we want to save the color first
 #.
 #: ../gtk/deprecated/gtkcolorseldialog.c:201 ../gtk/gtkappchooserdialog.c:509
-#: ../gtk/gtkcolorchooserdialog.c:149 ../gtk/gtkfontchooserdialog.c:174
+#: ../gtk/gtkcolorchooserdialog.c:150 ../gtk/gtkfontchooserdialog.c:174
 #: ../gtk/gtkprinteroptionwidget.c:550
 msgid "_Select"
 msgstr "Aus_wählen"
@@ -1174,7 +1177,7 @@ msgstr "%d %%"
 msgid "Pick a Color"
 msgstr "Wählen Sie eine Farbe"
 
-#: ../gtk/gtkcolorchooserdialog.c:162
+#: ../gtk/gtkcolorchooserdialog.c:164
 msgid "Select a Color"
 msgstr "Farbe auswählen"
 
@@ -1616,8 +1619,8 @@ msgstr "Datei in %s konnte nicht erstellt werden, weil dies kein Ordner ist."
 
 #: ../gtk/gtkfilechooserdefault.c:1029
 msgid ""
-"You may only select folders.  The item that you selected is not a folder; try "
-"using a different item."
+"You may only select folders.  The item that you selected is not a folder; "
+"try using a different item."
 msgstr ""
 "Sie dürfen nur Ordner auswählen. Das von Ihnen ausgewählte Objekt ist kein "
 "Ordner. Versuchen Sie, ein anderes Objekt auszuwählen."
@@ -1881,8 +1884,8 @@ msgstr "Schrift"
 #: ../gtk/gtkfontchooserwidget.c:110
 msgid "No fonts matched your search. You can revise your search and try again."
 msgstr ""
-"Keine Schriften stimmten mit Ihrer Suche überein. Ändern Sie Ihre Suchanfrage "
-"und versuchen Sie es erneut."
+"Keine Schriften stimmten mit Ihrer Suche überein. Ändern Sie Ihre "
+"Suchanfrage und versuchen Sie es erneut."
 
 #: ../gtk/gtkfontchooserwidget.c:557
 msgid "Search font name"
@@ -1922,12 +1925,12 @@ msgid "System (%s)"
 msgstr "System (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6167
+#: ../gtk/gtklabel.c:6144
 msgid "_Open Link"
 msgstr "Link ö_ffnen"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6179
+#: ../gtk/gtklabel.c:6156
 msgid "Copy _Link Address"
 msgstr "Link-Adresse _kopieren"
 
@@ -3559,22 +3562,6 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:7789
-msgid "Minimize"
-msgstr "Minimieren"
-
-#: ../gtk/gtkwindow.c:7798
-msgid "Unmaximize"
-msgstr "Maximierung aufheben"
-
-#: ../gtk/gtkwindow.c:7798
-msgid "Maximize"
-msgstr "Maximieren"
-
-#: ../gtk/gtkwindow.c:7812
-msgid "Close"
-msgstr "Schließen"
-
 #: ../gtk/paper_names_offsets.c:4
 msgctxt "paper size"
 msgid "asme_f"
@@ -4435,7 +4422,8 @@ msgstr "Der erstellte Cache war ungültig.\n"
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr ""
-"»%s« konnte nicht in »%s« umbenannt werden: %s; »%s« wird deswegen entfernt.\n"
+"»%s« konnte nicht in »%s« umbenannt werden: %s; »%s« wird deswegen "
+"entfernt.\n"
 
 #: ../gtk/updateiconcache.c:1576
 #, c-format
@@ -5157,11 +5145,11 @@ msgstr "Mit Test-Drucke drucken"
 #~ msgstr "Bildlader-Modul konnte nicht geladen werden: %s: %s"
 
 #~ msgid ""
-#~ "Image-loading module %s does not export the proper interface; perhaps it's "
-#~ "from a different GTK version?"
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
 #~ msgstr ""
-#~ "Bildlader-Modul %s exportiert nicht die richtige Schnittstelle; vielleicht "
-#~ "stammt es aus einer anderen GTK-Version?"
+#~ "Bildlader-Modul %s exportiert nicht die richtige Schnittstelle; "
+#~ "vielleicht stammt es aus einer anderen GTK-Version?"
 
 #~ msgid "Image type '%s' is not supported"
 #~ msgstr "Bildtyp »%s« wird nicht unterstützt"
@@ -5178,7 +5166,8 @@ msgstr "Mit Test-Drucke drucken"
 #~ msgid "Error writing to image file: %s"
 #~ msgstr "Fehler beim Schreiben einer Bilddatei (%s)"
 
-#~ msgid "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
 #~ msgstr ""
 #~ "Diese Fassung von gdk-pixbuf unterstützt das Speichern in diesem "
 #~ "Bildformat nicht: %s"
@@ -5563,7 +5552,8 @@ msgstr "Mit Test-Drucke drucken"
 #~ msgstr "PNM-Bildlader unterstützt dieses PNM-Unterformat nicht"
 
 #~ msgid "Raw PNM formats require exactly one whitespace before sample data"
-#~ msgstr "Rohe PNM-Formate verlangen genau einen Leerraum vor den Sample-Daten"
+#~ msgstr ""
+#~ "Rohe PNM-Formate verlangen genau einen Leerraum vor den Sample-Daten"
 
 #~ msgid "Cannot allocate memory for loading PNM image"
 #~ msgstr ""
@@ -5767,8 +5757,8 @@ msgstr "Mit Test-Drucke drucken"
 
 #~ msgid "Cannot allocate memory for loading XPM image"
 #~ msgstr ""
-#~ "Der zum Laden eines XPM-Bildes verwendete Speicher konnte nicht zugewiesen "
-#~ "werden"
+#~ "Der zum Laden eines XPM-Bildes verwendete Speicher konnte nicht "
+#~ "zugewiesen werden"
 
 #~ msgid "Cannot read XPM colormap"
 #~ msgstr "XPM-Farbtabelle konnte nicht gelesen werden"
@@ -5834,8 +5824,8 @@ msgstr "Mit Test-Drucke drucken"
 #~ "available to this program.\n"
 #~ "Are you sure that you want to select it?"
 #~ msgstr ""
-#~ "Die Datei »%s« liegt auf einer anderen Maschine (namens %s) und könnte für "
-#~ "dieses Programm nicht verfügbar sein.\n"
+#~ "Die Datei »%s« liegt auf einer anderen Maschine (namens %s) und könnte "
+#~ "für dieses Programm nicht verfügbar sein.\n"
 #~ "Sind Sie sicher, dass Sie sie markieren wollen?"
 
 #~ msgid "_New Folder"
@@ -6740,15 +6730,16 @@ msgstr "Mit Test-Drucke drucken"
 #~ msgid "Invalid filename: %s"
 #~ msgstr "Ungültiger Dateiname: %s"
 
-#~ msgid "Could not add a bookmark for '%s' because it is an invalid path name."
+#~ msgid ""
+#~ "Could not add a bookmark for '%s' because it is an invalid path name."
 #~ msgstr ""
 #~ "Es konnte kein Lesezeichen für »%s« hinzugefügt werden, da dies ein "
 #~ "ungültiger Pfadname ist."
 
 #~ msgid "Could not select file '%s' because it is an invalid path name."
 #~ msgstr ""
-#~ "Datei »%s« konnte nicht ausgewählt werden, da dies ein ungültiger Pfadname "
-#~ "ist."
+#~ "Datei »%s« konnte nicht ausgewählt werden, da dies ein ungültiger "
+#~ "Pfadname ist."
 
 #~ msgid "%d byte"
 #~ msgid_plural "%d bytes"
