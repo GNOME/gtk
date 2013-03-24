@@ -36,8 +36,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-17 08:13+0100\n"
-"PO-Revision-Date: 2013-03-16 18:42+0100\n"
+"POT-Creation-Date: 2013-03-24 14:50+0100\n"
+"PO-Revision-Date: 2013-03-23 17:53+0100\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Dansk <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -516,7 +516,7 @@ msgstr "Redigér"
 
 #: ../gtk/a11y/gtkcellaccessible.c:262
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:72
-#: ../gtk/a11y/gtkentryaccessible.c:1541
+#: ../gtk/a11y/gtkentryaccessible.c:1557
 #: ../gtk/a11y/gtkexpanderaccessible.c:281
 msgctxt "Action name"
 msgid "Activate"
@@ -573,7 +573,7 @@ msgctxt "Action description"
 msgid "Presses the combobox"
 msgstr "Trykker på kombinationsboksen"
 
-#: ../gtk/a11y/gtkentryaccessible.c:1550
+#: ../gtk/a11y/gtkentryaccessible.c:1566
 msgctxt "Action description"
 msgid "Activates the entry"
 msgstr "Aktiverer dette element"
@@ -773,7 +773,7 @@ msgstr ""
 #. * since we want to save the color first
 #.
 #: ../gtk/deprecated/gtkcolorseldialog.c:201 ../gtk/gtkappchooserdialog.c:509
-#: ../gtk/gtkcolorchooserdialog.c:150 ../gtk/gtkfontchooserdialog.c:174
+#: ../gtk/gtkcolorchooserdialog.c:149 ../gtk/gtkfontchooserdialog.c:174
 #: ../gtk/gtkprinteroptionwidget.c:550
 msgid "_Select"
 msgstr "_Vælg"
@@ -1182,7 +1182,7 @@ msgstr "%d %%"
 msgid "Pick a Color"
 msgstr "Vælg en farve"
 
-#: ../gtk/gtkcolorchooserdialog.c:164
+#: ../gtk/gtkcolorchooserdialog.c:162
 msgid "Select a Color"
 msgstr "Vælg en farve"
 
@@ -1922,12 +1922,12 @@ msgid "System (%s)"
 msgstr "System (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6144
+#: ../gtk/gtklabel.c:6169
 msgid "_Open Link"
 msgstr "_Åbn link"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6156
+#: ../gtk/gtklabel.c:6181
 msgid "Copy _Link Address"
 msgstr "Kopiér _linkadresse"
 
@@ -3544,6 +3544,22 @@ msgstr "Fuld lydstyrke"
 msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
+
+#: ../gtk/gtkwindow.c:7860
+msgid "Minimize"
+msgstr "Minimér"
+
+#: ../gtk/gtkwindow.c:7869
+msgid "Unmaximize"
+msgstr "Afmaksimér"
+
+#: ../gtk/gtkwindow.c:7869
+msgid "Maximize"
+msgstr "Maksimér"
+
+#: ../gtk/gtkwindow.c:7883
+msgid "Close"
+msgstr "Luk"
 
 #: ../gtk/paper_names_offsets.c:4
 msgctxt "paper size"
