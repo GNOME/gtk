@@ -18,6 +18,14 @@
  */
 #include <gtk/gtk.h>
 
+static gboolean
+main_loop_quit_cb (gpointer data)
+{
+  gtk_main_quit ();
+
+  return FALSE;
+}
+
 static void
 test_dialog_basic (void)
 {
@@ -25,6 +33,9 @@ test_dialog_basic (void)
 
   dialog = gtk_dialog_new();
   g_assert (GTK_IS_DIALOG (dialog));
+  g_assert (gtk_dialog_get_action_area (GTK_DIALOG (dialog)) != NULL);
+  g_assert (gtk_dialog_get_content_area (GTK_DIALOG (dialog)) != NULL);
+
   gtk_widget_destroy (dialog);
 }
 
@@ -136,6 +147,13 @@ test_app_chooser_dialog_basic (void)
 
   widget = gtk_app_chooser_dialog_new_for_content_type (NULL, 0, "text/plain");
   g_assert (GTK_IS_APP_CHOOSER_DIALOG (widget));
+
+  /* GtkAppChooserDialog bug, if destroyed before spinning 
+   * the main context then app_chooser_online_get_default_ready_cb()
+   * will be eventually called and segfault.
+   */
+  g_timeout_add (500, main_loop_quit_cb, NULL);
+  gtk_main();
   gtk_widget_destroy (widget);
 }
 
@@ -146,6 +164,44 @@ test_color_chooser_dialog_basic (void)
 
   widget = gtk_color_chooser_dialog_new (NULL, NULL);
   g_assert (GTK_IS_COLOR_CHOOSER_DIALOG (widget));
+  gtk_widget_destroy (widget);
+}
+
+/* Avoid warnings from GVFS-RemoteVolumeMonitor */
+static gboolean
+ignore_gvfs_warning (const gchar *log_domain,
+		     GLogLevelFlags log_level,
+		     const gchar *message,
+		     gpointer user_data)
+{
+  if (g_strcmp0 (log_domain, "GVFS-RemoteVolumeMonitor") == 0)
+    return FALSE;
+
+  return TRUE;
+}
+
+static void
+test_file_chooser_widget_basic (void)
+{
+  GtkWidget *widget;
+
+  g_test_log_set_fatal_handler (ignore_gvfs_warning, NULL);
+
+  widget = gtk_file_chooser_widget_new (GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+  g_assert (GTK_IS_FILE_CHOOSER_WIDGET (widget));
+
+  /* XXX BUG:
+   *
+   * Spin the mainloop for a bit, this allows the file operations
+   * to complete, GtkFileChooserDefault has a bug where it leaks
+   * GtkTreeRowReferences to the internal shortcuts_model
+   *
+   * Since we assert all automated children are finalized we
+   * can catch this
+   */
+  g_timeout_add (100, main_loop_quit_cb, NULL);
+  gtk_main();
+
   gtk_widget_destroy (widget);
 }
 
@@ -173,6 +229,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Template/GtkAppChooserWidget/Basic", test_app_chooser_widget_basic);
   g_test_add_func ("/Template/GtkAppChooserDialog/Basic", test_app_chooser_dialog_basic);
   g_test_add_func ("/Template/GtkColorChooserDialog/Basic", test_color_chooser_dialog_basic);
+  g_test_add_func ("/Template/GtkFileChooserWidget/Basic", test_file_chooser_widget_basic);
 
   return g_test_run();
 }
