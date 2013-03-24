@@ -1193,6 +1193,7 @@ gtk_get_major_version
 gtk_get_micro_version
 gtk_get_minor_version
 gtk_get_option_group
+gtk_glade_catalog_init
 gtk_grab_add
 gtk_grab_get_current
 gtk_grab_remove

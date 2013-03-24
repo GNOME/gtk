@@ -732,6 +732,7 @@ gtk_base_c_sources = 		\
 	gtkfontchooserutils.c	\
 	gtkfontchooserwidget.c	\
 	gtkframe.c		\
+	gtkgladecatalog.c	\
 	gtkgrid.c		\
 	gtkheaderbar.c		\
 	gtkhsla.c		\
