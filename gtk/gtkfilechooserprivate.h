@@ -106,8 +106,6 @@ GSList *       _gtk_file_chooser_list_shortcut_folder_files (GtkFileChooser *cho
 struct _GtkFileChooserDialogPrivate
 {
   GtkWidget *widget;
-  
-  char *file_system;
 
   /* for use with GtkFileChooserEmbed */
   gboolean response_requested;

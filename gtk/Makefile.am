@@ -1103,6 +1103,7 @@ COMPOSITE_TEMPLATES =			\
 	gtkcolorchooserdialog.ui	\
 	gtkdialog.ui			\
 	gtkfilechooserdefault.ui	\
+	gtkfilechooserdialog.ui		\
 	gtkinfobar.ui			\
 	gtklockbutton.ui		\
 	gtkmessagedialog.ui		\
