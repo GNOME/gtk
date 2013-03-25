@@ -718,6 +718,7 @@ gtk_grid_request_non_spanning (GtkGridRequest *request,
   GtkGridLine *line;
   GList *list;
   gint i;
+  GtkBaselinePosition baseline_pos;
   gint minimum, minimum_baseline;
   gint natural, natural_baseline;
 
@@ -760,6 +761,30 @@ gtk_grid_request_non_spanning (GtkGridRequest *request,
 	{
 	  line->minimum = MAX (line->minimum, line->minimum_above + line->minimum_below);
 	  line->natural = MAX (line->natural, line->natural_above + line->natural_below);
+
+	  baseline_pos = gtk_grid_get_row_baseline_position (request->grid, i + lines->min);
+
+	  switch (baseline_pos)
+	    {
+	    case GTK_BASELINE_POSITION_TOP:
+	      line->minimum_above += 0;
+	      line->minimum_below += line->minimum - (line->minimum_above + line->minimum_below);
+	      line->natural_above += 0;
+	      line->natural_below += line->natural - (line->natural_above + line->natural_below);
+	      break;
+	    case GTK_BASELINE_POSITION_CENTER:
+	      line->minimum_above += (line->minimum - (line->minimum_above + line->minimum_below))/2;
+	      line->minimum_below += (line->minimum - (line->minimum_above + line->minimum_below))/2;
+	      line->natural_above += (line->natural - (line->natural_above + line->natural_below))/2;
+	      line->natural_below += (line->natural - (line->natural_above + line->natural_below))/2;
+	      break;
+	    case GTK_BASELINE_POSITION_BOTTOM:
+	      line->minimum_above += line->minimum - (line->minimum_above + line->minimum_below);
+	      line->minimum_below += 0;
+	      line->natural_above += line->natural - (line->natural_above + line->natural_below);
+	      line->natural_below += 0;
+	      break;
+	    }
 	}
     }
 }
