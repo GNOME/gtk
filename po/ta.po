@@ -8,14 +8,14 @@
 # Felix <ifelix25@gmail.com>, 2006.
 # I. Felix <ifelix@redhat.com>, 2009.
 # I Felix <ifelix@redhat.com>, 2011.
-# Shantha kumar <shkumar@redhat.com>, 2012.
+# Shantha kumar <shkumar@redhat.com>, 2012, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master.ta\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug."
 "cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2012-12-07 16:36+0000\n"
-"PO-Revision-Date: 2012-12-19 12:37+0530\n"
+"POT-Creation-Date: 2013-03-20 23:37+0000\n"
+"PO-Revision-Date: 2013-03-25 15:24+0530\n"
 "Last-Translator: Shantha kumar <shkumar@redhat.com>\n"
 "Language-Team: Tamil <>\n"
 "Language: ta\n"
@@ -34,48 +34,48 @@ msgstr ""
 "\n"
 "\n"
 
-#: ../gdk/gdk.c:155
+#: ../gdk/gdk.c:157
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "--gdk-debug விருப்பத்தைப் பாகுபடுத்துவதில் பிழை"
 
-#: ../gdk/gdk.c:175
+#: ../gdk/gdk.c:177
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "விருப்பம் --gdk-no-debugஐ எடுக்கும் போது பிழை"
 
 #. Description of --class=CLASS in --help output
-#: ../gdk/gdk.c:203
+#: ../gdk/gdk.c:205
 msgid "Program class as used by the window manager"
 msgstr "விண்டோஸ் மேலாளரால் பயன்படுத்தப்பட்ட நிரல் வகுப்பு"
 
 #. Placeholder in --class=CLASS in --help output
-#: ../gdk/gdk.c:204
+#: ../gdk/gdk.c:206
 msgid "CLASS"
 msgstr "CLASS"
 
 #. Description of --name=NAME in --help output
-#: ../gdk/gdk.c:206
+#: ../gdk/gdk.c:208
 msgid "Program name as used by the window manager"
 msgstr "விண்டோஸ் மேலாளரால் நிரல் பெயர் பயன்படுத்தப்பட்டது"
 
 #. Placeholder in --name=NAME in --help output
-#: ../gdk/gdk.c:207
+#: ../gdk/gdk.c:209
 msgid "NAME"
 msgstr "NAME"
 
 #. Description of --display=DISPLAY in --help output
-#: ../gdk/gdk.c:209
+#: ../gdk/gdk.c:211
 msgid "X display to use"
 msgstr "பயன்படுத்த X காட்சி"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: ../gdk/gdk.c:210
+#: ../gdk/gdk.c:212
 msgid "DISPLAY"
 msgstr "DISPLAY"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: ../gdk/gdk.c:213
+#: ../gdk/gdk.c:215
 msgid "GDK debugging flags to set"
 msgstr "GDK பிழைத்திருத்தும் கொடிகளை அமைக்கிறது"
 
@@ -83,12 +83,12 @@ msgstr "GDK பிழைத்திருத்தும் கொடிகள�
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:214 ../gdk/gdk.c:217 ../gtk/gtkmain.c:454 ../gtk/gtkmain.c:457
+#: ../gdk/gdk.c:216 ../gdk/gdk.c:219 ../gtk/gtkmain.c:453 ../gtk/gtkmain.c:456
 msgid "FLAGS"
 msgstr "FLAGS"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:216
+#: ../gdk/gdk.c:218
 msgid "GDK debugging flags to unset"
 msgstr "GDK பிழைதிருத்துதல் கொடிகளை அமைத்தல் நீக்குகிறது"
 
@@ -468,12 +468,147 @@ msgid_plural "Opening %d Items"
 msgstr[0] "%d உருப்படியை திறக்கிறது"
 msgstr[1] "%d உருப்படிகளை திறக்கிறது"
 
-#: ../gtk/a11y/gtkspinneraccessible.c:40
+#: ../gtk/a11y/gtkbooleancellaccessible.c:43
+msgctxt "Action description"
+msgid "Toggles the cell"
+msgstr "கலத்தை நிலைமாற்றும்"
+
+#: ../gtk/a11y/gtkbooleancellaccessible.c:63
+#: ../gtk/a11y/gtkswitchaccessible.c:101
+msgctxt "Action name"
+msgid "Toggle"
+msgstr "நிலைமாற்று"
+
+#: ../gtk/a11y/gtkbuttonaccessible.c:341
+#: ../gtk/a11y/gtkmenuitemaccessible.c:436
+msgctxt "Action name"
+msgid "Click"
+msgstr "சொடுக்கு"
+
+#: ../gtk/a11y/gtkbuttonaccessible.c:350
+msgctxt "Action description"
+msgid "Clicks the button"
+msgstr "பொத்தானை சொடுக்கும்"
+
+#: ../gtk/a11y/gtkcellaccessible.c:258
+msgctxt "Action name"
+msgid "Expand or contract"
+msgstr "விரிவாக்கு அல்லது சுருக்கு"
+
+#: ../gtk/a11y/gtkcellaccessible.c:260
+#| msgctxt "Stock label"
+#| msgid "_Edit"
+msgctxt "Action name"
+msgid "Edit"
+msgstr "திருத்து"
+
+#: ../gtk/a11y/gtkcellaccessible.c:262
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:72
+#: ../gtk/a11y/gtkentryaccessible.c:1557
+#: ../gtk/a11y/gtkexpanderaccessible.c:281
+msgctxt "Action name"
+msgid "Activate"
+msgstr "செயல்படுத்து"
+
+#: ../gtk/a11y/gtkcellaccessible.c:275
+msgctxt "Action description"
+msgid "Expands or contracts the row in the tree view containing this cell"
+msgstr ""
+"இந்தக் கலத்தைக் கொண்டுள்ள கிளையமைப்புப் பார்வையிலுள்ள வரிசையை விரிவாக்கும் அல்லது சுருக்கும்"
+
+#: ../gtk/a11y/gtkcellaccessible.c:277
+msgctxt "Action description"
+msgid "Creates a widget in which the contents of the cell can be edited"
+msgstr "கலத்தின் உள்ளடக்கத்தைத் திருத்தக்கூடிய ஒரு விட்ஜெட்டை உருவாக்கும்"
+
+#: ../gtk/a11y/gtkcellaccessible.c:279
+msgctxt "Action description"
+msgid "Activates the cell"
+msgstr "கலத்தைச் செயல்படுத்தும்"
+
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:71
+#| msgid "_Select"
+msgctxt "Action name"
+msgid "Select"
+msgstr "தேர்ந்தெடுக்கவும்"
+
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:73
+#| msgid "_Customize"
+msgctxt "Action name"
+msgid "Customize"
+msgstr "தனிப்பயனாக்கு"
+
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:84
+#| msgid "Select a Color"
+msgctxt "Action description"
+msgid "Selects the color"
+msgstr "நிறத்தைத் தேர்ந்தெடுக்கும்"
+
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:85
+#| msgid "Brightness of the color."
+msgctxt "Action description"
+msgid "Activates the color"
+msgstr "வண்ணத்தை செயல்படுத்தும்."
+
+#: ../gtk/a11y/gtkcolorswatchaccessible.c:86
+#| msgid "Custom color %d: %s"
+msgctxt "Action description"
+msgid "Customizes the color"
+msgstr "வண்ணத்தைத் தனிப்பயனாக்கும்"
+
+#: ../gtk/a11y/gtkcomboboxaccessible.c:313
+#| msgid "_Pressure:"
+msgctxt "Action name"
+msgid "Press"
+msgstr "அழுத்து"
+
+#: ../gtk/a11y/gtkcomboboxaccessible.c:322
+#| msgid "Decreases the volume"
+msgctxt "Action description"
+msgid "Presses the combobox"
+msgstr "கூட்டுப்பெட்டியை அழுத்தும்"
+
+#: ../gtk/a11y/gtkentryaccessible.c:1566
+msgctxt "Action description"
+msgid "Activates the entry"
+msgstr "உள்ளீட்டை செயபடுத்தும்"
+
+#: ../gtk/a11y/gtkexpanderaccessible.c:290
+msgctxt "Action description"
+msgid "Activates the expander"
+msgstr "விரிவாக்கியை செயல்படுத்தும்"
+
+#: ../gtk/a11y/gtkmenuitemaccessible.c:445
+msgctxt "Action description"
+msgid "Clicks the menuitem"
+msgstr "மெனு உருப்படியை சொடுக்கும்"
+
+#: ../gtk/a11y/gtkscalebuttonaccessible.c:140
+msgctxt "Action description"
+msgid "Pops up the slider"
+msgstr "ஸ்லைடரை மேலெழுப்பும்"
+
+#: ../gtk/a11y/gtkscalebuttonaccessible.c:142
+msgctxt "Action description"
+msgid "Dismisses the slider"
+msgstr "ஸ்லைடரை நிராகரிக்கும்"
+
+#: ../gtk/a11y/gtkscalebuttonaccessible.c:170
+msgctxt "Action name"
+msgid "Popup"
+msgstr "பாப்-அப்"
+
+#: ../gtk/a11y/gtkscalebuttonaccessible.c:172
+msgctxt "Action name"
+msgid "Dismiss"
+msgstr "நிராகரி"
+
+#: ../gtk/a11y/gtkspinneraccessible.c:39
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
 msgstr "ஸ்பின்னர்"
 
-#: ../gtk/a11y/gtkspinneraccessible.c:41
+#: ../gtk/a11y/gtkspinneraccessible.c:40
 msgid "Provides visual indication of progress"
 msgstr "முன்னேற்றத்தின்  காட்சி அறிகுறியை வழங்குகிறது"
 
@@ -485,6 +620,11 @@ msgstr "மாற்றுதல்"
 #: ../gtk/a11y/gtkswitchaccessible.c:64
 msgid "Switches between on and off states"
 msgstr "ஆன் மற்றும் ஆஃப் நிலைகளுக்கு இடையே மாற்றுகிறது"
+
+#: ../gtk/a11y/gtkswitchaccessible.c:110
+msgctxt "Action description"
+msgid "Toggles the switch"
+msgstr "ஸ்விட்ச்சை நிலைமாற்றும்"
 
 #: ../gtk/deprecated/gtkcolorsel.c:425
 msgid ""
@@ -621,7 +761,7 @@ msgstr ""
 #. We emit the response for the Select button manually,
 #. * since we want to save the color first
 #.
-#: ../gtk/deprecated/gtkcolorseldialog.c:201 ../gtk/gtkappchooserdialog.c:574
+#: ../gtk/deprecated/gtkcolorseldialog.c:201 ../gtk/gtkappchooserdialog.c:509
 #: ../gtk/gtkcolorchooserdialog.c:150 ../gtk/gtkfontchooserdialog.c:174
 #: ../gtk/gtkprinteroptionwidget.c:550
 msgid "_Select"
@@ -693,27 +833,27 @@ msgid "Could not show link"
 msgstr "இணைப்பைக் காட்ட முடியவில்லை"
 
 #: ../gtk/gtkaboutdialog.c:1017
-msgid "Homepage"
-msgstr "முகப்புபக்கம்"
+msgid "Website"
+msgstr "வலைத்தளம்"
 
 #: ../gtk/gtkaboutdialog.c:1071
 #, c-format
 msgid "About %s"
 msgstr "%s பற்றி"
 
-#: ../gtk/gtkaboutdialog.c:2396
+#: ../gtk/gtkaboutdialog.c:2398
 msgid "Created by"
 msgstr "இதன்படி உருவாக்கப்பட்டது"
 
-#: ../gtk/gtkaboutdialog.c:2399
+#: ../gtk/gtkaboutdialog.c:2401
 msgid "Documented by"
 msgstr "ஆவணமாக்கம்"
 
-#: ../gtk/gtkaboutdialog.c:2409
+#: ../gtk/gtkaboutdialog.c:2411
 msgid "Translated by"
 msgstr "மொழிபெயர்ப்பு"
 
-#: ../gtk/gtkaboutdialog.c:2414
+#: ../gtk/gtkaboutdialog.c:2416
 msgid "Artwork by"
 msgstr "கலை வேலை"
 
@@ -777,18 +917,17 @@ msgctxt "keyboard label"
 msgid "Meta"
 msgstr "மெட்டா"
 
-#: ../gtk/gtkaccellabel.c:848
+#: ../gtk/gtkaccellabel.c:849
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "இடைவெளி"
 
-#: ../gtk/gtkaccellabel.c:851
+#: ../gtk/gtkaccellabel.c:852
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
 
 #: ../gtk/gtkappchooserbutton.c:290
-#| msgid "Other application..."
 msgid "Other application…"
 msgstr "மற்ற பயன்பாடு..."
 
@@ -800,42 +939,29 @@ msgstr "ஆன்லைன் பயன்பாடுகளுக்கான �
 msgid "_Find applications online"
 msgstr "ஆன்லைன் பயன்பாடுகளை தேடவும் (_F)"
 
-#: ../gtk/gtkappchooserdialog.c:247
-msgid "Could not run application"
-msgstr "பயன்பாட்டை இயக்க முடியவில்லை"
-
-#: ../gtk/gtkappchooserdialog.c:260
-#, c-format
-msgid "Could not find '%s'"
-msgstr "'%s' ஐ ஏற்ற முடியவில்லை"
-
-#: ../gtk/gtkappchooserdialog.c:263
-msgid "Could not find application"
-msgstr "பயன்பாட்டை தேட முடியவில்லை"
-
 #. Translators: %s is a filename
-#: ../gtk/gtkappchooserdialog.c:397
+#: ../gtk/gtkappchooserdialog.c:332
 #, c-format
 msgid "Select an application to open \"%s\""
 msgstr "\"%s\" திறப்பதற்கு ஒரு பயன்பாட்டை தேர்ந்தெடுக்கவும்"
 
-#: ../gtk/gtkappchooserdialog.c:398 ../gtk/gtkappchooserwidget.c:657
+#: ../gtk/gtkappchooserdialog.c:333 ../gtk/gtkappchooserwidget.c:657
 #, c-format
 msgid "No applications available to open \"%s\""
 msgstr "\"%s\" ஐ திறப்பதற்கு பயன்பாடுகள் எதுவும் இல்லை"
 
 #. Translators: %s is a file type description
-#: ../gtk/gtkappchooserdialog.c:404
+#: ../gtk/gtkappchooserdialog.c:339
 #, c-format
 msgid "Select an application for \"%s\" files"
 msgstr "\"%s\" கோப்புகளுக்கு ஒரு பயன்பாட்டை தேர்ந்தெடுக்கவும்"
 
-#: ../gtk/gtkappchooserdialog.c:406
+#: ../gtk/gtkappchooserdialog.c:341
 #, c-format
 msgid "No applications available to open \"%s\" files"
 msgstr "\"%s\" கோப்புகளை திறப்பதற்கு பயன்பாடுகள் எதுவும் இல்லை"
 
-#: ../gtk/gtkappchooserdialog.c:422
+#: ../gtk/gtkappchooserdialog.c:357
 msgid ""
 "Click \"Show other applications\", for more options, or \"Find applications "
 "online\" to install a new application"
@@ -843,11 +969,11 @@ msgstr ""
 "\"மற்ற பயன்பாடுகளை காட்டு\" , மேலும் விருப்பங்களுக்கு கிளிக் செய்யவும், அல்லது ஒரு "
 "புதிய பயன்பாட்டை நிறுவுவதற்கு \"ஆன்லைன் பயன்பாடுகளை தேடு\" "
 
-#: ../gtk/gtkappchooserdialog.c:492
+#: ../gtk/gtkappchooserdialog.c:427
 msgid "Forget association"
 msgstr "சங்கத்தை மறக்கவும்"
 
-#: ../gtk/gtkappchooserdialog.c:558
+#: ../gtk/gtkappchooserdialog.c:493
 msgid "Show other applications"
 msgstr "மற்ற பயன்பாடுகளை காட்டவும்"
 
@@ -867,7 +993,7 @@ msgstr "தொடர்புடைய பயன்பாடுகள்"
 msgid "Other Applications"
 msgstr "மற்ற பயன்பாடுகள்"
 
-#: ../gtk/gtkapplication.c:1557
+#: ../gtk/gtkapplication.c:1565
 #, c-format
 msgid ""
 "%s cannot quit at this time:\n"
@@ -1031,7 +1157,6 @@ msgstr "தவறான"
 #. * acelerator.
 #.
 #: ../gtk/gtkcellrendereraccel.c:416 ../gtk/gtkcellrendereraccel.c:747
-#| msgid "New accelerator..."
 msgid "New accelerator…"
 msgstr "புதிய மாற்றி…"
 
@@ -1059,201 +1184,201 @@ msgstr "சிவப்பு %d%%, பச்சை %d%%, நீலம் %d%%, 
 msgid "Red %d%%, Green %d%%, Blue %d%%"
 msgstr "சிவப்பு %d%%, பச்சை %d%%, நீலம் %d%%"
 
-#: ../gtk/gtkcolorchooserwidget.c:360
+#: ../gtk/gtkcolorchooserwidget.c:364
 #, c-format
 msgid "Color: %s"
 msgstr "நிறம்: %s"
 
-#: ../gtk/gtkcolorchooserwidget.c:419
+#: ../gtk/gtkcolorchooserwidget.c:423
 msgctxt "Color name"
 msgid "Light Scarlet Red"
 msgstr "லைட் ஸ்கார்லெட் சிவப்பு"
 
-#: ../gtk/gtkcolorchooserwidget.c:420
+#: ../gtk/gtkcolorchooserwidget.c:424
 msgctxt "Color name"
 msgid "Scarlet Red"
 msgstr "ஸ்கார்லெட் சிவப்பு"
 
-#: ../gtk/gtkcolorchooserwidget.c:421
+#: ../gtk/gtkcolorchooserwidget.c:425
 msgctxt "Color name"
 msgid "Dark Scarlet Red"
 msgstr "டார்க் ஸ்கார்லெட் சிவப்பு"
 
-#: ../gtk/gtkcolorchooserwidget.c:422
+#: ../gtk/gtkcolorchooserwidget.c:426
 msgctxt "Color name"
 msgid "Light Orange"
 msgstr "லைட் ஆரஞ்சு"
 
-#: ../gtk/gtkcolorchooserwidget.c:423
+#: ../gtk/gtkcolorchooserwidget.c:427
 msgctxt "Color name"
 msgid "Orange"
 msgstr "ஆரஞ்சு"
 
-#: ../gtk/gtkcolorchooserwidget.c:424
+#: ../gtk/gtkcolorchooserwidget.c:428
 msgctxt "Color name"
 msgid "Dark Orange"
 msgstr "டார்க் ஆரஞ்சு"
 
-#: ../gtk/gtkcolorchooserwidget.c:425
+#: ../gtk/gtkcolorchooserwidget.c:429
 msgctxt "Color name"
 msgid "Light Butter"
 msgstr "லைட் வெண்ணெய் நிறம்"
 
-#: ../gtk/gtkcolorchooserwidget.c:426
+#: ../gtk/gtkcolorchooserwidget.c:430
 msgctxt "Color name"
 msgid "Butter"
 msgstr "வெண்ணெய் நிறம்"
 
-#: ../gtk/gtkcolorchooserwidget.c:427
+#: ../gtk/gtkcolorchooserwidget.c:431
 msgctxt "Color name"
 msgid "Dark Butter"
 msgstr "டார்க் வெண்ணெய் நிறம்"
 
-#: ../gtk/gtkcolorchooserwidget.c:428
+#: ../gtk/gtkcolorchooserwidget.c:432
 msgctxt "Color name"
 msgid "Light Chameleon"
 msgstr "லைட் பச்சொந்தி நிறம்"
 
-#: ../gtk/gtkcolorchooserwidget.c:429
+#: ../gtk/gtkcolorchooserwidget.c:433
 msgctxt "Color name"
 msgid "Chameleon"
 msgstr "பச்சொந்தி நிறம்"
 
-#: ../gtk/gtkcolorchooserwidget.c:430
+#: ../gtk/gtkcolorchooserwidget.c:434
 msgctxt "Color name"
 msgid "Dark Chameleon"
 msgstr "டார்க் பச்சொந்தி நிறம்"
 
-#: ../gtk/gtkcolorchooserwidget.c:431
+#: ../gtk/gtkcolorchooserwidget.c:435
 msgctxt "Color name"
 msgid "Light Sky Blue"
 msgstr "லைட் வான நீலம்"
 
-#: ../gtk/gtkcolorchooserwidget.c:432
+#: ../gtk/gtkcolorchooserwidget.c:436
 msgctxt "Color name"
 msgid "Sky Blue"
 msgstr "வான நீலம்"
 
-#: ../gtk/gtkcolorchooserwidget.c:433
+#: ../gtk/gtkcolorchooserwidget.c:437
 msgctxt "Color name"
 msgid "Dark Sky Blue"
 msgstr "டார்க் வான நீலம்"
 
-#: ../gtk/gtkcolorchooserwidget.c:434
+#: ../gtk/gtkcolorchooserwidget.c:438
 msgctxt "Color name"
 msgid "Light Plum"
 msgstr "லைட் ப்ளம்"
 
-#: ../gtk/gtkcolorchooserwidget.c:435
+#: ../gtk/gtkcolorchooserwidget.c:439
 msgctxt "Color name"
 msgid "Plum"
 msgstr "ப்ளம்"
 
-#: ../gtk/gtkcolorchooserwidget.c:436
+#: ../gtk/gtkcolorchooserwidget.c:440
 msgctxt "Color name"
 msgid "Dark Plum"
 msgstr "டார்க் ப்ளம்"
 
-#: ../gtk/gtkcolorchooserwidget.c:437
+#: ../gtk/gtkcolorchooserwidget.c:441
 msgctxt "Color name"
 msgid "Light Chocolate"
 msgstr "லைட் சாக்லேட்"
 
-#: ../gtk/gtkcolorchooserwidget.c:438
+#: ../gtk/gtkcolorchooserwidget.c:442
 msgctxt "Color name"
 msgid "Chocolate"
 msgstr "சாக்லேட்"
 
-#: ../gtk/gtkcolorchooserwidget.c:439
+#: ../gtk/gtkcolorchooserwidget.c:443
 msgctxt "Color name"
 msgid "Dark Chocolate"
 msgstr "டார் சாக்லேட்"
 
-#: ../gtk/gtkcolorchooserwidget.c:440
+#: ../gtk/gtkcolorchooserwidget.c:444
 msgctxt "Color name"
 msgid "Light Aluminum 1"
 msgstr "லைட் அலுமினியம் 1"
 
-#: ../gtk/gtkcolorchooserwidget.c:441
+#: ../gtk/gtkcolorchooserwidget.c:445
 msgctxt "Color name"
 msgid "Aluminum 1"
 msgstr "அலுமினியம் 1"
 
-#: ../gtk/gtkcolorchooserwidget.c:442
+#: ../gtk/gtkcolorchooserwidget.c:446
 msgctxt "Color name"
 msgid "Dark Aluminum 1"
 msgstr "டார்க் அலுமினியம் 1"
 
-#: ../gtk/gtkcolorchooserwidget.c:443
+#: ../gtk/gtkcolorchooserwidget.c:447
 msgctxt "Color name"
 msgid "Light Aluminum 2"
 msgstr "லைட் அலுமினியம் 2"
 
-#: ../gtk/gtkcolorchooserwidget.c:444
+#: ../gtk/gtkcolorchooserwidget.c:448
 msgctxt "Color name"
 msgid "Aluminum 2"
 msgstr "அலுமினியம் 2"
 
-#: ../gtk/gtkcolorchooserwidget.c:445
+#: ../gtk/gtkcolorchooserwidget.c:449
 msgctxt "Color name"
 msgid "Dark Aluminum 2"
 msgstr "டார்க் அலுமினியம் 2"
 
-#: ../gtk/gtkcolorchooserwidget.c:459
+#: ../gtk/gtkcolorchooserwidget.c:463
 msgctxt "Color name"
 msgid "Black"
 msgstr "கருப்பு"
 
-#: ../gtk/gtkcolorchooserwidget.c:460
+#: ../gtk/gtkcolorchooserwidget.c:464
 msgctxt "Color name"
 msgid "Very Dark Gray"
 msgstr "மிக டார்க் கிரே"
 
-#: ../gtk/gtkcolorchooserwidget.c:461
+#: ../gtk/gtkcolorchooserwidget.c:465
 msgctxt "Color name"
 msgid "Darker Gray"
 msgstr "இன்னும் டார்க் கிரே"
 
-#: ../gtk/gtkcolorchooserwidget.c:462
+#: ../gtk/gtkcolorchooserwidget.c:466
 msgctxt "Color name"
 msgid "Dark Gray"
 msgstr "டார்க் கிரே"
 
-#: ../gtk/gtkcolorchooserwidget.c:463
+#: ../gtk/gtkcolorchooserwidget.c:467
 msgctxt "Color name"
 msgid "Medium Gray"
 msgstr "நடுத்தர கிரே"
 
-#: ../gtk/gtkcolorchooserwidget.c:464
+#: ../gtk/gtkcolorchooserwidget.c:468
 msgctxt "Color name"
 msgid "Light Gray"
 msgstr "லைட் கிரே"
 
-#: ../gtk/gtkcolorchooserwidget.c:465
+#: ../gtk/gtkcolorchooserwidget.c:469
 msgctxt "Color name"
 msgid "Lighter Gray"
 msgstr "இன்னும் லைட் கிரே"
 
-#: ../gtk/gtkcolorchooserwidget.c:466
+#: ../gtk/gtkcolorchooserwidget.c:470
 msgctxt "Color name"
 msgid "Very Light Gray"
 msgstr "மிக லைட் கிரே"
 
-#: ../gtk/gtkcolorchooserwidget.c:467
+#: ../gtk/gtkcolorchooserwidget.c:471
 msgctxt "Color name"
 msgid "White"
 msgstr "வெள்ளை"
 
 #. translators: label for the custom section in the color chooser
-#: ../gtk/gtkcolorchooserwidget.c:516
+#: ../gtk/gtkcolorchooserwidget.c:520
 msgid "Custom"
 msgstr "தனிப்பயன்"
 
-#: ../gtk/gtkcolorchooserwidget.c:524
+#: ../gtk/gtkcolorchooserwidget.c:528
 msgid "Create custom color"
 msgstr "தனிப்பயன் நிறத்தை உருவாக்கு"
 
-#: ../gtk/gtkcolorchooserwidget.c:543
+#: ../gtk/gtkcolorchooserwidget.c:546
 #, c-format
 msgid "Custom color %d: %s"
 msgstr "தனிப்பயன் வண்ணம் %d: %s"
@@ -1334,7 +1459,6 @@ msgid "mm"
 msgstr "மிமீ"
 
 #: ../gtk/gtkcustompaperunixdialog.c:605
-#| msgid "Margins from Printer..."
 msgid "Margins from Printer…"
 msgstr "அச்சடிப்பிக்கான ஓரங்கள்…"
 
@@ -1375,15 +1499,15 @@ msgstr "வலது: (_R)"
 msgid "Paper Margins"
 msgstr "தாள் ஓரங்கள்"
 
-#: ../gtk/gtkentry.c:9127 ../gtk/gtktextview.c:8591
+#: ../gtk/gtkentry.c:9204 ../gtk/gtktextview.c:8684
 msgid "Input _Methods"
 msgstr "உள்ளீட்பு _முறைகள்"
 
-#: ../gtk/gtkentry.c:9141 ../gtk/gtktextview.c:8605
+#: ../gtk/gtkentry.c:9218 ../gtk/gtktextview.c:8698
 msgid "_Insert Unicode Control Character"
 msgstr "யூனிகோட் கட்டுப்பாட்டு வரியுரு _சொருகவும்"
 
-#: ../gtk/gtkentry.c:10094
+#: ../gtk/gtkentry.c:10316
 msgid "Caps Lock is on"
 msgstr "Caps Lock செயலிலுள்ளது"
 
@@ -1432,7 +1556,7 @@ msgstr "Caps Lock செயலிலுள்ளது"
 msgid "Select a File"
 msgstr "ஒரு கோப்பினை தேர்ந்தெடுக்கவும்"
 
-#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkfilechooserdefault.c:1820
+#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkfilechooserdefault.c:1825
 msgid "Desktop"
 msgstr "கணிமேசை"
 
@@ -1440,8 +1564,7 @@ msgstr "கணிமேசை"
 msgid "(None)"
 msgstr "(ஒன்றுமில்லை)"
 
-#: ../gtk/gtkfilechooserbutton.c:2046
-#| msgid "Other..."
+#: ../gtk/gtkfilechooserbutton.c:2198
 msgid "Other…"
 msgstr "பிற…"
 
@@ -1449,23 +1572,23 @@ msgstr "பிற…"
 msgid "Type name of new folder"
 msgstr "புதிய அடைவின் பெயரை உள்ளீடுக"
 
-#: ../gtk/gtkfilechooserdefault.c:971
+#: ../gtk/gtkfilechooserdefault.c:954
 msgid "Could not retrieve information about the file"
 msgstr "கோப்பினை பற்றிய தகவல் பெற முடியவில்லை"
 
-#: ../gtk/gtkfilechooserdefault.c:982
+#: ../gtk/gtkfilechooserdefault.c:965
 msgid "Could not add a bookmark"
 msgstr "புத்தகக்குறியை சேர்க்க முடியவில்லை"
 
-#: ../gtk/gtkfilechooserdefault.c:993
+#: ../gtk/gtkfilechooserdefault.c:976
 msgid "Could not remove bookmark"
 msgstr "புத்தகக்குறியை நீக்க முடியவில்லை"
 
-#: ../gtk/gtkfilechooserdefault.c:1004
+#: ../gtk/gtkfilechooserdefault.c:987
 msgid "The folder could not be created"
 msgstr "அடைவினை உருவாக்க முடியவில்லை"
 
-#: ../gtk/gtkfilechooserdefault.c:1017
+#: ../gtk/gtkfilechooserdefault.c:1000
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1473,16 +1596,16 @@ msgstr ""
 "ஏற்கனவே இந்த பெயரில் ஒரு கோப்பு இருப்பதால், அடைவினை உருவாக்க முடியவில்லை, அடைவிற்கு "
 "வேறு பெயரிடவும் அல்லது முதலில் கோப்பின் பெயரை மாற்றவும்."
 
-#: ../gtk/gtkfilechooserdefault.c:1031
+#: ../gtk/gtkfilechooserdefault.c:1014
 msgid "You need to choose a valid filename."
 msgstr "ஒரு சரியான கோப்புபெயரை தேர்ந்தெடுக்க வேண்டும்."
 
-#: ../gtk/gtkfilechooserdefault.c:1034
+#: ../gtk/gtkfilechooserdefault.c:1017
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "%s ஆக ஒரு கோப்புறை இல்லாத ஒரு கோப்பினை உருவாக்க முடியவில்லை"
 
-#: ../gtk/gtkfilechooserdefault.c:1046
+#: ../gtk/gtkfilechooserdefault.c:1029
 msgid ""
 "You may only select folders.  The item that you selected is not a folder; "
 "try using a different item."
@@ -1490,11 +1613,11 @@ msgstr ""
 "நீங்கள் கோப்புறைகளை மட்டுமே தேர்ந்தெடுக்கலாம். நீங்கள் தேர்ந்தெடுத்த உருப்படி ஒரு கோப்புறை "
 "இல்லை; ஒரு வேறுபட்ட உருப்படியை பயன்படுத்துவதற்கு முயற்சிக்கவும்."
 
-#: ../gtk/gtkfilechooserdefault.c:1056
+#: ../gtk/gtkfilechooserdefault.c:1039
 msgid "Invalid file name"
 msgstr "தவறான கோப்பு பெயர்"
 
-#: ../gtk/gtkfilechooserdefault.c:1066
+#: ../gtk/gtkfilechooserdefault.c:1049
 msgid "The folder contents could not be displayed"
 msgstr "அடைவின் உள்ளவைகளை காட்ட முடியாது"
 
@@ -1502,209 +1625,207 @@ msgstr "அடைவின் உள்ளவைகளை காட்ட மு
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1592
+#: ../gtk/gtkfilechooserdefault.c:1575
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s on %2$s"
 
-#: ../gtk/gtkfilechooserdefault.c:1741
+#: ../gtk/gtkfilechooserdefault.c:1724
 msgid "Search"
 msgstr "தேடு"
 
-#: ../gtk/gtkfilechooserdefault.c:1765 ../gtk/gtkfilechooserdefault.c:4991
+#: ../gtk/gtkfilechooserdefault.c:1768 ../gtk/gtkfilechooserdefault.c:4996
 msgid "Recently Used"
 msgstr "சமீபகாத்தில் பயன்படுத்தப்பட்டது"
 
-#: ../gtk/gtkfilechooserdefault.c:2364
+#: ../gtk/gtkfilechooserdefault.c:2369
 msgid "Select which types of files are shown"
 msgstr "எந்த வகையான கோப்புகளை காட்ட வேண்டும் என்பதை தேர்ந்தெடு"
 
-#: ../gtk/gtkfilechooserdefault.c:2723
+#: ../gtk/gtkfilechooserdefault.c:2728
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "புத்தகக்குறிகளுக்கு '%s' அடைவினை சேர்க்க முடியவில்லை"
 
-#: ../gtk/gtkfilechooserdefault.c:2767
+#: ../gtk/gtkfilechooserdefault.c:2772
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "புத்தகக்குறிகளுக்கு நடப்பு அடைவினை சேர்"
 
-#: ../gtk/gtkfilechooserdefault.c:2769
+#: ../gtk/gtkfilechooserdefault.c:2774
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "புத்தகக்குறிகளுக்கு தேர்ந்தெடுக்கப்பட்ட அடைவுகளை சேர்"
 
-#: ../gtk/gtkfilechooserdefault.c:2807
+#: ../gtk/gtkfilechooserdefault.c:2812
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "புத்தகக்குறிகளை நீக்கு '%s'"
 
-#: ../gtk/gtkfilechooserdefault.c:2809
+#: ../gtk/gtkfilechooserdefault.c:2814
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "புத்தகக்குறி '%s' ஐ நீக்க முடியாது"
 
-#: ../gtk/gtkfilechooserdefault.c:2816 ../gtk/gtkfilechooserdefault.c:3702
+#: ../gtk/gtkfilechooserdefault.c:2821 ../gtk/gtkfilechooserdefault.c:3707
 msgid "Remove the selected bookmark"
 msgstr "தேர்ந்தெடுக்கப்பட்ட புத்தகக்குறியை நீக்கு"
 
-#: ../gtk/gtkfilechooserdefault.c:3380
+#: ../gtk/gtkfilechooserdefault.c:3385
 msgid "Remove"
 msgstr "நீக்கு"
 
-#: ../gtk/gtkfilechooserdefault.c:3389
-#| msgid "_Rename"
+#: ../gtk/gtkfilechooserdefault.c:3394
 msgid "Rename…"
 msgstr "மறுபெயரிடு…"
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3553
+#: ../gtk/gtkfilechooserdefault.c:3558
 msgid "Places"
 msgstr "இடங்கள்"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3610
+#: ../gtk/gtkfilechooserdefault.c:3615
 msgid "_Places"
 msgstr "இடங்கள் (_P)"
 
-#: ../gtk/gtkfilechooserdefault.c:3690
+#: ../gtk/gtkfilechooserdefault.c:3695
 msgid "Add the selected folder to the Bookmarks"
 msgstr "தேர்ந்தெடுக்கப்பட்ட அடைவினை புத்தகக்குறியில் சேர்க்கவும்"
 
-#: ../gtk/gtkfilechooserdefault.c:3951
+#: ../gtk/gtkfilechooserdefault.c:3956
 msgid "Could not select file"
 msgstr "கோப்பினை தேர்ந்தெடுக்க முடியவில்லை"
 
-#: ../gtk/gtkfilechooserdefault.c:4176
+#: ../gtk/gtkfilechooserdefault.c:4181
 msgid "_Visit this file"
 msgstr "இந்த கோப்பை பார்க்கவும் (_V)"
 
-#: ../gtk/gtkfilechooserdefault.c:4179
-#| msgid "_Copy file's location"
+#: ../gtk/gtkfilechooserdefault.c:4184
 msgid "_Copy file’s location"
 msgstr "கோப்பின் இடத்தை நகலெடுக்கவும் (_C)"
 
-#: ../gtk/gtkfilechooserdefault.c:4182
+#: ../gtk/gtkfilechooserdefault.c:4187
 msgid "_Add to Bookmarks"
 msgstr "புத்தக்குறிகளில் சேர் (_A)"
 
-#: ../gtk/gtkfilechooserdefault.c:4189
+#: ../gtk/gtkfilechooserdefault.c:4194
 msgid "Show _Hidden Files"
 msgstr "மறைவான கோப்புகளை காட்டு (_H)"
 
-#: ../gtk/gtkfilechooserdefault.c:4192
+#: ../gtk/gtkfilechooserdefault.c:4197
 msgid "Show _Size Column"
 msgstr "நிரலின் அளவை காட்டு (_S)"
 
-#: ../gtk/gtkfilechooserdefault.c:4417
+#: ../gtk/gtkfilechooserdefault.c:4422
 msgid "Files"
 msgstr "கோப்புகள்"
 
-#: ../gtk/gtkfilechooserdefault.c:4468
+#: ../gtk/gtkfilechooserdefault.c:4473
 msgid "Name"
 msgstr "பெயர்"
 
-#: ../gtk/gtkfilechooserdefault.c:4491
+#: ../gtk/gtkfilechooserdefault.c:4496
 msgid "Size"
 msgstr "அளவு"
 
-#: ../gtk/gtkfilechooserdefault.c:4505
+#: ../gtk/gtkfilechooserdefault.c:4510
 msgid "Modified"
 msgstr "மாற்றப்பட்டது"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4598
+#: ../gtk/gtkfilechooserdefault.c:4603
 msgid "_Name:"
 msgstr "பெயர்: (_N)"
 
-#: ../gtk/gtkfilechooserdefault.c:4829
+#: ../gtk/gtkfilechooserdefault.c:4834
 msgid "Type a file name"
 msgstr "கோப்பு பெயரை தட்டச்சு செய்யவும்"
 
-#: ../gtk/gtkfilechooserdefault.c:4876 ../gtk/gtkfilechooserdefault.c:4887
+#: ../gtk/gtkfilechooserdefault.c:4881 ../gtk/gtkfilechooserdefault.c:4892
 msgid "Please select a folder below"
 msgstr "கீழே ஒரு கோப்புறை தேர்ந்தெடு"
 
-#: ../gtk/gtkfilechooserdefault.c:4882
+#: ../gtk/gtkfilechooserdefault.c:4887
 msgid "Please type a file name"
 msgstr "ஒரு கோப்பு பெயரை தட்டச்சு செய்யவும்"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:4953
+#: ../gtk/gtkfilechooserdefault.c:4958
 msgid "Create Fo_lder"
 msgstr "அடைவினை உருவாக்கு (_l)"
 
-#: ../gtk/gtkfilechooserdefault.c:5001
+#: ../gtk/gtkfilechooserdefault.c:5006
 msgid "Search:"
 msgstr "தேடு:"
 
-#: ../gtk/gtkfilechooserdefault.c:5052
+#: ../gtk/gtkfilechooserdefault.c:5057
 msgid "_Location:"
 msgstr "இடம் (_L):"
 
-#: ../gtk/gtkfilechooserdefault.c:5502
+#: ../gtk/gtkfilechooserdefault.c:5507
 msgid "Save in _folder:"
 msgstr "அடைவில் சேமி: (_f)"
 
-#: ../gtk/gtkfilechooserdefault.c:5504
+#: ../gtk/gtkfilechooserdefault.c:5509
 msgid "Create in _folder:"
 msgstr "அடைவில் உருவாக்கு: (_f)"
 
-#: ../gtk/gtkfilechooserdefault.c:6597
+#: ../gtk/gtkfilechooserdefault.c:6530
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "%s இன் உள்ளடக்கங்களை வாசிக்க முடியவில்லை"
 
-#: ../gtk/gtkfilechooserdefault.c:6601
+#: ../gtk/gtkfilechooserdefault.c:6534
 msgid "Could not read the contents of the folder"
 msgstr "கோப்புறையில் உள்ளடக்கங்களை வாசிக்க முடியவில்லை"
 
-#: ../gtk/gtkfilechooserdefault.c:6694 ../gtk/gtkfilechooserdefault.c:6762
-#: ../gtk/gtkfilechooserdefault.c:6942
+#: ../gtk/gtkfilechooserdefault.c:6627 ../gtk/gtkfilechooserdefault.c:6695
+#: ../gtk/gtkfilechooserdefault.c:6875
 msgid "Unknown"
 msgstr "தெரியாதது"
 
-#: ../gtk/gtkfilechooserdefault.c:6709
+#: ../gtk/gtkfilechooserdefault.c:6642
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6711
+#: ../gtk/gtkfilechooserdefault.c:6644
 msgid "Yesterday at %H:%M"
 msgstr "நேற்று இந்நேரத்தில்  %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7413
+#: ../gtk/gtkfilechooserdefault.c:7346
 msgid "Cannot change to folder because it is not local"
 msgstr "அடைவினை மாற்ற முடியாது ஏனெனில் அது உள்ளமைவில் இல்லை"
 
-#: ../gtk/gtkfilechooserdefault.c:8020 ../gtk/gtkfilechooserdefault.c:8041
+#: ../gtk/gtkfilechooserdefault.c:7943 ../gtk/gtkfilechooserdefault.c:7964
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "%s குறுக்குவழி ஏற்கனவே உள்ளது"
 
-#: ../gtk/gtkfilechooserdefault.c:8131
+#: ../gtk/gtkfilechooserdefault.c:8054
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "குறுக்குவழி %s இல்லை"
 
-#: ../gtk/gtkfilechooserdefault.c:8377 ../gtk/gtkprintunixdialog.c:548
+#: ../gtk/gtkfilechooserdefault.c:8301 ../gtk/gtkprintunixdialog.c:548
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "கோப்பு பெயர் \"%s\" ஏற்கனவே உள்ளது.  அதனை மாற்ற வேண்டுமா?"
 
-#: ../gtk/gtkfilechooserdefault.c:8380 ../gtk/gtkprintunixdialog.c:552
+#: ../gtk/gtkfilechooserdefault.c:8304 ../gtk/gtkprintunixdialog.c:552
 #, c-format
 msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "\"%s\"ல் கோப்பு ஏற்கனவே உள்ளது.  மாற்றினால் உள்ளடக்கங்களை மேலே எழுதும்."
 
-#: ../gtk/gtkfilechooserdefault.c:8385 ../gtk/gtkprintunixdialog.c:559
+#: ../gtk/gtkfilechooserdefault.c:8309 ../gtk/gtkprintunixdialog.c:559
 msgid "_Replace"
 msgstr "மாற்று (_R)"
 
-#: ../gtk/gtkfilechooserdefault.c:9192
+#: ../gtk/gtkfilechooserdefault.c:9116
 msgid "Could not start the search process"
 msgstr "தேடும் செயலை துவக்க முடியவில்லை"
 
-#: ../gtk/gtkfilechooserdefault.c:9193
+#: ../gtk/gtkfilechooserdefault.c:9117
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1712,11 +1833,11 @@ msgstr ""
 "இந்த நிரல் indexer daemonக்கு இணைப்பை உருவாக்க முடியவில்லை. இது இயங்குகிறதா என "
 "உறுதிபடுத்தவும்."
 
-#: ../gtk/gtkfilechooserdefault.c:9207
+#: ../gtk/gtkfilechooserdefault.c:9131
 msgid "Could not send the search request"
 msgstr "தேடுதல் கோரிக்கையை அனுப்ப முடியவில்லை"
 
-#: ../gtk/gtkfilechooserdefault.c:9817
+#: ../gtk/gtkfilechooserdefault.c:9741
 #, c-format
 msgid "Could not mount %s"
 msgstr "%sஐ ஏற்ற முடியவில்லை"
@@ -1756,12 +1877,12 @@ msgstr "எழுத்துரு பெயரை தேடவும்"
 msgid "Font Family"
 msgstr "எழுத்துருக் குடும்பம்"
 
-#: ../gtk/gtkicontheme.c:1931
+#: ../gtk/gtkicontheme.c:1935
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "திட்டத்தில் சின்னம் '%s' இல்லை"
 
-#: ../gtk/gtkicontheme.c:3462
+#: ../gtk/gtkicontheme.c:3557
 msgid "Failed to load icon"
 msgstr "உருவத்தை ஏற்றத்தில் தோல்வியுற்றது"
 
@@ -1786,17 +1907,16 @@ msgid "System (%s)"
 msgstr "கணினி (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6139
+#: ../gtk/gtklabel.c:6167
 msgid "_Open Link"
 msgstr "இணைப்பை திற (_O)"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6151
+#: ../gtk/gtklabel.c:6179
 msgid "Copy _Link Address"
 msgstr "இணைப்பு முகவரியை நகலெடு (_L)"
 
 #: ../gtk/gtk-launch.c:71
-#| msgid "APPLICATION [URI...] - launch an APPLICATION with URI."
 msgid "APPLICATION [URI…] — launch an APPLICATION with URI."
 msgstr "APPLICATION [URI] - URI கொண்டு ஒரு APPLICATION ஐ ஏற்று."
 
@@ -1831,7 +1951,8 @@ msgstr "%s: பயன்பாட்டின் பெயர் இல்லை
 #, c-format
 msgid "Creating AppInfo from id not supported on non unix operating systems"
 msgstr ""
-"Id இலிருந்து ஒரு பயன்பாட்டுத்தகவலை உருவாக்கும் செயலுக்கு unix அல்லாத இயக்க முறைமைகளில் ஆதரவில்லை"
+"Id இலிருந்து ஒரு பயன்பாட்டுத்தகவலை உருவாக்கும் செயலுக்கு unix அல்லாத இயக்க முறைமைகளில் "
+"ஆதரவில்லை"
 
 #. Translators: the first %s is the program name, the second one
 #. is the application name.
@@ -1888,27 +2009,27 @@ msgstr ""
 "உங்கள் கணினி நிர்வாகியை தொடரவும்"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:447
+#: ../gtk/gtkmain.c:446
 msgid "Load additional GTK+ modules"
 msgstr "கூடுதல் GTK+தொகுதிகளை ஏற்று"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:448
+#: ../gtk/gtkmain.c:447
 msgid "MODULES"
 msgstr "MODULES"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:450
+#: ../gtk/gtkmain.c:449
 msgid "Make all warnings fatal"
 msgstr "அனைத்து எச்சரிக்கை செய்திகளையும் முடிவடைய செய்யவும்"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:453
+#: ../gtk/gtkmain.c:452
 msgid "GTK+ debugging flags to set"
 msgstr "GTK+ பிழைத்திருத்தும் கொடிகளை அமைகிறது"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:456
+#: ../gtk/gtkmain.c:455
 msgid "GTK+ debugging flags to unset"
 msgstr "GTK+ பிழைத்திருத்தும் கொடிகளை நீக்குகிறது"
 
@@ -1917,20 +2038,20 @@ msgstr "GTK+ பிழைத்திருத்தும் கொடிகள
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:704
+#: ../gtk/gtkmain.c:703
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:769
+#: ../gtk/gtkmain.c:768
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "காட்சியை திறக்கமுடியவில்லை: %s"
 
-#: ../gtk/gtkmain.c:835
+#: ../gtk/gtkmain.c:834
 msgid "GTK+ Options"
 msgstr "GTK+ விருப்பங்கள்"
 
-#: ../gtk/gtkmain.c:835
+#: ../gtk/gtkmain.c:834
 msgid "Show GTK+ Options"
 msgstr "GTK+ விருப்பங்களை காட்டு"
 
@@ -2061,7 +2182,6 @@ msgstr ""
 " கீழ்: %s %s"
 
 #: ../gtk/gtkpagesetupunixdialog.c:845 ../gtk/gtkprintunixdialog.c:3329
-#| msgid "Manage Custom Sizes"
 msgid "Manage Custom Sizes…"
 msgstr "தனிப்பயன் அளவுகளை நிர்வகி…"
 
@@ -2195,7 +2315,7 @@ msgstr "தாள் வெளியே உள்ளது"
 
 #. Translators: this is a printer status.
 #: ../gtk/gtkprintoperation-win32.c:613
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2126
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2286
 msgid "Paused"
 msgstr "இடை நிறுத்தப்பட்டது"
 
@@ -2245,7 +2365,6 @@ msgid "Getting printer information failed"
 msgstr "அச்சடிப்பி தகவலை பெற முடியவில்லை..."
 
 #: ../gtk/gtkprintunixdialog.c:1916
-#| msgid "Getting printer information..."
 msgid "Getting printer information…"
 msgstr "அச்சடிப்பி தகவலை பெறுகிறது…"
 
@@ -2323,42 +2442,42 @@ msgstr "பொது"
 #. * multiple pages on a sheet when printing
 #.
 #: ../gtk/gtkprintunixdialog.c:3058
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3692
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4622
 msgid "Left to right, top to bottom"
 msgstr "இடமிருந்து வலம், மேலிருந்து கீழே"
 
 #: ../gtk/gtkprintunixdialog.c:3058
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3692
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4622
 msgid "Left to right, bottom to top"
 msgstr "இடமிருந்து வலம், கீழேயிருந்து மேலே"
 
 #: ../gtk/gtkprintunixdialog.c:3059
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3693
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4623
 msgid "Right to left, top to bottom"
 msgstr "வலமிருந்து இடம், மேலிருந்து கீழே"
 
 #: ../gtk/gtkprintunixdialog.c:3059
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3693
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4623
 msgid "Right to left, bottom to top"
 msgstr "வலமிருந்து இடம், கீழேயிருந்து மேலே"
 
 #: ../gtk/gtkprintunixdialog.c:3060
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3694
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4624
 msgid "Top to bottom, left to right"
 msgstr "மேலிருந்து கீழே, இடமிருந்து வலம்"
 
 #: ../gtk/gtkprintunixdialog.c:3060
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3694
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4624
 msgid "Top to bottom, right to left"
 msgstr "மேலிருந்து கீழே, வலமிருந்து இடம்"
 
 #: ../gtk/gtkprintunixdialog.c:3061
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3695
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4625
 msgid "Bottom to top, left to right"
 msgstr "கீழேயிருந்து மேலே, இடமிருந்து வலம்"
 
 #: ../gtk/gtkprintunixdialog.c:3061
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3695
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4625
 msgid "Bottom to top, right to left"
 msgstr "கீழேயிருந்து மேலே, வலமிருந்து இடம்"
 
@@ -2366,7 +2485,7 @@ msgstr "கீழேயிருந்து மேலே, வலமிருந
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: ../gtk/gtkprintunixdialog.c:3065 ../gtk/gtkprintunixdialog.c:3078
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3772
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4702
 msgid "Page Ordering"
 msgstr "பக்க வரிசைப்படுத்தல்"
 
@@ -2536,31 +2655,31 @@ msgstr "பின்: (_A)"
 msgid "Job"
 msgstr "பணி"
 
-#: ../gtk/gtkprintunixdialog.c:3753
+#: ../gtk/gtkprintunixdialog.c:3751
 msgid "Advanced"
 msgstr "கூடுதல்"
 
 #. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3791
+#: ../gtk/gtkprintunixdialog.c:3789
 msgid "Image Quality"
 msgstr "பட தரம்"
 
 #. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3795
+#: ../gtk/gtkprintunixdialog.c:3793
 msgid "Color"
 msgstr "நிறம்"
 
 #. Translators: this will appear as tab label in print dialog.
 #. It's a typographical term, as in "Binding and finishing"
-#: ../gtk/gtkprintunixdialog.c:3800
+#: ../gtk/gtkprintunixdialog.c:3798
 msgid "Finishing"
 msgstr "முடிக்கிறது"
 
-#: ../gtk/gtkprintunixdialog.c:3810
+#: ../gtk/gtkprintunixdialog.c:3808
 msgid "Some of the settings in the dialog conflict"
 msgstr "இந்த உரையாடலிலுள்ள சில அமைவுகள் முரணாக உள்ளது"
 
-#: ../gtk/gtkprintunixdialog.c:3836
+#: ../gtk/gtkprintunixdialog.c:3834
 msgid "Print"
 msgstr "அச்சிடு"
 
@@ -2649,15 +2768,15 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:1010 ../gtk/gtkrecentmanager.c:1023
-#: ../gtk/gtkrecentmanager.c:1160 ../gtk/gtkrecentmanager.c:1170
-#: ../gtk/gtkrecentmanager.c:1222 ../gtk/gtkrecentmanager.c:1231
-#: ../gtk/gtkrecentmanager.c:1246
+#: ../gtk/gtkrecentmanager.c:1035 ../gtk/gtkrecentmanager.c:1048
+#: ../gtk/gtkrecentmanager.c:1185 ../gtk/gtkrecentmanager.c:1195
+#: ../gtk/gtkrecentmanager.c:1247 ../gtk/gtkrecentmanager.c:1256
+#: ../gtk/gtkrecentmanager.c:1271
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "URI '%s'உடன் உருப்படியை தேட முடியவில்லை"
 
-#: ../gtk/gtkrecentmanager.c:2446
+#: ../gtk/gtkrecentmanager.c:2471
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr "பெயர் '%s' க்கான உருப்படியுடன் பதிவுசெய்யப்பட்ட பயன்பாடு URI '%s' உடன் காணப்படவில்லை"
@@ -3335,17 +3454,17 @@ msgstr "ZWJ Zero width _joiner"
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ Zero width _non-joiner"
 
-#: ../gtk/gtkuimanager.c:1781
+#: ../gtk/gtkuimanager.c:1780
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "எதிர்பார்க்காத துவக்க அடையாள-ஒட்டு '%s' வரிசை %d வரியுரு %d இல்"
 
-#: ../gtk/gtkuimanager.c:1871
+#: ../gtk/gtkuimanager.c:1870
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "வரிசை %d வரியுரு %d இல் எதிர்பார்க்காத வரியுரு தரவு"
 
-#: ../gtk/gtkuimanager.c:2694
+#: ../gtk/gtkuimanager.c:2693
 msgid "Empty"
 msgstr "வெற்று"
 
@@ -4216,101 +4335,101 @@ msgctxt "paper size"
 msgid "ROC 8k"
 msgstr "ROC 8k"
 
-#: ../gtk/updateiconcache.c:1368
+#: ../gtk/updateiconcache.c:1386
 #, c-format
 msgid "Failed to write header\n"
 msgstr "தலைப்பினை எழுத முடியவில்லை\n"
 
-#: ../gtk/updateiconcache.c:1374
+#: ../gtk/updateiconcache.c:1392
 #, c-format
 msgid "Failed to write hash table\n"
 msgstr "ஹஷ் அட்டவணையை எழுத முடியவில்லை\n"
 
-#: ../gtk/updateiconcache.c:1380
+#: ../gtk/updateiconcache.c:1398
 #, c-format
 msgid "Failed to write folder index\n"
 msgstr "அடைவு அகரவரிசையை எழுத முடியவில்லை\n"
 
-#: ../gtk/updateiconcache.c:1388
+#: ../gtk/updateiconcache.c:1406
 #, c-format
 msgid "Failed to rewrite header\n"
 msgstr "தலைப்பினை மீண்டும் எழுத முடியவில்லை\n"
 
-#: ../gtk/updateiconcache.c:1482
+#: ../gtk/updateiconcache.c:1500
 #, c-format
 msgid "Failed to open file %s : %s\n"
 msgstr "கோப்பு %sஐ திறக்க முடியவில்லை : %s\n"
 
-#: ../gtk/updateiconcache.c:1490 ../gtk/updateiconcache.c:1520
+#: ../gtk/updateiconcache.c:1508 ../gtk/updateiconcache.c:1538
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "இடமாற்று கோப்பினை எழுத முடியவில்லை: %s\n"
 
-#: ../gtk/updateiconcache.c:1530
+#: ../gtk/updateiconcache.c:1548
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "உருவாக்கப்பட்ட இடையகம் தவறானது.\n"
 
-#: ../gtk/updateiconcache.c:1544
+#: ../gtk/updateiconcache.c:1562
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "%s லிருந்து %sஐ மறுபெயரிட முடியாது: %s, பின் %s ஐ நீக்குகிறது.\n"
 
-#: ../gtk/updateiconcache.c:1558
+#: ../gtk/updateiconcache.c:1576
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "%s லிருந்து %sக்கு மறுபெயரிட முடியவில்லை: %s\n"
 
-#: ../gtk/updateiconcache.c:1568
+#: ../gtk/updateiconcache.c:1586
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "%s லிருந்து %sக்கு மாற்றாக மறுபெயரிட முடியாது: %s.\n"
 
-#: ../gtk/updateiconcache.c:1595
+#: ../gtk/updateiconcache.c:1613
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "இடமாற்று கோப்பு வெற்றிகரமாக உருவாக்கப்பட்டது.\n"
 
-#: ../gtk/updateiconcache.c:1634
+#: ../gtk/updateiconcache.c:1652
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "புதுப்பிக்கப்பட்டாத இருந்தாலும், ஏற்கனவே இருக்கும் இடமாற்றினை மேலேழுதுகிறது"
 
-#: ../gtk/updateiconcache.c:1635
+#: ../gtk/updateiconcache.c:1653
 msgid "Don't check for the existence of index.theme"
 msgstr "index.themeல் இருப்பதை சரிபார்க்க வேண்டாம்"
 
-#: ../gtk/updateiconcache.c:1636
+#: ../gtk/updateiconcache.c:1654
 msgid "Don't include image data in the cache"
 msgstr "இடமாற்றில் உரு தரவினை சேர்க்க வேண்டாம்"
 
-#: ../gtk/updateiconcache.c:1637
+#: ../gtk/updateiconcache.c:1655
 msgid "Output a C header file"
 msgstr "ஒரு C தலைப்பு கோப்பின் வெளியீடு"
 
-#: ../gtk/updateiconcache.c:1638
+#: ../gtk/updateiconcache.c:1656
 msgid "Turn off verbose output"
 msgstr "verbose வெளியீட்டை நிறுத்தவும்"
 
-#: ../gtk/updateiconcache.c:1639
+#: ../gtk/updateiconcache.c:1657
 msgid "Validate existing icon cache"
 msgstr "இருக்கும் சின்னத்தின் இடையக்கத்தை மதிப்பிடவும்"
 
-#: ../gtk/updateiconcache.c:1706
+#: ../gtk/updateiconcache.c:1724
 #, c-format
 msgid "File not found: %s\n"
 msgstr "கோப்பினை காண முடியவில்லை: %s\n"
 
-#: ../gtk/updateiconcache.c:1712
+#: ../gtk/updateiconcache.c:1730
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "ஒரு சரியான சின்னத்தின் இடையகம் இல்லை: %s\n"
 
-#: ../gtk/updateiconcache.c:1725
+#: ../gtk/updateiconcache.c:1743
 #, c-format
 msgid "No theme index file.\n"
 msgstr "தீம் இன்டக்ஸ் கோப்பு இல்லை.\n"
 
-#: ../gtk/updateiconcache.c:1729
+#: ../gtk/updateiconcache.c:1747
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -4375,320 +4494,325 @@ msgstr "வியாட்நாமிஸ் (VIQR)"
 msgid "X Input Method"
 msgstr "X உள்ளீட்டு முறை"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:858
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1073
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1002
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1217
 msgid "Username:"
 msgstr "பயனர்பெயர்:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:859
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1082
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1003
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1226
 msgid "Password:"
 msgstr "கடவுச்சொல்:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:898
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1095
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1042
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1239
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
 msgstr "%sஇல் அச்சடிப்பி %s ஒரு ஆவணத்தை அச்சிட அங்கீகாரம் தேவை"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:900
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1044
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "%sஇல் ஒரு ஆவணத்தை அச்சிட அங்கீகாரம் தேவை"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:904
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1048
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
 msgstr "பணி %sஇன் அளவுருகளை பெற அங்கீகாரம் தேவை"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:906
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1050
 msgid "Authentication is required to get attributes of a job"
 msgstr "ஒரு பணியின் அளவுருகளை பெற அங்கீகாரம் தேவை"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:910
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1054
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "அச்சடிப்பி %sஇன் அளவுருகளை பெற அங்கீகாரம் தேவை"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:912
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1056
 msgid "Authentication is required to get attributes of a printer"
 msgstr "ஒரு அச்சடிப்பியின் அளவுருகளை பெற அங்கீகாரம் தேவை"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:915
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1059
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "%sஇன் முன்னிருப்பு அச்சடிப்பிகளை பெற அங்கீகாரம் தேவை"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:918
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1062
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "%sஇலிருந்து அச்சடிப்பிகளை பெற அங்கீகாரம் தேவைப்படுகிறது"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:923
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1067
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "%sஇலிருந்து ஒரு கோப்பினை பெற அங்கீகாரம் தேவை"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:925
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1069
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "%sக்கு அங்கீகாரம் தேவைப்படுகிறது"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1067
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1211
 msgid "Domain:"
 msgstr "செயற்களம்:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1097
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1241
 #, c-format
 msgid "Authentication is required to print document '%s'"
 msgstr "'%s'இல் ஒரு ஆவணத்தை அச்சிட அங்கீகாரம் தேவைப்பட்டது"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1102
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1246
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr "அச்சடிப்பி %s இல் இந்த ஆவணத்தை அச்சிட அங்கீகாரம் தேவைப்பட்டது"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1104
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1248
 msgid "Authentication is required to print this document"
 msgstr "இந்த ஆவணத்தை அச்சிட அங்கீகாரம் தேவைப்பட்டது"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1666
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1810
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "அச்சடிப்பி '%s' டோனர் குறைவாக உள்ளது."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1667
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1811
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "அச்சடிப்பி '%s' இல் டோனர் இல்லை."
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1669
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1813
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr "அச்சடிப்பி '%s' டெவலப்பரில் குறைவாக உள்ளது."
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1671
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1815
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr "அச்சடிப்பி '%s'இல் டெவலப்பர் இல்லை."
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1673
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1817
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr "அச்சடிப்பி '%s' கொடுக்கப்பட்ட மார்க்கரில் குறைந்தது ஒன்றில் குறைவாக உள்ளது."
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1675
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1819
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr "அச்சடிப்பி '%s' கொடுக்கப்பட்ட ஒரு மார்க்கர் கூட இல்லை."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1676
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1820
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr "அச்சடிப்பியின் உறை திறந்திருக்கிறது '%s'."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1677
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1821
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr "'%s' அச்சடிப்பியின் கதவு திறந்துள்ளது."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1678
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1822
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "அச்சடிப்பி '%s' தாளை விட கீழே உள்ளது."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1679
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1823
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "அச்சடிப்பி '%s' தாளிற்கு வெளியில் உள்ளது."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1680
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1824
 #, c-format
 msgid "Printer '%s' is currently offline."
 msgstr "அச்சடிப்பி '%s' தற்போது ஆஃப்லைனில் உள்ளது."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1681
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1825
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "அச்சடிப்பியில் ஒரு பிழை இருக்கிறது '%s'."
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2123
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2283
 msgid "Paused; Rejecting Jobs"
 msgstr "நிறுதப்பட்டது ; வேலைகளை ஏற்க மறுக்கிறது"
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2129
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2289
 msgid "Rejecting Jobs"
 msgstr "வேலைகளை ஏற்க மறுக்கிறது"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2915
+#. Translators: this string connects multiple printer states together.
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2331
+msgid "; "
+msgstr "; "
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3845
 msgid "Two Sided"
 msgstr "இரண்டு பக்கம்"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2916
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3846
 msgid "Paper Type"
 msgstr "தாள் வகை"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2917
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3847
 msgid "Paper Source"
 msgstr "தாள் மூலம்"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2918
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3848
 msgid "Output Tray"
 msgstr "வெளியீடு தட்டு"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2919
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3849
 msgid "Resolution"
 msgstr "திரைதிறன்"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2920
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3850
 msgid "GhostScript pre-filtering"
 msgstr "GhostScript pre-filtering"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2929
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3859
 msgid "One Sided"
 msgstr "ஒற்றை பக்கம்"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2931
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3861
 msgid "Long Edge (Standard)"
 msgstr "Long Edge (Standard)"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2933
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3863
 msgid "Short Edge (Flip)"
 msgstr "Short Edge (Flip)"
 
 #. Translators: this is an option of "Paper Source"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2935
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2937
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2945
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3865
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3867
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3875
 msgid "Auto Select"
 msgstr "தானாக தேர்ந்தெடுத்தல்"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2939
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2941
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2943
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2947
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3435
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3869
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3871
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3873
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3877
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4365
 msgid "Printer Default"
 msgstr "முன்னிருப்பு அச்சடிப்பி"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2949
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3879
 msgid "Embed GhostScript fonts only"
 msgstr "உட்பொதியப்பட்ட GhostScript எழுத்துருக்கள் மட்டும்"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2951
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3881
 msgid "Convert to PS level 1"
 msgstr "PS level 1க்கு மாற்று"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2953
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3883
 msgid "Convert to PS level 2"
 msgstr "PS level 2க்கு மாற்று"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2955
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3885
 msgid "No pre-filtering"
 msgstr "முன் வடிப்பி எதுவும் இல்லை"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2964
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3894
 msgid "Miscellaneous"
 msgstr "மற்றவைகள்"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4617
 msgid "Urgent"
 msgstr "அவசரம்"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4617
 msgid "High"
 msgstr "உயர்ந்த"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4617
 msgid "Medium"
 msgstr "நடுத்தரம்"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3687
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4617
 msgid "Low"
 msgstr "குறைந்த"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3717
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4647
 msgid "Job Priority"
 msgstr "பணி முன்னுரிமை"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3728
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4658
 msgid "Billing Info"
 msgstr "இரசீது தகவல்"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3743
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4673
 msgid "None"
 msgstr "ஒன்றுமில்லை"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3743
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4673
 msgid "Classified"
 msgstr "வகைப்படுத்தல்"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3743
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4673
 msgid "Confidential"
 msgstr "அந்தரங்கம்"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3743
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4673
 msgid "Secret"
 msgstr "இரகசியம்"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3743
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4673
 msgid "Standard"
 msgstr "இயல்பான"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3743
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4673
 msgid "Top Secret"
 msgstr "உயர்ந்த இரகசியம்"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3743
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4673
 msgid "Unclassified"
 msgstr "வகைப்படுத்தாதது"
 
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3754
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4684
 msgid "Pages per Sheet"
 msgstr "தாளுக்கான பக்கங்கள்"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3814
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4744
 msgid "Before"
 msgstr "முன்"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3829
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4759
 msgid "After"
 msgstr "பின்"
 
@@ -4696,14 +4820,14 @@ msgstr "பின்"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3849
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4779
 msgid "Print at"
 msgstr "அச்சிடு"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3860
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4790
 msgid "Print at time"
 msgstr "நேரத்திற்கு அச்சிடவும்"
 
@@ -4711,33 +4835,33 @@ msgstr "நேரத்திற்கு அச்சிடவும்"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3895
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4825
 #, c-format
 msgid "Custom %sx%s"
 msgstr "தனிபயன் %sx%s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3976
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4906
 msgid "Printer Profile"
 msgstr "அச்சடிப்பி விவரக்குறிப்பு"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3983
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4913
 msgid "Unavailable"
 msgstr "கிடைக்கவில்லை"
 
 #. TRANSLATORS: when we're running an old CUPS, and
 #. * it hasn't registered the device with colord
-#: ../modules/printbackends/cups/gtkprintercups.c:221
+#: ../modules/printbackends/cups/gtkprintercups.c:241
 msgid "Color management unavailable"
 msgstr "வண்ண மேலாண்மை கிடைக்கவில்லை"
 
 #. TRANSLATORS: when there is no color profile available
-#: ../modules/printbackends/cups/gtkprintercups.c:233
+#: ../modules/printbackends/cups/gtkprintercups.c:253
 msgid "No profile available"
 msgstr "விவரக்குறிப்பு எதுவும் இல்லை"
 
 #. TRANSLATORS: when the color profile has no title
-#: ../modules/printbackends/cups/gtkprintercups.c:244
+#: ../modules/printbackends/cups/gtkprintercups.c:264
 msgid "Unspecified profile"
 msgstr "குறிப்பிடப்படாத விவரக்குறிப்பு"
 
@@ -4820,6 +4944,18 @@ msgstr "test-output.%s"
 #: ../modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "அச்சடிப்பிலிருந்து சோதனை அச்சடிப்பிக்கு"
+
+#~ msgid "Homepage"
+#~ msgstr "முகப்புபக்கம்"
+
+#~ msgid "Could not run application"
+#~ msgstr "பயன்பாட்டை இயக்க முடியவில்லை"
+
+#~ msgid "Could not find '%s'"
+#~ msgstr "'%s' ஐ ஏற்ற முடியவில்லை"
+
+#~ msgid "Could not find application"
+#~ msgstr "பயன்பாட்டை தேட முடியவில்லை"
 
 #~ msgid "Rename..."
 #~ msgstr "மறுபெயர்..."
@@ -5685,9 +5821,6 @@ msgstr "அச்சடிப்பிலிருந்து சோதனை �
 
 #~ msgid "_Y:"
 #~ msgstr "_Y:"
-
-#~ msgid "_Pressure:"
-#~ msgstr "அழுத்தம் (_P)"
 
 #~ msgid "X _tilt:"
 #~ msgstr "X சாய்வு; (_t)"
