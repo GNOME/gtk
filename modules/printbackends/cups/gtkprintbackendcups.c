@@ -787,9 +787,6 @@ static void
 gtk_print_backend_cups_finalize (GObject *object)
 {
   GtkPrintBackendCups *backend_cups;
-#ifdef HAVE_CUPS_API_1_6
-  gint                 i;
-#endif
 
   GTK_NOTE (PRINTING,
             g_print ("CUPS Backend: finalizing CUPS backend module\n"));
@@ -812,6 +809,37 @@ gtk_print_backend_cups_finalize (GObject *object)
 #ifdef HAVE_COLORD
   g_object_unref (backend_cups->colord_client);
 #endif
+
+#ifdef HAVE_CUPS_API_1_6
+  g_clear_object (&backend_cups->avahi_cancellable);
+  g_clear_pointer (&backend_cups->avahi_default_printer, g_free);
+  g_clear_object (&backend_cups->dbus_connection);
+#endif
+
+  backend_parent_class->finalize (object);
+}
+
+static void
+gtk_print_backend_cups_dispose (GObject *object)
+{
+  GtkPrintBackendCups *backend_cups;
+#ifdef HAVE_CUPS_API_1_6
+  gint                 i;
+#endif
+
+  GTK_NOTE (PRINTING,
+            g_print ("CUPS Backend: %s\n", G_STRFUNC));
+
+  backend_cups = GTK_PRINT_BACKEND_CUPS (object);
+
+  if (backend_cups->list_printers_poll > 0)
+    g_source_remove (backend_cups->list_printers_poll);
+  backend_cups->list_printers_poll = 0;
+  backend_cups->list_printers_attempts = 0;
+
+  if (backend_cups->default_printer_poll > 0)
+    g_source_remove (backend_cups->default_printer_poll);
+  backend_cups->default_printer_poll = 0;
 
 #ifdef HAVE_CUPS_API_1_6
   g_cancellable_cancel (backend_cups->avahi_cancellable);
@@ -849,33 +877,7 @@ gtk_print_backend_cups_finalize (GObject *object)
                                             backend_cups->avahi_service_browser_subscription_id);
       backend_cups->avahi_service_browser_subscription_id = 0;
     }
-
-  g_clear_object (&backend_cups->avahi_cancellable);
-  g_clear_pointer (&backend_cups->avahi_default_printer, g_free);
-  g_clear_object (&backend_cups->dbus_connection);
 #endif
-
-  backend_parent_class->finalize (object);
-}
-
-static void
-gtk_print_backend_cups_dispose (GObject *object)
-{
-  GtkPrintBackendCups *backend_cups;
-
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: %s\n", G_STRFUNC));
-
-  backend_cups = GTK_PRINT_BACKEND_CUPS (object);
-
-  if (backend_cups->list_printers_poll > 0)
-    g_source_remove (backend_cups->list_printers_poll);
-  backend_cups->list_printers_poll = 0;
-  backend_cups->list_printers_attempts = 0;
-
-  if (backend_cups->default_printer_poll > 0)
-    g_source_remove (backend_cups->default_printer_poll);
-  backend_cups->default_printer_poll = 0;
 
   backend_parent_class->dispose (object);
 }
@@ -2609,7 +2611,7 @@ avahi_service_resolver_cb (GObject      *source_object,
                            gpointer      user_data)
 {
   AvahiConnectionTestData *data;
-  GtkPrintBackendCups     *backend = GTK_PRINT_BACKEND_CUPS (user_data);
+  GtkPrintBackendCups     *backend;
   const gchar             *name;
   const gchar             *host;
   const gchar             *type;
@@ -2634,6 +2636,8 @@ avahi_service_resolver_cb (GObject      *source_object,
                                           &error);
   if (output)
     {
+      backend = GTK_PRINT_BACKEND_CUPS (user_data);
+
       g_variant_get (output, "(ii&s&s&s&si&sq@aayu)",
                      &interface,
                      &protocol,
@@ -2702,7 +2706,8 @@ avahi_service_resolver_cb (GObject      *source_object,
     }
   else
     {
-      g_warning ("%s", error->message);
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        g_warning ("%s", error->message);
       g_error_free (error);
     }
 }
@@ -2805,7 +2810,7 @@ avahi_service_browser_new_cb (GObject      *source_object,
                               GAsyncResult *res,
                               gpointer      user_data)
 {
-  GtkPrintBackendCups *cups_backend = GTK_PRINT_BACKEND_CUPS (user_data);
+  GtkPrintBackendCups *cups_backend;
   GVariant            *output;
   GError              *error = NULL;
   gint                 i;
@@ -2815,6 +2820,7 @@ avahi_service_browser_new_cb (GObject      *source_object,
                                           &error);
   if (output)
     {
+      cups_backend = GTK_PRINT_BACKEND_CUPS (user_data);
       i = cups_backend->avahi_service_browser_paths[0] ? 1 : 0;
 
       g_variant_get (output, "(o)", &cups_backend->avahi_service_browser_paths[i]);
@@ -2853,8 +2859,8 @@ avahi_service_browser_new_cb (GObject      *source_object,
        * The creation of ServiceBrowser fails with G_IO_ERROR_DBUS_ERROR
        * if Avahi is disabled.
        */
-      if (error->domain != G_IO_ERROR ||
-          error->code != G_IO_ERROR_DBUS_ERROR)
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_DBUS_ERROR) &&
+          !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
         g_warning ("%s", error->message);
       g_error_free (error);
     }
@@ -2865,16 +2871,22 @@ avahi_create_browsers (GObject      *source_object,
                        GAsyncResult *res,
                        gpointer      user_data)
 {
-  GtkPrintBackendCups *cups_backend = GTK_PRINT_BACKEND_CUPS (user_data);
+  GDBusConnection     *dbus_connection;
+  GtkPrintBackendCups *cups_backend;
   GError              *error = NULL;
 
-  cups_backend->dbus_connection = g_bus_get_finish (res, &error);
-  if (!cups_backend->dbus_connection)
+  dbus_connection = g_bus_get_finish (res, &error);
+  if (!dbus_connection)
     {
-      g_debug ("Couldn't connect to D-Bus system bus, %s", error->message);
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        g_warning ("Couldn't connect to D-Bus system bus, %s", error->message);
+
       g_error_free (error);
       return;
     }
+
+  cups_backend = GTK_PRINT_BACKEND_CUPS (user_data);
+  cups_backend->dbus_connection = dbus_connection;
 
   /*
    * We need to subscribe to signals of service browser before
@@ -2937,7 +2949,7 @@ static void
 avahi_request_printer_list (GtkPrintBackendCups *cups_backend)
 {
   cups_backend->avahi_cancellable = g_cancellable_new ();
-  g_bus_get (G_BUS_TYPE_SYSTEM, NULL, avahi_create_browsers, cups_backend);
+  g_bus_get (G_BUS_TYPE_SYSTEM, cups_backend->avahi_cancellable, avahi_create_browsers, cups_backend);
 }
 #endif
 
