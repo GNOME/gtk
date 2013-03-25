@@ -8,21 +8,21 @@
 # Manoj Kumar Giri <mgiri@redhat.com>, 2009.
 # Rajesh Ranjan <rajesh672@gmail.com>, 2009.
 # rajesh <rajesh>, 2012.
-# rajesh <rajeshkajha@yahoo.com>, 2012.
+# rajesh <rajeshkajha@yahoo.com>, 2012, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-3-0.hi\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-03-12 22:05+0000\n"
-"PO-Revision-Date: 2012-09-19 17:27+0530\n"
-"Last-Translator: rajesh <rajeshkajha@yahoo.com>\n"
-"Language-Team: Hindi <Indlinux>\n"
+"PO-Revision-Date: 2013-03-25 12:57+0530\n"
+"Last-Translator: raj <raj>\n"
+"Language-Team: Hindi <kde-i18n-doc@kde.org>\n"
 "Language: hi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.2\n"
+"X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "\n"
 "\n"
@@ -468,37 +468,36 @@ msgstr[1] "%d मदों को खोल रहा है"
 #: ../gtk/a11y/gtkbooleancellaccessible.c:43
 msgctxt "Action description"
 msgid "Toggles the cell"
-msgstr ""
+msgstr "कोष्ठ टॉगल करें"
 
 #: ../gtk/a11y/gtkbooleancellaccessible.c:63
 #: ../gtk/a11y/gtkswitchaccessible.c:101
 msgctxt "Action name"
 msgid "Toggle"
-msgstr ""
+msgstr "टॉगल"
 
 #: ../gtk/a11y/gtkbuttonaccessible.c:341
 #: ../gtk/a11y/gtkmenuitemaccessible.c:436
 msgctxt "Action name"
 msgid "Click"
-msgstr ""
+msgstr "क्लिक करें"
 
 #: ../gtk/a11y/gtkbuttonaccessible.c:350
 msgctxt "Action description"
 msgid "Clicks the button"
-msgstr ""
+msgstr "बटन क्लिक करें"
 
 #: ../gtk/a11y/gtkcellaccessible.c:258
 msgctxt "Action name"
 msgid "Expand or contract"
-msgstr ""
+msgstr "फैलाएँ या सिकोड़ें"
 
 #: ../gtk/a11y/gtkcellaccessible.c:260
-#, fuzzy
 #| msgctxt "Stock label"
 #| msgid "_Edit"
 msgctxt "Action name"
 msgid "Edit"
-msgstr "संपादन (_E)"
+msgstr "संपादन"
 
 #: ../gtk/a11y/gtkcellaccessible.c:262
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:72
@@ -506,104 +505,98 @@ msgstr "संपादन (_E)"
 #: ../gtk/a11y/gtkexpanderaccessible.c:281
 msgctxt "Action name"
 msgid "Activate"
-msgstr ""
+msgstr "सक्रिय करें"
 
 #: ../gtk/a11y/gtkcellaccessible.c:275
 msgctxt "Action description"
 msgid "Expands or contracts the row in the tree view containing this cell"
-msgstr ""
+msgstr "कोष्ठ समाहित करने में तरू दृश्य में पंक्ति को फैलाएँ या सिकोड़ें"
 
 #: ../gtk/a11y/gtkcellaccessible.c:277
 msgctxt "Action description"
 msgid "Creates a widget in which the contents of the cell can be edited"
-msgstr ""
+msgstr "विज़ेट बनाएँ जिसमें कोष्ठ की सामग्री को संपादित की जा सकती है"
 
 #: ../gtk/a11y/gtkcellaccessible.c:279
 msgctxt "Action description"
 msgid "Activates the cell"
-msgstr ""
+msgstr "कोष्ठ सक्रिय करें"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:71
-#, fuzzy
 #| msgid "_Select"
 msgctxt "Action name"
 msgid "Select"
-msgstr "चुनें (_S)"
+msgstr "चुनें"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:73
-#, fuzzy
 #| msgid "_Customize"
 msgctxt "Action name"
 msgid "Customize"
-msgstr "पसंदीदा करें (_C)"
+msgstr "मनपसंद बनाएँ"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:84
-#, fuzzy
 #| msgid "Select a Color"
 msgctxt "Action description"
 msgid "Selects the color"
-msgstr "फोल्डर चुनें"
+msgstr "रंग चुनता है"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:85
-#, fuzzy
 #| msgid "Brightness of the color."
 msgctxt "Action description"
 msgid "Activates the color"
-msgstr "रंग का चमकीलापन."
+msgstr "रंग सक्रिय करता है"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:86
-#, fuzzy
 #| msgid "Custom color %d: %s"
 msgctxt "Action description"
 msgid "Customizes the color"
-msgstr "मनपसंद रंग %d: %s"
+msgstr "रंग मनपसंद करता है"
 
 #: ../gtk/a11y/gtkcomboboxaccessible.c:313
 msgctxt "Action name"
 msgid "Press"
-msgstr ""
+msgstr "दबाएँ"
 
 #: ../gtk/a11y/gtkcomboboxaccessible.c:322
-#, fuzzy
 #| msgid "Decreases the volume"
 msgctxt "Action description"
 msgid "Presses the combobox"
-msgstr "आवाज घटाता है"
+msgstr "कोंबोबॉक्स को दबाता है"
 
 #: ../gtk/a11y/gtkentryaccessible.c:1550
 msgctxt "Action description"
 msgid "Activates the entry"
-msgstr ""
+msgstr "प्रविष्टि को सक्रिय करता है"
 
 #: ../gtk/a11y/gtkexpanderaccessible.c:290
 msgctxt "Action description"
 msgid "Activates the expander"
-msgstr ""
+msgstr "प्रसारक को सक्रिय करता है"
 
 #: ../gtk/a11y/gtkmenuitemaccessible.c:445
 msgctxt "Action description"
 msgid "Clicks the menuitem"
-msgstr ""
+msgstr "मेन्यू मद क्लिक करता है"
 
 #: ../gtk/a11y/gtkscalebuttonaccessible.c:140
 msgctxt "Action description"
 msgid "Pops up the slider"
-msgstr ""
+msgstr "स्लाइडर पॉप अप करता है"
 
 #: ../gtk/a11y/gtkscalebuttonaccessible.c:142
 msgctxt "Action description"
 msgid "Dismisses the slider"
-msgstr ""
+msgstr "स्लाइडर डिसमिस करता है"
 
 #: ../gtk/a11y/gtkscalebuttonaccessible.c:170
 msgctxt "Action name"
 msgid "Popup"
-msgstr ""
+msgstr "पॉप अप"
 
 #: ../gtk/a11y/gtkscalebuttonaccessible.c:172
 msgctxt "Action name"
 msgid "Dismiss"
-msgstr ""
+msgstr "छोड़ें"
 
 #: ../gtk/a11y/gtkspinneraccessible.c:39
 msgctxt "throbbing progress animation widget"
@@ -626,21 +619,23 @@ msgstr "चालू और बंद स्थिति में स्वि�
 #: ../gtk/a11y/gtkswitchaccessible.c:110
 msgctxt "Action description"
 msgid "Toggles the switch"
-msgstr ""
+msgstr "स्विच टॉगल करें"
 
 #: ../gtk/deprecated/gtkcolorsel.c:425
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
-"रंग चुनें जिसे आप बाहरी रिंग से चुनना चाहते हैं. आंतरिक त्रिभुज के प्रयोग से रंग के गहरेपन व "
+"रंग चुनें जिसे आप बाहरी रिंग से चुनना चाहते हैं. आंतरिक त्रिभुज के प्रयोग से "
+"रंग के गहरेपन व "
 "हल्केपन को चुनें."
 
 #: ../gtk/deprecated/gtkcolorsel.c:451
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
-msgstr "ड्रॉपर क्लिक करें, फिर अपने स्क्रीन पर कहीं भी वह रंग चुनने के लिए क्लिक करें."
+msgstr ""
+"ड्रॉपर क्लिक करें, फिर अपने स्क्रीन पर कहीं भी वह रंग चुनने के लिए क्लिक करें."
 
 #: ../gtk/deprecated/gtkcolorsel.c:461
 msgid "_Hue:"
@@ -707,7 +702,8 @@ msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
-"आप एचटीएमएल शैली हैक्साडेसीमल मान प्रविष्ट कर सकते हैं या सामान्य रूप में रंग का नाम जैसा "
+"आप एचटीएमएल शैली हैक्साडेसीमल मान प्रविष्ट कर सकते हैं या सामान्य रूप में रंग "
+"का नाम जैसा "
 "कि 'orange' प्रविष्ट कर सकते हैं."
 
 #: ../gtk/deprecated/gtkcolorsel.c:548
@@ -724,14 +720,17 @@ msgid ""
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
-"पहले चयनित रंग, आपके द्वारा चयन किये जा रहे रंग के लिये तुलना. आप इस रंग को पैलेट प्रविष्टि "
+"पहले चयनित रंग, आपके द्वारा चयन किये जा रहे रंग के लिये तुलना. आप इस रंग को "
+"पैलेट प्रविष्टि "
 "खींच सकते हैं, या इस रंग को मौजूदा रूप में चुनें अन्य रंग स्वाच के किनारे."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1078
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
-msgstr "रंग जिसे आपने चुना. आप इस रंग को खींच सकते हैं भविष्य में इसे उपयोग करने की दृष्टि से."
+msgstr ""
+"रंग जिसे आपने चुना. आप इस रंग को खींच सकते हैं भविष्य में इसे उपयोग करने की "
+"दृष्टि से."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1084
 msgid ""
@@ -752,8 +751,10 @@ msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
-"पैलेट प्रविष्टि को इसे वर्तमान रंग में लाने के लिये क्लिक करें. इस प्रविष्टि को बदलने के लिये, "
-"रंग नमूने को यहां खींचें या इसे दाहिने क्लिक करें और चुनें \"यहां रंग सहेजें.\""
+"पैलेट प्रविष्टि को इसे वर्तमान रंग में लाने के लिये क्लिक करें. इस प्रविष्टि "
+"को बदलने के लिये, "
+"रंग नमूने को यहां खींचें या इसे दाहिने क्लिक करें और चुनें \"यहां रंग "
+"सहेजें.\""
 
 #. We emit the response for the Select button manually,
 #. * since we want to save the color first
@@ -834,7 +835,7 @@ msgstr "कड़ी नहीं दिखा सका"
 
 #: ../gtk/gtkaboutdialog.c:1017
 msgid "Website"
-msgstr ""
+msgstr "वेबसाइट"
 
 #: ../gtk/gtkaboutdialog.c:1071
 #, c-format
@@ -928,7 +929,6 @@ msgid "Backslash"
 msgstr "Backslash"
 
 #: ../gtk/gtkappchooserbutton.c:290
-#, fuzzy
 #| msgid "Other application..."
 msgid "Other application…"
 msgstr "अन्य अनुप्रयोग..."
@@ -968,7 +968,8 @@ msgid ""
 "Click \"Show other applications\", for more options, or \"Find applications "
 "online\" to install a new application"
 msgstr ""
-"\"अन्य अनुप्रयोग दिखाएँ\" को क्लिक करें, अधिक विकल्प के लिए या \"ऑनलाइन अनुप्रयोग ढूँढ़ें\" "
+"\"अन्य अनुप्रयोग दिखाएँ\" को क्लिक करें, अधिक विकल्प के लिए या \"ऑनलाइन "
+"अनुप्रयोग ढूँढ़ें\" "
 "नए अनुप्रयोग को संस्थापित करने के लिए"
 
 #: ../gtk/gtkappchooserdialog.c:427
@@ -1170,7 +1171,6 @@ msgstr "अवैध"
 #. * acelerator.
 #.
 #: ../gtk/gtkcellrendereraccel.c:416 ../gtk/gtkcellrendereraccel.c:747
-#, fuzzy
 #| msgid "New accelerator..."
 msgid "New accelerator…"
 msgstr "नया त्वरक..."
@@ -1479,10 +1479,9 @@ msgid "mm"
 msgstr "mm"
 
 #: ../gtk/gtkcustompaperunixdialog.c:605
-#, fuzzy
 #| msgid "Margins from Printer..."
 msgid "Margins from Printer…"
-msgstr "हाशिया मुद्रक से..."
+msgstr "मुद्रक से हाशिया ..."
 
 #: ../gtk/gtkcustompaperunixdialog.c:771
 #, c-format
@@ -1587,10 +1586,9 @@ msgid "(None)"
 msgstr "(कुछ नहीं)"
 
 #: ../gtk/gtkfilechooserbutton.c:2198
-#, fuzzy
 #| msgid "Other..."
 msgid "Other…"
-msgstr "अन्य..."
+msgstr "अन्य…"
 
 #: ../gtk/gtkfilechooserdefault.c:152
 msgid "Type name of new folder"
@@ -1617,7 +1615,8 @@ msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
-"फ़ोल्डर नहीं बनाया जा सका, क्योंकि उस नाम के साथ फ़ाइल पहले से मौजूद है.  फ़ोल्डर के लिये "
+"फ़ोल्डर नहीं बनाया जा सका, क्योंकि उस नाम के साथ फ़ाइल पहले से मौजूद है.  "
+"फ़ोल्डर के लिये "
 "अलग नाम ढूंढने की कोशिश करें, यह फ़ाइल का पहले फिर नामकरण करें."
 
 #: ../gtk/gtkfilechooserdefault.c:1014
@@ -1627,14 +1626,16 @@ msgstr "आपको किसी वैध फ़ाइलनाम चुन�
 #: ../gtk/gtkfilechooserdefault.c:1017
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
-msgstr "फ़ाइल को %s के अंदर बनाने की जरूरत नहीं है क्योंकि यह एक फोल्डर नहीं है"
+msgstr ""
+"फ़ाइल को %s के अंदर बनाने की जरूरत नहीं है क्योंकि यह एक फोल्डर नहीं है"
 
 #: ../gtk/gtkfilechooserdefault.c:1029
 msgid ""
 "You may only select folders.  The item that you selected is not a folder; "
 "try using a different item."
 msgstr ""
-"आप केवल फोल्डर चुन सकते हैं.  मद जिसे आपने चुना वह फोल्डर नहीं है; किसी अलग मद के उपयोग "
+"आप केवल फोल्डर चुन सकते हैं.  मद जिसे आपने चुना वह फोल्डर नहीं है; किसी अलग "
+"मद के उपयोग "
 "की कोशिश करें."
 
 #: ../gtk/gtkfilechooserdefault.c:1039
@@ -1700,7 +1701,6 @@ msgid "Remove"
 msgstr "हटाएँ"
 
 #: ../gtk/gtkfilechooserdefault.c:3394
-#, fuzzy
 #| msgid "Rename..."
 msgid "Rename…"
 msgstr "नाम बदलें..."
@@ -1844,7 +1844,8 @@ msgstr "\"%s\" नामक फ़ाइल पहले से मौजूद 
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
-msgstr "\"%s\" में फ़ाइल पहले से मौजूद है.  इसे बदलना इसकी सामग्री के ऊपर लिख देगा."
+msgstr ""
+"\"%s\" में फ़ाइल पहले से मौजूद है.  इसे बदलना इसकी सामग्री के ऊपर लिख देगा."
 
 #: ../gtk/gtkfilechooserdefault.c:8309 ../gtk/gtkprintunixdialog.c:559
 msgid "_Replace"
@@ -1859,7 +1860,8 @@ msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
-"यह प्रोग्राम इंडेक्सर डेमॉन में कनेक्शन बनाने में समर्थ नहीं था. कृपया सुनिश्चित करें कि यह चल "
+"यह प्रोग्राम इंडेक्सर डेमॉन में कनेक्शन बनाने में समर्थ नहीं था. कृपया "
+"सुनिश्चित करें कि यह चल "
 "रहा है."
 
 #: ../gtk/gtkfilechooserdefault.c:9131
@@ -1895,7 +1897,9 @@ msgstr "फ़ॉन्ट"
 
 #: ../gtk/gtkfontchooserwidget.c:110
 msgid "No fonts matched your search. You can revise your search and try again."
-msgstr "कोई फ़ॉन्ट आपकी खोज से मिला. आप अपने खोज को फिर जांच सकते हैं और फिर कोशिश करें."
+msgstr ""
+"कोई फ़ॉन्ट आपकी खोज से मिला. आप अपने खोज को फिर जांच सकते हैं और फिर कोशिश "
+"करें."
 
 #: ../gtk/gtkfontchooserwidget.c:557
 msgid "Search font name"
@@ -1945,10 +1949,9 @@ msgid "Copy _Link Address"
 msgstr "कड़ी पता की नक़ल लें (_L)"
 
 #: ../gtk/gtk-launch.c:71
-#, fuzzy
 #| msgid "APPLICATION [URI...] - launch an APPLICATION with URI."
 msgid "APPLICATION [URI…] — launch an APPLICATION with URI."
-msgstr "APPLICATION [URI...] - URI के साथ कोई अनुप्रयोग लॉन्च करें."
+msgstr "APPLICATION [URI...] — URI के साथ कोई अनुप्रयोग लॉन्च करें."
 
 #. Translators: this message will appear after the usage string
 #. and before the list of options.
@@ -1982,7 +1985,7 @@ msgstr "%s: अनुपस्थित अनुप्रयोग नाम"
 #: ../gtk/gtk-launch.c:121
 #, c-format
 msgid "Creating AppInfo from id not supported on non unix operating systems"
-msgstr ""
+msgstr "AppInfo को आईडी से बनाना गैर यूनिक्स ऑपरेटिंग तंत्र पर समर्थित नहीं है"
 
 #. Translators: the first %s is the program name, the second one
 #. is the application name.
@@ -2147,7 +2150,9 @@ msgstr "प्रक्रिया समाप्त करें (_E)"
 #: ../gtk/gtkmountoperation-stub.c:62
 #, c-format
 msgid "Cannot kill process with PID %d. Operation is not implemented."
-msgstr "PID %d वाली प्रक्रिया समाप्त नहीं कर सकता है. संक्रिया लागू नहीं की जा सकती है."
+msgstr ""
+"PID %d वाली प्रक्रिया समाप्त नहीं कर सकता है. संक्रिया लागू नहीं की जा सकती "
+"है."
 
 #. translators: this string is a name for the 'less' command
 #: ../gtk/gtkmountoperation-x11.c:954
@@ -2218,10 +2223,9 @@ msgstr ""
 " नीचे:%s %s"
 
 #: ../gtk/gtkpagesetupunixdialog.c:845 ../gtk/gtkprintunixdialog.c:3329
-#, fuzzy
 #| msgid "Manage Custom Sizes"
 msgid "Manage Custom Sizes…"
-msgstr "पसंदीदा आकार प्रबंधित करें"
+msgstr "पसंदीदा आकार प्रबंधित करें…"
 
 #: ../gtk/gtkpagesetupunixdialog.c:896
 msgid "_Format for:"
@@ -2403,10 +2407,9 @@ msgid "Getting printer information failed"
 msgstr "मुद्रक सूचना पा रहा है..."
 
 #: ../gtk/gtkprintunixdialog.c:1916
-#, fuzzy
 #| msgid "Getting printer information..."
 msgid "Getting printer information…"
-msgstr "मुद्रक सूचना पा रहा है..."
+msgstr "मुद्रक सूचना पा रहा है…"
 
 #: ../gtk/gtkprintunixdialog.c:2184
 msgid "Printer"
@@ -3458,7 +3461,8 @@ msgstr "श्रृंखलाबद्ध आंकड़ा विरूप�
 #: ../gtk/gtktextbufferserialize.c:1868
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
-msgstr "श्रृंखलाबद्ध आंकड़ा विरूपित है. पहला खंड GTKTEXTBUFFERCONTENTS-0001 नहीं है"
+msgstr ""
+"श्रृंखलाबद्ध आंकड़ा विरूपित है. पहला खंड GTKTEXTBUFFERCONTENTS-0001 नहीं है"
 
 #: ../gtk/gtktextutil.c:58
 msgid "LRM _Left-to-right mark"
@@ -4482,7 +4486,8 @@ msgid ""
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
 "कोई प्रसंग सूची फ़ाइल '%s' मे नहीं है.\n"
-"यदि आप सचमुच एक प्रतीक कैश बनाना चाहते हैं, --ignore-theme-index का प्रयोग करें.\n"
+"यदि आप सचमुच एक प्रतीक कैश बनाना चाहते हैं, --ignore-theme-index का प्रयोग "
+"करें.\n"
 
 #  ID
 #. ID
@@ -4702,7 +4707,7 @@ msgstr "कार्य छोड़ रहा है"
 #. Translators: this string connects multiple printer states together.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2277
 msgid "; "
-msgstr ""
+msgstr "; "
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3684
 msgid "Two Sided"
