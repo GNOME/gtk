@@ -101,6 +101,12 @@ static void gtk_button_box_get_preferred_height_for_width (GtkWidget *widget,
                                                            gint       width,
                                                            gint      *minimum,
                                                            gint      *natural);
+static void gtk_button_box_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
+									gint       width,
+									gint      *minimum,
+									gint      *natural,
+									gint      *minimum_baseline,
+									gint      *natural_baseline);
 
 static void gtk_button_box_size_allocate      (GtkWidget         *widget,
                                                GtkAllocation     *allocation);
@@ -143,6 +149,7 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
   widget_class->get_preferred_height = gtk_button_box_get_preferred_height;
   widget_class->get_preferred_width_for_height = gtk_button_box_get_preferred_width_for_height;
   widget_class->get_preferred_height_for_width = gtk_button_box_get_preferred_height_for_width;
+  widget_class->get_preferred_height_and_baseline_for_width = gtk_button_box_get_preferred_height_and_baseline_for_width;
   widget_class->size_allocate = gtk_button_box_size_allocate;
 
   container_class->remove = gtk_button_box_remove;
@@ -438,7 +445,10 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
                                   gint       *nvis_children,
                                   gint       *nvis_secondaries,
                                   gint      **widths,
-                                  gint      **heights)
+                                  gint      **heights,
+                                  gint      **baselines,
+				  gint       *baseline,
+				  gint       *baseline_height)
 {
   GtkButtonBox *bbox;
   GList *children, *list;
@@ -446,6 +456,7 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
   gint nsecondaries;
   gint needed_width;
   gint needed_height;
+  gint needed_above, needed_below;
   gint avg_w, avg_h;
   GtkRequisition child_requisition;
   gint ipad_w;
@@ -456,11 +467,15 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
   gint ipad_y;
   gboolean homogeneous;
   gint i;
+  gint max_above, max_below, child_baseline;
+  GtkOrientation orientation;
+  gboolean have_baseline;
 
   g_return_if_fail (GTK_IS_BUTTON_BOX (widget));
 
   bbox = GTK_BUTTON_BOX (widget);
 
+  orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget));
   homogeneous = gtk_box_get_homogeneous (GTK_BOX (widget));
 
   gtk_widget_style_get (widget,
@@ -475,22 +490,33 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
   list = children = _gtk_box_get_children (GTK_BOX (bbox));
   needed_width = child_min_width;
   needed_height = child_min_height;
+  needed_above = 0;
+  needed_below = 0;
   ipad_w = ipad_x * 2;
   ipad_h = ipad_y * 2;
 
+  have_baseline = FALSE;
+  max_above = max_below = 0;
   avg_w = avg_h = 0;
-  while (children)
+  for (children = list; children != NULL; children = children->next)
     {
       GtkWidget *child;
 
       child = children->data;
-      children = children->next;
 
       if (gtk_widget_get_visible (child))
         {
           nchildren += 1;
-          gtk_widget_get_preferred_size (child,
-                                         &child_requisition, NULL);
+          gtk_widget_get_preferred_size_and_baseline (child,
+						      &child_requisition, NULL, &child_baseline, NULL);
+	  if (orientation == GTK_ORIENTATION_HORIZONTAL &&
+	      gtk_widget_get_valign_with_baseline (child) == GTK_ALIGN_BASELINE &&
+	      child_baseline != -1)
+	    {
+	      have_baseline = TRUE;
+	      max_above = MAX (max_above, child_baseline + ipad_y);
+	      max_below = MAX (max_below , child_requisition.height + ipad_h - (child_baseline + ipad_y));
+	    }
           avg_w += child_requisition.width + ipad_w;
           avg_h += child_requisition.height + ipad_h;
         }
@@ -498,8 +524,14 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
   avg_w /= MAX (nchildren, 1);
   avg_h /= MAX (nchildren, 1);
 
+  if (baseline)
+    *baseline = have_baseline ? max_above : -1;
+  if (baseline_height)
+    *baseline_height = max_above + max_below;
+
   *widths = g_new (gint, nchildren);
   *heights = g_new (gint, nchildren);
+  *baselines = g_new (gint, nchildren);
 
   i = 0;
   children = list;
@@ -520,7 +552,8 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
           if (is_secondary)
             nsecondaries++;
 
-          gtk_widget_get_preferred_size (child, &child_requisition, NULL);
+          gtk_widget_get_preferred_size_and_baseline (child,
+						      &child_requisition, NULL, &child_baseline, NULL);
 
           if (homogeneous ||
               (!non_homogeneous && (child_requisition.width + ipad_w < avg_w * 1.5)))
@@ -534,16 +567,38 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
               (*widths)[i] = child_requisition.width + ipad_w;
             }
 
+	  (*baselines)[i] = -1;
+
           if (homogeneous ||
               (!non_homogeneous && (child_requisition.height + ipad_h < avg_h * 1.5)))
             {
               (*heights)[i] = -1;
-              if (child_requisition.height + ipad_h > needed_height)
-                needed_height = child_requisition.height + ipad_h;
+
+	      if (orientation == GTK_ORIENTATION_HORIZONTAL &&
+		  gtk_widget_get_valign_with_baseline (child) == GTK_ALIGN_BASELINE &&
+		  child_baseline != -1)
+		{
+		  (*baselines)[i] = child_baseline + ipad_y;
+
+		  if (child_baseline + ipad_y > needed_above)
+		    needed_above = child_baseline + ipad_y;
+		  if (child_requisition.height - child_baseline + ipad_y > needed_below)
+		    needed_below = child_requisition.height - child_baseline + ipad_y;
+		}
+	      else
+		{
+		  if (child_requisition.height + ipad_h > needed_height)
+		    needed_height = child_requisition.height + ipad_h;
+		}
             }
           else
             {
               (*heights)[i] = child_requisition.height + ipad_h;
+
+	      if (orientation == GTK_ORIENTATION_HORIZONTAL &&
+		  gtk_widget_get_valign_with_baseline (child) == GTK_ALIGN_BASELINE &&
+		  child_baseline != -1)
+		(*baselines)[i] = child_baseline + ipad_y;
             }
 
           i++;
@@ -552,12 +607,18 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
 
   g_list_free (list);
 
+  needed_height = MAX (needed_height, needed_above + needed_below);
+
   for (i = 0; i < nchildren; i++)
     {
       if ((*widths)[i] == -1)
         (*widths)[i] = needed_width;
       if ((*heights)[i] == -1)
-        (*heights)[i] = needed_height;
+	{
+	  (*heights)[i] = needed_height;
+	  if ((*baselines)[i] != -1)
+	    (*baselines)[i] = needed_above;
+	}
     }
 
   if (nvis_children)
@@ -569,18 +630,23 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
 
 static void
 gtk_button_box_size_request (GtkWidget      *widget,
-                             GtkRequisition *requisition)
+                             GtkRequisition *requisition,
+			     gint           *baseline)
 {
   GtkButtonBoxPrivate *priv;
   GtkButtonBox *bbox;
   gint nvis_children;
-  gint max_size;
+  gint max_size, max_above, max_below;
   gint total_size;
   gint spacing;
   GtkOrientation orientation;
   gint *widths;
   gint *heights;
+  gint *baselines;
   gint i;
+
+  if (baseline)
+    *baseline = -1;
 
   bbox = GTK_BUTTON_BOX (widget);
   priv = bbox->priv;
@@ -591,16 +657,22 @@ gtk_button_box_size_request (GtkWidget      *widget,
   gtk_button_box_child_requisition (widget,
                                     &nvis_children,
                                     NULL,
-                                    &widths, &heights);
+                                    &widths, &heights, &baselines, baseline, NULL);
 
-  max_size = 0;
+  max_size = max_above = max_below = 0;
   total_size = 0;
   for (i = 0; i < nvis_children; i++)
     {
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
           total_size += widths[i];
-          max_size = MAX (max_size, heights[i]);
+	  if (baselines[i] == -1)
+	    max_size = MAX (max_size, heights[i]);
+	  else
+	    {
+	      max_above = MAX (max_above, baselines[i]);
+	      max_below = MAX (max_below, heights[i] - baselines[i]);
+	    }
         }
       else
         {
@@ -610,6 +682,23 @@ gtk_button_box_size_request (GtkWidget      *widget,
     }
   g_free (widths);
   g_free (heights);
+  g_free (baselines);
+
+  max_size = MAX (max_size, max_above + max_below);
+
+  switch (gtk_box_get_baseline_position (GTK_BOX (widget)))
+    {
+    case GTK_BASELINE_POSITION_TOP:
+      break;
+    case GTK_BASELINE_POSITION_CENTER:
+      if (baseline != NULL && *baseline != -1)
+	*baseline += (max_size - (max_above + max_below)) / 2;
+      break;
+    case GTK_BASELINE_POSITION_BOTTOM:
+      if (baseline != NULL && *baseline != -1)
+	*baseline += max_size - (max_above + max_below);
+      break;
+    }
 
   if (nvis_children == 0)
     {
@@ -656,7 +745,7 @@ gtk_button_box_get_preferred_width (GtkWidget *widget,
 {
   GtkRequisition requisition;
 
-  gtk_button_box_size_request (widget, &requisition);
+  gtk_button_box_size_request (widget, &requisition, NULL);
 
   *minimum = *natural = requisition.width;
 }
@@ -666,11 +755,9 @@ gtk_button_box_get_preferred_height (GtkWidget *widget,
                                      gint      *minimum,
                                      gint      *natural)
 {
-  GtkRequisition requisition;
-
-  gtk_button_box_size_request (widget, &requisition);
-
-  *minimum = *natural = requisition.height;
+  gtk_button_box_get_preferred_height_and_baseline_for_width (widget, -1,
+							      minimum, natural,
+							      NULL, NULL);
 }
 
 static void
@@ -689,6 +776,26 @@ gtk_button_box_get_preferred_height_for_width (GtkWidget *widget,
                                                gint      *natural)
 {
   gtk_button_box_get_preferred_height (widget, minimum, natural);
+}
+
+static void
+gtk_button_box_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
+							    gint       width,
+							    gint      *minimum,
+							    gint      *natural,
+							    gint      *minimum_baseline,
+							    gint      *natural_baseline)
+{
+  GtkRequisition requisition;
+  gint baseline;
+
+  gtk_button_box_size_request (widget, &requisition, &baseline);
+
+  *minimum = *natural = requisition.height;
+  if (minimum_baseline)
+    *minimum_baseline = baseline;
+  if (natural_baseline)
+    *natural_baseline = baseline;
 }
 
 static void
@@ -714,10 +821,13 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
   gint ipad_x, ipad_y;
   gint *widths;
   gint *heights;
+  gint *baselines;
   gint *sizes;
   gint primary_size;
   gint secondary_size;
   gint total_size;
+  gint baseline, baseline_height;
+  gint child_baseline, allocated_baseline;
   gint i;
 
   bbox = GTK_BUTTON_BOX (widget);
@@ -733,7 +843,27 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
   gtk_button_box_child_requisition (widget,
                                     &nvis_children,
                                     &n_secondaries,
-                                    &widths, &heights);
+                                    &widths, &heights, &baselines, &baseline, &baseline_height);
+
+  allocated_baseline = gtk_widget_get_allocated_baseline (widget);
+  if (allocated_baseline != -1)
+    baseline = allocated_baseline;
+  else if (baseline != -1)
+    {
+      /* TODO: modify baseline based on baseline_pos && allocated_baseline*/
+      switch (gtk_box_get_baseline_position (GTK_BOX (widget)))
+	{
+	case GTK_BASELINE_POSITION_TOP:
+	  baseline = baseline;
+	  break;
+	case GTK_BASELINE_POSITION_CENTER:
+	  baseline = baseline + (allocation->height - baseline_height) / 2;
+	  break;
+	case GTK_BASELINE_POSITION_BOTTOM:
+	  baseline = allocation->height - (baseline_height - baseline);
+	  break;
+	}
+    }
 
   n_primaries = nvis_children - n_secondaries;
   primary_size = 0;
@@ -917,10 +1047,17 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
         {
           child_allocation.width = widths[i];
           child_allocation.height = heights[i];
+	  child_baseline = -1;
 
           if (orientation == GTK_ORIENTATION_HORIZONTAL)
             {
-              child_allocation.y = allocation->y + (allocation->height - child_allocation.height) / 2;
+	      if (baselines[i] != -1)
+		{
+		  child_allocation.y = allocation->y + baseline - baselines[i];
+		  child_baseline = baselines[i];
+		}
+	      else
+		child_allocation.y = allocation->y + (allocation->height - child_allocation.height) / 2;
 
               if (gtk_button_box_get_child_secondary (bbox, child))
                 {
@@ -953,7 +1090,7 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
                 }
             }
 
-          gtk_widget_size_allocate (child, &child_allocation);
+          gtk_widget_size_allocate_with_baseline (child, &child_allocation, child_baseline);
           i++;
         }
     }
@@ -961,6 +1098,7 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
   g_list_free (list);
   g_free (widths);
   g_free (heights);
+  g_free (baselines);
 }
 
 /**
