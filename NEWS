@@ -1,3 +1,40 @@
+Overview of Changes in GTK+ 3.8.0
+=================================
+
+* Bug fixes
+ 674759 GtkLabel: wrong value of "mnemonic-keyval" when...
+ 695493 testgtk: issues with the color selection example
+ 696051 vertical grid lines in rtl mode
+ 696171 GtkAssistant highlighted font unreadable
+ 696202 Add GtkSpinner animation back to Win32 theme
+ 696232 win32: do not crash on invalid utf8 conversion
+ 696405 appchooserbutton: filter out applications not...
+ 696546 Fix a crash in gtk_print_backend_cups_finalize()
+ 696553 Fix a crash in avahi_create_browsers()
+        Use natural size to set treeview adjustments
+
+* Translation updates
+ Aragonese
+ Czech
+ French
+ Galician
+ German
+ Gujarati
+ Hindi
+ Hungarian
+ Italian
+ Kazakh
+ Marathi
+ Odia
+ Persian
+ Punjabi
+ Russian
+ Slovenian
+ Tamil
+ Traditional Chinese
+ Ukrainian
+
+
 Overview of Changes in GTK+ 3.7.14
 ==================================
 
