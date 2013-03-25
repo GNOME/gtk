@@ -1222,17 +1222,33 @@ gtk_box_get_size (GtkWidget      *widget,
       natural += (nvis_children - 1) * private->spacing;
     }
 
+  minimum = MAX (minimum, minimum_below + minimum_above);
+  natural = MAX (natural, natural_below + natural_above);
+
   if (have_baseline)
     {
-      min_baseline = minimum_above;
-      nat_baseline = natural_above;
+      switch (private->baseline_pos)
+	{
+	case GTK_BASELINE_POSITION_TOP:
+	  min_baseline = minimum_above;
+	  nat_baseline = natural_above;
+	  break;
+	case GTK_BASELINE_POSITION_CENTER:
+	  min_baseline = minimum_above + (minimum - (minimum_above + minimum_below)) / 2;
+	  nat_baseline = natural_above + (natural - (natural_above + natural_below)) / 2;
+	  break;
+	case GTK_BASELINE_POSITION_BOTTOM:
+	  min_baseline = minimum - minimum_below;
+	  nat_baseline = natural - natural_below;
+	  break;
+	}
     }
 
   if (minimum_size)
-    *minimum_size = MAX (minimum, minimum_below + minimum_above);
+    *minimum_size = minimum;
 
   if (natural_size)
-    *natural_size = MAX (natural, natural_below + natural_above);
+    *natural_size = natural;
 
   if (minimum_baseline)
     *minimum_baseline = min_baseline;
