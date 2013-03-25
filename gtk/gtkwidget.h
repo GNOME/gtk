@@ -535,6 +535,11 @@ void   gtk_widget_get_preferred_height_and_baseline_for_width (GtkWidget     *wi
 void                gtk_widget_get_preferred_size             (GtkWidget      *widget,
                                                                GtkRequisition *minimum_size,
                                                                GtkRequisition *natural_size);
+void                gtk_widget_get_preferred_size_and_baseline (GtkWidget      *widget,
+								GtkRequisition *minimum_size,
+								GtkRequisition *natural_size,
+								gint           *minimum_baseline,
+								gint           *natural_baseline);
 
 GDK_DEPRECATED_IN_3_0_FOR(gtk_widget_get_preferred_size)
 void       gtk_widget_get_child_requisition (GtkWidget         *widget,

@@ -576,6 +576,56 @@ gtk_widget_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
 					    natural_baseline);
 }
 
+void
+gtk_widget_get_preferred_size_and_baseline (GtkWidget      *widget,
+					    GtkRequisition *minimum_size,
+					    GtkRequisition *natural_size,
+					    gint           *minimum_baseline,
+					    gint           *natural_baseline)
+{
+  gint min_width, nat_width;
+  gint min_height, nat_height;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
+    {
+      gtk_widget_get_preferred_width (widget, &min_width, &nat_width);
+
+      if (minimum_size)
+	{
+	  minimum_size->width = min_width;
+	  gtk_widget_get_preferred_height_and_baseline_for_width (widget, min_width,
+								  &minimum_size->height, NULL, minimum_baseline, NULL);
+	}
+
+      if (natural_size)
+	{
+	  natural_size->width = nat_width;
+	  gtk_widget_get_preferred_height_and_baseline_for_width (widget, nat_width,
+								  NULL, &natural_size->height, NULL, natural_baseline);
+	}
+    }
+  else /* GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT or CONSTANT_SIZE */
+    {
+      gtk_widget_get_preferred_height_and_baseline_for_width (widget, -1, &min_height, &nat_height, minimum_baseline, natural_baseline);
+
+      if (minimum_size)
+	{
+	  minimum_size->height = min_height;
+	  gtk_widget_get_preferred_width_for_height (widget, min_height,
+                                                     &minimum_size->width, NULL);
+	}
+
+      if (natural_size)
+	{
+	  natural_size->height = nat_height;
+	  gtk_widget_get_preferred_width_for_height (widget, nat_height,
+                                                     NULL, &natural_size->width);
+	}
+    }
+}
+
 /**
  * gtk_widget_get_preferred_size:
  * @widget: a #GtkWidget instance
@@ -602,49 +652,9 @@ gtk_widget_get_preferred_size (GtkWidget      *widget,
                                GtkRequisition *minimum_size,
                                GtkRequisition *natural_size)
 {
-  gint min_width, nat_width;
-  gint min_height, nat_height;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
-    {
-      gtk_widget_get_preferred_width (widget, &min_width, &nat_width);
-
-      if (minimum_size)
-	{
-	  minimum_size->width = min_width;
-	  gtk_widget_get_preferred_height_for_width (widget, min_width,
-                                                     &minimum_size->height, NULL);
-	}
-
-      if (natural_size)
-	{
-	  natural_size->width = nat_width;
-	  gtk_widget_get_preferred_height_for_width (widget, nat_width,
-                                                     NULL, &natural_size->height);
-	}
-    }
-  else /* GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT or CONSTANT_SIZE */
-    {
-      gtk_widget_get_preferred_height (widget, &min_height, &nat_height);
-
-      if (minimum_size)
-	{
-	  minimum_size->height = min_height;
-	  gtk_widget_get_preferred_width_for_height (widget, min_height,
-                                                     &minimum_size->width, NULL);
-	}
-
-      if (natural_size)
-	{
-	  natural_size->height = nat_height;
-	  gtk_widget_get_preferred_width_for_height (widget, nat_height,
-                                                     NULL, &natural_size->width);
-	}
-    }
+  gtk_widget_get_preferred_size_and_baseline (widget, minimum_size, natural_size,
+					      NULL, NULL);
 }
-
 
 static gint
 compare_gap (gconstpointer p1,
