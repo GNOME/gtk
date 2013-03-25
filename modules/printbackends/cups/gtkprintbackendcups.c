@@ -852,7 +852,7 @@ gtk_print_backend_cups_finalize (GObject *object)
 
   g_clear_object (&backend_cups->avahi_cancellable);
   g_clear_pointer (&backend_cups->avahi_default_printer, g_free);
-  g_object_unref (backend_cups->dbus_connection);
+  g_clear_object (&backend_cups->dbus_connection);
 #endif
 
   backend_parent_class->finalize (object);
