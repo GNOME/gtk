@@ -555,6 +555,27 @@ gtk_widget_get_preferred_height_for_width (GtkWidget *widget,
 					    NULL, NULL);
 }
 
+/**
+ * gtk_widget_get_preferred_height_and_baseline_for_width:
+ * @widget: a #GtkWidget instance
+ * @width: the width which is available for allocation, or -1 if none
+ * @minimum_height: (out) (allow-none): location for storing the minimum height, or %NULL
+ * @natural_height: (out) (allow-none): location for storing the natural height, or %NULL
+ * @minimum_baseline: (out) (allow-none): location for storing the baseline for the minimum height, or %NULL
+ * @natural_baseline: (out) (allow-none): location for storing the baseline for the natural height, or %NULL
+ *
+ * Retrieves a widget's minimum and natural height and the corresponding baselines if it would be given
+ * the specified @width, or the default height if @width is -1. The baselines may be -1 which means
+ * that no baseline is requested for this widget.
+ *
+ * The returned request will be modified by the
+ * GtkWidgetClass::adjust_size_request and GtkWidgetClass::adjust_baseline_request virtual methods
+ * and by any #GtkSizeGroup<!-- -->s that have been applied. That is, the returned request
+ * is the one that should be used for layout, not necessarily the one
+ * returned by the widget itself.
+ *
+ * Since: 3.10
+ */
 void
 gtk_widget_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
 							gint       width,

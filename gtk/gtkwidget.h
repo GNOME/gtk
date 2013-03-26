@@ -527,6 +527,7 @@ void                gtk_widget_get_preferred_width_for_height (GtkWidget      *w
                                                                gint            height,
                                                                gint           *minimum_width,
                                                                gint           *natural_width);
+GDK_AVAILABLE_IN_3_10
 void   gtk_widget_get_preferred_height_and_baseline_for_width (GtkWidget     *widget,
 							       gint           width,
 							       gint          *minimum_height,
