@@ -51,9 +51,15 @@ struct _GdkWaylandCursor
   GdkCursor cursor;
   gchar *name;
   guint serial;
-  int hotspot_x, hotspot_y;
-  int width, height;
-  struct wl_buffer *buffer;
+
+  struct
+  {
+    int hotspot_x, hotspot_y;
+    int width, height;
+    struct wl_buffer *buffer;
+  } pixbuf;
+
+  struct wl_cursor *wl_cursor;
   gboolean free_buffer;
 };
 
@@ -145,12 +151,7 @@ set_cursor_from_theme (GdkWaylandCursor *cursor, struct wl_cursor_theme *theme)
         return FALSE;
     }
 
-  cursor->hotspot_x = c->images[0]->hotspot_x;
-  cursor->hotspot_y = c->images[0]->hotspot_y;
-  cursor->width = c->images[0]->width;
-  cursor->height = c->images[0]->height;
-
-  cursor->buffer = wl_cursor_image_get_buffer(c->images[0]);
+  cursor->wl_cursor = c;
   cursor->free_buffer = FALSE;
 
   return TRUE;
@@ -170,7 +171,7 @@ gdk_wayland_cursor_finalize (GObject *object)
 
   g_free (cursor->name);
   if (cursor->free_buffer)
-    wl_buffer_destroy (cursor->buffer);
+    wl_buffer_destroy (cursor->pixbuf.buffer);
 
   G_OBJECT_CLASS (_gdk_wayland_cursor_parent_class)->finalize (object);
 }
@@ -190,13 +191,26 @@ _gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
 {
   GdkWaylandCursor *wayland_cursor = GDK_WAYLAND_CURSOR (cursor);
 
-  *x = wayland_cursor->hotspot_x;
-  *y = wayland_cursor->hotspot_y;
+  if (wayland_cursor->wl_cursor)
+    {
+      *x = wayland_cursor->wl_cursor->images[0]->hotspot_x;
+      *y = wayland_cursor->wl_cursor->images[0]->hotspot_y;
 
-  *w = wayland_cursor->width;
-  *h = wayland_cursor->height;
+      *w = wayland_cursor->wl_cursor->images[0]->width;
+      *h = wayland_cursor->wl_cursor->images[0]->height;
 
-  return wayland_cursor->buffer;
+      return wl_cursor_image_get_buffer(wayland_cursor->wl_cursor->images[0]);
+    }
+  else /* From pixbuf */
+    {
+      *x = wayland_cursor->pixbuf.hotspot_x;
+      *y = wayland_cursor->pixbuf.hotspot_y;
+
+      *w = wayland_cursor->pixbuf.width;
+      *h = wayland_cursor->pixbuf.height;
+
+      return wayland_cursor->pixbuf.buffer;
+    }
 }
 
 static void
@@ -357,37 +371,37 @@ _gdk_wayland_display_get_cursor_for_pixbuf (GdkDisplay *display,
 			 NULL);
   cursor->name = NULL;
   cursor->serial = theme_serial;
-  cursor->hotspot_x = x;
-  cursor->hotspot_y = y;
+  cursor->pixbuf.hotspot_x = x;
+  cursor->pixbuf.hotspot_y = y;
 
   if (pixbuf)
     {
-      cursor->width = gdk_pixbuf_get_width (pixbuf);
-      cursor->height = gdk_pixbuf_get_height (pixbuf);
+      cursor->pixbuf.width = gdk_pixbuf_get_width (pixbuf);
+      cursor->pixbuf.height = gdk_pixbuf_get_height (pixbuf);
     }
   else
     {
-      cursor->width = 1;
-      cursor->height = 1;
+      cursor->pixbuf.width = 1;
+      cursor->pixbuf.height = 1;
     }
 
   pool = _create_shm_pool (wayland_display->shm,
-                           cursor->width,
-                           cursor->height,
+                           cursor->pixbuf.width,
+                           cursor->pixbuf.height,
                            &size,
                            &data);
 
   if (pixbuf)
-    set_pixbuf (data, cursor->width, cursor->height, pixbuf);
+    set_pixbuf (data, cursor->pixbuf.width, cursor->pixbuf.height, pixbuf);
   else
     memset (data, 0, 4);
 
-  stride = cursor->width * 4;
-  cursor->buffer = wl_shm_pool_create_buffer (pool, 0,
-					cursor->width,
-					cursor->height,
-					stride,
-					WL_SHM_FORMAT_ARGB8888);
+  stride = cursor->pixbuf.width * 4;
+  cursor->pixbuf.buffer = wl_shm_pool_create_buffer (pool, 0,
+                                                     cursor->pixbuf.width,
+                                                     cursor->pixbuf.height,
+                                                     stride,
+                                                     WL_SHM_FORMAT_ARGB8888);
   cursor->free_buffer = FALSE;
 
   wl_shm_pool_destroy (pool);
