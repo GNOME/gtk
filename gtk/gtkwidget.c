@@ -95,6 +95,7 @@
  *   <listitem>#GtkWidgetClass.get_preferred_height()</listitem>
  *   <listitem>#GtkWidgetClass.get_preferred_height_for_width()</listitem>
  *   <listitem>#GtkWidgetClass.get_preferred_width_for_height()</listitem>
+ *   <listitem>#GtkWidgetClass.get_preferred_height_and_baseline_for_width()</listitem>
  * </itemizedlist>
  *
  * There are some important things to keep in mind when implementing
@@ -222,6 +223,26 @@
  * container, you <emphasis>must</emphasis> use the wrapper APIs.
  * Otherwise, you would not properly consider widget margins,
  * #GtkSizeGroup, and so forth.
+ *
+ * Since 3.10 Gtk+ also supports baseline vertical alignment of widgets. This
+ * means that widgets are positioned such that the typographical baseline of
+ * widgets in the same row are aligned. This happens if a widget supports baselines,
+ * has a vertical alignment of %GTK_ALIGN_BASELINE, and is inside a container
+ * that supports baselines and has a natural "row" that it aligns to the baseline,
+ * or a baseline assigned to it by the grandparent.
+ *
+ * Baseline alignment support for a widget is done by the #GtkWidgetClass.get_preferred_height_and_baseline_for_width()
+ * virtual function. It allows you to report a baseline in combination with the
+ * minimum and natural height. If there is no baseline you can return -1 to indicate
+ * this. The default implementation of this virtual function calls into the
+ * #GtkWidgetClass.get_preferred_height() and #GtkWidgetClass.get_preferred_height_for_width(),
+ * so if baselines are not supported it doesn't need to be implemented.
+ *
+ * If a widget ends up baseline aligned it will be allocated all the space in the parent
+ * as if it was %GTK_ALIGN_FILL, but the selected baseline can be found via gtk_widget_get_allocated_baseline().
+ * If this has a value other than -1 you need to align the widget such that the baseline
+ * appears at the position.
+ *
  * </para>
  * </refsect2>
  * <refsect2 id="style-properties">
