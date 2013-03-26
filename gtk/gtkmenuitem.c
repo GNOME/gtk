@@ -1341,23 +1341,9 @@ _gtk_menu_item_set_placement (GtkMenuItem         *menu_item,
 void
 gtk_menu_item_select (GtkMenuItem *menu_item)
 {
-  GtkWidget *parent;
-
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
 
   g_signal_emit (menu_item, menu_item_signals[SELECT], 0);
-
-  /* Enable themeing of the parent menu item depending on whether
-   * something is selected in its submenu
-   */
-  parent = gtk_widget_get_parent (GTK_WIDGET (menu_item));
-  if (GTK_IS_MENU (parent))
-    {
-      GtkMenu *menu = GTK_MENU (parent);
-
-      if (menu->priv->parent_menu_item)
-        gtk_widget_queue_draw (GTK_WIDGET (menu->priv->parent_menu_item));
-    }
 }
 
 /**
@@ -1370,23 +1356,9 @@ gtk_menu_item_select (GtkMenuItem *menu_item)
 void
 gtk_menu_item_deselect (GtkMenuItem *menu_item)
 {
-  GtkWidget *parent;
-
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
 
   g_signal_emit (menu_item, menu_item_signals[DESELECT], 0);
-
-  /* Enable themeing of the parent menu item depending on whether
-   * something is selected in its submenu
-   */
-  parent = gtk_widget_get_parent (GTK_WIDGET (menu_item));
-  if (GTK_IS_MENU (parent))
-    {
-      GtkMenu *menu = GTK_MENU (parent);
-
-      if (menu->priv->parent_menu_item)
-        gtk_widget_queue_draw (GTK_WIDGET (menu->priv->parent_menu_item));
-    }
 }
 
 /**
