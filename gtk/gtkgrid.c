@@ -2411,6 +2411,18 @@ gtk_grid_get_row_baseline_position (GtkGrid      *grid,
   return props->baseline_position;
 }
 
+/**
+ * gtk_grid_set_baseline_row:
+ * @grid: a #GtkGrid
+ * @row: the row index
+ *
+ * Sets which row defines the global baseline for the entire grid.
+ * Each row in the grid can have its own local baseline, but only
+ * one of those is global, meaning it will be the baseline in the
+ * parent of the @grid.
+ *
+ * Returns: the row index defining the global baseline
+ */
 void
 gtk_grid_set_baseline_row (GtkGrid *grid,
 			   gint     row)
@@ -2426,14 +2438,19 @@ gtk_grid_set_baseline_row (GtkGrid *grid,
       priv->baseline_row = row;
 
       if (gtk_widget_get_visible (GTK_WIDGET (grid)))
-	{
-	  gtk_widget_queue_resize (GTK_WIDGET (grid));
-	  //gtk_widget_queue_resize (gtk_widget_get_parent (GTK_WIDGET (grid)));
-	}
+	gtk_widget_queue_resize (GTK_WIDGET (grid));
       g_object_notify (G_OBJECT (grid), "baseline-row");
     }
 }
 
+/**
+ * gtk_grid_set_baseline_row:
+ * @grid: a #GtkGrid
+ *
+ * Returns which row defines the global baseline of @grid.
+ *
+ * Returns: the row index defining the global baseline
+ */
 gint
 gtk_grid_get_baseline_row (GtkGrid         *grid)
 {
