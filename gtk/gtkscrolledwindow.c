@@ -573,6 +573,9 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   gtk_widget_set_has_window (GTK_WIDGET (scrolled_window), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (scrolled_window), TRUE);
 
+  /* Instantiated by gtk_scrolled_window_set_[hv]adjustment
+   * which are both construct properties
+   */
   priv->hscrollbar = NULL;
   priv->vscrollbar = NULL;
   priv->hscrollbar_policy = GTK_POLICY_AUTOMATIC;
@@ -771,9 +774,7 @@ gtk_scrolled_window_get_hadjustment (GtkScrolledWindow *scrolled_window)
 
   priv = scrolled_window->priv;
 
-  return (priv->hscrollbar ?
-	  gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar)) :
-	  NULL);
+  return gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar));
 }
 
 /**
@@ -794,9 +795,7 @@ gtk_scrolled_window_get_vadjustment (GtkScrolledWindow *scrolled_window)
 
   priv = scrolled_window->priv;
 
-  return (priv->vscrollbar ?
-	  gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar)) :
-	  NULL);
+  return gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
 }
 
 /**
@@ -805,8 +804,7 @@ gtk_scrolled_window_get_vadjustment (GtkScrolledWindow *scrolled_window)
  *
  * Returns the horizontal scrollbar of @scrolled_window.
  *
- * Returns: (transfer none): the horizontal scrollbar of the scrolled window,
- *     or %NULL if it does not have one.
+ * Returns: (transfer none): the horizontal scrollbar of the scrolled window.
  *
  * Since: 2.8
  */
@@ -824,8 +822,7 @@ gtk_scrolled_window_get_hscrollbar (GtkScrolledWindow *scrolled_window)
  * 
  * Returns the vertical scrollbar of @scrolled_window.
  *
- * Returns: (transfer none): the vertical scrollbar of the scrolled window,
- *     or %NULL if it does not have one.
+ * Returns: (transfer none): the vertical scrollbar of the scrolled window.
  *
  * Since: 2.8
  */
@@ -1463,10 +1460,8 @@ gtk_scrolled_window_forall (GtkContainer *container,
       scrolled_window = GTK_SCROLLED_WINDOW (container);
       priv = scrolled_window->priv;
 
-      if (priv->vscrollbar)
-	callback (priv->vscrollbar, callback_data);
-      if (priv->hscrollbar)
-	callback (priv->hscrollbar, callback_data);
+      callback (priv->vscrollbar, callback_data);
+      callback (priv->hscrollbar, callback_data);
     }
 }
 
@@ -1524,19 +1519,17 @@ gtk_scrolled_window_scroll_child (GtkScrolledWindow *scrolled_window,
       return FALSE;
     }
 
-  if ((horizontal && (!priv->hscrollbar || !priv->hscrollbar_visible)) ||
-      (!horizontal && (!priv->vscrollbar || !priv->vscrollbar_visible)))
+  if ((horizontal && !priv->hscrollbar_visible) ||
+      (!horizontal && !priv->vscrollbar_visible))
     return FALSE;
 
   if (horizontal)
     {
-      if (priv->hscrollbar)
-	adjustment = gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar));
+      adjustment = gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar));
     }
   else
     {
-      if (priv->vscrollbar)
-	adjustment = gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
+      adjustment = gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
     }
 
   if (adjustment)
@@ -2144,7 +2137,7 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
 
   if (gdk_event_get_scroll_deltas ((GdkEvent *) event, &delta_x, &delta_y))
     {
-      if (delta_x != 0.0 && priv->hscrollbar &&
+      if (delta_x != 0.0 &&
           gtk_widget_get_visible (priv->hscrollbar))
         {
           GtkAdjustment *adj;
@@ -2166,7 +2159,7 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
           handled = TRUE;
         }
 
-      if (delta_y != 0.0 && priv->vscrollbar &&
+      if (delta_y != 0.0 &&
           gtk_widget_get_visible (priv->vscrollbar))
         {
           GtkAdjustment *adj;
@@ -2855,8 +2848,7 @@ gtk_scrolled_window_adjustment_changed (GtkAdjustment *adjustment,
   scrolled_window = GTK_SCROLLED_WINDOW (data);
   priv = scrolled_window->priv;
 
-  if (priv->hscrollbar &&
-      adjustment == gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar)))
+  if (adjustment == gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar)))
     {
       if (priv->hscrollbar_policy == GTK_POLICY_AUTOMATIC)
 	{
@@ -2870,8 +2862,7 @@ gtk_scrolled_window_adjustment_changed (GtkAdjustment *adjustment,
 	    gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
 	}
     }
-  else if (priv->vscrollbar &&
-	   adjustment == gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar)))
+  else if (adjustment == gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar)))
     {
       if (priv->vscrollbar_policy == GTK_POLICY_AUTOMATIC)
 	{
@@ -2899,11 +2890,9 @@ gtk_scrolled_window_adjustment_value_changed (GtkAdjustment *adjustment,
     return;
 
   /* Ensure GtkAdjustment and unclamped values are in sync */
-  if (priv->vscrollbar &&
-      adjustment == gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar)))
+  if (adjustment == gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar)))
     priv->unclamped_vadj_value = gtk_adjustment_get_value (adjustment);
-  else if (priv->hscrollbar &&
-           adjustment == gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar)))
+  else if (adjustment == gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar)))
     priv->unclamped_hadj_value = gtk_adjustment_get_value (adjustment);
 }
 
