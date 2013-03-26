@@ -789,8 +789,8 @@ _gdk_wayland_screen_new (GdkDisplay *display)
 
   screen_wayland = GDK_WAYLAND_SCREEN (screen);
   screen_wayland->display = display;
-  screen_wayland->width = 8192;
-  screen_wayland->height = 8192;
+  screen_wayland->width = 0;
+  screen_wayland->height = 0;
 
   screen_wayland->visual = gdk_wayland_visual_new (screen);
 
@@ -891,6 +891,11 @@ output_handle_mode(void *data,
 
   monitor->geometry.width = width;
   monitor->geometry.height = height;
+
+  monitor->screen->width =
+    MAX (monitor->screen->width, monitor->geometry.x + width);
+  monitor->screen->height =
+    MAX (monitor->screen->height, monitor->geometry.y + height);
 }
 
 static const struct wl_output_listener output_listener =
