@@ -133,10 +133,18 @@ typedef enum
 
 /**
  * GtkBaselinePosition:
- * @GTK_BASELINE_POSITION_TOP:
- * @GTK_BASELINE_POSITION_CENTER:
- * @GTK_BASELINE_POSITION_BOTTOM:
+ * @GTK_BASELINE_POSITION_TOP: Align the baseline at the top
+ * @GTK_BASELINE_POSITION_CENTER: Center the baseline
+ * @GTK_BASELINE_POSITION_BOTTOM: Align the baseline at the bottom
  *
+ * Whenever a container has some form of natural row it may align
+ * children in that row along a common typographical baseline. If
+ * the amount of verical space in the row is taller than the total
+ * requested height of the baseline-aligned children then it can use a
+ * #GtkBaselinePosition to select where to put the baseline inside the
+ * extra availible space.
+ *
+ * Since: 3.10
  */
 typedef enum
 {
