@@ -26,6 +26,13 @@
 
 G_BEGIN_DECLS
 
+/* Placement of submenus */
+typedef enum
+{
+  GTK_TOP_BOTTOM,
+  GTK_LEFT_RIGHT
+} GtkSubmenuPlacement;
+
 struct _GtkMenuShellPrivate
 {
   GList *children;
