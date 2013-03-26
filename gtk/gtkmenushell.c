@@ -45,7 +45,6 @@
 #include "gtkmenubar.h"
 #include "gtkmenuitemprivate.h"
 #include "gtkmenushellprivate.h"
-#include "gtkmenuprivate.h"
 #include "gtkmnemonichash.h"
 #include "gtkwindow.h"
 #include "gtkprivate.h"
