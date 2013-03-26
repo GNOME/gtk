@@ -781,6 +781,7 @@ GtkAlign gtk_widget_get_halign        (GtkWidget *widget);
 void     gtk_widget_set_halign        (GtkWidget *widget,
                                        GtkAlign   align);
 GtkAlign gtk_widget_get_valign        (GtkWidget *widget);
+GDK_AVAILABLE_IN_3_10
 GtkAlign gtk_widget_get_valign_with_baseline (GtkWidget *widget);
 void     gtk_widget_set_valign        (GtkWidget *widget,
                                        GtkAlign   align);

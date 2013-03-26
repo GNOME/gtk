@@ -13367,6 +13367,15 @@ gtk_widget_set_halign (GtkWidget *widget,
   g_object_notify (G_OBJECT (widget), "halign");
 }
 
+/**
+ * gtk_widget_get_valign_with_baseline:
+ * @widget: a #GtkWidget
+ *
+ * Gets the value of the #GtkWidget:valign property, including
+ * %GTK_ALIGN_BASELINE.
+ *
+ * Returns: the vertical alignment of @widget
+ */
 GtkAlign
 gtk_widget_get_valign_with_baseline (GtkWidget *widget)
 {
@@ -13380,7 +13389,12 @@ gtk_widget_get_valign_with_baseline (GtkWidget *widget)
  *
  * Gets the value of the #GtkWidget:valign property.
  *
- * Returns: the vertical alignment of @widget
+ * For backwards compatibility reasons this method will never return
+ * %GTK_ALIGN_BASELINE, but instead it will convert it to
+ * %GTK_ALIGN_FILL. If your widget want to support baseline aligned
+ * children it must use gtk_widget_get_valign_with_baseline().
+ *
+ * Returns: the vertical alignment of @widget, ignoring baseline alignment
  */
 GtkAlign
 gtk_widget_get_valign (GtkWidget *widget)
