@@ -140,6 +140,8 @@ struct _GtkImagePrivate
 
   gchar                *filename;       /* Only used with GTK_IMAGE_ANIMATION, GTK_IMAGE_PIXBUF */
   gchar                *resource_path;  /* Only used with GTK_IMAGE_PIXBUF */
+
+  float baseline_align;
 };
 
 
@@ -154,6 +156,12 @@ static void gtk_image_get_preferred_width  (GtkWidget    *widget,
 static void gtk_image_get_preferred_height (GtkWidget    *widget,
                                             gint         *minimum,
                                             gint         *natural);
+static void gtk_image_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
+								   gint       width,
+								   gint      *minimum,
+								   gint      *natural,
+								   gint      *minimum_baseline,
+								   gint      *natural_baseline);
 
 static void gtk_image_style_updated        (GtkWidget    *widget);
 static void gtk_image_screen_changed       (GtkWidget    *widget,
@@ -207,6 +215,7 @@ gtk_image_class_init (GtkImageClass *class)
   widget_class->draw = gtk_image_draw;
   widget_class->get_preferred_width = gtk_image_get_preferred_width;
   widget_class->get_preferred_height = gtk_image_get_preferred_height;
+  widget_class->get_preferred_height_and_baseline_for_width = gtk_image_get_preferred_height_and_baseline_for_width;
   widget_class->unmap = gtk_image_unmap;
   widget_class->unrealize = gtk_image_unrealize;
   widget_class->style_updated = gtk_image_style_updated;
@@ -1393,6 +1402,26 @@ gtk_image_get_preferred_size (GtkImage *image,
     *height_out = height;
 }
 
+static float
+gtk_image_get_baseline_align (GtkImage *image)
+{
+  PangoContext *pango_context;
+  PangoFontMetrics *metrics;
+
+  if (image->priv->baseline_align == 0.0)
+    {
+      pango_context = gtk_widget_get_pango_context (GTK_WIDGET (image));
+      metrics = pango_context_get_metrics (pango_context,
+					   pango_context_get_font_description (pango_context),
+					   pango_context_get_language (pango_context));
+      image->priv->baseline_align =
+	(float)pango_font_metrics_get_ascent (metrics) /
+	(pango_font_metrics_get_ascent (metrics) + pango_font_metrics_get_descent (metrics));
+    }
+
+  return image->priv->baseline_align;
+}
+
 static gint
 gtk_image_draw (GtkWidget *widget,
                 cairo_t   *cr)
@@ -1401,7 +1430,7 @@ gtk_image_draw (GtkWidget *widget,
   GtkImagePrivate *priv;
   GtkMisc *misc;
   GtkStyleContext *context;
-  gint x, y, width, height;
+  gint x, y, width, height, baseline;
   gfloat xalign, yalign;
   GtkBorder border;
 
@@ -1427,8 +1456,28 @@ gtk_image_draw (GtkWidget *widget,
   if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
     xalign = 1.0 - xalign;
 
+  baseline = gtk_widget_get_allocated_baseline (widget);
+
   x = floor ((gtk_widget_get_allocated_width (widget) - width) * xalign) + border.left;
-  y = floor ((gtk_widget_get_allocated_height (widget) - height) * yalign) + border.top;
+  if (baseline == -1)
+    y = floor ((gtk_widget_get_allocated_height (widget) - height) * yalign) + border.top;
+  else
+    {
+      PangoContext *pango_context;
+      PangoFontMetrics *metrics;
+      float baseline_align;
+
+      pango_context = gtk_widget_get_pango_context (widget);
+      metrics = pango_context_get_metrics (pango_context,
+					   pango_context_get_font_description (pango_context),
+					   pango_context_get_language (pango_context));
+      baseline_align =
+	(double)pango_font_metrics_get_ascent (metrics) /
+	(pango_font_metrics_get_ascent (metrics) + pango_font_metrics_get_descent (metrics));
+
+      y = CLAMP (baseline - height * baseline_align,
+		 border.top, gtk_widget_get_allocated_height (widget) - height);
+    }
 
   if (gtk_image_get_storage_type (image) == GTK_IMAGE_ANIMATION)
     {
@@ -1536,14 +1585,36 @@ gtk_image_get_preferred_width (GtkWidget *widget,
 } 
 
 static void
+gtk_image_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
+						       gint       width,
+						       gint      *minimum,
+						       gint      *natural,
+						       gint      *minimum_baseline,
+						       gint      *natural_baseline)
+{
+  gint height;
+  float baseline_align;
+
+  gtk_image_get_preferred_size (GTK_IMAGE (widget), NULL, &height);
+  *minimum = *natural = height;
+
+  if (minimum_baseline || natural_baseline)
+    {
+      baseline_align = gtk_image_get_baseline_align (GTK_IMAGE (widget));
+      if (minimum_baseline)
+	*minimum_baseline = height * baseline_align;
+      if (natural_baseline)
+	*natural_baseline = height * baseline_align;
+    }
+}
+
+static void
 gtk_image_get_preferred_height (GtkWidget *widget,
                                 gint      *minimum,
                                 gint      *natural)
 {
-  gint height;
-
-  gtk_image_get_preferred_size (GTK_IMAGE (widget), NULL, &height);
-  *minimum = *natural = height;
+  gtk_image_get_preferred_height_and_baseline_for_width (widget, -1, minimum, natural,
+							 NULL, NULL);
 }
 
 static void
@@ -1558,9 +1629,13 @@ icon_theme_changed (GtkImage *image)
 static void
 gtk_image_style_updated (GtkWidget *widget)
 {
+  GtkImage *image = GTK_IMAGE (widget);
+  GtkImagePrivate *priv = image->priv;
+
   GTK_WIDGET_CLASS (gtk_image_parent_class)->style_updated (widget);
 
-  icon_theme_changed (GTK_IMAGE (widget));
+  icon_theme_changed (image);
+  priv->baseline_align = 0.0;
 }
 
 static void
