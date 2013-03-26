@@ -24,7 +24,7 @@
 
 #include "config.h"
 
-#include "gtkmenuprivate.h"
+#include "gtkmenu.h"
 #include "gtkmenuitemprivate.h"
 #include "gtkstylecontext.h"
 #include "gtktearoffmenuitem.h"
@@ -167,7 +167,7 @@ gtk_tearoff_menu_item_get_preferred_height (GtkWidget      *widget,
   *minimum = *natural = (border_width * 2) + padding.top + padding.bottom;
 
   parent = gtk_widget_get_parent (widget);
-  if (GTK_IS_MENU (parent) && GTK_MENU (parent)->priv->torn_off)
+  if (GTK_IS_MENU (parent) && gtk_menu_get_tearoff_state (GTK_MENU (parent)))
     {
       *minimum += ARROW_SIZE;
       *natural += ARROW_SIZE;
@@ -217,7 +217,7 @@ gtk_tearoff_menu_item_draw (GtkWidget *widget,
     }
 
   parent = gtk_widget_get_parent (widget);
-  if (GTK_IS_MENU (parent) && GTK_MENU (parent)->priv->torn_off)
+  if (GTK_IS_MENU (parent) && gtk_menu_get_tearoff_state (GTK_MENU (parent)))
     {
       gint arrow_x;
 
@@ -292,8 +292,7 @@ gtk_tearoff_menu_item_activate (GtkMenuItem *menu_item)
       GtkMenu *menu = GTK_MENU (parent);
 
       gtk_widget_queue_resize (GTK_WIDGET (menu_item));
-      gtk_menu_set_tearoff_state (GTK_MENU (parent),
-                                  !menu->priv->torn_off);
+      gtk_menu_set_tearoff_state (menu, !gtk_menu_get_tearoff_state (menu));
     }
 }
 
