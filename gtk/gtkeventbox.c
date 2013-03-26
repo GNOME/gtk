@@ -65,6 +65,12 @@ static void     gtk_event_box_get_preferred_width  (GtkWidget *widget,
 static void     gtk_event_box_get_preferred_height (GtkWidget *widget,
                                                     gint      *minimum,
                                                     gint      *natural);
+static void     gtk_event_box_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
+									   gint       width,
+									   gint      *minimum,
+									   gint      *natural,
+									   gint      *minimum_baseline,
+									   gint      *natural_baseline);
 static void     gtk_event_box_size_allocate (GtkWidget        *widget,
                                              GtkAllocation    *allocation);
 static gboolean gtk_event_box_draw          (GtkWidget        *widget,
@@ -96,6 +102,7 @@ gtk_event_box_class_init (GtkEventBoxClass *class)
   widget_class->unmap = gtk_event_box_unmap;
   widget_class->get_preferred_width = gtk_event_box_get_preferred_width;
   widget_class->get_preferred_height = gtk_event_box_get_preferred_height;
+  widget_class->get_preferred_height_and_baseline_for_width = gtk_event_box_get_preferred_height_and_baseline_for_width;
   widget_class->size_allocate = gtk_event_box_size_allocate;
   widget_class->draw = gtk_event_box_draw;
 
@@ -515,9 +522,12 @@ gtk_event_box_get_preferred_width (GtkWidget *widget,
 }
 
 static void
-gtk_event_box_get_preferred_height (GtkWidget *widget,
-                                    gint      *minimum,
-                                    gint      *natural)
+gtk_event_box_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
+							   gint       width,
+							   gint      *minimum,
+							   gint      *natural,
+							   gint      *minimum_baseline,
+							   gint      *natural_baseline)
 {
   GtkBin *bin = GTK_BIN (widget);
   GtkWidget *child;
@@ -528,9 +538,30 @@ gtk_event_box_get_preferred_height (GtkWidget *widget,
   if (natural)
     *natural = 0;
 
+  if (minimum_baseline)
+    *minimum_baseline = -1;
+
+  if (natural_baseline)
+    *natural_baseline = -1;
+
   child = gtk_bin_get_child (bin);
   if (child && gtk_widget_get_visible (child))
-    gtk_widget_get_preferred_height (child, minimum, natural);
+    gtk_widget_get_preferred_height_and_baseline_for_width (child,
+							    -1,
+							    minimum,
+							    natural,
+							    minimum_baseline,
+							    natural_baseline);
+}
+
+static void
+gtk_event_box_get_preferred_height (GtkWidget *widget,
+                                    gint      *minimum,
+                                    gint      *natural)
+{
+  gtk_event_box_get_preferred_height_and_baseline_for_width (widget, -1,
+							     minimum, natural,
+							     NULL, NULL);
 }
 
 static void
@@ -539,6 +570,7 @@ gtk_event_box_size_allocate (GtkWidget     *widget,
 {
   GtkBin *bin;
   GtkAllocation child_allocation;
+  gint baseline;
   GtkEventBoxPrivate *priv;
   GtkWidget *child;
 
@@ -578,9 +610,10 @@ gtk_event_box_size_allocate (GtkWidget     *widget,
                                 child_allocation.height);
     }
 
+  baseline = gtk_widget_get_allocated_baseline (widget);
   child = gtk_bin_get_child (bin);
   if (child)
-    gtk_widget_size_allocate (child, &child_allocation);
+    gtk_widget_size_allocate_with_baseline (child, &child_allocation, baseline);
 }
 
 static gboolean
