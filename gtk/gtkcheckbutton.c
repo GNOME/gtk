@@ -379,6 +379,8 @@ static void
 gtk_check_button_size_allocate (GtkWidget     *widget,
 				GtkAllocation *allocation)
 {
+  PangoContext *pango_context;
+  PangoFontMetrics *metrics;
   GtkCheckButton *check_button;
   GtkToggleButton *toggle_button;
   GtkButton *button;
@@ -435,6 +437,16 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
 	    baseline -= child_allocation.y - allocation->y;
 	  gtk_widget_size_allocate_with_baseline (child, &child_allocation, baseline);
 	}
+
+      pango_context = gtk_widget_get_pango_context (widget);
+      metrics = pango_context_get_metrics (pango_context,
+					   pango_context_get_font_description (pango_context),
+					   pango_context_get_language (pango_context));
+      button->priv->baseline_align =
+	(double)pango_font_metrics_get_ascent (metrics) /
+	(pango_font_metrics_get_ascent (metrics) + pango_font_metrics_get_descent (metrics));
+      pango_font_metrics_unref (metrics);
+
     }
   else
     GTK_WIDGET_CLASS (gtk_check_button_parent_class)->size_allocate (widget, allocation);
@@ -492,6 +504,7 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
   gint indicator_spacing;
   gint focus_width;
   gint focus_pad;
+  gint baseline;
   guint border_width;
   gboolean interior_focus;
   GtkAllocation allocation;
@@ -502,6 +515,7 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
   toggle_button = GTK_TOGGLE_BUTTON (check_button);
 
   gtk_widget_get_allocation (widget, &allocation);
+  baseline = gtk_widget_get_allocated_baseline (widget);
   context = gtk_widget_get_style_context (widget);
   state = gtk_widget_get_state_flags (widget);
 
@@ -516,7 +530,11 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   x = indicator_spacing + border_width;
-  y = (allocation.height - indicator_size) / 2;
+  if (baseline == -1)
+    y = (allocation.height - indicator_size) / 2;
+  else
+    y = CLAMP (baseline - indicator_size * button->priv->baseline_align,
+	       0, allocation.height - indicator_size);
 
   child = gtk_bin_get_child (GTK_BIN (check_button));
   if (!interior_focus || !(child && gtk_widget_get_visible (child)))
