@@ -597,6 +597,28 @@ gtk_widget_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
 					    natural_baseline);
 }
 
+/**
+ * gtk_widget_get_preferred_size_and_baseline:
+ * @widget: a #GtkWidget instance
+ * @minimum_size: (out) (allow-none): location for storing the minimum size, or %NULL
+ * @natural_size: (out) (allow-none): location for storing the natural size, or %NULL
+ *
+ * Retrieves the minimum and natural size  and the corresponding baselines of a widget, taking
+ * into account the widget's preference for height-for-width management. The baselines may
+ * be -1 which means that no baseline is requested for this widget.
+ *
+ * This is used to retrieve a suitable size by container widgets which do
+ * not impose any restrictions on the child placement. It can be used
+ * to deduce toplevel window and menu sizes as well as child widgets in
+ * free-form containers such as GtkLayout.
+ *
+ * <note><para>Handle with care. Note that the natural height of a height-for-width
+ * widget will generally be a smaller size than the minimum height, since the required
+ * height for the natural width is generally smaller than the required height for
+ * the minimum width.</para></note>
+ *
+ * Since: 3.10
+ */
 void
 gtk_widget_get_preferred_size_and_baseline (GtkWidget      *widget,
 					    GtkRequisition *minimum_size,
@@ -665,6 +687,9 @@ gtk_widget_get_preferred_size_and_baseline (GtkWidget      *widget,
  * widget will generally be a smaller size than the minimum height, since the required
  * height for the natural width is generally smaller than the required height for
  * the minimum width.</para></note>
+ *
+ * Use gtk_widget_get_preferred_size_and_baseline() if you want to support
+ * baseline alignment.
  *
  * Since: 3.0
  */
