@@ -178,6 +178,12 @@ main (int    argc,
 	  gtk_container_add (GTK_CONTAINER (hbox), button);
 	}
 
+      image = gtk_image_new_from_icon_name ("face-sad", GTK_ICON_SIZE_BUTTON);
+      gtk_image_set_pixel_size (GTK_IMAGE (image), 34);
+      if (j == 0)
+	gtk_widget_set_valign (image, GTK_ALIGN_BASELINE);
+      gtk_container_add (GTK_CONTAINER (hbox), image);
+
       button = gtk_toggle_button_new_with_label ("│Xyj,Ö");
       if (j == 0)
 	gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
