@@ -2358,6 +2358,15 @@ get_row_properties_or_default (GtkGrid      *grid,
   return &gtk_grid_row_properties_default;
 }
 
+/**
+ * gtk_grid_set_row_baseline_position:
+ * @grid: a #GtkGrid
+ * @row: a row index
+ * @pos: a #GtkBaselinePosition
+ *
+ * Sets how the baseline should be positioned on @row of the
+ * grid, in case that row is assigned more space than is requested.
+ */
 void
 gtk_grid_set_row_baseline_position (GtkGrid            *grid,
 				    gint                row,
@@ -2378,6 +2387,17 @@ gtk_grid_set_row_baseline_position (GtkGrid            *grid,
     }
 }
 
+/**
+ * gtk_grid_get_row_baseline_position:
+ * @grid: a #GtkGrid
+ * @row: a row index
+ *
+ * Returns the baseline position of @row as set
+ * by gtk_grid_set_row_baseline_position() or the default value
+ * %GTK_BASELINE_POSITION_CENTER.
+ *
+ * Returns: the baseline position of @row
+ */
 GtkBaselinePosition
 gtk_grid_get_row_baseline_position (GtkGrid      *grid,
 				    gint          row)
