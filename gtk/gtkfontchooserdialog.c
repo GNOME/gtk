@@ -110,19 +110,6 @@ gtk_font_chooser_dialog_get_property (GObject      *object,
 }
 
 static void
-gtk_font_chooser_dialog_class_init (GtkFontChooserDialogClass *klass)
-{
-  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-
-  gobject_class->get_property = gtk_font_chooser_dialog_get_property;
-  gobject_class->set_property = gtk_font_chooser_dialog_set_property;
-
-  _gtk_font_chooser_install_properties (gobject_class);
-
-  g_type_class_add_private (klass, sizeof (GtkFontChooserDialogPrivate));
-}
-
-static void
 font_activated_cb (GtkFontChooser *fontchooser,
                    const gchar    *fontname,
                    gpointer        user_data)
@@ -133,56 +120,45 @@ font_activated_cb (GtkFontChooser *fontchooser,
 }
 
 static void
+gtk_font_chooser_dialog_class_init (GtkFontChooserDialogClass *klass)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  gobject_class->get_property = gtk_font_chooser_dialog_get_property;
+  gobject_class->set_property = gtk_font_chooser_dialog_set_property;
+
+  _gtk_font_chooser_install_properties (gobject_class);
+
+  /* Bind class to template
+   */
+  gtk_widget_class_set_template_from_resource (widget_class,
+					       "/org/gtk/libgtk/gtkfontchooserdialog.ui");
+
+  gtk_widget_class_bind_child (widget_class, GtkFontChooserDialogPrivate, fontchooser);
+  gtk_widget_class_bind_child (widget_class, GtkFontChooserDialogPrivate, select_button);
+  gtk_widget_class_bind_child (widget_class, GtkFontChooserDialogPrivate, cancel_button);
+  gtk_widget_class_bind_callback (widget_class, font_activated_cb);
+
+  g_type_class_add_private (klass, sizeof (GtkFontChooserDialogPrivate));
+}
+
+static void
 gtk_font_chooser_dialog_init (GtkFontChooserDialog *fontchooserdiag)
 {
   GtkFontChooserDialogPrivate *priv;
-  GtkDialog *dialog = GTK_DIALOG (fontchooserdiag);
-  GtkWidget *action_area, *content_area;
 
   fontchooserdiag->priv = G_TYPE_INSTANCE_GET_PRIVATE (fontchooserdiag,
                                                        GTK_TYPE_FONT_CHOOSER_DIALOG,
                                                        GtkFontChooserDialogPrivate);
   priv = fontchooserdiag->priv;
 
-  content_area = gtk_dialog_get_content_area (dialog);
-  action_area = gtk_dialog_get_action_area (dialog);
-
-  gtk_container_set_border_width (GTK_CONTAINER (dialog), 5);
-  gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
-  gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
-  gtk_box_set_spacing (GTK_BOX (action_area), 6);
-
-  gtk_widget_push_composite_child ();
-
-  gtk_window_set_resizable (GTK_WINDOW (fontchooserdiag), TRUE);
-
-  /* Create the content area */
-  priv->fontchooser = gtk_font_chooser_widget_new ();
-  gtk_container_set_border_width (GTK_CONTAINER (priv->fontchooser), 5);
-  gtk_widget_show (priv->fontchooser);
-  gtk_box_pack_start (GTK_BOX (content_area),
-                      priv->fontchooser, TRUE, TRUE, 0);
-
-  g_signal_connect (priv->fontchooser, "font-activated",
-                    G_CALLBACK (font_activated_cb), dialog);
-
-  /* Create the action area */
-  priv->cancel_button = gtk_dialog_add_button (dialog,
-                                               GTK_STOCK_CANCEL,
-                                               GTK_RESPONSE_CANCEL);
-  priv->select_button = gtk_dialog_add_button (dialog,
-                                               _("_Select"),
-                                               GTK_RESPONSE_OK);
-  gtk_widget_grab_default (priv->select_button);
+  gtk_widget_init_template (GTK_WIDGET (fontchooserdiag));
 
   gtk_dialog_set_alternative_button_order (GTK_DIALOG (fontchooserdiag),
                                            GTK_RESPONSE_OK,
                                            GTK_RESPONSE_CANCEL,
                                            -1);
-
-  gtk_window_set_title (GTK_WINDOW (fontchooserdiag), _("Font Selection"));
-
-  gtk_widget_pop_composite_child ();
 
   _gtk_font_chooser_set_delegate (GTK_FONT_CHOOSER (fontchooserdiag),
                                   GTK_FONT_CHOOSER (priv->fontchooser));

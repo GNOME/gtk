@@ -19,6 +19,7 @@
     <file compressed="true">gtkdialog.ui</file>
     <file compressed="true">gtkfilechooserdefault.ui</file>
     <file compressed="true">gtkfilechooserdialog.ui</file>
+    <file compressed="true">gtkfontchooserdialog.ui</file>
     <file compressed="true">gtkfontchooserwidget.ui</file>
     <file compressed="true">gtkinfobar.ui</file>
     <file compressed="true">gtklockbutton.ui</file>

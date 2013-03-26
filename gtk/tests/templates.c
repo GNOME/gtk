@@ -234,6 +234,16 @@ test_font_chooser_widget_basic (void)
   gtk_widget_destroy (widget);
 }
 
+static void
+test_font_chooser_dialog_basic (void)
+{
+  GtkWidget *widget;
+
+  widget = gtk_font_chooser_dialog_new ("Choose a font !", NULL);
+  g_assert (GTK_IS_FONT_CHOOSER_DIALOG (widget));
+  gtk_widget_destroy (widget);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -261,6 +271,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Template/GtkFileChooserWidget/Basic", test_file_chooser_widget_basic);
   g_test_add_func ("/Template/GtkFileChooserDialog/Basic", test_file_chooser_dialog_basic);
   g_test_add_func ("/Template/GtkFontChooserWidget/Basic", test_font_chooser_widget_basic);
+  g_test_add_func ("/Template/GtkFontChooserDialog/Basic", test_font_chooser_dialog_basic);
 
   return g_test_run();
 }
