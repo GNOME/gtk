@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="gtk30">
+  <!-- interface-requires gtk+ 3.10 -->
+  <object class="GtkListStore" id="model">
+    <columns>
+      <!-- column-name family -->
+      <column type="PangoFontFamily"/>
+      <!-- column-name face -->
+      <column type="PangoFontFace"/>
+      <!-- column-name description -->
+      <column type="PangoFontDescription"/>
+      <!-- column-name preview-title -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTreeModelFilter" id="filter_model">
+    <property name="child_model">model</property>
+    <signal name="row-deleted" handler="row_deleted_cb" swapped="no"/>
+    <signal name="row-inserted" handler="row_inserted_cb" swapped="no"/>
+  </object>
+  <object class="GtkAdjustment" id="slider_adjustment">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+    <signal name="value-changed" handler="size_change_cb" swapped="no"/>
+  </object>
+  <object class="GtkAdjustment" id="spin_adjustment">
+    <property name="upper">100</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+    <signal name="value-changed" handler="size_change_cb" swapped="no"/>
+  </object>
+  <template class="GtkFontChooserWidget" parent="GtkBox">
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkGrid" id="grid1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="row_spacing">6</property>
+        <property name="column_spacing">6</property>
+        <child>
+          <object class="GtkSearchEntry" id="search_entry">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="hexpand">True</property>
+            <property name="invisible_char">•</property>
+            <property name="primary_icon_name">edit-find-symbolic</property>
+            <property name="primary_icon_activatable">False</property>
+            <property name="secondary_icon_activatable">False</property>
+            <property name="primary_icon_sensitive">False</property>
+            <property name="secondary_icon_sensitive">False</property>
+            <property name="placeholder_text" translatable="yes">Search font name</property>
+            <signal name="notify::text" handler="text_changed_cb" swapped="no"/>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
+            <property name="width">2</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkNotebook" id="list_notebook">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="show_tabs">False</property>
+            <child>
+              <object class="GtkScrolledWindow" id="list_scrolled_window">
+                <property name="width_request">400</property>
+                <property name="height_request">300</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="hscrollbar_policy">never</property>
+                <property name="shadow_type">etched-in</property>
+                <child>
+                  <object class="GtkTreeView" id="family_face_list">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="model">filter_model</property>
+                    <property name="headers_visible">False</property>
+                    <property name="rules_hint">True</property>
+                    <property name="enable_search">False</property>
+                    <property name="fixed_height_mode">True</property>
+                    <signal name="cursor-changed" handler="cursor_changed_cb" swapped="no"/>
+                    <signal name="row-activated" handler="row_activated_cb" swapped="no"/>
+                    <signal name="style-updated" handler="gtk_font_chooser_widget_set_cell_size" object="GtkFontChooserWidget" after="yes" swapped="yes"/>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection" id="treeview-selection1"/>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="family_face_column">
+                        <property name="sizing">fixed</property>
+                        <property name="title" translatable="yes">Font Family</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="family_face_cell">
+                            <property name="ellipsize">end</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="tab">
+              <placeholder/>
+            </child>
+            <child>
+              <object class="GtkLabel" id="empty_list">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">center</property>
+                <property name="valign">start</property>
+                <property name="margin_left">12</property>
+                <property name="margin_right">12</property>
+                <property name="margin_top">12</property>
+                <property name="margin_bottom">12</property>
+                <property name="label" translatable="yes">No fonts matched your search. You can revise your search and try again.</property>
+              </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child type="tab">
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">1</property>
+            <property name="width">2</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="preview">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="invisible_char">•</property>
+            <property name="text">Sample string goes here</property>
+            <signal name="scroll-event" handler="zoom_preview_cb" swapped="no"/>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">2</property>
+            <property name="width">2</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScale" id="size_slider">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="hexpand">True</property>
+            <property name="adjustment">slider_adjustment</property>
+            <property name="digits">0</property>
+            <signal name="scroll-event" handler="zoom_preview_cb" swapped="no"/>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">3</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSpinButton" id="size_spin">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="invisible_char">•</property>
+            <property name="adjustment">spin_adjustment</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">3</property>
+            <property name="width">1</property>
+            <property name="height">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+  </template>
+</interface>
