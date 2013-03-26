@@ -787,6 +787,7 @@ gtk_dialog_add_button (GtkDialog   *dialog,
   button = gtk_button_new_from_stock (button_text);
 
   gtk_widget_set_can_default (button, TRUE);
+  gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
 
   gtk_widget_show (button);
 
