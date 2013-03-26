@@ -60,7 +60,6 @@ struct _GdkWaylandCursor
   } pixbuf;
 
   struct wl_cursor *wl_cursor;
-  gboolean free_buffer;
 };
 
 struct _GdkWaylandCursorClass
@@ -152,7 +151,6 @@ set_cursor_from_theme (GdkWaylandCursor *cursor, struct wl_cursor_theme *theme)
     }
 
   cursor->wl_cursor = c;
-  cursor->free_buffer = FALSE;
 
   return TRUE;
 }
@@ -170,7 +168,7 @@ gdk_wayland_cursor_finalize (GObject *object)
   GdkWaylandCursor *cursor = GDK_WAYLAND_CURSOR (object);
 
   g_free (cursor->name);
-  if (cursor->free_buffer)
+  if (cursor->pixbuf.buffer)
     wl_buffer_destroy (cursor->pixbuf.buffer);
 
   G_OBJECT_CLASS (_gdk_wayland_cursor_parent_class)->finalize (object);
@@ -402,7 +400,6 @@ _gdk_wayland_display_get_cursor_for_pixbuf (GdkDisplay *display,
                                                      cursor->pixbuf.height,
                                                      stride,
                                                      WL_SHM_FORMAT_ARGB8888);
-  cursor->free_buffer = FALSE;
 
   wl_shm_pool_destroy (pool);
 
