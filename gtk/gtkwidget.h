@@ -507,6 +507,7 @@ void       gtk_widget_size_request        (GtkWidget           *widget,
                                            GtkRequisition      *requisition);
 void	   gtk_widget_size_allocate	  (GtkWidget	       *widget,
 					   GtkAllocation       *allocation);
+GDK_AVAILABLE_IN_3_10
 void	   gtk_widget_size_allocate_with_baseline	  (GtkWidget	       *widget,
 							   GtkAllocation       *allocation,
 							   gint                 baseline);

@@ -5224,6 +5224,28 @@ gtk_widget_invalidate_widget_windows (GtkWidget *widget,
 				       invalidate_predicate, widget);
 }
 
+/**
+ * gtk_widget_size_allocate_with_baseline:
+ * @widget: a #GtkWidget
+ * @allocation: position and size to be allocated to @widget
+ * @baseline: The baseline of the child, or -1
+ *
+ * This function is only used by #GtkContainer subclasses, to assign a size,
+ * position and (optionally) baseline to their child widgets.
+ *
+ * In this function, the allocation and baseline may be adjusted. It
+ * will be forced to a 1x1 minimum size, and the
+ * adjust_size_allocation virtual and adjust_baseline_allocation
+ * methods on the child will be used to adjust the allocation and
+ * baseline. Standard adjustments include removing the widget's
+ * margins, and applying the widget's #GtkWidget:halign and
+ * #GtkWidget:valign properties.
+ *
+ * If the child widget does not have a valign of %GTK_ALIGN_BASELINE the
+ * baseline argument is ignored and -1 is used instead.
+ *
+ * Since: 3.10
+ **/
 void
 gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
 					GtkAllocation *allocation,
@@ -5437,6 +5459,9 @@ out:
  * method on the child will be used to adjust the allocation. Standard
  * adjustments include removing the widget's margins, and applying the
  * widget's #GtkWidget:halign and #GtkWidget:valign properties.
+ *
+ * For baseline support in containers you need to use gtk_widget_size_allocate_with_baseline()
+ * instead.
  **/
 void
 gtk_widget_size_allocate (GtkWidget	*widget,
