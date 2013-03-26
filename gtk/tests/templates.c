@@ -18,6 +18,10 @@
  */
 #include <gtk/gtk.h>
 
+#ifdef HAVE_UNIX_PRINT_WIDGETS
+#  include <gtk/gtkunixprint.h>
+#endif
+
 static gboolean
 main_loop_quit_cb (gpointer data)
 {
@@ -254,6 +258,19 @@ test_recent_chooser_widget_basic (void)
   gtk_widget_destroy (widget);
 }
 
+#ifdef HAVE_UNIX_PRINT_WIDGETS
+static void
+test_page_setup_unix_dialog_basic (void)
+{
+  GtkWidget *widget;
+
+  widget = gtk_page_setup_unix_dialog_new ("Setup your Page !", NULL);
+  g_assert (GTK_IS_PAGE_SETUP_UNIX_DIALOG (widget));
+  gtk_widget_destroy (widget);
+}
+
+#endif
+
 int
 main (int argc, char **argv)
 {
@@ -283,6 +300,10 @@ main (int argc, char **argv)
   g_test_add_func ("/Template/GtkFontChooserWidget/Basic", test_font_chooser_widget_basic);
   g_test_add_func ("/Template/GtkFontChooserDialog/Basic", test_font_chooser_dialog_basic);
   g_test_add_func ("/Template/GtkRecentChooserWidget/Basic", test_recent_chooser_widget_basic);
+
+#ifdef HAVE_UNIX_PRINT_WIDGETS
+  g_test_add_func ("/Template/UnixPrint/GtkPageSetupUnixDialog/Basic", test_page_setup_unix_dialog_basic);
+#endif
 
   return g_test_run();
 }

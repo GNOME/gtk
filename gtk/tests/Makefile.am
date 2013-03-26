@@ -10,6 +10,10 @@ AM_CPPFLAGS = \
 	$(GTK_DEBUG_FLAGS)		\
 	$(GTK_DEP_CFLAGS)
 
+if OS_UNIX
+AM_CPPFLAGS += -DHAVE_UNIX_PRINT_WIDGETS
+endif
+
 DEPS = \
 	$(top_builddir)/gtk/libgtk-3.la
 
