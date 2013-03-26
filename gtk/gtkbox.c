@@ -1783,6 +1783,18 @@ gtk_box_get_spacing (GtkBox *box)
   return box->priv->spacing;
 }
 
+/**
+ * gtk_box_set_baseline_position:
+ * @box: a #GtkBox
+ * @position: a #GtkBaselinePosition
+ *
+ * Sets the baseline position of a box. This affects
+ * only horizontal boxes with at least one baseline aligned
+ * child. If there is more vertical space availible than requested,
+ * and the baseline is not allocated by the parent then
+ * @position is used to allocate the baseline wrt the
+ * extra space available.
+ */
 void
 gtk_box_set_baseline_position (GtkBox             *box,
 			       GtkBaselinePosition position)
@@ -1803,6 +1815,14 @@ gtk_box_set_baseline_position (GtkBox             *box,
     }
 }
 
+/**
+ * gtk_box_get_baseline_position:
+ * @box: a #GtkBox
+ *
+ * Gets the value set by gtk_box_set_baseline_position().
+ *
+ * Return value: the baseline position
+ **/
 GtkBaselinePosition
 gtk_box_get_baseline_position (GtkBox         *box)
 {
