@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="gtk30">
+  <!-- interface-requires gtk+ 3.10 -->
+  <object class="GtkListStore" id="recent_store">
+    <columns>
+      <!-- column-name uri -->
+      <column type="gchararray"/>
+      <!-- column-name display-name -->
+      <column type="gchararray"/>
+      <!-- column-name info -->
+      <column type="GtkRecentInfo"/>
+    </columns>
+  </object>
+  <template class="GtkRecentChooserDefault" parent="GtkBox">
+    <property name="can_focus">False</property>
+    <property name="orientation">vertical</property>
+    <property name="spacing">6</property>
+    <child>
+      <object class="GtkScrolledWindow" id="scrolledwindow">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="hscrollbar_policy">never</property>
+        <property name="shadow_type">in</property>
+        <child>
+          <object class="GtkTreeView" id="recent_view">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="has_tooltip">True</property>
+            <property name="headers_visible">False</property>
+            <signal name="button-press-event" handler="recent_view_button_press_cb" swapped="no"/>
+            <signal name="drag-begin" handler="recent_view_drag_begin_cb" swapped="no"/>
+            <signal name="drag-data-get" handler="recent_view_drag_data_get_cb" swapped="no"/>
+            <signal name="popup-menu" handler="recent_view_popup_menu_cb" swapped="no"/>
+            <signal name="query-tooltip" handler="recent_view_query_tooltip_cb" swapped="no"/>
+            <signal name="row-activated" handler="row_activated_cb" swapped="no"/>
+            <child internal-child="selection">
+              <object class="GtkTreeSelection" id="selection">
+                <signal name="changed" handler="selection_changed_cb" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="icon_column">
+                <property name="title">icon</property>
+                <child>
+                  <object class="GtkCellRendererPixbuf" id="icon_renderer">
+                    <property name="stock_size">4</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="meta_column">
+                <property name="title">meta</property>
+                <property name="expand">True</property>
+                <child>
+                  <object class="GtkCellRendererText" id="meta_renderer">
+                    <property name="ellipsize">end</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="filter_combo_hbox">
+        <property name="can_focus">False</property>
+        <property name="spacing">12</property>
+        <child>
+          <object class="GtkComboBoxText" id="filter_combo">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="tooltip_text" translatable="yes">Select which type of documents are shown</property>
+            <property name="focus_on_click">False</property>
+            <property name="entry_text_column">0</property>
+            <property name="id_column">1</property>
+            <signal name="changed" handler="filter_combo_changed_cb" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+  </template>
+</interface>
