@@ -79,6 +79,7 @@ struct _GdkWaylandScreenClass
 
 struct _GdkWaylandMonitor
 {
+  GdkWaylandScreen *screen;
   struct wl_output *output;
   GdkRectangle  geometry;
   int		width_mm;
@@ -859,6 +860,7 @@ output_handle_geometry(void *data,
 		       int32_t transform)
 {
   GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)data;
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (monitor->screen->display);
 
   monitor->geometry.x = x;
   monitor->geometry.y = y;
@@ -868,6 +870,10 @@ output_handle_geometry(void *data,
 
   monitor->manufacturer = g_strdup (make);
   monitor->output_name = g_strdup (model);
+
+  /* Once we have the geometry event we know we have all events
+   * from the wl_output and need no further init roundtrips. */
+  display->init_ref_count--;
 }
 
 static void
@@ -901,6 +907,7 @@ _gdk_wayland_screen_add_output (GdkScreen *screen,
   GdkWaylandMonitor *monitor = g_new0(GdkWaylandMonitor, 1);
 
   monitor->output = output;
+  monitor->screen = screen_wayland;
   g_ptr_array_add(screen_wayland->monitors, monitor);
 
   wl_output_add_listener(output, &output_listener, monitor);

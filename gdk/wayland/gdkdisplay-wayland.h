@@ -66,6 +66,8 @@ struct _GdkWaylandDisplay
 
   GSource *event_source;
 
+  int init_ref_count;
+
   struct xkb_context *xkb_context;
 };
 

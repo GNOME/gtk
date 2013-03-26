@@ -1106,6 +1106,7 @@ seat_handle_capabilities(void *data, struct wl_seat *seat,
   GdkWaylandDeviceData *device = data;
   GdkWaylandDeviceManager *device_manager =
     GDK_WAYLAND_DEVICE_MANAGER(device->device_manager);
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (device->display);
 
   if ((caps & WL_SEAT_CAPABILITY_POINTER) && !device->wl_pointer)
     {
@@ -1178,6 +1179,10 @@ seat_handle_capabilities(void *data, struct wl_seat *seat,
       _gdk_device_set_associated_device (device->pointer, device->keyboard);
       _gdk_device_set_associated_device (device->keyboard, device->pointer);
     }
+
+  /* Once we have the capabilities event we know we have all events
+   * from the wl_seat and need no further init roundtrips. */
+  display->init_ref_count--;
 }
 
 static const struct wl_seat_listener seat_listener = {
