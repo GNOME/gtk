@@ -359,7 +359,7 @@ copy ..\..\..\gtk\deprecated\gtkvscrollbar.h $(CopyDir)\include\gtk-$(ApiVersion
 copy ..\..\..\gtk\deprecated\gtkvseparator.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated&#x0D;&#x0A;
 copy ..\..\..\gtk\deprecated\gtkvpaned.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated&#x0D;&#x0A;
 
-mkdir $(CopyDir)\include\gtk-$(ApiVersion)\a11y&#x0D;&#x0A;
+mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y&#x0D;&#x0A;
 
 copy ..\..\..\gtk\a11y\gtkarrowaccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y&#x0D;&#x0A;
 copy ..\..\..\gtk\a11y\gtkbooleancellaccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y&#x0D;&#x0A;

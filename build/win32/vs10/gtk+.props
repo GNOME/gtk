@@ -576,7 +576,7 @@ copy ..\..\..\gtk\deprecated\gtkvseparator.h $(CopyDir)\include\gtk-$(ApiVersion
 copy ..\..\..\gtk\deprecated\gtkvpaned.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated
 
 
-mkdir $(CopyDir)\include\gtk-$(ApiVersion)\a11y
+mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y
 
 
 copy ..\..\..\gtk\a11y\gtkarrowaccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y
