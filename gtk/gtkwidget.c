@@ -14181,6 +14181,17 @@ gtk_widget_get_allocated_height (GtkWidget *widget)
   return widget->priv->allocation.height;
 }
 
+/**
+ * gtk_widget_get_allocated_baseline:
+ * @widget: the widget to query
+ *
+ * Returns the baseline that has currently been allocated to @widget.
+ * This function is intended to be used when implementing handlers
+ * for the #GtkWidget::draw function, and when allocating child
+ * widgets in #GtkWidget::size_allocate.
+ *
+ * Returns: the baseline of the @widget, or -1 if none
+ **/
 int
 gtk_widget_get_allocated_baseline (GtkWidget *widget)
 {

@@ -683,6 +683,7 @@ void                  gtk_widget_unregister_window      (GtkWidget    *widget,
 
 int                   gtk_widget_get_allocated_width    (GtkWidget     *widget);
 int                   gtk_widget_get_allocated_height   (GtkWidget     *widget);
+GDK_AVAILABLE_IN_3_10
 int                   gtk_widget_get_allocated_baseline (GtkWidget     *widget);
 
 void                  gtk_widget_get_allocation         (GtkWidget     *widget,
