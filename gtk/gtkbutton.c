@@ -1157,6 +1157,7 @@ gtk_button_construct_child (GtkButton *button)
       else
 	box = gtk_box_new (GTK_ORIENTATION_VERTICAL, image_spacing);
 
+      gtk_widget_set_valign (image, GTK_ALIGN_BASELINE);
       gtk_widget_set_valign (box, GTK_ALIGN_BASELINE);
 
       if (priv->align_set)
