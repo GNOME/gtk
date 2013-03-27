@@ -11271,3 +11271,9 @@ ensure_state_flag_backdrop (GtkWidget *widget)
 
   gtk_widget_queue_draw (widget);
 }
+
+GdkWindow *
+_gtk_window_get_content_window (GtkWindow *window)
+{
+  return window->priv->content_window;
+}
