@@ -59,6 +59,7 @@ main (int argc, char *argv[])
   GtkWidget *header;
   GtkWidget *footer;
   GtkWidget *button;
+  GtkWidget *image;
   GtkWidget *content;
   GtkCssProvider *provider;
 
@@ -77,9 +78,16 @@ main (int argc, char *argv[])
   gtk_header_bar_set_title (GTK_HEADER_BAR (header), "Example header");
 
   button = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
+  gtk_style_context_add_class (gtk_widget_get_style_context (button), "suggested-action");
   g_signal_connect (button, "clicked", G_CALLBACK (gtk_main_quit), NULL);
 
   gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);
+
+  button = gtk_button_new ();
+  image = gtk_image_new_from_icon_name ("bookmark-new-symbolic", GTK_ICON_SIZE_BUTTON);
+  gtk_container_add (GTK_CONTAINER (button), image);
+
+  gtk_header_bar_pack_start (GTK_HEADER_BAR (header), button);
 
   gtk_window_set_titlebar (GTK_WINDOW (window), header);
 
