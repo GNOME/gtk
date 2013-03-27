@@ -288,6 +288,7 @@ gtk_assistant_set_page_title
 gtk_assistant_set_page_type
 gtk_assistant_update_buttons_state
 gtk_attach_options_get_type
+gtk_baseline_position_get_type
 gtk_binding_entry_add_signal
 gtk_binding_entry_add_signall
 gtk_binding_entry_add_signal_from_string
@@ -308,6 +309,7 @@ gtk_border_free
 gtk_border_get_type
 gtk_border_new
 gtk_border_style_get_type
+gtk_box_get_baseline_position
 gtk_box_get_homogeneous
 gtk_box_get_spacing
 gtk_box_get_type
@@ -316,6 +318,7 @@ gtk_box_pack_end
 gtk_box_pack_start
 gtk_box_query_child_packing
 gtk_box_reorder_child
+gtk_box_set_baseline_position
 gtk_box_set_child_packing
 gtk_box_set_homogeneous
 gtk_box_set_spacing
@@ -1195,9 +1198,11 @@ gtk_grab_get_current
 gtk_grab_remove
 gtk_grid_attach
 gtk_grid_attach_next_to
+gtk_grid_get_baseline_row
 gtk_grid_get_child_at
 gtk_grid_get_column_homogeneous
 gtk_grid_get_column_spacing
+gtk_grid_get_row_baseline_position
 gtk_grid_get_row_homogeneous
 gtk_grid_get_row_spacing
 gtk_grid_get_type
@@ -1207,8 +1212,10 @@ gtk_grid_insert_row
 gtk_grid_new
 gtk_grid_remove_column
 gtk_grid_remove_row
+gtk_grid_set_baseline_row
 gtk_grid_set_column_homogeneous
 gtk_grid_set_column_spacing
+gtk_grid_set_row_baseline_position
 gtk_grid_set_row_homogeneous
 gtk_grid_set_row_spacing
 gtk_handle_box_get_child_detached
@@ -3707,6 +3714,7 @@ gtk_widget_error_bell
 gtk_widget_event
 gtk_widget_freeze_child_notify
 gtk_widget_get_accessible
+gtk_widget_get_allocated_baseline
 gtk_widget_get_allocated_height
 gtk_widget_get_allocated_width
 gtk_widget_get_allocation
@@ -3748,8 +3756,10 @@ gtk_widget_get_parent_window
 gtk_widget_get_path
 gtk_widget_get_pointer
 gtk_widget_get_preferred_height
+gtk_widget_get_preferred_height_and_baseline_for_width
 gtk_widget_get_preferred_height_for_width
 gtk_widget_get_preferred_size
+gtk_widget_get_preferred_size_and_baseline
 gtk_widget_get_preferred_width
 gtk_widget_get_preferred_width_for_height
 gtk_widget_get_realized
@@ -3772,6 +3782,7 @@ gtk_widget_get_tooltip_window
 gtk_widget_get_toplevel
 gtk_widget_get_type
 gtk_widget_get_valign
+gtk_widget_get_valign_with_baseline
 gtk_widget_get_vexpand
 gtk_widget_get_vexpand_set
 gtk_widget_get_visible
@@ -3924,6 +3935,7 @@ gtk_widget_show
 gtk_widget_show_all
 gtk_widget_show_now
 gtk_widget_size_allocate
+gtk_widget_size_allocate_with_baseline
 gtk_widget_size_request
 gtk_widget_style_attach
 gtk_widget_style_get
