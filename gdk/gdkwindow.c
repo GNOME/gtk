@@ -9999,6 +9999,9 @@ gdk_window_print (GdkWindow *window,
     g_print (" alpha[%d]",
 	   window->alpha);
 
+  if (window->has_alpha_background)
+    g_print (" alpha_bg");
+
   s = print_region (window->clip_region);
   g_print (" clipbox[%s]", s);
 
