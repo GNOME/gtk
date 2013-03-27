@@ -37,8 +37,6 @@
 #include <sys/time.h>
 #include <sys/mman.h>
 
-typedef struct _GdkWaylandDeviceData GdkWaylandDeviceData;
-
 typedef struct _DataOffer DataOffer;
 
 typedef struct _GdkWaylandSelectionOffer GdkWaylandSelectionOffer;
@@ -65,6 +63,7 @@ struct _GdkWaylandDeviceData
   double surface_x, surface_y;
   uint32_t time;
   uint32_t enter_serial;
+  uint32_t button_press_serial;
   GdkWindow *pointer_grab_window;
   uint32_t pointer_grab_time;
   guint32 repeat_timer;
@@ -696,6 +695,8 @@ pointer_handle_button (void              *data,
   }
 
   device->time = time;
+  if (state)
+    device->button_press_serial = serial;
 
   event = gdk_event_new (state ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE);
   event->button.window = g_object_ref (device->pointer_focus);
@@ -1349,6 +1350,12 @@ _gdk_wayland_device_manager_new (GdkDisplay *display)
   return g_object_new (GDK_TYPE_WAYLAND_DEVICE_MANAGER,
                        "display", display,
                        NULL);
+}
+
+uint32_t
+_gdk_wayland_device_get_button_press_serial(GdkWaylandDeviceData *device)
+{
+  return device->button_press_serial;
 }
 
 gint

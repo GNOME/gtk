@@ -563,8 +563,6 @@ gdk_wayland_window_map (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkWindowImplWayland *parent;
-  GdkWaylandDisplay *wayland_display =
-    GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   GdkWindow *transient_for;
 
   if (!impl->mapped && !impl->use_custom_surface)
@@ -591,6 +589,7 @@ gdk_wayland_window_map (GdkWindow *window)
         {
           struct wl_seat *grab_input_seat = NULL;
           GdkWindowImplWayland *tmp_impl;
+          GdkWaylandDeviceData *device;
 
           parent = GDK_WINDOW_IMPL_WAYLAND (transient_for->impl);
 
@@ -616,10 +615,10 @@ gdk_wayland_window_map (GdkWindow *window)
                impl->hint == GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU ||
                impl->hint == GDK_WINDOW_TYPE_HINT_COMBO))
             {
-
+              device = wl_seat_get_user_data(grab_input_seat);
               wl_shell_surface_set_popup (impl->shell_surface,
                                           grab_input_seat,
-                                          _gdk_wayland_display_get_serial (wayland_display),
+                                          _gdk_wayland_device_get_button_press_serial(device),
                                           parent->surface,
                                           window->x, window->y, 0);
             }
