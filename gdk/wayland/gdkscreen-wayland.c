@@ -853,6 +853,30 @@ _gdk_wayland_screen_init (GdkWaylandScreen *screen_wayland)
 }
 
 static void
+update_screen_size (GdkWaylandScreen *screen_wayland)
+{
+  gint width, height;
+  gint i;
+
+  width = height = 0;
+  for (i = 0; i < screen_wayland->monitors->len; i++)
+    {
+      GdkWaylandMonitor *monitor = screen_wayland->monitors->pdata[i];
+
+      width = MAX (width, monitor->geometry.x + monitor->geometry.width);
+      height = MAX (height, monitor->geometry.y + monitor->geometry.height);
+    }
+
+  if (screen_wayland->width != width ||
+      screen_wayland->height != height)
+    {
+      screen_wayland->width = width;
+      screen_wayland->height = width;
+      g_signal_emit_by_name (screen_wayland, "size-changed");
+    }
+}
+
+static void
 output_handle_geometry(void *data,
 		       struct wl_output *wl_output,
 		       int x, int y, int physical_width, int physical_height,
@@ -878,7 +902,10 @@ output_handle_geometry(void *data,
     display->init_ref_count--;
 
   if (monitor->geometry.width != 0)
-    g_signal_emit_by_name (monitor->screen, "monitors-changed");
+    {
+      g_signal_emit_by_name (monitor->screen, "monitors-changed");
+      update_screen_size (monitor->screen);
+    }
 }
 
 static void
@@ -898,11 +925,7 @@ output_handle_mode(void *data,
   monitor->geometry.height = height;
 
   g_signal_emit_by_name (monitor->screen, "monitors-changed");
-
-  monitor->screen->width =
-    MAX (monitor->screen->width, monitor->geometry.x + width);
-  monitor->screen->height =
-    MAX (monitor->screen->height, monitor->geometry.y + height);
+  update_screen_size (monitor->screen);
 }
 
 static const struct wl_output_listener output_listener =
