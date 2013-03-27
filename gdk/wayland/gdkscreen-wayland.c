@@ -896,12 +896,6 @@ output_handle_geometry(void *data,
   monitor->manufacturer = g_strdup (make);
   monitor->output_name = g_strdup (model);
 
-  /* Once we have the geometry event we know we have all events
-   * from the wl_output and need no further init roundtrips.
-   */
-  if (display->init_ref_count > 0)
-    display->init_ref_count--;
-
   if (monitor->geometry.width != 0)
     {
       g_signal_emit_by_name (monitor->screen, "monitors-changed");
