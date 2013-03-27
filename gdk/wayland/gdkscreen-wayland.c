@@ -876,6 +876,9 @@ output_handle_geometry(void *data,
    */
   if (display->init_ref_count > 0)
     display->init_ref_count--;
+
+  if (monitor->geometry.width != 0)
+    g_signal_emit_by_name (monitor->screen, "monitors-changed");
 }
 
 static void
@@ -893,6 +896,8 @@ output_handle_mode(void *data,
 
   monitor->geometry.width = width;
   monitor->geometry.height = height;
+
+  g_signal_emit_by_name (monitor->screen, "monitors-changed");
 
   monitor->screen->width =
     MAX (monitor->screen->width, monitor->geometry.x + width);
