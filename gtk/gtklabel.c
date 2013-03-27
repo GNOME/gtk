@@ -3801,9 +3801,9 @@ gtk_label_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
                                minimum_height, natural_height,
 			       minimum_baseline, natural_baseline);
 
-      if (minimum_baseline && *minimum_baseline >= 0)
+      if (minimum_baseline && *minimum_baseline != -1)
 	*minimum_baseline += border.top;
-      if (natural_baseline && *natural_baseline >= 0)
+      if (natural_baseline && *natural_baseline != -1)
 	*natural_baseline += border.top;
 
       if (minimum_height)
@@ -3954,7 +3954,7 @@ get_layout_location (GtkLabel  *label,
 
   baseline_offset = 0;
   baseline = gtk_widget_get_allocated_baseline (widget);
-  if (baseline >= 0 && !priv->have_transform)
+  if (baseline != -1 && !priv->have_transform)
     {
       layout_baseline = pango_layout_get_baseline (priv->layout) / PANGO_SCALE;
       baseline_offset = baseline - layout_baseline;
