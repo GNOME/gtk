@@ -940,19 +940,26 @@ static void
 apply_clip_as_shape (GdkWindow *window)
 {
   GdkRectangle r;
+  cairo_region_t *region;
 
   r.x = r.y = 0;
   r.width = window->width;
   r.height = window->height;
 
+  region = cairo_region_copy (window->clip_region);
+  if (window->layered_region)
+    cairo_region_subtract (region, window->layered_region);
+
   /* We only apply the clip region if would differ
      from the actual clip region implied by the size
      of the window. This is to avoid unneccessarily
      adding meaningless shapes to all native subwindows */
-  if (!region_rect_equal (window->clip_region, &r))
-    apply_shape (window, window->clip_region);
+  if (!region_rect_equal (region, &r))
+    apply_shape (window, region);
   else
     apply_shape (window, NULL);
+
+  cairo_region_destroy (region);
 }
 
 static void
