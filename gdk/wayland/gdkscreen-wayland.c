@@ -952,8 +952,8 @@ _gdk_wayland_screen_add_output (GdkScreen        *screen,
 }
 
 void
-_gdk_wayland_screen_remove_output_by_id (GdkScreen *screen,
-                                         guint32    id)
+_gdk_wayland_screen_remove_output (GdkScreen *screen,
+                                   guint32    id)
 {
   GdkWaylandScreen *screen_wayland = GDK_WAYLAND_SCREEN (screen);
   int i;

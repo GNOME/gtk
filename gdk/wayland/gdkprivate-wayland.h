@@ -132,8 +132,11 @@ gchar *     _gdk_wayland_display_utf8_to_string_target (GdkDisplay  *display,
 							const gchar *str);
 
 GdkDeviceManager *_gdk_wayland_device_manager_new (GdkDisplay *display);
-void              _gdk_wayland_device_manager_add_device (GdkDeviceManager *device_manager,
-							  struct wl_seat *seat);
+void              _gdk_wayland_device_manager_add_seat (GdkDeviceManager *device_manager,
+                                                        guint32           id,
+						        struct wl_seat   *seat);
+void              _gdk_wayland_device_manager_remove_seat (GdkDeviceManager *device_manager,
+                                                           guint32           id);
 
 GdkKeymap *_gdk_wayland_device_get_keymap (GdkDevice *device);
 
@@ -154,8 +157,8 @@ GdkScreen *_gdk_wayland_screen_new (GdkDisplay *display);
 void _gdk_wayland_screen_add_output (GdkScreen        *screen,
                                      guint32           id,
                                      struct wl_output *output);
-void _gdk_wayland_screen_remove_output_by_id (GdkScreen *screen,
-                                              guint32 id);
+void _gdk_wayland_screen_remove_output (GdkScreen *screen,
+                                        guint32 id);
 
 void _gdk_wayland_display_manager_add_display (GdkDisplayManager *manager,
 					       GdkDisplay        *display);

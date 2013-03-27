@@ -30,7 +30,6 @@
 #include "gdkkeysyms.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdevicemanagerprivate.h"
-#include "gdkprivate-wayland.h"
 
 #include <xkbcommon/xkbcommon.h>
 #include <X11/keysym.h>
@@ -46,6 +45,7 @@ typedef struct _GdkWaylandSelectionOffer GdkWaylandSelectionOffer;
 
 struct _GdkWaylandDeviceData
 {
+  guint32 id;
   struct wl_seat *wl_seat;
   struct wl_pointer *wl_pointer;
   struct wl_keyboard *wl_keyboard;
@@ -1128,6 +1128,8 @@ seat_handle_capabilities(void *data, struct wl_seat *seat,
 
       device_manager->devices =
         g_list_prepend (device_manager->devices, device->pointer);
+
+      g_signal_emit_by_name (device_manager, "device-added", device->pointer);
     }
   else if (!(caps & WL_SEAT_CAPABILITY_POINTER) && device->wl_pointer)
     {
@@ -1137,11 +1139,12 @@ seat_handle_capabilities(void *data, struct wl_seat *seat,
       device_manager->devices =
         g_list_remove (device_manager->devices, device->pointer);
 
+      g_signal_emit_by_name (device_manager, "device-removed", device->pointer);
       g_object_unref (device->pointer);
       device->pointer = NULL;
     }
 
-  if ((caps & WL_SEAT_CAPABILITY_KEYBOARD) && !device->wl_keyboard) 
+  if ((caps & WL_SEAT_CAPABILITY_KEYBOARD) && !device->wl_keyboard)
     {
       device->wl_keyboard = wl_seat_get_keyboard(seat);
       wl_keyboard_set_user_data(device->wl_keyboard, device);
@@ -1161,6 +1164,8 @@ seat_handle_capabilities(void *data, struct wl_seat *seat,
 
       device_manager->devices =
         g_list_prepend (device_manager->devices, device->keyboard);
+
+      g_signal_emit_by_name (device_manager, "device-added", device->keyboard);
     }
   else if (!(caps & WL_SEAT_CAPABILITY_KEYBOARD) && device->wl_keyboard) 
     {
@@ -1170,6 +1175,7 @@ seat_handle_capabilities(void *data, struct wl_seat *seat,
       device_manager->devices =
         g_list_remove (device_manager->devices, device->keyboard);
 
+      g_signal_emit_by_name (device_manager, "device-removed", device->keyboard);
       g_object_unref (device->keyboard);
       device->keyboard = NULL;
     }
@@ -1181,8 +1187,10 @@ seat_handle_capabilities(void *data, struct wl_seat *seat,
     }
 
   /* Once we have the capabilities event we know we have all events
-   * from the wl_seat and need no further init roundtrips. */
-  display->init_ref_count--;
+   * from the wl_seat and need no further init roundtrips.
+   */
+  if (display->init_ref_count > 0)
+    display->init_ref_count--;
 }
 
 static const struct wl_seat_listener seat_listener = {
@@ -1205,8 +1213,9 @@ init_settings (GdkWaylandDeviceData *device)
 }
 
 void
-_gdk_wayland_device_manager_add_device (GdkDeviceManager *device_manager,
-					struct wl_seat *wl_seat)
+_gdk_wayland_device_manager_add_seat (GdkDeviceManager *device_manager,
+                                      guint32           id,
+				      struct wl_seat   *wl_seat)
 {
   GdkDisplay *display;
   GdkWaylandDisplay *display_wayland;
@@ -1216,6 +1225,7 @@ _gdk_wayland_device_manager_add_device (GdkDeviceManager *device_manager,
   display_wayland = GDK_WAYLAND_DISPLAY (display);
 
   device = g_new0 (GdkWaylandDeviceData, 1);
+  device->id = id;
   device->keymap = _gdk_wayland_keymap_new ();
   device->display = display;
   device->device_manager = device_manager;
@@ -1235,6 +1245,32 @@ _gdk_wayland_device_manager_add_device (GdkDeviceManager *device_manager,
     wl_compositor_create_surface (display_wayland->compositor);
 
   init_settings (device);
+}
+
+void
+_gdk_wayland_device_manager_remove_seat (GdkDeviceManager *manager,
+                                         guint32           id)
+{
+  GdkWaylandDeviceManager *device_manager = GDK_WAYLAND_DEVICE_MANAGER (manager);
+  GList *l;
+
+  for (l = device_manager->devices; l != NULL; l = l->next)
+    {
+      GdkWaylandDevice *wayland_device = l->data;
+      GdkWaylandDeviceData *device = wayland_device->device;
+
+      if (device->id == id)
+        {
+          seat_handle_capabilities (device, device->wl_seat, 0);
+          g_object_unref (device->keymap);
+          wl_surface_destroy (device->pointer_surface);
+          /* FIXME: destroy data_device */
+          g_clear_object (&device->keyboard_settings);
+          g_free (device);
+
+          break;
+        }
+    }
 }
 
 static void

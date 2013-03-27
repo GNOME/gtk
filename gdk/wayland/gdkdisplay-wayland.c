@@ -120,8 +120,7 @@ gdk_registry_handle_global(void *data, struct wl_registry *registry, uint32_t id
     display_wayland->init_ref_count++;
   } else if (strcmp(interface, "wl_seat") == 0) {
     seat = wl_registry_bind(display_wayland->wl_registry, id, &wl_seat_interface, 1);
-    _gdk_wayland_device_manager_add_device (gdk_display->device_manager,
-					    seat);
+    _gdk_wayland_device_manager_add_seat (gdk_display->device_manager, id, seat);
     /* We need to roundtrip until we've received the wl_seat
      * capabilities event which informs us of available input devices
      * on this seat. */
@@ -139,9 +138,10 @@ gdk_registry_handle_global_remove(void               *data,
                                   uint32_t            id)
 {
   GdkWaylandDisplay *display_wayland = data;
+  GdkDisplay *display = GDK_DISPLAY (display_wayland);
 
-  /* We don't know what this item is - try as an output */
-  _gdk_wayland_screen_remove_output_by_id (display_wayland->screen, id);
+  _gdk_wayland_device_manager_remove_seat (display->device_manager, id);
+  _gdk_wayland_screen_remove_output (display_wayland->screen, id);
 
   /* FIXME: the object needs to be destroyed here, we're leaking */
 }
