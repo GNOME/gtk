@@ -1462,22 +1462,8 @@ gtk_image_draw (GtkWidget *widget,
   if (baseline == -1)
     y = floor ((gtk_widget_get_allocated_height (widget) - height) * yalign) + border.top;
   else
-    {
-      PangoContext *pango_context;
-      PangoFontMetrics *metrics;
-      float baseline_align;
-
-      pango_context = gtk_widget_get_pango_context (widget);
-      metrics = pango_context_get_metrics (pango_context,
-					   pango_context_get_font_description (pango_context),
-					   pango_context_get_language (pango_context));
-      baseline_align =
-	(double)pango_font_metrics_get_ascent (metrics) /
-	(pango_font_metrics_get_ascent (metrics) + pango_font_metrics_get_descent (metrics));
-
-      y = CLAMP (baseline - height * baseline_align,
-		 border.top, gtk_widget_get_allocated_height (widget) - height);
-    }
+    y = CLAMP (baseline - height * gtk_image_get_baseline_align (image),
+	       border.top, gtk_widget_get_allocated_height (widget) - height);
 
   if (gtk_image_get_storage_type (image) == GTK_IMAGE_ANIMATION)
     {
