@@ -962,6 +962,9 @@ _gdk_wayland_screen_remove_output_by_id (GdkScreen *screen,
       if (wl_proxy_get_id ((struct wl_proxy *)monitor->output) == id)
         {
           g_ptr_array_remove (screen_wayland->monitors, monitor);
+
+          g_signal_emit_by_name (screen_wayland, "monitors-changed");
+          update_screen_size (screen_wayland);
           break;
         }
     }
