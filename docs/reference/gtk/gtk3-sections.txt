@@ -486,6 +486,8 @@ gtk_box_set_spacing
 gtk_box_reorder_child
 gtk_box_query_child_packing
 gtk_box_set_child_packing
+gtk_box_get_baseline_position
+gtk_box_set_baseline_position
 <SUBSECTION Standard>
 GTK_BOX
 GTK_IS_BOX
@@ -5159,6 +5161,7 @@ gtk_widget_remove_tick_callback
 gtk_widget_size_request
 gtk_widget_get_child_requisition
 gtk_widget_size_allocate
+gtk_widget_size_allocate_with_baseline
 gtk_widget_add_accelerator
 gtk_widget_remove_accelerator
 gtk_widget_set_accel_path
@@ -5291,6 +5294,7 @@ gtk_widget_get_allocated_width
 gtk_widget_get_allocated_height
 gtk_widget_get_allocation
 gtk_widget_set_allocation
+gtk_widget_get_allocated_baseline
 gtk_widget_get_app_paintable
 gtk_widget_get_can_default
 gtk_widget_set_can_default
@@ -5351,8 +5355,10 @@ gtk_widget_get_preferred_height
 gtk_widget_get_preferred_width
 gtk_widget_get_preferred_height_for_width
 gtk_widget_get_preferred_width_for_height
+gtk_widget_get_preferred_height_and_baseline_for_width
 gtk_widget_get_request_mode
 gtk_widget_get_preferred_size
+gtk_widget_get_preferred_size_and_baseline
 gtk_distribute_natural_allocation
 
 <SUBSECTION Alignment and Margins>
@@ -5360,6 +5366,7 @@ GtkAlign
 gtk_widget_get_halign
 gtk_widget_set_halign
 gtk_widget_get_valign
+gtk_widget_get_valign_with_baseline
 gtk_widget_set_valign
 gtk_widget_get_margin_left
 gtk_widget_set_margin_left
@@ -7249,6 +7256,10 @@ gtk_grid_set_column_homogeneous
 gtk_grid_get_column_homogeneous
 gtk_grid_set_column_spacing
 gtk_grid_get_column_spacing
+gtk_grid_get_baseline_row
+gtk_grid_set_baseline_row
+gtk_grid_get_row_baseline_position
+gtk_grid_set_row_baseline_position
 
 <SUBSECTION Standard>
 GtkGridClass
