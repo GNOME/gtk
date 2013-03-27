@@ -711,12 +711,6 @@ static void             gtk_widget_real_get_width               (GtkWidget      
 static void             gtk_widget_real_get_height              (GtkWidget         *widget,
                                                                  gint              *minimum_size,
                                                                  gint              *natural_size);
-static void  gtk_widget_real_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
-									  gint       width,
-									  gint      *minimum_height,
-									  gint      *natural_height,
-									  gint      *minimum_baseline,
-									  gint      *natural_baseline);
 
 static void             gtk_widget_queue_tooltip_query          (GtkWidget *widget);
 
@@ -1017,7 +1011,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->get_preferred_height = gtk_widget_real_get_height;
   klass->get_preferred_width_for_height = gtk_widget_real_get_width_for_height;
   klass->get_preferred_height_for_width = gtk_widget_real_get_height_for_width;
-  klass->get_preferred_height_and_baseline_for_width = gtk_widget_real_get_preferred_height_and_baseline_for_width;
+  klass->get_preferred_height_and_baseline_for_width = NULL;
   klass->state_changed = NULL;
   klass->state_flags_changed = gtk_widget_real_state_flags_changed;
   klass->parent_set = NULL;
@@ -5300,7 +5294,8 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
   /* Never pass a baseline to a child unless it requested it.
      This means containers don't have to manually check for this. */
   if (baseline != -1 &&
-      gtk_widget_get_valign_with_baseline (widget) != GTK_ALIGN_BASELINE)
+      (gtk_widget_get_valign_with_baseline (widget) != GTK_ALIGN_BASELINE ||
+       !_gtk_widget_has_baseline_support (widget)))
     baseline = -1;
 
   alloc_needed = priv->alloc_needed;
@@ -13305,25 +13300,6 @@ gtk_widget_real_get_width_for_height (GtkWidget *widget,
                                       gint      *natural_width)
 {
   GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, minimum_width, natural_width);
-}
-
-static void
-gtk_widget_real_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
-							     gint       width,
-							     gint      *minimum_height,
-							     gint      *natural_height,
-							     gint      *minimum_baseline,
-							     gint      *natural_baseline)
-{
-  if (width == -1)
-    GTK_WIDGET_GET_CLASS (widget)->get_preferred_height (widget, minimum_height, natural_height);
-  else
-    GTK_WIDGET_GET_CLASS (widget)->get_preferred_height_for_width (widget, width, minimum_height, natural_height);
-
-  if (minimum_baseline)
-    *minimum_baseline = -1;
-  if (natural_baseline)
-    *natural_baseline = -1;
 }
 
 /**

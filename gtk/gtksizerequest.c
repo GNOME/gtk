@@ -93,6 +93,46 @@ get_vfunc_name (GtkOrientation orientation,
     return for_size < 0 ? "get_preferred_height" : "get_preferred_height_for_width";
 }
 
+static gboolean
+widget_class_has_baseline_support (GtkWidgetClass *widget_class)
+{
+  GtkWidgetClass *parent_class;
+
+  if (widget_class->get_preferred_height_and_baseline_for_width == NULL)
+    return FALSE;
+
+  /* This is kinda hacky, but for backwards compatibility reasons we have to handle the case
+     where a class previously did not support get_preferred_height_and_baseline_for_width,
+     but then gained support for it, and a subclass of it overrides the previous non-baseline
+     methods. If this happens we need to call the overridden (non-baseline supporting) versions
+     on the subclass, rather than the inherited but not overriddent new get_preferred_height_and_baseline_for_width.
+  */
+
+  /* Loop over all parent classes that inherit the same get_preferred_height_and_baseline_for_width */
+  parent_class = g_type_class_peek_parent (widget_class);
+  while (parent_class != NULL &&
+	 parent_class->get_preferred_height_and_baseline_for_width == widget_class->get_preferred_height_and_baseline_for_width)
+    {
+      if (parent_class->get_preferred_height != widget_class->get_preferred_height ||
+	  parent_class->get_preferred_height_for_width != widget_class->get_preferred_height_for_width)
+	return FALSE;
+
+	parent_class = g_type_class_peek_parent (parent_class);
+    }
+
+  return TRUE;
+}
+
+gboolean
+_gtk_widget_has_baseline_support (GtkWidget *widget)
+{
+  GtkWidgetClass *widget_class;
+
+  widget_class = GTK_WIDGET_GET_CLASS (widget);
+
+  return widget_class_has_baseline_support (widget_class);
+}
+
 static void
 gtk_widget_query_size_for_orientation (GtkWidget        *widget,
                                        GtkOrientation    orientation,
@@ -168,9 +208,12 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
           if (for_size < 0)
             {
 	      push_recursion_check (widget, orientation, for_size);
-	      widget_class->get_preferred_height_and_baseline_for_width (widget, -1,
-									 &min_size, &nat_size,
-									 &min_baseline, &nat_baseline);
+	      if (widget_class_has_baseline_support (widget_class))
+		widget_class->get_preferred_height_and_baseline_for_width (widget, -1,
+									   &min_size, &nat_size,
+									   &min_baseline, &nat_baseline);
+	      else
+		widget_class->get_preferred_height (widget, &min_size, &nat_size);
 	      pop_recursion_check (widget, orientation);
             }
           else
@@ -192,9 +235,13 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
 						    &adjusted_for_size);
 
 	      push_recursion_check (widget, orientation, for_size);
-	      widget_class->get_preferred_height_and_baseline_for_width (widget, MAX (adjusted_for_size, minimum_width),
-									 &min_size, &nat_size,
-									 &min_baseline, &nat_baseline);
+	      if (widget_class_has_baseline_support (widget_class))
+		widget_class->get_preferred_height_and_baseline_for_width (widget, MAX (adjusted_for_size, minimum_width),
+									   &min_size, &nat_size,
+									   &min_baseline, &nat_baseline);
+	      else
+		widget_class->get_preferred_height_for_width (widget, MAX (adjusted_for_size, minimum_width),
+							      &min_size, &nat_size);
 	      pop_recursion_check (widget, orientation);
             }
         }
