@@ -151,7 +151,8 @@ GdkWindow *_gdk_wayland_screen_create_root_window (GdkScreen *screen,
 						   int height);
 
 GdkScreen *_gdk_wayland_screen_new (GdkDisplay *display);
-void _gdk_wayland_screen_add_output (GdkScreen *scren,
+void _gdk_wayland_screen_add_output (GdkScreen        *screen,
+                                     guint32           id,
                                      struct wl_output *output);
 void _gdk_wayland_screen_remove_output_by_id (GdkScreen *screen,
                                               guint32 id);
