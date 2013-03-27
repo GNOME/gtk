@@ -872,8 +872,10 @@ output_handle_geometry(void *data,
   monitor->output_name = g_strdup (model);
 
   /* Once we have the geometry event we know we have all events
-   * from the wl_output and need no further init roundtrips. */
-  display->init_ref_count--;
+   * from the wl_output and need no further init roundtrips.
+   */
+  if (display->init_ref_count > 0)
+    display->init_ref_count--;
 }
 
 static void
