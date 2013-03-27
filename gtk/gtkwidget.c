@@ -13375,6 +13375,8 @@ gtk_widget_set_halign (GtkWidget *widget,
  * %GTK_ALIGN_BASELINE.
  *
  * Returns: the vertical alignment of @widget
+ *
+ * Since: 3.10
  */
 GtkAlign
 gtk_widget_get_valign_with_baseline (GtkWidget *widget)
@@ -14191,6 +14193,8 @@ gtk_widget_get_allocated_height (GtkWidget *widget)
  * widgets in #GtkWidget::size_allocate.
  *
  * Returns: the baseline of the @widget, or -1 if none
+ *
+ * Since: 3.10
  **/
 int
 gtk_widget_get_allocated_baseline (GtkWidget *widget)
