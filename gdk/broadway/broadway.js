@@ -496,12 +496,6 @@ function cmdMoveResizeSurface(id, has_pos, x, y, has_size, w, h)
 	    var xOffset = surface.x;
 	    var yOffset = surface.y;
 
-	    var transientToplevel = getTransientToplevel(surface);
-	    if (transientToplevel) {
-		xOffset = surface.x - transientToplevel.x;
-		yOffset = surface.y - transientToplevel.y;
-	    }
-
 	    var element = surface.canvas;
 	    if (surface.frame) {
 		element = surface.frame;
