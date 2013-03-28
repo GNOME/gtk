@@ -183,8 +183,8 @@ gdk_wayland_cursor_get_image (GdkCursor *cursor)
 struct wl_buffer *
 _gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
                                 guint      image_index,
-                                int       *x,
-                                int       *y,
+                                int       *hotspot_x,
+                                int       *hotspot_y,
                                 int       *w,
                                 int       *h)
 {
@@ -204,8 +204,8 @@ _gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
 
       image = wayland_cursor->wl_cursor->images[image_index];
 
-      *x = image->hotspot_x;
-      *y = image->hotspot_y;
+      *hotspot_x = image->hotspot_x;
+      *hotspot_y = image->hotspot_y;
 
       *w = image->width;
       *h = image->height;
@@ -214,8 +214,8 @@ _gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
     }
   else /* From pixbuf */
     {
-      *x = wayland_cursor->pixbuf.hotspot_x;
-      *y = wayland_cursor->pixbuf.hotspot_y;
+      *hotspot_x = wayland_cursor->pixbuf.hotspot_x;
+      *hotspot_y = wayland_cursor->pixbuf.hotspot_y;
 
       *w = wayland_cursor->pixbuf.width;
       *h = wayland_cursor->pixbuf.height;

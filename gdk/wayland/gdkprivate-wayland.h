@@ -81,8 +81,8 @@ gboolean   _gdk_wayland_display_supports_cursor_color (GdkDisplay *display);
 
 struct wl_buffer *_gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
                                                   guint      image_index,
-                                                  int       *x,
-                                                  int       *y,
+                                                  int       *hotspot_x,
+                                                  int       *hotspot_y,
                                                   int       *w,
                                                   int       *h);
 guint      _gdk_wayland_cursor_get_next_image_index (GdkCursor *cursor,
