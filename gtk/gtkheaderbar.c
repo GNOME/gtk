@@ -1054,7 +1054,7 @@ gtk_header_bar_remove (GtkContainer *container,
     {
       child = l->data;
       gtk_widget_unparent (child->widget);
-      bar->priv->children = g_list_remove_link (bar->priv->children, l);
+      bar->priv->children = g_list_delete_link (bar->priv->children, l);
       g_free (child);
       gtk_widget_queue_resize (GTK_WIDGET (container));
     }
