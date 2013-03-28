@@ -372,15 +372,15 @@ gtk_overlay_get_child_position (GtkOverlay    *overlay,
                                 GtkAllocation *alloc)
 {
   GtkAllocation main_alloc;
-  GtkRequisition req;
+  GtkRequisition min, req;
   GtkAlign halign;
   GtkTextDirection direction;
 
   gtk_overlay_get_main_widget_allocation (overlay, &main_alloc);
-  gtk_widget_get_preferred_size (widget, NULL, &req);
+  gtk_widget_get_preferred_size (widget, &min, &req);
 
   alloc->x = main_alloc.x;
-  alloc->width = MIN (main_alloc.width, req.width);
+  alloc->width = MAX (min.width, MIN (main_alloc.width, req.width));
 
   direction = gtk_widget_get_direction (widget);
 
@@ -391,7 +391,7 @@ gtk_overlay_get_child_position (GtkOverlay    *overlay,
       /* nothing to do */
       break;
     case GTK_ALIGN_FILL:
-      alloc->width = main_alloc.width;
+      alloc->width = MAX (alloc->width, main_alloc.width);
       break;
     case GTK_ALIGN_CENTER:
       alloc->x += main_alloc.width / 2 - req.width / 2;
@@ -402,7 +402,7 @@ gtk_overlay_get_child_position (GtkOverlay    *overlay,
     }
 
   alloc->y = main_alloc.y;
-  alloc->height = MIN (main_alloc.height, req.height);
+  alloc->height = MAX  (min.height, MIN (main_alloc.height, req.height));
 
   switch (gtk_widget_get_valign (widget))
     {
@@ -410,7 +410,7 @@ gtk_overlay_get_child_position (GtkOverlay    *overlay,
       /* nothing to do */
       break;
     case GTK_ALIGN_FILL:
-      alloc->height = main_alloc.height;
+      alloc->height = MAX (alloc->height, main_alloc.height);
       break;
     case GTK_ALIGN_CENTER:
       alloc->y += main_alloc.height / 2 - req.height / 2;
