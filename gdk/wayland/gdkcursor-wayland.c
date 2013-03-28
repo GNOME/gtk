@@ -182,6 +182,7 @@ gdk_wayland_cursor_get_image (GdkCursor *cursor)
 
 struct wl_buffer *
 _gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
+                                guint      image_index,
                                 int       *x,
                                 int       *y,
                                 int       *w,
@@ -191,13 +192,25 @@ _gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
 
   if (wayland_cursor->wl_cursor)
     {
-      *x = wayland_cursor->wl_cursor->images[0]->hotspot_x;
-      *y = wayland_cursor->wl_cursor->images[0]->hotspot_y;
+      struct wl_cursor_image *image;
 
-      *w = wayland_cursor->wl_cursor->images[0]->width;
-      *h = wayland_cursor->wl_cursor->images[0]->height;
+      if (image_index >= wayland_cursor->wl_cursor->image_count)
+        {
+          g_warning (G_STRLOC " out of bounds cursor image [%d / %d]",
+                     image_index,
+                     wayland_cursor->wl_cursor->image_count - 1);
+          image_index = 0;
+        }
 
-      return wl_cursor_image_get_buffer(wayland_cursor->wl_cursor->images[0]);
+      image = wayland_cursor->wl_cursor->images[image_index];
+
+      *x = image->hotspot_x;
+      *y = image->hotspot_y;
+
+      *w = image->width;
+      *h = image->height;
+
+      return wl_cursor_image_get_buffer (image);
     }
   else /* From pixbuf */
     {
@@ -209,6 +222,32 @@ _gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
 
       return wayland_cursor->pixbuf.buffer;
     }
+}
+
+guint
+_gdk_wayland_cursor_get_next_image_index (GdkCursor *cursor,
+                                          guint      current_image_index,
+                                          guint     *next_image_delay)
+{
+  struct wl_cursor *wl_cursor = GDK_WAYLAND_CURSOR (cursor)->wl_cursor;
+
+  if (wl_cursor && wl_cursor->image_count > 1)
+    {
+      if (current_image_index >= wl_cursor->image_count)
+        {
+          g_warning (G_STRLOC " out of bounds cursor image [%d / %d]",
+                     current_image_index, wl_cursor->image_count - 1);
+          current_image_index = 0;
+        }
+
+      /* Return the time to next image */
+      if (next_image_delay)
+        *next_image_delay = wl_cursor->images[current_image_index]->delay;
+
+      return (current_image_index + 1) % wl_cursor->image_count;
+    }
+  else
+    return current_image_index;
 }
 
 static void
@@ -334,11 +373,6 @@ _gdk_wayland_display_get_cursor_for_name (GdkDisplay  *display,
 
   if (!set_cursor_from_theme (private, wayland_display->cursor_theme))
     return GDK_CURSOR (private);
-
-  /* TODO: Do something clever so we can do animated cursors - move the
-   * wl_pointer_set_cursor to a function here so that we can do the magic to
-   * iterate through
-   */
 
   add_to_cache (wayland_display, private);
 

@@ -71,6 +71,9 @@ struct _GdkWaylandDeviceData
   guint32 repeat_count;
   GSettings *keyboard_settings;
 
+  guint cursor_timeout_id;
+  guint cursor_image_index;
+
   DataOffer *drag_offer;
   DataOffer *selection_offer;
 
@@ -145,13 +148,62 @@ gdk_wayland_device_get_state (GdkDevice       *device,
 }
 
 static void
+gdk_wayland_device_stop_window_cursor_animation (GdkWaylandDeviceData *wd)
+{
+  if (wd->cursor_timeout_id > 0)
+    {
+      g_source_remove (wd->cursor_timeout_id);
+      wd->cursor_timeout_id = 0;
+    }
+  wd->cursor_image_index = 0;
+}
+
+static gboolean
+gdk_wayland_device_update_window_cursor (GdkWaylandDeviceData *wd)
+{
+  struct wl_buffer *buffer;
+  int x, y, w, h;
+  guint next_image_index, next_image_delay;
+
+  buffer = _gdk_wayland_cursor_get_buffer (wd->cursor, wd->cursor_image_index,
+                                           &x, &y, &w, &h);
+  wl_pointer_set_cursor (wd->wl_pointer,
+                         wd->enter_serial,
+                         wd->pointer_surface,
+                         x, y);
+  wl_surface_attach (wd->pointer_surface, buffer, 0, 0);
+  wl_surface_damage (wd->pointer_surface,  0, 0, w, h);
+  wl_surface_commit (wd->pointer_surface);
+
+  next_image_index =
+    _gdk_wayland_cursor_get_next_image_index (wd->cursor,
+                                              wd->cursor_image_index,
+                                              &next_image_delay);
+
+  if (next_image_index != wd->cursor_image_index)
+    {
+      guint id;
+
+      /* Queue timeout for next frame */
+      id = g_timeout_add (next_image_delay,
+                          (GSourceFunc)gdk_wayland_device_update_window_cursor,
+                          wd);
+
+      wd->cursor_timeout_id = id;
+      wd->cursor_image_index = next_image_index;
+    }
+  else
+    wd->cursor_timeout_id = 0;
+
+  return FALSE;
+}
+
+static void
 gdk_wayland_device_set_window_cursor (GdkDevice *device,
                                       GdkWindow *window,
                                       GdkCursor *cursor)
 {
   GdkWaylandDeviceData *wd = GDK_WAYLAND_DEVICE(device)->device;
-  struct wl_buffer *buffer;
-  int x, y, w, h;
 
   /* Setting the cursor to NULL means that we should use the default cursor */
   if (!cursor)
@@ -164,19 +216,14 @@ gdk_wayland_device_set_window_cursor (GdkDevice *device,
   if (cursor == wd->cursor)
     return;
 
+  gdk_wayland_device_stop_window_cursor_animation (wd);
+
   if (wd->cursor)
     g_object_unref (wd->cursor);
 
   wd->cursor = g_object_ref (cursor);
 
-  buffer = _gdk_wayland_cursor_get_buffer (wd->cursor, &x, &y, &w, &h);
-  wl_pointer_set_cursor (wd->wl_pointer,
-                         wd->enter_serial,
-                         wd->pointer_surface,
-                         x, y);
-  wl_surface_attach (wd->pointer_surface, buffer, 0, 0);
-  wl_surface_damage (wd->pointer_surface,  0, 0, w, h);
-  wl_surface_commit (wd->pointer_surface);
+  gdk_wayland_device_update_window_cursor (wd);
 }
 
 static void
@@ -622,6 +669,7 @@ pointer_handle_leave (void              *data,
   g_object_unref(device->pointer_focus);
   if (device->cursor)
     {
+      gdk_wayland_device_stop_window_cursor_animation (device);
       g_object_unref (device->cursor);
       device->cursor = NULL;
     }
