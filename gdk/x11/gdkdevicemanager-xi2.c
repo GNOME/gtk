@@ -1555,7 +1555,20 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         source_device = g_hash_table_lookup (device_manager->id_table,
                                              GUINT_TO_POINTER (xev->sourceid));
         gdk_event_set_source_device (event, source_device);
-        _gdk_device_xi2_reset_scroll_valuators (GDK_X11_DEVICE_XI2 (source_device));
+
+	if (gdk_device_get_device_type (source_device) != GDK_DEVICE_TYPE_MASTER)
+          _gdk_device_xi2_reset_scroll_valuators (GDK_X11_DEVICE_XI2 (source_device));
+        else
+          {
+            GList *slaves, *l;
+
+            slaves = gdk_device_list_slave_devices (source_device);
+
+            for (l = slaves; l; l = l->next)
+              _gdk_device_xi2_reset_scroll_valuators (GDK_X11_DEVICE_XI2 (l->data));
+
+            g_list_free (slaves);
+          }
 
         event->crossing.mode = translate_crossing_mode (xev->mode);
         event->crossing.detail = translate_notify_type (xev->detail);
