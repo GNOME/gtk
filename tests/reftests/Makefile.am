@@ -62,6 +62,9 @@ EXTRA_DIST += \
 	background-window-transparent.css \
 	background-window-transparent.ref.ui \
 	background-window-transparent.ui \
+	bad-color-names.css \
+	bad-color-names.ref.ui \
+	bad-color-names.ui \
 	reference-background-origin.png	\
 	border-color-default.css \
 	border-color-default.ref.ui \
