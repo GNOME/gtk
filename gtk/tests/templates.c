@@ -269,6 +269,15 @@ test_page_setup_unix_dialog_basic (void)
   gtk_widget_destroy (widget);
 }
 
+static void
+test_print_unix_dialog_basic (void)
+{
+  GtkWidget *widget;
+
+  widget = gtk_print_unix_dialog_new ("Go Print !", NULL);
+  g_assert (GTK_IS_PRINT_UNIX_DIALOG (widget));
+  gtk_widget_destroy (widget);
+}
 #endif
 
 int
@@ -303,6 +312,7 @@ main (int argc, char **argv)
 
 #ifdef HAVE_UNIX_PRINT_WIDGETS
   g_test_add_func ("/Template/UnixPrint/GtkPageSetupUnixDialog/Basic", test_page_setup_unix_dialog_basic);
+  g_test_add_func ("/Template/UnixPrint/GtkPrintUnixDialog/Basic", test_print_unix_dialog_basic);
 #endif
 
   return g_test_run();
