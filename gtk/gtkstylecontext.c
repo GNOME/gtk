@@ -2827,7 +2827,8 @@ _gtk_style_context_resolve_color (GtkStyleContext    *context,
                                       GTK_STYLE_PROVIDER_PRIVATE (context->priv->cascade),
                                       _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR),
                                       GTK_CSS_DEPENDS_ON_COLOR,
-                                      dependencies);
+                                      dependencies,
+                                      NULL);
   if (val == NULL)
     return FALSE;
 

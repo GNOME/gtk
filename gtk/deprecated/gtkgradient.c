@@ -342,7 +342,8 @@ _gtk_gradient_resolve_full (GtkGradient             *gradient,
                                           provider,
                                           _gtk_css_computed_values_get_value (values, GTK_CSS_PROPERTY_COLOR),
                                           GTK_CSS_DEPENDS_ON_COLOR,
-                                          &stop_deps);
+                                          &stop_deps,
+                                          NULL);
       if (val)
         {
           rgba = *_gtk_css_rgba_value_get_rgba (val);

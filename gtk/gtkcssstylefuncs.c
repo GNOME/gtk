@@ -234,7 +234,8 @@ rgba_value_compute (GtkStyleProviderPrivate *provider,
                                           provider,
                                           _gtk_css_computed_values_get_value (values, GTK_CSS_PROPERTY_COLOR),
                                           GTK_CSS_DEPENDS_ON_COLOR,
-                                          dependencies);
+                                          dependencies,
+                                          NULL);
       if (val != NULL)
         {
           rgba = *_gtk_css_rgba_value_get_rgba (val);
@@ -323,7 +324,8 @@ color_value_compute (GtkStyleProviderPrivate *provider,
                                           provider,
                                           _gtk_css_computed_values_get_value (values, GTK_CSS_PROPERTY_COLOR),
                                           GTK_CSS_DEPENDS_ON_COLOR,
-                                          dependencies);
+                                          dependencies,
+                                          NULL);
       if (val != NULL)
         {
           const GdkRGBA *rgba = _gtk_css_rgba_value_get_rgba (val);
