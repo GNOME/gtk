@@ -140,7 +140,8 @@ _gtk_css_color_value_resolve (GtkCssValue             *color,
                               GtkStyleProviderPrivate *provider,
                               GtkCssValue             *current,
                               GtkCssDependencies       current_deps,
-                              GtkCssDependencies      *dependencies)
+                              GtkCssDependencies      *dependencies,
+                              GSList                  *cycle_list)
 {
   GtkCssDependencies unused;
   GtkCssValue *value;
@@ -160,12 +161,18 @@ _gtk_css_color_value_resolve (GtkCssValue             *color,
     case COLOR_TYPE_NAME:
       {
 	GtkCssValue *named;
+        GSList cycle = { color, cycle_list };
+
+        /* If color exists in cycle_list, we're currently resolving it.
+         * So we've detected a cycle. */
+        if (g_slist_find (cycle_list, color))
+          return NULL;
 
         named = _gtk_style_provider_private_get_color (provider, color->sym_col.name);
 	if (named == NULL)
 	  return NULL;
 
-        value = _gtk_css_color_value_resolve (named, provider, current, current_deps, dependencies);
+        value = _gtk_css_color_value_resolve (named, provider, current, current_deps, dependencies, &cycle);
 	if (value == NULL)
 	  return NULL;
       }
@@ -177,7 +184,7 @@ _gtk_css_color_value_resolve (GtkCssValue             *color,
         GtkHSLA hsla;
 	GdkRGBA shade;
 
-	val = _gtk_css_color_value_resolve (color->sym_col.shade.color, provider, current, current_deps, dependencies);
+	val = _gtk_css_color_value_resolve (color->sym_col.shade.color, provider, current, current_deps, dependencies, cycle_list);
 	if (val == NULL)
 	  return NULL;
 
@@ -199,7 +206,7 @@ _gtk_css_color_value_resolve (GtkCssValue             *color,
 	GtkCssValue *val;
 	GdkRGBA alpha;
 
-	val = _gtk_css_color_value_resolve (color->sym_col.alpha.color, provider, current, current_deps, dependencies);
+	val = _gtk_css_color_value_resolve (color->sym_col.alpha.color, provider, current, current_deps, dependencies, cycle_list);
 	if (val == NULL)
 	  return NULL;
 
@@ -219,13 +226,13 @@ _gtk_css_color_value_resolve (GtkCssValue             *color,
 	GdkRGBA color1, color2, res;
         GtkCssDependencies dep1, dep2;
 
-	val = _gtk_css_color_value_resolve (color->sym_col.mix.color1, provider, current, current_deps, &dep1);
+	val = _gtk_css_color_value_resolve (color->sym_col.mix.color1, provider, current, current_deps, &dep1, cycle_list);
 	if (val == NULL)
 	  return NULL;
 	color1 = *_gtk_css_rgba_value_get_rgba (val);
 	_gtk_css_value_unref (val);
 
-	val = _gtk_css_color_value_resolve (color->sym_col.mix.color2, provider, current, current_deps, &dep2);
+	val = _gtk_css_color_value_resolve (color->sym_col.mix.color2, provider, current, current_deps, &dep2, cycle_list);
 	if (val == NULL)
 	  return NULL;
 	color2 = *_gtk_css_rgba_value_get_rgba (val);
@@ -324,7 +331,8 @@ gtk_css_value_color_compute (GtkCssValue             *value,
                                            provider,
                                            current,
                                            current_deps,
-                                           dependencies);
+                                           dependencies,
+                                           NULL);
 
   if (resolved == NULL)
     return gtk_css_value_color_get_fallback (property_id, provider, values, parent_values);

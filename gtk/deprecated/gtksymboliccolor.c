@@ -307,6 +307,7 @@ gtk_symbolic_color_resolve (GtkSymbolicColor   *color,
                                     GTK_STYLE_PROVIDER_PRIVATE (props),
                                     current,
                                     0,
+                                    NULL,
                                     NULL);
   _gtk_css_value_unref (current);
   if (v == NULL)
