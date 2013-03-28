@@ -66,6 +66,8 @@ struct _GdkBroadwayDisplay
   GdkWindow *active_offscreen_window;
 
   GdkBroadwayServer *server;
+
+  gpointer move_resize_data;
 };
 
 struct _GdkBroadwayDisplayClass
