@@ -3576,11 +3576,11 @@ gtk_text_mark_get_type
 <TITLE>GtkTextTag</TITLE>
 GtkTextTag
 GtkWrapMode
-GtkTextAttributes
 gtk_text_tag_new
 gtk_text_tag_get_priority
 gtk_text_tag_set_priority
 gtk_text_tag_event
+GtkTextAttributes
 GtkTextAppearance
 gtk_text_attributes_new
 gtk_text_attributes_copy
