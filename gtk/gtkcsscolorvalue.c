@@ -166,6 +166,8 @@ _gtk_css_color_value_resolve (GtkCssValue             *color,
 	  return NULL;
 
         value = _gtk_css_color_value_resolve (named, provider, current, current_deps, dependencies);
+	if (value == NULL)
+	  return NULL;
       }
 
       break;
