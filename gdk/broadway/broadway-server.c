@@ -1583,6 +1583,11 @@ broadway_server_window_update (BroadwayServer *server,
 						       window->width,
 						       window->height);
 
+  g_assert (window->width == cairo_image_surface_get_width (window->last_surface));
+  g_assert (window->width == cairo_image_surface_get_width (surface));
+  g_assert (window->height == cairo_image_surface_get_height (window->last_surface));
+  g_assert (window->height == cairo_image_surface_get_height (surface));
+
   if (server->output != NULL)
     {
       if (window->last_synced)

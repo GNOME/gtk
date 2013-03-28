@@ -256,10 +256,6 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
       {
 	window->x = message->configure_notify.x;
 	window->y = message->configure_notify.y;
-	window->width = message->configure_notify.width;
-	window->height = message->configure_notify.height;
-	_gdk_window_update_size (window);
-	_gdk_broadway_window_resize_surface (window);
 
 	event = gdk_event_new (GDK_CONFIGURE);
 	event->configure.window = g_object_ref (window);
