@@ -535,6 +535,8 @@ _gdk_wayland_display_get_keymap (GdkDisplay *display)
       break;
     }
 
+  g_list_free (list);
+
   if (core_keyboard && tmp_keymap)
     {
       g_object_unref (tmp_keymap);
