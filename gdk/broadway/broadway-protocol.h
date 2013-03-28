@@ -36,6 +36,9 @@ typedef enum {
   BROADWAY_OP_SET_TRANSIENT_FOR = 'p',
   BROADWAY_OP_PUT_RGB = 'i',
   BROADWAY_OP_FLUSH = 'f',
+  BROADWAY_OP_REQUEST_AUTH = 'l',
+  BROADWAY_OP_AUTH_OK = 'L',
+  BROADWAY_OP_DISCONNECTED = 'D',
 } BroadwayOpType;
 
 typedef struct {

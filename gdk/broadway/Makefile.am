@@ -83,7 +83,7 @@ broadwayd_SOURCES = \
 	broadway-output.h		\
 	broadway-output.c
 
-broadwayd_LDADD = $(GDK_DEP_LIBS) -lrt
+broadwayd_LDADD = $(GDK_DEP_LIBS) -lrt -lcrypt
 
 MAINTAINERCLEANFILES = $(broadway_built_sources)
 EXTRA_DIST += $(broadway_built_sources)
