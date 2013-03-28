@@ -82,9 +82,52 @@ G_DEFINE_TYPE_WITH_CODE (GtkOverlay, gtk_overlay, GTK_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_overlay_buildable_init))
 
+static void
+gtk_overlay_compute_child_allocation (GtkOverlay      *overlay,
+				      GtkOverlayChild *child,
+				      GtkAllocation *window_allocation,
+				      GtkAllocation *widget_allocation)
+{
+  gint left, right, top, bottom;
+  GtkAllocation allocation, overlay_allocation;
+  gboolean result;
+
+  g_signal_emit (overlay, signals[GET_CHILD_POSITION],
+                 0, child->widget, &allocation, &result);
+
+  gtk_widget_get_allocation (GTK_WIDGET (overlay), &overlay_allocation);
+
+  allocation.x += overlay_allocation.x;
+  allocation.y += overlay_allocation.y;
+
+  /* put the margins outside the window; also arrange things
+   * so that the adjusted child allocation still ends up at 0, 0
+   */
+  left = gtk_widget_get_margin_left (child->widget);
+  right = gtk_widget_get_margin_right (child->widget);
+  top = gtk_widget_get_margin_top (child->widget);
+  bottom = gtk_widget_get_margin_bottom (child->widget);
+
+  if (widget_allocation)
+    {
+      widget_allocation->x = - left;
+      widget_allocation->y = - top;
+      widget_allocation->width = allocation.width;
+      widget_allocation->height = allocation.height;
+    }
+
+  if (window_allocation)
+    {
+      window_allocation->x = allocation.x + left;
+      window_allocation->y = allocation.y + top;
+      window_allocation->width = allocation.width - (left + right);
+      window_allocation->height = allocation.height - (top + bottom);
+    }
+}
+
 static GdkWindow *
 gtk_overlay_create_child_window (GtkOverlay *overlay,
-                                 GtkWidget  *child)
+                                 GtkOverlayChild *child)
 {
   GtkWidget *widget = GTK_WIDGET (overlay);
   GtkAllocation allocation;
@@ -92,7 +135,7 @@ gtk_overlay_create_child_window (GtkOverlay *overlay,
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  gtk_widget_get_allocation (child, &allocation);
+  gtk_overlay_compute_child_allocation (overlay, child, &allocation, NULL);
 
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.wclass = GDK_INPUT_OUTPUT;
@@ -108,8 +151,8 @@ gtk_overlay_create_child_window (GtkOverlay *overlay,
   gtk_widget_register_window (widget, window);
   gtk_style_context_set_background (gtk_widget_get_style_context (widget), window);
 
-  gtk_widget_set_parent_window (child, window);
-
+  gtk_widget_set_parent_window (child->widget, window);
+  
   return window;
 }
 
@@ -240,9 +283,7 @@ static void
 gtk_overlay_child_allocate (GtkOverlay      *overlay,
                             GtkOverlayChild *child)
 {
-  gint left, right, top, bottom;
-  GtkAllocation allocation, child_allocation, overlay_allocation;
-  gboolean result;
+  GtkAllocation window_allocation, child_allocation;
 
   if (gtk_widget_get_mapped (GTK_WIDGET (overlay)))
     {
@@ -255,38 +296,14 @@ gtk_overlay_child_allocate (GtkOverlay      *overlay,
   if (!gtk_widget_get_visible (child->widget))
     return;
 
-  g_signal_emit (overlay, signals[GET_CHILD_POSITION],
-                 0, child->widget, &allocation, &result);
-
-  gtk_widget_get_allocation (GTK_WIDGET (overlay), &overlay_allocation);
-
-  allocation.x += overlay_allocation.x;
-  allocation.y += overlay_allocation.y;
-
-  /* put the margins outside the window; also arrange things
-   * so that the adjusted child allocation still ends up at 0, 0
-   */
-  left = gtk_widget_get_margin_left (child->widget);
-  right = gtk_widget_get_margin_right (child->widget);
-  top = gtk_widget_get_margin_top (child->widget);
-  bottom = gtk_widget_get_margin_bottom (child->widget);
-
-  child_allocation.x = - left;
-  child_allocation.y = - top;
-  child_allocation.width = allocation.width;
-  child_allocation.height = allocation.height;
-
-  allocation.x += left;
-  allocation.y += top;
-  allocation.width -= left + right;
-  allocation.height -= top + bottom;
+  gtk_overlay_compute_child_allocation (overlay, child, &window_allocation, &child_allocation);
 
   if (child->window)
     gdk_window_move_resize (child->window,
-                            allocation.x, allocation.y,
-                            allocation.width, allocation.height);
+                            window_allocation.x, window_allocation.y,
+                            window_allocation.width, window_allocation.height);
 
-  gtk_overlay_child_update_style_classes (overlay, child->widget, &allocation);
+  gtk_overlay_child_update_style_classes (overlay, child->widget, &window_allocation);
   gtk_widget_size_allocate (child->widget, &child_allocation);
 }
 
@@ -346,9 +363,7 @@ gtk_overlay_size_allocate (GtkWidget     *widget,
   gtk_widget_size_allocate (main_widget, allocation);
 
   for (children = priv->children; children; children = children->next)
-    {
-      gtk_overlay_child_allocate (overlay, children->data);
-    }
+    gtk_overlay_child_allocate (overlay, children->data);
 }
 
 static gboolean
@@ -423,10 +438,7 @@ gtk_overlay_realize (GtkWidget *widget)
       child = children->data;
 
       if (child->window == NULL)
-	{
-	  child->window = gtk_overlay_create_child_window (overlay, child->widget);
-	  gtk_overlay_child_allocate (overlay, child);
-	}
+	child->window = gtk_overlay_create_child_window (overlay, child);
     }
 }
 
@@ -712,9 +724,8 @@ gtk_overlay_add_overlay (GtkOverlay *overlay,
 
   if (gtk_widget_get_realized (GTK_WIDGET (overlay)))
     {
-      child->window = gtk_overlay_create_child_window (overlay, widget);
+      child->window = gtk_overlay_create_child_window (overlay, child);
       gtk_widget_set_parent (widget, GTK_WIDGET (overlay));
-      gtk_overlay_child_allocate (overlay, child);
     }
   else
     gtk_widget_set_parent (widget, GTK_WIDGET (overlay));
