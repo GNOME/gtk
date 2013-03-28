@@ -581,6 +581,12 @@ gdk_broadway_window_set_geometry_hints (GdkWindow         *window,
 					const GdkGeometry *geometry,
 					GdkWindowHints     geom_mask)
 {
+  GdkWindowImplBroadway *impl;
+
+  impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
+
+  impl->geometry_hints = *geometry;
+  impl->geometry_hints_mask = geom_mask;
 }
 
 static void
@@ -1028,6 +1034,8 @@ struct _MoveResizeData
   gint moveresize_orig_width;
   gint moveresize_orig_height;
   long moveresize_process_time;
+  GdkWindowHints moveresize_geom_mask;
+  GdkGeometry moveresize_geometry;
   BroadwayInputMsg *moveresize_pending_event;
 };
 
@@ -1115,6 +1123,13 @@ update_pos (MoveResizeData *mv_resize,
       y = MAX (y, 0);
       w = MAX (w, 1);
       h = MAX (h, 1);
+
+      if (mv_resize->moveresize_geom_mask)
+	{
+	  gdk_window_constrain_size (&mv_resize->moveresize_geometry,
+				     mv_resize->moveresize_geom_mask,
+				     w, h, &w, &h);
+	}
 
       gdk_window_move_resize (mv_resize->moveresize_window, x, y, w, h);
     }
@@ -1279,6 +1294,71 @@ create_moveresize_window (MoveResizeData *mv_resize,
 }
 
 static void
+calculate_unmoving_origin (MoveResizeData *mv_resize)
+{
+  GdkRectangle rect;
+  gint width, height;
+
+  if (mv_resize->moveresize_geom_mask & GDK_HINT_WIN_GRAVITY &&
+      mv_resize->moveresize_geometry.win_gravity == GDK_GRAVITY_STATIC)
+    {
+      gdk_window_get_origin (mv_resize->moveresize_window,
+			     &mv_resize->moveresize_orig_x,
+			     &mv_resize->moveresize_orig_y);
+    }
+  else
+    {
+      gdk_window_get_frame_extents (mv_resize->moveresize_window, &rect);
+      gdk_window_get_geometry (mv_resize->moveresize_window,
+			       NULL, NULL, &width, &height);
+
+      switch (mv_resize->moveresize_geometry.win_gravity)
+	{
+	case GDK_GRAVITY_NORTH_WEST:
+	  mv_resize->moveresize_orig_x = rect.x;
+	  mv_resize->moveresize_orig_y = rect.y;
+	  break;
+	case GDK_GRAVITY_NORTH:
+	  mv_resize->moveresize_orig_x = rect.x + rect.width / 2 - width / 2;
+	  mv_resize->moveresize_orig_y = rect.y;
+	  break;
+	case GDK_GRAVITY_NORTH_EAST:
+	  mv_resize->moveresize_orig_x = rect.x + rect.width - width;
+	  mv_resize->moveresize_orig_y = rect.y;
+	  break;
+	case GDK_GRAVITY_WEST:
+	  mv_resize->moveresize_orig_x = rect.x;
+	  mv_resize->moveresize_orig_y = rect.y + rect.height / 2 - height / 2;
+	  break;
+	case GDK_GRAVITY_CENTER:
+	  mv_resize->moveresize_orig_x = rect.x + rect.width / 2 - width / 2;
+	  mv_resize->moveresize_orig_y = rect.y + rect.height / 2 - height / 2;
+	  break;
+	case GDK_GRAVITY_EAST:
+	  mv_resize->moveresize_orig_x = rect.x + rect.width - width;
+	  mv_resize->moveresize_orig_y = rect.y + rect.height / 2 - height / 2;
+	  break;
+	case GDK_GRAVITY_SOUTH_WEST:
+	  mv_resize->moveresize_orig_x = rect.x;
+	  mv_resize->moveresize_orig_y = rect.y + rect.height - height;
+	  break;
+	case GDK_GRAVITY_SOUTH:
+	  mv_resize->moveresize_orig_x = rect.x + rect.width / 2 - width / 2;
+	  mv_resize->moveresize_orig_y = rect.y + rect.height - height;
+	  break;
+	case GDK_GRAVITY_SOUTH_EAST:
+	  mv_resize->moveresize_orig_x = rect.x + rect.width - width;
+	  mv_resize->moveresize_orig_y = rect.y + rect.height - height;
+	  break;
+	default:
+	  mv_resize->moveresize_orig_x = rect.x;
+	  mv_resize->moveresize_orig_y = rect.y;
+	  break;
+	}
+    }
+}
+
+static void
 gdk_broadway_window_begin_resize_drag (GdkWindow     *window,
 				       GdkWindowEdge  edge,
                                        GdkDevice     *device,
@@ -1288,6 +1368,9 @@ gdk_broadway_window_begin_resize_drag (GdkWindow     *window,
 				       guint32        timestamp)
 {
   MoveResizeData *mv_resize;
+  GdkWindowImplBroadway *impl;
+
+  impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
 
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
@@ -1302,11 +1385,13 @@ gdk_broadway_window_begin_resize_drag (GdkWindow     *window,
   mv_resize->moveresize_y = root_y;
   mv_resize->moveresize_window = g_object_ref (window);
 
-  gdk_window_get_origin (mv_resize->moveresize_window,
-			 &mv_resize->moveresize_orig_x,
-			 &mv_resize->moveresize_orig_y);
   mv_resize->moveresize_orig_width = gdk_window_get_width (window);
   mv_resize->moveresize_orig_height = gdk_window_get_height (window);
+
+  mv_resize->moveresize_geom_mask = impl->geometry_hints_mask;
+  mv_resize->moveresize_geometry = impl->geometry_hints;
+
+  calculate_unmoving_origin (mv_resize);
 
   create_moveresize_window (mv_resize, timestamp);
 }
