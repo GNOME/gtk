@@ -225,34 +225,16 @@ function flushSurface(surface)
 	    context.save();
 	    context.beginPath();
 
-	    var minx;
-	    var miny;
-	    var maxx;
-	    var maxy;
 	    for (var j = 0; j < cmd.rects.length; j++) {
 		var rect = cmd.rects[j];
 		context.rect(rect.x, rect.y, rect.w, rect.h);
-		if (j == 0) {
-		    minx = rect.x;
-		    miny = rect.y;
-		    maxx = rect.x + rect.w;
-		    maxy = rect.y + rect.h;
-		} else {
-		    if (rect.x < minx)
-			minx = rect.x;
-		    if (rect.y < miny)
-			miny = rect.y;
-		    if (rect.x + rect.w > maxx)
-			maxx = rect.x + rect.w;
-		    if (rect.y + rect.h > maxy)
-			maxy = rect.y + rect.h;
-		}
 	    }
 	    context.clip();
-	    context.globalCompositeOperation = "copy";
-	    context.drawImage(context.canvas,
-			      minx - cmd.dx, miny - cmd.dy, maxx - minx, maxy - miny,
-			      minx, miny, maxx - minx, maxy - miny);
+	    // This seems to break chrome when src overlaps dest
+	    // But source-over should be fine for rgb surfaces anyway
+	    //context.globalCompositeOperation = "copy";
+	    context.drawImage(surface.canvas,
+			      cmd.dx, cmd.dy);
 	    context.restore();
 	    break;
 
@@ -751,8 +733,12 @@ BinCommands.prototype.get_32 = function() {
 };
 BinCommands.prototype.get_image_url = function() {
     var size = this.get_32();
-    var png_blob = new Blob ([this.arraybuffer.slice (this.pos, this.pos + size)], {type:"image/png"});
-    var url = URL.createObjectURL(png_blob, {oneTimeOnly: true});
+    var png_blob = new Blob ([new Uint8Array (this.arraybuffer, this.pos, size)], {type:"image/png"});
+    var url;
+    if (window.webkitURL)
+	url = window.webkitURL.createObjectURL(png_blob);
+    else
+	url = window.URL.createObjectURL(png_blob, {oneTimeOnly: true});
     this.pos = this.pos + size;
     return url;
 };
@@ -2599,7 +2585,7 @@ function onMouseWheel(ev)
     var id = getSurfaceId(ev);
     var pos = getPositionsFromEvent(ev, id);
 
-    var offset = ev.detail ? ev.detail : ev.wheelDelta;
+    var offset = ev.detail ? ev.detail : -ev.wheelDelta;
     var dir = 0;
     if (offset > 0)
 	dir = 1;
@@ -2669,12 +2655,12 @@ function login()
 	var input = document.createElement("input");
 	input.setAttribute("type", "password");
 	div.appendChild(input);
+	input.focus ();
 	input.onkeyup = function(e) {
-	    if (e.keyCode === 13) {
+	    if (e.keyCode === 13 && input.value != "") {
 		inputSocket.send ("l" + input.value);
 	    }
 	}
-	input.focus ();
 	loginDiv = div;
     } else {
 	alert ("Wrong password");
