@@ -23,6 +23,8 @@ BroadwayOutput *broadway_output_new             (GOutputStream  *out,
 void            broadway_output_free            (BroadwayOutput *output);
 int             broadway_output_flush           (BroadwayOutput *output);
 int             broadway_output_has_error       (BroadwayOutput *output);
+void            broadway_output_set_next_serial (BroadwayOutput *output,
+						 guint32         serial);
 guint32         broadway_output_get_next_serial (BroadwayOutput *output);
 void            broadway_output_new_surface     (BroadwayOutput *output,
 						 int             id,
@@ -31,6 +33,9 @@ void            broadway_output_new_surface     (BroadwayOutput *output,
 						 int             w,
 						 int             h,
 						 gboolean        is_temp);
+void            broadway_output_request_auth    (BroadwayOutput *output);
+void            broadway_output_auth_ok         (BroadwayOutput *output);
+void            broadway_output_disconnected    (BroadwayOutput *output);
 void            broadway_output_show_surface    (BroadwayOutput *output,
 						 int             id);
 void            broadway_output_hide_surface    (BroadwayOutput *output,

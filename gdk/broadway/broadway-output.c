@@ -317,6 +317,13 @@ broadway_output_get_next_serial (BroadwayOutput *output)
   return output->serial;
 }
 
+void
+broadway_output_set_next_serial (BroadwayOutput *output,
+				 guint32 serial)
+{
+  output->serial = serial;
+}
+
 
 /************************************************************************
  *                     Core rendering operations                        *
@@ -469,6 +476,24 @@ broadway_output_new_surface(BroadwayOutput *output,
   append_uint16 (output, w);
   append_uint16 (output, h);
   append_bool (output, is_temp);
+}
+
+void
+broadway_output_request_auth (BroadwayOutput *output)
+{
+  write_header (output, BROADWAY_OP_REQUEST_AUTH);
+}
+
+void
+broadway_output_auth_ok (BroadwayOutput *output)
+{
+  write_header (output, BROADWAY_OP_AUTH_OK);
+}
+
+void
+broadway_output_disconnected (BroadwayOutput *output)
+{
+  write_header (output, BROADWAY_OP_DISCONNECTED);
 }
 
 void

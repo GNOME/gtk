@@ -537,6 +537,21 @@ function handleCommands(cmd)
 	var command = cmd.get_char();
 	lastSerial = cmd.get_32();
 	switch (command) {
+	case 'l':
+	    login ();
+	    break;
+
+	case 'L':
+	    if (loginDiv != null)
+		loginDiv.parentNode.removeChild(loginDiv);
+	    start ();
+	    break;
+
+	case 'D':
+	    alert ("disconnected");
+	    inputSocket = null;
+	    break;
+
 	case 's': // create new surface
 	    id = cmd.get_16();
 	    x = cmd.get_16s();
@@ -2625,6 +2640,47 @@ function newWS(loc) {
     return ws;
 }
 
+function start()
+{
+    setupDocument(document);
+
+    var w, h;
+    w = window.innerWidth;
+    h = window.innerHeight;
+    window.onresize = function(ev) {
+	var w, h;
+	w = window.innerWidth;
+	h = window.innerHeight;
+	sendInput ("d", [w, h]);
+    };
+    sendInput ("d", [w, h]);
+}
+
+var loginDiv = null;
+function login()
+{
+    if (loginDiv == null) {
+	var div = document.createElement('div');
+	document.body.appendChild(div);
+	div.innerHTML = "Please enter password<br>";
+	div.style.marginTop = "40px";
+	div.style.textAlign = "center";
+
+	var input = document.createElement("input");
+	input.setAttribute("type", "password");
+	div.appendChild(input);
+	input.onkeyup = function(e) {
+	    if (e.keyCode === 13) {
+		inputSocket.send ("l" + input.value);
+	    }
+	}
+	input.focus ();
+	loginDiv = div;
+    } else {
+	alert ("Wrong password");
+    }
+}
+
 function connect()
 {
     var url = window.location.toString();
@@ -2646,23 +2702,13 @@ function connect()
 
     ws.onopen = function() {
 	inputSocket = ws;
-	var w, h;
-	w = window.innerWidth;
-	h = window.innerHeight;
-	window.onresize = function(ev) {
-	    var w, h;
-	    w = window.innerWidth;
-	    h = window.innerHeight;
-	    sendInput ("d", [w, h]);
-	};
-	sendInput ("d", [w, h]);
     };
     ws.onclose = function() {
+	if (inputSocket != null)
+	    alert ("disconnected");
 	inputSocket = null;
     };
     ws.onmessage = function(event) {
 	handleMessage(event.data);
     };
-
-    setupDocument(document);
 }

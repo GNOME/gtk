@@ -54,6 +54,15 @@ Start your applications like this:
 BROADWAY_DISPLAY=:5 gtk3-demo
 </programlisting>
 
+You can add password protection for your session by creating a file in
+<filename>$XDG_CONFIG_HOME/broadway.passwd</filename> or <filename>$HOME/.config/broadway.passwd</filename>
+with a crypt(3) style password hash.
+
+A simple way to generate it is with openssl:
+<programlisting>
+openssl passwd -1  > ~/.config/broadway.passwd
+</programlisting>
+
 </para>
 </refsect1>
 
