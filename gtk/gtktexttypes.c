@@ -37,14 +37,8 @@ gtk_text_unknown_char_utf8_gtk_tests_only (void)
   return _gtk_text_unknown_char_utf8;
 }
 
-static inline gboolean
-inline_byte_begins_utf8_char (const gchar *byte)
-{
-  return ((*byte & 0xC0) != 0x80);
-}
-
 gboolean
 gtk_text_byte_begins_utf8_char (const gchar *byte)
 {
-  return inline_byte_begins_utf8_char (byte);
+  return ((*byte & 0xC0) != 0x80);
 }
