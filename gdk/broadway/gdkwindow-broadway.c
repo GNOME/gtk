@@ -999,20 +999,19 @@ static MoveResizeData *
 get_move_resize_data (GdkDisplay *display,
 		      gboolean    create)
 {
+  GdkBroadwayDisplay *broadway_display;
   MoveResizeData *mv_resize;
-  static GQuark move_resize_quark = 0;
 
-  if (!move_resize_quark)
-    move_resize_quark = g_quark_from_static_string ("gdk-window-moveresize");
+  broadway_display = GDK_BROADWAY_DISPLAY (display);
 
-  mv_resize = g_object_get_qdata (G_OBJECT (display), move_resize_quark);
+  mv_resize = broadway_display->move_resize_data;
 
   if (!mv_resize && create)
     {
       mv_resize = g_new0 (MoveResizeData, 1);
       mv_resize->display = display;
 
-      g_object_set_qdata (G_OBJECT (display), move_resize_quark, mv_resize);
+      broadway_display->move_resize_data = mv_resize;
     }
 
   return mv_resize;
@@ -1135,7 +1134,7 @@ _gdk_broadway_moveresize_handle_event (GdkDisplay *display,
 
   switch (event->base.type)
     {
-    case 'm':
+    case BROADWAY_EVENT_POINTER_MOVE:
       if (mv_resize->moveresize_window->resize_count > 0)
 	{
 	  if (mv_resize->moveresize_pending_event)
@@ -1163,7 +1162,7 @@ _gdk_broadway_moveresize_handle_event (GdkDisplay *display,
 	finish_drag (mv_resize);
       break;
 
-    case 'B':
+    case BROADWAY_EVENT_BUTTON_RELEASE:
       update_pos (mv_resize,
 		  event->pointer.root_x,
 		  event->pointer.root_y);
