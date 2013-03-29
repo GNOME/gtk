@@ -50,9 +50,7 @@
 #include "config.h"
 
 #include "gtktextattributes.h"
-
-#include "gtktexttag.h"
-#include "gtktexttypes.h"
+#include "gtktexttagprivate.h"
 
 /**
  * gtk_text_attributes_new:
