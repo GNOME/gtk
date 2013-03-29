@@ -99,6 +99,9 @@ struct BroadwayWindow {
   gint32 transient_for;
 
   cairo_surface_t *last_surface;
+
+  char *cached_surface_name;
+  cairo_surface_t *cached_surface;
 };
 
 static void broadway_server_resync_windows (BroadwayServer *server);
@@ -1416,6 +1419,12 @@ broadway_server_destroy_window (BroadwayServer *server,
       server->toplevels = g_list_remove (server->toplevels, window);
       g_hash_table_remove (server->id_ht,
 			   GINT_TO_POINTER (id));
+
+      if (window->cached_surface_name != NULL)
+	g_free (window->cached_surface_name);
+      if (window->cached_surface != NULL)
+	cairo_surface_destroy (window->cached_surface);
+
       g_free (window);
     }
 }
@@ -1833,11 +1842,21 @@ broadway_server_open_surface (BroadwayServer *server,
 			      int width,
 			      int height)
 {
+  BroadwayWindow *window;
   ShmSurfaceData *data;
   cairo_surface_t *surface;
   gsize size;
   void *ptr;
   int fd;
+
+  window = g_hash_table_lookup (server->id_ht,
+				GINT_TO_POINTER (id));
+  if (window == NULL)
+    return NULL;
+
+  if (window->cached_surface_name != NULL &&
+      strcmp (name, window->cached_surface_name) == 0)
+    return cairo_surface_reference (window->cached_surface);
 
   size = width * height * sizeof (guint32);
 
@@ -1848,8 +1867,10 @@ broadway_server_open_surface (BroadwayServer *server,
       return NULL;
     }
 
-  ptr = mmap(0, size, PROT_READ, MAP_SHARED, fd, 0); 
+  ptr = mmap(0, size, PROT_READ, MAP_SHARED, fd, 0);
   (void) close(fd);
+
+  shm_unlink (name);
 
   if (ptr == NULL)
     return NULL;
@@ -1864,9 +1885,17 @@ broadway_server_open_surface (BroadwayServer *server,
 						 width, height,
 						 width * sizeof (guint32));
   g_assert (surface != NULL);
-  
+
   cairo_surface_set_user_data (surface, &shm_cairo_key,
 			       data, shm_data_unmap);
+
+  if (window->cached_surface_name != NULL)
+    g_free (window->cached_surface_name);
+  window->cached_surface_name = g_strdup (name);
+
+  if (window->cached_surface != NULL)
+    cairo_surface_destroy (window->cached_surface);
+  window->cached_surface = cairo_surface_reference (surface);
 
   return surface;
 }
