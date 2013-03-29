@@ -78,5 +78,10 @@ gboolean            broadway_server_window_move_resize       (BroadwayServer   *
 							      int               y,
 							      int               width,
 							      int               height);
+cairo_surface_t * broadway_server_open_surface (BroadwayServer *server,
+						guint32 id,
+						char *name,
+						int width,
+						int height);
 
 #endif /* __BROADWAY_SERVER__ */
