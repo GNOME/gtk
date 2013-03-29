@@ -431,8 +431,6 @@ gtk_color_button_init (GtkColorButton *button)
                                               GTK_TYPE_COLOR_BUTTON,
                                               GtkColorButtonPrivate);
 
-  gtk_widget_push_composite_child ();
-
   button->priv->draw_area = gtk_drawing_area_new ();
   layout = gtk_widget_create_pango_layout (GTK_WIDGET (button), "Black");
   pango_layout_get_pixel_extents (layout, NULL, &rect);
@@ -470,8 +468,6 @@ gtk_color_button_init (GtkColorButton *button)
                     G_CALLBACK (gtk_color_button_drag_data_received), button);
   g_signal_connect (button, "drag-data-get",
                     G_CALLBACK (gtk_color_button_drag_data_get), button);
-
-  gtk_widget_pop_composite_child ();
 }
 
 static void

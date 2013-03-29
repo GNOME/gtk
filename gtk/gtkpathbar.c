@@ -151,8 +151,6 @@ get_slider_button (GtkPathBar  *path_bar,
   GtkWidget *button;
   AtkObject *atk_obj;
 
-  gtk_widget_push_composite_child ();
-
   button = gtk_button_new ();
   atk_obj = gtk_widget_get_accessible (button);
   if (arrow_type == GTK_ARROW_LEFT)
@@ -169,8 +167,6 @@ get_slider_button (GtkPathBar  *path_bar,
 
   g_signal_connect (G_OBJECT (button), "unmap",
 		    G_CALLBACK (on_slider_unmap), path_bar);
-
-  gtk_widget_pop_composite_child ();
 
   return button;
 }
@@ -1835,11 +1831,9 @@ gtk_path_bar_get_info_callback (GCancellable *cancellable,
   display_name = g_file_info_get_display_name (info);
   is_hidden = g_file_info_get_is_hidden (info) || g_file_info_get_is_backup (info);
 
-  gtk_widget_push_composite_child ();
   button_data = make_directory_button (file_info->path_bar, display_name,
                                        file_info->file,
 				       file_info->first_directory, is_hidden);
-  gtk_widget_pop_composite_child ();
   g_object_unref (file_info->file);
 
   file_info->new_buttons = g_list_prepend (file_info->new_buttons, button_data);

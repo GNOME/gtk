@@ -117,8 +117,6 @@ gtk_file_chooser_widget_constructor (GType                  type,
 									       construct_params);
   priv = GTK_FILE_CHOOSER_WIDGET_GET_PRIVATE (object);
 
-  gtk_widget_push_composite_child ();
-
   priv->impl = _gtk_file_chooser_default_new ();
   
   gtk_box_pack_start (GTK_BOX (object), priv->impl, TRUE, TRUE, 0);
@@ -129,8 +127,6 @@ gtk_file_chooser_widget_constructor (GType                  type,
 
   _gtk_file_chooser_embed_set_delegate (GTK_FILE_CHOOSER_EMBED (object),
 					GTK_FILE_CHOOSER_EMBED (priv->impl));
-  
-  gtk_widget_pop_composite_child ();
 
   return object;
 }

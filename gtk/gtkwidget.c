@@ -10500,6 +10500,8 @@ static GQuark quark_composite_name = 0;
  *
  * Sets a widgets composite name. The widget must be
  * a composite child of its parent; see gtk_widget_push_composite_child().
+ *
+ * Deprecated: 3.10: Use gtk_widget_class_set_template(), or don't use this API at all.
  **/
 void
 gtk_widget_set_composite_name (GtkWidget   *widget,
@@ -10527,6 +10529,8 @@ gtk_widget_set_composite_name (GtkWidget   *widget,
  * Returns: the composite name of @widget, or %NULL if @widget is not
  *   a composite child. The string should be freed when it is no
  *   longer needed.
+ *
+ * Deprecated: 3.10: Use gtk_widget_class_set_template(), or don't use this API at all.
  **/
 gchar*
 gtk_widget_get_composite_name (GtkWidget *widget)
@@ -10566,6 +10570,9 @@ gtk_widget_get_composite_name (GtkWidget *widget)
  *                          GTK_WIDGET (scrolled_window));
  *   g_object_ref (scrolled_window->hscrollbar);
  * ]|
+ *
+ * Deprecated: 3.10: This API never really worked well and was mostly unused, now
+ * we have a more complete mechanism for composite children, see gtk_widget_class_set_template().
  **/
 void
 gtk_widget_push_composite_child (void)
@@ -10577,6 +10584,8 @@ gtk_widget_push_composite_child (void)
  * gtk_widget_pop_composite_child:
  *
  * Cancels the effect of a previous call to gtk_widget_push_composite_child().
+ *
+ * Deprecated: 3.10: Use gtk_widget_class_set_template(), or don't use this API at all.
  **/
 void
 gtk_widget_pop_composite_child (void)

@@ -853,12 +853,10 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
   g_return_if_fail (priv->button == NULL);
 
-  gtk_widget_push_composite_child ();
   priv->button = gtk_button_new ();
   if (priv->visible)
     gtk_widget_show (priv->button);
   gtk_widget_add_events (priv->button, GDK_POINTER_MOTION_MASK);
-  gtk_widget_pop_composite_child ();
 
   /* make sure we own a reference to it as well. */
   if (_gtk_tree_view_get_header_window (tree_view))

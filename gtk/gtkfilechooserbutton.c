@@ -482,8 +482,6 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   priv->icon_size = FALLBACK_ICON_SIZE;
   priv->focus_on_click = TRUE;
 
-  gtk_widget_push_composite_child ();
-
   /* Button */
   priv->button = gtk_button_new ();
   g_signal_connect (priv->button, "clicked",
@@ -551,8 +549,6 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (priv->combo_box),
 				      priv->name_cell, name_cell_data_func,
 				      NULL, NULL);
-
-  gtk_widget_pop_composite_child ();
 
   /* DnD */
   gtk_drag_dest_set (GTK_WIDGET (button),

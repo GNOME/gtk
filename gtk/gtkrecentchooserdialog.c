@@ -199,8 +199,6 @@ gtk_recent_chooser_dialog_constructor (GType                  type,
 										 construct_params);
   priv = GTK_RECENT_CHOOSER_DIALOG_GET_PRIVATE (object);
   
-  gtk_widget_push_composite_child ();
-  
   if (priv->manager)
     priv->chooser = g_object_new (GTK_TYPE_RECENT_CHOOSER_WIDGET,
   				  "recent-manager", priv->manager,
@@ -221,8 +219,6 @@ gtk_recent_chooser_dialog_constructor (GType                  type,
   
   _gtk_recent_chooser_set_delegate (GTK_RECENT_CHOOSER (object),
   				    GTK_RECENT_CHOOSER (priv->chooser));
-  
-  gtk_widget_pop_composite_child ();
   
   return object;
 }

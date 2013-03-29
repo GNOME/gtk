@@ -394,8 +394,6 @@ gtk_color_editor_init (GtkColorEditor *editor)
   g_signal_connect_swapped (v_adj, "value-changed", G_CALLBACK (hsv_changed), editor);
   g_signal_connect_swapped (a_adj, "value-changed", G_CALLBACK (hsv_changed), editor);
 
-  gtk_widget_push_composite_child ();
-
   /* Construct the main UI */
   editor->priv->swatch = swatch = gtk_color_swatch_new ();
   gtk_color_swatch_set_selectable (GTK_COLOR_SWATCH (editor->priv->swatch), FALSE);
@@ -511,8 +509,6 @@ gtk_color_editor_init (GtkColorEditor *editor)
 
   gtk_widget_show_all (editor->priv->overlay);
   gtk_container_add (GTK_CONTAINER (editor), editor->priv->overlay);
-
-  gtk_widget_pop_composite_child ();
 }
 
 static void
