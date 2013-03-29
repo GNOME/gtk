@@ -12,6 +12,9 @@
 #include <errno.h>
 #include <unistd.h>
 #include <crypt.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -1806,6 +1809,66 @@ broadway_server_ungrab_pointer (BroadwayServer *server,
   server->pointer_grab_window_id = -1;
 
   return serial;
+}
+
+static const cairo_user_data_key_t shm_cairo_key;
+
+typedef struct {
+  void *data;
+  gsize data_size;
+} ShmSurfaceData;
+
+static void
+shm_data_unmap (void *_data)
+{
+  ShmSurfaceData *data = _data;
+  munmap (data->data, data->data_size);
+  g_free (data);
+}
+
+cairo_surface_t *
+broadway_server_open_surface (BroadwayServer *server,
+			      guint32 id,
+			      char *name,
+			      int width,
+			      int height)
+{
+  ShmSurfaceData *data;
+  cairo_surface_t *surface;
+  gsize size;
+  void *ptr;
+  int fd;
+
+  size = width * height * sizeof (guint32);
+
+  fd = shm_open(name, O_RDONLY, 0600);
+  if (fd == -1)
+    {
+      perror ("Failed to shm_open");
+      return NULL;
+    }
+
+  ptr = mmap(0, size, PROT_READ, MAP_SHARED, fd, 0); 
+  (void) close(fd);
+
+  if (ptr == NULL)
+    return NULL;
+
+  data = g_new0 (ShmSurfaceData, 1);
+
+  data->data = ptr;
+  data->data_size = size;
+
+  surface = cairo_image_surface_create_for_data ((guchar *)data->data,
+						 CAIRO_FORMAT_RGB24,
+						 width, height,
+						 width * sizeof (guint32));
+  g_assert (surface != NULL);
+  
+  cairo_surface_set_user_data (surface, &shm_cairo_key,
+			       data, shm_data_unmap);
+
+  return surface;
 }
 
 guint32
