@@ -885,7 +885,6 @@ output_handle_geometry(void *data,
 		       int32_t transform)
 {
   GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)data;
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (monitor->screen->display);
 
   monitor->geometry.x = x;
   monitor->geometry.y = y;
