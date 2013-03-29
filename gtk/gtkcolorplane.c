@@ -37,6 +37,13 @@ struct _GtkColorPlanePrivate
   GtkPressAndHold *press_and_hold;
 };
 
+enum {
+  PROP_0,
+  PROP_H_ADJUSTMENT,
+  PROP_S_ADJUSTMENT,
+  PROP_V_ADJUSTMENT
+};
+
 G_DEFINE_TYPE (GtkColorPlane, gtk_color_plane, GTK_TYPE_DRAWING_AREA)
 
 static void
@@ -458,12 +465,57 @@ plane_finalize (GObject *object)
 }
 
 static void
+plane_set_property (GObject      *object,
+		    guint         prop_id,
+		    const GValue *value,
+		    GParamSpec   *pspec)
+{
+  GtkColorPlane *plane = GTK_COLOR_PLANE (object);
+  GObject *adjustment;
+
+  /* Construct only properties can only be set once, these are created
+   * only in order to be properly buildable from gtkcoloreditor.ui
+   */
+  switch (prop_id)
+    {
+    case PROP_H_ADJUSTMENT:
+      adjustment = g_value_get_object (value);
+      if (adjustment)
+	{
+	  plane->priv->h_adj = g_object_ref_sink (adjustment);
+	  g_signal_connect_swapped (adjustment, "value-changed", G_CALLBACK (h_changed), plane);
+	}
+      break;
+    case PROP_S_ADJUSTMENT:
+      adjustment = g_value_get_object (value);
+      if (adjustment)
+	{
+	  plane->priv->s_adj = g_object_ref_sink (adjustment);
+	  g_signal_connect_swapped (adjustment, "value-changed", G_CALLBACK (sv_changed), plane);
+	}
+      break;
+    case PROP_V_ADJUSTMENT:
+      adjustment = g_value_get_object (value);
+      if (adjustment)
+	{
+	  plane->priv->v_adj = g_object_ref_sink (adjustment);
+	  g_signal_connect_swapped (adjustment, "value-changed", G_CALLBACK (sv_changed), plane);
+	}
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
 gtk_color_plane_class_init (GtkColorPlaneClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
   object_class->finalize = plane_finalize;
+  object_class->set_property = plane_set_property;
 
   widget_class->draw = plane_draw;
   widget_class->configure_event = plane_configure;
@@ -473,6 +525,33 @@ gtk_color_plane_class_init (GtkColorPlaneClass *class)
   widget_class->grab_broken_event = plane_grab_broken;
   widget_class->key_press_event = plane_key_press;
   widget_class->touch_event = plane_touch;
+
+  g_object_class_install_property (object_class,
+                                   PROP_H_ADJUSTMENT,
+                                   g_param_spec_object ("h-adjustment",
+                                                        "Hue Adjustment",
+                                                        "Hue Adjustment",
+							GTK_TYPE_ADJUSTMENT,
+							G_PARAM_WRITABLE |
+							G_PARAM_CONSTRUCT_ONLY));
+
+  g_object_class_install_property (object_class,
+                                   PROP_S_ADJUSTMENT,
+                                   g_param_spec_object ("s-adjustment",
+                                                        "Saturation Adjustment",
+                                                        "Saturation Adjustment",
+							GTK_TYPE_ADJUSTMENT,
+							G_PARAM_WRITABLE |
+							G_PARAM_CONSTRUCT_ONLY));
+
+  g_object_class_install_property (object_class,
+                                   PROP_V_ADJUSTMENT,
+                                   g_param_spec_object ("v-adjustment",
+                                                        "Value Adjustment",
+                                                        "Value Adjustment",
+							GTK_TYPE_ADJUSTMENT,
+							G_PARAM_WRITABLE |
+							G_PARAM_CONSTRUCT_ONLY));
 
   g_type_class_add_private (class, sizeof (GtkColorPlanePrivate));
 }
@@ -484,14 +563,11 @@ gtk_color_plane_new (GtkAdjustment *h_adj,
 {
   GtkColorPlane *plane;
 
-  plane = (GtkColorPlane *) g_object_new (GTK_TYPE_COLOR_PLANE, NULL);
-
-  plane->priv->h_adj = g_object_ref_sink (h_adj);
-  plane->priv->s_adj = g_object_ref_sink (s_adj);
-  plane->priv->v_adj = g_object_ref_sink (v_adj);
-  g_signal_connect_swapped (h_adj, "value-changed", G_CALLBACK (h_changed), plane);
-  g_signal_connect_swapped (s_adj, "value-changed", G_CALLBACK (sv_changed), plane);
-  g_signal_connect_swapped (v_adj, "value-changed", G_CALLBACK (sv_changed), plane);
+  plane = (GtkColorPlane *) g_object_new (GTK_TYPE_COLOR_PLANE,
+					  "h-adjustment", h_adj,
+					  "s-adjustment", s_adj,
+					  "v-adjustment", v_adj,
+					  NULL);
 
   return (GtkWidget *)plane;
 }
