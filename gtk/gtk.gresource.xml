@@ -16,6 +16,7 @@
     <file compressed="true">gtkappchooserwidget.ui</file>
     <file compressed="true">gtkassistant.ui</file>
     <file compressed="true">gtkcolorchooserdialog.ui</file>
+    <file compressed="true">gtkcoloreditor.ui</file>
     <file compressed="true">gtkdialog.ui</file>
     <file compressed="true">gtkfilechooserdefault.ui</file>
     <file compressed="true">gtkfilechooserdialog.ui</file>

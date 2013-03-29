@@ -1101,6 +1101,7 @@ COMPOSITE_TEMPLATES =			\
 	gtkappchooserwidget.ui		\
 	gtkassistant.ui			\
 	gtkcolorchooserdialog.ui	\
+	gtkcoloreditor.ui		\
 	gtkdialog.ui			\
 	gtkfilechooserdefault.ui	\
 	gtkfilechooserdialog.ui		\

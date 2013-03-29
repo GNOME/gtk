@@ -166,6 +166,7 @@ test_color_chooser_dialog_basic (void)
 {
   GtkWidget *widget;
 
+  /* This test also tests the internal GtkColorEditor widget */
   widget = gtk_color_chooser_dialog_new (NULL, NULL);
   g_assert (GTK_IS_COLOR_CHOOSER_DIALOG (widget));
   gtk_widget_destroy (widget);
