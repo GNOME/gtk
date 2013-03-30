@@ -1111,6 +1111,7 @@ COMPOSITE_TEMPLATES =			\
 	gtklockbutton.ui		\
 	gtkmessagedialog.ui		\
 	gtkpagesetupunixdialog.ui	\
+	gtkpathbar.ui			\
 	gtkprintunixdialog.ui		\
 	gtkrecentchooserdefault.ui	\
 	gtkscalebutton.ui		\

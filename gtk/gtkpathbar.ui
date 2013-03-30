@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="gtk30">
+  <!-- interface-requires gtk+ 3.10 -->
+  <object class="GtkButton" id="down_slider_button">
+    <property name="visible">True</property>
+    <property name="can_focus">True</property>
+    <property name="receives_default">True</property>
+    <property name="focus_on_click">False</property>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="down_slider_button-atkobject">
+        <property name="AtkObject::accessible-name" translatable="yes">Down Path</property>
+      </object>
+    </child>
+    <signal name="button-press-event" handler="gtk_path_bar_slider_button_press" swapped="no"/>
+    <signal name="button-release-event" handler="gtk_path_bar_slider_button_release" swapped="no"/>
+    <signal name="focus-out-event" handler="gtk_path_bar_slider_down_defocus" swapped="no"/>
+    <signal name="unmap" handler="on_slider_unmap" swapped="no"/>
+    <child>
+      <object class="GtkArrow" id="arrow2">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkButton" id="up_slider_button">
+    <property name="visible">True</property>
+    <property name="can_focus">True</property>
+    <property name="receives_default">True</property>
+    <property name="focus_on_click">False</property>
+    <child internal-child="accessible">
+      <object class="AtkObject" id="up_slider_button-atkobject">
+        <property name="AtkObject::accessible-name" translatable="yes">Up Path</property>
+      </object>
+    </child>
+    <signal name="button-press-event" handler="gtk_path_bar_slider_button_press" swapped="no"/>
+    <signal name="button-release-event" handler="gtk_path_bar_slider_button_release" swapped="no"/>
+    <signal name="focus-out-event" handler="gtk_path_bar_slider_up_defocus" swapped="no"/>
+    <signal name="unmap" handler="on_slider_unmap" swapped="no"/>
+    <child>
+      <object class="GtkArrow" id="arrow1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="arrow_type">left</property>
+      </object>
+    </child>
+  </object>
+</interface>

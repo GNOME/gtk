@@ -26,6 +26,7 @@
     <file compressed="true">gtklockbutton.ui</file>
     <file compressed="true">gtkmessagedialog.ui</file>
     <file compressed="true">gtkpagesetupunixdialog.ui</file>
+    <file compressed="true">gtkpathbar.ui</file>
     <file compressed="true">gtkprintunixdialog.ui</file>
     <file compressed="true">gtkrecentchooserdefault.ui</file>
     <file compressed="true">gtkscalebutton.ui</file>

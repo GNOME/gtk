@@ -23,8 +23,9 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GtkPathBar      GtkPathBar;
-typedef struct _GtkPathBarClass GtkPathBarClass;
+typedef struct _GtkPathBar        GtkPathBar;
+typedef struct _GtkPathBarClass   GtkPathBarClass;
+typedef struct _GtkPathBarPrivate GtkPathBarPrivate;
 
 
 #define GTK_TYPE_PATH_BAR                 (gtk_path_bar_get_type ())
@@ -38,35 +39,7 @@ struct _GtkPathBar
 {
   GtkContainer parent;
 
-  GtkFileSystem *file_system;
-  GFile *root_file;
-  GFile *home_file;
-  GFile *desktop_file;
-
-  GCancellable *get_info_cancellable;
-
-  GdkPixbuf *root_icon;
-  GdkPixbuf *home_icon;
-  GdkPixbuf *desktop_icon;
-
-  GdkWindow *event_window;
-
-  GList *button_list;
-  GList *first_scrolled_button;
-  GList *fake_root;
-  GtkWidget *up_slider_button;
-  GtkWidget *down_slider_button;
-  guint settings_signal_id;
-  gint icon_size;
-  gint16 slider_width;
-  gint16 spacing;
-  gint16 button_offset;
-  guint timer;
-  guint slider_visible : 1;
-  guint need_timer     : 1;
-  guint ignore_click   : 1;
-  guint scrolling_up   : 1;
-  guint scrolling_down : 1;
+  GtkPathBarPrivate *priv;
 };
 
 struct _GtkPathBarClass

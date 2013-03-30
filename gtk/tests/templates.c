@@ -190,6 +190,7 @@ test_file_chooser_widget_basic (void)
 {
   GtkWidget *widget;
 
+  /* This test also tests the internal GtkPathBar widget */
   g_test_log_set_fatal_handler (ignore_gvfs_warning, NULL);
 
   widget = gtk_file_chooser_widget_new (GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
