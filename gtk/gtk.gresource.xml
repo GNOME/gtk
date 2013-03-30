@@ -33,5 +33,6 @@
     <file compressed="true">gtkrecentchooserdefault.ui</file>
     <file compressed="true">gtkscalebutton.ui</file>
     <file compressed="true">gtkstatusbar.ui</file>
+    <file compressed="true">gtkvolumebutton.ui</file>
   </gresource>
 </gresources>

@@ -125,6 +125,16 @@ test_scale_button_basic (void)
 }
 
 static void
+test_volume_button_basic (void)
+{
+  GtkWidget *widget;
+
+  widget = gtk_volume_button_new ();
+  g_assert (GTK_IS_VOLUME_BUTTON (widget));
+  gtk_widget_destroy (widget);
+}
+
+static void
 test_statusbar_basic (void)
 {
   GtkWidget *widget;
@@ -327,6 +337,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Template/GtkLockButton/Basic", test_lock_button_basic);
   g_test_add_func ("/Template/GtkAssistant/Basic", test_assistant_basic);
   g_test_add_func ("/Template/GtkScaleButton/Basic", test_scale_button_basic);
+  g_test_add_func ("/Template/GtkVolumeButton/Basic", test_volume_button_basic);
   g_test_add_func ("/Template/GtkStatusBar/Basic", test_statusbar_basic);
   g_test_add_func ("/Template/GtkAppChooserWidget/Basic", test_app_chooser_widget_basic);
   g_test_add_func ("/Template/GtkAppChooserDialog/Basic", test_app_chooser_dialog_basic);

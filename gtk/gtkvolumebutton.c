@@ -135,6 +135,7 @@ static void
 gtk_volume_button_class_init (GtkVolumeButtonClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   gobject_class->set_property = gtk_volume_button_set_property;
   gobject_class->get_property = gtk_volume_button_get_property;
@@ -156,51 +157,24 @@ gtk_volume_button_class_init (GtkVolumeButtonClass *klass)
                                                          P_("Whether to use symbolic icons"),
                                                          FALSE,
                                                          G_PARAM_READWRITE));
+
+  /* Bind class to template
+   */
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/gtkvolumebutton.ui");
+  gtk_widget_class_bind_callback (widget_class, cb_query_tooltip);
+  gtk_widget_class_bind_callback (widget_class, cb_value_changed);
 }
 
 static void
 gtk_volume_button_init (GtkVolumeButton *button)
 {
-  GtkScaleButton *sbutton = GTK_SCALE_BUTTON (button);
-  GtkAdjustment *adj;
-  GtkWidget *minus_button, *plus_button;
+  GtkWidget *widget = GTK_WIDGET (button);
 
-  atk_object_set_name (gtk_widget_get_accessible (GTK_WIDGET (button)),
-		       _("Volume"));
-  atk_object_set_description (gtk_widget_get_accessible (GTK_WIDGET (button)),
-		       _("Turns volume down or up"));
-  atk_action_set_description (ATK_ACTION (gtk_widget_get_accessible (GTK_WIDGET (button))),
-			      1,
-			      _("Adjusts the volume"));
+  gtk_widget_init_template (widget);
 
-  minus_button = gtk_scale_button_get_minus_button (sbutton);
-  plus_button = gtk_scale_button_get_plus_button (sbutton);
-
-  atk_object_set_name (gtk_widget_get_accessible (minus_button),
-		       _("Volume Down"));
-  atk_object_set_description (gtk_widget_get_accessible (minus_button),
-		       _("Decreases the volume"));
-  gtk_widget_set_tooltip_text (minus_button, _("Volume Down"));
-
-  atk_object_set_name (gtk_widget_get_accessible (plus_button),
-		       _("Volume Up"));
-  atk_object_set_description (gtk_widget_get_accessible (plus_button),
-		       _("Increases the volume"));
-  gtk_widget_set_tooltip_text (plus_button, _("Volume Up"));
-
-  gtk_scale_button_set_icons (sbutton, (const char **) icons);
-
-  adj = gtk_adjustment_new (0., 0., 1., 0.02, 0.2, 0.);
-  g_object_set (G_OBJECT (button),
-		"adjustment", adj,
-		"size", GTK_ICON_SIZE_SMALL_TOOLBAR,
-		"has-tooltip", TRUE,
-		NULL);
-
-  g_signal_connect (G_OBJECT (button), "query-tooltip",
-		    G_CALLBACK (cb_query_tooltip), NULL);
-  g_signal_connect (G_OBJECT (button), "value-changed",
-		    G_CALLBACK (cb_value_changed), NULL);
+  /* The atk action description is not supported by GtkBuilder */
+  atk_action_set_description (ATK_ACTION (gtk_widget_get_accessible (GTK_WIDGET (widget))),
+			      1, _("Adjusts the volume"));
 }
 
 /**

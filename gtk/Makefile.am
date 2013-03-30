@@ -1117,7 +1117,8 @@ COMPOSITE_TEMPLATES =			\
 	gtkprintunixdialog.ui		\
 	gtkrecentchooserdefault.ui	\
 	gtkscalebutton.ui		\
-	gtkstatusbar.ui
+	gtkstatusbar.ui			\
+	gtkvolumebutton.ui
 
 #
 # rules to generate built sources
