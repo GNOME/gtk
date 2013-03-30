@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-03-25 18:17+0000\n"
-"PO-Revision-Date: 2013-03-30 09:40+0100\n"
+"PO-Revision-Date: 2013-03-15 09:36+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -24,6 +24,8 @@ msgstr ""
 "%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Generator: Poedit 1.5.4\n"
+"X-Poedit-Language: Slovenian\n"
+"X-Poedit-Country: SLOVENIA\n"
 
 #: ../gdk/gdk.c:157
 #, c-format
@@ -4633,8 +4635,9 @@ msgstr "Zavračanje poslov"
 
 #. Translators: this string connects multiple printer states together.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2333
+#, fuzzy
 msgid "; "
-msgstr "; "
+msgstr ";"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3857
 msgid "Two Sided"
