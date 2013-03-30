@@ -82,10 +82,6 @@ enum {
   LAST_SIGNAL
 };
 
-enum {
-  LAST_ARG
-};
-
 static void gtk_text_tag_table_finalize     (GObject              *object);
 static void gtk_text_tag_table_set_property (GObject              *object,
                                              guint                 prop_id,
