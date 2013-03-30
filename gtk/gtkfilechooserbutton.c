@@ -130,7 +130,10 @@ enum
   LAST_SIGNAL
 };
 
-/* TreeModel Columns */
+/* TreeModel Columns
+ *
+ * keep in line with the store defined in gtkfilechooserbutton.ui
+ */
 enum
 {
   ICON_COLUMN,
@@ -182,7 +185,6 @@ struct _GtkFileChooserButtonPrivate
   GFile *selection_while_inactive;
   GFile *current_folder_while_inactive;
 
-  gulong combo_box_changed_id;
   gulong fs_volumes_changed_id;
   gulong fs_bookmarks_changed_id;
 
@@ -465,6 +467,23 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
 
   _gtk_file_chooser_install_properties (gobject_class);
 
+  /* Bind class to template
+   */
+  gtk_widget_class_set_template_from_resource (widget_class,
+					       "/org/gtk/libgtk/gtkfilechooserbutton.ui");
+
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserButtonPrivate, model);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserButtonPrivate, button);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserButtonPrivate, image);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserButtonPrivate, label);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserButtonPrivate, combo_box);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserButtonPrivate, icon_cell);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserButtonPrivate, name_cell);
+
+  gtk_widget_class_bind_callback (widget_class, button_clicked_cb);
+  gtk_widget_class_bind_callback (widget_class, combo_box_changed_cb);
+  gtk_widget_class_bind_callback (widget_class, combo_box_notify_popup_shown_cb);
+
   g_type_class_add_private (class, sizeof (GtkFileChooserButtonPrivate));
 }
 
@@ -472,7 +491,6 @@ static void
 gtk_file_chooser_button_init (GtkFileChooserButton *button)
 {
   GtkFileChooserButtonPrivate *priv;
-  GtkWidget *box, *image, *sep;
   GtkTargetList *target_list;
 
   priv = button->priv = G_TYPE_INSTANCE_GET_PRIVATE (button,
@@ -482,70 +500,8 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   priv->icon_size = FALLBACK_ICON_SIZE;
   priv->focus_on_click = TRUE;
 
-  /* Button */
-  priv->button = gtk_button_new ();
-  g_signal_connect (priv->button, "clicked",
-                    G_CALLBACK (button_clicked_cb), button);
-  gtk_box_pack_start (GTK_BOX (button), priv->button, TRUE, TRUE, 0);
-  gtk_widget_set_halign (priv->button, GTK_ALIGN_FILL);
-  gtk_widget_show (priv->button);
+  gtk_widget_init_template (GTK_WIDGET (button));
 
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
-  gtk_container_add (GTK_CONTAINER (priv->button), box);
-  gtk_widget_show (box);
-
-  priv->image = gtk_image_new ();
-  gtk_box_pack_start (GTK_BOX (box), priv->image, FALSE, FALSE, 0);
-  gtk_widget_show (priv->image);
-
-  priv->label = gtk_label_new (_(FALLBACK_DISPLAY_NAME));
-  gtk_label_set_ellipsize (GTK_LABEL (priv->label), PANGO_ELLIPSIZE_END);
-  gtk_widget_set_halign (priv->label, GTK_ALIGN_START);
-  gtk_widget_set_valign (priv->label, GTK_ALIGN_CENTER);
-  gtk_box_pack_start (GTK_BOX (box), priv->label, TRUE, TRUE, 0);
-  //gtk_container_add (GTK_CONTAINER (box), priv->label);
-  gtk_widget_show (priv->label);
-
-  sep = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
-  gtk_box_pack_start (GTK_BOX (box), sep, FALSE, FALSE, 0);
-  gtk_widget_show (sep);
-
-  image = gtk_image_new_from_stock (GTK_STOCK_OPEN, GTK_ICON_SIZE_MENU);
-  gtk_box_pack_start (GTK_BOX (box), image, FALSE, FALSE, 0);
-  gtk_widget_show (image);
-
-  /* Combo Box */
-  /* Keep in sync with columns enum, line 88 */
-  priv->model =
-    GTK_TREE_MODEL (gtk_list_store_new (NUM_COLUMNS,
-					GDK_TYPE_PIXBUF, /* ICON_COLUMN */
-					G_TYPE_STRING,	 /* DISPLAY_NAME_COLUMN */
-					G_TYPE_CHAR,	 /* TYPE_COLUMN */
-					G_TYPE_POINTER	 /* DATA_COLUMN (Volume || Path) */,
-					G_TYPE_BOOLEAN   /* IS_FOLDER_COLUMN */,
-					G_TYPE_POINTER	 /* CANCELLABLE_COLUMN */));
-
-  priv->combo_box = gtk_combo_box_new ();
-  priv->combo_box_changed_id = g_signal_connect (priv->combo_box, "changed",
-						 G_CALLBACK (combo_box_changed_cb), button);
-
-  g_signal_connect (priv->combo_box, "notify::popup-shown",
-		    G_CALLBACK (combo_box_notify_popup_shown_cb), button);
-
-  gtk_box_pack_start (GTK_BOX (button), priv->combo_box, TRUE, TRUE, 0);
-  gtk_widget_set_halign (priv->combo_box, GTK_ALIGN_FILL);
-
-  priv->icon_cell = gtk_cell_renderer_pixbuf_new ();
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (priv->combo_box),
-			      priv->icon_cell, FALSE);
-  gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (priv->combo_box),
-				 priv->icon_cell, "pixbuf", ICON_COLUMN);
-
-  priv->name_cell = gtk_cell_renderer_text_new ();
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (priv->combo_box),
-			      priv->name_cell, TRUE);
-  gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (priv->combo_box),
-				 priv->name_cell, "text", DISPLAY_NAME_COLUMN);
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (priv->combo_box),
 				      priv->name_cell, name_cell_data_func,
 				      NULL, NULL);
@@ -1122,12 +1078,6 @@ gtk_file_chooser_button_destroy (GtkWidget *widget)
         }
       g_slist_free (priv->change_icon_theme_cancellables);
       priv->change_icon_theme_cancellables = NULL;
-    }
-
-  if (priv->model)
-    {
-      g_object_unref (priv->model);
-      priv->model = NULL;
     }
 
   if (priv->filter_model)
@@ -2398,9 +2348,9 @@ select_combo_box_row_no_notify (GtkFileChooserButton *button, int pos)
   gtk_tree_model_filter_convert_child_iter_to_iter (GTK_TREE_MODEL_FILTER (priv->filter_model),
 						    &filter_iter, &iter);
 
-  g_signal_handler_block (priv->combo_box, priv->combo_box_changed_id);
+  g_signal_handlers_block_by_func (priv->combo_box, combo_box_changed_cb, button);
   gtk_combo_box_set_active_iter (GTK_COMBO_BOX (priv->combo_box), &filter_iter);
-  g_signal_handler_unblock (priv->combo_box, priv->combo_box_changed_id);
+  g_signal_handlers_unblock_by_func (priv->combo_box, combo_box_changed_cb, button);
 }
 
 static void
@@ -2457,11 +2407,10 @@ update_combo_box (GtkFileChooserButton *button)
 
       if (row_found)
 	{
-	  g_signal_handler_block (priv->combo_box, priv->combo_box_changed_id);
+	  g_signal_handlers_block_by_func (priv->combo_box, combo_box_changed_cb, button);
 	  gtk_combo_box_set_active_iter (GTK_COMBO_BOX (priv->combo_box),
 					 &iter);
-	  g_signal_handler_unblock (priv->combo_box,
-				    priv->combo_box_changed_id);
+	  g_signal_handlers_unblock_by_func (priv->combo_box, combo_box_changed_cb, button);
 	}
     }
   while (!row_found && gtk_tree_model_iter_next (priv->filter_model, &iter));

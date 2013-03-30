@@ -231,6 +231,21 @@ test_file_chooser_dialog_basic (void)
 }
 
 static void
+test_file_chooser_button_basic (void)
+{
+  GtkWidget *widget;
+
+  g_test_log_set_fatal_handler (ignore_gvfs_warning, NULL);
+
+  widget = gtk_file_chooser_button_new ("Choose a file !", GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+  g_assert (GTK_IS_FILE_CHOOSER_BUTTON (widget));
+  g_timeout_add (100, main_loop_quit_cb, NULL);
+  gtk_main();
+
+  gtk_widget_destroy (widget);
+}
+
+static void
 test_font_chooser_widget_basic (void)
 {
   GtkWidget *widget;
@@ -308,6 +323,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Template/GtkColorChooserDialog/Basic", test_color_chooser_dialog_basic);
   g_test_add_func ("/Template/GtkFileChooserWidget/Basic", test_file_chooser_widget_basic);
   g_test_add_func ("/Template/GtkFileChooserDialog/Basic", test_file_chooser_dialog_basic);
+  g_test_add_func ("/Template/GtkFileChooserButton/Basic", test_file_chooser_button_basic);
   g_test_add_func ("/Template/GtkFontChooserWidget/Basic", test_font_chooser_widget_basic);
   g_test_add_func ("/Template/GtkFontChooserDialog/Basic", test_font_chooser_dialog_basic);
   g_test_add_func ("/Template/GtkRecentChooserWidget/Basic", test_recent_chooser_widget_basic);
