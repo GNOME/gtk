@@ -207,12 +207,20 @@ static const struct wl_registry_listener registry_listener = {
     gdk_registry_handle_global_remove
 };
 
+static void
+log_handler(const char *format, va_list args)
+{
+  g_logv (G_LOG_DOMAIN, G_LOG_LEVEL_ERROR, format, args);
+}
+
 GdkDisplay *
 _gdk_wayland_display_open (const gchar *display_name)
 {
   struct wl_display *wl_display;
   GdkDisplay *display;
   GdkWaylandDisplay *display_wayland;
+
+  wl_log_set_handler_client(log_handler);
 
   wl_display = wl_display_connect(display_name);
   if (!wl_display)
