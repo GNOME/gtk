@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-03-25 18:16+0000\n"
-"PO-Revision-Date: 2013-03-14 22:10+0100\n"
+"PO-Revision-Date: 2013-03-30 11:07+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenščina <gnome-si@googlegroups.com>\n"
 "Language: Slovenian\n"
@@ -27,8 +27,6 @@ msgstr ""
 "%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Generator: Poedit 1.5.4\n"
-"X-Poedit-Language: Slovenian\n"
-"X-Poedit-Country: SLOVENIA\n"
 
 #: ../gdk/gdkapplaunchcontext.c:129 ../gdk/gdkcursor.c:134
 #: ../gdk/gdkdevicemanager.c:170
@@ -1315,24 +1313,26 @@ msgid "The index of the child in the parent"
 msgstr "Indeks podrejenega predmeta v nadrejenem predmetu"
 
 #: ../gtk/gtkbubblewindow.c:852
+#| msgid "Related Action"
 msgid "Relative to"
 msgstr "Relativno na"
 
 #: ../gtk/gtkbubblewindow.c:853
 msgid "Window the bubble window points to"
-msgstr ""
+msgstr "Okno, na katerega kaže obvestilo v oblačku"
 
 #: ../gtk/gtkbubblewindow.c:859
+#| msgid "Font scaling factor"
 msgid "Pointing to"
 msgstr "Kaže na"
 
 #: ../gtk/gtkbubblewindow.c:860
 msgid "Rectangle the bubble window points to"
-msgstr ""
+msgstr "Polje, na katerega kaže obvestilo v oblačku"
 
 #: ../gtk/gtkbubblewindow.c:867
 msgid "Position to place the bubble window"
-msgstr ""
+msgstr "Položaj prikaza obvestila v oblačku"
 
 #: ../gtk/gtkbuilder.c:307
 msgid "Translation Domain"
@@ -3248,7 +3248,7 @@ msgstr "Napolni vse"
 
 #: ../gtk/gtkentry.c:1439 ../gtk/gtktextview.c:877
 msgid "Whether to emit ::populate-popup for touch popups"
-msgstr ""
+msgstr "Ali naj se objavi predmet ::populate-popup za pojavna okna na dotik"
 
 #: ../gtk/gtkentry.c:1453
 msgid "Icon Prelight"
@@ -6411,6 +6411,7 @@ msgstr ""
 "kazalke."
 
 #: ../gtk/gtksettings.c:1420
+#| msgid "Recent Files Max Age"
 msgid "Recent Files Enabled"
 msgstr "Nedavno uporabljene datoteke omogočene"
 
@@ -6554,9 +6555,10 @@ msgstr "Povezan predmet GdkScreen"
 
 #: ../gtk/gtkstylecontext.c:451
 msgid "FrameClock"
-msgstr ""
+msgstr "Ura okna"
 
 #: ../gtk/gtkstylecontext.c:452
+#| msgid "The associated GdkScreen"
 msgid "The associated GdkFrameClock"
 msgstr "Povezan predmet GdkFrameClock"
 
