@@ -617,6 +617,7 @@ _gtk_builder_construct (GtkBuilder *builder,
   GtkBuildableIface *iface;
   gboolean custom_set_property;
   GtkBuildable *buildable;
+  GParamFlags param_filter_flags;
 
   g_assert (info->class_name != NULL);
   object_type = gtk_builder_get_type_from_name (builder, info->class_name);
@@ -641,10 +642,27 @@ _gtk_builder_construct (GtkBuilder *builder,
       return NULL;
     }
 
+  /* If there is a manual constructor (like UIManager), or if this is a
+   * reference to an internal child, then we filter out construct-only
+   * and warn that they cannot be set.
+   *
+   * Otherwise if we are calling g_object_newv(), we want to pass
+   * both G_PARAM_CONSTRUCT and G_PARAM_CONSTRUCT_ONLY to the
+   * object's constructor.
+   *
+   * Passing all construct properties to g_object_newv() slightly
+   * improves performance as the construct properties will only be set once.
+   */
+  if (info->constructor ||
+      (info->parent && ((ChildInfo*)info->parent)->internal_child != NULL))
+    param_filter_flags = G_PARAM_CONSTRUCT_ONLY;
+  else
+    param_filter_flags = G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY;
+
   gtk_builder_get_parameters (builder, object_type,
                               info->id,
                               info->properties,
-			      (G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY),
+			      param_filter_flags,
                               &parameters,
                               &construct_parameters);
 
