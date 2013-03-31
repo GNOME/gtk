@@ -144,6 +144,7 @@ struct _GtkTextAttributes
   PangoLanguage *language;
 
   /*< private >*/
+  /* Paragraph background */
   GdkColor *pg_bg_color;
 
   /*< public >*/
@@ -159,6 +160,7 @@ struct _GtkTextAttributes
   guint editable : 1;
 
   /*< private >*/
+  /* Paragraph background */
   GdkRGBA *pg_bg_rgba;
 
   guint padding[3];
