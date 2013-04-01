@@ -154,7 +154,6 @@ G_DEFINE_TYPE (GdkWindowImplX11, gdk_window_impl_x11, GDK_TYPE_WINDOW_IMPL)
 static void
 gdk_window_impl_x11_init (GdkWindowImplX11 *impl)
 {  
-  impl->toplevel_window_type = -1;
   impl->device_cursor = g_hash_table_new_full (NULL, NULL,
                                                NULL, g_object_unref);
 }
