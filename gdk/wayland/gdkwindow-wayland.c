@@ -95,8 +95,6 @@ struct _GdkWindowImplWayland
 
   GdkCursor *cursor;
 
-  gint8 toplevel_window_type;
-
   struct wl_surface *surface;
   struct wl_shell_surface *shell_surface;
   unsigned int mapped : 1;
@@ -154,7 +152,6 @@ G_DEFINE_TYPE (GdkWindowImplWayland, _gdk_window_impl_wayland, GDK_TYPE_WINDOW_I
 static void
 _gdk_window_impl_wayland_init (GdkWindowImplWayland *impl)
 {
-  impl->toplevel_window_type = -1;
 }
 
 void
