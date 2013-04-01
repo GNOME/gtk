@@ -7799,8 +7799,10 @@ gtk_widget_set_state (GtkWidget           *widget,
 {
   GtkStateFlags flags;
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   if (state == gtk_widget_get_state (widget))
     return;
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   switch (state)
     {
@@ -11368,7 +11370,9 @@ gtk_widget_propagate_state (GtkWidget    *widget,
   GtkStateFlags new_flags, old_flags = priv->state_flags;
   GtkStateType old_state;
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   old_state = gtk_widget_get_state (widget);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   priv->state_flags |= data->flags_to_set;
   priv->state_flags &= ~(data->flags_to_unset);
