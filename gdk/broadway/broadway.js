@@ -2675,7 +2675,7 @@ function connect()
 	var params = query_string[1].split("&");
     }
 
-    var loc = window.location.toString().replace("http:", "ws:");
+    var loc = window.location.toString().replace("http:", "ws:").replace("https:", "wss:");
     loc = loc.substr(0, loc.lastIndexOf('/')) + "/socket";
 
     var supports_binary = newWS (loc + "-test").binaryType == "blob";
