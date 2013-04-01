@@ -1670,21 +1670,6 @@ gdk_x11_display_get_name (GdkDisplay *display)
   return (gchar *) DisplayString (GDK_X11_DISPLAY (display)->xdisplay);
 }
 
-static gint
-gdk_x11_display_get_n_screens (GdkDisplay *display)
-{
-  return 1;
-}
-
-static GdkScreen *
-gdk_x11_display_get_screen (GdkDisplay *display,
-			    gint        screen_num)
-{
-  g_return_val_if_fail (screen_num == 0, NULL);
-
-  return GDK_X11_DISPLAY (display)->screen;
-}
-
 static GdkScreen *
 gdk_x11_display_get_default_screen (GdkDisplay *display)
 {
@@ -2798,8 +2783,6 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->window_type = GDK_TYPE_X11_WINDOW;
 
   display_class->get_name = gdk_x11_display_get_name;
-  display_class->get_n_screens = gdk_x11_display_get_n_screens;
-  display_class->get_screen = gdk_x11_display_get_screen;
   display_class->get_default_screen = gdk_x11_display_get_default_screen;
   display_class->beep = gdk_x11_display_beep;
   display_class->sync = gdk_x11_display_sync;

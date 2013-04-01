@@ -186,24 +186,6 @@ gdk_broadway_display_get_name (GdkDisplay *display)
   return (gchar *) "Broadway";
 }
 
-static gint
-gdk_broadway_display_get_n_screens (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
-
-  return 1;
-}
-
-static GdkScreen *
-gdk_broadway_display_get_screen (GdkDisplay *display,
-				 gint        screen_num)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  g_return_val_if_fail (screen_num == 0, NULL);
-
-  return GDK_BROADWAY_DISPLAY (display)->screens[screen_num];
-}
-
 static GdkScreen *
 gdk_broadway_display_get_default_screen (GdkDisplay *display)
 {
@@ -394,8 +376,6 @@ gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
   display_class->window_type = GDK_TYPE_BROADWAY_WINDOW;
 
   display_class->get_name = gdk_broadway_display_get_name;
-  display_class->get_n_screens = gdk_broadway_display_get_n_screens;
-  display_class->get_screen = gdk_broadway_display_get_screen;
   display_class->get_default_screen = gdk_broadway_display_get_default_screen;
   display_class->beep = gdk_broadway_display_beep;
   display_class->sync = gdk_broadway_display_sync;

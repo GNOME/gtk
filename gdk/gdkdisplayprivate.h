@@ -136,9 +136,6 @@ struct _GdkDisplayClass
   GType window_type;          /* type for native windows for this display, set in class_init */
 
   const gchar *              (*get_name)           (GdkDisplay *display);
-  gint                       (*get_n_screens)      (GdkDisplay *display);
-  GdkScreen *                (*get_screen)         (GdkDisplay *display,
-                                                    gint        screen_num);
   GdkScreen *                (*get_default_screen) (GdkDisplay *display);
   void                       (*beep)               (GdkDisplay *display);
   void                       (*sync)               (GdkDisplay *display);

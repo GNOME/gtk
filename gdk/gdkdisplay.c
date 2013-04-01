@@ -1430,7 +1430,7 @@ gdk_display_get_n_screens (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
 
-  return GDK_DISPLAY_GET_CLASS (display)->get_n_screens (display);
+  return 1;
 }
 
 /**
@@ -1449,8 +1449,9 @@ gdk_display_get_screen (GdkDisplay *display,
 			gint        screen_num)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  g_return_val_if_fail (screen_num != 0, NULL);
 
-  return GDK_DISPLAY_GET_CLASS (display)->get_screen (display, screen_num);
+  return gdk_display_get_default_screen (display);
 }
 
 /**

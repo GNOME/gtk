@@ -155,24 +155,6 @@ gdk_quartz_display_get_name (GdkDisplay *display)
   return display_name;
 }
 
-static gint
-gdk_quartz_display_get_n_screens (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
-
-  return 1;
-}
-
-static GdkScreen *
-gdk_quartz_display_get_screen (GdkDisplay *display,
-                               gint        screen_num)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  g_return_val_if_fail (screen_num == 0, NULL);
-
-  return _gdk_screen;
-}
-
 static GdkScreen *
 gdk_quartz_display_get_default_screen (GdkDisplay *display)
 {
@@ -323,8 +305,6 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   display_class->window_type = GDK_TYPE_QUARTZ_WINDOW;
 
   display_class->get_name = gdk_quartz_display_get_name;
-  display_class->get_n_screens = gdk_quartz_display_get_n_screens;
-  display_class->get_screen = gdk_quartz_display_get_screen;
   display_class->get_default_screen = gdk_quartz_display_get_default_screen;
   display_class->beep = gdk_quartz_display_beep;
   display_class->sync = gdk_quartz_display_sync;
