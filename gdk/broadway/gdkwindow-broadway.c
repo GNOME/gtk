@@ -1274,6 +1274,7 @@ create_moveresize_window (MoveResizeData *mv_resize,
 
   gdk_window_show (mv_resize->moveresize_emulation_window);
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   status = gdk_pointer_grab (mv_resize->moveresize_emulation_window,
 			     FALSE,
 			     GDK_BUTTON_RELEASE_MASK |
@@ -1281,6 +1282,7 @@ create_moveresize_window (MoveResizeData *mv_resize,
 			     NULL,
 			     NULL,
 			     timestamp);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   if (status != GDK_GRAB_SUCCESS)
     {
