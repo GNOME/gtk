@@ -153,7 +153,7 @@ You can change the default attributes for a given #GtkTextView, and you can
 apply tags that change the attributes for a region of text.  For text features 
 that come from the theme &mdash; such as font and foreground color &mdash; use 
 standard #GtkWidget functions such as gtk_widget_modify_font() or
-gtk_widget_override_text(). For other attributes there are dedicated methods on
+gtk_widget_override_color(). For other attributes there are dedicated methods on
 #GtkTextView such as gtk_text_view_set_tabs().
 
 <informalexample><programlisting>
