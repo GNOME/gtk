@@ -13,30 +13,6 @@ state_changed (GtkWidget *widget)
   const gchar *sep;
 
   g_print ("state changed: \n");
-  switch (gtk_widget_get_state (widget))
-    {
-    case GTK_STATE_ACTIVE:
-      g_print ("active, ");
-      break;
-    case GTK_STATE_PRELIGHT:
-      g_print ("prelight, ");
-      break;
-    case GTK_STATE_SELECTED:
-      g_print ("selected, ");
-      break;
-    case GTK_STATE_INSENSITIVE:
-      g_print ("insensitive, ");
-      break;
-    case GTK_STATE_INCONSISTENT:
-      g_print ("inconsistent, ");
-      break;
-    case GTK_STATE_FOCUSED:
-      g_print ("focused, ");
-      break;
-    case GTK_STATE_NORMAL:
-      g_print ("normal, ");
-      break;
-    }
 
   flags = gtk_widget_get_state_flags (widget);
   sep = "";
