@@ -9779,7 +9779,6 @@ gtk_window_set_screen (GtkWindow *window,
 
   gtk_window_free_key_hash (window);
   priv->screen = screen;
-  gtk_widget_reset_rc_styles (widget);
   if (screen != previous_screen)
     {
       if (previous_screen)
