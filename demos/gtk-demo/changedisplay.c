@@ -1,24 +1,23 @@
 /* Change Display
  *
- * Demonstrates migrating a window between different displays and
- * screens. A display is a mouse and keyboard with some number of
- * associated monitors. A screen is a set of monitors grouped
- * into a single physical work area. The neat thing about having
- * multiple displays is that they can be on a completely separate
+ * Demonstrates migrating a window between different displays.
+ * A display is a mouse and keyboard with some number of
+ * associated monitors. The neat thing about having multiple 
+ * displays is that they can be on a completely separate
  * computers, as long as there is a network connection to the
  * computer where the application is running.
  *
  * Only some of the windowing systems where GTK+ runs have the
- * concept of multiple displays and screens. (The X Window System
- * is the main example.) Other windowing systems can only
- * handle one keyboard and mouse, and combine all monitors into
- * a single screen.
+ * concept of multiple displays. (The X Window System is the
+ * main example.) Other windowing systems can only handle one
+ * keyboard and mouse, and combine all monitors into
+ * a single display.
  *
  * This is a moderately complex example, and demonstrates:
  *
- *  - Tracking the currently open displays and screens
+ *  - Tracking the currently open displays
  *
- *  - Changing the screen for a window
+ *  - Changing the display for a window
  *
  *  - Letting the user choose a window by clicking on it
  *
@@ -45,11 +44,8 @@ struct _ChangeDisplayInfo
   GtkSizeGroup *size_group;
 
   GtkTreeModel *display_model;
-  GtkTreeModel *screen_model;
-  GtkTreeSelection *screen_selection;
 
   GdkDisplay *current_display;
-  GdkScreen *current_screen;
 };
 
 /* These enumerations provide symbolic names for the columns
@@ -177,38 +173,9 @@ query_change_display (ChangeDisplayInfo *info)
                                  "to move to the new screen");
 
   if (toplevel)
-    gtk_window_set_screen (GTK_WINDOW (toplevel), info->current_screen);
+    gtk_window_set_screen (GTK_WINDOW (toplevel), gdk_display_get_screen (info->current_display, 0));
   else
     gdk_display_beep (gdk_screen_get_display (screen));
-}
-
-/* Fills in the screen list based on the current display
- */
-static void
-fill_screens (ChangeDisplayInfo *info)
-{
-  gtk_list_store_clear (GTK_LIST_STORE (info->screen_model));
-
-  if (info->current_display)
-    {
-      gint n_screens = gdk_display_get_n_screens (info->current_display);
-      gint i;
-
-      for (i = 0; i < n_screens; i++)
-        {
-          GdkScreen *screen = gdk_display_get_screen (info->current_display, i);
-          GtkTreeIter iter;
-
-          gtk_list_store_append (GTK_LIST_STORE (info->screen_model), &iter);
-          gtk_list_store_set (GTK_LIST_STORE (info->screen_model), &iter,
-                              SCREEN_COLUMN_NUMBER, i,
-                              SCREEN_COLUMN_SCREEN, screen,
-                              -1);
-
-          if (i == 0)
-            gtk_tree_selection_select_iter (info->screen_selection, &iter);
-        }
-    }
 }
 
 /* Called when the user clicks on a button in our dialog or
@@ -320,28 +287,6 @@ display_changed_cb (GtkTreeSelection  *selection,
                         -1);
   else
     info->current_display = NULL;
-
-  fill_screens (info);
-}
-
-/* Called when the selected row in the sceen list changes.
- * Updates info->current_screen.
- */
-static void
-screen_changed_cb (GtkTreeSelection  *selection,
-                   ChangeDisplayInfo *info)
-{
-  GtkTreeModel *model;
-  GtkTreeIter iter;
-
-  if (info->current_screen)
-    g_object_unref (info->current_screen);
-  if (gtk_tree_selection_get_selected (selection, &model, &iter))
-    gtk_tree_model_get (model, &iter,
-                        SCREEN_COLUMN_SCREEN, &info->current_screen,
-                        -1);
-  else
-    info->current_screen = NULL;
 }
 
 /* This function is used both for creating the "Display" and
@@ -442,37 +387,6 @@ create_display_frame (ChangeDisplayInfo *info)
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view));
   g_signal_connect (selection, "changed",
                     G_CALLBACK (display_changed_cb), info);
-
-  return frame;
-}
-
-/* Creates the "Screen" frame in the main window.
- */
-GtkWidget *
-create_screen_frame (ChangeDisplayInfo *info)
-{
-  GtkWidget *frame;
-  GtkWidget *tree_view;
-  GtkWidget *button_vbox;
-  GtkTreeViewColumn *column;
-
-  create_frame (info, "Screen", &frame, &tree_view, &button_vbox);
-
-  info->screen_model = (GtkTreeModel *)gtk_list_store_new (SCREEN_NUM_COLUMNS,
-                                                           G_TYPE_INT,
-                                                           GDK_TYPE_SCREEN);
-
-  gtk_tree_view_set_model (GTK_TREE_VIEW (tree_view), info->screen_model);
-
-  column = gtk_tree_view_column_new_with_attributes ("Number",
-                                                     gtk_cell_renderer_text_new (),
-                                                     "text", SCREEN_COLUMN_NUMBER,
-                                                     NULL);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
-
-  info->screen_selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view));
-  g_signal_connect (info->screen_selection, "changed",
-                    G_CALLBACK (screen_changed_cb), info);
 
   return frame;
 }
@@ -580,12 +494,9 @@ destroy_info (ChangeDisplayInfo *info)
 
   g_object_unref (info->size_group);
   g_object_unref (info->display_model);
-  g_object_unref (info->screen_model);
 
   if (info->current_display)
     g_object_unref (info->current_display);
-  if (info->current_screen)
-    g_object_unref (info->current_screen);
 
   g_free (info);
 }
@@ -635,9 +546,6 @@ do_changedisplay (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (content_area), vbox, TRUE, TRUE, 0);
 
       frame = create_display_frame (info);
-      gtk_box_pack_start (GTK_BOX (vbox), frame, TRUE, TRUE, 0);
-
-      frame = create_screen_frame (info);
       gtk_box_pack_start (GTK_BOX (vbox), frame, TRUE, TRUE, 0);
 
       initialize_displays (info);
