@@ -6169,6 +6169,9 @@ gtk_window_has_mnemonic_modifier_pressed (GtkWindow *window)
   GdkDeviceManager *device_manager;
   gboolean retval = FALSE;
 
+  if (!window->priv->mnemonic_modifier)
+    return FALSE;
+
   device_manager = gdk_display_get_device_manager (gtk_widget_get_display (GTK_WIDGET (window)));
   devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
 
