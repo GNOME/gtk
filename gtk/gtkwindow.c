@@ -6162,11 +6162,12 @@ do_focus_change (GtkWidget *widget,
   g_object_unref (widget);
 }
 
-static void
-maybe_set_mnemonics_visible (GtkWindow *window)
+static gboolean
+gtk_window_has_mnemonic_modifier_pressed (GtkWindow *window)
 {
   GList *devices, *d;
   GdkDeviceManager *device_manager;
+  gboolean retval = FALSE;
 
   device_manager = gdk_display_get_device_manager (gtk_widget_get_display (GTK_WIDGET (window)));
   devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
@@ -6183,13 +6184,15 @@ maybe_set_mnemonics_visible (GtkWindow *window)
                                 NULL, &mask);
           if (window->priv->mnemonic_modifier == (mask & gtk_accelerator_get_default_mod_mask ()))
             {
-              _gtk_window_schedule_mnemonics_visible (window);
+              retval = TRUE;
               break;
             }
         }
     }
 
   g_list_free (devices);
+
+  return retval;
 }
 
 static gint
@@ -6211,8 +6214,8 @@ gtk_window_focus_in_event (GtkWidget     *widget,
 
       g_object_get (gtk_widget_get_settings (widget),
                     "gtk-auto-mnemonics", &auto_mnemonics, NULL);
-      if (auto_mnemonics)
-        maybe_set_mnemonics_visible (window);
+      if (auto_mnemonics && gtk_window_has_mnemonic_modifier_pressed (window))
+        _gtk_window_schedule_mnemonics_visible (window);
     }
 
   return FALSE;
