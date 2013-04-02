@@ -667,15 +667,22 @@ size_group_start_element (GMarkupParseContext *context,
   GSListSubParserData *data = (GSListSubParserData*)user_data;
 
   if (strcmp (element_name, "widget") == 0)
-    for (i = 0; names[i]; i++)
-      if (strcmp (names[i], "name") == 0)
-	data->items = g_slist_prepend (data->items, g_strdup (values[i]));
+    {
+      for (i = 0; names[i]; i++)
+        {
+          if (strcmp (names[i], "name") == 0)
+            data->items = g_slist_prepend (data->items, g_strdup (values[i]));
+        }
+    }
   else if (strcmp (element_name, "widgets") == 0)
-    return;
+    {
+      return;
+    }
   else
-    g_warning ("Unsupported type tag for GtkSizeGroup: %s\n",
-	       element_name);
-
+    {
+      g_warning ("Unsupported type tag for GtkSizeGroup: %s\n",
+                 element_name);
+    }
 }
 
 static const GMarkupParser size_group_parser =
