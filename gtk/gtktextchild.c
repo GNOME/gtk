@@ -101,7 +101,7 @@ pixbuf_segment_check_func (GtkTextLineSegment *seg,
   if (seg->next == NULL)
     g_error ("pixbuf segment is the last segment in a line");
 
-  if (seg->byte_count != 3)
+  if (seg->byte_count != GTK_TEXT_UNKNOWN_CHAR_UTF8_LEN)
     g_error ("pixbuf segment has byte count of %d", seg->byte_count);
 
   if (seg->char_count != 1)
@@ -201,7 +201,7 @@ child_segment_check_func (GtkTextLineSegment *seg,
   if (seg->next == NULL)
     g_error ("child segment is the last segment in a line");
 
-  if (seg->byte_count != 3)
+  if (seg->byte_count != GTK_TEXT_UNKNOWN_CHAR_UTF8_LEN)
     g_error ("child segment has byte count of %d", seg->byte_count);
 
   if (seg->char_count != 1)
@@ -232,9 +232,10 @@ _gtk_widget_segment_new (GtkTextChildAnchor *anchor)
 
   seg->next = NULL;
 
-  seg->byte_count = 3; /* We convert to the 0xFFFC "unknown character",
-                        * a 3-byte sequence in UTF-8
-                        */
+  /* We convert to the 0xFFFC "unknown character",
+   * a 3-byte sequence in UTF-8.
+   */
+  seg->byte_count = GTK_TEXT_UNKNOWN_CHAR_UTF8_LEN;
   seg->char_count = 1;
 
   seg->body.child.obj = anchor;
