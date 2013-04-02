@@ -69,7 +69,17 @@ to that bug report.
 Otherwise, enter a new bug report that describes the patch,
 and attach the patch to that bug report.
 
-Patches should be in unified diff form. (The -up option to GNU diff.)
+Patches should be in unified diff form. (The -up option to GNU diff)
+Even better are git-formatted patches. (Use git format-patch)
+
+
+Release notes for 3.10
+======================
+
+* GDK has been changed to allow only a single screen per display.
+  Only the X11 backend had multiple screens before, and multi-screen
+  setups (not multi-monitor!) are very rare nowadays. If you really
+  need multiple X screens, open them as separate displays.
 
 Release notes for 3.8
 =====================
