@@ -1698,7 +1698,7 @@ gtk_main_do_event (GdkEvent *event)
               if (GTK_IS_WINDOW (window))
                 {
                   if (mnemonics_visible)
-                    _gtk_window_set_auto_mnemonics_visible (GTK_WINDOW (window));
+                    _gtk_window_schedule_mnemonics_visible (GTK_WINDOW (window));
                   else
                     gtk_window_set_mnemonics_visible (GTK_WINDOW (window), FALSE);
                 }

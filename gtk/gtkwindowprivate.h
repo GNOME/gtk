@@ -86,7 +86,7 @@ gboolean        _gtk_window_query_nonaccels     (GtkWindow      *window,
                                                  guint           accel_key,
                                                  GdkModifierType accel_mods);
 
-void            _gtk_window_set_auto_mnemonics_visible (GtkWindow *window);
+void            _gtk_window_schedule_mnemonics_visible (GtkWindow *window);
 
 G_END_DECLS
 
