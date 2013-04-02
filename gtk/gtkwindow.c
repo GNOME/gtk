@@ -98,7 +98,7 @@
  * </refsect2>
  */
 
-#define AUTO_MNEMONICS_DELAY 300 /* ms */
+#define MNEMONICS_DELAY 300 /* ms */
 
 typedef struct _GtkDeviceGrabInfo GtkDeviceGrabInfo;
 
@@ -132,7 +132,7 @@ struct _GtkWindowPrivate
 
   guint16  configure_request_count;
 
-  guint    auto_mnemonics_timeout_id;
+  guint    mnemonics_display_timeout_id;
 
   /* The following flags are initially TRUE (before a window is mapped).
    * They cause us to compute a configure request that involves
@@ -4740,10 +4740,10 @@ gtk_window_finalize (GObject *object)
 
   g_free (priv->startup_id);
 
-  if (priv->auto_mnemonics_timeout_id)
+  if (priv->mnemonics_display_timeout_id)
     {
-      g_source_remove (priv->auto_mnemonics_timeout_id);
-      priv->auto_mnemonics_timeout_id = 0;
+      g_source_remove (priv->mnemonics_display_timeout_id);
+      priv->mnemonics_display_timeout_id = 0;
     }
 
 #ifdef GDK_WINDOWING_X11
@@ -6183,7 +6183,7 @@ maybe_set_mnemonics_visible (GtkWindow *window)
                                 NULL, &mask);
           if (window->priv->mnemonic_modifier == (mask & gtk_accelerator_get_default_mod_mask ()))
             {
-              _gtk_window_set_auto_mnemonics_visible (window);
+              _gtk_window_schedule_mnemonics_visible (window);
               break;
             }
         }
@@ -9650,17 +9650,17 @@ gtk_window_set_mnemonics_visible (GtkWindow *window,
       g_object_notify (G_OBJECT (window), "mnemonics-visible");
     }
 
-  if (priv->auto_mnemonics_timeout_id)
+  if (priv->mnemonics_display_timeout_id)
     {
-      g_source_remove (priv->auto_mnemonics_timeout_id);
-      priv->auto_mnemonics_timeout_id = 0;
+      g_source_remove (priv->mnemonics_display_timeout_id);
+      priv->mnemonics_display_timeout_id = 0;
     }
 
   priv->mnemonics_visible_set = TRUE;
 }
 
 static gboolean
-set_auto_mnemonics_visible_cb (gpointer data)
+schedule_mnemonics_visible_cb (gpointer data)
 {
   GtkWindow *window = data;
 
@@ -9672,15 +9672,15 @@ set_auto_mnemonics_visible_cb (gpointer data)
 }
 
 void
-_gtk_window_set_auto_mnemonics_visible (GtkWindow *window)
+_gtk_window_schedule_mnemonics_visible (GtkWindow *window)
 {
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  if (window->priv->auto_mnemonics_timeout_id)
+  if (window->priv->mnemonics_display_timeout_id)
     return;
 
-  window->priv->auto_mnemonics_timeout_id =
-    gdk_threads_add_timeout (AUTO_MNEMONICS_DELAY, set_auto_mnemonics_visible_cb, window);
+  window->priv->mnemonics_display_timeout_id =
+    gdk_threads_add_timeout (MNEMONICS_DELAY, schedule_mnemonics_visible_cb, window);
 }
 
 /**
