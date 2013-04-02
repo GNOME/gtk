@@ -3480,7 +3480,9 @@ gtk_widget_set_property (GObject         *object,
       gtk_widget_set_receives_default (widget, g_value_get_boolean (value));
       break;
     case PROP_STYLE:
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_widget_set_style (widget, g_value_get_object (value));
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_EVENTS:
       if (!gtk_widget_get_realized (widget) && gtk_widget_get_has_window (widget))
@@ -3658,7 +3660,9 @@ gtk_widget_get_property (GObject         *object,
       g_value_set_boolean (value, widget->priv->composite_child);
       break;
     case PROP_STYLE:
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       g_value_set_object (value, gtk_widget_get_style (widget));
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_EVENTS:
       eventp = g_object_get_qdata (G_OBJECT (widget), quark_event_mask);
@@ -3805,7 +3809,9 @@ gtk_widget_init (GtkWidget *widget)
 
   _gtk_size_request_cache_init (&priv->requests);
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   priv->style = gtk_widget_get_default_style ();
+  G_GNUC_END_IGNORE_DEPRECATIONS;
   g_object_ref (priv->style);
 }
 
@@ -4808,7 +4814,9 @@ gtk_widget_realize (GtkWidget *widget)
       if (priv->parent && !gtk_widget_get_realized (priv->parent))
 	gtk_widget_realize (priv->parent);
 
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_widget_ensure_style (widget);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
 
       if (priv->style_update_pending)
         g_signal_emit (widget, widget_signals[STYLE_UPDATED], 0);
@@ -7121,6 +7129,7 @@ gtk_widget_real_style_updated (GtkWidget *widget)
   gtk_widget_update_pango_context (widget);
   gtk_widget_update_alpha (widget);
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   if (priv->style != NULL &&
       priv->style != gtk_widget_get_default_style ())
     {
@@ -7132,6 +7141,7 @@ gtk_widget_real_style_updated (GtkWidget *widget)
                      0,
                      widget->priv->style);
     }
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   if (widget->priv->context)
     {
@@ -10814,10 +10824,12 @@ gtk_widget_real_destroy (GtkWidget *object)
       l = next;
     }
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   if (priv->style)
     g_object_unref (priv->style);
   priv->style = gtk_widget_get_default_style ();
   g_object_ref (priv->style);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 static void

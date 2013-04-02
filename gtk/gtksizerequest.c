@@ -119,7 +119,9 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
     {
       gint adjusted_min, adjusted_natural, adjusted_for_size = for_size;
 
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_widget_ensure_style (widget);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
 
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {

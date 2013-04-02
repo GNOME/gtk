@@ -1798,6 +1798,7 @@ gtk_icon_set_render_icon (GtkIconSet        *icon_set,
   g_return_val_if_fail (icon_set != NULL, NULL);
   g_return_val_if_fail (style == NULL || GTK_IS_STYLE (style), NULL);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   if (style && gtk_style_has_context (style))
     {
       g_object_get (style, "context", &context, NULL);
@@ -1828,7 +1829,6 @@ gtk_icon_set_render_icon (GtkIconSet        *icon_set,
     }
 
   gtk_style_context_set_state (context, flags);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   gtk_style_context_set_direction (context, direction);
 G_GNUC_END_IGNORE_DEPRECATIONS;
 
