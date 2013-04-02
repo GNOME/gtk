@@ -11152,9 +11152,9 @@ set_auto_mnemonics_visible_cb (gpointer data)
 {
   GtkWindow *window = data;
 
-  gtk_window_set_mnemonics_visible (window, TRUE);
+  window->priv->mnemonics_display_timeout_id = 0;
 
-  window->priv->auto_mnemonics_timeout_id = 0;
+  gtk_window_set_mnemonics_visible (window, TRUE);
 
   return FALSE;
 }
