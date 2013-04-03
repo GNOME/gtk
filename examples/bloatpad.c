@@ -35,6 +35,29 @@ change_fullscreen_state (GSimpleAction *action,
 }
 
 static void
+change_busy_state (GSimpleAction *action,
+                   GVariant      *state,
+                   gpointer       user_data)
+{
+  GtkWindow *window = user_data;
+  GApplication *application = G_APPLICATION (gtk_window_get_application (window));
+
+  /* do this twice to test multiple busy counter increases */
+  if (g_variant_get_boolean (state))
+    {
+      g_application_mark_busy (application);
+      g_application_mark_busy (application);
+    }
+  else
+    {
+      g_application_unmark_busy (application);
+      g_application_unmark_busy (application);
+    }
+
+  g_simple_action_set_state (action, state);
+}
+
+static void
 change_justify_state (GSimpleAction *action,
                       GVariant      *state,
                       gpointer       user_data)
@@ -94,6 +117,7 @@ static GActionEntry win_entries[] = {
   { "copy", window_copy, NULL, NULL, NULL },
   { "paste", window_paste, NULL, NULL, NULL },
   { "fullscreen", activate_toggle, NULL, "false", change_fullscreen_state },
+  { "busy", activate_toggle, NULL, "false", change_busy_state },
   { "justify", activate_radio, "s", "'left'", change_justify_state }
 };
 
@@ -355,6 +379,10 @@ bloat_pad_startup (GApplication *application)
                                "          <attribute name='label' translatable='yes'>_Fullscreen</attribute>"
                                "          <attribute name='action'>win.fullscreen</attribute>"
                                "          <attribute name='accel'>F11</attribute>"
+                               "        </item>"
+                               "        <item>"
+                               "          <attribute name='label' translatable='yes'>_Look Busy</attribute>"
+                               "          <attribute name='action'>win.busy</attribute>"
                                "        </item>"
                                "      </section>"
                                "    </submenu>"
