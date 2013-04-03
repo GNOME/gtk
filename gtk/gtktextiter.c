@@ -4163,6 +4163,9 @@ gtk_text_iter_forward_to_tag_toggle (GtkTextIter *iter,
 
   check_invariants (iter);
 
+  if (gtk_text_iter_is_end (iter))
+    return FALSE;
+
   current_line = real->line;
   next_line = _gtk_text_line_next_could_contain_tag (current_line,
                                                      real->tree, tag);

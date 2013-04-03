@@ -255,6 +255,57 @@ test_search_caseless (void)
   check_found_backward ("This is some \303\200\n\303\200 text", "a\314\200\na\314\200", flags, 13, 16, "\303\200\n\303\200");
 }
 
+static void
+test_forward_to_tag_toggle (void)
+{
+  GtkTextBuffer *buffer;
+  GtkTextTag *bold_tag;
+  GtkTextTag *editable_tag;
+  GtkTextIter iter;
+  gint offset;
+
+  buffer = gtk_text_buffer_new (NULL);
+
+  bold_tag = gtk_text_buffer_create_tag (buffer, "bold",
+                                         "weight", PANGO_WEIGHT_BOLD,
+                                         NULL);
+
+  editable_tag = gtk_text_buffer_create_tag (buffer, "not-editable",
+                                             "editable", FALSE,
+                                             NULL);
+
+  gtk_text_buffer_get_start_iter (buffer, &iter);
+
+  gtk_text_buffer_insert (buffer, &iter, "a", -1);
+  gtk_text_buffer_insert_with_tags (buffer, &iter, "b", -1, bold_tag, NULL);
+  gtk_text_buffer_insert_with_tags (buffer, &iter, "c", -1, editable_tag, NULL);
+
+  /* Go to the first "on" toggle */
+  gtk_text_buffer_get_start_iter (buffer, &iter);
+  g_assert (gtk_text_iter_forward_to_tag_toggle (&iter, NULL));
+  offset = gtk_text_iter_get_offset (&iter);
+  g_assert_cmpint (offset, ==, 1);
+
+  /* Go to the last "off" toggle for the bold tag */
+  g_assert (gtk_text_iter_forward_to_tag_toggle (&iter, bold_tag));
+  offset = gtk_text_iter_get_offset (&iter);
+  g_assert_cmpint (offset, ==, 2);
+
+  g_assert (!gtk_text_iter_forward_to_tag_toggle (&iter, bold_tag));
+
+  /* Go to the first "on" toggle for the editable tag */
+  gtk_text_buffer_get_start_iter (buffer, &iter);
+  g_assert (gtk_text_iter_forward_to_tag_toggle (&iter, editable_tag));
+  offset = gtk_text_iter_get_offset (&iter);
+  g_assert_cmpint (offset, ==, 2);
+
+  /* Test with the end iter */
+  gtk_text_buffer_get_end_iter (buffer, &iter);
+  g_assert (!gtk_text_iter_forward_to_tag_toggle (&iter, editable_tag));
+
+  g_object_unref (buffer);
+}
+
 int
 main (int argc, char** argv)
 {
@@ -264,6 +315,7 @@ main (int argc, char** argv)
   g_test_add_func ("/TextIter/Search Full Buffer", test_full_buffer);
   g_test_add_func ("/TextIter/Search", test_search);
   g_test_add_func ("/TextIter/Search Caseless", test_search_caseless);
+  g_test_add_func ("/TextIter/Forward To Tag Toggle", test_forward_to_tag_toggle);
 
   return g_test_run();
 }
