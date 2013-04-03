@@ -271,16 +271,13 @@ void
 _gdk_broadway_window_resize_surface (GdkWindow *window)
 {
   GdkWindowImplBroadway *impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
-  cairo_surface_t *old;
 
   if (impl->surface)
     {
-      old = impl->surface;
+      cairo_surface_destroy (impl->surface);
 
       impl->surface = _gdk_broadway_server_create_surface (gdk_window_get_width (impl->wrapper),
 							   gdk_window_get_height (impl->wrapper));
-
-      cairo_surface_destroy (old);
     }
 
   if (impl->ref_surface)
