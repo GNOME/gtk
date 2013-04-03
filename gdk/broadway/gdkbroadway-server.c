@@ -506,7 +506,7 @@ make_valid_fs_char (char c)
 {
   char chars[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ01234567890";
 
-  return chars[c % sizeof (chars)];
+  return chars[c % (sizeof (chars) - 1)];
 }
 
 /* name must have at least space for 34 bytes */
