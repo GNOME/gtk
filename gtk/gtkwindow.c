@@ -2777,6 +2777,8 @@ gtk_window_set_attached_to (GtkWindow *window,
     gtk_style_context_set_parent (context, gtk_widget_get_style_context (priv->attach_widget));
   else
     gtk_style_context_set_parent (context, NULL);
+
+  g_object_notify (G_OBJECT (window), "attached-to");
 }
 
 /**
