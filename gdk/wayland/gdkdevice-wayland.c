@@ -829,6 +829,7 @@ keyboard_handle_keymap (void               *data,
 
   g_signal_emit_by_name (device->keymap, "keys-changed");
   g_signal_emit_by_name (device->keymap, "state-changed");
+  g_signal_emit_by_name (device->keymap, "direction-changed");
 }
 
 static void
@@ -1122,14 +1123,18 @@ keyboard_handle_modifiers (void               *data,
   GdkWaylandDeviceData *device = data;
   GdkKeymap *keymap;
   struct xkb_state *xkb_state;
+  PangoDirection direction;
 
   keymap = device->keymap;
+  direction = gdk_keymap_get_direction (keymap);
   xkb_state = _gdk_wayland_keymap_get_xkb_state (keymap);
   device->modifiers = mods_depressed | mods_latched | mods_locked;
 
   xkb_state_update_mask (xkb_state, mods_depressed, mods_latched, mods_locked, group, 0, 0);
 
   g_signal_emit_by_name (keymap, "state-changed");
+  if (direction != gdk_keymap_get_direction (keymap))
+    g_signal_emit_by_name (keymap, "direction-changed");
 }
 
 static const struct wl_pointer_listener pointer_listener = {
