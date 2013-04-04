@@ -478,27 +478,21 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 
   if (xevent->type == DestroyNotify && !is_substructure)
     {
-      int i, n;
+      screen = GDK_X11_DISPLAY (display)->screen;
+      x11_screen = GDK_X11_SCREEN (screen);
 
-      n = gdk_display_get_n_screens (display);
-      for (i = 0; i < n; i++)
+      if (x11_screen->wmspec_check_window == xevent->xdestroywindow.window)
         {
-          screen = gdk_display_get_screen (display, i);
-          x11_screen = GDK_X11_SCREEN (screen);
+          x11_screen->wmspec_check_window = None;
+          x11_screen->last_wmspec_check_time = 0;
+          g_free (x11_screen->window_manager_name);
+          x11_screen->window_manager_name = g_strdup ("unknown");
 
-          if (x11_screen->wmspec_check_window == xevent->xdestroywindow.window)
-            {
-              x11_screen->wmspec_check_window = None;
-              x11_screen->last_wmspec_check_time = 0;
-              g_free (x11_screen->window_manager_name);
-              x11_screen->window_manager_name = g_strdup ("unknown");
+          /* careful, reentrancy */
+          _gdk_x11_screen_window_manager_changed (screen);
 
-              /* careful, reentrancy */
-              _gdk_x11_screen_window_manager_changed (screen);
-
-              return_val = FALSE;
-              goto done;
-            }
+          return_val = FALSE;
+          goto done;
         }
     }
 

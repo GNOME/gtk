@@ -512,27 +512,53 @@ gdk_x11_device_xi2_window_at_position (GdkDevice       *device,
     }
   else
     {
-      gint i, screens, width, height;
+      gint width, height;
       GList *toplevels, *list;
       Window pointer_window, root, child;
 
       /* FIXME: untrusted clients case not multidevice-safe */
       pointer_window = None;
-      screens = gdk_display_get_n_screens (display);
 
-      for (i = 0; i < screens; ++i)
+      screen = gdk_display_get_screen (display, 0);
+      toplevels = gdk_screen_get_toplevel_windows (screen);
+      for (list = toplevels; list != NULL; list = g_list_next (list))
         {
-          screen = gdk_display_get_screen (display, i);
-          toplevels = gdk_screen_get_toplevel_windows (screen);
-          for (list = toplevels; list != NULL; list = g_list_next (list))
+          window = GDK_WINDOW (list->data);
+          xwindow = GDK_WINDOW_XID (window);
+
+          /* Free previous button mask, if any */
+          g_free (button_state.mask);
+
+          gdk_x11_display_error_trap_push (display);
+          XIQueryPointer (xdisplay,
+                          device_xi2->device_id,
+                          xwindow,
+                          &root, &child,
+                          &xroot_x, &xroot_y,
+                          &xwin_x, &xwin_y,
+                          &button_state,
+                          &mod_state,
+                          &group_state);
+          if (gdk_x11_display_error_trap_pop (display))
+            continue;
+          if (child != None)
             {
-              window = GDK_WINDOW (list->data);
-              xwindow = GDK_WINDOW_XID (window);
+              pointer_window = child;
+              break;
+            }
+          gdk_window_get_geometry (window, NULL, NULL, &width, &height);
+          if (xwin_x >= 0 && xwin_y >= 0 && xwin_x < width && xwin_y < height)
+            {
+              /* A childless toplevel, or below another window? */
+              XSetWindowAttributes attributes;
+              Window w;
 
-              /* Free previous button mask, if any */
-              g_free (button_state.mask);
+              free (button_state.mask);
 
-              gdk_x11_display_error_trap_push (display);
+              w = XCreateWindow (xdisplay, xwindow, (int)xwin_x, (int)xwin_y, 1, 1, 0,
+                                 CopyFromParent, InputOnly, CopyFromParent,
+                                 0, &attributes);
+              XMapWindow (xdisplay, w);
               XIQueryPointer (xdisplay,
                               device_xi2->device_id,
                               xwindow,
@@ -542,41 +568,11 @@ gdk_x11_device_xi2_window_at_position (GdkDevice       *device,
                               &button_state,
                               &mod_state,
                               &group_state);
-              if (gdk_x11_display_error_trap_pop (display))
-                continue;
-              if (child != None)
+              XDestroyWindow (xdisplay, w);
+              if (child == w)
                 {
-                  pointer_window = child;
+                  pointer_window = xwindow;
                   break;
-                }
-              gdk_window_get_geometry (window, NULL, NULL, &width, &height);
-              if (xwin_x >= 0 && xwin_y >= 0 && xwin_x < width && xwin_y < height)
-                {
-                  /* A childless toplevel, or below another window? */
-                  XSetWindowAttributes attributes;
-                  Window w;
-
-                  free (button_state.mask);
-
-                  w = XCreateWindow (xdisplay, xwindow, (int)xwin_x, (int)xwin_y, 1, 1, 0,
-                                     CopyFromParent, InputOnly, CopyFromParent,
-                                     0, &attributes);
-                  XMapWindow (xdisplay, w);
-                  XIQueryPointer (xdisplay,
-                                  device_xi2->device_id,
-                                  xwindow,
-                                  &root, &child,
-                                  &xroot_x, &xroot_y,
-                                  &xwin_x, &xwin_y,
-                                  &button_state,
-                                  &mod_state,
-                                  &group_state);
-                  XDestroyWindow (xdisplay, w);
-                  if (child == w)
-                    {
-                      pointer_window = xwindow;
-                      break;
-                    }
                 }
             }
 

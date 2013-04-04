@@ -450,7 +450,7 @@ gdk_x11_device_core_window_at_position (GdkDevice       *device,
     }
   else
     {
-      gint i, screens, width, height;
+      gint width, height;
       GList *toplevels, *list;
       Window pointer_window, root, child;
       int rootx = -1, rooty = -1;
@@ -459,58 +459,51 @@ gdk_x11_device_core_window_at_position (GdkDevice       *device,
 
       /* FIXME: untrusted clients case not multidevice-safe */
       pointer_window = None;
-      screens = gdk_display_get_n_screens (display);
-
-      for (i = 0; i < screens; ++i)
+      screen = gdk_display_get_screen (display, 0);
+      toplevels = gdk_screen_get_toplevel_windows (screen);
+      for (list = toplevels; list != NULL; list = g_list_next (list))
         {
-          screen = gdk_display_get_screen (display, i);
-          toplevels = gdk_screen_get_toplevel_windows (screen);
-          for (list = toplevels; list != NULL; list = g_list_next (list))
+          window = GDK_WINDOW (list->data);
+          xwindow = GDK_WINDOW_XID (window);
+          gdk_x11_display_error_trap_push (display);
+          XQueryPointer (xdisplay, xwindow,
+                         &root, &child,
+                         &rootx, &rooty,
+                         &winx, &winy,
+                         &xmask);
+          if (gdk_x11_display_error_trap_pop (display))
+            continue;
+          if (child != None)
             {
-              window = GDK_WINDOW (list->data);
-              xwindow = GDK_WINDOW_XID (window);
-              gdk_x11_display_error_trap_push (display);
+              pointer_window = child;
+              break;
+            }
+          gdk_window_get_geometry (window, NULL, NULL, &width, &height);
+          if (winx >= 0 && winy >= 0 && winx < width && winy < height)
+            {
+              /* A childless toplevel, or below another window? */
+              XSetWindowAttributes attributes;
+              Window w;
+
+              w = XCreateWindow (xdisplay, xwindow, winx, winy, 1, 1, 0,
+                                 CopyFromParent, InputOnly, CopyFromParent,
+                                 0, &attributes);
+              XMapWindow (xdisplay, w);
               XQueryPointer (xdisplay, xwindow,
                              &root, &child,
                              &rootx, &rooty,
                              &winx, &winy,
                              &xmask);
-              if (gdk_x11_display_error_trap_pop (display))
-                continue;
-              if (child != None)
+              XDestroyWindow (xdisplay, w);
+              if (child == w)
                 {
-                  pointer_window = child;
+                  pointer_window = xwindow;
                   break;
                 }
-              gdk_window_get_geometry (window, NULL, NULL, &width, &height);
-              if (winx >= 0 && winy >= 0 && winx < width && winy < height)
-                {
-                  /* A childless toplevel, or below another window? */
-                  XSetWindowAttributes attributes;
-                  Window w;
-
-                  w = XCreateWindow (xdisplay, xwindow, winx, winy, 1, 1, 0,
-                                     CopyFromParent, InputOnly, CopyFromParent,
-                                     0, &attributes);
-                  XMapWindow (xdisplay, w);
-                  XQueryPointer (xdisplay, xwindow,
-                                 &root, &child,
-                                 &rootx, &rooty,
-                                 &winx, &winy,
-                                 &xmask);
-                  XDestroyWindow (xdisplay, w);
-                  if (child == w)
-                    {
-                      pointer_window = xwindow;
-                      break;
-                    }
-                }
             }
-
-          g_list_free (toplevels);
-          if (pointer_window != None)
-            break;
         }
+
+      g_list_free (toplevels);
 
       xwindow = pointer_window;
     }
