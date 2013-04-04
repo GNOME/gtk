@@ -2493,7 +2493,11 @@ gtk_text_buffer_create_tag (GtkTextBuffer *buffer,
 
   tag = gtk_text_tag_new (tag_name);
 
-  gtk_text_tag_table_add (get_table (buffer), tag);
+  if (!gtk_text_tag_table_add (get_table (buffer), tag))
+    {
+      g_object_unref (tag);
+      return NULL;
+    }
 
   if (first_property_name)
     {
