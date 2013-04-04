@@ -50,6 +50,9 @@ struct _GdkWaylandKeymap
 
   struct xkb_keymap *xkb_keymap;
   struct xkb_state *xkb_state;
+
+  PangoDirection *direction;
+  gboolean bidi;
 };
 
 struct _GdkWaylandKeymapClass
@@ -70,6 +73,7 @@ gdk_wayland_keymap_finalize (GObject *object)
 
   xkb_keymap_unref (keymap->xkb_keymap);
   xkb_state_unref (keymap->xkb_state);
+  g_free (keymap->direction);
 
   G_OBJECT_CLASS (_gdk_wayland_keymap_parent_class)->finalize (object);
 }
@@ -77,13 +81,24 @@ gdk_wayland_keymap_finalize (GObject *object)
 static PangoDirection
 gdk_wayland_keymap_get_direction (GdkKeymap *keymap)
 {
-    return PANGO_DIRECTION_NEUTRAL;
+  GdkWaylandKeymap *keymap_wayland = GDK_WAYLAND_KEYMAP (keymap);
+  gint i;
+
+  for (i = 0; i < xkb_keymap_num_layouts (keymap_wayland->xkb_keymap); i++)
+    {
+      if (xkb_state_layout_index_is_active (keymap_wayland->xkb_state, i, XKB_STATE_LAYOUT_EFFECTIVE))
+        return keymap_wayland->direction[i];
+    }
+
+  return PANGO_DIRECTION_NEUTRAL;
 }
 
 static gboolean
 gdk_wayland_keymap_have_bidi_layouts (GdkKeymap *keymap)
 {
-    return FALSE;
+  GdkWaylandKeymap *keymap_wayland = GDK_WAYLAND_KEYMAP (keymap);
+
+  return keymap_wayland->bidi;
 }
 
 static gboolean
@@ -233,6 +248,75 @@ _gdk_wayland_keymap_new ()
   return GDK_KEYMAP (keymap);
 }
 
+static void
+update_direction (GdkWaylandKeymap *keymap)
+{
+  gint num_layouts;
+  gint *rtl;
+  gint key;
+  gboolean have_rtl, have_ltr;
+  gint i;
+
+  num_layouts = xkb_keymap_num_layouts (keymap->xkb_keymap);
+
+  g_free (keymap->direction);
+  keymap->direction = g_new0 (PangoDirection, num_layouts);
+
+  rtl = g_new0 (gint, num_layouts);
+
+  for (key = 8; key < 255; key++) /* FIXME: min/max keycode */
+    {
+       gint layouts;
+       gint layout;
+
+       layouts = xkb_keymap_num_layouts_for_key (keymap->xkb_keymap, key);
+       for (layout = 0; layout < layouts; layout++)
+         {
+           const xkb_keysym_t *syms;
+           gint num_syms;
+           gint sym;
+
+           num_syms = xkb_keymap_key_get_syms_by_level (keymap->xkb_keymap, key, layout, 0, &syms);
+           for (sym = 0; sym < num_syms; sym++)
+             {
+               PangoDirection dir;
+               dir = pango_unichar_direction (xkb_keysym_to_utf32 (syms[sym]));
+               switch (dir)
+                 {
+                 case PANGO_DIRECTION_RTL:
+                   rtl[layout]++;
+                   break;
+                 case PANGO_DIRECTION_LTR:
+                   rtl[layout]--;
+                   break;
+                 default:
+                   break;
+                 }
+             }
+         }
+    }
+
+  have_rtl = have_ltr = FALSE;
+  for (i = 0; i < num_layouts; i++)
+    {
+      if (rtl[i] > 0)
+        {
+          keymap->direction[i] = PANGO_DIRECTION_RTL;
+          have_rtl = TRUE;
+        }
+      else
+        {
+          keymap->direction[i] = PANGO_DIRECTION_LTR;
+          have_ltr = TRUE;
+        }
+    }
+
+  if (have_rtl && have_ltr)
+    keymap->bidi = TRUE;
+
+  g_free (rtl);
+}
+
 void
 _gdk_wayland_keymap_update_from_fd (GdkKeymap *keymap,
                                     uint32_t   format,
@@ -261,6 +345,8 @@ _gdk_wayland_keymap_update_from_fd (GdkKeymap *keymap,
   keymap_wayland->xkb_state = xkb_state_new (keymap_wayland->xkb_keymap);
 
   xkb_context_unref (context);
+
+  update_direction (keymap_wayland);
 }
 
 struct xkb_keymap *_gdk_wayland_keymap_get_xkb_keymap (GdkKeymap *keymap)
