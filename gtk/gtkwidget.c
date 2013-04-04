@@ -14255,7 +14255,8 @@ gtk_widget_propagate_alpha (GtkWidget *widget)
 
   if (gtk_widget_get_has_window (widget))
     {
-      if (priv->window != NULL && !gdk_window_has_native (priv->window))
+      if (priv->window != NULL &&
+	  (!gdk_window_has_native (priv->window) || gtk_widget_is_toplevel (widget)))
 	gdk_window_set_opacity (priv->window,
 				norender ? 0 : priv->alpha / 255.0);
     }
