@@ -182,7 +182,6 @@ struct _GtkIconThemePrivate
   guint is_screen_singleton : 1;
   guint pixbuf_supports_svg : 1;
   guint themes_valid        : 1;
-  guint check_reload        : 1;
   guint loading_themes      : 1;
 
   /* A list of all the themes needed to look up icons.
@@ -4797,30 +4796,6 @@ find_builtin_icon (const gchar *icon_name,
 
   return min_icon;
 }
-
-void
-_gtk_icon_theme_check_reload (GdkDisplay *display)
-{
-  gint n_screens, i;
-  GdkScreen *screen;
-  GtkIconTheme *icon_theme;
-
-  n_screens = gdk_display_get_n_screens (display);
-  
-  for (i = 0; i < n_screens; i++)
-    {
-      screen = gdk_display_get_screen (display, i);
-
-      icon_theme = g_object_get_data (G_OBJECT (screen), "gtk-icon-theme");
-      if (icon_theme)
-	{
-	  icon_theme->priv->check_reload = TRUE;
-	  ensure_valid_themes (icon_theme);
-	  icon_theme->priv->check_reload = FALSE;
-	}
-    }
-}
-
 
 /**
  * gtk_icon_theme_lookup_by_gicon:
