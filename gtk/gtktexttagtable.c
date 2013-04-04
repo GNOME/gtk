@@ -236,17 +236,19 @@ gtk_text_tag_table_buildable_add_child (GtkBuildable        *buildable,
  *
  * @tag must not be in a tag table already, and may not have
  * the same name as an already-added tag.
+ *
+ * Returns: %TRUE on success.
  **/
-void
+gboolean
 gtk_text_tag_table_add (GtkTextTagTable *table,
                         GtkTextTag      *tag)
 {
   GtkTextTagTablePrivate *priv;
   guint size;
 
-  g_return_if_fail (GTK_IS_TEXT_TAG_TABLE (table));
-  g_return_if_fail (GTK_IS_TEXT_TAG (tag));
-  g_return_if_fail (tag->priv->table == NULL);
+  g_return_val_if_fail (GTK_IS_TEXT_TAG_TABLE (table), FALSE);
+  g_return_val_if_fail (GTK_IS_TEXT_TAG (tag), FALSE);
+  g_return_val_if_fail (tag->priv->table == NULL, FALSE);
 
   priv = table->priv;
 
@@ -254,7 +256,7 @@ gtk_text_tag_table_add (GtkTextTagTable *table,
     {
       g_warning ("A tag named '%s' is already in the tag table.",
                  tag->priv->name);
-      return;
+      return FALSE;
     }
   
   g_object_ref (tag);
@@ -277,6 +279,7 @@ gtk_text_tag_table_add (GtkTextTagTable *table,
   tag->priv->priority = size - 1;
 
   g_signal_emit (table, signals[TAG_ADDED], 0, tag);
+  return TRUE;
 }
 
 /**
