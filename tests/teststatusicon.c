@@ -65,7 +65,7 @@ screen_changed_cb (GtkStatusIcon *icon)
 }
 
 static void
-update_icons (void)
+update_icon (void)
 {
   GSList *l;
   gchar *icon_name;
@@ -99,7 +99,7 @@ timeout_handler (gpointer data)
   else
     status = TEST_STATUS_INFO;
 
-  update_icons ();
+  update_icon ();
 
   return TRUE;
 }
@@ -259,41 +259,29 @@ popup_menu (GtkStatusIcon *icon,
 int
 main (int argc, char **argv)
 {
-  GdkDisplay *display;
-  guint n_screens, i;
+  GtkStatusIcon *icon;
 
   gtk_init (&argc, &argv);
 
-  display = gdk_display_get_default ();
+  icon = gtk_status_icon_new ();
 
-  n_screens = gdk_display_get_n_screens (display);
+  g_signal_connect (icon, "size-changed", G_CALLBACK (size_changed_cb), NULL);
+  g_signal_connect (icon, "notify::embedded", G_CALLBACK (embedded_changed_cb), NULL);
+  g_signal_connect (icon, "notify::orientation", G_CALLBACK (orientation_changed_cb), NULL);
+  g_signal_connect (icon, "notify::screen", G_CALLBACK (screen_changed_cb), NULL);
+  g_print ("icon size %d\n", gtk_status_icon_get_size (icon));
 
-  for (i = 0; i < n_screens; i++)
-    {
-      GtkStatusIcon *icon;
+  g_signal_connect (icon, "activate",
+                    G_CALLBACK (icon_activated), NULL);
 
-      icon = gtk_status_icon_new ();
-      gtk_status_icon_set_screen (icon, gdk_display_get_screen (display, i));
-      update_icons ();
+  g_signal_connect (icon, "popup-menu",
+                    G_CALLBACK (popup_menu), NULL);
 
-      g_signal_connect (icon, "size-changed", G_CALLBACK (size_changed_cb), NULL);
-      g_signal_connect (icon, "notify::embedded", G_CALLBACK (embedded_changed_cb), NULL);
-      g_signal_connect (icon, "notify::orientation", G_CALLBACK (orientation_changed_cb), NULL);
-      g_signal_connect (icon, "notify::screen", G_CALLBACK (screen_changed_cb), NULL);
-      g_print ("icon size %d\n", gtk_status_icon_get_size (icon));
+  icons = g_slist_append (icons, icon);
 
-      g_signal_connect (icon, "activate",
-                        G_CALLBACK (icon_activated), NULL);
+  update_icon ();
 
-      g_signal_connect (icon, "popup-menu",
-                        G_CALLBACK (popup_menu), NULL);
-
-      icons = g_slist_append (icons, icon);
- 
-      update_icons ();
-
-      timeout = gdk_threads_add_timeout (2000, timeout_handler, icon);
-    }
+  timeout = gdk_threads_add_timeout (2000, timeout_handler, icon);
 
   gtk_main ();
 
