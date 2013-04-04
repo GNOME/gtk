@@ -459,18 +459,13 @@ display_closed_cb (GdkDisplay *display,
 {
   GdkScreen *screen;
   GtkSettings *settings;
-  gint i;
 
-  for (i = 0; i < gdk_display_get_n_screens (display); i++)
-    {
-      screen = gdk_display_get_screen (display, i);
+  screen = gdk_display_get_screen (display, 0);
+  settings = gtk_settings_get_for_screen (screen);
 
-      settings = gtk_settings_get_for_screen (screen);
-
-      g_object_set_data_full (G_OBJECT (settings),
-			      I_("gtk-modules"),
-			      NULL, NULL);
-    }  
+  g_object_set_data_full (G_OBJECT (settings),
+			  I_("gtk-modules"),
+			  NULL, NULL);
 }
 		   
 
@@ -478,10 +473,10 @@ static void
 display_opened_cb (GdkDisplayManager *display_manager,
 		   GdkDisplay        *display)
 {
+  GValue value = G_VALUE_INIT;
   GSList *slist;
   GdkScreen *screen;
   GtkSettings *settings;
-  gint i;
 
   for (slist = gtk_modules; slist; slist = slist->next)
     {
@@ -494,20 +489,14 @@ display_opened_cb (GdkDisplayManager *display_manager,
 	}
     }
   
-  for (i = 0; i < gdk_display_get_n_screens (display); i++)
+  g_value_init (&value, G_TYPE_STRING);
+  screen = gdk_display_get_screen (display, 0);
+
+  if (gdk_screen_get_setting (screen, "gtk-modules", &value))
     {
-      GValue value = G_VALUE_INIT;
-
-      g_value_init (&value, G_TYPE_STRING);
-
-      screen = gdk_display_get_screen (display, i);
-
-      if (gdk_screen_get_setting (screen, "gtk-modules", &value))
-	{
-	  settings = gtk_settings_get_for_screen (screen);
-	  _gtk_modules_settings_changed (settings, g_value_get_string (&value));
-	  g_value_unset (&value);
-	}
+      settings = gtk_settings_get_for_screen (screen);
+      _gtk_modules_settings_changed (settings, g_value_get_string (&value));
+      g_value_unset (&value);
     }
 
   /* Since closing display doesn't actually release the resources yet,
