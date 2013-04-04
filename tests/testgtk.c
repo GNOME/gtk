@@ -5328,7 +5328,6 @@ typedef struct
 {
   GtkWidget *combo;
   GtkWidget *entry;
-  GtkWidget *radio_dpy;
   GtkWidget *toplevel;
   GtkWidget *dialog_window;
 } ScreenDisplaySelection;
@@ -5342,58 +5341,43 @@ screen_display_check (GtkWidget *widget, ScreenDisplaySelection *data)
   GdkScreen *new_screen = NULL;
   GdkScreen *current_screen = gtk_widget_get_screen (widget);
   
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (data->radio_dpy)))
-    {
-      display_name = gtk_entry_get_text (GTK_ENTRY (data->entry));
-      display = gdk_display_open (display_name);
+  display_name = gtk_entry_get_text (GTK_ENTRY (data->entry));
+  display = gdk_display_open (display_name);
       
-      if (!display)
-	{
-	  dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_toplevel (widget)),
-					   GTK_DIALOG_DESTROY_WITH_PARENT,
-					   GTK_MESSAGE_ERROR,
-					   GTK_BUTTONS_OK,
-					   "The display :\n%s\ncannot be opened",
-					   display_name);
-	  gtk_window_set_screen (GTK_WINDOW (dialog), current_screen);
-	  gtk_widget_show (dialog);
-	  g_signal_connect (dialog, "response",
-			    G_CALLBACK (gtk_widget_destroy),
-			    NULL);
-	}
-      else
-        {
-          GtkTreeModel *model = gtk_combo_box_get_model (GTK_COMBO_BOX (data->combo));
-          gint i = 0;
-          GtkTreeIter iter;
-          gboolean found = FALSE;
-          while (gtk_tree_model_iter_nth_child (model, &iter, NULL, i++))
-            {
-              gchar *name;
-              gtk_tree_model_get (model, &iter, 0, &name, -1);
-              found = !g_ascii_strcasecmp (display_name, name);
-              g_free (name);
-
-              if (found)
-                break;
-            }
-          if (!found)
-            gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (data->combo), display_name);
-          new_screen = gdk_display_get_default_screen (display);
-        }
+  if (!display)
+    {
+      dialog = gtk_message_dialog_new (GTK_WINDOW (gtk_widget_get_toplevel (widget)),
+                                       GTK_DIALOG_DESTROY_WITH_PARENT,
+                                       GTK_MESSAGE_ERROR,
+                                       GTK_BUTTONS_OK,
+                                       "The display :\n%s\ncannot be opened",
+                                       display_name);
+      gtk_window_set_screen (GTK_WINDOW (dialog), current_screen);
+      gtk_widget_show (dialog);
+      g_signal_connect (dialog, "response",
+                        G_CALLBACK (gtk_widget_destroy),
+                        NULL);
     }
   else
     {
-      gint number_of_screens = gdk_display_get_n_screens (display);
-      gint screen_num = gdk_screen_get_number (current_screen);
-      if ((screen_num +1) < number_of_screens)
-	new_screen = gdk_display_get_screen (display, screen_num + 1);
-      else
-	new_screen = gdk_display_get_screen (display, 0);
-    }
-  
-  if (new_screen) 
-    {
+      GtkTreeModel *model = gtk_combo_box_get_model (GTK_COMBO_BOX (data->combo));
+      gint i = 0;
+      GtkTreeIter iter;
+      gboolean found = FALSE;
+      while (gtk_tree_model_iter_nth_child (model, &iter, NULL, i++))
+        {
+          gchar *name;
+          gtk_tree_model_get (model, &iter, 0, &name, -1);
+          found = !g_ascii_strcasecmp (display_name, name);
+          g_free (name);
+
+          if (found)
+            break;
+        }
+      if (!found)
+        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (data->combo), display_name);
+      new_screen = gdk_display_get_default_screen (display);
+
       gtk_window_set_screen (GTK_WINDOW (data->toplevel), new_screen);
       gtk_widget_destroy (data->dialog_window);
     }
@@ -5409,11 +5393,10 @@ void
 create_display_screen (GtkWidget *widget)
 {
   GtkWidget *grid, *frame, *window, *combo_dpy, *vbox;
-  GtkWidget *radio_dpy, *radio_scr, *applyb, *cancelb;
+  GtkWidget *label_dpy, *applyb, *cancelb;
   GtkWidget *bbox;
   ScreenDisplaySelection *scr_dpy_data;
   GdkScreen *screen = gtk_widget_get_screen (widget);
-  GdkDisplay *display = gdk_screen_get_display (screen);
 
   window = g_object_new (gtk_window_get_type (),
 			 "screen", screen,
@@ -5427,7 +5410,7 @@ create_display_screen (GtkWidget *widget)
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   gtk_container_add (GTK_CONTAINER (window), vbox);
   
-  frame = gtk_frame_new ("Select screen or display");
+  frame = gtk_frame_new ("Select display");
   gtk_container_add (GTK_CONTAINER (vbox), frame);
   
   grid = gtk_grid_new ();
@@ -5436,26 +5419,15 @@ create_display_screen (GtkWidget *widget)
 
   gtk_container_add (GTK_CONTAINER (frame), grid);
 
-  radio_dpy = gtk_radio_button_new_with_label (NULL, "move to another X display");
-  if (gdk_display_get_n_screens(display) > 1)
-    radio_scr = gtk_radio_button_new_with_label 
-    (gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_dpy)), "move to next screen");
-  else
-    {    
-      radio_scr = gtk_radio_button_new_with_label 
-	(gtk_radio_button_get_group (GTK_RADIO_BUTTON (radio_dpy)), 
-	 "only one screen on the current display");
-      gtk_widget_set_sensitive (radio_scr, FALSE);
-    }
+  label_dpy = gtk_label_new ("move to another X display");
   combo_dpy = gtk_combo_box_text_new_with_entry ();
   gtk_widget_set_hexpand (combo_dpy, TRUE);
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_dpy), "diabolo:0.0");
   gtk_entry_set_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combo_dpy))),
                       "<hostname>:<X Server Num>.<Screen Num>");
 
-  gtk_grid_attach (GTK_GRID (grid), radio_dpy, 0, 0, 1, 1);
-  gtk_grid_attach (GTK_GRID (grid), radio_scr, 0, 1, 1, 1);
-  gtk_grid_attach (GTK_GRID (grid), combo_dpy, 1, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), label_dpy, 0, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), combo_dpy, 0, 1, 1, 1);
 
   bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
   applyb = gtk_button_new_from_stock (GTK_STOCK_APPLY);
@@ -5469,7 +5441,6 @@ create_display_screen (GtkWidget *widget)
   scr_dpy_data = g_new0 (ScreenDisplaySelection, 1);
 
   scr_dpy_data->entry = gtk_bin_get_child (GTK_BIN (combo_dpy));
-  scr_dpy_data->radio_dpy = radio_dpy;
   scr_dpy_data->toplevel = gtk_widget_get_toplevel (widget);
   scr_dpy_data->dialog_window = window;
 
@@ -9751,7 +9722,7 @@ struct {
   { "composited window", create_composited_window },
   { "cursors", create_cursors },
   { "dialog", create_dialog },
-  { "display & screen", create_display_screen, TRUE },
+  { "display", create_display_screen, TRUE },
   { "entry", create_entry },
   { "event box", create_event_box },
   { "event watcher", create_event_watcher },
