@@ -45,6 +45,7 @@ GdkDisplay *gdk_display_open                (const gchar *display_name);
 
 const gchar * gdk_display_get_name         (GdkDisplay *display);
 
+GDK_DEPRECATED_IN_3_10
 gint        gdk_display_get_n_screens      (GdkDisplay  *display);
 GdkScreen * gdk_display_get_screen         (GdkDisplay  *display,
                                             gint         screen_num);

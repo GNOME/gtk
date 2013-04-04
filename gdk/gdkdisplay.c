@@ -1424,6 +1424,8 @@ gdk_display_get_name (GdkDisplay *display)
  * Returns: number of screens.
  *
  * Since: 2.2
+ *
+ * Deprecated: 3.10: The number of screens is always 1.
  */
 gint
 gdk_display_get_n_screens (GdkDisplay *display)
