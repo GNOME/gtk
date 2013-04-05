@@ -287,7 +287,8 @@ _gtk_css_shadows_value_paint_spinner (const GtkCssValue *shadows,
 void
 _gtk_css_shadows_value_paint_box (const GtkCssValue   *shadows,
                                   cairo_t             *cr,
-                                  const GtkRoundedBox *padding_box)
+                                  const GtkRoundedBox *padding_box,
+                                  gboolean             inset)
 {
   guint i;
 
@@ -295,6 +296,7 @@ _gtk_css_shadows_value_paint_box (const GtkCssValue   *shadows,
 
   for (i = 0; i < shadows->len; i++)
     {
-      _gtk_css_shadow_value_paint_box (shadows->values[i], cr, padding_box);
+      if (inset == _gtk_css_shadow_value_get_inset (shadows->values[i]))
+        _gtk_css_shadow_value_paint_box (shadows->values[i], cr, padding_box);
     }
 }

@@ -46,7 +46,8 @@ void            _gtk_css_shadows_value_paint_spinner  (const GtkCssValue        
                                                        gdouble                   progress);
 void            _gtk_css_shadows_value_paint_box      (const GtkCssValue        *shadows,
                                                        cairo_t                  *cr,
-                                                       const GtkRoundedBox      *padding_box);
+                                                       const GtkRoundedBox      *padding_box,
+                                                       gboolean                  inset);
 
 G_END_DECLS
 

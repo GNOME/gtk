@@ -265,11 +265,13 @@ _gtk_theming_background_paint_layer (GtkThemingBackground *bg,
 
 static void
 _gtk_theming_background_apply_shadow (GtkThemingBackground *bg,
-                                      cairo_t              *cr)
+                                      cairo_t              *cr,
+                                      gboolean              inset)
 {
   _gtk_css_shadows_value_paint_box (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BOX_SHADOW),
                                     cr,
-                                    &bg->padding_box);
+                                    &bg->padding_box,
+                                    inset);
 }
 
 static void
@@ -358,6 +360,8 @@ _gtk_theming_background_render (GtkThemingBackground *bg,
   cairo_save (cr);
   cairo_translate (cr, bg->paint_area.x, bg->paint_area.y);
 
+  _gtk_theming_background_apply_shadow (bg, cr, FALSE); /* Outset shadow */
+
   _gtk_theming_background_paint_color (bg, cr, background_image);
 
   for (idx = _gtk_css_array_value_get_n_values (background_image) - 1; idx >= 0; idx--)
@@ -365,7 +369,7 @@ _gtk_theming_background_render (GtkThemingBackground *bg,
       _gtk_theming_background_paint_layer (bg, idx, cr);
     }
 
-  _gtk_theming_background_apply_shadow (bg, cr);
+  _gtk_theming_background_apply_shadow (bg, cr, TRUE);  /* Inset shadow */
 
   cairo_restore (cr);
 }
