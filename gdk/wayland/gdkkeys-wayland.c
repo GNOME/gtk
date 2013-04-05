@@ -139,18 +139,53 @@ gdk_wayland_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
 					    guint        **keyvals,
 					    gint          *n_entries)
 {
+  struct xkb_keymap *xkb_keymap = GDK_WAYLAND_KEYMAP (keymap)->xkb_keymap;
+  gint num_layouts, layout;
+  gint num_entries;
+  gint i;
+
+  num_layouts = xkb_keymap_num_layouts_for_key (xkb_keymap, hardware_keycode);
+
+  num_entries = 0;
+  for (layout = 0; layout < num_layouts; layout++)
+    num_entries += xkb_keymap_num_levels_for_key (xkb_keymap, hardware_keycode,  layout);
+
  if (n_entries)
-    *n_entries = 1;
+    *n_entries = num_entries;
   if (keys)
     {
-      *keys = g_new0 (GdkKeymapKey, 1);
+      *keys = g_new0 (GdkKeymapKey, num_entries);
       (*keys)->keycode = hardware_keycode;
     }
   if (keyvals)
     {
-      *keyvals = g_new0 (guint, 1);
+      *keyvals = g_new0 (guint, num_entries);
       (*keyvals)[0] = hardware_keycode;
     }
+
+  i = 0;
+  for (layout = 0; layout < num_layouts; layout++)
+    {
+      gint num_levels, level;
+      num_levels = xkb_keymap_num_levels_for_key (xkb_keymap, hardware_keycode, layout);
+      for (level = 0; level < num_levels; level++)
+        {
+           const xkb_keysym_t *syms;
+           int num_syms;
+           num_syms = xkb_keymap_key_get_syms_by_level (xkb_keymap, hardware_keycode, layout, 0, &syms);
+          if (keys)
+            {
+              (*keys)[i].keycode = hardware_keycode;
+              (*keys)[i].group = layout;
+              (*keys)[i].level = level;
+            }
+          if (keyvals && num_syms > 0)
+            (*keyvals)[i] = syms[0];
+
+          i++;
+        }
+    }
+
   return TRUE;
 }
 
