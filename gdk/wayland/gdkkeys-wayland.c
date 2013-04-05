@@ -225,29 +225,6 @@ _gdk_wayland_keymap_init (GdkWaylandKeymap *keymap)
 {
 }
 
-GdkKeymap *
-_gdk_wayland_keymap_new ()
-{
-  GdkWaylandKeymap *keymap;
-  struct xkb_context *context;
-  struct xkb_rule_names names;
-
-  keymap = g_object_new (_gdk_wayland_keymap_get_type(), NULL);
-
-  context = xkb_context_new (0);
-
-  names.rules = "evdev";
-  names.model = "pc105";
-  names.layout = "us";
-  names.variant = "";
-  names.options = "";
-  keymap->xkb_keymap = xkb_keymap_new_from_names (context, &names, 0);
-  keymap->xkb_state = xkb_state_new (keymap->xkb_keymap);
-  xkb_context_unref (context);
-
-  return GDK_KEYMAP (keymap);
-}
-
 static void
 update_direction (GdkWaylandKeymap *keymap)
 {
@@ -315,6 +292,31 @@ update_direction (GdkWaylandKeymap *keymap)
     keymap->bidi = TRUE;
 
   g_free (rtl);
+}
+
+GdkKeymap *
+_gdk_wayland_keymap_new ()
+{
+  GdkWaylandKeymap *keymap;
+  struct xkb_context *context;
+  struct xkb_rule_names names;
+
+  keymap = g_object_new (_gdk_wayland_keymap_get_type(), NULL);
+
+  context = xkb_context_new (0);
+
+  names.rules = "evdev";
+  names.model = "pc105";
+  names.layout = "us";
+  names.variant = "";
+  names.options = "";
+  keymap->xkb_keymap = xkb_keymap_new_from_names (context, &names, 0);
+  keymap->xkb_state = xkb_state_new (keymap->xkb_keymap);
+  xkb_context_unref (context);
+
+  update_direction (keymap);
+
+  return GDK_KEYMAP (keymap);
 }
 
 void
