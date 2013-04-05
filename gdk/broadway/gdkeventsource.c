@@ -247,7 +247,7 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
     break;
   case BROADWAY_EVENT_GRAB_NOTIFY:
   case BROADWAY_EVENT_UNGRAB_NOTIFY:
-    _gdk_display_device_grab_update (display, display->core_pointer, NULL, message->base.serial);
+    _gdk_display_device_grab_update (display, display->core_pointer, display->core_pointer, message->base.serial);
     break;
 
   case BROADWAY_EVENT_CONFIGURE_NOTIFY:
