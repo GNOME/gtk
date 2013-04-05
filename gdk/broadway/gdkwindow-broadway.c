@@ -437,6 +437,10 @@ gdk_window_broadway_hide (GdkWindow *window)
     _gdk_make_event (GDK_WINDOW (window), GDK_UNMAP, NULL, FALSE);
 
   broadway_display = GDK_BROADWAY_DISPLAY (gdk_window_get_display (window));
+
+  _gdk_broadway_window_grab_check_unmap (window,
+					 _gdk_broadway_server_get_next_serial (broadway_display->server));
+
   if (_gdk_broadway_server_window_hide (broadway_display->server, impl->id))
     queue_flush (window);
 
