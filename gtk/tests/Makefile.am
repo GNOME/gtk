@@ -160,6 +160,11 @@ TEST_PROGS			+= gtkmenu
 gtkmenu_SOURCES			 = gtkmenu.c
 gtkmenu_LDADD			 = $(progs_ldadd)
 
+
+TEST_PROGS			+= objects-finalize
+objects_finalize_SOURCES         = objects-finalize.c
+objects_finalize_LDADD	         = $(progs_ldadd)
+
 EXTRA_DIST +=				\
 	file-chooser-test-dir/empty     \
 	file-chooser-test-dir/text.txt
