@@ -121,13 +121,44 @@ gdk_wayland_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
 					   GdkKeymapKey **keys,
 					   gint          *n_keys)
 {
-  if (n_keys)
-    *n_keys = 1;
-  if (keys)
+  struct xkb_keymap *xkb_keymap = GDK_WAYLAND_KEYMAP (keymap)->xkb_keymap;
+  GArray *retval;
+  guint keycode;
+
+  retval = g_array_new (FALSE, FALSE, sizeof (GdkKeymapKey));
+
+  for (keycode = 8; keycode < 255; keycode++) /* FIXME: min/max keycode */
     {
-      *keys = g_new0 (GdkKeymapKey, 1);
-      (*keys)->keycode = keyval;
+      gint num_layouts, layout;
+      num_layouts = xkb_keymap_num_layouts_for_key (xkb_keymap, keycode);
+      for (layout = 0; layout < num_layouts; layout++)
+        {
+          gint num_levels, level;
+          num_levels = xkb_keymap_num_levels_for_key (xkb_keymap, keycode, layout);
+          for (level = 0; level < num_levels; level++)
+            {
+              const xkb_keysym_t *syms;
+              gint num_syms, sym;
+              num_syms = xkb_keymap_key_get_syms_by_level (xkb_keymap, keycode, layout, level, &syms);
+              for (sym = 0; sym < num_syms; sym++)
+                {
+                  if (syms[sym] == keyval)
+                    {
+                      GdkKeymapKey key;
+
+                      key.keycode = keycode;
+                      key.group = layout;
+                      key.level = level;
+
+                      g_array_append_val (retval, key);
+                    }
+                }
+            }
+        }
     }
+
+  *n_keys = retval->len;
+  *keys = (GdkKeymapKey*) g_array_free (retval, FALSE);
 
   return TRUE;
 }
@@ -153,15 +184,9 @@ gdk_wayland_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
  if (n_entries)
     *n_entries = num_entries;
   if (keys)
-    {
-      *keys = g_new0 (GdkKeymapKey, num_entries);
-      (*keys)->keycode = hardware_keycode;
-    }
+    *keys = g_new0 (GdkKeymapKey, num_entries);
   if (keyvals)
-    {
-      *keyvals = g_new0 (guint, num_entries);
-      (*keyvals)[0] = hardware_keycode;
-    }
+    *keyvals = g_new0 (guint, num_entries);
 
   i = 0;
   for (layout = 0; layout < num_layouts; layout++)
@@ -186,14 +211,26 @@ gdk_wayland_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
         }
     }
 
-  return TRUE;
+  return num_entries > 0;
 }
 
 static guint
 gdk_wayland_keymap_lookup_key (GdkKeymap          *keymap,
 			       const GdkKeymapKey *key)
 {
-  return key->keycode;
+  struct xkb_keymap *xkb_keymap = GDK_WAYLAND_KEYMAP (keymap)->xkb_keymap;
+  const xkb_keysym_t *syms;
+  int num_syms;
+
+  num_syms = xkb_keymap_key_get_syms_by_level (xkb_keymap,
+                                               key->keycode,
+                                               key->group,
+                                               key->level,
+                                               &syms);
+  if (num_syms > 0)
+    return syms[0];
+  else
+    return XKB_KEY_NoSymbol;
 }
 
 static gboolean
@@ -265,7 +302,7 @@ update_direction (GdkWaylandKeymap *keymap)
 {
   gint num_layouts;
   gint *rtl;
-  gint key;
+  guint key;
   gboolean have_rtl, have_ltr;
   gint i;
 
