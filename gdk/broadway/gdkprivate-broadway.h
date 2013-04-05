@@ -92,6 +92,8 @@ gboolean _gdk_broadway_moveresize_configure_done (GdkDisplay *display,
 
 void     _gdk_broadway_selection_window_destroyed (GdkWindow *window);
 void     _gdk_broadway_window_grab_check_destroy (GdkWindow *window);
+void     _gdk_broadway_window_grab_check_unmap (GdkWindow *window,
+						gulong     serial);
 
 void _gdk_keymap_keys_changed     (GdkDisplay      *display);
 gint _gdk_broadway_get_group_for_state (GdkDisplay      *display,
