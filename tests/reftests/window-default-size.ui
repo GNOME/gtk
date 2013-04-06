@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkWindow" id="window1">
+    <property name="can_focus">False</property>
+    <property name="type">popup</property>
+    <property name="default_width">103</property>
+    <property name="default_height">97</property>
+    <child>
+      <placeholder/>
+    </child>
+  </object>
+</interface>
