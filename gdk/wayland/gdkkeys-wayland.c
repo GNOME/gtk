@@ -432,3 +432,23 @@ struct xkb_state *_gdk_wayland_keymap_get_xkb_state (GdkKeymap *keymap)
 {
   return GDK_WAYLAND_KEYMAP (keymap)->xkb_state;
 }
+
+gboolean
+_gdk_wayland_keymap_key_is_modifier (GdkKeymap *keymap,
+                                     guint      keycode)
+{
+  struct xkb_keymap *xkb_keymap = GDK_WAYLAND_KEYMAP (keymap)->xkb_keymap;
+  struct xkb_state *xkb_state;
+  gboolean is_modifier;
+
+  is_modifier = FALSE;
+
+  xkb_state = xkb_state_new (xkb_keymap);
+
+  if (xkb_state_update_key (xkb_state, keycode, XKB_KEY_DOWN) & XKB_STATE_MODS_EFFECTIVE)
+    is_modifier = TRUE;
+
+  xkb_state_unref (xkb_state);
+
+  return is_modifier;
+}

@@ -1032,10 +1032,9 @@ deliver_key_event(GdkWaylandDeviceData *device,
   event->button.time = time;
   event->key.state = device->modifiers;
   event->key.group = 0;
-  event->key.hardware_keycode = sym;
+  event->key.hardware_keycode = key;
   event->key.keyval = sym;
-
-  event->key.is_modifier = device->modifiers > 0;
+  event->key.is_modifier = _gdk_wayland_keymap_key_is_modifier (keymap, key);
 
   translate_keyboard_string (&event->key);
 
