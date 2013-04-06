@@ -714,6 +714,16 @@ gdk_offscreen_window_process_updates_recurse (GdkWindow *window,
 }
 
 static void
+gdk_offscreen_window_get_frame_extents (GdkWindow    *window,
+					GdkRectangle *rect)
+{
+  rect->x = window->x;
+  rect->y = window->y;
+  rect->width = window->width;
+  rect->height = window->height;
+}
+
+static void
 gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
 {
   GdkWindowImplClass *impl_class = GDK_WINDOW_IMPL_CLASS (klass);
@@ -763,7 +773,7 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   impl_class->set_startup_id = gdk_offscreen_window_set_string;
   impl_class->set_transient_for = gdk_offscreen_window_set_transient_for;
   impl_class->get_root_origin = NULL;
-  impl_class->get_frame_extents = NULL;
+  impl_class->get_frame_extents = gdk_offscreen_window_get_frame_extents;
   impl_class->set_override_redirect = NULL;
   impl_class->set_accept_focus = NULL;
   impl_class->set_focus_on_map = gdk_offscreen_window_set_boolean;
