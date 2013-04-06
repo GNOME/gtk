@@ -1202,6 +1202,9 @@ static void
 gtk_recent_chooser_sync_action_properties (GtkActivatable *activatable,
 				           GtkAction      *action)
 {
+  if (!action)
+    return;
+
   gtk_widget_set_sensitive (GTK_WIDGET (activatable), gtk_action_is_sensitive (action));
 
   _gtk_recent_chooser_sync_action_properties (activatable, action);
