@@ -962,7 +962,7 @@ gtk_recent_chooser_list_filters (GtkRecentChooser *chooser)
 /**
  * gtk_recent_chooser_set_filter:
  * @chooser: a #GtkRecentChooser
- * @filter: a #GtkRecentFilter
+ * @filter: (allow-none): a #GtkRecentFilter
  *
  * Sets @filter as the current #GtkRecentFilter object used by @chooser
  * to affect the displayed recently used resources.
@@ -974,7 +974,7 @@ gtk_recent_chooser_set_filter (GtkRecentChooser *chooser,
 			       GtkRecentFilter  *filter)
 {
   g_return_if_fail (GTK_IS_RECENT_CHOOSER (chooser));
-  g_return_if_fail (GTK_IS_RECENT_FILTER (filter));
+  g_return_if_fail (filter == NULL || GTK_IS_RECENT_FILTER (filter));
   
   g_object_set (G_OBJECT (chooser), "filter", filter, NULL);
 }
