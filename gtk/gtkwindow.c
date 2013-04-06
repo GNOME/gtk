@@ -4998,13 +4998,19 @@ static void
 update_window_buttons (GtkWindow *window)
 {
   GtkWindowPrivate *priv = window->priv;
+  GdkWindow *win;
+  gboolean maximized = FALSE;
 
   if (priv->custom_title)
     return;
 
+  win = gtk_widget_get_window (GTK_WIDGET (window));
+  if (win != NULL)
+    maximized = gdk_window_get_state (win) & GDK_WINDOW_STATE_MAXIMIZED;
   if (priv->decorated &&
       priv->client_decorated &&
       !priv->fullscreen &&
+      !(maximized && priv->hide_titlebar_when_maximized) &&
       priv->title_box != NULL)
     {
       gchar *layout_desc;
