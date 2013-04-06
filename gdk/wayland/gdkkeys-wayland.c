@@ -240,21 +240,21 @@ get_xkb_modifiers (struct xkb_keymap *xkb_keymap,
   guint32 mods = 0;
 
   if (state & GDK_SHIFT_MASK)
-    mods |= xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_SHIFT);
+    mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_SHIFT);
   if (state & GDK_LOCK_MASK)
-    mods |= xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_CAPS);
+    mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_CAPS);
   if (state & GDK_CONTROL_MASK)
-    mods |= xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_CTRL);
+    mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_CTRL);
   if (state & GDK_MOD1_MASK)
-    mods |= xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_ALT);
+    mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_ALT);
   if (state & GDK_MOD2_MASK)
-    mods |= xkb_keymap_mod_get_index (xkb_keymap, "Mod2");
+    mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, "Mod2");
   if (state & GDK_MOD3_MASK)
-    mods |= xkb_keymap_mod_get_index (xkb_keymap, "Mod3");
+    mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, "Mod3");
   if (state & GDK_MOD4_MASK)
-    mods |= xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_LOGO);
+    mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_LOGO);
   if (state & GDK_MOD5_MASK)
-    mods |= xkb_keymap_mod_get_index (xkb_keymap, "Mod5");
+    mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, "Mod5");
 
   return mods;
 }
@@ -265,26 +265,25 @@ get_gdk_modifiers (struct xkb_keymap *xkb_keymap,
 {
   GdkModifierType state = 0;
 
-  if (mods & xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_SHIFT))
+  if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_SHIFT)))
     state |= GDK_SHIFT_MASK;
-  if (mods & xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_CAPS))
+  if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_CAPS)))
     state |= GDK_LOCK_MASK;
-  if (mods & xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_CTRL))
+  if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_CTRL)))
     state |= GDK_CONTROL_MASK;
-  if (mods & xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_ALT))
+  if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_ALT)))
     state |= GDK_MOD1_MASK;
-  if (mods & xkb_keymap_mod_get_index (xkb_keymap, "Mod2"))
+  if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, "Mod2")))
     state |= GDK_MOD2_MASK;
-  if (mods & xkb_keymap_mod_get_index (xkb_keymap, "Mod3"))
+  if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, "Mod3")))
     state |= GDK_MOD3_MASK;
-  if (mods & xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_LOGO))
+  if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_LOGO)))
     state |= GDK_MOD4_MASK;
-  if (mods & xkb_keymap_mod_get_index (xkb_keymap, "Mod5"))
+  if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, "Mod5")))
     state |= GDK_MOD5_MASK;
 
   return state;
 }
-
 
 static gboolean
 gdk_wayland_keymap_translate_keyboard_state (GdkKeymap       *keymap,
