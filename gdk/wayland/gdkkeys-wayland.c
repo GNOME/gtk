@@ -195,9 +195,9 @@ gdk_wayland_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
       num_levels = xkb_keymap_num_levels_for_key (xkb_keymap, hardware_keycode, layout);
       for (level = 0; level < num_levels; level++)
         {
-           const xkb_keysym_t *syms;
-           int num_syms;
-           num_syms = xkb_keymap_key_get_syms_by_level (xkb_keymap, hardware_keycode, layout, 0, &syms);
+          const xkb_keysym_t *syms;
+          int num_syms;
+          num_syms = xkb_keymap_key_get_syms_by_level (xkb_keymap, hardware_keycode, layout, 0, &syms);
           if (keys)
             {
               (*keys)[i].keycode = hardware_keycode;
