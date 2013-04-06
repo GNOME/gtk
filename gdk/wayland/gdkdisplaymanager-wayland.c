@@ -181,6 +181,8 @@ gdk_wayland_display_manager_get_keyval_name (GdkDisplayManager *manager,
 
   switch (keyval)
     {
+    case 0:
+      return NULL;
     case GDK_KEY_Page_Up:
       return "Page_Up";
     case GDK_KEY_Page_Down:
