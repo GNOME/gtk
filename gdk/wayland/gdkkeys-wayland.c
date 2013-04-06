@@ -233,6 +233,59 @@ gdk_wayland_keymap_lookup_key (GdkKeymap          *keymap,
     return XKB_KEY_NoSymbol;
 }
 
+static guint32
+get_xkb_modifiers (struct xkb_keymap *xkb_keymap,
+                   GdkModifierType    state)
+{
+  guint32 mods = 0;
+
+  if (state & GDK_SHIFT_MASK)
+    mods |= xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_SHIFT);
+  if (state & GDK_LOCK_MASK)
+    mods |= xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_CAPS);
+  if (state & GDK_CONTROL_MASK)
+    mods |= xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_CTRL);
+  if (state & GDK_MOD1_MASK)
+    mods |= xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_ALT);
+  if (state & GDK_MOD2_MASK)
+    mods |= xkb_keymap_mod_get_index (xkb_keymap, "Mod2");
+  if (state & GDK_MOD3_MASK)
+    mods |= xkb_keymap_mod_get_index (xkb_keymap, "Mod3");
+  if (state & GDK_MOD4_MASK)
+    mods |= xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_LOGO);
+  if (state & GDK_MOD5_MASK)
+    mods |= xkb_keymap_mod_get_index (xkb_keymap, "Mod5");
+
+  return mods;
+}
+
+static GdkModifierType
+get_gdk_modifiers (struct xkb_keymap *xkb_keymap,
+                   guint32            mods)
+{
+  GdkModifierType state = 0;
+
+  if (mods & xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_SHIFT))
+    state |= GDK_SHIFT_MASK;
+  if (mods & xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_CAPS))
+    state |= GDK_LOCK_MASK;
+  if (mods & xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_CTRL))
+    state |= GDK_CONTROL_MASK;
+  if (mods & xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_ALT))
+    state |= GDK_MOD1_MASK;
+  if (mods & xkb_keymap_mod_get_index (xkb_keymap, "Mod2"))
+    state |= GDK_MOD2_MASK;
+  if (mods & xkb_keymap_mod_get_index (xkb_keymap, "Mod3"))
+    state |= GDK_MOD3_MASK;
+  if (mods & xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_LOGO))
+    state |= GDK_MOD4_MASK;
+  if (mods & xkb_keymap_mod_get_index (xkb_keymap, "Mod5"))
+    state |= GDK_MOD5_MASK;
+
+  return state;
+}
+
+
 static gboolean
 gdk_wayland_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 					     guint            hardware_keycode,
@@ -240,20 +293,43 @@ gdk_wayland_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 					     gint             group,
 					     guint           *keyval,
 					     gint            *effective_group,
-					     gint            *level,
+					     gint            *effective_level,
 					     GdkModifierType *consumed_modifiers)
 {
+  struct xkb_keymap *xkb_keymap;
+  struct xkb_state *xkb_state;
+  guint32 modifiers;
+  guint32 consumed;
+  xkb_layout_index_t layout;
+  xkb_level_index_t level;
+  xkb_keysym_t sym;
+
   g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), FALSE);
   g_return_val_if_fail (group < 4, FALSE);
 
+  xkb_keymap = GDK_WAYLAND_KEYMAP (keymap)->xkb_keymap;
+
+  modifiers = get_xkb_modifiers (xkb_keymap, state);
+
+  xkb_state = xkb_state_new (xkb_keymap);
+
+  xkb_state_update_mask (xkb_state, modifiers, 0, 0, group, 0, 0);
+
+  layout = xkb_state_key_get_layout (xkb_state, hardware_keycode);
+  level = xkb_state_key_get_level (xkb_state, hardware_keycode, layout);
+  sym = xkb_state_key_get_one_sym (xkb_state, hardware_keycode);
+  consumed = modifiers & ~xkb_state_mod_mask_remove_consumed (xkb_state, hardware_keycode, modifiers);
+
+  xkb_state_unref (xkb_state);
+
   if (keyval)
-    *keyval = hardware_keycode;
+    *keyval = sym;
   if (effective_group)
-    *effective_group = 0;
-  if (level)
-    *level = 0;
+    *effective_group = layout;
+  if (effective_level)
+    *effective_level = level;
   if (consumed_modifiers)
-    *consumed_modifiers = 0;
+    *consumed_modifiers = get_gdk_modifiers (xkb_keymap, consumed);
 
   return TRUE;
 }
