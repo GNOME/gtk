@@ -125,6 +125,11 @@ gdk_pixmap_impl_win32_finalize (GObject *object)
 	  /* Drop our reference */
 	  cairo_surface_destroy (drawable_impl->cairo_surface);
 	  drawable_impl->cairo_surface = NULL;
+	  if (impl->is_allocated)
+	    {
+	      GDI_CALL (DeleteDC, (drawable_impl->hdc));
+	      GDI_CALL (DeleteObject, (GDK_PIXMAP_HBITMAP (wrapper)));
+	    }
 	}
     }
 
@@ -321,6 +326,7 @@ _gdk_pixmap_new (GdkDrawable *drawable,
 	}
 
       SelectObject (hdc, hbitmap);
+      pixmap_impl->is_allocated = TRUE;
     }
 
   /* We need to use the same hdc, because only one hdc
