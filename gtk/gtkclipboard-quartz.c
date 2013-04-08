@@ -108,7 +108,7 @@ static GtkClipboard *clipboard_peek       (GdkDisplay       *display,
   memset (&selection_data, 0, sizeof (GtkSelectionData));
 
   selection_data.selection = clipboard->selection;
-  selection_data.target = _gtk_quartz_pasteboard_type_to_atom (type);
+  selection_data.target = gdk_quartz_pasteboard_type_to_atom_libgtk_only (type);
   selection_data.display = gdk_display_get_default ();
   selection_data.length = -1;
 
