@@ -1120,6 +1120,13 @@ COMPOSITE_TEMPLATES =			\
 	gtkstatusbar.ui			\
 	gtkvolumebutton.ui
 
+template_headers = $(COMPOSITE_TEMPLATES:.ui=.ui.h)
+
+MAINTAINERCLEANFILES += $(template_headers)
+
+%.ui.h: %.ui extract-strings
+	$(AM_V_GEN) ./extract-strings $< > $@
+
 #
 # rules to generate built sources
 #
@@ -1164,7 +1171,7 @@ gtktypebuiltins.c: @REBUILD@ $(gtk_public_h_sources) $(deprecated_h_sources) gtk
 gtkresources.h: gtk.gresource.xml
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $(srcdir)/gtk.gresource.xml \
 		--target=$@ --sourcedir=$(srcdir) --c-name _gtk --generate-header --manual-register
-gtkresources.c: gtk.gresource.xml gtk-default.css gtk-win32.css gtk-win32-xp.css gtk-win32-base.css gtk-win32-classic.css $(DND_CURSORS) $(COMPOSITE_TEMPLATES)
+gtkresources.c: gtk.gresource.xml gtk-default.css gtk-win32.css gtk-win32-xp.css gtk-win32-base.css gtk-win32-classic.css $(DND_CURSORS) $(COMPOSITE_TEMPLATES) $(template_headers)
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $(srcdir)/gtk.gresource.xml \
 		--target=$@ --sourcedir=$(srcdir) --c-name _gtk --generate-source --manual-register
 
@@ -1389,6 +1396,11 @@ bin_PROGRAMS += gtk-launch
 gtk_launch_LDADD = $(LDADDS)
 gtk_launch_SOURCES = gtk-launch.c
 endif
+
+noinst_PROGRAMS = extract-strings
+
+extract_strings_SOURCES = extract-strings.c
+extract_strings_LDADD = $(GLIB_LIBS)
 
 .PHONY: files test test-debug
 
