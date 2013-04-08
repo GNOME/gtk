@@ -677,7 +677,6 @@ gtk_plug_unrealize (GtkWidget *widget)
 
   if (priv->socket_window != NULL)
     {
-      gtk_widget_unregister_window (widget, priv->socket_window);
       g_object_unref (priv->socket_window);
       priv->socket_window = NULL;
 
@@ -879,7 +878,6 @@ gtk_plug_filter_func (GdkXEvent *gdk_xevent,
 	      {
 		GtkWidget *widget = GTK_WIDGET (plug);
 
-                gtk_widget_unregister_window (widget, priv->socket_window);
 		g_object_unref (priv->socket_window);
 		priv->socket_window = NULL;
 
