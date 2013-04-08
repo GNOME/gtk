@@ -159,7 +159,6 @@ struct _GtkWindowPrivate
    * and on unrealize (for size).
    */
   guint    need_default_position     : 1;
-  guint    need_default_size         : 1;
 
   guint    above_initially           : 1;
   guint    accept_focus              : 1;
@@ -1280,7 +1279,6 @@ gtk_window_init (GtkWindow *window)
   priv->resizable = TRUE;
   priv->configure_notify_received = FALSE;
   priv->position = GTK_WIN_POS_NONE;
-  priv->need_default_size = TRUE;
   priv->need_default_position = TRUE;
   priv->modal = FALSE;
   priv->gdk_type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
@@ -5406,7 +5404,6 @@ gtk_window_map (GtkWidget *widget)
     }
 
   /* No longer use the default settings */
-  priv->need_default_size = FALSE;
   priv->need_default_position = FALSE;
 
   if (priv->reset_type_hint)
@@ -5561,10 +5558,12 @@ gtk_window_guess_default_size (GtkWindow *window,
                                gint      *width,
                                gint      *height)
 {
-  GtkWidget *widget = GTK_WIDGET (window);
+  GtkWindowGeometryInfo *info;
+  GtkWidget *widget;
   GdkScreen *screen;
   int minimum, natural;
 
+  widget = GTK_WIDGET (window);
   screen = gtk_widget_get_screen (widget);
 
   *width = gdk_screen_get_width (screen);
@@ -5598,6 +5597,14 @@ gtk_window_guess_default_size (GtkWindow *window,
 
       gtk_widget_get_preferred_height_for_width (widget, *width, &minimum, &natural);
       *height = MAX (minimum, MIN (*height, natural));
+    }
+
+  info = gtk_window_get_geometry_info (window, FALSE);
+  if (info)
+    {
+      /* MAX() works even if the last request is unset with -1 */
+      *width = MAX (*width, info->last.configure_request.width);
+      *height = MAX (*height, info->last.configure_request.height);
     }
 }
 
@@ -5845,7 +5852,6 @@ gtk_window_unrealize (GtkWidget *widget)
    *
    * Default positioning is reset on unmap, instead of unrealize.
    */
-  priv->need_default_size = TRUE;
   info = gtk_window_get_geometry_info (window, FALSE);
   if (info)
     {
@@ -7970,7 +7976,6 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
                                            gint        *width,
                                            gint        *height)
 {
-  GtkWindowPrivate *priv = window->priv;
   GtkWindowGeometryInfo *info;
 
   /* Preconditions:
@@ -7979,42 +7984,29 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
   
   info = gtk_window_get_geometry_info (window, FALSE);
 
-  if (priv->need_default_size)
-    {
-      gtk_window_guess_default_size (window, width, height);
+  gtk_window_guess_default_size (window, width, height);
 
-      /* If window is empty so requests 0, default to random nonzero size */
-       if (*width == 0 && *height == 0)
-         {
-           *width = 200;
-           *height = 200;
-         }
+  /* If window is empty so requests 0, default to random nonzero size */
+   if (*width == 0 && *height == 0)
+     {
+       *width = 200;
+       *height = 200;
+     }
 
-       /* Override with default size */
+   /* Override with default size */
 
-       if (info)
-	 {
-	   if (info->default_width > 0)
-	     *width = info->default_width;
-	   if (info->default_height > 0)
-	     *height = info->default_height;
+   if (info)
+     {
+       if (info->default_width > 0)
+         *width = info->default_width;
+       if (info->default_height > 0)
+         *height = info->default_height;
 
-	   if (info->default_is_geometry)
-	     geometry_size_to_pixels (geometry, flags,
-				      info->default_width > 0 ? width : NULL,
-				      info->default_height > 0 ? height : NULL);
-         }
-    }
-  else
-    {
-      GtkAllocation allocation;
-
-      gtk_widget_get_allocation (GTK_WIDGET (window), &allocation);
-
-      /* Default to keeping current size */
-      *width = allocation.width;
-      *height = allocation.height;
-    }
+       if (info->default_is_geometry)
+         geometry_size_to_pixels (geometry, flags,
+                                  info->default_width > 0 ? width : NULL,
+                                  info->default_height > 0 ? height : NULL);
+     }
 
   /* Override any size with gtk_window_resize() values */
   if (info)
