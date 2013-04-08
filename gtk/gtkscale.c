@@ -1903,4 +1903,10 @@ gtk_scale_buildable_custom_finished (GtkBuildable *buildable,
       g_slist_free (marks_data->marks);
       g_slice_free (MarksSubparserData, marks_data);
     }
+  else
+    {
+      parent_buildable_iface->custom_finished (buildable, builder, child,
+					       tagname, user_data);
+    }
+
 }
