@@ -5009,12 +5009,12 @@ gtk_widget_unrealize (GtkWidget *widget)
  * @widget: a #GtkWidget
  * @region: region to draw
  *
- * Invalidates the rectangular area of @widget defined by @region by
- * calling gdk_window_invalidate_region() on the widget's window and
- * all its child windows. Once the main loop becomes idle (after the
- * current batch of events has been processed, roughly), the window
- * will receive expose events for the union of all regions that have
- * been invalidated.
+ * Invalidates the area of @widget defined by @region by calling
+ * gdk_window_invalidate_region() on the widget's window and all its
+ * child windows. Once the main loop becomes idle (after the current
+ * batch of events has been processed, roughly), the window will
+ * receive expose events for the union of all regions that have been
+ * invalidated.
  *
  * Normally you would only use this function in widget
  * implementations. You might also use it to schedule a redraw of a
