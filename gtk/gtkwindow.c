@@ -5080,7 +5080,6 @@ gtk_window_guess_default_size (GtkWindow *window,
                                gint      *width,
                                gint      *height)
 {
-  GtkWindowGeometryInfo *info;
   GtkWidget *widget;
   GdkScreen *screen;
   int minimum, natural;
@@ -5120,11 +5119,21 @@ gtk_window_guess_default_size (GtkWindow *window,
       gtk_widget_get_preferred_height_for_width (widget, *width, &minimum, &natural);
       *height = MAX (minimum, MIN (*height, natural));
     }
+}
+
+static void
+gtk_window_get_remembered_size (GtkWindow *window,
+                                int       *width,
+                                int       *height)
+{
+  GtkWindowGeometryInfo *info;
+
+  *width = 0;
+  *height = 0;
 
   info = gtk_window_get_geometry_info (window, FALSE);
   if (info)
     {
-      g_print ("last geometry info was %d %d\n", info->last.configure_request.width, info->last.configure_request.height);
       /* MAX() works even if the last request is unset with -1 */
       *width = MAX (*width, info->last.configure_request.width);
       *height = MAX (*height, info->last.configure_request.height);
@@ -5185,11 +5194,15 @@ gtk_window_realize (GtkWidget *widget)
       allocation.width == 1 &&
       allocation.height == 1)
     {
+      gint w, h;
 
       allocation.x = 0;
       allocation.y = 0;
 
       gtk_window_guess_default_size (window, &allocation.width, &allocation.height);
+      gtk_window_get_remembered_size (window, &w, &h);
+      allocation.width = MAX (allocation.width, w);
+      allocation.height = MAX (allocation.height, h);
       if (allocation.width == 0 || allocation.height == 0)
 	{
 	  /* non-empty window */
@@ -6530,6 +6543,7 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
                                            gint        *height)
 {
   GtkWindowGeometryInfo *info;
+  int w, h;
 
   /* Preconditions:
    *  - we've done a size request
@@ -6538,6 +6552,9 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
   info = gtk_window_get_geometry_info (window, FALSE);
 
   gtk_window_guess_default_size (window, width, height);
+  gtk_window_get_remembered_size (window, &w, &h);
+  *width = MAX (*width, w);
+  *height = MAX (*height, h);
 
   /* If window is empty so requests 0, default to random nonzero size */
    if (*width == 0 && *height == 0)
