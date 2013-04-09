@@ -40,6 +40,8 @@ libgdkinclude_HEADERS =				\
 libgdkwaylandinclude_HEADERS = 			\
 	gdkwaylanddevice.h			\
 	gdkwaylanddisplay.h			\
+	gdkwaylanddisplaymanager.h		\
+	gdkwaylandselection.h			\
 	gdkwaylandwindow.h
 
 -include $(top_srcdir)/git.mk
