@@ -82,6 +82,11 @@ static guint signals[LAST_SIGNAL] = { 0 };
 G_DEFINE_TYPE (GdkDisplay, gdk_display, G_TYPE_OBJECT)
 
 static void
+gdk_display_real_make_default (GdkDisplay *display)
+{
+}
+
+static void
 gdk_display_class_init (GdkDisplayClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
@@ -91,6 +96,8 @@ gdk_display_class_init (GdkDisplayClass *class)
 
   class->get_app_launch_context = gdk_display_real_get_app_launch_context;
   class->window_type = GDK_TYPE_WINDOW;
+
+  class->make_default = gdk_display_real_make_default;
 
   /**
    * GdkDisplay::opened:

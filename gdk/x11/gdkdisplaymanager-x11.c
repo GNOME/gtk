@@ -99,14 +99,6 @@ gdk_x11_display_manager_list_displays (GdkDisplayManager *manager)
 }
 
 static void
-gdk_x11_display_manager_set_default_display (GdkDisplayManager *manager,
-                                             GdkDisplay        *display)
-{
-  if (display)
-    _gdk_x11_display_make_default (display);
-}
-
-static void
 gdk_x11_display_manager_init (GdkX11DisplayManager *manager)
 {
   _gdk_x11_windowing_init ();
@@ -130,7 +122,6 @@ gdk_x11_display_manager_class_init (GdkX11DisplayManagerClass *class)
 
   manager_class->open_display = gdk_x11_display_manager_open_display;
   manager_class->list_displays = gdk_x11_display_manager_list_displays;
-  manager_class->set_default_display = gdk_x11_display_manager_set_default_display;
   manager_class->atom_intern = _gdk_x11_display_manager_atom_intern;
   manager_class->get_atom_name = _gdk_x11_display_manager_get_atom_name;
   manager_class->lookup_keyval = _gdk_x11_display_manager_lookup_keyval;

@@ -168,7 +168,6 @@ gboolean _gdk_x11_display_is_root_window (GdkDisplay *display,
                                           Window      xroot_window);
 
 GdkDisplay * _gdk_x11_display_open            (const gchar *display_name);
-void _gdk_x11_display_make_default            (GdkDisplay *display);
 void _gdk_x11_display_update_grab_info        (GdkDisplay *display,
                                                GdkDevice  *device,
                                                gint        status);

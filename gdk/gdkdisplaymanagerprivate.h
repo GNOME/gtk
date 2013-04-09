@@ -40,8 +40,6 @@ struct _GdkDisplayManagerClass
   GObjectClass parent_class;
 
   GSList *     (*list_displays)       (GdkDisplayManager *manager);
-  void         (*set_default_display) (GdkDisplayManager *manager,
-                                       GdkDisplay        *display);
   GdkDisplay * (*open_display)        (GdkDisplayManager *manager,
                                        const gchar       *name);
 

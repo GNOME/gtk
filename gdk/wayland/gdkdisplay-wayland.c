@@ -424,11 +424,6 @@ gdk_wayland_display_get_next_serial (GdkDisplay *display)
   return ++serial;
 }
 
-void
-_gdk_wayland_display_make_default (GdkDisplay *display)
-{
-}
-
 /**
  * gdk_wayland_display_broadcast_startup_message:
  * @display: a #GdkDisplay

@@ -26,6 +26,7 @@
 
 #include "gdkconfig.h"
 #include "gdkdisplaymanagerprivate.h"
+#include "gdkdisplayprivate.h"
 #include "gdkinternals.h"
 #include "gdkkeysprivate.h"
 #include "gdkmarshalers.h"
@@ -480,8 +481,8 @@ gdk_display_manager_set_default_display (GdkDisplayManager *manager,
 {
   manager->default_display = display;
 
-  if (GDK_DISPLAY_MANAGER_GET_CLASS (manager)->set_default_display)
-    GDK_DISPLAY_MANAGER_GET_CLASS (manager)->set_default_display (manager, display);
+  if (display)
+    GDK_DISPLAY_GET_CLASS (display)->make_default (display);
 
   g_object_notify (G_OBJECT (manager), "default-display");
 }

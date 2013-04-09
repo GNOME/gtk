@@ -1997,8 +1997,8 @@ gdk_x11_display_get_xdisplay (GdkDisplay *display)
   return GDK_X11_DISPLAY (display)->xdisplay;
 }
 
-void
-_gdk_x11_display_make_default (GdkDisplay *display)
+static void
+gdk_x11_display_make_default (GdkDisplay *display)
 {
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
   const gchar *startup_id;
@@ -2791,6 +2791,7 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->beep = gdk_x11_display_beep;
   display_class->sync = gdk_x11_display_sync;
   display_class->flush = gdk_x11_display_flush;
+  display_class->make_default = gdk_x11_display_make_default;
   display_class->has_pending = gdk_x11_display_has_pending;
   display_class->queue_events = _gdk_x11_display_queue_events;
   display_class->get_default_group = gdk_x11_display_get_default_group;
