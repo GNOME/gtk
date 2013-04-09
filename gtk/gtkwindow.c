@@ -5602,6 +5602,7 @@ gtk_window_guess_default_size (GtkWindow *window,
   info = gtk_window_get_geometry_info (window, FALSE);
   if (info)
     {
+      g_print ("last geometry info was %d %d\n", info->last.configure_request.width, info->last.configure_request.height);
       /* MAX() works even if the last request is unset with -1 */
       *width = MAX (*width, info->last.configure_request.width);
       *height = MAX (*height, info->last.configure_request.height);
@@ -8781,36 +8782,6 @@ gtk_window_compare_hints (GdkGeometry *geometry_a,
     return FALSE;
 
   return TRUE;
-}
-
-void
-_gtk_window_constrain_size (GtkWindow   *window,
-			    gint         width,
-			    gint         height,
-			    gint        *new_width,
-			    gint        *new_height)
-{
-  GtkWindowPrivate *priv;
-  GtkWindowGeometryInfo *info;
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  priv = window->priv;
-
-  info = priv->geometry_info;
-  if (info)
-    {
-      GdkWindowHints flags = info->last.flags;
-      GdkGeometry *geometry = &info->last.geometry;
-      
-      gtk_window_constrain_size (window,
-				 geometry,
-				 flags,
-				 width,
-				 height,
-				 new_width,
-				 new_height);
-    }
 }
 
 static void 
