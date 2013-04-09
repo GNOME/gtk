@@ -32,7 +32,6 @@ struct _GdkX11DisplayManager
 {
   GdkDisplayManager parent;
 
-  GdkDisplay *default_display;
   GSList *displays;
 
   gboolean init_failed;
@@ -79,13 +78,12 @@ static GdkDisplay *
 gdk_x11_display_manager_open_display (GdkDisplayManager *manager,
                                       const gchar       *name)
 {
-  GdkX11DisplayManager *manager_x11 = GDK_X11_DISPLAY_MANAGER (manager);
   GdkDisplay *display;
 
   display = _gdk_x11_display_open (name);
   if (display != NULL)
     {
-      if (manager_x11->default_display == NULL)
+      if (gdk_display_manager_get_default_display (manager) == NULL)
         gdk_display_manager_set_default_display (manager, display);
 
       g_signal_emit_by_name (manager, "display-opened", display);
@@ -100,18 +98,10 @@ gdk_x11_display_manager_list_displays (GdkDisplayManager *manager)
   return g_slist_copy (GDK_X11_DISPLAY_MANAGER (manager)->displays);
 }
 
-static GdkDisplay *
-gdk_x11_display_manager_get_default_display (GdkDisplayManager *manager)
-{
-  return GDK_X11_DISPLAY_MANAGER (manager)->default_display;
-}
-
 static void
 gdk_x11_display_manager_set_default_display (GdkDisplayManager *manager,
                                              GdkDisplay        *display)
 {
-  GDK_X11_DISPLAY_MANAGER (manager)->default_display = display;
-
   if (display)
     _gdk_x11_display_make_default (display);
 }
@@ -141,7 +131,6 @@ gdk_x11_display_manager_class_init (GdkX11DisplayManagerClass *class)
   manager_class->open_display = gdk_x11_display_manager_open_display;
   manager_class->list_displays = gdk_x11_display_manager_list_displays;
   manager_class->set_default_display = gdk_x11_display_manager_set_default_display;
-  manager_class->get_default_display = gdk_x11_display_manager_get_default_display;
   manager_class->atom_intern = _gdk_x11_display_manager_atom_intern;
   manager_class->get_atom_name = _gdk_x11_display_manager_get_atom_name;
   manager_class->lookup_keyval = _gdk_x11_display_manager_lookup_keyval;
@@ -166,7 +155,7 @@ _gdk_x11_display_manager_remove_display (GdkDisplayManager *manager,
 
   manager_x11->displays = g_slist_remove (manager_x11->displays, display);
 
-  if (manager_x11->default_display == display)
+  if (gdk_display_manager_get_default_display (manager) == display)
     {
       if (manager_x11->displays)
         gdk_display_manager_set_default_display (manager, manager_x11->displays->data);

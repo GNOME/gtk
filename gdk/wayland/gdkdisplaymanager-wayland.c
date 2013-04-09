@@ -33,7 +33,6 @@ struct _GdkWaylandDisplayManager
 {
   GdkDisplayManager parent;
 
-  GdkDisplay *default_display;
   GSList *displays;
 
   GHashTable *name_to_atoms;
@@ -111,15 +110,7 @@ static void
 gdk_wayland_display_manager_set_default_display (GdkDisplayManager *manager,
 						 GdkDisplay        *display)
 {
-  GDK_WAYLAND_DISPLAY_MANAGER (manager)->default_display = display;
-
   _gdk_wayland_display_make_default (display);
-}
-
-static GdkDisplay *
-gdk_wayland_display_manager_get_default_display (GdkDisplayManager *manager)
-{
-  return GDK_WAYLAND_DISPLAY_MANAGER (manager)->default_display;
 }
 
 static GdkAtom
@@ -215,7 +206,6 @@ gdk_wayland_display_manager_class_init (GdkWaylandDisplayManagerClass *class)
   manager_class->open_display = gdk_wayland_display_manager_open_display;
   manager_class->list_displays = gdk_wayland_display_manager_list_displays;
   manager_class->set_default_display = gdk_wayland_display_manager_set_default_display;
-  manager_class->get_default_display = gdk_wayland_display_manager_get_default_display;
   manager_class->atom_intern = gdk_wayland_display_manager_atom_intern;
   manager_class->get_atom_name = gdk_wayland_display_manager_get_atom_name;
   manager_class->lookup_keyval = gdk_wayland_display_manager_lookup_keyval;
@@ -282,7 +272,7 @@ _gdk_wayland_display_manager_remove_display (GdkDisplayManager *manager,
 
   manager_wayland->displays = g_slist_remove (manager_wayland->displays, display);
 
-  if (manager_wayland->default_display == display)
+  if (gdk_display_manager_get_default_display (manager) == display)
     {
       if (manager_wayland->displays)
         gdk_display_manager_set_default_display (manager, manager_wayland->displays->data);

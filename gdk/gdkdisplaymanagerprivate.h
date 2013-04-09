@@ -31,6 +31,8 @@ typedef struct _GdkDisplayManagerClass GdkDisplayManagerClass;
 struct _GdkDisplayManager
 {
   GObject parent_instance;
+
+  GdkDisplay *default_display;
 };
 
 struct _GdkDisplayManagerClass
@@ -38,7 +40,6 @@ struct _GdkDisplayManagerClass
   GObjectClass parent_class;
 
   GSList *     (*list_displays)       (GdkDisplayManager *manager);
-  GdkDisplay * (*get_default_display) (GdkDisplayManager *manager);
   void         (*set_default_display) (GdkDisplayManager *manager,
                                        GdkDisplay        *display);
   GdkDisplay * (*open_display)        (GdkDisplayManager *manager,

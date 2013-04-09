@@ -421,7 +421,7 @@ _gdk_display_manager_get_nocreate (void)
 GdkDisplay *
 gdk_display_manager_get_default_display (GdkDisplayManager *manager)
 {
-  return GDK_DISPLAY_MANAGER_GET_CLASS (manager)->get_default_display (manager);
+  return manager->default_display;
 }
 
 /**
@@ -478,7 +478,10 @@ void
 gdk_display_manager_set_default_display (GdkDisplayManager *manager,
                                          GdkDisplay        *display)
 {
-  GDK_DISPLAY_MANAGER_GET_CLASS (manager)->set_default_display (manager, display);
+  manager->default_display = display;
+
+  if (GDK_DISPLAY_MANAGER_GET_CLASS (manager)->set_default_display)
+    GDK_DISPLAY_MANAGER_GET_CLASS (manager)->set_default_display (manager, display);
 
   g_object_notify (G_OBJECT (manager), "default-display");
 }

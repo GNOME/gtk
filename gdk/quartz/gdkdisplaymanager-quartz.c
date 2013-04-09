@@ -36,7 +36,6 @@ struct _GdkQuartzDisplayManager
 {
   GdkDisplayManager parent;
 
-  GdkDisplay *default_display;
   GSList *displays;
 };
 
@@ -56,21 +55,6 @@ gdk_quartz_display_manager_list_displays (GdkDisplayManager *manager)
   GdkQuartzDisplayManager *manager_quartz = GDK_QUARTZ_DISPLAY_MANAGER (manager);
 
   return g_slist_copy (manager_quartz->displays);
-}
-
-static GdkDisplay *
-gdk_quartz_display_manager_get_default_display (GdkDisplayManager *manager)
-{
-  return GDK_QUARTZ_DISPLAY_MANAGER (manager)->default_display;
-}
-
-static void
-gdk_quartz_display_manager_set_default_display (GdkDisplayManager *manager,
-                                                GdkDisplay        *display)
-{
-  GdkQuartzDisplayManager *manager_quartz = GDK_QUARTZ_DISPLAY_MANAGER (manager);
-
-  manager_quartz->default_display = display;
 }
 
 #include "../gdkkeynames.c"
@@ -123,8 +107,6 @@ gdk_quartz_display_manager_class_init (GdkQuartzDisplayManagerClass *class)
 
   manager_class->open_display = gdk_quartz_display_manager_open_display;
   manager_class->list_displays = gdk_quartz_display_manager_list_displays;
-  manager_class->set_default_display = gdk_quartz_display_manager_set_default_display;
-  manager_class->get_default_display = gdk_quartz_display_manager_get_default_display;
   manager_class->atom_intern = _gdk_quartz_display_manager_atom_intern;
   manager_class->get_atom_name = _gdk_quartz_display_manager_get_atom_name;
   manager_class->lookup_keyval = gdk_quartz_display_manager_lookup_keyval;
@@ -151,7 +133,7 @@ _gdk_quartz_display_manager_remove_display (GdkDisplayManager *manager,
 
   manager_quartz->displays = g_slist_remove (manager_quartz->displays, display);
 
-  if (manager_quartz->default_display == display)
+  if (gdk_display_manager_get_default_display (manager) == display)
     {
       if (manager_quartz->displays)
         gdk_display_manager_set_default_display (manager, manager_quartz->displays->data);

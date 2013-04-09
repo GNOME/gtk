@@ -34,7 +34,6 @@ struct _GdkBroadwayDisplayManager
 {
   GdkDisplayManager parent;
 
-  GdkDisplay *default_display;
   GSList *displays;
 
   gboolean init_failed;
@@ -99,21 +98,6 @@ gdk_broadway_display_manager_list_displays (GdkDisplayManager *manager)
   return g_slist_copy (manager_broadway->displays);
 }
 
-static GdkDisplay *
-gdk_broadway_display_manager_get_default_display (GdkDisplayManager *manager)
-{
-  return GDK_BROADWAY_DISPLAY_MANAGER (manager)->default_display;
-}
-
-static void
-gdk_broadway_display_manager_set_default_display (GdkDisplayManager *manager,
-                                                GdkDisplay        *display)
-{
-  GdkBroadwayDisplayManager *manager_broadway = GDK_BROADWAY_DISPLAY_MANAGER (manager);
-
-  manager_broadway->default_display = display;
-}
-
 #include "../gdkkeynames.c"
 
 static gchar *
@@ -154,8 +138,6 @@ gdk_broadway_display_manager_class_init (GdkBroadwayDisplayManagerClass *class)
 
   manager_class->open_display = gdk_broadway_display_manager_open_display;
   manager_class->list_displays = gdk_broadway_display_manager_list_displays;
-  manager_class->set_default_display = gdk_broadway_display_manager_set_default_display;
-  manager_class->get_default_display = gdk_broadway_display_manager_get_default_display;
   manager_class->atom_intern = _gdk_broadway_display_manager_atom_intern;
   manager_class->get_atom_name = _gdk_broadway_display_manager_get_atom_name;
   manager_class->lookup_keyval = gdk_broadway_display_manager_lookup_keyval;
@@ -182,7 +164,7 @@ _gdk_broadway_display_manager_remove_display (GdkDisplayManager *manager,
 
   manager_broadway->displays = g_slist_remove (manager_broadway->displays, display);
 
-  if (manager_broadway->default_display == display)
+  if (gdk_display_manager_get_default_display (manager) == display)
     {
       if (manager_broadway->displays)
         gdk_display_manager_set_default_display (manager, manager_broadway->displays->data);
