@@ -556,8 +556,7 @@
  * The optional blur radius parameter is parsed, but it is currently not rendered by
  * the GTK+ theming engine.
  * The inset parameter defines whether the drop shadow should be rendered inside or outside
- * the box canvas. Only inset box-shadows are currently supported by the GTK+ theming engine,
- * non-inset elements are currently ignored.
+ * the box canvas.
  * </para>
  * <para>
  * To set multiple box-shadows on an element, you can specify a comma-separated list
