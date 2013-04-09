@@ -255,13 +255,11 @@ gdk_wayland_device_query_state (GdkDevice        *device,
     *root_window = gdk_screen_get_root_window (default_screen);
   if (child_window)
     *child_window = wd->pointer_focus;
-  /* Do something clever for relative here */
-#if 0
+  /* TODO: Do something clever for relative here */
   if (root_x)
-    *root_x = wd->x;
+    *root_x = wd->surface_x;
   if (root_y)
-    *root_y = wd->y;
-#endif
+    *root_y = wd->surface_y;
   if (win_x)
     *win_x = wd->surface_x;
   if (win_y)
