@@ -147,16 +147,6 @@ gdk_win32_screen_get_number (GdkScreen *screen)
   return 0;
 }
 
-gchar *
-_gdk_windowing_substitute_screen_number (const gchar *display_name,
-					 int          screen_number)
-{
-  if (screen_number != 0)
-    return NULL;
-
-  return g_strdup (display_name);
-}
-
 static gchar *
 gdk_win32_screen_make_display_name (GdkScreen *screen)
 {

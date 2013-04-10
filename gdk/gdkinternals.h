@@ -346,8 +346,6 @@ void       _gdk_screen_close             (GdkScreen      *screen);
 void _gdk_cursor_destroy (GdkCursor *cursor);
 
 extern const GOptionEntry _gdk_windowing_args[];
-gchar *_gdk_windowing_substitute_screen_number (const gchar *display_name,
-                                                gint         screen_number);
 
 void _gdk_windowing_got_event                (GdkDisplay       *display,
                                               GList            *event_link,
