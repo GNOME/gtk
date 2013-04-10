@@ -5056,6 +5056,7 @@ update_window_buttons (GtkWindow *window)
               for (j = 0; t[j]; j++)
                 {
                   GtkWidget *button = NULL;
+                  GtkWidget *image = NULL;
 
                   if (strcmp (t[j], "icon") == 0)
                     {
@@ -5076,8 +5077,9 @@ update_window_buttons (GtkWindow *window)
                       priv->gdk_type_hint == GDK_WINDOW_TYPE_HINT_NORMAL)
                     {
                       button = gtk_button_new ();
-                      gtk_container_add (GTK_CONTAINER (button),
-                                         gtk_image_new_from_icon_name ("window-minimize", GTK_ICON_SIZE_MENU));
+                      image = gtk_image_new_from_icon_name ("window-minimize-symbolic", GTK_ICON_SIZE_MENU);
+                      g_object_set (image, "use-fallback", TRUE, NULL);
+                      gtk_container_add (GTK_CONTAINER (button), image);
                       gtk_style_context_add_class (gtk_widget_get_style_context (button), "window-minimize-button");
                       gtk_widget_set_can_focus (button, FALSE);
                       gtk_widget_show_all (button);
@@ -5098,10 +5100,11 @@ update_window_buttons (GtkWindow *window)
                         maximized = gdk_window_get_state (win) & GDK_WINDOW_STATE_MAXIMIZED;
                       else
                         maximized = FALSE;
-                      icon_name = maximized ? "window-restore" : "window-maximize";
+                      icon_name = maximized ? "window-restore-symbolic" : "window-maximize-symbolic";
                       button = gtk_button_new ();
-                      gtk_container_add (GTK_CONTAINER (button),
-                                         gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_MENU));
+                      image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
+                      g_object_set (image, "use-fallback", TRUE, NULL);
+                      gtk_container_add (GTK_CONTAINER (button), image);
                       gtk_style_context_add_class (gtk_widget_get_style_context (button), "window-maximize-button");
                       gtk_widget_set_can_focus (button, FALSE);
                       gtk_widget_show_all (button);
@@ -5114,8 +5117,9 @@ update_window_buttons (GtkWindow *window)
                            priv->gdk_type_hint == GDK_WINDOW_TYPE_HINT_NORMAL)
                     {
                       button = gtk_button_new ();
-                      gtk_container_add (GTK_CONTAINER (button),
-                                         gtk_image_new_from_icon_name ("window-delete", GTK_ICON_SIZE_MENU));
+                      image = gtk_image_new_from_icon_name ("window-delete-symbolic", GTK_ICON_SIZE_MENU);
+                      g_object_set (image, "use-fallback", TRUE, NULL);
+                      gtk_container_add (GTK_CONTAINER (button), image);
                       gtk_style_context_add_class (gtk_widget_get_style_context (button), "window-close-button");
                       gtk_widget_set_can_focus (button, FALSE);
                       gtk_widget_show_all (button);
