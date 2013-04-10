@@ -502,7 +502,7 @@ gdk_display_manager_set_default_display (GdkDisplayManager *manager,
 GSList *
 gdk_display_manager_list_displays (GdkDisplayManager *manager)
 {
-  return GDK_DISPLAY_MANAGER_GET_CLASS (manager)->list_displays (manager);
+  return g_slist_copy (manager->displays);
 }
 
 /**
@@ -588,4 +588,30 @@ gdk_atom_name (GdkAtom atom)
   GdkDisplayManager *manager = gdk_display_manager_get ();
 
   return GDK_DISPLAY_MANAGER_GET_CLASS (manager)->get_atom_name (manager, atom);
+}
+
+void
+_gdk_display_manager_add_display (GdkDisplayManager *manager,
+                                  GdkDisplay        *display)
+{
+  if (manager->displays == NULL)
+    gdk_display_manager_set_default_display (manager, display);
+
+  manager->displays = g_slist_prepend (manager->displays, display);
+}
+
+/* NB: This function can be called multiple times per display. */
+void
+_gdk_display_manager_remove_display (GdkDisplayManager *manager,
+                                     GdkDisplay        *display)
+{
+  manager->displays = g_slist_remove (manager->displays, display);
+
+  if (manager->default_display == display)
+    {
+      if (manager->displays)
+        gdk_display_manager_set_default_display (manager, manager->displays->data);
+      else
+        gdk_display_manager_set_default_display (manager, NULL);
+    }
 }

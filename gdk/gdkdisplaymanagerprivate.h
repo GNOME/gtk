@@ -33,13 +33,14 @@ struct _GdkDisplayManager
   GObject parent_instance;
 
   GdkDisplay *default_display;
+
+  GSList *displays;
 };
 
 struct _GdkDisplayManagerClass
 {
   GObjectClass parent_class;
 
-  GSList *     (*list_displays)       (GdkDisplayManager *manager);
   GdkDisplay * (*open_display)        (GdkDisplayManager *manager,
                                        const gchar       *name);
 
@@ -65,6 +66,11 @@ struct _GdkDisplayManagerClass
 
 GdkDisplayManager *
 _gdk_display_manager_get_nocreate (void);
+
+void            _gdk_display_manager_add_display        (GdkDisplayManager      *manager,
+                                                         GdkDisplay             *display);
+void            _gdk_display_manager_remove_display     (GdkDisplayManager      *manager,
+                                                         GdkDisplay             *display);
 
 G_END_DECLS
 

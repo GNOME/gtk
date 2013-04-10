@@ -44,10 +44,6 @@ void _gdk_broadway_windowing_init (void);
 
 gchar * _gdk_broadway_display_manager_get_atom_name (GdkDisplayManager *manager,
 						     GdkAtom atom);
-void _gdk_broadway_display_manager_add_display (GdkDisplayManager *manager,
-						GdkDisplay        *display);
-void _gdk_broadway_display_manager_remove_display (GdkDisplayManager *manager,
-						   GdkDisplay        *display);
 GdkAtom _gdk_broadway_display_manager_atom_intern_static_string (GdkDisplayManager *manager,
 								 const gchar *atom_name);
 GdkAtom _gdk_broadway_display_manager_atom_intern (GdkDisplayManager *manager,

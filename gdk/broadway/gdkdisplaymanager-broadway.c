@@ -34,8 +34,6 @@ struct _GdkBroadwayDisplayManager
 {
   GdkDisplayManager parent;
 
-  GSList *displays;
-
   gboolean init_failed;
 };
 
@@ -90,14 +88,6 @@ gdk_broadway_display_manager_open_display (GdkDisplayManager *manager,
   return _gdk_broadway_display_open (name);
 }
 
-static GSList *
-gdk_broadway_display_manager_list_displays (GdkDisplayManager *manager)
-{
-  GdkBroadwayDisplayManager *manager_broadway = GDK_BROADWAY_DISPLAY_MANAGER (manager);
-
-  return g_slist_copy (manager_broadway->displays);
-}
-
 #include "../gdkkeynames.c"
 
 static gchar *
@@ -137,38 +127,8 @@ gdk_broadway_display_manager_class_init (GdkBroadwayDisplayManagerClass *class)
   object_class->finalize = gdk_broadway_display_manager_finalize;
 
   manager_class->open_display = gdk_broadway_display_manager_open_display;
-  manager_class->list_displays = gdk_broadway_display_manager_list_displays;
   manager_class->atom_intern = _gdk_broadway_display_manager_atom_intern;
   manager_class->get_atom_name = _gdk_broadway_display_manager_get_atom_name;
   manager_class->lookup_keyval = gdk_broadway_display_manager_lookup_keyval;
   manager_class->get_keyval_name = gdk_broadway_display_manager_get_keyval_name;
-}
-
-void
-_gdk_broadway_display_manager_add_display (GdkDisplayManager *manager,
-					   GdkDisplay        *display)
-{
-  GdkBroadwayDisplayManager *manager_broadway = GDK_BROADWAY_DISPLAY_MANAGER (manager);
-
-  if (manager_broadway->displays == NULL)
-    gdk_display_manager_set_default_display (manager, display);
-
-  manager_broadway->displays = g_slist_prepend (manager_broadway->displays, display);
-}
-
-void
-_gdk_broadway_display_manager_remove_display (GdkDisplayManager *manager,
-					      GdkDisplay        *display)
-{
-  GdkBroadwayDisplayManager *manager_broadway = GDK_BROADWAY_DISPLAY_MANAGER (manager);
-
-  manager_broadway->displays = g_slist_remove (manager_broadway->displays, display);
-
-  if (gdk_display_manager_get_default_display (manager) == display)
-    {
-      if (manager_broadway->displays)
-        gdk_display_manager_set_default_display (manager, manager_broadway->displays->data);
-      else
-        gdk_display_manager_set_default_display (manager, NULL);
-    }
 }

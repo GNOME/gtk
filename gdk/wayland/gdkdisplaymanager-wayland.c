@@ -100,12 +100,6 @@ gdk_wayland_display_manager_open_display (GdkDisplayManager *manager,
   return _gdk_wayland_display_open (name);
 }
 
-static GSList *
-gdk_wayland_display_manager_list_displays (GdkDisplayManager *manager)
-{
-  return g_slist_copy (GDK_WAYLAND_DISPLAY_MANAGER (manager)->displays);
-}
-
 static GdkAtom
 gdk_wayland_display_manager_atom_intern (GdkDisplayManager *manager_in,
 					 const gchar       *atom_name,
@@ -197,7 +191,6 @@ gdk_wayland_display_manager_class_init (GdkWaylandDisplayManagerClass *class)
   object_class->finalize = gdk_wayland_display_manager_finalize;
 
   manager_class->open_display = gdk_wayland_display_manager_open_display;
-  manager_class->list_displays = gdk_wayland_display_manager_list_displays;
   manager_class->atom_intern = gdk_wayland_display_manager_atom_intern;
   manager_class->get_atom_name = gdk_wayland_display_manager_get_atom_name;
   manager_class->lookup_keyval = gdk_wayland_display_manager_lookup_keyval;

@@ -247,11 +247,6 @@ void     _gdk_device_xi2_reset_scroll_valuators   (GdkX11DeviceXI2    *device);
 
 void     _gdk_x11_event_translate_keyboard_string (GdkEventKey *event);
 
-void _gdk_x11_display_manager_add_display      (GdkDisplayManager *manager,
-                                                GdkDisplay        *display);
-void _gdk_x11_display_manager_remove_display   (GdkDisplayManager *manager,
-                                                GdkDisplay        *display);
-
 GdkAtom _gdk_x11_display_manager_atom_intern   (GdkDisplayManager *manager,
                                                 const gchar       *atom_name,
                                                 gboolean           copy_name);

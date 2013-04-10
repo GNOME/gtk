@@ -155,12 +155,6 @@ gchar *     _gdk_quartz_display_utf8_to_string_target      (GdkDisplay     *disp
                                                             const gchar    *str);
 
 
-/* Display manager */
-void    _gdk_quartz_display_manager_add_display    (GdkDisplayManager *manager,
-                                                    GdkDisplay        *display);
-void    _gdk_quartz_display_manager_remove_display (GdkDisplayManager *manager,
-                                                    GdkDisplay        *display);
-
 /* Display manager methods - events */
 GdkAtom _gdk_quartz_display_manager_atom_intern   (GdkDisplayManager *manager,
                                                    const gchar       *atom_name,

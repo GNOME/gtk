@@ -32,8 +32,6 @@ struct _GdkX11DisplayManager
 {
   GdkDisplayManager parent;
 
-  GSList *displays;
-
   gboolean init_failed;
 };
 
@@ -92,12 +90,6 @@ gdk_x11_display_manager_open_display (GdkDisplayManager *manager,
   return display;
 }
 
-static GSList *
-gdk_x11_display_manager_list_displays (GdkDisplayManager *manager)
-{
-  return g_slist_copy (GDK_X11_DISPLAY_MANAGER (manager)->displays);
-}
-
 static void
 gdk_x11_display_manager_init (GdkX11DisplayManager *manager)
 {
@@ -121,36 +113,9 @@ gdk_x11_display_manager_class_init (GdkX11DisplayManagerClass *class)
   object_class->finalize = gdk_x11_display_manager_finalize;
 
   manager_class->open_display = gdk_x11_display_manager_open_display;
-  manager_class->list_displays = gdk_x11_display_manager_list_displays;
   manager_class->atom_intern = _gdk_x11_display_manager_atom_intern;
   manager_class->get_atom_name = _gdk_x11_display_manager_get_atom_name;
   manager_class->lookup_keyval = _gdk_x11_display_manager_lookup_keyval;
   manager_class->get_keyval_name = _gdk_x11_display_manager_get_keyval_name;
   manager_class->keyval_convert_case = _gdk_x11_display_manager_keyval_convert_case;
-}
-
-void
-_gdk_x11_display_manager_add_display (GdkDisplayManager *manager,
-                                      GdkDisplay        *display)
-{
-  GdkX11DisplayManager *manager_x11 = GDK_X11_DISPLAY_MANAGER (manager);
-
-  manager_x11->displays = g_slist_prepend (manager_x11->displays, display);
-}
-
-void
-_gdk_x11_display_manager_remove_display (GdkDisplayManager *manager,
-                                         GdkDisplay        *display)
-{
-  GdkX11DisplayManager *manager_x11 = GDK_X11_DISPLAY_MANAGER (manager);
-
-  manager_x11->displays = g_slist_remove (manager_x11->displays, display);
-
-  if (gdk_display_manager_get_default_display (manager) == display)
-    {
-      if (manager_x11->displays)
-        gdk_display_manager_set_default_display (manager, manager_x11->displays->data);
-      else
-        gdk_display_manager_set_default_display (manager, NULL);
-    }
 }

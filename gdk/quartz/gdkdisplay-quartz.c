@@ -265,17 +265,12 @@ G_DEFINE_TYPE (GdkQuartzDisplay, gdk_quartz_display, GDK_TYPE_DISPLAY)
 static void
 gdk_quartz_display_init (GdkQuartzDisplay *display)
 {
-  _gdk_quartz_display_manager_add_display (gdk_display_manager_get (),
-                                           GDK_DISPLAY_OBJECT (display));
 }
 
 static void
 gdk_quartz_display_dispose (GObject *object)
 {
   GdkQuartzDisplay *display_quartz = GDK_QUARTZ_DISPLAY (object);
-
-  _gdk_quartz_display_manager_remove_display (gdk_display_manager_get (),
-                                              GDK_DISPLAY_OBJECT (object));
 
   g_list_foreach (display_quartz->input_devices,
                   (GFunc) g_object_run_dispose, NULL);

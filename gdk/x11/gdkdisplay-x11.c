@@ -176,8 +176,6 @@ G_DEFINE_TYPE_WITH_CODE (GdkX11Display, gdk_x11_display, GDK_TYPE_DISPLAY,
 static void
 gdk_x11_display_init (GdkX11Display *display)
 {
-  _gdk_x11_display_manager_add_display (gdk_display_manager_get (),
-                                        GDK_DISPLAY (display));
 }
 
 static void
@@ -1836,10 +1834,7 @@ gdk_x11_display_ungrab (GdkDisplay *display)
 static void
 gdk_x11_display_dispose (GObject *object)
 {
-  GdkDisplay *display = GDK_DISPLAY (object);
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (object);
-
-  _gdk_x11_display_manager_remove_display (gdk_display_manager_get (), display);
 
   g_list_foreach (display_x11->input_devices, (GFunc) g_object_run_dispose, NULL);
 
