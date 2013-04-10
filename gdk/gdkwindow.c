@@ -5463,6 +5463,7 @@ gdk_window_process_updates_internal (GdkWindow *window)
   GdkWindowImplIface *impl_iface;
   gboolean save_region = FALSE;
   GdkRectangle clip_box;
+  int iteration;
 
   /* Ensure the window lives while updating it */
   g_object_ref (window);
@@ -5470,8 +5471,15 @@ gdk_window_process_updates_internal (GdkWindow *window)
   /* If an update got queued during update processing, we can get a
    * window in the update queue that has an empty update_area.
    * just ignore it.
+   *
+   * We run this multiple times if needed because on win32 the
+   * first run can cause new (synchronous) updates from
+   * gdk_window_flush_outstanding_moves(). However, we
+   * limit it to two iterations to avoid any potential loops.
    */
-  if (private->update_area)
+  iteration = 0;
+  while (private->update_area &&
+	 iteration++ < 2)
     {
       GdkRegion *update_area = private->update_area;
       private->update_area = NULL;
