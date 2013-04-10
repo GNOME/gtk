@@ -2765,10 +2765,6 @@ avahi_service_browser_signal_handler (GDBusConnection *connection,
     }
   else if (g_strcmp0 (signal_name, "ItemRemove") == 0)
     {
-      GtkPrinterCups *printer;
-      GList          *list;
-      GList          *iter;
-
       g_variant_get (parameters, "(ii&s&s&su)",
                      &interface,
                      &protocol,
@@ -2780,6 +2776,10 @@ avahi_service_browser_signal_handler (GDBusConnection *connection,
       if (g_strcmp0 (type, "_ipp._tcp") == 0 ||
           g_strcmp0 (type, "_ipps._tcp") == 0)
         {
+          GtkPrinterCups *printer;
+          GList          *list;
+          GList          *iter;
+
           list = gtk_print_backend_get_printer_list (GTK_PRINT_BACKEND (backend));
           for (iter = list; iter; iter = iter->next)
             {
@@ -2799,9 +2799,9 @@ avahi_service_browser_signal_handler (GDBusConnection *connection,
                   break;
                 }
             }
-        }
 
-      g_list_free (list);
+          g_list_free (list);
+        }
     }
 }
 
