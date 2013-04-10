@@ -1560,21 +1560,28 @@ blit_inside_drawable (HDC                   hdc,
        * scrolling a window that is partially obscured by another window. For
        * example, GIMP's toolbox being over the editor window. */
 
-      RECT scrollRect, emptyRect;
+      RECT emptyRect, clipRect;
       HRGN updateRgn;
+      GdkRegion *update_region;
 
-      scrollRect.left = MIN (xsrc, xdest);
-      scrollRect.top = MIN (ysrc, ydest);
-      scrollRect.right = MAX (xsrc + width + 1, xdest + width + 1);
-      scrollRect.bottom = MAX (ysrc + height + 1, ydest + height + 1);
+      clipRect.left = xdest;
+      clipRect.top = ydest;
+      clipRect.right = xdest + width;
+      clipRect.bottom = ydest + height;
 
       SetRectEmpty (&emptyRect);
       updateRgn = CreateRectRgnIndirect (&emptyRect);
 
-      if (!ScrollDC (hdc, xdest - xsrc, ydest - ysrc, &scrollRect, NULL, updateRgn, NULL))
+      if (!ScrollDC (hdc, xdest - xsrc, ydest - ysrc, NULL, &clipRect, updateRgn, NULL))
         WIN32_GDI_FAILED ("ScrollDC");
-      else if (!InvalidateRgn (src->handle, updateRgn, FALSE))
-        WIN32_GDI_FAILED ("InvalidateRgn");
+      else
+	{
+	  GdkDrawable *wrapper = src->wrapper;
+	  update_region = _gdk_win32_hrgn_to_region (updateRgn);
+	  if (!gdk_region_empty (update_region))
+	    _gdk_window_invalidate_for_expose (GDK_WINDOW (wrapper), update_region);
+	  gdk_region_destroy (update_region);
+	}
 
       if (!DeleteObject (updateRgn))
         WIN32_GDI_FAILED ("DeleteObject");
