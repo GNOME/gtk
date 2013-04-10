@@ -3319,27 +3319,11 @@ pre_paste_prep (ClipboardRequest *request_data,
   
   get_paste_point (buffer, insert_point, TRUE);
 
-  /* If we're going to replace the selection, we insert before it to
-   * avoid messing it up, then we delete the selection after inserting.
-   */
   if (request_data->replace_selection)
     {
       GtkTextIter start, end;
       
       if (gtk_text_buffer_get_selection_bounds (buffer, &start, &end))
-        *insert_point = start;
-    }
-}
-
-static void
-post_paste_cleanup (ClipboardRequest *request_data)
-{
-  if (request_data->replace_selection)
-    {
-      GtkTextIter start, end;
-      
-      if (gtk_text_buffer_get_selection_bounds (request_data->buffer,
-                                                &start, &end))
         {
           if (request_data->interactive)
             gtk_text_buffer_delete_interactive (request_data->buffer,
@@ -3348,6 +3332,8 @@ post_paste_cleanup (ClipboardRequest *request_data)
                                                 request_data->default_editable);
           else
             gtk_text_buffer_delete (request_data->buffer, &start, &end);
+
+          *insert_point = start;
         }
     }
 }
@@ -3392,8 +3378,6 @@ clipboard_text_received (GtkClipboard *clipboard,
         gtk_text_buffer_insert (buffer, &insert_point,
                                 str, -1);
 
-      post_paste_cleanup (request_data);
-      
       if (request_data->interactive) 
 	gtk_text_buffer_end_user_action (buffer);
 
@@ -3493,10 +3477,10 @@ clipboard_rich_text_received (GtkClipboard *clipboard,
 
   if (text != NULL && length > 0)
     {
-      pre_paste_prep (request_data, &insert_point);
-
       if (request_data->interactive)
         gtk_text_buffer_begin_user_action (request_data->buffer);
+
+      pre_paste_prep (request_data, &insert_point);
 
       if (!request_data->interactive ||
           gtk_text_iter_can_insert (&insert_point,
@@ -3522,10 +3506,7 @@ clipboard_rich_text_received (GtkClipboard *clipboard,
       emit_paste_done (request_data->buffer, clipboard);
 
       if (retval)
-        {
-          post_paste_cleanup (request_data);
-          return;
-        }
+        return;
     }
 
   /* Request the text selection instead */
@@ -3543,14 +3524,23 @@ paste_from_buffer (GtkClipboard      *clipboard,
 {
   GtkTextIter insert_point;
   GtkTextBuffer *buffer = request_data->buffer;
-  
+
   /* We're about to emit a bunch of signals, so be safe */
   g_object_ref (src_buffer);
-  
-  pre_paste_prep (request_data, &insert_point);
-  
+
+  /* Replacing the selection with itself */
+  if (request_data->replace_selection &&
+      buffer == src_buffer)
+    {
+      /* Clear the paste point if needed */
+      get_paste_point (buffer, &insert_point, TRUE);
+      goto done;
+    }
+
   if (request_data->interactive) 
     gtk_text_buffer_begin_user_action (buffer);
+
+  pre_paste_prep (request_data, &insert_point);
 
   if (!gtk_text_iter_equal (start, end))
     {
@@ -3564,11 +3554,10 @@ paste_from_buffer (GtkClipboard      *clipboard,
                                            request_data->interactive);
     }
 
-  post_paste_cleanup (request_data);
-      
   if (request_data->interactive) 
     gtk_text_buffer_end_user_action (buffer);
 
+done:
   emit_paste_done (buffer, clipboard);
 
   g_object_unref (src_buffer);
