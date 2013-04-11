@@ -1408,11 +1408,11 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         GdkDevice *source_device;
 
         GDK_NOTE(EVENTS,
-                 g_message ("touch %s:\twindow %ld\n\ttouch id: %u\n\tpointer emulating: %d",
+                 g_message ("touch %s:\twindow %ld\n\ttouch id: %u\n\tpointer emulating: %s",
                             ev->evtype == XI_TouchBegin ? "begin" : "end",
                             xev->event,
                             xev->detail,
-                            xev->flags & XITouchEmulatingPointer));
+                            xev->flags & XITouchEmulatingPointer ? "true" : "false"));
 
         if (ev->evtype == XI_TouchBegin)
           event->touch.type = GDK_TOUCH_BEGIN;
@@ -1481,10 +1481,10 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         GdkDevice *source_device;
 
         GDK_NOTE(EVENTS,
-                 g_message ("touch update:\twindow %ld\n\ttouch id: %u\n\tpointer emulating: %d",
+                 g_message ("touch update:\twindow %ld\n\ttouch id: %u\n\tpointer emulating: %s",
                             xev->event,
                             xev->detail,
-                            xev->flags & XITouchEmulatingPointer));
+                            xev->flags & XITouchEmulatingPointer ? "true" : "false"));
 
         event->touch.window = window;
         event->touch.sequence = GUINT_TO_POINTER (xev->detail);
