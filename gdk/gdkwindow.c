@@ -3499,24 +3499,22 @@ static void
 gdk_window_flush_outstanding_moves (GdkWindow *window)
 {
   GdkWindow *impl_window;
-  GList *l, *outstanding;
   GdkWindowRegionMove *move;
 
   impl_window = gdk_window_get_impl_window (window);
-  outstanding = impl_window->outstanding_moves;
-  impl_window->outstanding_moves = NULL;
 
-  for (l = outstanding; l != NULL; l = l->next)
+  while (impl_window->outstanding_moves)
     {
-      move = l->data;
+      move = impl_window->outstanding_moves->data;
+      impl_window->outstanding_moves = 
+	g_list_delete_link (impl_window->outstanding_moves,
+			    impl_window->outstanding_moves);
 
       do_move_region_bits_on_impl (impl_window,
 				   move->dest_region, move->dx, move->dy);
 
       gdk_window_region_move_free (move);
     }
-
-  g_list_free (outstanding);
 }
 
 /**
