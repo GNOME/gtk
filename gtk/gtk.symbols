@@ -1228,6 +1228,7 @@ gtk_hbox_get_type
 gtk_hbox_new
 gtk_hbutton_box_get_type
 gtk_hbutton_box_new
+gtk_header_bar_get_type
 gtk_header_bar_new
 gtk_header_bar_pack_start
 gtk_header_bar_pack_end
@@ -3701,7 +3702,7 @@ gtk_widget_class_list_style_properties
 gtk_widget_class_path
 gtk_widget_class_set_accessible_role
 gtk_widget_class_set_accessible_type
-gtk_widget_class_set_signal_connect_func
+gtk_widget_class_set_connect_func
 gtk_widget_class_set_template
 gtk_widget_class_set_template_from_resource
 gtk_widget_compute_expand
