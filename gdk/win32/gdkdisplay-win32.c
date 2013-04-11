@@ -299,24 +299,6 @@ gdk_win32_display_get_name (GdkDisplay *display)
   return display_name_cache;
 }
 
-static gint
-gdk_win32_display_get_n_screens (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
-
-  return 1;
-}
-
-static GdkScreen *
-gdk_win32_display_get_screen (GdkDisplay *display,
-			      gint        screen_num)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  g_return_val_if_fail (screen_num == 0, NULL);
-
-  return _gdk_screen;
-}
-
 static GdkScreen *
 gdk_win32_display_get_default_screen (GdkDisplay *display)
 {
@@ -663,8 +645,6 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   display_class->window_type = GDK_TYPE_WIN32_WINDOW;
 
   display_class->get_name = gdk_win32_display_get_name;
-  display_class->get_n_screens = gdk_win32_display_get_n_screens;
-  display_class->get_screen = gdk_win32_display_get_screen;
   display_class->get_default_screen = gdk_win32_display_get_default_screen;
   display_class->beep = gdk_win32_display_beep;
   display_class->sync = gdk_win32_display_sync;
