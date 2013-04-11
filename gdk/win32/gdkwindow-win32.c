@@ -3330,9 +3330,8 @@ _gdk_win32_window_translate (GdkWindow *window,
                              gint       dy)
 {
   GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
-  GdkRectangle extents;
-  RECT rect;
   HRGN hrgn, area_hrgn;
+  cairo_region_t *update_region;
   HDC hdc;
   int ret;
 
@@ -3367,19 +3366,17 @@ _gdk_win32_window_translate (GdkWindow *window,
   /* Clip hdc to target region */
   API_CALL (SelectClipRgn, (hdc, area_hrgn));
 
-  cairo_region_get_extents (area, &extents);
-
-  rect.left = MIN (extents.x, extents.x - dx);
-  rect.top = MIN (extents.y, extents.y - dy);
-  rect.right = MAX (extents.x + extents.width, extents.x - dx  + extents.width);
-  rect.bottom = MAX (extents.y + extents.height, extents.y - dy  + extents.height);
-
   SetRectRgn (hrgn, 0, 0, 0, 0);
 
-  if (!ScrollDC (hdc, dx, dy, &rect, NULL, hrgn, NULL))
+  if (!ScrollDC (hdc, dx, dy, NULL, NULL, hrgn, NULL))
     WIN32_GDI_FAILED ("ScrollDC");
-  else if (!InvalidateRgn (GDK_WINDOW_HWND (window), hrgn, FALSE))
-    WIN32_GDI_FAILED ("InvalidateRgn");
+  else
+    {
+      update_region = _gdk_win32_hrgn_to_region (hrgn);
+      if (!cairo_region_is_empty (update_region))
+	_gdk_window_invalidate_for_expose (window, update_region);
+      cairo_region_destroy (update_region);
+    }
 
   /* Unset hdc clip region */
   API_CALL (SelectClipRgn, (hdc, NULL));
