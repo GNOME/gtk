@@ -37,6 +37,9 @@ test_dialog_basic (void)
 
   dialog = gtk_dialog_new();
   g_assert (GTK_IS_DIALOG (dialog));
+  g_assert (gtk_dialog_get_action_area (GTK_DIALOG (dialog)) != NULL);
+  g_assert (gtk_dialog_get_content_area (GTK_DIALOG (dialog)) != NULL);
+
   gtk_widget_destroy (dialog);
 }
 
@@ -158,6 +161,13 @@ test_app_chooser_dialog_basic (void)
 
   widget = gtk_app_chooser_dialog_new_for_content_type (NULL, 0, "text/plain");
   g_assert (GTK_IS_APP_CHOOSER_DIALOG (widget));
+
+  /* GtkAppChooserDialog bug, if destroyed before spinning 
+   * the main context then app_chooser_online_get_default_ready_cb()
+   * will be eventually called and segfault.
+   */
+  g_timeout_add (500, main_loop_quit_cb, NULL);
+  gtk_main();
   gtk_widget_destroy (widget);
 }
 

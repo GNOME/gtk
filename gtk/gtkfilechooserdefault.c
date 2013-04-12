@@ -275,6 +275,7 @@ typedef struct {
 
   GtkTreeViewColumn *list_name_column;
   GtkCellRenderer *list_name_renderer;
+  GtkCellRenderer *list_pixbuf_renderer;
   GtkTreeViewColumn *list_mtime_column;
   GtkTreeViewColumn *list_size_column;
 
@@ -541,7 +542,6 @@ static GSList * recent_get_selected_files    (GtkFileChooserDefault *impl);
 static void     set_file_system_backend      (GtkFileChooserDefault *impl);
 static void     unset_file_system_backend    (GtkFileChooserDefault *impl);
 
-
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkFileChooserDefault, _gtk_file_chooser_default, GTK_TYPE_BOX,
@@ -549,225 +549,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkFileChooserDefault, _gtk_file_chooser_default, GTK_T
 						gtk_file_chooser_default_iface_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER_EMBED,
 						gtk_file_chooser_embed_default_iface_init));						
-
-
-static void
-add_normal_and_shifted_binding (GtkBindingSet  *binding_set,
-				guint           keyval,
-				GdkModifierType modifiers,
-				const gchar    *signal_name)
-{
-  gtk_binding_entry_add_signal (binding_set,
-				keyval, modifiers,
-				signal_name, 0);
-
-  gtk_binding_entry_add_signal (binding_set,
-				keyval, modifiers | GDK_SHIFT_MASK,
-				signal_name, 0);
-}
-
-static void
-_gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
-{
-  static const guint quick_bookmark_keyvals[10] = {
-    GDK_KEY_1, GDK_KEY_2, GDK_KEY_3, GDK_KEY_4, GDK_KEY_5, GDK_KEY_6, GDK_KEY_7, GDK_KEY_8, GDK_KEY_9, GDK_KEY_0
-  };
-  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
-  GtkBindingSet *binding_set;
-  int i;
-
-  gobject_class->finalize = gtk_file_chooser_default_finalize;
-  gobject_class->constructor = gtk_file_chooser_default_constructor;
-  gobject_class->set_property = gtk_file_chooser_default_set_property;
-  gobject_class->get_property = gtk_file_chooser_default_get_property;
-  gobject_class->dispose = gtk_file_chooser_default_dispose;
-
-  widget_class->show_all = gtk_file_chooser_default_show_all;
-  widget_class->realize = gtk_file_chooser_default_realize;
-  widget_class->map = gtk_file_chooser_default_map;
-  widget_class->unmap = gtk_file_chooser_default_unmap;
-  widget_class->hierarchy_changed = gtk_file_chooser_default_hierarchy_changed;
-  widget_class->style_updated = gtk_file_chooser_default_style_updated;
-  widget_class->screen_changed = gtk_file_chooser_default_screen_changed;
-
-  signals[LOCATION_POPUP] =
-    g_signal_new_class_handler (I_("location-popup"),
-                                G_OBJECT_CLASS_TYPE (class),
-                                G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
-                                G_CALLBACK (location_popup_handler),
-                                NULL, NULL,
-                                _gtk_marshal_VOID__STRING,
-                                G_TYPE_NONE, 1, G_TYPE_STRING);
-
-  signals[LOCATION_POPUP_ON_PASTE] =
-    g_signal_new_class_handler (I_("location-popup-on-paste"),
-                                G_OBJECT_CLASS_TYPE (class),
-                                G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
-                                G_CALLBACK (location_popup_on_paste_handler),
-                                NULL, NULL,
-                                _gtk_marshal_VOID__VOID,
-                                G_TYPE_NONE, 0);
-
-  signals[LOCATION_TOGGLE_POPUP] =
-    g_signal_new_class_handler (I_("location-toggle-popup"),
-                                G_OBJECT_CLASS_TYPE (class),
-                                G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
-                                G_CALLBACK (location_toggle_popup_handler),
-                                NULL, NULL,
-                                _gtk_marshal_VOID__VOID,
-                                G_TYPE_NONE, 0);
-
-  signals[UP_FOLDER] =
-    g_signal_new_class_handler (I_("up-folder"),
-                                G_OBJECT_CLASS_TYPE (class),
-                                G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
-                                G_CALLBACK (up_folder_handler),
-                                NULL, NULL,
-                                _gtk_marshal_VOID__VOID,
-                                G_TYPE_NONE, 0);
-
-  signals[DOWN_FOLDER] =
-    g_signal_new_class_handler (I_("down-folder"),
-                                G_OBJECT_CLASS_TYPE (class),
-                                G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
-                                G_CALLBACK (down_folder_handler),
-                                NULL, NULL,
-                                _gtk_marshal_VOID__VOID,
-                                G_TYPE_NONE, 0);
-
-  signals[HOME_FOLDER] =
-    g_signal_new_class_handler (I_("home-folder"),
-                                G_OBJECT_CLASS_TYPE (class),
-                                G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
-                                G_CALLBACK (home_folder_handler),
-                                NULL, NULL,
-                                _gtk_marshal_VOID__VOID,
-                                G_TYPE_NONE, 0);
-
-  signals[DESKTOP_FOLDER] =
-    g_signal_new_class_handler (I_("desktop-folder"),
-                                G_OBJECT_CLASS_TYPE (class),
-                                G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
-                                G_CALLBACK (desktop_folder_handler),
-                                NULL, NULL,
-                                _gtk_marshal_VOID__VOID,
-                                G_TYPE_NONE, 0);
-
-  signals[QUICK_BOOKMARK] =
-    g_signal_new_class_handler (I_("quick-bookmark"),
-                                G_OBJECT_CLASS_TYPE (class),
-                                G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
-                                G_CALLBACK (quick_bookmark_handler),
-                                NULL, NULL,
-                                _gtk_marshal_VOID__INT,
-                                G_TYPE_NONE, 1, G_TYPE_INT);
-
-  signals[SHOW_HIDDEN] =
-    g_signal_new_class_handler (I_("show-hidden"),
-                                G_OBJECT_CLASS_TYPE (class),
-                                G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
-                                G_CALLBACK (show_hidden_handler),
-                                NULL, NULL,
-                                _gtk_marshal_VOID__VOID,
-                                G_TYPE_NONE, 0);
-
-  signals[SEARCH_SHORTCUT] =
-    g_signal_new_class_handler (I_("search-shortcut"),
-                                G_OBJECT_CLASS_TYPE (class),
-                                G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
-                                G_CALLBACK (search_shortcut_handler),
-                                NULL, NULL,
-                                _gtk_marshal_VOID__VOID,
-                                G_TYPE_NONE, 0);
-
-  signals[RECENT_SHORTCUT] =
-    g_signal_new_class_handler (I_("recent-shortcut"),
-                                G_OBJECT_CLASS_TYPE (class),
-                                G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
-                                G_CALLBACK (recent_shortcut_handler),
-                                NULL, NULL,
-                                _gtk_marshal_VOID__VOID,
-                                G_TYPE_NONE, 0);
-
-  binding_set = gtk_binding_set_by_class (class);
-
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_l, GDK_CONTROL_MASK,
-				"location-toggle-popup",
-				0);
-
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_slash, 0,
-				"location-popup",
-				1, G_TYPE_STRING, "/");
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_KP_Divide, 0,
-				"location-popup",
-				1, G_TYPE_STRING, "/");
-
-#ifdef G_OS_UNIX
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_asciitilde, 0,
-				"location-popup",
-				1, G_TYPE_STRING, "~");
-#endif
-
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_v, GDK_CONTROL_MASK,
-				"location-popup-on-paste",
-				0);
-
-  add_normal_and_shifted_binding (binding_set,
-				  GDK_KEY_Up, GDK_MOD1_MASK,
-				  "up-folder");
-
-  add_normal_and_shifted_binding (binding_set,
-				  GDK_KEY_KP_Up, GDK_MOD1_MASK,
-				  "up-folder");
-
-  add_normal_and_shifted_binding (binding_set,
-				  GDK_KEY_Down, GDK_MOD1_MASK,
-				  "down-folder");
-  add_normal_and_shifted_binding (binding_set,
-				  GDK_KEY_KP_Down, GDK_MOD1_MASK,
-				  "down-folder");
-
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_Home, GDK_MOD1_MASK,
-				"home-folder",
-				0);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_KP_Home, GDK_MOD1_MASK,
-				"home-folder",
-				0);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_d, GDK_MOD1_MASK,
-				"desktop-folder",
-				0);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_h, GDK_CONTROL_MASK,
-                                "show-hidden",
-                                0);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_s, GDK_MOD1_MASK,
-                                "search-shortcut",
-                                0);
-  gtk_binding_entry_add_signal (binding_set,
-                                GDK_KEY_r, GDK_MOD1_MASK,
-                                "recent-shortcut",
-                                0);
-
-  for (i = 0; i < 10; i++)
-    gtk_binding_entry_add_signal (binding_set,
-				  quick_bookmark_keyvals[i], GDK_MOD1_MASK,
-				  "quick-bookmark",
-				  1, G_TYPE_INT, i);
-
-  _gtk_file_chooser_install_properties (gobject_class);
-
-  g_type_class_add_private (gobject_class, sizeof (GtkFileChooserDefaultPrivate));
-}
 
 static void
 gtk_file_chooser_default_iface_init (GtkFileChooserIface *iface)
@@ -796,48 +577,6 @@ gtk_file_chooser_embed_default_iface_init (GtkFileChooserEmbedIface *iface)
   iface->get_default_size = gtk_file_chooser_default_get_default_size;
   iface->should_respond = gtk_file_chooser_default_should_respond;
   iface->initial_focus = gtk_file_chooser_default_initial_focus;
-}
-
-static void
-_gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
-{
-  GtkFileChooserDefaultPrivate *priv;
-
-  profile_start ("start", NULL);
-#ifdef PROFILE_FILE_CHOOSER
-  access ("MARK: *** CREATE FILE CHOOSER", F_OK);
-#endif
-  impl->priv = G_TYPE_INSTANCE_GET_PRIVATE (impl,
-					    GTK_TYPE_FILE_CHOOSER_DEFAULT,
-					    GtkFileChooserDefaultPrivate);
-  priv = impl->priv;
-
-  priv->local_only = TRUE;
-  priv->preview_widget_active = TRUE;
-  priv->use_preview_label = TRUE;
-  priv->select_multiple = FALSE;
-  priv->show_hidden = FALSE;
-  priv->show_size_column = TRUE;
-  priv->icon_size = FALLBACK_ICON_SIZE;
-  priv->load_state = LOAD_EMPTY;
-  priv->reload_state = RELOAD_EMPTY;
-  priv->pending_select_files = NULL;
-  priv->location_mode = LOCATION_MODE_PATH_BAR;
-  priv->operation_mode = OPERATION_MODE_BROWSE;
-  priv->sort_column = MODEL_COL_NAME;
-  priv->sort_order = GTK_SORT_ASCENDING;
-  priv->recent_manager = gtk_recent_manager_get_default ();
-  priv->create_folders = TRUE;
-
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (impl),
-                                  GTK_ORIENTATION_VERTICAL);
-  gtk_box_set_spacing (GTK_BOX (impl), 12);
-
-  set_file_system_backend (impl);
-
-  priv->bookmarks_manager = _gtk_bookmarks_manager_new (NULL, NULL);
-
-  profile_end ("end", NULL);
 }
 
 static void
@@ -1344,36 +1083,6 @@ renderer_editing_canceled_cb (GtkCellRendererText   *cell_renderer_text,
   queue_edited_idle (impl, NULL);
 }
 
-/* Creates the widgets for the filter combo box */
-static GtkWidget *
-filter_create (GtkFileChooserDefault *impl)
-{
-  GtkFileChooserDefaultPrivate *priv = impl->priv;
-  GtkCellRenderer *cell;
-  GList           *cells;
-
-  priv->filter_combo = gtk_combo_box_text_new ();
-  gtk_combo_box_set_focus_on_click (GTK_COMBO_BOX (priv->filter_combo), FALSE);
-
-  /* Get the combo's text renderer and set ellipsize parameters */
-  cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (priv->filter_combo));
-  g_assert (cells);
-  cell = cells->data;
-
-  g_object_set (G_OBJECT (cell),
-		"ellipsize", PANGO_ELLIPSIZE_END,
-		NULL);
-
-  g_list_free (cells);
-
-  g_signal_connect (priv->filter_combo, "changed",
-		    G_CALLBACK (filter_combo_changed), impl);
-
-  gtk_widget_set_tooltip_text (priv->filter_combo,
-                               _("Select which types of files are shown"));
-
-  return priv->filter_combo;
-}
 
 struct selection_check_closure {
   GtkFileChooserDefault *impl;
@@ -1492,25 +1201,6 @@ places_sidebar_show_error_message_cb (GtkPlacesSidebar *sidebar,
 				      GtkFileChooserDefault *impl)
 {
   error_message (impl, primary, secondary);
-}
-
-/* Creates the widgets for the shortcuts/bookmarks pane */
-static GtkWidget *
-shortcuts_pane_create (GtkFileChooserDefault *impl,
-		       GtkSizeGroup          *size_group)
-{
-  GtkFileChooserDefaultPrivate *priv = impl->priv;
-
-  priv->places_sidebar = gtk_places_sidebar_new ();
-
-  g_signal_connect (priv->places_sidebar, "open-location",
-		    G_CALLBACK (places_sidebar_open_location_cb),
-		    impl);
-  g_signal_connect (priv->places_sidebar, "show-error-message",
-		    G_CALLBACK (places_sidebar_show_error_message_cb),
-		    impl);
-
-  return priv->places_sidebar;
 }
 
 static gboolean
@@ -2234,188 +1924,17 @@ file_list_query_tooltip_cb (GtkWidget  *widget,
 }
 
 static void
-set_icon_cell_renderer_fixed_size (GtkFileChooserDefault *impl, GtkCellRenderer *renderer)
+set_icon_cell_renderer_fixed_size (GtkFileChooserDefault *impl)
 {
   GtkFileChooserDefaultPrivate *priv = impl->priv;
   gint xpad, ypad;
 
-  gtk_cell_renderer_get_padding (renderer, &xpad, &ypad);
-  gtk_cell_renderer_set_fixed_size (renderer, 
+  gtk_cell_renderer_get_padding (priv->list_pixbuf_renderer, &xpad, &ypad);
+  gtk_cell_renderer_set_fixed_size (priv->list_pixbuf_renderer, 
                                     xpad * 2 + priv->icon_size,
                                     ypad * 2 + priv->icon_size);
 }
 
-/* Creates the widgets for the file list */
-static GtkWidget *
-create_file_list (GtkFileChooserDefault *impl)
-{
-  GtkFileChooserDefaultPrivate *priv = impl->priv;
-  GtkWidget *swin;
-  GtkTreeSelection *selection;
-  GtkTreeViewColumn *column;
-  GtkCellRenderer *renderer;
-
-  /* Scrolled window */
-  swin = gtk_scrolled_window_new (NULL, NULL);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swin),
-				  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
-  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (swin),
-				       GTK_SHADOW_IN);
-
-  /* Tree/list view */
-
-  priv->browse_files_tree_view = gtk_tree_view_new ();
-#ifdef PROFILE_FILE_CHOOSER
-  g_object_set_data (G_OBJECT (priv->browse_files_tree_view), "fmq-name", "file_list");
-#endif
-  g_object_set_data (G_OBJECT (priv->browse_files_tree_view), I_("GtkFileChooserDefault"), impl);
-  atk_object_set_name (gtk_widget_get_accessible (priv->browse_files_tree_view), _("Files"));
-
-  gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (priv->browse_files_tree_view), TRUE);
-  gtk_container_add (GTK_CONTAINER (swin), priv->browse_files_tree_view);
-
-  gtk_drag_dest_set (priv->browse_files_tree_view,
-                     GTK_DEST_DEFAULT_ALL,
-                     NULL, 0,
-                     GDK_ACTION_COPY | GDK_ACTION_MOVE);
-  gtk_drag_dest_add_uri_targets (priv->browse_files_tree_view);
-  
-  g_signal_connect (priv->browse_files_tree_view, "row-activated",
-		    G_CALLBACK (list_row_activated), impl);
-  g_signal_connect (priv->browse_files_tree_view, "key-press-event",
-    		    G_CALLBACK (browse_files_key_press_event_cb), impl);
-  g_signal_connect (priv->browse_files_tree_view, "popup-menu",
-		    G_CALLBACK (list_popup_menu_cb), impl);
-  g_signal_connect (priv->browse_files_tree_view, "button-press-event",
-		    G_CALLBACK (list_button_press_event_cb), impl);
-
-  g_signal_connect (priv->browse_files_tree_view, "drag-data-received",
-                    G_CALLBACK (file_list_drag_data_received_cb), impl);
-  g_signal_connect (priv->browse_files_tree_view, "drag-drop",
-                    G_CALLBACK (file_list_drag_drop_cb), impl);
-  g_signal_connect (priv->browse_files_tree_view, "drag-motion",
-                    G_CALLBACK (file_list_drag_motion_cb), impl);
-
-  g_object_set (priv->browse_files_tree_view, "has-tooltip", TRUE, NULL);
-  g_signal_connect (priv->browse_files_tree_view, "query-tooltip",
-                    G_CALLBACK (file_list_query_tooltip_cb), impl);
-
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->browse_files_tree_view));
-  gtk_tree_selection_set_select_function (selection,
-					  list_select_func,
-					  impl, NULL);
-  gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (priv->browse_files_tree_view),
-					  GDK_BUTTON1_MASK,
-					  NULL, 0,
-					  GDK_ACTION_COPY | GDK_ACTION_MOVE);
-  gtk_drag_source_add_uri_targets (priv->browse_files_tree_view);
-
-  g_signal_connect (selection, "changed",
-		    G_CALLBACK (list_selection_changed), impl);
-
-  /* Keep the column order in sync with update_cell_renderer_attributes() */
-
-  /* Filename column */
-
-  priv->list_name_column = gtk_tree_view_column_new ();
-  gtk_tree_view_column_set_expand (priv->list_name_column, TRUE);
-  gtk_tree_view_column_set_resizable (priv->list_name_column, TRUE);
-  gtk_tree_view_column_set_title (priv->list_name_column, _("Name"));
-
-  renderer = gtk_cell_renderer_pixbuf_new ();
-  /* We set a fixed size so that we get an empty slot even if no icons are loaded yet */
-  set_icon_cell_renderer_fixed_size (impl, renderer);
-  gtk_tree_view_column_pack_start (priv->list_name_column, renderer, FALSE);
-
-  priv->list_name_renderer = gtk_cell_renderer_text_new ();
-  g_object_set (priv->list_name_renderer,
-		"ellipsize", PANGO_ELLIPSIZE_END,
-		NULL);
-  g_signal_connect (priv->list_name_renderer, "edited",
-		    G_CALLBACK (renderer_edited_cb), impl);
-  g_signal_connect (priv->list_name_renderer, "editing-canceled",
-		    G_CALLBACK (renderer_editing_canceled_cb), impl);
-  gtk_tree_view_column_pack_start (priv->list_name_column, priv->list_name_renderer, TRUE);
-
-  gtk_tree_view_append_column (GTK_TREE_VIEW (priv->browse_files_tree_view), priv->list_name_column);
-
-  /* Size column */
-
-  column = gtk_tree_view_column_new ();
-  gtk_tree_view_column_set_resizable (column, TRUE);
-  gtk_tree_view_column_set_title (column, _("Size"));
-
-  renderer = gtk_cell_renderer_text_new ();
-  g_object_set (renderer, 
-                "alignment", PANGO_ALIGN_RIGHT,
-                NULL);
-  gtk_tree_view_column_pack_start (column, renderer, TRUE); /* bug: it doesn't expand */
-  gtk_tree_view_append_column (GTK_TREE_VIEW (priv->browse_files_tree_view), column);
-  priv->list_size_column = column;
-
-  /* Modification time column */
-
-  column = gtk_tree_view_column_new ();
-  gtk_tree_view_column_set_resizable (column, TRUE);
-  gtk_tree_view_column_set_title (column, _("Modified"));
-
-  renderer = gtk_cell_renderer_text_new ();
-  gtk_tree_view_column_pack_start (column, renderer, TRUE);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (priv->browse_files_tree_view), column);
-  priv->list_mtime_column = column;
-  
-  file_list_set_sort_column_ids (impl);
-  update_cell_renderer_attributes (impl);
-
-  gtk_widget_show_all (swin);
-
-  return swin;
-}
-
-/* Creates the widgets for the files/folders pane */
-static GtkWidget *
-file_pane_create (GtkFileChooserDefault *impl,
-		  GtkSizeGroup          *size_group)
-{
-  GtkFileChooserDefaultPrivate *priv = impl->priv;
-  GtkWidget *vbox;
-  GtkWidget *hbox;
-  GtkWidget *widget;
-
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
-  gtk_widget_show (vbox);
-
-  /* Box for lists and preview */
-
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, PREVIEW_HBOX_SPACING);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
-  gtk_widget_show (hbox);
-
-  /* File list */
-
-  widget = create_file_list (impl);
-  gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
-  gtk_size_group_add_widget (size_group, widget);
-
-  /* Preview */
-
-  priv->preview_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
-  gtk_box_pack_start (GTK_BOX (hbox), priv->preview_box, FALSE, FALSE, 0);
-  /* Don't show preview box initially */
-
-  /* Filter combo */
-
-  priv->filter_combo_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-
-  widget = filter_create (impl);
-
-  gtk_widget_show (widget);
-  gtk_box_pack_end (GTK_BOX (priv->filter_combo_hbox), widget, FALSE, FALSE, 0);
-
-  gtk_box_pack_end (GTK_BOX (vbox), priv->filter_combo_hbox, FALSE, FALSE, 0);
-
-  return vbox;
-}
 
 static void
 location_entry_create (GtkFileChooserDefault *impl)
@@ -2679,30 +2198,6 @@ location_button_toggled_cb (GtkToggleButton *toggle,
   location_mode_set (impl, new_mode, FALSE);
 }
 
-/* Creates a toggle button for the location entry. */
-static void
-location_button_create (GtkFileChooserDefault *impl)
-{
-  GtkFileChooserDefaultPrivate *priv = impl->priv;
-  GtkWidget *image;
-  const char *str;
-
-  image = gtk_image_new_from_stock (GTK_STOCK_EDIT, GTK_ICON_SIZE_BUTTON);
-  gtk_widget_show (image);
-
-  priv->location_button = g_object_new (GTK_TYPE_TOGGLE_BUTTON,
-					"image", image,
-					NULL);
-
-  g_signal_connect (priv->location_button, "toggled",
-		    G_CALLBACK (location_button_toggled_cb), impl);
-
-  str = _("Type a file name");
-
-  gtk_widget_set_tooltip_text (priv->location_button, str);
-  atk_object_set_name (gtk_widget_get_accessible (priv->location_button), str);
-}
-
 typedef enum {
   PATH_BAR_FOLDER_PATH,
   PATH_BAR_SELECT_A_FOLDER,
@@ -2711,26 +2206,6 @@ typedef enum {
   PATH_BAR_RECENTLY_USED,
   PATH_BAR_SEARCH
 } PathBarMode;
-
-/* Creates the info bar for informational messages or warnings, with its icon and label */
-static void
-info_bar_create (GtkFileChooserDefault *impl)
-{
-  GtkFileChooserDefaultPrivate *priv = impl->priv;
-  GtkWidget *content_area;
-
-  priv->browse_select_a_folder_info_bar = gtk_info_bar_new ();
-  priv->browse_select_a_folder_icon = gtk_image_new_from_stock (GTK_STOCK_DIRECTORY, GTK_ICON_SIZE_MENU);
-  priv->browse_select_a_folder_label = gtk_label_new (NULL);
-
-  content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (priv->browse_select_a_folder_info_bar));
-
-  gtk_box_pack_start (GTK_BOX (content_area), priv->browse_select_a_folder_icon, FALSE, FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (content_area), priv->browse_select_a_folder_label, FALSE, FALSE, 0);
-
-  gtk_widget_show (priv->browse_select_a_folder_icon);
-  gtk_widget_show (priv->browse_select_a_folder_label);
-}
 
 /* Sets the info bar to show the appropriate informational or warning message */
 static void
@@ -2774,64 +2249,6 @@ info_bar_set (GtkFileChooserDefault *impl, PathBarMode mode)
 
   if (free_str)
     g_free (str);
-}
-
-/* Creates the icon and label used to show that the file chooser is in Search or Recently-used mode */
-static void
-special_mode_widgets_create (GtkFileChooserDefault *impl)
-{
-  GtkFileChooserDefaultPrivate *priv = impl->priv;
-
-  priv->browse_special_mode_icon = gtk_image_new ();
-  gtk_size_group_add_widget (priv->browse_path_bar_size_group, priv->browse_special_mode_icon);
-  gtk_box_pack_start (GTK_BOX (priv->browse_path_bar_hbox), priv->browse_special_mode_icon, FALSE, FALSE, 0);
-
-  priv->browse_special_mode_label = gtk_label_new (NULL);
-  gtk_size_group_add_widget (priv->browse_path_bar_size_group, priv->browse_special_mode_label);
-  gtk_box_pack_start (GTK_BOX (priv->browse_path_bar_hbox), priv->browse_special_mode_label, FALSE, FALSE, 0);
-}
-
-/* Creates the path bar's container and eveyrthing that goes in it: location button, pathbar, info bar, and Create Folder button */
-static void
-path_bar_widgets_create (GtkFileChooserDefault *impl)
-{
-  GtkFileChooserDefaultPrivate *priv = impl->priv;
-
-  /* Location widgets - note browse_path_bar_hbox is packed in the right place until switch_path_bar() */
-  priv->browse_path_bar_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-  gtk_widget_show (priv->browse_path_bar_hbox);
-
-  /* Size group that allows the path bar to be the same size between modes */
-  priv->browse_path_bar_size_group = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
-  gtk_size_group_set_ignore_hidden (priv->browse_path_bar_size_group, FALSE);
-
-  /* Location button */
-  location_button_create (impl);
-  gtk_size_group_add_widget (priv->browse_path_bar_size_group, priv->location_button);
-  gtk_box_pack_start (GTK_BOX (priv->browse_path_bar_hbox), priv->location_button, FALSE, FALSE, 0);
-
-  /* Path bar */
-  priv->browse_path_bar = g_object_new (GTK_TYPE_PATH_BAR, NULL);
-  _gtk_path_bar_set_file_system (GTK_PATH_BAR (priv->browse_path_bar), priv->file_system);
-  g_signal_connect (priv->browse_path_bar, "path-clicked", G_CALLBACK (path_bar_clicked), impl);
-
-  gtk_size_group_add_widget (priv->browse_path_bar_size_group, priv->browse_path_bar);
-  gtk_box_pack_start (GTK_BOX (priv->browse_path_bar_hbox), priv->browse_path_bar, TRUE, TRUE, 0);
-
-  /* Info bar */
-  info_bar_create (impl);
-  gtk_size_group_add_widget (priv->browse_path_bar_size_group, priv->browse_select_a_folder_info_bar);
-  gtk_box_pack_start (GTK_BOX (priv->browse_path_bar_hbox), priv->browse_select_a_folder_info_bar, TRUE, TRUE, 0);
-
-  /* Widgets for special modes (recently-used in Open mode, Search mode) */
-  special_mode_widgets_create (impl);
-
-  /* Create Folder */
-  priv->browse_new_folder_button = gtk_button_new_with_mnemonic (_("Create Fo_lder"));
-  g_signal_connect (priv->browse_new_folder_button, "clicked",
-		    G_CALLBACK (new_folder_button_clicked), impl);
-  gtk_size_group_add_widget (priv->browse_path_bar_size_group, priv->browse_new_folder_button);
-  gtk_box_pack_end (GTK_BOX (priv->browse_path_bar_hbox), priv->browse_new_folder_button, FALSE, FALSE, 0);
 }
 
 /* Sets the path bar's mode to show a label, the actual folder path, or a
@@ -2903,50 +2320,6 @@ path_bar_set_mode (GtkFileChooserDefault *impl, PathBarMode mode)
   gtk_widget_set_visible (priv->browse_new_folder_button,		create_folder_visible);
 }
 
-/* Creates the main hpaned with the widgets shared by Open and Save mode */
-static void
-browse_widgets_create (GtkFileChooserDefault *impl)
-{
-  GtkFileChooserDefaultPrivate *priv = impl->priv;
-  GtkWidget *hpaned;
-  GtkWidget *widget;
-  GtkSizeGroup *size_group;
-
-  priv->browse_widgets_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
-  gtk_box_pack_start (GTK_BOX (impl), priv->browse_widgets_box, TRUE, TRUE, 0);
-  gtk_widget_show (priv->browse_widgets_box);
-
-  priv->browse_header_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
-  gtk_box_pack_start (GTK_BOX (priv->browse_widgets_box), priv->browse_header_box, FALSE, FALSE, 0);
-  gtk_widget_show (priv->browse_header_box);
-
-  /* Path bar, info bar, and their respective machinery - the browse_path_bar_hbox will get packed elsewhere */
-  path_bar_widgets_create (impl);
-
-  /* Box for the location label and entry */
-
-  priv->location_entry_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
-  gtk_box_pack_start (GTK_BOX (priv->browse_header_box), priv->location_entry_box, FALSE, FALSE, 0);
-
-  priv->location_label = gtk_label_new_with_mnemonic (_("_Location:"));
-  gtk_widget_show (priv->location_label);
-  gtk_box_pack_start (GTK_BOX (priv->location_entry_box), priv->location_label, FALSE, FALSE, 0);
-
-  /* size group is used by the scrolled windows of the panes */
-  size_group = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
-
-  /* Paned widget */
-
-  hpaned = priv->browse_widgets_hpaned = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
-  gtk_widget_show (hpaned);
-  gtk_box_pack_start (GTK_BOX (priv->browse_widgets_box), hpaned, TRUE, TRUE, 0);
-
-  widget = shortcuts_pane_create (impl, size_group);
-  gtk_paned_pack1 (GTK_PANED (hpaned), widget, FALSE, FALSE);
-  widget = file_pane_create (impl, size_group);
-  gtk_paned_pack2 (GTK_PANED (hpaned), widget, TRUE, FALSE);
-  g_object_unref (size_group);
-}
 
 static GObject*
 gtk_file_chooser_default_constructor (GType                  type,
@@ -2967,18 +2340,6 @@ gtk_file_chooser_default_constructor (GType                  type,
 
   g_assert (priv->file_system);
 
-  gtk_widget_push_composite_child ();
-
-  /* The browse widgets */
-  browse_widgets_create (impl);
-
-  /* Alignment to hold extra widget */
-  priv->extra_align = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_widget_set_halign (priv->extra_align, GTK_ALIGN_START);
-  gtk_widget_set_valign (priv->extra_align, GTK_ALIGN_CENTER);
-  gtk_box_pack_start (GTK_BOX (impl), priv->extra_align, FALSE, FALSE, 0);
-
-  gtk_widget_pop_composite_child ();
   update_appearance (impl);
 
   profile_end ("end", NULL);
@@ -3752,8 +3113,6 @@ change_icon_theme (GtkFileChooserDefault *impl)
   GtkFileChooserDefaultPrivate *priv = impl->priv;
   GtkSettings *settings;
   gint width, height;
-  GtkCellRenderer *renderer;
-  GList *cells;
 
   profile_start ("start", NULL);
 
@@ -3765,11 +3124,8 @@ change_icon_theme (GtkFileChooserDefault *impl)
     priv->icon_size = FALLBACK_ICON_SIZE;
 
   /* the first cell in the first column is the icon column, and we have a fixed size there */
-  cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (
-        gtk_tree_view_get_column (GTK_TREE_VIEW (priv->browse_files_tree_view), 0)));
-  renderer = GTK_CELL_RENDERER (cells->data);
-  set_icon_cell_renderer_fixed_size (impl, renderer);
-  g_list_free (cells);
+  set_icon_cell_renderer_fixed_size (impl);
+
   if (priv->browse_files_model)
     _gtk_file_system_model_clear_cache (priv->browse_files_model, MODEL_COL_PIXBUF);
   gtk_widget_queue_resize (priv->browse_files_tree_view);
@@ -7882,4 +7238,383 @@ show_hidden_handler (GtkFileChooserDefault *impl)
   g_object_set (impl,
 		"show-hidden", !priv->show_hidden,
 		NULL);
+}
+
+static void
+add_normal_and_shifted_binding (GtkBindingSet  *binding_set,
+				guint           keyval,
+				GdkModifierType modifiers,
+				const gchar    *signal_name)
+{
+  gtk_binding_entry_add_signal (binding_set,
+				keyval, modifiers,
+				signal_name, 0);
+
+  gtk_binding_entry_add_signal (binding_set,
+				keyval, modifiers | GDK_SHIFT_MASK,
+				signal_name, 0);
+}
+
+static void
+_gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
+{
+  static const guint quick_bookmark_keyvals[10] = {
+    GDK_KEY_1, GDK_KEY_2, GDK_KEY_3, GDK_KEY_4, GDK_KEY_5, GDK_KEY_6, GDK_KEY_7, GDK_KEY_8, GDK_KEY_9, GDK_KEY_0
+  };
+  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+  GtkBindingSet *binding_set;
+  int i;
+
+  gobject_class->finalize = gtk_file_chooser_default_finalize;
+  gobject_class->constructor = gtk_file_chooser_default_constructor;
+  gobject_class->set_property = gtk_file_chooser_default_set_property;
+  gobject_class->get_property = gtk_file_chooser_default_get_property;
+  gobject_class->dispose = gtk_file_chooser_default_dispose;
+
+  widget_class->show_all = gtk_file_chooser_default_show_all;
+  widget_class->realize = gtk_file_chooser_default_realize;
+  widget_class->map = gtk_file_chooser_default_map;
+  widget_class->unmap = gtk_file_chooser_default_unmap;
+  widget_class->hierarchy_changed = gtk_file_chooser_default_hierarchy_changed;
+  widget_class->style_updated = gtk_file_chooser_default_style_updated;
+  widget_class->screen_changed = gtk_file_chooser_default_screen_changed;
+
+  signals[LOCATION_POPUP] =
+    g_signal_new_class_handler (I_("location-popup"),
+                                G_OBJECT_CLASS_TYPE (class),
+                                G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                                G_CALLBACK (location_popup_handler),
+                                NULL, NULL,
+                                _gtk_marshal_VOID__STRING,
+                                G_TYPE_NONE, 1, G_TYPE_STRING);
+
+  signals[LOCATION_POPUP_ON_PASTE] =
+    g_signal_new_class_handler (I_("location-popup-on-paste"),
+                                G_OBJECT_CLASS_TYPE (class),
+                                G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                                G_CALLBACK (location_popup_on_paste_handler),
+                                NULL, NULL,
+                                _gtk_marshal_VOID__VOID,
+                                G_TYPE_NONE, 0);
+
+  signals[LOCATION_TOGGLE_POPUP] =
+    g_signal_new_class_handler (I_("location-toggle-popup"),
+                                G_OBJECT_CLASS_TYPE (class),
+                                G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                                G_CALLBACK (location_toggle_popup_handler),
+                                NULL, NULL,
+                                _gtk_marshal_VOID__VOID,
+                                G_TYPE_NONE, 0);
+
+  signals[UP_FOLDER] =
+    g_signal_new_class_handler (I_("up-folder"),
+                                G_OBJECT_CLASS_TYPE (class),
+                                G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                                G_CALLBACK (up_folder_handler),
+                                NULL, NULL,
+                                _gtk_marshal_VOID__VOID,
+                                G_TYPE_NONE, 0);
+
+  signals[DOWN_FOLDER] =
+    g_signal_new_class_handler (I_("down-folder"),
+                                G_OBJECT_CLASS_TYPE (class),
+                                G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                                G_CALLBACK (down_folder_handler),
+                                NULL, NULL,
+                                _gtk_marshal_VOID__VOID,
+                                G_TYPE_NONE, 0);
+
+  signals[HOME_FOLDER] =
+    g_signal_new_class_handler (I_("home-folder"),
+                                G_OBJECT_CLASS_TYPE (class),
+                                G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                                G_CALLBACK (home_folder_handler),
+                                NULL, NULL,
+                                _gtk_marshal_VOID__VOID,
+                                G_TYPE_NONE, 0);
+
+  signals[DESKTOP_FOLDER] =
+    g_signal_new_class_handler (I_("desktop-folder"),
+                                G_OBJECT_CLASS_TYPE (class),
+                                G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                                G_CALLBACK (desktop_folder_handler),
+                                NULL, NULL,
+                                _gtk_marshal_VOID__VOID,
+                                G_TYPE_NONE, 0);
+
+  signals[QUICK_BOOKMARK] =
+    g_signal_new_class_handler (I_("quick-bookmark"),
+                                G_OBJECT_CLASS_TYPE (class),
+                                G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                                G_CALLBACK (quick_bookmark_handler),
+                                NULL, NULL,
+                                _gtk_marshal_VOID__INT,
+                                G_TYPE_NONE, 1, G_TYPE_INT);
+
+  signals[SHOW_HIDDEN] =
+    g_signal_new_class_handler (I_("show-hidden"),
+                                G_OBJECT_CLASS_TYPE (class),
+                                G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                                G_CALLBACK (show_hidden_handler),
+                                NULL, NULL,
+                                _gtk_marshal_VOID__VOID,
+                                G_TYPE_NONE, 0);
+
+  signals[SEARCH_SHORTCUT] =
+    g_signal_new_class_handler (I_("search-shortcut"),
+                                G_OBJECT_CLASS_TYPE (class),
+                                G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                                G_CALLBACK (search_shortcut_handler),
+                                NULL, NULL,
+                                _gtk_marshal_VOID__VOID,
+                                G_TYPE_NONE, 0);
+
+  signals[RECENT_SHORTCUT] =
+    g_signal_new_class_handler (I_("recent-shortcut"),
+                                G_OBJECT_CLASS_TYPE (class),
+                                G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                                G_CALLBACK (recent_shortcut_handler),
+                                NULL, NULL,
+                                _gtk_marshal_VOID__VOID,
+                                G_TYPE_NONE, 0);
+
+  binding_set = gtk_binding_set_by_class (class);
+
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_KEY_l, GDK_CONTROL_MASK,
+				"location-toggle-popup",
+				0);
+
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_KEY_slash, 0,
+				"location-popup",
+				1, G_TYPE_STRING, "/");
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_KEY_KP_Divide, 0,
+				"location-popup",
+				1, G_TYPE_STRING, "/");
+
+#ifdef G_OS_UNIX
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_KEY_asciitilde, 0,
+				"location-popup",
+				1, G_TYPE_STRING, "~");
+#endif
+
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_KEY_v, GDK_CONTROL_MASK,
+				"location-popup-on-paste",
+				0);
+
+  add_normal_and_shifted_binding (binding_set,
+				  GDK_KEY_Up, GDK_MOD1_MASK,
+				  "up-folder");
+
+  add_normal_and_shifted_binding (binding_set,
+				  GDK_KEY_KP_Up, GDK_MOD1_MASK,
+				  "up-folder");
+
+  add_normal_and_shifted_binding (binding_set,
+				  GDK_KEY_Down, GDK_MOD1_MASK,
+				  "down-folder");
+  add_normal_and_shifted_binding (binding_set,
+				  GDK_KEY_KP_Down, GDK_MOD1_MASK,
+				  "down-folder");
+
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_KEY_Home, GDK_MOD1_MASK,
+				"home-folder",
+				0);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_KEY_KP_Home, GDK_MOD1_MASK,
+				"home-folder",
+				0);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_KEY_d, GDK_MOD1_MASK,
+				"desktop-folder",
+				0);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_KEY_h, GDK_CONTROL_MASK,
+                                "show-hidden",
+                                0);
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_KEY_s, GDK_MOD1_MASK,
+                                "search-shortcut",
+                                0);
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_KEY_r, GDK_MOD1_MASK,
+                                "recent-shortcut",
+                                0);
+
+  for (i = 0; i < 10; i++)
+    gtk_binding_entry_add_signal (binding_set,
+				  quick_bookmark_keyvals[i], GDK_MOD1_MASK,
+				  "quick-bookmark",
+				  1, G_TYPE_INT, i);
+
+  _gtk_file_chooser_install_properties (gobject_class);
+
+  g_type_class_add_private (gobject_class, sizeof (GtkFileChooserDefaultPrivate));
+
+  /* Bind class to template */
+
+  gtk_widget_class_set_template_from_resource (widget_class,
+					       "/org/gtk/libgtk/gtkfilechooserdefault.ui");
+
+  /* A *lot* of widgets that we need to handle .... */
+
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefaultPrivate, browse_widgets_box);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefaultPrivate, browse_widgets_hpaned);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefaultPrivate, browse_header_box);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefaultPrivate, browse_widgets_box);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefaultPrivate, places_sidebar);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefaultPrivate, browse_files_tree_view);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefaultPrivate, browse_new_folder_button);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefaultPrivate, browse_path_bar_hbox);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefaultPrivate, browse_path_bar_size_group);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefaultPrivate, browse_path_bar);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefaultPrivate, browse_special_mode_icon);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefaultPrivate, browse_special_mode_label);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefaultPrivate, browse_select_a_folder_info_bar);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefaultPrivate, browse_select_a_folder_label);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefaultPrivate, browse_select_a_folder_icon);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefaultPrivate, filter_combo_hbox);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefaultPrivate, filter_combo);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefaultPrivate, preview_box);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefaultPrivate, extra_align);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefaultPrivate, location_button);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefaultPrivate, location_entry_box);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefaultPrivate, location_label);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefaultPrivate, list_name_column);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefaultPrivate, list_pixbuf_renderer);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefaultPrivate, list_name_renderer);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefaultPrivate, list_mtime_column);
+  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefaultPrivate, list_size_column);
+
+  /* And a *lot* of callbacks to bind ... */
+  gtk_widget_class_bind_callback (widget_class, browse_files_key_press_event_cb);
+  gtk_widget_class_bind_callback (widget_class, file_list_drag_drop_cb);
+  gtk_widget_class_bind_callback (widget_class, file_list_drag_data_received_cb);
+  gtk_widget_class_bind_callback (widget_class, list_popup_menu_cb);
+  gtk_widget_class_bind_callback (widget_class, file_list_query_tooltip_cb);
+  gtk_widget_class_bind_callback (widget_class, list_button_press_event_cb);
+  gtk_widget_class_bind_callback (widget_class, list_row_activated);
+  gtk_widget_class_bind_callback (widget_class, file_list_drag_motion_cb);
+  gtk_widget_class_bind_callback (widget_class, list_selection_changed);
+  gtk_widget_class_bind_callback (widget_class, renderer_editing_canceled_cb);
+  gtk_widget_class_bind_callback (widget_class, renderer_edited_cb);
+  gtk_widget_class_bind_callback (widget_class, filter_combo_changed);
+  gtk_widget_class_bind_callback (widget_class, location_button_toggled_cb);
+  gtk_widget_class_bind_callback (widget_class, new_folder_button_clicked);
+  gtk_widget_class_bind_callback (widget_class, path_bar_clicked);
+  gtk_widget_class_bind_callback (widget_class, places_sidebar_open_location_cb);
+  gtk_widget_class_bind_callback (widget_class, places_sidebar_show_error_message_cb);
+}
+
+static void
+post_process_ui (GtkFileChooserDefault *impl)
+{
+  GtkTreeSelection *selection;
+  GtkCellRenderer  *cell;
+  GList            *cells;
+
+  /* Some qdata, qdata can't be set with GtkBuilder */
+  g_object_set_data (G_OBJECT (impl->priv->browse_files_tree_view), "fmq-name", "file_list");
+  g_object_set_data (G_OBJECT (impl->priv->browse_files_tree_view), I_("GtkFileChooserDefault"), impl);
+
+  /* Setup file list treeview */
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->priv->browse_files_tree_view));
+  gtk_tree_selection_set_select_function (selection,
+					  list_select_func,
+					  impl, NULL);
+  gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (impl->priv->browse_files_tree_view),
+					  GDK_BUTTON1_MASK,
+					  NULL, 0,
+					  GDK_ACTION_COPY | GDK_ACTION_MOVE);
+  gtk_drag_source_add_uri_targets (impl->priv->browse_files_tree_view);
+
+  gtk_drag_dest_set (impl->priv->browse_files_tree_view,
+                     GTK_DEST_DEFAULT_ALL,
+                     NULL, 0,
+                     GDK_ACTION_COPY | GDK_ACTION_MOVE);
+  gtk_drag_dest_add_uri_targets (impl->priv->browse_files_tree_view);
+
+  /* File browser treemodel columns are shared between GtkFileChooser implementations,
+   * so we don't set cell renderer attributes in GtkBuilder, but rather keep that
+   * in code.
+   */
+  file_list_set_sort_column_ids (impl);
+  update_cell_renderer_attributes (impl);
+
+  /* Get the combo's text renderer and set ellipsize parameters,
+   * perhaps GtkComboBoxText should declare the cell renderer
+   * as an 'internal-child', then we could configure it in GtkBuilder
+   * instead of hard coding it here.
+   */
+  cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (impl->priv->filter_combo));
+  g_assert (cells);
+  cell = cells->data;
+  g_object_set (G_OBJECT (cell),
+		"ellipsize", PANGO_ELLIPSIZE_END,
+		NULL);
+
+  g_list_free (cells);
+
+  /* Set the GtkPathBar file system backend */
+  _gtk_path_bar_set_file_system (GTK_PATH_BAR (impl->priv->browse_path_bar), impl->priv->file_system);
+
+  /* Set the fixed size icon renderer, this requires
+   * that priv->icon_size be already setup.
+   */
+  set_icon_cell_renderer_fixed_size (impl);
+}
+
+static void
+_gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
+{
+  GtkFileChooserDefaultPrivate *priv;
+
+  profile_start ("start", NULL);
+#ifdef PROFILE_FILE_CHOOSER
+  access ("MARK: *** CREATE FILE CHOOSER", F_OK);
+#endif
+  impl->priv = G_TYPE_INSTANCE_GET_PRIVATE (impl,
+					    GTK_TYPE_FILE_CHOOSER_DEFAULT,
+					    GtkFileChooserDefaultPrivate);
+  priv = impl->priv;
+
+  priv->local_only = TRUE;
+  priv->preview_widget_active = TRUE;
+  priv->use_preview_label = TRUE;
+  priv->select_multiple = FALSE;
+  priv->show_hidden = FALSE;
+  priv->show_size_column = TRUE;
+  priv->icon_size = FALLBACK_ICON_SIZE;
+  priv->load_state = LOAD_EMPTY;
+  priv->reload_state = RELOAD_EMPTY;
+  priv->pending_select_files = NULL;
+  priv->location_mode = LOCATION_MODE_PATH_BAR;
+  priv->operation_mode = OPERATION_MODE_BROWSE;
+  priv->sort_column = MODEL_COL_NAME;
+  priv->sort_order = GTK_SORT_ASCENDING;
+  priv->recent_manager = gtk_recent_manager_get_default ();
+  priv->create_folders = TRUE;
+
+  /* Ensure GTK+ private types used by the template
+   * definition before calling gtk_widget_init_template()
+   */
+  g_type_ensure (GTK_TYPE_PATH_BAR);
+  gtk_widget_init_template (GTK_WIDGET (impl));
+
+  set_file_system_backend (impl);
+
+  priv->bookmarks_manager = _gtk_bookmarks_manager_new (NULL, NULL);
+
+  /* Setup various attributes and callbacks in the UI 
+   * which cannot be done with GtkBuilder.
+   */
+  post_process_ui (impl);
+
+  profile_end ("end", NULL);
 }
