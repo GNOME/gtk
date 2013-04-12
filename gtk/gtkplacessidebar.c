@@ -238,9 +238,6 @@ enum {
 #define ICON_NAME_FOLDER_VIDEOS		"folder-videos-symbolic"
 #define ICON_NAME_FOLDER_SAVED_SEARCH	"folder-saved-search-symbolic"
 
-/* Settings keys */
-#define SETTINGS_KEY_STARTUP_MODE        "startup-mode"
-
 static guint places_sidebar_signals [LAST_SIGNAL] = { 0 };
 static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
 
