@@ -59,6 +59,12 @@ gdk_wayland_display_manager_initable_init (GInitable     *initable,
 {
   struct wl_display *wl_display;
 
+  /* Set by the compositor when launching a special client - and it gets reset
+   * by wl_display_connect so we must avoid calling it twice
+   */
+  if (g_getenv ("WAYLAND_SOCKET"))
+    return TRUE;
+
   /* check that a connection to the default display is possible */
   wl_display = wl_display_connect (gdk_get_display_arg_name ());
 
