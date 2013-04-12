@@ -102,16 +102,6 @@ gboolean       _gtk_file_chooser_remove_shortcut_folder  (GtkFileChooser    *cho
 							  GError           **error);
 GSList *       _gtk_file_chooser_list_shortcut_folder_files (GtkFileChooser *chooser);
 
-/* GtkFileChooserWidget private */
-
-struct _GtkFileChooserWidgetPrivate
-{
-  GtkWidget *impl;
-
-  char *file_system;
-};
-
-
 /* GtkFileChooserDefault private */
 
 typedef enum {

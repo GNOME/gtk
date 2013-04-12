@@ -45,10 +45,12 @@
  * #GtkFileChooser.
  */
 
+struct _GtkFileChooserWidgetPrivate
+{
+  GtkWidget *impl;
+};
 
 #define GTK_FILE_CHOOSER_WIDGET_GET_PRIVATE(o)  (GTK_FILE_CHOOSER_WIDGET (o)->priv)
-
-static void gtk_file_chooser_widget_finalize     (GObject                   *object);
 
 static GObject* gtk_file_chooser_widget_constructor  (GType                  type,
 						      guint                  n_construct_properties,
@@ -76,7 +78,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gobject_class->constructor = gtk_file_chooser_widget_constructor;
   gobject_class->set_property = gtk_file_chooser_widget_set_property;
   gobject_class->get_property = gtk_file_chooser_widget_get_property;
-  gobject_class->finalize = gtk_file_chooser_widget_finalize;
 
   _gtk_file_chooser_install_properties (gobject_class);
 
@@ -92,16 +93,6 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *chooser_widget)
   chooser_widget->priv = priv;
   gtk_orientable_set_orientation (GTK_ORIENTABLE (chooser_widget),
                                   GTK_ORIENTATION_VERTICAL);
-}
-
-static void
-gtk_file_chooser_widget_finalize (GObject *object)
-{
-  GtkFileChooserWidget *chooser = GTK_FILE_CHOOSER_WIDGET (object);
-
-  g_free (chooser->priv->file_system);
-
-  G_OBJECT_CLASS (gtk_file_chooser_widget_parent_class)->finalize (object);
 }
 
 static GObject*
