@@ -102,17 +102,6 @@ gboolean       _gtk_file_chooser_remove_shortcut_folder  (GtkFileChooser    *cho
 							  GError           **error);
 GSList *       _gtk_file_chooser_list_shortcut_folder_files (GtkFileChooser *chooser);
 
-/* GtkFileChooserDialog private */
-
-struct _GtkFileChooserDialogPrivate
-{
-  GtkWidget *widget;
-
-  /* for use with GtkFileChooserEmbed */
-  gboolean response_requested;
-};
-
-
 /* GtkFileChooserWidget private */
 
 struct _GtkFileChooserWidgetPrivate
