@@ -3301,6 +3301,8 @@ hostname_proxy_new_cb (GObject      *source_object,
 	sidebar->hostnamed_proxy = g_dbus_proxy_new_for_bus_finish (res, &error);
 	g_clear_object (&sidebar->hostnamed_cancellable);
 
+	g_object_unref (sidebar);
+
 	if (error != NULL) {
 		g_debug ("Failed to create D-Bus proxy: %s", error->message);
 		g_error_free (error);
@@ -3588,7 +3590,7 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 				  "org.freedesktop.hostname1",
 				  sidebar->hostnamed_cancellable,
 				  hostname_proxy_new_cb,
- 				  sidebar);
+ 				  g_object_ref (sidebar));
 }
 
 static void
