@@ -33,7 +33,6 @@
 #include <string.h>
 #include <glib/gprintf.h>
 #include <gtk/gtk.h>
-#include "gtk/gtkfilechooserprivate.h"
 #include "gtk/gtkfilechooserdefault.h"
 #include "gtk/gtkfilechooserentry.h"
 
