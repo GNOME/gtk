@@ -19,6 +19,7 @@
 #ifndef __GTK_FILE_CHOOSER_PRIVATE_H__
 #define __GTK_FILE_CHOOSER_PRIVATE_H__
 
+#include "gtkbookmarksmanager.h"
 #include "gtkfilechooser.h"
 #include "gtkfilesystem.h"
 #include "gtkfilesystemmodel.h"
@@ -42,6 +43,7 @@ G_BEGIN_DECLS
 #define SETTINGS_KEY_WINDOW_POSITION     "window-position"
 #define SETTINGS_KEY_WINDOW_SIZE         "window-size"
 #define SETTINGS_KEY_SIDEBAR_WIDTH       "sidebar-width"
+#define SETTINGS_KEY_STARTUP_MODE        "startup-mode"
 
 #define GTK_FILE_CHOOSER_GET_IFACE(inst)  (G_TYPE_INSTANCE_GET_INTERFACE ((inst), GTK_TYPE_FILE_CHOOSER, GtkFileChooserIface))
 
@@ -146,6 +148,13 @@ typedef enum {
   OPERATION_MODE_RECENT
 } OperationMode;
 
+typedef enum {
+  STARTUP_MODE_RECENT,
+  STARTUP_MODE_CWD
+} StartupMode;
+
+#define REMOVE_FOR_PLACES_SIDEBAR 0
+
 struct _GtkFileChooserDefault
 {
   GtkBox parent_instance;
@@ -164,12 +173,6 @@ struct _GtkFileChooserDefault
   GtkWidget *browse_widgets_box;
   GtkWidget *browse_widgets_hpaned;
   GtkWidget *browse_header_box;
-  GtkWidget *browse_shortcuts_tree_view;
-  GtkWidget *browse_shortcuts_add_button;
-  GtkWidget *browse_shortcuts_remove_button;
-  GtkWidget *browse_shortcuts_popup_menu;
-  GtkWidget *browse_shortcuts_popup_menu_remove_item;
-  GtkWidget *browse_shortcuts_popup_menu_rename_item;
   GtkWidget *browse_files_tree_view;
   GtkWidget *browse_files_popup_menu;
   GtkWidget *browse_files_popup_menu_add_shortcut_item;
@@ -189,6 +192,9 @@ struct _GtkFileChooserDefault
 
   GtkFileSystemModel *browse_files_model;
   char *browse_files_last_selected_name;
+
+  GtkWidget *places_sidebar;
+  StartupMode startup_mode;
 
   /* OPERATION_MODE_SEARCH */
   GtkWidget *search_hbox;
@@ -216,13 +222,6 @@ struct _GtkFileChooserDefault
   GtkWidget *location_entry;
   LocationMode location_mode;
 
-  GtkListStore *shortcuts_model;
-
-  /* Filter for the shortcuts pane.  We filter out the "current folder" row and
-   * the separator that we use for the "Save in folder" combo.
-   */
-  GtkTreeModel *shortcuts_pane_filter_model;
-  
   /* Handles */
   GSList *loading_shortcuts;
   GSList *reload_icon_cancellables;
@@ -243,6 +242,8 @@ struct _GtkFileChooserDefault
 
   GtkFileFilter *current_filter;
   GSList *filters;
+
+  GtkBookmarksManager *bookmarks_manager;
 
   int num_volumes;
   int num_shortcuts;
