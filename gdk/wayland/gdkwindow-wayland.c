@@ -714,7 +714,9 @@ gdk_wayland_window_show (GdkWindow *window, gboolean already_mapped)
       wl_surface_set_user_data(impl->surface, window);
     }
 
-  if (!impl->use_custom_surface && display_wayland->shell)
+  if (!impl->shell_surface &&
+      !impl->use_custom_surface &&
+      display_wayland->shell)
     {
       impl->shell_surface = wl_shell_get_shell_surface (display_wayland->shell,
                                                         impl->surface);
