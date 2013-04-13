@@ -5674,17 +5674,19 @@ gtk_window_realize (GtkWidget *widget)
       gtk_widget_set_window (widget, gdk_window);
       gtk_widget_register_window (widget, gdk_window);
 
-      priv->content_window = gdk_window_new (gdk_window,
-                                             &attributes, attributes_mask);
-      gdk_window_show (priv->content_window);
-      gtk_widget_register_window (widget, priv->content_window);
+      if (priv->type == GTK_WINDOW_TOPLEVEL)
+        {
+          priv->content_window = gdk_window_new (gdk_window,
+                                                 &attributes, attributes_mask);
+          gdk_window_show (priv->content_window);
+          gtk_widget_register_window (widget, priv->content_window);
 
-      gtk_style_context_set_background (gtk_widget_get_style_context (widget), priv->content_window);
+          gtk_style_context_set_background (gtk_widget_get_style_context (widget), priv->content_window);
 
-      if (gtk_bin_get_child (GTK_BIN (window)))
-        gtk_widget_set_parent_window (gtk_bin_get_child (GTK_BIN (window)),
-                                      priv->content_window);
-
+          if (gtk_bin_get_child (GTK_BIN (window)))
+            gtk_widget_set_parent_window (gtk_bin_get_child (GTK_BIN (window)),
+                                          priv->content_window);
+        }
       return;
     }
 
@@ -5783,17 +5785,20 @@ gtk_window_realize (GtkWidget *widget)
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
 
-  priv->content_window = gdk_window_new (gdk_window,
-                                         &attributes, attributes_mask);
-  gdk_window_show (priv->content_window);
-  gtk_widget_register_window (widget, priv->content_window);
+  if (priv->type == GTK_WINDOW_TOPLEVEL)
+    {
+      priv->content_window = gdk_window_new (gdk_window,
+                                             &attributes, attributes_mask);
+      gdk_window_show (priv->content_window);
+      gtk_widget_register_window (widget, priv->content_window);
 
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_set_background (context, priv->content_window);
+      context = gtk_widget_get_style_context (widget);
+      gtk_style_context_set_background (context, priv->content_window);
 
-  if (gtk_bin_get_child (GTK_BIN (window)))
-    gtk_widget_set_parent_window (gtk_bin_get_child (GTK_BIN (window)),
-                                  priv->content_window);
+      if (gtk_bin_get_child (GTK_BIN (window)))
+        gtk_widget_set_parent_window (gtk_bin_get_child (GTK_BIN (window)),
+                                      priv->content_window);
+    }
 
   if (priv->transient_parent &&
       gtk_widget_get_realized (GTK_WIDGET (priv->transient_parent)))
@@ -5904,9 +5909,12 @@ gtk_window_unrealize (GtkWidget *widget)
   if (priv->grip_window != NULL)
     resize_grip_destroy_window (window);
 
-  gtk_widget_unregister_window (widget, priv->content_window);
-  gdk_window_destroy (priv->content_window);
-  priv->content_window = NULL;
+  if (priv->content_window != NULL)
+    {
+      gtk_widget_unregister_window (widget, priv->content_window);
+      gdk_window_destroy (priv->content_window);
+      priv->content_window = NULL;
+    }
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->unrealize (widget);
 }
@@ -6243,11 +6251,12 @@ _gtk_window_set_allocation (GtkWindow           *window,
           set_grip_position (window);
         }
 
-      gdk_window_move_resize (priv->content_window,
-                              child_allocation.x,
-                              child_allocation.y,
-                              child_allocation.width,
-                              child_allocation.height);
+      if (priv->content_window != NULL)
+        gdk_window_move_resize (priv->content_window,
+                                child_allocation.x,
+                                child_allocation.y,
+                                child_allocation.width,
+                                child_allocation.height);
 
     }
 
@@ -7289,7 +7298,8 @@ gtk_window_add (GtkContainer *container,
 {
   GtkWindowPrivate *priv = GTK_WINDOW (container)->priv;
 
-  gtk_widget_set_parent_window (child, priv->content_window);
+  if (priv->content_window != NULL)
+    gtk_widget_set_parent_window (child, priv->content_window);
 
   GTK_CONTAINER_CLASS (gtk_window_parent_class)->add (container, child);
 }
@@ -7481,7 +7491,8 @@ window_cursor_changed (GdkWindow  *window,
   priv->default_cursor = gdk_window_get_cursor (window);
   if (priv->default_cursor == NULL)
     priv->default_cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_LEFT_PTR);
-  gdk_window_set_cursor (priv->content_window, priv->default_cursor);
+  if (priv->content_window != NULL)
+    gdk_window_set_cursor (priv->content_window, priv->default_cursor);
 }
 
 static void
@@ -9050,6 +9061,7 @@ gtk_window_draw (GtkWidget *widget,
     }
 
   if (!gtk_widget_get_app_paintable (widget) &&
+      priv->content_window != NULL &&
       gtk_cairo_should_draw_window (cr, priv->content_window))
     {
       gint x, y;
