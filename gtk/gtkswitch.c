@@ -52,7 +52,6 @@
 #include <math.h>
 
 #define DEFAULT_SLIDER_WIDTH    (36)
-#define DEFAULT_SLIDER_HEIGHT   (22)
 
 struct _GtkSwitchPrivate
 {
@@ -328,7 +327,7 @@ gtk_switch_get_preferred_width (GtkWidget *widget,
                         "focus-padding", &focus_pad,
                         NULL);
 
-  width += 2 * (focus_width + focus_pad);
+  slider_width = MAX (slider_width, 3 * (focus_width + focus_pad));
 
   /* Translators: if the "on" state label requires more than three
    * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
@@ -364,7 +363,7 @@ gtk_switch_get_preferred_height (GtkWidget *widget,
   GtkStyleContext *context;
   GtkStateFlags state;
   GtkBorder padding;
-  gint height, focus_width, focus_pad;
+  gint height, focus_width, focus_pad, slider_width, min_height;
   PangoLayout *layout;
   PangoRectangle logical_rect;
   gchar *str;
@@ -382,11 +381,12 @@ gtk_switch_get_preferred_height (GtkWidget *widget,
   gtk_style_context_restore (context);
 
   gtk_widget_style_get (widget,
+                        "slider-width", &slider_width,
                         "focus-line-width", &focus_width,
                         "focus-padding", &focus_pad,
                         NULL);
 
-  height += 2 * (focus_width + focus_pad);
+  min_height = MAX (slider_width * 0.6, 3 * (focus_width + focus_pad));
 
   str = g_strdup_printf ("%s%s",
                          C_("switch", "ON"),
@@ -395,7 +395,7 @@ gtk_switch_get_preferred_height (GtkWidget *widget,
   layout = gtk_widget_create_pango_layout (widget, str);
   pango_layout_get_extents (layout, NULL, &logical_rect);
   pango_extents_to_pixels (&logical_rect, NULL);
-  height += MAX (DEFAULT_SLIDER_HEIGHT, logical_rect.height);
+  height += MAX (min_height, logical_rect.height);
 
   g_object_unref (layout);
   g_free (str);
@@ -528,13 +528,7 @@ gtk_switch_draw (GtkWidget *widget,
   gint label_x, label_y;
   GtkBorder padding;
   GtkStateFlags state;
-  gint focus_width, focus_pad;
   gint x, y, width, height;
-
-  gtk_widget_style_get (widget,
-                        "focus-line-width", &focus_width,
-                        "focus-padding", &focus_pad,
-                        NULL);
 
   context = gtk_widget_get_style_context (widget);
   state = gtk_widget_get_state_flags (widget);
@@ -551,14 +545,6 @@ gtk_switch_draw (GtkWidget *widget,
   y = 0;
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
-
-  if (gtk_widget_has_visible_focus (widget))
-    gtk_render_focus (context, cr, x, y, width, height);
-
-  x += focus_width + focus_pad;
-  y += focus_width + focus_pad;
-  width -= 2 * (focus_width + focus_pad);
-  height -= 2 * (focus_width + focus_pad);
 
   gtk_style_context_save (context);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_TROUGH);
@@ -617,6 +603,22 @@ gtk_switch_draw (GtkWidget *widget,
   gtk_style_context_restore (context);
 
   gtk_switch_paint_handle (widget, cr, &handle);
+
+  if (gtk_widget_has_visible_focus (widget))
+    {
+      gint focus_width, focus_pad, pad;
+
+      gtk_widget_style_get (widget,
+                            "focus-line-width", &focus_width,
+                            "focus-padding", &focus_pad,
+                            NULL);
+
+      pad = focus_pad + focus_width;
+
+      gtk_render_focus (context, cr,
+                        handle.x + pad, handle.y + pad,
+                        handle.width - pad*2, handle.height - pad*2);
+    }
 
   return FALSE;
 }
