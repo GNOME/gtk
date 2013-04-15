@@ -412,11 +412,4 @@
       <widget name="browse_new_folder_button"/>
     </widgets>
   </object>
-  <object class="GtkSizeGroup" id="paned_size_group">
-    <property name="mode">vertical</property>
-    <widgets>
-      <widget name="browse_shortcuts_swin"/>
-      <widget name="browse_files_swin"/>
-    </widgets>
-  </object>
 </interface>
