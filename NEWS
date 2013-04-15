@@ -1,3 +1,47 @@
+Overview of Changes in GTK+ 3.8.1
+=================================
+
+* Broadway backend improvements:
+ - Ensure window sizes are synched right
+ - Sync surface updates with paint clock
+ - Add support for password authentication
+ - Reuse surfaces passed to server
+
+* CSS improvements:
+ - Add cycle detection to color resolving
+
+* Bug fixes
+ 675649 gtk-demo: Fix typo
+ 681446 gtkdnd memory leak
+ 685419 gtkprintbackendfile: Infinite loop in _cairo_write()
+ 685420 Critical warnings when GtkPrintJob is released too early
+ 690275 scrolling on other windows is applied when coming back...
+ 696370 GtkOverlay doesn't work on top of GtkClutterEmbed
+ 696622 gtk option printer widget segfault in epiphany
+ 696623 GtkOverlay with a revealer produces warnings setting a...
+ 696882 GtkWindow changes size after hide/show cycle
+ 697144 Popup menu mnemonics fixes
+ 697263 Impossible to set window transparency on 3.8
+ 697427 Unreferencing GtkStatusIcon object causes abort
+
+* Translation updates
+ Basque
+ British English
+ Catalan (Valencian)
+ Czech
+ Finnish
+ Hungarian
+ Indonesian
+ Interlingua
+ Kannada
+ Malayalam
+ Norwegian bokmål
+ Polish
+ Simplified Chinese
+ Slovak
+ Slovenian
+
+
 Overview of Changes in GTK+ 3.8.0
 =================================
 
@@ -26,7 +70,7 @@ Overview of Changes in GTK+ 3.8.0
  Kazakh
  Marathi
  Odia
- Persian
+  Persian
  Punjabi
  Russian
  Slovenian
