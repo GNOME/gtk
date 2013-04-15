@@ -35,34 +35,6 @@
 
 #include <string.h>
 
-GdkAtom
-_gdk_broadway_display_manager_atom_intern (GdkDisplayManager *manager,
-					   const gchar *atom_name, 
-					   gboolean     only_if_exists)
-{
-  return _GDK_MAKE_ATOM (g_quark_from_string (atom_name));
-}
-
-GdkAtom
-_gdk_broadway_display_manager_atom_intern_static_string (GdkDisplayManager *manager,
-							 const gchar *atom_name)
-{
-  return _GDK_MAKE_ATOM (g_quark_from_static_string (atom_name));
-}
-
-static const char *
-get_atom_name (GdkAtom atom)
-{
-  return g_quark_to_string (GPOINTER_TO_UINT(atom));
-}
-
-gchar *
-_gdk_broadway_display_manager_get_atom_name (GdkDisplayManager *manager,
-					     GdkAtom atom)
-{
-  return g_strdup (get_atom_name (atom));
-}
-
 gboolean
 _gdk_broadway_window_get_property (GdkWindow   *window,
 				   GdkAtom      property,

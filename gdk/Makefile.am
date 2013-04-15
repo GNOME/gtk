@@ -134,6 +134,7 @@ gdk_c_sources = 				\
 	gdkframeclockidle.c			\
 	gdkpango.c				\
 	gdkpixbuf-drawable.c			\
+	gdkproperty.c				\
 	gdkrectangle.c				\
 	gdkrgba.c				\
 	gdkscreen.c				\

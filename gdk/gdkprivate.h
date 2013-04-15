@@ -29,6 +29,8 @@
 
 G_BEGIN_DECLS
 
+const char * _gdk_atom_name_const (GdkAtom atom);
+
 void gdk_window_destroy_notify	     (GdkWindow *window);
 
 void gdk_synthesize_window_state (GdkWindow     *window,

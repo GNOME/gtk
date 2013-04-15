@@ -45,11 +45,6 @@ struct _GdkDisplayManagerClass
                                        const gchar       *name);
 
   /* FIXME the following should really be frontend-only, not vfuncs */
-  GdkAtom      (*atom_intern)         (GdkDisplayManager *manager,
-                                       const gchar       *atom_name,
-                                       gboolean           copy_name);
-  gchar *      (*get_atom_name)       (GdkDisplayManager *manager,
-                                       GdkAtom            atom);
   guint        (*lookup_keyval)       (GdkDisplayManager *manager,
                                        const gchar       *name);
   gchar *      (*get_keyval_name)     (GdkDisplayManager *manager,

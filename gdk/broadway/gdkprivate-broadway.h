@@ -42,15 +42,6 @@
 void _gdk_broadway_resync_windows (void);
 void _gdk_broadway_windowing_init (void);
 
-gchar * _gdk_broadway_display_manager_get_atom_name (GdkDisplayManager *manager,
-						     GdkAtom atom);
-GdkAtom _gdk_broadway_display_manager_atom_intern_static_string (GdkDisplayManager *manager,
-								 const gchar *atom_name);
-GdkAtom _gdk_broadway_display_manager_atom_intern (GdkDisplayManager *manager,
-						   const gchar *atom_name, 
-						   gboolean     only_if_exists);
-
-
 void     _gdk_broadway_window_register_dnd (GdkWindow      *window);
 GdkDragContext * _gdk_broadway_window_drag_begin (GdkWindow *window,
 						  GdkDevice *device,
