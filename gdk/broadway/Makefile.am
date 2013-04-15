@@ -60,9 +60,7 @@ libgdk_broadway_la_SOURCES =		\
 	gdkeventsource.c	\
 	gdkeventsource.h	\
 	gdkglobals-broadway.c	\
-	gdkim-broadway.c	\
 	gdkkeys-broadway.c	\
-	gdkmain-broadway.c	\
 	gdkproperty-broadway.c	\
 	gdkscreen-broadway.c	\
 	gdkscreen-broadway.h	\

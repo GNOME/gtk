@@ -107,7 +107,6 @@ gdk_broadway_display_manager_lookup_keyval (GdkDisplayManager *manager,
 static void
 gdk_broadway_display_manager_init (GdkBroadwayDisplayManager *manager)
 {
-  _gdk_broadway_windowing_init ();
 }
 
 static void

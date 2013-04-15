@@ -40,7 +40,6 @@
 #include "gdkbroadwaywindow.h"
 
 void _gdk_broadway_resync_windows (void);
-void _gdk_broadway_windowing_init (void);
 
 void     _gdk_broadway_window_register_dnd (GdkWindow      *window);
 GdkDragContext * _gdk_broadway_window_drag_begin (GdkWindow *window,
@@ -89,8 +88,6 @@ void _gdk_keymap_add_virtual_modifiers_compat (GdkKeymap       *keymap,
                                                GdkModifierType *modifiers);
 gboolean _gdk_keymap_key_is_modifier   (GdkKeymap       *keymap,
 					guint            keycode);
-
-void _gdk_broadway_initialize_locale (void);
 
 void _gdk_broadway_screen_events_init   (GdkScreen *screen);
 GdkVisual *_gdk_broadway_screen_get_system_visual (GdkScreen * screen);
