@@ -76,11 +76,6 @@ struct _GdkKeymap
   GdkDisplay *display;
 };
 
-void _gdk_display_manager_real_keyval_convert_case (GdkDisplayManager *manager,
-                                                    guint              symbol,
-                                                    guint             *lower,
-                                                    guint             *upper);
-
 G_END_DECLS
 
 #endif

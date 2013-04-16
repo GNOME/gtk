@@ -190,28 +190,6 @@ gdk_keymap_init (GdkKeymap *keymap)
  */
 
 /**
- * gdk_keyval_convert_case:
- * @symbol: a keyval
- * @lower: (out): return location for lowercase version of @symbol
- * @upper: (out): return location for uppercase version of @symbol
- *
- * Obtains the upper- and lower-case versions of the keyval @symbol.
- * Examples of keyvals are #GDK_KEY_a, #GDK_KEY_Enter, #GDK_KEY_F1, etc.
- */
-void
-gdk_keyval_convert_case (guint symbol,
-                         guint *lower,
-                         guint *upper)
-{
-  GdkDisplayManager *manager = _gdk_display_manager_get_nocreate ();
-
-  if (manager)
-    GDK_DISPLAY_MANAGER_GET_CLASS (manager)->keyval_convert_case (manager, symbol, lower, upper);
-  else
-    _gdk_display_manager_real_keyval_convert_case (NULL, symbol, lower, upper);
-}
-
-/**
  * gdk_keyval_to_upper:
  * @keyval: a key value.
  *
@@ -742,14 +720,37 @@ gdk_keyval_from_name (const gchar *keyval_name)
                                                                  keyval_name);
 }
 
+/**
+ * gdk_keyval_convert_case:
+ * @symbol: a keyval
+ * @lower: (out): return location for lowercase version of @symbol
+ * @upper: (out): return location for uppercase version of @symbol
+ *
+ * Obtains the upper- and lower-case versions of the keyval @symbol.
+ * Examples of keyvals are #GDK_KEY_a, #GDK_KEY_Enter, #GDK_KEY_F1, etc.
+ */
 void
-_gdk_display_manager_real_keyval_convert_case (GdkDisplayManager *manager,
-                                               guint              symbol,
-                                               guint             *lower,
-                                               guint             *upper)
+gdk_keyval_convert_case (guint symbol,
+                         guint *lower,
+                         guint *upper)
 {
-  guint xlower = symbol;
-  guint xupper = symbol;
+  GdkDisplayManager *manager;
+  guint xlower, xupper;
+
+  manager = _gdk_display_manager_get_nocreate ();
+  if (manager)
+    {
+      GdkDisplayManagerClass *manager_class = GDK_DISPLAY_MANAGER_GET_CLASS (manager);
+
+      if (manager_class->keyval_convert_case)
+        {
+          manager_class->keyval_convert_case (manager, symbol, lower, upper);
+          return;
+        }
+    }
+
+  xlower = symbol;
+  xupper = symbol;
 
   /* Check for directly encoded 24-bit UCS characters: */
   if ((symbol & 0xff000000) == 0x01000000)
