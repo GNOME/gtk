@@ -45,22 +45,6 @@ gdk_win32_display_manager_open_display (GdkDisplayManager *manager,
   return _gdk_win32_display_open (name);
 }
 
-#include "../gdkkeynames.c"
-
-static gchar *
-gdk_win32_display_manager_get_keyval_name (GdkDisplayManager *manager,
-                                           guint              keyval)
-{
-  return _gdk_keyval_name (keyval);
-}
-
-static guint
-gdk_win32_display_manager_lookup_keyval (GdkDisplayManager *manager,
-                                         const gchar       *name)
-{
-  return _gdk_keyval_from_name (name);
-}
-
 static void
 gdk_win32_display_manager_init (GdkWin32DisplayManager *manager)
 {
@@ -94,6 +78,4 @@ gdk_win32_display_manager_class_init (GdkWin32DisplayManagerClass *class)
   manager_class->atom_intern = _gdk_win32_display_manager_atom_intern;
   manager_class->get_atom_name = _gdk_win32_display_manager_get_atom_name;
 #endif
-  manager_class->lookup_keyval = gdk_win32_display_manager_lookup_keyval;
-  manager_class->get_keyval_name = gdk_win32_display_manager_get_keyval_name;
 }

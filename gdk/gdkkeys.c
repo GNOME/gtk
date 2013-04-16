@@ -674,6 +674,7 @@ gdk_keymap_get_modifier_mask (GdkKeymap         *keymap,
   return GDK_KEYMAP_GET_CLASS (keymap)->get_modifier_mask (keymap, intent);
 }
 
+#include "gdkkeynames.c"
 
 /**
  * gdk_keyval_name:
@@ -692,10 +693,16 @@ gdk_keymap_get_modifier_mask (GdkKeymap         *keymap,
 gchar *
 gdk_keyval_name (guint keyval)
 {
-  GdkDisplayManager *manager = gdk_display_manager_get ();
+  GdkDisplayManagerClass *manager_class;
+  GdkDisplayManager *manager;
 
-  return GDK_DISPLAY_MANAGER_GET_CLASS (manager)->get_keyval_name (manager,
-                                                                   keyval);
+  manager = gdk_display_manager_get ();
+  manager_class = GDK_DISPLAY_MANAGER_GET_CLASS (manager);
+
+  if (manager_class->get_keyval_name)
+    return manager_class->get_keyval_name (manager, keyval);
+  else
+    return _gdk_keyval_name (keyval);
 }
 
 /**
@@ -714,10 +721,16 @@ gdk_keyval_name (guint keyval)
 guint
 gdk_keyval_from_name (const gchar *keyval_name)
 {
-  GdkDisplayManager *manager = gdk_display_manager_get ();
+  GdkDisplayManagerClass *manager_class;
+  GdkDisplayManager *manager;
 
-  return GDK_DISPLAY_MANAGER_GET_CLASS (manager)->lookup_keyval (manager,
-                                                                 keyval_name);
+  manager = gdk_display_manager_get ();
+  manager_class = GDK_DISPLAY_MANAGER_GET_CLASS (manager);
+
+  if (manager_class->lookup_keyval)
+    return manager_class->lookup_keyval (manager, keyval_name);
+  else
+    return _gdk_keyval_from_name (keyval_name);
 }
 
 /**

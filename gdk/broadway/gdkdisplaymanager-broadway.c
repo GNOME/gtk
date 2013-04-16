@@ -88,22 +88,6 @@ gdk_broadway_display_manager_open_display (GdkDisplayManager *manager,
   return _gdk_broadway_display_open (name);
 }
 
-#include "../gdkkeynames.c"
-
-static gchar *
-gdk_broadway_display_manager_get_keyval_name (GdkDisplayManager *manager,
-                                            guint              keyval)
-{
-  return _gdk_keyval_name (keyval);
-}
-
-static guint
-gdk_broadway_display_manager_lookup_keyval (GdkDisplayManager *manager,
-                                          const gchar       *name)
-{
-  return _gdk_keyval_from_name (name);
-}
-
 static void
 gdk_broadway_display_manager_init (GdkBroadwayDisplayManager *manager)
 {
@@ -126,6 +110,4 @@ gdk_broadway_display_manager_class_init (GdkBroadwayDisplayManagerClass *class)
   object_class->finalize = gdk_broadway_display_manager_finalize;
 
   manager_class->open_display = gdk_broadway_display_manager_open_display;
-  manager_class->lookup_keyval = gdk_broadway_display_manager_lookup_keyval;
-  manager_class->get_keyval_name = gdk_broadway_display_manager_get_keyval_name;
 }
