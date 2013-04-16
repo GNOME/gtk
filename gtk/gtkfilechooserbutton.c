@@ -186,11 +186,12 @@ struct _GtkFileChooserButtonPrivate
   GFile *current_folder_while_inactive;
 
   gulong fs_volumes_changed_id;
-  gulong fs_bookmarks_changed_id;
 
   GCancellable *dnd_select_folder_cancellable;
   GCancellable *update_button_cancellable;
   GSList *change_icon_theme_cancellables;
+
+  GtkBookmarksManager *bookmarks_manager;
 
   gint icon_size;
 
@@ -323,8 +324,7 @@ static void          update_label_and_image       (GtkFileChooserButton *button)
 /* Child Object Callbacks */
 static void     fs_volumes_changed_cb            (GtkFileSystem  *fs,
 						  gpointer        user_data);
-static void     fs_bookmarks_changed_cb          (GtkFileSystem  *fs,
-						  gpointer        user_data);
+static void     bookmarks_changed_cb             (gpointer        user_data);
 
 static void     combo_box_changed_cb             (GtkComboBox    *combo_box,
 						  gpointer        user_data);
@@ -502,6 +502,8 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
 
   gtk_widget_init_template (GTK_WIDGET (button));
 
+  /* Bookmarks manager */
+  priv->bookmarks_manager = _gtk_bookmarks_manager_new (bookmarks_changed_cb, button);
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (priv->combo_box),
 				      priv->name_cell, name_cell_data_func,
 				      NULL, NULL);
@@ -849,7 +851,7 @@ gtk_file_chooser_button_constructor (GType                  type,
   model_add_volumes (button, list);
   g_slist_free (list);
 
-  list = _gtk_file_system_list_bookmarks (priv->fs);
+  list = _gtk_bookmarks_manager_list_bookmarks (priv->bookmarks_manager);
   model_add_bookmarks (button, list);
   g_slist_foreach (list, (GFunc) g_object_unref, NULL);
   g_slist_free (list);
@@ -878,9 +880,6 @@ gtk_file_chooser_button_constructor (GType                  type,
   priv->fs_volumes_changed_id =
     g_signal_connect (priv->fs, "volumes-changed",
 		      G_CALLBACK (fs_volumes_changed_cb), object);
-  priv->fs_bookmarks_changed_id =
-    g_signal_connect (priv->fs, "bookmarks-changed",
-		      G_CALLBACK (fs_bookmarks_changed_cb), object);
 
   update_label_and_image (button);
   update_combo_box (button);
@@ -964,7 +963,7 @@ gtk_file_chooser_button_set_property (GObject      *object,
     case GTK_FILE_CHOOSER_PROP_LOCAL_ONLY:
       g_object_set_property (G_OBJECT (priv->dialog), pspec->name, value);
       fs_volumes_changed_cb (priv->fs, button);
-      fs_bookmarks_changed_cb (priv->fs, button);
+      bookmarks_changed_cb (button);
       break;
 
     case GTK_FILE_CHOOSER_PROP_SELECT_MULTIPLE:
@@ -1089,9 +1088,14 @@ gtk_file_chooser_button_destroy (GtkWidget *widget)
   if (priv->fs)
     {
       g_signal_handler_disconnect (priv->fs, priv->fs_volumes_changed_id);
-      g_signal_handler_disconnect (priv->fs, priv->fs_bookmarks_changed_id);
       g_object_unref (priv->fs);
       priv->fs = NULL;
+    }
+
+  if (priv->bookmarks_manager)
+    {
+      _gtk_bookmarks_manager_free (priv->bookmarks_manager);
+      priv->bookmarks_manager = NULL;
     }
 
   GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->destroy (widget);
@@ -1604,7 +1608,7 @@ set_info_for_file_at_iter (GtkFileChooserButton *button,
 
   data = g_new0 (struct SetDisplayNameData, 1);
   data->button = g_object_ref (button);
-  data->label = _gtk_file_system_get_bookmark_label (button->priv->fs, file);
+  data->label = _gtk_bookmarks_manager_get_bookmark_label (button->priv->bookmarks_manager, file);
 
   tree_path = gtk_tree_model_get_path (button->priv->model, iter);
   data->row_ref = gtk_tree_row_reference_new (button->priv->model, tree_path);
@@ -1988,7 +1992,7 @@ model_add_bookmarks (GtkFileChooserButton *button,
 	   * If we switch to a better bookmarks file format (XBEL), we
 	   * should use mime info to get a better icon.
 	   */
-	  label = _gtk_file_system_get_bookmark_label (button->priv->fs, file);
+	  label = _gtk_bookmarks_manager_get_bookmark_label (button->priv->bookmarks_manager, file);
 	  if (!label)
 	    label = _gtk_file_chooser_label_for_file (file);
 
@@ -2091,7 +2095,7 @@ model_update_current_folder (GtkFileChooserButton *button,
        * If we switch to a better bookmarks file format (XBEL), we
        * should use mime info to get a better icon.
        */
-      label = _gtk_file_system_get_bookmark_label (button->priv->fs, file);
+      label = _gtk_bookmarks_manager_get_bookmark_label (button->priv->bookmarks_manager, file);
       if (!label)
 	label = _gtk_file_chooser_label_for_file (file);
 
@@ -2548,7 +2552,7 @@ update_label_and_image (GtkFileChooserButton *button)
         {
           GdkPixbuf *pixbuf;
 
-          label_text = _gtk_file_system_get_bookmark_label (button->priv->fs, file);
+          label_text = _gtk_bookmarks_manager_get_bookmark_label (button->priv->bookmarks_manager, file);
           pixbuf = gtk_icon_theme_load_icon (get_icon_theme (GTK_WIDGET (priv->image)),
                                              "text-x-generic",
                                              priv->icon_size, 0, NULL);
@@ -2616,14 +2620,13 @@ fs_volumes_changed_cb (GtkFileSystem *fs,
 }
 
 static void
-fs_bookmarks_changed_cb (GtkFileSystem *fs,
-			 gpointer       user_data)
+bookmarks_changed_cb (gpointer user_data)
 {
   GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (user_data);
   GtkFileChooserButtonPrivate *priv = button->priv;
   GSList *bookmarks;
 
-  bookmarks = _gtk_file_system_list_bookmarks (fs);
+  bookmarks = _gtk_bookmarks_manager_list_bookmarks (priv->bookmarks_manager);
   model_remove_rows (user_data,
 		     model_get_type_position (user_data,
 					      ROW_TYPE_BOOKMARK_SEPARATOR),

@@ -19,6 +19,7 @@
 #ifndef __GTK_FILE_CHOOSER_PRIVATE_H__
 #define __GTK_FILE_CHOOSER_PRIVATE_H__
 
+#include "gtkbookmarksmanager.h"
 #include "gtkfilechooser.h"
 #include "gtkfilesystem.h"
 #include "gtkfilesystemmodel.h"
@@ -42,11 +43,11 @@ G_BEGIN_DECLS
 #define SETTINGS_KEY_WINDOW_POSITION     "window-position"
 #define SETTINGS_KEY_WINDOW_SIZE         "window-size"
 #define SETTINGS_KEY_SIDEBAR_WIDTH       "sidebar-width"
+#define SETTINGS_KEY_STARTUP_MODE        "startup-mode"
 
 #define GTK_FILE_CHOOSER_GET_IFACE(inst)  (G_TYPE_INSTANCE_GET_INTERFACE ((inst), GTK_TYPE_FILE_CHOOSER, GtkFileChooserIface))
 
 typedef struct _GtkFileChooserIface GtkFileChooserIface;
-typedef struct _GtkFileChooserDefaultPrivate GtkFileChooserDefaultPrivate;
 
 struct _GtkFileChooserIface
 {
@@ -101,58 +102,6 @@ gboolean       _gtk_file_chooser_remove_shortcut_folder  (GtkFileChooser    *cho
 							  GError           **error);
 GSList *       _gtk_file_chooser_list_shortcut_folder_files (GtkFileChooser *chooser);
 
-/* GtkFileChooserDialog private */
-
-struct _GtkFileChooserDialogPrivate
-{
-  GtkWidget *widget;
-
-  /* for use with GtkFileChooserEmbed */
-  gboolean response_requested;
-};
-
-
-/* GtkFileChooserWidget private */
-
-struct _GtkFileChooserWidgetPrivate
-{
-  GtkWidget *impl;
-
-  char *file_system;
-};
-
-
-/* GtkFileChooserDefault private */
-
-typedef enum {
-  LOAD_EMPTY,			/* There is no model */
-  LOAD_PRELOAD,			/* Model is loading and a timer is running; model isn't inserted into the tree yet */
-  LOAD_LOADING,			/* Timeout expired, model is inserted into the tree, but not fully loaded yet */
-  LOAD_FINISHED			/* Model is fully loaded and inserted into the tree */
-} LoadState;
-
-typedef enum {
-  RELOAD_EMPTY,			/* No folder has been set */
-  RELOAD_HAS_FOLDER		/* We have a folder, although it may not be completely loaded yet; no need to reload */
-} ReloadState;
-
-typedef enum {
-  LOCATION_MODE_PATH_BAR,
-  LOCATION_MODE_FILENAME_ENTRY
-} LocationMode;
-
-typedef enum {
-  OPERATION_MODE_BROWSE,
-  OPERATION_MODE_SEARCH,
-  OPERATION_MODE_RECENT
-} OperationMode;
-
-struct _GtkFileChooserDefault
-{
-  GtkBox parent_instance;
-
-  GtkFileChooserDefaultPrivate *priv;
-};
 
 G_END_DECLS
 

@@ -33,6 +33,11 @@
     <value nick='descending' value='1'/>
   </enum>
 
+  <enum id='org.gtk.Settings.FileChooser.StartupMode'>
+    <value nick='recent' value='0'/>
+    <value nick='cwd' value='1'/>
+  </enum>
+
   <schema id='org.gtk.Settings.FileChooser' path='/org/gtk/settings/file-chooser/'>
     <key name='last-folder-uri' type='s'>
       <default>""</default>
@@ -62,6 +67,9 @@
     </key>
     <key name='window-size' type='(ii)'>
       <default>(-1, -1)</default>
+    </key>
+    <key name='startup-mode' enum='org.gtk.Settings.FileChooser.StartupMode'>
+      <default>'recent'</default>
     </key>
     <key name='sidebar-width' type='i'>
       <default>148</default>

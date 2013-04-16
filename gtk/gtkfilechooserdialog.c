@@ -193,6 +193,14 @@
  */
 
 
+struct _GtkFileChooserDialogPrivate
+{
+  GtkWidget *widget;
+
+  /* for use with GtkFileChooserEmbed */
+  gboolean response_requested;
+};
+
 #define GTK_FILE_CHOOSER_DIALOG_GET_PRIVATE(o)  (GTK_FILE_CHOOSER_DIALOG (o)->priv)
 
 static void     gtk_file_chooser_dialog_set_property (GObject               *object,

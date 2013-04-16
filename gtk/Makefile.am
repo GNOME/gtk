@@ -295,6 +295,7 @@ gtk_public_h_sources = 		\
 	gtkpagesetup.h		\
 	gtkpaned.h		\
 	gtkpapersize.h		\
+	gtkplacessidebar.h	\
 	gtkplug.h		\
 	gtkprintcontext.h	\
 	gtkprintoperation.h	\
@@ -421,6 +422,7 @@ gtk_private_h_sources =		\
 	gtkbindingsprivate.h	\
 	gtkbitmaskprivate.h	\
 	gtkbitmaskprivateimpl.h	\
+	gtkbookmarksmanager.h	\
 	gtkborderimageprivate.h \
 	gtkboxprivate.h         \
 	gtkbubblewindowprivate.h	\
@@ -547,6 +549,7 @@ gtk_private_h_sources =		\
 	gtktextutil.h		\
 	gtkthemingbackgroundprivate.h \
 	gtkthemingengineprivate.h \
+	gtktrashmonitor.h	\
 	gtktoolpaletteprivate.h	\
 	gtktreedatalist.h	\
 	gtktreeprivate.h	\
@@ -621,6 +624,7 @@ gtk_base_c_sources = 		\
 	gtkbbox.c		\
 	gtkbin.c		\
 	gtkbindings.c		\
+	gtkbookmarksmanager.c	\
 	gtkborder.c		\
 	gtkborderimage.c	\
 	gtkbox.c		\
@@ -783,6 +787,7 @@ gtk_base_c_sources = 		\
 	gtkpango.c		\
 	gtkpapersize.c		\
 	gtkpathbar.c		\
+	gtkplacessidebar.c	\
 	gtkpressandhold.c	\
 	gtkprintcontext.c	\
 	gtkprintoperation.c	\
@@ -866,6 +871,7 @@ gtk_base_c_sources = 		\
 	gtktoolpalette.c	\
 	gtktoolshell.c		\
 	gtktooltip.c		\
+	gtktrashmonitor.c	\
 	gtktreedatalist.c	\
 	gtktreednd.c		\
 	gtktreemenu.c		\
