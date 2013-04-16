@@ -296,6 +296,33 @@ gdk_display_manager_get (void)
   return manager;
 }
 
+typedef struct _GdkBackend GdkBackend;
+
+struct _GdkBackend {
+  const char *name;
+  GType (* get_backend_type) (void);
+};
+
+GdkBackend gdk_backends[] = {
+#ifdef GDK_WINDOWING_QUARTZ
+  { "quartz",   gdk_quartz_display_manager_get_type },
+#endif
+#ifdef GDK_WINDOWING_WIN32
+  { "win32",    gdk_quartz_display_manager_get_type },
+#endif
+#ifdef GDK_WINDOWING_X11
+  { "x11",      gdk_x11_display_manager_get_type },
+#endif
+#ifdef GDK_WINDOWING_WAYLAND
+  { "wayland",   gdk_wayland_display_manager_get_type },
+#endif
+#ifdef GDK_WINDOWING_BROADWAY
+  { "broadway",   gdk_broadway_display_manager_get_type },
+#endif
+  /* NULL-terminating this array so we can use commas above */
+  { NULL, NULL }
+};
+
 /**
  * gdk_display_manager_peek:
  *
@@ -315,7 +342,7 @@ gdk_display_manager_peek (void)
     {
       const gchar *backend_list;
       gchar **backends;
-      gint i;
+      gint i, j;
       gboolean allow_any;
 
       if (allowed_backends == NULL)
@@ -335,61 +362,18 @@ gdk_display_manager_peek (void)
           if (!allow_any && !any && !strstr (allowed_backends, backend))
             continue;
 
-#ifdef GDK_WINDOWING_QUARTZ
-          if ((any && allow_any) ||
-              (any && strstr (allowed_backends, "quartz")) ||
-              g_str_equal (backend, "quartz"))
+          for (j = 0; gdk_backends[j].name != NULL; j++)
             {
-              GDK_NOTE (MISC, g_message ("Trying quartz backend"));
-              manager = g_initable_new (gdk_quartz_display_manager_get_type (), NULL, NULL, NULL);
-              if (manager)
-                break;
+              if ((any && allow_any) ||
+                  (any && strstr (allowed_backends, gdk_backends[j].name)) ||
+                  g_str_equal (backend, gdk_backends[j].name))
+                {
+                  GDK_NOTE (MISC, g_message ("Trying %s backend", gdk_backends[j].name));
+                  manager = g_initable_new (gdk_backends[j].get_backend_type (), NULL, NULL, NULL);
+                  if (manager)
+                    break;
+                }
             }
-#endif
-#ifdef GDK_WINDOWING_WIN32
-          if ((any && allow_any) ||
-              (any && strstr (allowed_backends, "win32")) ||
-              g_str_equal (backend, "win32"))
-            {
-              GDK_NOTE (MISC, g_message ("Trying win32 backend"));
-              manager = g_initable_new (gdk_win32_display_manager_get_type (), NULL, NULL, NULL);
-              if (manager)
-                break;
-            }
-#endif
-#ifdef GDK_WINDOWING_X11
-          if ((any && allow_any) ||
-              (any && strstr (allowed_backends, "x11")) ||
-              g_str_equal (backend, "x11"))
-            {
-              GDK_NOTE (MISC, g_message ("Trying x11 backend"));
-              manager = g_initable_new (gdk_x11_display_manager_get_type (), NULL, NULL, NULL);
-              if (manager)
-                break;
-            }
-#endif
-#ifdef GDK_WINDOWING_WAYLAND
-          if ((any && allow_any) ||
-              (any && strstr (allowed_backends, "wayland")) ||
-              g_str_equal (backend, "wayland"))
-            {
-              GDK_NOTE (MISC, g_message ("Trying wayland backend"));
-              manager = g_initable_new (gdk_wayland_display_manager_get_type (), NULL, NULL, NULL);
-              if (manager)
-                break;
-            }
-#endif
-#ifdef GDK_WINDOWING_BROADWAY
-          if ((any && allow_any) ||
-              (any && strstr (allowed_backends, "broadway")) ||
-              g_str_equal (backend, "broadway"))
-            {
-              GDK_NOTE (MISC, g_message ("Trying broadway backend"));
-              manager = g_initable_new (gdk_broadway_display_manager_get_type (), NULL, NULL, NULL);
-              if (manager)
-                break;
-            }
-#endif
         }
       g_strfreev (backends);
     }
