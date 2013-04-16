@@ -693,16 +693,7 @@ gdk_keymap_get_modifier_mask (GdkKeymap         *keymap,
 gchar *
 gdk_keyval_name (guint keyval)
 {
-  GdkDisplayManagerClass *manager_class;
-  GdkDisplayManager *manager;
-
-  manager = gdk_display_manager_get ();
-  manager_class = GDK_DISPLAY_MANAGER_GET_CLASS (manager);
-
-  if (manager_class->get_keyval_name)
-    return manager_class->get_keyval_name (manager, keyval);
-  else
-    return _gdk_keyval_name (keyval);
+  return _gdk_keyval_name (keyval);
 }
 
 /**
@@ -721,16 +712,7 @@ gdk_keyval_name (guint keyval)
 guint
 gdk_keyval_from_name (const gchar *keyval_name)
 {
-  GdkDisplayManagerClass *manager_class;
-  GdkDisplayManager *manager;
-
-  manager = gdk_display_manager_get ();
-  manager_class = GDK_DISPLAY_MANAGER_GET_CLASS (manager);
-
-  if (manager_class->lookup_keyval)
-    return manager_class->lookup_keyval (manager, keyval_name);
-  else
-    return _gdk_keyval_from_name (keyval_name);
+  return _gdk_keyval_from_name (keyval_name);
 }
 
 /**
@@ -747,20 +729,7 @@ gdk_keyval_convert_case (guint symbol,
                          guint *lower,
                          guint *upper)
 {
-  GdkDisplayManager *manager;
   guint xlower, xupper;
-
-  manager = _gdk_display_manager_get_nocreate ();
-  if (manager)
-    {
-      GdkDisplayManagerClass *manager_class = GDK_DISPLAY_MANAGER_GET_CLASS (manager);
-
-      if (manager_class->keyval_convert_case)
-        {
-          manager_class->keyval_convert_case (manager, symbol, lower, upper);
-          return;
-        }
-    }
 
   xlower = symbol;
   xupper = symbol;

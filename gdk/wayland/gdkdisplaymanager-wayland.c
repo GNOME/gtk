@@ -27,8 +27,6 @@
 #include "gdkwayland.h"
 #include "gdkinternals.h"
 
-#include <xkbcommon/xkbcommon.h>
-
 struct _GdkWaylandDisplayManager
 {
   GdkDisplayManager parent;
@@ -97,40 +95,6 @@ gdk_wayland_display_manager_open_display (GdkDisplayManager *manager,
   return _gdk_wayland_display_open (name);
 }
 
-static guint
-gdk_wayland_display_manager_lookup_keyval (GdkDisplayManager *manager,
-					   const gchar       *keyval_name)
-{
-  g_return_val_if_fail (keyval_name != NULL, 0);
-
-  return xkb_keysym_from_name (keyval_name, 0);
-}
-
-static gchar *
-gdk_wayland_display_manager_get_keyval_name (GdkDisplayManager *manager,
-					     guint              keyval)
-{
-  static char buf[128];
-
-  switch (keyval)
-    {
-    case 0:
-      return NULL;
-    case GDK_KEY_Page_Up:
-      return "Page_Up";
-    case GDK_KEY_Page_Down:
-      return "Page_Down";
-    case GDK_KEY_KP_Page_Up:
-      return "KP_Page_Up";
-    case GDK_KEY_KP_Page_Down:
-      return "KP_Page_Down";
-    }
-
-  xkb_keysym_get_name(keyval, buf, sizeof (buf));
-
-  return buf;
-}
-
 static void
 gdk_wayland_display_manager_class_init (GdkWaylandDisplayManagerClass *class)
 {
@@ -140,8 +104,6 @@ gdk_wayland_display_manager_class_init (GdkWaylandDisplayManagerClass *class)
   object_class->finalize = gdk_wayland_display_manager_finalize;
 
   manager_class->open_display = gdk_wayland_display_manager_open_display;
-  manager_class->lookup_keyval = gdk_wayland_display_manager_lookup_keyval;
-  manager_class->get_keyval_name = gdk_wayland_display_manager_get_keyval_name;
 }
 
 static void

@@ -1382,63 +1382,6 @@ gdk_x11_keymap_translate_keyboard_state (GdkKeymap       *keymap,
   return tmp_keyval != NoSymbol;
 }
 
-/* Key handling not part of the keymap */
-gchar*
-_gdk_x11_display_manager_get_keyval_name (GdkDisplayManager *manager,
-                                          guint              keyval)
-{
-  switch (keyval)
-    {
-    case GDK_KEY_Page_Up:
-      return "Page_Up";
-    case GDK_KEY_Page_Down:
-      return "Page_Down";
-    case GDK_KEY_KP_Page_Up:
-      return "KP_Page_Up";
-    case GDK_KEY_KP_Page_Down:
-      return "KP_Page_Down";
-    }
-
-  return XKeysymToString (keyval);
-}
-
-guint
-_gdk_x11_display_manager_lookup_keyval (GdkDisplayManager *manager,
-                                        const gchar       *keyval_name)
-{
-  g_return_val_if_fail (keyval_name != NULL, 0);
-
-  return XStringToKeysym (keyval_name);
-}
-
-void
-_gdk_x11_display_manager_keyval_convert_case (GdkDisplayManager *manager,
-                                              guint              symbol,
-                                              guint             *lower,
-                                              guint             *upper)
-{
-  KeySym xlower = 0;
-  KeySym xupper = 0;
-
-  /* Check for directly encoded 24-bit UCS characters: */
-  if ((symbol & 0xff000000) == 0x01000000)
-    {
-      if (lower)
-        *lower = gdk_unicode_to_keyval (g_unichar_tolower (symbol & 0x00ffffff));
-      if (upper)
-        *upper = gdk_unicode_to_keyval (g_unichar_toupper (symbol & 0x00ffffff));
-      return;
-    }
-
-  if (symbol)
-    XConvertCase (symbol, &xlower, &xupper);
-
-  if (lower)
-    *lower = xlower;
-  if (upper)
-    *upper = xupper;
-}
-
 /**
  * gdk_x11_keymap_get_group_for_state:
  * @keymap: a #GdkX11Keymap

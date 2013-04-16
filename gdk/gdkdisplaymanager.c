@@ -397,15 +397,6 @@ gdk_display_manager_peek (void)
   return manager;
 }
 
-/* Used for cases where we don't actually want to instantiate a
- * display manager if none exists.  Internal only.
- */
-GdkDisplayManager *
-_gdk_display_manager_get_nocreate (void)
-{
-  return manager;
-}
-
 /**
  * gdk_display_manager_get_default_display:
  * @manager: a #GdkDisplayManager

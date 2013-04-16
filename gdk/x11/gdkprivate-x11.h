@@ -252,14 +252,6 @@ GdkAtom _gdk_x11_display_manager_atom_intern   (GdkDisplayManager *manager,
                                                 gboolean           copy_name);
 gchar * _gdk_x11_display_manager_get_atom_name (GdkDisplayManager *manager,
                                                 GdkAtom            atom);
-guint   _gdk_x11_display_manager_lookup_keyval (GdkDisplayManager *manager,
-                                                const gchar       *name);
-gchar * _gdk_x11_display_manager_get_keyval_name (GdkDisplayManager *manager,
-                                                  guint              keyval);
-void    _gdk_x11_display_manager_keyval_convert_case (GdkDisplayManager *manager,
-                                                      guint              symbol,
-                                                      guint             *lower,
-                                                      guint             *upper);
 
 GdkCursor *_gdk_x11_display_get_cursor_for_type     (GdkDisplay    *display,
                                                      GdkCursorType  type);

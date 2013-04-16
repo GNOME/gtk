@@ -113,7 +113,4 @@ gdk_x11_display_manager_class_init (GdkX11DisplayManagerClass *class)
   object_class->finalize = gdk_x11_display_manager_finalize;
 
   manager_class->open_display = gdk_x11_display_manager_open_display;
-  manager_class->lookup_keyval = _gdk_x11_display_manager_lookup_keyval;
-  manager_class->get_keyval_name = _gdk_x11_display_manager_get_keyval_name;
-  manager_class->keyval_convert_case = _gdk_x11_display_manager_keyval_convert_case;
 }

@@ -44,23 +44,10 @@ struct _GdkDisplayManagerClass
   GdkDisplay * (*open_display)        (GdkDisplayManager *manager,
                                        const gchar       *name);
 
-  /* FIXME the following should really be frontend-only, not vfuncs */
-  guint        (*lookup_keyval)       (GdkDisplayManager *manager,
-                                       const gchar       *name);
-  gchar *      (*get_keyval_name)     (GdkDisplayManager *manager,
-                                       guint              keyval);
-  void         (*keyval_convert_case) (GdkDisplayManager *manager,
-                                       guint              keyval,
-                                       guint             *lower,
-                                       guint             *upper);
-
   /* signals */
   void         (*display_opened)      (GdkDisplayManager *manager,
                                        GdkDisplay        *display);
 };
-
-GdkDisplayManager *
-_gdk_display_manager_get_nocreate (void);
 
 void            _gdk_display_manager_add_display        (GdkDisplayManager      *manager,
                                                          GdkDisplay             *display);
