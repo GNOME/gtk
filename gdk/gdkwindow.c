@@ -143,8 +143,6 @@
  * multiple client side windows in the same backing store.
  */
 
-#define USE_BACKING_STORE	/* Appears to work on Win32, too, now. */
-
 /* This adds a local value to the GdkVisibilityState enum */
 #define GDK_VISIBILITY_NOT_VIEWABLE 3
 
@@ -2940,7 +2938,6 @@ void
 gdk_window_begin_paint_region (GdkWindow       *window,
 			       const cairo_region_t *region)
 {
-#ifdef USE_BACKING_STORE
   GdkRectangle clip_box;
   GdkWindowPaint *paint, *implicit_paint;
   GdkWindow *impl_window;
@@ -3050,8 +3047,6 @@ gdk_window_begin_paint_region (GdkWindow       *window,
       gdk_window_clear_backing_region (window,
 				       paint->region);
     }
-
-#endif /* USE_BACKING_STORE */
 }
 
 /**
@@ -3070,7 +3065,6 @@ gdk_window_begin_paint_region (GdkWindow       *window,
 void
 gdk_window_end_paint (GdkWindow *window)
 {
-#ifdef USE_BACKING_STORE
   GdkWindow *composited;
   GdkWindowPaint *paint;
   GdkRectangle clip_box;
@@ -3146,7 +3140,6 @@ gdk_window_end_paint (GdkWindow *window)
 	  break;
 	}
     }
-#endif /* USE_BACKING_STORE */
 }
 
 static void
