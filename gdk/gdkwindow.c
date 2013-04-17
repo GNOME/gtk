@@ -123,9 +123,7 @@
  * All GdkWindows (native or not) track the position of the window in the parent
  * (x, y), the size of the window (width, height), the position of the window
  * with respect to the impl window (abs_x, abs_y). We also track the clip
- * region of the window wrt parent windows and siblings, in window-relative
- * coordinates with and without child windows included (clip_region,
- * clip_region_with_children).
+ * region of the window wrt parent windows, in window-relative coordinates (clip_region).
  *
  * All toplevel windows are native windows, but also child windows can be
  * native (although not children of offscreens). We always listen to
@@ -216,7 +214,6 @@ static void gdk_window_invalidate_rect_full (GdkWindow          *window,
 					     const GdkRectangle *rect,
 					     gboolean            invalidate_children,
 					     ClearBg             clear_bg);
-static void _gdk_window_propagate_has_alpha_background (GdkWindow *window);
 static cairo_surface_t *gdk_window_ref_impl_surface (GdkWindow *window);
 
 static void gdk_window_set_frame_clock (GdkWindow      *window,
@@ -565,9 +562,6 @@ gdk_window_finalize (GObject *object)
   if (window->devices_inside)
     g_list_free (window->devices_inside);
 
-  if (window->layered_region)
-      cairo_region_destroy (window->layered_region);
-
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -655,72 +649,76 @@ gdk_window_has_no_impl (GdkWindow *window)
   return window->impl_window != window;
 }
 
-static gboolean
-gdk_window_has_alpha (GdkWindow *window)
-{
-  return !gdk_window_has_impl (window) &&
-    (window->has_alpha_background || window->alpha != 255);
-}
-
 static void
-remove_layered_child_area (GdkWindow *window,
-			   cairo_region_t *region)
+remove_sibling_overlapped_area (GdkWindow *window,
+				cairo_region_t *region)
 {
-  GdkWindow *child;
+  GdkWindow *parent;
+  GdkWindow *sibling;
   cairo_region_t *child_region;
   GdkRectangle r;
   GList *l;
+  cairo_region_t *shape;
 
-  for (l = window->children; l; l = l->next)
+  parent = window->parent;
+
+  if (parent == NULL)
+    return;
+
+  /* Convert from from window coords to parent coords */
+  cairo_region_translate (region, window->x, window->y);
+
+  for (l = parent->children; l; l = l->next)
     {
-      child = l->data;
+      sibling = l->data;
 
-      /* If region is empty already, no need to do
-	 anything potentially costly */
-      if (cairo_region_is_empty (region))
+      if (sibling == window)
 	break;
 
-      if (!GDK_WINDOW_IS_MAPPED (child) || child->input_only || child->composited)
+      if (!GDK_WINDOW_IS_MAPPED (sibling) || sibling->input_only || sibling->composited)
 	continue;
 
       /* Ignore offscreen children, as they don't draw in their parent and
        * don't take part in the clipping */
-      if (gdk_window_is_offscreen (child))
+      if (gdk_window_is_offscreen (sibling))
 	continue;
 
-      /* Only non-impl children with alpha add to the layered region */
-      if (!gdk_window_has_alpha (child))
-	continue;
-
-      r.x = child->x;
-      r.y = child->y;
-      r.width = child->width;
-      r.height = child->height;
-
-      /* Bail early if child totally outside region */
-      if (cairo_region_contains_rectangle (region, &r) == CAIRO_REGION_OVERLAP_OUT)
-	continue;
+      r.x = sibling->x;
+      r.y = sibling->y;
+      r.width = sibling->width;
+      r.height = sibling->height;
 
       child_region = cairo_region_create_rectangle (&r);
-      if (child->shape)
+
+      if (sibling->shape)
 	{
 	  /* Adjust shape region to parent window coords */
-	  cairo_region_translate (child->shape, child->x, child->y);
-	  cairo_region_intersect (child_region, child->shape);
-	  cairo_region_translate (child->shape, -child->x, -child->y);
+	  cairo_region_translate (sibling->shape, sibling->x, sibling->y);
+	  cairo_region_intersect (child_region, sibling->shape);
+	  cairo_region_translate (sibling->shape, -sibling->x, -sibling->y);
+	}
+      else if (window->window_type == GDK_WINDOW_FOREIGN)
+	{
+	  shape = GDK_WINDOW_IMPL_GET_CLASS (sibling)->get_shape (sibling);
+	  if (shape)
+	    {
+	      cairo_region_intersect (child_region, shape);
+	      cairo_region_destroy (shape);
+	    }
 	}
 
       cairo_region_subtract (region, child_region);
       cairo_region_destroy (child_region);
     }
+
+  /* Convert back to window coords */
+  cairo_region_translate (region, -window->x, -window->y);
 }
 
 static void
 remove_child_area (GdkWindow *window,
-		   GdkWindow *until,
 		   gboolean for_input,
-		   cairo_region_t *region,
-		   cairo_region_t *layered_region)
+		   cairo_region_t *region)
 {
   GdkWindow *child;
   cairo_region_t *child_region;
@@ -731,9 +729,6 @@ remove_child_area (GdkWindow *window,
   for (l = window->children; l; l = l->next)
     {
       child = l->data;
-
-      if (child == until)
-	break;
 
       /* If region is empty already, no need to do
 	 anything potentially costly */
@@ -791,13 +786,7 @@ remove_child_area (GdkWindow *window,
 	    }
 	}
 
-      if (gdk_window_has_alpha (child))
-	{
-	  if (layered_region != NULL)
-	    cairo_region_union (layered_region, child_region);
-	}
-      else
-	cairo_region_subtract (region, child_region);
+      cairo_region_subtract (region, child_region);
       cairo_region_destroy (child_region);
     }
 }
@@ -924,8 +913,7 @@ apply_clip_as_shape (GdkWindow *window)
   r.height = window->height;
 
   region = cairo_region_copy (window->clip_region);
-  if (window->layered_region)
-    cairo_region_subtract (region, window->layered_region);
+  remove_sibling_overlapped_area (window, region);
 
   /* We only apply the clip region if would differ
      from the actual clip region implied by the size
@@ -948,7 +936,7 @@ recompute_visible_regions_internal (GdkWindow *private,
   GdkRectangle r;
   GList *l;
   GdkWindow *child;
-  cairo_region_t *new_clip, *new_layered;
+  cairo_region_t *new_clip;
   gboolean clip_region_changed;
   gboolean abs_pos_changed;
   int old_abs_x, old_abs_y;
@@ -975,13 +963,11 @@ recompute_visible_regions_internal (GdkWindow *private,
 
   /* Update clip region based on:
    * parent clip
-   * window size
-   * siblings in parents above window
+   * window size/position
    */
   clip_region_changed = FALSE;
   if (recalculate_clip)
     {
-      new_layered = cairo_region_create ();
       if (private->viewable)
 	{
 	  /* Calculate visible region (sans children) in parent window coords */
@@ -992,17 +978,10 @@ recompute_visible_regions_internal (GdkWindow *private,
 	  new_clip = cairo_region_create_rectangle (&r);
 
 	  if (!gdk_window_is_toplevel (private))
-	    {
-	      cairo_region_intersect (new_clip, private->parent->clip_region);
-	      cairo_region_union (new_layered, private->parent->layered_region);
-
-	      /* Remove all overlapping children from parent. */
-	      remove_child_area (private->parent, private, FALSE, new_clip, new_layered);
-	    }
+	    cairo_region_intersect (new_clip, private->parent->clip_region);
 
 	  /* Convert from parent coords to window coords */
 	  cairo_region_translate (new_clip, -private->x, -private->y);
-	  cairo_region_translate (new_layered, -private->x, -private->y);
 
 	  if (private->shape)
 	    cairo_region_intersect (new_clip, private->shape);
@@ -1010,29 +989,13 @@ recompute_visible_regions_internal (GdkWindow *private,
       else
 	  new_clip = cairo_region_create ();
 
-      cairo_region_intersect (new_layered, new_clip);
-      
       if (private->clip_region == NULL ||
 	  !cairo_region_equal (private->clip_region, new_clip))
 	clip_region_changed = TRUE;
 
-      if (private->layered_region == NULL ||
-	  !cairo_region_equal (private->layered_region, new_layered))
-	clip_region_changed = TRUE;
-      
       if (private->clip_region)
 	cairo_region_destroy (private->clip_region);
       private->clip_region = new_clip;
-
-      if (private->layered_region != NULL)
-	cairo_region_destroy (private->layered_region);
-      private->layered_region = new_layered;
-
-      if (private->clip_region_with_children)
-	cairo_region_destroy (private->clip_region_with_children);
-      private->clip_region_with_children = cairo_region_copy (private->clip_region);
-      if (private->window_type != GDK_WINDOW_ROOT)
-	remove_child_area (private, NULL, FALSE, private->clip_region_with_children, NULL);
     }
 
   if (clip_region_changed)
@@ -1446,7 +1409,6 @@ gdk_window_new (GdkWindow     *parent,
 
       /* XXX: Cache this somehow? */
       window->background = cairo_pattern_create_rgba (0, 0, 0, 0);
-      window->has_alpha_background = TRUE;
     }
   else
     {
@@ -1748,21 +1710,9 @@ gdk_window_reparent (GdkWindow *window,
 
   _gdk_window_update_viewable (window);
 
-  if (window->background == NULL)
-    {
-      /* parent relative background, update has_alpha_background */
-      if (window->parent == NULL ||
-	  window->parent->window_type == GDK_WINDOW_ROOT)
-	window->has_alpha_background = FALSE;
-      else
-	window->has_alpha_background = window->parent->has_alpha_background;
-    }
-
   recompute_visible_regions (window, TRUE, FALSE);
   if (old_parent && GDK_WINDOW_TYPE (old_parent) != GDK_WINDOW_ROOT)
     recompute_visible_regions (old_parent, FALSE, TRUE);
-
-  _gdk_window_propagate_has_alpha_background (window);
 
   /* We used to apply the clip as the shape, but no more.
      Reset this to the real shape */
@@ -1880,6 +1830,8 @@ gdk_window_ensure_native (GdkWindow *window)
 
   if (gdk_window_is_viewable (window))
     impl_class->show (window, FALSE);
+
+  gdk_window_invalidate_in_parent (window);
 
   return TRUE;
 }
@@ -2118,12 +2070,6 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 	    {
 	      cairo_region_destroy (window->clip_region);
 	      window->clip_region = NULL;
-	    }
-
-	  if (window->clip_region_with_children)
-	    {
-	      cairo_region_destroy (window->clip_region_with_children);
-	      window->clip_region_with_children = NULL;
 	    }
 	}
       break;
@@ -2847,7 +2793,7 @@ gdk_window_flush_implicit_paint (GdkWindow *window)
 
   paint = l->data;
 
-  region = cairo_region_copy (window->clip_region_with_children);
+  region = cairo_region_copy (window->clip_region);
   cairo_region_translate (region, window->abs_x, window->abs_y);
 
   /* Anything in the whole flushed window that was drawn is now
@@ -3045,7 +2991,7 @@ gdk_window_begin_paint_region (GdkWindow       *window,
   paint = g_new (GdkWindowPaint, 1);
   paint->region = cairo_region_copy (region);
 
-  cairo_region_intersect (paint->region, window->clip_region_with_children);
+  cairo_region_intersect (paint->region, window->clip_region);
   cairo_region_get_extents (paint->region, &clip_box);
 
   cairo_region_translate (paint->region, window->abs_x, window->abs_y);
@@ -3080,9 +3026,8 @@ gdk_window_begin_paint_region (GdkWindow       *window,
      by being drawn in back to front order. However, if implicit paints are not used, for
      instance if it was flushed due to a non-double-buffered paint in the middle of the
      expose we need to copy in the existing data here. */
-  if (gdk_window_has_alpha (window) &&
-      (!implicit_paint ||
-       (implicit_paint && implicit_paint->flushed != NULL && !cairo_region_is_empty (implicit_paint->flushed))))
+  if (!implicit_paint ||
+      (implicit_paint && implicit_paint->flushed != NULL && !cairo_region_is_empty (implicit_paint->flushed)))
     {
       cairo_t *cr = cairo_create (paint->surface);
       /* We can't use gdk_cairo_set_source_window here, as that might
@@ -3186,7 +3131,7 @@ gdk_window_end_paint (GdkWindow *window)
     {
       cairo_t *cr;
 
-      full_clip = cairo_region_copy (window->clip_region_with_children);
+      full_clip = cairo_region_copy (window->clip_region);
       cairo_region_intersect (full_clip, paint->region);
 
       cr = gdk_cairo_create (window);
@@ -3535,7 +3480,7 @@ gdk_cairo_create (GdkWindow *window)
 
   if (!window->paint_stack)
     {
-      gdk_cairo_region (cr, window->clip_region_with_children);
+      gdk_cairo_region (cr, window->clip_region);
       cairo_clip (cr);
     }
   else
@@ -3715,10 +3660,9 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
       end_implicit = gdk_window_begin_implicit_paint (window->impl_window, &clip_box, TRUE, window->alpha);
     }
 
-  /* Paint the window before the children, clipped to the window region
-     with visible child windows removed */
+  /* Paint the window before the children, clipped to the window region */
   clipped_expose_region = cairo_region_copy (expose_region);
-  cairo_region_intersect (clipped_expose_region, window->clip_region_with_children);
+  cairo_region_intersect (clipped_expose_region, window->clip_region);
 
   if (!cairo_region_is_empty (clipped_expose_region) &&
       !window->destroyed)
@@ -4416,7 +4360,7 @@ gdk_window_get_update_area (GdkWindow *window)
 
   if (impl_window->update_area)
     {
-      tmp_region = cairo_region_copy (window->clip_region_with_children);
+      tmp_region = cairo_region_copy (window->clip_region);
       /* Convert to impl coords */
       cairo_region_translate (tmp_region, window->abs_x, window->abs_y);
       cairo_region_intersect (tmp_region, impl_window->update_area);
@@ -4431,12 +4375,12 @@ gdk_window_get_update_area (GdkWindow *window)
 	  /* Convert from impl coords */
 	  cairo_region_translate (tmp_region, -window->abs_x, -window->abs_y);
 
-	  /* Don't remove any update area that is overlapped by non-opaque windows
-	     (children or siblings) with alpha, as these really need to be repainted
-	     independently of this window. */
+	  /* Don't remove any update area that is overlapped by sibling windows
+	     or child windows as these really need to be repainted independently of this window. */
 	  to_remove = cairo_region_copy (tmp_region);
-	  cairo_region_subtract (to_remove, window->parent->layered_region);
-	  remove_layered_child_area (window, to_remove);
+
+	  remove_child_area (window, FALSE, to_remove);
+	  remove_sibling_overlapped_area (window, to_remove);
 
 	  /* Remove from update_area */
 	  cairo_region_translate (to_remove, window->abs_x, window->abs_y);
@@ -6068,28 +6012,6 @@ gdk_window_set_background_rgba (GdkWindow     *window,
 }
 
 
-/* Updates has_alpha_background recursively for all child windows
-   that have parent-relative alpha */
-static void
-_gdk_window_propagate_has_alpha_background (GdkWindow *window)
-{
-  GdkWindow *child;
-  GList *l;
-
-  for (l = window->children; l; l = l->next)
-    {
-      child = l->data;
-
-      if (child->background == NULL &&
-	  child->has_alpha_background != window->has_alpha_background)
-	{
-	  child->has_alpha_background = window->has_alpha_background;
-	  recompute_visible_regions (child, TRUE, FALSE);
-	  _gdk_window_propagate_has_alpha_background (child);
-	}
-    }
-}
-
 /**
  * gdk_window_set_background_pattern:
  * @window: a #GdkWindow
@@ -6107,9 +6029,6 @@ void
 gdk_window_set_background_pattern (GdkWindow *window,
                                    cairo_pattern_t *pattern)
 {
-  gboolean has_alpha;
-  cairo_pattern_type_t type;
-  
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (window->input_only)
@@ -6120,69 +6039,6 @@ gdk_window_set_background_pattern (GdkWindow *window,
   if (window->background)
     cairo_pattern_destroy (window->background);
   window->background = pattern;
-
-  has_alpha = TRUE;
-
-  if (pattern == NULL)
-    {
-      /* parent-relative, copy has_alpha from parent */
-      if (window->parent == NULL ||
-	  window->parent->window_type == GDK_WINDOW_ROOT)
-	has_alpha = FALSE;
-      else
-	has_alpha = window->parent->has_alpha_background;
-    }
-  else
-    {
-      type = cairo_pattern_get_type (pattern);
-
-      if (type == CAIRO_PATTERN_TYPE_SOLID)
-	{
-	  double alpha;
-	  cairo_pattern_get_rgba (pattern, NULL, NULL, NULL, &alpha);
-	  if (alpha == 1.0)
-	    has_alpha = FALSE;
-	}
-      else if (type == CAIRO_PATTERN_TYPE_LINEAR ||
-	       type == CAIRO_PATTERN_TYPE_RADIAL)
-	{
-	  int i, n;
-	  double alpha;
-
-	  n = 0;
-	  cairo_pattern_get_color_stop_count (pattern, &n);
-	  has_alpha = FALSE;
-	  for (i = 0; i < n; i++)
-	    {
-	      cairo_pattern_get_color_stop_rgba (pattern, i, NULL,
-						 NULL, NULL, NULL, &alpha);
-	      if (alpha != 1.0)
-		{
-		  has_alpha = TRUE;
-		  break;
-		}
-	    }
-	}
-      else if (type == CAIRO_PATTERN_TYPE_SURFACE)
-	{
-	  cairo_surface_t *surface;
-	  cairo_content_t content;
-
-	  cairo_pattern_get_surface (pattern, &surface);
-	  content = cairo_surface_get_content (surface);
-	  has_alpha =
-	    (content == CAIRO_CONTENT_ALPHA) ||
-	    (content == CAIRO_CONTENT_COLOR_ALPHA);
-	}
-    }
-
-  if (has_alpha != window->has_alpha_background)
-    {
-      window->has_alpha_background = has_alpha;  
-      recompute_visible_regions (window, TRUE, FALSE);
-
-      _gdk_window_propagate_has_alpha_background (window);
-    }
 
   if (gdk_window_has_impl (window))
     {
@@ -6809,7 +6665,7 @@ do_child_shapes (GdkWindow *window,
   r.height = window->height;
 
   region = cairo_region_create_rectangle (&r);
-  remove_child_area (window, NULL, FALSE, region, NULL);
+  remove_child_area (window, FALSE, region);
 
   if (merge && window->shape)
     cairo_region_subtract (region, window->shape);
@@ -6928,7 +6784,7 @@ do_child_input_shapes (GdkWindow *window,
   r.height = window->height;
 
   region = cairo_region_create_rectangle (&r);
-  remove_child_area (window, NULL, TRUE, region, NULL);
+  remove_child_area (window, TRUE, region);
 
   if (merge && window->shape)
     cairo_region_subtract (region, window->shape);
@@ -9366,9 +9222,6 @@ gdk_window_print (GdkWindow *window,
   if (window->alpha != 255)
     g_print (" alpha[%d]",
 	   window->alpha);
-
-  if (window->has_alpha_background)
-    g_print (" alpha_bg");
 
   s = print_region (window->clip_region);
   g_print (" clipbox[%s]", s);
