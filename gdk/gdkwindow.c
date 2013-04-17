@@ -6120,64 +6120,6 @@ move_native_children (GdkWindow *private)
     }
 }
 
-static gboolean
-collect_native_child_region_helper (GdkWindow *window,
-				    GdkWindowImpl *impl,
-				    cairo_region_t **region,
-				    int x_offset,
-				    int y_offset)
-{
-  GdkWindow *child;
-  cairo_region_t *tmp;
-  GList *l;
-
-  for (l = window->children; l != NULL; l = l->next)
-    {
-      child = l->data;
-
-      if (!GDK_WINDOW_IS_MAPPED (child) || child->input_only)
-	continue;
-
-      if (child->impl != impl)
-	{
-	  tmp = cairo_region_copy (child->clip_region);
-	  cairo_region_translate (tmp,
-			     x_offset + child->x,
-			     y_offset + child->y);
-	  if (*region == NULL)
-	    *region = tmp;
-	  else
-	    {
-	      cairo_region_union (*region, tmp);
-	      cairo_region_destroy (tmp);
-	    }
-	}
-      else
-	collect_native_child_region_helper (child, impl, region,
-					    x_offset + child->x,
-					    y_offset + child->y);
-    }
-
-  return FALSE;
-}
-
-static cairo_region_t *
-collect_native_child_region (GdkWindow *window,
-			     gboolean include_this)
-{
-  cairo_region_t *region;
-
-  if (include_this && gdk_window_has_impl (window) && window->viewable)
-    return cairo_region_copy (window->clip_region);
-
-  region = NULL;
-
-  collect_native_child_region_helper (window, window->impl, &region, 0, 0);
-
-  return region;
-}
-
-
 static void
 gdk_window_move_resize_internal (GdkWindow *window,
 				 gboolean   with_move,
@@ -6186,13 +6128,10 @@ gdk_window_move_resize_internal (GdkWindow *window,
 				 gint       width,
 				 gint       height)
 {
-  cairo_region_t *old_region, *old_layered, *new_region, *copy_area;
-  cairo_region_t *old_native_child_region, *new_native_child_region;
-  GdkWindow *impl_window;
+  cairo_region_t *old_region, *new_region;
   GdkWindowImplClass *impl_class;
   gboolean expose;
-  int old_x, old_y, old_abs_x, old_abs_y;
-  int dx, dy;
+  int old_abs_x, old_abs_y;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -6217,39 +6156,15 @@ gdk_window_move_resize_internal (GdkWindow *window,
 
   expose = FALSE;
   old_region = NULL;
-  old_layered = NULL;
 
-  impl_window = gdk_window_get_impl_window (window);
-
-  old_x = window->x;
-  old_y = window->y;
-
-  old_native_child_region = NULL;
   if (gdk_window_is_viewable (window) &&
       !window->input_only)
     {
       expose = TRUE;
 
       old_region = cairo_region_copy (window->clip_region);
-      old_layered = cairo_region_copy (window->layered_region);
       /* Adjust regions to parent window coords */
       cairo_region_translate (old_region, window->x, window->y);
-      cairo_region_translate (old_layered, window->x, window->y);
-
-      old_native_child_region = collect_native_child_region (window, TRUE);
-      if (old_native_child_region)
-	{
-	  /* Adjust region to parent window coords */
-	  cairo_region_translate (old_native_child_region, window->x, window->y);
-
-	  /* Any native window move will immediately copy stuff to the destination, which may overwrite a
-	   * source or destination for a delayed GdkWindowRegionMove. So, we need
-	   * to flush those here for the parent window and all overlapped subwindows
-	   * of it. And we need to do this before setting the new clips as those will be
-	   * affecting this.
-	   */
-	  gdk_window_flush_recursive (window->parent);
-	}
     }
 
   /* Set the new position and size */
@@ -6268,21 +6183,10 @@ gdk_window_move_resize_internal (GdkWindow *window,
       window->height = height;
     }
 
-  dx = window->x - old_x;
-  dy = window->y - old_y;
-
   old_abs_x = window->abs_x;
   old_abs_y = window->abs_y;
 
   recompute_visible_regions (window, TRUE, FALSE);
-
-  new_native_child_region = NULL;
-  if (old_native_child_region)
-    {
-      new_native_child_region = collect_native_child_region (window, TRUE);
-      /* Adjust region to parent window coords */
-      cairo_region_translate (new_native_child_region, window->x, window->y);
-    }
 
   if (gdk_window_has_impl (window))
     {
@@ -6304,85 +6208,12 @@ gdk_window_move_resize_internal (GdkWindow *window,
       /* Adjust region to parent window coords */
       cairo_region_translate (new_region, window->x, window->y);
 
-      /* copy_area:
-       * Part of the data at the new location can be copied from the
-       * old location, this area is the intersection of the old region
-       * moved as the copy will move it and then intersected with
-       * the new region.
-       *
-       * new_region:
-       * Everything in the old and new regions that is not copied must be
-       * invalidated (including children) as this is newly exposed
-       */
-      if (gdk_window_has_alpha (window))
-	copy_area = cairo_region_create (); /* Copy nothing for alpha windows */
-      else
-	copy_area = cairo_region_copy (new_region);
-
-      /* Don't copy from a previously layered region */
-      cairo_region_translate (old_layered, dx, dy);
-      cairo_region_subtract (copy_area, old_layered);
-
-      /* Don't copy into a layered region */
-      cairo_region_translate (copy_area, -window->x, -window->y);
-      cairo_region_subtract (copy_area, window->layered_region);
-      cairo_region_translate (copy_area, window->x, window->y);
-
       cairo_region_union (new_region, old_region);
 
-      if (old_native_child_region)
-	{
-	  /* Don't copy from inside native children, as this is copied by
-	   * the native window move.
-	   */
-	  cairo_region_subtract (old_region, old_native_child_region);
-	}
-      cairo_region_translate (old_region, dx, dy);
-
-      cairo_region_intersect (copy_area, old_region);
-
-      if (new_native_child_region)
-	{
-	  /* Don't copy any bits that would cause a read from the moved
-	     native windows, as we can't read that data */
-	  cairo_region_translate (new_native_child_region, dx, dy);
-	  cairo_region_subtract (copy_area, new_native_child_region);
-	  cairo_region_translate (new_native_child_region, -dx, -dy);
-	}
-
-      cairo_region_subtract (new_region, copy_area);
-
-      /* Convert old region to impl coords */
-      cairo_region_translate (old_region, -dx + window->abs_x - window->x, -dy + window->abs_y - window->y);
-
-      /* convert from parent coords to impl */
-      cairo_region_translate (copy_area, window->abs_x - window->x, window->abs_y - window->y);
-
-      move_region_on_impl (impl_window, copy_area, dx, dy); /* takes ownership of copy_area */
-
-      /* Invalidate affected part in the parent window
-       *  (no higher window should be affected)
-       * We also invalidate any children in that area, which could include
-       * this window if it still overlaps that area.
-       */
-      if (old_native_child_region)
-	{
-	  /* No need to expose the region that the native window move copies */
-	  cairo_region_translate (old_native_child_region, dx, dy);
-	  cairo_region_intersect (old_native_child_region, new_native_child_region);
-	  cairo_region_subtract (new_region, old_native_child_region);
-	}
       gdk_window_invalidate_region_full (window->parent, new_region, TRUE, CLEAR_BG_ALL);
 
       cairo_region_destroy (old_region);
-      cairo_region_destroy (old_layered);
       cairo_region_destroy (new_region);
-    }
-
-  if (old_native_child_region)
-    {
-      cairo_region_destroy (old_native_child_region);
-      cairo_region_destroy (new_native_child_region);
     }
 
   _gdk_synthesize_crossing_events_for_geometry_change (window);
@@ -6484,9 +6315,6 @@ gdk_window_scroll (GdkWindow *window,
 		   gint       dx,
 		   gint       dy)
 {
-  GdkWindow *impl_window;
-  cairo_region_t *copy_area, *noncopy_area, *old_layered_area;
-  cairo_region_t *old_native_child_region, *new_native_child_region;
   GList *tmp_list;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -6496,20 +6324,6 @@ gdk_window_scroll (GdkWindow *window,
 
   if (window->destroyed)
     return;
-
-  old_layered_area = cairo_region_copy (window->layered_region);
-  old_native_child_region = collect_native_child_region (window, FALSE);
-  if (old_native_child_region)
-    {
-      /* Any native window move will immediately copy stuff to the destination, which may overwrite a
-       * source or destination for a delayed GdkWindowRegionMove. So, we need
-       * to flush those here for the window and all overlapped subwindows
-       * of it. And we need to do this before setting the new clips as those will be
-       * affecting this.
-       */
-      gdk_window_flush_recursive (window);
-    }
-
 
   /* First move all child windows, without causing invalidation */
 
@@ -6527,64 +6341,9 @@ gdk_window_scroll (GdkWindow *window,
 
   recompute_visible_regions (window, FALSE, TRUE);
 
-  new_native_child_region = NULL;
-  if (old_native_child_region)
-    new_native_child_region = collect_native_child_region (window, FALSE);
-
   move_native_children (window);
 
-  /* Then copy the actual bits of the window w/ child windows */
-
-  impl_window = gdk_window_get_impl_window (window);
-
-  /* Calculate the area that can be gotten by copying the old area */
-  if (gdk_window_has_alpha (window))
-    copy_area = cairo_region_create (); /* Copy nothing for alpha windows */
-  else
-    copy_area = cairo_region_copy (window->clip_region);
-  cairo_region_subtract (copy_area, old_layered_area);
-  if (old_native_child_region)
-    {
-      /* Don't copy from inside native children, as this is copied by
-       * the native window move.
-       */
-      cairo_region_subtract (copy_area, old_native_child_region);
-
-      /* Don't copy any bits that would cause a read from the moved
-	 native windows, as we can't read that data */
-      cairo_region_subtract (copy_area, new_native_child_region);
-    }
-  cairo_region_translate (copy_area, dx, dy);
-  cairo_region_intersect (copy_area, window->clip_region);
-  cairo_region_subtract (copy_area, window->layered_region);
-
-  /* And the rest need to be invalidated */
-  noncopy_area = cairo_region_copy (window->clip_region);
-  cairo_region_subtract (noncopy_area, copy_area);
-
-  /* convert from window coords to impl */
-  cairo_region_translate (copy_area, window->abs_x, window->abs_y);
-
-  move_region_on_impl (impl_window, copy_area, dx, dy); /* takes ownership of copy_area */
-
-  /* Invalidate not copied regions */
-  if (old_native_child_region)
-    {
-      /* No need to expose the region that the native window move copies */
-      cairo_region_translate (old_native_child_region, dx, dy);
-      cairo_region_intersect (old_native_child_region, new_native_child_region);
-      cairo_region_subtract (noncopy_area, old_native_child_region);
-    }
-  gdk_window_invalidate_region_full (window, noncopy_area, TRUE, CLEAR_BG_ALL);
-
-  cairo_region_destroy (noncopy_area);
-  cairo_region_destroy (old_layered_area);
-
-  if (old_native_child_region)
-    {
-      cairo_region_destroy (old_native_child_region);
-      cairo_region_destroy (new_native_child_region);
-    }
+  gdk_window_invalidate_region_full (window, window->clip_region, TRUE, CLEAR_BG_ALL);
 
   _gdk_synthesize_crossing_events_for_geometry_change (window);
 }
@@ -6610,9 +6369,7 @@ gdk_window_move_region (GdkWindow       *window,
 			gint             dx,
 			gint             dy)
 {
-  GdkWindow *impl_window;
-  cairo_region_t *nocopy_area;
-  cairo_region_t *copy_area;
+  cairo_region_t *expose_area;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (region != NULL);
@@ -6623,36 +6380,12 @@ gdk_window_move_region (GdkWindow       *window,
   if (window->destroyed)
     return;
 
-  impl_window = gdk_window_get_impl_window (window);
+  expose_area = cairo_region_copy (region);
+  cairo_region_translate (expose_area, dx, dy);
+  cairo_region_union (expose_area, region);
 
-  /* compute source regions */
-  if (gdk_window_has_alpha (window))
-    copy_area = cairo_region_create (); /* Copy nothing for alpha windows */
-  else
-    copy_area = cairo_region_copy (region);
-  cairo_region_intersect (copy_area, window->clip_region_with_children);
-  cairo_region_subtract (copy_area, window->layered_region);
-  remove_layered_child_area (window, copy_area);
-
-  /* compute destination regions */
-  cairo_region_translate (copy_area, dx, dy);
-  cairo_region_intersect (copy_area, window->clip_region_with_children);
-  cairo_region_subtract (copy_area, window->layered_region);
-  remove_layered_child_area (window, copy_area);
-
-  /* Invalidate parts of the region (source and dest) not covered
-     by the copy */
-  nocopy_area = cairo_region_copy (region);
-  cairo_region_translate (nocopy_area, dx, dy);
-  cairo_region_union (nocopy_area, region);
-  cairo_region_subtract (nocopy_area, copy_area);
-
-  /* convert from window coords to impl */
-  cairo_region_translate (copy_area, window->abs_x, window->abs_y);
-  move_region_on_impl (impl_window, copy_area, dx, dy); /* Takes ownership of copy_area */
-
-  gdk_window_invalidate_region_full (window, nocopy_area, FALSE, CLEAR_BG_ALL);
-  cairo_region_destroy (nocopy_area);
+  gdk_window_invalidate_region_full (window, expose_area, FALSE, CLEAR_BG_ALL);
+  cairo_region_destroy (expose_area);
 }
 
 /**
