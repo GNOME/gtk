@@ -252,8 +252,6 @@ struct _GdkWindow
 
   GSList *implicit_paint;
 
-  GList *outstanding_moves;
-
   cairo_region_t *shape;
   cairo_region_t *input_shape;
 
