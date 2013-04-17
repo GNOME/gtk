@@ -134,6 +134,8 @@ _gdk_quartz_display_open (const gchar *display_name)
   _gdk_quartz_dnd_init ();
 #endif
 
+  g_signal_emit_by_name (_gdk_display, "opened");
+
   g_signal_emit_by_name (gdk_display_manager_get (),
 			 "display_opened", _gdk_display);
 
