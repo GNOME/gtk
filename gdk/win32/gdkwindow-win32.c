@@ -3319,77 +3319,6 @@ _gdk_win32_window_queue_antiexpose (GdkWindow *window,
   return FALSE;
 }
 
-/* Gets called from gdwindow.c(do_move_region_bits_on_impl)
- * and got tested with testgtk::big_window. Given the previous,
- * untested implementation this one looks much too simple ;)
- */
-static void
-_gdk_win32_window_translate (GdkWindow *window,
-                             cairo_region_t *area, /* In impl window coords */
-                             gint       dx,
-                             gint       dy)
-{
-  GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
-  HRGN hrgn, area_hrgn;
-  cairo_region_t *update_region;
-  HDC hdc;
-  int ret;
-
-  /* Note: This is the destination area, not the source, and
-     it has been moved by dx, dy from the source area */
-  area_hrgn = cairo_region_to_hrgn (area, 0, 0);
-
-  /* First we copy any outstanding invalid areas in the 
-     source area to the new position in the destination area */
-  hrgn = CreateRectRgn (0, 0, 0, 0);
-  ret = GetUpdateRgn (GDK_WINDOW_HWND (window), hrgn, FALSE);
-  if (ret == ERROR)
-    WIN32_API_FAILED ("GetUpdateRgn");
-  else if (ret != NULLREGION)
-    {
-      /* Convert the source invalid region as it would be copied */
-      OffsetRgn (hrgn, dx, dy);
-      /* Keep what intersects the copy destination area */
-      ret = CombineRgn (hrgn, hrgn, area_hrgn, RGN_AND);
-      /* And invalidate it */
-      if (ret == ERROR)
-        WIN32_API_FAILED ("CombineRgn");
-      else if (ret != NULLREGION)
-	API_CALL (InvalidateRgn, (GDK_WINDOW_HWND (window), hrgn, TRUE));
-    }
-
-  /* Then we copy the bits, invalidating whatever is copied from
-     otherwise invisible areas */
-
-  hdc = _gdk_win32_impl_acquire_dc (impl);
-
-  /* Clip hdc to target region */
-  API_CALL (SelectClipRgn, (hdc, area_hrgn));
-
-  SetRectRgn (hrgn, 0, 0, 0, 0);
-
-  if (!ScrollDC (hdc, dx, dy, NULL, NULL, hrgn, NULL))
-    WIN32_GDI_FAILED ("ScrollDC");
-  else
-    {
-      update_region = _gdk_win32_hrgn_to_region (hrgn);
-      if (!cairo_region_is_empty (update_region))
-	_gdk_window_invalidate_for_expose (window, update_region);
-      cairo_region_destroy (update_region);
-    }
-
-  /* Unset hdc clip region */
-  API_CALL (SelectClipRgn, (hdc, NULL));
-
-  _gdk_win32_impl_release_dc (impl);
-
-  if (!DeleteObject (hrgn))
-    WIN32_GDI_FAILED ("DeleteObject");
-
-  if (!DeleteObject (area_hrgn))
-    WIN32_GDI_FAILED ("DeleteObject");
-}
-
 static void
 gdk_win32_input_shape_combine_region (GdkWindow *window,
 				      const cairo_region_t *shape_region,
@@ -3556,7 +3485,6 @@ gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
   impl_class->input_shape_combine_region = gdk_win32_input_shape_combine_region;
   impl_class->set_static_gravities = gdk_win32_window_set_static_gravities;
   impl_class->queue_antiexpose = _gdk_win32_window_queue_antiexpose;
-  impl_class->translate = _gdk_win32_window_translate;
   impl_class->destroy = gdk_win32_window_destroy;
   impl_class->destroy_foreign = gdk_win32_window_destroy_foreign;
   impl_class->resize_cairo_surface = gdk_win32_window_resize_cairo_surface;
