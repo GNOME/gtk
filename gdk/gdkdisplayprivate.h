@@ -237,6 +237,7 @@ struct _GdkDisplayClass
                                                         const gchar    *text);
 
   /* Signals */
+  void                   (*opened)                     (GdkDisplay     *display);
   void (*closed) (GdkDisplay *display,
                   gboolean    is_error);
 };
