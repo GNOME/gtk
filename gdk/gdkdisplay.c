@@ -108,6 +108,8 @@ gdk_display_real_opened (GdkDisplay *display)
 
   g_signal_connect (device_manager, "device-removed",
                     G_CALLBACK (device_removed_cb), display);
+
+  _gdk_display_manager_add_display (gdk_display_manager_get (), display);
 }
 
 static void
@@ -206,8 +208,6 @@ gdk_display_init (GdkDisplay *display)
 
   display->multiple_click_info = g_hash_table_new_full (NULL, NULL, NULL,
                                                         (GDestroyNotify) g_free);
-
-  _gdk_display_manager_add_display (gdk_display_manager_get (), display);
 }
 
 static void
