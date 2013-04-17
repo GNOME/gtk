@@ -217,9 +217,6 @@ _gdk_win32_display_open (const gchar *display_name)
 
   g_signal_emit_by_name (_gdk_display, "opened");
 
-  g_signal_emit_by_name (gdk_display_manager_get (),
-			 "display_opened", _gdk_display);
-
   GDK_NOTE (MISC, g_print ("... _gdk_display now set up\n"));
 
   return _gdk_display;

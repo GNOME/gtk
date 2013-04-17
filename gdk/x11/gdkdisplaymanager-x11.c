@@ -83,8 +83,6 @@ gdk_x11_display_manager_open_display (GdkDisplayManager *manager,
     {
       if (gdk_display_manager_get_default_display (manager) == NULL)
         gdk_display_manager_set_default_display (manager, display);
-
-      g_signal_emit_by_name (manager, "display-opened", display);
     }
 
   return display;

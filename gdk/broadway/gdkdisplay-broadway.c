@@ -171,7 +171,6 @@ _gdk_broadway_display_open (const gchar *display_name)
     }
 
   g_signal_emit_by_name (display, "opened");
-  g_signal_emit_by_name (gdk_display_manager_get (), "display-opened", display);
 
   return display;
 }

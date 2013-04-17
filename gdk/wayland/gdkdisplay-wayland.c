@@ -246,7 +246,6 @@ _gdk_wayland_display_open (struct wl_display *wl_display)
   gdk_input_init (display);
 
   g_signal_emit_by_name (display, "opened");
-  g_signal_emit_by_name (gdk_display_manager_get(), "display_opened", display);
 
   return display;
 }

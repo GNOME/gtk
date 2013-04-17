@@ -505,6 +505,8 @@ _gdk_display_manager_add_display (GdkDisplayManager *manager,
     gdk_display_manager_set_default_display (manager, display);
 
   manager->displays = g_slist_prepend (manager->displays, display);
+
+  g_signal_emit (manager, signals[DISPLAY_OPENED], 0, display);
 }
 
 /* NB: This function can be called multiple times per display. */
