@@ -3365,7 +3365,7 @@ gtk_container_propagate_draw (GtkContainer   *container,
 {
   GdkEventExpose *event;
   GtkAllocation allocation;
-  GdkWindow *window, *w;
+  GdkWindow *window, *w, *event_window, *child_in_window;
   int x, y;
 
   g_return_if_fail (GTK_IS_CONTAINER (container));
@@ -3374,13 +3374,26 @@ gtk_container_propagate_draw (GtkContainer   *container,
 
   g_assert (gtk_widget_get_parent (child) == GTK_WIDGET (container));
 
+  if (!gtk_widget_is_drawable (child))
+    return;
+
+  /* Only propagate to native child window if we're not handling
+     an expose (i.e. in a pure gtk_widget_draw() call */
   event = _gtk_cairo_get_event (cr);
-  if (event)
-    {
-      if (gtk_widget_get_has_window (child) ||
-          gtk_widget_get_window (child) != event->window)
-        return;
-    }
+  if (event &&
+      (gtk_widget_get_has_window (child) &&
+       gdk_window_has_native (gtk_widget_get_window (child))))
+    return;
+
+  /* Never propagate to a child window when exposing a window
+     that is not the one the child widget is in. */
+  event_window = _gtk_cairo_get_event_window (cr);
+  if (gtk_widget_get_has_window (child))
+    child_in_window = gdk_window_get_parent (gtk_widget_get_window (child));
+  else
+    child_in_window = gtk_widget_get_window (child);
+  if (event_window != NULL && child_in_window != event_window)
+    return;
 
   cairo_save (cr);
 
@@ -3422,7 +3435,7 @@ gtk_container_propagate_draw (GtkContainer   *container,
 
   cairo_translate (cr, x, y);
 
-  _gtk_widget_draw_internal (child, cr, TRUE);
+  _gtk_widget_draw (child, cr);
 
   cairo_restore (cr);
 }

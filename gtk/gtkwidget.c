@@ -854,9 +854,10 @@ static void gtk_widget_on_frame_clock_update (GdkFrameClock *frame_clock,
                                               GtkWidget     *widget);
 
 static gboolean event_window_is_still_viewable (GdkEvent *event);
+static void gtk_cairo_set_event_window (cairo_t        *cr,
+					GdkWindow *window);
 static void gtk_cairo_set_event (cairo_t        *cr,
 				 GdkEventExpose *event);
-static void gtk_widget_propagate_alpha (GtkWidget *widget);
 
 /* --- variables --- */
 static gpointer         gtk_widget_parent_class = NULL;
@@ -967,24 +968,9 @@ gtk_widget_draw_marshaller (GClosure     *closure,
                             gpointer      invocation_hint,
                             gpointer      marshal_data)
 {
-  GtkWidget *widget = g_value_get_object (&param_values[0]);
-  GdkEventExpose *tmp_event;
-  gboolean push_group;
   cairo_t *cr = g_value_get_boxed (&param_values[1]);
 
   cairo_save (cr);
-  tmp_event = _gtk_cairo_get_event (cr);
-
-  push_group =
-    widget->priv->opacity_group ||
-    (widget->priv->alpha != 255 &&
-     (!gtk_widget_get_has_window (widget) || tmp_event == NULL));
-
-  if (push_group)
-    {
-      cairo_push_group (cr);
-      gtk_cairo_set_event (cr, NULL);
-    }
 
   _gtk_marshal_BOOLEAN__BOXED (closure,
                                return_value,
@@ -994,14 +980,6 @@ gtk_widget_draw_marshaller (GClosure     *closure,
                                marshal_data);
 
 
-  if (push_group)
-    {
-      cairo_pop_group_to_source (cr);
-      cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-      cairo_paint_with_alpha (cr, widget->priv->alpha / 255.0);
-    }
-
-  gtk_cairo_set_event (cr, tmp_event);
   cairo_restore (cr);
 }
 
@@ -1014,9 +992,6 @@ gtk_widget_draw_marshallerv (GClosure     *closure,
 			     int           n_params,
 			     GType        *param_types)
 {
-  GtkWidget *widget = GTK_WIDGET (instance);
-  GdkEventExpose *tmp_event;
-  gboolean push_group;
   cairo_t *cr;
   va_list args_copy;
 
@@ -1024,18 +999,6 @@ gtk_widget_draw_marshallerv (GClosure     *closure,
   cr = va_arg (args_copy, gpointer);
 
   cairo_save (cr);
-  tmp_event = _gtk_cairo_get_event (cr);
-
-  push_group =
-    widget->priv->opacity_group ||
-    (widget->priv->alpha != 255 &&
-     (!gtk_widget_get_has_window (widget) || tmp_event == NULL));
-
-  if (push_group)
-    {
-      cairo_push_group (cr);
-      gtk_cairo_set_event (cr, NULL);
-    }
 
   _gtk_marshal_BOOLEAN__BOXEDv (closure,
 				return_value,
@@ -1046,14 +1009,6 @@ gtk_widget_draw_marshallerv (GClosure     *closure,
 				param_types);
 
 
-  if (push_group)
-    {
-      cairo_pop_group_to_source (cr);
-      cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-      cairo_paint_with_alpha (cr, widget->priv->alpha / 255.0);
-    }
-
-  gtk_cairo_set_event (cr, tmp_event);
   cairo_restore (cr);
 
   va_end (args_copy);
@@ -4235,8 +4190,6 @@ gtk_widget_unparent (GtkWidget *widget)
     g_object_notify_queue_clear (G_OBJECT (widget), nqueue);
   g_object_notify_queue_thaw (G_OBJECT (widget), nqueue);
 
-  gtk_widget_propagate_alpha (widget);
-
   gtk_widget_pop_verify_invariants (widget);
   g_object_unref (widget);
 }
@@ -6315,6 +6268,23 @@ gtk_widget_real_mnemonic_activate (GtkWidget *widget,
   return TRUE;
 }
 
+static const cairo_user_data_key_t event_window_key;
+
+GdkWindow *
+_gtk_cairo_get_event_window (cairo_t *cr)
+{
+  g_return_val_if_fail (cr != NULL, NULL);
+
+  return cairo_get_user_data (cr, &event_window_key);
+}
+
+static void
+gtk_cairo_set_event_window (cairo_t        *cr,
+			    GdkWindow *event_window)
+{
+  cairo_set_user_data (cr, &event_window_key, event_window, NULL);
+}
+
 static const cairo_user_data_key_t event_key;
 
 GdkEventExpose *
@@ -6327,7 +6297,7 @@ _gtk_cairo_get_event (cairo_t *cr)
 
 static void
 gtk_cairo_set_event (cairo_t        *cr,
-                     GdkEventExpose *event)
+		     GdkEventExpose *event)
 {
   cairo_set_user_data (cr, &event_key, event, NULL);
 }
@@ -6356,15 +6326,15 @@ gboolean
 gtk_cairo_should_draw_window (cairo_t *cr,
                               GdkWindow *window)
 {
-  GdkEventExpose *event;
+  GdkWindow *event_window;
 
   g_return_val_if_fail (cr != NULL, FALSE);
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
 
-  event = _gtk_cairo_get_event (cr);
+  event_window = _gtk_cairo_get_event_window (cr);
 
-  return event == NULL ||
-         event->window == window;
+  return event_window == NULL ||
+    event_window == window;
 }
 
 static gboolean
@@ -6381,16 +6351,19 @@ gtk_widget_get_clip_draw (GtkWidget *widget)
   return TRUE;
 }
 
-/* code shared by gtk_container_propagate_draw() and
- * gtk_widget_draw()
- */
-void
+static void
 _gtk_widget_draw_internal (GtkWidget *widget,
                            cairo_t   *cr,
-                           gboolean   clip_to_size)
+                           gboolean   clip_to_size,
+			   GdkWindow *window)
 {
+  GdkWindow *tmp_event_window;
+
   if (!gtk_widget_is_drawable (widget))
     return;
+
+  tmp_event_window = _gtk_cairo_get_event_window (cr);
+  gtk_cairo_set_event_window (cr, window);
 
   clip_to_size &= gtk_widget_get_clip_draw (widget);
 
@@ -6432,7 +6405,7 @@ _gtk_widget_draw_internal (GtkWidget *widget,
 #endif
 
       if (cairo_status (cr) &&
-          _gtk_cairo_get_event (cr))
+          _gtk_cairo_get_event_window (cr))
         {
           /* We check the event so we only warn about internal GTK calls.
            * Errors might come from PDF streams having write failures and
@@ -6444,7 +6417,173 @@ _gtk_widget_draw_internal (GtkWidget *widget,
                      cairo_status_to_string (cairo_status (cr)));
         }
     }
+
+  gtk_cairo_set_event_window (cr, tmp_event_window);
 }
+
+/* Emit draw() on the widget that owns window,
+   and on any child windows that also belong
+   to the widget. */
+static void
+_gtk_widget_draw_windows (GdkWindow *window,
+			  cairo_t *cr,
+			  int window_x,
+			  int window_y)
+{
+  cairo_pattern_t *pattern;
+  gboolean do_clip;
+  GtkWidget *widget = NULL;
+  GList *l;
+  int x, y;
+
+  if (!gdk_window_is_viewable (window))
+    return;
+
+  cairo_save (cr);
+  cairo_translate (cr, window_x, window_y);
+  cairo_rectangle (cr, 0, 0,
+		   gdk_window_get_width (window),
+		   gdk_window_get_height (window));
+  cairo_clip (cr);
+
+  if (gdk_cairo_get_clip_rectangle (cr, NULL))
+    {
+      gdk_window_get_user_data (window, (gpointer *) &widget);
+
+      /* Only clear bg if double bufferer. This is what we used
+	 to do before, where begin_paint() did the clearing. */
+      pattern = gdk_window_get_background_pattern (window);
+      if (pattern != NULL &&
+	  widget->priv->double_buffered)
+	{
+	  cairo_save (cr);
+	  cairo_set_source (cr, pattern);
+	  cairo_paint (cr);
+	  cairo_restore (cr);
+	}
+
+      do_clip = _gtk_widget_get_translation_to_window (widget, window,
+						       &x, &y);
+      cairo_save (cr);
+      cairo_translate (cr, -x, -y);
+      _gtk_widget_draw_internal (widget, cr, do_clip, window);
+      cairo_restore (cr);
+
+      for (l = g_list_last (gdk_window_peek_children (window));
+	   l != NULL;
+	   l = l->prev)
+	{
+	  GdkWindow *child_window = l->data;
+	  gpointer child_data;
+	  GdkWindowType type;
+	  int wx, wy;
+
+	  type = gdk_window_get_window_type (child_window);
+	  if (!gdk_window_is_visible (child_window) ||
+	      gdk_window_is_input_only (child_window) ||
+	      type == GDK_WINDOW_OFFSCREEN ||
+	      type == GDK_WINDOW_FOREIGN)
+	    continue;
+
+	  gdk_window_get_user_data (child_window, &child_data);
+	  if (child_data == (gpointer)widget)
+	    {
+	      gdk_window_get_position (child_window, &wx, &wy);
+	      _gtk_widget_draw_windows (child_window, cr, wx,wy);
+	    }
+	}
+    }
+
+  cairo_restore (cr);
+}
+
+void
+_gtk_widget_draw (GtkWidget *widget,
+		  cairo_t   *cr)
+{
+  GdkWindow *window, *child_window;
+  gpointer child_data;
+  GList *l;
+  int wx, wy;
+  gboolean push_group;
+  GdkWindowType type;
+
+  /* We get expose events only on native windows, so the draw
+   * implementation has to walk the entire widget hierarchy, except
+   * that it stops at native subwindows while we're in an expose
+   * event (_gtk_cairo_get_event () != NULL).
+   *
+   * However, we need to properly clip drawing into child windows
+   * to avoid drawing outside if widgets use e.g. cairo_paint(), so
+   * we traverse over GdkWindows as well as GtkWidgets.
+   *
+   * In order to be able to have opacity groups for entire widgets
+   * that consists of multiple windows we collect all the windows
+   * that belongs to a widget and draw them in one go. This means
+   * we may somewhat reorder GdkWindows when we paint them, but
+   * thats not generally a problem, as if you want a guaranteed
+   * order you generally use a windowed widget where you control
+   * the window hierarchy.
+   */
+
+  cairo_save (cr);
+
+  push_group =
+    widget->priv->opacity_group ||
+    (widget->priv->alpha != 255 &&
+     !gtk_widget_is_toplevel (widget));
+
+  if (push_group)
+    cairo_push_group (cr);
+
+  window = gtk_widget_get_window (widget);
+  if (gtk_widget_get_has_window (widget))
+    {
+      /* The widget will be completely contained in its window, so just
+       * expose that (and any child window belonging to the widget) */
+      _gtk_widget_draw_windows (window, cr, 0, 0);
+    }
+  else
+    {
+      /* The widget draws in its parent window, so we send a draw() for
+       * that. */
+      _gtk_widget_draw_internal (widget, cr, TRUE, window);
+
+      /* But, it may also have child windows in the parent which we should
+       * draw (after having drawn on the parent) */
+      for (l = g_list_last (gdk_window_peek_children (window));
+	   l != NULL;
+	   l = l->prev)
+	{
+	  child_window = l->data;
+	  type = gdk_window_get_window_type (child_window);
+	  if (!gdk_window_is_visible (child_window) ||
+	      gdk_window_is_input_only (child_window) ||
+	      type == GDK_WINDOW_OFFSCREEN ||
+	      type == GDK_WINDOW_FOREIGN)
+	    continue;
+
+	  gdk_window_get_user_data (child_window, &child_data);
+	  if (child_data == (gpointer)widget)
+	    {
+	      gdk_window_get_position (child_window, &wx, &wy);
+	      _gtk_widget_draw_windows (child_window, cr,
+					wx - widget->priv->allocation.x,
+					wy - widget->priv->allocation.y);
+	    }
+	}
+    }
+
+  if (push_group)
+    {
+      cairo_pop_group_to_source (cr);
+      cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+      cairo_paint_with_alpha (cr, widget->priv->alpha / 255.0);
+    }
+
+  cairo_restore (cr);
+}
+
 
 /**
  * gtk_widget_draw:
@@ -6476,24 +6615,11 @@ void
 gtk_widget_draw (GtkWidget *widget,
                  cairo_t   *cr)
 {
-  GdkEventExpose *tmp_event;
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (!widget->priv->alloc_needed);
   g_return_if_fail (cr != NULL);
 
-  cairo_save (cr);
-  /* We have to reset the event here so that draw functions can call
-   * gtk_widget_draw() on random other widgets and get the desired
-   * effect: Drawing all contents, not just the current window.
-   */
-  tmp_event = _gtk_cairo_get_event (cr);
-  gtk_cairo_set_event (cr, NULL);
-
-  _gtk_widget_draw_internal (widget, cr, TRUE);
-
-  gtk_cairo_set_event (cr, tmp_event);
-  cairo_restore (cr);
+  _gtk_widget_draw (widget, cr);
 }
 
 static gboolean
@@ -6788,8 +6914,6 @@ gtk_widget_send_expose (GtkWidget *widget,
 {
   gboolean result = FALSE;
   cairo_t *cr;
-  int x, y;
-  gboolean do_clip;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
   g_return_val_if_fail (gtk_widget_get_realized (widget), TRUE);
@@ -6797,21 +6921,18 @@ gtk_widget_send_expose (GtkWidget *widget,
   g_return_val_if_fail (event->type == GDK_EXPOSE, TRUE);
 
   cr = gdk_cairo_create (event->expose.window);
-  gtk_cairo_set_event (cr, &event->expose);
-
   gdk_cairo_region (cr, event->expose.region);
   cairo_clip (cr);
 
-  do_clip = _gtk_widget_get_translation_to_window (widget,
-						   event->expose.window,
-						   &x, &y);
-  cairo_translate (cr, -x, -y);
+  gtk_cairo_set_event (cr, &event->expose);
 
-  _gtk_widget_draw_internal (widget, cr, do_clip);
+  if (event->expose.window == widget->priv->window)
+    _gtk_widget_draw (widget, cr);
+  else
+    _gtk_widget_draw_windows (event->expose.window, cr, 0, 0);
 
-  /* unset here, so if someone keeps a reference to cr we
-   * don't leak the window. */
   gtk_cairo_set_event (cr, NULL);
+
   cairo_destroy (cr);
 
   return result;
@@ -8493,6 +8614,9 @@ gtk_widget_get_app_paintable (GtkWidget *widget)
  * expose events, since even the clearing to the background color or
  * pixmap will not happen automatically (as it is done in
  * gdk_window_begin_paint_region()).
+ *
+ * Since 3.10 this function only works for widgets with native
+ * windows.
  **/
 void
 gtk_widget_set_double_buffered (GtkWidget *widget,
@@ -8750,8 +8874,6 @@ gtk_widget_set_parent (GtkWidget *widget,
     {
       gtk_widget_queue_compute_expand (parent);
     }
-
-  gtk_widget_propagate_alpha (widget);
 
   gtk_widget_pop_verify_invariants (widget);
 }
@@ -14592,10 +14714,6 @@ gtk_widget_set_window (GtkWidget *widget,
     {
       priv->window = window;
 
-      if (gtk_widget_get_has_window (widget) && window != NULL && !gdk_window_has_native (window))
-	gdk_window_set_opacity (window,
-				priv->norender ? 0 : priv->alpha / 255.0);
-
       g_object_notify (G_OBJECT (widget), "window");
     }
 }
@@ -14734,85 +14852,7 @@ gtk_widget_set_support_multidevice (GtkWidget *widget,
  * in gtk_widget_set_opacity, secondly we can get it from the css opacity. These two
  * are multiplied together to form the total alpha. Secondly, the user can specify
  * an opacity group for a widget, which means we must essentially handle it as having alpha.
- *
- * We handle opacity in two ways. For a windowed widget, with opacity set but no opacity
- * group we directly set the opacity of widget->window. This will cause gdk to properly
- * redirect drawing inside the window to a buffer and do OVER paint_with_alpha.
- *
- * However, if the widget is not windowed, or the user specified an opacity group for the
- * widget we do the opacity handling in the ::draw marshaller for the widget. A naive
- * implementation of this would break for windowed widgets or descendant widgets with
- * windows, as these would not be handled by the ::draw signal. To handle this we set
- * all such gdkwindows as fully transparent and then override gtk_cairo_should_draw_window()
- * to make the draw signal propagate to *all* child widgets/windows.
- *
- * Note: We don't make all child windows fully transparent, we stop at the first one
- * in each branch when propagating down the hierarchy.
  */
-
-
-/* This is called when priv->alpha or priv->opacity_group group changes, and should
- * update priv->norender and GdkWindow opacity for this widget and any children that
- * needs changing. It is also called whenver the parent changes, the parents
- * norender_children state changes, or the has_window state of the widget changes.
- */
-static void
-gtk_widget_propagate_alpha (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = widget->priv;
-  GtkWidget *parent;
-  gboolean norender, norender_children;
-  GList *l;
-
-  parent = priv->parent;
-
-  /* Norender affects only windowed widget and means don't render widget->window in the
-     normal fashion.
-     We only set this if the parent has norender_children, because:
-     a) For an opacity group (that does not have a norender_children parent) we still
-     need to render the window or we will never get an expose event.
-     b) For alpha we set the opacity of window->widget directly, so no other
-     work is needed.
-  */
-  norender = (parent != NULL && parent->priv->norender_children);
-
-  /* windows under this widget should not render if:
-     a) This widget has an opacity group
-     b) This widget has alpha and is no-windowed (otherwise we'd set alpha on widget->window)
-     c) This widget has norender but is no-windowed (a windowed widget would "swallow" the norender)
-  */
-  norender_children =
-    priv->opacity_group ||
-    (!gtk_widget_get_has_window (widget) &&
-     ( norender || priv->alpha != 255));
-
-  if (gtk_widget_get_has_window (widget))
-    {
-      if (priv->window != NULL &&
-	  (!gdk_window_has_native (priv->window) || gtk_widget_is_toplevel (widget)))
-	gdk_window_set_opacity (priv->window,
-				norender ? 0 : priv->alpha / 255.0);
-    }
-
-  for (l = priv->registered_windows; l != NULL; l = l->next)
-    {
-      GdkWindow *w = l->data;
-      if (w != priv->window && !gdk_window_has_native (w))
-	gdk_window_set_opacity (w, norender_children ? 0.0 : 1.0);
-    }
-
-  priv->norender = norender;
-  if (priv->norender_children != norender_children)
-    {
-      priv->norender_children = norender_children;
-
-      if (GTK_IS_CONTAINER (widget))
-	gtk_container_forall (GTK_CONTAINER (widget), (GtkCallback)gtk_widget_propagate_alpha, NULL);
-    }
-
-  if (gtk_widget_get_realized (widget))
-    gtk_widget_queue_draw (widget);
-}
 
 static void
 gtk_widget_update_alpha (GtkWidget *widget)
@@ -14840,8 +14880,12 @@ gtk_widget_update_alpha (GtkWidget *widget)
 
   priv->alpha = alpha;
 
-  gtk_widget_propagate_alpha (widget);
+  if (gtk_widget_is_toplevel (widget))
+    gdk_window_set_opacity (priv->window,
+			    priv->alpha / 255.0);
 
+  if (gtk_widget_get_realized (widget))
+    gtk_widget_queue_draw (widget);
 }
 
 static void
@@ -14861,7 +14905,8 @@ gtk_widget_set_has_opacity_group  (GtkWidget *widget,
 
   priv->opacity_group = has_opacity_group;
 
-  gtk_widget_propagate_alpha (widget);
+  if (gtk_widget_get_realized (widget))
+    gtk_widget_queue_draw (widget);
 }
 
 /**
