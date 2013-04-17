@@ -125,16 +125,6 @@ struct _GdkWindowImplClass
   gboolean     (* queue_antiexpose)     (GdkWindow       *window,
 					 cairo_region_t  *update_area);
 
-  /* Called to move @area inside @window by @dx x @dy pixels. @area is 
-   * guaranteed to be inside @window. If part of @area is not invisible or
-   * invalid, it is this function's job to queue expose events in those 
-   * areas.
-   */
-  void         (* translate)            (GdkWindow       *window,
-					 cairo_region_t  *area,
-					 gint            dx,
-					 gint            dy);
-
 /* Called to do the windowing system specific part of gdk_window_destroy(),
  *
  * window: The window being destroyed
