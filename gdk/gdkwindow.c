@@ -136,20 +136,7 @@
  * so that eg. client side siblings that overlap the native child properly
  * draws over the native child window.
  *
- * In order to minimize flicker and for performance we use a couple of cacheing
- * tricks. First of all, every time we do a window to window copy area, for instance
- * when moving a client side window or when scrolling/moving a region in a window
- * we store this in outstanding_moves instead of applying immediately. We then
- * delay this move until we really need it (because something depends on being
- * able to read it), or until we're handing a redraw from an expose/invalidation
- * (actually we delay it past redraw, but before blitting the double buffer
- * to the window). This gives us two advantages. First of all it minimizes the time
- * from the window is moved to the exposes related to that move, secondly it allows
- * us to be smart about how to do the copy. We combine multiple moves into one (when
- * possible) and we don't actually do copies to anything that is or will be
- * invalidated and exposed anyway.
- *
- * Secondly, we use something called a "implicit paint" during repaint handling.
+ * We use something called a "implicit paint" during repaint handling.
  * An implicit paint is similar to a regular paint for the paint stack, but it is
  * not put on the stack. Instead, it is set on the impl window, and later when
  * regular gdk_window_begin_paint_region()  happen on a window of this impl window
@@ -191,11 +178,6 @@ struct _GdkWindowPaint
   guint uses_implicit : 1;
 };
 
-typedef struct {
-  cairo_region_t *dest_region; /* The destination region */
-  int dx, dy; /* The amount that the source was moved to reach dest_region */
-} GdkWindowRegionMove;
-
 /* Global info */
 
 static void             gdk_window_drop_cairo_surface (GdkWindow *private);
@@ -219,18 +201,13 @@ static void gdk_window_clear_backing_region (GdkWindow *window,
 static void recompute_visible_regions   (GdkWindow *private,
 					 gboolean recalculate_siblings,
 					 gboolean recalculate_children);
-static void gdk_window_flush_outstanding_moves (GdkWindow *window);
 static void gdk_window_flush_recursive  (GdkWindow *window);
-static void do_move_region_bits_on_impl (GdkWindow *window,
-					 cairo_region_t *region, /* In impl window coords */
-					 int dx, int dy);
 static void gdk_window_invalidate_in_parent (GdkWindow *private);
 static void move_native_children        (GdkWindow *private);
 static void update_cursor               (GdkDisplay *display,
                                          GdkDevice  *device);
 static void impl_window_add_update_area (GdkWindow *impl_window,
 					 cairo_region_t *region);
-static void gdk_window_region_move_free (GdkWindowRegionMove *move);
 static void gdk_window_invalidate_region_full (GdkWindow       *window,
 					       const cairo_region_t *region,
 					       gboolean         invalidate_children,
@@ -2148,9 +2125,6 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 	      cairo_region_destroy (window->clip_region_with_children);
 	      window->clip_region_with_children = NULL;
 	    }
-
-	  g_list_free_full (window->outstanding_moves, (GDestroyNotify) gdk_window_region_move_free);
-	  window->outstanding_moves = NULL;
 	}
       break;
     }
@@ -3212,8 +3186,6 @@ gdk_window_end_paint (GdkWindow *window)
     {
       cairo_t *cr;
 
-      gdk_window_flush_outstanding_moves (window);
-
       full_clip = cairo_region_copy (window->clip_region_with_children);
       cairo_region_intersect (full_clip, paint->region);
 
@@ -3281,242 +3253,6 @@ gdk_window_free_paint_stack (GdkWindow *window)
     }
 }
 
-static void
-do_move_region_bits_on_impl (GdkWindow *impl_window,
-			     cairo_region_t *dest_region, /* In impl window coords */
-			     int dx, int dy)
-{
-  GdkWindowImplClass *impl_class;
-
-  impl_class = GDK_WINDOW_IMPL_GET_CLASS (impl_window->impl);
-
-  impl_class->translate (impl_window, dest_region, dx, dy);
-}
-
-static GdkWindowRegionMove *
-gdk_window_region_move_new (cairo_region_t *region,
-			    int dx, int dy)
-{
-  GdkWindowRegionMove *move;
-
-  move = g_slice_new (GdkWindowRegionMove);
-  move->dest_region = cairo_region_copy (region);
-  move->dx = dx;
-  move->dy = dy;
-
-  return move;
-}
-
-static void
-gdk_window_region_move_free (GdkWindowRegionMove *move)
-{
-  cairo_region_destroy (move->dest_region);
-  g_slice_free (GdkWindowRegionMove, move);
-}
-
-static void
-append_move_region (GdkWindow *impl_window,
-		    cairo_region_t *new_dest_region,
-		    int dx, int dy)
-{
-  GdkWindowRegionMove *move, *old_move;
-  cairo_region_t *new_total_region, *old_total_region;
-  cairo_region_t *source_overlaps_destination;
-  cairo_region_t *non_overwritten;
-  gboolean added_move;
-  GList *l, *prev;
-
-  if (cairo_region_is_empty (new_dest_region))
-    return;
-
-  /* In principle this could just append the move to the list of outstanding
-     moves that will be replayed before drawing anything when we're handling
-     exposes. However, we'd like to do a bit better since its commonly the case
-     that we get multiple copies where A is copied to B and then B is copied
-     to C, and we'd like to express this as a simple copy A to C operation. */
-
-  /* We approach this by taking the new move and pushing it ahead of moves
-     starting at the end of the list and stopping when its not safe to do so.
-     It's not safe to push past a move if either the source of the new move
-     is in the destination of the old move, or if the destination of the new
-     move is in the source of the new move, or if the destination of the new
-     move overlaps the destination of the old move. We simplify this by
-     just comparing the total regions (src + dest) */
-  new_total_region = cairo_region_copy (new_dest_region);
-  cairo_region_translate (new_total_region, -dx, -dy);
-  cairo_region_union (new_total_region, new_dest_region);
-
-  added_move = FALSE;
-  for (l = g_list_last (impl_window->outstanding_moves); l != NULL; l = prev)
-    {
-      prev = l->prev;
-      old_move = l->data;
-
-      old_total_region = cairo_region_copy (old_move->dest_region);
-      cairo_region_translate (old_total_region, -old_move->dx, -old_move->dy);
-      cairo_region_union (old_total_region, old_move->dest_region);
-
-      cairo_region_intersect (old_total_region, new_total_region);
-      /* If these regions intersect then its not safe to push the
-	 new region before the old one */
-      if (!cairo_region_is_empty (old_total_region))
-	{
-	  /* The area where the new moves source overlaps the old ones
-	     destination */
-	  source_overlaps_destination = cairo_region_copy (new_dest_region);
-	  cairo_region_translate (source_overlaps_destination, -dx, -dy);
-	  cairo_region_intersect (source_overlaps_destination, old_move->dest_region);
-	  cairo_region_translate (source_overlaps_destination, dx, dy);
-
-	  /* We can do all sort of optimizations here, but to do things safely it becomes
-	     quite complicated. However, a very common case is that you copy something first,
-	     then copy all that or a subset of it to a new location (i.e. if you scroll twice
-	     in the same direction). We'd like to detect this case and optimize it to one
-	     copy. */
-	  if (cairo_region_equal (source_overlaps_destination, new_dest_region))
-	    {
-	      /* This means we might be able to replace the old move and the new one
-		 with the new one read from the old ones source, and a second copy of
-		 the non-overwritten parts of the old move. However, such a split
-		 is only valid if the source in the old move isn't overwritten
-		 by the destination of the new one */
-
-	      /* the new destination of old move if split is ok: */
-	      non_overwritten = cairo_region_copy (old_move->dest_region);
-	      cairo_region_subtract (non_overwritten, new_dest_region);
-	      /* move to source region */
-	      cairo_region_translate (non_overwritten, -old_move->dx, -old_move->dy);
-
-	      cairo_region_intersect (non_overwritten, new_dest_region);
-	      if (cairo_region_is_empty (non_overwritten))
-		{
-		  added_move = TRUE;
-		  move = gdk_window_region_move_new (new_dest_region,
-						     dx + old_move->dx,
-						     dy + old_move->dy);
-
-		  impl_window->outstanding_moves =
-		    g_list_insert_before (impl_window->outstanding_moves,
-					  l, move);
-		  cairo_region_subtract (old_move->dest_region, new_dest_region);
-		}
-	      cairo_region_destroy (non_overwritten);
-	    }
-
-	  cairo_region_destroy (source_overlaps_destination);
-	  cairo_region_destroy (old_total_region);
-	  break;
-	}
-      cairo_region_destroy (old_total_region);
-    }
-
-  cairo_region_destroy (new_total_region);
-
-  if (!added_move)
-    {
-      move = gdk_window_region_move_new (new_dest_region, dx, dy);
-
-      if (l == NULL)
-	impl_window->outstanding_moves =
-	  g_list_prepend (impl_window->outstanding_moves,
-			  move);
-      else
-	impl_window->outstanding_moves =
-	  g_list_insert_before (impl_window->outstanding_moves,
-				l->next, move);
-    }
-}
-
-/* Moves bits and update area by dx/dy in impl window.
-   Takes ownership of region to avoid copy (because we may change it) */
-static void
-move_region_on_impl (GdkWindow *impl_window,
-		     cairo_region_t *region, /* In impl window coords */
-		     int dx, int dy)
-{
-  GSList *l;
-
-  if ((dx == 0 && dy == 0) ||
-      cairo_region_is_empty (region))
-    {
-      cairo_region_destroy (region);
-      return;
-    }
-
-  g_assert (impl_window == gdk_window_get_impl_window (impl_window));
-
-  /* Move any old invalid regions in the copy source area by dx/dy */
-  if (impl_window->update_area)
-    {
-      cairo_region_t *update_area;
-
-      update_area = cairo_region_copy (region);
-
-      /* Convert from target to source */
-      cairo_region_translate (update_area, -dx, -dy);
-      cairo_region_intersect (update_area, impl_window->update_area);
-      /* We only copy the area, so keep the old update area invalid.
-	 It would be safe to remove it too, as code that uses
-	 move_region_on_impl generally also invalidate the source
-	 area. However, it would just use waste cycles. */
-
-      /* Convert back */
-      cairo_region_translate (update_area, dx, dy);
-      cairo_region_union (impl_window->update_area, update_area);
-
-      /* This area of the destination is now invalid,
-	 so no need to copy to it.  */
-      cairo_region_subtract (region, update_area);
-
-      cairo_region_destroy (update_area);
-    }
-
-  /* If we're currently exposing this window, don't copy to this
-     destination, as it will be overdrawn when the expose is done,
-     instead invalidate it and repaint later. */
-  for (l = impl_window->implicit_paint; l != NULL; l = l->next)
-    {
-      GdkWindowPaint *implicit_paint = l->data;
-      cairo_region_t *exposing;
-
-      exposing = cairo_region_copy (implicit_paint->region);
-      cairo_region_intersect (exposing, region);
-      cairo_region_subtract (region, exposing);
-
-      impl_window_add_update_area (impl_window, exposing);
-      cairo_region_destroy (exposing);
-    }
-
-  append_move_region (impl_window, region, dx, dy);
-
-  cairo_region_destroy (region);
-}
-
-/* Flushes all outstanding changes to the window, call this
- * before drawing directly to the window (i.e. outside a begin/end_paint pair).
- */
-static void
-gdk_window_flush_outstanding_moves (GdkWindow *window)
-{
-  GdkWindow *impl_window;
-  GdkWindowRegionMove *move;
-
-  impl_window = gdk_window_get_impl_window (window);
-
-  while (impl_window->outstanding_moves)
-    {
-      move = impl_window->outstanding_moves->data;
-      impl_window->outstanding_moves = 
-	g_list_delete_link (impl_window->outstanding_moves,
-			    impl_window->outstanding_moves);
-
-      do_move_region_bits_on_impl (impl_window,
-				   move->dest_region, move->dx, move->dy);
-
-      gdk_window_region_move_free (move);
-    }
-}
-
 /**
  * gdk_window_flush:
  * @window: a #GdkWindow
@@ -3527,9 +3263,7 @@ gdk_window_flush_outstanding_moves (GdkWindow *window)
  * Gdk uses multiple kinds of caching to get better performance and
  * nicer drawing. For instance, during exposes all paints to a window
  * using double buffered rendering are keep on a surface until the last
- * window has been exposed. It also delays window moves/scrolls until
- * as long as possible until next update to avoid tearing when moving
- * windows.
+ * window has been exposed.
  *
  * Normally this should be completely invisible to applications, as
  * we automatically flush the windows when required, but this might
@@ -3542,7 +3276,6 @@ gdk_window_flush_outstanding_moves (GdkWindow *window)
 void
 gdk_window_flush (GdkWindow *window)
 {
-  gdk_window_flush_outstanding_moves (window);
   gdk_window_flush_implicit_paint (window);
 }
 
@@ -4059,10 +3792,6 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
 
 /* Process and remove any invalid area on the native window by creating
  * expose events for the window and all non-native descendants.
- * Also processes any outstanding moves on the window before doing
- * any drawing. Note that its possible to have outstanding moves without
- * any invalid area as we use the update idle mechanism to coalesce
- * multiple moves as well as multiple invalidations.
  */
 static void
 gdk_window_process_updates_internal (GdkWindow *window)
@@ -4070,7 +3799,6 @@ gdk_window_process_updates_internal (GdkWindow *window)
   GdkWindowImplClass *impl_class;
   gboolean save_region = FALSE;
   GdkRectangle clip_box;
-  int iteration;
 
   /* Ensure the window lives while updating it */
   g_object_ref (window);
@@ -4078,15 +3806,8 @@ gdk_window_process_updates_internal (GdkWindow *window)
   /* If an update got queued during update processing, we can get a
    * window in the update queue that has an empty update_area.
    * just ignore it.
-   *
-   * We run this multiple times if needed because on win32 the
-   * first run can cause new (synchronous) updates from
-   * gdk_window_flush_outstanding_moves(). However, we
-   * limit it to two iterations to avoid any potential loops.
    */
-  iteration = 0;
-  while (window->update_area &&
-	 iteration++ < 2)
+  if (window->update_area)
     {
       cairo_region_t *update_area = window->update_area;
       window->update_area = NULL;
@@ -4106,51 +3827,8 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	      g_usleep (70000);
 	    }
 
-	  /* At this point we will be completely redrawing all of update_area.
-	   * If we have any outstanding moves that end up moving stuff inside
-	   * this area we don't actually need to move that as that part would
-	   * be overdrawn by the expose anyway. So, in order to copy less data
-	   * we remove these areas from the outstanding moves.
-	   */
-	  if (window->outstanding_moves)
-	    {
-	      GdkWindowRegionMove *move;
-	      cairo_region_t *remove;
-	      GList *l, *prev;
-
-	      remove = cairo_region_copy (update_area);
-	      /* We iterate backwards, starting from the state that would be
-		 if we had applied all the moves. */
-	      for (l = g_list_last (window->outstanding_moves); l != NULL; l = prev)
-		{
-		  prev = l->prev;
-		  move = l->data;
-
-		  /* Don't need this area */
-		  cairo_region_subtract (move->dest_region, remove);
-
-		  /* However if any of the destination we do need has a source
-		     in the updated region we do need that as a destination for
-		     the earlier moves */
-		  cairo_region_translate (move->dest_region, -move->dx, -move->dy);
-		  cairo_region_subtract (remove, move->dest_region);
-
-		  if (cairo_region_is_empty (move->dest_region))
-		    {
-		      gdk_window_region_move_free (move);
-		      window->outstanding_moves =
-			g_list_delete_link (window->outstanding_moves, l);
-		    }
-		  else /* move back */
-		    cairo_region_translate (move->dest_region, move->dx, move->dy);
-		}
-	      cairo_region_destroy (remove);
-	    }
-
-	  /* By now we a set of window moves that should be applied, and then
-	   * an update region that should be repainted. A trivial implementation
-	   * would just do that in order, however in order to get nicer drawing
-	   * we do some tricks:
+	  /* By now we an update region that should be repainted. However in order to
+	   * get nicer drawing we do some tricks:
 	   *
 	   * First of all, each subwindow expose may be double buffered by
 	   * itself (depending on widget setting) via
@@ -4165,20 +3843,12 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	   * gdk double buffering there. Secondly, some subwindow could be
 	   * non-double buffered and draw directly to the window outside a
 	   * begin/end_paint pair. That will be lead to a gdk_window_flush
-	   * which immediately executes all outstanding moves and paints+removes
-	   * the implicit paint (further paints will allocate their own surfaces).
+	   * which immediately paints+removes the implicit paint (further
+	   * paints will allocate their own surfaces).
 	   *
-	   * Secondly, in the case of implicit double buffering we expose all
-	   * the child windows into the implicit surface before we execute
-	   * the outstanding moves. This way we minimize the time between
-	   * doing the moves and rendering the new update area, thus minimizing
-	   * flashing. Of course, if any subwindow is non-double buffered we
-	   * well flush earlier than that.
-	   *
-	   * Thirdly, after having done the outstanding moves we queue an
-	   * "antiexpose" on the area that will be drawn by the expose, which
-	   * means that any invalid region on the native window side before
-	   * the first expose drawing operation will be discarded, as it
+	   * Secondly, we queue an "antiexpose" on the area that will be drawn by
+	   * the expose, which means that any invalid region on the native window side
+	   * before the first expose drawing operation will be discarded, as it
 	   * has by then been overdrawn with valid data. This means we can
 	   * avoid doing the unnecessary repaint any outstanding expose events.
 	   */
@@ -4189,10 +3859,6 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
 	  if (!end_implicit)
 	    {
-	      /* Rendering is not double buffered by gdk, do outstanding
-	       * moves and queue antiexposure immediately. No need to do
-	       * any tricks */
-	      gdk_window_flush_outstanding_moves (window);
 	      save_region = impl_class->queue_antiexpose (window, update_area);
 	    }
 	  /* Render the invalid areas to the implicit paint, by sending exposes.
@@ -4201,12 +3867,9 @@ gdk_window_process_updates_internal (GdkWindow *window)
 
 	  if (end_implicit)
 	    {
-	      /* Do moves right before exposes are rendered to the window */
-	      gdk_window_flush_outstanding_moves (window);
-
 	      /* By this time we know that any outstanding expose for this
 	       * area is invalid and we can avoid it, so queue an antiexpose.
-	       * we have already started drawing to the window, so it would
+	       * If we flushed we have already started drawing to the window, so it would
 	       * be to late to anti-expose now. Since this is merely an
 	       * optimization we just avoid doing it at all in that case.
 	       */
@@ -4219,13 +3882,6 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	}
       if (!save_region)
 	cairo_region_destroy (update_area);
-    }
-
-  if (window->outstanding_moves)
-    {
-      /* Flush any outstanding moves, may happen if we moved a window but got
-	 no actual invalid area */
-      gdk_window_flush_outstanding_moves (window);
     }
 
   g_object_unref (window);
@@ -4368,8 +4024,7 @@ gdk_window_process_updates_with_mode (GdkWindow     *window,
   g_object_ref (window);
 
   impl_window = gdk_window_get_impl_window (window);
-  if ((impl_window->update_area ||
-       impl_window->outstanding_moves) &&
+  if ((impl_window->update_area) &&
       !impl_window->update_freeze_count &&
       !gdk_window_is_toplevel_frozen (window) &&
 
@@ -4594,11 +4249,7 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
 
   impl_window = gdk_window_get_impl_window (window);
 
-  if (!cairo_region_is_empty (visible_region)  ||
-      /* Even if we're not exposing anything, make sure we process
-	 idles for windows with outstanding moves */
-      (impl_window->outstanding_moves != NULL &&
-       impl_window->update_area == NULL))
+  if (!cairo_region_is_empty (visible_region))
     {
       if (debug_updates)
 	draw_ugly_color (window, region);
@@ -4734,34 +4385,6 @@ void
 _gdk_window_invalidate_for_expose (GdkWindow       *window,
 				   cairo_region_t       *region)
 {
-  GdkWindowRegionMove *move;
-  cairo_region_t *move_region;
-  GList *l;
-
-  /* Any invalidations comming from the windowing system will
-     be in areas that may be moved by outstanding moves,
-     so we need to modify the expose region correspondingly,
-     otherwise we would expose in the wrong place, as the
-     outstanding moves will be copied before we draw the
-     exposes. */
-  for (l = window->outstanding_moves; l != NULL; l = l->next)
-    {
-      move = l->data;
-
-      /* covert to move source region */
-      move_region = cairo_region_copy (move->dest_region);
-      cairo_region_translate (move_region, -move->dx, -move->dy);
-
-      /* Move area of region that intersects with move source
-	 by dx, dy of the move*/
-      cairo_region_intersect (move_region, region);
-      cairo_region_subtract (region, move_region);
-      cairo_region_translate (move_region, move->dx, move->dy);
-      cairo_region_union (region, move_region);
-
-      cairo_region_destroy (move_region);
-    }
-
   gdk_window_invalidate_maybe_recurse_full (window, region, CLEAR_BG_WINCLEARED,
 					    (gboolean (*) (GdkWindow *, gpointer))gdk_window_has_no_impl,
 					    NULL);
@@ -4821,8 +4444,7 @@ gdk_window_get_update_area (GdkWindow *window)
 
 	  cairo_region_destroy (to_remove);
 
-	  if (cairo_region_is_empty (impl_window->update_area) &&
-	      impl_window->outstanding_moves == NULL)
+	  if (cairo_region_is_empty (impl_window->update_area))
 	    {
 	      cairo_region_destroy (impl_window->update_area);
 	      impl_window->update_area = NULL;
