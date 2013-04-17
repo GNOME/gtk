@@ -1432,9 +1432,10 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                        PANGO_TYPE_ATTR_LIST,
                                                        GTK_PARAM_READWRITE));
 
-  /** GtkEntry:populate-all:
+  /**
+   * GtkEntry:populate-all:
    *
-   * If ::populate-all is %TRUE, the #GtkEntry::populate-popup
+   * If :populate-all is %TRUE, the #GtkEntry::populate-popup
    * signal is also emitted for touch popups.
    *
    * Since: 3.8
@@ -1514,7 +1515,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * to this signal and append your items to the @widget, which
    * will be a #GtkMenu in this case.
    *
-   * If #GtkEntry::populate-all is %TRUE, this signal will
+   * If #GtkEntry:populate-all is %TRUE, this signal will
    * also be emitted to populate touch popups. In this case,
    * @widget will be a different container, e.g. a #GtkToolbar.
    * The signal handler should not make assumptions about the

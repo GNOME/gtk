@@ -56,7 +56,7 @@ typedef guint8 * (* GtkTextBufferSerializeFunc)   (GtkTextBuffer     *register_b
  * @content_buffer: the #GtkTextBuffer to deserialize into
  * @iter: insertion point for the deserialized text
  * @data: data to deserialize
- * @length: length of %data
+ * @length: length of @data
  * @create_tags: %TRUE if deserializing may create tags
  * @user_data: user data that was specified when registering the format
  * @error: return location for a #GError

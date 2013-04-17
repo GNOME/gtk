@@ -61,7 +61,8 @@
  * SECTION:gtktreeview
  * @Short_description: A widget for displaying both trees and lists
  * @Title: GtkTreeView
- * @See_also: #GtkTreeViewColumn, #GtkTreeSelection, #GtkTreeDnd, #GtkTreeMode,
+ * @See_also: #GtkTreeViewColumn, #GtkTreeSelection, #GtkTreeModel,
+ *   <link linkend="gtk3-GtkTreeView-drag-and-drop">GtkTreeView drag-and-drop</link>,
  *   #GtkTreeSortable, #GtkTreeModelSort, #GtkListStore, #GtkTreeStore,
  *   #GtkCellRenderer, #GtkCellEditable, #GtkCellRendererPixbuf,
  *   #GtkCellRendererText, #GtkCellRendererToggle

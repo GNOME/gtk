@@ -3046,7 +3046,7 @@ gtk_text_buffer_get_modified (GtkTextBuffer *buffer)
  * last time it was saved. Whenever the buffer is saved to disk, call
  * gtk_text_buffer_set_modified (@buffer, FALSE). When the buffer is modified,
  * it will automatically toggled on the modified bit again. When the modified
- * bit flips, the buffer emits a "modified-changed" signal.
+ * bit flips, the buffer emits the #GtkTextBuffer::modified-changed signal.
  **/
 void
 gtk_text_buffer_set_modified (GtkTextBuffer *buffer,
@@ -4210,7 +4210,7 @@ gtk_text_buffer_get_target_list (GtkTextBuffer   *buffer,
  *
  * This function returns the list of targets this text buffer can
  * provide for copying and as DND source. The targets in the list are
- * added with %info values from the #GtkTextBufferTargetInfo enum,
+ * added with @info values from the #GtkTextBufferTargetInfo enum,
  * using gtk_target_list_add_rich_text_targets() and
  * gtk_target_list_add_text_targets().
  *
@@ -4242,7 +4242,7 @@ gtk_text_buffer_get_copy_target_list (GtkTextBuffer *buffer)
  *
  * This function returns the list of targets this text buffer supports
  * for pasting and as DND destination. The targets in the list are
- * added with %info values from the #GtkTextBufferTargetInfo enum,
+ * added with @info values from the #GtkTextBufferTargetInfo enum,
  * using gtk_target_list_add_rich_text_targets() and
  * gtk_target_list_add_text_targets().
  *
