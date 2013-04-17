@@ -58,7 +58,7 @@ static GQuark    deserialize_quark (void);
  * @buffer: a #GtkTextBuffer
  * @mime_type: the format's mime-type
  * @function: the serialize function to register
- * @user_data: %function's user_data
+ * @user_data: @function's user_data
  * @user_data_destroy: a function to call when @user_data is no longer needed
  *
  * This function registers a rich text serialization @function along with

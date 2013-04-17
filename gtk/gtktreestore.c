@@ -37,8 +37,9 @@
  * widget.  It implements the #GtkTreeModel interface, and consequentialy,
  * can use all of the methods available there.  It also implements the
  * #GtkTreeSortable interface so it can be sorted by the view.  Finally,
- * it also implements the tree <link linkend="gtktreednd">drag and
- * drop</link> interfaces.
+ * it also implements the tree
+ * <link linkend="gtk3-GtkTreeView-drag-and-drop">drag and drop</link>
+ * interfaces.
  *
  * <refsect2 id="GtkTreeStore-BUILDER-UI">
  * <title>GtkTreeStore as GtkBuildable</title>

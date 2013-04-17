@@ -39,8 +39,9 @@
  * widget.  It implements the #GtkTreeModel interface, and consequentialy,
  * can use all of the methods available there.  It also implements the
  * #GtkTreeSortable interface so it can be sorted by the view.
- * Finally, it also implements the tree <link linkend="gtktreednd">drag and
- * drop</link> interfaces.
+ * Finally, it also implements the tree
+ * <link linkend="gtk3-GtkTreeView-drag-and-drop">drag and drop</link>
+ * interfaces.
  *
  * The #GtkListStore can accept most GObject types as a column type, though
  * it can't accept all custom types.  Internally, it will keep a copy of

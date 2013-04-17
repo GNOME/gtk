@@ -863,9 +863,10 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                        GTK_INPUT_HINT_NONE,
                                                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
-  /** GtkTextView:populate-all:
+  /**
+   * GtkTextView:populate-all:
    *
-   * If ::populate-all is %TRUE, the #GtkTextView::populate-popup
+   * If :populate-all is %TRUE, the #GtkTextView::populate-popup
    * signal is also emitted for touch popups.
    *
    * Since: 3.8
@@ -1150,7 +1151,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    * to this signal and append your items to the @popup, which
    * will be a #GtkMenu in this case.
    *
-   * If #GtkEntry::populate-toolbar is %TRUE, this signal will
+   * If #GtkTextView:populate-all is %TRUE, this signal will
    * also be emitted to populate touch popups. In this case,
    * @popup will be a different container, e.g. a #GtkToolbar.
    *
