@@ -555,42 +555,6 @@ gdk_offscreen_window_queue_antiexpose (GdkWindow *window,
   return FALSE;
 }
 
-static void
-gdk_offscreen_window_translate (GdkWindow      *window,
-                                cairo_region_t *area,
-                                gint            dx,
-                                gint            dy)
-{
-  GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (window->impl);
-
-  if (offscreen->surface)
-    {
-      cairo_t *cr;
-
-      cr = cairo_create (offscreen->surface);
-
-      area = cairo_region_copy (area);
-
-      gdk_cairo_region (cr, area);
-      cairo_clip (cr);
-
-      /* NB: This is a self-copy and Cairo doesn't support that yet.
-       * So we do a litle trick.
-       */
-      cairo_push_group (cr);
-
-      cairo_set_source_surface (cr, offscreen->surface, dx, dy);
-      cairo_paint (cr);
-
-      cairo_pop_group_to_source (cr);
-      cairo_paint (cr);
-
-      cairo_destroy (cr);
-    }
-
-  _gdk_window_add_damage (window, area);
-}
-
 static cairo_surface_t *
 gdk_offscreen_window_resize_cairo_surface (GdkWindow       *window,
                                            cairo_surface_t *surface,
@@ -752,7 +716,6 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   impl_class->input_shape_combine_region = gdk_offscreen_window_input_shape_combine_region;
   impl_class->set_static_gravities = gdk_offscreen_window_set_static_gravities;
   impl_class->queue_antiexpose = gdk_offscreen_window_queue_antiexpose;
-  impl_class->translate = gdk_offscreen_window_translate;
   impl_class->destroy = gdk_offscreen_window_destroy;
   impl_class->destroy_foreign = NULL;
   impl_class->resize_cairo_surface = gdk_offscreen_window_resize_cairo_surface;

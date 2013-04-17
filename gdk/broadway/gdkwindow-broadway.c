@@ -1470,56 +1470,6 @@ _gdk_broadway_window_queue_antiexpose (GdkWindow *window,
   return TRUE;
 }
 
-static void
-copy_region (cairo_surface_t *surface,
-	     cairo_region_t *area,
-	     gint            dx,
-	     gint            dy)
-{
-  cairo_t *cr;
-
-  cr = cairo_create (surface);
-
-  gdk_cairo_region (cr, area);
-  cairo_clip (cr);
-
-  /* NB: This is a self-copy and Cairo doesn't support that yet.
-   * So we do a litle trick.
-   */
-  cairo_push_group (cr);
-
-  cairo_set_source_surface (cr, surface, dx, dy);
-  cairo_paint (cr);
-
-  cairo_pop_group_to_source (cr);
-  cairo_paint (cr);
-
-  cairo_destroy (cr);
-}
-
-void
-_gdk_broadway_window_translate (GdkWindow      *window,
-				cairo_region_t *area,
-				gint            dx,
-				gint            dy)
-{
-  GdkWindowImplBroadway *impl;
-  GdkBroadwayDisplay *broadway_display;
-
-  impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
-
-  if (impl->surface)
-    {
-      copy_region (impl->surface, area, dx, dy);
-      broadway_display = GDK_BROADWAY_DISPLAY (gdk_window_get_display (window));
-
-      if (_gdk_broadway_server_window_translate (broadway_display->server,
-						 impl->id,
-						 area, dx, dy))
-	queue_flush (window);
-    }
-}
-
 guint32
 gdk_broadway_get_last_seen_time (GdkWindow  *window)
 {
@@ -1558,7 +1508,6 @@ gdk_window_impl_broadway_class_init (GdkWindowImplBroadwayClass *klass)
   impl_class->input_shape_combine_region = gdk_window_broadway_input_shape_combine_region;
   impl_class->set_static_gravities = gdk_window_broadway_set_static_gravities;
   impl_class->queue_antiexpose = _gdk_broadway_window_queue_antiexpose;
-  impl_class->translate = _gdk_broadway_window_translate;
   impl_class->destroy = _gdk_broadway_window_destroy;
   impl_class->destroy_foreign = gdk_broadway_window_destroy_foreign;
   impl_class->resize_cairo_surface = gdk_window_broadway_resize_cairo_surface;
