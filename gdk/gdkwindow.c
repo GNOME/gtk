@@ -133,14 +133,6 @@
  * For native windows we apply the calculated clip region as a window shape
  * so that eg. client side siblings that overlap the native child properly
  * draws over the native child window.
- *
- * We use something called a "implicit paint" during repaint handling.
- * An implicit paint is similar to a regular paint for the paint stack, but it is
- * not put on the stack. Instead, it is set on the impl window, and later when
- * regular gdk_window_begin_paint_region()  happen on a window of this impl window
- * we reuse the surface from the implicit paint. During repaint we create and at the
- * end flush an implicit paint, which means we can collect all the paints on
- * multiple client side windows in the same backing store.
  */
 
 /* This adds a local value to the GdkVisibilityState enum */
@@ -169,9 +161,6 @@ struct _GdkWindowPaint
 {
   cairo_region_t *region;
   cairo_surface_t *surface;
-  cairo_region_t *flushed;
-  guint8 alpha;
-  guint uses_implicit : 1;
 };
 
 /* Global info */
@@ -196,7 +185,6 @@ static void gdk_window_clear_backing_region (GdkWindow *window,
 
 static void recompute_visible_regions   (GdkWindow *private,
 					 gboolean recalculate_children);
-static void gdk_window_flush_recursive  (GdkWindow *window);
 static void gdk_window_invalidate_in_parent (GdkWindow *private);
 static void move_native_children        (GdkWindow *private);
 static void update_cursor               (GdkDisplay *display,
@@ -2655,215 +2643,10 @@ gdk_window_get_content (GdkWindow *window)
   return content;
 }
 
-/* This creates an empty "implicit" paint region for the impl window.
- * By itself this does nothing, but real paints to this window
- * or children of it can use this surface as backing to avoid allocating
- * multiple surfaces for subwindow rendering. When doing so they
- * add to the region of the implicit paint region, which will be
- * pushed to the window when the implicit paint region is ended.
- * Such paints should not copy anything to the window on paint end, but
- * should rely on the implicit paint end.
- * The implicit paint will be automatically ended if someone draws
- * directly to the window or a child window.
- */
-static gboolean
-gdk_window_begin_implicit_paint (GdkWindow *window, GdkRectangle *rect,
-				 gboolean with_alpha, guint8 alpha)
-{
-  GdkWindowPaint *paint;
-
-  g_assert (gdk_window_has_impl (window));
-
-  if (GDK_IS_PAINTABLE (window->impl))
-    return FALSE; /* Implementation does double buffering */
-
-  if (window->paint_stack != NULL)
-    return FALSE; /* Don't stack implicit paints */
-
-  /* Never do implicit paints for foreign windows, they don't need
-   * double buffer combination since they have no client side children,
-   * and creating surfaces for them is risky since they could disappear
-   * at any time
-   */
-  if (window->window_type == GDK_WINDOW_FOREIGN)
-    return FALSE;
-
-  paint = g_new (GdkWindowPaint, 1);
-  paint->region = cairo_region_create (); /* Empty */
-  paint->uses_implicit = FALSE;
-  paint->flushed = NULL;
-  paint->alpha = alpha;
-  paint->surface = gdk_window_create_similar_surface (window,
-						      with_alpha ? CAIRO_CONTENT_COLOR_ALPHA : gdk_window_get_content (window),
-		                                      MAX (rect->width, 1),
-                                                      MAX (rect->height, 1));
-  cairo_surface_set_device_offset (paint->surface, -rect->x, -rect->y);
-
-  window->implicit_paint = g_slist_prepend (window->implicit_paint, paint);
-
-  return TRUE;
-}
-
 static cairo_surface_t *
 gdk_window_ref_impl_surface (GdkWindow *window)
 {
   return GDK_WINDOW_IMPL_GET_CLASS (window->impl)->ref_cairo_surface (gdk_window_get_impl_window (window));
-}
-
-static cairo_t *
-gdk_cairo_create_for_impl (GdkWindow *window)
-{
-  cairo_surface_t *surface;
-  cairo_t *cr;
-
-  surface = gdk_window_ref_impl_surface (window);
-  cr = cairo_create (surface);
-
-  cairo_surface_destroy (surface);
-
-  return cr;
-}
-
-/* This is called whenever something is drawing directly to the
- * window, bypassing the double buffering. When this happens we
- * need to mark any the currently drawn data in the double buffer
- * as invalid to avoid later drawing it back over the directly
- * rendered pixels. We also need to mark this region as "flushed"
- * so that if we later try to paint on it double-buffered we need
- * to read back the on-window pixels rather than relying on what
- * is in the current double-buffer pixmap.
- *
- * Note that this doesn't correctly handle the case where the
- * non-double buffered drawing uses transparency and relies on
- * what the windows below it draws. A fix for that would require
- * drawing the existing double-buffered background to the window,
- * but that causes ugly flashes. Non-double buffered drawing is
- * typically only used in old code or when the drawed widget
- * already has a double-buffering layer, and in these cases the
- * pixels are opaque anyway. If you need transparency, don't
- * disable double buffering.
- */
-static void
-gdk_window_flush_implicit_paint (GdkWindow *window)
-{
-  GdkWindow *impl_window;
-  GdkWindowPaint *paint;
-  cairo_region_t *region;
-  GSList *l;
-
-  impl_window = gdk_window_get_impl_window (window);
-  if (impl_window->implicit_paint == NULL)
-    return;
-
-  /* There is no proper way to flush any non-toplevel implicit
-     paint, because direct rendering is not compatible with
-     opacity rendering, as it requires an opacity group.
-
-     We warn and flush just the outermost paint in this case.
-  */
-  l = g_slist_last (impl_window->implicit_paint);
-  if (l != impl_window->implicit_paint)
-    g_warning ("Non double buffered drawing not supported inside transparent windows");
-
-  paint = l->data;
-
-  region = cairo_region_copy (window->clip_region);
-  cairo_region_translate (region, window->abs_x, window->abs_y);
-
-  /* Anything in the whole flushed window that was drawn is now
-     considered unpainted, so that we don't push it back at the
-     end of the implicit paint overwriting the directly rendered
-     pixels. */
-  cairo_region_subtract (paint->region, region);
-
-  /* Save flushed area so we can read it back if we draw over it later */
-  if (paint->flushed == NULL)
-    paint->flushed = region;
-  else
-    {
-      cairo_region_union (paint->flushed, region);
-      cairo_region_destroy (region);
-    }
-}
-
-/* Ends an implicit paint, paired with gdk_window_begin_implicit_paint returning TRUE */
-static void
-gdk_window_end_implicit_paint (GdkWindow *window)
-{
-  GdkWindowPaint *paint;
-
-  g_assert (gdk_window_has_impl (window));
-
-  g_assert (window->implicit_paint != NULL);
-
-  paint = window->implicit_paint->data;
-
-  window->implicit_paint = g_slist_delete_link (window->implicit_paint,
-						window->implicit_paint);
-
-  if (!GDK_WINDOW_DESTROYED (window) && !cairo_region_is_empty (paint->region) && paint->alpha > 0)
-    {
-      GdkWindowPaint *parent_paint = NULL;
-      cairo_t *cr;
-
-      /* Some regions are valid, push these to window now */
-      if (window->implicit_paint)
-	{
-	  parent_paint = window->implicit_paint->data;
-
-	  /* If the toplevel implicit paint was flushed, restore it now
-	     before we blend over it. */
-	  if (parent_paint->flushed != NULL &&
-	      !cairo_region_is_empty (parent_paint->flushed))
-	    {
-	      cairo_surface_t *source_surface = gdk_window_ref_impl_surface (window);
-	      cairo_region_t *flushed = cairo_region_copy (parent_paint->flushed);
-
-	      cr = cairo_create (parent_paint->surface);
-	      cairo_set_source_surface (cr, source_surface, 0, 0);
-	      cairo_surface_destroy (source_surface);
-
-	      cairo_region_intersect (flushed, paint->region);
-	      gdk_cairo_region (cr, flushed);
-	      cairo_clip (cr);
-
-	      cairo_region_subtract (parent_paint->flushed, flushed);
-	      cairo_region_destroy (flushed);
-
-	      cairo_paint (cr);
-	      cairo_destroy (cr);
-	    }
-
-	  cr = cairo_create (parent_paint->surface);
-	}
-      else
-	cr = gdk_cairo_create_for_impl (window);
-
-      gdk_cairo_region (cr, paint->region);
-      cairo_clip (cr);
-      cairo_set_source_surface (cr, paint->surface, 0, 0);
-      if (paint->alpha == 255)
-	{
-	  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-	  cairo_paint (cr);
-	}
-      else
-	{
-	  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-	  cairo_paint_with_alpha (cr, paint->alpha / 255.0);
-	}
-
-      cairo_destroy (cr);
-
-      if (parent_paint)
-	cairo_region_union (parent_paint->region, paint->region);
-    }
-
-  cairo_region_destroy (paint->region);
-  if (paint->flushed)
-    cairo_region_destroy (paint->flushed);
-  cairo_surface_destroy (paint->surface);
-  g_free (paint);
 }
 
 /**
@@ -2939,8 +2722,7 @@ gdk_window_begin_paint_region (GdkWindow       *window,
 			       const cairo_region_t *region)
 {
   GdkRectangle clip_box;
-  GdkWindowPaint *paint, *implicit_paint;
-  GdkWindow *impl_window;
+  GdkWindowPaint *paint;
   GSList *list;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -2958,78 +2740,16 @@ gdk_window_begin_paint_region (GdkWindow       *window,
       return;
     }
 
-  impl_window = gdk_window_get_impl_window (window);
-  implicit_paint = impl_window->implicit_paint != NULL ? impl_window->implicit_paint->data : NULL;
-
   paint = g_new (GdkWindowPaint, 1);
   paint->region = cairo_region_copy (region);
 
   cairo_region_intersect (paint->region, window->clip_region);
   cairo_region_get_extents (paint->region, &clip_box);
 
-  cairo_region_translate (paint->region, window->abs_x, window->abs_y);
-
-  /* Mark the region as valid on the implicit paint */
-
-  if (implicit_paint)
-    cairo_region_union (implicit_paint->region, paint->region);
-
-  /* Convert back to normal coords */
-  cairo_region_translate (paint->region, -window->abs_x, -window->abs_y);
-
-  if (implicit_paint)
-    {
-      paint->uses_implicit = TRUE;
-      paint->surface = cairo_surface_create_for_rectangle (implicit_paint->surface,
-                                                           window->abs_x + clip_box.x,
-                                                           window->abs_y + clip_box.y,
-			                                   MAX (clip_box.width, 1),
-                                                           MAX (clip_box.height, 1));
-    }
-  else
-    {
-      paint->uses_implicit = FALSE;
-      paint->surface = gdk_window_create_similar_surface (window,
-                                                          gdk_window_get_content (window),
-			                                  MAX (clip_box.width, 1),
-                                                          MAX (clip_box.height, 1));
-    }
-
-  /* Normally alpha backgrounded client side windows are composited on the implicit paint
-     by being drawn in back to front order. However, if implicit paints are not used, for
-     instance if it was flushed due to a non-double-buffered paint in the middle of the
-     expose we need to copy in the existing data here. */
-  if (!implicit_paint ||
-      (implicit_paint && implicit_paint->flushed != NULL && !cairo_region_is_empty (implicit_paint->flushed)))
-    {
-      cairo_t *cr = cairo_create (paint->surface);
-      /* We can't use gdk_cairo_set_source_window here, as that might
-	 flush the implicit paint at an unfortunate time, since this
-	 would be detected as a draw during non-expose time */
-      cairo_surface_t *source_surface  = gdk_window_ref_impl_surface (impl_window);
-      cairo_set_source_surface (cr, source_surface,
-				- (window->abs_x + clip_box.x),
-				- (window->abs_y + clip_box.y));
-      cairo_surface_destroy (source_surface);
-
-      /* Only read back the flushed area if any */
-      if (implicit_paint)
-	{
-	  cairo_region_t *flushed = cairo_region_copy (implicit_paint->flushed);
-	  /* Convert from impl coords */
-	  cairo_region_translate (flushed, -window->abs_x, -window->abs_y);
-	  cairo_region_intersect (flushed, paint->region);
-	  gdk_cairo_region (cr, flushed);
-	  cairo_clip (cr);
-
-	  /* Convert to impl coords */
-	  cairo_region_translate (flushed, window->abs_x, window->abs_y);
-	  cairo_region_subtract (implicit_paint->flushed, flushed);
-	  cairo_region_destroy (flushed);
-	}
-      cairo_paint (cr);
-      cairo_destroy (cr);
-    }
+  paint->surface = gdk_window_create_similar_surface (window,
+						      gdk_window_get_content (window),
+						      MAX (clip_box.width, 1),
+						      MAX (clip_box.height, 1));
 
   cairo_surface_set_device_offset (paint->surface, -clip_box.x, -clip_box.y);
 
@@ -3069,6 +2789,7 @@ gdk_window_end_paint (GdkWindow *window)
   GdkWindowPaint *paint;
   GdkRectangle clip_box;
   cairo_region_t *full_clip;
+  cairo_t *cr;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -3096,23 +2817,27 @@ gdk_window_end_paint (GdkWindow *window)
 					     window->paint_stack);
 
   cairo_region_get_extents (paint->region, &clip_box);
+  full_clip = cairo_region_copy (window->clip_region);
+  cairo_region_intersect (full_clip, paint->region);
 
-  if (!paint->uses_implicit)
+  cr = gdk_cairo_create (window);
+  cairo_set_source_surface (cr, paint->surface, 0, 0);
+  gdk_cairo_region (cr, full_clip);
+  cairo_clip (cr);
+  if (gdk_window_has_impl (window) ||  
+      window->alpha == 255)
     {
-      cairo_t *cr;
-
-      full_clip = cairo_region_copy (window->clip_region);
-      cairo_region_intersect (full_clip, paint->region);
-
-      cr = gdk_cairo_create (window);
       cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-      cairo_set_source_surface (cr, paint->surface, 0, 0);
-      gdk_cairo_region (cr, full_clip);
-      cairo_fill (cr);
-
-      cairo_destroy (cr);
-      cairo_region_destroy (full_clip);
+      cairo_paint (cr);
     }
+  else
+    {
+      cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+      cairo_paint_with_alpha (cr, window->alpha / 255.0);
+    }
+
+  cairo_destroy (cr);
+  cairo_region_destroy (full_clip);
 
   cairo_surface_destroy (paint->surface);
   cairo_region_destroy (paint->region);
@@ -3190,33 +2915,6 @@ gdk_window_free_paint_stack (GdkWindow *window)
 void
 gdk_window_flush (GdkWindow *window)
 {
-  gdk_window_flush_implicit_paint (window);
-}
-
-static void
-gdk_window_flush_recursive_helper (GdkWindow *window,
-				   GdkWindowImpl *impl)
-{
-  GdkWindow *child;
-  GList *l;
-
-  for (l = window->children; l != NULL; l = l->next)
-    {
-      child = l->data;
-
-      if (child->impl == impl)
-	/* Same impl, ignore */
-	gdk_window_flush_recursive_helper (child, impl);
-      else
-	gdk_window_flush_recursive (child);
-    }
-}
-
-static void
-gdk_window_flush_recursive (GdkWindow *window)
-{
-  gdk_window_flush (window);
-  gdk_window_flush_recursive_helper (window, window->impl);
 }
 
 /**
@@ -3395,10 +3093,6 @@ _gdk_window_ref_cairo_surface (GdkWindow *window)
     }
   else
     {
-
-      /* This will be drawing directly to the window, so flush implicit paint */
-      gdk_window_flush (window);
-
       if (!window->cairo_surface)
 	{
 	  window->cairo_surface = gdk_window_create_cairo_surface (window,
@@ -3451,18 +3145,6 @@ gdk_cairo_create (GdkWindow *window)
     {
       gdk_cairo_region (cr, window->clip_region);
       cairo_clip (cr);
-    }
-  else
-    {
-      GdkWindowPaint *paint = window->paint_stack->data;
-
-      /* Only needs to clip to region if piggybacking
-	 on an implicit paint */
-      if (paint->uses_implicit)
-	{
-	  gdk_cairo_region (cr, paint->region);
-	  cairo_clip (cr);
-	}
     }
     
   cairo_surface_destroy (surface);
@@ -3608,7 +3290,6 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
   cairo_region_t *clipped_expose_region;
   GdkRectangle clip_box;
   GList *l, *children;
-  gboolean end_implicit;
 
   if (cairo_region_is_empty (expose_region))
     return;
@@ -3617,7 +3298,6 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
       gdk_window_has_impl (window))
     _gdk_window_add_damage ((GdkWindow *) window->impl_window, expose_region);
 
-  end_implicit = FALSE;
   if (window->alpha != 255 && !gdk_window_has_impl (window))
     {
       if (window->alpha == 0)
@@ -3626,7 +3306,7 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
       cairo_region_get_extents (expose_region, &clip_box);
       clip_box.x += window->abs_x;
       clip_box.y += window->abs_y;
-      end_implicit = gdk_window_begin_implicit_paint (window->impl_window, &clip_box, TRUE, window->alpha);
+      /* TODO: How do we now do subwindow alphas */
     }
 
   /* Paint the window before the children, clipped to the window region */
@@ -3681,9 +3361,6 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
     }
 
   g_list_free_full (children, g_object_unref);
-
-  if (end_implicit)
-    gdk_window_end_implicit_paint (window->impl_window);
 }
 
 /* Process and remove any invalid area on the native window by creating
@@ -3699,6 +3376,8 @@ gdk_window_process_updates_internal (GdkWindow *window)
   /* Ensure the window lives while updating it */
   g_object_ref (window);
 
+  window->in_update = TRUE;
+
   /* If an update got queued during update processing, we can get a
    * window in the update queue that has an empty update_area.
    * just ignore it.
@@ -3711,9 +3390,8 @@ gdk_window_process_updates_internal (GdkWindow *window)
       if (gdk_window_is_viewable (window))
 	{
 	  cairo_region_t *expose_region;
-	  gboolean end_implicit;
 
-	  /* Clip to part visible in toplevel */
+	  /* Clip to part visible in impl window */
 	  cairo_region_intersect (update_area, window->clip_region);
 
 	  if (debug_updates)
@@ -3723,62 +3401,18 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	      g_usleep (70000);
 	    }
 
-	  /* By now we an update region that should be repainted. However in order to
-	   * get nicer drawing we do some tricks:
-	   *
-	   * First of all, each subwindow expose may be double buffered by
-	   * itself (depending on widget setting) via
-	   * gdk_window_begin/end_paint(). But we also do an "implicit" paint,
-	   * creating a single surface the size of the invalid area on the
-	   * native window which all the individual normal paints will draw
-	   * into. This way in the normal case there will be only one surface
-	   * allocated and only once surface draw done for all the windows
-	   * in this native window.
-	   * There are a couple of reasons this may fail, for instance, some
-	   * backends (like quartz) do its own double buffering, so we disable
-	   * gdk double buffering there. Secondly, some subwindow could be
-	   * non-double buffered and draw directly to the window outside a
-	   * begin/end_paint pair. That will be lead to a gdk_window_flush
-	   * which immediately paints+removes the implicit paint (further
-	   * paints will allocate their own surfaces).
-	   *
-	   * Secondly, we queue an "antiexpose" on the area that will be drawn by
-	   * the expose, which means that any invalid region on the native window side
-	   * before the first expose drawing operation will be discarded, as it
-	   * has by then been overdrawn with valid data. This means we can
-	   * avoid doing the unnecessary repaint any outstanding expose events.
-	   */
-
 	  cairo_region_get_extents (update_area, &clip_box);
-	  end_implicit = gdk_window_begin_implicit_paint (window, &clip_box, FALSE, 255);
 	  expose_region = cairo_region_copy (update_area);
 	  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
-	  if (!end_implicit)
-	    {
-	      save_region = impl_class->queue_antiexpose (window, update_area);
-	    }
-	  /* Render the invalid areas to the implicit paint, by sending exposes.
-	   * May flush if non-double buffered widget draw. */
+	  save_region = impl_class->queue_antiexpose (window, update_area);
           impl_class->process_updates_recurse (window, expose_region);
-
-	  if (end_implicit)
-	    {
-	      /* By this time we know that any outstanding expose for this
-	       * area is invalid and we can avoid it, so queue an antiexpose.
-	       * If we flushed we have already started drawing to the window, so it would
-	       * be to late to anti-expose now. Since this is merely an
-	       * optimization we just avoid doing it at all in that case.
-	       */
-	      if (window->implicit_paint != NULL && !((GdkWindowPaint *)window->implicit_paint->data)->flushed)
-                save_region = impl_class->queue_antiexpose (window, update_area);
-
-	      gdk_window_end_implicit_paint (window);
-	    }
 	  cairo_region_destroy (expose_region);
 	}
       if (!save_region)
 	cairo_region_destroy (update_area);
     }
+
+  window->in_update = FALSE;
 
   g_object_unref (window);
 }
@@ -3926,7 +3560,7 @@ gdk_window_process_updates_with_mode (GdkWindow     *window,
 
       /* Don't recurse into process_updates_internal, we'll
        * do the update later when idle instead. */
-      impl_window->implicit_paint == NULL)
+      !impl_window->in_update)
     {
       gdk_window_process_updates_internal ((GdkWindow *)impl_window);
       gdk_window_remove_update_window ((GdkWindow *)impl_window);
