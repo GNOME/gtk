@@ -3327,8 +3327,8 @@ gtk_container_propagate_draw (GtkContainer   *container,
   event = _gtk_cairo_get_event (cr);
   if (event)
     {
-      if (gtk_widget_get_has_window (child) ||
-          gtk_widget_get_window (child) != event->window)
+      if (gtk_widget_get_has_window (child) &&
+          gdk_window_has_native (gtk_widget_get_window (child)))
         return;
     }
 
