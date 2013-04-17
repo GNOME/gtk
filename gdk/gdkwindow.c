@@ -197,7 +197,6 @@ static void gdk_window_clear_backing_region (GdkWindow *window,
 					     cairo_region_t *region);
 
 static void recompute_visible_regions   (GdkWindow *private,
-					 gboolean recalculate_siblings,
 					 gboolean recalculate_children);
 static void gdk_window_flush_recursive  (GdkWindow *window);
 static void gdk_window_invalidate_in_parent (GdkWindow *private);
@@ -930,7 +929,6 @@ apply_clip_as_shape (GdkWindow *window)
 static void
 recompute_visible_regions_internal (GdkWindow *private,
 				    gboolean   recalculate_clip,
-				    gboolean   recalculate_siblings,
 				    gboolean   recalculate_children)
 {
   GdkRectangle r;
@@ -1047,31 +1045,13 @@ recompute_visible_regions_internal (GdkWindow *private,
 	   */
 	  recompute_visible_regions_internal (child,
 					      recalculate_clip && (clip_region_changed || recalculate_children),
-					      FALSE, FALSE);
+					      FALSE);
 	}
     }
 
   if (clip_region_changed &&
       should_apply_clip_as_shape (private))
     apply_clip_as_shape (private);
-
-  if (recalculate_siblings &&
-      !gdk_window_is_toplevel (private))
-    {
-      /* If we moved a child window in parent or changed the stacking order, then we
-       * need to recompute the visible area of all the other children in the parent
-       */
-      for (l = private->parent->children; l; l = l->next)
-	{
-	  child = l->data;
-
-	  if (child != private)
-	    recompute_visible_regions_internal (child, TRUE, FALSE, FALSE);
-	}
-
-      /* We also need to recompute the _with_children clip for the parent */
-      recompute_visible_regions_internal (private->parent, TRUE, FALSE, FALSE);
-    }
 
   if (private->cairo_surface && gdk_window_has_impl (private))
     {
@@ -1103,19 +1083,17 @@ recompute_visible_regions_internal (GdkWindow *private,
  */
 static void
 recompute_visible_regions (GdkWindow *private,
-			   gboolean recalculate_siblings,
 			   gboolean recalculate_children)
 {
   recompute_visible_regions_internal (private,
 				      TRUE,
-				      recalculate_siblings,
 				      recalculate_children);
 }
 
 void
 _gdk_window_update_size (GdkWindow *window)
 {
-  recompute_visible_regions (window, TRUE, FALSE);
+  recompute_visible_regions (window, FALSE);
 }
 
 /* Find the native window that would be just above "child"
@@ -1458,7 +1436,7 @@ gdk_window_new (GdkWindow     *parent,
       window->impl = g_object_ref (window->impl_window->impl);
     }
 
-  recompute_visible_regions (window, TRUE, FALSE);
+  recompute_visible_regions (window, FALSE);
 
   gdk_window_set_cursor (window, ((attributes_mask & GDK_WA_CURSOR) ?
 				  (attributes->cursor) :
@@ -1710,9 +1688,7 @@ gdk_window_reparent (GdkWindow *window,
 
   _gdk_window_update_viewable (window);
 
-  recompute_visible_regions (window, TRUE, FALSE);
-  if (old_parent && GDK_WINDOW_TYPE (old_parent) != GDK_WINDOW_ROOT)
-    recompute_visible_regions (old_parent, FALSE, TRUE);
+  recompute_visible_regions (window, FALSE);
 
   /* We used to apply the clip as the shape, but no more.
      Reset this to the real shape */
@@ -1812,7 +1788,7 @@ gdk_window_ensure_native (GdkWindow *window)
       impl_class->restack_under ((GdkWindow *)above, &listhead);
     }
 
-  recompute_visible_regions (window, FALSE, FALSE);
+  recompute_visible_regions (window, FALSE);
 
   /* The shape may not have been set, as the clip region doesn't actually
      change, so do it here manually */
@@ -2002,7 +1978,7 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 	      if (!recursing &&
 		  GDK_WINDOW_IS_MAPPED (window))
 		{
-		  recompute_visible_regions (window, TRUE, FALSE);
+		  recompute_visible_regions (window, FALSE);
 		  gdk_window_invalidate_in_parent (window);
 		}
 	    }
@@ -4875,7 +4851,7 @@ set_viewable (GdkWindow *w,
   w->viewable = val;
 
   if (val)
-    recompute_visible_regions (w, FALSE, FALSE);
+    recompute_visible_regions (w, FALSE);
 
   for (l = w->children; l != NULL; l = l->next)
     {
@@ -4998,7 +4974,7 @@ gdk_window_show_internal (GdkWindow *window, gboolean raise)
 
   if (!was_mapped || raise)
     {
-      recompute_visible_regions (window, TRUE, FALSE);
+      recompute_visible_regions (window, FALSE);
 
       /* If any decendants became visible we need to send visibility notify */
       gdk_window_update_visibility_recursively (window, NULL);
@@ -5051,8 +5027,6 @@ gdk_window_raise (GdkWindow *window)
 
   /* Keep children in (reverse) stacking order */
   gdk_window_raise_internal (window);
-
-  recompute_visible_regions (window, TRUE, FALSE);
 
   if (gdk_window_is_viewable (window) &&
       !window->input_only)
@@ -5172,8 +5146,6 @@ gdk_window_lower (GdkWindow *window)
   /* Keep children in (reverse) stacking order */
   gdk_window_lower_internal (window);
 
-  recompute_visible_regions (window, TRUE, FALSE);
-
   _gdk_synthesize_crossing_events_for_geometry_change (window);
   gdk_window_invalidate_in_parent (window);
 }
@@ -5286,8 +5258,6 @@ gdk_window_restack (GdkWindow     *window,
 	}
     }
 
-  recompute_visible_regions (window, TRUE, FALSE);
-
   _gdk_synthesize_crossing_events_for_geometry_change (window);
   gdk_window_invalidate_in_parent (window);
 }
@@ -5383,7 +5353,7 @@ gdk_window_hide (GdkWindow *window)
       impl_class->hide (window);
     }
 
-  recompute_visible_regions (window, TRUE, FALSE);
+  recompute_visible_regions (window, FALSE);
 
   /* all decendants became non-visible, we need to send visibility notify */
   gdk_window_update_visibility_recursively (window, NULL);
@@ -5441,7 +5411,7 @@ gdk_window_withdraw (GdkWindow *window)
 	  _gdk_synthesize_crossing_events_for_geometry_change (window->parent);
 	}
 
-      recompute_visible_regions (window, TRUE, FALSE);
+      recompute_visible_regions (window, FALSE);
     }
 }
 
@@ -5643,7 +5613,7 @@ gdk_window_move_resize_toplevel (GdkWindow *window,
 
   /* Avoid recomputing for pure toplevel moves, for performance reasons */
   if (is_resize)
-    recompute_visible_regions (window, TRUE, FALSE);
+    recompute_visible_regions (window, FALSE);
 
   if (expose)
     {
@@ -5752,7 +5722,7 @@ gdk_window_move_resize_internal (GdkWindow *window,
   old_abs_x = window->abs_x;
   old_abs_y = window->abs_y;
 
-  recompute_visible_regions (window, TRUE, FALSE);
+  recompute_visible_regions (window, FALSE);
 
   if (gdk_window_has_impl (window))
     {
@@ -5905,7 +5875,7 @@ gdk_window_scroll (GdkWindow *window,
       tmp_list = tmp_list->next;
     }
 
-  recompute_visible_regions (window, FALSE, TRUE);
+  recompute_visible_regions (window, TRUE);
 
   move_native_children (window);
 
@@ -6615,7 +6585,7 @@ gdk_window_shape_combine_region (GdkWindow       *window,
   else
     window->shape = NULL;
 
-  recompute_visible_regions (window, TRUE, FALSE);
+  recompute_visible_regions (window, FALSE);
 
   if (gdk_window_has_impl (window) &&
       !should_apply_clip_as_shape (window))
@@ -6948,7 +6918,7 @@ gdk_window_set_composited (GdkWindow *window,
 
   impl_class->set_composited (window, composited);
 
-  recompute_visible_regions (window, TRUE, FALSE);
+  recompute_visible_regions (window, FALSE);
 
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_window_invalidate_in_parent (window);
@@ -10497,7 +10467,7 @@ gdk_window_set_opacity (GdkWindow *window,
     GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_opacity (window, opacity);
   else
     {
-      recompute_visible_regions (window, TRUE, FALSE);
+      recompute_visible_regions (window, FALSE);
       gdk_window_invalidate_rect_full (window, NULL, TRUE, CLEAR_BG_ALL);
     }
 }
