@@ -3651,23 +3651,6 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
 
 	  g_object_unref (window);
 	}
-      else if (window->window_type != GDK_WINDOW_FOREIGN)
-	{
-	  /* No exposure mask set, so nothing will be drawn, the
-	   * app relies on the background being what it specified
-	   * for the window. So, we need to clear this manually.
-	   *
-	   * For foreign windows if expose is not set that generally
-	   * means some other client paints them, so don't clear
-	   * there.
-	   *
-	   * We use begin/end_paint around the clear so that we can
-	   * piggyback on the implicit paint */
-
-	  gdk_window_begin_paint_region (window, clipped_expose_region);
-	  /* The actual clear happens in begin_paint_region */
-	  gdk_window_end_paint (window);
-	}
     }
   cairo_region_destroy (clipped_expose_region);
 
