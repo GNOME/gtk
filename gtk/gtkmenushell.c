@@ -2100,6 +2100,16 @@ gtk_menu_shell_tracker_remove_func (gint     position,
  * mentioned and @action_namespace is "app" then the effective action
  * name is "app.quit".
  *
+ * This function uses #GtkActionable to define the action name and
+ * target values on the created menu items.  If you want to use an
+ * action group other than "app" and "win", or if you want to use a
+ * #GtkMenuShell outside of a #GtkApplicationWindow, then you will need
+ * to attach your own action group to the widget hierarchy using
+ * gtk_widget_insert_action_group().  As an example, if you created a
+ * group with a "quit" action and inserted it with the name "mygroup"
+ * then you would use the action name "mygroup.quit" in your
+ * #GMenuModel.
+ *
  * For most cases you are probably better off using
  * gtk_menu_new_from_model() or gtk_menu_bar_new_from_model() or just
  * directly passing the #GMenuModel to gtk_application_set_app_menu() or
