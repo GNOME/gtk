@@ -88,22 +88,12 @@ gdk_wayland_display_manager_finalize (GObject *object)
   G_OBJECT_CLASS (gdk_wayland_display_manager_parent_class)->finalize (object);
 }
 
-static GdkDisplay *
-gdk_wayland_display_manager_open_display (GdkDisplayManager *manager,
-					  const gchar       *name)
-{
-  return _gdk_wayland_display_open (name);
-}
-
 static void
 gdk_wayland_display_manager_class_init (GdkWaylandDisplayManagerClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
-  GdkDisplayManagerClass *manager_class = GDK_DISPLAY_MANAGER_CLASS (class);
 
   object_class->finalize = gdk_wayland_display_manager_finalize;
-
-  manager_class->open_display = gdk_wayland_display_manager_open_display;
 }
 
 static void

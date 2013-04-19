@@ -72,13 +72,6 @@ g_initable_iface_init (GInitableIface *iface)
 }
 
 
-static GdkDisplay *
-gdk_x11_display_manager_open_display (GdkDisplayManager *manager,
-                                      const gchar       *name)
-{
-  return _gdk_x11_display_open (name);
-}
-
 static void
 gdk_x11_display_manager_init (GdkX11DisplayManager *manager)
 {
@@ -97,9 +90,6 @@ static void
 gdk_x11_display_manager_class_init (GdkX11DisplayManagerClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
-  GdkDisplayManagerClass *manager_class = GDK_DISPLAY_MANAGER_CLASS (class);
 
   object_class->finalize = gdk_x11_display_manager_finalize;
-
-  manager_class->open_display = gdk_x11_display_manager_open_display;
 }

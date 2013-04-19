@@ -40,13 +40,6 @@ struct _GdkQuartzDisplayManager
 
 G_DEFINE_TYPE (GdkQuartzDisplayManager, gdk_quartz_display_manager, GDK_TYPE_DISPLAY_MANAGER)
 
-static GdkDisplay *
-gdk_quartz_display_manager_open_display (GdkDisplayManager *manager,
-                                         const gchar       *name)
-{
-  return _gdk_quartz_display_open (name);
-}
-
 static void
 gdk_quartz_display_manager_init (GdkQuartzDisplayManager *manager)
 {
@@ -79,7 +72,6 @@ gdk_quartz_display_manager_class_init (GdkQuartzDisplayManagerClass *class)
 
   object_class->finalize = gdk_quartz_display_manager_finalize;
 
-  manager_class->open_display = gdk_quartz_display_manager_open_display;
   manager_class->atom_intern = _gdk_quartz_display_manager_atom_intern;
   manager_class->get_atom_name = _gdk_quartz_display_manager_get_atom_name;
 }

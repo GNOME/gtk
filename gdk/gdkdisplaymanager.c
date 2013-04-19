@@ -34,6 +34,7 @@
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
+#include "x11/gdkprivate-x11.h"
 #endif
 
 #ifdef GDK_WINDOWING_QUARTZ
@@ -42,18 +43,22 @@
  * "generic" GDK source code.
  */
 #include "quartz/gdkquartzdisplaymanager.h"
+#include "quartz/gdkprivate-quartz.h"
 #endif
 
 #ifdef GDK_WINDOWING_BROADWAY
 #include "broadway/gdkbroadwaydisplaymanager.h"
+#include "broadway/gdkprivate-broadway.h"
 #endif
 
 #ifdef GDK_WINDOWING_WIN32
 #include "win32/gdkwin32.h"
+#include "win32/gdkprivate-win32.h"
 #endif
 
 #ifdef GDK_WINDOWING_WAYLAND
 #include "wayland/gdkwayland.h"
+#include "wayland/gdkprivate-wayland.h"
 #endif
 
 /**
@@ -301,23 +306,24 @@ typedef struct _GdkBackend GdkBackend;
 struct _GdkBackend {
   const char *name;
   GType (* get_backend_type) (void);
+  GdkDisplay * (* open_display) (const char *name);
 };
 
 GdkBackend gdk_backends[] = {
 #ifdef GDK_WINDOWING_QUARTZ
-  { "quartz",   gdk_quartz_display_manager_get_type },
+  { "quartz",   gdk_quartz_display_manager_get_type,    _gdk_quartz_display_open },
 #endif
 #ifdef GDK_WINDOWING_WIN32
-  { "win32",    gdk_quartz_display_manager_get_type },
+  { "win32",    gdk_win32_display_manager_get_type,     _gdk_win32_display_open },
 #endif
 #ifdef GDK_WINDOWING_X11
-  { "x11",      gdk_x11_display_manager_get_type },
+  { "x11",      gdk_x11_display_manager_get_type,       _gdk_x11_display_open },
 #endif
 #ifdef GDK_WINDOWING_WAYLAND
-  { "wayland",   gdk_wayland_display_manager_get_type },
+  { "wayland",  gdk_wayland_display_manager_get_type,   _gdk_wayland_display_open },
 #endif
 #ifdef GDK_WINDOWING_BROADWAY
-  { "broadway",   gdk_broadway_display_manager_get_type },
+  { "broadway", gdk_broadway_display_manager_get_type,  _gdk_broadway_display_open },
 #endif
   /* NULL-terminating this array so we can use commas above */
   { NULL, NULL }
@@ -494,7 +500,19 @@ GdkDisplay *
 gdk_display_manager_open_display (GdkDisplayManager *manager,
                                   const gchar       *name)
 {
-  return GDK_DISPLAY_MANAGER_GET_CLASS (manager)->open_display (manager, name);
+  guint i;
+
+  for (i = 0; gdk_backends[i].name != NULL; i++)
+    {
+      if (G_OBJECT_TYPE (manager) == gdk_backends[i].get_backend_type ())
+        {
+          return gdk_backends[i].open_display (name);
+        }
+    }
+
+  g_assert_not_reached ();
+
+  return NULL;
 }
 
 void

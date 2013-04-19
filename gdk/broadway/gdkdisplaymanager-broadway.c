@@ -81,13 +81,6 @@ g_initable_iface_init (GInitableIface *iface)
   iface->init = gdk_broadway_display_manager_initable_init;
 }
 
-static GdkDisplay *
-gdk_broadway_display_manager_open_display (GdkDisplayManager *manager,
-                                         const gchar       *name)
-{
-  return _gdk_broadway_display_open (name);
-}
-
 static void
 gdk_broadway_display_manager_init (GdkBroadwayDisplayManager *manager)
 {
@@ -105,9 +98,6 @@ static void
 gdk_broadway_display_manager_class_init (GdkBroadwayDisplayManagerClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
-  GdkDisplayManagerClass *manager_class = GDK_DISPLAY_MANAGER_CLASS (class);
 
   object_class->finalize = gdk_broadway_display_manager_finalize;
-
-  manager_class->open_display = gdk_broadway_display_manager_open_display;
 }

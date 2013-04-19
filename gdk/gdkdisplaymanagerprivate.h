@@ -41,9 +41,6 @@ struct _GdkDisplayManagerClass
 {
   GObjectClass parent_class;
 
-  GdkDisplay * (*open_display)        (GdkDisplayManager *manager,
-                                       const gchar       *name);
-
   /* signals */
   void         (*display_opened)      (GdkDisplayManager *manager,
                                        GdkDisplay        *display);
