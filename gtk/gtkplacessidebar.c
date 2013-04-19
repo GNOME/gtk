@@ -1306,6 +1306,12 @@ compute_drop_position (GtkTreeView             *tree_view,
 
 	drop_possible = TRUE;
 
+	/* Normalize drops on the feedback row */
+	if (place_type == PLACES_DROP_FEEDBACK) {
+		*pos = GTK_TREE_VIEW_DROP_INTO_OR_BEFORE;
+		goto out;
+	}
+
 	/* Never drop on headings, but special case the bookmarks heading,
 	 * so we can drop bookmarks in between it and the first bookmark.
 	 */
@@ -1366,6 +1372,8 @@ compute_drop_position (GtkTreeView             *tree_view,
 
 		g_free (uri);
 	}
+
+out:
 
 	if (!drop_possible) {
 		gtk_tree_path_free (*path);
@@ -1429,8 +1437,6 @@ start_drop_feedback (GtkPlacesSidebar *sidebar, GtkTreePath *path, GtkTreeViewDr
 	if (drop_as_bookmarks) {
 		int new_bookmark_index;
 		GtkTreeIter iter;
-
-		g_assert (pos == GTK_TREE_VIEW_DROP_BEFORE || pos == GTK_TREE_VIEW_DROP_AFTER);
 
 		new_bookmark_index = gtk_tree_path_get_indices (path)[0];
 
@@ -1518,11 +1524,11 @@ drag_motion_callback (GtkTreeView *tree_view,
 					    PLACES_SIDEBAR_COLUMN_ROW_TYPE, &place_type,
 					    -1);
 
-			if (section_type == SECTION_BOOKMARKS) {
-				if (pos == GTK_TREE_VIEW_DROP_BEFORE || pos == GTK_TREE_VIEW_DROP_AFTER) {
-					action = GDK_ACTION_COPY;
-					drop_as_bookmarks = TRUE;
-				}
+			if (place_type == PLACES_DROP_FEEDBACK
+			    || (section_type == SECTION_BOOKMARKS
+				&& (pos == GTK_TREE_VIEW_DROP_BEFORE || pos == GTK_TREE_VIEW_DROP_AFTER))) {
+				action = GDK_ACTION_COPY;
+				drop_as_bookmarks = TRUE;
 			}
 
 			if (!drop_as_bookmarks) {
