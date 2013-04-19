@@ -1408,6 +1408,18 @@ free_drag_data (GtkPlacesSidebar *sidebar)
 	}
 }
 
+static void
+start_drop_feedback (GtkPlacesSidebar *sidebar, GtkTreePath *path, GtkTreeViewDropPosition pos, gboolean drop_as_bookmarks)
+{
+	gtk_tree_view_set_drag_dest_row (sidebar->tree_view, path, pos);
+}
+
+static void
+stop_drop_feedback (GtkPlacesSidebar *sidebar)
+{
+	gtk_tree_view_set_drag_dest_row (sidebar->tree_view, NULL, 0);
+}
+
 static gboolean
 drag_motion_callback (GtkTreeView *tree_view,
 		      GdkDragContext *context,
@@ -1421,8 +1433,10 @@ drag_motion_callback (GtkTreeView *tree_view,
 	int action;
 	GtkTreeIter iter;
 	gboolean res;
+	gboolean drop_as_bookmarks;
 
 	action = 0;
+	drop_as_bookmarks = FALSE;
 
 	if (!sidebar->drag_data_received) {
 		if (!get_drag_data (tree_view, context, time)) {
@@ -1449,7 +1463,6 @@ drag_motion_callback (GtkTreeView *tree_view,
 		if (sidebar->drag_list != NULL) {
 			SectionType section_type;
 			PlaceType place_type;
-			gboolean drop_as_bookmarks;
 
 			gtk_tree_model_get_iter (GTK_TREE_MODEL (sidebar->store),
 						 &iter, path);
@@ -1458,8 +1471,6 @@ drag_motion_callback (GtkTreeView *tree_view,
 					    PLACES_SIDEBAR_COLUMN_SECTION_TYPE, &section_type,
 					    PLACES_SIDEBAR_COLUMN_ROW_TYPE, &place_type,
 					    -1);
-
-			drop_as_bookmarks = FALSE;
 
 			if (section_type == SECTION_BOOKMARKS) {
 				if (pos == GTK_TREE_VIEW_DROP_BEFORE || pos == GTK_TREE_VIEW_DROP_AFTER) {
@@ -1490,9 +1501,9 @@ drag_motion_callback (GtkTreeView *tree_view,
 
  out:
 	if (action != 0)
-		gtk_tree_view_set_drag_dest_row (tree_view, path, pos);
+		start_drop_feedback (sidebar, path, pos, drop_as_bookmarks);
 	else
-		gtk_tree_view_set_drag_dest_row (tree_view, NULL, pos);
+		stop_drop_feedback (sidebar);
 
 	if (path != NULL) {
 		gtk_tree_path_free (path);
