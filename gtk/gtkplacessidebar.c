@@ -108,6 +108,26 @@
 
 #define DO_NOT_COMPILE 0
 
+/* These are used when a destination-side DnD operation is taking place.
+ * Normally, when a file is being hovered directly over a bookmark,
+ * we'll be in DROP_STATE_NORMAL.
+ *
+ * But when a file is being hovered between bookmarks, this means the user
+ * may want to create a new bookmark for that file between those bookmarks.
+ * In that case, the drop state will be *not* DROP_STATE_NORMAL.
+ *
+ * When the drop state is FADING_OUT, it means that the user is hovering
+ * directly over an existing bookmark and an immediate drop will cause the
+ * file being dragged to be dropped on the bookmark, instead of causing
+ * a new bookmark to be created.
+ */
+typedef enum {
+	DROP_STATE_NORMAL,
+	DROP_STATE_NEW_BOOKMARK_FADING_IN,
+	DROP_STATE_NEW_BOOKMARK_ARMED,
+	DROP_STATE_NEW_BOOKMARK_FADING_OUT
+} DropState;
+
 struct _GtkPlacesSidebar {
 	GtkScrolledWindow parent;
 
@@ -142,6 +162,9 @@ struct _GtkPlacesSidebar {
 	char *hostname;
 
 	GtkPlacesOpenFlags open_flags;
+
+	DropState drop_state;
+	int new_bookmark_index;
 
 	guint show_desktop : 1;
 };
@@ -195,6 +218,7 @@ typedef enum {
 	PLACES_MOUNTED_VOLUME,
 	PLACES_BOOKMARK,
 	PLACES_HEADING,
+	PLACES_DROP_FEEDBACK
 } PlaceType;
 
 typedef enum {
@@ -1282,6 +1306,12 @@ compute_drop_position (GtkTreeView             *tree_view,
 
 	drop_possible = TRUE;
 
+	/* Normalize drops on the feedback row */
+	if (place_type == PLACES_DROP_FEEDBACK) {
+		*pos = GTK_TREE_VIEW_DROP_INTO_OR_BEFORE;
+		goto out;
+	}
+
 	/* Never drop on headings, but special case the bookmarks heading,
 	 * so we can drop bookmarks in between it and the first bookmark.
 	 */
@@ -1343,6 +1373,8 @@ compute_drop_position (GtkTreeView             *tree_view,
 		g_free (uri);
 	}
 
+out:
+
 	if (!drop_possible) {
 		gtk_tree_path_free (*path);
 		*path = NULL;
@@ -1385,6 +1417,87 @@ free_drag_data (GtkPlacesSidebar *sidebar)
 	}
 }
 
+static void
+remove_drop_bookmark_feedback_row (GtkPlacesSidebar *sidebar)
+{
+	if (sidebar->new_bookmark_index != -1) {
+		gboolean success;
+		GtkTreeIter iter;
+
+		success = gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (sidebar->store), &iter, NULL, sidebar->new_bookmark_index);
+		g_assert (success);
+		gtk_list_store_remove (sidebar->store, &iter);
+		sidebar->new_bookmark_index = -1;
+	}
+}
+
+#if 0
+static const char *
+pos_to_string (GtkTreeViewDropPosition pos)
+{
+	switch (pos) {
+	case GTK_TREE_VIEW_DROP_BEFORE:
+		return "before";
+		
+	case GTK_TREE_VIEW_DROP_AFTER:
+		return "after";
+		
+	case GTK_TREE_VIEW_DROP_INTO_OR_BEFORE:
+		return "into_or_before";
+		
+	case GTK_TREE_VIEW_DROP_INTO_OR_AFTER:
+		return "into_or_after";
+
+	default:
+		return "w00t";
+	}
+}
+#endif
+
+static void
+start_drop_feedback (GtkPlacesSidebar *sidebar, GtkTreePath *path, GtkTreeViewDropPosition pos, gboolean drop_as_bookmarks)
+{
+	if (drop_as_bookmarks) {
+		int new_bookmark_index;
+		GtkTreePath *new_path;
+
+		new_bookmark_index = gtk_tree_path_get_indices (path)[0];
+
+		if (pos == GTK_TREE_VIEW_DROP_AFTER)
+			new_bookmark_index++;
+
+		if (sidebar->new_bookmark_index != new_bookmark_index) {
+			GtkTreeIter iter;
+
+			if (sidebar->new_bookmark_index != -1
+			    && sidebar->new_bookmark_index < new_bookmark_index)
+				new_bookmark_index--; /* since the removal of the old feedback row pushed items one position up */
+
+			remove_drop_bookmark_feedback_row (sidebar);
+
+			/* Insert the new feedback row */
+			sidebar->new_bookmark_index = new_bookmark_index;
+			gtk_list_store_insert_with_values (sidebar->store, &iter, sidebar->new_bookmark_index,
+							   PLACES_SIDEBAR_COLUMN_ROW_TYPE, PLACES_DROP_FEEDBACK,
+							   PLACES_SIDEBAR_COLUMN_SECTION_TYPE, SECTION_BOOKMARKS,
+							   PLACES_SIDEBAR_COLUMN_NAME, _("New bookmark"),
+							   PLACES_SIDEBAR_COLUMN_NO_EJECT, TRUE,
+							   -1);
+		}
+
+		new_path = gtk_tree_path_new_from_indices (new_bookmark_index, -1);
+		gtk_tree_view_set_drag_dest_row (sidebar->tree_view, new_path, GTK_TREE_VIEW_DROP_INTO_OR_BEFORE);
+		gtk_tree_path_free (new_path);
+	} else
+		gtk_tree_view_set_drag_dest_row (sidebar->tree_view, path, pos);
+}
+
+static void
+stop_drop_feedback (GtkPlacesSidebar *sidebar)
+{
+	gtk_tree_view_set_drag_dest_row (sidebar->tree_view, NULL, 0);
+}
+
 static gboolean
 drag_motion_callback (GtkTreeView *tree_view,
 		      GdkDragContext *context,
@@ -1398,8 +1511,10 @@ drag_motion_callback (GtkTreeView *tree_view,
 	int action;
 	GtkTreeIter iter;
 	gboolean res;
+	gboolean drop_as_bookmarks;
 
 	action = 0;
+	drop_as_bookmarks = FALSE;
 
 	if (!sidebar->drag_data_received) {
 		if (!get_drag_data (tree_view, context, time)) {
@@ -1426,7 +1541,6 @@ drag_motion_callback (GtkTreeView *tree_view,
 		if (sidebar->drag_list != NULL) {
 			SectionType section_type;
 			PlaceType place_type;
-			gboolean drop_as_bookmarks;
 
 			gtk_tree_model_get_iter (GTK_TREE_MODEL (sidebar->store),
 						 &iter, path);
@@ -1436,13 +1550,11 @@ drag_motion_callback (GtkTreeView *tree_view,
 					    PLACES_SIDEBAR_COLUMN_ROW_TYPE, &place_type,
 					    -1);
 
-			drop_as_bookmarks = FALSE;
-
-			if (section_type == SECTION_BOOKMARKS) {
-				if (pos == GTK_TREE_VIEW_DROP_BEFORE || pos == GTK_TREE_VIEW_DROP_AFTER) {
-					action = GDK_ACTION_COPY;
-					drop_as_bookmarks = TRUE;
-				}
+			if (place_type == PLACES_DROP_FEEDBACK
+			    || (section_type == SECTION_BOOKMARKS
+				&& (pos == GTK_TREE_VIEW_DROP_BEFORE || pos == GTK_TREE_VIEW_DROP_AFTER))) {
+				action = GDK_ACTION_COPY;
+				drop_as_bookmarks = TRUE;
 			}
 
 			if (!drop_as_bookmarks) {
@@ -1467,9 +1579,9 @@ drag_motion_callback (GtkTreeView *tree_view,
 
  out:
 	if (action != 0)
-		gtk_tree_view_set_drag_dest_row (tree_view, path, pos);
+		start_drop_feedback (sidebar, path, pos, drop_as_bookmarks);
 	else
-		gtk_tree_view_set_drag_dest_row (tree_view, NULL, pos);
+		stop_drop_feedback (sidebar);
 
 	if (path != NULL) {
 		gtk_tree_path_free (path);
@@ -1489,7 +1601,8 @@ drag_leave_callback (GtkTreeView *tree_view,
 		     GtkPlacesSidebar *sidebar)
 {
 	free_drag_data (sidebar);
-	gtk_tree_view_set_drag_dest_row (tree_view, NULL, 0);
+	stop_drop_feedback (sidebar);
+	remove_drop_bookmark_feedback_row (sidebar);
 	g_signal_stop_emission_by_name (tree_view, "drag-leave");
 }
 
@@ -3588,6 +3701,9 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 				  sidebar->hostnamed_cancellable,
 				  hostname_proxy_new_cb,
  				  g_object_ref (sidebar));
+
+	sidebar->drop_state = DROP_STATE_NORMAL;
+	sidebar->new_bookmark_index = -1;
 }
 
 static void
