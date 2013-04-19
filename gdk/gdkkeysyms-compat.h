@@ -2278,6 +2278,7 @@
 #define GDK_TouchpadToggle 0x1008ffa9
 #define GDK_TouchpadOn 0x1008ffb0
 #define GDK_TouchpadOff 0x1008ffb1
+#define GDK_AudioMicMute 0x1008ffb2
 #define GDK_Switch_VT_1 0x1008fe01
 #define GDK_Switch_VT_2 0x1008fe02
 #define GDK_Switch_VT_3 0x1008fe03
