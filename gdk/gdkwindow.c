@@ -151,12 +151,6 @@ enum {
   PROP_CURSOR
 };
 
-typedef enum {
-  CLEAR_BG_NONE,
-  CLEAR_BG_WINCLEARED, /* Clear backgrounds except those that the window system clears */
-  CLEAR_BG_ALL
-} ClearBg;
-
 struct _GdkWindowPaint
 {
   cairo_region_t *region;
@@ -193,12 +187,10 @@ static void impl_window_add_update_area (GdkWindow *impl_window,
 					 cairo_region_t *region);
 static void gdk_window_invalidate_region_full (GdkWindow       *window,
 					       const cairo_region_t *region,
-					       gboolean         invalidate_children,
-					       ClearBg          clear_bg);
+					       gboolean         invalidate_children);
 static void gdk_window_invalidate_rect_full (GdkWindow          *window,
 					     const GdkRectangle *rect,
-					     gboolean            invalidate_children,
-					     ClearBg             clear_bg);
+					     gboolean            invalidate_children);
 static cairo_surface_t *gdk_window_ref_impl_surface (GdkWindow *window);
 
 static void gdk_window_set_frame_clock (GdkWindow      *window,
@@ -3624,8 +3616,7 @@ gdk_window_process_updates (GdkWindow *window,
 static void
 gdk_window_invalidate_rect_full (GdkWindow          *window,
 				  const GdkRectangle *rect,
-				  gboolean            invalidate_children,
-				  ClearBg             clear_bg)
+				  gboolean            invalidate_children)
 {
   GdkRectangle window_rect;
   cairo_region_t *region;
@@ -3648,7 +3639,7 @@ gdk_window_invalidate_rect_full (GdkWindow          *window,
     }
 
   region = cairo_region_create_rectangle (rect);
-  gdk_window_invalidate_region_full (window, region, invalidate_children, clear_bg);
+  gdk_window_invalidate_region_full (window, region, invalidate_children);
   cairo_region_destroy (region);
 }
 
@@ -3668,7 +3659,7 @@ gdk_window_invalidate_rect (GdkWindow          *window,
 			    const GdkRectangle *rect,
 			    gboolean            invalidate_children)
 {
-  gdk_window_invalidate_rect_full (window, rect, invalidate_children, CLEAR_BG_NONE);
+  gdk_window_invalidate_rect_full (window, rect, invalidate_children);
 }
 
 static void
@@ -3700,26 +3691,66 @@ impl_window_add_update_area (GdkWindow *impl_window,
     }
 }
 
-/* clear_bg controls if the region will be cleared to
- * the background pattern if the exposure mask is not
- * set for the window, whereas this might not otherwise be
- * done (unless necessary to emulate background settings).
- * Set this to CLEAR_BG_WINCLEARED or CLEAR_BG_ALL if you
- * need to clear the background, such as when exposing the area beneath a
- * hidden or moved window, but not when an app requests repaint or when the
- * windowing system exposes a newly visible area (because then the windowing
- * system has already cleared the area).
- */
 static void
 gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
 					  const cairo_region_t *region,
-					  ClearBg               clear_bg,
+                                          GdkWindowChildFunc    child_func,
+					  gpointer              user_data);
+
+static void
+invalidate_impl_subwindows (GdkWindow            *window,
+			    const cairo_region_t *region,
+			    GdkWindowChildFunc    child_func,
+			    gpointer              user_data,
+			    int dx, int dy)
+{
+  GList *tmp_list;
+
+  tmp_list = window->children;
+
+  while (tmp_list)
+    {
+      GdkWindow *child = tmp_list->data;
+      tmp_list = tmp_list->next;
+
+      if (child->input_only ||
+	  !window->viewable)
+	continue;
+
+      if (child_func && (*child_func) ((GdkWindow *)child, user_data))
+	{
+	  if (gdk_window_has_impl (child))
+	    {
+	      cairo_region_t *tmp = cairo_region_copy (region);
+	      cairo_region_translate (tmp, -dx, -dy);
+	      gdk_window_invalidate_maybe_recurse_full (child,
+							tmp, child_func, user_data);
+	      cairo_region_destroy (tmp);
+	    }
+	  else
+	    {
+	      dx += child->x;
+	      dy += child->y;
+	      invalidate_impl_subwindows (child,
+					  region,
+					  child_func, user_data,
+					  dx, dy);
+	      dx -= child->x;
+	      dy -= child->y;
+	    }
+
+	}
+    }
+}
+
+static void
+gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
+					  const cairo_region_t *region,
                                           GdkWindowChildFunc    child_func,
 					  gpointer              user_data)
 {
   GdkWindow *impl_window;
   cairo_region_t *visible_region;
-  GList *tmp_list;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -3735,54 +3766,14 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
   visible_region = gdk_window_get_visible_region (window);
   cairo_region_intersect (visible_region, region);
 
-  tmp_list = window->children;
-  while (tmp_list)
-    {
-      GdkWindow *child = tmp_list->data;
-
-      if (!child->input_only)
-	{
-	  cairo_region_t *child_region;
-	  GdkRectangle child_rect;
-
-	  child_rect.x = child->x;
-	  child_rect.y = child->y;
-	  child_rect.width = child->width;
-	  child_rect.height = child->height;
-	  child_region = cairo_region_create_rectangle (&child_rect);
-
-	  /* remove child area from the invalid area of the parent */
-	  if (GDK_WINDOW_IS_MAPPED (child) && !child->shaped &&
-	      !child->composited &&
-	      !gdk_window_is_offscreen (child))
-	    cairo_region_subtract (visible_region, child_region);
-
-	  if (child_func && (*child_func) ((GdkWindow *)child, user_data))
-	    {
-	      cairo_region_t *tmp = cairo_region_copy (region);
-
-	      cairo_region_translate (tmp, - child_rect.x, - child_rect.y);
-	      cairo_region_translate (child_region, - child_rect.x, - child_rect.y);
-	      cairo_region_intersect (child_region, tmp);
-
-	      gdk_window_invalidate_maybe_recurse_full ((GdkWindow *)child,
-							child_region, clear_bg, child_func, user_data);
-
-	      cairo_region_destroy (tmp);
-	    }
-
-	  cairo_region_destroy (child_region);
-	}
-
-      tmp_list = tmp_list->next;
-    }
+  invalidate_impl_subwindows (window, region, child_func, user_data, 0, 0);
 
   impl_window = gdk_window_get_impl_window (window);
 
   if (!cairo_region_is_empty (visible_region))
     {
       if (debug_updates)
-	draw_ugly_color (window, region);
+	draw_ugly_color (window, visible_region);
 
       /* Convert to impl coords */
       cairo_region_translate (visible_region, window->abs_x, window->abs_y);
@@ -3791,10 +3782,7 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
 	 we need to clear the area (by request or to emulate background
 	 clearing for non-native windows or native windows with no support
 	 for window backgrounds */
-      if (window->event_mask & GDK_EXPOSURE_MASK ||
-	  clear_bg == CLEAR_BG_ALL ||
-	  clear_bg == CLEAR_BG_WINCLEARED)
-	impl_window_add_update_area (impl_window, visible_region);
+      impl_window_add_update_area (impl_window, visible_region);
     }
 
   cairo_region_destroy (visible_region);
@@ -3831,7 +3819,7 @@ gdk_window_invalidate_maybe_recurse (GdkWindow            *window,
                                      GdkWindowChildFunc    child_func,
 				     gpointer              user_data)
 {
-  gdk_window_invalidate_maybe_recurse_full (window, region, CLEAR_BG_NONE,
+  gdk_window_invalidate_maybe_recurse_full (window, region,
 					    child_func, user_data);
 }
 
@@ -3845,10 +3833,9 @@ true_predicate (GdkWindow *window,
 static void
 gdk_window_invalidate_region_full (GdkWindow       *window,
 				    const cairo_region_t *region,
-				    gboolean         invalidate_children,
-				    ClearBg          clear_bg)
+				    gboolean         invalidate_children)
 {
-  gdk_window_invalidate_maybe_recurse_full (window, region, clear_bg,
+  gdk_window_invalidate_maybe_recurse_full (window, region,
 					    invalidate_children ?
 					    true_predicate : (gboolean (*) (GdkWindow *, gpointer))NULL,
 				       NULL);
@@ -3915,7 +3902,7 @@ void
 _gdk_window_invalidate_for_expose (GdkWindow       *window,
 				   cairo_region_t       *region)
 {
-  gdk_window_invalidate_maybe_recurse_full (window, region, CLEAR_BG_WINCLEARED,
+  gdk_window_invalidate_maybe_recurse_full (window, region,
 					    (gboolean (*) (GdkWindow *, gpointer))gdk_window_has_no_impl,
 					    NULL);
 }
@@ -4592,7 +4579,7 @@ gdk_window_show_internal (GdkWindow *window, gboolean raise)
       if (gdk_window_is_viewable (window))
 	{
 	  _gdk_synthesize_crossing_events_for_geometry_change (window);
-	  gdk_window_invalidate_rect_full (window, NULL, TRUE, CLEAR_BG_ALL);
+	  gdk_window_invalidate_rect_full (window, NULL, TRUE);
 	}
     }
 }
@@ -4640,7 +4627,7 @@ gdk_window_raise (GdkWindow *window)
 
   if (gdk_window_is_viewable (window) &&
       !window->input_only)
-    gdk_window_invalidate_region_full (window, window->clip_region, TRUE, CLEAR_BG_ALL);
+    gdk_window_invalidate_region_full (window, window->clip_region, TRUE);
 }
 
 static void
@@ -4726,7 +4713,7 @@ gdk_window_invalidate_in_parent (GdkWindow *private)
   child.height = private->height;
   gdk_rectangle_intersect (&r, &child, &r);
 
-  gdk_window_invalidate_rect_full (private->parent, &r, TRUE, CLEAR_BG_ALL);
+  gdk_window_invalidate_rect_full (private->parent, &r, TRUE);
 }
 
 
@@ -5233,7 +5220,7 @@ gdk_window_move_resize_toplevel (GdkWindow *window,
        * X will expose it, but lets do that without the roundtrip
        */
       cairo_region_subtract (new_region, old_region);
-      gdk_window_invalidate_region_full (window, new_region, TRUE, CLEAR_BG_WINCLEARED);
+      gdk_window_invalidate_region_full (window, new_region, TRUE);
 
       cairo_region_destroy (old_region);
       cairo_region_destroy (new_region);
@@ -5356,7 +5343,7 @@ gdk_window_move_resize_internal (GdkWindow *window,
 
       cairo_region_union (new_region, old_region);
 
-      gdk_window_invalidate_region_full (window->parent, new_region, TRUE, CLEAR_BG_ALL);
+      gdk_window_invalidate_region_full (window->parent, new_region, TRUE);
 
       cairo_region_destroy (old_region);
       cairo_region_destroy (new_region);
@@ -5489,7 +5476,7 @@ gdk_window_scroll (GdkWindow *window,
 
   move_native_children (window);
 
-  gdk_window_invalidate_region_full (window, window->clip_region, TRUE, CLEAR_BG_ALL);
+  gdk_window_invalidate_region_full (window, window->clip_region, TRUE);
 
   _gdk_synthesize_crossing_events_for_geometry_change (window);
 }
@@ -5530,7 +5517,7 @@ gdk_window_move_region (GdkWindow       *window,
   cairo_region_translate (expose_area, dx, dy);
   cairo_region_union (expose_area, region);
 
-  gdk_window_invalidate_region_full (window, expose_area, FALSE, CLEAR_BG_ALL);
+  gdk_window_invalidate_region_full (window, expose_area, FALSE);
   cairo_region_destroy (expose_area);
 }
 
@@ -5626,7 +5613,7 @@ gdk_window_set_background_pattern (GdkWindow *window,
       impl_class->set_background (window, pattern);
     }
   else
-    gdk_window_invalidate_rect_full (window, NULL, TRUE, CLEAR_BG_ALL);
+    gdk_window_invalidate_rect_full (window, NULL, TRUE);
 }
 
 /**
@@ -6209,7 +6196,7 @@ gdk_window_shape_combine_region (GdkWindow       *window,
       diff = cairo_region_copy (new_region);
       cairo_region_subtract (diff, old_region);
 
-      gdk_window_invalidate_region_full (window, diff, TRUE, CLEAR_BG_ALL);
+      gdk_window_invalidate_region_full (window, diff, TRUE);
 
       cairo_region_destroy (diff);
 
@@ -6222,7 +6209,7 @@ gdk_window_shape_combine_region (GdkWindow       *window,
 	  /* Adjust region to parent window coords */
 	  cairo_region_translate (diff, window->x, window->y);
 
-	  gdk_window_invalidate_region_full (window->parent, diff, TRUE, CLEAR_BG_ALL);
+	  gdk_window_invalidate_region_full (window->parent, diff, TRUE);
 
 	  cairo_region_destroy (diff);
 	}
@@ -10078,7 +10065,7 @@ gdk_window_set_opacity (GdkWindow *window,
   else
     {
       recompute_visible_regions (window, FALSE);
-      gdk_window_invalidate_rect_full (window, NULL, TRUE, CLEAR_BG_ALL);
+      gdk_window_invalidate_rect_full (window, NULL, TRUE);
     }
 }
 
