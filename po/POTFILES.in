@@ -35,7 +35,7 @@ gtk/deprecated/gtkhsv.c
 gtk/deprecated/gtkstyle.c
 gtk/deprecated/gtktable.c
 gtk/gtkaboutdialog.c
-gtk/gtkaboutdialog.ui
+[type: gettext/glade]gtk/gtkaboutdialog.ui
 gtk/gtkaccelgroup.c
 gtk/gtkaccellabel.c
 gtk/gtkaccelmap.c
@@ -49,14 +49,14 @@ gtk/gtkalignment.c
 gtk/gtkappchooserbutton.c
 gtk/gtkappchooser.c
 gtk/gtkappchooserdialog.c
-gtk/gtkappchooserdialog.ui
+[type: gettext/glade]gtk/gtkappchooserdialog.ui
 gtk/gtkappchooserwidget.c
 gtk/gtkapplication.c
 gtk/gtkapplicationwindow.c
 gtk/gtkarrow.c
 gtk/gtkaspectframe.c
 gtk/gtkassistant.c
-gtk/gtkassistant.ui
+[type: gettext/glade]gtk/gtkassistant.ui
 gtk/gtkbbox.c
 gtk/gtkbin.c
 gtk/gtkbindings.c
@@ -92,10 +92,10 @@ gtk/gtkclipboard-wayland.c
 gtk/gtkcolorbutton.c
 gtk/gtkcolorchooser.c
 gtk/gtkcolorchooserdialog.c
-gtk/gtkcolorchooserdialog.ui
+[type: gettext/glade]gtk/gtkcolorchooserdialog.ui
 gtk/gtkcolorchooserwidget.c
 gtk/gtkcoloreditor.c
-gtk/gtkcoloreditor.ui
+[type: gettext/glade]gtk/gtkcoloreditor.ui
 gtk/gtkcolorplane.c
 gtk/gtkcolorscale.c
 gtk/gtkcolorswatch.c
@@ -116,10 +116,10 @@ gtk/gtkentrycompletion.c
 gtk/gtkeventbox.c
 gtk/gtkexpander.c
 gtk/gtkfilechooserbutton.c
-gtk/gtkfilechooserbutton.ui
+[type: gettext/glade]gtk/gtkfilechooserbutton.ui
 gtk/gtkfilechooser.c
 gtk/gtkfilechooserdefault.c
-gtk/gtkfilechooserdefault.ui
+[type: gettext/glade]gtk/gtkfilechooserdefault.ui
 gtk/gtkfilechooserdialog.c
 gtk/gtkfilechooserembed.c
 gtk/gtkfilechooserentry.c
@@ -130,13 +130,13 @@ gtk/gtkfilesystem.c
 gtk/gtkfilesystemmodel.c
 gtk/gtkfixed.c
 gtk/gtkfontbutton.c
-gtk/gtkfontbutton.ui
+[type: gettext/glade]gtk/gtkfontbutton.ui
 gtk/gtkfontchooser.c
 gtk/gtkfontchooser.c
 gtk/gtkfontchooserdialog.c
-gtk/gtkfontchooserdialog.ui
+[type: gettext/glade]gtk/gtkfontchooserdialog.ui
 gtk/gtkfontchooserwidget.c
-gtk/gtkfontchooserwidget.ui
+[type: gettext/glade]gtk/gtkfontchooserwidget.ui
 gtk/gtkframe.c
 gtk/gtkgrid.c
 gtk/gtkheaderbar.c
@@ -158,7 +158,7 @@ gtk/gtklevelbar.c
 gtk/gtklinkbutton.c
 gtk/gtkliststore.c
 gtk/gtklockbutton.c
-gtk/gtklockbutton.ui
+[type: gettext/glade]gtk/gtklockbutton.ui
 gtk/gtkmain.c
 gtk/gtkmenubar.c
 gtk/gtkmenubutton.c
@@ -167,7 +167,7 @@ gtk/gtkmenuitem.c
 gtk/gtkmenushell.c
 gtk/gtkmenutoolbutton.c
 gtk/gtkmessagedialog.c
-gtk/gtkmessagedialog.ui
+[type: gettext/glade]gtk/gtkmessagedialog.ui
 gtk/gtkmisc.c
 gtk/gtkmodifierstyle.c
 gtk/gtkmodules.c
@@ -180,11 +180,11 @@ gtk/gtkorientable.c
 gtk/gtkoverlay.c
 gtk/gtkpagesetup.c
 gtk/gtkpagesetupunixdialog.c
-gtk/gtkpagesetupunixdialog.ui
+[type: gettext/glade]gtk/gtkpagesetupunixdialog.ui
 gtk/gtkpaned.c
 gtk/gtkpapersize.c
 gtk/gtkpathbar.c
-gtk/gtkpathbar.ui
+[type: gettext/glade]gtk/gtkpathbar.ui
 gtk/gtkplacessidebar.c
 gtk/gtkplug.c
 gtk/gtkpressandhold.c
@@ -198,7 +198,7 @@ gtk/gtkprintoperationpreview.c
 gtk/gtkprintoperation-unix.c
 gtk/gtkprintoperation-win32.c
 gtk/gtkprintunixdialog.c
-gtk/gtkprintunixdialog.ui
+[type: gettext/glade]gtk/gtkprintunixdialog.ui
 gtk/gtkprogressbar.c
 gtk/gtkradioaction.c
 gtk/gtkradiobutton.c
@@ -208,7 +208,7 @@ gtk/gtkrange.c
 gtk/gtkrecentaction.c
 gtk/gtkrecentchooser.c
 gtk/gtkrecentchooserdefault.c
-gtk/gtkrecentchooserdefault.ui
+[type: gettext/glade]gtk/gtkrecentchooserdefault.ui
 gtk/gtkrecentchoosermenu.c
 gtk/gtkrecentmanager.c
 gtk/gtkscalebutton.c
@@ -271,7 +271,7 @@ gtk/gtktreeviewcolumn.c
 gtk/gtkuimanager.c
 gtk/gtkviewport.c
 gtk/gtkvolumebutton.c
-gtk/gtkvolumebutton.ui
+[type: gettext/glade]gtk/gtkvolumebutton.ui
 gtk/gtkwidget.c
 gtk/gtkwindow.c
 gtk/paper_names_offsets.c
