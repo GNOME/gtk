@@ -1379,7 +1379,7 @@ gdk_broadway_window_begin_resize_drag (GdkWindow     *window,
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
-  mv_resize = get_move_resize_data (GDK_WINDOW_DISPLAY (window), TRUE);
+  mv_resize = get_move_resize_data (gdk_window_get_display (window), TRUE);
 
   mv_resize->is_resize = TRUE;
   mv_resize->moveresize_button = button;
