@@ -90,7 +90,10 @@ _gdk_keyval_from_name (const gchar *keyval_name)
   gdk_key *found;
 
   g_return_val_if_fail (keyval_name != NULL, 0);
-  
+
+  if (strncmp (keyval_name,"XF86", 4) == 0)
+    keyval_name += 4;
+
   found = bsearch (keyval_name, gdk_keys_by_name,
 		   GDK_NUM_KEYS, sizeof (gdk_key),
 		   gdk_keys_name_compare);
