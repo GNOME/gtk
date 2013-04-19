@@ -40,9 +40,6 @@
 
 #include "config.h"
 
-#define GDK_SCREEN_DISPLAY(screen)    (GDK_SCREEN_WAYLAND (screen)->display)
-#define GDK_WINDOW_SCREEN(win)	      (gdk_window_get_screen (win))
-#define GDK_WINDOW_DISPLAY(win)       (GDK_SCREEN_WAYLAND (GDK_WINDOW_SCREEN (win))->display)
 #define GDK_WINDOW_IS_WAYLAND(win)    (GDK_IS_WINDOW_IMPL_WAYLAND (((GdkWindow *)win)->impl))
 
 void _gdk_wayland_window_add_focus    (GdkWindow *window);
