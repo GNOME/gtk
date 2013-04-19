@@ -3440,7 +3440,7 @@ gtk_cell_area_activate_cell (GtkCellArea          *area,
           /* If the signal was successfully handled start the editing */
           if (gtk_widget_get_parent (GTK_WIDGET (editable_widget)))
             {
-              gtk_cell_editable_start_editing (editable_widget, NULL);
+              gtk_cell_editable_start_editing (editable_widget, event);
               gtk_widget_grab_focus (GTK_WIDGET (editable_widget));
             }
           else
