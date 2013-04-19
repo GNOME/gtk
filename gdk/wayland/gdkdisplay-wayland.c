@@ -214,12 +214,17 @@ log_handler(const char *format, va_list args)
 }
 
 GdkDisplay *
-_gdk_wayland_display_open (struct wl_display *wl_display)
+_gdk_wayland_display_open (const gchar *display_name)
 {
+  struct wl_display *wl_display;
   GdkDisplay *display;
   GdkWaylandDisplay *display_wayland;
 
   wl_log_set_handler_client(log_handler);
+
+  wl_display = wl_display_connect(display_name);
+  if (!wl_display)
+    return NULL;
 
   display = g_object_new (GDK_TYPE_WAYLAND_DISPLAY, NULL);
   display_wayland = GDK_WAYLAND_DISPLAY (display);
