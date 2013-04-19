@@ -68,21 +68,34 @@ end_element_handler (GMarkupParseContext  *context,
                      GError              **error)
 {
   ParserData *data = user_data;
+  gchar **lines;
+  gint i;
 
   if (!data->translatable)
     return;
+
+  lines = g_strsplit (data->text->str, "\n", -1);
 
   if (data->comments)
     g_string_append_printf (data->output, "\n/* %s */\n",
                             data->comments);
 
   if (data->context)
-    g_string_append_printf (data->output, "C_(\"%s\", \"%s\")\n",
-                            data->context,
-                            data->text->str);
+    g_string_append_printf (data->output, "C_(\"%s\", ",
+                            data->context);
   else
-    g_string_append_printf (data->output, "N_(\"%s\")\n",
-                            data->text->str);
+    g_string_append (data->output, "N_(");
+
+  for (i = 0; lines[i]; i++)
+    g_string_append_printf (data->output, "%s\"%s%s\"%s",
+                            i > 0 ? "   " : "",
+                            lines[i],
+                            lines[i+1] ? "\\n" : "",
+                            lines[i+1] ? "\n" : "");
+
+  g_string_append (data->output, ");\n");
+
+  g_strfreev (lines);
 
   g_free (data->comments);
   g_free (data->context);
