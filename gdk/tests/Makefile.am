@@ -31,6 +31,10 @@ TEST_PROGS        += display
 display_SOURCES    = display.c
 display_LDADD      = $(progs_ldadd)
 
+TEST_PROGS        += keysyms
+keysyms_SOURCES    = keysyms.c
+keysyms_LDADD      = $(progs_ldadd)
+
 CLEANFILES = \
 	cairosurface.png	\
 	gdksurface.png
