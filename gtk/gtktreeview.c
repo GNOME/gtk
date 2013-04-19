@@ -14420,7 +14420,7 @@ gtk_tree_view_get_dest_row_at_pos (GtkTreeView             *tree_view,
   gint cell_y;
   gint bin_x, bin_y;
   gdouble offset_into_row;
-  gdouble third;
+  gdouble fourth;
   GdkRectangle cell;
   GtkTreeViewColumn *column = NULL;
   GtkTreePath *tmp_path = NULL;
@@ -14442,8 +14442,8 @@ gtk_tree_view_get_dest_row_at_pos (GtkTreeView             *tree_view,
   if (tree_view->priv->tree == NULL)
     return FALSE;
 
-  /* If in the top third of a row, we drop before that row; if
-   * in the bottom third, drop after that row; if in the middle,
+  /* If in the top fourth of a row, we drop before that row; if
+   * in the bottom fourth, drop after that row; if in the middle,
    * and the row has children, drop into the row.
    */
   gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, drag_x, drag_y,
@@ -14470,11 +14470,11 @@ gtk_tree_view_get_dest_row_at_pos (GtkTreeView             *tree_view,
 
   tmp_path = NULL;
 
-  third = cell.height / 3.0;
+  fourth = cell.height / 4.0;
 
   if (pos)
     {
-      if (offset_into_row < third)
+      if (offset_into_row < fourth)
         {
           *pos = GTK_TREE_VIEW_DROP_BEFORE;
         }
@@ -14482,7 +14482,7 @@ gtk_tree_view_get_dest_row_at_pos (GtkTreeView             *tree_view,
         {
           *pos = GTK_TREE_VIEW_DROP_INTO_OR_BEFORE;
         }
-      else if (offset_into_row < third * 2.0)
+      else if (offset_into_row < cell.height - fourth)
         {
           *pos = GTK_TREE_VIEW_DROP_INTO_OR_AFTER;
         }
