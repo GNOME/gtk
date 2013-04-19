@@ -155,7 +155,7 @@ void     _gdk_wayland_display_queue_events (GdkDisplay *display);
 
 GdkAppLaunchContext *_gdk_wayland_display_get_app_launch_context (GdkDisplay *display);
 
-GdkDisplay *_gdk_wayland_display_open (const gchar *display_name);
+GdkDisplay *_gdk_wayland_display_open (struct wl_display *display);
 
 GdkWindow *_gdk_wayland_screen_create_root_window (GdkScreen *screen,
 						   int width,

@@ -34,6 +34,10 @@ struct _GdkWaylandDisplayManager
   GSList *displays;
 
   gboolean init_failed;
+  struct {
+      struct wl_display *wl_display;
+      gchar *name;
+  } cached_display;
 };
 
 struct _GdkWaylandDisplayManagerClass
@@ -51,6 +55,7 @@ gdk_wayland_display_manager_initable_init (GInitable     *initable,
                                            GCancellable  *cancellable,
                                            GError       **error)
 {
+  GdkWaylandDisplayManager *manager = GDK_WAYLAND_DISPLAY_MANAGER (initable);
   struct wl_display *wl_display;
 
   /* Set by the compositor when launching a special client - and it gets reset
@@ -64,12 +69,12 @@ gdk_wayland_display_manager_initable_init (GInitable     *initable,
 
   if (!wl_display)
     {
-      GDK_WAYLAND_DISPLAY_MANAGER (initable)->init_failed = TRUE;
+      manager->init_failed = TRUE;
       return FALSE;
     }
 
-  wl_display_disconnect (wl_display);
-
+  manager->cached_display.name = g_strdup (gdk_get_display_arg_name ());
+  manager->cached_display.wl_display = wl_display;
   return TRUE;
 }
 
@@ -89,10 +94,35 @@ gdk_wayland_display_manager_finalize (GObject *object)
 }
 
 static GdkDisplay *
-gdk_wayland_display_manager_open_display (GdkDisplayManager *manager,
+gdk_wayland_display_manager_open_display (GdkDisplayManager *display_manager,
 					  const gchar       *name)
 {
-  return _gdk_wayland_display_open (name);
+  GdkWaylandDisplayManager *manager = GDK_WAYLAND_DISPLAY_MANAGER (display_manager);
+  struct wl_display *wl_display;
+
+  if (name == manager->cached_display.name || 
+      g_strcmp0 (name, manager->cached_display.name))
+    {
+      /* Cache hit */
+      wl_display = manager->cached_display.wl_display;
+    }
+
+  if (!wl_display)
+    {
+      /* Cache miss */
+      if (manager->cached_display.wl_display)
+        wl_display_disconnect (manager->cached_display.wl_display);
+      wl_display = wl_display_connect (name);
+    }
+
+  /* Use the cache at most once */
+  g_free (manager->cached_display.name);
+  manager->cached_display.wl_display = NULL;
+
+  if (!wl_display)
+    return NULL;
+
+  return _gdk_wayland_display_open (wl_display);
 }
 
 static void
