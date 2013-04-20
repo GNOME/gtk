@@ -68,6 +68,9 @@ INSTOBJEXT = @INSTOBJEXT@
 .SUFFIXES:
 .SUFFIXES: .c .o .po .pox .gmo .mo .msg .cat
 
+$(filter %.ui.h, $(POTFILES)):
+	$(MAKE) -C ../gtk gtkresources.c
+
 .c.o:
 	$(COMPILE) $<
 
