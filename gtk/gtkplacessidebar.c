@@ -165,6 +165,7 @@ struct _GtkPlacesSidebar {
 
 	DropState drop_state;
 	int new_bookmark_index;
+	guint drag_leave_timeout_id;
 
 	guint show_desktop : 1;
 };
@@ -1420,14 +1421,15 @@ free_drag_data (GtkPlacesSidebar *sidebar)
 static void
 remove_drop_bookmark_feedback_row (GtkPlacesSidebar *sidebar)
 {
-	if (sidebar->new_bookmark_index != -1) {
+	if (sidebar->drop_state != DROP_STATE_NORMAL) {
 		gboolean success;
 		GtkTreeIter iter;
 
 		success = gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (sidebar->store), &iter, NULL, sidebar->new_bookmark_index);
 		g_assert (success);
 		gtk_list_store_remove (sidebar->store, &iter);
-		sidebar->new_bookmark_index = -1;
+
+		sidebar->drop_state = DROP_STATE_NORMAL;
 	}
 }
 
@@ -1460,22 +1462,31 @@ start_drop_feedback (GtkPlacesSidebar *sidebar, GtkTreePath *path, GtkTreeViewDr
 	if (drop_as_bookmarks) {
 		int new_bookmark_index;
 		GtkTreePath *new_path;
+		gboolean need_feedback_row;
 
 		new_bookmark_index = gtk_tree_path_get_indices (path)[0];
-
 		if (pos == GTK_TREE_VIEW_DROP_AFTER)
 			new_bookmark_index++;
 
-		if (sidebar->new_bookmark_index != new_bookmark_index) {
+		if (sidebar->drop_state == DROP_STATE_NORMAL)
+			need_feedback_row = TRUE;
+		else {
+			/* Feedback row already exists; remove it if its position needs to change */
+
+			if (sidebar->new_bookmark_index == new_bookmark_index)
+				need_feedback_row = FALSE;
+			else {
+				if (sidebar->new_bookmark_index < new_bookmark_index)
+					new_bookmark_index--; /* since the removal of the old feedback row pushed items one position up */
+
+				remove_drop_bookmark_feedback_row (sidebar);
+				need_feedback_row = TRUE;
+			}
+		}
+
+		if (need_feedback_row) {
 			GtkTreeIter iter;
 
-			if (sidebar->new_bookmark_index != -1
-			    && sidebar->new_bookmark_index < new_bookmark_index)
-				new_bookmark_index--; /* since the removal of the old feedback row pushed items one position up */
-
-			remove_drop_bookmark_feedback_row (sidebar);
-
-			/* Insert the new feedback row */
 			sidebar->new_bookmark_index = new_bookmark_index;
 			gtk_list_store_insert_with_values (sidebar->store, &iter, sidebar->new_bookmark_index,
 							   PLACES_SIDEBAR_COLUMN_ROW_TYPE, PLACES_DROP_FEEDBACK,
@@ -1485,9 +1496,11 @@ start_drop_feedback (GtkPlacesSidebar *sidebar, GtkTreePath *path, GtkTreeViewDr
 							   -1);
 		}
 
-		new_path = gtk_tree_path_new_from_indices (new_bookmark_index, -1);
+		new_path = gtk_tree_path_new_from_indices (sidebar->new_bookmark_index, -1);
 		gtk_tree_view_set_drag_dest_row (sidebar->tree_view, new_path, GTK_TREE_VIEW_DROP_INTO_OR_BEFORE);
 		gtk_tree_path_free (new_path);
+
+		sidebar->drop_state = DROP_STATE_NEW_BOOKMARK_ARMED;
 	} else
 		gtk_tree_view_set_drag_dest_row (sidebar->tree_view, path, pos);
 }
@@ -1594,15 +1607,30 @@ drag_motion_callback (GtkTreeView *tree_view,
 	return TRUE;
 }
 
+static gboolean
+drag_leave_timeout_cb (gpointer data)
+{
+	GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (data);
+
+	free_drag_data (sidebar);
+	stop_drop_feedback (sidebar);
+	remove_drop_bookmark_feedback_row (sidebar);
+
+	sidebar->drag_leave_timeout_id = 0;
+	return FALSE;
+}
+
 static void
 drag_leave_callback (GtkTreeView *tree_view,
 		     GdkDragContext *context,
 		     unsigned int time,
 		     GtkPlacesSidebar *sidebar)
 {
-	free_drag_data (sidebar);
-	stop_drop_feedback (sidebar);
-	remove_drop_bookmark_feedback_row (sidebar);
+	if (sidebar->drag_leave_timeout_id)
+		g_source_remove (sidebar->drag_leave_timeout_id);
+
+	sidebar->drag_leave_timeout_id = gdk_threads_add_timeout (500, drag_leave_timeout_cb, sidebar);
+
 	g_signal_stop_emission_by_name (tree_view, "drag-leave");
 }
 
@@ -1783,7 +1811,9 @@ drag_data_received_callback (GtkWidget *widget,
 					position++;
 
 				if (tree_pos == GTK_TREE_VIEW_DROP_BEFORE
-				    || tree_pos == GTK_TREE_VIEW_DROP_AFTER) {
+				    || tree_pos == GTK_TREE_VIEW_DROP_AFTER
+				    || place_type == PLACES_DROP_FEEDBACK) {
+					remove_drop_bookmark_feedback_row (sidebar);
 					drop_files_as_bookmarks (sidebar, source_file_list, position);
 					success = TRUE;
 					drop_as_bookmarks = TRUE;
@@ -1813,6 +1843,7 @@ drag_data_received_callback (GtkWidget *widget,
 out:
 	sidebar->drop_occured = FALSE;
 	free_drag_data (sidebar);
+	remove_drop_bookmark_feedback_row (sidebar);
 	gtk_drag_finish (context, success, FALSE, time);
 
 	gtk_tree_path_free (tree_path);
@@ -1827,6 +1858,7 @@ drag_drop_callback (GtkTreeView *tree_view,
 		    GtkPlacesSidebar *sidebar)
 {
 	gboolean retval = FALSE;
+
 	sidebar->drop_occured = TRUE;
 	retval = get_drag_data (tree_view, context, time);
 	g_signal_stop_emission_by_name (tree_view, "drag-drop");
@@ -3762,6 +3794,11 @@ gtk_places_sidebar_dispose (GObject *object)
 	sidebar = GTK_PLACES_SIDEBAR (object);
 
 	sidebar->tree_view = NULL;
+
+	if (sidebar->drag_leave_timeout_id) {
+		g_source_remove (sidebar->drag_leave_timeout_id);
+		sidebar->drag_leave_timeout_id = 0;
+	}
 
 	free_drag_data (sidebar);
 
