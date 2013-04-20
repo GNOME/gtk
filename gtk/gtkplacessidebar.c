@@ -3209,6 +3209,22 @@ bookmarks_popup_menu_cb (GtkWidget *widget,
 	return TRUE;
 }
 
+static void
+bookmarks_row_activated_cb (GtkWidget *widget,
+			    GtkTreePath *path,
+			    GtkTreeViewColumn *column,
+			    GtkPlacesSidebar *sidebar)
+{
+	GtkTreeIter iter;
+	GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW (widget));
+
+	if (!gtk_tree_model_get_iter (model, &iter, path)) {
+		return;
+	}
+
+	open_selected_bookmark (sidebar, model, &iter, 0);
+}
+
 static gboolean
 bookmarks_button_release_event_cb (GtkWidget *widget,
 				   GdkEventButton *event,
@@ -3234,6 +3250,10 @@ bookmarks_button_release_event_cb (GtkWidget *widget,
 		return FALSE;
 	}
 
+	if (event->button == 1) {
+		return FALSE;
+	}
+
 	tree_view = GTK_TREE_VIEW (widget);
 	model = gtk_tree_view_get_model (tree_view);
 
@@ -3254,9 +3274,7 @@ bookmarks_button_release_event_cb (GtkWidget *widget,
 		return FALSE;
 	}
 
-	if (event->button == 1) {
-		open_selected_bookmark (sidebar, model, &iter, 0);
-	} else if (event->button == 2) {
+	if (event->button == 2) {
 		GtkPlacesOpenFlags open_flags = GTK_PLACES_OPEN_NORMAL;
 
 		open_flags = ((event->state & GDK_CONTROL_MASK) ?
@@ -3550,36 +3568,6 @@ bookmarks_changed_cb (gpointer data)
 	update_places (sidebar);
 }
 
-static gboolean
-tree_view_button_press_callback (GtkWidget *tree_view,
-				 GdkEventButton *event,
-				 gpointer data)
-{
-	GtkTreePath *path;
-	GtkTreeViewColumn *column;
-
-	if (event->button == 1 && event->type == GDK_BUTTON_PRESS) {
-		if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (tree_view),
-						   event->x, event->y,
-						   &path,
-						   &column,
-						   NULL,
-						   NULL)) {
-			gtk_tree_view_row_activated (GTK_TREE_VIEW (tree_view), path, column);
-		}
-	}
-
-	return FALSE;
-}
-
-static void
-tree_view_set_activate_on_single_click (GtkTreeView *tree_view)
-{
-	g_signal_connect (tree_view, "button_press_event",
-			  G_CALLBACK (tree_view_button_press_callback),
-			  NULL);
-}
-
 static void
 trash_monitor_trash_state_changed_cb (GtkTrashMonitor *monitor,
 				      GtkPlacesSidebar *sidebar)
@@ -3776,8 +3764,10 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 			  G_CALLBACK (bookmarks_popup_menu_cb), sidebar);
 	g_signal_connect (tree_view, "button-release-event",
 			  G_CALLBACK (bookmarks_button_release_event_cb), sidebar);
+	g_signal_connect (tree_view, "row-activated",
+			  G_CALLBACK (bookmarks_row_activated_cb), sidebar);
 
-	tree_view_set_activate_on_single_click (sidebar->tree_view);
+	gtk_tree_view_set_activate_on_single_click (sidebar->tree_view, TRUE);
 
 	sidebar->hostname = g_strdup (_("Computer"));
 	sidebar->hostnamed_cancellable = g_cancellable_new ();
