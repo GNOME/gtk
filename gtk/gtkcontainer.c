@@ -3324,6 +3324,9 @@ gtk_container_propagate_draw (GtkContainer   *container,
 
   g_assert (gtk_widget_get_parent (child) == GTK_WIDGET (container));
 
+  if (!gtk_widget_is_drawable (child))
+    return;
+
   event = _gtk_cairo_get_event (cr);
   if (event)
     {
