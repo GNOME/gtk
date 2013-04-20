@@ -181,7 +181,8 @@ struct _GtkPlacesSidebarClass {
 				        GtkPlacesOpenFlags open_flags);
 	void (* populate_popup)        (GtkPlacesSidebar *sidebar,
 					GtkMenu          *menu,
-					GFile            *selected_item);
+					GFile            *selected_item,
+					GVolume          *selected_volume);
 	void (* show_error_message)    (GtkPlacesSidebar *sidebar,
 				        const char       *primary,
 				        const char       *secondary);
@@ -342,10 +343,10 @@ emit_open_location (GtkPlacesSidebar *sidebar, GFile *location, GtkPlacesOpenFla
 }
 
 static void
-emit_populate_popup (GtkPlacesSidebar *sidebar, GtkMenu *menu, GFile *selected_item)
+emit_populate_popup (GtkPlacesSidebar *sidebar, GtkMenu *menu, GFile *selected_item, GVolume *selected_volume)
 {
 	g_signal_emit (sidebar, places_sidebar_signals[POPULATE_POPUP], 0,
-		       menu, selected_item);
+		       menu, selected_item, selected_volume);
 }
 
 static void
@@ -3206,9 +3207,10 @@ bookmarks_build_popup_menu (GtkPlacesSidebar *sidebar)
 	else
 		file = NULL;
 
-	emit_populate_popup (sidebar, GTK_MENU (sidebar->popup_menu), file);
+	emit_populate_popup (sidebar, GTK_MENU (sidebar->popup_menu), file, sel_info.volume);
 
-	g_object_unref (file);
+	if (file)
+		g_object_unref (file);
 
 	free_selection_info (&sel_info);
 }
@@ -4002,7 +4004,8 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 	 * GtkPlacesSidebar::populate-popup:
 	 * @sidebar: the object which received the signal.
 	 * @menu: a #GtkMenu.
-	 * @selected_item: #GFile with the item to which the menu should refer.
+	 * @selected_item: #GFile with the item to which the menu should refer, or #NULL in the case of a @selected_volume.
+	 * @selected_volume: #GVolume if the selected item is a volume, or #NULL if it is a file.
 	 *
 	 * The places sidebar emits this signal when the user invokes a contextual
 	 * menu on one of its items.  In the signal handler, the application may
@@ -4013,6 +4016,11 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 	 * during their GtkMenuItem::activate callbacks, the application can use
 	 * gtk_places_sidebar_get_location() to get the file to which the item
 	 * refers.
+	 *
+	 * The @selected_item argument may be #NULL in case the selection refers to
+	 * a volume.  In this case, @selected_volume will be non-NULL.  In this case,
+	 * the calling application will have to g_object_ref() the @selected_volume and
+	 * keep it around for the purposes of its menu item's "activate" callback.
 	 *
 	 * The @menu and all its menu items are destroyed after the user
 	 * dismisses the menu.  The menu is re-created (and thus, this signal is
@@ -4026,8 +4034,9 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 			      G_SIGNAL_RUN_FIRST,
 			      G_STRUCT_OFFSET (GtkPlacesSidebarClass, populate_popup),
 			      NULL, NULL,
-			      _gtk_marshal_VOID__OBJECT_OBJECT,
-			      G_TYPE_NONE, 2,
+			      _gtk_marshal_VOID__OBJECT_OBJECT_OBJECT,
+			      G_TYPE_NONE, 3,
+			      G_TYPE_OBJECT,
 			      G_TYPE_OBJECT,
 			      G_TYPE_OBJECT);
 
