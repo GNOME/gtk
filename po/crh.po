@@ -291,134 +291,134 @@ msgstr "Sil"
 #. Translators: 'Mon' means Monitor here, and the XF86 prefix should be removed
 #: ../gdk/keyname-table.h:3991
 msgctxt "keyboard label"
-msgid "XF86MonBrightnessUp"
+msgid "MonBrightnessUp"
 msgstr ""
 
 #: ../gdk/keyname-table.h:3992
 msgctxt "keyboard label"
-msgid "XF86MonBrightnessDown"
+msgid "MonBrightnessDown"
 msgstr ""
 
 #: ../gdk/keyname-table.h:3993
 msgctxt "keyboard label"
-msgid "XF86AudioMute"
+msgid "AudioMute"
 msgstr ""
 
 #: ../gdk/keyname-table.h:3994
 msgctxt "keyboard label"
-msgid "XF86AudioLowerVolume"
+msgid "AudioLowerVolume"
 msgstr ""
 
 #: ../gdk/keyname-table.h:3995
 msgctxt "keyboard label"
-msgid "XF86AudioRaiseVolume"
+msgid "AudioRaiseVolume"
 msgstr ""
 
 #: ../gdk/keyname-table.h:3996
 msgctxt "keyboard label"
-msgid "XF86AudioPlay"
+msgid "AudioPlay"
 msgstr ""
 
 #: ../gdk/keyname-table.h:3997
 msgctxt "keyboard label"
-msgid "XF86AudioStop"
+msgid "AudioStop"
 msgstr ""
 
 #: ../gdk/keyname-table.h:3998
 msgctxt "keyboard label"
-msgid "XF86AudioNext"
+msgid "AudioNext"
 msgstr ""
 
 #: ../gdk/keyname-table.h:3999
 msgctxt "keyboard label"
-msgid "XF86AudioPrev"
+msgid "AudioPrev"
 msgstr ""
 
 #: ../gdk/keyname-table.h:4000
 msgctxt "keyboard label"
-msgid "XF86AudioRecord"
+msgid "AudioRecord"
 msgstr ""
 
 #: ../gdk/keyname-table.h:4001
 msgctxt "keyboard label"
-msgid "XF86AudioPause"
+msgid "AudioPause"
 msgstr ""
 
 #: ../gdk/keyname-table.h:4002
 msgctxt "keyboard label"
-msgid "XF86AudioRewind"
+msgid "AudioRewind"
 msgstr ""
 
 #: ../gdk/keyname-table.h:4003
 msgctxt "keyboard label"
-msgid "XF86AudioMedia"
+msgid "AudioMedia"
 msgstr ""
 
 #: ../gdk/keyname-table.h:4004
 msgctxt "keyboard label"
-msgid "XF86ScreenSaver"
+msgid "ScreenSaver"
 msgstr ""
 
 #: ../gdk/keyname-table.h:4005
 msgctxt "keyboard label"
-msgid "XF86Battery"
+msgid "Battery"
 msgstr ""
 
 #: ../gdk/keyname-table.h:4006
 msgctxt "keyboard label"
-msgid "XF86Launch1"
+msgid "Launch1"
 msgstr ""
 
 #: ../gdk/keyname-table.h:4007
 #, fuzzy
 msgctxt "keyboard label"
-msgid "XF86Forward"
+msgid "Forward"
 msgstr "İ_leri"
 
 #: ../gdk/keyname-table.h:4008
 #, fuzzy
 msgctxt "keyboard label"
-msgid "XF86Back"
+msgid "Back"
 msgstr "_Keri"
 
 #: ../gdk/keyname-table.h:4009
 msgctxt "keyboard label"
-msgid "XF86Sleep"
+msgid "Sleep"
 msgstr ""
 
 #: ../gdk/keyname-table.h:4010
 msgctxt "keyboard label"
-msgid "XF86Hibernate"
+msgid "Hibernate"
 msgstr ""
 
 #: ../gdk/keyname-table.h:4011
 msgctxt "keyboard label"
-msgid "XF86WLAN"
+msgid "WLAN"
 msgstr ""
 
 #: ../gdk/keyname-table.h:4012
 msgctxt "keyboard label"
-msgid "XF86WebCam"
+msgid "WebCam"
 msgstr ""
 
 #: ../gdk/keyname-table.h:4013
 msgctxt "keyboard label"
-msgid "XF86Display"
+msgid "Display"
 msgstr ""
 
 #: ../gdk/keyname-table.h:4014
 msgctxt "keyboard label"
-msgid "XF86TouchpadToggle"
+msgid "TouchpadToggle"
 msgstr ""
 
 #: ../gdk/keyname-table.h:4015
 msgctxt "keyboard label"
-msgid "XF86WakeUp"
+msgid "WakeUp"
 msgstr ""
 
 #: ../gdk/keyname-table.h:4016
 msgctxt "keyboard label"
-msgid "XF86Suspend"
+msgid "Suspend"
 msgstr ""
 
 #. Description of --sync in --help output

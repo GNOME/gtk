@@ -307,132 +307,132 @@ msgstr "Delete"
 #. Translators: 'Mon' means Monitor here, and the XF86 prefix should be removed
 #: ../gdk/keyname-table.h:3991
 msgctxt "keyboard label"
-msgid "XF86MonBrightnessUp"
+msgid "MonBrightnessUp"
 msgstr "모니터 밝게"
 
 #: ../gdk/keyname-table.h:3992
 msgctxt "keyboard label"
-msgid "XF86MonBrightnessDown"
+msgid "MonBrightnessDown"
 msgstr "모니터 어둡게"
 
 #: ../gdk/keyname-table.h:3993
 msgctxt "keyboard label"
-msgid "XF86AudioMute"
+msgid "AudioMute"
 msgstr "오디오 묵음"
 
 #: ../gdk/keyname-table.h:3994
 msgctxt "keyboard label"
-msgid "XF86AudioLowerVolume"
+msgid "AudioLowerVolume"
 msgstr "오디오 볼륨 낮추기"
 
 #: ../gdk/keyname-table.h:3995
 msgctxt "keyboard label"
-msgid "XF86AudioRaiseVolume"
+msgid "AudioRaiseVolume"
 msgstr "오디오 볼륨 높이기"
 
 #: ../gdk/keyname-table.h:3996
 msgctxt "keyboard label"
-msgid "XF86AudioPlay"
+msgid "AudioPlay"
 msgstr "오디오 재생"
 
 #: ../gdk/keyname-table.h:3997
 msgctxt "keyboard label"
-msgid "XF86AudioStop"
+msgid "AudioStop"
 msgstr "오디오 중지"
 
 #: ../gdk/keyname-table.h:3998
 msgctxt "keyboard label"
-msgid "XF86AudioNext"
+msgid "AudioNext"
 msgstr "오디오 다음"
 
 #: ../gdk/keyname-table.h:3999
 msgctxt "keyboard label"
-msgid "XF86AudioPrev"
+msgid "AudioPrev"
 msgstr "오디오 이전"
 
 #: ../gdk/keyname-table.h:4000
 msgctxt "keyboard label"
-msgid "XF86AudioRecord"
+msgid "AudioRecord"
 msgstr "오디오 녹음"
 
 #: ../gdk/keyname-table.h:4001
 msgctxt "keyboard label"
-msgid "XF86AudioPause"
+msgid "AudioPause"
 msgstr "오디오 일시중지"
 
 #: ../gdk/keyname-table.h:4002
 msgctxt "keyboard label"
-msgid "XF86AudioRewind"
+msgid "AudioRewind"
 msgstr "오디오 뒤로"
 
 #: ../gdk/keyname-table.h:4003
 msgctxt "keyboard label"
-msgid "XF86AudioMedia"
+msgid "AudioMedia"
 msgstr "오디오 미디어"
 
 #: ../gdk/keyname-table.h:4004
 msgctxt "keyboard label"
-msgid "XF86ScreenSaver"
+msgid "ScreenSaver"
 msgstr "화면 보호기"
 
 #: ../gdk/keyname-table.h:4005
 msgctxt "keyboard label"
-msgid "XF86Battery"
+msgid "Battery"
 msgstr "배터리"
 
 #: ../gdk/keyname-table.h:4006
 msgctxt "keyboard label"
-msgid "XF86Launch1"
+msgid "Launch1"
 msgstr "실행1"
 
 #: ../gdk/keyname-table.h:4007
 msgctxt "keyboard label"
-msgid "XF86Forward"
+msgid "Forward"
 msgstr "앞으로"
 
 #: ../gdk/keyname-table.h:4008
 msgctxt "keyboard label"
-msgid "XF86Back"
+msgid "Back"
 msgstr "뒤로"
 
 #: ../gdk/keyname-table.h:4009
 msgctxt "keyboard label"
-msgid "XF86Sleep"
+msgid "Sleep"
 msgstr "일시절전"
 
 #: ../gdk/keyname-table.h:4010
 msgctxt "keyboard label"
-msgid "XF86Hibernate"
+msgid "Hibernate"
 msgstr "최대절전"
 
 #: ../gdk/keyname-table.h:4011
 msgctxt "keyboard label"
-msgid "XF86WLAN"
+msgid "WLAN"
 msgstr "무선랜"
 
 #: ../gdk/keyname-table.h:4012
 msgctxt "keyboard label"
-msgid "XF86WebCam"
+msgid "WebCam"
 msgstr "웹카메라"
 
 #: ../gdk/keyname-table.h:4013
 msgctxt "keyboard label"
-msgid "XF86Display"
+msgid "Display"
 msgstr "디스플레이"
 
 #: ../gdk/keyname-table.h:4014
 msgctxt "keyboard label"
-msgid "XF86TouchpadToggle"
+msgid "TouchpadToggle"
 msgstr "터치패드 토글"
 
 #: ../gdk/keyname-table.h:4015
 msgctxt "keyboard label"
-msgid "XF86WakeUp"
+msgid "WakeUp"
 msgstr "깨어나기"
 
 #: ../gdk/keyname-table.h:4016
 msgctxt "keyboard label"
-msgid "XF86Suspend"
+msgid "Suspend"
 msgstr "절전"
 
 #. Description of --sync in --help output

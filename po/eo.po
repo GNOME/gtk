@@ -280,132 +280,132 @@ msgstr "Forigi"
 #. Translators: 'Mon' means Monitor here, and the XF86 prefix should be removed
 #: ../gdk/keyname-table.h:3990
 msgctxt "keyboard label"
-msgid "XF86MonBrightnessUp"
+msgid "MonBrightnessUp"
 msgstr "Plialtigi ekran-helecon"
 
 #: ../gdk/keyname-table.h:3991
 msgctxt "keyboard label"
-msgid "XF86MonBrightnessDown"
+msgid "MonBrightnessDown"
 msgstr "Malplialtigi ekran-helecon"
 
 #: ../gdk/keyname-table.h:3992
 msgctxt "keyboard label"
-msgid "XF86AudioMute"
+msgid "AudioMute"
 msgstr "Silentigi sonon"
 
 #: ../gdk/keyname-table.h:3993
 msgctxt "keyboard label"
-msgid "XF86AudioLowerVolume"
+msgid "AudioLowerVolume"
 msgstr "Malplialtigi sonforton"
 
 #: ../gdk/keyname-table.h:3994
 msgctxt "keyboard label"
-msgid "XF86AudioRaiseVolume"
+msgid "AudioRaiseVolume"
 msgstr "Plialtigi sonforton"
 
 #: ../gdk/keyname-table.h:3995
 msgctxt "keyboard label"
-msgid "XF86AudioPlay"
+msgid "AudioPlay"
 msgstr "Ludi sonon"
 
 #: ../gdk/keyname-table.h:3996
 msgctxt "keyboard label"
-msgid "XF86AudioStop"
+msgid "AudioStop"
 msgstr "Haltigi sonludon"
 
 #: ../gdk/keyname-table.h:3997
 msgctxt "keyboard label"
-msgid "XF86AudioNext"
+msgid "AudioNext"
 msgstr "Sekva sono"
 
 #: ../gdk/keyname-table.h:3998
 msgctxt "keyboard label"
-msgid "XF86AudioPrev"
+msgid "AudioPrev"
 msgstr "Antaŭa sono"
 
 #: ../gdk/keyname-table.h:3999
 msgctxt "keyboard label"
-msgid "XF86AudioRecord"
+msgid "AudioRecord"
 msgstr "Registri sonon"
 
 #: ../gdk/keyname-table.h:4000
 msgctxt "keyboard label"
-msgid "XF86AudioPause"
+msgid "AudioPause"
 msgstr "Paŭzigi sonon"
 
 #: ../gdk/keyname-table.h:4001
 msgctxt "keyboard label"
-msgid "XF86AudioRewind"
+msgid "AudioRewind"
 msgstr "Revolvi sonon"
 
 #: ../gdk/keyname-table.h:4002
 msgctxt "keyboard label"
-msgid "XF86AudioMedia"
+msgid "AudioMedia"
 msgstr "Aŭdvidea sono"
 
 #: ../gdk/keyname-table.h:4003
 msgctxt "keyboard label"
-msgid "XF86ScreenSaver"
+msgid "ScreenSaver"
 msgstr "Ekrankurteno"
 
 #: ../gdk/keyname-table.h:4004
 msgctxt "keyboard label"
-msgid "XF86Battery"
+msgid "Battery"
 msgstr "Akumulatoro"
 
 #: ../gdk/keyname-table.h:4005
 msgctxt "keyboard label"
-msgid "XF86Launch1"
+msgid "Launch1"
 msgstr "Lanĉi1"
 
 #: ../gdk/keyname-table.h:4006
 msgctxt "keyboard label"
-msgid "XF86Forward"
+msgid "Forward"
 msgstr "Antaŭen"
 
 #: ../gdk/keyname-table.h:4007
 msgctxt "keyboard label"
-msgid "XF86Back"
+msgid "Back"
 msgstr "Malantaŭen"
 
 #: ../gdk/keyname-table.h:4008
 msgctxt "keyboard label"
-msgid "XF86Sleep"
+msgid "Sleep"
 msgstr "Dormeti"
 
 #: ../gdk/keyname-table.h:4009
 msgctxt "keyboard label"
-msgid "XF86Hibernate"
+msgid "Hibernate"
 msgstr "Pasivumigi"
 
 #: ../gdk/keyname-table.h:4010
 msgctxt "keyboard label"
-msgid "XF86WLAN"
+msgid "WLAN"
 msgstr "WLAN"
 
 #: ../gdk/keyname-table.h:4011
 msgctxt "keyboard label"
-msgid "XF86WebCam"
+msgid "WebCam"
 msgstr "Retkamerao"
 
 #: ../gdk/keyname-table.h:4012
 msgctxt "keyboard label"
-msgid "XF86Display"
+msgid "Display"
 msgstr "Ekrano"
 
 #: ../gdk/keyname-table.h:4013
 msgctxt "keyboard label"
-msgid "XF86TouchpadToggle"
+msgid "TouchpadToggle"
 msgstr "Tuŝplata baskulo"
 
 #: ../gdk/keyname-table.h:4014
 msgctxt "keyboard label"
-msgid "XF86WakeUp"
+msgid "WakeUp"
 msgstr "Veki"
 
 #: ../gdk/keyname-table.h:4015
 msgctxt "keyboard label"
-msgid "XF86Suspend"
+msgid "Suspend"
 msgstr "Prokrasti"
 
 #. Description of --sync in --help output

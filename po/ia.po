@@ -278,132 +278,132 @@ msgstr "Deler"
 #. Translators: 'Mon' means Monitor here, and the XF86 prefix should be removed
 #: ../gdk/keyname-table.h:3991
 msgctxt "keyboard label"
-msgid "XF86MonBrightnessUp"
+msgid "MonBrightnessUp"
 msgstr "Accrescer luminositate"
 
 #: ../gdk/keyname-table.h:3992
 msgctxt "keyboard label"
-msgid "XF86MonBrightnessDown"
+msgid "MonBrightnessDown"
 msgstr "Decrescer luminositate"
 
 #: ../gdk/keyname-table.h:3993
 msgctxt "keyboard label"
-msgid "XF86AudioMute"
+msgid "AudioMute"
 msgstr "Silentiar"
 
 #: ../gdk/keyname-table.h:3994
 msgctxt "keyboard label"
-msgid "XF86AudioLowerVolume"
+msgid "AudioLowerVolume"
 msgstr "Abassar volumine"
 
 #: ../gdk/keyname-table.h:3995
 msgctxt "keyboard label"
-msgid "XF86AudioRaiseVolume"
+msgid "AudioRaiseVolume"
 msgstr "Altiar volumine"
 
 #: ../gdk/keyname-table.h:3996
 msgctxt "keyboard label"
-msgid "XF86AudioPlay"
+msgid "AudioPlay"
 msgstr "Reproducer"
 
 #: ../gdk/keyname-table.h:3997
 msgctxt "keyboard label"
-msgid "XF86AudioStop"
+msgid "AudioStop"
 msgstr "Arrestar"
 
 #: ../gdk/keyname-table.h:3998
 msgctxt "keyboard label"
-msgid "XF86AudioNext"
+msgid "AudioNext"
 msgstr "Sequente"
 
 #: ../gdk/keyname-table.h:3999
 msgctxt "keyboard label"
-msgid "XF86AudioPrev"
+msgid "AudioPrev"
 msgstr "Precedente"
 
 #: ../gdk/keyname-table.h:4000
 msgctxt "keyboard label"
-msgid "XF86AudioRecord"
+msgid "AudioRecord"
 msgstr "Registrar"
 
 #: ../gdk/keyname-table.h:4001
 msgctxt "keyboard label"
-msgid "XF86AudioPause"
+msgid "AudioPause"
 msgstr "Pausar"
 
 #: ../gdk/keyname-table.h:4002
 msgctxt "keyboard label"
-msgid "XF86AudioRewind"
+msgid "AudioRewind"
 msgstr "Rebobinar"
 
 #: ../gdk/keyname-table.h:4003
 msgctxt "keyboard label"
-msgid "XF86AudioMedia"
+msgid "AudioMedia"
 msgstr "Media"
 
 #: ../gdk/keyname-table.h:4004
 msgctxt "keyboard label"
-msgid "XF86ScreenSaver"
+msgid "ScreenSaver"
 msgstr "Economisator"
 
 #: ../gdk/keyname-table.h:4005
 msgctxt "keyboard label"
-msgid "XF86Battery"
+msgid "Battery"
 msgstr "Accumulator"
 
 #: ../gdk/keyname-table.h:4006
 msgctxt "keyboard label"
-msgid "XF86Launch1"
+msgid "Launch1"
 msgstr "Lancear"
 
 #: ../gdk/keyname-table.h:4007
 msgctxt "keyboard label"
-msgid "XF86Forward"
+msgid "Forward"
 msgstr "Avantiar"
 
 #: ../gdk/keyname-table.h:4008
 msgctxt "keyboard label"
-msgid "XF86Back"
+msgid "Back"
 msgstr "Regreder"
 
 #: ../gdk/keyname-table.h:4009
 msgctxt "keyboard label"
-msgid "XF86Sleep"
+msgid "Sleep"
 msgstr "Dormir"
 
 #: ../gdk/keyname-table.h:4010
 msgctxt "keyboard label"
-msgid "XF86Hibernate"
+msgid "Hibernate"
 msgstr "Hinernar"
 
 #: ../gdk/keyname-table.h:4011
 msgctxt "keyboard label"
-msgid "XF86WLAN"
+msgid "WLAN"
 msgstr "Rete sin filo"
 
 #: ../gdk/keyname-table.h:4012
 msgctxt "keyboard label"
-msgid "XF86WebCam"
+msgid "WebCam"
 msgstr "Camera web"
 
 #: ../gdk/keyname-table.h:4013
 msgctxt "keyboard label"
-msgid "XF86Display"
+msgid "Display"
 msgstr "Schermo"
 
 #: ../gdk/keyname-table.h:4014
 msgctxt "keyboard label"
-msgid "XF86TouchpadToggle"
+msgid "TouchpadToggle"
 msgstr "Pannello tactile"
 
 #: ../gdk/keyname-table.h:4015
 msgctxt "keyboard label"
-msgid "XF86WakeUp"
+msgid "WakeUp"
 msgstr "Eveliar"
 
 #: ../gdk/keyname-table.h:4016
 msgctxt "keyboard label"
-msgid "XF86Suspend"
+msgid "Suspend"
 msgstr "Suspender"
 
 #. Description of --sync in --help output

@@ -236,107 +236,107 @@ msgstr "Delete"
 
 #. Translators: 'Mon' means Monitor here, and the XF86 prefix should be removed
 msgctxt "keyboard label"
-msgid "XF86MonBrightnessUp"
+msgid "MonBrightnessUp"
 msgstr "Kuvari heledust vähemaks"
 
 msgctxt "keyboard label"
-msgid "XF86MonBrightnessDown"
+msgid "MonBrightnessDown"
 msgstr "Kuvari heledust juurde"
 
 msgctxt "keyboard label"
-msgid "XF86AudioMute"
+msgid "AudioMute"
 msgstr "Heli tummaks"
 
 msgctxt "keyboard label"
-msgid "XF86AudioLowerVolume"
+msgid "AudioLowerVolume"
 msgstr "Heli vaiksemaks"
 
 msgctxt "keyboard label"
-msgid "XF86AudioRaiseVolume"
+msgid "AudioRaiseVolume"
 msgstr "Heli valjemaks"
 
 msgctxt "keyboard label"
-msgid "XF86AudioPlay"
+msgid "AudioPlay"
 msgstr "Heli - esitamine"
 
 msgctxt "keyboard label"
-msgid "XF86AudioStop"
+msgid "AudioStop"
 msgstr "Heli - stopp"
 
 msgctxt "keyboard label"
-msgid "XF86AudioNext"
+msgid "AudioNext"
 msgstr "Heli - järgmine"
 
 msgctxt "keyboard label"
-msgid "XF86AudioPrev"
+msgid "AudioPrev"
 msgstr "Heli - eelmine"
 
 msgctxt "keyboard label"
-msgid "XF86AudioRecord"
+msgid "AudioRecord"
 msgstr "Heli - lindistamine"
 
 msgctxt "keyboard label"
-msgid "XF86AudioPause"
+msgid "AudioPause"
 msgstr "Heli - paus"
 
 msgctxt "keyboard label"
-msgid "XF86AudioRewind"
+msgid "AudioRewind"
 msgstr "Heli - tagasi kerimine"
 
 msgctxt "keyboard label"
-msgid "XF86AudioMedia"
+msgid "AudioMedia"
 msgstr "Heli - meedianupp"
 
 msgctxt "keyboard label"
-msgid "XF86ScreenSaver"
+msgid "ScreenSaver"
 msgstr "Ekraanisäästja"
 
 msgctxt "keyboard label"
-msgid "XF86Battery"
+msgid "Battery"
 msgstr "Aku"
 
 msgctxt "keyboard label"
-msgid "XF86Launch1"
+msgid "Launch1"
 msgstr "Käivitaja 1"
 
 msgctxt "keyboard label"
-msgid "XF86Forward"
+msgid "Forward"
 msgstr "Edasi"
 
 msgctxt "keyboard label"
-msgid "XF86Back"
+msgid "Back"
 msgstr "Tagasi"
 
 msgctxt "keyboard label"
-msgid "XF86Sleep"
+msgid "Sleep"
 msgstr "Uinak"
 
 msgctxt "keyboard label"
-msgid "XF86Hibernate"
+msgid "Hibernate"
 msgstr "Talveuni"
 
 msgctxt "keyboard label"
-msgid "XF86WLAN"
+msgid "WLAN"
 msgstr "Juhtmeta võrk"
 
 msgctxt "keyboard label"
-msgid "XF86WebCam"
+msgid "WebCam"
 msgstr "Veebikaamera"
 
 msgctxt "keyboard label"
-msgid "XF86Display"
+msgid "Display"
 msgstr "Kuva"
 
 msgctxt "keyboard label"
-msgid "XF86TouchpadToggle"
+msgid "TouchpadToggle"
 msgstr "Puuteplaadi lüliti"
 
 msgctxt "keyboard label"
-msgid "XF86WakeUp"
+msgid "WakeUp"
 msgstr "Üles äratamine"
 
 msgctxt "keyboard label"
-msgid "XF86Suspend"
+msgid "Suspend"
 msgstr "Arvuti peatamine"
 
 #. Description of --sync in --help output
