@@ -767,8 +767,8 @@ update_places (GtkPlacesSidebar *sidebar)
 	icon = g_themed_icon_new (ICON_NAME_HOME);
 	add_place (sidebar, PLACES_BUILT_IN,
 		   SECTION_COMPUTER,
-		   _("Home"), icon,
-		   home_uri, NULL, NULL, NULL, 0,
+		   _("Home"), icon, home_uri,
+		   NULL, NULL, NULL, 0,
 		   _("Open your personal folder"));
 	g_object_unref (icon);
 	g_free (home_uri);
@@ -779,8 +779,8 @@ update_places (GtkPlacesSidebar *sidebar)
 		icon = g_themed_icon_new (ICON_NAME_DESKTOP);
 		add_place (sidebar, PLACES_BUILT_IN,
 			   SECTION_COMPUTER,
-			   _("Desktop"), icon,
-			   mount_uri, NULL, NULL, NULL, 0,
+			   _("Desktop"), icon, mount_uri,
+			   NULL, NULL, NULL, 0,
 			   _("Open the contents of your desktop in a folder"));
 		g_object_unref (icon);
 		g_free (mount_uri);
@@ -949,8 +949,8 @@ update_places (GtkPlacesSidebar *sidebar)
 	icon = g_themed_icon_new (ICON_NAME_FILESYSTEM);
 	add_place (sidebar, PLACES_BUILT_IN,
 		   SECTION_DEVICES,
-		   sidebar->hostname, icon,
-		   mount_uri, NULL, NULL, NULL, 0,
+		   sidebar->hostname, icon, mount_uri,
+		   NULL, NULL, NULL, 0,
 		   _("Open the contents of the File System"));
 	g_object_unref (icon);
 
@@ -1057,8 +1057,8 @@ update_places (GtkPlacesSidebar *sidebar)
 	icon = g_themed_icon_new (ICON_NAME_NETWORK);
 	add_place (sidebar, PLACES_BUILT_IN,
 		   SECTION_NETWORK,
-		   _("Browse Network"), icon,
-		   mount_uri, NULL, NULL, NULL, 0,
+		   _("Browse Network"), icon, mount_uri,
+		   NULL, NULL, NULL, 0,
 		   _("Browse the contents of the network"));
 	g_object_unref (icon);
 
