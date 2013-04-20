@@ -166,6 +166,8 @@ struct _GtkPlacesSidebar {
 	DropState drop_state;
 	int new_bookmark_index;
 	guint drag_leave_timeout_id;
+	guint switch_location_timer;
+	char *drop_target_uri;
 
 	guint show_desktop : 1;
 };
@@ -1408,6 +1410,15 @@ get_drag_data (GtkTreeView *tree_view,
 }
 
 static void
+remove_switch_location_timer (GtkPlacesSidebar *sidebar)
+{
+	if (sidebar->switch_location_timer != 0) {
+		g_source_remove (sidebar->switch_location_timer);
+		sidebar->switch_location_timer = 0;
+	}
+}
+
+static void
 free_drag_data (GtkPlacesSidebar *sidebar)
 {
 	sidebar->drag_data_received = FALSE;
@@ -1415,6 +1426,49 @@ free_drag_data (GtkPlacesSidebar *sidebar)
 	if (sidebar->drag_list) {
 		g_list_free_full (sidebar->drag_list, g_object_unref);
 		sidebar->drag_list = NULL;
+	}
+
+	remove_switch_location_timer (sidebar);
+
+	g_free (sidebar->drop_target_uri);
+	sidebar->drop_target_uri = NULL;
+}
+
+static gboolean
+switch_location_timer (gpointer user_data)
+{
+	GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
+	GFile *location;
+
+	sidebar->switch_location_timer = 0;
+
+	location = g_file_new_for_uri (sidebar->drop_target_uri);
+	emit_open_location (sidebar, location, 0);
+	g_object_unref (location);
+
+	return FALSE;
+}
+
+static void
+check_switch_location_timer (GtkPlacesSidebar *sidebar, const char *uri)
+{
+	GtkSettings *settings;
+	guint timeout;
+
+	if (g_strcmp0 (uri, sidebar->drop_target_uri) == 0) {
+		return;
+	}
+	remove_switch_location_timer (sidebar);
+
+	settings = gtk_widget_get_settings (GTK_WIDGET (sidebar));
+	g_object_get (settings, "gtk-timeout-expand", &timeout, NULL);
+
+	g_free (sidebar->drop_target_uri);
+	sidebar->drop_target_uri = NULL;
+
+	if (uri != NULL) {
+		sidebar->drop_target_uri = g_strdup (uri);
+		sidebar->switch_location_timer = gdk_threads_add_timeout (timeout, switch_location_timer, sidebar);
 	}
 }
 
@@ -1525,6 +1579,7 @@ drag_motion_callback (GtkTreeView *tree_view,
 	GtkTreeIter iter;
 	gboolean res;
 	gboolean drop_as_bookmarks;
+	char *drop_target_uri = NULL;
 
 	action = 0;
 	drop_as_bookmarks = FALSE;
@@ -1571,30 +1626,32 @@ drag_motion_callback (GtkTreeView *tree_view,
 			}
 
 			if (!drop_as_bookmarks) {
-				char *uri;
-
 				gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store),
 						    &iter,
-						    PLACES_SIDEBAR_COLUMN_URI, &uri,
+						    PLACES_SIDEBAR_COLUMN_URI, &drop_target_uri,
 						    -1);
 
-				if (uri != NULL) {
-					GFile *dest_file = g_file_new_for_uri (uri);
+				if (drop_target_uri != NULL) {
+					GFile *dest_file = g_file_new_for_uri (drop_target_uri);
 
 					action = emit_drag_action_requested (sidebar, context, dest_file, sidebar->drag_list);
 
 					g_object_unref (dest_file);
-					g_free (uri);
 				} /* uri may be NULL for unmounted volumes, for example, so we don't allow drops there */
 			}
 		}
 	}
 
  out:
-	if (action != 0)
+	if (action != 0) {
+		check_switch_location_timer (sidebar, drop_target_uri);
 		start_drop_feedback (sidebar, path, pos, drop_as_bookmarks);
-	else
+	} else {
+		remove_switch_location_timer (sidebar);
 		stop_drop_feedback (sidebar);
+	}
+
+	g_free (drop_target_uri);
 
 	if (path != NULL) {
 		gtk_tree_path_free (path);
