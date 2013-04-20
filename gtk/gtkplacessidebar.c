@@ -1312,7 +1312,7 @@ compute_drop_position (GtkTreeView             *tree_view,
 		goto out;
 	}
 
-	/* Never drop on headings, but special case the bookmarks heading,
+o	/* Never drop on headings, but special case the bookmarks heading,
 	 * so we can drop bookmarks in between it and the first bookmark.
 	 */
 	if (place_type == PLACES_HEADING
@@ -1795,7 +1795,9 @@ drag_data_received_callback (GtkWidget *widget,
 					position++;
 
 				if (tree_pos == GTK_TREE_VIEW_DROP_BEFORE
-				    || tree_pos == GTK_TREE_VIEW_DROP_AFTER) {
+				    || tree_pos == GTK_TREE_VIEW_DROP_AFTER
+				    || place_type == PLACES_DROP_FEEDBACK) {
+					remove_drop_bookmark_feedback_row (sidebar);
 					drop_files_as_bookmarks (sidebar, source_file_list, position);
 					success = TRUE;
 					drop_as_bookmarks = TRUE;
@@ -1825,6 +1827,7 @@ drag_data_received_callback (GtkWidget *widget,
 out:
 	sidebar->drop_occured = FALSE;
 	free_drag_data (sidebar);
+	remove_drop_bookmark_feedback_row (sidebar);
 	gtk_drag_finish (context, success, FALSE, time);
 
 	gtk_tree_path_free (tree_path);
