@@ -166,6 +166,8 @@ struct _GtkPlacesSidebar {
 	DropState drop_state;
 	int new_bookmark_index;
 	guint drag_leave_timeout_id;
+	guint switch_location_timer;
+	char *drop_target_uri;
 
 	guint show_desktop : 1;
 };
@@ -765,8 +767,8 @@ update_places (GtkPlacesSidebar *sidebar)
 	icon = g_themed_icon_new (ICON_NAME_HOME);
 	add_place (sidebar, PLACES_BUILT_IN,
 		   SECTION_COMPUTER,
-		   _("Home"), icon,
-		   home_uri, NULL, NULL, NULL, 0,
+		   _("Home"), icon, home_uri,
+		   NULL, NULL, NULL, 0,
 		   _("Open your personal folder"));
 	g_object_unref (icon);
 	g_free (home_uri);
@@ -777,8 +779,8 @@ update_places (GtkPlacesSidebar *sidebar)
 		icon = g_themed_icon_new (ICON_NAME_DESKTOP);
 		add_place (sidebar, PLACES_BUILT_IN,
 			   SECTION_COMPUTER,
-			   _("Desktop"), icon,
-			   mount_uri, NULL, NULL, NULL, 0,
+			   _("Desktop"), icon, mount_uri,
+			   NULL, NULL, NULL, 0,
 			   _("Open the contents of your desktop in a folder"));
 		g_object_unref (icon);
 		g_free (mount_uri);
@@ -947,8 +949,8 @@ update_places (GtkPlacesSidebar *sidebar)
 	icon = g_themed_icon_new (ICON_NAME_FILESYSTEM);
 	add_place (sidebar, PLACES_BUILT_IN,
 		   SECTION_DEVICES,
-		   sidebar->hostname, icon,
-		   mount_uri, NULL, NULL, NULL, 0,
+		   sidebar->hostname, icon, mount_uri,
+		   NULL, NULL, NULL, 0,
 		   _("Open the contents of the File System"));
 	g_object_unref (icon);
 
@@ -1055,8 +1057,8 @@ update_places (GtkPlacesSidebar *sidebar)
 	icon = g_themed_icon_new (ICON_NAME_NETWORK);
 	add_place (sidebar, PLACES_BUILT_IN,
 		   SECTION_NETWORK,
-		   _("Browse Network"), icon,
-		   mount_uri, NULL, NULL, NULL, 0,
+		   _("Browse Network"), icon, mount_uri,
+		   NULL, NULL, NULL, 0,
 		   _("Browse the contents of the network"));
 	g_object_unref (icon);
 
@@ -1408,6 +1410,15 @@ get_drag_data (GtkTreeView *tree_view,
 }
 
 static void
+remove_switch_location_timer (GtkPlacesSidebar *sidebar)
+{
+	if (sidebar->switch_location_timer != 0) {
+		g_source_remove (sidebar->switch_location_timer);
+		sidebar->switch_location_timer = 0;
+	}
+}
+
+static void
 free_drag_data (GtkPlacesSidebar *sidebar)
 {
 	sidebar->drag_data_received = FALSE;
@@ -1415,6 +1426,49 @@ free_drag_data (GtkPlacesSidebar *sidebar)
 	if (sidebar->drag_list) {
 		g_list_free_full (sidebar->drag_list, g_object_unref);
 		sidebar->drag_list = NULL;
+	}
+
+	remove_switch_location_timer (sidebar);
+
+	g_free (sidebar->drop_target_uri);
+	sidebar->drop_target_uri = NULL;
+}
+
+static gboolean
+switch_location_timer (gpointer user_data)
+{
+	GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (user_data);
+	GFile *location;
+
+	sidebar->switch_location_timer = 0;
+
+	location = g_file_new_for_uri (sidebar->drop_target_uri);
+	emit_open_location (sidebar, location, 0);
+	g_object_unref (location);
+
+	return FALSE;
+}
+
+static void
+check_switch_location_timer (GtkPlacesSidebar *sidebar, const char *uri)
+{
+	GtkSettings *settings;
+	guint timeout;
+
+	if (g_strcmp0 (uri, sidebar->drop_target_uri) == 0) {
+		return;
+	}
+	remove_switch_location_timer (sidebar);
+
+	settings = gtk_widget_get_settings (GTK_WIDGET (sidebar));
+	g_object_get (settings, "gtk-timeout-expand", &timeout, NULL);
+
+	g_free (sidebar->drop_target_uri);
+	sidebar->drop_target_uri = NULL;
+
+	if (uri != NULL) {
+		sidebar->drop_target_uri = g_strdup (uri);
+		sidebar->switch_location_timer = gdk_threads_add_timeout (timeout, switch_location_timer, sidebar);
 	}
 }
 
@@ -1525,6 +1579,7 @@ drag_motion_callback (GtkTreeView *tree_view,
 	GtkTreeIter iter;
 	gboolean res;
 	gboolean drop_as_bookmarks;
+	char *drop_target_uri = NULL;
 
 	action = 0;
 	drop_as_bookmarks = FALSE;
@@ -1571,30 +1626,32 @@ drag_motion_callback (GtkTreeView *tree_view,
 			}
 
 			if (!drop_as_bookmarks) {
-				char *uri;
-
 				gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store),
 						    &iter,
-						    PLACES_SIDEBAR_COLUMN_URI, &uri,
+						    PLACES_SIDEBAR_COLUMN_URI, &drop_target_uri,
 						    -1);
 
-				if (uri != NULL) {
-					GFile *dest_file = g_file_new_for_uri (uri);
+				if (drop_target_uri != NULL) {
+					GFile *dest_file = g_file_new_for_uri (drop_target_uri);
 
 					action = emit_drag_action_requested (sidebar, context, dest_file, sidebar->drag_list);
 
 					g_object_unref (dest_file);
-					g_free (uri);
 				} /* uri may be NULL for unmounted volumes, for example, so we don't allow drops there */
 			}
 		}
 	}
 
  out:
-	if (action != 0)
+	if (action != 0) {
+		check_switch_location_timer (sidebar, drop_target_uri);
 		start_drop_feedback (sidebar, path, pos, drop_as_bookmarks);
-	else
+	} else {
+		remove_switch_location_timer (sidebar);
 		stop_drop_feedback (sidebar);
+	}
+
+	g_free (drop_target_uri);
 
 	if (path != NULL) {
 		gtk_tree_path_free (path);
@@ -3152,6 +3209,22 @@ bookmarks_popup_menu_cb (GtkWidget *widget,
 	return TRUE;
 }
 
+static void
+bookmarks_row_activated_cb (GtkWidget *widget,
+			    GtkTreePath *path,
+			    GtkTreeViewColumn *column,
+			    GtkPlacesSidebar *sidebar)
+{
+	GtkTreeIter iter;
+	GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW (widget));
+
+	if (!gtk_tree_model_get_iter (model, &iter, path)) {
+		return;
+	}
+
+	open_selected_bookmark (sidebar, model, &iter, 0);
+}
+
 static gboolean
 bookmarks_button_release_event_cb (GtkWidget *widget,
 				   GdkEventButton *event,
@@ -3177,6 +3250,10 @@ bookmarks_button_release_event_cb (GtkWidget *widget,
 		return FALSE;
 	}
 
+	if (event->button == 1) {
+		return FALSE;
+	}
+
 	tree_view = GTK_TREE_VIEW (widget);
 	model = gtk_tree_view_get_model (tree_view);
 
@@ -3197,9 +3274,7 @@ bookmarks_button_release_event_cb (GtkWidget *widget,
 		return FALSE;
 	}
 
-	if (event->button == 1) {
-		open_selected_bookmark (sidebar, model, &iter, 0);
-	} else if (event->button == 2) {
+	if (event->button == 2) {
 		GtkPlacesOpenFlags open_flags = GTK_PLACES_OPEN_NORMAL;
 
 		open_flags = ((event->state & GDK_CONTROL_MASK) ?
@@ -3493,36 +3568,6 @@ bookmarks_changed_cb (gpointer data)
 	update_places (sidebar);
 }
 
-static gboolean
-tree_view_button_press_callback (GtkWidget *tree_view,
-				 GdkEventButton *event,
-				 gpointer data)
-{
-	GtkTreePath *path;
-	GtkTreeViewColumn *column;
-
-	if (event->button == 1 && event->type == GDK_BUTTON_PRESS) {
-		if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (tree_view),
-						   event->x, event->y,
-						   &path,
-						   &column,
-						   NULL,
-						   NULL)) {
-			gtk_tree_view_row_activated (GTK_TREE_VIEW (tree_view), path, column);
-		}
-	}
-
-	return FALSE;
-}
-
-static void
-tree_view_set_activate_on_single_click (GtkTreeView *tree_view)
-{
-	g_signal_connect (tree_view, "button_press_event",
-			  G_CALLBACK (tree_view_button_press_callback),
-			  NULL);
-}
-
 static void
 trash_monitor_trash_state_changed_cb (GtkTrashMonitor *monitor,
 				      GtkPlacesSidebar *sidebar)
@@ -3719,8 +3764,10 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 			  G_CALLBACK (bookmarks_popup_menu_cb), sidebar);
 	g_signal_connect (tree_view, "button-release-event",
 			  G_CALLBACK (bookmarks_button_release_event_cb), sidebar);
+	g_signal_connect (tree_view, "row-activated",
+			  G_CALLBACK (bookmarks_row_activated_cb), sidebar);
 
-	tree_view_set_activate_on_single_click (sidebar->tree_view);
+	gtk_tree_view_set_activate_on_single_click (sidebar->tree_view, TRUE);
 
 	sidebar->hostname = g_strdup (_("Computer"));
 	sidebar->hostnamed_cancellable = g_cancellable_new ();
