@@ -633,6 +633,10 @@ gboolean gdk_window_set_static_gravities (GdkWindow *window,
                                           gboolean   use_static);
 
 /* GdkWindow */
+typedef gboolean (*GdkWindowUpdateHandlerFunc)  (GdkWindow *window,
+						 cairo_region_t *region);
+void gdk_window_set_update_handler (GdkWindow *window,
+				    GdkWindowUpdateHandlerFunc handler);
 
 gboolean      gdk_window_has_native         (GdkWindow       *window);
 void              gdk_window_set_type_hint (GdkWindow        *window,
