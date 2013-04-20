@@ -266,6 +266,7 @@ struct _GdkWindow
   guint num_offscreen_children;
 
   GdkFrameClock *frame_clock; /* NULL to use from parent or default */
+  GdkWindowInvalidateHandlerFunc invalidate_handler;
 };
 
 #define GDK_WINDOW_TYPE(d) (((GDK_WINDOW (d)))->window_type)

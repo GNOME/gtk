@@ -3647,6 +3647,30 @@ gdk_window_invalidate_rect (GdkWindow          *window,
   gdk_window_invalidate_rect_full (window, rect, invalidate_children);
 }
 
+/**
+ * gdk_window_set_invalidate_handler:
+ * @window: a #GdkWindow
+ * @handler: a #GdkWindowInvalidateHandlerFunc callback function
+ *
+ * Registers an invalidate handler for a specific window. This
+ * will get called whenever a region in the window or its children
+ * is invalidated.
+ *
+ * This can be used to record the invalidated region, which is
+ * useful if you are keeping an offscreen copy of some region
+ * and want to keep it up to date. You can also modify the
+ * invalidated region in case you're doing some effect where
+ * e.g. a child widget appears in multiple places.
+ *
+ * Since: 3.10
+ **/
+void
+gdk_window_set_invalidate_handler (GdkWindow *window,
+				   GdkWindowInvalidateHandlerFunc handler)
+{
+  window->invalidate_handler = handler;
+}
+
 static void
 draw_ugly_color (GdkWindow       *window,
 		 const cairo_region_t *region)
@@ -3734,8 +3758,8 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
                                           GdkWindowChildFunc    child_func,
 					  gpointer              user_data)
 {
-  GdkWindow *impl_window;
   cairo_region_t *visible_region;
+  cairo_rectangle_int_t r;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -3748,26 +3772,37 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
       window->window_type == GDK_WINDOW_ROOT)
     return;
 
-  visible_region = gdk_window_get_visible_region (window);
-  cairo_region_intersect (visible_region, region);
+  r.x = 0;
+  r.y = 0;
+
+  visible_region = cairo_region_copy (region);
 
   invalidate_impl_subwindows (window, region, child_func, user_data, 0, 0);
 
-  impl_window = gdk_window_get_impl_window (window);
+  if (debug_updates)
+    draw_ugly_color (window, visible_region);
 
-  if (!cairo_region_is_empty (visible_region))
+  while (window != NULL && 
+	 !cairo_region_is_empty (visible_region))
     {
-      if (debug_updates)
-	draw_ugly_color (window, visible_region);
+      if (window->invalidate_handler)
+	window->invalidate_handler (window, visible_region);
 
-      /* Convert to impl coords */
-      cairo_region_translate (visible_region, window->abs_x, window->abs_y);
+      r.width = window->width;
+      r.height = window->height;
+      cairo_region_intersect_rectangle (visible_region, &r);
 
-      /* Only invalidate area if app requested expose events or if
-	 we need to clear the area (by request or to emulate background
-	 clearing for non-native windows or native windows with no support
-	 for window backgrounds */
-      impl_window_add_update_area (impl_window, visible_region);
+      if (gdk_window_has_impl (window))
+	{
+	  impl_window_add_update_area (window, visible_region);
+	  break;
+	}
+      else
+	{
+	  cairo_region_translate (visible_region,
+				  window->x, window->y);
+	  window = window->parent;
+	}
     }
 
   cairo_region_destroy (visible_region);
