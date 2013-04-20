@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-04-19 17:57+0000\n"
-"PO-Revision-Date: 2013-01-21 12:48+0500\n"
+"PO-Revision-Date: 2013-04-20 09:45+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: \n"
 "Language: Tajik\n"
@@ -3560,10 +3560,9 @@ msgid "The title to display"
 msgstr ""
 
 #: ../gtk/gtkheaderbar.c:1287
-#, fuzzy
 #| msgid "Title"
 msgid "Subitle"
-msgstr "Сарлавҳа"
+msgstr ""
 
 #: ../gtk/gtkheaderbar.c:1288
 msgid "The subtitle to display"
@@ -4697,10 +4696,9 @@ msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr ""
 
 #: ../gtk/gtkplacessidebar.c:3889
-#, fuzzy
 #| msgid "Location"
 msgid "Location to select"
-msgstr "Ҷойгиршавӣ"
+msgstr "Ҷойгиршавӣ барои интихоб"
 
 #: ../gtk/gtkplacessidebar.c:3890
 msgid "The location to highlight in the sidebar"
@@ -5777,7 +5775,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:557
 msgid "Xft RGBA"
-msgstr ""
+msgstr "Xft RGBA"
 
 #: ../gtk/gtksettings.c:558
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
@@ -5785,7 +5783,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:567
 msgid "Xft DPI"
-msgstr ""
+msgstr "Xft DPI"
 
 #: ../gtk/gtksettings.c:568
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"

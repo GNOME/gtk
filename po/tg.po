@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-03-25 18:34+0000\n"
-"PO-Revision-Date: 2013-01-21 17:37+0500\n"
+"PO-Revision-Date: 2013-04-20 09:43+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: \n"
 "Language: Tajik\n"
@@ -18,7 +18,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 1.5.4\n"
-"X-Poedit-Language: Tajik\n"
 
 #: ../gdk/gdk.c:157
 #, c-format
@@ -1825,7 +1824,7 @@ msgstr "Номаълум"
 
 #: ../gtk/gtkfilechooserdefault.c:6642
 msgid "%H:%M"
-msgstr ""
+msgstr "%H:%M"
 
 #: ../gtk/gtkfilechooserdefault.c:6644
 msgid "Yesterday at %H:%M"
@@ -2435,7 +2434,7 @@ msgstr "Диапазон"
 
 #: ../gtk/gtkprintunixdialog.c:2235
 msgid "_All Pages"
-msgstr ""
+msgstr "_Ҳамаи саҳифаҳо"
 
 #: ../gtk/gtkprintunixdialog.c:2240
 msgid "C_urrent Page"
@@ -2884,7 +2883,7 @@ msgstr "Иловакунӣ"
 #: ../gtk/gtkstock.c:334
 msgctxt "Stock label"
 msgid "_Apply"
-msgstr ""
+msgstr "_Татбиқ кардан"
 
 #: ../gtk/gtkstock.c:335
 #, fuzzy
