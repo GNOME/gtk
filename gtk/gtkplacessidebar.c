@@ -165,6 +165,7 @@ struct _GtkPlacesSidebar {
 
 	DropState drop_state;
 	int new_bookmark_index;
+	guint drag_leave_timeout_id;
 
 	guint show_desktop : 1;
 };
@@ -1312,7 +1313,7 @@ compute_drop_position (GtkTreeView             *tree_view,
 		goto out;
 	}
 
-o	/* Never drop on headings, but special case the bookmarks heading,
+	/* Never drop on headings, but special case the bookmarks heading,
 	 * so we can drop bookmarks in between it and the first bookmark.
 	 */
 	if (place_type == PLACES_HEADING
@@ -1606,15 +1607,30 @@ drag_motion_callback (GtkTreeView *tree_view,
 	return TRUE;
 }
 
+static gboolean
+drag_leave_timeout_cb (gpointer data)
+{
+	GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (data);
+
+	free_drag_data (sidebar);
+	stop_drop_feedback (sidebar);
+	remove_drop_bookmark_feedback_row (sidebar);
+
+	sidebar->drag_leave_timeout_id = 0;
+	return FALSE;
+}
+
 static void
 drag_leave_callback (GtkTreeView *tree_view,
 		     GdkDragContext *context,
 		     unsigned int time,
 		     GtkPlacesSidebar *sidebar)
 {
-	free_drag_data (sidebar);
-	stop_drop_feedback (sidebar);
-	remove_drop_bookmark_feedback_row (sidebar);
+	if (sidebar->drag_leave_timeout_id)
+		g_source_remove (sidebar->drag_leave_timeout_id);
+
+	sidebar->drag_leave_timeout_id = gdk_threads_add_timeout (500, drag_leave_timeout_cb, sidebar);
+
 	g_signal_stop_emission_by_name (tree_view, "drag-leave");
 }
 
@@ -3778,6 +3794,11 @@ gtk_places_sidebar_dispose (GObject *object)
 	sidebar = GTK_PLACES_SIDEBAR (object);
 
 	sidebar->tree_view = NULL;
+
+	if (sidebar->drag_leave_timeout_id) {
+		g_source_remove (sidebar->drag_leave_timeout_id);
+		sidebar->drag_leave_timeout_id = 0;
+	}
 
 	free_drag_data (sidebar);
 
