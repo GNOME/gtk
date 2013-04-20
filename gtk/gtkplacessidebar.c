@@ -1688,6 +1688,8 @@ drag_leave_callback (GtkTreeView *tree_view,
 
 	sidebar->drag_leave_timeout_id = gdk_threads_add_timeout (500, drag_leave_timeout_cb, sidebar);
 
+	remove_switch_location_timer (sidebar);
+
 	g_signal_stop_emission_by_name (tree_view, "drag-leave");
 }
 
