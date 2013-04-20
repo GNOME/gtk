@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-04-19 17:57+0000\n"
-"PO-Revision-Date: 2013-04-20 09:45+0500\n"
+"PO-Revision-Date: 2013-04-20 13:38+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: \n"
 "Language: Tajik\n"
@@ -109,7 +109,7 @@ msgstr ""
 
 #: ../gdk/gdkscreen.c:91
 msgid "Font options"
-msgstr ""
+msgstr "Имконоти шрифт"
 
 #: ../gdk/gdkscreen.c:92
 msgid "The default font options for the screen"
@@ -117,7 +117,7 @@ msgstr ""
 
 #: ../gdk/gdkscreen.c:99
 msgid "Font resolution"
-msgstr ""
+msgstr "Возеҳии шрифт"
 
 #: ../gdk/gdkscreen.c:100
 msgid "The resolution for fonts on the screen"
@@ -2085,7 +2085,7 @@ msgstr "Андозаи шрифт"
 
 #: ../gtk/gtkcellrenderertext.c:444 ../gtk/gtktexttag.c:394
 msgid "Font points"
-msgstr ""
+msgstr "Нуқтаҳои шрифт"
 
 #: ../gtk/gtkcellrenderertext.c:445 ../gtk/gtktexttag.c:395
 msgid "Font size in points"
@@ -6025,7 +6025,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:1054
 msgid "XDG sound theme name"
-msgstr ""
+msgstr "Номи мавзӯи овозии XDG"
 
 #. Translators: this means sounds that are played as feedback to user input
 #: ../gtk/gtksettings.c:1076
