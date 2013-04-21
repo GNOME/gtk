@@ -7584,3 +7584,12 @@ GtkStackTransitionType
 gtk_stack_set_transition_type
 gtk_stack_get_transition_type
 </SECTION>
+
+<SECTION>
+<FILE>gtkstackswitcher</FILE>
+<TITLE>GtkStackSwitcher</TITLE>
+GtkStackSwitcher
+gtk_stack_switcher_new
+gtk_stack_switcher_set_stack
+gtk_stack_switcher_get_stack
+</SECTION>
