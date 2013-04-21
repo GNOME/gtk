@@ -258,9 +258,6 @@ gtk_application_window_update_menubar (GtkApplicationWindow *window)
 
       window->priv->menubar = gtk_menu_bar_new_from_model (G_MENU_MODEL (combined));
       gtk_widget_set_parent (window->priv->menubar, GTK_WIDGET (window));
-      if (_gtk_window_get_content_window (GTK_WINDOW (window)) != NULL)
-        gtk_widget_set_parent_window (window->priv->menubar,
-                                      _gtk_window_get_content_window (GTK_WINDOW (window)));
       gtk_widget_show_all (window->priv->menubar);
       g_object_unref (combined);
 
@@ -762,10 +759,6 @@ gtk_application_window_real_realize (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_application_window_parent_class)
     ->realize (widget);
-
-  if (window->priv->menubar != NULL)
-    gtk_widget_set_parent_window (window->priv->menubar,
-                                  _gtk_window_get_content_window (GTK_WINDOW (window)));
 
 #ifdef GDK_WINDOWING_X11
   {
