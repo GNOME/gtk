@@ -1075,13 +1075,15 @@ update_places (GtkPlacesSidebar *sidebar)
 		   _("Browse the contents of the network"));
 	g_object_unref (icon);
 
-	icon = g_themed_icon_new (ICON_NAME_NETWORK_SERVER);
-	add_place (sidebar, PLACES_CONNECT_TO_SERVER,
-		   SECTION_NETWORK,
-		   _("Connect to Server"), icon, NULL,
-		   NULL, NULL, NULL, 0,
-		   _("Connect to a network server address"));
-	g_object_unref (icon);
+	if (sidebar->show_connect_to_server) {
+		icon = g_themed_icon_new (ICON_NAME_NETWORK_SERVER);
+		add_place (sidebar, PLACES_CONNECT_TO_SERVER,
+			   SECTION_NETWORK,
+			   _("Connect to Server"), icon, NULL,
+			   NULL, NULL, NULL, 0,
+			   _("Connect to a network server address"));
+		g_object_unref (icon);
+	}
 
 	network_volumes = g_list_reverse (network_volumes);
 	for (l = network_volumes; l != NULL; l = l->next) {
