@@ -2471,6 +2471,7 @@ gtk_entry_dispose (GObject *object)
   gtk_entry_set_icon_tooltip_markup (entry, GTK_ENTRY_ICON_PRIMARY, NULL);
   gtk_entry_set_icon_from_pixbuf (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
   gtk_entry_set_icon_tooltip_markup (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
+  gtk_entry_set_completion (entry, NULL);
 
   if (priv->buffer)
     {
@@ -2504,8 +2505,6 @@ gtk_entry_finalize (GObject *object)
           priv->icons[i] = NULL;
         }
     }
-
-  gtk_entry_set_completion (entry, NULL);
 
   if (entry->cached_layout)
     g_object_unref (entry->cached_layout);
