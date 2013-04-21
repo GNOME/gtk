@@ -52,8 +52,7 @@ on_back_button_clicked (GtkButton *button, GtkStack *stack)
     {
       if (g_str_equal (vis, seq[i]))
         {
-          gtk_stack_set_transition_type (stack, GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT);
-          gtk_stack_set_visible_child_name (stack, seq[i - 1]);
+          gtk_stack_set_visible_child_full (stack, seq[i - 1], GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT);
           break;
         }
     }
@@ -72,8 +71,7 @@ on_forward_button_clicked (GtkButton *button, GtkStack *stack)
     {
       if (g_str_equal (vis, seq[i]))
         {
-          gtk_stack_set_transition_type (stack, GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT);
-          gtk_stack_set_visible_child_name (stack, seq[i + 1]);
+          gtk_stack_set_visible_child_full (stack, seq[i + 1], GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT);
           break;
         }
     }

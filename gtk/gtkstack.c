@@ -111,6 +111,8 @@ struct _GtkStackPrivate {
   guint tick_id;
   gint64 start_time;
   gint64 end_time;
+
+  GtkStackTransitionType active_transition_type;
 };
 
 static void     gtk_stack_add                            (GtkContainer  *widget,
@@ -626,9 +628,9 @@ get_bin_window_x (GtkStack      *stack,
 
   if (priv->transition_pos < 1.0)
     {
-      if (priv->transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT)
+      if (priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT)
         x = allocation->width * (1 - ease_out_cubic (priv->transition_pos));
-      if (priv->transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT)
+      if (priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT)
         x = -allocation->width * (1 - ease_out_cubic (priv->transition_pos));
     }
 
@@ -646,8 +648,8 @@ gtk_stack_set_transition_position (GtkStack *stack,
   gtk_widget_queue_draw (GTK_WIDGET (stack));
 
   if (priv->bin_window != NULL &&
-      (priv->transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT ||
-       priv->transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT))
+      (priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT ||
+       priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT))
     {
       GtkAllocation allocation;
       gtk_widget_get_allocation (GTK_WIDGET (stack), &allocation);
@@ -735,7 +737,9 @@ gtk_stack_unschedule_ticks (GtkStack *stack)
 }
 
 static void
-gtk_stack_start_transition (GtkStack *stack)
+gtk_stack_start_transition (GtkStack               *stack,
+                            GtkStackTransitionType  transition_type,
+                            guint                   transition_duration)
 {
   GtkStackPrivate *priv = stack->priv;
   GtkWidget *widget = GTK_WIDGET (stack);
@@ -747,26 +751,31 @@ gtk_stack_start_transition (GtkStack *stack)
 
   if (gtk_widget_get_mapped (widget) &&
       animations_enabled &&
-      priv->transition_type != GTK_STACK_TRANSITION_TYPE_NONE &&
+      transition_type != GTK_STACK_TRANSITION_TYPE_NONE &&
+      transition_duration != 0 &&
       priv->last_visible_child != NULL)
     {
       gtk_widget_set_opacity (widget, 0.999);
 
       priv->transition_pos = 0.0;
       priv->start_time = gdk_frame_clock_get_frame_time (gtk_widget_get_frame_clock (widget));
-      priv->end_time = priv->start_time + (priv->transition_duration * 1000);
+      priv->end_time = priv->start_time + (transition_duration * 1000);
+      priv->active_transition_type = transition_type;
       gtk_stack_schedule_ticks (stack);
     }
   else
     {
       gtk_stack_unschedule_ticks (stack);
+      priv->active_transition_type = GTK_STACK_TRANSITION_TYPE_NONE;
       gtk_stack_set_transition_position (stack, 1.0);
     }
 }
 
 static void
-set_visible_child (GtkStack          *stack,
-                   GtkStackChildInfo *child_info)
+set_visible_child (GtkStack               *stack,
+                   GtkStackChildInfo      *child_info,
+                   GtkStackTransitionType  transition_type,
+                   guint                   transition_duration)
 {
   GtkStackPrivate *priv = stack->priv;
   GtkStackChildInfo *info;
@@ -817,7 +826,7 @@ set_visible_child (GtkStack          *stack,
   g_object_notify (G_OBJECT (stack), "visible-child");
   g_object_notify (G_OBJECT (stack), "visible-child-name");
 
-  gtk_stack_start_transition (stack);
+  gtk_stack_start_transition (stack, transition_type, transition_duration);
 }
 
 static void
@@ -834,10 +843,10 @@ stack_child_visibility_notify_cb (GObject    *obj,
 
   if (priv->visible_child == NULL &&
       gtk_widget_get_visible (child))
-    set_visible_child (stack, child_info);
+    set_visible_child (stack, child_info, priv->transition_type, priv->transition_duration);
   else if (priv->visible_child == child_info &&
            !gtk_widget_get_visible (child))
-    set_visible_child (stack, NULL);
+    set_visible_child (stack, NULL, priv->transition_type, priv->transition_duration);
 
   if (child_info == priv->last_visible_child)
     {
@@ -929,7 +938,7 @@ gtk_stack_add (GtkContainer *container,
 
   if (priv->visible_child == NULL &&
       gtk_widget_get_visible (child))
-    set_visible_child (stack, child_info);
+    set_visible_child (stack, child_info, priv->transition_type, priv->transition_duration);
   else
     gtk_widget_set_child_visible (child, FALSE);
 
@@ -961,7 +970,7 @@ gtk_stack_remove (GtkContainer *container,
   child_info->widget = NULL;
 
   if (priv->visible_child == child_info)
-    set_visible_child (stack, NULL);
+    set_visible_child (stack, NULL, priv->transition_type, priv->transition_duration);
 
   if (priv->last_visible_child == child_info)
     priv->last_visible_child = NULL;
@@ -1185,7 +1194,9 @@ gtk_stack_set_visible_child (GtkStack  *stack,
     return;
 
   if (gtk_widget_get_visible (child_info->widget))
-    set_visible_child (stack, child_info);
+    set_visible_child (stack, child_info,
+                       stack->priv->transition_type,
+                       stack->priv->transition_duration);
 }
 
 /**
@@ -1205,6 +1216,24 @@ gtk_stack_set_visible_child (GtkStack  *stack,
 void
 gtk_stack_set_visible_child_name (GtkStack   *stack,
                                  const gchar *name)
+{
+  gtk_stack_set_visible_child_full (stack, name, stack->priv->transition_type);
+}
+
+/**
+ * gtk_stack_set_visible_child_name:
+ * @stack: a #GtkStack
+ * @name: the name of the child to make visible
+ * @transition_type: the transition type to use
+ *
+ * Makes the child with the given name visible.
+ *
+ * Since: 3.10
+ */
+void
+gtk_stack_set_visible_child_full (GtkStack               *stack,
+                                  const gchar            *name,
+                                  GtkStackTransitionType  transition_type)
 {
   GtkStackPrivate *priv;
   GtkStackChildInfo *child_info, *info;
@@ -1228,7 +1257,7 @@ gtk_stack_set_visible_child_name (GtkStack   *stack,
     }
 
   if (child_info != NULL && gtk_widget_get_visible (child_info->widget))
-    set_visible_child (stack, child_info);
+    set_visible_child (stack, child_info, transition_type, priv->transition_duration);
 }
 
 static void
@@ -1373,7 +1402,7 @@ gtk_stack_draw (GtkWidget *widget,
               cairo_destroy (pattern_cr);
             }
 
-          switch (priv->transition_type)
+          switch (priv->active_transition_type)
             {
             case GTK_STACK_TRANSITION_TYPE_CROSSFADE:
               gtk_stack_draw_crossfade (widget, cr);

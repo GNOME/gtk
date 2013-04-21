@@ -70,6 +70,9 @@ GtkWidget *            gtk_stack_get_visible_child       (GtkStack              
 void                   gtk_stack_set_visible_child_name  (GtkStack               *stack,
                                                           const gchar            *name);
 const gchar *          gtk_stack_get_visible_child_name  (GtkStack               *stack);
+void                   gtk_stack_set_visible_child_full  (GtkStack               *stack,
+                                                          const gchar            *name,
+                                                          GtkStackTransitionType  transition_type);
 void                   gtk_stack_set_homogeneous         (GtkStack               *stack,
                                                           gboolean                homogeneous);
 gboolean               gtk_stack_get_homogeneous         (GtkStack               *stack);
