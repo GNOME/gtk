@@ -736,6 +736,21 @@ gtk_stack_unschedule_ticks (GtkStack *stack)
     }
 }
 
+static GtkStackTransitionType
+effective_transition_type (GtkStack               *stack,
+                           GtkStackTransitionType  transition_type)
+{
+  if (gtk_widget_get_direction (GTK_WIDGET (stack)) == GTK_TEXT_DIR_RTL)
+    {
+      if (transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT)
+        return GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT;
+      else if (transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT)
+        return GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT;
+    }
+
+  return transition_type;
+}
+
 static void
 gtk_stack_start_transition (GtkStack               *stack,
                             GtkStackTransitionType  transition_type,
@@ -760,7 +775,7 @@ gtk_stack_start_transition (GtkStack               *stack,
       priv->transition_pos = 0.0;
       priv->start_time = gdk_frame_clock_get_frame_time (gtk_widget_get_frame_clock (widget));
       priv->end_time = priv->start_time + (transition_duration * 1000);
-      priv->active_transition_type = transition_type;
+      priv->active_transition_type = effective_transition_type (stack, transition_type);
       gtk_stack_schedule_ticks (stack);
     }
   else
@@ -1397,7 +1412,8 @@ gtk_stack_draw (GtkWidget *widget,
                                                    priv->last_visible_surface_allocation.height);
               pattern_cr = cairo_create (priv->last_visible_surface);
               /* We don't use propagate_draw here, because we don't want to apply
-                 the bin_window offset */
+               * the bin_window offset
+               */
               gtk_widget_draw (priv->last_visible_child->widget, pattern_cr);
               cairo_destroy (pattern_cr);
             }
