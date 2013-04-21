@@ -28,6 +28,37 @@
 #include <math.h>
 #include <string.h>
 
+/**
+ * SECTION:gtkstack
+ * @Short_description: A stacking container
+ * @Title: GtkStack
+ * @See_also: #GtkNotebook, #GtkStackSwitcher
+ *
+ * The GtkStack widget is a container which only shows
+ * one of its children at a time. In contrast to GtkNotebook,
+ * GtkStack does not provide a visible means for users
+ * to change the visible child. Instead, the #GtkStackSwitcher
+ * widget can be used with GtkStack to provide this functionality.
+ *
+ * Transitions between pages can be animated as slides or
+ * fades. This can be controlled with gtk_stack_set_transition_type().
+ * These animations respect the #GtkSettings::gtk-enable-animations
+ * setting.
+ *
+ * The GtkStack widget was added in GTK+ 3.10.
+ */
+
+/**
+ * GtkStackTransitionType:
+ * @GTK_STACK_TRANSITION_TYPE_NONE: No transition
+ * @GTK_STACK_TRANSITION_TYPE_CROSSFADE: A cross-fade
+ * @GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT: Slight from left to right
+ * @GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT: Sligth from right to left
+ *
+ * These enumeration values describe the possible transitions
+ * between pages in a #GtkStack widget.
+ */
+
 /* TODO:
  *  more transition types (slides)
  *  filter events out events to the last_child widget during transitions
@@ -77,7 +108,6 @@ struct _GtkStackPrivate {
   cairo_surface_t *last_visible_surface;
   GtkAllocation last_visible_surface_allocation;
   gdouble transition_pos;
-
   guint tick_id;
   gint64 start_time;
   gint64 end_time;
@@ -386,7 +416,15 @@ gtk_stack_class_init (GtkStackClass *klass)
   g_type_class_add_private (klass, sizeof (GtkStackPrivate));
 }
 
-
+/**
+ * gtk_stack_new:
+ *
+ * Creates a new #GtkStack container.
+ *
+ * Returns: a new #GtkStack
+ *
+ * Since: 3.10
+ */
 GtkWidget *
 gtk_stack_new (void)
 {
@@ -808,6 +846,20 @@ stack_child_visibility_notify_cb (GObject    *obj,
     }
 }
 
+/**
+ * gtk_stack_add_titled:
+ * @stack: a #GtkStack
+ * @child: the widget to add
+ * @name: the name for @child
+ * @title: a human-readable title for @child
+ *
+ * Adds a child to @stack.
+ * The child is identified by the @name. The @title
+ * will be used by #GtkStackSwitcher to represent
+ * @child in a tab bar, so it should be short.
+ *
+ * Since: 3.10
+ */
 void
 gtk_stack_add_titled (GtkStack   *stack,
                      GtkWidget   *child,
@@ -824,6 +876,17 @@ gtk_stack_add_titled (GtkStack   *stack,
                                      NULL);
 }
 
+/**
+ * gtk_stack_add_named:
+ * @stack: a #GtkStack
+ * @child: the widget to add
+ * @name: the name for @child
+ *
+ * Adds a child to @stack.
+ * The child is identified by the @name.
+ *
+ * Since: 3.10
+ */
 void
 gtk_stack_add_named (GtkStack   *stack,
                     GtkWidget   *child,
@@ -914,6 +977,18 @@ gtk_stack_remove (GtkContainer *container,
     gtk_widget_queue_resize (GTK_WIDGET (stack));
 }
 
+/**
+ * gtk_stack_set_homogeneous:
+ * @stack: a #GtkStack
+ * @homogeneous: %TRUE to make @stack homogeneous
+ *
+ * Sets the #GtkStack to be homogeneous or not. If it
+ * is homogeneous, the #GtkStack will request the same
+ * size for all its children. If it isn't, the stack
+ * may change size when a different child becomes visible.
+ *
+ * Since: 3.10
+ */
 void
 gtk_stack_set_homogeneous (GtkStack *stack,
                            gboolean  homogeneous)
@@ -937,6 +1012,17 @@ gtk_stack_set_homogeneous (GtkStack *stack,
   g_object_notify (G_OBJECT (stack), "homogeneous");
 }
 
+/**
+ * gtk_stack_get_homogeneous:
+ * @stack: a #GtkStack
+ *
+ * Gets whether @stack is homogeneous.
+ * See gtk_stack_set_homogeneous().
+ *
+ * Return value: whether @stack is homogeneous.
+ *
+ * Since: 3.10
+ */
 gboolean
 gtk_stack_get_homogeneous (GtkStack *stack)
 {
@@ -945,6 +1031,17 @@ gtk_stack_get_homogeneous (GtkStack *stack)
   return stack->priv->homogeneous;
 }
 
+/**
+ * gtk_stack_get_transition_duration:
+ * @stack: a #GtkStack
+ *
+ * Returns the amount of time (in milliseconds that
+ * transitions between pages in @stack will take.
+ *
+ * Returns: the transition duration
+ *
+ * Since: 3.10
+ */
 gint
 gtk_stack_get_transition_duration (GtkStack *stack)
 {
@@ -953,16 +1050,39 @@ gtk_stack_get_transition_duration (GtkStack *stack)
   return stack->priv->transition_duration;
 }
 
+/**
+ * gtk_stack_set_transition_duration:
+ * @stack: a #GtkStack
+ * @transition_duration: the new duration, in milliseconds
+ *
+ * Sets the duration that transitions between pages in @stack
+ * will take.
+ *
+ * Returns: the transition duration
+ *
+ * Since: 3.10
+ */
 void
 gtk_stack_set_transition_duration (GtkStack *stack,
-                                  gint value)
+                                   gint      transition_duration)
 {
   g_return_if_fail (GTK_IS_STACK (stack));
 
-  stack->priv->transition_duration = value;
+  stack->priv->transition_duration = transition_duration;
   g_object_notify (G_OBJECT (stack), "transition-duration");
 }
 
+/**
+ * gtk_stack_get_transition_type:
+ * @stack: a #GtkStack
+ *
+ * Gets the type of animation that will be used
+ * for transitions between pages in @stack.
+ *
+ * Return value: the current transition type of @stack
+ *
+ * Since: 3.10
+ */
 GtkStackTransitionType
 gtk_stack_get_transition_type (GtkStack *stack)
 {
@@ -971,13 +1091,28 @@ gtk_stack_get_transition_type (GtkStack *stack)
   return stack->priv->transition_type;
 }
 
+/**
+ * gtk_stack_set_transition_type:
+ * @stack: a #GtkStack
+ * @transition_type: the new transition type
+ *
+ * Sets the type of animation that will be used for
+ * transitions between pages in @stack. Available
+ * types include various kinds of fades and slides.
+ *
+ * The transition type can be changed without problems
+ * at runtime, so it is possible to change the animation
+ * based on the page that is about to become current.
+ *
+ * Since: 3.10
+ */
 void
-gtk_stack_set_transition_type (GtkStack *stack,
-                              GtkStackTransitionType value)
+gtk_stack_set_transition_type (GtkStack              *stack,
+                              GtkStackTransitionType  transition_type)
 {
   g_return_if_fail (GTK_IS_STACK (stack));
 
-  stack->priv->transition_type = value;
+  stack->priv->transition_type = transition_type;
   g_object_notify (G_OBJECT (stack), "transition-type");
 }
 
@@ -985,12 +1120,13 @@ gtk_stack_set_transition_type (GtkStack *stack,
  * gtk_stack_get_visible_child:
  * @stack: a #GtkStack
  *
- * Gets the currently visible child of the #GtkStack, or %NULL if the
- * there are no visible children. The returned widget does not have a reference
- * added, so you do not need to unref it.
+ * Gets the currently visible child of @stack, or %NULL if
+ * there are no visible children.
  *
- * Return value: (transfer none): pointer to child of the #GtkStack
- **/
+ * Return value: (transfer none): the visible child of the #GtkStack
+ *
+ * Since: 3.10
+ */
 GtkWidget *
 gtk_stack_get_visible_child (GtkStack *stack)
 {
@@ -999,6 +1135,17 @@ gtk_stack_get_visible_child (GtkStack *stack)
   return stack->priv->visible_child ? stack->priv->visible_child->widget : NULL;
 }
 
+/**
+ * gtk_stack_get_visible_child_name:
+ * @stack: a #GtkStack
+ *
+ * Returns the name of the currently visible child of @stack, or
+ * %NULL if there is no visible child.
+ *
+ * Return value: (transfer none): the name of the visible child of the #GtkStack
+ *
+ * Since: 3.10
+ */
 const gchar *
 gtk_stack_get_visible_child_name (GtkStack *stack)
 {
@@ -1010,6 +1157,20 @@ gtk_stack_get_visible_child_name (GtkStack *stack)
   return NULL;
 }
 
+/**
+ * gtk_stack_set_visible_child:
+ * @stack: a #GtkStack
+ * @child: a child of @stack
+ *
+ * Makes @child the visible child of @stack.
+ *
+ * If @child is different from the currently
+ * visible child, the transition between the
+ * two will be animated with the current
+ * transition type of @stack.
+ *
+ * Since: 3.10
+ */
 void
 gtk_stack_set_visible_child (GtkStack  *stack,
                              GtkWidget *child)
@@ -1027,6 +1188,20 @@ gtk_stack_set_visible_child (GtkStack  *stack,
     set_visible_child (stack, child_info);
 }
 
+/**
+ * gtk_stack_set_visible_child_name:
+ * @stack: a #GtkStack
+ * @name: the name of the child to make visible
+ *
+ * Makes the child with the given name visible.
+ *
+ * If @child is different from the currently
+ * visible child, the transition between the
+ * two will be animated with the current
+ * transition type of @stack.
+ *
+ * Since: 3.10
+ */
 void
 gtk_stack_set_visible_child_name (GtkStack   *stack,
                                  const gchar *name)

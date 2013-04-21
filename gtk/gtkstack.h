@@ -77,7 +77,7 @@ void                   gtk_stack_set_transition_duration (GtkStack              
                                                           gint                    transition_duration);
 gint                   gtk_stack_get_transition_duration (GtkStack               *stack);
 void                   gtk_stack_set_transition_type     (GtkStack               *stack,
-                                                          GtkStackTransitionType  type);
+                                                          GtkStackTransitionType  transition_type);
 GtkStackTransitionType gtk_stack_get_transition_type     (GtkStack               *stack);
 
 G_END_DECLS
