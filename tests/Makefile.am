@@ -263,6 +263,8 @@ testrevealer_DEPENDENCIES = $(TEST_DEPS)
 
 animated_resizing_SOURCES = 	\
 	animated-resizing.c	\
+	frame-stats.c		\
+	frame-stats.h		\
 	variable.c		\
 	variable.h
 

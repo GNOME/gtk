@@ -4,7 +4,7 @@
 #include <math.h>
 #include <string.h>
 
-#include "variable.h"
+#include "frame-stats.h"
 
 #define RADIUS 64
 #define DIAMETER (2*RADIUS)
@@ -19,11 +19,8 @@ static int window_width = WIDTH, window_height = HEIGHT;
 gint64 start_frame_time;
 static double angle;
 
-static int max_stats = -1;
-static double statistics_time = 5.;
 static double load_factor = 1.0;
 static double cb_no_resize = FALSE;
-static gboolean machine_readable = FALSE;
 
 static cairo_surface_t *source_surface;
 
@@ -114,113 +111,9 @@ on_window_draw (GtkWidget *widget,
 }
 
 static void
-print_double (const char *description,
-              double      value)
-{
-  if (machine_readable)
-    g_print ("%g\t", value);
-  else
-    g_print ("%s: %g\n", description, value);
-}
-
-static void
-print_variable (const char *description,
-                Variable *variable)
-{
-  if (variable->weight != 0)
-    {
-      if (machine_readable)
-        g_print ("%g\t%g\t",
-                 variable_mean (variable),
-                 variable_standard_deviation (variable));
-      else
-        g_print ("%s: %g +/- %g\n", description,
-                 variable_mean (variable),
-                 variable_standard_deviation (variable));
-    }
-  else
-    {
-      if (machine_readable)
-        g_print ("-\t-\t");
-      else
-        g_print ("%s: <n/a>\n", description);
-    }
-}
-
-static void
-handle_frame_stats (GdkFrameClock *frame_clock)
-{
-  static int num_stats = 0;
-  static double last_print_time = 0;
-  static int frames_since_last_print = 0;
-  static gint64 frame_counter;
-  static gint64 last_handled_frame = -1;
-
-  static Variable latency = VARIABLE_INIT;
-
-  double current_time;
-
-  current_time = g_get_monotonic_time ();
-  if (current_time >= last_print_time + 1000000 * statistics_time)
-    {
-      if (frames_since_last_print)
-        {
-          if (num_stats == 0 && machine_readable)
-            {
-              g_print ("# load_factor frame_rate latency\n");
-            }
-
-          num_stats++;
-          if (machine_readable)
-            g_print ("%g	", load_factor);
-          print_double ("Frame rate ",
-                        frames_since_last_print / ((current_time - last_print_time) / 1000000.));
-
-          print_variable ("Latency", &latency);
-
-          g_print ("\n");
-        }
-
-      last_print_time = current_time;
-      frames_since_last_print = 0;
-      variable_reset (&latency);
-
-      if (num_stats == max_stats)
-        gtk_main_quit ();
-    }
-
-  frames_since_last_print++;
-
-  for (frame_counter = last_handled_frame;
-       frame_counter < gdk_frame_clock_get_frame_counter (frame_clock);
-       frame_counter++)
-    {
-      GdkFrameTimings *timings = gdk_frame_clock_get_timings (frame_clock, frame_counter);
-      GdkFrameTimings *previous_timings = gdk_frame_clock_get_timings (frame_clock, frame_counter - 1);
-
-      if (!timings || gdk_frame_timings_get_complete (timings))
-        last_handled_frame = frame_counter;
-
-      if (timings && gdk_frame_timings_get_complete (timings) && previous_timings &&
-          gdk_frame_timings_get_presentation_time (timings) != 0 &&
-          gdk_frame_timings_get_presentation_time (previous_timings) != 0)
-        {
-          double display_time = (gdk_frame_timings_get_presentation_time (timings) - gdk_frame_timings_get_presentation_time (previous_timings)) / 1000.;
-          double frame_latency = (gdk_frame_timings_get_presentation_time (previous_timings) - gdk_frame_timings_get_frame_time (previous_timings)) / 1000. + display_time / 2;
-
-          variable_add_weighted (&latency, frame_latency, display_time);
-        }
-    }
-}
-
-static void
 on_frame (double progress)
 {
-  GdkFrameClock *frame_clock = gtk_widget_get_frame_clock (window);
   int jitter;
-
-  if (frame_clock)
-    handle_frame_stats (frame_clock);
 
   angle = 2 * M_PI * progress;
   jitter = WINDOW_SIZE_JITTER * sin(angle);
@@ -265,10 +158,7 @@ on_map_event (GtkWidget	  *widget,
 
 static GOptionEntry options[] = {
   { "factor", 'f', 0, G_OPTION_ARG_DOUBLE, &load_factor, "Load factor", "FACTOR" },
-  { "max-statistics", 'm', 0, G_OPTION_ARG_INT, &max_stats, "Maximum statistics printed", NULL },
-  { "machine-readable", 0, 0, G_OPTION_ARG_NONE, &machine_readable, "Print statistics in columns", NULL },
   { "no-resize", 'n', 0, G_OPTION_ARG_NONE, &cb_no_resize, "No Resize", NULL },
-  { "statistics-time", 's', 0, G_OPTION_ARG_DOUBLE, &statistics_time, "Statistics accumulation time", "TIME" },
   { NULL }
 };
 
@@ -279,21 +169,26 @@ main(int argc, char **argv)
   GdkScreen *screen;
   GdkRectangle monitor_bounds;
 
-  if (!gtk_init_with_args (&argc, &argv, "",
-                           options, NULL, &error))
+  GOptionContext *context = g_option_context_new (NULL);
+  g_option_context_add_main_entries (context, options, NULL);
+  frame_stats_add_options (g_option_context_get_main_group (context));
+  g_option_context_add_group (context,
+                              gtk_get_option_group (TRUE));
+
+  if (!g_option_context_parse (context, &argc, &argv, &error))
     {
       g_printerr ("Option parsing failed: %s\n", error->message);
       return 1;
     }
 
-  g_print ("%sLoad factor: %g\n",
-           machine_readable ? "# " : "",
+  g_print ("# Load factor: %g\n",
            load_factor);
-  g_print ("%sResizing?: %s\n",
-           machine_readable ? "# " : "",
+  g_print ("# Resizing?: %s\n",
            cb_no_resize ? "no" : "yes");
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  frame_stats_ensure (GTK_WINDOW (window));
+
   gtk_window_set_keep_above (GTK_WINDOW (window), TRUE);
   gtk_window_set_gravity (GTK_WINDOW (window), GDK_GRAVITY_CENTER);
   gtk_widget_set_app_paintable (window, TRUE);

@@ -4,6 +4,14 @@
 #include "variable.h"
 
 void
+variable_init (Variable *variable)
+{
+  variable->weight = 0.0;
+  variable->sum = 0.0;
+  variable->sum2 = 0.0;
+}
+
+void
 variable_add_weighted (Variable *variable,
                        double    value,
                        double    weight)
@@ -32,12 +40,3 @@ variable_standard_deviation (Variable *variable)
   double mean = variable_mean (variable);
   return sqrt (variable->sum2 / variable->weight - mean * mean);
 }
-
-void
-variable_reset (Variable *variable)
-{
-  variable->weight = 0;
-  variable->sum = 0;
-  variable->sum2 = 0;
-}
-
