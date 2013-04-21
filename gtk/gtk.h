@@ -179,6 +179,8 @@
 #include <gtk/gtksizerequest.h>
 #include <gtk/gtkspinbutton.h>
 #include <gtk/gtkspinner.h>
+#include <gtk/gtkstack.h>
+#include <gtk/gtkstackswitcher.h>
 #include <gtk/gtkstatusbar.h>
 #include <gtk/gtkstatusicon.h>
 #include <gtk/gtkstock.h>
