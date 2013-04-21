@@ -8890,7 +8890,8 @@ gtk_window_draw (GtkWidget *widget,
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  get_decoration_borders (widget, &title_border, &inner_border, &outer_border);
+  if (priv->client_decorated)
+    get_decoration_borders (widget, &title_border, &inner_border, &outer_border);
 
   if (!gtk_widget_get_app_paintable (widget) &&
       gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
