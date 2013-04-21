@@ -22,6 +22,25 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
+/**
+ * SECTION:gtkstackswitcher
+ * @Short_decription: A controller for GtkStack
+ * @Title: GtkStackSwitcher
+ * @See_also: #GtkStack
+ *
+ * The GtkStackSwitcher widget acts as a controller for a
+ * #GtkStack; it shows a row of buttons to switch between
+ * the various pages of the associated stack widget.
+ *
+ * All the content for the buttons comes from the child properties
+ * of the #GtkStack.
+ *
+ * It is possible to associate multiple #GtkStackSwitcher widgets
+ * with the same stack widget.
+ *
+ * The GtkStackSwitcher widget was added in 3.10.
+ */
+
 struct _GtkStackSwitcherPrivate
 {
   GtkStack *stack;
@@ -281,6 +300,8 @@ connect_stack_signals (GtkStackSwitcher *switcher)
  * @stack: (allow-none): a #GtkStack
  *
  * Sets the stack to control.
+ *
+ * Since: 3.10
  */
 void
 gtk_stack_switcher_set_stack (GtkStackSwitcher *switcher,
@@ -320,11 +341,13 @@ gtk_stack_switcher_set_stack (GtkStackSwitcher *switcher,
  * gtk_stack_switcher_get_stack:
  * @switcher: a #GtkStackSwitcher
  *
- * Retrieves the stack. See
- * gtk_stack_switcher_set_stack().
+ * Retrieves the stack.
+ * See gtk_stack_switcher_set_stack().
  *
  * Return value: (transfer none): the stack, or %NULL if
  *    none has been set explicitly.
+ *
+ * Since: 3.10
  */
 GtkStack *
 gtk_stack_switcher_get_stack (GtkStackSwitcher *switcher)
@@ -406,6 +429,15 @@ gtk_stack_switcher_class_init (GtkStackSwitcherClass *class)
   g_type_class_add_private (object_class, sizeof (GtkStackSwitcherPrivate));
 }
 
+/**
+ * gtk_stack_switcher_new:
+ *
+ * Create a new #GtkStackSwitcher.
+ *
+ * Return value: a new #GtkStackSwitcher.
+ *
+ * Since: 3.10
+ */
 GtkWidget *
 gtk_stack_switcher_new (void)
 {
