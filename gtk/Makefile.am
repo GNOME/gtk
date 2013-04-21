@@ -331,6 +331,8 @@ gtk_public_h_sources = 		\
 	gtksocket.h		\
 	gtkspinbutton.h		\
 	gtkspinner.h		\
+	gtkstack.h		\
+	gtkstackswitcher.h	\
 	gtkstatusbar.h		\
 	gtkstatusicon.h		\
 	gtkstock.h		\
@@ -830,6 +832,8 @@ gtk_base_c_sources = 		\
 	gtkshow.c		\
 	gtkspinbutton.c		\
 	gtkspinner.c		\
+	gtkstack.c		\
+	gtkstackswitcher.c	\
 	gtkstatusbar.c		\
 	gtkstatusicon.c		\
 	gtkstock.c		\

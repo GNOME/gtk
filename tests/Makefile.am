@@ -130,7 +130,8 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testpixbuf-color		\
 	testpixbuf-scale		\
 	testgmenu			\
-	testlogout
+	testlogout			\
+	teststack
 
 if USE_X11
 noinst_PROGRAMS += testerrors
@@ -254,6 +255,7 @@ testpixbuf_color_DEPENDENCIES = $(TEST_DEPS)
 testpixbuf_scale_DEPENDENCIES = $(TEST_DEPS)
 testgmenu_DEPENDENCIES = $(TEST_DEPS)
 testlogout_DEPENDENCIES = $(TEST_DEPS)
+teststack_DEPENDENCIES = $(TEST_DEPS)
 
 animated_resizing_SOURCES = 	\
 	animated-resizing.c	\
@@ -451,6 +453,8 @@ testpixbuf_save_SOURCES = testpixbuf-save.c
 testcolorchooser_SOURCES = testcolorchooser.c
 
 testkineticscrolling_SOURCES = testkineticscrolling.c
+
+teststack_SOURCES = teststack.c
 
 EXTRA_DIST += 			\
 	gradient1.png		\
