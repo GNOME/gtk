@@ -170,6 +170,7 @@ struct _GtkPlacesSidebar {
 	char *drop_target_uri;
 
 	guint show_desktop : 1;
+	guint show_connect_to_server : 1;
 };
 
 struct _GtkPlacesSidebarClass {
@@ -180,10 +181,12 @@ struct _GtkPlacesSidebarClass {
 				        GtkPlacesOpenFlags open_flags);
 	void (* populate_popup)        (GtkPlacesSidebar *sidebar,
 					GtkMenu          *menu,
-					GFile            *selected_item);
+					GFile            *selected_item,
+					GVolume          *selected_volume);
 	void (* show_error_message)    (GtkPlacesSidebar *sidebar,
 				        const char       *primary,
 				        const char       *secondary);
+	void (* show_connect_to_server) (GtkPlacesSidebar *sidebar);
 	GdkDragAction (* drag_action_requested) (GtkPlacesSidebar *sidebar,
 						 GdkDragContext   *context,
 						 GFile            *dest_file,
@@ -221,6 +224,7 @@ typedef enum {
 	PLACES_MOUNTED_VOLUME,
 	PLACES_BOOKMARK,
 	PLACES_HEADING,
+	PLACES_CONNECT_TO_SERVER,
 	PLACES_DROP_FEEDBACK
 } PlaceType;
 
@@ -235,6 +239,7 @@ enum {
 	OPEN_LOCATION,
 	POPULATE_POPUP,
 	SHOW_ERROR_MESSAGE,
+	SHOW_CONNECT_TO_SERVER,
 	DRAG_ACTION_REQUESTED,
 	DRAG_ACTION_ASK,
 	DRAG_PERFORM_DROP,
@@ -245,15 +250,17 @@ enum {
 	PROP_LOCATION = 1,
 	PROP_OPEN_FLAGS,
 	PROP_SHOW_DESKTOP,
+	PROP_SHOW_CONNECT_TO_SERVER,
 	NUM_PROPERTIES,
 };
 
 /* Names for themed icons */
-#define ICON_NAME_HOME		"user-home-symbolic"
-#define ICON_NAME_DESKTOP	"user-desktop"
-#define ICON_NAME_FILESYSTEM	"drive-harddisk-symbolic"
-#define ICON_NAME_EJECT		"media-eject-symbolic"
-#define ICON_NAME_NETWORK	"network-workgroup-symbolic"
+#define ICON_NAME_HOME		 "user-home-symbolic"
+#define ICON_NAME_DESKTOP	 "user-desktop"
+#define ICON_NAME_FILESYSTEM	 "drive-harddisk-symbolic"
+#define ICON_NAME_EJECT		 "media-eject-symbolic"
+#define ICON_NAME_NETWORK	 "network-workgroup-symbolic"
+#define ICON_NAME_NETWORK_SERVER "network-server-symbolic"
 
 #define ICON_NAME_FOLDER_DESKTOP	"user-desktop"
 #define ICON_NAME_FOLDER_DOCUMENTS	"folder-documents-symbolic"
@@ -336,10 +343,10 @@ emit_open_location (GtkPlacesSidebar *sidebar, GFile *location, GtkPlacesOpenFla
 }
 
 static void
-emit_populate_popup (GtkPlacesSidebar *sidebar, GtkMenu *menu, GFile *selected_item)
+emit_populate_popup (GtkPlacesSidebar *sidebar, GtkMenu *menu, GFile *selected_item, GVolume *selected_volume)
 {
 	g_signal_emit (sidebar, places_sidebar_signals[POPULATE_POPUP], 0,
-		       menu, selected_item);
+		       menu, selected_item, selected_volume);
 }
 
 static void
@@ -347,6 +354,12 @@ emit_show_error_message (GtkPlacesSidebar *sidebar, const char *primary, const c
 {
 	g_signal_emit (sidebar, places_sidebar_signals[SHOW_ERROR_MESSAGE], 0,
 		       primary, secondary);
+}
+
+static void
+emit_show_connect_to_server (GtkPlacesSidebar *sidebar)
+{
+	g_signal_emit (sidebar, places_sidebar_signals[SHOW_CONNECT_TO_SERVER], 0);
 }
 
 static GdkDragAction
@@ -1060,6 +1073,14 @@ update_places (GtkPlacesSidebar *sidebar)
 		   _("Browse Network"), icon, mount_uri,
 		   NULL, NULL, NULL, 0,
 		   _("Browse the contents of the network"));
+	g_object_unref (icon);
+
+	icon = g_themed_icon_new (ICON_NAME_NETWORK_SERVER);
+	add_place (sidebar, PLACES_CONNECT_TO_SERVER,
+		   SECTION_NETWORK,
+		   _("Connect to Server"), icon, NULL,
+		   NULL, NULL, NULL, 0,
+		   _("Connect to a network server address"));
 	g_object_unref (icon);
 
 	network_volumes = g_list_reverse (network_volumes);
@@ -2187,53 +2208,78 @@ mount_volume (GtkPlacesSidebar *sidebar, GVolume *volume)
 }
 
 static void
+open_selected_volume (GtkPlacesSidebar   *sidebar,
+		      GtkTreeModel       *model,
+		      GtkTreeIter        *iter,
+		      GtkPlacesOpenFlags  open_flags)
+{
+	GDrive *drive;
+	GVolume *volume;
+
+	gtk_tree_model_get (model, iter,
+			    PLACES_SIDEBAR_COLUMN_DRIVE, &drive,
+			    PLACES_SIDEBAR_COLUMN_VOLUME, &volume,
+			    -1);
+
+	if (volume != NULL && !sidebar->mounting) {
+		sidebar->mounting = TRUE;
+
+		sidebar->go_to_after_mount_open_flags = open_flags;
+
+		mount_volume (sidebar, volume);
+	} else if (volume == NULL && drive != NULL &&
+		   (g_drive_can_start (drive) || g_drive_can_start_degraded (drive))) {
+		GMountOperation *mount_op;
+
+		mount_op = gtk_mount_operation_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (sidebar))));
+		g_drive_start (drive, G_DRIVE_START_NONE, mount_op, NULL, drive_start_from_bookmark_cb, NULL);
+		g_object_unref (mount_op);
+ 	}
+
+	if (drive != NULL)
+		g_object_unref (drive);
+
+	if (volume != NULL)
+		g_object_unref (volume);
+}
+
+static void
+open_selected_uri (GtkPlacesSidebar   *sidebar,
+		   const gchar        *uri,
+		   GtkPlacesOpenFlags  open_flags)
+{
+	GFile *location;
+
+	location = g_file_new_for_uri (uri);
+	emit_open_location (sidebar, location, open_flags);
+	g_object_unref (location);
+}
+
+static void
 open_selected_bookmark (GtkPlacesSidebar	*sidebar,
 			GtkTreeModel		*model,
 			GtkTreeIter		*iter,
 			GtkPlacesOpenFlags	 open_flags)
 {
-	GFile *location;
 	char *uri;
+	PlaceType place_type;
 
 	if (!iter) {
 		return;
 	}
 
-	gtk_tree_model_get (model, iter, PLACES_SIDEBAR_COLUMN_URI, &uri, -1);
+	gtk_tree_model_get (model, iter,
+			    PLACES_SIDEBAR_COLUMN_URI, &uri,
+			    PLACES_SIDEBAR_COLUMN_ROW_TYPE, &place_type,
+			    -1);
 
 	if (uri != NULL) {
-		location = g_file_new_for_uri (uri);
-		emit_open_location (sidebar, location, open_flags);
-
-		g_object_unref (location);
+		open_selected_uri (sidebar, uri, open_flags);
 		g_free (uri);
-
+	} else if (place_type == PLACES_CONNECT_TO_SERVER) {
+		emit_show_connect_to_server (sidebar);
 	} else {
-		GDrive *drive;
-		GVolume *volume;
-
-		gtk_tree_model_get (model, iter,
-				    PLACES_SIDEBAR_COLUMN_DRIVE, &drive,
-				    PLACES_SIDEBAR_COLUMN_VOLUME, &volume,
-				    -1);
-
-		if (volume != NULL && !sidebar->mounting) {
-			sidebar->mounting = TRUE;
-
-			sidebar->go_to_after_mount_open_flags = open_flags;
-
-			mount_volume (sidebar, volume);
-		} else if (volume == NULL && drive != NULL &&
-			   (g_drive_can_start (drive) || g_drive_can_start_degraded (drive))) {
-			GMountOperation *mount_op;
-
-			mount_op = gtk_mount_operation_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (sidebar))));
-			g_drive_start (drive, G_DRIVE_START_NONE, mount_op, NULL, drive_start_from_bookmark_cb, sidebar);
-			g_object_unref (mount_op);
-		}
-
-		g_clear_object (&drive);
-		g_clear_object (&volume);
+		open_selected_volume (sidebar, model, iter, open_flags);
 	}
 }
 
@@ -3161,9 +3207,10 @@ bookmarks_build_popup_menu (GtkPlacesSidebar *sidebar)
 	else
 		file = NULL;
 
-	emit_populate_popup (sidebar, GTK_MENU (sidebar->popup_menu), file);
+	emit_populate_popup (sidebar, GTK_MENU (sidebar->popup_menu), file, sel_info.volume);
 
-	g_object_unref (file);
+	if (file)
+		g_object_unref (file);
 
 	free_selection_info (&sel_info);
 }
@@ -3292,7 +3339,8 @@ bookmarks_button_release_event_cb (GtkWidget *widget,
 				    PLACES_SIDEBAR_COLUMN_ROW_TYPE, &row_type,
 				    -1);
 
-		if (row_type != PLACES_HEADING) {
+		if (row_type != PLACES_HEADING
+		    && row_type != PLACES_CONNECT_TO_SERVER) {
 			bookmarks_popup_menu (sidebar, event);
 		}
 	}
@@ -3477,7 +3525,9 @@ places_sidebar_sort_func (GtkTreeModel *model,
 
 		g_free (name_a);
 		g_free (name_b);
-	}
+	} else if (place_type_a == PLACES_CONNECT_TO_SERVER) {
+		retval = 1;
+ 	}
 
 	return retval;
 }
@@ -3805,6 +3855,9 @@ gtk_places_sidebar_set_property (GObject      *obj,
 	case PROP_SHOW_DESKTOP:
 		gtk_places_sidebar_set_show_desktop (sidebar, g_value_get_boolean (value));
 		break;
+	case PROP_SHOW_CONNECT_TO_SERVER:
+		gtk_places_sidebar_set_show_connect_to_server (sidebar, g_value_get_boolean (value));
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
 		break;
@@ -3828,6 +3881,9 @@ gtk_places_sidebar_get_property (GObject    *obj,
 		break;
 	case PROP_SHOW_DESKTOP:
 		g_value_set_boolean (value, gtk_places_sidebar_get_show_desktop (sidebar));
+		break;
+	case PROP_SHOW_CONNECT_TO_SERVER:
+		g_value_set_boolean (value, gtk_places_sidebar_get_show_connect_to_server (sidebar));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
@@ -3948,7 +4004,8 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 	 * GtkPlacesSidebar::populate-popup:
 	 * @sidebar: the object which received the signal.
 	 * @menu: a #GtkMenu.
-	 * @selected_item: #GFile with the item to which the menu should refer.
+	 * @selected_item: #GFile with the item to which the menu should refer, or #NULL in the case of a @selected_volume.
+	 * @selected_volume: #GVolume if the selected item is a volume, or #NULL if it is a file.
 	 *
 	 * The places sidebar emits this signal when the user invokes a contextual
 	 * menu on one of its items.  In the signal handler, the application may
@@ -3959,6 +4016,11 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 	 * during their GtkMenuItem::activate callbacks, the application can use
 	 * gtk_places_sidebar_get_location() to get the file to which the item
 	 * refers.
+	 *
+	 * The @selected_item argument may be #NULL in case the selection refers to
+	 * a volume.  In this case, @selected_volume will be non-NULL.  In this case,
+	 * the calling application will have to g_object_ref() the @selected_volume and
+	 * keep it around for the purposes of its menu item's "activate" callback.
 	 *
 	 * The @menu and all its menu items are destroyed after the user
 	 * dismisses the menu.  The menu is re-created (and thus, this signal is
@@ -3972,8 +4034,9 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 			      G_SIGNAL_RUN_FIRST,
 			      G_STRUCT_OFFSET (GtkPlacesSidebarClass, populate_popup),
 			      NULL, NULL,
-			      _gtk_marshal_VOID__OBJECT_OBJECT,
-			      G_TYPE_NONE, 2,
+			      _gtk_marshal_VOID__OBJECT_OBJECT_OBJECT,
+			      G_TYPE_NONE, 3,
+			      G_TYPE_OBJECT,
 			      G_TYPE_OBJECT,
 			      G_TYPE_OBJECT);
 
@@ -4000,6 +4063,27 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 			      G_TYPE_NONE, 2,
 			      G_TYPE_STRING,
 			      G_TYPE_STRING);
+
+	/**
+	 * GtkPlacesSidebar::show-connect-to-server:
+	 * @sidebar: the object which received the signal.
+	 *
+	 * The places sidebar emits this signal when it needs the calling
+	 * application to present an way to connect directly to a network server.
+	 * For example, the application may bring up a dialog box asking for
+	 * a URL like "sftp://ftp.example.com".  It is up to the application to create
+	 * the corresponding mount by using, for example, g_file_mount_enclosing_volume().
+	 *
+	 * Since: 3.8
+	 */
+	places_sidebar_signals [SHOW_CONNECT_TO_SERVER] =
+		g_signal_new (I_("show-connect-to-server"),
+			      G_OBJECT_CLASS_TYPE (gobject_class),
+			      G_SIGNAL_RUN_FIRST,
+			      G_STRUCT_OFFSET (GtkPlacesSidebarClass, show_connect_to_server),
+			      NULL, NULL,
+			      _gtk_marshal_VOID__VOID,
+			      G_TYPE_NONE, 0);
 
 	/**
 	 * GtkPlacesSidebar::drag-action-requested:
@@ -4103,6 +4187,12 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 		g_param_spec_boolean ("show-desktop",
 				      P_("Whether to show desktop"),
 				      P_("Whether the sidebar includes a builtin shortcut to the desktop folder"),
+				      FALSE,
+				      G_PARAM_READWRITE);
+	properties[PROP_SHOW_CONNECT_TO_SERVER] =
+		g_param_spec_boolean ("show-connect-to-server",
+				      P_("Whether to show connect to server"),
+				      P_("Whether the sidebar includes a builtin shortcut to a 'Connect to server' dialog"),
 				      FALSE,
 				      G_PARAM_READWRITE);
 
@@ -4382,6 +4472,48 @@ gtk_places_sidebar_get_show_desktop (GtkPlacesSidebar *sidebar)
 	g_return_val_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar), FALSE);
 
 	return sidebar->show_desktop;
+}
+
+/**
+ * gtk_places_sidebar_set_show_connect_to_server:
+ * @sidebar: a places sidebar
+ * @show_connect_to_server: whether to show an item for the Connect to Server command
+ *
+ * Sets whether the @sidebar should show an item for connecting to a network server; this is off by default.
+ * An application may want to turn this on if it implements a way for the user to connect
+ * to network servers directly.
+ *
+ * Since: 3.8
+ */
+void
+gtk_places_sidebar_set_show_connect_to_server (GtkPlacesSidebar *sidebar, gboolean show_connect_to_server)
+{
+	g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
+
+	show_connect_to_server = !!show_connect_to_server;
+	if (sidebar->show_connect_to_server != show_connect_to_server) {
+		sidebar->show_connect_to_server = show_connect_to_server;
+		update_places (sidebar);
+		g_object_notify_by_pspec (G_OBJECT (sidebar), properties[PROP_SHOW_CONNECT_TO_SERVER]);
+	}
+}
+
+/**
+ * gtk_places_sidebar_get_show_connect_to_server:
+ * @sidebar: a places sidebar
+ *
+ * Returns the value previously set with gtk_places_sidebar_set_show_connect_to_server()
+ *
+ * Return value: %TRUE if the sidebar will display a "Connect to Server" item.
+ *
+ * Since: 3.8
+ */
+gboolean
+gtk_places_sidebar_get_show_connect_to_server (GtkPlacesSidebar *sidebar)
+{
+	g_return_val_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar), FALSE);
+
+	return sidebar->show_connect_to_server;
 }
 
 static GSList *
