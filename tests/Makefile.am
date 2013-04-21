@@ -27,6 +27,7 @@ endif
 noinst_PROGRAMS =  $(TEST_PROGS)	\
 	animated-resizing		\
 	motion-compression		\
+	scrolling-performance		\
 	simple				\
 	flicker				\
 	print-editor			\
@@ -158,6 +159,7 @@ endif
 animated_resizing_DEPENDENCIES = $(TEST_DEPS)
 flicker_DEPENDENCIES = $(TEST_DEPS)
 motion_compression_DEPENDENCIES = $(TEST_DEPS)
+scrolling_performance_DEPENDENCIES = $(TEST_DEPS)
 simple_DEPENDENCIES = $(TEST_DEPS)
 print_editor_DEPENDENCIES = $(TEST_DEPS)
 video_timer_DEPENDENCIES = $(TEST_DEPS)
@@ -263,6 +265,13 @@ testrevealer_DEPENDENCIES = $(TEST_DEPS)
 
 animated_resizing_SOURCES = 	\
 	animated-resizing.c	\
+	frame-stats.c		\
+	frame-stats.h		\
+	variable.c		\
+	variable.h
+
+scrolling_performance_SOURCES = \
+	scrolling-performance.c	\
 	frame-stats.c		\
 	frame-stats.h		\
 	variable.c		\
