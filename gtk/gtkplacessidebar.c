@@ -4174,26 +4174,26 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 
 	properties[PROP_LOCATION] =
 		g_param_spec_object ("location",
-				     P_("Location to select"),
+				     P_("Location to Select"),
 				     P_("The location to highlight in the sidebar"),
 				     G_TYPE_FILE,
 				     G_PARAM_READWRITE);
 	properties[PROP_OPEN_FLAGS] =
 		g_param_spec_flags ("open-flags",
-				    P_("The open modes supported for this widget"),
-				    P_("The set of open modes supported for this widget"),
+				    P_("Open Flags"),
+				    P_("Modes in which the calling application can open locations selected in the sidebar"),
 				    GTK_TYPE_PLACES_OPEN_FLAGS,
 				    GTK_PLACES_OPEN_NORMAL,
 				    G_PARAM_READWRITE);
 	properties[PROP_SHOW_DESKTOP] =
 		g_param_spec_boolean ("show-desktop",
-				      P_("Whether to show desktop"),
-				      P_("Whether the sidebar includes a builtin shortcut to the desktop folder"),
+				      P_("Show 'Desktop'"),
+				      P_("Whether the sidebar includes a builtin shortcut to the Desktop folder"),
 				      FALSE,
 				      G_PARAM_READWRITE);
 	properties[PROP_SHOW_CONNECT_TO_SERVER] =
 		g_param_spec_boolean ("show-connect-to-server",
-				      P_("Whether to show connect to server"),
+				      P_("Show 'Connect to Server'"),
 				      P_("Whether the sidebar includes a builtin shortcut to a 'Connect to server' dialog"),
 				      FALSE,
 				      G_PARAM_READWRITE);
