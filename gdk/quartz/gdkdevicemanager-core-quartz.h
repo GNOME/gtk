@@ -21,7 +21,7 @@
 #define __GDK_QUARTZ_DEVICE_MANAGER_CORE__
 
 #include <gdkdevicemanagerprivate.h>
-#include <gdkquartzdevicemanager-core.h>
+#include "gdkquartzdevicemanager-core.h"
 
 G_BEGIN_DECLS
 

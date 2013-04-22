@@ -21,7 +21,7 @@
 #define __GDK_QUARTZ_DND__
 
 #include <gdkdndprivate.h>
-#include <gdkquartzdnd.h>
+#include "gdkquartzdnd.h"
 
 #include <AppKit/AppKit.h>
 
