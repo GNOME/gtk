@@ -25,6 +25,8 @@
 #include "gtkactionhelper.h"
 #include "gtkwidgetprivate.h"
 #include "gtkaccellabel.h"
+#include "gtkimage.h"
+#include "gtkbox.h"
 
 struct _GtkModelMenuItem
 {
@@ -113,6 +115,51 @@ gtk_model_menu_item_setup (GtkModelMenuItem  *item,
   GMenuModel *submenu;
   const gchar *key;
   GVariant *value;
+  GtkWidget *label;
+
+  label = NULL;
+
+  /* In the case that we have an icon, make an HBox and put it beside
+   * the label.  Otherwise, we just have a label directly.
+   */
+  if ((value = g_menu_model_get_item_attribute_value (model, item_index, "icon", NULL)))
+    {
+      GIcon *icon;
+
+      icon = g_icon_deserialize (value);
+
+      if (icon != NULL)
+        {
+          GtkWidget *image;
+          GtkWidget *box;
+
+          box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+
+          image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_MENU);
+          gtk_box_pack_start (GTK_BOX (box), image, FALSE, FALSE, 0);
+          g_object_unref (icon);
+
+          label = gtk_accel_label_new ("");
+          gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+          gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (label), GTK_WIDGET (item));
+          gtk_box_pack_end (GTK_BOX (box), label, TRUE, TRUE, 0);
+
+          gtk_container_add (GTK_CONTAINER (item), box);
+
+          gtk_widget_show_all (box);
+        }
+
+      g_variant_unref (value);
+    }
+
+  if (label == NULL)
+    {
+      /* Ensure that the GtkAccelLabel has been created... */
+      (void) gtk_menu_item_get_label (GTK_MENU_ITEM (item));
+      label = gtk_bin_get_child (GTK_BIN (item));
+    }
+
+  g_assert (label != NULL);
 
   if ((submenu = g_menu_model_get_item_link (model, item_index, "submenu")))
     {
@@ -141,7 +188,7 @@ gtk_model_menu_item_setup (GtkModelMenuItem  *item,
   while (g_menu_attribute_iter_get_next (iter, &key, &value))
     {
       if (g_str_equal (key, "label") && g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
-        gtk_menu_item_set_label (GTK_MENU_ITEM (item), g_variant_get_string (value, NULL));
+        gtk_label_set_text_with_mnemonic (GTK_LABEL (label), g_variant_get_string (value, NULL));
 
       else if (g_str_equal (key, "accel") && g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
         {
@@ -151,16 +198,7 @@ gtk_model_menu_item_setup (GtkModelMenuItem  *item,
           gtk_accelerator_parse (g_variant_get_string (value, NULL), &key, &modifiers);
 
           if (key)
-            {
-              GtkAccelLabel *accel_label;
-
-              /* Ensure that the GtkAccelLabel has been created... */
-              (void) gtk_menu_item_get_label (GTK_MENU_ITEM (item));
-              accel_label = GTK_ACCEL_LABEL (gtk_bin_get_child (GTK_BIN (item)));
-              g_assert (accel_label);
-
-              gtk_accel_label_set_accel (accel_label, key, modifiers);
-            }
+            gtk_accel_label_set_accel (GTK_ACCEL_LABEL (label), key, modifiers);
         }
 
       else if (g_str_equal (key, "action") && g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
