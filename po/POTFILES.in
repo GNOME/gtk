@@ -195,6 +195,7 @@ gtk/gtkrecentchooser.c
 gtk/gtkrecentchooserdefault.c
 gtk/gtkrecentchoosermenu.c
 gtk/gtkrecentmanager.c
+gtk/gtkrevealer.c
 gtk/gtkscalebutton.c
 gtk/gtkscale.c
 gtk/gtkscrollable.c
@@ -209,6 +210,8 @@ gtk/gtksizerequest.c
 gtk/gtksocket.c
 gtk/gtkspinbutton.c
 gtk/gtkspinner.c
+gtk/gtkstack.c
+gtk/gtkstackswitcher.c
 gtk/gtkstatusbar.c
 gtk/gtkstatusicon.c
 gtk/gtkstock.c
@@ -300,4 +303,3 @@ gtk/gtkrecentchooserdefault.ui.h
 gtk/gtkscalebutton.ui.h
 gtk/gtkstatusbar.ui.h
 gtk/gtkvolumebutton.ui.h
-
