@@ -55,6 +55,9 @@
     <file preprocess="to-pixdata">gnome-fs-directory.png</file>
     <file preprocess="to-pixdata">gnome-fs-regular.png</file>
   </gresource>
+  <gresource prefix="/stack">
+    <file>stack.ui</file>
+  </gresource>
   <gresource prefix="/images">
     <file>alphatest.png</file>
     <file>floppybuddy.gif</file>
@@ -110,6 +113,7 @@
     <file>rotated_text.c</file>
     <file>search_entry.c</file>
     <file>sizegroup.c</file>
+    <file>stack.c</file>
     <file>spinner.c</file>
     <file>stock_browser.c</file>
     <file>textview.c</file>

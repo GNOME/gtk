@@ -43,6 +43,7 @@ demos =						\
 	search_entry.c				\
 	sizegroup.c				\
 	spinner.c				\
+	stack.c					\
 	stock_browser.c				\
 	textview.c				\
 	textscroll.c				\
@@ -110,6 +111,7 @@ RESOURCES=	$(demos)			\
 		application.ui			\
 		demo.ui				\
 		menus.ui			\
+		stack.ui			\
 		theming.ui			\
 		alphatest.png			\
 		apple-red.png			\
