@@ -50,7 +50,7 @@ on_back_button_clicked (GtkButton *button, GtkStack *stack)
 
   for (i = 1; i < G_N_ELEMENTS (seq); i++)
     {
-      if (g_str_equal (vis, seq[i]))
+      if (g_strcmp0 (vis, seq[i]) == 0)
         {
           gtk_stack_set_visible_child_full (stack, seq[i - 1], GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT);
           break;
@@ -69,7 +69,7 @@ on_forward_button_clicked (GtkButton *button, GtkStack *stack)
 
   for (i = 0; i < G_N_ELEMENTS (seq) - 1; i++)
     {
-      if (g_str_equal (vis, seq[i]))
+      if (g_strcmp0 (vis, seq[i]) == 0)
         {
           gtk_stack_set_visible_child_full (stack, seq[i + 1], GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT);
           break;
@@ -83,7 +83,7 @@ update_back_button_sensitivity (GtkStack *stack, GParamSpec *pspec, GtkWidget *b
   const gchar *vis;
 
   vis = gtk_stack_get_visible_child_name (stack);
-  gtk_widget_set_sensitive (button, ! g_str_equal (vis, "1"));
+  gtk_widget_set_sensitive (button, g_strcmp0 (vis, "1") != 0);
 }
 
 static void
@@ -92,7 +92,7 @@ update_forward_button_sensitivity (GtkStack *stack, GParamSpec *pspec, GtkWidget
   const gchar *vis;
 
   vis = gtk_stack_get_visible_child_name (stack);
-  gtk_widget_set_sensitive (button, ! g_str_equal (vis, "3"));
+  gtk_widget_set_sensitive (button, g_strcmp0 (vis, "3") != 0);
 }
 
 gint
@@ -209,14 +209,12 @@ main (gint argc,
   gtk_container_add (GTK_CONTAINER (hbox), button);
 
   combo = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo),
-				  "NONE");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo),
-				  "CROSSFADE");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo),
-				  "SLIDE_RIGHT");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo),
-				  "SLIDE_LEFT");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "NONE");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "CROSSFADE");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "SLIDE_RIGHT");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "SLIDE_LEFT");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "SLIDE_UP");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "SLIDE_DOWN");
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
 
   gtk_container_add (GTK_CONTAINER (hbox), combo);
