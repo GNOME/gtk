@@ -11,8 +11,6 @@
     <glade-widget-class name="GtkColorPlane" generic-name="colorplane" title="Color Plane" icon-name="widget-gtk-colorselection"/>
     <glade-widget-class name="GtkColorScale" generic-name="colorscale" title="Color Scale" icon-name="widget-gtk-colorselection"/>
     <glade-widget-class name="GtkScaleButtonScale" generic-name="scalebuttonscale" title="Scale Button Scale"/>
-    <glade-widget-class name="ShortcutsPaneModelFilter" generic-name="shortcutsfilter" title="Shortcuts Filter"
-			icon-name="widget-gtk-treemodelfilter"/>
 
     <!-- gtkunixprint private widgets -->
     <glade-widget-class name="GtkPrinterOptionWidget" generic-name="printeroptionwidget" title="Printer Option Widget"
@@ -31,7 +29,6 @@
     <glade-widget-class-ref name="GtkColorPlane"/>
     <glade-widget-class-ref name="GtkColorScale"/>
     <glade-widget-class-ref name="GtkScaleButtonScale"/>
-    <glade-widget-class-ref name="ShortcutsPaneModelFilter"/>
     <glade-widget-class-ref name="GtkPrinterOptionWidget"/>
     <glade-widget-class-ref name="GtkPlacesSidebar"/>
   </glade-widget-group>
