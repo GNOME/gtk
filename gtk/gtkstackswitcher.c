@@ -24,7 +24,7 @@
 
 /**
  * SECTION:gtkstackswitcher
- * @Short_decription: A controller for GtkStack
+ * @Short_description: A controller for GtkStack
  * @Title: GtkStackSwitcher
  * @See_also: #GtkStack
  *
