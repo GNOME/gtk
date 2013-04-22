@@ -174,6 +174,7 @@ libgdk_3_la_LIBADD += x11/libgdk-x11.la
 endif # USE_X11
 
 if USE_QUARTZ
+libgdk_3_la_CFLAGS = -xobjective-c
 libgdk_3_la_LIBADD += quartz/libgdk-quartz.la
 endif # USE_QUARTZ
 
@@ -370,7 +371,7 @@ dist-hook: ../build/win32/vs9/gdk.vcproj ../build/win32/vs10/gdk.vcxproj ../buil
 	done >libgdk.sourcefiles
 	$(CPP) -P - <$(top_srcdir)/build/win32/vs9/gdk.vcprojin >$@
 	rm libgdk.sourcefiles
-	
+
 ../build/win32/vs10/gdk.vcxproj: ../build/win32/vs10/gdk.vcxprojin
 	for F in $(libgdk_3_la_SOURCES); do \
 		case $$F in \
