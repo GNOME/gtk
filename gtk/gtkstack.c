@@ -103,7 +103,7 @@ struct _GtkStackPrivate {
   gboolean homogeneous;
 
   GtkStackTransitionType transition_type;
-  gint transition_duration;
+  guint transition_duration;
 
   GtkStackChildInfo *last_visible_child;
   cairo_surface_t *last_visible_surface;
@@ -216,7 +216,7 @@ gtk_stack_get_property (GObject   *object,
       g_value_set_string (value, gtk_stack_get_visible_child_name (stack));
       break;
     case PROP_TRANSITION_DURATION:
-      g_value_set_int (value, gtk_stack_get_transition_duration (stack));
+      g_value_set_uint (value, gtk_stack_get_transition_duration (stack));
       break;
     case PROP_TRANSITION_TYPE:
       g_value_set_enum (value, gtk_stack_get_transition_type (stack));
@@ -247,7 +247,7 @@ gtk_stack_set_property (GObject     *object,
       gtk_stack_set_visible_child_name (stack, g_value_get_string (value));
       break;
     case PROP_TRANSITION_DURATION:
-      gtk_stack_set_transition_duration (stack, g_value_get_int (value));
+      gtk_stack_set_transition_duration (stack, g_value_get_uint (value));
       break;
     case PROP_TRANSITION_TYPE:
       gtk_stack_set_transition_type (stack, g_value_get_enum (value));
@@ -1101,7 +1101,7 @@ gtk_stack_get_homogeneous (GtkStack *stack)
  *
  * Since: 3.10
  */
-gint
+guint
 gtk_stack_get_transition_duration (GtkStack *stack)
 {
   g_return_val_if_fail (GTK_IS_STACK (stack), 0);
@@ -1123,7 +1123,7 @@ gtk_stack_get_transition_duration (GtkStack *stack)
  */
 void
 gtk_stack_set_transition_duration (GtkStack *stack,
-                                   gint      transition_duration)
+                                   guint     transition_duration)
 {
   g_return_if_fail (GTK_IS_STACK (stack));
 
