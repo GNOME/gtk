@@ -1094,7 +1094,7 @@ gtk_stack_get_homogeneous (GtkStack *stack)
  * gtk_stack_get_transition_duration:
  * @stack: a #GtkStack
  *
- * Returns the amount of time (in milliseconds that
+ * Returns the amount of time (in milliseconds) that
  * transitions between pages in @stack will take.
  *
  * Returns: the transition duration
