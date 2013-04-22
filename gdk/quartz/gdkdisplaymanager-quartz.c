@@ -71,7 +71,4 @@ gdk_quartz_display_manager_class_init (GdkQuartzDisplayManagerClass *class)
   GdkDisplayManagerClass *manager_class = GDK_DISPLAY_MANAGER_CLASS (class);
 
   object_class->finalize = gdk_quartz_display_manager_finalize;
-
-  manager_class->atom_intern = _gdk_quartz_display_manager_atom_intern;
-  manager_class->get_atom_name = _gdk_quartz_display_manager_get_atom_name;
 }

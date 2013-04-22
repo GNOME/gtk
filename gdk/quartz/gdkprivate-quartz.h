@@ -154,14 +154,6 @@ gint        _gdk_quartz_display_text_property_to_utf8_list (GdkDisplay     *disp
 gchar *     _gdk_quartz_display_utf8_to_string_target      (GdkDisplay     *displayt,
                                                             const gchar    *str);
 
-
-/* Display manager methods - events */
-GdkAtom _gdk_quartz_display_manager_atom_intern   (GdkDisplayManager *manager,
-                                                   const gchar       *atom_name,
-                                                   gboolean           copy_name);
-gchar * _gdk_quartz_display_manager_get_atom_name (GdkDisplayManager *manager,
-                                                   GdkAtom            atom);
-
 /* Screen */
 GdkScreen  *_gdk_quartz_screen_new                      (void);
 void        _gdk_quartz_screen_update_window_sizes      (GdkScreen *screen);
