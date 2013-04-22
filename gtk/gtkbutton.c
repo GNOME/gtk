@@ -164,12 +164,20 @@ static void gtk_button_set_related_action        (GtkButton            *button,
 static void gtk_button_set_use_action_appearance (GtkButton            *button,
 						  gboolean              use_appearance);
 
-static void gtk_button_get_preferred_width       (GtkWidget           *widget,
-						  gint                *minimum_size,
-						  gint                *natural_size);
-static void gtk_button_get_preferred_height      (GtkWidget           *widget,
-						  gint                *minimum_size,
-						  gint                *natural_size);
+static void gtk_button_get_preferred_width             (GtkWidget           *widget,
+                                                        gint                *minimum_size,
+                                                        gint                *natural_size);
+static void gtk_button_get_preferred_height            (GtkWidget           *widget,
+                                                        gint                *minimum_size,
+                                                        gint                *natural_size);
+static void gtk_button_get_preferred_width_for_height  (GtkWidget           *widget,
+                                                        gint                 for_size,
+                                                        gint                *minimum_size,
+                                                        gint                *natural_size);
+static void gtk_button_get_preferred_height_for_width  (GtkWidget           *widget,
+                                                        gint                 for_size,
+                                                        gint                *minimum_size,
+                                                        gint                *natural_size);
   
 static guint button_signals[LAST_SIGNAL] = { 0 };
 
@@ -194,8 +202,10 @@ gtk_button_class_init (GtkButtonClass *klass)
   gobject_class->set_property = gtk_button_set_property;
   gobject_class->get_property = gtk_button_get_property;
 
-  widget_class->get_preferred_width  = gtk_button_get_preferred_width;
+  widget_class->get_preferred_width = gtk_button_get_preferred_width;
   widget_class->get_preferred_height = gtk_button_get_preferred_height;
+  widget_class->get_preferred_width_for_height = gtk_button_get_preferred_width_for_height;
+  widget_class->get_preferred_height_for_width = gtk_button_get_preferred_height_for_width;
   widget_class->destroy = gtk_button_destroy;
   widget_class->screen_changed = gtk_button_screen_changed;
   widget_class->realize = gtk_button_realize;
@@ -2062,6 +2072,7 @@ gtk_button_finish_activate (GtkButton *button,
 static void
 gtk_button_get_size (GtkWidget      *widget,
 		     GtkOrientation  orientation,
+                     gint            for_size,
 		     gint           *minimum_size,
 		     gint           *natural_size)
 {
@@ -2130,7 +2141,7 @@ gtk_button_get_preferred_width (GtkWidget *widget,
                                 gint      *minimum_size,
                                 gint      *natural_size)
 {
-  gtk_button_get_size (widget, GTK_ORIENTATION_HORIZONTAL, minimum_size, natural_size);
+  gtk_button_get_size (widget, GTK_ORIENTATION_HORIZONTAL, -1, minimum_size, natural_size);
 }
 
 static void 
@@ -2138,7 +2149,25 @@ gtk_button_get_preferred_height (GtkWidget *widget,
                                  gint      *minimum_size,
                                  gint      *natural_size)
 {
-  gtk_button_get_size (widget, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
+  gtk_button_get_size (widget, GTK_ORIENTATION_VERTICAL, -1, minimum_size, natural_size);
+}
+
+static void 
+gtk_button_get_preferred_width_for_height (GtkWidget *widget,
+                                           gint       for_size,
+                                           gint      *minimum_size,
+                                           gint      *natural_size)
+{
+  gtk_button_get_size (widget, GTK_ORIENTATION_HORIZONTAL, for_size, minimum_size, natural_size);
+}
+
+static void 
+gtk_button_get_preferred_height_for_width (GtkWidget *widget,
+                                           gint       for_size,
+                                           gint      *minimum_size,
+                                           gint      *natural_size)
+{
+  gtk_button_get_size (widget, GTK_ORIENTATION_VERTICAL, for_size, minimum_size, natural_size);
 }
 
 /**
