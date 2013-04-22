@@ -1269,7 +1269,7 @@ gtk_stack_set_visible_child_name (GtkStack   *stack,
 }
 
 /**
- * gtk_stack_set_visible_child_name:
+ * gtk_stack_set_visible_child_full:
  * @stack: a #GtkStack
  * @name: the name of the child to make visible
  * @transition: the transition type to use
