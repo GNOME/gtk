@@ -374,12 +374,12 @@ gtk_stack_class_init (GtkStackClass *klass)
                                                         GTK_PARAM_READWRITE));
   g_object_class_install_property (object_class,
                                    PROP_TRANSITION_DURATION,
-                                   g_param_spec_int ("transition-duration",
-                                                     P_("Transition duration"),
-                                                     P_("The animation duration, in milliseconds"),
-                                                     G_MININT, G_MAXINT,
-                                                     200,
-                                                     GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+                                   g_param_spec_uint ("transition-duration",
+                                                      P_("Transition duration"),
+                                                      P_("The animation duration, in milliseconds"),
+                                                      0, G_MAXUINT,
+                                                      200,
+                                                      GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
   g_object_class_install_property (object_class,
                                    PROP_TRANSITION_TYPE,
                                    g_param_spec_enum ("transition-type",
