@@ -568,6 +568,9 @@ gtk_stack_set_child_property (GtkContainer *container,
   GtkStack *stack = GTK_STACK (container);
   GtkStackPrivate *priv = stack->priv;
   GtkStackChildInfo *info;
+  GtkStackChildInfo *info2;
+  gchar *name;
+  GList *l;
 
   info = find_child_info_for_widget (stack, child);
   if (info == NULL)
@@ -579,8 +582,19 @@ gtk_stack_set_child_property (GtkContainer *container,
   switch (property_id)
     {
     case CHILD_PROP_NAME:
+      name = g_value_dup_string (value);
+      for (l = priv->children; l != NULL; l = l->next)
+        {
+          info2 = l->data;
+          if (g_strcmp0 (info2->name, name) == 0)
+            {
+              g_warning ("Duplicate child name in GtkStack: %s\n", name);
+              break;
+            }
+        }
+
       g_free (info->name);
-      info->name = g_value_dup_string (value);
+      info->name = name;
 
       gtk_container_child_notify (container, child, "name");
 
