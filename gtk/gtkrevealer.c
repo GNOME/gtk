@@ -28,6 +28,34 @@
 #include "gtkintl.h"
 #include <math.h>
 
+/**
+ * SECTION:gtkrevealer
+ * @Short_description: Hide and show with animation
+ * @Title: GtkRevealer
+ * @See_also: #GtkExpander
+ *
+ * The GtkRevealer widget is a container which animates
+ * the transition of its child from invisible to visible.
+ *
+ * The style of transition can be controlled with
+ * gtk_revealer_set_transition_type().
+ *
+ * The GtkRevealer widget was added in GTK+ 3.10.
+ */
+
+/**
+ * GtkRevealerTransitionType:
+ * @GTK_REVEALER_TRANSITION_TYPE_NONE: No transition
+ * @GTK_REVEALER_TRANSITION_TYPE_CROSSFADE: Fade in
+ * @GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT: Slide in from the left
+ * @GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT: Slide in from the right
+ * @GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP: Slide in from the bottom
+ * @GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN: Slide in from the top
+ *
+ * These enumeration values describe the possible transitions
+ * when the child of a #GtkRevealer widget is shown or hidden.
+ */
+
 enum  {
   PROP_0,
   PROP_TRANSITION_TYPE,
@@ -582,6 +610,18 @@ gtk_revealer_real_draw (GtkWidget *widget,
   return TRUE;
 }
 
+/**
+ * gtk_revealer_set_reveal_child:
+ * @revealer: a #GtkRevealer
+ * @reveal_child: %TRUE to reveal the child
+ *
+ * Tells the #GtkRevealer to reveal or conceal its child.
+ *
+ * The transition will be animated with the current
+ * transition type of @revealer.
+ *
+ * Since: 3.10
+ */
 void
 gtk_revealer_set_reveal_child (GtkRevealer *revealer,
                                gboolean     reveal_child)
@@ -594,6 +634,22 @@ gtk_revealer_set_reveal_child (GtkRevealer *revealer,
     gtk_revealer_start_animation (revealer, 0.0);
 }
 
+/**
+ * gtk_revealer_get_reveal_child:
+ * @revealer:
+ *
+ * Returns whether the child is currently
+ * revealed. See gtk_revealer_set_reveal_child().
+ *
+ * This function returns %TRUE as soon as the transition
+ * is to the revealed state is started. To learn whether
+ * the child is fully revealed (ie the transition is completed),
+ * use gtk_revealer_get_child_revealed().
+ *
+ * Return value: %TRUE if the child is revealed.
+ *
+ * Since: 3.10
+ */
 gboolean
 gtk_revealer_get_reveal_child (GtkRevealer *revealer)
 {
@@ -602,6 +658,17 @@ gtk_revealer_get_reveal_child (GtkRevealer *revealer)
   return revealer->priv->target_pos != 0.0;
 }
 
+/**
+ * gtk_revealer_get_child_revealed:
+ * @revealer: a #GtkRevealer
+ *
+ * Returns whether the child is fully revealed, ie wether
+ * the transition to the revealed state is completed.
+ *
+ * Return value: %TRUE if the child is fully revealed
+ *
+ * Since: 3.10
+ */
 gboolean
 gtk_revealer_get_child_revealed (GtkRevealer *revealer)
 {
@@ -718,6 +785,17 @@ gtk_revealer_real_get_preferred_width_for_height (GtkWidget *widget,
     *natural_width_out = natural_width;
 }
 
+/**
+ * gtk_revealer_get_transition_duration:
+ * @revealer: a #GtkRevealer
+ *
+ * Returns the amount of time (in milliseconds) that
+ * transitions will take.
+ *
+ * Returns: the transition duration
+ *
+ * Since: 3.10
+ */
 guint
 gtk_revealer_get_transition_duration (GtkRevealer *revealer)
 {
@@ -726,6 +804,15 @@ gtk_revealer_get_transition_duration (GtkRevealer *revealer)
   return revealer->priv->transition_duration;
 }
 
+/**
+ * gtk_revealer_set_transition_duration:
+ * @revealer: a #GtkRevealer
+ * @duration: the new duration, in milliseconds
+ *
+ * Sets the duration that transitions will take.
+ *
+ * Since: 3.10
+ */
 void
 gtk_revealer_set_transition_duration (GtkRevealer *revealer,
                                       guint        value)
@@ -736,6 +823,17 @@ gtk_revealer_set_transition_duration (GtkRevealer *revealer,
   g_object_notify (G_OBJECT (revealer), "transition-duration");
 }
 
+/**
+ * gtk_revealer_get_transition_type:
+ * @revealer: a #GtkRevealer
+ *
+ * Gets the type of animation that will be used
+ * for transitions in @revealer.
+ *
+ * Return value: the current transition type of @revealer
+ *
+ * Since: 3.10
+ */
 GtkRevealerTransitionType
 gtk_revealer_get_transition_type (GtkRevealer *revealer)
 {
@@ -744,6 +842,17 @@ gtk_revealer_get_transition_type (GtkRevealer *revealer)
   return revealer->priv->transition_type;
 }
 
+/**
+ * gtk_stack_set_transition_type:
+ * @stack: a #GtkStack
+ * @transition: the new transition type
+ *
+ * Sets the type of animation that will be used for
+ * transitions in @revealer. Available types include
+ * various kinds of fades and slides.
+ *
+ * Since: 3.10
+ */
 void
 gtk_revealer_set_transition_type (GtkRevealer               *revealer,
                                   GtkRevealerTransitionType  transition)
