@@ -74,15 +74,15 @@ void                   gtk_stack_set_visible_child_name  (GtkStack              
 const gchar *          gtk_stack_get_visible_child_name  (GtkStack               *stack);
 void                   gtk_stack_set_visible_child_full  (GtkStack               *stack,
                                                           const gchar            *name,
-                                                          GtkStackTransitionType  transition_type);
+                                                          GtkStackTransitionType  transition);
 void                   gtk_stack_set_homogeneous         (GtkStack               *stack,
                                                           gboolean                homogeneous);
 gboolean               gtk_stack_get_homogeneous         (GtkStack               *stack);
 void                   gtk_stack_set_transition_duration (GtkStack               *stack,
-                                                          guint                   transition_duration);
+                                                          guint                   duration);
 guint                  gtk_stack_get_transition_duration (GtkStack               *stack);
 void                   gtk_stack_set_transition_type     (GtkStack               *stack,
-                                                          GtkStackTransitionType  transition_type);
+                                                          GtkStackTransitionType  transition);
 GtkStackTransitionType gtk_stack_get_transition_type     (GtkStack               *stack);
 
 G_END_DECLS

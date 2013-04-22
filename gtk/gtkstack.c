@@ -1112,22 +1112,20 @@ gtk_stack_get_transition_duration (GtkStack *stack)
 /**
  * gtk_stack_set_transition_duration:
  * @stack: a #GtkStack
- * @transition_duration: the new duration, in milliseconds
+ * @duration: the new duration, in milliseconds
  *
  * Sets the duration that transitions between pages in @stack
  * will take.
- *
- * Returns: the transition duration
  *
  * Since: 3.10
  */
 void
 gtk_stack_set_transition_duration (GtkStack *stack,
-                                   guint     transition_duration)
+                                   guint     duration)
 {
   g_return_if_fail (GTK_IS_STACK (stack));
 
-  stack->priv->transition_duration = transition_duration;
+  stack->priv->transition_duration = duration;
   g_object_notify (G_OBJECT (stack), "transition-duration");
 }
 
@@ -1153,7 +1151,7 @@ gtk_stack_get_transition_type (GtkStack *stack)
 /**
  * gtk_stack_set_transition_type:
  * @stack: a #GtkStack
- * @transition_type: the new transition type
+ * @transition: the new transition type
  *
  * Sets the type of animation that will be used for
  * transitions between pages in @stack. Available
@@ -1167,11 +1165,11 @@ gtk_stack_get_transition_type (GtkStack *stack)
  */
 void
 gtk_stack_set_transition_type (GtkStack              *stack,
-                              GtkStackTransitionType  transition_type)
+                              GtkStackTransitionType  transition)
 {
   g_return_if_fail (GTK_IS_STACK (stack));
 
-  stack->priv->transition_type = transition_type;
+  stack->priv->transition_type = transition;
   g_object_notify (G_OBJECT (stack), "transition-type");
 }
 
@@ -1274,7 +1272,7 @@ gtk_stack_set_visible_child_name (GtkStack   *stack,
  * gtk_stack_set_visible_child_name:
  * @stack: a #GtkStack
  * @name: the name of the child to make visible
- * @transition_type: the transition type to use
+ * @transition: the transition type to use
  *
  * Makes the child with the given name visible.
  *
@@ -1283,7 +1281,7 @@ gtk_stack_set_visible_child_name (GtkStack   *stack,
 void
 gtk_stack_set_visible_child_full (GtkStack               *stack,
                                   const gchar            *name,
-                                  GtkStackTransitionType  transition_type)
+                                  GtkStackTransitionType  transition)
 {
   GtkStackPrivate *priv;
   GtkStackChildInfo *child_info, *info;
@@ -1307,7 +1305,7 @@ gtk_stack_set_visible_child_full (GtkStack               *stack,
     }
 
   if (child_info != NULL && gtk_widget_get_visible (child_info->widget))
-    set_visible_child (stack, child_info, transition_type, priv->transition_duration);
+    set_visible_child (stack, child_info, transition, priv->transition_duration);
 }
 
 static void
