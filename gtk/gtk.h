@@ -163,6 +163,7 @@
 #include <gtk/gtkrecentchooserwidget.h>
 #include <gtk/gtkrecentfilter.h>
 #include <gtk/gtkrecentmanager.h>
+#include <gtk/gtkrevealer.h>
 #include <gtk/gtkscale.h>
 #include <gtk/gtkscalebutton.h>
 #include <gtk/gtkscrollable.h>
