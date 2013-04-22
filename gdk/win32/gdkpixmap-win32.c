@@ -293,15 +293,15 @@ _gdk_pixmap_new (GdkDrawable *drawable,
       bmi.u.bmiMasks[1] = visual->green_mask;
       bmi.u.bmiMasks[2] = visual->blue_mask;
 
-      hbitmap = CreateDIBSection (hdc, (BITMAPINFO *) &bmi,
-				  iUsage, (PVOID *) &bits, NULL, 0);
-      GDI_CALL (ReleaseDC, (hwnd, hdc));
-      if (hbitmap == NULL)
+      if ((hbitmap = CreateDIBSection (hdc, (BITMAPINFO *) &bmi,
+				       iUsage, (PVOID *) &bits, NULL, 0)) == NULL)
 	{
 	  WIN32_GDI_FAILED ("CreateDIBSection");
+	  GDI_CALL (ReleaseDC, (hwnd, hdc));
 	  g_object_unref ((GObject *) pixmap);
 	  return NULL;
 	}
+      GDI_CALL (ReleaseDC, (hwnd, hdc));
 
       dib_surface = cairo_image_surface_create_for_data (bits,
 							 format, width, height,
