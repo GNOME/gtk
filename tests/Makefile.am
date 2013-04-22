@@ -131,7 +131,8 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testpixbuf-scale		\
 	testgmenu			\
 	testlogout			\
-	teststack
+	teststack			\
+	testrevealer
 
 if USE_X11
 noinst_PROGRAMS += testerrors
@@ -256,6 +257,7 @@ testpixbuf_scale_DEPENDENCIES = $(TEST_DEPS)
 testgmenu_DEPENDENCIES = $(TEST_DEPS)
 testlogout_DEPENDENCIES = $(TEST_DEPS)
 teststack_DEPENDENCIES = $(TEST_DEPS)
+testrevealer_DEPENDENCIES = $(TEST_DEPS)
 
 animated_resizing_SOURCES = 	\
 	animated-resizing.c	\
@@ -455,6 +457,8 @@ testcolorchooser_SOURCES = testcolorchooser.c
 testkineticscrolling_SOURCES = testkineticscrolling.c
 
 teststack_SOURCES = teststack.c
+
+testrevealer_SOURCES = testrevealer.c
 
 EXTRA_DIST += 			\
 	gradient1.png		\
