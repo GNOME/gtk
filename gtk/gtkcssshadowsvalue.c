@@ -300,3 +300,37 @@ _gtk_css_shadows_value_paint_box (const GtkCssValue   *shadows,
         _gtk_css_shadow_value_paint_box (shadows->values[i], cr, padding_box);
     }
 }
+
+void
+_gtk_css_shadows_value_get_extents (const GtkCssValue *shadows,
+                                    GtkBorder         *border)
+{
+  guint i;
+  GtkBorder b = { 0 };
+  const GtkCssValue *shadow;
+  gdouble hoffset, voffset, spread, radius;
+
+  g_return_if_fail (shadows->class == &GTK_CSS_VALUE_SHADOWS);
+
+  for (i = 0; i < shadows->len; i++)
+    {
+      shadow = shadows->values[i];
+
+      if (_gtk_css_shadow_value_get_inset (shadow))
+        continue;
+
+      _gtk_css_shadow_value_get_geometry (shadow,
+                                          &hoffset, &voffset,
+                                          &radius, &spread);
+
+      b.top = MAX (0, radius + spread - voffset);
+      b.right = MAX (0, radius + spread + hoffset);
+      b.bottom = MAX (0, radius + spread + voffset);
+      b.left = MAX (0, radius + spread - hoffset);
+
+      border->top = MAX (border->top, b.top);
+      border->right = MAX (border->right, b.right);
+      border->bottom = MAX (border->bottom, b.bottom);
+      border->left = MAX (border->left, b.left);
+    }
+}

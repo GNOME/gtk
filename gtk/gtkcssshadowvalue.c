@@ -454,6 +454,26 @@ _gtk_css_shadow_value_get_inset (const GtkCssValue *shadow)
 }
 
 void
+_gtk_css_shadow_value_get_geometry (const GtkCssValue *shadow,
+                                    gdouble           *hoffset,
+                                    gdouble           *voffset,
+                                    gdouble           *radius,
+                                    gdouble           *spread)
+{
+  g_return_if_fail (shadow->class == &GTK_CSS_VALUE_SHADOW);
+
+  if (hoffset != NULL)
+    *hoffset = _gtk_css_number_value_get (shadow->hoffset, 0);
+  if (voffset != NULL)
+    *voffset = _gtk_css_number_value_get (shadow->voffset, 0);
+
+  if (radius != NULL)
+    *radius = _gtk_css_number_value_get (shadow->radius, 0);
+  if (spread != NULL)
+    *spread = _gtk_css_number_value_get (shadow->spread, 0);
+}
+
+void
 _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
                                  cairo_t             *cr,
                                  const GtkRoundedBox *padding_box)

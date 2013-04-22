@@ -49,6 +49,9 @@ void            _gtk_css_shadows_value_paint_box      (const GtkCssValue        
                                                        const GtkRoundedBox      *padding_box,
                                                        gboolean                  inset);
 
+void            _gtk_css_shadows_value_get_extents    (const GtkCssValue        *shadows,
+                                                       GtkBorder                *border);
+
 G_END_DECLS
 
 #endif /* __GTK_CSS_SHADOWS_VALUE_H__ */
