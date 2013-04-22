@@ -657,3 +657,26 @@ gtk_distribute_natural_allocation (gint              extra_space,
 
   return extra_space;
 }
+
+void
+_gtk_widget_get_preferred_size_for_size (GtkWidget      *widget,
+                                         GtkOrientation  orientation,
+                                         gint            size,
+                                         gint           *minimum,
+                                         gint           *natural)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (size >= -1);
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    if (size < 0)
+      gtk_widget_get_preferred_width (widget, minimum, natural);
+    else
+      gtk_widget_get_preferred_width_for_height (widget, size, minimum, natural);
+  else
+    if (size < 0)
+      gtk_widget_get_preferred_height (widget, minimum, natural);
+    else
+      gtk_widget_get_preferred_height_for_width (widget, size, minimum, natural);
+}
+

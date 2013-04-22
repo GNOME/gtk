@@ -2215,25 +2215,6 @@ gtk_notebook_get_preferred_tabs_size (GtkNotebook    *notebook,
 }
 
 static void
-get_preferred_size_for_size (GtkWidget      *widget,
-                             GtkOrientation  orientation,
-                             gint            size,
-                             gint           *minimum,
-                             gint           *natural)
-{
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    if (size < 0)
-      gtk_widget_get_preferred_width (widget, minimum, natural);
-    else
-      gtk_widget_get_preferred_width_for_height (widget, size, minimum, natural);
-  else
-    if (size < 0)
-      gtk_widget_get_preferred_height (widget, minimum, natural);
-    else
-      gtk_widget_get_preferred_height_for_width (widget, size, minimum, natural);
-}
-
-static void
 get_padding_and_border (GtkNotebook *notebook,
                         GtkBorder *border)
 {
@@ -2282,11 +2263,11 @@ gtk_notebook_size_request (GtkWidget      *widget,
       if (gtk_widget_get_visible (page->child))
         {
           vis_pages++;
-          get_preferred_size_for_size (page->child,
-                                       orientation,
-                                       size, 
-                                       &child_minimum,
-                                       &child_natural);
+          _gtk_widget_get_preferred_size_for_size (page->child,
+                                                   orientation,
+                                                   size, 
+                                                   &child_minimum,
+                                                   &child_natural);
 
           *minimum = MAX (*minimum, child_minimum);
           *natural = MAX (*natural, child_natural);

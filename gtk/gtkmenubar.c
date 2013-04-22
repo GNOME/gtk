@@ -50,6 +50,7 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
+#include "gtkwidgetprivate.h"
 
 /* Properties */
 enum {
@@ -309,25 +310,6 @@ gtk_menu_bar_get_property (GObject    *object,
 }
 
 static void
-get_preferred_size_for_size (GtkWidget      *widget,
-                             GtkOrientation  orientation,
-                             gint            size,
-                             gint           *minimum,
-                             gint           *natural)
-{
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    if (size < 0)
-      gtk_widget_get_preferred_width (widget, minimum, natural);
-    else
-      gtk_widget_get_preferred_width_for_height (widget, size, minimum, natural);
-  else
-    if (size < 0)
-      gtk_widget_get_preferred_height (widget, minimum, natural);
-    else
-      gtk_widget_get_preferred_height_for_width (widget, size, minimum, natural);
-}
-
-static void
 gtk_menu_bar_size_request (GtkWidget      *widget,
                            GtkOrientation  orientation,
                            gint            size,
@@ -374,7 +356,7 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
 
       if (gtk_widget_get_visible (child))
         {
-          get_preferred_size_for_size (child, orientation, size, &child_minimum, &child_natural);
+          _gtk_widget_get_preferred_size_for_size (child, orientation, size, &child_minimum, &child_natural);
 
           if (use_toggle_size)
             {

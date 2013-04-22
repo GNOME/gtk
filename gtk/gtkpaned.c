@@ -35,6 +35,7 @@
 #include "gtkorientableprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkwidgetprivate.h"
 #include "a11y/gtkpanedaccessible.h"
 
 /**
@@ -870,25 +871,6 @@ gtk_paned_finalize (GObject *object)
 }
 
 static void
-get_preferred_size_for_size (GtkWidget      *widget,
-                             GtkOrientation  orientation,
-                             gint            size,
-                             gint           *minimum,
-                             gint           *natural)
-{
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    if (size < 0)
-      gtk_widget_get_preferred_width (widget, minimum, natural);
-    else
-      gtk_widget_get_preferred_width_for_height (widget, size, minimum, natural);
-  else
-    if (size < 0)
-      gtk_widget_get_preferred_height (widget, minimum, natural);
-    else
-      gtk_widget_get_preferred_height_for_width (widget, size, minimum, natural);
-}
-
-static void
 gtk_paned_get_preferred_size (GtkWidget      *widget,
                               GtkOrientation  orientation,
                               gint            size,
@@ -903,7 +885,7 @@ gtk_paned_get_preferred_size (GtkWidget      *widget,
 
   if (priv->child1 && gtk_widget_get_visible (priv->child1))
     {
-      get_preferred_size_for_size (priv->child1, orientation, size, &child_min, &child_nat);
+      _gtk_widget_get_preferred_size_for_size (priv->child1, orientation, size, &child_min, &child_nat);
       if (priv->child1_shrink && priv->orientation == orientation)
         *minimum = 0;
       else
@@ -913,7 +895,7 @@ gtk_paned_get_preferred_size (GtkWidget      *widget,
 
   if (priv->child2 && gtk_widget_get_visible (priv->child2))
     {
-      get_preferred_size_for_size (priv->child2, orientation, size, &child_min, &child_nat);
+      _gtk_widget_get_preferred_size_for_size (priv->child2, orientation, size, &child_min, &child_nat);
 
       if (priv->orientation == orientation)
         {
