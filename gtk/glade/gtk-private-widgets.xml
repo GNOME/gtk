@@ -22,7 +22,6 @@
 	<property id="size" disabled="True"/>
       </properties>
     </glade-widget-class>
-    <glade-widget-class name="GtkPlacesSidebar" generic-name="placessidebar" title="Places Sidebar"/>
   </glade-widget-classes>
   
   <glade-widget-group name="gtk-private" title="Private GTK+ Classes">
@@ -33,6 +32,5 @@
     <glade-widget-class-ref name="GtkScaleButtonScale"/>
     <glade-widget-class-ref name="ShortcutsPaneModelFilter"/>
     <glade-widget-class-ref name="GtkPrinterOptionWidget"/>
-    <glade-widget-class-ref name="GtkPlacesSidebar"/>
   </glade-widget-group>
 </glade-catalog>
