@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-03-25 18:34+0000\n"
-"PO-Revision-Date: 2013-04-20 14:27+0500\n"
+"PO-Revision-Date: 2013-04-22 13:11+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: \n"
 "Language: Tajik\n"
@@ -412,10 +412,9 @@ msgid "WebCam"
 msgstr "Веб-камера"
 
 #: ../gdk/keyname-table.h:4013
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Display"
-msgstr "Дисплей"
+msgstr "Display"
 
 #: ../gdk/keyname-table.h:4014
 msgctxt "keyboard label"
@@ -474,11 +473,10 @@ msgid "Opening %s"
 msgstr ""
 
 #: ../gdk/x11/gdkapplaunchcontext-x11.c:310
-#, fuzzy, c-format
+#, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
-msgstr[0] "Илова кардани объект"
-msgstr[1] ""
+msgstr[0] ""
 
 #: ../gtk/a11y/gtkbooleancellaccessible.c:43
 #, fuzzy
@@ -1171,9 +1169,8 @@ msgstr "Беэътимод"
 #. * acelerator.
 #.
 #: ../gtk/gtkcellrendereraccel.c:416 ../gtk/gtkcellrendereraccel.c:747
-#, fuzzy
 msgid "New accelerator…"
-msgstr "<i>_Намоиши нав...</i>"
+msgstr "Суръатафзои нав…"
 
 #: ../gtk/gtkcellrendererprogress.c:372 ../gtk/gtkcellrendererprogress.c:462
 #, c-format
@@ -1186,7 +1183,6 @@ msgid "Pick a Color"
 msgstr "Интихоби ранг"
 
 #: ../gtk/gtkcolorchooserdialog.c:162
-#, fuzzy
 msgid "Select a Color"
 msgstr "Интихоби ранг"
 
@@ -1475,9 +1471,8 @@ msgstr "_Фармоишдиҳӣ"
 #. * it isn't default:mm or default:inch it will not work
 #.
 #: ../gtk/gtkcustompaperunixdialog.c:115
-#, fuzzy
 msgid "default:mm"
-msgstr "Андозаи пешфарз:"
+msgstr "пешфарз:мм"
 
 #. And show the custom paper dialog
 #: ../gtk/gtkcustompaperunixdialog.c:397 ../gtk/gtkprintunixdialog.c:3275
@@ -1490,7 +1485,7 @@ msgstr "дюйм"
 
 #: ../gtk/gtkcustompaperunixdialog.c:560 ../gtk/gtkpagesetupunixdialog.c:776
 msgid "mm"
-msgstr ""
+msgstr "мм"
 
 #: ../gtk/gtkcustompaperunixdialog.c:605
 msgid "Margins from Printer…"
@@ -1601,7 +1596,7 @@ msgstr "(Ҳеҷ)"
 
 #: ../gtk/gtkfilechooserbutton.c:2198
 msgid "Other…"
-msgstr ""
+msgstr "Дигар..."
 
 #: ../gtk/gtkfilechooserdefault.c:152
 #, fuzzy
@@ -2049,9 +2044,8 @@ msgstr ""
 
 #. Placeholder in --gtk-module=MODULES in --help output
 #: ../gtk/gtkmain.c:447
-#, fuzzy
 msgid "MODULES"
-msgstr "Модулҳои боршаванда"
+msgstr "МОДУЛҲО"
 
 #. Description of --g-fatal-warnings in --help output
 #: ../gtk/gtkmain.c:449
@@ -2074,9 +2068,8 @@ msgstr ""
 #. * it isn't default:LTR or default:RTL it will not work
 #.
 #: ../gtk/gtkmain.c:703
-#, fuzzy
 msgid "default:LTR"
-msgstr "Андозаи пешфарз:"
+msgstr "пешфарз:LTR"
 
 #: ../gtk/gtkmain.c:768
 #, fuzzy, c-format
@@ -2263,9 +2256,8 @@ msgid "Authentication"
 msgstr "_Санҷиши ҳаққоният"
 
 #: ../gtk/gtkprinteroptionwidget.c:546
-#, fuzzy
 msgid "Select a filename"
-msgstr "Номи файли пойгоҳи иттилоотӣ"
+msgstr "Интихоби номи файл"
 
 #: ../gtk/gtkprinteroptionwidget.c:770
 msgid "Not available"
@@ -2380,9 +2372,8 @@ msgid "Custom size"
 msgstr "Андозаи равзана"
 
 #: ../gtk/gtkprintoperation-win32.c:1537
-#, fuzzy
 msgid "No printer found"
-msgstr "Тамосҳо дарёфт нашудаанд"
+msgstr "Ягон принтер ёфт нашуд"
 
 #: ../gtk/gtkprintoperation-win32.c:1564
 msgid "Invalid argument to CreateDC"
@@ -2677,7 +2668,7 @@ msgstr "_Ҳозир"
 
 #: ../gtk/gtkprintunixdialog.c:3603
 msgid "A_t:"
-msgstr ""
+msgstr "_Дар:"
 
 #. Translators: Ability to parse the am/pm format depends on actual locale.
 #. * You can remove the am/pm values below for your locale if they are not
@@ -2810,9 +2801,8 @@ msgstr ""
 #. * recent chooser menu widget.
 #.
 #: ../gtk/gtkrecentchoosermenu.c:360
-#, fuzzy
 msgid "No items found"
-msgstr "Тамосҳо дарёфт нашудаанд"
+msgstr "Ягон объект ёфт нашуд"
 
 #: ../gtk/gtkrecentchoosermenu.c:526 ../gtk/gtkrecentchoosermenu.c:582
 #, c-format
@@ -2953,10 +2943,9 @@ msgid "_Delete"
 msgstr "_Нест кардан"
 
 #: ../gtk/gtkstock.c:345
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Discard"
-msgstr "&Рад кардан"
+msgstr "_Рад кардан"
 
 #: ../gtk/gtkstock.c:346
 msgctxt "Stock label"
@@ -3619,7 +3608,7 @@ msgstr "%d %%"
 #: ../gtk/paper_names_offsets.c:4
 msgctxt "paper size"
 msgid "asme_f"
-msgstr ""
+msgstr "asme_f"
 
 #: ../gtk/paper_names_offsets.c:5
 msgctxt "paper size"
@@ -3798,37 +3787,37 @@ msgstr "A9"
 #: ../gtk/paper_names_offsets.c:39
 msgctxt "paper size"
 msgid "B0"
-msgstr ""
+msgstr "B0"
 
 #: ../gtk/paper_names_offsets.c:40
 msgctxt "paper size"
 msgid "B1"
-msgstr ""
+msgstr "B1"
 
 #: ../gtk/paper_names_offsets.c:41
 msgctxt "paper size"
 msgid "B10"
-msgstr ""
+msgstr "B10"
 
 #: ../gtk/paper_names_offsets.c:42
 msgctxt "paper size"
 msgid "B2"
-msgstr ""
+msgstr "B2"
 
 #: ../gtk/paper_names_offsets.c:43
 msgctxt "paper size"
 msgid "B3"
-msgstr ""
+msgstr "B3"
 
 #: ../gtk/paper_names_offsets.c:44
 msgctxt "paper size"
 msgid "B4"
-msgstr ""
+msgstr "B4"
 
 #: ../gtk/paper_names_offsets.c:45
 msgctxt "paper size"
 msgid "B5"
-msgstr ""
+msgstr "B5"
 
 #: ../gtk/paper_names_offsets.c:46
 #, fuzzy
@@ -3839,27 +3828,27 @@ msgstr "Зичи изофӣ"
 #: ../gtk/paper_names_offsets.c:47
 msgctxt "paper size"
 msgid "B6"
-msgstr ""
+msgstr "B6"
 
 #: ../gtk/paper_names_offsets.c:48
 msgctxt "paper size"
 msgid "B6/C4"
-msgstr ""
+msgstr "B6/C4"
 
 #: ../gtk/paper_names_offsets.c:49
 msgctxt "paper size"
 msgid "B7"
-msgstr ""
+msgstr "B7"
 
 #: ../gtk/paper_names_offsets.c:50
 msgctxt "paper size"
 msgid "B8"
-msgstr ""
+msgstr "B8"
 
 #: ../gtk/paper_names_offsets.c:51
 msgctxt "paper size"
 msgid "B9"
-msgstr ""
+msgstr "B9"
 
 #: ../gtk/paper_names_offsets.c:52
 msgctxt "paper size"
@@ -4130,32 +4119,32 @@ msgstr "Лифофаи a2"
 #: ../gtk/paper_names_offsets.c:105
 msgctxt "paper size"
 msgid "Arch A"
-msgstr ""
+msgstr "Arch A"
 
 #: ../gtk/paper_names_offsets.c:106
 msgctxt "paper size"
 msgid "Arch B"
-msgstr ""
+msgstr "Arch B"
 
 #: ../gtk/paper_names_offsets.c:107
 msgctxt "paper size"
 msgid "Arch C"
-msgstr ""
+msgstr "Arch C"
 
 #: ../gtk/paper_names_offsets.c:108
 msgctxt "paper size"
 msgid "Arch D"
-msgstr ""
+msgstr "Arch D"
 
 #: ../gtk/paper_names_offsets.c:109
 msgctxt "paper size"
 msgid "Arch E"
-msgstr ""
+msgstr "Arch E"
 
 #: ../gtk/paper_names_offsets.c:110
 msgctxt "paper size"
 msgid "b-plus"
-msgstr ""
+msgstr "b-plus"
 
 #: ../gtk/paper_names_offsets.c:111
 msgctxt "paper size"
@@ -4406,7 +4395,7 @@ msgstr "Лифофаи prc10"
 #: ../gtk/paper_names_offsets.c:157
 msgctxt "paper size"
 msgid "prc 16k"
-msgstr ""
+msgstr "prc 16k"
 
 #: ../gtk/paper_names_offsets.c:158
 msgctxt "paper size"
@@ -4421,7 +4410,7 @@ msgstr "Лифофаи prc3"
 #: ../gtk/paper_names_offsets.c:160
 msgctxt "paper size"
 msgid "prc 32k"
-msgstr ""
+msgstr "prc 32k"
 
 #: ../gtk/paper_names_offsets.c:161
 msgctxt "paper size"
