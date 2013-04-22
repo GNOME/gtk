@@ -219,7 +219,7 @@ gtk_stack_get_property (GObject   *object,
       g_value_set_int (value, gtk_stack_get_transition_duration (stack));
       break;
     case PROP_TRANSITION_TYPE:
-      g_value_set_int (value, gtk_stack_get_transition_type (stack));
+      g_value_set_enum (value, gtk_stack_get_transition_type (stack));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -250,7 +250,7 @@ gtk_stack_set_property (GObject     *object,
       gtk_stack_set_transition_duration (stack, g_value_get_int (value));
       break;
     case PROP_TRANSITION_TYPE:
-      gtk_stack_set_transition_type (stack, g_value_get_int (value));
+      gtk_stack_set_transition_type (stack, g_value_get_enum (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -382,13 +382,12 @@ gtk_stack_class_init (GtkStackClass *klass)
                                                      GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
   g_object_class_install_property (object_class,
                                    PROP_TRANSITION_TYPE,
-                                   g_param_spec_int ("transition-type",
-                                                     P_("Transition type"),
-                                                     P_("The type of animation used to transition"),
-                                                     GTK_STACK_TRANSITION_TYPE_NONE,
-                                                     G_MAXINT,
-                                                     GTK_STACK_TRANSITION_TYPE_NONE,
-                                                     GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+                                   g_param_spec_enum ("transition-type",
+                                                      P_("Transition type"),
+                                                      P_("The type of animation used to transition"),
+                                                      GTK_TYPE_STACK_TRANSITION_TYPE,
+                                                      GTK_STACK_TRANSITION_TYPE_NONE,
+                                                      GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 
   gtk_container_class_install_child_property (container_class, CHILD_PROP_NAME,
     g_param_spec_string ("name",
