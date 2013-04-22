@@ -41,7 +41,7 @@ main (gint argc,
   gtk_revealer_set_transition_duration (GTK_REVEALER (revealer), 2000);
   gtk_grid_attach (GTK_GRID (box), revealer, 1, 0, 1, 1);
 
-  widget = gtk_toggle_button_new_with_label ("None");
+  widget = gtk_toggle_button_new_with_label ("Fade");
   gtk_grid_attach (GTK_GRID (box), widget, 4, 4, 1, 1);
   revealer = gtk_revealer_new ();
   gtk_widget_set_halign (revealer, GTK_ALIGN_END);
@@ -50,7 +50,7 @@ main (gint argc,
   gtk_entry_set_text (GTK_ENTRY (entry), "00000");
   gtk_container_add (GTK_CONTAINER (revealer), entry);
   g_object_bind_property (widget, "active", revealer, "reveal-child", 0);
-  gtk_revealer_set_transition_type (GTK_REVEALER (revealer), GTK_REVEALER_TRANSITION_TYPE_NONE);
+  gtk_revealer_set_transition_type (GTK_REVEALER (revealer), GTK_REVEALER_TRANSITION_TYPE_CROSSFADE);
   gtk_revealer_set_transition_duration (GTK_REVEALER (revealer), 2000);
   gtk_grid_attach (GTK_GRID (box), revealer, 3, 4, 1, 1);
 

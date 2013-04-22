@@ -439,7 +439,15 @@ gtk_revealer_set_position (GtkRevealer *revealer,
       new_visible != gtk_widget_get_child_visible (child))
     gtk_widget_set_child_visible (child, new_visible);
 
-  gtk_widget_queue_resize (GTK_WIDGET (revealer));
+  if (priv->transition_type == GTK_REVEALER_TRANSITION_TYPE_CROSSFADE)
+    {
+      gtk_widget_set_opacity (GTK_WIDGET (revealer), priv->current_pos);
+      gtk_widget_queue_draw (GTK_WIDGET (revealer));
+    }
+  else
+    {
+      gtk_widget_queue_resize (GTK_WIDGET (revealer));
+    }
 
   if (priv->current_pos == priv->target_pos)
     g_object_notify (G_OBJECT (revealer), "child-revealed");
@@ -480,7 +488,6 @@ gtk_revealer_animate_cb (GtkRevealer   *revealer,
   gtk_revealer_animate_step (revealer, now);
   if (priv->current_pos == priv->target_pos)
     {
-      gtk_widget_set_opacity (GTK_WIDGET (revealer), 1.0);
       priv->tick_id = 0;
       return FALSE;
     }
@@ -505,8 +512,6 @@ gtk_revealer_start_animation (GtkRevealer *revealer,
       priv->transition_duration != 0 &&
       priv->transition_type != GTK_REVEALER_TRANSITION_TYPE_NONE)
     {
-      gtk_widget_set_opacity (widget, 0.999);
-
       priv->source_pos = priv->current_pos;
       priv->start_time = gdk_frame_clock_get_frame_time (gtk_widget_get_frame_clock (widget));
       priv->end_time = priv->start_time + (priv->transition_duration * 1000);
