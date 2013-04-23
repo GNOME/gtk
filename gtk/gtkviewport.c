@@ -656,9 +656,9 @@ gtk_viewport_get_view_window (GtkViewport *viewport)
   return viewport->priv->view_window;
 }
 
-static gboolean
-gtk_viewport_bin_window_update_handler (GdkWindow *window,
-					cairo_region_t *region)
+static void
+gtk_viewport_bin_window_invalidate_handler (GdkWindow *window,
+					    cairo_region_t *region)
 {
   gpointer widget;
   GtkViewport *viewport;
@@ -685,8 +685,6 @@ gtk_viewport_bin_window_update_handler (GdkWindow *window,
   r.width = priv->backing_surface_w;
   r.height = priv->backing_surface_h;
   cairo_region_intersect_rectangle (priv->backing_surface_dirty, &r);
-
-  return TRUE;
 }
 
 static void
@@ -753,8 +751,8 @@ gtk_viewport_realize (GtkWidget *widget)
 
   priv->bin_window = gdk_window_new (priv->view_window, &attributes, attributes_mask);
   gtk_widget_register_window (widget, priv->bin_window);
-  gdk_window_set_update_handler (priv->bin_window,
-				 gtk_viewport_bin_window_update_handler);
+  gdk_window_set_invalidate_handler (priv->bin_window,
+				     gtk_viewport_bin_window_invalidate_handler);
 
   child = gtk_bin_get_child (bin);
   if (child)
