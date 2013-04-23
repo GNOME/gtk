@@ -55,6 +55,23 @@ Duis eu lectus quam. Vivamus eget metus a mauris molestie venenatis pulvinar ele
 Nulla facilisi. Pellentesque at dolor sit amet purus dapibus pulvinar molestie quis neque.
 Suspendisse feugiat quam quis dolor accumsan cursus. </property>
   </object>
+  <object class="GtkTextBuffer" id="textbuffer2">
+    <property name="text">* Translation updates:
+ Aragonese
+ Assamese
+ Basque
+ Brazilian Portuguese
+ Dutch
+ German
+ Hebrew
+ Hungarian
+ Polish
+ Portuguese
+ Serbian
+ Slovenian
+ Spanish
+ Uyghur</property>
+  </object>
   <object class="GtkAccelGroup" id="accelgroup1"/>
   <object class="GtkWindow" id="window">
     <property name="can_focus">False</property>
@@ -2146,30 +2163,158 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
               </object>
             </child>
             <child>
-              <object class="GtkBox" id="page2">
+              <object class="GtkOverlay" id="page2">
                 <property name="visible">True</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">6</property>
-                <property name="border-width">6</property>
-                <child>
-                  <object class="GtkBox" id="page2box1">
+                <child type="overlay">
+                  <object class="GtkRevealer" id="page2revealer">
                     <property name="visible">True</property>
-                    <property name="orientation">horizontal</property>
-                    <property name="spacing">4</property>
+                    <property name="halign">center</property>
+                    <property name="valign">start</property>
                     <child>
-                      <object class="GtkSpinButton" id="verticalspin1">
+                      <object class="GtkFrame" id="page2frame">
                         <property name="visible">True</property>
-                        <property name="orientation">vertical</property>
-                        <property name="adjustment">adjustment2</property>
+                        <property name="margin-top">2</property>
+                        <child>
+                          <object class="GtkBox" id="page2box">
+                            <property name="visible">True</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
+                            <property name="margin-left">10</property>
+                            <property name="margin-right">10</property>
+                            <property name="spacing">20</property>
+                            <child>
+                              <object class="GtkLabel" id="page2note">
+                                <property name="visible">True</property>
+                                <property name="hexpand">True</property>
+                                <property name="halign">start</property>
+                                <property name="label">NEWS!</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="page2dismiss">
+                                <property name="visible">True</property>
+                                <child>
+                                  <object class="GtkImage" id="page2dismissi">
+                                    <property name="visible">True</property>
+                                    <property name="icon-name">window-close-symbolic</property>
+                                    <property name="icon-size">0</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                     </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkGrid" id="page2grid">
+                    <property name="visible">True</property>
+                    <property name="column-homogeneous">True</property>
+                    <property name="row-spacing">6</property>
+                    <property name="column-spacing">6</property>
+                    <property name="border-width">6</property>
                     <child>
-                      <object class="GtkSpinButton" id="verticalspin2">
+                      <object class="GtkBox" id="page2box1">
                         <property name="visible">True</property>
-                        <property name="sensitive">False</property>
-                        <property name="orientation">vertical</property>
-                        <property name="adjustment">adjustment1</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="spacing">4</property>
+                        <child>
+                          <object class="GtkSpinButton" id="verticalspin1">
+                            <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
+                            <property name="adjustment">adjustment2</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkSpinButton" id="verticalspin2">
+                            <property name="visible">True</property>
+                            <property name="sensitive">False</property>
+                            <property name="orientation">vertical</property>
+                            <property name="adjustment">adjustment1</property>
+                          </object>
+                        </child>
                       </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="filler1">
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="filler2">
+                        <property name="visible">True</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">2</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkStackSwitcher" id="switcher">
+                        <property name="visible">True</property>
+                        <property name="stack">stack</property>
+                        <property name="halign">center</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkFrame" id="frame">
+                        <property name="visible">True</property>
+                        <property name="hexpand">False</property>
+                        <child>
+                          <object class="GtkStack" id="stack">
+                            <property name="visible">True</property>
+                            <property name="transition-type">crossfade</property>
+                            <property name="transition-duration">1000</property>
+                            <child>
+                              <object class="GtkScrolledWindow" id="swo">
+                                <property name="visible">True</property>
+                                <property name="shadow-type">none</property>
+                                <child>
+                                  <object class="GtkTextView" id="tvo">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="buffer">textbuffer2</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="name">page1</property>
+                                <property name="icon-name">document-open-recent-symbolic</property>
+                                <property name="title">News</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkImage" id="imageo">
+                                <property name="visible">True</property>
+                                <property name="resource">/logos/gtk-logo-256.png</property>
+                              </object>
+                              <packing>
+                                <property name="name">page2</property>
+                                <property name="icon-name">system-shutdown-symbolic</property>
+                                <property name="title">Logo</property>
+                              </packing>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
+                      </packing>
                     </child>
                   </object>
                 </child>

@@ -78,6 +78,35 @@ on_page_toggled (GtkToggleButton *button,
   gtk_notebook_set_current_page (pages, page);
 }
 
+static void
+spin_value_changed (GtkAdjustment *adjustment, GtkWidget *label)
+{
+  GtkWidget *w;
+  gint v;
+  gchar *text;
+
+  v = (int)gtk_adjustment_get_value (adjustment);
+
+  if ((v % 3) == 0)
+    {
+      text = g_strdup_printf ("%d is a multiple of 3", v);
+      gtk_label_set_label (GTK_LABEL (label), text);
+      g_free (text);
+    }
+
+  w = gtk_widget_get_ancestor (label, GTK_TYPE_REVEALER);
+  gtk_revealer_set_reveal_child (GTK_REVEALER (w), (v % 3) == 0);
+}
+
+static void
+dismiss (GtkWidget *button)
+{
+  GtkWidget *w;
+
+  w = gtk_widget_get_ancestor (button, GTK_TYPE_REVEALER);
+  gtk_revealer_set_reveal_child (GTK_REVEALER (w), FALSE);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -86,6 +115,7 @@ main (int argc, char *argv[])
   GtkWidget  *widget;
   GtkWidget  *notebook;
   gboolean    dark = FALSE;
+  GtkAdjustment *adj;
 
   gtk_init (&argc, &argv);
 
@@ -113,6 +143,14 @@ main (int argc, char *argv[])
 
   widget = (GtkWidget*) gtk_builder_get_object (builder, "aboutmenuitem");
   g_signal_connect (widget, "activate", G_CALLBACK (show_about), window);
+
+  widget = (GtkWidget*) gtk_builder_get_object (builder, "page2dismiss");
+  g_signal_connect (widget, "clicked", G_CALLBACK (dismiss), NULL);
+
+  widget = (GtkWidget*) gtk_builder_get_object (builder, "page2note");
+  adj = (GtkAdjustment *) gtk_builder_get_object (builder, "adjustment2");
+  g_signal_connect (adj, "value-changed",
+                    G_CALLBACK (spin_value_changed), widget);
 
   g_object_unref (G_OBJECT (builder));
 
