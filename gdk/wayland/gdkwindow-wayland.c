@@ -1626,16 +1626,17 @@ gdk_wayland_window_process_updates_recurse (GdkWindow      *window,
   if (impl->cairo_surface)
     gdk_wayland_window_attach_image (window);
 
+  _gdk_window_process_updates_recurse (window, region);
+
   n = cairo_region_num_rectangles(region);
   for (i = 0; i < n; i++)
     {
       cairo_region_get_rectangle (region, i, &rect);
       wl_surface_damage (impl->surface,
                          rect.x, rect.y, rect.width, rect.height);
-      wl_surface_commit(impl->surface);
     }
 
-  _gdk_window_process_updates_recurse (window, region);
+  wl_surface_commit (impl->surface);
 }
 
 static void
