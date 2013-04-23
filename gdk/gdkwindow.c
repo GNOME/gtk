@@ -3662,11 +3662,28 @@ gdk_window_invalidate_rect (GdkWindow          *window,
   gdk_window_invalidate_rect_full (window, rect, invalidate_children);
 }
 
+/**
+ * gdk_window_set_invalidate_handler:
+ * @window: a #GdkWindow
+ * @handler: a #GdkWindowInvalidateHandlerFunc callback function
+ *
+ * Registers an invalidate handler for a specific window. This
+ * will get called whenever a region in the window or its children
+ * is invalidated.
+ *
+ * This can be used to record the invalidated region, which is
+ * useful if you are keeping an offscreen copy of some region
+ * and want to keep it up to date. You can also modify the
+ * invalidated region in case you're doing some effect where
+ * e.g. a child widget appears in multiple places.
+ *
+ * Since: 3.10
+ **/
 void
-gdk_window_set_update_handler (GdkWindow *window,
-			       GdkWindowUpdateHandlerFunc handler)
+gdk_window_set_invalidate_handler (GdkWindow *window,
+				   GdkWindowInvalidateHandlerFunc handler)
 {
-  window->update_handler = handler;
+  window->invalidate_handler = handler;
 }
 
 static void
@@ -3793,11 +3810,8 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
 	}
       else
 	{
-	  if (window->update_handler)
-	    {
-	      if (!window->update_handler (window, visible_region))
-		break;
-	    }
+	  if (window->invalidate_handler)
+	    window->invalidate_handler (window, visible_region);
 	  cairo_region_translate (visible_region,
 				  window->x, window->y);
 	  window = window->parent;

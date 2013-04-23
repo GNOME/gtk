@@ -633,10 +633,26 @@ gboolean gdk_window_set_static_gravities (GdkWindow *window,
                                           gboolean   use_static);
 
 /* GdkWindow */
-typedef gboolean (*GdkWindowUpdateHandlerFunc)  (GdkWindow *window,
+
+/**
+ * GdkWindowInvalidateHandlerFunc:
+ * @window: a #GdkWindow
+ * @region: a #cairo_region_t
+ *
+ * Whenever some area of the window is invalidated (directly in the
+ * window or in a child window) this gets called with @region in
+ * the coordinate space of @window. You can use @region to just
+ * keep track of the dirty region, or you can actually change
+ * @region in case you are doing display tricks like showing
+ * a child in multiple places.
+ *
+ * Since: 3.10
+ */
+typedef void (*GdkWindowInvalidateHandlerFunc)  (GdkWindow *window,
 						 cairo_region_t *region);
-void gdk_window_set_update_handler (GdkWindow *window,
-				    GdkWindowUpdateHandlerFunc handler);
+GDK_AVAILABLE_IN_3_10
+void gdk_window_set_invalidate_handler (GdkWindow *window,
+					GdkWindowInvalidateHandlerFunc handler);
 
 gboolean      gdk_window_has_native         (GdkWindow       *window);
 void              gdk_window_set_type_hint (GdkWindow        *window,
