@@ -89,11 +89,9 @@ const gchar*      _gtk_widget_get_accel_path               (GtkWidget *widget,
 
 AtkObject *       _gtk_widget_peek_accessible              (GtkWidget *widget);
 
+GdkWindow *       _gtk_cairo_get_event_window              (cairo_t *cr);
 GdkEventExpose *  _gtk_cairo_get_event                     (cairo_t *cr);
 
-void              _gtk_widget_draw_internal                (GtkWidget *widget,
-                                                            cairo_t   *cr,
-                                                            gboolean   clip_to_size);
 void              _gtk_widget_set_has_default              (GtkWidget *widget,
                                                             gboolean   has_default);
 void              _gtk_widget_set_has_grab                 (GtkWidget *widget,
