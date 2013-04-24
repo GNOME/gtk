@@ -89,7 +89,6 @@ gboolean        _gtk_window_titlebar_shows_app_menu (GtkWindow *window);
 void            _gtk_window_get_shadow_width (GtkWindow *window,
                                               GtkBorder *border);
 
-gboolean        _gtk_window_get_maximized (GtkWindow *window);
 void            _gtk_window_toggle_maximized (GtkWindow *window);
 
 G_END_DECLS

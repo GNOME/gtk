@@ -280,6 +280,8 @@ enum {
   PROP_MNEMONICS_VISIBLE,
   PROP_FOCUS_VISIBLE,
 
+  PROP_IS_MAXIMIZED,
+
   LAST_ARG
 };
 
@@ -1075,6 +1077,14 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 
+  g_object_class_install_property (gobject_class,
+                                   PROP_IS_MAXIMIZED,
+                                   g_param_spec_boolean ("is-maximized",
+                                                         P_("Is maximized"),
+                                                         P_("Whether the window is maximized"),
+                                                         FALSE,
+                                                         GTK_PARAM_READABLE));
+
   /* Style properties.
    */
   gtk_widget_class_install_style_property (widget_class,
@@ -1233,10 +1243,28 @@ gtk_window_class_init (GtkWindowClass *klass)
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_WINDOW_ACCESSIBLE);
 }
 
+/**
+ * gtk_window_is_maximized:
+ * @window: a #GtkWindow
+ *
+ * Retrieves the current maximized state of @window.
+ *
+ * Note that since maximization is ultimately handled by the window
+ * manager and happens asynchronously to an application request, you
+ * shouldn't assume the return value of this function changing
+ * immediately (or at all), as an effect of calling
+ * gtk_window_maximize() or gtk_window_unmaximize().
+ *
+ * Returns: whether the window has a maximized state.
+ *
+ * Since: 3.12
+ */
 gboolean
-_gtk_window_get_maximized (GtkWindow *window)
+gtk_window_is_maximized (GtkWindow *window)
 {
   GtkWindowPrivate *priv = window->priv;
+
+  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
 
   return priv->maximized;
 }
@@ -1593,6 +1621,9 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_FOCUS_VISIBLE:
       g_value_set_boolean (value, priv->focus_visible);
+      break;
+    case PROP_IS_MAXIMIZED:
+      g_value_set_boolean (value, gtk_window_is_maximized (window));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -6776,6 +6807,7 @@ gtk_window_state_event (GtkWidget           *widget,
     {
       priv->maximized =
         (event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED) ? 1 : 0;
+      g_object_notify (G_OBJECT (widget), "is-maximized");
     }
 
   if (event->changed_mask & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_TILED))
@@ -9696,8 +9728,9 @@ gtk_window_unstick (GtkWindow *window)
  * initially.
  *
  * You can track maximization via the "window-state-event" signal
- * on #GtkWidget.
- * 
+ * on #GtkWidget, or by listening to notifications on the
+ * #GtkWindow:is-maximized property.
+ *
  **/
 void
 gtk_window_maximize (GtkWindow *window)

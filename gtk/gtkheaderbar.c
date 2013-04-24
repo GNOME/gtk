@@ -433,7 +433,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                        type_hint == GDK_WINDOW_TYPE_HINT_NORMAL)
                 {
                   const gchar *icon_name;
-                  gboolean maximized = _gtk_window_get_maximized (window);
+                  gboolean maximized = gtk_window_is_maximized (window);
 
                   icon_name = maximized ? "window-restore-symbolic" : "window-maximize-symbolic";
                   button = gtk_button_new ();
