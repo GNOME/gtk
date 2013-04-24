@@ -926,7 +926,7 @@ gtk_viewport_draw (GtkWidget *widget,
 	  priv->backing_surface_dirty = NULL;
 	}
 
-      if (gtk_cairo_should_draw_window (cr, priv->view_window))
+      if (gtk_cairo_should_draw_window (cr, priv->bin_window))
 	{
 	  gdk_window_get_position (priv->view_window, &x, &y);
 	  cairo_set_source_surface (cr, priv->backing_surface,
@@ -941,16 +941,19 @@ gtk_viewport_draw (GtkWidget *widget,
   else
     {
       /* Don't use backing_surface */
-      gdk_window_get_position (priv->view_window, &x, &y);
-      cairo_rectangle (cr, x, y,
-                       gdk_window_get_width (priv->view_window),
-                       gdk_window_get_height (priv->view_window));
-      cairo_clip (cr);
-      gdk_window_get_position (priv->bin_window, &x, &y);
-      gtk_render_background (context, cr, x, y,
-                             gdk_window_get_width (priv->bin_window),
-                             gdk_window_get_height (priv->bin_window));
-      GTK_WIDGET_CLASS (gtk_viewport_parent_class)->draw (widget, cr);
+      if (gtk_cairo_should_draw_window (cr, priv->bin_window))
+	{
+	  gdk_window_get_position (priv->view_window, &x, &y);
+	  cairo_rectangle (cr, x, y,
+			   gdk_window_get_width (priv->view_window),
+			   gdk_window_get_height (priv->view_window));
+	  cairo_clip (cr);
+	  gdk_window_get_position (priv->bin_window, &x, &y);
+	  gtk_render_background (context, cr, x, y,
+				 gdk_window_get_width (priv->bin_window),
+				 gdk_window_get_height (priv->bin_window));
+	  GTK_WIDGET_CLASS (gtk_viewport_parent_class)->draw (widget, cr);
+	}
     }
 
   return FALSE;
