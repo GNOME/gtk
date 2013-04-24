@@ -66,7 +66,7 @@ ensure_resources(cairo_surface_t *target)
       }
 }
 
-static void
+static gboolean
 on_window_draw (GtkWidget *widget,
                 cairo_t   *cr)
 
@@ -108,6 +108,8 @@ on_window_draw (GtkWidget *widget,
     }
 
   g_rand_free(rand);
+
+  return FALSE;
 }
 
 static void

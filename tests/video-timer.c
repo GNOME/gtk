@@ -190,7 +190,7 @@ adjust_clock_for_phase (gint64 frame_clock_time,
 
 /* Drawing */
 
-static void
+static gboolean
 on_window_draw (GtkWidget *widget,
                 cairo_t   *cr)
 {
@@ -224,6 +224,8 @@ on_window_draw (GtkWidget *widget,
           displayed_frame->frame_counter = gdk_frame_clock_get_frame_counter (frame_clock);
         }
     }
+
+  return FALSE;
 }
 
 static void
