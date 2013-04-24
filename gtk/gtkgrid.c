@@ -2552,7 +2552,7 @@ gtk_grid_set_baseline_row (GtkGrid *grid,
 }
 
 /**
- * gtk_grid_set_baseline_row:
+ * gtk_grid_get_baseline_row:
  * @grid: a #GtkGrid
  *
  * Returns which row defines the global baseline of @grid.

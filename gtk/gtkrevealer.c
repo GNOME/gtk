@@ -874,8 +874,8 @@ gtk_revealer_get_transition_type (GtkRevealer *revealer)
 }
 
 /**
- * gtk_stack_set_transition_type:
- * @stack: a #GtkStack
+ * gtk_revealer_set_transition_type:
+ * @revealer: a #GtkRevealer
  * @transition: the new transition type
  *
  * Sets the type of animation that will be used for
