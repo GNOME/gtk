@@ -26,6 +26,7 @@
 #include "gdkwindow.h"
 #include "gdkwindowimpl.h"
 #include "gdkdisplay-wayland.h"
+#include "gdkframeclockprivate.h"
 #include "gdkprivate-wayland.h"
 #include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
@@ -140,6 +141,9 @@ struct _GdkWindowImplWayland
     } saved_fullscreen, saved_maximized;
 
   gboolean use_custom_surface;
+
+  gboolean pending_commit;
+  gint64 pending_frame_counter;
 };
 
 struct _GdkWindowImplWaylandClass
@@ -256,6 +260,63 @@ get_default_title (void)
   return title;
 }
 
+static void
+frame_callback (void               *data,
+                struct wl_callback *callback,
+                uint32_t            time)
+{
+  GdkWindow *window = data;
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkFrameClock *clock = gdk_window_get_frame_clock (window);
+  GdkFrameTimings *timings;
+
+  wl_callback_destroy (callback);
+  _gdk_frame_clock_thaw (clock);
+
+  timings = gdk_frame_clock_get_timings (clock, impl->pending_frame_counter);
+  impl->pending_frame_counter = 0;
+
+  if (timings == NULL)
+    return;
+
+  timings->complete = TRUE;
+
+#ifdef G_ENABLE_DEBUG
+  if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
+    _gdk_frame_clock_debug_print_timings (clock, timings);
+#endif
+}
+
+static const struct wl_callback_listener listener = {
+  frame_callback
+};
+
+static void
+on_frame_clock_before_paint (GdkFrameClock *clock,
+                             GdkWindow     *window)
+{
+}
+
+static void
+on_frame_clock_after_paint (GdkFrameClock *clock,
+                            GdkWindow     *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  struct wl_callback *callback;
+
+  if (!impl->pending_commit)
+    return;
+
+  impl->pending_commit = FALSE;
+  impl->pending_frame_counter = gdk_frame_clock_get_frame_counter (clock);
+
+  callback = wl_surface_frame (impl->surface);
+  wl_callback_add_listener (callback, &listener, window);
+  _gdk_frame_clock_freeze (clock);
+
+  wl_surface_commit (impl->surface);
+}
+
 void
 _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
 					 GdkWindow     *window,
@@ -266,6 +327,7 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
 					 gint           attributes_mask)
 {
   GdkWindowImplWayland *impl;
+  GdkFrameClock *frame_clock;
   const char *title;
 
   impl = g_object_new (GDK_TYPE_WINDOW_IMPL_WAYLAND, NULL);
@@ -306,6 +368,13 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
 
   if (attributes_mask & GDK_WA_TYPE_HINT)
     gdk_window_set_type_hint (window, attributes->type_hint);
+
+  frame_clock = gdk_window_get_frame_clock (window);
+
+  g_signal_connect (frame_clock, "before-paint",
+                    G_CALLBACK (on_frame_clock_before_paint), window);
+  g_signal_connect (frame_clock, "after-paint",
+                    G_CALLBACK (on_frame_clock_after_paint), window);
 }
 
 static const cairo_user_data_key_t gdk_wayland_cairo_key;
@@ -368,6 +437,7 @@ gdk_wayland_window_attach_image (GdkWindow *window)
 
   /* Attach this new buffer to the surface */
   wl_surface_attach (impl->surface, data->buffer, dx, dy);
+  impl->pending_commit = TRUE;
 }
 
 static void
@@ -1640,9 +1710,8 @@ gdk_wayland_window_process_updates_recurse (GdkWindow      *window,
       cairo_region_get_rectangle (region, i, &rect);
       wl_surface_damage (impl->surface,
                          rect.x, rect.y, rect.width, rect.height);
+      impl->pending_commit = TRUE;
     }
-
-  wl_surface_commit (impl->surface);
 }
 
 static void
