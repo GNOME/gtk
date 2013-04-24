@@ -478,28 +478,34 @@ gdk_wayland_create_cairo_surface (GdkWaylandDisplay *display,
   return surface;
 }
 
-/* On this first call this creates a double reference - the first reference
- * is held by the GdkWindowImplWayland struct - since unlike other backends
- * the Cairo surface is not just a cheap wrapper around some other backing.
- * It is the buffer itself.
- */
-static cairo_surface_t *
-gdk_wayland_window_ref_cairo_surface (GdkWindow *window)
+static void
+gdk_wayland_window_ensure_cairo_surface (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkWaylandDisplay *display_wayland =
-    GDK_WAYLAND_DISPLAY (gdk_window_get_display (impl->wrapper));
-
-  if (GDK_WINDOW_DESTROYED (impl->wrapper))
-    return NULL;
-
   if (!impl->cairo_surface)
     {
+      GdkWaylandDisplay *display_wayland =
+        GDK_WAYLAND_DISPLAY (gdk_window_get_display (impl->wrapper));
+
       impl->cairo_surface =
 	gdk_wayland_create_cairo_surface (display_wayland,
 				      impl->wrapper->width,
 				      impl->wrapper->height);
     }
+}
+
+/* Unlike other backends the Cairo surface is not just a cheap wrapper
+ * around some other backing.  It is the buffer itself.
+ */
+static cairo_surface_t *
+gdk_wayland_window_ref_cairo_surface (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  if (GDK_WINDOW_DESTROYED (impl->wrapper))
+    return NULL;
+
+  gdk_wayland_window_ensure_cairo_surface (window);
 
   cairo_surface_reference (impl->cairo_surface);
 
@@ -1623,8 +1629,8 @@ gdk_wayland_window_process_updates_recurse (GdkWindow      *window,
 
   gdk_wayland_window_map (window);
 
-  if (impl->cairo_surface)
-    gdk_wayland_window_attach_image (window);
+  gdk_wayland_window_ensure_cairo_surface (window);
+  gdk_wayland_window_attach_image (window);
 
   _gdk_window_process_updates_recurse (window, region);
 
