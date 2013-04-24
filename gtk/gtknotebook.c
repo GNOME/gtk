@@ -8176,9 +8176,11 @@ gtk_notebook_set_tab_reorderable (GtkNotebook *notebook,
   if (!list)
     return;
 
+  reorderable = reorderable != FALSE;
+
   if (GTK_NOTEBOOK_PAGE (list)->reorderable != reorderable)
     {
-      GTK_NOTEBOOK_PAGE (list)->reorderable = (reorderable == TRUE);
+      GTK_NOTEBOOK_PAGE (list)->reorderable = reorderable;
       gtk_widget_child_notify (child, "reorderable");
     }
 }
@@ -8269,9 +8271,11 @@ gtk_notebook_set_tab_detachable (GtkNotebook *notebook,
   if (!list)
     return;
 
+  detachable = detachable != FALSE;
+
   if (GTK_NOTEBOOK_PAGE (list)->detachable != detachable)
     {
-      GTK_NOTEBOOK_PAGE (list)->detachable = (detachable == TRUE);
+      GTK_NOTEBOOK_PAGE (list)->detachable = detachable;
       gtk_widget_child_notify (child, "detachable");
     }
 }
