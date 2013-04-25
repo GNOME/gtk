@@ -130,7 +130,7 @@ gdk_wayland_screen_dispose (GObject *object)
   GdkWaylandScreen *screen_wayland = GDK_WAYLAND_SCREEN (object);
 
   if (screen_wayland->root_window)
-    _gdk_window_destroy (screen_wayland->root_window, TRUE);
+    _gdk_window_destroy (screen_wayland->root_window, FALSE);
 
   G_OBJECT_CLASS (_gdk_wayland_screen_parent_class)->dispose (object);
 }

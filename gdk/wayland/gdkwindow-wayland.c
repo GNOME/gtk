@@ -594,8 +594,6 @@ gdk_window_impl_wayland_finalize (GObject *object)
 
   if (impl->cursor)
     g_object_unref (impl->cursor);
-  if (impl->server_surface)
-    cairo_surface_destroy (impl->server_surface);
 
   G_OBJECT_CLASS (_gdk_window_impl_wayland_parent_class)->finalize (object);
 }
@@ -769,6 +767,17 @@ static const struct wl_shell_surface_listener shell_surface_listener = {
 };
 
 static void
+gdk_wayland_window_create_surface (GdkWindow  *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+
+  impl->surface = wl_compositor_create_surface (display_wayland->compositor);
+
+  wl_surface_set_user_data(impl->surface, window);
+}
+
+static void
 gdk_wayland_window_show (GdkWindow *window, gboolean already_mapped)
 {
   GdkDisplay *display;
@@ -785,10 +794,7 @@ gdk_wayland_window_show (GdkWindow *window, gboolean already_mapped)
     gdk_wayland_window_set_user_time (window, impl->user_time);
 
   if (!impl->surface)
-    {
-      impl->surface = wl_compositor_create_surface(display_wayland->compositor);
-      wl_surface_set_user_data(impl->surface, window);
-    }
+    gdk_wayland_window_create_surface (window);
 
   if (!impl->shell_surface &&
       !impl->use_custom_surface &&
@@ -814,7 +820,8 @@ gdk_wayland_window_show (GdkWindow *window, gboolean already_mapped)
 }
 
 static void
-gdk_wayland_window_hide (GdkWindow *window)
+gdk_wayland_window_hide_surface (GdkWindow *window,
+                                 gboolean   is_destroy)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
@@ -822,7 +829,7 @@ gdk_wayland_window_hide (GdkWindow *window)
     {
       if (impl->shell_surface)
         wl_shell_surface_destroy(impl->shell_surface);
-      if (impl->use_custom_surface)
+      if (impl->use_custom_surface && !is_destroy)
         {
           wl_surface_attach (impl->surface, NULL, 0, 0);
           wl_surface_commit (impl->surface);
@@ -837,15 +844,18 @@ gdk_wayland_window_hide (GdkWindow *window)
       impl->server_surface = NULL;
       impl->mapped = FALSE;
     }
+}
 
+static void
+gdk_wayland_window_hide (GdkWindow *window)
+{
+  gdk_wayland_window_hide_surface (window, FALSE);
   _gdk_window_clear_update_area (window);
 }
 
 static void
 gdk_window_wayland_withdraw (GdkWindow *window)
 {
-  GdkWindowImplWayland *impl;
-
   if (!window->destroyed)
     {
       if (GDK_WINDOW_IS_MAPPED (window))
@@ -853,26 +863,7 @@ gdk_window_wayland_withdraw (GdkWindow *window)
 
       g_assert (!GDK_WINDOW_IS_MAPPED (window));
 
-      impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-      if (impl->surface)
-        {
-          if (impl->shell_surface)
-            wl_shell_surface_destroy(impl->shell_surface);
-          if (impl->use_custom_surface)
-            {
-              wl_surface_attach (impl->surface, NULL, 0, 0);
-              wl_surface_commit (impl->surface);
-            }
-          else if (impl->surface)
-            {
-              wl_surface_destroy(impl->surface);
-              impl->surface = NULL;
-            }
-          impl->shell_surface = NULL;
-          cairo_surface_destroy(impl->server_surface);
-          impl->server_surface = NULL;
-          impl->mapped = FALSE;
-        }
+      gdk_wayland_window_hide_surface (window, FALSE);
     }
 }
 
@@ -1103,21 +1094,19 @@ gdk_wayland_window_destroy (GdkWindow *window,
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
+  /* We don't have nested windows */
+  g_return_if_fail (!recursing);
+  /* Wayland windows can't be externally destroyed; we may possibly
+   * eventually want to use this path at display close-down */
+  g_return_if_fail (!foreign_destroy);
+
+  gdk_wayland_window_hide_surface (window, TRUE);
+
   if (impl->cairo_surface)
     {
       cairo_surface_finish (impl->cairo_surface);
       cairo_surface_set_user_data (impl->cairo_surface, &gdk_wayland_cairo_key,
 				   NULL, NULL);
-    }
-
-  if (!recursing && !foreign_destroy)
-    {
-      if (impl->shell_surface)
-        wl_shell_surface_destroy(impl->shell_surface);
-      if (impl->surface)
-        wl_surface_destroy(impl->surface);
-      impl->shell_surface = NULL;
-      impl->surface = NULL;
     }
 }
 
@@ -1973,18 +1962,13 @@ void
 gdk_wayland_window_set_use_custom_surface (GdkWindow *window)
 {
   GdkWindowImplWayland *impl;
-  GdkWaylandDisplay *display;
 
   g_return_if_fail (GDK_IS_WAYLAND_WINDOW (window));
 
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   if (!impl->surface)
-    {
-      display = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
-      impl->surface = wl_compositor_create_surface (display->compositor);
-      wl_surface_set_user_data (impl->surface, window);
-    }
+    gdk_wayland_window_create_surface (window);
 
   impl->use_custom_surface = TRUE;
 }
