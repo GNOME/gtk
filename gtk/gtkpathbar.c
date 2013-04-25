@@ -34,11 +34,14 @@
 #include "gtkmarshalers.h"
 #include "gtksettings.h"
 #include "gtktogglebutton.h"
+#include "gtktypebuiltins.h"
 #include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
 
 struct _GtkPathBarPrivate
 {
+  GtkPlacesOpenFlags open_flags;
+
   GtkFileSystem *file_system;
   GFile *root_file;
   GFile *home_file;
@@ -75,6 +78,11 @@ enum {
   LAST_SIGNAL
 };
 
+enum {
+  PROP_OPEN_FLAGS = 1,
+  NUM_PROPERTIES
+};
+
 typedef enum {
   NORMAL_BUTTON,
   ROOT_BUTTON,
@@ -87,6 +95,8 @@ typedef enum {
 #define SCROLL_DELAY_FACTOR 5
 
 static guint path_bar_signals [LAST_SIGNAL] = { 0 };
+
+static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
 
 /* Icon size for if we can't get it from the theme */
 #define FALLBACK_ICON_SIZE 16
@@ -179,33 +189,76 @@ on_slider_unmap (GtkWidget  *widget,
 static void
 gtk_path_bar_init (GtkPathBar *path_bar)
 {
-  path_bar->priv = G_TYPE_INSTANCE_GET_PRIVATE (path_bar,
-						GTK_TYPE_PATH_BAR,
-						GtkPathBarPrivate);
+  GtkPathBarPrivate *priv;
+
+  path_bar->priv = priv = G_TYPE_INSTANCE_GET_PRIVATE (path_bar,
+						       GTK_TYPE_PATH_BAR,
+						       GtkPathBarPrivate);
+
+  priv->open_flags = GTK_PLACES_OPEN_NORMAL;
 
   gtk_widget_init_template (GTK_WIDGET (path_bar));
 
   /* Add the children manually because GtkPathBar derives from an abstract class,
    * Glade cannot edit a <template> in gtkpathbar.ui if it's only a GtkContainer.
    */
-  gtk_container_add (GTK_CONTAINER (path_bar), path_bar->priv->down_slider_button);
-  gtk_container_add (GTK_CONTAINER (path_bar), path_bar->priv->up_slider_button);
+  gtk_container_add (GTK_CONTAINER (path_bar), priv->down_slider_button);
+  gtk_container_add (GTK_CONTAINER (path_bar), priv->up_slider_button);
 
   /* GtkBuilder wont let us connect 'swapped' without specifying the signal's
    * user data in the .ui file
    */
-  g_signal_connect_swapped (path_bar->priv->up_slider_button, "clicked",
+  g_signal_connect_swapped (priv->up_slider_button, "clicked",
 			    G_CALLBACK (gtk_path_bar_scroll_up), path_bar);
-  g_signal_connect_swapped (path_bar->priv->down_slider_button, "clicked",
+  g_signal_connect_swapped (priv->down_slider_button, "clicked",
 			    G_CALLBACK (gtk_path_bar_scroll_down), path_bar);
 
   gtk_widget_set_has_window (GTK_WIDGET (path_bar), FALSE);
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (path_bar), FALSE);
 
-  path_bar->priv->get_info_cancellable = NULL;
+  priv->get_info_cancellable = NULL;
 
-  path_bar->priv->spacing = 0;
-  path_bar->priv->icon_size = FALLBACK_ICON_SIZE;
+  priv->spacing = 0;
+  priv->icon_size = FALLBACK_ICON_SIZE;
+}
+
+static void
+gtk_path_bar_set_property  (GObject      *obj,
+			    guint         property_id,
+			    const GValue *value,
+			    GParamSpec   *pspec)
+{
+  GtkPathBar *path_bar = GTK_PATH_BAR (obj);
+
+  switch (property_id)
+    {
+    case PROP_OPEN_FLAGS:
+      gtk_path_bar_set_open_flags (path_bar, g_value_get_flags (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_path_bar_get_property (GObject    *obj,
+			   guint       property_id,
+			   GValue     *value,
+			   GParamSpec *pspec)
+{
+  GtkPathBar *path_bar = GTK_PATH_BAR (obj);
+
+  switch (property_id)
+    {
+    case PROP_OPEN_FLAGS:
+      g_value_set_flags (value, gtk_path_bar_get_open_flags (path_bar));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
+      break;
+    }
 }
 
 static void
@@ -221,6 +274,8 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
 
   gobject_class->finalize = gtk_path_bar_finalize;
   gobject_class->dispose = gtk_path_bar_dispose;
+  gobject_class->set_property = gtk_path_bar_set_property;
+  gobject_class->get_property = gtk_path_bar_get_property;
 
   widget_class->get_preferred_width = gtk_path_bar_get_preferred_width;
   widget_class->get_preferred_height = gtk_path_bar_get_preferred_height;
@@ -254,6 +309,16 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
 		  G_TYPE_POINTER,
 		  G_TYPE_POINTER,
 		  G_TYPE_BOOLEAN);
+
+  properties[PROP_OPEN_FLAGS] =
+    g_param_spec_flags ("open-flags",
+			P_("Open Flags"),
+			P_("Modes in which the calling application can open locations selected in the path bar"),
+			GTK_TYPE_PLACES_OPEN_FLAGS,
+			GTK_PLACES_OPEN_NORMAL,
+			G_PARAM_READWRITE);
+
+  g_object_class_install_properties (gobject_class, NUM_PROPERTIES, properties);
 
   /* Bind class to template
    */
@@ -2019,3 +2084,65 @@ gtk_path_bar_new (void)
 {
   return GTK_WIDGET (g_object_new (GTK_TYPE_PATH_BAR, NULL));
 }
+
+/**
+ * gtk_path_bar_set_open_flags:
+ * @path_bar: a path bar
+ * @flags: Bitmask of modes in which the calling application can open locations
+ *
+ * Sets the way in which the calling application can open new locations from
+ * the path bar.  For example, some applications only open locations
+ * "directly" into their main view, while others may support opening locations
+ * in a new notebook tab or a new window.
+ *
+ * This function is used to tell the @path_bar about the ways in which the
+ * application can open new locations, so that the sidebar can display (or not)
+ * the "Open in new tab" and "Open in new window" menu items as appropriate.
+ *
+ * When the #GtkPathBar::open-location signal is emitted, its flags
+ * argument will be set to one of the @flags that was passed in
+ * gtk_path_bar_set_open_flags().
+ *
+ * Passing 0 for @flags will cause #GTK_PLACES_OPEN_NORMAL to always be sent
+ * to callbacks for the "open-location" signal.
+ *
+ * Since: 3.10
+ */
+void
+gtk_path_bar_set_open_flags (GtkPathBar *path_bar, GtkPlacesOpenFlags flags)
+{
+  GtkPathBarPrivate *priv;
+
+  g_return_if_fail (GTK_IS_PATH_BAR (path_bar));
+
+  priv = path_bar->priv;
+
+  if (priv->open_flags != flags)
+    {
+      priv->open_flags = flags;
+      g_object_notify_by_pspec (G_OBJECT (path_bar), properties[PROP_OPEN_FLAGS]);
+    }
+}
+
+/**
+ * gtk_path_bar_get_open_flags:
+ * @path_bar: a #GtkPathBar
+ *
+ * Return value: the flags that were previously set with gtk_path_bar_get_open_flags(),
+ * or simply GTK_PLACES_OPEN_NORMAL (the default value) if that function has not
+ * been used.
+ *
+ * Since: 3.10
+ */
+GtkPlacesOpenFlags
+gtk_path_bar_get_open_flags (GtkPathBar *path_bar)
+{
+  GtkPathBarPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_PATH_BAR (path_bar), 0);
+
+  priv = path_bar->priv;
+
+  return priv->open_flags;
+}
+

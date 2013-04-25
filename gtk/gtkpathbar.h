@@ -61,6 +61,9 @@ GType    gtk_path_bar_get_type (void) G_GNUC_CONST;
 
 GtkWidget *gtk_path_bar_new (void);
 
+GtkPlacesOpenFlags gtk_path_bar_get_open_flags (GtkPathBar *path_bar);
+void gtk_path_bar_set_open_flags (GtkPathBar *path_bar, GtkPlacesOpenFlags flags);
+
 void     _gtk_path_bar_set_file_system (GtkPathBar         *path_bar,
 					GtkFileSystem      *file_system);
 void     _gtk_path_bar_set_file        (GtkPathBar         *path_bar,
