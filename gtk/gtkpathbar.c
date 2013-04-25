@@ -2005,3 +2005,17 @@ _gtk_path_bar_down (GtkPathBar *path_bar)
 	}
     }
 }
+
+/**
+ * gtk_path_bar_new:
+ *
+ * Creates a new #GtkPathBar.  You need to set a path on it with
+ * gtk_path_bar_set_location() for it to show anything.
+ *
+ * Return value: a newly-created #GtkPathBar.
+ */
+GtkWidget *
+gtk_path_bar_new (void)
+{
+  return GTK_WIDGET (g_object_new (GTK_TYPE_PATH_BAR, NULL));
+}
