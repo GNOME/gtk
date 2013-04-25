@@ -87,6 +87,7 @@ struct _GdkWaylandMonitor
   int		height_mm;
   char *	output_name;
   char *	manufacturer;
+  int		refresh_rate;
 };
 
 G_DEFINE_TYPE (GdkWaylandScreen, _gdk_wayland_screen, GDK_TYPE_SCREEN)
@@ -917,6 +918,7 @@ output_handle_mode(void *data,
 
   monitor->geometry.width = width;
   monitor->geometry.height = height;
+  monitor->refresh_rate = refresh;
 
   g_signal_emit_by_name (monitor->screen, "monitors-changed");
   update_screen_size (monitor->screen);
@@ -964,4 +966,22 @@ _gdk_wayland_screen_remove_output (GdkScreen *screen,
           break;
         }
     }
+}
+
+int
+_gdk_wayland_screen_get_output_refresh_rate (GdkScreen        *screen,
+                                             struct wl_output *output)
+{
+  GdkWaylandScreen *screen_wayland = GDK_WAYLAND_SCREEN (screen);
+  int i;
+
+  for (i = 0; i < screen_wayland->monitors->len; i++)
+    {
+      GdkWaylandMonitor *monitor = screen_wayland->monitors->pdata[i];
+
+      if (monitor->output == output)
+        return monitor->refresh_rate;
+    }
+
+  return 0;
 }

@@ -164,6 +164,8 @@ void _gdk_wayland_screen_add_output (GdkScreen        *screen,
                                      struct wl_output *output);
 void _gdk_wayland_screen_remove_output (GdkScreen *screen,
                                         guint32 id);
+int _gdk_wayland_screen_get_output_refresh_rate (GdkScreen        *screen,
+                                                 struct wl_output *output);
 
 void _gdk_wayland_display_manager_add_display (GdkDisplayManager *manager,
 					       GdkDisplay        *display);

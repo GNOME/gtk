@@ -96,6 +96,9 @@ struct _GdkWindowImplWayland
 
   GdkCursor *cursor;
 
+  /* The wl_outputs that this window currently touches */
+  GSList *outputs;
+
   struct wl_surface *surface;
   struct wl_shell_surface *shell_surface;
   unsigned int mapped : 1;
@@ -267,6 +270,7 @@ frame_callback (void               *data,
 {
   GdkWindow *window = data;
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   GdkFrameClock *clock = gdk_window_get_frame_clock (window);
   GdkFrameTimings *timings;
 
@@ -278,6 +282,17 @@ frame_callback (void               *data,
 
   if (timings == NULL)
     return;
+
+  timings->refresh_interval = 16667; /* default to 1/60th of a second */
+  if (impl->outputs)
+    {
+      /* We pick a random output out of the outputs that the window touches
+       * The rate here is in milli-hertz */
+      int refresh_rate = _gdk_wayland_screen_get_output_refresh_rate (wayland_display->screen,
+                                                                      impl->outputs->data);
+      if (refresh_rate != 0)
+        timings->refresh_interval = G_GINT64_CONSTANT(1000000000) / refresh_rate;
+    }
 
   timings->complete = TRUE;
 
@@ -713,6 +728,28 @@ gdk_wayland_window_map (GdkWindow *window)
 }
 
 static void
+surface_enter (void *data,
+               struct wl_surface *wl_surface,
+               struct wl_output *output)
+{
+  GdkWindow *window = GDK_WINDOW (data);
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  impl->outputs = g_slist_prepend (impl->outputs, output);
+}
+
+static void
+surface_leave (void *data,
+               struct wl_surface *wl_surface,
+               struct wl_output *output)
+{
+  GdkWindow *window = GDK_WINDOW (data);
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  impl->outputs = g_slist_remove (impl->outputs, output);
+}
+
+static void
 shell_surface_handle_configure(void *data,
                                struct wl_shell_surface *shell_surface,
                                uint32_t edges,
@@ -760,6 +797,11 @@ shell_surface_ping (void                    *data,
   wl_shell_surface_pong(shell_surface, serial);
 }
 
+static const struct wl_surface_listener surface_listener = {
+  surface_enter,
+  surface_leave
+};
+
 static const struct wl_shell_surface_listener shell_surface_listener = {
   shell_surface_ping,
   shell_surface_handle_configure,
@@ -775,6 +817,8 @@ gdk_wayland_window_create_surface (GdkWindow  *window)
   impl->surface = wl_compositor_create_surface (display_wayland->compositor);
 
   wl_surface_set_user_data(impl->surface, window);
+  wl_surface_add_listener(impl->surface,
+                          &surface_listener, window);
 }
 
 static void
@@ -838,6 +882,9 @@ gdk_wayland_window_hide_surface (GdkWindow *window,
         {
           wl_surface_destroy(impl->surface);
           impl->surface = NULL;
+
+          g_slist_free (impl->outputs);
+          impl->outputs = NULL;
         }
       impl->shell_surface = NULL;
       cairo_surface_destroy(impl->server_surface);
