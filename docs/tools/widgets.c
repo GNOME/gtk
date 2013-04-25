@@ -400,11 +400,6 @@ create_combo_box_entry (void)
   GtkWidget *align;
   GtkWidget *child;
   GtkTreeModel *model;
-  
-  gtk_rc_parse_string ("style \"combo-box-entry-style\" {\n"
-		       "  GtkComboBox::appears-as-list = 1\n"
-		       "}\n"
-		       "widget_class \"GtkComboBoxEntry\" style \"combo-box-entry-style\"\n" );
 
   model = (GtkTreeModel *)gtk_list_store_new (1, G_TYPE_STRING);
   widget = g_object_new (GTK_TYPE_COMBO_BOX,
@@ -427,14 +422,22 @@ create_combo_box (void)
 {
   GtkWidget *widget;
   GtkWidget *align;
-  
-  gtk_rc_parse_string ("style \"combo-box-style\" {\n"
-		       "  GtkComboBox::appears-as-list = 0\n"
-		       "}\n"
-		       "widget_class \"GtkComboBox\" style \"combo-box-style\"\n" );
+  GtkCellRenderer *cell;
+  GtkListStore *store;
 
-  widget = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Combo Box");
+  widget = gtk_combo_box_new ();
+  gtk_cell_layout_clear (GTK_CELL_LAYOUT (widget));
+  cell = gtk_cell_renderer_pixbuf_new ();
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (widget), cell, FALSE);
+  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (widget), cell, "icon-name", 0, NULL);
+  cell = gtk_cell_renderer_text_new ();
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (widget), cell, FALSE);
+  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (widget), cell, "text", 1, NULL);
+
+  store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
+  gtk_list_store_insert_with_values (store, NULL, -1, 0, "edit-delete", 1, "Combo Box", -1);
+  gtk_combo_box_set_model (GTK_COMBO_BOX (widget), GTK_TREE_MODEL (store));
+
   gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
   align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
   gtk_container_add (GTK_CONTAINER (align), widget);
@@ -442,6 +445,38 @@ create_combo_box (void)
   return new_widget_info ("combo-box", align, SMALL);
 }
 
+static WidgetInfo *
+create_combo_box_text (void)
+{
+  GtkWidget *widget;
+  GtkWidget *align;
+
+  widget = gtk_combo_box_text_new ();
+
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Combo Box Text");
+  gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
+  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  gtk_container_add (GTK_CONTAINER (align), widget);
+
+  return new_widget_info ("combo-box-text", align, SMALL);
+}
+
+static WidgetInfo *
+create_info_bar (void)
+{
+  GtkWidget *widget;
+  GtkWidget *align;
+
+  widget = gtk_info_bar_new_with_buttons ("Close", 0, NULL);
+  gtk_info_bar_set_message_type (GTK_INFO_BAR (widget), GTK_MESSAGE_INFO);
+  gtk_container_add (GTK_CONTAINER (gtk_info_bar_get_content_area (GTK_INFO_BAR (widget))),
+                     gtk_label_new ("Info Bar"));
+
+  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  gtk_container_add (GTK_CONTAINER (align), widget);
+
+  return new_widget_info ("info-bar", align, SMALL);
+}
 static WidgetInfo *
 create_recent_chooser_dialog (void)
 {
@@ -679,12 +714,12 @@ create_panes (void)
   pane = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_paned_pack1 (GTK_PANED (pane),
 		   g_object_new (GTK_TYPE_FRAME,
-				 "shadow", GTK_SHADOW_IN,
+				 "shadow-type", GTK_SHADOW_IN,
 				 NULL),
 		   FALSE, FALSE);
   gtk_paned_pack2 (GTK_PANED (pane),
 		   g_object_new (GTK_TYPE_FRAME,
-				 "shadow", GTK_SHADOW_IN,
+				 "shadow-type", GTK_SHADOW_IN,
 				 NULL),
 		   FALSE, FALSE);
   gtk_box_pack_start (GTK_BOX (hbox),
@@ -693,12 +728,12 @@ create_panes (void)
   pane = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
   gtk_paned_pack1 (GTK_PANED (pane),
 		   g_object_new (GTK_TYPE_FRAME,
-				 "shadow", GTK_SHADOW_IN,
+				 "shadow-type", GTK_SHADOW_IN,
 				 NULL),
 		   FALSE, FALSE);
   gtk_paned_pack2 (GTK_PANED (pane),
 		   g_object_new (GTK_TYPE_FRAME,
-				 "shadow", GTK_SHADOW_IN,
+				 "shadow-type", GTK_SHADOW_IN,
 				 NULL),
 		   FALSE, FALSE);
   gtk_box_pack_start (GTK_BOX (hbox),
@@ -1022,11 +1057,33 @@ create_scrolledwindow (void)
   GtkWidget *scrolledwin, *label;
 
   scrolledwin = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwin),
+                                  GTK_POLICY_ALWAYS, GTK_POLICY_ALWAYS);
   label = gtk_label_new ("Scrolled Window");
 
   gtk_container_add (GTK_CONTAINER (scrolledwin), label);
 
   return new_widget_info ("scrolledwindow", scrolledwin, MEDIUM);
+}
+
+static WidgetInfo *
+create_scrollbar (void)
+{
+  GtkWidget *widget;
+  GtkWidget *vbox, *align;
+
+  widget = gtk_scrollbar_new (GTK_ORIENTATION_HORIZONTAL, NULL);
+  gtk_widget_set_size_request (widget, 100, -1);
+
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  gtk_container_add (GTK_CONTAINER (align), widget);
+  gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox),
+		      gtk_label_new ("Scrollbar"),
+		      FALSE, FALSE, 0);
+
+  return new_widget_info ("scrollbar", vbox, SMALL);
 }
 
 static WidgetInfo *
@@ -1257,6 +1314,7 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_color_button ());
   retval = g_list_prepend (retval, create_combo_box ());
   retval = g_list_prepend (retval, create_combo_box_entry ());
+  retval = g_list_prepend (retval, create_combo_box_text ());
   retval = g_list_prepend (retval, create_entry ());
   retval = g_list_prepend (retval, create_file_button ());
   retval = g_list_prepend (retval, create_font_button ());
@@ -1273,6 +1331,7 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_radio ());
   retval = g_list_prepend (retval, create_scales ());
   retval = g_list_prepend (retval, create_scrolledwindow ());
+  retval = g_list_prepend (retval, create_scrollbar ());
   retval = g_list_prepend (retval, create_separator ());
   retval = g_list_prepend (retval, create_spinbutton ());
   retval = g_list_prepend (retval, create_statusbar ());
@@ -1298,6 +1357,7 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_menu_button ());
   retval = g_list_prepend (retval, create_search_entry ());
   retval = g_list_prepend (retval, create_level_bar ());
+  retval = g_list_prepend (retval, create_info_bar ());
 
   return retval;
 }
