@@ -264,6 +264,50 @@ get_default_title (void)
 }
 
 static void
+fill_presentation_time_from_frame_time (GdkFrameTimings *timings,
+                                        guint32          frame_time)
+{
+  /* The timestamp in a wayland frame is a msec time value that in some
+   * way reflects the time at which the server started drawing the frame.
+   * This is not useful from our perspective.
+   *
+   * However, for the DRM backend of Weston, on reasonably recent
+   * Linux, we know that the time is the
+   * clock_gettime(CLOCK_MONOTONIC) value at the vblank, and that
+   * backend starts drawing immediately after receiving the vblank
+   * notification. If we detect this, and make the assumption that the
+   * compositor will finish drawing before the next vblank, we can
+   * then determine the presentation time as the frame time we
+   * recieved plus one refresh interval.
+   *
+   * If a backend is using clock_gettime(CLOCK_MONOTONIC), but not
+   * picking values right at the vblank, then the presentation times
+   * we compute won't be accurate, but not really worse than then
+   * the alternative of not providing presentation times at all.
+   *
+   * The complexity here is dealing with the fact that we receive
+   * only the low 32 bits of the CLOCK_MONOTONIC value in milliseconds.
+   */
+  gint64 now_monotonic = g_get_monotonic_time ();
+  gint64 now_monotonic_msec = now_monotonic / 1000;
+  uint32_t now_monotonic_low = (uint32_t)now_monotonic_msec;
+
+  if (frame_time - now_monotonic_low < 1000 ||
+      frame_time - now_monotonic_low > (uint32_t)-1000)
+    {
+      /* Timestamp we received is within one second of the current time.
+       */
+      gint64 last_frame_time = now_monotonic + (gint64)1000 * (gint32)(frame_time - now_monotonic_low);
+      if ((gint32)now_monotonic_low < 0 && (gint32)frame_time > 0)
+        last_frame_time += (gint64)1000 * G_GINT64_CONSTANT(0x100000000);
+      else if ((gint32)now_monotonic_low > 0 && (gint32)frame_time < 0)
+        last_frame_time -= (gint64)1000 * G_GINT64_CONSTANT(0x100000000);
+
+      timings->presentation_time = last_frame_time + timings->refresh_interval;
+    }
+}
+
+static void
 frame_callback (void               *data,
                 struct wl_callback *callback,
                 uint32_t            time)
@@ -294,6 +338,8 @@ frame_callback (void               *data,
         timings->refresh_interval = G_GINT64_CONSTANT(1000000000) / refresh_rate;
     }
 
+  fill_presentation_time_from_frame_time (timings, time);
+
   timings->complete = TRUE;
 
 #ifdef G_ENABLE_DEBUG
@@ -310,6 +356,30 @@ static void
 on_frame_clock_before_paint (GdkFrameClock *clock,
                              GdkWindow     *window)
 {
+  GdkFrameTimings *timings = gdk_frame_clock_get_current_timings (clock);
+  gint64 presentation_time;
+  gint64 refresh_interval;
+
+  gdk_frame_clock_get_refresh_info (clock,
+                                    timings->frame_time,
+                                    &refresh_interval, &presentation_time);
+
+  if (presentation_time != 0)
+    {
+      /* Assume the algorithm used by the DRM backend of Weston - it
+       * starts drawing at the next vblank after receiving the commit
+       * for this frame, and presentation occurs at the vblank
+       * after that.
+       */
+      timings->predicted_presentation_time = presentation_time + refresh_interval;
+    }
+  else
+    {
+      /* As above, but we don't actually know the phase of the vblank,
+       * so just assume that we're half way through a refresh cycle.
+       */
+      timings->predicted_presentation_time = timings->frame_time + refresh_interval / 2 + refresh_interval;
+    }
 }
 
 static void
