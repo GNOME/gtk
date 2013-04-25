@@ -122,6 +122,8 @@ rebuild_child (GtkWidget   *self,
     {
       button_child = gtk_label_new (title);
 
+      gtk_widget_set_tooltip_text (GTK_WIDGET (self), NULL);
+
       gtk_style_context_remove_class (context, "image-button");
       gtk_style_context_add_class (context, "text-button");
     }
