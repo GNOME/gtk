@@ -407,7 +407,7 @@ gdk_frame_clock_paint_idle (void *data)
                   priv->requested &= ~GDK_FRAME_CLOCK_PHASE_LAYOUT;
                   g_signal_emit_by_name (G_OBJECT (clock), "layout");
                 }
-	      if (iter == 4)
+	      if (iter == 5)
 		g_warning ("gdk-frame-clock: layout continuously requested, giving up after 4 tries");
             }
         case GDK_FRAME_CLOCK_PHASE_PAINT:
