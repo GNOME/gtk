@@ -36,9 +36,9 @@
  *
  * The GtkStack widget is a container which only shows
  * one of its children at a time. In contrast to GtkNotebook,
- * GtkStack does not provide a visible means for users
- * to change the visible child. Instead, the #GtkStackSwitcher
- * widget can be used with GtkStack to provide this functionality.
+ * GtkStack does not provide a means for users to change the
+ * visible child. Instead, the #GtkStackSwitcher widget can be
+ * used with GtkStack to provide this functionality.
  *
  * Transitions between pages can be animated as slides or
  * fades. This can be controlled with gtk_stack_set_transition_type().
