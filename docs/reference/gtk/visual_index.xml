@@ -18,6 +18,9 @@
   <link linkend="GtkComboBox">
     <inlinegraphic fileref="combo-box.png" format="PNG"></inlinegraphic>
   </link>
+  <link linkend="GtkComboBoxText">
+    <inlinegraphic fileref="combo-box-text.png" format="PNG"></inlinegraphic>
+  </link>
   <link linkend="GtkEntry">
     <inlinegraphic fileref="entry.png" format="PNG"></inlinegraphic>
   </link>
@@ -146,5 +149,14 @@
   </link>
   <link linkend="GtkFontChooserDialog">
     <inlinegraphic fileref="fontchooser.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkAboutDialog">
+    <inlinegraphic fileref="aboutdialog.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkInfoBar">
+    <inlinegraphic fileref="info-bar.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkScrollbar">
+    <inlinegraphic fileref="scrollbar.png" format="PNG"></inlinegraphic>
   </link>
 </para>

@@ -301,7 +301,7 @@ HTML_IMAGES = \
 	$(srcdir)/images/appchooserdialog.png				\
 	$(srcdir)/images/assistant.png					\
 	$(srcdir)/images/box-packing.png				\
-	$(srcdir)/images/box-expand.png				\
+	$(srcdir)/images/box-expand.png					\
 	$(srcdir)/images/button.png					\
 	$(srcdir)/images/check-button.png				\
 	$(srcdir)/images/color-button.png				\
@@ -309,8 +309,8 @@ HTML_IMAGES = \
 	$(srcdir)/images/colorchooser.png				\
 	$(srcdir)/images/combo-box.png					\
 	$(srcdir)/images/combo-box-entry.png				\
+	$(srcdir)/images/combo-box-text.png				\
 	$(srcdir)/images/entry.png					\
-	$(srcdir)/images/search-entry.png				\
 	$(srcdir)/images/figure-hierarchical-drawing.png		\
 	$(srcdir)/images/figure-windowed-label.png			\
 	$(srcdir)/images/file-button.png				\
@@ -321,6 +321,7 @@ HTML_IMAGES = \
 	$(srcdir)/images/frame.png					\
 	$(srcdir)/images/icon-view.png					\
 	$(srcdir)/images/image.png					\
+	$(srcdir)/images/info-bar.png					\
 	$(srcdir)/images/label.png					\
 	$(srcdir)/images/levelbar.png					\
 	$(srcdir)/images/link-button.png				\
@@ -342,7 +343,9 @@ HTML_IMAGES = \
 	$(srcdir)/images/radio-group.png				\
 	$(srcdir)/images/recentchooserdialog.png			\
 	$(srcdir)/images/scales.png					\
+	$(srcdir)/images/scrollbar.png					\
 	$(srcdir)/images/scrolledwindow.png				\
+	$(srcdir)/images/search-entry.png				\
 	$(srcdir)/images/separator.png					\
 	$(srcdir)/images/spinbutton.png					\
 	$(srcdir)/images/spinner.png					\
