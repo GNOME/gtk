@@ -18,8 +18,12 @@
 #ifndef __GTK_PATH_BAR_H__
 #define __GTK_PATH_BAR_H__
 
-#include "gtkcontainer.h"
-#include "gtkfilesystem.h"
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
+#include <gtk/gtkcontainer.h>
+#include <gtk/gtkfilesystem.h>
 
 G_BEGIN_DECLS
 

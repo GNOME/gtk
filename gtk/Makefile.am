@@ -295,6 +295,7 @@ gtk_public_h_sources = 		\
 	gtkpagesetup.h		\
 	gtkpaned.h		\
 	gtkpapersize.h		\
+	gtkpathbar.h		\
 	gtkplacessidebar.h	\
 	gtkplug.h		\
 	gtkprintcontext.h	\
@@ -514,7 +515,6 @@ gtk_private_h_sources =		\
 	gtknumerableiconprivate.h \
 	gtkorientableprivate.h	\
 	gtkpango.h		\
-	gtkpathbar.h		\
 	gtkpressandholdprivate.h \
 	gtkprintoperation-private.h \
 	gtkprintutils.h		\
