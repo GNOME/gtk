@@ -1061,7 +1061,7 @@ gtk_tree_model_sort_row_deleted (GtkTreeModel *s_model,
     gtk_tree_model_sort_free_level (tree_model_sort,
                                     elt->children, FALSE);
 
-  if (level->ref_count == 0)
+  if (level->ref_count == 0 && g_sequence_get_length (level->seq) == 1)
     {
       gtk_tree_model_sort_increment_stamp (tree_model_sort);
       gtk_tree_model_row_deleted (GTK_TREE_MODEL (data), path);

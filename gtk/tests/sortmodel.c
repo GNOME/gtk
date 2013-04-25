@@ -1171,6 +1171,37 @@ specific_bug_674587 (void)
   g_object_unref (m);
 }
 
+static void
+row_deleted_cb (GtkTreeModel *tree_model,
+    GtkTreePath  *path,
+    guint *count)
+{
+  *count = *count + 1;
+}
+
+static void
+specific_bug_698846 (void)
+{
+  GtkListStore *store;
+  GtkTreeModel *sorted;
+  GtkTreeIter iter;
+  guint count = 0;
+
+  g_test_bug ("698846");
+
+  store = gtk_list_store_new (1, G_TYPE_STRING);
+  sorted = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (store));
+
+  gtk_list_store_insert_with_values (store, &iter, 0, 0, "a", -1);
+  gtk_list_store_insert_with_values (store, &iter, 1, 0, "b", -1);
+
+  g_signal_connect (sorted, "row-deleted", G_CALLBACK (row_deleted_cb), &count);
+
+  gtk_list_store_clear (store);
+
+  g_assert_cmpuint (count, ==, 2);
+}
+
 /* main */
 
 void
@@ -1206,5 +1237,7 @@ register_sort_model_tests (void)
                    specific_bug_364946);
   g_test_add_func ("/TreeModelSort/specific/bug-674587",
                    specific_bug_674587);
+  g_test_add_func ("/TreeModelSort/specific/bug-698846",
+                   specific_bug_698846);
 }
 
