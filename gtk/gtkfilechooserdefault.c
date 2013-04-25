@@ -504,11 +504,11 @@ static void list_row_activated         (GtkTreeView           *tree_view,
 					GtkTreeViewColumn     *column,
 					GtkFileChooserDefault *impl);
 
-static void path_bar_clicked (GtkPathBar            *path_bar,
-			      GFile                 *file,
-			      GFile                 *child,
-                              gboolean               child_is_hidden,
-                              GtkFileChooserDefault *impl);
+static void path_bar_open_location_cb (GtkPathBar            *path_bar,
+				       GFile                 *file,
+				       GFile                 *child,
+				       gboolean               child_is_hidden,
+				       GtkFileChooserDefault *impl);
 
 static void update_cell_renderer_attributes (GtkFileChooserDefault *impl);
 
@@ -7014,11 +7014,11 @@ list_row_activated (GtkTreeView           *tree_view,
 }
 
 static void
-path_bar_clicked (GtkPathBar            *path_bar,
-		  GFile                 *file,
-		  GFile                 *child_file,
-		  gboolean               child_is_hidden,
-		  GtkFileChooserDefault *impl)
+path_bar_open_location_cb (GtkPathBar            *path_bar,
+			   GFile                 *file,
+			   GFile                 *child_file,
+			   gboolean               child_is_hidden,
+			   GtkFileChooserDefault *impl)
 {
   if (child_file)
     pending_select_files_add (impl, child_file);
@@ -7507,7 +7507,7 @@ _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
   gtk_widget_class_bind_callback (widget_class, filter_combo_changed);
   gtk_widget_class_bind_callback (widget_class, location_button_toggled_cb);
   gtk_widget_class_bind_callback (widget_class, new_folder_button_clicked);
-  gtk_widget_class_bind_callback (widget_class, path_bar_clicked);
+  gtk_widget_class_bind_callback (widget_class, path_bar_open_location_cb);
   gtk_widget_class_bind_callback (widget_class, places_sidebar_open_location_cb);
   gtk_widget_class_bind_callback (widget_class, places_sidebar_show_error_message_cb);
 }

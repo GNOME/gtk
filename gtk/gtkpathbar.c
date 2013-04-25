@@ -74,7 +74,7 @@ struct _GtkPathBarPrivate
 };
 
 enum {
-  PATH_CLICKED,
+  OPEN_LOCATION,
   LAST_SIGNAL
 };
 
@@ -298,16 +298,41 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
   /* FIXME: */
   /*  container_class->child_type = gtk_path_bar_child_type;*/
 
-  path_bar_signals [PATH_CLICKED] =
-    g_signal_new (I_("path-clicked"),
+  /**
+   * GtkPathBar::open-location
+   * @path_bar: the object which received the signal.
+   * location: location which the calling application should open.
+   * child_file: child of @location which is shown in the path bar.
+   * child_is_hidden: whether @child_file is a hidden file.
+   *
+   * The path bar emits this signal when the user clicks on one of its path
+   * buttons.  For example, if the pathbar is showing /foo/bar and the user
+   * clicks on the button for "foo", then @location will point to /foo, @child_file
+   * will point to /foo/bar, and @child_is_hidden will indicate whether "bar"
+   * refers to a hidden file or not.
+   *
+   * In case the user clicks the innermost path component of the path being shown,
+   * for example "bar" in the above case, then @child_file will be #NULL.
+   *
+   * The calling application can use @child_file and @child_is_hidden to
+   * determine whether to highlight a child file in the parent folder that will
+   * be shown:  in the above case, the application could show the contents of
+   * the "foo" folder, with "bar" selected for convenience.  In case "bar" were
+   * a hidden file (as indicated by @child_is_hidden), the application would
+   * turn on a "show hidden files" preference for the folder being shown.
+   *
+   * Since: 3.10
+   */
+  path_bar_signals [OPEN_LOCATION] =
+    g_signal_new (I_("open-location"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
-		  G_STRUCT_OFFSET (GtkPathBarClass, path_clicked),
+		  0,
 		  NULL, NULL,
-		  _gtk_marshal_VOID__POINTER_POINTER_BOOLEAN,
+		  _gtk_marshal_VOID__OBJECT_OBJECT_BOOLEAN,
 		  G_TYPE_NONE, 3,
-		  G_TYPE_POINTER,
-		  G_TYPE_POINTER,
+		  G_TYPE_OBJECT,
+		  G_TYPE_OBJECT,
 		  G_TYPE_BOOLEAN);
 
   properties[PROP_OPEN_FLAGS] =
@@ -1427,7 +1452,7 @@ button_clicked_cb (GtkWidget *button,
       child_is_hidden = FALSE;
     }
 
-  g_signal_emit (path_bar, path_bar_signals [PATH_CLICKED], 0,
+  g_signal_emit (path_bar, path_bar_signals [OPEN_LOCATION], 0,
 		 button_data->file, child_file, child_is_hidden);
 }
 

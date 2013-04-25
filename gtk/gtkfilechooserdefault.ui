@@ -79,7 +79,7 @@
                   <object class="GtkPathBar" id="browse_path_bar">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <signal name="path-clicked" handler="path_bar_clicked" after="yes" swapped="no"/>
+                    <signal name="open-location" handler="path_bar_open_location_cb" after="yes" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">True</property>
