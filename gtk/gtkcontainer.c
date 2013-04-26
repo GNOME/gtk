@@ -3435,7 +3435,7 @@ gtk_container_propagate_draw (GtkContainer   *container,
 
   cairo_translate (cr, x, y);
 
-  gtk_widget_draw (child, cr);
+  _gtk_widget_draw (child, cr);
 
   cairo_restore (cr);
 }

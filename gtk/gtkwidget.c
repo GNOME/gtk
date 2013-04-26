@@ -6489,35 +6489,9 @@ _gtk_widget_draw_windows (GdkWindow *window,
   cairo_restore (cr);
 }
 
-/**
- * gtk_widget_draw:
- * @widget: the widget to draw. It must be drawable (see
- *   gtk_widget_is_drawable()) and a size must have been allocated.
- * @cr: a cairo context to draw to
- *
- * Draws @widget to @cr. The top left corner of the widget will be
- * drawn to the currently set origin point of @cr.
- *
- * You should pass a cairo context as @cr argument that is in an
- * original state. Otherwise the resulting drawing is undefined. For
- * example changing the operator using cairo_set_operator() or the
- * line width using cairo_set_line_width() might have unwanted side
- * effects.
- * You may however change the context's transform matrix - like with
- * cairo_scale(), cairo_translate() or cairo_set_matrix() and clip
- * region with cairo_clip() prior to calling this function. Also, it
- * is fine to modify the context with cairo_save() and
- * cairo_push_group() prior to calling this function.
- *
- * <note><para>Special purpose widgets may contain special code for
- * rendering to the screen and might appear differently on screen
- * and when rendered using gtk_widget_draw().</para></note>
- *
- * Since: 3.0
- **/
 void
-gtk_widget_draw (GtkWidget *widget,
-                 cairo_t   *cr)
+_gtk_widget_draw (GtkWidget *widget,
+		  cairo_t   *cr)
 {
   GdkWindow *window, *child_window;
   gpointer child_data;
@@ -6543,9 +6517,6 @@ gtk_widget_draw (GtkWidget *widget,
    * order you generally use a windowed widget where you control
    * the window hierarchy.
    */
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (!widget->priv->alloc_needed);
-  g_return_if_fail (cr != NULL);
 
   cairo_save (cr);
 
@@ -6603,6 +6574,44 @@ gtk_widget_draw (GtkWidget *widget,
     }
 
   cairo_restore (cr);
+}
+
+
+/**
+ * gtk_widget_draw:
+ * @widget: the widget to draw. It must be drawable (see
+ *   gtk_widget_is_drawable()) and a size must have been allocated.
+ * @cr: a cairo context to draw to
+ *
+ * Draws @widget to @cr. The top left corner of the widget will be
+ * drawn to the currently set origin point of @cr.
+ *
+ * You should pass a cairo context as @cr argument that is in an
+ * original state. Otherwise the resulting drawing is undefined. For
+ * example changing the operator using cairo_set_operator() or the
+ * line width using cairo_set_line_width() might have unwanted side
+ * effects.
+ * You may however change the context's transform matrix - like with
+ * cairo_scale(), cairo_translate() or cairo_set_matrix() and clip
+ * region with cairo_clip() prior to calling this function. Also, it
+ * is fine to modify the context with cairo_save() and
+ * cairo_push_group() prior to calling this function.
+ *
+ * <note><para>Special purpose widgets may contain special code for
+ * rendering to the screen and might appear differently on screen
+ * and when rendered using gtk_widget_draw().</para></note>
+ *
+ * Since: 3.0
+ **/
+void
+gtk_widget_draw (GtkWidget *widget,
+                 cairo_t   *cr)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (!widget->priv->alloc_needed);
+  g_return_if_fail (cr != NULL);
+
+  _gtk_widget_draw (widget, cr);
 }
 
 static gboolean
@@ -6910,7 +6919,7 @@ gtk_widget_send_expose (GtkWidget *widget,
   gtk_cairo_set_event (cr, &event->expose);
 
   if (event->expose.window == widget->priv->window)
-    gtk_widget_draw (widget, cr);
+    _gtk_widget_draw (widget, cr);
   else
     _gtk_widget_draw_windows (event->expose.window, cr, 0, 0);
 
