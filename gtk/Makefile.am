@@ -1737,6 +1737,7 @@ endif
 
 EXTRA_DIST +=                   \
 	$(STOCK_ICONS)		\
+	$(COMPOSITE_TEMPLATES)	\
 	$(DND_CURSORS)		\
 	$(GENERATED_ICONS)	\
 	gtk.def			\
