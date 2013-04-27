@@ -1417,6 +1417,8 @@ gtk_image_get_baseline_align (GtkImage *image)
       image->priv->baseline_align =
 	(float)pango_font_metrics_get_ascent (metrics) /
 	(pango_font_metrics_get_ascent (metrics) + pango_font_metrics_get_descent (metrics));
+
+      pango_font_metrics_unref (metrics);
     }
 
   return image->priv->baseline_align;
