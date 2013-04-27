@@ -2267,7 +2267,9 @@ gtk_notebook_size_request (GtkWidget      *widget,
                                                    orientation,
                                                    size, 
                                                    &child_minimum,
-                                                   &child_natural);
+                                                   &child_natural,
+                                                   NULL,
+                                                   NULL);
 
           *minimum = MAX (*minimum, child_minimum);
           *natural = MAX (*natural, child_natural);

@@ -858,20 +858,33 @@ _gtk_widget_get_preferred_size_for_size (GtkWidget      *widget,
                                          GtkOrientation  orientation,
                                          gint            size,
                                          gint           *minimum,
-                                         gint           *natural)
+                                         gint           *natural,
+                                         gint           *minimum_baseline,
+                                         gint           *natural_baseline)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (size >= -1);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    if (size < 0)
-      gtk_widget_get_preferred_width (widget, minimum, natural);
-    else
-      gtk_widget_get_preferred_width_for_height (widget, size, minimum, natural);
+    {
+      if (size < 0)
+        gtk_widget_get_preferred_width (widget, minimum, natural);
+      else
+        gtk_widget_get_preferred_width_for_height (widget, size, minimum, natural);
+
+      if (minimum_baseline)
+        *minimum_baseline = -1;
+      if (natural_baseline)
+        *natural_baseline = -1;
+    }
   else
-    if (size < 0)
-      gtk_widget_get_preferred_height (widget, minimum, natural);
-    else
-      gtk_widget_get_preferred_height_for_width (widget, size, minimum, natural);
+    {
+      gtk_widget_get_preferred_height_and_baseline_for_width (widget,
+                                                              size,
+                                                              minimum,
+                                                              natural,
+                                                              minimum_baseline,
+                                                              natural_baseline);
+    }
 }
 

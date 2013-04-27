@@ -356,7 +356,7 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
 
       if (gtk_widget_get_visible (child))
         {
-          _gtk_widget_get_preferred_size_for_size (child, orientation, size, &child_minimum, &child_natural);
+          _gtk_widget_get_preferred_size_for_size (child, orientation, size, &child_minimum, &child_natural, NULL, NULL);
 
           if (use_toggle_size)
             {
