@@ -53,6 +53,7 @@
 #include "gtkactivatable.h"
 #include "gtksizerequest.h"
 #include "gtktypebuiltins.h"
+#include "gtkwidgetprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "a11y/gtkbuttonaccessible.h"
@@ -2152,10 +2153,11 @@ gtk_button_get_size (GtkWidget      *widget,
       gint child_min, child_nat;
       gint child_min_baseline = -1, child_nat_baseline = -1;
 
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-	gtk_widget_get_preferred_width (child, &child_min, &child_nat);
-      else
-	gtk_widget_get_preferred_height_and_baseline_for_width (child, -1, &child_min, &child_nat, &child_min_baseline, &child_nat_baseline);
+      _gtk_widget_get_preferred_size_for_size (child,
+                                               orientation,
+                                               for_size,
+                                               &child_min, &child_nat,
+                                               &child_min_baseline, &child_nat_baseline);
 
       if (minimum_baseline && child_min_baseline >= 0)
 	*minimum_baseline = child_min_baseline + top_offset;
