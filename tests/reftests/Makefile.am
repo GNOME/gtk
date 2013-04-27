@@ -109,6 +109,8 @@ EXTRA_DIST += \
 	box-shadow-spec-inset.css \
 	box-shadow-spec-inset.ref.ui \
 	box-shadow-spec-inset.ui \
+	button-wrapping.ui \
+	button-wrapping.ref.ui \
 	css-match-class.css \
 	css-match-class.ref.ui \
 	css-match-class.ui \
