@@ -617,18 +617,8 @@ gtk_grid_request_init (GtkGridRequest *request,
       child = list->data;
 
       attach = &child->attach[orientation];
-      if (attach->span != 1)
-        continue;
-      if (gtk_widget_compute_expand (child->widget, orientation))
+      if (attach->span == 1 && gtk_widget_compute_expand (child->widget, orientation))
         lines->lines[attach->pos - lines->min].expand = TRUE;
-
-      lines->lines[attach->pos - lines->min].empty = FALSE;
-    }
-
-  for (i = 0; i < lines->max - lines->min; i++)
-    {
-      if (lines->lines[i].empty)
-        lines->lines[i].expand = TRUE;
     }
 }
 
@@ -1037,8 +1027,6 @@ gtk_grid_request_compute_expand (GtkGridRequest *request,
 	  if (attach->pos + i >= max || attach->pos + 1 < min)
 	    continue;
 
-          if (line->empty)
-            line->expand = TRUE;
           line->empty = FALSE;
         }
 
