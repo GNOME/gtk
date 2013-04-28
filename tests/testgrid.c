@@ -394,6 +394,55 @@ insert (void)
   gtk_widget_show_all (window);
 }
 
+static void
+spanning_grid (void)
+{
+  GtkWidget *window;
+  GtkWidget *g;
+  GtkWidget *c;
+
+  /* inspired by bug 698660
+   * the row/column that are empty except for the spanning
+   * child need to stay collapsed
+   */
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title (GTK_WINDOW (window), "Spanning");
+
+  g = gtk_grid_new ();
+  gtk_container_add (GTK_CONTAINER (window), g);
+
+  c = test_widget ("0", "blue");
+  gtk_widget_set_hexpand (c, TRUE);
+  gtk_grid_attach (GTK_GRID (g), c, 0, 4, 4, 1);
+
+  c = test_widget ("1", "green");
+  gtk_widget_set_vexpand (c, TRUE);
+  gtk_grid_attach (GTK_GRID (g), c, 4, 0, 1, 4);
+
+  c = test_widget ("2", "red");
+  gtk_widget_set_hexpand (c, TRUE);
+  gtk_widget_set_vexpand (c, TRUE);
+  gtk_grid_attach (GTK_GRID (g), c, 3, 3, 1, 1);
+
+  c = test_widget ("3", "yellow");
+  gtk_grid_attach (GTK_GRID (g), c, 0, 3, 2, 1);
+
+  c = test_widget ("4", "orange");
+  gtk_grid_attach (GTK_GRID (g), c, 3, 0, 1, 2);
+
+  c = test_widget ("5", "purple");
+  gtk_grid_attach (GTK_GRID (g), c, 1, 1, 1, 1);
+
+  c = test_widget ("6", "white");
+  gtk_grid_attach (GTK_GRID (g), c, 0, 1, 1, 1);
+
+  c = test_widget ("7", "cyan");
+  gtk_grid_attach (GTK_GRID (g), c, 1, 0, 1, 1);
+
+  gtk_widget_show_all (window);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -409,6 +458,7 @@ main (int argc, char *argv[])
   scrolling ();
   insert ();
   empty_grid ();
+  spanning_grid ();
 
   gtk_main ();
 
