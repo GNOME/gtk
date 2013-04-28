@@ -3288,7 +3288,7 @@ msgstr "Su_mažinti"
 #: ../gtk/gtkswitch.c:337 ../gtk/gtkswitch.c:392 ../gtk/gtkswitch.c:583
 msgctxt "switch"
 msgid "ON"
-msgstr "Įjungta"
+msgstr "❙"
 
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
@@ -3296,7 +3296,7 @@ msgstr "Įjungta"
 #: ../gtk/gtkswitch.c:345 ../gtk/gtkswitch.c:393 ../gtk/gtkswitch.c:598
 msgctxt "switch"
 msgid "OFF"
-msgstr "Išjungta"
+msgstr "○"
 
 #: ../gtk/gtktextbufferrichtext.c:649
 #, c-format
