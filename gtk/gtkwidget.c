@@ -5431,8 +5431,9 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
 	}
 
       name = g_type_name (G_OBJECT_TYPE (G_OBJECT (widget)));
-      g_print ("gtk_widget_size_allocate: %*s%s %d %d",
+      g_print ("gtk_widget_size_allocate: %*s%s %d %d %d %d",
 	       2 * depth, " ", name,
+	       allocation->x, allocation->y,
 	       allocation->width, allocation->height);
       if (baseline != -1)
 	g_print (" baseline: %d", baseline);
