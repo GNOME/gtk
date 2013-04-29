@@ -352,26 +352,6 @@ void _gdk_windowing_got_event                (GdkDisplay       *display,
 
 #define GDK_WINDOW_IS_MAPPED(window) (((window)->state & GDK_WINDOW_STATE_WITHDRAWN) == 0)
 
-#define GDK_TYPE_PAINTABLE            (_gdk_paintable_get_type ())
-#define GDK_PAINTABLE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_PAINTABLE, GdkPaintable))
-#define GDK_IS_PAINTABLE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_PAINTABLE))
-#define GDK_PAINTABLE_GET_IFACE(obj)  (G_TYPE_INSTANCE_GET_INTERFACE ((obj), GDK_TYPE_PAINTABLE, GdkPaintableIface))
-
-typedef struct _GdkPaintable        GdkPaintable;
-typedef struct _GdkPaintableIface   GdkPaintableIface;
-
-struct _GdkPaintableIface
-{
-  GTypeInterface g_iface;
-  
-  void (* begin_paint_region)       (GdkPaintable    *paintable,
-                                     GdkWindow       *window,
-                                     const cairo_region_t *region);
-  void (* end_paint)                (GdkPaintable    *paintable);
-};
-
-GType _gdk_paintable_get_type (void) G_GNUC_CONST;
-
 void _gdk_window_invalidate_for_expose (GdkWindow       *window,
                                         cairo_region_t       *region);
 
