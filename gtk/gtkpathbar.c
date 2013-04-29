@@ -1973,24 +1973,33 @@ gtk_path_bar_get_info_callback (GCancellable *cancellable,
 			       file_info);
 }
 
+/**
+ * gtk_path_bar_set_location:
+ * @path_bar: a #GtkPathBar
+ * @location: (allow-none): location to show, or #NULL for no current path
+ *
+ * Sets the location that the path bar should show.
+ *
+ * Since: 3.10
+ */
 void
-_gtk_path_bar_set_file (GtkPathBar      *path_bar,
-                        GFile           *file,
-                        const gboolean   keep_trail)
+gtk_path_bar_set_location (GtkPathBar *path_bar,
+			   GFile      *location,
+			   gboolean    keep_trail)
 {
   struct SetFileInfo *info;
 
   g_return_if_fail (GTK_IS_PATH_BAR (path_bar));
-  g_return_if_fail (G_IS_FILE (file));
+  g_return_if_fail (G_IS_FILE (location));
 
   /* Check whether the new path is already present in the pathbar as buttons.
    * This could be a parent directory or a previous selected subdirectory.
    */
-  if (keep_trail && gtk_path_bar_check_parent_path (path_bar, file))
+  if (keep_trail && gtk_path_bar_check_parent_path (path_bar, location))
     return;
 
   info = g_new0 (struct SetFileInfo, 1);
-  info->file = g_object_ref (file);
+  info->file = g_object_ref (location);
   info->path_bar = path_bar;
   info->first_directory = TRUE;
   info->parent_file = g_file_get_parent (info->file);

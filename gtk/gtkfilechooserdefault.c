@@ -2522,7 +2522,7 @@ put_recent_folder_in_pathbar (GtkFileChooserDefault *impl, GtkTreeIter *iter)
   gtk_tree_model_get (GTK_TREE_MODEL (priv->recent_model), iter,
 		      MODEL_COL_FILE, &file,
 		      -1);
-  _gtk_path_bar_set_file (GTK_PATH_BAR (priv->browse_path_bar), file, FALSE);
+  gtk_path_bar_set_location (GTK_PATH_BAR (priv->browse_path_bar), file, FALSE);
   g_object_unref (file);
 }
 
@@ -4615,7 +4615,7 @@ update_current_folder_get_info_cb (GCancellable *cancellable,
   if (! _gtk_file_info_consider_as_directory (info))
     goto out;
 
-  _gtk_path_bar_set_file (GTK_PATH_BAR (priv->browse_path_bar), data->file, data->keep_trail);
+  gtk_path_bar_set_location (GTK_PATH_BAR (priv->browse_path_bar), data->file, data->keep_trail);
 
   if (priv->current_folder != data->file)
     {
