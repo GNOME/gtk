@@ -101,6 +101,9 @@ struct _GdkWindowImplClass
                                          gint            *x,
                                          gint            *y,
                                          GdkModifierType *mask);
+  gboolean    (* begin_paint_region)    (GdkWindow       *window,
+					 const cairo_region_t *region);
+  void        (* end_paint)             (GdkWindow       *window);
 
   cairo_region_t * (* get_shape)        (GdkWindow       *window);
   cairo_region_t * (* get_input_shape)  (GdkWindow       *window);
