@@ -2716,11 +2716,15 @@ gdk_window_begin_paint_region (GdkWindow       *window,
   GdkRectangle clip_box;
   GdkWindowPaint *paint;
   GSList *list;
+  gboolean needs_surface;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !gdk_window_has_impl (window))
     return;
+
+  needs_surface = TRUE;
 
   if (GDK_IS_PAINTABLE (window->impl))
     {
@@ -2729,21 +2733,23 @@ gdk_window_begin_paint_region (GdkWindow       *window,
       if (iface->begin_paint_region)
 	iface->begin_paint_region ((GdkPaintable*)window->impl, window, region);
 
-      return;
+      needs_surface = FALSE;
     }
 
-  paint = g_new (GdkWindowPaint, 1);
+  paint = g_new0 (GdkWindowPaint, 1);
   paint->region = cairo_region_copy (region);
 
   cairo_region_intersect (paint->region, window->clip_region);
   cairo_region_get_extents (paint->region, &clip_box);
 
-  paint->surface = gdk_window_create_similar_surface (window,
-						      gdk_window_get_content (window),
-						      MAX (clip_box.width, 1),
-						      MAX (clip_box.height, 1));
-
-  cairo_surface_set_device_offset (paint->surface, -clip_box.x, -clip_box.y);
+  if (needs_surface)
+    {
+      paint->surface = gdk_window_create_similar_surface (window,
+							  gdk_window_get_content (window),
+							  MAX (clip_box.width, 1),
+							  MAX (clip_box.height, 1));
+      cairo_surface_set_device_offset (paint->surface, -clip_box.x, -clip_box.y);
+    }
 
   for (list = window->paint_stack; list != NULL; list = list->next)
     {
@@ -2755,10 +2761,8 @@ gdk_window_begin_paint_region (GdkWindow       *window,
   window->paint_stack = g_slist_prepend (window->paint_stack, paint);
 
   if (!cairo_region_is_empty (paint->region))
-    {
-      gdk_window_clear_backing_region (window,
-				       paint->region);
-    }
+    gdk_window_clear_backing_region (window,
+				     paint->region);
 }
 
 /**
@@ -2785,17 +2789,9 @@ gdk_window_end_paint (GdkWindow *window)
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !gdk_window_has_impl (window))
     return;
-
-  if (GDK_IS_PAINTABLE (window->impl))
-    {
-      GdkPaintableIface *iface = GDK_PAINTABLE_GET_IFACE (window->impl);
-
-      if (iface->end_paint)
-	iface->end_paint ((GdkPaintable*)window->impl);
-      return;
-    }
 
   if (window->paint_stack == NULL)
     {
@@ -2803,35 +2799,48 @@ gdk_window_end_paint (GdkWindow *window)
       return;
     }
 
+  if (GDK_IS_PAINTABLE (window->impl))
+    {
+      GdkPaintableIface *iface = GDK_PAINTABLE_GET_IFACE (window->impl);
+
+      if (iface->end_paint)
+	iface->end_paint ((GdkPaintable*)window->impl);
+    }
+
   paint = window->paint_stack->data;
 
   window->paint_stack = g_slist_delete_link (window->paint_stack,
 					     window->paint_stack);
 
-  cairo_region_get_extents (paint->region, &clip_box);
-  full_clip = cairo_region_copy (window->clip_region);
-  cairo_region_intersect (full_clip, paint->region);
 
-  cr = gdk_cairo_create (window);
-  cairo_set_source_surface (cr, paint->surface, 0, 0);
-  gdk_cairo_region (cr, full_clip);
-  cairo_clip (cr);
-  if (gdk_window_has_impl (window) ||  
-      window->alpha == 255)
+  if (paint->surface != NULL)
     {
-      cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-      cairo_paint (cr);
-    }
-  else
-    {
-      cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-      cairo_paint_with_alpha (cr, window->alpha / 255.0);
+      cairo_region_get_extents (paint->region, &clip_box);
+      full_clip = cairo_region_copy (window->clip_region);
+      cairo_region_intersect (full_clip, paint->region);
+
+      cr = gdk_cairo_create (window);
+      cairo_set_source_surface (cr, paint->surface, 0, 0);
+      gdk_cairo_region (cr, full_clip);
+      cairo_clip (cr);
+      if (gdk_window_has_impl (window) ||
+	  window->alpha == 255)
+	{
+	  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+	  cairo_paint (cr);
+	}
+      else
+	{
+	  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+	  cairo_paint_with_alpha (cr, window->alpha / 255.0);
+	}
+
+      cairo_destroy (cr);
+      cairo_region_destroy (full_clip);
+
+      cairo_surface_destroy (paint->surface);
     }
 
-  cairo_destroy (cr);
-  cairo_region_destroy (full_clip);
-
-  cairo_surface_destroy (paint->surface);
   cairo_region_destroy (paint->region);
   g_free (paint);
 
@@ -2870,7 +2879,8 @@ gdk_window_free_paint_stack (GdkWindow *window)
 	{
 	  GdkWindowPaint *paint = tmp_list->data;
 
-	  if (tmp_list == window->paint_stack)
+	  if (tmp_list == window->paint_stack &&
+	      paint->surface != NULL)
 	    cairo_surface_destroy (paint->surface);
 
 	  cairo_region_destroy (paint->region);
@@ -2972,13 +2982,19 @@ gdk_window_get_visible_region (GdkWindow *window)
   return cairo_region_copy (window->clip_region);
 }
 
-static cairo_t *
-setup_backing_rect (GdkWindow *window, GdkWindowPaint *paint)
+static void
+gdk_window_clear_backing_region (GdkWindow *window,
+				 cairo_region_t *region)
 {
+  GdkWindowPaint *paint = window->paint_stack->data;
+  cairo_region_t *clip;
   GdkWindow *bg_window;
   cairo_pattern_t *pattern = NULL;
   int x_offset = 0, y_offset = 0;
   cairo_t *cr;
+
+  if (GDK_WINDOW_DESTROYED (window) || paint->surface == NULL)
+    return;
 
   cr = cairo_create (paint->surface);
 
@@ -3000,22 +3016,6 @@ setup_backing_rect (GdkWindow *window, GdkWindowPaint *paint)
     }
   else
     cairo_set_source_rgb (cr, 0, 0, 0);
-
-  return cr;
-}
-
-static void
-gdk_window_clear_backing_region (GdkWindow *window,
-				 cairo_region_t *region)
-{
-  GdkWindowPaint *paint = window->paint_stack->data;
-  cairo_region_t *clip;
-  cairo_t *cr;
-
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
-
-  cr = setup_backing_rect (window, paint);
 
   clip = cairo_region_copy (paint->region);
   cairo_region_intersect (clip, region);
@@ -3054,7 +3054,7 @@ gdk_window_create_cairo_surface (GdkWindow *window,
 				 int height)
 {
   cairo_surface_t *surface, *subsurface;
-  
+
   surface = gdk_window_ref_impl_surface (window);
   if (gdk_window_has_impl (window))
     return surface;
@@ -3073,15 +3073,21 @@ cairo_surface_t *
 _gdk_window_ref_cairo_surface (GdkWindow *window)
 {
   cairo_surface_t *surface;
+  GdkWindowPaint *paint;
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
 
-  if (window->paint_stack)
-    {
-      GdkWindowPaint *paint = window->paint_stack->data;
+  paint = NULL;
+  if (window->impl_window->paint_stack)
+    paint = window->impl_window->paint_stack->data;
 
-      surface = paint->surface;
-      cairo_surface_reference (surface);
+  if (paint && paint->surface != NULL)
+    {
+      surface = cairo_surface_create_for_rectangle (paint->surface,
+						    window->abs_x,
+						    window->abs_y,
+						    window->width,
+						    window->height);
     }
   else
     {
@@ -3125,20 +3131,30 @@ _gdk_window_ref_cairo_surface (GdkWindow *window)
 cairo_t *
 gdk_cairo_create (GdkWindow *window)
 {
+  GdkWindowPaint *paint;
   cairo_surface_t *surface;
+  cairo_region_t *region;
   cairo_t *cr;
-    
+
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
 
   surface = _gdk_window_ref_cairo_surface (window);
   cr = cairo_create (surface);
 
-  if (!window->paint_stack)
+  if (window->impl_window->paint_stack)
     {
-      gdk_cairo_region (cr, window->clip_region);
-      cairo_clip (cr);
-    }
-    
+      paint = window->impl_window->paint_stack->data;
+
+      region = cairo_region_copy (paint->region);
+      cairo_region_translate (region, -window->abs_x, -window->abs_y);
+      gdk_cairo_region (cr, region);
+      cairo_region_destroy (region);
+   }
+  else
+    gdk_cairo_region (cr, window->clip_region);
+
+  cairo_clip (cr);
+
   cairo_surface_destroy (surface);
 
   return cr;
