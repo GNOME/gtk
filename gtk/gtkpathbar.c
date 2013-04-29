@@ -189,6 +189,34 @@ on_slider_unmap (GtkWidget  *widget,
 }
 
 static void
+setup_basic_folders (GtkPathBar *path_bar)
+{
+  GtkPathBarPrivate *priv = path_bar->priv;
+  const char *home;
+
+  home = g_get_home_dir ();
+  if (home != NULL)
+    {
+      const gchar *desktop;
+
+      priv->home_file = g_file_new_for_path (home);
+
+      desktop = g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP);
+      if (desktop != NULL)
+        priv->desktop_file = g_file_new_for_path (desktop);
+      else 
+        priv->desktop_file = NULL;
+    }
+  else
+    {
+      priv->home_file = NULL;
+      priv->desktop_file = NULL;
+    }
+
+  priv->root_file = g_file_new_for_path ("/");
+}
+
+static void
 gtk_path_bar_init (GtkPathBar *path_bar)
 {
   GtkPathBarPrivate *priv;
@@ -222,6 +250,8 @@ gtk_path_bar_init (GtkPathBar *path_bar)
 
   priv->spacing = 0;
   priv->icon_size = FALLBACK_ICON_SIZE;
+
+  setup_basic_folders (path_bar);
 }
 
 static void
@@ -2088,35 +2118,11 @@ void
 _gtk_path_bar_set_file_system (GtkPathBar    *path_bar,
 			       GtkFileSystem *file_system)
 {
-  const char *home;
-
   g_return_if_fail (GTK_IS_PATH_BAR (path_bar));
 
   g_assert (path_bar->priv->file_system == NULL);
 
   path_bar->priv->file_system = g_object_ref (file_system);
-
-  home = g_get_home_dir ();
-  if (home != NULL)
-    {
-      const gchar *desktop;
-
-      path_bar->priv->home_file = g_file_new_for_path (home);
-      /* FIXME: Need file system backend specific way of getting the
-       * Desktop path.
-       */
-      desktop = g_get_user_special_dir (G_USER_DIRECTORY_DESKTOP);
-      if (desktop != NULL)
-        path_bar->priv->desktop_file = g_file_new_for_path (desktop);
-      else 
-        path_bar->priv->desktop_file = NULL;
-    }
-  else
-    {
-      path_bar->priv->home_file = NULL;
-      path_bar->priv->desktop_file = NULL;
-    }
-  path_bar->priv->root_file = g_file_new_for_path ("/");
 }
 
 /**
