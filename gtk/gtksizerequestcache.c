@@ -58,7 +58,7 @@ _gtk_size_request_cache_free (SizeRequestCache *cache)
 {
   if (cache->requests_x)
     free_sizes_x (cache->requests_x);
-  if (cache->requests_x)
+  if (cache->requests_y)
     free_sizes_y (cache->requests_y);
 }
 
