@@ -6397,10 +6397,11 @@ _gtk_widget_draw_windows (GdkWindow *window,
 
       /* Only clear bg if double bufferer. This is what we used
 	 to do before, where begin_paint() did the clearing. */
-      if (widget->priv->double_buffered)
+      pattern = gdk_window_get_background_pattern (window);
+      if (pattern != NULL &&
+	  widget->priv->double_buffered)
 	{
 	  cairo_save (cr);
-	  pattern = gdk_window_get_background_pattern (window);
 	  cairo_set_source (cr, pattern);
 	  cairo_paint (cr);
 	  cairo_restore (cr);
