@@ -791,10 +791,7 @@ gtk_box_compute_expand (GtkWidget      *widget,
   gboolean opposite_expand;
   GtkOrientation opposite_orientation;
 
-  if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
-    opposite_orientation = GTK_ORIENTATION_VERTICAL;
-  else
-    opposite_orientation = GTK_ORIENTATION_HORIZONTAL;
+  opposite_orientation = OPPOSITE_ORIENTATION (private->orientation);
 
   our_expand = FALSE;
   opposite_expand = FALSE;

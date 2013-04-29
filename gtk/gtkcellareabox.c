@@ -239,10 +239,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkCellAreaBox, gtk_cell_area_box, GTK_TYPE_CELL_AREA,
                                                 gtk_cell_area_box_cell_layout_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL));
 
-#define OPPOSITE_ORIENTATION(orientation)                       \
-  ((orientation) == GTK_ORIENTATION_HORIZONTAL ?                \
-   GTK_ORIENTATION_VERTICAL : GTK_ORIENTATION_HORIZONTAL)
-
 static void
 gtk_cell_area_box_init (GtkCellAreaBox *box)
 {

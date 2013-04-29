@@ -37,6 +37,8 @@ G_BEGIN_DECLS
 #define GTK_PARAM_WRITABLE G_PARAM_WRITABLE|G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
 #define GTK_PARAM_READWRITE G_PARAM_READWRITE|G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
 
+#define OPPOSITE_ORIENTATION(_orientation) (1 - (_orientation))
+
 #ifdef G_DISABLE_CAST_CHECKS
 /* This is true for debug no and minimum */
 #define gtk_internal_return_if_fail(__expr) G_STMT_START{ (void)0; }G_STMT_END

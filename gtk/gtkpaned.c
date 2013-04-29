@@ -927,7 +927,11 @@ gtk_paned_get_preferred_size_for_opposite_orientation (GtkWidget      *widget,
 
   if (priv->child1 && gtk_widget_get_visible (priv->child1))
     {
-      _gtk_widget_get_preferred_size_for_size (priv->child1, 1 - priv->orientation, size, &child_min, &child_nat, NULL, NULL);
+      _gtk_widget_get_preferred_size_for_size (priv->child1,
+                                               OPPOSITE_ORIENTATION (priv->orientation),
+                                               size,
+                                               &child_min, &child_nat,
+                                               NULL, NULL);
       
       *minimum = child_min;
       *natural = child_nat;
@@ -935,7 +939,11 @@ gtk_paned_get_preferred_size_for_opposite_orientation (GtkWidget      *widget,
 
   if (priv->child2 && gtk_widget_get_visible (priv->child2))
     {
-      _gtk_widget_get_preferred_size_for_size (priv->child2, 1 - priv->orientation, size, &child_min, &child_nat, NULL, NULL);
+      _gtk_widget_get_preferred_size_for_size (priv->child2,
+                                               OPPOSITE_ORIENTATION (priv->orientation),
+                                               size,
+                                               &child_min, &child_nat,
+                                               NULL, NULL);
 
       *minimum = MAX (*minimum, child_min);
       *natural = MAX (*natural, child_nat);
