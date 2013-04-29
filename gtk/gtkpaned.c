@@ -871,6 +871,62 @@ gtk_paned_finalize (GObject *object)
 }
 
 static void
+gtk_paned_compute_position (GtkPaned *paned,
+                            gint      allocation,
+                            gint      child1_req,
+                            gint      child2_req,
+                            gint     *min_pos,
+                            gint     *max_pos,
+                            gint     *out_pos)
+{
+  GtkPanedPrivate *priv = paned->priv;
+  gint min, max, pos;
+
+  min = priv->child1_shrink ? 0 : child1_req;
+
+  max = allocation;
+  if (!priv->child2_shrink)
+    max = MAX (1, max - child2_req);
+  max = MAX (min, max);
+
+  if (!priv->position_set)
+    {
+      if (priv->child1_resize && !priv->child2_resize)
+	pos = MAX (0, allocation - child2_req);
+      else if (!priv->child1_resize && priv->child2_resize)
+	pos = child1_req;
+      else if (child1_req + child2_req != 0)
+	pos = allocation * ((gdouble)child1_req / (child1_req + child2_req)) + 0.5;
+      else
+	pos = allocation * 0.5 + 0.5;
+    }
+  else
+    {
+      /* If the position was set before the initial allocation.
+       * (priv->last_allocation <= 0) just clamp it and leave it.
+       */
+      if (priv->last_allocation > 0)
+	{
+	  if (priv->child1_resize && !priv->child2_resize)
+	    pos = priv->child1_size + allocation - priv->last_allocation;
+	  else if (!(!priv->child1_resize && priv->child2_resize))
+	    pos = allocation * ((gdouble) priv->child1_size / (priv->last_allocation)) + 0.5;
+	}
+      else
+        pos = min;
+    }
+
+  pos = CLAMP (pos, min, max);
+  
+  if (min_pos)
+    *min_pos = pos;
+  if (max_pos)
+    *max_pos = pos;
+  if (out_pos)
+    *out_pos = pos;
+}
+
+static void
 gtk_paned_get_preferred_size (GtkWidget      *widget,
                               GtkOrientation  orientation,
                               gint            size,
@@ -2064,41 +2120,10 @@ gtk_paned_calc_position (GtkPaned *paned,
   old_min_position = priv->min_position;
   old_max_position = priv->max_position;
 
-  priv->min_position = priv->child1_shrink ? 0 : child1_req;
-
-  priv->max_position = allocation;
-  if (!priv->child2_shrink)
-    priv->max_position = MAX (1, priv->max_position - child2_req);
-  priv->max_position = MAX (priv->min_position, priv->max_position);
-
-  if (!priv->position_set)
-    {
-      if (priv->child1_resize && !priv->child2_resize)
-	priv->child1_size = MAX (0, allocation - child2_req);
-      else if (!priv->child1_resize && priv->child2_resize)
-	priv->child1_size = child1_req;
-      else if (child1_req + child2_req != 0)
-	priv->child1_size = allocation * ((gdouble)child1_req / (child1_req + child2_req)) + 0.5;
-      else
-	priv->child1_size = allocation * 0.5 + 0.5;
-    }
-  else
-    {
-      /* If the position was set before the initial allocation.
-       * (priv->last_allocation <= 0) just clamp it and leave it.
-       */
-      if (priv->last_allocation > 0)
-	{
-	  if (priv->child1_resize && !priv->child2_resize)
-	    priv->child1_size += allocation - priv->last_allocation;
-	  else if (!(!priv->child1_resize && priv->child2_resize))
-	    priv->child1_size = allocation * ((gdouble) priv->child1_size / (priv->last_allocation)) + 0.5;
-	}
-    }
-
-  priv->child1_size = CLAMP (priv->child1_size,
-			      priv->min_position,
-			      priv->max_position);
+  gtk_paned_compute_position (paned,
+                              allocation, child1_req, child2_req,
+                              &priv->min_position, &priv->max_position,
+                              &priv->child1_size);
 
   if (priv->child1)
     gtk_paned_set_child_visible (paned, 0, priv->child1_size != 0);
