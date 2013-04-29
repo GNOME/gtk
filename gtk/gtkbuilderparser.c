@@ -1015,19 +1015,19 @@ start_element (GMarkupParseContext *context,
 		   element_name);
 }
 
-gchar *
+const gchar *
 _gtk_builder_parser_translate (const gchar *domain,
 			       const gchar *context,
 			       const gchar *text)
 {
-  const char *s;
+  const gchar *s;
 
   if (context)
     s = g_dpgettext2 (domain, context, text);
   else
     s = g_dgettext (domain, text);
 
-  return g_strdup (s);
+  return s;
 }
 
 /* Called for close tags </foo> */
@@ -1128,15 +1128,14 @@ end_element (GMarkupParseContext *context,
 
           if (prop_info->translatable && prop_info->text->len)
             {
-	      prop_info->data = _gtk_builder_parser_translate (data->domain,
-							       prop_info->context,
-							       prop_info->text->str);
+              prop_info->data = g_strdup (_gtk_builder_parser_translate (data->domain,
+                                                                         prop_info->context,
+                                                                         prop_info->text->str));
               g_string_free (prop_info->text, TRUE);
             }
           else
             {
               prop_info->data = g_string_free (prop_info->text, FALSE);
-              
             }
 
           object_info->properties =

@@ -2555,9 +2555,9 @@ list_store_text (GMarkupParseContext *context,
        * since the parser is not telling the builder about the domain.
        * However, it will work for gtk_builder_set_translation_domain() calls.
        */
-      translated = _gtk_builder_parser_translate (data->domain,
-						  info->context,
-						  string);
+      translated = g_strdup (_gtk_builder_parser_translate (data->domain,
+                                                            info->context,
+                                                            string));
       g_free (string);
       string = translated;
     }

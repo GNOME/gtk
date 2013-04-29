@@ -13522,7 +13522,7 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
 
 	          if (i < n_actions)
                     {
-                      gchar *description;
+                      const gchar *description;
 
                       if (action_data->translatable && action_data->description->len)
                         description = _gtk_builder_parser_translate (gtk_builder_get_translation_domain (builder),

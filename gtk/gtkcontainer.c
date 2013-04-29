@@ -664,8 +664,8 @@ attributes_end_element (GMarkupParseContext *context,
   /* translate the string */
   if (parser_data->string->len && parser_data->translatable)
     {
-      gchar *translated;
-      const gchar* domain;
+      const gchar *translated;
+      const gchar *domain;
 
       domain = gtk_builder_get_translation_domain (parser_data->builder);
 

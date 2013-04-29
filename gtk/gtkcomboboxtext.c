@@ -234,7 +234,7 @@ item_end_element (GMarkupParseContext *context,
     {
       if (data->translatable)
 	{
-	  gchar *translated;
+	  const gchar *translated;
 
 	  /* FIXME: This will not use the domain set in the .ui file,
 	   * since the parser is not telling the builder about the domain.

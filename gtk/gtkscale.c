@@ -1880,7 +1880,7 @@ gtk_scale_buildable_custom_finished (GtkBuildable *buildable,
   if (strcmp (tagname, "marks") == 0)
     {
       GSList *m;
-      gchar *markup;
+      const gchar *markup;
 
       marks_data = (MarksSubparserData *)user_data;
 
