@@ -241,30 +241,6 @@ print_region (cairo_region_t *region)
 }
 #endif
 
-GType
-_gdk_paintable_get_type (void)
-{
-  static GType paintable_type = 0;
-
-  if (!paintable_type)
-    {
-      const GTypeInfo paintable_info =
-      {
-	sizeof (GdkPaintableIface),  /* class_size */
-	NULL,                        /* base_init */
-	NULL,                        /* base_finalize */
-      };
-
-      paintable_type = g_type_register_static (G_TYPE_INTERFACE,
-					       g_intern_static_string ("GdkPaintable"),
-					       &paintable_info, 0);
-
-      g_type_interface_add_prerequisite (paintable_type, G_TYPE_OBJECT);
-    }
-
-  return paintable_type;
-}
-
 static void
 gdk_window_init (GdkWindow *window)
 {
@@ -2714,6 +2690,7 @@ gdk_window_begin_paint_region (GdkWindow       *window,
 			       const cairo_region_t *region)
 {
   GdkRectangle clip_box;
+  GdkWindowImplClass *impl_class;
   GdkWindowPaint *paint;
   GSList *list;
   gboolean needs_surface;
@@ -2724,17 +2701,11 @@ gdk_window_begin_paint_region (GdkWindow       *window,
       !gdk_window_has_impl (window))
     return;
 
+  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+
   needs_surface = TRUE;
-
-  if (GDK_IS_PAINTABLE (window->impl))
-    {
-      GdkPaintableIface *iface = GDK_PAINTABLE_GET_IFACE (window->impl);
-
-      if (iface->begin_paint_region)
-	iface->begin_paint_region ((GdkPaintable*)window->impl, window, region);
-
-      needs_surface = FALSE;
-    }
+  if (impl_class->begin_paint_region)
+    needs_surface = impl_class->begin_paint_region (window, region);
 
   paint = g_new0 (GdkWindowPaint, 1);
   paint->region = cairo_region_copy (region);
@@ -2783,6 +2754,7 @@ gdk_window_end_paint (GdkWindow *window)
 {
   GdkWindow *composited;
   GdkWindowPaint *paint;
+  GdkWindowImplClass *impl_class;
   GdkRectangle clip_box;
   cairo_region_t *full_clip;
   cairo_t *cr;
@@ -2799,13 +2771,10 @@ gdk_window_end_paint (GdkWindow *window)
       return;
     }
 
-  if (GDK_IS_PAINTABLE (window->impl))
-    {
-      GdkPaintableIface *iface = GDK_PAINTABLE_GET_IFACE (window->impl);
+  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
 
-      if (iface->end_paint)
-	iface->end_paint ((GdkPaintable*)window->impl);
-    }
+  if (impl_class->end_paint)
+    impl_class->end_paint (window);
 
   paint = window->paint_stack->data;
 

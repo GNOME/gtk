@@ -364,19 +364,18 @@ gdk_window_impl_quartz_init (GdkWindowImplQuartz *impl)
   impl->type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
 }
 
-static void
-gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
-                                           GdkWindow       *window,
+static gboolean
+gdk_window_impl_quartz_begin_paint_region (GdkWindow       *window,
 					   const cairo_region_t *region)
 {
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (paintable);
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->imp);
   cairo_region_t *clipped_and_offset_region;
   cairo_t *cr;
 
   clipped_and_offset_region = cairo_region_copy (region);
 
   cairo_region_intersect (clipped_and_offset_region,
-                        window->clip_region_with_children);
+                        window->clip_region);
   cairo_region_translate (clipped_and_offset_region,
                      window->abs_x, window->abs_y);
 
@@ -415,12 +414,14 @@ gdk_window_impl_quartz_begin_paint_region (GdkPaintable    *paintable,
 
 done:
   cairo_region_destroy (clipped_and_offset_region);
+
+  return FALSE;
 }
 
 static void
-gdk_window_impl_quartz_end_paint (GdkPaintable *paintable)
+gdk_window_impl_quartz_end_paint (GdkWindow *window)
 {
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (paintable);
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
 
   impl->begin_paint_count--;
 
@@ -534,13 +535,6 @@ _gdk_quartz_display_after_process_all_updates (GdkDisplay *display)
   in_process_all_updates = FALSE;
 
   NSEnableScreenUpdates ();
-}
-
-static void
-gdk_window_impl_quartz_paintable_init (GdkPaintableIface *iface)
-{
-  iface->begin_paint_region = gdk_window_impl_quartz_begin_paint_region;
-  iface->end_paint = gdk_window_impl_quartz_end_paint;
 }
 
 static const gchar *
@@ -3040,6 +3034,8 @@ gdk_window_impl_quartz_class_init (GdkWindowImplQuartzClass *klass)
   impl_class->resize_cairo_surface = gdk_window_quartz_resize_cairo_surface;
   impl_class->get_shape = gdk_quartz_window_get_shape;
   impl_class->get_input_shape = gdk_quartz_window_get_input_shape;
+  impl_class->begin_paint_region = gdk_window_impl_quartz_begin_paint_region;
+  impl_class->end_paint = gdk_window_impl_quartz_end_paint;
 
   impl_class->focus = gdk_quartz_window_focus;
   impl_class->set_type_hint = gdk_quartz_window_set_type_hint;
@@ -3115,19 +3111,9 @@ _gdk_window_impl_quartz_get_type (void)
 	  (GInstanceInitFunc) gdk_window_impl_quartz_init,
 	};
 
-      const GInterfaceInfo paintable_info = 
-	{
-	  (GInterfaceInitFunc) gdk_window_impl_quartz_paintable_init,
-	  NULL,
-	  NULL
-	};
-
       object_type = g_type_register_static (GDK_TYPE_WINDOW_IMPL,
                                             "GdkWindowImplQuartz",
                                             &object_info, 0);
-      g_type_add_interface_static (object_type,
-				   GDK_TYPE_PAINTABLE,
-				   &paintable_info);
     }
 
   return object_type;
