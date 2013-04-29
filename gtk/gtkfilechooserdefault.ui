@@ -290,7 +290,7 @@
                             <child>
                               <object class="GtkTreeViewColumn" id="list_mtime_column">
                                 <property name="resizable">True</property>
-                                <property name="title" translatable="yes">Modifed</property>
+                                <property name="title" translatable="yes">Modified</property>
                                 <child>
                                   <object class="GtkCellRendererText" id="list_mtime_renderer"/>
                                 </child>
