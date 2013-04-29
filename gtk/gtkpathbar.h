@@ -67,6 +67,7 @@ void gtk_path_bar_set_open_flags (GtkPathBar *path_bar, GtkPlacesOpenFlags flags
 void gtk_path_bar_set_location (GtkPathBar *path_bar,
 				GFile      *location,
 				gboolean    keep_trail);
+GFile *gtk_path_bar_get_location (GtkPathBar *path_bar);
 
 void     _gtk_path_bar_set_file_system (GtkPathBar         *path_bar,
 					GtkFileSystem      *file_system);

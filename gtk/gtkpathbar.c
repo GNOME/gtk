@@ -43,6 +43,7 @@ struct _GtkPathBarPrivate
   GtkPlacesOpenFlags open_flags;
 
   GtkFileSystem *file_system;
+  GFile *current_location;
   GFile *root_file;
   GFile *home_file;
   GFile *desktop_file;
@@ -375,6 +376,8 @@ gtk_path_bar_finalize (GObject *object)
   gtk_path_bar_stop_scrolling (path_bar);
 
   g_list_free (path_bar->priv->button_list);
+  if (path_bar->priv->current_location)
+    g_object_unref (path_bar->priv->current_location);
   if (path_bar->priv->root_file)
     g_object_unref (path_bar->priv->root_file);
   if (path_bar->priv->home_file)
@@ -1987,10 +1990,25 @@ gtk_path_bar_set_location (GtkPathBar *path_bar,
 			   GFile      *location,
 			   gboolean    keep_trail)
 {
+  GtkPathBarPrivate *priv;
   struct SetFileInfo *info;
 
   g_return_if_fail (GTK_IS_PATH_BAR (path_bar));
   g_return_if_fail (G_IS_FILE (location));
+
+  priv = path_bar->priv;
+
+  if (priv->current_location)
+    g_object_unref (priv->current_location);
+
+  if (location)
+    priv->current_location = g_object_ref (location);
+  else
+    {
+      priv->current_location = NULL;
+      gtk_path_bar_clear_buttons (path_bar);
+      return;
+    }
 
   /* Check whether the new path is already present in the pathbar as buttons.
    * This could be a parent directory or a previous selected subdirectory.
@@ -2013,6 +2031,30 @@ gtk_path_bar_set_location (GtkPathBar *path_bar,
                                "standard::display-name,standard::is-hidden,standard::is-backup",
                                gtk_path_bar_get_info_callback,
                                info);
+}
+
+/**
+ * gtk_path_bar_get_location:
+ * @path_bar: a #GtkPathBar
+ *
+ * Return value: (transfer full): a #GFile with the location that the @path_bar
+ * is showing currently, or #NULL if no path is being shown at all.
+ *
+ * Since: 3.10
+ */
+GFile *
+gtk_path_bar_get_location (GtkPathBar *path_bar)
+{
+  GtkPathBarPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_PATH_BAR (path_bar), NULL);
+
+  priv = path_bar->priv;
+
+  if (priv->current_location)
+    return g_object_ref (priv->current_location);
+  else
+    return NULL;
 }
 
 /* FIXME: This should be a construct-only property */
