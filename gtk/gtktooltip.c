@@ -692,6 +692,15 @@ struct ChildLocation
 };
 
 static void
+prepend_and_ref_widget (GtkWidget *widget,
+                        gpointer   data)
+{
+  GSList **slist_p = data;
+
+  *slist_p = g_slist_prepend (*slist_p, g_object_ref (widget));
+}
+
+static void
 child_location_foreach (GtkWidget *child,
 			gpointer   data)
 {
@@ -735,6 +744,7 @@ child_location_foreach (GtkWidget *child,
 	  if (GTK_IS_CONTAINER (child))
 	    {
 	      struct ChildLocation tmp = { NULL, NULL, 0, 0 };
+              GSList *children = NULL, *tmp_list;
 
 	      /* Take (x, y) relative the child's allocation and
 	       * recurse.
@@ -744,12 +754,20 @@ child_location_foreach (GtkWidget *child,
 	      tmp.container = child;
 
 	      gtk_container_forall (GTK_CONTAINER (child),
-				    child_location_foreach, &tmp);
+				    prepend_and_ref_widget, &children);
+
+              for (tmp_list = children; tmp_list; tmp_list = tmp_list->next)
+                {
+                  child_location_foreach (tmp_list->data, &tmp);
+                  g_object_unref (tmp_list->data);
+                }
 
 	      if (tmp.child)
 		child_loc->child = tmp.child;
 	      else
 		child_loc->child = child;
+
+              g_slist_free (children);
 	    }
 	  else
 	    child_loc->child = child;
