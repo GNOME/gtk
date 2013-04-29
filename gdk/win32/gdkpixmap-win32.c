@@ -113,14 +113,19 @@ gdk_pixmap_impl_win32_finalize (GObject *object)
 
   if (!impl->is_foreign)
     {
-      drawable_impl->hdc_count--;
+      /* Only decrement count if we did set the hdc */
+      if (drawable_impl->hdc)
+	drawable_impl->hdc_count--;
 
-      /* Tell outstanding owners that the surface is useless */
-      cairo_surface_finish (drawable_impl->cairo_surface);
+      if (drawable_impl->cairo_surface)
+	{
+	  /* Tell outstanding owners that the surface is useless */
+	  cairo_surface_finish (drawable_impl->cairo_surface);
 
-      /* Drop our reference */
-      cairo_surface_destroy (drawable_impl->cairo_surface);
-      drawable_impl->cairo_surface = NULL;
+	  /* Drop our reference */
+	  cairo_surface_destroy (drawable_impl->cairo_surface);
+	  drawable_impl->cairo_surface = NULL;
+	}
     }
 
   _gdk_win32_drawable_finish (GDK_DRAWABLE (object));
