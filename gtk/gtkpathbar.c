@@ -80,7 +80,8 @@ enum {
 };
 
 enum {
-  PROP_OPEN_FLAGS = 1,
+  PROP_LOCATION = 1,
+  PROP_OPEN_FLAGS,
   NUM_PROPERTIES
 };
 
@@ -233,6 +234,9 @@ gtk_path_bar_set_property  (GObject      *obj,
 
   switch (property_id)
     {
+    case PROP_LOCATION:
+      gtk_path_bar_set_location (path_bar, g_value_get_object (value), FALSE);
+      break;
     case PROP_OPEN_FLAGS:
       gtk_path_bar_set_open_flags (path_bar, g_value_get_flags (value));
       break;
@@ -253,6 +257,9 @@ gtk_path_bar_get_property (GObject    *obj,
 
   switch (property_id)
     {
+    case PROP_LOCATION:
+      g_value_take_object (value, gtk_path_bar_get_location (path_bar));
+      break;
     case PROP_OPEN_FLAGS:
       g_value_set_flags (value, gtk_path_bar_get_open_flags (path_bar));
       break;
@@ -336,6 +343,12 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
 		  G_TYPE_OBJECT,
 		  G_TYPE_BOOLEAN);
 
+  properties[PROP_LOCATION] =
+    g_param_spec_object ("location",
+			 P_("Location to Show"),
+			 P_("The location to show in the path bar"),
+			 G_TYPE_FILE,
+			 G_PARAM_READWRITE);
   properties[PROP_OPEN_FLAGS] =
     g_param_spec_flags ("open-flags",
 			P_("Open Flags"),
@@ -1422,6 +1435,7 @@ button_clicked_cb (GtkWidget *button,
 {
   ButtonData *button_data;
   GtkPathBar *path_bar;
+  GtkPathBarPrivate *priv;
   GList *button_list;
   gboolean child_is_hidden;
   GFile *child_file;
@@ -1431,6 +1445,7 @@ button_clicked_cb (GtkWidget *button,
     return;
 
   path_bar = GTK_PATH_BAR (gtk_widget_get_parent (button));
+  priv = path_bar->priv;
 
   button_list = g_list_find (path_bar->priv->button_list, button_data);
   g_assert (button_list != NULL);
@@ -1454,6 +1469,14 @@ button_clicked_cb (GtkWidget *button,
       child_file = NULL;
       child_is_hidden = FALSE;
     }
+
+  g_object_ref (button_data->file);
+
+  if (priv->current_location)
+    g_object_unref (priv->current_location);
+
+  priv->current_location = button_data->file;
+  g_object_notify_by_pspec (G_OBJECT (path_bar), properties[PROP_LOCATION]);
 
   g_signal_emit (path_bar, path_bar_signals [OPEN_LOCATION], 0,
 		 button_data->file, child_file, child_is_hidden);
@@ -1980,6 +2003,7 @@ gtk_path_bar_get_info_callback (GCancellable *cancellable,
  * gtk_path_bar_set_location:
  * @path_bar: a #GtkPathBar
  * @location: (allow-none): location to show, or #NULL for no current path
+ * @keep_trail: if child folders of @location were being shown, whether to keep them or not
  *
  * Sets the location that the path bar should show.
  *
@@ -2007,14 +2031,14 @@ gtk_path_bar_set_location (GtkPathBar *path_bar,
     {
       priv->current_location = NULL;
       gtk_path_bar_clear_buttons (path_bar);
-      return;
+      goto out;
     }
 
   /* Check whether the new path is already present in the pathbar as buttons.
    * This could be a parent directory or a previous selected subdirectory.
    */
   if (keep_trail && gtk_path_bar_check_parent_path (path_bar, location))
-    return;
+    goto out;
 
   info = g_new0 (struct SetFileInfo, 1);
   info->file = g_object_ref (location);
@@ -2031,6 +2055,8 @@ gtk_path_bar_set_location (GtkPathBar *path_bar,
                                "standard::display-name,standard::is-hidden,standard::is-backup",
                                gtk_path_bar_get_info_callback,
                                info);
+ out:
+  g_object_notify_by_pspec (G_OBJECT (path_bar), properties[PROP_LOCATION]);
 }
 
 /**
