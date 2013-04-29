@@ -6393,13 +6393,19 @@ _gtk_widget_draw_windows (GdkWindow *window,
 
   if (gdk_cairo_get_clip_rectangle (cr, NULL))
     {
-      cairo_save (cr);
-      pattern = gdk_window_get_background_pattern (window);
-      cairo_set_source (cr, pattern);
-      cairo_paint (cr);
-      cairo_restore (cr);
-
       gdk_window_get_user_data (window, (gpointer *) &widget);
+
+      /* Only clear bg if double bufferer. This is what we used
+	 to do before, where begin_paint() did the clearing. */
+      if (widget->priv->double_buffered)
+	{
+	  cairo_save (cr);
+	  pattern = gdk_window_get_background_pattern (window);
+	  cairo_set_source (cr, pattern);
+	  cairo_paint (cr);
+	  cairo_restore (cr);
+	}
+
       do_clip = _gtk_widget_get_translation_to_window (widget, window,
 						       &x, &y);
       cairo_save (cr);
