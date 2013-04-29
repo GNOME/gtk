@@ -38,6 +38,33 @@
 #include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
 
+typedef enum {
+  NORMAL_BUTTON,
+  ROOT_BUTTON,
+  HOME_BUTTON,
+  DESKTOP_BUTTON,
+  MOUNT_BUTTON
+} ButtonType;
+
+#define BUTTON_DATA(x) ((ButtonData *)(x))
+
+typedef struct
+{
+  GtkWidget *button;
+  ButtonType type;
+  char *dir_name;
+  GFile *file;
+
+  GtkWidget *image;
+  GtkWidget *label;
+  GtkWidget *bold_label;
+
+  GCancellable *cancellable;
+  guint ignore_changes : 1;
+  guint file_is_hidden : 1;
+  guint is_root : 1;
+} ButtonData;
+
 struct _GtkPathBarPrivate
 {
   GtkPlacesOpenFlags open_flags;
@@ -47,6 +74,8 @@ struct _GtkPathBarPrivate
   GFile *root_file;
   GFile *home_file;
   GFile *desktop_file;
+
+  ButtonData *current_button_data;
 
   GCancellable *get_info_cancellable;
 
@@ -65,7 +94,6 @@ struct _GtkPathBarPrivate
   gint icon_size;
   gint16 slider_width;
   gint16 spacing;
-  gint16 button_offset;
   guint timer;
   guint slider_visible : 1;
   guint need_timer     : 1;
@@ -85,15 +113,6 @@ enum {
   NUM_PROPERTIES
 };
 
-typedef enum {
-  NORMAL_BUTTON,
-  ROOT_BUTTON,
-  HOME_BUTTON,
-  DESKTOP_BUTTON
-} ButtonType;
-
-#define BUTTON_DATA(x) ((ButtonData *)(x))
-
 #define SCROLL_DELAY_FACTOR 5
 
 static guint path_bar_signals [LAST_SIGNAL] = { 0 };
@@ -103,20 +122,9 @@ static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
 /* Icon size for if we can't get it from the theme */
 #define FALLBACK_ICON_SIZE 16
 
-typedef struct _ButtonData ButtonData;
+/* Avoid overly long buttons (FIXME: shouldn't this be based on the font size?) */
+#define BUTTON_MAX_WIDTH 250
 
-struct _ButtonData
-{
-  GtkWidget *button;
-  ButtonType type;
-  char *dir_name;
-  GFile *file;
-  GtkWidget *image;
-  GtkWidget *label;
-  GCancellable *cancellable;
-  guint ignore_changes : 1;
-  guint file_is_hidden : 1;
-};
 /* This macro is used to check if a button can be used as a fake root.
  * All buttons in front of a fake root are automatically hidden when in a
  * directory below a fake root and replaced with the "<" arrow button.
