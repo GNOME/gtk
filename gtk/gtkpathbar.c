@@ -329,7 +329,7 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
 		  G_SIGNAL_RUN_FIRST,
 		  0,
 		  NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT_OBJECT_BOOLEAN,
+		  NULL,
 		  G_TYPE_NONE, 3,
 		  G_TYPE_OBJECT,
 		  G_TYPE_OBJECT,
