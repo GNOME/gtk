@@ -871,59 +871,75 @@ gtk_paned_finalize (GObject *object)
 }
 
 static void
-gtk_paned_compute_position (GtkPaned *paned,
-                            gint      allocation,
-                            gint      child1_req,
-                            gint      child2_req,
-                            gint     *min_pos,
-                            gint     *max_pos,
-                            gint     *out_pos)
+gtk_paned_get_preferred_size_for_orientation (GtkWidget      *widget,
+                                              gint            size,
+                                              gint           *minimum,
+                                              gint           *natural)
 {
+  GtkPaned *paned = GTK_PANED (widget);
   GtkPanedPrivate *priv = paned->priv;
-  gint min, max, pos;
+  gint child_min, child_nat;
 
-  min = priv->child1_shrink ? 0 : child1_req;
+  *minimum = *natural = 0;
 
-  max = allocation;
-  if (!priv->child2_shrink)
-    max = MAX (1, max - child2_req);
-  max = MAX (min, max);
-
-  if (!priv->position_set)
+  if (priv->child1 && gtk_widget_get_visible (priv->child1))
     {
-      if (priv->child1_resize && !priv->child2_resize)
-	pos = MAX (0, allocation - child2_req);
-      else if (!priv->child1_resize && priv->child2_resize)
-	pos = child1_req;
-      else if (child1_req + child2_req != 0)
-	pos = allocation * ((gdouble)child1_req / (child1_req + child2_req)) + 0.5;
+      _gtk_widget_get_preferred_size_for_size (priv->child1, priv->orientation, size, &child_min, &child_nat, NULL, NULL);
+      if (priv->child1_shrink)
+        *minimum = 0;
       else
-	pos = allocation * 0.5 + 0.5;
-    }
-  else
-    {
-      /* If the position was set before the initial allocation.
-       * (priv->last_allocation <= 0) just clamp it and leave it.
-       */
-      if (priv->last_allocation > 0)
-	{
-	  if (priv->child1_resize && !priv->child2_resize)
-	    pos = priv->child1_size + allocation - priv->last_allocation;
-	  else if (!(!priv->child1_resize && priv->child2_resize))
-	    pos = allocation * ((gdouble) priv->child1_size / (priv->last_allocation)) + 0.5;
-	}
-      else
-        pos = min;
+        *minimum = child_min;
+      *natural = child_nat;
     }
 
-  pos = CLAMP (pos, min, max);
-  
-  if (min_pos)
-    *min_pos = pos;
-  if (max_pos)
-    *max_pos = pos;
-  if (out_pos)
-    *out_pos = pos;
+  if (priv->child2 && gtk_widget_get_visible (priv->child2))
+    {
+      _gtk_widget_get_preferred_size_for_size (priv->child2, priv->orientation, size, &child_min, &child_nat, NULL, NULL);
+
+      if (!priv->child2_shrink)
+        *minimum += child_min;
+      *natural += child_nat;
+    }
+
+  if (priv->child1 && gtk_widget_get_visible (priv->child1) &&
+      priv->child2 && gtk_widget_get_visible (priv->child2))
+    {
+      gint handle_size;
+
+      gtk_widget_style_get (widget, "handle-size", &handle_size, NULL);
+
+      *minimum += handle_size;
+      *natural += handle_size;
+    }
+}
+
+static void
+gtk_paned_get_preferred_size_for_opposite_orientation (GtkWidget      *widget,
+                                                       gint            size,
+                                                       gint           *minimum,
+                                                       gint           *natural)
+{
+  GtkPaned *paned = GTK_PANED (widget);
+  GtkPanedPrivate *priv = paned->priv;
+  gint child_min, child_nat;
+
+  *minimum = *natural = 0;
+
+  if (priv->child1 && gtk_widget_get_visible (priv->child1))
+    {
+      _gtk_widget_get_preferred_size_for_size (priv->child1, 1 - priv->orientation, size, &child_min, &child_nat, NULL, NULL);
+      
+      *minimum = child_min;
+      *natural = child_nat;
+    }
+
+  if (priv->child2 && gtk_widget_get_visible (priv->child2))
+    {
+      _gtk_widget_get_preferred_size_for_size (priv->child2, 1 - priv->orientation, size, &child_min, &child_nat, NULL, NULL);
+
+      *minimum = MAX (*minimum, child_min);
+      *natural = MAX (*natural, child_nat);
+    }
 }
 
 static void
@@ -935,50 +951,11 @@ gtk_paned_get_preferred_size (GtkWidget      *widget,
 {
   GtkPaned *paned = GTK_PANED (widget);
   GtkPanedPrivate *priv = paned->priv;
-  gint child_min, child_nat;
 
-  *minimum = *natural = 0;
-
-  if (priv->child1 && gtk_widget_get_visible (priv->child1))
-    {
-      _gtk_widget_get_preferred_size_for_size (priv->child1, orientation, size, &child_min, &child_nat, NULL, NULL);
-      if (priv->child1_shrink && priv->orientation == orientation)
-        *minimum = 0;
-      else
-        *minimum = child_min;
-      *natural = child_nat;
-    }
-
-  if (priv->child2 && gtk_widget_get_visible (priv->child2))
-    {
-      _gtk_widget_get_preferred_size_for_size (priv->child2, orientation, size, &child_min, &child_nat, NULL, NULL);
-
-      if (priv->orientation == orientation)
-        {
-          if (!priv->child2_shrink)
-            *minimum += child_min;
-          *natural += child_nat;
-        }
-      else
-        {
-          *minimum = MAX (*minimum, child_min);
-          *natural = MAX (*natural, child_nat);
-        }
-    }
-
-  if (priv->child1 && gtk_widget_get_visible (priv->child1) &&
-      priv->child2 && gtk_widget_get_visible (priv->child2))
-    {
-      gint handle_size;
-
-      gtk_widget_style_get (widget, "handle-size", &handle_size, NULL);
-
-      if (priv->orientation == orientation)
-        {
-          *minimum += handle_size;
-          *natural += handle_size;
-        }
-    }
+  if (orientation == priv->orientation)
+    return gtk_paned_get_preferred_size_for_orientation (widget, size, minimum, natural);
+  else
+    return gtk_paned_get_preferred_size_for_opposite_orientation (widget, size, minimum, natural);
 }
 
 static void
