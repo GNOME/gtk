@@ -3392,7 +3392,7 @@ gtk_container_propagate_draw (GtkContainer   *container,
     child_in_window = gdk_window_get_parent (gtk_widget_get_window (child));
   else
     child_in_window = gtk_widget_get_window (child);
-  if (child_in_window != event_window)
+  if (event_window != NULL && child_in_window != event_window)
     return;
 
   cairo_save (cr);
