@@ -154,6 +154,17 @@ IME_MODULE=im-ime.la
 endif
 endif
 
+im_quartz_la_CPPFLAGS = -xobjective-c
+im_quartz_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
+im_quartz_la_SOURCES = imquartz.c
+libstatic_im_quartz_la_SOURCES = $(im_quartz_la_SOURCES)
+im_quartz_la_LIBADD = $(LDADDS)
+if INCLUDE_IM_QUARTZ
+STATIC_QUARTZ_MODULE = libstatic-im-quartz.la
+else
+QUARTZ_MODULE = im-quartz.la
+endif
+
 multipress_defs = -DMULTIPRESS_LOCALEDIR=\""$(mplocaledir)"\" -DMULTIPRESS_CONFDIR=\""$(sysconfdir)/gtk-2.0"\"
 im_multipress_la_CPPFLAGS = $(multipress_defs)
 libstatic_im_multipress_la_CPPFLAGS = $(im_multipress_la_CPPFLAGS)
@@ -213,6 +224,7 @@ module_LTLIBRARIES =			\
 	$(INUKTITUT_MODULE)		\
 	$(IPA_MODULE)			\
 	$(MULTIPRESS_MODULE)		\
+	$(QUARTZ_MODULE)		\
 	$(THAI_MODULE)			\
 	$(TI_ER_MODULE)			\
 	$(TI_ET_MODULE)			\
@@ -229,6 +241,7 @@ noinst_LTLIBRARIES =				\
 	$(STATIC_INUKTITUT_MODULE)		\
 	$(STATIC_IPA_MODULE)			\
 	$(STATIC_MULTIPRESS_MODULE)		\
+	$(STATIC_QUARTZ_MODULE)			\
 	$(STATIC_THAI_MODULE)			\
 	$(STATIC_TI_ER_MODULE)			\
 	$(STATIC_TI_ET_MODULE)			\
