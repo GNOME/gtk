@@ -53,6 +53,7 @@
 #include "gtkmain.h"
 #include "gtksettings.h"
 #include "gtkwidgetpath.h"
+#include "gtkpixelcacheprivate.h"
 #include "a11y/gtktreeviewaccessibleprivate.h"
 
 
@@ -303,6 +304,8 @@ struct _GtkTreeViewPrivate
   /* Sub windows */
   GdkWindow *bin_window;
   GdkWindow *header_window;
+
+  GtkPixelCache *pixel_cache;
 
   /* Scroll position state keeping */
   GtkTreeRowReference *top_row;
@@ -1730,6 +1733,8 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   tree_view->priv->headers_visible = TRUE;
   tree_view->priv->activate_on_single_click = FALSE;
 
+  tree_view->priv->pixel_cache = _gtk_pixel_cache_new ();
+
   /* We need some padding */
   tree_view->priv->dy = 0;
   tree_view->priv->cursor_offset = 0;
@@ -2130,6 +2135,10 @@ gtk_tree_view_destroy (GtkWidget *widget)
       tree_view->priv->vadjustment = NULL;
     }
 
+  if (tree_view->priv->pixel_cache)
+    _gtk_pixel_cache_free (tree_view->priv->pixel_cache);
+  tree_view->priv->pixel_cache = NULL;
+
   GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->destroy (widget);
 }
 
@@ -2218,6 +2227,25 @@ gtk_tree_view_ensure_background (GtkTreeView *tree_view)
 }
 
 static void
+gtk_tree_view_bin_window_invalidate_handler (GdkWindow *window,
+					     cairo_region_t *region)
+{
+  gpointer widget;
+  GtkTreeView *tree_view;
+  int y;
+
+  gdk_window_get_user_data (window, &widget);
+  tree_view = GTK_TREE_VIEW (widget);
+
+  y = gtk_adjustment_get_value (tree_view->priv->vadjustment);
+  cairo_region_translate (region,
+			  0, y);
+  _gtk_pixel_cache_invalidate (tree_view->priv->pixel_cache, region);
+  cairo_region_translate (region,
+			  0, -y);
+}
+
+static void
 gtk_tree_view_realize (GtkWidget *widget)
 {
   GtkAllocation allocation;
@@ -2268,6 +2296,8 @@ gtk_tree_view_realize (GtkWidget *widget)
   tree_view->priv->bin_window = gdk_window_new (window,
 						&attributes, attributes_mask);
   gtk_widget_register_window (widget, tree_view->priv->bin_window);
+  gdk_window_set_invalidate_handler (tree_view->priv->bin_window,
+				     gtk_tree_view_bin_window_invalidate_handler);
 
   gtk_widget_get_allocation (widget, &allocation);
 
@@ -5368,6 +5398,35 @@ done:
   return FALSE;
 }
 
+static void
+draw_bin (cairo_t *cr,
+	  gpointer user_data)
+{
+  GtkWidget *widget = GTK_WIDGET (user_data);
+  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
+  GList *tmp_list;
+
+  cairo_save (cr);
+
+  gtk_cairo_transform_to_window (cr, widget, tree_view->priv->bin_window);
+  gtk_tree_view_bin_draw (widget, cr);
+
+  cairo_restore (cr);
+
+  /* We can't just chain up to Container::draw as it will try to send the
+   * event to the headers, so we handle propagating it to our children
+   * (eg. widgets being edited) ourselves.
+   */
+  tmp_list = tree_view->priv->children;
+  while (tmp_list)
+    {
+      GtkTreeViewChild *child = tmp_list->data;
+      tmp_list = tmp_list->next;
+
+      gtk_container_propagate_draw (GTK_CONTAINER (tree_view), child->widget, cr);
+    }
+}
+
 static gboolean
 gtk_tree_view_draw (GtkWidget *widget,
                     cairo_t   *cr)
@@ -5384,27 +5443,22 @@ gtk_tree_view_draw (GtkWidget *widget,
 
   if (gtk_cairo_should_draw_window (cr, tree_view->priv->bin_window))
     {
-      GList *tmp_list;
+      cairo_rectangle_int_t view_rect;
+      cairo_rectangle_int_t canvas_rect;
 
-      cairo_save (cr);
+      view_rect.x = 0;
+      view_rect.y = gtk_tree_view_get_effective_header_height (tree_view);
+      view_rect.width = gdk_window_get_width (tree_view->priv->bin_window);
+      view_rect.height = gdk_window_get_height (tree_view->priv->bin_window);
 
-      gtk_cairo_transform_to_window (cr, widget, tree_view->priv->bin_window);
-      gtk_tree_view_bin_draw (widget, cr);
+      gdk_window_get_position (tree_view->priv->bin_window, &canvas_rect.x, &canvas_rect.y);
+      canvas_rect.y = -gtk_adjustment_get_value (tree_view->priv->vadjustment);
+      canvas_rect.width = gdk_window_get_width (tree_view->priv->bin_window);
+      canvas_rect.height = tree_view->priv->height;
 
-      cairo_restore (cr);
-
-      /* We can't just chain up to Container::draw as it will try to send the
-       * event to the headers, so we handle propagating it to our children
-       * (eg. widgets being edited) ourselves.
-       */
-      tmp_list = tree_view->priv->children;
-      while (tmp_list)
-	{
-	  GtkTreeViewChild *child = tmp_list->data;
-	  tmp_list = tmp_list->next;
-
-	  gtk_container_propagate_draw (GTK_CONTAINER (tree_view), child->widget, cr);
-	}
+      _gtk_pixel_cache_draw (tree_view->priv->pixel_cache, cr, tree_view->priv->bin_window,
+			     &view_rect, &canvas_rect,
+			     draw_bin, widget);
     }
 
   gtk_style_context_save (context);
