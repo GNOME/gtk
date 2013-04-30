@@ -296,7 +296,7 @@ _gtk_pixel_cache_draw (GtkPixelCache *cache,
       cairo_set_source_surface (cr, cache->surface,
 				cache->surface_x + view_rect->x + canvas_rect->x,
 				cache->surface_y + view_rect->y + canvas_rect->y);
-      cairo_rectangle (cr, view_rect->x, view_rect->x,
+      cairo_rectangle (cr, view_rect->x, view_rect->y,
 		       view_rect->width, view_rect->height);
       cairo_fill (cr);
       cairo_restore (cr);
@@ -304,7 +304,7 @@ _gtk_pixel_cache_draw (GtkPixelCache *cache,
   else
     {
       cairo_rectangle (cr,
-		       view_rect->x, view_rect->x,
+		       view_rect->x, view_rect->y,
 		       view_rect->width, view_rect->height);
       cairo_clip (cr);
       draw (cr, user_data);
