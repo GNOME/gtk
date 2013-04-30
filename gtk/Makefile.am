@@ -519,6 +519,7 @@ gtk_private_h_sources =		\
 	gtkprintoperation-private.h \
 	gtkprintutils.h		\
 	gtkprivate.h		\
+	gtkpixelcacheprivate.h	\
 	gtkquery.h		\
 	gtkrbtree.h		\
 	gtkrecentchooserdefault.h \
@@ -800,6 +801,7 @@ gtk_base_c_sources = 		\
 	gtkprivate.c		\
 	gtkprivatetypebuiltins.c \
 	gtkprogressbar.c	\
+	gtkpixelcache.c		\
 	gtkradioaction.c	\
 	gtkradiobutton.c	\
 	gtkradiomenuitem.c	\

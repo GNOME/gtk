@@ -32,6 +32,7 @@
 #include "gtkprivate.h"
 #include "gtkscrollable.h"
 #include "gtktypebuiltins.h"
+#include "gtkpixelcacheprivate.h"
 
 
 /**
@@ -66,12 +67,7 @@ struct _GtkViewportPrivate
   GdkWindow      *bin_window;
   GdkWindow      *view_window;
 
-  int backing_surface_x;
-  int backing_surface_y;
-  int backing_surface_w;
-  int backing_surface_h;
-  cairo_surface_t *backing_surface;
-  cairo_region_t *backing_surface_dirty;
+  GtkPixelCache *pixel_cache;
 
   /* GtkScrollablePolicy needs to be checked when
    * driving the scrollable adjustment values */
@@ -256,6 +252,8 @@ gtk_viewport_init (GtkViewport *viewport)
   priv->hadjustment = NULL;
   priv->vadjustment = NULL;
 
+  priv->pixel_cache = _gtk_pixel_cache_new ();
+
   viewport_set_adjustment (viewport, GTK_ORIENTATION_HORIZONTAL, NULL);
   viewport_set_adjustment (viewport, GTK_ORIENTATION_VERTICAL, NULL);
 }
@@ -308,9 +306,14 @@ static void
 gtk_viewport_destroy (GtkWidget *widget)
 {
   GtkViewport *viewport = GTK_VIEWPORT (widget);
+  GtkViewportPrivate *priv = viewport->priv;
 
   viewport_disconnect_adjustment (viewport, GTK_ORIENTATION_HORIZONTAL);
   viewport_disconnect_adjustment (viewport, GTK_ORIENTATION_VERTICAL);
+
+  if (priv->pixel_cache)
+    _gtk_pixel_cache_free (priv->pixel_cache);
+  priv->pixel_cache = NULL;
 
   GTK_WIDGET_CLASS (gtk_viewport_parent_class)->destroy (widget);
 }
@@ -663,28 +666,12 @@ gtk_viewport_bin_window_invalidate_handler (GdkWindow *window,
   gpointer widget;
   GtkViewport *viewport;
   GtkViewportPrivate *priv;
-  cairo_rectangle_int_t r;
 
   gdk_window_get_user_data (window, &widget);
   viewport = GTK_VIEWPORT (widget);
   priv = viewport->priv;
 
-  if (priv->backing_surface_dirty == NULL)
-    priv->backing_surface_dirty = cairo_region_create ();
-
-  cairo_region_translate (region,
-			  -priv->backing_surface_x,
-			  -priv->backing_surface_y);
-  cairo_region_union (priv->backing_surface_dirty, region);
-  cairo_region_translate (region,
-			  priv->backing_surface_x,
-			  priv->backing_surface_y);
-
-  r.x = 0;
-  r.y = 0;
-  r.width = priv->backing_surface_w;
-  r.height = priv->backing_surface_h;
-  cairo_region_intersect_rectangle (priv->backing_surface_dirty, &r);
+  _gtk_pixel_cache_invalidate (priv->pixel_cache, region);
 }
 
 static void
@@ -783,6 +770,25 @@ gtk_viewport_unrealize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_viewport_parent_class)->unrealize (widget);
 }
 
+static void
+draw_bin (cairo_t *cr,
+	  gpointer user_data)
+{
+  GtkWidget *widget = GTK_WIDGET (user_data);
+  GtkViewport *viewport = GTK_VIEWPORT (widget);
+  GtkViewportPrivate *priv = viewport->priv;
+  GtkStyleContext *context;
+  int x, y;
+
+  context = gtk_widget_get_style_context (widget);
+
+  gdk_window_get_position (priv->bin_window, &x, &y);
+  gtk_render_background (context, cr, x, y,
+			 gdk_window_get_width (priv->bin_window),
+			 gdk_window_get_height (priv->bin_window));
+  GTK_WIDGET_CLASS (gtk_viewport_parent_class)->draw (widget, cr);
+}
+
 static gint
 gtk_viewport_draw (GtkWidget *widget,
                    cairo_t   *cr)
@@ -790,10 +796,6 @@ gtk_viewport_draw (GtkWidget *widget,
   GtkViewport *viewport = GTK_VIEWPORT (widget);
   GtkViewportPrivate *priv = viewport->priv;
   GtkStyleContext *context;
-  cairo_t *backing_cr;
-  GtkWidget *child;
-  int x, y, bin_x, bin_y, new_surf_x, new_surf_y;
-  cairo_rectangle_int_t view_pos;
 
   context = gtk_widget_get_style_context (widget);
 
@@ -810,150 +812,22 @@ gtk_viewport_draw (GtkWidget *widget,
       gtk_style_context_restore (context);
     }
 
-  if (priv->backing_surface &&
-      /* Don't use backing surface if rendering elsewhere */
-      cairo_surface_get_type (priv->backing_surface) == cairo_surface_get_type (cairo_get_target (cr)))
+  if (gtk_cairo_should_draw_window (cr, priv->bin_window))
     {
-      gdk_window_get_position (priv->bin_window, &bin_x, &bin_y);
-      view_pos.x = -bin_x;
-      view_pos.y = -bin_y;
-      view_pos.width = gdk_window_get_width (priv->view_window);
-      view_pos.height = gdk_window_get_height (priv->view_window);
+      cairo_rectangle_int_t view_rect;
+      cairo_rectangle_int_t canvas_rect;
 
-      /* Reposition so all is visible visible */
-      if (priv->backing_surface)
-	{
-	  cairo_rectangle_int_t r;
-	  cairo_region_t *copy_region;
-	  if (view_pos.x < priv->backing_surface_x ||
-	      view_pos.x + view_pos.width >
-	      priv->backing_surface_x + priv->backing_surface_w ||
-	      view_pos.y < priv->backing_surface_y ||
-	      view_pos.y + view_pos.height >
-	      priv->backing_surface_y + priv->backing_surface_h)
-	    {
-	      new_surf_x = priv->backing_surface_x;
-	      if (view_pos.x < priv->backing_surface_x)
-		new_surf_x = view_pos.x - (priv->backing_surface_w - view_pos.width);
-	      else if (view_pos.x + view_pos.width >
-		       priv->backing_surface_x + priv->backing_surface_w)
-		new_surf_x = view_pos.x;
+      gdk_window_get_position (priv->view_window, &view_rect.x, &view_rect.y);
+      view_rect.width = gdk_window_get_width (priv->view_window);
+      view_rect.height = gdk_window_get_height (priv->view_window);
 
-	      new_surf_y = priv->backing_surface_y;
-	      if (view_pos.y < priv->backing_surface_y)
-		new_surf_y = view_pos.y - (priv->backing_surface_h - view_pos.height);
-	      else if (view_pos.y + view_pos.height >
-		       priv->backing_surface_y + priv->backing_surface_h)
-		new_surf_y = view_pos.y;
+      gdk_window_get_position (priv->bin_window, &canvas_rect.x, &canvas_rect.y);
+      canvas_rect.width = gdk_window_get_width (priv->bin_window);
+      canvas_rect.height = gdk_window_get_height (priv->bin_window);
 
-	      r.x = 0;
-	      r.y = 0;
-	      r.width = priv->backing_surface_w;
-	      r.height = priv->backing_surface_h;
-	      copy_region = cairo_region_create_rectangle (&r);
-
-	      if (priv->backing_surface_dirty)
-		{
-		  cairo_region_subtract (copy_region, priv->backing_surface_dirty);
-		  cairo_region_destroy (priv->backing_surface_dirty);
-		  priv->backing_surface_dirty = NULL;
-		}
-
-	      cairo_region_translate (copy_region,
-				      priv->backing_surface_x - new_surf_x,
-				      priv->backing_surface_y - new_surf_y);
-	      cairo_region_intersect_rectangle (copy_region, &r);
-
-	      backing_cr = cairo_create (priv->backing_surface);
-	      gdk_cairo_region (backing_cr, copy_region);
-	      cairo_clip (backing_cr);
-	      cairo_push_group (backing_cr);
-	      cairo_set_source_surface (backing_cr, priv->backing_surface,
-					priv->backing_surface_x - new_surf_x,
-					priv->backing_surface_y - new_surf_y);
-	      cairo_paint (backing_cr);
-	      cairo_pop_group_to_source (backing_cr);
-	      cairo_set_operator (backing_cr, CAIRO_OPERATOR_SOURCE);
-	      cairo_paint (backing_cr);
-	      cairo_destroy (backing_cr);
-
-	      priv->backing_surface_x = new_surf_x;
-	      priv->backing_surface_y = new_surf_y;
-
-	      cairo_region_xor_rectangle (copy_region, &r);
-	      priv->backing_surface_dirty = copy_region;
-	    }
-	}
-
-      if (priv->backing_surface_dirty &&
-	  !cairo_region_is_empty (priv->backing_surface_dirty))
-	{
-	  backing_cr = cairo_create (priv->backing_surface);
-	  gdk_cairo_region (backing_cr, priv->backing_surface_dirty);
-	  cairo_clip (backing_cr);
-	  cairo_translate (backing_cr,
-			   -priv->backing_surface_x,
-			   -priv->backing_surface_y);
-	  cairo_set_source_rgba (backing_cr,
-				 0, 0, 0, 0);
-	  cairo_set_operator (backing_cr, CAIRO_OPERATOR_SOURCE);
-	  cairo_paint (backing_cr);
-	  cairo_set_operator (backing_cr, CAIRO_OPERATOR_OVER);
-	  gtk_render_background (context, backing_cr,
-				 0,0,
-				 gdk_window_get_width (priv->bin_window),
-				 gdk_window_get_height (priv->bin_window));
-	  child = gtk_bin_get_child (GTK_BIN (widget));
-	  if (child && gtk_widget_get_visible (child)) {
-	    if (!gtk_widget_get_has_window (child))
-	      {
-		GtkAllocation child_allocation;
-		gtk_widget_get_allocation (child, &child_allocation);
-		cairo_translate (backing_cr,
-				 child_allocation.x,
-				 child_allocation.y);
-	      }
-
-	    gtk_widget_draw (child, backing_cr);
-	  }
-
-	  cairo_destroy (backing_cr);
-	}
-
-      if (priv->backing_surface_dirty)
-	{
-	  cairo_region_destroy (priv->backing_surface_dirty);
-	  priv->backing_surface_dirty = NULL;
-	}
-
-      if (gtk_cairo_should_draw_window (cr, priv->bin_window))
-	{
-	  gdk_window_get_position (priv->view_window, &x, &y);
-	  cairo_set_source_surface (cr, priv->backing_surface,
-				    priv->backing_surface_x + bin_x + x,
-				    priv->backing_surface_y + bin_y + y);
-	  cairo_rectangle (cr, x, y,
-			   gdk_window_get_width (priv->view_window),
-			   gdk_window_get_height (priv->view_window));
-	  cairo_fill (cr);
-	}
-    }
-  else
-    {
-      /* Don't use backing_surface */
-      if (gtk_cairo_should_draw_window (cr, priv->bin_window))
-	{
-	  gdk_window_get_position (priv->view_window, &x, &y);
-	  cairo_rectangle (cr, x, y,
-			   gdk_window_get_width (priv->view_window),
-			   gdk_window_get_height (priv->view_window));
-	  cairo_clip (cr);
-	  gdk_window_get_position (priv->bin_window, &x, &y);
-	  gtk_render_background (context, cr, x, y,
-				 gdk_window_get_width (priv->bin_window),
-				 gdk_window_get_height (priv->bin_window));
-	  GTK_WIDGET_CLASS (gtk_viewport_parent_class)->draw (widget, cr);
-	}
+      _gtk_pixel_cache_draw (priv->pixel_cache, cr, priv->bin_window,
+			     &view_rect, &canvas_rect,
+			     draw_bin, widget);
     }
 
   return FALSE;
@@ -987,7 +861,6 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
   GtkAdjustment *vadjustment = priv->vadjustment;
   GtkAllocation child_allocation;
   GtkWidget *child;
-  int surface_w, surface_h;
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
@@ -1016,7 +889,6 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
   if (gtk_widget_get_realized (widget))
     {
       GtkAllocation view_allocation;
-      cairo_rectangle_int_t rect;
 
       gdk_window_move_resize (gtk_widget_get_window (widget),
 			      allocation->x + border_width,
@@ -1035,48 +907,6 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
                               - gtk_adjustment_get_value (vadjustment),
                               child_allocation.width,
                               child_allocation.height);
-
-      surface_w = view_allocation.width;
-      if (child_allocation.width > view_allocation.width)
-	surface_w = MIN (surface_w + 64, child_allocation.width);
-
-      surface_h = view_allocation.height;
-      if (child_allocation.height > view_allocation.height)
-	surface_h = MIN (surface_h + 64, child_allocation.height);
-
-      if (priv->backing_surface != NULL &&
-	  (priv->backing_surface_w < view_allocation.width ||
-	   priv->backing_surface_w > surface_w + 32 ||
-	   priv->backing_surface_h < view_allocation.height ||
-	   priv->backing_surface_h > surface_h + 32))
-	{
-	  cairo_surface_destroy (priv->backing_surface);
-	  priv->backing_surface = NULL;
-	  if (priv->backing_surface_dirty)
-	    cairo_region_destroy (priv->backing_surface_dirty);
-	  priv->backing_surface_dirty = NULL;
-	}
-
-      if (priv->backing_surface == NULL &&
-	  (view_allocation.width < child_allocation.width ||
-	   view_allocation.height < child_allocation.height))
-	{
-	  priv->backing_surface_x = gtk_adjustment_get_value (hadjustment);
-	  priv->backing_surface_y = gtk_adjustment_get_value (vadjustment);
-	  priv->backing_surface_w = surface_w;
-	  priv->backing_surface_h = surface_h;
-	  priv->backing_surface_dirty = cairo_region_create ();
-	  priv->backing_surface =
-	    gdk_window_create_similar_surface (priv->bin_window,
-					       CAIRO_CONTENT_COLOR_ALPHA,
-					       surface_w, surface_h);
-	  rect.x = 0;
-	  rect.y = 0;
-	  rect.width = surface_w;
-	  rect.height = surface_h;
-	  cairo_region_union_rectangle (priv->backing_surface_dirty,
-					&rect);
-	}
     }
 
   child = gtk_bin_get_child (bin);
