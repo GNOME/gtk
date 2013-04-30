@@ -215,6 +215,7 @@ _gtk_pixel_cache_set_position (GtkPixelCache         *cache,
 
       backing_cr = cairo_create (cache->surface);
       gdk_cairo_region (backing_cr, copy_region);
+      cairo_set_operator (backing_cr, CAIRO_OPERATOR_SOURCE);
       cairo_clip (backing_cr);
       cairo_push_group (backing_cr);
       cairo_set_source_surface (backing_cr, cache->surface,
@@ -222,7 +223,6 @@ _gtk_pixel_cache_set_position (GtkPixelCache         *cache,
 				cache->surface_y - new_surf_y);
       cairo_paint (backing_cr);
       cairo_pop_group_to_source (backing_cr);
-      cairo_set_operator (backing_cr, CAIRO_OPERATOR_SOURCE);
       cairo_paint (backing_cr);
       cairo_destroy (backing_cr);
 
