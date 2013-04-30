@@ -1242,7 +1242,6 @@ if test "$have_gio_unix" = "yes"; then
 else
   GDK_GIO_PACKAGE=gio-2.0
 fi
-AM_CONDITIONAL(HAVE_GIO_UNIX, test "$have_gio_unix" = "yes")
 
 # Check for Pango flags
 

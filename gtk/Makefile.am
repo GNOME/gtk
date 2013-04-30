@@ -1356,7 +1356,9 @@ endif
 #
 # Installed tools
 #
-bin_PROGRAMS = gtk-query-immodules-3.0
+bin_PROGRAMS = \
+	gtk-query-immodules-3.0	\
+	gtk-launch
 
 if BUILD_ICON_CACHE
 bin_PROGRAMS += gtk-update-icon-cache
@@ -1403,11 +1405,8 @@ gtk_update_icon_cache_LDADD = $(GDK_PIXBUF_LIBS)
 gtk_update_icon_cache_SOURCES = updateiconcache.c
 endif
 
-if HAVE_GIO_UNIX
-bin_PROGRAMS += gtk-launch
 gtk_launch_LDADD = $(LDADDS)
 gtk_launch_SOURCES = gtk-launch.c
-endif
 
 noinst_PROGRAMS = extract-strings
 
