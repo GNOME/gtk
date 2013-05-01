@@ -4871,6 +4871,10 @@ gtk_window_get_position (GtkWindow *window,
  * Hides @window, then reshows it, resetting the
  * default size and position of the window. Used
  * by GUI builders only.
+ * 
+ * Deprecated: 3.10: GUI builders can call gtk_widget_hide(),
+ *   gtk_widget_unrealize() and then gtk_widget_show() on @window
+ *   themselves, if they still need this functionality.
  **/
 void
 gtk_window_reshow_with_initial_size (GtkWindow *window)
