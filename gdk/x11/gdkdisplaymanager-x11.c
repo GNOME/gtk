@@ -75,7 +75,6 @@ g_initable_iface_init (GInitableIface *iface)
 static void
 gdk_x11_display_manager_init (GdkX11DisplayManager *manager)
 {
-  _gdk_x11_windowing_init ();
 }
 
 static void

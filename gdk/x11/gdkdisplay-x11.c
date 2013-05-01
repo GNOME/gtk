@@ -2824,4 +2824,6 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->convert_selection = _gdk_x11_display_convert_selection;
   display_class->text_property_to_utf8_list = _gdk_x11_display_text_property_to_utf8_list;
   display_class->utf8_to_string_target = _gdk_x11_display_utf8_to_string_target;
+
+  _gdk_x11_windowing_init ();
 }
