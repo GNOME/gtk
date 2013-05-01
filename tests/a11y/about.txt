@@ -7,7 +7,7 @@ window1
   <AtkComponent>
   layer: window
   alpha: 1
-  unnamed-GtkContainerAccessible-0
+  dialog-vbox1
     "filler"
     parent: window1
     index: 0
@@ -16,18 +16,18 @@ window1
     <AtkComponent>
     layer: widget
     alpha: 1
-    unnamed-GtkContainerAccessible-1
+    box
       "filler"
-      parent: unnamed-GtkContainerAccessible-0
+      parent: dialog-vbox1
       index: 0
       state: enabled sensitive showing vertical visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
-      unnamed-GtkImageAccessible-2
+      logo_image
         "icon"
-        parent: unnamed-GtkContainerAccessible-1
+        parent: box
         index: 0
         state: enabled sensitive showing visible
         toolkit: gtk
@@ -35,11 +35,11 @@ window1
         layer: widget
         alpha: 1
         <AtkImage>
-        image size: -1 x -1
+        image size: 20 x 20
         image description: (null)
-      FancyPants
+      name_label
         "label"
-        parent: unnamed-GtkContainerAccessible-1
+        parent: box
         index: 1
         name: FancyPants
         state: enabled focusable multi-line sensitive showing visible
@@ -76,9 +76,9 @@ window1
                             variant: <omitted>
                             weight: <omitted>
                             wrap-mode: word
-      unnamed-GtkNotebookAccessible-3
+      notebook
         "page tab list"
-        parent: unnamed-GtkContainerAccessible-1
+        parent: box
         index: 2
         state: enabled sensitive showing visible
         toolkit: gtk
@@ -86,16 +86,16 @@ window1
         layer: widget
         alpha: 1
         <AtkSelection>
-        selected children: unnamed-GtkNotebookPageAccessible-4
-        unnamed-GtkNotebookPageAccessible-4
+        selected children: unnamed-GtkNotebookPageAccessible-0
+        unnamed-GtkNotebookPageAccessible-0
           "page tab"
-          parent: unnamed-GtkNotebookAccessible-3
+          parent: notebook
           index: 0
           state: enabled selectable selected showing visible
           <AtkComponent>
           layer: widget
           alpha: 1
-          unnamed-GtkContainerAccessible-5
+          page_vbox
             "filler"
             index: 0
             state: enabled sensitive showing vertical visible
@@ -103,9 +103,9 @@ window1
             <AtkComponent>
             layer: widget
             alpha: 1
-            0.99
+            version_label
               "label"
-              parent: unnamed-GtkContainerAccessible-5
+              parent: page_vbox
               index: 0
               name: 0.99
               state: enabled focusable multi-line sensitive showing visible
@@ -142,9 +142,9 @@ window1
                                   variant: <omitted>
                                   weight: <omitted>
                                   wrap-mode: word
-            comments
+            comments_label
               "label"
-              parent: unnamed-GtkContainerAccessible-5
+              parent: page_vbox
               index: 1
               name: comments
               state: enabled focusable multi-line sensitive showing visible
@@ -181,18 +181,18 @@ window1
                                   variant: <omitted>
                                   weight: <omitted>
                                   wrap-mode: word
-            unnamed-GtkContainerAccessible-6
+            hbox
               "filler"
-              parent: unnamed-GtkContainerAccessible-5
+              parent: page_vbox
               index: 2
               state: enabled horizontal sensitive showing visible
               toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
-              Website
+              website_label
                 "label"
-                parent: unnamed-GtkContainerAccessible-6
+                parent: hbox
                 index: 0
                 name: Website
                 state: enabled focusable multi-line sensitive showing visible
@@ -229,9 +229,9 @@ window1
                                     variant: <omitted>
                                     weight: <omitted>
                                     wrap-mode: word
-            no comments
+            copyright_label
               "label"
-              parent: unnamed-GtkContainerAccessible-5
+              parent: page_vbox
               index: 3
               name: no comments
               state: enabled focusable multi-line sensitive showing visible
@@ -268,10 +268,9 @@ window1
                                   variant: <omitted>
                                   weight: <omitted>
                                   wrap-mode: word
-            This program comes with ABSOLUTELY NO WARRANTY;
-for details, visit http://www.gnu.org/licenses/gpl.html
+            license_label
               "label"
-              parent: unnamed-GtkContainerAccessible-5
+              parent: page_vbox
               index: 4
               name: This program comes with ABSOLUTELY NO WARRANTY;
 for details, visit http://www.gnu.org/licenses/gpl.html
@@ -284,7 +283,7 @@ for details, visit http://www.gnu.org/licenses/gpl.html
               text: This program comes with ABSOLUTELY NO WARRANTY;
 for details, visit http://www.gnu.org/licenses/gpl.html
               character count: 103
-              caret offset: 0
+              caret offset: 67
               default attributes: bg-color: <omitted>
                                   bg-full-height: 0
                                   direction: <omitted>
@@ -310,53 +309,179 @@ for details, visit http://www.gnu.org/licenses/gpl.html
                                   variant: <omitted>
                                   weight: <omitted>
                                   wrap-mode: word
-    unnamed-GtkContainerAccessible-7
+        unnamed-GtkNotebookPageAccessible-1
+          "page tab"
+          parent: notebook
+          index: 1
+          state: enabled selectable visible
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          credits_page
+            "filler"
+            index: 0
+            state: enabled sensitive vertical visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            scrolledwindow1
+              "scroll pane"
+              parent: credits_page
+              index: 0
+              state: enabled focusable sensitive visible
+              toolkit: gtk
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              viewport1
+                "viewport"
+                parent: scrolledwindow1
+                index: 0
+                state: enabled sensitive visible
+                toolkit: gtk
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                credits_grid
+                  "panel"
+                  parent: viewport1
+                  index: 0
+                  state: enabled sensitive vertical visible
+                  toolkit: gtk
+                  <AtkComponent>
+                  layer: widget
+                  alpha: 1
+              unnamed-GtkRangeAccessible-2
+                "scroll bar"
+                parent: scrolledwindow1
+                state: enabled horizontal sensitive visible
+                toolkit: gtk
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                <AtkValue>
+                minimum value: 0.000000
+                maximum value: 0.000000
+                current value: 0.000000
+                minimum increment: 39.200000
+              unnamed-GtkRangeAccessible-3
+                "scroll bar"
+                parent: scrolledwindow1
+                state: enabled sensitive vertical visible
+                toolkit: gtk
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                <AtkValue>
+                minimum value: 0.000000
+                maximum value: 0.000000
+                current value: 0.000000
+                minimum increment: 13.400000
+        unnamed-GtkNotebookPageAccessible-4
+          "page tab"
+          parent: notebook
+          index: 2
+          state: enabled selectable visible
+          <AtkComponent>
+          layer: widget
+          alpha: 1
+          license_page
+            "filler"
+            index: 0
+            state: enabled sensitive vertical visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            scrolledwindow2
+              "scroll pane"
+              parent: license_page
+              index: 0
+              state: enabled focusable sensitive visible
+              toolkit: gtk
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              license_view
+                "text"
+                parent: scrolledwindow2
+                index: 0
+                state: enabled focusable multi-line sensitive visible
+                toolkit: gtk
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                <AtkText>
+                text: 
+                character count: 0
+                caret offset: 0
+                default attributes: bg-color: <omitted>
+                                    bg-full-height: false
+                                    direction: <omitted>
+                                    editable: false
+                                    family-name: <omitted>
+                                    fg-color: <omitted>
+                                    indent: 0
+                                    invisible: false
+                                    justification: left
+                                    language: <omitted>
+                                    left-margin: 8
+                                    pixels-above-lines: 0
+                                    pixels-below-lines: 0
+                                    pixels-inside-wrap: 0
+                                    right-margin: 8
+                                    rise: 0
+                                    scale: 1
+                                    size: <omitted>
+                                    stretch: <omitted>
+                                    strikethrough: false
+                                    style: <omitted>
+                                    underline: none
+                                    variant: <omitted>
+                                    weight: <omitted>
+                                    wrap-mode: none
+                <AtkStreamableContent>
+                mime types: application/x-gtk-text-buffer-rich-text text/plain
+              unnamed-GtkRangeAccessible-5
+                "scroll bar"
+                parent: scrolledwindow2
+                state: enabled horizontal sensitive visible
+                toolkit: gtk
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                <AtkValue>
+                minimum value: 0.000000
+                maximum value: 0.000000
+                current value: 0.000000
+                minimum increment: 39.800000
+              unnamed-GtkRangeAccessible-6
+                "scroll bar"
+                parent: scrolledwindow2
+                state: enabled sensitive vertical visible
+                toolkit: gtk
+                <AtkComponent>
+                layer: widget
+                alpha: 1
+                <AtkValue>
+                minimum value: 0.000000
+                maximum value: 0.000000
+                current value: 0.000000
+                minimum increment: 14.000000
+    dialog-action_area1
       "filler"
-      parent: unnamed-GtkContainerAccessible-0
+      parent: dialog-vbox1
       index: 1
       state: enabled horizontal sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
-      unnamed-GtkToggleButtonAccessible-8
-        "toggle button"
-        parent: unnamed-GtkContainerAccessible-7
-        index: 0
-        name: License
-        state: enabled focusable sensitive
-        toolkit: gtk
-        <AtkComponent>
-        layer: widget
-        alpha: 1
-        <AtkImage>
-        image size: -1 x -1
-        image description: (null)
-        <AtkAction>
-        action 0 name: click
-        action 0 description: Clicks the button
-        action 0 keybinding: <Alt>l
-      unnamed-GtkToggleButtonAccessible-9
-        "toggle button"
-        parent: unnamed-GtkContainerAccessible-7
-        index: 1
-        name: Credits
-        state: enabled focusable sensitive
-        toolkit: gtk
-        <AtkComponent>
-        layer: widget
-        alpha: 1
-        <AtkImage>
-        image size: 20 x 20
-        image description: (null)
-        <AtkAction>
-        action 0 name: click
-        action 0 description: Clicks the button
-        action 0 keybinding: <Alt>r
-      unnamed-GtkButtonAccessible-10
+      close_button
         "push button"
-        parent: unnamed-GtkContainerAccessible-7
-        index: 2
+        parent: dialog-action_area1
+        index: 0
         name: Close
         state: enabled focusable sensitive showing visible default
         toolkit: gtk
@@ -370,3 +495,37 @@ for details, visit http://www.gnu.org/licenses/gpl.html
         action 0 name: click
         action 0 description: Clicks the button
         action 0 keybinding: <Alt>c
+      license_button
+        "toggle button"
+        parent: dialog-action_area1
+        index: 1
+        name: License
+        state: enabled focusable sensitive
+        toolkit: gtk
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkImage>
+        image size: -1 x -1
+        image description: (null)
+        <AtkAction>
+        action 0 name: click
+        action 0 description: Clicks the button
+        action 0 keybinding: <Alt>l
+      credits_button
+        "toggle button"
+        parent: dialog-action_area1
+        index: 2
+        name: Credits
+        state: enabled focusable sensitive
+        toolkit: gtk
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkImage>
+        image size: 20 x 20
+        image description: (null)
+        <AtkAction>
+        action 0 name: click
+        action 0 description: Clicks the button
+        action 0 keybinding: <Alt>r

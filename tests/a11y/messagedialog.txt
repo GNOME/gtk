@@ -7,7 +7,7 @@ window1
   <AtkComponent>
   layer: window
   alpha: 1
-  unnamed-GtkContainerAccessible-0
+  dialog-vbox1
     "filler"
     parent: window1
     index: 0
@@ -16,18 +16,18 @@ window1
     <AtkComponent>
     layer: widget
     alpha: 1
-    unnamed-GtkContainerAccessible-1
+    box
       "filler"
-      parent: unnamed-GtkContainerAccessible-0
+      parent: dialog-vbox1
       index: 0
       state: enabled horizontal sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
-      unnamed-GtkImageAccessible-2
+      image
         "icon"
-        parent: unnamed-GtkContainerAccessible-1
+        parent: box
         index: 0
         state: enabled sensitive showing visible
         toolkit: gtk
@@ -37,18 +37,18 @@ window1
         <AtkImage>
         image size: 48 x 48
         image description: (null)
-      unnamed-GtkContainerAccessible-3
+      message_area
         "filler"
-        parent: unnamed-GtkContainerAccessible-1
+        parent: box
         index: 1
         state: enabled sensitive showing vertical visible
         toolkit: gtk
         <AtkComponent>
         layer: widget
         alpha: 1
-        Information
+        label
           "label"
-          parent: unnamed-GtkContainerAccessible-3
+          parent: message_area
           index: 0
           name: Information
           state: enabled focusable multi-line sensitive showing visible
@@ -85,9 +85,9 @@ window1
                               variant: <omitted>
                               weight: <omitted>
                               wrap-mode: word
-        More Information
+        secondary_label
           "label"
-          parent: unnamed-GtkContainerAccessible-3
+          parent: message_area
           index: 1
           name: More Information
           state: enabled focusable multi-line sensitive showing visible
@@ -124,9 +124,9 @@ window1
                               variant: <omitted>
                               weight: <omitted>
                               wrap-mode: word
-    unnamed-GtkContainerAccessible-4
+    dialog-action_area1
       "filler"
-      parent: unnamed-GtkContainerAccessible-0
+      parent: dialog-vbox1
       index: 1
       state: enabled horizontal sensitive showing visible
       toolkit: gtk

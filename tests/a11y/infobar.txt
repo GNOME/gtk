@@ -64,7 +64,7 @@ window1
                             variant: <omitted>
                             weight: <omitted>
                             wrap-mode: word
-    unnamed-GtkContainerAccessible-0
+    action_area
       "filler"
       parent: bar1
       index: 1

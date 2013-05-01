@@ -7,7 +7,7 @@ window1
   <AtkComponent>
   layer: window
   alpha: 1
-  unnamed-GtkContainerAccessible-0
+  vbox
     "filler"
     parent: window1
     index: 0
@@ -16,36 +16,36 @@ window1
     <AtkComponent>
     layer: widget
     alpha: 1
-    unnamed-GtkContainerAccessible-1
+    unnamed-GtkContainerAccessible-0
       "color chooser"
-      parent: unnamed-GtkContainerAccessible-0
+      parent: vbox
       index: 0
       state: enabled sensitive showing vertical visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
-      unnamed-GtkContainerAccessible-2
+      unnamed-GtkContainerAccessible-1
         "filler"
-        parent: unnamed-GtkContainerAccessible-1
+        parent: unnamed-GtkContainerAccessible-0
         index: 0
         state: enabled horizontal sensitive showing visible
         toolkit: gtk
         <AtkComponent>
         layer: widget
         alpha: 1
-        unnamed-GtkContainerAccessible-3
+        unnamed-GtkContainerAccessible-2
           "filler"
-          parent: unnamed-GtkContainerAccessible-2
+          parent: unnamed-GtkContainerAccessible-1
           index: 0
           state: enabled sensitive showing vertical visible
           toolkit: gtk
           <AtkComponent>
           layer: widget
           alpha: 1
-          unnamed-GtkWidgetAccessible-4
+          unnamed-GtkWidgetAccessible-3
             "color chooser"
-            parent: unnamed-GtkContainerAccessible-3
+            parent: unnamed-GtkContainerAccessible-2
             index: 0
             name: Color Wheel
             description: Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle.
@@ -60,36 +60,36 @@ window1
             <AtkComponent>
             layer: widget
             alpha: 1
-          unnamed-GtkContainerAccessible-5
+          unnamed-GtkContainerAccessible-4
             "filler"
-            parent: unnamed-GtkContainerAccessible-3
+            parent: unnamed-GtkContainerAccessible-2
             index: 1
             state: enabled horizontal sensitive showing visible
             toolkit: gtk
             <AtkComponent>
             layer: widget
             alpha: 1
-            unnamed-GtkFrameAccessible-6
+            unnamed-GtkFrameAccessible-5
               "panel"
-              parent: unnamed-GtkContainerAccessible-5
+              parent: unnamed-GtkContainerAccessible-4
               index: 0
               state: enabled sensitive showing visible
               toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
-              unnamed-GtkContainerAccessible-7
+              unnamed-GtkContainerAccessible-6
                 "filler"
-                parent: unnamed-GtkFrameAccessible-6
+                parent: unnamed-GtkFrameAccessible-5
                 index: 0
                 state: enabled horizontal sensitive showing visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GtkWidgetAccessible-8
+                unnamed-GtkWidgetAccessible-7
                   "unknown"
-                  parent: unnamed-GtkContainerAccessible-7
+                  parent: unnamed-GtkContainerAccessible-6
                   index: 0
                   description: The previously-selected color, for comparison to the color you're selecting now.
                   state: enabled sensitive showing visible
@@ -97,9 +97,9 @@ window1
                   <AtkComponent>
                   layer: widget
                   alpha: 1
-                unnamed-GtkWidgetAccessible-9
+                unnamed-GtkWidgetAccessible-8
                   "unknown"
-                  parent: unnamed-GtkContainerAccessible-7
+                  parent: unnamed-GtkContainerAccessible-6
                   index: 1
                   description: The color you've chosen.
                   state: enabled sensitive showing visible
@@ -107,9 +107,9 @@ window1
                   <AtkComponent>
                   layer: widget
                   alpha: 1
-            unnamed-GtkButtonAccessible-10
+            unnamed-GtkButtonAccessible-9
               "push button"
-              parent: unnamed-GtkContainerAccessible-5
+              parent: unnamed-GtkContainerAccessible-4
               index: 1
               description: Click the eyedropper, then click a color anywhere on your screen to select that color.
               state: enabled focusable sensitive showing visible
@@ -123,18 +123,18 @@ window1
               <AtkAction>
               action 0 name: click
               action 0 description: Clicks the button
-        unnamed-GtkContainerAccessible-11
+        unnamed-GtkContainerAccessible-10
           "filler"
-          parent: unnamed-GtkContainerAccessible-2
+          parent: unnamed-GtkContainerAccessible-1
           index: 1
           state: enabled sensitive showing vertical visible
           toolkit: gtk
           <AtkComponent>
           layer: widget
           alpha: 1
-          unnamed-GtkContainerAccessible-12
+          unnamed-GtkContainerAccessible-11
             "panel"
-            parent: unnamed-GtkContainerAccessible-11
+            parent: unnamed-GtkContainerAccessible-10
             index: 0
             state: enabled horizontal sensitive showing visible
             toolkit: gtk
@@ -143,7 +143,7 @@ window1
             alpha: 1
             #FFFFFF
               "text"
-              parent: unnamed-GtkContainerAccessible-12
+              parent: unnamed-GtkContainerAccessible-11
               index: 0
               description: You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' in this entry.
               labelled-by: Color name:
@@ -187,7 +187,7 @@ window1
               action 0 keybinding: <Alt>n
             Color name:
               "label"
-              parent: unnamed-GtkContainerAccessible-12
+              parent: unnamed-GtkContainerAccessible-11
               index: 1
               name: Color name:
               label-for: #FFFFFF
@@ -227,7 +227,7 @@ window1
                                   wrap-mode: word
             255
               "text"
-              parent: unnamed-GtkContainerAccessible-12
+              parent: unnamed-GtkContainerAccessible-11
               index: 2
               description: Transparency of the color.
               state: editable enabled focusable sensitive single-line
@@ -267,9 +267,9 @@ window1
               <AtkAction>
               action 0 name: activate
               action 0 description: Activates the entry
-            unnamed-GtkScaleAccessible-13
+            unnamed-GtkScaleAccessible-12
               "slider"
-              parent: unnamed-GtkContainerAccessible-12
+              parent: unnamed-GtkContainerAccessible-11
               index: 3
               description: Transparency of the color.
               labelled-by: Opacity:
@@ -285,10 +285,10 @@ window1
               minimum increment: 1.000000
             Opacity:
               "label"
-              parent: unnamed-GtkContainerAccessible-12
+              parent: unnamed-GtkContainerAccessible-11
               index: 4
               name: Opacity:
-              label-for: unnamed-GtkScaleAccessible-13
+              label-for: unnamed-GtkScaleAccessible-12
               state: enabled multi-line sensitive
               toolkit: gtk
               <AtkComponent>
@@ -323,9 +323,9 @@ window1
                                   variant: <omitted>
                                   weight: <omitted>
                                   wrap-mode: word
-            unnamed-GtkWidgetAccessible-14
+            unnamed-GtkWidgetAccessible-13
               "separator"
-              parent: unnamed-GtkContainerAccessible-12
+              parent: unnamed-GtkContainerAccessible-11
               index: 5
               state: enabled horizontal sensitive showing visible
               toolkit: gtk
@@ -334,10 +334,10 @@ window1
               alpha: 1
             255
               "spin button"
-              parent: unnamed-GtkContainerAccessible-12
+              parent: unnamed-GtkContainerAccessible-11
               index: 6
               description: Amount of blue light in the color.
-              controller-for: unnamed-GtkWidgetAccessible-4
+              controller-for: unnamed-GtkWidgetAccessible-3
               labelled-by: Blue:
               state: editable enabled focusable horizontal sensitive showing single-line visible
               toolkit: gtk
@@ -384,7 +384,7 @@ window1
               minimum increment: 1.000000
             Blue:
               "label"
-              parent: unnamed-GtkContainerAccessible-12
+              parent: unnamed-GtkContainerAccessible-11
               index: 7
               name: Blue:
               label-for: 255
@@ -424,10 +424,10 @@ window1
                                   wrap-mode: word
             255
               "spin button"
-              parent: unnamed-GtkContainerAccessible-12
+              parent: unnamed-GtkContainerAccessible-11
               index: 8
               description: Amount of green light in the color.
-              controller-for: unnamed-GtkWidgetAccessible-4
+              controller-for: unnamed-GtkWidgetAccessible-3
               labelled-by: Green:
               state: editable enabled focusable horizontal sensitive showing single-line visible
               toolkit: gtk
@@ -474,7 +474,7 @@ window1
               minimum increment: 1.000000
             Green:
               "label"
-              parent: unnamed-GtkContainerAccessible-12
+              parent: unnamed-GtkContainerAccessible-11
               index: 9
               name: Green:
               label-for: 255
@@ -514,10 +514,10 @@ window1
                                   wrap-mode: word
             255
               "spin button"
-              parent: unnamed-GtkContainerAccessible-12
+              parent: unnamed-GtkContainerAccessible-11
               index: 10
               description: Amount of red light in the color.
-              controller-for: unnamed-GtkWidgetAccessible-4
+              controller-for: unnamed-GtkWidgetAccessible-3
               labelled-by: Red:
               state: editable enabled focusable horizontal sensitive showing single-line visible
               toolkit: gtk
@@ -564,7 +564,7 @@ window1
               minimum increment: 1.000000
             Red:
               "label"
-              parent: unnamed-GtkContainerAccessible-12
+              parent: unnamed-GtkContainerAccessible-11
               index: 11
               name: Red:
               label-for: 255
@@ -604,10 +604,10 @@ window1
                                   wrap-mode: word
             100
               "spin button"
-              parent: unnamed-GtkContainerAccessible-12
+              parent: unnamed-GtkContainerAccessible-11
               index: 12
               description: Brightness of the color.
-              controller-for: unnamed-GtkWidgetAccessible-4
+              controller-for: unnamed-GtkWidgetAccessible-3
               labelled-by: Value:
               state: editable enabled focusable horizontal sensitive showing single-line visible
               toolkit: gtk
@@ -654,7 +654,7 @@ window1
               minimum increment: 1.000000
             Value:
               "label"
-              parent: unnamed-GtkContainerAccessible-12
+              parent: unnamed-GtkContainerAccessible-11
               index: 13
               name: Value:
               label-for: 100
@@ -694,10 +694,10 @@ window1
                                   wrap-mode: word
             0
               "spin button"
-              parent: unnamed-GtkContainerAccessible-12
+              parent: unnamed-GtkContainerAccessible-11
               index: 14
               description: Intensity of the color.
-              controller-for: unnamed-GtkWidgetAccessible-4
+              controller-for: unnamed-GtkWidgetAccessible-3
               labelled-by: Saturation:
               state: editable enabled focusable horizontal sensitive showing single-line visible
               toolkit: gtk
@@ -744,7 +744,7 @@ window1
               minimum increment: 1.000000
             Saturation:
               "label"
-              parent: unnamed-GtkContainerAccessible-12
+              parent: unnamed-GtkContainerAccessible-11
               index: 15
               name: Saturation:
               label-for: 0
@@ -784,10 +784,10 @@ window1
                                   wrap-mode: word
             0
               "spin button"
-              parent: unnamed-GtkContainerAccessible-12
+              parent: unnamed-GtkContainerAccessible-11
               index: 16
               description: Position on the color wheel.
-              controller-for: unnamed-GtkWidgetAccessible-4
+              controller-for: unnamed-GtkWidgetAccessible-3
               labelled-by: Hue:
               state: editable enabled focusable horizontal sensitive showing single-line visible
               toolkit: gtk
@@ -834,7 +834,7 @@ window1
               minimum increment: 1.000000
             Hue:
               "label"
-              parent: unnamed-GtkContainerAccessible-12
+              parent: unnamed-GtkContainerAccessible-11
               index: 17
               name: Hue:
               label-for: 0
@@ -872,9 +872,9 @@ window1
                                   variant: <omitted>
                                   weight: <omitted>
                                   wrap-mode: word
-          unnamed-GtkContainerAccessible-15
+          unnamed-GtkContainerAccessible-14
             "filler"
-            parent: unnamed-GtkContainerAccessible-11
+            parent: unnamed-GtkContainerAccessible-10
             index: 1
             state: enabled sensitive vertical
             toolkit: gtk
@@ -883,10 +883,10 @@ window1
             alpha: 1
             Palette:
               "label"
-              parent: unnamed-GtkContainerAccessible-15
+              parent: unnamed-GtkContainerAccessible-14
               index: 0
               name: Palette:
-              label-for: unnamed-GtkWidgetAccessible-16
+              label-for: unnamed-GtkWidgetAccessible-15
               state: enabled multi-line sensitive visible
               toolkit: gtk
               <AtkComponent>
@@ -921,27 +921,27 @@ window1
                                   variant: <omitted>
                                   weight: <omitted>
                                   wrap-mode: word
-            unnamed-GtkContainerAccessible-17
+            unnamed-GtkContainerAccessible-16
               "panel"
-              parent: unnamed-GtkContainerAccessible-15
+              parent: unnamed-GtkContainerAccessible-14
               index: 1
               state: enabled horizontal sensitive visible
               toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
-              unnamed-GtkFrameAccessible-18
+              unnamed-GtkFrameAccessible-17
                 "panel"
-                parent: unnamed-GtkContainerAccessible-17
+                parent: unnamed-GtkContainerAccessible-16
                 index: 0
                 state: enabled sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GtkWidgetAccessible-19
+                unnamed-GtkWidgetAccessible-18
                   "unknown"
-                  parent: unnamed-GtkFrameAccessible-18
+                  parent: unnamed-GtkFrameAccessible-17
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
@@ -949,18 +949,18 @@ window1
                   <AtkComponent>
                   layer: widget
                   alpha: 1
-              unnamed-GtkFrameAccessible-20
+              unnamed-GtkFrameAccessible-19
                 "panel"
-                parent: unnamed-GtkContainerAccessible-17
+                parent: unnamed-GtkContainerAccessible-16
                 index: 1
                 state: enabled sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GtkWidgetAccessible-21
+                unnamed-GtkWidgetAccessible-20
                   "unknown"
-                  parent: unnamed-GtkFrameAccessible-20
+                  parent: unnamed-GtkFrameAccessible-19
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
@@ -968,18 +968,18 @@ window1
                   <AtkComponent>
                   layer: widget
                   alpha: 1
-              unnamed-GtkFrameAccessible-22
+              unnamed-GtkFrameAccessible-21
                 "panel"
-                parent: unnamed-GtkContainerAccessible-17
+                parent: unnamed-GtkContainerAccessible-16
                 index: 2
                 state: enabled sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GtkWidgetAccessible-23
+                unnamed-GtkWidgetAccessible-22
                   "unknown"
-                  parent: unnamed-GtkFrameAccessible-22
+                  parent: unnamed-GtkFrameAccessible-21
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
@@ -987,18 +987,18 @@ window1
                   <AtkComponent>
                   layer: widget
                   alpha: 1
-              unnamed-GtkFrameAccessible-24
+              unnamed-GtkFrameAccessible-23
                 "panel"
-                parent: unnamed-GtkContainerAccessible-17
+                parent: unnamed-GtkContainerAccessible-16
                 index: 3
                 state: enabled sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GtkWidgetAccessible-25
+                unnamed-GtkWidgetAccessible-24
                   "unknown"
-                  parent: unnamed-GtkFrameAccessible-24
+                  parent: unnamed-GtkFrameAccessible-23
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
@@ -1006,18 +1006,18 @@ window1
                   <AtkComponent>
                   layer: widget
                   alpha: 1
-              unnamed-GtkFrameAccessible-26
+              unnamed-GtkFrameAccessible-25
                 "panel"
-                parent: unnamed-GtkContainerAccessible-17
+                parent: unnamed-GtkContainerAccessible-16
                 index: 4
                 state: enabled sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GtkWidgetAccessible-27
+                unnamed-GtkWidgetAccessible-26
                   "unknown"
-                  parent: unnamed-GtkFrameAccessible-26
+                  parent: unnamed-GtkFrameAccessible-25
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
@@ -1025,18 +1025,18 @@ window1
                   <AtkComponent>
                   layer: widget
                   alpha: 1
-              unnamed-GtkFrameAccessible-28
+              unnamed-GtkFrameAccessible-27
                 "panel"
-                parent: unnamed-GtkContainerAccessible-17
+                parent: unnamed-GtkContainerAccessible-16
                 index: 5
                 state: enabled sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GtkWidgetAccessible-29
+                unnamed-GtkWidgetAccessible-28
                   "unknown"
-                  parent: unnamed-GtkFrameAccessible-28
+                  parent: unnamed-GtkFrameAccessible-27
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
@@ -1044,18 +1044,18 @@ window1
                   <AtkComponent>
                   layer: widget
                   alpha: 1
-              unnamed-GtkFrameAccessible-30
+              unnamed-GtkFrameAccessible-29
                 "panel"
-                parent: unnamed-GtkContainerAccessible-17
+                parent: unnamed-GtkContainerAccessible-16
                 index: 6
                 state: enabled sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GtkWidgetAccessible-31
+                unnamed-GtkWidgetAccessible-30
                   "unknown"
-                  parent: unnamed-GtkFrameAccessible-30
+                  parent: unnamed-GtkFrameAccessible-29
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
@@ -1063,18 +1063,18 @@ window1
                   <AtkComponent>
                   layer: widget
                   alpha: 1
-              unnamed-GtkFrameAccessible-32
+              unnamed-GtkFrameAccessible-31
                 "panel"
-                parent: unnamed-GtkContainerAccessible-17
+                parent: unnamed-GtkContainerAccessible-16
                 index: 7
                 state: enabled sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GtkWidgetAccessible-33
+                unnamed-GtkWidgetAccessible-32
                   "unknown"
-                  parent: unnamed-GtkFrameAccessible-32
+                  parent: unnamed-GtkFrameAccessible-31
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
@@ -1082,18 +1082,18 @@ window1
                   <AtkComponent>
                   layer: widget
                   alpha: 1
-              unnamed-GtkFrameAccessible-34
+              unnamed-GtkFrameAccessible-33
                 "panel"
-                parent: unnamed-GtkContainerAccessible-17
+                parent: unnamed-GtkContainerAccessible-16
                 index: 8
                 state: enabled sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GtkWidgetAccessible-35
+                unnamed-GtkWidgetAccessible-34
                   "unknown"
-                  parent: unnamed-GtkFrameAccessible-34
+                  parent: unnamed-GtkFrameAccessible-33
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
@@ -1101,18 +1101,18 @@ window1
                   <AtkComponent>
                   layer: widget
                   alpha: 1
-              unnamed-GtkFrameAccessible-36
+              unnamed-GtkFrameAccessible-35
                 "panel"
-                parent: unnamed-GtkContainerAccessible-17
+                parent: unnamed-GtkContainerAccessible-16
                 index: 9
                 state: enabled sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GtkWidgetAccessible-37
+                unnamed-GtkWidgetAccessible-36
                   "unknown"
-                  parent: unnamed-GtkFrameAccessible-36
+                  parent: unnamed-GtkFrameAccessible-35
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
@@ -1120,18 +1120,18 @@ window1
                   <AtkComponent>
                   layer: widget
                   alpha: 1
-              unnamed-GtkFrameAccessible-38
+              unnamed-GtkFrameAccessible-37
                 "panel"
-                parent: unnamed-GtkContainerAccessible-17
+                parent: unnamed-GtkContainerAccessible-16
                 index: 10
                 state: enabled sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GtkWidgetAccessible-39
+                unnamed-GtkWidgetAccessible-38
                   "unknown"
-                  parent: unnamed-GtkFrameAccessible-38
+                  parent: unnamed-GtkFrameAccessible-37
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
@@ -1139,18 +1139,18 @@ window1
                   <AtkComponent>
                   layer: widget
                   alpha: 1
-              unnamed-GtkFrameAccessible-40
+              unnamed-GtkFrameAccessible-39
                 "panel"
-                parent: unnamed-GtkContainerAccessible-17
+                parent: unnamed-GtkContainerAccessible-16
                 index: 11
                 state: enabled sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GtkWidgetAccessible-41
+                unnamed-GtkWidgetAccessible-40
                   "unknown"
-                  parent: unnamed-GtkFrameAccessible-40
+                  parent: unnamed-GtkFrameAccessible-39
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
@@ -1158,18 +1158,18 @@ window1
                   <AtkComponent>
                   layer: widget
                   alpha: 1
-              unnamed-GtkFrameAccessible-42
+              unnamed-GtkFrameAccessible-41
                 "panel"
-                parent: unnamed-GtkContainerAccessible-17
+                parent: unnamed-GtkContainerAccessible-16
                 index: 12
                 state: enabled sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GtkWidgetAccessible-43
+                unnamed-GtkWidgetAccessible-42
                   "unknown"
-                  parent: unnamed-GtkFrameAccessible-42
+                  parent: unnamed-GtkFrameAccessible-41
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
@@ -1177,18 +1177,18 @@ window1
                   <AtkComponent>
                   layer: widget
                   alpha: 1
-              unnamed-GtkFrameAccessible-44
+              unnamed-GtkFrameAccessible-43
                 "panel"
-                parent: unnamed-GtkContainerAccessible-17
+                parent: unnamed-GtkContainerAccessible-16
                 index: 13
                 state: enabled sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GtkWidgetAccessible-45
+                unnamed-GtkWidgetAccessible-44
                   "unknown"
-                  parent: unnamed-GtkFrameAccessible-44
+                  parent: unnamed-GtkFrameAccessible-43
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
@@ -1196,18 +1196,18 @@ window1
                   <AtkComponent>
                   layer: widget
                   alpha: 1
-              unnamed-GtkFrameAccessible-46
+              unnamed-GtkFrameAccessible-45
                 "panel"
-                parent: unnamed-GtkContainerAccessible-17
+                parent: unnamed-GtkContainerAccessible-16
                 index: 14
                 state: enabled sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GtkWidgetAccessible-47
+                unnamed-GtkWidgetAccessible-46
                   "unknown"
-                  parent: unnamed-GtkFrameAccessible-46
+                  parent: unnamed-GtkFrameAccessible-45
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
@@ -1215,18 +1215,18 @@ window1
                   <AtkComponent>
                   layer: widget
                   alpha: 1
-              unnamed-GtkFrameAccessible-48
+              unnamed-GtkFrameAccessible-47
                 "panel"
-                parent: unnamed-GtkContainerAccessible-17
+                parent: unnamed-GtkContainerAccessible-16
                 index: 15
                 state: enabled sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GtkWidgetAccessible-49
+                unnamed-GtkWidgetAccessible-48
                   "unknown"
-                  parent: unnamed-GtkFrameAccessible-48
+                  parent: unnamed-GtkFrameAccessible-47
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
@@ -1234,18 +1234,18 @@ window1
                   <AtkComponent>
                   layer: widget
                   alpha: 1
-              unnamed-GtkFrameAccessible-50
+              unnamed-GtkFrameAccessible-49
                 "panel"
-                parent: unnamed-GtkContainerAccessible-17
+                parent: unnamed-GtkContainerAccessible-16
                 index: 16
                 state: enabled sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GtkWidgetAccessible-51
+                unnamed-GtkWidgetAccessible-50
                   "unknown"
-                  parent: unnamed-GtkFrameAccessible-50
+                  parent: unnamed-GtkFrameAccessible-49
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
@@ -1253,18 +1253,18 @@ window1
                   <AtkComponent>
                   layer: widget
                   alpha: 1
-              unnamed-GtkFrameAccessible-52
+              unnamed-GtkFrameAccessible-51
                 "panel"
-                parent: unnamed-GtkContainerAccessible-17
+                parent: unnamed-GtkContainerAccessible-16
                 index: 17
                 state: enabled sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GtkWidgetAccessible-53
+                unnamed-GtkWidgetAccessible-52
                   "unknown"
-                  parent: unnamed-GtkFrameAccessible-52
+                  parent: unnamed-GtkFrameAccessible-51
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
@@ -1272,18 +1272,18 @@ window1
                   <AtkComponent>
                   layer: widget
                   alpha: 1
-              unnamed-GtkFrameAccessible-54
+              unnamed-GtkFrameAccessible-53
                 "panel"
-                parent: unnamed-GtkContainerAccessible-17
+                parent: unnamed-GtkContainerAccessible-16
                 index: 18
                 state: enabled sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GtkWidgetAccessible-55
+                unnamed-GtkWidgetAccessible-54
                   "unknown"
-                  parent: unnamed-GtkFrameAccessible-54
+                  parent: unnamed-GtkFrameAccessible-53
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   state: enabled focusable sensitive visible
@@ -1291,18 +1291,18 @@ window1
                   <AtkComponent>
                   layer: widget
                   alpha: 1
-              unnamed-GtkFrameAccessible-56
+              unnamed-GtkFrameAccessible-55
                 "panel"
-                parent: unnamed-GtkContainerAccessible-17
+                parent: unnamed-GtkContainerAccessible-16
                 index: 19
                 state: enabled sensitive visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                unnamed-GtkWidgetAccessible-16
+                unnamed-GtkWidgetAccessible-15
                   "unknown"
-                  parent: unnamed-GtkFrameAccessible-56
+                  parent: unnamed-GtkFrameAccessible-55
                   index: 0
                   description: Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select "Save color here."
                   labelled-by: Palette:
@@ -1311,18 +1311,18 @@ window1
                   <AtkComponent>
                   layer: widget
                   alpha: 1
-    unnamed-GtkContainerAccessible-57
+    action_area
       "filler"
-      parent: unnamed-GtkContainerAccessible-0
+      parent: vbox
       index: 1
       state: enabled horizontal sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: widget
       alpha: 1
-      unnamed-GtkButtonAccessible-58
+      unnamed-GtkButtonAccessible-56
         "push button"
-        parent: unnamed-GtkContainerAccessible-57
+        parent: action_area
         index: 0
         name: Help
         state: enabled focusable sensitive
@@ -1337,9 +1337,9 @@ window1
         action 0 name: click
         action 0 description: Clicks the button
         action 0 keybinding: <Alt>h
-      unnamed-GtkButtonAccessible-59
+      unnamed-GtkButtonAccessible-57
         "push button"
-        parent: unnamed-GtkContainerAccessible-57
+        parent: action_area
         index: 1
         name: Select
         state: enabled focusable sensitive showing visible default
@@ -1354,9 +1354,9 @@ window1
         action 0 name: click
         action 0 description: Clicks the button
         action 0 keybinding: <Alt>s
-      unnamed-GtkButtonAccessible-60
+      unnamed-GtkButtonAccessible-58
         "push button"
-        parent: unnamed-GtkContainerAccessible-57
+        parent: action_area
         index: 2
         name: Cancel
         state: enabled focusable sensitive showing visible

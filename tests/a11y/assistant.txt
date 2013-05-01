@@ -9,7 +9,7 @@ window1
   button1
     "push button"
     index: 0
-    name: Page 1
+    name: 
     state: enabled focusable sensitive showing visible
     toolkit: gtk
     <AtkComponent>
@@ -24,7 +24,7 @@ window1
   button2
     "push button"
     index: 0
-    name: Page 2
+    name: 
     state: enabled focusable sensitive visible
     toolkit: gtk
     <AtkComponent>
@@ -36,18 +36,18 @@ window1
     <AtkAction>
     action 0 name: click
     action 0 description: Clicks the button
-  unnamed-GtkContainerAccessible-0
+  action_area
     "filler"
-    parent: unnamed-GtkContainerAccessible-1
+    parent: content_box
     index: 1
     state: enabled horizontal sensitive showing visible
     toolkit: gtk
     <AtkComponent>
     layer: widget
     alpha: 1
-    unnamed-GtkButtonAccessible-2
+    close
       "push button"
-      parent: unnamed-GtkContainerAccessible-0
+      parent: action_area
       index: 0
       name: Close
       state: enabled focusable sensitive
@@ -62,9 +62,9 @@ window1
       action 0 name: click
       action 0 description: Clicks the button
       action 0 keybinding: <Alt>c
-    unnamed-GtkButtonAccessible-3
+    cancel
       "push button"
-      parent: unnamed-GtkContainerAccessible-0
+      parent: action_area
       index: 1
       name: Cancel
       state: enabled focusable sensitive showing visible
@@ -79,9 +79,9 @@ window1
       action 0 name: click
       action 0 description: Clicks the button
       action 0 keybinding: <Alt>c
-    unnamed-GtkButtonAccessible-4
+    last
       "push button"
-      parent: unnamed-GtkContainerAccessible-0
+      parent: action_area
       index: 2
       name: Finish
       state: focusable
@@ -96,9 +96,9 @@ window1
       action 0 name: click
       action 0 description: Clicks the button
       action 0 keybinding: <Alt>f
-    unnamed-GtkButtonAccessible-5
+    back
       "push button"
-      parent: unnamed-GtkContainerAccessible-0
+      parent: action_area
       index: 3
       name: Go Back
       state: enabled focusable sensitive
@@ -113,9 +113,9 @@ window1
       action 0 name: click
       action 0 description: Clicks the button
       action 0 keybinding: <Alt>b
-    unnamed-GtkButtonAccessible-6
+    forward
       "push button"
-      parent: unnamed-GtkContainerAccessible-0
+      parent: action_area
       index: 4
       name: Continue
       state: focusable showing visible
@@ -130,9 +130,9 @@ window1
       action 0 name: click
       action 0 description: Clicks the button
       action 0 keybinding: <Alt>o
-    unnamed-GtkButtonAccessible-7
+    apply
       "push button"
-      parent: unnamed-GtkContainerAccessible-0
+      parent: action_area
       index: 5
       name: Apply
       state: enabled focusable sensitive
