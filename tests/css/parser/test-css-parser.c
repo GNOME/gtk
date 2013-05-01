@@ -301,6 +301,7 @@ main (int argc, char **argv)
 {
   gtk_test_init (&argc, &argv);
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   /* Add a bunch of properties so we can test that we parse them properly */
   gtk_style_properties_register_property (NULL,
                                           g_param_spec_boolean ("boolean-property",
@@ -320,18 +321,6 @@ main (int argc, char **argv)
                                                              "test uint properties",
                                                              0, G_MAXUINT, 0,
                                                              G_PARAM_READABLE));
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_float ("float-property",
-                                                              "float property",
-                                                              "test float properties",
-                                                              -G_MAXFLOAT, G_MAXFLOAT, 0.0f,
-                                                              G_PARAM_READABLE));
-  gtk_style_properties_register_property (NULL,
-                                          g_param_spec_double ("double-property",
-                                                               "double property",
-                                                               "test double properties",
-                                                               -G_MAXDOUBLE, G_MAXDOUBLE, 0.0,
-                                                               G_PARAM_READABLE));
   gtk_style_properties_register_property (NULL,
                                           g_param_spec_string ("string-property",
                                                                "string property",
@@ -397,6 +386,7 @@ main (int argc, char **argv)
                                                               "test uint8 properties",
                                                               0, G_MAXUINT8, 0,
                                                               G_PARAM_READABLE));
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   if (argc < 2)
     {
