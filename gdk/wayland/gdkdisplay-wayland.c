@@ -260,8 +260,6 @@ gdk_wayland_display_dispose (GObject *object)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (object);
 
-  _gdk_wayland_display_manager_remove_display (gdk_display_manager_get (),
-					       GDK_DISPLAY (display_wayland));
   g_list_foreach (display_wayland->input_devices,
 		  (GFunc) g_object_run_dispose, NULL);
 
@@ -613,9 +611,6 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass * class)
 static void
 gdk_wayland_display_init (GdkWaylandDisplay *display)
 {
-  _gdk_wayland_display_manager_add_display (gdk_display_manager_get (),
-					    GDK_DISPLAY (display));
-
   display->xkb_context = xkb_context_new (0);
 }
 

@@ -101,31 +101,3 @@ gdk_wayland_display_manager_init (GdkWaylandDisplayManager *manager)
 {
 }
 
-void
-_gdk_wayland_display_manager_add_display (GdkDisplayManager *manager,
-					  GdkDisplay        *display)
-{
-  GdkWaylandDisplayManager *manager_wayland = GDK_WAYLAND_DISPLAY_MANAGER (manager);
-
-  if (manager_wayland->displays == NULL)
-    gdk_display_manager_set_default_display (manager, display);
-
-  manager_wayland->displays = g_slist_prepend (manager_wayland->displays, display);
-}
-
-void
-_gdk_wayland_display_manager_remove_display (GdkDisplayManager *manager,
-					     GdkDisplay        *display)
-{
-  GdkWaylandDisplayManager *manager_wayland = GDK_WAYLAND_DISPLAY_MANAGER (manager);
-
-  manager_wayland->displays = g_slist_remove (manager_wayland->displays, display);
-
-  if (gdk_display_manager_get_default_display (manager) == display)
-    {
-      if (manager_wayland->displays)
-        gdk_display_manager_set_default_display (manager, manager_wayland->displays->data);
-      else
-        gdk_display_manager_set_default_display (manager, NULL);
-    }
-}

@@ -167,11 +167,6 @@ void _gdk_wayland_screen_remove_output (GdkScreen *screen,
 int _gdk_wayland_screen_get_output_refresh_rate (GdkScreen        *screen,
                                                  struct wl_output *output);
 
-void _gdk_wayland_display_manager_add_display (GdkDisplayManager *manager,
-					       GdkDisplay        *display);
-void _gdk_wayland_display_manager_remove_display (GdkDisplayManager *manager,
-						  GdkDisplay        *display);
-
 void _gdk_wayland_window_set_device_grabbed (GdkWindow      *window,
                                              GdkDevice      *device,
                                              struct wl_seat *seat,
