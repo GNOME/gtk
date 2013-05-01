@@ -1,3 +1,201 @@
+Overview of Changes in GTK+ 3.7 to 3.9
+======================================
+
+* GtkFileChooser:
+ - Always show fuse-mounted locations in shortcuts
+ - GtkFileChooserButton has received a lot of fixes and tests have
+   been added for many of them
+
+* GtkWindow:
+ - Initial support for client-side decorations has been added. This
+   is going to be used by default under Wayland. To try it with other
+   backends, set the GTK_CSD=1 environment variable.
+ - gtk_window_set_titlebar: A new function that can set a custom,
+   client-side titlebar on toplevel windows.
+
+* Wayland:
+ - Use client-side decorations
+ - Implement maximization
+ - Improve cursor handling
+ - Improve multi-monitor handling
+ - Support most GtkSettings (for now by reading GSettings directly)
+ - Complete the keymap implementation
+ - Add support for custom surfaces
+ - Implement animated cursors
+ - Support the WAYLAND_SOCKET environment variable
+ - Implement frame synchronizatio
+ - Document Wayland-specific APIs
+
+* Broadway:
+ - Improve window size handling
+ - Implement frame synchronization
+ - Add support for password authentication
+
+* New APIs, widgets, feature additions:
+ - GtkHeaderBar is a new widget similar to a GtkBox, with the extra
+   feature that it can center a child (typically a title), independent
+   of the other content.
+ - GtkPlacesSidebar is the sidebar widget in the file chooser, exported
+   as a public widget - it will be shared with nautilus.
+ - GtkStack is an alternative to GtkNotebook for showing one of several
+   child widgets at a time. It supports animated transitions. Tabs are
+   not built into this widgets, but instead provided by the separate
+   GtkStackSwitcher widget.
+ - GtkRevealer is a new new widget that can hide or show its child
+   in an animated fashion.
+ - GtkMenuTracker is a helper object that makes dealing with
+   GMenuModels easier and more efficient.
+ - gtk_grid_remove_row/column: New functions to remove whole rows
+   or columns from a GtkGrid
+ - Support for composite children has been added to GtkWidget. This
+   allows to create complex widgets from GtkBuilder ui files. All
+   complex GTK+ widgets have been converted to use this facility.
+ - Baseline support was added to the GTK+ size allocation machinery.
+   Widgets can now export the baseline of the text they contain,
+   and containers can align their children wrt to their baselines.
+
+
+* Known problems, feature removals, compatibility caveats:
+ - Handling of window size is currently in flux, and there are
+   some known problems with sizes unintentionally changing
+ - Support for the Motif DND protocol has been dropped
+ - Client-side decorations still have some issues when drawing
+   directly on toplevel windows or setting their background
+ - Support for multiple screens per display has been removed. This
+   was only ever supported on X11, and is an exceedingly rare setup
+   nowadays. The display-screen relation is now 1:1, and we will do
+   some more simplification of displaymanager/display/screen/monitor
+   APIs.
+ - gdk_window_get_display has been deprecated
+ - gtk_widget_push_composite_child has been deprecated - this was
+   used for anything
+ - GtkSwitch has been changed to draw focus internally, instead of
+   reserving space outside the switch for it. This may require some
+   application adjustment where margins were tweaked to 'correct'
+   the alignment of switches manually
+
+* Printing:
+ - Avoid blocking when looking for avahi printers
+ - Don't link against avahi-gobject, use D-Bus directly
+
+* Bugs fixed:
+ 504901 GtkCellRendererCombo requires click-and-hold
+ 586367 In local_only mode, file chooser should return native pa...
+ 671939 [regression] crash on exit
+ 672018 Need API to set global application state (busy, counters...
+ 674051 Scrolling zoom in view - incorrect image display
+ 674759 GtkLabel: wrong value of "mnemonic-keyval" when "use-mar...
+ 675571 (out) or (inout) annotation possibly missing for gtk_men...
+ 675649 gtk-demo: Fix typo
+ 680241 Instructions on how to build a GTK app won't work with r...
+ 681446 gtkdnd memory leak
+ 685419 gtkprintbackendfile: Infinite loop in _cairo_write()
+ 685420 Critical warnings when GtkPrintJob is released too early
+ 688820 GIcon is a bad interface
+ 688896 Add documentation for GtkWidget::show,hide,map,unmap,rea...
+ 690275 scrolling on other windows is applied when coming back (...
+ 691040 selection is reported incorrectly in file chooser button
+ 692871 Need to expose output information to make GdkScreen API ...
+ 694339 Fix build of GTK+ on Windows
+ 694465 Allow backends to fail during initialisation
+ 695200 Switching apps while a combobox open makes the parent wi...
+ 695228 GdkPixbuf:ERROR:gdk-pixbuf-animation.c:242:gdk_pixbuf_an...
+ 695278 Avoid passing a NULL title to setTitle
+ 695304 GtkTextView: don't popdown a bubble if we don't have one
+ 695312 Initial 'text' set in the non-numeric-only GtkSpinButton...
+ 695375 GtkEntryAccessible: also handle entry icon tooltip NULL ...
+ 695380 gtk_binding_entry_skip broken
+ 695391 wayland documentation section id is "gtk-osx"
+ 695473 treeview: fix a critical warning
+ 695476 Drop the Motif DND protocol
+ 695482 Universal Access panel appears jumbled and horrible afte...
+ 695493 testgtk: issues with the color selection example
+ 695495 testgtk: cursor example segfaults
+ 695497 testgtk: lack of key repeat
+ 695506 gtk-demo: link hovering unreliable
+ 695682 Cannot build docs for wayland-only build
+ 695714 Getting of printer info can hang
+ 695772 Different appearance of menus within Audacious
+ 695783 GtkApplication: Allow passing windows on non-X11 targets
+ 695861 Allow to use custom surfaces for GdkWindows in Wayland
+ 695874 GtkFontChooser docs
+ 695895 Fix the gtk3-demo demo program on Windows
+ 695945 implement minimize / maximize functionality
+ 695948 GtkFontButton sets wrong show-preview-entry
+ 695998 csd: enable shadows in the outer border
+ 696051 vertical grid lines in rtl mode
+ 696138 GtkWidget: some deprecation marks are missing
+ 696171 GtkAssistant highlighted font unreadable
+ 696202 Add GtkSpinner animation back to Win32 theme
+ 696232 win32: do not crash on invalid utf8 conversion
+ 696340 wayland: device list is populated async
+ 696370 GtkOverlay doesn't work on top of GtkClutterEmbed
+ 696429 wayland: Implement animated cursors
+ 696457 gnome-ostree build broken by 3a9de35a6cefddc09aaf000e523...
+ 696468 improve GMenuModel -> GtkMenu conversion
+ 696546 gtk_print_backend_cups_finalize() crashes if cups_get_pr...
+ 696553 Crash in avahi_create_browsers
+ 696561 GtkApplicationWindow rendering broken
+ 696608 css_image_value_parse: returning FALSE in pointer function
+ 696622 gtk option printer widget segfault in epiphany
+ 696623 GtkOverlay with a revealer produces warnings setting a m...
+ 696767 a pair of memory leaks
+ 696882 [regression] GtkWindow changes size after hide/show cycle
+ 697048 GtkTextView: small code improvements
+ 697144 Popup menu mnemonics fixes
+ 697196 gtk_notebook_set_tab_reorderable boolean handling
+ 697200 GtkWindow: notify::attached-to not emitted
+ 697263 Impossible to set window transparency on 3.8
+ 697275 gtk_window_set_default_size() doesn't work anymore
+ 697427 Unreferencing GtkStatusIcon object causes abort
+ 697673 Apps should connect only once when using Wayland
+ 697795 xi2: Improve pointer emulation debug reporting
+ 697886 dnd icon drawing broken on master
+ 697947 A lot of GTK+ apps fail to launch with error "desktop_she...
+ 698181 Document icon-shadow CSS property
+ 698433 Geometry management broken in GtkBin widgets
+ 698682 GtkSpinButton: don't constantly recreate style contexts f...
+ 698864 wayland: improve integration with GdkFrameClock
+ 699020 GtkImage: do not leak metrics in baseline align
+ 699225 typo: Modifed -> Modified
+
+* Translation updates:
+ Arabic
+ Aragonese
+ Assamese
+ Belarusian
+ Brazilian Portuguese
+ British English
+ Catalan
+ Catalan (Valencian)
+ Czech
+ Danish
+ Finnish
+ French
+ Galician
+ German
+ Greek
+ Hindi
+ Hungarian
+ Indonesian
+ Italian
+ Kazakh
+ Korean
+ Latvian
+ Malayalam
+ Odia
+ Persian
+ Polish
+ Punjabi
+ Russian
+ Serbian
+ Simplified Chinese
+ Slovenian
+ Tajik
+ Tamil
+ Ukrainian
+
+
 Overview of Changes in GTK+ 3.7.12
 ==================================
 
