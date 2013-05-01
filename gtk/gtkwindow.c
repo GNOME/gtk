@@ -7838,9 +7838,6 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
   info = gtk_window_get_geometry_info (window, FALSE);
 
   gtk_window_guess_default_size (window, width, height);
-  gtk_window_get_remembered_size (window, &w, &h);
-  *width = MAX (*width, w);
-  *height = MAX (*height, h);
 
   /* If window is empty so requests 0, default to random nonzero size */
    if (*width == 0 && *height == 0)
@@ -7850,7 +7847,6 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
      }
 
    /* Override with default size */
-
    if (info)
      {
        if (info->default_width > 0)
@@ -7863,6 +7859,11 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
                                   info->default_width > 0 ? width : NULL,
                                   info->default_height > 0 ? height : NULL);
      }
+
+  /* Override with last size of this window */
+  gtk_window_get_remembered_size (window, &w, &h);
+  *width = MAX (*width, w);
+  *height = MAX (*height, h);
 
   /* Override any size with gtk_window_resize() values */
   if (info)
