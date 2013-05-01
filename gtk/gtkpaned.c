@@ -911,17 +911,19 @@ gtk_paned_compute_position (GtkPaned *paned,
 	    pos = priv->child1_size + allocation - priv->last_allocation;
 	  else if (!(!priv->child1_resize && priv->child2_resize))
 	    pos = allocation * ((gdouble) priv->child1_size / (priv->last_allocation)) + 0.5;
+          else
+            pos = priv->child1_size;
 	}
       else
-        pos = min;
+        pos = priv->child1_size;
     }
 
   pos = CLAMP (pos, min, max);
   
   if (min_pos)
-    *min_pos = pos;
+    *min_pos = min;
   if (max_pos)
-    *max_pos = pos;
+    *max_pos = max;
   if (out_pos)
     *out_pos = pos;
 }
