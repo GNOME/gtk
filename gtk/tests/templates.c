@@ -171,6 +171,7 @@ test_app_chooser_dialog_basic (void)
   gtk_widget_destroy (widget);
 }
 
+#if 0
 static void
 test_color_chooser_dialog_basic (void)
 {
@@ -195,7 +196,6 @@ ignore_gvfs_warning (const gchar *log_domain,
   return TRUE;
 }
 
-#if 0
 static void
 test_file_chooser_widget_basic (void)
 {
