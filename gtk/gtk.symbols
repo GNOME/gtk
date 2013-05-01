@@ -1907,6 +1907,7 @@ gtk_places_sidebar_add_shortcut
 gtk_places_sidebar_get_location
 gtk_places_sidebar_get_nth_bookmark
 gtk_places_sidebar_get_open_flags
+gtk_places_sidebar_get_show_connect_to_server
 gtk_places_sidebar_get_show_desktop
 gtk_places_sidebar_get_type
 gtk_places_sidebar_list_shortcuts
@@ -1914,6 +1915,7 @@ gtk_places_sidebar_new
 gtk_places_sidebar_remove_shortcut
 gtk_places_sidebar_set_location
 gtk_places_sidebar_set_open_flags
+gtk_places_sidebar_set_show_connect_to_server
 gtk_places_sidebar_set_show_desktop
 #ifdef G_OS_UNIX
 gtk_plug_construct
@@ -2445,6 +2447,7 @@ gtk_requisition_new
 gtk_resize_mode_get_type
 gtk_response_type_get_type
 gtk_revealer_new
+gtk_revealer_get_type
 gtk_revealer_get_reveal_child
 gtk_revealer_set_reveal_child
 gtk_revealer_get_child_revealed
@@ -2452,6 +2455,7 @@ gtk_revealer_get_transition_duration
 gtk_revealer_set_transition_duration
 gtk_revealer_get_transition_type
 gtk_revealer_set_transition_type
+gtk_revealer_transition_type_get_type
 gtk_rgb_to_hsv
 gtk_scale_accessible_get_type
 gtk_scale_add_mark
