@@ -310,7 +310,7 @@ struct _GdkBackend {
   GdkDisplay * (* open_display) (const char *name);
 };
 
-GdkBackend gdk_backends[] = {
+static GdkBackend gdk_backends[] = {
 #ifdef GDK_WINDOWING_QUARTZ
   { "quartz",   gdk_quartz_display_manager_get_type,    _gdk_quartz_display_open },
 #endif
