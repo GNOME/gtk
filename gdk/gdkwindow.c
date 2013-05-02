@@ -3774,11 +3774,8 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
 
   r.x = 0;
   r.y = 0;
-  r.width = window->width;
-  r.height = window->height;
 
   visible_region = cairo_region_copy (region);
-  cairo_region_intersect_rectangle (visible_region, &r);
 
   invalidate_impl_subwindows (window, region, child_func, user_data, 0, 0);
 
@@ -3788,6 +3785,13 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
   while (window != NULL && 
 	 !cairo_region_is_empty (visible_region))
     {
+      if (window->invalidate_handler)
+	window->invalidate_handler (window, visible_region);
+
+      r.width = window->width;
+      r.height = window->height;
+      cairo_region_intersect_rectangle (visible_region, &r);
+
       if (gdk_window_has_impl (window))
 	{
 	  impl_window_add_update_area (window, visible_region);
@@ -3795,14 +3799,9 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
 	}
       else
 	{
-	  if (window->invalidate_handler)
-	    window->invalidate_handler (window, visible_region);
 	  cairo_region_translate (visible_region,
 				  window->x, window->y);
 	  window = window->parent;
-	  r.width = window->width;
-	  r.height = window->height;
-	  cairo_region_intersect_rectangle (visible_region, &r);
 	}
     }
 
