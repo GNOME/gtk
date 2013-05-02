@@ -2510,7 +2510,6 @@ remove_attach_widget (GtkWindow *window)
     {
       _gtk_widget_remove_attached_window (priv->attach_widget, window);
 
-      g_object_remove_weak_pointer (priv->attach_widget, &priv->attach_widget);
       priv->attach_widget = NULL;
     }
 }
@@ -2759,8 +2758,6 @@ gtk_window_set_attached_to (GtkWindow *window,
   if (priv->attach_widget)
     {
       _gtk_widget_add_attached_window (priv->attach_widget, window);
-
-      g_object_add_weak_pointer (priv->attach_widget, &priv->attach_widget);
     }
 
   /* Update the style, as the widget path might change. */
