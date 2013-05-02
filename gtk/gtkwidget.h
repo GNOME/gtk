@@ -444,13 +444,14 @@ struct _GtkWidgetClass
                                            gint              *natural_baseline);
   void         (* adjust_baseline_allocation) (GtkWidget         *widget,
 					       gint              *baseline);
+  void         (*queue_draw_region)           (GtkWidget         *widget,
+					       const cairo_region_t *region);
 
   /*< private >*/
 
   GtkWidgetClassPrivate *priv;
 
   /* Padding for future expansion */
-  void (*_gtk_reserved5) (void);
   void (*_gtk_reserved6) (void);
   void (*_gtk_reserved7) (void);
 };
