@@ -382,9 +382,6 @@ gdk_display_open_default_libgtk_only (void)
 
   g_return_val_if_fail (gdk_initialized, NULL);
 
-  if (gdk_display_manager_peek () == NULL)
-    return NULL;
-
   display = gdk_display_get_default ();
   if (display)
     return display;

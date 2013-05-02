@@ -253,36 +253,6 @@ gdk_set_allowed_backends (const gchar *backends)
   allowed_backends = g_strdup (backends);
 }
 
-static GdkDisplayManager *manager = NULL;
-
-/**
- * gdk_display_manager_get:
- *
- * Gets the singleton #GdkDisplayManager object.
- *
- * When called for the first time, this function consults the
- * <envar>GDK_BACKEND</envar> environment variable to find out which
- * of the supported GDK backends to use (in case GDK has been compiled
- * with multiple backends). Applications can use gdk_set_allowed_backends()
- * to limit what backends can be used.
- *
- * Returns: (transfer none): The global #GdkDisplayManager singleton;
- *     gdk_parse_args(), gdk_init(), or gdk_init_check() must have
- *     been called first.
- *
- * Since: 2.2
- **/
-GdkDisplayManager*
-gdk_display_manager_get (void)
-{
-  gdk_display_manager_peek ();
-
-  if (manager == NULL)
-    g_error ("No GDK backend found (%s)", allowed_backends);
-
-  return manager;
-}
-
 typedef struct _GdkBackend GdkBackend;
 
 struct _GdkBackend {
@@ -311,20 +281,27 @@ static GdkBackend gdk_backends[] = {
 };
 
 /**
- * gdk_display_manager_peek:
+ * gdk_display_manager_get:
  *
- * Gets the singleton #GdkDisplayManager object. If GDK could
- * not be initialized, %NULL is returned.
+ * Gets the singleton #GdkDisplayManager object.
  *
- * Returns: (transfer none): The global #GdkDisplayManager singleton,
- *     or %NULL if GDK could not be initialized. gdk_parse_args(),
- *     gdk_init(), or gdk_init_check() must have been called first
+ * When called for the first time, this function consults the
+ * <envar>GDK_BACKEND</envar> environment variable to find out which
+ * of the supported GDK backends to use (in case GDK has been compiled
+ * with multiple backends). Applications can use gdk_set_allowed_backends()
+ * to limit what backends can be used.
  *
- * Since: 3.10
- */
-GdkDisplayManager *
-gdk_display_manager_peek (void)
+ * Returns: (transfer none): The global #GdkDisplayManager singleton;
+ *     gdk_parse_args(), gdk_init(), or gdk_init_check() must have
+ *     been called first.
+ *
+ * Since: 2.2
+ **/
+GdkDisplayManager*
+gdk_display_manager_get (void)
 {
+  static GdkDisplayManager *manager = NULL;
+
   if (manager == NULL)
     manager = g_object_new (GDK_TYPE_DISPLAY_MANAGER, NULL);
   

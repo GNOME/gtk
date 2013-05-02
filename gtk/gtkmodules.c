@@ -525,17 +525,14 @@ _gtk_modules_init (gint        *argc,
       gtk_argv [*argc] = NULL;
     }
 
-  display_manager = gdk_display_manager_peek ();
-  if (display_manager != NULL)
-    {
-      default_display_opened = gdk_display_get_default () != NULL;
-      g_signal_connect (display_manager, "notify::default-display",
-                        G_CALLBACK (default_display_notify_cb),
-                        NULL);
-      g_signal_connect (display_manager, "display-opened",
-                        G_CALLBACK (display_opened_cb),
-                        NULL);
-    }
+  display_manager = gdk_display_manager_get ();
+  default_display_opened = gdk_display_get_default () != NULL;
+  g_signal_connect (display_manager, "notify::default-display",
+                    G_CALLBACK (default_display_notify_cb),
+                    NULL);
+  g_signal_connect (display_manager, "display-opened",
+                    G_CALLBACK (display_opened_cb),
+                    NULL);
 
   if (gtk_modules_args)
     {

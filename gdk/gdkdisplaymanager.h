@@ -43,8 +43,6 @@ G_BEGIN_DECLS
 GType              gdk_display_manager_get_type            (void) G_GNUC_CONST;
 
 GdkDisplayManager *gdk_display_manager_get                 (void);
-GDK_AVAILABLE_IN_3_10
-GdkDisplayManager *gdk_display_manager_peek                (void);
 GdkDisplay *       gdk_display_manager_get_default_display (GdkDisplayManager *manager);
 void               gdk_display_manager_set_default_display (GdkDisplayManager *manager,
                                                             GdkDisplay        *display);
