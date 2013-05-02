@@ -797,6 +797,8 @@ static void     gtk_tree_view_stop_rubber_band               (GtkTreeView       
 static void     update_prelight                              (GtkTreeView        *tree_view,
                                                               int                 x,
                                                               int                 y);
+static void     gtk_tree_view_queue_draw_region              (GtkWidget          *widget,
+							      const cairo_region_t *region);
 
 static inline gint gtk_tree_view_get_effective_header_height (GtkTreeView *tree_view);
 
@@ -963,6 +965,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   widget_class->style_updated = gtk_tree_view_style_updated;
   widget_class->grab_notify = gtk_tree_view_grab_notify;
   widget_class->state_flags_changed = gtk_tree_view_state_flags_changed;
+  widget_class->queue_draw_region = gtk_tree_view_queue_draw_region;
 
   /* GtkContainer signals */
   container_class->remove = gtk_tree_view_remove;
@@ -2243,6 +2246,23 @@ gtk_tree_view_bin_window_invalidate_handler (GdkWindow *window,
   _gtk_pixel_cache_invalidate (tree_view->priv->pixel_cache, region);
   cairo_region_translate (region,
 			  0, -y);
+}
+
+static void
+gtk_tree_view_queue_draw_region (GtkWidget *widget,
+				 const cairo_region_t *region)
+{
+  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
+
+  /* There is no way we can know if a region targets the
+     not-currently-visible but in pixel cache region, so we
+     always just invalidate the whole thing whenever the
+     tree view gets a queue draw. This doesn't normally happen
+     in normal scrolling cases anyway. */
+  _gtk_pixel_cache_invalidate (tree_view->priv->pixel_cache, NULL);
+
+  GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->queue_draw_region (widget,
+								    region);
 }
 
 static void
