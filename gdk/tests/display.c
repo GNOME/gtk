@@ -2,11 +2,10 @@
 
 #include <gdk/gdk.h>
 
-#if 0
 static void
 test_unset_display (void)
 {
-  if (g_test_trap_fork (0, G_TEST_TRAP_SILENCE_STDOUT | G_TEST_TRAP_SILENCE_STDERR))
+  if (g_test_trap_fork (0, 0))//G_TEST_TRAP_SILENCE_STDOUT | G_TEST_TRAP_SILENCE_STDERR))
     {
       GdkDisplayManager *manager;
 
@@ -62,17 +61,14 @@ test_bad_display (void)
   g_test_trap_assert_failed ();
   g_test_trap_assert_stderr ("*cannot open display*");
 }
-#endif
 
 int
 main (int argc, char *argv[])
 {
   g_test_init (&argc, &argv, NULL);
 
-#if 0
   g_test_add_func ("/display/unset-display", test_unset_display);
   g_test_add_func ("/display/bad-display", test_bad_display);
-#endif
 
   return g_test_run ();
 }
