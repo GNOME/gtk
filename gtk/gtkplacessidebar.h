@@ -77,26 +77,33 @@ typedef enum {
   GTK_PLACES_OPEN_NEW_WINDOW = 1 << 2
 } GtkPlacesOpenFlags;
 
-GType gtk_places_sidebar_get_type (void);
-GtkWidget *gtk_places_sidebar_new (void);
+GType              gtk_places_sidebar_get_type                   (void) G_GNUC_CONST;
+GtkWidget *        gtk_places_sidebar_new                        (void);
 
-GtkPlacesOpenFlags gtk_places_sidebar_get_open_flags (GtkPlacesSidebar *sidebar);
-void gtk_places_sidebar_set_open_flags (GtkPlacesSidebar *sidebar, GtkPlacesOpenFlags flags);
+GtkPlacesOpenFlags gtk_places_sidebar_get_open_flags             (GtkPlacesSidebar   *sidebar);
+void               gtk_places_sidebar_set_open_flags             (GtkPlacesSidebar   *sidebar,
+                                                                  GtkPlacesOpenFlags  flags);
 
-GFile *gtk_places_sidebar_get_location (GtkPlacesSidebar *sidebar);
-void gtk_places_sidebar_set_location (GtkPlacesSidebar *sidebar, GFile *location);
+GFile *            gtk_places_sidebar_get_location               (GtkPlacesSidebar   *sidebar);
+void               gtk_places_sidebar_set_location               (GtkPlacesSidebar   *sidebar,
+                                                                  GFile              *location);
 
-gboolean gtk_places_sidebar_get_show_desktop (GtkPlacesSidebar *sidebar);
-void gtk_places_sidebar_set_show_desktop (GtkPlacesSidebar *sidebar, gboolean show_desktop);
+gboolean           gtk_places_sidebar_get_show_desktop           (GtkPlacesSidebar   *sidebar);
+void               gtk_places_sidebar_set_show_desktop           (GtkPlacesSidebar   *sidebar,
+                                                                  gboolean            show_desktop);
 
-gboolean gtk_places_sidebar_get_show_connect_to_server (GtkPlacesSidebar *sidebar);
-void gtk_places_sidebar_set_show_connect_to_server (GtkPlacesSidebar *sidebar, gboolean show_connect_to_server);
+gboolean           gtk_places_sidebar_get_show_connect_to_server (GtkPlacesSidebar   *sidebar);
+void               gtk_places_sidebar_set_show_connect_to_server (GtkPlacesSidebar   *sidebar,
+                                                                  gboolean            show_connect_to_server);
 
-void gtk_places_sidebar_add_shortcut (GtkPlacesSidebar *sidebar, GFile *location);
-void gtk_places_sidebar_remove_shortcut (GtkPlacesSidebar *sidebar, GFile *location);
-GSList *gtk_places_sidebar_list_shortcuts (GtkPlacesSidebar *sidebar);
+void               gtk_places_sidebar_add_shortcut               (GtkPlacesSidebar   *sidebar,
+                                                                  GFile              *location);
+void               gtk_places_sidebar_remove_shortcut            (GtkPlacesSidebar   *sidebar,
+                                                                  GFile              *location);
+GSList *           gtk_places_sidebar_list_shortcuts             (GtkPlacesSidebar   *sidebar);
 
-GFile *gtk_places_sidebar_get_nth_bookmark (GtkPlacesSidebar *sidebar, int n);
+GFile *            gtk_places_sidebar_get_nth_bookmark           (GtkPlacesSidebar   *sidebar,
+                                                                  gint                n);
 
 G_END_DECLS
 
