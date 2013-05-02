@@ -11052,6 +11052,9 @@ gtk_widget_dispose (GObject *object)
 
   g_clear_object (&priv->muxer);
 
+  g_list_free (priv->attached_windows);
+  priv->attached_windows = NULL;
+
   G_OBJECT_CLASS (gtk_widget_parent_class)->dispose (object);
 }
 
