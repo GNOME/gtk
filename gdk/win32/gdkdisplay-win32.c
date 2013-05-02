@@ -688,4 +688,6 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   display_class->convert_selection = _gdk_win32_display_convert_selection;
   display_class->text_property_to_utf8_list = _gdk_win32_display_text_property_to_utf8_list;
   display_class->utf8_to_string_target = _gdk_win32_display_utf8_to_string_target;
+  
+  _gdk_win32_windowing_init ();
 }

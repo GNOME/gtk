@@ -41,14 +41,6 @@ G_DEFINE_TYPE (GdkWin32DisplayManager, gdk_win32_display_manager, GDK_TYPE_DISPL
 static void
 gdk_win32_display_manager_init (GdkWin32DisplayManager *manager)
 {
-  static once = TRUE;
-  /* relies on displaymanager being a singleton , but our init functions
-   * call gtk_diplay_maanger_get() again */
-  if (once)
-    {
-      once = FALSE;
-      _gdk_win32_windowing_init ();
-    }
 }
 
 static void
