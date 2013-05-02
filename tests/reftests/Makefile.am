@@ -271,8 +271,6 @@ EXTRA_DIST += \
 	unresolvable.css \
 	unresolvable.ref.ui \
 	unresolvable.ui \
-	window-border-width.ref.ui \
-	window-border-width.ui \
 	window-default-size.ref.ui \
 	window-default-size.ui
 
