@@ -17,6 +17,7 @@
 
 #include "config.h"
 
+#include "gtkdebug.h"
 #include "gtkpixelcacheprivate.h"
 
 /* The extra size of the offscreen surface we allocate
@@ -277,7 +278,27 @@ _gtk_pixel_cache_repaint (GtkPixelCache *cache,
 
       cairo_set_operator (backing_cr, CAIRO_OPERATOR_OVER);
 
+      cairo_save (backing_cr);
       draw (backing_cr, user_data);
+      cairo_restore (backing_cr);
+
+#ifdef G_ENABLE_DEBUG
+      if (gtk_get_debug_flags () & GTK_DEBUG_PIXEL_CACHE)
+	{
+	  GdkRGBA colors[] = {
+	    { 1, 0, 0, 0.08},
+	    { 0, 1, 0, 0.08},
+	    { 0, 0, 1, 0.08},
+	    { 1, 0, 1, 0.08},
+	    { 1, 1, 0, 0.08},
+	    { 0, 1, 1, 0.08},
+	  };
+	  static int current_color = 0;
+
+	  gdk_cairo_set_source_rgba (backing_cr, &colors[(current_color++) % G_N_ELEMENTS (colors)]);
+	  cairo_paint (backing_cr);
+	}
+#endif
 
       cairo_destroy (backing_cr);
     }
