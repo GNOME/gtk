@@ -172,9 +172,9 @@ gtkmenu_SOURCES			 = gtkmenu.c
 gtkmenu_LDADD			 = $(progs_ldadd)
 
 
-#TEST_PROGS			+= objects-finalize
-#objects_finalize_SOURCES         = objects-finalize.c
-#objects_finalize_LDADD	         = $(progs_ldadd)
+TEST_PROGS			+= objects-finalize
+objects_finalize_SOURCES         = objects-finalize.c
+objects_finalize_LDADD	         = $(progs_ldadd)
 
 TEST_PROGS			+= window
 window_SOURCES			 = window.c
