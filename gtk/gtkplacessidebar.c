@@ -2205,8 +2205,7 @@ mount_volume (GtkPlacesSidebar *sidebar, GVolume *volume)
 	mount_op = gtk_mount_operation_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (sidebar))));
 	g_mount_operation_set_password_save (mount_op, G_PASSWORD_SAVE_FOR_SESSION);
 
-	g_object_ref (sidebar);
-	g_volume_mount (volume, 0, mount_op, NULL, volume_mount_cb, sidebar);
+	g_volume_mount (volume, 0, mount_op, NULL, volume_mount_cb, g_object_ref (sidebar));
 }
 
 static void
@@ -3572,8 +3571,6 @@ hostname_proxy_new_cb (GObject      *source_object,
 	sidebar->hostnamed_proxy = g_dbus_proxy_new_for_bus_finish (res, &error);
 	g_clear_object (&sidebar->hostnamed_cancellable);
 
-	g_object_unref (sidebar);
-
 	if (error != NULL) {
 		g_debug ("Failed to create D-Bus proxy: %s", error->message);
 		g_error_free (error);
@@ -3833,7 +3830,7 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 				  "org.freedesktop.hostname1",
 				  sidebar->hostnamed_cancellable,
 				  hostname_proxy_new_cb,
- 				  g_object_ref (sidebar));
+ 				  sidebar);
 
 	sidebar->drop_state = DROP_STATE_NORMAL;
 	sidebar->new_bookmark_index = -1;
