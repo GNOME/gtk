@@ -501,19 +501,48 @@ GdkDisplay *
 gdk_display_manager_open_display (GdkDisplayManager *manager,
                                   const gchar       *name)
 {
-  guint i;
+  const gchar *backend_list;
+  GdkDisplay *display;
+  gchar **backends;
+  gint i, j;
+  gboolean allow_any;
 
-  for (i = 0; gdk_backends[i].name != NULL; i++)
+  if (allowed_backends == NULL)
+    allowed_backends = "*";
+  allow_any = strstr (allowed_backends, "*") != NULL;
+
+  backend_list = g_getenv ("GDK_BACKEND");
+  if (backend_list == NULL)
+    backend_list = allowed_backends;
+  backends = g_strsplit (backend_list, ",", 0);
+
+  display = NULL;
+
+  for (i = 0; display == NULL && backends[i] != NULL; i++)
     {
-      if (G_OBJECT_TYPE (manager) == gdk_backends[i].get_backend_type ())
+      const gchar *backend = backends[i];
+      gboolean any = g_str_equal (backend, "*");
+
+      if (!allow_any && !any && !strstr (allowed_backends, backend))
+        continue;
+
+      for (j = 0; gdk_backends[j].name != NULL; j++)
         {
-          return gdk_backends[i].open_display (name);
+          if ((any && allow_any) ||
+              (any && strstr (allowed_backends, gdk_backends[j].name)) ||
+              g_str_equal (backend, gdk_backends[j].name))
+            {
+              GDK_NOTE (MISC, g_message ("Trying %s backend", gdk_backends[j].name));
+              display = gdk_backends[j].open_display (name);
+              if (display)
+                break;
+            }
         }
     }
 
-  g_assert_not_reached ();
+  g_strfreev (backends);
 
-  return NULL;
+  return display;
 }
 
 void
