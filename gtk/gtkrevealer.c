@@ -659,7 +659,7 @@ gtk_revealer_set_reveal_child (GtkRevealer *revealer,
 
 /**
  * gtk_revealer_get_reveal_child:
- * @revealer:
+ * @revealer: a #GtkRevealer
  *
  * Returns whether the child is currently
  * revealed. See gtk_revealer_set_reveal_child().
