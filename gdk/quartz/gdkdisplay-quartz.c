@@ -336,4 +336,17 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   display_class->convert_selection = _gdk_quartz_display_convert_selection;
   display_class->text_property_to_utf8_list = _gdk_quartz_display_text_property_to_utf8_list;
   display_class->utf8_to_string_target = _gdk_quartz_display_utf8_to_string_target;
+
+  ProcessSerialNumber psn = { 0, kCurrentProcess };
+  void (*_gtk_quartz_framework_init_ptr) (void);
+
+  /* Make the current process a foreground application, i.e. an app
+   * with a user interface, in case we're not running from a .app bundle
+   */
+  TransformProcessType (&psn, kProcessTransformToForegroundApplication);
+
+  /* Initialize GTK+ framework if there is one. */
+  _gtk_quartz_framework_init_ptr = dlsym (RTLD_DEFAULT, "_gtk_quartz_framework_init");
+  if (_gtk_quartz_framework_init_ptr)
+    _gtk_quartz_framework_init_ptr ();
 }
