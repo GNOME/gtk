@@ -130,24 +130,7 @@ static void gdk_display_manager_get_property (GObject                *object,
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-static void g_initable_iface_init (GInitableIface *iface);
-
-G_DEFINE_TYPE_WITH_CODE (GdkDisplayManager, gdk_display_manager, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, g_initable_iface_init))
-
-static gboolean
-gdk_display_manager_initable_init (GInitable     *initable,
-                                   GCancellable  *cancellable,
-                                   GError       **error)
-{
-  return TRUE;
-}
-
-static void
-g_initable_iface_init (GInitableIface *iface)
-{
-  iface->init = gdk_display_manager_initable_init;
-}
+G_DEFINE_TYPE (GdkDisplayManager, gdk_display_manager, G_TYPE_OBJECT)
 
 static void
 gdk_display_manager_class_init (GdkDisplayManagerClass *klass)

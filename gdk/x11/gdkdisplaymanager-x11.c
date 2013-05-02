@@ -31,8 +31,6 @@
 struct _GdkX11DisplayManager
 {
   GdkDisplayManager parent;
-
-  gboolean init_failed;
 };
 
 struct _GdkX11DisplayManagerClass
@@ -40,37 +38,7 @@ struct _GdkX11DisplayManagerClass
   GdkDisplayManagerClass parent_class;
 };
 
-static void g_initable_iface_init (GInitableIface *iface);
-
-G_DEFINE_TYPE_WITH_CODE (GdkX11DisplayManager, gdk_x11_display_manager, GDK_TYPE_DISPLAY_MANAGER,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, g_initable_iface_init))
-
-static gboolean
-gdk_x11_display_manager_initable_init (GInitable     *initable,
-                                       GCancellable  *cancellable,
-                                       GError       **error)
-{
-  Display *display;
-
-  /* check that a connection to the default display is possible */
-  display = XOpenDisplay (gdk_get_display_arg_name ());
-  if (!display)
-    {
-      GDK_X11_DISPLAY_MANAGER (initable)->init_failed = TRUE;
-      return FALSE;
-    }
-
-  XCloseDisplay (display);
-
-  return TRUE;
-}
-
-void
-g_initable_iface_init (GInitableIface *iface)
-{
-  iface->init = gdk_x11_display_manager_initable_init;
-}
-
+G_DEFINE_TYPE (GdkX11DisplayManager, gdk_x11_display_manager, GDK_TYPE_DISPLAY_MANAGER)
 
 static void
 gdk_x11_display_manager_init (GdkX11DisplayManager *manager)
@@ -80,8 +48,7 @@ gdk_x11_display_manager_init (GdkX11DisplayManager *manager)
 static void
 gdk_x11_display_manager_finalize (GObject *object)
 {
-  if (GDK_X11_DISPLAY_MANAGER (object)->init_failed == FALSE)
-    g_error ("A GdkX11DisplayManager object was finalized. This should not happen");
+  g_error ("A GdkX11DisplayManager object was finalized. This should not happen");
   G_OBJECT_CLASS (gdk_x11_display_manager_parent_class)->finalize (object);
 }
 
