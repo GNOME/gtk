@@ -126,6 +126,17 @@ _gtk_pixel_cache_create_surface_if_needed (GtkPixelCache         *cache,
 {
   cairo_rectangle_int_t rect;
   int surface_w, surface_h;
+  cairo_content_t content;
+  cairo_pattern_t *bg;
+  double red, green, blue, alpha;
+
+  content = CAIRO_CONTENT_COLOR_ALPHA;
+  bg = gdk_window_get_background_pattern (window);
+  if (bg != NULL &&
+      cairo_pattern_get_type (bg) == CAIRO_PATTERN_TYPE_SOLID &&
+      cairo_pattern_get_rgba (bg, &red, &green, &blue, &alpha) == CAIRO_STATUS_SUCCESS &&
+      alpha == 1.0)
+    content = CAIRO_CONTENT_COLOR;
 
   surface_w = view_rect->width;
   if (canvas_rect->width > surface_w)
@@ -137,7 +148,8 @@ _gtk_pixel_cache_create_surface_if_needed (GtkPixelCache         *cache,
 
   /* If current surface can't fit view_rect or is too large, kill it */
   if (cache->surface != NULL &&
-      (cache->surface_w < view_rect->width ||
+      (cairo_surface_get_content (cache->surface) != content ||
+       cache->surface_w < view_rect->width ||
        cache->surface_w > surface_w + ALLOW_LARGER_SIZE ||
        cache->surface_h < view_rect->height ||
        cache->surface_h > surface_h + ALLOW_LARGER_SIZE))
@@ -159,9 +171,9 @@ _gtk_pixel_cache_create_surface_if_needed (GtkPixelCache         *cache,
       cache->surface_y = -canvas_rect->y;
       cache->surface_w = surface_w;
       cache->surface_h = surface_h;
+
       cache->surface =
-	gdk_window_create_similar_surface (window,
-					   CAIRO_CONTENT_COLOR_ALPHA,
+	gdk_window_create_similar_surface (window, content,
 					   surface_w, surface_h);
       rect.x = 0;
       rect.y = 0;
