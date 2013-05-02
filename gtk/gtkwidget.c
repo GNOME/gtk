@@ -751,6 +751,8 @@ static void             gtk_widget_real_get_width_for_height    (GtkWidget      
                                                                  gint             *natural_width);
 static void             gtk_widget_real_state_flags_changed     (GtkWidget        *widget,
                                                                  GtkStateFlags     old_state);
+static void             gtk_widget_real_queue_draw_region       (GtkWidget         *widget,
+								 const cairo_region_t *region);
 static const GtkWidgetAuxInfo* _gtk_widget_get_aux_info_or_defaults (GtkWidget *widget);
 static GtkWidgetAuxInfo* gtk_widget_get_aux_info                (GtkWidget        *widget,
                                                                  gboolean          create);
@@ -1078,6 +1080,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->adjust_baseline_request = gtk_widget_real_adjust_baseline_request;
   klass->adjust_size_allocation = gtk_widget_real_adjust_size_allocation;
   klass->adjust_baseline_allocation = gtk_widget_real_adjust_baseline_allocation;
+  klass->queue_draw_region = gtk_widget_real_queue_draw_region;
 
   g_object_class_install_property (gobject_class,
 				   PROP_NAME,
@@ -4961,6 +4964,15 @@ gtk_widget_unrealize (GtkWidget *widget)
  * Draw queueing.
  *****************************************/
 
+static void
+gtk_widget_real_queue_draw_region (GtkWidget         *widget,
+				   const cairo_region_t *region)
+{
+  GtkWidgetPrivate *priv = widget->priv;
+
+  gdk_window_invalidate_region (priv->window, region, TRUE);
+}
+
 /**
  * gtk_widget_queue_draw_region:
  * @widget: a #GtkWidget
@@ -4998,7 +5010,7 @@ gtk_widget_queue_draw_region (GtkWidget            *widget,
     if (!gtk_widget_get_mapped (w))
       return;
 
-  gdk_window_invalidate_region (priv->window, region, TRUE);
+  WIDGET_CLASS (widget)->queue_draw_region (widget, region);
 }
 
 /**
