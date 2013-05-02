@@ -6028,18 +6028,17 @@ gtk_tree_view_node_queue_redraw (GtkTreeView *tree_view,
 				 GtkRBTree   *tree,
 				 GtkRBNode   *node)
 {
-  GtkAllocation allocation;
-  gint y;
+  GdkRectangle rect;
 
-  y = _gtk_rbtree_node_find_offset (tree, node)
-    - gtk_adjustment_get_value (tree_view->priv->vadjustment)
-    + gtk_tree_view_get_effective_header_height (tree_view);
+  rect.x = 0;
+  rect.y =
+    _gtk_rbtree_node_find_offset (tree, node)
+    - gtk_adjustment_get_value (tree_view->priv->vadjustment);
+  rect.width = gtk_widget_get_allocated_width (GTK_WIDGET (tree_view));
+  rect.height = GTK_RBNODE_GET_HEIGHT (node);
 
-  gtk_widget_get_allocation (GTK_WIDGET (tree_view), &allocation);
-  gtk_widget_queue_draw_area (GTK_WIDGET (tree_view),
-			      0, y,
-                              allocation.width,
-			      GTK_RBNODE_GET_HEIGHT (node));
+  gdk_window_invalidate_rect (tree_view->priv->bin_window,
+			      &rect, TRUE);
 }
 
 static gboolean
