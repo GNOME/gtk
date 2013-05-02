@@ -3568,11 +3568,14 @@ hostname_proxy_new_cb (GObject      *source_object,
 {
 	GtkPlacesSidebar *sidebar = user_data;
 	GError *error = NULL;
+        GDBusProxy *proxy;
 
-	sidebar->hostnamed_proxy = g_dbus_proxy_new_for_bus_finish (res, &error);
+	proxy = g_dbus_proxy_new_for_bus_finish (res, &error);
+        if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+          return;
+
+        sidebar->hostnamed_proxy = proxy;
 	g_clear_object (&sidebar->hostnamed_cancellable);
-
-	g_object_unref (sidebar);
 
 	if (error != NULL) {
 		g_debug ("Failed to create D-Bus proxy: %s", error->message);
@@ -3833,7 +3836,7 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 				  "org.freedesktop.hostname1",
 				  sidebar->hostnamed_cancellable,
 				  hostname_proxy_new_cb,
- 				  g_object_ref (sidebar));
+ 				  sidebar);
 
 	sidebar->drop_state = DROP_STATE_NORMAL;
 	sidebar->new_bookmark_index = -1;
