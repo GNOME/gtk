@@ -58,7 +58,6 @@ window1
       <AtkAction>
       action 0 name: press
       action 0 description: Presses the combobox
-      <AtkSelection>
       unnamed-GtkMenuAccessible-0
         "menu"
         parent: button1

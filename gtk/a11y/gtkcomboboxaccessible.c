@@ -29,11 +29,9 @@ struct _GtkComboBoxAccessiblePrivate
 };
 
 static void atk_action_interface_init    (AtkActionIface    *iface);
-static void atk_selection_interface_init (AtkSelectionIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkComboBoxAccessible, gtk_combo_box_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
-                         G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init)
-                         G_IMPLEMENT_INTERFACE (ATK_TYPE_SELECTION, atk_selection_interface_init))
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init))
 
 static void
 changed_cb (GtkWidget *widget)
@@ -52,7 +50,6 @@ changed_cb (GtkWidget *widget)
     {
       accessible->priv->old_selection = index;
       g_object_notify (G_OBJECT (obj), "accessible-name");
-      g_signal_emit_by_name (obj, "selection-changed");
     }
 }
 
@@ -332,107 +329,4 @@ atk_action_interface_init (AtkActionIface *iface)
   iface->get_name = gtk_combo_box_accessible_action_get_name;
   iface->get_localized_name = gtk_combo_box_accessible_action_get_localized_name;
   iface->get_description = gtk_combo_box_accessible_action_get_description;
-}
-
-static gboolean
-gtk_combo_box_accessible_add_selection (AtkSelection *selection,
-                                        gint          i)
-{
-  GtkWidget *widget;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
-  if (widget == NULL)
-    return FALSE;
-
-  gtk_combo_box_set_active (GTK_COMBO_BOX (widget), i);
-
-  return TRUE;
-}
-
-static gboolean
-gtk_combo_box_accessible_clear_selection (AtkSelection *selection)
-{
-  GtkWidget *widget;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
-  if (widget == NULL)
-    return FALSE;
-
-  gtk_combo_box_set_active (GTK_COMBO_BOX (widget), -1);
-
-  return TRUE;
-}
-
-static AtkObject *
-gtk_combo_box_accessible_ref_selection (AtkSelection *selection,
-                                        gint          i)
-{
-  GtkComboBox *combo_box;
-  GtkWidget *widget;
-  AtkObject *obj;
-  gint index;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
-  if (widget == NULL)
-    return NULL;
-
-  if (i != 0)
-    return NULL;
-
-  combo_box = GTK_COMBO_BOX (widget);
-
-  obj = gtk_combo_box_get_popup_accessible (combo_box);
-  index = gtk_combo_box_get_active (combo_box);
-
-  return atk_object_ref_accessible_child (obj, index);
-}
-
-static gint
-gtk_combo_box_accessible_get_selection_count (AtkSelection *selection)
-{
-  GtkWidget *widget;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
-  if (widget == NULL)
-    return 0;
-
-  return (gtk_combo_box_get_active (GTK_COMBO_BOX (widget)) == -1) ? 0 : 1;
-}
-
-static gboolean
-gtk_combo_box_accessible_is_child_selected (AtkSelection *selection,
-                                            gint          i)
-{
-  GtkWidget *widget;
-  gint j;
-
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
-
-  if (widget == NULL)
-    return FALSE;
-
-  j = gtk_combo_box_get_active (GTK_COMBO_BOX (widget));
-
-  return (j == i);
-}
-
-static gboolean
-gtk_combo_box_accessible_remove_selection (AtkSelection *selection,
-                                           gint          i)
-{
-  if (atk_selection_is_child_selected (selection, i))
-    atk_selection_clear_selection (selection);
-
-  return TRUE;
-}
-
-static void
-atk_selection_interface_init (AtkSelectionIface *iface)
-{
-  iface->add_selection = gtk_combo_box_accessible_add_selection;
-  iface->clear_selection = gtk_combo_box_accessible_clear_selection;
-  iface->ref_selection = gtk_combo_box_accessible_ref_selection;
-  iface->get_selection_count = gtk_combo_box_accessible_get_selection_count;
-  iface->is_child_selected = gtk_combo_box_accessible_is_child_selected;
-  iface->remove_selection = gtk_combo_box_accessible_remove_selection;
 }
