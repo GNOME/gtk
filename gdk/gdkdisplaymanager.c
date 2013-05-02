@@ -306,25 +306,24 @@ typedef struct _GdkBackend GdkBackend;
 
 struct _GdkBackend {
   const char *name;
-  GType (* get_backend_type) (void);
   GdkDisplay * (* open_display) (const char *name);
 };
 
 static GdkBackend gdk_backends[] = {
 #ifdef GDK_WINDOWING_QUARTZ
-  { "quartz",   gdk_quartz_display_manager_get_type,    _gdk_quartz_display_open },
+  { "quartz",   _gdk_quartz_display_open },
 #endif
 #ifdef GDK_WINDOWING_WIN32
-  { "win32",    gdk_win32_display_manager_get_type,     _gdk_win32_display_open },
+  { "win32",    _gdk_win32_display_open },
 #endif
 #ifdef GDK_WINDOWING_X11
-  { "x11",      gdk_x11_display_manager_get_type,       _gdk_x11_display_open },
+  { "x11",      _gdk_x11_display_open },
 #endif
 #ifdef GDK_WINDOWING_WAYLAND
-  { "wayland",  gdk_wayland_display_manager_get_type,   _gdk_wayland_display_open },
+  { "wayland",  _gdk_wayland_display_open },
 #endif
 #ifdef GDK_WINDOWING_BROADWAY
-  { "broadway", gdk_broadway_display_manager_get_type,  _gdk_broadway_display_open },
+  { "broadway", _gdk_broadway_display_open },
 #endif
   /* NULL-terminating this array so we can use commas above */
   { NULL, NULL }
@@ -346,45 +345,8 @@ GdkDisplayManager *
 gdk_display_manager_peek (void)
 {
   if (manager == NULL)
-    {
-      const gchar *backend_list;
-      gchar **backends;
-      gint i, j;
-      gboolean allow_any;
-
-      if (allowed_backends == NULL)
-        allowed_backends = "*";
-      allow_any = strstr (allowed_backends, "*") != NULL;
-
-      backend_list = g_getenv ("GDK_BACKEND");
-      if (backend_list == NULL)
-        backend_list = allowed_backends;
-      backends = g_strsplit (backend_list, ",", 0);
-
-      for (i = 0; manager == NULL && backends[i] != NULL; i++)
-        {
-          const gchar *backend = backends[i];
-          gboolean any = g_str_equal (backend, "*");
-
-          if (!allow_any && !any && !strstr (allowed_backends, backend))
-            continue;
-
-          for (j = 0; gdk_backends[j].name != NULL; j++)
-            {
-              if ((any && allow_any) ||
-                  (any && strstr (allowed_backends, gdk_backends[j].name)) ||
-                  g_str_equal (backend, gdk_backends[j].name))
-                {
-                  GDK_NOTE (MISC, g_message ("Trying %s backend", gdk_backends[j].name));
-                  manager = g_initable_new (gdk_backends[j].get_backend_type (), NULL, NULL, NULL);
-                  if (manager)
-                    break;
-                }
-            }
-        }
-      g_strfreev (backends);
-    }
-
+    manager = g_object_new (GDK_TYPE_DISPLAY_MANAGER, NULL);
+  
   return manager;
 }
 
