@@ -31,7 +31,6 @@
 
 #include <gdk/wayland/gdkwaylanddevice.h>
 #include <gdk/wayland/gdkwaylanddisplay.h>
-#include <gdk/wayland/gdkwaylanddisplaymanager.h>
 #include <gdk/wayland/gdkwaylandselection.h>
 #include <gdk/wayland/gdkwaylandwindow.h>
 
