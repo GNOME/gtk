@@ -3989,7 +3989,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 	 * location; for example, a file manager should show a list of files in
 	 * the specified location.
 	 *
-	 * Since: 3.8
+	 * Since: 3.10
 	 */
 	places_sidebar_signals [OPEN_LOCATION] =
 		g_signal_new (I_("open-location"),
@@ -4028,7 +4028,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 	 * dismisses the menu.  The menu is re-created (and thus, this signal is
 	 * emitted) every time the user activates the contextual menu.
 	 *
-	 * Since: 3.8
+	 * Since: 3.10
 	 */
 	places_sidebar_signals [POPULATE_POPUP] =
 		g_signal_new (I_("populate-popup"),
@@ -4053,7 +4053,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 	 * refer to mounting or unmounting media, for example, when a drive
 	 * cannot be started for some reason.
 	 *
-	 * Since: 3.8
+	 * Since: 3.10
 	 */
 	places_sidebar_signals [SHOW_ERROR_MESSAGE] =
 		g_signal_new (I_("show-error-message"),
@@ -4076,7 +4076,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 	 * a URL like "sftp://ftp.example.com".  It is up to the application to create
 	 * the corresponding mount by using, for example, g_file_mount_enclosing_volume().
 	 *
-	 * Since: 3.8
+	 * Since: 3.10
 	 */
 	places_sidebar_signals [SHOW_CONNECT_TO_SERVER] =
 		g_signal_new (I_("show-connect-to-server"),
@@ -4108,7 +4108,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 	 * or #GDK_ACTION_MOVE, or 0 if no action is allowed here (i.e. drops
 	 * are not allowed in the specified @dest_file).
 	 *
-	 * Since: 3.8
+	 * Since: 3.10
 	 */
 	places_sidebar_signals [DRAG_ACTION_REQUESTED] =
 		g_signal_new (I_("drag-action-requested"),
@@ -4133,7 +4133,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 	 * Return value: the final drag action that the sidebar should pass to the drag side
 	 * of the drag-and-drop operation.
 	 *
-	 * Since: 3.8
+	 * Since: 3.10
 	 */
 	places_sidebar_signals [DRAG_ACTION_ASK] =
 		g_signal_new (I_("drag-action-ask"),
@@ -4158,7 +4158,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 	 * @source_file_list has the list of files that are dropped into it and
 	 * which should be copied/moved/etc. based on the specified @action.
 	 *
-	 * Since: 3.8
+	 * Since: 3.10
 	 */
 	places_sidebar_signals [DRAG_PERFORM_DROP] =
 		g_signal_new (I_("drag-perform-drop"),
@@ -4316,7 +4316,7 @@ shortcuts_model_new (GtkPlacesSidebar *sidebar)
  * Passing 0 for @flags will cause #GTK_PLACES_OPEN_NORMAL to always be sent
  * to callbacks for the "open-location" signal.
  *
- * Since: 3.8
+ * Since: 3.10
  */
 void
 gtk_places_sidebar_set_open_flags (GtkPlacesSidebar *sidebar, GtkPlacesOpenFlags flags)
@@ -4348,7 +4348,7 @@ gtk_places_sidebar_get_open_flags (GtkPlacesSidebar *sidebar)
  * places, or it will unhighlight everything if the @location is not among the
  * places in the list.
  *
- * Since: 3.8
+ * Since: 3.10
  */
 void
 gtk_places_sidebar_set_location (GtkPlacesSidebar *sidebar, GFile *location)
@@ -4408,7 +4408,7 @@ gtk_places_sidebar_set_location (GtkPlacesSidebar *sidebar, GFile *location)
  * Returns: (transfer full): a GFile with the selected location, or #NULL if nothing is visually
  * selected.
  *
- * Since: 3.8
+ * Since: 3.10
  */
 GFile *
 gtk_places_sidebar_get_location (GtkPlacesSidebar *sidebar)
@@ -4443,7 +4443,7 @@ gtk_places_sidebar_get_location (GtkPlacesSidebar *sidebar)
  * An application may want to turn this on if the desktop environment actually supports the
  * notion of a desktop.
  *
- * Since: 3.8
+ * Since: 3.10
  */
 void
 gtk_places_sidebar_set_show_desktop (GtkPlacesSidebar *sidebar, gboolean show_desktop)
@@ -4466,7 +4466,7 @@ gtk_places_sidebar_set_show_desktop (GtkPlacesSidebar *sidebar, gboolean show_de
  *
  * Return value: %TRUE if the sidebar will display a builtin shortcut to the desktop folder.
  *
- * Since: 3.8
+ * Since: 3.10
  */
 gboolean
 gtk_places_sidebar_get_show_desktop (GtkPlacesSidebar *sidebar)
@@ -4485,7 +4485,7 @@ gtk_places_sidebar_get_show_desktop (GtkPlacesSidebar *sidebar)
  * An application may want to turn this on if it implements a way for the user to connect
  * to network servers directly.
  *
- * Since: 3.8
+ * Since: 3.10
  */
 void
 gtk_places_sidebar_set_show_connect_to_server (GtkPlacesSidebar *sidebar, gboolean show_connect_to_server)
@@ -4508,7 +4508,7 @@ gtk_places_sidebar_set_show_connect_to_server (GtkPlacesSidebar *sidebar, gboole
  *
  * Return value: %TRUE if the sidebar will display a "Connect to Server" item.
  *
- * Since: 3.8
+ * Since: 3.10
  */
 gboolean
 gtk_places_sidebar_get_show_connect_to_server (GtkPlacesSidebar *sidebar)
@@ -4550,7 +4550,7 @@ find_shortcut_link (GtkPlacesSidebar *sidebar, GFile *location)
  * is called multiple times with different locations, then they are added
  * to the sidebar's list in the same order as the function is called.
  *
- * Since: 3.8
+ * Since: 3.10
  */
 void
 gtk_places_sidebar_add_shortcut (GtkPlacesSidebar *sidebar, GFile *location)
@@ -4573,7 +4573,7 @@ gtk_places_sidebar_add_shortcut (GtkPlacesSidebar *sidebar, GFile *location)
  * inserted with gtk_places_sidebar_add_shortcut().  If the @location is not a
  * shortcut in the sidebar, then nothing is done.
  *
- * Since: 3.8
+ * Since: 3.10
  */
 void
 gtk_places_sidebar_remove_shortcut (GtkPlacesSidebar *sidebar, GFile *location)
@@ -4606,7 +4606,7 @@ gtk_places_sidebar_remove_shortcut (GtkPlacesSidebar *sidebar, GFile *location)
  * g_slist_free_full (list, (GDestroyNotify) g_object_unref);
  * ]|
  *
- * Since: 3.8
+ * Since: 3.10
  */
 GSList *
 gtk_places_sidebar_list_shortcuts (GtkPlacesSidebar *sidebar)
@@ -4629,7 +4629,7 @@ gtk_places_sidebar_list_shortcuts (GtkPlacesSidebar *sidebar)
  * #NULL if no such index exist.  Note that the indices start at 0, even though
  * the file chooser starts them with the keyboard shortcut "Alt-1".
  *
- * Since: 3.8
+ * Since: 3.10
  */
 GFile *
 gtk_places_sidebar_get_nth_bookmark (GtkPlacesSidebar *sidebar, int n)
