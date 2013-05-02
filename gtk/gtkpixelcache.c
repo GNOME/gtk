@@ -71,9 +71,22 @@ _gtk_pixel_cache_invalidate (GtkPixelCache *cache,
 			     cairo_region_t *region)
 {
   cairo_rectangle_int_t r;
+  cairo_region_t *free_region = NULL;
 
-  if (cache->surface == NULL || cairo_region_is_empty (region))
+  if (cache->surface == NULL ||
+      (region != NULL && cairo_region_is_empty (region)))
     return;
+
+  if (region == NULL)
+    {
+      r.x = cache->surface_x;
+      r.y = cache->surface_y;
+      r.width = cache->surface_w;
+      r.height = cache->surface_h;
+
+      free_region = region =
+	cairo_region_create_rectangle (&r);
+    }
 
   if (cache->surface_dirty == NULL)
     {
@@ -93,10 +106,14 @@ _gtk_pixel_cache_invalidate (GtkPixelCache *cache,
 			      cache->surface_y);
     }
 
+  if (free_region)
+    cairo_region_destroy (free_region);
+
   r.x = 0;
   r.y = 0;
   r.width = cache->surface_w;
   r.height = cache->surface_h;
+
   cairo_region_intersect_rectangle (cache->surface_dirty, &r);
 }
 
