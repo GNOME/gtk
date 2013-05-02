@@ -495,6 +495,8 @@ struct _GtkTreeViewPrivate
 
   guint in_grab : 1;
 
+  guint in_scroll : 1;
+
   /* Whether our key press handler is to avoid sending an unhandled binding to the search entry */
   guint search_entry_avoid_unhandled_binding : 1;
 
@@ -2239,6 +2241,11 @@ gtk_tree_view_bin_window_invalidate_handler (GdkWindow *window,
 
   gdk_window_get_user_data (window, &widget);
   tree_view = GTK_TREE_VIEW (widget);
+
+  /* Scrolling will invalidate everything in the bin window,
+     but we already have it in the cache, so we can ignore that */
+  if (tree_view->priv->in_scroll)
+    return;
 
   y = gtk_adjustment_get_value (tree_view->priv->vadjustment);
   cairo_region_translate (region,
@@ -4819,8 +4826,6 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 
   bin_window_width = gdk_window_get_width (tree_view->priv->bin_window);
   bin_window_height = gdk_window_get_height (tree_view->priv->bin_window);
-  cairo_rectangle (cr, 0, 0, bin_window_width, bin_window_height);
-  cairo_clip (cr);
   if (!gdk_cairo_get_clip_rectangle (cr, &clip))
     return TRUE;
 
@@ -11309,7 +11314,9 @@ gtk_tree_view_adjustment_changed (GtkAdjustment *adjustment,
                 }
 	    }
 	}
+      tree_view->priv->in_scroll = TRUE;
       gdk_window_scroll (tree_view->priv->bin_window, 0, dy);
+      tree_view->priv->in_scroll = FALSE;
 
       if (tree_view->priv->dy != (int) gtk_adjustment_get_value (tree_view->priv->vadjustment))
         {
