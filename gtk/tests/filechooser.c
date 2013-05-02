@@ -653,7 +653,7 @@ test_file_chooser_button_with_response (const FileChooserButtonTest *setup, gint
 {
   WindowAndButton w;
   SignalWatcher *watcher;
-  GtkWidget *fc_dialog;
+  GtkWidget *fc_dialog = NULL;
   int iterations;
   int i;
 
