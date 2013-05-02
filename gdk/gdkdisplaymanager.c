@@ -48,7 +48,6 @@
 #endif
 
 #ifdef GDK_WINDOWING_BROADWAY
-#include "broadway/gdkbroadwaydisplaymanager.h"
 #include "broadway/gdkprivate-broadway.h"
 #endif
 

@@ -32,7 +32,6 @@
 #include <gdk/broadway/gdkbroadwaywindow.h>
 #include <gdk/broadway/gdkbroadwaycursor.h>
 #include <gdk/broadway/gdkbroadwayvisual.h>
-#include <gdk/broadway/gdkbroadwaydisplaymanager.h>
 
 #undef __GDKBROADWAY_H_INSIDE__
 

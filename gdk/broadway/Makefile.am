@@ -23,7 +23,6 @@ libgdkinclude_HEADERS = 	\
 	gdkbroadway.h
 
 libgdkbroadwayinclude_HEADERS = 	\
-	gdkbroadwaydisplaymanager.h	\
 	gdkbroadwaywindow.h		\
 	gdkbroadwaycursor.h		\
 	gdkbroadwayvisual.h
@@ -55,7 +54,6 @@ libgdk_broadway_la_SOURCES =		\
 	gdkdevicemanager-broadway.c \
 	gdkdisplay-broadway.c	\
 	gdkdisplay-broadway.h	\
-	gdkdisplaymanager-broadway.c	\
 	gdkdnd-broadway.c	\
 	gdkeventsource.c	\
 	gdkeventsource.h	\
