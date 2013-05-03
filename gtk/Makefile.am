@@ -1308,12 +1308,23 @@ LDADDS =								\
 	$(GTK_DEP_LIBS)
 
 if HAVE_INTROSPECTION
+# The Quartz clipboard and dnd files aren't annotated for
+# introspection. Rather than copy the annotations over from the
+# regular files, exclude the quartz ones:
 introspection_files = \
     $(filter-out %private.h gtktextdisplay.h gtktextlayout.h, $(gtkinclude_HEADERS) $(deprecatedinclude_HEADERS)) \
-    $(gtk_base_c_sources) \
+    $(filter-out  gtkclipboard-quartz.c gtkdnd-quartz.c, \
+    $(gtk_base_c_sources)) \
     gtkprintoperation-unix.c \
     gtktypebuiltins.h \
     gtktypebuiltins.c
+
+# And include the regular ones:
+if USE_QUARTZ
+introspection_files += \
+    gtkclipboard.c \
+    gtkdnd.c
+endif
 
 if USE_X11
 introspection_files += \
