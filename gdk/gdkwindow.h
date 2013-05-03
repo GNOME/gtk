@@ -767,6 +767,9 @@ GdkWindow *   gdk_window_get_effective_toplevel (GdkWindow *window);
 
 GList *	      gdk_window_get_children	 (GdkWindow	  *window);
 GList *       gdk_window_peek_children   (GdkWindow       *window);
+GList *       gdk_window_get_children_with_user_data (GdkWindow *window,
+						      gpointer user_data);
+
 GdkEventMask  gdk_window_get_events	 (GdkWindow	  *window);
 void	      gdk_window_set_events	 (GdkWindow	  *window,
 					  GdkEventMask	   event_mask);
