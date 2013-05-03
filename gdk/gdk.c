@@ -666,12 +666,12 @@ gdk_init (int *argc, char ***argv)
  * </informalexample>
  *
  * Unfortunately, all of the above documentation holds with the X11
- * backend only. With the Win32 backend, GDK and GTK+ calls should not
- * be attempted from multiple threads at all. Combining the GDK lock
- * with other locks such as the Python global interpreter lock can be
- * complicated.
+ * backend only. With the Win32 or Quartz backends, GDK and GTK+ calls
+ * must occur only in the main thread (see below). When using Python,
+ * even on X11 combining the GDK lock with other locks such as the
+ * Python global interpreter lock can be complicated.
  *
- * For these reason, the threading support has been deprecated in
+ * For these reasons, the threading support has been deprecated in
  * GTK+ 3.6. Instead of calling GTK+ directly from multiple threads,
  * it is recommended to use g_idle_add(), g_main_context_invoke()
  * and similar functions to make these calls from the main thread
