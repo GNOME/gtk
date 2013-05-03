@@ -29,6 +29,8 @@
 #include "gtkthemingengineprivate.h"
 #include "gtkpango.h"
 
+#include <math.h>
+
 struct _GtkCssValue {
   GTK_CSS_VALUE_BASE
   guint inset :1;
@@ -479,30 +481,43 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
                                  const GtkRoundedBox *padding_box)
 {
   GtkRoundedBox box, clip_box;
-  double spread, radius;
+  double spread, radius, x, y, outside;
 
   g_return_if_fail (shadow->class == &GTK_CSS_VALUE_SHADOW);
 
   cairo_save (cr);
+
+  spread = _gtk_css_number_value_get (shadow->spread, 0);
+  radius = _gtk_css_number_value_get (shadow->radius, 0);
+  x = _gtk_css_number_value_get (shadow->hoffset, 0);
+  y = _gtk_css_number_value_get (shadow->voffset, 0);
 
   if (shadow->inset)
     {
       _gtk_rounded_box_path (padding_box, cr);
       cairo_clip (cr);
     }
+  else
+    {
+      cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
+      _gtk_rounded_box_path (padding_box, cr);
+
+      outside = spread + radius + MAX (fabs (x), fabs (y));
+      clip_box = *padding_box;
+      _gtk_rounded_box_grow (&clip_box, outside, outside, outside, outside);
+      _gtk_rounded_box_clip_path (&clip_box, cr);
+      cairo_clip (cr);
+    }
 
   box = *padding_box;
-  _gtk_rounded_box_move (&box,
-                         _gtk_css_number_value_get (shadow->hoffset, 0),
-                         _gtk_css_number_value_get (shadow->voffset, 0));
-  spread = _gtk_css_number_value_get (shadow->spread, 0);
+  _gtk_rounded_box_move (&box, x, y);
+
   if (shadow->inset)
     _gtk_rounded_box_shrink (&box, spread, spread, spread, spread);
   else /* Outset */
     _gtk_rounded_box_grow (&box, spread, spread, spread, spread);
 
   clip_box = *padding_box;
-  radius = _gtk_css_number_value_get (shadow->radius, 0);
   _gtk_rounded_box_shrink (&clip_box, -radius, -radius, -radius, -radius);
 
   cr = gtk_css_shadow_value_start_drawing (shadow, cr);
