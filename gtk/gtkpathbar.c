@@ -161,6 +161,8 @@ static gboolean gtk_path_bar_scroll               (GtkWidget        *widget,
 static void gtk_path_bar_scroll_up                (GtkPathBar       *path_bar);
 static void gtk_path_bar_scroll_down              (GtkPathBar       *path_bar);
 static void gtk_path_bar_stop_scrolling           (GtkPathBar       *path_bar);
+static gboolean gtk_path_bar_scroll_timeout       (GtkPathBar *path_bar);
+
 static gboolean gtk_path_bar_slider_up_defocus    (GtkWidget        *widget,
 						   GdkEventButton   *event,
 						   GtkPathBar       *path_bar);
@@ -226,6 +228,69 @@ setup_basic_folders (GtkPathBar *path_bar)
 }
 
 static void
+slider_drag_motion_cb (GtkWidget      *widget,
+		       GdkDragContext *context,
+		       gint            x,
+		       gint            y,
+		       guint           time,
+		       GtkPathBar     *path_bar)
+{
+  GtkPathBarPrivate *priv = path_bar->priv;
+  GtkSettings *settings;
+  guint timeout;
+
+  if (priv->timer == 0)
+    {
+      settings = gtk_widget_get_settings (widget);
+
+      g_object_get (settings, "gtk-timeout-expand", &timeout, NULL);
+
+      priv->need_timer = TRUE;
+      priv->timer = gdk_threads_add_timeout (timeout, (GSourceFunc) gtk_path_bar_scroll_timeout, path_bar);
+
+      priv->scrolling_up = (widget == priv->up_slider_button);
+      priv->scrolling_down = (widget == priv->down_slider_button);
+    }
+}
+
+static void
+slider_drag_leave_cb (GtkWidget      *widget,
+		      GdkDragContext *context,
+		      guint           time,
+		      GtkPathBar     *path_bar)
+{
+  gtk_path_bar_stop_scrolling (path_bar);
+}
+
+static void
+setup_dnd_in_arrows (GtkPathBar *path_bar)
+{
+  GtkPathBarPrivate *priv = path_bar->priv;
+
+  gtk_drag_dest_set (GTK_WIDGET (priv->up_slider_button), 0, NULL, 0, 0);
+  gtk_drag_dest_set_track_motion (GTK_WIDGET (priv->up_slider_button), TRUE);
+  g_signal_connect (priv->up_slider_button,
+		    "drag-motion",
+		    G_CALLBACK (slider_drag_motion_cb),
+		    path_bar);
+  g_signal_connect (priv->up_slider_button,
+		    "drag-leave",
+		    G_CALLBACK (slider_drag_leave_cb),
+		    path_bar);
+
+  gtk_drag_dest_set (GTK_WIDGET (priv->down_slider_button), 0, NULL, 0, 0);
+  gtk_drag_dest_set_track_motion (GTK_WIDGET (priv->down_slider_button), TRUE);
+  g_signal_connect (priv->down_slider_button,
+		    "drag-motion",
+		    G_CALLBACK (slider_drag_motion_cb),
+		    path_bar);
+  g_signal_connect (priv->down_slider_button,
+		    "drag-leave",
+		    G_CALLBACK (slider_drag_leave_cb),
+		    path_bar);
+}
+
+static void
 gtk_path_bar_init (GtkPathBar *path_bar)
 {
   GtkPathBarPrivate *priv;
@@ -260,6 +325,8 @@ gtk_path_bar_init (GtkPathBar *path_bar)
   priv->icon_size = FALLBACK_ICON_SIZE;
 
   setup_basic_folders (path_bar);
+
+  setup_dnd_in_arrows (path_bar);
 
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (path_bar)),
 			       GTK_STYLE_CLASS_LINKED);
@@ -1240,7 +1307,7 @@ gtk_path_bar_scroll_timeout (GtkPathBar *path_bar)
 	  priv->need_timer = FALSE;
 
 	  priv->timer = gdk_threads_add_timeout (timeout * SCROLL_DELAY_FACTOR,
-					   (GSourceFunc)gtk_path_bar_scroll_timeout,
+					   (GSourceFunc) gtk_path_bar_scroll_timeout,
 					   path_bar);
 	}
       else
