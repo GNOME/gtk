@@ -277,7 +277,7 @@ gtk_theming_engine_finalize (GObject *object)
   priv = GTK_THEMING_ENGINE (object)->priv;
   g_free (priv->name);
 
-  G_OBJECT_GET_CLASS (gtk_theming_engine_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_theming_engine_parent_class)->finalize (object);
 }
 
 static void
