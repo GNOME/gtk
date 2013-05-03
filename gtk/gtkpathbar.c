@@ -260,6 +260,9 @@ gtk_path_bar_init (GtkPathBar *path_bar)
   priv->icon_size = FALLBACK_ICON_SIZE;
 
   setup_basic_folders (path_bar);
+
+  gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (path_bar)),
+			       GTK_STYLE_CLASS_LINKED);
 }
 
 static void
@@ -1831,6 +1834,8 @@ make_directory_button (GtkPathBar  *path_bar,
 
   button_data->type = find_button_type (path_bar, file);
   button_data->button = gtk_toggle_button_new ();
+  gtk_style_context_add_class (gtk_widget_get_style_context (button_data->button),
+			       "text-button"); /* FIXME: why is there no constant for this style class? */
   atk_obj = gtk_widget_get_accessible (button_data->button);
   gtk_button_set_focus_on_click (GTK_BUTTON (button_data->button), FALSE);
   gtk_widget_add_events (button_data->button, GDK_SCROLL_MASK);
