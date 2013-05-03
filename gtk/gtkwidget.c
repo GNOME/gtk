@@ -4799,10 +4799,10 @@ static guint tick_callback_id;
  * @user_data: data to pass to @callback
  * @notify: function to call to free @user_data when the callback is removed.
  *
- * Queues a animation frame update and adds a callback to be called
+ * Queues an animation frame update and adds a callback to be called
  * before each frame. Until the tick callback is removed, it will be
  * called frequently (usually at the frame rate of the output device
- * or as quickly as the application an be repainted, whichever is
+ * or as quickly as the application can be repainted, whichever is
  * slower). For this reason, is most suitable for handling graphics
  * that change every frame or every few frames. The tick callback does
  * not automatically imply a relayout or repaint. If you want a
