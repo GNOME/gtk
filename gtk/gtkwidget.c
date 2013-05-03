@@ -6391,7 +6391,7 @@ _gtk_widget_draw_windows (GdkWindow *window,
   cairo_pattern_t *pattern;
   gboolean do_clip;
   GtkWidget *widget = NULL;
-  GList *l;
+  GList *children, *l;
   int x, y;
 
   if (!gdk_window_is_viewable (window))
@@ -6427,29 +6427,26 @@ _gtk_widget_draw_windows (GdkWindow *window,
       _gtk_widget_draw_internal (widget, cr, do_clip, window);
       cairo_restore (cr);
 
-      for (l = g_list_last (gdk_window_peek_children (window));
-	   l != NULL;
-	   l = l->prev)
+      children = gdk_window_get_children_with_user_data (window, widget);
+      for (l = children; l != NULL; l = l->next)
 	{
 	  GdkWindow *child_window = l->data;
-	  gpointer child_data;
 	  GdkWindowType type;
 	  int wx, wy;
 
-	  type = gdk_window_get_window_type (child_window);
 	  if (!gdk_window_is_visible (child_window) ||
-	      gdk_window_is_input_only (child_window) ||
-	      type == GDK_WINDOW_OFFSCREEN ||
+	      gdk_window_is_input_only (child_window))
+	    continue;
+
+	  type = gdk_window_get_window_type (child_window);
+	  if (type == GDK_WINDOW_OFFSCREEN ||
 	      type == GDK_WINDOW_FOREIGN)
 	    continue;
 
-	  gdk_window_get_user_data (child_window, &child_data);
-	  if (child_data == (gpointer)widget)
-	    {
-	      gdk_window_get_position (child_window, &wx, &wy);
-	      _gtk_widget_draw_windows (child_window, cr, wx,wy);
-	    }
+	  gdk_window_get_position (child_window, &wx, &wy);
+	  _gtk_widget_draw_windows (child_window, cr, wx,wy);
 	}
+      g_list_free (children);
     }
 
   cairo_restore (cr);
@@ -6460,8 +6457,7 @@ _gtk_widget_draw (GtkWidget *widget,
 		  cairo_t   *cr)
 {
   GdkWindow *window, *child_window;
-  gpointer child_data;
-  GList *l;
+  GList *children, *l;
   int wx, wy;
   gboolean push_group;
   GdkWindowType type;
@@ -6509,27 +6505,26 @@ _gtk_widget_draw (GtkWidget *widget,
 
       /* But, it may also have child windows in the parent which we should
        * draw (after having drawn on the parent) */
-      for (l = g_list_last (gdk_window_peek_children (window));
-	   l != NULL;
-	   l = l->prev)
+      children = gdk_window_get_children_with_user_data (window, widget);
+      for (l = children; l != NULL; l = l->next)
 	{
 	  child_window = l->data;
-	  type = gdk_window_get_window_type (child_window);
+
 	  if (!gdk_window_is_visible (child_window) ||
-	      gdk_window_is_input_only (child_window) ||
-	      type == GDK_WINDOW_OFFSCREEN ||
+	      gdk_window_is_input_only (child_window))
+	    continue;
+
+	  type = gdk_window_get_window_type (child_window);
+	  if (type == GDK_WINDOW_OFFSCREEN ||
 	      type == GDK_WINDOW_FOREIGN)
 	    continue;
 
-	  gdk_window_get_user_data (child_window, &child_data);
-	  if (child_data == (gpointer)widget)
-	    {
-	      gdk_window_get_position (child_window, &wx, &wy);
-	      _gtk_widget_draw_windows (child_window, cr,
-					wx - widget->priv->allocation.x,
-					wy - widget->priv->allocation.y);
-	    }
+	  gdk_window_get_position (child_window, &wx, &wy);
+	  _gtk_widget_draw_windows (child_window, cr,
+				    wx - widget->priv->allocation.x,
+				    wy - widget->priv->allocation.y);
 	}
+      g_list_free (children);
     }
 
   if (push_group)
