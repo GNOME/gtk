@@ -2399,6 +2399,47 @@ gdk_window_peek_children (GdkWindow *window)
   return window->children;
 }
 
+
+/**
+ * gdk_window_get_children_with_user_data:
+ * @window: a #GdkWindow
+ *
+ * Gets the list of children of @window known to GDK with a particular
+ * user_data set on it.
+ *
+ * The returned list must be freed, but the elements in the
+ * list need not be.
+ *
+ * The list is returned in (relative) stacking order, i.e. the
+ * lowest window is first.
+ *
+ * Return value: (transfer container) (element-type GdkWindow):
+ *     list of child windows inside @window
+ **/
+GList *
+gdk_window_get_children_with_user_data (GdkWindow *window, gpointer user_data)
+{
+  GdkWindow *child;
+  GList *res, *l;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return NULL;
+
+  res = NULL;
+  for (l = window->children; l != NULL; l = l->next)
+    {
+      child = l->data;
+
+      if (child->user_data == user_data)
+	res = g_list_prepend (res, child);
+    }
+
+  return res;
+}
+
+
 /**
  * gdk_window_add_filter: (skip)
  * @window: (allow-none): a #GdkWindow

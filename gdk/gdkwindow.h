@@ -856,6 +856,10 @@ GDK_AVAILABLE_IN_ALL
 GList *	      gdk_window_get_children	 (GdkWindow	  *window);
 GDK_AVAILABLE_IN_ALL
 GList *       gdk_window_peek_children   (GdkWindow       *window);
+GDK_AVAILABLE_IN_3_10
+GList *       gdk_window_get_children_with_user_data (GdkWindow *window,
+						      gpointer user_data);
+
 GDK_AVAILABLE_IN_ALL
 GdkEventMask  gdk_window_get_events	 (GdkWindow	  *window);
 GDK_AVAILABLE_IN_ALL
