@@ -269,8 +269,8 @@ struct _GdkWindow
   GdkWindowInvalidateHandlerFunc invalidate_handler;
 };
 
-#define GDK_WINDOW_TYPE(d) (((GDK_WINDOW (d)))->window_type)
-#define GDK_WINDOW_DESTROYED(d) (GDK_WINDOW (d)->destroyed)
+#define GDK_WINDOW_TYPE(d) ((((GdkWindow *)(d)))->window_type)
+#define GDK_WINDOW_DESTROYED(d) (((GdkWindow *)(d))->destroyed)
 
 extern gchar     *_gdk_display_name;
 extern gint       _gdk_screen_number;
