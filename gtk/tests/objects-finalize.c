@@ -26,11 +26,14 @@
 
 typedef GType (*GTypeGetFunc) (void);
 
+static gboolean finalized = FALSE;
+
 static gboolean
 main_loop_quit_cb (gpointer data)
 {
   gtk_main_quit ();
 
+  g_assert (finalized);
   return FALSE;
 }
 
@@ -48,7 +51,6 @@ test_finalize_object (gconstpointer data)
 {
   GType test_type = GPOINTER_TO_SIZE (data);
   GObject *object;
-  gboolean finalized = FALSE;
 
   object = g_object_new (test_type, NULL);
   g_assert (G_IS_OBJECT (object));
@@ -65,8 +67,6 @@ test_finalize_object (gconstpointer data)
     gtk_widget_destroy (GTK_WIDGET (object));
   else
     g_object_unref (object);
-
-  g_assert (finalized);
 
   /* Even if the object did finalize, it may have left some dangerous stuff in the GMainContext */
   g_timeout_add (50, main_loop_quit_cb, NULL);
