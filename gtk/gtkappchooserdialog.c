@@ -536,6 +536,8 @@ gtk_app_chooser_dialog_dispose (GObject *object)
   cancel_and_clear_cancellable (self);
   g_clear_object (&self->priv->online);
 
+  self->priv->dismissed = TRUE;
+
   G_OBJECT_CLASS (gtk_app_chooser_dialog_parent_class)->dispose (object);
 }
 
