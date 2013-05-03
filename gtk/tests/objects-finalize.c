@@ -63,7 +63,7 @@ test_finalize_object (gconstpointer data)
   g_object_weak_ref (object, check_finalized, &finalized);
 
   /* Toplevels are owned by GTK+, just tell GTK+ to destroy it */
-  if (GTK_IS_WINDOW (object))
+  if (GTK_IS_WINDOW (object) || GTK_IS_INVISIBLE (object))
     gtk_widget_destroy (GTK_WIDGET (object));
   else
     g_object_unref (object);
