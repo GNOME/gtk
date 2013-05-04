@@ -650,14 +650,14 @@ _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *wayland_display)
   g_assert (wayland_display->shm);
 
   g_value_init (&v, G_TYPE_INT);
-  if (gdk_setting_get ("gtk-cursor-theme-size", &v))
+  if (gdk_screen_get_setting (wayland_display->screen, "gtk-cursor-theme-size", &v))
     size = g_value_get_int (&v);
   else
     size = 32;
   g_value_unset (&v);
 
   g_value_init (&v, G_TYPE_STRING);
-  if (gdk_setting_get ("gtk-cursor-theme-name", &v))
+  if (gdk_screen_get_setting (wayland_display->screen, "gtk-cursor-theme-name", &v))
     name = g_value_get_string (&v);
   else
     name = "default";
