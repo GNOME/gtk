@@ -512,7 +512,7 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
   GtkAllocation child_allocation;
   GtkWidget *child;
   gint width, height;
-  guint border_width;
+  gint border_width;
   gint padding_horizontal, padding_vertical;
   gint baseline;
 

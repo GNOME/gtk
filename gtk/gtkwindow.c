@@ -6357,7 +6357,7 @@ _gtk_window_set_allocation (GtkWindow           *window,
   GtkWidget *widget = (GtkWidget *)window;
   GtkWindowPrivate *priv = window->priv;
   GtkAllocation child_allocation;
-  guint border_width;
+  gint border_width;
   GtkBorder window_border = { 0 };
   gint title_height = 0;
 

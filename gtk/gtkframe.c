@@ -816,7 +816,7 @@ gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
   GtkAllocation allocation;
   GtkBorder padding;
   gint top_margin;
-  guint border_width;
+  gint border_width;
 
   gtk_widget_get_allocation (widget, &allocation);
   get_padding_and_border (frame, &padding);

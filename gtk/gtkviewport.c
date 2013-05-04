@@ -318,7 +318,7 @@ viewport_get_view_allocation (GtkViewport   *viewport,
   GtkStyleContext *context;
   GtkStateFlags state;
   GtkBorder padding, border;
-  guint border_width;
+  gint border_width;
 
   gtk_widget_get_allocation (widget, &allocation);
   border_width = gtk_container_get_border_width (GTK_CONTAINER (viewport));

@@ -2459,7 +2459,7 @@ gtk_notebook_size_allocate (GtkWidget     *widget,
 
   if (priv->children)
     {
-      guint border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+      gint border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
       GtkNotebookPage *page;
       GtkAllocation child_allocation;
       GList *children;
