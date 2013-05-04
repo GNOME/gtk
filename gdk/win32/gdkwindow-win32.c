@@ -228,7 +228,7 @@ _gdk_windowing_window_init (GdkScreen *screen)
   window->visual = gdk_screen_get_system_visual (screen);
 
   window->window_type = GDK_WINDOW_ROOT;
-  window->depth = gdk_visual_get_system ()->depth;
+  window->depth = window->visual->depth;
 
   _gdk_root_window_size_init ();
 
