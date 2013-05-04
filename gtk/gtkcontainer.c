@@ -664,16 +664,17 @@ attributes_end_element (GMarkupParseContext *context,
   /* translate the string */
   if (parser_data->string->len && parser_data->translatable)
     {
-      const gchar *translated;
+      gchar *translated;
       const gchar *domain;
 
       domain = gtk_builder_get_translation_domain (parser_data->builder);
 
-      translated = _gtk_builder_parser_translate (domain,
-						  parser_data->context,
-						  parser_data->string->str);
+      translated = g_strdup (_gtk_builder_parser_translate (domain,
+                                                            parser_data->context,
+                                                            parser_data->string->str));
       g_string_set_size (parser_data->string, 0);
       g_string_append (parser_data->string, translated);
+      g_free (translated);
     }
 
   if (parser_data->child_prop_name)
