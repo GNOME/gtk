@@ -2717,7 +2717,7 @@ settings_update_provider (GdkScreen       *screen,
                           GtkCssProvider **old,
                           GtkCssProvider  *new)
 {
-  if (*old != new)
+  if (screen != NULL && *old != new)
     {
       if (*old)
         {
