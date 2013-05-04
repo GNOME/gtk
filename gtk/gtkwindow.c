@@ -103,6 +103,11 @@
  * <object class="GtkAccelGroup" id="accelgroup1"/>
  * ]]></programlisting>
  * </example>
+ * <para>
+ * The GtkWindow implementation of the GtkBuildable interface
+ * supports setting a child as the titlebar by specifying "titlebar" as
+ * the "type" attribute of a <tag class="starttag">child</tag> element.
+ * </para>
  * </refsect2>
  */
 
@@ -511,6 +516,10 @@ static void gtk_window_get_property (GObject         *object,
 
 /* GtkBuildable */
 static void gtk_window_buildable_interface_init  (GtkBuildableIface *iface);
+static void gtk_window_buildable_add_child (GtkBuildable *buildable,
+                                            GtkBuilder   *builder,
+                                            GObject      *child,
+                                            const gchar  *type);
 static void gtk_window_buildable_set_buildable_property (GtkBuildable        *buildable,
 							 GtkBuilder          *builder,
 							 const gchar         *name,
@@ -1556,6 +1565,21 @@ gtk_window_buildable_interface_init (GtkBuildableIface *iface)
   iface->parser_finished = gtk_window_buildable_parser_finished;
   iface->custom_tag_start = gtk_window_buildable_custom_tag_start;
   iface->custom_finished = gtk_window_buildable_custom_finished;
+  iface->add_child = gtk_window_buildable_add_child;
+}
+
+static void
+gtk_window_buildable_add_child (GtkBuildable *buildable,
+                                GtkBuilder   *builder,
+                                GObject      *child,
+                                const gchar  *type)
+{
+  if (type && strcmp (type, "titlebar") == 0)
+    gtk_window_set_titlebar (GTK_WINDOW (buildable), GTK_WIDGET (child));
+  else if (!type)
+    gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
+  else
+    GTK_BUILDER_WARN_INVALID_CHILD_TYPE (buildable, type);
 }
 
 static void
