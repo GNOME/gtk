@@ -50,13 +50,18 @@ struct _GtkContainerCellAccessibleClass
   GtkCellAccessibleClass parent_class;
 };
 
+GDK_AVAILABLE_IN_ALL
 GType                       gtk_container_cell_accessible_get_type     (void);
 
+GDK_AVAILABLE_IN_ALL
 GtkContainerCellAccessible *gtk_container_cell_accessible_new          (void);
+GDK_AVAILABLE_IN_ALL
 void                        gtk_container_cell_accessible_add_child    (GtkContainerCellAccessible *container,
                                                                         GtkCellAccessible          *child);
+GDK_AVAILABLE_IN_ALL
 void                        gtk_container_cell_accessible_remove_child (GtkContainerCellAccessible *container,
                                                                         GtkCellAccessible          *child);
+GDK_AVAILABLE_IN_ALL
 GList                      *gtk_container_cell_accessible_get_children  (GtkContainerCellAccessible *container);
 
 G_END_DECLS

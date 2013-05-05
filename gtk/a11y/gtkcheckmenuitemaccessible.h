@@ -49,6 +49,7 @@ struct _GtkCheckMenuItemAccessibleClass
   GtkMenuItemAccessibleClass parent_class;
 };
 
+GDK_AVAILABLE_IN_ALL
 GType gtk_check_menu_item_accessible_get_type (void);
 
 G_END_DECLS

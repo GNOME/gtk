@@ -50,6 +50,7 @@ struct _GtkTextCellAccessibleClass
   GtkRendererCellAccessibleClass parent_class;
 };
 
+GDK_AVAILABLE_IN_ALL
 GType gtk_text_cell_accessible_get_type (void);
 
 G_END_DECLS

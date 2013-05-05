@@ -49,6 +49,7 @@ struct _GtkLinkButtonAccessibleClass
   GtkButtonAccessibleClass parent_class;
 };
 
+GDK_AVAILABLE_IN_ALL
 GType gtk_link_button_accessible_get_type (void);
 
 G_END_DECLS

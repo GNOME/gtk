@@ -49,6 +49,7 @@ struct _GtkRadioButtonAccessibleClass
   GtkToggleButtonAccessibleClass parent_class;
 };
 
+GDK_AVAILABLE_IN_ALL
 GType gtk_radio_button_accessible_get_type (void);
 
 G_END_DECLS

@@ -49,7 +49,9 @@ struct _GtkToplevelAccessibleClass
   AtkObjectClass parent_class;
 };
 
+GDK_AVAILABLE_IN_ALL
 GType  gtk_toplevel_accessible_get_type     (void);
+GDK_AVAILABLE_IN_ALL
 GList *gtk_toplevel_accessible_get_children (GtkToplevelAccessible *accessible);
 
 G_END_DECLS

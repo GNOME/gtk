@@ -49,7 +49,11 @@ struct _GtkEntryAccessibleClass
   GtkWidgetAccessibleClass parent_class;
 };
 
+GDK_AVAILABLE_IN_ALL
 GType gtk_entry_accessible_get_type (void);
+
+GDK_AVAILABLE_IN_ALL
+GType gtk_entry_icon_accessible_get_type (void);
 
 G_END_DECLS
 

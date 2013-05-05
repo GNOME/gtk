@@ -49,6 +49,7 @@ struct _GtkTextViewAccessibleClass
   GtkContainerAccessibleClass parent_class;
 };
 
+GDK_AVAILABLE_IN_ALL
 GType gtk_text_view_accessible_get_type (void);
 
 

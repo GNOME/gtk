@@ -56,6 +56,7 @@ struct _GtkWidgetAccessibleClass
 
 };
 
+GDK_AVAILABLE_IN_ALL
 GType gtk_widget_accessible_get_type (void);
 
 G_END_DECLS

@@ -49,6 +49,7 @@ struct _GtkFrameAccessibleClass
   GtkContainerAccessibleClass parent_class;
 };
 
+GDK_AVAILABLE_IN_ALL
 GType gtk_frame_accessible_get_type (void);
 
 G_END_DECLS

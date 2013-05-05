@@ -49,11 +49,14 @@ struct _GtkNotebookPageAccessibleClass
   AtkObjectClass parent_class;
 };
 
+GDK_AVAILABLE_IN_ALL
 GType      gtk_notebook_page_accessible_get_type   (void);
 
+GDK_AVAILABLE_IN_ALL
 AtkObject *gtk_notebook_page_accessible_new        (GtkNotebookAccessible     *notebook,
                                                     GtkWidget                 *child);
 
+GDK_AVAILABLE_IN_ALL
 void       gtk_notebook_page_accessible_invalidate (GtkNotebookPageAccessible *page);
 
 G_END_DECLS

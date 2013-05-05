@@ -50,8 +50,10 @@ struct _GtkRendererCellAccessibleClass
   GtkCellAccessibleClass parent_class;
 };
 
+GDK_AVAILABLE_IN_ALL
 GType      gtk_renderer_cell_accessible_get_type     (void);
 
+GDK_AVAILABLE_IN_ALL
 AtkObject *gtk_renderer_cell_accessible_new          (GtkCellRenderer * renderer);
 
 G_END_DECLS
