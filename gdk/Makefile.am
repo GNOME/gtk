@@ -54,8 +54,7 @@ LDADD = 					\
 	-version-info $(LT_VERSION_INFO)	\
 	-export-dynamic 			\
 	-rpath $(libdir) 			\
-	$(no_undefined)				\
-	$(LIBTOOL_EXPORT_OPTIONS)
+	$(no_undefined)
 
 #
 # setup source file variables

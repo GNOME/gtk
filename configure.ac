@@ -508,16 +508,6 @@ PKG_CHECK_MODULES(CAIRO_BACKEND, [$cairo_backends])
 
 PKG_CHECK_MODULES(GMODULE, [gmodule-2.0])
 
-if test "$os_win32" != yes; then
-    # libtool option to control which symbols are exported
-    # right now, symbols starting with _ are not exported
-    LIBTOOL_EXPORT_OPTIONS='-export-symbols-regex "^[[^_]].*"'
-else
-    # We currently use .def files on Windows (for gdk and gtk)
-    LIBTOOL_EXPORT_OPTIONS=
-fi
-AC_SUBST(LIBTOOL_EXPORT_OPTIONS)
-
 dnl ******************************************************
 dnl * See whether to include shared library dependencies *
 dnl ******************************************************
