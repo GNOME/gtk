@@ -216,6 +216,25 @@ random_menu_new (GRand *rand,
 
 static void assert_menu_equality (GtkContainer *container, GMenuModel   *model);
 
+static const gchar *
+get_label (GtkMenuItem *item)
+{
+  GList *children = gtk_container_get_children (GTK_CONTAINER (item));
+  const gchar *label = NULL;
+
+  while (children)
+    {
+      if (GTK_IS_CONTAINER (children->data))
+        children = g_list_concat (children, gtk_container_get_children (children->data));
+      else if (GTK_IS_LABEL (children->data))
+        label = gtk_label_get_text (children->data);
+
+      children = g_list_delete_link (children, children);
+    }
+
+  return label;
+}
+
 /* a bit complicated with the separators...
  *
  * with_separators are if subsections of this GMenuModel should have
@@ -307,7 +326,7 @@ assert_section_equality (GSList      **children,
           our_children = g_slist_remove (our_children, item);
 
           /* get_label() returns "" when it ought to return NULL */
-          g_assert_cmpstr (gtk_menu_item_get_label (item), ==, label ? label : "");
+          g_assert_cmpstr (get_label (item), ==, label ? label : "");
           submenu_widget = gtk_menu_item_get_submenu (item);
 
           if (submenu)
