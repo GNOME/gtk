@@ -28,6 +28,7 @@
 
 #include "gtkvseparator.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 /**
  * SECTION:gtkvseparator

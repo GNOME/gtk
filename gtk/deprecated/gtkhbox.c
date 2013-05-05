@@ -29,6 +29,7 @@
 
 #include "gtkhbox.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 /**
  * SECTION:gtkhbox

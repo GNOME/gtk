@@ -30,6 +30,7 @@
 #include "gtkvbox.h"
 #include "gtkboxprivate.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 /**
  * SECTION:gtkvbox

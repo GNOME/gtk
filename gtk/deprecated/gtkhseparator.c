@@ -27,6 +27,7 @@
 #include "gtkhseparator.h"
 #include "gtkorientable.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 /**
  * SECTION:gtkhseparator

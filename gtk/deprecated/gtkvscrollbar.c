@@ -32,6 +32,7 @@
 #include "gtkorientable.h"
 #include "gtkscrollbar.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 /**
  * SECTION:gtkvscrollbar

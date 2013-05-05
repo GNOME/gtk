@@ -30,6 +30,7 @@
 #include "gtktearoffmenuitem.h"
 #include "gtkintl.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 /**
  * SECTION:gtktearoffmenuitem

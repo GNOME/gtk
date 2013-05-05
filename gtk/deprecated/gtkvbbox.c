@@ -28,6 +28,7 @@
 #include "gtkorientable.h"
 #include "gtkintl.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 /**
  * SECTION:gtkvbbox

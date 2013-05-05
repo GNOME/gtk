@@ -32,6 +32,7 @@
 #include "gtkadjustment.h"
 #include "gtkorientable.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 /**
  * SECTION:gtkvscale
