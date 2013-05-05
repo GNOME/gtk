@@ -138,6 +138,7 @@
 
 
 #define GTK_TYPE_IDENTIFIER (gtk_identifier_get_type ())
+_GDK_EXTERN
 GType gtk_identifier_get_type (void) G_GNUC_CONST;
 
 

@@ -19,6 +19,9 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+
+#include "config.h"
+
 #include "gtkpathbar.h"
 #include "gtkcolorswatchprivate.h"
 #include "gtkcolorplaneprivate.h"
@@ -35,7 +38,7 @@ GType _gtk_scale_button_scale_get_type (void);
  * and is used to ensure the private types for use in Glade while
  * editing UI files that define GTK+'s various composite widget classes.
  */
-void
+_GDK_EXTERN void
 gtk_glade_catalog_init (const gchar *catalog_name)
 {
   g_type_ensure (GTK_TYPE_PATH_BAR);

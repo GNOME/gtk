@@ -52,13 +52,9 @@
 #include "gtkwin32themeprivate.h"
 #endif
 
-#undef GDK_DEPRECATED
-#undef GDK_DEPRECATED_FOR
-#define GDK_DEPRECATED
-#define GDK_DEPRECATED_FOR(f)
-
 #include "deprecated/gtkrc.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 /**
  * SECTION:gtksettings
