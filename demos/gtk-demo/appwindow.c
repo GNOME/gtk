@@ -5,8 +5,9 @@
  * This example uses GtkUIManager and GtkActionGroup.
  */
 
-#include <gtk/gtk.h>
 #include "config.h"
+
+#include <gtk/gtk.h>
 
 static GtkWidget *window = NULL;
 static GtkWidget *infobar = NULL;
