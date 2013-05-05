@@ -127,6 +127,7 @@ libgtka11y_la_CPPFLAGS = 		\
 	$(AM_CPPFLAGS)
 
 libgtka11y_la_CFLAGS = 			\
+	$(GDK_HIDDEN_VISIBILITY_CFLAGS) \
 	$(GTK_DEP_CFLAGS)		\
 	$(GTK_DEBUG_FLAGS)		\
 	$(AM_CFLAGS)
