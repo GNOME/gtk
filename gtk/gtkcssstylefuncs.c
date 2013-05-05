@@ -222,7 +222,9 @@ rgba_value_compute (GtkStyleProviderPrivate *provider,
   const GValue *value;
 
   value = _gtk_css_typed_value_get (specified);
-  
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
   if (G_VALUE_HOLDS (value, GTK_TYPE_SYMBOLIC_COLOR))
     {
       GtkSymbolicColor *symbolic = g_value_get_boxed (value);
@@ -250,6 +252,8 @@ rgba_value_compute (GtkStyleProviderPrivate *provider,
     }
   else
     return _gtk_css_value_ref (specified);
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 static gboolean 
@@ -314,7 +318,9 @@ color_value_compute (GtkStyleProviderPrivate *provider,
   const GValue *value;
 
   value = _gtk_css_typed_value_get (specified);
-  
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
   if (G_VALUE_HOLDS (value, GTK_TYPE_SYMBOLIC_COLOR))
     {
       GValue new_value = G_VALUE_INIT;
@@ -334,13 +340,15 @@ color_value_compute (GtkStyleProviderPrivate *provider,
           color.blue = rgba->blue * 65535. + 0.5;
           _gtk_css_value_unref (val);
         }
-      
+
       g_value_init (&new_value, GDK_TYPE_COLOR);
       g_value_set_boxed (&new_value, &color);
       return _gtk_css_typed_value_new_take (&new_value);
     }
   else
     return _gtk_css_value_ref (specified);
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 static gboolean
@@ -742,8 +750,13 @@ pattern_value_parse (GtkCssParser *parser,
   else if (_gtk_css_parser_begins_with (parser, '-'))
     {
       g_value_unset (value);
+
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
       g_value_init (value, GTK_TYPE_GRADIENT);
       return gradient_value_parse (parser, value);
+
+      G_GNUC_END_IGNORE_DEPRECATIONS;
     }
   else
     {
@@ -871,11 +884,13 @@ pattern_value_compute (GtkStyleProviderPrivate *provider,
 {
   const GValue *value = _gtk_css_typed_value_get (specified);
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
   if (G_VALUE_HOLDS (value, GTK_TYPE_GRADIENT))
     {
       GValue new_value = G_VALUE_INIT;
       cairo_pattern_t *gradient;
-      
+
       gradient = _gtk_gradient_resolve_full (g_value_get_boxed (value), provider, values, parent_values, dependencies);
 
       g_value_init (&new_value, CAIRO_GOBJECT_TYPE_PATTERN);
@@ -884,6 +899,8 @@ pattern_value_compute (GtkStyleProviderPrivate *provider,
     }
   else
     return _gtk_css_value_ref (specified);
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 static gboolean 
@@ -999,10 +1016,16 @@ gtk_css_style_funcs_init (void)
                                 color_value_parse,
                                 color_value_print,
                                 color_value_compute);
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
   register_conversion_function (GTK_TYPE_SYMBOLIC_COLOR,
                                 symbolic_color_value_parse,
                                 symbolic_color_value_print,
                                 NULL);
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
   register_conversion_function (PANGO_TYPE_FONT_DESCRIPTION,
                                 font_description_value_parse,
                                 font_description_value_print,
@@ -1039,10 +1062,16 @@ gtk_css_style_funcs_init (void)
                                 border_value_parse,
                                 border_value_print,
                                 NULL);
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
   register_conversion_function (GTK_TYPE_GRADIENT,
                                 gradient_value_parse,
                                 gradient_value_print,
                                 NULL);
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
   register_conversion_function (CAIRO_GOBJECT_TYPE_PATTERN,
                                 pattern_value_parse,
                                 pattern_value_print,

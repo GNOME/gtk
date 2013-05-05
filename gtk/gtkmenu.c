@@ -5489,9 +5489,14 @@ child_at (GtkMenu *menu,
             {
               child = children->data;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
               if (child_offset + child_requisition.height > y &&
                   !GTK_IS_TEAROFF_MENU_ITEM (child))
                 return child;
+
+G_GNUC_END_IGNORE_DEPRECATIONS
+
             }
 
           child_offset += child_requisition.height;

@@ -1285,6 +1285,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  							 P_("Whether the widget is part of a composite widget"),
  							 FALSE,
  							 GTK_PARAM_READABLE));
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
   g_object_class_install_property (gobject_class,
 				   PROP_STYLE,
 				   g_param_spec_object ("style",
@@ -1292,6 +1295,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  							P_("The style of the widget, which contains information about how it will look (colors etc)"),
  							GTK_TYPE_STYLE,
  							GTK_PARAM_READWRITE));
+
+G_GNUC_END_IGNORE_DEPRECATIONS
+
   g_object_class_install_property (gobject_class,
 				   PROP_EVENTS,
 				   g_param_spec_flags ("events",
@@ -1870,6 +1876,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *
    * Deprecated:3.0: Use the #GtkWidget::style-updated signal
    */
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
   widget_signals[STYLE_SET] =
     g_signal_new (I_("style-set"),
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -1879,6 +1888,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_STYLE);
+
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   /**
    * GtkWidget::style-updated:

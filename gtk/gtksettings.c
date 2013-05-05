@@ -54,8 +54,6 @@
 
 #include "deprecated/gtkrc.h"
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-
 /**
  * SECTION:gtksettings
  * @Short_description: Sharing settings between applications
@@ -2109,6 +2107,8 @@ gtk_settings_set_double_property (GtkSettings *settings,
   g_value_unset (&svalue.value);
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /**
  * gtk_rc_property_parse_color:
  * @pspec: a #GParamSpec
@@ -2443,6 +2443,8 @@ gtk_rc_property_parse_border (const GParamSpec *pspec,
 
   return success;
 }
+
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 void
 _gtk_settings_handle_event (GdkEventSetting *event)

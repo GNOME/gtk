@@ -45,11 +45,6 @@
 #include "gtkwindow.h"
 #include "gtkprivate.h"
 
-#undef GDK_DEPRECATED
-#undef GDK_DEPRECATED_FOR
-#define GDK_DEPRECATED
-#define GDK_DEPRECATED_FOR(f)
-
 #include "gtkuimanager.h"
 #include "deprecated/gtktearoffmenuitem.h"
 
@@ -2299,10 +2294,16 @@ find_menu_position (GNode      *node,
 	  if (GTK_IS_MENU_ITEM (menushell))
 	    menushell = gtk_menu_item_get_submenu (GTK_MENU_ITEM (menushell));
 	  siblings = gtk_container_get_children (GTK_CONTAINER (menushell));
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 	  if (siblings != NULL && GTK_IS_TEAROFF_MENU_ITEM (siblings->data))
 	    pos = 1;
 	  else
 	    pos = 0;
+
+G_GNUC_END_IGNORE_DEPRECATIONS
+
 	  g_list_free (siblings);
 	  break;
 	case NODE_TYPE_MENU_PLACEHOLDER:
@@ -2483,15 +2484,21 @@ update_smart_separators (GtkWidget *proxy)
 	  else if (gtk_widget_get_visible (cur->data))
 	    {
 	      last = NULL;
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 	      if (GTK_IS_TEAROFF_MENU_ITEM (cur->data) || cur->data == filler)
 		visible = FALSE;
-	      else 
+	      else
 		{
 		  visible = TRUE;
 		  empty = FALSE;
 		}
+
+G_GNUC_END_IGNORE_DEPRECATIONS
+
 	    }
-	  
+
 	  cur = cur->next;
 	}
 
@@ -2597,16 +2604,19 @@ update_node (GtkUIManager *manager,
    */
   if (info->proxy != NULL && action == info->action)
     {
-      if (info->type == NODE_TYPE_MENU) 
+      if (info->type == NODE_TYPE_MENU)
 	{
 	  GtkWidget *menu;
 	  GList *siblings;
-	  
+
 	  if (GTK_IS_MENU (info->proxy))
 	    menu = info->proxy;
 	  else
 	    menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (info->proxy));
 	  siblings = gtk_container_get_children (GTK_CONTAINER (menu));
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 	  if (siblings != NULL && GTK_IS_TEAROFF_MENU_ITEM (siblings->data))
 	    {
 	      if (manager->private_data->add_tearoffs && !in_popup)
@@ -2614,9 +2624,12 @@ update_node (GtkUIManager *manager,
 	      else
 		gtk_widget_hide (GTK_WIDGET (siblings->data));
 	    }
+
+G_GNUC_END_IGNORE_DEPRECATIONS
+
 	  g_list_free (siblings);
 	}
-      
+
       goto recurse_children;
     }
   
@@ -2684,10 +2697,14 @@ update_node (GtkUIManager *manager,
               {
                 GtkWidget *tearoff;
                 GtkWidget *filler;
-	    
+
                 menu = gtk_menu_new ();
                 gtk_widget_set_name (menu, info->name);
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
                 tearoff = gtk_tearoff_menu_item_new ();
+G_GNUC_END_IGNORE_DEPRECATIONS
+
                 gtk_widget_set_no_show_all (tearoff, TRUE);
                 gtk_menu_shell_append (GTK_MENU_SHELL (menu), tearoff);
                 filler = gtk_menu_item_new_with_label (_("Empty"));
@@ -2698,7 +2715,7 @@ update_node (GtkUIManager *manager,
                 gtk_widget_set_no_show_all (filler, TRUE);
                 gtk_menu_shell_append (GTK_MENU_SHELL (menu), filler);
               }
-	    
+
             if (NODE_INFO (node->parent)->type == NODE_TYPE_TOOLITEM)
 	      {
 		info->proxy = menu;
@@ -2718,7 +2735,7 @@ update_node (GtkUIManager *manager,
 		     g_signal_connect (info->proxy, "notify::visible",
 		   		       G_CALLBACK (update_smart_separators), NULL);
 		     gtk_widget_set_name (info->proxy, info->name);
-		
+
 		     gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy), menu);
 		     gtk_menu_shell_insert (GTK_MENU_SHELL (menushell), info->proxy, pos);
                  }
@@ -2726,20 +2743,23 @@ update_node (GtkUIManager *manager,
 	  }
 	else
           gtk_activatable_set_related_action (GTK_ACTIVATABLE (info->proxy), action);
-	
+
 	if (prev_submenu)
 	  {
 	    gtk_menu_item_set_submenu (GTK_MENU_ITEM (info->proxy),
 				       prev_submenu);
 	    g_object_unref (prev_submenu);
 	  }
-	
+
 	if (GTK_IS_MENU (info->proxy))
 	  menu = info->proxy;
 	else
 	  menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (info->proxy));
 
 	siblings = gtk_container_get_children (GTK_CONTAINER (menu));
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 	if (siblings != NULL && GTK_IS_TEAROFF_MENU_ITEM (siblings->data))
 	  {
 	    if (manager->private_data->add_tearoffs && !in_popup)
@@ -2747,6 +2767,9 @@ update_node (GtkUIManager *manager,
 	    else
 	      gtk_widget_hide (GTK_WIDGET (siblings->data));
 	  }
+
+G_GNUC_END_IGNORE_DEPRECATIONS
+
 	g_list_free (siblings);
       }
       break;

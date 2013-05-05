@@ -1139,12 +1139,18 @@ gtk_menu_is_empty (GtkWidget *menu)
     {
       if (gtk_widget_get_visible (cur->data))
 	{
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 	  if (!GTK_IS_TEAROFF_MENU_ITEM (cur->data) &&
 	      !g_object_get_data (cur->data, "gtk-empty-menu-item"))
             {
 	      result = FALSE;
               break;
             }
+
+G_GNUC_END_IGNORE_DEPRECATIONS
+
 	}
       cur = cur->next;
     }
