@@ -547,7 +547,7 @@ gtk_event_box_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
   child = gtk_bin_get_child (bin);
   if (child && gtk_widget_get_visible (child))
     gtk_widget_get_preferred_height_and_baseline_for_width (child,
-							    -1,
+							    width,
 							    minimum,
 							    natural,
 							    minimum_baseline,
