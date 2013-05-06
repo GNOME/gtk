@@ -475,6 +475,15 @@ _gtk_css_shadow_value_get_geometry (const GtkCssValue *shadow,
     *spread = _gtk_css_number_value_get (shadow->spread, 0);
 }
 
+static gboolean
+has_empty_clip (cairo_t *cr)
+{
+  double x1, y1, x2, y2;
+
+  cairo_clip_extents (cr, &x1, &y1, &x2, &y2);
+  return x1 == x2 && y1 == y2;
+}
+
 static void
 draw_shadow (const GtkCssValue   *shadow,
 	     cairo_t             *cr,
@@ -482,6 +491,9 @@ draw_shadow (const GtkCssValue   *shadow,
 	     GtkRoundedBox       *clip_box)
 {
   cairo_t *shadow_cr;
+
+  if (has_empty_clip (cr))
+    return;
 
   shadow_cr = gtk_css_shadow_value_start_drawing (shadow, cr);
 
@@ -528,6 +540,12 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
       _gtk_rounded_box_grow (&clip_box, outside, outside, outside, outside);
       _gtk_rounded_box_clip_path (&clip_box, cr);
       cairo_clip (cr);
+    }
+
+  if (has_empty_clip (cr))
+    {
+      cairo_restore (cr);
+      return;
     }
 
   box = *padding_box;
