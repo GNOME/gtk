@@ -31,6 +31,10 @@
 
 #include <math.h>
 
+/* The blur of _gtk_cairo_blur_surface only approximately ends at radius,
+   so we add an extra pixel to make the clips less dramatic */
+#define CLIP_RADIUS_EXTRA 4
+
 struct _GtkCssValue {
   GTK_CSS_VALUE_BASE
   guint inset :1;
@@ -314,7 +318,7 @@ gtk_css_shadow_value_start_drawing (const GtkCssValue *shadow,
   cairo_rectangle_int_t clip_rect;
   cairo_surface_t *surface;
   cairo_t *blur_cr;
-  gdouble radius;
+  gdouble radius, clip_radius;
 
   radius = _gtk_css_number_value_get (shadow->radius, 0);
   if (radius == 0.0)
@@ -322,11 +326,13 @@ gtk_css_shadow_value_start_drawing (const GtkCssValue *shadow,
 
   gdk_cairo_get_clip_rectangle (cr, &clip_rect);
 
+  clip_radius = radius + CLIP_RADIUS_EXTRA;
+
   /* Create a larger surface to center the blur. */
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                        clip_rect.width + 2 * radius,
-                                        clip_rect.height + 2 * radius);
-  cairo_surface_set_device_offset (surface, radius - clip_rect.x, radius - clip_rect.y);
+                                        clip_rect.width + 2 * clip_radius,
+                                        clip_rect.height + 2 * clip_radius);
+  cairo_surface_set_device_offset (surface, clip_radius - clip_rect.x, clip_radius - clip_rect.y);
   blur_cr = cairo_create (surface);
   cairo_set_user_data (blur_cr, &shadow_key, cairo_reference (cr), (cairo_destroy_func_t) cairo_destroy);
 
@@ -519,7 +525,7 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
                                  const GtkRoundedBox *padding_box)
 {
   GtkRoundedBox box, clip_box;
-  double spread, radius, x, y, outside;
+  double spread, radius, clip_radius, x, y, outside;
 
   g_return_if_fail (shadow->class == &GTK_CSS_VALUE_SHADOW);
 
@@ -527,6 +533,7 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
 
   spread = _gtk_css_number_value_get (shadow->spread, 0);
   radius = _gtk_css_number_value_get (shadow->radius, 0);
+  clip_radius = radius + CLIP_RADIUS_EXTRA;
   x = _gtk_css_number_value_get (shadow->hoffset, 0);
   y = _gtk_css_number_value_get (shadow->voffset, 0);
 
@@ -540,7 +547,7 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
       cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
       _gtk_rounded_box_path (padding_box, cr);
 
-      outside = spread + radius + MAX (fabs (x), fabs (y));
+      outside = spread + clip_radius + MAX (fabs (x), fabs (y));
       clip_box = *padding_box;
       _gtk_rounded_box_grow (&clip_box, outside, outside, outside, outside);
       _gtk_rounded_box_clip_path (&clip_box, cr);
@@ -563,7 +570,7 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
     _gtk_rounded_box_grow (&box, spread, spread, spread, spread);
 
   clip_box = *padding_box;
-  _gtk_rounded_box_shrink (&clip_box, -radius, -radius, -radius, -radius);
+  _gtk_rounded_box_shrink (&clip_box, -clip_radius, -clip_radius, -clip_radius, -clip_radius);
 
   if (radius == 0)
     draw_shadow (shadow, cr, &box, &clip_box, FALSE);
@@ -596,10 +603,10 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
 	{
 	  /* In the outset case we want to paint the entire box, plus as far
 	   * as the radius reaches from it */
-	  r.x = floor (box.box.x - radius);
-	  r.y = floor (box.box.y - radius);
-	  r.width = ceil (box.box.x + box.box.width + radius) - r.x;
-	  r.height = ceil (box.box.y + box.box.height + radius) - r.y;
+	  r.x = floor (box.box.x - clip_radius);
+	  r.y = floor (box.box.y - clip_radius);
+	  r.width = ceil (box.box.x + box.box.width + clip_radius) - r.x;
+	  r.height = ceil (box.box.y + box.box.height + clip_radius) - r.y;
 
 	  remaining = cairo_region_create_rectangle (&r);
 	}
@@ -609,24 +616,24 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
 	{
 	  if (i == GTK_CSS_TOP_LEFT || i == GTK_CSS_BOTTOM_LEFT)
 	    {
-	      x1 = floor (box.box.x - radius);
-	      x2 = ceil (box.box.x + box.corner[i].horizontal + radius);
+	      x1 = floor (box.box.x - clip_radius);
+	      x2 = ceil (box.box.x + box.corner[i].horizontal + clip_radius);
 	    }
 	  else
 	    {
-	      x1 = floor (box.box.x + box.box.width - box.corner[i].horizontal - radius);
-	      x2 = ceil (box.box.x + box.box.width + radius);
+	      x1 = floor (box.box.x + box.box.width - box.corner[i].horizontal - clip_radius);
+	      x2 = ceil (box.box.x + box.box.width + clip_radius);
 	    }
 
 	  if (i == GTK_CSS_TOP_LEFT || i == GTK_CSS_TOP_RIGHT)
 	    {
-	      y1 = floor (box.box.y - radius);
-	      y2 = ceil (box.box.y + box.corner[i].vertical + radius);
+	      y1 = floor (box.box.y - clip_radius);
+	      y2 = ceil (box.box.y + box.corner[i].vertical + clip_radius);
 	    }
 	  else
 	    {
-	      y1 = floor (box.box.y + box.box.height - box.corner[i].vertical - radius);
-	      y2 = ceil (box.box.y + box.box.height + radius);
+	      y1 = floor (box.box.y + box.box.height - box.corner[i].vertical - clip_radius);
+	      y2 = ceil (box.box.y + box.box.height + clip_radius);
 	    }
 
 
@@ -652,34 +659,34 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
 	{
 	  if (i == GTK_CSS_TOP || i == GTK_CSS_BOTTOM)
 	    {
-	      x1 = floor (box.box.x - radius);
-	      x2 = ceil (box.box.x + box.box.width + radius);
+	      x1 = floor (box.box.x - clip_radius);
+	      x2 = ceil (box.box.x + box.box.width + clip_radius);
 	    }
 	  else if (i == GTK_CSS_LEFT)
 	    {
-	      x1 = floor (box.box.x -radius);
-	      x2 = ceil (box.box.x + radius);
+	      x1 = floor (box.box.x -clip_radius);
+	      x2 = ceil (box.box.x + clip_radius);
 	    }
 	  else
 	    {
-	      x1 = floor (box.box.x + box.box.width -radius);
-	      x2 = ceil (box.box.x + box.box.width + radius);
+	      x1 = floor (box.box.x + box.box.width -clip_radius);
+	      x2 = ceil (box.box.x + box.box.width + clip_radius);
 	    }
 
 	  if (i == GTK_CSS_LEFT || i == GTK_CSS_RIGHT)
 	    {
-	      y1 = floor (box.box.y - radius);
-	      y2 = ceil (box.box.y + box.box.height + radius);
+	      y1 = floor (box.box.y - clip_radius);
+	      y2 = ceil (box.box.y + box.box.height + clip_radius);
 	    }
 	  else if (i == GTK_CSS_TOP)
 	    {
-	      y1 = floor (box.box.y -radius);
-	      y2 = ceil (box.box.y + radius);
+	      y1 = floor (box.box.y -clip_radius);
+	      y2 = ceil (box.box.y + clip_radius);
 	    }
 	  else
 	    {
-	      y1 = floor (box.box.y + box.box.height -radius);
-	      y2 = ceil (box.box.y + box.box.height + radius);
+	      y1 = floor (box.box.y + box.box.height -clip_radius);
+	      y2 = ceil (box.box.y + box.box.height + clip_radius);
 	    }
 
 	  cairo_save (cr);
