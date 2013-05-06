@@ -2320,7 +2320,7 @@ set_info_state_message (PrinterSetupInfo *info)
 
       if (info->reason_level >= GTK_PRINTER_STATE_LEVEL_WARNING)
         {
-          if (strlen (info->state_msg) == 0)
+          if (info->state_msg == NULL || info->state_msg[0] == '\0')
             {
               g_free (info->state_msg);
               info->state_msg = reason_msg_desc;
