@@ -2868,6 +2868,7 @@ gtk_settings_load_from_key_file (GtkSettings       *settings,
           }
 
         case G_TYPE_INT:
+        case G_TYPE_UINT:
           {
             gint i_val;
 
