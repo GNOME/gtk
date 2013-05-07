@@ -23,7 +23,6 @@ EXTRA_DIST += 			\
 	gen-keyname-table.pl	\
 	gdkconfig.h.win32	\
 	gdkkeysyms-update.pl	\
-	gdk.def			\
 	gdkmarshalers.list	\
 	gdkwindowimpl.h		\
 	makefile.msc		\
@@ -297,11 +296,6 @@ else
 install-ms-lib:
 uninstall-ms-lib:
 endif
-
-# This places the generated .def file in srcdir, since it is expected to be there.
-# (The one from a tarball is)
-gdk.def: gdk.symbols
-	$(AM_V_GEN) (echo -e EXPORTS; $(CPP) -P -DGDK_WINDOWING_WIN32 - <$(srcdir)/gdk.symbols | sed -e '/^$$/d' -e 's/^/	/' -e 's/G_GNUC_[^ ]*//g') > $(srcdir)/gdk.def
 
 lib_LTLIBRARIES = libgdk-3.la
 

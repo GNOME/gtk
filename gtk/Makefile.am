@@ -95,11 +95,6 @@ install-ms-lib:
 uninstall-ms-lib:
 endif
 
-# This places the generated .def file in srcdir, since it is expected to be there.
-# (The one from a tarball is)
-gtk.def: gtk.symbols
-	$(AM_V_GEN) (echo -e EXPORTS; $(CPP) -P -DG_OS_WIN32 - <$(srcdir)/gtk.symbols | $(SED) -e '/^$$/d' -e 's/^/	/') > $(srcdir)/gtk.def
-
 libgtkincludedir = $(includedir)/gtk-3.0/gtk
 libadd = \
 	$(top_builddir)/gdk/libgdk-3.la	\
@@ -1737,7 +1732,6 @@ EXTRA_DIST +=                   \
 	$(COMPOSITE_TEMPLATES)	\
 	$(DND_CURSORS)		\
 	$(GENERATED_ICONS)	\
-	gtk.def			\
 	gtk-win32.rc		\
 	gtk-win32.rc.in		\
 	gtkwin32embed.h		\
