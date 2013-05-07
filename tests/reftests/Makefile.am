@@ -27,6 +27,10 @@ clean-local:
 
 EXTRA_DIST += \
 	align-expand.sh \
+	border-image-repeat.sh \
+	$(NULL)
+
+EXTRA_DIST += \
 	background-area.css \
 	background-area.ref.ui \
 	background-area.ui \
@@ -87,7 +91,6 @@ EXTRA_DIST += \
 	border-image-gradient.ui \
 	border-image-repeat.css \
 	border-image-repeat.ref.ui \
-	border-image-repeat.sh \
 	border-image-repeat.ui \
 	border-image-url.css \
 	border-image-url.ref.ui \
