@@ -1437,7 +1437,8 @@ gtk_stack_draw (GtkWidget *widget,
   GtkStackPrivate *priv = stack->priv;
   cairo_t *pattern_cr;
 
-  if (priv->visible_child)
+  if (priv->visible_child &&
+      gtk_cairo_should_draw_window (cr, priv->bin_window))
     {
       if (priv->transition_pos < 1.0)
         {
@@ -1475,7 +1476,7 @@ gtk_stack_draw (GtkWidget *widget,
             }
 
         }
-      else if (gtk_cairo_should_draw_window (cr, priv->bin_window))
+      else
         gtk_container_propagate_draw (GTK_CONTAINER (stack),
                                       priv->visible_child->widget,
                                       cr);
