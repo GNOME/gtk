@@ -3334,7 +3334,13 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
   if (!cairo_region_is_empty (clipped_expose_region) &&
       !window->destroyed)
     {
-      if (window->event_mask & GDK_EXPOSURE_MASK)
+      /* While gtk+ no longer handles exposes on anything but native
+	 window we still have to send them to all windows that have the
+	 event mask set for backwards compat. We also need to send
+	 it to all native windows, even if they don't specify the
+	 expose mask, because they may have non-native children that do. */
+      if (gdk_window_has_impl (window) ||
+	  window->event_mask & GDK_EXPOSURE_MASK)
 	{
 	  GdkEvent event;
 
