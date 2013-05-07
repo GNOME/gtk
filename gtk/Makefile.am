@@ -100,11 +100,6 @@ endif
 gtk.def: gtk.symbols
 	$(AM_V_GEN) (echo -e EXPORTS; $(CPP) -P -DG_OS_WIN32 - <$(srcdir)/gtk.symbols | $(SED) -e '/^$$/d' -e 's/^/	/') > $(srcdir)/gtk.def
 
-TESTS_ENVIRONMENT = srcdir="$(srcdir)" gtk_all_c_sources="$(gtk_all_c_sources)"
-if OS_LINUX
-TESTS = abicheck.sh
-endif
-
 libgtkincludedir = $(includedir)/gtk-3.0/gtk
 libadd = \
 	$(top_builddir)/gdk/libgdk-3.la	\
@@ -1072,7 +1067,6 @@ gtk_extra_sources =				\
 	paper_names_offsets.c			\
 	gen-paper-names.c			\
 	gtkstatusicon-quartz.c			\
-	gtk.symbols				\
 	gtk-win32-base.css			\
 	gtk-win32.css				\
 	gtk-win32-xp.css			\
@@ -1758,7 +1752,6 @@ EXTRA_DIST +=                   \
 	gtk-keys.css.mac	\
 	makefile.msc		\
 	makefile.msc.in		\
-	abicheck.sh		\
 	gtktypebuiltins.c.template \
 	gtktypebuiltins.h.template \
 	gtkprivatetypebuiltins.c.template \

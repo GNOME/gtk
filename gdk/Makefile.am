@@ -27,11 +27,9 @@ EXTRA_DIST += 			\
 	gdkmarshalers.list	\
 	gdkwindowimpl.h		\
 	makefile.msc		\
-	gdk.symbols		\
 	gdkenumtypes.c.template	\
 	gdkenumtypes.h.template	\
-	gdkversionmacros.h.in	\
-	abicheck.sh
+	gdkversionmacros.h.in
 
 AM_CPPFLAGS = 				\
 	-DG_LOG_DOMAIN=\"Gdk\"		\
@@ -304,11 +302,6 @@ endif
 # (The one from a tarball is)
 gdk.def: gdk.symbols
 	$(AM_V_GEN) (echo -e EXPORTS; $(CPP) -P -DGDK_WINDOWING_WIN32 - <$(srcdir)/gdk.symbols | sed -e '/^$$/d' -e 's/^/	/' -e 's/G_GNUC_[^ ]*//g') > $(srcdir)/gdk.def
-
-TESTS_ENVIRONMENT = srcdir="$(srcdir)"
-if OS_LINUX
-TESTS = abicheck.sh
-endif
 
 lib_LTLIBRARIES = libgdk-3.la
 
