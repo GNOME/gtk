@@ -20,6 +20,8 @@
 #include "gtkdebug.h"
 #include "gtkpixelcacheprivate.h"
 
+#define BLOW_CACHE_TIMEOUT_SEC 20
+
 /* The extra size of the offscreen surface we allocate
    to make scrolling more efficient */
 #define EXTRA_SIZE 64
@@ -39,6 +41,8 @@ struct _GtkPixelCache {
 
   /* may be null if not dirty */
   cairo_region_t *surface_dirty;
+
+  guint timeout_tag;
 };
 
 GtkPixelCache *
@@ -56,6 +60,9 @@ _gtk_pixel_cache_free (GtkPixelCache *cache)
 {
   if (cache == NULL)
     return;
+
+  if (cache->timeout_tag)
+    g_source_remove (cache->timeout_tag);
 
   if (cache->surface != NULL)
     cairo_surface_destroy (cache->surface);
@@ -322,6 +329,26 @@ _gtk_pixel_cache_repaint (GtkPixelCache *cache,
     }
 }
 
+static gboolean
+blow_cache_cb  (gpointer user_data)
+{
+  GtkPixelCache *cache = user_data;
+
+  cache->timeout_tag = 0;
+
+  if (cache->surface)
+    {
+      cairo_surface_destroy (cache->surface);
+      cache->surface = NULL;
+      if (cache->surface_dirty)
+	cairo_region_destroy (cache->surface_dirty);
+      cache->surface_dirty = NULL;
+    }
+
+  return G_SOURCE_REMOVE;
+}
+
+
 void
 _gtk_pixel_cache_draw (GtkPixelCache *cache,
 		       cairo_t *cr,
@@ -333,6 +360,12 @@ _gtk_pixel_cache_draw (GtkPixelCache *cache,
 		       GtkPixelCacheDrawFunc draw,
 		       gpointer user_data)
 {
+  if (cache->timeout_tag)
+    g_source_remove (cache->timeout_tag);
+
+  cache->timeout_tag = g_timeout_add_seconds (BLOW_CACHE_TIMEOUT_SEC,
+					      blow_cache_cb, cache);
+
   _gtk_pixel_cache_create_surface_if_needed (cache, window,
 					     view_rect, canvas_rect);
   _gtk_pixel_cache_set_position (cache, view_rect, canvas_rect);
