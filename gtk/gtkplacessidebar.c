@@ -1606,6 +1606,7 @@ drag_motion_callback (GtkTreeView *tree_view,
 
 	action = 0;
 	drop_as_bookmarks = FALSE;
+	path = NULL;
 
 	if (!sidebar->drag_data_received) {
 		if (!get_drag_data (tree_view, context, time)) {
@@ -1613,7 +1614,6 @@ drag_motion_callback (GtkTreeView *tree_view,
 		}
 	}
 
-	path = NULL;
 	res = compute_drop_position (tree_view, x, y, &path, &pos, sidebar);
 
 	if (!res) {
