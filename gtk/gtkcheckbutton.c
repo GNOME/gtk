@@ -248,6 +248,40 @@ _gtk_check_button_get_props (GtkCheckButton *check_button,
 }
 
 static void
+gtk_check_button_get_full_border (GtkCheckButton *check_button,
+                                  GtkBorder      *border,
+                                  gint           *indicator)
+{
+  int focus_width, focus_pad, indicator_size, indicator_spacing, indicator_extra, border_width;
+  GtkWidget *child;
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (check_button));
+  gtk_widget_style_get (GTK_WIDGET (check_button),
+                        "focus-line-width", &focus_width,
+                        "focus-padding", &focus_pad,
+                        "indicator-size", &indicator_size,
+                        "indicator-spacing", &indicator_spacing,
+                        NULL);
+  child = gtk_bin_get_child (GTK_BIN (check_button));
+
+  border->left = border_width + focus_width + focus_pad;
+  border->right = border_width + focus_width + focus_pad;
+  border->top = border_width + focus_width + focus_pad;
+  border->bottom = border_width + focus_width + focus_pad;
+
+  indicator_extra = indicator_size + 2 * indicator_spacing;
+  if (child && gtk_widget_get_visible (child))
+    indicator_extra += indicator_spacing;
+  if (gtk_widget_get_direction (GTK_WIDGET (check_button)) == GTK_TEXT_DIR_RTL)
+    border->right += indicator_extra;
+  else
+    border->left += indicator_extra;
+
+  if (indicator)
+    *indicator = indicator_size + 2 * indicator_spacing;
+}
+
+static void
 gtk_check_button_get_preferred_width (GtkWidget *widget,
                                       gint      *minimum,
                                       gint      *natural)
@@ -257,37 +291,24 @@ gtk_check_button_get_preferred_width (GtkWidget *widget,
   if (gtk_toggle_button_get_mode (toggle_button))
     {
       GtkWidget *child;
-      gint indicator_size;
-      gint indicator_spacing;
-      gint focus_width;
-      gint focus_pad;
-      guint border_width;
+      GtkBorder border;
 
-      border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+      gtk_check_button_get_full_border (GTK_CHECK_BUTTON (widget), &border, NULL);
 
-      gtk_widget_style_get (GTK_WIDGET (widget),
-                            "focus-line-width", &focus_width,
-                            "focus-padding", &focus_pad,
-                            NULL);
-      *minimum = 2 * border_width;
-      *natural = 2 * border_width;
-
-      _gtk_check_button_get_props (GTK_CHECK_BUTTON (widget),
-                                   &indicator_size, &indicator_spacing);
 
       child = gtk_bin_get_child (GTK_BIN (widget));
       if (child && gtk_widget_get_visible (child))
         {
-          gint child_min, child_nat;
-
-          gtk_widget_get_preferred_width (child, &child_min, &child_nat);
-
-          *minimum += child_min + indicator_spacing;
-          *natural += child_nat + indicator_spacing;
+          gtk_widget_get_preferred_width (child, minimum, natural);
+        }
+      else
+        {
+          *minimum = 0;
+          *natural = 0;
         }
 
-      *minimum += (indicator_size + indicator_spacing * 2 + 2 * (focus_width + focus_pad));
-      *natural += (indicator_size + indicator_spacing * 2 + 2 * (focus_width + focus_pad));
+      *minimum += border.left + border.right;
+      *natural += border.left + border.right;
     }
   else
     GTK_WIDGET_CLASS (gtk_check_button_parent_class)->get_preferred_width (widget, minimum, natural);
@@ -306,26 +327,10 @@ gtk_check_button_get_preferred_height_and_baseline_for_width (GtkWidget         
   if (gtk_toggle_button_get_mode (toggle_button))
     {
       GtkWidget *child;
-      gint temp;
-      gint indicator_size;
-      gint indicator_spacing;
-      gint focus_width;
-      gint focus_pad;
-      gint old_minimum, old_natural;
-      guint border_width;
+      GtkBorder border;
+      gint indicator;
 
-      border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-
-      gtk_widget_style_get (GTK_WIDGET (widget),
-                            "focus-line-width", &focus_width,
-                            "focus-padding", &focus_pad,
-                            NULL);
-
-      *minimum = border_width * 2;
-      *natural = border_width * 2;
-
-      _gtk_check_button_get_props (GTK_CHECK_BUTTON (widget),
-                                   &indicator_size, &indicator_spacing);
+      gtk_check_button_get_full_border (GTK_CHECK_BUTTON (widget), &border, &indicator);
 
       child = gtk_bin_get_child (GTK_BIN (widget));
       if (child && gtk_widget_get_visible (child))
@@ -337,27 +342,22 @@ gtk_check_button_get_preferred_height_and_baseline_for_width (GtkWidget         
 								  &child_min, &child_nat,
 								  &child_min_baseline, &child_nat_baseline);
 
+          *minimum = MAX (indicator, child_min);
+          *natural = MAX (indicator, child_nat);
+
 	  if (minimum_baseline && child_min_baseline >= 0)
-	    *minimum_baseline = child_min_baseline + border_width;
+	    *minimum_baseline = child_min_baseline + border.top + (*minimum - child_min) / 2;
 	  if (natural_baseline && child_nat_baseline >= 0)
-	    *natural_baseline = child_nat_baseline + border_width;
-
-          *minimum += child_min;
-          *natural += child_nat;
-
+	    *natural_baseline = child_nat_baseline + border.top + (*natural - child_nat) / 2;
+        }
+      else
+        {
+          *minimum = indicator;
+          *natural = indicator;
         }
 
-      old_minimum = *minimum;
-      old_natural = *natural;
-
-      temp = indicator_size + indicator_spacing * 2;
-      *minimum = MAX (*minimum, temp) + 2 * (focus_width + focus_pad);
-      *natural = MAX (*natural, temp) + 2 * (focus_width + focus_pad);
-
-      if (minimum_baseline && *minimum_baseline != -1)
-	minimum_baseline += (*minimum - old_minimum) / 2;
-      if (natural_baseline && *natural_baseline != -1)
-	natural_baseline += (*natural - old_natural) / 2;
+      *minimum += border.top + border.bottom;
+      *natural += border.top + border.bottom;
     }
   else
     GTK_WIDGET_CLASS (gtk_check_button_parent_class)->get_preferred_height_and_baseline_for_width (widget, width,
@@ -394,16 +394,6 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
   if (gtk_toggle_button_get_mode (toggle_button))
     {
       GtkWidget *child;
-      gint indicator_size;
-      gint indicator_spacing;
-      gint focus_width;
-      gint focus_pad;
-      
-      _gtk_check_button_get_props (check_button, &indicator_size, &indicator_spacing);
-      gtk_widget_style_get (widget,
-			    "focus-line-width", &focus_width,
-			    "focus-padding", &focus_pad,
-			    NULL);
 
       gtk_widget_set_allocation (widget, allocation);
 
@@ -415,26 +405,18 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
       child = gtk_bin_get_child (GTK_BIN (button));
       if (child && gtk_widget_get_visible (child))
 	{
-          guint border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+          GtkBorder border;
+          
+          gtk_check_button_get_full_border (check_button, &border, NULL);
 
-	  child_allocation.width = allocation->width -
-	    ((border_width + focus_width + focus_pad) * 2 + indicator_size + indicator_spacing * 3);
-	  child_allocation.width = MAX (child_allocation.width, 1);
+          child_allocation.x = allocation->x + border.left;
+          child_allocation.y = allocation->y + border.top;
+	  child_allocation.width = allocation->width - border.left - border.right;
+	  child_allocation.height = allocation->height - border.top - border.bottom;
 
-	  child_allocation.height = allocation->height - (border_width + focus_width + focus_pad) * 2;
-	  child_allocation.height = MAX (child_allocation.height, 1);
-	  
-	  child_allocation.x = (border_width + indicator_size + indicator_spacing * 3 +
-                                allocation->x + focus_width + focus_pad);
-          child_allocation.y = allocation->y + (allocation->height - child_allocation.height) / 2;
-
-	  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-	    child_allocation.x = allocation->x + allocation->width
-	      - (child_allocation.x - allocation->x + child_allocation.width);
-	  
 	  baseline = gtk_widget_get_allocated_baseline (widget);
 	  if (baseline != -1)
-	    baseline -= child_allocation.y - allocation->y;
+	    baseline -= border.top;
 	  gtk_widget_size_allocate_with_baseline (child, &child_allocation, baseline);
 	}
 
