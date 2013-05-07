@@ -103,6 +103,12 @@ test_resize (void)
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_container_add (GTK_CONTAINER (window), box);
 
+  gtk_window_resize (GTK_WINDOW (window), 1, 1);
+
+  gtk_window_get_size (GTK_WINDOW (window), &w, &h);
+  g_assert_cmpint (w, ==, 1);
+  g_assert_cmpint (h, ==, 1);
+
   gtk_window_resize (GTK_WINDOW (window), 400, 200);
 
   gtk_widget_show_all (window);
@@ -128,6 +134,39 @@ test_resize (void)
   gtk_widget_destroy (window);
 }
 
+static void
+test_resize_popup (void)
+{
+  GtkWidget *window;
+  gint x, y, w, h;
+
+  window = gtk_window_new (GTK_WINDOW_POPUP);
+  gtk_window_set_screen (GTK_WINDOW (window), gdk_screen_get_default ());
+  gtk_window_resize (GTK_WINDOW (window), 1, 1);
+  gtk_window_move (GTK_WINDOW (window), -99, -99);
+
+  gtk_window_get_position (GTK_WINDOW (window), &x, &y);
+  gtk_window_get_size (GTK_WINDOW (window), &w, &h);
+  g_assert_cmpint (x, ==, -99);
+  g_assert_cmpint (y, ==, -99);
+  g_assert_cmpint (w, ==, 1);
+  g_assert_cmpint (h, ==, 1);
+
+  gtk_widget_show (window);
+
+  g_timeout_add (200, stop_main, NULL);
+  gtk_main ();
+
+  gtk_window_get_position (GTK_WINDOW (window), &x, &y);
+  gtk_window_get_size (GTK_WINDOW (window), &w, &h);
+  g_assert_cmpint (x, ==, -99);
+  g_assert_cmpint (y, ==, -99);
+  g_assert_cmpint (w, ==, 1);
+  g_assert_cmpint (h, ==, 1);
+
+  gtk_widget_destroy (window);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -143,6 +182,7 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/window/default-size", test_default_size);
   g_test_add_func ("/window/resize", test_resize);
+  g_test_add_func ("/window/resize-popup", test_resize_popup);
 
   return g_test_run ();
 }
