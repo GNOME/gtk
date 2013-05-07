@@ -15,12 +15,13 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+
 #include "gtkimcontextmultipress.h"
 #include <string.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtkimmodule.h>
-#include <config.h>
 
 #define AUTOMATIC_COMPOSE_TIMEOUT 1 /* seconds */
 #define CONFIGURATION_FILENAME MULTIPRESS_CONFDIR G_DIR_SEPARATOR_S "im-multipress.conf"

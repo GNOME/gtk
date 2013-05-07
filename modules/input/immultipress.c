@@ -14,9 +14,10 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+
 #include "gtkimcontextmultipress.h"
 #include <gtk/gtkimmodule.h> /* For GtkIMContextInfo */
-#include <config.h>
 #include <glib/gi18n.h>
 #include <string.h> /* For strcmp() */
 
