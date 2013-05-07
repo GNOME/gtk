@@ -1,4 +1,5 @@
 include $(top_srcdir)/Makefile.decl
+NULL =
 
 TEST_PROGS += gtk-reftest
 
@@ -272,6 +273,7 @@ EXTRA_DIST += \
 	unresolvable.ref.ui \
 	unresolvable.ui \
 	window-default-size.ref.ui \
-	window-default-size.ui
+	window-default-size.ui \
+	$(NULL)
 
 -include $(top_srcdir)/git.mk
