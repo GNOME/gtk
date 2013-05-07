@@ -29,8 +29,9 @@
 #include "gtkbuttonprivate.h"
 #include "gtklabel.h"
 
-#include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkprivate.h"
+#include "gtkwidgetprivate.h"
 
 
 /**
@@ -52,12 +53,20 @@
 #define INDICATOR_SPACING  2
 
 
-static void gtk_check_button_get_preferred_width  (GtkWidget          *widget,
-                                                   gint               *minimum,
-                                                   gint               *natural);
-static void gtk_check_button_get_preferred_height (GtkWidget          *widget,
-                                                   gint               *minimum,
-                                                   gint               *natural);
+static void gtk_check_button_get_preferred_width                         (GtkWidget          *widget,
+                                                                          gint               *minimum,
+                                                                          gint               *natural);
+static void gtk_check_button_get_preferred_width_for_height              (GtkWidget          *widget,
+                                                                          gint                height,
+                                                                          gint               *minimum,
+                                                                          gint               *natural);
+static void gtk_check_button_get_preferred_height                        (GtkWidget          *widget,
+                                                                          gint               *minimum,
+                                                                          gint               *natural);
+static void gtk_check_button_get_preferred_height_for_width              (GtkWidget          *widget,
+                                                                          gint                width,
+                                                                          gint               *minimum,
+                                                                          gint               *natural);
 static void gtk_check_button_get_preferred_height_and_baseline_for_width (GtkWidget          *widget,
 									  gint                width,
 									  gint               *minimum,
@@ -85,7 +94,9 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   widget_class = (GtkWidgetClass*) class;
 
   widget_class->get_preferred_width = gtk_check_button_get_preferred_width;
+  widget_class->get_preferred_width_for_height = gtk_check_button_get_preferred_width_for_height;
   widget_class->get_preferred_height = gtk_check_button_get_preferred_height;
+  widget_class->get_preferred_height_for_width = gtk_check_button_get_preferred_height_for_width;
   widget_class->get_preferred_height_and_baseline_for_width = gtk_check_button_get_preferred_height_and_baseline_for_width;
   widget_class->size_allocate = gtk_check_button_size_allocate;
   widget_class->draw = gtk_check_button_draw;
@@ -282,9 +293,10 @@ gtk_check_button_get_full_border (GtkCheckButton *check_button,
 }
 
 static void
-gtk_check_button_get_preferred_width (GtkWidget *widget,
-                                      gint      *minimum,
-                                      gint      *natural)
+gtk_check_button_get_preferred_width_for_height (GtkWidget *widget,
+                                                 gint       height,
+                                                 gint      *minimum,
+                                                 gint      *natural)
 {
   GtkToggleButton *toggle_button = GTK_TOGGLE_BUTTON (widget);
   
@@ -299,7 +311,14 @@ gtk_check_button_get_preferred_width (GtkWidget *widget,
       child = gtk_bin_get_child (GTK_BIN (widget));
       if (child && gtk_widget_get_visible (child))
         {
-          gtk_widget_get_preferred_width (child, minimum, natural);
+          if (height > -1)
+            height -= border.top + border.bottom;
+
+          _gtk_widget_get_preferred_size_for_size (child,
+                                                   GTK_ORIENTATION_HORIZONTAL,
+                                                   height,
+                                                   minimum, natural,
+                                                   NULL, NULL);
         }
       else
         {
@@ -312,6 +331,14 @@ gtk_check_button_get_preferred_width (GtkWidget *widget,
     }
   else
     GTK_WIDGET_CLASS (gtk_check_button_parent_class)->get_preferred_width (widget, minimum, natural);
+}
+
+static void
+gtk_check_button_get_preferred_width (GtkWidget *widget,
+                                      gint      *minimum,
+                                      gint      *natural)
+{
+  gtk_check_button_get_preferred_width_for_height (widget, -1, minimum, natural);
 }
 
 static void
@@ -338,7 +365,10 @@ gtk_check_button_get_preferred_height_and_baseline_for_width (GtkWidget         
           gint child_min, child_nat;
 	  gint child_min_baseline = -1, child_nat_baseline = -1;
 
-          gtk_widget_get_preferred_height_and_baseline_for_width (child, -1,
+          if (width > -1)
+            width -= border.left + border.right;
+
+          gtk_widget_get_preferred_height_and_baseline_for_width (child, width,
 								  &child_min, &child_nat,
 								  &child_min_baseline, &child_nat_baseline);
 
@@ -363,6 +393,17 @@ gtk_check_button_get_preferred_height_and_baseline_for_width (GtkWidget         
     GTK_WIDGET_CLASS (gtk_check_button_parent_class)->get_preferred_height_and_baseline_for_width (widget, width,
 												   minimum, natural,
 												   minimum_baseline, natural_baseline);
+}
+
+static void
+gtk_check_button_get_preferred_height_for_width (GtkWidget *widget,
+                                                 gint       width,
+                                                 gint      *minimum,
+                                                 gint      *natural)
+{
+  gtk_check_button_get_preferred_height_and_baseline_for_width (widget, width,
+								minimum, natural,
+								NULL, NULL);
 }
 
 static void
