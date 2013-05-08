@@ -384,7 +384,7 @@ static void gtk_label_size_allocate     (GtkWidget        *widget,
                                          GtkAllocation    *allocation);
 static void gtk_label_state_flags_changed   (GtkWidget        *widget,
                                              GtkStateFlags     prev_state);
-static gint gtk_label_draw              (GtkWidget        *widget,
+static gboolean gtk_label_draw          (GtkWidget        *widget,
                                          cairo_t          *cr);
 static gboolean gtk_label_focus         (GtkWidget         *widget,
                                          GtkDirectionType   direction);
@@ -4038,7 +4038,7 @@ gtk_label_get_focus_link (GtkLabel *label)
   return NULL;
 }
 
-static gint
+static gboolean
 gtk_label_draw (GtkWidget *widget,
                 cairo_t   *cr)
 {
