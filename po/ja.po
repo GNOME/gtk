@@ -10,16 +10,16 @@
 # Nishibori Kiyotaka <ml.nishibori.kiyotaka@gmail.com>, 2009-2010.
 # Masato Hashimoto <cabezon.hashimoto@gmail.com>, 2010.
 # IWAI, Masaharu <iwaim.sub@gmail.com>, 2010.
-# Jiro Matsuzawa <jmatsuzawa@src.gnome.org>, 2011, 2012.
+# Jiro Matsuzawa <jmatsuzawa@gnome.org>, 2011, 2012, 2013.
 # Shushi KUROSE <md81bird@hitaki.net>, 2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ gtk-3-2\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-08 20:56+0900\n"
-"PO-Revision-Date: 2013-02-16 01:14+0900\n"
-"Last-Translator: Shushi KUROSE <md81bird@hitaki.net>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2013-05-01 05:47+0000\n"
+"PO-Revision-Date: 2013-05-06 09:48+0900\n"
+"Last-Translator: Jiro Matsuzawa <jmatsuzawa@gnome.rog>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -774,12 +774,13 @@ msgstr "フォントの選択"
 #. * contains the URL of the license.
 #.
 #: ../gtk/gtkaboutdialog.c:104
-#, fuzzy, c-format
-#| msgid "This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a href=\"%s\">%s</a>"
+#, c-format
 msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY;\n"
 "for details, visit <a href=\"%s\">%s</a>"
-msgstr "This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a href=\"%s\">%s</a>"
+msgstr ""
+"This program comes with ABSOLUTELY NO WARRANTY;\n"
+"for details, visit <a href=\"%s\">%s</a>"
 
 #: ../gtk/gtkaboutdialog.c:357
 msgid "License"
@@ -805,7 +806,7 @@ msgstr "リンクを表示できませんでした"
 
 #: ../gtk/gtkaboutdialog.c:1017
 msgid "Website"
-msgstr ""
+msgstr "ウェブサイト"
 
 #: ../gtk/gtkaboutdialog.c:1071
 #, c-format
@@ -899,20 +900,16 @@ msgid "Backslash"
 msgstr "\\"
 
 #: ../gtk/gtkappchooserbutton.c:290
-#, fuzzy
-#| msgid "Other application..."
 msgid "Other application…"
-msgstr "別のアプリケーション..."
+msgstr "別のアプリケーション…"
 
 #: ../gtk/gtkappchooserdialog.c:137
 msgid "Failed to look for applications online"
 msgstr "オンラインでのアプリケーション検索に失敗しました"
 
 #: ../gtk/gtkappchooserdialog.c:188
-#, fuzzy
-#| msgid "Find applications online"
 msgid "_Find applications online"
-msgstr "オンラインでアプリケーションを探す"
+msgstr "オンラインでアプリケーションを探す(_F)"
 
 #. Translators: %s is a filename
 #: ../gtk/gtkappchooserdialog.c:332
@@ -978,42 +975,31 @@ msgid "Application"
 msgstr "アプリケーション"
 
 #: ../gtk/gtkassistant.c:1008
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "C_onnect"
 msgid "C_ontinue"
-msgstr "接続(_O)"
+msgstr "続行(_O)"
 
 #: ../gtk/gtkassistant.c:1011
-#, fuzzy
-#| msgctxt "Stock label, navigation"
-#| msgid "_Back"
 msgid "Go _Back"
 msgstr "戻る(_B)"
 
 #: ../gtk/gtkassistant.c:1015
-#, fuzzy
-#| msgctxt "print operation status"
-#| msgid "Finished"
 msgid "_Finish"
-msgstr "完了"
+msgstr "完了(_F)"
 
 #: ../gtk/gtkbuilder-menus.c:220
-#, fuzzy, c-format
-#| msgid "Element <%s> is not allowed below <%s>"
+#, c-format
 msgid "Element <%s> not allowed inside <%s>"
-msgstr "要素 <%s> は <%s> の下で定義できません"
+msgstr "要素 <%s> は <%s> 内に含められません"
 
 #: ../gtk/gtkbuilder-menus.c:225
-#, fuzzy, c-format
-#| msgid "Element <%s> is not allowed below <%s>"
+#, c-format
 msgid "Element <%s> not allowed at toplevel"
-msgstr "要素 <%s> は <%s> の下で定義できません"
+msgstr "要素 <%s> はトップレベルでは使えません"
 
 #: ../gtk/gtkbuilder-menus.c:314
 #, c-format
 msgid "text may not appear inside <%s>"
-msgstr ""
+msgstr "文字列は <%s> 内に含められません"
 
 #: ../gtk/gtkbuilderparser.c:341
 #, c-format
@@ -1129,17 +1115,15 @@ msgstr "無効"
 #: ../gtk/gtkcellrendereraccel.c:292
 msgctxt "Accelerator"
 msgid "Invalid"
-msgstr "無効"
+msgstr "不正"
 
 #. This label is displayed in a treeview cell displaying
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
 #: ../gtk/gtkcellrendereraccel.c:416 ../gtk/gtkcellrendereraccel.c:747
-#, fuzzy
-#| msgid "New accelerator..."
 msgid "New accelerator…"
-msgstr "新しいアクセラレータ..."
+msgstr "新しいアクセラレータ…"
 
 #: ../gtk/gtkcellrendererprogress.c:372 ../gtk/gtkcellrendererprogress.c:462
 #, c-format
@@ -1465,10 +1449,8 @@ msgid "mm"
 msgstr "ミリ"
 
 #: ../gtk/gtkcustompaperunixdialog.c:605
-#, fuzzy
-#| msgid "Margins from Printer..."
 msgid "Margins from Printer…"
-msgstr "プリンターのマージン..."
+msgstr "プリンターのマージン…"
 
 #: ../gtk/gtkcustompaperunixdialog.c:771
 #, c-format
@@ -1573,10 +1555,8 @@ msgid "(None)"
 msgstr "(なし)"
 
 #: ../gtk/gtkfilechooserbutton.c:2198
-#, fuzzy
-#| msgid "Other..."
 msgid "Other…"
-msgstr "その他..."
+msgstr "その他…"
 
 #: ../gtk/gtkfilechooserdefault.c:152
 msgid "Type name of new folder"
@@ -1678,10 +1658,8 @@ msgid "Remove"
 msgstr "削除"
 
 #: ../gtk/gtkfilechooserdefault.c:3394
-#, fuzzy
-#| msgid "Rename..."
 msgid "Rename…"
-msgstr "ファイル名の変更..."
+msgstr "ファイル名の変更…"
 
 #. Accessible object name for the file chooser's shortcuts pane
 #: ../gtk/gtkfilechooserdefault.c:3558
@@ -1927,15 +1905,14 @@ msgid ""
 msgstr ""
 
 #: ../gtk/gtk-launch.c:87
-#, fuzzy, c-format
-#| msgid "Error parsing option --gdk-debug"
+#, c-format
 msgid "Error parsing commandline options: %s\n"
-msgstr "--gdk-debug オプションの解析エラーです"
+msgstr "コマンドラインオプションの解析エラー: %s\n"
 
 #: ../gtk/gtk-launch.c:89 ../gtk/gtk-launch.c:102
 #, c-format
 msgid "Try \"%s --help\" for more information."
-msgstr ""
+msgstr "詳しい情報については \"%s --help\" を実行してください。"
 
 #. Translators: the %s is the program name. This error message
 #. means the user is calling gtk-launch without any argument.
@@ -1943,7 +1920,7 @@ msgstr ""
 #, fuzzy, c-format
 #| msgid "Find applications online"
 msgid "%s: missing application name"
-msgstr "オンラインでアプリケーションを探す"
+msgstr "%s: アプリケーション名が指定されていません"
 
 #: ../gtk/gtk-launch.c:121
 #, c-format
@@ -1953,17 +1930,16 @@ msgstr ""
 #. Translators: the first %s is the program name, the second one
 #. is the application name.
 #: ../gtk/gtk-launch.c:129
-#, fuzzy, c-format
-#| msgid "Could not run application"
+#, c-format
 msgid "%s: no such application %s"
-msgstr "アプリケーションを実行できませんでした"
+msgstr "%s: %s というアプリケーションが見つかりません"
 
 #. Translators: the first %s is the program name, the second one
 #. is the error message.
 #: ../gtk/gtk-launch.c:147
 #, c-format
 msgid "%s: error launching application: %s\n"
-msgstr ""
+msgstr "%s: アプリケーション起動エラー: %s\n"
 
 #: ../gtk/gtklinkbutton.c:499
 msgid "Copy URL"
@@ -2057,38 +2033,28 @@ msgid "Co_nnect"
 msgstr "接続する(_N)"
 
 #: ../gtk/gtkmountoperation.c:609
-#, fuzzy
-#| msgid "Co_nnect"
 msgid "Connect As"
-msgstr "接続する(_N)"
+msgstr "接続方法"
 
 #: ../gtk/gtkmountoperation.c:618
-#, fuzzy
-#| msgid "Connect _anonymously"
 msgid "_Anonymous"
-msgstr "匿名で接続する(_A)"
+msgstr "匿名(_A)"
 
 #: ../gtk/gtkmountoperation.c:627
 msgid "Registered U_ser"
-msgstr ""
+msgstr "登録ユーザー(_S)"
 
 #: ../gtk/gtkmountoperation.c:638
-#, fuzzy
-#| msgid "_Username:"
 msgid "_Username"
-msgstr "ユーザー名(_U):"
+msgstr "ユーザー名(_U)"
 
 #: ../gtk/gtkmountoperation.c:643
-#, fuzzy
-#| msgid "_Domain:"
 msgid "_Domain"
-msgstr "ドメイン(_D):"
+msgstr "ドメイン(_D)"
 
 #: ../gtk/gtkmountoperation.c:649
-#, fuzzy
-#| msgid "_Password:"
 msgid "_Password"
-msgstr "パスワード(_P):"
+msgstr "パスワード(_P)"
 
 #: ../gtk/gtkmountoperation.c:671
 msgid "Forget password _immediately"
@@ -2189,10 +2155,8 @@ msgstr ""
 " 下側: %s %s"
 
 #: ../gtk/gtkpagesetupunixdialog.c:845 ../gtk/gtkprintunixdialog.c:3329
-#, fuzzy
-#| msgid "Manage Custom Sizes"
 msgid "Manage Custom Sizes…"
-msgstr "その他のサイズの管理"
+msgstr "その他のサイズの管理…"
 
 #: ../gtk/gtkpagesetupunixdialog.c:896
 msgid "_Format for:"
@@ -2227,10 +2191,8 @@ msgid "Authentication"
 msgstr "認証"
 
 #: ../gtk/gtkprinteroptionwidget.c:548
-#, fuzzy
-#| msgid "Select a File"
 msgid "Select a filename"
-msgstr "ファイルを選択"
+msgstr "ファイル名を選択"
 
 #: ../gtk/gtkprinteroptionwidget.c:772
 msgid "Not available"
@@ -2376,10 +2338,8 @@ msgid "Getting printer information failed"
 msgstr "プリンターの情報の取得に失敗しました。"
 
 #: ../gtk/gtkprintunixdialog.c:1916
-#, fuzzy
-#| msgid "Getting printer information..."
 msgid "Getting printer information…"
-msgstr "プリンターの情報を取得中..."
+msgstr "プリンターの情報を取得中…"
 
 #: ../gtk/gtkprintunixdialog.c:2184
 msgid "Printer"
