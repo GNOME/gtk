@@ -263,7 +263,7 @@ gtk_menu_tracker_item_action_removed (GActionObserver   *observer,
 {
   GtkMenuTrackerItem *self = GTK_MENU_TRACKER_ITEM (observer);
 
-  if (self->can_activate)
+  if (!self->can_activate)
     return;
 
   g_object_freeze_notify (G_OBJECT (self));
