@@ -476,7 +476,7 @@ bindings_value_parse_one (GtkCssParser *parser)
       return NULL;
     }
 
-  if (g_ascii_strcasecmp (name, "none"))
+  if (g_ascii_strcasecmp (name, "none") == 0)
     {
       name = NULL;
     }
