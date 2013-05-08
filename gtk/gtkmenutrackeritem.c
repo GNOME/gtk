@@ -107,6 +107,8 @@ gtk_menu_tracker_item_finalize (GObject *object)
 {
   GtkMenuTrackerItem *self = GTK_MENU_TRACKER_ITEM (object);
 
+  g_free (self->action_namespace);
+
   if (self->observable)
     g_object_unref (self->observable);
 
