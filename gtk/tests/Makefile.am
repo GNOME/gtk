@@ -156,6 +156,10 @@ keyhash_CFLAGS			 = -DGTK_COMPILATION \
 				   -DGTK_DATA_PREFIX=\"$(prefix)\" \
 				   -DGTK_SYSCONFDIR=\"$(sysconfdir)\"
 
+TEST_PROGS			+= window
+window_SOURCES			 = window.c
+window_LDADD			 = $(progs_ldadd)
+
 EXTRA_DIST +=				\
 	file-chooser-test-dir/empty     \
 	file-chooser-test-dir/text.txt
