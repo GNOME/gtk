@@ -1361,10 +1361,6 @@ gdk_window_new (GdkWindow     *parent,
   native = FALSE;
   if (window->parent->window_type == GDK_WINDOW_ROOT)
     native = TRUE; /* Always use native windows for toplevels */
-  else if (!window->input_only &&
-	   (attributes_mask & GDK_WA_VISUAL &&
-	    attributes->visual != gdk_window_get_visual (window->parent)))
-    native = TRUE; /* InputOutput window with different visual than parent, needs native window */
 
   if (gdk_window_is_offscreen (window))
     {
