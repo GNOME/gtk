@@ -53,7 +53,6 @@
 struct _GtkCheckMenuItemPrivate
 {
   guint active             : 1;
-  guint always_show_toggle : 1;
   guint draw_as_radio      : 1;
   guint inconsistent       : 1;
 };
@@ -467,7 +466,6 @@ gtk_check_menu_item_init (GtkCheckMenuItem *check_menu_item)
   priv = check_menu_item->priv; 
 
   priv->active = FALSE;
-  priv->always_show_toggle = TRUE;
 }
 
 static gint
@@ -556,34 +554,29 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 
       y = (allocation.height - indicator_size) / 2;
 
-      if (priv->active ||
-          priv->always_show_toggle ||
-          (state & GTK_STATE_FLAG_PRELIGHT))
+      gtk_style_context_save (context);
+
+      if (priv->inconsistent)
+        state |= GTK_STATE_FLAG_INCONSISTENT;
+      else if (priv->active)
+        state |= GTK_STATE_FLAG_ACTIVE;
+
+      gtk_style_context_set_state (context, state);
+
+      if (priv->draw_as_radio)
         {
-          gtk_style_context_save (context);
-
-          if (priv->inconsistent)
-            state |= GTK_STATE_FLAG_INCONSISTENT;
-          else if (priv->active)
-            state |= GTK_STATE_FLAG_ACTIVE;
-
-          gtk_style_context_set_state (context, state);
-
-          if (priv->draw_as_radio)
-            {
-              gtk_style_context_add_class (context, GTK_STYLE_CLASS_RADIO);
-              gtk_render_option (context, cr, x, y,
-                                 indicator_size, indicator_size);
-            }
-          else
-            {
-              gtk_style_context_add_class (context, GTK_STYLE_CLASS_CHECK);
-              gtk_render_check (context, cr, x, y,
-                                indicator_size, indicator_size);
-            }
-
-          gtk_style_context_restore (context);
+          gtk_style_context_add_class (context, GTK_STYLE_CLASS_RADIO);
+          gtk_render_option (context, cr, x, y,
+                             indicator_size, indicator_size);
         }
+      else
+        {
+          gtk_style_context_add_class (context, GTK_STYLE_CLASS_CHECK);
+          gtk_render_check (context, cr, x, y,
+                            indicator_size, indicator_size);
+        }
+
+      gtk_style_context_restore (context);
     }
 }
 
