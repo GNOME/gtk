@@ -27,6 +27,7 @@ typedef struct _GtkMenuTrackerSection GtkMenuTrackerSection;
 
 struct _GtkMenuTracker
 {
+  GActionObservable        *observable;
   GtkMenuTrackerInsertFunc  insert_func;
   GtkMenuTrackerRemoveFunc  remove_func;
   gpointer                  user_data;
@@ -159,7 +160,12 @@ gtk_menu_tracker_section_sync_separators (GtkMenuTrackerSection *section,
   if (should_have_separator > section->has_separator)
     {
       /* Add a separator */
-      (* tracker->insert_func) (offset, parent_model, parent_index, NULL, TRUE, tracker->user_data);
+      GtkMenuTrackerItem *item;
+
+      item = gtk_menu_tracker_item_new (tracker->observable, parent_model, parent_index, NULL, TRUE);
+      (* tracker->insert_func) (item, offset, tracker->user_data);
+      g_object_unref (item);
+
       section->has_separator = TRUE;
     }
   else if (should_have_separator < section->has_separator)
@@ -258,8 +264,13 @@ gtk_menu_tracker_add_items (GtkMenuTracker         *tracker,
         }
       else
         {
-          (* tracker->insert_func) (offset, model, position + n_items,
-                                    section->action_namespace, FALSE, tracker->user_data);
+          GtkMenuTrackerItem *item;
+
+          item = gtk_menu_tracker_item_new (tracker->observable, model, position + n_items,
+                                            section->action_namespace, FALSE);
+          (* tracker->insert_func) (item, offset, tracker->user_data);
+          g_object_unref (item);
+
           *change_point = g_slist_prepend (*change_point, NULL);
         }
     }
@@ -400,7 +411,8 @@ gtk_menu_tracker_section_new (GtkMenuTracker *tracker,
  * gtk_menu_tracker_free() is called.
  */
 GtkMenuTracker *
-gtk_menu_tracker_new (GMenuModel               *model,
+gtk_menu_tracker_new (GActionObservable        *observable,
+                      GMenuModel               *model,
                       gboolean                  with_separators,
                       const gchar              *action_namespace,
                       GtkMenuTrackerInsertFunc  insert_func,
@@ -410,6 +422,7 @@ gtk_menu_tracker_new (GMenuModel               *model,
   GtkMenuTracker *tracker;
 
   tracker = g_slice_new (GtkMenuTracker);
+  tracker->observable = g_object_ref (observable);
   tracker->insert_func = insert_func;
   tracker->remove_func = remove_func;
   tracker->user_data = user_data;
@@ -430,5 +443,6 @@ void
 gtk_menu_tracker_free (GtkMenuTracker *tracker)
 {
   gtk_menu_tracker_section_free (tracker->toplevel);
+  g_object_unref (tracker->observable);
   g_slice_free (GtkMenuTracker, tracker);
 }

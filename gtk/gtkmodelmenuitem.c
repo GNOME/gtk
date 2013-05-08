@@ -1,5 +1,5 @@
 /*
- * Copyright © 2011 Canonical Limited
+ * Copyright © 2011, 2013 Canonical Limited
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,17 +21,14 @@
 
 #include "gtkmodelmenuitem.h"
 
-#include "gtkaccelmapprivate.h"
-#include "gtkactionhelper.h"
-#include "gtkwidgetprivate.h"
-#include "gtkaccellabel.h"
+#include "gtklabel.h"
 #include "gtkimage.h"
 #include "gtkbox.h"
 
 struct _GtkModelMenuItem
 {
   GtkCheckMenuItem parent_instance;
-  GtkActionHelperRole role;
+  GtkMenuTrackerItemRole role;
   gboolean has_indicator;
 };
 
@@ -39,7 +36,14 @@ typedef GtkCheckMenuItemClass GtkModelMenuItemClass;
 
 G_DEFINE_TYPE (GtkModelMenuItem, gtk_model_menu_item, GTK_TYPE_CHECK_MENU_ITEM)
 
-#define PROP_ACTION_ROLE 1
+enum
+{
+  PROP_0,
+  PROP_ACTION_ROLE,
+  PROP_ICON,
+  PROP_TEXT,
+  PROP_TOGGLED
+};
 
 static void
 gtk_model_menu_item_toggle_size_request (GtkMenuItem *menu_item,
@@ -56,6 +60,12 @@ gtk_model_menu_item_toggle_size_request (GtkMenuItem *menu_item,
 }
 
 static void
+gtk_model_menu_item_activate (GtkMenuItem *item)
+{
+  /* block the automatic toggle behaviour -- just do nothing */
+}
+
+static void
 gtk_model_menu_item_draw_indicator (GtkCheckMenuItem *check_item,
                                     cairo_t          *cr)
 {
@@ -64,177 +74,6 @@ gtk_model_menu_item_draw_indicator (GtkCheckMenuItem *check_item,
   if (item->has_indicator)
     GTK_CHECK_MENU_ITEM_CLASS (gtk_model_menu_item_parent_class)
       ->draw_indicator (check_item, cr);
-}
-
-static void
-gtk_actionable_set_namespaced_action_name (GtkActionable *actionable,
-                                           const gchar   *namespace,
-                                           const gchar   *action_name)
-{
-  if (namespace)
-    {
-      gchar *name = g_strdup_printf ("%s.%s", namespace, action_name);
-      gtk_actionable_set_action_name (actionable, name);
-      g_free (name);
-    }
-  else
-    {
-      gtk_actionable_set_action_name (actionable, action_name);
-    }
-}
-
-static void
-gtk_model_menu_item_submenu_shown (GtkWidget *widget,
-                                   gpointer   user_data)
-{
-  const gchar *action_name = user_data;
-  GActionMuxer *muxer;
-
-  muxer = _gtk_widget_get_action_muxer (widget);
-  g_action_group_change_action_state (G_ACTION_GROUP (muxer), action_name, g_variant_new_boolean (TRUE));
-}
-
-static void
-gtk_model_menu_item_submenu_hidden (GtkWidget *widget,
-                                    gpointer   user_data)
-{
-  const gchar *action_name = user_data;
-  GActionMuxer *muxer;
-
-  muxer = _gtk_widget_get_action_muxer (widget);
-  g_action_group_change_action_state (G_ACTION_GROUP (muxer), action_name, g_variant_new_boolean (FALSE));
-}
-
-static void
-gtk_model_menu_item_setup (GtkModelMenuItem  *item,
-                           GMenuModel        *model,
-                           gint               item_index,
-                           const gchar       *action_namespace)
-{
-  GMenuAttributeIter *iter;
-  GMenuModel *submenu;
-  const gchar *key;
-  GVariant *value;
-  GtkWidget *label;
-
-  label = NULL;
-
-  /* In the case that we have an icon, make an HBox and put it beside
-   * the label.  Otherwise, we just have a label directly.
-   */
-  if ((value = g_menu_model_get_item_attribute_value (model, item_index, "icon", NULL)))
-    {
-      GIcon *icon;
-
-      icon = g_icon_deserialize (value);
-
-      if (icon != NULL)
-        {
-          GtkWidget *image;
-          GtkWidget *box;
-
-          box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-
-          image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_MENU);
-          gtk_box_pack_start (GTK_BOX (box), image, FALSE, FALSE, 0);
-          g_object_unref (icon);
-
-          label = gtk_accel_label_new ("");
-          gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
-          gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (label), GTK_WIDGET (item));
-          gtk_box_pack_end (GTK_BOX (box), label, TRUE, TRUE, 0);
-
-          gtk_container_add (GTK_CONTAINER (item), box);
-
-          gtk_widget_show_all (box);
-        }
-
-      g_variant_unref (value);
-    }
-
-  if (label == NULL)
-    {
-      /* Ensure that the GtkAccelLabel has been created... */
-      (void) gtk_menu_item_get_label (GTK_MENU_ITEM (item));
-      label = gtk_bin_get_child (GTK_BIN (item));
-    }
-
-  g_assert (label != NULL);
-
-  if ((submenu = g_menu_model_get_item_link (model, item_index, "submenu")))
-    {
-      gchar *section_namespace = NULL;
-      GtkWidget *menu;
-
-      g_menu_model_get_item_attribute (model, item_index, "action-namespace", "s", &section_namespace);
-      menu = gtk_menu_new ();
-
-      if (action_namespace)
-        {
-          gchar *namespace = g_strjoin (".", action_namespace, section_namespace, NULL);
-          gtk_menu_shell_bind_model (GTK_MENU_SHELL (menu), submenu, namespace, TRUE);
-          g_free (namespace);
-        }
-      else
-        gtk_menu_shell_bind_model (GTK_MENU_SHELL (menu), submenu, section_namespace, TRUE);
-
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), menu);
-
-      g_free (section_namespace);
-      g_object_unref (submenu);
-    }
-
-  iter = g_menu_model_iterate_item_attributes (model, item_index);
-  while (g_menu_attribute_iter_get_next (iter, &key, &value))
-    {
-      if (g_str_equal (key, "label") && g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
-        gtk_label_set_text_with_mnemonic (GTK_LABEL (label), g_variant_get_string (value, NULL));
-
-      else if (g_str_equal (key, "accel") && g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
-        {
-          GdkModifierType modifiers;
-          guint key;
-
-          gtk_accelerator_parse (g_variant_get_string (value, NULL), &key, &modifiers);
-
-          if (key)
-            gtk_accel_label_set_accel (GTK_ACCEL_LABEL (label), key, modifiers);
-        }
-
-      else if (g_str_equal (key, "action") && g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
-        gtk_actionable_set_namespaced_action_name (GTK_ACTIONABLE (item), action_namespace,
-                                                   g_variant_get_string (value, NULL));
-
-      else if (g_str_equal (key, "target"))
-        gtk_actionable_set_action_target_value (GTK_ACTIONABLE (item), value);
-
-      else if (g_str_equal (key, "submenu-action") && g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
-        {
-          GtkWidget *submenu;
-
-          submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (item));
-
-          if (submenu != NULL)
-            {
-              const gchar *action = g_variant_get_string (value, NULL);
-              gchar *full_action;
-
-              if (action_namespace)
-                full_action = g_strjoin (".", action_namespace, action, NULL);
-              else
-                full_action = g_strdup (action);
-
-              g_object_set_data_full (G_OBJECT (submenu), "gtkmodelmenu-visibility-action", full_action, g_free);
-              g_signal_connect (submenu, "show", G_CALLBACK (gtk_model_menu_item_submenu_shown), full_action);
-              g_signal_connect (submenu, "hide", G_CALLBACK (gtk_model_menu_item_submenu_hidden), full_action);
-            }
-        }
-
-      g_variant_unref (value);
-    }
-  g_object_unref (iter);
-
-  gtk_menu_item_set_use_underline (GTK_MENU_ITEM (item), TRUE);
 }
 
 static void
@@ -250,36 +89,30 @@ gtk_model_menu_item_set_has_indicator (GtkModelMenuItem *item,
 }
 
 static void
-gtk_model_menu_item_set_property (GObject *object, guint prop_id,
-                                  const GValue *value, GParamSpec *pspec)
+gtk_model_menu_item_set_action_role (GtkModelMenuItem       *item,
+                                     GtkMenuTrackerItemRole  role)
 {
-  GtkModelMenuItem *item = GTK_MODEL_MENU_ITEM (object);
-  GtkActionHelperRole role;
   AtkObject *accessible;
   AtkRole a11y_role;
-
-  g_assert (prop_id == PROP_ACTION_ROLE);
-
-  role = g_value_get_uint (value);
 
   if (role == item->role)
     return;
 
-  gtk_check_menu_item_set_draw_as_radio (GTK_CHECK_MENU_ITEM (item), role == GTK_ACTION_HELPER_ROLE_RADIO);
-  gtk_model_menu_item_set_has_indicator (item, role != GTK_ACTION_HELPER_ROLE_NORMAL);
+  gtk_check_menu_item_set_draw_as_radio (GTK_CHECK_MENU_ITEM (item), role == GTK_MENU_TRACKER_ITEM_ROLE_RADIO);
+  gtk_model_menu_item_set_has_indicator (item, role != GTK_MENU_TRACKER_ITEM_ROLE_NORMAL);
 
   accessible = gtk_widget_get_accessible (GTK_WIDGET (item));
   switch (role)
     {
-    case GTK_ACTION_HELPER_ROLE_NORMAL:
+    case GTK_MENU_TRACKER_ITEM_ROLE_NORMAL:
       a11y_role = ATK_ROLE_MENU_ITEM;
       break;
 
-    case GTK_ACTION_HELPER_ROLE_TOGGLE:
+    case GTK_MENU_TRACKER_ITEM_ROLE_TOGGLE:
       a11y_role = ATK_ROLE_CHECK_MENU_ITEM;
       break;
 
-    case GTK_ACTION_HELPER_ROLE_RADIO:
+    case GTK_MENU_TRACKER_ITEM_ROLE_RADIO:
       a11y_role = ATK_ROLE_RADIO_MENU_ITEM;
       break;
 
@@ -288,6 +121,148 @@ gtk_model_menu_item_set_property (GObject *object, guint prop_id,
     }
 
   atk_object_set_role (accessible, a11y_role);
+}
+
+static void
+gtk_model_menu_item_set_icon (GtkModelMenuItem *item,
+                              GIcon            *icon)
+{
+  GtkWidget *child;
+
+  g_return_if_fail (GTK_IS_MODEL_MENU_ITEM (item));
+  g_return_if_fail (icon == NULL || G_IS_ICON (icon));
+
+  child = gtk_bin_get_child (GTK_BIN (item));
+
+  /* There are only three possibilities here:
+   *
+   *   - no child
+   *   - accel label child
+   *   - already a box
+   *
+   * Handle the no-child case by having GtkMenuItem create the accel
+   * label, then we will only have two possible cases.
+   */
+  if (child == NULL)
+    {
+      gtk_menu_item_get_label (GTK_MENU_ITEM (item));
+      child = gtk_bin_get_child (GTK_BIN (item));
+      g_assert (GTK_IS_LABEL (child));
+    }
+
+  /* If it is a box, make sure there are no images inside of it already.
+   */
+  if (GTK_IS_BOX (child))
+    {
+      GList *children;
+
+      children = gtk_container_get_children (GTK_CONTAINER (child));
+      while (children)
+        {
+          if (GTK_IS_IMAGE (children->data))
+            gtk_widget_destroy (children->data);
+
+          children = g_list_delete_link (children, children);
+        }
+    }
+
+  /* If it is not a box, put it into a box, at the end */
+  if (!GTK_IS_BOX (child))
+    {
+      GtkWidget *box;
+
+      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+
+      /* Reparent the child without destroying it */
+      g_object_ref (child);
+      gtk_container_remove (GTK_CONTAINER (item), child);
+      gtk_box_pack_end (GTK_BOX (box), child, TRUE, TRUE, 0);
+      g_object_unref (child);
+
+      gtk_container_add (GTK_CONTAINER (item), box);
+      gtk_widget_show (box);
+
+      /* Now we have a box */
+      child = box;
+    }
+
+  g_assert (GTK_IS_BOX (child));
+
+  /* child is now a box containing a label and no image.  Add the icon,
+   * if appropriate.
+   */
+  if (icon != NULL)
+    {
+      GtkWidget *image;
+
+      image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_MENU);
+      gtk_box_pack_start (GTK_BOX (child), image, FALSE, FALSE, 0);
+      gtk_widget_show (image);
+    }
+}
+
+static void
+gtk_model_menu_item_set_text (GtkModelMenuItem *item,
+                              const gchar      *text)
+{
+  GtkWidget *child;
+  GList *children;
+
+  child = gtk_bin_get_child (GTK_BIN (item));
+  if (child == NULL)
+    {
+      gtk_menu_item_get_label (GTK_MENU_ITEM (item));
+      child = gtk_bin_get_child (GTK_BIN (item));
+      g_assert (GTK_IS_LABEL (child));
+    }
+
+  if (GTK_IS_LABEL (child))
+    {
+      gtk_label_set_text_with_mnemonic (GTK_LABEL (child), text);
+      return;
+    }
+
+  if (!GTK_IS_CONTAINER (child))
+    return;
+
+  children = gtk_container_get_children (GTK_CONTAINER (child));
+
+  while (children)
+    {
+      if (GTK_IS_LABEL (children->data))
+        gtk_label_set_label (GTK_LABEL (children->data), text);
+
+      children = g_list_delete_link (children, children);
+    }
+}
+
+static void
+gtk_model_menu_item_set_property (GObject *object, guint prop_id,
+                                  const GValue *value, GParamSpec *pspec)
+{
+  GtkModelMenuItem *item = GTK_MODEL_MENU_ITEM (object);
+
+  switch (prop_id)
+    {
+    case PROP_ACTION_ROLE:
+      gtk_model_menu_item_set_action_role (item, g_value_get_enum (value));
+      break;
+
+    case PROP_ICON:
+      gtk_model_menu_item_set_icon (item, g_value_get_object (value));
+      break;
+
+    case PROP_TEXT:
+      gtk_model_menu_item_set_text (item, g_value_get_string (value));
+      break;
+
+    case PROP_TOGGLED:
+      _gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item), g_value_get_boolean (value));
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
 }
 
 static void
@@ -305,24 +280,28 @@ gtk_model_menu_item_class_init (GtkModelMenuItemClass *class)
   check_class->draw_indicator = gtk_model_menu_item_draw_indicator;
 
   item_class->toggle_size_request = gtk_model_menu_item_toggle_size_request;
+  item_class->activate = gtk_model_menu_item_activate;
 
   object_class->set_property = gtk_model_menu_item_set_property;
 
   g_object_class_install_property (object_class, PROP_ACTION_ROLE,
-                                   g_param_spec_uint ("action-role", "action role", "action role",
-                                                      0, 2, 0, G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+                                   g_param_spec_enum ("action-role", "action role", "action role",
+                                                      GTK_TYPE_MENU_TRACKER_ITEM_ROLE,
+                                                      GTK_MENU_TRACKER_ITEM_ROLE_NORMAL,
+                                                      G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_ICON,
+                                   g_param_spec_object ("icon", "icon", "icon", G_TYPE_ICON,
+                                                        G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_TEXT,
+                                   g_param_spec_string ("text", "text", "text", NULL,
+                                                        G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_TOGGLED,
+                                   g_param_spec_boolean ("toggled", "toggled", "toggled", FALSE,
+                                                         G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 }
 
 GtkWidget *
-gtk_model_menu_item_new (GMenuModel        *model,
-                         gint               item_index,
-                         const gchar       *action_namespace)
+gtk_model_menu_item_new (void)
 {
-  GtkModelMenuItem *item;
-
-  item = g_object_new (GTK_TYPE_MODEL_MENU_ITEM, NULL);
-
-  gtk_model_menu_item_setup (item, model, item_index, action_namespace);
-
-  return GTK_WIDGET (item);
+  return g_object_new (GTK_TYPE_MODEL_MENU_ITEM, NULL);
 }

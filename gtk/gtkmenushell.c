@@ -52,6 +52,7 @@
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
 #include "gtkmodelmenuitem.h"
+#include "gtkwidgetprivate.h"
 
 #include "deprecated/gtktearoffmenuitem.h"
 
@@ -2039,33 +2040,30 @@ gtk_menu_shell_get_parent_shell (GtkMenuShell *menu_shell)
 }
 
 static void
-gtk_menu_shell_tracker_insert_func (gint         position,
-                                    GMenuModel  *model,
-                                    gint         item_index,
-                                    const gchar *action_namespace,
-                                    gboolean     is_separator,
-                                    gpointer     user_data)
+gtk_menu_shell_item_activate (GtkMenuItem *menuitem,
+                              gpointer     user_data)
 {
-  GtkMenuShell *menu_shell = user_data;
-  GtkWidget *item;
+  GtkMenuTrackerItem *item = user_data;
 
-  if (is_separator)
-    {
-      gchar *label;
+  gtk_menu_tracker_item_activated (item);
+}
 
-      item = gtk_separator_menu_item_new ();
+static void
+gtk_menu_shell_submenu_shown (GtkWidget *submenu,
+                              gpointer   user_data)
+{
+  GtkMenuTrackerItem *item = user_data;
 
-      if (g_menu_model_get_item_attribute (model, item_index, G_MENU_ATTRIBUTE_LABEL, "s", &label))
-        {
-          gtk_menu_item_set_label (GTK_MENU_ITEM (item), label);
-          g_free (label);
-        }
-    }
-  else
-    item = gtk_model_menu_item_new (model, item_index, action_namespace);
+  gtk_menu_tracker_item_request_submenu_shown (item, TRUE);
+}
 
-  gtk_menu_shell_insert (menu_shell, item, position);
-  gtk_widget_show (item);
+static void
+gtk_menu_shell_submenu_hidden (GtkWidget *submenu,
+                               gpointer   user_data)
+{
+  GtkMenuTrackerItem *item = user_data;
+
+  gtk_menu_tracker_item_request_submenu_shown (item, FALSE);
 }
 
 static void
@@ -2081,6 +2079,92 @@ gtk_menu_shell_tracker_remove_func (gint     position,
    * simple gtk_container_remove() isn't good enough to break that.
    */
   gtk_widget_destroy (child);
+}
+
+static void
+gtk_menu_shell_tracker_insert_func (GtkMenuTrackerItem *item,
+                                    gint                position,
+                                    gpointer            user_data)
+{
+  GtkMenuShell *menu_shell = user_data;
+  GtkWidget *widget;
+
+  if (gtk_menu_tracker_item_get_role (item) == GTK_MENU_TRACKER_ITEM_ROLE_SEPARATOR)
+    widget = gtk_separator_menu_item_new ();
+  else
+    widget = gtk_model_menu_item_new ();
+
+  /* TODO: drop this when we have bindings that ref the source */
+  g_object_set_data_full (G_OBJECT (widget), "GtkMenuTrackerItem", g_object_ref (item), g_object_unref);
+
+  if (!GTK_IS_SEPARATOR_MENU_ITEM (widget))
+    {
+      GMenuModel *submenu;
+
+      /* We bind to "text" instead of "label" because GtkModelMenuItem
+       * uses this property (along with "icon") to control its child
+       * widget.  Once this is merged into GtkMenuItem we can go back to
+       * using "label".
+       */
+      g_object_bind_property (item, "label", widget, "text", G_BINDING_SYNC_CREATE);
+      g_object_bind_property (item, "icon", widget, "icon", G_BINDING_SYNC_CREATE);
+      g_object_bind_property (item, "sensitive", widget, "sensitive", G_BINDING_SYNC_CREATE);
+      g_object_bind_property (item, "visible", widget, "visible", G_BINDING_SYNC_CREATE);
+      g_object_bind_property (item, "role", widget, "action-role", G_BINDING_SYNC_CREATE);
+      g_object_bind_property (item, "toggled", widget, "toggled", G_BINDING_SYNC_CREATE);
+
+      g_signal_connect (widget, "activate", G_CALLBACK (gtk_menu_shell_item_activate), item);
+
+      submenu = gtk_menu_tracker_item_get_submenu (item);
+
+      if (submenu)
+        {
+          GActionObservable *observable;
+          GtkWidget *subwidget;
+          GtkMenuShell *subshell;
+
+          /* reuse the observer to reduce the amount of GActionMuxer traffic */
+          observable = gtk_menu_tracker_item_get_observable (item);
+          subwidget = gtk_menu_new ();
+          subshell = GTK_MENU_SHELL (subwidget);
+
+          /* We recurse directly here: we could use an idle instead to
+           * prevent arbitrary recursion depth.  We could also do it
+           * lazy...
+           */
+          subshell->priv->tracker = gtk_menu_tracker_new (observable, submenu, TRUE,
+                                                          gtk_menu_tracker_item_get_submenu_namespace (item),
+                                                          gtk_menu_shell_tracker_insert_func,
+                                                          gtk_menu_shell_tracker_remove_func,
+                                                          subwidget);
+          gtk_menu_item_set_submenu (GTK_MENU_ITEM (widget), subwidget);
+
+          if (gtk_menu_tracker_item_get_should_request_show (item))
+            {
+              /* We don't request show in the strictest sense of the
+               * word: we just notify when we are showing and don't
+               * bother waiting for the reply.
+               *
+               * This could be fixed one day, but it would be slightly
+               * complicated and would have a strange interaction with
+               * the submenu pop-up delay.
+               *
+               * Note: 'item' is already kept alive from above.
+               */
+              g_signal_connect (subwidget, "show", G_CALLBACK (gtk_menu_shell_submenu_shown), item);
+              g_signal_connect (subwidget, "hide", G_CALLBACK (gtk_menu_shell_submenu_hidden), item);
+            }
+        }
+    }
+  else
+    {
+      /* For separators, we bind to the "label" property in case there
+       * is a section heading.
+       */
+      g_object_bind_property (item, "label", widget, "label", G_BINDING_SYNC_CREATE);
+    }
+
+  gtk_menu_shell_insert (menu_shell, widget, position);
 }
 
 /**
@@ -2134,8 +2218,12 @@ gtk_menu_shell_bind_model (GtkMenuShell *menu_shell,
                            const gchar  *action_namespace,
                            gboolean      with_separators)
 {
+  GActionMuxer *muxer;
+
   g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
   g_return_if_fail (model == NULL || G_IS_MENU_MODEL (model));
+
+  muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (menu_shell));
 
   g_clear_pointer (&menu_shell->priv->tracker, gtk_menu_tracker_free);
 
@@ -2143,7 +2231,8 @@ gtk_menu_shell_bind_model (GtkMenuShell *menu_shell,
     gtk_container_remove (GTK_CONTAINER (menu_shell), menu_shell->priv->children->data);
 
   if (model)
-    menu_shell->priv->tracker = gtk_menu_tracker_new (model, with_separators, action_namespace,
+    menu_shell->priv->tracker = gtk_menu_tracker_new (G_ACTION_OBSERVABLE (muxer),
+                                                      model, with_separators, action_namespace,
                                                       gtk_menu_shell_tracker_insert_func,
                                                       gtk_menu_shell_tracker_remove_func,
                                                       menu_shell);

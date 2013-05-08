@@ -497,6 +497,7 @@ gtk_private_h_sources =		\
 	gtkmenuitemprivate.h	\
 	gtkmenushellprivate.h	\
 	gtkmenutracker.h	\
+	gtkmenutrackeritem.h	\
 	gtkmnemonichash.h	\
 	gtkmodelmenuitem.h	\
 	gtkmodifierstyle.h	\
@@ -764,6 +765,7 @@ gtk_base_c_sources = 		\
 	gtkmenuitem.c		\
 	gtkmenushell.c		\
 	gtkmenutracker.c	\
+	gtkmenutrackeritem.c	\
 	gtkmenutoolbutton.c	\
 	gtkmessagedialog.c	\
 	gtkmisc.c		\
