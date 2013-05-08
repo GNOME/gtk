@@ -22,30 +22,31 @@
 #ifndef __GTK_MENU_TRACKER_H__
 #define __GTK_MENU_TRACKER_H__
 
-#include <gio/gio.h>
+#include "gtkmenutrackeritem.h"
 
 typedef struct _GtkMenuTracker GtkMenuTracker;
 
-typedef void         (* GtkMenuTrackerInsertFunc)       (gint                      position,
-                                                         GMenuModel               *model,
-                                                         gint                      item_index,
-                                                         const gchar              *action_namespace,
-                                                         gboolean                  is_separator,
-                                                         gpointer                  user_data);
+typedef void         (* GtkMenuTrackerInsertFunc)                       (GtkMenuTrackerItem       *item,
+                                                                         gint                      position,
+                                                                         gpointer                  user_data);
 
-typedef void         (* GtkMenuTrackerRemoveFunc)       (gint                      position,
-                                                         gpointer                  user_data);
+typedef void         (* GtkMenuTrackerRemoveFunc)                       (gint                      position,
+                                                                         gpointer                  user_data);
 
 
-G_GNUC_INTERNAL
-GtkMenuTracker *        gtk_menu_tracker_new            (GMenuModel               *model,
-                                                         gboolean                  with_separators,
-                                                         const gchar              *action_namespace,
-                                                         GtkMenuTrackerInsertFunc  insert_func,
-                                                         GtkMenuTrackerRemoveFunc  remove_func,
-                                                         gpointer                  user_data);
+GtkMenuTracker *        gtk_menu_tracker_new                            (GtkActionObservable      *observer,
+                                                                         GMenuModel               *model,
+                                                                         gboolean                  with_separators,
+                                                                         const gchar              *action_namespace,
+                                                                         GtkMenuTrackerInsertFunc  insert_func,
+                                                                         GtkMenuTrackerRemoveFunc  remove_func,
+                                                                         gpointer                  user_data);
 
-G_GNUC_INTERNAL
-void                    gtk_menu_tracker_free           (GtkMenuTracker           *tracker);
+GtkMenuTracker *        gtk_menu_tracker_new_for_item_submenu           (GtkMenuTrackerItem       *item,
+                                                                         GtkMenuTrackerInsertFunc  insert_func,
+                                                                         GtkMenuTrackerRemoveFunc  remove_func,
+                                                                         gpointer                  user_data);
+
+void                    gtk_menu_tracker_free                           (GtkMenuTracker           *tracker);
 
 #endif /* __GTK_MENU_TRACKER_H__ */
