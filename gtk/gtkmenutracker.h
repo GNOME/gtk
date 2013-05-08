@@ -24,16 +24,7 @@
 
 #include "gtkmenutrackeritem.h"
 
-#define GTK_TYPE_MENU_TRACKER                               (gtk_menu_tracker_get_type ())
-#define GTK_MENU_TRACKER(inst)                              (G_TYPE_CHECK_INSTANCE_CAST ((inst), \
-                                                             GTK_TYPE_MENU_TRACKER, GtkMenuTracker))
-#define GTK_IS_MENU_TRACKER(inst)                           (G_TYPE_CHECK_INSTANCE_TYPE ((inst), \
-                                                             GTK_TYPE_MENU_TRACKER))
-
 typedef struct _GtkMenuTracker GtkMenuTracker;
-
-G_GNUC_INTERNAL
-GType                   gtk_menu_tracker_get_type                       (void) G_GNUC_CONST;
 
 typedef void         (* GtkMenuTrackerInsertFunc)       (GtkMenuTrackerItem       *item,
                                                          gint                      position,
@@ -53,10 +44,6 @@ GtkMenuTracker *        gtk_menu_tracker_new            (GActionObservable      
                                                          gpointer                  user_data);
 
 G_GNUC_INTERNAL
-void                    gtk_menu_tracker_setup          (GtkMenuTracker           *tracker,
-                                                         GActionObservable        *observer,
-                                                         GMenuModel               *model,
-                                                         gboolean                  with_separators,
-                                                         const gchar              *action_namespace);
+void                    gtk_menu_tracker_free           (GtkMenuTracker           *tracker);
 
 #endif /* __GTK_MENU_TRACKER_H__ */

@@ -533,7 +533,7 @@ gtk_menu_shell_dispose (GObject *object)
 {
   GtkMenuShell *menu_shell = GTK_MENU_SHELL (object);
 
-  g_clear_object (&menu_shell->priv->tracker);
+  g_clear_pointer (&menu_shell->priv->tracker, gtk_menu_tracker_free);
   gtk_menu_shell_deactivate (menu_shell);
 
   G_OBJECT_CLASS (gtk_menu_shell_parent_class)->dispose (object);
@@ -2226,7 +2226,7 @@ gtk_menu_shell_bind_model (GtkMenuShell *menu_shell,
 
   muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (menu_shell));
 
-  g_clear_object (&menu_shell->priv->tracker);
+  g_clear_pointer (&menu_shell->priv->tracker, gtk_menu_tracker_free);
 
   while (menu_shell->priv->children)
     gtk_container_remove (GTK_CONTAINER (menu_shell), menu_shell->priv->children->data);
