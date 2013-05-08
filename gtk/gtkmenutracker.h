@@ -22,7 +22,7 @@
 #ifndef __GTK_MENU_TRACKER_H__
 #define __GTK_MENU_TRACKER_H__
 
-#include <gtk/gtkmenutrackeritem.h>
+#include "gtkmenutrackeritem.h"
 
 #define GTK_TYPE_MENU_TRACKER                               (gtk_menu_tracker_get_type ())
 #define GTK_MENU_TRACKER(inst)                              (G_TYPE_CHECK_INSTANCE_CAST ((inst), \
