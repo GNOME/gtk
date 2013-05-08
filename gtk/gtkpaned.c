@@ -1391,6 +1391,7 @@ gtk_paned_create_child_window (GtkPaned  *paned,
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
+  attributes.visual = gtk_widget_get_visual (widget);
   if (child)
     {
       GtkAllocation allocation;
@@ -1415,13 +1416,13 @@ gtk_paned_create_child_window (GtkPaned  *paned,
       gtk_widget_get_allocation (child, &allocation);
       attributes.width = allocation.width;
       attributes.height = allocation.height;
-      attributes_mask = GDK_WA_X | GDK_WA_Y;
+      attributes_mask = GDK_WA_X | GDK_WA_Y| GDK_WA_VISUAL;
     }
   else
     {
       attributes.width = 1;
       attributes.height = 1;
-      attributes_mask = 0;
+      attributes_mask = GDK_WA_VISUAL;
     }
 
   window = gdk_window_new (gtk_widget_get_window (widget),
