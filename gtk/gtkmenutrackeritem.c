@@ -23,6 +23,7 @@ enum {
   PROP_VISIBLE,
   PROP_ROLE,
   PROP_TOGGLED,
+  PROP_ACCEL,
   PROP_SUBMENU,
   PROP_SUBMENU_NAMESPACE,
   N_PROPS
@@ -86,6 +87,9 @@ gtk_menu_tracker_item_get_property (GObject    *object,
     case PROP_TOGGLED:
       g_value_set_boolean (value, gtk_menu_tracker_item_get_toggled (self));
       break;
+    case PROP_ACCEL:
+      g_value_set_string (value, gtk_menu_tracker_item_get_accel (self));
+      break;
     case PROP_SUBMENU:
       g_value_set_object (value, gtk_menu_tracker_item_get_submenu (self));
       break;
@@ -136,6 +140,8 @@ gtk_menu_tracker_item_class_init (GtkMenuTrackerItemClass *class)
                        G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
   gtk_menu_tracker_item_pspecs[PROP_TOGGLED] =
     g_param_spec_boolean ("toggled", "", "", FALSE, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
+  gtk_menu_tracker_item_pspecs[PROP_ACCEL] =
+    g_param_spec_string ("accel", "", "", NULL, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
   gtk_menu_tracker_item_pspecs[PROP_SUBMENU] =
     g_param_spec_object ("submenu", "", "", G_TYPE_MENU_MODEL, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
   gtk_menu_tracker_item_pspecs[PROP_SUBMENU_NAMESPACE] =
@@ -407,6 +413,16 @@ gboolean
 gtk_menu_tracker_item_get_toggled (GtkMenuTrackerItem *self)
 {
   return self->toggled;
+}
+
+const gchar *
+gtk_menu_tracker_item_get_accel (GtkMenuTrackerItem *self)
+{
+  const gchar *accel = NULL;
+
+  g_menu_item_get_attribute (self->item, "accel", "&s", &accel);
+
+  return accel;
 }
 
 GMenuModel *

@@ -21,7 +21,7 @@
 
 #include "gtkmodelmenuitem.h"
 
-#include "gtklabel.h"
+#include "gtkaccellabel.h"
 #include "gtkimage.h"
 #include "gtkbox.h"
 
@@ -42,7 +42,8 @@ enum
   PROP_ACTION_ROLE,
   PROP_ICON,
   PROP_TEXT,
-  PROP_TOGGLED
+  PROP_TOGGLED,
+  PROP_ACCEL
 };
 
 static void
@@ -237,6 +238,55 @@ gtk_model_menu_item_set_text (GtkModelMenuItem *item,
 }
 
 static void
+gtk_model_menu_item_set_accel (GtkModelMenuItem *item,
+                               const gchar      *accel)
+{
+  GtkWidget *child;
+  GList *children;
+  GdkModifierType modifiers;
+  guint key;
+
+  if (accel)
+    {
+      gtk_accelerator_parse (accel, &key, &modifiers);
+      if (!key)
+        modifiers = 0;
+    }
+  else
+    {
+      key = 0;
+      modifiers = 0;
+    }
+
+  child = gtk_bin_get_child (GTK_BIN (item));
+  if (child == NULL)
+    {
+      gtk_menu_item_get_label (GTK_MENU_ITEM (item));
+      child = gtk_bin_get_child (GTK_BIN (item));
+      g_assert (GTK_IS_LABEL (child));
+    }
+
+  if (GTK_IS_LABEL (child))
+    {
+      gtk_accel_label_set_accel (GTK_ACCEL_LABEL (child), key, modifiers);
+      return;
+    }
+
+  if (!GTK_IS_CONTAINER (child))
+    return;
+
+  children = gtk_container_get_children (GTK_CONTAINER (child));
+
+  while (children)
+    {
+      if (GTK_IS_ACCEL_LABEL (children->data))
+        gtk_accel_label_set_accel (children->data, key, modifiers);
+
+      children = g_list_delete_link (children, children);
+    }
+}
+
+void
 gtk_model_menu_item_set_property (GObject *object, guint prop_id,
                                   const GValue *value, GParamSpec *pspec)
 {
@@ -258,6 +308,10 @@ gtk_model_menu_item_set_property (GObject *object, guint prop_id,
 
     case PROP_TOGGLED:
       _gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item), g_value_get_boolean (value));
+      break;
+
+    case PROP_ACCEL:
+      gtk_model_menu_item_set_accel (item, g_value_get_string (value));
       break;
 
     default:
@@ -298,6 +352,9 @@ gtk_model_menu_item_class_init (GtkModelMenuItemClass *class)
   g_object_class_install_property (object_class, PROP_TOGGLED,
                                    g_param_spec_boolean ("toggled", "toggled", "toggled", FALSE,
                                                          G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_ACCEL,
+                                   g_param_spec_string ("accel", "accel", "accel", NULL,
+                                                        G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 }
 
 GtkWidget *

@@ -74,6 +74,9 @@ G_GNUC_INTERNAL
 gboolean                gtk_menu_tracker_item_get_toggled               (GtkMenuTrackerItem *self);
 
 G_GNUC_INTERNAL
+const gchar *           gtk_menu_tracker_item_get_accel                 (GtkMenuTrackerItem *self);
+
+G_GNUC_INTERNAL
 GMenuModel *            gtk_menu_tracker_item_get_submenu               (GtkMenuTrackerItem *self);
 
 G_GNUC_INTERNAL
