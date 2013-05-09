@@ -34,7 +34,7 @@ gtk_action_observable_default_init (GtkActionObservableInterface *iface)
 {
 }
 
-/*
+/**
  * gtk_action_observable_register_observer:
  * @observable: a #GtkActionObservable
  * @action_name: the name of the action
@@ -54,7 +54,7 @@ gtk_action_observable_register_observer (GtkActionObservable *observable,
     ->register_observer (observable, action_name, observer);
 }
 
-/*
+/**
  * gtk_action_observable_unregister_observer:
  * @observable: a #GtkActionObservable
  * @action_name: the name of the action
