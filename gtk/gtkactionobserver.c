@@ -54,7 +54,7 @@ gtk_action_observer_default_init (GtkActionObserverInterface *class)
 {
 }
 
-/*
+/**
  * gtk_action_observer_action_added:
  * @observer: a #GtkActionObserver
  * @observable: the source of the event
@@ -85,7 +85,7 @@ gtk_action_observer_action_added (GtkActionObserver   *observer,
     ->action_added (observer, observable, action_name, parameter_type, enabled, state);
 }
 
-/*
+/**
  * gtk_action_observer_action_enabled_changed:
  * @observer: a #GtkActionObserver
  * @observable: the source of the event
@@ -110,7 +110,7 @@ gtk_action_observer_action_enabled_changed (GtkActionObserver   *observer,
     ->action_enabled_changed (observer, observable, action_name, enabled);
 }
 
-/*
+/**
  * gtk_action_observer_action_state_changed:
  * @observer: a #GtkActionObserver
  * @observable: the source of the event
@@ -135,7 +135,7 @@ gtk_action_observer_action_state_changed (GtkActionObserver   *observer,
     ->action_state_changed (observer, observable, action_name, state);
 }
 
-/*
+/**
  * gtk_action_observer_action_removed:
  * @observer: a #GtkActionObserver
  * @observable: the source of the event
