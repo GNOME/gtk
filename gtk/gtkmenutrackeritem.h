@@ -38,59 +38,42 @@ typedef enum  {
   GTK_MENU_TRACKER_ITEM_ROLE_RADIO,
 } GtkMenuTrackerItemRole;
 
-G_GNUC_INTERNAL
 GType                   gtk_menu_tracker_item_get_type                  (void) G_GNUC_CONST;
 
-G_GNUC_INTERNAL
 GType                   gtk_menu_tracker_item_role_get_type             (void) G_GNUC_CONST;
 
-G_GNUC_INTERNAL
 GtkMenuTrackerItem *    gtk_menu_tracker_item_new                       (GtkActionObservable *observable,
                                                                          GMenuModel          *model,
                                                                          gint                 item_index,
                                                                          const gchar         *action_namespace,
                                                                          gboolean             is_separator);
 
-G_GNUC_INTERNAL
 GtkActionObservable *   gtk_menu_tracker_item_get_observable            (GtkMenuTrackerItem *self);
 
-G_GNUC_INTERNAL
 gboolean                gtk_menu_tracker_item_get_is_separator          (GtkMenuTrackerItem *self);
 
-G_GNUC_INTERNAL
 const gchar *           gtk_menu_tracker_item_get_label                 (GtkMenuTrackerItem *self);
 
-G_GNUC_INTERNAL
 GIcon *                 gtk_menu_tracker_item_get_icon                  (GtkMenuTrackerItem *self);
 
-G_GNUC_INTERNAL
 gboolean                gtk_menu_tracker_item_get_sensitive             (GtkMenuTrackerItem *self);
 
-G_GNUC_INTERNAL
 gboolean                gtk_menu_tracker_item_get_visible               (GtkMenuTrackerItem *self);
 
-G_GNUC_INTERNAL
 GtkMenuTrackerItemRole  gtk_menu_tracker_item_get_role                  (GtkMenuTrackerItem *self);
 
-G_GNUC_INTERNAL
 gboolean                gtk_menu_tracker_item_get_toggled               (GtkMenuTrackerItem *self);
 
-G_GNUC_INTERNAL
 const gchar *           gtk_menu_tracker_item_get_accel                 (GtkMenuTrackerItem *self);
 
-G_GNUC_INTERNAL
 GMenuModel *            gtk_menu_tracker_item_get_submenu               (GtkMenuTrackerItem *self);
 
-G_GNUC_INTERNAL
 gchar *                 gtk_menu_tracker_item_get_submenu_namespace     (GtkMenuTrackerItem *self);
 
-G_GNUC_INTERNAL
 gboolean                gtk_menu_tracker_item_get_should_request_show   (GtkMenuTrackerItem *self);
 
-G_GNUC_INTERNAL
 void                    gtk_menu_tracker_item_activated                 (GtkMenuTrackerItem *self);
 
-G_GNUC_INTERNAL
 void                    gtk_menu_tracker_item_request_submenu_shown     (GtkMenuTrackerItem *self,
                                                                          gboolean            shown);
 

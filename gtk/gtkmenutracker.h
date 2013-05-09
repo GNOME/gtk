@@ -34,7 +34,6 @@ typedef void         (* GtkMenuTrackerRemoveFunc)       (gint                   
                                                          gpointer                  user_data);
 
 
-G_GNUC_INTERNAL
 GtkMenuTracker *        gtk_menu_tracker_new            (GtkActionObservable      *observer,
                                                          GMenuModel               *model,
                                                          gboolean                  with_separators,
@@ -43,7 +42,6 @@ GtkMenuTracker *        gtk_menu_tracker_new            (GtkActionObservable    
                                                          GtkMenuTrackerRemoveFunc  remove_func,
                                                          gpointer                  user_data);
 
-G_GNUC_INTERNAL
 void                    gtk_menu_tracker_free           (GtkMenuTracker           *tracker);
 
 #endif /* __GTK_MENU_TRACKER_H__ */
