@@ -255,6 +255,11 @@ AC_ARG_ENABLE(rebuilds,
               [AS_HELP_STRING([--disable-rebuilds],
                               [disable all source autogeneration rules])],,
               [enable_rebuilds=yes])
+AC_ARG_ENABLE(installed_tests,
+              AS_HELP_STRING([--enable-installed-tests],
+                             [Install test programs (default: no)]),,
+              [enable_installed_tests=no])
+AM_CONDITIONAL(BUILDOPT_INSTALL_TESTS, test x$enable_installed_tests = xyes)
 
 AC_ARG_ENABLE(gtk2-dependency,
               [AS_HELP_STRING([--enable-gtk2-dependency],

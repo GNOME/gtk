@@ -30,7 +30,7 @@ EXTRA_DIST += \
 	border-image-repeat.sh \
 	$(NULL)
 
-EXTRA_DIST += \
+testdata = \
 	background-area.css \
 	background-area.ref.ui \
 	background-area.ui \
@@ -279,4 +279,25 @@ EXTRA_DIST += \
 	window-default-size.ui \
 	$(NULL)
 
+if BUILDOPT_INSTALL_TESTS
+insttestdir=$(pkglibexecdir)/installed-tests
+insttest_PROGRAMS = gtk-reftest
+
+reftestdir = $(insttestdir)/reftests
+reftest_DATA = $(testdata)
+
+substitutions = \
+	-e s,@pkglibexecdir\@,$(pkglibexecdir),g \
+	$(NULL)
+
+reftests.test: reftests.test.in Makefile
+	$(AM_V_GEN) sed $(substitutions) $< > $@.tmp && mv $@.tmp $@
+
+EXTRA_DIST += \
+	reftests.test.in
+
+testmetadir = $(datadir)/installed-tests/$(PACKAGE)
+testmeta_DATA = reftests.test
+endif
+ 
 -include $(top_srcdir)/git.mk

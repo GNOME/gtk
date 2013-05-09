@@ -1,0 +1,3 @@
+[Test]
+Exec=/bin/sh -c "@pkglibexecdir@/installed-tests/gtk-reftest -k --verbose --output $(pwd) --directory @pkglibexecdir@/installed-tests/reftests"
+Type=session
