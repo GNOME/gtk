@@ -5006,12 +5006,9 @@ void
 gtk_widget_queue_draw_region (GtkWidget            *widget,
                               const cairo_region_t *region)
 {
-  GtkWidgetPrivate *priv;
   GtkWidget *w;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  priv = widget->priv;
 
   if (!gtk_widget_get_realized (widget))
     return;
