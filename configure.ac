@@ -542,9 +542,6 @@ AM_CONDITIONAL(DISABLE_EXPLICIT_DEPS, test $enable_explicit_deps = no)
 
 AC_PATH_PROGS(PERL, perl5 perl)
 
-# We would like indent, but don't require it.
-AC_CHECK_PROG(INDENT, indent, indent)
-
 REBUILD=\#
 if test "x$enable_rebuilds" = "xyes" && \
      test -n "$PERL" && \
