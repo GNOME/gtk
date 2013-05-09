@@ -34,9 +34,8 @@ typedef struct _GtkMenuTrackerItem GtkMenuTrackerItem;
 
 typedef enum  {
   GTK_MENU_TRACKER_ITEM_ROLE_NORMAL,
-  GTK_MENU_TRACKER_ITEM_ROLE_TOGGLE,
+  GTK_MENU_TRACKER_ITEM_ROLE_CHECK,
   GTK_MENU_TRACKER_ITEM_ROLE_RADIO,
-  GTK_MENU_TRACKER_ITEM_ROLE_SEPARATOR
 } GtkMenuTrackerItemRole;
 
 G_GNUC_INTERNAL
@@ -54,6 +53,9 @@ GtkMenuTrackerItem *    gtk_menu_tracker_item_new                       (GAction
 
 G_GNUC_INTERNAL
 GActionObservable *     gtk_menu_tracker_item_get_observable            (GtkMenuTrackerItem *self);
+
+G_GNUC_INTERNAL
+gboolean                gtk_menu_tracker_item_get_is_separator          (GtkMenuTrackerItem *self);
 
 G_GNUC_INTERNAL
 const gchar *           gtk_menu_tracker_item_get_label                 (GtkMenuTrackerItem *self);

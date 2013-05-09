@@ -10,6 +10,7 @@ struct _GtkMenuTrackerItem
   gchar *action_namespace;
   GMenuItem *item;
   GtkMenuTrackerItemRole role : 4;
+  guint is_separator : 1;
   guint can_activate : 1;
   guint sensitive : 1;
   guint toggled : 1;
@@ -17,6 +18,7 @@ struct _GtkMenuTrackerItem
 
 enum {
   PROP_0,
+  PROP_IS_SEPARATOR,
   PROP_LABEL,
   PROP_ICON,
   PROP_SENSITIVE,
@@ -44,9 +46,8 @@ gtk_menu_tracker_item_role_get_type (void)
     {
       static const GEnumValue values[] = {
         { GTK_MENU_TRACKER_ITEM_ROLE_NORMAL, "GTK_MENU_TRACKER_ITEM_ROLE_NORMAL", "normal" },
-        { GTK_MENU_TRACKER_ITEM_ROLE_TOGGLE, "GTK_MENU_TRACKER_ITEM_ROLE_TOGGLE", "toggle" },
+        { GTK_MENU_TRACKER_ITEM_ROLE_CHECK, "GTK_MENU_TRACKER_ITEM_ROLE_CHECK", "check" },
         { GTK_MENU_TRACKER_ITEM_ROLE_RADIO, "GTK_MENU_TRACKER_ITEM_ROLE_RADIO", "radio" },
-        { GTK_MENU_TRACKER_ITEM_ROLE_SEPARATOR, "GTK_MENU_TRACKER_ITEM_ROLE_SEPARATOR", "separator" },
         { 0, NULL, NULL }
       };
       GType type;
@@ -69,6 +70,9 @@ gtk_menu_tracker_item_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_IS_SEPARATOR:
+      g_value_set_boolean (value, gtk_menu_tracker_item_get_is_separator (self));
+      break;
     case PROP_LABEL:
       g_value_set_string (value, gtk_menu_tracker_item_get_label (self));
       break;
@@ -128,6 +132,8 @@ gtk_menu_tracker_item_class_init (GtkMenuTrackerItemClass *class)
   class->get_property = gtk_menu_tracker_item_get_property;
   class->finalize = gtk_menu_tracker_item_finalize;
 
+  gtk_menu_tracker_item_pspecs[PROP_IS_SEPARATOR] =
+    g_param_spec_boolean ("is-separator", "", "", FALSE, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
   gtk_menu_tracker_item_pspecs[PROP_LABEL] =
     g_param_spec_string ("label", "", "", NULL, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
   gtk_menu_tracker_item_pspecs[PROP_ICON] =
@@ -187,7 +193,7 @@ gtk_menu_tracker_item_action_added (GActionObserver    *observer,
   else if (state != NULL && g_variant_is_of_type (state, G_VARIANT_TYPE_BOOLEAN))
     {
       self->toggled = g_variant_get_boolean (state);
-      self->role = GTK_MENU_TRACKER_ITEM_ROLE_TOGGLE;
+      self->role = GTK_MENU_TRACKER_ITEM_ROLE_CHECK;
     }
 
   g_object_freeze_notify (G_OBJECT (self));
@@ -317,6 +323,7 @@ gtk_menu_tracker_item_new (GActionObservable *observable,
   self->item = g_menu_item_new_from_model (model, item_index);
   self->action_namespace = g_strdup (action_namespace);
   self->observable = g_object_ref (observable);
+  self->is_separator = is_separator;
 
   if (!is_separator && g_menu_item_get_attribute (self->item, "action", "&s", &action_name))
     {
@@ -352,10 +359,7 @@ gtk_menu_tracker_item_new (GActionObservable *observable,
         g_variant_unref (state);
     }
   else
-    {
-      self->role = is_separator ? GTK_MENU_TRACKER_ITEM_ROLE_SEPARATOR : GTK_MENU_TRACKER_ITEM_ROLE_NORMAL;
-      self->sensitive = TRUE;
-    }
+    self->sensitive = TRUE;
 
   return self;
 }
@@ -364,6 +368,12 @@ GActionObservable *
 gtk_menu_tracker_item_get_observable (GtkMenuTrackerItem *self)
 {
   return self->observable;
+}
+
+gboolean
+gtk_menu_tracker_item_get_is_separator (GtkMenuTrackerItem *self)
+{
+  return self->is_separator;
 }
 
 const gchar *

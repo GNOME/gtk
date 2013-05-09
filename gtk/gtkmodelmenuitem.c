@@ -109,7 +109,7 @@ gtk_model_menu_item_set_action_role (GtkModelMenuItem       *item,
       a11y_role = ATK_ROLE_MENU_ITEM;
       break;
 
-    case GTK_MENU_TRACKER_ITEM_ROLE_TOGGLE:
+    case GTK_MENU_TRACKER_ITEM_ROLE_CHECK:
       a11y_role = ATK_ROLE_CHECK_MENU_ITEM;
       break;
 

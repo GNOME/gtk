@@ -2089,7 +2089,7 @@ gtk_menu_shell_tracker_insert_func (GtkMenuTrackerItem *item,
   GtkMenuShell *menu_shell = user_data;
   GtkWidget *widget;
 
-  if (gtk_menu_tracker_item_get_role (item) == GTK_MENU_TRACKER_ITEM_ROLE_SEPARATOR)
+  if (gtk_menu_tracker_item_get_is_separator (item))
     widget = gtk_separator_menu_item_new ();
   else
     widget = gtk_model_menu_item_new ();
