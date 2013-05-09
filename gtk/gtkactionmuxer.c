@@ -26,7 +26,7 @@
 
 #include <string.h>
 
-/*
+/**
  * SECTION:gactionmuxer
  * @short_description: Aggregate and monitor several action groups
  *
@@ -602,7 +602,7 @@ gtk_action_muxer_class_init (GObjectClass *class)
   g_object_class_install_properties (class, NUM_PROPERTIES, properties);
 }
 
-/*
+/**
  * gtk_action_muxer_insert:
  * @muxer: a #GtkActionMuxer
  * @prefix: the prefix string for the action group
@@ -656,7 +656,7 @@ gtk_action_muxer_insert (GtkActionMuxer *muxer,
                                             G_CALLBACK (gtk_action_muxer_group_action_state_changed), group);
 }
 
-/*
+/**
  * gtk_action_muxer_remove:
  * @muxer: a #GtkActionMuxer
  * @prefix: the prefix of the action group to remove
@@ -690,7 +690,7 @@ gtk_action_muxer_remove (GtkActionMuxer *muxer,
     }
 }
 
-/*
+/**
  * gtk_action_muxer_new:
  *
  * Creates a new #GtkActionMuxer.
@@ -701,10 +701,11 @@ gtk_action_muxer_new (void)
   return g_object_new (GTK_TYPE_ACTION_MUXER, NULL);
 }
 
-/* gtk_action_muxer_get_parent:
+/**
+ * gtk_action_muxer_get_parent:
  * @muxer: a #GtkActionMuxer
  *
- * Returns: (transfer-none): the parent of @muxer, or NULL.
+ * Returns: (transfer none): the parent of @muxer, or NULL.
  */
 GtkActionMuxer *
 gtk_action_muxer_get_parent (GtkActionMuxer *muxer)
@@ -714,7 +715,8 @@ gtk_action_muxer_get_parent (GtkActionMuxer *muxer)
   return muxer->parent;
 }
 
-/* gtk_action_muxer_set_parent:
+/**
+ * gtk_action_muxer_set_parent:
  * @muxer: a #GtkActionMuxer
  * @parent: (allow-none): the new parent #GtkActionMuxer
  *
