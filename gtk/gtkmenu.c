@@ -1683,29 +1683,6 @@ gtk_menu_popup_for_device (GtkMenu             *menu,
    */
   gtk_menu_position (menu, TRUE);
 
-  /* Compute the size of the toplevel and realize it so we
-   * can scroll correctly.
-   */
-  if (!gtk_widget_get_realized (GTK_WIDGET (menu)))
-  {
-    GtkRequisition tmp_request;
-    GtkAllocation tmp_allocation = { 0, };
-
-    /* Instead of trusting the menu position function to queue a
-     * resize when the menu goes out of bounds, invalidate the cached
-     * size here.
-     */
-    gtk_widget_queue_resize (GTK_WIDGET (menu));
-    gtk_widget_get_preferred_size (priv->toplevel, &tmp_request, NULL);
-
-    tmp_allocation.width = tmp_request.width;
-    tmp_allocation.height = tmp_request.height;
-
-    gtk_widget_size_allocate (priv->toplevel, &tmp_allocation);
-
-    gtk_widget_realize (priv->toplevel);
-  }
-
   gtk_menu_scroll_to (menu, priv->scroll_offset);
 
   /* if no item is selected, select the first one */
@@ -2581,7 +2558,7 @@ gtk_menu_realize (GtkWidget *widget)
   gtk_widget_get_allocation (widget, &allocation);
 
   attributes.x = 0;
-  attributes.y = 0;
+  attributes.y = - priv->scroll_offset;
   attributes.width = allocation.width + (2 * border_width) +
     padding.left + padding.right;
   attributes.height = priv->requested_height - (2 * border_width) +
