@@ -20,7 +20,7 @@
 #ifndef __GTK_MENU_TRACKER_ITEM_H__
 #define __GTK_MENU_TRACKER_ITEM_H__
 
-#include "gactionobservable.h"
+#include "gtkactionobservable.h"
 
 #define GTK_TYPE_MENU_TRACKER_ITEM                          (gtk_menu_tracker_item_get_type ())
 #define GTK_MENU_TRACKER_ITEM(inst)                         (G_TYPE_CHECK_INSTANCE_CAST ((inst), \
@@ -45,14 +45,14 @@ G_GNUC_INTERNAL
 GType                   gtk_menu_tracker_item_role_get_type             (void) G_GNUC_CONST;
 
 G_GNUC_INTERNAL
-GtkMenuTrackerItem *    gtk_menu_tracker_item_new                       (GActionObservable *observable,
-                                                                         GMenuModel        *model,
-                                                                         gint               item_index,
-                                                                         const gchar       *action_namespace,
-                                                                         gboolean           is_separator);
+GtkMenuTrackerItem *    gtk_menu_tracker_item_new                       (GtkActionObservable *observable,
+                                                                         GMenuModel          *model,
+                                                                         gint                 item_index,
+                                                                         const gchar         *action_namespace,
+                                                                         gboolean             is_separator);
 
 G_GNUC_INTERNAL
-GActionObservable *     gtk_menu_tracker_item_get_observable            (GtkMenuTrackerItem *self);
+GtkActionObservable *   gtk_menu_tracker_item_get_observable            (GtkMenuTrackerItem *self);
 
 G_GNUC_INTERNAL
 gboolean                gtk_menu_tracker_item_get_is_separator          (GtkMenuTrackerItem *self);

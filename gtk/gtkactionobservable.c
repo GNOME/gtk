@@ -19,9 +19,9 @@
 
 #include "config.h"
 
-#include "gactionobservable.h"
+#include "gtkactionobservable.h"
 
-G_DEFINE_INTERFACE (GActionObservable, g_action_observable, G_TYPE_OBJECT)
+G_DEFINE_INTERFACE (GtkActionObservable, gtk_action_observable, G_TYPE_OBJECT)
 
 /*
  * SECTION:gactionobserable
@@ -30,35 +30,35 @@ G_DEFINE_INTERFACE (GActionObservable, g_action_observable, G_TYPE_OBJECT)
  */
 
 void
-g_action_observable_default_init (GActionObservableInterface *iface)
+gtk_action_observable_default_init (GtkActionObservableInterface *iface)
 {
 }
 
 /*
- * g_action_observable_register_observer:
- * @observable: a #GActionObservable
+ * gtk_action_observable_register_observer:
+ * @observable: a #GtkActionObservable
  * @action_name: the name of the action
- * @observer: the #GActionObserver to which the events will be reported
+ * @observer: the #GtkActionObserver to which the events will be reported
  *
  * Registers @observer as being interested in changes to @action_name on
  * @observable.
  */
 void
-g_action_observable_register_observer (GActionObservable *observable,
-                                       const gchar       *action_name,
-                                       GActionObserver   *observer)
+gtk_action_observable_register_observer (GtkActionObservable *observable,
+                                         const gchar         *action_name,
+                                         GtkActionObserver   *observer)
 {
-  g_return_if_fail (G_IS_ACTION_OBSERVABLE (observable));
+  g_return_if_fail (GTK_IS_ACTION_OBSERVABLE (observable));
 
-  G_ACTION_OBSERVABLE_GET_IFACE (observable)
+  GTK_ACTION_OBSERVABLE_GET_IFACE (observable)
     ->register_observer (observable, action_name, observer);
 }
 
 /*
- * g_action_observable_unregister_observer:
- * @observable: a #GActionObservable
+ * gtk_action_observable_unregister_observer:
+ * @observable: a #GtkActionObservable
  * @action_name: the name of the action
- * @observer: the #GActionObserver to which the events will be reported
+ * @observer: the #GtkActionObserver to which the events will be reported
  *
  * Removes the registration of @observer as being interested in changes
  * to @action_name on @observable.
@@ -67,12 +67,12 @@ g_action_observable_register_observer (GActionObservable *observable,
  * unregistered an equal number of times.
  */
 void
-g_action_observable_unregister_observer (GActionObservable *observable,
-                                         const gchar       *action_name,
-                                         GActionObserver   *observer)
+gtk_action_observable_unregister_observer (GtkActionObservable *observable,
+                                           const gchar         *action_name,
+                                           GtkActionObserver   *observer)
 {
-  g_return_if_fail (G_IS_ACTION_OBSERVABLE (observable));
+  g_return_if_fail (GTK_IS_ACTION_OBSERVABLE (observable));
 
-  G_ACTION_OBSERVABLE_GET_IFACE (observable)
+  GTK_ACTION_OBSERVABLE_GET_IFACE (observable)
     ->unregister_observer (observable, action_name, observer);
 }

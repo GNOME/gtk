@@ -18,7 +18,7 @@
  */
 
 #include "gtkactionhelper.h"
-#include "gactionobservable.h"
+#include "gtkactionobservable.h"
 
 #include "gtkwidget.h"
 #include "gtkwidgetprivate.h"
@@ -57,7 +57,7 @@ struct _GtkActionHelper
 
   GtkActionHelperGroup *group;
 
-  GActionMuxer *action_context;
+  GtkActionMuxer *action_context;
   gchar *action_name;
 
   GVariant *target;
@@ -81,10 +81,10 @@ enum
 
 static GParamSpec *gtk_action_helper_pspecs[N_PROPS];
 
-static void gtk_action_helper_observer_iface_init (GActionObserverInterface *iface);
+static void gtk_action_helper_observer_iface_init (GtkActionObserverInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkActionHelper, gtk_action_helper, G_TYPE_OBJECT,
-  G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_OBSERVER, gtk_action_helper_observer_iface_init))
+  G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTION_OBSERVER, gtk_action_helper_observer_iface_init))
 
 static void
 gtk_action_helper_report_change (GtkActionHelper *helper,
@@ -288,38 +288,38 @@ gtk_action_helper_finalize (GObject *object)
 }
 
 static void
-gtk_action_helper_observer_action_added (GActionObserver    *observer,
-                                         GActionObservable  *observable,
-                                         const gchar        *action_name,
-                                         const GVariantType *parameter_type,
-                                         gboolean            enabled,
-                                         GVariant           *state)
+gtk_action_helper_observer_action_added (GtkActionObserver   *observer,
+                                         GtkActionObservable *observable,
+                                         const gchar         *action_name,
+                                         const GVariantType  *parameter_type,
+                                         gboolean             enabled,
+                                         GVariant            *state)
 {
   gtk_action_helper_action_added (GTK_ACTION_HELPER (observer), enabled, parameter_type, state, TRUE);
 }
 
 static void
-gtk_action_helper_observer_action_enabled_changed (GActionObserver    *observer,
-                                                   GActionObservable  *observable,
-                                                   const gchar        *action_name,
-                                                   gboolean            enabled)
+gtk_action_helper_observer_action_enabled_changed (GtkActionObserver   *observer,
+                                                   GtkActionObservable *observable,
+                                                   const gchar         *action_name,
+                                                   gboolean             enabled)
 {
   gtk_action_helper_action_enabled_changed (GTK_ACTION_HELPER (observer), enabled);
 }
 
 static void
-gtk_action_helper_observer_action_state_changed (GActionObserver    *observer,
-                                                 GActionObservable  *observable,
-                                                 const gchar        *action_name,
-                                                 GVariant           *state)
+gtk_action_helper_observer_action_state_changed (GtkActionObserver   *observer,
+                                                 GtkActionObservable *observable,
+                                                 const gchar         *action_name,
+                                                 GVariant            *state)
 {
   gtk_action_helper_action_state_changed (GTK_ACTION_HELPER (observer), state);
 }
 
 static void
-gtk_action_helper_observer_action_removed (GActionObserver    *observer,
-                                           GActionObservable  *observable,
-                                           const gchar        *action_name)
+gtk_action_helper_observer_action_removed (GtkActionObserver   *observer,
+                                           GtkActionObservable *observable,
+                                           const gchar         *action_name)
 {
   gtk_action_helper_action_removed (GTK_ACTION_HELPER (observer));
 }
@@ -345,7 +345,7 @@ gtk_action_helper_class_init (GtkActionHelperClass *class)
 }
 
 static void
-gtk_action_helper_observer_iface_init (GActionObserverInterface *iface)
+gtk_action_helper_observer_iface_init (GtkActionObserverInterface *iface)
 {
   iface->action_added = gtk_action_helper_observer_action_added;
   iface->action_enabled_changed = gtk_action_helper_observer_action_enabled_changed;
@@ -401,7 +401,7 @@ gtk_action_helper_active_window_changed (GObject    *object,
                                          gpointer    user_data)
 {
   GtkActionHelper *helper = user_data;
-  GActionMuxer *parent;
+  GtkActionMuxer *parent;
 
   if (helper->widget)
     g_object_unref (helper->widget);
@@ -415,11 +415,11 @@ gtk_action_helper_active_window_changed (GObject    *object,
     }
   else
     {
-      parent = g_action_muxer_new ();
-      g_action_muxer_insert (parent, "app", G_ACTION_GROUP (helper->application));
+      parent = gtk_action_muxer_new ();
+      gtk_action_muxer_insert (parent, "app", G_ACTION_GROUP (helper->application));
     }
 
-  g_action_muxer_set_parent (helper->action_context, parent);
+  gtk_action_muxer_set_parent (helper->action_context, parent);
   g_object_unref (parent);
 }
 
@@ -433,7 +433,7 @@ gtk_action_helper_new_with_application (GtkApplication *application)
   helper = g_object_new (GTK_TYPE_ACTION_HELPER, NULL);
   helper->application = g_object_ref (application);
 
-  helper->action_context = g_action_muxer_new ();
+  helper->action_context = gtk_action_muxer_new ();
   g_signal_connect (application, "notify::active-window", G_CALLBACK (gtk_action_helper_active_window_changed), helper);
   gtk_action_helper_active_window_changed (NULL, NULL, helper);
 
@@ -455,17 +455,17 @@ gtk_action_helper_set_action_name (GtkActionHelper *helper,
 
   if (helper->action_name)
     {
-      g_action_observable_unregister_observer (G_ACTION_OBSERVABLE (helper->action_context),
-                                               helper->action_name,
-                                               G_ACTION_OBSERVER (helper));
+      gtk_action_observable_unregister_observer (GTK_ACTION_OBSERVABLE (helper->action_context),
+                                                 helper->action_name,
+                                                 GTK_ACTION_OBSERVER (helper));
       g_free (helper->action_name);
     }
 
   helper->action_name = g_strdup (action_name);
 
-  g_action_observable_register_observer (G_ACTION_OBSERVABLE (helper->action_context),
-                                         helper->action_name,
-                                         G_ACTION_OBSERVER (helper));
+  gtk_action_observable_register_observer (GTK_ACTION_OBSERVABLE (helper->action_context),
+                                           helper->action_name,
+                                           GTK_ACTION_OBSERVER (helper));
 
   /* Start by recording the current state of our properties so we know
    * what notify signals we will need to send.

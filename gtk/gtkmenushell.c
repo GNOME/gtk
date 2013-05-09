@@ -2120,7 +2120,7 @@ gtk_menu_shell_tracker_insert_func (GtkMenuTrackerItem *item,
 
       if (submenu)
         {
-          GActionObservable *observable;
+          GtkActionObservable *observable;
           GtkWidget *subwidget;
           GtkMenuShell *subshell;
 
@@ -2219,7 +2219,7 @@ gtk_menu_shell_bind_model (GtkMenuShell *menu_shell,
                            const gchar  *action_namespace,
                            gboolean      with_separators)
 {
-  GActionMuxer *muxer;
+  GtkActionMuxer *muxer;
 
   g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
   g_return_if_fail (model == NULL || G_IS_MENU_MODEL (model));
@@ -2232,7 +2232,7 @@ gtk_menu_shell_bind_model (GtkMenuShell *menu_shell,
     gtk_container_remove (GTK_CONTAINER (menu_shell), menu_shell->priv->children->data);
 
   if (model)
-    menu_shell->priv->tracker = gtk_menu_tracker_new (G_ACTION_OBSERVABLE (muxer),
+    menu_shell->priv->tracker = gtk_menu_tracker_new (GTK_ACTION_OBSERVABLE (muxer),
                                                       model, with_separators, action_namespace,
                                                       gtk_menu_shell_tracker_insert_func,
                                                       gtk_menu_shell_tracker_remove_func,

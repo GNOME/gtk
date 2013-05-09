@@ -6,7 +6,7 @@ struct _GtkMenuTrackerItem
 {
   GObject parent_instance;
 
-  GActionObservable *observable;
+  GtkActionObservable *observable;
   gchar *action_namespace;
   GMenuItem *item;
   GtkMenuTrackerItemRole role : 4;
@@ -33,9 +33,9 @@ enum {
 
 static GParamSpec *gtk_menu_tracker_item_pspecs[N_PROPS];
 
-static void gtk_menu_tracker_item_init_observer_iface (GActionObserverInterface *iface);
+static void gtk_menu_tracker_item_init_observer_iface (GtkActionObserverInterface *iface);
 G_DEFINE_TYPE_WITH_CODE (GtkMenuTrackerItem, gtk_menu_tracker_item, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_OBSERVER, gtk_menu_tracker_item_init_observer_iface))
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTION_OBSERVER, gtk_menu_tracker_item_init_observer_iface))
 
 GType
 gtk_menu_tracker_item_role_get_type (void)
@@ -159,12 +159,12 @@ gtk_menu_tracker_item_class_init (GtkMenuTrackerItemClass *class)
 }
 
 static void
-gtk_menu_tracker_item_action_added (GActionObserver    *observer,
-                                    GActionObservable  *observable,
-                                    const gchar        *action_name,
-                                    const GVariantType *parameter_type,
-                                    gboolean            enabled,
-                                    GVariant           *state)
+gtk_menu_tracker_item_action_added (GtkActionObserver   *observer,
+                                    GtkActionObservable *observable,
+                                    const gchar         *action_name,
+                                    const GVariantType  *parameter_type,
+                                    gboolean             enabled,
+                                    GVariant            *state)
 {
   GtkMenuTrackerItem *self = GTK_MENU_TRACKER_ITEM (observer);
   GVariant *action_target;
@@ -214,10 +214,10 @@ gtk_menu_tracker_item_action_added (GActionObserver    *observer,
 }
 
 static void
-gtk_menu_tracker_item_action_enabled_changed (GActionObserver   *observer,
-                                              GActionObservable *observable,
-                                              const gchar       *action_name,
-                                              gboolean           enabled)
+gtk_menu_tracker_item_action_enabled_changed (GtkActionObserver   *observer,
+                                              GtkActionObservable *observable,
+                                              const gchar         *action_name,
+                                              gboolean             enabled)
 {
   GtkMenuTrackerItem *self = GTK_MENU_TRACKER_ITEM (observer);
 
@@ -233,10 +233,10 @@ gtk_menu_tracker_item_action_enabled_changed (GActionObserver   *observer,
 }
 
 static void
-gtk_menu_tracker_item_action_state_changed (GActionObserver   *observer,
-                                            GActionObservable *observable,
-                                            const gchar       *action_name,
-                                            GVariant          *state)
+gtk_menu_tracker_item_action_state_changed (GtkActionObserver   *observer,
+                                            GtkActionObservable *observable,
+                                            const gchar         *action_name,
+                                            GVariant            *state)
 {
   GtkMenuTrackerItem *self = GTK_MENU_TRACKER_ITEM (observer);
   GVariant *action_target;
@@ -265,9 +265,9 @@ gtk_menu_tracker_item_action_state_changed (GActionObserver   *observer,
 }
 
 static void
-gtk_menu_tracker_item_action_removed (GActionObserver   *observer,
-                                      GActionObservable *observable,
-                                      const gchar       *action_name)
+gtk_menu_tracker_item_action_removed (GtkActionObserver   *observer,
+                                      GtkActionObservable *observable,
+                                      const gchar         *action_name)
 {
   GtkMenuTrackerItem *self = GTK_MENU_TRACKER_ITEM (observer);
 
@@ -298,7 +298,7 @@ gtk_menu_tracker_item_action_removed (GActionObserver   *observer,
 }
 
 static void
-gtk_menu_tracker_item_init_observer_iface (GActionObserverInterface *iface)
+gtk_menu_tracker_item_init_observer_iface (GtkActionObserverInterface *iface)
 {
   iface->action_added = gtk_menu_tracker_item_action_added;
   iface->action_enabled_changed = gtk_menu_tracker_item_action_enabled_changed;
@@ -307,16 +307,16 @@ gtk_menu_tracker_item_init_observer_iface (GActionObserverInterface *iface)
 }
 
 GtkMenuTrackerItem *
-gtk_menu_tracker_item_new (GActionObservable *observable,
-                           GMenuModel        *model,
-                           gint               item_index,
-                           const gchar       *action_namespace,
-                           gboolean           is_separator)
+gtk_menu_tracker_item_new (GtkActionObservable *observable,
+                           GMenuModel          *model,
+                           gint                 item_index,
+                           const gchar         *action_namespace,
+                           gboolean             is_separator)
 {
   GtkMenuTrackerItem *self;
   const gchar *action_name;
 
-  g_return_val_if_fail (G_IS_ACTION_OBSERVABLE (observable), NULL);
+  g_return_val_if_fail (GTK_IS_ACTION_OBSERVABLE (observable), NULL);
   g_return_val_if_fail (G_IS_MENU_MODEL (model), NULL);
 
   self = g_object_new (GTK_TYPE_MENU_TRACKER_ITEM, NULL);
@@ -340,20 +340,21 @@ gtk_menu_tracker_item_new (GActionObservable *observable,
           gchar *full_action;
 
           full_action = g_strjoin (".", action_namespace, action_name, NULL);
-          g_action_observable_register_observer (self->observable, full_action, G_ACTION_OBSERVER (self));
+          gtk_action_observable_register_observer (self->observable, full_action, GTK_ACTION_OBSERVER (self));
           found = g_action_group_query_action (group, full_action, &enabled, &parameter_type, NULL, NULL, &state);
           g_free (full_action);
         }
       else
         {
-          g_action_observable_register_observer (self->observable, action_name, G_ACTION_OBSERVER (self));
+          gtk_action_observable_register_observer (self->observable, action_name, GTK_ACTION_OBSERVER (self));
           found = g_action_group_query_action (group, action_name, &enabled, &parameter_type, NULL, NULL, &state);
         }
 
       if (found)
-        gtk_menu_tracker_item_action_added (G_ACTION_OBSERVER (self), observable, NULL, parameter_type, enabled, state);
+        gtk_menu_tracker_item_action_added (GTK_ACTION_OBSERVER (self), observable, NULL,
+                                            parameter_type, enabled, state);
       else
-        gtk_menu_tracker_item_action_removed (G_ACTION_OBSERVER (self), observable, NULL);
+        gtk_menu_tracker_item_action_removed (GTK_ACTION_OBSERVER (self), observable, NULL);
 
       if (state)
         g_variant_unref (state);
@@ -364,7 +365,7 @@ gtk_menu_tracker_item_new (GActionObservable *observable,
   return self;
 }
 
-GActionObservable *
+GtkActionObservable *
 gtk_menu_tracker_item_get_observable (GtkMenuTrackerItem *self)
 {
   return self->observable;

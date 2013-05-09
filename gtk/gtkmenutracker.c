@@ -27,7 +27,7 @@ typedef struct _GtkMenuTrackerSection GtkMenuTrackerSection;
 
 struct _GtkMenuTracker
 {
-  GActionObservable        *observable;
+  GtkActionObservable      *observable;
   GtkMenuTrackerInsertFunc  insert_func;
   GtkMenuTrackerRemoveFunc  remove_func;
   gpointer                  user_data;
@@ -411,7 +411,7 @@ gtk_menu_tracker_section_new (GtkMenuTracker *tracker,
  * gtk_menu_tracker_free() is called.
  */
 GtkMenuTracker *
-gtk_menu_tracker_new (GActionObservable        *observable,
+gtk_menu_tracker_new (GtkActionObservable      *observable,
                       GMenuModel               *model,
                       gboolean                  with_separators,
                       const gchar              *action_namespace,
