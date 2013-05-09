@@ -221,7 +221,8 @@ _gtk_bookmarks_manager_new (GtkBookmarksChangedFunc changed_func, gpointer chang
       /* Read the legacy one and write it to the new one */
       legacy_bookmarks_file = get_legacy_bookmarks_file ();
       manager->bookmarks = read_bookmarks (legacy_bookmarks_file);
-      save_bookmarks (bookmarks_file, manager->bookmarks);
+      if (manager->bookmarks)
+	save_bookmarks (bookmarks_file, manager->bookmarks);
 
       g_object_unref (legacy_bookmarks_file);
     }
