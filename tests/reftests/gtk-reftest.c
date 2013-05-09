@@ -33,10 +33,13 @@ typedef enum {
 #define GTK_STYLE_PROVIDER_PRIORITY_FORCE G_MAXUINT
 
 static char *arg_output_dir = NULL;
+static char *arg_base_dir = NULL;
 
 static const GOptionEntry test_args[] = {
   { "output",         'o', 0, G_OPTION_ARG_FILENAME, &arg_output_dir,
     "Directory to save image files to", "DIR" },
+  { "directory",        'd', 0, G_OPTION_ARG_FILENAME, &arg_base_dir,
+    "Directory to run tests from", "DIR" },
   { NULL }
 };
 
@@ -566,6 +569,8 @@ add_tests_for_files_in_directory (GFile *dir)
 int
 main (int argc, char **argv)
 {
+  const char *basedir;
+  
   /* I don't want to fight fuzzy scaling algorithms in GPUs,
    * so unles you explicitly set it to something else, we
    * will use Cairo's image surface.
@@ -575,16 +580,17 @@ main (int argc, char **argv)
   if (!parse_command_line (&argc, &argv))
     return 1;
 
+  if (arg_base_dir)
+    basedir = arg_base_dir;
+  else if (g_getenv ("srcdir"))
+    basedir = g_getenv ("srcdir");
+  else
+    basedir = ".";
+
   if (argc < 2)
     {
-      const char *basedir;
       GFile *dir;
 
-      if (g_getenv ("srcdir"))
-        basedir = g_getenv ("srcdir");
-      else
-        basedir = ".";
-        
       dir = g_file_new_for_path (basedir);
       
       add_tests_for_files_in_directory (dir);
@@ -604,6 +610,12 @@ main (int argc, char **argv)
           g_object_unref (file);
         }
     }
+
+  /* We need to ensure the process' current working directory
+   * is the same as the reftest data, because we're using the
+   * "file" property of GtkImage as a relative path in builder files.
+   */
+  chdir (basedir);
 
   return g_test_run ();
 }
