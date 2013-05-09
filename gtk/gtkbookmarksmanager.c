@@ -115,6 +115,7 @@ save_bookmarks (GFile  *bookmarks_file,
   GError *error = NULL;
   GString *contents;
   GSList *l;
+  GFile *parent = NULL;
 
   contents = g_string_new ("");
 
@@ -136,16 +137,28 @@ save_bookmarks (GFile  *bookmarks_file,
       g_free (uri);
     }
 
+  parent = g_file_get_parent (bookmarks_file);
+  if (!g_file_make_directory_with_parents (parent, NULL, &error))
+    {
+       if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_EXISTS))
+	 g_clear_error (&error);
+       else
+	 goto out;
+    }
   if (!g_file_replace_contents (bookmarks_file,
 				contents->str,
 				strlen (contents->str),
 				NULL, FALSE, 0, NULL,
 				NULL, &error))
+    goto out;
+
+ out:
+  if (error)
     {
       g_critical ("%s", error->message);
       g_error_free (error);
     }
-
+  g_clear_object (&parent);
   g_string_free (contents, TRUE);
 }
 
