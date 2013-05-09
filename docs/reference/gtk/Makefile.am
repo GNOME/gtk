@@ -21,9 +21,9 @@ CFILE_GLOB=$(top_srcdir)/gtk/*.c
 # Header files to ignore when scanning
 IGNORE_HFILES=				\
 	fnmatch.h			\
-	gactionmuxer.h			\
-	gactionobserver.h		\
-	gactionobservable.h		\
+	gtkactionmuxer.h		\
+	gtkactionobserver.h		\
+	gtkactionobservable.h		\
 	gtk9slice.h			\
 	gtkanimationdescription.h	\
 	gtkdebug.h			\
