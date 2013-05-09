@@ -24,7 +24,7 @@
 G_DEFINE_INTERFACE (GtkActionObserver, gtk_action_observer, G_TYPE_OBJECT)
 
 /**
- * SECTION:gactionobserver
+ * SECTION:gtkactionobserver
  * @short_description: an interface implemented by objects that are
  *                     interested in monitoring actions for changes
  *
