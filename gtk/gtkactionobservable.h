@@ -20,7 +20,7 @@
 #ifndef __GTK_ACTION_OBSERVABLE_H__
 #define __GTK_ACTION_OBSERVABLE_H__
 
-#include <gtk/gtkactionobserver.h>
+#include "gtkactionobserver.h"
 
 G_BEGIN_DECLS
 
