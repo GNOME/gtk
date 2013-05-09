@@ -498,17 +498,6 @@ test_ui_file (GFile *file)
   remove_extra_css (provider);
 }
 
-static void
-add_test_for_file (GFile *file)
-{
-  g_test_add_vtable (g_file_get_path (file),
-                     0,
-                     g_object_ref (file),
-                     NULL,
-                     (GTestFixtureFunc) test_ui_file,
-                     (GTestFixtureFunc) g_object_unref);
-}
-
 static int
 compare_files (gconstpointer a, gconstpointer b)
 {
@@ -529,14 +518,27 @@ compare_files (gconstpointer a, gconstpointer b)
 }
 
 static void
-add_tests_for_files_in_directory (GFile *dir)
+add_test_for_file (GFile *file)
 {
   GFileEnumerator *enumerator;
   GFileInfo *info;
   GList *files;
   GError *error = NULL;
 
-  enumerator = g_file_enumerate_children (dir, G_FILE_ATTRIBUTE_STANDARD_NAME, 0, NULL, &error);
+
+  if (g_file_query_file_type (file, 0, NULL) != G_FILE_TYPE_DIRECTORY)
+    {
+      g_test_add_vtable (g_file_get_path (file),
+                         0,
+                         g_object_ref (file),
+                         NULL,
+                         (GTestFixtureFunc) test_ui_file,
+                         (GTestFixtureFunc) g_object_unref);
+      return;
+    }
+
+
+  enumerator = g_file_enumerate_children (file, G_FILE_ATTRIBUTE_STANDARD_NAME, 0, NULL, &error);
   g_assert_no_error (error);
   files = NULL;
 
@@ -553,7 +555,7 @@ add_tests_for_files_in_directory (GFile *dir)
           continue;
         }
 
-      files = g_list_prepend (files, g_file_get_child (dir, filename));
+      files = g_list_prepend (files, g_file_get_child (file, filename));
 
       g_object_unref (info);
     }
@@ -593,7 +595,7 @@ main (int argc, char **argv)
 
       dir = g_file_new_for_path (basedir);
       
-      add_tests_for_files_in_directory (dir);
+      add_test_for_file (dir);
 
       g_object_unref (dir);
     }
