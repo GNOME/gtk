@@ -365,6 +365,11 @@ gtk_menu_tracker_item_new (GtkActionObservable *observable,
   return self;
 }
 
+/**
+ * gtk_menu_tracker_item_get_observable:
+ *
+ * Returns: (transfer none):
+ */
 GtkActionObservable *
 gtk_menu_tracker_item_get_observable (GtkMenuTrackerItem *self)
 {
@@ -387,6 +392,11 @@ gtk_menu_tracker_item_get_label (GtkMenuTrackerItem *self)
   return label;
 }
 
+/**
+ * gtk_menu_tracker_item_get_icon:
+ *
+ * Returns: (transfer full):
+ */
 GIcon *
 gtk_menu_tracker_item_get_icon (GtkMenuTrackerItem *self)
 {
@@ -438,6 +448,11 @@ gtk_menu_tracker_item_get_accel (GtkMenuTrackerItem *self)
   return accel;
 }
 
+/**
+ * gtk_menu_tracker_item_get_submenu:
+ *
+ * Returns: (transfer full):
+ */
 GMenuModel *
 gtk_menu_tracker_item_get_submenu (GtkMenuTrackerItem *self)
 {
