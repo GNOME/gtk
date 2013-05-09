@@ -51,13 +51,13 @@ MAINTAINERCLEANFILES = $(BUILT_SOURCES) $(stamp_files)
 
 typebuiltins.h: stamp-typebuiltins.h
 	@true
-stamp-typebuiltins.h: @REBUILD@ $(headers_with_enums) typebuiltins.h.template
+stamp-typebuiltins.h: $(headers_with_enums) typebuiltins.h.template
 	( cd $(srcdir) && $(GLIB_MKENUMS) --template typebuiltins.h.template \
 		$(headers_with_enums) ) >> xgen-gtbh \
 	&& (cmp -s xgen-gtbh typebuiltins.h || cp xgen-gtbh typebuiltins.h ) \
 	&& rm -f xgen-gtbh \
 	&& echo timestamp > $(@F)
-typebuiltins.c: @REBUILD@ $(headers_with_enums) typebuiltins.c.template
+typebuiltins.c: $(headers_with_enums) typebuiltins.c.template
 	( cd $(srcdir) && $(GLIB_MKENUMS) --template typebuiltins.c.template \
 		$(headers_with_enums) ) > xgen-gtbc \
 	&& cp xgen-gtbc typebuiltins.c  \

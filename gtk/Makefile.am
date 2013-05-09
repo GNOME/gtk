@@ -1147,12 +1147,12 @@ BUILT_SOURCES = $(gtk_built_sources) stamp-icons
 # ../configure will supress all autogeneration rules.
 gtkmarshalers.h: stamp-gtkmarshalers.h
 	@true
-stamp-gtkmarshalers.h: @REBUILD@ gtkmarshalers.list
+stamp-gtkmarshalers.h: gtkmarshalers.list
 	$(AM_V_GEN) $(GLIB_GENMARSHAL) --prefix=_gtk_marshal $(srcdir)/gtkmarshalers.list --header --valist-marshallers >> xgen-gmlh \
 	&& (cmp -s xgen-gmlh gtkmarshalers.h || cp xgen-gmlh gtkmarshalers.h) \
 	&& rm -f xgen-gmlh \
 	&& echo timestamp > $(@F)
-gtkmarshalers.c: @REBUILD@ gtkmarshalers.list
+gtkmarshalers.c: gtkmarshalers.list
 	$(AM_V_GEN) (echo "#include \"gtkmarshalers.h\""; \
 	 $(GLIB_GENMARSHAL) --prefix=_gtk_marshal $(srcdir)/gtkmarshalers.list --body  --valist-marshallers) >> xgen-gmlc \
 	&& cp xgen-gmlc gtkmarshalers.c \
@@ -1160,13 +1160,13 @@ gtkmarshalers.c: @REBUILD@ gtkmarshalers.list
 
 gtktypebuiltins.h: stamp-gtktypebuiltins.h
 	@true
-stamp-gtktypebuiltins.h: @REBUILD@ $(gtk_public_h_sources) $(deprecated_h_sources) gtktypebuiltins.h.template
+stamp-gtktypebuiltins.h: $(gtk_public_h_sources) $(deprecated_h_sources) gtktypebuiltins.h.template
 	$(AM_V_GEN) ( cd $(srcdir) && $(GLIB_MKENUMS) --template gtktypebuiltins.h.template \
 		$(gtk_public_h_sources) $(deprecated_h_sources) ) > xgen-gtbh \
 	&& (cmp -s xgen-gtbh gtktypebuiltins.h || cp xgen-gtbh gtktypebuiltins.h ) \
 	&& rm -f xgen-gtbh \
 	&& echo timestamp > $(@F)
-gtktypebuiltins.c: @REBUILD@ $(gtk_public_h_sources) $(deprecated_h_sources) gtktypebuiltins.c.template
+gtktypebuiltins.c: $(gtk_public_h_sources) $(deprecated_h_sources) gtktypebuiltins.c.template
 	$(AM_V_GEN) ( cd $(srcdir) && $(GLIB_MKENUMS) --template gtktypebuiltins.c.template \
 		$(gtk_public_h_sources) $(deprecated_h_sources) ) > xgen-gtbc \
 	&& cp xgen-gtbc gtktypebuiltins.c  \
@@ -1181,20 +1181,20 @@ gtkresources.c: gtk.gresource.xml gtk-default.css gtk-win32.css gtk-win32-xp.css
 
 gtkprivatetypebuiltins.h: stamp-gtkprivatetypebuiltins.h
 	@true
-stamp-gtkprivatetypebuiltins.h: @REBUILD@ $(gtk_private_type_h_sources) gtkprivatetypebuiltins.h.template
+stamp-gtkprivatetypebuiltins.h: $(gtk_private_type_h_sources) gtkprivatetypebuiltins.h.template
 	$(AM_V_GEN) ( cd $(srcdir) && $(GLIB_MKENUMS) --template gtkprivatetypebuiltins.h.template \
 		$(gtk_private_type_h_sources) ) > xgen-gptbh \
 	&& (cmp -s xgen-gptbh gtkprivatetypebuiltins.h || cp xgen-gptbh gtkprivatetypebuiltins.h ) \
 	&& rm -f xgen-gptbh \
 	&& echo timestamp > $(@F)
-gtkprivatetypebuiltins.c: @REBUILD@ $(gtk_private_type_h_sources)  gtkprivatetypebuiltins.c.template
+gtkprivatetypebuiltins.c: $(gtk_private_type_h_sources)  gtkprivatetypebuiltins.c.template
 	$(AM_V_GEN) ( cd $(srcdir) && $(GLIB_MKENUMS) --template gtkprivatetypebuiltins.c.template \
 		$(gtk_private_type_h_sources) ) > xgen-gptbc \
 	&& cp xgen-gptbc gtkprivatetypebuiltins.c  \
 	&& rm -f xgen-gptbc
 
 
-gtktypefuncs.c: @REBUILD@ stamp-gtktypebuiltins.h stamp-gtkprivatetypebuiltins.h $(top_srcdir)/gtk/*.h $(top_srcdir)/gtk/deprecated/*.h $(top_srcdir)/gdk/*.h Makefile
+gtktypefuncs.c: stamp-gtktypebuiltins.h stamp-gtkprivatetypebuiltins.h $(top_srcdir)/gtk/*.h $(top_srcdir)/gtk/deprecated/*.h $(top_srcdir)/gdk/*.h Makefile
 	$(AM_V_GEN) echo '#include <gtk/gtkx.h>' > xgen-gtfsrc.c && \
 	  echo 'G_GNUC_BEGIN_IGNORE_DEPRECATIONS' > xgen-gtf && \
 	  ${CPP} $(DEFS) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) xgen-gtfsrc.c | \
@@ -1715,7 +1715,7 @@ gtk_update_icon_cache_program = ./gtk-update-icon-cache$(EXEEXT)
 endif
 endif
 
-gtkbuiltincache.h: @REBUILD@ stamp-icons
+gtkbuiltincache.h: stamp-icons
 if !USE_EXTERNAL_ICON_CACHE
 if CROSS_COMPILING
 	$(AM_V_at) $(MAKE) $(AM_MAKEFLAGS) -C native/

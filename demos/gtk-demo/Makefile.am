@@ -86,7 +86,7 @@ gsettings_SCHEMAS = \
 
 @GSETTINGS_RULES@
 
-demos.h: @REBUILD@ $(demos) geninclude.pl
+demos.h: $(demos) geninclude.pl
 	 $(AM_V_GEN) (here=`pwd` ; cd $(srcdir) && $(PERL) $$here/geninclude.pl $(demos)) > demos.h
 
 gtk3_demo_SOURCES = 		\

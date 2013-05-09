@@ -315,13 +315,13 @@ BUILT_SOURCES = \
 
 gdkenumtypes.h: stamp-gdkenumtypes.h
 	@true
-stamp-gdkenumtypes.h: @REBUILD@ $(gdk_public_h_sources) gdkenumtypes.h.template
+stamp-gdkenumtypes.h: $(gdk_public_h_sources) gdkenumtypes.h.template
 	$(AM_V_GEN) ( cd $(srcdir) && $(GLIB_MKENUMS) --template gdkenumtypes.h.template \
 		$(gdk_public_h_sources) ) >> xgen-geth \
 	&& (cmp -s xgen-geth gdkenumtypes.h || cp xgen-geth gdkenumtypes.h ) \
 	&& rm -f xgen-geth \
 	&& echo timestamp > $(@F)
-gdkenumtypes.c: @REBUILD@ $(gdk_public_h_sources) gdkenumtypes.c.template
+gdkenumtypes.c: $(gdk_public_h_sources) gdkenumtypes.c.template
 	$(AM_V_GEN) ( cd $(srcdir) && $(GLIB_MKENUMS) --template gdkenumtypes.c.template \
 		$(gdk_public_h_sources) ) > xgen-getc \
 	&& cp xgen-getc gdkenumtypes.c  \
@@ -330,11 +330,11 @@ gdkenumtypes.c: @REBUILD@ $(gdk_public_h_sources) gdkenumtypes.c.template
 #
 # Marshaller generation
 #
-gdkmarshalers.h: @REBUILD@ gdkmarshalers.list
+gdkmarshalers.h: gdkmarshalers.list
 	$(AM_V_GEN) $(GLIB_GENMARSHAL) --prefix=_gdk_marshal $(srcdir)/gdkmarshalers.list --header > gdkmarshalers-h.tmp \
 	&& mv gdkmarshalers-h.tmp gdkmarshalers.h \
 	|| ( rm -f gdkmarshalers-h.tmp && exit 1)
-gdkmarshalers.c: @REBUILD@ gdkmarshalers.list
+gdkmarshalers.c: gdkmarshalers.list
 	$(AM_V_GEN) (echo "#include \"gdkmarshalers.h\""; \
 	 $(GLIB_GENMARSHAL) --prefix=_gdk_marshal $(srcdir)/gdkmarshalers.list --body) > gdkmarshalers-c.tmp	\
 	&& mv gdkmarshalers-c.tmp gdkmarshalers.c \
