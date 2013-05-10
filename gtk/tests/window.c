@@ -55,16 +55,19 @@ test_default_size (void)
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_container_add (GTK_CONTAINER (window), box);
 
+  /* check that default size is unset initially */
   gtk_window_get_default_size (GTK_WINDOW (window), &w, &h);
   g_assert_cmpint (w, ==, -1);
   g_assert_cmpint (h, ==, -1);
 
+  /* check that setting default size before realize works */
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 300);
 
   gtk_window_get_default_size (GTK_WINDOW (window), &w, &h);
   g_assert_cmpint (w, ==, 300);
   g_assert_cmpint (h, ==, 300);
 
+  /* check that the window size is also reported accordingly */
   gtk_window_get_size (GTK_WINDOW (window), &w, &h);
   g_assert_cmpint (w, ==, 300);
   g_assert_cmpint (h, ==, 300);
@@ -75,6 +78,7 @@ test_default_size (void)
     g_timeout_add (200, stop_main, NULL);
   gtk_main ();
 
+  /* check that the window and its content actually gets the right size */
   gtk_window_get_size (GTK_WINDOW (window), &w, &h);
   g_assert_cmpint (w, ==, 300);
   g_assert_cmpint (h, ==, 300);
@@ -84,6 +88,34 @@ test_default_size (void)
 
   g_assert_cmpint (gtk_widget_get_allocated_width (box), ==, 300);
   g_assert_cmpint (gtk_widget_get_allocated_height (box), ==, 300);
+
+  /* check that setting default size after the fact does not change
+   * window size
+   */
+  gtk_window_set_default_size (GTK_WINDOW (window), 100, 600);
+  gtk_window_get_default_size (GTK_WINDOW (window), &w, &h);
+  g_assert_cmpint (w, ==, 100);
+  g_assert_cmpint (h, ==, 600);
+
+  if (!interactive)
+    g_timeout_add (200, stop_main, NULL);
+  gtk_main ();
+
+  gtk_window_get_size (GTK_WINDOW (window), &w, &h);
+  g_assert_cmpint (w, ==, 300);
+  g_assert_cmpint (h, ==, 300);
+
+  /* check that even hide/show does not pull in the new default */
+  gtk_widget_hide (window);
+  gtk_widget_show (window);
+
+  if (!interactive)
+    g_timeout_add (200, stop_main, NULL);
+  gtk_main ();
+
+  gtk_window_get_size (GTK_WINDOW (window), &w, &h);
+  g_assert_cmpint (w, ==, 300);
+  g_assert_cmpint (h, ==, 300);
 
   gtk_widget_destroy (window);
 }
@@ -103,6 +135,9 @@ test_resize (void)
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_container_add (GTK_CONTAINER (window), box);
 
+  /* test that resize before show overrides default size */
+  gtk_window_set_default_size (GTK_WINDOW (window), 500, 500);
+
   gtk_window_resize (GTK_WINDOW (window), 1, 1);
 
   gtk_window_get_size (GTK_WINDOW (window), &w, &h);
@@ -117,10 +152,15 @@ test_resize (void)
     g_timeout_add (200, stop_main, NULL);
   gtk_main ();
 
+  /* test that resize before show works */
   gtk_window_get_size (GTK_WINDOW (window), &w, &h);
   g_assert_cmpint (w, ==, 400);
   g_assert_cmpint (h, ==, 200);
 
+  /* test that resize after show works, both
+   * for making things bigger and for making things
+   * smaller
+   */
   gtk_window_resize (GTK_WINDOW (window), 200, 400);
 
   if (!interactive)
@@ -140,6 +180,7 @@ test_resize_popup (void)
   GtkWidget *window;
   gint x, y, w, h;
 
+  /* testcase for the dnd window */
   window = gtk_window_new (GTK_WINDOW_POPUP);
   gtk_window_set_screen (GTK_WINDOW (window), gdk_screen_get_default ());
   gtk_window_resize (GTK_WINDOW (window), 1, 1);
@@ -174,6 +215,8 @@ test_show_hide (void)
   gint w, h, w1, h1;
 
   g_test_bug ("696882");
+
+  /* test that hide/show does not affect the size */
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
@@ -213,6 +256,10 @@ test_show_hide2 (void)
 
   g_test_bug ("696882");
 
+  /* test that hide/show does not affect the size,
+   * even when get_position/move is called
+   */
+
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
   gtk_widget_show (window);
@@ -251,6 +298,11 @@ test_show_hide3 (void)
   gint x, y, w, h, w1, h1;
 
   g_test_bug ("696882");
+
+  /* test that hide/show does not affect the size,
+   * even when get_position/move is called and
+   * a default size is set
+   */
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (window), 200, 200);
@@ -300,10 +352,10 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/window/default-size", test_default_size);
   g_test_add_func ("/window/resize", test_resize);
+  g_test_add_func ("/window/resize-popup", test_resize_popup);
   g_test_add_func ("/window/show-hide", test_show_hide);
   g_test_add_func ("/window/show-hide2", test_show_hide2);
   g_test_add_func ("/window/show-hide3", test_show_hide3);
-  g_test_add_func ("/window/resize-popup", test_resize_popup);
 
   return g_test_run ();
 }
