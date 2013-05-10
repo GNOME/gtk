@@ -549,6 +549,7 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
 
   _gtk_icon_helper_draw (icon_helper,
                          context, cr,
+                         gtk_widget_get_scale_factor (widget),
                          pix_rect.x, pix_rect.y);
   g_object_unref (icon_helper);
 

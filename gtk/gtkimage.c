@@ -1477,8 +1477,9 @@ gtk_image_draw (GtkWidget *widget,
     }
   else
     {
-      _gtk_icon_helper_draw (priv->icon_helper, 
+      _gtk_icon_helper_draw (priv->icon_helper,
                              context, cr,
+                             gtk_widget_get_scale_factor (widget),
                              x, y);
     }
 

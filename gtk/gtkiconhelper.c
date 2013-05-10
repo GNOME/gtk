@@ -267,18 +267,6 @@ ensure_pixbuf_for_icon_name_or_gicon (GtkIconHelper *self,
 }
 
 static void
-ensure_pixbuf_for_icon_set (GtkIconHelper *self,
-                            GtkStyleContext *context,
-                            GtkIconSet *icon_set)
-{
-  if (!check_invalidate_pixbuf (self, context))
-    return;
-
-  self->priv->rendered_pixbuf = 
-    gtk_icon_set_render_icon_pixbuf (icon_set, context, self->priv->icon_size);
-}
-
-static void
 ensure_pixbuf_at_size (GtkIconHelper   *self,
                        GtkStyleContext *context)
 {
@@ -307,12 +295,26 @@ ensure_pixbuf_at_size (GtkIconHelper   *self,
     self->priv->rendered_pixbuf = g_object_ref (self->priv->orig_pixbuf);
 }
 
+GtkIconSet *
+_gtk_icon_helper_ensure_icon_set (GtkIconHelper *self,
+                                  GtkStyleContext *context)
+{
+  switch (self->priv->storage_type)
+    {
+    case GTK_IMAGE_ICON_SET:
+      return self->priv->icon_set;
+    case GTK_IMAGE_STOCK:
+      return gtk_style_context_lookup_icon_set (context, self->priv->stock_id);
+    default:
+      return NULL;
+    }
+}
+
 GdkPixbuf *
 _gtk_icon_helper_ensure_pixbuf (GtkIconHelper *self,
                                 GtkStyleContext *context)
 {
   GdkPixbuf *pixbuf = NULL;
-  GtkIconSet *icon_set;
 
   switch (self->priv->storage_type)
     {
@@ -321,19 +323,6 @@ _gtk_icon_helper_ensure_pixbuf (GtkIconHelper *self,
         ensure_pixbuf_at_size (self, context);
       else
         pixbuf = g_object_ref (self->priv->orig_pixbuf);
-      break;
-
-    case GTK_IMAGE_STOCK:
-      icon_set = gtk_style_context_lookup_icon_set (context, self->priv->stock_id);
-      if (icon_set != NULL)
-	ensure_pixbuf_for_icon_set (self, context, icon_set);
-      else
-	pixbuf = NULL;
-      break;
-
-    case GTK_IMAGE_ICON_SET:
-      icon_set = self->priv->icon_set;
-      ensure_pixbuf_for_icon_set (self, context, icon_set);
       break;
 
     case GTK_IMAGE_ICON_NAME:
@@ -581,17 +570,33 @@ void
 _gtk_icon_helper_draw (GtkIconHelper *self,
                        GtkStyleContext *context,
                        cairo_t *cr,
+                       gdouble scale,
                        gdouble x,
                        gdouble y)
 {
+  GtkIconSet *icon_set;
   GdkPixbuf *pixbuf;
 
-  pixbuf = _gtk_icon_helper_ensure_pixbuf (self, context);
+  icon_set = _gtk_icon_helper_ensure_icon_set (self, context);
 
-  if (pixbuf != NULL)
+  if (icon_set)
     {
-      gtk_render_icon (context, cr, pixbuf, x, y);
-      g_object_unref (pixbuf);
+      cairo_save (cr);
+      gtk_cairo_set_source_icon_set (cr, context,
+                                     icon_set, self->priv->icon_size,
+                                     scale, x, y);
+      cairo_paint (cr);
+      cairo_restore (cr);
+    }
+  else
+    {
+      pixbuf = _gtk_icon_helper_ensure_pixbuf (self, context);
+
+      if (pixbuf != NULL)
+        {
+          gtk_render_icon (context, cr, pixbuf, x, y);
+          g_object_unref (pixbuf);
+        }
     }
 }
 

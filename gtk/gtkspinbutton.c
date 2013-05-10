@@ -1020,6 +1020,7 @@ gtk_spin_button_panel_draw (GtkSpinButton   *spin_button,
   y = floor ((height - icon_height) / 2.0);
 
   _gtk_icon_helper_draw (icon_helper, context, cr,
+                         gtk_widget_get_scale_factor (widget),
                          x, y);
   cairo_restore (cr);
 
