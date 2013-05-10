@@ -179,10 +179,21 @@ GtkIconInfo * gtk_icon_theme_lookup_icon           (GtkIconTheme                
 						    const gchar                 *icon_name,
 						    gint                         size,
 						    GtkIconLookupFlags           flags);
+GtkIconInfo * gtk_icon_theme_lookup_icon_for_scale (GtkIconTheme                *icon_theme,
+                                                    const gchar                 *icon_name,
+                                                    gint                         size,
+                                                    gdouble                      scale,
+                                                    GtkIconLookupFlags           flags);
+
 GDK_AVAILABLE_IN_ALL
 GtkIconInfo * gtk_icon_theme_choose_icon           (GtkIconTheme                *icon_theme,
 						    const gchar                 *icon_names[],
 						    gint                         size,
+						    GtkIconLookupFlags           flags);
+GtkIconInfo * gtk_icon_theme_choose_icon_for_scale (GtkIconTheme                *icon_theme,
+						    const gchar                 *icon_names[],
+						    gint                         size,
+                                                    gdouble                      scale,
 						    GtkIconLookupFlags           flags);
 GDK_AVAILABLE_IN_ALL
 GdkPixbuf *   gtk_icon_theme_load_icon             (GtkIconTheme                *icon_theme,
@@ -190,6 +201,12 @@ GdkPixbuf *   gtk_icon_theme_load_icon             (GtkIconTheme                
 						    gint                         size,
 						    GtkIconLookupFlags           flags,
 						    GError                     **error);
+GdkPixbuf *   gtk_icon_theme_load_icon_for_scale   (GtkIconTheme                *icon_theme,
+                                                    const gchar                 *icon_name,
+                                                    gint                         size,
+                                                    gdouble                      scale,
+                                                    GtkIconLookupFlags           flags,
+                                                    GError                     **error);
 
 GDK_AVAILABLE_IN_ALL
 GtkIconInfo * gtk_icon_theme_lookup_by_gicon       (GtkIconTheme                *icon_theme,
