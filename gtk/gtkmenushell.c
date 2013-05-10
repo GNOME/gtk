@@ -2088,7 +2088,6 @@ gtk_menu_shell_tracker_insert_func (GtkMenuTrackerItem *item,
 {
   GtkMenuShell *menu_shell = user_data;
   GtkWidget *widget;
-  GMenuModel *submenu;
 
   if (gtk_menu_tracker_item_get_is_separator (item))
     {
@@ -2099,30 +2098,24 @@ gtk_menu_shell_tracker_insert_func (GtkMenuTrackerItem *item,
        */
       g_object_bind_property (item, "label", widget, "label", G_BINDING_SYNC_CREATE);
     }
-  else if ((submenu = gtk_menu_tracker_item_get_submenu (item)))
+  else if (gtk_menu_tracker_item_get_has_submenu (item))
     {
-      GtkActionObservable *observable;
-      GtkWidget *subwidget;
-      GtkMenuShell *subshell;
+      GtkMenuShell *submenu;
 
       widget = gtk_model_menu_item_new ();
       g_object_bind_property (item, "label", widget, "text", G_BINDING_SYNC_CREATE);
 
-      /* reuse the observer to reduce the amount of GActionMuxer traffic */
-      observable = gtk_menu_tracker_item_get_observable (item);
-      subwidget = gtk_menu_new ();
-      subshell = GTK_MENU_SHELL (subwidget);
+      submenu = GTK_MENU_SHELL (gtk_menu_new ());
 
       /* We recurse directly here: we could use an idle instead to
        * prevent arbitrary recursion depth.  We could also do it
        * lazy...
        */
-      subshell->priv->tracker = gtk_menu_tracker_new (observable, submenu, TRUE,
-                                                      gtk_menu_tracker_item_get_submenu_namespace (item),
-                                                      gtk_menu_shell_tracker_insert_func,
-                                                      gtk_menu_shell_tracker_remove_func,
-                                                      subwidget);
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (widget), subwidget);
+      submenu->priv->tracker = gtk_menu_tracker_new_for_item_submenu (item,
+                                                                      gtk_menu_shell_tracker_insert_func,
+                                                                      gtk_menu_shell_tracker_remove_func,
+                                                                      submenu);
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (widget), GTK_WIDGET (submenu));
 
       if (gtk_menu_tracker_item_get_should_request_show (item))
         {
@@ -2136,8 +2129,8 @@ gtk_menu_shell_tracker_insert_func (GtkMenuTrackerItem *item,
            *
            * Note: 'item' is already kept alive from above.
            */
-          g_signal_connect (subwidget, "show", G_CALLBACK (gtk_menu_shell_submenu_shown), item);
-          g_signal_connect (subwidget, "hide", G_CALLBACK (gtk_menu_shell_submenu_hidden), item);
+          g_signal_connect (submenu, "show", G_CALLBACK (gtk_menu_shell_submenu_shown), item);
+          g_signal_connect (submenu, "hide", G_CALLBACK (gtk_menu_shell_submenu_hidden), item);
         }
     }
   else

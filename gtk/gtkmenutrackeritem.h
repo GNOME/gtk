@@ -52,6 +52,8 @@ GtkActionObservable *   gtk_menu_tracker_item_get_observable            (GtkMenu
 
 gboolean                gtk_menu_tracker_item_get_is_separator          (GtkMenuTrackerItem *self);
 
+gboolean                gtk_menu_tracker_item_get_has_submenu           (GtkMenuTrackerItem *self);
+
 const gchar *           gtk_menu_tracker_item_get_label                 (GtkMenuTrackerItem *self);
 
 GIcon *                 gtk_menu_tracker_item_get_icon                  (GtkMenuTrackerItem *self);

@@ -19,6 +19,7 @@ struct _GtkMenuTrackerItem
 enum {
   PROP_0,
   PROP_IS_SEPARATOR,
+  PROP_HAS_SUBMENU,
   PROP_LABEL,
   PROP_ICON,
   PROP_SENSITIVE,
@@ -72,6 +73,9 @@ gtk_menu_tracker_item_get_property (GObject    *object,
     {
     case PROP_IS_SEPARATOR:
       g_value_set_boolean (value, gtk_menu_tracker_item_get_is_separator (self));
+      break;
+    case PROP_HAS_SUBMENU:
+      g_value_set_boolean (value, gtk_menu_tracker_item_get_has_submenu (self));
       break;
     case PROP_LABEL:
       g_value_set_string (value, gtk_menu_tracker_item_get_label (self));
@@ -134,6 +138,8 @@ gtk_menu_tracker_item_class_init (GtkMenuTrackerItemClass *class)
 
   gtk_menu_tracker_item_pspecs[PROP_IS_SEPARATOR] =
     g_param_spec_boolean ("is-separator", "", "", FALSE, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
+  gtk_menu_tracker_item_pspecs[PROP_HAS_SUBMENU] =
+    g_param_spec_boolean ("has-submenu", "", "", FALSE, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
   gtk_menu_tracker_item_pspecs[PROP_LABEL] =
     g_param_spec_string ("label", "", "", NULL, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
   gtk_menu_tracker_item_pspecs[PROP_ICON] =
@@ -380,6 +386,22 @@ gboolean
 gtk_menu_tracker_item_get_is_separator (GtkMenuTrackerItem *self)
 {
   return self->is_separator;
+}
+
+gboolean
+gtk_menu_tracker_item_get_has_submenu (GtkMenuTrackerItem *self)
+{
+  GMenuModel *link;
+
+  link = g_menu_item_get_link (self->item, G_MENU_LINK_SUBMENU);
+
+  if (link)
+    {
+      g_object_unref (link);
+      return TRUE;
+    }
+  else
+    return FALSE;
 }
 
 const gchar *

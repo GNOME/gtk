@@ -42,6 +42,11 @@ GtkMenuTracker *        gtk_menu_tracker_new                            (GtkActi
                                                                          GtkMenuTrackerRemoveFunc  remove_func,
                                                                          gpointer                  user_data);
 
+GtkMenuTracker *        gtk_menu_tracker_new_for_item_submenu           (GtkMenuTrackerItem       *item,
+                                                                         GtkMenuTrackerInsertFunc  insert_func,
+                                                                         GtkMenuTrackerRemoveFunc  remove_func,
+                                                                         gpointer                  user_data);
+
 void                    gtk_menu_tracker_free                           (GtkMenuTracker           *tracker);
 
 #endif /* __GTK_MENU_TRACKER_H__ */

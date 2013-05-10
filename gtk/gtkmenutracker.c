@@ -433,6 +433,19 @@ gtk_menu_tracker_new (GtkActionObservable      *observable,
   return tracker;
 }
 
+GtkMenuTracker *
+gtk_menu_tracker_new_for_item_submenu (GtkMenuTrackerItem       *item,
+                                       GtkMenuTrackerInsertFunc  insert_func,
+                                       GtkMenuTrackerRemoveFunc  remove_func,
+                                       gpointer                  user_data)
+{
+  return gtk_menu_tracker_new (gtk_menu_tracker_item_get_observable (item),
+                               gtk_menu_tracker_item_get_submenu (item),
+                               TRUE,
+                               gtk_menu_tracker_item_get_submenu_namespace (item),
+                               insert_func, remove_func, user_data);
+}
+
 /*< private >
  * gtk_menu_tracker_free:
  * @tracker: a #GtkMenuTracker
