@@ -193,12 +193,15 @@ void             gtk_icon_source_set_state_wildcarded     (GtkIconSource       *
 GDK_AVAILABLE_IN_ALL
 void             gtk_icon_source_set_size_wildcarded      (GtkIconSource       *source,
                                                            gboolean             setting);
+void             gtk_icon_source_set_scale_wildcarded     (GtkIconSource       *source,
+                                                           gboolean             setting);
 GDK_AVAILABLE_IN_ALL
 gboolean         gtk_icon_source_get_size_wildcarded      (const GtkIconSource *source);
 GDK_AVAILABLE_IN_ALL
 gboolean         gtk_icon_source_get_state_wildcarded     (const GtkIconSource *source);
 GDK_AVAILABLE_IN_ALL
 gboolean         gtk_icon_source_get_direction_wildcarded (const GtkIconSource *source);
+gboolean         gtk_icon_source_get_scale_wildcarded     (const GtkIconSource *source);
 GDK_AVAILABLE_IN_ALL
 void             gtk_icon_source_set_direction            (GtkIconSource       *source,
                                                            GtkTextDirection     direction);
@@ -208,13 +211,15 @@ void             gtk_icon_source_set_state                (GtkIconSource       *
 GDK_AVAILABLE_IN_ALL
 void             gtk_icon_source_set_size                 (GtkIconSource       *source,
                                                            GtkIconSize          size);
+void             gtk_icon_source_set_scale                (GtkIconSource       *source,
+                                                           gdouble              scale);
 GDK_AVAILABLE_IN_ALL
 GtkTextDirection gtk_icon_source_get_direction            (const GtkIconSource *source);
 GDK_AVAILABLE_IN_ALL
 GtkStateType     gtk_icon_source_get_state                (const GtkIconSource *source);
 GDK_AVAILABLE_IN_ALL
 GtkIconSize      gtk_icon_source_get_size                 (const GtkIconSource *source);
-
+gdouble          gtk_icon_source_get_scale                (const GtkIconSource *source);
 
 /* ignore this */
 void _gtk_icon_set_invalidate_caches (void);
