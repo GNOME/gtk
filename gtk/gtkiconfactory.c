@@ -3199,3 +3199,31 @@ gtk_icon_factory_buildable_custom_tag_end (GtkBuildable *buildable,
       gtk_icon_factory_add_default (icon_factory);
     }
 }
+
+void
+gtk_cairo_set_source_icon_set (cairo_t         *cr,
+                               GtkStyleContext *context,
+                               GtkIconSet      *icon_set,
+                               GtkIconSize      size,
+                               gdouble          scale,
+                               gdouble          icon_x,
+                               gdouble          icon_y)
+{
+  cairo_pattern_t *pattern;
+  cairo_matrix_t matrix;
+  GdkPixbuf *pixbuf;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (cr != NULL);
+  g_return_if_fail (icon_set != NULL);
+
+  pixbuf = gtk_icon_set_render_icon_pixbuf_scaled (icon_set, context, size, &scale);
+  gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
+
+  pattern = cairo_get_source (cr);
+  cairo_matrix_init_scale (&matrix, scale, scale);
+  cairo_matrix_translate (&matrix, -icon_x, -icon_y);
+  cairo_pattern_set_matrix (pattern, &matrix);
+
+  g_object_unref (pixbuf);
+}

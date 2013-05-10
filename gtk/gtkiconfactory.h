@@ -221,6 +221,15 @@ GDK_AVAILABLE_IN_ALL
 GtkIconSize      gtk_icon_source_get_size                 (const GtkIconSource *source);
 gdouble          gtk_icon_source_get_scale                (const GtkIconSource *source);
 
+/* Cairo helper */
+void             gtk_cairo_set_source_icon_set            (cairo_t             *cr,
+                                                           GtkStyleContext     *context,
+                                                           GtkIconSet          *icon_set,
+                                                           GtkIconSize          size,
+                                                           gdouble              scale,
+                                                           gdouble              icon_x,
+                                                           gdouble              icon_y);
+
 /* ignore this */
 void _gtk_icon_set_invalidate_caches (void);
 GList* _gtk_icon_factory_list_ids (void);
