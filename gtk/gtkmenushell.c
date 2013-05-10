@@ -2090,16 +2090,19 @@ gtk_menu_shell_tracker_insert_func (GtkMenuTrackerItem *item,
   GtkWidget *widget;
 
   if (gtk_menu_tracker_item_get_is_separator (item))
-    widget = gtk_separator_menu_item_new ();
+    {
+      widget = gtk_separator_menu_item_new ();
+
+      /* For separators, we bind to the "label" property in case there
+       * is a section heading.
+       */
+      g_object_bind_property (item, "label", widget, "label", G_BINDING_SYNC_CREATE);
+    }
   else
-    widget = gtk_model_menu_item_new ();
-
-  /* TODO: drop this when we have bindings that ref the source */
-  g_object_set_data_full (G_OBJECT (widget), "GtkMenuTrackerItem", g_object_ref (item), g_object_unref);
-
-  if (!GTK_IS_SEPARATOR_MENU_ITEM (widget))
     {
       GMenuModel *submenu;
+
+      widget = gtk_model_menu_item_new ();
 
       /* We bind to "text" instead of "label" because GtkModelMenuItem
        * uses this property (along with "icon") to control its child
@@ -2157,13 +2160,9 @@ gtk_menu_shell_tracker_insert_func (GtkMenuTrackerItem *item,
             }
         }
     }
-  else
-    {
-      /* For separators, we bind to the "label" property in case there
-       * is a section heading.
-       */
-      g_object_bind_property (item, "label", widget, "label", G_BINDING_SYNC_CREATE);
-    }
+
+  /* TODO: drop this when we have bindings that ref the source */
+  g_object_set_data_full (G_OBJECT (widget), "GtkMenuTrackerItem", g_object_ref (item), g_object_unref);
 
   gtk_menu_shell_insert (menu_shell, widget, position);
 }
