@@ -216,6 +216,7 @@ struct _GtkApplicationWindowPrivate
   GtkWidget *menubar;
   GtkAccelGroup *accels;
   GSList *accel_closures;
+  guint accel_map_changed_id;
 
   GMenu *app_menu_section;
   GMenu *menubar_section;
@@ -752,7 +753,12 @@ gtk_application_window_real_realize (GtkWidget *widget)
   gtk_application_window_update_shell_shows_app_menu (window, settings);
   gtk_application_window_update_shell_shows_menubar (window, settings);
   gtk_application_window_update_menubar (window);
+
+  /* Update the accelerators, and ensure we do again
+   * if the accel map changes */
   gtk_application_window_update_accels (window);
+  window->priv->accel_map_changed_id = g_signal_connect_swapped (gtk_accel_map_get (), "changed",
+								 G_CALLBACK (gtk_application_window_update_accels), window);
 
   GTK_WIDGET_CLASS (gtk_application_window_parent_class)
     ->realize (widget);
@@ -790,12 +796,15 @@ gtk_application_window_real_realize (GtkWidget *widget)
 static void
 gtk_application_window_real_unrealize (GtkWidget *widget)
 {
+  GtkApplicationWindow *window = GTK_APPLICATION_WINDOW (widget);
   GtkSettings *settings;
 
   settings = gtk_widget_get_settings (widget);
 
   g_signal_handlers_disconnect_by_func (settings, gtk_application_window_shell_shows_app_menu_changed, widget);
   g_signal_handlers_disconnect_by_func (settings, gtk_application_window_shell_shows_menubar_changed, widget);
+
+  g_signal_handler_disconnect (gtk_accel_map_get (), window->priv->accel_map_changed_id);
 
   GTK_WIDGET_CLASS (gtk_application_window_parent_class)
     ->unrealize (widget);
