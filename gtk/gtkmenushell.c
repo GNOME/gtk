@@ -2088,6 +2088,7 @@ gtk_menu_shell_tracker_insert_func (GtkMenuTrackerItem *item,
 {
   GtkMenuShell *menu_shell = user_data;
   GtkWidget *widget;
+  GMenuModel *submenu;
 
   if (gtk_menu_tracker_item_get_is_separator (item))
     {
@@ -2098,10 +2099,49 @@ gtk_menu_shell_tracker_insert_func (GtkMenuTrackerItem *item,
        */
       g_object_bind_property (item, "label", widget, "label", G_BINDING_SYNC_CREATE);
     }
+  else if ((submenu = gtk_menu_tracker_item_get_submenu (item)))
+    {
+      GtkActionObservable *observable;
+      GtkWidget *subwidget;
+      GtkMenuShell *subshell;
+
+      widget = gtk_model_menu_item_new ();
+      g_object_bind_property (item, "label", widget, "text", G_BINDING_SYNC_CREATE);
+
+      /* reuse the observer to reduce the amount of GActionMuxer traffic */
+      observable = gtk_menu_tracker_item_get_observable (item);
+      subwidget = gtk_menu_new ();
+      subshell = GTK_MENU_SHELL (subwidget);
+
+      /* We recurse directly here: we could use an idle instead to
+       * prevent arbitrary recursion depth.  We could also do it
+       * lazy...
+       */
+      subshell->priv->tracker = gtk_menu_tracker_new (observable, submenu, TRUE,
+                                                      gtk_menu_tracker_item_get_submenu_namespace (item),
+                                                      gtk_menu_shell_tracker_insert_func,
+                                                      gtk_menu_shell_tracker_remove_func,
+                                                      subwidget);
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (widget), subwidget);
+
+      if (gtk_menu_tracker_item_get_should_request_show (item))
+        {
+          /* We don't request show in the strictest sense of the
+           * word: we just notify when we are showing and don't
+           * bother waiting for the reply.
+           *
+           * This could be fixed one day, but it would be slightly
+           * complicated and would have a strange interaction with
+           * the submenu pop-up delay.
+           *
+           * Note: 'item' is already kept alive from above.
+           */
+          g_signal_connect (subwidget, "show", G_CALLBACK (gtk_menu_shell_submenu_shown), item);
+          g_signal_connect (subwidget, "hide", G_CALLBACK (gtk_menu_shell_submenu_hidden), item);
+        }
+    }
   else
     {
-      GMenuModel *submenu;
-
       widget = gtk_model_menu_item_new ();
 
       /* We bind to "text" instead of "label" because GtkModelMenuItem
@@ -2118,47 +2158,6 @@ gtk_menu_shell_tracker_insert_func (GtkMenuTrackerItem *item,
       g_object_bind_property (item, "accel", widget, "accel", G_BINDING_SYNC_CREATE);
 
       g_signal_connect (widget, "activate", G_CALLBACK (gtk_menu_shell_item_activate), item);
-
-      submenu = gtk_menu_tracker_item_get_submenu (item);
-
-      if (submenu)
-        {
-          GtkActionObservable *observable;
-          GtkWidget *subwidget;
-          GtkMenuShell *subshell;
-
-          /* reuse the observer to reduce the amount of GActionMuxer traffic */
-          observable = gtk_menu_tracker_item_get_observable (item);
-          subwidget = gtk_menu_new ();
-          subshell = GTK_MENU_SHELL (subwidget);
-
-          /* We recurse directly here: we could use an idle instead to
-           * prevent arbitrary recursion depth.  We could also do it
-           * lazy...
-           */
-          subshell->priv->tracker = gtk_menu_tracker_new (observable, submenu, TRUE,
-                                                          gtk_menu_tracker_item_get_submenu_namespace (item),
-                                                          gtk_menu_shell_tracker_insert_func,
-                                                          gtk_menu_shell_tracker_remove_func,
-                                                          subwidget);
-          gtk_menu_item_set_submenu (GTK_MENU_ITEM (widget), subwidget);
-
-          if (gtk_menu_tracker_item_get_should_request_show (item))
-            {
-              /* We don't request show in the strictest sense of the
-               * word: we just notify when we are showing and don't
-               * bother waiting for the reply.
-               *
-               * This could be fixed one day, but it would be slightly
-               * complicated and would have a strange interaction with
-               * the submenu pop-up delay.
-               *
-               * Note: 'item' is already kept alive from above.
-               */
-              g_signal_connect (subwidget, "show", G_CALLBACK (gtk_menu_shell_submenu_shown), item);
-              g_signal_connect (subwidget, "hide", G_CALLBACK (gtk_menu_shell_submenu_hidden), item);
-            }
-        }
     }
 
   /* TODO: drop this when we have bindings that ref the source */
