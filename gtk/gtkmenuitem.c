@@ -52,15 +52,28 @@
  * @See_also: #GtkBin, #GtkMenuShell
  *
  * The #GtkMenuItem widget and the derived widgets are the only valid
- * childs for menus. Their function is to correctly handle highlighting,
+ * children for menus. Their function is to correctly handle highlighting,
  * alignment, events and submenus.
  *
- * As it derives from #GtkBin it can hold any valid child widget, altough
- * only a few are really useful.
+ * As a GtkMenuItem derives from #GtkBin it can hold any valid child widget,
+ * although only a few are really useful.
+ *
+ * By default, a GtkMenuItem sets a #GtkAccelLabel as its child.
+ * GtkMenuItem has direct functions to set the label and its mnemonic.
+ * For more advanced label settings, you can fetch the child widget from the GtkBin.
+ *
+ * <example>
+ * <title>Setting markup and accelerator on a MenuItem</title>
+ * <programlisting><![CDATA[
+ * GtkWidget *child = gtk_bin_get_child (GTK_BIN (menu_item));
+ * gtk_label_set_markup (GTK_LABEL (child), "<i>new label</i> with <b>markup</b>");
+ * gtk_accel_label_set_accel (GTK_ACCEL_LABEL (child), GDK_KEY_1, 0);
+ * ]]></programlisting>
+ * </example>
  *
  * <refsect2 id="GtkMenuItem-BUILDER-UI">
  * <title>GtkMenuItem as GtkBuildable</title>
- * The GtkMenuItem implementation of the GtkBuildable interface
+ * The GtkMenuItem implementation of the #GtkBuildable interface
  * supports adding a submenu by specifying "submenu" as the "type"
  * attribute of a &lt;child&gt; element.
  * <example>
