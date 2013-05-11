@@ -338,11 +338,9 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   display_class->utf8_to_string_target = _gdk_quartz_display_utf8_to_string_target;
 
   ProcessSerialNumber psn = { 0, kCurrentProcess };
-  void (*_gtk_quartz_framework_init_ptr) (void);
 
   /* Make the current process a foreground application, i.e. an app
    * with a user interface, in case we're not running from a .app bundle
    */
   TransformProcessType (&psn, kProcessTransformToForegroundApplication);
-
 }
