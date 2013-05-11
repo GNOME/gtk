@@ -345,8 +345,4 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
    */
   TransformProcessType (&psn, kProcessTransformToForegroundApplication);
 
-  /* Initialize GTK+ framework if there is one. */
-  _gtk_quartz_framework_init_ptr = dlsym (RTLD_DEFAULT, "_gtk_quartz_framework_init");
-  if (_gtk_quartz_framework_init_ptr)
-    _gtk_quartz_framework_init_ptr ();
 }

@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include <dlfcn.h>
 #include <ApplicationServices/ApplicationServices.h>
 
 #include "gdkquartzdisplay.h"
