@@ -646,8 +646,8 @@ gtk_widget_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
 					    natural_baseline);
 }
 
-/**
- * gtk_widget_get_preferred_size_and_baseline:
+/*
+ * _gtk_widget_get_preferred_size_and_baseline:
  * @widget: a #GtkWidget instance
  * @minimum_size: (out) (allow-none): location for storing the minimum size, or %NULL
  * @natural_size: (out) (allow-none): location for storing the natural size, or %NULL
@@ -665,15 +665,13 @@ gtk_widget_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
  * widget will generally be a smaller size than the minimum height, since the required
  * height for the natural width is generally smaller than the required height for
  * the minimum width.</para></note>
- *
- * Since: 3.10
  */
 void
-gtk_widget_get_preferred_size_and_baseline (GtkWidget      *widget,
-					    GtkRequisition *minimum_size,
-					    GtkRequisition *natural_size,
-					    gint           *minimum_baseline,
-					    gint           *natural_baseline)
+_gtk_widget_get_preferred_size_and_baseline (GtkWidget      *widget,
+                                             GtkRequisition *minimum_size,
+                                             GtkRequisition *natural_size,
+                                             gint           *minimum_baseline,
+                                             gint           *natural_baseline)
 {
   gint min_width, nat_width;
   gint min_height, nat_height;
@@ -747,8 +745,8 @@ gtk_widget_get_preferred_size (GtkWidget      *widget,
                                GtkRequisition *minimum_size,
                                GtkRequisition *natural_size)
 {
-  gtk_widget_get_preferred_size_and_baseline (widget, minimum_size, natural_size,
-					      NULL, NULL);
+  _gtk_widget_get_preferred_size_and_baseline (widget, minimum_size, natural_size,
+                                               NULL, NULL);
 }
 
 static gint

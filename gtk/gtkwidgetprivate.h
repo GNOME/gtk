@@ -81,6 +81,11 @@ void _gtk_widget_get_preferred_size_for_size   (GtkWidget         *widget,
                                                 gint              *natural,
                                                 gint              *minimum_baseline,
                                                 gint              *natural_baseline);
+void _gtk_widget_get_preferred_size_and_baseline(GtkWidget        *widget,
+                                                GtkRequisition    *minimum_size,
+                                                GtkRequisition    *natural_size,
+                                                gint              *minimum_baseline,
+                                                gint              *natural_baseline);
 gboolean _gtk_widget_has_baseline_support (GtkWidget *widget);
 
 gboolean _gtk_widget_get_translation_to_window (GtkWidget      *widget,

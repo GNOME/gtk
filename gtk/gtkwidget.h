@@ -566,12 +566,6 @@ GDK_AVAILABLE_IN_ALL
 void                gtk_widget_get_preferred_size             (GtkWidget      *widget,
                                                                GtkRequisition *minimum_size,
                                                                GtkRequisition *natural_size);
-GDK_AVAILABLE_IN_3_10
-void                gtk_widget_get_preferred_size_and_baseline (GtkWidget      *widget,
-								GtkRequisition *minimum_size,
-								GtkRequisition *natural_size,
-								gint           *minimum_baseline,
-								gint           *natural_baseline);
 
 GDK_DEPRECATED_IN_3_0_FOR(gtk_widget_get_preferred_size)
 void       gtk_widget_get_child_requisition (GtkWidget         *widget,

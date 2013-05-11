@@ -56,6 +56,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtksizerequest.h"
+#include "gtkwidgetprivate.h"
 
 #include "gtkintl.h"
 
@@ -507,8 +508,8 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
       if (gtk_widget_get_visible (child))
         {
           nchildren += 1;
-          gtk_widget_get_preferred_size_and_baseline (child,
-						      &child_requisition, NULL, &child_baseline, NULL);
+          _gtk_widget_get_preferred_size_and_baseline (child,
+                                                       &child_requisition, NULL, &child_baseline, NULL);
 	  if (orientation == GTK_ORIENTATION_HORIZONTAL &&
 	      gtk_widget_get_valign_with_baseline (child) == GTK_ALIGN_BASELINE &&
 	      child_baseline != -1)
@@ -552,8 +553,8 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
           if (is_secondary)
             nsecondaries++;
 
-          gtk_widget_get_preferred_size_and_baseline (child,
-						      &child_requisition, NULL, &child_baseline, NULL);
+          _gtk_widget_get_preferred_size_and_baseline (child,
+                                                       &child_requisition, NULL, &child_baseline, NULL);
 
           if (homogeneous ||
               (!non_homogeneous && (child_requisition.width + ipad_w < avg_w * 1.5)))
