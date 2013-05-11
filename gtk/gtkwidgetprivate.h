@@ -67,13 +67,6 @@ void _gtk_widget_override_size_request (GtkWidget *widget,
 void _gtk_widget_restore_size_request  (GtkWidget *widget,
                                         int        old_width,
                                         int        old_height);
-void _gtk_widget_compute_size_for_orientation  (GtkWidget         *widget,
-                                                GtkOrientation     orientation,
-                                                gint               for_size,
-                                                gint              *minimum_size,
-                                                gint              *natural_size,
-						gint              *minimum_baseline,
-						gint              *natural_baseline);
 void _gtk_widget_get_preferred_size_for_size   (GtkWidget         *widget,
                                                 GtkOrientation     orientation,
                                                 gint               size,
