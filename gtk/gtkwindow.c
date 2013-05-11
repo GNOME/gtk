@@ -7897,6 +7897,20 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
       gtk_window_get_remembered_size (window, width, height);
     }
 
+  /* Override any size with gtk_window_resize() values */
+  if (info)
+    {
+      if (info->resize_width > 0)
+       *width = info->resize_width;
+      if (info->resize_height > 0)
+       *height = info->resize_height;
+
+      if (info->resize_is_geometry)
+       geometry_size_to_pixels (geometry, flags,
+                                info->resize_width > 0 ? width : NULL,
+                                info->resize_height > 0 ? height : NULL);
+    }
+
   /* Don't ever request zero width or height, it's not supported by
      gdk. The size allocation code will round it to 1 anyway but if
      we do it then the value returned from this function will is
