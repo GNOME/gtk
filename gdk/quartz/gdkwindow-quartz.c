@@ -368,7 +368,7 @@ static gboolean
 gdk_window_impl_quartz_begin_paint_region (GdkWindow       *window,
 					   const cairo_region_t *region)
 {
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->imp);
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
   cairo_region_t *clipped_and_offset_region;
   cairo_t *cr;
 
