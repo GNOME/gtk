@@ -163,6 +163,7 @@ struct _GtkWindowPrivate
    * and on unrealize (for size).
    */
   guint    need_default_position     : 1;
+  guint    need_default_size         : 1;
 
   guint    above_initially           : 1;
   guint    accept_focus              : 1;
@@ -1282,6 +1283,7 @@ gtk_window_init (GtkWindow *window)
   priv->resizable = TRUE;
   priv->configure_notify_received = FALSE;
   priv->position = GTK_WIN_POS_NONE;
+  priv->need_default_size = TRUE;
   priv->need_default_position = TRUE;
   priv->modal = FALSE;
   priv->gdk_type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
@@ -5399,6 +5401,7 @@ gtk_window_map (GtkWidget *widget)
     }
 
   /* No longer use the default settings */
+  priv->need_default_size = FALSE;
   priv->need_default_position = FALSE;
 
   if (priv->reset_type_hint)
@@ -5878,6 +5881,7 @@ gtk_window_unrealize (GtkWidget *widget)
    *
    * Default positioning is reset on unmap, instead of unrealize.
    */
+  priv->need_default_size = TRUE;
   info = gtk_window_get_geometry_info (window, FALSE);
   if (info)
     {
@@ -7849,6 +7853,7 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
                                            gint        *width,
                                            gint        *height)
 {
+  GtkWindowPrivate *priv = window->priv;
   GtkWindowGeometryInfo *info;
   int w, h;
 
@@ -7858,46 +7863,38 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
   
   info = gtk_window_get_geometry_info (window, FALSE);
 
-  gtk_window_guess_default_size (window, width, height);
+  if (priv->need_default_size)
+    {
+      gtk_window_guess_default_size (window, width, height);
+      gtk_window_get_remembered_size (window, &w, &h);
+      *width = MAX (*width, w);
+      *height = MAX (*height, h);
 
-  /* If window is empty so requests 0, default to random nonzero size */
-   if (*width == 0 && *height == 0)
-     {
-       *width = 200;
-       *height = 200;
-     }
+      /* If window is empty so requests 0, default to random nonzero size */
+      if (*width == 0 && *height == 0)
+        {
+          *width = 200;
+          *height = 200;
+        }
 
-   /* Override with default size */
-   if (info)
-     {
-       if (info->default_width > 0)
-         *width = info->default_width;
-       if (info->default_height > 0)
-         *height = info->default_height;
+      /* Override with default size */
+      if (info)
+        {
+          if (info->default_width > 0)
+            *width = info->default_width;
+          if (info->default_height > 0)
+            *height = info->default_height;
 
-       if (info->default_is_geometry)
-         geometry_size_to_pixels (geometry, flags,
+          if (info->default_is_geometry)
+            geometry_size_to_pixels (geometry, flags,
                                   info->default_width > 0 ? width : NULL,
                                   info->default_height > 0 ? height : NULL);
-     }
-
-  /* Override with last size of this window */
-  gtk_window_get_remembered_size (window, &w, &h);
-  *width = MAX (*width, w);
-  *height = MAX (*height, h);
-
-  /* Override any size with gtk_window_resize() values */
-  if (info)
+        }
+    }
+  else
     {
-      if (info->resize_width > 0)
-	*width = info->resize_width;
-      if (info->resize_height > 0)
-	*height = info->resize_height;
-
-      if (info->resize_is_geometry)
-	geometry_size_to_pixels (geometry, flags,
-				 info->resize_width > 0 ? width : NULL,
-				 info->resize_height > 0 ? height : NULL);
+      /* Default to keeping current size */
+      gtk_window_get_remembered_size (window, width, height);
     }
 
   /* Don't ever request zero width or height, it's not supported by
