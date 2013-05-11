@@ -684,6 +684,12 @@ AM_PATH_GLIB_2_0(glib_required_version, :,
 *** GLIB is always available from ftp://ftp.gtk.org/pub/gtk/.]),
   gobject gmodule-no-export)
 
+PKG_PROG_PKG_CONFIG_FOR_BUILD
+GLIB_CFLAGS_FOR_BUILD=`$PKG_CONFIG_FOR_BUILD --cflags glib-2.0 gobject-2.0 gmodule-no-export-2.0`
+GLIB_LIBS_FOR_BUILD=`$PKG_CONFIG_FOR_BUILD --libs glib-2.0 gobject-2.0 gmodule-no-export-2.0`
+AC_SUBST(GLIB_CFLAGS_FOR_BUILD)
+AC_SUBST(GLIB_LIBS_FOR_BUILD)
+
 dnl Check for bind_textdomain_codeset, including -lintl if GLib brings it in.
 dnl
 gtk_save_LIBS=$LIBS

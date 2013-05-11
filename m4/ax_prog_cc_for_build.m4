@@ -57,6 +57,7 @@ pushdef([CPP], CPP_FOR_BUILD)dnl
 pushdef([CFLAGS], CFLAGS_FOR_BUILD)dnl
 pushdef([CPPFLAGS], CPPFLAGS_FOR_BUILD)dnl
 pushdef([LDFLAGS], LDFLAGS_FOR_BUILD)dnl
+pushdef([LIBS], LIBS_FOR_BUILD)dnl
 pushdef([host], build)dnl
 pushdef([host_alias], build_alias)dnl
 pushdef([host_cpu], build_cpu)dnl
@@ -98,6 +99,7 @@ popdef([host_vendor])dnl
 popdef([host_cpu])dnl
 popdef([host_alias])dnl
 popdef([host])dnl
+popdef([LIBS])dnl
 popdef([LDFLAGS])dnl
 popdef([CPPFLAGS])dnl
 popdef([CFLAGS])dnl
