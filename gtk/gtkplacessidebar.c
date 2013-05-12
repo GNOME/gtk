@@ -964,7 +964,7 @@ update_places (GtkPlacesSidebar *sidebar)
 		   SECTION_DEVICES,
 		   sidebar->hostname, icon, mount_uri,
 		   NULL, NULL, NULL, 0,
-		   _("Open the contents of the File System"));
+		   _("Open the contents of the file system"));
 	g_object_unref (icon);
 
 	/* add mounts that has no volume (/etc/mtab mounts, ftp, sftp,...) */
