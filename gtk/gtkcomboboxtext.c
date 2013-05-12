@@ -58,7 +58,8 @@
  * The GtkComboBoxText implementation of the GtkBuildable interface
  * supports adding items directly using the &lt;items&gt; element
  * and specifying &lt;item&gt; elements for each item. Each &lt;item&gt;
- * element supports the regular translation attributes "translatable",
+ * element can specify the "id" corresponding to the appended text and
+ * also supports the regular translation attributes "translatable",
  * "context" and "comments".
  *
  * <example>
@@ -66,9 +67,9 @@
  * <programlisting><![CDATA[
  * <object class="GtkComboBoxText">
  *   <items>
- *     <item translatable="yes">Factory</item>
- *     <item translatable="yes">Home</item>
- *     <item translatable="yes">Subway</item>
+ *     <item translatable="yes" id="factory">Factory</item>
+ *     <item translatable="yes" id="home">Home</item>
+ *     <item translatable="yes" id="subway">Subway</item>
  *   </items>
  * </object>
  * ]]></programlisting>
@@ -236,10 +237,6 @@ item_end_element (GMarkupParseContext *context,
 	{
 	  const gchar *translated;
 
-	  /* FIXME: This will not use the domain set in the .ui file,
-	   * since the parser is not telling the builder about the domain.
-	   * However, it will work for gtk_builder_set_translation_domain() calls.
-	   */
 	  translated = _gtk_builder_parser_translate (data->domain,
 						      data->context,
 						      data->string->str);
