@@ -1,3 +1,29 @@
+Overview of Changes in GTK+ 3.8.2
+=================================
+
+* Bugs fixed:
+ 504901 GtkCellRendererCombo requires click-and-hold
+ 695120 GtkMenu and GdkWindow sizes can get out of sync
+ 698051 Typo in documentation comment
+ 698181 Document icon-shadow CSS property
+ 699104 when nothing is selected, Add to Bookmarks is enabled...
+ 699239 Choose DnD/tooltip widget better on GtkOverlay and ot...
+ 699750 Print dialog crashes when printer does not provide pr...
+ 699901 GTK CSS keybinding broken
+ 699929 GtkCheckMenuItem: remove an unused boolean field
+ 700007 Various small improvements
+ 700079 Fix accels added after the window was shown not working
+
+Translation updates:
+ Brazilian Portuguese
+ German
+ Italian
+ Japanese
+ Lithuanian
+ Norwegian bokmål
+ Russian
+
+
 Overview of Changes in GTK+ 3.8.1
 =================================
 
