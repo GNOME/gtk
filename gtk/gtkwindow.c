@@ -540,6 +540,7 @@ static void gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
 						      gpointer       user_data);
 
 static void ensure_state_flag_backdrop (GtkWidget *widget);
+static void unset_titlebar (GtkWindow *window);
 
 G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
@@ -2547,6 +2548,7 @@ gtk_window_dispose (GObject *object)
 
   gtk_window_set_focus (window, NULL);
   gtk_window_set_default (window, NULL);
+  unset_titlebar (window);
 
   remove_attach_widget (GTK_WINDOW (object));
 
@@ -3437,6 +3439,22 @@ gtk_window_set_geometry_hints (GtkWindow       *window,
   gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
 }
 
+static void
+unset_titlebar (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = window->priv;
+
+  if (priv->title_box != NULL)
+    {
+      gtk_widget_unparent (priv->title_box);
+      priv->title_box = NULL;
+      priv->title_icon = NULL;
+      priv->title_min_button = NULL;
+      priv->title_max_button = NULL;
+      priv->title_close_button = NULL;
+    }
+}
+
 /**
  * gtk_window_set_titlebar:
  * @window: a #GtkWindow
@@ -3462,15 +3480,7 @@ gtk_window_set_titlebar (GtkWindow *window,
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  if (priv->title_box != NULL)
-    {
-      gtk_widget_unparent (priv->title_box);
-      priv->title_box = NULL;
-      priv->title_icon = NULL;
-      priv->title_min_button = NULL;
-      priv->title_max_button = NULL;
-      priv->title_close_button = NULL;
-    }
+  unset_titlebar (window);
 
   priv->custom_title = TRUE;
   priv->title_box = titlebar;
