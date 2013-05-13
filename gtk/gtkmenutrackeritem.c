@@ -23,6 +23,58 @@
 
 #include "gtkmenutrackeritem.h"
 
+/**
+ * SECTION:gtkmenutrackeritem
+ * @Title: GtkMenuTrackerItem
+ * @Short_description: Small helper for model menu items
+ *
+ * A #GtkMenuTrackerItem is a small helper class used by #GtkMenuTracker to
+ * represent menu items. It has one of three classes: normal item, separator,
+ * or submenu.
+ *
+ * If an item is one of the non-normal classes (submenu, separator), only the
+ * label of the item needs to be respected. Otherwise, all the properties
+ * of the item contribute to the item's appearance and state.
+ *
+ * Implementing the appearance of the menu item is up to toolkits, and certain
+ * toolkits may choose to ignore certain properties, like icon or accel. The
+ * role of the item determines its accessibility role, along with its
+ * decoration if the GtkMenuTrackerItem::toggled property is true. As an
+ * example, if the item has the role %GTK_MENU_TRACKER_ITEM_ROLE_CHECK and
+ * GtkMenuTrackerItem::toggled is %FALSE, its accessible role should be that of
+ * a check menu item, and no decoration should be drawn. But if
+ * GtkMenuTrackerItem::toggled is %TRUE, a checkmark should be drawn.
+ *
+ * All properties except for the two class-determining properties,
+ * GtkMenuTrackerItem::is-separator and GtkMenuTrackerItem::has-submenu are
+ * allowed to change, so listen to the notify signals to update your item's
+ * appearance. When using a GObject library, this can conveniently be done
+ * with g_object_bind_property() and #GBinding, and this is how this is
+ * implemented in GTK+; the appearance side is implemented in #GtkModelMenuItem.
+ *
+ * When an item is clicked, simply call gtk_menu_tracker_item_activated() in
+ * response. The #GtkMenuTrackerItem will take care of everything related to
+ * activating the item and will itself update the state of all items in
+ * response.
+ *
+ * Submenus are a special case of menu item. When an item is a submenu, you
+ * should create a submenu for it with gtk_menu_tracker_new_item_for_submenu(),
+ * and apply the same menu tracking logic you would for a toplevel menu.
+ * Applications using submenus may want to lazily build their submenus in
+ * response to the user clicking on it, as building a submenu may be expensive.
+ *
+ * Thus, the submenu has two special controls -- the submenu's visibility
+ * should be controlled by the GtkMenuTrackerItem::submenu-shown property,
+ * and if a user clicks on the submenu, do not immediately show the menu,
+ * but call gtk_menu_tracker_item_request_submenu_shown() and wait for the
+ * GtkMenuTrackerItem::submenu-shown property to update. If the user navigates,
+ * the application may want to be notified so it can cancel the expensive
+ * operation that it was using to build the submenu. Thus,
+ * gtk_menu_tracker_item_request_submenu_shown() takes a boolean parameter.
+ * Use %TRUE when the user wants to open the submenu, and %FALSE when the
+ * user wants to close the submenu.
+ */
+
 typedef GObjectClass GtkMenuTrackerItemClass;
 
 struct _GtkMenuTrackerItem

@@ -23,6 +23,40 @@
 
 #include "gtkmenutracker.h"
 
+/**
+ * SECTION:gtkmenutracker
+ * @Title: GtkMenuTracker
+ * @Short_description: A helper class for interpreting #GMenuModel
+ *
+ * #GtkMenuTracker is a simple object to ease implementations of #GMenuModel.
+ * Given a #GtkActionObservable (usually a #GActionMuxer) along with a
+ * #GMenuModel, it will tell you which menu items to create and where to place
+ * them. If a menu item is removed, it will tell you the position of the menu
+ * item to remove.
+ *
+ * Using #GtkMenuTracker is fairly simple. The only guarantee you must make
+ * to #GtkMenuTracker is that you must obey all insert signals and track the
+ * position of items that #GtkMenuTracker gives you. That is, #GtkMenuTracker
+ * expects positions of all the latter items to change when it calls your
+ * insertion callback with an early position, as it may ask you to remove
+ * an item with a readjusted position later.
+ *
+ * #GtkMenuTracker will give you a #GtkMenuTrackerItem in your callback. You
+ * must hold onto this object until a remove signal is emitted. This item
+ * represents a single menu item, which can be one of three classes: normal item,
+ * separator, or submenu.
+ *
+ * Certain properties on the #GtkMenuTrackerItem are mutable, and you must
+ * listen for changes in the item. For more details, see the documentation
+ * for #GtkMenuTrackerItem along with https://live.gnome.org/GApplication/GMenuModel.
+ *
+ * The idea of @with_separators is for special cases where menu models may
+ * be tracked in places where separators are not available, like in toplevel
+ * "File", "Edit" menu bars. Ignoring separator items is wrong, as #GtkMenuTracker
+ * expects the position to change, so we must tell #GtkMenuTracker to ignore
+ * separators itself.
+ */
+
 typedef struct _GtkMenuTrackerSection GtkMenuTrackerSection;
 
 struct _GtkMenuTracker
