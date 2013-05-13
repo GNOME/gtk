@@ -1,7 +1,7 @@
 #include <gtk/gtk.h>
 
 static const gchar css[] =
- ".background { "
+ ".main.background { "
  " background-image: -gtk-gradient (linear, center top, center bottom, "
  "      from (red), "
  "      to (blue)); "
@@ -19,6 +19,25 @@ static const gchar css[] =
  "      to (@bg_color)); "
  " border-radius: 10px 10px 0px 0px; "
  "}";
+
+static void
+on_bookmark_clicked (GtkButton *button, gpointer data)
+{
+  GtkWindow *window = GTK_WINDOW (data);
+  GtkWidget *chooser;
+
+  chooser = gtk_file_chooser_dialog_new ("File Chooser Test",
+                                         window,
+                                         GTK_FILE_CHOOSER_ACTION_OPEN,
+                                         GTK_STOCK_CLOSE,
+                                         GTK_RESPONSE_CLOSE,
+                                         NULL);
+
+  g_signal_connect (chooser, "response",
+                    G_CALLBACK (gtk_widget_destroy), NULL);
+
+  gtk_widget_show (chooser);
+}
 
 static void
 change_title (GtkButton *button, gpointer data)
@@ -84,6 +103,7 @@ main (int argc, char *argv[])
   gtk_init (NULL, NULL);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_style_context_add_class (gtk_widget_get_style_context (window), "main");
 
   header = gtk_header_bar_new ();
   gtk_style_context_add_class (gtk_widget_get_style_context (header), "titlebar");
@@ -103,6 +123,7 @@ main (int argc, char *argv[])
 
   button = gtk_button_new ();
   image = gtk_image_new_from_icon_name ("bookmark-new-symbolic", GTK_ICON_SIZE_BUTTON);
+  g_signal_connect (button, "clicked", G_CALLBACK (on_bookmark_clicked), window);
   gtk_container_add (GTK_CONTAINER (button), image);
 
   gtk_header_bar_pack_start (GTK_HEADER_BAR (header), button);
