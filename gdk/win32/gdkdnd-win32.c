@@ -70,7 +70,11 @@
  *
  */
  
+/* The mingw.org compiler does not export GUIDS in it's import library. To work
+ * around that, define INITGUID to have the GUIDS declared. */
+#if defined(__MINGW32__) && !defined(__MINGW64_VERSION_MAJOR)
 #define INITGUID
+#endif
 
 #include "gdkdnd.h"
 #include "gdkproperty.h"
