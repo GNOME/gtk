@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 3.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-13 09:34+0200\n"
+"POT-Creation-Date: 2013-05-13 11:15+0200\n"
 "PO-Revision-Date: 2013-05-13 09:38+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
@@ -494,7 +494,8 @@ msgstr "Aktiver"
 #: ../gtk/a11y/gtkcellaccessible.c:275
 msgctxt "Action description"
 msgid "Expands or contracts the row in the tree view containing this cell"
-msgstr "Utvider eller trekker sammen raden i trevisningen som inneholder denne cellen"
+msgstr ""
+"Utvider eller trekker sammen raden i trevisningen som inneholder denne cellen"
 
 #: ../gtk/a11y/gtkcellaccessible.c:277
 msgctxt "Action description"
