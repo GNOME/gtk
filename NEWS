@@ -1,3 +1,22 @@
+Overview of Changes from GTK+ 2.24.17 to 2.24.18
+================================================
+
+* Bug fixes:
+ 586367 In local_only mode, file chooser should return native paths...
+ 674051 Scrolling zoom in view - incorrect image display
+ 683072 Print dialog shows cryptic status message and displays garb...
+ 683983 Gimp crashes on exporting JPEG files (probably related to E...
+ 694711 write-after-free segfault in GailTreeView
+ 695003 Entry's bg active state in pixmaps-engine is broken in 15 a...
+ 695278 Avoid passing a NULL title to setTitle
+ 695312 Initial 'text' set in the non-numeric-only GtkSpinButton au...
+ 698563 Ensure correct error reporting when CreateDIBSection fails
+
+* Translation updates:
+ Hungarian
+ Interlingua
+
+
 Overview of Changes from GTK+ 2.24.16 to 2.24.17
 ================================================
 
