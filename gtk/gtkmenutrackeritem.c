@@ -585,7 +585,6 @@ gtk_menu_tracker_item_get_submenu_shown (GtkMenuTrackerItem *self)
   return self->submenu_shown;
 }
 
-/* only called from the opener, internally */
 static void
 gtk_menu_tracker_item_set_submenu_shown (GtkMenuTrackerItem *self,
                                          gboolean            submenu_shown)
@@ -762,22 +761,28 @@ gtk_menu_tracker_item_request_submenu_shown (GtkMenuTrackerItem *self,
                                              gboolean            shown)
 {
   const gchar *submenu_action;
-  gboolean okay;
+  gboolean has_submenu_action;
 
   if (shown == self->submenu_requested)
     return;
 
-  /* Should not be getting called unless we have submenu-action.
-   */
-  okay = g_menu_item_get_attribute (self->item, "submenu-action", "&s", &submenu_action);
-  g_assert (okay);
+  has_submenu_action = g_menu_item_get_attribute (self->item, "submenu-action", "&s", &submenu_action);
 
   self->submenu_requested = shown;
 
-  if (shown)
-    g_object_set_data_full (G_OBJECT (self), "submenu-opener",
-                            gtk_menu_tracker_opener_new (self, submenu_action),
-                            gtk_menu_tracker_opener_free);
+  /* If we have a submenu action, start a submenu opener and wait
+   * for the reply from the client. Otherwise, simply open the
+   * submenu immediately.
+   */
+  if (has_submenu_action)
+    {
+      if (shown)
+        g_object_set_data_full (G_OBJECT (self), "submenu-opener",
+                                gtk_menu_tracker_opener_new (self, submenu_action),
+                                gtk_menu_tracker_opener_free);
+      else
+        g_object_set_data (G_OBJECT (self), "submenu-opener", NULL);
+    }
   else
-    g_object_set_data (G_OBJECT (self), "submenu-opener", NULL);
+    gtk_menu_tracker_item_set_submenu_shown (self, shown);
 }
