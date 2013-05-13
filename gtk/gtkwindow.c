@@ -5019,16 +5019,27 @@ update_window_buttons (GtkWindow *window)
   GtkWindowPrivate *priv = window->priv;
   gboolean maximized;
 
-  if (priv->custom_title)
+  if (priv->title_box == NULL)
     return;
 
   maximized = gtk_window_get_maximized (window);
 
+  if (priv->fullscreen ||
+      (maximized && priv->hide_titlebar_when_maximized))
+    {
+      gtk_widget_hide (priv->title_box);
+      return;
+    }
+  else
+    {
+      gtk_widget_show (priv->title_box);
+    }
+
+  if (priv->custom_title)
+    return;
+
   if (priv->decorated &&
-      priv->client_decorated &&
-      !priv->fullscreen &&
-      !(maximized && priv->hide_titlebar_when_maximized) &&
-      priv->title_box != NULL)
+      priv->client_decorated)
     {
       gchar *layout_desc;
       gchar **tokens, **t;
@@ -5150,13 +5161,6 @@ update_window_buttons (GtkWindow *window)
           g_strfreev (tokens);
         }
       g_free (layout_desc);
-
-      gtk_widget_show (priv->title_box);
-    }
-  else
-    {
-      if (priv->title_box != NULL)
-        gtk_widget_hide (priv->title_box);
     }
 }
 
