@@ -32,24 +32,18 @@ G_BEGIN_DECLS
 
 typedef struct _GtkActionMuxer                              GtkActionMuxer;
 
-G_GNUC_INTERNAL
 GType                   gtk_action_muxer_get_type                       (void);
-G_GNUC_INTERNAL
 GtkActionMuxer *        gtk_action_muxer_new                            (void);
 
-G_GNUC_INTERNAL
 void                    gtk_action_muxer_insert                         (GtkActionMuxer *muxer,
                                                                          const gchar    *prefix,
                                                                          GActionGroup   *group);
 
-G_GNUC_INTERNAL
 void                    gtk_action_muxer_remove                         (GtkActionMuxer *muxer,
                                                                          const gchar    *prefix);
 
-G_GNUC_INTERNAL
 GtkActionMuxer *        gtk_action_muxer_get_parent                     (GtkActionMuxer *muxer);
 
-G_GNUC_INTERNAL
 void                    gtk_action_muxer_set_parent                     (GtkActionMuxer *muxer,
                                                                          GtkActionMuxer *parent);
 
