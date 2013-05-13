@@ -79,4 +79,6 @@ void                    gtk_menu_tracker_item_activated                 (GtkMenu
 void                    gtk_menu_tracker_item_request_submenu_shown     (GtkMenuTrackerItem *self,
                                                                          gboolean            shown);
 
+gboolean                gtk_menu_tracker_item_get_submenu_shown         (GtkMenuTrackerItem *self);
+
 #endif

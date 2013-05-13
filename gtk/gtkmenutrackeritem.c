@@ -14,6 +14,8 @@ struct _GtkMenuTrackerItem
   guint can_activate : 1;
   guint sensitive : 1;
   guint toggled : 1;
+  guint submenu_shown : 1;
+  guint submenu_requested : 1;
 };
 
 enum {
@@ -29,6 +31,7 @@ enum {
   PROP_ACCEL,
   PROP_SUBMENU,
   PROP_SUBMENU_NAMESPACE,
+  PROP_SUBMENU_SHOWN,
   N_PROPS
 };
 
@@ -104,6 +107,9 @@ gtk_menu_tracker_item_get_property (GObject    *object,
     case PROP_SUBMENU_NAMESPACE:
       g_value_set_string (value, gtk_menu_tracker_item_get_submenu_namespace (self));
       break;
+    case PROP_SUBMENU_SHOWN:
+      g_value_set_boolean (value, gtk_menu_tracker_item_get_submenu_shown (self));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -160,6 +166,8 @@ gtk_menu_tracker_item_class_init (GtkMenuTrackerItemClass *class)
     g_param_spec_object ("submenu", "", "", G_TYPE_MENU_MODEL, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
   gtk_menu_tracker_item_pspecs[PROP_SUBMENU_NAMESPACE] =
     g_param_spec_string ("submenu-namespace", "", "", NULL, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
+  gtk_menu_tracker_item_pspecs[PROP_SUBMENU_SHOWN] =
+    g_param_spec_boolean ("submenu-shown", "", "", FALSE, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
 
   g_object_class_install_properties (class, N_PROPS, gtk_menu_tracker_item_pspecs);
 }
@@ -503,6 +511,24 @@ gtk_menu_tracker_item_get_should_request_show (GtkMenuTrackerItem *self)
   return g_menu_item_get_attribute (self->item, "submenu-action", "&s", NULL);
 }
 
+gboolean
+gtk_menu_tracker_item_get_submenu_shown (GtkMenuTrackerItem *self)
+{
+  return self->submenu_shown;
+}
+
+/* only called from the opener, internally */
+static void
+gtk_menu_tracker_item_set_submenu_shown (GtkMenuTrackerItem *self,
+                                         gboolean            submenu_shown)
+{
+  if (submenu_shown == self->submenu_shown)
+    return;
+
+  self->submenu_shown = submenu_shown;
+  g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_SUBMENU_SHOWN]);
+}
+
 void
 gtk_menu_tracker_item_activated (GtkMenuTrackerItem *self)
 {
@@ -532,26 +558,158 @@ gtk_menu_tracker_item_activated (GtkMenuTrackerItem *self)
     g_variant_unref (action_target);
 }
 
+typedef struct
+{
+  GtkMenuTrackerItem *item;
+  gchar              *submenu_action;
+  gboolean            first_time;
+} GtkMenuTrackerOpener;
+
+static void
+gtk_menu_tracker_opener_update (GtkMenuTrackerOpener *opener)
+{
+  GActionGroup *group = G_ACTION_GROUP (opener->item->observable);
+  gboolean is_open = TRUE;
+
+  /* We consider the menu as being "open" if the action does not exist
+   * or if there is another problem (no state, wrong state type, etc.).
+   * If the action exists, with the correct state then we consider it
+   * open if we have ever seen this state equal to TRUE.
+   *
+   * In the event that we see the state equal to FALSE, we force it back
+   * to TRUE.  We do not signal that the menu was closed because this is
+   * likely to create UI thrashing.
+   *
+   * The only way the menu can have a true-to-false submenu-shown
+   * transition is if the user calls _request_submenu_shown (FALSE).
+   * That is handled in _free() below.
+   */
+
+  if (g_action_group_has_action (group, opener->submenu_action))
+    {
+      GVariant *state = g_action_group_get_action_state (group, opener->submenu_action);
+
+      if (state)
+        {
+          if (g_variant_is_of_type (state, G_VARIANT_TYPE_BOOLEAN))
+            is_open = g_variant_get_boolean (state);
+          g_variant_unref (state);
+        }
+    }
+
+  /* If it is already open, signal that.
+   *
+   * If it is not open, ask it to open.
+   */
+  if (is_open)
+    gtk_menu_tracker_item_set_submenu_shown (opener->item, TRUE);
+
+  if (!is_open || opener->first_time)
+    {
+      g_action_group_change_action_state (group, opener->submenu_action, g_variant_new_boolean (TRUE));
+      opener->first_time = FALSE;
+    }
+}
+
+static void
+gtk_menu_tracker_opener_added (GActionGroup *group,
+                               const gchar  *action_name,
+                               gpointer      user_data)
+{
+  GtkMenuTrackerOpener *opener = user_data;
+
+  if (g_str_equal (action_name, opener->submenu_action))
+    gtk_menu_tracker_opener_update (opener);
+}
+
+static void
+gtk_menu_tracker_opener_removed (GActionGroup *action_group,
+                                 const gchar  *action_name,
+                                 gpointer      user_data)
+{
+  GtkMenuTrackerOpener *opener = user_data;
+
+  if (g_str_equal (action_name, opener->submenu_action))
+    gtk_menu_tracker_opener_update (opener);
+}
+
+static void
+gtk_menu_tracker_opener_changed (GActionGroup *action_group,
+                                 const gchar  *action_name,
+                                 GVariant     *new_state,
+                                 gpointer      user_data)
+{
+  GtkMenuTrackerOpener *opener = user_data;
+
+  if (g_str_equal (action_name, opener->submenu_action))
+    gtk_menu_tracker_opener_update (opener);
+}
+
+static void
+gtk_menu_tracker_opener_free (gpointer data)
+{
+  GtkMenuTrackerOpener *opener = data;
+
+  g_signal_handlers_disconnect_by_func (opener->item->observable, gtk_menu_tracker_opener_added, opener);
+  g_signal_handlers_disconnect_by_func (opener->item->observable, gtk_menu_tracker_opener_removed, opener);
+  g_signal_handlers_disconnect_by_func (opener->item->observable, gtk_menu_tracker_opener_changed, opener);
+
+  g_action_group_change_action_state (G_ACTION_GROUP (opener->item->observable),
+                                      opener->submenu_action,
+                                      g_variant_new_boolean (FALSE));
+
+  gtk_menu_tracker_item_set_submenu_shown (opener->item, FALSE);
+
+  g_free (opener->submenu_action);
+
+  g_slice_free (GtkMenuTrackerOpener, opener);
+}
+
+static GtkMenuTrackerOpener *
+gtk_menu_tracker_opener_new (GtkMenuTrackerItem *item,
+                             const gchar        *submenu_action)
+{
+  GtkMenuTrackerOpener *opener;
+
+  opener = g_slice_new (GtkMenuTrackerOpener);
+  opener->first_time = TRUE;
+  opener->item = item;
+
+  if (item->action_namespace)
+    opener->submenu_action = g_strjoin (".", item->action_namespace, submenu_action, NULL);
+  else
+    opener->submenu_action = g_strdup (submenu_action);
+
+  g_signal_connect (item->observable, "action-added", G_CALLBACK (gtk_menu_tracker_opener_added), opener);
+  g_signal_connect (item->observable, "action-removed", G_CALLBACK (gtk_menu_tracker_opener_removed), opener);
+  g_signal_connect (item->observable, "action-state-changed", G_CALLBACK (gtk_menu_tracker_opener_changed), opener);
+
+  gtk_menu_tracker_opener_update (opener);
+
+  return opener;
+}
+
 void
 gtk_menu_tracker_item_request_submenu_shown (GtkMenuTrackerItem *self,
                                              gboolean            shown)
 {
   const gchar *submenu_action;
-  GVariant *value;
+  gboolean okay;
 
-  if (!g_menu_item_get_attribute (self->item, "submenu-action", "&s", &submenu_action))
+  if (shown == self->submenu_requested)
     return;
 
-  value = g_variant_new_boolean (shown);
+  /* Should not be getting called unless we have submenu-action.
+   */
+  okay = g_menu_item_get_attribute (self->item, "submenu-action", "&s", &submenu_action);
+  g_assert (okay);
 
-  if (self->action_namespace)
-    {
-      gchar *full_action;
+  self->submenu_requested = shown;
 
-      full_action = g_strjoin (".", self->action_namespace, submenu_action, NULL);
-      g_action_group_change_action_state (G_ACTION_GROUP (self->observable), full_action, value);
-      g_free (full_action);
-    }
+  if (shown)
+    g_object_set_data_full (G_OBJECT (self), "submenu-opener",
+                            gtk_menu_tracker_opener_new (self, submenu_action),
+                            gtk_menu_tracker_opener_free);
   else
-    g_action_group_change_action_state (G_ACTION_GROUP (self->observable), submenu_action, value);
+    g_object_set_data (G_OBJECT (self), "submenu-opener", NULL);
 }
