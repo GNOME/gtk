@@ -1638,11 +1638,11 @@ file_list_drag_motion_cb (GtkWidget             *widget,
   return TRUE;
 }
 
-/* Sensitizes the "Copy file’s location" context menu item if there is actually
+/* Sensitizes the "Copy file’s location" and other context menu items if there is actually
  * a selection active.
  */
 static void
-check_copy_file_location_sensitivity (GtkFileChooserDefault *impl)
+check_file_list_menu_sensitivity (GtkFileChooserDefault *impl)
 {
   GtkFileChooserDefaultPrivate *priv = impl->priv;
   GtkTreeSelection *selection;
@@ -1656,6 +1656,10 @@ check_copy_file_location_sensitivity (GtkFileChooserDefault *impl)
 
   if (priv->browse_files_popup_menu_copy_file_location_item)
     gtk_widget_set_sensitive (priv->browse_files_popup_menu_copy_file_location_item, active);
+  if (priv->browse_files_popup_menu_add_shortcut_item)
+    gtk_widget_set_sensitive (priv->browse_files_popup_menu_add_shortcut_item, active);
+  if (priv->browse_files_popup_menu_visit_file_item)
+    gtk_widget_set_sensitive (priv->browse_files_popup_menu_visit_file_item, active);
 }
 
 static GtkWidget *
@@ -1727,7 +1731,7 @@ file_list_build_popup_menu (GtkFileChooserDefault *impl)
   priv->browse_files_popup_menu_size_column_item	= file_list_add_check_menu_item (impl, _("Show _Size Column"),
 											 G_CALLBACK (show_size_column_toggled_cb));
 
-  check_copy_file_location_sensitivity (impl);
+  check_file_list_menu_sensitivity (impl);
 }
 
 /* Updates the popup menu for the file list, creating it if necessary */
@@ -6967,7 +6971,7 @@ list_selection_changed (GtkTreeSelection      *selection,
   path_bar_update (impl);
 
   check_preview_change (impl);
-  check_copy_file_location_sensitivity (impl);
+  check_file_list_menu_sensitivity (impl);
 
   g_signal_emit_by_name (impl, "selection-changed", 0);
 }
