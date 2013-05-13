@@ -47,13 +47,10 @@ struct _GtkActionObservableInterface
                                 GtkActionObserver   *observer);
 };
 
-G_GNUC_INTERNAL
 GType                   gtk_action_observable_get_type                  (void);
-G_GNUC_INTERNAL
 void                    gtk_action_observable_register_observer         (GtkActionObservable *observable,
                                                                          const gchar         *action_name,
                                                                          GtkActionObserver   *observer);
-G_GNUC_INTERNAL
 void                    gtk_action_observable_unregister_observer       (GtkActionObservable *observable,
                                                                          const gchar         *action_name,
                                                                          GtkActionObserver   *observer);
