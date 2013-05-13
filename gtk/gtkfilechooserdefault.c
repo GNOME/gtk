@@ -1712,10 +1712,10 @@ file_list_build_popup_menu (GtkFileChooserDefault *impl)
 			     priv->browse_files_tree_view,
 			     popup_menu_detach_cb);
 
-  priv->browse_files_popup_menu_visit_file_item		= file_list_add_image_menu_item (impl, GTK_STOCK_DIRECTORY, _("_Visit this file"),
+  priv->browse_files_popup_menu_visit_file_item		= file_list_add_image_menu_item (impl, GTK_STOCK_DIRECTORY, _("_Visit File"),
 											 G_CALLBACK (visit_file_cb));
 
-  priv->browse_files_popup_menu_copy_file_location_item	= file_list_add_image_menu_item (impl, GTK_STOCK_COPY, _("_Copy file’s location"),
+  priv->browse_files_popup_menu_copy_file_location_item	= file_list_add_image_menu_item (impl, GTK_STOCK_COPY, _("_Copy Location"),
 											 G_CALLBACK (copy_file_location_cb));
 
   priv->browse_files_popup_menu_add_shortcut_item	= file_list_add_image_menu_item (impl, GTK_STOCK_ADD, _("_Add to Bookmarks"),
