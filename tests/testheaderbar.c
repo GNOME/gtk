@@ -51,6 +51,24 @@ change_subtitle (GtkButton *button, gpointer data)
     }
 }
 
+static void
+toggle_fullscreen (GtkButton *button, gpointer data)
+{
+  GtkWidget *window = GTK_WIDGET (data);
+  static gboolean fullscreen = FALSE;
+
+  if (fullscreen)
+    {
+      gtk_window_unfullscreen (GTK_WINDOW (window));
+      fullscreen = FALSE;
+    }
+  else
+    {
+      gtk_window_fullscreen (GTK_WINDOW (window));
+      fullscreen = TRUE;
+    }
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -102,7 +120,9 @@ main (int argc, char *argv[])
   button = gtk_button_new_with_label ("End 1");
   g_signal_connect (button, "clicked", G_CALLBACK (change_subtitle), header);
   gtk_header_bar_pack_end (GTK_HEADER_BAR (footer), button);
-  gtk_header_bar_pack_end (GTK_HEADER_BAR (footer), gtk_button_new_with_label ("End 2"));
+  button = gtk_button_new_with_label ("End 2");
+  gtk_header_bar_pack_end (GTK_HEADER_BAR (footer), button);
+  g_signal_connect (button, "clicked", G_CALLBACK (toggle_fullscreen), window);
   gtk_box_pack_end (GTK_BOX (box), footer, FALSE, FALSE, 0);
 
   content = gtk_image_new_from_icon_name ("start-here-symbolic", GTK_ICON_SIZE_DIALOG);
@@ -113,6 +133,8 @@ main (int argc, char *argv[])
   gtk_widget_show_all (window);
 
   gtk_main ();
+
+  gtk_widget_destroy (window);
 
   return 0;
 }
