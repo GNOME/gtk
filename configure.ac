@@ -1787,6 +1787,7 @@ tests/reftests/Makefile
 tests/visuals/Makefile
 testsuite/Makefile
 testsuite/gdk/Makefile
+testsuite/gtk/Makefile
 docs/Makefile
 docs/reference/Makefile
 docs/reference/gdk/Makefile
@@ -1816,7 +1817,6 @@ gtk/gtkversion.h
 gtk/gtk-win32.rc
 gtk/a11y/Makefile
 gtk/native/Makefile
-gtk/tests/Makefile
 libgail-util/Makefile
 modules/Makefile
 modules/engines/Makefile
