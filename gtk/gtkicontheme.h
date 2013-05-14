@@ -179,6 +179,7 @@ GtkIconInfo * gtk_icon_theme_lookup_icon           (GtkIconTheme                
 						    const gchar                 *icon_name,
 						    gint                         size,
 						    GtkIconLookupFlags           flags);
+GDK_AVAILABLE_IN_3_10
 GtkIconInfo * gtk_icon_theme_lookup_icon_for_scale (GtkIconTheme                *icon_theme,
                                                     const gchar                 *icon_name,
                                                     gint                         size,
@@ -190,6 +191,7 @@ GtkIconInfo * gtk_icon_theme_choose_icon           (GtkIconTheme                
 						    const gchar                 *icon_names[],
 						    gint                         size,
 						    GtkIconLookupFlags           flags);
+GDK_AVAILABLE_IN_3_10
 GtkIconInfo * gtk_icon_theme_choose_icon_for_scale (GtkIconTheme                *icon_theme,
 						    const gchar                 *icon_names[],
 						    gint                         size,
@@ -201,6 +203,7 @@ GdkPixbuf *   gtk_icon_theme_load_icon             (GtkIconTheme                
 						    gint                         size,
 						    GtkIconLookupFlags           flags,
 						    GError                     **error);
+GDK_AVAILABLE_IN_3_10
 GdkPixbuf *   gtk_icon_theme_load_icon_for_scale   (GtkIconTheme                *icon_theme,
                                                     const gchar                 *icon_name,
                                                     gint                         size,

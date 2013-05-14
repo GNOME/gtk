@@ -193,6 +193,7 @@ void             gtk_icon_source_set_state_wildcarded     (GtkIconSource       *
 GDK_AVAILABLE_IN_ALL
 void             gtk_icon_source_set_size_wildcarded      (GtkIconSource       *source,
                                                            gboolean             setting);
+GDK_AVAILABLE_IN_3_10
 void             gtk_icon_source_set_scale_wildcarded     (GtkIconSource       *source,
                                                            gboolean             setting);
 GDK_AVAILABLE_IN_ALL
@@ -201,6 +202,7 @@ GDK_AVAILABLE_IN_ALL
 gboolean         gtk_icon_source_get_state_wildcarded     (const GtkIconSource *source);
 GDK_AVAILABLE_IN_ALL
 gboolean         gtk_icon_source_get_direction_wildcarded (const GtkIconSource *source);
+GDK_AVAILABLE_IN_3_10
 gboolean         gtk_icon_source_get_scale_wildcarded     (const GtkIconSource *source);
 GDK_AVAILABLE_IN_ALL
 void             gtk_icon_source_set_direction            (GtkIconSource       *source,
@@ -211,6 +213,7 @@ void             gtk_icon_source_set_state                (GtkIconSource       *
 GDK_AVAILABLE_IN_ALL
 void             gtk_icon_source_set_size                 (GtkIconSource       *source,
                                                            GtkIconSize          size);
+GDK_AVAILABLE_IN_3_10
 void             gtk_icon_source_set_scale                (GtkIconSource       *source,
                                                            gdouble              scale);
 GDK_AVAILABLE_IN_ALL
@@ -219,9 +222,11 @@ GDK_AVAILABLE_IN_ALL
 GtkStateType     gtk_icon_source_get_state                (const GtkIconSource *source);
 GDK_AVAILABLE_IN_ALL
 GtkIconSize      gtk_icon_source_get_size                 (const GtkIconSource *source);
+GDK_AVAILABLE_IN_3_10
 gdouble          gtk_icon_source_get_scale                (const GtkIconSource *source);
 
 /* Cairo helper */
+GDK_AVAILABLE_IN_3_10
 void             gtk_cairo_set_source_icon_set            (cairo_t             *cr,
                                                            GtkStyleContext     *context,
                                                            GtkIconSet          *icon_set,
