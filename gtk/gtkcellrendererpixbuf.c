@@ -79,7 +79,8 @@ enum {
   PROP_STOCK_DETAIL,
   PROP_FOLLOW_STATE,
   PROP_ICON_NAME,
-  PROP_GICON
+  PROP_GICON,
+  PROP_ICON_SET
 };
 
 
@@ -247,6 +248,13 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
                                                         G_TYPE_ICON,
                                                         GTK_PARAM_READWRITE));
 
+  g_object_class_install_property (object_class,
+				   PROP_ICON_SET,
+				   g_param_spec_boxed ("icon-set",
+						       P_("Icon set"),
+						       P_("Icon set to render the image from"),
+						       GTK_TYPE_ICON_SET,
+						       GTK_PARAM_READABLE));
 
 
   g_type_class_add_private (object_class, sizeof (GtkCellRendererPixbufPrivate));
@@ -292,6 +300,9 @@ gtk_cell_renderer_pixbuf_get_property (GObject        *object,
     case PROP_GICON:
       g_value_set_object (value, _gtk_icon_helper_peek_gicon (priv->icon_helper));
       break;
+    case PROP_ICON_SET:
+      g_value_set_boxed (value, _gtk_icon_helper_peek_icon_set (priv->icon_helper));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
@@ -317,6 +328,9 @@ gtk_cell_renderer_pixbuf_reset (GtkCellRendererPixbuf *cellpixbuf)
       break;
     case GTK_IMAGE_GICON:
       g_object_notify (G_OBJECT (cellpixbuf), "gicon");
+      break;
+    case GTK_IMAGE_ICON_SET:
+      g_object_notify (G_OBJECT (cellpixbuf), "icon-set");
       break;
     case GTK_IMAGE_EMPTY:
     default:
@@ -373,6 +387,10 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
     case PROP_GICON:
       gtk_cell_renderer_pixbuf_reset (cellpixbuf);
       _gtk_icon_helper_set_gicon (priv->icon_helper, g_value_get_object (value), priv->icon_size);
+      break;
+    case PROP_ICON_SET:
+      gtk_cell_renderer_pixbuf_reset (cellpixbuf);
+      _gtk_icon_helper_set_icon_set (priv->icon_helper, g_value_get_boxed (value), priv->icon_size);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
