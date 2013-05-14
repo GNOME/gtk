@@ -1785,6 +1785,8 @@ tests/css/Makefile
 tests/css/parser/Makefile
 tests/reftests/Makefile
 tests/visuals/Makefile
+testsuite/Makefile
+testsuite/gdk/Makefile
 docs/Makefile
 docs/reference/Makefile
 docs/reference/gdk/Makefile
@@ -1807,7 +1809,6 @@ gdk/win32/rc/Makefile
 gdk/win32/rc/gdk.rc
 gdk/quartz/Makefile
 gdk/wayland/Makefile
-gdk/tests/Makefile
 gdk/gdkversionmacros.h
 gtk/Makefile
 gtk/makefile.msc

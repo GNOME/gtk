@@ -9,9 +9,9 @@ INTROSPECTION_COMPILER_ARGS = \
    --includedir=$(srcdir) \
    --includedir=.
 
-SUBDIRS = $(GDK_BACKENDS) . tests
+SUBDIRS = $(GDK_BACKENDS) .
 
-DIST_SUBDIRS = win32 x11 quartz broadway wayland tests
+DIST_SUBDIRS = win32 x11 quartz broadway wayland
 
 CLEANFILES =
 
