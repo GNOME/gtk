@@ -1086,6 +1086,10 @@ gboolean   gdk_window_get_support_multidevice (GdkWindow *window);
 GDK_AVAILABLE_IN_3_8
 GdkFrameClock* gdk_window_get_frame_clock      (GdkWindow     *window);
 
+GDK_AVAILABLE_IN_3_10
+void       gdk_window_set_opaque_region        (GdkWindow      *window,
+                                                cairo_region_t *region);
+
 G_END_DECLS
 
 #endif /* __GDK_WINDOW_H__ */

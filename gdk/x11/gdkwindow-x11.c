@@ -5556,6 +5556,51 @@ gdk_x11_window_set_frame_sync_enabled (GdkWindow *window,
 }
 
 static void
+gdk_x11_window_set_opaque_region (GdkWindow      *window,
+                                  cairo_region_t *region)
+{
+  GdkDisplay *display;
+
+  int nitems;
+  gulong *data;
+
+  if (region != NULL)
+    {
+      int i, nrects;
+
+      nrects = cairo_region_num_rectangles (region);
+      nitems = nrects * 4;
+      data = g_new (gulong, nitems);
+
+      for (i = 0; i < nrects; i++)
+        {
+          cairo_rectangle_int_t rect;
+          cairo_region_get_rectangle (region, i, &rect);
+          data[i+0] = rect.x;
+          data[i+1] = rect.y;
+          data[i+2] = rect.width;
+          data[i+3] = rect.height;
+        }
+    }
+  else
+    {
+      nitems = 0;
+      data = NULL;
+    }
+
+  display = gdk_window_get_display (window);
+
+  XChangeProperty (GDK_DISPLAY_XDISPLAY (display),
+                   GDK_WINDOW_XID (window),
+                   gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_OPAQUE_REGION"),
+                   XA_CARDINAL, 32, PropModeReplace,
+                   (guchar *) data, nitems);
+
+  if (data != NULL)
+    g_free (data);
+}
+
+static void
 gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -5643,4 +5688,5 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->change_property = _gdk_x11_window_change_property;
   impl_class->delete_property = _gdk_x11_window_delete_property;
   impl_class->get_scale_factor = gdk_x11_window_get_scale_factor;
+  impl_class->set_opaque_region = gdk_x11_window_set_opaque_region;
 }

@@ -2020,6 +2020,46 @@ gdk_wayland_window_get_scale_factor (GdkWindow *window)
   return impl->scale;
 }
 
+static struct wl_region *
+wl_region_from_cairo_region (GdkWaylandDisplay *display,
+                             cairo_region_t    *region)
+{
+  struct wl_region *wl_region;
+  int i, n_rects;
+
+  wl_region = wl_compositor_create_region (display->compositor);
+  if (wl_region == NULL)
+    return NULL;
+
+  n_rects = cairo_region_num_rectangles (region);
+  for (i = 0; i < n_rects; i++)
+    {
+      cairo_rectangle_int_t rect;
+      cairo_region_get_rectangle (region, i, &rect);
+      wl_region_add (wl_region, rect.x, rect.y, rect.width, rect.height);
+    }
+
+  return wl_region;
+}
+
+static void
+gdk_wayland_window_set_opaque_region (GdkWindow      *window,
+                                      cairo_region_t *region)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  struct wl_region *wl_region;
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  wl_region = wl_region_from_cairo_region (GDK_WAYLAND_DISPLAY (gdk_window_get_display (window)), region);
+  if (wl_region == NULL)
+    return;
+
+  wl_surface_set_opaque_region (impl->surface, wl_region);
+  wl_region_destroy (wl_region);
+}
+
 
 static void
 _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
@@ -2109,6 +2149,7 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   impl_class->change_property = gdk_wayland_window_change_property;
   impl_class->delete_property = gdk_wayland_window_delete_property;
   impl_class->get_scale_factor = gdk_wayland_window_get_scale_factor;
+  impl_class->set_opaque_region = gdk_wayland_window_set_opaque_region;
 }
 
 

@@ -10787,3 +10787,39 @@ gdk_window_get_scale_factor (GdkWindow *window)
 
   return 1;
 }
+
+/**
+ * gdk_window_set_opaque_region:
+ * @window: a top-level or non-native #GdkWindow
+ * @region: a region
+ *
+ * For optimizization purposes, compositing window managers may
+ * like to not draw obscured regions of windows, or turn off blending
+ * during for these regions. With RGB windows with no transparency,
+ * this is just the shape of the window, but with ARGB32 windows, the
+ * compositor does not know what regions of the window are transparent
+ * or not.
+ *
+ * This function only works for toplevel windows.
+ *
+ * GTK+ will automatically update this property automatically if
+ * the @window background is opaque, as we know where the opaque regions
+ * are. If your window background is not opaque, please update this
+ * property in your #GtkWindow::style_updated handler.
+ *
+ * Since: 3.10
+ */
+void
+gdk_window_set_opaque_region (GdkWindow      *window,
+                              cairo_region_t *region)
+{
+  GdkWindowImplClass *impl_class;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (!GDK_WINDOW_DESTROYED (window));
+
+  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+
+  if (impl_class->set_opaque_region)
+    return impl_class->set_opaque_region (window, region);
+}
