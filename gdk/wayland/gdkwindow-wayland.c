@@ -736,8 +736,8 @@ gdk_wayland_window_configure (GdkWindow *window,
   event->configure.width = width;
   event->configure.height = height;
 
-  _gdk_window_update_size (window);
   gdk_wayland_window_update_size (window, width, height, edges);
+  _gdk_window_update_size (window);
 
   g_object_ref(window);
 
