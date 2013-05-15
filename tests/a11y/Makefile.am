@@ -1,4 +1,5 @@
 include $(top_srcdir)/Makefile.decl
+NULL =
 
 check_PROGRAMS = $(TEST_PROGS)
 
@@ -44,7 +45,7 @@ TEST_PROGS += util
 
 noinst_PROGS = testfocus
 
-EXTRA_DIST += \
+testdata = \
 	hello-world.ui hello-world.txt \
 	mnemonic.ui mnemonic.txt \
 	accessible-name.ui accessible-name.txt \
@@ -71,6 +72,28 @@ EXTRA_DIST += \
 	scale-drawvalue.ui scale-drawvalue.txt \
 	placeholder-text.ui placeholder-text.txt \
 	menu.ui menu.txt \
-	combos.ui combos.txt
+	combos.ui combos.txt \
+	$(NULL)
+
+if BUILDOPT_INSTALL_TESTS
+insttestdir=$(pkglibexecdir)/installed-tests
+insttest_PROGRAMS = accessibility-dump
+
+a11ytestdir = $(insttestdir)/a11ytests
+a11ytest_DATA = $(testdata)
+
+substitutions = \
+	-e s,@pkglibexecdir\@,$(pkglibexecdir),g \
+	$(NULL)
+
+a11ytests.test: a11ytests.test.in Makefile
+	$(AM_V_GEN) sed $(substitutions) $< > $@.tmp && mv $@.tmp $@
+
+EXTRA_DIST += \
+	a11ytests.test.in
+
+testmetadir = $(datadir)/installed-tests/$(PACKAGE)
+testmeta_DATA = a11ytests.test
+endif
 
 -include $(top_srcdir)/git.mk
