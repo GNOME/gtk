@@ -1,0 +1,3 @@
+[Test]
+Exec=/bin/sh -c "@pkglibexecdir@/installed-tests/rgba"
+Type=session
