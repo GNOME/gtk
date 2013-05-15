@@ -1780,12 +1780,12 @@ demos/pixbuf-demo/Makefile
 demos/widget-factory/Makefile
 examples/Makefile
 tests/Makefile
-tests/css/Makefile
-tests/css/parser/Makefile
 tests/reftests/Makefile
 tests/visuals/Makefile
 testsuite/Makefile
 testsuite/a11y/Makefile
+testsuite/css/Makefile
+testsuite/css/parser/Makefile
 testsuite/gdk/Makefile
 testsuite/gtk/Makefile
 docs/Makefile
