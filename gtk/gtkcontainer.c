@@ -346,6 +346,9 @@ static void    gtk_container_buildable_custom_tag_end (GtkBuildable *buildable,
                                                        const gchar  *tagname,
                                                        gpointer     *data);
 
+static gboolean gtk_container_should_propagate_draw (GtkContainer   *container,
+                                                     GtkWidget      *child,
+                                                     cairo_t        *cr);
 
 /* --- variables --- */
 static const gchar           vadjustment_key[] = "gtk-vadjustment";
@@ -3261,35 +3264,81 @@ gtk_container_show_all (GtkWidget *widget)
   gtk_widget_show (widget);
 }
 
+typedef struct {
+  GtkWidget *child;
+  int window_depth;
+} ChildOrderInfo;
+
 static void
-gtk_container_draw_child (GtkWidget *child,
-                          gpointer   client_data)
+gtk_container_draw_forall (GtkWidget *widget,
+                           gpointer   client_data)
 {
   struct {
-    GtkWidget *container;
+    GtkContainer *container;
+    GArray *child_infos;
     cairo_t *cr;
   } *data = client_data;
+  ChildOrderInfo info;
+  GList *siblings;
+  GdkWindow *window;
 
-  gtk_container_propagate_draw (GTK_CONTAINER (data->container),
-                                child,
-                                data->cr);
+  if (gtk_container_should_propagate_draw (data->container, widget, data->cr))
+    {
+      info.child = widget;
+      info.window_depth = G_MAXINT;
+      if (gtk_widget_get_has_window (widget))
+        {
+          window = gtk_widget_get_window (widget);
+          siblings = gdk_window_peek_children (gdk_window_get_parent (window));
+          info.window_depth = g_list_index (siblings, window);
+        }
+      g_array_append_val (data->child_infos, info);
+    }
+}
+
+static gint
+compare_children_for_draw (gconstpointer  _a,
+                           gconstpointer  _b)
+{
+  const ChildOrderInfo *a = _a;
+  const ChildOrderInfo *b = _b;
+
+  return b->window_depth - a->window_depth;
 }
 
 static gint
 gtk_container_draw (GtkWidget *widget,
                     cairo_t   *cr)
 {
+  GtkContainer *container = GTK_CONTAINER (widget);
+  GArray *child_infos;
+  int i;
+  ChildOrderInfo *child_info;
   struct {
-    GtkWidget *container;
+    GtkContainer *container;
+    GArray *child_infos;
     cairo_t *cr;
   } data;
 
-  data.container = widget;
-  data.cr = cr;
+  child_infos = g_array_new (FALSE, TRUE, sizeof (ChildOrderInfo));
 
-  gtk_container_forall (GTK_CONTAINER (widget),
-                        gtk_container_draw_child,
+  data.container = container;
+  data.cr = cr;
+  data.child_infos = child_infos;
+  gtk_container_forall (container,
+                        gtk_container_draw_forall,
                         &data);
+
+  g_array_sort (child_infos, compare_children_for_draw);
+
+  for (i = 0; i < child_infos->len; i++)
+    {
+      child_info = &g_array_index (child_infos, ChildOrderInfo, i);
+      gtk_container_propagate_draw (container,
+                                    child_info->child, cr);
+    }
+
+  g_array_free (child_infos, TRUE);
 
   return FALSE;
 }
@@ -3335,6 +3384,39 @@ gtk_container_unmap (GtkWidget *widget)
                         NULL);
 }
 
+static gboolean
+gtk_container_should_propagate_draw (GtkContainer   *container,
+                                     GtkWidget      *child,
+                                     cairo_t        *cr)
+{
+  GdkEventExpose *event;
+  GdkWindow *event_window, *child_in_window;
+
+  if (!gtk_widget_is_drawable (child))
+    return FALSE;
+
+  /* Only propagate to native child window if we're not handling
+     an expose (i.e. in a pure gtk_widget_draw() call */
+  event = _gtk_cairo_get_event (cr);
+  if (event &&
+      (gtk_widget_get_has_window (child) &&
+       gdk_window_has_native (gtk_widget_get_window (child))))
+    return FALSE;
+
+  /* Never propagate to a child window when exposing a window
+     that is not the one the child widget is in. */
+  event_window = _gtk_cairo_get_event_window (cr);
+  if (gtk_widget_get_has_window (child))
+    child_in_window = gdk_window_get_parent (gtk_widget_get_window (child));
+  else
+    child_in_window = gtk_widget_get_window (child);
+  if (event_window != NULL && child_in_window != event_window)
+    return FALSE;
+
+  return TRUE;
+}
+
+
 /**
  * gtk_container_propagate_draw:
  * @container: a #GtkContainer
@@ -3364,9 +3446,8 @@ gtk_container_propagate_draw (GtkContainer   *container,
                               GtkWidget      *child,
                               cairo_t        *cr)
 {
-  GdkEventExpose *event;
   GtkAllocation allocation;
-  GdkWindow *window, *w, *event_window, *child_in_window;
+  GdkWindow *window, *w;
   int x, y;
 
   g_return_if_fail (GTK_IS_CONTAINER (container));
@@ -3375,25 +3456,7 @@ gtk_container_propagate_draw (GtkContainer   *container,
 
   g_assert (gtk_widget_get_parent (child) == GTK_WIDGET (container));
 
-  if (!gtk_widget_is_drawable (child))
-    return;
-
-  /* Only propagate to native child window if we're not handling
-     an expose (i.e. in a pure gtk_widget_draw() call */
-  event = _gtk_cairo_get_event (cr);
-  if (event &&
-      (gtk_widget_get_has_window (child) &&
-       gdk_window_has_native (gtk_widget_get_window (child))))
-    return;
-
-  /* Never propagate to a child window when exposing a window
-     that is not the one the child widget is in. */
-  event_window = _gtk_cairo_get_event_window (cr);
-  if (gtk_widget_get_has_window (child))
-    child_in_window = gdk_window_get_parent (gtk_widget_get_window (child));
-  else
-    child_in_window = gtk_widget_get_window (child);
-  if (event_window != NULL && child_in_window != event_window)
+  if (!gtk_container_should_propagate_draw (container, child, cr))
     return;
 
   cairo_save (cr);
