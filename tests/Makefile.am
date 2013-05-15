@@ -1,7 +1,7 @@
 ## Makefile.am for gtk+/tests
 include $(top_srcdir)/Makefile.decl
 
-SUBDIRS = reftests visuals
+SUBDIRS = visuals
 
 AM_CPPFLAGS =				\
 	-I$(top_srcdir)			\
