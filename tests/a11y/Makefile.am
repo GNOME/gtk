@@ -77,7 +77,7 @@ testdata = \
 
 if BUILDOPT_INSTALL_TESTS
 insttestdir=$(pkglibexecdir)/installed-tests
-insttest_PROGRAMS = accessibility-dump
+insttest_PROGRAMS = $(TEST_PROGS)
 
 a11ytestdir = $(insttestdir)/a11ytests
 a11ytest_DATA = $(testdata)
@@ -86,14 +86,25 @@ substitutions = \
 	-e s,@pkglibexecdir\@,$(pkglibexecdir),g \
 	$(NULL)
 
-a11ytests.test: a11ytests.test.in Makefile
+test_in_files = \
+	a11ytests.test.in \
+	a11ychildren.test.in \
+	a11ytree.test.in \
+	a11yvalue.test.in \
+	a11yderive.test.in \
+	a11ytext.test.in \
+	a11yutil.test.in \
+	$(NULL)
+
+test_files = $(test_in_files:.test.in=.test)
+
+$(test_files): %.test: %.test.in
 	$(AM_V_GEN) sed $(substitutions) $< > $@.tmp && mv $@.tmp $@
 
-EXTRA_DIST += \
-	a11ytests.test.in
+EXTRA_DIST += $(test_in_files)
 
 testmetadir = $(datadir)/installed-tests/$(PACKAGE)
-testmeta_DATA = a11ytests.test
+testmeta_DATA = $(test_files)
 endif
 
 -include $(top_srcdir)/git.mk

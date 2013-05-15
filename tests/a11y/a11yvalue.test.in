@@ -1,0 +1,4 @@
+[Test]
+Exec=/bin/sh -c "@pkglibexecdir@/installed-tests/value"
+Type=session
+
