@@ -616,7 +616,7 @@ remove_sibling_overlapped_area (GdkWindow *window,
 
   parent = window->parent;
 
-  if (parent == NULL)
+  if (gdk_window_is_toplevel (window))
     return;
 
   /* Convert from from window coords to parent coords */
@@ -664,6 +664,8 @@ remove_sibling_overlapped_area (GdkWindow *window,
       cairo_region_subtract (region, child_region);
       cairo_region_destroy (child_region);
     }
+
+  remove_sibling_overlapped_area (parent, region);
 
   /* Convert back to window coords */
   cairo_region_translate (region, -window->x, -window->y);
@@ -1004,10 +1006,6 @@ recompute_visible_regions_internal (GdkWindow *private,
 	}
     }
 
-  if (clip_region_changed &&
-      should_apply_clip_as_shape (private))
-    apply_clip_as_shape (private);
-
   if (private->cairo_surface && gdk_window_has_impl (private))
     {
       GdkWindowImplClass *iface = GDK_WINDOW_IMPL_GET_CLASS (private->impl);
@@ -1040,6 +1038,11 @@ static void
 recompute_visible_regions (GdkWindow *private,
 			   gboolean recalculate_children)
 {
+  GdkWindow *toplevel;
+
+  toplevel = gdk_window_get_toplevel (private);
+  toplevel->geometry_dirty = TRUE;
+
   recompute_visible_regions_internal (private,
 				      TRUE,
 				      recalculate_children);
@@ -1508,7 +1511,7 @@ gdk_window_reparent (GdkWindow *window,
 {
   GdkWindow *old_parent;
   GdkScreen *screen;
-  gboolean show, was_mapped, applied_clip_as_shape;
+  gboolean show, was_mapped;
   gboolean do_reparent_to_impl;
   GdkEventMask old_native_event_mask;
   GdkWindowImplClass *impl_class;
@@ -1547,8 +1550,6 @@ gdk_window_reparent (GdkWindow *window,
   if (new_parent->window_type == GDK_WINDOW_ROOT ||
       new_parent->window_type == GDK_WINDOW_FOREIGN)
     gdk_window_ensure_native (window);
-
-  applied_clip_as_shape = should_apply_clip_as_shape (window);
 
   old_native_event_mask = 0;
   do_reparent_to_impl = FALSE;
@@ -1661,13 +1662,6 @@ gdk_window_reparent (GdkWindow *window,
 
   recompute_visible_regions (window, FALSE);
 
-  /* We used to apply the clip as the shape, but no more.
-     Reset this to the real shape */
-  if (gdk_window_has_impl (window) &&
-      applied_clip_as_shape &&
-      !should_apply_clip_as_shape (window))
-    apply_shape (window, window->shape);
-
   if (do_reparent_to_impl)
     reparent_to_impl (window);
   else
@@ -1765,11 +1759,6 @@ gdk_window_ensure_native (GdkWindow *window)
     }
 
   recompute_visible_regions (window, FALSE);
-
-  /* The shape may not have been set, as the clip region doesn't actually
-     change, so do it here manually */
-  if (should_apply_clip_as_shape (window))
-    apply_clip_as_shape (window);
 
   reparent_to_impl (window);
 
@@ -3416,6 +3405,23 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
   g_list_free_full (children, g_object_unref);
 }
 
+static void
+gdk_window_update_native_shapes (GdkWindow *window)
+{
+  GdkWindow *child;
+  GList *l;
+
+  if (should_apply_clip_as_shape (window))
+    apply_clip_as_shape (window);
+
+  for (l = window->native_children; l != NULL; l = l->next)
+    {
+      child = l->data;
+
+      gdk_window_update_native_shapes (child);
+    }
+}
+
 /* Process and remove any invalid area on the native window by creating
  * expose events for the window and all non-native descendants.
  */
@@ -3425,6 +3431,14 @@ gdk_window_process_updates_internal (GdkWindow *window)
   GdkWindowImplClass *impl_class;
   gboolean save_region = FALSE;
   GdkRectangle clip_box;
+  GdkWindow *toplevel;
+
+  toplevel = gdk_window_get_toplevel (window);
+  if (toplevel->geometry_dirty)
+    {
+      gdk_window_update_native_shapes (toplevel);
+      toplevel->geometry_dirty = FALSE;
+    }
 
   /* Ensure the window lives while updating it */
   g_object_ref (window);
@@ -6279,10 +6293,6 @@ gdk_window_shape_combine_region (GdkWindow       *window,
     window->shape = NULL;
 
   recompute_visible_regions (window, FALSE);
-
-  if (gdk_window_has_impl (window) &&
-      !should_apply_clip_as_shape (window))
-    apply_shape (window, window->shape);
 
   if (old_region)
     {
