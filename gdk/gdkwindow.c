@@ -230,6 +230,7 @@ print_region (cairo_region_t *region)
 	  g_string_append_printf (s, "extent: %dx%d @%d,%d, details: ", r.width, r.height, r.x, r.y);
 	  for (i = 0; i < num; i++)
 	    {
+              cairo_region_get_rectangle (region, i, &r);
 	      g_string_append_printf (s, "[%dx%d @%d,%d]", r.width, r.height, r.x, r.y);
 	      if (i != num -1)
 		g_string_append (s, ", ");
