@@ -364,7 +364,7 @@ for details, visit http://www.gnu.org/licenses/gpl.html
                 minimum value: 0.000000
                 maximum value: 0.000000
                 current value: 0.000000
-                minimum increment: 39.200000
+                minimum increment: 39.800000
               unnamed-GtkRangeAccessible-3
                 "scroll bar"
                 parent: scrolledwindow1
@@ -377,7 +377,7 @@ for details, visit http://www.gnu.org/licenses/gpl.html
                 minimum value: 0.000000
                 maximum value: 0.000000
                 current value: 0.000000
-                minimum increment: 13.400000
+                minimum increment: 14.400000
         unnamed-GtkNotebookPageAccessible-4
           "page tab"
           parent: notebook
@@ -468,7 +468,7 @@ for details, visit http://www.gnu.org/licenses/gpl.html
                 minimum value: 0.000000
                 maximum value: 0.000000
                 current value: 0.000000
-                minimum increment: 14.000000
+                minimum increment: 14.400000
     dialog-action_area1
       "filler"
       parent: dialog-vbox1
