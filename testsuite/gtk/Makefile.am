@@ -161,8 +161,8 @@ TEST_PROGS			+= keyhash
 keyhash_SOURCES			 = keyhash.c \
 				   $(top_srcdir)/gtk/gtkkeyhash.c \
 				   $(top_srcdir)/gtk/gtkkeyhash.h \
-				   $(top_srcdir)/gtk/gtkresources.c \
-				   $(top_srcdir)/gtk/gtkresources.h \
+				   $(top_builddir)/gtk/gtkresources.c \
+				   $(top_builddir)/gtk/gtkresources.h \
 				   $(top_srcdir)/gtk/gtkprivate.c \
 				   $(top_srcdir)/gtk/gtkprivate.h
 keyhash_LDADD			 = $(progs_ldadd)
