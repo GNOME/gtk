@@ -18,8 +18,8 @@
 
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
-#include "../gtkkeyhash.h"
-#include "../gtkprivate.h"
+#include "../../gtk/gtkkeyhash.h"
+#include "../../gtk/gtkprivate.h"
 
 static gint count;
 
