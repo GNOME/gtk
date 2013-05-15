@@ -140,15 +140,17 @@ grid_LDADD			 = $(progs_ldadd)
 
 TEST_PROGS			+= rbtree
 rbtree_CFLAGS			 = -DGTK_COMPILATION -UG_ENABLE_DEBUG
-rbtree_SOURCES			 = rbtree.c ../gtkrbtree.h ../gtkrbtree.c
+rbtree_SOURCES			 = rbtree.c \
+				   $(top_srcdir)/gtk/gtkrbtree.h \
+				   $(top_srcdir)/gtk/gtkrbtree.c
 rbtree_LDADD			 = $(GTK_DEP_LIBS)
 
 TEST_PROGS			+= bitmask
 bitmask_CFLAGS			 = -DGTK_COMPILATION -UG_ENABLE_DEBUG
 bitmask_SOURCES			 = bitmask.c \
-				   ../gtkbitmaskprivate.h \
-				   ../gtkallocatedbitmaskprivate.h \
-				   ../gtkallocatedbitmask.c
+				   $(top_srcdir)/gtk/gtkbitmaskprivate.h \
+				   $(top_srcdir)/gtk/gtkallocatedbitmaskprivate.h \
+				   $(top_srcdir)/gtk/gtkallocatedbitmask.c
 bitmask_LDADD			 = $(GTK_DEP_LIBS)
 
 TEST_PROGS			+= regression-tests
@@ -157,9 +159,12 @@ regression_tests_LDADD		 = $(progs_ldadd)
 
 TEST_PROGS			+= keyhash
 keyhash_SOURCES			 = keyhash.c \
-				   ../gtkkeyhash.c ../gtkkeyhash.h \
-				   ../gtkresources.c ../gtkresources.h \
-				   ../gtkprivate.c ../gtkprivate.h
+				   $(top_srcdir)/gtk/gtkkeyhash.c \
+				   $(top_srcdir)/gtk/gtkkeyhash.h \
+				   $(top_srcdir)/gtk/gtkresources.c \
+				   $(top_srcdir)/gtk/gtkresources.h \
+				   $(top_srcdir)/gtk/gtkprivate.c \
+				   $(top_srcdir)/gtk/gtkprivate.h
 keyhash_LDADD			 = $(progs_ldadd)
 keyhash_CFLAGS			 = -DGTK_COMPILATION \
 				   -DGTK_LIBDIR=\"$(libdir)\" \
