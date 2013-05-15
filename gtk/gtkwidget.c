@@ -3450,7 +3450,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_widget_class_install_style_property (klass,
                                            g_param_spec_boolean ("window-dragging",
                                                                  P_("Window dragging"),
-                                                                 P_("Whether windows can be dragged by clicking on empty areas"),
+                                                                 P_("Whether windows can be dragged and maximized by clicking on empty areas"),
                                                                  FALSE,
                                                                  GTK_PARAM_READABLE));
 

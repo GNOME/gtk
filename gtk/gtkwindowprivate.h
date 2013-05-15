@@ -65,6 +65,9 @@ void            _gtk_window_set_allocation         (GtkWindow           *window,
                                                     const GtkAllocation *allocation,
                                                     GtkAllocation       *allocation_out);
 
+gboolean       _gtk_window_handle_button_press_for_widget (GtkWidget      *widget,
+                                                           GdkEventButton *event);
+
 typedef void (*GtkWindowKeysForeachFunc) (GtkWindow      *window,
                                           guint           keyval,
                                           GdkModifierType modifiers,

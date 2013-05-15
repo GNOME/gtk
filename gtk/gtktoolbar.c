@@ -56,6 +56,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
+#include "gtkwindowprivate.h"
 
 
 /**
@@ -2672,7 +2673,7 @@ gtk_toolbar_arrow_button_press (GtkWidget      *button,
 {
   show_menu (toolbar, event);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-  
+
   return TRUE;
 }
 
@@ -2680,8 +2681,6 @@ static gboolean
 gtk_toolbar_button_press (GtkWidget      *toolbar,
     			  GdkEventButton *event)
 {
-  GtkWidget *window;
-
   if (gdk_event_triggers_context_menu ((GdkEvent *) event))
     {
       gboolean return_value;
@@ -2693,32 +2692,7 @@ gtk_toolbar_button_press (GtkWidget      *toolbar,
       return return_value;
     }
 
-  if (event->type != GDK_BUTTON_PRESS)
-    return FALSE;
-
-  window = gtk_widget_get_toplevel (toolbar);
-
-  if (window)
-    {
-      gboolean window_drag = FALSE;
-
-      gtk_widget_style_get (toolbar,
-                            "window-dragging", &window_drag,
-                            NULL);
-
-      if (window_drag)
-        {
-          gtk_window_begin_move_drag (GTK_WINDOW (window),
-                                      event->button,
-                                      event->x_root,
-                                      event->y_root,
-                                      event->time);
-
-          return TRUE;
-        }
-    }
-
-  return FALSE;
+  return _gtk_window_handle_button_press_for_widget (toolbar, event);
 }
 
 static gboolean

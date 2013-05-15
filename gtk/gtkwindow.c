@@ -11667,3 +11667,54 @@ ensure_state_flag_backdrop (GtkWidget *widget)
 
   gtk_widget_queue_draw (widget);
 }
+
+gboolean
+_gtk_window_handle_button_press_for_widget (GtkWidget      *widget,
+                                            GdkEventButton *event)
+{
+  gboolean processed = FALSE;
+  gboolean window_drag = FALSE;
+  GtkWindow *window;
+
+  gtk_widget_style_get (GTK_WIDGET (widget),
+                        "window-dragging", &window_drag,
+                        NULL);
+
+  if (!window_drag)
+    return FALSE;
+
+  if (event->button != GDK_BUTTON_PRIMARY)
+    return FALSE;
+
+  window = GTK_WINDOW (gtk_widget_get_toplevel (widget));
+
+  switch (event->type)
+    {
+    case GDK_BUTTON_PRESS:
+      gtk_window_begin_move_drag (window,
+                                  event->button,
+                                  event->x_root,
+                                  event->y_root,
+                                  event->time);
+      processed = TRUE;
+      break;
+
+    case GDK_2BUTTON_PRESS:
+      {
+        GdkWindow *gdk_window = gtk_widget_get_window (GTK_WIDGET (window));
+
+        if (gdk_window_get_state (gdk_window) & GDK_WINDOW_STATE_MAXIMIZED)
+          gdk_window_unmaximize (gdk_window);
+          else
+            gdk_window_maximize (gdk_window);
+
+        processed = TRUE;
+      }
+      break;
+
+    default:
+      break;
+    }
+
+  return processed;
+}
