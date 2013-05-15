@@ -819,17 +819,49 @@ add_tests_for_files_in_directory (GFile *dir)
   g_list_free_full (files, g_object_unref);
 }
 
+static char *arg_base_dir = NULL;
+
+static const GOptionEntry test_args[] = {
+  { "directory",        'd', 0, G_OPTION_ARG_FILENAME, &arg_base_dir,
+    "Directory to run tests from", "DIR" },
+  { NULL }
+};
+
+static gboolean
+parse_command_line (int *argc, char ***argv)
+{
+  GError *error = NULL;
+  GOptionContext *context;
+
+  context = g_option_context_new ("- run GTK accessibility tests");
+  g_option_context_add_main_entries (context, test_args, NULL);
+  g_option_context_set_ignore_unknown_options (context, TRUE);
+
+  if (!g_option_context_parse (context, argc, argv, &error))
+    {
+      g_print ("option parsing failed: %s\n", error->message);
+      return FALSE;
+    }
+
+  gtk_test_init (argc, argv);
+
+  return TRUE;
+}
+
 int
 main (int argc, char **argv)
 {
-  gtk_test_init (&argc, &argv);
+  if (!parse_command_line (&argc, &argv))
+    return 1;
 
   if (argc < 2)
     {
       const char *basedir;
       GFile *dir;
 
-      if (g_getenv ("srcdir"))
+      if (arg_base_dir)
+        basedir = arg_base_dir;
+      else if (g_getenv ("srcdir"))
         basedir = g_getenv ("srcdir");
       else
         basedir = ".";
