@@ -714,6 +714,8 @@ gdk_win32_window_foreign_new_for_display (GdkDisplay      *display,
     window->parent = _gdk_root;
   
   window->parent->children = g_list_prepend (window->parent->children, window);
+  window->parent->impl_window->native_children =
+    g_list_prepend (window->parent->impl_window->native_children, window);
 
   GetClientRect ((HWND) anid, &rect);
   point.x = rect.left;

@@ -1226,6 +1226,8 @@ gdk_x11_window_foreign_new_for_display (GdkDisplay *display,
     win->parent = gdk_screen_get_root_window (screen);
 
   win->parent->children = g_list_prepend (win->parent->children, win);
+  win->parent->impl_window->native_children =
+    g_list_prepend (win->parent->impl_window->native_children, win);
 
   impl->xid = window;
 

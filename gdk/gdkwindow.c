@@ -1375,6 +1375,9 @@ gdk_window_new (GdkWindow     *parent,
       _gdk_display_create_window_impl (display, window, real_parent, screen, event_mask, attributes, attributes_mask);
       window->impl_window = window;
 
+      if (parent)
+        parent->impl_window->native_children = g_list_prepend (parent->impl_window->native_children, window);
+
       /* This will put the native window topmost in the native parent, which may
        * be wrong wrt other native windows in the non-native hierarchy, so restack */
       if (!_gdk_window_has_impl (real_parent))
@@ -1444,6 +1447,14 @@ change_impl (GdkWindow *private,
 
       if (child->impl == old_impl)
 	change_impl (child, impl_window, new);
+      else
+        {
+          /* The child is a native, update native_children */
+          old_impl_window->native_children =
+            g_list_remove (old_impl_window->native_children, child);
+          impl_window->native_children =
+            g_list_prepend (impl_window->native_children, child);
+        }
     }
 }
 
@@ -1570,13 +1581,22 @@ gdk_window_reparent (GdkWindow *window,
     }
 
   if (old_parent)
-    old_parent->children = g_list_remove (old_parent->children, window);
+    {
+      old_parent->children = g_list_remove (old_parent->children, window);
+
+      if (gdk_window_has_impl (window))
+        old_parent->impl_window->native_children =
+          g_list_remove (old_parent->impl_window->native_children, window);
+    }
 
   window->parent = new_parent;
   window->x = x;
   window->y = y;
 
   new_parent->children = g_list_prepend (new_parent->children, window);
+
+  if (gdk_window_has_impl (window))
+    new_parent->impl_window->native_children = g_list_prepend (new_parent->impl_window->native_children, window);
 
   /* Switch the window type as appropriate */
 
@@ -1686,7 +1706,7 @@ gdk_window_ensure_native (GdkWindow *window)
   GdkWindowImpl *new_impl, *old_impl;
   GdkDisplay *display;
   GdkScreen *screen;
-  GdkWindow *above;
+  GdkWindow *above, *parent;
   GList listhead;
   GdkWindowImplClass *impl_class;
 
@@ -1711,14 +1731,19 @@ gdk_window_ensure_native (GdkWindow *window)
 
   screen = gdk_window_get_screen (window);
   display = gdk_screen_get_display (screen);
+  parent = window->parent;
 
   old_impl = window->impl;
   _gdk_display_create_window_impl (display,
-                                   window, window->parent,
+                                   window, parent,
                                    screen,
                                    get_native_event_mask (window),
                                    NULL, 0);
   new_impl = window->impl;
+
+  if (parent)
+    parent->impl_window->native_children =
+      g_list_prepend (parent->impl_window->native_children, window);
 
   window->impl = old_impl;
   change_impl (window, window, new_impl);
@@ -1729,7 +1754,7 @@ gdk_window_ensure_native (GdkWindow *window)
    * native parent, which may be wrong wrt the position of the previous
    * non-native window wrt to the other non-native children, so correct this.
    */
-  above = find_native_sibling_above (window->parent, window);
+  above = find_native_sibling_above (parent, window);
   if (above)
     {
       listhead.data = window;
@@ -1925,6 +1950,10 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 	      if (window->parent->children)
 		window->parent->children = g_list_remove (window->parent->children, window);
 
+              if (gdk_window_has_impl (window))
+                window->parent->impl_window->native_children =
+                  g_list_remove (window->parent->impl_window->native_children, window);
+
 	      if (!recursing &&
 		  GDK_WINDOW_IS_MAPPED (window))
 		{
@@ -1967,6 +1996,9 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 		}
 
 	      g_list_free (children);
+
+              if (gdk_window_has_impl (window))
+                g_assert (window->native_children == NULL);
 	    }
 
 	  _gdk_window_clear_update_area (window);
