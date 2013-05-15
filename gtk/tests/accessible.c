@@ -21,17 +21,14 @@ test_type (GType t)
 int
 main (int argc, char *argv[])
 {
-  GType *tp;
-  gint i;
+  const GType *tp;
+  guint i, n;
 
   gtk_init (&argc, &argv);
 
-  tp = g_new0 (GType, 1000);
-#undef GDK_WINDOWING_X11
-#include "../gtktypefuncs.c"
-  *tp = 0;
+  tp = gtk_test_list_all_types (&n);
 
-  for (i = 0; tp[i]; i++)
+  for (i = 0; i < n; n++)
     test_type (tp[i]);
 
   return 0;
