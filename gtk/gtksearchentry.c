@@ -51,9 +51,37 @@
 
 G_DEFINE_TYPE (GtkSearchEntry, gtk_search_entry, GTK_TYPE_ENTRY)
 
+typedef struct {
+  guint delayed_changed_id;
+  gboolean in_timeout;
+} GtkSearchEntryPrivate;
+
+/* 150 mseconds of delay */
+#define DELAYED_TIMEOUT_ID 150
+
+/* This widget got created without a private structure, meaning
+ * that we cannot now have one without breaking ABI */
+#define GET_PRIV(e) G_TYPE_INSTANCE_GET_PRIVATE (e, GTK_TYPE_SEARCH_ENTRY, GtkSearchEntryPrivate)
+
+static void
+gtk_search_entry_finalize (GObject *object)
+{
+  GtkSearchEntryPrivate *priv = GET_PRIV (object);
+
+  if (priv->delayed_changed_id > 0)
+    g_source_remove (priv->delayed_changed_id);
+
+  G_OBJECT_CLASS (gtk_search_entry_parent_class)->finalize (object);
+}
+
 static void
 gtk_search_entry_class_init (GtkSearchEntryClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = gtk_search_entry_finalize;
+
+  g_type_class_add_private (klass, sizeof (GtkSearchEntryPrivate));
 }
 
 static void
@@ -63,14 +91,42 @@ search_entry_clear_cb (GtkEntry *entry,
   gtk_entry_set_text (entry, "");
 }
 
-static void
-search_entry_changed_cb (GtkEntry *entry,
-                         gpointer  user_data)
+static gboolean
+gtk_search_entry_changed_timeout_cb (gpointer user_data)
 {
+  GtkSearchEntry *entry = user_data;
+  GtkSearchEntryPrivate *priv = GET_PRIV (entry);
+
+  priv->in_timeout = TRUE;
+  g_signal_emit_by_name (entry, "changed");
+  priv->delayed_changed_id = 0;
+  priv->in_timeout = FALSE;
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+reset_timeout (GtkSearchEntry *entry)
+{
+  GtkSearchEntryPrivate *priv = GET_PRIV (entry);
+
+  if (priv->delayed_changed_id > 0)
+    g_source_remove (priv->delayed_changed_id);
+  priv->delayed_changed_id = g_timeout_add (DELAYED_TIMEOUT_ID,
+                                            gtk_search_entry_changed_timeout_cb,
+                                            entry);
+}
+
+static void
+search_entry_changed_cb (GtkSearchEntry *entry,
+                         gpointer        user_data)
+{
+  GtkSearchEntryPrivate *priv = GET_PRIV (entry);
   const char *str, *icon_name;
   gboolean active;
 
-  str = gtk_entry_get_text (entry);
+  /* Update the icons first */
+  str = gtk_entry_get_text (GTK_ENTRY (entry));
 
   if (str == NULL || *str == '\0')
     {
@@ -91,6 +147,15 @@ search_entry_changed_cb (GtkEntry *entry,
                 "secondary-icon-activatable", active,
                 "secondary-icon-sensitive", active,
                 NULL);
+
+  /* Don't stop the emission if it's the timeout
+   * emitting the signal, otherwise we'll get in a loop */
+  if (priv->in_timeout)
+    return;
+
+  /* Queue up the timeout */
+  reset_timeout (entry);
+  g_signal_stop_emission_by_name (entry, "changed");
 }
 
 static void
@@ -106,8 +171,6 @@ gtk_search_entry_init (GtkSearchEntry *entry)
                 "primary-icon-activatable", FALSE,
                 "primary-icon-sensitive", FALSE,
                 NULL);
-
-  search_entry_changed_cb (GTK_ENTRY (entry), NULL);
 }
 
 /**

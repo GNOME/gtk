@@ -116,6 +116,7 @@
     <file>revealer.c</file>
     <file>rotated_text.c</file>
     <file>search_entry.c</file>
+    <file>search_entry2.c</file>
     <file>sizegroup.c</file>
     <file>stack.c</file>
     <file>spinner.c</file>
