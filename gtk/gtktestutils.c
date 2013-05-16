@@ -116,6 +116,45 @@ test_find_widget_input_windows (GtkWidget *widget,
   return g_slist_reverse (matches);
 }
 
+static gboolean
+quit_main_loop_callback (GtkWidget     *widget,
+                         GdkFrameClock *frame_clock,
+                         gpointer       user_data)
+{
+  gtk_main_quit ();
+
+  return G_SOURCE_REMOVE;
+}
+
+/**
+ * gtk_test_widget_wait_for_draw:
+ * @widget: the widget to wait for
+ *
+ * Enters the main loop and waits for @widget to be "drawn". In this
+ * context that means it waits for the frame clock of @widget to have
+ * run a full styling, layout and drawing cycle.
+ *
+ * This function is intended to be used for syncing with actions that
+ * depend on @widget relayouting or on interaction with the display
+ * server.
+ **/
+void
+gtk_test_widget_wait_for_draw (GtkWidget *widget)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  /* We can do this here because the whole tick procedure does not
+   * reenter the main loop. Otherwise we'd need to manually get the
+   * frame clock and connect to the after-paint signal.
+   */
+  gtk_widget_add_tick_callback (widget,
+                                quit_main_loop_callback,
+                                NULL,
+                                NULL);
+
+  gtk_main ();
+}
+
 /**
  * gtk_test_widget_send_key:
  * @widget: Widget to generate a key press and release on.

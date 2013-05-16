@@ -61,6 +61,8 @@ GDK_AVAILABLE_IN_ALL
 gboolean        gtk_test_spin_button_click      (GtkSpinButton  *spinner,
                                                  guint           button,
                                                  gboolean        upwards);
+GDK_AVAILABLE_IN_3_10
+void            gtk_test_widget_wait_for_draw   (GtkWidget      *widget);
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_test_widget_click           (GtkWidget      *widget,
                                                  guint           button,
