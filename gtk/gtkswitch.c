@@ -108,6 +108,10 @@ gtk_switch_button_press (GtkWidget      *widget,
   GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
   GtkAllocation allocation;
 
+  /* Don't handle extra mouse buttons events, let them bubble up */
+  if (event->button > 5)
+    return GDK_EVENT_PROPAGATE;
+
   gtk_widget_get_allocation (widget, &allocation);
 
   if (priv->is_active)
@@ -118,7 +122,7 @@ gtk_switch_button_press (GtkWidget      *widget,
       if (event->x <= allocation.width / 2)
         {
           priv->in_press = TRUE;
-          return TRUE;
+          return GDK_EVENT_STOP;
         }
 
       priv->offset = event->x - allocation.width / 2;
@@ -131,7 +135,7 @@ gtk_switch_button_press (GtkWidget      *widget,
       if (event->x >= allocation.width / 2)
         {
           priv->in_press = TRUE;
-          return TRUE;
+          return GDK_EVENT_STOP;
         }
 
       priv->offset = event->x;
@@ -143,7 +147,7 @@ gtk_switch_button_press (GtkWidget      *widget,
                 "gtk-dnd-drag-threshold", &priv->drag_threshold,
                 NULL);
 
-  return TRUE;
+  return GDK_EVENT_STOP;
 }
 
 static gboolean
@@ -154,10 +158,10 @@ gtk_switch_motion (GtkWidget      *widget,
 
   /* if this is a direct toggle we don't handle motion */
   if (priv->in_press)
-    return FALSE;
+    return GDK_EVENT_PROPAGATE;
 
   if (ABS (event->x - priv->drag_start) < priv->drag_threshold)
-    return TRUE;
+    return GDK_EVENT_STOP;
 
   if (event->state & GDK_BUTTON1_MASK)
     {
@@ -198,10 +202,10 @@ gtk_switch_motion (GtkWidget      *widget,
       /* we need to redraw the handle */
       gtk_widget_queue_draw (widget);
 
-      return TRUE;
+      return GDK_EVENT_STOP;
     }
 
-  return FALSE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static gboolean
@@ -211,6 +215,10 @@ gtk_switch_button_release (GtkWidget      *widget,
   GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
   GtkAllocation allocation;
 
+  /* Don't handle extra mouse buttons events, let them bubble up */
+  if (event->button > 5)
+    return GDK_EVENT_PROPAGATE;
+
   gtk_widget_get_allocation (widget, &allocation);
 
   /* dragged toggles have a "soft" grab, so we don't care whether we
@@ -218,7 +226,7 @@ gtk_switch_button_release (GtkWidget      *widget,
    * for direct toggles, instead
    */
   if (!priv->is_dragging && !priv->in_switch)
-    return FALSE;
+    return GDK_EVENT_PROPAGATE;
 
   /* direct toggle */
   if (priv->in_press)
@@ -226,7 +234,7 @@ gtk_switch_button_release (GtkWidget      *widget,
       priv->in_press = FALSE;
       gtk_switch_set_active (GTK_SWITCH (widget), !priv->is_active);
 
-      return TRUE;
+      return GDK_EVENT_STOP;
     }
 
   /* toggle the switch if the handle was clicked but a drag had not been
@@ -235,7 +243,7 @@ gtk_switch_button_release (GtkWidget      *widget,
     {
       gtk_switch_set_active (GTK_SWITCH (widget), !priv->is_active);
 
-      return TRUE;
+      return GDK_EVENT_STOP;
     }
 
   /* dragged toggle */
@@ -259,10 +267,10 @@ gtk_switch_button_release (GtkWidget      *widget,
 
       gtk_widget_queue_draw (widget);
 
-      return TRUE;
+      return GDK_EVENT_STOP;
     }
 
-  return FALSE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static gboolean
