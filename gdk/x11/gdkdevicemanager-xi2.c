@@ -1682,6 +1682,8 @@ gdk_x11_device_manager_xi2_get_window (GdkEventTranslator *translator,
     return NULL;
 
   ev = (XIEvent *) xevent->xcookie.data;
+  if (!ev)
+    return NULL;
 
   get_event_window (translator, ev, &window);
   return window;
