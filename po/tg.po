@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-03-25 18:34+0000\n"
-"PO-Revision-Date: 2013-05-05 19:21+0500\n"
+"PO-Revision-Date: 2013-05-16 16:04+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: \n"
 "Language: Tajik\n"
@@ -22,12 +22,12 @@ msgstr ""
 #: ../gdk/gdk.c:157
 #, c-format
 msgid "Error parsing option --gdk-debug"
-msgstr ""
+msgstr "Ҳангоми таҷзияи имкони --gdk-debug хатогӣ ба вуҷуд омадааст"
 
 #: ../gdk/gdk.c:177
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
-msgstr ""
+msgstr "Ҳангоми таҷзияи имкони  --gdk-no-debug хатогӣ ба вуҷуд омадааст"
 
 #. Description of --class=CLASS in --help output
 #: ../gdk/gdk.c:205
@@ -62,7 +62,7 @@ msgstr "ДИСПЛЕЙ"
 #. Description of --gdk-debug=FLAGS in --help output
 #: ../gdk/gdk.c:215
 msgid "GDK debugging flags to set"
-msgstr ""
+msgstr "Байрақчаҳои ислоҳи хатоҳои GDK барои таъин кардан"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
@@ -76,7 +76,7 @@ msgstr "байрақҳои нодуруст"
 #. Description of --gdk-no-debug=FLAGS in --help output
 #: ../gdk/gdk.c:218
 msgid "GDK debugging flags to unset"
-msgstr ""
+msgstr "Байрақчаҳои ислоҳи хатоҳои GDK барои бекор кардани таъинот"
 
 #.
 #. * Translators, the strings in the 'keyboard label' context are
@@ -91,7 +91,6 @@ msgstr ""
 #. * Page_Up       - Page up
 #.
 #: ../gdk/keyname-table.h:3952
-#, fuzzy
 msgctxt "keyboard label"
 msgid "BackSpace"
 msgstr "Backspace"
@@ -175,10 +174,9 @@ msgid "End"
 msgstr "End"
 
 #: ../gdk/keyname-table.h:3968
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Begin"
-msgstr "Сар"
+msgstr "Сар кардан"
 
 #: ../gdk/keyname-table.h:3969
 msgctxt "keyboard label"
@@ -191,103 +189,90 @@ msgid "Insert"
 msgstr "Дарҷ кардан"
 
 #: ../gdk/keyname-table.h:3971
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Num_Lock"
-msgstr "Экрани қулф"
+msgstr "Num_Lock"
 
 #. Translators: KP_ means 'key pad' here
 #: ../gdk/keyname-table.h:3973
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Space"
-msgstr "Фазои стандартӣ"
+msgstr "KP_Space"
 
 #: ../gdk/keyname-table.h:3974
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Tab"
-msgstr "Варақаи _нав"
+msgstr "KP_Tab"
 
 #: ../gdk/keyname-table.h:3975
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Enter"
-msgstr "Паролро ворид кунед"
+msgstr "KP_Enter"
 
 #: ../gdk/keyname-table.h:3976
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Home"
-msgstr "Телефони хонагӣ"
+msgstr "KP_Home"
 
 #: ../gdk/keyname-table.h:3977
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Left"
-msgstr "Москунӣ ба канори чап"
+msgstr "KP_Left"
 
 #: ../gdk/keyname-table.h:3978
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Up"
-msgstr "Ба боло ҳаракат кардан"
+msgstr "KP_Up"
 
 #: ../gdk/keyname-table.h:3979
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Right"
-msgstr "Москунӣ ба канори рост"
+msgstr "KP_Right"
 
 #: ../gdk/keyname-table.h:3980
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Down"
-msgstr "Ба поён ҳаракат кардан"
+msgstr "KP_Down"
 
 #: ../gdk/keyname-table.h:3981
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
-msgstr ""
+msgstr "KP_Page_Up"
 
 #: ../gdk/keyname-table.h:3982
 msgctxt "keyboard label"
 msgid "KP_Prior"
-msgstr ""
+msgstr "KP_Prior"
 
 #: ../gdk/keyname-table.h:3983
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
-msgstr ""
+msgstr "KP_Page_Down"
 
 #: ../gdk/keyname-table.h:3984
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Next"
-msgstr "Паёми навбатӣ"
+msgstr "KP_Next"
 
 #: ../gdk/keyname-table.h:3985
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_End"
-msgstr "Охири рӯйхати калидҳо"
+msgstr "KP_End"
 
 #: ../gdk/keyname-table.h:3986
 msgctxt "keyboard label"
 msgid "KP_Begin"
-msgstr ""
+msgstr "KP_Begin"
 
 #: ../gdk/keyname-table.h:3987
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Insert"
-msgstr "Дарҷ кардани сутун"
+msgstr "KP_Insert"
 
 #: ../gdk/keyname-table.h:3988
-#, fuzzy
 msgctxt "keyboard label"
 msgid "KP_Delete"
-msgstr "Несткунии вазифа"
+msgstr "KP_Delete"
 
 #: ../gdk/keyname-table.h:3989
 msgctxt "keyboard label"
@@ -308,57 +293,57 @@ msgstr ""
 #: ../gdk/keyname-table.h:3993
 msgctxt "keyboard label"
 msgid "AudioMute"
-msgstr ""
+msgstr "AudioMute"
 
 #: ../gdk/keyname-table.h:3994
 msgctxt "keyboard label"
 msgid "AudioLowerVolume"
-msgstr ""
+msgstr "AudioLowerVolume"
 
 #: ../gdk/keyname-table.h:3995
 msgctxt "keyboard label"
 msgid "AudioRaiseVolume"
-msgstr ""
+msgstr "AudioRaiseVolume"
 
 #: ../gdk/keyname-table.h:3996
 msgctxt "keyboard label"
 msgid "AudioPlay"
-msgstr ""
+msgstr "AudioPlay"
 
 #: ../gdk/keyname-table.h:3997
 msgctxt "keyboard label"
 msgid "AudioStop"
-msgstr ""
+msgstr "AudioStop"
 
 #: ../gdk/keyname-table.h:3998
 msgctxt "keyboard label"
 msgid "AudioNext"
-msgstr ""
+msgstr "AudioNext"
 
 #: ../gdk/keyname-table.h:3999
 msgctxt "keyboard label"
 msgid "AudioPrev"
-msgstr ""
+msgstr "AudioPrev"
 
 #: ../gdk/keyname-table.h:4000
 msgctxt "keyboard label"
 msgid "AudioRecord"
-msgstr ""
+msgstr "AudioRecord"
 
 #: ../gdk/keyname-table.h:4001
 msgctxt "keyboard label"
 msgid "AudioPause"
-msgstr ""
+msgstr "AudioPause"
 
 #: ../gdk/keyname-table.h:4002
 msgctxt "keyboard label"
 msgid "AudioRewind"
-msgstr ""
+msgstr "AudioRewind"
 
 #: ../gdk/keyname-table.h:4003
 msgctxt "keyboard label"
 msgid "AudioMedia"
-msgstr ""
+msgstr "AudioMedia"
 
 #: ../gdk/keyname-table.h:4004
 msgctxt "keyboard label"
@@ -366,7 +351,6 @@ msgid "ScreenSaver"
 msgstr "Пардаи экран"
 
 #: ../gdk/keyname-table.h:4005
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Battery"
 msgstr "Батарея"
@@ -383,7 +367,6 @@ msgid "Forward"
 msgstr "Ба пеш"
 
 #: ../gdk/keyname-table.h:4008
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Back"
 msgstr "Бозгашт"
@@ -394,10 +377,9 @@ msgid "Sleep"
 msgstr ""
 
 #: ../gdk/keyname-table.h:4010
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Hibernate"
-msgstr "Гибернатсия"
+msgstr "Hibernate"
 
 #: ../gdk/keyname-table.h:4011
 msgctxt "keyboard label"
@@ -433,7 +415,7 @@ msgstr "Таваққуф"
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:53
 msgid "Don't batch GDI requests"
-msgstr ""
+msgstr "Дархостҳои GDI-ро ба гурӯҳҳо нагузоред"
 
 #. Description of --no-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:55
@@ -491,21 +473,19 @@ msgstr "Иваз кардан"
 
 #: ../gtk/a11y/gtkbuttonaccessible.c:341
 #: ../gtk/a11y/gtkmenuitemaccessible.c:436
-#, fuzzy
 msgctxt "Action name"
 msgid "Click"
-msgstr "Зеркунӣ"
+msgstr "Зер кардан"
 
 #: ../gtk/a11y/gtkbuttonaccessible.c:350
-#, fuzzy
 msgctxt "Action description"
 msgid "Clicks the button"
-msgstr "Тугмачаи фаъолкунӣ"
+msgstr "Тугмаро зер мекунад"
 
 #: ../gtk/a11y/gtkcellaccessible.c:258
 msgctxt "Action name"
 msgid "Expand or contract"
-msgstr ""
+msgstr "Густариш додан ё печонидан"
 
 #: ../gtk/a11y/gtkcellaccessible.c:260
 msgctxt "Action name"
@@ -516,7 +496,6 @@ msgstr "Таҳрир кардан"
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:72
 #: ../gtk/a11y/gtkentryaccessible.c:1557
 #: ../gtk/a11y/gtkexpanderaccessible.c:281
-#, fuzzy
 msgctxt "Action name"
 msgid "Activate"
 msgstr "Фаъол кардан"
@@ -525,17 +504,20 @@ msgstr "Фаъол кардан"
 msgctxt "Action description"
 msgid "Expands or contracts the row in the tree view containing this cell"
 msgstr ""
+"Сатреро дар намуди дарахте, ки катаки ҷорӣ дар он ҷойгир аст, густариш "
+"медиҳад ё мепечонад."
 
 #: ../gtk/a11y/gtkcellaccessible.c:277
 msgctxt "Action description"
 msgid "Creates a widget in which the contents of the cell can be edited"
 msgstr ""
+"Виҷетро эҷод мекунад, ки дар дохили он мӯҳтавои катак метавонад таҳрир карда "
+"шавад"
 
 #: ../gtk/a11y/gtkcellaccessible.c:279
-#, fuzzy
 msgctxt "Action description"
 msgid "Activates the cell"
-msgstr "Катаки интихобшуда"
+msgstr "Катакро фаъол мекунад"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:71
 msgctxt "Action name"
@@ -553,10 +535,9 @@ msgid "Selects the color"
 msgstr "Интихоб кардани ранг"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:85
-#, fuzzy
 msgctxt "Action description"
 msgid "Activates the color"
-msgstr "Ранги марз:"
+msgstr "Рангро фаъол мекунад"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:86
 msgctxt "Action description"
@@ -574,20 +555,19 @@ msgid "Presses the combobox"
 msgstr ""
 
 #: ../gtk/a11y/gtkentryaccessible.c:1566
-#, fuzzy
 msgctxt "Action description"
 msgid "Activates the entry"
-msgstr "Несткунии воридот"
+msgstr "Вурудро фаъол мекунад"
 
 #: ../gtk/a11y/gtkexpanderaccessible.c:290
 msgctxt "Action description"
 msgid "Activates the expander"
-msgstr ""
+msgstr "Густаришдиҳандаро фаъол мекунад"
 
 #: ../gtk/a11y/gtkmenuitemaccessible.c:445
 msgctxt "Action description"
 msgid "Clicks the menuitem"
-msgstr ""
+msgstr "Объекти менюро зер мекунад"
 
 #: ../gtk/a11y/gtkscalebuttonaccessible.c:140
 msgctxt "Action description"
@@ -607,7 +587,7 @@ msgstr ""
 #: ../gtk/a11y/gtkscalebuttonaccessible.c:172
 msgctxt "Action name"
 msgid "Dismiss"
-msgstr ""
+msgstr "Пӯшидани "
 
 #: ../gtk/a11y/gtkspinneraccessible.c:39
 msgctxt "throbbing progress animation widget"
@@ -667,9 +647,8 @@ msgid "_Value:"
 msgstr "_Қимат:"
 
 #: ../gtk/deprecated/gtkcolorsel.c:467
-#, fuzzy
 msgid "Brightness of the color."
-msgstr "Ранги марз:"
+msgstr "Дурахшонии ранг."
 
 #: ../gtk/deprecated/gtkcolorsel.c:468
 msgid "_Red:"
@@ -677,7 +656,7 @@ msgstr "_Сурх:"
 
 #: ../gtk/deprecated/gtkcolorsel.c:469
 msgid "Amount of red light in the color."
-msgstr ""
+msgstr "Миқдори равшании сурх дар ранг."
 
 #: ../gtk/deprecated/gtkcolorsel.c:470
 msgid "_Green:"
@@ -685,7 +664,7 @@ msgstr "_Сабз:"
 
 #: ../gtk/deprecated/gtkcolorsel.c:471
 msgid "Amount of green light in the color."
-msgstr ""
+msgstr "Миқдори равшании сабз дар ранг."
 
 #: ../gtk/deprecated/gtkcolorsel.c:472
 msgid "_Blue:"
@@ -693,7 +672,7 @@ msgstr "_Кабуд:"
 
 #: ../gtk/deprecated/gtkcolorsel.c:473
 msgid "Amount of blue light in the color."
-msgstr ""
+msgstr "Миқдори равшании кабуд дар ранг."
 
 #: ../gtk/deprecated/gtkcolorsel.c:476
 msgid "Op_acity:"
@@ -704,9 +683,8 @@ msgid "Transparency of the color."
 msgstr "Шаффофияти ранг."
 
 #: ../gtk/deprecated/gtkcolorsel.c:501
-#, fuzzy
 msgid "Color _name:"
-msgstr "Номи шрифт"
+msgstr "Номи _ранг:"
 
 #: ../gtk/deprecated/gtkcolorsel.c:516
 msgid ""
@@ -719,9 +697,8 @@ msgid "_Palette:"
 msgstr ""
 
 #: ../gtk/deprecated/gtkcolorsel.c:578
-#, fuzzy
 msgid "Color Wheel"
-msgstr "Ранги марз:"
+msgstr "Чархи ранг"
 
 #: ../gtk/deprecated/gtkcolorsel.c:1072
 msgid ""
@@ -755,6 +732,10 @@ msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
+"Ин воридаи лавҳачаи рассомиро зер кунед, то ин ки онро ҳамчун ранги ҷорӣ "
+"таъин кунед. Барои тағйир додани ин ворида, намунаи рангро дар ин ҷо зер "
+"кунед, ки онро бо тугмаи рости муш зер карда, \"Захира кардани ранг дар ин ҷо"
+"\"-ро зер кунед."
 
 #. We emit the response for the Select button manually,
 #. * since we want to save the color first
@@ -766,9 +747,8 @@ msgid "_Select"
 msgstr "_Интихоб кардан"
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:219
-#, fuzzy
 msgid "Color Selection"
-msgstr "По_к кардани интихоб"
+msgstr "Интихоби ранг"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
@@ -820,7 +800,7 @@ msgstr "Номи барнома"
 #. Add the credits button
 #: ../gtk/gtkaboutdialog.c:751
 msgid "C_redits"
-msgstr ""
+msgstr "М_уаллифон"
 
 #. Add the license button
 #: ../gtk/gtkaboutdialog.c:764
@@ -829,7 +809,7 @@ msgstr "_Иҷозатнома"
 
 #: ../gtk/gtkaboutdialog.c:980
 msgid "Could not show link"
-msgstr ""
+msgstr "Пайванд намоиш дода нашуд"
 
 #: ../gtk/gtkaboutdialog.c:1017
 msgid "Website"
@@ -854,9 +834,8 @@ msgid "Translated by"
 msgstr "Тарҷумашуда бо:"
 
 #: ../gtk/gtkaboutdialog.c:2416
-#, fuzzy
 msgid "Artwork by"
-msgstr "Мӯҳлати иҷро то"
+msgstr "Асар"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -904,7 +883,6 @@ msgstr "Олӣ"
 #. * this.
 #.
 #: ../gtk/gtkaccellabel.c:818
-#, fuzzy
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -927,7 +905,7 @@ msgstr "Фазо"
 #: ../gtk/gtkaccellabel.c:852
 msgctxt "keyboard label"
 msgid "Backslash"
-msgstr ""
+msgstr "Хати каҷи баръакс"
 
 #: ../gtk/gtkappchooserbutton.c:290
 msgid "Other application…"
@@ -935,7 +913,7 @@ msgstr "Барномаи дигар…"
 
 #: ../gtk/gtkappchooserdialog.c:137
 msgid "Failed to look for applications online"
-msgstr ""
+msgstr "Ҷустуҷӯи барномаҳо дар онлайн бо нокомӣ дучор шуд"
 
 #: ../gtk/gtkappchooserdialog.c:188
 #, fuzzy
@@ -951,7 +929,7 @@ msgstr ""
 #: ../gtk/gtkappchooserdialog.c:333 ../gtk/gtkappchooserwidget.c:657
 #, c-format
 msgid "No applications available to open \"%s\""
-msgstr ""
+msgstr "Ягон барнома барои кушодани \"%s\" вуҷуд надорад"
 
 #. Translators: %s is a file type description
 #: ../gtk/gtkappchooserdialog.c:339
@@ -962,7 +940,7 @@ msgstr ""
 #: ../gtk/gtkappchooserdialog.c:341
 #, c-format
 msgid "No applications available to open \"%s\" files"
-msgstr ""
+msgstr "Ягон барнома барои кушодани файлҳои \"%s\" вуҷуд надорад"
 
 #: ../gtk/gtkappchooserdialog.c:357
 msgid ""
@@ -972,7 +950,7 @@ msgstr ""
 
 #: ../gtk/gtkappchooserdialog.c:427
 msgid "Forget association"
-msgstr ""
+msgstr "Фаромуш кардани робита"
 
 #: ../gtk/gtkappchooserdialog.c:493
 msgid "Show other applications"
@@ -1021,19 +999,18 @@ msgid "Go _Back"
 msgstr "_Бозгашт"
 
 #: ../gtk/gtkassistant.c:1015
-#, fuzzy
 msgid "_Finish"
-msgstr "Шуд"
+msgstr "_Тайёр"
 
 #: ../gtk/gtkbuilder-menus.c:220
 #, c-format
 msgid "Element <%s> not allowed inside <%s>"
-msgstr ""
+msgstr "Унсури <%s> дар дохили <%s> иҷозат дода намешавад"
 
 #: ../gtk/gtkbuilder-menus.c:225
 #, c-format
 msgid "Element <%s> not allowed at toplevel"
-msgstr ""
+msgstr "Унсури <%s> дар сатҳи болоӣ иҷозат дода намешавад"
 
 #: ../gtk/gtkbuilder-menus.c:314
 #, c-format
@@ -1043,12 +1020,12 @@ msgstr ""
 #: ../gtk/gtkbuilderparser.c:341
 #, c-format
 msgid "Invalid type function on line %d: '%s'"
-msgstr ""
+msgstr "Функсияи беэътибори type дар хати %d: '%s'"
 
 #: ../gtk/gtkbuilderparser.c:405
 #, c-format
 msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
-msgstr ""
+msgstr "ID-и такрории \"%s\"-и объект дар хати %d (қаблан дар хати %d)"
 
 #: ../gtk/gtkbuilderparser.c:865
 #, fuzzy, c-format
@@ -1071,9 +1048,8 @@ msgstr "Барчаспи иҷронашуда: '%s'"
 #. * will appear to the right of the month.
 #.
 #: ../gtk/gtkcalendar.c:872
-#, fuzzy
 msgid "calendar:MY"
-msgstr "Видеоҳои ман"
+msgstr "calendar:MY"
 
 #. Translate to calendar:week_start:0 if you want Sunday to be the
 #. * first day of the week to calendar:week_start:1 if you want Monday
@@ -1081,7 +1057,7 @@ msgstr "Видеоҳои ман"
 #.
 #: ../gtk/gtkcalendar.c:910
 msgid "calendar:week_start:0"
-msgstr ""
+msgstr "calendar:week_start:0"
 
 #. Translators:  This is a text measurement template.
 #. * Translate it to the widest year text
@@ -1207,7 +1183,7 @@ msgstr ""
 #: ../gtk/gtkcolorchooserwidget.c:425
 msgctxt "Color name"
 msgid "Dark Scarlet Red"
-msgstr ""
+msgstr "Арғувони торик"
 
 #: ../gtk/gtkcolorchooserwidget.c:426
 msgctxt "Color name"
@@ -1233,7 +1209,7 @@ msgstr "Норанҷии равшан"
 #: ../gtk/gtkcolorchooserwidget.c:430
 msgctxt "Color name"
 msgid "Butter"
-msgstr ""
+msgstr "Равғани маска"
 
 #: ../gtk/gtkcolorchooserwidget.c:431
 #, fuzzy
@@ -1250,7 +1226,7 @@ msgstr "Норанҷии равшан"
 #: ../gtk/gtkcolorchooserwidget.c:433
 msgctxt "Color name"
 msgid "Chameleon"
-msgstr ""
+msgstr "Бӯқаламун"
 
 #: ../gtk/gtkcolorchooserwidget.c:434
 #, fuzzy
@@ -1261,7 +1237,7 @@ msgstr "Норинҷи торик"
 #: ../gtk/gtkcolorchooserwidget.c:435
 msgctxt "Color name"
 msgid "Light Sky Blue"
-msgstr ""
+msgstr "Осмонранги равшан"
 
 #: ../gtk/gtkcolorchooserwidget.c:436
 msgctxt "Color name"
@@ -1271,7 +1247,7 @@ msgstr "Кабуди осмонранг"
 #: ../gtk/gtkcolorchooserwidget.c:437
 msgctxt "Color name"
 msgid "Dark Sky Blue"
-msgstr ""
+msgstr "Осмонранги торик"
 
 #: ../gtk/gtkcolorchooserwidget.c:438
 #, fuzzy
@@ -1319,10 +1295,9 @@ msgid "Aluminum 1"
 msgstr "Алюминий 1"
 
 #: ../gtk/gtkcolorchooserwidget.c:446
-#, fuzzy
 msgctxt "Color name"
 msgid "Dark Aluminum 1"
-msgstr "Норинҷи торик"
+msgstr "Алиминии торик 1"
 
 #: ../gtk/gtkcolorchooserwidget.c:447
 #, fuzzy
@@ -1336,10 +1311,9 @@ msgid "Aluminum 2"
 msgstr "Алюминий 2"
 
 #: ../gtk/gtkcolorchooserwidget.c:449
-#, fuzzy
 msgctxt "Color name"
 msgid "Dark Aluminum 2"
-msgstr "Норинҷи торик"
+msgstr "Алиминии торик 2"
 
 #: ../gtk/gtkcolorchooserwidget.c:463
 msgctxt "Color name"
@@ -1396,17 +1370,16 @@ msgstr "Иловагӣ"
 
 #: ../gtk/gtkcolorchooserwidget.c:528
 msgid "Create custom color"
-msgstr ""
+msgstr "Эҷод кардани ранги фармоишӣ"
 
 #: ../gtk/gtkcolorchooserwidget.c:546
-#, fuzzy, c-format
+#, c-format
 msgid "Custom color %d: %s"
-msgstr "Ранги марз:"
+msgstr "Ранги танзимшавандаи %d: %s"
 
 #: ../gtk/gtkcoloreditor.c:412
-#, fuzzy
 msgid "Color Name"
-msgstr "Номи шрифт"
+msgstr "Номи ранг"
 
 #: ../gtk/gtkcoloreditor.c:457
 msgctxt "Color channel"
@@ -1421,7 +1394,7 @@ msgstr "Қимат"
 #: ../gtk/gtkcoloreditor.c:471
 msgctxt "Color channel"
 msgid "S"
-msgstr ""
+msgstr "S"
 
 #: ../gtk/gtkcoloreditor.c:473
 msgctxt "Color channel"
@@ -1436,7 +1409,7 @@ msgstr "Навъи ранг"
 #: ../gtk/gtkcoloreditor.c:488
 msgctxt "Color channel"
 msgid "H"
-msgstr ""
+msgstr "H"
 
 #: ../gtk/gtkcoloreditor.c:496 ../gtk/gtkcolorscale.c:303
 msgctxt "Color channel"
@@ -1449,9 +1422,8 @@ msgid "A"
 msgstr "A"
 
 #: ../gtk/gtkcolorplane.c:438
-#, fuzzy
 msgid "Color Plane"
-msgstr "Ранги марз:"
+msgstr "Сафҳаи ранг"
 
 #: ../gtk/gtkcolorswatch.c:447
 msgid "_Customize"
@@ -1470,7 +1442,7 @@ msgstr "пешфарз:мм"
 #. And show the custom paper dialog
 #: ../gtk/gtkcustompaperunixdialog.c:397 ../gtk/gtkprintunixdialog.c:3275
 msgid "Manage Custom Sizes"
-msgstr ""
+msgstr "Идора кардани андозаҳои иловагӣ"
 
 #: ../gtk/gtkcustompaperunixdialog.c:558 ../gtk/gtkpagesetupunixdialog.c:778
 msgid "inch"
@@ -1482,12 +1454,12 @@ msgstr "мм"
 
 #: ../gtk/gtkcustompaperunixdialog.c:605
 msgid "Margins from Printer…"
-msgstr ""
+msgstr "Ҳошияҳо аз принтер..."
 
 #: ../gtk/gtkcustompaperunixdialog.c:771
-#, fuzzy, c-format
+#, c-format
 msgid "Custom Size %d"
-msgstr "Андозаи равзана"
+msgstr "Андозаи танзимшавандаи %d"
 
 #: ../gtk/gtkcustompaperunixdialog.c:1109
 msgid "_Width:"
@@ -1522,17 +1494,16 @@ msgid "Paper Margins"
 msgstr "Ҳошияҳои саҳифа"
 
 #: ../gtk/gtkentry.c:9204 ../gtk/gtktextview.c:8684
-#, fuzzy
 msgid "Input _Methods"
-msgstr "УСУЛҲОИ РОҲАНДОЗӢ"
+msgstr "Тарзи _вуруд"
 
 #: ../gtk/gtkentry.c:9218 ../gtk/gtktextview.c:8698
 msgid "_Insert Unicode Control Character"
-msgstr ""
+msgstr "_Дарҷ кардани аломати идоракунии Unicode"
 
 #: ../gtk/gtkentry.c:10316
 msgid "Caps Lock is on"
-msgstr ""
+msgstr "Caps Lock фаъол аст"
 
 #. *
 #. * SECTION:gtkfilechooserbutton
@@ -1597,15 +1568,15 @@ msgstr "Номи ҷузвдони навро ворид кунед"
 
 #: ../gtk/gtkfilechooserdefault.c:954
 msgid "Could not retrieve information about the file"
-msgstr ""
+msgstr "Маълумот дар бораи файл бозёбӣ карда нашуд"
 
 #: ../gtk/gtkfilechooserdefault.c:965
 msgid "Could not add a bookmark"
-msgstr ""
+msgstr "Хатбарак илова карда нашуд"
 
 #: ../gtk/gtkfilechooserdefault.c:976
 msgid "Could not remove bookmark"
-msgstr ""
+msgstr "Хатбарак тоза карда нашуд"
 
 #: ../gtk/gtkfilechooserdefault.c:987
 msgid "The folder could not be created"
@@ -1624,7 +1595,7 @@ msgstr ""
 #: ../gtk/gtkfilechooserdefault.c:1017
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
-msgstr ""
+msgstr "Файл дар %s эҷод карда намешавад, чунки он ҷузвдон намебошад"
 
 #: ../gtk/gtkfilechooserdefault.c:1029
 msgid ""
@@ -1715,18 +1686,16 @@ msgid "Add the selected folder to the Bookmarks"
 msgstr "Илова кардани ҷузвдони интихобшуда ба хатбаракҳо"
 
 #: ../gtk/gtkfilechooserdefault.c:3956
-#, fuzzy
 msgid "Could not select file"
-msgstr "Файли '%1' кушода намешавад"
+msgstr "Файл интихоб нашуд"
 
 #: ../gtk/gtkfilechooserdefault.c:4181
 msgid "_Visit this file"
-msgstr ""
+msgstr "_Кушодани ин файл"
 
 #: ../gtk/gtkfilechooserdefault.c:4184
-#, fuzzy
 msgid "_Copy file’s location"
-msgstr "_Нусха бардоштани ҷойгиршавии пайванд"
+msgstr "_Нусха бардоштани ҷойгиршавии файл"
 
 #: ../gtk/gtkfilechooserdefault.c:4187
 msgid "_Add to Bookmarks"
@@ -1763,7 +1732,7 @@ msgstr "_Ном:"
 
 #: ../gtk/gtkfilechooserdefault.c:4834
 msgid "Type a file name"
-msgstr ""
+msgstr "Номи файлро ворид кунед"
 
 #: ../gtk/gtkfilechooserdefault.c:4881 ../gtk/gtkfilechooserdefault.c:4892
 msgid "Please select a folder below"
@@ -1776,7 +1745,7 @@ msgstr ""
 #. Create Folder
 #: ../gtk/gtkfilechooserdefault.c:4958
 msgid "Create Fo_lder"
-msgstr ""
+msgstr "Эҷод кардани ҷ_узадон"
 
 #: ../gtk/gtkfilechooserdefault.c:5006
 msgid "Search:"
@@ -1792,18 +1761,17 @@ msgid "Save in _folder:"
 msgstr "Намоиш дар ҷузвдон"
 
 #: ../gtk/gtkfilechooserdefault.c:5509
-#, fuzzy
 msgid "Create in _folder:"
-msgstr "Намоиш дар ҷузвдон"
+msgstr "Эҷод _кардан дар ҷузвдони:"
 
 #: ../gtk/gtkfilechooserdefault.c:6530
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read the contents of %s"
-msgstr "Файли '%1' хонда намешавад"
+msgstr "Мӯҳтавои %s кушода нашуд"
 
 #: ../gtk/gtkfilechooserdefault.c:6534
 msgid "Could not read the contents of the folder"
-msgstr ""
+msgstr "Мӯҳтавои ҷузвдон хонда нашуд"
 
 #: ../gtk/gtkfilechooserdefault.c:6627 ../gtk/gtkfilechooserdefault.c:6695
 #: ../gtk/gtkfilechooserdefault.c:6875
@@ -1820,7 +1788,7 @@ msgstr "Дирӯз дар %H:%M"
 
 #: ../gtk/gtkfilechooserdefault.c:7346
 msgid "Cannot change to folder because it is not local"
-msgstr ""
+msgstr "Ба ҷузвдон тағйир дода нашуд, чунки он маҳаллӣ намебошад"
 
 #: ../gtk/gtkfilechooserdefault.c:7943 ../gtk/gtkfilechooserdefault.c:7964
 #, c-format
@@ -1850,7 +1818,7 @@ msgstr "_Ҷойгузин кардан"
 
 #: ../gtk/gtkfilechooserdefault.c:9116
 msgid "Could not start the search process"
-msgstr ""
+msgstr "Раванди ҷустуҷӯ оғоз карда нашуд"
 
 #: ../gtk/gtkfilechooserdefault.c:9117
 msgid ""
@@ -1860,12 +1828,12 @@ msgstr ""
 
 #: ../gtk/gtkfilechooserdefault.c:9131
 msgid "Could not send the search request"
-msgstr ""
+msgstr "Дархости ҷустуҷӯ фиристода нашуд"
 
 #: ../gtk/gtkfilechooserdefault.c:9741
-#, fuzzy, c-format
+#, c-format
 msgid "Could not mount %s"
-msgstr "%1 сабт карда натавонист"
+msgstr "%s васл намешавад"
 
 #. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
 #. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
@@ -1893,6 +1861,8 @@ msgstr "Шрифт"
 #: ../gtk/gtkfontchooserwidget.c:110
 msgid "No fonts matched your search. You can revise your search and try again."
 msgstr ""
+"Ягон шрифт ба ҷустуҷӯи шумо мутобиқат накард. Шумо метавонед ҷустуҷӯи худро "
+"аз назар гузаронида, амалро такрор кунед."
 
 #: ../gtk/gtkfontchooserwidget.c:557
 #, fuzzy
@@ -1906,7 +1876,7 @@ msgstr "Гурӯҳи шрифт"
 #: ../gtk/gtkicontheme.c:1935
 #, c-format
 msgid "Icon '%s' not present in theme"
-msgstr ""
+msgstr "Нишонаи \"%s\" дар мавзӯъ мавҷуд нест"
 
 #: ../gtk/gtkicontheme.c:3557
 #, fuzzy
@@ -1941,13 +1911,12 @@ msgstr "_Кушодани пайванд"
 
 #. Copy Link Address
 #: ../gtk/gtklabel.c:6179
-#, fuzzy
 msgid "Copy _Link Address"
-msgstr "&Нусхабардории суроғаи алоқа"
+msgstr "Нусха бардоштани суроғаи _пайванд"
 
 #: ../gtk/gtk-launch.c:71
 msgid "APPLICATION [URI…] — launch an APPLICATION with URI."
-msgstr ""
+msgstr "APPLICATION [URI…] — иҷро кардани БАРНОМА бо URI."
 
 #. Translators: this message will appear after the usage string
 #. and before the list of options.
@@ -1956,11 +1925,13 @@ msgid ""
 "Launch specified application by its desktop file info\n"
 "optionally passing list of URIs as arguments."
 msgstr ""
+"Иҷро кардани барномаи муайяншуда бо файли мизи кории он,\n"
+"ихтиёран бо фиристодани рӯйхати URI-ҳо ҳамчун аргументҳо."
 
 #: ../gtk/gtk-launch.c:87
 #, c-format
 msgid "Error parsing commandline options: %s\n"
-msgstr ""
+msgstr "Ҳангоми таҷзияи имконоти сатри фармон хатогӣ ба вуҷуд омадааст: %s\n"
 
 #: ../gtk/gtk-launch.c:89 ../gtk/gtk-launch.c:102
 #, c-format
@@ -1977,7 +1948,7 @@ msgstr "%s: номи барнома намерасад"
 #: ../gtk/gtk-launch.c:121
 #, c-format
 msgid "Creating AppInfo from id not supported on non unix operating systems"
-msgstr ""
+msgstr "Эҷодкунии AppInfo аз id дар системаҳои ғайри-unix дастгирӣ намешавад"
 
 #. Translators: the first %s is the program name, the second one
 #. is the application name.
@@ -1994,9 +1965,8 @@ msgid "%s: error launching application: %s\n"
 msgstr "%s: хатогии оғози барнома: %s\n"
 
 #: ../gtk/gtklinkbutton.c:499
-#, fuzzy
 msgid "Copy URL"
-msgstr "URL-ро ворид намоед"
+msgstr "_Нусха бардоштани суроғаи URL"
 
 #: ../gtk/gtklinkbutton.c:665
 #, fuzzy
@@ -2016,12 +1986,16 @@ msgid ""
 "Dialog is unlocked.\n"
 "Click to prevent further changes"
 msgstr ""
+"Равзанаи гуфтугӯ кушода мебошад.\n"
+"Барои манъ кардани тағйироти оянда зер кунед"
 
 #: ../gtk/gtklockbutton.c:317
 msgid ""
 "Dialog is locked.\n"
 "Click to make changes"
 msgstr ""
+"Равзанаи гуфтугӯ қулфшуда мебошад.\n"
+"Барои даровардани тағйирот зер кунед"
 
 #: ../gtk/gtklockbutton.c:326
 msgid ""
@@ -2032,7 +2006,7 @@ msgstr ""
 #. Description of --gtk-module=MODULES in --help output
 #: ../gtk/gtkmain.c:446
 msgid "Load additional GTK+ modules"
-msgstr ""
+msgstr "Бор кардани модулҳои иловагии GTK+"
 
 #. Placeholder in --gtk-module=MODULES in --help output
 #: ../gtk/gtkmain.c:447
@@ -2047,7 +2021,7 @@ msgstr ""
 #. Description of --gtk-debug=FLAGS in --help output
 #: ../gtk/gtkmain.c:452
 msgid "GTK+ debugging flags to set"
-msgstr ""
+msgstr "Байрақчаҳои ислоҳи хатоҳои GTK+"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
 #: ../gtk/gtkmain.c:455
@@ -2064,14 +2038,13 @@ msgid "default:LTR"
 msgstr "пешфарз:LTR"
 
 #: ../gtk/gtkmain.c:768
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot open display: %s"
-msgstr "Не удалось открыть %1 для чтения"
+msgstr "Дисплей кушода нашуд: %s"
 
 #: ../gtk/gtkmain.c:834
-#, fuzzy
 msgid "GTK+ Options"
-msgstr "Имконоти GTK-VNC:"
+msgstr "Имконоти GTK+"
 
 #: ../gtk/gtkmain.c:834
 #, fuzzy
@@ -2080,12 +2053,11 @@ msgstr "Намоиш додани имконоти GTK-VNC"
 
 #: ../gtk/gtkmountoperation.c:535
 msgid "Co_nnect"
-msgstr ""
+msgstr "_Пайваст кардан"
 
 #: ../gtk/gtkmountoperation.c:609
-#, fuzzy
 msgid "Connect As"
-msgstr "Захира кардан ҳамчун"
+msgstr "Пайваст кардан ҳамчун"
 
 #: ../gtk/gtkmountoperation.c:618
 msgid "_Anonymous"
@@ -2093,7 +2065,7 @@ msgstr "_Ношинос"
 
 #: ../gtk/gtkmountoperation.c:627
 msgid "Registered U_ser"
-msgstr ""
+msgstr "_Корбари қайдшуда"
 
 #: ../gtk/gtkmountoperation.c:638
 msgid "_Username"
@@ -2109,7 +2081,7 @@ msgstr "_Парол"
 
 #: ../gtk/gtkmountoperation.c:671
 msgid "Forget password _immediately"
-msgstr ""
+msgstr "Фавран _паролро фаромуш кунед"
 
 #: ../gtk/gtkmountoperation.c:681
 msgid "Remember password until you _logout"
@@ -2150,12 +2122,11 @@ msgstr ""
 
 #: ../gtk/gtkmountoperation-x11.c:956
 msgid "Bourne Again Shell"
-msgstr ""
+msgstr "Bourne Again Shell"
 
 #: ../gtk/gtkmountoperation-x11.c:957
-#, fuzzy
 msgid "Bourne Shell"
-msgstr "Восити интерактивӣ"
+msgstr "Bourne Shell"
 
 #: ../gtk/gtkmountoperation-x11.c:958
 msgid "Z Shell"
@@ -2164,7 +2135,7 @@ msgstr "Восити Z"
 #: ../gtk/gtkmountoperation-x11.c:1055
 #, c-format
 msgid "Cannot end process with PID %d: %s"
-msgstr ""
+msgstr "Раванд бо PID %d: %s қатъ карда намешавад"
 
 #: ../gtk/gtknotebook.c:5069 ../gtk/gtknotebook.c:7723
 #, c-format
@@ -2186,13 +2157,12 @@ msgid "Not a valid page setup file"
 msgstr ""
 
 #: ../gtk/gtkpagesetupunixdialog.c:167
-#, fuzzy
 msgid "Any Printer"
-msgstr "Насбкунии принтер"
+msgstr "Ягон принтер"
 
 #: ../gtk/gtkpagesetupunixdialog.c:167
 msgid "For portable documents"
-msgstr ""
+msgstr "Барои ҳуҷҷатҳои чопшаванда"
 
 #: ../gtk/gtkpagesetupunixdialog.c:796
 #, fuzzy, c-format
@@ -2206,7 +2176,7 @@ msgstr "Слева направо, сверху вниз"
 
 #: ../gtk/gtkpagesetupunixdialog.c:845 ../gtk/gtkprintunixdialog.c:3329
 msgid "Manage Custom Sizes…"
-msgstr ""
+msgstr "Идора кардани андозаҳои иловагӣ..."
 
 #: ../gtk/gtkpagesetupunixdialog.c:896
 #, fuzzy
@@ -2306,7 +2276,7 @@ msgstr "Ба анҷом расид"
 #: ../gtk/gtkprintoperation.c:1785
 msgctxt "print operation status"
 msgid "Finished with error"
-msgstr ""
+msgstr "Бо хатогӣ ба анҷом расид"
 
 #: ../gtk/gtkprintoperation.c:2349
 #, c-format
@@ -2324,7 +2294,7 @@ msgstr "%d чоп шуда истодааст"
 
 #: ../gtk/gtkprintoperation.c:3013
 msgid "Error creating print preview"
-msgstr ""
+msgstr "Ҳангоми эҷодкунии пешнамоиши чоп хатогӣ ба вуҷуд омадааст"
 
 #: ../gtk/gtkprintoperation.c:3016
 msgid "The most probable reason is that a temporary file could not be created."
@@ -2355,9 +2325,8 @@ msgid "Need user intervention"
 msgstr ""
 
 #: ../gtk/gtkprintoperation-win32.c:715
-#, fuzzy
 msgid "Custom size"
-msgstr "Андозаи равзана"
+msgstr "Андозаи танзимшаванда"
 
 #: ../gtk/gtkprintoperation-win32.c:1537
 msgid "No printer found"
@@ -2365,7 +2334,7 @@ msgstr "Ягон принтер ёфт нашуд"
 
 #: ../gtk/gtkprintoperation-win32.c:1564
 msgid "Invalid argument to CreateDC"
-msgstr ""
+msgstr "Аргументи беэътибор ба CreateDC"
 
 #: ../gtk/gtkprintoperation-win32.c:1600 ../gtk/gtkprintoperation-win32.c:1827
 #, fuzzy
@@ -2380,15 +2349,15 @@ msgstr "Фазои холии диск кофӣ нест"
 
 #: ../gtk/gtkprintoperation-win32.c:1758
 msgid "Invalid argument to PrintDlgEx"
-msgstr ""
+msgstr "Аргументи беэътибор ба PrintDlgEx"
 
 #: ../gtk/gtkprintoperation-win32.c:1763
 msgid "Invalid pointer to PrintDlgEx"
-msgstr ""
+msgstr "Нишондиҳандаи беэътибор ба PrintDlgEx"
 
 #: ../gtk/gtkprintoperation-win32.c:1768
 msgid "Invalid handle to PrintDlgEx"
-msgstr ""
+msgstr "Дастаки беэътибор ба PrintDlgEx"
 
 #: ../gtk/gtkprintoperation-win32.c:1773
 msgid "Unspecified error"
@@ -2396,11 +2365,11 @@ msgstr "Хатогии номаълум"
 
 #: ../gtk/gtkprintunixdialog.c:681
 msgid "Getting printer information failed"
-msgstr ""
+msgstr "Маълумоти принтер гирифта нашуд"
 
 #: ../gtk/gtkprintunixdialog.c:1916
 msgid "Getting printer information…"
-msgstr ""
+msgstr "Маълумоти принтер гирифта шуда истодааст..."
 
 #: ../gtk/gtkprintunixdialog.c:2184
 msgid "Printer"
@@ -2425,9 +2394,8 @@ msgid "_All Pages"
 msgstr "_Ҳамаи саҳифаҳо"
 
 #: ../gtk/gtkprintunixdialog.c:2240
-#, fuzzy
 msgid "C_urrent Page"
-msgstr "Саҳифаи холӣ"
+msgstr "_Саҳифаи ҷорӣ"
 
 #: ../gtk/gtkprintunixdialog.c:2248
 #, fuzzy
@@ -2455,11 +2423,11 @@ msgstr "Нусхаҳо"
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
 #: ../gtk/gtkprintunixdialog.c:2280
 msgid "Copie_s:"
-msgstr ""
+msgstr "Н_усхаҳо:"
 
 #: ../gtk/gtkprintunixdialog.c:2296
 msgid "C_ollate"
-msgstr ""
+msgstr "М_уқоиса кардан"
 
 #: ../gtk/gtkprintunixdialog.c:2302
 msgid "_Reverse"
@@ -2477,15 +2445,13 @@ msgstr "Умумӣ"
 #.
 #: ../gtk/gtkprintunixdialog.c:3058
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4634
-#, fuzzy
 msgid "Left to right, top to bottom"
-msgstr "Слева направо, сверху вниз"
+msgstr "Аз чап ба рост, аз боло ба поён"
 
 #: ../gtk/gtkprintunixdialog.c:3058
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4634
-#, fuzzy
 msgid "Left to right, bottom to top"
-msgstr "Слева направо, сверху вниз"
+msgstr "Аз чап ба рост, аз поён ба боло"
 
 #: ../gtk/gtkprintunixdialog.c:3059
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4635
@@ -2511,15 +2477,13 @@ msgstr "Аз боло ба поён, аз рост ба чап"
 
 #: ../gtk/gtkprintunixdialog.c:3061
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4637
-#, fuzzy
 msgid "Bottom to top, left to right"
-msgstr "Слева направо, сверху вниз"
+msgstr "Аз поён ба боло, аз чап ба рост"
 
 #: ../gtk/gtkprintunixdialog.c:3061
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4637
-#, fuzzy
 msgid "Bottom to top, right to left"
-msgstr "Слева направо, сверху вниз"
+msgstr "Аз поён ба боло, аз рост ба чап"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
@@ -2544,7 +2508,7 @@ msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:3108
 msgid "Bottom to top"
-msgstr ""
+msgstr "Аз поён ба боло"
 
 #: ../gtk/gtkprintunixdialog.c:3352
 msgid "Layout"
@@ -2564,9 +2528,8 @@ msgid "Page or_dering:"
 msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:3395
-#, fuzzy
 msgid "_Only print:"
-msgstr "Пешнамоиши чоп"
+msgstr ""
 
 #. In enum order
 #: ../gtk/gtkprintunixdialog.c:3407
@@ -2627,18 +2590,16 @@ msgid "Reverse landscape"
 msgstr "Хидмати Landscape"
 
 #: ../gtk/gtkprintunixdialog.c:3556
-#, fuzzy
 msgid "Job Details"
-msgstr "Намоиш додани тафсилот"
+msgstr "Тафсилоти кор"
 
 #: ../gtk/gtkprintunixdialog.c:3560
 msgid "Pri_ority:"
-msgstr ""
+msgstr "_Аввалият:"
 
 #: ../gtk/gtkprintunixdialog.c:3572
-#, fuzzy
 msgid "_Billing info:"
-msgstr "Навори маълумот"
+msgstr "_Маълумоти пардохт:"
 
 #: ../gtk/gtkprintunixdialog.c:3587
 msgid "Print Document"
@@ -2670,9 +2631,8 @@ msgid "Time of print"
 msgstr "Вақти чоп"
 
 #: ../gtk/gtkprintunixdialog.c:3631
-#, fuzzy
 msgid "On _hold"
-msgstr "Удерживать до следующих распоряжений"
+msgstr ""
 
 #: ../gtk/gtkprintunixdialog.c:3632
 msgid "Hold the job until it is explicitly released"
@@ -2686,9 +2646,8 @@ msgstr "Илова кардани муқова"
 #. * dialog that controls the front cover page.
 #.
 #: ../gtk/gtkprintunixdialog.c:3657
-#, fuzzy
 msgid "Be_fore:"
-msgstr "%s боргирӣ мешавад."
+msgstr "_Пеш аз:"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
@@ -2701,7 +2660,6 @@ msgstr "_Баъд аз:"
 #. * job-specific options in the print dialog
 #.
 #: ../gtk/gtkprintunixdialog.c:3687
-#, fuzzy
 msgid "Job"
 msgstr "Кор"
 
@@ -2711,9 +2669,8 @@ msgstr "Иловагӣ"
 
 #. Translators: this will appear as tab label in print dialog.
 #: ../gtk/gtkprintunixdialog.c:3789
-#, fuzzy
 msgid "Image Quality"
-msgstr "Хусусиятҳои тасвир"
+msgstr "Сифати тасвир"
 
 #. Translators: this will appear as tab label in print dialog.
 #: ../gtk/gtkprintunixdialog.c:3793
@@ -2741,7 +2698,7 @@ msgstr ""
 #: ../gtk/gtkrecentchooserdefault.c:1129 ../gtk/gtkrecentchooserdefault.c:1166
 #, c-format
 msgid "No item for URI '%s' found"
-msgstr ""
+msgstr "Ягон объект барои URI-и \"%s\" ёфт нашуд"
 
 #: ../gtk/gtkrecentchooserdefault.c:1293
 msgid "Untitled filter"
@@ -2749,11 +2706,11 @@ msgstr "Филтри беном"
 
 #: ../gtk/gtkrecentchooserdefault.c:1646
 msgid "Could not remove item"
-msgstr ""
+msgstr "Объект тоза карда нашуд"
 
 #: ../gtk/gtkrecentchooserdefault.c:1690
 msgid "Could not clear list"
-msgstr ""
+msgstr "Рӯйхат пок карда нашуд"
 
 #: ../gtk/gtkrecentchooserdefault.c:1774
 msgid "Copy _Location"
@@ -2765,9 +2722,8 @@ msgid "_Remove From List"
 msgstr "Несткунӣ аз Баргузидаҳо"
 
 #: ../gtk/gtkrecentchooserdefault.c:1796
-#, fuzzy
 msgid "_Clear List"
-msgstr "Рӯйхатро тоза кунед"
+msgstr "_Пок кардани рӯйхат"
 
 #: ../gtk/gtkrecentchooserdefault.c:1810
 msgid "Show _Private Resources"
@@ -2790,7 +2746,7 @@ msgstr "Ягон объект ёфт нашуд"
 #: ../gtk/gtkrecentchoosermenu.c:526 ../gtk/gtkrecentchoosermenu.c:582
 #, c-format
 msgid "No recently used resource found with URI `%s'"
-msgstr ""
+msgstr "Ягон захирагоҳи охирини истифодашуда бо URI-и \"%s\" ёфт нашуд"
 
 #: ../gtk/gtkrecentchoosermenu.c:792
 #, c-format
@@ -2833,6 +2789,7 @@ msgstr ""
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr ""
+"Ягон барномаи қайдшуда бо номи \"%s\" барои объект бо URI-и \"%s\" ёфт нашуд"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: ../gtk/gtkstock.c:324
@@ -2901,12 +2858,12 @@ msgstr "_Пӯшидан"
 #: ../gtk/gtkstock.c:340
 msgctxt "Stock label"
 msgid "C_onnect"
-msgstr ""
+msgstr "П_айваст кардан"
 
 #: ../gtk/gtkstock.c:341
 msgctxt "Stock label"
 msgid "_Convert"
-msgstr ""
+msgstr "_Табдил додан"
 
 #: ../gtk/gtkstock.c:342
 msgctxt "Stock label"
@@ -2914,10 +2871,9 @@ msgid "_Copy"
 msgstr "_Нусха бардоштан"
 
 #: ../gtk/gtkstock.c:343
-#, fuzzy
 msgctxt "Stock label"
 msgid "Cu_t"
-msgstr "&Буридан"
+msgstr "_Буридан"
 
 #: ../gtk/gtkstock.c:344
 msgctxt "Stock label"
@@ -2957,7 +2913,7 @@ msgstr "_Ёфтан"
 #: ../gtk/gtkstock.c:351
 msgctxt "Stock label"
 msgid "Find and _Replace"
-msgstr ""
+msgstr "Ёфтан ва _ҷойиваз кардан"
 
 #: ../gtk/gtkstock.c:352
 #, fuzzy
@@ -2971,10 +2927,9 @@ msgid "_Fullscreen"
 msgstr "_Экрани пурра"
 
 #: ../gtk/gtkstock.c:354
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
-msgstr "Шарҳро монед"
+msgstr "_Нигоҳ доштан дар экрани пурра"
 
 #. This is a navigation label as in "go to the bottom of the page"
 #: ../gtk/gtkstock.c:356
@@ -3025,10 +2980,9 @@ msgid "_Up"
 msgstr "_Боло"
 
 #: ../gtk/gtkstock.c:371
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Hard Disk"
-msgstr "Диски USB"
+msgstr "_Диски сахт"
 
 #: ../gtk/gtkstock.c:372
 msgctxt "Stock label"
@@ -3066,10 +3020,9 @@ msgid "_Italic"
 msgstr "_Хам"
 
 #: ../gtk/gtkstock.c:379
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Jump to"
-msgstr "Гузаштан ба"
+msgstr "_Гузаштан ба"
 
 #. This is about text justification, "centered text"
 #: ../gtk/gtkstock.c:381
@@ -3327,17 +3280,15 @@ msgstr "_Ҳа"
 
 #. Zoom
 #: ../gtk/gtkstock.c:448
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Normal Size"
-msgstr "Андозаи равзана"
+msgstr "_Андозаи муқаррарӣ"
 
 #. Zoom
 #: ../gtk/gtkstock.c:450
-#, fuzzy
 msgctxt "Stock label"
 msgid "Best _Fit"
-msgstr "&Дар саҳифа ҷо кунед"
+msgstr "_Мувофиқати беҳтарин"
 
 #: ../gtk/gtkstock.c:451
 msgctxt "Stock label"
@@ -3399,7 +3350,7 @@ msgstr "Унсури <%s> дорои \"ном\" ва сифати \"id\" нам�
 #: ../gtk/gtktextbufferserialize.c:947
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
-msgstr ""
+msgstr "Сифати \"%s\" дар як унсури <%s> ду маротиба такрор шудааст"
 
 #: ../gtk/gtktextbufferserialize.c:965 ../gtk/gtktextbufferserialize.c:990
 #, c-format
@@ -3413,7 +3364,7 @@ msgstr ""
 
 #: ../gtk/gtktextbufferserialize.c:1041
 msgid "Anonymous tag found and tags can not be created."
-msgstr ""
+msgstr "Барчаспи ношинос ёфт шуд, ва барчаспҳо наметавонанд эҷод карда шаванд."
 
 #: ../gtk/gtktextbufferserialize.c:1052
 #, c-format
@@ -3424,28 +3375,30 @@ msgstr ""
 #: ../gtk/gtktextbufferserialize.c:1331 ../gtk/gtktextbufferserialize.c:1405
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
-msgstr ""
+msgstr "Унсури <%s> дар поёни <%s> иҷозат дода намешавад"
 
 #: ../gtk/gtktextbufferserialize.c:1182
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
-msgstr ""
+msgstr "\"%s\" намуди боэътибори сифат намебошад"
 
 #: ../gtk/gtktextbufferserialize.c:1190
-#, fuzzy, c-format
+#, c-format
 msgid "\"%s\" is not a valid attribute name"
-msgstr "Хатогӣ: %s is not a valid interface name\n"
+msgstr "\"%s\" номи сифати нодуруст аст"
 
 #: ../gtk/gtktextbufferserialize.c:1200
 #, c-format
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
+"\"%s\" наметавонад ба қимати намуди \"%s\" барои сифати \"%s\" табдил дода "
+"шавад"
 
 #: ../gtk/gtktextbufferserialize.c:1209
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
-msgstr ""
+msgstr "\"%s\" қимати боэътибор барои сифати \"%s\" намебошад"
 
 #: ../gtk/gtktextbufferserialize.c:1294
 #, c-format
@@ -3469,7 +3422,7 @@ msgstr "Унсури <%s> аллакай муайян карда шудааст"
 
 #: ../gtk/gtktextbufferserialize.c:1391
 msgid "A <text> element can't occur before a <tags> element"
-msgstr ""
+msgstr "Унсури <text> наметавонад пеш аз унсури <tags> ба вуҷуд ояд"
 
 #: ../gtk/gtktextbufferserialize.c:1790
 msgid "Serialized data is malformed"
@@ -3490,7 +3443,7 @@ msgstr ""
 
 #: ../gtk/gtktextutil.c:60
 msgid "LRE Left-to-right _embedding"
-msgstr ""
+msgstr "LRE Аз чап ба рост _ҷододашаванда"
 
 #: ../gtk/gtktextutil.c:61
 msgid "RLE Right-to-left e_mbedding"
@@ -3543,9 +3496,8 @@ msgid "Turns volume down or up"
 msgstr ""
 
 #: ../gtk/gtkvolumebutton.c:174
-#, fuzzy
 msgid "Adjusts the volume"
-msgstr "Баландии пурсадо"
+msgstr "Танзими баландии садо"
 
 #: ../gtk/gtkvolumebutton.c:180 ../gtk/gtkvolumebutton.c:183
 msgid "Volume Down"
@@ -3561,9 +3513,8 @@ msgid "Volume Up"
 msgstr "Баланд"
 
 #: ../gtk/gtkvolumebutton.c:188
-#, fuzzy
 msgid "Increases the volume"
-msgstr "Баландии пурсадо"
+msgstr "Садоро баланд мекунад"
 
 #: ../gtk/gtkvolumebutton.c:246
 msgid "Muted"
@@ -3651,10 +3602,9 @@ msgid "A3"
 msgstr "A3"
 
 #: ../gtk/paper_names_offsets.c:17
-#, fuzzy
 msgctxt "paper size"
 msgid "A3 Extra"
-msgstr "Зичи изофӣ"
+msgstr "A3 иловагӣ"
 
 #: ../gtk/paper_names_offsets.c:18
 msgctxt "paper size"
@@ -3687,16 +3637,14 @@ msgid "A4"
 msgstr "A4"
 
 #: ../gtk/paper_names_offsets.c:24
-#, fuzzy
 msgctxt "paper size"
 msgid "A4 Extra"
-msgstr "Зичи изофӣ"
+msgstr "A4 иловагӣ"
 
 #: ../gtk/paper_names_offsets.c:25
-#, fuzzy
 msgctxt "paper size"
 msgid "A4 Tab"
-msgstr "Варақаи _нав"
+msgstr "Варақаи A4"
 
 #: ../gtk/paper_names_offsets.c:26
 msgctxt "paper size"
@@ -3739,10 +3687,9 @@ msgid "A5"
 msgstr "A5"
 
 #: ../gtk/paper_names_offsets.c:34
-#, fuzzy
 msgctxt "paper size"
 msgid "A5 Extra"
-msgstr "Зичи изофӣ"
+msgstr "A5 иловагӣ"
 
 #: ../gtk/paper_names_offsets.c:35
 msgctxt "paper size"
@@ -3800,10 +3747,9 @@ msgid "B5"
 msgstr "B5"
 
 #: ../gtk/paper_names_offsets.c:46
-#, fuzzy
 msgctxt "paper size"
 msgid "B5 Extra"
-msgstr "Зичи изофӣ"
+msgstr "B5 иловагӣ"
 
 #: ../gtk/paper_names_offsets.c:47
 msgctxt "paper size"
@@ -3991,22 +3937,19 @@ msgid "jis exec"
 msgstr ""
 
 #: ../gtk/paper_names_offsets.c:84
-#, fuzzy
 msgctxt "paper size"
 msgid "Choukei 2 Envelope"
-msgstr "Лифофаи DL"
+msgstr "Лифофаи Choukei 2"
 
 #: ../gtk/paper_names_offsets.c:85
-#, fuzzy
 msgctxt "paper size"
 msgid "Choukei 3 Envelope"
-msgstr "Лифофаи DL"
+msgstr "Лифофаи Choukei 3"
 
 #: ../gtk/paper_names_offsets.c:86
-#, fuzzy
 msgctxt "paper size"
 msgid "Choukei 4 Envelope"
-msgstr "Лифофаи DL"
+msgstr "Лифофаи Choukei 4"
 
 #: ../gtk/paper_names_offsets.c:87
 msgctxt "paper size"
@@ -4014,16 +3957,14 @@ msgid "hagaki (postcard)"
 msgstr ""
 
 #: ../gtk/paper_names_offsets.c:88
-#, fuzzy
 msgctxt "paper size"
 msgid "kahu Envelope"
-msgstr "Лифофаи DL"
+msgstr "Лифофаи kahu"
 
 #: ../gtk/paper_names_offsets.c:89
-#, fuzzy
 msgctxt "paper size"
 msgid "kaku2 Envelope"
-msgstr "Лифофаи DL"
+msgstr "Лифофаи kaku2"
 
 #: ../gtk/paper_names_offsets.c:90
 msgctxt "paper size"
@@ -4128,13 +4069,12 @@ msgstr "b-plus"
 #: ../gtk/paper_names_offsets.c:111
 msgctxt "paper size"
 msgid "c"
-msgstr ""
+msgstr "c"
 
 #: ../gtk/paper_names_offsets.c:112
-#, fuzzy
 msgctxt "paper size"
 msgid "c5 Envelope"
-msgstr "Лифофаи DL"
+msgstr "Лифофаи c5"
 
 #: ../gtk/paper_names_offsets.c:113
 msgctxt "paper size"
@@ -4165,7 +4105,7 @@ msgstr "Иҷрокунанда"
 #: ../gtk/paper_names_offsets.c:118
 msgctxt "paper size"
 msgid "f"
-msgstr ""
+msgstr "f"
 
 #: ../gtk/paper_names_offsets.c:119
 #, fuzzy
@@ -4197,31 +4137,29 @@ msgid "Government Letter"
 msgstr "Буквы, в нижнем регистре"
 
 #: ../gtk/paper_names_offsets.c:124
-#, fuzzy
 msgctxt "paper size"
 msgid "Index 3x5"
-msgstr "ИНДЕКСИ КӮМАК"
+msgstr "Индекси 3x5"
 
 #: ../gtk/paper_names_offsets.c:125
 msgctxt "paper size"
 msgid "Index 4x6 (postcard)"
-msgstr ""
+msgstr "Index 4x6 (postcard)"
 
 #: ../gtk/paper_names_offsets.c:126
 msgctxt "paper size"
 msgid "Index 4x6 ext"
-msgstr ""
+msgstr "Index 4x6 ext"
 
 #: ../gtk/paper_names_offsets.c:127
-#, fuzzy
 msgctxt "paper size"
 msgid "Index 5x8"
-msgstr "ИНДЕКСИ КӮМАК"
+msgstr "Индекси 5x8"
 
 #: ../gtk/paper_names_offsets.c:128
 msgctxt "paper size"
 msgid "Invoice"
-msgstr ""
+msgstr "Invoice"
 
 #: ../gtk/paper_names_offsets.c:129
 msgctxt "paper size"
@@ -4236,7 +4174,7 @@ msgstr "Ҳуқуқии US"
 #: ../gtk/paper_names_offsets.c:131
 msgctxt "paper size"
 msgid "US Legal Extra"
-msgstr ""
+msgstr "ИМА Ҳуқукии  иловагӣ"
 
 #: ../gtk/paper_names_offsets.c:132
 msgctxt "paper size"
@@ -4246,12 +4184,12 @@ msgstr "Мактуби US"
 #: ../gtk/paper_names_offsets.c:133
 msgctxt "paper size"
 msgid "US Letter Extra"
-msgstr ""
+msgstr "ИМА Мактуби иловагӣ"
 
 #: ../gtk/paper_names_offsets.c:134
 msgctxt "paper size"
 msgid "US Letter Plus"
-msgstr ""
+msgstr "ИМА Мактуби изофӣ"
 
 #: ../gtk/paper_names_offsets.c:135
 msgctxt "paper size"
@@ -4316,7 +4254,7 @@ msgstr "Dai-pa-kai"
 #: ../gtk/paper_names_offsets.c:147
 msgctxt "paper size"
 msgid "Folio"
-msgstr ""
+msgstr "Folio"
 
 #: ../gtk/paper_names_offsets.c:148
 #, fuzzy
@@ -4421,32 +4359,32 @@ msgstr "Лифофаи prc9"
 #: ../gtk/paper_names_offsets.c:167
 msgctxt "paper size"
 msgid "ROC 16k"
-msgstr ""
+msgstr "ROC 16k"
 
 #: ../gtk/paper_names_offsets.c:168
 msgctxt "paper size"
 msgid "ROC 8k"
-msgstr ""
+msgstr "ROC 8k"
 
 #: ../gtk/updateiconcache.c:1386
 #, c-format
 msgid "Failed to write header\n"
-msgstr ""
+msgstr "Сарлавҳа навишта нашуд\n"
 
 #: ../gtk/updateiconcache.c:1392
 #, c-format
 msgid "Failed to write hash table\n"
-msgstr ""
+msgstr "Ҷадвали ҳэш навишта нашуд\n"
 
 #: ../gtk/updateiconcache.c:1398
 #, c-format
 msgid "Failed to write folder index\n"
-msgstr ""
+msgstr "Индекси ҷузадон навишта нашуд\n"
 
 #: ../gtk/updateiconcache.c:1406
 #, c-format
 msgid "Failed to rewrite header\n"
-msgstr ""
+msgstr "Сарлавҳа аз нав навишта нашуд\n"
 
 #: ../gtk/updateiconcache.c:1500
 #, fuzzy, c-format
@@ -4456,7 +4394,7 @@ msgstr "Боркунии файли '%1' қатъ шуд"
 #: ../gtk/updateiconcache.c:1508 ../gtk/updateiconcache.c:1538
 #, c-format
 msgid "Failed to write cache file: %s\n"
-msgstr ""
+msgstr "Файли зерҳофиза навишта нашуд: %s\n"
 
 #: ../gtk/updateiconcache.c:1548
 #, c-format
@@ -4466,22 +4404,22 @@ msgstr ""
 #: ../gtk/updateiconcache.c:1562
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
-msgstr ""
+msgstr "Номи %s ба %s иваз карда нашуд: %s, %s тоза карда мешавад.\n"
 
 #: ../gtk/updateiconcache.c:1576
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
-msgstr ""
+msgstr "Номи %s ба %s иваз карда нашуд: %s\n"
 
 #: ../gtk/updateiconcache.c:1586
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
-msgstr ""
+msgstr "Номи %s ба %s иваз карда нашуд: %s.\n"
 
 #: ../gtk/updateiconcache.c:1613
 #, c-format
 msgid "Cache file created successfully.\n"
-msgstr ""
+msgstr "Файли зерҳофиза бомуваффақият эҷод карда шуд.\n"
 
 #: ../gtk/updateiconcache.c:1652
 msgid "Overwrite an existing cache, even if up to date"
@@ -4489,11 +4427,11 @@ msgstr ""
 
 #: ../gtk/updateiconcache.c:1653
 msgid "Don't check for the existence of index.theme"
-msgstr ""
+msgstr "Мавҷудияти index.theme санҷида нашавад"
 
 #: ../gtk/updateiconcache.c:1654
 msgid "Don't include image data in the cache"
-msgstr ""
+msgstr "Иттилооти тасвирро ба зерҳофиза илова накунед"
 
 #: ../gtk/updateiconcache.c:1655
 #, fuzzy
@@ -4542,9 +4480,8 @@ msgstr ""
 
 #. ID
 #: ../modules/input/imcyrillic-translit.c:215
-#, fuzzy
 msgid "Cyrillic (Transliterated)"
-msgstr "Кириллица дополнительные"
+msgstr "Кириллӣ (Транслитератсияшуда)"
 
 #. ID
 #: ../modules/input/iminuktitut.c:125
@@ -4601,49 +4538,50 @@ msgstr "Парол:"
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
 msgstr ""
+"Барои чоп кардани ҳуҷҷати \"%s\" дар принтери %s санҷиши ҳаққоният лозим аст"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1046
 #, c-format
 msgid "Authentication is required to print a document on %s"
-msgstr ""
+msgstr "Барои чоп кардани ҳуҷҷат дар %s санҷиши ҳаққоният лозим аст"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1050
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
-msgstr ""
+msgstr "Барои гирифтани сифатҳои вазифаи \"%s\" санҷиши ҳаққоният лозим аст"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1052
 msgid "Authentication is required to get attributes of a job"
-msgstr ""
+msgstr "Барои гирифтани сифатҳои вазифа санҷиши ҳаққоният лозим аст"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1056
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
-msgstr ""
+msgstr "Барои гирифтани сифатҳои принтери %s санҷиши ҳаққоният лозим аст"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1058
 msgid "Authentication is required to get attributes of a printer"
-msgstr ""
+msgstr "Барои гирифтани сифатҳои принтер санҷиши ҳаққоният лозим аст"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1061
 #, c-format
 msgid "Authentication is required to get default printer of %s"
-msgstr ""
+msgstr "Барои гирифтани принтери пешфарзи %s санҷиши ҳаққоният лозим аст"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1064
 #, c-format
 msgid "Authentication is required to get printers from %s"
-msgstr ""
+msgstr "Барои гирифтани принтерҳо аз %s санҷиши ҳаққоният лозим аст"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1069
 #, c-format
 msgid "Authentication is required to get a file from %s"
-msgstr ""
+msgstr "Барои гирифтани файл аз %s санҷиши ҳаққоният лозим мебошад"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1071
 #, c-format
 msgid "Authentication is required on %s"
-msgstr ""
+msgstr "Дар %s санҷиши ҳаққоният талаб карда мешавад"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1213
 msgid "Domain:"
@@ -4652,16 +4590,17 @@ msgstr "Домен:"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1243
 #, c-format
 msgid "Authentication is required to print document '%s'"
-msgstr ""
+msgstr "Барои чоп кардани ҳуҷҷати \"%s\" санҷиши ҳаққоният лозим аст"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1248
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr ""
+"Барои чоп кардани ин ҳуҷҷат дар принтери %s санҷиши ҳаққоният лозим аст"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1250
 msgid "Authentication is required to print this document"
-msgstr ""
+msgstr "Барои чоп кардани ин ҳуҷҷат санҷиши ҳаққоният лозим аст"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1812
 #, c-format
@@ -4766,7 +4705,7 @@ msgstr "Возеҳӣ"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3862
 msgid "GhostScript pre-filtering"
-msgstr ""
+msgstr "Филтркунии пешфарзи GhostScript"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3871
 #, fuzzy
@@ -4776,7 +4715,7 @@ msgstr "Ubuntu One"
 #. Translators: this is an option of "Two Sided"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3873
 msgid "Long Edge (Standard)"
-msgstr ""
+msgstr "Канори дароз (стандартӣ)"
 
 #. Translators: this is an option of "Two Sided"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3875
@@ -4803,22 +4742,22 @@ msgstr "Принтери пешфарз:"
 #. Translators: this is an option of "GhostScript"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3891
 msgid "Embed GhostScript fonts only"
-msgstr ""
+msgstr "Танҳо шрифтҳои GhostScript-ро ҷо диҳед"
 
 #. Translators: this is an option of "GhostScript"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3893
 msgid "Convert to PS level 1"
-msgstr ""
+msgstr "Табдил додан ба сатҳи 1-и PS"
 
 #. Translators: this is an option of "GhostScript"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3895
 msgid "Convert to PS level 2"
-msgstr ""
+msgstr "Табдил додан ба сатҳи 2-и PS"
 
 #. Translators: this is an option of "GhostScript"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3897
 msgid "No pre-filtering"
-msgstr ""
+msgstr "Бе филтркунии пешакӣ"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
@@ -4849,17 +4788,15 @@ msgstr "Паст"
 #. * in the print dialog
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4659
-#, fuzzy
 msgid "Job Priority"
-msgstr "Афзалияти амал:"
+msgstr "Аввалияти кор"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4670
-#, fuzzy
 msgid "Billing Info"
-msgstr "Навори маълумот"
+msgstr "Маълумоти пардохт"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
@@ -4869,9 +4806,8 @@ msgid "None"
 msgstr "Ҳеҷ"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4685
-#, fuzzy
 msgid "Classified"
-msgstr "Классифицируется"
+msgstr "Таснифшаванда"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4685
 msgid "Confidential"
@@ -4935,9 +4871,9 @@ msgstr ""
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4837
-#, fuzzy, c-format
+#, c-format
 msgid "Custom %sx%s"
-msgstr "Сарварақи танзимшаванда"
+msgstr "%sx%s танзимшаванда"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4918
 msgid "Printer Profile"
@@ -4952,7 +4888,7 @@ msgstr "Дастнорас"
 #. * it hasn't registered the device with colord
 #: ../modules/printbackends/cups/gtkprintercups.c:241
 msgid "Color management unavailable"
-msgstr ""
+msgstr "Идоракунии ранг дастнорас аст"
 
 #. TRANSLATORS: when there is no color profile available
 #: ../modules/printbackends/cups/gtkprintercups.c:253
@@ -5008,9 +4944,8 @@ msgid "Pages Per Sheet"
 msgstr "Саҳифаҳо дар як варақ"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:426
-#, fuzzy
 msgid "Command Line"
-msgstr "Рақамҳои хатҳо"
+msgstr "Сатри иҷрои фармон"
 
 #. SUN_BRANDING
 #: ../modules/printbackends/papi/gtkprintbackendpapi.c:809
