@@ -477,18 +477,6 @@ test_position (GtkTreeView *tree_view,
 
 
 /* Testing scrolling to various positions with various alignments */
-
-static void
-ensure_layout (void)
-{
-        /* HACK: sleep for more than one frame, to give the paint clock
-         * time to prepare the new layout */
-        g_usleep (100 * 1000);
-
-	while (gtk_events_pending ())
-		gtk_main_iteration ();
-}
-
 static void
 scroll (ScrollFixture *fixture,
 	GtkTreePath   *path,
@@ -503,7 +491,8 @@ scroll (ScrollFixture *fixture,
 
 	gtk_widget_show_all (fixture->window);
 
-        ensure_layout ();
+        gtk_test_widget_wait_for_draw (fixture->window);
+
 	test_position (GTK_TREE_VIEW (fixture->tree_view), path,
 		       use_align, row_align);
 }
@@ -561,8 +550,7 @@ scroll_after_realize (ScrollFixture *fixture,
 {
 	gtk_widget_show_all (fixture->window);
 
-	while (gtk_events_pending ())
-		gtk_main_iteration ();
+        gtk_test_widget_wait_for_draw (fixture->window);
 
 	gtk_tree_view_set_cursor (GTK_TREE_VIEW (fixture->tree_view), path,
 				  NULL, FALSE);
@@ -570,7 +558,8 @@ scroll_after_realize (ScrollFixture *fixture,
 				      path, NULL,
 				      use_align, row_align, 0.0);
 
-        ensure_layout ();
+        gtk_test_widget_wait_for_draw (fixture->window);
+
 	test_position (GTK_TREE_VIEW (fixture->tree_view), path,
 		       use_align, row_align);
 }
@@ -640,8 +629,7 @@ scroll_both_realize (ScrollFixture *fixture,
 				      use_align, row_align, 0.0);
 	gtk_tree_path_free (end);
 
-	while (gtk_events_pending ())
-		gtk_main_iteration ();
+        gtk_test_widget_wait_for_draw (fixture->window);
 
 	/* Scroll to final position */
 	gtk_tree_view_set_cursor (GTK_TREE_VIEW (fixture->tree_view), path,
@@ -650,7 +638,8 @@ scroll_both_realize (ScrollFixture *fixture,
 				      path, NULL,
 				      use_align, row_align, 0.0);
 
-        ensure_layout ();
+        gtk_test_widget_wait_for_draw (fixture->window);
+
 	test_position (GTK_TREE_VIEW (fixture->tree_view), path,
 		       use_align, row_align);
 }
@@ -794,8 +783,7 @@ scroll_new_row (ScrollFixture *fixture,
 
 	gtk_widget_show_all (fixture->window);
 
-	while (gtk_events_pending ())
-		gtk_main_iteration ();
+        gtk_test_widget_wait_for_draw (fixture->window);
 
 	/* Create the new row and scroll to it */
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (fixture->tree_view));
@@ -817,7 +805,7 @@ scroll_new_row (ScrollFixture *fixture,
 				  column,
 				  TRUE);
 
-        ensure_layout ();
+        gtk_test_widget_wait_for_draw (fixture->window);
 
 	/* Test position */
 	test_position (GTK_TREE_VIEW (fixture->tree_view), scroll_path,
@@ -849,8 +837,7 @@ scroll_new_row_tree (ScrollFixture *fixture,
 
 	gtk_tree_view_expand_all (GTK_TREE_VIEW (fixture->tree_view));
 
-	while (gtk_events_pending ())
-		gtk_main_iteration ();
+        gtk_test_widget_wait_for_draw (fixture->window);
 
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (fixture->tree_view));
 	vadjustment = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (fixture->tree_view));
@@ -869,7 +856,7 @@ scroll_new_row_tree (ScrollFixture *fixture,
 					      scroll_path, NULL, FALSE, 0.0, 0.0);
 		gtk_tree_path_free (scroll_path);
 
-                ensure_layout ();
+                gtk_test_widget_wait_for_draw (fixture->window);
 
 		/* Test position, the scroll bar must be at the end */
 		g_assert (gtk_adjustment_get_value (vadjustment) == gtk_adjustment_get_upper (vadjustment) - gtk_adjustment_get_page_size (vadjustment));
@@ -912,8 +899,7 @@ test_bug316689 (ScrollFixture *fixture,
 	while (gtk_tree_model_iter_nth_child (model, &iter, NULL, N_ROWS - 15))
 		gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
 
-	while (gtk_events_pending ())
-		gtk_main_iteration ();
+        gtk_test_widget_wait_for_draw (fixture->window);
 
 	vadjustment = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (fixture->tree_view));
 
@@ -952,8 +938,7 @@ test_bug359231 (void)
 	scroll_fixture_setup (fixture, GTK_TREE_MODEL (store), NULL);
 	gtk_widget_show_all (fixture->window);
 
-	while (gtk_events_pending ())
-		gtk_main_iteration ();
+        gtk_test_widget_wait_for_draw (fixture->window);
 
 	/* Prepend some rows at the top, expand */
 	gtk_tree_store_prepend (store, &iter, NULL);
@@ -964,8 +949,7 @@ test_bug359231 (void)
 
 	gtk_tree_view_expand_all (GTK_TREE_VIEW (fixture->tree_view));
 
-	while (gtk_events_pending ())
-		gtk_main_iteration ();
+        gtk_test_widget_wait_for_draw (fixture->window);
 
 	/* Test if height of row 0:0 is correct */
 	path = gtk_tree_path_new_from_indices (0, -1);
@@ -1016,8 +1000,7 @@ test_bug93584 (ScrollFixture *fixture,
 	row = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (store), NULL);
 	row -= 20;
 
-	while (gtk_events_pending ())
-		gtk_main_iteration ();
+        gtk_test_widget_wait_for_draw (fixture->window);
 
 	path = gtk_tree_path_new_from_indices (row, -1);
 	scroll (fixture, path, TRUE, 0.5);
@@ -1044,8 +1027,7 @@ test_bug111500 (ScrollFixture *fixture,
 	/* Make sure all events have been processed and the window
 	 * is visible.
 	 */
-	while (gtk_events_pending ())
-		gtk_main_iteration ();
+        gtk_test_widget_wait_for_draw (fixture->window);
 
 	/* Further prepare model */
 	store = GTK_TREE_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (fixture->tree_view)));
@@ -1094,8 +1076,7 @@ test_bug111500_mixed (ScrollFixture *fixture,
 	/* Make sure all events have been processed and the window
 	 * is visible.
 	 */
-	while (gtk_events_pending ())
-		gtk_main_iteration ();
+        gtk_test_widget_wait_for_draw (fixture->window);
 
 	/* Further prepare model */
 	store = GTK_TREE_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (fixture->tree_view)));
@@ -1152,8 +1133,7 @@ test_bug163214 (ScrollFixture *fixture,
 	/* Make sure all events have been processed and the window
 	 * is visible.
 	 */
-	while (gtk_events_pending ())
-		gtk_main_iteration ();
+        gtk_test_widget_wait_for_draw (fixture->window);
 
 	store = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (fixture->tree_view)));
 
@@ -1174,8 +1154,7 @@ test_bug163214 (ScrollFixture *fixture,
 	/* Make sure all events have been processed and the window
 	 * is visible.
 	 */
-	while (gtk_events_pending ())
-		gtk_main_iteration ();
+        gtk_test_widget_wait_for_draw (fixture->window);
 
 	store = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (fixture->tree_view)));
 
