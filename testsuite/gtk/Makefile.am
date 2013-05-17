@@ -31,8 +31,8 @@ test_in_files =
 noinst_PROGRAMS = $(TEST_PROGS)
 
 
-TEST_PROGS			+= testing
-test_in_files			+= testing.test.in
+#TEST_PROGS			+= testing
+#test_in_files			+= testing.test.in
 testing_SOURCES			 = testing.c
 testing_LDADD			 = $(progs_ldadd)
 
@@ -55,8 +55,8 @@ test_in_files			+= treeview.test.in
 treeview_SOURCES		 = treeview.c
 treeview_LDADD			 = $(progs_ldadd)
 
-TEST_PROGS			+= treeview-scrolling
-test_in_files			+= treeview-scrolling.test.in
+#TEST_PROGS			+= treeview-scrolling
+#test_in_files			+= treeview-scrolling.test.in
 treeview_scrolling_SOURCES	 = treeview-scrolling.c
 treeview_scrolling_LDADD	 = $(progs_ldadd) -lm
 
@@ -88,8 +88,8 @@ accel_LDADD			 = $(progs_ldadd)
 #crossingevents_SOURCES		 = crossingevents.c
 #crossingevents_LDADD		 = $(progs_ldadd)
 
-TEST_PROGS			+= filechooser
-test_in_files			+= filechooser.test.in
+#TEST_PROGS			+= filechooser
+#test_in_files			+= filechooser.test.in
 filechooser_SOURCES		 = filechooser.c
 filechooser_LDADD		 = $(progs_ldadd)
 
