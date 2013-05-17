@@ -51,6 +51,13 @@ static void              gdk_input_update_axes           (GdkDevicePrivate *gdkd
 static guint             gdk_input_translate_state       (guint             state,
 							  guint             device_state);
 
+/* A temporary error handler for ignoring device unplugging-related errors. */
+static int
+ignore_errors (Display *display, XErrorEvent *event)
+{
+  return True;
+}
+
 GdkDevicePrivate *
 _gdk_input_find_device (GdkDisplay *display,
 			guint32     id)
@@ -314,6 +321,7 @@ void
 _gdk_input_select_events (GdkWindow *impl_window,
 			  GdkDevicePrivate *gdkdev)
 {
+  int (*old_handler) (Display *, XErrorEvent *);
   XEventClass classes[GDK_MAX_DEVICE_CLASSES];
   gint num_classes;
   guint event_mask;
@@ -341,9 +349,22 @@ _gdk_input_select_events (GdkWindow *impl_window,
 
   _gdk_input_common_find_events (gdkdev, event_mask,
 				 classes, &num_classes);
+
+  /* From X11 doc:
+   * "XSelectExtensionEvent can generate a BadWindow or BadClass error."
+   * In particular when a device is unplugged, a requested event class
+   * could no longer be valid and raise a BadClass, which would cause
+   * the program to crash.
+   *
+   * To handle this case gracefully, we simply ignore XSelectExtensionEvent() errors.
+   * This is OK since there is no events to report for the unplugged device anyway.
+   * So simply the device remains "silent".
+   */
+  old_handler = XSetErrorHandler (ignore_errors);
   XSelectExtensionEvent (GDK_WINDOW_XDISPLAY (impl_window),
 			 GDK_WINDOW_XWINDOW (impl_window),
 			 classes, num_classes);
+  XSetErrorHandler (old_handler);
 }
 
 gint
@@ -893,8 +914,9 @@ gdk_device_get_state (GdkDevice       *device,
     }
   else
     {
+      int (*old_handler) (Display *, XErrorEvent *);
       GdkDevicePrivate *gdkdev;
-      XDeviceState *state;
+      XDeviceState *state = NULL;
       XInputClass *input_class;
 
       if (mask)
@@ -902,8 +924,22 @@ gdk_device_get_state (GdkDevice       *device,
 
       gdkdev = (GdkDevicePrivate *)device;
 
+      /* From X11 doc: "XQueryDeviceState can generate a BadDevice error."
+       * This would occur in particular when a device is unplugged,
+       * which would cause the program to crash (see bug 575767).
+       *
+       * To handle this case gracefully, we simply ignore the device.
+       * GTK+ 3 handles this better with XInput 2's hotplugging support;
+       * but this is better than a crash in GTK+ 2.
+       */
+      old_handler = XSetErrorHandler (ignore_errors);
       state = XQueryDeviceState (GDK_WINDOW_XDISPLAY (window),
 				 gdkdev->xdevice);
+      XSetErrorHandler (old_handler);
+
+      if (! state)
+        return;
+
       input_class = state->data;
       for (i=0; i<state->num_classes; i++)
 	{

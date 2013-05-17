@@ -76,6 +76,12 @@ gdk_device_set_mode (GdkDevice      *device,
   return TRUE;
 }
 
+static int
+ignore_errors (Display *display, XErrorEvent *event)
+{
+  return True;
+}
+
 static void
 gdk_input_check_proximity (GdkDisplay *display)
 {
@@ -91,10 +97,31 @@ gdk_input_check_proximity (GdkDisplay *display)
 	  && !GDK_IS_CORE (gdkdev)
 	  && gdkdev->xdevice)
 	{
-	  XDeviceState *state = XQueryDeviceState(display_impl->xdisplay,
-						  gdkdev->xdevice);
-	  XInputClass *xic;
-	  int i;
+      int (*old_handler) (Display *, XErrorEvent *);
+      XDeviceState *state = NULL;
+      XInputClass *xic;
+      int i;
+
+      /* From X11 doc: "XQueryDeviceState can generate a BadDevice error."
+       * This would occur in particular when a device is unplugged,
+       * which would cause the program to crash (see bug 575767).
+       *
+       * To handle this case gracefully, we simply ignore the device.
+       * GTK+ 3 handles this better with XInput 2's hotplugging support;
+       * but this is better than a crash in GTK+ 2.
+       */
+      old_handler = XSetErrorHandler (ignore_errors);
+      state = XQueryDeviceState(display_impl->xdisplay, gdkdev->xdevice);
+      XSetErrorHandler (old_handler);
+
+      if (! state)
+        {
+          /* Broken device. It may have been disconnected.
+           * Ignore it.
+           */
+          tmp_list = tmp_list->next;
+          continue;
+        }
 
 	  xic = state->data;
 	  for (i=0; i<state->num_classes; i++)
