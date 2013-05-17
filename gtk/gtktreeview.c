@@ -314,7 +314,7 @@ struct _GtkTreeViewPrivate
   /* we cache it for simplicity of the code */
   gint dy;
 
-  guint presize_handler_timer;
+  guint presize_handler_tick_cb;
   guint validate_rows_timer;
   guint scroll_sync_timer;
 
@@ -717,7 +717,6 @@ static gboolean validate_rows_handler    (GtkTreeView *tree_view);
 static gboolean do_validate_rows         (GtkTreeView *tree_view,
 					  gboolean     queue_resize);
 static gboolean validate_rows            (GtkTreeView *tree_view);
-static gboolean presize_handler_callback (gpointer     data);
 static void     install_presize_handler  (GtkTreeView *tree_view);
 static void     install_scroll_sync_handler (GtkTreeView *tree_view);
 static void     gtk_tree_view_set_top_row   (GtkTreeView *tree_view,
@@ -1753,7 +1752,7 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   tree_view->priv->press_start_x = -1;
   tree_view->priv->press_start_y = -1;
   tree_view->priv->reorderable = FALSE;
-  tree_view->priv->presize_handler_timer = 0;
+  tree_view->priv->presize_handler_tick_cb = 0;
   tree_view->priv->scroll_sync_timer = 0;
   tree_view->priv->fixed_height = -1;
   tree_view->priv->fixed_height_mode = FALSE;
@@ -2391,10 +2390,10 @@ gtk_tree_view_unrealize (GtkWidget *widget)
       priv->open_dest_timeout = 0;
     }
 
-  if (priv->presize_handler_timer != 0)
+  if (priv->presize_handler_tick_cb != 0)
     {
-      g_source_remove (priv->presize_handler_timer);
-      priv->presize_handler_timer = 0;
+      gtk_widget_remove_tick_callback (widget, priv->presize_handler_tick_cb);
+      priv->presize_handler_tick_cb = 0;
     }
 
   if (priv->validate_rows_timer != 0)
@@ -6850,7 +6849,7 @@ do_presize_handler (GtkTreeView *tree_view)
       tree_view->priv->mark_rows_col_dirty = FALSE;
     }
   validate_visible_area (tree_view);
-  tree_view->priv->presize_handler_timer = 0;
+  tree_view->priv->presize_handler_tick_cb = 0;
 
   if (tree_view->priv->fixed_height_mode)
     {
@@ -6870,11 +6869,13 @@ do_presize_handler (GtkTreeView *tree_view)
 }
 
 static gboolean
-presize_handler_callback (gpointer data)
+presize_handler_callback (GtkWidget     *widget,
+                          GdkFrameClock *clock,
+                          gpointer       unused)
 {
-  do_presize_handler (GTK_TREE_VIEW (data));
+  do_presize_handler (GTK_TREE_VIEW (widget));
 		   
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -6883,10 +6884,10 @@ install_presize_handler (GtkTreeView *tree_view)
   if (! gtk_widget_get_realized (GTK_WIDGET (tree_view)))
     return;
 
-  if (! tree_view->priv->presize_handler_timer)
+  if (! tree_view->priv->presize_handler_tick_cb)
     {
-      tree_view->priv->presize_handler_timer =
-	gdk_threads_add_idle_full (GTK_PRIORITY_RESIZE - 2, presize_handler_callback, tree_view, NULL);
+      tree_view->priv->presize_handler_tick_cb =
+	gtk_widget_add_tick_callback (GTK_WIDGET (tree_view), presize_handler_callback, NULL, NULL);
     }
   if (! tree_view->priv->validate_rows_timer)
     {
