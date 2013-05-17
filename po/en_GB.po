@@ -158,12 +158,12 @@ msgstr "Down"
 #: ../gdk/keyname-table.h:3965
 msgctxt "keyboard label"
 msgid "Page_Up"
-msgstr "Page up"
+msgstr "Page Up"
 
 #: ../gdk/keyname-table.h:3966
 msgctxt "keyboard label"
 msgid "Page_Down"
-msgstr "Page down"
+msgstr "Page Down"
 
 #: ../gdk/keyname-table.h:3967
 msgctxt "keyboard label"
@@ -234,7 +234,7 @@ msgstr "Down (keypad)"
 #: ../gdk/keyname-table.h:3981
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
-msgstr "Page up (keypad)"
+msgstr "Page Up (keypad)"
 
 #: ../gdk/keyname-table.h:3982
 msgctxt "keyboard label"
@@ -244,7 +244,7 @@ msgstr "Prior (keypad)"
 #: ../gdk/keyname-table.h:3983
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
-msgstr "Page down (keypad)"
+msgstr "Page Down (keypad)"
 
 #: ../gdk/keyname-table.h:3984
 msgctxt "keyboard label"
