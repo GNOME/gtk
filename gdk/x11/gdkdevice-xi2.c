@@ -329,6 +329,16 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
   display = gdk_window_get_display (window);
   default_screen = gdk_display_get_default_screen (display);
 
+  if (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_SLAVE)
+    {
+      GdkDevice *master = gdk_device_get_associated_device (device);
+
+      if (master)
+        _gdk_device_query_state (master, window, root_window, child_window,
+                                 root_x, root_y, win_x, win_y, mask);
+      return;
+    }
+
   if (!GDK_X11_DISPLAY (display)->trusted_client ||
       !XIQueryPointer (GDK_WINDOW_XDISPLAY (window),
                        device_xi2->device_id,
