@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: Tajik Gnome\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-03-25 18:34+0000\n"
-"PO-Revision-Date: 2013-05-18 02:12+0500\n"
+"POT-Creation-Date: 2013-05-17 12:52+0000\n"
+"PO-Revision-Date: 2013-05-18 02:16+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: \n"
 "Language: Tajik\n"
@@ -162,7 +162,7 @@ msgstr "_Ба саҳифаи болоӣ"
 #: ../gdk/keyname-table.h:3966
 msgctxt "keyboard label"
 msgid "Page_Down"
-msgstr "Ба саҳифаи _поёнӣ"
+msgstr "Ба _саҳифаи поёнӣ"
 
 #: ../gdk/keyname-table.h:3967
 msgctxt "keyboard label"
@@ -277,134 +277,186 @@ msgstr "Нест кардан"
 
 #. Translators: 'Mon' means Monitor here, and the XF86 prefix should be removed
 #: ../gdk/keyname-table.h:3991
+#| msgctxt "keyboard label"
+#| msgid "MonBrightnessUp"
 msgctxt "keyboard label"
-msgid "MonBrightnessUp"
-msgstr "MonBrightnessUp"
+msgid "XF86MonBrightnessUp"
+msgstr "XF86MonBrightnessUp (Дурахшони баланд)"
 
 #: ../gdk/keyname-table.h:3992
+#| msgctxt "keyboard label"
+#| msgid "MonBrightnessDown"
 msgctxt "keyboard label"
-msgid "MonBrightnessDown"
-msgstr "MonBrightnessDown"
+msgid "XF86MonBrightnessDown"
+msgstr "XF86MonBrightnessDown (Дурахшони паст)"
 
 #: ../gdk/keyname-table.h:3993
+#| msgctxt "keyboard label"
+#| msgid "AudioMute"
 msgctxt "keyboard label"
-msgid "AudioMute"
-msgstr "AudioMute"
+msgid "XF86AudioMute"
+msgstr "XF86AudioMute (Бесадо)"
 
 #: ../gdk/keyname-table.h:3994
+#| msgctxt "keyboard label"
+#| msgid "AudioLowerVolume"
 msgctxt "keyboard label"
-msgid "AudioLowerVolume"
-msgstr "AudioLowerVolume"
+msgid "XF86AudioLowerVolume"
+msgstr "XF86AudioLowerVolume (Паст)"
 
 #: ../gdk/keyname-table.h:3995
+#| msgctxt "keyboard label"
+#| msgid "AudioRaiseVolume"
 msgctxt "keyboard label"
-msgid "AudioRaiseVolume"
-msgstr "AudioRaiseVolume"
+msgid "XF86AudioRaiseVolume"
+msgstr "XF86AudioRaiseVolume (Баланд)"
 
 #: ../gdk/keyname-table.h:3996
+#| msgctxt "keyboard label"
+#| msgid "AudioPlay"
 msgctxt "keyboard label"
-msgid "AudioPlay"
-msgstr "AudioPlay"
+msgid "XF86AudioPlay"
+msgstr "XF86AudioPlay (Пахш)"
 
 #: ../gdk/keyname-table.h:3997
+#| msgctxt "keyboard label"
+#| msgid "AudioStop"
 msgctxt "keyboard label"
-msgid "AudioStop"
-msgstr "AudioStop"
+msgid "XF86AudioStop"
+msgstr "XF86AudioStop (Ист)"
 
 #: ../gdk/keyname-table.h:3998
+#| msgctxt "keyboard label"
+#| msgid "AudioNext"
 msgctxt "keyboard label"
-msgid "AudioNext"
-msgstr "AudioNext"
+msgid "XF86AudioNext"
+msgstr "XF86AudioNext (Навбатӣ)"
 
 #: ../gdk/keyname-table.h:3999
+#| msgctxt "keyboard label"
+#| msgid "AudioPrev"
 msgctxt "keyboard label"
-msgid "AudioPrev"
-msgstr "AudioPrev"
+msgid "XF86AudioPrev"
+msgstr "XF86AudioPrev (Қаблӣ)"
 
 #: ../gdk/keyname-table.h:4000
+#| msgctxt "keyboard label"
+#| msgid "AudioRecord"
 msgctxt "keyboard label"
-msgid "AudioRecord"
-msgstr "AudioRecord"
+msgid "XF86AudioRecord"
+msgstr "XF86AudioRecord (Сабт)"
 
 #: ../gdk/keyname-table.h:4001
+#| msgctxt "keyboard label"
+#| msgid "AudioPause"
 msgctxt "keyboard label"
-msgid "AudioPause"
-msgstr "AudioPause"
+msgid "XF86AudioPause"
+msgstr "XF86AudioPause (Таваққуф)"
 
 #: ../gdk/keyname-table.h:4002
+#| msgctxt "keyboard label"
+#| msgid "AudioRewind"
 msgctxt "keyboard label"
-msgid "AudioRewind"
-msgstr "AudioRewind"
+msgid "XF86AudioRewind"
+msgstr "XF86AudioRewind (Ақиб)"
 
 #: ../gdk/keyname-table.h:4003
+#| msgctxt "keyboard label"
+#| msgid "AudioMedia"
 msgctxt "keyboard label"
-msgid "AudioMedia"
-msgstr "AudioMedia"
+msgid "XF86AudioMedia"
+msgstr "XF86AudioMedia"
 
 #: ../gdk/keyname-table.h:4004
+#| msgctxt "keyboard label"
+#| msgid "ScreenSaver"
 msgctxt "keyboard label"
-msgid "ScreenSaver"
-msgstr "Пардаи экран"
+msgid "XF86ScreenSaver"
+msgstr "XF86ScreenSaver (Пардаи экран)"
 
 #: ../gdk/keyname-table.h:4005
+#| msgctxt "keyboard label"
+#| msgid "Battery"
 msgctxt "keyboard label"
-msgid "Battery"
-msgstr "Батарея"
+msgid "XF86Battery"
+msgstr "XF86Battery (Батарея)"
 
 #: ../gdk/keyname-table.h:4006
+#| msgctxt "keyboard label"
+#| msgid "Launch1"
 msgctxt "keyboard label"
-msgid "Launch1"
-msgstr "Launch1"
+msgid "XF86Launch1"
+msgstr "XF86Launch1 (Оғоз)"
 
 #: ../gdk/keyname-table.h:4007
+#| msgctxt "keyboard label"
+#| msgid "Forward"
 msgctxt "keyboard label"
-msgid "Forward"
-msgstr "Ба пеш"
+msgid "XF86Forward"
+msgstr "XF86Forward (Ба пеш)"
 
 #: ../gdk/keyname-table.h:4008
+#| msgctxt "keyboard label"
+#| msgid "Back"
 msgctxt "keyboard label"
-msgid "Back"
-msgstr "Бозгашт"
+msgid "XF86Back"
+msgstr "XF86Back (Бозгашт)"
 
 #: ../gdk/keyname-table.h:4009
+#| msgctxt "keyboard label"
+#| msgid "Sleep"
 msgctxt "keyboard label"
-msgid "Sleep"
-msgstr "Хобидан"
+msgid "XF86Sleep"
+msgstr "XF86Sleep (Хобидан)"
 
 #: ../gdk/keyname-table.h:4010
+#| msgctxt "keyboard label"
+#| msgid "Hibernate"
 msgctxt "keyboard label"
-msgid "Hibernate"
-msgstr "Hibernate"
+msgid "XF86Hibernate"
+msgstr "XF86Hibernate (Гибернатсия)"
 
 #: ../gdk/keyname-table.h:4011
+#| msgctxt "keyboard label"
+#| msgid "WLAN"
 msgctxt "keyboard label"
-msgid "WLAN"
-msgstr "WLAN"
+msgid "XF86WLAN"
+msgstr "XF86WLAN (Шабакаи LAN)"
 
 #: ../gdk/keyname-table.h:4012
+#| msgctxt "keyboard label"
+#| msgid "WebCam"
 msgctxt "keyboard label"
-msgid "WebCam"
-msgstr "Веб-камера"
+msgid "XF86WebCam"
+msgstr "XF86WebCam (Веб-камера)"
 
 #: ../gdk/keyname-table.h:4013
+#| msgctxt "keyboard label"
+#| msgid "Display"
 msgctxt "keyboard label"
-msgid "Display"
-msgstr "Display"
+msgid "XF86Display"
+msgstr "XF86Display (Дисплей)"
 
 #: ../gdk/keyname-table.h:4014
+#| msgctxt "keyboard label"
+#| msgid "TouchpadToggle"
 msgctxt "keyboard label"
-msgid "TouchpadToggle"
-msgstr "TouchpadToggle"
+msgid "XF86TouchpadToggle"
+msgstr "XF86TouchpadToggle (Фаъоли панели ламсӣ)"
 
 #: ../gdk/keyname-table.h:4015
+#| msgctxt "keyboard label"
+#| msgid "WakeUp"
 msgctxt "keyboard label"
-msgid "WakeUp"
-msgstr "WakeUp"
+msgid "XF86WakeUp"
+msgstr "XF86WakeUp (Бедор кардан)"
 
 #: ../gdk/keyname-table.h:4016
+#| msgctxt "keyboard label"
+#| msgid "Suspend"
 msgctxt "keyboard label"
-msgid "Suspend"
-msgstr "Таваққуф"
+msgid "XF86Suspend"
+msgstr "XF86Suspend (Таваққуф)"
 
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:53
@@ -745,7 +797,7 @@ msgstr ""
 #.
 #: ../gtk/deprecated/gtkcolorseldialog.c:201 ../gtk/gtkappchooserdialog.c:509
 #: ../gtk/gtkcolorchooserdialog.c:149 ../gtk/gtkfontchooserdialog.c:174
-#: ../gtk/gtkprinteroptionwidget.c:550
+#: ../gtk/gtkprinteroptionwidget.c:552
 msgid "_Select"
 msgstr "_Интихоб кардан"
 
@@ -2203,11 +2255,11 @@ msgstr "Системаи файлии root"
 msgid "Authentication"
 msgstr "_Санҷиши ҳаққоният"
 
-#: ../gtk/gtkprinteroptionwidget.c:546
+#: ../gtk/gtkprinteroptionwidget.c:548
 msgid "Select a filename"
 msgstr "Интихоби номи файл"
 
-#: ../gtk/gtkprinteroptionwidget.c:770
+#: ../gtk/gtkprinteroptionwidget.c:772
 msgid "Not available"
 msgstr "Дастнорас аст"
 
@@ -4869,32 +4921,32 @@ msgstr "Профили беном"
 msgid "output"
 msgstr "натиҷа"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:521
+#: ../modules/printbackends/file/gtkprintbackendfile.c:527
 msgid "Print to File"
 msgstr "Чоп кардан ба файл"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:647
+#: ../modules/printbackends/file/gtkprintbackendfile.c:653
 msgid "PDF"
 msgstr "PDF"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:647
+#: ../modules/printbackends/file/gtkprintbackendfile.c:653
 msgid "Postscript"
 msgstr "Postscript"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:647
+#: ../modules/printbackends/file/gtkprintbackendfile.c:653
 msgid "SVG"
 msgstr "SVG"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:660
+#: ../modules/printbackends/file/gtkprintbackendfile.c:666
 #: ../modules/printbackends/test/gtkprintbackendtest.c:501
 msgid "Pages per _sheet:"
 msgstr "Саҳифаҳо дар _як варақ:"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:719
+#: ../modules/printbackends/file/gtkprintbackendfile.c:725
 msgid "File"
 msgstr "Файл"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:729
+#: ../modules/printbackends/file/gtkprintbackendfile.c:735
 msgid "_Output format"
 msgstr "_Формати барориш"
 
