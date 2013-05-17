@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-03-25 18:34+0000\n"
-"PO-Revision-Date: 2013-05-17 17:06+0500\n"
+"PO-Revision-Date: 2013-05-18 02:12+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: \n"
 "Language: Tajik\n"
@@ -162,7 +162,7 @@ msgstr "_Ба саҳифаи болоӣ"
 #: ../gdk/keyname-table.h:3966
 msgctxt "keyboard label"
 msgid "Page_Down"
-msgstr "Ба _саҳифаи поёнӣ"
+msgstr "Ба саҳифаи _поёнӣ"
 
 #: ../gdk/keyname-table.h:3967
 msgctxt "keyboard label"
