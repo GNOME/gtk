@@ -52,12 +52,6 @@ gboolean     _gtk_tree_view_get_cursor_node           (GtkTreeView       *tree_v
 						       GtkRBNode        **node);
 GtkTreePath *_gtk_tree_path_new_from_rbtree           (GtkRBTree         *tree,
 						       GtkRBNode         *node);
-void         _gtk_tree_view_child_move_resize         (GtkTreeView       *tree_view,
-						       GtkWidget         *widget,
-						       gint               x,
-						       gint               y,
-						       gint               width,
-						       gint               height);
 void         _gtk_tree_view_queue_draw_node           (GtkTreeView       *tree_view,
 						       GtkRBTree         *tree,
 						       GtkRBNode         *node,

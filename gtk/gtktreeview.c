@@ -8728,43 +8728,6 @@ gtk_tree_view_put (GtkTreeView *tree_view,
   gtk_widget_set_parent (child_widget, GTK_WIDGET (tree_view));
 }
 
-void
-_gtk_tree_view_child_move_resize (GtkTreeView *tree_view,
-				  GtkWidget   *widget,
-				  /* in tree coordinates */
-				  gint         x,
-				  gint         y,
-				  gint         width,
-				  gint         height)
-{
-  GtkTreeViewChild *child = NULL;
-  GList *list;
-  GdkRectangle allocation;
-
-  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  for (list = tree_view->priv->children; list; list = list->next)
-    {
-      if (((GtkTreeViewChild *)list->data)->widget == widget)
-	{
-	  child = list->data;
-	  break;
-	}
-    }
-  if (child == NULL)
-    return;
-
-  allocation.x = child->x = x;
-  allocation.y = child->y = y;
-  allocation.width = child->width = width;
-  allocation.height = child->height = height;
-
-  if (gtk_widget_get_realized (widget))
-    gtk_widget_size_allocate (widget, &allocation);
-}
-
-
 /* TreeModel Callbacks
  */
 
