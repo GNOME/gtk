@@ -4733,8 +4733,7 @@ static void
 gtk_tree_view_draw_grid_lines (GtkTreeView    *tree_view,
 			       cairo_t        *cr)
 {
-  GList *list;
-  GtkTreeViewColumn *last;
+  GList *list, *first, *last;
   gboolean rtl;
   gint current_x = 0;
 
@@ -4744,17 +4743,23 @@ gtk_tree_view_draw_grid_lines (GtkTreeView    *tree_view,
 
   rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
 
-  for (list = (rtl ? g_list_last (tree_view->priv->columns) : g_list_first (tree_view->priv->columns)),
-       last = (rtl ? g_list_first (tree_view->priv->columns) : g_list_last (tree_view->priv->columns))->data;
+  first = g_list_first (tree_view->priv->columns);
+  last = g_list_last (tree_view->priv->columns);
+
+  for (list = (rtl ? last : first);
        list;
        list = (rtl ? list->prev : list->next))
     {
       GtkTreeViewColumn *column = list->data;
 
-      current_x += gtk_tree_view_column_get_width (column);
-
       /* We don't want a line for the last column */
-      if (column == last) break;
+      if (column == (rtl ? first->data : last->data))
+        break;
+
+      if (!gtk_tree_view_column_get_visible (column))
+        continue;
+
+      current_x += gtk_tree_view_column_get_width (column);
 
       gtk_tree_view_draw_line (tree_view, cr,
                                GTK_TREE_VIEW_GRID_LINE,
