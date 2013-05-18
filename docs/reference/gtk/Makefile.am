@@ -141,7 +141,6 @@ content_files =					\
 	migrating-smclient-GtkApplication.xml	\
 	migrating-GtkGrid.xml			\
 	migrating-GtkStyleContext.xml		\
-	objects_grouped.sgml			\
 	osx.sgml				\
 	broadway.xml				\
 	wayland.xml				\
