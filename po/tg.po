@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-05-17 12:52+0000\n"
-"PO-Revision-Date: 2013-05-18 02:16+0500\n"
+"PO-Revision-Date: 2013-05-19 12:37+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: \n"
 "Language: Tajik\n"
@@ -3494,15 +3494,15 @@ msgstr "_Форматгузории самтии PDF"
 
 #: ../gtk/gtktextutil.c:65
 msgid "ZWS _Zero width space"
-msgstr "ZWS _Zero width space"
+msgstr "_Фазои бари сифрӣ (ZWS)"
 
 #: ../gtk/gtktextutil.c:66
 msgid "ZWJ Zero width _joiner"
-msgstr "ZWJ _Паҳноии сифрии муттаҳидкунанда"
+msgstr "_Паҳноии сифрии муттаҳидкунанда (ZWJ)"
 
 #: ../gtk/gtktextutil.c:67
 msgid "ZWNJ Zero width _non-joiner"
-msgstr "ZWNJ Па_ҳноии сифрии муттаҳиднакунанда"
+msgstr "Па_ҳноии сифрии муттаҳиднакунанда (ZWNJ)"
 
 #: ../gtk/gtkuimanager.c:1780
 #, c-format
