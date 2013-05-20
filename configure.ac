@@ -361,6 +361,7 @@ DISABLE_ON_QUARTZ=''
 if test "x$enable_quartz_backend" = xyes; then
   cairo_backends="$cairo_backends cairo-quartz"
   GDK_BACKENDS="$GDK_BACKENDS quartz"
+  backend_immodules="$backend_immodules,quartz"
   GDK_WINDOWING="$GDK_WINDOWING
 #define GDK_WINDOWING_QUARTZ"
   GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -framework Cocoa"
@@ -875,6 +876,7 @@ AM_CONDITIONAL(INCLUDE_IM_IME, [test x"$INCLUDE_ime" = xyes])
 AM_CONDITIONAL(INCLUDE_IM_INUKTITUT, [test x"$INCLUDE_inuktitut" = xyes])
 AM_CONDITIONAL(INCLUDE_IM_IPA, [test x"$INCLUDE_ipa" = xyes])
 AM_CONDITIONAL(INCLUDE_IM_MULTIPRESS, [test x"$INCLUDE_multipress" = xyes])
+AM_CONDITIONAL(INCLUDE_IM_QUARTZ, [test x"$INCLUDE_quartz" = xyes])
 AM_CONDITIONAL(INCLUDE_IM_THAI, [test x"$INCLUDE_thai" = xyes])
 AM_CONDITIONAL(INCLUDE_IM_TI_ER, [test x"$INCLUDE_ti_er" = xyes])
 AM_CONDITIONAL(INCLUDE_IM_TI_ET, [test x"$INCLUDE_ti_et" = xyes])
