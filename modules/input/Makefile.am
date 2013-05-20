@@ -159,7 +159,9 @@ im_quartz_la_LIBADD = $(LDADDS)
 if INCLUDE_IM_QUARTZ
 STATIC_QUARTZ_MODULE = libstatic-im-quartz.la
 else
+if USE_QUARTZ
 QUARTZ_MODULE = im-quartz.la
+endif
 endif
 
 multipress_defs = -DMULTIPRESS_LOCALEDIR=\""$(mplocaledir)"\" -DMULTIPRESS_CONFDIR=\""$(sysconfdir)/gtk-2.0"\"
