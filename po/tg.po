@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-05-17 12:52+0000\n"
-"PO-Revision-Date: 2013-05-19 12:37+0500\n"
+"PO-Revision-Date: 2013-05-20 12:43+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: \n"
 "Language: Tajik\n"
@@ -4728,7 +4728,7 @@ msgstr "Филтркунии пешфарзи GhostScript"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3871
 msgid "One Sided"
-msgstr "Якпаҳлӯ"
+msgstr "Яктарафа"
 
 #. Translators: this is an option of "Two Sided"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3873
