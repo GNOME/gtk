@@ -2567,7 +2567,7 @@ gtk_file_chooser_get_show_hidden (GtkFileChooser *chooser)
  * a confirmation dialog if the user types a file name that already exists.  This
  * is %FALSE by default.
  *
- * Regardless of this setting, the @chooser will emit the
+ * If set to %TRUE, the @chooser will emit the
  * #GtkFileChooser::confirm-overwrite signal when appropriate.
  *
  * If all you need is the stock confirmation dialog, set this property to %TRUE.
