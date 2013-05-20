@@ -313,7 +313,19 @@ gtk_quartz_clear_main_menu (void)
 
 - (void)populate
 {
-  [self removeAllItems];
+  /* removeAllItems is available only in 10.6 and later, but it's more
+     efficient than iterating over the array of
+     NSMenuItems. performSelector: suppresses a compiler warning when
+     building on earlier OSX versions. */
+  if ([self respondsToSelector: @selector (removeAllItems)])
+    [self performSelector: @selector (removeAllItems)];
+  else
+    {
+      /* Iterate from the bottom up to save reindexing the NSArray. */
+      int i;
+      for (i = [self numberOfItems]; i > 0; i--)
+	[self removeItemAtIndex: i];
+    }
 
   [self appendFromModel:model withSeparators:with_separators];
 }
