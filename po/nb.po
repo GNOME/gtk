@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 3.7.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-13 14:36+0200\n"
-"PO-Revision-Date: 2013-05-13 14:44+0200\n"
+"PO-Revision-Date: 2013-05-20 18:31+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: no\n"
@@ -567,12 +567,12 @@ msgstr "Klikker menyoppføringen"
 #: ../gtk/a11y/gtkscalebuttonaccessible.c:140
 msgctxt "Action description"
 msgid "Pops up the slider"
-msgstr ""
+msgstr "Viser rullefeltet"
 
 #: ../gtk/a11y/gtkscalebuttonaccessible.c:142
 msgctxt "Action description"
 msgid "Dismisses the slider"
-msgstr ""
+msgstr "Tar bort rullefeltet"
 
 #: ../gtk/a11y/gtkscalebuttonaccessible.c:170
 msgctxt "Action name"
@@ -605,7 +605,7 @@ msgstr "Bytter mellom av/på tilstand"
 #: ../gtk/a11y/gtkswitchaccessible.c:110
 msgctxt "Action description"
 msgid "Toggles the switch"
-msgstr ""
+msgstr "Aktiverer bryteren"
 
 #: ../gtk/deprecated/gtkcolorsel.c:425
 msgid ""
