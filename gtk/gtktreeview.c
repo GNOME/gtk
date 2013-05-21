@@ -11080,8 +11080,7 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view,
    */
   GList *list;
   gboolean found_focus = FALSE;
-  GtkWidgetClass *entry_parent_class;
-  
+
   if (!tree_view->priv->enable_search && !keybinding)
     return FALSE;
 
@@ -11139,11 +11138,8 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view,
 		   (GSourceFunc) gtk_tree_view_search_entry_flush_timeout,
 		   tree_view);
 
-  /* Grab focus will select all the text.  We don't want that to happen, so we
-   * call the parent instance and bypass the selection change.  This is probably
-   * really non-kosher. */
-  entry_parent_class = g_type_class_peek_parent (GTK_ENTRY_GET_CLASS (tree_view->priv->search_entry));
-  (entry_parent_class->grab_focus) (tree_view->priv->search_entry);
+  /* Grab focus without selecting all the text. */
+  _gtk_entry_grab_focus (GTK_ENTRY (tree_view->priv->search_entry), FALSE);
 
   /* send focus-in event */
   send_focus_change (tree_view->priv->search_entry, device, TRUE);
