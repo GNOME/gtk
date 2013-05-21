@@ -25,8 +25,8 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-04-22 12:23+0000\n"
-"PO-Revision-Date: 2013-04-22 11:06-0300\n"
+"POT-Creation-Date: 2013-05-18 23:07+0000\n"
+"PO-Revision-Date: 2013-05-20 19:03-0300\n"
 "Last-Translator: Rafael Ferreira <rafael.f.f1@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -295,131 +295,183 @@ msgstr "Delete"
 
 #. Translators: 'Mon' means Monitor here, and the XF86 prefix should be removed
 #: ../gdk/keyname-table.h:3991
+#| msgctxt "keyboard label"
+#| msgid "MonBrightnessUp"
 msgctxt "keyboard label"
 msgid "MonBrightnessUp"
 msgstr "AumentarBrilhoMonitor"
 
 #: ../gdk/keyname-table.h:3992
+#| msgctxt "keyboard label"
+#| msgid "MonBrightnessDown"
 msgctxt "keyboard label"
 msgid "MonBrightnessDown"
 msgstr "DiminuirBrilhoMonitor"
 
 #: ../gdk/keyname-table.h:3993
+#| msgctxt "keyboard label"
+#| msgid "AudioMute"
 msgctxt "keyboard label"
 msgid "AudioMute"
 msgstr "ÁudioMudo"
 
 #: ../gdk/keyname-table.h:3994
+#| msgctxt "keyboard label"
+#| msgid "AudioLowerVolume"
 msgctxt "keyboard label"
 msgid "AudioLowerVolume"
 msgstr "AbaixarVolumeÁudio"
 
 #: ../gdk/keyname-table.h:3995
+#| msgctxt "keyboard label"
+#| msgid "AudioRaiseVolume"
 msgctxt "keyboard label"
 msgid "AudioRaiseVolume"
 msgstr "AumentarVolumeÁudio"
 
 #: ../gdk/keyname-table.h:3996
+#| msgctxt "keyboard label"
+#| msgid "AudioPlay"
 msgctxt "keyboard label"
 msgid "AudioPlay"
 msgstr "ReproduzirÁudio"
 
 #: ../gdk/keyname-table.h:3997
+#| msgctxt "keyboard label"
+#| msgid "AudioStop"
 msgctxt "keyboard label"
 msgid "AudioStop"
 msgstr "PararÁudio"
 
 #: ../gdk/keyname-table.h:3998
+#| msgctxt "keyboard label"
+#| msgid "AudioNext"
 msgctxt "keyboard label"
 msgid "AudioNext"
 msgstr "PróximoÁudio"
 
 #: ../gdk/keyname-table.h:3999
+#| msgctxt "keyboard label"
+#| msgid "AudioPrev"
 msgctxt "keyboard label"
 msgid "AudioPrev"
 msgstr "ÁudioAnterior"
 
 #: ../gdk/keyname-table.h:4000
+#| msgctxt "keyboard label"
+#| msgid "AudioRecord"
 msgctxt "keyboard label"
 msgid "AudioRecord"
 msgstr "GravarÁudio"
 
 #: ../gdk/keyname-table.h:4001
+#| msgctxt "keyboard label"
+#| msgid "AudioPause"
 msgctxt "keyboard label"
 msgid "AudioPause"
 msgstr "PausarÁudio"
 
 #: ../gdk/keyname-table.h:4002
+#| msgctxt "keyboard label"
+#| msgid "AudioRewind"
 msgctxt "keyboard label"
 msgid "AudioRewind"
 msgstr "RetornarÁudio"
 
 #: ../gdk/keyname-table.h:4003
+#| msgctxt "keyboard label"
+#| msgid "AudioMedia"
 msgctxt "keyboard label"
 msgid "AudioMedia"
 msgstr "MídiaÁudio"
 
 #: ../gdk/keyname-table.h:4004
+#| msgctxt "keyboard label"
+#| msgid "ScreenSaver"
 msgctxt "keyboard label"
 msgid "ScreenSaver"
 msgstr "ProtetorTela"
 
 #: ../gdk/keyname-table.h:4005
+#| msgctxt "keyboard label"
+#| msgid "Battery"
 msgctxt "keyboard label"
 msgid "Battery"
 msgstr "Bateria"
 
 #: ../gdk/keyname-table.h:4006
+#| msgctxt "keyboard label"
+#| msgid "Launch1"
 msgctxt "keyboard label"
 msgid "Launch1"
 msgstr "Lançar1"
 
 #: ../gdk/keyname-table.h:4007
+#| msgctxt "keyboard label"
+#| msgid "Forward"
 msgctxt "keyboard label"
 msgid "Forward"
 msgstr "Avançar"
 
 #: ../gdk/keyname-table.h:4008
+#| msgctxt "keyboard label"
+#| msgid "Back"
 msgctxt "keyboard label"
 msgid "Back"
 msgstr "Voltar"
 
 #: ../gdk/keyname-table.h:4009
+#| msgctxt "keyboard label"
+#| msgid "Sleep"
 msgctxt "keyboard label"
 msgid "Sleep"
 msgstr "Suspender"
 
 #: ../gdk/keyname-table.h:4010
+#| msgctxt "keyboard label"
+#| msgid "Hibernate"
 msgctxt "keyboard label"
 msgid "Hibernate"
 msgstr "Hibernar"
 
 #: ../gdk/keyname-table.h:4011
+#| msgctxt "keyboard label"
+#| msgid "WLAN"
 msgctxt "keyboard label"
 msgid "WLAN"
 msgstr "WLAN"
 
 #: ../gdk/keyname-table.h:4012
+#| msgctxt "keyboard label"
+#| msgid "WebCam"
 msgctxt "keyboard label"
 msgid "WebCam"
 msgstr "WebCam"
 
 #: ../gdk/keyname-table.h:4013
+#| msgctxt "keyboard label"
+#| msgid "Display"
 msgctxt "keyboard label"
 msgid "Display"
 msgstr "Exibir"
 
 #: ../gdk/keyname-table.h:4014
+#| msgctxt "keyboard label"
+#| msgid "TouchpadToggle"
 msgctxt "keyboard label"
 msgid "TouchpadToggle"
 msgstr "AlternarTouchpad"
 
 #: ../gdk/keyname-table.h:4015
+#| msgctxt "keyboard label"
+#| msgid "WakeUp"
 msgctxt "keyboard label"
 msgid "WakeUp"
 msgstr "ParaCima"
 
 #: ../gdk/keyname-table.h:4016
+#| msgctxt "keyboard label"
+#| msgid "Suspend"
 msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "Suspender"
@@ -1004,7 +1056,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../gtk/gtkapplicationwindow.c:333 ../gtk/gtkprintoperation-unix.c:480
+#: ../gtk/gtkapplicationwindow.c:334 ../gtk/gtkprintoperation-unix.c:480
 #: ../gtk/gtkprintoperation-win32.c:1445
 msgid "Application"
 msgstr "Aplicativo"
@@ -1500,15 +1552,15 @@ msgstr "_Direita:"
 msgid "Paper Margins"
 msgstr "Margens do papel"
 
-#: ../gtk/gtkentry.c:9204 ../gtk/gtktextview.c:8684
+#: ../gtk/gtkentry.c:9205 ../gtk/gtktextview.c:8685
 msgid "Input _Methods"
 msgstr "_Métodos de entrada"
 
-#: ../gtk/gtkentry.c:9218 ../gtk/gtktextview.c:8698
+#: ../gtk/gtkentry.c:9219 ../gtk/gtktextview.c:8699
 msgid "_Insert Unicode Control Character"
 msgstr "_Inserir caractere de controle Unicode"
 
-#: ../gtk/gtkentry.c:10316
+#: ../gtk/gtkentry.c:10317
 msgid "Caps Lock is on"
 msgstr "A tecla Caps Lock está ativa"
 
@@ -1636,7 +1688,7 @@ msgstr "%1$s em %2$s"
 msgid "Search"
 msgstr "Pesquisar"
 
-#: ../gtk/gtkfilechooserdefault.c:1768 ../gtk/gtkfilechooserdefault.c:4996
+#: ../gtk/gtkfilechooserdefault.c:1768 ../gtk/gtkfilechooserdefault.c:5000
 msgid "Recently Used"
 msgstr "Usado recentemente"
 
@@ -1699,137 +1751,137 @@ msgstr "Adiciona a pasta selecionada aos Marcadores"
 msgid "Could not select file"
 msgstr "Não foi possível selecionar arquivo"
 
-#: ../gtk/gtkfilechooserdefault.c:4181
+#: ../gtk/gtkfilechooserdefault.c:4185
 msgid "_Visit this file"
 msgstr "_Visitar este arquivo"
 
-#: ../gtk/gtkfilechooserdefault.c:4184
+#: ../gtk/gtkfilechooserdefault.c:4188
 msgid "_Copy file’s location"
 msgstr "_Copiar localização do arquivo"
 
-#: ../gtk/gtkfilechooserdefault.c:4187
+#: ../gtk/gtkfilechooserdefault.c:4191
 msgid "_Add to Bookmarks"
 msgstr "_Adicionar aos marcadores"
 
-#: ../gtk/gtkfilechooserdefault.c:4194
+#: ../gtk/gtkfilechooserdefault.c:4198
 msgid "Show _Hidden Files"
 msgstr "Mostrar arquivos _ocultos"
 
-#: ../gtk/gtkfilechooserdefault.c:4197
+#: ../gtk/gtkfilechooserdefault.c:4201
 msgid "Show _Size Column"
 msgstr "Mostrar coluna _Tamanho"
 
-#: ../gtk/gtkfilechooserdefault.c:4422
+#: ../gtk/gtkfilechooserdefault.c:4426
 msgid "Files"
 msgstr "Arquivos"
 
-#: ../gtk/gtkfilechooserdefault.c:4473
+#: ../gtk/gtkfilechooserdefault.c:4477
 msgid "Name"
 msgstr "Nome"
 
-#: ../gtk/gtkfilechooserdefault.c:4496
+#: ../gtk/gtkfilechooserdefault.c:4500
 msgid "Size"
 msgstr "Tamanho"
 
-#: ../gtk/gtkfilechooserdefault.c:4510
+#: ../gtk/gtkfilechooserdefault.c:4514
 msgid "Modified"
 msgstr "Modificado"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4603
+#: ../gtk/gtkfilechooserdefault.c:4607
 msgid "_Name:"
 msgstr "_Nome:"
 
-#: ../gtk/gtkfilechooserdefault.c:4834
+#: ../gtk/gtkfilechooserdefault.c:4838
 msgid "Type a file name"
 msgstr "Digite um nome de arquivo"
 
-#: ../gtk/gtkfilechooserdefault.c:4881 ../gtk/gtkfilechooserdefault.c:4892
+#: ../gtk/gtkfilechooserdefault.c:4885 ../gtk/gtkfilechooserdefault.c:4896
 msgid "Please select a folder below"
 msgstr "Por favor, selecione uma pasta abaixo"
 
-#: ../gtk/gtkfilechooserdefault.c:4887
+#: ../gtk/gtkfilechooserdefault.c:4891
 msgid "Please type a file name"
 msgstr "Por favor, digite um nome de arquivo"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:4958
+#: ../gtk/gtkfilechooserdefault.c:4962
 msgid "Create Fo_lder"
 msgstr "Criar _pasta"
 
-#: ../gtk/gtkfilechooserdefault.c:5006
+#: ../gtk/gtkfilechooserdefault.c:5010
 msgid "Search:"
 msgstr "Pesquisar:"
 
-#: ../gtk/gtkfilechooserdefault.c:5057
+#: ../gtk/gtkfilechooserdefault.c:5061
 msgid "_Location:"
 msgstr "Locali_zação:"
 
-#: ../gtk/gtkfilechooserdefault.c:5507
+#: ../gtk/gtkfilechooserdefault.c:5511
 msgid "Save in _folder:"
 msgstr "Salvar na _pasta:"
 
-#: ../gtk/gtkfilechooserdefault.c:5509
+#: ../gtk/gtkfilechooserdefault.c:5513
 msgid "Create in _folder:"
 msgstr "Criar na _pasta:"
 
-#: ../gtk/gtkfilechooserdefault.c:6530
+#: ../gtk/gtkfilechooserdefault.c:6534
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Não foi possível ler o conteúdo de %s"
 
-#: ../gtk/gtkfilechooserdefault.c:6534
+#: ../gtk/gtkfilechooserdefault.c:6538
 msgid "Could not read the contents of the folder"
 msgstr "Não foi possível ler o conteúdo da pasta"
 
-#: ../gtk/gtkfilechooserdefault.c:6627 ../gtk/gtkfilechooserdefault.c:6695
-#: ../gtk/gtkfilechooserdefault.c:6875
+#: ../gtk/gtkfilechooserdefault.c:6631 ../gtk/gtkfilechooserdefault.c:6699
+#: ../gtk/gtkfilechooserdefault.c:6879
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: ../gtk/gtkfilechooserdefault.c:6642
+#: ../gtk/gtkfilechooserdefault.c:6646
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6644
+#: ../gtk/gtkfilechooserdefault.c:6648
 msgid "Yesterday at %H:%M"
 msgstr "Ontem às %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7346
+#: ../gtk/gtkfilechooserdefault.c:7350
 msgid "Cannot change to folder because it is not local"
 msgstr "Não foi possível ir para a pasta porque ela não é local"
 
-#: ../gtk/gtkfilechooserdefault.c:7943 ../gtk/gtkfilechooserdefault.c:7964
+#: ../gtk/gtkfilechooserdefault.c:7947 ../gtk/gtkfilechooserdefault.c:7968
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "O atalho %s já existe"
 
-#: ../gtk/gtkfilechooserdefault.c:8054
+#: ../gtk/gtkfilechooserdefault.c:8058
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "O atalho %s não existe"
 
-#: ../gtk/gtkfilechooserdefault.c:8301 ../gtk/gtkprintunixdialog.c:548
+#: ../gtk/gtkfilechooserdefault.c:8305 ../gtk/gtkprintunixdialog.c:548
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Um arquivo com o nome \"%s\" já existe.  Você deseja substituí-lo?"
 
-#: ../gtk/gtkfilechooserdefault.c:8304 ../gtk/gtkprintunixdialog.c:552
+#: ../gtk/gtkfilechooserdefault.c:8308 ../gtk/gtkprintunixdialog.c:552
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "O arquivo já existe em \"%s\".  Substituí-lo irá sobrescrever seu conteúdo."
 
-#: ../gtk/gtkfilechooserdefault.c:8309 ../gtk/gtkprintunixdialog.c:559
+#: ../gtk/gtkfilechooserdefault.c:8313 ../gtk/gtkprintunixdialog.c:559
 msgid "_Replace"
 msgstr "Substitui_r"
 
-#: ../gtk/gtkfilechooserdefault.c:9116
+#: ../gtk/gtkfilechooserdefault.c:9120
 msgid "Could not start the search process"
 msgstr "Não foi possível iniciar o processo de pesquisa"
 
-#: ../gtk/gtkfilechooserdefault.c:9117
+#: ../gtk/gtkfilechooserdefault.c:9121
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1837,11 +1889,11 @@ msgstr ""
 "Não foi possível estabelecer uma conexão com o serviço indexador.  Por "
 "favor, certifique-se de que o serviço está em execução."
 
-#: ../gtk/gtkfilechooserdefault.c:9131
+#: ../gtk/gtkfilechooserdefault.c:9135
 msgid "Could not send the search request"
 msgstr "Não foi possível enviar o pedido de pesquisa"
 
-#: ../gtk/gtkfilechooserdefault.c:9741
+#: ../gtk/gtkfilechooserdefault.c:9745
 #, c-format
 msgid "Could not mount %s"
 msgstr "Não foi possível montar %s"
@@ -3308,7 +3360,7 @@ msgstr "_Reduzir"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: ../gtk/gtkswitch.c:337 ../gtk/gtkswitch.c:392 ../gtk/gtkswitch.c:583
+#: ../gtk/gtkswitch.c:345 ../gtk/gtkswitch.c:400 ../gtk/gtkswitch.c:591
 msgctxt "switch"
 msgid "ON"
 msgstr "ON"
@@ -3316,7 +3368,7 @@ msgstr "ON"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: ../gtk/gtkswitch.c:345 ../gtk/gtkswitch.c:393 ../gtk/gtkswitch.c:598
+#: ../gtk/gtkswitch.c:353 ../gtk/gtkswitch.c:401 ../gtk/gtkswitch.c:606
 msgctxt "switch"
 msgid "OFF"
 msgstr "OFF"
