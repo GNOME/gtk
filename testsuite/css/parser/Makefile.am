@@ -1,6 +1,11 @@
 include $(top_srcdir)/Makefile.decl
 
+NULL =
+
+CLEANFILES =
+
 TEST_PROGS += test-css-parser
+test_in_files = test-css-parser.test.in
 
 check_PROGRAMS = $(TEST_PROGS)
 
@@ -24,7 +29,7 @@ test_css_parser_SOURCES = \
 clean-local:
 	rm $(builddir)/*.out.css || true
 
-EXTRA_DIST += \
+test_data = \
 	at-invalid-01.css \
 	at-invalid-01.errors \
 	at-invalid-01.ref.css \
@@ -340,6 +345,29 @@ EXTRA_DIST += \
 	value-none.css \
 	value-none.errors \
 	value-none.ref.css \
-	widget-style-property.css
+	widget-style-property.css \
+	$(NULL)
 
+if BUILDOPT_INSTALL_TESTS
+insttestdir=$(pkglibexecdir)/installed-tests/css/parser
+insttest_PROGRAMS = $(TEST_PROGS)
+insttest_DATA = $(test_data)
+
+substitutions = \
+	-e s,@pkglibexecdir\@,$(pkglibexecdir),g \
+	$(NULL)
+
+test_files = $(test_in_files:.test.in=.test)
+
+$(test_files): %.test: %.test.in
+	$(AM_V_GEN) sed $(substitutions) $< > $@.tmp && mv $@.tmp $@
+
+EXTRA_DIST += $(test_in_files)
+
+CLEANFILES += $(test_files)
+
+testmetadir = $(datadir)/installed-tests/$(PACKAGE)/css/parser
+testmeta_DATA = $(test_files)
+endif
+ 
 -include $(top_srcdir)/git.mk

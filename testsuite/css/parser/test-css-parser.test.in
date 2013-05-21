@@ -1,0 +1,3 @@
+[Test]
+Exec=/bin/sh -c "cd @pkglibexecdir@/installed-tests/css/parser && @pkglibexecdir@/installed-tests/css/parser/test-css-parser"
+Type=session
