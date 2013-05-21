@@ -124,6 +124,7 @@ search_entry_changed_cb (GtkSearchEntry *entry,
   GtkSearchEntryPrivate *priv = GET_PRIV (entry);
   const char *str, *icon_name;
   gboolean active;
+  gboolean cleared = FALSE;
 
   /* Update the icons first */
   str = gtk_entry_get_text (GTK_ENTRY (entry));
@@ -132,6 +133,7 @@ search_entry_changed_cb (GtkSearchEntry *entry,
     {
       icon_name = NULL;
       active = FALSE;
+      cleared = TRUE;
     }
   else
     {
@@ -151,6 +153,11 @@ search_entry_changed_cb (GtkSearchEntry *entry,
   /* Don't stop the emission if it's the timeout
    * emitting the signal, otherwise we'll get in a loop */
   if (priv->in_timeout)
+    return;
+
+  /* Don't emit the signal in a timeout if we've cleared
+   * the entry, we don't want a delay */
+  if (cleared)
     return;
 
   /* Queue up the timeout */
