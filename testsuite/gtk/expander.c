@@ -42,15 +42,17 @@ test_click_expander (void)
   /* check expanding */
   simsuccess = gtk_test_widget_click (expander, 1, 0);
   g_assert (simsuccess == TRUE);
-  while (gtk_events_pending ()) /* let expander timeout/idle handlers update */
-    gtk_main_iteration ();
+
+  gtk_test_widget_wait_for_draw (expander);
+
   expanded = gtk_expander_get_expanded (GTK_EXPANDER (expander));
   g_assert (expanded);
   /* check collapsing */
   simsuccess = gtk_test_widget_click (expander, 1, 0);
   g_assert (simsuccess == TRUE);
-  while (gtk_events_pending ()) /* let expander timeout/idle handlers update */
-    gtk_main_iteration ();
+
+  gtk_test_widget_wait_for_draw (expander);
+
   expanded = gtk_expander_get_expanded (GTK_EXPANDER (expander));
   g_assert (!expanded);
 }
@@ -75,8 +77,9 @@ test_click_content_widget (void)
   g_assert (expanded);
   simsuccess = gtk_test_widget_click (entry, 1, 0);
   g_assert (simsuccess == TRUE);
-  while (gtk_events_pending ()) /* let expander timeout/idle handlers update */
-    gtk_main_iteration ();
+
+  gtk_test_widget_wait_for_draw (expander);
+
   expanded = gtk_expander_get_expanded (GTK_EXPANDER (expander));
   g_assert (expanded);
 }
