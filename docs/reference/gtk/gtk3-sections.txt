@@ -3039,6 +3039,23 @@ GtkScrolledWindowPrivate
 </SECTION>
 
 <SECTION>
+<FILE>gtksearchbar</FILE>
+<TITLE>GtkSearchBar</TITLE>
+GtkSearchBar
+gtk_search_bar_new
+gtk_search_bar_handle_event
+<SUBSECTION Standard>
+GTK_TYPE_SEARCH_BAR
+GTK_SEARCH_BAR
+GTK_SEARCH_BAR_CLASS
+GTK_IS_SEARCH_BAR
+GTK_IS_SEARCH_BAR_CLASS
+GTK_SEARCH_BAR_GET_CLASS
+<SUBSECTION Private>
+gtk_search_bar_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtksearchentry</FILE>
 <TITLE>GtkSearchEntry</TITLE>
 GtkSearchEntry

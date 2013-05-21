@@ -31,6 +31,7 @@
     <file compressed="true">gtkpathbar.ui</file>
     <file compressed="true">gtkprintunixdialog.ui</file>
     <file compressed="true">gtkrecentchooserdefault.ui</file>
+    <file compressed="true">gtksearchbar.ui</file>
     <file compressed="true">gtkscalebutton.ui</file>
     <file compressed="true">gtkstatusbar.ui</file>
     <file compressed="true">gtkvolumebutton.ui</file>

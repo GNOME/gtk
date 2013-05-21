@@ -311,6 +311,7 @@ gtk_public_h_sources = 		\
 	gtkscrollable.h		\
 	gtkscrollbar.h		\
 	gtkscrolledwindow.h	\
+	gtksearchbar.h		\
 	gtksearchentry.h	\
 	gtkselection.h		\
 	gtkseparator.h		\
@@ -590,6 +591,7 @@ gtk_base_c_sources = 		\
 	gtkactionobservable.c	\
 	gtkactionable.c		\
 	gtkquery.c		\
+	gtksearchbar.c		\
 	gtksearchentry.c	\
 	gtksearchengine.c	\
 	gtksearchenginesimple.c	\
@@ -1122,6 +1124,7 @@ COMPOSITE_TEMPLATES =			\
 	gtkpathbar.ui			\
 	gtkprintunixdialog.ui		\
 	gtkrecentchooserdefault.ui	\
+	gtksearchbar.ui			\
 	gtkscalebutton.ui		\
 	gtkstatusbar.ui			\
 	gtkvolumebutton.ui

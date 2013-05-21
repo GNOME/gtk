@@ -26,44 +26,64 @@ search_changed_cb (GtkSearchEntry *entry,
   gtk_label_set_text (result_label, text ? text : "");
 }
 
+static gboolean
+window_key_press_event_cb (GtkWidget    *widget,
+			   GdkEvent     *event,
+			   GtkSearchBar *bar)
+{
+  return gtk_search_bar_handle_event (bar, event);
+}
+
 GtkWidget *
 do_search_entry2 (GtkWidget *do_widget)
 {
-  GtkWidget *content_area;
   GtkWidget *vbox;
   GtkWidget *hbox;
   GtkWidget *label;
   GtkWidget *entry;
+  GtkWidget *container;
+  GtkWidget *searchbar;
   GtkWidget *button;
 
   if (!window)
     {
-      window = gtk_dialog_new_with_buttons ("Search Entry #2",
-                                            GTK_WINDOW (do_widget),
-                                            0,
-                                            GTK_STOCK_CLOSE,
-                                            GTK_RESPONSE_NONE,
-                                            NULL);
-      gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_title (GTK_WINDOW (window), "Search Entry #2");
+      gtk_window_set_transient_for (GTK_WINDOW (window), GTK_WINDOW (do_widget));
+      gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
+      gtk_widget_set_size_request (window, 200, -1);
 
-      g_signal_connect (window, "response",
-                        G_CALLBACK (gtk_widget_destroy), NULL);
       g_signal_connect (window, "destroy",
                         G_CALLBACK (search_entry_destroyed), &window);
 
-      content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
+      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+      gtk_container_add (GTK_CONTAINER (window), vbox);
+      gtk_container_set_border_width (GTK_CONTAINER (vbox), 0);
 
-      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-      gtk_box_pack_start (GTK_BOX (content_area), vbox, TRUE, TRUE, 0);
-      gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
-
-      label = gtk_label_new (NULL);
-      gtk_label_set_markup (GTK_LABEL (label), "Search entry demo #2");
-      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
-
-      /* Create our entry */
       entry = gtk_search_entry_new ();
-      gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE, 0);
+      container = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+      gtk_widget_set_halign (container, GTK_ALIGN_CENTER);
+      gtk_box_pack_start (GTK_BOX (container), entry, FALSE, FALSE, 0);
+      searchbar = gtk_search_bar_new ();
+      gtk_search_bar_connect_entry (GTK_SEARCH_BAR (searchbar), GTK_ENTRY (entry));
+      gtk_search_bar_set_show_close_button (GTK_SEARCH_BAR (searchbar), FALSE);
+      gtk_container_add (GTK_CONTAINER (searchbar), container);
+      gtk_box_pack_start (GTK_BOX (vbox), searchbar, FALSE, FALSE, 0);
+
+      /* Hook the search bar to key presses */
+      g_signal_connect (window, "key-press-event",
+                        G_CALLBACK (window_key_press_event_cb), searchbar);
+
+      /* Help */
+      label = gtk_label_new ("Start Typing to search");
+      gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
+
+      /* Toggle button */
+      button = gtk_toggle_button_new_with_label ("Search");
+      g_object_bind_property (button, "active",
+                              searchbar, "search-mode-enabled",
+                              G_BINDING_BIDIRECTIONAL);
+      gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
 
       /* Result */
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
@@ -78,10 +98,6 @@ do_search_entry2 (GtkWidget *do_widget)
 
       g_signal_connect (entry, "changed",
                         G_CALLBACK (search_changed_cb), label);
-
-      /* Give the focus to the close button */
-      button = gtk_dialog_get_widget_for_response (GTK_DIALOG (window), GTK_RESPONSE_NONE);
-      gtk_widget_grab_focus (button);
     }
 
   if (!gtk_widget_get_visible (window))
