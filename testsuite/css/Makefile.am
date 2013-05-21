@@ -1,8 +1,11 @@
 include $(top_srcdir)/Makefile.decl
 
+NULL =
+
 SUBDIRS = parser
 
 check_PROGRAMS = $(TEST_PROGS)
+test_in_files =
 
 AM_CPPFLAGS =				\
 	-I$(top_srcdir)                 \
@@ -20,5 +23,25 @@ LDADD = \
 	$(GTK_DEP_LIBS)
 
 TEST_PROGS += api 
+test_in_files += api.test.in
+
+if BUILDOPT_INSTALL_TESTS
+insttestdir=$(pkglibexecdir)/installed-tests/css
+insttest_PROGRAMS = $(TEST_PROGS)
+
+substitutions = \
+	-e s,@pkglibexecdir\@,$(pkglibexecdir),g \
+	$(NULL)
+
+test_files = $(test_in_files:.test.in=.test)
+
+$(test_files): %.test: %.test.in
+	$(AM_V_GEN) sed $(substitutions) $< > $@.tmp && mv $@.tmp $@
+
+EXTRA_DIST += $(test_in_files)
+
+testmetadir = $(datadir)/installed-tests/$(PACKAGE)/css
+testmeta_DATA = $(test_files)
+endif
 
 -include $(top_srcdir)/git.mk
