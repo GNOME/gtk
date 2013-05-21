@@ -873,7 +873,7 @@ update_screen_size (GdkWaylandScreen *screen_wayland)
       screen_wayland->height != height)
     {
       screen_wayland->width = width;
-      screen_wayland->height = width;
+      screen_wayland->height = height;
       g_signal_emit_by_name (screen_wayland, "size-changed");
     }
 }
