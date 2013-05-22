@@ -1645,19 +1645,19 @@ static void
 check_file_list_menu_sensitivity (GtkFileChooserDefault *impl)
 {
   GtkFileChooserDefaultPrivate *priv = impl->priv;
-  GtkTreeSelection *selection;
+  gint num_selected;
+  gboolean all_files;
+  gboolean all_folders;
   gboolean active;
 
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->browse_files_tree_view));
-  if (gtk_tree_selection_count_selected_rows (selection) == 0)
-    active = FALSE;
-  else
-    active = TRUE;
+  selection_check (impl, &num_selected, &all_files, &all_folders);
+
+  active = (num_selected != 0);
 
   if (priv->browse_files_popup_menu_copy_file_location_item)
     gtk_widget_set_sensitive (priv->browse_files_popup_menu_copy_file_location_item, active);
   if (priv->browse_files_popup_menu_add_shortcut_item)
-    gtk_widget_set_sensitive (priv->browse_files_popup_menu_add_shortcut_item, active);
+    gtk_widget_set_sensitive (priv->browse_files_popup_menu_add_shortcut_item, active && all_folders);
   if (priv->browse_files_popup_menu_visit_file_item)
     gtk_widget_set_sensitive (priv->browse_files_popup_menu_visit_file_item, active);
 }
