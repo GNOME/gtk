@@ -352,7 +352,7 @@ gdk_rgba_equal (gconstpointer p1,
  * These string forms are string forms those supported by
  * the CSS3 colors module, and can be parsed by gdk_rgba_parse().
  *
- * Note that this string representation may loose some
+ * Note that this string representation may lose some
  * precision, since r, g and b are represented as 8-bit
  * integers. If this is a concern, you should use a
  * different representation.
