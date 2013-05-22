@@ -1769,8 +1769,18 @@ drop_files_as_bookmarks (GtkPlacesSidebar *sidebar,
 
 	for (l = files; l; l = l->next) {
 		GFile *f = G_FILE (l->data);
+		GFileInfo *info = g_file_query_info (f,
+						     G_FILE_ATTRIBUTE_STANDARD_TYPE,
+						     G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
+						     NULL,
+						     NULL);
 
-		_gtk_bookmarks_manager_insert_bookmark (sidebar->bookmarks_manager, f, position++, NULL); /* NULL-GError */
+		if (info) {
+			if (_gtk_file_info_consider_as_directory (info))
+				_gtk_bookmarks_manager_insert_bookmark (sidebar->bookmarks_manager, f, position++, NULL); /* NULL-GError */
+
+			g_object_unref (info);
+		}
 	}
 }
 
