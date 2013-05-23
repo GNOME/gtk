@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-04-19 17:57+0000\n"
-"PO-Revision-Date: 2013-05-17 17:47+0500\n"
+"PO-Revision-Date: 2013-05-23 12:28+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: \n"
 "Language: Tajik\n"
@@ -25,7 +25,7 @@ msgstr "Дисплей"
 
 #: ../gdk/gdkcursor.c:126
 msgid "Cursor type"
-msgstr ""
+msgstr "Навъи курсор"
 
 #: ../gdk/gdkcursor.c:127
 msgid "Standard cursor type"
@@ -539,7 +539,7 @@ msgstr ""
 
 #: ../gtk/gtkaccellabel.c:188
 msgid "Accelerator Closure"
-msgstr ""
+msgstr "Бастани суръатфизо"
 
 #: ../gtk/gtkaccellabel.c:189
 msgid "The closure to be monitored for accelerator changes"
@@ -547,7 +547,7 @@ msgstr ""
 
 #: ../gtk/gtkaccellabel.c:195
 msgid "Accelerator Widget"
-msgstr ""
+msgstr "Виҷети суръатфизо"
 
 #: ../gtk/gtkaccellabel.c:196
 msgid "The widget to be monitored for accelerator changes"
@@ -563,7 +563,7 @@ msgstr ""
 
 #: ../gtk/gtkactionable.c:70
 msgid "action name"
-msgstr ""
+msgstr "номи фаъолият"
 
 #: ../gtk/gtkactionable.c:71
 msgid "The name of the associated action, like 'app.quit'"
@@ -571,7 +571,7 @@ msgstr ""
 
 #: ../gtk/gtkactionable.c:75
 msgid "action target value"
-msgstr ""
+msgstr "қимати ҳадафи фаъолият"
 
 #: ../gtk/gtkactionable.c:76
 msgid "The parameter for action invocations"
@@ -606,7 +606,7 @@ msgstr ""
 
 #: ../gtk/gtkaction.c:265
 msgid "Tooltip"
-msgstr ""
+msgstr "Маслиҳатҳои система"
 
 #: ../gtk/gtkaction.c:266
 msgid "A tooltip for this action."
@@ -709,7 +709,7 @@ msgstr ""
 
 #: ../gtk/gtkaction.c:393
 msgid "Action Group"
-msgstr ""
+msgstr "Гурӯҳи фаъолият"
 
 #: ../gtk/gtkaction.c:394
 msgid ""
@@ -739,7 +739,7 @@ msgstr ""
 
 #: ../gtk/gtkactiongroup.c:249
 msgid "Accelerator Group"
-msgstr ""
+msgstr "Гурӯҳи суръатфизо"
 
 #: ../gtk/gtkactiongroup.c:250
 msgid "The accelerator group the actions of this group should use."
@@ -894,7 +894,7 @@ msgstr ""
 
 #: ../gtk/gtkappchooserbutton.c:634
 msgid "Show default item"
-msgstr ""
+msgstr "Намоиш додани объектҳои пешфарз"
 
 #: ../gtk/gtkappchooserbutton.c:635
 msgid "Whether the combobox should show the default application on top"
@@ -926,7 +926,7 @@ msgstr ""
 
 #: ../gtk/gtkappchooserwidget.c:946
 msgid "Show default app"
-msgstr ""
+msgstr "Намоиш додани барномаҳои пешфарз"
 
 #: ../gtk/gtkappchooserwidget.c:947
 msgid "Whether the widget should show the default application"
@@ -934,7 +934,7 @@ msgstr ""
 
 #: ../gtk/gtkappchooserwidget.c:961
 msgid "Show recommended apps"
-msgstr ""
+msgstr "Намоиш додани барномаҳои тавсияшуда"
 
 #: ../gtk/gtkappchooserwidget.c:962
 msgid "Whether the widget should show recommended applications"
@@ -942,7 +942,7 @@ msgstr ""
 
 #: ../gtk/gtkappchooserwidget.c:976
 msgid "Show fallback apps"
-msgstr ""
+msgstr "Намоиш додани барномаҳои вайроншуда"
 
 #: ../gtk/gtkappchooserwidget.c:977
 msgid "Whether the widget should show fallback applications"
@@ -950,7 +950,7 @@ msgstr ""
 
 #: ../gtk/gtkappchooserwidget.c:989
 msgid "Show other apps"
-msgstr ""
+msgstr "Намоиш додани барномаҳои дигар"
 
 #: ../gtk/gtkappchooserwidget.c:990
 msgid "Whether the widget should show other applications"
@@ -958,7 +958,7 @@ msgstr ""
 
 #: ../gtk/gtkappchooserwidget.c:1003
 msgid "Show all apps"
-msgstr ""
+msgstr "Намоиш додани ҳамаи барномаҳо"
 
 #: ../gtk/gtkappchooserwidget.c:1004
 msgid "Whether the widget should show all applications"
@@ -1441,7 +1441,7 @@ msgstr ""
 
 #: ../gtk/gtkcalendar.c:528
 msgid "Show Day Names"
-msgstr ""
+msgstr "Намоиш додани номҳои рӯз"
 
 #: ../gtk/gtkcalendar.c:529
 msgid "If TRUE, day names are displayed"
@@ -1604,7 +1604,7 @@ msgstr ""
 
 #: ../gtk/gtkcellrendereraccel.c:148
 msgid "Accelerator key"
-msgstr ""
+msgstr "Тугмаи  суръатфизо"
 
 #: ../gtk/gtkcellrendereraccel.c:149
 msgid "The keyval of the accelerator"
@@ -1612,7 +1612,7 @@ msgstr ""
 
 #: ../gtk/gtkcellrendereraccel.c:165
 msgid "Accelerator modifiers"
-msgstr ""
+msgstr "Тағйирдиҳандаҳои суръатфизо"
 
 #: ../gtk/gtkcellrendereraccel.c:166
 msgid "The modifier mask of the accelerator"
@@ -1620,7 +1620,7 @@ msgstr ""
 
 #: ../gtk/gtkcellrendereraccel.c:183
 msgid "Accelerator keycode"
-msgstr ""
+msgstr "Рамзи тугмаи суръатфизо"
 
 #: ../gtk/gtkcellrendereraccel.c:184
 msgid "The hardware keycode of the accelerator"
@@ -1628,7 +1628,7 @@ msgstr ""
 
 #: ../gtk/gtkcellrendereraccel.c:203
 msgid "Accelerator Mode"
-msgstr ""
+msgstr "Ҳолати суръатфизо"
 
 #: ../gtk/gtkcellrendereraccel.c:204
 msgid "The type of accelerators"
@@ -2345,7 +2345,7 @@ msgstr ""
 
 #: ../gtk/gtkcellrenderertoggle.c:155
 msgid "Activatable"
-msgstr ""
+msgstr "Фаъолшаванда"
 
 #: ../gtk/gtkcellrenderertoggle.c:156
 msgid "The toggle button can be activated"
@@ -2773,7 +2773,7 @@ msgstr ""
 
 #: ../gtk/gtkdialog.c:323 ../gtk/gtkinfobar.c:519
 msgid "Action area border"
-msgstr ""
+msgstr "Марзи ноҳияи фаъолият"
 
 #: ../gtk/gtkdialog.c:324
 msgid "Width of border around the button area at the bottom of the dialog"
@@ -2809,7 +2809,7 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:748 ../gtk/gtklabel.c:816
 msgid "Cursor Position"
-msgstr ""
+msgstr "Ҷойгиршавии курсор"
 
 #: ../gtk/gtkentry.c:749 ../gtk/gtklabel.c:817
 msgid "The current position of the insertion cursor in chars"
@@ -3461,7 +3461,7 @@ msgstr ""
 
 #: ../gtk/gtkfontbutton.c:501
 msgid "Show style"
-msgstr ""
+msgstr "Намоиш додани сабк"
 
 #: ../gtk/gtkfontbutton.c:502
 msgid "Whether the selected font style is shown in the label"
@@ -3481,7 +3481,7 @@ msgstr ""
 
 #: ../gtk/gtkfontchooser.c:104
 msgid "Show preview text entry"
-msgstr ""
+msgstr "Пешнамоиш додани вуруди матн"
 
 #: ../gtk/gtkfontchooser.c:105
 msgid "Whether the preview text entry is shown or not"
@@ -3684,7 +3684,7 @@ msgstr ""
 
 #: ../gtk/gtkiconview.c:605 ../gtk/gtktreeview.c:1172
 msgid "Tooltip Column"
-msgstr ""
+msgstr "Сутуни маслиҳатҳои система"
 
 #: ../gtk/gtkiconview.c:606
 msgid "The column in the model containing the tooltip texts for the items"
@@ -4439,7 +4439,7 @@ msgstr ""
 
 #: ../gtk/gtknotebook.c:710
 msgid "Show Tabs"
-msgstr ""
+msgstr "Намоиш додани варақаҳо"
 
 #: ../gtk/gtknotebook.c:711
 msgid "Whether tabs should be shown"
@@ -4447,7 +4447,7 @@ msgstr ""
 
 #: ../gtk/gtknotebook.c:717
 msgid "Show Border"
-msgstr ""
+msgstr "Намоиш додани марзҳо"
 
 #: ../gtk/gtknotebook.c:718
 msgid "Whether the border should be shown"
@@ -4463,7 +4463,7 @@ msgstr ""
 
 #: ../gtk/gtknotebook.c:731
 msgid "Enable Popup"
-msgstr ""
+msgstr "Фаъол карлдани равзанаҳои пайдошаванда"
 
 #: ../gtk/gtknotebook.c:732
 msgid ""
@@ -4774,7 +4774,7 @@ msgstr ""
 
 #: ../gtk/gtkprinter.c:144
 msgid "Accepts PDF"
-msgstr ""
+msgstr "Қабулкунии PDF"
 
 #: ../gtk/gtkprinter.c:145
 msgid "TRUE if this printer can accept PDF"
@@ -4782,7 +4782,7 @@ msgstr ""
 
 #: ../gtk/gtkprinter.c:151
 msgid "Accepts PostScript"
-msgstr ""
+msgstr "Қабулкунии PostScript"
 
 #: ../gtk/gtkprinter.c:152
 msgid "TRUE if this printer can accept PostScript"
@@ -4826,7 +4826,7 @@ msgstr ""
 
 #: ../gtk/gtkprinter.c:212
 msgid "Accepting Jobs"
-msgstr ""
+msgstr "Қабулкунии вазифаҳо"
 
 #: ../gtk/gtkprinter.c:213
 msgid "TRUE if this printer is accepting new jobs"
@@ -4949,7 +4949,7 @@ msgstr ""
 
 #: ../gtk/gtkprintoperation.c:1251
 msgid "Show Dialog"
-msgstr ""
+msgstr "Намоиш додани равзанаи гуфтугӯ"
 
 #: ../gtk/gtkprintoperation.c:1252
 msgid "TRUE if a progress dialog is shown while printing."
@@ -4957,7 +4957,7 @@ msgstr ""
 
 #: ../gtk/gtkprintoperation.c:1275
 msgid "Allow Async"
-msgstr ""
+msgstr "Иҷозат додани ҳамоҳангсозӣ"
 
 #: ../gtk/gtkprintoperation.c:1276
 msgid "TRUE if print process may run asynchronous."
@@ -5009,7 +5009,7 @@ msgstr ""
 
 #: ../gtk/gtkprintoperation.c:1402 ../gtk/gtkprintunixdialog.c:473
 msgid "Embed Page Setup"
-msgstr ""
+msgstr "Танзими саҳифаи дарунсохт"
 
 #: ../gtk/gtkprintoperation.c:1403 ../gtk/gtkprintunixdialog.c:474
 msgid "TRUE if page setup combos are embedded in GtkPrintUnixDialog"
@@ -5204,7 +5204,7 @@ msgstr ""
 
 #: ../gtk/gtkrange.c:467
 msgid "Show Fill Level"
-msgstr ""
+msgstr "Намоиш додани сатҳи пуркунӣ"
 
 #: ../gtk/gtkrange.c:468
 msgid "Whether to display a fill level indicator graphics on trough."
@@ -5320,7 +5320,7 @@ msgstr ""
 
 #: ../gtk/gtkrecentchooser.c:145
 msgid "Show Private"
-msgstr ""
+msgstr "Намоиш додани \"Шахсӣ\""
 
 #: ../gtk/gtkrecentchooser.c:146
 msgid "Whether the private items should be displayed"
@@ -5344,7 +5344,7 @@ msgstr ""
 
 #: ../gtk/gtkrecentchooser.c:188
 msgid "Show Not Found"
-msgstr ""
+msgstr "Намоиш додани \"Ёфт нашуд\""
 
 #: ../gtk/gtkrecentchooser.c:189
 msgid "Whether the items pointing to unavailable resources should be displayed"
@@ -5644,7 +5644,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:384
 msgid "Cursor Blink"
-msgstr ""
+msgstr "Мижазании курсор"
 
 #: ../gtk/gtksettings.c:385
 msgid "Whether the cursor should blink"
@@ -5652,7 +5652,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:392
 msgid "Cursor Blink Time"
-msgstr ""
+msgstr "Вақти мижазании курсор"
 
 #: ../gtk/gtksettings.c:393
 msgid "Length of the cursor blink cycle, in milliseconds"
@@ -5660,7 +5660,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:412
 msgid "Cursor Blink Timeout"
-msgstr ""
+msgstr "Анҷоми вақти мижазании курсор"
 
 #: ../gtk/gtksettings.c:413
 msgid "Time after which the cursor stops blinking, in seconds"
@@ -5678,7 +5678,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:428
 msgid "Theme Name"
-msgstr ""
+msgstr "Номи мавзӯъ"
 
 #: ../gtk/gtksettings.c:429
 msgid "Name of theme to load"
@@ -5791,7 +5791,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:577
 msgid "Cursor theme name"
-msgstr ""
+msgstr "Номи мавзӯи курсор"
 
 #: ../gtk/gtksettings.c:578
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
@@ -5799,7 +5799,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:586
 msgid "Cursor theme size"
-msgstr ""
+msgstr "Андозаи мавзӯи курсор"
 
 #: ../gtk/gtksettings.c:587
 msgid "Size to use for cursors, or 0 to use the default size"
@@ -5877,7 +5877,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:710
 msgid "Enable Animations"
-msgstr ""
+msgstr "Фаъол кардани аниматсияҳо"
 
 #: ../gtk/gtksettings.c:711
 msgid "Whether to enable toolkit-wide animations."
@@ -5885,7 +5885,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:732
 msgid "Enable Touchscreen Mode"
-msgstr ""
+msgstr "Фаъол кардани реҷаи экрани ламсӣ"
 
 #: ../gtk/gtksettings.c:733
 msgid "When TRUE, there are no motion notify events delivered on this screen"
@@ -5893,7 +5893,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:750
 msgid "Tooltip timeout"
-msgstr ""
+msgstr "Анҷоми вақти маслиҳатҳои система"
 
 #: ../gtk/gtksettings.c:751
 msgid "Timeout before tooltip is shown"
@@ -5973,7 +5973,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:945
 msgid "Enable Mnemonics"
-msgstr ""
+msgstr "Фаъол карлдани мнемоника"
 
 #: ../gtk/gtksettings.c:946
 msgid "Whether labels should have mnemonics"
@@ -5981,7 +5981,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:962
 msgid "Enable Accelerators"
-msgstr ""
+msgstr "Фаъол кардани суръатфизо"
 
 #: ../gtk/gtksettings.c:963
 msgid "Whether menu items should have accelerators"
@@ -6021,7 +6021,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:1053
 msgid "Sound Theme Name"
-msgstr ""
+msgstr "Номи мавзӯи овоздор"
 
 #: ../gtk/gtksettings.c:1054
 msgid "XDG sound theme name"
@@ -6038,7 +6038,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:1098
 msgid "Enable Event Sounds"
-msgstr ""
+msgstr "Фаъол кардани садоҳои рӯйдодҳо"
 
 #: ../gtk/gtksettings.c:1099
 msgid "Whether to play any event sounds at all"
@@ -6046,7 +6046,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:1114
 msgid "Enable Tooltips"
-msgstr ""
+msgstr "Фаъол кардани маслиҳатҳои система"
 
 #: ../gtk/gtksettings.c:1115
 msgid "Whether tooltips should be shown on widgets"
@@ -6108,7 +6108,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:1238
 msgid "Show button images"
-msgstr ""
+msgstr "Намоиш додани тасвирҳои тугмаҳо"
 
 #: ../gtk/gtksettings.c:1239
 msgid "Whether images should be shown on buttons"
@@ -6132,7 +6132,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:1275
 msgid "Show menu images"
-msgstr ""
+msgstr "Намоиш додани тасвирҳои меню"
 
 #: ../gtk/gtksettings.c:1276
 msgid "Whether images should be shown in menus"
@@ -6234,7 +6234,7 @@ msgstr ""
 
 #: ../gtk/gtksettings.c:1407
 msgid "Enable primary paste"
-msgstr ""
+msgstr "Фаъол карлдани гузоштани аввалӣ"
 
 #: ../gtk/gtksettings.c:1408
 msgid ""
@@ -6354,7 +6354,7 @@ msgstr ""
 
 #: ../gtk/gtkstatusicon.c:384 ../gtk/gtkwidget.c:1320
 msgid "Tooltip Text"
-msgstr ""
+msgstr "Матни маслиҳатҳои система"
 
 #: ../gtk/gtkstatusicon.c:385 ../gtk/gtkwidget.c:1321 ../gtk/gtkwidget.c:1342
 msgid "The contents of the tooltip for this widget"
@@ -6362,7 +6362,7 @@ msgstr ""
 
 #: ../gtk/gtkstatusicon.c:408 ../gtk/gtkwidget.c:1341
 msgid "Tooltip markup"
-msgstr ""
+msgstr "Қайди маслиҳатҳои система"
 
 #: ../gtk/gtkstatusicon.c:409
 msgid "The contents of the tooltip for this tray icon"
@@ -6442,7 +6442,7 @@ msgstr ""
 
 #: ../gtk/gtktextbuffer.c:251
 msgid "Cursor position"
-msgstr ""
+msgstr "Ҷойгиршавии курсор"
 
 #: ../gtk/gtktextbuffer.c:252
 msgid ""
@@ -6787,7 +6787,7 @@ msgstr "Ҳошияи рост"
 
 #: ../gtk/gtktextview.c:781
 msgid "Cursor Visible"
-msgstr ""
+msgstr "Намоёнии курсор"
 
 #: ../gtk/gtktextview.c:782
 msgid "If the insertion cursor is shown"
@@ -6807,7 +6807,7 @@ msgstr ""
 
 #: ../gtk/gtktextview.c:805
 msgid "Accepts tab"
-msgstr ""
+msgstr "Қабулкунии варақа"
 
 #: ../gtk/gtktextview.c:806
 msgid "Whether Tab will result in a tab character being entered"
@@ -6863,7 +6863,7 @@ msgstr ""
 
 #: ../gtk/gtktoolbar.c:509
 msgid "Show Arrow"
-msgstr ""
+msgstr "Намоиш додани тирҳо"
 
 #: ../gtk/gtktoolbar.c:510
 msgid "If an arrow should be shown if the toolbar doesn't fit"
@@ -7184,7 +7184,7 @@ msgstr ""
 
 #: ../gtk/gtktreeview.c:1037
 msgid "Enable Search"
-msgstr ""
+msgstr "Фаъол кардани ҷустуҷӯ"
 
 #: ../gtk/gtktreeview.c:1038
 msgid "View allows user to search through columns interactively"
@@ -7225,7 +7225,7 @@ msgstr ""
 
 #: ../gtk/gtktreeview.c:1122
 msgid "Show Expanders"
-msgstr ""
+msgstr "Намоиш додани васеъкунандаҳо"
 
 #: ../gtk/gtktreeview.c:1123
 msgid "View has expanders"
@@ -7250,7 +7250,7 @@ msgstr ""
 
 #: ../gtk/gtktreeview.c:1155
 msgid "Enable Grid Lines"
-msgstr ""
+msgstr "Фаъол кардани хатҳои тӯрӣ"
 
 #: ../gtk/gtktreeview.c:1156
 msgid "Whether grid lines should be drawn in the tree view"
@@ -7258,7 +7258,7 @@ msgstr ""
 
 #: ../gtk/gtktreeview.c:1164
 msgid "Enable Tree Lines"
-msgstr ""
+msgstr "Фаъол кардани хатҳои дарахт"
 
 #: ../gtk/gtktreeview.c:1165
 msgid "Whether tree lines should be drawn in the tree view"
@@ -7748,7 +7748,7 @@ msgstr ""
 
 #: ../gtk/gtkwidget.c:3371
 msgid "Cursor color"
-msgstr ""
+msgstr "Ранги курсор"
 
 #: ../gtk/gtkwidget.c:3372
 msgid "Color with which to draw insertion cursor"
@@ -7766,7 +7766,7 @@ msgstr ""
 
 #: ../gtk/gtkwidget.c:3383
 msgid "Cursor line aspect ratio"
-msgstr ""
+msgstr "Таносуби хати курсор"
 
 #: ../gtk/gtkwidget.c:3384
 msgid "Aspect ratio with which to draw insertion cursor"
@@ -8009,7 +8009,7 @@ msgstr ""
 
 #: ../gtk/gtkwindow.c:920
 msgid "Accept focus"
-msgstr ""
+msgstr "Қабул кардани фокус"
 
 #: ../gtk/gtkwindow.c:921
 msgid "TRUE if the window should receive the input focus."
