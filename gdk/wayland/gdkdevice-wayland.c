@@ -32,7 +32,6 @@
 #include "gdkdevicemanagerprivate.h"
 
 #include <xkbcommon/xkbcommon.h>
-#include <X11/keysym.h>
 
 #include <sys/time.h>
 #include <sys/mman.h>
