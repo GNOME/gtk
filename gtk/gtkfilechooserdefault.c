@@ -772,13 +772,11 @@ error_filename_to_long_dialog (GtkFileChooserDefault *impl)
  * the same name is already there.
  */
 static void
-error_selecting_folder_over_existing_file_dialog (GtkFileChooserDefault *impl,
-						  GFile                 *file)
+error_selecting_folder_over_existing_file_dialog (GtkFileChooserDefault *impl)
 {
-  error_dialog (impl,
-		_("You may only select folders.  The item that you selected is not a folder; "
-                  "try using a different item."),
-		file, NULL);
+  error_message (impl,
+                 _("You may only select folders"),
+                 _("The item that you selected is not a folder try using a different item."));
 }
 
 /* Shows an error dialog about not being able to create a filename */
@@ -5782,7 +5780,7 @@ file_exists_get_info_cb (GCancellable *cancellable,
 	      request_response_and_add_to_recent_list (impl);
 	    }
 	  else
-	    error_selecting_folder_over_existing_file_dialog (impl, data->file);
+	    error_selecting_folder_over_existing_file_dialog (impl);
 	}
     }
   else if (priv->action == GTK_FILE_CHOOSER_ACTION_SAVE)
