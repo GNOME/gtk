@@ -760,6 +760,14 @@ error_with_file_under_nonfolder (GtkFileChooserDefault *impl,
 		parent_file, error);
 }
 
+static void
+error_filename_to_long_dialog (GtkFileChooserDefault *impl)
+{
+  error_message (impl,
+                 _("Cannot create file as the filename is to long"),
+                 _("Try using a shorter name."));
+}
+
 /* Shows an error about not being able to select a folder because a file with
  * the same name is already there.
  */
@@ -5782,7 +5790,10 @@ file_exists_get_info_cb (GCancellable *cancellable,
       if (is_folder)
 	change_folder_and_display_error (impl, data->file, TRUE);
       else
-	needs_parent_check = TRUE;
+        if (!file_exists && g_error_matches (error, G_IO_ERROR, G_IO_ERROR_FILENAME_TOO_LONG))
+          error_filename_to_long_dialog (data->impl);
+        else
+          needs_parent_check = TRUE;
     }
   else
     {
