@@ -1123,7 +1123,6 @@ update_places (GtkPlacesSidebar *sidebar)
 			   name, icon, mount_uri,
 			   NULL, NULL, mount, 0, tooltip);
 		g_object_unref (root);
-		g_object_unref (mount);
 		g_object_unref (icon);
 		g_free (name);
 		g_free (mount_uri);
