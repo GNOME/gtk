@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "gtkheaderbar.h"
+#include "gtkheaderbarprivate.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
@@ -162,6 +163,44 @@ init_sizing_box (GtkHeaderBar *bar)
   gtk_widget_show_all (priv->label_sizing_box);
 }
 
+GtkWidget *
+_gtk_header_bar_create_title_box (const char *title,
+                                  const char *subtitle,
+                                  GtkWidget **ret_title_label,
+                                  GtkWidget **ret_subtitle_label)
+{
+  GtkWidget *label_box;
+  GtkWidget *title_label;
+  GtkWidget *subtitle_label;
+
+  label_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_widget_set_valign (label_box, GTK_ALIGN_CENTER);
+  gtk_widget_show (label_box);
+
+  title_label = gtk_label_new (title);
+  boldify_label (title_label);
+  gtk_label_set_line_wrap (GTK_LABEL (title_label), FALSE);
+  gtk_label_set_single_line_mode (GTK_LABEL (title_label), TRUE);
+  gtk_label_set_ellipsize (GTK_LABEL (title_label), PANGO_ELLIPSIZE_END);
+  gtk_box_pack_start (GTK_BOX (label_box), title_label, FALSE, FALSE, 0);
+  gtk_widget_show (title_label);
+
+  subtitle_label = gtk_label_new (subtitle);
+  smallify_label (subtitle_label);
+  gtk_label_set_line_wrap (GTK_LABEL (subtitle_label), FALSE);
+  gtk_label_set_single_line_mode (GTK_LABEL (subtitle_label), TRUE);
+  gtk_label_set_ellipsize (GTK_LABEL (subtitle_label), PANGO_ELLIPSIZE_END);
+  gtk_box_pack_start (GTK_BOX (label_box), subtitle_label, FALSE, FALSE, 0);
+  gtk_widget_set_no_show_all (subtitle_label, TRUE);
+
+  if (ret_title_label)
+    *ret_title_label = title_label;
+  if (ret_subtitle_label)
+    *ret_subtitle_label = subtitle_label;
+
+  return label_box;
+}
+
 static void
 construct_label_box (GtkHeaderBar *bar)
 {
@@ -169,25 +208,11 @@ construct_label_box (GtkHeaderBar *bar)
 
   g_assert (priv->label_box == NULL);
 
-  priv->label_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  priv->label_box = _gtk_header_bar_create_title_box (priv->title,
+                                                      priv->subtitle,
+                                                      &priv->title_label,
+                                                      &priv->subtitle_label);
   gtk_widget_set_parent (priv->label_box, GTK_WIDGET (bar));
-  gtk_widget_set_valign (priv->label_box, GTK_ALIGN_CENTER);
-  gtk_widget_show (priv->label_box);
-
-  priv->title_label = gtk_label_new (priv->title);
-  boldify_label (priv->title_label);
-  gtk_label_set_line_wrap (GTK_LABEL (priv->title_label), FALSE);
-  gtk_label_set_single_line_mode (GTK_LABEL (priv->title_label), TRUE);
-  gtk_label_set_ellipsize (GTK_LABEL (priv->title_label), PANGO_ELLIPSIZE_END);
-  gtk_box_pack_start (GTK_BOX (priv->label_box), priv->title_label, FALSE, FALSE, 0);
-  gtk_widget_show (priv->title_label);
-
-  priv->subtitle_label = gtk_label_new (priv->subtitle);
-  smallify_label (priv->subtitle_label);
-  gtk_label_set_line_wrap (GTK_LABEL (priv->subtitle_label), FALSE);
-  gtk_label_set_single_line_mode (GTK_LABEL (priv->subtitle_label), TRUE);
-  gtk_label_set_ellipsize (GTK_LABEL (priv->subtitle_label), PANGO_ELLIPSIZE_END);
-  gtk_box_pack_start (GTK_BOX (priv->label_box), priv->subtitle_label, FALSE, FALSE, 0);
 }
 
 static void
