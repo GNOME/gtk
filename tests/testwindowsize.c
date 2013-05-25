@@ -7,6 +7,20 @@ static GtkWidget *default_width_spin;
 static GtkWidget *default_height_spin;
 static GtkWidget *resizable_check;
 
+static gboolean
+configure_event_cb (GtkWidget *window, GdkEventConfigure *event, GtkLabel *label)
+{
+  gchar *str;
+  gint width, height;
+
+  gtk_window_get_size (GTK_WINDOW (window), &width, &height);
+  str = g_strdup_printf ("%d x %d", width, height);
+  gtk_label_set_label (label, str);
+  g_free (str);
+
+  return FALSE;
+}
+
 static void
 show_dialog (void)
 {
@@ -44,8 +58,14 @@ show_dialog (void)
 
   gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))),
                       label, 0, TRUE, TRUE);
-
   gtk_widget_show (label);
+
+  label = gtk_label_new ("? x ?");
+  gtk_widget_show (label);
+
+  gtk_dialog_add_action_widget (GTK_DIALOG (dialog), label, GTK_RESPONSE_HELP);
+  g_signal_connect (dialog, "configure-event",
+                    G_CALLBACK (configure_event_cb), label);
 
   gtk_dialog_run (GTK_DIALOG (dialog));
 
