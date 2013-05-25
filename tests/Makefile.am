@@ -134,7 +134,8 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testgmenu			\
 	testlogout			\
 	teststack			\
-	testrevealer
+	testrevealer			\
+	testwindowsize
 
 if USE_X11
 noinst_PROGRAMS += testerrors
@@ -262,6 +263,7 @@ testgmenu_DEPENDENCIES = $(TEST_DEPS)
 testlogout_DEPENDENCIES = $(TEST_DEPS)
 teststack_DEPENDENCIES = $(TEST_DEPS)
 testrevealer_DEPENDENCIES = $(TEST_DEPS)
+testwindowsize_DEPENDENCIES = $(TEST_DEPS)
 
 animated_resizing_SOURCES = 	\
 	animated-resizing.c	\
@@ -475,6 +477,8 @@ testkineticscrolling_SOURCES = testkineticscrolling.c
 teststack_SOURCES = teststack.c
 
 testrevealer_SOURCES = testrevealer.c
+
+testwindowsize_SOURCES = testwindowsize.c
 
 EXTRA_DIST += 			\
 	gradient1.png		\
