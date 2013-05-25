@@ -81,6 +81,13 @@ Release notes for 3.10
   setups (not multi-monitor!) are very rare nowadays. If you really
   need multiple X screens, open them as separate displays.
 
+* The behavior of GtkBox::expand has been changed to never propagate
+  up. Previously, this was happening inconsistently. If you want the
+  expand to propagate, use the GtkWidget h/v expand properties.
+  If you experience sizing problems with widgets in ported code,
+  carefully check the expand and fill flags of your boxes.
+
+
 Release notes for 3.8
 =====================
 
