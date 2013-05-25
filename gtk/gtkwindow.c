@@ -8755,19 +8755,19 @@ gtk_window_compute_hints (GtkWindow   *window,
        *  +-----------+
        */
 #define TEMPORARY_SIZE 10000 /* 10,000 pixels should be bigger than real widget sizes */
-      GtkRequisition requisition;
+      GtkRequisition req;
       int current_width, current_height;
 
       _gtk_widget_override_size_request (geometry_info->widget,
 					 TEMPORARY_SIZE, TEMPORARY_SIZE,
 					 &current_width, &current_height);
       gtk_widget_get_preferred_size (widget,
-                                     &requisition, NULL);
+                                     &req, NULL);
       _gtk_widget_restore_size_request (geometry_info->widget,
 					current_width, current_height);
 
-      extra_width = requisition.width - TEMPORARY_SIZE;
-      extra_height = requisition.height - TEMPORARY_SIZE;
+      extra_width = req.width - TEMPORARY_SIZE;
+      extra_height = req.height - TEMPORARY_SIZE;
 
       if (extra_width < 0 || extra_height < 0)
 	{
