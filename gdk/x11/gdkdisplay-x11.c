@@ -247,6 +247,25 @@ do_net_wm_state_changes (GdkWindow *window)
                                      GDK_WINDOW_STATE_MAXIMIZED);
     }
 
+  /* FIXME: we rely on implementation details of mutter here:
+   * mutter only tiles horizontally, and sets maxvert when it does
+   * and if it tiles, it always affects all edges
+   */
+  if (old_state & GDK_WINDOW_STATE_TILED)
+    {
+      if (!toplevel->have_maxvert)
+        gdk_synthesize_window_state (window,
+                                     GDK_WINDOW_STATE_TILED,
+                                     0);
+    }
+  else
+    {
+      if (toplevel->have_maxvert)
+        gdk_synthesize_window_state (window,
+                                     0,
+                                     GDK_WINDOW_STATE_TILED);
+    }
+
   if (old_state & GDK_WINDOW_STATE_FOCUSED)
     {
       if (!toplevel->have_focused)

@@ -209,6 +209,7 @@ struct _GtkWindowPrivate
   guint    client_decorated          : 1; /* Decorations drawn client-side */
   guint    custom_title              : 1; /* app-provided titlebar */
   guint    fullscreen                : 1;
+  guint    tiled                     : 1;
 
 };
 
@@ -6120,7 +6121,8 @@ get_decoration_size (GtkWidget *widget,
   if (!priv->client_decorated)
     return;
 
-  if (gtk_window_get_maximized (GTK_WINDOW (widget)))
+  if (gtk_window_get_maximized (GTK_WINDOW (widget)) ||
+      GTK_WINDOW (widget)->priv->tiled)
     return;
 
   state = gtk_widget_get_state_flags (widget);
@@ -6556,7 +6558,14 @@ gtk_window_state_event (GtkWidget           *widget,
         (event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN) ? 1 : 0;
     }
 
-  if (event->changed_mask & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED))
+  if (event->changed_mask & GDK_WINDOW_STATE_TILED)
+    {
+      priv->tiled =
+        (event->new_window_state & GDK_WINDOW_STATE_TILED) ? 1 : 0;
+    }
+
+
+  if (event->changed_mask & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_TILED))
     {
       update_window_buttons (window);
       gtk_widget_queue_draw (GTK_WIDGET (window));
@@ -8891,6 +8900,7 @@ gtk_window_draw (GtkWidget *widget,
       if (priv->client_decorated &&
           priv->decorated &&
           !priv->fullscreen &&
+          !priv->tiled &&
           !gtk_window_get_maximized (GTK_WINDOW (widget)))
         {
           gtk_style_context_save (context);
