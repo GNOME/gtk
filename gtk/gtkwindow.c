@@ -147,6 +147,7 @@ struct _GtkWindowPrivate
 
   guint    mnemonics_display_timeout_id;
 
+  gint title_height;
   GtkWidget *title_box;
   GtkWidget *title_icon;
   GtkWidget *title_min_button;
@@ -1790,7 +1791,7 @@ gtk_window_set_title (GtkWindow   *window,
   if (gtk_widget_get_realized (widget))
     gdk_window_set_title (gtk_widget_get_window (widget), priv->title);
 
-  if (priv->title_box != NULL)
+  if (GTK_IS_HEADER_BAR (priv->title_box) && !priv->custom_title)
     gtk_header_bar_set_title (GTK_HEADER_BAR (priv->title_box), priv->title);
 
   g_object_notify (G_OBJECT (window), "title");
@@ -3489,6 +3490,8 @@ gtk_window_set_titlebar (GtkWindow *window,
   visual = gdk_screen_get_rgba_visual (gtk_widget_get_screen (widget));
   if (visual)
     gtk_widget_set_visual (widget, visual);
+
+  gtk_widget_queue_resize (widget);
 }
 
 /**
@@ -6377,7 +6380,6 @@ _gtk_window_set_allocation (GtkWindow           *window,
   GtkAllocation child_allocation;
   gint border_width;
   GtkBorder window_border = { 0 };
-  gint title_height = 0;
 
   g_assert (allocation != NULL);
   g_assert (allocation_out != NULL);
@@ -6391,6 +6393,8 @@ _gtk_window_set_allocation (GtkWindow           *window,
   child_allocation.y = 0;
   child_allocation.width = allocation->width;
   child_allocation.height = allocation->height;
+
+  priv->title_height = 0;
 
   if (priv->title_box != NULL &&
       priv->decorated &&
@@ -6407,9 +6411,9 @@ _gtk_window_set_allocation (GtkWindow           *window,
       gtk_widget_get_preferred_height_for_width (priv->title_box,
                                                  title_allocation.width,
                                                  NULL,
-                                                 &title_height);
+                                                 &priv->title_height);
 
-      title_allocation.height = title_height;
+      title_allocation.height = priv->title_height;
 
       gtk_widget_size_allocate (priv->title_box, &title_allocation);
     }
@@ -6418,10 +6422,10 @@ _gtk_window_set_allocation (GtkWindow           *window,
       !priv->fullscreen)
     {
       child_allocation.x += window_border.left;
-      child_allocation.y += window_border.top + title_height;
+      child_allocation.y += window_border.top + priv->title_height;
       child_allocation.width -= window_border.left + window_border.right;
       child_allocation.height -= window_border.top + window_border.bottom +
-                                title_height;
+                                 priv->title_height;
     }
 
   if (gtk_widget_get_realized (widget))
@@ -8911,7 +8915,7 @@ gtk_window_draw (GtkWidget *widget,
         }
 
       if (priv->title_box && gtk_widget_get_visible (priv->title_box))
-        title_height = gtk_widget_get_allocated_height (priv->title_box);
+        title_height = priv->title_height;
       else
         title_height = 0;
 
