@@ -232,7 +232,7 @@ static const gchar *allowed_backends;
  * followed by the Quartz backend, and then all
  * others.
  *
- * If the <envvar>GDK_BACKEND</envvar> environment variable
+ * If the <envar>GDK_BACKEND</envar> environment variable
  * is set, it determines what backends are tried in what
  * order, while still respecting the set of allowed backends
  * that are specified by this function.

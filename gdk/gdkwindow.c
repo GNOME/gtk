@@ -2424,7 +2424,7 @@ gdk_window_peek_children (GdkWindow *window)
  * @user_data: 
  *
  * Gets the list of children of @window known to GDK with a particular
- * user_data set on it.
+ * @user_data set on it.
  *
  * The returned list must be freed, but the elements in the
  * list need not be.
