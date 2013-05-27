@@ -402,6 +402,11 @@ How to compile GTK+ itself
             <arg choice="plain">--enable-gtk2-dependency</arg>
             <arg choice="plain">--disable-gtk2-dependency</arg>
           </group>
+          <sbr/>
+          <group>
+            <arg choice="plain">--enable-installed-tests</arg>
+            <arg choice="plain">--disable-installed-tests</arg>
+          </group>
         </cmdsynopsis>
       </para>
 
@@ -622,6 +627,19 @@ How to compile GTK+ itself
           both GTK+ 2.x and GTK+ 3 may want to use this option to
           avoid file conflicts between these packages.
           The default is to build gtk-update-icon-cache.
+        </para>
+      </formalpara>
+
+      <formalpara>
+        <title><systemitem>--enable-installed-tests</systemitem> or
+           <systemitem>--disable-installed-tests</systemitem></title>
+
+        <para>
+          Whether to install tests on the system. If enabled, tests
+          and their data are installed in <filename>${libexecdir}/gtk+/installed-tests</filename>.
+          Metadata for the tests is installed in <filename>${prefix}/share/installed-tests/gtk+</filename>.
+          To run the installed tests, gnome-desktop-testing-runner
+          can be used.
         </para>
       </formalpara>
     </refsect1>
