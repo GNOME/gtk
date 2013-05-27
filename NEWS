@@ -1,3 +1,80 @@
+Overview of Changes in GTK+ 3.9.0 to 3.9.2
+==========================================
+
+* The GDK initialization code has been refactored. GdkDisplayManager
+  is no longer backend-specific.
+
+* The symbol exporting functionality has been refactored. We no longer
+  use .symbols files, and instead rely on explicit header annotations
+  for every exported symbol. the abicheck scripts are no longer used.
+
+* The GDK drawing and scrolling has been simplified. We no longer use
+  XCopyArea for scrolling, instead an offscreen cache is used. There
+  is a new debug flag, GTK_DEBUG=pixel-cache for this.
+
+* Window sizing issues have been addressed.
+
+* Implement height-for-width for GtkEventBox and GtkCheckButton
+
+* Custom titlebars can now be set from GtkBuilder files
+
+* Optionally install tests, when configured with --enable-installed-tests.
+  To run these tests, gnome-desktop-testing-runner can be used.
+
+* Native input methods are supported on OS X now.
+
+699739
+699140
+699633
+699901
+699750
+698051
+699929
+695120
+700007
+700053
+700054
+699239
+699104
+698361
+700079
+698933
+700056
+699690
+700301
+699970
+696640
+700578
+700575
+700465
+700233
+699289
+694273
+691921
+667759
+700737
+561221
+700844
+700787
+628902
+700979
+360131
+591969
+700864
+696001
+
+* Translation updates:
+ Brazilian Portuguese
+ English
+ Hebrew
+ Japanese
+ Norwegian bokmål
+ Russian
+ Slovak
+ Spanish
+ Tajik
+
+
 Overview of Changes in GTK+ 3.7 to 3.9
 ======================================
 
