@@ -1296,6 +1296,7 @@ distclean-local:
 	if test $(srcdir) != .; then \
 	  rm -f $(MAINTAINERCLEANFILES); \
 	  rm -rf stock-icons; \
+	  rm -f extract-strings$(EXEEXT); \
 	fi
 
 DEPS = libgtk-3.la $(top_builddir)/gdk/libgdk-3.la
