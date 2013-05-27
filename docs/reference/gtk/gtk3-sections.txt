@@ -7142,6 +7142,7 @@ gtk_test_text_get
 gtk_test_text_set
 gtk_test_widget_click
 gtk_test_widget_send_key
+gtk_test_widget_wait_for_draw
 </SECTION>
 
 <SECTION>

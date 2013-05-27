@@ -137,6 +137,8 @@ quit_main_loop_callback (GtkWidget     *widget,
  * This function is intended to be used for syncing with actions that
  * depend on @widget relayouting or on interaction with the display
  * server.
+ *
+ * Since: 3.10
  **/
 void
 gtk_test_widget_wait_for_draw (GtkWidget *widget)
