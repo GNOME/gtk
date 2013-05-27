@@ -172,7 +172,6 @@ GdkDisplayClass
 <TITLE>GdkDisplayManager</TITLE>
 GdkDisplayManager
 gdk_display_manager_get
-gdk_display_manager_peek
 gdk_display_manager_get_default_display
 gdk_display_manager_set_default_display
 gdk_display_manager_list_displays
@@ -460,6 +459,7 @@ GdkModifierType
 gdk_window_get_parent
 gdk_window_get_toplevel
 gdk_window_get_children
+gdk_window_get_children_with_user_data
 gdk_window_peek_children
 gdk_window_get_events
 gdk_window_set_events

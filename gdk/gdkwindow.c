@@ -2421,6 +2421,7 @@ gdk_window_peek_children (GdkWindow *window)
 /**
  * gdk_window_get_children_with_user_data:
  * @window: a #GdkWindow
+ * @user_data: 
  *
  * Gets the list of children of @window known to GDK with a particular
  * user_data set on it.
@@ -2433,9 +2434,12 @@ gdk_window_peek_children (GdkWindow *window)
  *
  * Return value: (transfer container) (element-type GdkWindow):
  *     list of child windows inside @window
+ *
+ * Since: 3.10
  **/
 GList *
-gdk_window_get_children_with_user_data (GdkWindow *window, gpointer user_data)
+gdk_window_get_children_with_user_data (GdkWindow *window,
+                                        gpointer   user_data)
 {
   GdkWindow *child;
   GList *res, *l;
@@ -3755,8 +3759,8 @@ gdk_window_invalidate_rect (GdkWindow          *window,
  * Since: 3.10
  **/
 void
-gdk_window_set_invalidate_handler (GdkWindow *window,
-				   GdkWindowInvalidateHandlerFunc handler)
+gdk_window_set_invalidate_handler (GdkWindow                      *window,
+				   GdkWindowInvalidateHandlerFunc  handler)
 {
   window->invalidate_handler = handler;
 }

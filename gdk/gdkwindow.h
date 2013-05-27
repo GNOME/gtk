@@ -693,11 +693,11 @@ gboolean gdk_window_set_static_gravities (GdkWindow *window,
  *
  * Since: 3.10
  */
-typedef void (*GdkWindowInvalidateHandlerFunc)  (GdkWindow *window,
+typedef void (*GdkWindowInvalidateHandlerFunc)  (GdkWindow      *window,
 						 cairo_region_t *region);
 GDK_AVAILABLE_IN_3_10
-void gdk_window_set_invalidate_handler (GdkWindow *window,
-					GdkWindowInvalidateHandlerFunc handler);
+void gdk_window_set_invalidate_handler (GdkWindow                      *window,
+					GdkWindowInvalidateHandlerFunc  handler);
 
 GDK_AVAILABLE_IN_ALL
 gboolean      gdk_window_has_native         (GdkWindow       *window);
@@ -858,7 +858,7 @@ GDK_AVAILABLE_IN_ALL
 GList *       gdk_window_peek_children   (GdkWindow       *window);
 GDK_AVAILABLE_IN_3_10
 GList *       gdk_window_get_children_with_user_data (GdkWindow *window,
-						      gpointer user_data);
+						      gpointer   user_data);
 
 GDK_AVAILABLE_IN_ALL
 GdkEventMask  gdk_window_get_events	 (GdkWindow	  *window);
