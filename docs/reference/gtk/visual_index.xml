@@ -159,4 +159,16 @@
   <link linkend="GtkScrollbar">
     <inlinegraphic fileref="scrollbar.png" format="PNG"></inlinegraphic>
   </link>
+  <link linkend="GtkHeaderBar">
+    <inlinegraphic fileref="headerbar.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkPlacesSidebar">
+    <inlinegraphic fileref="placessidebar.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkStack">
+    <inlinegraphic fileref="stack.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkStackSwitcher">
+    <inlinegraphic fileref="stackswitcher.png" format="PNG"></inlinegraphic>
+  </link>
 </para>

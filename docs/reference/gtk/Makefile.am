@@ -318,6 +318,7 @@ HTML_IMAGES = \
 	$(srcdir)/images/fontsel.png					\
 	$(srcdir)/images/fontchooser.png				\
 	$(srcdir)/images/frame.png					\
+	$(srcdir)/images/headerbar.png					\
 	$(srcdir)/images/icon-view.png					\
 	$(srcdir)/images/image.png					\
 	$(srcdir)/images/info-bar.png					\
@@ -337,6 +338,7 @@ HTML_IMAGES = \
 	$(srcdir)/images/notebook.png					\
 	$(srcdir)/images/panes.png					\
 	$(srcdir)/images/pagesetupdialog.png				\
+	$(srcdir)/images/placessidebar.png				\
 	$(srcdir)/images/printdialog.png				\
 	$(srcdir)/images/progressbar.png				\
 	$(srcdir)/images/radio-group.png				\
@@ -348,6 +350,8 @@ HTML_IMAGES = \
 	$(srcdir)/images/separator.png					\
 	$(srcdir)/images/spinbutton.png					\
 	$(srcdir)/images/spinner.png					\
+	$(srcdir)/images/stack.png					\
+	$(srcdir)/images/stackswitcher.png				\
 	$(srcdir)/images/statusbar.png					\
 	$(srcdir)/images/toggle-button.png				\
 	$(srcdir)/images/toolbar.png					\

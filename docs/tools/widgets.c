@@ -119,6 +119,7 @@ new_widget_info (const char *name,
     {
       info->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_has_resize_grip (GTK_WINDOW (info->window), FALSE);
+      gtk_container_set_border_width (GTK_CONTAINER (info->window), 12);
       info->include_decorations = FALSE;
       gtk_widget_show_all (widget);
       gtk_container_add (GTK_CONTAINER (info->window), widget);
@@ -127,7 +128,6 @@ new_widget_info (const char *name,
 
   gtk_widget_set_app_paintable (info->window, TRUE);
   g_signal_connect (info->window, "focus", G_CALLBACK (gtk_true), NULL);
-  gtk_container_set_border_width (GTK_CONTAINER (info->window), 12);
 
   switch (size)
     {
@@ -1300,11 +1300,131 @@ create_colorchooserdialog (void)
   return info;
 }
 
+static WidgetInfo *
+create_headerbar (void)
+{
+  GtkWidget *window;
+  GtkWidget *bar;
+  GtkWidget *align;
+  GtkWidget *view;
+  GtkWidget *button;
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_container_set_border_width (GTK_CONTAINER (window), 0);
+  view = gtk_text_view_new ();
+  gtk_widget_show (view);
+  gtk_widget_set_size_request (window, 220, 150);
+  gtk_container_add (GTK_CONTAINER (window), view);
+  bar = gtk_header_bar_new ();
+  gtk_header_bar_set_title (GTK_HEADER_BAR (bar), "Header Bar");
+  gtk_header_bar_set_subtitle (GTK_HEADER_BAR (bar), "(subtitle)");
+  gtk_window_set_titlebar (GTK_WINDOW (window), bar);
+  button = gtk_button_new ();
+  gtk_container_add (GTK_CONTAINER (button), gtk_image_new_from_icon_name ("bookmark-new-symbolic", GTK_ICON_SIZE_BUTTON));
+  gtk_widget_show_all (button);
+  gtk_header_bar_pack_end (GTK_HEADER_BAR (bar), button);
+
+  return new_widget_info ("headerbar", window, ASIS);
+}
+
+static WidgetInfo *
+create_placessidebar (void)
+{
+  GtkWidget *bar;
+  GtkWidget *vbox;
+  GtkWidget *align;
+
+  bar = gtk_places_sidebar_new ();
+  gtk_widget_set_size_request (bar, 150, 300);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+
+  gtk_container_add (GTK_CONTAINER (align), bar);
+  gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox),
+                      gtk_label_new ("Places Sidebar"),
+                      FALSE, FALSE, 0);
+
+  return new_widget_info ("placessidebar", vbox, ASIS);
+}
+
+static WidgetInfo *
+create_stack (void)
+{
+  GtkWidget *stack;
+  GtkWidget *switcher;
+  GtkWidget *vbox;
+  GtkWidget *view;
+
+  stack = gtk_stack_new ();
+  gtk_widget_set_margin_top (stack, 10);
+  gtk_widget_set_margin_bottom (stack, 10);
+  gtk_widget_set_size_request (stack, 120, 120);
+  view = gtk_text_view_new ();
+  gtk_widget_show (view);
+  gtk_stack_add_titled (GTK_STACK (stack), view, "page1", "Page 1");
+  view = gtk_text_view_new ();
+  gtk_widget_show (view);
+  gtk_stack_add_titled (GTK_STACK (stack), view, "page2", "Page 2");
+
+  switcher = gtk_stack_switcher_new ();
+  gtk_stack_switcher_set_stack (GTK_STACK_SWITCHER (switcher), GTK_STACK (stack));
+  gtk_widget_set_halign (switcher, GTK_ALIGN_CENTER);
+
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+
+  gtk_box_pack_start (GTK_BOX (vbox), switcher, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), stack, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox),
+                      gtk_label_new ("Stack"),
+                      FALSE, FALSE, 0);
+
+  return new_widget_info ("stack", vbox, ASIS);
+}
+
+static WidgetInfo *
+create_stack_switcher (void)
+{
+  GtkWidget *stack;
+  GtkWidget *switcher;
+  GtkWidget *vbox;
+  GtkWidget *view;
+
+  stack = gtk_stack_new ();
+  gtk_widget_set_margin_top (stack, 10);
+  gtk_widget_set_margin_bottom (stack, 10);
+  gtk_widget_set_size_request (stack, 120, 120);
+  view = gtk_text_view_new ();
+  gtk_widget_show (view);
+  gtk_stack_add_titled (GTK_STACK (stack), view, "page1", "Page 1");
+  view = gtk_text_view_new ();
+  gtk_widget_show (view);
+  gtk_stack_add_titled (GTK_STACK (stack), view, "page2", "Page 2");
+
+  switcher = gtk_stack_switcher_new ();
+  gtk_stack_switcher_set_stack (GTK_STACK_SWITCHER (switcher), GTK_STACK (stack));
+  gtk_widget_set_halign (switcher, GTK_ALIGN_CENTER);
+
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+
+  gtk_box_pack_start (GTK_BOX (vbox), switcher, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), stack, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox),
+                      gtk_label_new ("Stack Switcher"),
+                      FALSE, FALSE, 0);
+
+  return new_widget_info ("stackswitcher", vbox, ASIS);
+}
+
 GList *
 get_all_widgets (void)
 {
   GList *retval = NULL;
 
+  retval = g_list_prepend (retval, create_headerbar ());
+  retval = g_list_prepend (retval, create_placessidebar ());
+  retval = g_list_prepend (retval, create_stack ());
+  retval = g_list_prepend (retval, create_stack_switcher ());
   retval = g_list_prepend (retval, create_toolpalette ());
   retval = g_list_prepend (retval, create_spinner ());
   retval = g_list_prepend (retval, create_about_dialog ());
