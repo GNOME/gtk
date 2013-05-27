@@ -5390,7 +5390,6 @@ gtk_widget_get_preferred_width_for_height
 gtk_widget_get_preferred_height_and_baseline_for_width
 gtk_widget_get_request_mode
 gtk_widget_get_preferred_size
-gtk_widget_get_preferred_size_and_baseline
 gtk_distribute_natural_allocation
 
 <SUBSECTION Alignment and Margins>
