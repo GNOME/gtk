@@ -87,6 +87,10 @@ Release notes for 3.10
   If you experience sizing problems with widgets in ported code,
   carefully check the expand and fill flags of your boxes.
 
+* GtkBin no longer provides default implementations for
+  get_height_for_width, subclasses now have to provide their own
+  implementation if they need height-for-width functionality.
+
 
 Release notes for 3.8
 =====================
