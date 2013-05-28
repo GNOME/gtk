@@ -35,9 +35,19 @@ TEST_PROGS        += keysyms
 keysyms_SOURCES    = keysyms.c
 keysyms_LDADD      = $(progs_ldadd)
 
-CLEANFILES = \
+CLEANFILES = 			\
 	cairosurface.png	\
-	gdksurface.png
+	gdksurface.png		\
+	$(NULL)
+
+test_in_files = 		\
+	rgba.test.in 		\
+	encoding.test.in 	\
+	display.test.in 	\
+	keysyms.test.in 	\
+	$(NULL)
+
+EXTRA_DIST += $(test_in_files)
 
 if BUILDOPT_INSTALL_TESTS
 insttestdir=$(pkglibexecdir)/installed-tests
@@ -47,19 +57,10 @@ substitutions = \
 	-e s,@pkglibexecdir\@,$(pkglibexecdir),g \
 	$(NULL)
 
-test_in_files = \
-	rgba.test.in \
-	encoding.test.in \
-	display.test.in \
-	keysyms.test.in \
-	$(NULL)
-
 test_files = $(test_in_files:.test.in=.test)
 
 $(test_files): %.test: %.test.in
 	$(AM_V_GEN) sed $(substitutions) $< > $@.tmp && mv $@.tmp $@
-
-EXTRA_DIST += $(test_in_files)
 
 testmetadir = $(datadir)/installed-tests/$(PACKAGE)
 testmeta_DATA = $(test_files)

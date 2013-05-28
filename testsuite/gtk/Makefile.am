@@ -1,8 +1,6 @@
 include $(top_srcdir)/Makefile.decl
 
-NULL=
-
-SUBDIRS =
+NULL =
 
 AM_CPPFLAGS = \
 	-I$(top_srcdir)			\
@@ -221,8 +219,10 @@ window_SOURCES			 = window.c
 window_LDADD			 = $(progs_ldadd)
 
 EXTRA_DIST +=				\
+	$(test_in_files)		\
 	file-chooser-test-dir/empty     \
-	file-chooser-test-dir/text.txt
+	file-chooser-test-dir/text.txt	\
+	$(NULL)
 
 if BUILDOPT_INSTALL_TESTS
 insttestdir=$(pkglibexecdir)/installed-tests
@@ -236,8 +236,6 @@ test_files = $(test_in_files:.test.in=.test)
 
 $(test_files): %.test: %.test.in
 	$(AM_V_GEN) sed $(substitutions) $< > $@.tmp && mv $@.tmp $@
-
-EXTRA_DIST += $(test_in_files)
 
 testmetadir = $(datadir)/installed-tests/$(PACKAGE)
 testmeta_DATA = $(test_files)

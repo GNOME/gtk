@@ -22,8 +22,10 @@ LDADD = \
 	$(top_builddir)/gtk/libgtk-3.la \
 	$(GTK_DEP_LIBS)
 
-TEST_PROGS += api 
+TEST_PROGS += api
 test_in_files += api.test.in
+
+EXTRA_DIST += $(test_in_files)
 
 if BUILDOPT_INSTALL_TESTS
 insttestdir=$(pkglibexecdir)/installed-tests/css
@@ -37,8 +39,6 @@ test_files = $(test_in_files:.test.in=.test)
 
 $(test_files): %.test: %.test.in
 	$(AM_V_GEN) sed $(substitutions) $< > $@.tmp && mv $@.tmp $@
-
-EXTRA_DIST += $(test_in_files)
 
 testmetadir = $(datadir)/installed-tests/$(PACKAGE)/css
 testmeta_DATA = $(test_files)

@@ -282,6 +282,11 @@ testdata = \
 	window-default-size.ui \
 	$(NULL)
 
+EXTRA_DIST += 			\
+	(testdata)		\
+	reftests.test.in	\
+	$(NULL)
+
 if BUILDOPT_INSTALL_TESTS
 insttestdir=$(pkglibexecdir)/installed-tests
 insttest_PROGRAMS = gtk-reftest
@@ -295,9 +300,6 @@ substitutions = \
 
 reftests.test: reftests.test.in Makefile
 	$(AM_V_GEN) sed $(substitutions) $< > $@.tmp && mv $@.tmp $@
-
-EXTRA_DIST += \
-	reftests.test.in
 
 testmetadir = $(datadir)/installed-tests/$(PACKAGE)
 testmeta_DATA = reftests.test

@@ -348,6 +348,8 @@ test_data = \
 	widget-style-property.css \
 	$(NULL)
 
+EXTRA_DIST += $(test_in_files) $(test_data)
+
 if BUILDOPT_INSTALL_TESTS
 insttestdir=$(pkglibexecdir)/installed-tests/css/parser
 insttest_PROGRAMS = $(TEST_PROGS)
