@@ -216,6 +216,9 @@ testdata = \
 	linear-gradient.css \
 	linear-gradient.ref.ui \
 	linear-gradient.ui \
+	linear-gradient-transition-to-other.css \
+	linear-gradient-transition-to-other.ref.ui \
+	linear-gradient-transition-to-other.ui \
 	marble.xpm \
 	messagedialog-secondarytext.ui \
 	messagedialog-secondarytext.ref.ui \
