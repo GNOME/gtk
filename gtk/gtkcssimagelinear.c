@@ -471,6 +471,7 @@ gtk_css_image_linear_transition (GtkCssImage *start_image,
   start = GTK_CSS_IMAGE_LINEAR (start_image);
 
   if (end_image == NULL)
+    return GTK_CSS_IMAGE_CLASS (_gtk_css_image_linear_parent_class)->transition (start_image, end_image, property_id, progress);
 
   if (!GTK_IS_CSS_IMAGE_LINEAR (end_image))
     return GTK_CSS_IMAGE_CLASS (_gtk_css_image_linear_parent_class)->transition (start_image, end_image, property_id, progress);
