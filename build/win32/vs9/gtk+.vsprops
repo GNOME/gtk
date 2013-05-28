@@ -210,6 +210,7 @@ copy ..\..\..\gtk\gtkfontchooserdialog.h $(CopyDir)\include\gtk-$(ApiVersion)\gt
 copy ..\..\..\gtk\gtkfontchooserwidget.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkframe.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkgrid.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
+copy ..\..\..\gtk\gtkheaderbar.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkiconfactory.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkicontheme.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkiconview.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
@@ -247,6 +248,7 @@ copy ..\..\..\gtk\gtkoverlay.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x
 copy ..\..\..\gtk\gtkpagesetup.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkpaned.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkpapersize.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
+copy ..\..\..\gtk\gtkplacessidebar.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkplug.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkprintcontext.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkprintoperation.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
@@ -267,6 +269,7 @@ copy ..\..\..\gtk\gtkrecentchoosermenu.h $(CopyDir)\include\gtk-$(ApiVersion)\gt
 copy ..\..\..\gtk\gtkrecentchooserwidget.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkrecentfilter.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkrecentmanager.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
+copy ..\..\..\gtk\gtkrevealer.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkscale.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkscalebutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkscrollable.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
@@ -284,6 +287,8 @@ copy ..\..\..\gtk\gtksizerequest.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D
 copy ..\..\..\gtk\gtksocket.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkspinbutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkspinner.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
+copy ..\..\..\gtk\gtkstack.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
+copy ..\..\..\gtk\gtkstackswitcher.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkstatusbar.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkstatusicon.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkstock.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
@@ -436,14 +441,6 @@ cd ..&#x0D;&#x0A;
 call gengir_gtk.bat&#x0D;&#x0A;
 cd vs$(VSVer)&#x0D;&#x0A;
 		      "
-	/>
-	<UserMacro
-		Name="GtkGenerateGdkDef"
-		Value="echo EXPORTS &gt;&quot;$(IntDir)\gdk.def&quot; &amp;&amp; cl /EP -DGDK_WINDOWING_WIN32 -DALL_FILES -DG_GNUC_CONST= ..\..\..\gdk\gdk.symbols &gt;&gt;&quot;$(IntDir)\gdk.def&quot;"
-	/>
-	<UserMacro
-		Name="GtkGenerateGtkDef"
-		Value="echo EXPORTS &gt;&quot;$(IntDir)\gtk.def&quot; &amp;&amp; cl /EP -DGDK_WINDOWING_WIN32 -DINCLUDE_VARIABLES -DG_OS_WIN32 -DALL_FILES -DG_GNUC_MALLOC= -DG_GNUC_CONST= -DG_GNUC_NULL_TERMINATED= -DG_GNUC_PRINTF=;G_GNUC_PRINTF ..\..\..\gtk\gtk.symbols &gt;&gt;&quot;$(IntDir)\gtk.def&quot;"
 	/>
 	<UserMacro
 		Name="GtkLibtoolCompatibleDllPrefix"

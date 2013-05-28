@@ -88,7 +88,6 @@
     <Link>
       <AdditionalDependencies>atk-1.0.lib;pangowin32-1.0.lib;imm32.lib;winspool.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
-      <ModuleDefinitionFile>$(IntDir)gtk.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <ImportLibrary>$(TargetDir)$(ProjectName)-$(ApiVersion).lib</ImportLibrary>
@@ -108,7 +107,6 @@
     <Link>
       <AdditionalDependencies>atk-1.0.lib;pangowin32-1.0.lib;imm32.lib;winspool.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
-      <ModuleDefinitionFile>$(IntDir)gtk.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -133,7 +131,6 @@
     <Link>
       <AdditionalDependencies>atk-1.0.lib;pangowin32-1.0.lib;imm32.lib;winspool.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
-      <ModuleDefinitionFile>$(IntDir)gtk.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <ImportLibrary>$(TargetDir)$(ProjectName)-$(ApiVersion).lib</ImportLibrary>
@@ -153,7 +150,6 @@
     <Link>
       <AdditionalDependencies>atk-1.0.lib;pangowin32-1.0.lib;imm32.lib;winspool.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
-      <ModuleDefinitionFile>$(IntDir)gtk.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -162,22 +158,6 @@
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <CustomBuild Include="..\..\..\gdk\gtk.symbols">
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating gtk.def</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(GtkGenerateGtkDef)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)gtk.def;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating gtk.def</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(GtkGenerateGtkDef)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)gtk.def;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating gtk.def</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(GtkGenerateGtkDef)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)gtk.def;%(Outputs)</Outputs>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating gtk.def</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(GtkGenerateGtkDef)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)gtk.def;%(Outputs)</Outputs>
-    </CustomBuild>
-  </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\..\gtk\gtk-win32.rc" />
   </ItemGroup>

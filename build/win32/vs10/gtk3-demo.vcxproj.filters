@@ -122,16 +122,25 @@
     <ClCompile Include="..\..\..\demos\gtk-demo\printing.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\demos\gtk-demo\revealer.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\rotated_text.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\search_entry.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\demos\gtk-demo\search_entry2.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\sizegroup.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\spinner.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\demos\gtk-demo\stack.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\stock_browser.c">

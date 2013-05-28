@@ -45,7 +45,6 @@
 				AdditionalDependencies="atk-1.0.lib pangowin32-1.0.lib imm32.lib winspool.lib comctl32.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
 				LinkIncremental="1"
-				ModuleDefinitionFile="$(IntDir)\gtk.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				ImportLibrary="$(TargetDir)$(ProjectName)-$(ApiVersion).lib"
@@ -76,7 +75,6 @@
 				AdditionalDependencies="atk-1.0.lib pangowin32-1.0.lib imm32.lib winspool.lib comctl32.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
 				LinkIncremental="1"
-				ModuleDefinitionFile="$(IntDir)\gtk.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -111,7 +109,6 @@
 				AdditionalDependencies="atk-1.0.lib pangowin32-1.0.lib imm32.lib winspool.lib comctl32.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
 				LinkIncremental="1"
-				ModuleDefinitionFile="$(IntDir)\gtk.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				ImportLibrary="$(TargetDir)$(ProjectName)-$(ApiVersion).lib"
@@ -142,7 +139,6 @@
 				AdditionalDependencies="atk-1.0.lib pangowin32-1.0.lib imm32.lib winspool.lib comctl32.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
 				LinkIncremental="1"
-				ModuleDefinitionFile="$(IntDir)\gtk.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -166,50 +162,6 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
-			<File
-				RelativePath="..\..\..\gdk\gtk.symbols"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Generating gtk.def"
-						CommandLine="$(GtkGenerateGtkDef)"
-						Outputs="$(IntDir)\gtk.def"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Generating gtk.def"
-						CommandLine="$(GtkGenerateGtkDef)"
-						Outputs="$(IntDir)\gtk.def"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Generating gtk.def"
-						CommandLine="$(GtkGenerateGtkDef)"
-						Outputs="$(IntDir)\gtk.def"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Generating gtk.def"
-						CommandLine="$(GtkGenerateGtkDef)"
-						Outputs="$(IntDir)\gtk.def"
-					/>
-				</FileConfiguration>
-			</File>
 			<File RelativePath="..\..\..\gtk\gtk-win32.rc" />
 		</Filter>
 		<Filter

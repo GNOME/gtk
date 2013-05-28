@@ -197,10 +197,13 @@
 			<File RelativePath="..\..\..\demos\gtk-demo\pickers.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\pixbufs.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\printing.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\revealer.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\rotated_text.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\search_entry.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\search_entry2.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\sizegroup.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\spinner.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\stack.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\stock_browser.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\textscroll.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\textview.c" />

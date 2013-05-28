@@ -282,6 +282,8 @@ copy ..\..\..\gtk\gtkframe.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkgrid.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
+copy ..\..\..\gtk\gtkheaderbar.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
+
 copy ..\..\..\gtk\gtkiconfactory.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkicontheme.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
@@ -356,6 +358,8 @@ copy ..\..\..\gtk\gtkpaned.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkpapersize.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
+copy ..\..\..\gtk\gtkplacessidebar.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
+
 copy ..\..\..\gtk\gtkplug.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkprintcontext.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
@@ -396,6 +400,8 @@ copy ..\..\..\gtk\gtkrecentfilter.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkrecentmanager.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
+copy ..\..\..\gtk\gtkrevealer.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
+
 copy ..\..\..\gtk\gtkscale.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkscalebutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
@@ -429,6 +435,10 @@ copy ..\..\..\gtk\gtksocket.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 copy ..\..\..\gtk\gtkspinbutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkspinner.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
+
+copy ..\..\..\gtk\gtkstack.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
+
+copy ..\..\..\gtk\gtkstackswitcher.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkstatusbar.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
@@ -708,8 +718,6 @@ call gengir_gtk.bat
 
 cd vs$(VSVer)
 </DoGenGir>
-    <GtkGenerateGdkDef>echo EXPORTS &gt;"$(DefDir)\gdk.def" &amp;&amp; cl /EP -DGDK_WINDOWING_WIN32 -DALL_FILES -DG_GNUC_CONST= ..\..\..\gdk\gdk.symbols &gt;&gt;"$(DefDir)\gdk.def"</GtkGenerateGdkDef>
-    <GtkGenerateGtkDef>echo EXPORTS &gt;"$(DefDir)\gtk.def" &amp;&amp; cl /EP -DGDK_WINDOWING_WIN32 -DINCLUDE_VARIABLES -DG_OS_WIN32 -DALL_FILES -DG_GNUC_MALLOC= -DG_GNUC_CONST= -DG_GNUC_NULL_TERMINATED= -DG_GNUC_PRINTF=;G_GNUC_PRINTF ..\..\..\gtk\gtk.symbols &gt;&gt;"$(DefDir)\gtk.def"</GtkGenerateGtkDef>
     <GtkLibtoolCompatibleDllPrefix>lib</GtkLibtoolCompatibleDllPrefix>
     <GtkLibtoolCompatibleDllSuffix>-$(ApiVersion)-0</GtkLibtoolCompatibleDllSuffix>
     <GtkSeparateVSDllPrefix />
