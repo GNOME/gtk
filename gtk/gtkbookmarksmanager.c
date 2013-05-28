@@ -39,6 +39,20 @@ _gtk_bookmark_free (GtkBookmark *bookmark)
   g_slice_free (GtkBookmark, bookmark);
 }
 
+static void
+set_error_bookmark_doesnt_exist (GFile *file, GError **error)
+{
+  gchar *uri = g_file_get_uri (file);
+
+  g_set_error (error,
+               GTK_FILE_CHOOSER_ERROR,
+               GTK_FILE_CHOOSER_ERROR_NONEXISTENT,
+               _("%s does not exist in the bookmarks list"),
+               uri);
+
+  g_free (uri);
+}
+
 static GFile *
 get_legacy_bookmarks_file (void)
 {
@@ -350,7 +364,7 @@ _gtk_bookmarks_manager_insert_bookmark (GtkBookmarksManager *manager,
       g_set_error (error,
 		   GTK_FILE_CHOOSER_ERROR,
 		   GTK_FILE_CHOOSER_ERROR_ALREADY_EXISTS,
-		   "%s already exists in the bookmarks list",
+		   _("%s already exists in the bookmarks list"),
 		   uri);
 
       g_free (uri);
@@ -397,16 +411,7 @@ _gtk_bookmarks_manager_remove_bookmark (GtkBookmarksManager *manager,
     }
   else
     {
-      gchar *uri = g_file_get_uri (file);
-
-      g_set_error (error,
-		   GTK_FILE_CHOOSER_ERROR,
-		   GTK_FILE_CHOOSER_ERROR_NONEXISTENT,
-		   "%s does not exist in the bookmarks list",
-		   uri);
-
-      g_free (uri);
-
+      set_error_bookmark_doesnt_exist (file, error);
       return FALSE;
     }
 
@@ -454,16 +459,7 @@ _gtk_bookmarks_manager_reorder_bookmark (GtkBookmarksManager *manager,
     }
   else
     {
-      gchar *uri = g_file_get_uri (file);
-
-      g_set_error (error,
-		   GTK_FILE_CHOOSER_ERROR,
-		   GTK_FILE_CHOOSER_ERROR_NONEXISTENT,
-		   "%s does not exist in the bookmarks list",
-		   uri);
-
-      g_free (uri);
-
+      set_error_bookmark_doesnt_exist (file, error);
       return FALSE;
     }
 
@@ -527,16 +523,7 @@ _gtk_bookmarks_manager_set_bookmark_label (GtkBookmarksManager *manager,
     }
   else
     {
-      gchar *uri = g_file_get_uri (file);
-
-      g_set_error (error,
-		   GTK_FILE_CHOOSER_ERROR,
-		   GTK_FILE_CHOOSER_ERROR_NONEXISTENT,
-		   "%s does not exist in the bookmarks list",
-		   uri);
-
-      g_free (uri);
-
+      set_error_bookmark_doesnt_exist (file, error);
       return FALSE;
     }
 
