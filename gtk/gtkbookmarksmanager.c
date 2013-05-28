@@ -343,8 +343,9 @@ _gtk_bookmarks_manager_insert_bookmark (GtkBookmarksManager *manager,
 
   if (link)
     {
+      gchar *uri;
       bookmark = link->data;
-      gchar *uri = g_file_get_uri (bookmark->file);
+      uri = g_file_get_uri (bookmark->file);
 
       g_set_error (error,
 		   GTK_FILE_CHOOSER_ERROR,

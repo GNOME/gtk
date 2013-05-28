@@ -26,7 +26,8 @@
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-#include <math.h>
+
+#include "fallback-c89.c"
 
 /**
  * SECTION:gtkrevealer
