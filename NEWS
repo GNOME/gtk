@@ -23,45 +23,46 @@ Overview of Changes in GTK+ 3.9.0 to 3.9.2
 
 * Native input methods are supported on OS X now.
 
-699739
-699140
-699633
-699901
-699750
-698051
-699929
-695120
-700007
-700053
-700054
-699239
-699104
-698361
-700079
-698933
-700056
-699690
-700301
-699970
-696640
-700578
-700575
-700465
-700233
-699289
-694273
-691921
-667759
-700737
-561221
-700844
-700787
-628902
-700979
-360131
-591969
-700864
-696001
+* Bugs fixed:
+ 360131 Wrong documentation for gtk_file_chooser_set_do_overwrite_...
+ 561221 Don't allow file bookmarks
+ 591969 make the FileChooser dialog handle Make FileChooser handle...
+ 628902 use expand flags to determine window resizability
+ 667759 gtkdnd-quartz.c is missing annotations for introspection
+ 691921 GTK+ (quartz) built on Mac OS X 10.5 references [NSMenu re...
+ 694273 Patch to support NSTextInputClient in text widgets
+ 695120 GtkMenu and GdkWindow sizes can get out of sync
+ 696001 need to know about tiling
+ 696640 GtkButton: Don't suppress unhandled mouse events
+ 698051 Typo in documentation comment
+ 698361 file chooser: menu commands should be capitalized
+ 698933 places sidebar: don't capitalize "file system"
+ 699104 when nothing is selected, Add to Bookmarks is enabled but ...
+ 699140 Baseline support breaks height-for-width in event box
+ 699239 Choose DnD/tooltip widget better on GtkOverlay and other l...
+ 699289 API request: MenuItem has no function to set label markup
+ 699633 GtkWindow: critical messages when negative size allocations
+ 699690 Cross-compilation broken as of 3.9.0 due to extract-string...
+ 699739 GtkSettings fails to read uint properties from settings.ini
+ 699750 Print dialog crashes when printer does not provide printer...
+ 699901 GTK CSS keybinding broken
+ 699929 GtkCheckMenuItem: remove an unused boolean field
+ 699970 Fullscreen OSD not visible against gtk+ git master
+ 700007 Various small improvements
+ 700053 titlebar: fullscreen broken
+ 700054 titlebar: warning at destroy time
+ 700056 titlebar: dialogs do not appear centered
+ 700079 Fix accels added after the window was shown not working
+ 700233 Gtk+ exits on X11 when querying a slave device
+ 700301 wayland: ensure the clip region is updated after the windo...
+ 700465 Missing NULL-check in XI2's implementation for get_window()
+ 700575 docs: remove unused objects_grouped.sgml
+ 700578 Missing vertical grid lines when some columns hidden.
+ 700737 [wayland] gdk_screen_get_height() returns wrong value
+ 700787 Add GtkSearchBar widget
+ 700844 GdkRgba: Fix 'loose' typo
+ 700864 error_selecting_folder_over_existing_file_dialog() will ne...
+ 700979 GtkPlacesSidebar: do not unref mount
 
 * Translation updates:
  Brazilian Portuguese
