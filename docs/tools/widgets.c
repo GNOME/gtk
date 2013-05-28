@@ -1305,7 +1305,6 @@ create_headerbar (void)
 {
   GtkWidget *window;
   GtkWidget *bar;
-  GtkWidget *align;
   GtkWidget *view;
   GtkWidget *button;
 
