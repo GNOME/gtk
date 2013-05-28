@@ -21,8 +21,7 @@
 #include "gdkdisplay.h"
 #include "gdkscreen.h"
 #include "gdkcursor.h"
-#include "gdkprivate-win32.h"
-#include "gdkwin32cursor.h"
+#include "gdkwin32.h"
 
 #ifdef __MINGW32__
 #include <w32api.h>
