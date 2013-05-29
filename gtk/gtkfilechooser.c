@@ -1912,8 +1912,7 @@ _gtk_file_chooser_get_file_system (GtkFileChooser *chooser)
  *
  * When there is no application-supplied preview widget, or the
  * application-supplied preview widget is not active, the file chooser
- * may display an internally generated preview of the current file or
- * it may display no preview at all.
+ * will display no preview at all.
  *
  * Since: 2.4
  **/
