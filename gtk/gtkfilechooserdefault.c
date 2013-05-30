@@ -1482,6 +1482,7 @@ get_file_info_finished (GCancellable *cancellable,
 
   if (!info)
     {
+      shortcuts_free_row_data (request->impl, &iter);
       gtk_list_store_remove (request->impl->shortcuts_model, &iter);
       shortcuts_update_count (request->impl, request->type, -1);
 
