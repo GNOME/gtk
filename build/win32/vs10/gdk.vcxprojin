@@ -158,7 +158,6 @@
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
-  </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\..\gdk\win32\rc\gdk.rc" />
   </ItemGroup>
