@@ -861,13 +861,9 @@ main (int argc, char **argv)
 
       if (arg_base_dir)
         basedir = arg_base_dir;
-      else if (g_getenv ("srcdir"))
-        basedir = g_getenv ("srcdir");
       else
-        basedir = ".";
-        
+        basedir = g_test_get_dir (G_TEST_DIST);
       dir = g_file_new_for_path (basedir);
-      
       add_tests_for_files_in_directory (dir);
 
       g_object_unref (dir);

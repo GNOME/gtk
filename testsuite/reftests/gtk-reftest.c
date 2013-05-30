@@ -584,10 +584,8 @@ main (int argc, char **argv)
 
   if (arg_base_dir)
     basedir = arg_base_dir;
-  else if (g_getenv ("srcdir"))
-    basedir = g_getenv ("srcdir");
   else
-    basedir = ".";
+    basedir = g_test_get_dir (G_TEST_DIST);
 
   if (argc < 2)
     {
