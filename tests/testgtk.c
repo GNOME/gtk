@@ -7740,6 +7740,7 @@ window_controls (GtkWidget *window)
 			    control_window);
   gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   button = gtk_button_new_with_label ("Reshow with initial size");
   g_signal_connect_object (button,
 			   "clicked",
@@ -7747,6 +7748,7 @@ window_controls (GtkWidget *window)
 			   window,
 			   G_CONNECT_SWAPPED);
   gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
   
   button = gtk_button_new_with_label ("Queue resize");
   g_signal_connect_object (button,
