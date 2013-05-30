@@ -1870,7 +1870,8 @@ gtk_container_real_check_resize (GtkContainer *container)
     }
   else
     {
-      gtk_container_resize_children (container);
+      gtk_widget_size_allocate (widget, &allocation);
+      gtk_widget_set_allocation (widget, &allocation);
     }
 }
 
