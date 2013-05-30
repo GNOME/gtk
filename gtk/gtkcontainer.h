@@ -174,7 +174,7 @@ void   gtk_container_set_focus_hadjustment (GtkContainer     *container,
 GDK_AVAILABLE_IN_ALL
 GtkAdjustment *gtk_container_get_focus_hadjustment (GtkContainer *container);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void    gtk_container_resize_children      (GtkContainer     *container);
 
 GDK_AVAILABLE_IN_ALL
