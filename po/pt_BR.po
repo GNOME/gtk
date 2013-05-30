@@ -25,8 +25,8 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-05-18 23:07+0000\n"
-"PO-Revision-Date: 2013-05-20 19:03-0300\n"
+"POT-Creation-Date: 2013-05-22 15:38+0000\n"
+"PO-Revision-Date: 2013-05-30 04:59-0300\n"
 "Last-Translator: Rafael Ferreira <rafael.f.f1@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -295,183 +295,131 @@ msgstr "Delete"
 
 #. Translators: 'Mon' means Monitor here, and the XF86 prefix should be removed
 #: ../gdk/keyname-table.h:3991
-#| msgctxt "keyboard label"
-#| msgid "MonBrightnessUp"
 msgctxt "keyboard label"
 msgid "MonBrightnessUp"
 msgstr "AumentarBrilhoMonitor"
 
 #: ../gdk/keyname-table.h:3992
-#| msgctxt "keyboard label"
-#| msgid "MonBrightnessDown"
 msgctxt "keyboard label"
 msgid "MonBrightnessDown"
 msgstr "DiminuirBrilhoMonitor"
 
 #: ../gdk/keyname-table.h:3993
-#| msgctxt "keyboard label"
-#| msgid "AudioMute"
 msgctxt "keyboard label"
 msgid "AudioMute"
 msgstr "ÁudioMudo"
 
 #: ../gdk/keyname-table.h:3994
-#| msgctxt "keyboard label"
-#| msgid "AudioLowerVolume"
 msgctxt "keyboard label"
 msgid "AudioLowerVolume"
 msgstr "AbaixarVolumeÁudio"
 
 #: ../gdk/keyname-table.h:3995
-#| msgctxt "keyboard label"
-#| msgid "AudioRaiseVolume"
 msgctxt "keyboard label"
 msgid "AudioRaiseVolume"
 msgstr "AumentarVolumeÁudio"
 
 #: ../gdk/keyname-table.h:3996
-#| msgctxt "keyboard label"
-#| msgid "AudioPlay"
 msgctxt "keyboard label"
 msgid "AudioPlay"
 msgstr "ReproduzirÁudio"
 
 #: ../gdk/keyname-table.h:3997
-#| msgctxt "keyboard label"
-#| msgid "AudioStop"
 msgctxt "keyboard label"
 msgid "AudioStop"
 msgstr "PararÁudio"
 
 #: ../gdk/keyname-table.h:3998
-#| msgctxt "keyboard label"
-#| msgid "AudioNext"
 msgctxt "keyboard label"
 msgid "AudioNext"
 msgstr "PróximoÁudio"
 
 #: ../gdk/keyname-table.h:3999
-#| msgctxt "keyboard label"
-#| msgid "AudioPrev"
 msgctxt "keyboard label"
 msgid "AudioPrev"
 msgstr "ÁudioAnterior"
 
 #: ../gdk/keyname-table.h:4000
-#| msgctxt "keyboard label"
-#| msgid "AudioRecord"
 msgctxt "keyboard label"
 msgid "AudioRecord"
 msgstr "GravarÁudio"
 
 #: ../gdk/keyname-table.h:4001
-#| msgctxt "keyboard label"
-#| msgid "AudioPause"
 msgctxt "keyboard label"
 msgid "AudioPause"
 msgstr "PausarÁudio"
 
 #: ../gdk/keyname-table.h:4002
-#| msgctxt "keyboard label"
-#| msgid "AudioRewind"
 msgctxt "keyboard label"
 msgid "AudioRewind"
 msgstr "RetornarÁudio"
 
 #: ../gdk/keyname-table.h:4003
-#| msgctxt "keyboard label"
-#| msgid "AudioMedia"
 msgctxt "keyboard label"
 msgid "AudioMedia"
 msgstr "MídiaÁudio"
 
 #: ../gdk/keyname-table.h:4004
-#| msgctxt "keyboard label"
-#| msgid "ScreenSaver"
 msgctxt "keyboard label"
 msgid "ScreenSaver"
 msgstr "ProtetorTela"
 
 #: ../gdk/keyname-table.h:4005
-#| msgctxt "keyboard label"
-#| msgid "Battery"
 msgctxt "keyboard label"
 msgid "Battery"
 msgstr "Bateria"
 
 #: ../gdk/keyname-table.h:4006
-#| msgctxt "keyboard label"
-#| msgid "Launch1"
 msgctxt "keyboard label"
 msgid "Launch1"
 msgstr "Lançar1"
 
 #: ../gdk/keyname-table.h:4007
-#| msgctxt "keyboard label"
-#| msgid "Forward"
 msgctxt "keyboard label"
 msgid "Forward"
 msgstr "Avançar"
 
 #: ../gdk/keyname-table.h:4008
-#| msgctxt "keyboard label"
-#| msgid "Back"
 msgctxt "keyboard label"
 msgid "Back"
 msgstr "Voltar"
 
 #: ../gdk/keyname-table.h:4009
-#| msgctxt "keyboard label"
-#| msgid "Sleep"
 msgctxt "keyboard label"
 msgid "Sleep"
 msgstr "Suspender"
 
 #: ../gdk/keyname-table.h:4010
-#| msgctxt "keyboard label"
-#| msgid "Hibernate"
 msgctxt "keyboard label"
 msgid "Hibernate"
 msgstr "Hibernar"
 
 #: ../gdk/keyname-table.h:4011
-#| msgctxt "keyboard label"
-#| msgid "WLAN"
 msgctxt "keyboard label"
 msgid "WLAN"
 msgstr "WLAN"
 
 #: ../gdk/keyname-table.h:4012
-#| msgctxt "keyboard label"
-#| msgid "WebCam"
 msgctxt "keyboard label"
 msgid "WebCam"
 msgstr "WebCam"
 
 #: ../gdk/keyname-table.h:4013
-#| msgctxt "keyboard label"
-#| msgid "Display"
 msgctxt "keyboard label"
 msgid "Display"
 msgstr "Exibir"
 
 #: ../gdk/keyname-table.h:4014
-#| msgctxt "keyboard label"
-#| msgid "TouchpadToggle"
 msgctxt "keyboard label"
 msgid "TouchpadToggle"
 msgstr "AlternarTouchpad"
 
 #: ../gdk/keyname-table.h:4015
-#| msgctxt "keyboard label"
-#| msgid "WakeUp"
 msgctxt "keyboard label"
 msgid "WakeUp"
 msgstr "ParaCima"
 
 #: ../gdk/keyname-table.h:4016
-#| msgctxt "keyboard label"
-#| msgid "Suspend"
 msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "Suspender"
