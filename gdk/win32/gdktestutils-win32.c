@@ -15,6 +15,8 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
+#include "config.h"
+
 #include <gdk/gdktestutils.h>
 #include <gdk/gdkkeysyms.h>
 #include <win32/gdkwin32.h>

@@ -21,6 +21,8 @@
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
+#include "config.h"
+
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -35,8 +37,6 @@
 #include "gdkkeysyms.h"
 #include "gdkkeysprivate.h"
 #include "gdkwin32keys.h"
-
-#include "config.h"
 
 struct _GdkWin32KeymapClass
 {
