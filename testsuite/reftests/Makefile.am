@@ -283,7 +283,7 @@ testdata = \
 	$(NULL)
 
 EXTRA_DIST += 			\
-	(testdata)		\
+	$(testdata)		\
 	reftests.test.in	\
 	$(NULL)
 
