@@ -3170,7 +3170,7 @@ msgstr "保存(_S)"
 #: ../gtk/gtkstock.c:430
 msgctxt "Stock label"
 msgid "Save _As"
-msgstr "別名で保存(_A)"
+msgstr "名前を付けて保存(_A)"
 
 #: ../gtk/gtkstock.c:431
 msgctxt "Stock label"
