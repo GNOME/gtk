@@ -86,11 +86,11 @@ enum {
   CHILD_PROP_POSITION
 };
 
-static void gtk_header_buildable_init (GtkBuildableIface *iface);
+static void gtk_header_bar_buildable_init (GtkBuildableIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkHeaderBar, gtk_header_bar, GTK_TYPE_CONTAINER,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-                                                gtk_header_buildable_init));
+                                                gtk_header_bar_buildable_init));
 
 static void
 boldify_label (GtkWidget *label)
@@ -1357,10 +1357,10 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
 }
 
 static void
-gtk_header_buildable_add_child (GtkBuildable *buildable,
-                                GtkBuilder   *builder,
-                                GObject      *child,
-                                const gchar  *type)
+gtk_header_bar_buildable_add_child (GtkBuildable *buildable,
+                                    GtkBuilder   *builder,
+                                    GObject      *child,
+                                    const gchar  *type)
 {
   if (type && strcmp (type, "title") == 0)
     gtk_header_bar_set_custom_title (GTK_HEADER_BAR (buildable), GTK_WIDGET (child));
@@ -1371,9 +1371,9 @@ gtk_header_buildable_add_child (GtkBuildable *buildable,
 }
 
 static void
-gtk_header_buildable_init (GtkBuildableIface *iface)
+gtk_header_bar_buildable_init (GtkBuildableIface *iface)
 {
-  iface->add_child = gtk_header_buildable_add_child;
+  iface->add_child = gtk_header_bar_buildable_add_child;
 }
 
 /**
