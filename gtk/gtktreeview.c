@@ -2737,6 +2737,7 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
   GList *tmp_list;
   gboolean width_changed = FALSE;
   gint old_width;
+  double page_size;
 
   gtk_widget_get_allocation (widget, &widget_allocation);
   old_width = widget_allocation.width;
@@ -2795,27 +2796,17 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
                                 MAX (tree_view->priv->width -
                                      allocation->width, 0));
 
-  g_object_freeze_notify (G_OBJECT (tree_view->priv->vadjustment));
-  gtk_adjustment_set_page_size (tree_view->priv->vadjustment,
-                                allocation->height -
-                                gtk_tree_view_get_effective_header_height (tree_view));
-  gtk_adjustment_set_step_increment (tree_view->priv->vadjustment,
-                                     gtk_adjustment_get_page_size (tree_view->priv->vadjustment) * 0.1);
-  gtk_adjustment_set_page_increment (tree_view->priv->vadjustment,
-                                     gtk_adjustment_get_page_size (tree_view->priv->vadjustment) * 0.9);
-  gtk_adjustment_set_lower (tree_view->priv->vadjustment, 0);
-  gtk_adjustment_set_upper (tree_view->priv->vadjustment,
-                            MAX (gtk_adjustment_get_page_size (tree_view->priv->vadjustment),
-                                 gtk_tree_view_get_height (tree_view)));
-  g_object_thaw_notify (G_OBJECT (tree_view->priv->vadjustment));
-
+  page_size = allocation->height - gtk_tree_view_get_effective_header_height (tree_view);
+  gtk_adjustment_configure (tree_view->priv->vadjustment,
+                            gtk_adjustment_get_value (tree_view->priv->vadjustment),
+                            0,
+                            MAX (page_size, gtk_tree_view_get_height (tree_view)),
+                            page_size * 0.1,
+                            page_size * 0.9,
+                            page_size);
+ 
   /* now the adjustments and window sizes are in sync, we can sync toprow/dy again */
-  if (gtk_tree_view_get_height (tree_view) <= gtk_adjustment_get_page_size (tree_view->priv->vadjustment))
-    gtk_adjustment_set_value (GTK_ADJUSTMENT (tree_view->priv->vadjustment), 0);
-  else if (gtk_adjustment_get_value (tree_view->priv->vadjustment) + gtk_adjustment_get_page_size (tree_view->priv->vadjustment) > gtk_tree_view_get_height (tree_view))
-    gtk_adjustment_set_value (GTK_ADJUSTMENT (tree_view->priv->vadjustment),
-                              gtk_tree_view_get_height (tree_view) - gtk_adjustment_get_page_size (tree_view->priv->vadjustment));
-  else if (gtk_tree_row_reference_valid (tree_view->priv->top_row))
+  if (gtk_tree_row_reference_valid (tree_view->priv->top_row))
     gtk_tree_view_top_row_to_dy (tree_view);
   else
     gtk_tree_view_dy_to_top_row (tree_view);
