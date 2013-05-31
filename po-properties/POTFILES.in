@@ -57,6 +57,7 @@ gtk/gtkassistant.c
 gtk/gtkbbox.c
 gtk/gtkbin.c
 gtk/gtkbindings.c
+gtk/gtkbookmarksmanager.c
 gtk/gtkbox.c
 gtk/gtkbubblewindow.c
 gtk/gtkbuildable.c
@@ -199,6 +200,7 @@ gtk/gtkscale.c
 gtk/gtkscrollable.c
 gtk/gtkscrollbar.c
 gtk/gtkscrolledwindow.c
+gtk/gtksearchbar.c
 gtk/gtkselection.c
 gtk/gtkseparator.c
 gtk/gtkseparatortoolitem.c
