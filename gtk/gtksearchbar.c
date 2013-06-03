@@ -47,7 +47,8 @@
  *
  * For keyboard presses to start a search, events will need to be forwarded
  * from the top-level window that contains the search bar. See
- * gtk_search_bar_handle_event() for example code.
+ * gtk_search_bar_handle_event() for example code. Common shortcuts such as Ctrl+F
+ * should be handled as an application action, or through the menu items.
  *
  * You will also need to tell the search bar about which entry you are
  * using as your search entry using gtk_search_bar_connect_entry().
