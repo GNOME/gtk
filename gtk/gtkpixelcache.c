@@ -38,6 +38,7 @@ struct _GtkPixelCache {
   int surface_y;
   int surface_w;
   int surface_h;
+  double surface_scale;
 
   /* may be null if not dirty */
   cairo_region_t *surface_dirty;
@@ -159,7 +160,8 @@ _gtk_pixel_cache_create_surface_if_needed (GtkPixelCache         *cache,
        cache->surface_w < view_rect->width ||
        cache->surface_w > surface_w + ALLOW_LARGER_SIZE ||
        cache->surface_h < view_rect->height ||
-       cache->surface_h > surface_h + ALLOW_LARGER_SIZE))
+       cache->surface_h > surface_h + ALLOW_LARGER_SIZE ||
+       cache->surface_scale != gdk_window_get_scale_factor (window)))
     {
       cairo_surface_destroy (cache->surface);
       cache->surface = NULL;
@@ -178,6 +180,7 @@ _gtk_pixel_cache_create_surface_if_needed (GtkPixelCache         *cache,
       cache->surface_y = -canvas_rect->y;
       cache->surface_w = surface_w;
       cache->surface_h = surface_h;
+      cache->surface_scale = gdk_window_get_scale_factor (window);
 
       cache->surface =
 	gdk_window_create_similar_surface (window, content,
