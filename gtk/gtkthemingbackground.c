@@ -216,9 +216,9 @@ _gtk_theming_background_paint_layer (GtkThemingBackground *bg,
       else
         surface_height = round (image_height);
 
-      surface = cairo_surface_create_similar (cairo_get_target (cr),
-                                              CAIRO_CONTENT_COLOR_ALPHA,
-                                              surface_width, surface_height);
+      surface = gdk_cairo_surface_create_similar (cairo_get_target (cr),
+                                                  CAIRO_CONTENT_COLOR_ALPHA,
+                                                  surface_width, surface_height);
       cr2 = cairo_create (surface);
       cairo_translate (cr2,
                        0.5 * (surface_width - image_width),

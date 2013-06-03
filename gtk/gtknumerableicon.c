@@ -175,9 +175,9 @@ draw_from_image (cairo_surface_t *image)
   cairo_surface_t *surface;
   cairo_t *cr;
 
-  surface = cairo_surface_create_similar (image, CAIRO_CONTENT_COLOR_ALPHA,
-                                          cairo_image_surface_get_width (image),
-                                          cairo_image_surface_get_height (image));
+  surface = gdk_cairo_surface_create_similar (image, CAIRO_CONTENT_COLOR_ALPHA,
+                                              cairo_image_surface_get_width (image),
+                                              cairo_image_surface_get_height (image));
   cr = cairo_create (surface);
 
   cairo_set_source_surface (cr, image, 0, 0);

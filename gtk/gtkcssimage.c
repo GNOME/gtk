@@ -392,7 +392,7 @@ _gtk_css_image_get_surface (GtkCssImage     *image,
   g_return_val_if_fail (surface_height > 0, NULL);
 
   if (target)
-    result = cairo_surface_create_similar (target,
+    result = gdk_cairo_surface_create_similar (target,
                                            CAIRO_CONTENT_COLOR_ALPHA,
                                            surface_width,
                                            surface_height);
