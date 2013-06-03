@@ -797,7 +797,7 @@ struct _GdkEventScroll
  *   <filename>&lt;gdk/gdkkeysyms.h&gt;</filename> header file for a
  *   complete list of GDK key codes.
  * @length: the length of @string.
- * @string: a string containing the an approximation of the text that
+ * @string: a string containing an approximation of the text that
  *   would result from this keypress. The only correct way to handle text
  *   input of text is using input methods (see #GtkIMContext), so this
  *   field is deprecated and should never be used.
