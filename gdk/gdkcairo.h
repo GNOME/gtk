@@ -66,6 +66,12 @@ GDK_DEPRECATED_IN_3_4_FOR(gdk_cairo_set_source_rgba)
 void       gdk_cairo_set_source_color   (cairo_t              *cr,
                                          const GdkColor       *color);
 
+GDK_AVAILABLE_IN_3_10
+cairo_surface_t * gdk_cairo_surface_create_similar (cairo_surface_t *surface,
+                                                    cairo_content_t content,
+                                                    int             width,
+                                                    int             height);
+
 G_END_DECLS
 
 #endif /* __GDK_CAIRO_H__ */

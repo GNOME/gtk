@@ -459,3 +459,40 @@ gdk_cairo_region_create_from_surface (cairo_surface_t *surface)
 
   return region;
 }
+
+static const cairo_user_data_key_t window_key;
+
+static GdkWindow  *
+_gdk_cairo_surface_get_window (cairo_surface_t *surface)
+{
+  return cairo_surface_get_user_data (surface, &window_key);
+}
+
+void
+_gdk_cairo_surface_set_window (cairo_surface_t *surface,
+                               GdkWindow  *window)
+{
+  cairo_surface_set_user_data (surface, &window_key,
+                               window, NULL);
+}
+
+cairo_surface_t *
+gdk_cairo_surface_create_similar (cairo_surface_t *surface,
+                                  cairo_content_t content,
+                                  int             width,
+                                  int             height)
+{
+  GdkWindow *window;
+
+  window = _gdk_cairo_surface_get_window (surface);
+  if (window)
+    return gdk_window_create_similar_surface (window,
+                                              content,
+                                              width,
+                                              height);
+  else
+    return cairo_surface_create_similar (surface,
+                                         content,
+                                         width,
+                                         height);
+}
