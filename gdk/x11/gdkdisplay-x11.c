@@ -1873,19 +1873,10 @@ static void
 gdk_x11_display_finalize (GObject *object)
 {
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (object);
-  gint           i;
 
   /* Keymap */
   if (display_x11->keymap)
     g_object_unref (display_x11->keymap);
-
-  /* Free motif Dnd */
-  if (display_x11->motif_target_lists)
-    {
-      for (i = 0; i < display_x11->motif_n_target_lists; i++)
-        g_list_free (display_x11->motif_target_lists[i]);
-      g_free (display_x11->motif_target_lists);
-    }
 
   _gdk_x11_cursor_display_finalize (GDK_DISPLAY (display_x11));
 
