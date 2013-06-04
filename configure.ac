@@ -1263,6 +1263,17 @@ else
         LIBS="$gtk_save_LIBS"
 fi
 
+# Check for cairo_set_device_scale, as we don't want to depend hard on
+# this until there is a stable release with it
+CAIRO_CFLAGS=`$PKG_CONFIG --cflags cairo`
+CAIRO_LIBS=`$PKG_CONFIG --libs cairo`
+CFLAGS="$CFLAGS $CAIRO_CFLAGS"
+gtk_save_LIBS="$LIBS"
+LIBS="$CAIRO_LIBS $LIBS"
+AC_CHECK_FUNCS(cairo_surface_set_device_scale)
+LIBS="$gtk_save_LIBS"
+
+
 CFLAGS="$saved_cflags"
 LDFLAGS="$saved_ldflags"
 
