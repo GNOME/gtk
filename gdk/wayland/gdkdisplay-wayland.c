@@ -168,8 +168,8 @@ gdk_registry_handle_global(void *data, struct wl_registry *registry, uint32_t id
 	wl_registry_bind(display_wayland->wl_registry, id, &wl_shell_interface, 1);
   } else if (strcmp(interface, "wl_output") == 0) {
     output =
-      wl_registry_bind(display_wayland->wl_registry, id, &wl_output_interface, 1);
-    _gdk_wayland_screen_add_output(display_wayland->screen, id, output);
+      wl_registry_bind(display_wayland->wl_registry, id, &wl_output_interface, 2);
+    _gdk_wayland_screen_add_output(display_wayland->screen, id, output, version);
     /* We need another roundtrip to receive the modes and geometry
      * events for the output, which gives us the physical properties
      * and available modes on the output. */

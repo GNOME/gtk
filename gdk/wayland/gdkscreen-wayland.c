@@ -77,10 +77,13 @@ struct _GdkWaylandScreenClass
   void (* window_manager_changed) (GdkWaylandScreen *screen_wayland);
 };
 
+#define OUTPUT_VERSION_WITH_DONE 2
+
 struct _GdkWaylandMonitor
 {
   GdkWaylandScreen *screen;
   guint32       id;
+  guint32       version;
   struct wl_output *output;
   GdkRectangle  geometry;
   int		width_mm;
@@ -88,6 +91,7 @@ struct _GdkWaylandMonitor
   char *	output_name;
   char *	manufacturer;
   int		refresh_rate;
+  gint          scale;
 };
 
 G_DEFINE_TYPE (GdkWaylandScreen, _gdk_wayland_screen, GDK_TYPE_SCREEN)
@@ -247,6 +251,21 @@ gdk_wayland_screen_get_monitor_geometry (GdkScreen    *screen,
 
   if (dest)
     *dest = monitor->geometry;
+}
+
+static gint
+gdk_wayland_screen_get_monitor_scale_factor (GdkScreen *screen,
+					     gint       monitor_num)
+{
+  GdkWaylandScreen *screen_wayland = GDK_WAYLAND_SCREEN (screen);
+  GdkWaylandMonitor *monitor;
+
+  if (monitor_num >= screen_wayland->monitors->len)
+    return 1;
+
+  monitor = g_ptr_array_index(screen_wayland->monitors, monitor_num);
+
+  return monitor->scale;
 }
 
 static GdkVisual *
@@ -822,6 +841,7 @@ _gdk_wayland_screen_class_init (GdkWaylandScreenClass *klass)
   screen_class->get_monitor_plug_name = gdk_wayland_screen_get_monitor_plug_name;
   screen_class->get_monitor_geometry = gdk_wayland_screen_get_monitor_geometry;
   screen_class->get_monitor_workarea = gdk_wayland_screen_get_monitor_geometry;
+  screen_class->get_monitor_scale_factor = gdk_wayland_screen_get_monitor_scale_factor;
   screen_class->get_system_visual = gdk_wayland_screen_get_system_visual;
   screen_class->get_rgba_visual = gdk_wayland_screen_get_rgba_visual;
   screen_class->is_composited = gdk_wayland_screen_is_composited;
@@ -888,11 +908,31 @@ output_handle_geometry(void *data,
   monitor->manufacturer = g_strdup (make);
   monitor->output_name = g_strdup (model);
 
-  if (monitor->geometry.width != 0)
+  if (monitor->geometry.width != 0 && monitor->version < OUTPUT_VERSION_WITH_DONE)
     {
       g_signal_emit_by_name (monitor->screen, "monitors-changed");
       update_screen_size (monitor->screen);
     }
+}
+
+static void
+output_handle_done(void *data,
+		   struct wl_output *wl_output)
+{
+  GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)data;
+
+  g_signal_emit_by_name (monitor->screen, "monitors-changed");
+  update_screen_size (monitor->screen);
+}
+
+static void
+output_handle_scale(void *data,
+		    struct wl_output *wl_output,
+		    uint32_t factor)
+{
+  GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)data;
+
+  monitor->scale = factor;
 }
 
 static void
@@ -912,27 +952,35 @@ output_handle_mode(void *data,
   monitor->geometry.height = height;
   monitor->refresh_rate = refresh;
 
-  g_signal_emit_by_name (monitor->screen, "monitors-changed");
-  update_screen_size (monitor->screen);
+  if (monitor->geometry.width != 0 && monitor->version < OUTPUT_VERSION_WITH_DONE)
+    {
+      g_signal_emit_by_name (monitor->screen, "monitors-changed");
+      update_screen_size (monitor->screen);
+    }
 }
 
 static const struct wl_output_listener output_listener =
 {
   output_handle_geometry,
-  output_handle_mode
+  output_handle_mode,
+  output_handle_done,
+  output_handle_scale,
 };
 
 void
 _gdk_wayland_screen_add_output (GdkScreen        *screen,
                                 guint32           id,
-                                struct wl_output *output)
+                                struct wl_output *output,
+				guint32           version)
 {
   GdkWaylandScreen *screen_wayland = GDK_WAYLAND_SCREEN (screen);
   GdkWaylandMonitor *monitor = g_new0(GdkWaylandMonitor, 1);
 
   monitor->id = id;
   monitor->output = output;
+  monitor->version = version;
   monitor->screen = screen_wayland;
+  monitor->scale = 1;
   g_ptr_array_add(screen_wayland->monitors, monitor);
 
   wl_output_add_listener(output, &output_listener, monitor);
@@ -973,6 +1021,24 @@ _gdk_wayland_screen_get_output_refresh_rate (GdkScreen        *screen,
 
       if (monitor->output == output)
         return monitor->refresh_rate;
+    }
+
+  return 0;
+}
+
+guint32
+_gdk_wayland_screen_get_output_scale (GdkScreen        *screen,
+				      struct wl_output *output)
+{
+  GdkWaylandScreen *screen_wayland = GDK_WAYLAND_SCREEN (screen);
+  int i;
+
+  for (i = 0; i < screen_wayland->monitors->len; i++)
+    {
+      GdkWaylandMonitor *monitor = screen_wayland->monitors->pdata[i];
+
+      if (monitor->output == output)
+        return monitor->scale;
     }
 
   return 0;
