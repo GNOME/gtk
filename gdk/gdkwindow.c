@@ -2757,6 +2757,7 @@ gdk_window_begin_paint_region (GdkWindow       *window,
   GdkWindowImplClass *impl_class;
   GdkWindowPaint *paint;
   GSList *list;
+  double sx, sy;
   gboolean needs_surface;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -2783,7 +2784,11 @@ gdk_window_begin_paint_region (GdkWindow       *window,
 							  gdk_window_get_content (window),
 							  MAX (clip_box.width, 1),
 							  MAX (clip_box.height, 1));
-      cairo_surface_set_device_offset (paint->surface, -clip_box.x, -clip_box.y);
+      sx = sy = 1;
+#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
+      cairo_surface_get_device_scale (paint->surface, &sx, &sy);
+#endif
+      cairo_surface_set_device_offset (paint->surface, -clip_box.x*sx, -clip_box.y*sy);
     }
 
   for (list = window->paint_stack; list != NULL; list = list->next)
@@ -9198,10 +9203,18 @@ gdk_window_create_similar_surface (GdkWindow *     window,
                                    int             height)
 {
   cairo_surface_t *window_surface, *surface;
+  double sx, sy;
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
-  
+
   window_surface = gdk_window_ref_impl_surface (window);
+  sx = sy = 1;
+#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
+  cairo_surface_get_device_scale (window_surface, &sx, &sy);
+#endif
+
+  width = width * sx;
+  height = height * sy;
 
   switch (_gdk_rendering_mode)
   {
@@ -9223,6 +9236,10 @@ gdk_window_create_similar_surface (GdkWindow *     window,
                                               width, height);
       break;
   }
+
+#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
+  cairo_surface_set_device_scale (surface, sx, sy);
+#endif
 
   cairo_surface_destroy (window_surface);
 
