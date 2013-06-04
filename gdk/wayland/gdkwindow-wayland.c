@@ -145,6 +145,7 @@ struct _GdkWindowImplWayland
 
   gboolean use_custom_surface;
 
+  guint32 scale;
   gboolean pending_commit;
   gint64 pending_frame_counter;
 };
@@ -154,11 +155,15 @@ struct _GdkWindowImplWaylandClass
   GdkWindowImplClass parent_class;
 };
 
+static void gdk_wayland_window_configure (GdkWindow *window,
+					  int width, int height, int edges);
+
 G_DEFINE_TYPE (GdkWindowImplWayland, _gdk_window_impl_wayland, GDK_TYPE_WINDOW_IMPL)
 
 static void
 _gdk_window_impl_wayland_init (GdkWindowImplWayland *impl)
 {
+  impl->scale = 1;
 }
 
 void
@@ -391,6 +396,7 @@ typedef struct _GdkWaylandCairoSurfaceData {
   struct wl_buffer *buffer;
   GdkWaylandDisplay *display;
   int32_t width, height;
+  uint32_t scale;
   gboolean busy;
 } GdkWaylandCairoSurfaceData;
 
@@ -417,6 +423,44 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
   data = cairo_surface_get_user_data (impl->cairo_surface,
 				      &gdk_wayland_cairo_key);
   data->busy = TRUE;
+}
+
+static void
+window_update_scale (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+  guint32 scale;
+  GSList *l;
+
+  scale = 1;
+  for (l = impl->outputs; l != NULL; l = l->next)
+    {
+      guint32 output_scale =
+	_gdk_wayland_screen_get_output_scale (wayland_display->screen,
+					      l->data);
+      scale = MAX (scale, output_scale);
+    }
+
+#ifndef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
+  /* Don't announce a scale if we can't support it */
+  scale = 1;
+#endif
+
+  if (scale != impl->scale)
+    {
+      impl->scale = scale;
+
+      /* Notify app that scale changed */
+      gdk_wayland_window_configure (window, window->width, window->height, impl->resize_edges);
+    }
+}
+
+static void
+on_monitors_changed (GdkScreen *screen,
+		     GdkWindow *window)
+{
+  window_update_scale (window);
 }
 
 void
@@ -449,6 +493,9 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
 
   g_object_ref (window);
 
+  /* More likely to be right than just assuming 1 */
+  impl->scale = gdk_screen_get_monitor_scale_factor (screen, 0);
+
   impl->title = NULL;
 
   switch (GDK_WINDOW_TYPE (window))
@@ -477,6 +524,9 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
                     G_CALLBACK (on_frame_clock_before_paint), window);
   g_signal_connect (frame_clock, "after-paint",
                     G_CALLBACK (on_frame_clock_after_paint), window);
+
+  g_signal_connect (screen, "monitors-changed",
+                    G_CALLBACK (on_monitors_changed), window);
 }
 
 static void
@@ -528,6 +578,8 @@ gdk_wayland_window_attach_image (GdkWindow *window)
 
   /* Attach this new buffer to the surface */
   wl_surface_attach (impl->surface, data->buffer, dx, dy);
+  wl_surface_set_buffer_scale (impl->surface, data->scale);
+
   impl->pending_commit = TRUE;
 }
 
@@ -609,7 +661,7 @@ static const struct wl_buffer_listener buffer_listener = {
 
 static cairo_surface_t *
 gdk_wayland_create_cairo_surface (GdkWaylandDisplay *display,
-				  int width, int height)
+				  int width, int height, guint scale)
 {
   GdkWaylandCairoSurfaceData *data;
   cairo_surface_t *surface = NULL;
@@ -621,28 +673,33 @@ gdk_wayland_create_cairo_surface (GdkWaylandDisplay *display,
   data->buffer = NULL;
   data->width = width;
   data->height = height;
+  data->scale = scale;
   data->busy = FALSE;
 
   stride = width * 4;
 
   data->pool = _create_shm_pool (display->shm,
-                                 width, height,
+                                 width*scale, height*scale,
                                  &data->buf_length,
                                  &data->buf);
 
   data->buffer = wl_shm_pool_create_buffer (data->pool, 0,
-                                            width, height,
-                                            stride, WL_SHM_FORMAT_ARGB8888);
+                                            width*scale, height*scale,
+                                            stride*scale, WL_SHM_FORMAT_ARGB8888);
   wl_buffer_add_listener (data->buffer, &buffer_listener, data);
 
   surface = cairo_image_surface_create_for_data (data->buf,
                                                  CAIRO_FORMAT_ARGB32,
-                                                 width,
-                                                 height,
-                                                 stride);
+                                                 width*scale,
+                                                 height*scale,
+                                                 stride*scale);
 
   cairo_surface_set_user_data (surface, &gdk_wayland_cairo_key,
                                data, gdk_wayland_cairo_surface_destroy);
+
+#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
+  cairo_surface_set_device_scale (surface, scale, scale);
+#endif
 
   status = cairo_surface_status (surface);
   if (status != CAIRO_STATUS_SUCCESS)
@@ -665,8 +722,9 @@ gdk_wayland_window_ensure_cairo_surface (GdkWindow *window)
 
       impl->cairo_surface =
 	gdk_wayland_create_cairo_surface (display_wayland,
-				      impl->wrapper->width,
-				      impl->wrapper->height);
+					  impl->wrapper->width,
+					  impl->wrapper->height,
+					  impl->scale);
     }
 }
 
@@ -727,7 +785,7 @@ gdk_wayland_window_configure (GdkWindow *window,
 
   display = gdk_window_get_display (window);
 
-  /* TODO: Only generate a configure event if width or height have actually
+  /* TODO: Only generate a configure event if width/height/scale have actually
    * changed?
    */
   event = gdk_event_new (GDK_CONFIGURE);
@@ -841,6 +899,8 @@ surface_enter (void *data,
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   impl->outputs = g_slist_prepend (impl->outputs, output);
+
+  window_update_scale (window);
 }
 
 static void
@@ -852,7 +912,10 @@ surface_leave (void *data,
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   impl->outputs = g_slist_remove (impl->outputs, output);
+
+  window_update_scale (window);
 }
+
 
 static void
 shell_surface_handle_configure(void *data,
@@ -1905,6 +1968,18 @@ gdk_wayland_window_delete_property (GdkWindow *window,
 {
 }
 
+static gint
+gdk_wayland_window_get_scale_factor (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return 1;
+
+  return impl->scale;
+}
+
+
 static void
 _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
 {
@@ -1991,6 +2066,7 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   impl_class->get_property = gdk_wayland_window_get_property;
   impl_class->change_property = gdk_wayland_window_change_property;
   impl_class->delete_property = gdk_wayland_window_delete_property;
+  impl_class->get_scale_factor = gdk_wayland_window_get_scale_factor;
 }
 
 
