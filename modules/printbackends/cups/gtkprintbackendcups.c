@@ -1655,7 +1655,7 @@ cups_request_job_info_cb (GtkPrintBackendCups *print_backend,
   state = 0;
 
 #ifdef HAVE_CUPS_API_1_6
-  attr = ippFindAttribute (response, "job-state", IPP_TAG_INTEGER);
+  attr = ippFindAttribute (response, "job-state", IPP_TAG_ENUM);
   state = ippGetInteger (attr, 0);
 #else
   for (attr = response->attrs; attr != NULL; attr = attr->next)
