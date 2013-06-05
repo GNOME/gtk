@@ -7420,19 +7420,19 @@ msgstr "Jestli povolit výběr více položek táhnutím ukazatele myši"
 
 #: ../gtk/gtktreeview.c:1155
 msgid "Enable Grid Lines"
-msgstr "Povolit řádky mřížky"
+msgstr "Zapnout čáry mřížky"
 
 #: ../gtk/gtktreeview.c:1156
 msgid "Whether grid lines should be drawn in the tree view"
-msgstr "Jestli se mají kreslit řádky mřížky ve stromovém zobrazení"
+msgstr "Jestli se mají ve stromovém zobrazení kreslit čáry mřížky"
 
 #: ../gtk/gtktreeview.c:1164
 msgid "Enable Tree Lines"
-msgstr "Povolit stromové řádky"
+msgstr "Zapnout čáry stromu"
 
 #: ../gtk/gtktreeview.c:1165
 msgid "Whether tree lines should be drawn in the tree view"
-msgstr "Jestli se mají stromové řádky kreslit ve stromovém zobrazení"
+msgstr "Jestli se mají ve stromovém zobrazení kreslit čáry stromu"
 
 #: ../gtk/gtktreeview.c:1173
 msgid "The column in the model containing the tooltip texts for the rows"
