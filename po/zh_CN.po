@@ -4618,7 +4618,7 @@ msgstr "拒绝任务"
 #. Translators: this string connects multiple printer states together.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2331
 msgid "; "
-msgstr "; "
+msgstr "；"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3845
 msgid "Two Sided"
