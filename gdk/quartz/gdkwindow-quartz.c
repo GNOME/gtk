@@ -2338,14 +2338,18 @@ window_type_hint_to_level (GdkWindowTypeHint hint)
       return NSTornOffMenuWindowLevel;
 
     case GDK_WINDOW_TYPE_HINT_DOCK:
+      return NSFloatingWindowLevel; /* NSDockWindowLevel is deprecated, and not replaced */
+
     case GDK_WINDOW_TYPE_HINT_UTILITY:
+    case GDK_WINDOW_TYPE_HINT_DIALOG:  /* Dialog window */
       return NSFloatingWindowLevel;
 
     case GDK_WINDOW_TYPE_HINT_NORMAL:  /* Normal toplevel window */
-    case GDK_WINDOW_TYPE_HINT_DIALOG:  /* Dialog window */
     case GDK_WINDOW_TYPE_HINT_TOOLBAR: /* Window used to implement toolbars */
-    case GDK_WINDOW_TYPE_HINT_DESKTOP: /* N/A */
-      break;
+      return NSNormalWindowLevel;
+
+    case GDK_WINDOW_TYPE_HINT_DESKTOP:
+      return kCGDesktopWindowLevelKey; /* doesn't map to any real Cocoa model */
 
     default:
       break;
