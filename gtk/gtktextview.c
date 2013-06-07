@@ -8574,20 +8574,11 @@ range_contains_editable_text (const GtkTextIter *start,
     {
       if (gtk_text_iter_editable (&iter, default_editability))
         return TRUE;
-      
+
       gtk_text_iter_forward_to_tag_toggle (&iter, NULL);
     }
 
   return FALSE;
-}                             
-
-static void
-unichar_chosen_func (const char *text,
-                     gpointer    data)
-{
-  GtkTextView *text_view = GTK_TEXT_VIEW (data);
-
-  gtk_text_view_commit_text (text_view, text);
 }
 
 static void
@@ -8609,34 +8600,31 @@ popup_targets_received (GtkClipboard     *clipboard,
        */
       gboolean clipboard_contains_text;
       GtkWidget *menuitem;
-      GtkWidget *submenu;
       gboolean have_selection;
       gboolean can_insert;
       GtkTextIter iter;
       GtkTextIter sel_start, sel_end;
-      gboolean show_input_method_menu;
-      gboolean show_unicode_menu;
-      
+
       clipboard_contains_text = gtk_selection_data_targets_include_text (data);
 
       if (priv->popup_menu)
 	gtk_widget_destroy (priv->popup_menu);
 
       priv->popup_menu = gtk_menu_new ();
-      
+
       gtk_menu_attach_to_widget (GTK_MENU (priv->popup_menu),
 				 GTK_WIDGET (text_view),
 				 popup_menu_detach);
-      
+
       have_selection = gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
                                                              &sel_start, &sel_end);
-      
+
       gtk_text_buffer_get_iter_at_mark (get_buffer (text_view),
 					&iter,
 					gtk_text_buffer_get_insert (get_buffer (text_view)));
-      
+
       can_insert = gtk_text_iter_can_insert (&iter, priv->editable);
-      
+
       append_action_signal (text_view, priv->popup_menu, GTK_STOCK_CUT, "cut-clipboard",
 			    have_selection &&
                             range_contains_editable_text (&sel_start, &sel_end,
@@ -8645,9 +8633,9 @@ popup_targets_received (GtkClipboard     *clipboard,
 			    have_selection);
       append_action_signal (text_view, priv->popup_menu, GTK_STOCK_PASTE, "paste-clipboard",
 			    can_insert && clipboard_contains_text);
-      
+
       menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_DELETE, NULL);
-      gtk_widget_set_sensitive (menuitem, 
+      gtk_widget_set_sensitive (menuitem,
 				have_selection &&
 				range_contains_editable_text (&sel_start, &sel_end,
 							      priv->editable));
@@ -8668,56 +8656,13 @@ popup_targets_received (GtkClipboard     *clipboard,
       gtk_widget_show (menuitem);
       gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
 
-      g_object_get (gtk_widget_get_settings (GTK_WIDGET (text_view)),
-                    "gtk-show-input-method-menu", &show_input_method_menu,
-                    "gtk-show-unicode-menu", &show_unicode_menu,
-                    NULL);
-      
-      if (show_input_method_menu || show_unicode_menu)
-        {
-	  menuitem = gtk_separator_menu_item_new ();
-	  gtk_widget_show (menuitem);
-	  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
-	}
+      g_signal_emit (text_view, signals[POPULATE_POPUP],
+		     0, priv->popup_menu);
 
-      if (show_input_method_menu)
-        {
-	  menuitem = gtk_menu_item_new_with_mnemonic (_("Input _Methods"));
-	  gtk_widget_show (menuitem);
-	  gtk_widget_set_sensitive (menuitem, can_insert);
-
-	  submenu = gtk_menu_new ();
-	  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
-	  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
-	  
-	  gtk_im_multicontext_append_menuitems (GTK_IM_MULTICONTEXT (priv->im_context),
-						GTK_MENU_SHELL (submenu));
-	}
-
-      if (show_unicode_menu)
-        {
-	  menuitem = gtk_menu_item_new_with_mnemonic (_("_Insert Unicode Control Character"));
-	  gtk_widget_show (menuitem);
-	  gtk_widget_set_sensitive (menuitem, can_insert);
-      
-	  submenu = gtk_menu_new ();
-	  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
-	  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
-	  
-	  _gtk_text_util_append_special_char_menuitems (GTK_MENU_SHELL (submenu),
-							unichar_chosen_func,
-							text_view);
-	}
-	  
-      g_signal_emit (text_view,
-		     signals[POPULATE_POPUP],
-		     0,
-		     priv->popup_menu);
-      
       if (info->device)
-	gtk_menu_popup_for_device (GTK_MENU (priv->popup_menu), 
-      info->device, NULL, NULL, NULL, NULL, NULL,
-			info->button, info->time);
+	gtk_menu_popup_for_device (GTK_MENU (priv->popup_menu),
+                                   info->device, NULL, NULL, NULL, NULL, NULL,
+			           info->button, info->time);
       else
 	{
 	  gtk_menu_popup (GTK_MENU (priv->popup_menu), NULL, NULL,
