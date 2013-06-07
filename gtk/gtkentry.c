@@ -9164,17 +9164,6 @@ popup_position_func (GtkMenu   *menu,
   *push_in = FALSE;
 }
 
-static void
-unichar_chosen_func (const char *text,
-                     gpointer    data)
-{
-  GtkEntry *entry = GTK_ENTRY (data);
-  GtkEntryPrivate *priv = entry->priv;
-
-  if (priv->editable)
-    gtk_entry_enter_text (entry, text);
-}
-
 typedef struct
 {
   GtkEntry *entry;
@@ -9197,10 +9186,7 @@ popup_targets_received (GtkClipboard     *clipboard,
       DisplayMode mode;
       gboolean clipboard_contains_text;
       GtkWidget *menuitem;
-      GtkWidget *submenu;
-      gboolean show_input_method_menu;
-      gboolean show_unicode_menu;
-      
+
       clipboard_contains_text = gtk_selection_data_targets_include_text (data);
       if (info_entry_priv->popup_menu)
 	gtk_widget_destroy (info_entry_priv->popup_menu);
@@ -9210,7 +9196,7 @@ popup_targets_received (GtkClipboard     *clipboard,
       gtk_menu_attach_to_widget (GTK_MENU (info_entry_priv->popup_menu),
 				 GTK_WIDGET (entry),
 				 popup_menu_detach);
-      
+
       mode = gtk_entry_get_display_mode (entry);
       append_action_signal (entry, info_entry_priv->popup_menu, GTK_STOCK_CUT, "cut-clipboard",
                             info_entry_priv->editable && mode == DISPLAY_NORMAL &&
@@ -9233,60 +9219,15 @@ popup_targets_received (GtkClipboard     *clipboard,
       menuitem = gtk_separator_menu_item_new ();
       gtk_widget_show (menuitem);
       gtk_menu_shell_append (GTK_MENU_SHELL (info_entry_priv->popup_menu), menuitem);
-      
+
       menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_SELECT_ALL, NULL);
       gtk_widget_set_sensitive (menuitem, gtk_entry_buffer_get_length (info_entry_priv->buffer) > 0);
       g_signal_connect_swapped (menuitem, "activate",
 			        G_CALLBACK (gtk_entry_select_all), entry);
       gtk_widget_show (menuitem);
       gtk_menu_shell_append (GTK_MENU_SHELL (info_entry_priv->popup_menu), menuitem);
-      
-      g_object_get (gtk_widget_get_settings (GTK_WIDGET (entry)),
-                    "gtk-show-input-method-menu", &show_input_method_menu,
-                    "gtk-show-unicode-menu", &show_unicode_menu,
-                    NULL);
 
-      if (show_input_method_menu || show_unicode_menu)
-        {
-          menuitem = gtk_separator_menu_item_new ();
-          gtk_widget_show (menuitem);
-          gtk_menu_shell_append (GTK_MENU_SHELL (info_entry_priv->popup_menu), menuitem);
-        }
-      
-      if (show_input_method_menu)
-        {
-          menuitem = gtk_menu_item_new_with_mnemonic (_("Input _Methods"));
-          gtk_widget_set_sensitive (menuitem, info_entry_priv->editable);
-          gtk_widget_show (menuitem);
-          submenu = gtk_menu_new ();
-          gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
-
-          gtk_menu_shell_append (GTK_MENU_SHELL (info_entry_priv->popup_menu), menuitem);
-
-          gtk_im_multicontext_append_menuitems (GTK_IM_MULTICONTEXT (info_entry_priv->im_context),
-                                                GTK_MENU_SHELL (submenu));
-        }
-      
-      if (show_unicode_menu)
-        {
-          menuitem = gtk_menu_item_new_with_mnemonic (_("_Insert Unicode Control Character"));
-          gtk_widget_set_sensitive (menuitem, info_entry_priv->editable);
-          gtk_widget_show (menuitem);
-          
-          submenu = gtk_menu_new ();
-          gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
-          gtk_menu_shell_append (GTK_MENU_SHELL (info_entry_priv->popup_menu), menuitem);
-
-          _gtk_text_util_append_special_char_menuitems (GTK_MENU_SHELL (submenu),
-                                                        unichar_chosen_func,
-                                                        entry);
-        }
-      
-      g_signal_emit (entry,
-		     signals[POPULATE_POPUP],
-		     0,
-		     info_entry_priv->popup_menu);
-
+      g_signal_emit (entry, signals[POPULATE_POPUP], 0, info_entry_priv->popup_menu);
 
       if (info->device)
 	gtk_menu_popup_for_device (GTK_MENU (info_entry_priv->popup_menu),
@@ -9304,7 +9245,7 @@ popup_targets_received (GtkClipboard     *clipboard,
   g_object_unref (entry);
   g_slice_free (PopupInfo, info);
 }
-			
+
 static void
 gtk_entry_do_popup (GtkEntry       *entry,
                     GdkEventButton *event)
