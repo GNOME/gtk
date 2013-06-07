@@ -48,8 +48,6 @@ static const struct {
   {"Gtk/MenuBarAccel",        "gtk-menu-bar-accel"},
   {"Gtk/CursorThemeName",     "gtk-cursor-theme-name"},
   {"Gtk/CursorThemeSize",     "gtk-cursor-theme-size"},
-  {"Gtk/ShowInputMethodMenu", "gtk-show-input-method-menu"},
-  {"Gtk/ShowUnicodeMenu",     "gtk-show-unicode-menu"},
   {"Gtk/TimeoutInitial",      "gtk-timeout-initial"},
   {"Gtk/TimeoutRepeat",       "gtk-timeout-repeat"},
   {"Gtk/ColorScheme",         "gtk-color-scheme"},
