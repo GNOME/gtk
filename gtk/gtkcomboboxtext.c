@@ -240,8 +240,7 @@ item_end_element (GMarkupParseContext *context,
 	  translated = _gtk_builder_parser_translate (data->domain,
 						      data->context,
 						      data->string->str);
-	  g_string_set_size (data->string, 0);
-	  g_string_append (data->string, translated);
+	  g_string_assign (data->string, translated);
 	}
 
       gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (data->object), data->id, data->string->str);

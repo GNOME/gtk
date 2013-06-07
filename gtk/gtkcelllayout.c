@@ -820,8 +820,7 @@ cell_packing_end_element (GMarkupParseContext *context,
 	  translated = _gtk_builder_parser_translate (domain,
 						      parser_data->context,
 						      parser_data->string->str);
-	  g_string_set_size (parser_data->string, 0);
-	  g_string_append (parser_data->string, translated);
+	  g_string_assign (parser_data->string, translated);
 	}
 
       if (parser_data->cell_prop_name)
