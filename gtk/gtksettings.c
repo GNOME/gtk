@@ -160,8 +160,6 @@ enum {
   PROP_CURSOR_THEME_SIZE,
   PROP_ALTERNATIVE_BUTTON_ORDER,
   PROP_ALTERNATIVE_SORT_ARROWS,
-  PROP_SHOW_INPUT_METHOD_MENU,
-  PROP_SHOW_UNICODE_MENU,
   PROP_TIMEOUT_INITIAL,
   PROP_TIMEOUT_REPEAT,
   PROP_TIMEOUT_EXPAND,
@@ -613,24 +611,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
   g_assert (result == PROP_ALTERNATIVE_SORT_ARROWS);
 
   result = settings_install_property_parser (class,
-                                             g_param_spec_boolean ("gtk-show-input-method-menu",
-                                                                   P_("Show the 'Input Methods' menu"),
-                                                                   P_("Whether the context menus of entries and text views should offer to change the input method"),
-                                                                   TRUE,
-                                                                   GTK_PARAM_READWRITE),
-                                             NULL);
-  g_assert (result == PROP_SHOW_INPUT_METHOD_MENU);
-
-  result = settings_install_property_parser (class,
-                                             g_param_spec_boolean ("gtk-show-unicode-menu",
-                                                                   P_("Show the 'Insert Unicode Control Character' menu"),
-                                                                   P_("Whether the context menus of entries and text views should offer to insert control characters"),
-                                                                   TRUE,
-                                                                   GTK_PARAM_READWRITE),
-                                             NULL);
-  g_assert (result == PROP_SHOW_UNICODE_MENU);
-
-  result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-timeout-initial",
                                                                P_("Start timeout"),
                                                                P_("Starting value for timeouts, when button is pressed"),
@@ -988,7 +968,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * This also can be a colon-separated list of input methods, which GTK+
    * will try in turn until it finds one available on the system.
    *
-   * See #GtkIMContext and see the #GtkSettings:gtk-show-input-method-menu property.
+   * See #GtkIMContext.
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-im-module",
