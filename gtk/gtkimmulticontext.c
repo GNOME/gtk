@@ -592,6 +592,11 @@ pathnamecmp (const char *a,
  * Add menuitems for various available input methods to a menu;
  * the menuitems, when selected, will switch the input method
  * for the context and the global default input method.
+ *
+ * Deprecated: 3.10: It is better to use the system-wide input
+ *     method framework for changing input methods. Modern
+ *     desktop shells offer on-screen displays for this that
+ *     can triggered with a keyboard shortcut, e.g. Super-Space.
  **/
 void
 gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,

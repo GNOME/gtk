@@ -63,7 +63,7 @@ GType         gtk_im_multicontext_get_type (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkIMContext *gtk_im_multicontext_new      (void);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void          gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
 						    GtkMenuShell      *menushell);
 GDK_AVAILABLE_IN_ALL
