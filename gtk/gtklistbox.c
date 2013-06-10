@@ -781,14 +781,6 @@ gtk_list_box_update_cursor (GtkListBox *list_box,
   priv->cursor_row = row;
   gtk_widget_grab_focus (GTK_WIDGET (row));
   gtk_widget_queue_draw (GTK_WIDGET (row));
-  if (row != NULL && priv->adjustment != NULL)
-    {
-      GtkAllocation allocation;
-      gtk_widget_get_allocation (GTK_WIDGET (list_box), &allocation);
-      gtk_adjustment_clamp_page (priv->adjustment,
-                                 priv->cursor_row->priv->y + allocation.y,
-                                 priv->cursor_row->priv->y + allocation.y + priv->cursor_row->priv->height);
-  }
   _gtk_list_box_accessible_update_cursor (list_box, row);
 }
 
