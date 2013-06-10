@@ -63,7 +63,6 @@ struct _GtkListBoxPrivate
 
   /* DnD */
   GtkListBoxRow *drag_highlighted_row;
-  guint auto_scroll_timeout_id;
 };
 
 struct _GtkListBoxRowPrivate
@@ -153,11 +152,6 @@ static void                 gtk_list_box_real_size_allocate           (GtkWidget
                                                                        GtkAllocation       *allocation);
 static void                 gtk_list_box_real_drag_leave              (GtkWidget           *widget,
                                                                        GdkDragContext      *context,
-                                                                       guint                time_);
-static gboolean             gtk_list_box_real_drag_motion             (GtkWidget           *widget,
-                                                                       GdkDragContext      *context,
-                                                                       gint                 x,
-                                                                       gint                 y,
                                                                        guint                time_);
 static void                 gtk_list_box_real_activate_cursor_row     (GtkListBox          *list_box);
 static void                 gtk_list_box_real_toggle_cursor_row       (GtkListBox          *list_box);
@@ -259,9 +253,6 @@ gtk_list_box_finalize (GObject *obj)
   GtkListBox *list_box = GTK_LIST_BOX (obj);
   GtkListBoxPrivate *priv = list_box->priv;
 
-  if (priv->auto_scroll_timeout_id != ((guint) 0))
-    g_source_remove (priv->auto_scroll_timeout_id);
-
   if (priv->sort_func_target_destroy_notify != NULL)
     priv->sort_func_target_destroy_notify (priv->sort_func_target);
   if (priv->filter_func_target_destroy_notify != NULL)
@@ -310,7 +301,6 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
   widget_class->get_preferred_width_for_height = gtk_list_box_real_get_preferred_width_for_height;
   widget_class->size_allocate = gtk_list_box_real_size_allocate;
   widget_class->drag_leave = gtk_list_box_real_drag_leave;
-  widget_class->drag_motion = gtk_list_box_real_drag_motion;
   container_class->add = gtk_list_box_real_add;
   container_class->remove = gtk_list_box_real_remove;
   container_class->forall = gtk_list_box_real_forall_internal;
@@ -1416,6 +1406,9 @@ gtk_list_box_real_remove (GtkContainer* container, GtkWidget* child)
     priv->active_row = NULL;
   }
 
+  if (row == priv->drag_highlighted_row)
+    gtk_list_box_drag_unhighlight_row (list_box);
+
   next = gtk_list_box_get_next_visible (list_box, row->priv->iter);
   gtk_widget_unparent (child);
   g_sequence_remove (row->priv->iter);
@@ -1693,86 +1686,8 @@ static void
 gtk_list_box_real_drag_leave (GtkWidget *widget, GdkDragContext *context, guint time_)
 {
   GtkListBox *list_box = GTK_LIST_BOX (widget);
-  GtkListBoxPrivate *priv = list_box->priv;
 
   gtk_list_box_drag_unhighlight_row (list_box);
-  if (priv->auto_scroll_timeout_id != 0) {
-    g_source_remove (priv->auto_scroll_timeout_id);
-    priv->auto_scroll_timeout_id = 0;
-  }
-}
-
-typedef struct
-{
-  GtkListBox *list_box;
-  gint move;
-} MoveData;
-
-static void
-move_data_free (MoveData *data)
-{
-  g_slice_free (MoveData, data);
-}
-
-static gboolean
-drag_motion_timeout (MoveData *data)
-{
-  GtkListBox *list_box = data->list_box;
-  GtkListBoxPrivate *priv = list_box->priv;
-
-  gtk_adjustment_set_value (priv->adjustment,
-                            gtk_adjustment_get_value (priv->adjustment) +
-                            gtk_adjustment_get_step_increment (priv->adjustment) * data->move);
-  return TRUE;
-}
-
-static gboolean
-gtk_list_box_real_drag_motion (GtkWidget *widget, GdkDragContext *context,
-                               gint x, gint y, guint time_)
-{
-  GtkListBox *list_box = GTK_LIST_BOX (widget);
-  GtkListBoxPrivate *priv = list_box->priv;
-  int move;
-  MoveData *data;
-  gdouble size;
-
-  /* Auto-scroll during Dnd if cursor is moving into the top/bottom portion of the
-     * box. */
-  if (priv->auto_scroll_timeout_id != 0)
-    {
-      g_source_remove (priv->auto_scroll_timeout_id);
-      priv->auto_scroll_timeout_id = 0;
-    }
-
-  if (priv->adjustment == NULL)
-    return FALSE;
-
-  /* Part of the view triggering auto-scroll */
-  size = 30;
-  move = 0;
-
-  if (y < (gtk_adjustment_get_value (priv->adjustment) + size))
-    {
-      /* Scroll up */
-      move = -1;
-    }
-  else if (y > ((gtk_adjustment_get_value (priv->adjustment) + gtk_adjustment_get_page_size (priv->adjustment)) - size))
-    {
-      /* Scroll down */
-      move = 1;
-    }
-
-  if (move == 0)
-    return FALSE;
-
-  data = g_slice_new0 (MoveData);
-  data->list_box = list_box;
-
-  priv->auto_scroll_timeout_id =
-    g_timeout_add_full (G_PRIORITY_DEFAULT, 150, (GSourceFunc)drag_motion_timeout,
-                        data, (GDestroyNotify) move_data_free);
-
-  return FALSE;
 }
 
 static void
