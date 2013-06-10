@@ -385,12 +385,7 @@
  * </refsect2>
  */
 
-/* Add flags here that should not be propagated to children. By default,
- * all flags will be set on children (think prelight or active), but we
- * might want to not do this for some.
- */
-#define GTK_STATE_FLAGS_DONT_PROPAGATE (GTK_STATE_FLAG_FOCUSED | GTK_STATE_FLAG_DIR_LTR | GTK_STATE_FLAG_DIR_RTL)
-#define GTK_STATE_FLAGS_DO_PROPAGATE (~GTK_STATE_FLAGS_DONT_PROPAGATE)
+#define GTK_STATE_FLAGS_DO_PROPAGATE (GTK_STATE_FLAG_INSENSITIVE|GTK_STATE_FLAG_BACKDROP)
 
 #define WIDGET_CLASS(w)	 GTK_WIDGET_GET_CLASS (w)
 
