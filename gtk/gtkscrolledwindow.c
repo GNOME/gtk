@@ -3040,14 +3040,21 @@ gtk_scrolled_window_add (GtkContainer *container,
   scrolled_window = GTK_SCROLLED_WINDOW (container);
   priv = scrolled_window->priv;
 
+  hadj = gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar));
+  vadj = gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
+
   if (GTK_IS_SCROLLABLE (child))
     {
       scrollable_child = child;
     }
   else
     {
-      scrollable_child = gtk_viewport_new (NULL, NULL);
+      scrollable_child = gtk_viewport_new (hadj, vadj);
       gtk_widget_show (scrollable_child);
+      gtk_container_set_focus_hadjustment (GTK_CONTAINER (scrollable_child),
+                                           gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (scrolled_window)));
+      gtk_container_set_focus_vadjustment (GTK_CONTAINER (scrollable_child),
+                                           gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (scrolled_window)));
       gtk_container_add (GTK_CONTAINER (scrollable_child), child);
     }
 
@@ -3056,9 +3063,6 @@ gtk_scrolled_window_add (GtkContainer *container,
 
   _gtk_bin_set_child (bin, scrollable_child);
   gtk_widget_set_parent (scrollable_child, GTK_WIDGET (bin));
-
-  hadj = gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar));
-  vadj = gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
 
   g_object_set (scrollable_child, "hadjustment", hadj, "vadjustment", vadj, NULL);
 }
@@ -3129,6 +3133,10 @@ gtk_scrolled_window_add_with_viewport (GtkScrolledWindow *scrolled_window,
       viewport =
         gtk_viewport_new (gtk_scrolled_window_get_hadjustment (scrolled_window),
                           gtk_scrolled_window_get_vadjustment (scrolled_window));
+      gtk_container_set_focus_hadjustment (GTK_CONTAINER (viewport),
+                                           gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (scrolled_window)));
+      gtk_container_set_focus_vadjustment (GTK_CONTAINER (viewport),
+                                           gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (scrolled_window)));
       gtk_container_add (GTK_CONTAINER (scrolled_window), viewport);
     }
 
