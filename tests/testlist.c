@@ -244,7 +244,7 @@ main (int argc, char *argv[])
 {
   GtkCssProvider *provider;
   GtkWidget *window, *hbox, *vbox, *list, *row, *row3, *row_vbox, *row_hbox, *l;
-  GtkWidget *check, *button, *combo;
+  GtkWidget *check, *button, *combo, *scrolled;
 
   gtk_init (NULL, NULL);
 
@@ -273,9 +273,12 @@ main (int argc, char *argv[])
                                   "GTK_SELECTION_BROWSE");
   g_signal_connect (combo, "changed", G_CALLBACK (selection_mode_changed), list);
   gtk_container_add (GTK_CONTAINER (vbox), combo);
-  gtk_combo_box_set_active (GTK_COMBO_BOX (combo), gtk_list_box_get_selection_mode (list));
+  gtk_combo_box_set_active (GTK_COMBO_BOX (combo), gtk_list_box_get_selection_mode (GTK_LIST_BOX (list)));
 
-  gtk_container_add (GTK_CONTAINER (hbox), list);
+  scrolled = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+  gtk_container_add (GTK_CONTAINER (scrolled), list);
+  gtk_container_add (GTK_CONTAINER (hbox), scrolled);
 
   g_signal_connect (list, "row-activated", G_CALLBACK (row_activated_cb), NULL);
   g_signal_connect (list, "row-selected", G_CALLBACK (row_selected_cb), NULL);

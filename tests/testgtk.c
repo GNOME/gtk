@@ -2801,7 +2801,128 @@ create_image (GtkWidget *widget)
   else
     gtk_widget_destroy (window);
 }
-     
+
+/*
+ * ListBox demo
+ */
+
+static int
+list_sort_cb (GtkListBoxRow *a, GtkListBoxRow *b, gpointer data)
+{
+  gint aa = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (a), "value"));
+  gint bb = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (b), "value"));
+  return aa - bb;
+}
+
+static gboolean
+list_filter_cb (GtkListBoxRow *row, gpointer data)
+{
+  gint value = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (row), "value"));
+
+  return value % 2 == 0;
+}
+
+static void
+list_sort_clicked_cb (GtkButton *button,
+                      gpointer data)
+{
+  GtkListBox *list = data;
+
+  gtk_list_box_set_sort_func (list, list_sort_cb, NULL, NULL);
+}
+
+static void
+list_filter_clicked_cb (GtkButton *button,
+                        gpointer data)
+{
+  GtkListBox *list = data;
+
+  gtk_list_box_set_filter_func (list, list_filter_cb, NULL, NULL);
+}
+
+
+static void
+list_unfilter_clicked_cb (GtkButton *button,
+                          gpointer data)
+{
+  GtkListBox *list = data;
+
+  gtk_list_box_set_filter_func (list, NULL, NULL, NULL);
+}
+
+
+static void
+create_listbox (GtkWidget *widget)
+{
+  static GtkWidget *window = NULL;
+
+  if (!window)
+    {
+      GtkWidget *hbox, *vbox, *scrolled, *scrolled_box, *list, *label, *button;
+      GdkScreen *screen = gtk_widget_get_screen (widget);
+      int i;
+
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_screen (GTK_WINDOW (window), screen);
+
+      g_signal_connect (window, "destroy",
+                        G_CALLBACK (gtk_widget_destroyed),
+                        &window);
+      g_signal_connect (window, "delete-event",
+                        G_CALLBACK (gtk_true),
+                        NULL);
+
+      gtk_window_set_title (GTK_WINDOW (window), "listbox");
+
+      hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+      gtk_container_add (GTK_CONTAINER (window), hbox);
+
+      scrolled = gtk_scrolled_window_new (NULL, NULL);
+      gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+      gtk_container_add (GTK_CONTAINER (hbox), scrolled);
+
+      scrolled_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+      gtk_container_add (GTK_CONTAINER (scrolled), scrolled_box);
+
+      label = gtk_label_new ("This is \na LABEL\nwith rows");
+      gtk_container_add (GTK_CONTAINER (scrolled_box), label);
+
+      list = gtk_list_box_new();
+      gtk_list_box_set_adjustment (GTK_LIST_BOX (list), gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (scrolled)));
+      gtk_container_add (GTK_CONTAINER (scrolled_box), list);
+
+      for (i = 0; i < 1000; i++)
+        {
+          gint value = g_random_int_range (0, 10000);
+          label = gtk_label_new (g_strdup_printf ("Value %u", value));
+          gtk_widget_show (label);
+          gtk_container_add (GTK_CONTAINER (list), label);
+          g_object_set_data (G_OBJECT (gtk_widget_get_parent (label)), "value", GINT_TO_POINTER (value));
+        }
+
+      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+      gtk_container_add (GTK_CONTAINER (hbox), vbox);
+
+      button = gtk_button_new_with_label ("sort");
+      gtk_container_add (GTK_CONTAINER (vbox), button);
+      g_signal_connect (button, "clicked", G_CALLBACK (list_sort_clicked_cb), list);
+
+      button = gtk_button_new_with_label ("filter odd");
+      gtk_container_add (GTK_CONTAINER (vbox), button);
+      g_signal_connect (button, "clicked", G_CALLBACK (list_filter_clicked_cb), list);
+
+      button = gtk_button_new_with_label ("unfilter");
+      gtk_container_add (GTK_CONTAINER (vbox), button);
+      g_signal_connect (button, "clicked", G_CALLBACK (list_unfilter_clicked_cb), list);
+    }
+
+  if (!gtk_widget_get_visible (window))
+    gtk_widget_show_all (window);
+  else
+    gtk_widget_destroy (window);
+}
+
+
 /*
  * Menu demo
  */
@@ -9736,6 +9857,7 @@ struct {
   { "key lookup", create_key_lookup },
   { "labels", create_labels },
   { "layout", create_layout },
+  { "listbox", create_listbox },
   { "menus", create_menus },
   { "message dialog", create_message_dialog },
   { "modal window", create_modal_window, TRUE },
