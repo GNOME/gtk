@@ -72,6 +72,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testimage			\
 	testinput			\
 	testkineticscrolling		\
+	testlist			\
 	testlockbutton			\
 	testmenubars			\
 	testmenubutton			\
@@ -200,6 +201,7 @@ testheaderbar_DEPENDENCIES = $(TEST_DEPS)
 testinput_DEPENDENCIES = $(TEST_DEPS)
 testimage_DEPENDENCIES = $(TEST_DEPS)
 testkineticscrolling_DEPENDENCIES = $(TEST_DEPS)
+testlist_DEPENDENCIES = $(TEST_DEPS)
 testlockbutton_DEPENDENCIES = $(TEST_DEPS)
 testmenubars_DEPENDENCIES = $(TEST_DEPS)
 testmenubutton_DEPENDENCIES = $(TEST_DEPS)
