@@ -133,9 +133,6 @@ void           gtk_list_box_set_adjustment               (GtkListBox            
 GDK_AVAILABLE_IN_3_10
 GtkAdjustment *gtk_list_box_get_adjustment               (GtkListBox                    *list_box);
 GDK_AVAILABLE_IN_3_10
-void           gtk_list_box_add_to_scrolled              (GtkListBox                    *list_box,
-                                                          GtkScrolledWindow             *scrolled);
-GDK_AVAILABLE_IN_3_10
 void           gtk_list_box_set_selection_mode           (GtkListBox                    *list_box,
                                                           GtkSelectionMode               mode);
 GDK_AVAILABLE_IN_3_10

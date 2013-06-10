@@ -160,6 +160,8 @@ static void                 gtk_list_box_real_move_cursor             (GtkListBo
                                                                        gint                 count);
 static void                 gtk_list_box_real_refilter                (GtkListBox          *list_box);
 static void                 gtk_list_box_finalize                     (GObject             *obj);
+static void                 gtk_list_box_real_parent_set              (GtkWidget           *widget,
+                                                                       GtkWidget           *prev_parent);
 
 
 static void                 gtk_list_box_real_get_preferred_height           (GtkWidget           *widget,
@@ -301,6 +303,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
   widget_class->get_preferred_width_for_height = gtk_list_box_real_get_preferred_width_for_height;
   widget_class->size_allocate = gtk_list_box_real_size_allocate;
   widget_class->drag_leave = gtk_list_box_real_drag_leave;
+  widget_class->parent_set = gtk_list_box_real_parent_set;
   container_class->add = gtk_list_box_real_add;
   container_class->remove = gtk_list_box_real_remove;
   container_class->forall = gtk_list_box_real_forall_internal;
@@ -519,8 +522,6 @@ gtk_list_box_set_adjustment (GtkListBox *list_box,
   if (priv->adjustment)
     g_object_unref (priv->adjustment);
   priv->adjustment = adjustment;
-  gtk_container_set_focus_vadjustment (GTK_CONTAINER (list_box),
-                                       adjustment);
 }
 
 GtkAdjustment *
@@ -533,18 +534,21 @@ gtk_list_box_get_adjustment (GtkListBox *list_box)
   return priv->adjustment;
 }
 
-void
-gtk_list_box_add_to_scrolled (GtkListBox *list_box,
-                              GtkScrolledWindow *scrolled)
+static void
+gtk_list_box_real_parent_set (GtkWidget   *widget,
+                              GtkWidget   *prev_parent)
 {
-  g_return_if_fail (list_box != NULL);
-  g_return_if_fail (scrolled != NULL);
+  GtkWidget *parent;
+  GtkAdjustment *adjustment;
 
-  gtk_container_add (GTK_CONTAINER (scrolled), GTK_WIDGET (list_box));
-  gtk_list_box_set_adjustment (list_box,
-                               gtk_scrolled_window_get_vadjustment (scrolled));
+  parent = gtk_widget_get_parent (widget);
+
+  if (parent && GTK_IS_SCROLLABLE (parent))
+    {
+      adjustment = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (parent));
+      gtk_list_box_set_adjustment (GTK_LIST_BOX (widget), adjustment);
+    }
 }
-
 
 void
 gtk_list_box_set_selection_mode (GtkListBox *list_box, GtkSelectionMode mode)
