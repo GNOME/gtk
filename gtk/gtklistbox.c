@@ -1871,7 +1871,6 @@ void
 gtk_list_box_drag_highlight_row (GtkListBox *list_box, GtkListBoxRow *row)
 {
   GtkListBoxPrivate *priv = list_box->priv;
-  GtkListBoxRow *old_highlight;
 
   g_return_if_fail (list_box != NULL);
   g_return_if_fail (row != NULL);
@@ -1881,11 +1880,7 @@ gtk_list_box_drag_highlight_row (GtkListBox *list_box, GtkListBoxRow *row)
 
   gtk_list_box_drag_unhighlight_row (list_box);
   gtk_drag_highlight (GTK_WIDGET (row));
-
-  old_highlight = priv->drag_highlighted_row;
   priv->drag_highlighted_row = g_object_ref (row);
-  if (old_highlight)
-    g_object_unref (old_highlight);
 }
 
 static void
