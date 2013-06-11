@@ -1536,7 +1536,12 @@ gtk_list_box_real_add (GtkContainer* container, GtkWidget *child)
   row->priv->iter = iter;
   gtk_widget_set_parent (GTK_WIDGET (row), GTK_WIDGET (list_box));
   gtk_list_box_apply_filter (list_box, row);
-  gtk_list_box_row_visibility_changed (list_box, row);
+  if (gtk_widget_get_visible (GTK_WIDGET (list_box)))
+    {
+      gtk_list_box_update_header (list_box, row->priv->iter);
+      gtk_list_box_update_header (list_box,
+                                  gtk_list_box_get_next_visible (list_box, row->priv->iter));
+    }
 }
 
 static void
