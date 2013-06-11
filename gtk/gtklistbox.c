@@ -88,6 +88,7 @@ struct _GtkListBoxRowPrivate
   GtkWidget *header;
   gint y;
   gint height;
+  gboolean visible;
 };
 
 enum {
@@ -1312,6 +1313,19 @@ gtk_list_box_real_realize (GtkWidget* widget)
   gtk_widget_set_window (GTK_WIDGET (list_box), window); /* Passes ownership */
 }
 
+/* Children are visible if they are shown by the app (visible)
+   and not filtered out (child_visible) by the listbox */
+static void
+update_row_is_visible (GtkListBoxRow *row)
+{
+  row->priv->visible = gtk_widget_get_visible (GTK_WIDGET (row)) && gtk_widget_get_child_visible (GTK_WIDGET (row));
+}
+
+static gboolean
+row_is_visible (GtkListBoxRow *row)
+{
+  return row->priv->visible;
+}
 
 static void
 gtk_list_box_apply_filter (GtkListBox *list_box, GtkListBoxRow *row)
@@ -1324,6 +1338,8 @@ gtk_list_box_apply_filter (GtkListBox *list_box, GtkListBoxRow *row)
     do_show = priv->filter_func (row, priv->filter_func_target);
 
   gtk_widget_set_child_visible (GTK_WIDGET (row), do_show);
+
+  update_row_is_visible (row);
 }
 
 static void
@@ -1340,14 +1356,6 @@ gtk_list_box_apply_filter_all (GtkListBox *list_box)
       row = g_sequence_get (iter);
       gtk_list_box_apply_filter (list_box, row);
     }
-}
-
-/* Children are visible if they are shown by the app (visible)
-   and not filtered out (child_visible) by the listbox */
-static gboolean
-row_is_visible (GtkListBoxRow *row)
-{
-  return gtk_widget_get_visible (GTK_WIDGET (row)) && gtk_widget_get_child_visible (GTK_WIDGET (row));
 }
 
 static GtkListBoxRow *
@@ -1502,6 +1510,8 @@ gtk_list_box_update_header (GtkListBox *list_box, GSequenceIter* iter)
 static void
 gtk_list_box_row_visibility_changed (GtkListBox *list_box, GtkListBoxRow *row)
 {
+  update_row_is_visible (row);
+
   if (gtk_widget_get_visible (GTK_WIDGET (list_box)))
     {
       gtk_list_box_update_header (list_box, row->priv->iter);
@@ -1535,6 +1545,7 @@ gtk_list_box_real_add (GtkContainer* container, GtkWidget *child)
 
   row->priv->iter = iter;
   gtk_widget_set_parent (GTK_WIDGET (row), GTK_WIDGET (list_box));
+  row->priv->visible = gtk_widget_get_visible (GTK_WIDGET (row));
   gtk_list_box_apply_filter (list_box, row);
   if (gtk_widget_get_visible (GTK_WIDGET (list_box)))
     {
