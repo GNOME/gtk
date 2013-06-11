@@ -1109,23 +1109,40 @@ gtk_list_box_real_button_press_event (GtkWidget *widget,
 {
   GtkListBox *list_box = GTK_LIST_BOX (widget);
   GtkListBoxPrivate *priv = list_box->priv;
+  gboolean ctrl_pressed;
 
   if (event->button == GDK_BUTTON_PRIMARY)
     {
       GtkListBoxRow *row;
+
+      ctrl_pressed = (event->state & GDK_CONTROL_MASK) != 0;
+
+      priv->active_row = NULL;
+
       row = gtk_list_box_get_row_at_y (list_box, event->y);
       if (row != NULL)
         {
-          priv->active_row = row;
-          priv->active_row_active = TRUE;
-          gtk_widget_set_state_flags (GTK_WIDGET (priv->active_row),
-                                      GTK_STATE_FLAG_ACTIVE,
-                                      FALSE);
-          gtk_widget_queue_draw (GTK_WIDGET (list_box));
-          if (event->type == GDK_2BUTTON_PRESS &&
-              !priv->activate_single_click)
-            g_signal_emit (list_box, signals[ROW_ACTIVATED], 0,
-                           row);
+          if (ctrl_pressed)
+            {
+              if (priv->selection_mode == GTK_SELECTION_SINGLE &&
+                  priv->selected_row == row)
+                gtk_list_box_update_selected (list_box, NULL);
+              else
+                gtk_list_box_update_selected (list_box, row);
+            }
+          else
+            {
+              priv->active_row = row;
+              priv->active_row_active = TRUE;
+              gtk_widget_set_state_flags (GTK_WIDGET (priv->active_row),
+                                          GTK_STATE_FLAG_ACTIVE,
+                                          FALSE);
+              gtk_widget_queue_draw (GTK_WIDGET (list_box));
+              if (event->type == GDK_2BUTTON_PRESS &&
+                  !priv->activate_single_click)
+                g_signal_emit (list_box, signals[ROW_ACTIVATED], 0,
+                               row);
+            }
 
         }
       /* TODO:
