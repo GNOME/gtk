@@ -97,9 +97,51 @@ struct _GtkListBoxRowClass
   void (*_gtk_reserved3) (void);
 };
 
-typedef gboolean (*GtkListBoxFilterFunc) (GtkListBoxRow* row, gpointer user_data);
-typedef gint (*GtkListBoxSortFunc) (GtkListBoxRow* row1, GtkListBoxRow* row2, gpointer user_data);
-typedef void (*GtkListBoxUpdateSeparatorFunc) (GtkListBoxRow* row, GtkListBoxRow* before, gpointer user_data);
+/**
+ * GtkListBoxFilterFunc:
+ * @row: The row that may be filtered.
+ * @user_data: (closure): user data.
+ *
+ * Will be called whenever the row changes or is added and lets you control
+ * if the row should be visible or not.
+ *
+ * Returns: %TRUE if the row should be visible, %FALSE otherwise
+ *
+ * Since: 3.10
+ */
+typedef gboolean (*GtkListBoxFilterFunc) (GtkListBoxRow * row,
+                                          gpointer        user_data);
+/**
+ * GtkListBoxSortFunc:
+ * @row1: The first row.
+ * @row2: The second row.
+ * @user_data: (closure): user data.
+ *
+ * Compare two rows to determin which should be first.
+ *
+ * Returns: < 0 if @row1 should be before @row2, 0 if they are equal and > 0 otherwise
+ *
+ * Since: 3.10
+ */
+typedef gint (*GtkListBoxSortFunc) (GtkListBoxRow *row1,
+                                    GtkListBoxRow *row2,
+                                    gpointer       user_data);
+/**
+ * GtkListBoxUpdateSeparatorFunc:
+ * @row: The row to update
+ * @before: The row before @row, or %NULL if it is first.
+ * @user_data: (closure): user data.
+ *
+ * Whenever @row changes or which row is before @row changes this is called, which
+ * lets you update the separator on @row. You may remove or set a new one
+ * via gtk_list_box_row_set_separator() or just change the state of the current
+ * separator widget.
+ *
+ * Since: 3.10
+ */
+typedef void (*GtkListBoxUpdateSeparatorFunc) (GtkListBoxRow *row,
+                                               GtkListBoxRow *before,
+                                               gpointer       user_data);
 
 GDK_AVAILABLE_IN_3_10
 GType      gtk_list_box_row_get_type      (void) G_GNUC_CONST;

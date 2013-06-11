@@ -29,8 +29,25 @@
  * SECTION:gtklistbox
  * @Short_description: A list container
  * @Title: GtkListBox
+ * @See_also: #GtkScrolledWindow
  *
- */
+ * A GtkListBox is a vertical container that contains GtkListBoxRow
+ * children. These rows can by dynamically sorted and filtered, and
+ * headers can be added dynamically depending on the row content.
+ * It also allows keyboard and mouse navigation and selection like
+ * a typical list.
+ *
+ * Using GtkListBox is often an alternative to #GtkTreeView, especially
+ * when the list contents has a more complicated layout than what is allowed
+ * by a #GtkCellRenderer, or when the contents is interactive (i.e. has a
+ * button in it).
+ *
+ * Although a #GtkListBox must have only #GtkListBoxRow children you can
+ * add any kind of widget to it via gtk_container_add(), and a #GtkListBoxRow
+ * widget will automatically be inserted between the list and the widget.
+ *
+ * The GtkListBox widget was added in GTK+ 3.10.
+*/
 
 struct _GtkListBoxPrivate
 {
@@ -182,6 +199,15 @@ static void                 gtk_list_box_real_get_preferred_width_for_height (Gt
 static GParamSpec *properties[LAST_PROPERTY] = { NULL, };
 static guint signals[LAST_SIGNAL] = { 0 };
 
+/**
+ * gtk_list_box_new:
+ *
+ * Creates a new #GtkListBox container.
+ *
+ * Returns: a new #GtkListBox
+ *
+ * Since: 3.10
+ */
 GtkWidget *
 gtk_list_box_new (void)
 {
@@ -330,6 +356,16 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
 
   g_object_class_install_properties (object_class, LAST_PROPERTY, properties);
 
+  /**
+   * GtkListBox::row-selected:
+   * @list_box: the #GtkListBox
+   * @row: the selected row
+   *
+   * The ::row-selected signal is emitted when a new row is selected, or
+   * (with a %NULL @row) when the selection is cleared.
+   *
+   * Since: 3.10
+   */
   signals[ROW_SELECTED] =
     g_signal_new ("row-selected",
                   GTK_TYPE_LIST_BOX,
@@ -338,7 +374,17 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE, 1,
-                  GTK_TYPE_WIDGET);
+                  GTK_TYPE_LIST_BOX_ROW);
+  /**
+   * GtkListBox::row-activated:
+   * @list_box: the #GtkListBox
+   * @row: the activated row
+   *
+   * The ::row-activated signal is emitted when a row has been activated by
+   * the user.
+   *
+   * Since: 3.10
+   */
   signals[ROW_ACTIVATED] =
     g_signal_new ("row-activated",
                   GTK_TYPE_LIST_BOX,
@@ -347,7 +393,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE, 1,
-                  GTK_TYPE_WIDGET);
+                  GTK_TYPE_LIST_BOX_ROW);
   signals[ACTIVATE_CURSOR_ROW] =
     g_signal_new ("activate-cursor-row",
                   GTK_TYPE_LIST_BOX,
@@ -420,6 +466,8 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
  * Gets the selected row.
  *
  * Return value: (transfer none): The selected #GtkWidget.
+ *
+ * Since: 3.10
  **/
 GtkListBoxRow *
 gtk_list_box_get_selected_row (GtkListBox *list_box)
@@ -442,6 +490,8 @@ gtk_list_box_get_selected_row (GtkListBox *list_box)
  * Gets the n:th child in the list (not counting separators).
  *
  * Return value: (transfer none): The child #GtkWidget.
+ *
+ * Since: 3.10
  **/
 GtkListBoxRow *
 gtk_list_box_get_row_at_index (GtkListBox *list_box, gint index)
@@ -463,9 +513,11 @@ gtk_list_box_get_row_at_index (GtkListBox *list_box, gint index)
  * @list_box: An #GtkListBox.
  * @y: position
  *
- * Gets the row at the y position.
+ * Gets the row at the @y position.
  *
  * Return value: (transfer none): The row.
+ *
+ * Since: 3.10
  **/
 GtkListBoxRow *
 gtk_list_box_get_row_at_y (GtkListBox *list_box, gint y)
@@ -496,11 +548,14 @@ gtk_list_box_get_row_at_y (GtkListBox *list_box, gint y)
   return found_row;
 }
 
-
 /**
  * gtk_list_box_select_row:
  * @list_box: a #GtkListBox
  * @row: (allow-none): The row to select or %NULL
+ *
+ * Make @row the currently selected row.
+ *
+ * Since: 3.10
  */
 void
 gtk_list_box_select_row (GtkListBox *list_box, GtkListBoxRow *row)
@@ -510,6 +565,22 @@ gtk_list_box_select_row (GtkListBox *list_box, GtkListBoxRow *row)
   gtk_list_box_update_selected (list_box, row);
 }
 
+/**
+ * gtk_list_box_set_adjustment:
+ * @list_box: a #GtkListBox
+ * @adjustment: (allow-none): The adjustment or %NULL
+ *
+ * Sets the adjustment (if any) that the widget uses to
+ * for vertical scrolling. For instance, this is used
+ * to get the page size for PageUp/Down key handling.
+ *
+ * In the normal case when the @list_box is packed inside
+ * a #GtkScrolledWindow the adjustment from that will
+ * be picked up automatically, so there is no need
+ * to manually do that.
+ *
+ * Since: 3.10
+ */
 void
 gtk_list_box_set_adjustment (GtkListBox *list_box,
                              GtkAdjustment *adjustment)
@@ -524,6 +595,17 @@ gtk_list_box_set_adjustment (GtkListBox *list_box,
   priv->adjustment = adjustment;
 }
 
+/**
+ * gtk_list_box_get_adjustment:
+ * @list_box: a #GtkListBox
+ *
+ * Gets the adjustment (if any) that the widget uses to
+ * for vertical scrolling.
+ *
+ * Return value: (transfer none): The adjustment.
+ *
+ * Since: 3.10
+ */
 GtkAdjustment *
 gtk_list_box_get_adjustment (GtkListBox *list_box)
 {
@@ -550,6 +632,18 @@ gtk_list_box_real_parent_set (GtkWidget   *widget,
     }
 }
 
+/**
+ * gtk_list_box_set_selection_mode:
+ * @list_box: a #GtkListBox
+ * @mode: The #GtkSelectionMode
+ *
+ * Sets how selection works in the listbox.
+ * See #GtkSelectionMode for details.
+ *
+ * Note: #GtkListBox does not support @GTK_SELECTION_MULTIPLE.
+ *
+ * Since: 3.10
+ */
 void
 gtk_list_box_set_selection_mode (GtkListBox *list_box, GtkSelectionMode mode)
 {
@@ -573,6 +667,16 @@ gtk_list_box_set_selection_mode (GtkListBox *list_box, GtkSelectionMode mode)
   g_object_notify_by_pspec (G_OBJECT (list_box), properties[PROP_SELECTION_MODE]);
 }
 
+/**
+ * gtk_list_box_get_selection_mode:
+ * @list_box: a #GtkListBox
+ *
+ * Gets the selection mode of the listbox.
+ *
+ * Returns: a #GtkSelectionMode
+ *
+ * Since: 3.10
+ */
 GtkSelectionMode
 gtk_list_box_get_selection_mode (GtkListBox *list_box)
 {
@@ -585,9 +689,20 @@ gtk_list_box_get_selection_mode (GtkListBox *list_box)
 
 /**
  * gtk_list_box_set_filter_func:
- * @filter_func: (allow-none):
- * @user_data:
- * @destroy:
+ * @list_box: a #GtkListBox
+ * @filter_func: (closure user_data) (allow-none): Callback that lets you filter which rows to show
+ * @user_data: user data passed to @filter_func
+ * @destroy: destroy notifier for @user_data
+ *
+ * By setting a filter function on the @list_box one can decide dynamically which
+ * of the rows to show. For instance, to implement a search function on a list that
+ * filters the original list to only show the matching rows.
+ *
+ * The @filter_func will be called for each row after the call, and it will
+ * continue to be called each time a row changes (via gtk_list_box_row_changed()) or
+ * when gtk_list_box_refilter() is called.
+ *
+ * Since: 3.10
  */
 void
 gtk_list_box_set_filter_func (GtkListBox *list_box,
@@ -611,9 +726,31 @@ gtk_list_box_set_filter_func (GtkListBox *list_box,
 
 /**
  * gtk_list_box_set_separator_func:
- * @update_separator: (allow-none):
- * @user_data:
- * @destroy:
+ * @list_box: a #GtkListBox
+ * @update_separator: (closure user_data) (allow-none): Callback that lets you add row separators
+ * @user_data: user data passed to @update_separator
+ * @destroy: destroy notifier for @user_data
+ *
+ * By setting a separator function on the @list_box one can dynamically add separators
+ * in front of rows, depending on the contents of the row and its position in the list.
+ * For instance, one could use it to add headers in front of the first item of a
+ * new kind, in a list sorted by the kind.
+ *
+ * The @update_separator can look at the current separator widget using gtk_list_box_row_get_separator()
+ * and either update the state of the widget as needed, or set a new one using
+ * gtk_list_box_row_set_separator(). If no separator is needed, set the separator to %NULL.
+ *
+ * Note that you may get many calls @update_separator to this for a particular row when e.g.
+ * changing things that don't affect the separator. In this case it is important for performance
+ * to not blindly replace an exisiting separator widh an identical one.
+ *
+ * The @update_separator function will be called for each row after the call, and it will
+ * continue to be called each time a row changes (via gtk_list_box_row_changed()) and when
+ * the row before changes (either by gtk_list_box_row_changed() on the previous row, or when
+ * the previous row becomes a different row). It is also called for all rows when
+ * gtk_list_box_reseparate() is called.
+ *
+ * Since: 3.10
  */
 void
 gtk_list_box_set_separator_func (GtkListBox *list_box,
@@ -642,6 +779,18 @@ gtk_list_box_real_refilter (GtkListBox *list_box)
   gtk_widget_queue_resize (GTK_WIDGET (list_box));
 }
 
+/**
+ * gtk_list_box_refilter:
+ * @list_box: a #GtkListBox
+ *
+ * Update the filtering for all rows. Call this when result
+ * of the filter function on the @list_box is changed due
+ * to an external factor. For instance, this would be used
+ * if the filter function just looked for a specific search
+ * string and the entry with the search string has changed.
+ *
+ * Since: 3.10
+ */
 void
 gtk_list_box_refilter (GtkListBox *list_box)
 {
@@ -660,6 +809,16 @@ do_sort (GtkListBoxRow *a,
   return priv->sort_func (a, b, priv->sort_func_target);
 }
 
+/**
+ * gtk_list_box_resort:
+ * @list_box: a #GtkListBox
+ *
+ * Update the sorting for all rows. Call this when result
+ * of the sort function on the @list_box is changed due
+ * to an external factor.
+ *
+ * Since: 3.10
+ */
 void
 gtk_list_box_resort (GtkListBox *list_box)
 {
@@ -673,6 +832,16 @@ gtk_list_box_resort (GtkListBox *list_box)
   gtk_widget_queue_resize (GTK_WIDGET (list_box));
 }
 
+/**
+ * gtk_list_box_reseparate:
+ * @list_box: a #GtkListBox
+ *
+ * Update the separators for all rows. Call this when result
+ * of the separator function on the @list_box is changed due
+ * to an external factor.
+ *
+ * Since: 3.10
+ */
 void
 gtk_list_box_reseparate (GtkListBox *list_box)
 {
@@ -691,9 +860,19 @@ gtk_list_box_reseparate (GtkListBox *list_box)
 
 /**
  * gtk_list_box_set_sort_func:
+ * @list_box: a #GtkListBox
  * @sort_func: (closure user_data) (allow-none):
- * @user_data:
- * @destroy:
+ * @user_data: user data passed to @sort_func
+ * @destroy: destroy notifier for @user_data
+ *
+ * By setting a sort function on the @list_box one can dynamically reorder the rows
+ * of the list, based on the contents of the rows.
+ *
+ * The @sort_func will be called for each row after the call, and will continue to
+ * be called each time a row changes (via gtk_list_box_row_changed()) and when
+ * gtk_list_box_resort() is called.
+ *
+ * Since: 3.10
  */
 void
 gtk_list_box_set_sort_func (GtkListBox *list_box,
@@ -741,6 +920,16 @@ gtk_list_box_got_row_changed (GtkListBox *list_box, GtkListBoxRow *row)
     }
 }
 
+/**
+ * gtk_list_box_set_activate_on_single_click:
+ * @list_box: a #GtkListBox
+ * @single: a boolean
+ *
+ * If @single is %TRUE, rows will be activated when you click on them, otherwise
+ * you need to double-click.
+ *
+ * Since: 3.10
+ */
 void
 gtk_list_box_set_activate_on_single_click (GtkListBox *list_box,
                                            gboolean single)
@@ -1170,7 +1359,6 @@ gtk_list_box_get_first_visible (GtkListBox *list_box)
   return NULL;
 }
 
-
 static GtkListBoxRow *
 gtk_list_box_get_last_visible (GtkListBox *list_box)
 {
@@ -1233,7 +1421,6 @@ gtk_list_box_get_next_visible (GtkListBox *list_box, GSequenceIter* iter)
 
   return iter;
 }
-
 
 static void
 gtk_list_box_update_separator (GtkListBox *list_box, GSequenceIter* iter)
@@ -1642,6 +1829,17 @@ gtk_list_box_real_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
     }
 }
 
+/**
+ * gtk_list_box_drag_unhighlight_row:
+ * @list_box: An #GtkListBox.
+ *
+ * If a row has previously been highlighted via gtk_list_box_drag_highlight_row()
+ * it will have the highlight removed.
+ *
+ * Return value: (transfer none): The selected #GtkWidget.
+ *
+ * Since: 3.10
+ **/
 void
 gtk_list_box_drag_unhighlight_row (GtkListBox *list_box)
 {
@@ -1657,6 +1855,20 @@ gtk_list_box_drag_unhighlight_row (GtkListBox *list_box)
 }
 
 
+/**
+ * gtk_list_box_drag_highlight_row:
+ * @list_box: An #GtkListBox.
+ * @row: a #GtkListBoxRow
+ *
+ * This is a helper function for implementing DnD onto a #GtkListBox.
+ * The passed in @row will be highlighted via gtk_drag_highlight(),
+ * and any previously highlighted row will be unhighlighted.
+ *
+ * The row will also be unhighlighted when the widget gets
+ * a drag leave event.
+ *
+ * Since: 3.10
+ **/
 void
 gtk_list_box_drag_highlight_row (GtkListBox *list_box, GtkListBoxRow *row)
 {
@@ -1845,6 +2057,15 @@ gtk_list_box_real_move_cursor (GtkListBox *list_box,
 }
 
 
+/**
+ * gtk_list_box_row_new:
+ *
+ * Creates a new #GtkListBoxRow, to be used as a child of a #GtkListBox.
+ *
+ * Returns: a new #GtkListBoxRow
+ *
+ * Since: 3.10
+ */
 GtkWidget *
 gtk_list_box_row_new (void)
 {
@@ -2160,6 +2381,29 @@ gtk_list_box_row_real_size_allocate (GtkWidget *widget, GtkAllocation *allocatio
     }
 }
 
+/**
+ * gtk_list_box_row_changed:
+ * @row: a #GtkListBoxRow
+ *
+ * Marks @row as changed, causing any state that depends on this
+ * to be updated. This affects sorting, filtering and separators.
+ *
+ * Note that calls to this method must be in sync with the data
+ * used for the row functions. For instance, if the list is
+ * mirroring some external data set, and *two* rows changed in the
+ * external data set then when you call gtk_list_box_row_changed()
+ * on the first row the sort function must only read the new data
+ * for the first of the two changed rows, otherwise the resorting
+ * of the rows will be wrong.
+ *
+ * This generally means that if you don't fully control the data
+ * model you have to duplicate the data that affects the listbox
+ * row functions into the row widgets themselves. Another alternative
+ * is to call gtk_list_box_resort() on any model change, but that is
+ * more expensive.
+ *
+ * Since: 3.10
+ */
 void
 gtk_list_box_row_changed (GtkListBoxRow *row)
 {
@@ -2171,8 +2415,15 @@ gtk_list_box_row_changed (GtkListBoxRow *row)
 
 /**
  * gtk_list_box_row_get_separator:
+ * @row: a #GtkListBoxRow
  *
- * Return value: (transfer none): The current separator.
+ * Returns the current separator of the @row. This can be used
+ * in a  @GtkListBoxUpdateSeparatorFunc to see if there is a separator
+ * set already, and if so to update the state of it.
+ *
+ * Return value: (transfer none): The current separator, or %NULL if none
+ *
+ * Since: 3.10
  */
 GtkWidget *
 gtk_list_box_row_get_separator (GtkListBoxRow *row)
@@ -2182,8 +2433,14 @@ gtk_list_box_row_get_separator (GtkListBoxRow *row)
 
 /**
  * gtk_list_box_row_set_separator:
+ * @row: a #GtkListBoxRow
  * @separator: (allow-none):
  *
+ * Sets the current separator of the @row. This is only allowed to be called
+ * from a @GtkListBoxUpdateSeparatorFunc. It will replace any existing
+ * separator in the row, and be shown in front of the row in the listbox.
+ *
+ * Since: 3.10
  */
 void
 gtk_list_box_row_set_separator (GtkListBoxRow *row,
