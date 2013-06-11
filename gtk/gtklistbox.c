@@ -96,7 +96,6 @@ enum {
   ACTIVATE_CURSOR_ROW,
   TOGGLE_CURSOR_ROW,
   MOVE_CURSOR,
-  REFILTER,
   LAST_SIGNAL
 };
 
@@ -175,7 +174,6 @@ static void                 gtk_list_box_real_toggle_cursor_row       (GtkListBo
 static void                 gtk_list_box_real_move_cursor             (GtkListBox          *list_box,
                                                                        GtkMovementStep      step,
                                                                        gint                 count);
-static void                 gtk_list_box_real_refilter                (GtkListBox          *list_box);
 static void                 gtk_list_box_finalize                     (GObject             *obj);
 static void                 gtk_list_box_real_parent_set              (GtkWidget           *widget,
                                                                        GtkWidget           *prev_parent);
@@ -337,7 +335,6 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
   klass->activate_cursor_row = gtk_list_box_real_activate_cursor_row;
   klass->toggle_cursor_row = gtk_list_box_real_toggle_cursor_row;
   klass->move_cursor = gtk_list_box_real_move_cursor;
-  klass->refilter = gtk_list_box_real_refilter;
 
   properties[PROP_SELECTION_MODE] =
     g_param_spec_enum ("selection-mode",
@@ -419,14 +416,6 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
                   _gtk_marshal_VOID__ENUM_INT,
                   G_TYPE_NONE, 2,
                   GTK_TYPE_MOVEMENT_STEP, G_TYPE_INT);
-  signals[REFILTER] =
-    g_signal_new ("refilter",
-                  GTK_TYPE_LIST_BOX,
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GtkListBoxClass, refilter),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE, 0);
 
   widget_class->activate_signal = signals[ACTIVATE_CURSOR_ROW];
 
@@ -771,14 +760,6 @@ gtk_list_box_set_separator_func (GtkListBox *list_box,
   gtk_list_box_reseparate (list_box);
 }
 
-static void
-gtk_list_box_real_refilter (GtkListBox *list_box)
-{
-  gtk_list_box_apply_filter_all (list_box);
-  gtk_list_box_reseparate (list_box);
-  gtk_widget_queue_resize (GTK_WIDGET (list_box));
-}
-
 /**
  * gtk_list_box_refilter:
  * @list_box: a #GtkListBox
@@ -796,7 +777,9 @@ gtk_list_box_refilter (GtkListBox *list_box)
 {
   g_return_if_fail (list_box != NULL);
 
-  g_signal_emit (list_box, signals[REFILTER], 0);
+  gtk_list_box_apply_filter_all (list_box);
+  gtk_list_box_reseparate (list_box);
+  gtk_widget_queue_resize (GTK_WIDGET (list_box));
 }
 
 static gint

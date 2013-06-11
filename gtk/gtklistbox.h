@@ -62,7 +62,6 @@ struct _GtkListBoxClass
   void (*activate_cursor_row) (GtkListBox* list_box);
   void (*toggle_cursor_row) (GtkListBox* list_box);
   void (*move_cursor) (GtkListBox* list_box, GtkMovementStep step, gint count);
-  void (*refilter) (GtkListBox* list_box);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
