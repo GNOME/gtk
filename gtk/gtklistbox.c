@@ -727,7 +727,7 @@ gtk_list_box_get_selection_mode (GtkListBox *list_box)
  *
  * The @filter_func will be called for each row after the call, and it will
  * continue to be called each time a row changes (via gtk_list_box_row_changed()) or
- * when gtk_list_box_refilter() is called.
+ * when gtk_list_box_invalidate_filter() is called.
  *
  * Since: 3.10
  */
@@ -748,7 +748,7 @@ gtk_list_box_set_filter_func (GtkListBox *list_box,
   priv->filter_func_target = user_data;
   priv->filter_func_target_destroy_notify = destroy;
 
-  gtk_list_box_refilter (list_box);
+  gtk_list_box_invalidate_filter (list_box);
 }
 
 /**
@@ -775,7 +775,7 @@ gtk_list_box_set_filter_func (GtkListBox *list_box,
  * continue to be called each time a row changes (via gtk_list_box_row_changed()) and when
  * the row before changes (either by gtk_list_box_row_changed() on the previous row, or when
  * the previous row becomes a different row). It is also called for all rows when
- * gtk_list_box_reseparate() is called.
+ * gtk_list_box_invalidate_headers() is called.
  *
  * Since: 3.10
  */
@@ -795,11 +795,11 @@ gtk_list_box_set_header_func (GtkListBox *list_box,
   priv->update_header_func = update_header;
   priv->update_header_func_target = user_data;
   priv->update_header_func_target_destroy_notify = destroy;
-  gtk_list_box_reseparate (list_box);
+  gtk_list_box_invalidate_headers (list_box);
 }
 
 /**
- * gtk_list_box_refilter:
+ * gtk_list_box_invalidate_filter:
  * @list_box: a #GtkListBox
  *
  * Update the filtering for all rows. Call this when result
@@ -811,12 +811,12 @@ gtk_list_box_set_header_func (GtkListBox *list_box,
  * Since: 3.10
  */
 void
-gtk_list_box_refilter (GtkListBox *list_box)
+gtk_list_box_invalidate_filter (GtkListBox *list_box)
 {
   g_return_if_fail (list_box != NULL);
 
   gtk_list_box_apply_filter_all (list_box);
-  gtk_list_box_reseparate (list_box);
+  gtk_list_box_invalidate_headers (list_box);
   gtk_widget_queue_resize (GTK_WIDGET (list_box));
 }
 
@@ -831,7 +831,7 @@ do_sort (GtkListBoxRow *a,
 }
 
 /**
- * gtk_list_box_resort:
+ * gtk_list_box_invalidate_sort:
  * @list_box: a #GtkListBox
  *
  * Update the sorting for all rows. Call this when result
@@ -841,7 +841,7 @@ do_sort (GtkListBoxRow *a,
  * Since: 3.10
  */
 void
-gtk_list_box_resort (GtkListBox *list_box)
+gtk_list_box_invalidate_sort (GtkListBox *list_box)
 {
   GtkListBoxPrivate *priv = list_box->priv;
 
@@ -849,7 +849,7 @@ gtk_list_box_resort (GtkListBox *list_box)
 
   g_sequence_sort (priv->children,
                    (GCompareDataFunc)do_sort, list_box);
-  gtk_list_box_reseparate (list_box);
+  gtk_list_box_invalidate_headers (list_box);
   gtk_widget_queue_resize (GTK_WIDGET (list_box));
 }
 
@@ -869,7 +869,7 @@ gtk_list_box_do_reseparate (GtkListBox *list_box)
 
 
 /**
- * gtk_list_box_reseparate:
+ * gtk_list_box_invalidate_headers:
  * @list_box: a #GtkListBox
  *
  * Update the separators for all rows. Call this when result
@@ -879,7 +879,7 @@ gtk_list_box_do_reseparate (GtkListBox *list_box)
  * Since: 3.10
  */
 void
-gtk_list_box_reseparate (GtkListBox *list_box)
+gtk_list_box_invalidate_headers (GtkListBox *list_box)
 {
   g_return_if_fail (list_box != NULL);
 
@@ -901,7 +901,7 @@ gtk_list_box_reseparate (GtkListBox *list_box)
  *
  * The @sort_func will be called for each row after the call, and will continue to
  * be called each time a row changes (via gtk_list_box_row_changed()) and when
- * gtk_list_box_resort() is called.
+ * gtk_list_box_invalidate_sort() is called.
  *
  * Since: 3.10
  */
@@ -921,7 +921,7 @@ gtk_list_box_set_sort_func (GtkListBox *list_box,
   priv->sort_func = sort_func;
   priv->sort_func_target = user_data;
   priv->sort_func_target_destroy_notify = destroy;
-  gtk_list_box_resort (list_box);
+  gtk_list_box_invalidate_sort (list_box);
 }
 
 static void
@@ -2510,7 +2510,7 @@ gtk_list_box_row_real_size_allocate (GtkWidget *widget, GtkAllocation *allocatio
  * This generally means that if you don't fully control the data
  * model you have to duplicate the data that affects the listbox
  * row functions into the row widgets themselves. Another alternative
- * is to call gtk_list_box_resort() on any model change, but that is
+ * is to call gtk_list_box_invalidate_sort() on any model change, but that is
  * more expensive.
  *
  * Since: 3.10

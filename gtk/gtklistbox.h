@@ -192,11 +192,11 @@ void           gtk_list_box_set_header_func              (GtkListBox            
                                                           gpointer                       user_data,
                                                           GDestroyNotify                 destroy);
 GDK_AVAILABLE_IN_3_10
-void           gtk_list_box_refilter                     (GtkListBox                    *list_box);
+void           gtk_list_box_invalidate_filter            (GtkListBox                    *list_box);
 GDK_AVAILABLE_IN_3_10
-void           gtk_list_box_resort                       (GtkListBox                    *list_box);
+void           gtk_list_box_invalidate_sort              (GtkListBox                    *list_box);
 GDK_AVAILABLE_IN_3_10
-void           gtk_list_box_reseparate                   (GtkListBox                    *list_box);
+void           gtk_list_box_invalidate_headers           (GtkListBox                    *list_box);
 GDK_AVAILABLE_IN_3_10
 void           gtk_list_box_set_sort_func                (GtkListBox                    *list_box,
                                                           GtkListBoxSortFunc             sort_func,
