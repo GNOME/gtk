@@ -80,6 +80,8 @@ struct _GtkListBoxPrivate
 
   /* DnD */
   GtkListBoxRow *drag_highlighted_row;
+
+  int n_visible_rows;
 };
 
 struct _GtkListBoxRowPrivate
@@ -1316,9 +1318,21 @@ gtk_list_box_real_realize (GtkWidget* widget)
 /* Children are visible if they are shown by the app (visible)
    and not filtered out (child_visible) by the listbox */
 static void
-update_row_is_visible (GtkListBoxRow *row)
+update_row_is_visible (GtkListBox *list_box, GtkListBoxRow *row)
 {
-  row->priv->visible = gtk_widget_get_visible (GTK_WIDGET (row)) && gtk_widget_get_child_visible (GTK_WIDGET (row));
+  GtkListBoxPrivate *priv = list_box->priv;
+  gboolean was_visible;
+
+  was_visible = row->priv->visible;
+
+  row->priv->visible =
+    gtk_widget_get_visible (GTK_WIDGET (row)) &&
+    gtk_widget_get_child_visible (GTK_WIDGET (row));
+
+  if (was_visible && !row->priv->visible)
+    priv->n_visible_rows--;
+  if (!was_visible && row->priv->visible)
+    priv->n_visible_rows++;
 }
 
 static gboolean
@@ -1339,7 +1353,7 @@ gtk_list_box_apply_filter (GtkListBox *list_box, GtkListBoxRow *row)
 
   gtk_widget_set_child_visible (GTK_WIDGET (row), do_show);
 
-  update_row_is_visible (row);
+  update_row_is_visible (list_box, row);
 }
 
 static void
@@ -1510,7 +1524,7 @@ gtk_list_box_update_header (GtkListBox *list_box, GSequenceIter* iter)
 static void
 gtk_list_box_row_visibility_changed (GtkListBox *list_box, GtkListBoxRow *row)
 {
-  update_row_is_visible (row);
+  update_row_is_visible (list_box, row);
 
   if (gtk_widget_get_visible (GTK_WIDGET (list_box)))
     {
@@ -1543,9 +1557,13 @@ gtk_list_box_real_add (GtkContainer* container, GtkWidget *child)
   else
     iter = g_sequence_append (priv->children, row);
 
+
   row->priv->iter = iter;
   gtk_widget_set_parent (GTK_WIDGET (row), GTK_WIDGET (list_box));
+  gtk_widget_set_child_visible (GTK_WIDGET (row), TRUE);
   row->priv->visible = gtk_widget_get_visible (GTK_WIDGET (row));
+  if (row->priv->visible)
+      priv->n_visible_rows++;
   gtk_list_box_apply_filter (list_box, row);
   if (gtk_widget_get_visible (GTK_WIDGET (list_box)))
     {
@@ -1591,6 +1609,9 @@ gtk_list_box_real_remove (GtkContainer* container, GtkWidget* child)
       g_warning ("Tried to remove non-child %p\n", child);
       return;
     }
+
+  if (row->priv->visible)
+    priv->n_visible_rows--;
 
   if (row->priv->header != NULL)
     {
