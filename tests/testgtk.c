@@ -2815,7 +2815,13 @@ list_sort_cb (GtkListBoxRow *a, GtkListBoxRow *b, gpointer data)
 }
 
 static gboolean
-list_filter_cb (GtkListBoxRow *row, gpointer data)
+list_filter_all_cb (GtkListBoxRow *row, gpointer data)
+{
+  return FALSE;
+}
+
+static gboolean
+list_filter_odd_cb (GtkListBoxRow *row, gpointer data)
 {
   gint value = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (row), "value"));
 
@@ -2832,12 +2838,21 @@ list_sort_clicked_cb (GtkButton *button,
 }
 
 static void
-list_filter_clicked_cb (GtkButton *button,
-                        gpointer data)
+list_filter_odd_clicked_cb (GtkButton *button,
+                            gpointer data)
 {
   GtkListBox *list = data;
 
-  gtk_list_box_set_filter_func (list, list_filter_cb, NULL, NULL);
+  gtk_list_box_set_filter_func (list, list_filter_odd_cb, NULL, NULL);
+}
+
+static void
+list_filter_all_clicked_cb (GtkButton *button,
+                            gpointer data)
+{
+  GtkListBox *list = data;
+
+  gtk_list_box_set_filter_func (list, list_filter_all_cb, NULL, NULL);
 }
 
 
@@ -2848,6 +2863,27 @@ list_unfilter_clicked_cb (GtkButton *button,
   GtkListBox *list = data;
 
   gtk_list_box_set_filter_func (list, NULL, NULL, NULL);
+}
+
+static void
+add_placeholder_clicked_cb (GtkButton *button,
+                            gpointer data)
+{
+  GtkListBox *list = data;
+  GtkWidget *label;
+
+  label = gtk_label_new ("You filtered everything!!!");
+  gtk_widget_show (label);
+  gtk_list_box_set_placeholder (GTK_LIST_BOX (list), label);
+}
+
+static void
+remove_placeholder_clicked_cb (GtkButton *button,
+                            gpointer data)
+{
+  GtkListBox *list = data;
+
+  gtk_list_box_set_placeholder (GTK_LIST_BOX (list), NULL);
 }
 
 
@@ -2909,11 +2945,23 @@ create_listbox (GtkWidget *widget)
 
       button = gtk_button_new_with_label ("filter odd");
       gtk_container_add (GTK_CONTAINER (vbox), button);
-      g_signal_connect (button, "clicked", G_CALLBACK (list_filter_clicked_cb), list);
+      g_signal_connect (button, "clicked", G_CALLBACK (list_filter_odd_clicked_cb), list);
+
+      button = gtk_button_new_with_label ("filter all");
+      gtk_container_add (GTK_CONTAINER (vbox), button);
+      g_signal_connect (button, "clicked", G_CALLBACK (list_filter_all_clicked_cb), list);
 
       button = gtk_button_new_with_label ("unfilter");
       gtk_container_add (GTK_CONTAINER (vbox), button);
       g_signal_connect (button, "clicked", G_CALLBACK (list_unfilter_clicked_cb), list);
+
+      button = gtk_button_new_with_label ("add placeholder");
+      gtk_container_add (GTK_CONTAINER (vbox), button);
+      g_signal_connect (button, "clicked", G_CALLBACK (add_placeholder_clicked_cb), list);
+
+      button = gtk_button_new_with_label ("remove placeholder");
+      gtk_container_add (GTK_CONTAINER (vbox), button);
+      g_signal_connect (button, "clicked", G_CALLBACK (remove_placeholder_clicked_cb), list);
     }
 
   if (!gtk_widget_get_visible (window))
