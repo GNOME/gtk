@@ -52,7 +52,7 @@
 struct _GtkListBoxPrivate
 {
   GSequence *children;
-  GHashTable *separator_hash;
+  GHashTable *header_hash;
 
   GtkListBoxSortFunc sort_func;
   gpointer sort_func_target;
@@ -62,9 +62,9 @@ struct _GtkListBoxPrivate
   gpointer filter_func_target;
   GDestroyNotify filter_func_target_destroy_notify;
 
-  GtkListBoxUpdateSeparatorFunc update_separator_func;
-  gpointer update_separator_func_target;
-  GDestroyNotify update_separator_func_target_destroy_notify;
+  GtkListBoxUpdateHeaderFunc update_header_func;
+  gpointer update_header_func_target;
+  GDestroyNotify update_header_func_target_destroy_notify;
 
   GtkListBoxRow *selected_row;
   GtkListBoxRow *prelight_row;
@@ -85,7 +85,7 @@ struct _GtkListBoxPrivate
 struct _GtkListBoxRowPrivate
 {
   GSequenceIter *iter;
-  GtkWidget *separator;
+  GtkWidget *header;
   gint y;
   gint height;
 };
@@ -112,7 +112,7 @@ G_DEFINE_TYPE (GtkListBoxRow, gtk_list_box_row, GTK_TYPE_BIN)
 static void                 gtk_list_box_update_selected              (GtkListBox          *list_box,
                                                                        GtkListBoxRow       *row);
 static void                 gtk_list_box_apply_filter_all             (GtkListBox          *list_box);
-static void                 gtk_list_box_update_separator             (GtkListBox          *list_box,
+static void                 gtk_list_box_update_header             (GtkListBox          *list_box,
                                                                        GSequenceIter       *iter);
 static GSequenceIter *      gtk_list_box_get_next_visible             (GtkListBox          *list_box,
                                                                        GSequenceIter       *_iter);
@@ -226,7 +226,7 @@ gtk_list_box_init (GtkListBox *list_box)
   priv->activate_single_click = TRUE;
 
   priv->children = g_sequence_new (NULL);
-  priv->separator_hash = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
+  priv->header_hash = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
 }
 
 static void
@@ -283,14 +283,14 @@ gtk_list_box_finalize (GObject *obj)
     priv->sort_func_target_destroy_notify (priv->sort_func_target);
   if (priv->filter_func_target_destroy_notify != NULL)
     priv->filter_func_target_destroy_notify (priv->filter_func_target);
-  if (priv->update_separator_func_target_destroy_notify != NULL)
-    priv->update_separator_func_target_destroy_notify (priv->update_separator_func_target);
+  if (priv->update_header_func_target_destroy_notify != NULL)
+    priv->update_header_func_target_destroy_notify (priv->update_header_func_target);
 
   g_clear_object (&priv->adjustment);
   g_clear_object (&priv->drag_highlighted_row);
 
   g_sequence_free (priv->children);
-  g_hash_table_unref (priv->separator_hash);
+  g_hash_table_unref (priv->header_hash);
 
   G_OBJECT_CLASS (gtk_list_box_parent_class)->finalize (obj);
 }
@@ -476,7 +476,7 @@ gtk_list_box_get_selected_row (GtkListBox *list_box)
  * @list_box: An #GtkListBox.
  * @index: the index of the row
  *
- * Gets the n:th child in the list (not counting separators).
+ * Gets the n:th child in the list (not counting headers).
  *
  * Return value: (transfer none): The child #GtkWidget.
  *
@@ -714,26 +714,26 @@ gtk_list_box_set_filter_func (GtkListBox *list_box,
 }
 
 /**
- * gtk_list_box_set_separator_func:
+ * gtk_list_box_set_header_func:
  * @list_box: a #GtkListBox
- * @update_separator: (closure user_data) (allow-none): Callback that lets you add row separators
- * @user_data: user data passed to @update_separator
+ * @update_header: (closure user_data) (allow-none): Callback that lets you add row headers
+ * @user_data: user data passed to @update_header
  * @destroy: destroy notifier for @user_data
  *
- * By setting a separator function on the @list_box one can dynamically add separators
+ * By setting a header function on the @list_box one can dynamically add headers
  * in front of rows, depending on the contents of the row and its position in the list.
  * For instance, one could use it to add headers in front of the first item of a
  * new kind, in a list sorted by the kind.
  *
- * The @update_separator can look at the current separator widget using gtk_list_box_row_get_separator()
+ * The @update_header can look at the current header widget using gtk_list_box_row_get_header()
  * and either update the state of the widget as needed, or set a new one using
- * gtk_list_box_row_set_separator(). If no separator is needed, set the separator to %NULL.
+ * gtk_list_box_row_set_header(). If no header is needed, set the header to %NULL.
  *
- * Note that you may get many calls @update_separator to this for a particular row when e.g.
- * changing things that don't affect the separator. In this case it is important for performance
- * to not blindly replace an exisiting separator widh an identical one.
+ * Note that you may get many calls @update_header to this for a particular row when e.g.
+ * changing things that don't affect the header. In this case it is important for performance
+ * to not blindly replace an exisiting header widh an identical one.
  *
- * The @update_separator function will be called for each row after the call, and it will
+ * The @update_header function will be called for each row after the call, and it will
  * continue to be called each time a row changes (via gtk_list_box_row_changed()) and when
  * the row before changes (either by gtk_list_box_row_changed() on the previous row, or when
  * the previous row becomes a different row). It is also called for all rows when
@@ -742,21 +742,21 @@ gtk_list_box_set_filter_func (GtkListBox *list_box,
  * Since: 3.10
  */
 void
-gtk_list_box_set_separator_func (GtkListBox *list_box,
-                                 GtkListBoxUpdateSeparatorFunc update_separator,
-                                 gpointer user_data,
-                                 GDestroyNotify destroy)
+gtk_list_box_set_header_func (GtkListBox *list_box,
+                              GtkListBoxUpdateHeaderFunc update_header,
+                              gpointer user_data,
+                              GDestroyNotify destroy)
 {
   GtkListBoxPrivate *priv = list_box->priv;
 
   g_return_if_fail (list_box != NULL);
 
-  if (priv->update_separator_func_target_destroy_notify != NULL)
-    priv->update_separator_func_target_destroy_notify (priv->update_separator_func_target);
+  if (priv->update_header_func_target_destroy_notify != NULL)
+    priv->update_header_func_target_destroy_notify (priv->update_header_func_target);
 
-  priv->update_separator_func = update_separator;
-  priv->update_separator_func_target = user_data;
-  priv->update_separator_func_target_destroy_notify = destroy;
+  priv->update_header_func = update_header;
+  priv->update_header_func_target = user_data;
+  priv->update_header_func_target_destroy_notify = destroy;
   gtk_list_box_reseparate (list_box);
 }
 
@@ -820,7 +820,7 @@ gtk_list_box_resort (GtkListBox *list_box)
  * @list_box: a #GtkListBox
  *
  * Update the separators for all rows. Call this when result
- * of the separator function on the @list_box is changed due
+ * of the header function on the @list_box is changed due
  * to an external factor.
  *
  * Since: 3.10
@@ -836,7 +836,7 @@ gtk_list_box_reseparate (GtkListBox *list_box)
   for (iter = g_sequence_get_begin_iter (priv->children);
        !g_sequence_iter_is_end (iter);
        iter = g_sequence_iter_next (iter))
-    gtk_list_box_update_separator (list_box, iter);
+    gtk_list_box_update_header (list_box, iter);
 
   gtk_widget_queue_resize (GTK_WIDGET (list_box));
 }
@@ -897,9 +897,9 @@ gtk_list_box_got_row_changed (GtkListBox *list_box, GtkListBoxRow *row)
   if (gtk_widget_get_visible (GTK_WIDGET (list_box)))
     {
       next = gtk_list_box_get_next_visible (list_box, row->priv->iter);
-      gtk_list_box_update_separator (list_box, row->priv->iter);
-      gtk_list_box_update_separator (list_box, next);
-      gtk_list_box_update_separator (list_box, prev_next);
+      gtk_list_box_update_header (list_box, row->priv->iter);
+      gtk_list_box_update_header (list_box, next);
+      gtk_list_box_update_header (list_box, prev_next);
     }
 }
 
@@ -1406,13 +1406,13 @@ gtk_list_box_get_next_visible (GtkListBox *list_box, GSequenceIter* iter)
 }
 
 static void
-gtk_list_box_update_separator (GtkListBox *list_box, GSequenceIter* iter)
+gtk_list_box_update_header (GtkListBox *list_box, GSequenceIter* iter)
 {
   GtkListBoxPrivate *priv = list_box->priv;
   GtkListBoxRow *row;
   GSequenceIter *before_iter;
   GtkListBoxRow *before_row;
-  GtkWidget *old_separator;
+  GtkWidget *old_header;
 
   if (iter == NULL || g_sequence_iter_is_end (iter))
     return;
@@ -1429,40 +1429,40 @@ gtk_list_box_update_separator (GtkListBox *list_box, GSequenceIter* iter)
         g_object_ref (before_row);
     }
 
-  if (priv->update_separator_func != NULL &&
+  if (priv->update_header_func != NULL &&
       row_is_visible (row))
     {
-      old_separator = row->priv->separator;
-      if (old_separator)
-        g_object_ref (old_separator);
-      priv->update_separator_func (row,
-                                   before_row,
-                                   priv->update_separator_func_target);
-      if (old_separator != row->priv->separator)
+      old_header = row->priv->header;
+      if (old_header)
+        g_object_ref (old_header);
+      priv->update_header_func (row,
+                                before_row,
+                                priv->update_header_func_target);
+      if (old_header != row->priv->header)
         {
-          if (old_separator != NULL)
+          if (old_header != NULL)
             {
-              gtk_widget_unparent (old_separator);
-              g_hash_table_remove (priv->separator_hash, old_separator);
+              gtk_widget_unparent (old_header);
+              g_hash_table_remove (priv->header_hash, old_header);
             }
-          if (row->priv->separator != NULL)
+          if (row->priv->header != NULL)
             {
-              g_hash_table_insert (priv->separator_hash, row->priv->separator, row);
-              gtk_widget_set_parent (row->priv->separator, GTK_WIDGET (list_box));
-              gtk_widget_show (row->priv->separator);
+              g_hash_table_insert (priv->header_hash, row->priv->header, row);
+              gtk_widget_set_parent (row->priv->header, GTK_WIDGET (list_box));
+              gtk_widget_show (row->priv->header);
             }
           gtk_widget_queue_resize (GTK_WIDGET (list_box));
         }
-      if (old_separator)
-        g_object_unref (old_separator);
+      if (old_header)
+        g_object_unref (old_header);
     }
   else
     {
-      if (row->priv->separator != NULL)
+      if (row->priv->header != NULL)
         {
-          g_hash_table_remove (priv->separator_hash, row->priv->separator);
-          gtk_widget_unparent (row->priv->separator);
-          gtk_list_box_row_set_separator (row, NULL);
+          g_hash_table_remove (priv->header_hash, row->priv->header);
+          gtk_widget_unparent (row->priv->header);
+          gtk_list_box_row_set_header (row, NULL);
           gtk_widget_queue_resize (GTK_WIDGET (list_box));
         }
     }
@@ -1477,9 +1477,9 @@ gtk_list_box_row_visibility_changed (GtkListBox *list_box, GtkListBoxRow *row)
 {
   if (gtk_widget_get_visible (GTK_WIDGET (list_box)))
     {
-      gtk_list_box_update_separator (list_box, row->priv->iter);
-      gtk_list_box_update_separator (list_box,
-                                     gtk_list_box_get_next_visible (list_box, row->priv->iter));
+      gtk_list_box_update_header (list_box, row->priv->iter);
+      gtk_list_box_update_header (list_box,
+                                  gtk_list_box_get_next_visible (list_box, row->priv->iter));
     }
 }
 
@@ -1526,11 +1526,11 @@ gtk_list_box_real_remove (GtkContainer* container, GtkWidget* child)
 
   if (!GTK_IS_LIST_BOX_ROW (child))
     {
-      row = g_hash_table_lookup (priv->separator_hash, child);
+      row = g_hash_table_lookup (priv->header_hash, child);
       if (row != NULL)
         {
-          g_hash_table_remove (priv->separator_hash, child);
-          g_clear_object (&row->priv->separator);
+          g_hash_table_remove (priv->header_hash, child);
+          g_clear_object (&row->priv->header);
           gtk_widget_unparent (child);
           if (was_visible && gtk_widget_get_visible (GTK_WIDGET (list_box)))
             gtk_widget_queue_resize (GTK_WIDGET (list_box));
@@ -1549,11 +1549,11 @@ gtk_list_box_real_remove (GtkContainer* container, GtkWidget* child)
       return;
     }
 
-  if (row->priv->separator != NULL)
+  if (row->priv->header != NULL)
     {
-      g_hash_table_remove (priv->separator_hash, row->priv->separator);
-      gtk_widget_unparent (row->priv->separator);
-      g_clear_object (&row->priv->separator);
+      g_hash_table_remove (priv->header_hash, row->priv->header);
+      gtk_widget_unparent (row->priv->header);
+      g_clear_object (&row->priv->header);
     }
 
   if (row == priv->selected_row)
@@ -1579,7 +1579,7 @@ gtk_list_box_real_remove (GtkContainer* container, GtkWidget* child)
   gtk_widget_unparent (child);
   g_sequence_remove (row->priv->iter);
   if (gtk_widget_get_visible (GTK_WIDGET (list_box)))
-    gtk_list_box_update_separator (list_box, next);
+    gtk_list_box_update_header (list_box, next);
 
   if (was_visible && gtk_widget_get_visible (GTK_WIDGET (list_box)))
     gtk_widget_queue_resize (GTK_WIDGET (list_box));
@@ -1602,8 +1602,8 @@ gtk_list_box_real_forall_internal (GtkContainer* container,
     {
       row = g_sequence_get (iter);
       iter = g_sequence_iter_next (iter);
-      if (row->priv->separator != NULL && include_internals)
-        callback (row->priv->separator, callback_target);
+      if (row->priv->header != NULL && include_internals)
+        callback (row->priv->header, callback_target);
       callback (GTK_WIDGET (row), callback_target);
     }
 }
@@ -1670,9 +1670,9 @@ gtk_list_box_real_get_preferred_height_for_width (GtkWidget* widget, gint width,
       if (!row_is_visible (row))
         continue;
 
-      if (row->priv->separator != NULL)
+      if (row->priv->header != NULL)
         {
-          gtk_widget_get_preferred_height_for_width (row->priv->separator, width, &row_min, NULL);
+          gtk_widget_get_preferred_height_for_width (row->priv->header, width, &row_min, NULL);
           minimum_height += row_min;
         }
       gtk_widget_get_preferred_height_for_width (GTK_WIDGET (row), width,
@@ -1719,9 +1719,9 @@ gtk_list_box_real_get_preferred_width (GtkWidget* widget, gint* minimum_width_ou
       minimum_width = MAX (minimum_width, row_min);
       natural_width = MAX (natural_width, row_nat);
 
-      if (row->priv->separator != NULL)
+      if (row->priv->header != NULL)
         {
-          gtk_widget_get_preferred_width (row->priv->separator, &row_min, &row_nat);
+          gtk_widget_get_preferred_width (row->priv->header, &row_min, &row_nat);
           minimum_width = MAX (minimum_width, row_min);
           natural_width = MAX (natural_width, row_nat);
         }
@@ -1747,7 +1747,7 @@ gtk_list_box_real_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
   GtkListBox *list_box = GTK_LIST_BOX (widget);
   GtkListBoxPrivate *priv = list_box->priv;
   GtkAllocation child_allocation;
-  GtkAllocation separator_allocation;
+  GtkAllocation header_allocation;
   GtkListBoxRow *row;
   GdkWindow *window;
   GSequenceIter *iter;
@@ -1759,10 +1759,10 @@ gtk_list_box_real_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
   child_allocation.width = 0;
   child_allocation.height = 0;
 
-  separator_allocation.x = 0;
-  separator_allocation.y = 0;
-  separator_allocation.width = 0;
-  separator_allocation.height = 0;
+  header_allocation.x = 0;
+  header_allocation.y = 0;
+  header_allocation.width = 0;
+  header_allocation.height = 0;
 
   gtk_widget_set_allocation (GTK_WIDGET (list_box), allocation);
   window = gtk_widget_get_window (GTK_WIDGET (list_box));
@@ -1774,8 +1774,8 @@ gtk_list_box_real_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
   child_allocation.x = 0;
   child_allocation.y = 0;
   child_allocation.width = allocation->width;
-  separator_allocation.x = 0;
-  separator_allocation.width = allocation->width;
+  header_allocation.x = 0;
+  header_allocation.width = allocation->width;
 
   for (iter = g_sequence_get_begin_iter (priv->children);
        !g_sequence_iter_is_end (iter);
@@ -1789,14 +1789,14 @@ gtk_list_box_real_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
           continue;
         }
 
-      if (row->priv->separator != NULL)
+      if (row->priv->header != NULL)
         {
-          gtk_widget_get_preferred_height_for_width (row->priv->separator,
+          gtk_widget_get_preferred_height_for_width (row->priv->header,
                                                      allocation->width, &child_min, NULL);
-          separator_allocation.height = child_min;
-          separator_allocation.y = child_allocation.y;
-          gtk_widget_size_allocate (row->priv->separator,
-                                    &separator_allocation);
+          header_allocation.height = child_min;
+          header_allocation.y = child_allocation.y;
+          gtk_widget_size_allocate (row->priv->header,
+                                    &header_allocation);
           child_allocation.y += child_min;
         }
 
@@ -2397,45 +2397,45 @@ gtk_list_box_row_changed (GtkListBoxRow *row)
 }
 
 /**
- * gtk_list_box_row_get_separator:
+ * gtk_list_box_row_get_header:
  * @row: a #GtkListBoxRow
  *
- * Returns the current separator of the @row. This can be used
- * in a  @GtkListBoxUpdateSeparatorFunc to see if there is a separator
+ * Returns the current header of the @row. This can be used
+ * in a  @GtkListBoxUpdateSeparatorFunc to see if there is a header
  * set already, and if so to update the state of it.
  *
- * Return value: (transfer none): The current separator, or %NULL if none
+ * Return value: (transfer none): The current header, or %NULL if none
  *
  * Since: 3.10
  */
 GtkWidget *
-gtk_list_box_row_get_separator (GtkListBoxRow *row)
+gtk_list_box_row_get_header (GtkListBoxRow *row)
 {
-  return row->priv->separator;
+  return row->priv->header;
 }
 
 /**
- * gtk_list_box_row_set_separator:
+ * gtk_list_box_row_set_header:
  * @row: a #GtkListBoxRow
- * @separator: (allow-none):
+ * @header: (allow-none):
  *
- * Sets the current separator of the @row. This is only allowed to be called
+ * Sets the current header of the @row. This is only allowed to be called
  * from a @GtkListBoxUpdateSeparatorFunc. It will replace any existing
- * separator in the row, and be shown in front of the row in the listbox.
+ * header in the row, and be shown in front of the row in the listbox.
  *
  * Since: 3.10
  */
 void
-gtk_list_box_row_set_separator (GtkListBoxRow *row,
-                                GtkWidget *separator)
+gtk_list_box_row_set_header (GtkListBoxRow *row,
+                                GtkWidget *header)
 {
-  if (row->priv->separator)
-    g_object_unref (row->priv->separator);
+  if (row->priv->header)
+    g_object_unref (row->priv->header);
 
-  row->priv->separator = separator;
+  row->priv->header = header;
 
-  if (separator)
-    g_object_ref (separator);
+  if (header)
+    g_object_ref (header);
 }
 
 
@@ -2445,7 +2445,7 @@ gtk_list_box_row_finalize (GObject *obj)
   GtkListBoxRow *row = GTK_LIST_BOX_ROW (obj);
   GtkListBoxRowPrivate *priv = row->priv;
 
-  g_clear_object (&priv->separator);
+  g_clear_object (&priv->header);
 
   G_OBJECT_CLASS (gtk_list_box_row_parent_class)->finalize (obj);
 }

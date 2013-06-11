@@ -126,31 +126,31 @@ typedef gint (*GtkListBoxSortFunc) (GtkListBoxRow *row1,
                                     GtkListBoxRow *row2,
                                     gpointer       user_data);
 /**
- * GtkListBoxUpdateSeparatorFunc:
+ * GtkListBoxUpdateHeaderFunc:
  * @row: The row to update
  * @before: The row before @row, or %NULL if it is first.
  * @user_data: (closure): user data.
  *
  * Whenever @row changes or which row is before @row changes this is called, which
- * lets you update the separator on @row. You may remove or set a new one
- * via gtk_list_box_row_set_separator() or just change the state of the current
- * separator widget.
+ * lets you update the header on @row. You may remove or set a new one
+ * via gtk_list_box_row_set_header() or just change the state of the current
+ * header widget.
  *
  * Since: 3.10
  */
-typedef void (*GtkListBoxUpdateSeparatorFunc) (GtkListBoxRow *row,
-                                               GtkListBoxRow *before,
-                                               gpointer       user_data);
+typedef void (*GtkListBoxUpdateHeaderFunc) (GtkListBoxRow *row,
+                                            GtkListBoxRow *before,
+                                            gpointer       user_data);
 
 GDK_AVAILABLE_IN_3_10
 GType      gtk_list_box_row_get_type      (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_3_10
 GtkWidget* gtk_list_box_row_new           (void);
 GDK_AVAILABLE_IN_3_10
-GtkWidget* gtk_list_box_row_get_separator (GtkListBoxRow *row);
+GtkWidget* gtk_list_box_row_get_header    (GtkListBoxRow *row);
 GDK_AVAILABLE_IN_3_10
-void       gtk_list_box_row_set_separator (GtkListBoxRow *row,
-                                           GtkWidget     *separator);
+void       gtk_list_box_row_set_header    (GtkListBoxRow *row,
+                                           GtkWidget     *header);
 GDK_AVAILABLE_IN_3_10
 void       gtk_list_box_row_changed       (GtkListBoxRow *row);
 
@@ -184,8 +184,8 @@ void           gtk_list_box_set_filter_func              (GtkListBox            
                                                           gpointer                       user_data,
                                                           GDestroyNotify                 destroy);
 GDK_AVAILABLE_IN_3_10
-void           gtk_list_box_set_separator_func           (GtkListBox                    *list_box,
-                                                          GtkListBoxUpdateSeparatorFunc  update_separator,
+void           gtk_list_box_set_header_func              (GtkListBox                    *list_box,
+                                                          GtkListBoxUpdateHeaderFunc     update_header,
                                                           gpointer                       user_data,
                                                           GDestroyNotify                 destroy);
 GDK_AVAILABLE_IN_3_10

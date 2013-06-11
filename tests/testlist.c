@@ -60,7 +60,7 @@ row_new (const gchar* text, gint sort_id) {
 
 
 static void
-update_separator_cb (Row *row, Row *before, gpointer data)
+update_header_cb (Row *row, Row *before, gpointer data)
 {
   GtkWidget *hbox, *l, *b;
   GList *children;
@@ -69,29 +69,29 @@ update_separator_cb (Row *row, Row *before, gpointer data)
       (row->label != NULL &&
        strcmp (gtk_label_get_text (GTK_LABEL (row->label)), "blah3") == 0))
     {
-      /* Create separator if needed */
-      if (gtk_list_box_row_get_separator (GTK_LIST_BOX_ROW (row)) == NULL)
+      /* Create header if needed */
+      if (gtk_list_box_row_get_header (GTK_LIST_BOX_ROW (row)) == NULL)
         {
           hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-          l = gtk_label_new ("Separator");
+          l = gtk_label_new ("Header");
           gtk_container_add (GTK_CONTAINER (hbox), l);
           b = gtk_button_new_with_label ("button");
           gtk_container_add (GTK_CONTAINER (hbox), b);
           gtk_widget_show (l);
           gtk_widget_show (b);
-          gtk_list_box_row_set_separator (GTK_LIST_BOX_ROW (row), hbox);
+          gtk_list_box_row_set_header (GTK_LIST_BOX_ROW (row), hbox);
       }
 
-      hbox = gtk_list_box_row_get_separator(GTK_LIST_BOX_ROW (row));
+      hbox = gtk_list_box_row_get_header(GTK_LIST_BOX_ROW (row));
 
       children = gtk_container_get_children (GTK_CONTAINER (hbox));
       l = children->data;
       g_list_free (children);
-      gtk_label_set_text (GTK_LABEL (l), g_strdup_printf ("Separator %d", row->sort_id));
+      gtk_label_set_text (GTK_LABEL (l), g_strdup_printf ("Header %d", row->sort_id));
     }
   else
     {
-      gtk_list_box_row_set_separator(GTK_LIST_BOX_ROW (row), NULL);
+      gtk_list_box_row_set_header(GTK_LIST_BOX_ROW (row), NULL);
     }
 }
 
@@ -210,7 +210,7 @@ separate_clicked_cb (GtkButton *button,
 {
   GtkListBox *list = data;
 
-  gtk_list_box_set_separator_func (list, (GtkListBoxUpdateSeparatorFunc)update_separator_cb, NULL, NULL);
+  gtk_list_box_set_header_func (list, (GtkListBoxUpdateHeaderFunc)update_header_cb, NULL, NULL);
 }
 
 static void
@@ -219,7 +219,7 @@ unseparate_clicked_cb (GtkButton *button,
 {
   GtkListBox *list = data;
 
-  gtk_list_box_set_separator_func (list, NULL, NULL, NULL);
+  gtk_list_box_set_header_func (list, NULL, NULL, NULL);
 }
 
 static void
