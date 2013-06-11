@@ -815,6 +815,21 @@ gtk_list_box_resort (GtkListBox *list_box)
   gtk_widget_queue_resize (GTK_WIDGET (list_box));
 }
 
+static void
+gtk_list_box_do_reseparate (GtkListBox *list_box)
+{
+  GtkListBoxPrivate *priv = list_box->priv;
+  GSequenceIter *iter;
+
+  for (iter = g_sequence_get_begin_iter (priv->children);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter))
+    gtk_list_box_update_header (list_box, iter);
+
+  gtk_widget_queue_resize (GTK_WIDGET (list_box));
+}
+
+
 /**
  * gtk_list_box_reseparate:
  * @list_box: a #GtkListBox
@@ -828,17 +843,12 @@ gtk_list_box_resort (GtkListBox *list_box)
 void
 gtk_list_box_reseparate (GtkListBox *list_box)
 {
-  GtkListBoxPrivate *priv = list_box->priv;
-  GSequenceIter *iter;
-
   g_return_if_fail (list_box != NULL);
 
-  for (iter = g_sequence_get_begin_iter (priv->children);
-       !g_sequence_iter_is_end (iter);
-       iter = g_sequence_iter_next (iter))
-    gtk_list_box_update_header (list_box, iter);
+  if (!gtk_widget_get_visible (GTK_WIDGET (list_box)))
+    return;
 
-  gtk_widget_queue_resize (GTK_WIDGET (list_box));
+  gtk_list_box_do_reseparate (list_box);
 }
 
 /**
@@ -1186,7 +1196,7 @@ gtk_list_box_real_show (GtkWidget *widget)
 {
   GtkListBox * list_box = GTK_LIST_BOX (widget);
 
-  gtk_list_box_reseparate (list_box);
+  gtk_list_box_do_reseparate (list_box);
 
   GTK_WIDGET_CLASS (gtk_list_box_parent_class)->show (widget);
 }
