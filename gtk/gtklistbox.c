@@ -1836,8 +1836,6 @@ gtk_list_box_real_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
  * If a row has previously been highlighted via gtk_list_box_drag_highlight_row()
  * it will have the highlight removed.
  *
- * Return value: (transfer none): The selected #GtkWidget.
- *
  * Since: 3.10
  **/
 void
