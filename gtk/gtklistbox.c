@@ -54,6 +54,8 @@ struct _GtkListBoxPrivate
   GSequence *children;
   GHashTable *header_hash;
 
+  GtkWidget *placeholder;
+
   GtkListBoxSortFunc sort_func;
   gpointer sort_func_target;
   GDestroyNotify sort_func_target_destroy_notify;
@@ -556,6 +558,39 @@ gtk_list_box_select_row (GtkListBox *list_box, GtkListBoxRow *row)
 
   gtk_list_box_update_selected (list_box, row);
 }
+
+
+/**
+ * gtk_list_box_set_placeholder:
+ * @list_box: a #GtkListBox
+ * @placeholder: (allow-none): a #GtkWidget or %NULL
+ *
+ * Sets the placeholder widget that is shown in the list when
+ * it doesn't display any visible children.
+ *
+ * Since: 3.10
+ */
+void
+gtk_list_box_set_placeholder (GtkListBox *list_box, GtkWidget *placeholder)
+{
+  GtkListBoxPrivate *priv = list_box->priv;
+
+  if (priv->placeholder)
+    {
+      gtk_widget_unparent (priv->placeholder);
+      gtk_widget_queue_resize (GTK_WIDGET (list_box));
+    }
+
+  priv->placeholder = placeholder;
+
+  if (placeholder)
+    {
+      gtk_widget_set_parent (GTK_WIDGET (placeholder), GTK_WIDGET (list_box));
+      gtk_widget_set_child_visible (GTK_WIDGET (placeholder),
+                                    priv->n_visible_rows == 0);
+    }
+}
+
 
 /**
  * gtk_list_box_set_adjustment:
@@ -1315,12 +1350,26 @@ gtk_list_box_real_realize (GtkWidget* widget)
   gtk_widget_set_window (GTK_WIDGET (list_box), window); /* Passes ownership */
 }
 
+static void
+list_box_add_visible_rows (GtkListBox *list_box, int n)
+{
+  GtkListBoxPrivate *priv = list_box->priv;
+  int was_zero;
+
+  was_zero = priv->n_visible_rows == 0;
+  priv->n_visible_rows += n;
+
+  if (priv->placeholder &&
+      (was_zero || priv->n_visible_rows == 0))
+    gtk_widget_set_child_visible (GTK_WIDGET (priv->placeholder),
+                                  priv->n_visible_rows == 0);
+}
+
 /* Children are visible if they are shown by the app (visible)
    and not filtered out (child_visible) by the listbox */
 static void
 update_row_is_visible (GtkListBox *list_box, GtkListBoxRow *row)
 {
-  GtkListBoxPrivate *priv = list_box->priv;
   gboolean was_visible;
 
   was_visible = row->priv->visible;
@@ -1330,9 +1379,9 @@ update_row_is_visible (GtkListBox *list_box, GtkListBoxRow *row)
     gtk_widget_get_child_visible (GTK_WIDGET (row));
 
   if (was_visible && !row->priv->visible)
-    priv->n_visible_rows--;
+    list_box_add_visible_rows (list_box, -1);
   if (!was_visible && row->priv->visible)
-    priv->n_visible_rows++;
+    list_box_add_visible_rows (list_box, 1);
 }
 
 static gboolean
@@ -1563,7 +1612,7 @@ gtk_list_box_real_add (GtkContainer* container, GtkWidget *child)
   gtk_widget_set_child_visible (GTK_WIDGET (row), TRUE);
   row->priv->visible = gtk_widget_get_visible (GTK_WIDGET (row));
   if (row->priv->visible)
-      priv->n_visible_rows++;
+    list_box_add_visible_rows (list_box, 1);
   gtk_list_box_apply_filter (list_box, row);
   if (gtk_widget_get_visible (GTK_WIDGET (list_box)))
     {
@@ -1611,7 +1660,7 @@ gtk_list_box_real_remove (GtkContainer* container, GtkWidget* child)
     }
 
   if (row->priv->visible)
-    priv->n_visible_rows--;
+    list_box_add_visible_rows (list_box, -1);
 
   if (row->priv->header != NULL)
     {
@@ -1660,6 +1709,9 @@ gtk_list_box_real_forall_internal (GtkContainer* container,
   GtkListBoxPrivate *priv = list_box->priv;
   GSequenceIter *iter;
   GtkListBoxRow *row;
+
+  if (priv->placeholder != NULL && include_internals)
+    callback (priv->placeholder, callback_target);
 
   iter = g_sequence_get_begin_iter (priv->children);
   while (!g_sequence_iter_is_end (iter))
@@ -1723,6 +1775,10 @@ gtk_list_box_real_get_preferred_height_for_width (GtkWidget* widget, gint width,
 
   minimum_height = 0;
 
+  if (priv->placeholder != NULL && gtk_widget_get_child_visible (priv->placeholder))
+    gtk_widget_get_preferred_height_for_width (priv->placeholder, width,
+                                               &minimum_height, NULL);
+
   for (iter = g_sequence_get_begin_iter (priv->children);
        !g_sequence_iter_is_end (iter);
        iter = g_sequence_iter_next (iter))
@@ -1770,6 +1826,10 @@ gtk_list_box_real_get_preferred_width (GtkWidget* widget, gint* minimum_width_ou
 
   minimum_width = 0;
   natural_width = 0;
+
+  if (priv->placeholder != NULL && gtk_widget_get_child_visible (priv->placeholder))
+    gtk_widget_get_preferred_width (priv->placeholder,
+                                    &minimum_width, &natural_width);
 
   for (iter = g_sequence_get_begin_iter (priv->children);
        !g_sequence_iter_is_end (iter);
@@ -1840,6 +1900,17 @@ gtk_list_box_real_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
   child_allocation.width = allocation->width;
   header_allocation.x = 0;
   header_allocation.width = allocation->width;
+
+  if (priv->placeholder != NULL && gtk_widget_get_child_visible (priv->placeholder))
+    {
+      gtk_widget_get_preferred_height_for_width (priv->placeholder,
+                                                 allocation->width, &child_min, NULL);
+      header_allocation.height = child_min;
+      header_allocation.y = child_allocation.y;
+      gtk_widget_size_allocate (priv->placeholder,
+                                &header_allocation);
+      child_allocation.y += child_min;
+    }
 
   for (iter = g_sequence_get_begin_iter (priv->children);
        !g_sequence_iter_is_end (iter);

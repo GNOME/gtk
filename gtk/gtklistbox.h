@@ -169,6 +169,9 @@ GDK_AVAILABLE_IN_3_10
 void           gtk_list_box_select_row                   (GtkListBox                    *list_box,
                                                           GtkListBoxRow                 *row);
 GDK_AVAILABLE_IN_3_10
+void           gtk_list_box_set_placeholder              (GtkListBox                    *list_box,
+                                                          GtkWidget                     *placeholder);
+GDK_AVAILABLE_IN_3_10
 void           gtk_list_box_set_adjustment               (GtkListBox                    *list_box,
                                                           GtkAdjustment                 *adjustment);
 GDK_AVAILABLE_IN_3_10
