@@ -206,6 +206,8 @@ GDK_AVAILABLE_IN_3_10
 void           gtk_list_box_set_activate_on_single_click (GtkListBox                    *list_box,
                                                           gboolean                       single);
 GDK_AVAILABLE_IN_3_10
+gboolean       gtk_list_box_get_activate_on_single_click (GtkListBox                    *list_box);
+GDK_AVAILABLE_IN_3_10
 void           gtk_list_box_drag_unhighlight_row         (GtkListBox                    *list_box);
 GDK_AVAILABLE_IN_3_10
 void           gtk_list_box_drag_highlight_row           (GtkListBox                    *list_box,

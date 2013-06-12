@@ -979,6 +979,27 @@ gtk_list_box_set_activate_on_single_click (GtkListBox *list_box,
   g_object_notify_by_pspec (G_OBJECT (list_box), properties[PROP_ACTIVATE_ON_SINGLE_CLICK]);
 }
 
+/**
+ * gtk_list_box_get_activate_on_single_click:
+ * @list_box: a #GtkListBox
+ *
+ * Returns whether rows activate on single clicks.
+ *
+ * Returns: %TRUE if rows are activated on single click, %FALSE otherwise
+ *
+ * Since: 3.10
+ */
+gboolean
+gtk_list_box_get_activate_on_single_click (GtkListBox *list_box)
+{
+  GtkListBoxPrivate *priv = list_box->priv;
+
+  g_return_val_if_fail (list_box != NULL, FALSE);
+
+  return priv->activate_single_click;
+}
+
+
 static void
 gtk_list_box_add_move_binding (GtkBindingSet *binding_set,
                                guint keyval,
