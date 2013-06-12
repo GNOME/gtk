@@ -197,6 +197,24 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_BUTTON "button"
 
 /**
+ * GTK_STYLE_CLASS_LIST:
+ *
+ * A CSS class to match lists.
+ *
+ * This is used by #GtkListBox.
+ */
+#define GTK_STYLE_CLASS_LIST "list"
+
+/**
+ * GTK_STYLE_CLASS_LIST_ROW:
+ *
+ * A CSS class to match list rowss.
+ *
+ * This is used by #GtkListBoxRow.
+ */
+#define GTK_STYLE_CLASS_LIST_ROW "list-row"
+
+/**
  * GTK_STYLE_CLASS_CALENDAR:
  *
  * A CSS class to match calendars.

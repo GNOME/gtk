@@ -221,6 +221,7 @@ static void
 gtk_list_box_init (GtkListBox *list_box)
 {
   GtkListBoxPrivate *priv;
+  GtkStyleContext *context;
 
   list_box->priv = priv =
     G_TYPE_INSTANCE_GET_PRIVATE (list_box, GTK_TYPE_LIST_BOX, GtkListBoxPrivate);
@@ -232,6 +233,9 @@ gtk_list_box_init (GtkListBox *list_box)
 
   priv->children = g_sequence_new (NULL);
   priv->header_hash = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, NULL);
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (list_box));
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_LIST);
 }
 
 static void
@@ -2208,12 +2212,16 @@ static void
 gtk_list_box_row_init (GtkListBoxRow *row)
 {
   GtkListBoxRowPrivate *priv;
+  GtkStyleContext *context;
 
   row->priv = priv =
     G_TYPE_INSTANCE_GET_PRIVATE (row, GTK_TYPE_LIST_BOX_ROW, GtkListBoxRowPrivate);
 
   gtk_widget_set_can_focus (GTK_WIDGET (row), TRUE);
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (row), TRUE);
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (row));
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_LIST_ROW);
 }
 
 static void
