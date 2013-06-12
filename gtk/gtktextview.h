@@ -106,6 +106,8 @@ struct _GtkTextViewClass
   /* overwrite */
   void (* toggle_overwrite) (GtkTextView *text_view);
 
+  GtkTextBuffer * (* create_buffer) (GtkTextView *text_view);
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
@@ -114,7 +116,6 @@ struct _GtkTextViewClass
   void (*_gtk_reserved5) (void);
   void (*_gtk_reserved6) (void);
   void (*_gtk_reserved7) (void);
-  void (*_gtk_reserved8) (void);
 };
 
 GDK_AVAILABLE_IN_ALL

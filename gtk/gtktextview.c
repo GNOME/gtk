@@ -357,6 +357,8 @@ static void gtk_text_view_select_all           (GtkWidget        *widget,
                                                 gboolean          select);
 static gboolean get_middle_click_paste         (GtkTextView      *text_view);
 
+static GtkTextBuffer* gtk_text_view_create_buffer (GtkTextView   *text_view);
+
 /* Source side drag signals */
 static void gtk_text_view_drag_begin       (GtkWidget        *widget,
                                             GdkDragContext   *context);
@@ -688,6 +690,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   klass->copy_clipboard = gtk_text_view_copy_clipboard;
   klass->paste_clipboard = gtk_text_view_paste_clipboard;
   klass->toggle_overwrite = gtk_text_view_toggle_overwrite;
+  klass->create_buffer = gtk_text_view_create_buffer;
 
   /*
    * Properties
@@ -1716,12 +1719,18 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
 }
 
 static GtkTextBuffer*
+gtk_text_view_create_buffer (GtkTextView *text_view)
+{
+  return gtk_text_buffer_new (NULL);
+}
+
+static GtkTextBuffer*
 get_buffer (GtkTextView *text_view)
 {
   if (text_view->priv->buffer == NULL)
     {
       GtkTextBuffer *b;
-      b = gtk_text_buffer_new (NULL);
+      b = GTK_TEXT_VIEW_GET_CLASS (text_view)->create_buffer (text_view);
       gtk_text_view_set_buffer (text_view, b);
       g_object_unref (b);
     }
