@@ -1242,10 +1242,10 @@ gtk_list_box_real_button_release_event (GtkWidget *widget,
             gtk_list_box_select_and_activate (list_box, priv->active_row);
           else
             gtk_list_box_update_selected (list_box, priv->active_row);
+
+          gtk_widget_unset_state_flags (GTK_WIDGET (priv->active_row),
+                                        GTK_STATE_FLAG_ACTIVE);
         }
-      if (priv->active_row_active)
-        gtk_widget_unset_state_flags (GTK_WIDGET (priv->active_row),
-                                      GTK_STATE_FLAG_ACTIVE);
       priv->active_row = NULL;
       priv->active_row_active = FALSE;
       gtk_widget_queue_draw (GTK_WIDGET (list_box));
