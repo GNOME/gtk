@@ -1233,23 +1233,29 @@ gtk_list_box_real_button_release_event (GtkWidget *widget,
   GtkListBox *list_box = GTK_LIST_BOX (widget);
   GtkListBoxPrivate *priv = list_box->priv;
 
+  /* Take a ref to protect against reentrancy (i.e. the activation may destroy the widget) */
+  g_object_ref (list_box);
+
   if (event->button == GDK_BUTTON_PRIMARY)
     {
       if (priv->active_row != NULL &&
           priv->active_row_active)
         {
+          gtk_widget_unset_state_flags (GTK_WIDGET (priv->active_row),
+                                        GTK_STATE_FLAG_ACTIVE);
+
           if (priv->activate_single_click)
             gtk_list_box_select_and_activate (list_box, priv->active_row);
           else
             gtk_list_box_update_selected (list_box, priv->active_row);
 
-          gtk_widget_unset_state_flags (GTK_WIDGET (priv->active_row),
-                                        GTK_STATE_FLAG_ACTIVE);
         }
       priv->active_row = NULL;
       priv->active_row_active = FALSE;
       gtk_widget_queue_draw (GTK_WIDGET (list_box));
   }
+
+  g_object_unref (list_box);
 
   return FALSE;
 }
