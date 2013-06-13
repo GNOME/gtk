@@ -75,6 +75,7 @@ libgdkwin32include_HEADERS =	\
 	gdkwin32displaymanager.h\
 	gdkwin32dnd.h		\
 	gdkwin32keys.h		\
+	gdkwin32misc.h		\
 	gdkwin32screen.h	\
 	gdkwin32window.h
 

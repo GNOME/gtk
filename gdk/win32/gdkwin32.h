@@ -34,82 +34,8 @@
 #include <gdk/win32/gdkwin32keys.h>
 #include <gdk/win32/gdkwin32screen.h>
 #include <gdk/win32/gdkwin32window.h>
+#include <gdk/win32/gdkwin32misc.h>
 
 #undef __GDKWIN32_H_INSIDE__
-
-#include <gdk/gdkprivate.h>
-
-#ifndef STRICT
-#define STRICT			/* We want strict type checks */
-#endif
-#include <windows.h>
-#include <commctrl.h>
-
-G_BEGIN_DECLS
-
-#ifdef INSIDE_GDK_WIN32
-
-#include "gdkprivate-win32.h"
-
-#define GDK_WINDOW_HWND(win)          (GDK_WINDOW_IMPL_WIN32(win->impl)->handle)
-#else
-/* definition for exported 'internals' go here */
-#define GDK_WINDOW_HWND(d) (gdk_win32_window_get_handle (d))
-
-#endif
-
-/* These need to be here so gtkstatusicon.c can pick them up if needed. */
-#ifndef WM_XBUTTONDOWN
-#define WM_XBUTTONDOWN 0x020B
-#endif
-#ifndef WM_XBUTTONUP
-#define WM_XBUTTONUP 0x020C
-#endif
-#ifndef GET_XBUTTON_WPARAM
-#define GET_XBUTTON_WPARAM(w) (HIWORD(w))
-#endif
-#ifndef XBUTTON1
-#define XBUTTON1 1
-#endif
-#ifndef XBUTTON2
-#define XBUTTON2 2
-#endif
-
-
-/* Return true if the GdkWindow is a win32 implemented window */
-GDK_AVAILABLE_IN_ALL
-gboolean      gdk_win32_window_is_win32 (GdkWindow *window);
-GDK_AVAILABLE_IN_ALL
-HWND          gdk_win32_window_get_impl_hwnd (GdkWindow *window);
-
-/* Return the Gdk* for a particular HANDLE */
-GDK_AVAILABLE_IN_ALL
-gpointer      gdk_win32_handle_table_lookup (HWND handle);
-/* Translate from window to Windows handle */
-GDK_AVAILABLE_IN_ALL
-HGDIOBJ       gdk_win32_window_get_handle (GdkWindow *window);
-
-GDK_AVAILABLE_IN_ALL
-void          gdk_win32_selection_add_targets (GdkWindow  *owner,
-					       GdkAtom     selection,
-					       gint	   n_targets,
-					       GdkAtom    *targets);
-
-/* For internal GTK use only */
-GDK_AVAILABLE_IN_ALL
-GdkPixbuf    *gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon);
-GDK_AVAILABLE_IN_ALL
-HICON         gdk_win32_pixbuf_to_hicon_libgtk_only (GdkPixbuf *pixbuf);
-GDK_AVAILABLE_IN_ALL
-void          gdk_win32_set_modal_dialog_libgtk_only (HWND window);
-
-GDK_AVAILABLE_IN_ALL
-GdkWindow *   gdk_win32_window_foreign_new_for_display (GdkDisplay *display,
-                                                        HWND        anid);
-GDK_AVAILABLE_IN_ALL
-GdkWindow *   gdk_win32_window_lookup_for_display (GdkDisplay *display,
-                                                   HWND        anid);
-
-G_END_DECLS
 
 #endif /* __GDK_WIN32_H__ */
