@@ -39,9 +39,6 @@
 #include <errno.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netinet/tcp.h>
 
 static void   gdk_broadway_display_dispose            (GObject            *object);
 static void   gdk_broadway_display_finalize           (GObject            *object);

@@ -39,8 +39,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <netinet/in.h>
-#include <unistd.h>
 
 /* Forward declarations */
 static void     gdk_window_broadway_set_background     (GdkWindow      *window,
