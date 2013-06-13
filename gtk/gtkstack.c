@@ -895,11 +895,11 @@ set_visible_child (GtkStack               *stack,
 
       if (transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT)
 	{
-	  transition_type = i_first ? GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT : GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT;
+	  transition_type = i_first ? GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT : GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT;
 	}
       if (transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN)
 	{
-	  transition_type = i_first ? GTK_STACK_TRANSITION_TYPE_SLIDE_UP : GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN;
+	  transition_type = i_first ? GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN : GTK_STACK_TRANSITION_TYPE_SLIDE_UP;
 	}
     }
 
