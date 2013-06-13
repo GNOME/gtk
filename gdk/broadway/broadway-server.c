@@ -20,9 +20,15 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <sys/types.h>
+#ifdef G_OS_UNIX
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
+#endif
+#ifdef G_OS_WIN32
+#include <windows.h>
+#include <string.h>
+#endif
 
 typedef struct BroadwayInput BroadwayInput;
 typedef struct BroadwayWindow BroadwayWindow;
@@ -861,6 +867,73 @@ broadway_server_block_for_input (BroadwayServer *server, char op,
   }
 }
 
+static void *
+map_named_shm (char *name, gsize size)
+{
+#ifdef G_OS_UNIX
+
+  int fd;
+  void *ptr;
+
+  fd = shm_open(name, O_RDONLY, 0600);
+  if (fd == -1)
+    {
+      perror ("Failed to shm_open");
+      return NULL;
+    }
+
+  ptr = mmap(0, size, PROT_READ, MAP_SHARED, fd, 0);
+
+  (void) close(fd);
+
+  shm_unlink (name);
+
+  return ptr;
+
+#elif defined(G_OS_WIN32)
+
+  int fd;
+  void *ptr;
+  char *shmpath;
+  void *map = ((void *)-1);
+
+  if (*name == '/')
+    ++name;
+  shmpath = g_build_filename (g_get_tmp_dir (), name, NULL);
+
+  fd = open(shmpath, O_RDONLY, 0600);
+  if (fd == -1)
+    {
+      g_free (shmpath);
+      perror ("Failed to shm_open");
+      return NULL;
+    }
+
+  if (size == 0)
+    ptr = map;
+  else
+    {
+      HANDLE h, fm;
+      h = (HANDLE)_get_osfhandle (fd);
+      fm = CreateFileMapping (h, NULL, PAGE_READONLY, 0, (DWORD)size, NULL);
+      ptr = MapViewOfFile (fm, FILE_MAP_READ, 0, 0, (size_t)size);
+      CloseHandle (fm);
+    }
+
+  (void) close(fd);
+
+  remove (shmpath);
+  g_free (shmpath);
+
+  return ptr;
+
+#else
+#error "No shm mapping supported"
+
+  return NULL;
+#endif
+}
+
 static char *
 parse_line (char *line, char *key)
 {
@@ -877,6 +950,7 @@ parse_line (char *line, char *key)
     p++;
   return p;
 }
+
 static void
 send_error (HttpRequest *request,
 	    int error_code,
@@ -1835,7 +1909,11 @@ static void
 shm_data_unmap (void *_data)
 {
   ShmSurfaceData *data = _data;
+#ifdef G_OS_UNIX
   munmap (data->data, data->data_size);
+#elif defined(G_OS_WIN32)
+  UnmapViewOfFile (data->data);
+#endif
   g_free (data);
 }
 
@@ -1851,7 +1929,6 @@ broadway_server_open_surface (BroadwayServer *server,
   cairo_surface_t *surface;
   gsize size;
   void *ptr;
-  int fd;
 
   window = g_hash_table_lookup (server->id_ht,
 				GINT_TO_POINTER (id));
@@ -1864,17 +1941,7 @@ broadway_server_open_surface (BroadwayServer *server,
 
   size = width * height * sizeof (guint32);
 
-  fd = shm_open(name, O_RDONLY, 0600);
-  if (fd == -1)
-    {
-      perror ("Failed to shm_open");
-      return NULL;
-    }
-
-  ptr = mmap(0, size, PROT_READ, MAP_SHARED, fd, 0);
-  (void) close(fd);
-
-  shm_unlink (name);
+  ptr = map_named_shm (name, size);
 
   if (ptr == NULL)
     return NULL;

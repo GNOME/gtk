@@ -80,7 +80,11 @@ broadwayd_SOURCES = \
 	broadway-output.h		\
 	broadway-output.c
 
+if OS_WIN32
+broadwayd_LDADD = $(GDK_DEP_LIBS) -lcrypt -lws2_32
+else
 broadwayd_LDADD = $(GDK_DEP_LIBS) -lrt -lcrypt
+endif
 
 MAINTAINERCLEANFILES = $(broadway_built_sources)
 EXTRA_DIST += $(broadway_built_sources)

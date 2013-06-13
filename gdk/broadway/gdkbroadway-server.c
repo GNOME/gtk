@@ -20,6 +20,9 @@
 #include <errno.h>
 #include <unistd.h>
 #include <sys/types.h>
+#ifdef G_OS_WIN32
+#include <windows.h>
+#endif
 #include "gdkintl.h"
 
 typedef struct BroadwayInput BroadwayInput;
@@ -538,6 +541,85 @@ _gdk_broadway_server_window_translate (GdkBroadwayServer *server,
   return TRUE;
 }
 
+static void *
+map_named_shm (char *name, gsize size)
+{
+#ifdef G_OS_UNIX
+
+  int fd;
+  void *ptr;
+  int res;
+
+  fd = shm_open(name, O_RDWR|O_CREAT|O_EXCL, 0600);
+  if (fd == -1)
+    {
+      if (errno != EEXIST)
+	g_error ("Unable to allocate shared mem for window");
+      return NULL;
+    }
+
+  res = ftruncate (fd, size);
+  g_assert (res != -1);
+
+  res = posix_fallocate (fd, 0, size);
+  if (res != 0)
+    {
+      shm_unlink (name);
+      g_error ("Not enough shared memory for window surface");
+    }
+  
+  ptr = mmap(0, size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
+
+  (void) close(fd);
+
+  return ptr;
+
+#elif defined(G_OS_WIN32)
+
+  int fd;
+  void *ptr;
+  char *shmpath;
+  void *map = ((void *)-1);
+  int res;
+
+  if (*name == '/')
+    ++name;
+  shmpath = g_build_filename (g_get_tmp_dir (), name, NULL);
+
+  fd = open(shmpath, O_RDWR|O_CREAT|O_EXCL, 0600);
+  g_free (shmpath);
+  if (fd == -1)
+    {
+      if (errno != EEXIST)
+	g_error ("Unable to allocate shared mem for window");
+      return NULL;
+    }
+
+  res = ftruncate (fd, size);
+  g_assert (res != -1);
+  
+  if (size == 0)
+    ptr = map;
+  else
+    {
+      HANDLE h, fm;
+      h = (HANDLE)_get_osfhandle (fd);
+      fm = CreateFileMapping (h, NULL, PAGE_READWRITE, 0, (DWORD)size, NULL);
+      ptr = MapViewOfFile (fm, FILE_MAP_WRITE, 0, 0, (size_t)size);
+      CloseHandle (fm);
+    }
+
+  (void) close(fd);
+
+  return ptr;
+
+#else
+#error "No shm mapping supported"
+
+  return NULL;
+#endif
+}
+
 static char
 make_valid_fs_char (char c)
 {
@@ -547,11 +629,12 @@ make_valid_fs_char (char c)
 }
 
 /* name must have at least space for 34 bytes */
-static int
-create_random_shm (char *name)
+static gpointer
+create_random_shm (char *name, gsize size)
 {
   guint32 r;
-  int i, o, fd;
+  int i, o;
+  gpointer ptr;
 
   while (TRUE)
     {
@@ -570,18 +653,11 @@ create_random_shm (char *name)
 	  name[o++] = make_valid_fs_char ((r >> 24) & 0xff);
 	}
       name[o++] = 0;
-  
-      fd = shm_open(name, O_RDWR|O_CREAT|O_EXCL, 0600);
-      if (fd >= 0)
-	return fd;
 
-      if (errno != EEXIST)
-	{
-	  g_printerr ("Unable to allocate shared mem for window");
-	  exit (1);
-	}
+      ptr = map_named_shm (name, size);
+      if (ptr)
+	return ptr;
     }
-
 }
 
 static const cairo_user_data_key_t gdk_broadway_shm_cairo_key;
@@ -597,8 +673,26 @@ shm_data_destroy (void *_data)
 {
   BroadwayShmSurfaceData *data = _data;
 
+#ifdef G_OS_UNIX
+
   munmap (data->data, data->data_size);
   shm_unlink (data->name);
+
+#elif defined(G_OS_WIN32)
+
+  char *name = data->name;
+  char *shmpath;
+
+  if (*name == '/')
+    ++name;
+
+  shmpath = g_build_filename (g_get_tmp_dir (), name, NULL);
+  UnmapViewOfFile (data->data);
+  remove (shmpath);
+  g_free (shmpath);
+
+#endif
+
   g_free (data);
 }
 
@@ -608,26 +702,10 @@ _gdk_broadway_server_create_surface (int                 width,
 {
   BroadwayShmSurfaceData *data;
   cairo_surface_t *surface;
-  int res;
-  int fd;
 
   data = g_new (BroadwayShmSurfaceData, 1);
   data->data_size = width * height * sizeof (guint32);
-  
-  fd = create_random_shm (data->name);
-
-  res = ftruncate (fd, data->data_size);
-  g_assert (res != -1);
-
-  res = posix_fallocate (fd, 0, data->data_size);
-  if (res != 0)
-    {
-      shm_unlink (data->name);
-      g_error ("Not enough shared memory for window surface");
-    }
-
-  data->data = mmap(0, data->data_size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0); 
-  (void) close(fd);
+  data->data = create_random_shm (data->name, data->data_size);
 
   surface = cairo_image_surface_create_for_data ((guchar *)data->data,
 						 CAIRO_FORMAT_RGB24, width, height, width * sizeof (guint32));
