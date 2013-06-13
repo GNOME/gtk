@@ -56,6 +56,8 @@
  * @GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT: Slide from right to left
  * @GTK_STACK_TRANSITION_TYPE_SLIDE_UP: Slide from bottom up
  * @GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN: Slide from top down
+ * @GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT: Slide from left or right according to the children order
+ * @GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN: Slide from top down or bottom up according to the order
  *
  * These enumeration values describe the possible transitions
  * between pages in a #GtkStack widget.
@@ -869,6 +871,37 @@ set_visible_child (GtkStack               *stack,
 
   if (child_info)
     gtk_widget_set_child_visible (child_info->widget, TRUE);
+
+  if ((child_info == NULL || priv->last_visible_child == NULL) &&
+      (transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT ||
+       transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN))
+    {
+      transition_type = GTK_STACK_TRANSITION_TYPE_NONE;
+    }
+  else if (transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT ||
+	   transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN)
+    {
+      gboolean i_first = FALSE;
+      for (l = priv->children; l != NULL; l = g_list_next (l))
+        {
+	  if (child_info == l->data)
+	    {
+	      i_first = TRUE;
+	      break;
+	    }
+	  if (priv->last_visible_child == l->data)
+	    break;
+        }
+
+      if (transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT)
+	{
+	  transition_type = i_first ? GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT : GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT;
+	}
+      if (transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN)
+	{
+	  transition_type = i_first ? GTK_STACK_TRANSITION_TYPE_SLIDE_UP : GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN;
+	}
+    }
 
   gtk_widget_queue_resize (GTK_WIDGET (stack));
   gtk_widget_queue_draw (GTK_WIDGET (stack));

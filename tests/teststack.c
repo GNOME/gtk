@@ -215,6 +215,8 @@ main (gint argc,
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "SLIDE_LEFT");
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "SLIDE_UP");
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "SLIDE_DOWN");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "SLIDE_LEFT_RIGHT");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "SLIDE_UP_DOWN");
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
 
   gtk_container_add (GTK_CONTAINER (hbox), combo);
