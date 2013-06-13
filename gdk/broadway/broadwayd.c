@@ -437,12 +437,14 @@ main (int argc, char *argv[])
   GError *error = NULL;
   GOptionContext *context;
   GMainLoop *loop;
+  GInetAddress *inet;
   GSocketAddress *address;
   GSocketService *listener;
-  char *path, *base;
+  char *path, *basename;
   char *http_address = NULL;
   int http_port = 0;
-  int display = 1;
+  char *display;
+  int port = 0;
   const GOptionEntry entries[] = {
     { "port", 'p', 0, G_OPTION_ARG_INT, &http_port, "Httpd port", "PORT" },
     { "address", 'a', 0, G_OPTION_ARG_STRING, &http_address, "Ip address to bind to ", "ADDRESS" },
@@ -457,6 +459,7 @@ main (int argc, char *argv[])
       exit (1);
     }
 
+  display = NULL;
   if (argc > 1)
     {
       if (*argv[1] != ':')
@@ -464,16 +467,49 @@ main (int argc, char *argv[])
 	  g_printerr ("Usage broadwayd [:DISPLAY]\n");
 	  exit (1);
 	}
-      display = strtol(argv[1]+1, NULL, 10);
-      if (display == 0)
-	{
-	  g_printerr ("Failed to parse display num %s\n", argv[1]);
-	  exit (1);
-	}
+      display = argv[1];
+    }
+
+  if (display == NULL)
+    {
+#ifdef G_OS_UNIX
+      display = ":0";
+#else
+      display = ":tcp"
+#endif
+    }
+
+  if (g_str_has_prefix (display, ":tcp"))
+    {
+      port = strtol (display + strlen (":tcp"), NULL, 10);
+
+      inet = g_inet_address_new_from_string ("127.0.0.1");
+      g_print ("Listening on 127.0.0.1:%d\n", port + 9090);
+      address = g_inet_socket_address_new (inet, port + 9090);
+      g_object_unref (inet);
+    }
+#ifdef G_OS_UNIX
+  else if (display[0] == ':' && g_ascii_isdigit(display[1]))
+    {
+      port = strtol (display + strlen (":"), NULL, 10);
+      basename = g_strdup_printf ("broadway%d.socket", port + 1);
+      path = g_build_filename (g_get_user_runtime_dir (), basename, NULL);
+      g_free (basename);
+
+      g_print ("Listening on %s\n", path);
+      address = g_unix_socket_address_new_with_type (path, -1,
+						     G_UNIX_SOCKET_ADDRESS_ABSTRACT);
+      g_free (path);
+    }
+#endif
+  else
+    {
+      g_printerr ("Failed to parse display %s\n", display);
+      exit (1);
     }
 
   if (http_port == 0)
-    http_port = 8080 + (display - 1);
+    http_port = 8080 + port;
 
   server = broadway_server_new (http_address, http_port, &error);
   if (server == NULL)
@@ -481,14 +517,6 @@ main (int argc, char *argv[])
       g_printerr ("%s\n", error->message);
       return 1;
     }
-
-  base = g_strdup_printf ("broadway%d.socket", display);
-  path = g_build_filename (g_get_user_runtime_dir (), base, NULL);
-  g_free (base);
-  g_print ("Listening on %s\n", path);
-  address = g_unix_socket_address_new_with_type (path, -1,
-						 G_UNIX_SOCKET_ADDRESS_ABSTRACT);
-  g_free (path);
 
   listener = g_socket_service_new ();
   if (!g_socket_listener_add_address (G_SOCKET_LISTENER (listener),
@@ -503,7 +531,6 @@ main (int argc, char *argv[])
       return 1;
     }
   g_object_unref (address);
-
   g_signal_connect (listener, "incoming", G_CALLBACK (incoming_client), NULL);
 
   g_socket_service_start (G_SOCKET_SERVICE (listener));

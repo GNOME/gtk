@@ -14,7 +14,7 @@ typedef struct _GdkBroadwayServerClass GdkBroadwayServerClass;
 #define GDK_IS_BROADWAY_SERVER_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_BROADWAY_SERVER))
 #define GDK_BROADWAY_SERVER_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_BROADWAY_SERVER, GdkBroadwayServerClass))
 
-GdkBroadwayServer *_gdk_broadway_server_new                      (int                 port,
+GdkBroadwayServer *_gdk_broadway_server_new                      (const char         *display,
 								  GError            **error);
 void               _gdk_broadway_server_flush                    (GdkBroadwayServer  *server);
 void               _gdk_broadway_server_sync                     (GdkBroadwayServer  *server);

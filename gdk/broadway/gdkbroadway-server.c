@@ -20,6 +20,7 @@
 #include <errno.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include "gdkintl.h"
 
 typedef struct BroadwayInput BroadwayInput;
 
@@ -81,31 +82,64 @@ _gdk_broadway_server_get_next_serial (GdkBroadwayServer *server)
 }
 
 GdkBroadwayServer *
-_gdk_broadway_server_new (int port, GError **error)
+_gdk_broadway_server_new (const char *display, GError **error)
 {
   GdkBroadwayServer *server;
   char *basename;
   GSocketClient *client;
   GSocketConnection *connection;
+  GInetAddress *inet;
   GSocketAddress *address;
   GPollableInputStream *pollable;
   GInputStream *in;
   GSource *source;
   char *path;
+  char *local_socket_type = NULL;
+  int port;
 
-  basename = g_strdup_printf ("broadway%d.socket", port);
-  path = g_build_filename (g_get_user_runtime_dir (), basename, NULL);
-  g_free (basename);
+  if (display == NULL)
+    {
+#ifdef G_OS_UNIX
+      display = ":0";
+#else
+      display = ":tcp"
+#endif
+    }
 
-  address = g_unix_socket_address_new_with_type (path, -1,
-						 G_UNIX_SOCKET_ADDRESS_ABSTRACT);
-  g_free (path);
+  if (g_str_has_prefix (display, ":tcp"))
+    {
+      port = 9090 + strtol (display + strlen (":tcp"), NULL, 10);
+
+      inet = g_inet_address_new_from_string ("127.0.0.1");
+      address = g_inet_socket_address_new (inet, port);
+      g_object_unref (inet);
+    }
+#ifdef G_OS_UNIX
+  else if (display[0] == ':' && g_ascii_isdigit(display[1]))
+    {
+      port = strtol (display + strlen (":"), NULL, 10);
+      basename = g_strdup_printf ("broadway%d.socket", port + 1);
+      path = g_build_filename (g_get_user_runtime_dir (), basename, NULL);
+      g_free (basename);
+
+      address = g_unix_socket_address_new_with_type (path, -1,
+						     G_UNIX_SOCKET_ADDRESS_ABSTRACT);
+      g_free (path);
+    }
+#endif
+  else
+    {
+      g_set_error (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
+		   _("broadway display type not supported '%s'"), display);
+      return NULL;
+    }
+
+  g_free (local_socket_type);
 
   client = g_socket_client_new ();
 
-  error = NULL;
   connection = g_socket_client_connect (client, G_SOCKET_CONNECTABLE (address), NULL, error);
-  
+
   g_object_unref (address);
   g_object_unref (client);
 
