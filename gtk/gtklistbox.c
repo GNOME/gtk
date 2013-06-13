@@ -1867,7 +1867,10 @@ gtk_list_box_real_get_preferred_width (GtkWidget* widget, gint* minimum_width_ou
        iter = g_sequence_iter_next (iter))
     {
       row = g_sequence_get (iter);
-      if (!row_is_visible (row))
+
+      /* We *do* take visible but filtered rows into account here so that the list
+         width doesn't change during filtering */
+      if (!gtk_widget_get_visible (GTK_WIDGET (row)))
         continue;
 
       gtk_widget_get_preferred_width (GTK_WIDGET (row), &row_min, &row_nat);
