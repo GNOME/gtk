@@ -10,7 +10,9 @@
 
 #include <glib.h>
 #include <gio/gio.h>
+#ifdef G_OS_UNIX
 #include <gio/gunixsocketaddress.h>
+#endif
 
 #include "broadway-server.h"
 

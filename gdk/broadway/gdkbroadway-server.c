@@ -12,7 +12,9 @@
 
 #include <glib.h>
 #include <glib/gprintf.h>
+#ifdef G_OS_UNIX
 #include <gio/gunixsocketaddress.h>
+#endif
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
