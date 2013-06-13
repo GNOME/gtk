@@ -1449,7 +1449,9 @@ gtk_stack_draw_slide (GtkWidget *widget,
   if (priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN)
     y += allocation.height;
 
-  if (priv->last_visible_surface)
+  if (priv->last_visible_surface &&
+      gtk_cairo_should_draw_window (cr, priv->view_window))
+
     {
       cairo_save (cr);
       cairo_set_source_surface (cr, priv->last_visible_surface, x, y);
@@ -1457,9 +1459,10 @@ gtk_stack_draw_slide (GtkWidget *widget,
       cairo_restore (cr);
      }
 
-  gtk_container_propagate_draw (GTK_CONTAINER (stack),
-                                priv->visible_child->widget,
-                                cr);
+  if (gtk_cairo_should_draw_window (cr, priv->bin_window))
+    gtk_container_propagate_draw (GTK_CONTAINER (stack),
+				  priv->visible_child->widget,
+				  cr);
 }
 
 static gboolean
@@ -1470,8 +1473,7 @@ gtk_stack_draw (GtkWidget *widget,
   GtkStackPrivate *priv = stack->priv;
   cairo_t *pattern_cr;
 
-  if (priv->visible_child &&
-      gtk_cairo_should_draw_window (cr, priv->bin_window))
+  if (priv->visible_child)
     {
       if (priv->transition_pos < 1.0)
         {
@@ -1496,7 +1498,8 @@ gtk_stack_draw (GtkWidget *widget,
           switch (priv->active_transition_type)
             {
             case GTK_STACK_TRANSITION_TYPE_CROSSFADE:
-              gtk_stack_draw_crossfade (widget, cr);
+	      if (gtk_cairo_should_draw_window (cr, priv->bin_window))
+		gtk_stack_draw_crossfade (widget, cr);
               break;
             case GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT:
             case GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT:
@@ -1509,7 +1512,7 @@ gtk_stack_draw (GtkWidget *widget,
             }
 
         }
-      else
+      else if (gtk_cairo_should_draw_window (cr, priv->bin_window))
         gtk_container_propagate_draw (GTK_CONTAINER (stack),
                                       priv->visible_child->widget,
                                       cr);
