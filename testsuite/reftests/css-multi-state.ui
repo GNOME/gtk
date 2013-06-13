@@ -12,10 +12,10 @@
         <property name="receives_default">True</property>
         <property name="use_action_appearance">False</property>
         <property name="active">True</property>
+        <property name="sensitive">False</property>
         <child>
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
-            <property name="sensitive">False</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">insensitive</property>
           </object>

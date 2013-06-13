@@ -1,9 +1,9 @@
-GtkLabel:active,
+GtkToggleButton:active,
 #reference:insensitive {
   color: lime;
 }
 
-GtkLabel:insensitive,
+GtkToggleButton:insensitive,
 #reference:active {
   color: blue;
 }
