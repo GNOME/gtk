@@ -325,7 +325,8 @@ gdk_x11_window_predict_presentation_time (GdkWindow *window)
 }
 
 static void
-gdk_x11_window_begin_frame (GdkWindow *window)
+gdk_x11_window_begin_frame (GdkWindow *window,
+                            gboolean   force_frame)
 {
   GdkWindowImplX11 *impl;
 
@@ -348,6 +349,13 @@ gdk_x11_window_begin_frame (GdkWindow *window)
 
       impl->toplevel->configure_counter_value = 0;
 
+      window_pre_damage (window);
+    }
+  else if (force_frame)
+    {
+      /* When mapping the window, we really want to freeze the
+         rendering of the window by the compositor until we've
+         actually painted something into the window's buffer. */
       window_pre_damage (window);
     }
   else
@@ -945,7 +953,7 @@ setup_toplevel_window (GdkWindow *window,
   ensure_sync_counter (window);
 
   /* Start off in a frozen state - we'll finish this when we first paint */
-  gdk_x11_window_begin_frame (window);
+  gdk_x11_window_begin_frame (window, TRUE);
 }
 
 static void
@@ -953,7 +961,7 @@ on_frame_clock_before_paint (GdkFrameClock *clock,
                              GdkWindow     *window)
 {
   gdk_x11_window_predict_presentation_time (window);
-  gdk_x11_window_begin_frame (window);
+  gdk_x11_window_begin_frame (window, FALSE);
 }
 
 static void
