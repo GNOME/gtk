@@ -1,3 +1,5 @@
+#include "config.h"
+
 #include "broadway-server.h"
 
 #include "broadway-output.h"
@@ -12,7 +14,9 @@
 #include <errno.h>
 #include <unistd.h>
 #include <crypt.h>
+#ifdef HAVE_SYS_MMAN_H
 #include <sys/mman.h>
+#endif
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <sys/types.h>

@@ -1,6 +1,8 @@
 #include "config.h"
 #include <string.h>
+#ifdef HAVE_SYS_MMAN_H
 #include <sys/mman.h>
+#endif
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <stdlib.h>
