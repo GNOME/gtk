@@ -231,6 +231,7 @@
       <xi:include href="xml/gtkaspectframe.xml" />
       <xi:include href="xml/gtkbox.xml" />
       <xi:include href="xml/gtkbbox.xml" />
+      <xi:include href="xml/gtklistbox.xml" />
       <xi:include href="xml/gtkfixed.xml" />
       <xi:include href="xml/gtkpaned.xml" />
       <xi:include href="xml/gtklayout.xml" />
