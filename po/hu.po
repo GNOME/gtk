@@ -1032,11 +1032,11 @@ msgstr "Ismeretlen"
 
 #: ../gtk/gtkfilechooserdefault.c:6567
 msgid "%H:%M"
-msgstr "%k.%M"
+msgstr "%H.%M"
 
 #: ../gtk/gtkfilechooserdefault.c:6569
 msgid "Yesterday at %H:%M"
-msgstr "Tegnap %k.%M"
+msgstr "Tegnap %H.%M"
 
 #: ../gtk/gtkfilechooserdefault.c:7248
 msgid "Cannot change to folder because it is not local"

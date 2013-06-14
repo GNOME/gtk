@@ -1062,11 +1062,11 @@ msgstr "Sconosciuto"
 
 #: ../gtk/gtkfilechooserdefault.c:6551
 msgid "%H:%M"
-msgstr "%k.%M"
+msgstr "%H.%M"
 
 #: ../gtk/gtkfilechooserdefault.c:6553
 msgid "Yesterday at %H:%M"
-msgstr "Ieri alle %k.%M"
+msgstr "Ieri alle %H.%M"
 
 #: ../gtk/gtkfilechooserdefault.c:7219
 msgid "Cannot change to folder because it is not local"
