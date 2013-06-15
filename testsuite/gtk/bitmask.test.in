@@ -1,3 +1,0 @@
-[Test]
-Exec=/bin/sh -c "@pkglibexecdir@/installed-tests/bitmask"
-Type=session

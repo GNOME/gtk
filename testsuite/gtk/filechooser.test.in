@@ -1,3 +1,0 @@
-[Test]
-Exec=/bin/sh -c "@pkglibexecdir@/installed-tests/filechooser"
-Type=session
