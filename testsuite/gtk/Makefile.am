@@ -32,6 +32,7 @@ TEST_PROGS += 			\
 	bitmask			\
 	builder			\
 	cellarea		\
+	defaultvalue		\
 	entry			\
 	expander		\
 	floating		\
@@ -39,6 +40,7 @@ TEST_PROGS += 			\
 	gtkmenu			\
 	keyhash			\
 	listbox			\
+	object			\
 	objects-finalize	\
 	papersize		\
 	rbtree			\
@@ -46,6 +48,7 @@ TEST_PROGS += 			\
 	regression-tests	\
 	stylecontext		\
 	templates		\
+	testing			\
 	textbuffer		\
 	textiter		\
 	treemodel		\
