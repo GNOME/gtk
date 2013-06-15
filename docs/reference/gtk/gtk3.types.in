@@ -101,6 +101,8 @@ gtk_label_get_type
 gtk_layout_get_type
 gtk_link_button_get_type
 gtk_list_store_get_type
+gtk_list_box_get_type
+gtk_list_box_row_get_type
 gtk_lock_button_get_type
 gtk_menu_bar_get_type
 gtk_menu_button_get_type
