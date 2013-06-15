@@ -38,6 +38,7 @@ TEST_PROGS += 			\
 	grid			\
 	gtkmenu			\
 	keyhash			\
+	listbox			\
 	objects-finalize	\
 	papersize		\
 	rbtree			\
