@@ -276,12 +276,9 @@ static void
 widget_fixups (GtkWidget *widget)
 {
   /* post-constructor for widgets that need additional settings to work correctly */
-  if (GTK_IS_COMBO_BOX (widget))
+  if (GTK_IS_COMBO_BOX_TEXT (widget))
     {
-      GtkListStore *store = gtk_list_store_new (1, G_TYPE_STRING);
-      g_object_set (widget, "model", store, NULL);
-      g_object_unref (store);
-      gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "test text");
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "test text");
     }
 }
 
