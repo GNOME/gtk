@@ -161,27 +161,27 @@ test_iconview_subclass2 (void)
   g_object_unref (view);
 }
 
+static void
+test_iconview_subclass3_subprocess (void)
+{
+  GtkWidget *view;
+  GtkCellArea *area;
+
+  subclass_init = 1;
+
+  area = gtk_cell_area_box_new ();
+  view = g_object_new (my_icon_view_get_type (), "cell-area", area, NULL);
+  g_assert (area == gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view)));
+  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_VERTICAL);
+  g_object_ref_sink (view);
+  g_object_unref (view);
+}
+
 /* test we get a warning if an area is provided, but ignored */
 static void
 test_iconview_subclass3 (void)
 {
-  subclass_init = 1;
-
-  if (g_test_trap_fork (0, G_TEST_TRAP_SILENCE_STDERR))
-    {
-      GtkWidget *view;
-      GtkCellArea *area;
-
-      area = gtk_cell_area_box_new ();
-      view = g_object_new (my_icon_view_get_type (), "cell-area", area, NULL);
-      g_assert (area == gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view)));
-      g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_VERTICAL);
-
-      g_object_ref_sink (view);
-      g_object_unref (view);
-
-      exit (0);
-    }
+  g_test_trap_subprocess ("/tests/iconview-subclass3/subprocess", 0, 0);
   g_test_trap_assert_failed ();
   g_test_trap_assert_stderr ("*ignoring construct property*");
 }
@@ -317,27 +317,28 @@ test_combobox_subclass2 (void)
   g_object_unref (view);
 }
 
+static void
+test_combobox_subclass3_subprocess (void)
+{
+  GtkWidget *view;
+  GtkCellArea *area;
+
+  subclass_init = 1;
+
+  area = gtk_cell_area_box_new ();
+  view = g_object_new (my_combo_box_get_type (), "cell-area", area, NULL);
+  g_assert (area == gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view)));
+  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_VERTICAL);
+
+  g_object_ref_sink (view);
+  g_object_unref (view);
+}
+
 /* test we get a warning if an area is provided, but ignored */
 static void
 test_combobox_subclass3 (void)
 {
-  subclass_init = 1;
-
-  if (g_test_trap_fork (0, G_TEST_TRAP_SILENCE_STDERR))
-    {
-      GtkWidget *view;
-      GtkCellArea *area;
-
-      area = gtk_cell_area_box_new ();
-      view = g_object_new (my_combo_box_get_type (), "cell-area", area, NULL);
-      g_assert (area == gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view)));
-      g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_VERTICAL);
-
-      g_object_ref_sink (view);
-      g_object_unref (view);
-
-      exit (0);
-    }
+  g_test_trap_subprocess ("/tests/combobox-subclass3/subprocess", 0, 0);
   g_test_trap_assert_failed ();
   g_test_trap_assert_stderr ("*ignoring construct property*");
 }
@@ -475,27 +476,28 @@ test_cellview_subclass2 (void)
   g_object_unref (view);
 }
 
+static void
+test_cellview_subclass3_subprocess (void)
+{
+  GtkWidget *view;
+  GtkCellArea *area;
+
+  subclass_init = 1;
+
+  area = gtk_cell_area_box_new ();
+  view = g_object_new (my_cell_view_get_type (), "cell-area", area, NULL);
+  g_assert (area == gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view)));
+  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_VERTICAL);
+
+  g_object_ref_sink (view);
+  g_object_unref (view);
+}
+
 /* test we get a warning if an area is provided, but ignored */
 static void
 test_cellview_subclass3 (void)
 {
-  subclass_init = 1;
-
-  if (g_test_trap_fork (0, G_TEST_TRAP_SILENCE_STDERR))
-    {
-      GtkWidget *view;
-      GtkCellArea *area;
-
-      area = gtk_cell_area_box_new ();
-      view = g_object_new (my_cell_view_get_type (), "cell-area", area, NULL);
-      g_assert (area == gtk_cell_layout_get_area (GTK_CELL_LAYOUT (view)));
-      g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_VERTICAL);
-
-      g_object_ref_sink (view);
-      g_object_unref (view);
-
-      exit (0);
-    }
+  g_test_trap_subprocess ("/tests/cellview-subclass3/subprocess", 0, 0);
   g_test_trap_assert_failed ();
   g_test_trap_assert_stderr ("*ignoring construct property*");
 }
@@ -631,27 +633,28 @@ test_column_subclass2 (void)
   g_object_unref (col);
 }
 
+static void
+test_column_subclass3_subprocess (void)
+{
+  GtkTreeViewColumn *col;
+  GtkCellArea *area;
+
+  subclass_init = 1;
+
+  area = gtk_cell_area_box_new ();
+  col = g_object_new (my_tree_view_column_get_type (), "cell-area", area, NULL);
+  g_assert (area == gtk_cell_layout_get_area (GTK_CELL_LAYOUT (col)));
+  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_VERTICAL);
+
+  g_object_ref_sink (col);
+  g_object_unref (col);
+}
+
 /* test we get a warning if an area is provided, but ignored */
 static void
 test_column_subclass3 (void)
 {
-  subclass_init = 1;
-
-  if (g_test_trap_fork (0, G_TEST_TRAP_SILENCE_STDERR))
-    {
-      GtkTreeViewColumn *col;
-      GtkCellArea *area;
-
-      area = gtk_cell_area_box_new ();
-      col = g_object_new (my_tree_view_column_get_type (), "cell-area", area, NULL);
-      g_assert (area == gtk_cell_layout_get_area (GTK_CELL_LAYOUT (col)));
-      g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_VERTICAL);
-
-      g_object_ref_sink (col);
-      g_object_unref (col);
-
-      exit (0);
-    }
+  g_test_trap_subprocess ("/tests/column-subclass3/subprocess", 0, 0);
   g_test_trap_assert_failed ();
   g_test_trap_assert_stderr ("*ignoring construct property*");
 }
@@ -787,27 +790,28 @@ test_completion_subclass2 (void)
   g_object_unref (c);
 }
 
+static void
+test_completion_subclass3_subprocess (void)
+{
+  GtkEntryCompletion *c;
+  GtkCellArea *area;
+
+  subclass_init = 1;
+
+  area = gtk_cell_area_box_new ();
+  c = g_object_new (my_entry_completion_get_type (), "cell-area", area, NULL);
+  g_assert (area == gtk_cell_layout_get_area (GTK_CELL_LAYOUT (c)));
+  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_VERTICAL);
+
+  g_object_ref_sink (c);
+  g_object_unref (c);
+}
+
 /* test we get a warning if an area is provided, but ignored */
 static void
 test_completion_subclass3 (void)
 {
-  subclass_init = 1;
-
-  if (g_test_trap_fork (0, G_TEST_TRAP_SILENCE_STDERR))
-    {
-      GtkEntryCompletion *c;
-      GtkCellArea *area;
-
-      area = gtk_cell_area_box_new ();
-      c = g_object_new (my_entry_completion_get_type (), "cell-area", area, NULL);
-      g_assert (area == gtk_cell_layout_get_area (GTK_CELL_LAYOUT (c)));
-      g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (area)) == GTK_ORIENTATION_VERTICAL);
-
-      g_object_ref_sink (c);
-      g_object_unref (c);
-
-      exit (0);
-    }
+  g_test_trap_subprocess ("/tests/completion-subclass3/subprocess", 0, 0);
   g_test_trap_assert_failed ();
   g_test_trap_assert_stderr ("*ignoring construct property*");
 }
@@ -826,6 +830,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/tests/iconview-subclass1", test_iconview_subclass1);
   g_test_add_func ("/tests/iconview-subclass2", test_iconview_subclass2);
   g_test_add_func ("/tests/iconview-subclass3", test_iconview_subclass3);
+  g_test_add_func ("/tests/iconview-subclass3/subprocess", test_iconview_subclass3_subprocess);
 
   g_test_add_func ("/tests/combobox-new", test_combobox_new);
   g_test_add_func ("/tests/combobox-new-with-area", test_combobox_new_with_area);
@@ -834,6 +839,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/tests/combobox-subclass1", test_combobox_subclass1);
   g_test_add_func ("/tests/combobox-subclass2", test_combobox_subclass2);
   g_test_add_func ("/tests/combobox-subclass3", test_combobox_subclass3);
+  g_test_add_func ("/tests/combobox-subclass3/subprocess", test_combobox_subclass3_subprocess);
 
   g_test_add_func ("/tests/cellview-new", test_cellview_new);
   g_test_add_func ("/tests/cellview-new-with-context", test_cellview_new_with_context);
@@ -842,6 +848,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/tests/cellview-subclass1", test_cellview_subclass1);
   g_test_add_func ("/tests/cellview-subclass2", test_cellview_subclass2);
   g_test_add_func ("/tests/cellview-subclass3", test_cellview_subclass3);
+  g_test_add_func ("/tests/cellview-subclass3/subprocess", test_cellview_subclass3_subprocess);
 
   g_test_add_func ("/tests/column-new", test_column_new);
   g_test_add_func ("/tests/column-new-with-area", test_column_new_with_area);
@@ -850,6 +857,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/tests/column-subclass1", test_column_subclass1);
   g_test_add_func ("/tests/column-subclass2", test_column_subclass2);
   g_test_add_func ("/tests/column-subclass3", test_column_subclass3);
+  g_test_add_func ("/tests/column-subclass3/subprocess", test_column_subclass3_subprocess);
 
   g_test_add_func ("/tests/completion-new", test_completion_new);
   g_test_add_func ("/tests/completion-new-with-area", test_completion_new_with_area);
@@ -858,6 +866,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/tests/completion-subclass1", test_completion_subclass1);
   g_test_add_func ("/tests/completion-subclass2", test_completion_subclass2);
   g_test_add_func ("/tests/completion-subclass3", test_completion_subclass3);
+  g_test_add_func ("/tests/completion-subclass3/subprocess", test_completion_subclass3_subprocess);
 
   return g_test_run();
 }
