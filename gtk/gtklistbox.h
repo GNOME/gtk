@@ -26,7 +26,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkscrolledwindow.h>
+#include <gtk/gtkbin.h>
 
 G_BEGIN_DECLS
 
@@ -38,12 +38,12 @@ G_BEGIN_DECLS
 #define GTK_IS_LIST_BOX_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_LIST_BOX))
 #define GTK_LIST_BOX_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_LIST_BOX, GtkListBoxClass))
 
-typedef struct _GtkListBox GtkListBox;
-typedef struct _GtkListBoxClass GtkListBoxClass;
+typedef struct _GtkListBox        GtkListBox;
+typedef struct _GtkListBoxClass   GtkListBoxClass;
 typedef struct _GtkListBoxPrivate GtkListBoxPrivate;
 
-typedef struct _GtkListBoxRow GtkListBoxRow;
-typedef struct _GtkListBoxRowClass GtkListBoxRowClass;
+typedef struct _GtkListBoxRow        GtkListBoxRow;
+typedef struct _GtkListBoxRowClass   GtkListBoxRowClass;
 typedef struct _GtkListBoxRowPrivate GtkListBoxRowPrivate;
 
 struct _GtkListBox
@@ -57,11 +57,15 @@ struct _GtkListBoxClass
 {
   GtkContainerClass parent_class;
 
-  void (*row_selected) (GtkListBox* list_box, GtkListBoxRow* row);
-  void (*row_activated) (GtkListBox* list_box, GtkListBoxRow* row);
-  void (*activate_cursor_row) (GtkListBox* list_box);
-  void (*toggle_cursor_row) (GtkListBox* list_box);
-  void (*move_cursor) (GtkListBox* list_box, GtkMovementStep step, gint count);
+  void (*row_selected)        (GtkListBox      *list_box,
+                               GtkListBoxRow   *row);
+  void (*row_activated)       (GtkListBox      *list_box,
+                               GtkListBoxRow   *row);
+  void (*activate_cursor_row) (GtkListBox      *list_box);
+  void (*toggle_cursor_row)   (GtkListBox      *list_box);
+  void (*move_cursor)         (GtkListBox      *list_box,
+                               GtkMovementStep  step,
+                               gint             count);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
@@ -72,12 +76,12 @@ struct _GtkListBoxClass
   void (*_gtk_reserved6) (void);
 };
 
-#define GTK_TYPE_LIST_BOX_ROW (gtk_list_box_row_get_type ())
-#define GTK_LIST_BOX_ROW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_LIST_BOX_ROW, GtkListBoxRow))
-#define GTK_LIST_BOX_ROW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_LIST_BOX_ROW, GtkListBoxRowClass))
-#define GTK_IS_LIST_BOX_ROW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_LIST_BOX_ROW))
+#define GTK_TYPE_LIST_BOX_ROW            (gtk_list_box_row_get_type ())
+#define GTK_LIST_BOX_ROW(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_LIST_BOX_ROW, GtkListBoxRow))
+#define GTK_LIST_BOX_ROW_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_LIST_BOX_ROW, GtkListBoxRowClass))
+#define GTK_IS_LIST_BOX_ROW(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_LIST_BOX_ROW))
 #define GTK_IS_LIST_BOX_ROW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_LIST_BOX_ROW))
-#define GTK_LIST_BOX_ROW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_LIST_BOX_ROW, GtkListBoxRowClass))
+#define GTK_LIST_BOX_ROW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_LIST_BOX_ROW, GtkListBoxRowClass))
 
 struct _GtkListBoxRow
 {
@@ -98,8 +102,8 @@ struct _GtkListBoxRowClass
 
 /**
  * GtkListBoxFilterFunc:
- * @row: The row that may be filtered.
- * @user_data: (closure): user data.
+ * @row: the row that may be filtered
+ * @user_data: (closure): user data
  *
  * Will be called whenever the row changes or is added and lets you control
  * if the row should be visible or not.
@@ -108,33 +112,36 @@ struct _GtkListBoxRowClass
  *
  * Since: 3.10
  */
-typedef gboolean (*GtkListBoxFilterFunc) (GtkListBoxRow * row,
-                                          gpointer        user_data);
+typedef gboolean (*GtkListBoxFilterFunc) (GtkListBoxRow *row,
+                                          gpointer       user_data);
+
 /**
  * GtkListBoxSortFunc:
- * @row1: The first row.
- * @row2: The second row.
- * @user_data: (closure): user data.
+ * @row1: the first row
+ * @row2: the second row
+ * @user_data: (closure): user data
  *
  * Compare two rows to determin which should be first.
  *
- * Returns: < 0 if @row1 should be before @row2, 0 if they are equal and > 0 otherwise
+ * Returns: < 0 if @row1 should be before @row2, 0 if they are
+ *     equal and > 0 otherwise
  *
  * Since: 3.10
  */
 typedef gint (*GtkListBoxSortFunc) (GtkListBoxRow *row1,
                                     GtkListBoxRow *row2,
                                     gpointer       user_data);
+
 /**
  * GtkListBoxUpdateHeaderFunc:
- * @row: The row to update
- * @before: The row before @row, or %NULL if it is first.
- * @user_data: (closure): user data.
+ * @row: the row to update
+ * @before: the row before @row, or %NULL if it is first
+ * @user_data: (closure): user data
  *
- * Whenever @row changes or which row is before @row changes this is called, which
- * lets you update the header on @row. You may remove or set a new one
- * via gtk_list_box_row_set_header() or just change the state of the current
- * header widget.
+ * Whenever @row changes or which row is before @row changes this
+ * is called, which lets you update the header on @row. You may
+ * remove or set a new one via gtk_list_box_row_set_header() or
+ * just change the state of the current header widget.
  *
  * Since: 3.10
  */
@@ -161,7 +168,7 @@ GDK_AVAILABLE_IN_3_10
 GtkListBoxRow* gtk_list_box_get_selected_row             (GtkListBox                    *list_box);
 GDK_AVAILABLE_IN_3_10
 GtkListBoxRow* gtk_list_box_get_row_at_index             (GtkListBox                    *list_box,
-                                                          int                           index);
+                                                          gint                           index_);
 GDK_AVAILABLE_IN_3_10
 GtkListBoxRow* gtk_list_box_get_row_at_y                 (GtkListBox                    *list_box,
                                                           gint                           y);
