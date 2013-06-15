@@ -33,10 +33,10 @@ check_property (const char *output,
 
   g_value_init (&default_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
   g_param_value_set_default (pspec, &default_value);
-      
+
   v = g_strdup_value_contents (value);
   dv = g_strdup_value_contents (&default_value);
-  
+
   msg = g_strdup_printf ("%s %s.%s: %s != %s\n",
 			 output,
 			 g_type_name (pspec->owner_type),
@@ -45,7 +45,7 @@ check_property (const char *output,
   g_assertion_message (G_LOG_DOMAIN, __FILE__, __LINE__,
 		       G_STRFUNC, msg);
   g_free (msg);
-  
+
   g_free (v);
   g_free (dv);
   g_value_unset (&default_value);
@@ -59,8 +59,11 @@ test_type (gconstpointer data)
   GParamSpec **pspecs;
   guint n_pspecs, i;
   GType type;
+  GdkDisplay *display;
 
   type = * (GType *) data;
+
+  display = gdk_display_get_default ();
 
   if (!G_TYPE_IS_CLASSED (type))
     return;
@@ -75,11 +78,15 @@ test_type (gconstpointer data)
   if (g_type_is_a (type, GTK_TYPE_PRINT_JOB) ||
       g_type_is_a (type, GTK_TYPE_APPLICATION) ||
       g_type_is_a (type, GDK_TYPE_PIXBUF_LOADER) ||
-      g_type_is_a (type, gdk_pixbuf_simple_anim_iter_get_type ()))
+      g_type_is_a (type, gdk_pixbuf_simple_anim_iter_get_type ()) ||
+      g_str_equal (g_type_name (type), "GdkX11DeviceManagerXI2") ||
+      g_str_equal (g_type_name (type), "GdkX11Display") ||
+      g_str_equal (g_type_name (type), "GdkX11DisplayManager") ||
+      g_str_equal (g_type_name (type), "GdkX11Screen"))
     return;
 
   klass = g_type_class_ref (type);
-  
+
   if (g_type_is_a (type, GTK_TYPE_SETTINGS))
     instance = g_object_ref (gtk_settings_get_default ());
   else if (g_type_is_a (type, GDK_TYPE_WINDOW))
@@ -91,6 +98,8 @@ test_type (gconstpointer data)
       attributes.height = 100;
       instance = g_object_ref (gdk_window_new (NULL, &attributes, 0));
     }
+  else if (g_str_equal (g_type_name (type), "GdkX11Cursor"))
+    instance = g_object_new (type, "display", display, NULL);
   else
     instance = g_object_new (type, NULL);
 
@@ -102,7 +111,7 @@ test_type (gconstpointer data)
     {
       GParamSpec *pspec = pspecs[i];
       GValue value = G_VALUE_INIT;
-      
+
       if (pspec->owner_type != type)
 	continue;
 
@@ -116,7 +125,7 @@ test_type (gconstpointer data)
       if (g_type_is_a (type, GTK_TYPE_ABOUT_DIALOG) &&
 	  (strcmp (pspec->name, "program-name") == 0))
 	continue;
-      
+
       /* These are set to the current date */
       if (g_type_is_a (type, GTK_TYPE_CALENDAR) &&
 	  (strcmp (pspec->name, "year") == 0 ||
@@ -124,24 +133,41 @@ test_type (gconstpointer data)
 	   strcmp (pspec->name, "day") == 0))
 	continue;
 
+      if (g_type_is_a (type, GTK_TYPE_CELL_AREA_CONTEXT) &&
+	  (strcmp (pspec->name, "minimum-width") == 0 ||
+	   strcmp (pspec->name, "minimum-height") == 0 ||
+	   strcmp (pspec->name, "natural-width") == 0 ||
+	   strcmp (pspec->name, "natural-height") == 0))
+	continue;
+
       if (g_type_is_a (type, GTK_TYPE_CELL_RENDERER_TEXT) &&
 	  (strcmp (pspec->name, "background-gdk") == 0 ||
 	   strcmp (pspec->name, "foreground-gdk") == 0 ||
+	   strcmp (pspec->name, "background-rgba") == 0 ||
+	   strcmp (pspec->name, "foreground-rgba") == 0 ||
 	   strcmp (pspec->name, "font") == 0 ||
 	   strcmp (pspec->name, "font-desc") == 0))
 	continue;
 
       if (g_type_is_a (type, GTK_TYPE_CELL_VIEW) &&
 	  (strcmp (pspec->name, "background-gdk") == 0 ||
-	   strcmp (pspec->name, "foreground-gdk") == 0))
+	   strcmp (pspec->name, "foreground-gdk") == 0 ||
+	   strcmp (pspec->name, "foreground-rgba") == 0 ||
+	   strcmp (pspec->name, "background-rgba") == 0 ||
+           strcmp (pspec->name, "cell-area") == 0 ||
+           strcmp (pspec->name, "cell-area-context") == 0))
 	continue;
 
       if (g_type_is_a (type, GTK_TYPE_COLOR_BUTTON) &&
-	  strcmp (pspec->name, "color") == 0)
+	  (strcmp (pspec->name, "color") == 0 ||
+	   strcmp (pspec->name, "rgba") == 0))
 	continue;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
       if (g_type_is_a (type, GTK_TYPE_COLOR_SELECTION) &&
-	  strcmp (pspec->name, "current-color") == 0)
+	  (strcmp (pspec->name, "current-color") == 0 ||
+	   strcmp (pspec->name, "current-rgba") == 0))
 	continue;
 
       if (g_type_is_a (type, GTK_TYPE_COLOR_SELECTION_DIALOG) &&
@@ -151,15 +177,36 @@ test_type (gconstpointer data)
 	   strcmp (pspec->name, "cancel-button") == 0))
 	continue;
 
+      if (g_type_is_a (type, GTK_TYPE_COMBO_BOX) &&
+	  (strcmp (pspec->name, "cell-area") == 0 ||
+           strcmp (pspec->name, "cell-area-context") == 0))
+	continue;
+
+G_GNUC_END_IGNORE_DEPRECATIONS
+
       /* Default invisible char is determined at runtime */
       if (g_type_is_a (type, GTK_TYPE_ENTRY) &&
 	  (strcmp (pspec->name, "invisible-char") == 0 ||
            strcmp (pspec->name, "buffer") == 0))
 	continue;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
+      if (g_type_is_a (type, GTK_TYPE_ENTRY_COMPLETION) &&
+	  (strcmp (pspec->name, "cell-area") == 0 ||
+           strcmp (pspec->name, "cell-area-context") == 0))
+	continue;
+
       if (g_type_is_a (type, GTK_TYPE_FONT_SELECTION) &&
 	  strcmp (pspec->name, "font") == 0)
 	continue;
+
+      if (g_type_is_a (type, GTK_TYPE_ICON_VIEW) &&
+	  (strcmp (pspec->name, "cell-area") == 0 ||
+           strcmp (pspec->name, "cell-area-context") == 0))
+	continue;
+
+G_GNUC_END_IGNORE_DEPRECATIONS
 
       if (g_type_is_a (type, GTK_TYPE_LAYOUT) &&
 	  (strcmp (pspec->name, "hadjustment") == 0 ||
@@ -203,26 +250,7 @@ test_type (gconstpointer data)
            strcmp (pspec->name, "vadjustment") == 0))
 	continue;
 
-      /* these defaults come from XResources */
-      if (g_type_is_a (type, GTK_TYPE_SETTINGS) &&
-          strncmp (pspec->name, "gtk-xft-", 8) == 0)
-        continue;
-
-      if (g_type_is_a (type, GTK_TYPE_SETTINGS) &&
-          (strcmp (pspec->name, "color-hash") == 0 ||
-	   strcmp (pspec->name, "gtk-cursor-theme-name") == 0 ||
-	   strcmp (pspec->name, "gtk-cursor-theme-size") == 0 ||
-	   strcmp (pspec->name, "gtk-dnd-drag-threshold") == 0 ||
-	   strcmp (pspec->name, "gtk-double-click-time") == 0 ||
-	   strcmp (pspec->name, "gtk-fallback-icon-theme") == 0 ||
-	   strcmp (pspec->name, "gtk-file-chooser-backend") == 0 ||
-	   strcmp (pspec->name, "gtk-icon-theme-name") == 0 ||
-	   strcmp (pspec->name, "gtk-im-module") == 0 ||
-	   strcmp (pspec->name, "gtk-key-theme-name") == 0 ||
-	   strcmp (pspec->name, "gtk-theme-name") == 0 ||
-           strcmp (pspec->name, "gtk-sound-theme-name") == 0 ||
-           strcmp (pspec->name, "gtk-enable-input-feedback-sounds") == 0 ||
-           strcmp (pspec->name, "gtk-enable-event-sounds") == 0))
+      if (g_type_is_a (type, GTK_TYPE_SETTINGS))
         continue;
 
       if (g_type_is_a (type, GTK_TYPE_SPIN_BUTTON) &&
@@ -232,6 +260,10 @@ test_type (gconstpointer data)
       if (g_type_is_a (type, GTK_TYPE_STATUS_ICON) &&
           (strcmp (pspec->name, "size") == 0 ||
            strcmp (pspec->name, "screen") == 0))
+        continue;
+
+      if (g_type_is_a (type, GTK_TYPE_STYLE_CONTEXT) &&
+           strcmp (pspec->name, "screen") == 0)
         continue;
 
       if (g_type_is_a (type, GTK_TYPE_TEXT_BUFFER) &&
@@ -262,6 +294,11 @@ test_type (gconstpointer data)
            strcmp (pspec->name, "vadjustment") == 0))
 	continue;
 
+      if (g_type_is_a (type, GTK_TYPE_TREE_VIEW_COLUMN) &&
+	  (strcmp (pspec->name, "cell-area") == 0 ||
+           strcmp (pspec->name, "cell-area-context") == 0))
+	continue;
+
       if (g_type_is_a (type, GTK_TYPE_VIEWPORT) &&
 	  (strcmp (pspec->name, "hadjustment") == 0 ||
            strcmp (pspec->name, "vadjustment") == 0))
@@ -275,11 +312,11 @@ test_type (gconstpointer data)
 
       /* resize-grip-visible is determined at runtime */
       if (g_type_is_a (type, GTK_TYPE_WINDOW) &&
-          (strcmp (pspec->name, "resize-grip-visible") == 0))
+          strcmp (pspec->name, "resize-grip-visible") == 0)
         continue;
 
       if (g_test_verbose ())
-      g_print ("Property %s.%s\n", 
+      g_print ("Property %s.%s\n",
 	     g_type_name (pspec->owner_type),
 	     pspec->name);
       g_value_init (&value, G_PARAM_SPEC_VALUE_TYPE (pspec));
@@ -291,19 +328,30 @@ test_type (gconstpointer data)
 
   if (g_type_is_a (type, GTK_TYPE_WIDGET))
     {
+      g_object_set (gtk_settings_get_default (), "gtk-theme-name", "Raleigh", NULL);
       pspecs = gtk_widget_class_list_style_properties (GTK_WIDGET_CLASS (klass), &n_pspecs);
-      
+
       for (i = 0; i < n_pspecs; ++i)
 	{
 	  GParamSpec *pspec = pspecs[i];
 	  GValue value = G_VALUE_INIT;
-	  
+
 	  if (pspec->owner_type != type)
 	    continue;
 
 	  if ((pspec->flags & G_PARAM_READABLE) == 0)
 	    continue;
-	  
+
+          if (g_type_is_a (type, GTK_TYPE_BUTTON) &&
+              strcmp (pspec->name, "default-border") == 0)
+            continue;
+
+          if (g_type_is_a (type, GTK_TYPE_WINDOW) &&
+              (strcmp (pspec->name, "resize-grip-width") == 0 ||
+               strcmp (pspec->name, "resize-grip-height") == 0 ||
+               strcmp (pspec->name, "decoration-button-layout") == 0))
+            continue;
+
 	  g_value_init (&value, G_PARAM_SPEC_VALUE_TYPE (pspec));
 	  gtk_widget_style_get_property (GTK_WIDGET (instance), pspec->name, &value);
 	  check_property ("Style property", pspec, &value);
@@ -312,12 +360,12 @@ test_type (gconstpointer data)
 
       g_free (pspecs);
     }
-  
+
   if (g_type_is_a (type, GDK_TYPE_WINDOW))
     gdk_window_destroy (GDK_WINDOW (instance));
   else
     g_object_unref (instance);
-  
+
   g_type_class_unref (klass);
 }
 
@@ -329,12 +377,12 @@ main (int argc, char **argv)
 
   gtk_test_init (&argc, &argv);
   gtk_test_register_all_types();
-  
+
   otypes = gtk_test_list_all_types (NULL);
   for (i = 0; otypes[i]; i++)
     {
       gchar *testname;
-      
+
       testname = g_strdup_printf ("/Default Values/%s",
 				  g_type_name (otypes[i]));
       g_test_add_data_func (testname,
@@ -342,6 +390,6 @@ main (int argc, char **argv)
 			    test_type);
       g_free (testname);
     }
-  
+
   return g_test_run();
 }
