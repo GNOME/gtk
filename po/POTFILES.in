@@ -147,6 +147,7 @@ gtk/gtk-launch.c
 gtk/gtklayout.c
 gtk/gtklevelbar.c
 gtk/gtklinkbutton.c
+gtk/gtklistbox.c
 gtk/gtkliststore.c
 gtk/gtklockbutton.c
 gtk/gtkmain.c
