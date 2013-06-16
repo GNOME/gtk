@@ -91,6 +91,12 @@ Release notes for 3.10
   get_height_for_width, subclasses now have to provide their own
   implementation if they need height-for-width functionality.
 
+* Widget state propagation has been changed. Historically, all of
+  active, prelight, selected, insensitive, inconsistent and backdrop
+  have been propagated to children. This has now been restricted
+  to just the insensitive and backdrop states. This mostly affects
+  theming.
+
 
 Release notes for 3.8
 =====================
