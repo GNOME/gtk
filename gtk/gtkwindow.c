@@ -1310,13 +1310,13 @@ gtk_window_init (GtkWindow *window)
   toplevel_list = g_slist_prepend (toplevel_list, window);
 
   if (priv->screen)
-    g_signal_connect (priv->screen, "composited-changed",
-                      G_CALLBACK (gtk_window_on_composited_changed), window);
+    g_signal_connect_object (priv->screen, "composited-changed",
+                             G_CALLBACK (gtk_window_on_composited_changed), window, 0);
 
 #ifdef GDK_WINDOWING_X11
-  g_signal_connect (gtk_settings_get_for_screen (priv->screen),
-                    "notify::gtk-application-prefer-dark-theme",
-                    G_CALLBACK (gtk_window_on_theme_variant_changed), window);
+  g_signal_connect_object (gtk_settings_get_for_screen (priv->screen),
+                           "notify::gtk-application-prefer-dark-theme",
+                           G_CALLBACK (gtk_window_on_theme_variant_changed), window, 0);
 #endif
 
   context = gtk_widget_get_style_context (GTK_WIDGET (window));
