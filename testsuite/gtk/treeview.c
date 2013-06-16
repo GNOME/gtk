@@ -159,6 +159,7 @@ test_row_separator_height_func (GtkTreeModel *model,
   path = gtk_tree_model_get_path (model, iter);
   if (gtk_tree_path_get_indices (path)[0] == 2)
     ret = TRUE;
+  g_print ("row %d separator %d\n", gtk_tree_path_get_indices (path)[0], ret);
   gtk_tree_path_free (path);
 
   return ret;
@@ -174,7 +175,7 @@ test_row_separator_height (void)
   GtkListStore *store;
   GtkWidget *window;
   GtkWidget *tree_view;
-  GdkRectangle rect, cell_rect;
+  GdkRectangle rect = { 0, }, cell_rect = { 0, };
 
   store = gtk_list_store_new (1, G_TYPE_STRING);
   gtk_list_store_insert_with_values (store, &iter, 0, 0, "Row content", -1);
