@@ -2431,11 +2431,9 @@ test_menus (void)
 
   gtk_widget_destroy (GTK_WIDGET (window));
   g_object_unref (builder);
-
 }
 
-
-static void 
+static void
 test_file (const gchar *filename)
 {
   GtkBuilder *builder;
@@ -2474,7 +2472,6 @@ test_file (const gchar *filename)
   gtk_main ();
 
   g_object_unref (builder);
-  builder = NULL;
 }
 
 static void
@@ -2719,6 +2716,9 @@ test_expose_object (void)
 
   g_assert (external_object == G_OBJECT (builder));
   g_assert (external_object_swapped == G_OBJECT (builder));
+
+  g_object_unref (builder);
+  g_object_unref (image);
 }
 
 int
