@@ -1,3 +1,17 @@
+Overview of Changes from GTK+ 2.24.18 to 2.24.19
+================================================
+
+* Bug fixes:
+ 432386 GtkFileChooserDefault leaks memory if a shortcut...
+ 575767 Crashes when XInput device disappears
+ 694273 Patch to support NSTextInputClient in text widgets
+ 698614 GObject: prevent installing properties after init
+ 700578 Missing vertical grid lines when some columns hidden
+
+* Translation updates:
+ German
+
+
 Overview of Changes from GTK+ 2.24.17 to 2.24.18
 ================================================
 
