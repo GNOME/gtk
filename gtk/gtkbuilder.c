@@ -286,6 +286,7 @@ struct _GtkBuilderPrivate
   gchar *filename;
   gchar *resource_prefix;
   GType template_type;
+  GtkApplication *application;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkBuilder, gtk_builder, G_TYPE_OBJECT)
@@ -2513,4 +2514,64 @@ gtk_builder_new_from_string (const gchar *string,
     g_error ("failed to add UI: %s", error->message);
 
   return builder;
+}
+
+/**
+ * gtk_builder_set_application:
+ * @builder: a #GtkBuilder
+ * @application: a #GtkApplication
+ *
+ * Sets the application associated with @builder.
+ *
+ * You only need this function if there is more than one #GApplication
+ * in your process.  @application cannot be %NULL.
+ *
+ * Since: 3.10
+ **/
+void
+gtk_builder_set_application (GtkBuilder     *builder,
+                             GtkApplication *application)
+{
+  g_return_if_fail (GTK_IS_BUILDER (builder));
+  g_return_if_fail (GTK_IS_APPLICATION (application));
+
+  if (builder->priv->application)
+    g_object_unref (builder->priv->application);
+
+  builder->priv->application = g_object_ref (application);
+}
+
+/**
+ * gtk_builder_get_application:
+ * @builder: a #GtkBuilder
+ *
+ * Gets the #GtkApplication associated with the builder.
+ *
+ * The #GtkApplication is used for creating action proxies as requested
+ * from XML that the builder is loading.
+ *
+ * By default, the builder uses the default application: the one from
+ * g_application_get_default().  If you want to use another application
+ * for constructing proxies, use gtk_builder_set_application().
+ *
+ * Returns: (transfer none): the application being used by the builder,
+ *     or %NULL
+ *
+ * Since: 3.10
+ **/
+GtkApplication *
+gtk_builder_get_application (GtkBuilder *builder)
+{
+  g_return_if_fail (GTK_IS_BUILDER (builder));
+
+  if (!builder->priv->application)
+    {
+      GApplication *application;
+
+      application = g_application_get_default ();
+      if (application && GTK_IS_APPLICATION (application))
+        builder->priv->application = g_object_ref (GTK_APPLICATION (application));
+    }
+
+  return builder->priv->application;
 }
