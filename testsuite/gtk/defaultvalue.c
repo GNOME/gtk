@@ -92,6 +92,7 @@ test_type (gconstpointer data)
   else if (g_type_is_a (type, GDK_TYPE_WINDOW))
     {
       GdkWindowAttr attributes;
+      attributes.wclass = GDK_INPUT_OUTPUT;
       attributes.window_type = GDK_WINDOW_TEMP;
       attributes.event_mask = 0;
       attributes.width = 100;
