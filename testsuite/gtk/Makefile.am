@@ -48,7 +48,6 @@ TEST_PROGS += 			\
 	regression-tests	\
 	stylecontext		\
 	templates		\
-	testing			\
 	textbuffer		\
 	textiter		\
 	treemodel		\
