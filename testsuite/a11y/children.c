@@ -143,7 +143,7 @@ test_add_remove (GtkWidget *widget)
   AtkObject *child_accessible;
   SignalData add_data;
   SignalData remove_data;
-  SignalData parent_data[3];
+  SignalData parent_data[3] = { { 0, }, };
   STATE state;
   gint i, j;
   gint step_children;
