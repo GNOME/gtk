@@ -2710,7 +2710,7 @@ settings_update_cursor_theme (GtkSettings *settings)
     gdk_wayland_display_set_cursor_theme (display, theme, size);
   else
 #endif
-    g_warning ("unsupported GDK backend\n");
+    g_warning ("GtkSettings Cursor Theme: Unsupported GDK backend\n");
   g_free (theme);
 }
 
