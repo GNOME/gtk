@@ -343,6 +343,8 @@ gtk_builder_finalize (GObject *object)
   g_free (priv->resource_prefix);
   
   g_hash_table_destroy (priv->objects);
+  if (priv->callbacks)
+    g_hash_table_destroy (priv->callbacks);
 
   g_slist_foreach (priv->signals, (GFunc) _free_signal_info, NULL);
   g_slist_free (priv->signals);
