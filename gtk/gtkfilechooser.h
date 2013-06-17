@@ -153,8 +153,10 @@ gboolean             gtk_file_chooser_get_create_folders (GtkFileChooser *choose
 /* Suggested name for the Save-type actions
  */
 GDK_AVAILABLE_IN_ALL
-void     gtk_file_chooser_set_current_name   (GtkFileChooser *chooser,
-					      const gchar    *name);
+void        gtk_file_chooser_set_current_name  (GtkFileChooser *chooser,
+					        const gchar    *name);
+GDK_AVAILABLE_IN_3_10
+gchar *gtk_file_chooser_get_current_name (GtkFileChooser *chooser);
 
 /* Filename manipulation
  */

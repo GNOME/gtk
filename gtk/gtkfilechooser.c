@@ -1353,6 +1353,34 @@ gtk_file_chooser_set_current_name  (GtkFileChooser *chooser,
 }
 
 /**
+ * gtk_file_chooser_get_current_name:
+ * @chooser: a #GtkFileChooser
+ *
+ * Gets the current name in the file selector, as entered by the user in the
+ * text entry for "Name".
+ *
+ * This is meant to be used in save dialogs, to get the currently typed filename
+ * when the file itself does not exist yet.  For example, an application that
+ * adds a custom extra widget to the file chooser for "file format" may want to
+ * change the extension of the typed filename based on the chosen format, say,
+ * from ".jpg" to ".png".
+ *
+ * Returns: The raw text from the file chooser's "Name" entry.  Free this with
+ * g_free().  Note that this string is not a full pathname or URI; it is
+ * whatever the contents of the entry are.  Note also that this string is in
+ * UTF-8 encoding, which is not necessarily the system's encoding for filenames.
+ *
+ * Since: 3.10
+ **/
+gchar *
+gtk_file_chooser_get_current_name (GtkFileChooser *chooser)
+{
+  g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
+
+  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->get_current_name (chooser);
+}
+
+/**
  * gtk_file_chooser_get_uri:
  * @chooser: a #GtkFileChooser
  * 

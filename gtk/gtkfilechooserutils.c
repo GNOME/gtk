@@ -31,6 +31,7 @@ static gboolean       delegate_set_current_folder     (GtkFileChooser    *choose
 static GFile *        delegate_get_current_folder     (GtkFileChooser    *chooser);
 static void           delegate_set_current_name       (GtkFileChooser    *chooser,
 						       const gchar       *name);
+static gchar *        delegate_get_current_name       (GtkFileChooser    *chooser);
 static gboolean       delegate_select_file            (GtkFileChooser    *chooser,
 						       GFile             *file,
 						       GError           **error);
@@ -134,6 +135,7 @@ _gtk_file_chooser_delegate_iface_init (GtkFileChooserIface *iface)
   iface->set_current_folder = delegate_set_current_folder;
   iface->get_current_folder = delegate_get_current_folder;
   iface->set_current_name = delegate_set_current_name;
+  iface->get_current_name = delegate_get_current_name;
   iface->select_file = delegate_select_file;
   iface->unselect_file = delegate_unselect_file;
   iface->select_all = delegate_select_all;
@@ -306,6 +308,12 @@ delegate_set_current_name (GtkFileChooser *chooser,
 			   const gchar    *name)
 {
   gtk_file_chooser_set_current_name (get_delegate (chooser), name);
+}
+
+static gchar *
+delegate_get_current_name (GtkFileChooser *chooser)
+{
+  return gtk_file_chooser_get_current_name (get_delegate (chooser));
 }
 
 static void
