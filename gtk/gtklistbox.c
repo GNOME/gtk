@@ -1197,6 +1197,8 @@ gtk_list_box_real_button_press_event (GtkWidget      *widget,
   GtkListBox *list_box = GTK_LIST_BOX (widget);
   GtkListBoxPrivate *priv = list_box->priv;
   gboolean ctrl_pressed;
+  GdkWindow *window;
+  double x, y;
 
   if (event->button == GDK_BUTTON_PRIMARY)
     {
@@ -1206,7 +1208,17 @@ gtk_list_box_real_button_press_event (GtkWidget      *widget,
 
       priv->active_row = NULL;
 
-      row = gtk_list_box_get_row_at_y (list_box, event->y);
+      window = event->window;
+      x = event->x;
+      y = event->y;
+
+      while (window && window != gtk_widget_get_window (widget))
+        {
+          gdk_window_coords_to_parent (window, x, y, &x, &y);
+          window = gdk_window_get_effective_parent (window);
+        }
+
+      row = gtk_list_box_get_row_at_y (list_box, y);
       if (row != NULL)
         {
           if (ctrl_pressed)
