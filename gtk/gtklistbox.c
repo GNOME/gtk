@@ -1221,7 +1221,13 @@ gtk_list_box_real_button_press_event (GtkWidget      *widget,
       row = gtk_list_box_get_row_at_y (list_box, y);
       if (row != NULL)
         {
-          if (ctrl_pressed)
+          if (event->type == GDK_2BUTTON_PRESS)
+            {
+              if (!priv->activate_single_click)
+                g_signal_emit (list_box, signals[ROW_ACTIVATED], 0,
+                               row);
+            }
+          else if (ctrl_pressed)
             {
               if (priv->selection_mode == GTK_SELECTION_SINGLE &&
                   priv->selected_row == row)
@@ -1237,10 +1243,6 @@ gtk_list_box_real_button_press_event (GtkWidget      *widget,
                                           GTK_STATE_FLAG_ACTIVE,
                                           FALSE);
               gtk_widget_queue_draw (GTK_WIDGET (list_box));
-              if (event->type == GDK_2BUTTON_PRESS &&
-                  !priv->activate_single_click)
-                g_signal_emit (list_box, signals[ROW_ACTIVATED], 0,
-                               row);
             }
 
         }
