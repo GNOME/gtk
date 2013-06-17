@@ -1,3 +1,35 @@
+Overview of Changes in GTK+ 3.9.2 to 3.9.4
+==========================================
+
+* GtkSearchBar: a toolbar that will popup automatically when
+  searches should be started, and dismissed when they are finished
+
+* GtkListBox a vertical container that can sort and filter its
+  children
+
+* GtkStack has gained position dependent transitions (left-right
+  and up-down)
+
+* The Broadway GDK backend can be built on Windows now
+
+* Bugs fixed:
+ 593079 untranslated strings in errors
+ 692638 Don't use AC_CANONICAL_TARGET
+ 699673 [3.2/3.4/3.6/3.8] uuid conflicting on Windows
+ 700185 GtkWindow: problem with child widget visibility
+ 700444 [W32] The use of uninitialized GDK default screen
+ 700779 gtk_menu_item_draw puts the arrow too close to the border
+ 701463 typo: "a string containing the an approximation"
+ 701840 deprecate gtk_im_multicontext_append_menuitems
+ 702370 a11y's /child/add-remove/GtkEntry test reads invalid memory
+
+* Translation updates
+ Brazilian Portuguese
+ Chinese
+ Czech
+ Japanese
+
+
 Overview of Changes in GTK+ 3.9.0 to 3.9.2
 ==========================================
 
