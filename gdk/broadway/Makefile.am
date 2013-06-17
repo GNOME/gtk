@@ -72,6 +72,9 @@ libgdk_broadway_la_SOURCES =		\
 	gdkbroadway-server.h	\
 	gdkbroadway-server.c
 
+libgdk_broadway_la_LIBADD = \
+	-lrt
+
 broadwayd_SOURCES = \
 	broadway-protocol.h		\
 	broadwayd.c 			\
