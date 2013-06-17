@@ -88,6 +88,7 @@ struct _GtkListBoxPrivate
   GtkListBoxRow *drag_highlighted_row;
 
   int n_visible_rows;
+  gboolean in_widget;
 };
 
 struct _GtkListBoxRowPrivate
@@ -1134,6 +1135,8 @@ gtk_list_box_real_enter_notify_event (GtkWidget        *widget,
   if (event->window != gtk_widget_get_window (GTK_WIDGET (list_box)))
     return FALSE;
 
+  list_box->priv->in_widget = TRUE;
+
   row = gtk_list_box_get_row_at_y (list_box, event->y);
   gtk_list_box_update_prelight (list_box, row);
   gtk_list_box_update_active (list_box, row);
@@ -1152,7 +1155,10 @@ gtk_list_box_real_leave_notify_event (GtkWidget        *widget,
     return FALSE;
 
   if (event->detail != GDK_NOTIFY_INFERIOR)
-    row = NULL;
+    {
+      list_box->priv->in_widget = FALSE;
+      row = NULL;
+    }
   else
     row = gtk_list_box_get_row_at_y (list_box, event->y);
 
@@ -1171,6 +1177,9 @@ gtk_list_box_real_motion_notify_event (GtkWidget      *widget,
   GdkWindow *window, *event_window;
   gint relative_y;
   gdouble parent_y;
+
+  if (!list_box->priv->in_widget)
+    return FALSE;
 
   window = gtk_widget_get_window (GTK_WIDGET (list_box));
   event_window = event->window;
