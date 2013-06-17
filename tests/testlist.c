@@ -239,6 +239,15 @@ selection_mode_changed (GtkComboBox *combo, gpointer data)
   gtk_list_box_set_selection_mode (list, gtk_combo_box_get_active (combo));
 }
 
+static void
+single_click_clicked (GtkButton *check, gpointer data)
+{
+  GtkListBox *list = data;
+
+  g_print ("single: %d\n", gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check)));
+  gtk_list_box_set_activate_on_single_click (list, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check)));
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -274,6 +283,10 @@ main (int argc, char *argv[])
   g_signal_connect (combo, "changed", G_CALLBACK (selection_mode_changed), list);
   gtk_container_add (GTK_CONTAINER (vbox), combo);
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), gtk_list_box_get_selection_mode (GTK_LIST_BOX (list)));
+  check = gtk_check_button_new_with_label ("single click mode");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), gtk_list_box_get_activate_on_single_click (GTK_LIST_BOX (list)));
+  g_signal_connect (check, "toggled", G_CALLBACK (single_click_clicked), list);
+  gtk_container_add (GTK_CONTAINER (vbox), check);
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
