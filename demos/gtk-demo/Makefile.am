@@ -30,6 +30,7 @@ demos =						\
 	images.c				\
 	infobar.c				\
 	links.c					\
+	listbox.c				\
 	list_store.c				\
 	menus.c					\
 	offscreen_window.c			\
@@ -116,6 +117,7 @@ RESOURCES=	$(demos)			\
 		stack.ui			\
 		revealer.ui			\
 		theming.ui			\
+		listbox.ui			\
 		alphatest.png			\
 		apple-red.png			\
 		background.jpg			\
@@ -132,6 +134,7 @@ RESOURCES=	$(demos)			\
 		gtk-logo-24.png			\
 		gtk-logo-48.png			\
 		gtk-logo-old.png		\
+		messages.txt			\
 		css_accordion.css		\
 		css_basics.css			\
 		css_multiplebgs.css		\

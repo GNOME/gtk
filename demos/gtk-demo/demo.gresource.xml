@@ -104,6 +104,7 @@
     <file>images.c</file>
     <file>infobar.c</file>
     <file>links.c</file>
+    <file>listbox.c</file>
     <file>list_store.c</file>
     <file>menus.c</file>
     <file>offscreen_window.c</file>
@@ -132,5 +133,11 @@
   <gresource prefix="/textview">
     <file>floppybuddy.gif</file>
     <file>gtk-logo-old.png</file>
+  </gresource>
+  <gresource prefix="/listbox">
+    <file>listbox.ui</file>
+    <file>messages.txt</file>
+    <file>gtk-logo-48.png</file>
+    <file>apple-red.png</file>
   </gresource>
 </gresources>
