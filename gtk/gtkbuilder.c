@@ -24,10 +24,16 @@
  * @Title: GtkBuilder
  *
  * A GtkBuilder is an auxiliary object that reads textual descriptions
- * of a user interface and instantiates the described objects. To pass a
- * description to a GtkBuilder, call gtk_builder_add_from_file() or
- * gtk_builder_add_from_string(). These functions can be called multiple
- * times; the builder merges the content of all descriptions.
+ * of a user interface and instantiates the described objects. To create
+ * a GtkBuilder from a user interface description, call
+ * gtk_builder_new_from_file(), gtk_builder_new_from_resource() or
+ * gtk_builder_new_from_string().
+ *
+ * In the (unusual) case that you want to add user interface
+ * descriptions from multiple sources to the same GtkBuilder you can
+ * call gtk_builder_new() to get an empty builder and populate it by
+ * (multiple) calls to gtk_builder_add_from_file(),
+ * gtk_builder_add_from_resource() or gtk_builder_add_from_string().
  *
  * A GtkBuilder holds a reference to all objects that it has constructed
  * and drops these references when it is finalized. This finalization can
@@ -948,9 +954,17 @@ _gtk_builder_finish (GtkBuilder *builder)
 /**
  * gtk_builder_new:
  *
- * Creates a new builder object.
+ * Creates a new empty builder object.
  *
- * Return value: a new #GtkBuilder object
+ * This function is only useful if you intend to make multiple calls to
+ * gtk_builder_add_from_file(), gtk_builder_add_from_resource() or
+ * gtk_builder_add_from_string() in order to merge multiple UI
+ * descriptions into a single builder.
+ *
+ * Most users will probably want to use gtk_builder_new_from_file(),
+ * gtk_builder_new_from_resource() or gtk_builder_new_from_string().
+ *
+ * Return value: a new (empty) #GtkBuilder object
  *
  * Since: 2.12
  **/
@@ -967,7 +981,9 @@ gtk_builder_new (void)
  * @error: (allow-none): return location for an error, or %NULL
  *
  * Parses a file containing a <link linkend="BUILDER-UI">GtkBuilder 
- * UI definition</link> and merges it with the current contents of @builder. 
+ * UI definition</link> and merges it with the current contents of @builder.
+ *
+ * Most users will probably want to use gtk_builder_new_from_file().
  * 
  * Upon errors 0 will be returned and @error will be assigned a
  * #GError from the #GTK_BUILDER_ERROR, #G_MARKUP_ERROR or #G_FILE_ERROR 
@@ -1146,6 +1162,8 @@ _gtk_builder_extend_with_template (GtkBuilder    *builder,
  * Parses a resource file containing a <link linkend="BUILDER-UI">GtkBuilder
  * UI definition</link> and merges it with the current contents of @builder.
  *
+ * Most users will probably want to use gtk_builder_new_from_resource().
+ *
  * Upon errors 0 will be returned and @error will be assigned a
  * #GError from the #GTK_BUILDER_ERROR, #G_MARKUP_ERROR or #G_RESOURCE_ERROR
  * domain.
@@ -1301,6 +1319,8 @@ gtk_builder_add_objects_from_resource (GtkBuilder   *builder,
  *
  * Parses a string containing a <link linkend="BUILDER-UI">GtkBuilder 
  * UI definition</link> and merges it with the current contents of @builder. 
+ *
+ * Most users will probably want to use gtk_builder_new_from_string().
  *
  * Upon errors 0 will be returned and @error will be assigned a
  * #GError from the #GTK_BUILDER_ERROR or #G_MARKUP_ERROR domain.
@@ -2408,4 +2428,92 @@ gtk_builder_lookup_callback_symbol (GtkBuilder    *builder,
     return NULL;
 
   return g_hash_table_lookup (builder->priv->callbacks, callback_name);
+}
+
+/**
+ * gtk_builder_new_from_file:
+ * @filename: filename of user interface description file
+ *
+ * Builds the <link linkend="BUILDER-UI">GtkBuilder UI definition</link>
+ * in the file @filename.
+ *
+ * If there is an error opening the file or parsing the description then
+ * the program will be aborted.  You should only ever attempt to parse
+ * user interface descriptions that are shipped as part of your program.
+ *
+ * Returns: a #Gtkbuilder containing the described interface
+ *
+ * Since: 3.10
+ **/
+GtkBuilder *
+gtk_builder_new_from_file (const gchar *filename)
+{
+  GError *error = NULL;
+  GtkBuilder *builder;
+
+  builder = gtk_builder_new ();
+  if (!gtk_builder_add_from_file (builder, filename, &error))
+    g_error ("failed to add UI: %s", error->message);
+
+  return builder;
+}
+
+/**
+ * gtk_builder_new_from_resource:
+ * @resource_path: a #GResource resource path
+ *
+ * Builds the <link linkend="BUILDER-UI">GtkBuilder UI definition</link>
+ * at @resource_path.
+ *
+ * If there is an error locating the resurce or parsing the description
+ * then the program will be aborted.
+ *
+ * Returns: a #Gtkbuilder containing the described interface
+ *
+ * Since: 3.10
+ **/
+GtkBuilder *
+gtk_builder_new_from_resource (const gchar *resource_path)
+{
+  GError *error = NULL;
+  GtkBuilder *builder;
+
+  builder = gtk_builder_new ();
+  if (!gtk_builder_add_from_resource (builder, resource_path, &error))
+    g_error ("failed to add UI: %s", error->message);
+
+  return builder;
+}
+
+/**
+ * gtk_builder_new_from_string:
+ * @string: a user interface (XML) description
+ * @length: the length of @string, or -1
+ *
+ * Builds the user interface described by @string (in the <link
+ * linkend="BUILDER-UI">GtkBuilder UI definition</link> format).
+ *
+ * If @string is %NULL-terminated then @length should be -1.  If @length
+ * is not -1 then it is the length of @string.
+ *
+ * If there is an error parsing @string then the program will be
+ * aborted.  You should not attempt to parse user interface description
+ * from untrusted sources.
+ *
+ * Returns: a #Gtkbuilder containing the interface described by @string
+ *
+ * Since: 3.10
+ **/
+GtkBuilder *
+gtk_builder_new_from_string (const gchar *string,
+                             gssize       length)
+{
+  GError *error = NULL;
+  GtkBuilder *builder;
+
+  builder = gtk_builder_new ();
+  if (!gtk_builder_add_from_string (builder, string, length, &error))
+    g_error ("failed to add UI: %s", error->message);
+
+  return builder;
 }

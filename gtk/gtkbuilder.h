@@ -179,6 +179,13 @@ gboolean     gtk_builder_value_from_string_type  (GtkBuilder    *builder,
                                                   const gchar  	*string,
                                                   GValue       	*value,
 						  GError       **error);
+GDK_AVAILABLE_IN_3_10
+GtkBuilder * gtk_builder_new_from_file           (const gchar   *filename);
+GDK_AVAILABLE_IN_3_10
+GtkBuilder * gtk_builder_new_from_resource       (const gchar   *resource_path);
+GDK_AVAILABLE_IN_3_10
+GtkBuilder * gtk_builder_new_from_string         (const gchar   *string,
+                                                  gssize         length);
 
 GDK_AVAILABLE_IN_3_10
 void         gtk_builder_add_callback_symbol     (GtkBuilder    *builder,

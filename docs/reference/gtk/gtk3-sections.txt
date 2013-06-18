@@ -597,6 +597,13 @@ gtk_builder_value_from_string
 gtk_builder_value_from_string_type
 GTK_BUILDER_WARN_INVALID_CHILD_TYPE
 GTK_BUILDER_ERROR
+<SUBSECTION>
+gtk_builder_new
+gtk_builder_add_from_file
+gtk_builder_add_from_resource
+gtk_builder_add_from_string
+gtk_builder_add_objects_from_file
+gtk_builder_add_objects_from_string
 <SUBSECTION Standard>
 GTK_BUILDER
 GTK_IS_BUILDER
