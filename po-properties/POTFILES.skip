@@ -1,4 +1,5 @@
 demos/gtk-demo/demo.ui
+demos/gtk-demo/listbox.ui
 demos/gtk-demo/menus.ui
 demos/gtk-demo/stack.ui
 demos/gtk-demo/theming.ui
