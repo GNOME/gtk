@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-04-19 17:57+0000\n"
-"PO-Revision-Date: 2013-05-23 12:28+0500\n"
+"PO-Revision-Date: 2013-06-18 10:31+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: \n"
 "Language: Tajik\n"
@@ -157,7 +157,7 @@ msgstr "ID-и дастгоҳ"
 
 #: ../gdk/x11/gdkdevice-xi2.c:139
 msgid "Device identifier"
-msgstr ""
+msgstr "Муайянкунандаи дастгоҳ"
 
 #: ../gtk/a11y/gtkrenderercellaccessible.c:97
 msgid "Cell renderer"
@@ -185,15 +185,15 @@ msgstr ""
 
 #: ../gtk/deprecated/gtkcolorsel.c:345 ../gtk/gtkcolorbutton.c:203
 msgid "Current Color"
-msgstr ""
+msgstr "Ранги ҷорӣ"
 
 #: ../gtk/deprecated/gtkcolorsel.c:346
 msgid "The current color"
-msgstr ""
+msgstr "Ранги ҷорӣ"
 
 #: ../gtk/deprecated/gtkcolorsel.c:352 ../gtk/gtkcolorbutton.c:218
 msgid "Current Alpha"
-msgstr ""
+msgstr "Алфа-канали ҷорӣ"
 
 #: ../gtk/deprecated/gtkcolorsel.c:353
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
@@ -201,15 +201,15 @@ msgstr ""
 
 #: ../gtk/deprecated/gtkcolorsel.c:367
 msgid "Current RGBA"
-msgstr ""
+msgstr "RGBA-и ҷорӣ"
 
 #: ../gtk/deprecated/gtkcolorsel.c:368
 msgid "The current RGBA color"
-msgstr ""
+msgstr "Ранги ҷории RGBA"
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:138
 msgid "Color Selection"
-msgstr ""
+msgstr "Интихоби ранг"
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:139
 msgid "The color selection embedded in the dialog."
@@ -225,11 +225,11 @@ msgstr ""
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:152
 msgid "Cancel Button"
-msgstr ""
+msgstr "Тугмаи бекоркунӣ"
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:153
 msgid "The cancel button of the dialog."
-msgstr ""
+msgstr "Тугмаи бекоркунии равзанаи гуфтугӯ."
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:159
 msgid "Help Button"
@@ -237,7 +237,7 @@ msgstr "Тугмаи \"Кӯмак\""
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:160
 msgid "The help button of the dialog."
-msgstr ""
+msgstr "Тугмаи кӯмаки равзанаи гуфтугӯ."
 
 #: ../gtk/deprecated/gtkfontsel.c:243 ../gtk/gtkfontbutton.c:451
 msgid "Font name"
@@ -245,11 +245,11 @@ msgstr "Номи шрифт"
 
 #: ../gtk/deprecated/gtkfontsel.c:244
 msgid "The string that represents this font"
-msgstr ""
+msgstr "Сатре, ки ин шрифтро ифода мекунад."
 
 #: ../gtk/deprecated/gtkfontsel.c:250 ../gtk/gtkfontchooser.c:91
 msgid "Preview text"
-msgstr ""
+msgstr "Матни пешнамоиш"
 
 #: ../gtk/deprecated/gtkfontsel.c:251 ../gtk/gtkfontchooser.c:92
 msgid "The text to display in order to demonstrate the selected font"
@@ -974,11 +974,11 @@ msgstr ""
 
 #: ../gtk/gtkapplication.c:738
 msgid "Register session"
-msgstr ""
+msgstr "Қайд кардани ҷаласа"
 
 #: ../gtk/gtkapplication.c:739
 msgid "Register with the session manager"
-msgstr ""
+msgstr "Қайд кардан бо мудири ҷаласаҳо"
 
 #: ../gtk/gtkapplication.c:744
 msgid "Application menu"
@@ -1039,7 +1039,7 @@ msgstr "Миқдори фазое, ки бо тирча истифода меш�
 
 #: ../gtk/gtkaspectframe.c:107 ../gtk/gtkwidget.c:1386
 msgid "Horizontal Alignment"
-msgstr ""
+msgstr "Москунии уфуқӣ"
 
 #: ../gtk/gtkaspectframe.c:108
 msgid "X alignment of the child"
@@ -1047,7 +1047,7 @@ msgstr ""
 
 #: ../gtk/gtkaspectframe.c:114 ../gtk/gtkwidget.c:1402
 msgid "Vertical Alignment"
-msgstr ""
+msgstr "Москунии амудӣ"
 
 #: ../gtk/gtkaspectframe.c:115
 msgid "Y alignment of the child"
@@ -1111,7 +1111,7 @@ msgstr ""
 
 #: ../gtk/gtkassistant.c:407
 msgid "Sidebar image"
-msgstr ""
+msgstr "Тасвири навори ҷонибӣ"
 
 #: ../gtk/gtkassistant.c:408
 msgid "Sidebar image for the assistant page"
@@ -1159,7 +1159,7 @@ msgstr ""
 
 #: ../gtk/gtkbbox.c:194
 msgid "Layout style"
-msgstr ""
+msgstr "Сабки тарҳбандӣ"
 
 #: ../gtk/gtkbbox.c:195
 msgid ""
@@ -1249,7 +1249,7 @@ msgstr ""
 
 #: ../gtk/gtkbubblewindow.c:852
 msgid "Relative to"
-msgstr ""
+msgstr "Алоқаманд ба"
 
 #: ../gtk/gtkbubblewindow.c:853
 msgid "Window the bubble window points to"
@@ -1257,7 +1257,7 @@ msgstr ""
 
 #: ../gtk/gtkbubblewindow.c:859
 msgid "Pointing to"
-msgstr ""
+msgstr "Нишондиҳанда ба"
 
 #: ../gtk/gtkbubblewindow.c:860
 msgid "Rectangle the bubble window points to"
@@ -1269,7 +1269,7 @@ msgstr ""
 
 #: ../gtk/gtkbuilder.c:313
 msgid "Translation Domain"
-msgstr ""
+msgstr "Домени тарҷума"
 
 #: ../gtk/gtkbuilder.c:314
 msgid "The translation domain used by gettext"
@@ -1284,7 +1284,7 @@ msgstr ""
 #: ../gtk/gtkbutton.c:240 ../gtk/gtkexpander.c:296 ../gtk/gtklabel.c:742
 #: ../gtk/gtkmenuitem.c:445 ../gtk/gtktoolbutton.c:246
 msgid "Use underline"
-msgstr ""
+msgstr "Истифода бурдани зерхаткашӣ"
 
 #: ../gtk/gtkbutton.c:241 ../gtk/gtkexpander.c:297 ../gtk/gtklabel.c:743
 #: ../gtk/gtkmenuitem.c:446
@@ -1329,7 +1329,7 @@ msgstr ""
 
 #: ../gtk/gtkbutton.c:318 ../gtk/gtkimagemenuitem.c:158
 msgid "Image widget"
-msgstr ""
+msgstr "Виҷети тасвир"
 
 #: ../gtk/gtkbutton.c:319
 msgid "Child widget to appear next to the button text"
@@ -1337,7 +1337,7 @@ msgstr ""
 
 #: ../gtk/gtkbutton.c:333
 msgid "Image position"
-msgstr ""
+msgstr "Ҷойгиршавии тасвир"
 
 #: ../gtk/gtkbutton.c:334
 msgid "The position of the image relative to the text"
@@ -1345,7 +1345,7 @@ msgstr ""
 
 #: ../gtk/gtkbutton.c:476
 msgid "Default Spacing"
-msgstr ""
+msgstr "Фосилагузории пешфарз"
 
 #: ../gtk/gtkbutton.c:477
 msgid "Extra space to add for GTK_CAN_DEFAULT buttons"
@@ -1391,7 +1391,7 @@ msgstr ""
 
 #: ../gtk/gtkbutton.c:539 ../gtk/gtkentry.c:810 ../gtk/gtkentry.c:1976
 msgid "Inner Border"
-msgstr ""
+msgstr "Марзи дохилӣ"
 
 #: ../gtk/gtkbutton.c:540
 msgid "Border between button edges and child."
@@ -1399,7 +1399,7 @@ msgstr ""
 
 #: ../gtk/gtkbutton.c:553
 msgid "Image spacing"
-msgstr ""
+msgstr "Фосилагузории тасвирҳо"
 
 #: ../gtk/gtkbutton.c:554
 msgid "Spacing in pixels between the image and label"
@@ -1411,7 +1411,7 @@ msgstr "Сол"
 
 #: ../gtk/gtkcalendar.c:470
 msgid "The selected year"
-msgstr ""
+msgstr "Соли интихобшуда"
 
 #: ../gtk/gtkcalendar.c:483
 msgid "Month"
@@ -1449,7 +1449,7 @@ msgstr ""
 
 #: ../gtk/gtkcalendar.c:542
 msgid "No Month Change"
-msgstr ""
+msgstr "Бе тағйирдиҳии моҳ"
 
 #: ../gtk/gtkcalendar.c:543
 msgid "If TRUE, the selected month cannot be changed"
@@ -1489,7 +1489,7 @@ msgstr ""
 
 #: ../gtk/gtkcalendar.c:619
 msgid "Inner border"
-msgstr ""
+msgstr "Марзи дохилӣ"
 
 #: ../gtk/gtkcalendar.c:620
 msgid "Inner border space"
@@ -3103,7 +3103,7 @@ msgstr ""
 
 #: ../gtk/gtkentry.c:1366
 msgid "Completion"
-msgstr ""
+msgstr "Хотимаёбӣ"
 
 #: ../gtk/gtkentry.c:1367
 msgid "The auxiliary completion object"
@@ -3159,7 +3159,7 @@ msgstr ""
 
 #: ../gtk/gtkentrycompletion.c:323
 msgid "Completion Model"
-msgstr ""
+msgstr "Намунаи хотимаёбӣ"
 
 #: ../gtk/gtkentrycompletion.c:324
 msgid "The model to find matches in"
@@ -3666,7 +3666,7 @@ msgstr ""
 
 #: ../gtk/gtkiconview.c:580
 msgid "Item Orientation"
-msgstr ""
+msgstr "Самти объект"
 
 #: ../gtk/gtkiconview.c:581
 msgid ""
