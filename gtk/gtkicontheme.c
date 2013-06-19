@@ -350,7 +350,8 @@ static void     blow_themes               (GtkIconTheme    *icon_themes);
 static gboolean rescan_themes             (GtkIconTheme    *icon_themes);
 
 static GtkIconData *icon_data_dup      (GtkIconData     *icon_data);
-static void  icon_data_free            (GtkIconData     *icon_data);
+static GtkIconData *icon_data_ref      (GtkIconData     *icon_data);
+static void  icon_data_unref           (GtkIconData     *icon_data);
 static void load_icon_data             (IconThemeDir    *dir,
 			                const char      *path,
 			                const char      *name);
@@ -2606,9 +2607,9 @@ theme_lookup_icon (IconTheme          *theme,
           icon_info->filename = NULL;
           icon_info->icon_file = NULL;
         }
-      
+
       if (min_dir->icon_data != NULL)
-	icon_info->data = g_hash_table_lookup (min_dir->icon_data, icon_name);
+        icon_info->data = icon_data_ref (g_hash_table_lookup (min_dir->icon_data, icon_name));
 
       if (icon_info->data == NULL && min_dir->cache != NULL)
 	{
@@ -2617,9 +2618,9 @@ theme_lookup_icon (IconTheme          *theme,
 	    {
 	      if (min_dir->icon_data == NULL)
 		min_dir->icon_data = g_hash_table_new_full (g_str_hash, g_str_equal,
-							    g_free, (GDestroyNotify)icon_data_free);
+							    g_free, (GDestroyNotify)icon_data_unref);
 
-	      g_hash_table_replace (min_dir->icon_data, g_strdup (icon_name), icon_info->data);
+	      g_hash_table_replace (min_dir->icon_data, g_strdup (icon_name), icon_data_ref (icon_info->data));
 	    }
 	}
 
@@ -2634,10 +2635,10 @@ theme_lookup_icon (IconTheme          *theme,
 	    {
 	      if (min_dir->icon_data == NULL)	
 		min_dir->icon_data = g_hash_table_new_full (g_str_hash, g_str_equal,
-							    g_free, (GDestroyNotify)icon_data_free);
+							    g_free, (GDestroyNotify)icon_data_unref);
 	      load_icon_data (min_dir, icon_file_path, icon_file_name);
 	      
-	      icon_info->data = g_hash_table_lookup (min_dir->icon_data, icon_name);
+	      icon_info->data = icon_data_ref (g_hash_table_lookup (min_dir->icon_data, icon_name));
 	    }
 	  g_free (icon_file_name);
 	  g_free (icon_file_path);
@@ -2726,7 +2727,6 @@ load_icon_data (IconThemeDir *dir, const char *path, const char *name)
   int i;
   gint *ivalues;
   GError *error = NULL;
-  
   GtkIconData *data;
 
   icon_file = g_key_file_new ();
@@ -2741,8 +2741,10 @@ load_icon_data (IconThemeDir *dir, const char *path, const char *name)
   else
     {
       base_name = strip_suffix (name);
-      
+
       data = g_slice_new0 (GtkIconData);
+      data->ref = 1;
+
       /* takes ownership of base_name */
       g_hash_table_replace (dir->icon_data, base_name, data);
       
@@ -2823,7 +2825,7 @@ scan_directory (GtkIconThemePrivate *icon_theme,
 	{
 	  if (dir->icon_data == NULL)
 	    dir->icon_data = g_hash_table_new_full (g_str_hash, g_str_equal,
-						    g_free, (GDestroyNotify)icon_data_free);
+						    g_free, (GDestroyNotify)icon_data_unref);
 	  
 	  path = g_build_filename (full_dir, name, NULL);
 	  if (g_file_test (path, G_FILE_TEST_IS_REGULAR))
@@ -2962,12 +2964,27 @@ theme_subdir_load (GtkIconTheme *icon_theme,
     }
 }
 
-static void
-icon_data_free (GtkIconData *icon_data)
+static GtkIconData *
+icon_data_ref (GtkIconData *icon_data)
 {
-  g_free (icon_data->attach_points);
-  g_free (icon_data->display_name);
-  g_slice_free (GtkIconData, icon_data);
+  if (icon_data)
+    icon_data->ref++;
+  return icon_data;
+}
+
+static void
+icon_data_unref (GtkIconData *icon_data)
+{
+  if (icon_data)
+    {
+      icon_data->ref--;
+      if (icon_data->ref == 0)
+        {
+          g_free (icon_data->attach_points);
+          g_free (icon_data->display_name);
+          g_slice_free (GtkIconData, icon_data);
+        }
+    }
 }
 
 static GtkIconData *
@@ -2977,6 +2994,7 @@ icon_data_dup (GtkIconData *icon_data)
   if (icon_data)
     {
       dup = g_slice_new0 (GtkIconData);
+      dup->ref = 1;
       *dup = *icon_data;
       if (dup->n_attach_points > 0)
 	{
@@ -3125,6 +3143,7 @@ gtk_icon_info_finalize (GObject *object)
     g_object_unref (icon_info->cache_pixbuf);
   if (icon_info->symbolic_pixbuf_size)
     gtk_requisition_free (icon_info->symbolic_pixbuf_size);
+  icon_data_unref (icon_info->data);
 
   symbolic_pixbuf_cache_free (icon_info->symbolic_pixbuf_cache);
 

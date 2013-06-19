@@ -25,6 +25,7 @@ typedef struct _GtkIconData GtkIconData;
 
 struct _GtkIconData
 {
+  gint ref;
   gboolean has_embedded_rect;
   gint x0, y0, x1, y1;
   
