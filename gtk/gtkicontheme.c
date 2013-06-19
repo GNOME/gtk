@@ -204,7 +204,7 @@ struct _GtkIconThemePrivate
   glong last_stat_time;
   GList *dir_mtimes;
 
-  gulong reset_styles_idle;
+  gulong theme_changed_idle;
 };
 
 typedef struct {
@@ -796,7 +796,7 @@ free_dir_mtime (IconThemeDirMtime *dir_mtime)
 }
 
 static gboolean
-reset_styles_idle (gpointer user_data)
+theme_changed_idle (gpointer user_data)
 {
   GtkIconTheme *icon_theme;
   GtkIconThemePrivate *priv;
@@ -804,12 +804,25 @@ reset_styles_idle (gpointer user_data)
   icon_theme = GTK_ICON_THEME (user_data);
   priv = icon_theme->priv;
 
+  g_signal_emit (icon_theme, signal_changed, 0);
+
   if (priv->screen && priv->is_screen_singleton)
     gtk_style_context_reset_widgets (priv->screen);
 
-  priv->reset_styles_idle = 0;
+  priv->theme_changed_idle = 0;
 
   return FALSE;
+}
+
+static void
+queue_theme_changed (GtkIconTheme *icon_theme)
+{
+  GtkIconThemePrivate *priv = icon_theme->priv;
+
+  if (!priv->theme_changed_idle)
+    priv->theme_changed_idle =
+      gdk_threads_add_idle_full (GTK_PRIORITY_RESIZE - 2,
+                                 theme_changed_idle, icon_theme, NULL);
 }
 
 static void
@@ -821,16 +834,13 @@ do_theme_change (GtkIconTheme *icon_theme)
 
   if (!priv->themes_valid)
     return;
-  
+
   GTK_NOTE (ICONTHEME, 
 	    g_print ("change to icon theme \"%s\"\n", priv->current_theme));
   blow_themes (icon_theme);
-  g_signal_emit (icon_theme, signal_changed, 0);
 
-  if (!priv->reset_styles_idle)
-    priv->reset_styles_idle = 
-      gdk_threads_add_idle_full (GTK_PRIORITY_RESIZE - 2, 
-		       reset_styles_idle, icon_theme, NULL);
+  queue_theme_changed (icon_theme);
+
 }
 
 static void
@@ -865,10 +875,10 @@ gtk_icon_theme_finalize (GObject *object)
   g_hash_table_destroy (priv->info_cache);
   g_assert (priv->info_cache_lru == NULL);
 
-  if (priv->reset_styles_idle)
+  if (priv->theme_changed_idle)
     {
-      g_source_remove (priv->reset_styles_idle);
-      priv->reset_styles_idle = 0;
+      g_source_remove (priv->theme_changed_idle);
+      priv->theme_changed_idle = 0;
     }
 
   unset_screen (icon_theme);
@@ -1411,9 +1421,7 @@ ensure_valid_themes (GtkIconTheme *icon_theme)
       load_themes (icon_theme);
 
       if (was_valid)
-	{
-	  g_signal_emit (icon_theme, signal_changed, 0);
-	}
+        queue_theme_changed (icon_theme);
     }
 
   priv->loading_themes = FALSE;
