@@ -397,6 +397,47 @@ set_filename_existing_nonexistent_cb (GtkButton      *button,
 }
 
 static void
+get_selection_cb (GtkButton      *button,
+		  GtkFileChooser *chooser)
+{
+  GSList *selection;
+
+  selection = gtk_file_chooser_get_uris (chooser);
+
+  g_print ("Selection: ");
+
+  if (selection == NULL)
+    g_print ("empty\n");
+  else
+    {
+      GSList *l;
+      
+      for (l = selection; l; l = l->next)
+	{
+	  char *uri = l->data;
+
+	  g_print ("%s\n", uri);
+
+	  if (l->next)
+	    g_print ("           ");
+	}
+    }
+
+  g_slist_free_full (selection, g_free);
+}
+
+static void
+get_current_name_cb (GtkButton      *button,
+		     GtkFileChooser *chooser)
+{
+  char *name;
+
+  name = gtk_file_chooser_get_current_name (chooser);
+  g_print ("Current name: %s\n", name ? name : "NULL");
+  g_free (name);
+}
+
+static void
 unmap_and_remap_cb (GtkButton *button,
 		    GtkFileChooser *chooser)
 {
@@ -681,6 +722,16 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (vbbox), button);
   g_signal_connect (button, "clicked",
 		    G_CALLBACK (set_filename_existing_nonexistent_cb), dialog);
+
+  button = gtk_button_new_with_label ("Get selection");
+  gtk_container_add (GTK_CONTAINER (vbbox), button);
+  g_signal_connect (button, "clicked",
+		    G_CALLBACK (get_selection_cb), dialog);
+
+  button = gtk_button_new_with_label ("Get current name");
+  gtk_container_add (GTK_CONTAINER (vbbox), button);
+  g_signal_connect (button, "clicked",
+		    G_CALLBACK (get_current_name_cb), dialog);
 
   button = gtk_button_new_with_label ("Unmap and remap");
   gtk_container_add (GTK_CONTAINER (vbbox), button);
