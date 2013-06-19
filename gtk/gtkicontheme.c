@@ -1399,7 +1399,10 @@ ensure_valid_themes (GtkIconTheme *icon_theme)
 
       if (ABS (tv.tv_sec - priv->last_stat_time) > 5 &&
 	  rescan_themes (icon_theme))
-	blow_themes (icon_theme);
+        {
+          g_hash_table_remove_all (priv->info_cache);
+          blow_themes (icon_theme);
+        }
     }
   
   if (!priv->themes_valid)
