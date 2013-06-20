@@ -712,7 +712,6 @@ static gboolean validate_row             (GtkTreeView *tree_view,
 					  GtkTreeIter *iter,
 					  GtkTreePath *path);
 static void     validate_visible_area    (GtkTreeView *tree_view);
-static gboolean validate_rows_handler    (GtkTreeView *tree_view);
 static gboolean do_validate_rows         (GtkTreeView *tree_view,
 					  gboolean     queue_resize);
 static gboolean validate_rows            (GtkTreeView *tree_view);
@@ -6824,21 +6823,6 @@ validate_rows (GtkTreeView *tree_view)
 }
 
 static gboolean
-validate_rows_handler (GtkTreeView *tree_view)
-{
-  gboolean retval;
-
-  retval = do_validate_rows (tree_view, TRUE);
-  if (! retval && tree_view->priv->validate_rows_timer)
-    {
-      g_source_remove (tree_view->priv->validate_rows_timer);
-      tree_view->priv->validate_rows_timer = 0;
-    }
-
-  return retval;
-}
-
-static gboolean
 do_presize_handler (GtkTreeView *tree_view)
 {
   if (tree_view->priv->mark_rows_col_dirty)
@@ -6891,7 +6875,7 @@ install_presize_handler (GtkTreeView *tree_view)
   if (! tree_view->priv->validate_rows_timer)
     {
       tree_view->priv->validate_rows_timer =
-	gdk_threads_add_idle_full (GTK_TREE_VIEW_PRIORITY_VALIDATE, (GSourceFunc) validate_rows_handler, tree_view, NULL);
+	gdk_threads_add_idle_full (GTK_TREE_VIEW_PRIORITY_VALIDATE, (GSourceFunc) validate_rows, tree_view, NULL);
     }
 }
 
