@@ -1375,7 +1375,7 @@ gtk_file_chooser_set_current_name  (GtkFileChooser *chooser,
 gchar *
 gtk_file_chooser_get_current_name (GtkFileChooser *chooser)
 {
-  g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
   return GTK_FILE_CHOOSER_GET_IFACE (chooser)->get_current_name (chooser);
 }
