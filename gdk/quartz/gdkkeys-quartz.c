@@ -267,7 +267,7 @@ const static struct {
 };
 
 static void
-maybe_update_keymap (void)
+update_keymap (void)
 {
   const void *chr_data = NULL;
 
@@ -542,8 +542,6 @@ gdk_quartz_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
   GArray *keys_array;
   int i;
 
-  maybe_update_keymap ();
-
   *n_keys = 0;
   keys_array = g_array_new (FALSE, FALSE, sizeof (GdkKeymapKey));
 
@@ -578,8 +576,6 @@ gdk_quartz_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
   GArray *keys_array, *keyvals_array;
   int i;
   guint *p;
-
-  maybe_update_keymap ();
 
   *n_entries = 0;
 
@@ -688,8 +684,6 @@ gdk_quartz_keymap_translate_keyboard_state (GdkKeymap       *keymap,
   guint tmp_keyval;
   GdkModifierType bit;
   guint tmp_modifiers = 0;
-
-  maybe_update_keymap ();
 
   if (keyval)
     *keyval = 0;
@@ -836,13 +830,35 @@ _gdk_quartz_keys_is_modifier (guint keycode)
 }
 
 static void
+input_sources_changed_notification (CFNotificationCenterRef  center,
+                                    void                    *observer,
+                                    CFStringRef              name,
+                                    const void              *object,
+                                    CFDictionaryRef          userInfo)
+{
+  update_keymap ();
+}
+
+static void
 gdk_quartz_keymap_init (GdkQuartzKeymap *keymap)
 {
+  update_keymap ();
+  CFNotificationCenterAddObserver (CFNotificationCenterGetDistributedCenter (),
+                                   keymap,
+                                   input_sources_changed_notification,
+                                   CFSTR ("AppleSelectedInputSourcesChangedNotification"),
+                                   NULL,
+                                   CFNotificationSuspensionBehaviorDeliverImmediately);
 }
 
 static void
 gdk_quartz_keymap_finalize (GObject *object)
 {
+  CFNotificationCenterRemoveObserver (CFNotificationCenterGetDistributedCenter (),
+                                      object,
+                                      CFSTR ("AppleSelectedInputSourcesChangedNotification"),
+                                      NULL);
+
   G_OBJECT_CLASS (gdk_quartz_keymap_parent_class)->finalize (object);
 }
 
