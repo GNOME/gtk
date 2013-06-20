@@ -4848,7 +4848,7 @@ strbreakup (const char *string,
  * @flags: flags affecting how the search is done
  * @match_start: (out caller-allocates) (allow-none): return location for start of match, or %NULL
  * @match_end: (out caller-allocates) (allow-none): return location for end of match, or %NULL
- * @limit: (allow-none): bound for the search, or %NULL for the end of the buffer
+ * @limit: (allow-none): location of last possible @match_end, or %NULL for the end of the buffer
  *
  * Searches forward for @str. Any match is returned by setting
  * @match_start to the first character of the match and @match_end to the
