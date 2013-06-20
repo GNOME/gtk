@@ -303,7 +303,9 @@ gdk_x11_device_xi2_warp (GdkDevice *device,
   XIWarpPointer (GDK_SCREEN_XDISPLAY (screen),
                  device_xi2->device_id,
                  None, dest,
-                 0, 0, 0, 0, x, y);
+                 0, 0, 0, 0,
+                 x * GDK_X11_SCREEN(screen)->window_scale,
+                 y * GDK_X11_SCREEN(screen)->window_scale);
 }
 
 static void
@@ -317,6 +319,7 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
                                 gint             *win_y,
                                 GdkModifierType  *mask)
 {
+  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
   GdkX11DeviceXI2 *device_xi2 = GDK_X11_DEVICE_XI2 (device);
   GdkDisplay *display;
   GdkScreen *default_screen;
@@ -381,16 +384,16 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
     *child_window = gdk_x11_window_lookup_for_display (display, xchild_window);
 
   if (root_x)
-    *root_x = (gint) xroot_x;
+    *root_x = (gint) (xroot_x / impl->window_scale);
 
   if (root_y)
-    *root_y = (gint) xroot_y;
+    *root_y = (gint) (xroot_y / impl->window_scale);
 
   if (win_x)
-    *win_x = (gint) xwin_x;
+    *win_x = (gint) (xwin_x / impl->window_scale);
 
   if (win_y)
-    *win_y = (gint) xwin_y;
+    *win_y = (gint) (xwin_y / impl->window_scale);
 
   if (mask)
     *mask = _gdk_x11_device_xi2_translate_state (&mod_state, &button_state, &group_state);
@@ -479,6 +482,7 @@ gdk_x11_device_xi2_window_at_position (GdkDevice       *device,
                                        GdkModifierType *mask,
                                        gboolean         get_toplevel)
 {
+  GdkWindowImplX11 *impl;
   GdkX11DeviceXI2 *device_xi2 = GDK_X11_DEVICE_XI2 (device);
   GdkDisplay *display;
   GdkScreen *screen;
@@ -624,12 +628,15 @@ gdk_x11_device_xi2_window_at_position (GdkDevice       *device,
   gdk_x11_display_ungrab (display);
 
   window = gdk_x11_window_lookup_for_display (display, last);
+  impl = NULL;
+  if (window)
+    impl = GDK_WINDOW_IMPL_X11 (window->impl);
 
   if (win_x)
-    *win_x = (window) ? (gint) xwin_x : -1;
+    *win_x = (window) ? (gint) (xwin_x / impl->window_scale) : -1;
 
   if (win_y)
-    *win_y = (window) ? (gint) xwin_y : -1;
+    *win_y = (window) ? (gint) (xwin_y / impl->window_scale) : -1;
 
   if (mask)
     *mask = _gdk_x11_device_xi2_translate_state (&mod_state, &button_state, &group_state);

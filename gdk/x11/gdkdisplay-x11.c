@@ -558,11 +558,16 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 
       {
 	GdkRectangle expose_rect;
+        int x2, y2;
 
-	expose_rect.x = xevent->xexpose.x;
-	expose_rect.y = xevent->xexpose.y;
-	expose_rect.width = xevent->xexpose.width;
-	expose_rect.height = xevent->xexpose.height;
+        expose_rect.x = xevent->xexpose.x / window_impl->window_scale;
+        expose_rect.y = xevent->xexpose.y / window_impl->window_scale;
+
+        x2 = (xevent->xexpose.x + xevent->xexpose.width + window_impl->window_scale -1) / window_impl->window_scale;
+        expose_rect.width = x2 - expose_rect.x;
+
+        y2 = (xevent->xexpose.y + xevent->xexpose.height + window_impl->window_scale -1) / window_impl->window_scale;
+        expose_rect.height = y2 - expose_rect.y;
 
         _gdk_x11_window_process_expose (window, xevent->xexpose.serial, &expose_rect);
         return_val = FALSE;
@@ -573,6 +578,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
     case GraphicsExpose:
       {
 	GdkRectangle expose_rect;
+        int x2, y2;
 
         GDK_NOTE (EVENTS,
 		  g_message ("graphics expose:\tdrawable: %ld",
@@ -584,10 +590,14 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
             break;
           }
 
-	expose_rect.x = xevent->xgraphicsexpose.x;
-	expose_rect.y = xevent->xgraphicsexpose.y;
-	expose_rect.width = xevent->xgraphicsexpose.width;
-	expose_rect.height = xevent->xgraphicsexpose.height;
+        expose_rect.x = xevent->xgraphicsexpose.x / window_impl->window_scale;
+        expose_rect.y = xevent->xgraphicsexpose.y / window_impl->window_scale;
+
+        x2 = (xevent->xgraphicsexpose.x + xevent->xgraphicsexpose.width + window_impl->window_scale -1) / window_impl->window_scale;
+        expose_rect.width = x2 - expose_rect.x;
+
+        y2 = (xevent->xgraphicsexpose.y + xevent->xgraphicsexpose.height + window_impl->window_scale -1) / window_impl->window_scale;
+        expose_rect.height = y2 - expose_rect.y;
 
         _gdk_x11_window_process_expose (window, xevent->xgraphicsexpose.serial, &expose_rect);
         return_val = FALSE;
@@ -773,8 +783,8 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 			   : ""));
       if (window && GDK_WINDOW_TYPE (window) == GDK_WINDOW_ROOT)
         {
-	  window->width = xevent->xconfigure.width;
-	  window->height = xevent->xconfigure.height;
+	  window->width = xevent->xconfigure.width / window_impl->window_scale;
+	  window->height = xevent->xconfigure.height / window_impl->window_scale;
 
 	  _gdk_window_update_size (window);
 	  _gdk_x11_window_update_size (GDK_WINDOW_IMPL_X11 (window->impl));
@@ -799,8 +809,8 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	{
 	  event->configure.type = GDK_CONFIGURE;
 	  event->configure.window = window;
-	  event->configure.width = xevent->xconfigure.width;
-	  event->configure.height = xevent->xconfigure.height;
+	  event->configure.width = xevent->xconfigure.width / window_impl->window_scale;
+	  event->configure.height = xevent->xconfigure.height / window_impl->window_scale;
 
 	  if (!xevent->xconfigure.send_event &&
 	      !xevent->xconfigure.override_redirect &&
@@ -818,22 +828,22 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 					 &tx, &ty,
 					 &child_window))
 		{
-		  event->configure.x = tx;
-		  event->configure.y = ty;
+		  event->configure.x = tx / window_impl->window_scale;
+		  event->configure.y = ty / window_impl->window_scale;
 		}
 	      gdk_x11_display_error_trap_pop_ignored (display);
 	    }
 	  else
 	    {
-	      event->configure.x = xevent->xconfigure.x;
-	      event->configure.y = xevent->xconfigure.y;
+	      event->configure.x = xevent->xconfigure.x / window_impl->window_scale;
+	      event->configure.y = xevent->xconfigure.y / window_impl->window_scale;
 	    }
 	  if (!is_substructure)
 	    {
 	      window->x = event->configure.x;
 	      window->y = event->configure.y;
-	      window->width = xevent->xconfigure.width;
-	      window->height = xevent->xconfigure.height;
+	      window->width = xevent->xconfigure.width / window_impl->window_scale;
+	      window->height = xevent->xconfigure.height / window_impl->window_scale;
 
 	      _gdk_window_update_size (window);
 	      _gdk_x11_window_update_size (GDK_WINDOW_IMPL_X11 (window->impl));
@@ -1015,11 +1025,15 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	  XDamageNotifyEvent *damage_event = (XDamageNotifyEvent *) xevent;
 	  XserverRegion repair;
 	  GdkRectangle rect;
+          int x2, y2;
 
-	  rect.x = window->x + damage_event->area.x;
-	  rect.y = window->y + damage_event->area.y;
-	  rect.width = damage_event->area.width;
-	  rect.height = damage_event->area.height;
+	  rect.x = window->x + damage_event->area.x / window_impl->window_scale;
+	  rect.y = window->y + damage_event->area.y / window_impl->window_scale;
+
+          x2 = (rect.x * window_impl->window_scale + damage_event->area.width + window_impl->window_scale -1) / window_impl->window_scale;
+          y2 = (rect.y * window_impl->window_scale + damage_event->area.height + window_impl->window_scale -1) / window_impl->window_scale;
+	  rect.width = x2 - rect.x;
+	  rect.height = y2 - rect.y;
 
 	  repair = XFixesCreateRegion (display_x11->xdisplay,
 				       &damage_event->area, 1);
