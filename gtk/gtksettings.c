@@ -2787,6 +2787,8 @@ settings_update_resolution (GtkSettings *settings)
   GtkSettingsPrivate *priv = settings->priv;
   gint dpi_int;
   gdouble dpi;
+  const char *scale_env;
+  double scale;
 
   g_object_get (settings,
                 "gtk-xft-dpi", &dpi_int,
@@ -2796,6 +2798,14 @@ settings_update_resolution (GtkSettings *settings)
     dpi = dpi_int / 1024.;
   else
     dpi = -1.;
+
+  scale_env = g_getenv ("GDK_DPI_SCALE");
+  if (scale_env)
+    {
+      scale = g_ascii_strtod (scale_env, NULL);
+      if (scale != 0 && dpi > 0)
+	dpi *= scale;
+    }
 
   gdk_screen_set_resolution (priv->screen, dpi);
 }
