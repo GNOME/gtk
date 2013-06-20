@@ -246,7 +246,7 @@ const static struct {
 };
 
 static void
-maybe_update_keymap (void)
+update_keymap (void)
 {
   const void *chr_data = NULL;
 
@@ -485,13 +485,32 @@ maybe_update_keymap (void)
     }
 }
 
+static void
+input_sources_changed_notification (CFNotificationCenterRef  center,
+                                    void                    *observer,
+                                    CFStringRef              name,
+                                    const void              *object,
+                                    CFDictionaryRef          userInfo)
+{
+  update_keymap ();
+}
+
 GdkKeymap *
 gdk_keymap_get_for_display (GdkDisplay *display)
 {
   g_return_val_if_fail (display == gdk_display_get_default (), NULL);
 
   if (default_keymap == NULL)
-    default_keymap = g_object_new (gdk_keymap_get_type (), NULL);
+    {
+      default_keymap = g_object_new (gdk_keymap_get_type (), NULL);
+      update_keymap ();
+      CFNotificationCenterAddObserver (CFNotificationCenterGetDistributedCenter (),
+                                       NULL,
+                                       input_sources_changed_notification,
+                                       CFSTR ("AppleSelectedInputSourcesChangedNotification"),
+                                       NULL,
+                                       CFNotificationSuspensionBehaviorDeliverImmediately);
+    }
 
   return default_keymap;
 }
@@ -530,8 +549,6 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
   g_return_val_if_fail (n_keys != NULL, FALSE);
   g_return_val_if_fail (keyval != 0, FALSE);
 
-  maybe_update_keymap ();
-
   *n_keys = 0;
   keys_array = g_array_new (FALSE, FALSE, sizeof (GdkKeymapKey));
 
@@ -569,8 +586,6 @@ gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
 
   g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), FALSE);
   g_return_val_if_fail (n_entries != NULL, FALSE);
-
-  maybe_update_keymap ();
 
   *n_entries = 0;
 
@@ -689,8 +704,6 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
   g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), FALSE);
   g_return_val_if_fail (group >= 0 && group <= 1, FALSE);
   
-  maybe_update_keymap ();
-
   if (keyval)
     *keyval = 0;
   if (effective_group)
