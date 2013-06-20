@@ -332,9 +332,11 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
                                              GdkEvent           *event,
                                              XEvent             *xevent)
 {
+  GdkWindowImplX11 *impl;
   GdkX11DeviceManagerCore *device_manager;
   GdkWindow *window;
   gboolean return_val;
+  int scale;
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
 
   device_manager = GDK_X11_DEVICE_MANAGER_CORE (translator);
@@ -342,13 +344,17 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
 
   window = get_event_window (translator, xevent);
 
+  scale = 1;
   if (window)
     {
       if (GDK_WINDOW_DESTROYED (window) || !GDK_IS_WINDOW (window))
         return FALSE;
 
       g_object_ref (window);
+      impl = GDK_WINDOW_IMPL_X11 (window->impl);
+      scale = impl->window_scale;
     }
+
 
   event->any.window = window;
   event->any.send_event = xevent->xany.send_event ? TRUE : FALSE;
@@ -458,10 +464,10 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
 
           event->scroll.window = window;
           event->scroll.time = xevent->xbutton.time;
-          event->scroll.x = (gdouble) xevent->xbutton.x;
-          event->scroll.y = (gdouble) xevent->xbutton.y;
-          event->scroll.x_root = (gdouble) xevent->xbutton.x_root;
-          event->scroll.y_root = (gdouble) xevent->xbutton.y_root;
+          event->scroll.x = (gdouble) xevent->xbutton.x / scale;
+          event->scroll.y = (gdouble) xevent->xbutton.y / scale;
+          event->scroll.x_root = (gdouble) xevent->xbutton.x_root / scale;
+          event->scroll.y_root = (gdouble) xevent->xbutton.y_root / scale;
           event->scroll.state = (GdkModifierType) xevent->xbutton.state;
           event->scroll.device = device_manager->core_pointer;
 
@@ -480,10 +486,10 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
           event->button.type = GDK_BUTTON_PRESS;
           event->button.window = window;
           event->button.time = xevent->xbutton.time;
-          event->button.x = (gdouble) xevent->xbutton.x;
-          event->button.y = (gdouble) xevent->xbutton.y;
-          event->button.x_root = (gdouble) xevent->xbutton.x_root;
-          event->button.y_root = (gdouble) xevent->xbutton.y_root;
+          event->button.x = (gdouble) xevent->xbutton.x / scale;
+          event->button.y = (gdouble) xevent->xbutton.y / scale;
+          event->button.x_root = (gdouble) xevent->xbutton.x_root / scale;
+          event->button.y_root = (gdouble) xevent->xbutton.y_root / scale;
           event->button.axes = NULL;
           event->button.state = (GdkModifierType) xevent->xbutton.state;
           event->button.button = xevent->xbutton.button;
@@ -523,10 +529,10 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
       event->button.type = GDK_BUTTON_RELEASE;
       event->button.window = window;
       event->button.time = xevent->xbutton.time;
-      event->button.x = (gdouble) xevent->xbutton.x;
-      event->button.y = (gdouble) xevent->xbutton.y;
-      event->button.x_root = (gdouble) xevent->xbutton.x_root;
-      event->button.y_root = (gdouble) xevent->xbutton.y_root;
+      event->button.x = (gdouble) xevent->xbutton.x / scale;
+      event->button.y = (gdouble) xevent->xbutton.y / scale;
+      event->button.x_root = (gdouble) xevent->xbutton.x_root / scale;
+      event->button.y_root = (gdouble) xevent->xbutton.y_root / scale;
       event->button.axes = NULL;
       event->button.state = (GdkModifierType) xevent->xbutton.state;
       event->button.button = xevent->xbutton.button;
@@ -553,10 +559,10 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
       event->motion.type = GDK_MOTION_NOTIFY;
       event->motion.window = window;
       event->motion.time = xevent->xmotion.time;
-      event->motion.x = (gdouble) xevent->xmotion.x;
-      event->motion.y = (gdouble) xevent->xmotion.y;
-      event->motion.x_root = (gdouble) xevent->xmotion.x_root;
-      event->motion.y_root = (gdouble) xevent->xmotion.y_root;
+      event->motion.x = (gdouble) xevent->xmotion.x / scale;
+      event->motion.y = (gdouble) xevent->xmotion.y / scale;
+      event->motion.x_root = (gdouble) xevent->xmotion.x_root / scale;
+      event->motion.y_root = (gdouble) xevent->xmotion.y_root / scale;
       event->motion.axes = NULL;
       event->motion.state = (GdkModifierType) xevent->xmotion.state;
       event->motion.is_hint = xevent->xmotion.is_hint;
@@ -602,10 +608,10 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
         event->crossing.subwindow = NULL;
 
       event->crossing.time = xevent->xcrossing.time;
-      event->crossing.x = (gdouble) xevent->xcrossing.x;
-      event->crossing.y = (gdouble) xevent->xcrossing.y;
-      event->crossing.x_root = (gdouble) xevent->xcrossing.x_root;
-      event->crossing.y_root = (gdouble) xevent->xcrossing.y_root;
+      event->crossing.x = (gdouble) xevent->xcrossing.x / scale;
+      event->crossing.y = (gdouble) xevent->xcrossing.y / scale;
+      event->crossing.x_root = (gdouble) xevent->xcrossing.x_root / scale;
+      event->crossing.y_root = (gdouble) xevent->xcrossing.y_root / scale;
 
       event->crossing.mode = translate_crossing_mode (xevent->xcrossing.mode);
       event->crossing.detail = translate_notify_type (xevent->xcrossing.detail);
@@ -646,10 +652,10 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
         event->crossing.subwindow = NULL;
 
       event->crossing.time = xevent->xcrossing.time;
-      event->crossing.x = (gdouble) xevent->xcrossing.x;
-      event->crossing.y = (gdouble) xevent->xcrossing.y;
-      event->crossing.x_root = (gdouble) xevent->xcrossing.x_root;
-      event->crossing.y_root = (gdouble) xevent->xcrossing.y_root;
+      event->crossing.x = (gdouble) xevent->xcrossing.x / scale;
+      event->crossing.y = (gdouble) xevent->xcrossing.y / scale;
+      event->crossing.x_root = (gdouble) xevent->xcrossing.x_root / scale;
+      event->crossing.y_root = (gdouble) xevent->xcrossing.y_root / scale;
 
       event->crossing.mode = translate_crossing_mode (xevent->xcrossing.mode);
       event->crossing.detail = translate_notify_type (xevent->xcrossing.detail);

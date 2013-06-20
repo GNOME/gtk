@@ -42,18 +42,22 @@ _gdk_x11_window_move_resize_child (GdkWindow *window,
                                    gint       width,
                                    gint       height)
 {
+  GdkWindowImplX11 *impl;
+
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  if (width > 65535 ||
-      height > 65535)
+  impl = GDK_WINDOW_IMPL_X11 (window->impl);
+
+  if (width * impl->window_scale > 65535 ||
+      height * impl->window_scale > 65535)
     {
       g_warning ("Native children wider or taller than 65535 pixels are not supported");
 
-      if (width > 65535)
-        width = 65535;
-      if (height > 65535)
-        height = 65535;
+      if (width * impl->window_scale > 65535)
+        width = 65535 / impl->window_scale;
+      if (height * impl->window_scale > 65535)
+        height = 65535 / impl->window_scale;
     }
 
   window->x = x;
@@ -69,9 +73,10 @@ _gdk_x11_window_move_resize_child (GdkWindow *window,
   _gdk_x11_window_tmp_unset_bg (window, TRUE);
   XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
                      GDK_WINDOW_XID (window),
-                     window->x + window->parent->abs_x,
-                     window->y + window->parent->abs_y,
-                     width, height);
+                     (window->x + window->parent->abs_x) * impl->window_scale,
+                     (window->y + window->parent->abs_y) * impl->window_scale,
+                     width * impl->window_scale,
+                     height * impl->window_scale);
   _gdk_x11_window_tmp_reset_parent_bg (window);
   _gdk_x11_window_tmp_reset_bg (window, TRUE);
 }

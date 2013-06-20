@@ -1115,6 +1115,8 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
   XGenericEventCookie *cookie;
   gboolean return_val = TRUE;
   GdkWindow *window;
+  GdkWindowImplX11 *impl;
+  int scale;
   XIEvent *ev;
 
   device_manager = (GdkX11DeviceManagerXI2 *) translator;
@@ -1135,6 +1137,13 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
   if (window && GDK_WINDOW_DESTROYED (window))
     return FALSE;
+
+  scale = 1;
+  if (window)
+    {
+      impl = GDK_WINDOW_IMPL_X11 (window->impl);
+      scale = impl->window_scale;
+    }
 
   if (ev->evtype == XI_Motion ||
       ev->evtype == XI_ButtonRelease)
@@ -1232,10 +1241,10 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
             event->scroll.window = window;
             event->scroll.time = xev->time;
-            event->scroll.x = (gdouble) xev->event_x;
-            event->scroll.y = (gdouble) xev->event_y;
-            event->scroll.x_root = (gdouble) xev->root_x;
-            event->scroll.y_root = (gdouble) xev->root_y;
+            event->scroll.x = (gdouble) xev->event_x / scale;
+            event->scroll.y = (gdouble) xev->event_y / scale;
+            event->scroll.x_root = (gdouble) xev->root_x / scale;
+            event->scroll.y_root = (gdouble) xev->root_y / scale;
             event->scroll.delta_x = 0;
             event->scroll.delta_y = 0;
 
@@ -1259,10 +1268,10 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
             event->button.window = window;
             event->button.time = xev->time;
-            event->button.x = (gdouble) xev->event_x;
-            event->button.y = (gdouble) xev->event_y;
-            event->button.x_root = (gdouble) xev->root_x;
-            event->button.y_root = (gdouble) xev->root_y;
+            event->button.x = (gdouble) xev->event_x / scale;
+            event->button.y = (gdouble) xev->event_y / scale;
+            event->button.x_root = (gdouble) xev->root_x / scale;
+            event->button.y_root = (gdouble) xev->root_y / scale;
 
             event->button.device = g_hash_table_lookup (device_manager->id_table,
                                                         GUINT_TO_POINTER (xev->deviceid));
@@ -1350,10 +1359,10 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
             event->scroll.window = window;
             event->scroll.time = xev->time;
-            event->scroll.x = (gdouble) xev->event_x;
-            event->scroll.y = (gdouble) xev->event_y;
-            event->scroll.x_root = (gdouble) xev->root_x;
-            event->scroll.y_root = (gdouble) xev->root_y;
+            event->scroll.x = (gdouble) xev->event_x / scale;
+            event->scroll.y = (gdouble) xev->event_y / scale;
+            event->scroll.x_root = (gdouble) xev->root_x / scale;
+            event->scroll.y_root = (gdouble) xev->root_y / scale;
             event->scroll.delta_x = delta_x;
             event->scroll.delta_y = delta_y;
 
@@ -1367,10 +1376,10 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         event->motion.type = GDK_MOTION_NOTIFY;
         event->motion.window = window;
         event->motion.time = xev->time;
-        event->motion.x = (gdouble) xev->event_x;
-        event->motion.y = (gdouble) xev->event_y;
-        event->motion.x_root = (gdouble) xev->root_x;
-        event->motion.y_root = (gdouble) xev->root_y;
+        event->motion.x = (gdouble) xev->event_x / scale;
+        event->motion.y = (gdouble) xev->event_y / scale;
+        event->motion.x_root = (gdouble) xev->root_x / scale;
+        event->motion.y_root = (gdouble) xev->root_y / scale;
 
         event->motion.device = device;
         gdk_event_set_source_device (event, source_device);
@@ -1423,10 +1432,10 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
         event->touch.window = window;
         event->touch.time = xev->time;
-        event->touch.x = (gdouble) xev->event_x;
-        event->touch.y = (gdouble) xev->event_y;
-        event->touch.x_root = (gdouble) xev->root_x;
-        event->touch.y_root = (gdouble) xev->root_y;
+        event->touch.x = (gdouble) xev->event_x / scale;
+        event->touch.y = (gdouble) xev->event_y / scale;
+        event->touch.x_root = (gdouble) xev->root_x / scale;
+        event->touch.y_root = (gdouble) xev->root_y / scale;
 
         event->touch.device = g_hash_table_lookup (device_manager->id_table,
                                                    GUINT_TO_POINTER (xev->deviceid));
@@ -1492,10 +1501,10 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         event->touch.sequence = GUINT_TO_POINTER (xev->detail);
         event->touch.type = GDK_TOUCH_UPDATE;
         event->touch.time = xev->time;
-        event->touch.x = (gdouble) xev->event_x;
-        event->touch.y = (gdouble) xev->event_y;
-        event->touch.x_root = (gdouble) xev->root_x;
-        event->touch.y_root = (gdouble) xev->root_y;
+        event->touch.x = (gdouble) xev->event_x / scale;
+        event->touch.y = (gdouble) xev->event_y / scale;
+        event->touch.x_root = (gdouble) xev->root_x / scale;
+        event->touch.y_root = (gdouble) xev->root_y / scale;
 
         event->touch.device = g_hash_table_lookup (device_manager->id_table,
                                                    GINT_TO_POINTER (xev->deviceid));
@@ -1540,10 +1549,10 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
         event->crossing.type = (ev->evtype == XI_Enter) ? GDK_ENTER_NOTIFY : GDK_LEAVE_NOTIFY;
 
-        event->crossing.x = (gdouble) xev->event_x;
-        event->crossing.y = (gdouble) xev->event_y;
-        event->crossing.x_root = (gdouble) xev->root_x;
-        event->crossing.y_root = (gdouble) xev->root_y;
+        event->crossing.x = (gdouble) xev->event_x / scale;
+        event->crossing.y = (gdouble) xev->event_y / scale;
+        event->crossing.x_root = (gdouble) xev->root_x / scale;
+        event->crossing.y_root = (gdouble) xev->root_y / scale;
         event->crossing.time = xev->time;
         event->crossing.focus = xev->focus;
 

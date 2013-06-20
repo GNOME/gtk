@@ -140,11 +140,13 @@ gboolean _gdk_x11_selection_filter_clear_event (XSelectionClearEvent *event);
 
 cairo_region_t* _gdk_x11_xwindow_get_shape  (Display *xdisplay,
                                              Window   window,
+                                             gint     scale,
                                              gint     shape_type);
 
 void     _gdk_x11_region_get_xrectangles   (const cairo_region_t  *region,
                                             gint                   x_offset,
                                             gint                   y_offset,
+                                            gint                   scale,
                                             XRectangle           **rects,
                                             gint                  *n_rects);
 

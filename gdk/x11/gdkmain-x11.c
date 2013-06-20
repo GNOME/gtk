@@ -368,6 +368,7 @@ void
 _gdk_x11_region_get_xrectangles (const cairo_region_t *region,
                                  gint             x_offset,
                                  gint             y_offset,
+                                 gint             scale,
                                  XRectangle     **rects,
                                  gint            *n_rects)
 {
@@ -381,10 +382,10 @@ _gdk_x11_region_get_xrectangles (const cairo_region_t *region,
   for (i = 0; i < n; i++)
     {
       cairo_region_get_rectangle (region, i, &box);
-      rectangles[i].x = CLAMP (box.x + x_offset, G_MINSHORT, G_MAXSHORT);
-      rectangles[i].y = CLAMP (box.y + y_offset, G_MINSHORT, G_MAXSHORT);
-      rectangles[i].width = CLAMP (box.width, G_MINSHORT, G_MAXSHORT);
-      rectangles[i].height = CLAMP (box.height, G_MINSHORT, G_MAXSHORT);
+      rectangles[i].x = CLAMP ((box.x + x_offset) * scale, G_MINSHORT, G_MAXSHORT);
+      rectangles[i].y = CLAMP ((box.y + y_offset) * scale, G_MINSHORT, G_MAXSHORT);
+      rectangles[i].width = CLAMP (box.width * scale, G_MINSHORT, G_MAXSHORT);
+      rectangles[i].height = CLAMP (box.height * scale, G_MINSHORT, G_MAXSHORT);
     }
 
   *n_rects = n;

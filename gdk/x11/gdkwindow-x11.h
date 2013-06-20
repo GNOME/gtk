@@ -64,6 +64,8 @@ struct _GdkWindowImplX11
 
   Window xid;
 
+  gint window_scale;
+
   GdkToplevelX11 *toplevel;	/* Toplevel-specific information */
   GdkCursor *cursor;
   GHashTable *device_cursor;
