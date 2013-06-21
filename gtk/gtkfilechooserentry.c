@@ -551,8 +551,12 @@ finished_loading_cb (GtkFileSystemModel  *model,
 
   completion = gtk_entry_get_completion (GTK_ENTRY (chooser_entry));
   update_inline_completion (chooser_entry);
-  gtk_entry_completion_complete (completion);
-  gtk_entry_completion_insert_prefix (completion);
+
+  if (gtk_widget_has_focus (GTK_WIDGET (chooser_entry)))
+    {
+      gtk_entry_completion_complete (completion);
+      gtk_entry_completion_insert_prefix (completion);
+    }
 }
 
 static void
