@@ -85,7 +85,7 @@ test_in_files = \
 	a11yutil.test.in \
 	$(NULL)
 
-EXTRA_DIST += $(test_in_files)
+EXTRA_DIST += $(test_in_files) $(testdata)
 
 if BUILDOPT_INSTALL_TESTS
 insttestdir=$(pkglibexecdir)/installed-tests
