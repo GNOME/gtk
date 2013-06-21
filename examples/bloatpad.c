@@ -139,15 +139,18 @@ new_window (GApplication *app,
   gtk_container_add (GTK_CONTAINER (window), grid);
 
   toolbar = gtk_toolbar_new ();
-  button = gtk_toggle_tool_button_new_from_stock (GTK_STOCK_JUSTIFY_LEFT);
+  button = gtk_toggle_tool_button_new ();
+  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (button), "format-justify-left");
   gtk_actionable_set_detailed_action_name (GTK_ACTIONABLE (button), "win.justify::left");
   gtk_container_add (GTK_CONTAINER (toolbar), GTK_WIDGET (button));
 
-  button = gtk_toggle_tool_button_new_from_stock (GTK_STOCK_JUSTIFY_CENTER);
+  button = gtk_toggle_tool_button_new ();
+  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (button), "format-justify-center");
   gtk_actionable_set_detailed_action_name (GTK_ACTIONABLE (button), "win.justify::center");
   gtk_container_add (GTK_CONTAINER (toolbar), GTK_WIDGET (button));
 
-  button = gtk_toggle_tool_button_new_from_stock (GTK_STOCK_JUSTIFY_RIGHT);
+  button = gtk_toggle_tool_button_new ();
+  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (button), "format-justify-right");
   gtk_actionable_set_detailed_action_name (GTK_ACTIONABLE (button), "win.justify::right");
   gtk_container_add (GTK_CONTAINER (toolbar), GTK_WIDGET (button));
 
