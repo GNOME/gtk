@@ -1,3 +1,26 @@
+Overview of Changes in GTK+ 3.9.4 to 3.9.6
+==========================================
+
+* GtkListBox:
+ - handle double-clicks properly
+ - add an example in gtk3-demo
+
+* Bugs fixed:
+ 390048 Patch for adding "whole word" search for gtk_text_iter...
+ 560337 GtkFileChooser hour time missing for current date files
+ 649390 CRLF text is copied to clipboard as CRCRLF on Windows
+ 679930 gtk_builder_add_* should not use GError
+ 698183 Text input is too slow and some keys are broken after...
+ 701174 Update misleading filechooser documentation
+ 702598 Invalid read of size 4 in gtk_icon_info_get_embedded_rect
+ 702695 typo: "and thus will thus"
+ 702763 ellipsize placeholder text
+
+* Translation updates:
+ Italian
+ Tajik
+
+
 Overview of Changes in GTK+ 3.9.2 to 3.9.4
 ==========================================
 
