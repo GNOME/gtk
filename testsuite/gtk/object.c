@@ -107,7 +107,7 @@ pspec_select_value (GParamSpec *pspec,
 {
   /* generate a value suitable for pspec */
   if (G_IS_PARAM_SPEC_CHAR (pspec))
-    ASSIGN_VALUE (g_value_set_char, value, GParamSpecChar*, pspec, default_value, minimum, maximum, dvalue);
+    ASSIGN_VALUE (g_value_set_schar, value, GParamSpecChar*, pspec, default_value, minimum, maximum, dvalue);
   else if (G_IS_PARAM_SPEC_UCHAR (pspec))
     ASSIGN_VALUE (g_value_set_uchar, value, GParamSpecUChar*, pspec, default_value, minimum, maximum, dvalue);
   else if (G_IS_PARAM_SPEC_INT (pspec))
@@ -179,7 +179,7 @@ value_as_pointer (GValue *value)
   if (G_VALUE_HOLDS_BOOLEAN (value))
     return GINT_TO_POINTER(g_value_get_boolean (value));
   if (G_VALUE_HOLDS_CHAR (value))
-    return (void*) (gssize) g_value_get_char (value);
+    return (void*) (gssize) g_value_get_schar (value);
   if (G_VALUE_HOLDS_UCHAR (value))
     return (void*) (gsize) g_value_get_uchar (value);
   if (G_VALUE_HOLDS_INT (value))
