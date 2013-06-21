@@ -566,6 +566,11 @@ main (int argc, char **argv)
 	action = GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER;
       else if (! strcmp ("create_folder", action_arg))
 	action = GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER;
+      else
+	{
+	  g_print ("--action must be one of \"open\", \"save\", \"select_folder\", \"create_folder\"\n");
+	  return 1;
+	}
 
       g_free (action_arg);
     }
