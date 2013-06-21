@@ -7,6 +7,7 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
 static GtkWidget *window = NULL;
@@ -177,10 +178,6 @@ static GtkActionEntry entries[] = {
     "_About", "<control>A",                    /* label, accelerator */
     "About",                                   /* tooltip */
     G_CALLBACK (about_cb) },
-  { "Logo", "demo-gtk-logo",                   /* name, stock id */
-     NULL, NULL,                               /* label, accelerator */
-    "GTK+",                                    /* tooltip */
-    G_CALLBACK (activate_action) },
 };
 static guint n_entries = G_N_ELEMENTS (entries);
 
@@ -279,58 +276,8 @@ static const gchar *ui_info =
 "      </menu>"
 "    </toolitem>"
 "    <toolitem action='Quit'/>"
-"    <separator action='Sep1'/>"
-"    <toolitem action='Logo'/>"
 "  </toolbar>"
 "</ui>";
-
-
-
-/* This function registers our custom toolbar icons, so they can be themed.
- *
- * It's totally optional to do this, you could just manually insert icons
- * and have them not be themeable, especially if you never expect people
- * to theme your app.
- */
-static void
-register_stock_icons (void)
-{
-  static gboolean registered = FALSE;
-
-  if (!registered)
-    {
-      GdkPixbuf *pixbuf;
-      GtkIconFactory *factory;
-      GtkIconSet *icon_set;
-
-      static GtkStockItem items[] = {
-        { "demo-gtk-logo",
-          "_GTK!",
-          0, 0, NULL }
-      };
-
-      registered = TRUE;
-
-      /* Register our stock items */
-      gtk_stock_add (items, G_N_ELEMENTS (items));
-
-      /* Add our custom icon factory to the list of defaults */
-      factory = gtk_icon_factory_new ();
-      gtk_icon_factory_add_default (factory);
-
-      pixbuf = gdk_pixbuf_new_from_resource ("/appwindow/gtk-logo-old.png", NULL);
-      /* We assert the existence of the pixbuf as we load it from a custom resource. */
-      g_assert (pixbuf);
-
-      icon_set = gtk_icon_set_new_from_pixbuf (pixbuf);
-      gtk_icon_factory_add (factory, "demo-gtk-logo", icon_set);
-      gtk_icon_set_unref (icon_set);
-      g_object_unref (pixbuf);
-
-      /* Drop our reference to the factory, GTK will hold a reference. */
-      g_object_unref (factory);
-    }
-}
 
 static void
 update_statusbar (GtkTextBuffer *buffer,
@@ -386,8 +333,6 @@ do_appwindow (GtkWidget *do_widget)
       GtkAction *open_action;
       GtkUIManager *merge;
       GError *error = NULL;
-
-      register_stock_icons ();
 
       /* Create the toplevel window
        */
@@ -470,7 +415,7 @@ do_appwindow (GtkWidget *do_widget)
                           messagelabel,
                           TRUE, TRUE, 0);
       gtk_info_bar_add_button (GTK_INFO_BAR (infobar),
-                               GTK_STOCK_OK, GTK_RESPONSE_OK);
+                               _("OK"), GTK_RESPONSE_OK);
       g_signal_connect (infobar, "response",
                         G_CALLBACK (gtk_widget_hide), NULL);
 

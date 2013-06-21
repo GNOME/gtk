@@ -121,7 +121,6 @@
     <file>sizegroup.c</file>
     <file>stack.c</file>
     <file>spinner.c</file>
-    <file>stock_browser.c</file>
     <file>textview.c</file>
     <file>textscroll.c</file>
     <file>theming_style_classes.c</file>

@@ -4,6 +4,7 @@
  *
  */
 
+#include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
 static GtkWidget *window = NULL;
@@ -38,7 +39,7 @@ do_spinner (GtkWidget *do_widget)
     window = gtk_dialog_new_with_buttons ("GtkSpinner",
                                           GTK_WINDOW (do_widget),
                                           0,
-                                          GTK_STOCK_CLOSE,
+                                          _("_Close"),
                                           GTK_RESPONSE_NONE,
                                           NULL);
     gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
@@ -71,12 +72,12 @@ do_spinner (GtkWidget *do_widget)
     spinner_unsensitive = spinner;
     gtk_widget_set_sensitive (hbox, FALSE);
 
-    button = gtk_button_new_from_stock (GTK_STOCK_MEDIA_PLAY);
+    button = gtk_button_new_with_label (_("Play"));
     g_signal_connect (G_OBJECT (button), "clicked",
                       G_CALLBACK (on_play_clicked), spinner);
     gtk_container_add (GTK_CONTAINER (vbox), button);
 
-    button = gtk_button_new_from_stock (GTK_STOCK_MEDIA_STOP);
+    button = gtk_button_new_with_label (_("Stop"));
     g_signal_connect (G_OBJECT (button), "clicked",
                       G_CALLBACK (on_stop_clicked), spinner);
     gtk_container_add (GTK_CONTAINER (vbox), button);

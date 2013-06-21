@@ -9,6 +9,7 @@
  * manager to run.
  */
 
+#include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <string.h>
 
@@ -68,17 +69,24 @@ paste_button_clicked (GtkWidget *button,
 static GdkPixbuf *
 get_image_pixbuf (GtkImage *image)
 {
-  gchar *stock_id;
+  gchar *icon_name;
   GtkIconSize size;
+  GtkIconTheme *icon_theme;
+  int width;
 
   switch (gtk_image_get_storage_type (image))
     {
     case GTK_IMAGE_PIXBUF:
       return g_object_ref (gtk_image_get_pixbuf (image));
-    case GTK_IMAGE_STOCK:
-      gtk_image_get_stock (image, &stock_id, &size);
-      return gtk_widget_render_icon_pixbuf (GTK_WIDGET (image),
-                                            stock_id, size);
+    case GTK_IMAGE_ICON_NAME:
+      gtk_image_get_icon_name (image, &icon_name, &size);
+      icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (image));
+      gtk_icon_size_lookup (size, &width, NULL);
+      return gtk_icon_theme_load_icon (icon_theme,
+                                       icon_name,
+                                       width,
+                                       GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+                                       NULL);
     default:
       g_warning ("Image storage type %d not handled",
                  gtk_image_get_storage_type (image));
@@ -177,12 +185,12 @@ button_press (GtkWidget      *widget,
 
   menu = gtk_menu_new ();
 
-  item = gtk_image_menu_item_new_from_stock (GTK_STOCK_COPY, NULL);
+  item = gtk_menu_item_new_with_mnemonic (_("_Copy"));
   g_signal_connect (item, "activate", G_CALLBACK (copy_image), data);
   gtk_widget_show (item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 
-  item = gtk_image_menu_item_new_from_stock (GTK_STOCK_PASTE, NULL);
+  item = gtk_menu_item_new_with_mnemonic (_("_Paste"));
   g_signal_connect (item, "activate", G_CALLBACK (paste_image), data);
   gtk_widget_show (item);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
@@ -228,7 +236,7 @@ do_clipboard (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
 
       /* Create the button */
-      button = gtk_button_new_from_stock (GTK_STOCK_COPY);
+      button = gtk_button_new_with_mnemonic (_("_Copy"));
       gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
       g_signal_connect (button, "clicked",
                         G_CALLBACK (copy_button_clicked), entry);
@@ -245,7 +253,7 @@ do_clipboard (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
 
       /* Create the button */
-      button = gtk_button_new_from_stock (GTK_STOCK_PASTE);
+      button = gtk_button_new_with_mnemonic (_("_Paste"));
       gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
       g_signal_connect (button, "clicked",
                         G_CALLBACK (paste_button_clicked), entry);
@@ -258,8 +266,8 @@ do_clipboard (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
 
       /* Create the first image */
-      image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING,
-                                        GTK_ICON_SIZE_BUTTON);
+      image = gtk_image_new_from_icon_name ("dialog-warning",
+                                            GTK_ICON_SIZE_BUTTON);
       ebox = gtk_event_box_new ();
       gtk_container_add (GTK_CONTAINER (ebox), image);
       gtk_container_add (GTK_CONTAINER (hbox), ebox);
@@ -284,8 +292,8 @@ do_clipboard (GtkWidget *do_widget)
                         G_CALLBACK (button_press), image);
 
       /* Create the second image */
-      image = gtk_image_new_from_stock (GTK_STOCK_STOP,
-                                        GTK_ICON_SIZE_BUTTON);
+      image = gtk_image_new_from_icon_name ("process-stop",
+                                            GTK_ICON_SIZE_BUTTON);
       ebox = gtk_event_box_new ();
       gtk_container_add (GTK_CONTAINER (ebox), image);
       gtk_container_add (GTK_CONTAINER (hbox), ebox);

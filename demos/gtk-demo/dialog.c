@@ -3,6 +3,7 @@
  * Dialog widgets are used to pop up a transient window for user feedback.
  */
 
+#include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
 static GtkWidget *window = NULL;
@@ -36,7 +37,7 @@ interactive_dialog_clicked (GtkButton *button,
   GtkWidget *content_area;
   GtkWidget *dialog;
   GtkWidget *hbox;
-  GtkWidget *stock;
+  GtkWidget *image;
   GtkWidget *table;
   GtkWidget *local_entry1;
   GtkWidget *local_entry2;
@@ -46,9 +47,9 @@ interactive_dialog_clicked (GtkButton *button,
   dialog = gtk_dialog_new_with_buttons ("Interactive Dialog",
                                         GTK_WINDOW (window),
                                         GTK_DIALOG_MODAL| GTK_DIALOG_DESTROY_WITH_PARENT,
-                                        GTK_STOCK_OK,
+                                        _("_OK"),
                                         GTK_RESPONSE_OK,
-                                        "_Non-stock Button",
+                                        "_Cancel",
                                         GTK_RESPONSE_CANCEL,
                                         NULL);
 
@@ -58,8 +59,8 @@ interactive_dialog_clicked (GtkButton *button,
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 8);
   gtk_box_pack_start (GTK_BOX (content_area), hbox, FALSE, FALSE, 0);
 
-  stock = gtk_image_new_from_stock (GTK_STOCK_DIALOG_QUESTION, GTK_ICON_SIZE_DIALOG);
-  gtk_box_pack_start (GTK_BOX (hbox), stock, FALSE, FALSE, 0);
+  image = gtk_image_new_from_icon_name ("dialog-question", GTK_ICON_SIZE_DIALOG);
+  gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, FALSE, 0);
 
   table = gtk_grid_new ();
   gtk_grid_set_row_spacing (GTK_GRID (table), 4);

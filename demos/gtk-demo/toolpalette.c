@@ -9,7 +9,7 @@
 
 static GtkWidget *window = NULL;
 
-static void load_stock_items (GtkToolPalette *palette);
+static void load_icon_items (GtkToolPalette *palette);
 static void load_toggle_items (GtkToolPalette *palette);
 static void load_special_items (GtkToolPalette *palette);
 
@@ -35,11 +35,19 @@ canvas_item_new (GtkWidget     *widget,
                  gdouble        y)
 {
   CanvasItem *item = NULL;
-  const gchar *stock_id;
+  const gchar *icon_name;
   GdkPixbuf *pixbuf;
+  GtkIconTheme *icon_theme;
+  int width;
 
-  stock_id = gtk_tool_button_get_stock_id (button);
-  pixbuf = gtk_widget_render_icon_pixbuf (widget, stock_id, GTK_ICON_SIZE_DIALOG);
+  icon_name = gtk_tool_button_get_icon_name (button);
+  icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (widget));
+  gtk_icon_size_lookup (GTK_ICON_SIZE_DIALOG, &width, NULL);
+  pixbuf = gtk_icon_theme_load_icon (icon_theme,
+                                     icon_name,
+                                     width,
+                                     GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+                                     NULL);
 
   if (pixbuf)
     {
@@ -511,7 +519,7 @@ do_toolpalette (GtkWidget *do_widget)
       /* Add and fill the ToolPalette: */
       palette = gtk_tool_palette_new ();
 
-      load_stock_items (GTK_TOOL_PALETTE (palette));
+      load_icon_items (GTK_TOOL_PALETTE (palette));
       load_toggle_items (GTK_TOOL_PALETTE (palette));
       load_special_items (GTK_TOOL_PALETTE (palette));
 
@@ -626,62 +634,45 @@ do_toolpalette (GtkWidget *do_widget)
 
 
 static void
-load_stock_items (GtkToolPalette *palette)
+load_icon_items (GtkToolPalette *palette)
 {
-  GtkWidget *group_af = gtk_tool_item_group_new ("Stock Icons (A-F)");
-  GtkWidget *group_gn = gtk_tool_item_group_new ("Stock Icons (G-N)");
-  GtkWidget *group_or = gtk_tool_item_group_new ("Stock Icons (O-R)");
-  GtkWidget *group_sz = gtk_tool_item_group_new ("Stock Icons (S-Z)");
-  GtkWidget *group = NULL;
+  GList *contexts;
+  GList *l;
+  GtkIconTheme *icon_theme;
 
-  GtkToolItem *item;
-  GSList *stock_ids;
-  GSList *iter;
+  icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (palette)));
 
-  stock_ids = gtk_stock_list_ids ();
-  stock_ids = g_slist_sort (stock_ids, (GCompareFunc) strcmp);
-
-  gtk_container_add (GTK_CONTAINER (palette), group_af);
-  gtk_container_add (GTK_CONTAINER (palette), group_gn);
-  gtk_container_add (GTK_CONTAINER (palette), group_or);
-  gtk_container_add (GTK_CONTAINER (palette), group_sz);
-
-  for (iter = stock_ids; iter; iter = g_slist_next (iter))
+  contexts = gtk_icon_theme_list_contexts (icon_theme);
+  for (l = contexts; l; l = g_list_next (l))
     {
-      GtkStockItem stock_item;
-      gchar *id = iter->data;
+      gchar *context = l->data;
+      GList *icon_names;
+      GList *ll;
 
-      switch (id[4])
+      GtkWidget *group = gtk_tool_item_group_new (context);
+      gtk_container_add (GTK_CONTAINER (palette), group);
+
+      g_message ("Got context '%s'", context);
+      icon_names = gtk_icon_theme_list_icons (icon_theme, context);
+      icon_names = g_list_sort (icon_names, (GCompareFunc) strcmp);
+
+      for (ll = icon_names; ll; ll = g_list_next (ll))
         {
-          case 'a':
-            group = group_af;
-            break;
+          GtkToolItem *item;
+          gchar *id = ll->data;
 
-          case 'g':
-            group = group_gn;
-            break;
+          g_message ("Got id '%s'", id);
 
-          case 'o':
-            group = group_or;
-            break;
-
-          case 's':
-            group = group_sz;
-            break;
+          item = gtk_tool_button_new (NULL, NULL);
+          gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), id);
+          gtk_tool_item_set_tooltip_text (GTK_TOOL_ITEM (item), id);
+          gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
         }
 
-      item = gtk_tool_button_new_from_stock (id);
-      gtk_tool_item_set_tooltip_text (GTK_TOOL_ITEM (item), id);
-      gtk_tool_item_set_is_important (GTK_TOOL_ITEM (item), TRUE);
-      gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
-
-      if (!gtk_stock_lookup (id, &stock_item) || !stock_item.label)
-        gtk_tool_button_set_label (GTK_TOOL_BUTTON (item), id);
-
-      g_free (id);
+      g_list_free_full (icon_names, g_free);
     }
 
-  g_slist_free (stock_ids);
+  g_list_free_full (contexts, g_free);
 }
 
 static void
@@ -761,22 +752,26 @@ load_special_items (GtkToolPalette *palette)
                            "homogeneous", FALSE, "expand", TRUE,
                            "new-row", TRUE, NULL);
 
-  item = gtk_tool_button_new_from_stock (GTK_STOCK_GO_UP);
+  item = gtk_tool_button_new (NULL, NULL);
+  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "go-up");
   gtk_tool_item_set_tooltip_text (item, "Show on vertical palettes only");
   gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
   gtk_tool_item_set_visible_horizontal (item, FALSE);
 
-  item = gtk_tool_button_new_from_stock (GTK_STOCK_GO_FORWARD);
+  item = gtk_tool_button_new (NULL, NULL);
+  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "go-next");
   gtk_tool_item_set_tooltip_text (item, "Show on horizontal palettes only");
   gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
   gtk_tool_item_set_visible_vertical (item, FALSE);
 
-  item = gtk_tool_button_new_from_stock (GTK_STOCK_DELETE);
+  item = gtk_tool_button_new (NULL, NULL);
+  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "edit-delete");
   gtk_tool_item_set_tooltip_text (item, "Do not show at all");
   gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
   gtk_widget_set_no_show_all (GTK_WIDGET (item), TRUE);
 
-  item = gtk_tool_button_new_from_stock (GTK_STOCK_FULLSCREEN);
+  item = gtk_tool_button_new (NULL, NULL);
+  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "view-fullscreen");
   gtk_tool_item_set_tooltip_text (item, "Expanded this item");
   gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
   gtk_container_child_set (GTK_CONTAINER (group), GTK_WIDGET (item),
@@ -784,7 +779,8 @@ load_special_items (GtkToolPalette *palette)
                            "expand", TRUE,
                            NULL);
 
-  item = gtk_tool_button_new_from_stock (GTK_STOCK_HELP);
+  item = gtk_tool_button_new (NULL, NULL);
+  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "help-browser");
   gtk_tool_item_set_tooltip_text (item, "A regular item");
   gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
 }

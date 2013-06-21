@@ -29,6 +29,7 @@
 
 #undef GDK_DISABLE_DEPRECATED
 
+#include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
 /* The ChangeDisplayInfo structure corresponds to a toplevel window and
@@ -211,8 +212,8 @@ open_display_cb (GtkWidget         *button,
   dialog = gtk_dialog_new_with_buttons ("Open Display",
                                         GTK_WINDOW (info->window),
                                         GTK_DIALOG_MODAL,
-                                        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                                        GTK_STOCK_OK, GTK_RESPONSE_OK,
+                                        _("_Cancel"), GTK_RESPONSE_CANCEL,
+                                        _("_OK"), GTK_RESPONSE_OK,
                                         NULL);
 
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
@@ -528,7 +529,7 @@ do_changedisplay (GtkWidget *do_widget)
       info->window = gtk_dialog_new_with_buttons ("Change Screen or display",
                                             GTK_WINDOW (do_widget),
                                             0,
-                                            GTK_STOCK_CLOSE,  GTK_RESPONSE_CLOSE,
+                                            _("_Close"),  GTK_RESPONSE_CLOSE,
                                             "Change",         GTK_RESPONSE_OK,
                                             NULL);
 

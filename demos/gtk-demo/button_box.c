@@ -3,6 +3,7 @@
  * The Button Box widgets are used to arrange buttons with padding.
  */
 
+#include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
 static GtkWidget *
@@ -28,13 +29,13 @@ create_bbox (gint  horizontal,
   gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), layout);
   gtk_box_set_spacing (GTK_BOX (bbox), spacing);
 
-  button = gtk_button_new_from_stock (GTK_STOCK_OK);
+  button = gtk_button_new_with_label (_("OK"));
   gtk_container_add (GTK_CONTAINER (bbox), button);
 
-  button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
+  button = gtk_button_new_with_label (_("Cancel"));
   gtk_container_add (GTK_CONTAINER (bbox), button);
 
-  button = gtk_button_new_from_stock (GTK_STOCK_HELP);
+  button = gtk_button_new_with_label (_("Help"));
   gtk_container_add (GTK_CONTAINER (bbox), button);
 
   return frame;

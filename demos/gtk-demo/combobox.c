@@ -7,81 +7,59 @@
  * How the options are displayed is controlled by cell renderers.
  */
 
+#include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
 enum
 {
-  PIXBUF_COL,
+  ICON_NAME_COL,
   TEXT_COL
 };
 
-static gchar *
-strip_underscore (const gchar *text)
-{
-  gchar *p, *q;
-  gchar *result;
-
-  result = g_strdup (text);
-  p = q = result;
-  while (*p)
-    {
-      if (*p != '_')
-        {
-          *q = *p;
-          q++;
-        }
-      p++;
-    }
-  *q = '\0';
-
-  return result;
-}
-
 static GtkTreeModel *
-create_stock_icon_store (void)
+create_icon_store (void)
 {
-  gchar *stock_id[6] = {
-    GTK_STOCK_DIALOG_WARNING,
-    GTK_STOCK_STOP,
-    GTK_STOCK_NEW,
-    GTK_STOCK_CLEAR,
+  const gchar *icon_names[6] = {
+    "dialog-warning",
+    "process-stop",
+    "document-new",
+    "edit-clear",
     NULL,
-    GTK_STOCK_OPEN
+    "document-open"
+  };
+  const gchar *labels[6] = {
+    N_("Warning"),
+    N_("Stop"),
+    N_("New"),
+    N_("Clear"),
+    NULL,
+    N_("Open")
   };
 
-  GtkStockItem item;
-  GdkPixbuf *pixbuf;
   GtkWidget *cellview;
   GtkTreeIter iter;
   GtkListStore *store;
-  gchar *label;
   gint i;
 
   cellview = gtk_cell_view_new ();
 
-  store = gtk_list_store_new (2, GDK_TYPE_PIXBUF, G_TYPE_STRING);
+  store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
 
-  for (i = 0; i < G_N_ELEMENTS (stock_id); i++)
+  for (i = 0; i < G_N_ELEMENTS (icon_names); i++)
     {
-      if (stock_id[i])
+      if (icon_names[i])
         {
-          pixbuf = gtk_widget_render_icon_pixbuf (cellview, stock_id[i],
-                                                  GTK_ICON_SIZE_BUTTON);
-          gtk_stock_lookup (stock_id[i], &item);
-          label = strip_underscore (item.label);
           gtk_list_store_append (store, &iter);
           gtk_list_store_set (store, &iter,
-                              PIXBUF_COL, pixbuf,
-                              TEXT_COL, label,
+                              ICON_NAME_COL, icon_names[i],
+                              TEXT_COL, _(labels[i]),
                               -1);
-          g_object_unref (pixbuf);
-          g_free (label);
         }
       else
         {
           gtk_list_store_append (store, &iter);
           gtk_list_store_set (store, &iter,
-                              PIXBUF_COL, NULL,
+                              ICON_NAME_COL, NULL,
                               TEXT_COL, "separator",
                               -1);
         }
@@ -351,14 +329,14 @@ do_combobox (GtkWidget *do_widget)
     /* A combobox demonstrating cell renderers, separators and
      *  insensitive rows
      */
-    frame = gtk_frame_new ("Some stock icons");
+    frame = gtk_frame_new ("Items with icons");
     gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
     box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_container_set_border_width (GTK_CONTAINER (box), 5);
     gtk_container_add (GTK_CONTAINER (frame), box);
 
-    model = create_stock_icon_store ();
+    model = create_icon_store ();
     combo = gtk_combo_box_new_with_model (model);
     g_object_unref (model);
     gtk_container_add (GTK_CONTAINER (box), combo);
@@ -366,7 +344,7 @@ do_combobox (GtkWidget *do_widget)
     renderer = gtk_cell_renderer_pixbuf_new ();
     gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo), renderer, FALSE);
     gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo), renderer,
-                                    "pixbuf", PIXBUF_COL,
+                                    "icon-name", ICON_NAME_COL,
                                     NULL);
 
     gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (combo),

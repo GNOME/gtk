@@ -54,7 +54,6 @@ DEMOS = \
 	pixbufs.c		\
 	rotated_text.c	\
 	sizegroup.c	\
-	stock_browser.c	\
 	textview.c	\
 	tree_store.c	\
 	ui_manager.c	\
@@ -83,7 +82,6 @@ OBJECTS = \
 	pixbufs.obj	\
 	rotated_text.obj \
 	sizegroup.obj	\
-	stock_browser.obj	\
 	textview.obj	\
 	tree_store.obj	\
 	ui_manager.obj	\

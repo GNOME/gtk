@@ -3,6 +3,7 @@
  * Offscreen windows can be used to render elements multiple times to achieve
  * various effects.
  */
+#include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
 #define GTK_TYPE_MIRROR_BIN              (gtk_mirror_bin_get_type ())
@@ -497,14 +498,12 @@ do_offscreen_window2 (GtkWidget *do_widget)
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
       backbutton = gtk_button_new ();
       gtk_container_add (GTK_CONTAINER (backbutton),
-                         gtk_image_new_from_stock (GTK_STOCK_GO_BACK, 4));
+                         gtk_image_new_from_icon_name ("go-previous", 4));
       gtk_size_group_add_widget (group, backbutton);
       entry = gtk_entry_new ();
       gtk_size_group_add_widget (group, entry);
-      applybutton = gtk_button_new ();
+      applybutton = gtk_button_new_with_label (_("Apply"));
       gtk_size_group_add_widget (group, applybutton);
-      gtk_container_add (GTK_CONTAINER (applybutton),
-                         gtk_image_new_from_stock (GTK_STOCK_APPLY, 4));
 
       gtk_container_add (GTK_CONTAINER (window), vbox);
       gtk_box_pack_start (GTK_BOX (vbox), bin, TRUE, TRUE, 0);

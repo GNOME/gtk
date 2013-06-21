@@ -47,7 +47,6 @@ demos =						\
 	sizegroup.c				\
 	spinner.c				\
 	stack.c					\
-	stock_browser.c				\
 	textview.c				\
 	textscroll.c				\
 	theming_style_classes.c			\

@@ -5,6 +5,7 @@
  * example might be helpful.
  */
 
+#include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <string.h>
 
@@ -267,12 +268,16 @@ do_iconview (GtkWidget *do_widget)
       tool_bar = gtk_toolbar_new ();
       gtk_box_pack_start (GTK_BOX (vbox), tool_bar, FALSE, FALSE, 0);
 
-      up_button = gtk_tool_button_new_from_stock (GTK_STOCK_GO_UP);
+      up_button = gtk_tool_button_new (NULL, NULL);
+      gtk_tool_button_set_label (GTK_TOOL_BUTTON (up_button), _("_Up"));
+      gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (up_button), "go-up");
       gtk_tool_item_set_is_important (up_button, TRUE);
       gtk_widget_set_sensitive (GTK_WIDGET (up_button), FALSE);
       gtk_toolbar_insert (GTK_TOOLBAR (tool_bar), up_button, -1);
 
-      home_button = gtk_tool_button_new_from_stock (GTK_STOCK_HOME);
+      home_button = gtk_tool_button_new (NULL, NULL);
+      gtk_tool_button_set_label (GTK_TOOL_BUTTON (home_button), _("_Home"));
+      gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (home_button), "go-home");
       gtk_tool_item_set_is_important (home_button, TRUE);
       gtk_toolbar_insert (GTK_TOOLBAR (tool_bar), home_button, -1);
 

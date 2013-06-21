@@ -40,7 +40,7 @@
             <property name="margin_bottom">8</property>
             <property name="margin_left">8</property>
             <property name="margin_right">8</property>
-            <property name="stock">gtk-missing-image</property>
+            <property name="icon-name">image-missing</property>
           </object>
           <packing>
             <property name="left_attach">0</property>

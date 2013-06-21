@@ -4,6 +4,7 @@
  * This demo shows how to use these features in a search entry.
  */
 
+#include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
 static GtkWidget *window = NULL;
@@ -85,9 +86,6 @@ static void
 search_by_name (GtkWidget *item,
                 GtkEntry  *entry)
 {
-  gtk_entry_set_icon_from_stock (entry,
-                                 GTK_ENTRY_ICON_PRIMARY,
-                                 GTK_STOCK_FIND);
   gtk_entry_set_icon_tooltip_text (entry,
                                    GTK_ENTRY_ICON_PRIMARY,
                                    "Search by name\n"
@@ -99,9 +97,7 @@ static void
 search_by_description (GtkWidget *item,
                        GtkEntry  *entry)
 {
-  gtk_entry_set_icon_from_stock (entry,
-                                 GTK_ENTRY_ICON_PRIMARY,
-                                 GTK_STOCK_EDIT);
+
   gtk_entry_set_icon_tooltip_text (entry,
                                    GTK_ENTRY_ICON_PRIMARY,
                                    "Search by description\n"
@@ -113,9 +109,6 @@ static void
 search_by_file (GtkWidget *item,
                 GtkEntry  *entry)
 {
-  gtk_entry_set_icon_from_stock (entry,
-                                 GTK_ENTRY_ICON_PRIMARY,
-                                 GTK_STOCK_OPEN);
   gtk_entry_set_icon_tooltip_text (entry,
                                    GTK_ENTRY_ICON_PRIMARY,
                                    "Search by file name\n"
@@ -132,26 +125,17 @@ create_search_menu (GtkWidget *entry)
 
   menu = gtk_menu_new ();
 
-  item = gtk_image_menu_item_new_with_mnemonic ("Search by _name");
-  image = gtk_image_new_from_stock (GTK_STOCK_FIND, GTK_ICON_SIZE_MENU);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-  gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (item), TRUE);
+  item = gtk_menu_item_new_with_mnemonic ("Search by _name");
   g_signal_connect (item, "activate",
                     G_CALLBACK (search_by_name), entry);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 
-  item = gtk_image_menu_item_new_with_mnemonic ("Search by _description");
-  image = gtk_image_new_from_stock (GTK_STOCK_EDIT, GTK_ICON_SIZE_MENU);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-  gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (item), TRUE);
+  item = gtk_menu_item_new_with_mnemonic ("Search by _description");
   g_signal_connect (item, "activate",
                     G_CALLBACK (search_by_description), entry);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 
-  item = gtk_image_menu_item_new_with_mnemonic ("Search by _file name");
-  image = gtk_image_new_from_stock (GTK_STOCK_OPEN, GTK_ICON_SIZE_MENU);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-  gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (item), TRUE);
+  item = gtk_menu_item_new_with_mnemonic ("Search by _file name");
   g_signal_connect (item, "activate",
                     G_CALLBACK (search_by_file), entry);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
@@ -241,7 +225,7 @@ do_search_entry (GtkWidget *do_widget)
       window = gtk_dialog_new_with_buttons ("Search Entry",
                                             GTK_WINDOW (do_widget),
                                             0,
-                                            GTK_STOCK_CLOSE,
+                                            _("_Close"),
                                             GTK_RESPONSE_NONE,
                                             NULL);
       gtk_window_set_resizable (GTK_WINDOW (window), FALSE);

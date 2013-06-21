@@ -68,10 +68,12 @@ create_toolbar (void)
   toolbar = gtk_toolbar_new ();
   gtk_widget_set_valign (toolbar, GTK_ALIGN_CENTER);
 
-  item = gtk_tool_button_new_from_stock (GTK_STOCK_GO_FORWARD);
+  item = gtk_tool_button_new (NULL, NULL);
+  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "go-next");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
-  item = gtk_tool_button_new_from_stock (GTK_STOCK_GO_BACK);
+  item = gtk_tool_button_new (NULL, NULL);
+  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "go-previous");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
   item = gtk_tool_button_new (NULL, "Hello World");

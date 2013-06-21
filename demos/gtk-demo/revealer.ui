@@ -19,11 +19,11 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="button1">
-                <property name="label">gtk-close</property>
+                <property name="label" translatable="yes">_Close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
+                <property name="use_underline">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>

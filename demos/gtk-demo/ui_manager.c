@@ -49,10 +49,6 @@ static GtkActionEntry entries[] = {
     "_About", "<control>A",                    /* label, accelerator */
     "About",                                   /* tooltip */
     G_CALLBACK (activate_action) },
-  { "Logo", "demo-gtk-logo",                   /* name, stock id */
-     NULL, NULL,                               /* label, accelerator */
-    "GTK+",                                    /* tooltip */
-    G_CALLBACK (activate_action) },
 };
 static guint n_entries = G_N_ELEMENTS (entries);
 
@@ -135,8 +131,6 @@ static const gchar *ui_info =
 "  <toolbar  name='ToolBar'>"
 "    <toolitem action='Open'/>"
 "    <toolitem action='Quit'/>"
-"    <separator action='Sep1'/>"
-"    <toolitem action='Logo'/>"
 "  </toolbar>"
 "</ui>";
 

@@ -8,12 +8,12 @@
         <property name="hexpand">True</property>
         <child>
           <object class="GtkMenuToolButton" id="menutool">
-            <property name="stock-id">gtk-open</property>
+            <property name="icon-name">document-open</property>
           </object>
         </child>
         <child>
           <object class="GtkToolButton" id="quit">
-            <property name="stock-id">gtk-quit</property>
+            <property name="icon-name">application-exit</property>
             <property name="action-name">app.quit</property>
           </object>
         </child>
@@ -22,7 +22,7 @@
         </child>
         <child>
           <object class="GtkToolButton" id="logo">
-            <property name="stock-id">demo-gtk-logo</property>
+            <property name="icon-name">applications-other</property>
             <property name="action-name">win.logo</property>
           </object>
         </child>
@@ -54,8 +54,8 @@
               <object class="GtkButton" id="button">
                 <property name="visible">True</property>
                 <property name="valign">center</property>
-                <property name="label">gtk-ok</property>
-                <property name="use-stock">True</property>
+                <property name="label" translatable="yes">_OK</property>
+                <property name="use_underline">True</property>
               </object>
             </child>
           </object>

@@ -156,40 +156,6 @@ activate_quit (GSimpleAction *action,
 }
 
 static void
-register_stock_icons (void)
-{
-  static gboolean registered = FALSE;
-
-  if (!registered)
-    {
-      GdkPixbuf *pixbuf;
-      GtkIconFactory *factory;
-      GtkIconSet *icon_set;
-
-      static GtkStockItem items[] = {
-        { "demo-gtk-logo", "_GTK!", 0, 0, NULL }
-      };
-
-      registered = TRUE;
-
-      gtk_stock_add (items, G_N_ELEMENTS (items));
-
-      factory = gtk_icon_factory_new ();
-      gtk_icon_factory_add_default (factory);
-
-      pixbuf = gdk_pixbuf_new_from_resource ("/application/gtk-logo-24.png", NULL);
-
-      icon_set = gtk_icon_set_new_from_pixbuf (pixbuf);
-      gtk_icon_factory_add (factory, "demo-gtk-logo", icon_set);
-      gtk_icon_set_unref (icon_set);
-      g_object_unref (pixbuf);
-
-      /* Drop our reference to the factory, GTK will hold a reference. */
-      g_object_unref (factory);
-    }
-}
-
-static void
 update_statusbar (GtkTextBuffer *buffer,
                   GtkStatusbar  *statusbar)
 {
@@ -375,8 +341,6 @@ main (int argc, char *argv[])
   GAction *action;
 
   gtk_init (NULL, NULL);
-
-  register_stock_icons ();
 
   app = gtk_application_new ("org.gtk.Demo", 0);
   settings = g_settings_new ("org.gtk.Demo");

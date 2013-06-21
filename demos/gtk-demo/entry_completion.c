@@ -5,6 +5,7 @@
  *
  */
 
+#include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
 static GtkWidget *window = NULL;
@@ -49,7 +50,7 @@ do_entry_completion (GtkWidget *do_widget)
       window = gtk_dialog_new_with_buttons ("GtkEntryCompletion",
                                             GTK_WINDOW (do_widget),
                                             0,
-                                            GTK_STOCK_CLOSE,
+                                            _("_Close"),
                                             GTK_RESPONSE_NONE,
                                             NULL);
       gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
