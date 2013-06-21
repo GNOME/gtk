@@ -33,8 +33,6 @@
  * is used by GTK+ text input widgets like #GtkEntry to map from key events to
  * Unicode character strings.
  *
- * The user may change the current input method via a context menu, unless the   
- * #GtkSettings:gtk-show-input-method-menu GtkSettings property is set to FALSE. 
  * The default input method can be set programmatically via the 
  * #GtkSettings:gtk-im-module GtkSettings property. Alternatively, you may set 
  * the GTK_IM_MODULE environment variable as documented in #gtk-running.

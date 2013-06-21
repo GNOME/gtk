@@ -324,8 +324,6 @@ _gdk_win32_window_delete_property (GdkWindow *window,
   "Gtk/CursorBlinkTimeout\0"  "gtk-cursor-blink-timeout\0"
   "Gtk/CursorThemeName\0"     "gtk-cursor-theme-name\0"
   "Gtk/CursorThemeSize\0"     "gtk-cursor-theme-size\0"
-  "Gtk/ShowInputMethodMenu\0" "gtk-show-input-method-menu\0"
-  "Gtk/ShowUnicodeMenu\0"     "gtk-show-unicode-menu\0"
   "Gtk/TimeoutInitial\0"      "gtk-timeout-initial\0"
   "Gtk/TimeoutRepeat\0"       "gtk-timeout-repeat\0"
   "Gtk/ColorScheme\0"         "gtk-color-scheme\0"
