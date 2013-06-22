@@ -2764,12 +2764,15 @@ static void
 combo_box_changed_cb (GtkComboBox *combo_box,
 		      gpointer     user_data)
 {
+  GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (user_data);
+  GtkFileChooserButtonPrivate *priv = button->priv;
   GtkTreeIter iter;
+  gboolean file_was_set;
+
+  file_was_set = FALSE;
 
   if (gtk_combo_box_get_active_iter (combo_box, &iter))
     {
-      GtkFileChooserButton *button = GTK_FILE_CHOOSER_BUTTON (user_data);
-      GtkFileChooserButtonPrivate *priv = button->priv;
       gchar type;
       gpointer data;
 
@@ -2788,7 +2791,10 @@ combo_box_changed_cb (GtkComboBox *combo_box,
 	case ROW_TYPE_BOOKMARK:
 	case ROW_TYPE_CURRENT_FOLDER:
 	  if (data)
-	    gtk_file_chooser_button_select_file (GTK_FILE_CHOOSER (button), data, NULL);
+	    {
+	      gtk_file_chooser_button_select_file (GTK_FILE_CHOOSER (button), data, NULL);
+	      file_was_set = TRUE;
+	    }
 	  break;
 	case ROW_TYPE_VOLUME:
 	  {
@@ -2798,6 +2804,7 @@ combo_box_changed_cb (GtkComboBox *combo_box,
 	    if (base_file)
 	      {
 		gtk_file_chooser_button_select_file (GTK_FILE_CHOOSER (button), base_file, NULL);
+		file_was_set = TRUE;
 		g_object_unref (base_file);
 	      }
 	  }
@@ -2809,6 +2816,9 @@ combo_box_changed_cb (GtkComboBox *combo_box,
 	  break;
 	}
     }
+
+  if (file_was_set)
+    g_signal_emit (button, file_chooser_button_signals[FILE_SET], 0);
 }
 
 /* Calback for the "notify::popup-shown" signal on the combo box.
