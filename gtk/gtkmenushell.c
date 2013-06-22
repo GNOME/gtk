@@ -2132,6 +2132,8 @@ gtk_menu_shell_tracker_insert_func (GtkMenuTrackerItem *item,
           g_signal_connect (submenu, "show", G_CALLBACK (gtk_menu_shell_submenu_shown), item);
           g_signal_connect (submenu, "hide", G_CALLBACK (gtk_menu_shell_submenu_hidden), item);
         }
+
+      gtk_widget_show (widget);
     }
   else
     {
