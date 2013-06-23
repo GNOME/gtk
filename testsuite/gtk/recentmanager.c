@@ -47,6 +47,8 @@ recent_manager_add (void)
 
   recent_data = g_slice_new0 (GtkRecentData);
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
   /* mime type is mandatory */
   recent_data->mime_type = NULL;
   recent_data->app_name = "testrecentchooser";
@@ -82,6 +84,8 @@ recent_manager_add (void)
                                          recent_data);
     }
   g_test_trap_assert_failed ();
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   recent_data->mime_type = "text/plain";
   recent_data->app_name = "testrecentchooser";
