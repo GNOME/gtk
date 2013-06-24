@@ -196,7 +196,6 @@ draw_from_gicon (GtkNumerableIcon *self)
   GtkIconInfo *info;
   GdkPixbuf *pixbuf;
   cairo_surface_t *surface;
-  cairo_t *cr;
 
   if (self->priv->style != NULL)
     {
@@ -220,16 +219,7 @@ draw_from_gicon (GtkNumerableIcon *self)
   if (pixbuf == NULL)
     return NULL;
 
-  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                        gdk_pixbuf_get_width (pixbuf),
-                                        gdk_pixbuf_get_height (pixbuf));
-
-  cr = cairo_create (surface);
-
-  gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
-  cairo_paint (cr);
-
-  cairo_destroy (cr);
+  surface = gdk_cairo_pixbuf_to_surface (pixbuf, NULL);
   g_object_unref (pixbuf);
 
   return surface;

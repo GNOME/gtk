@@ -766,7 +766,6 @@ pattern_value_parse (GtkCssParser *parser,
       GFile *file;
       cairo_surface_t *surface;
       cairo_pattern_t *pattern;
-      cairo_t *cr;
       cairo_matrix_t matrix;
 
       file = _gtk_css_parser_read_url (parser);
@@ -784,21 +783,15 @@ pattern_value_parse (GtkCssParser *parser,
           return FALSE;
         }
 
-      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                            gdk_pixbuf_get_width (pixbuf),
-                                            gdk_pixbuf_get_height (pixbuf));
-      cr = cairo_create (surface);
-      gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
-      cairo_paint (cr);
+      surface = gdk_cairo_pixbuf_to_surface (pixbuf, NULL);
       pattern = cairo_pattern_create_for_surface (surface);
+      cairo_surface_destroy (surface);
 
       cairo_matrix_init_scale (&matrix,
                                gdk_pixbuf_get_width (pixbuf),
                                gdk_pixbuf_get_height (pixbuf));
       cairo_pattern_set_matrix (pattern, &matrix);
 
-      cairo_surface_destroy (surface);
-      cairo_destroy (cr);
       g_object_unref (pixbuf);
 
       g_value_take_boxed (value, pattern);
