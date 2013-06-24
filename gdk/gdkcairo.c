@@ -176,24 +176,20 @@ gdk_cairo_region (cairo_t         *cr,
 }
 
 /**
- * gdk_cairo_set_source_pixbuf:
- * @cr: a cairo context
+ * gdk_cairo_surface_create_from_pixbuf:
  * @pixbuf: a #GdkPixbuf
- * @pixbuf_x: X coordinate of location to place upper left corner of @pixbuf
- * @pixbuf_y: Y coordinate of location to place upper left corner of @pixbuf
+ * @scale: the scale of the new surface, or 0 to use same as @window
+ * @for_window: The window this will be drawn to, on %NULL.
  *
- * Sets the given pixbuf as the source pattern for @cr.
+ * Creates an image surface with the same contents as
+ * the pixbuf.
  *
- * The pattern has an extend mode of %CAIRO_EXTEND_NONE and is aligned
- * so that the origin of @pixbuf is @pixbuf_x, @pixbuf_y.
- *
- * Since: 2.8
+ * Since: 3.10
  */
-void
-gdk_cairo_set_source_pixbuf (cairo_t         *cr,
-                             const GdkPixbuf *pixbuf,
-                             gdouble          pixbuf_x,
-                             gdouble          pixbuf_y)
+cairo_surface_t *
+gdk_cairo_surface_create_from_pixbuf (const GdkPixbuf *pixbuf,
+                                      int scale,
+                                      GdkWindow *for_window)
 {
   gint width = gdk_pixbuf_get_width (pixbuf);
   gint height = gdk_pixbuf_get_height (pixbuf);
@@ -204,7 +200,6 @@ gdk_cairo_set_source_pixbuf (cairo_t         *cr,
   guchar *cairo_pixels;
   cairo_format_t format;
   cairo_surface_t *surface;
-  static const cairo_user_data_key_t key;
   int j;
 
   if (n_channels == 3)
@@ -212,14 +207,13 @@ gdk_cairo_set_source_pixbuf (cairo_t         *cr,
   else
     format = CAIRO_FORMAT_ARGB32;
 
-  cairo_stride = cairo_format_stride_for_width (format, width);
-  cairo_pixels = g_malloc_n (height, cairo_stride);
-  surface = cairo_image_surface_create_for_data ((unsigned char *)cairo_pixels,
-                                                 format,
-                                                 width, height, cairo_stride);
-
-  cairo_surface_set_user_data (surface, &key,
-                               cairo_pixels, (cairo_destroy_func_t)g_free);
+  surface =
+     gdk_window_create_similar_image_surface (for_window,
+					      format,
+					      width, height,
+					      scale);
+  cairo_stride = cairo_image_surface_get_stride (surface);
+  cairo_pixels = cairo_image_surface_get_data (surface);
 
   for (j = height; j; j--)
     {
@@ -277,6 +271,33 @@ gdk_cairo_set_source_pixbuf (cairo_t         *cr,
       cairo_pixels += cairo_stride;
     }
 
+  cairo_surface_mark_dirty (surface);
+  return surface;
+}
+
+/**
+ * gdk_cairo_set_source_pixbuf:
+ * @cr: a cairo context
+ * @pixbuf: a #GdkPixbuf
+ * @pixbuf_x: X coordinate of location to place upper left corner of @pixbuf
+ * @pixbuf_y: Y coordinate of location to place upper left corner of @pixbuf
+ *
+ * Sets the given pixbuf as the source pattern for @cr.
+ *
+ * The pattern has an extend mode of %CAIRO_EXTEND_NONE and is aligned
+ * so that the origin of @pixbuf is @pixbuf_x, @pixbuf_y.
+ *
+ * Since: 2.8
+ */
+void
+gdk_cairo_set_source_pixbuf (cairo_t         *cr,
+                             const GdkPixbuf *pixbuf,
+                             gdouble          pixbuf_x,
+                             gdouble          pixbuf_y)
+{
+  cairo_surface_t *surface;
+
+  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, NULL);
   cairo_set_source_surface (cr, surface, pixbuf_x, pixbuf_y);
   cairo_surface_destroy (surface);
 }
