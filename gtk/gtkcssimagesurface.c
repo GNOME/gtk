@@ -142,20 +142,12 @@ _gtk_css_image_surface_new_for_pixbuf (GdkPixbuf *pixbuf)
 {
   GtkCssImage *image;
   cairo_surface_t *surface;
-  cairo_t *cr;
 
   g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
 
-  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                        gdk_pixbuf_get_width (pixbuf),
-                                        gdk_pixbuf_get_height (pixbuf));
-  cr = cairo_create (surface);
-  gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
-  cairo_paint (cr);
-  cairo_destroy (cr);
+  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, NULL);
 
   image = _gtk_css_image_surface_new (surface);
-
   cairo_surface_destroy (surface);
 
   return image;
