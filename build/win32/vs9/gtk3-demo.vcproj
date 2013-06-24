@@ -187,6 +187,7 @@
 			<File RelativePath="..\..\..\demos\gtk-demo\images.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\infobar.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\links.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\listbox.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\list_store.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\main.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\menus.c" />

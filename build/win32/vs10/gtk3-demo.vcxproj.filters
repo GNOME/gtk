@@ -92,6 +92,9 @@
     <ClCompile Include="..\..\..\demos\gtk-demo\links.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\demos\gtk-demo\listbox.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\list_store.c">
       <Filter>Source Files</Filter>
     </ClCompile>
