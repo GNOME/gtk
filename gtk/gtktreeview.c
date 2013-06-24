@@ -6807,22 +6807,6 @@ do_validate_rows (GtkTreeView *tree_view, gboolean queue_resize)
 }
 
 static gboolean
-validate_rows (GtkTreeView *tree_view)
-{
-  gboolean retval;
-  
-  retval = do_validate_rows (tree_view, TRUE);
-  
-  if (! retval && tree_view->priv->validate_rows_timer)
-    {
-      g_source_remove (tree_view->priv->validate_rows_timer);
-      tree_view->priv->validate_rows_timer = 0;
-    }
-
-  return retval;
-}
-
-static gboolean
 do_presize_handler (GtkTreeView *tree_view)
 {
   if (tree_view->priv->mark_rows_col_dirty)
@@ -6863,6 +6847,22 @@ presize_handler_callback (GtkWidget     *widget,
   do_presize_handler (GTK_TREE_VIEW (widget));
 		   
   return G_SOURCE_REMOVE;
+}
+
+static gboolean
+validate_rows (GtkTreeView *tree_view)
+{
+  gboolean retval;
+  
+  retval = do_validate_rows (tree_view, TRUE);
+  
+  if (! retval && tree_view->priv->validate_rows_timer)
+    {
+      g_source_remove (tree_view->priv->validate_rows_timer);
+      tree_view->priv->validate_rows_timer = 0;
+    }
+
+  return retval;
 }
 
 static void
