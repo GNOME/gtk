@@ -19,7 +19,7 @@
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="stock">gtk-about</property>
+                <property name="icon_name">help-about</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -56,7 +56,7 @@
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="stock">gtk-about</property>
+                <property name="icon_name">help-about</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -106,7 +106,7 @@
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="stock">gtk-about</property>
+                <property name="icon_name">help-about</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -164,7 +164,7 @@
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="vexpand">True</property>
-                <property name="stock">gtk-about</property>
+                <property name="icon_name">help-about</property>
               </object>
               <packing>
                 <property name="expand">False</property>

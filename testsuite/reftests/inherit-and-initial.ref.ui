@@ -80,47 +80,43 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem1">
-                        <property name="label">gtk-new</property>
+                      <object class="GtkMenuItem" id="imagemenuitem1">
+                        <property name="label" translatable="yes">_New</property>
                         <property name="name">inherit</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
-                        <property name="use_stock">True</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem2">
-                        <property name="label">gtk-open</property>
+                      <object class="GtkMenuItem" id="imagemenuitem2">
+                        <property name="label" translatable="yes">_Open</property>
                         <property name="name">inherit</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
-                        <property name="use_stock">True</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem3">
-                        <property name="label">gtk-save</property>
+                      <object class="GtkMenuItem" id="imagemenuitem3">
+                        <property name="label" translatable="yes">_Save</property>
                         <property name="name">inherit</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
-                        <property name="use_stock">True</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem4">
-                        <property name="label">gtk-save-as</property>
+                      <object class="GtkMenuItem" id="imagemenuitem4">
+                        <property name="label" translatable="yes">Save _As</property>
                         <property name="name">inherit</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
-                        <property name="use_stock">True</property>
                       </object>
                     </child>
                     <child>
@@ -132,14 +128,13 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem5">
-                        <property name="label">gtk-quit</property>
+                      <object class="GtkMenuItem" id="imagemenuitem5">
+                        <property name="label" translatable="yes">_Quit</property>
                         <property name="name">inherit</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
-                        <property name="use_stock">True</property>
                       </object>
                     </child>
                   </object>
@@ -160,62 +155,57 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem6">
-                        <property name="label">gtk-cut</property>
+                      <object class="GtkMenuItem" id="imagemenuitem6">
+                        <property name="label" translatable="yes">Cu_t</property>
                         <property name="accel_group">accelgroup1</property>
                         <property name="name">inherit</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
-                        <property name="use_stock">True</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem7">
-                        <property name="label">gtk-copy</property>
+                      <object class="GtkMenuItem" id="imagemenuitem7">
+                        <property name="label" translatable="yes">_Copy</property>
                         <property name="accel_group">accelgroup1</property>
                         <property name="name">inherit</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
-                        <property name="use_stock">True</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem8">
-                        <property name="label">gtk-paste</property>
+                      <object class="GtkMenuItem" id="imagemenuitem8">
+                        <property name="label" translatable="yes">_Paste</property>
                         <property name="accel_group">accelgroup1</property>
                         <property name="name">inherit</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
-                        <property name="use_stock">True</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem9">
-                        <property name="label">gtk-delete</property>
+                      <object class="GtkMenuItem" id="imagemenuitem9">
+                        <property name="label" translatable="yes">_Delete</property>
                         <property name="accel_group">accelgroup1</property>
                         <property name="name">inherit</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
-                        <property name="use_stock">True</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="togglesmenuitem">
+                      <object class="GtkMenuItem" id="togglesmenuitem">
                         <property name="label">Checks &amp; Radios</property>
                         <property name="name">inherit</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
-                        <property name="use_stock">False</property>
                         <child type="submenu">
                           <object class="GtkMenu" id="togglessubmenu">
                             <property name="name">inherit</property>
@@ -424,14 +414,13 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem10">
-                        <property name="label">gtk-about</property>
+                      <object class="GtkMenuItem" id="imagemenuitem10">
+                        <property name="label" translatable="yes">_About</property>
                         <property name="name">inherit</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_action_appearance">False</property>
                         <property name="use_underline">True</property>
-                        <property name="use_stock">True</property>
                       </object>
                     </child>
                   </object>
@@ -461,7 +450,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                 <property name="use_action_appearance">False</property>
                 <property name="label" translatable="yes">Save</property>
                 <property name="use_underline">True</property>
-                <property name="stock_id">gtk-save</property>
+                <property name="icon_name">document-save</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -476,7 +465,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                 <property name="use_action_appearance">False</property>
                 <property name="label" translatable="yes">Open</property>
                 <property name="use_underline">True</property>
-                <property name="stock_id">gtk-open</property>
+                <property name="icon_name">document-open</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -503,7 +492,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                 <property name="use_action_appearance">False</property>
                 <property name="label" translatable="yes">Find</property>
                 <property name="use_underline">True</property>
-                <property name="stock_id">gtk-find</property>
+                <property name="icon_name">edit-find</property>
               </object>
               <packing>
                 <property name="expand">False</property>

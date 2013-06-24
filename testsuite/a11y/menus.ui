@@ -4,7 +4,7 @@
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="stock">gtk-go-up</property>
+    <property name="icon-name">go-up</property>
     <property name="icon-size">5</property>
   </object>
   <object class="GtkWindow" id="window1">
@@ -25,23 +25,21 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkImageMenuItem" id="imagemenuitem1">
-                    <property name="label">gtk-new</property>
+                  <object class="GtkMenuItem" id="imagemenuitem1">
+                    <property name="label" translatable="yes">_New</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="use_action_appearance">False</property>
                     <property name="use_underline">True</property>
-                    <property name="use_stock">True</property>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkImageMenuItem" id="imagemenuitem2">
+                  <object class="GtkMenuItem" id="imagemenuitem2">
                     <property name="label" translatable="yes">bla</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="use_action_appearance">False</property>
                     <property name="image">image1</property>
-                    <property name="use_stock">False</property>
                   </object>
                 </child>
                 <child>

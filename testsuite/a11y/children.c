@@ -116,14 +116,14 @@ do_create_child (STATE *state, gint i)
       switch (i)
         {
         case 0:
-          gtk_entry_set_icon_from_stock (GTK_ENTRY (state->widget),
-                                         GTK_ENTRY_ICON_PRIMARY,
-                                         GTK_STOCK_CAPS_LOCK_WARNING);
+          gtk_entry_set_icon_from_icon_name (GTK_ENTRY (state->widget),
+                                             GTK_ENTRY_ICON_PRIMARY,
+                                             "dialog-warning-symbolic");
         return TRUE;
         case 1:
-          gtk_entry_set_icon_from_stock (GTK_ENTRY (state->widget),
-                                         GTK_ENTRY_ICON_SECONDARY,
-                                         GTK_STOCK_CLEAR);
+          gtk_entry_set_icon_from_icon_name (GTK_ENTRY (state->widget),
+                                             GTK_ENTRY_ICON_SECONDARY,
+                                             "edit-clear");
         return TRUE;
         default:
           return FALSE;

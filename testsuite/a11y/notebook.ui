@@ -9,8 +9,7 @@
         <property name="visible">True</property>
         <child>
           <object class="GtkButton" id="page1">
-            <property name="label">gtk-yes</property>
-            <property name="use_stock">True</property>
+            <property name="label" translatable="yes">Yes</property>
             <property name="visible">True</property>
           </object>
         </child>
@@ -22,8 +21,7 @@
         </child>
         <child>
           <object class="GtkButton" id="page2">
-            <property name="label">gtk-no</property>
-            <property name="use_stock">True</property>
+            <property name="label" translatable="yes">No</property>
             <property name="visible">True</property>
           </object>
         </child>

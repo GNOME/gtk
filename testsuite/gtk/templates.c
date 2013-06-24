@@ -230,7 +230,7 @@ test_file_chooser_dialog_basic (void)
 
   widget = gtk_file_chooser_dialog_new ("The Dialog", NULL,
 					GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-					GTK_STOCK_OK, GTK_RESPONSE_OK,
+					"_OK", GTK_RESPONSE_OK,
 					NULL);
 
   g_assert (GTK_IS_FILE_CHOOSER_DIALOG (widget));

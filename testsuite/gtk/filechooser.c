@@ -130,11 +130,11 @@ test_set_filename (GtkFileChooserAction action,
   guint timeout_id;
 
   chooser = gtk_file_chooser_dialog_new ("hello", NULL, action,
-					 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+					 _("_Cancel"), GTK_RESPONSE_CANCEL,
 					 NULL);
 
   closure.chooser = chooser;
-  closure.accept_button = gtk_dialog_add_button (GTK_DIALOG (chooser), GTK_STOCK_OK, GTK_RESPONSE_ACCEPT);
+  closure.accept_button = gtk_dialog_add_button (GTK_DIALOG (chooser), _("_OK"), GTK_RESPONSE_ACCEPT);
   closure.focus_button = focus_button;
 
   gtk_dialog_set_default_response (GTK_DIALOG (chooser), GTK_RESPONSE_ACCEPT);
@@ -1796,10 +1796,10 @@ test_confirm_overwrite_for_path (const char *path, gboolean append_extension)
   closure.extension = NULL;
   closure.confirm_overwrite_signal_emitted = 0;
   closure.chooser = gtk_file_chooser_dialog_new ("hello", NULL, GTK_FILE_CHOOSER_ACTION_SAVE,
-						 GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+						 _("_Cancel"), GTK_RESPONSE_CANCEL,
 						 NULL);
   closure.accept_button = gtk_dialog_add_button (GTK_DIALOG (closure.chooser),
-                                                 GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT);
+                                                 _("_Save"), GTK_RESPONSE_ACCEPT);
   gtk_dialog_set_default_response (GTK_DIALOG (closure.chooser), GTK_RESPONSE_ACCEPT);
 
   gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (closure.chooser), TRUE);
@@ -2059,9 +2059,9 @@ test_action_widgets (void)
   dialog = gtk_file_chooser_dialog_new ("Test file chooser",
 					NULL,
 					GTK_FILE_CHOOSER_ACTION_OPEN,
-					GTK_STOCK_CANCEL,
+					_("_Cancel"),
 					GTK_RESPONSE_CANCEL,
-					GTK_STOCK_OK,
+					_("_OK"),
 					GTK_RESPONSE_ACCEPT,
 					NULL);
   gtk_widget_show_now (dialog);
@@ -2097,9 +2097,9 @@ test_reload_sequence (gboolean set_folder_before_map)
   dialog = gtk_file_chooser_dialog_new ("Test file chooser",
 					NULL,
 					GTK_FILE_CHOOSER_ACTION_OPEN,
-					GTK_STOCK_CANCEL,
+					_("_Cancel"),
 					GTK_RESPONSE_CANCEL,
-					GTK_STOCK_OK,
+					_("_OK"),
 					GTK_RESPONSE_ACCEPT,
 					NULL);
   impl = get_impl_from_dialog (dialog);
@@ -2258,8 +2258,8 @@ test_button_folder_states_for_action (GtkFileChooserAction action, gboolean use_
   if (use_dialog)
     {
       dialog = gtk_file_chooser_dialog_new ("Test", NULL, action,
-					    GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					    GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
+					    _("_Cancel"), GTK_RESPONSE_CANCEL,
+					    _("_OK"), GTK_RESPONSE_ACCEPT,
 					    NULL);
       button = gtk_file_chooser_button_new_with_dialog (dialog);
 
@@ -2398,8 +2398,8 @@ test_folder_switch_and_filters (void)
   base_dir = g_build_filename (cwd, "file-chooser-test-dir", NULL);
 
   dialog = gtk_file_chooser_dialog_new ("Test", NULL, GTK_FILE_CHOOSER_ACTION_OPEN,
-					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
+					_("_Cancel"), GTK_RESPONSE_CANCEL,
+					_("_OK"), GTK_RESPONSE_ACCEPT,
 					NULL);
   impl = get_impl_from_dialog (dialog);
 
