@@ -50,7 +50,6 @@
 #include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtkscale.h"
-#include "gtkstock.h"
 #include "gtkbox.h"
 #include "gtkwindow.h"
 #include "gtktypebuiltins.h"
@@ -1494,9 +1493,9 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
 
   if (!priv->icon_list || priv->icon_list[0] == '\0')
     {
-      gtk_image_set_from_stock (GTK_IMAGE (priv->image),
-                                GTK_STOCK_MISSING_IMAGE,
-                                priv->size);
+      gtk_image_set_from_icon_name (GTK_IMAGE (priv->image),
+                                    "image-missing",
+                                    priv->size);
       return;
     }
 

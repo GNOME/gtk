@@ -1697,16 +1697,16 @@ gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
 
   /* Create the action area */
   priv->cancel_button = gtk_dialog_add_button (dialog,
-                                               GTK_STOCK_CANCEL,
+                                               _("_Cancel"),
                                                GTK_RESPONSE_CANCEL);
 
   priv->apply_button = gtk_dialog_add_button (dialog,
-                                              GTK_STOCK_APPLY,
+                                              _("_Apply"),
                                               GTK_RESPONSE_APPLY);
   gtk_widget_hide (priv->apply_button);
 
   priv->ok_button = gtk_dialog_add_button (dialog,
-                                           GTK_STOCK_OK,
+                                           _("_OK"),
                                            GTK_RESPONSE_OK);
   gtk_widget_grab_default (priv->ok_button);
 

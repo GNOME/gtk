@@ -161,11 +161,16 @@ ensure_stated_icon_from_info (GtkIconHelper *self,
 
   if (destination == NULL)
     {
-      GtkIconSet *icon_set;
-      icon_set = gtk_style_context_lookup_icon_set (context, GTK_STOCK_MISSING_IMAGE);
+      GtkIconTheme *icon_theme;
+      int width;
 
-      destination =
-        gtk_icon_set_render_icon_pixbuf (icon_set, context, self->priv->icon_size);
+      icon_theme = gtk_icon_theme_get_for_screen (gtk_style_context_get_screen (context));
+      gtk_icon_size_lookup (self->priv->icon_size, &width, NULL);
+      destination = gtk_icon_theme_load_icon (icon_theme,
+                                              "image-missing",
+                                              width,
+                                              GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+                                              NULL);
     }
   else if (!symbolic)
     {

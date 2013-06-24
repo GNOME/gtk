@@ -64,11 +64,10 @@
             <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="preview_button">
-                <property name="label">gtk-print-preview</property>
+                <property name="label" translatable="yes">Pre_view</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -78,11 +77,10 @@
             </child>
             <child>
               <object class="GtkButton" id="cancel_button">
-                <property name="label">gtk-cancel</property>
+                <property name="label" translatable="yes">_Cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -92,14 +90,13 @@
             </child>
             <child>
               <object class="GtkButton" id="print_button">
-                <property name="label">gtk-print</property>
+                <property name="label" translatable="yes">_Print</property>
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
                 <property name="receives_default">True</property>
-                <property name="use_stock">True</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -1686,7 +1683,7 @@
                   <object class="GtkImage" id="image1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="stock">gtk-dialog-warning</property>
+                    <property name="icon_name">dialog-warning</property>
                     <property name="icon_size">1</property>
                   </object>
                   <packing>

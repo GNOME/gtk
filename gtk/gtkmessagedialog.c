@@ -33,7 +33,6 @@
 #include "gtklabel.h"
 #include "gtkbox.h"
 #include "gtkimage.h"
-#include "gtkstock.h"
 #include "gtkiconfactory.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
@@ -359,7 +358,7 @@ setup_type (GtkMessageDialog *dialog,
 	    GtkMessageType    type)
 {
   GtkMessageDialogPrivate *priv = dialog->priv;
-  const gchar *stock_id = NULL;
+  const gchar *name = NULL;
   AtkObject *atk_obj;
   GIcon *gicon = NULL;
 
@@ -368,22 +367,22 @@ setup_type (GtkMessageDialog *dialog,
   switch (type)
     {
     case GTK_MESSAGE_INFO:
-      stock_id = GTK_STOCK_DIALOG_INFO;
+      name = _("Information");
       gicon = g_themed_icon_new_with_default_fallbacks ("dialog-information-symbolic");
       break;
 
     case GTK_MESSAGE_QUESTION:
-      stock_id = GTK_STOCK_DIALOG_QUESTION;
+      name = _("Question");
       gicon = g_themed_icon_new_with_default_fallbacks ("dialog-question-symbolic");
       break;
 
     case GTK_MESSAGE_WARNING:
-      stock_id = GTK_STOCK_DIALOG_WARNING;
+      name = _("Warning");
       gicon = g_themed_icon_new_with_default_fallbacks ("dialog-warning-symbolic");
       break;
 
     case GTK_MESSAGE_ERROR:
-      stock_id = GTK_STOCK_DIALOG_ERROR;
+      name = _("Error");
       gicon = g_themed_icon_new_with_default_fallbacks ("dialog-error-symbolic");
       break;
 
@@ -403,13 +402,8 @@ setup_type (GtkMessageDialog *dialog,
   if (GTK_IS_ACCESSIBLE (atk_obj))
     {
       atk_object_set_role (atk_obj, ATK_ROLE_ALERT);
-      if (stock_id)
-        {
-          GtkStockItem item;
-
-          gtk_stock_lookup (stock_id, &item);
-          atk_object_set_name (atk_obj, item.label);
-        }
+      if (name)
+        atk_object_set_name (atk_obj, name);
     }
 }
 
@@ -681,7 +675,7 @@ gtk_message_dialog_set_image (GtkMessageDialog *dialog,
 
   if (image == NULL)
     {
-      image = gtk_image_new_from_stock (NULL, GTK_ICON_SIZE_DIALOG);
+      image = gtk_image_new_from_icon_name (NULL, GTK_ICON_SIZE_DIALOG);
       gtk_widget_set_halign (image, GTK_ALIGN_CENTER);
       gtk_widget_set_valign (image, GTK_ALIGN_START);
     }
@@ -886,28 +880,28 @@ gtk_message_dialog_add_buttons (GtkMessageDialog* message_dialog,
 
     case GTK_BUTTONS_OK:
       gtk_dialog_add_button (dialog,
-                             GTK_STOCK_OK,
+                             _("_OK"),
                              GTK_RESPONSE_OK);
       break;
 
     case GTK_BUTTONS_CLOSE:
       gtk_dialog_add_button (dialog,
-                             GTK_STOCK_CLOSE,
+                             _("_Close"),
                              GTK_RESPONSE_CLOSE);
       break;
 
     case GTK_BUTTONS_CANCEL:
       gtk_dialog_add_button (dialog,
-                             GTK_STOCK_CANCEL,
+                             _("_Cancel"),
                              GTK_RESPONSE_CANCEL);
       break;
 
     case GTK_BUTTONS_YES_NO:
       gtk_dialog_add_button (dialog,
-                             GTK_STOCK_NO,
+                             _("_No"),
                              GTK_RESPONSE_NO);
       gtk_dialog_add_button (dialog,
-                             GTK_STOCK_YES,
+                             _("_Yes"),
                              GTK_RESPONSE_YES);
       gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
 					       GTK_RESPONSE_YES,
@@ -917,10 +911,10 @@ gtk_message_dialog_add_buttons (GtkMessageDialog* message_dialog,
 
     case GTK_BUTTONS_OK_CANCEL:
       gtk_dialog_add_button (dialog,
-                             GTK_STOCK_CANCEL,
+                             _("_Cancel"),
                              GTK_RESPONSE_CANCEL);
       gtk_dialog_add_button (dialog,
-                             GTK_STOCK_OK,
+                             _("_OK"),
                              GTK_RESPONSE_OK);
       gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
 					       GTK_RESPONSE_OK,

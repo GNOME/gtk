@@ -66,7 +66,6 @@
 #include "gtkscrolledwindow.h"
 #include "gtkseparatormenuitem.h"
 #include "gtksettings.h"
-#include "gtkstock.h"
 #include "gtktrashmonitor.h"
 #include "gtktreeselection.h"
 #include "gtktreednd.h"
@@ -3111,9 +3110,7 @@ bookmarks_build_popup_menu (GtkPlacesSidebar *sidebar)
 				   GTK_WIDGET (sidebar),
 				   bookmarks_popup_menu_detach_cb);
 
-	item = gtk_image_menu_item_new_with_mnemonic (_("_Open"));
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),
-				       gtk_image_new_from_stock (GTK_STOCK_OPEN, GTK_ICON_SIZE_MENU));
+	item = gtk_menu_item_new_with_mnemonic (_("_Open"));
 	g_signal_connect (item, "activate",
 			  G_CALLBACK (open_shortcut_cb), sidebar);
 	gtk_widget_show (item);
@@ -3143,10 +3140,8 @@ bookmarks_build_popup_menu (GtkPlacesSidebar *sidebar)
 			  G_CALLBACK (add_shortcut_cb), sidebar);
 	gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
 
-	item = gtk_image_menu_item_new_with_label (_("Remove"));
+	item = gtk_menu_item_new_with_label (_("Remove"));
 	menu_data.remove_item = item;
-	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),
-				       gtk_image_new_from_stock (GTK_STOCK_REMOVE, GTK_ICON_SIZE_MENU));
 	g_signal_connect (item, "activate",
 			  G_CALLBACK (remove_shortcut_cb), sidebar);
 	gtk_widget_show (item);

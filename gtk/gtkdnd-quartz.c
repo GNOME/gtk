@@ -1942,7 +1942,7 @@ gtk_drag_set_icon_default (GdkDragContext    *context)
 {
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
 
-  gtk_drag_set_icon_stock (context, GTK_STOCK_DND, -2, -2);
+  gtk_drag_set_icon_name (context, "text-x-generic", -2, -2);
 }
 
 static void

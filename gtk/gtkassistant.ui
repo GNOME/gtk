@@ -1,21 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk30">
   <!-- interface-requires gtk+ 3.10 -->
-  <object class="GtkImage" id="back_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-go-back</property>
-  </object>
-  <object class="GtkImage" id="forward_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-go-forward</property>
-  </object>
-  <object class="GtkImage" id="last_image">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-goto-last</property>
-  </object>
   <template class="GtkAssistant" parent="GtkWindow">
     <property name="can_focus">False</property>
     <child>
@@ -94,12 +79,11 @@
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkButton" id="apply">
-                    <property name="label">gtk-apply</property>
+                    <property name="label" translatable="yes">_Apply</property>
                     <property name="can_focus">True</property>
                     <property name="can_default">True</property>
                     <property name="receives_default">True</property>
                     <property name="no_show_all">True</property>
-                    <property name="use_stock">True</property>
                     <signal name="clicked" handler="on_assistant_apply" swapped="no"/>
                   </object>
                   <packing>
@@ -117,7 +101,6 @@
                     <property name="can_default">True</property>
                     <property name="receives_default">True</property>
                     <property name="no_show_all">True</property>
-                    <property name="image">forward_image</property>
                     <property name="use_underline">True</property>
                     <signal name="clicked" handler="on_assistant_forward" swapped="no"/>
                   </object>
@@ -135,7 +118,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="no_show_all">True</property>
-                    <property name="image">back_image</property>
                     <property name="use_underline">True</property>
                     <signal name="clicked" handler="on_assistant_back" swapped="no"/>
                   </object>
@@ -152,7 +134,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="no_show_all">True</property>
-                    <property name="image">last_image</property>
                     <property name="use_underline">True</property>
                     <signal name="clicked" handler="on_assistant_last" swapped="no"/>
                   </object>
@@ -165,12 +146,11 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="cancel">
-                    <property name="label">gtk-cancel</property>
+                    <property name="label" translatable="yes">_Cancel</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="no_show_all">True</property>
-                    <property name="use_stock">True</property>
                     <signal name="clicked" handler="on_assistant_cancel" swapped="no"/>
                   </object>
                   <packing>
@@ -182,12 +162,11 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="close">
-                    <property name="label">gtk-close</property>
+                    <property name="label" translatable="yes">_Close</property>
                     <property name="can_focus">True</property>
                     <property name="can_default">True</property>
                     <property name="receives_default">True</property>
                     <property name="no_show_all">True</property>
-                    <property name="use_stock">True</property>
                     <signal name="clicked" handler="on_assistant_close" swapped="no"/>
                   </object>
                   <packing>

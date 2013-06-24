@@ -2061,7 +2061,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
               /* fall back to a missing image */
               theme = gtk_icon_theme_get_default ();
               pixbuf = gtk_icon_theme_load_icon (theme, 
-                                                 GTK_STOCK_MISSING_IMAGE,
+                                                 "image-missing",
                                                  16,
                                                  GTK_ICON_LOOKUP_USE_BUILTIN,
                                                  NULL);

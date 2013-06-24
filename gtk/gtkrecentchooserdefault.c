@@ -27,7 +27,6 @@
 #include <unistd.h>
 #endif
 
-#include "gtkstock.h"
 #include "gtkicontheme.h"
 #include "gtkiconfactory.h"
 #include "gtksettings.h"
@@ -1694,10 +1693,8 @@ recent_view_menu_build (GtkRecentChooserDefault *impl)
   			     impl->priv->recent_view,
   			     recent_popup_menu_detach_cb);
   
-  item = gtk_image_menu_item_new_with_mnemonic (_("Copy _Location"));
+  item = gtk_menu_item_new_with_mnemonic (_("Copy _Location"));
   impl->priv->recent_popup_menu_copy_item = item;
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),
-		  		 gtk_image_new_from_stock (GTK_STOCK_COPY, GTK_ICON_SIZE_MENU));
   g_signal_connect (item, "activate",
 		    G_CALLBACK (copy_activated_cb), impl);
   gtk_widget_show (item);
@@ -1707,19 +1704,15 @@ recent_view_menu_build (GtkRecentChooserDefault *impl)
   gtk_widget_show (item);
   gtk_menu_shell_append (GTK_MENU_SHELL (impl->priv->recent_popup_menu), item);
   
-  item = gtk_image_menu_item_new_with_mnemonic (_("_Remove From List"));
+  item = gtk_menu_item_new_with_mnemonic (_("_Remove From List"));
   impl->priv->recent_popup_menu_remove_item = item;
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),
-  				 gtk_image_new_from_stock (GTK_STOCK_REMOVE, GTK_ICON_SIZE_MENU));
   g_signal_connect (item, "activate",
   		    G_CALLBACK (remove_item_activated_cb), impl);
   gtk_widget_show (item);
   gtk_menu_shell_append (GTK_MENU_SHELL (impl->priv->recent_popup_menu), item);
 
-  item = gtk_image_menu_item_new_with_mnemonic (_("_Clear List"));
+  item = gtk_menu_item_new_with_mnemonic (_("_Clear List"));
   impl->priv->recent_popup_menu_clear_item = item;
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),
-  				 gtk_image_new_from_stock (GTK_STOCK_CLEAR, GTK_ICON_SIZE_MENU));
   g_signal_connect (item, "activate",
 		    G_CALLBACK (remove_all_activated_cb), impl);
   

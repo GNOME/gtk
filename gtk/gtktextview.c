@@ -39,7 +39,6 @@
 #include "gtkseparatormenuitem.h"
 #include "gtksettings.h"
 #include "gtkselectionprivate.h"
-#include "gtkstock.h"
 #include "gtktextbufferrichtext.h"
 #include "gtktextdisplay.h"
 #include "gtktextview.h"
@@ -8417,11 +8416,11 @@ activate_cb (GtkWidget   *menuitem,
 static void
 append_action_signal (GtkTextView  *text_view,
 		      GtkWidget    *menu,
-		      const gchar  *stock_id,
+		      const gchar  *label,
 		      const gchar  *signal,
                       gboolean      sensitive)
 {
-  GtkWidget *menuitem = gtk_image_menu_item_new_from_stock (stock_id, NULL);
+  GtkWidget *menuitem = gtk_menu_item_new_with_mnemonic (label);
 
   g_object_set_data (G_OBJECT (menuitem), I_("gtk-signal"), (char *)signal);
   g_signal_connect (menuitem, "activate",
@@ -8625,16 +8624,16 @@ popup_targets_received (GtkClipboard     *clipboard,
 
       can_insert = gtk_text_iter_can_insert (&iter, priv->editable);
 
-      append_action_signal (text_view, priv->popup_menu, GTK_STOCK_CUT, "cut-clipboard",
+      append_action_signal (text_view, priv->popup_menu, _("Cu_t"), "cut-clipboard",
 			    have_selection &&
                             range_contains_editable_text (&sel_start, &sel_end,
                                                           priv->editable));
-      append_action_signal (text_view, priv->popup_menu, GTK_STOCK_COPY, "copy-clipboard",
+      append_action_signal (text_view, priv->popup_menu, _("_Copy"), "copy-clipboard",
 			    have_selection);
-      append_action_signal (text_view, priv->popup_menu, GTK_STOCK_PASTE, "paste-clipboard",
+      append_action_signal (text_view, priv->popup_menu, _("_Paste"), "paste-clipboard",
 			    can_insert && clipboard_contains_text);
 
-      menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_DELETE, NULL);
+      menuitem = gtk_menu_item_new_with_mnemonic (_("_Delete"));
       gtk_widget_set_sensitive (menuitem,
 				have_selection &&
 				range_contains_editable_text (&sel_start, &sel_end,
@@ -8648,7 +8647,7 @@ popup_targets_received (GtkClipboard     *clipboard,
       gtk_widget_show (menuitem);
       gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
 
-      menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_SELECT_ALL, NULL);
+      menuitem = gtk_menu_item_new_with_mnemonic (_("Select _All"));
       gtk_widget_set_sensitive (menuitem,
                                 gtk_text_buffer_get_char_count (priv->buffer) > 0);
       g_signal_connect (menuitem, "activate",
@@ -8756,11 +8755,11 @@ activate_bubble_cb (GtkWidget   *item,
 static void
 append_bubble_action (GtkTextView  *text_view,
                       GtkWidget    *toolbar,
-                      const gchar  *stock_id,
+                      const gchar  *label,
                       const gchar  *signal,
                       gboolean      sensitive)
 {
-  GtkToolItem *item = gtk_tool_button_new_from_stock (stock_id);
+  GtkToolItem *item = gtk_tool_button_new (NULL, label);
   g_object_set_data (G_OBJECT (item), I_("gtk-signal"), (char *)signal);
   g_signal_connect (item, "clicked", G_CALLBACK (activate_bubble_cb), text_view);
   gtk_widget_set_sensitive (GTK_WIDGET (item), sensitive);
@@ -8808,13 +8807,13 @@ bubble_targets_received (GtkClipboard     *clipboard,
   can_insert = gtk_text_iter_can_insert (&iter, priv->editable);
   has_clipboard = gtk_selection_data_targets_include_text (data);
 
-  append_bubble_action (text_view, toolbar, GTK_STOCK_CUT, "cut-clipboard",
+  append_bubble_action (text_view, toolbar, _("Cu_t"), "cut-clipboard",
                         has_selection &&
                         range_contains_editable_text (&sel_start, &sel_end,
                                                       priv->editable));
-  append_bubble_action (text_view, toolbar, GTK_STOCK_COPY, "copy-clipboard",
+  append_bubble_action (text_view, toolbar, _("_Copy"), "copy-clipboard",
                         has_selection);
-  append_bubble_action (text_view, toolbar, GTK_STOCK_PASTE, "paste-clipboard",
+  append_bubble_action (text_view, toolbar, _("_Paste"), "paste-clipboard",
                         can_insert && has_clipboard);
 
   if (priv->populate_all)

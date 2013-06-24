@@ -43,7 +43,6 @@
 #include "gtknotebook.h"
 #include "gtkorientable.h"
 #include "gtkscrolledwindow.h"
-#include "gtkstock.h"
 #include "gtktextview.h"
 #include "gtkiconfactory.h"
 #include "gtkshow.h"
@@ -59,7 +58,6 @@
  * SECTION:gtkaboutdialog
  * @Short_description: Display information about an application
  * @Title: GtkAboutDialog
- * @See_also: #GTK_STOCK_ABOUT
  *
  * The GtkAboutDialog offers a simple way to display information about
  * a program like its logo, name, copyright, website and license. It is

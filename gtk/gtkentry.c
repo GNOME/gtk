@@ -9093,11 +9093,11 @@ gtk_entry_grab_notify (GtkWidget *widget,
 static void
 append_action_signal (GtkEntry     *entry,
 		      GtkWidget    *menu,
-		      const gchar  *stock_id,
+		      const gchar  *label,
 		      const gchar  *signal,
                       gboolean      sensitive)
 {
-  GtkWidget *menuitem = gtk_image_menu_item_new_from_stock (stock_id, NULL);
+  GtkWidget *menuitem = gtk_menu_item_new_with_mnemonic (label);
 
   g_object_set_data (G_OBJECT (menuitem), I_("gtk-signal"), (char *)signal);
   g_signal_connect (menuitem, "activate",
@@ -9202,18 +9202,18 @@ popup_targets_received (GtkClipboard     *clipboard,
 				 popup_menu_detach);
 
       mode = gtk_entry_get_display_mode (entry);
-      append_action_signal (entry, info_entry_priv->popup_menu, GTK_STOCK_CUT, "cut-clipboard",
+      append_action_signal (entry, info_entry_priv->popup_menu, _("Cu_t"), "cut-clipboard",
                             info_entry_priv->editable && mode == DISPLAY_NORMAL &&
                             info_entry_priv->current_pos != info_entry_priv->selection_bound);
 
-      append_action_signal (entry, info_entry_priv->popup_menu, GTK_STOCK_COPY, "copy-clipboard",
+      append_action_signal (entry, info_entry_priv->popup_menu, _("_Copy"), "copy-clipboard",
                             mode == DISPLAY_NORMAL &&
                             info_entry_priv->current_pos != info_entry_priv->selection_bound);
 
-      append_action_signal (entry, info_entry_priv->popup_menu, GTK_STOCK_PASTE, "paste-clipboard",
+      append_action_signal (entry, info_entry_priv->popup_menu, _("_Paste"), "paste-clipboard",
                             info_entry_priv->editable && clipboard_contains_text);
 
-      menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_DELETE, NULL);
+      menuitem = gtk_menu_item_new_with_mnemonic (_("_Delete"));
       gtk_widget_set_sensitive (menuitem, info_entry_priv->editable && info_entry_priv->current_pos != info_entry_priv->selection_bound);
       g_signal_connect_swapped (menuitem, "activate",
 			        G_CALLBACK (gtk_entry_delete_cb), entry);
@@ -9224,7 +9224,7 @@ popup_targets_received (GtkClipboard     *clipboard,
       gtk_widget_show (menuitem);
       gtk_menu_shell_append (GTK_MENU_SHELL (info_entry_priv->popup_menu), menuitem);
 
-      menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_SELECT_ALL, NULL);
+      menuitem = gtk_menu_item_new_with_mnemonic (_("Select _All"));
       gtk_widget_set_sensitive (menuitem, gtk_entry_buffer_get_length (info_entry_priv->buffer) > 0);
       g_signal_connect_swapped (menuitem, "activate",
 			        G_CALLBACK (gtk_entry_select_all), entry);
@@ -9300,11 +9300,11 @@ activate_bubble_cb (GtkWidget *item,
 static void
 append_bubble_action (GtkEntry     *entry,
                       GtkWidget    *toolbar,
-                      const gchar  *stock_id,
+                      const gchar  *label,
                       const gchar  *signal,
                       gboolean      sensitive)
 {
-  GtkToolItem *item = gtk_tool_button_new_from_stock (stock_id);
+  GtkToolItem *item = gtk_tool_button_new (NULL, label);
   g_object_set_data (G_OBJECT (item), I_("gtk-signal"), (char *)signal);
   g_signal_connect (item, "clicked", G_CALLBACK (activate_bubble_cb), entry);
   gtk_widget_set_sensitive (GTK_WIDGET (item), sensitive);
@@ -9348,13 +9348,13 @@ bubble_targets_received (GtkClipboard     *clipboard,
   has_clipboard = gtk_selection_data_targets_include_text (data);
   mode = gtk_entry_get_display_mode (entry);
 
-  append_bubble_action (entry, toolbar, GTK_STOCK_CUT, "cut-clipboard",
+  append_bubble_action (entry, toolbar, _("Cu_t"), "cut-clipboard",
                         priv->editable && has_selection && mode == DISPLAY_NORMAL);
 
-  append_bubble_action (entry, toolbar, GTK_STOCK_COPY, "copy-clipboard",
+  append_bubble_action (entry, toolbar, _("_Copy"), "copy-clipboard",
                         has_selection && mode == DISPLAY_NORMAL);
 
-  append_bubble_action (entry, toolbar, GTK_STOCK_PASTE, "paste-clipboard",
+  append_bubble_action (entry, toolbar, _("_Paste"), "paste-clipboard",
                         priv->editable && has_clipboard);
 
   if (priv->populate_all)
@@ -10279,7 +10279,7 @@ show_capslock_feedback (GtkEntry    *entry,
 
   if (gtk_entry_get_icon_storage_type (entry, GTK_ENTRY_ICON_SECONDARY) == GTK_IMAGE_EMPTY)
     {
-      gtk_entry_set_icon_from_stock (entry, GTK_ENTRY_ICON_SECONDARY, GTK_STOCK_CAPS_LOCK_WARNING);
+      gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY, "dialog-warning-symbolic");
       gtk_entry_set_icon_activatable (entry, GTK_ENTRY_ICON_SECONDARY, FALSE);
       priv->caps_lock_warning_shown = TRUE;
     }

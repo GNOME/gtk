@@ -59,7 +59,6 @@
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
 #include "gtksizerequest.h"
-#include "gtkstock.h"
 #include "gtkshow.h"
 #include "gtktooltip.h"
 #include "gtkprivate.h"
@@ -496,10 +495,7 @@ gtk_link_button_do_popup (GtkLinkButton  *link_button,
 		      		 GTK_WIDGET (link_button),
 				 popup_menu_detach);
 
-      menu_item = gtk_image_menu_item_new_with_mnemonic (_("Copy URL"));
-      gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_item),
-		      		     gtk_image_new_from_stock (GTK_STOCK_COPY,
-							       GTK_ICON_SIZE_MENU));
+      menu_item = gtk_menu_item_new_with_mnemonic (_("Copy URL"));
       g_signal_connect (menu_item, "activate",
 		        G_CALLBACK (copy_activate_cb), link_button);
       gtk_widget_show (menu_item);

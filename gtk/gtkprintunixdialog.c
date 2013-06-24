@@ -36,7 +36,6 @@
 #include "gtkspinbutton.h"
 #include "gtkcellrendererpixbuf.h"
 #include "gtkcellrenderertext.h"
-#include "gtkstock.h"
 #include "gtkiconfactory.h"
 #include "gtkimage.h"
 #include "gtktreeselection.h"
@@ -610,17 +609,12 @@ set_busy_cursor (GtkPrintUnixDialog *dialog,
 static void
 add_custom_button_to_dialog (GtkDialog   *dialog,
                              const gchar *mnemonic_label,
-                             const gchar *stock_id,
                              gint         response_id)
 {
   GtkWidget *button = NULL;
 
   button = gtk_button_new_with_mnemonic (mnemonic_label);
   gtk_widget_set_can_default (button, TRUE);
-  gtk_button_set_image (GTK_BUTTON (button),
-                        gtk_image_new_from_stock (stock_id,
-                                                  GTK_ICON_SIZE_BUTTON));
-  gtk_widget_show (button);
 
   gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, response_id);
 }
@@ -689,10 +683,9 @@ error_dialogs (GtkPrintUnixDialog *print_dialog,
                                                                 dirname);
 
                       gtk_dialog_add_button (GTK_DIALOG (dialog),
-                                             GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+                                             _("_Cancel"), GTK_RESPONSE_CANCEL);
                       add_custom_button_to_dialog (GTK_DIALOG (dialog),
                                                    _("_Replace"),
-                                                   GTK_STOCK_PRINT,
                                                    GTK_RESPONSE_ACCEPT);
                       gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
                                                                GTK_RESPONSE_ACCEPT,

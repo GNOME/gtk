@@ -43,7 +43,6 @@
 #include "gtkdialog.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
-#include "gtkstock.h"
 #include "gtkorientable.h"
 #include "gtktypebuiltins.h"
 
@@ -82,7 +81,7 @@
  * content_area = gtk_info_bar_get_content_area (GTK_INFO_BAR (info_bar));
  * gtk_container_add (GTK_CONTAINER (content_area), message_label);
  * gtk_info_bar_add_button (GTK_INFO_BAR (info_bar),
- *                          GTK_STOCK_OK, GTK_RESPONSE_OK);
+ *                          _("_OK"), GTK_RESPONSE_OK);
  * g_signal_connect (info_bar, "response",
  *                   G_CALLBACK (gtk_widget_hide), NULL);
  * gtk_grid_attach (GTK_GRID (grid),
@@ -1110,27 +1109,26 @@ gtk_info_bar_set_message_type (GtkInfoBar     *info_bar,
       atk_obj = gtk_widget_get_accessible (GTK_WIDGET (info_bar));
       if (GTK_IS_ACCESSIBLE (atk_obj))
         {
-          GtkStockItem item;
-          const char *stock_id = NULL;
+          const char *name = NULL;
 
           atk_object_set_role (atk_obj, ATK_ROLE_ALERT);
 
           switch (message_type)
             {
             case GTK_MESSAGE_INFO:
-              stock_id = GTK_STOCK_DIALOG_INFO;
+              name = _("Information");
               break;
 
             case GTK_MESSAGE_QUESTION:
-              stock_id = GTK_STOCK_DIALOG_QUESTION;
+              name = _("Question");
               break;
 
             case GTK_MESSAGE_WARNING:
-              stock_id = GTK_STOCK_DIALOG_WARNING;
+              name = _("Warning");
               break;
 
             case GTK_MESSAGE_ERROR:
-              stock_id = GTK_STOCK_DIALOG_ERROR;
+              name = _("Error");
               break;
 
             case GTK_MESSAGE_OTHER:
@@ -1141,10 +1139,9 @@ gtk_info_bar_set_message_type (GtkInfoBar     *info_bar,
               break;
             }
 
-          if (stock_id)
+          if (name)
             {
-              gtk_stock_lookup (stock_id, &item);
-              atk_object_set_name (atk_obj, item.label);
+              atk_object_set_name (atk_obj, name);
             }
         }
 

@@ -38,7 +38,6 @@
 #include "gtkmountoperation.h"
 #include "gtkprivate.h"
 #include "gtkradiobutton.h"
-#include "gtkstock.h"
 #include "gtkgrid.h"
 #include "gtkwindow.h"
 #include "gtktreeview.h"
@@ -528,10 +527,10 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
 
   gtk_window_set_resizable (window, FALSE);
   gtk_window_set_title (window, "");
-  gtk_window_set_icon_name (window, GTK_STOCK_DIALOG_AUTHENTICATION);
+  gtk_window_set_icon_name (window, "dialog-password");
 
   gtk_dialog_add_buttons (dialog,
-                          GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                          _("_Cancel"), GTK_RESPONSE_CANCEL,
                           _("Co_nnect"), GTK_RESPONSE_OK,
                           NULL);
   gtk_dialog_set_default_response (dialog, GTK_RESPONSE_OK);
@@ -546,8 +545,8 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
   gtk_box_pack_start (GTK_BOX (content_area), hbox, TRUE, TRUE, 0);
 
-  icon = gtk_image_new_from_stock (GTK_STOCK_DIALOG_AUTHENTICATION,
-                                   GTK_ICON_SIZE_DIALOG);
+  icon = gtk_image_new_from_icon_name ("dialog-password",
+                                       GTK_ICON_SIZE_DIALOG);
 
   gtk_widget_set_halign (icon, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (icon, GTK_ALIGN_START);
@@ -1297,9 +1296,7 @@ do_popup_menu_for_process_tree_view (GtkWidget         *widget,
 
   menu = gtk_menu_new ();
 
-  item = gtk_image_menu_item_new_with_mnemonic (_("_End Process"));
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),
-                                 gtk_image_new_from_stock (GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU));
+  item = gtk_menu_item_new_with_mnemonic (_("_End Process"));
   g_signal_connect (item, "activate",
                     G_CALLBACK (on_end_process_activated),
                     op);

@@ -51,8 +51,8 @@
  *
  * dialog = gtk_recent_chooser_dialog_new ("Recent Documents",
  *                                         parent_window,
- *                                         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
- *                                         GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+ *                                         _("_Cancel"), GTK_RESPONSE_CANCEL,
+ *                                         _("_Open"), GTK_RESPONSE_ACCEPT,
  *                                         NULL);
  *
  * if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)

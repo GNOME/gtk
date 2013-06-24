@@ -104,7 +104,6 @@
 #define DEFAULT_TITLE		N_("Select a File")
 #define DESKTOP_DISPLAY_NAME	N_("Desktop")
 #define FALLBACK_DISPLAY_NAME	N_("(None)") /* this string is used in gtk+/gtk/tests/filechooser.c - change it there if you change it here */
-#define FALLBACK_ICON_NAME	"stock_unknown"
 #define FALLBACK_ICON_SIZE	16
 
 
@@ -806,9 +805,9 @@ gtk_file_chooser_button_constructor (GType                  type,
     {
       priv->dialog = gtk_file_chooser_dialog_new (NULL, NULL,
 						  GTK_FILE_CHOOSER_ACTION_OPEN,
-						  GTK_STOCK_CANCEL,
+						  _("_Cancel"),
 						  GTK_RESPONSE_CANCEL,
-						  GTK_STOCK_OPEN,
+						  _("_Open"),
 						  GTK_RESPONSE_ACCEPT,
 						  NULL);
 
@@ -1403,7 +1402,7 @@ change_icon_theme (GtkFileChooserButton *button)
 
   do
     {
-      GdkPixbuf *pixbuf;
+      GdkPixbuf *pixbuf = NULL;
       gchar type;
       gpointer data;
 
@@ -1451,9 +1450,6 @@ change_icon_theme (GtkFileChooserButton *button)
 		pixbuf = gtk_icon_theme_load_icon (theme, "folder-remote",
 						   priv->icon_size, 0, NULL);
 	    }
-	  else
-	    pixbuf = gtk_icon_theme_load_icon (theme, FALLBACK_ICON_NAME,
-					       priv->icon_size, 0, NULL);
 	  break;
 	case ROW_TYPE_VOLUME:
 	  if (data)
@@ -1461,9 +1457,6 @@ change_icon_theme (GtkFileChooserButton *button)
 							  GTK_WIDGET (button),
 							  priv->icon_size,
 							  NULL);
-	  else
-	    pixbuf = gtk_icon_theme_load_icon (theme, FALLBACK_ICON_NAME,
-					       priv->icon_size, 0, NULL);
 	  break;
 	default:
 	  continue;
@@ -2468,11 +2461,6 @@ update_label_get_info_cb (GCancellable *cancellable,
   gtk_label_set_text (GTK_LABEL (priv->label), g_file_info_get_display_name (info));
 
   pixbuf = _gtk_file_info_render_icon (info, GTK_WIDGET (priv->image), priv->icon_size);
-
-  if (!pixbuf)
-    pixbuf = gtk_icon_theme_load_icon (get_icon_theme (GTK_WIDGET (priv->image)),
-				       FALLBACK_ICON_NAME,
-				       priv->icon_size, 0, NULL);
 
   gtk_image_set_from_pixbuf (GTK_IMAGE (priv->image), pixbuf);
   if (pixbuf)

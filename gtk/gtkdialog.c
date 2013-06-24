@@ -106,7 +106,7 @@
  *    dialog = gtk_dialog_new_with_buttons ("Message",
  *                                          main_application_window,
  *                                          GTK_DIALOG_DESTROY_WITH_PARENT,
- *                                          GTK_STOCK_OK,
+ *                                          _("_OK"),
  *                                          GTK_RESPONSE_NONE,
  *                                          NULL);
  *    content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
@@ -590,9 +590,9 @@ gtk_dialog_new_empty (const gchar     *title,
  *  GtkWidget *dialog = gtk_dialog_new_with_buttons ("My dialog",
  *                                                   main_app_window,
  *                                                   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
- *                                                   GTK_STOCK_OK,
+ *                                                   _("_OK"),
  *                                                   GTK_RESPONSE_ACCEPT,
- *                                                   GTK_STOCK_CANCEL,
+ *                                                   _("_Cancel"),
  *                                                   GTK_RESPONSE_REJECT,
  *                                                   NULL);
  * ]|
@@ -1241,17 +1241,17 @@ gtk_dialog_set_alternative_button_order_valist (GtkDialog *dialog,
  * following example shows:
  * |[
  * cancel_button = gtk_dialog_add_button (GTK_DIALOG (dialog),
- *                                        GTK_STOCK_CANCEL,
+ *                                        _("_Cancel"),
  *                                        GTK_RESPONSE_CANCEL);
  *
  * ok_button = gtk_dialog_add_button (GTK_DIALOG (dialog),
- *                                    GTK_STOCK_OK,
+ *                                    _("_OK"),
  *                                    GTK_RESPONSE_OK);
  *
  * gtk_widget_grab_default (ok_button);
  *
  * help_button = gtk_dialog_add_button (GTK_DIALOG (dialog),
- *                                      GTK_STOCK_HELP,
+ *                                      _("_Help"),
  *                                      GTK_RESPONSE_HELP);
  *
  * gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),

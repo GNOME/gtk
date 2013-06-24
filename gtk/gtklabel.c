@@ -42,7 +42,6 @@
 #include "gtkmenuitem.h"
 #include "gtkmenushellprivate.h"
 #include "gtknotebook.h"
-#include "gtkstock.h"
 #include "gtkbindings.h"
 #include "gtkbuildable.h"
 #include "gtkimage.h"
@@ -6103,11 +6102,11 @@ activate_cb (GtkWidget *menuitem,
 static void
 append_action_signal (GtkLabel     *label,
 		      GtkWidget    *menu,
-		      const gchar  *stock_id,
+		      const gchar  *text,
 		      const gchar  *signal,
                       gboolean      sensitive)
 {
-  GtkWidget *menuitem = gtk_image_menu_item_new_from_stock (stock_id, NULL);
+  GtkWidget *menuitem = gtk_menu_item_new_with_mnemonic (text);
 
   g_object_set_data (G_OBJECT (menuitem), I_("gtk-signal"), (char *)signal);
   g_signal_connect (menuitem, "activate",
@@ -6210,7 +6209,6 @@ gtk_label_do_popup (GtkLabel       *label,
   GtkLabelPrivate *priv = label->priv;
   GtkWidget *menuitem;
   GtkWidget *menu;
-  GtkWidget *image;
   gboolean have_selection;
   GtkLabelLink *link;
 
@@ -6240,36 +6238,28 @@ gtk_label_do_popup (GtkLabel       *label,
   if (!have_selection && link)
     {
       /* Open Link */
-      menuitem = gtk_image_menu_item_new_with_mnemonic (_("_Open Link"));
+      menuitem = gtk_menu_item_new_with_mnemonic (_("_Open Link"));
       gtk_widget_show (menuitem);
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
       g_signal_connect (G_OBJECT (menuitem), "activate",
                         G_CALLBACK (open_link_activate_cb), label);
 
-      image = gtk_image_new_from_stock (GTK_STOCK_JUMP_TO, GTK_ICON_SIZE_MENU);
-      gtk_widget_show (image);
-      gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
-
       /* Copy Link Address */
-      menuitem = gtk_image_menu_item_new_with_mnemonic (_("Copy _Link Address"));
+      menuitem = gtk_menu_item_new_with_mnemonic (_("Copy _Link Address"));
       gtk_widget_show (menuitem);
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
       g_signal_connect (G_OBJECT (menuitem), "activate",
                         G_CALLBACK (copy_link_activate_cb), label);
-
-      image = gtk_image_new_from_stock (GTK_STOCK_COPY, GTK_ICON_SIZE_MENU);
-      gtk_widget_show (image);
-      gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
     }
   else
     {
-      append_action_signal (label, menu, GTK_STOCK_CUT, "cut-clipboard", FALSE);
-      append_action_signal (label, menu, GTK_STOCK_COPY, "copy-clipboard", have_selection);
-      append_action_signal (label, menu, GTK_STOCK_PASTE, "paste-clipboard", FALSE);
+      append_action_signal (label, menu, _("Cu_t"), "cut-clipboard", FALSE);
+      append_action_signal (label, menu, _("_Copy"), "copy-clipboard", have_selection);
+      append_action_signal (label, menu, _("_Paste"), "paste-clipboard", FALSE);
   
-      menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_DELETE, NULL);
+      menuitem = gtk_menu_item_new_with_mnemonic (_("_Delete"));
       gtk_widget_set_sensitive (menuitem, FALSE);
       gtk_widget_show (menuitem);
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
@@ -6278,7 +6268,7 @@ gtk_label_do_popup (GtkLabel       *label,
       gtk_widget_show (menuitem);
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
-      menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_SELECT_ALL, NULL);
+      menuitem = gtk_menu_item_new_with_mnemonic (_("Select _All"));
       g_signal_connect_swapped (menuitem, "activate",
 			        G_CALLBACK (gtk_label_select_all), label);
       gtk_widget_show (menuitem);

@@ -788,9 +788,9 @@ gtk_image_set_from_file   (GtkImage    *image,
 
   if (anim == NULL)
     {
-      gtk_image_set_from_stock (image,
-                                GTK_STOCK_MISSING_IMAGE,
-                                DEFAULT_ICON_SIZE);
+      gtk_image_set_from_icon_name (image,
+                                    "image-missing",
+                                    DEFAULT_ICON_SIZE);
       g_object_thaw_notify (G_OBJECT (image));
       return;
     }
@@ -845,9 +845,9 @@ gtk_image_set_from_resource (GtkImage    *image,
 
   if (animation == NULL)
     {
-      gtk_image_set_from_stock (image,
-                                GTK_STOCK_MISSING_IMAGE,
-                                DEFAULT_ICON_SIZE);
+      gtk_image_set_from_icon_name (image,
+                                    "image-missing",
+                                    DEFAULT_ICON_SIZE);
       g_object_thaw_notify (G_OBJECT (image));
       return;
     }

@@ -2435,7 +2435,7 @@ gtk_drag_source_site_get_icon_helper (GtkDragSourceSite *site)
     helper = _gtk_icon_helper_new ();
 
   if (_gtk_icon_helper_get_is_empty (helper))
-    _gtk_icon_helper_set_stock_id (helper, GTK_STOCK_DND, GTK_ICON_SIZE_DND);
+    _gtk_icon_helper_set_icon_name (helper, "text-x-generic", GTK_ICON_SIZE_DND);
 
   return helper;
 }
@@ -3036,7 +3036,7 @@ gtk_drag_get_icon (GtkDragSourceInfo *info,
 	  info->icon_window = NULL;
 
           helper = _gtk_icon_helper_new ();
-          _gtk_icon_helper_set_stock_id (helper, GTK_STOCK_DND, GTK_ICON_SIZE_DND);
+          _gtk_icon_helper_set_icon_name (helper, "text-x-generic", GTK_ICON_SIZE_DND);
           set_icon_helper (info->context, helper, -2, -2, TRUE);
 	  info->fallback_icon = info->icon_window;
 	  
@@ -3523,7 +3523,7 @@ gtk_drag_set_icon_default (GdkDragContext *context)
 {
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
 
-  gtk_drag_set_icon_stock (context, GTK_STOCK_DND, -2, -2);
+  gtk_drag_set_icon_name (context, "text-x-generic", -2, -2);
 }
 
 /*************************************************************

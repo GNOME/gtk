@@ -18,7 +18,6 @@
 #include "config.h"
 
 #include "gtkdialog.h"
-#include "gtkstock.h"
 #include "gtkbutton.h"
 #include "gtkbox.h"
 #include "gtkprivate.h"

@@ -316,7 +316,7 @@ gtk_custom_paper_unix_dialog_init (GtkCustomPaperUnixDialog *dialog)
   populate_dialog (dialog);
 
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
-                          GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
+                          _("_Close"), GTK_RESPONSE_CLOSE,
                           NULL);
 
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_CLOSE);

@@ -194,7 +194,7 @@ gtk_color_selection_dialog_init (GtkColorSelectionDialog *colorseldiag)
   gtk_widget_show (priv->colorsel);
 
   priv->cancel_button = gtk_dialog_add_button (dialog,
-                                               GTK_STOCK_CANCEL,
+                                               _("_Cancel"),
                                                GTK_RESPONSE_CANCEL);
 
   priv->ok_button = gtk_dialog_add_button (dialog,
@@ -204,7 +204,7 @@ gtk_color_selection_dialog_init (GtkColorSelectionDialog *colorseldiag)
   gtk_widget_grab_default (priv->ok_button);
 
   priv->help_button = gtk_dialog_add_button (dialog,
-                                             GTK_STOCK_HELP,
+                                             _("_Help"),
                                              GTK_RESPONSE_HELP);
 
   gtk_widget_hide (priv->help_button);

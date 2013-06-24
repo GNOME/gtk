@@ -69,7 +69,6 @@
 #include "gtksettings.h"
 #include "gtksizegroup.h"
 #include "gtksizerequest.h"
-#include "gtkstock.h"
 #include "gtktypebuiltins.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"

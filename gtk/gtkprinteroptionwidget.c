@@ -31,7 +31,6 @@
 #include "gtklabel.h"
 #include "gtkliststore.h"
 #include "gtkradiobutton.h"
-#include "gtkstock.h"
 #include "gtkgrid.h"
 #include "gtktogglebutton.h"
 #include "gtkorientable.h"
@@ -548,7 +547,7 @@ filesave_choose_cb (GtkWidget              *button,
   dialog = gtk_file_chooser_dialog_new (_("Select a filename"),
                                         toplevel,
                                         GTK_FILE_CHOOSER_ACTION_SAVE,
-                                        GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                        _("_Cancel"), GTK_RESPONSE_CANCEL,
                                         _("_Select"), GTK_RESPONSE_ACCEPT,
                                         NULL);
 
@@ -893,7 +892,7 @@ construct_widgets (GtkPrinterOptionWidget *widget)
       break;
     }
 
-  priv->image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING, GTK_ICON_SIZE_MENU);
+  priv->image = gtk_image_new_from_icon_name ("dialog-warning", GTK_ICON_SIZE_MENU);
   gtk_box_pack_start (GTK_BOX (widget), priv->image, FALSE, FALSE, 0);
 }
 

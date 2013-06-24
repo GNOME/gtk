@@ -66,7 +66,6 @@
 #include "gtksettings.h"
 #include "gtksizegroup.h"
 #include "gtksizerequest.h"
-#include "gtkstock.h"
 #include "gtktoolbar.h"
 #include "gtktoolbutton.h"
 #include "gtktooltip.h"
@@ -1671,17 +1670,14 @@ check_file_list_menu_sensitivity (GtkFileChooserDefault *impl)
 }
 
 static GtkWidget *
-file_list_add_image_menu_item (GtkFileChooserDefault *impl,
-			       const char *stock_name,
-			       const char *mnemonic_label,
-			       GCallback callback)
+file_list_add_menu_item (GtkFileChooserDefault *impl,
+                         const char *mnemonic_label,
+                         GCallback callback)
 {
   GtkFileChooserDefaultPrivate *priv = impl->priv;
   GtkWidget *item;
 
-  item = gtk_image_menu_item_new_with_mnemonic (mnemonic_label);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),
-                                 gtk_image_new_from_stock (stock_name, GTK_ICON_SIZE_MENU));
+  item = gtk_menu_item_new_with_mnemonic (mnemonic_label);
   g_signal_connect (item, "activate", callback, impl);
   gtk_widget_show (item);
   gtk_menu_shell_append (GTK_MENU_SHELL (priv->browse_files_popup_menu), item);
@@ -1720,13 +1716,13 @@ file_list_build_popup_menu (GtkFileChooserDefault *impl)
 			     priv->browse_files_tree_view,
 			     popup_menu_detach_cb);
 
-  priv->browse_files_popup_menu_visit_file_item		= file_list_add_image_menu_item (impl, GTK_STOCK_DIRECTORY, _("_Visit File"),
+  priv->browse_files_popup_menu_visit_file_item		= file_list_add_menu_item (impl, _("_Visit File"),
 											 G_CALLBACK (visit_file_cb));
 
-  priv->browse_files_popup_menu_copy_file_location_item	= file_list_add_image_menu_item (impl, GTK_STOCK_COPY, _("_Copy Location"),
+  priv->browse_files_popup_menu_copy_file_location_item	= file_list_add_menu_item (impl, _("_Copy Location"),
 											 G_CALLBACK (copy_file_location_cb));
 
-  priv->browse_files_popup_menu_add_shortcut_item	= file_list_add_image_menu_item (impl, GTK_STOCK_ADD, _("_Add to Bookmarks"),
+  priv->browse_files_popup_menu_add_shortcut_item	= file_list_add_menu_item (impl, _("_Add to Bookmarks"),
 											 G_CALLBACK (add_to_shortcuts_cb));
 
   item = gtk_separator_menu_item_new ();
@@ -2254,9 +2250,9 @@ info_bar_set (GtkFileChooserDefault *impl, PathBarMode mode)
     }
 
   gtk_info_bar_set_message_type (GTK_INFO_BAR (priv->browse_select_a_folder_info_bar), message_type);
-  gtk_image_set_from_stock (GTK_IMAGE (priv->browse_select_a_folder_icon),
-			    (message_type == GTK_MESSAGE_WARNING) ? GTK_STOCK_DIALOG_WARNING : GTK_STOCK_DIRECTORY,
-			    GTK_ICON_SIZE_MENU);
+  gtk_image_set_from_icon_name (GTK_IMAGE (priv->browse_select_a_folder_icon),
+                                (message_type == GTK_MESSAGE_WARNING) ? "dialog-warning-symbolic" : "folder-symbolic",
+                                GTK_ICON_SIZE_MENU);
   gtk_label_set_markup (GTK_LABEL (priv->browse_select_a_folder_label), str);
 
   if (free_str)
@@ -2303,7 +2299,7 @@ path_bar_set_mode (GtkFileChooserDefault *impl, PathBarMode mode)
       break;
 
     case PATH_BAR_SEARCH:
-      gtk_image_set_from_stock (GTK_IMAGE (priv->browse_special_mode_icon), GTK_STOCK_FIND, GTK_ICON_SIZE_BUTTON);
+      gtk_image_set_from_icon_name (GTK_IMAGE (priv->browse_special_mode_icon), "edit-find-symbolic", GTK_ICON_SIZE_BUTTON);
 
       tmp = g_strdup_printf ("<b>%s</b>", _("Search:"));
       gtk_label_set_markup (GTK_LABEL (priv->browse_special_mode_label), tmp);
@@ -5450,15 +5446,12 @@ get_display_name_from_file_list (GtkFileChooserDefault *impl)
 static void
 add_custom_button_to_dialog (GtkDialog   *dialog,
 			     const gchar *mnemonic_label,
-			     const gchar *stock_id,
 			     gint         response_id)
 {
   GtkWidget *button;
 
   button = gtk_button_new_with_mnemonic (mnemonic_label);
   gtk_widget_set_can_default (button, TRUE);
-  gtk_button_set_image (GTK_BUTTON (button),
-			gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_BUTTON));
   gtk_widget_show (button);
 
   gtk_dialog_add_action_widget (GTK_DIALOG (dialog), button, response_id);
@@ -5489,9 +5482,8 @@ confirm_dialog_should_accept_filename (GtkFileChooserDefault *impl,
 					      "overwrite its contents."),
 					    folder_display_name);
 
-  gtk_dialog_add_button (GTK_DIALOG (dialog), GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
-  add_custom_button_to_dialog (GTK_DIALOG (dialog), _("_Replace"),
-                               GTK_STOCK_SAVE_AS, GTK_RESPONSE_ACCEPT);
+  gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Cancel"), GTK_RESPONSE_CANCEL);
+  add_custom_button_to_dialog (GTK_DIALOG (dialog), _("_Replace"), GTK_RESPONSE_ACCEPT);
   gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
                                            GTK_RESPONSE_ACCEPT,
                                            GTK_RESPONSE_CANCEL,

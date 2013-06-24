@@ -748,8 +748,8 @@ request_password (GtkPrintBackend  *backend,
   priv->auth_info = g_new0 (gchar *, length);
 
   dialog = gtk_dialog_new_with_buttons ( _("Authentication"), NULL, GTK_DIALOG_MODAL, 
-                                         GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                                         GTK_STOCK_OK, GTK_RESPONSE_OK,
+                                         _("_Cancel"), GTK_RESPONSE_CANCEL,
+                                         _("_OK"), GTK_RESPONSE_OK,
                                          NULL);
 
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
@@ -757,7 +757,7 @@ request_password (GtkPrintBackend  *backend,
   main_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
   /* Left */
-  icon = gtk_image_new_from_stock (GTK_STOCK_DIALOG_AUTHENTICATION, GTK_ICON_SIZE_DIALOG);
+  icon = gtk_image_new_from_icon_name ("dialog-password-symbolic", GTK_ICON_SIZE_DIALOG);
   gtk_widget_set_halign (icon, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (icon, GTK_ALIGN_START);
   g_object_set (icon, "margin", 6, NULL);
