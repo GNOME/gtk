@@ -2601,7 +2601,7 @@ gtk_list_box_row_real_size_allocate (GtkWidget     *widget,
  * @row: a #GtkListBoxRow
  *
  * Marks @row as changed, causing any state that depends on this
- * to be updated. This affects sorting, filtering and separators.
+ * to be updated. This affects sorting, filtering and headers.
  *
  * Note that calls to this method must be in sync with the data
  * used for the row functions. For instance, if the list is
@@ -2633,7 +2633,7 @@ gtk_list_box_row_changed (GtkListBoxRow *row)
  * @row: a #GtkListBoxRow
  *
  * Returns the current header of the @row. This can be used
- * in a  @GtkListBoxUpdateSeparatorFunc to see if there is a header
+ * in a #GtkListBoxUpdateHeaderFunc to see if there is a header
  * set already, and if so to update the state of it.
  *
  * Return value: (transfer none): the current header, or %NULL if none
@@ -2652,7 +2652,7 @@ gtk_list_box_row_get_header (GtkListBoxRow *row)
  * @header: (allow-none): the header, or %NULL
  *
  * Sets the current header of the @row. This is only allowed to be called
- * from a @GtkListBoxUpdateSeparatorFunc. It will replace any existing
+ * from a #GtkListBoxUpdateHeaderFunc. It will replace any existing
  * header in the row, and be shown in front of the row in the listbox.
  *
  * Since: 3.10

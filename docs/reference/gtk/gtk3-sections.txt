@@ -505,6 +505,9 @@ gtk_box_get_type
 <TITLE>GtkListBox</TITLE>
 GtkListBox
 GtkListBoxRow
+GtkListBoxFilterFunc
+GtkListBoxSortFunc
+GtkListBoxUpdateHeaderFunc
 
 gtk_list_box_new
 gtk_list_box_select_row
