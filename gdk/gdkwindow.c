@@ -9250,6 +9250,74 @@ gdk_window_create_similar_surface (GdkWindow *     window,
   return surface;
 }
 
+
+/**
+ * gdk_window_create_similar_image_surface:
+ * @window: window to make new surface similar to, or %NULL if none
+ * @format: (type int): the format for the new surface
+ * @width: width of the new surface
+ * @height: height of the new surface
+ * @scale: the scale of the new surface, or 0 to use same as @window
+ *
+ * Create a new image surface that is efficient to draw on the
+ * given @window.
+ *
+ * Initially the surface contents are all 0 (transparent if contents
+ * have transparency, black otherwise.)
+ *
+ * Returns: a pointer to the newly allocated surface. The caller
+ * owns the surface and should call cairo_surface_destroy() when done
+ * with it.
+ *
+ * This function always returns a valid pointer, but it will return a
+ * pointer to a "nil" surface if @other is already in an error state
+ * or any other error occurs.
+ *
+ * Since: 3.10
+ **/
+cairo_surface_t *
+gdk_window_create_similar_image_surface (GdkWindow *     window,
+					 cairo_format_t  format,
+					 int             width,
+					 int             height,
+					 int             scale)
+{
+  cairo_surface_t *window_surface, *surface;
+  GdkDisplay *display;
+  GdkScreen *screen;
+
+  g_return_val_if_fail (window ==NULL || GDK_IS_WINDOW (window), NULL);
+
+  if (window == NULL)
+    {
+      display = gdk_display_get_default ();
+      screen = gdk_display_get_default_screen (display);
+      window = gdk_screen_get_root_window (screen);
+    }
+
+  window_surface = gdk_window_ref_impl_surface (window);
+  if (scale == 0)
+    scale = gdk_window_get_scale_factor (window);
+
+  surface =
+    cairo_surface_create_similar_image (window_surface,
+					format,
+					width,
+					height);
+
+  cairo_surface_destroy (window_surface);
+
+#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
+  cairo_surface_set_device_scale (surface, scale, scale);
+#endif
+
+  if (window)
+    _gdk_cairo_surface_set_window (surface, window);
+
+  return surface;
+}
+
+
 /**
  * gdk_window_focus:
  * @window: a #GdkWindow
