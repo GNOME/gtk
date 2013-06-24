@@ -4409,7 +4409,6 @@ forward_chars_with_skipping (GtkTextIter *iter,
                              gboolean     skip_nontext,
                              gboolean     skip_decomp)
 {
-
   gint i;
 
   g_return_if_fail (count >= 0);
@@ -4421,8 +4420,8 @@ forward_chars_with_skipping (GtkTextIter *iter,
       gboolean ignored = FALSE;
 
       /* minimal workaround to avoid the infinite loop of bug #168247. */
-       if (gtk_text_iter_is_end (iter))
-         return;
+      if (gtk_text_iter_is_end (iter))
+        return;
 
       if (skip_nontext &&
           gtk_text_iter_get_char (iter) == GTK_TEXT_UNKNOWN_CHAR)
@@ -4749,7 +4748,7 @@ lines_match (const GtkTextIter *start,
 
   /* Go to end of search string */
   forward_chars_with_skipping (&next, g_utf8_strlen (*lines, -1),
-                               visible_only, !slice, TRUE);
+                               visible_only, !slice, case_insensitive);
 
   g_free (line_text);
 
@@ -5307,7 +5306,7 @@ gtk_text_iter_backward_search (const GtkTextIter *iter,
             }
 
           forward_chars_with_skipping (&next, offset,
-                                       visible_only, !slice, TRUE);
+                                       visible_only, !slice, case_insensitive);
 
           if (match_end)
             *match_end = next;

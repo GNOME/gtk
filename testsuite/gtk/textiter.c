@@ -174,6 +174,18 @@ test_search (void)
   check_found_forward ("This is some foo\nfoo text", "foo\nfoo", 0, 13, 20, "foo\nfoo");
   check_found_backward ("This is some foo\nfoo text", "foo\nfoo", 0, 13, 20, "foo\nfoo");
   check_not_found ("This is some foo\nfoo text", "Foo\nfoo", 0);
+
+  /* check also that different composition of utf8 characters
+     (e.g. accented letters) match */
+
+  check_found_forward ("This is some \303\200 text", "\303\200", 0, 13, 14, "\303\200");
+  check_found_forward ("This is some \303\200 text", "some \303\200", 0, 8, 14, "some \303\200");
+  check_found_forward ("This is some \303\200 text", "\303\200 text", 0, 13, 19, "\303\200 text");
+  check_found_forward ("This is some \303\200 text", "some \303\200 text", 0, 8, 19, "some \303\200 text");
+  check_found_backward ("This is some \303\240 text", "\303\240", 0, 13, 14, "\303\240");
+  check_found_backward ("This is some \303\240 text", "some \303\240", 0, 8, 14, "some \303\240");
+  check_found_backward ("This is some \303\240 text", "\303\240 text", 0, 13, 19, "\303\240 text");
+  check_found_backward ("This is some \303\240 text", "some \303\240 text", 0, 8, 19, "some \303\240 text");
 }
 
 static void
