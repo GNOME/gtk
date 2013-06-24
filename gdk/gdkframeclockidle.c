@@ -63,7 +63,7 @@ struct _GdkFrameClockIdlePrivate
 static gboolean gdk_frame_clock_flush_idle (void *data);
 static gboolean gdk_frame_clock_paint_idle (void *data);
 
-G_DEFINE_TYPE (GdkFrameClockIdle, gdk_frame_clock_idle, GDK_TYPE_FRAME_CLOCK)
+G_DEFINE_TYPE_WITH_PRIVATE (GdkFrameClockIdle, gdk_frame_clock_idle, GDK_TYPE_FRAME_CLOCK)
 
 static gint64 sleep_serial;
 static gint64 sleep_source_prepare_time;
@@ -122,10 +122,8 @@ gdk_frame_clock_idle_init (GdkFrameClockIdle *frame_clock_idle)
 {
   GdkFrameClockIdlePrivate *priv;
 
-  frame_clock_idle->priv = G_TYPE_INSTANCE_GET_PRIVATE (frame_clock_idle,
-                                                        GDK_TYPE_FRAME_CLOCK_IDLE,
-                                                        GdkFrameClockIdlePrivate);
-  priv = frame_clock_idle->priv;
+  frame_clock_idle->priv = priv =
+    gdk_frame_clock_idle_get_instance_private (frame_clock_idle);
 
   priv->freeze_count = 0;
 }
@@ -581,8 +579,6 @@ gdk_frame_clock_idle_class_init (GdkFrameClockIdleClass *klass)
   frame_clock_class->end_updating = gdk_frame_clock_idle_end_updating;
   frame_clock_class->freeze = gdk_frame_clock_idle_freeze;
   frame_clock_class->thaw = gdk_frame_clock_idle_thaw;
-
-  g_type_class_add_private (klass, sizeof (GdkFrameClockIdlePrivate));
 }
 
 GdkFrameClock *

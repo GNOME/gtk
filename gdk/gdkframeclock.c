@@ -69,8 +69,6 @@
  * they will stay exactly synchronized.
  */
 
-G_DEFINE_ABSTRACT_TYPE (GdkFrameClock, gdk_frame_clock, G_TYPE_OBJECT)
-
 enum {
   FLUSH_EVENTS,
   BEFORE_PAINT,
@@ -93,6 +91,8 @@ struct _GdkFrameClockPrivate
   gint current;
   GdkFrameTimings *timings[FRAME_HISTORY_MAX_LENGTH];
 };
+
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkFrameClock, gdk_frame_clock, G_TYPE_OBJECT)
 
 static void
 gdk_frame_clock_finalize (GObject *object)
@@ -236,8 +236,6 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
-
-  g_type_class_add_private (klass, sizeof (GdkFrameClockPrivate));
 }
 
 static void
@@ -245,10 +243,7 @@ gdk_frame_clock_init (GdkFrameClock *clock)
 {
   GdkFrameClockPrivate *priv;
 
-  clock->priv = G_TYPE_INSTANCE_GET_PRIVATE (clock,
-                                             GDK_TYPE_FRAME_CLOCK,
-                                             GdkFrameClockPrivate);
-  priv = clock->priv;
+  clock->priv = priv = gdk_frame_clock_get_instance_private (clock);
 
   priv->frame_counter = -1;
   priv->current = FRAME_HISTORY_MAX_LENGTH - 1;
