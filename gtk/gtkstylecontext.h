@@ -1084,6 +1084,12 @@ void        gtk_render_icon        (GtkStyleContext     *context,
                                     GdkPixbuf           *pixbuf,
                                     gdouble              x,
                                     gdouble              y);
+GDK_AVAILABLE_IN_3_10
+void        gtk_render_icon_pattern (GtkStyleContext    *context,
+				     cairo_t            *cr,
+				     cairo_pattern_t    *pattern,
+				     gdouble             x,
+				     gdouble             y);
 GDK_AVAILABLE_IN_3_4
 void        gtk_render_insertion_cursor
                                    (GtkStyleContext     *context,
