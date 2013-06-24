@@ -6832,7 +6832,11 @@ do_presize_handler (GtkTreeView *tree_view)
       tree_view->priv->mark_rows_col_dirty = FALSE;
     }
   validate_visible_area (tree_view);
-  tree_view->priv->presize_handler_tick_cb = 0;
+  if (tree_view->priv->presize_handler_tick_cb != 0)
+    {
+      gtk_widget_remove_tick_callback (GTK_WIDGET (tree_view), tree_view->priv->presize_handler_tick_cb);
+      tree_view->priv->presize_handler_tick_cb = 0;
+    }
 
   if (tree_view->priv->fixed_height_mode)
     {
