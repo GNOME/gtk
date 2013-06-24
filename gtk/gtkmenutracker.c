@@ -473,11 +473,20 @@ gtk_menu_tracker_new_for_item_submenu (GtkMenuTrackerItem       *item,
                                        GtkMenuTrackerRemoveFunc  remove_func,
                                        gpointer                  user_data)
 {
-  return gtk_menu_tracker_new (_gtk_menu_tracker_item_get_observable (item),
-                               _gtk_menu_tracker_item_get_submenu (item),
-                               TRUE,
-                               _gtk_menu_tracker_item_get_submenu_namespace (item),
-                               insert_func, remove_func, user_data);
+  GtkMenuTracker *tracker;
+  GMenuModel *submenu;
+  gchar *namespace;
+
+  submenu = _gtk_menu_tracker_item_get_submenu (item);
+  namespace = _gtk_menu_tracker_item_get_submenu_namespace (item);
+
+  tracker = gtk_menu_tracker_new (_gtk_menu_tracker_item_get_observable (item), submenu,
+                                  TRUE, namespace, insert_func, remove_func, user_data);
+
+  g_object_unref (submenu);
+  g_free (namespace);
+
+  return tracker;
 }
 
 /*< private >
