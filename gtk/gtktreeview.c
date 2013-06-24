@@ -6854,6 +6854,12 @@ validate_rows (GtkTreeView *tree_view)
 {
   gboolean retval;
   
+  if (tree_view->priv->presize_handler_tick_cb)
+    {
+      do_presize_handler (tree_view);
+      return G_SOURCE_CONTINUE;
+    }
+
   retval = do_validate_rows (tree_view, TRUE);
   
   if (! retval && tree_view->priv->validate_rows_timer)
