@@ -31,7 +31,7 @@ enum {
   PROP_RENDERER
 };
 
-G_DEFINE_TYPE (GtkRendererCellAccessible, gtk_renderer_cell_accessible, GTK_TYPE_CELL_ACCESSIBLE)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkRendererCellAccessible, gtk_renderer_cell_accessible, GTK_TYPE_CELL_ACCESSIBLE)
 
 static void
 gtk_renderer_cell_accessible_set_property (GObject         *object,
@@ -98,16 +98,12 @@ gtk_renderer_cell_accessible_class_init (GtkRendererCellAccessibleClass *klass)
 							P_("The cell renderer represented by this accessible"),
 							GTK_TYPE_CELL_RENDERER,
 							G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-
-  g_type_class_add_private (klass, sizeof (GtkRendererCellAccessiblePrivate));
 }
 
 static void
 gtk_renderer_cell_accessible_init (GtkRendererCellAccessible *renderer_cell)
 {
-  renderer_cell->priv = G_TYPE_INSTANCE_GET_PRIVATE (renderer_cell,
-                                                     GTK_TYPE_RENDERER_CELL_ACCESSIBLE,
-                                                     GtkRendererCellAccessiblePrivate);
+  renderer_cell->priv = gtk_renderer_cell_accessible_get_instance_private (renderer_cell);
 }
 
 AtkObject *

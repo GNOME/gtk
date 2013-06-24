@@ -27,7 +27,7 @@ struct _GtkContainerCellAccessiblePrivate
   gint n_children;
 };
 
-G_DEFINE_TYPE (GtkContainerCellAccessible, gtk_container_cell_accessible, GTK_TYPE_CELL_ACCESSIBLE)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkContainerCellAccessible, gtk_container_cell_accessible, GTK_TYPE_CELL_ACCESSIBLE)
 
 
 static void
@@ -114,16 +114,12 @@ gtk_container_cell_accessible_class_init (GtkContainerCellAccessibleClass *klass
   accessible_class->widget_unset = gtk_container_cell_widget_unset;
 
   cell_class->update_cache = gtk_container_cell_accessible_update_cache;
-
-  g_type_class_add_private (g_object_class, sizeof (GtkContainerCellAccessiblePrivate));
 }
 
 static void
 gtk_container_cell_accessible_init (GtkContainerCellAccessible *cell)
 {
-  cell->priv = G_TYPE_INSTANCE_GET_PRIVATE (cell,
-                                            GTK_TYPE_CONTAINER_CELL_ACCESSIBLE,
-                                            GtkContainerCellAccessiblePrivate);
+  cell->priv = gtk_container_cell_accessible_get_instance_private (cell);
 }
 
 GtkContainerCellAccessible *

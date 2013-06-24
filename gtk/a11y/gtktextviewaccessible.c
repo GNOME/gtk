@@ -57,6 +57,7 @@ static void atk_text_interface_init               (AtkTextIface              *if
 static void atk_streamable_content_interface_init (AtkStreamableContentIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkTextViewAccessible, gtk_text_view_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
+                         G_ADD_PRIVATE (GtkTextViewAccessible)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_EDITABLE_TEXT, atk_editable_text_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_STREAMABLE_CONTENT, atk_streamable_content_interface_init))
@@ -167,16 +168,12 @@ gtk_text_view_accessible_class_init (GtkTextViewAccessibleClass *klass)
   class->initialize = gtk_text_view_accessible_initialize;
 
   widget_class->notify_gtk = gtk_text_view_accessible_notify_gtk;
-
-  g_type_class_add_private (klass, sizeof (GtkTextViewAccessiblePrivate));
 }
 
 static void
 gtk_text_view_accessible_init (GtkTextViewAccessible *accessible)
 {
-  accessible->priv = G_TYPE_INSTANCE_GET_PRIVATE (accessible,
-                                                  GTK_TYPE_TEXT_VIEW_ACCESSIBLE,
-                                                  GtkTextViewAccessiblePrivate);
+  accessible->priv = gtk_text_view_accessible_get_instance_private (accessible);
 }
 
 static gchar *

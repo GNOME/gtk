@@ -90,6 +90,7 @@ static void gtk_text_cell_accessible_update_cache       (GtkCellAccessible *cell
 static void atk_text_interface_init (AtkTextIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkTextCellAccessible, gtk_text_cell_accessible, GTK_TYPE_RENDERER_CELL_ACCESSIBLE,
+                         G_ADD_PRIVATE (GtkTextCellAccessible)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init))
 
 static AtkStateSet *
@@ -196,16 +197,12 @@ gtk_text_cell_accessible_class_init (GtkTextCellAccessibleClass *klass)
   atk_object_class->ref_state_set = gtk_text_cell_accessible_ref_state_set;
 
   gobject_class->finalize = gtk_text_cell_accessible_finalize;
-
-  g_type_class_add_private (klass, sizeof (GtkTextCellAccessiblePrivate));
 }
 
 static void
 gtk_text_cell_accessible_init (GtkTextCellAccessible *text_cell)
 {
-  text_cell->priv = G_TYPE_INSTANCE_GET_PRIVATE (text_cell,
-                                                 GTK_TYPE_TEXT_CELL_ACCESSIBLE,
-                                                 GtkTextCellAccessiblePrivate);
+  text_cell->priv = gtk_text_cell_accessible_get_instance_private (text_cell);
 }
 
 static gchar *

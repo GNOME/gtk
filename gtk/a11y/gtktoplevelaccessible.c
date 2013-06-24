@@ -35,7 +35,7 @@ struct _GtkToplevelAccessiblePrivate
   GList *window_list;
 };
 
-G_DEFINE_TYPE (GtkToplevelAccessible, gtk_toplevel_accessible, ATK_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkToplevelAccessible, gtk_toplevel_accessible, ATK_TYPE_OBJECT)
 
 static void
 gtk_toplevel_accessible_initialize (AtkObject *accessible,
@@ -151,8 +151,6 @@ gtk_toplevel_accessible_class_init (GtkToplevelAccessibleClass *klass)
   class->get_name = gtk_toplevel_accessible_get_name;
 
   g_object_class->finalize = gtk_toplevel_accessible_object_finalize;
-
-  g_type_class_add_private (klass, sizeof (GtkToplevelAccessiblePrivate));
 }
 
 static void
@@ -260,9 +258,7 @@ gtk_toplevel_accessible_init (GtkToplevelAccessible *toplevel)
   GList *l;
   guint signal_id;
 
-  toplevel->priv = G_TYPE_INSTANCE_GET_PRIVATE (toplevel,
-                                                GTK_TYPE_TOPLEVEL_ACCESSIBLE,
-                                                GtkToplevelAccessiblePrivate);
+  toplevel->priv = gtk_toplevel_accessible_get_instance_private (toplevel);
 
   l = toplevel->priv->window_list = gtk_window_list_toplevels ();
 

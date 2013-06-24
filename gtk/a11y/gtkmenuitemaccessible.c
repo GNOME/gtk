@@ -47,6 +47,7 @@ static void atk_action_interface_init    (AtkActionIface *iface);
 static void atk_selection_interface_init (AtkSelectionIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkMenuItemAccessible, gtk_menu_item_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
+                         G_ADD_PRIVATE (GtkMenuItemAccessible)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init);
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_SELECTION, atk_selection_interface_init))
 
@@ -258,16 +259,12 @@ gtk_menu_item_accessible_class_init (GtkMenuItemAccessibleClass *klass)
   class->initialize = gtk_menu_item_accessible_initialize;
   class->get_name = gtk_menu_item_accessible_get_name;
   class->get_role = gtk_menu_item_accessible_get_role;
-
-  g_type_class_add_private (klass, sizeof (GtkMenuItemAccessiblePrivate));
 }
 
 static void
 gtk_menu_item_accessible_init (GtkMenuItemAccessible *menu_item)
 {
-  menu_item->priv = G_TYPE_INSTANCE_GET_PRIVATE (menu_item,
-                                                 GTK_TYPE_MENU_ITEM_ACCESSIBLE,
-                                                 GtkMenuItemAccessiblePrivate);
+  menu_item->priv = gtk_menu_item_accessible_get_instance_private (menu_item);
 }
 
 static GtkWidget *

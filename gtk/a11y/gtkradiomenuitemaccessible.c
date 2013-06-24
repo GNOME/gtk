@@ -25,7 +25,9 @@ struct _GtkRadioMenuItemAccessiblePrivate
   GSList *old_group;
 };
 
-G_DEFINE_TYPE (GtkRadioMenuItemAccessible, gtk_radio_menu_item_accessible, GTK_TYPE_CHECK_MENU_ITEM_ACCESSIBLE)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkRadioMenuItemAccessible,
+                            gtk_radio_menu_item_accessible,
+                            GTK_TYPE_CHECK_MENU_ITEM_ACCESSIBLE)
 
 
 static AtkRelationSet *
@@ -106,14 +108,10 @@ gtk_radio_menu_item_accessible_class_init (GtkRadioMenuItemAccessibleClass *klas
 
   class->ref_relation_set = gtk_radio_menu_item_accessible_ref_relation_set;
   class->initialize = gtk_radio_menu_item_accessible_initialize;
-
-  g_type_class_add_private (klass, sizeof (GtkRadioMenuItemAccessiblePrivate));
 }
 
 static void
 gtk_radio_menu_item_accessible_init (GtkRadioMenuItemAccessible *radio_menu_item)
 {
-  radio_menu_item->priv = G_TYPE_INSTANCE_GET_PRIVATE (radio_menu_item,
-                                                       GTK_TYPE_RADIO_MENU_ITEM_ACCESSIBLE,
-                                                       GtkRadioMenuItemAccessiblePrivate);
+  radio_menu_item->priv = gtk_radio_menu_item_accessible_get_instance_private (radio_menu_item);
 }

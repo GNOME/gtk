@@ -31,14 +31,13 @@ struct _GtkLabelAccessiblePrivate
 static void atk_text_interface_init (AtkTextIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkLabelAccessible, gtk_label_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
+                         G_ADD_PRIVATE (GtkLabelAccessible)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init))
 
 static void
 gtk_label_accessible_init (GtkLabelAccessible *label)
 {
-  label->priv = G_TYPE_INSTANCE_GET_PRIVATE (label,
-                                             GTK_TYPE_LABEL_ACCESSIBLE,
-                                             GtkLabelAccessiblePrivate);
+  label->priv = gtk_label_accessible_get_instance_private (label);
 }
 
 static void
@@ -279,8 +278,6 @@ gtk_label_accessible_class_init (GtkLabelAccessibleClass *klass)
   class->ref_state_set = gtk_label_accessible_ref_state_set;
   class->ref_relation_set = gtk_label_accessible_ref_relation_set;
   class->initialize = gtk_label_accessible_initialize;
-
-  g_type_class_add_private (klass, sizeof (GtkLabelAccessiblePrivate));
 }
 
 /* atktext.h */

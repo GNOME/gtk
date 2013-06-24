@@ -31,6 +31,7 @@ struct _GtkNotebookPageAccessiblePrivate
 static void atk_component_interface_init (AtkComponentIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkNotebookPageAccessible, gtk_notebook_page_accessible, ATK_TYPE_OBJECT,
+                         G_ADD_PRIVATE (GtkNotebookPageAccessible)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init))
 
 
@@ -213,16 +214,12 @@ gtk_notebook_page_accessible_class_init (GtkNotebookPageAccessibleClass *klass)
   class->ref_child = gtk_notebook_page_accessible_ref_child;
   class->ref_state_set = gtk_notebook_page_accessible_ref_state_set;
   class->get_index_in_parent = gtk_notebook_page_accessible_get_index_in_parent;
-
-  g_type_class_add_private (klass, sizeof (GtkNotebookPageAccessiblePrivate));
 }
 
 static void
 gtk_notebook_page_accessible_init (GtkNotebookPageAccessible *page)
 {
-  page->priv = G_TYPE_INSTANCE_GET_PRIVATE (page,
-                                            GTK_TYPE_NOTEBOOK_PAGE_ACCESSIBLE,
-                                            GtkNotebookPageAccessiblePrivate);
+  page->priv = gtk_notebook_page_accessible_get_instance_private (page);
 }
 
 static void

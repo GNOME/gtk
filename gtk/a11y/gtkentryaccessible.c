@@ -383,6 +383,7 @@ static void atk_action_interface_init        (AtkActionIface       *iface);
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkEntryAccessible, gtk_entry_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
+                         G_ADD_PRIVATE (GtkEntryAccessible)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_EDITABLE_TEXT, atk_editable_text_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_TEXT, atk_text_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init))
@@ -750,16 +751,12 @@ gtk_entry_accessible_class_init (GtkEntryAccessibleClass *klass)
   widget_class->notify_gtk = gtk_entry_accessible_notify_gtk;
 
   gobject_class->finalize = gtk_entry_accessible_finalize;
-
-  g_type_class_add_private (klass, sizeof (GtkEntryAccessiblePrivate));
 }
 
 static void
 gtk_entry_accessible_init (GtkEntryAccessible *entry)
 {
-  entry->priv = G_TYPE_INSTANCE_GET_PRIVATE (entry,
-                                             GTK_TYPE_ENTRY_ACCESSIBLE,
-                                             GtkEntryAccessiblePrivate);
+  entry->priv = gtk_entry_accessible_get_instance_private (entry);
   entry->priv->cursor_position = 0;
   entry->priv->selection_bound = 0;
 }

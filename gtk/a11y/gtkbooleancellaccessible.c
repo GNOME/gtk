@@ -88,8 +88,9 @@ gtk_boolean_cell_accessible_action_interface_init (AtkActionIface *iface)
 }
 
 
-G_DEFINE_TYPE_EXTENDED (GtkBooleanCellAccessible, gtk_boolean_cell_accessible, GTK_TYPE_RENDERER_CELL_ACCESSIBLE, 0,
-                        G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, gtk_boolean_cell_accessible_action_interface_init))
+G_DEFINE_TYPE_WITH_CODE (GtkBooleanCellAccessible, gtk_boolean_cell_accessible, GTK_TYPE_RENDERER_CELL_ACCESSIBLE,
+                         G_ADD_PRIVATE (GtkBooleanCellAccessible)
+                         G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, gtk_boolean_cell_accessible_action_interface_init))
 
 
 static AtkStateSet *
@@ -150,15 +151,11 @@ gtk_boolean_cell_accessible_class_init (GtkBooleanCellAccessibleClass *klass)
   atkobject_class->ref_state_set = gtk_boolean_cell_accessible_ref_state_set;
 
   cell_class->update_cache = gtk_boolean_cell_accessible_update_cache;
-
-  g_type_class_add_private (klass, sizeof (GtkBooleanCellAccessiblePrivate));
 }
 
 static void
 gtk_boolean_cell_accessible_init (GtkBooleanCellAccessible *cell)
 {
-  cell->priv =  G_TYPE_INSTANCE_GET_PRIVATE (cell,
-                                             GTK_TYPE_BOOLEAN_CELL_ACCESSIBLE,
-                                             GtkBooleanCellAccessiblePrivate);
+  cell->priv = gtk_boolean_cell_accessible_get_instance_private (cell);
 }
 

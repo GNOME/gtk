@@ -26,7 +26,7 @@ struct _GtkRadioButtonAccessiblePrivate
 };
 
 
-G_DEFINE_TYPE (GtkRadioButtonAccessible, gtk_radio_button_accessible, GTK_TYPE_TOGGLE_BUTTON_ACCESSIBLE)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkRadioButtonAccessible, gtk_radio_button_accessible, GTK_TYPE_TOGGLE_BUTTON_ACCESSIBLE)
 
 static void
 gtk_radio_button_accessible_initialize (AtkObject *accessible,
@@ -109,14 +109,10 @@ gtk_radio_button_accessible_class_init (GtkRadioButtonAccessibleClass *klass)
 
   class->initialize = gtk_radio_button_accessible_initialize;
   class->ref_relation_set = gtk_radio_button_accessible_ref_relation_set;
-
-  g_type_class_add_private (klass, sizeof (GtkRadioButtonAccessiblePrivate));
 }
 
 static void
 gtk_radio_button_accessible_init (GtkRadioButtonAccessible *radio_button)
 {
-  radio_button->priv = G_TYPE_INSTANCE_GET_PRIVATE (radio_button,
-                                                    GTK_TYPE_RADIO_BUTTON_ACCESSIBLE,
-                                                    GtkRadioButtonAccessiblePrivate);
+  radio_button->priv = gtk_radio_button_accessible_get_instance_private (radio_button);
 }

@@ -82,6 +82,7 @@ static void atk_component_interface_init              (AtkComponentIface        
 static void gtk_cell_accessible_parent_interface_init (GtkCellAccessibleParentIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkTreeViewAccessible, gtk_tree_view_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
+                         G_ADD_PRIVATE (GtkTreeViewAccessible)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_TABLE, atk_table_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_SELECTION, atk_selection_interface_init)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init)
@@ -529,16 +530,12 @@ gtk_tree_view_accessible_class_init (GtkTreeViewAccessibleClass *klass)
   container_class->remove_gtk = NULL;
 
   gobject_class->finalize = gtk_tree_view_accessible_finalize;
-
-  g_type_class_add_private (klass, sizeof (GtkTreeViewAccessiblePrivate));
 }
 
 static void
 gtk_tree_view_accessible_init (GtkTreeViewAccessible *view)
 {
-  view->priv = G_TYPE_INSTANCE_GET_PRIVATE (view,
-                                            GTK_TYPE_TREE_VIEW_ACCESSIBLE,
-                                            GtkTreeViewAccessiblePrivate);
+  view->priv = gtk_tree_view_accessible_get_instance_private (view);
 }
 
 /* atkcomponent.h */

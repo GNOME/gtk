@@ -31,6 +31,7 @@ struct _GtkComboBoxAccessiblePrivate
 static void atk_action_interface_init    (AtkActionIface    *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkComboBoxAccessible, gtk_combo_box_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
+                         G_ADD_PRIVATE (GtkComboBoxAccessible)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_ACTION, atk_action_interface_init))
 
 static void
@@ -199,16 +200,12 @@ gtk_combo_box_accessible_class_init (GtkComboBoxAccessibleClass *klass)
   class->get_n_children = gtk_combo_box_accessible_get_n_children;
   class->ref_child = gtk_combo_box_accessible_ref_child;
   class->initialize = gtk_combo_box_accessible_initialize;
-
-  g_type_class_add_private (klass, sizeof (GtkComboBoxAccessiblePrivate));
 }
 
 static void
 gtk_combo_box_accessible_init (GtkComboBoxAccessible *combo_box)
 {
-  combo_box->priv = G_TYPE_INSTANCE_GET_PRIVATE (combo_box,
-                                                 GTK_TYPE_COMBO_BOX_ACCESSIBLE,
-                                                 GtkComboBoxAccessiblePrivate);
+  combo_box->priv = gtk_combo_box_accessible_get_instance_private (combo_box);
   combo_box->priv->old_selection = -1;
   combo_box->priv->name = NULL;
   combo_box->priv->popup_set = FALSE;

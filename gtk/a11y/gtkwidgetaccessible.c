@@ -40,6 +40,7 @@ static gboolean gtk_widget_accessible_all_parents_visible (GtkWidget *widget);
 static void atk_component_interface_init (AtkComponentIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkWidgetAccessible, gtk_widget_accessible, GTK_TYPE_ACCESSIBLE,
+                         G_ADD_PRIVATE (GtkWidgetAccessible)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_COMPONENT, atk_component_interface_init))
 
 /* Translate GtkWidget::focus-in/out-event to AtkObject::focus-event */
@@ -541,16 +542,12 @@ gtk_widget_accessible_class_init (GtkWidgetAccessibleClass *klass)
   class->initialize = gtk_widget_accessible_initialize;
   class->get_attributes = gtk_widget_accessible_get_attributes;
   class->focus_event = gtk_widget_accessible_focus_event;
-
-  g_type_class_add_private (klass, sizeof (GtkWidgetAccessiblePrivate));
 }
 
 static void
 gtk_widget_accessible_init (GtkWidgetAccessible *accessible)
 {
-  accessible->priv = G_TYPE_INSTANCE_GET_PRIVATE (accessible,
-                                                  GTK_TYPE_WIDGET_ACCESSIBLE,
-                                                  GtkWidgetAccessiblePrivate);
+  accessible->priv = gtk_widget_accessible_get_instance_private (accessible);
 }
 
 static void

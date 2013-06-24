@@ -39,6 +39,7 @@ struct _GtkNotebookAccessiblePrivate
 static void atk_selection_interface_init (AtkSelectionIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkNotebookAccessible, gtk_notebook_accessible, GTK_TYPE_CONTAINER_ACCESSIBLE,
+                         G_ADD_PRIVATE (GtkNotebookAccessible)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_SELECTION, atk_selection_interface_init))
 
 static gboolean
@@ -322,16 +323,12 @@ gtk_notebook_accessible_class_init (GtkNotebookAccessibleClass *klass)
   /* we listen to page-added/-removed, so we don't care about these */
   container_class->add_gtk = NULL;
   container_class->remove_gtk = NULL;
-
-  g_type_class_add_private (klass, sizeof (GtkNotebookAccessiblePrivate));
 }
 
 static void
 gtk_notebook_accessible_init (GtkNotebookAccessible *notebook)
 {
-  notebook->priv = G_TYPE_INSTANCE_GET_PRIVATE (notebook,
-                                                GTK_TYPE_NOTEBOOK_ACCESSIBLE,
-                                                GtkNotebookAccessiblePrivate);
+  notebook->priv = gtk_notebook_accessible_get_instance_private (notebook);
   notebook->priv->pages = g_hash_table_new_full (g_direct_hash,
                                                  g_direct_equal,
                                                  NULL,

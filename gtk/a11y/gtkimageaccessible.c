@@ -30,6 +30,7 @@ struct _GtkImageAccessiblePrivate
 static void atk_image_interface_init (AtkImageIface  *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkImageAccessible, gtk_image_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
+                         G_ADD_PRIVATE (GtkImageAccessible)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_IMAGE, atk_image_interface_init))
 
 static void
@@ -103,16 +104,12 @@ gtk_image_accessible_class_init (GtkImageAccessibleClass *klass)
   gobject_class->finalize = gtk_image_accessible_finalize;
   class->initialize = gtk_image_accessible_initialize;
   class->get_name = gtk_image_accessible_get_name;
-
-  g_type_class_add_private (klass, sizeof (GtkImageAccessiblePrivate));
 }
 
 static void
 gtk_image_accessible_init (GtkImageAccessible *image)
 {
-  image->priv = G_TYPE_INSTANCE_GET_PRIVATE (image,
-                                             GTK_TYPE_IMAGE_ACCESSIBLE,
-                                             GtkImageAccessiblePrivate);
+  image->priv = gtk_image_accessible_get_instance_private (image);
 }
 
 static const gchar *

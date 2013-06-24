@@ -198,14 +198,13 @@ gtk_link_button_accessible_get_hyperlink (AtkHyperlinkImpl *impl)
 static void atk_hypertext_impl_interface_init (AtkHyperlinkImplIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkLinkButtonAccessible, gtk_link_button_accessible, GTK_TYPE_BUTTON_ACCESSIBLE,
+                         G_ADD_PRIVATE (GtkLinkButtonAccessible)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_HYPERLINK_IMPL, atk_hypertext_impl_interface_init))
 
 static void
 gtk_link_button_accessible_init (GtkLinkButtonAccessible *button)
 {
-  button->priv = G_TYPE_INSTANCE_GET_PRIVATE (button,
-                                              GTK_TYPE_LINK_BUTTON_ACCESSIBLE,
-                                              GtkLinkButtonAccessiblePrivate);
+  button->priv = gtk_link_button_accessible_get_instance_private (button);
 }
 
 static void
@@ -223,8 +222,6 @@ static void
 gtk_link_button_accessible_class_init (GtkLinkButtonAccessibleClass *klass)
 {
   G_OBJECT_CLASS (klass)->finalize = gtk_link_button_accessible_finalize;
-
-  g_type_class_add_private (klass, sizeof (GtkLinkButtonAccessiblePrivate));
 }
 
 static void

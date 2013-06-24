@@ -25,7 +25,7 @@ struct _GtkContainerAccessiblePrivate
   GList *children;
 };
 
-G_DEFINE_TYPE (GtkContainerAccessible, gtk_container_accessible, GTK_TYPE_WIDGET_ACCESSIBLE)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkContainerAccessible, gtk_container_accessible, GTK_TYPE_WIDGET_ACCESSIBLE)
 
 static gint
 gtk_container_accessible_get_n_children (AtkObject* obj)
@@ -90,8 +90,8 @@ gtk_container_accessible_add_gtk (GtkContainer *container,
  
 static gint
 gtk_container_accessible_remove_gtk (GtkContainer *container,
-                           GtkWidget    *widget,
-                           gpointer     data)
+                                     GtkWidget    *widget,
+                                     gpointer     data)
 {
   GtkContainerAccessible *accessible = GTK_CONTAINER_ACCESSIBLE (data);
   GtkContainerAccessibleClass *klass;
@@ -193,14 +193,10 @@ gtk_container_accessible_class_init (GtkContainerAccessibleClass *klass)
 
   klass->add_gtk = gtk_container_accessible_real_add_gtk;
   klass->remove_gtk = gtk_container_accessible_real_remove_gtk;
-
-  g_type_class_add_private (klass, sizeof (GtkContainerAccessiblePrivate));
 }
 
 static void
 gtk_container_accessible_init (GtkContainerAccessible *container)
 {
-  container->priv = G_TYPE_INSTANCE_GET_PRIVATE (container,
-                                                 GTK_TYPE_CONTAINER_ACCESSIBLE,
-                                                 GtkContainerAccessiblePrivate);
+  container->priv = gtk_container_accessible_get_instance_private (container);
 }

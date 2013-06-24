@@ -28,6 +28,7 @@ struct _GtkArrowAccessiblePrivate
 static void atk_image_interface_init (AtkImageIface  *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkArrowAccessible, gtk_arrow_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
+                         G_ADD_PRIVATE (GtkArrowAccessible)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_IMAGE, atk_image_interface_init))
 
 static void
@@ -58,16 +59,12 @@ gtk_arrow_accessible_class_init (GtkArrowAccessibleClass *klass)
   atk_object_class->initialize = gtk_arrow_accessible_initialize;
 
   gobject_class->finalize = gtk_arrow_accessible_finalize;
-
-  g_type_class_add_private (klass, sizeof (GtkArrowAccessiblePrivate));
 }
 
 static void
 gtk_arrow_accessible_init (GtkArrowAccessible *arrow)
 {
-  arrow->priv = G_TYPE_INSTANCE_GET_PRIVATE (arrow,
-                                             GTK_TYPE_ARROW_ACCESSIBLE,
-                                             GtkArrowAccessiblePrivate);
+  arrow->priv = gtk_arrow_accessible_get_instance_private (arrow);
 }
 
 static const gchar *
