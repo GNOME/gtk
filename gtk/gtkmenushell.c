@@ -2091,12 +2091,24 @@ gtk_menu_shell_tracker_insert_func (GtkMenuTrackerItem *item,
 
   if (gtk_menu_tracker_item_get_is_separator (item))
     {
+      const gchar *label;
+
       widget = gtk_separator_menu_item_new ();
 
-      /* For separators, we bind to the "label" property in case there
-       * is a section heading.
+      /* For separators, we may have a section heading, so check the
+       * "label" property.
+       *
+       * Note: we only do this once, and we only do it if the label is
+       * non-NULL because even setting a NULL label on the separator
+       * will be enough to create a GtkLabel and add it, changing the
+       * appearance in the process.
        */
-      g_object_bind_property (item, "label", widget, "label", G_BINDING_SYNC_CREATE);
+
+      label = gtk_menu_tracker_item_get_label (item);
+      if (label)
+        gtk_menu_item_set_label (GTK_MENU_ITEM (widget), label);
+
+      gtk_widget_show (widget);
     }
   else if (gtk_menu_tracker_item_get_has_submenu (item))
     {
