@@ -26,6 +26,8 @@ G_DEFINE_TYPE (GtkIconHelper, _gtk_icon_helper, G_TYPE_OBJECT)
 struct _GtkIconHelperPrivate {
   GtkImageType storage_type;
 
+  GdkWindow *window;
+
   GdkPixbuf *orig_pixbuf;
   GdkPixbufAnimation *animation;
   GIcon *gicon;
@@ -50,6 +52,7 @@ _gtk_icon_helper_clear (GtkIconHelper *self)
   g_clear_object (&self->priv->orig_pixbuf);
   g_clear_object (&self->priv->animation);
   g_clear_object (&self->priv->rendered_pixbuf);
+  g_clear_object (&self->priv->window);
 
   if (self->priv->icon_set != NULL)
     {
@@ -74,6 +77,17 @@ void
 _gtk_icon_helper_invalidate (GtkIconHelper *self)
 {
   g_clear_object (&self->priv->rendered_pixbuf);
+}
+
+void
+ _gtk_icon_helper_set_window (GtkIconHelper *self,
+			      GdkWindow *window)
+{
+  if (window)
+    g_object_ref (window);
+  g_clear_object (&self->priv->window);
+  self->priv->window = window;
+
 }
 
 static void
