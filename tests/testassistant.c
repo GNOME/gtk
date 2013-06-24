@@ -542,7 +542,7 @@ create_full_featured_assistant (GtkWidget *widget)
       assistant = gtk_assistant_new ();
       gtk_window_set_default_size (GTK_WINDOW (assistant), 400, 300);
 
-      button = gtk_button_new_from_stock (GTK_STOCK_STOP);
+      button = gtk_button_new_with_label ("_Stop");
       gtk_widget_show (button);
       gtk_assistant_add_action_widget (GTK_ASSISTANT (assistant), button);
       g_signal_connect (button, "clicked",

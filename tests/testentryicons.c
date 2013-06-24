@@ -49,7 +49,7 @@ drag_begin_cb (GtkWidget      *widget,
 
   pos = gtk_entry_get_current_icon_drag_source (GTK_ENTRY (widget));
   if (pos != -1)
-    gtk_drag_set_icon_stock (context, GTK_STOCK_INFO, 2, 2);
+    gtk_drag_set_icon_name (context, "dialog-info", 2, 2);
 
   g_print ("drag begin %d\n", pos);
 }
@@ -121,8 +121,8 @@ main (int argc, char **argv)
   gtk_widget_set_hexpand (entry, TRUE);
   gtk_grid_attach (GTK_GRID (grid), entry, 1, 0, 1, 1);
 
-  icon = g_themed_icon_new ("folder");
-  g_themed_icon_append_name (G_THEMED_ICON (icon), "folder");
+  icon = g_themed_icon_new ("folder-symbolic");
+  g_themed_icon_append_name (G_THEMED_ICON (icon), "folder-symbolic");
 
   gtk_entry_set_icon_from_gicon (GTK_ENTRY (entry),
 				 GTK_ENTRY_ICON_PRIMARY,
@@ -142,7 +142,7 @@ main (int argc, char **argv)
 
   
   /*
-   * Save File - sets the icon using a stock id.
+   * Save File - sets the icon using an icon name.
    */
   label = gtk_label_new ("Save File:");
   gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
@@ -154,9 +154,9 @@ main (int argc, char **argv)
   gtk_entry_set_text (GTK_ENTRY (entry), "‏Right-to-left");
   gtk_widget_set_direction (entry, GTK_TEXT_DIR_RTL);
   
-  gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
-				 GTK_ENTRY_ICON_PRIMARY,
-				 GTK_STOCK_SAVE);
+  gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
+                                     GTK_ENTRY_ICON_PRIMARY,
+                                     "document-save-symbolic");
   gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
 				   GTK_ENTRY_ICON_PRIMARY,
 				   "Save a file");
@@ -187,13 +187,13 @@ main (int argc, char **argv)
   gtk_widget_set_hexpand (entry, TRUE);
   gtk_grid_attach (GTK_GRID (grid), entry, 1, 2, 1, 1);
 
-  gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
-				 GTK_ENTRY_ICON_PRIMARY,
-				 GTK_STOCK_FIND);
+  gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
+                                     GTK_ENTRY_ICON_PRIMARY,
+                                     "edit-find-symbolic");
 
-  gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
-				 GTK_ENTRY_ICON_SECONDARY,
-				 GTK_STOCK_CLEAR);
+  gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
+                                     GTK_ENTRY_ICON_SECONDARY,
+                                     "edit-clear-symbolic");
 
   g_signal_connect (entry, "icon-press", G_CALLBACK (clear_pressed), NULL);
 
@@ -203,7 +203,7 @@ main (int argc, char **argv)
                     G_CALLBACK (properties_cb), entry);                    
 
   /*
-   * Password - Sets the icon using a stock id
+   * Password - Sets the icon using an icon name
    */
   label = gtk_label_new ("Password:");
   gtk_grid_attach (GTK_GRID (grid), label, 0, 3, 1, 1);
@@ -214,9 +214,9 @@ main (int argc, char **argv)
   gtk_grid_attach (GTK_GRID (grid), entry, 1, 3, 1, 1);
   gtk_entry_set_visibility (GTK_ENTRY (entry), FALSE);
 
-  gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
-				 GTK_ENTRY_ICON_PRIMARY,
-				 GTK_STOCK_DIALOG_AUTHENTICATION);
+  gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
+                                     GTK_ENTRY_ICON_PRIMARY,
+                                     "dialog-password-symbolic");
 
   gtk_entry_set_icon_activatable (GTK_ENTRY (entry),
 				  GTK_ENTRY_ICON_PRIMARY,

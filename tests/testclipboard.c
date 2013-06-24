@@ -114,7 +114,7 @@ main (int argc, char **argv)
                                         0,
                                         "Copy Large", 0,
                                         "Copy Small", 1,
-                                        GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
+                                        "_Close", GTK_RESPONSE_CLOSE,
                                         NULL);
 
   image = gtk_image_new ();

@@ -41,7 +41,7 @@ int main (int argc, char **argv)
 		GtkWidget *item;
 
 		if (i == 3) {
-			item = gtk_image_menu_item_new_from_stock (GTK_STOCK_COPY, accel_group);
+			item = gtk_menu_item_new_with_mnemonic ("_Copy");
 		} else {
 			char *label;
 

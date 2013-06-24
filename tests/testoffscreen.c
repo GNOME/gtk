@@ -3,6 +3,7 @@
  */
 
 #include <math.h>
+#include <string.h>
 #include <gtk/gtk.h>
 #include "gtkoffscreenbox.h"
 
@@ -143,8 +144,9 @@ create_treeview (GtkWidget *vbox)
   GtkWidget *scrolledwindow;
   GtkListStore *store;
   GtkWidget *tree_view;
-  GSList *stock_ids;
-  GSList *list;
+  GtkIconTheme *icon_theme;
+  GList *icon_names;
+  GList *list;
 
   scrolledwindow = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolledwindow),
@@ -161,7 +163,7 @@ create_treeview (GtkWidget *vbox)
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view), -1,
                                                "Icon",
                                                gtk_cell_renderer_pixbuf_new (),
-                                               "stock-id", 0,
+                                               "icon-name", 0,
                                                NULL);
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view), -1,
                                                "Label",
@@ -169,24 +171,21 @@ create_treeview (GtkWidget *vbox)
                                                "text", 1,
                                                NULL);
 
-  stock_ids = gtk_stock_list_ids ();
+  icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (vbox));
+  icon_names = gtk_icon_theme_list_icons (icon_theme, NULL);
+  icon_names = g_list_sort (icon_names, (GCompareFunc) strcmp);
 
-  for (list = stock_ids; list; list = g_slist_next (list))
+  for (list = icon_names; list; list = g_list_next (list))
     {
-      const gchar *stock_id = list->data;
-      GtkStockItem item;
+      const gchar *name = list->data;
 
-      if (gtk_stock_lookup (stock_id, &item))
-        {
-          gtk_list_store_insert_with_values (store, NULL, -1,
-                                             0, item.stock_id,
-                                             1, item.label,
-                                             -1);
-        }
+      gtk_list_store_insert_with_values (store, NULL, -1,
+                                         0, name,
+                                         1, name,
+                                         -1);
     }
 
-  g_slist_foreach (stock_ids, (GFunc) g_free, NULL);
-  g_slist_free (stock_ids);
+  g_list_free_full (icon_names, g_free);
 }
 
 static GtkWidget *

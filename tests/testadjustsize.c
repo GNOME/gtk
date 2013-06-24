@@ -37,8 +37,8 @@ static GtkWidget *test_widgets[TEST_WIDGET_LAST];
 static GtkWidget*
 create_image (void)
 {
-  return gtk_image_new_from_stock (GTK_STOCK_OPEN,
-                                   GTK_ICON_SIZE_BUTTON);
+  return gtk_image_new_from_icon_name ("document-open",
+                                       GTK_ICON_SIZE_BUTTON);
 }
 
 static GtkWidget*

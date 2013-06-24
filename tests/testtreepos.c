@@ -114,7 +114,7 @@ int main (int argc, char *argv[])
 
   cell = gtk_cell_renderer_pixbuf_new ();
   gtk_tree_view_column_pack_start (col, cell, FALSE);
-  gtk_tree_view_column_add_attribute (col, cell, "stock-id", 2);
+  gtk_tree_view_column_add_attribute (col, cell, "icon-name", 2);
 
   cell = gtk_cell_renderer_toggle_new ();
   gtk_tree_view_column_pack_start (col, cell, FALSE);
@@ -123,9 +123,9 @@ int main (int argc, char *argv[])
   gtk_tree_view_append_column (GTK_TREE_VIEW (tv), col);
 
   store = gtk_tree_store_new (3, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_STRING);
-  gtk_tree_store_insert_with_values (store, NULL, NULL, 0, 0, "One row", 1, FALSE, 2, "gtk-open", -1);
-  gtk_tree_store_insert_with_values (store, &iter, NULL, 1, 0, "Two row", 1, FALSE, 2, "gtk-file", -1);
-  gtk_tree_store_insert_with_values (store, NULL, &iter, 0, 0, "Three row", 1, FALSE, 2, "gtk-file", -1);
+  gtk_tree_store_insert_with_values (store, NULL, NULL, 0, 0, "One row", 1, FALSE, 2, "document-open", -1);
+  gtk_tree_store_insert_with_values (store, &iter, NULL, 1, 0, "Two row", 1, FALSE, 2, "dialog-warning", -1);
+  gtk_tree_store_insert_with_values (store, NULL, &iter, 0, 0, "Three row", 1, FALSE, 2, "dialog-error", -1);
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (tv), GTK_TREE_MODEL (store));
 

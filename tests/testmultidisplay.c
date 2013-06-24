@@ -85,8 +85,8 @@ make_selection_dialog (GdkScreen * screen,
   gtk_widget_grab_focus (entry);
 
   gtk_dialog_add_buttons (GTK_DIALOG (window),
-			  GTK_STOCK_APPLY, GTK_RESPONSE_APPLY,
-			  GTK_STOCK_QUIT, GTK_RESPONSE_DELETE_EVENT,
+			  "_Apply", GTK_RESPONSE_APPLY,
+			  "_Quit", GTK_RESPONSE_DELETE_EVENT,
 			  NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (window), GTK_RESPONSE_APPLY);
 
@@ -116,7 +116,7 @@ main (int argc, char *argv[])
   dialog = gtk_dialog_new_with_buttons ("Second Display Selection",
 					NULL,
 					GTK_DIALOG_MODAL,
-					GTK_STOCK_OK,
+					"_OK",
 					GTK_RESPONSE_OK, NULL);
 
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);

@@ -573,9 +573,9 @@ main (gint argc, gchar **argv)
   store = create_items_list (&treeview);
   gtk_container_add (GTK_CONTAINER (scrolled_window), treeview);
   
-  item = gtk_tool_button_new_from_stock (GTK_STOCK_NEW);
+  item = gtk_tool_button_new (NULL, NULL);
+  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "document-new");
   gtk_tool_button_set_label (GTK_TOOL_BUTTON (item), "Custom label");
-  gtk_tool_button_set_label (GTK_TOOL_BUTTON (item), NULL);
   add_item_to_list (store, item, "New");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
   gdk_threads_add_timeout (3000, (GSourceFunc) timeout_cb, item);
@@ -592,7 +592,9 @@ main (gint argc, gchar **argv)
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
     }
 
-  item = gtk_menu_tool_button_new_from_stock (GTK_STOCK_OPEN);
+  item = gtk_menu_tool_button_new (NULL, NULL);
+  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "document-open");
+  gtk_tool_button_set_label (GTK_TOOL_BUTTON (item), "Open");
   gtk_menu_tool_button_set_menu (GTK_MENU_TOOL_BUTTON (item), menu);
   add_item_to_list (store, item, "Open");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
@@ -609,7 +611,9 @@ main (gint argc, gchar **argv)
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
     }
 
-  item = gtk_menu_tool_button_new_from_stock (GTK_STOCK_GO_BACK);
+  item = gtk_menu_tool_button_new (NULL, NULL);
+  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "go-previous");
+  gtk_tool_button_set_label (GTK_TOOL_BUTTON (item), "Back");
   gtk_menu_tool_button_set_menu (GTK_MENU_TOOL_BUTTON (item), menu);
   add_item_to_list (store, item, "BackWithHistory");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
@@ -618,14 +622,16 @@ main (gint argc, gchar **argv)
   add_item_to_list (store, item, "-----");    
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
   
-  image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING, GTK_ICON_SIZE_DIALOG);
+  image = gtk_image_new_from_icon_name ("dialog-warning", GTK_ICON_SIZE_DIALOG);
   item = gtk_tool_item_new ();
   gtk_widget_show (image);
   gtk_container_add (GTK_CONTAINER (item), image);
   add_item_to_list (store, item, "(Custom Item)");    
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
   
-  item = gtk_tool_button_new_from_stock (GTK_STOCK_GO_BACK);
+  item = gtk_tool_button_new (NULL, NULL);
+  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "go-previous");
+  gtk_tool_button_set_label (GTK_TOOL_BUTTON (item), "Back");
   add_item_to_list (store, item, "Back");    
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
@@ -633,11 +639,14 @@ main (gint argc, gchar **argv)
   add_item_to_list (store, item, "-----");  
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
   
-  item = gtk_tool_button_new_from_stock (GTK_STOCK_GO_FORWARD);
+  item = gtk_tool_button_new (NULL, NULL);
+  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "go-next");
+  gtk_tool_button_set_label (GTK_TOOL_BUTTON (item), "Forward");
   add_item_to_list (store, item, "Forward");  
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
-  item = gtk_toggle_tool_button_new_from_stock (GTK_STOCK_BOLD);
+  item = gtk_toggle_tool_button_new ();
+  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "format-text-bold");
   g_signal_connect (item, "toggled", G_CALLBACK (bold_toggled), NULL);
   add_item_to_list (store, item, "Bold");  
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
@@ -650,20 +659,23 @@ main (gint argc, gchar **argv)
   gtk_separator_tool_item_set_draw (GTK_SEPARATOR_TOOL_ITEM (item), FALSE);
   g_assert (gtk_toolbar_get_nth_item (GTK_TOOLBAR (toolbar), 0) != 0);
   
-  item = gtk_radio_tool_button_new_from_stock (NULL, GTK_STOCK_JUSTIFY_LEFT);
+  item = gtk_radio_tool_button_new (NULL);
+  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "format-justify-left");
   group = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON (item));
   add_item_to_list (store, item, "Left");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
   
   
-  item = gtk_radio_tool_button_new_from_stock (group, GTK_STOCK_JUSTIFY_CENTER);
+  item = gtk_radio_tool_button_new (group);
+  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "format-justify-center");
   make_prop_editor (G_OBJECT (item));
 
   group = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON (item));
   add_item_to_list (store, item, "Center");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
-  item = gtk_radio_tool_button_new_from_stock (group, GTK_STOCK_JUSTIFY_RIGHT);
+  item = gtk_radio_tool_button_new (group);
+  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "format-justify-right");
   add_item_to_list (store, item, "Right");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 

@@ -104,7 +104,7 @@ int main (int argc, char *argv[])
 	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_container_add (GTK_CONTAINER (box), hbox);
 	button = gtk_button_new_with_label ("_Save");
-	gtk_button_set_image (GTK_BUTTON (button), gtk_image_new_from_stock (GTK_STOCK_ABOUT, GTK_ICON_SIZE_BUTTON));
+	gtk_button_set_image (GTK_BUTTON (button), gtk_image_new_from_icon_name ("help-about", GTK_ICON_SIZE_BUTTON));
 	gtk_container_add (GTK_CONTAINER (hbox), button);
 
 	g_object_get (button,
@@ -121,7 +121,7 @@ int main (int argc, char *argv[])
 	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 	gtk_container_add (GTK_CONTAINER (box), hbox);
 	button = gtk_button_new_with_mnemonic ("_Save");
-	gtk_button_set_image (GTK_BUTTON (button), gtk_image_new_from_stock (GTK_STOCK_ABOUT, GTK_ICON_SIZE_BUTTON));
+	gtk_button_set_image (GTK_BUTTON (button), gtk_image_new_from_icon_name ("help-about", GTK_ICON_SIZE_BUTTON));
 	gtk_container_add (GTK_CONTAINER (hbox), button);
 	g_object_get (button,
                       "label", &text,

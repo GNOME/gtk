@@ -48,7 +48,7 @@ enum {
 static TreeEntry info_entries[] =
   {
     { 
-      "gtk-execute", 
+      "system-run", 
       "Will you\n"
       "run this ?", 
       "Currently executing that thing... you might want to abort",
@@ -58,7 +58,7 @@ static TreeEntry info_entries[] =
       NULL
     },
     { 
-      "gtk-dialog-authentication", 
+      "dialog-password", 
       "This is the\n"
       "realest of the real", 
       "We are about to authenticate the actual realness, this could take some time",
@@ -73,7 +73,7 @@ static TreeEntry info_entries[] =
 static TreeEntry directory_entries[] =
   {
     { 
-      "gtk-edit", 
+      "document-open", 
       "We can edit\n"
       "things in here", 
       "Time to edit your directory, almost finished now",
@@ -83,7 +83,7 @@ static TreeEntry directory_entries[] =
       NULL
     },
     { 
-      "gtk-file", 
+      "text-x-generic", 
       "You have a\n"
       "file here", 
       "Who would of thought there would be a file in the directory ?",
@@ -93,7 +93,7 @@ static TreeEntry directory_entries[] =
       NULL
     },
     { 
-      "gtk-dialog-question", 
+      "dialog-question", 
       "Any questions ?",
       "This file would like to ask you a question",
       "so he decided that the fine print underneath the progress bar probably made no sense at all",
@@ -107,7 +107,7 @@ static TreeEntry directory_entries[] =
 static TreeEntry other_entries[] =
   {
     { 
-      "gtk-zoom-fit", 
+      "zoom-fit-best", 
       "Thats the\n"
       "perfect fit", 
       "Now fitting foo into bar using frobnicator",
@@ -118,7 +118,7 @@ static TreeEntry other_entries[] =
       NULL
     },
     { 
-      "gtk-underline", 
+      "format-text-underline", 
       "Under the\n"
       "line", 
       "Now underlining that this demo would look alot niftier with some real content",
@@ -133,18 +133,18 @@ static TreeEntry other_entries[] =
 static TreeEntry add_entries[] =
   {
     { 
-      "gtk-about", 
+      "help-about", 
       "its about\n"
       "to start", 
       "This is what it's all about",
-      "so he went ahead and added the 'gtk-about' icon to his story, thinking 'mint cream' would be the "
+      "so he went ahead and added the 'help-about' icon to his story, thinking 'mint cream' would be the "
       "right color for something like that",
       "dark violet",
       1,
       NULL
     },
     { 
-      "gtk-zoom-in", 
+      "zoom-in", 
       "Watch it\n"
       "Zoom !", 
       "Now zooming into something",
@@ -154,7 +154,7 @@ static TreeEntry add_entries[] =
       NULL
     },
     { 
-      "gtk-zoom-out", 
+      "zoom-out", 
       "Zoom Zoom\n"
       "Zoom !", 
       "Now zooming out of something else",
@@ -171,7 +171,7 @@ static TreeEntry add_entries[] =
 static TreeEntry main_entries[] =
   {
     { 
-      "gtk-info", 
+      "dialog-information", 
       "This is all\n"
       "the info", 
       "We are currently informing you",
@@ -181,7 +181,7 @@ static TreeEntry main_entries[] =
       info_entries
     },
     { 
-      "gtk-dialog-warning", 
+      "dialog-warning", 
       "This is a\n"
       "warning", 
       "We would like to warn you that your laptop might explode after we're done",
@@ -191,7 +191,7 @@ static TreeEntry main_entries[] =
       NULL
     },
     { 
-      "gtk-dialog-error", 
+      "dialog-error", 
       "An error will\n"
       "occur", 
       "Once we're done here, dont worry... an error will surely occur.",
@@ -201,7 +201,7 @@ static TreeEntry main_entries[] =
       NULL
     },
     { 
-      "gtk-directory", 
+      "folder", 
       "The directory", 
       "Currently scanning your directories.",
       "jill didnt know what to make of the barking pigs either so she fed him sleeping pills",
@@ -210,7 +210,7 @@ static TreeEntry main_entries[] =
       directory_entries
     },
     { 
-      "gtk-delete", 
+      "edit-delete", 
       "Now deleting\n"
       "the whole thing",
       "Time to delete the sucker",
@@ -220,7 +220,7 @@ static TreeEntry main_entries[] =
       NULL
     },
     { 
-      "gtk-add", 
+      "list-add", 
       "Anything\n"
       "to add ?",
       "Now adding stuff... please be patient",
@@ -230,7 +230,7 @@ static TreeEntry main_entries[] =
       add_entries
     },
     { 
-      "gtk-redo", 
+      "edit-redo", 
       "Time to\n"
       "do it again",
       "For the hell of it, lets add the content to the treeview over and over again !",
@@ -325,7 +325,7 @@ main (gint argc, gchar **argv)
   g_object_set (renderer, "stock-size", GTK_ICON_SIZE_DIALOG, NULL);
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
   gtk_tree_view_column_set_attributes (column, renderer,
-				       "stock-id", ICON_COLUMN, NULL);
+				       "icon-name", ICON_COLUMN, NULL);
 
   renderer = gtk_cell_renderer_text_new ();
   g_object_set (renderer, "scale", 1.2F, "weight", PANGO_WEIGHT_BOLD, NULL);

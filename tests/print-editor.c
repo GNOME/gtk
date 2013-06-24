@@ -154,8 +154,8 @@ do_open (GtkAction *action)
   dialog = gtk_file_chooser_dialog_new ("Select file",
 					GTK_WINDOW (main_window),
 					GTK_FILE_CHOOSER_ACTION_OPEN,
-					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					GTK_STOCK_OPEN, GTK_RESPONSE_OK,
+					"_Cancel", GTK_RESPONSE_CANCEL,
+					"_Open", GTK_RESPONSE_OK,
 					NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
   response = gtk_dialog_run (GTK_DIALOG (dialog));
@@ -216,8 +216,8 @@ do_save_as (GtkAction *action)
   dialog = gtk_file_chooser_dialog_new ("Select file",
 					GTK_WINDOW (main_window),
 					GTK_FILE_CHOOSER_ACTION_SAVE,
-					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					GTK_STOCK_SAVE, GTK_RESPONSE_OK,
+					"_Cancel", GTK_RESPONSE_CANCEL,
+					"_Save", GTK_RESPONSE_OK,
 					NULL);
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
   response = gtk_dialog_run (GTK_DIALOG (dialog));
@@ -572,7 +572,7 @@ preview_cb (GtkPrintOperation        *op,
   page = gtk_spin_button_new_with_range (1, 100, 1);
   gtk_box_pack_start (GTK_BOX (hbox), page, FALSE, FALSE, 0);
   
-  close = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
+  close = gtk_button_new_with_label ("Close");
   gtk_box_pack_start (GTK_BOX (hbox), close, FALSE, FALSE, 0);
 
   da = gtk_drawing_area_new ();

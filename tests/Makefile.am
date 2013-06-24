@@ -74,7 +74,6 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testkineticscrolling		\
 	testlist			\
 	testlockbutton			\
-	testmenubars			\
 	testmenubutton			\
 	testmountoperation		\
 	testmultidisplay		\
@@ -203,7 +202,6 @@ testimage_DEPENDENCIES = $(TEST_DEPS)
 testkineticscrolling_DEPENDENCIES = $(TEST_DEPS)
 testlist_DEPENDENCIES = $(TEST_DEPS)
 testlockbutton_DEPENDENCIES = $(TEST_DEPS)
-testmenubars_DEPENDENCIES = $(TEST_DEPS)
 testmenubutton_DEPENDENCIES = $(TEST_DEPS)
 testmountoperation_DEPENDENCIES = $(TEST_DEPS)
 testmultidisplay_DEPENDENCIES = $(TEST_DEPS)

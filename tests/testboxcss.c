@@ -104,7 +104,7 @@ add_button (GtkBox *box)
   char *text;
 
   text = g_strdup_printf ("Remove %d", ++count);
-  button = (GtkWidget *)gtk_button_new_from_stock (text);
+  button = (GtkWidget *)gtk_button_new_with_label (text);
   g_free (text);
   gtk_style_context_add_class (gtk_widget_get_style_context (button), "play");
   g_signal_connect_swapped (button,

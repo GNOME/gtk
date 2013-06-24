@@ -258,7 +258,7 @@ create_alpha_window (GtkWidget *widget)
       
       window = gtk_dialog_new_with_buttons ("Alpha Window",
 					    GTK_WINDOW (gtk_widget_get_toplevel (widget)), 0,
-					    GTK_STOCK_CLOSE, 0,
+					    "_Close", 0,
 					    NULL);
 
       gtk_widget_set_app_paintable (window, TRUE);
@@ -553,7 +553,7 @@ create_big_windows (GtkWidget *widget)
       
       window = gtk_dialog_new_with_buttons ("Big Windows",
                                             NULL, 0,
-                                            GTK_STOCK_CLOSE,
+                                            "_Close",
                                             GTK_RESPONSE_NONE,
                                             NULL);
  
@@ -845,7 +845,7 @@ create_check_buttons (GtkWidget *widget)
     {
       window = gtk_dialog_new_with_buttons ("Check Buttons",
                                             NULL, 0,
-                                            GTK_STOCK_CLOSE,
+                                            "_Close",
                                             GTK_RESPONSE_NONE,
                                             NULL);
 
@@ -910,7 +910,7 @@ create_radio_buttons (GtkWidget *widget)
     {
       window = gtk_dialog_new_with_buttons ("Radio Buttons",
                                             NULL, 0,
-                                            GTK_STOCK_CLOSE,
+                                            "_Close",
                                             GTK_RESPONSE_NONE,
                                             NULL);
 
@@ -1923,7 +1923,7 @@ create_rotated_label (GtkWidget *widget)
     {
       window = gtk_dialog_new_with_buttons ("Rotated Label",
 					    GTK_WINDOW (gtk_widget_get_toplevel (widget)), 0,
-					    GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
+					    "_Close", GTK_RESPONSE_CLOSE,
 					    NULL);
 
       gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
@@ -2054,7 +2054,7 @@ create_rotated_text (GtkWidget *widget)
 
       window = gtk_dialog_new_with_buttons ("Rotated Text",
 					    GTK_WINDOW (gtk_widget_get_toplevel (widget)), 0,
-					    GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
+					    "_Close", GTK_RESPONSE_CLOSE,
 					    NULL);
 
       gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
@@ -2785,8 +2785,8 @@ create_image (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
       pack_image (vbox, "Stock Warning Dialog",
-                  gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING,
-                                            GTK_ICON_SIZE_DIALOG));
+                  gtk_image_new_from_icon_name ("dialog-warning",
+                                                GTK_ICON_SIZE_DIALOG));
 
       pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **) openfile);
       
@@ -2993,8 +2993,8 @@ create_menu (GdkScreen *screen, gint depth, gint length)
 
   group = NULL;
 
-  image = gtk_image_new_from_stock (GTK_STOCK_OPEN,
-                                    GTK_ICON_SIZE_MENU);
+  image = gtk_image_new_from_icon_name ("document-open",
+                                        GTK_ICON_SIZE_MENU);
   gtk_widget_show (image);
   menuitem = gtk_image_menu_item_new_with_label ("Image item");
   gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
@@ -3050,8 +3050,8 @@ create_table_menu (GdkScreen *screen, gint cols, gint rows)
   j++;
 
   /* now fill the items submenu */
-  image = gtk_image_new_from_stock (GTK_STOCK_HELP,
-				    GTK_ICON_SIZE_MENU);
+  image = gtk_image_new_from_icon_name ("help-broswer",
+                                        GTK_ICON_SIZE_MENU);
   gtk_widget_show (image);
   menuitem = gtk_image_menu_item_new_with_label ("Image");
   gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
@@ -3066,8 +3066,8 @@ create_table_menu (GdkScreen *screen, gint cols, gint rows)
   gtk_menu_attach (GTK_MENU (submenu), menuitem, 0, 1, 1, 2);
   gtk_widget_show (menuitem);
   
-  image = gtk_image_new_from_stock (GTK_STOCK_HELP,
-				    GTK_ICON_SIZE_MENU);
+  image = gtk_image_new_from_icon_name ("help-browser",
+                                        GTK_ICON_SIZE_MENU);
   gtk_widget_show (image);
   menuitem = gtk_image_menu_item_new_with_label ("Image");
   gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
@@ -3271,8 +3271,8 @@ create_menus (GtkWidget *widget)
       gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
       gtk_widget_show (menuitem);
 
-      image = gtk_image_new_from_stock (GTK_STOCK_HELP,
-                                        GTK_ICON_SIZE_MENU);
+      image = gtk_image_new_from_icon_name ("help-browser",
+                                            GTK_ICON_SIZE_MENU);
       gtk_widget_show (image);
       menuitem = gtk_image_menu_item_new_with_label ("Help");
       gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
@@ -3506,7 +3506,7 @@ create_key_lookup (GtkWidget *widget)
       GtkWidget *content_area;
 
       window = gtk_dialog_new_with_buttons ("Key Lookup", NULL, 0,
-					    GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
+					    "_Close", GTK_RESPONSE_CLOSE,
 					    NULL);
 
       gtk_window_set_screen (GTK_WINDOW (window),
@@ -3599,10 +3599,11 @@ cmw_file (GtkWidget *widget, GtkWidget *parent)
     GtkWidget *fs;
 
     fs = gtk_file_chooser_dialog_new ("This is a modal file selection dialog",
-      GTK_WINDOW (parent), GTK_FILE_CHOOSER_ACTION_OPEN,
-      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
-      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-      NULL);
+                                      GTK_WINDOW (parent),
+                                      GTK_FILE_CHOOSER_ACTION_OPEN,
+                                      "_Open", GTK_RESPONSE_ACCEPT,
+                                      "_Cancel", GTK_RESPONSE_CANCEL,
+                                      NULL);
     gtk_window_set_screen (GTK_WINDOW (fs), gtk_widget_get_screen (parent));
     gtk_window_set_modal (GTK_WINDOW (fs), TRUE);
 
@@ -4291,7 +4292,7 @@ create_size_group_window (GdkScreen    *screen,
 
   window = gtk_dialog_new_with_buttons ("GtkSizeGroup",
 					NULL, 0,
-					GTK_STOCK_CLOSE,
+					"_Close",
 					GTK_RESPONSE_NONE,
 					NULL);
 
@@ -5188,8 +5189,8 @@ create_forward_back (const char       *title,
 {
   GtkWidget *frame = gtk_frame_new (title);
   GtkWidget *bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
-  GtkWidget *back_button = gtk_button_new_from_stock (GTK_STOCK_GO_BACK);
-  GtkWidget *forward_button = gtk_button_new_from_stock (GTK_STOCK_GO_FORWARD);
+  GtkWidget *back_button = gtk_button_new_with_label ("Back");
+  GtkWidget *forward_button = gtk_button_new_with_label ("Forward");
 
   gtk_container_set_border_width (GTK_CONTAINER (bbox), 5);
   
@@ -5320,7 +5321,7 @@ create_focus (GtkWidget *widget)
       
       window = gtk_dialog_new_with_buttons ("Keyboard focus navigation",
                                             NULL, 0,
-                                            GTK_STOCK_CLOSE,
+                                            "_Close",
                                             GTK_RESPONSE_NONE,
                                             NULL);
 
@@ -5599,8 +5600,8 @@ create_display_screen (GtkWidget *widget)
   gtk_grid_attach (GTK_GRID (grid), combo_dpy, 0, 1, 1, 1);
 
   bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
-  applyb = gtk_button_new_from_stock (GTK_STOCK_APPLY);
-  cancelb = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
+  applyb = gtk_button_new_with_label ("_Apply");
+  cancelb = gtk_button_new_with_label ("_Cancel");
   
   gtk_container_add (GTK_CONTAINER (vbox), bbox);
 

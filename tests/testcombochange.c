@@ -254,7 +254,7 @@ main (int argc, char **argv)
   
   dialog = gtk_dialog_new_with_buttons ("GtkComboBox model changes",
 					NULL, 0,
-					GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
+					"_Close", GTK_RESPONSE_CLOSE,
 					NULL);
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));

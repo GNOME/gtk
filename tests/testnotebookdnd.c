@@ -103,9 +103,16 @@ on_notebook_drag_begin (GtkWidget      *widget,
 
   if (page_num > 2)
     {
-      pixbuf = gtk_widget_render_icon_pixbuf (widget,
-                                              (page_num % 2) ? GTK_STOCK_HELP : GTK_STOCK_STOP,
-                                              GTK_ICON_SIZE_DND);
+      GtkIconTheme *icon_theme;
+      int width;
+
+      icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (widget));
+      gtk_icon_size_lookup (GTK_ICON_SIZE_DND, &width, NULL);
+      pixbuf = gtk_icon_theme_load_icon (icon_theme,
+                                         (page_num % 2) ? "help-browser" : "process-stop",
+                                         width,
+                                         GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+                                         NULL);
 
       gtk_drag_set_icon_pixbuf (context, pixbuf, 0, 0);
       g_object_unref (pixbuf);
@@ -219,7 +226,7 @@ create_trash_button (void)
 {
   GtkWidget *button;
 
-  button = gtk_button_new_from_stock (GTK_STOCK_DELETE);
+  button = gtk_button_new_with_label ("_Delete");
 
   gtk_drag_dest_set (button,
                      GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,

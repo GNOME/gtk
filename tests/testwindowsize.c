@@ -36,7 +36,7 @@ show_dialog (void)
 
   dialog = gtk_dialog_new_with_buttons ("Test", GTK_WINDOW (window),
                                         GTK_DIALOG_MODAL,
-                                        GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL,
+                                        "_Close", GTK_RESPONSE_CANCEL,
                                         NULL);
 
   label = gtk_label_new ("Lorem ipsum dolor sit amet, consectetur adipiscing elit. "

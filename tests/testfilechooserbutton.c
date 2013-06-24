@@ -285,7 +285,7 @@ main (int   argc,
   g_free (cwd);
 
   win = gtk_dialog_new_with_buttons ("TestFileChooserButton", NULL, 0,
-				     GTK_STOCK_QUIT, GTK_RESPONSE_CLOSE, NULL);
+				     "_Quit", GTK_RESPONSE_CLOSE, NULL);
   g_signal_connect (win, "style-set", G_CALLBACK (win_style_set_cb), NULL);
   g_signal_connect (win, "response", G_CALLBACK (gtk_main_quit), NULL);
 
@@ -327,7 +327,7 @@ main (int   argc,
   g_signal_connect (chooser, "update-preview", G_CALLBACK (chooser_update_preview_cb), NULL);
   gtk_box_pack_start (GTK_BOX (hbox), chooser, TRUE, TRUE, 0);
 
-  button = gtk_button_new_from_stock (GTK_STOCK_PROPERTIES);
+  button = gtk_button_new_with_label ("_Properties");
   g_signal_connect (button, "clicked", G_CALLBACK (properties_button_clicked_cb), chooser);
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
 
@@ -357,7 +357,7 @@ main (int   argc,
   g_signal_connect (chooser, "update-preview", G_CALLBACK (chooser_update_preview_cb), NULL);
   gtk_box_pack_start (GTK_BOX (hbox), chooser, TRUE, TRUE, 0);
 
-  button = gtk_button_new_from_stock (GTK_STOCK_PROPERTIES);
+  button = gtk_button_new_with_label ("_Properties");
   g_signal_connect (button, "clicked", G_CALLBACK (properties_button_clicked_cb), chooser);
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
 

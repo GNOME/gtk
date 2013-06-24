@@ -153,48 +153,39 @@ create_combo_box_grid_demo (void)
 static GtkTreeModel *
 create_tree_blaat (void)
 {
-        GdkPixbuf *pixbuf;
         GtkWidget *cellview;
         GtkTreeIter iter, iter2;
         GtkTreeStore *store;
 
         cellview = gtk_cell_view_new ();
 
-	store = gtk_tree_store_new (3, GDK_TYPE_PIXBUF, G_TYPE_STRING, G_TYPE_BOOLEAN);
+	store = gtk_tree_store_new (3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
 
-        pixbuf = gtk_widget_render_icon_pixbuf (cellview, GTK_STOCK_DIALOG_WARNING,
-                                                GTK_ICON_SIZE_BUTTON);
         gtk_tree_store_append (store, &iter, NULL);
         gtk_tree_store_set (store, &iter,
-                            0, pixbuf,
-                            1, "gtk-stock-dialog-warning",
+                            0, "dialog-warning",
+                            1, "dialog-warning",
 			    2, FALSE,
                             -1);
 
-        pixbuf = gtk_widget_render_icon_pixbuf (cellview, GTK_STOCK_STOP,
-                                                GTK_ICON_SIZE_BUTTON);
         gtk_tree_store_append (store, &iter2, &iter);			       
         gtk_tree_store_set (store, &iter2,
-                            0, pixbuf,
-                            1, "gtk-stock-stop",
+                            0, "process-stop",
+                            1, "process-stop",
 			    2, FALSE,
                             -1);
 
-        pixbuf = gtk_widget_render_icon_pixbuf (cellview, GTK_STOCK_NEW,
-                                                GTK_ICON_SIZE_BUTTON);
         gtk_tree_store_append (store, &iter2, &iter);			       
         gtk_tree_store_set (store, &iter2,
-                            0, pixbuf,
-                            1, "gtk-stock-new",
+                            0, "document-new",
+                            1, "document-new",
 			    2, FALSE,
                             -1);
 
-        pixbuf = gtk_widget_render_icon_pixbuf (cellview, GTK_STOCK_CLEAR,
-                                                GTK_ICON_SIZE_BUTTON);
         gtk_tree_store_append (store, &iter, NULL);
         gtk_tree_store_set (store, &iter,
-                            0, pixbuf,
-                            1, "gtk-stock-clear",
+                            0, "edit-clear",
+                            1, "edit-clear",
 			    2, FALSE,
                             -1);
 
@@ -207,12 +198,10 @@ create_tree_blaat (void)
                             -1);
 #endif
 
-        pixbuf = gtk_widget_render_icon_pixbuf (cellview, GTK_STOCK_OPEN,
-                                                GTK_ICON_SIZE_BUTTON);
         gtk_tree_store_append (store, &iter, NULL);
         gtk_tree_store_set (store, &iter,
-                            0, pixbuf,
-                            1, "gtk-stock-open",
+                            0, "document-open",
+                            1, "document-open",
 			    2, FALSE,
                             -1);
 
@@ -224,21 +213,18 @@ create_tree_blaat (void)
 static GtkTreeModel *
 create_empty_list_blaat (void)
 {
-        GdkPixbuf *pixbuf;
         GtkWidget *cellview;
         GtkTreeIter iter;
         GtkListStore *store;
 
         cellview = gtk_cell_view_new ();
 
-        store = gtk_list_store_new (2, GDK_TYPE_PIXBUF, G_TYPE_STRING);
+        store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
 
-        pixbuf = gtk_widget_render_icon_pixbuf (cellview, GTK_STOCK_DIALOG_WARNING,
-                                                GTK_ICON_SIZE_BUTTON);
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter,
-                            0, pixbuf,
-                            1, "gtk-stock-dialog-warning",
+                            0, "dialog-warning",
+                            1, "dialog-warning",
                             -1);
 
         gtk_widget_destroy (cellview);
@@ -251,7 +237,6 @@ populate_list_blaat (gpointer data)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (data);
   GtkListStore *store;
-  GdkPixbuf *pixbuf;
   GtkWidget *cellview;
   GtkTreeIter iter;
   
@@ -264,28 +249,22 @@ populate_list_blaat (gpointer data)
 
   cellview = gtk_cell_view_new ();
   
-  pixbuf = gtk_widget_render_icon_pixbuf (cellview, GTK_STOCK_STOP,
-				          GTK_ICON_SIZE_BUTTON);
   gtk_list_store_append (store, &iter);			       
   gtk_list_store_set (store, &iter,
-		      0, pixbuf,
-		      1, "gtk-stock-stop",
+		      0, "process-stop",
+		      1, "process-stop",
 		      -1);
   
-  pixbuf = gtk_widget_render_icon_pixbuf (cellview, GTK_STOCK_NEW,
-				          GTK_ICON_SIZE_BUTTON);
   gtk_list_store_append (store, &iter);			       
   gtk_list_store_set (store, &iter,
-		      0, pixbuf,
-		      1, "gtk-stock-new",
+		      0, "document-new",
+		      1, "document-new",
 		      -1);
   
-  pixbuf = gtk_widget_render_icon_pixbuf (cellview, GTK_STOCK_CLEAR,
-				          GTK_ICON_SIZE_BUTTON);
   gtk_list_store_append (store, &iter);
   gtk_list_store_set (store, &iter,
-		      0, pixbuf,
-		      1, "gtk-stock-clear",
+		      0, "edit-clear",
+		      1, "edit-clear",
 		      -1);
   
   gtk_list_store_append (store, &iter);
@@ -294,12 +273,10 @@ populate_list_blaat (gpointer data)
 		      1, "separator",
 		      -1);
   
-  pixbuf = gtk_widget_render_icon_pixbuf (cellview, GTK_STOCK_OPEN,
-				          GTK_ICON_SIZE_BUTTON);
   gtk_list_store_append (store, &iter);
   gtk_list_store_set (store, &iter,
-		      0, pixbuf,
-		      1, "gtk-stock-open",
+		      0, "document-open",
+		      1, "document-open",
 		      -1);
   
   gtk_widget_destroy (cellview);  
@@ -308,45 +285,36 @@ populate_list_blaat (gpointer data)
 static GtkTreeModel *
 create_list_blaat (void)
 {
-        GdkPixbuf *pixbuf;
         GtkWidget *cellview;
         GtkTreeIter iter;
         GtkListStore *store;
 
         cellview = gtk_cell_view_new ();
 
-        store = gtk_list_store_new (2, GDK_TYPE_PIXBUF, G_TYPE_STRING);
+        store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
 
-        pixbuf = gtk_widget_render_icon_pixbuf (cellview, GTK_STOCK_DIALOG_WARNING,
-                                                GTK_ICON_SIZE_BUTTON);
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter,
-                            0, pixbuf,
-                            1, "gtk-stock-dialog-warning",
+                            0, "dialog-warning",
+                            1, "dialog-warning",
                             -1);
 
-        pixbuf = gtk_widget_render_icon_pixbuf (cellview, GTK_STOCK_STOP,
-                                                GTK_ICON_SIZE_BUTTON);
         gtk_list_store_append (store, &iter);			       
         gtk_list_store_set (store, &iter,
-                            0, pixbuf,
-                            1, "gtk-stock-stop",
+                            0, "process-stop",
+                            1, "process-stop",
                             -1);
 
-        pixbuf = gtk_widget_render_icon_pixbuf (cellview, GTK_STOCK_NEW,
-                                                GTK_ICON_SIZE_BUTTON);
         gtk_list_store_append (store, &iter);			       
         gtk_list_store_set (store, &iter,
-                            0, pixbuf,
-                            1, "gtk-stock-new",
+                            0, "document-new",
+                            1, "document-new",
                             -1);
 
-        pixbuf = gtk_widget_render_icon_pixbuf (cellview, GTK_STOCK_CLEAR,
-                                                GTK_ICON_SIZE_BUTTON);
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter,
-                            0, pixbuf,
-                            1, "gtk-stock-clear",
+                            0, "edit-clear",
+                            1, "edit-clear",
                             -1);
 
         gtk_list_store_append (store, &iter);
@@ -355,12 +323,10 @@ create_list_blaat (void)
                             1, "separator",
                             -1);
 
-        pixbuf = gtk_widget_render_icon_pixbuf (cellview, GTK_STOCK_OPEN,
-                                                GTK_ICON_SIZE_BUTTON);
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter,
-                            0, pixbuf,
-                            1, "gtk-stock-open",
+                            0, "document-open",
+                            1, "document-open",
                             -1);
 
         gtk_widget_destroy (cellview);
@@ -1086,7 +1052,6 @@ main (int argc, char **argv)
         GtkWidget *combobox, *comboboxtext, *comboboxgrid;
         GtkWidget *tmp, *boom;
         GtkCellRenderer *renderer;
-        GdkPixbuf *pixbuf;
         GtkTreeModel *model;
 	GtkTreePath *path;
 	GtkTreeIter iter;
@@ -1129,13 +1094,10 @@ main (int argc, char **argv)
 
         cellview = gtk_cell_view_new ();
         renderer = gtk_cell_renderer_pixbuf_new ();
-        pixbuf = gtk_widget_render_icon_pixbuf (cellview, GTK_STOCK_DIALOG_WARNING,
-                                                GTK_ICON_SIZE_BUTTON);
-
         gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (cellview),
                                     renderer,
                                     FALSE);
-        g_object_set (renderer, "pixbuf", pixbuf, NULL);
+        g_object_set (renderer, "icon-name", "dialog-warning", NULL);
 
         renderer = gtk_cell_renderer_text_new ();
         gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (cellview),
@@ -1163,7 +1125,7 @@ main (int argc, char **argv)
                                     renderer,
                                     FALSE);
         gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combobox), renderer,
-                                        "pixbuf", 0,
+                                        "icon-name", 0,
                                         NULL);
 	gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (combobox),
 					    renderer,
@@ -1208,7 +1170,7 @@ main (int argc, char **argv)
                                     renderer,
                                     FALSE);
         gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combobox), renderer,
-                                        "pixbuf", 0,
+                                        "icon-name", 0,
                                         NULL);
 	gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (combobox),
 					    renderer,
@@ -1251,7 +1213,7 @@ main (int argc, char **argv)
                                     renderer,
                                     FALSE);
         gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combobox), renderer,
-                                        "pixbuf", 0,
+                                        "icon-name", 0,
                                         NULL);
 	gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (combobox),
 					    renderer,
@@ -1312,7 +1274,7 @@ main (int argc, char **argv)
                                     renderer,
                                     FALSE);
         gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combobox), renderer,
-                                        "pixbuf", 0,
+                                        "icon-name", 0,
                                         NULL);
 	gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (combobox),
 					    renderer,

@@ -30,8 +30,8 @@ enum {
   STRING_COLUMN,
   IS_EDITABLE_COLUMN,
   IS_SENSITIVE_COLUMN,
-  PIXBUF_COLUMN,
-  LAST_PIXBUF_COLUMN,
+  ICON_NAME_COLUMN,
+  LAST_ICON_NAME_COLUMN,
   PROGRESS_COLUMN,
   NUM_COLUMNS
 };
@@ -53,20 +53,13 @@ create_model (void)
   GtkTreeStore *model;
   GtkTreeIter iter;
   gint i;
-  GdkPixbuf *foo, *bar;
-  GtkWidget *blah;
 
-  blah = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  foo = gtk_widget_render_icon_pixbuf (blah, GTK_STOCK_NEW, GTK_ICON_SIZE_MENU);
-  bar = gtk_widget_render_icon_pixbuf (blah, GTK_STOCK_DELETE, GTK_ICON_SIZE_MENU);
-  gtk_widget_destroy (blah);
-  
   model = gtk_tree_store_new (NUM_COLUMNS,
 			      G_TYPE_STRING,
 			      G_TYPE_BOOLEAN,
 			      G_TYPE_BOOLEAN,
-			      GDK_TYPE_PIXBUF,
-			      GDK_TYPE_PIXBUF,
+			      G_TYPE_STRING,
+			      G_TYPE_STRING,
 			      G_TYPE_INT);
 
   for (i = 0; model_strings[i].string != NULL; i++)
@@ -77,8 +70,8 @@ create_model (void)
 			  STRING_COLUMN, model_strings[i].string,
 			  IS_EDITABLE_COLUMN, model_strings[i].is_editable,
 			  IS_SENSITIVE_COLUMN, model_strings[i].is_sensitive,
-			  PIXBUF_COLUMN, foo,
-			  LAST_PIXBUF_COLUMN, bar,
+			  ICON_NAME_COLUMN, "document-new",
+			  LAST_ICON_NAME_COLUMN, "edit-delete",
 			  PROGRESS_COLUMN, model_strings[i].progress,
 			  -1);
     }
@@ -269,7 +262,7 @@ main (gint argc, gchar **argv)
   renderer = gtk_cell_renderer_pixbuf_new ();
   gtk_tree_view_column_pack_start (column, renderer, FALSE);
   gtk_tree_view_column_set_attributes (column, renderer,
-				       "pixbuf", PIXBUF_COLUMN, 
+				       "icon-name", ICON_NAME_COLUMN, 
 				       "sensitive", IS_SENSITIVE_COLUMN,
 				       NULL);
   callback[0].area = area;
@@ -311,7 +304,7 @@ main (gint argc, gchar **argv)
 		NULL);
   gtk_tree_view_column_pack_start (column, renderer, FALSE);
   gtk_tree_view_column_set_attributes (column, renderer,
-				       "pixbuf", LAST_PIXBUF_COLUMN, 
+				       "icon-name", LAST_ICON_NAME_COLUMN, 
 				       "sensitive", IS_SENSITIVE_COLUMN,
 				       NULL);
   callback[3].area = area;

@@ -296,8 +296,8 @@ save_clicked (GtkWidget *button,
   dialog = gtk_file_chooser_dialog_new ("Filename for window data",
 					NULL,
 					GTK_FILE_CHOOSER_ACTION_SAVE,
-					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+					"_Cancel", GTK_RESPONSE_CANCEL,
+					"_Save", GTK_RESPONSE_ACCEPT,
 					NULL);
   
   gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
@@ -455,7 +455,7 @@ manual_clicked (GtkWidget *button,
   dialog = gtk_dialog_new_with_buttons ("Select new position and size",
 					GTK_WINDOW (main_window),
 					GTK_DIALOG_MODAL,
-					GTK_STOCK_OK, GTK_RESPONSE_OK,
+					"_OK", GTK_RESPONSE_OK,
 					NULL);
   
 
@@ -896,8 +896,8 @@ main (int argc, char **argv)
 
   button = gtk_button_new ();
   gtk_button_set_image (GTK_BUTTON (button),
-			gtk_image_new_from_stock (GTK_STOCK_GO_BACK,
-						  GTK_ICON_SIZE_BUTTON));
+			gtk_image_new_from_icon_name ("go-previous-symbolic",
+                                                      GTK_ICON_SIZE_BUTTON));
   g_signal_connect (button, "clicked", 
 		    G_CALLBACK (move_window_clicked), 
 		    GINT_TO_POINTER (GTK_DIR_LEFT));
@@ -906,8 +906,8 @@ main (int argc, char **argv)
 
   button = gtk_button_new ();
   gtk_button_set_image (GTK_BUTTON (button),
-			gtk_image_new_from_stock (GTK_STOCK_GO_UP,
-						  GTK_ICON_SIZE_BUTTON));
+			gtk_image_new_from_icon_name ("go-up-symbolic",
+                                                      GTK_ICON_SIZE_BUTTON));
   g_signal_connect (button, "clicked", 
 		    G_CALLBACK (move_window_clicked), 
 		    GINT_TO_POINTER (GTK_DIR_UP));
@@ -916,8 +916,8 @@ main (int argc, char **argv)
 
   button = gtk_button_new ();
   gtk_button_set_image (GTK_BUTTON (button),
-			gtk_image_new_from_stock (GTK_STOCK_GO_FORWARD,
-						  GTK_ICON_SIZE_BUTTON));
+			gtk_image_new_from_icon_name ("go-next-symbolic",
+                                                      GTK_ICON_SIZE_BUTTON));
   g_signal_connect (button, "clicked", 
 		    G_CALLBACK (move_window_clicked), 
 		    GINT_TO_POINTER (GTK_DIR_RIGHT));
@@ -926,8 +926,8 @@ main (int argc, char **argv)
 
   button = gtk_button_new ();
   gtk_button_set_image (GTK_BUTTON (button),
-			gtk_image_new_from_stock (GTK_STOCK_GO_DOWN,
-						  GTK_ICON_SIZE_BUTTON));
+			gtk_image_new_from_icon_name ("go-down-symbolic",
+                                                      GTK_ICON_SIZE_BUTTON));
   g_signal_connect (button, "clicked", 
 		    G_CALLBACK (move_window_clicked), 
 		    GINT_TO_POINTER (GTK_DIR_DOWN));
@@ -974,8 +974,8 @@ main (int argc, char **argv)
 
   button = gtk_button_new_with_label ("scroll");
   gtk_button_set_image (GTK_BUTTON (button),
-			gtk_image_new_from_stock (GTK_STOCK_GO_UP,
-						  GTK_ICON_SIZE_BUTTON));
+			gtk_image_new_from_icon_name ("go-up-symbolic",
+                                                      GTK_ICON_SIZE_BUTTON));
   g_signal_connect (button, "clicked", 
 		    G_CALLBACK (scroll_window_clicked), 
 		    GINT_TO_POINTER (GTK_DIR_UP));
@@ -984,8 +984,8 @@ main (int argc, char **argv)
 
   button = gtk_button_new_with_label ("scroll");
   gtk_button_set_image (GTK_BUTTON (button),
-			gtk_image_new_from_stock (GTK_STOCK_GO_DOWN,
-						  GTK_ICON_SIZE_BUTTON));
+			gtk_image_new_from_icon_name ("go-down-symbolic",
+                                                      GTK_ICON_SIZE_BUTTON));
   g_signal_connect (button, "clicked", 
 		    G_CALLBACK (scroll_window_clicked), 
 		    GINT_TO_POINTER (GTK_DIR_DOWN));

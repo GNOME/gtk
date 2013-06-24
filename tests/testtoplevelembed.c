@@ -18,7 +18,7 @@ create_tab_label (GtkWidget *toplevel)
   GtkWidget *box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
   GtkWidget *label = gtk_label_new (G_OBJECT_TYPE_NAME (toplevel));
   GtkWidget *button = gtk_button_new ();
-  GtkWidget *image = gtk_image_new_from_stock (GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
+  GtkWidget *image = gtk_image_new_from_icon_name ("window-close", GTK_ICON_SIZE_MENU);
 
   gtk_container_add (GTK_CONTAINER (button), image);
   gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
@@ -86,8 +86,8 @@ main (gint argc, gchar **argv)
   g_signal_connect (widget, "delete-event", G_CALLBACK (toplevel_delete_event), NULL);
 
   widget = gtk_recent_chooser_dialog_new ("the recent chooser", NULL,
-					  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					  GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+					  "_Cancel", GTK_RESPONSE_CANCEL,
+					  "_Open", GTK_RESPONSE_ACCEPT,
 					  NULL);
   toplevel_delete_event (widget, NULL, NULL);
   g_signal_connect (widget, "delete-event", G_CALLBACK (toplevel_delete_event), NULL);

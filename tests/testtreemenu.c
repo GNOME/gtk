@@ -155,7 +155,7 @@ simple_tree_model (void)
   gtk_tree_store_append (store, &parent, NULL);
   gtk_tree_store_set (store, &parent, 
 		      SIMPLE_COLUMN_NAME, "Alice in wonderland",
-		      SIMPLE_COLUMN_ICON, "gtk-execute",
+		      SIMPLE_COLUMN_ICON, "system-run",
 		      SIMPLE_COLUMN_DESCRIPTION, 
 		      "Twas brillig, and the slithy toves "
 		      "did gyre and gimble in the wabe",
@@ -164,35 +164,35 @@ simple_tree_model (void)
   gtk_tree_store_append (store, &iter, &parent);
   gtk_tree_store_set (store, &iter, 
 		      SIMPLE_COLUMN_NAME, "Go ask",
-		      SIMPLE_COLUMN_ICON, "gtk-zoom-out",
+		      SIMPLE_COLUMN_ICON, "zoom-out",
 		      SIMPLE_COLUMN_DESCRIPTION, "One pill makes you shorter",
 		      -1);
 
   gtk_tree_store_append (store, &iter, &parent);
   gtk_tree_store_set (store, &iter, 
 		      SIMPLE_COLUMN_NAME, "Alice",
-		      SIMPLE_COLUMN_ICON, "gtk-zoom-in",
+		      SIMPLE_COLUMN_ICON, "zoom-in",
 		      SIMPLE_COLUMN_DESCRIPTION, "Another one makes you tall",
 		      -1);
 
   gtk_tree_store_append (store, &iter, &parent);
   gtk_tree_store_set (store, &iter, 
 		      SIMPLE_COLUMN_NAME, "Jefferson Airplane",
-		      SIMPLE_COLUMN_ICON, "gtk-zoom-fit",
+		      SIMPLE_COLUMN_ICON, "zoom-fit-best",
 		      SIMPLE_COLUMN_DESCRIPTION, "The one's that mother gives you dont do anything at all",
 		      -1);
 
   gtk_tree_store_append (store, &iter, NULL);
   gtk_tree_store_set (store, &iter, 
 		      SIMPLE_COLUMN_NAME, "Marry Poppins",
-		      SIMPLE_COLUMN_ICON, "gtk-yes",
+		      SIMPLE_COLUMN_ICON, "dialog-information",
 		      SIMPLE_COLUMN_DESCRIPTION, "Supercalifragilisticexpialidocious",
 		      -1);
 
   gtk_tree_store_append (store, &iter, NULL);
   gtk_tree_store_set (store, &iter, 
 		      SIMPLE_COLUMN_NAME, "George Bush",
-		      SIMPLE_COLUMN_ICON, "gtk-dialog-question",
+		      SIMPLE_COLUMN_ICON, "dialog-question",
 		      SIMPLE_COLUMN_DESCRIPTION, "It's a very good question, very direct, "
 		      "and I'm not going to answer it",
 		      -1);
@@ -200,7 +200,7 @@ simple_tree_model (void)
   gtk_tree_store_append (store, &parent, NULL);
   gtk_tree_store_set (store, &parent, 
 		      SIMPLE_COLUMN_NAME, "Whinnie the pooh",
-		      SIMPLE_COLUMN_ICON, "gtk-stop",
+		      SIMPLE_COLUMN_ICON, "process-stop",
 		      SIMPLE_COLUMN_DESCRIPTION, "The most wonderful thing about tiggers, "
 		      "is tiggers are wonderful things",
 		      -1);
@@ -208,56 +208,56 @@ simple_tree_model (void)
   gtk_tree_store_append (store, &iter, &parent);
   gtk_tree_store_set (store, &iter, 
 		      SIMPLE_COLUMN_NAME, "Tigger",
-		      SIMPLE_COLUMN_ICON, "gtk-yes",
+		      SIMPLE_COLUMN_ICON, "dialog-information",
 		      SIMPLE_COLUMN_DESCRIPTION, "Eager",
 		      -1);
 
   gtk_tree_store_append (store, &child, &iter);
   gtk_tree_store_set (store, &child, 
 		      SIMPLE_COLUMN_NAME, "Jump",
-		      SIMPLE_COLUMN_ICON, "gtk-yes",
+		      SIMPLE_COLUMN_ICON, "dialog-information",
 		      SIMPLE_COLUMN_DESCRIPTION, "Very High",
 		      -1);
 
   gtk_tree_store_append (store, &child, &iter);
   gtk_tree_store_set (store, &child, 
 		      SIMPLE_COLUMN_NAME, "Pounce",
-		      SIMPLE_COLUMN_ICON, "gtk-no",
+		      SIMPLE_COLUMN_ICON, "dialog-question",
 		      SIMPLE_COLUMN_DESCRIPTION, "On Pooh",
 		      -1);
 
   gtk_tree_store_append (store, &child, &iter);
   gtk_tree_store_set (store, &child, 
 		      SIMPLE_COLUMN_NAME, "Bounce",
-		      SIMPLE_COLUMN_ICON, "gtk-cancel",
+		      SIMPLE_COLUMN_ICON, "dialog-error",
 		      SIMPLE_COLUMN_DESCRIPTION, "Around",
 		      -1);
 
   gtk_tree_store_append (store, &iter, &parent);
   gtk_tree_store_set (store, &iter, 
 		      SIMPLE_COLUMN_NAME, "Owl",
-		      SIMPLE_COLUMN_ICON, "gtk-stop",
+		      SIMPLE_COLUMN_ICON, "process-stop",
 		      SIMPLE_COLUMN_DESCRIPTION, "Wise",
 		      -1);
 
   gtk_tree_store_append (store, &iter, &parent);
   gtk_tree_store_set (store, &iter, 
 		      SIMPLE_COLUMN_NAME, "Eor",
-		      SIMPLE_COLUMN_ICON, "gtk-no",
+		      SIMPLE_COLUMN_ICON, "dialog-question",
 		      SIMPLE_COLUMN_DESCRIPTION, "Depressed",
 		      -1);
 
   gtk_tree_store_append (store, &iter, &parent);
   gtk_tree_store_set (store, &iter, 
 		      SIMPLE_COLUMN_NAME, "Piglet",
-		      SIMPLE_COLUMN_ICON, "gtk-media-play",
+		      SIMPLE_COLUMN_ICON, "media-playback-start",
 		      SIMPLE_COLUMN_DESCRIPTION, "Insecure",
 		      -1);
 
   gtk_tree_store_append (store, &iter, NULL);
   gtk_tree_store_set (store, &iter, 
 		      SIMPLE_COLUMN_NAME, "Aleister Crowley",
-		      SIMPLE_COLUMN_ICON, "gtk-about",
+		      SIMPLE_COLUMN_ICON, "help-about",
 		      SIMPLE_COLUMN_DESCRIPTION, 
 		      "Thou shalt do what thou wilt shall be the whole of the law",
 		      -1);
@@ -265,7 +265,7 @@ simple_tree_model (void)
   gtk_tree_store_append (store, &iter, NULL);
   gtk_tree_store_set (store, &iter, 
 		      SIMPLE_COLUMN_NAME, "Mark Twain",
-		      SIMPLE_COLUMN_ICON, "gtk-quit",
+		      SIMPLE_COLUMN_ICON, "application-exit",
 		      SIMPLE_COLUMN_DESCRIPTION, 
 		      "Giving up smoking is the easiest thing in the world. "
 		      "I know because I've done it thousands of times.",
@@ -290,7 +290,7 @@ create_cell_area (void)
   cell_2 = renderer = gtk_cell_renderer_pixbuf_new ();
   g_object_set (G_OBJECT (renderer), "xalign", 0.0F, NULL);
   gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (area), renderer, TRUE, FALSE, FALSE);
-  gtk_cell_area_attribute_connect (area, renderer, "stock-id", SIMPLE_COLUMN_ICON);
+  gtk_cell_area_attribute_connect (area, renderer, "icon-name", SIMPLE_COLUMN_ICON);
 
   cell_3 = renderer = gtk_cell_renderer_text_new ();
   g_object_set (G_OBJECT (renderer), 

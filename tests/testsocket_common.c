@@ -170,12 +170,12 @@ create_menubar (GtkWindow *window)
   gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
   menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
-  menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_NEW, NULL);
+  menuitem = gtk_menu_item_new_with_mnemonic ("_New");
   g_signal_connect (menuitem, "activate", G_CALLBACK (print_hello), window);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
   menuitem = gtk_separator_menu_item_new ();
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-  menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_QUIT, NULL);
+  menuitem = gtk_menu_item_new_with_mnemonic ("_Quit");
   g_signal_connect (menuitem, "activate", G_CALLBACK (gtk_main_quit), window);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
@@ -186,7 +186,7 @@ create_menubar (GtkWindow *window)
   gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
   menu = gtk_menu_new ();
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
-  menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_ABOUT, NULL);
+  menuitem = gtk_menu_item_new_with_mnemonic ("_About");
   g_signal_connect (menuitem, "activate", G_CALLBACK (print_hello), window);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 

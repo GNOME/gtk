@@ -95,7 +95,7 @@ create_recent_chooser_menu (gint limit)
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
   gtk_widget_show (menuitem);
 
-  menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_CLEAR, NULL);
+  menuitem = gtk_menu_item_new_with_mnemonic ("Clear");
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
   gtk_widget_show (menuitem);
 
@@ -113,11 +113,11 @@ create_file_menu (GtkAccelGroup *accelgroup)
 
   menu = gtk_menu_new ();
 
-  menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_NEW, accelgroup);
+  menuitem = gtk_menu_item_new_with_mnemonic ("_New");
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
   gtk_widget_show (menuitem);
 
-  menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_OPEN, accelgroup);
+  menuitem = gtk_image_menu_item_new_with_mnemonic ("_Open");
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
   gtk_widget_show (menuitem);
 
@@ -131,7 +131,7 @@ create_file_menu (GtkAccelGroup *accelgroup)
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
   gtk_widget_show (menuitem);
 
-  menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_QUIT, accelgroup);
+  menuitem = gtk_menu_item_new_with_mnemonic ("_Quit");
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
   gtk_widget_show (menuitem);
 

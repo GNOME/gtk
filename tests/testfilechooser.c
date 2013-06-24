@@ -586,16 +586,16 @@ main (int argc, char **argv)
     case GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER:
       gtk_window_set_title (GTK_WINDOW (dialog), "Select a file");
       gtk_dialog_add_buttons (GTK_DIALOG (dialog),
-			      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			      GTK_STOCK_OPEN, GTK_RESPONSE_OK,
+			      _("_Cancel"), GTK_RESPONSE_CANCEL,
+			      _("_Open"), GTK_RESPONSE_OK,
 			      NULL);
       break;
     case GTK_FILE_CHOOSER_ACTION_SAVE:
     case GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER:
       gtk_window_set_title (GTK_WINDOW (dialog), "Save a file");
       gtk_dialog_add_buttons (GTK_DIALOG (dialog),
-			      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			      GTK_STOCK_SAVE, GTK_RESPONSE_OK,
+			      _("_Cancel"), GTK_RESPONSE_CANCEL,
+			      _("_Open"), GTK_RESPONSE_OK,
 			      NULL);
       break;
     }
