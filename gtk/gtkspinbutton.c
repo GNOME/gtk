@@ -1001,6 +1001,7 @@ gtk_spin_button_panel_draw (GtkSpinButton   *spin_button,
   width = gdk_window_get_width (panel);
 
   icon_helper = _gtk_icon_helper_new ();
+  _gtk_icon_helper_set_window (icon_helper, panel);
   _gtk_icon_helper_set_use_fallback (icon_helper, TRUE);
 
   if (panel == priv->down_panel)
