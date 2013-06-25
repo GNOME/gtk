@@ -82,6 +82,17 @@ gtk_printer_cups_init (GtkPrinterCups *printer)
   printer->get_remote_ppd_attempts = 0;
   printer->remote_cups_connection_test = NULL;
   printer->auth_info_required = NULL;
+#ifdef HAVE_CUPS_API_1_6
+  printer->avahi_browsed = FALSE;
+  printer->avahi_name = NULL;
+  printer->avahi_type = NULL;
+  printer->avahi_domain = NULL;
+#endif
+  printer->ipp_version_major = 1;
+  printer->ipp_version_minor = 1;
+  printer->supports_copies = FALSE;
+  printer->supports_collate = FALSE;
+  printer->supports_number_up = FALSE;
 }
 
 static void
@@ -100,6 +111,12 @@ gtk_printer_cups_finalize (GObject *object)
   g_free (printer->default_cover_before);
   g_free (printer->default_cover_after);
   g_strfreev (printer->auth_info_required);
+
+#ifdef HAVE_CUPS_API_1_6
+  g_free (printer->avahi_name);
+  g_free (printer->avahi_type);
+  g_free (printer->avahi_domain);
+#endif
 
   if (printer->ppd_file)
     ppdClose (printer->ppd_file);
@@ -128,6 +145,7 @@ gtk_printer_cups_new (const char      *name,
 {
   GObject *result;
   gboolean accepts_pdf;
+  GtkPrinterCups *printer;
 
 #if (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR >= 2) || CUPS_VERSION_MAJOR > 1
   accepts_pdf = TRUE;
@@ -142,7 +160,16 @@ gtk_printer_cups_new (const char      *name,
 			 "accepts-pdf", accepts_pdf,
                          NULL);
 
-  return (GtkPrinterCups *) result;
+  printer = GTK_PRINTER_CUPS (result);
+
+  /*
+   * IPP version 1.1 has to be supported
+   * by all implementations according to rfc 2911
+   */
+  printer->ipp_version_major = 1;
+  printer->ipp_version_minor = 1;
+
+  return printer;
 }
 
 ppd_file_t *
