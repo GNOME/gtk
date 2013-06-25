@@ -608,6 +608,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
    /**
    * GtkTextBuffer::paste-done:
    * @textbuffer: the object which received the signal
+   * @clipboard: the #GtkClipboard pasted from
    * 
    * The paste-done signal is emitted after paste operation has been completed.
    * This is useful to properly scroll the view to the end of the pasted text.

@@ -537,7 +537,7 @@ gtk_search_bar_get_show_close_button (GtkSearchBar *bar)
 /**
  * gtk_search_bar_set_show_close_button:
  * @bar: a #GtkSearchBar
- * @shown: whether the close button will be shown or not.
+ * @visible: whether the close button will be shown or not.
  *
  * Shows or hides the close button.
  *
