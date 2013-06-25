@@ -489,7 +489,7 @@ for details, visit http://www.gnu.org/licenses/gpl.html
         layer: widget
         alpha: 1
         <AtkImage>
-        image size: 20 x 20
+        image size: -1 x -1
         image description: (null)
         <AtkAction>
         action 0 name: click

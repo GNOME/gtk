@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon-name">go-up</property>
-    <property name="icon-size">5</property>
-  </object>
   <object class="GtkWindow" id="window1">
     <property name="can_focus">False</property>
     <child>
@@ -25,7 +19,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkMenuItem" id="imagemenuitem1">
+                  <object class="GtkMenuItem" id="menuitema1">
                     <property name="label" translatable="yes">_New</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -34,12 +28,11 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkMenuItem" id="imagemenuitem2">
+                  <object class="GtkMenuItem" id="menuitema2">
                     <property name="label" translatable="yes">bla</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="use_action_appearance">False</property>
-                    <property name="image">image1</property>
                   </object>
                 </child>
                 <child>
