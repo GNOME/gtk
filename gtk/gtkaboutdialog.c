@@ -540,7 +540,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                                    g_param_spec_string ("logo-icon-name",
                                                         P_("Logo Icon Name"),
                                                         P_("A named icon to use as the logo for the about box."),
-                                                        NULL,
+                                                        "image-missing",
                                                         GTK_PARAM_READWRITE));
   /**
    * GtkAboutDialog:wrap-license:
