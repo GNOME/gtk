@@ -884,17 +884,23 @@ gtk_action_unblock_activate (GtkAction *action)
 GtkWidget *
 gtk_action_create_icon (GtkAction *action, GtkIconSize icon_size)
 {
+  GtkWidget *widget = NULL;
+
   g_return_val_if_fail (GTK_IS_ACTION (action), NULL);
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 
   if (action->private_data->stock_id &&
       gtk_icon_factory_lookup_default (action->private_data->stock_id))
-    return gtk_image_new_from_stock (action->private_data->stock_id, icon_size);
+    widget = gtk_image_new_from_stock (action->private_data->stock_id, icon_size);
   else if (action->private_data->gicon)
-    return gtk_image_new_from_gicon (action->private_data->gicon, icon_size);
+    widget = gtk_image_new_from_gicon (action->private_data->gicon, icon_size);
   else if (action->private_data->icon_name)
-    return gtk_image_new_from_icon_name (action->private_data->icon_name, icon_size);
-  else
-    return NULL;
+    widget = gtk_image_new_from_icon_name (action->private_data->icon_name, icon_size);
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
+  return widget;
 }
 
 /**

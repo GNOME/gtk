@@ -94,6 +94,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="help-about.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.6
+ *
+ * Deprecated: 3.10: Use named icon "help-about" or the label "_About".
  */
 #define GTK_STOCK_ABOUT            "gtk-about"
 
@@ -102,6 +104,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Add" item.
  * <inlinegraphic fileref="list-add.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "list-add" or the label "_Add".
  */
 #define GTK_STOCK_ADD              "gtk-add"
 
@@ -110,6 +114,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Apply" item.
  * <inlinegraphic fileref="gtk-apply.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Do not use an icon. Use label "_Apply".
  */
 #define GTK_STOCK_APPLY            "gtk-apply"
 
@@ -118,6 +124,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Bold" item.
  * <inlinegraphic fileref="format-text-bold.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "format-text-bold".
  */
 #define GTK_STOCK_BOLD             "gtk-bold"
 
@@ -126,6 +134,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Cancel" item.
  * <inlinegraphic fileref="gtk-cancel.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Do not use an icon. Use label "_Cancel".
  */
 #define GTK_STOCK_CANCEL           "gtk-cancel"
 
@@ -136,6 +146,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="gtk-caps-lock-warning.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10: Use named icon "dialog-warning-symbolic".
  */
 #define GTK_STOCK_CAPS_LOCK_WARNING "gtk-caps-lock-warning"
 
@@ -144,6 +156,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "CD-Rom" item.
  * <inlinegraphic fileref="media-optical.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "media-optical".
  */
 #define GTK_STOCK_CDROM            "gtk-cdrom"
 
@@ -152,6 +166,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Clear" item.
  * <inlinegraphic fileref="edit-clear.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "edit-clear".
  */
 #define GTK_STOCK_CLEAR            "gtk-clear"
 
@@ -160,6 +176,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Close" item.
  * <inlinegraphic fileref="window-close.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "window-close" or the label "_Close".
  */
 #define GTK_STOCK_CLOSE            "gtk-close"
 
@@ -170,6 +188,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="gtk-color-picker.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.2
+ *
+ * Deprecated: 3.10
  */
 #define GTK_STOCK_COLOR_PICKER     "gtk-color-picker"
 
@@ -180,6 +200,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="gtk-connect.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.6
+ *
+ * Deprecated: 3.10
  */
 #define GTK_STOCK_CONNECT          "gtk-connect"
 
@@ -188,6 +210,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Convert" item.
  * <inlinegraphic fileref="gtk-convert.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10
  */
 #define GTK_STOCK_CONVERT          "gtk-convert"
 
@@ -196,6 +220,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Copy" item.
  * <inlinegraphic fileref="edit-copy.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Do not use an icon. Use label "_Copy".
  */
 #define GTK_STOCK_COPY             "gtk-copy"
 
@@ -204,6 +230,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Cut" item.
  * <inlinegraphic fileref="edit-cut.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Do not use an icon. Use label "Cu_t".
  */
 #define GTK_STOCK_CUT              "gtk-cut"
 
@@ -212,6 +240,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Delete" item.
  * <inlinegraphic fileref="edit-delete.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Do not use an icon. Use label "_Delete".
  */
 #define GTK_STOCK_DELETE           "gtk-delete"
 
@@ -222,6 +252,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="dialog-password.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10: Use named icon "dialog-password".
  */
 #define GTK_STOCK_DIALOG_AUTHENTICATION "gtk-dialog-authentication"
 
@@ -230,6 +262,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Information" item.
  * <inlinegraphic fileref="dialog-information.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "dialog-information".
  */
 #define GTK_STOCK_DIALOG_INFO      "gtk-dialog-info"
 
@@ -238,6 +272,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Warning" item.
  * <inlinegraphic fileref="dialog-warning.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "dialog-warning".
  */
 #define GTK_STOCK_DIALOG_WARNING   "gtk-dialog-warning"
 
@@ -246,6 +282,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Error" item.
  * <inlinegraphic fileref="dialog-error.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "dialog-error".
  */
 #define GTK_STOCK_DIALOG_ERROR     "gtk-dialog-error"
 
@@ -254,6 +292,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Question" item.
  * <inlinegraphic fileref="dialog-question.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "dialog-question".
  */
 #define GTK_STOCK_DIALOG_QUESTION  "gtk-dialog-question"
 
@@ -264,6 +304,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="folder.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.6
+ *
+ * Deprecated: 3.10: Use named icon "folder".
  */
 #define GTK_STOCK_DIRECTORY        "gtk-directory"
 
@@ -273,6 +315,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * The "Discard" item.
  *
  * Since: 2.12
+ *
+ * Deprecated: 3.10
  */
 #define GTK_STOCK_DISCARD          "gtk-discard"
 
@@ -283,6 +327,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="gtk-disconnect.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.6
+ *
+ * Deprecated: 3.10
  */
 #define GTK_STOCK_DISCONNECT       "gtk-disconnect"
 
@@ -291,6 +337,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Drag-And-Drop" icon.
  * <inlinegraphic fileref="gtk-dnd.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10
  */
 #define GTK_STOCK_DND              "gtk-dnd"
 
@@ -299,6 +347,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Drag-And-Drop multiple" icon.
  * <inlinegraphic fileref="gtk-dnd-multiple.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10
  */
 #define GTK_STOCK_DND_MULTIPLE     "gtk-dnd-multiple"
 
@@ -309,6 +359,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="gtk-edit.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.6
+ *
+ * Deprecated: 3.10
  */
 #define GTK_STOCK_EDIT             "gtk-edit"
 
@@ -317,6 +369,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Execute" item.
  * <inlinegraphic fileref="system-run.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "system-run".
  */
 #define GTK_STOCK_EXECUTE          "gtk-execute"
 
@@ -329,6 +383,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * Since 3.0, this item has a label, before it only had an icon.
  *
  * Since: 2.6
+ *
+ * Deprecated: 3.10: Use named icon "text-x-generic".
  */
 #define GTK_STOCK_FILE             "gtk-file"
 
@@ -337,6 +393,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Find" item.
  * <inlinegraphic fileref="edit-find.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "edit-find".
  */
 #define GTK_STOCK_FIND             "gtk-find"
 
@@ -345,6 +403,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Find and Replace" item.
  * <inlinegraphic fileref="edit-find-replace.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "edit-find-replace".
  */
 #define GTK_STOCK_FIND_AND_REPLACE "gtk-find-and-replace"
 
@@ -353,6 +413,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Floppy" item.
  * <inlinegraphic fileref="media-floppy.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10
  */
 #define GTK_STOCK_FLOPPY           "gtk-floppy"
 
@@ -363,6 +425,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="view-fullscreen.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.8
+ *
+ * Deprecated: 3.10: Use named icon "view-fullscreen".
  */
 #define GTK_STOCK_FULLSCREEN       "gtk-fullscreen"
 
@@ -371,6 +435,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Bottom" item.
  * <inlinegraphic fileref="go-bottom.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "go-bottom".
  */
 #define GTK_STOCK_GOTO_BOTTOM      "gtk-goto-bottom"
 
@@ -381,6 +447,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="go-first-ltr.png" format="PNG"></inlinegraphic>
  * RTL variant
  * <inlinegraphic fileref="go-first-rtl.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "go-first".
  */
 #define GTK_STOCK_GOTO_FIRST       "gtk-goto-first"
 
@@ -391,6 +459,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="go-last-ltr.png" format="PNG"></inlinegraphic>
  * RTL variant
  * <inlinegraphic fileref="go-last-rtl.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "go-last".
  */
 #define GTK_STOCK_GOTO_LAST        "gtk-goto-last"
 
@@ -399,6 +469,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Top" item.
  * <inlinegraphic fileref="go-top.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "go-top".
  */
 #define GTK_STOCK_GOTO_TOP         "gtk-goto-top"
 
@@ -409,7 +481,9 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="go-previous-ltr.png" format="PNG"></inlinegraphic>
  * RTL variant
  * <inlinegraphic fileref="go-previous-rtl.png" format="PNG"></inlinegraphic>
- */
+ *
+ * Deprecated: 3.10: Use named icon "go-previous".
+*/
 #define GTK_STOCK_GO_BACK          "gtk-go-back"
 
 /**
@@ -417,6 +491,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Down" item.
  * <inlinegraphic fileref="go-down.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "go-down".
  */
 #define GTK_STOCK_GO_DOWN          "gtk-go-down"
 
@@ -427,6 +503,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="go-next-ltr.png" format="PNG"></inlinegraphic>
  * RTL variant
  * <inlinegraphic fileref="go-next-rtl.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "go-next".
  */
 #define GTK_STOCK_GO_FORWARD       "gtk-go-forward"
 
@@ -435,6 +513,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Up" item.
  * <inlinegraphic fileref="go-up.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "go-up".
  */
 #define GTK_STOCK_GO_UP            "gtk-go-up"
 
@@ -445,6 +525,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="drive-harddisk.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10: Use named icon "drive-harddisk".
  */
 #define GTK_STOCK_HARDDISK         "gtk-harddisk"
 
@@ -453,6 +535,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Help" item.
  * <inlinegraphic fileref="help-contents.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "help-browser".
  */
 #define GTK_STOCK_HELP             "gtk-help"
 
@@ -461,6 +545,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Home" item.
  * <inlinegraphic fileref="go-home.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "go-home".
  */
 #define GTK_STOCK_HOME             "gtk-home"
 
@@ -469,6 +555,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Index" item.
  * <inlinegraphic fileref="gtk-index.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10
  */
 #define GTK_STOCK_INDEX            "gtk-index"
 
@@ -481,6 +569,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="format-indent-more-rtl.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10: Use named icon "format-indent-more".
  */
 #define GTK_STOCK_INDENT           "gtk-indent"
 
@@ -491,6 +581,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="dialog-information.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.8
+ *
+ * Deprecated: 3.10: Use named icon "dialog-information".
  */
 #define GTK_STOCK_INFO             "gtk-info"
 
@@ -499,6 +591,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Italic" item.
  * <inlinegraphic fileref="format-text-italic.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "format-text-italic".
  */
 #define GTK_STOCK_ITALIC           "gtk-italic"
 
@@ -509,6 +603,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="go-jump-ltr.png" format="PNG"></inlinegraphic>
  * RTL-variant
  * <inlinegraphic fileref="go-jump-rtl.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "go-jump".
  */
 #define GTK_STOCK_JUMP_TO          "gtk-jump-to"
 
@@ -517,6 +613,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Center" item.
  * <inlinegraphic fileref="format-justify-center.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "format-justify-center".
  */
 #define GTK_STOCK_JUSTIFY_CENTER   "gtk-justify-center"
 
@@ -525,6 +623,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Fill" item.
  * <inlinegraphic fileref="format-justify-fill.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "format-justify-fill".
  */
 #define GTK_STOCK_JUSTIFY_FILL     "gtk-justify-fill"
 
@@ -533,6 +633,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Left" item.
  * <inlinegraphic fileref="format-justify-left.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "format-justify-left".
  */
 #define GTK_STOCK_JUSTIFY_LEFT     "gtk-justify-left"
 
@@ -541,6 +643,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Right" item.
  * <inlinegraphic fileref="format-justify-right.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "format-justify-right".
  */
 #define GTK_STOCK_JUSTIFY_RIGHT    "gtk-justify-right"
 
@@ -551,6 +655,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="view-restore.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.8
+ *
+ * Deprecated: 3.10: Use named icon "view-restore".
  */
 #define GTK_STOCK_LEAVE_FULLSCREEN "gtk-leave-fullscreen"
 
@@ -559,6 +665,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Missing image" icon.
  * <inlinegraphic fileref="image-missing.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "image-missing".
  */
 #define GTK_STOCK_MISSING_IMAGE    "gtk-missing-image"
 
@@ -571,6 +679,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="media-seek-forward-rtl.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.6
+ *
+ * Deprecated: 3.10: Use named icon "media-seek-forward" or the label "_Forward".
  */
 #define GTK_STOCK_MEDIA_FORWARD    "gtk-media-forward"
 
@@ -583,6 +693,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="media-skip-forward-rtl.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.6
+ *
+ * Deprecated: 3.10: Use named icon "media-skip-forward" or the label "_Next".
  */
 #define GTK_STOCK_MEDIA_NEXT       "gtk-media-next"
 
@@ -593,6 +705,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="media-playback-pause.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.6
+ *
+ * Deprecated: 3.10: Use named icon "media-playback-pause" or the label "P_ause".
  */
 #define GTK_STOCK_MEDIA_PAUSE      "gtk-media-pause"
 
@@ -605,6 +719,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="media-playback-start-rtl.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.6
+ *
+ * Deprecated: 3.10: Use named icon "media-playback-start" or the label "_Play".
  */
 #define GTK_STOCK_MEDIA_PLAY       "gtk-media-play"
 
@@ -617,6 +733,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="media-skip-backward-rtl.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.6
+ *
+ * Deprecated: 3.10: Use named icon "media-skip-backward" or the label "Pre_vious".
  */
 #define GTK_STOCK_MEDIA_PREVIOUS   "gtk-media-previous"
 
@@ -627,6 +745,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="media-record.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.6
+ *
+ * Deprecated: 3.10: Use named icon "media-record" or the label "_Record".
  */
 #define GTK_STOCK_MEDIA_RECORD     "gtk-media-record"
 
@@ -639,6 +759,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="media-seek-backward-rtl.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.6
+ *
+ * Deprecated: 3.10: Use named icon "media-seek-backward" or the label "R_ewind".
  */
 #define GTK_STOCK_MEDIA_REWIND     "gtk-media-rewind"
 
@@ -649,6 +771,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="media-playback-stop.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.6
+ *
+ * Deprecated: 3.10: Use named icon "media-playback-stop" or the label "_Stop".
  */
 #define GTK_STOCK_MEDIA_STOP       "gtk-media-stop"
 
@@ -659,6 +783,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="network-idle.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10: Use named icon "network-workgroup".
  */
 #define GTK_STOCK_NETWORK          "gtk-network"
 
@@ -667,6 +793,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "New" item.
  * <inlinegraphic fileref="document-new.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "document-new" or the label "_New".
  */
 #define GTK_STOCK_NEW              "gtk-new"
 
@@ -675,6 +803,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "No" item.
  * <inlinegraphic fileref="gtk-no.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10
  */
 #define GTK_STOCK_NO               "gtk-no"
 
@@ -683,6 +813,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "OK" item.
  * <inlinegraphic fileref="gtk-ok.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Do not use an icon. Use label "_OK".
  */
 #define GTK_STOCK_OK               "gtk-ok"
 
@@ -691,6 +823,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Open" item.
  * <inlinegraphic fileref="document-open.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "document-open" or the label "_Open".
  */
 #define GTK_STOCK_OPEN             "gtk-open"
 
@@ -701,6 +835,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="gtk-orientation-portrait.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.10
+ *
+ * Deprecated: 3.10
  */
 #define GTK_STOCK_ORIENTATION_PORTRAIT "gtk-orientation-portrait"
 
@@ -711,6 +847,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="gtk-orientation-landscape.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.10
+ *
+ * Deprecated: 3.10
  */
 #define GTK_STOCK_ORIENTATION_LANDSCAPE "gtk-orientation-landscape"
 
@@ -721,6 +859,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="gtk-orientation-reverse-landscape.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.10
+ *
+ * Deprecated: 3.10
  */
 #define GTK_STOCK_ORIENTATION_REVERSE_LANDSCAPE "gtk-orientation-reverse-landscape"
 
@@ -731,6 +871,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="gtk-orientation-reverse-portrait.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.10
+ *
+ * Deprecated: 3.10
  */
 #define GTK_STOCK_ORIENTATION_REVERSE_PORTRAIT "gtk-orientation-reverse-portrait"
 
@@ -741,6 +883,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="gtk-page-setup.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.14
+ *
+ * Deprecated: 3.10: Use named icon "document-page-setup" or the label "Page Set_up".
  */
 #define GTK_STOCK_PAGE_SETUP       "gtk-page-setup"
 
@@ -749,6 +893,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Paste" item.
  * <inlinegraphic fileref="edit-paste.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Do not use an icon. Use label "_Paste".
  */
 #define GTK_STOCK_PASTE            "gtk-paste"
 
@@ -757,6 +903,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Preferences" item.
  * <inlinegraphic fileref="gtk-preferences.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "preferences-system" or the label "_Preferences".
  */
 #define GTK_STOCK_PREFERENCES      "gtk-preferences"
 
@@ -765,6 +913,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Print" item.
  * <inlinegraphic fileref="document-print.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "document-print" or the label "_Print".
  */
 #define GTK_STOCK_PRINT            "gtk-print"
 
@@ -775,6 +925,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="printer-error.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.14
+ *
+ * Deprecated: 3.10: Use named icon "printer-error".
  */
 #define GTK_STOCK_PRINT_ERROR      "gtk-print-error"
 
@@ -785,6 +937,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="printer-paused.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.14
+ *
+ * Deprecated: 3.10
  */
 #define GTK_STOCK_PRINT_PAUSED     "gtk-print-paused"
 
@@ -793,6 +947,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Print Preview" item.
  * <inlinegraphic fileref="document-print-preview.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use label "Pre_view".
  */
 #define GTK_STOCK_PRINT_PREVIEW    "gtk-print-preview"
 
@@ -803,6 +959,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="printer-info.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.14
+ *
+ * Deprecated: 3.10
  */
 #define GTK_STOCK_PRINT_REPORT     "gtk-print-report"
 
@@ -814,6 +972,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="printer-warning.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.14
+ *
+ * Deprecated: 3.10
  */
 #define GTK_STOCK_PRINT_WARNING    "gtk-print-warning"
 
@@ -822,6 +982,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Properties" item.
  * <inlinegraphic fileref="document-properties.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "document-properties" or the label "_Properties".
  */
 #define GTK_STOCK_PROPERTIES       "gtk-properties"
 
@@ -830,6 +992,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Quit" item.
  * <inlinegraphic fileref="application-exit.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "application-exit" or the label "_Quit".
  */
 #define GTK_STOCK_QUIT             "gtk-quit"
 
@@ -840,6 +1004,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="edit-redo-ltr.png" format="PNG"></inlinegraphic>
  * RTL variant
  * <inlinegraphic fileref="edit-redo-rtl.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "edit-redo" or the label "_Redo".
  */
 #define GTK_STOCK_REDO             "gtk-redo"
 
@@ -848,6 +1014,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Refresh" item.
  * <inlinegraphic fileref="view-refresh.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "view-refresh" or the label "_Refresh".
  */
 #define GTK_STOCK_REFRESH          "gtk-refresh"
 
@@ -856,6 +1024,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Remove" item.
  * <inlinegraphic fileref="list-remove.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "list-remove" or the label "_Remove".
  */
 #define GTK_STOCK_REMOVE           "gtk-remove"
 
@@ -866,6 +1036,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="document-revert-ltr.png" format="PNG"></inlinegraphic>
  * RTL variant
  * <inlinegraphic fileref="document-revert-rtl.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "document-revert" or the label "_Revert".
  */
 #define GTK_STOCK_REVERT_TO_SAVED  "gtk-revert-to-saved"
 
@@ -874,6 +1046,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Save" item.
  * <inlinegraphic fileref="document-save.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "document-save" or the label "_Save".
  */
 #define GTK_STOCK_SAVE             "gtk-save"
 
@@ -882,6 +1056,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Save As" item.
  * <inlinegraphic fileref="document-save-as.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "document-save-as" or the label "Save _As".
  */
 #define GTK_STOCK_SAVE_AS          "gtk-save-as"
 
@@ -892,6 +1068,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="edit-select-all.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.10
+ *
+ * Deprecated: 3.10: Use named icon "edit-select-all" or the label "Select _All".
  */
 #define GTK_STOCK_SELECT_ALL       "gtk-select-all"
 
@@ -900,6 +1078,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Color" item.
  * <inlinegraphic fileref="gtk-select-color.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10
  */
 #define GTK_STOCK_SELECT_COLOR     "gtk-select-color"
 
@@ -908,6 +1088,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Font" item.
  * <inlinegraphic fileref="gtk-font.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10
  */
 #define GTK_STOCK_SELECT_FONT      "gtk-select-font"
 
@@ -916,6 +1098,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Ascending" item.
  * <inlinegraphic fileref="view-sort-ascending.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "view-sort-ascending".
  */
 #define GTK_STOCK_SORT_ASCENDING   "gtk-sort-ascending"
 
@@ -924,6 +1108,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Descending" item.
  * <inlinegraphic fileref="view-sort-descending.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "view-sort-descending".
  */
 #define GTK_STOCK_SORT_DESCENDING  "gtk-sort-descending"
 
@@ -932,6 +1118,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Spell Check" item.
  * <inlinegraphic fileref="tools-check-spelling.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "tools-check-spelling".
  */
 #define GTK_STOCK_SPELL_CHECK      "gtk-spell-check"
 
@@ -940,6 +1128,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Stop" item.
  * <inlinegraphic fileref="process-stop.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "process-stop" or the label "_Stop".
  */
 #define GTK_STOCK_STOP             "gtk-stop"
 
@@ -948,6 +1138,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Strikethrough" item.
  * <inlinegraphic fileref="format-text-strikethrough.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "format-text-strikethrough" or the label "_Strikethrough".
  */
 #define GTK_STOCK_STRIKETHROUGH    "gtk-strikethrough"
 
@@ -958,6 +1150,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="gtk-undelete-ltr.png" format="PNG"></inlinegraphic>
  * RTL variant
  * <inlinegraphic fileref="gtk-undelete-rtl.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10
  */
 #define GTK_STOCK_UNDELETE         "gtk-undelete"
 
@@ -966,6 +1160,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Underline" item.
  * <inlinegraphic fileref="format-text-underline.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "format-text-underline" or the label "_Underline".
  */
 #define GTK_STOCK_UNDERLINE        "gtk-underline"
 
@@ -976,6 +1172,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="edit-undo-ltr.png" format="PNG"></inlinegraphic>
  * RTL variant
  * <inlinegraphic fileref="edit-undo-rtl.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "edit-undo" or the label "_Undo".
  */
 #define GTK_STOCK_UNDO             "gtk-undo"
 
@@ -988,6 +1186,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  * <inlinegraphic fileref="format-indent-less-rtl.png" format="PNG"></inlinegraphic>
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10: Use named icon "format-indent-less".
  */
 #define GTK_STOCK_UNINDENT         "gtk-unindent"
 
@@ -996,6 +1196,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Yes" item.
  * <inlinegraphic fileref="gtk-yes.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10
  */
 #define GTK_STOCK_YES              "gtk-yes"
 
@@ -1004,6 +1206,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Zoom 100%" item.
  * <inlinegraphic fileref="zoom-original.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "zoom-original" or the label "_Normal Size".
  */
 #define GTK_STOCK_ZOOM_100         "gtk-zoom-100"
 
@@ -1012,6 +1216,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Zoom to Fit" item.
  * <inlinegraphic fileref="zoom-fit-best.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "zoom-fit-best" or the label "Best _Fit".
  */
 #define GTK_STOCK_ZOOM_FIT         "gtk-zoom-fit"
 
@@ -1020,6 +1226,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Zoom In" item.
  * <inlinegraphic fileref="zoom-in.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "zoom-in" or the label "Zoom _In".
  */
 #define GTK_STOCK_ZOOM_IN          "gtk-zoom-in"
 
@@ -1028,6 +1236,8 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * The "Zoom Out" item.
  * <inlinegraphic fileref="zoom-out.png" format="PNG"></inlinegraphic>
+ *
+ * Deprecated: 3.10: Use named icon "zoom-out" or the label "Zoom _Out".
  */
 #define GTK_STOCK_ZOOM_OUT         "gtk-zoom-out"
 

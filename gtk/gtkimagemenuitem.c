@@ -166,6 +166,8 @@ gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
    * stock id to select the stock item for the item.
    *
    * Since: 2.16
+   *
+   * Deprecated: 3.10
    */
   g_object_class_install_property (gobject_class,
                                    PROP_USE_STOCK,
@@ -200,6 +202,8 @@ gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
    * The Accel Group to use for stock accelerator keys
    *
    * Since: 2.16
+   *
+   * Deprecated: 3.10
    */
   g_object_class_install_property (gobject_class,
                                    PROP_ACCEL_GROUP,
@@ -252,13 +256,17 @@ gtk_image_menu_item_set_property (GObject         *object,
       gtk_image_menu_item_set_image (image_menu_item, (GtkWidget *) g_value_get_object (value));
       break;
     case PROP_USE_STOCK:
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_image_menu_item_set_use_stock (image_menu_item, g_value_get_boolean (value));
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_ALWAYS_SHOW_IMAGE:
       gtk_image_menu_item_set_always_show_image (image_menu_item, g_value_get_boolean (value));
       break;
     case PROP_ACCEL_GROUP:
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_image_menu_item_set_accel_group (image_menu_item, g_value_get_object (value));
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -280,7 +288,9 @@ gtk_image_menu_item_get_property (GObject         *object,
       g_value_set_object (value, gtk_image_menu_item_get_image (image_menu_item));
       break;
     case PROP_USE_STOCK:
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       g_value_set_boolean (value, gtk_image_menu_item_get_use_stock (image_menu_item));
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_ALWAYS_SHOW_IMAGE:
       g_value_set_boolean (value, gtk_image_menu_item_get_always_show_image (image_menu_item));
@@ -387,6 +397,8 @@ gtk_image_menu_item_recalculate (GtkImageMenuItem *image_menu_item)
   if (priv->use_stock && priv->label)
     {
 
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
       if (!priv->image)
         {
           image = gtk_image_new_from_stock (priv->label, GTK_ICON_SIZE_MENU);
@@ -396,7 +408,9 @@ gtk_image_menu_item_recalculate (GtkImageMenuItem *image_menu_item)
       if (gtk_stock_lookup (priv->label, &stock_item))
           resolved_label = stock_item.label;
 
-        gtk_menu_item_set_use_underline (GTK_MENU_ITEM (image_menu_item), TRUE);
+      gtk_menu_item_set_use_underline (GTK_MENU_ITEM (image_menu_item), TRUE);
+
+      G_GNUC_END_IGNORE_DEPRECATIONS;
     }
 
   GTK_MENU_ITEM_CLASS
@@ -661,7 +675,9 @@ activatable_update_stock_id (GtkImageMenuItem *image_menu_item, GtkAction *actio
   if (GTK_IS_IMAGE (image) &&
       stock_id && gtk_icon_factory_lookup_default (stock_id))
     {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_image_set_from_stock (GTK_IMAGE (image), stock_id, GTK_ICON_SIZE_MENU);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       return TRUE;
     }
 
@@ -836,6 +852,8 @@ gtk_image_menu_item_new_with_mnemonic (const gchar *label)
  * gtk_accel_map_add_entry() to register it.
  *
  * Returns: a new #GtkImageMenuItem.
+ *
+ * Deprecated: 3.10: Use gtk_image_menu_item_new() instead.
  */
 GtkWidget*
 gtk_image_menu_item_new_from_stock (const gchar   *stock_id,
@@ -857,6 +875,8 @@ gtk_image_menu_item_new_from_stock (const gchar   *stock_id,
  * stock id to select the stock item for the item.
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_image_menu_item_set_use_stock (GtkImageMenuItem *image_menu_item,
@@ -889,6 +909,8 @@ gtk_image_menu_item_set_use_stock (GtkImageMenuItem *image_menu_item,
  *     stock id to select the stock item for the item
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10
  */
 gboolean
 gtk_image_menu_item_get_use_stock (GtkImageMenuItem *image_menu_item)
@@ -971,6 +993,8 @@ gtk_image_menu_item_get_always_show_image (GtkImageMenuItem *image_menu_item)
  * you shouldnt need this (see gtk_image_menu_item_new_from_stock()).
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_image_menu_item_set_accel_group (GtkImageMenuItem *image_menu_item,

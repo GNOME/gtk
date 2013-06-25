@@ -1065,6 +1065,8 @@ gtk_entry_class_init (GtkEntryClass *class)
    * The stock id to use for the primary icon for the entry.
    *
    * Since: 2.16
+   *
+   * Deprecated: 3.10: Use #GtkEntry:primary-icon-name instead.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_STOCK_PRIMARY,
@@ -1080,6 +1082,8 @@ gtk_entry_class_init (GtkEntryClass *class)
    * The stock id to use for the secondary icon for the entry.
    *
    * Since: 2.16
+   *
+   * Deprecated: 3.10: Use #GtkEntry:secondary-icon-name instead.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_STOCK_SECONDARY,
@@ -2161,15 +2165,19 @@ gtk_entry_set_property (GObject         *object,
       break;
 
     case PROP_STOCK_PRIMARY:
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_entry_set_icon_from_stock (entry,
                                      GTK_ENTRY_ICON_PRIMARY,
                                      g_value_get_string (value));
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
 
     case PROP_STOCK_SECONDARY:
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_entry_set_icon_from_stock (entry,
                                      GTK_ENTRY_ICON_SECONDARY,
                                      g_value_get_string (value));
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
 
     case PROP_ICON_NAME_PRIMARY:
@@ -2403,15 +2411,19 @@ gtk_entry_get_property (GObject         *object,
       break;
 
     case PROP_STOCK_PRIMARY:
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       g_value_set_string (value,
                           gtk_entry_get_icon_stock (entry,
                                                     GTK_ENTRY_ICON_PRIMARY));
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
 
     case PROP_STOCK_SECONDARY:
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       g_value_set_string (value,
                           gtk_entry_get_icon_stock (entry,
                                                     GTK_ENTRY_ICON_SECONDARY));
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
 
     case PROP_ICON_NAME_PRIMARY:
@@ -8134,6 +8146,8 @@ gtk_entry_set_icon_from_pixbuf (GtkEntry             *entry,
  * If @stock_id is %NULL, no icon will be shown in the specified position.
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10: Use gtk_entry_set_icon_from_icon_name() instead.
  */
 void
 gtk_entry_set_icon_from_stock (GtkEntry             *entry,
@@ -8476,6 +8490,8 @@ gtk_entry_get_icon_gicon (GtkEntry             *entry,
  *          wasn't set from a stock id
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10: Use gtk_entry_get_icon_name() instead.
  */
 const gchar *
 gtk_entry_get_icon_stock (GtkEntry             *entry,
@@ -10297,7 +10313,7 @@ remove_capslock_feedback (GtkEntry *entry)
 
   if (priv->caps_lock_warning_shown)
     {
-      gtk_entry_set_icon_from_stock (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
+      gtk_entry_set_icon_from_icon_name (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
       priv->caps_lock_warning_shown = FALSE;
     } 
 }

@@ -40,6 +40,7 @@
 #include "gtkprivate.h"
 #include "gtkbuildable.h"
 #include "gtksettings.h"
+#include "gtkstock.h"
 
 /**
  * SECTION:gtkdialog
@@ -563,7 +564,7 @@ gtk_dialog_new_empty (const gchar     *title,
  * @title: (allow-none): Title of the dialog, or %NULL
  * @parent: (allow-none): Transient parent of the dialog, or %NULL
  * @flags: from #GtkDialogFlags
- * @first_button_text: (allow-none): stock ID or text to go in first button, or %NULL
+ * @first_button_text: (allow-none): text to go in first button, or %NULL
  * @...: response ID for first button, then additional buttons, ending with %NULL
  *
  * Creates a new #GtkDialog with title @title (or %NULL for the default
@@ -573,8 +574,7 @@ gtk_dialog_new_empty (const gchar     *title,
  * and/or to have it destroyed along with its transient parent
  * (#GTK_DIALOG_DESTROY_WITH_PARENT). After @flags, button
  * text/response ID pairs should be listed, with a %NULL pointer ending
- * the list. Button text can be either a stock ID such as
- * #GTK_STOCK_OK, or some arbitrary text. A response ID can be
+ * the list. Button text can be arbitrary text. A response ID can be
  * any positive number, or one of the values in the #GtkResponseType
  * enumeration. If the user clicks one of these dialog buttons,
  * #GtkDialog will emit the #GtkDialog::response signal with the corresponding
@@ -720,14 +720,14 @@ gtk_dialog_add_action_widget (GtkDialog *dialog,
 /**
  * gtk_dialog_add_button:
  * @dialog: a #GtkDialog
- * @button_text: text of button, or stock ID
+ * @button_text: text of button
  * @response_id: response ID for the button
  *
- * Adds a button with the given text (or a stock button, if @button_text is a
- * stock ID) and sets things up so that clicking the button will emit the
- * #GtkDialog::response signal with the given @response_id. The button is
- * appended to the end of the dialog's action area. The button widget is
- * returned, but usually you don't need it.
+ * Adds a button with the given text and sets things up so that
+ * clicking the button will emit the #GtkDialog::response signal with
+ * the given @response_id. The button is appended to the end of the
+ * dialog's action area. The button widget is returned, but usually
+ * you don't need it.
  *
  * Return value: (transfer none): the #GtkButton widget that was added
  **/
@@ -741,7 +741,15 @@ gtk_dialog_add_button (GtkDialog   *dialog,
   g_return_val_if_fail (GTK_IS_DIALOG (dialog), NULL);
   g_return_val_if_fail (button_text != NULL, NULL);
 
-  button = gtk_button_new_from_stock (button_text);
+  button = gtk_button_new_with_label (button_text);
+  gtk_button_set_use_underline (GTK_BUTTON (button), TRUE);
+
+  if (button_text)
+    {
+      GtkStockItem item;
+      if (gtk_stock_lookup (button_text, &item))
+        g_object_set (button, "use-stock", TRUE, NULL);
+    }
 
   gtk_widget_set_can_default (button, TRUE);
   gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
@@ -785,7 +793,7 @@ gtk_dialog_add_buttons_valist (GtkDialog      *dialog,
 /**
  * gtk_dialog_add_buttons:
  * @dialog: a #GtkDialog
- * @first_button_text: button text or stock ID
+ * @first_button_text: button text
  * @...: response ID for first button, then more text-response_id pairs
  *
  * Adds more buttons, same as calling gtk_dialog_add_button()

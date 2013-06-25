@@ -86,7 +86,7 @@ GDK_AVAILABLE_IN_ALL
 GtkStatusIcon        *gtk_status_icon_new_from_pixbuf    (GdkPixbuf          *pixbuf);
 GDK_AVAILABLE_IN_ALL
 GtkStatusIcon        *gtk_status_icon_new_from_file      (const gchar        *filename);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10_FOR(gtk_status_icon_new_from_icon_name)
 GtkStatusIcon        *gtk_status_icon_new_from_stock     (const gchar        *stock_id);
 GDK_AVAILABLE_IN_ALL
 GtkStatusIcon        *gtk_status_icon_new_from_icon_name (const gchar        *icon_name);
@@ -99,7 +99,7 @@ void                  gtk_status_icon_set_from_pixbuf    (GtkStatusIcon      *st
 GDK_AVAILABLE_IN_ALL
 void                  gtk_status_icon_set_from_file      (GtkStatusIcon      *status_icon,
 							  const gchar        *filename);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10_FOR(gtk_status_icon_set_from_icon_name)
 void                  gtk_status_icon_set_from_stock     (GtkStatusIcon      *status_icon,
 							  const gchar        *stock_id);
 GDK_AVAILABLE_IN_ALL
@@ -114,7 +114,7 @@ GtkImageType          gtk_status_icon_get_storage_type   (GtkStatusIcon      *st
 
 GDK_AVAILABLE_IN_ALL
 GdkPixbuf            *gtk_status_icon_get_pixbuf         (GtkStatusIcon      *status_icon);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10_FOR(gtk_status_icon_get_icon_name)
 const gchar *         gtk_status_icon_get_stock          (GtkStatusIcon      *status_icon);
 GDK_AVAILABLE_IN_ALL
 const gchar *         gtk_status_icon_get_icon_name      (GtkStatusIcon      *status_icon);

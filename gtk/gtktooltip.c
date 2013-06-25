@@ -67,7 +67,7 @@
  * to the signal handler is a GtkTooltip object. This is the object that we
  * are about to display as a tooltip, and can be manipulated in your callback
  * using functions like gtk_tooltip_set_icon(). There are functions for setting
- * the tooltip's markup, setting an image from a stock icon, or even putting in
+ * the tooltip's markup, setting an image from a named icon, or even putting in
  * a custom widget.
  * </para>
  * </listitem>
@@ -382,6 +382,8 @@ gtk_tooltip_set_icon (GtkTooltip *tooltip,
  * by @size.  If @stock_id is %NULL, the image will be hidden.
  *
  * Since: 2.12
+ *
+ * Deprecated: 3.10: Use gtk_tooltip_set_icon_from_icon_name() instead.
  */
 void
 gtk_tooltip_set_icon_from_stock (GtkTooltip  *tooltip,
@@ -390,7 +392,9 @@ gtk_tooltip_set_icon_from_stock (GtkTooltip  *tooltip,
 {
   g_return_if_fail (GTK_IS_TOOLTIP (tooltip));
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   gtk_image_set_from_stock (GTK_IMAGE (tooltip->image), stock_id, size);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   if (stock_id)
     gtk_widget_show (tooltip->image);

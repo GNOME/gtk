@@ -45,9 +45,7 @@
  *
  * #GtkToolButton<!-- -->s are #GtkToolItems containing buttons.
  *
- * Use gtk_tool_button_new() to create a new #GtkToolButton. Use
- * gtk_tool_button_new_from_stock() to create a #GtkToolButton
- * containing a stock item.
+ * Use gtk_tool_button_new() to create a new #GtkToolButton.
  *
  * The label of a #GtkToolButton is determined by the properties
  * #GtkToolButton:label-widget, #GtkToolButton:label, and
@@ -254,6 +252,11 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
 							P_("Widget to use as the item label"),
 							GTK_TYPE_WIDGET,
 							GTK_PARAM_READWRITE));
+  /**
+   * GtkToolButton:stock-id:
+   *
+   * Deprecated: 3.10: Use #GtkToolButton:icon-name instead.
+   */
   g_object_class_install_property (object_class,
 				   PROP_STOCK_ID,
 				   g_param_spec_string ("stock-id",
@@ -515,7 +518,9 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
       else if (button->priv->stock_id && 
 	       gtk_icon_factory_lookup_default (button->priv->stock_id))
 	{
+          G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 	  icon = gtk_image_new_from_stock (button->priv->stock_id, icon_size);
+          G_GNUC_END_IGNORE_DEPRECATIONS;
 	  gtk_widget_show (icon);
 	}
       else if (button->priv->icon_name)
@@ -615,7 +620,9 @@ gtk_tool_button_set_property (GObject         *object,
       gtk_tool_button_set_label_widget (button, g_value_get_object (value));
       break;
     case PROP_STOCK_ID:
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_tool_button_set_stock_id (button, g_value_get_string (value));
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_ICON_NAME:
       gtk_tool_button_set_icon_name (button, g_value_get_string (value));
@@ -758,8 +765,12 @@ clone_image_menu_size (GtkImage *image, GtkSettings *settings)
   if (storage_type == GTK_IMAGE_STOCK)
     {
       gchar *stock_id;
+      GtkWidget *widget;
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_image_get_stock (image, &stock_id, NULL);
-      return gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_MENU);
+      widget = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_MENU);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
+      return widget;
     }
   else if (storage_type == GTK_IMAGE_ICON_NAME)
     {
@@ -848,7 +859,9 @@ gtk_tool_button_create_menu_proxy (GtkToolItem *item)
     }
   else if (button->priv->stock_id)
     {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       menu_image = gtk_image_new_from_stock (button->priv->stock_id, GTK_ICON_SIZE_MENU);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
     }
 
   if (menu_image)
@@ -935,7 +948,11 @@ gtk_tool_button_update (GtkActivatable *activatable,
   if (strcmp (property_name, "short-label") == 0)
     gtk_tool_button_set_label (button, gtk_action_get_short_label (action));
   else if (strcmp (property_name, "stock-id") == 0)
-    gtk_tool_button_set_stock_id (button, gtk_action_get_stock_id (action));
+    {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+      gtk_tool_button_set_stock_id (button, gtk_action_get_stock_id (action));
+      G_GNUC_END_IGNORE_DEPRECATIONS;
+    }
   else if (strcmp (property_name, "gicon") == 0)
     {
       const gchar *stock_id = gtk_action_get_stock_id (action);
@@ -978,11 +995,15 @@ gtk_tool_button_sync_action_properties (GtkActivatable *activatable,
     return;
 
   button = GTK_TOOL_BUTTON (activatable);
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   stock_id = gtk_action_get_stock_id (action);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   gtk_tool_button_set_label (button, gtk_action_get_short_label (action));
   gtk_tool_button_set_use_underline (button, TRUE);
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   gtk_tool_button_set_stock_id (button, stock_id);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
   gtk_tool_button_set_icon_name (button, gtk_action_get_icon_name (action));
 
   if (stock_id && gtk_icon_factory_lookup_default (stock_id))
@@ -1020,6 +1041,8 @@ gtk_tool_button_sync_action_properties (GtkActivatable *activatable,
  * Return value: A new #GtkToolButton
  * 
  * Since: 2.4
+ *
+ * Deprecated: 3.10: Use gtk_tool_button_new() instead.
  **/
 GtkToolItem *
 gtk_tool_button_new_from_stock (const gchar *stock_id)
@@ -1187,6 +1210,8 @@ gtk_tool_button_get_use_underline (GtkToolButton *button)
  * overridden by non-%NULL "label" and "icon_widget" properties.
  * 
  * Since: 2.4
+ *
+ * Deprecated: 3.10: Use gtk_tool_button_set_icon_name() instead.
  **/
 void
 gtk_tool_button_set_stock_id (GtkToolButton *button,
@@ -1216,6 +1241,8 @@ gtk_tool_button_set_stock_id (GtkToolButton *button,
  * Return value: the name of the stock item for @button.
  * 
  * Since: 2.4
+ *
+ * Deprecated: 3.10: Use gtk_tool_button_get_icon_name() instead.
  **/
 const gchar *
 gtk_tool_button_get_stock_id (GtkToolButton *button)

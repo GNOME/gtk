@@ -38,10 +38,7 @@
  * Use gtk_radio_tool_button_new() to create a new
  * #GtkRadioToolButton. Use gtk_radio_tool_button_new_from_widget() to
  * create a new #GtkRadioToolButton that is part of the same group as an
- * existing #GtkRadioToolButton. Use
- * gtk_radio_tool_button_new_from_stock() or
- * gtk_radio_tool_button_new_with_stock_from_widget() create a new
- * #GtkRadioToolButton containing a stock item.
+ * existing #GtkRadioToolButton.
  */
 
 
@@ -162,6 +159,8 @@ gtk_radio_tool_button_new (GSList *group)
  * Return value: The new #GtkRadioToolButton
  * 
  * Since: 2.4
+ *
+ * Deprecated: 3.10: Use gtk_radio_tool_button_new() instead.
  **/
 GtkToolItem *
 gtk_radio_tool_button_new_from_stock (GSList      *group,
@@ -216,19 +215,26 @@ gtk_radio_tool_button_new_from_widget (GtkRadioToolButton *group)
  * Return value: (transfer none): A new #GtkRadioToolButton
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10: gtk_radio_tool_button_new_from_widget
  **/
 GtkToolItem *
 gtk_radio_tool_button_new_with_stock_from_widget (GtkRadioToolButton *group,
 						  const gchar        *stock_id)
 {
   GSList *list = NULL;
-  
+  GtkToolItem *item;
+
   g_return_val_if_fail (group == NULL || GTK_IS_RADIO_TOOL_BUTTON (group), NULL);
 
   if (group != NULL)
     list = gtk_radio_tool_button_get_group (group);
-  
-  return gtk_radio_tool_button_new_from_stock (list, stock_id);
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  item = gtk_radio_tool_button_new_from_stock (list, stock_id);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
+  return item;
 }
 
 static GtkRadioButton *

@@ -46,8 +46,7 @@
  * button pops up a dropdown menu.
  *
  * Use gtk_menu_tool_button_new() to create a new
- * #GtkMenuToolButton. Use gtk_menu_tool_button_new_from_stock() to
- * create a new #GtkMenuToolButton containing a stock item.
+ * #GtkMenuToolButton.
  *
  * <refsect2 id="GtkMenuToolButton-BUILDER-UI">
  * <title>GtkMenuToolButton as GtkBuildable</title>
@@ -376,6 +375,8 @@ gtk_menu_tool_button_new (GtkWidget   *icon_widget,
  * Return value: the new #GtkMenuToolButton
  *
  * Since: 2.6
+ *
+ * Deprecated: 3.10: Use gtk_menu_tool_button_new() instead.
  **/
 GtkToolItem *
 gtk_menu_tool_button_new_from_stock (const gchar *stock_id)

@@ -238,6 +238,11 @@ gtk_image_class_init (GtkImageClass *class)
                                                         GTK_PARAM_READWRITE));
   
 
+  /**
+   * GtkImage:stock:
+   *
+   * Deprecated: 3.10: Use #GtkImage:icon-name instead.
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_STOCK,
                                    g_param_spec_string ("stock",
@@ -420,8 +425,10 @@ gtk_image_set_property (GObject      *object,
       gtk_image_set_from_file (image, g_value_get_string (value));
       break;
     case PROP_STOCK:
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_image_set_from_stock (image, g_value_get_string (value),
                                 icon_size);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_ICON_SET:
       gtk_image_set_from_icon_set (image, g_value_get_boxed (value),
@@ -625,6 +632,8 @@ gtk_image_new_from_pixbuf (GdkPixbuf *pixbuf)
  * gtk_icon_factory_add_default() and gtk_icon_factory_add().
  * 
  * Return value: a new #GtkImage displaying the stock icon
+ *
+ * Deprecated: 3.10: Use gtk_image_new_from_icon_name() instead.
  **/
 GtkWidget*
 gtk_image_new_from_stock (const gchar    *stock_id,
@@ -634,7 +643,9 @@ gtk_image_new_from_stock (const gchar    *stock_id,
 
   image = g_object_new (GTK_TYPE_IMAGE, NULL);
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   gtk_image_set_from_stock (image, stock_id, size);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   return GTK_WIDGET (image);
 }
@@ -905,6 +916,8 @@ gtk_image_set_from_pixbuf (GtkImage  *image,
  * @size: (type int): a stock icon size
  *
  * See gtk_image_new_from_stock() for details.
+ *
+ * Deprecated: 3.10: Use gtk_image_set_from_icon_name() instead.
  **/
 void
 gtk_image_set_from_stock  (GtkImage       *image,
@@ -1142,6 +1155,8 @@ gtk_image_get_pixbuf (GtkImage *image)
  * %GTK_IMAGE_STOCK (see gtk_image_get_storage_type()).
  * The returned string is owned by the #GtkImage and should not
  * be freed.
+ *
+ * Deprecated: 3.10: Use gtk_image_get_icon_name() instead.
  **/
 void
 gtk_image_get_stock  (GtkImage        *image,

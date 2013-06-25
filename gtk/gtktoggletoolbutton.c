@@ -40,8 +40,7 @@
  * button.
  *
  * Use gtk_toggle_tool_button_new() to create a new
- * #GtkToggleToolButton. Use gtk_toggle_tool_button_new_from_stock() to
- * create a new #GtkToggleToolButton containing a stock item.
+ * #GtkToggleToolButton.
  */
 
 
@@ -223,7 +222,9 @@ gtk_toggle_tool_button_create_menu_proxy (GtkToolItem *item)
 
   label_widget = gtk_tool_button_get_label_widget (tool_button);
   label_text = gtk_tool_button_get_label (tool_button);
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   stock_id = gtk_tool_button_get_stock_id (tool_button);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   if (GTK_IS_LABEL (label_widget))
     {
@@ -405,6 +406,8 @@ gtk_toggle_tool_button_new (void)
  * Return value: A new #GtkToggleToolButton
  * 
  * Since: 2.4
+ *
+ * Deprecated: 3.10: Use gtk_toggle_tool_button_new() instead.
  **/
 GtkToolItem *
 gtk_toggle_tool_button_new_from_stock (const gchar *stock_id)

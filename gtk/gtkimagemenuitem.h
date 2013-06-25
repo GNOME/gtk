@@ -75,7 +75,7 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_menu_item_new_with_label    (const gchar      *label);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_menu_item_new_with_mnemonic (const gchar      *label);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10_FOR(gtk_image_menu_item_new)
 GtkWidget* gtk_image_menu_item_new_from_stock    (const gchar      *stock_id,
                                                   GtkAccelGroup    *accel_group);
 GDK_AVAILABLE_IN_ALL
@@ -88,12 +88,12 @@ void       gtk_image_menu_item_set_image         (GtkImageMenuItem *image_menu_i
                                                   GtkWidget        *image);
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_menu_item_get_image         (GtkImageMenuItem *image_menu_item);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void       gtk_image_menu_item_set_use_stock     (GtkImageMenuItem *image_menu_item,
 						  gboolean          use_stock);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 gboolean   gtk_image_menu_item_get_use_stock     (GtkImageMenuItem *image_menu_item);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void       gtk_image_menu_item_set_accel_group   (GtkImageMenuItem *image_menu_item, 
 						  GtkAccelGroup    *accel_group);
 

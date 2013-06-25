@@ -45,6 +45,7 @@
 #include "gtkprivate.h"
 #include "gtkorientable.h"
 #include "gtktypebuiltins.h"
+#include "gtkstock.h"
 
 /**
  * SECTION:gtkinfobar
@@ -677,14 +678,14 @@ gtk_info_bar_get_content_area (GtkInfoBar *info_bar)
 /**
  * gtk_info_bar_add_button:
  * @info_bar: a #GtkInfoBar
- * @button_text: text of button, or stock ID
+ * @button_text: text of button
  * @response_id: response ID for the button
  *
- * Adds a button with the given text (or a stock button, if button_text
- * is a stock ID) and sets things up so that clicking the button will emit
- * the "response" signal with the given response_id. The button is appended
- * to the end of the info bars's action area. The button widget is
- * returned, but usually you don't need it.
+ * Adds a button with the given text and sets things up so that
+ * clicking the button will emit the "response" signal with the given
+ * response_id. The button is appended to the end of the info bars's
+ * action area. The button widget is returned, but usually you don't
+ * need it.
  *
  * Returns: (transfer none): the #GtkButton widget that was added
  *
@@ -700,7 +701,15 @@ gtk_info_bar_add_button (GtkInfoBar  *info_bar,
   g_return_val_if_fail (GTK_IS_INFO_BAR (info_bar), NULL);
   g_return_val_if_fail (button_text != NULL, NULL);
 
-  button = gtk_button_new_from_stock (button_text);
+  button = gtk_button_new_with_label (button_text);
+  gtk_button_set_use_underline (GTK_BUTTON (button), TRUE);
+
+  if (button_text)
+    {
+      GtkStockItem item;
+      if (gtk_stock_lookup (button_text, &item))
+        g_object_set (button, "use-stock", TRUE, NULL);
+    }
 
   gtk_widget_set_can_default (button, TRUE);
 

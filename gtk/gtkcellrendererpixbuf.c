@@ -33,8 +33,8 @@
  *
  * A #GtkCellRendererPixbuf can be used to render an image in a cell. It allows
  * to render either a given #GdkPixbuf (set via the
- * #GtkCellRendererPixbuf:pixbuf property) or a stock icon (set via the
- * #GtkCellRendererPixbuf:stock-id property).
+ * #GtkCellRendererPixbuf:pixbuf property) or a named icon (set via the
+ * #GtkCellRendererPixbuf:icon-name property).
  *
  * To support the tree view, #GtkCellRendererPixbuf also supports rendering two
  * alternative pixbufs, when the #GtkCellRenderer:is-expander property is %TRUE.
@@ -169,6 +169,11 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 							GDK_TYPE_PIXBUF,
 							GTK_PARAM_READWRITE));
 
+  /**
+   * GtkCellRendererPixbuf:stock-id:
+   *
+   * Deprecated: 3.10: Use #GtkCellRendererPixbuf:icon-name instead.
+   */
   g_object_class_install_property (object_class,
 				   PROP_STOCK_ID,
 				   g_param_spec_string ("stock-id",

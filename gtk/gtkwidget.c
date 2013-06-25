@@ -9708,6 +9708,8 @@ gtk_widget_create_pango_layout (GtkWidget   *widget,
  *     stock ID wasn't known
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.10: Use gtk_icon_theme_load_icon() instead.
  **/
 GdkPixbuf*
 gtk_widget_render_icon_pixbuf (GtkWidget   *widget,

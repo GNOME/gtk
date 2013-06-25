@@ -173,7 +173,7 @@ void           gtk_drag_source_add_uri_targets   (GtkWidget    *widget);
 GDK_AVAILABLE_IN_ALL
 void gtk_drag_source_set_icon_pixbuf  (GtkWidget       *widget,
 				       GdkPixbuf       *pixbuf);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10_FOR(gtk_drag_source_set_icon_name)
 void gtk_drag_source_set_icon_stock   (GtkWidget       *widget,
 				       const gchar     *stock_id);
 GDK_AVAILABLE_IN_ALL
@@ -206,7 +206,7 @@ void gtk_drag_set_icon_pixbuf (GdkDragContext *context,
 			       GdkPixbuf      *pixbuf,
 			       gint            hot_x,
 			       gint            hot_y);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10_FOR(gtk_drag_set_icon_name)
 void gtk_drag_set_icon_stock  (GdkDragContext *context,
 			       const gchar    *stock_id,
 			       gint            hot_x,

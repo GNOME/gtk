@@ -69,7 +69,7 @@ GType        gtk_tool_button_get_type       (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkToolItem *gtk_tool_button_new            (GtkWidget   *icon_widget,
 					     const gchar *label);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10_FOR(gtk_tool_button_new)
 GtkToolItem *gtk_tool_button_new_from_stock (const gchar *stock_id);
 
 GDK_AVAILABLE_IN_ALL
@@ -82,10 +82,10 @@ void                  gtk_tool_button_set_use_underline (GtkToolButton *button,
 							 gboolean       use_underline);
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_tool_button_get_use_underline (GtkToolButton *button);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10_FOR(gtk_tool_button_set_icon_name)
 void                  gtk_tool_button_set_stock_id      (GtkToolButton *button,
 							 const gchar   *stock_id);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10_FOR(gtk_tool_button_get_icon_name)
 const gchar *         gtk_tool_button_get_stock_id      (GtkToolButton *button);
 GDK_AVAILABLE_IN_ALL
 void                  gtk_tool_button_set_icon_name     (GtkToolButton *button,

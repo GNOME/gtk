@@ -260,6 +260,11 @@ gtk_button_class_init (GtkButtonClass *klass)
                                                         FALSE,
                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
   
+  /**
+   * GtkButton:use-stock:
+   *
+   * Deprecated: 3.10
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_USE_STOCK,
                                    g_param_spec_boolean ("use-stock",
@@ -779,7 +784,9 @@ gtk_button_set_property (GObject         *object,
       gtk_button_set_use_underline (button, g_value_get_boolean (value));
       break;
     case PROP_USE_STOCK:
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_button_set_use_stock (button, g_value_get_boolean (value));
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_FOCUS_ON_CLICK:
       gtk_button_set_focus_on_click (button, g_value_get_boolean (value));
@@ -906,10 +913,18 @@ static void
 activatable_update_stock_id (GtkButton *button,
 			     GtkAction *action)
 {
-  if (!gtk_button_get_use_stock (button))
+  gboolean use_stock;
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  use_stock = gtk_button_get_use_stock (button);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
+  if (!use_stock)
     return;
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   gtk_button_set_label (button, gtk_action_get_stock_id (action));
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 static void
@@ -918,8 +933,13 @@ activatable_update_short_label (GtkButton *button,
 {
   GtkWidget *child;
   GtkWidget *image;
+  gboolean use_stock;
 
-  if (gtk_button_get_use_stock (button))
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  use_stock = gtk_button_get_use_stock (button);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
+  if (use_stock)
     return;
 
   image = gtk_button_get_image (button);
@@ -940,8 +960,13 @@ activatable_update_icon_name (GtkButton *button,
 			      GtkAction *action)
 {
   GtkWidget *image;
-	      
-  if (gtk_button_get_use_stock (button))
+  gboolean use_stock;
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  use_stock = gtk_button_get_use_stock (button);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
+  if (use_stock)
     return;
 
   image = gtk_button_get_image (button);
@@ -1142,6 +1167,8 @@ gtk_button_construct_child (GtkButton *button)
   if (child)
     gtk_container_remove (GTK_CONTAINER (button), child);
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
   if (priv->use_stock &&
       priv->label_text &&
       gtk_stock_lookup (priv->label_text, &item))
@@ -1153,6 +1180,8 @@ gtk_button_construct_child (GtkButton *button)
     }
   else
     label_text = priv->label_text;
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   if (image)
     {
@@ -1258,6 +1287,8 @@ gtk_button_new_with_label (const gchar *label)
  * label (as for gtk_button_new_with_mnemonic()).
  *
  * Returns: a new #GtkButton
+ *
+ * Deprecated: 3.10: Use gtk_button_new_with_label() instead.
  **/
 GtkWidget*
 gtk_button_new_from_stock (const gchar *stock_id)
@@ -2312,6 +2343,8 @@ gtk_button_get_use_underline (GtkButton *button)
  *
  * If %TRUE, the label set on the button is used as a
  * stock id to select the stock item for the button.
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_button_set_use_stock (GtkButton *button,
@@ -2344,6 +2377,8 @@ gtk_button_set_use_stock (GtkButton *button,
  * Return value: %TRUE if the button label is used to
  *               select a stock item instead of being
  *               used directly as the label text.
+ *
+ * Deprecated: 3.10
  */
 gboolean
 gtk_button_get_use_stock (GtkButton *button)

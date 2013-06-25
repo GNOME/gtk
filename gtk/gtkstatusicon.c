@@ -233,6 +233,11 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
 							NULL,
 							GTK_PARAM_WRITABLE));
 
+  /**
+   * GtkStatusIcon:stock:
+   *
+   * Deprecated: 3.10: Use #GtkStatusIcon:icon-name instead.
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_STOCK,
 				   g_param_spec_string ("stock",
@@ -1065,7 +1070,9 @@ gtk_status_icon_set_property (GObject      *object,
       gtk_status_icon_set_from_file (status_icon, g_value_get_string (value));
       break;
     case PROP_STOCK:
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_status_icon_set_from_stock (status_icon, g_value_get_string (value));
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_ICON_NAME:
       gtk_status_icon_set_from_icon_name (status_icon, g_value_get_string (value));
@@ -1111,7 +1118,9 @@ gtk_status_icon_get_property (GObject    *object,
       g_value_set_object (value, gtk_status_icon_get_pixbuf (status_icon));
       break;
     case PROP_STOCK:
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       g_value_set_string (value, gtk_status_icon_get_stock (status_icon));
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_ICON_NAME:
       g_value_set_string (value, gtk_status_icon_get_icon_name (status_icon));
@@ -1232,6 +1241,8 @@ gtk_status_icon_new_from_file (const gchar *filename)
  * Return value: a new #GtkStatusIcon
  *
  * Since: 2.10
+ *
+ * Deprecated: 3.10: Use gtk_status_icon_new_from_icon_name() instead.
  **/
 GtkStatusIcon *
 gtk_status_icon_new_from_stock (const gchar *stock_id)
@@ -1785,7 +1796,9 @@ gtk_status_icon_set_from_file (GtkStatusIcon *status_icon,
  * Makes @status_icon display the stock icon with the id @stock_id.
  * See gtk_status_icon_new_from_stock() for details.
  *
- * Since: 2.10 
+ * Since: 2.10
+ *
+ * Deprecated: 3.10: Use gtk_status_icon_set_from_icon_name() instead.
  **/
 void
 gtk_status_icon_set_from_stock (GtkStatusIcon *status_icon,
@@ -1901,6 +1914,8 @@ gtk_status_icon_get_pixbuf (GtkStatusIcon *status_icon)
  *   or %NULL if the image is empty.
  *
  * Since: 2.10
+ *
+ * Deprecated: 3.10: Use gtk_status_icon_get_icon_name() instead.
  **/
 const gchar *
 gtk_status_icon_get_stock (GtkStatusIcon *status_icon)

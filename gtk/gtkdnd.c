@@ -2940,9 +2940,11 @@ gtk_drag_source_set_icon_pixbuf (GtkWidget   *widget,
  * @stock_id: the ID of the stock icon to use
  *
  * Sets the icon that will be used for drags from a particular source
- * to a stock icon. 
+ * to a stock icon.
+ *
+ * Deprecated: 3.10: Use gtk_drag_source_set_icon_name() instead.
  **/
-void 
+void
 gtk_drag_source_set_icon_stock (GtkWidget   *widget,
 				const gchar *stock_id)
 {
@@ -3297,6 +3299,8 @@ gtk_drag_set_icon_pixbuf  (GdkDragContext *context,
  * @hot_y: the Y offset within the icon of the hotspot.
  * 
  * Sets the icon for a given drag from a stock ID.
+ *
+ * Deprecated: 3.10: Use gtk_drag_set_icon_name() instead.
  **/
 void 
 gtk_drag_set_icon_stock  (GdkDragContext *context,
