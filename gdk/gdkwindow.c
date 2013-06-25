@@ -3322,63 +3322,61 @@ gdk_window_schedule_update (GdkWindow *window)
                                    GDK_FRAME_CLOCK_PHASE_PAINT);
 }
 
-void
-_gdk_window_process_updates_recurse (GdkWindow *window,
-				     cairo_region_t *expose_region)
+static void
+_gdk_window_process_updates_recurse_helper (GdkWindow *window,
+                                            cairo_region_t *expose_region,
+                                            int dx, int dy)
 {
   GdkWindow *child;
   cairo_region_t *clipped_expose_region;
   GdkRectangle clip_box;
   GList *l, *children;
 
-  if (cairo_region_is_empty (expose_region))
-    return;
+  clipped_expose_region = cairo_region_copy (expose_region);
+  cairo_region_translate (clipped_expose_region, dx, dy);
+  cairo_region_intersect (clipped_expose_region, window->clip_region);
+
+  if (cairo_region_is_empty (clipped_expose_region) || window->destroyed)
+    goto out;
 
   if (gdk_window_is_offscreen (window->impl_window) &&
       gdk_window_has_impl (window))
-    _gdk_window_add_damage ((GdkWindow *) window->impl_window, expose_region);
+    _gdk_window_add_damage ((GdkWindow *) window->impl_window, clipped_expose_region);
 
   if (window->alpha != 255 && !gdk_window_has_impl (window))
     {
       if (window->alpha == 0)
-	return;
+        goto out;
 
-      cairo_region_get_extents (expose_region, &clip_box);
+      cairo_region_get_extents (clipped_expose_region, &clip_box);
       clip_box.x += window->abs_x;
       clip_box.y += window->abs_y;
       /* TODO: How do we now do subwindow alphas */
     }
 
   /* Paint the window before the children, clipped to the window region */
-  clipped_expose_region = cairo_region_copy (expose_region);
-  cairo_region_intersect (clipped_expose_region, window->clip_region);
 
-  if (!cairo_region_is_empty (clipped_expose_region) &&
-      !window->destroyed)
+  /* While gtk+ no longer handles exposes on anything but native
+     window we still have to send them to all windows that have the
+     event mask set for backwards compat. We also need to send
+     it to all native windows, even if they don't specify the
+     expose mask, because they may have non-native children that do. */
+  if (gdk_window_has_impl (window) ||
+      window->event_mask & GDK_EXPOSURE_MASK)
     {
-      /* While gtk+ no longer handles exposes on anything but native
-	 window we still have to send them to all windows that have the
-	 event mask set for backwards compat. We also need to send
-	 it to all native windows, even if they don't specify the
-	 expose mask, because they may have non-native children that do. */
-      if (gdk_window_has_impl (window) ||
-	  window->event_mask & GDK_EXPOSURE_MASK)
-	{
-	  GdkEvent event;
+      GdkEvent event;
 
-	  event.expose.type = GDK_EXPOSE;
-	  event.expose.window = g_object_ref (window);
-	  event.expose.send_event = FALSE;
-	  event.expose.count = 0;
-	  event.expose.region = clipped_expose_region;
-	  cairo_region_get_extents (clipped_expose_region, &event.expose.area);
+      event.expose.type = GDK_EXPOSE;
+      event.expose.window = g_object_ref (window);
+      event.expose.send_event = FALSE;
+      event.expose.count = 0;
+      event.expose.region = clipped_expose_region;
+      cairo_region_get_extents (clipped_expose_region, &event.expose.area);
 
-          _gdk_event_emit (&event);
+      _gdk_event_emit (&event);
 
-	  g_object_unref (window);
-	}
+      g_object_unref (window);
     }
-  cairo_region_destroy (clipped_expose_region);
 
   /* Make this reentrancy safe for expose handlers freeing windows */
   children = g_list_copy (window->children);
@@ -3390,24 +3388,31 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
       child = l->data;
 
       if (child->destroyed || !GDK_WINDOW_IS_MAPPED (child) || child->input_only || child->composited)
-	continue;
+        continue;
 
       /* Ignore offscreen children, as they don't draw in their parent and
        * don't take part in the clipping */
       if (gdk_window_is_offscreen (child))
-	continue;
+        continue;
 
       /* Client side child, expose */
       if (child->impl == window->impl)
-	{
-	  cairo_region_translate (expose_region, -child->x, -child->y);
-	  _gdk_window_process_updates_recurse ((GdkWindow *)child, expose_region);
-	  cairo_region_translate (expose_region, child->x, child->y);
-	}
+        _gdk_window_process_updates_recurse_helper ((GdkWindow *)child, clipped_expose_region, -child->x, -child->y);
     }
 
   g_list_free_full (children, g_object_unref);
+
+ out:
+  cairo_region_destroy (clipped_expose_region);
 }
+
+void
+_gdk_window_process_updates_recurse (GdkWindow *window,
+                                     cairo_region_t *expose_region)
+{
+  _gdk_window_process_updates_recurse_helper (window, expose_region, 0, 0);
+}
+
 
 static void
 gdk_window_update_native_shapes (GdkWindow *window)
