@@ -879,6 +879,13 @@ GDK_AVAILABLE_IN_ALL
 GdkPixbuf  * gtk_icon_set_render_icon_pixbuf   (GtkIconSet      *icon_set,
                                                 GtkStyleContext *context,
                                                 GtkIconSize      size);
+GDK_AVAILABLE_IN_3_10
+cairo_pattern_t  *
+gtk_icon_set_render_icon_pattern               (GtkIconSet      *icon_set,
+						GtkStyleContext *context,
+						GtkIconSize      size,
+						int              scale,
+						GdkWindow       *for_window);
 
 GDK_AVAILABLE_IN_ALL
 void        gtk_style_context_set_screen (GtkStyleContext *context,
