@@ -327,7 +327,7 @@ main (int   argc,
   g_signal_connect (chooser, "update-preview", G_CALLBACK (chooser_update_preview_cb), NULL);
   gtk_box_pack_start (GTK_BOX (hbox), chooser, TRUE, TRUE, 0);
 
-  button = gtk_button_new_with_label ("_Properties");
+  button = gtk_button_new_with_label ("Properties");
   g_signal_connect (button, "clicked", G_CALLBACK (properties_button_clicked_cb), chooser);
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
 
@@ -357,7 +357,7 @@ main (int   argc,
   g_signal_connect (chooser, "update-preview", G_CALLBACK (chooser_update_preview_cb), NULL);
   gtk_box_pack_start (GTK_BOX (hbox), chooser, TRUE, TRUE, 0);
 
-  button = gtk_button_new_with_label ("_Properties");
+  button = gtk_button_new_with_label ("Properties");
   g_signal_connect (button, "clicked", G_CALLBACK (properties_button_clicked_cb), chooser);
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
 

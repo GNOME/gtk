@@ -84,6 +84,7 @@
                     <property name="can_default">True</property>
                     <property name="receives_default">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="use_underline">True</property>
                     <signal name="clicked" handler="on_assistant_apply" swapped="no"/>
                   </object>
                   <packing>
@@ -151,6 +152,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="use_underline">True</property>
                     <signal name="clicked" handler="on_assistant_cancel" swapped="no"/>
                   </object>
                   <packing>
@@ -167,6 +169,7 @@
                     <property name="can_default">True</property>
                     <property name="receives_default">True</property>
                     <property name="no_show_all">True</property>
+                    <property name="use_underline">True</property>
                     <signal name="clicked" handler="on_assistant_close" swapped="no"/>
                   </object>
                   <packing>
