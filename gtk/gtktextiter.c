@@ -4858,18 +4858,8 @@ strbreakup (const char *string,
  * @limit. Note that a search is a linear or O(n) operation, so you
  * may wish to use @limit to avoid locking up your UI on large
  * buffers.
- * 
- * If the #GTK_TEXT_SEARCH_VISIBLE_ONLY flag is present, the match may
- * have invisible text interspersed in @str. i.e. @str will be a
- * possibly-noncontiguous subsequence of the matched range. similarly,
- * if you specify #GTK_TEXT_SEARCH_TEXT_ONLY, the match may have
- * pixbufs or child widgets mixed inside the matched range. If these
- * flags are not given, the match must be exact; the special 0xFFFC
- * character in @str will match embedded pixbufs or child widgets.
- * If you specify the #GTK_TEXT_SEARCH_CASE_INSENSITIVE flag, the text will
- * be matched regardless of what case it is in.
  *
- * Return value: whether a match was found
+ * Returns: whether a match was found
  **/
 gboolean
 gtk_text_iter_forward_search (const GtkTextIter *iter,
