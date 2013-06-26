@@ -119,6 +119,9 @@
 
 #define SPACE_FOR_CURSOR 1
 
+#define CURSOR_BLINK_TIME        1200
+#define CURSOR_BLINK_TIMEOUT_SEC 10
+
 #define GTK_TEXT_VIEW_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_TEXT_VIEW, GtkTextViewPrivate))
 
 typedef struct _GtkTextWindow GtkTextWindow;
@@ -5417,18 +5420,10 @@ gtk_text_view_forall (GtkContainer *container,
 static gboolean
 cursor_blinks (GtkTextView *text_view)
 {
-  GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (text_view));
-  gboolean blink;
-
 #ifdef DEBUG_VALIDATION_AND_SCROLLING
   return FALSE;
 #endif
   if (gtk_get_debug_flags () & GTK_DEBUG_UPDATES)
-    return FALSE;
-
-  g_object_get (settings, "gtk-cursor-blink", &blink, NULL);
-
-  if (!blink)
     return FALSE;
 
   if (text_view->priv->editable)
@@ -5440,7 +5435,7 @@ cursor_blinks (GtkTextView *text_view)
       gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &iter, insert);
       
       if (gtk_text_iter_editable (&iter, text_view->priv->editable))
-	return blink;
+	return TRUE;
     }
 
   return FALSE;
@@ -5458,29 +5453,6 @@ get_middle_click_paste (GtkTextView *text_view)
   return paste;
 }
 
-static gint
-get_cursor_time (GtkTextView *text_view)
-{
-  GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (text_view));
-  gint time;
-
-  g_object_get (settings, "gtk-cursor-blink-time", &time, NULL);
-
-  return time;
-}
-
-static gint
-get_cursor_blink_timeout (GtkTextView *text_view)
-{
-  GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (text_view));
-  gint time;
-
-  g_object_get (settings, "gtk-cursor-blink-timeout", &time, NULL);
-
-  return time;
-}
-
-
 /*
  * Blink!
  */
@@ -5491,7 +5463,6 @@ blink_cb (gpointer data)
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
   gboolean visible;
-  gint blink_timeout;
 
   text_view = GTK_TEXT_VIEW (data);
   priv = text_view->priv;
@@ -5512,24 +5483,23 @@ blink_cb (gpointer data)
 
   visible = gtk_text_layout_get_cursor_visible (priv->layout);
 
-  blink_timeout = get_cursor_blink_timeout (text_view);
-  if (priv->blink_time > 1000 * blink_timeout &&
-      blink_timeout < G_MAXINT/1000) 
+  if (priv->blink_time > 1000 * CURSOR_BLINK_TIMEOUT_SEC &&
+      CURSOR_BLINK_TIMEOUT_SEC < G_MAXINT/1000) 
     {
       /* we've blinked enough without the user doing anything, stop blinking */
       visible = 0;
       priv->blink_timeout = 0;
     } 
   else if (visible)
-    priv->blink_timeout = gdk_threads_add_timeout (get_cursor_time (text_view) * CURSOR_OFF_MULTIPLIER / CURSOR_DIVIDER,
+    priv->blink_timeout = gdk_threads_add_timeout (CURSOR_BLINK_TIME * CURSOR_OFF_MULTIPLIER / CURSOR_DIVIDER,
 						   blink_cb,
 						   text_view);
   else 
     {
-      priv->blink_timeout = gdk_threads_add_timeout (get_cursor_time (text_view) * CURSOR_ON_MULTIPLIER / CURSOR_DIVIDER,
+      priv->blink_timeout = gdk_threads_add_timeout (CURSOR_BLINK_TIME * CURSOR_ON_MULTIPLIER / CURSOR_DIVIDER,
 						     blink_cb,
 						     text_view);
-      priv->blink_time += get_cursor_time (text_view);
+      priv->blink_time += CURSOR_BLINK_TIME;
     }
 
   /* Block changed_handler while changing the layout's cursor visibility
@@ -5576,7 +5546,7 @@ gtk_text_view_check_cursor_blink (GtkTextView *text_view)
 	    {
 	      gtk_text_layout_set_cursor_visible (priv->layout, TRUE);
 	      
-	      priv->blink_timeout = gdk_threads_add_timeout (get_cursor_time (text_view) * CURSOR_OFF_MULTIPLIER / CURSOR_DIVIDER,
+	      priv->blink_timeout = gdk_threads_add_timeout (CURSOR_BLINK_TIME * CURSOR_OFF_MULTIPLIER / CURSOR_DIVIDER,
 							     blink_cb,
 							     text_view);
 	    }
@@ -5607,7 +5577,7 @@ gtk_text_view_pend_cursor_blink (GtkTextView *text_view)
       gtk_text_view_stop_cursor_blink (text_view);
       gtk_text_layout_set_cursor_visible (priv->layout, TRUE);
       
-      priv->blink_timeout = gdk_threads_add_timeout (get_cursor_time (text_view) * CURSOR_PEND_MULTIPLIER / CURSOR_DIVIDER,
+      priv->blink_timeout = gdk_threads_add_timeout (CURSOR_BLINK_TIME * CURSOR_PEND_MULTIPLIER / CURSOR_DIVIDER,
 						     blink_cb,
 						     text_view);
     }

@@ -370,8 +370,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Whether the cursor should blink.
    *
-   * Also see the #GtkSettings:gtk-cursor-blink-timeout setting,
-   * which allows more flexible control over cursor blinking.
+   * Deprecated: 3.10: This setting is ignored.
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-cursor-blink",
@@ -381,6 +380,14 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_CURSOR_BLINK);
+
+  /**
+   * GtkSettings:gtk-cursor-blink-time:
+   *
+   * Length of the cursor blink cycle, in milliseconds.
+   *
+   * Deprecated: 3.10: This setting is ignored.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-cursor-blink-time",
                                                                P_("Cursor Blink Time"),
@@ -400,12 +407,14 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * #GtkSettings:gtk-cursor-blink to %FALSE.
    *
    * Since: 2.12
+   *
+   * Deprecated: 3.10: This setting is ignored.
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-cursor-blink-timeout",
                                                                P_("Cursor Blink Timeout"),
                                                                P_("Time after which the cursor stops blinking, in seconds"),
-                                                               1, G_MAXINT, G_MAXINT,
+                                                               1, G_MAXINT, 10,
                                                                GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_CURSOR_BLINK_TIMEOUT);
