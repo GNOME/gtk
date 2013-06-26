@@ -2081,6 +2081,69 @@ gtk_icon_theme_load_icon_for_scale (GtkIconTheme        *icon_theme,
 }
 
 /**
+ * gtk_icon_theme_load_pattern:
+ * @icon_theme: a #GtkIconTheme
+ * @icon_name: the name of the icon to lookup
+ * @size: the desired icon size. The resulting icon may not be
+ *     exactly this size; see gtk_icon_info_load_icon().
+ * @scale: desired scale
+ * @for_window: (allow-none): #GdkWindow to optimize drawing for, or %NULL
+ * @flags: flags modifying the behavior of the icon lookup
+ * @error: (allow-none): Location to store error information on failure,
+ *     or %NULL.
+ *
+ * Looks up an icon in an icon theme for a particular window scale,
+ * scales it to the given size and renders it into a cairo pattern. This is a
+ * convenience function; if more details about the icon are needed,
+ * use gtk_icon_theme_lookup_icon() followed by
+ * gtk_icon_info_load_pattern().
+ *
+ * Note that you probably want to listen for icon theme changes and
+ * update the icon. This is usually done by connecting to the
+ * GtkWidget::style-set signal.
+ *
+ * Return value: (transfer full): the rendered icon; this may be a
+ *     newly created icon or a new reference to an internal icon, so
+ *     you must not modify the icon. Use cairo_pattern_destroy() to release
+ *     your reference to the icon. %NULL if the icon isn't found.
+ *
+ * Since: 3.10
+ **/
+cairo_pattern_t *
+gtk_icon_theme_load_pattern (GtkIconTheme        *icon_theme,
+			     const gchar         *icon_name,
+			     gint                 size,
+			     gint                 scale,
+			     GdkWindow           *for_window,
+			     GtkIconLookupFlags   flags,
+			     GError             **error)
+{
+  GtkIconInfo *icon_info;
+  cairo_pattern_t *pattern = NULL;
+  
+  g_return_val_if_fail (GTK_IS_ICON_THEME (icon_theme), NULL);
+  g_return_val_if_fail (icon_name != NULL, NULL);
+  g_return_val_if_fail ((flags & GTK_ICON_LOOKUP_NO_SVG) == 0 ||
+			(flags & GTK_ICON_LOOKUP_FORCE_SVG) == 0, NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+  g_return_val_if_fail (scale >= 1, NULL);
+
+  icon_info = gtk_icon_theme_lookup_icon_for_scale (icon_theme, icon_name, size, scale,
+                                                    flags | GTK_ICON_LOOKUP_USE_BUILTIN);
+  if (!icon_info)
+    {
+      g_set_error (error, GTK_ICON_THEME_ERROR,  GTK_ICON_THEME_NOT_FOUND,
+		   _("Icon '%s' not present in theme"), icon_name);
+      return NULL;
+    }
+
+  pattern = gtk_icon_info_load_pattern (icon_info, for_window, error);
+  g_object_unref (icon_info);
+
+  return pattern;
+}
+
+/**
  * gtk_icon_theme_has_icon:
  * @icon_theme: a #GtkIconTheme
  * @icon_name: the name of an icon
@@ -3800,6 +3863,63 @@ gtk_icon_info_load_icon (GtkIconInfo *icon_info,
 			      g_object_ref (icon_info));
 
   return icon_info->proxy_pixbuf;
+}
+
+/**
+ * gtk_icon_info_load_pattern:
+ * @icon_info: a #GtkIconInfo structure from gtk_icon_theme_lookup_icon()
+ * @for_window: (allow-none): #GdkWindow to optimize drawing for, or %NULL
+ * @error: (allow-none): location to store error information on failure,
+ *     or %NULL.
+ *
+ * Renders an icon previously looked up in an icon theme using
+ * gtk_icon_theme_lookup_icon(); the size will be based on the size
+ * passed to gtk_icon_theme_lookup_icon(). Note that the resulting
+ * pattern may not be exactly this size; an icon theme may have icons
+ * that differ slightly from their nominal sizes, and in addition GTK+
+ * will avoid scaling icons that it considers sufficiently close to the
+ * requested size or for which the source image would have to be scaled
+ * up too far. (This maintains sharpness.). This behaviour can be changed
+ * by passing the %GTK_ICON_LOOKUP_FORCE_SIZE flag when obtaining
+ * the #GtkIconInfo. If this flag has been specified, the pixbuf
+ * returned by this function will be scaled to the exact size.
+ *
+ * Return value: (transfer full): the rendered icon; this may be a newly
+ *     created icon or a new reference to an internal icon, so you must
+ *     not modify the icon. Use cairo_pattern_destroy() to release your reference
+ *     to the icon.
+ *
+ * Since: 3.10
+ **/
+cairo_pattern_t *
+gtk_icon_info_load_pattern (GtkIconInfo *icon_info,
+			    GdkWindow *for_window,
+			    GError     **error)
+{
+  GdkPixbuf *pixbuf;
+  cairo_surface_t *surface;
+  cairo_pattern_t *pattern;
+  cairo_matrix_t matrix;
+
+  g_return_val_if_fail (icon_info != NULL, NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  pixbuf = gtk_icon_info_load_icon (icon_info, error);
+
+  if (pixbuf == NULL)
+    return NULL;
+
+  surface = gdk_cairo_pixbuf_to_surface (pixbuf, for_window);
+  g_object_unref (pixbuf);
+  pattern = cairo_pattern_create_for_surface (surface);
+  cairo_surface_destroy (surface);
+
+  cairo_matrix_init_scale (&matrix, 
+			   icon_info->desired_scale, 
+			   icon_info->desired_scale);
+  cairo_pattern_set_matrix (pattern, &matrix);
+
+  return pattern;
 }
 
 static void
