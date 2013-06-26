@@ -40,7 +40,7 @@
  * SECTION:gtkaccelmap
  * @Short_description: Loadable keyboard accelerator specifications
  * @Title: Accelerator Maps
- * @See_also: #GtkAccelGroup, #GtkAccelKey, #GtkUIManager, gtk_widget_set_accel_path(), gtk_menu_item_set_accel_path(), #GtkSettings:gtk-can-change-accels
+ * @See_also: #GtkAccelGroup, #GtkAccelKey, #GtkUIManager, gtk_widget_set_accel_path(), gtk_menu_item_set_accel_path()
  *
  * Accelerator maps are used to define runtime configurable accelerators.
  * Functions for manipulating them are are usually used by higher level

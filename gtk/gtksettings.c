@@ -1324,6 +1324,13 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              gtk_rc_property_parse_enum);
   g_assert (result == PROP_SCROLLED_WINDOW_PLACEMENT);
 
+  /**
+   * GtkSettings:gtk-can-change-accels:
+   *
+   * Whether menu accelerators can be changed by pressing a key over the menu item.
+   *
+   * Deprecated: 3.10: This setting is ignored.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-can-change-accels",
                                                                    P_("Can change accelerators"),

@@ -32,7 +32,6 @@ static const struct {
   {"Net/CursorBlinkTime",     "gtk-cursor-blink-time"},
   {"Net/ThemeName",           "gtk-theme-name"},
   {"Net/IconThemeName",       "gtk-icon-theme-name"},
-  {"Gtk/CanChangeAccels",     "gtk-can-change-accels"},
   {"Gtk/ColorPalette",        "gtk-color-palette"},
   {"Gtk/FontName",            "gtk-font-name"},
   {"Gtk/IconSizes",           "gtk-icon-sizes"},
