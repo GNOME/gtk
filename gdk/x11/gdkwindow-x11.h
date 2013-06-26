@@ -74,6 +74,7 @@ struct _GdkWindowImplX11
                            * unset during resizing and scaling */
   guint override_redirect : 1;
   guint frame_clock_connected : 1;
+  guint frame_sync_enabled : 1;
 
   cairo_surface_t *cairo_surface;
 
@@ -176,6 +177,8 @@ GType gdk_window_impl_x11_get_type (void);
 
 void            gdk_x11_window_set_user_time        (GdkWindow *window,
 						     guint32    timestamp);
+void            gdk_x11_window_set_frame_sync_enabled (GdkWindow *window,
+                                                       gboolean   frame_sync_enabled);
 
 GdkToplevelX11 *_gdk_x11_window_get_toplevel        (GdkWindow *window);
 void            _gdk_x11_window_tmp_unset_bg        (GdkWindow *window,
