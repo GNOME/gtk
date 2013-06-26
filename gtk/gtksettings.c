@@ -1206,12 +1206,14 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * Whether images should be shown on buttons
    *
    * Since: 2.4
+   *
+   * Deprecated: 3.10: This setting is ignored
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-button-images",
                                                                    P_("Show button images"),
                                                                    P_("Whether images should be shown on buttons"),
-                                                                   TRUE,
+                                                                   FALSE,
                                                                    GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_BUTTON_IMAGES);
