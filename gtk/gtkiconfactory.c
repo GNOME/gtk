@@ -24,6 +24,8 @@
 
 #include "config.h"
 
+#define GDK_DISABLE_DEPRECATION_WARNINGS
+
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
@@ -40,7 +42,6 @@
 #include "gtkbuilderprivate.h"
 #include "gtktypebuiltins.h"
 #include "deprecated/gtkstyle.h"
-
 
 /**
  * SECTION:gtkiconfactory
@@ -285,6 +286,8 @@ gtk_icon_factory_finalize (GObject *object)
  * themes to override the icons for the application.
  *
  * Return value: a new #GtkIconFactory
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 GtkIconFactory*
 gtk_icon_factory_new (void)
@@ -308,6 +311,8 @@ gtk_icon_factory_new (void)
  * override your application's default icons. If an icon already
  * existed in @factory for @stock_id, it is unreferenced and replaced
  * with the new @icon_set.
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 void
 gtk_icon_factory_add (GtkIconFactory *factory,
@@ -352,6 +357,8 @@ gtk_icon_factory_add (GtkIconFactory *factory,
  * function directly, so that themes are taken into account.
  *
  * Return value: (transfer none): icon set of @stock_id.
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 GtkIconSet *
 gtk_icon_factory_lookup (GtkIconFactory *factory,
@@ -379,6 +386,8 @@ static GSList *default_factories = NULL;
  * There will normally be an icon factory added for each library or
  * application that comes with icons. The default icon factories
  * can be overridden by themes.
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 void
 gtk_icon_factory_add_default (GtkIconFactory *factory)
@@ -397,6 +406,8 @@ gtk_icon_factory_add_default (GtkIconFactory *factory)
  * Removes an icon factory from the list of default icon
  * factories. Not normally used; you might use it for a library that
  * can be unloaded or shut down.
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 void
 gtk_icon_factory_remove_default (GtkIconFactory  *factory)
@@ -447,6 +458,8 @@ _gtk_icon_factory_get_default_icons (void)
  * account.
  *
  * Return value: (transfer none): a #GtkIconSet, or %NULL
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 GtkIconSet *
 gtk_icon_factory_lookup_default (const gchar *stock_id)
@@ -867,6 +880,8 @@ icon_size_register_intern (const gchar *name,
  * etc. Returns the integer value for the size.
  *
  * Returns: (type int): integer value representing the size
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 GtkIconSize
 gtk_icon_size_register (const gchar *name,
@@ -888,6 +903,8 @@ gtk_icon_size_register (const gchar *name,
  * Registers @alias as another name for @target.
  * So calling gtk_icon_size_from_name() with @alias as argument
  * will return @target.
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 void
 gtk_icon_size_register_alias (const gchar *alias,
@@ -931,6 +948,8 @@ gtk_icon_size_register_alias (const gchar *alias,
  * Looks up the icon size associated with @name.
  *
  * Return value: (type int): the icon size
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 GtkIconSize
 gtk_icon_size_from_name (const gchar *name)
@@ -955,6 +974,8 @@ gtk_icon_size_from_name (const gchar *name)
  * is statically allocated and should not be freed.
  *
  * Returns: the name of the given icon size.
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 const gchar*
 gtk_icon_size_get_name (GtkIconSize  size)
@@ -1025,6 +1046,8 @@ static guint cache_serial = 0;
  * a #GtkIconFactory.
  *
  * Return value: a new #GtkIconSet
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 GtkIconSet*
 gtk_icon_set_new (void)
@@ -1053,6 +1076,8 @@ gtk_icon_set_new (void)
  * or make the icon look insensitive/prelighted.
  *
  * Return value: a new #GtkIconSet
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 GtkIconSet *
 gtk_icon_set_new_from_pixbuf (GdkPixbuf *pixbuf)
@@ -1080,6 +1105,8 @@ gtk_icon_set_new_from_pixbuf (GdkPixbuf *pixbuf)
  * Increments the reference count on @icon_set.
  *
  * Return value: @icon_set.
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 GtkIconSet*
 gtk_icon_set_ref (GtkIconSet *icon_set)
@@ -1098,6 +1125,8 @@ gtk_icon_set_ref (GtkIconSet *icon_set)
  *
  * Decrements the reference count on @icon_set, and frees memory
  * if the reference count reaches 0.
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 void
 gtk_icon_set_unref (GtkIconSet *icon_set)
@@ -1135,6 +1164,8 @@ G_DEFINE_BOXED_TYPE (GtkIconSet, gtk_icon_set,
  * Copies @icon_set by value.
  *
  * Return value: a new #GtkIconSet identical to the first.
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  **/
 GtkIconSet*
 gtk_icon_set_copy (GtkIconSet *icon_set)
@@ -1475,6 +1506,8 @@ render_fallback_image (GtkStyleContext   *context,
  * Return value: (transfer full): a #GdkPixbuf to be displayed
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 GdkPixbuf *
 gtk_icon_set_render_icon_pixbuf (GtkIconSet        *icon_set,
@@ -1665,6 +1698,8 @@ icon_source_compare (gconstpointer ap, gconstpointer bp)
  *
  * gtk_icon_set_new_from_pixbuf() creates a new icon set with a
  * default icon source based on the given pixbuf.
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 void
 gtk_icon_set_add_source (GtkIconSet          *icon_set,
@@ -1693,6 +1728,8 @@ gtk_icon_set_add_source (GtkIconSet          *icon_set,
  *
  * Obtains a list of icon sizes this icon set can render. The returned
  * array must be freed with g_free().
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 void
 gtk_icon_set_get_sizes (GtkIconSet   *icon_set,
@@ -1797,6 +1834,8 @@ gtk_icon_set_get_sizes (GtkIconSet   *icon_set,
  * direction, widget state, or icon size.
  *
  * Return value: a new #GtkIconSource
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 GtkIconSource*
 gtk_icon_source_new (void)
@@ -1823,6 +1862,8 @@ gtk_icon_source_new (void)
  * Creates a copy of @source; mostly useful for language bindings.
  *
  * Return value: a new #GtkIconSource
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 GtkIconSource*
 gtk_icon_source_copy (const GtkIconSource *source)
@@ -1864,6 +1905,8 @@ gtk_icon_source_copy (const GtkIconSource *source)
  *
  * Frees a dynamically-allocated icon source, along with its
  * filename, size, and pixbuf fields if those are not %NULL.
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 void
 gtk_icon_source_free (GtkIconSource *source)
@@ -1916,6 +1959,8 @@ icon_source_clear (GtkIconSource *source)
  *
  * Sets the name of an image file to use as a base image when creating
  * icon variants for #GtkIconSet. The filename must be absolute.
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 void
 gtk_icon_source_set_filename (GtkIconSource *source,
@@ -1944,6 +1989,8 @@ gtk_icon_source_set_filename (GtkIconSource *source,
  *
  * Sets the name of an icon to look up in the current icon theme
  * to use as a base image when creating icon variants for #GtkIconSet.
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 void
 gtk_icon_source_set_icon_name (GtkIconSource *source,
@@ -1971,6 +2018,8 @@ gtk_icon_source_set_icon_name (GtkIconSource *source,
  *
  * Sets a pixbuf to use as a base image when creating icon variants
  * for #GtkIconSet.
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 void
 gtk_icon_source_set_pixbuf (GtkIconSource *source,
@@ -2002,6 +2051,8 @@ gtk_icon_source_set_pixbuf (GtkIconSource *source,
  *
  * Return value: (type filename): image filename. This string must not
  * be modified or freed.
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 const gchar*
 gtk_icon_source_get_filename (const GtkIconSource *source)
@@ -2023,6 +2074,8 @@ gtk_icon_source_get_filename (const GtkIconSource *source)
  * persist beyond the lifetime of the icon source.
  *
  * Return value: icon name. This string must not be modified or freed.
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 const gchar*
 gtk_icon_source_get_icon_name (const GtkIconSource *source)
@@ -2049,6 +2102,8 @@ gtk_icon_source_get_icon_name (const GtkIconSource *source)
  * not incremented.
  *
  * Return value: (transfer none): source pixbuf
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 GdkPixbuf*
 gtk_icon_source_get_pixbuf (const GtkIconSource *source)
@@ -2077,6 +2132,8 @@ gtk_icon_source_get_pixbuf (const GtkIconSource *source)
  *
  * #GtkIconSet prefers non-wildcarded sources (exact matches) over
  * wildcarded sources, and will use an exact match when possible.
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 void
 gtk_icon_source_set_direction_wildcarded (GtkIconSource *source,
@@ -2105,6 +2162,8 @@ gtk_icon_source_set_direction_wildcarded (GtkIconSource *source,
  * produce an appropriate icon for a given state, for example
  * lightening an image on prelight, but will not modify source images
  * that match exactly.
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 void
 gtk_icon_source_set_state_wildcarded (GtkIconSource *source,
@@ -2133,6 +2192,8 @@ gtk_icon_source_set_state_wildcarded (GtkIconSource *source,
  * #GtkIconSet will normally scale wildcarded source images to produce
  * an appropriate icon at a given size, but will not change the size
  * of source images that match exactly.
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 void
 gtk_icon_source_set_size_wildcarded (GtkIconSource *source,
@@ -2150,6 +2211,8 @@ gtk_icon_source_set_size_wildcarded (GtkIconSource *source,
  * Gets the value set by gtk_icon_source_set_size_wildcarded().
  *
  * Return value: %TRUE if this icon source is a base for any icon size variant
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 gboolean
 gtk_icon_source_get_size_wildcarded (const GtkIconSource *source)
@@ -2166,6 +2229,8 @@ gtk_icon_source_get_size_wildcarded (const GtkIconSource *source)
  * Gets the value set by gtk_icon_source_set_state_wildcarded().
  *
  * Return value: %TRUE if this icon source is a base for any widget state variant
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 gboolean
 gtk_icon_source_get_state_wildcarded (const GtkIconSource *source)
@@ -2182,6 +2247,8 @@ gtk_icon_source_get_state_wildcarded (const GtkIconSource *source)
  * Gets the value set by gtk_icon_source_set_direction_wildcarded().
  *
  * Return value: %TRUE if this icon source is a base for any text direction variant
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 gboolean
 gtk_icon_source_get_direction_wildcarded (const GtkIconSource *source)
@@ -2203,6 +2270,8 @@ gtk_icon_source_get_direction_wildcarded (const GtkIconSource *source)
  * if the text direction is wildcarded. Therefore, you should usually
  * call gtk_icon_source_set_direction_wildcarded() to un-wildcard it
  * in addition to calling this function.
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 void
 gtk_icon_source_set_direction (GtkIconSource   *source,
@@ -2225,6 +2294,8 @@ gtk_icon_source_set_direction (GtkIconSource   *source,
  * if the state is wildcarded. Therefore, you should usually
  * call gtk_icon_source_set_state_wildcarded() to un-wildcard it
  * in addition to calling this function.
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 void
 gtk_icon_source_set_state (GtkIconSource *source,
@@ -2247,6 +2318,8 @@ gtk_icon_source_set_state (GtkIconSource *source,
  * if the size is wildcarded. Therefore, you should usually
  * call gtk_icon_source_set_size_wildcarded() to un-wildcard it
  * in addition to calling this function.
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 void
 gtk_icon_source_set_size (GtkIconSource *source,
@@ -2266,6 +2339,8 @@ gtk_icon_source_set_size (GtkIconSource *source,
  * wildcarded.
  *
  * Return value: text direction this source matches
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 GtkTextDirection
 gtk_icon_source_get_direction (const GtkIconSource *source)
@@ -2284,6 +2359,8 @@ gtk_icon_source_get_direction (const GtkIconSource *source)
  * wildcarded.
  *
  * Return value: widget state this source matches
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 GtkStateType
 gtk_icon_source_get_state (const GtkIconSource *source)
@@ -2301,6 +2378,8 @@ gtk_icon_source_get_state (const GtkIconSource *source)
  * is only useful/meaningful if the icon size is <emphasis>not</emphasis> wildcarded.
  *
  * Return value: (type int): icon size this source matches.
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 GtkIconSize
 gtk_icon_source_get_size (const GtkIconSource *source)
@@ -2583,6 +2662,8 @@ _gtk_icon_set_invalidate_caches (void)
  * The list itself should be freed.
  *
  * Return value: List of ids in icon factories
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 GList*
 _gtk_icon_factory_list_ids (void)

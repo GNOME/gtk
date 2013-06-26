@@ -2547,12 +2547,15 @@ gtk_style_context_get_style (GtkStyleContext *context,
  * %NULL.
  *
  * Returns: (transfer none): The looked  up %GtkIconSet, or %NULL
+ *
+ * Deprecated: 3.10: Use gtk_icon_theme_lookup_icon() instead.
  **/
 GtkIconSet *
 gtk_style_context_lookup_icon_set (GtkStyleContext *context,
                                    const gchar     *stock_id)
 {
   GtkStyleContextPrivate *priv;
+  GtkIconSet *icon_set;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
   g_return_val_if_fail (stock_id != NULL, NULL);
@@ -2560,7 +2563,13 @@ gtk_style_context_lookup_icon_set (GtkStyleContext *context,
   priv = context->priv;
   g_return_val_if_fail (priv->widget != NULL || priv->widget_path != NULL, NULL);
 
-  return gtk_icon_factory_lookup_default (stock_id);
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
+  icon_set = gtk_icon_factory_lookup_default (stock_id);
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
+  return icon_set;
 }
 
 /**
@@ -4401,6 +4410,8 @@ gtk_render_activity (GtkStyleContext *context,
  * Returns: (transfer full): a newly-created #GdkPixbuf containing the rendered icon
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.10: Use gtk_icon_theme_load_icon() instead.
  **/
 GdkPixbuf *
 gtk_render_icon_pixbuf (GtkStyleContext     *context,

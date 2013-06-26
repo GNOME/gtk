@@ -154,7 +154,6 @@ main (int argc, char **argv)
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   image = gtk_image_new_from_stock (GTK_STOCK_REDO, GTK_ICON_SIZE_DIALOG);
   gtk_grid_attach (GTK_GRID (grid), image, 1, 2, 1, 1);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   label = gtk_label_new ("GTK_IMAGE_ICON_SET");
   gtk_grid_attach (GTK_GRID (grid), label, 0, 3, 1, 1);
@@ -165,6 +164,7 @@ main (int argc, char **argv)
   gtk_icon_set_add_source (iconset, iconsource);
   image = gtk_image_new_from_icon_set (iconset, GTK_ICON_SIZE_DIALOG);
   gtk_grid_attach (GTK_GRID (grid), image, 1, 3, 1, 1);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   label = gtk_label_new ("GTK_IMAGE_ICON_NAME");
   gtk_grid_attach (GTK_GRID (grid), label, 0, 4, 1, 1);

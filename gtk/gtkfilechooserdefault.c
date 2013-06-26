@@ -3119,14 +3119,11 @@ static void
 change_icon_theme (GtkFileChooserDefault *impl)
 {
   GtkFileChooserDefaultPrivate *priv = impl->priv;
-  GtkSettings *settings;
   gint width, height;
 
   profile_start ("start", NULL);
 
-  settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (impl)));
-
-  if (gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_MENU, &width, &height))
+  if (gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &width, &height))
     priv->icon_size = MAX (width, height);
   else
     priv->icon_size = FALLBACK_ICON_SIZE;

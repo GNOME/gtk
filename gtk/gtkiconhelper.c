@@ -53,7 +53,9 @@ _gtk_icon_helper_clear (GtkIconHelper *self)
 
   if (self->priv->icon_set != NULL)
     {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_icon_set_unref (self->priv->icon_set);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       self->priv->icon_set = NULL;
     }
 
@@ -113,19 +115,12 @@ ensure_icon_size (GtkIconHelper *self,
 		  gint *height_out)
 {
   gint width, height;
-  GtkSettings *settings;
-  GdkScreen *screen;
-
-  screen = gtk_style_context_get_screen (context);
-  settings = gtk_settings_get_for_screen (screen);
 
   if (self->priv->pixel_size != -1)
     {
       width = height = self->priv->pixel_size;
     }
-  else if (!gtk_icon_size_lookup_for_settings (settings,
-					       self->priv->icon_size,
-					       &width, &height))
+  else if (!gtk_icon_size_lookup (self->priv->icon_size, &width, &height))
     {
       if (self->priv->icon_size == GTK_ICON_SIZE_INVALID)
         {
@@ -177,6 +172,10 @@ ensure_stated_icon_from_info (GtkIconHelper *self,
       GtkIconSource *source;
       GdkPixbuf *rendered;
 
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
+      /* FIXME: use gtk_icon_info_load_icon? */
+
       source = gtk_icon_source_new ();
       gtk_icon_source_set_pixbuf (source, destination);
       /* The size here is arbitrary; since size isn't
@@ -189,6 +188,8 @@ ensure_stated_icon_from_info (GtkIconHelper *self,
 
       rendered = gtk_render_icon_pixbuf (context, source, (GtkIconSize) -1);
       gtk_icon_source_free (source);
+
+      G_GNUC_END_IGNORE_DEPRECATIONS;
 
       g_object_unref (destination);
       destination = rendered;
@@ -279,8 +280,10 @@ ensure_pixbuf_for_icon_set (GtkIconHelper *self,
   if (!check_invalidate_pixbuf (self, context))
     return;
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   self->priv->rendered_pixbuf = 
     gtk_icon_set_render_icon_pixbuf (icon_set, context, self->priv->icon_size);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 static void
@@ -329,11 +332,13 @@ _gtk_icon_helper_ensure_pixbuf (GtkIconHelper *self,
       break;
 
     case GTK_IMAGE_STOCK:
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       icon_set = gtk_style_context_lookup_icon_set (context, self->priv->stock_id);
       if (icon_set != NULL)
 	ensure_pixbuf_for_icon_set (self, context, icon_set);
       else
 	pixbuf = NULL;
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
 
     case GTK_IMAGE_ICON_SET:
@@ -436,7 +441,9 @@ _gtk_icon_helper_set_icon_set (GtkIconHelper *self,
   if (icon_set != NULL)
     {
       self->priv->storage_type = GTK_IMAGE_ICON_SET;
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       self->priv->icon_set = gtk_icon_set_ref (icon_set);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       _gtk_icon_helper_set_icon_size (self, icon_size);
     }
 }

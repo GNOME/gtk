@@ -409,12 +409,9 @@ emit_drag_perform_drop (GtkPlacesSidebar *sidebar,
 static gint
 get_icon_size (GtkPlacesSidebar *sidebar)
 {
-	GtkSettings *settings;
 	gint width, height;
 
-	settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (sidebar)));
-
-	if (gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_MENU, &width, &height))
+	if (gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &width, &height))
 		return MAX (width, height);
 	else
 		return 16;

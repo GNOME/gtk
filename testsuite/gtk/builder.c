@@ -1922,7 +1922,9 @@ test_icon_factory (void)
   GtkIconSet *icon_set;
   GtkIconSource *icon_source;
   GtkWidget *image;
-  
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
   builder = builder_new_from_string (buffer1, -1, NULL);
   factory = gtk_builder_get_object (builder, "iconfactory1");
   g_assert (factory != NULL);
@@ -1983,6 +1985,7 @@ test_icon_factory (void)
                              GTK_BUILDER_ERROR_INVALID_ATTRIBUTE));
   g_error_free (error);
 #endif
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 
 }
 

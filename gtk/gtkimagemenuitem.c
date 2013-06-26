@@ -653,6 +653,8 @@ activatable_update_stock_id (GtkImageMenuItem *image_menu_item, GtkAction *actio
 
   image = gtk_image_menu_item_get_image (image_menu_item);
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
   if (GTK_IS_IMAGE (image) &&
       stock_id && gtk_icon_factory_lookup_default (stock_id))
     {
@@ -662,6 +664,8 @@ activatable_update_stock_id (GtkImageMenuItem *image_menu_item, GtkAction *actio
       return TRUE;
     }
 
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
   return FALSE;
 }
 
@@ -670,7 +674,12 @@ activatable_update_gicon (GtkImageMenuItem *image_menu_item, GtkAction *action)
 {
   GtkWidget   *image;
   GIcon       *icon = gtk_action_get_gicon (action);
-  const gchar *stock_id = gtk_action_get_stock_id (action);
+  const gchar *stock_id;
+  gboolean     ret = FALSE;
+
+  stock_id = gtk_action_get_stock_id (action);
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 
   image = gtk_image_menu_item_get_image (image_menu_item);
 
@@ -678,10 +687,12 @@ activatable_update_gicon (GtkImageMenuItem *image_menu_item, GtkAction *action)
       !(stock_id && gtk_icon_factory_lookup_default (stock_id)))
     {
       gtk_image_set_from_gicon (GTK_IMAGE (image), icon, GTK_ICON_SIZE_MENU);
-      return TRUE;
+      ret = TRUE;
     }
 
-  return FALSE;
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
+  return ret;
 }
 
 static void

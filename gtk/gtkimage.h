@@ -119,7 +119,7 @@ GtkWidget* gtk_image_new_from_pixbuf    (GdkPixbuf       *pixbuf);
 GDK_DEPRECATED_IN_3_10_FOR(gtk_image_new_from_icon_name)
 GtkWidget* gtk_image_new_from_stock     (const gchar     *stock_id,
                                          GtkIconSize      size);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10_FOR(gtk_image_new_from_icon_name)
 GtkWidget* gtk_image_new_from_icon_set  (GtkIconSet      *icon_set,
                                          GtkIconSize      size);
 GDK_AVAILABLE_IN_ALL
@@ -146,7 +146,7 @@ GDK_DEPRECATED_IN_3_10_FOR(gtk_image_set_from_icon_name)
 void gtk_image_set_from_stock     (GtkImage        *image,
                                    const gchar     *stock_id,
                                    GtkIconSize      size);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10_FOR(gtk_image_set_from_icon_name)
 void gtk_image_set_from_icon_set  (GtkImage        *image,
                                    GtkIconSet      *icon_set,
                                    GtkIconSize      size);

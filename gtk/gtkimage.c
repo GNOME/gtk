@@ -251,6 +251,12 @@ gtk_image_class_init (GtkImageClass *class)
                                                         NULL,
                                                         GTK_PARAM_READWRITE));
   
+  /**
+   * GtkImage:icon-set:
+   *
+   * Deprecated: 3.10: Use #GtkImage:icon-name instead.
+   */
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   g_object_class_install_property (gobject_class,
                                    PROP_ICON_SET,
                                    g_param_spec_boxed ("icon-set",
@@ -258,7 +264,8 @@ gtk_image_class_init (GtkImageClass *class)
                                                        P_("Icon set to display"),
                                                        GTK_TYPE_ICON_SET,
                                                        GTK_PARAM_READWRITE));
-  
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
   g_object_class_install_property (gobject_class,
                                    PROP_ICON_SIZE,
                                    g_param_spec_int ("icon-size",
@@ -431,8 +438,10 @@ gtk_image_set_property (GObject      *object,
       G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_ICON_SET:
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_image_set_from_icon_set (image, g_value_get_boxed (value),
                                    icon_size);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_ICON_SIZE:
       _gtk_icon_helper_set_icon_size (priv->icon_helper, g_value_get_int (value));
@@ -487,8 +496,10 @@ gtk_image_get_property (GObject     *object,
       g_value_set_string (value, _gtk_icon_helper_get_stock_id (priv->icon_helper));
       break;
     case PROP_ICON_SET:
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       g_value_set_boxed (value, _gtk_icon_helper_peek_icon_set (priv->icon_helper));
-      break;      
+      G_GNUC_END_IGNORE_DEPRECATIONS;
+      break;
     case PROP_ICON_SIZE:
       g_value_set_int (value, _gtk_icon_helper_get_icon_size (priv->icon_helper));
       break;
@@ -603,7 +614,7 @@ gtk_image_new_from_resource (const gchar *resource_path)
  * 
  * Note that this function just creates an #GtkImage from the pixbuf. The
  * #GtkImage created will not react to state changes. Should you want that, 
- * you should use gtk_image_new_from_icon_set().
+ * you should use gtk_image_new_from_icon_name().
  * 
  * Return value: a new #GtkImage
  **/
@@ -668,6 +679,8 @@ gtk_image_new_from_stock (const gchar    *stock_id,
  * #GtkImage will add its own reference rather than adopting yours.
  * 
  * Return value: a new #GtkImage
+ *
+ * Deprecated: 3.10: Use gtk_image_new_from_icon_name() instead.
  **/
 GtkWidget*
 gtk_image_new_from_icon_set (GtkIconSet     *icon_set,
@@ -677,7 +690,11 @@ gtk_image_new_from_icon_set (GtkIconSet     *icon_set,
 
   image = g_object_new (GTK_TYPE_IMAGE, NULL);
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
   gtk_image_set_from_icon_set (image, icon_set, size);
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   return GTK_WIDGET (image);
 }
@@ -955,6 +972,8 @@ gtk_image_set_from_stock  (GtkImage       *image,
  * @size: (type int): a stock icon size
  *
  * See gtk_image_new_from_icon_set() for details.
+ *
+ * Deprecated: 3.10: Use gtk_image_set_from_icon_name() instead.
  **/
 void
 gtk_image_set_from_icon_set  (GtkImage       *image,
@@ -969,6 +988,8 @@ gtk_image_set_from_icon_set  (GtkImage       *image,
 
   g_object_freeze_notify (G_OBJECT (image));
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
   if (icon_set)
     gtk_icon_set_ref (icon_set);
   
@@ -979,7 +1000,9 @@ gtk_image_set_from_icon_set  (GtkImage       *image,
       _gtk_icon_helper_set_icon_set (priv->icon_helper, icon_set, size);
       gtk_icon_set_unref (icon_set);
     }
-  
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
   g_object_notify (G_OBJECT (image), "icon-set");
   g_object_notify (G_OBJECT (image), "icon-size");
   

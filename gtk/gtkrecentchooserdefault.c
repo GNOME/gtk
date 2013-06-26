@@ -1327,16 +1327,9 @@ static gint
 get_icon_size_for_widget (GtkWidget   *widget,
 			  GtkIconSize  icon_size)
 {
-  GtkSettings *settings;
   gint width, height;
 
-  if (gtk_widget_has_screen (widget))
-    settings = gtk_settings_get_for_screen (gtk_widget_get_screen (widget));
-  else
-    settings = gtk_settings_get_default ();
-
-  if (gtk_icon_size_lookup_for_settings (settings, icon_size,
-                                         &width, &height))
+  if (gtk_icon_size_lookup (icon_size, &width, &height))
     return MAX (width, height);
 
   return FALLBACK_ICON_SIZE;

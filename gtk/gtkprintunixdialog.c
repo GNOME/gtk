@@ -2146,7 +2146,6 @@ draw_collate_cb (GtkWidget          *widget,
                  cairo_t            *cr,
                  GtkPrintUnixDialog *dialog)
 {
-  GtkSettings *settings;
   gint size;
   gfloat scale;
   gboolean collate, reverse, rtl;
@@ -2159,11 +2158,7 @@ draw_collate_cb (GtkWidget          *widget,
 
   rtl = (gtk_widget_get_direction (GTK_WIDGET (widget)) == GTK_TEXT_DIR_RTL);
 
-  settings = gtk_widget_get_settings (widget);
-  gtk_icon_size_lookup_for_settings (settings,
-                                     GTK_ICON_SIZE_DIALOG,
-                                     &size,
-                                     NULL);
+  gtk_icon_size_lookup (GTK_ICON_SIZE_DIALOG, &size, NULL);
   scale = size / 48.0;
   text_x = rtl ? 4 : 11;
 
@@ -2193,15 +2188,10 @@ gtk_print_unix_dialog_style_updated (GtkWidget *widget)
     {
       GtkPrintUnixDialog *dialog = (GtkPrintUnixDialog *)widget;
       GtkPrintUnixDialogPrivate *priv = dialog->priv;
-      GtkSettings *settings;
       gint size;
       gfloat scale;
 
-      settings = gtk_widget_get_settings (widget);
-      gtk_icon_size_lookup_for_settings (settings,
-                                         GTK_ICON_SIZE_DIALOG,
-                                         &size,
-                                         NULL);
+      gtk_icon_size_lookup (GTK_ICON_SIZE_DIALOG, &size, NULL);
       scale = size / 48.0;
 
       gtk_widget_set_size_request (priv->collate_image,

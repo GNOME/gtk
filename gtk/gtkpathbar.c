@@ -1270,12 +1270,9 @@ reload_icons (GtkPathBar *path_bar)
 static void
 change_icon_theme (GtkPathBar *path_bar)
 {
-  GtkSettings *settings;
   gint width, height;
 
-  settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (path_bar)));
-
-  if (gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_MENU, &width, &height))
+  if (gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &width, &height))
     path_bar->priv->icon_size = MAX (width, height);
   else
     path_bar->priv->icon_size = FALLBACK_ICON_SIZE;

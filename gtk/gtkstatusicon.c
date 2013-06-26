@@ -1332,24 +1332,15 @@ static gint
 round_pixel_size (GtkWidget *widget, 
                   gint       pixel_size)
 {
-  GdkScreen *screen;
-  GtkSettings *settings;
   GtkIconSize s;
   gint w, h, d, dist, size;
-
-  screen = gtk_widget_get_screen (widget);
-
-  if (!screen)
-    return GTK_ICON_SIZE_MENU;
-
-  settings = gtk_settings_get_for_screen (screen);
 
   dist = G_MAXINT;
   size = 0;
 
   for (s = GTK_ICON_SIZE_MENU; s <= GTK_ICON_SIZE_DIALOG; s++)
     {
-      if (gtk_icon_size_lookup_for_settings (settings, s, &w, &h))
+      if (gtk_icon_size_lookup (s, &w, &h))
 	{
 	  d = MAX (abs (pixel_size - w), abs (pixel_size - h));
 	  if (d < dist)

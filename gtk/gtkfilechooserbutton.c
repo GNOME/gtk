@@ -1372,7 +1372,6 @@ static void
 change_icon_theme (GtkFileChooserButton *button)
 {
   GtkFileChooserButtonPrivate *priv = button->priv;
-  GtkSettings *settings;
   GtkIconTheme *theme;
   GtkTreeIter iter;
   GSList *l;
@@ -1386,10 +1385,7 @@ change_icon_theme (GtkFileChooserButton *button)
   g_slist_free (button->priv->change_icon_theme_cancellables);
   button->priv->change_icon_theme_cancellables = NULL;
 
-  settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (button)));
-
-  if (gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_MENU,
-					 &width, &height))
+  if (gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &width, &height))
     priv->icon_size = MAX (width, height);
   else
     priv->icon_size = FALLBACK_ICON_SIZE;

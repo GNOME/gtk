@@ -169,12 +169,9 @@ gtk_image_accessible_get_image_size (AtkImage *image,
     case GTK_IMAGE_GICON:
       {
         GtkIconSize size;
-        GtkSettings *settings;
-
-        settings = gtk_settings_get_for_screen (gtk_widget_get_screen (widget));
 
         g_object_get (gtk_image, "icon-size", &size, NULL);
-        gtk_icon_size_lookup_for_settings (settings, size, width, height);
+        gtk_icon_size_lookup (size, width, height);
         break;
       }
     case GTK_IMAGE_ANIMATION:

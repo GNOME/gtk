@@ -196,16 +196,11 @@ gtk_cell_renderer_spinner_update_size (GtkCellRendererSpinner *cell,
                                        GtkWidget              *widget)
 {
   GtkCellRendererSpinnerPrivate *priv = cell->priv;
-  GdkScreen *screen;
-  GtkSettings *settings;
 
   if (priv->old_icon_size == priv->icon_size)
     return;
 
-  screen = gtk_widget_get_screen (GTK_WIDGET (widget));
-  settings = gtk_settings_get_for_screen (screen);
-
-  if (!gtk_icon_size_lookup_for_settings (settings, priv->icon_size, &priv->size, NULL))
+  if (!gtk_icon_size_lookup (priv->icon_size, &priv->size, NULL))
     {
       g_warning ("Invalid icon size %u\n", priv->icon_size);
       priv->size = 24;

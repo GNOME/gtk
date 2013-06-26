@@ -2662,13 +2662,7 @@ lookup_icon_size (GtkThemingEngine *engine,
 		  gint             *width,
 		  gint             *height)
 {
-  GdkScreen *screen;
-  GtkSettings *settings;
-
-  screen = gtk_theming_engine_get_screen (engine);
-  settings = gtk_settings_get_for_screen (screen);
-
-  return gtk_icon_size_lookup_for_settings (settings, size, width, height);
+  return gtk_icon_size_lookup (size, width, height);
 }
 
 static void
@@ -2704,8 +2698,12 @@ gtk_theming_engine_render_icon_pixbuf (GtkThemingEngine    *engine,
   gint height = 1;
   cairo_t *cr;
   cairo_surface_t *surface;
+  gboolean wildcarded;
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   base_pixbuf = gtk_icon_source_get_pixbuf (source);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
   state = gtk_theming_engine_get_state (engine);
 
   g_return_val_if_fail (base_pixbuf != NULL, NULL);
@@ -2720,14 +2718,16 @@ gtk_theming_engine_render_icon_pixbuf (GtkThemingEngine    *engine,
   /* If the size was wildcarded, and we're allowed to scale, then scale; otherwise,
    * leave it alone.
    */
-  if (size != (GtkIconSize) -1 &&
-      gtk_icon_source_get_size_wildcarded (source))
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  wildcarded = gtk_icon_source_get_size_wildcarded (source);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+  if (size != (GtkIconSize) -1 && wildcarded)
     scaled = scale_or_ref (base_pixbuf, width, height);
   else
     scaled = g_object_ref (base_pixbuf);
 
   /* If the state was wildcarded, then generate a state. */
-  if (gtk_icon_source_get_state_wildcarded (source))
+  if (wildcarded)
     {
       if (state & GTK_STATE_FLAG_INSENSITIVE)
         {
