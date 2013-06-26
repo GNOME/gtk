@@ -121,7 +121,6 @@ create_search_menu (GtkWidget *entry)
 {
   GtkWidget *menu;
   GtkWidget *item;
-  GtkWidget *image;
 
   menu = gtk_menu_new ();
 
