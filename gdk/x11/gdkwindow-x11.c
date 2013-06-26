@@ -157,6 +157,7 @@ gdk_window_impl_x11_init (GdkWindowImplX11 *impl)
   impl->toplevel_window_type = -1;
   impl->device_cursor = g_hash_table_new_full (NULL, NULL,
                                                NULL, g_object_unref);
+  impl->frame_sync_enabled = TRUE;
 }
 
 GdkToplevelX11 *
@@ -403,7 +404,8 @@ gdk_x11_window_end_frame (GdkWindow *window)
 		       impl->toplevel->extended_update_counter,
 		       impl->toplevel->current_counter_value);
 
-      if (gdk_x11_screen_supports_net_wm_hint (gdk_window_get_screen (window),
+      if (impl->frame_sync_enabled &&
+          gdk_x11_screen_supports_net_wm_hint (gdk_window_get_screen (window),
 					       gdk_atom_intern_static_string ("_NET_WM_FRAME_DRAWN")))
         {
           impl->toplevel->frame_pending = TRUE;
@@ -5304,6 +5306,37 @@ gdk_x11_window_get_xid (GdkWindow *window)
     }
   
   return GDK_WINDOW_IMPL_X11 (window->impl)->xid;
+}
+
+/**
+ * gdk_x11_window_set_frame_sync_enabled:
+ * @window: (type GdkX11Window): a native #GdkWindow
+ * @frame_sync_enabled: whether frame-synchronization should be enabled
+ *
+ * This function can be used to disable frame synchronization for a window.
+ * Normally frame synchronziation will be enabled or disabled based on whether
+ * the system has a compositor that supports frame synchronization, but if
+ * the window is not directly managed by the window manager, then frame
+ * synchronziation may need to be disabled. This is the case for a window
+ * embedded via the XEMBED protocol.
+ *
+ * Since: 3.8
+ */
+void
+gdk_x11_window_set_frame_sync_enabled (GdkWindow *window,
+                                       gboolean   frame_sync_enabled)
+{
+  /* Try to ensure the window has a native window */
+  if (!_gdk_window_has_impl (window))
+    gdk_window_ensure_native (window);
+
+  if (!GDK_WINDOW_IS_X11 (window))
+    {
+      g_warning (G_STRLOC " drawable is not a native X11 window");
+      return;
+    }
+
+  GDK_WINDOW_IMPL_X11 (window->impl)->frame_sync_enabled = FALSE;
 }
 
 static void

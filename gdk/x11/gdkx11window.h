@@ -67,6 +67,10 @@ void     gdk_x11_window_set_hide_titlebar_when_maximized (GdkWindow *window,
                                                           gboolean   hide_titlebar_when_maximized);
 void     gdk_x11_window_move_to_current_desktop (GdkWindow   *window);
 
+GDK_AVAILABLE_IN_3_8
+void     gdk_x11_window_set_frame_sync_enabled (GdkWindow *window,
+                                                gboolean   frame_sync_enabled);
+
 /**
  * GDK_WINDOW_XDISPLAY:
  * @win: a #GdkWindow.

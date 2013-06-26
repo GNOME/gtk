@@ -1057,6 +1057,13 @@ gtk_plug_realize (GtkWidget *widget)
       else /* If it's a passive plug, we use the root window */
         gdk_window = gdk_window_new (gtk_widget_get_root_window (widget),
                                      &attributes, attributes_mask);
+      /* Because the window isn't known to the window manager,
+       * frame sync won't work. In theory, XEMBED could be extended
+       * so that embedder did frame sync like a window manager, but
+       * it's just not worth the effort considering the current
+       * minimal use of XEMBED.
+       */
+      gdk_x11_window_set_frame_sync_enabled (gdk_window, FALSE);
       gtk_widget_set_window (widget, gdk_window);
 
       gdk_display_sync (gtk_widget_get_display (widget));
