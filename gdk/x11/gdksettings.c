@@ -43,7 +43,6 @@ static const struct {
   {"Gtk/IMStatusStyle",       "gtk-im-status-style"},
   {"Gtk/Modules",             "gtk-modules"},
   {"Gtk/FileChooserBackend",  "gtk-file-chooser-backend"},
-  {"Gtk/MenuImages",          "gtk-menu-images"},
   {"Gtk/MenuBarAccel",        "gtk-menu-bar-accel"},
   {"Gtk/CursorThemeName",     "gtk-cursor-theme-name"},
   {"Gtk/CursorThemeSize",     "gtk-cursor-theme-size"},

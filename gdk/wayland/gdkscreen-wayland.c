@@ -481,7 +481,6 @@ static TranslationEntry translations[] = {
   { "org.gnome.desktop.interface", "cursor-blink", "gtk-cursor-blink", G_TYPE_BOOLEAN,  { .b = TRUE } },
   { "org.gnome.desktop.interface", "cursor-blink-time", "gtk-cursor-blink-time", G_TYPE_INT, { .i = 1200 } },
   { "org.gnome.desktop.interface", "cursor-blink-timeout", "gtk-cursor-blink-timeout", G_TYPE_INT, { .i = 3600 } },
-  { "org.gnome.desktop.interface", "menus-have-icons", "gtk-menu-images", G_TYPE_BOOLEAN, { .b = FALSE } },
   { "org.gnome.desktop.interface", "gtk-im-module", "gtk-im-module", G_TYPE_STRING, { .s = "simple" } },
   { "org.gnome.desktop.interface", "enable-animations", "gtk-enable-animations", G_TYPE_BOOLEAN, { .b = TRUE } },
   { "org.gnome.desktop.interface", "automatic-mnemonics", "gtk-auto-mnemonics", G_TYPE_BOOLEAN, { .b = TRUE } },

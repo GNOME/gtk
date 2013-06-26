@@ -88,7 +88,7 @@
  *   /&ast; make sure the type is realized &ast;/
  *   g_type_class_unref (g_type_class_ref (GTK_TYPE_IMAGE_MENU_ITEM));
  *
- *   g_object_set (gtk_settings_get_default (), "gtk-menu-images", FALSE, NULL);
+ *   g_object_set (gtk_settings_get_default (), "gtk-enable-animations", FALSE, NULL);
  * </programlisting></informalexample>
  *
  * There is one GtkSettings instance per screen. It can be obtained with
@@ -1276,11 +1276,18 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              NULL);
   g_assert (result == PROP_ENTRY_PASSWORD_HINT_TIMEOUT);
 
+  /**
+   * GtkSettings::gtk-menu-images:
+   *
+   * Whether images should be shown in menu items
+   *
+   * Deprecated: 3.10: This setting is ignored
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-menu-images",
                                                                    P_("Show menu images"),
                                                                    P_("Whether images should be shown in menus"),
-                                                                   TRUE,
+                                                                   FALSE,
                                                                    GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_MENU_IMAGES);

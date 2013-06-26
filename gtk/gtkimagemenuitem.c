@@ -107,8 +107,6 @@ static void gtk_image_menu_item_get_property         (GObject         *object,
                                                       guint            prop_id,
                                                       GValue          *value,
                                                       GParamSpec      *pspec);
-static void gtk_image_menu_item_screen_changed       (GtkWidget        *widget,
-                                                      GdkScreen        *previous_screen);
 
 static void gtk_image_menu_item_recalculate          (GtkImageMenuItem *image_menu_item);
 
@@ -134,7 +132,6 @@ gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
   GtkContainerClass *container_class = (GtkContainerClass*) klass;
 
   widget_class->destroy = gtk_image_menu_item_destroy;
-  widget_class->screen_changed = gtk_image_menu_item_screen_changed;
   widget_class->get_preferred_width = gtk_image_menu_item_get_preferred_width;
   widget_class->get_preferred_height = gtk_image_menu_item_get_preferred_height;
   widget_class->get_preferred_height_for_width = gtk_image_menu_item_get_preferred_height_for_width;
@@ -180,10 +177,9 @@ gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
   /**
    * GtkImageMenuItem:always-show-image:
    *
-   * If %TRUE, the menu item will ignore the #GtkSettings:gtk-menu-images
-   * setting and always show the image, if available.
+   * If %TRUE, the menu item will always show the image, if available.
    *
-   * Use this property if the menuitem would be useless or hard to use
+   * Use this property only if the menuitem would be useless or hard to use
    * without the image.
    *
    * Since: 2.16
@@ -301,21 +297,6 @@ gtk_image_menu_item_get_property (GObject         *object,
     }
 }
 
-static gboolean
-show_image (GtkImageMenuItem *image_menu_item)
-{
-  GtkImageMenuItemPrivate *priv = image_menu_item->priv;
-  GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (image_menu_item));
-  gboolean show;
-
-  if (priv->always_show_image)
-    show = TRUE;
-  else
-    g_object_get (settings, "gtk-menu-images", &show, NULL);
-
-  return show;
-}
-
 static void
 gtk_image_menu_item_map (GtkWidget *widget)
 {
@@ -326,7 +307,7 @@ gtk_image_menu_item_map (GtkWidget *widget)
 
   if (priv->image)
     g_object_set (priv->image,
-                  "visible", show_image (image_menu_item),
+                  "visible", priv->always_show_image,
                   NULL);
 }
 
@@ -925,8 +906,7 @@ gtk_image_menu_item_get_use_stock (GtkImageMenuItem *image_menu_item)
  * @image_menu_item: a #GtkImageMenuItem
  * @always_show: %TRUE if the menuitem should always show the image
  *
- * If %TRUE, the menu item will ignore the #GtkSettings:gtk-menu-images
- * setting and always show the image, if available.
+ * If %TRUE, the menu item will always show the image, if available.
  *
  * Use this property if the menuitem would be useless or hard to use
  * without the image.
@@ -949,7 +929,7 @@ gtk_image_menu_item_set_always_show_image (GtkImageMenuItem *image_menu_item,
 
       if (priv->image)
         {
-          if (show_image (image_menu_item))
+          if (priv->always_show_image)
             gtk_widget_show (priv->image);
           else
             gtk_widget_hide (priv->image);
@@ -963,8 +943,7 @@ gtk_image_menu_item_set_always_show_image (GtkImageMenuItem *image_menu_item,
  * gtk_image_menu_item_get_always_show_image:
  * @image_menu_item: a #GtkImageMenuItem
  *
- * Returns whether the menu item will ignore the #GtkSettings:gtk-menu-images
- * setting and always show the image, if available.
+ * Returns whether the menu item will always show the image, if available.
  *
  * Returns: %TRUE if the menu item will always show the image
  *
@@ -1059,7 +1038,7 @@ gtk_image_menu_item_set_image (GtkImageMenuItem *image_menu_item,
 
   gtk_widget_set_parent (image, GTK_WIDGET (image_menu_item));
   g_object_set (image,
-                "visible", show_image (image_menu_item),
+                "visible", priv->always_show_image,
                 "no-show-all", TRUE,
                 NULL);
 
@@ -1109,67 +1088,4 @@ gtk_image_menu_item_remove (GtkContainer *container,
     {
       GTK_CONTAINER_CLASS (gtk_image_menu_item_parent_class)->remove (container, child);
     }
-}
-
-static void
-show_image_change_notify (GtkImageMenuItem *image_menu_item)
-{
-  GtkImageMenuItemPrivate *priv = image_menu_item->priv;
-
-  if (priv->image)
-    {
-      if (show_image (image_menu_item))
-        gtk_widget_show (priv->image);
-      else
-        gtk_widget_hide (priv->image);
-    }
-}
-
-static void
-traverse_container (GtkWidget *widget,
-                    gpointer   data)
-{
-  if (GTK_IS_IMAGE_MENU_ITEM (widget))
-    show_image_change_notify (GTK_IMAGE_MENU_ITEM (widget));
-  else if (GTK_IS_CONTAINER (widget))
-    gtk_container_forall (GTK_CONTAINER (widget), traverse_container, NULL);
-}
-
-static void
-gtk_image_menu_item_setting_changed (GtkSettings *settings)
-{
-  GList *list, *l;
-
-  list = gtk_window_list_toplevels ();
-
-  for (l = list; l; l = l->next)
-    gtk_container_forall (GTK_CONTAINER (l->data),
-                          traverse_container, NULL);
-
-  g_list_free (list);
-}
-
-static void
-gtk_image_menu_item_screen_changed (GtkWidget *widget,
-                                    GdkScreen *previous_screen)
-{
-  GtkSettings *settings;
-  gulong show_image_connection;
-
-  if (!gtk_widget_has_screen (widget))
-    return;
-
-  settings = gtk_widget_get_settings (widget);
-
-  show_image_connection =
-    g_signal_handler_find (settings, G_SIGNAL_MATCH_FUNC, 0, 0,
-                           NULL, gtk_image_menu_item_setting_changed, NULL);
-
-  if (show_image_connection)
-    return;
-
-  g_signal_connect (settings, "notify::gtk-menu-images",
-                    G_CALLBACK (gtk_image_menu_item_setting_changed), NULL);
-
-  show_image_change_notify (GTK_IMAGE_MENU_ITEM (widget));
 }
