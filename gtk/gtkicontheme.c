@@ -174,7 +174,6 @@ struct _GtkIconThemePrivate
   GList *info_cache_lru;
 
   gchar *current_theme;
-  gchar *fallback_theme;
   gchar **search_path;
   gint search_path_len;
 
@@ -570,22 +569,13 @@ update_current_theme (GtkIconTheme *icon_theme)
   if (!priv->custom_theme)
     {
       gchar *theme = NULL;
-      gchar *fallback_theme = NULL;
       gboolean changed = FALSE;
 
       if (priv->screen)
 	{
 	  GtkSettings *settings = gtk_settings_get_for_screen (priv->screen);
-	  g_object_get (settings, 
-			"gtk-icon-theme-name", &theme, 
-			"gtk-fallback-icon-theme", &fallback_theme, NULL);
+	  g_object_get (settings, "gtk-icon-theme-name", &theme, NULL);
 	}
-
-      /* ensure that the current theme (even when just the default)
-       * is searched before any fallback theme
-       */
-      if (!theme && fallback_theme)
-	theme = g_strdup (DEFAULT_THEME_NAME);
 
       if (theme_changed (priv->current_theme, theme))
 	{
@@ -595,15 +585,6 @@ update_current_theme (GtkIconTheme *icon_theme)
 	}
       else
 	g_free (theme);
-
-      if (theme_changed (priv->fallback_theme, fallback_theme))
-	{
-	  g_free (priv->fallback_theme);
-	  priv->fallback_theme = fallback_theme;
-	  changed = TRUE;
-	}
-      else
-	g_free (fallback_theme);
 
       if (changed)
 	do_theme_change (icon_theme);
@@ -680,8 +661,6 @@ gtk_icon_theme_set_screen (GtkIconTheme *icon_theme,
       g_signal_connect (display, "closed",
 			G_CALLBACK (display_closed), icon_theme);
       g_signal_connect (settings, "notify::gtk-icon-theme-name",
-			G_CALLBACK (theme_changed), icon_theme);
-      g_signal_connect (settings, "notify::gtk-fallback-icon-theme-name",
 			G_CALLBACK (theme_changed), icon_theme);
     }
 
@@ -1257,9 +1236,7 @@ load_themes (GtkIconTheme *icon_theme)
   if (priv->current_theme)
     insert_theme (icon_theme, priv->current_theme);
 
-  /* Always look in the "default" icon theme, and in a fallback theme */
-  if (priv->fallback_theme)
-    insert_theme (icon_theme, priv->fallback_theme);
+  /* Always look in the "default" icon theme */
   insert_theme (icon_theme, DEFAULT_THEME_NAME);
   priv->themes = g_list_reverse (priv->themes);
 

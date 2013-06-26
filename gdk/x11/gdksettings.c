@@ -52,7 +52,6 @@ static const struct {
   {"Xft/HintStyle",           "gtk-xft-hintstyle"},
   {"Xft/RGBA",                "gtk-xft-rgba"},
   {"Xft/DPI",                 "gtk-xft-dpi"},
-  {"Net/FallbackIconTheme",   "gtk-fallback-icon-theme"},
   {"Gtk/TouchscreenMode",     "gtk-touchscreen-mode"},
   {"Gtk/EnableAccels",        "gtk-enable-accels"},
   {"Gtk/ScrolledWindowPlacement", "gtk-scrolled-window-placement"},

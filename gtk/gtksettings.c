@@ -448,6 +448,13 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              NULL);
   g_assert (result == PROP_ICON_THEME_NAME);
 
+  /**
+   * GtkSettings:gtk-fallback-icon-theme:
+   *
+   * Name of a icon theme to fall back to.
+   *
+   * Deprecated: 3.10: This setting is ignored.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-fallback-icon-theme",
                                                                   P_("Fallback Icon Theme Name"),
