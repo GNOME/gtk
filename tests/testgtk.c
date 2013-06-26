@@ -662,6 +662,7 @@ create_buttons (GtkWidget *widget)
       gtk_container_set_border_width (GTK_CONTAINER (grid), 10);
       gtk_box_pack_start (GTK_BOX (box1), grid, TRUE, TRUE, 0);
 
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       button[0] = gtk_button_new_with_label ("button1");
       button[1] = gtk_button_new_with_mnemonic ("_button2");
       button[2] = gtk_button_new_with_mnemonic ("_button3");
@@ -671,6 +672,7 @@ create_buttons (GtkWidget *widget)
       button[6] = gtk_button_new_with_label ("button7");
       button[7] = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
       button[8] = gtk_button_new_with_label ("button9");
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       
       for (i = 0; i < 9; i++)
         {
@@ -1292,7 +1294,11 @@ create_toolbar (GtkWidget *widget)
               gtk_container_add (GTK_CONTAINER (toolitem), entry);
             }
           else if (create_toolbar_items[i].stock_id)
-            toolitem = gtk_tool_button_new_from_stock (create_toolbar_items[i].stock_id);
+            {
+              G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+              toolitem = gtk_tool_button_new_from_stock (create_toolbar_items[i].stock_id);
+              G_GNUC_END_IGNORE_DEPRECATIONS;
+            }
           else
             {
               GtkWidget *icon;
@@ -3301,7 +3307,9 @@ create_menus (GtkWidget *widget)
       menu = create_menu (screen, 1, 5);
       gtk_menu_set_accel_group (GTK_MENU (menu), accel_group);
 
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_NEW, accel_group);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
       gtk_widget_show (menuitem);
       
