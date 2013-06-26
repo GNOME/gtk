@@ -315,7 +315,6 @@ _gdk_win32_window_delete_property (GdkWindow *window,
   "Gtk/IMStatusStyle\0"       "gtk-im-status-style\0"
   "Gtk/Modules\0"             "gtk-modules\0"
   "Gtk/FileChooserBackend\0"  "gtk-file-chooser-backend\0"
-  "Gtk/MenuBarAccel\0"        "gtk-menu-bar-accel\0"
   "Gtk/CursorThemeName\0"     "gtk-cursor-theme-name\0"
   "Gtk/CursorThemeSize\0"     "gtk-cursor-theme-size\0"
   "Gtk/TimeoutInitial\0"      "gtk-timeout-initial\0"

@@ -473,6 +473,13 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              NULL);
   g_assert (result == PROP_KEY_THEME_NAME);
 
+  /**
+   * GtkSettings:gtk-menu-bar-accel:
+   *
+   * Keybinding to activate the menu bar.
+   *
+   * Deprecated: 3.10: This setting is ignored.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-menu-bar-accel",
                                                                   P_("Menu bar accelerator"),
