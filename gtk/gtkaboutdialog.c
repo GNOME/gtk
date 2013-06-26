@@ -209,7 +209,6 @@ static void                 gtk_about_dialog_set_property   (GObject            
                                                              GParamSpec         *pspec);
 static void                 gtk_about_dialog_show           (GtkWidget          *widge);
 static void                 update_name_version             (GtkAboutDialog     *about);
-static GtkIconSet *         icon_set_new_from_pixbufs       (GList              *pixbufs);
 static void                 follow_if_link                  (GtkAboutDialog     *about,
                                                              GtkTextView        *text_view,
                                                              GtkTextIter        *iter);
@@ -1690,24 +1689,6 @@ gtk_about_dialog_get_logo (GtkAboutDialog *about)
     return NULL;
 }
 
-static GtkIconSet *
-icon_set_new_from_pixbufs (GList *pixbufs)
-{
-  GtkIconSet *icon_set = gtk_icon_set_new ();
-
-  for (; pixbufs; pixbufs = pixbufs->next)
-    {
-      GdkPixbuf *pixbuf = GDK_PIXBUF (pixbufs->data);
-
-      GtkIconSource *icon_source = gtk_icon_source_new ();
-      gtk_icon_source_set_pixbuf (icon_source, pixbuf);
-      gtk_icon_set_add_source (icon_set, icon_source);
-      gtk_icon_source_free (icon_source);
-    }
-
-  return icon_set;
-}
-
 /**
  * gtk_about_dialog_set_logo:
  * @about: a #GtkAboutDialog
@@ -1742,12 +1723,9 @@ gtk_about_dialog_set_logo (GtkAboutDialog *about,
 
       if (pixbufs != NULL)
         {
-          GtkIconSet *icon_set = icon_set_new_from_pixbufs (pixbufs);
+          gtk_image_set_from_pixbuf (GTK_IMAGE (priv->logo_image),
+                                     GDK_PIXBUF (pixbufs->data));
 
-          gtk_image_set_from_icon_set (GTK_IMAGE (priv->logo_image),
-                                       icon_set, GTK_ICON_SIZE_DIALOG);
-
-          gtk_icon_set_unref (icon_set);
           g_list_free (pixbufs);
         }
     }
