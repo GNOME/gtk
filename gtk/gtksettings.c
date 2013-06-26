@@ -1312,6 +1312,13 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              NULL);
   g_assert (result == PROP_MENU_IMAGES);
 
+  /**
+   * GtkSettings:gtk-menu-bar-popup-delay:
+   *
+   * Delay before the submenus of a menu bar appear.
+   *
+   * Deprecated: 3.10: This setting is ignored.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-menu-bar-popup-delay",
                                                                P_("Delay before drop down menus appear"),
@@ -1358,6 +1365,13 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              NULL);
   g_assert (result == PROP_CAN_CHANGE_ACCELS);
 
+  /**
+   * GtkSettings:gtk-menu-popup-delay:
+   *
+   * Minimum time the pointer must stay over a menu item before the submenu appear.
+   *
+   * Deprecated: 3.10: This setting is ignored.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-menu-popup-delay",
                                                                P_("Delay before submenus appear"),
@@ -1368,6 +1382,13 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              NULL);
   g_assert (result == PROP_MENU_POPUP_DELAY);
 
+  /**
+   * GtkSettings:gtk-menu-popdown-delay:
+   *
+   * The time before hiding a submenu when the pointer is moving towards the submenu.
+   *
+   * Deprecated: 3.10: This setting is ignored.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-menu-popdown-delay",
                                                                P_("Delay before hiding a submenu"),

@@ -45,6 +45,8 @@
 #include "a11y/gtkmenuitemaccessible.h"
 #include "deprecated/gtktearoffmenuitem.h"
 
+#define MENU_POPUP_DELAY     225
+
 /**
  * SECTION:gtkmenuitem
  * @Short_description: The widget used for item in menus
@@ -1953,19 +1955,9 @@ get_popup_delay (GtkWidget *widget)
 
   parent = gtk_widget_get_parent (widget);
   if (GTK_IS_MENU_SHELL (parent))
-    {
-      return _gtk_menu_shell_get_popup_delay (GTK_MENU_SHELL (parent));
-    }
+    return _gtk_menu_shell_get_popup_delay (GTK_MENU_SHELL (parent));
   else
-    {
-      gint popup_delay;
-
-      g_object_get (gtk_widget_get_settings (widget),
-                    "gtk-menu-popup-delay", &popup_delay,
-                    NULL);
-
-      return popup_delay;
-    }
+    return MENU_POPUP_DELAY;
 }
 
 void

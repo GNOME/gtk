@@ -130,6 +130,9 @@
 #define MENU_SCROLL_TIMEOUT1  50
 #define MENU_SCROLL_TIMEOUT2  20
 
+#define MENU_POPUP_DELAY     225
+#define MENU_POPDOWN_DELAY  1000
+
 #define ATTACH_INFO_KEY "gtk-menu-child-attach-info-key"
 #define ATTACHED_MENUS "gtk-attached-menus"
 
@@ -4318,8 +4321,6 @@ gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
 
   if (event->x >= 0 && event->x < width)
     {
-      gint popdown_delay;
-
       gtk_menu_stop_navigating_submenu (menu);
 
       /* The navigation region is the triangle closest to the x/y
@@ -4358,16 +4359,12 @@ gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
             return;
         }
 
-      g_object_get (gtk_widget_get_settings (GTK_WIDGET (menu)),
-                    "gtk-menu-popdown-delay", &popdown_delay,
-                    NULL);
-
       popdown_data = g_new (GtkMenuPopdownData, 1);
       popdown_data->menu = menu;
       popdown_data->device = gdk_event_get_device ((GdkEvent *) event);
 
       priv->navigation_timeout = gdk_threads_add_timeout_full (G_PRIORITY_DEFAULT,
-                                                               popdown_delay,
+                                                               MENU_POPDOWN_DELAY,
                                                                gtk_menu_stop_navigating_submenu_cb,
                                                                popdown_data,
                                                                (GDestroyNotify) g_free);
@@ -5093,13 +5090,7 @@ gtk_menu_attach (GtkMenu   *menu,
 static gint
 gtk_menu_get_popup_delay (GtkMenuShell *menu_shell)
 {
-  gint popup_delay;
-
-  g_object_get (gtk_widget_get_settings (GTK_WIDGET (menu_shell)),
-                "gtk-menu-popup-delay", &popup_delay,
-                NULL);
-
-  return popup_delay;
+  return MENU_POPUP_DELAY;
 }
 
 static GtkWidget *

@@ -52,6 +52,8 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 
+#define MENU_BAR_POPUP_DELAY 0
+
 /* Properties */
 enum {
   PROP_0,
@@ -862,13 +864,7 @@ get_shadow_type (GtkMenuBar *menubar)
 static gint
 gtk_menu_bar_get_popup_delay (GtkMenuShell *menu_shell)
 {
-  gint popup_delay;
-  
-  g_object_get (gtk_widget_get_settings (GTK_WIDGET (menu_shell)),
-		"gtk-menu-bar-popup-delay", &popup_delay,
-		NULL);
-
-  return popup_delay;
+  return MENU_BAR_POPUP_DELAY;
 }
 
 static void

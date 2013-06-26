@@ -60,6 +60,8 @@
 
 
 #define MENU_SHELL_TIMEOUT   500
+#define MENU_POPUP_DELAY     225
+#define MENU_POPDOWN_DELAY   1000
 
 #define PACK_DIRECTION(m)                                 \
    (GTK_IS_MENU_BAR (m)                                   \
@@ -837,13 +839,8 @@ gtk_menu_shell_button_release (GtkWidget      *widget,
               else if (GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement != GTK_TOP_BOTTOM ||
                        priv->activated_submenu)
                 {
-                  gint popdown_delay;
                   GTimeVal *popup_time;
                   gint64 usec_since_popup = 0;
-
-                  g_object_get (gtk_widget_get_settings (widget),
-                                "gtk-menu-popdown-delay", &popdown_delay,
-                                NULL);
 
                   popup_time = g_object_get_data (G_OBJECT (submenu),
                                                   "gtk-menu-exact-popup-time");
@@ -870,7 +867,7 @@ gtk_menu_shell_button_release (GtkWidget      *widget,
                    */
                   if (!priv->activated_submenu &&
                       (usec_since_popup == 0 ||
-                       usec_since_popup > popdown_delay * 1000))
+                       usec_since_popup > MENU_POPDOWN_DELAY * 1000))
                     {
                       _gtk_menu_item_popdown_submenu (menu_item);
                     }
@@ -1745,14 +1742,7 @@ _gtk_menu_shell_get_popup_delay (GtkMenuShell *menu_shell)
     }
   else
     {
-      gint popup_delay;
-      GtkWidget *widget = GTK_WIDGET (menu_shell);
-
-      g_object_get (gtk_widget_get_settings (widget),
-                    "gtk-menu-popup-delay", &popup_delay,
-                    NULL);
-
-      return popup_delay;
+      return MENU_POPUP_DELAY;
     }
 }
 
