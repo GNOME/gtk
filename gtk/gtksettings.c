@@ -612,6 +612,11 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              NULL);
   g_assert (result == PROP_ALTERNATIVE_SORT_ARROWS);
 
+  /**
+   * GtkSettings:gtk-show-input-method-menu:
+   *
+   * Deprecated: 3.10: This setting is ignored.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-show-input-method-menu",
                                                                    P_("Show the 'Input Methods' menu"),
@@ -621,6 +626,11 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              NULL);
   g_assert (result == PROP_SHOW_INPUT_METHOD_MENU);
 
+  /**
+   * GtkSettings:gtk-show-unicode-menu:
+   *
+   * Deprecated: 3.10: This setting is ignored.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-show-unicode-menu",
                                                                    P_("Show the 'Insert Unicode Control Character' menu"),
@@ -988,7 +998,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * This also can be a colon-separated list of input methods, which GTK+
    * will try in turn until it finds one available on the system.
    *
-   * See #GtkIMContext and see the #GtkSettings:gtk-show-input-method-menu property.
+   * See #GtkIMContext.
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-im-module",
