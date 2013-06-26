@@ -326,7 +326,6 @@ _gdk_win32_window_delete_property (GdkWindow *window,
   "Xft/HintStyle\0"           "gtk-xft-hintstyle\0"
   "Xft/RGBA\0"                "gtk-xft-rgba\0"
   "Xft/DPI\0"                 "gtk-xft-dpi\0"
-  "Gtk/TouchscreenMode\0"     "gtk-touchscreen-mode\0"
   "Gtk/EnableAccels\0"        "gtk-enable-accels\0"
   "Gtk/ScrolledWindowPlacement\0" "gtk-scrolled-window-placement\0"
   "Gtk/IMModule\0"            "gtk-im-module\0"
