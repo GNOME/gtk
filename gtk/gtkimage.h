@@ -133,6 +133,8 @@ GtkWidget* gtk_image_new_from_icon_name (const gchar     *icon_name,
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_new_from_gicon     (GIcon           *icon,
 					 GtkIconSize      size);
+GDK_AVAILABLE_IN_3_10
+GtkWidget* gtk_image_new_from_surface   (cairo_surface_t *surface);
 
 GDK_AVAILABLE_IN_ALL
 void gtk_image_clear              (GtkImage        *image);
@@ -164,6 +166,9 @@ GDK_AVAILABLE_IN_ALL
 void gtk_image_set_from_gicon     (GtkImage        *image,
 				   GIcon           *icon,
 				   GtkIconSize      size);
+GDK_AVAILABLE_IN_3_10
+void gtk_image_set_from_surface   (GtkImage        *image,
+				   cairo_surface_t *surface);
 GDK_AVAILABLE_IN_ALL
 void gtk_image_set_pixel_size     (GtkImage        *image,
 				   gint             pixel_size);
