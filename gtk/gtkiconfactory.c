@@ -649,14 +649,6 @@ struct _IconAlias
   gint   target;
 };
 
-typedef struct _SettingsIconSize SettingsIconSize;
-
-struct _SettingsIconSize
-{
-  gint width;
-  gint height;
-};
-
 static GHashTable *icon_aliases = NULL;
 static IconSize *icon_sizes = NULL;
 static gint      icon_sizes_allocated = 0;
@@ -732,215 +724,11 @@ init_icon_sizes (void)
     }
 }
 
-static void
-free_settings_sizes (gpointer data)
-{
-  g_array_free (data, TRUE);
-}
-
-static GArray *
-get_settings_sizes (GtkSettings *settings,
-		    gboolean    *created)
-{
-  GArray *settings_sizes;
-  static GQuark sizes_quark = 0;
-
-  if (!sizes_quark)
-    sizes_quark = g_quark_from_static_string ("gtk-icon-sizes");
-
-  settings_sizes = g_object_get_qdata (G_OBJECT (settings), sizes_quark);
-  if (!settings_sizes)
-    {
-      settings_sizes = g_array_new (FALSE, FALSE, sizeof (SettingsIconSize));
-      g_object_set_qdata_full (G_OBJECT (settings), sizes_quark,
-			       settings_sizes, free_settings_sizes);
-      if (created)
-	*created = TRUE;
-    }
-
-  return settings_sizes;
-}
-
-static void
-icon_size_set_for_settings (GtkSettings *settings,
-			    const gchar *size_name,
-			    gint         width,
-			    gint         height)
-{
-  GtkIconSize size;
-  GArray *settings_sizes;
-  SettingsIconSize *settings_size;
-
-  g_return_if_fail (size_name != NULL);
-
-  size = gtk_icon_size_from_name (size_name);
-  if (size == GTK_ICON_SIZE_INVALID)
-    /* Reserve a place */
-    size = icon_size_register_intern (size_name, -1, -1);
-
-  settings_sizes = get_settings_sizes (settings, NULL);
-  if (size >= settings_sizes->len)
-    {
-      SettingsIconSize unset = { -1, -1 };
-      gint i;
-
-      for (i = settings_sizes->len; i <= size; i++)
-	g_array_append_val (settings_sizes, unset);
-    }
-
-  settings_size = &g_array_index (settings_sizes, SettingsIconSize, size);
-
-  settings_size->width = width;
-  settings_size->height = height;
-}
-
-/* Like pango_parse_word, but accept - as well
- */
 static gboolean
-scan_icon_size_name (const char **pos, GString *out)
-{
-  const char *p = *pos;
-
-  while (g_ascii_isspace (*p))
-    p++;
-
-  if (!((*p >= 'A' && *p <= 'Z') ||
-	(*p >= 'a' && *p <= 'z') ||
-	*p == '_' || *p == '-'))
-    return FALSE;
-
-  g_string_truncate (out, 0);
-  g_string_append_c (out, *p);
-  p++;
-
-  while ((*p >= 'A' && *p <= 'Z') ||
-	 (*p >= 'a' && *p <= 'z') ||
-	 (*p >= '0' && *p <= '9') ||
-	 *p == '_' || *p == '-')
-    {
-      g_string_append_c (out, *p);
-      p++;
-    }
-
-  *pos = p;
-
-  return TRUE;
-}
-
-static void
-icon_size_setting_parse (GtkSettings *settings,
-			 const gchar *icon_size_string)
-{
-  GString *name_buf = g_string_new (NULL);
-  const gchar *p = icon_size_string;
-
-  while (pango_skip_space (&p))
-    {
-      gint width, height;
-
-      if (!scan_icon_size_name (&p, name_buf))
-	goto err;
-
-      if (!pango_skip_space (&p))
-	goto err;
-
-      if (*p != '=')
-	goto err;
-
-      p++;
-
-      if (!pango_scan_int (&p, &width))
-	goto err;
-
-      if (!pango_skip_space (&p))
-	goto err;
-
-      if (*p != ',')
-	goto err;
-
-      p++;
-
-      if (!pango_scan_int (&p, &height))
-	goto err;
-
-      if (width > 0 && height > 0)
-	{
-	  icon_size_set_for_settings (settings, name_buf->str,
-				      width, height);
-	}
-      else
-	{
-	  g_warning ("Invalid size in gtk-icon-sizes: %d,%d\n", width, height);
-	}
-
-      pango_skip_space (&p);
-      if (*p == '\0')
-	break;
-      if (*p == ':')
-	p++;
-      else
-	goto err;
-    }
-
-  g_string_free (name_buf, TRUE);
-  return;
-
- err:
-  g_warning ("Error parsing gtk-icon-sizes string:\n\t'%s'", icon_size_string);
-  g_string_free (name_buf, TRUE);
-}
-
-static void
-icon_size_set_all_from_settings (GtkSettings *settings)
-{
-  GArray *settings_sizes;
-  gchar *icon_size_string;
-
-  /* Reset old settings */
-  settings_sizes = get_settings_sizes (settings, NULL);
-  g_array_set_size (settings_sizes, 0);
-
-  g_object_get (settings,
-		"gtk-icon-sizes", &icon_size_string,
-		NULL);
-
-  if (icon_size_string)
-    {
-      icon_size_setting_parse (settings, icon_size_string);
-      g_free (icon_size_string);
-    }
-}
-
-static void
-icon_size_settings_changed (GtkSettings  *settings,
-			    GParamSpec   *pspec)
-{
-  icon_size_set_all_from_settings (settings);
-
-  gtk_style_context_reset_widgets (_gtk_settings_get_screen (settings));
-}
-
-static void
-icon_sizes_init_for_settings (GtkSettings *settings)
-{
-  g_signal_connect (settings,
-		    "notify::gtk-icon-sizes",
-		    G_CALLBACK (icon_size_settings_changed),
-		    NULL);
-
-  icon_size_set_all_from_settings (settings);
-}
-
-static gboolean
-icon_size_lookup_intern (GtkSettings *settings,
-			 GtkIconSize  size,
+icon_size_lookup_intern (GtkIconSize  size,
 			 gint        *widthp,
 			 gint        *heightp)
 {
-  GArray *settings_sizes;
-  gint width_for_settings = -1;
-  gint height_for_settings = -1;
-
   init_icon_sizes ();
 
   if (size == (GtkIconSize)-1)
@@ -952,31 +740,11 @@ icon_size_lookup_intern (GtkSettings *settings,
   if (size == GTK_ICON_SIZE_INVALID)
     return FALSE;
 
-  if (settings)
-    {
-      gboolean initial = FALSE;
-
-      settings_sizes = get_settings_sizes (settings, &initial);
-
-      if (initial)
-	icon_sizes_init_for_settings (settings);
-
-      if (size < settings_sizes->len)
-	{
-	  SettingsIconSize *settings_size;
-
-	  settings_size = &g_array_index (settings_sizes, SettingsIconSize, size);
-
-	  width_for_settings = settings_size->width;
-	  height_for_settings = settings_size->height;
-	}
-    }
-
   if (widthp)
-    *widthp = width_for_settings >= 0 ? width_for_settings : icon_sizes[size].width;
+    *widthp = icon_sizes[size].width;
 
   if (heightp)
-    *heightp = height_for_settings >= 0 ? height_for_settings : icon_sizes[size].height;
+    *heightp = icon_sizes[size].height;
 
   return TRUE;
 }
@@ -1003,6 +771,8 @@ icon_size_lookup_intern (GtkSettings *settings,
  * Return value: %TRUE if @size was a valid size
  *
  * Since: 2.2
+ *
+ * Deprecated: 3.10: Use gtk_icon_size_lookup() instead.
  */
 gboolean
 gtk_icon_size_lookup_for_settings (GtkSettings *settings,
@@ -1012,7 +782,7 @@ gtk_icon_size_lookup_for_settings (GtkSettings *settings,
 {
   g_return_val_if_fail (GTK_IS_SETTINGS (settings), FALSE);
 
-  return icon_size_lookup_intern (settings, size, width, height);
+  return icon_size_lookup_intern (size, width, height);
 }
 
 /**
@@ -1021,12 +791,9 @@ gtk_icon_size_lookup_for_settings (GtkSettings *settings,
  * @width: (out) (allow-none): location to store icon width
  * @height: (out) (allow-none): location to store icon height
  *
- * Obtains the pixel size of a semantic icon size, possibly
- * modified by user preferences for the default #GtkSettings.
- * (See gtk_icon_size_lookup_for_settings().)
- * Normally @size would be
+ * Obtains the pixel size of a semantic icon size @size:
  * #GTK_ICON_SIZE_MENU, #GTK_ICON_SIZE_BUTTON, etc.  This function
- * isn't normally needed, gtk_widget_render_icon_pixbuf() is the usual
+ * isn't normally needed, gtk_icon_theme_load_icon() is the usual
  * way to get an icon for rendering, then just look at the size of
  * the rendered pixbuf. The rendered pixbuf may not even correspond to
  * the width/height returned by gtk_icon_size_lookup(), because themes
@@ -1043,8 +810,7 @@ gtk_icon_size_lookup (GtkIconSize  size,
   GTK_NOTE (MULTIHEAD,
 	    g_warning ("gtk_icon_size_lookup ()) is not multihead safe"));
 
-  return gtk_icon_size_lookup_for_settings (gtk_settings_get_default (),
-					    size, widthp, heightp);
+  return icon_size_lookup_intern (size, widthp, heightp);
 }
 
 static GtkIconSize
@@ -1133,7 +899,7 @@ gtk_icon_size_register_alias (const gchar *alias,
 
   init_icon_sizes ();
 
-  if (!icon_size_lookup_intern (NULL, target, NULL, NULL))
+  if (!icon_size_lookup_intern (target, NULL, NULL))
     g_warning ("gtk_icon_size_register_alias: Icon size %u does not exist", target);
 
   ia = g_hash_table_lookup (icon_aliases, alias);
@@ -1412,8 +1178,8 @@ sizes_equivalent (GtkIconSize lhs,
 
   gint r_w, r_h, l_w, l_h;
 
-  icon_size_lookup_intern (NULL, rhs, &r_w, &r_h);
-  icon_size_lookup_intern (NULL, lhs, &l_w, &l_h);
+  icon_size_lookup_intern (rhs, &r_w, &r_h);
+  icon_size_lookup_intern (lhs, &l_w, &l_h);
 
   return r_w == l_w && r_h == l_h;
 #endif

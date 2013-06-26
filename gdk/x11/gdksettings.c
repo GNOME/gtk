@@ -32,7 +32,6 @@ static const struct {
   {"Net/IconThemeName",       "gtk-icon-theme-name"},
   {"Gtk/ColorPalette",        "gtk-color-palette"},
   {"Gtk/FontName",            "gtk-font-name"},
-  {"Gtk/IconSizes",           "gtk-icon-sizes"},
   {"Gtk/KeyThemeName",        "gtk-key-theme-name"},
   {"Gtk/ToolbarStyle",        "gtk-toolbar-style"},
   {"Gtk/ToolbarIconSize",     "gtk-toolbar-icon-size"},

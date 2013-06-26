@@ -520,6 +520,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * gtk-button, gtk-small-toolbar, gtk-large-toolbar, gtk-dnd,
    * gtk-dialog. Applications can register their own named icon
    * sizes with gtk_icon_size_register().
+   *
+   * Deprecated: 3.10: This setting is ignored.
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-icon-sizes",

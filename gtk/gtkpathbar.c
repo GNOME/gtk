@@ -1292,8 +1292,7 @@ settings_notify_cb (GObject    *object,
 
   name = g_param_spec_get_name (pspec);
 
-  if (! strcmp (name, "gtk-icon-theme-name") ||
-      ! strcmp (name, "gtk-icon-sizes"))
+  if (strcmp (name, "gtk-icon-theme-name") == 0)
     change_icon_theme (path_bar);
 }
 

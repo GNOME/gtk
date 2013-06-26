@@ -106,7 +106,7 @@ gboolean gtk_icon_size_lookup              (GtkIconSize  size,
 					    gint        *width,
 					    gint        *height);
 #endif /* GDK_MULTIHEAD_SAFE */
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10_FOR(gtk_icon_size_lookup)
 gboolean gtk_icon_size_lookup_for_settings (GtkSettings *settings,
 					    GtkIconSize  size,
 					    gint        *width,

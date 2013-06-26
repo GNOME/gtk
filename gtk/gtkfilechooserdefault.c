@@ -3153,8 +3153,7 @@ settings_notify_cb (GObject               *object,
 
   name = g_param_spec_get_name (pspec);
 
-  if (strcmp (name, "gtk-icon-theme-name") == 0 ||
-      strcmp (name, "gtk-icon-sizes") == 0)
+  if (strcmp (name, "gtk-icon-theme-name") == 0)
     change_icon_theme (impl);
 
   profile_end ("end", NULL);
