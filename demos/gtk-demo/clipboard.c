@@ -69,7 +69,7 @@ paste_button_clicked (GtkWidget *button,
 static GdkPixbuf *
 get_image_pixbuf (GtkImage *image)
 {
-  gchar *icon_name;
+  const gchar *icon_name;
   GtkIconSize size;
   GtkIconTheme *icon_theme;
   int width;
@@ -80,7 +80,7 @@ get_image_pixbuf (GtkImage *image)
       return g_object_ref (gtk_image_get_pixbuf (image));
     case GTK_IMAGE_ICON_NAME:
       gtk_image_get_icon_name (image, &icon_name, &size);
-      icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (image));
+      icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (image)));
       gtk_icon_size_lookup (size, &width, NULL);
       return gtk_icon_theme_load_icon (icon_theme,
                                        icon_name,
