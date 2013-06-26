@@ -50,6 +50,7 @@ struct wl_surface       *gdk_wayland_window_get_wl_surface       (GdkWindow *win
 GDK_AVAILABLE_IN_ALL
 struct wl_shell_surface *gdk_wayland_window_get_wl_shell_surface (GdkWindow *window);
 
+GDK_AVAILABLE_IN_ALL
 void                     gdk_wayland_window_set_use_custom_surface (GdkWindow *window);
 
 G_END_DECLS
