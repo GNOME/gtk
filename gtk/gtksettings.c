@@ -1362,6 +1362,13 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              NULL);
   g_assert (result == PROP_LABEL_SELECT_ON_FOCUS);
 
+  /**
+   * GtkSettings:gtk-color-palette:
+   *
+   * Palette to use in the deprecated color selector.
+   *
+   * Deprecated: 3.10: Only used by the deprecated color selector widget.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-color-palette",
                                                                   P_("Custom palette"),
