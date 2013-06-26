@@ -76,6 +76,7 @@
 #include "gtkorientable.h"
 #include "gtkintl.h"
 
+#include <cairo-gobject.h>
 #include <errno.h>
 #include <string.h>
 #include <time.h>
@@ -364,7 +365,7 @@ enum {
   MODEL_COL_NAME_COLLATED,
   MODEL_COL_IS_FOLDER,
   MODEL_COL_IS_SENSITIVE,
-  MODEL_COL_PIXBUF,
+  MODEL_COL_PATTERN,
   MODEL_COL_SIZE_TEXT,
   MODEL_COL_MTIME_TEXT,
   MODEL_COL_ELLIPSIZE,
@@ -381,7 +382,7 @@ enum {
 	G_TYPE_STRING,		  /* MODEL_COL_NAME_COLLATED */	\
 	G_TYPE_BOOLEAN,		  /* MODEL_COL_IS_FOLDER */	\
 	G_TYPE_BOOLEAN,		  /* MODEL_COL_IS_SENSITIVE */	\
-	GDK_TYPE_PIXBUF,	  /* MODEL_COL_PIXBUF */	\
+	CAIRO_GOBJECT_TYPE_PATTERN,  /* MODEL_COL_PATTERN */	\
 	G_TYPE_STRING,		  /* MODEL_COL_SIZE_TEXT */	\
 	G_TYPE_STRING,		  /* MODEL_COL_MTIME_TEXT */	\
 	PANGO_TYPE_ELLIPSIZE_MODE /* MODEL_COL_ELLIPSIZE */
@@ -3132,7 +3133,7 @@ change_icon_theme (GtkFileChooserDefault *impl)
   set_icon_cell_renderer_fixed_size (impl);
 
   if (priv->browse_files_model)
-    _gtk_file_system_model_clear_cache (priv->browse_files_model, MODEL_COL_PIXBUF);
+    _gtk_file_system_model_clear_cache (priv->browse_files_model, MODEL_COL_PATTERN);
   gtk_widget_queue_resize (priv->browse_files_tree_view);
 
   profile_end ("end", NULL);
@@ -4152,12 +4153,12 @@ file_system_model_set (GtkFileSystemModel *model,
       else
         g_value_set_boolean (value, TRUE);
       break;
-    case MODEL_COL_PIXBUF:
+    case MODEL_COL_PATTERN:
       if (info)
         {
           if (g_file_info_has_attribute (info, G_FILE_ATTRIBUTE_STANDARD_ICON))
             {
-              g_value_take_object (value, _gtk_file_info_render_icon (info, GTK_WIDGET (impl), priv->icon_size));
+              g_value_take_boxed (value, _gtk_file_info_render_icon (info, GTK_WIDGET (impl), priv->icon_size));
             }
           else
             {
@@ -7069,7 +7070,7 @@ update_cell_renderer_attributes (GtkFileChooserDefault *impl)
       if (GTK_IS_CELL_RENDERER_PIXBUF (renderer))
         {
           gtk_tree_view_column_set_attributes (column, renderer, 
-                                               "pixbuf", MODEL_COL_PIXBUF,
+                                               "pattern", MODEL_COL_PATTERN,
                                                NULL);
         }
       else
