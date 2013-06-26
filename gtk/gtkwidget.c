@@ -7603,8 +7603,6 @@ static gboolean
 gtk_widget_real_keynav_failed (GtkWidget        *widget,
                                GtkDirectionType  direction)
 {
-  gboolean cursor_only;
-
   switch (direction)
     {
     case GTK_DIR_TAB_FORWARD:
@@ -7615,11 +7613,6 @@ gtk_widget_real_keynav_failed (GtkWidget        *widget,
     case GTK_DIR_DOWN:
     case GTK_DIR_LEFT:
     case GTK_DIR_RIGHT:
-      g_object_get (gtk_widget_get_settings (widget),
-                    "gtk-keynav-cursor-only", &cursor_only,
-                    NULL);
-      if (cursor_only)
-        return FALSE;
       break;
     }
 
@@ -10100,11 +10093,7 @@ gtk_widget_child_focus (GtkWidget       *widget,
  *
  * The default ::keynav-failed handler returns %TRUE for
  * %GTK_DIR_TAB_FORWARD and %GTK_DIR_TAB_BACKWARD. For the other
- * values of #GtkDirectionType, it looks at the
- * #GtkSettings:gtk-keynav-cursor-only setting and returns %FALSE
- * if the setting is %TRUE. This way the entire user interface
- * becomes cursor-navigatable on input devices such as mobile phones
- * which only have cursor keys but no tab key.
+ * values of #GtkDirectionType it returns %FALSE.
  *
  * Whenever the default handler returns %TRUE, it also calls
  * gtk_widget_error_bell() to notify the user of the failed keyboard

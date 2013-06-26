@@ -663,12 +663,9 @@ gtk_radio_button_focus (GtkWidget         *widget,
   
   if (gtk_widget_is_focus (widget))
     {
-      GtkSettings *settings = gtk_widget_get_settings (widget);
       GSList *focus_list, *tmp_list;
       GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
       GtkWidget *new_focus = NULL;
-      gboolean cursor_only;
-      gboolean wrap_around;
 
       switch (direction)
 	{
@@ -712,26 +709,8 @@ gtk_radio_button_focus (GtkWidget         *widget,
 	    }
 	}
 
-      g_object_get (settings,
-                    "gtk-keynav-cursor-only", &cursor_only,
-                    "gtk-keynav-wrap-around", &wrap_around,
-                    NULL);
-
       if (!new_focus)
 	{
-          if (cursor_only)
-            {
-              g_slist_free (focus_list);
-              return FALSE;
-            }
-
-          if (!wrap_around)
-            {
-              g_slist_free (focus_list);
-              gtk_widget_error_bell (widget);
-              return TRUE;
-            }
-
 	  tmp_list = focus_list;
 
 	  while (tmp_list)
@@ -754,8 +733,7 @@ gtk_radio_button_focus (GtkWidget         *widget,
 	{
 	  gtk_widget_grab_focus (new_focus);
 
-          if (!cursor_only)
-            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (new_focus), TRUE);
+          gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (new_focus), TRUE);
 	}
 
       return TRUE;

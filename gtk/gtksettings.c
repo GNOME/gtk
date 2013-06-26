@@ -839,6 +839,9 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * to be present on the used input device.
    *
    * Since: 2.12
+   *
+   * Deprecated: 3.10: Generally, the behavior for touchscreen input should be
+   *             performed dynamically based on gdk_event_get_source_device().
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-keynav-cursor-only",
@@ -857,6 +860,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * navigation, such as menus, menubars and notebooks.
    *
    * Since: 2.12
+   *
+   * Deprecated: 3.10: This setting is ignored.
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-keynav-wrap-around",
