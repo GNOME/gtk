@@ -30,6 +30,7 @@ struct _GtkIconHelperPrivate {
   GdkWindow *window;
 
   GdkPixbuf *orig_pixbuf;
+  int orig_pixbuf_scale;
   GdkPixbufAnimation *animation;
   GIcon *gicon;
   GtkIconSet *icon_set;
@@ -327,17 +328,34 @@ ensure_pixbuf_at_size (GtkIconHelper   *self,
   if (self->priv->rendered_pixbuf)
     return;
 
-  if (self->priv->pixel_size != -1 ||
-      self->priv->icon_size != GTK_ICON_SIZE_INVALID)
+  if (self->priv->force_scale_pixbuf &&
+      (self->priv->pixel_size != -1 ||
+       self->priv->icon_size != GTK_ICON_SIZE_INVALID))
     {
       ensure_icon_size (self, context, &width, &height);
 
-      if (width < gdk_pixbuf_get_width (self->priv->orig_pixbuf) ||
+      if (self->priv->orig_pixbuf_scale > 1 ||
+	  /* These should divide the orig_pixbuf size by scale, but need not 
+	     due to the above scale > 1 check */
+	  width < gdk_pixbuf_get_width (self->priv->orig_pixbuf) ||
           height < gdk_pixbuf_get_height (self->priv->orig_pixbuf))
-        self->priv->rendered_pixbuf =
-          gdk_pixbuf_scale_simple (self->priv->orig_pixbuf,
-                                   width, height,
-                                   GDK_INTERP_BILINEAR);
+	{
+	  width = MIN (width, gdk_pixbuf_get_width (self->priv->orig_pixbuf) / self->priv->orig_pixbuf_scale);
+	  height = MIN (height, gdk_pixbuf_get_height (self->priv->orig_pixbuf) / self->priv->orig_pixbuf_scale);
+	  self->priv->rendered_pixbuf =
+	    gdk_pixbuf_scale_simple (self->priv->orig_pixbuf,
+				     width, height,
+				     GDK_INTERP_BILINEAR);
+	}
+    }
+  else if (self->priv->orig_pixbuf_scale > 1)
+    {
+	  width = gdk_pixbuf_get_width (self->priv->orig_pixbuf) / self->priv->orig_pixbuf_scale;
+	  height =gdk_pixbuf_get_height (self->priv->orig_pixbuf) / self->priv->orig_pixbuf_scale;
+	  self->priv->rendered_pixbuf =
+	    gdk_pixbuf_scale_simple (self->priv->orig_pixbuf,
+				     width, height,
+				     GDK_INTERP_BILINEAR);
     }
 
   if (!self->priv->rendered_pixbuf)
@@ -354,10 +372,7 @@ _gtk_icon_helper_ensure_pixbuf (GtkIconHelper *self,
   switch (self->priv->storage_type)
     {
     case GTK_IMAGE_PIXBUF:
-      if (self->priv->force_scale_pixbuf)
-        ensure_pixbuf_at_size (self, context);
-      else
-        pixbuf = g_object_ref (self->priv->orig_pixbuf);
+      ensure_pixbuf_at_size (self, context);
       break;
 
     case GTK_IMAGE_STOCK:
@@ -459,23 +474,28 @@ ensure_pattern_at_size (GtkIconHelper   *self,
        self->priv->icon_size != GTK_ICON_SIZE_INVALID))
     {
       ensure_icon_size (self, context, &width, &height);
-      width *= scale;
-      height *= scale;
 
-      if (width < gdk_pixbuf_get_width (self->priv->orig_pixbuf) ||
-          height < gdk_pixbuf_get_height (self->priv->orig_pixbuf))
+      if (scale != self->priv->orig_pixbuf_scale ||
+	  width < gdk_pixbuf_get_width (self->priv->orig_pixbuf) / self->priv->orig_pixbuf_scale ||
+          height < gdk_pixbuf_get_height (self->priv->orig_pixbuf) / self->priv->orig_pixbuf_scale)
 	{
+	  width = MIN (width * scale, gdk_pixbuf_get_width (self->priv->orig_pixbuf) * scale / self->priv->orig_pixbuf_scale);
+	  height = MIN (height * scale, gdk_pixbuf_get_height (self->priv->orig_pixbuf) * scale / self->priv->orig_pixbuf_scale);
+
 	  pixbuf = gdk_pixbuf_scale_simple (self->priv->orig_pixbuf,
 					    width, height,
 					    GDK_INTERP_BILINEAR);
 	}
       else
-	pixbuf = g_object_ref (self->priv->orig_pixbuf);
+	{
+	  pixbuf = g_object_ref (self->priv->orig_pixbuf); 
+	  scale = self->priv->orig_pixbuf_scale;
+	}
     }
   else
     {
       pixbuf = g_object_ref (self->priv->orig_pixbuf);
-      scale = 1;
+      scale = self->priv->orig_pixbuf_scale;
     }
 
   self->priv->rendered_pattern_width = (gdk_pixbuf_get_width (pixbuf) + scale - 1) / scale;
@@ -942,4 +962,21 @@ _gtk_icon_helper_set_force_scale_pixbuf (GtkIconHelper *self,
       self->priv->force_scale_pixbuf = force_scale;
       _gtk_icon_helper_invalidate (self);
     }
+}
+
+void 
+_gtk_icon_helper_set_pixbuf_scale (GtkIconHelper *self,
+				   int scale)
+{
+  if (self->priv->orig_pixbuf_scale != scale)
+    {
+      self->priv->orig_pixbuf_scale = scale;
+      _gtk_icon_helper_invalidate (self);
+    }
+}
+
+int
+_gtk_icon_helper_get_pixbuf_scale (GtkIconHelper *self)
+{
+  return self->priv->orig_pixbuf_scale;
 }
