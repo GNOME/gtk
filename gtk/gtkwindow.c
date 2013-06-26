@@ -797,8 +797,7 @@ gtk_window_class_init (GtkWindowClass *klass)
    *
    * Whether mnemonics are currently visible in this window.
    *
-   * This property is maintained by GTK+ based on the
-   * #GtkSettings:gtk-auto-mnemonics setting and user input,
+   * This property is maintained by GTK+ based on user input,
    * and should not be set by applications.
    *
    * Since: 2.20
@@ -5367,7 +5366,6 @@ gtk_window_map (GtkWidget *widget)
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = window->priv;
   GdkWindow *gdk_window;
-  gboolean auto_mnemonics;
   GtkPolicyType visible_focus;
 
   if (!gtk_widget_is_toplevel (widget))
@@ -5457,15 +5455,14 @@ gtk_window_map (GtkWidget *widget)
         }
     }
 
-  /* if auto-mnemonics is enabled and mnemonics visible is not already set
+  /* if mnemonics visible is not already set
    * (as in the case of popup menus), then hide mnemonics initially
    */
   g_object_get (gtk_widget_get_settings (widget),
-                "gtk-auto-mnemonics", &auto_mnemonics,
                 "gtk-visible-focus", &visible_focus,
                 NULL);
 
-  if (auto_mnemonics && !priv->mnemonics_visible_set)
+  if (!priv->mnemonics_visible_set)
     gtk_window_set_mnemonics_visible (window, FALSE);
 
   /* inherit from transient parent, so that a dialog that is
@@ -7231,7 +7228,6 @@ gtk_window_focus_in_event (GtkWidget     *widget,
 			   GdkEventFocus *event)
 {
   GtkWindow *window = GTK_WINDOW (widget);
-  gboolean auto_mnemonics;
 
   /* It appears spurious focus in events can occur when
    *  the window is hidden. So we'll just check to see if
@@ -7243,9 +7239,7 @@ gtk_window_focus_in_event (GtkWidget     *widget,
       _gtk_window_set_has_toplevel_focus (window, TRUE);
       _gtk_window_set_is_active (window, TRUE);
 
-      g_object_get (gtk_widget_get_settings (widget),
-                    "gtk-auto-mnemonics", &auto_mnemonics, NULL);
-      if (auto_mnemonics && gtk_window_has_mnemonic_modifier_pressed (window))
+      if (gtk_window_has_mnemonic_modifier_pressed (window))
         _gtk_window_schedule_mnemonics_visible (window);
     }
 
@@ -7257,16 +7251,12 @@ gtk_window_focus_out_event (GtkWidget     *widget,
 			    GdkEventFocus *event)
 {
   GtkWindow *window = GTK_WINDOW (widget);
-  gboolean auto_mnemonics;
 
   _gtk_window_set_has_toplevel_focus (window, FALSE);
   _gtk_window_set_is_active (window, FALSE);
 
   /* set the mnemonic-visible property to false */
-  g_object_get (gtk_widget_get_settings (widget),
-                "gtk-auto-mnemonics", &auto_mnemonics, NULL);
-  if (auto_mnemonics)
-    gtk_window_set_mnemonics_visible (window, FALSE);
+  gtk_window_set_mnemonics_visible (window, FALSE);
 
   return FALSE;
 }
@@ -10724,7 +10714,6 @@ gtk_window_activate_key (GtkWindow   *window,
 {
   GtkKeyHash *key_hash;
   GtkWindowKeyEntry *found_entry = NULL;
-  gboolean enable_mnemonics;
   gboolean enable_accels;
 
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
@@ -10742,7 +10731,6 @@ gtk_window_activate_key (GtkWindow   *window,
 					      event->group);
 
       g_object_get (gtk_widget_get_settings (GTK_WIDGET (window)),
-                    "gtk-enable-mnemonics", &enable_mnemonics,
                     "gtk-enable-accels", &enable_accels,
                     NULL);
 
@@ -10751,11 +10739,8 @@ gtk_window_activate_key (GtkWindow   *window,
 	  GtkWindowKeyEntry *entry = tmp_list->data;
 	  if (entry->is_mnemonic)
             {
-              if (enable_mnemonics)
-	        {
-	          found_entry = entry;
-	          break;
-	        }
+              found_entry = entry;
+              break;
             }
           else 
             {
@@ -10773,9 +10758,8 @@ gtk_window_activate_key (GtkWindow   *window,
     {
       if (found_entry->is_mnemonic)
         {
-          if (enable_mnemonics)
-            return gtk_window_mnemonic_activate (window, found_entry->keyval,
-                                                 found_entry->modifiers);
+          return gtk_window_mnemonic_activate (window, found_entry->keyval,
+                                               found_entry->modifiers);
         }
       else
         {

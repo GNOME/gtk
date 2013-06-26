@@ -483,7 +483,6 @@ static TranslationEntry translations[] = {
   { "org.gnome.desktop.interface", "cursor-blink-timeout", "gtk-cursor-blink-timeout", G_TYPE_INT, { .i = 3600 } },
   { "org.gnome.desktop.interface", "gtk-im-module", "gtk-im-module", G_TYPE_STRING, { .s = "simple" } },
   { "org.gnome.desktop.interface", "enable-animations", "gtk-enable-animations", G_TYPE_BOOLEAN, { .b = TRUE } },
-  { "org.gnome.desktop.interface", "automatic-mnemonics", "gtk-auto-mnemonics", G_TYPE_BOOLEAN, { .b = TRUE } },
   { "org.gnome.desktop.interface", "toolbar-style", "gtk-toolbar-style", G_TYPE_STRING, { .s = "both-horiz"} },
   { "org.gnome.desktop.interface", "toolbar-icons-size", "gtk-toolbar-icon-size", G_TYPE_STRING, { .s = "large"} },
   { "org.gnome.settings-daemon.peripherals.mouse", "double-click", "gtk-double-click-time", G_TYPE_INT, { .i = 250 } },

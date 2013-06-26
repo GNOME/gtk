@@ -943,6 +943,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * can be activated.
    *
    * Since: 2.12
+   *
+   * Deprecated: 3.10: This setting is ignored
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-enable-mnemonics",
@@ -1159,12 +1161,14 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * presses the mnemonic activator.
    *
    * Since: 2.20
+   *
+   * Deprecated: 3.10: This setting is ignored
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-auto-mnemonics",
                                                                    P_("Auto Mnemonics"),
                                                                    P_("Whether mnemonics should be automatically shown and hidden when the user presses the mnemonic activator."),
-                                                                   FALSE,
+                                                                   TRUE,
                                                                    GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_AUTO_MNEMONICS);

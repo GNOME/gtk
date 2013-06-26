@@ -1691,26 +1691,18 @@ gtk_main_do_event (GdkEvent *event)
           ((event->key.state & (gtk_accelerator_get_default_mod_mask ()) & ~(GDK_RELEASE_MASK|GDK_MOD1_MASK)) == 0) &&
           !GTK_IS_MENU_SHELL (grab_widget))
         {
-          gboolean auto_mnemonics;
+          gboolean mnemonics_visible;
+          GtkWidget *window;
 
-          g_object_get (gtk_widget_get_settings (grab_widget),
-                        "gtk-auto-mnemonics", &auto_mnemonics, NULL);
+          mnemonics_visible = (event->type == GDK_KEY_PRESS);
 
-          if (auto_mnemonics)
+          window = gtk_widget_get_toplevel (grab_widget);
+          if (GTK_IS_WINDOW (window))
             {
-              gboolean mnemonics_visible;
-              GtkWidget *window;
-
-              mnemonics_visible = (event->type == GDK_KEY_PRESS);
-
-              window = gtk_widget_get_toplevel (grab_widget);
-              if (GTK_IS_WINDOW (window))
-                {
-                  if (mnemonics_visible)
-                    _gtk_window_schedule_mnemonics_visible (GTK_WINDOW (window));
-                  else
-                    gtk_window_set_mnemonics_visible (GTK_WINDOW (window), FALSE);
-                }
+              if (mnemonics_visible)
+                _gtk_window_schedule_mnemonics_visible (GTK_WINDOW (window));
+              else
+                gtk_window_set_mnemonics_visible (GTK_WINDOW (window), FALSE);
             }
         }
       /* else fall through */

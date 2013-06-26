@@ -334,7 +334,6 @@ _gdk_win32_window_delete_property (GdkWindow *window,
   "Net/FallbackIconTheme\0"   "gtk-fallback-icon-theme\0"
   "Gtk/TouchscreenMode\0"     "gtk-touchscreen-mode\0"
   "Gtk/EnableAccels\0"        "gtk-enable-accels\0"
-  "Gtk/EnableMnemonics\0"     "gtk-enable-mnemonics\0"
   "Gtk/ScrolledWindowPlacement\0" "gtk-scrolled-window-placement\0"
   "Gtk/IMModule\0"            "gtk-im-module\0"
   "Fontconfig/Timestamp\0"    "gtk-fontconfig-timestamp\0"

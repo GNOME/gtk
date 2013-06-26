@@ -1867,9 +1867,6 @@ gtk_label_screen_changed (GtkWidget *widget,
 
   if (! shortcuts_connected)
     {
-      g_signal_connect (settings, "notify::gtk-enable-mnemonics",
-                        G_CALLBACK (label_shortcut_setting_changed),
-                        NULL);
       g_signal_connect (settings, "notify::gtk-enable-accels",
                         G_CALLBACK (label_shortcut_setting_changed),
                         NULL);
@@ -2546,13 +2543,8 @@ gtk_label_set_markup_internal (GtkLabel    *label,
 
   if (with_uline)
     {
-      gboolean enable_mnemonics;
-      gboolean auto_mnemonics;
-
-      g_object_get (gtk_widget_get_settings (GTK_WIDGET (label)),
-                    "gtk-enable-mnemonics", &enable_mnemonics,
-                    "gtk-auto-mnemonics", &auto_mnemonics,
-                    NULL);
+      gboolean enable_mnemonics = TRUE;
+      gboolean auto_mnemonics = TRUE;
 
       if (!(enable_mnemonics && priv->mnemonics_visible &&
             (!auto_mnemonics ||
@@ -2760,19 +2752,14 @@ gtk_label_set_pattern_internal (GtkLabel    *label,
 {
   GtkLabelPrivate *priv = label->priv;
   PangoAttrList *attrs;
-  gboolean enable_mnemonics;
-  gboolean auto_mnemonics;
+  gboolean enable_mnemonics = TRUE;
+  gboolean auto_mnemonics = TRUE;
 
   if (priv->pattern_set)
     return;
 
   if (is_mnemonic)
     {
-      g_object_get (gtk_widget_get_settings (GTK_WIDGET (label)),
-  		    "gtk-enable-mnemonics", &enable_mnemonics,
-	 	    "gtk-auto-mnemonics", &auto_mnemonics,
-		    NULL);
-
       if (enable_mnemonics && priv->mnemonics_visible && pattern &&
           (!auto_mnemonics ||
            (gtk_widget_is_sensitive (GTK_WIDGET (label)) &&
