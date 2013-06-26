@@ -17,6 +17,7 @@
 
 #include "config.h"
 #include <stdlib.h>
+#include <cairo-gobject.h>
 #include "gtkcellrendererpixbuf.h"
 #include "gtkiconfactory.h"
 #include "gtkiconhelperprivate.h"
@@ -74,6 +75,7 @@ enum {
   PROP_PIXBUF,
   PROP_PIXBUF_EXPANDER_OPEN,
   PROP_PIXBUF_EXPANDER_CLOSED,
+  PROP_SURFACE,
   PROP_STOCK_ID,
   PROP_STOCK_SIZE,
   PROP_STOCK_DETAIL,
@@ -168,6 +170,13 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 							P_("Pixbuf for closed expander"),
 							GDK_TYPE_PIXBUF,
 							GTK_PARAM_READWRITE));
+  g_object_class_install_property (object_class,
+				   PROP_SURFACE,
+				   g_param_spec_boxed ("surface",
+						       P_("surface"),
+						       P_("The surface to render"),
+						       CAIRO_GOBJECT_TYPE_SURFACE,
+						       GTK_PARAM_READWRITE));
 
   /**
    * GtkCellRendererPixbuf:stock-id:
@@ -279,6 +288,9 @@ gtk_cell_renderer_pixbuf_get_property (GObject        *object,
     case PROP_PIXBUF_EXPANDER_CLOSED:
       g_value_set_object (value, priv->pixbuf_expander_closed);
       break;
+    case PROP_SURFACE:
+      g_value_set_boxed (value, _gtk_icon_helper_peek_surface (priv->icon_helper));
+      break;
     case PROP_STOCK_ID:
       g_value_set_string (value, _gtk_icon_helper_get_stock_id (priv->icon_helper));
       break;
@@ -311,6 +323,9 @@ gtk_cell_renderer_pixbuf_reset (GtkCellRendererPixbuf *cellpixbuf)
 
   switch (storage_type)
     {
+    case GTK_IMAGE_SURFACE:
+      g_object_notify (G_OBJECT (cellpixbuf), "surface");
+      break;
     case GTK_IMAGE_PIXBUF:
       g_object_notify (G_OBJECT (cellpixbuf), "pixbuf");
       break;
@@ -355,6 +370,10 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
       if (priv->pixbuf_expander_closed)
         g_object_unref (priv->pixbuf_expander_closed);
       priv->pixbuf_expander_closed = (GdkPixbuf*) g_value_dup_object (value);
+      break;
+    case PROP_SURFACE:
+      gtk_cell_renderer_pixbuf_reset (cellpixbuf);
+      _gtk_icon_helper_set_surface (priv->icon_helper, g_value_get_boxed (value));
       break;
     case PROP_STOCK_ID:
       gtk_cell_renderer_pixbuf_reset (cellpixbuf);
