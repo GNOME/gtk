@@ -121,6 +121,8 @@ void _gdk_x11_screen_get_edge_monitors      (GdkScreen *screen,
 					     gint      *bottom,
 					     gint      *left,
 					     gint      *right);
+void _gdk_x11_screen_set_window_scale       (GdkX11Screen *x11_screen,
+					     int        scale);
 
 G_END_DECLS
 

@@ -1821,8 +1821,6 @@ window_x11_resize (GdkWindow *window,
             window->resize_count += 1;
         }
     }
-
-  _gdk_x11_window_update_size (GDK_WINDOW_IMPL_X11 (window->impl));
 }
 
 static inline void
@@ -1889,6 +1887,73 @@ gdk_window_x11_move_resize (GdkWindow *window,
       else
         window_x11_resize (window, width, height);
     }
+}
+
+static void
+set_scale_recursive (GdkWindow *window, int scale)
+{
+  GdkWindow *child;
+  GList *l;
+
+  for (l = window->children; l; l = l->next)
+    {
+      child = l->data;
+
+      if (child->impl != window->impl)
+        _gdk_x11_window_set_window_scale (child, scale);
+      else
+        set_scale_recursive (child, scale);
+    }
+}
+
+void
+_gdk_x11_window_set_window_scale (GdkWindow *window,
+				  int scale)
+{
+  GdkWindowImplX11 *impl;
+  GdkToplevelX11 *toplevel;
+  GdkWindowHints geom_mask;
+
+  if (window->window_type == GDK_WINDOW_OFFSCREEN)
+    return;
+
+  impl = GDK_WINDOW_IMPL_X11 (window->impl);
+
+  impl->window_scale = scale;
+
+  toplevel = _gdk_x11_window_get_toplevel (window);
+  if (toplevel && window->window_type != GDK_WINDOW_FOREIGN)
+    {
+      /* These are affected by window scale: */
+      geom_mask = toplevel->last_geometry_hints_mask &
+        (GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE | GDK_HINT_BASE_SIZE | GDK_HINT_RESIZE_INC);
+      if (geom_mask)
+        gdk_window_set_geometry_hints (window,
+                                       &toplevel->last_geometry_hints,
+                                       geom_mask);
+    }
+
+  if (window->window_type == GDK_WINDOW_FOREIGN)
+    XMoveWindow (GDK_WINDOW_XDISPLAY (window),
+                 GDK_WINDOW_XID (window),
+                 (window->x + window->parent->abs_x) * impl->window_scale,
+                 (window->y + window->parent->abs_y) * impl->window_scale);
+  else if (WINDOW_IS_TOPLEVEL(window))
+    XResizeWindow (GDK_WINDOW_XDISPLAY (window),
+                   GDK_WINDOW_XID (window),
+                   window->width * impl->window_scale,
+                   window->height * impl->window_scale);
+  else
+    XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
+                       GDK_WINDOW_XID (window),
+                       (window->x + window->parent->abs_x) * impl->window_scale,
+                       (window->y + window->parent->abs_y) * impl->window_scale,
+                       window->width * impl->window_scale,
+                       window->height * impl->window_scale);
+
+  gdk_window_invalidate_rect (window, NULL, TRUE);
+
+  set_scale_recursive (window, scale);
 }
 
 static gboolean
@@ -2401,10 +2466,18 @@ gdk_x11_window_set_geometry_hints (GdkWindow         *window,
 {
   GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
   XSizeHints size_hints;
-  
+  GdkToplevelX11 *toplevel;
+
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
+
+  toplevel = _gdk_x11_window_get_toplevel (window);
+  if (toplevel)
+    {
+      toplevel->last_geometry_hints = *geometry;
+      toplevel->last_geometry_hints_mask = geom_mask;
+    }
   
   size_hints.flags = 0;
   

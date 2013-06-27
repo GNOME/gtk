@@ -59,7 +59,11 @@ static const struct {
   {"Gtk/ShellShowsMenubar",   "gtk-shell-shows-menubar"},
   {"Gtk/EnablePrimaryPaste",  "gtk-enable-primary-paste"},
   {"Gtk/RecentFilesMaxAge",   "gtk-recent-files-max-age"},
-  {"Gtk/RecentFilesEnabled",  "gtk-recent-files-enabled"}
+  {"Gtk/RecentFilesEnabled",  "gtk-recent-files-enabled"},
+
+  /* These are here in order to be recognized, but are not sent to
+     gtk as they are handled internally by gdk: */
+  {"Gdk/WindowScalingFactor", "gdk-window-scaling-factor"}
 };
 
 static const char *
