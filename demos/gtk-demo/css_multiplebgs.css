@@ -56,7 +56,7 @@
 /*
 #bricks-button {
     background-color: #eef;
-    background-image: url('resource:///css_multiplebgs/brick.png');
+    background-image: -gtk-scaled(url('resource:///css_multiplebgs/brick.png'),url('resource:///css_multiplebgs/brick2.png'));
     background-repeat: no-repeat;
     background-position: center;
 }

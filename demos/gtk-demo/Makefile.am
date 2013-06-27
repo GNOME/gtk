@@ -117,6 +117,8 @@ RESOURCES=	$(demos)			\
 		listbox.ui			\
 		alphatest.png			\
 		apple-red.png			\
+		brick.png			\
+		brick2.png			\
 		background.jpg			\
 		floppybuddy.gif			\
 		gnome-applets.png		\
