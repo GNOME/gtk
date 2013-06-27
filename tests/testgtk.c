@@ -3002,8 +3002,11 @@ create_menu (GdkScreen *screen, gint depth, gint length)
   image = gtk_image_new_from_icon_name ("document-open",
                                         GTK_ICON_SIZE_MENU);
   gtk_widget_show (image);
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   menuitem = gtk_image_menu_item_new_with_label ("Image item");
   gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
+  gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (menuitem), TRUE);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
   gtk_widget_show (menuitem);
   
@@ -3059,8 +3062,11 @@ create_table_menu (GdkScreen *screen, gint cols, gint rows)
   image = gtk_image_new_from_icon_name ("help-broswer",
                                         GTK_ICON_SIZE_MENU);
   gtk_widget_show (image);
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   menuitem = gtk_image_menu_item_new_with_label ("Image");
   gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
+  gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (menuitem), TRUE);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
   gtk_menu_attach (GTK_MENU (submenu), menuitem, 0, 1, 0, 1);
   gtk_widget_show (menuitem);
 
@@ -3075,8 +3081,11 @@ create_table_menu (GdkScreen *screen, gint cols, gint rows)
   image = gtk_image_new_from_icon_name ("help-browser",
                                         GTK_ICON_SIZE_MENU);
   gtk_widget_show (image);
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   menuitem = gtk_image_menu_item_new_with_label ("Image");
   gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
+  gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (menuitem), TRUE);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
   gtk_menu_attach (GTK_MENU (submenu), menuitem, 1, 2, 1, 2);
   gtk_widget_show (menuitem);
 
@@ -3280,8 +3289,11 @@ create_menus (GtkWidget *widget)
       image = gtk_image_new_from_icon_name ("help-browser",
                                             GTK_ICON_SIZE_MENU);
       gtk_widget_show (image);
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       menuitem = gtk_image_menu_item_new_with_label ("Help");
       gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menuitem), image);
+      gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (menuitem), TRUE);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (screen, 4, 5));
       gtk_widget_set_hexpand (menuitem, TRUE);
       gtk_widget_set_halign (menuitem, GTK_ALIGN_END);
@@ -3307,12 +3319,6 @@ create_menus (GtkWidget *widget)
       menu = create_menu (screen, 1, 5);
       gtk_menu_set_accel_group (GTK_MENU (menu), accel_group);
 
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_NEW, accel_group);
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-      gtk_widget_show (menuitem);
-      
       menuitem = gtk_check_menu_item_new_with_label ("Accelerate Me");
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
       gtk_widget_show (menuitem);

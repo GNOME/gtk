@@ -836,22 +836,28 @@ gtk_recent_chooser_menu_create_item (GtkRecentChooserMenu *menu,
          * The %d is the number of the item, the %s is the name of the item.
          */
         text = g_strdup_printf (C_("recent menu label", "%d. %s"), count, escaped);
-      
+
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       item = gtk_image_menu_item_new_with_mnemonic (text);
-      
+      G_GNUC_END_IGNORE_DEPRECATIONS;
+
       g_free (escaped);
       g_free (name);
     }
   else
     {
       text = g_strdup (gtk_recent_info_get_display_name (info));
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       item = gtk_image_menu_item_new_with_label (text);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
     }
 
   g_free (text);
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (item),
                                              TRUE);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   /* ellipsize the menu item label, in case the recent document
    * display name is huge.
@@ -868,8 +874,10 @@ gtk_recent_chooser_menu_create_item (GtkRecentChooserMenu *menu,
       icon = gtk_recent_info_get_gicon (info);
 
       image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_MENU);
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
       gtk_image_menu_item_set_always_show_image (GTK_IMAGE_MENU_ITEM (item), TRUE);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       if (icon)
         g_object_unref (icon);
     }

@@ -434,7 +434,9 @@ gtk_recent_action_create_menu_item (GtkAction *action)
   GtkWidget *menuitem;
 
   menu = gtk_recent_action_create_menu (action);
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   menuitem = g_object_new (GTK_TYPE_IMAGE_MENU_ITEM, NULL);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
   gtk_widget_show (menu);
 
@@ -622,7 +624,9 @@ gtk_recent_action_class_init (GtkRecentActionClass *klass)
   action_class->create_menu_item = gtk_recent_action_create_menu_item;
   action_class->create_tool_item = gtk_recent_action_create_tool_item;
   action_class->create_menu = gtk_recent_action_create_menu;
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   action_class->menu_item_type = GTK_TYPE_IMAGE_MENU_ITEM;
+  G_GNUC_END_IGNORE_DEPRECATIONS;
   action_class->toolbar_item_type = GTK_TYPE_MENU_TOOL_BUTTON;
 
   _gtk_recent_chooser_install_properties (gobject_class);

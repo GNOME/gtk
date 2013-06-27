@@ -24,6 +24,8 @@
 
 #include "config.h"
 
+#define GDK_DISABLE_DEPRECATION_WARNINGS
+
 #include "gtkimagemenuitem.h"
 
 #include "gtkmenuitemprivate.h"
@@ -149,6 +151,13 @@ gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
   gobject_class->set_property = gtk_image_menu_item_set_property;
   gobject_class->get_property = gtk_image_menu_item_get_property;
 
+  /**
+   * GtkImageMenuItem:image:
+   *
+   * Child widget to appear next to the menu text.
+   *
+   * Deprecated: 3.10
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_IMAGE,
                                    g_param_spec_object ("image",
@@ -183,6 +192,8 @@ gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
    * without the image.
    *
    * Since: 2.16
+   *
+   * Deprecated: 3.10
    */
   g_object_class_install_property (gobject_class,
                                    PROP_ALWAYS_SHOW_IMAGE,
@@ -784,6 +795,8 @@ gtk_image_menu_item_sync_action_properties (GtkActivatable *activatable,
  * Creates a new #GtkImageMenuItem with an empty label.
  *
  * Returns: a new #GtkImageMenuItem
+ *
+ * Deprecated: 3.10: Use gtk_menu_item_new() instead.
  */
 GtkWidget*
 gtk_image_menu_item_new (void)
@@ -798,6 +811,8 @@ gtk_image_menu_item_new (void)
  * Creates a new #GtkImageMenuItem containing a label.
  *
  * Returns: a new #GtkImageMenuItem.
+ *
+ * Deprecated: 3.10: Use gtk_menu_item_new_with_label() instead.
  */
 GtkWidget*
 gtk_image_menu_item_new_with_label (const gchar *label)
@@ -817,6 +832,8 @@ gtk_image_menu_item_new_with_label (const gchar *label)
  * in @label indicate the mnemonic for the menu item.
  *
  * Returns: a new #GtkImageMenuItem
+ *
+ * Deprecated: 3.10: Use gtk_menu_item_new_with_mnemonic() instead.
  */
 GtkWidget*
 gtk_image_menu_item_new_with_mnemonic (const gchar *label)
@@ -923,6 +940,8 @@ gtk_image_menu_item_get_use_stock (GtkImageMenuItem *image_menu_item)
  * without the image.
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_image_menu_item_set_always_show_image (GtkImageMenuItem *image_menu_item,
@@ -959,6 +978,8 @@ gtk_image_menu_item_set_always_show_image (GtkImageMenuItem *image_menu_item,
  * Returns: %TRUE if the menu item will always show the image
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10
  */
 gboolean
 gtk_image_menu_item_get_always_show_image (GtkImageMenuItem *image_menu_item)
@@ -1029,6 +1050,8 @@ gtk_image_menu_item_set_accel_group (GtkImageMenuItem *image_menu_item,
  * Sets the image of @image_menu_item to the given widget.
  * Note that it depends on the show-menu-images setting whether
  * the image will be displayed or not.
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_image_menu_item_set_image (GtkImageMenuItem *image_menu_item,
@@ -1069,6 +1092,8 @@ gtk_image_menu_item_set_image (GtkImageMenuItem *image_menu_item,
  * See gtk_image_menu_item_set_image().
  *
  * Return value: (transfer none): the widget set as image of @image_menu_item
+ *
+ * Deprecated: 3.10
  **/
 GtkWidget*
 gtk_image_menu_item_get_image (GtkImageMenuItem *image_menu_item)

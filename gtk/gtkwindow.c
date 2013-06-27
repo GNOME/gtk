@@ -7794,7 +7794,7 @@ gtk_window_do_popup (GtkWindow      *window,
   gtk_widget_show (menuitem);
   gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
 
-  menuitem = gtk_image_menu_item_new_with_label (_("Close"));
+  menuitem = gtk_menu_item_new_with_label (_("Close"));
   gtk_widget_show (menuitem);
   if (!priv->deletable)
     gtk_widget_set_sensitive (menuitem, FALSE);

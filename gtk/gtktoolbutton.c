@@ -863,8 +863,6 @@ gtk_tool_button_create_menu_proxy (GtkToolItem *item)
       label = "";
     }
 
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
   if (use_mnemonic)
     menu_item = gtk_image_menu_item_new_with_mnemonic (label);
   else
@@ -876,13 +874,13 @@ gtk_tool_button_create_menu_proxy (GtkToolItem *item)
     }
   else if (button->priv->stock_id)
     {
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       menu_image = gtk_image_new_from_stock (button->priv->stock_id, GTK_ICON_SIZE_MENU);
-      G_GNUC_END_IGNORE_DEPRECATIONS;
     }
 
   if (menu_image)
     gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (menu_item), menu_image);
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   g_signal_connect_closure_by_id (menu_item,
 				  g_signal_lookup ("activate", G_OBJECT_TYPE (menu_item)), 0,
