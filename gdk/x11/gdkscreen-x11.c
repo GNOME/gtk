@@ -1087,6 +1087,28 @@ _gdk_x11_screen_new (GdkDisplay *display,
   return screen;
 }
 
+void
+_gdk_x11_screen_set_window_scale (GdkX11Screen *x11_screen,
+				  int scale)
+{
+  GList *toplevels, *l;
+
+  g_print ("set scale %d\n", scale);
+  if (x11_screen->window_scale == scale)
+    return;
+
+  x11_screen->window_scale = scale;
+
+  toplevels = gdk_screen_get_toplevel_windows (GDK_SCREEN (x11_screen));
+
+  for (l = toplevels; l != NULL; l = l->next)
+    {
+      GdkWindow *window = l->data;
+
+      _gdk_x11_window_set_window_scale (window, scale);
+    }
+}
+
 /*
  * It is important that we first request the selection
  * notification, and then setup the initial state of

@@ -68,6 +68,9 @@ gdk_xsettings_notify (GdkX11Screen     *x11_screen,
 {
   GdkEvent new_event;
 
+  if (!g_str_has_prefix (name, "gtk-"))
+    return;
+
   new_event.type = GDK_SETTING;
   new_event.setting.window = gdk_screen_get_root_window (GDK_SCREEN (x11_screen));
   new_event.setting.send_event = FALSE;
@@ -406,6 +409,7 @@ read_settings (GdkX11Screen *x11_screen,
   int result;
 
   GHashTable *old_list = x11_screen->xsettings;
+  GValue value = G_VALUE_INIT;
 
   x11_screen->xsettings = NULL;
 
@@ -443,6 +447,12 @@ read_settings (GdkX11Screen *x11_screen,
     notify_changes (x11_screen, old_list);
   if (old_list)
     g_hash_table_unref (old_list);
+
+  g_value_init (&value, G_TYPE_INT);
+  if (gdk_screen_get_setting (GDK_SCREEN (x11_screen),
+			      "gdk-window-scaling-factor", &value))
+    _gdk_x11_screen_set_window_scale (x11_screen,
+				      g_value_get_int (&value));
 }
 
 static Atom

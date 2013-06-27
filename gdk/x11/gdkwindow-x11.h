@@ -152,7 +152,10 @@ struct _GdkToplevelX11
    * that might not even be part of this app
    */
   Window focus_window;
- 
+
+  GdkWindowHints last_geometry_hints_mask;
+  GdkGeometry last_geometry_hints;
+  
 #ifdef HAVE_XSYNC
   XID update_counter;
   XID extended_update_counter;
@@ -185,6 +188,8 @@ void            _gdk_x11_window_tmp_reset_parent_bg (GdkWindow *window);
 GdkCursor      *_gdk_x11_window_get_cursor          (GdkWindow *window);
 
 void            _gdk_x11_window_update_size         (GdkWindowImplX11 *impl);
+void            _gdk_x11_window_set_window_scale    (GdkWindow *window,
+						     int        scale);
 
 G_END_DECLS
 
