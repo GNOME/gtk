@@ -103,7 +103,7 @@ gtk_css_image_scaled_compute (GtkCssImage             *image,
   GtkCssImageScaled *copy;
   int i;
 
-  scale = MIN (scale, scaled->n_images);
+  scale = MAX(MIN (scale, scaled->n_images), 1);
 
   if (scaled->scale == scale)
     return g_object_ref (scaled);
@@ -112,9 +112,20 @@ gtk_css_image_scaled_compute (GtkCssImage             *image,
       copy = g_object_new (_gtk_css_image_scaled_get_type (), NULL);
       copy->scale = scale;
       copy->n_images = scaled->n_images;
-      copy->images = g_memdup (scaled->images, sizeof (GtkCssImage *) * scaled->n_images);
+      copy->images = g_new (GtkCssImage *, scaled->n_images);
       for (i = 0; i < scaled->n_images; i++)
-	g_object_ref (copy->images[i]);
+        {
+          if (i == scale - 1)
+            copy->images[i] = _gtk_css_image_compute (scaled->images[i],
+                                                      property_id,
+                                                      provider,
+                                                      scale,
+                                                      values,
+                                                      parent_values,
+                                                      dependencies);
+          else
+            copy->images[i] = g_object_ref (scaled->images[i]);
+        }
 
       return GTK_CSS_IMAGE (copy);
     }
