@@ -62,6 +62,7 @@ static GtkCssImage *
 gtk_css_image_real_compute (GtkCssImage             *image,
                             guint                    property_id,
                             GtkStyleProviderPrivate *provider,
+			    int                      scale,
                             GtkCssComputedValues    *values,
                             GtkCssComputedValues    *parent_values,
                             GtkCssDependencies      *dependencies)
@@ -146,6 +147,7 @@ GtkCssImage *
 _gtk_css_image_compute (GtkCssImage             *image,
                         guint                    property_id,
                         GtkStyleProviderPrivate *provider,
+			int                      scale,
                         GtkCssComputedValues    *values,
                         GtkCssComputedValues    *parent_values,
                         GtkCssDependencies      *dependencies)
@@ -163,7 +165,7 @@ _gtk_css_image_compute (GtkCssImage             *image,
 
   klass = GTK_CSS_IMAGE_GET_CLASS (image);
 
-  return klass->compute (image, property_id, provider, values, parent_values, dependencies);
+  return klass->compute (image, property_id, provider, scale, values, parent_values, dependencies);
 }
 
 GtkCssImage *

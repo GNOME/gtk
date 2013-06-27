@@ -55,6 +55,7 @@ void                    _gtk_css_lookup_set_computed            (GtkCssLookup   
                                                                  GtkCssValue                *value);
 void                    _gtk_css_lookup_resolve                 (GtkCssLookup               *lookup,
                                                                  GtkStyleProviderPrivate    *provider,
+								 int                         scale,
                                                                  GtkCssComputedValues       *values,
                                                                  GtkCssComputedValues       *parent_values);
 

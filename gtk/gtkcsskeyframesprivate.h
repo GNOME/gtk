@@ -38,6 +38,7 @@ void                _gtk_css_keyframes_print                  (GtkCssKeyframes  
 
 GtkCssKeyframes *   _gtk_css_keyframes_compute                (GtkCssKeyframes         *keyframes,
                                                                GtkStyleProviderPrivate *provider,
+							       int                      scale,
                                                                GtkCssComputedValues    *values,
                                                                GtkCssComputedValues    *parent_values);
 

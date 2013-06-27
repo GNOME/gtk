@@ -59,6 +59,7 @@ static GtkCssValue *
 gtk_css_value_number_compute (GtkCssValue             *number,
                               guint                    property_id,
                               GtkStyleProviderPrivate *provider,
+			      int                      scale,
                               GtkCssComputedValues    *values,
                               GtkCssComputedValues    *parent_values,
                               GtkCssDependencies      *dependencies)

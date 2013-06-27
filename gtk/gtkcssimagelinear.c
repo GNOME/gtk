@@ -420,6 +420,7 @@ static GtkCssImage *
 gtk_css_image_linear_compute (GtkCssImage             *image,
                               guint                    property_id,
                               GtkStyleProviderPrivate *provider,
+			      int                      scale,
                               GtkCssComputedValues    *values,
                               GtkCssComputedValues    *parent_values,
                               GtkCssDependencies      *dependencies)
@@ -431,7 +432,7 @@ gtk_css_image_linear_compute (GtkCssImage             *image,
   copy = g_object_new (GTK_TYPE_CSS_IMAGE_LINEAR, NULL);
   copy->repeating = linear->repeating;
 
-  copy->angle = _gtk_css_value_compute (linear->angle, property_id, provider, values, parent_values, dependencies);
+  copy->angle = _gtk_css_value_compute (linear->angle, property_id, provider, scale, values, parent_values, dependencies);
   
   g_array_set_size (copy->stops, linear->stops->len);
   for (i = 0; i < linear->stops->len; i++)
@@ -442,12 +443,12 @@ gtk_css_image_linear_compute (GtkCssImage             *image,
       stop = &g_array_index (linear->stops, GtkCssImageLinearColorStop, i);
       scopy = &g_array_index (copy->stops, GtkCssImageLinearColorStop, i);
               
-      scopy->color = _gtk_css_value_compute (stop->color, property_id, provider, values, parent_values, &child_deps);
+      scopy->color = _gtk_css_value_compute (stop->color, property_id, provider, scale, values, parent_values, &child_deps);
       *dependencies = _gtk_css_dependencies_union (*dependencies, child_deps);
       
       if (stop->offset)
         {
-          scopy->offset = _gtk_css_value_compute (stop->offset, property_id, provider, values, parent_values, &child_deps);
+          scopy->offset = _gtk_css_value_compute (stop->offset, property_id, provider, scale, values, parent_values, &child_deps);
           *dependencies = _gtk_css_dependencies_union (*dependencies, child_deps);
         }
       else

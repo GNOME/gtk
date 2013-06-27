@@ -37,6 +37,7 @@ static GtkCssValue *
 gtk_css_value_inherit_compute (GtkCssValue             *value,
                                guint                    property_id,
                                GtkStyleProviderPrivate *provider,
+			       int                      scale,
                                GtkCssComputedValues    *values,
                                GtkCssComputedValues    *parent_values,
                                GtkCssDependencies      *dependencies)
@@ -51,6 +52,7 @@ gtk_css_value_inherit_compute (GtkCssValue             *value,
       return _gtk_css_value_compute (_gtk_css_initial_value_get (),
                                      property_id,
                                      provider,
+				     scale,
                                      values,
                                      parent_values,
                                      dependencies);

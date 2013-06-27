@@ -88,6 +88,7 @@ GtkCssValue *
 _gtk_css_value_compute (GtkCssValue             *value,
                         guint                    property_id,
                         GtkStyleProviderPrivate *provider,
+			int                      scale,
                         GtkCssComputedValues    *values,
                         GtkCssComputedValues    *parent_values,
                         GtkCssDependencies      *dependencies)
@@ -103,7 +104,7 @@ _gtk_css_value_compute (GtkCssValue             *value,
     dependencies = &fallback;
   *dependencies = 0;
 
-  return value->class->compute (value, property_id, provider, values, parent_values, dependencies);
+  return value->class->compute (value, property_id, provider, scale, values, parent_values, dependencies);
 }
 
 gboolean

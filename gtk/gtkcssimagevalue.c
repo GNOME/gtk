@@ -37,6 +37,7 @@ static GtkCssValue *
 gtk_css_value_image_compute (GtkCssValue             *value,
                              guint                    property_id,
                              GtkStyleProviderPrivate *provider,
+			     int                      scale,
                              GtkCssComputedValues    *values,
                              GtkCssComputedValues    *parent_values,
                              GtkCssDependencies      *dependencies)
@@ -48,7 +49,7 @@ gtk_css_value_image_compute (GtkCssValue             *value,
   if (image == NULL)
     return _gtk_css_value_ref (value);
 
-  computed = _gtk_css_image_compute (image, property_id, provider, values, parent_values, dependencies);
+  computed = _gtk_css_image_compute (image, property_id, provider, scale, values, parent_values, dependencies);
 
   if (computed == image)
     {

@@ -58,6 +58,7 @@ struct _GtkCssImageClass
   GtkCssImage *(* compute)                         (GtkCssImage                *image,
                                                     guint                       property_id,
                                                     GtkStyleProviderPrivate    *provider,
+						    int                         scale,
                                                     GtkCssComputedValues       *values,
                                                     GtkCssComputedValues       *parent_values,
                                                     GtkCssDependencies         *dependencies);
@@ -95,6 +96,7 @@ double         _gtk_css_image_get_aspect_ratio     (GtkCssImage                *
 GtkCssImage *  _gtk_css_image_compute              (GtkCssImage                *image,
                                                     guint                       property_id,
                                                     GtkStyleProviderPrivate    *provider,
+						    int                        scale,
                                                     GtkCssComputedValues       *values,
                                                     GtkCssComputedValues       *parent_values,
                                                     GtkCssDependencies         *dependencies);
