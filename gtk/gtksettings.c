@@ -646,7 +646,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              g_param_spec_boolean ("gtk-show-input-method-menu",
                                                                    P_("Show the 'Input Methods' menu"),
                                                                    P_("Whether the context menus of entries and text views should offer to change the input method"),
-                                                                   TRUE,
+                                                                   FALSE,
                                                                    GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_SHOW_INPUT_METHOD_MENU);
@@ -660,7 +660,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              g_param_spec_boolean ("gtk-show-unicode-menu",
                                                                    P_("Show the 'Insert Unicode Control Character' menu"),
                                                                    P_("Whether the context menus of entries and text views should offer to insert control characters"),
-                                                                   TRUE,
+                                                                   FALSE,
                                                                    GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_SHOW_UNICODE_MENU);
