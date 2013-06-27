@@ -744,12 +744,16 @@ gtk_dialog_add_button (GtkDialog   *dialog,
   button = gtk_button_new_with_label (button_text);
   gtk_button_set_use_underline (GTK_BUTTON (button), TRUE);
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
   if (button_text)
     {
       GtkStockItem item;
       if (gtk_stock_lookup (button_text, &item))
         g_object_set (button, "use-stock", TRUE, NULL);
     }
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   gtk_widget_set_can_default (button, TRUE);
   gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);

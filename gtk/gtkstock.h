@@ -44,6 +44,8 @@ G_BEGIN_DECLS
  * and #GtkActionGroup.
  *
  * Returns: the translated message
+ *
+ * Deprecated: 3.10
  */
 typedef gchar * (*GtkTranslateFunc) (const gchar  *path,
                                      gpointer      func_data);
@@ -59,28 +61,28 @@ struct _GtkStockItem
   gchar *translation_domain;
 };
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void     gtk_stock_add        (const GtkStockItem  *items,
                                guint                n_items);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void     gtk_stock_add_static (const GtkStockItem  *items,
                                guint                n_items);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 gboolean gtk_stock_lookup     (const gchar         *stock_id,
                                GtkStockItem        *item);
 
 /* Should free the list (and free each string in it also).
  * This function is only useful for GUI builders and such.
  */
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 GSList*  gtk_stock_list_ids  (void);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 GtkStockItem *gtk_stock_item_copy (const GtkStockItem *item);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void          gtk_stock_item_free (GtkStockItem       *item);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void          gtk_stock_set_translate_func (const gchar      *domain,
 					    GtkTranslateFunc  func,
 					    gpointer          data,

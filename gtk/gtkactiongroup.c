@@ -999,11 +999,15 @@ gtk_action_group_add_action_with_accel (GtkActionGroup *action_group,
 
       g_object_get (action, "stock-id", &stock_id, NULL);
 
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
       if (stock_id && gtk_stock_lookup (stock_id, &stock_item))
         {
           accel_key = stock_item.keyval;
           accel_mods = stock_item.modifier;
 	}
+
+      G_GNUC_END_IGNORE_DEPRECATIONS;
 
       g_free (stock_id);
     }

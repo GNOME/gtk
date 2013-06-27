@@ -1274,9 +1274,13 @@ gtk_action_set_label (GtkAction	  *action,
   if (!action->private_data->label_set && action->private_data->stock_id)
     {
       GtkStockItem stock_item;
-      
+
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
       if (gtk_stock_lookup (action->private_data->stock_id, &stock_item))
 	action->private_data->label = g_strdup (stock_item.label);
+
+      G_GNUC_END_IGNORE_DEPRECATIONS;
     }
 
   g_object_notify (G_OBJECT (action), "label");
@@ -1514,13 +1518,17 @@ gtk_action_set_stock_id (GtkAction   *action,
   if (!action->private_data->label_set)
     {
       GtkStockItem stock_item;
-      
+
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
       if (action->private_data->stock_id &&
 	  gtk_stock_lookup (action->private_data->stock_id, &stock_item))
 	gtk_action_set_label (action, stock_item.label);
-      else 
+      else
 	gtk_action_set_label (action, NULL);
-      
+
+      G_GNUC_END_IGNORE_DEPRECATIONS;
+
       action->private_data->label_set = FALSE;
     }
 }

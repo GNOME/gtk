@@ -447,6 +447,8 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 	  gboolean elide;
 	  gchar *label_text;
 
+          G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
 	  if (button->priv->label_text)
 	    {
 	      label_text = button->priv->label_text;
@@ -462,6 +464,8 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 	      label_text = "";
 	      elide = FALSE;
 	    }
+
+          G_GNUC_END_IGNORE_DEPRECATIONS;
 
 	  if (elide)
 	    label_text = _gtk_toolbar_elide_underscores (label_text);
@@ -837,7 +841,9 @@ gtk_tool_button_create_menu_proxy (GtkToolItem *item)
 
   if (_gtk_tool_item_create_menu_proxy (item))
     return TRUE;
- 
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
   if (GTK_IS_LABEL (button->priv->label_widget))
     {
       label = gtk_label_get_label (GTK_LABEL (button->priv->label_widget));
@@ -856,7 +862,9 @@ gtk_tool_button_create_menu_proxy (GtkToolItem *item)
     {
       label = "";
     }
-  
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
   if (use_mnemonic)
     menu_item = gtk_image_menu_item_new_with_mnemonic (label);
   else

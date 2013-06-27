@@ -24,6 +24,8 @@
 
 #include "config.h"
 
+#define GDK_DISABLE_DEPRECATION_WARNINGS
+
 #include <string.h>
 
 #include "gtkprivate.h"
@@ -142,7 +144,8 @@ real_add (const GtkStockItem *items,
  * any pointer into @items and @items can be freed. Use
  * gtk_stock_add_static() if @items is persistent and GTK+ need not
  * copy the array.
- * 
+ *
+ * Deprecated: 3.10
  **/
 void
 gtk_stock_add (const GtkStockItem *items,
@@ -160,7 +163,8 @@ gtk_stock_add (const GtkStockItem *items,
  *
  * Same as gtk_stock_add(), but doesn't copy @items, so
  * @items must persist until application exit.
- * 
+ *
+ * Deprecated: 3.10
  **/
 void
 gtk_stock_add_static (const GtkStockItem *items,
@@ -175,12 +179,13 @@ gtk_stock_add_static (const GtkStockItem *items,
  * gtk_stock_lookup:
  * @stock_id: a stock item name
  * @item: (out): stock item to initialize with values
- * 
+ *
  * Fills @item with the registered values for @stock_id, returning %TRUE
  * if @stock_id was known.
- * 
- * 
+ *
  * Return value: %TRUE if @item was initialized
+ *
+ * Deprecated: 3.10
  **/
 gboolean
 gtk_stock_lookup (const gchar  *stock_id,
@@ -227,6 +232,8 @@ gtk_stock_lookup (const gchar  *stock_id,
  * and each string in the list must be freed with g_free().
  *
  * Return value: (element-type utf8) (transfer full): a list of known stock IDs
+ *
+ * Deprecated: 3.10
  **/
 GSList*
 gtk_stock_list_ids (void)
@@ -277,6 +284,8 @@ gtk_stock_list_ids (void)
  * Copies a stock item, mostly useful for language bindings and not in applications.
  * 
  * Return value: a new #GtkStockItem
+ *
+ * Deprecated: 3.10
  **/
 GtkStockItem *
 gtk_stock_item_copy (const GtkStockItem *item)
@@ -303,7 +312,8 @@ gtk_stock_item_copy (const GtkStockItem *item)
  * Frees a stock item allocated on the heap, such as one returned by
  * gtk_stock_item_copy(). Also frees the fields inside the stock item,
  * if they are not %NULL.
- * 
+ *
+ * Deprecated: 3.10
  **/
 void
 gtk_stock_item_free (GtkStockItem *item)
@@ -496,6 +506,8 @@ static const GtkStockItem builtin_items [] =
  * ]|
  * 
  * Since: 2.8
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_stock_set_translate_func (const gchar      *domain,

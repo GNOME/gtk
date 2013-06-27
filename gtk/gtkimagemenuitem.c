@@ -1002,6 +1002,8 @@ gtk_image_menu_item_set_accel_group (GtkImageMenuItem *image_menu_item,
 
   priv = image_menu_item->priv;
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
   if (priv->use_stock && priv->label && gtk_stock_lookup (priv->label, &stock_item))
     if (stock_item.keyval)
       {
@@ -1014,6 +1016,9 @@ gtk_image_menu_item_set_accel_group (GtkImageMenuItem *image_menu_item,
 
         g_object_notify (G_OBJECT (image_menu_item), "accel-group");
       }
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
 }
 
 /**
