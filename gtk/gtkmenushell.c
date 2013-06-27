@@ -809,6 +809,18 @@ gtk_menu_shell_button_release (GtkWidget      *widget,
   GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
   GtkMenuShellPrivate *priv = menu_shell->priv;
 
+  if (priv->parent_menu_shell &&
+      (event->time - GTK_MENU_SHELL (priv->parent_menu_shell)->priv->activate_time) < MENU_SHELL_TIMEOUT)
+    {
+      /* The button-press originated in the parent menu bar and we are
+       * a pop-up menu. It was a quick press-and-release so we don't want
+       * to activate an item but we leave the popup in place instead.
+       * https://bugzilla.gnome.org/show_bug.cgi?id=703069
+       */
+      GTK_MENU_SHELL (priv->parent_menu_shell)->priv->activate_time = 0;
+      return TRUE;
+    }
+
   if (priv->active)
     {
       GtkWidget *menu_item;
