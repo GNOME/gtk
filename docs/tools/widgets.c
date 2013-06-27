@@ -485,8 +485,8 @@ create_recent_chooser_dialog (void)
 
   widget = gtk_recent_chooser_dialog_new ("Recent Chooser Dialog",
 					  NULL,
-					  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					  GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+					  "Cancel", GTK_RESPONSE_CANCEL,
+					  "Open", GTK_RESPONSE_ACCEPT,
 					  NULL); 
   gtk_window_set_default_size (GTK_WINDOW (widget), 505, 305);
   
@@ -639,6 +639,7 @@ create_file_button (void)
   GtkWidget *vbox2;
   GtkWidget *picker;
   GtkWidget *align;
+  char *path;
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
   vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
@@ -646,7 +647,6 @@ create_file_button (void)
   picker = gtk_file_chooser_button_new ("File Chooser Button",
 		  			GTK_FILE_CHOOSER_ACTION_OPEN);
   gtk_widget_set_size_request (picker, 150, -1);
-  gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (picker), "/etc/yum.conf");
   gtk_container_add (GTK_CONTAINER (align), picker);
   gtk_box_pack_start (GTK_BOX (vbox2), align, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox2),
@@ -664,7 +664,9 @@ create_file_button (void)
   picker = gtk_file_chooser_button_new ("File Chooser Button",
 		  			GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
   gtk_widget_set_size_request (picker, 150, -1);
-  gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (picker), "/");
+  path = g_build_filename (g_get_home_dir (), "Documents", NULL);
+  gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (picker), path);
+  g_free (path);
   gtk_container_add (GTK_CONTAINER (align), picker);
   gtk_box_pack_start (GTK_BOX (vbox2), align, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox2),
@@ -826,8 +828,8 @@ create_filesel (void)
   widget = gtk_file_chooser_dialog_new ("File Chooser Dialog",
 					NULL,
 					GTK_FILE_CHOOSER_ACTION_OPEN,
-					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-					GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+					"Cancel", GTK_RESPONSE_CANCEL,
+					"Open", GTK_RESPONSE_ACCEPT,
 					NULL); 
   gtk_window_set_default_size (GTK_WINDOW (widget), 505, 305);
   
@@ -882,15 +884,18 @@ create_toolbar (void)
 
   widget = gtk_toolbar_new ();
 
-  item = gtk_tool_button_new_from_stock (GTK_STOCK_NEW);
+  item = gtk_tool_button_new (NULL, NULL);
+  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "document-new");
   gtk_toolbar_insert (GTK_TOOLBAR (widget), item, -1);
 
-  item = gtk_menu_tool_button_new_from_stock (GTK_STOCK_OPEN);
+  item = gtk_tool_button_new (NULL, NULL);
+  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "document-open");
   menu = gtk_menu_new ();
   gtk_menu_tool_button_set_menu (GTK_MENU_TOOL_BUTTON (item), menu);
   gtk_toolbar_insert (GTK_TOOLBAR (widget), item, -1);
 
-  item = gtk_tool_button_new_from_stock (GTK_STOCK_REFRESH);
+  item = gtk_tool_button_new (NULL, NULL);
+  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "view-refresh");
   gtk_toolbar_insert (GTK_TOOLBAR (widget), item, -1);
 
   gtk_toolbar_set_show_arrow (GTK_TOOLBAR (widget), FALSE);
@@ -907,20 +912,26 @@ create_toolpalette (void)
   widget = gtk_tool_palette_new ();
   group = gtk_tool_item_group_new ("Tools");
   gtk_container_add (GTK_CONTAINER (widget), group);
-  item = gtk_tool_button_new_from_stock (GTK_STOCK_ABOUT);
+  item = gtk_tool_button_new (NULL, NULL);
+  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "help-about");
   gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
-  item = gtk_tool_button_new_from_stock (GTK_STOCK_FILE);
+  item = gtk_tool_button_new (NULL, NULL);
+  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "document-new");
   gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
-  item = gtk_tool_button_new_from_stock (GTK_STOCK_CONNECT);
+  item = gtk_tool_button_new (NULL, NULL);
+  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "folder");
   gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
 
   group = gtk_tool_item_group_new ("More tools");
   gtk_container_add (GTK_CONTAINER (widget), group);
-  item = gtk_tool_button_new_from_stock (GTK_STOCK_CUT);
+  item = gtk_tool_button_new (NULL, NULL);
+  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "edit-cut");
   gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
-  item = gtk_tool_button_new_from_stock (GTK_STOCK_EXECUTE);
+  item = gtk_tool_button_new (NULL, NULL);
+  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "edit-find");
   gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
-  item = gtk_tool_button_new_from_stock (GTK_STOCK_CANCEL);
+  item = gtk_tool_button_new (NULL, NULL);
+  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "document-properties");
   gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
 
   return new_widget_info ("toolpalette", widget, MEDIUM);
@@ -1163,8 +1174,8 @@ create_image (void)
   GtkWidget *widget;
   GtkWidget *align, *vbox;
 
-  widget = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING, 
-				     GTK_ICON_SIZE_DND);
+  widget = gtk_image_new_from_icon_name ("dialog-warning",
+                                         GTK_ICON_SIZE_DND);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
