@@ -130,7 +130,7 @@ static void gtk_button_box_get_child_property (GtkContainer      *container,
 #define DEFAULT_CHILD_IPAD_Y 0
 #define DEFAULT_LAYOUT_STYLE GTK_BUTTONBOX_EDGE
 
-G_DEFINE_TYPE (GtkButtonBox, gtk_button_box, GTK_TYPE_BOX)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkButtonBox, gtk_button_box, GTK_TYPE_BOX)
 
 static void
 gtk_button_box_class_init (GtkButtonBoxClass *class)
@@ -220,22 +220,15 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
                                                                     P_("If TRUE, the child will not be subject to homogeneous sizing"),
                                                                     FALSE,
                                                                     GTK_PARAM_READWRITE));
-
-  g_type_class_add_private (class, sizeof (GtkButtonBoxPrivate));
 }
 
 static void
 gtk_button_box_init (GtkButtonBox *button_box)
 {
-  GtkButtonBoxPrivate *priv;
-
-  button_box->priv = G_TYPE_INSTANCE_GET_PRIVATE (button_box,
-                                                  GTK_TYPE_BUTTON_BOX,
-                                                  GtkButtonBoxPrivate);
-  priv = button_box->priv;
+  button_box->priv = gtk_button_box_get_instance_private (button_box);
+  button_box->priv->layout_style = DEFAULT_LAYOUT_STYLE;
 
   gtk_box_set_spacing (GTK_BOX (button_box), 0);
-  priv->layout_style = DEFAULT_LAYOUT_STYLE;
 }
 
 static void

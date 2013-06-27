@@ -1047,6 +1047,7 @@ gtk_css_provider_error_quark (void)
 }
 
 G_DEFINE_TYPE_EXTENDED (GtkCssProvider, gtk_css_provider, G_TYPE_OBJECT, 0,
+                        G_ADD_PRIVATE (GtkCssProvider)
                         G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER,
                                                gtk_css_style_provider_iface_init)
                         G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER_PRIVATE,
@@ -1116,8 +1117,6 @@ gtk_css_provider_class_init (GtkCssProviderClass *klass)
   object_class->finalize = gtk_css_provider_finalize;
 
   klass->parsing_error = gtk_css_provider_parsing_error;
-
-  g_type_class_add_private (object_class, sizeof (GtkCssProviderPrivate));
 }
 
 static void
@@ -1387,9 +1386,7 @@ gtk_css_provider_init (GtkCssProvider *css_provider)
 {
   GtkCssProviderPrivate *priv;
 
-  priv = css_provider->priv = G_TYPE_INSTANCE_GET_PRIVATE (css_provider,
-                                                           GTK_TYPE_CSS_PROVIDER,
-                                                           GtkCssProviderPrivate);
+  priv = css_provider->priv = gtk_css_provider_get_instance_private (css_provider);
 
   priv->rulesets = g_array_new (FALSE, FALSE, sizeof (GtkCssRuleset));
 

@@ -83,11 +83,12 @@ static void gtk_style_properties_provider_private_init (GtkStyleProviderPrivateI
 static void gtk_style_properties_finalize              (GObject                          *object);
 
 
-G_DEFINE_TYPE_EXTENDED (GtkStyleProperties, gtk_style_properties, G_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER,
-                                               gtk_style_properties_provider_init)
-                        G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER_PRIVATE,
-                                               gtk_style_properties_provider_private_init));
+G_DEFINE_TYPE_WITH_CODE (GtkStyleProperties, gtk_style_properties, G_TYPE_OBJECT,
+                         G_ADD_PRIVATE (GtkStyleProperties)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER,
+                                                gtk_style_properties_provider_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER_PRIVATE,
+                                                gtk_style_properties_provider_private_init));
 
 static void
 gtk_style_properties_class_init (GtkStylePropertiesClass *klass)
@@ -95,8 +96,6 @@ gtk_style_properties_class_init (GtkStylePropertiesClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gtk_style_properties_finalize;
-
-  g_type_class_add_private (object_class, sizeof (GtkStylePropertiesPrivate));
 }
 
 static PropertyData *
@@ -253,14 +252,9 @@ property_data_match_state (PropertyData  *data,
 static void
 gtk_style_properties_init (GtkStyleProperties *props)
 {
-  GtkStylePropertiesPrivate *priv;
-
-  priv = props->priv = G_TYPE_INSTANCE_GET_PRIVATE (props,
-                                                    GTK_TYPE_STYLE_PROPERTIES,
-                                                    GtkStylePropertiesPrivate);
-
-  priv->properties = g_hash_table_new_full (NULL, NULL, NULL,
-                                            (GDestroyNotify) property_data_free);
+  props->priv = gtk_style_properties_get_instance_private (props);
+  props->priv->properties = g_hash_table_new_full (NULL, NULL, NULL,
+                                                   (GDestroyNotify) property_data_free);
 }
 
 static void

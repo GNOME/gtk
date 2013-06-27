@@ -215,6 +215,7 @@ static GtkBuildableIface *parent_buildable_iface;
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 G_DEFINE_TYPE_WITH_CODE (GtkMenuItem, gtk_menu_item, GTK_TYPE_BIN,
+                         G_ADD_PRIVATE (GtkMenuItem)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_menu_item_buildable_interface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
@@ -538,8 +539,6 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
                                                              P_("The minimum desired width of the menu item in characters"),
                                                              0, G_MAXINT, 12,
                                                              GTK_PARAM_READABLE));
-
-  g_type_class_add_private (klass, sizeof (GtkMenuItemPrivate));
 }
 
 static void
@@ -548,9 +547,7 @@ gtk_menu_item_init (GtkMenuItem *menu_item)
   GtkStyleContext *context;
   GtkMenuItemPrivate *priv;
 
-  priv = G_TYPE_INSTANCE_GET_PRIVATE (menu_item,
-                                      GTK_TYPE_MENU_ITEM,
-                                      GtkMenuItemPrivate);
+  priv = gtk_menu_item_get_instance_private (menu_item);
   menu_item->priv = priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (menu_item), FALSE);

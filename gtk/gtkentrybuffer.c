@@ -76,7 +76,7 @@ struct _GtkEntryBufferPrivate
   gint   max_length;
 };
 
-G_DEFINE_TYPE (GtkEntryBuffer, gtk_entry_buffer, G_TYPE_OBJECT);
+G_DEFINE_TYPE_WITH_PRIVATE (GtkEntryBuffer, gtk_entry_buffer, G_TYPE_OBJECT)
 
 /* --------------------------------------------------------------------------------
  * DEFAULT IMPLEMENTATIONS OF TEXT BUFFER
@@ -245,7 +245,7 @@ gtk_entry_buffer_init (GtkEntryBuffer *buffer)
 {
   GtkEntryBufferPrivate *pv;
 
-  pv = buffer->priv = G_TYPE_INSTANCE_GET_PRIVATE (buffer, GTK_TYPE_ENTRY_BUFFER, GtkEntryBufferPrivate);
+  pv = buffer->priv = gtk_entry_buffer_get_instance_private (buffer);
 
   pv->normal_text = NULL;
   pv->normal_text_chars = 0;
@@ -334,8 +334,6 @@ gtk_entry_buffer_class_init (GtkEntryBufferClass *klass)
 
   klass->inserted_text = gtk_entry_buffer_real_inserted_text;
   klass->deleted_text = gtk_entry_buffer_real_deleted_text;
-
-  g_type_class_add_private (gobject_class, sizeof (GtkEntryBufferPrivate));
 
   /**
    * GtkEntryBuffer:text:

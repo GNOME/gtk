@@ -616,6 +616,7 @@ static guint           cell_area_signals[LAST_SIGNAL] = { 0 };
 #define PARAM_SPEC_SET_PARAM_ID(pspec, id)      ((pspec)->param_id = (id))
 
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkCellArea, gtk_cell_area, G_TYPE_INITIALLY_UNOWNED,
+                                  G_ADD_PRIVATE (GtkCellArea)
                                   G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
                                                          gtk_cell_area_cell_layout_init)
                                   G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
@@ -626,9 +627,7 @@ gtk_cell_area_init (GtkCellArea *area)
 {
   GtkCellAreaPrivate *priv;
 
-  area->priv = G_TYPE_INSTANCE_GET_PRIVATE (area,
-                                            GTK_TYPE_CELL_AREA,
-                                            GtkCellAreaPrivate);
+  area->priv = gtk_cell_area_get_instance_private (area);
   priv = area->priv;
 
   priv->cell_info = g_hash_table_new_full (g_direct_hash,
@@ -846,8 +845,6 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
   /* Pool for Cell Properties */
   if (!cell_property_pool)
     cell_property_pool = g_param_spec_pool_new (FALSE);
-
-  g_type_class_add_private (object_class, sizeof (GtkCellAreaPrivate));
 }
 
 /*************************************************************

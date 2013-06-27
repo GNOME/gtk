@@ -164,6 +164,7 @@ enum
 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkGrid, gtk_grid, GTK_TYPE_CONTAINER,
+                         G_ADD_PRIVATE (GtkGrid)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
 
 
@@ -377,7 +378,7 @@ gtk_grid_init (GtkGrid *grid)
 {
   GtkGridPrivate *priv;
 
-  grid->priv = G_TYPE_INSTANCE_GET_PRIVATE (grid, GTK_TYPE_GRID, GtkGridPrivate);
+  grid->priv = gtk_grid_get_instance_private (grid);
   priv = grid->priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (grid), FALSE);
@@ -1771,8 +1772,6 @@ gtk_grid_class_init (GtkGridClass *class)
                       P_("The number of rows that a child spans"),
                       1, G_MAXINT, 1,
                       GTK_PARAM_READWRITE));
-
-  g_type_class_add_private (class, sizeof (GtkGridPrivate));
 }
 
 /**

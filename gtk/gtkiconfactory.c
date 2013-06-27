@@ -212,6 +212,7 @@ static GtkIconSize icon_size_register_intern (const gchar *name,
    any_direction, any_state, any_size }
 
 G_DEFINE_TYPE_WITH_CODE (GtkIconFactory, gtk_icon_factory, G_TYPE_OBJECT,
+                         G_ADD_PRIVATE (GtkIconFactory)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
 						gtk_icon_factory_buildable_init))
 
@@ -220,9 +221,7 @@ gtk_icon_factory_init (GtkIconFactory *factory)
 {
   GtkIconFactoryPrivate *priv;
 
-  factory->priv = G_TYPE_INSTANCE_GET_PRIVATE (factory,
-                                               GTK_TYPE_ICON_FACTORY,
-                                               GtkIconFactoryPrivate);
+  factory->priv = gtk_icon_factory_get_instance_private (factory);
   priv = factory->priv;
 
   priv->icons = g_hash_table_new (g_str_hash, g_str_equal);
@@ -235,8 +234,6 @@ gtk_icon_factory_class_init (GtkIconFactoryClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gtk_icon_factory_finalize;
-
-  g_type_class_add_private (klass, sizeof (GtkIconFactoryPrivate));
 }
 
 static void

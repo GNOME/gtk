@@ -204,7 +204,7 @@ struct _GtkCellRendererTextPrivate
   gulong entry_menu_popdown_timeout;
 };
 
-G_DEFINE_TYPE (GtkCellRendererText, gtk_cell_renderer_text, GTK_TYPE_CELL_RENDERER)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkCellRendererText, gtk_cell_renderer_text, GTK_TYPE_CELL_RENDERER)
 
 static void
 gtk_cell_renderer_text_init (GtkCellRendererText *celltext)
@@ -212,9 +212,7 @@ gtk_cell_renderer_text_init (GtkCellRendererText *celltext)
   GtkCellRendererTextPrivate *priv;
   GtkCellRenderer *cell = GTK_CELL_RENDERER (celltext);
 
-  celltext->priv = G_TYPE_INSTANCE_GET_PRIVATE (celltext,
-                                                GTK_TYPE_CELL_RENDERER_TEXT,
-                                                GtkCellRendererTextPrivate);
+  celltext->priv = gtk_cell_renderer_text_get_instance_private (celltext);
   priv = celltext->priv;
 
   gtk_cell_renderer_set_alignment (cell, 0.0, 0.5);
@@ -728,8 +726,6 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
 		  G_TYPE_NONE, 2,
 		  G_TYPE_STRING,
 		  G_TYPE_STRING);
-
-  g_type_class_add_private (object_class, sizeof (GtkCellRendererTextPrivate));
 
   gtk_cell_renderer_class_set_accessible_type (cell_class, GTK_TYPE_TEXT_CELL_ACCESSIBLE);
 }

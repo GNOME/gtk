@@ -89,7 +89,7 @@ static void gtk_radio_menu_item_get_property   (GObject               *object,
 
 static guint group_changed_signal = 0;
 
-G_DEFINE_TYPE (GtkRadioMenuItem, gtk_radio_menu_item, GTK_TYPE_CHECK_MENU_ITEM)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkRadioMenuItem, gtk_radio_menu_item, GTK_TYPE_CHECK_MENU_ITEM)
 
 /**
  * gtk_radio_menu_item_new:
@@ -430,8 +430,6 @@ gtk_radio_menu_item_class_init (GtkRadioMenuItemClass *klass)
 				       NULL, NULL,
 				       _gtk_marshal_VOID__VOID,
 				       G_TYPE_NONE, 0);
-
-  g_type_class_add_private (klass, sizeof (GtkRadioMenuItemPrivate));
 }
 
 static void
@@ -439,9 +437,7 @@ gtk_radio_menu_item_init (GtkRadioMenuItem *radio_menu_item)
 {
   GtkRadioMenuItemPrivate *priv;
 
-  radio_menu_item->priv = G_TYPE_INSTANCE_GET_PRIVATE (radio_menu_item,
-                                                       GTK_TYPE_RADIO_MENU_ITEM,
-                                                       GtkRadioMenuItemPrivate);
+  radio_menu_item->priv = gtk_radio_menu_item_get_instance_private (radio_menu_item);
   priv = radio_menu_item->priv;
 
   priv->group = g_slist_prepend (NULL, radio_menu_item);

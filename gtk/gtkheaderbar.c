@@ -89,6 +89,7 @@ enum {
 static void gtk_header_bar_buildable_init (GtkBuildableIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkHeaderBar, gtk_header_bar, GTK_TYPE_CONTAINER,
+                         G_ADD_PRIVATE (GtkHeaderBar)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_header_bar_buildable_init));
 
@@ -136,7 +137,7 @@ get_css_padding_and_border (GtkWidget *widget,
 static void
 init_sizing_box (GtkHeaderBar *bar)
 {
-  GtkHeaderBarPrivate *priv = bar->priv;
+  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   GtkWidget *w;
 
   /* We use this box to always request size for the two labels (title
@@ -204,7 +205,7 @@ _gtk_header_bar_create_title_box (const char *title,
 static void
 construct_label_box (GtkHeaderBar *bar)
 {
-  GtkHeaderBarPrivate *priv = bar->priv;
+  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
 
   g_assert (priv->label_box == NULL);
 
@@ -221,8 +222,7 @@ gtk_header_bar_init (GtkHeaderBar *bar)
   GtkStyleContext *context;
   GtkHeaderBarPrivate *priv;
 
-  priv = G_TYPE_INSTANCE_GET_PRIVATE (bar, GTK_TYPE_HEADER_BAR, GtkHeaderBarPrivate);
-  bar->priv = priv;
+  priv = gtk_header_bar_get_instance_private (bar);
 
   gtk_widget_set_has_window (GTK_WIDGET (bar), FALSE);
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (bar), FALSE);
@@ -246,12 +246,13 @@ gtk_header_bar_init (GtkHeaderBar *bar)
 static gint
 count_visible_children (GtkHeaderBar *bar)
 {
+  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   GList *l;
   Child *child;
   gint n;
 
   n = 0;
-  for (l = bar->priv->children; l; l = l->next)
+  for (l = priv->children; l; l = l->next)
     {
       child = l->data;
       if (gtk_widget_get_visible (child->widget))
@@ -298,7 +299,7 @@ gtk_header_bar_get_size (GtkWidget      *widget,
                          gint           *natural_size)
 {
   GtkHeaderBar *bar = GTK_HEADER_BAR (widget);
-  GtkHeaderBarPrivate *priv = bar->priv;
+  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   GList *l;
   gint nvis_children;
   gint minimum, natural;
@@ -360,7 +361,7 @@ gtk_header_bar_compute_size_for_orientation (GtkWidget *widget,
                                              gint      *natural_size)
 {
   GtkHeaderBar *bar = GTK_HEADER_BAR (widget);
-  GtkHeaderBarPrivate *priv = bar->priv;
+  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   GList *children;
   gint required_size = 0;
   gint required_natural = 0;
@@ -432,7 +433,7 @@ gtk_header_bar_compute_size_for_opposing_orientation (GtkWidget *widget,
                                                       gint      *natural_size)
 {
   GtkHeaderBar *bar = GTK_HEADER_BAR (widget);
-  GtkHeaderBarPrivate *priv = bar->priv;
+  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   Child *child;
   GList *children;
   gint nvis_children;
@@ -576,7 +577,7 @@ gtk_header_bar_size_allocate (GtkWidget     *widget,
                               GtkAllocation *allocation)
 {
   GtkHeaderBar *bar = GTK_HEADER_BAR (widget);
-  GtkHeaderBarPrivate *priv = bar->priv;
+  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   GtkRequestedSize *sizes;
   gint width, height;
   gint nvis_children;
@@ -743,12 +744,10 @@ void
 gtk_header_bar_set_title (GtkHeaderBar *bar,
                           const gchar  *title)
 {
-  GtkHeaderBarPrivate *priv;
+  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   gchar *new_title;
 
   g_return_if_fail (GTK_IS_HEADER_BAR (bar));
-
-  priv = bar->priv;
 
   new_title = g_strdup (title);
   g_free (priv->title);
@@ -778,9 +777,11 @@ gtk_header_bar_set_title (GtkHeaderBar *bar,
 const gchar *
 gtk_header_bar_get_title (GtkHeaderBar *bar)
 {
+  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
+
   g_return_val_if_fail (GTK_IS_HEADER_BAR (bar), NULL);
 
-  return bar->priv->title;
+  return priv->title;
 }
 
 /**
@@ -801,12 +802,10 @@ void
 gtk_header_bar_set_subtitle (GtkHeaderBar *bar,
                              const gchar  *subtitle)
 {
-  GtkHeaderBarPrivate *priv;
+  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   gchar *new_subtitle;
 
   g_return_if_fail (GTK_IS_HEADER_BAR (bar));
-
-  priv = bar->priv;
 
   new_subtitle = g_strdup (subtitle);
   g_free (priv->subtitle);
@@ -837,9 +836,11 @@ gtk_header_bar_set_subtitle (GtkHeaderBar *bar,
 const gchar *
 gtk_header_bar_get_subtitle (GtkHeaderBar *bar)
 {
+  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
+
   g_return_val_if_fail (GTK_IS_HEADER_BAR (bar), NULL);
 
-  return bar->priv->subtitle;
+  return priv->subtitle;
 }
 
 /**
@@ -859,13 +860,11 @@ void
 gtk_header_bar_set_custom_title (GtkHeaderBar *bar,
                                  GtkWidget    *title_widget)
 {
-  GtkHeaderBarPrivate *priv;
+  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
 
   g_return_if_fail (GTK_IS_HEADER_BAR (bar));
   if (title_widget)
     g_return_if_fail (GTK_IS_WIDGET (title_widget));
-
-  priv = bar->priv;
 
   /* No need to do anything if the custom widget stays the same */
   if (priv->custom_title == title_widget)
@@ -924,18 +923,20 @@ gtk_header_bar_set_custom_title (GtkHeaderBar *bar,
 GtkWidget *
 gtk_header_bar_get_custom_title (GtkHeaderBar *bar)
 {
+  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
+
   g_return_val_if_fail (GTK_IS_HEADER_BAR (bar), NULL);
 
-  return bar->priv->custom_title;
+  return priv->custom_title;
 }
 
 static void
 gtk_header_bar_finalize (GObject *object)
 {
-  GtkHeaderBar *bar = GTK_HEADER_BAR (object);
+  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (GTK_HEADER_BAR (object));
 
-  g_free (bar->priv->title);
-  g_free (bar->priv->subtitle);
+  g_free (priv->title);
+  g_free (priv->subtitle);
 
   G_OBJECT_CLASS (gtk_header_bar_parent_class)->finalize (object);
 }
@@ -947,7 +948,7 @@ gtk_header_bar_get_property (GObject    *object,
                              GParamSpec *pspec)
 {
   GtkHeaderBar *bar = GTK_HEADER_BAR (object);
-  GtkHeaderBarPrivate *priv = bar->priv;
+  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
 
   switch (prop_id)
     {
@@ -988,7 +989,7 @@ gtk_header_bar_set_property (GObject      *object,
                              GParamSpec   *pspec)
 {
   GtkHeaderBar *bar = GTK_HEADER_BAR (object);
-  GtkHeaderBarPrivate *priv = bar->priv;
+  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
 
   switch (prop_id)
     {
@@ -1030,6 +1031,7 @@ gtk_header_bar_pack (GtkHeaderBar *bar,
                      GtkWidget    *widget,
                      GtkPackType   pack_type)
 {
+  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   Child *child;
 
   g_return_if_fail (gtk_widget_get_parent (widget) == NULL);
@@ -1038,7 +1040,7 @@ gtk_header_bar_pack (GtkHeaderBar *bar,
   child->widget = widget;
   child->pack_type = pack_type;
 
-  bar->priv->children = g_list_append (bar->priv->children, child);
+  priv->children = g_list_append (priv->children, child);
 
   gtk_widget_freeze_child_notify (widget);
   gtk_widget_set_parent (widget, GTK_WIDGET (bar));
@@ -1058,10 +1060,11 @@ static GList *
 find_child_link (GtkHeaderBar *bar,
                  GtkWidget    *widget)
 {
+  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   GList *l;
   Child *child;
 
-  for (l = bar->priv->children; l; l = l->next)
+  for (l = priv->children; l; l = l->next)
     {
       child = l->data;
       if (child->widget == widget)
@@ -1076,6 +1079,7 @@ gtk_header_bar_remove (GtkContainer *container,
                        GtkWidget    *widget)
 {
   GtkHeaderBar *bar = GTK_HEADER_BAR (container);
+  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   GList *l;
   Child *child;
 
@@ -1084,7 +1088,7 @@ gtk_header_bar_remove (GtkContainer *container,
     {
       child = l->data;
       gtk_widget_unparent (child->widget);
-      bar->priv->children = g_list_delete_link (bar->priv->children, l);
+      priv->children = g_list_delete_link (priv->children, l);
       g_free (child);
       gtk_widget_queue_resize (GTK_WIDGET (container));
     }
@@ -1097,7 +1101,7 @@ gtk_header_bar_forall (GtkContainer *container,
                        gpointer      callback_data)
 {
   GtkHeaderBar *bar = GTK_HEADER_BAR (container);
-  GtkHeaderBarPrivate *priv = bar->priv;
+  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   Child *child;
   GList *children;
 
@@ -1139,10 +1143,12 @@ gtk_header_bar_get_child_property (GtkContainer *container,
                                    GValue       *value,
                                    GParamSpec   *pspec)
 {
+  GtkHeaderBar *bar = GTK_HEADER_BAR (container);
+  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   GList *l;
   Child *child;
 
-  l = find_child_link (GTK_HEADER_BAR (container), widget);
+  l = find_child_link (bar, widget);
   if (l == NULL)
     {
       g_param_value_set_default (pspec, value);
@@ -1158,7 +1164,7 @@ gtk_header_bar_get_child_property (GtkContainer *container,
       break;
 
     case CHILD_PROP_POSITION:
-      g_value_set_int (value, g_list_position (GTK_HEADER_BAR (container)->priv->children, l));
+      g_value_set_int (value, g_list_position (priv->children, l));
       break;
 
     default:
@@ -1355,8 +1361,6 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
                                                      0, G_MAXINT,
                                                      DEFAULT_VPADDING,
                                                      GTK_PARAM_READWRITE));
-
-  g_type_class_add_private (object_class, sizeof (GtkHeaderBarPrivate));
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_FILLER);
 }

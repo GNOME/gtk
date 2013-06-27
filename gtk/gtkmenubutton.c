@@ -174,7 +174,7 @@ enum
   PROP_DIRECTION
 };
 
-G_DEFINE_TYPE(GtkMenuButton, gtk_menu_button, GTK_TYPE_TOGGLE_BUTTON)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkMenuButton, gtk_menu_button, GTK_TYPE_TOGGLE_BUTTON)
 
 static void gtk_menu_button_dispose (GObject *object);
 
@@ -488,8 +488,6 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
   GtkToggleButtonClass *toggle_button_class = GTK_TOGGLE_BUTTON_CLASS (klass);
 
-  g_type_class_add_private (klass, sizeof (GtkMenuButtonPrivate));
-
   gobject_class->set_property = gtk_menu_button_set_property;
   gobject_class->get_property = gtk_menu_button_get_property;
   gobject_class->dispose = gtk_menu_button_dispose;
@@ -581,7 +579,7 @@ gtk_menu_button_init (GtkMenuButton *menu_button)
 {
   GtkMenuButtonPrivate *priv;
 
-  priv = G_TYPE_INSTANCE_GET_PRIVATE (menu_button, GTK_TYPE_MENU_BUTTON, GtkMenuButtonPrivate);
+  priv = gtk_menu_button_get_instance_private (menu_button);
   menu_button->priv = priv;
   priv->arrow_type = GTK_ARROW_DOWN;
 

@@ -90,6 +90,7 @@ enum {
 
 static void gtk_app_chooser_dialog_iface_init (GtkAppChooserIface *iface);
 G_DEFINE_TYPE_WITH_CODE (GtkAppChooserDialog, gtk_app_chooser_dialog, GTK_TYPE_DIALOG,
+                         G_ADD_PRIVATE (GtkAppChooserDialog)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_APP_CHOOSER,
                                                 gtk_app_chooser_dialog_iface_init));
 
@@ -665,15 +666,12 @@ gtk_app_chooser_dialog_class_init (GtkAppChooserDialogClass *klass)
   gtk_widget_class_bind_child (widget_class, GtkAppChooserDialogPrivate, show_more_button);
   gtk_widget_class_bind_child (widget_class, GtkAppChooserDialogPrivate, inner_box);
   gtk_widget_class_bind_callback (widget_class, show_more_button_clicked_cb);
-
-  g_type_class_add_private (klass, sizeof (GtkAppChooserDialogPrivate));
 }
 
 static void
 gtk_app_chooser_dialog_init (GtkAppChooserDialog *self)
 {
-  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self, GTK_TYPE_APP_CHOOSER_DIALOG,
-                                            GtkAppChooserDialogPrivate);
+  self->priv = gtk_app_chooser_dialog_get_instance_private (self);
 
   gtk_widget_init_template (GTK_WIDGET (self));
 

@@ -189,6 +189,7 @@ static guint entry_completion_signals[LAST_SIGNAL] = { 0 };
 static void     gtk_entry_completion_buildable_init      (GtkBuildableIface  *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkEntryCompletion, gtk_entry_completion, G_TYPE_OBJECT,
+                         G_ADD_PRIVATE (GtkEntryCompletion)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
                                                 gtk_entry_completion_cell_layout_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
@@ -452,8 +453,6 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
                                                         P_("The GtkCellArea used to layout cells"),
                                                         GTK_TYPE_CELL_AREA,
                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-
-  g_type_class_add_private (object_class, sizeof (GtkEntryCompletionPrivate));
 }
 
 
@@ -488,9 +487,7 @@ gtk_entry_completion_init (GtkEntryCompletion *completion)
   GtkEntryCompletionPrivate *priv;
 
   /* yes, also priv, need to keep the code readable */
-  completion->priv = G_TYPE_INSTANCE_GET_PRIVATE (completion,
-                                                  GTK_TYPE_ENTRY_COMPLETION,
-                                                  GtkEntryCompletionPrivate);
+  completion->priv = gtk_entry_completion_get_instance_private (completion);
   priv = completion->priv;
 
   priv->minimum_key_length = 1;

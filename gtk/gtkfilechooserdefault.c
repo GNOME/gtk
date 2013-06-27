@@ -546,6 +546,7 @@ static void     unset_file_system_backend    (GtkFileChooserDefault *impl);
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkFileChooserDefault, _gtk_file_chooser_default, GTK_TYPE_BOX,
+                         G_ADD_PRIVATE (GtkFileChooserDefault)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER,
 						gtk_file_chooser_default_iface_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER_EMBED,
@@ -7472,8 +7473,6 @@ _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 
   _gtk_file_chooser_install_properties (gobject_class);
 
-  g_type_class_add_private (gobject_class, sizeof (GtkFileChooserDefaultPrivate));
-
   /* Bind class to template */
 
   gtk_widget_class_set_template_from_resource (widget_class,
@@ -7596,9 +7595,7 @@ _gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
 #ifdef PROFILE_FILE_CHOOSER
   access ("MARK: *** CREATE FILE CHOOSER", F_OK);
 #endif
-  impl->priv = G_TYPE_INSTANCE_GET_PRIVATE (impl,
-					    GTK_TYPE_FILE_CHOOSER_DEFAULT,
-					    GtkFileChooserDefaultPrivate);
+  impl->priv = _gtk_file_chooser_default_get_instance_private (impl);
   priv = impl->priv;
 
   priv->local_only = TRUE;

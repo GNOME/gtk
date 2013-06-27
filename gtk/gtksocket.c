@@ -176,7 +176,7 @@ enum {
 
 static guint socket_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkSocket, gtk_socket, GTK_TYPE_CONTAINER)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkSocket, gtk_socket, GTK_TYPE_CONTAINER)
 
 static void
 gtk_socket_finalize (GObject *object)
@@ -255,8 +255,6 @@ gtk_socket_class_init (GtkSocketClass *class)
                   _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__VOID,
 		  G_TYPE_BOOLEAN, 0);
-
-  g_type_class_add_private (gobject_class, sizeof (GtkSocketPrivate));
 }
 
 static void
@@ -264,10 +262,9 @@ gtk_socket_init (GtkSocket *socket)
 {
   GtkSocketPrivate *priv;
 
-  priv = G_TYPE_INSTANCE_GET_PRIVATE (socket,
-                                      GTK_TYPE_SOCKET,
-                                      GtkSocketPrivate);
+  priv = gtk_socket_get_instance_private (socket);
   socket->priv = priv;
+
   priv->request_width = 0;
   priv->request_height = 0;
   priv->current_width = 0;

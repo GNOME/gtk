@@ -94,7 +94,7 @@ static void on_permission_changed (GPermission *permission,
                                    GParamSpec  *pspec,
                                    gpointer     user_data);
 
-G_DEFINE_TYPE (GtkLockButton, gtk_lock_button, GTK_TYPE_BUTTON);
+G_DEFINE_TYPE_WITH_PRIVATE (GtkLockButton, gtk_lock_button, GTK_TYPE_BUTTON)
 
 static void
 gtk_lock_button_finalize (GObject *object)
@@ -221,9 +221,7 @@ gtk_lock_button_init (GtkLockButton *button)
   GtkLockButtonPrivate *priv;
   gchar *names[3];
 
-  button->priv = priv = G_TYPE_INSTANCE_GET_PRIVATE (button,
-                                                     GTK_TYPE_LOCK_BUTTON,
-                                                     GtkLockButtonPrivate);
+  button->priv = priv = gtk_lock_button_get_instance_private (button);
 
   gtk_widget_init_template (GTK_WIDGET (button));
 
@@ -252,8 +250,6 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
   gobject_class->set_property = gtk_lock_button_set_property;
 
   button_class->clicked = gtk_lock_button_clicked;
-
-  g_type_class_add_private (klass, sizeof (GtkLockButtonPrivate));
 
   g_object_class_install_property (gobject_class, PROP_PERMISSION,
     g_param_spec_object ("permission",

@@ -51,15 +51,12 @@ enum
 
 static guint signals[LAST_SIGNAL];
 
-G_DEFINE_TYPE (GtkPressAndHold, gtk_press_and_hold, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkPressAndHold, gtk_press_and_hold, G_TYPE_OBJECT)
 
 static void
 gtk_press_and_hold_init (GtkPressAndHold *pah)
 {
-  pah->priv = G_TYPE_INSTANCE_GET_PRIVATE (pah,
-                                           GTK_TYPE_PRESS_AND_HOLD,
-                                           GtkPressAndHoldPrivate);
-
+  pah->priv = gtk_press_and_hold_get_instance_private (pah);
   pah->priv->hold_time = 1000;
   pah->priv->drag_threshold = 8;
 }
@@ -151,8 +148,6 @@ gtk_press_and_hold_class_init (GtkPressAndHoldClass *class)
   g_object_class_install_property (object_class, PROP_DRAG_THRESHOLD,
       g_param_spec_int ("drag-threshold", P_("Drag Threshold"), P_("Drag Threshold (in pixels)"),
                         1, G_MAXINT, 8, GTK_PARAM_READWRITE));
-
-  g_type_class_add_private (object_class, sizeof (GtkPressAndHoldPrivate));
 }
 
 static void

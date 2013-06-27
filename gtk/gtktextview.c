@@ -122,8 +122,6 @@
 #define CURSOR_BLINK_TIME        1200
 #define CURSOR_BLINK_TIMEOUT_SEC 10
 
-#define GTK_TEXT_VIEW_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_TEXT_VIEW, GtkTextViewPrivate))
-
 typedef struct _GtkTextWindow GtkTextWindow;
 typedef struct _GtkTextPendingScroll GtkTextPendingScroll;
 
@@ -594,6 +592,7 @@ static guint signals[LAST_SIGNAL] = { 0 };
 static gboolean test_touchscreen = FALSE;
 
 G_DEFINE_TYPE_WITH_CODE (GtkTextView, gtk_text_view, GTK_TYPE_CONTAINER,
+                         G_ADD_PRIVATE (GtkTextView)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
 
 static void
@@ -1446,8 +1445,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 				"move-focus", 1,
 				GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
 
-  g_type_class_add_private (gobject_class, sizeof (GtkTextViewPrivate));
-
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_TEXT_VIEW_ACCESSIBLE);
   test_touchscreen = g_getenv ("GTK_TEST_TOUCHSCREEN") != NULL;
 }
@@ -1459,7 +1456,7 @@ gtk_text_view_init (GtkTextView *text_view)
   GtkTargetList *target_list;
   GtkTextViewPrivate *priv;
 
-  text_view->priv = GTK_TEXT_VIEW_GET_PRIVATE (text_view);
+  text_view->priv = gtk_text_view_get_instance_private (text_view);
   priv = text_view->priv;
 
   gtk_widget_set_can_focus (widget, TRUE);

@@ -98,19 +98,16 @@ struct _GtkCellRendererPixbufPrivate
   gchar *stock_detail;
 };
 
-
-G_DEFINE_TYPE (GtkCellRendererPixbuf, gtk_cell_renderer_pixbuf, GTK_TYPE_CELL_RENDERER)
-
+G_DEFINE_TYPE_WITH_PRIVATE (GtkCellRendererPixbuf, gtk_cell_renderer_pixbuf, GTK_TYPE_CELL_RENDERER)
 
 static void
 gtk_cell_renderer_pixbuf_init (GtkCellRendererPixbuf *cellpixbuf)
 {
   GtkCellRendererPixbufPrivate *priv;
 
-  cellpixbuf->priv = G_TYPE_INSTANCE_GET_PRIVATE (cellpixbuf,
-                                                  GTK_TYPE_CELL_RENDERER_PIXBUF,
-                                                  GtkCellRendererPixbufPrivate);
+  cellpixbuf->priv = gtk_cell_renderer_pixbuf_get_instance_private (cellpixbuf);
   priv = cellpixbuf->priv;
+
   priv->icon_helper = _gtk_icon_helper_new ();
   priv->icon_size = GTK_ICON_SIZE_MENU;
 }
@@ -262,8 +259,6 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
                                                         GTK_PARAM_READWRITE));
 
 
-
-  g_type_class_add_private (object_class, sizeof (GtkCellRendererPixbufPrivate));
 
   gtk_cell_renderer_class_set_accessible_type (cell_class, GTK_TYPE_IMAGE_CELL_ACCESSIBLE);
 }

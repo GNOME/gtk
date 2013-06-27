@@ -110,7 +110,9 @@ struct _GtkToolItemGroupChild
 static void gtk_tool_item_group_tool_shell_init (GtkToolShellIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkToolItemGroup, gtk_tool_item_group, GTK_TYPE_CONTAINER,
-G_IMPLEMENT_INTERFACE (GTK_TYPE_TOOL_SHELL, gtk_tool_item_group_tool_shell_init));
+                         G_ADD_PRIVATE (GtkToolItemGroup)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_TOOL_SHELL,
+                                                gtk_tool_item_group_tool_shell_init));
 
 static GtkWidget*
 gtk_tool_item_group_get_alignment (GtkToolItemGroup *group)
@@ -381,9 +383,7 @@ gtk_tool_item_group_init (GtkToolItemGroup *group)
 
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (group), FALSE);
 
-  group->priv = priv = G_TYPE_INSTANCE_GET_PRIVATE (group,
-                                             GTK_TYPE_TOOL_ITEM_GROUP,
-                                             GtkToolItemGroupPrivate);
+  group->priv = priv = gtk_tool_item_group_get_instance_private (group);
 
   priv->children = NULL;
   priv->header_spacing = DEFAULT_HEADER_SPACING;
@@ -1677,8 +1677,6 @@ gtk_tool_item_group_class_init (GtkToolItemGroupClass *cls)
                                                                 G_MAXINT,
                                                                 0,
                                                                 GTK_PARAM_READWRITE));
-
-  g_type_class_add_private (cls, sizeof (GtkToolItemGroupPrivate));
 }
 
 /**

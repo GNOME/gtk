@@ -408,7 +408,7 @@ static StyleData *style_data_lookup             (GtkStyleContext *context);
 static void gtk_style_context_disconnect_update (GtkStyleContext *context);
 static void gtk_style_context_connect_update    (GtkStyleContext *context);
 
-G_DEFINE_TYPE (GtkStyleContext, gtk_style_context, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkStyleContext, gtk_style_context, G_TYPE_OBJECT)
 
 static void
 gtk_style_context_real_changed (GtkStyleContext *context)
@@ -476,8 +476,6 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
                                                         P_("The parent style context"),
                                                         GTK_TYPE_STYLE_CONTEXT,
                                                         GTK_PARAM_READWRITE));
-
-  g_type_class_add_private (object_class, sizeof (GtkStyleContextPrivate));
 }
 
 static StyleData *
@@ -715,9 +713,8 @@ gtk_style_context_init (GtkStyleContext *style_context)
 {
   GtkStyleContextPrivate *priv;
 
-  priv = style_context->priv = G_TYPE_INSTANCE_GET_PRIVATE (style_context,
-                                                            GTK_TYPE_STYLE_CONTEXT,
-                                                            GtkStyleContextPrivate);
+  priv = style_context->priv =
+    gtk_style_context_get_instance_private (style_context);
 
   priv->style_data = g_hash_table_new_full (style_info_hash,
                                             style_info_equal,

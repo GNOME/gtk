@@ -86,7 +86,7 @@ enum {
 };
 
 
-G_DEFINE_TYPE (GtkCustomPaperUnixDialog, gtk_custom_paper_unix_dialog, GTK_TYPE_DIALOG)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkCustomPaperUnixDialog, gtk_custom_paper_unix_dialog, GTK_TYPE_DIALOG)
 
 
 static void gtk_custom_paper_unix_dialog_finalize  (GObject                *object);
@@ -269,13 +269,7 @@ _gtk_print_save_custom_papers (GtkListStore *store)
 static void
 gtk_custom_paper_unix_dialog_class_init (GtkCustomPaperUnixDialogClass *class)
 {
-  GObjectClass *object_class;
-
-  object_class = (GObjectClass *) class;
-
-  object_class->finalize = gtk_custom_paper_unix_dialog_finalize;
-
-  g_type_class_add_private (class, sizeof (GtkCustomPaperUnixDialogPrivate));
+  G_OBJECT_CLASS (class)->finalize = gtk_custom_paper_unix_dialog_finalize;
 }
 
 static void
@@ -294,9 +288,7 @@ gtk_custom_paper_unix_dialog_init (GtkCustomPaperUnixDialog *dialog)
   GtkCustomPaperUnixDialogPrivate *priv;
   GtkTreeIter iter;
 
-  dialog->priv = G_TYPE_INSTANCE_GET_PRIVATE (dialog,
-                                              GTK_TYPE_CUSTOM_PAPER_UNIX_DIALOG,
-                                              GtkCustomPaperUnixDialogPrivate);
+  dialog->priv = gtk_custom_paper_unix_dialog_get_instance_private (dialog);
   priv = dialog->priv;
 
   priv->print_backends = NULL;

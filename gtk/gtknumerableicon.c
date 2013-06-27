@@ -93,7 +93,7 @@ enum {
 
 static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
 
-G_DEFINE_TYPE (GtkNumerableIcon, gtk_numerable_icon, G_TYPE_EMBLEMED_ICON);
+G_DEFINE_TYPE_WITH_PRIVATE (GtkNumerableIcon, gtk_numerable_icon, G_TYPE_EMBLEMED_ICON)
 
 static gint
 get_surface_size (cairo_surface_t *surface)
@@ -636,8 +636,6 @@ gtk_numerable_icon_class_init (GtkNumerableIconClass *klass)
   oclass->dispose = gtk_numerable_icon_dispose;
   oclass->finalize = gtk_numerable_icon_finalize;
 
-  g_type_class_add_private (klass, sizeof (GtkNumerableIconPrivate));
-
   properties[PROP_COUNT] =
     g_param_spec_int ("count",
                       P_("Icon's count"),
@@ -682,9 +680,7 @@ gtk_numerable_icon_init (GtkNumerableIcon *self)
   GdkRGBA bg;
   GdkRGBA fg;
 
-  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
-                                            GTK_TYPE_NUMERABLE_ICON,
-                                            GtkNumerableIconPrivate);
+  self->priv = gtk_numerable_icon_get_instance_private (self);
 
   gdk_rgba_parse (&bg, DEFAULT_BACKGROUND);
   gdk_rgba_parse (&fg, DEFAULT_FOREGROUND);

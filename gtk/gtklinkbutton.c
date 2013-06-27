@@ -136,7 +136,7 @@ static const GdkColor default_visited_link_color = { 0, 0x5555, 0x1a1a, 0x8b8b }
 
 static guint link_signals[LAST_SIGNAL] = { 0, };
 
-G_DEFINE_TYPE (GtkLinkButton, gtk_link_button, GTK_TYPE_BUTTON)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkLinkButton, gtk_link_button, GTK_TYPE_BUTTON)
 
 static void
 gtk_link_button_class_init (GtkLinkButtonClass *klass)
@@ -190,8 +190,6 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
                                                          P_("Whether this link has been visited."),
                                                          FALSE,
                                                          G_PARAM_READWRITE));
-  
-  g_type_class_add_private (gobject_class, sizeof (GtkLinkButtonPrivate));
 
   /**
    * GtkLinkButton::activate-link:
@@ -222,9 +220,7 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
 static void
 gtk_link_button_init (GtkLinkButton *link_button)
 {
-  link_button->priv = G_TYPE_INSTANCE_GET_PRIVATE (link_button,
-                                                   GTK_TYPE_LINK_BUTTON,
-                                                   GtkLinkButtonPrivate);
+  link_button->priv = gtk_link_button_get_instance_private (link_button);
 
   gtk_button_set_relief (GTK_BUTTON (link_button), GTK_RELIEF_NONE);
   

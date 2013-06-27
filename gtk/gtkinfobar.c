@@ -181,6 +181,7 @@ static void      gtk_info_bar_buildable_custom_finished    (GtkBuildable  *build
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkInfoBar, gtk_info_bar, GTK_TYPE_BOX,
+                         G_ADD_PRIVATE (GtkInfoBar)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_info_bar_buildable_interface_init))
 
@@ -532,8 +533,6 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/gtkinfobar.ui");
   gtk_widget_class_bind_child_internal (widget_class, GtkInfoBarPrivate, content_area);
   gtk_widget_class_bind_child_internal (widget_class, GtkInfoBarPrivate, action_area);
-
-  g_type_class_add_private (object_class, sizeof (GtkInfoBarPrivate));
 }
 
 static void
@@ -541,9 +540,7 @@ gtk_info_bar_init (GtkInfoBar *info_bar)
 {
   GtkWidget *widget = GTK_WIDGET (info_bar);
 
-  info_bar->priv = G_TYPE_INSTANCE_GET_PRIVATE (info_bar,
-                                                GTK_TYPE_INFO_BAR,
-                                                GtkInfoBarPrivate);
+  info_bar->priv = gtk_info_bar_get_instance_private (info_bar);
 
   gtk_widget_set_redraw_on_allocate (widget, TRUE);
 

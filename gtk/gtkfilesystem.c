@@ -93,7 +93,7 @@ struct AsyncFuncData
   gpointer data;
 };
 
-G_DEFINE_TYPE (GtkFileSystem, _gtk_file_system, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkFileSystem, _gtk_file_system, G_TYPE_OBJECT)
 
 
 /* GtkFileSystem methods */
@@ -151,8 +151,6 @@ _gtk_file_system_class_init (GtkFileSystemClass *class)
 		  NULL, NULL,
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
-
-  g_type_class_add_private (object_class, sizeof (GtkFileSystemPrivate));
 }
 
 static gboolean
@@ -336,10 +334,7 @@ _gtk_file_system_init (GtkFileSystem *file_system)
 
   DEBUG ("init");
 
-  file_system->priv = G_TYPE_INSTANCE_GET_PRIVATE (file_system,
-                                                   GTK_TYPE_FILE_SYSTEM,
-                                                   GtkFileSystemPrivate);
-  priv = file_system->priv;
+  file_system->priv = priv = _gtk_file_system_get_instance_private (file_system);
 
   /* Volumes */
   priv->volume_monitor = g_volume_monitor_get ();

@@ -94,7 +94,7 @@ static guint adjustment_signals[LAST_SIGNAL] = { 0 };
 
 static guint64 adjustment_changed_stamp = 0; /* protected by global gdk lock */
 
-G_DEFINE_TYPE (GtkAdjustment, gtk_adjustment, G_TYPE_INITIALLY_UNOWNED)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkAdjustment, gtk_adjustment, G_TYPE_INITIALLY_UNOWNED)
 
 static void
 gtk_adjustment_class_init (GtkAdjustmentClass *class)
@@ -246,16 +246,12 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
-
-  g_type_class_add_private (class, sizeof (GtkAdjustmentPrivate));
 }
 
 static void
 gtk_adjustment_init (GtkAdjustment *adjustment)
 {
-  adjustment->priv = G_TYPE_INSTANCE_GET_PRIVATE (adjustment,
-                                                  GTK_TYPE_ADJUSTMENT,
-                                                  GtkAdjustmentPrivate);
+  adjustment->priv = gtk_adjustment_get_instance_private (adjustment);
 }
 
 static void

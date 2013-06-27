@@ -164,16 +164,21 @@ enum {
   LAST_SIGNAL
 };
 
+static gint GtkCellRenderer_private_offset;
 static guint  cell_renderer_signals[LAST_SIGNAL] = { 0 };
+
+static inline gpointer
+gtk_cell_renderer_get_instance_private (GtkCellRenderer *self)
+{
+  return (G_STRUCT_MEMBER_P (self, GtkCellRenderer_private_offset));
+}
 
 static void
 gtk_cell_renderer_init (GtkCellRenderer *cell)
 {
   GtkCellRendererPrivate *priv;
 
-  cell->priv = G_TYPE_INSTANCE_GET_PRIVATE (cell,
-                                            GTK_TYPE_CELL_RENDERER,
-                                            GtkCellRendererPrivate);
+  cell->priv = gtk_cell_renderer_get_instance_private (cell);
   priv = cell->priv;
 
   priv->mode = GTK_CELL_RENDERER_MODE_INERT;
@@ -427,7 +432,8 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
                 P_("Cell background set"),
                 P_("Whether the cell background color is set"));
 
-  g_type_class_add_private (class, sizeof (GtkCellRendererPrivate));
+  if (GtkCellRenderer_private_offset != 0)
+    g_type_class_adjust_private_offset (class, &GtkCellRenderer_private_offset);
 
   gtk_cell_renderer_class_set_accessible_type (class, GTK_TYPE_RENDERER_CELL_ACCESSIBLE);
 }
@@ -463,6 +469,8 @@ gtk_cell_renderer_get_type (void)
       cell_renderer_type = g_type_register_static (G_TYPE_INITIALLY_UNOWNED, "GtkCellRenderer",
                                                    &cell_renderer_info, G_TYPE_FLAG_ABSTRACT);
 
+      GtkCellRenderer_private_offset =
+        g_type_add_instance_private (cell_renderer_type, sizeof (GtkCellRendererPrivate));
       g_type_add_class_private (cell_renderer_type, sizeof (GtkCellRendererClassPrivate));
     }
 

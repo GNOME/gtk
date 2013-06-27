@@ -137,8 +137,6 @@ enum {
   PROP_ACTIVE_WINDOW
 };
 
-G_DEFINE_TYPE (GtkApplication, gtk_application, G_TYPE_APPLICATION)
-
 struct _GtkApplicationPrivate
 {
   GList *windows;
@@ -175,6 +173,8 @@ struct _GtkApplicationPrivate
   guint next_cookie;
 #endif
 };
+
+G_DEFINE_TYPE_WITH_PRIVATE (GtkApplication, gtk_application, G_TYPE_APPLICATION)
 
 #ifdef GDK_WINDOWING_X11
 static void
@@ -492,9 +492,7 @@ gtk_application_after_emit (GApplication *application,
 static void
 gtk_application_init (GtkApplication *application)
 {
-  application->priv = G_TYPE_INSTANCE_GET_PRIVATE (application,
-                                                   GTK_TYPE_APPLICATION,
-                                                   GtkApplicationPrivate);
+  application->priv = gtk_application_get_instance_private (application);
 
 #ifdef GDK_WINDOWING_X11
   application->priv->next_id = 1;
@@ -688,8 +686,6 @@ gtk_application_class_init (GtkApplicationClass *class)
 
   class->window_added = gtk_application_window_added;
   class->window_removed = gtk_application_window_removed;
-
-  g_type_class_add_private (class, sizeof (GtkApplicationPrivate));
 
   /**
    * GtkApplication::window-added:

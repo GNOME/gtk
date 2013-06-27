@@ -100,6 +100,7 @@ static gint signals[LAST_SIGNAL];
 static GtkBuildableIface *parent_buildable_iface;
 
 G_DEFINE_TYPE_WITH_CODE (GtkMenuToolButton, gtk_menu_tool_button, GTK_TYPE_TOOL_BUTTON,
+                         G_ADD_PRIVATE (GtkMenuToolButton)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_menu_tool_button_buildable_interface_init))
 
@@ -272,8 +273,6 @@ gtk_menu_tool_button_class_init (GtkMenuToolButtonClass *klass)
                                                         P_("The dropdown menu"),
                                                         GTK_TYPE_MENU,
                                                         GTK_PARAM_READWRITE));
-
-  g_type_class_add_private (object_class, sizeof (GtkMenuToolButtonPrivate));
 }
 
 static void
@@ -283,9 +282,7 @@ gtk_menu_tool_button_init (GtkMenuToolButton *button)
   GtkWidget *arrow_button;
   GtkWidget *real_button;
 
-  button->priv = G_TYPE_INSTANCE_GET_PRIVATE (button,
-                                              GTK_TYPE_MENU_TOOL_BUTTON,
-                                              GtkMenuToolButtonPrivate);
+  button->priv = gtk_menu_tool_button_get_instance_private (button);
 
   gtk_tool_item_set_homogeneous (GTK_TOOL_ITEM (button), FALSE);
 

@@ -46,7 +46,7 @@ enum
   PROP_SCALE_TYPE
 };
 
-G_DEFINE_TYPE (GtkColorScale, gtk_color_scale, GTK_TYPE_SCALE)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkColorScale, gtk_color_scale, GTK_TYPE_SCALE)
 
 static void
 gtk_color_scale_get_trough_size (GtkColorScale *scale,
@@ -248,9 +248,8 @@ scale_draw (GtkWidget *widget,
 static void
 gtk_color_scale_init (GtkColorScale *scale)
 {
-  scale->priv = G_TYPE_INSTANCE_GET_PRIVATE (scale,
-                                             GTK_TYPE_COLOR_SCALE,
-                                             GtkColorScalePrivate);
+  scale->priv = gtk_color_scale_get_instance_private (scale);
+
   gtk_widget_add_events (GTK_WIDGET (scale), GDK_TOUCH_MASK);
 }
 
@@ -383,8 +382,6 @@ gtk_color_scale_class_init (GtkColorScaleClass *class)
       g_param_spec_int ("scale-type", P_("Scale type"), P_("Scale type"),
                         0, 1, 0,
                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-
-  g_type_class_add_private (class, sizeof (GtkColorScalePrivate));
 }
 
 void
@@ -401,9 +398,9 @@ GtkWidget *
 gtk_color_scale_new (GtkAdjustment     *adjustment,
                      GtkColorScaleType  type)
 {
-  return (GtkWidget *) g_object_new (GTK_TYPE_COLOR_SCALE,
-                                     "adjustment", adjustment,
-                                     "draw-value", FALSE,
-                                     "scale-type", type,
-                                     NULL);
+  return g_object_new (GTK_TYPE_COLOR_SCALE,
+                       "adjustment", adjustment,
+                       "draw-value", FALSE,
+                       "scale-type", type,
+                       NULL);
 }

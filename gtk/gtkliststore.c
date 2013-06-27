@@ -307,6 +307,7 @@ static void     gtk_list_store_buildable_custom_tag_end (GtkBuildable *buildable
 							 gpointer     *data);
 
 G_DEFINE_TYPE_WITH_CODE (GtkListStore, gtk_list_store, G_TYPE_OBJECT,
+                         G_ADD_PRIVATE (GtkListStore)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL,
 						gtk_list_store_tree_model_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_SOURCE,
@@ -327,8 +328,6 @@ gtk_list_store_class_init (GtkListStoreClass *class)
   object_class = (GObjectClass*) class;
 
   object_class->finalize = gtk_list_store_finalize;
-
-  g_type_class_add_private (class, sizeof (GtkListStorePrivate));
 }
 
 static void
@@ -386,9 +385,7 @@ gtk_list_store_init (GtkListStore *list_store)
 {
   GtkListStorePrivate *priv;
 
-  list_store->priv = G_TYPE_INSTANCE_GET_PRIVATE (list_store,
-                                                  GTK_TYPE_LIST_STORE,
-                                                  GtkListStorePrivate);
+  list_store->priv = gtk_list_store_get_instance_private (list_store);
   priv = list_store->priv;
 
   priv->seq = g_sequence_new (NULL);

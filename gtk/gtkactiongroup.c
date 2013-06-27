@@ -171,45 +171,12 @@ static void gtk_action_group_buildable_custom_tag_end (GtkBuildable *buildable,
 						       const gchar  *tagname,
 						       gpointer     *user_data);
 
-GType
-gtk_action_group_get_type (void)
-{
-  static GType type = 0;
-
-  if (!type)
-    {
-      const GTypeInfo type_info =
-      {
-        sizeof (GtkActionGroupClass),
-	NULL,           /* base_init */
-        NULL,           /* base_finalize */
-        (GClassInitFunc) gtk_action_group_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GtkActionGroup),
-        0, /* n_preallocs */
-        (GInstanceInitFunc) gtk_action_group_init,
-      };
-
-      const GInterfaceInfo buildable_info =
-      {
-	(GInterfaceInitFunc) gtk_action_group_buildable_init,
-	NULL,
-	NULL
-      };
-
-      type = g_type_register_static (G_TYPE_OBJECT, I_("GtkActionGroup"),
-				     &type_info, 0);
-
-      g_type_add_interface_static (type,
-				   GTK_TYPE_BUILDABLE,
-				   &buildable_info);
-    }
-  return type;
-}
-
-static GObjectClass *parent_class = NULL;
 static guint         action_group_signals[LAST_SIGNAL] = { 0 };
+
+G_DEFINE_TYPE_WITH_CODE (GtkActionGroup, gtk_action_group, G_TYPE_OBJECT,
+                         G_ADD_PRIVATE (GtkActionGroup)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_action_group_buildable_init))
 
 static void
 gtk_action_group_class_init (GtkActionGroupClass *klass)
@@ -217,7 +184,6 @@ gtk_action_group_class_init (GtkActionGroupClass *klass)
   GObjectClass *gobject_class;
 
   gobject_class = G_OBJECT_CLASS (klass);
-  parent_class = g_type_class_peek_parent (klass);
 
   gobject_class->finalize = gtk_action_group_finalize;
   gobject_class->set_property = gtk_action_group_set_property;
@@ -381,8 +347,6 @@ gtk_action_group_class_init (GtkActionGroupClass *klass)
 		  _gtk_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1, 
 		  GTK_TYPE_ACTION);
-
-  g_type_class_add_private (gobject_class, sizeof (GtkActionGroupPrivate));
 }
 
 
@@ -396,22 +360,16 @@ remove_action (GtkAction *action)
 static void
 gtk_action_group_init (GtkActionGroup *action_group)
 {
-  GtkActionGroupPrivate *private;
-
-  action_group->priv = G_TYPE_INSTANCE_GET_PRIVATE (action_group,
-                                                    GTK_TYPE_ACTION_GROUP,
-                                                    GtkActionGroupPrivate);
-  private = action_group->priv;
-
-  private->name = NULL;
-  private->sensitive = TRUE;
-  private->visible = TRUE;
-  private->actions = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                            NULL,
-                                            (GDestroyNotify) remove_action);
-  private->translate_func = NULL;
-  private->translate_data = NULL;
-  private->translate_notify = NULL;
+  action_group->priv = gtk_action_group_get_instance_private (action_group);
+  action_group->priv->name = NULL;
+  action_group->priv->sensitive = TRUE;
+  action_group->priv->visible = TRUE;
+  action_group->priv->actions = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                       NULL,
+                                                       (GDestroyNotify) remove_action);
+  action_group->priv->translate_func = NULL;
+  action_group->priv->translate_data = NULL;
+  action_group->priv->translate_notify = NULL;
 }
 
 static void
@@ -592,24 +550,18 @@ gtk_action_group_new (const gchar *name)
 static void
 gtk_action_group_finalize (GObject *object)
 {
-  GtkActionGroup *self;
-  GtkActionGroupPrivate *private;
+  GtkActionGroup *self = GTK_ACTION_GROUP (object);
 
-  self = GTK_ACTION_GROUP (object);
-  private = self->priv;
+  g_free (self->priv->name);
 
-  g_free (private->name);
-  private->name = NULL;
+  g_hash_table_destroy (self->priv->actions);
 
-  g_hash_table_destroy (private->actions);
-  private->actions = NULL;
+  g_clear_object (&self->priv->accel_group);
 
-  g_clear_object (&private->accel_group);
+  if (self->priv->translate_notify != NULL)
+    self->priv->translate_notify (self->priv->translate_data);
 
-  if (private->translate_notify)
-    private->translate_notify (private->translate_data);
-
-  parent_class->finalize (object);
+  G_OBJECT_CLASS (gtk_action_group_parent_class)->finalize (object);
 }
 
 static void

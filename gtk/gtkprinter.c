@@ -102,7 +102,7 @@ static void gtk_printer_get_property (GObject      *object,
 				      GValue       *value,
 				      GParamSpec   *pspec);
 
-G_DEFINE_TYPE (GtkPrinter, gtk_printer, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkPrinter, gtk_printer, G_TYPE_OBJECT)
 
 static void
 gtk_printer_class_init (GtkPrinterClass *class)
@@ -114,8 +114,6 @@ gtk_printer_class_init (GtkPrinterClass *class)
 
   object_class->set_property = gtk_printer_set_property;
   object_class->get_property = gtk_printer_get_property;
-
-  g_type_class_add_private (class, sizeof (GtkPrinterPrivate));
 
   g_object_class_install_property (G_OBJECT_CLASS (class),
                                    PROP_NAME,
@@ -240,9 +238,7 @@ gtk_printer_init (GtkPrinter *printer)
 {
   GtkPrinterPrivate *priv;
 
-  priv = printer->priv = G_TYPE_INSTANCE_GET_PRIVATE (printer,
-                                                      GTK_TYPE_PRINTER,
-                                                      GtkPrinterPrivate);
+  priv = printer->priv = gtk_printer_get_instance_private (printer);
 
   priv->name = NULL;
   priv->location = NULL;

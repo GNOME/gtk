@@ -80,7 +80,7 @@ static void gtk_radio_action_activate     (GtkAction *action);
 static GtkWidget *create_menu_item        (GtkAction *action);
 
 
-G_DEFINE_TYPE (GtkRadioAction, gtk_radio_action, GTK_TYPE_TOGGLE_ACTION)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkRadioAction, gtk_radio_action, GTK_TYPE_TOGGLE_ACTION)
 
 static guint         radio_action_signals[LAST_SIGNAL] = { 0 };
 
@@ -181,17 +181,12 @@ gtk_radio_action_class_init (GtkRadioActionClass *klass)
 		  G_STRUCT_OFFSET (GtkRadioActionClass, changed),  NULL, NULL,
 		  g_cclosure_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1, GTK_TYPE_RADIO_ACTION);
-
-  g_type_class_add_private (gobject_class, sizeof (GtkRadioActionPrivate));
 }
 
 static void
 gtk_radio_action_init (GtkRadioAction *action)
 {
-  action->private_data = G_TYPE_INSTANCE_GET_PRIVATE (action,
-                                                      GTK_TYPE_RADIO_ACTION,
-                                                      GtkRadioActionPrivate);
-
+  action->private_data = gtk_radio_action_get_instance_private (action);
   action->private_data->group = g_slist_prepend (NULL, action);
   action->private_data->value = 0;
 

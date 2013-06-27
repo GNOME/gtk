@@ -158,6 +158,7 @@ static void          clamp_page_ranges       (PrintPagesData *data);
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkPrintOperation, gtk_print_operation, G_TYPE_OBJECT,
+                         G_ADD_PRIVATE (GtkPrintOperation)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_PRINT_OPERATION_PREVIEW,
 						preview_iface_init))
 
@@ -224,9 +225,7 @@ gtk_print_operation_init (GtkPrintOperation *operation)
   GtkPrintOperationPrivate *priv;
   const char *appname;
 
-  priv = operation->priv = G_TYPE_INSTANCE_GET_PRIVATE (operation,
-                                                        GTK_TYPE_PRINT_OPERATION,
-                                                        GtkPrintOperationPrivate);
+  priv = operation->priv = gtk_print_operation_get_instance_private (operation);
 
   priv->status = GTK_PRINT_STATUS_INITIAL;
   priv->status_string = g_strdup ("");
@@ -736,8 +735,6 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
   class->preview = gtk_print_operation_preview_handler; 
   class->create_custom_widget = gtk_print_operation_create_custom_widget;
   class->done = gtk_print_operation_done;
-  
-  g_type_class_add_private (gobject_class, sizeof (GtkPrintOperationPrivate));
 
   /**
    * GtkPrintOperation::done:

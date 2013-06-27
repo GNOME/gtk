@@ -192,18 +192,16 @@ static void gtk_tool_palette_set_vadjustment (GtkToolPalette *palette,
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkToolPalette,
-               gtk_tool_palette,
-               GTK_TYPE_CONTAINER,
-               G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL)
-	       G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
+                         gtk_tool_palette,
+                         GTK_TYPE_CONTAINER,
+                         G_ADD_PRIVATE (GtkToolPalette)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
 
 static void
 gtk_tool_palette_init (GtkToolPalette *palette)
 {
-  palette->priv = G_TYPE_INSTANCE_GET_PRIVATE (palette,
-                                               GTK_TYPE_TOOL_PALETTE,
-                                               GtkToolPalettePrivate);
-
+  palette->priv = gtk_tool_palette_get_instance_private (palette);
   palette->priv->groups = g_ptr_array_sized_new (4);
   g_ptr_array_set_free_func (palette->priv->groups, g_free);
 
@@ -1007,8 +1005,6 @@ gtk_tool_palette_class_init (GtkToolPaletteClass *cls)
                                                                     P_("Whether the item group should receive extra space when the palette grows"),
                                                                     DEFAULT_CHILD_EXPAND,
                                                                     GTK_PARAM_READWRITE));
-
-  g_type_class_add_private (cls, sizeof (GtkToolPalettePrivate));
 }
 
 /**

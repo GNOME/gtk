@@ -68,7 +68,7 @@ struct _GtkSearchEngineSimplePrivate
 };
 
 
-G_DEFINE_TYPE (GtkSearchEngineSimple, _gtk_search_engine_simple, GTK_TYPE_SEARCH_ENGINE);
+G_DEFINE_TYPE_WITH_PRIVATE (GtkSearchEngineSimple, _gtk_search_engine_simple, GTK_TYPE_SEARCH_ENGINE)
 
 static void
 gtk_search_engine_simple_dispose (GObject *object)
@@ -362,14 +362,12 @@ _gtk_search_engine_simple_class_init (GtkSearchEngineSimpleClass *class)
   engine_class->start = gtk_search_engine_simple_start;
   engine_class->stop = gtk_search_engine_simple_stop;
   engine_class->is_indexed = gtk_search_engine_simple_is_indexed;
-
-  g_type_class_add_private (gobject_class, sizeof (GtkSearchEngineSimplePrivate));
 }
 
 static void
 _gtk_search_engine_simple_init (GtkSearchEngineSimple *engine)
 {
-  engine->priv = G_TYPE_INSTANCE_GET_PRIVATE (engine, GTK_TYPE_SEARCH_ENGINE_SIMPLE, GtkSearchEngineSimplePrivate);
+  engine->priv = _gtk_search_engine_simple_get_instance_private (engine);
 }
 
 GtkSearchEngine *

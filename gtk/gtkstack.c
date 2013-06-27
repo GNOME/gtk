@@ -172,7 +172,7 @@ static gint     get_bin_window_x                         (GtkStack      *stack,
 static gint     get_bin_window_y                         (GtkStack      *stack,
                                                           GtkAllocation *allocation);
 
-G_DEFINE_TYPE_WITH_PRIVATE(GtkStack, gtk_stack, GTK_TYPE_CONTAINER);
+G_DEFINE_TYPE_WITH_PRIVATE (GtkStack, gtk_stack, GTK_TYPE_CONTAINER)
 
 static void
 gtk_stack_init (GtkStack *stack)

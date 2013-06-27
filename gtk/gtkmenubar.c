@@ -102,7 +102,7 @@ static void gtk_menu_bar_move_current      (GtkMenuShell     *menu_shell,
 
 static GtkShadowType get_shadow_type   (GtkMenuBar      *menubar);
 
-G_DEFINE_TYPE (GtkMenuBar, gtk_menu_bar, GTK_TYPE_MENU_SHELL)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkMenuBar, gtk_menu_bar, GTK_TYPE_MENU_SHELL)
 
 static void
 gtk_menu_bar_class_init (GtkMenuBarClass *class)
@@ -237,8 +237,6 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
                                                              0,
                                                              GTK_PARAM_READABLE |
                                                              G_PARAM_DEPRECATED));
-
-  g_type_class_add_private (gobject_class, sizeof (GtkMenuBarPrivate));
 }
 
 static void
@@ -246,9 +244,7 @@ gtk_menu_bar_init (GtkMenuBar *menu_bar)
 {
   GtkStyleContext *context;
 
-  menu_bar->priv = G_TYPE_INSTANCE_GET_PRIVATE (menu_bar,
-                                                GTK_TYPE_MENU_BAR,
-                                                GtkMenuBarPrivate);
+  menu_bar->priv = gtk_menu_bar_get_instance_private (menu_bar);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (menu_bar));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_MENUBAR);

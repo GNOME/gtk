@@ -207,7 +207,7 @@ static gboolean gtk_menu_shell_real_move_selected (GtkMenuShell  *menu_shell,
 
 static guint menu_shell_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_ABSTRACT_TYPE (GtkMenuShell, gtk_menu_shell, GTK_TYPE_CONTAINER)
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkMenuShell, gtk_menu_shell, GTK_TYPE_CONTAINER)
 
 static void
 gtk_menu_shell_class_init (GtkMenuShellClass *klass)
@@ -455,8 +455,6 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
                                                          GTK_PARAM_READWRITE));
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_MENU_SHELL_ACCESSIBLE);
-
-  g_type_class_add_private (object_class, sizeof (GtkMenuShellPrivate));
 }
 
 static GType
@@ -468,13 +466,8 @@ gtk_menu_shell_child_type (GtkContainer *container)
 static void
 gtk_menu_shell_init (GtkMenuShell *menu_shell)
 {
-  GtkMenuShellPrivate *priv;
-
-  priv = G_TYPE_INSTANCE_GET_PRIVATE (menu_shell,
-                                      GTK_TYPE_MENU_SHELL,
-                                      GtkMenuShellPrivate);
-  menu_shell->priv = priv;
-  priv->take_focus = TRUE;
+  menu_shell->priv = gtk_menu_shell_get_instance_private (menu_shell);
+  menu_shell->priv->take_focus = TRUE;
 }
 
 static void

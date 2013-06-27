@@ -63,7 +63,7 @@ struct _GtkSearchEngineTrackerPrivate
   gboolean query_pending;
 };
 
-G_DEFINE_TYPE (GtkSearchEngineTracker, _gtk_search_engine_tracker, GTK_TYPE_SEARCH_ENGINE);
+G_DEFINE_TYPE_WITH_PRIVATE (GtkSearchEngineTracker, _gtk_search_engine_tracker, GTK_TYPE_SEARCH_ENGINE)
 
 static void
 finalize (GObject *object)
@@ -449,17 +449,12 @@ _gtk_search_engine_tracker_class_init (GtkSearchEngineTrackerClass *class)
   engine_class->start = gtk_search_engine_tracker_start;
   engine_class->stop = gtk_search_engine_tracker_stop;
   engine_class->is_indexed = gtk_search_engine_tracker_is_indexed;
-
-  g_type_class_add_private (gobject_class,
-                            sizeof (GtkSearchEngineTrackerPrivate));
 }
 
 static void
 _gtk_search_engine_tracker_init (GtkSearchEngineTracker *engine)
 {
-  engine->priv = G_TYPE_INSTANCE_GET_PRIVATE (engine,
-                                              GTK_TYPE_SEARCH_ENGINE_TRACKER,
-                                              GtkSearchEngineTrackerPrivate);
+  engine->priv = _gtk_search_engine_tracker_get_instance_private (engine);
 }
 
 

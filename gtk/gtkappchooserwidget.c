@@ -126,6 +126,7 @@ static guint signals[N_SIGNALS] = { 0, };
 static void gtk_app_chooser_widget_iface_init (GtkAppChooserIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkAppChooserWidget, gtk_app_chooser_widget, GTK_TYPE_BOX,
+                         G_ADD_PRIVATE (GtkAppChooserWidget)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_APP_CHOOSER,
                                                 gtk_app_chooser_widget_iface_init));
 
@@ -1093,8 +1094,6 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
   gtk_widget_class_bind_callback (widget_class, refresh_and_emit_app_selected);
   gtk_widget_class_bind_callback (widget_class, program_list_selection_activated);
   gtk_widget_class_bind_callback (widget_class, widget_button_press_event_cb);
-
-  g_type_class_add_private (klass, sizeof (GtkAppChooserWidgetPrivate));
 }
 
 static void
@@ -1103,8 +1102,7 @@ gtk_app_chooser_widget_init (GtkAppChooserWidget *self)
   GtkTreeSelection *selection;
   GtkTreeModel *sort;
 
-  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self, GTK_TYPE_APP_CHOOSER_WIDGET,
-                                            GtkAppChooserWidgetPrivate);
+  self->priv = gtk_app_chooser_widget_get_instance_private (self);
 
   gtk_widget_init_template (GTK_WIDGET (self));
 

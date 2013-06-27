@@ -153,12 +153,13 @@ enum
   PROP_FIT_MODEL
 };
 
-G_DEFINE_TYPE_WITH_CODE (GtkCellView, gtk_cell_view, GTK_TYPE_WIDGET, 
+G_DEFINE_TYPE_WITH_CODE (GtkCellView, gtk_cell_view, GTK_TYPE_WIDGET,
+                         G_ADD_PRIVATE (GtkCellView)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
 						gtk_cell_view_cell_layout_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
 						gtk_cell_view_buildable_init)
-			 G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL));
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
 
 static void
 gtk_cell_view_class_init (GtkCellViewClass *klass)
@@ -322,8 +323,6 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
   ADD_SET_PROP ("background-set", PROP_BACKGROUND_SET,
                 P_("Background set"),
                 P_("Whether this tag affects the background color"));
-
-  g_type_class_add_private (gobject_class, sizeof (GtkCellViewPrivate));
 }
 
 static void
@@ -533,16 +532,10 @@ gtk_cell_view_set_property (GObject      *object,
 static void
 gtk_cell_view_init (GtkCellView *cellview)
 {
-  GtkCellViewPrivate *priv;
-
-  cellview->priv = G_TYPE_INSTANCE_GET_PRIVATE (cellview,
-                                                GTK_TYPE_CELL_VIEW,
-                                                GtkCellViewPrivate);
-  priv = cellview->priv;
+  cellview->priv = gtk_cell_view_get_instance_private (cellview);
+  cellview->priv->orientation = GTK_ORIENTATION_HORIZONTAL;
 
   gtk_widget_set_has_window (GTK_WIDGET (cellview), FALSE);
-
-  priv->orientation = GTK_ORIENTATION_HORIZONTAL;
 }
 
 static void

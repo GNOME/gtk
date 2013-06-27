@@ -115,7 +115,7 @@ static void gtk_alignment_get_preferred_height_and_baseline_for_width (GtkWidget
 								       gint                *minimum_baseline,
 								       gint                *natural_baseline);
 
-G_DEFINE_TYPE (GtkAlignment, gtk_alignment, GTK_TYPE_BIN)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkAlignment, gtk_alignment, GTK_TYPE_BIN)
 
 static void
 gtk_alignment_class_init (GtkAlignmentClass *class)
@@ -242,8 +242,6 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
                                                       G_MAXINT,
                                                       0,
                                                       GTK_PARAM_READWRITE));
-
-  g_type_class_add_private (gobject_class, sizeof (GtkAlignmentPrivate));
 }
 
 static void
@@ -251,9 +249,7 @@ gtk_alignment_init (GtkAlignment *alignment)
 {
   GtkAlignmentPrivate *priv;
 
-  alignment->priv = G_TYPE_INSTANCE_GET_PRIVATE (alignment,
-                                                 GTK_TYPE_ALIGNMENT,
-                                                 GtkAlignmentPrivate);
+  alignment->priv = gtk_alignment_get_instance_private (alignment);
   priv = alignment->priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (alignment), FALSE);

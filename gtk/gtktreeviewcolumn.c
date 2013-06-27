@@ -209,6 +209,7 @@ enum
 static guint tree_column_signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkTreeViewColumn, gtk_tree_view_column, G_TYPE_INITIALLY_UNOWNED,
+                         G_ADD_PRIVATE (GtkTreeViewColumn)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
 						gtk_tree_view_column_cell_layout_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
@@ -425,8 +426,6 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
 							P_("The GtkCellArea used to layout cells"),
 							GTK_TYPE_CELL_AREA,
 							GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-
-  g_type_class_add_private (class, sizeof (GtkTreeViewColumnPrivate));
 }
 
 static void
@@ -459,9 +458,7 @@ gtk_tree_view_column_init (GtkTreeViewColumn *tree_column)
 {
   GtkTreeViewColumnPrivate *priv;
 
-  tree_column->priv = G_TYPE_INSTANCE_GET_PRIVATE (tree_column,
-						   GTK_TYPE_TREE_VIEW_COLUMN,
-						   GtkTreeViewColumnPrivate);
+  tree_column->priv = gtk_tree_view_column_get_instance_private (tree_column);
   priv = tree_column->priv;
 
   priv->button = NULL;

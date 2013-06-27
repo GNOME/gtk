@@ -291,6 +291,7 @@ static void gtk_spin_button_default_output (GtkSpinButton      *spin_button);
 static guint spinbutton_signals[LAST_SIGNAL] = {0};
 
 G_DEFINE_TYPE_WITH_CODE (GtkSpinButton, gtk_spin_button, GTK_TYPE_ENTRY,
+                         G_ADD_PRIVATE (GtkSpinButton)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
                                                 gtk_spin_button_editable_init))
@@ -537,8 +538,6 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   add_spin_binding (binding_set, GDK_KEY_Page_Up, GDK_CONTROL_MASK, GTK_SCROLL_END);
   add_spin_binding (binding_set, GDK_KEY_Page_Down, GDK_CONTROL_MASK, GTK_SCROLL_START);
 
-  g_type_class_add_private (class, sizeof (GtkSpinButtonPrivate));
-
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SPIN_BUTTON_ACCESSIBLE);
 }
 
@@ -653,9 +652,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   GtkSpinButtonPrivate *priv;
   GtkStyleContext *context;
 
-  spin_button->priv = G_TYPE_INSTANCE_GET_PRIVATE (spin_button,
-                                                   GTK_TYPE_SPIN_BUTTON,
-                                                   GtkSpinButtonPrivate);
+  spin_button->priv = gtk_spin_button_get_instance_private (spin_button);
   priv = spin_button->priv;
 
   priv->adjustment = NULL;

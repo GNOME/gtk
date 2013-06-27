@@ -44,15 +44,12 @@ G_BEGIN_DECLS
 #define GTK_SEARCH_BAR_GET_CLASS(obj)       (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_SEARCH_BAR, GtkSearchBarClass))
 
 typedef struct _GtkSearchBar        GtkSearchBar;
-typedef struct _GtkSearchBarPrivate GtkSearchBarPrivate;
 typedef struct _GtkSearchBarClass   GtkSearchBarClass;
 
 struct _GtkSearchBar
 {
   /*< private >*/
   GtkBin parent;
-
-  GtkSearchBarPrivate *priv;
 };
 
 struct _GtkSearchBarClass

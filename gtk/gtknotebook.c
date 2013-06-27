@@ -527,6 +527,7 @@ static void gtk_notebook_buildable_add_child      (GtkBuildable *buildable,
 static guint notebook_signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkNotebook, gtk_notebook, GTK_TYPE_CONTAINER,
+                         G_ADD_PRIVATE (GtkNotebook)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_notebook_buildable_init))
 
@@ -1149,8 +1150,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   add_tab_bindings (binding_set, GDK_CONTROL_MASK, GTK_DIR_TAB_FORWARD);
   add_tab_bindings (binding_set, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);
 
-  g_type_class_add_private (class, sizeof (GtkNotebookPrivate));
-
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_NOTEBOOK_ACCESSIBLE);
 }
 
@@ -1163,9 +1162,7 @@ gtk_notebook_init (GtkNotebook *notebook)
   gtk_widget_set_can_focus (GTK_WIDGET (notebook), TRUE);
   gtk_widget_set_has_window (GTK_WIDGET (notebook), FALSE);
 
-  notebook->priv = G_TYPE_INSTANCE_GET_PRIVATE (notebook,
-                                                GTK_TYPE_NOTEBOOK,
-                                                GtkNotebookPrivate);
+  notebook->priv = gtk_notebook_get_instance_private (notebook);
   priv = notebook->priv;
 
   priv->cur_page = NULL;

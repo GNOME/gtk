@@ -235,18 +235,17 @@ enum {
 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkCellAreaBox, gtk_cell_area_box, GTK_TYPE_CELL_AREA,
+                         G_ADD_PRIVATE (GtkCellAreaBox)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
                                                 gtk_cell_area_box_cell_layout_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL));
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
 
 static void
 gtk_cell_area_box_init (GtkCellAreaBox *box)
 {
   GtkCellAreaBoxPrivate *priv;
 
-  box->priv = G_TYPE_INSTANCE_GET_PRIVATE (box,
-                                           GTK_TYPE_CELL_AREA_BOX,
-                                           GtkCellAreaBoxPrivate);
+  box->priv = gtk_cell_area_box_get_instance_private (box);
   priv = box->priv;
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
@@ -383,8 +382,6 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
                                                  "reference to the start or end of the cell area"),
                                               GTK_TYPE_PACK_TYPE, GTK_PACK_START,
                                               GTK_PARAM_READWRITE));
-
-  g_type_class_add_private (object_class, sizeof (GtkCellAreaBoxPrivate));
 }
 
 

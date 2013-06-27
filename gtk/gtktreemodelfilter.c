@@ -497,6 +497,7 @@ static void         gtk_tree_model_filter_emit_row_inserted_for_path      (GtkTr
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkTreeModelFilter, gtk_tree_model_filter, G_TYPE_OBJECT,
+                         G_ADD_PRIVATE (GtkTreeModelFilter)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL,
 						gtk_tree_model_filter_tree_model_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_SOURCE,
@@ -505,10 +506,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkTreeModelFilter, gtk_tree_model_filter, G_TYPE_OBJEC
 static void
 gtk_tree_model_filter_init (GtkTreeModelFilter *filter)
 {
-  filter->priv = G_TYPE_INSTANCE_GET_PRIVATE (filter,
-                                              GTK_TYPE_TREE_MODEL_FILTER,
-                                              GtkTreeModelFilterPrivate);
-
+  filter->priv = gtk_tree_model_filter_get_instance_private (filter);
   filter->priv->visible_column = -1;
   filter->priv->zero_ref_count = 0;
   filter->priv->visible_method_set = FALSE;
@@ -550,8 +548,6 @@ gtk_tree_model_filter_class_init (GtkTreeModelFilterClass *filter_class)
                                                        ("The virtual root (relative to the child model) for this filtermodel"),
                                                        GTK_TYPE_TREE_PATH,
                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-
-  g_type_class_add_private (object_class, sizeof (GtkTreeModelFilterPrivate));
 }
 
 static void

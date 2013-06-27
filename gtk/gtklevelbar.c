@@ -110,13 +110,6 @@
 #define STYLE_CLASS_FILL_BLOCK           "fill-block"
 #define STYLE_CLASS_EMPTY_FILL_BLOCK     "empty-fill-block"
 
-static void gtk_level_bar_buildable_init (GtkBuildableIface *iface);
-
-G_DEFINE_TYPE_WITH_CODE (GtkLevelBar, gtk_level_bar, GTK_TYPE_WIDGET,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-                                                gtk_level_bar_buildable_init))
-
 enum {
   PROP_VALUE = 1,
   PROP_MIN_VALUE,
@@ -156,6 +149,14 @@ struct _GtkLevelBarPrivate {
 
 static void gtk_level_bar_set_value_internal (GtkLevelBar *self,
                                               gdouble      value);
+
+static void gtk_level_bar_buildable_init (GtkBuildableIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GtkLevelBar, gtk_level_bar, GTK_TYPE_WIDGET,
+                         G_ADD_PRIVATE (GtkLevelBar)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_level_bar_buildable_init))
 
 static GtkLevelBarOffset *
 gtk_level_bar_offset_new (const gchar *name,
@@ -1024,7 +1025,6 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
                                1, G_MAXINT, DEFAULT_BLOCK_SIZE,
                                G_PARAM_READWRITE));
 
-  g_type_class_add_private (klass, sizeof (GtkLevelBarPrivate));
   g_object_class_install_properties (oclass, LAST_PROPERTY, properties);
 
   gtk_widget_class_set_accessible_type (wclass, GTK_TYPE_LEVEL_BAR_ACCESSIBLE);
@@ -1035,7 +1035,7 @@ gtk_level_bar_init (GtkLevelBar *self)
 {
   GtkStyleContext *context;
 
-  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self, GTK_TYPE_LEVEL_BAR, GtkLevelBarPrivate);
+  self->priv = gtk_level_bar_get_instance_private (self);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (self));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEVEL_BAR);

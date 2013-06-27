@@ -99,7 +99,7 @@ static void gtk_cell_renderer_spinner_render       (GtkCellRenderer      *cell,
                                                     const GdkRectangle   *cell_area,
                                                     GtkCellRendererState  flags);
 
-G_DEFINE_TYPE (GtkCellRendererSpinner, gtk_cell_renderer_spinner, GTK_TYPE_CELL_RENDERER)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkCellRendererSpinner, gtk_cell_renderer_spinner, GTK_TYPE_CELL_RENDERER)
 
 static void
 gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
@@ -159,17 +159,12 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
                                                       GTK_TYPE_ICON_SIZE, GTK_ICON_SIZE_MENU,
                                                       G_PARAM_READWRITE));
 
-
-  g_type_class_add_private (object_class, sizeof (GtkCellRendererSpinnerPrivate));
 }
 
 static void
 gtk_cell_renderer_spinner_init (GtkCellRendererSpinner *cell)
 {
-  cell->priv = G_TYPE_INSTANCE_GET_PRIVATE (cell,
-                                            GTK_TYPE_CELL_RENDERER_SPINNER,
-                                            GtkCellRendererSpinnerPrivate);
-
+  cell->priv = gtk_cell_renderer_spinner_get_instance_private (cell);
   cell->priv->pulse = 0;
   cell->priv->old_icon_size = GTK_ICON_SIZE_INVALID;
   cell->priv->icon_size = GTK_ICON_SIZE_MENU;

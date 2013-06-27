@@ -448,6 +448,7 @@ enum
 static guint ui_manager_signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkUIManager, gtk_ui_manager, G_TYPE_OBJECT,
+                         G_ADD_PRIVATE (GtkUIManager)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
 						gtk_ui_manager_buildable_init))
 
@@ -646,10 +647,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
   klass->disconnect_proxy = NULL;
   klass->pre_activate = NULL;
   klass->post_activate = NULL;
-
-  g_type_class_add_private (gobject_class, sizeof (GtkUIManagerPrivate));
 }
-
 
 static void
 gtk_ui_manager_init (GtkUIManager *manager)
@@ -657,9 +655,7 @@ gtk_ui_manager_init (GtkUIManager *manager)
   guint merge_id;
   GNode *node;
 
-  manager->private_data = G_TYPE_INSTANCE_GET_PRIVATE (manager,
-                                                       GTK_TYPE_UI_MANAGER,
-                                                       GtkUIManagerPrivate);
+  manager->private_data = gtk_ui_manager_get_instance_private (manager);
 
   manager->private_data->accel_group = gtk_accel_group_new ();
 

@@ -155,6 +155,7 @@ static guint toolitem_signals[LAST_SIGNAL] = { 0 };
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 G_DEFINE_TYPE_WITH_CODE (GtkToolItem, gtk_tool_item, GTK_TYPE_BIN,
+                         G_ADD_PRIVATE (GtkToolItem)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
 						gtk_tool_item_activatable_interface_init))
 G_GNUC_END_IGNORE_DEPRECATIONS;
@@ -275,8 +276,6 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
-
-  g_type_class_add_private (object_class, sizeof (GtkToolItemPrivate));
 }
 
 static void
@@ -284,15 +283,11 @@ gtk_tool_item_init (GtkToolItem *toolitem)
 {
   gtk_widget_set_can_focus (GTK_WIDGET (toolitem), FALSE);
 
-  toolitem->priv = G_TYPE_INSTANCE_GET_PRIVATE (toolitem,
-                                                GTK_TYPE_TOOL_ITEM,
-                                                GtkToolItemPrivate);
-
+  toolitem->priv = gtk_tool_item_get_instance_private (toolitem);
   toolitem->priv->visible_horizontal = TRUE;
   toolitem->priv->visible_vertical = TRUE;
   toolitem->priv->homogeneous = FALSE;
   toolitem->priv->expand = FALSE;
-
   toolitem->priv->use_action_appearance = TRUE;
 }
 

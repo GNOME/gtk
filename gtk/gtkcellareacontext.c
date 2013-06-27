@@ -80,14 +80,12 @@ enum {
   PROP_NAT_HEIGHT
 };
 
-G_DEFINE_TYPE (GtkCellAreaContext, gtk_cell_area_context, G_TYPE_OBJECT);
+G_DEFINE_TYPE_WITH_PRIVATE (GtkCellAreaContext, gtk_cell_area_context, G_TYPE_OBJECT)
 
 static void
 gtk_cell_area_context_init (GtkCellAreaContext *context)
 {
-  context->priv = G_TYPE_INSTANCE_GET_PRIVATE (context,
-                                               GTK_TYPE_CELL_AREA_CONTEXT,
-                                               GtkCellAreaContextPrivate);
+  context->priv = gtk_cell_area_context_get_instance_private (context);
 }
 
 static void
@@ -194,8 +192,6 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
                                                      G_MAXINT,
                                                      -1,
                                                      G_PARAM_READABLE));
-
-  g_type_class_add_private (object_class, sizeof (GtkCellAreaContextPrivate));
 }
 
 /*************************************************************

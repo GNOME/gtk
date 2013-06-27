@@ -398,6 +398,7 @@ gtk_font_button_font_chooser_iface_init (GtkFontChooserIface *iface)
 }
 
 G_DEFINE_TYPE_WITH_CODE (GtkFontButton, gtk_font_button, GTK_TYPE_BUTTON,
+                         G_ADD_PRIVATE (GtkFontButton)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_FONT_CHOOSER,
                                                 gtk_font_button_font_chooser_iface_init))
 
@@ -547,16 +548,12 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
   gtk_widget_class_bind_child (widget_class, GtkFontButtonPrivate, font_label);
   gtk_widget_class_bind_child (widget_class, GtkFontButtonPrivate, size_label);
   gtk_widget_class_bind_child (widget_class, GtkFontButtonPrivate, font_size_box);
-  
-  g_type_class_add_private (gobject_class, sizeof (GtkFontButtonPrivate));
 }
 
 static void
 gtk_font_button_init (GtkFontButton *font_button)
 {
-  font_button->priv = G_TYPE_INSTANCE_GET_PRIVATE (font_button,
-                                                   GTK_TYPE_FONT_BUTTON,
-                                                   GtkFontButtonPrivate);
+  font_button->priv = gtk_font_button_get_instance_private (font_button);
 
   /* Initialize fields */
   font_button->priv->use_font = FALSE;

@@ -107,6 +107,7 @@ static void gtk_cell_renderer_progress_render       (GtkCellRenderer         *ce
 
      
 G_DEFINE_TYPE_WITH_CODE (GtkCellRendererProgress, gtk_cell_renderer_progress, GTK_TYPE_CELL_RENDERER,
+                         G_ADD_PRIVATE (GtkCellRendererProgress)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
 
 static void
@@ -225,9 +226,6 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
                                                          P_("Invert the direction in which the progress bar grows"),
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
-
-  g_type_class_add_private (object_class, 
-			    sizeof (GtkCellRendererProgressPrivate));
 }
 
 static void
@@ -235,9 +233,7 @@ gtk_cell_renderer_progress_init (GtkCellRendererProgress *cellprogress)
 {
   GtkCellRendererProgressPrivate *priv;
 
-  cellprogress->priv = G_TYPE_INSTANCE_GET_PRIVATE (cellprogress,
-                                                    GTK_TYPE_CELL_RENDERER_PROGRESS,
-                                                    GtkCellRendererProgressPrivate);
+  cellprogress->priv = gtk_cell_renderer_progress_get_instance_private (cellprogress);
   priv = cellprogress->priv;
 
   priv->value = 0;

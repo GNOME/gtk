@@ -528,6 +528,7 @@ static void    gtk_label_get_preferred_height_and_baseline_for_width (GtkWidget 
 static GtkBuildableIface *buildable_parent_iface = NULL;
 
 G_DEFINE_TYPE_WITH_CODE (GtkLabel, gtk_label, GTK_TYPE_MISC,
+                         G_ADD_PRIVATE (GtkLabel)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
 						gtk_label_buildable_interface_init))
 
@@ -1077,8 +1078,6 @@ gtk_label_class_init (GtkLabelClass *class)
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Enter, 0,
 				"activate-current-link", 0);
 
-  g_type_class_add_private (class, sizeof (GtkLabelPrivate));
-
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_LABEL_ACCESSIBLE);
 }
 
@@ -1222,9 +1221,7 @@ gtk_label_init (GtkLabel *label)
 {
   GtkLabelPrivate *priv;
 
-  label->priv = G_TYPE_INSTANCE_GET_PRIVATE (label,
-                                             GTK_TYPE_LABEL,
-                                             GtkLabelPrivate);
+  label->priv = gtk_label_get_instance_private (label);
   priv = label->priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (label), FALSE);

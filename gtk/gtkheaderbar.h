@@ -42,9 +42,6 @@ typedef struct _GtkHeaderBarClass         GtkHeaderBarClass;
 struct _GtkHeaderBar
 {
   GtkContainer container;
-
-  /*< private >*/
-  GtkHeaderBarPrivate *priv;
 };
 
 struct _GtkHeaderBarClass

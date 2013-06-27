@@ -73,7 +73,7 @@ static void               gtk_bin_get_preferred_height_for_width  (GtkWidget    
 static void               gtk_bin_size_allocate                   (GtkWidget           *widget,
                                                                    GtkAllocation       *allocation);
 
-G_DEFINE_ABSTRACT_TYPE (GtkBin, gtk_bin, GTK_TYPE_CONTAINER)
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkBin, gtk_bin, GTK_TYPE_CONTAINER)
 
 static void
 gtk_bin_class_init (GtkBinClass *class)
@@ -91,23 +91,14 @@ gtk_bin_class_init (GtkBinClass *class)
   container_class->remove = gtk_bin_remove;
   container_class->forall = gtk_bin_forall;
   container_class->child_type = gtk_bin_child_type;
-
-  g_type_class_add_private (class, sizeof (GtkBinPrivate));
 }
 
 static void
 gtk_bin_init (GtkBin *bin)
 {
-  GtkBinPrivate *priv;
-
-  bin->priv = G_TYPE_INSTANCE_GET_PRIVATE (bin,
-                                           GTK_TYPE_BIN,
-                                           GtkBinPrivate);
-  priv = bin->priv;
+  bin->priv = gtk_bin_get_instance_private (bin);
 
   gtk_widget_set_has_window (GTK_WIDGET (bin), FALSE);
-
-  priv->child = NULL;
 }
 
 

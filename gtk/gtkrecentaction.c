@@ -88,6 +88,7 @@ static void gtk_recent_chooser_iface_init (GtkRecentChooserIface *iface);
 G_DEFINE_TYPE_WITH_CODE (GtkRecentAction,
                          gtk_recent_action,
                          GTK_TYPE_ACTION,
+                         G_ADD_PRIVATE (GtkRecentAction)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_RECENT_CHOOSER,
                                                 gtk_recent_chooser_iface_init));
 
@@ -613,8 +614,6 @@ gtk_recent_action_class_init (GtkRecentActionClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkActionClass *action_class = GTK_ACTION_CLASS (klass);
 
-  g_type_class_add_private (klass, sizeof (GtkRecentActionPrivate));
-
   gobject_class->finalize = gtk_recent_action_finalize;
   gobject_class->dispose = gtk_recent_action_dispose;
   gobject_class->set_property = gtk_recent_action_set_property;
@@ -655,9 +654,7 @@ gtk_recent_action_init (GtkRecentAction *action)
 {
   GtkRecentActionPrivate *priv;
 
-  action->priv = priv = G_TYPE_INSTANCE_GET_PRIVATE (action,
-                                                     GTK_TYPE_RECENT_ACTION,
-                                                     GtkRecentActionPrivate);
+  action->priv = priv = gtk_recent_action_get_instance_private (action);
 
   priv->show_numbers = FALSE;
   priv->show_icons = TRUE;

@@ -85,7 +85,7 @@ static gboolean gtk_separator_tool_item_button_event      (GtkWidget            
                                                            GdkEventButton            *event);
 
 
-G_DEFINE_TYPE (GtkSeparatorToolItem, gtk_separator_tool_item, GTK_TYPE_TOOL_ITEM)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkSeparatorToolItem, gtk_separator_tool_item, GTK_TYPE_TOOL_ITEM)
 
 static gint
 get_space_size (GtkToolItem *tool_item)
@@ -142,9 +142,6 @@ gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class)
                                                          P_("Whether the separator is drawn, or just blank"),
                                                          TRUE,
                                                          GTK_PARAM_READWRITE));
-  
-
-  g_type_class_add_private (object_class, sizeof (GtkSeparatorToolItemPrivate));
 }
 
 static void
@@ -152,9 +149,7 @@ gtk_separator_tool_item_init (GtkSeparatorToolItem *separator_item)
 {
   GtkStyleContext *context;
 
-  separator_item->priv = G_TYPE_INSTANCE_GET_PRIVATE (separator_item,
-                                                      GTK_TYPE_SEPARATOR_TOOL_ITEM,
-                                                      GtkSeparatorToolItemPrivate);
+  separator_item->priv = gtk_separator_tool_item_get_instance_private (separator_item);
   separator_item->priv->draw = TRUE;
 
   gtk_widget_set_has_window (GTK_WIDGET (separator_item), FALSE);

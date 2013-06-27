@@ -310,7 +310,7 @@ static const gchar attach_data_key[] = "gtk-menu-attach-data";
 
 static guint menu_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkMenu, gtk_menu, GTK_TYPE_MENU_SHELL)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkMenu, gtk_menu, GTK_TYPE_MENU_SHELL)
 
 static void
 menu_queue_resize (GtkMenu *menu)
@@ -871,8 +871,6 @@ gtk_menu_class_init (GtkMenuClass *class)
                                 GTK_TYPE_SCROLL_TYPE,
                                 GTK_SCROLL_PAGE_DOWN);
 
-  g_type_class_add_private (gobject_class, sizeof (GtkMenuPrivate));
-
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_MENU_ACCESSIBLE);
 }
 
@@ -1071,7 +1069,7 @@ gtk_menu_init (GtkMenu *menu)
   GtkMenuPrivate *priv;
   GtkStyleContext *context;
 
-  priv = G_TYPE_INSTANCE_GET_PRIVATE (menu, GTK_TYPE_MENU, GtkMenuPrivate);
+  priv = gtk_menu_get_instance_private (menu);
 
   menu->priv = priv;
 

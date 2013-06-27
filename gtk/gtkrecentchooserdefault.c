@@ -291,6 +291,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 G_DEFINE_TYPE_WITH_CODE (GtkRecentChooserDefault,
 			 _gtk_recent_chooser_default,
 			 GTK_TYPE_BOX,
+                         G_ADD_PRIVATE (GtkRecentChooserDefault)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_RECENT_CHOOSER,
 				 		gtk_recent_chooser_iface_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
@@ -366,8 +367,6 @@ _gtk_recent_chooser_default_class_init (GtkRecentChooserDefaultClass *klass)
   gtk_widget_class_bind_callback (widget_class, recent_view_drag_begin_cb);
   gtk_widget_class_bind_callback (widget_class, recent_view_drag_data_get_cb);
   gtk_widget_class_bind_callback (widget_class, recent_view_query_tooltip_cb);
-
-  g_type_class_add_private (gobject_class, sizeof (GtkRecentChooserDefaultPrivate));
 }
 
 static void
@@ -375,9 +374,7 @@ _gtk_recent_chooser_default_init (GtkRecentChooserDefault *impl)
 {
   GtkRecentChooserDefaultPrivate *priv;
 
-  impl->priv = priv =
-    G_TYPE_INSTANCE_GET_PRIVATE (impl, GTK_TYPE_RECENT_CHOOSER_DEFAULT,
-				 GtkRecentChooserDefaultPrivate);
+  impl->priv = priv = _gtk_recent_chooser_default_get_instance_private (impl);
 
   /* by default, we use the global manager */
   priv->local_manager = FALSE;

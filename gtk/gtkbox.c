@@ -208,8 +208,8 @@ static void  gtk_box_get_preferred_height_and_baseline_for_width (GtkWidget     
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkBox, gtk_box, GTK_TYPE_CONTAINER,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE,
-                                                NULL))
+                         G_ADD_PRIVATE (GtkBox)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
 
 static void
 gtk_box_class_init (GtkBoxClass *class)
@@ -332,8 +332,6 @@ gtk_box_class_init (GtkBoxClass *class)
 								-1, G_MAXINT, 0,
 								GTK_PARAM_READWRITE));
 
-  g_type_class_add_private (object_class, sizeof (GtkBoxPrivate));
-
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_FILLER);
 }
 
@@ -342,9 +340,7 @@ gtk_box_init (GtkBox *box)
 {
   GtkBoxPrivate *private;
 
-  box->priv = G_TYPE_INSTANCE_GET_PRIVATE (box,
-                                           GTK_TYPE_BOX,
-                                           GtkBoxPrivate);
+  box->priv = gtk_box_get_instance_private (box);
   private = box->priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (box), FALSE);

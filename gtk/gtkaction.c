@@ -163,6 +163,7 @@ static void gtk_action_buildable_set_name         (GtkBuildable *buildable,
 static const gchar* gtk_action_buildable_get_name (GtkBuildable *buildable);
 
 G_DEFINE_TYPE_WITH_CODE (GtkAction, gtk_action, G_TYPE_OBJECT,
+                         G_ADD_PRIVATE (GtkAction)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
 						gtk_action_buildable_init))
 
@@ -514,17 +515,13 @@ gtk_action_class_init (GtkActionClass *klass)
 		  G_STRUCT_OFFSET (GtkActionClass, activate),  NULL, NULL,
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
-
-  g_type_class_add_private (gobject_class, sizeof (GtkActionPrivate));
 }
 
 
 static void
 gtk_action_init (GtkAction *action)
 {
-  action->private_data = G_TYPE_INSTANCE_GET_PRIVATE (action,
-                                                      GTK_TYPE_ACTION,
-                                                      GtkActionPrivate);
+  action->private_data = gtk_action_get_instance_private (action);
 
   action->private_data->name = NULL;
   action->private_data->label = NULL;

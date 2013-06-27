@@ -223,17 +223,16 @@ enum {
 static guint dialog_signals[LAST_SIGNAL];
 
 G_DEFINE_TYPE_WITH_CODE (GtkDialog, gtk_dialog, GTK_TYPE_WINDOW,
+                         G_ADD_PRIVATE (GtkDialog)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
 						gtk_dialog_buildable_interface_init))
 
 static void
 gtk_dialog_class_init (GtkDialogClass *class)
 {
-  GObjectClass *gobject_class;
   GtkWidgetClass *widget_class;
   GtkBindingSet *binding_set;
 
-  gobject_class = G_OBJECT_CLASS (class);
   widget_class = GTK_WIDGET_CLASS (class);
 
   widget_class->map = gtk_dialog_map;
@@ -242,8 +241,6 @@ gtk_dialog_class_init (GtkDialogClass *class)
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_DIALOG);
 
   class->close = gtk_dialog_close;
-
-  g_type_class_add_private (gobject_class, sizeof (GtkDialogPrivate));
 
   /**
    * GtkDialog::response:
@@ -371,9 +368,7 @@ update_spacings (GtkDialog *dialog)
 static void
 gtk_dialog_init (GtkDialog *dialog)
 {
-  dialog->priv = G_TYPE_INSTANCE_GET_PRIVATE (dialog,
-                                              GTK_TYPE_DIALOG,
-                                              GtkDialogPrivate);
+  dialog->priv = gtk_dialog_get_instance_private (dialog);
 
   gtk_widget_init_template (GTK_WIDGET (dialog));
 

@@ -49,19 +49,19 @@
  * Since: 3.6
  */
 
-G_DEFINE_TYPE (GtkSearchEntry, gtk_search_entry, GTK_TYPE_ENTRY)
-
 typedef struct {
   guint delayed_changed_id;
   gboolean in_timeout;
 } GtkSearchEntryPrivate;
+
+G_DEFINE_TYPE_WITH_PRIVATE (GtkSearchEntry, gtk_search_entry, GTK_TYPE_ENTRY)
 
 /* 150 mseconds of delay */
 #define DELAYED_TIMEOUT_ID 150
 
 /* This widget got created without a private structure, meaning
  * that we cannot now have one without breaking ABI */
-#define GET_PRIV(e) G_TYPE_INSTANCE_GET_PRIVATE (e, GTK_TYPE_SEARCH_ENTRY, GtkSearchEntryPrivate)
+#define GET_PRIV(e) ((GtkSearchEntryPrivate *) gtk_search_entry_get_instance_private ((GtkSearchEntry *) (e)))
 
 static void
 gtk_search_entry_finalize (GObject *object)
@@ -80,8 +80,6 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gtk_search_entry_finalize;
-
-  g_type_class_add_private (klass, sizeof (GtkSearchEntryPrivate));
 }
 
 static void

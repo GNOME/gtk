@@ -598,6 +598,7 @@ gtk_application_window_map_iface_init (GActionMapInterface *iface)
 }
 
 G_DEFINE_TYPE_WITH_CODE (GtkApplicationWindow, gtk_application_window, GTK_TYPE_WINDOW,
+                         G_ADD_PRIVATE (GtkApplicationWindow)
                          G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, gtk_application_window_group_iface_init)
                          G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_MAP, gtk_application_window_map_iface_init))
 
@@ -946,7 +947,7 @@ gtk_application_window_dispose (GObject *object)
 static void
 gtk_application_window_init (GtkApplicationWindow *window)
 {
-  window->priv = G_TYPE_INSTANCE_GET_PRIVATE (window, GTK_TYPE_APPLICATION_WINDOW, GtkApplicationWindowPrivate);
+  window->priv = gtk_application_window_get_instance_private (window);
 
   window->priv->actions = gtk_application_window_actions_new (window);
   window->priv->app_menu_section = g_menu_new ();
@@ -1007,7 +1008,6 @@ gtk_application_window_class_init (GtkApplicationWindowClass *class)
                              "menubar at the top of the window"),
                           TRUE, G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS | G_PARAM_READWRITE);
   g_object_class_install_properties (object_class, N_PROPS, gtk_application_window_properties);
-  g_type_class_add_private (class, sizeof (GtkApplicationWindowPrivate));
 }
 
 /**

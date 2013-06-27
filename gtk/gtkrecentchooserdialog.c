@@ -101,6 +101,7 @@ static void gtk_recent_chooser_dialog_get_property (GObject      *object,
 G_DEFINE_TYPE_WITH_CODE (GtkRecentChooserDialog,
 			 gtk_recent_chooser_dialog,
 			 GTK_TYPE_DIALOG,
+                         G_ADD_PRIVATE (GtkRecentChooserDialog)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_RECENT_CHOOSER,
 		       				_gtk_recent_chooser_delegate_iface_init))
 
@@ -115,20 +116,16 @@ gtk_recent_chooser_dialog_class_init (GtkRecentChooserDialogClass *klass)
   gobject_class->finalize = gtk_recent_chooser_dialog_finalize;
   
   _gtk_recent_chooser_install_properties (gobject_class);
-  
-  g_type_class_add_private (klass, sizeof (GtkRecentChooserDialogPrivate));
 }
 
 static void
 gtk_recent_chooser_dialog_init (GtkRecentChooserDialog *dialog)
 {
+  GtkRecentChooserDialogPrivate *priv;
   GtkWidget *content_area, *action_area;
-
-  GtkRecentChooserDialogPrivate *priv = G_TYPE_INSTANCE_GET_PRIVATE (dialog,
-  								     GTK_TYPE_RECENT_CHOOSER_DIALOG,
-  								     GtkRecentChooserDialogPrivate);
   GtkDialog *rc_dialog = GTK_DIALOG (dialog);
-  
+
+  priv = gtk_recent_chooser_dialog_get_instance_private (dialog);
   dialog->priv = priv;
 
   content_area = gtk_dialog_get_content_area (rc_dialog);

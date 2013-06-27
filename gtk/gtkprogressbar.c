@@ -122,6 +122,7 @@ static void     gtk_progress_bar_set_orientation  (GtkProgressBar *progress,
                                                    GtkOrientation  orientation);
 
 G_DEFINE_TYPE_WITH_CODE (GtkProgressBar, gtk_progress_bar, GTK_TYPE_WIDGET,
+                         G_ADD_PRIVATE (GtkProgressBar)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
 
 static void
@@ -286,8 +287,6 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                                                              1, G_MAXINT, MIN_VERTICAL_BAR_HEIGHT,
                                                              G_PARAM_READWRITE));
 
-  g_type_class_add_private (class, sizeof (GtkProgressBarPrivate));
-
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_PROGRESS_BAR_ACCESSIBLE);
 }
 
@@ -296,9 +295,7 @@ gtk_progress_bar_init (GtkProgressBar *pbar)
 {
   GtkProgressBarPrivate *priv;
 
-  pbar->priv = G_TYPE_INSTANCE_GET_PRIVATE (pbar,
-                                            GTK_TYPE_PROGRESS_BAR,
-                                            GtkProgressBarPrivate);
+  pbar->priv = gtk_progress_bar_get_instance_private (pbar);
   priv = pbar->priv;
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;

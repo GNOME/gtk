@@ -58,6 +58,7 @@ enum
 static void gtk_color_chooser_dialog_iface_init (GtkColorChooserInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkColorChooserDialog, gtk_color_chooser_dialog, GTK_TYPE_DIALOG,
+                         G_ADD_PRIVATE (GtkColorChooserDialog)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_COLOR_CHOOSER,
                                                 gtk_color_chooser_dialog_iface_init))
 
@@ -100,9 +101,7 @@ selected_cb (GtkButton *button,
 static void
 gtk_color_chooser_dialog_init (GtkColorChooserDialog *cc)
 {
-  cc->priv = G_TYPE_INSTANCE_GET_PRIVATE (cc,
-                                          GTK_TYPE_COLOR_CHOOSER_DIALOG,
-                                          GtkColorChooserDialogPrivate);
+  cc->priv = gtk_color_chooser_dialog_get_instance_private (cc);
 
   gtk_widget_init_template (GTK_WIDGET (cc));
 }
@@ -209,8 +208,6 @@ gtk_color_chooser_dialog_class_init (GtkColorChooserDialogClass *class)
   gtk_widget_class_bind_callback (widget_class, selected_cb);
   gtk_widget_class_bind_callback (widget_class, propagate_notify);
   gtk_widget_class_bind_callback (widget_class, color_activated_cb);
-
-  g_type_class_add_private (class, sizeof (GtkColorChooserDialogPrivate));
 }
 
 static void

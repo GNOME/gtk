@@ -175,9 +175,6 @@ struct _GtkAboutDialogPrivate
 #define CREDITS_PAGE_ID  1
 #define LICENSE_PAGE_ID  2
 
-#define GTK_ABOUT_DIALOG_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_ABOUT_DIALOG, GtkAboutDialogPrivate))
-
-
 enum
 {
   PROP_0,
@@ -251,7 +248,7 @@ enum {
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkAboutDialog, gtk_about_dialog, GTK_TYPE_DIALOG)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkAboutDialog, gtk_about_dialog, GTK_TYPE_DIALOG)
 
 
 static void
@@ -581,8 +578,6 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   gtk_widget_class_bind_callback (widget_class, text_view_key_press_event);
   gtk_widget_class_bind_callback (widget_class, text_view_visibility_notify_event);
   gtk_widget_class_bind_callback (widget_class, text_view_motion_notify_event);
-
-  g_type_class_add_private (object_class, sizeof (GtkAboutDialogPrivate));
 }
 
 static gboolean
@@ -691,7 +686,7 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   GtkAboutDialogPrivate *priv;
 
   /* Data */
-  priv = GTK_ABOUT_DIALOG_GET_PRIVATE (about);
+  priv = gtk_about_dialog_get_instance_private (about);
   about->priv = priv;
 
   priv->name = NULL;

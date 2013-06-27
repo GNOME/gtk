@@ -84,7 +84,7 @@ static void     gtk_event_box_get_property  (GObject          *object,
                                              GValue           *value,
                                              GParamSpec       *pspec);
 
-G_DEFINE_TYPE (GtkEventBox, gtk_event_box, GTK_TYPE_BIN)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkEventBox, gtk_event_box, GTK_TYPE_BIN)
 
 static void
 gtk_event_box_class_init (GtkEventBoxClass *class)
@@ -122,23 +122,15 @@ gtk_event_box_class_init (GtkEventBoxClass *class)
                                                         P_("Whether the event-trapping window of the eventbox is above the window of the child widget as opposed to below it."),
                                                         FALSE,
                                                         GTK_PARAM_READWRITE));
-
-  g_type_class_add_private (class, sizeof (GtkEventBoxPrivate));
 }
 
 static void
 gtk_event_box_init (GtkEventBox *event_box)
 {
-  GtkEventBoxPrivate *priv;
-
   gtk_widget_set_has_window (GTK_WIDGET (event_box), TRUE);
 
-  priv = G_TYPE_INSTANCE_GET_PRIVATE (event_box,
-                                      GTK_TYPE_EVENT_BOX,
-                                      GtkEventBoxPrivate);
-
-  event_box->priv = priv;
-  priv->above_child = FALSE;
+  event_box->priv = gtk_event_box_get_instance_private (event_box);
+  event_box->priv->above_child = FALSE;
 }
 
 /**

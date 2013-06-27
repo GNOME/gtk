@@ -87,7 +87,7 @@ enum {
   PROP_MODIFIER_MASK,
 };
 
-G_DEFINE_TYPE (GtkAccelGroup, gtk_accel_group, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkAccelGroup, gtk_accel_group, G_TYPE_OBJECT)
 
 /* --- functions --- */
 static void
@@ -167,8 +167,6 @@ gtk_accel_group_class_init (GtkAccelGroupClass *class)
                   G_TYPE_UINT,
                   GDK_TYPE_MODIFIER_TYPE,
                   G_TYPE_CLOSURE);
-
-  g_type_class_add_private (object_class, sizeof (GtkAccelGroupPrivate));
 }
 
 static void
@@ -225,9 +223,7 @@ gtk_accel_group_init (GtkAccelGroup *accel_group)
 {
   GtkAccelGroupPrivate *priv;
 
-  accel_group->priv = G_TYPE_INSTANCE_GET_PRIVATE (accel_group,
-                                                   GTK_TYPE_ACCEL_GROUP,
-                                                   GtkAccelGroupPrivate);
+  accel_group->priv = gtk_accel_group_get_instance_private (accel_group);
   priv = accel_group->priv;
 
   priv->lock_count = 0;

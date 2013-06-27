@@ -547,6 +547,7 @@ static void ensure_state_flag_backdrop (GtkWidget *widget);
 static void unset_titlebar (GtkWindow *window);
 
 G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_BIN,
+                         G_ADD_PRIVATE (GtkWindow)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
 						gtk_window_buildable_interface_init))
 
@@ -672,8 +673,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   klass->activate_default = gtk_window_real_activate_default;
   klass->activate_focus = gtk_window_real_activate_focus;
   klass->keys_changed = gtk_window_keys_changed;
-
-  g_type_class_add_private (gobject_class, sizeof (GtkWindowPrivate));
 
   /* Construct */
   g_object_class_install_property (gobject_class,
@@ -1280,9 +1279,7 @@ gtk_window_init (GtkWindow *window)
 
   widget = GTK_WIDGET (window);
 
-  window->priv = G_TYPE_INSTANCE_GET_PRIVATE (window,
-                                              GTK_TYPE_WINDOW,
-                                              GtkWindowPrivate);
+  window->priv = gtk_window_get_instance_private (window);
   priv = window->priv;
 
   gtk_widget_set_has_window (widget, TRUE);
@@ -9877,20 +9874,17 @@ gtk_window_has_toplevel_focus (GtkWindow *window)
  * freed.
  */
 
-G_DEFINE_TYPE (GtkWindowGroup, gtk_window_group, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkWindowGroup, gtk_window_group, G_TYPE_OBJECT)
 
 static void
 gtk_window_group_init (GtkWindowGroup *group)
 {
-  group->priv = G_TYPE_INSTANCE_GET_PRIVATE (group,
-                                             GTK_TYPE_WINDOW_GROUP,
-                                             GtkWindowGroupPrivate);
+  group->priv = gtk_window_group_get_instance_private (group);
 }
 
 static void
 gtk_window_group_class_init (GtkWindowGroupClass *klass)
 {
-  g_type_class_add_private (klass, sizeof (GtkWindowGroupPrivate));
 }
 
 /**

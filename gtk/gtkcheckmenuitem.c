@@ -97,6 +97,7 @@ static guint                check_menu_item_signals[LAST_SIGNAL] = { 0 };
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 G_DEFINE_TYPE_WITH_CODE (GtkCheckMenuItem, gtk_check_menu_item, GTK_TYPE_MENU_ITEM,
+                         G_ADD_PRIVATE (GtkCheckMenuItem)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
                                                 gtk_check_menu_item_activatable_interface_init))
 G_GNUC_END_IGNORE_DEPRECATIONS;
@@ -176,8 +177,6 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
                   NULL, NULL,
                   _gtk_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
-
-  g_type_class_add_private (klass, sizeof (GtkCheckMenuItemPrivate));
 }
 
 static void 
@@ -482,14 +481,8 @@ gtk_check_menu_item_get_draw_as_radio (GtkCheckMenuItem *check_menu_item)
 static void
 gtk_check_menu_item_init (GtkCheckMenuItem *check_menu_item)
 {
-  GtkCheckMenuItemPrivate *priv;
-
-  check_menu_item->priv = G_TYPE_INSTANCE_GET_PRIVATE (check_menu_item,
-                                                       GTK_TYPE_CHECK_MENU_ITEM,
-                                                       GtkCheckMenuItemPrivate);
-  priv = check_menu_item->priv; 
-
-  priv->active = FALSE;
+  check_menu_item->priv = gtk_check_menu_item_get_instance_private (check_menu_item);
+  check_menu_item->priv->active = FALSE;
 }
 
 static gint

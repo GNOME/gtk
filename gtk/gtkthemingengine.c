@@ -74,8 +74,6 @@ struct GtkThemingEnginePrivate
   gchar *name;
 };
 
-#define GTK_THEMING_ENGINE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_THEMING_ENGINE, GtkThemingEnginePrivate))
-
 static void gtk_theming_engine_finalize          (GObject      *object);
 static void gtk_theming_engine_impl_set_property (GObject      *object,
                                                   guint         prop_id,
@@ -188,8 +186,7 @@ static void gtk_theming_engine_render_icon_surface (GtkThemingEngine *engine,
 						    gdouble x,
 						    gdouble y);
 
-G_DEFINE_TYPE (GtkThemingEngine, gtk_theming_engine, G_TYPE_OBJECT)
-
+G_DEFINE_TYPE_WITH_PRIVATE (GtkThemingEngine, gtk_theming_engine, G_TYPE_OBJECT)
 
 typedef struct GtkThemingModule GtkThemingModule;
 typedef struct GtkThemingModuleClass GtkThemingModuleClass;
@@ -266,14 +263,12 @@ gtk_theming_engine_class_init (GtkThemingEngineClass *klass)
                                                         P_("Theming engine name"),
                                                         NULL,
                                                         G_PARAM_CONSTRUCT_ONLY | GTK_PARAM_READWRITE));
-
-  g_type_class_add_private (object_class, sizeof (GtkThemingEnginePrivate));
 }
 
 static void
 gtk_theming_engine_init (GtkThemingEngine *engine)
 {
-  engine->priv = GTK_THEMING_ENGINE_GET_PRIVATE (engine);
+  engine->priv = gtk_theming_engine_get_instance_private (engine);
 }
 
 static void

@@ -81,6 +81,7 @@ enum
 static void gtk_color_editor_iface_init (GtkColorChooserInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkColorEditor, gtk_color_editor, GTK_TYPE_BOX,
+                         G_ADD_PRIVATE (GtkColorEditor)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_COLOR_CHOOSER,
                                                 gtk_color_editor_iface_init))
 
@@ -344,9 +345,7 @@ gtk_color_editor_init (GtkColorEditor *editor)
 {
   GdkRGBA transparent = { 0, 0, 0, 0 };
 
-  editor->priv = G_TYPE_INSTANCE_GET_PRIVATE (editor,
-                                              GTK_TYPE_COLOR_EDITOR,
-                                              GtkColorEditorPrivate);
+  editor->priv = gtk_color_editor_get_instance_private (editor);
   editor->priv->use_alpha = TRUE;
 
   g_type_ensure (GTK_TYPE_COLOR_SCALE);
@@ -493,8 +492,6 @@ gtk_color_editor_class_init (GtkColorEditorClass *class)
   gtk_widget_class_bind_callback (widget_class, entry_apply);
   gtk_widget_class_bind_callback (widget_class, entry_focus_out);
   gtk_widget_class_bind_callback (widget_class, popup_edit);
-
-  g_type_class_add_private (class, sizeof (GtkColorEditorPrivate));
 }
 
 static void

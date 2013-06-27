@@ -84,7 +84,7 @@ static void gtk_spinner_get_preferred_height (GtkWidget *widget,
                                         gint            *natural_size);
 
 
-G_DEFINE_TYPE (GtkSpinner, gtk_spinner, GTK_TYPE_WIDGET)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkSpinner, gtk_spinner, GTK_TYPE_WIDGET)
 
 static void
 gtk_spinner_class_init (GtkSpinnerClass *klass)
@@ -93,7 +93,6 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
   GtkWidgetClass *widget_class;
 
   gobject_class = G_OBJECT_CLASS(klass);
-  g_type_class_add_private (gobject_class, sizeof (GtkSpinnerPrivate));
   gobject_class->get_property = gtk_spinner_get_property;
   gobject_class->set_property = gtk_spinner_set_property;
 
@@ -158,13 +157,9 @@ gtk_spinner_set_property (GObject      *object,
 static void
 gtk_spinner_init (GtkSpinner *spinner)
 {
-  GtkSpinnerPrivate *priv;
   GtkStyleContext *context;
 
-  priv = G_TYPE_INSTANCE_GET_PRIVATE (spinner,
-                                      GTK_TYPE_SPINNER,
-                                      GtkSpinnerPrivate);
-  spinner->priv = priv;
+  spinner->priv = gtk_spinner_get_instance_private (spinner);
 
   gtk_widget_set_has_window (GTK_WIDGET (spinner), FALSE);
 

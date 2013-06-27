@@ -856,6 +856,7 @@ static void gtk_cairo_set_event (cairo_t        *cr,
 				 GdkEventExpose *event);
 
 /* --- variables --- */
+static gint             GtkWidget_private_offset = 0;
 static gpointer         gtk_widget_parent_class = NULL;
 static guint            widget_signals[LAST_SIGNAL] = { 0 };
 static guint            composite_child_stack = 0;
@@ -926,6 +927,9 @@ gtk_widget_get_type (void)
 
       g_type_add_class_private (widget_type, sizeof (GtkWidgetClassPrivate));
 
+      GtkWidget_private_offset =
+        g_type_add_instance_private (widget_type, sizeof (GtkWidgetPrivate));
+
       g_type_add_interface_static (widget_type, ATK_TYPE_IMPLEMENTOR,
                                    &accessibility_info) ;
       g_type_add_interface_static (widget_type, GTK_TYPE_BUILDABLE,
@@ -933,6 +937,12 @@ gtk_widget_get_type (void)
     }
 
   return widget_type;
+}
+
+static inline gpointer
+gtk_widget_get_instance_private (GtkWidget *self)
+{
+  return (G_STRUCT_MEMBER_P (self, GtkWidget_private_offset));
 }
 
 static void
@@ -1017,6 +1027,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkBindingSet *binding_set;
 
+  g_type_class_adjust_private_offset (klass, &GtkWidget_private_offset);
   gtk_widget_parent_class = g_type_class_peek_parent (klass);
 
   quark_property_parser = g_quark_from_static_string ("gtk-rc-property-parser");
@@ -3552,8 +3563,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                                              1, G_MAXINT, 20,
                                                              GTK_PARAM_READABLE));
 
-  g_type_class_add_private (klass, sizeof (GtkWidgetPrivate));
-
   gtk_widget_class_set_accessible_type (klass, GTK_TYPE_WIDGET_ACCESSIBLE);
 }
 
@@ -3915,9 +3924,7 @@ gtk_widget_init (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv;
 
-  widget->priv = G_TYPE_INSTANCE_GET_PRIVATE (widget,
-                                              GTK_TYPE_WIDGET,
-                                              GtkWidgetPrivate);
+  widget->priv = gtk_widget_get_instance_private (widget); 
   priv = widget->priv;
 
   priv->child_visible = TRUE;

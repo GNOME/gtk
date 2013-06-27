@@ -190,6 +190,7 @@ static guint button_signals[LAST_SIGNAL] = { 0 };
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 G_DEFINE_TYPE_WITH_CODE (GtkButton, gtk_button, GTK_TYPE_BIN,
+                         G_ADD_PRIVATE (GtkButton)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIONABLE, gtk_button_actionable_iface_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
 						gtk_button_activatable_interface_init))
@@ -584,8 +585,6 @@ gtk_button_class_init (GtkButtonClass *klass)
 							     2,
 							     GTK_PARAM_READABLE));
 
-  g_type_class_add_private (gobject_class, sizeof (GtkButtonPrivate));
-
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_BUTTON_ACCESSIBLE);
 }
 
@@ -595,9 +594,7 @@ gtk_button_init (GtkButton *button)
   GtkButtonPrivate *priv;
   GtkStyleContext *context;
 
-  button->priv = G_TYPE_INSTANCE_GET_PRIVATE (button,
-                                              GTK_TYPE_BUTTON,
-                                              GtkButtonPrivate);
+  button->priv = gtk_button_get_instance_private (button);
   priv = button->priv;
 
   gtk_widget_set_can_focus (GTK_WIDGET (button), TRUE);

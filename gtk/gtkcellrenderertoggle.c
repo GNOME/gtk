@@ -96,7 +96,7 @@ struct _GtkCellRendererTogglePrivate
 };
 
 
-G_DEFINE_TYPE (GtkCellRendererToggle, gtk_cell_renderer_toggle, GTK_TYPE_CELL_RENDERER)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkCellRendererToggle, gtk_cell_renderer_toggle, GTK_TYPE_CELL_RENDERER)
 
 
 static void
@@ -104,9 +104,7 @@ gtk_cell_renderer_toggle_init (GtkCellRendererToggle *celltoggle)
 {
   GtkCellRendererTogglePrivate *priv;
 
-  celltoggle->priv = G_TYPE_INSTANCE_GET_PRIVATE (celltoggle,
-                                                  GTK_TYPE_CELL_RENDERER_TOGGLE,
-                                                  GtkCellRendererTogglePrivate);
+  celltoggle->priv = gtk_cell_renderer_toggle_get_instance_private (celltoggle);
   priv = celltoggle->priv;
 
   priv->activatable = TRUE;
@@ -193,8 +191,6 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 		  _gtk_marshal_VOID__STRING,
 		  G_TYPE_NONE, 1,
 		  G_TYPE_STRING);
-
-  g_type_class_add_private (object_class, sizeof (GtkCellRendererTogglePrivate));
 
   gtk_cell_renderer_class_set_accessible_type (cell_class, GTK_TYPE_BOOLEAN_CELL_ACCESSIBLE);
 }

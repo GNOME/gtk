@@ -65,20 +65,17 @@ enum
 
 static guint signals[LAST_SIGNAL];
 
-G_DEFINE_TYPE (GtkColorSwatch, gtk_color_swatch, GTK_TYPE_WIDGET)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkColorSwatch, gtk_color_swatch, GTK_TYPE_WIDGET)
 
 static void
 gtk_color_swatch_init (GtkColorSwatch *swatch)
 {
-  swatch->priv = G_TYPE_INSTANCE_GET_PRIVATE (swatch,
-                                              GTK_TYPE_COLOR_SWATCH,
-                                              GtkColorSwatchPrivate);
+  swatch->priv = gtk_color_swatch_get_instance_private (swatch);
+  swatch->priv->use_alpha = TRUE;
+  swatch->priv->selectable = TRUE;
 
   gtk_widget_set_can_focus (GTK_WIDGET (swatch), TRUE);
   gtk_widget_set_has_window (GTK_WIDGET (swatch), FALSE);
-
-  swatch->priv->use_alpha = TRUE;
-  swatch->priv->selectable = TRUE;
 }
 
 #define INTENSITY(r, g, b) ((r) * 0.30 + (g) * 0.59 + (b) * 0.11)
@@ -781,8 +778,6 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
   g_object_class_install_property (object_class, PROP_SELECTABLE,
       g_param_spec_boolean ("selectable", P_("Selectable"), P_("Whether the swatch is selectable"),
                             TRUE, GTK_PARAM_READWRITE));
-
-  g_type_class_add_private (object_class, sizeof (GtkColorSwatchPrivate));
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_COLOR_SWATCH_ACCESSIBLE);
 }

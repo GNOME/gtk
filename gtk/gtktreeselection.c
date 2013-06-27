@@ -101,7 +101,7 @@ enum
 static GParamSpec *properties[N_PROPERTIES];
 static guint tree_selection_signals [LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkTreeSelection, gtk_tree_selection, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkTreeSelection, gtk_tree_selection, G_TYPE_OBJECT)
 
 static void
 gtk_tree_selection_class_init (GtkTreeSelectionClass *class)
@@ -155,21 +155,13 @@ gtk_tree_selection_class_init (GtkTreeSelectionClass *class)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
-
-  g_type_class_add_private (class, sizeof (GtkTreeSelectionPrivate));
 }
 
 static void
 gtk_tree_selection_init (GtkTreeSelection *selection)
 {
-  GtkTreeSelectionPrivate *priv;
-
-  selection->priv = G_TYPE_INSTANCE_GET_PRIVATE (selection,
-                                                 GTK_TYPE_TREE_SELECTION,
-                                                 GtkTreeSelectionPrivate);
-  priv = selection->priv;
-
-  priv->type = GTK_SELECTION_SINGLE;
+  selection->priv = gtk_tree_selection_get_instance_private (selection);
+  selection->priv->type = GTK_SELECTION_SINGLE;
 }
 
 static void

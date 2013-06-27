@@ -38,9 +38,6 @@
 
 #include "gtkprinteroptionwidget.h"
 
-#define GTK_PRINTER_OPTION_WIDGET_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_PRINTER_OPTION_WIDGET, GtkPrinterOptionWidgetPrivate))
-
 /* This defines the max file length that the file chooser
  * button should display. The total length will be
  * FILENAME_LENGTH_MAX+3 because the truncated name is prefixed
@@ -86,7 +83,7 @@ enum {
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkPrinterOptionWidget, gtk_printer_option_widget, GTK_TYPE_BOX)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkPrinterOptionWidget, gtk_printer_option_widget, GTK_TYPE_BOX)
 
 static void gtk_printer_option_widget_set_property (GObject      *object,
 						    guint         prop_id,
@@ -114,8 +111,6 @@ gtk_printer_option_widget_class_init (GtkPrinterOptionWidgetClass *class)
 
   widget_class->mnemonic_activate = gtk_printer_option_widget_mnemonic_activate;
 
-  g_type_class_add_private (class, sizeof (GtkPrinterOptionWidgetPrivate));
-
   signals[CHANGED] =
     g_signal_new ("changed",
 		  G_TYPE_FROM_CLASS (class),
@@ -138,7 +133,7 @@ gtk_printer_option_widget_class_init (GtkPrinterOptionWidgetClass *class)
 static void
 gtk_printer_option_widget_init (GtkPrinterOptionWidget *widget)
 {
-  widget->priv = GTK_PRINTER_OPTION_WIDGET_GET_PRIVATE (widget); 
+  widget->priv = gtk_printer_option_widget_get_instance_private (widget);
 
   gtk_box_set_spacing (GTK_BOX (widget), 12);
 }

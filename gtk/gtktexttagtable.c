@@ -92,6 +92,7 @@ static void gtk_text_tag_table_buildable_add_child      (GtkBuildable        *bu
 static guint signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkTextTagTable, gtk_text_tag_table, G_TYPE_OBJECT,
+                         G_ADD_PRIVATE (GtkTextTagTable)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_text_tag_table_buildable_interface_init))
 
@@ -151,21 +152,13 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
                   G_TYPE_NONE,
                   1,
                   GTK_TYPE_TEXT_TAG);
-
-  g_type_class_add_private (klass, sizeof (GtkTextTagTablePrivate));
 }
 
 static void
 gtk_text_tag_table_init (GtkTextTagTable *table)
 {
-  GtkTextTagTablePrivate *priv;
-
-  table->priv = G_TYPE_INSTANCE_GET_PRIVATE (table,
-                                             GTK_TYPE_TEXT_TAG_TABLE,
-                                             GtkTextTagTablePrivate);
-  priv = table->priv;
-
-  priv->hash = g_hash_table_new (g_str_hash, g_str_equal);
+  table->priv = gtk_text_tag_table_get_instance_private (table);
+  table->priv->hash = g_hash_table_new (g_str_hash, g_str_equal);
 }
 
 /**

@@ -260,6 +260,7 @@ static guint             class_n_properties = 0;
 
 
 G_DEFINE_TYPE_EXTENDED (GtkSettings, gtk_settings, G_TYPE_OBJECT, 0,
+                        G_ADD_PRIVATE (GtkSettings)
                         G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER,
                                                gtk_settings_provider_iface_init)
                         G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER_PRIVATE,
@@ -276,11 +277,9 @@ gtk_settings_init (GtkSettings *settings)
   const gchar * const *config_dirs;
   const gchar *config_dir;
 
-  priv = G_TYPE_INSTANCE_GET_PRIVATE (settings,
-                                      GTK_TYPE_SETTINGS,
-                                      GtkSettingsPrivate);
-
+  priv = gtk_settings_get_instance_private (settings);
   settings->priv = priv;
+
   g_datalist_init (&priv->queued_settings);
   object_list = g_slist_prepend (object_list, settings);
 
@@ -1546,8 +1545,6 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_RECENT_FILES_ENABLED);
-
-  g_type_class_add_private (class, sizeof (GtkSettingsPrivate));
 }
 
 static void

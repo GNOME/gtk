@@ -85,7 +85,7 @@ static void gtk_aspect_frame_compute_child_allocation (GtkFrame            *fram
 #define MAX_RATIO 10000.0
 #define MIN_RATIO 0.0001
 
-G_DEFINE_TYPE (GtkAspectFrame, gtk_aspect_frame, GTK_TYPE_FRAME)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkAspectFrame, gtk_aspect_frame, GTK_TYPE_FRAME)
 
 static void
 gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
@@ -129,24 +129,17 @@ gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
                                                          P_("Force aspect ratio to match that of the frame's child"),
                                                          TRUE,
                                                          GTK_PARAM_READWRITE));
-
-  g_type_class_add_private (class, sizeof (GtkAspectFramePrivate));
 }
 
 static void
 gtk_aspect_frame_init (GtkAspectFrame *aspect_frame)
 {
-  GtkAspectFramePrivate *priv;
+  aspect_frame->priv = gtk_aspect_frame_get_instance_private (aspect_frame);
 
-  aspect_frame->priv = G_TYPE_INSTANCE_GET_PRIVATE (aspect_frame,
-                                                    GTK_TYPE_ASPECT_FRAME,
-                                                    GtkAspectFramePrivate);
-  priv = aspect_frame->priv;
-
-  priv->xalign = 0.5;
-  priv->yalign = 0.5;
-  priv->ratio = 1.0;
-  priv->obey_child = TRUE;
+  aspect_frame->priv->xalign = 0.5;
+  aspect_frame->priv->yalign = 0.5;
+  aspect_frame->priv->ratio = 1.0;
+  aspect_frame->priv->obey_child = TRUE;
 }
 
 static void

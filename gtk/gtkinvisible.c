@@ -74,7 +74,7 @@ static GObject *gtk_invisible_constructor (GType                  type,
 					   guint                  n_construct_properties,
 					   GObjectConstructParam *construct_params);
 
-G_DEFINE_TYPE (GtkInvisible, gtk_invisible, GTK_TYPE_WIDGET)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkInvisible, gtk_invisible, GTK_TYPE_WIDGET)
 
 static void
 gtk_invisible_class_init (GtkInvisibleClass *class)
@@ -102,8 +102,6 @@ gtk_invisible_class_init (GtkInvisibleClass *class)
  							P_("The screen where this window will be displayed"),
 							GDK_TYPE_SCREEN,
  							GTK_PARAM_READWRITE));
-
-  g_type_class_add_private (class, sizeof (GtkInvisiblePrivate));
 }
 
 static void
@@ -111,9 +109,7 @@ gtk_invisible_init (GtkInvisible *invisible)
 {
   GtkInvisiblePrivate *priv;
 
-  invisible->priv = G_TYPE_INSTANCE_GET_PRIVATE (invisible,
-                                                 GTK_TYPE_INVISIBLE,
-                                                 GtkInvisiblePrivate);
+  invisible->priv = gtk_invisible_get_instance_private (invisible);
   priv = invisible->priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (invisible), TRUE);

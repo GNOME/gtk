@@ -136,6 +136,7 @@ enum {
 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkMessageDialog, gtk_message_dialog, GTK_TYPE_DIALOG,
+                         G_ADD_PRIVATE (GtkMessageDialog)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_message_dialog_buildable_interface_init))
 
@@ -299,8 +300,6 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
   gtk_widget_class_bind_child (widget_class, GtkMessageDialogPrivate, label);
   gtk_widget_class_bind_child (widget_class, GtkMessageDialogPrivate, secondary_label);
   gtk_widget_class_bind_child_internal (widget_class, GtkMessageDialogPrivate, message_area);
-
-  g_type_class_add_private (gobject_class, sizeof (GtkMessageDialogPrivate));
 }
 
 static void
@@ -308,9 +307,7 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
 {
   GtkMessageDialogPrivate *priv;
 
-  dialog->priv = G_TYPE_INSTANCE_GET_PRIVATE (dialog,
-                                              GTK_TYPE_MESSAGE_DIALOG,
-                                              GtkMessageDialogPrivate);
+  dialog->priv = gtk_message_dialog_get_instance_private (dialog);
   priv = dialog->priv;
 
   priv->has_primary_markup = FALSE;

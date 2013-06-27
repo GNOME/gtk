@@ -79,6 +79,7 @@ static guint signals[LAST_SIGNAL] = { 0 };
 static void gtk_overlay_buildable_init (GtkBuildableIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkOverlay, gtk_overlay, GTK_TYPE_BIN,
+                         G_ADD_PRIVATE (GtkOverlay)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_overlay_buildable_init))
 
@@ -654,14 +655,12 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
                   G_TYPE_BOOLEAN, 2,
                   GTK_TYPE_WIDGET,
                   GDK_TYPE_RECTANGLE | G_SIGNAL_TYPE_STATIC_SCOPE);
-
-  g_type_class_add_private (object_class, sizeof (GtkOverlayPrivate));
 }
 
 static void
 gtk_overlay_init (GtkOverlay *overlay)
 {
-  overlay->priv = G_TYPE_INSTANCE_GET_PRIVATE (overlay, GTK_TYPE_OVERLAY, GtkOverlayPrivate);
+  overlay->priv = gtk_overlay_get_instance_private (overlay);
 
   gtk_widget_set_has_window (GTK_WIDGET (overlay), FALSE);
 }

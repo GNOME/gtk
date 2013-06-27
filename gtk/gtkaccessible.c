@@ -52,7 +52,7 @@ enum {
 
 static void gtk_accessible_real_connect_widget_destroyed (GtkAccessible *accessible);
 
-G_DEFINE_TYPE (GtkAccessible, gtk_accessible, ATK_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkAccessible, gtk_accessible, ATK_TYPE_OBJECT)
 
 static void
 gtk_accessible_set_property (GObject      *object,
@@ -96,9 +96,7 @@ gtk_accessible_get_property (GObject    *object,
 static void
 gtk_accessible_init (GtkAccessible *accessible)
 {
-  accessible->priv = G_TYPE_INSTANCE_GET_PRIVATE (accessible,
-                                                  GTK_TYPE_ACCESSIBLE,
-                                                  GtkAccessiblePrivate);
+  accessible->priv = gtk_accessible_get_instance_private (accessible);
 }
 
 static AtkStateSet *
@@ -159,8 +157,6 @@ gtk_accessible_class_init (GtkAccessibleClass *klass)
 							P_("The widget referenced by this accessible."),
 							GTK_TYPE_WIDGET,
 							G_PARAM_READWRITE));
-
-  g_type_class_add_private (klass, sizeof (GtkAccessiblePrivate));
 }
 
 /**

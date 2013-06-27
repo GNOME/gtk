@@ -55,7 +55,7 @@ struct _GtkSearchEngineQuartzPrivate
   gboolean query_finished;
 };
 
-G_DEFINE_TYPE (GtkSearchEngineQuartz, _gtk_search_engine_quartz, GTK_TYPE_SEARCH_ENGINE);
+G_DEFINE_TYPE_WITH_PRIVATE (GtkSearchEngineQuartz, _gtk_search_engine_quartz, GTK_TYPE_SEARCH_ENGINE)
 
 
 /* Implementation of the objective-C object */
@@ -229,8 +229,6 @@ _gtk_search_engine_quartz_class_init (GtkSearchEngineQuartzClass *class)
   engine_class->start = gtk_search_engine_quartz_start;
   engine_class->stop = gtk_search_engine_quartz_stop;
   engine_class->is_indexed = gtk_search_engine_quartz_is_indexed;
-
-  g_type_class_add_private (gobject_class, sizeof (GtkSearchEngineQuartzPrivate));
 }
 
 static void
@@ -238,7 +236,7 @@ _gtk_search_engine_quartz_init (GtkSearchEngineQuartz *engine)
 {
   QUARTZ_POOL_ALLOC;
 
-  engine->priv = G_TYPE_INSTANCE_GET_PRIVATE (engine, GTK_TYPE_SEARCH_ENGINE_QUARTZ, GtkSearchEngineQuartzPrivate);
+  engine->priv = _gtk_search_engine_quartz_get_instance_private (engine);
 
   engine->priv->ns_query = [[NSMetadataQuery alloc] init];
   engine->priv->receiver = [[ResultReceiver alloc] init];

@@ -120,6 +120,7 @@ static void gtk_viewport_queue_draw_region        (GtkWidget        *widget,
 						   const cairo_region_t *region);
 
 G_DEFINE_TYPE_WITH_CODE (GtkViewport, gtk_viewport, GTK_TYPE_BIN,
+                         G_ADD_PRIVATE (GtkViewport)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
 
 static void
@@ -164,8 +165,6 @@ gtk_viewport_class_init (GtkViewportClass *class)
 						      GTK_TYPE_SHADOW_TYPE,
 						      GTK_SHADOW_IN,
 						      GTK_PARAM_READWRITE));
-
-  g_type_class_add_private (class, sizeof (GtkViewportPrivate));
 }
 
 static void
@@ -240,9 +239,7 @@ gtk_viewport_init (GtkViewport *viewport)
 {
   GtkViewportPrivate *priv;
 
-  viewport->priv = G_TYPE_INSTANCE_GET_PRIVATE (viewport,
-                                                GTK_TYPE_VIEWPORT,
-                                                GtkViewportPrivate);
+  viewport->priv = gtk_viewport_get_instance_private (viewport);
   priv = viewport->priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (viewport), TRUE);

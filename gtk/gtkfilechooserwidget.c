@@ -50,8 +50,6 @@ struct _GtkFileChooserWidgetPrivate
   GtkWidget *impl;
 };
 
-#define GTK_FILE_CHOOSER_WIDGET_GET_PRIVATE(o)  (GTK_FILE_CHOOSER_WIDGET (o)->priv)
-
 static GObject* gtk_file_chooser_widget_constructor  (GType                  type,
 						      guint                  n_construct_properties,
 						      GObjectConstructParam *construct_params);
@@ -65,6 +63,7 @@ static void     gtk_file_chooser_widget_get_property (GObject               *obj
 						      GParamSpec            *pspec);
 
 G_DEFINE_TYPE_WITH_CODE (GtkFileChooserWidget, gtk_file_chooser_widget, GTK_TYPE_BOX,
+                         G_ADD_PRIVATE (GtkFileChooserWidget)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER,
 						_gtk_file_chooser_delegate_iface_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER_EMBED,
@@ -80,18 +79,14 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gobject_class->get_property = gtk_file_chooser_widget_get_property;
 
   _gtk_file_chooser_install_properties (gobject_class);
-
-  g_type_class_add_private (class, sizeof (GtkFileChooserWidgetPrivate));
 }
 
 static void
-gtk_file_chooser_widget_init (GtkFileChooserWidget *chooser_widget)
+gtk_file_chooser_widget_init (GtkFileChooserWidget *self)
 {
-  GtkFileChooserWidgetPrivate *priv = G_TYPE_INSTANCE_GET_PRIVATE (chooser_widget,
-								   GTK_TYPE_FILE_CHOOSER_WIDGET,
-								   GtkFileChooserWidgetPrivate);
-  chooser_widget->priv = priv;
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (chooser_widget),
+  self->priv = gtk_file_chooser_widget_get_instance_private (self);
+
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (self),
                                   GTK_ORIENTATION_VERTICAL);
 }
 
@@ -106,7 +101,7 @@ gtk_file_chooser_widget_constructor (GType                  type,
   object = G_OBJECT_CLASS (gtk_file_chooser_widget_parent_class)->constructor (type,
 									       n_construct_properties,
 									       construct_params);
-  priv = GTK_FILE_CHOOSER_WIDGET_GET_PRIVATE (object);
+  priv = gtk_file_chooser_widget_get_instance_private (GTK_FILE_CHOOSER_WIDGET (object));
 
   priv->impl = _gtk_file_chooser_default_new ();
   
@@ -128,7 +123,9 @@ gtk_file_chooser_widget_set_property (GObject         *object,
 				      const GValue    *value,
 				      GParamSpec      *pspec)
 {
-  GtkFileChooserWidgetPrivate *priv = GTK_FILE_CHOOSER_WIDGET_GET_PRIVATE (object);
+  GtkFileChooserWidgetPrivate *priv;
+  
+  priv = gtk_file_chooser_widget_get_instance_private (GTK_FILE_CHOOSER_WIDGET (object));
 
   switch (prop_id)
     {
@@ -144,7 +141,9 @@ gtk_file_chooser_widget_get_property (GObject         *object,
 				      GValue          *value,
 				      GParamSpec      *pspec)
 {
-  GtkFileChooserWidgetPrivate *priv = GTK_FILE_CHOOSER_WIDGET_GET_PRIVATE (object);
+  GtkFileChooserWidgetPrivate *priv;
+  
+  priv = gtk_file_chooser_widget_get_instance_private (GTK_FILE_CHOOSER_WIDGET (object));
   
   g_object_get_property (G_OBJECT (priv->impl), pspec->name, value);
 }

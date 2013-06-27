@@ -129,7 +129,7 @@ static void         gtk_accel_label_get_preferred_width (GtkWidget           *wi
                                                          gint                *nat_width);
 
 
-G_DEFINE_TYPE (GtkAccelLabel, gtk_accel_label, GTK_TYPE_LABEL)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkAccelLabel, gtk_accel_label, GTK_TYPE_LABEL)
 
 static void
 gtk_accel_label_class_init (GtkAccelLabelClass *class)
@@ -196,8 +196,6 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
                                                         P_("The widget to be monitored for accelerator changes"),
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE));
-
-  g_type_class_add_private (gobject_class, sizeof (GtkAccelLabelPrivate));
 }
 
 static void
@@ -253,9 +251,7 @@ gtk_accel_label_init (GtkAccelLabel *accel_label)
 {
   GtkAccelLabelPrivate *priv;
 
-  accel_label->priv = G_TYPE_INSTANCE_GET_PRIVATE (accel_label,
-                                                   GTK_TYPE_ACCEL_LABEL,
-                                                   GtkAccelLabelPrivate);
+  accel_label->priv = gtk_accel_label_get_instance_private (accel_label);
   priv = accel_label->priv;
 
   priv->accel_padding = 3;

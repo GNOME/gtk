@@ -66,7 +66,7 @@ struct _GtkTextHandlePrivate
   guint mode : 2;
 };
 
-G_DEFINE_TYPE (GtkTextHandle, _gtk_text_handle, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkTextHandle, _gtk_text_handle, G_TYPE_OBJECT)
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
@@ -535,8 +535,6 @@ _gtk_text_handle_class_init (GtkTextHandleClass *klass)
                                                         P_("Window the coordinates are based upon"),
                                                         GDK_TYPE_WINDOW,
                                                         GTK_PARAM_READWRITE));
-
-  g_type_class_add_private (object_class, sizeof (GtkTextHandlePrivate));
 }
 
 static void
@@ -545,9 +543,7 @@ _gtk_text_handle_init (GtkTextHandle *handle)
   GtkTextHandlePrivate *priv;
   GtkWidgetPath *path;
 
-  handle->priv = priv = G_TYPE_INSTANCE_GET_PRIVATE (handle,
-                                                     GTK_TYPE_TEXT_HANDLE,
-                                                     GtkTextHandlePrivate);
+  handle->priv = priv = _gtk_text_handle_get_instance_private (handle);
 
   path = gtk_widget_path_new ();
   gtk_widget_path_append_type (path, GTK_TYPE_TEXT_HANDLE);

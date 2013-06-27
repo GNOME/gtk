@@ -120,7 +120,7 @@ static void gtk_fixed_get_child_property (GtkContainer *container,
                                           GValue       *value,
                                           GParamSpec   *pspec);
 
-G_DEFINE_TYPE (GtkFixed, gtk_fixed, GTK_TYPE_CONTAINER)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkFixed, gtk_fixed, GTK_TYPE_CONTAINER)
 
 static void
 gtk_fixed_class_init (GtkFixedClass *class)
@@ -159,8 +159,6 @@ gtk_fixed_class_init (GtkFixedClass *class)
                                                                 P_("Y position of child widget"),
                                                                 G_MININT, G_MAXINT, 0,
                                                                 GTK_PARAM_READWRITE));
-
-  g_type_class_add_private (class, sizeof (GtkFixedPrivate));
 }
 
 static GType
@@ -172,7 +170,7 @@ gtk_fixed_child_type (GtkContainer *container)
 static void
 gtk_fixed_init (GtkFixed *fixed)
 {
-  fixed->priv = G_TYPE_INSTANCE_GET_PRIVATE (fixed, GTK_TYPE_FIXED, GtkFixedPrivate);
+  fixed->priv = gtk_fixed_get_instance_private (fixed);
 
   gtk_widget_set_has_window (GTK_WIDGET (fixed), FALSE);
 

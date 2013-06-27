@@ -80,7 +80,7 @@ struct _GtkCellAreaBoxContextPrivate
   gboolean  *align;
 };
 
-G_DEFINE_TYPE (GtkCellAreaBoxContext, _gtk_cell_area_box_context, GTK_TYPE_CELL_AREA_CONTEXT);
+G_DEFINE_TYPE_WITH_PRIVATE (GtkCellAreaBoxContext, _gtk_cell_area_box_context, GTK_TYPE_CELL_AREA_CONTEXT)
 
 static void
 free_cache_array (GArray *array)
@@ -167,9 +167,7 @@ _gtk_cell_area_box_context_init (GtkCellAreaBoxContext *box_context)
 {
   GtkCellAreaBoxContextPrivate *priv;
 
-  box_context->priv = G_TYPE_INSTANCE_GET_PRIVATE (box_context,
-                                                   GTK_TYPE_CELL_AREA_BOX_CONTEXT,
-                                                   GtkCellAreaBoxContextPrivate);
+  box_context->priv = _gtk_cell_area_box_context_get_instance_private (box_context);
   priv = box_context->priv;
 
   priv->base_widths  = g_array_new (FALSE, TRUE, sizeof (CachedSize));
@@ -193,8 +191,6 @@ _gtk_cell_area_box_context_class_init (GtkCellAreaBoxContextClass *class)
   context_class->reset                          = _gtk_cell_area_box_context_reset;
   context_class->get_preferred_height_for_width = _gtk_cell_area_box_context_get_preferred_height_for_width;
   context_class->get_preferred_width_for_height = _gtk_cell_area_box_context_get_preferred_width_for_height;
-
-  g_type_class_add_private (object_class, sizeof (GtkCellAreaBoxContextPrivate));
 }
 
 /*************************************************************

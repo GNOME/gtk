@@ -213,6 +213,7 @@ static guint signals [LAST_SIGNAL] = { 0 };
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkAssistant, gtk_assistant, GTK_TYPE_WINDOW,
+                         G_ADD_PRIVATE (GtkAssistant)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_assistant_buildable_interface_init))
 
@@ -450,8 +451,6 @@ gtk_assistant_class_init (GtkAssistantClass *class)
   gtk_widget_class_bind_callback (widget_class, on_assistant_back);
   gtk_widget_class_bind_callback (widget_class, on_assistant_cancel);
   gtk_widget_class_bind_callback (widget_class, on_assistant_last);
-
-  g_type_class_add_private (gobject_class, sizeof (GtkAssistantPrivate));
 }
 
 static gint
@@ -995,9 +994,8 @@ gtk_assistant_init (GtkAssistant *assistant)
 {
   GtkAssistantPrivate *priv;
 
-  assistant->priv = G_TYPE_INSTANCE_GET_PRIVATE (assistant,
-                                                 GTK_TYPE_ASSISTANT,
-                                                 GtkAssistantPrivate);
+  assistant->priv = gtk_assistant_get_instance_private (assistant);
+
   priv = assistant->priv;
   priv->pages = NULL;
   priv->current_page = NULL;

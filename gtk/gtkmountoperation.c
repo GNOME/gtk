@@ -102,16 +102,6 @@ static void   gtk_mount_operation_show_processes (GMountOperation *op,
 
 static void   gtk_mount_operation_aborted      (GMountOperation *op);
 
-G_DEFINE_TYPE (GtkMountOperation, gtk_mount_operation, G_TYPE_MOUNT_OPERATION);
-
-enum {
-  PROP_0,
-  PROP_PARENT,
-  PROP_IS_SHOWING,
-  PROP_SCREEN
-
-};
-
 struct _GtkMountOperationPrivate {
   GtkWindow *parent_window;
   GtkDialog *dialog;
@@ -139,13 +129,21 @@ struct _GtkMountOperationPrivate {
   GtkListStore *process_list_store;
 };
 
+enum {
+  PROP_0,
+  PROP_PARENT,
+  PROP_IS_SHOWING,
+  PROP_SCREEN
+
+};
+
+G_DEFINE_TYPE_WITH_PRIVATE (GtkMountOperation, gtk_mount_operation, G_TYPE_MOUNT_OPERATION)
+
 static void
 gtk_mount_operation_class_init (GtkMountOperationClass *klass)
 {
   GObjectClass         *object_class = G_OBJECT_CLASS (klass);
   GMountOperationClass *mount_op_class = G_MOUNT_OPERATION_CLASS (klass);
-
-  g_type_class_add_private (klass, sizeof (GtkMountOperationPrivate));
 
   object_class->finalize     = gtk_mount_operation_finalize;
   object_class->get_property = gtk_mount_operation_get_property;
@@ -186,9 +184,7 @@ gtk_mount_operation_init (GtkMountOperation *operation)
 {
   gchar *name_owner;
 
-  operation->priv = G_TYPE_INSTANCE_GET_PRIVATE (operation,
-                                                 GTK_TYPE_MOUNT_OPERATION,
-                                                 GtkMountOperationPrivate);
+  operation->priv = gtk_mount_operation_get_instance_private (operation);
 
   operation->priv->handler =
     _gtk_mount_operation_handler_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,

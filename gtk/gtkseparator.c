@@ -73,8 +73,8 @@ static gboolean   gtk_separator_draw         (GtkWidget      *widget,
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkSeparator, gtk_separator, GTK_TYPE_WIDGET,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE,
-                                                NULL))
+                         G_ADD_PRIVATE (GtkSeparator)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
 
 
 static void
@@ -94,24 +94,17 @@ gtk_separator_class_init (GtkSeparatorClass *class)
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_SEPARATOR);
 
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
-
-  g_type_class_add_private (object_class, sizeof (GtkSeparatorPrivate));
 }
 
 static void
 gtk_separator_init (GtkSeparator *separator)
 {
-  GtkSeparatorPrivate *private;
   GtkStyleContext *context;
 
-  separator->priv = G_TYPE_INSTANCE_GET_PRIVATE (separator,
-                                                 GTK_TYPE_SEPARATOR,
-                                                 GtkSeparatorPrivate);
-  private = separator->priv;
+  separator->priv = gtk_separator_get_instance_private (separator);
+  separator->priv->orientation = GTK_ORIENTATION_HORIZONTAL;
 
   gtk_widget_set_has_window (GTK_WIDGET (separator), FALSE);
-
-  private->orientation = GTK_ORIENTATION_HORIZONTAL;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (separator));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_SEPARATOR);

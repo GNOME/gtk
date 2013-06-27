@@ -136,6 +136,7 @@ static const GtkTargetEntry drop_types[] = { { "application/x-color", 0, 0 } };
 static void gtk_color_button_iface_init (GtkColorChooserInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkColorButton, gtk_color_button, GTK_TYPE_BUTTON,
+                         G_ADD_PRIVATE (GtkColorButton)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_COLOR_CHOOSER,
                                                 gtk_color_button_iface_init))
 
@@ -257,8 +258,6 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
                                                   NULL, NULL,
                                                   _gtk_marshal_VOID__VOID,
                                                   G_TYPE_NONE, 0);
-
-  g_type_class_add_private (gobject_class, sizeof (GtkColorButtonPrivate));
 }
 
 static gboolean
@@ -427,9 +426,7 @@ gtk_color_button_init (GtkColorButton *button)
   PangoRectangle rect;
 
   /* Create the widgets */
-  button->priv = G_TYPE_INSTANCE_GET_PRIVATE (button,
-                                              GTK_TYPE_COLOR_BUTTON,
-                                              GtkColorButtonPrivate);
+  button->priv = gtk_color_button_get_instance_private (button);
 
   button->priv->draw_area = gtk_drawing_area_new ();
   layout = gtk_widget_create_pango_layout (GTK_WIDGET (button), "Black");

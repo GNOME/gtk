@@ -92,6 +92,7 @@ static guint                toggle_signals[LAST_SIGNAL] = { 0 };
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 G_DEFINE_TYPE_WITH_CODE (GtkToggleToolButton, gtk_toggle_tool_button, GTK_TYPE_TOOL_BUTTON,
+                         G_ADD_PRIVATE (GtkToggleToolButton)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
 						gtk_toggle_tool_button_activatable_interface_init))
 G_GNUC_END_IGNORE_DEPRECATIONS;
@@ -142,8 +143,6 @@ gtk_toggle_tool_button_class_init (GtkToggleToolButtonClass *klass)
 		  NULL, NULL,
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
-
-  g_type_class_add_private (object_class, sizeof (GtkToggleToolButtonPrivate));
 }
 
 static void
@@ -152,9 +151,7 @@ gtk_toggle_tool_button_init (GtkToggleToolButton *button)
   GtkToolButton *tool_button = GTK_TOOL_BUTTON (button);
   GtkToggleButton *toggle_button = GTK_TOGGLE_BUTTON (_gtk_tool_button_get_button (tool_button));
 
-  button->priv = G_TYPE_INSTANCE_GET_PRIVATE (button,
-                                              GTK_TYPE_TOGGLE_TOOL_BUTTON,
-                                              GtkToggleToolButtonPrivate);
+  button->priv = gtk_toggle_tool_button_get_instance_private (button);
 
   /* If the real button is a radio button, it may have been
    * active at the time it was created.

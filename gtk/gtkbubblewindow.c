@@ -72,7 +72,7 @@ struct _GtkBubbleWindowPrivate
   guint final_position     : 2;
 };
 
-G_DEFINE_TYPE (GtkBubbleWindow, _gtk_bubble_window, GTK_TYPE_WINDOW)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkBubbleWindow, _gtk_bubble_window, GTK_TYPE_WINDOW)
 
 static void
 _gtk_bubble_window_init (GtkBubbleWindow *window)
@@ -82,9 +82,7 @@ _gtk_bubble_window_init (GtkBubbleWindow *window)
   GdkVisual *visual;
 
   widget = GTK_WIDGET (window);
-  window->priv = G_TYPE_INSTANCE_GET_PRIVATE (window,
-                                               GTK_TYPE_BUBBLE_WINDOW,
-                                               GtkBubbleWindowPrivate);
+  window->priv = _gtk_bubble_window_get_instance_private (window);
   gtk_window_set_default_size (GTK_WINDOW (window),
                                TAIL_GAP_WIDTH, TAIL_GAP_WIDTH);
   gtk_widget_set_app_paintable (widget, TRUE);
@@ -867,8 +865,6 @@ _gtk_bubble_window_class_init (GtkBubbleWindowClass *klass)
                                                       P_("Position to place the bubble window"),
                                                       GTK_TYPE_POSITION_TYPE, GTK_POS_TOP,
                                                       GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
-
-  g_type_class_add_private (klass, sizeof (GtkBubbleWindowPrivate));
 }
 
 static void

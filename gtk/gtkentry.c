@@ -642,6 +642,7 @@ static void         buffer_disconnect_signals          (GtkEntry       *entry);
 static GtkEntryBuffer *get_buffer                      (GtkEntry       *entry);
 
 G_DEFINE_TYPE_WITH_CODE (GtkEntry, gtk_entry, GTK_TYPE_WIDGET,
+                         G_ADD_PRIVATE (GtkEntry)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
                                                 gtk_entry_editable_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_EDITABLE,
@@ -1994,7 +1995,6 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                                GTK_PARAM_READABLE |
                                                                G_PARAM_DEPRECATED));
 
-  g_type_class_add_private (gobject_class, sizeof (GtkEntryPrivate));
   test_touchscreen = g_getenv ("GTK_TEST_TOUCHSCREEN") != NULL;
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_ENTRY_ACCESSIBLE);
@@ -2590,9 +2590,7 @@ gtk_entry_init (GtkEntry *entry)
   GtkStyleContext *context;
   GtkEntryPrivate *priv;
 
-  entry->priv = G_TYPE_INSTANCE_GET_PRIVATE (entry,
-                                             GTK_TYPE_ENTRY,
-                                             GtkEntryPrivate);
+  entry->priv = gtk_entry_get_instance_private (entry);
   priv = entry->priv;
 
   gtk_widget_set_can_focus (GTK_WIDGET (entry), TRUE);

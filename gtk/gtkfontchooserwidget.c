@@ -167,6 +167,7 @@ static void     gtk_font_chooser_widget_cell_data_func         (GtkTreeViewColum
 static void gtk_font_chooser_widget_iface_init (GtkFontChooserIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkFontChooserWidget, gtk_font_chooser_widget, GTK_TYPE_BOX,
+                         G_ADD_PRIVATE (GtkFontChooserWidget)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_FONT_CHOOSER,
                                                 gtk_font_chooser_widget_iface_init))
 
@@ -494,8 +495,6 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   gtk_widget_class_bind_callback (widget_class, row_inserted_cb);
   gtk_widget_class_bind_callback (widget_class, row_deleted_cb);
   gtk_widget_class_bind_callback (widget_class, size_change_cb);
-
-  g_type_class_add_private (klass, sizeof (GtkFontChooserWidgetPrivate));
 }
 
 static void
@@ -503,10 +502,7 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
 {
   GtkFontChooserWidgetPrivate *priv;
 
-  fontchooser->priv = G_TYPE_INSTANCE_GET_PRIVATE (fontchooser,
-                                                   GTK_TYPE_FONT_CHOOSER_WIDGET,
-                                                   GtkFontChooserWidgetPrivate);
-
+  fontchooser->priv = gtk_font_chooser_widget_get_instance_private (fontchooser);
   priv = fontchooser->priv;
 
   gtk_widget_init_template (GTK_WIDGET (fontchooser));

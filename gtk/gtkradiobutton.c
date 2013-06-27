@@ -132,7 +132,7 @@ static void     gtk_radio_button_get_property   (GObject             *object,
 						 GValue              *value,
 						 GParamSpec          *pspec);
 
-G_DEFINE_TYPE (GtkRadioButton, gtk_radio_button, GTK_TYPE_CHECK_BUTTON)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkRadioButton, gtk_radio_button, GTK_TYPE_CHECK_BUTTON)
 
 static guint group_changed_signal = 0;
 
@@ -194,8 +194,6 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
 				       _gtk_marshal_VOID__VOID,
 				       G_TYPE_NONE, 0);
 
-  g_type_class_add_private (class, sizeof (GtkRadioButtonPrivate));
-
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_RADIO_BUTTON_ACCESSIBLE);
 }
 
@@ -204,9 +202,7 @@ gtk_radio_button_init (GtkRadioButton *radio_button)
 {
   GtkRadioButtonPrivate *priv;
 
-  radio_button->priv = G_TYPE_INSTANCE_GET_PRIVATE (radio_button,
-                                                    GTK_TYPE_RADIO_BUTTON,
-                                                    GtkRadioButtonPrivate);
+  radio_button->priv = gtk_radio_button_get_instance_private (radio_button);
   priv = radio_button->priv;
 
   gtk_widget_set_receives_default (GTK_WIDGET (radio_button), FALSE);

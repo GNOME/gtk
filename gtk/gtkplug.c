@@ -130,7 +130,7 @@ enum {
 
 static guint plug_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkPlug, gtk_plug, GTK_TYPE_WINDOW)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkPlug, gtk_plug, GTK_TYPE_WINDOW)
 
 static void
 gtk_plug_get_property (GObject    *object,
@@ -233,16 +233,12 @@ gtk_plug_class_init (GtkPlugClass *class)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
-
-  g_type_class_add_private (class, sizeof (GtkPlugPrivate));
 }
 
 static void
 gtk_plug_init (GtkPlug *plug)
 {
-  plug->priv = G_TYPE_INSTANCE_GET_PRIVATE (plug,
-                                            GTK_TYPE_PLUG,
-                                            GtkPlugPrivate);
+  plug->priv = gtk_plug_get_instance_private (plug);
 }
 
 /**

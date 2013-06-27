@@ -87,6 +87,7 @@ enum
 static void gtk_color_chooser_widget_iface_init (GtkColorChooserInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkColorChooserWidget, gtk_color_chooser_widget, GTK_TYPE_BOX,
+                         G_ADD_PRIVATE (GtkColorChooserWidget)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_COLOR_CHOOSER,
                                                 gtk_color_chooser_widget_iface_init))
 
@@ -502,7 +503,7 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
   AtkObject *atk_obj;
   gchar *text, *name;
 
-  cc->priv = G_TYPE_INSTANCE_GET_PRIVATE (cc, GTK_TYPE_COLOR_CHOOSER_WIDGET, GtkColorChooserWidgetPrivate);
+  cc->priv = gtk_color_chooser_widget_get_instance_private (cc);
 
   cc->priv->use_alpha = TRUE;
 
@@ -677,8 +678,6 @@ gtk_color_chooser_widget_class_init (GtkColorChooserWidgetClass *class)
   g_object_class_install_property (object_class, PROP_SHOW_EDITOR,
       g_param_spec_boolean ("show-editor", P_("Show editor"), P_("Show editor"),
                             FALSE, GTK_PARAM_READWRITE));
-
-  g_type_class_add_private (object_class, sizeof (GtkColorChooserWidgetPrivate));
 }
 
 /* GtkColorChooser implementation {{{1 */

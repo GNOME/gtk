@@ -121,6 +121,7 @@ static void gtk_image_menu_item_sync_action_properties     (GtkActivatable      
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkImageMenuItem, gtk_image_menu_item, GTK_TYPE_MENU_ITEM,
+                         G_ADD_PRIVATE (GtkImageMenuItem)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
                                                 gtk_image_menu_item_activatable_interface_init))
 
@@ -220,7 +221,6 @@ gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
                                                         GTK_TYPE_ACCEL_GROUP,
                                                         GTK_PARAM_WRITABLE | G_PARAM_DEPRECATED));
 
-    g_type_class_add_private (klass, sizeof (GtkImageMenuItemPrivate));
 }
 
 static void
@@ -228,9 +228,7 @@ gtk_image_menu_item_init (GtkImageMenuItem *image_menu_item)
 {
   GtkImageMenuItemPrivate *priv;
 
-  image_menu_item->priv = G_TYPE_INSTANCE_GET_PRIVATE (image_menu_item,
-                                                       GTK_TYPE_IMAGE_MENU_ITEM,
-                                                       GtkImageMenuItemPrivate);
+  image_menu_item->priv = gtk_image_menu_item_get_instance_private (image_menu_item);
   priv = image_menu_item->priv;
 
   priv->image = NULL;

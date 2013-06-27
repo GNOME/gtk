@@ -907,6 +907,7 @@ static guint tree_view_signals [LAST_SIGNAL] = { 0 };
  */
 
 G_DEFINE_TYPE_WITH_CODE (GtkTreeView, gtk_tree_view, GTK_TYPE_CONTAINER,
+                         G_ADD_PRIVATE (GtkTreeView)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
 						gtk_tree_view_buildable_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
@@ -1715,15 +1716,13 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_F, GDK_CONTROL_MASK, "start-interactive-search", 0);
 
-  g_type_class_add_private (o_class, sizeof (GtkTreeViewPrivate));
-
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_TREE_VIEW_ACCESSIBLE);
 }
 
 static void
 gtk_tree_view_init (GtkTreeView *tree_view)
 {
-  tree_view->priv = G_TYPE_INSTANCE_GET_PRIVATE (tree_view, GTK_TYPE_TREE_VIEW, GtkTreeViewPrivate);
+  tree_view->priv = gtk_tree_view_get_instance_private (tree_view);
 
   gtk_widget_set_can_focus (GTK_WIDGET (tree_view), TRUE);
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (tree_view), FALSE);

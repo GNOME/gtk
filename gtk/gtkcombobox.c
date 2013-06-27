@@ -472,6 +472,7 @@ static void     gtk_combo_box_direction_changed              (GtkWidget    *widg
                                                               GtkTextDirection  previous_direction);
 
 G_DEFINE_TYPE_WITH_CODE (GtkComboBox, gtk_combo_box, GTK_TYPE_BIN,
+                         G_ADD_PRIVATE (GtkComboBox)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
                                                 gtk_combo_box_cell_layout_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_EDITABLE,
@@ -1070,8 +1071,6 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                               GTK_SHADOW_NONE,
                                                               GTK_PARAM_READABLE));
 
-  g_type_class_add_private (object_class, sizeof (GtkComboBoxPrivate));
-
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_COMBO_BOX_ACCESSIBLE);
 }
 
@@ -1102,9 +1101,7 @@ gtk_combo_box_init (GtkComboBox *combo_box)
 {
   GtkComboBoxPrivate *priv;
 
-  combo_box->priv = G_TYPE_INSTANCE_GET_PRIVATE (combo_box,
-                                                 GTK_TYPE_COMBO_BOX,
-                                                 GtkComboBoxPrivate);
+  combo_box->priv = gtk_combo_box_get_instance_private (combo_box);
   priv = combo_box->priv;
 
   priv->wrap_width = 0;

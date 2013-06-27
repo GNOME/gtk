@@ -356,6 +356,7 @@ static guint                 vadjustment_key_id = 0;
 static const gchar           hadjustment_key[] = "gtk-hadjustment";
 static guint                 hadjustment_key_id = 0;
 static guint                 container_signals[LAST_SIGNAL] = { 0 };
+static gint                  GtkContainer_private_offset;
 static GtkWidgetClass       *parent_class = NULL;
 extern GParamSpecPool       *_gtk_widget_child_property_pool;
 extern GObjectNotifyContext *_gtk_widget_child_property_notify_context;
@@ -363,6 +364,12 @@ static GtkBuildableIface    *parent_buildable_iface;
 
 
 /* --- functions --- */
+static inline gpointer
+gtk_container_get_instance_private (GtkContainer *self)
+{
+  return G_STRUCT_MEMBER_P (self, GtkContainer_private_offset);
+}
+
 GType
 gtk_container_get_type (void)
 {
@@ -394,6 +401,9 @@ gtk_container_get_type (void)
       container_type =
         g_type_register_static (GTK_TYPE_WIDGET, I_("GtkContainer"),
                                 &container_info, G_TYPE_FLAG_ABSTRACT);
+
+      GtkContainer_private_offset =
+        g_type_add_instance_private (container_type, sizeof (GtkContainerPrivate));
 
       g_type_add_interface_static (container_type,
                                    GTK_TYPE_BUILDABLE,
@@ -526,7 +536,8 @@ gtk_container_class_init (GtkContainerClass *class)
                   G_TYPE_NONE, 1,
                   GTK_TYPE_WIDGET);
 
-  g_type_class_add_private (class, sizeof (GtkContainerPrivate));
+  if (GtkContainer_private_offset != 0)
+    g_type_class_adjust_private_offset (class, &GtkContainer_private_offset);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_CONTAINER_ACCESSIBLE);
 }
@@ -1348,9 +1359,7 @@ gtk_container_init (GtkContainer *container)
 {
   GtkContainerPrivate *priv;
 
-  container->priv = G_TYPE_INSTANCE_GET_PRIVATE (container,
-                                                 GTK_TYPE_CONTAINER,
-                                                 GtkContainerPrivate);
+  container->priv = gtk_container_get_instance_private (container);
   priv = container->priv;
 
   priv->focus_child = NULL;

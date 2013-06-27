@@ -68,6 +68,7 @@ static GObject *gtk_font_chooser_dialog_buildable_get_internal_child (GtkBuildab
                                                                       const gchar  *childname);
 
 G_DEFINE_TYPE_WITH_CODE (GtkFontChooserDialog, gtk_font_chooser_dialog, GTK_TYPE_DIALOG,
+                         G_ADD_PRIVATE (GtkFontChooserDialog)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_FONT_CHOOSER,
                                                 _gtk_font_chooser_delegate_iface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
@@ -139,8 +140,6 @@ gtk_font_chooser_dialog_class_init (GtkFontChooserDialogClass *klass)
   gtk_widget_class_bind_child (widget_class, GtkFontChooserDialogPrivate, select_button);
   gtk_widget_class_bind_child (widget_class, GtkFontChooserDialogPrivate, cancel_button);
   gtk_widget_class_bind_callback (widget_class, font_activated_cb);
-
-  g_type_class_add_private (klass, sizeof (GtkFontChooserDialogPrivate));
 }
 
 static void
@@ -148,9 +147,7 @@ gtk_font_chooser_dialog_init (GtkFontChooserDialog *fontchooserdiag)
 {
   GtkFontChooserDialogPrivate *priv;
 
-  fontchooserdiag->priv = G_TYPE_INSTANCE_GET_PRIVATE (fontchooserdiag,
-                                                       GTK_TYPE_FONT_CHOOSER_DIALOG,
-                                                       GtkFontChooserDialogPrivate);
+  fontchooserdiag->priv = gtk_font_chooser_dialog_get_instance_private (fontchooserdiag);
   priv = fontchooserdiag->priv;
 
   gtk_widget_init_template (GTK_WIDGET (fontchooserdiag));

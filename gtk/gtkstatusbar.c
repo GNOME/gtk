@@ -116,7 +116,7 @@ static void     gtk_statusbar_hierarchy_changed (GtkWidget         *widget,
 
 static guint              statusbar_signals[SIGNAL_LAST] = { 0 };
 
-G_DEFINE_TYPE (GtkStatusbar, gtk_statusbar, GTK_TYPE_BOX);
+G_DEFINE_TYPE_WITH_PRIVATE (GtkStatusbar, gtk_statusbar, GTK_TYPE_BOX)
 
 static void
 gtk_statusbar_class_init (GtkStatusbarClass *class)
@@ -184,8 +184,6 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
   gtk_widget_class_bind_child (widget_class, GtkStatusbarPrivate, frame);
   gtk_widget_class_bind_child (widget_class, GtkStatusbarPrivate, label);
 
-  g_type_class_add_private (class, sizeof (GtkStatusbarPrivate));
-
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_STATUSBAR_ACCESSIBLE);
 }
 
@@ -195,9 +193,7 @@ gtk_statusbar_init (GtkStatusbar *statusbar)
   GtkStatusbarPrivate *priv;
   GtkShadowType shadow_type;
 
-  statusbar->priv = G_TYPE_INSTANCE_GET_PRIVATE (statusbar,
-                                                 GTK_TYPE_STATUSBAR,
-                                                 GtkStatusbarPrivate);
+  statusbar->priv = gtk_statusbar_get_instance_private (statusbar);
   priv = statusbar->priv;
 
   priv->seq_context_id = 1;

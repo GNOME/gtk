@@ -374,6 +374,7 @@ struct GtkPrintUnixDialogPrivate
 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkPrintUnixDialog, gtk_print_unix_dialog, GTK_TYPE_DIALOG,
+                         G_ADD_PRIVATE (GtkPrintUnixDialog)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_print_unix_dialog_buildable_init))
 
@@ -560,8 +561,6 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
   gtk_widget_class_bind_callback (widget_class, update_number_up_layout);
   gtk_widget_class_bind_callback (widget_class, redraw_page_layout_preview);
   gtk_widget_class_bind_callback (widget_class, draw_page_cb);
-
-  g_type_class_add_private (class, sizeof (GtkPrintUnixDialogPrivate));
 }
 
 /* Returns a toplevel GtkWindow, or NULL if none */
@@ -727,9 +726,7 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   GtkPrintUnixDialogPrivate *priv;
   GtkTreeSortable *sort;
 
-  dialog->priv = G_TYPE_INSTANCE_GET_PRIVATE (dialog,
-                                              GTK_TYPE_PRINT_UNIX_DIALOG,
-                                              GtkPrintUnixDialogPrivate);
+  dialog->priv = gtk_print_unix_dialog_get_instance_private (dialog);
   priv = dialog->priv;
 
   priv->print_backends = NULL;

@@ -167,6 +167,7 @@ static void gtk_scale_button_update_icon	(GtkScaleButton      *button);
 static void gtk_scale_button_scale_value_changed(GtkRange            *range);
 
 G_DEFINE_TYPE_WITH_CODE (GtkScaleButton, gtk_scale_button, GTK_TYPE_BUTTON,
+                         G_ADD_PRIVATE (GtkScaleButton)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE,
                                                 NULL))
 
@@ -193,8 +194,6 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkBindingSet *binding_set;
-
-  g_type_class_add_private (klass, sizeof (GtkScaleButtonPrivate));
 
   gobject_class->constructor = gtk_scale_button_constructor;
   gobject_class->finalize = gtk_scale_button_finalize;
@@ -385,9 +384,7 @@ gtk_scale_button_init (GtkScaleButton *button)
 {
   GtkScaleButtonPrivate *priv;
 
-  button->priv = priv = G_TYPE_INSTANCE_GET_PRIVATE (button,
-                                                     GTK_TYPE_SCALE_BUTTON,
-                                                     GtkScaleButtonPrivate);
+  button->priv = priv = gtk_scale_button_get_instance_private (button);
 
   priv->timeout = FALSE;
   priv->click_id = 0;

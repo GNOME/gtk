@@ -100,7 +100,7 @@ static guint cell_renderer_combo_signals[LAST_SIGNAL] = { 0, };
 
 #define GTK_CELL_RENDERER_COMBO_PATH "gtk-cell-renderer-combo-path"
 
-G_DEFINE_TYPE (GtkCellRendererCombo, gtk_cell_renderer_combo, GTK_TYPE_CELL_RENDERER_TEXT)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkCellRendererCombo, gtk_cell_renderer_combo, GTK_TYPE_CELL_RENDERER_TEXT)
 
 static void
 gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
@@ -204,8 +204,6 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
 		  G_TYPE_NONE, 2,
 		  G_TYPE_STRING,
 		  GTK_TYPE_TREE_ITER);
-
-  g_type_class_add_private (klass, sizeof (GtkCellRendererComboPrivate));
 }
 
 static void
@@ -213,9 +211,7 @@ gtk_cell_renderer_combo_init (GtkCellRendererCombo *self)
 {
   GtkCellRendererComboPrivate *priv;
 
-  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
-                                            GTK_TYPE_CELL_RENDERER_COMBO,
-                                            GtkCellRendererComboPrivate);
+  self->priv = gtk_cell_renderer_combo_get_instance_private (self);
   priv = self->priv;
 
   priv->model = NULL;

@@ -112,7 +112,7 @@ static void     gtk_im_context_simple_get_preedit_string (GtkIMContext          
 							  PangoAttrList           **attrs,
 							  gint                     *cursor_pos);
 
-G_DEFINE_TYPE (GtkIMContextSimple, gtk_im_context_simple, GTK_TYPE_IM_CONTEXT)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkIMContextSimple, gtk_im_context_simple, GTK_TYPE_IM_CONTEXT)
 
 static void
 gtk_im_context_simple_class_init (GtkIMContextSimpleClass *class)
@@ -124,16 +124,12 @@ gtk_im_context_simple_class_init (GtkIMContextSimpleClass *class)
   im_context_class->reset = gtk_im_context_simple_reset;
   im_context_class->get_preedit_string = gtk_im_context_simple_get_preedit_string;
   gobject_class->finalize = gtk_im_context_simple_finalize;
-
-  g_type_class_add_private (class, sizeof (GtkIMContextSimplePrivate));
 }
 
 static void
 gtk_im_context_simple_init (GtkIMContextSimple *im_context_simple)
 {
-  im_context_simple->priv = G_TYPE_INSTANCE_GET_PRIVATE (im_context_simple,
-                                                         GTK_TYPE_IM_CONTEXT_SIMPLE,
-                                                         GtkIMContextSimplePrivate);
+  im_context_simple->priv = gtk_im_context_simple_get_instance_private (im_context_simple); 
 }
 
 static void

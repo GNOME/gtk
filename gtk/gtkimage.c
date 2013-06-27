@@ -200,7 +200,7 @@ enum
   PROP_USE_FALLBACK
 };
 
-G_DEFINE_TYPE (GtkImage, gtk_image, GTK_TYPE_MISC)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkImage, gtk_image, GTK_TYPE_MISC)
 
 static void
 gtk_image_class_init (GtkImageClass *class)
@@ -387,8 +387,6 @@ gtk_image_class_init (GtkImageClass *class)
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
 
-  g_type_class_add_private (class, sizeof (GtkImagePrivate));
-
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_IMAGE_ACCESSIBLE);
 }
 
@@ -397,9 +395,7 @@ gtk_image_init (GtkImage *image)
 {
   GtkImagePrivate *priv;
 
-  image->priv = G_TYPE_INSTANCE_GET_PRIVATE (image,
-                                             GTK_TYPE_IMAGE,
-                                             GtkImagePrivate);
+  image->priv = gtk_image_get_instance_private (image);
   priv = image->priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (image), FALSE);

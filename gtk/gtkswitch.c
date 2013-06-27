@@ -97,6 +97,7 @@ static void gtk_switch_activatable_interface_init (GtkActivatableIface *iface);
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 G_DEFINE_TYPE_WITH_CODE (GtkSwitch, gtk_switch, GTK_TYPE_WIDGET,
+                         G_ADD_PRIVATE (GtkSwitch)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIONABLE,
                                                 gtk_switch_actionable_iface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
@@ -809,8 +810,6 @@ gtk_switch_class_init (GtkSwitchClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   gpointer activatable_iface;
 
-  g_type_class_add_private (klass, sizeof (GtkSwitchPrivate));
-
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   activatable_iface = g_type_default_interface_peek (GTK_TYPE_ACTIVATABLE);
   G_GNUC_END_IGNORE_DEPRECATIONS;
@@ -900,7 +899,7 @@ gtk_switch_class_init (GtkSwitchClass *klass)
 static void
 gtk_switch_init (GtkSwitch *self)
 {
-  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self, GTK_TYPE_SWITCH, GtkSwitchPrivate);
+  self->priv = gtk_switch_get_instance_private (self);
   self->priv->use_action_appearance = TRUE;
   gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);

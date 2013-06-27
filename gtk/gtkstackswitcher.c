@@ -53,7 +53,7 @@ enum {
   PROP_STACK
 };
 
-G_DEFINE_TYPE (GtkStackSwitcher, gtk_stack_switcher, GTK_TYPE_BOX);
+G_DEFINE_TYPE_WITH_PRIVATE (GtkStackSwitcher, gtk_stack_switcher, GTK_TYPE_BOX)
 
 static void
 gtk_stack_switcher_init (GtkStackSwitcher *switcher)
@@ -61,7 +61,7 @@ gtk_stack_switcher_init (GtkStackSwitcher *switcher)
   GtkStyleContext *context;
   GtkStackSwitcherPrivate *priv;
 
-  priv = G_TYPE_INSTANCE_GET_PRIVATE (switcher, GTK_TYPE_STACK_SWITCHER, GtkStackSwitcherPrivate);
+  priv = gtk_stack_switcher_get_instance_private (switcher);
   switcher->priv = priv;
 
   priv->stack = NULL;
@@ -427,8 +427,6 @@ gtk_stack_switcher_class_init (GtkStackSwitcherClass *class)
                                                         GTK_TYPE_STACK,
                                                         GTK_PARAM_READWRITE |
                                                         G_PARAM_CONSTRUCT));
-
-  g_type_class_add_private (object_class, sizeof (GtkStackSwitcherPrivate));
 }
 
 /**
@@ -443,5 +441,5 @@ gtk_stack_switcher_class_init (GtkStackSwitcherClass *class)
 GtkWidget *
 gtk_stack_switcher_new (void)
 {
-  return GTK_WIDGET (g_object_new (GTK_TYPE_STACK_SWITCHER, NULL));
+  return g_object_new (GTK_TYPE_STACK_SWITCHER, NULL);
 }

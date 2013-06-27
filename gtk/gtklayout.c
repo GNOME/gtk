@@ -161,6 +161,7 @@ static void gtk_layout_set_hadjustment_values (GtkLayout      *layout);
 static void gtk_layout_set_vadjustment_values (GtkLayout      *layout);
 
 G_DEFINE_TYPE_WITH_CODE (GtkLayout, gtk_layout, GTK_TYPE_CONTAINER,
+                         G_ADD_PRIVATE (GtkLayout)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
 
 /* Public interface
@@ -696,8 +697,6 @@ gtk_layout_class_init (GtkLayoutClass *class)
   container_class->add = gtk_layout_add;
   container_class->remove = gtk_layout_remove;
   container_class->forall = gtk_layout_forall;
-
-  g_type_class_add_private (class, sizeof (GtkLayoutPrivate));
 }
 
 static void
@@ -831,9 +830,7 @@ gtk_layout_init (GtkLayout *layout)
 {
   GtkLayoutPrivate *priv;
 
-  layout->priv = G_TYPE_INSTANCE_GET_PRIVATE (layout,
-                                              GTK_TYPE_LAYOUT,
-                                              GtkLayoutPrivate);
+  layout->priv = gtk_layout_get_instance_private (layout);
   priv = layout->priv;
 
   priv->children = NULL;

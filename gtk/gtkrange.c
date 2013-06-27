@@ -280,6 +280,7 @@ static gboolean      gtk_range_key_press                (GtkWidget     *range,
 
 
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkRange, gtk_range, GTK_TYPE_WIDGET,
+                                  G_ADD_PRIVATE (GtkRange)
                                   G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE,
                                                          NULL))
 
@@ -606,8 +607,6 @@ gtk_range_class_init (GtkRangeClass *class)
 							       0.0, 1.0, 0.5,
 							       GTK_PARAM_READABLE));
 
-  g_type_class_add_private (class, sizeof (GtkRangePrivate));
-
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_RANGE_ACCESSIBLE);
 }
 
@@ -713,9 +712,7 @@ gtk_range_init (GtkRange *range)
 {
   GtkRangePrivate *priv;
 
-  range->priv = G_TYPE_INSTANCE_GET_PRIVATE (range,
-                                             GTK_TYPE_RANGE,
-                                             GtkRangePrivate);
+  range->priv = gtk_range_get_instance_private (range);
   priv = range->priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (range), FALSE);

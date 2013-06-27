@@ -108,8 +108,7 @@ static void     gtk_revealer_real_get_preferred_width_for_height (GtkWidget     
                                                                   gint          *minimum_width,
                                                                   gint          *natural_width);
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkRevealer, gtk_revealer, GTK_TYPE_BIN);
-
+G_DEFINE_TYPE_WITH_PRIVATE (GtkRevealer, gtk_revealer, GTK_TYPE_BIN)
 
 static void
 gtk_revealer_init (GtkRevealer *revealer)

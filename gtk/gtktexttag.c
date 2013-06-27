@@ -174,7 +174,7 @@ static void gtk_text_tag_get_property (GObject         *object,
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkTextTag, gtk_text_tag, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkTextTag, gtk_text_tag, G_TYPE_OBJECT)
 
 static void
 gtk_text_tag_class_init (GtkTextTagClass *klass)
@@ -750,21 +750,13 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                   G_TYPE_OBJECT,
                   GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE,
                   GTK_TYPE_TEXT_ITER);
-
-  g_type_class_add_private (klass, sizeof (GtkTextTagPrivate));
 }
 
 static void
 gtk_text_tag_init (GtkTextTag *text_tag)
 {
-  GtkTextTagPrivate *priv;
-
-  text_tag->priv = G_TYPE_INSTANCE_GET_PRIVATE (text_tag,
-                                                GTK_TYPE_TEXT_TAG,
-                                                GtkTextTagPrivate);
-  priv = text_tag->priv;
-
-  priv->values = gtk_text_attributes_new ();
+  text_tag->priv = gtk_text_tag_get_instance_private (text_tag);
+  text_tag->priv->values = gtk_text_attributes_new ();
 }
 
 /**

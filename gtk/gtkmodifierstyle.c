@@ -40,6 +40,7 @@ static void gtk_modifier_style_provider_private_init (GtkStyleProviderPrivateInt
 static void gtk_modifier_style_finalize              (GObject                          *object);
 
 G_DEFINE_TYPE_EXTENDED (GtkModifierStyle, _gtk_modifier_style, G_TYPE_OBJECT, 0,
+                        G_ADD_PRIVATE (GtkModifierStyle)
                         G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER,
                                                gtk_modifier_style_provider_init)
                         G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER_PRIVATE,
@@ -61,8 +62,6 @@ _gtk_modifier_style_class_init (GtkModifierStyleClass *klass)
                   0, NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
-
-  g_type_class_add_private (object_class, sizeof (GtkModifierStylePrivate));
 }
 
 static void
@@ -70,9 +69,7 @@ _gtk_modifier_style_init (GtkModifierStyle *modifier_style)
 {
   GtkModifierStylePrivate *priv;
 
-  priv = modifier_style->priv = G_TYPE_INSTANCE_GET_PRIVATE (modifier_style,
-                                                             GTK_TYPE_MODIFIER_STYLE,
-                                                             GtkModifierStylePrivate);
+  priv = modifier_style->priv = _gtk_modifier_style_get_instance_private (modifier_style);
 
   priv->color_properties = g_hash_table_new_full (g_str_hash,
                                                   g_str_equal,

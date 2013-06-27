@@ -102,7 +102,7 @@ enum {
   PAGE_SETUP_LIST_N_COLS
 };
 
-G_DEFINE_TYPE (GtkPageSetupUnixDialog, gtk_page_setup_unix_dialog, GTK_TYPE_DIALOG)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkPageSetupUnixDialog, gtk_page_setup_unix_dialog, GTK_TYPE_DIALOG)
 
 static void gtk_page_setup_unix_dialog_finalize  (GObject                *object);
 static void fill_paper_sizes_from_printer        (GtkPageSetupUnixDialog *dialog,
@@ -177,8 +177,6 @@ gtk_page_setup_unix_dialog_class_init (GtkPageSetupUnixDialogClass *class)
 
   gtk_widget_class_bind_callback (widget_class, printer_changed_callback);
   gtk_widget_class_bind_callback (widget_class, paper_size_changed);
-
-  g_type_class_add_private (class, sizeof (GtkPageSetupUnixDialogPrivate));
 }
 
 static void
@@ -188,9 +186,7 @@ gtk_page_setup_unix_dialog_init (GtkPageSetupUnixDialog *dialog)
   GtkTreeIter iter;
   gchar *tmp;
 
-  priv = dialog->priv = G_TYPE_INSTANCE_GET_PRIVATE (dialog,
-                                                     GTK_TYPE_PAGE_SETUP_UNIX_DIALOG,
-                                                     GtkPageSetupUnixDialogPrivate);
+  priv = dialog->priv = gtk_page_setup_unix_dialog_get_instance_private (dialog);
 
   priv->print_backends = NULL;
 

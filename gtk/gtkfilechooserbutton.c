@@ -352,9 +352,10 @@ static guint file_chooser_button_signals[LAST_SIGNAL] = { 0 };
  *  GType Declaration  *
  * ******************* */
 
-G_DEFINE_TYPE_WITH_CODE (GtkFileChooserButton, gtk_file_chooser_button, GTK_TYPE_BOX, { \
-    G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER, gtk_file_chooser_button_file_chooser_iface_init) \
-})
+G_DEFINE_TYPE_WITH_CODE (GtkFileChooserButton, gtk_file_chooser_button, GTK_TYPE_BOX,
+                         G_ADD_PRIVATE (GtkFileChooserButton)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER,
+                                                gtk_file_chooser_button_file_chooser_iface_init))
 
 
 /* ***************** *
@@ -482,8 +483,6 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
   gtk_widget_class_bind_callback (widget_class, button_clicked_cb);
   gtk_widget_class_bind_callback (widget_class, combo_box_changed_cb);
   gtk_widget_class_bind_callback (widget_class, combo_box_notify_popup_shown_cb);
-
-  g_type_class_add_private (class, sizeof (GtkFileChooserButtonPrivate));
 }
 
 static void
@@ -492,9 +491,7 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   GtkFileChooserButtonPrivate *priv;
   GtkTargetList *target_list;
 
-  priv = button->priv = G_TYPE_INSTANCE_GET_PRIVATE (button,
-                                                     GTK_TYPE_FILE_CHOOSER_BUTTON,
-                                                     GtkFileChooserButtonPrivate);
+  priv = button->priv = gtk_file_chooser_button_get_instance_private (button);
 
   priv->icon_size = FALLBACK_ICON_SIZE;
   priv->focus_on_click = TRUE;

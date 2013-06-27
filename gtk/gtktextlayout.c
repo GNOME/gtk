@@ -87,7 +87,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define GTK_TEXT_LAYOUT_GET_PRIVATE(o)  (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_TEXT_LAYOUT, GtkTextLayoutPrivate))
+#define GTK_TEXT_LAYOUT_GET_PRIVATE(o)  ((GtkTextLayoutPrivate *) gtk_text_layout_get_instance_private ((o)))
 
 typedef struct _GtkTextLayoutPrivate GtkTextLayoutPrivate;
 
@@ -173,7 +173,7 @@ static guint signals[LAST_SIGNAL] = { 0 };
 
 PangoAttrType gtk_text_attr_appearance_type = 0;
 
-G_DEFINE_TYPE (GtkTextLayout, gtk_text_layout, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkTextLayout, gtk_text_layout, G_TYPE_OBJECT)
 
 static void
 gtk_text_layout_dispose (GObject *object)
@@ -271,8 +271,6 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
                   G_TYPE_OBJECT,
                   G_TYPE_INT,
                   G_TYPE_INT);
-  
-  g_type_class_add_private (object_class, sizeof (GtkTextLayoutPrivate));
 }
 
 static void

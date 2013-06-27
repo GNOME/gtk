@@ -44,7 +44,7 @@ enum {
   PROP_V_ADJUSTMENT
 };
 
-G_DEFINE_TYPE (GtkColorPlane, gtk_color_plane, GTK_TYPE_DRAWING_AREA)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkColorPlane, gtk_color_plane, GTK_TYPE_DRAWING_AREA)
 
 static void
 sv_to_xy (GtkColorPlane *plane,
@@ -428,9 +428,7 @@ gtk_color_plane_init (GtkColorPlane *plane)
 {
   AtkObject *atk_obj;
 
-  plane->priv = G_TYPE_INSTANCE_GET_PRIVATE (plane,
-                                             GTK_TYPE_COLOR_PLANE,
-                                             GtkColorPlanePrivate);
+  plane->priv = gtk_color_plane_get_instance_private (plane);
 
   gtk_widget_set_can_focus (GTK_WIDGET (plane), TRUE);
   gtk_widget_set_events (GTK_WIDGET (plane), GDK_KEY_PRESS_MASK
@@ -552,8 +550,6 @@ gtk_color_plane_class_init (GtkColorPlaneClass *class)
 							GTK_TYPE_ADJUSTMENT,
 							G_PARAM_WRITABLE |
 							G_PARAM_CONSTRUCT_ONLY));
-
-  g_type_class_add_private (class, sizeof (GtkColorPlanePrivate));
 }
 
 GtkWidget *
@@ -561,13 +557,9 @@ gtk_color_plane_new (GtkAdjustment *h_adj,
                      GtkAdjustment *s_adj,
                      GtkAdjustment *v_adj)
 {
-  GtkColorPlane *plane;
-
-  plane = (GtkColorPlane *) g_object_new (GTK_TYPE_COLOR_PLANE,
-					  "h-adjustment", h_adj,
-					  "s-adjustment", s_adj,
-					  "v-adjustment", v_adj,
-					  NULL);
-
-  return (GtkWidget *)plane;
+  return g_object_new (GTK_TYPE_COLOR_PLANE,
+                       "h-adjustment", h_adj,
+                       "s-adjustment", s_adj,
+                       "v-adjustment", v_adj,
+                       NULL);
 }

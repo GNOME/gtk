@@ -111,7 +111,7 @@ struct _ButtonData
  */
 #define BUTTON_IS_FAKE_ROOT(button) ((button)->type == HOME_BUTTON)
 
-G_DEFINE_TYPE (GtkPathBar, gtk_path_bar, GTK_TYPE_CONTAINER)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkPathBar, gtk_path_bar, GTK_TYPE_CONTAINER)
 
 static void gtk_path_bar_finalize                 (GObject          *object);
 static void gtk_path_bar_dispose                  (GObject          *object);
@@ -179,9 +179,7 @@ on_slider_unmap (GtkWidget  *widget,
 static void
 gtk_path_bar_init (GtkPathBar *path_bar)
 {
-  path_bar->priv = G_TYPE_INSTANCE_GET_PRIVATE (path_bar,
-						GTK_TYPE_PATH_BAR,
-						GtkPathBarPrivate);
+  path_bar->priv = gtk_path_bar_get_instance_private (path_bar);
 
   gtk_widget_init_template (GTK_WIDGET (path_bar));
 
@@ -270,8 +268,6 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
   gtk_widget_class_bind_callback (widget_class, gtk_path_bar_scroll_up);
   gtk_widget_class_bind_callback (widget_class, gtk_path_bar_scroll_down);
   gtk_widget_class_bind_callback (widget_class, on_slider_unmap);
-
-  g_type_class_add_private (gobject_class, sizeof (GtkPathBarPrivate));
 }
 
 

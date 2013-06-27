@@ -34,16 +34,6 @@
 static void app_chooser_online_iface_init (GtkAppChooserOnlineInterface *iface);
 static void app_chooser_online_pk_async_initable_init (GAsyncInitableIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkAppChooserOnlinePk, gtk_app_chooser_online_pk,
-                         G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE,
-                                                app_chooser_online_pk_async_initable_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_APP_CHOOSER_ONLINE,
-                                                app_chooser_online_iface_init)
-                         g_io_extension_point_implement ("gtkappchooser-online",
-                                                         g_define_type_id,
-                                                         "packagekit", 10));
-
 struct _GtkAppChooserOnlinePkPrivate {
   GSimpleAsyncResult *init_result;
   guint watch_id;
@@ -52,6 +42,17 @@ struct _GtkAppChooserOnlinePkPrivate {
   GSimpleAsyncResult *result;
   GtkWindow *parent;
 };
+
+G_DEFINE_TYPE_WITH_CODE (GtkAppChooserOnlinePk, gtk_app_chooser_online_pk,
+                         G_TYPE_OBJECT,
+                         G_ADD_PRIVATE (GtkAppChooserOnlinePk)
+                         G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE,
+                                                app_chooser_online_pk_async_initable_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_APP_CHOOSER_ONLINE,
+                                                app_chooser_online_iface_init)
+                         g_io_extension_point_implement ("gtkappchooser-online",
+                                                         g_define_type_id,
+                                                         "packagekit", 10));
 
 static void
 gtk_app_chooser_online_pk_dispose (GObject *obj)
@@ -70,15 +71,12 @@ gtk_app_chooser_online_pk_class_init (GtkAppChooserOnlinePkClass *klass)
   GObjectClass *oclass = G_OBJECT_CLASS (klass);
 
   oclass->dispose = gtk_app_chooser_online_pk_dispose;
-
-  g_type_class_add_private (klass, sizeof (GtkAppChooserOnlinePkPrivate));
 }
 
 static void
 gtk_app_chooser_online_pk_init (GtkAppChooserOnlinePk *self)
 {
-  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self, GTK_TYPE_APP_CHOOSER_ONLINE_PK,
-                                            GtkAppChooserOnlinePkPrivate);
+  self->priv = gtk_app_chooser_online_pk_get_instance_private (self);
 }
 
 static gboolean

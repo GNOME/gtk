@@ -104,16 +104,14 @@ struct _GtkCellRendererAccelPrivate
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkCellRendererAccel, gtk_cell_renderer_accel, GTK_TYPE_CELL_RENDERER_TEXT)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkCellRendererAccel, gtk_cell_renderer_accel, GTK_TYPE_CELL_RENDERER_TEXT)
 
 static void
 gtk_cell_renderer_accel_init (GtkCellRendererAccel *cell_accel)
 {
   gchar *text;
 
-  cell_accel->priv = G_TYPE_INSTANCE_GET_PRIVATE (cell_accel,
-                                                  GTK_TYPE_CELL_RENDERER_ACCEL,
-                                                  GtkCellRendererAccelPrivate);
+  cell_accel->priv = gtk_cell_renderer_accel_get_instance_private (cell_accel);
 
   text = convert_keysym_state_to_string (cell_accel, 0, 0, 0);
   g_object_set (cell_accel, "text", text, NULL);
@@ -247,8 +245,6 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
                                          g_cclosure_marshal_VOID__STRING,
                                          G_TYPE_NONE, 1,
                                          G_TYPE_STRING);
-
-  g_type_class_add_private (cell_accel_class, sizeof (GtkCellRendererAccelPrivate));
 }
 
 

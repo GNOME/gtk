@@ -31,7 +31,7 @@ struct _GtkQueryPrivate
   GList *mime_types;
 };
 
-G_DEFINE_TYPE (GtkQuery, _gtk_query, G_TYPE_OBJECT);
+G_DEFINE_TYPE_WITH_PRIVATE (GtkQuery, _gtk_query, G_TYPE_OBJECT)
 
 static void
 finalize (GObject *object)
@@ -52,14 +52,12 @@ _gtk_query_class_init (GtkQueryClass *class)
   
   gobject_class = G_OBJECT_CLASS (class);
   gobject_class->finalize = finalize;
-
-  g_type_class_add_private (gobject_class, sizeof (GtkQueryPrivate));  
 }
 
 static void
 _gtk_query_init (GtkQuery *query)
 {
-  query->priv = G_TYPE_INSTANCE_GET_PRIVATE (query, GTK_TYPE_QUERY, GtkQueryPrivate);
+  query->priv = _gtk_query_get_instance_private (query);
 }
 
 GtkQuery *

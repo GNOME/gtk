@@ -230,7 +230,7 @@ static guint signal_changed = 0;
 
 static GtkRecentManager *recent_manager_singleton = NULL;
 
-G_DEFINE_TYPE (GtkRecentManager, gtk_recent_manager, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkRecentManager, gtk_recent_manager, G_TYPE_OBJECT)
 
 static void
 filename_warning (const gchar *format, 
@@ -333,8 +333,6 @@ gtk_recent_manager_class_init (GtkRecentManagerClass *klass)
 		  G_TYPE_NONE, 0);
   
   klass->changed = gtk_recent_manager_real_changed;
-  
-  g_type_class_add_private (klass, sizeof (GtkRecentManagerPrivate));
 }
 
 static void
@@ -343,9 +341,7 @@ gtk_recent_manager_init (GtkRecentManager *manager)
   GtkRecentManagerPrivate *priv;
   GtkSettings *settings;
 
-  manager->priv = G_TYPE_INSTANCE_GET_PRIVATE (manager,
-                                               GTK_TYPE_RECENT_MANAGER,
-                                               GtkRecentManagerPrivate);
+  manager->priv = gtk_recent_manager_get_instance_private (manager);
   priv = manager->priv;
 
   priv->size = 0;

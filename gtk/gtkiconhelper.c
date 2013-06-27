@@ -22,8 +22,6 @@
 #include <math.h>
 #include "gtkiconhelperprivate.h"
 
-G_DEFINE_TYPE (GtkIconHelper, _gtk_icon_helper, G_TYPE_OBJECT)
-
 struct _GtkIconHelperPrivate {
   GtkImageType storage_type;
 
@@ -53,6 +51,8 @@ struct _GtkIconHelperPrivate {
   GtkStateFlags last_surface_state;
   gint last_surface_scale;
 };
+
+G_DEFINE_TYPE_WITH_PRIVATE (GtkIconHelper, _gtk_icon_helper, G_TYPE_OBJECT)
 
 void
 _gtk_icon_helper_clear (GtkIconHelper *self)
@@ -130,14 +130,12 @@ _gtk_icon_helper_class_init (GtkIconHelperClass *klass)
 
   oclass = G_OBJECT_CLASS (klass);
   oclass->finalize = gtk_icon_helper_finalize;
-
-  g_type_class_add_private (klass, sizeof (GtkIconHelperPrivate));
 }
 
 static void
 _gtk_icon_helper_init (GtkIconHelper *self)
 {
-  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self, GTK_TYPE_ICON_HELPER, GtkIconHelperPrivate);
+  self->priv = _gtk_icon_helper_get_instance_private (self);
 
   self->priv->storage_type = GTK_IMAGE_EMPTY;
   self->priv->icon_size = GTK_ICON_SIZE_INVALID;

@@ -101,10 +101,6 @@ static void real_insert_separator (GtkAppChooserButton *self,
 
 static guint signals[NUM_SIGNALS] = { 0, };
 
-G_DEFINE_TYPE_WITH_CODE (GtkAppChooserButton, gtk_app_chooser_button, GTK_TYPE_COMBO_BOX,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_APP_CHOOSER,
-                                                app_chooser_iface_init));
-
 struct _GtkAppChooserButtonPrivate {
   GtkListStore *store;
 
@@ -116,6 +112,11 @@ struct _GtkAppChooserButtonPrivate {
 
   GHashTable *custom_item_names;
 };
+
+G_DEFINE_TYPE_WITH_CODE (GtkAppChooserButton, gtk_app_chooser_button, GTK_TYPE_COMBO_BOX,
+                         G_ADD_PRIVATE (GtkAppChooserButton)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_APP_CHOOSER,
+                                                app_chooser_iface_init));
 
 static gboolean
 row_separator_func (GtkTreeModel *model,
@@ -670,15 +671,12 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
                   _gtk_marshal_VOID__STRING,
                   G_TYPE_NONE,
                   1, G_TYPE_STRING);
-
-  g_type_class_add_private (klass, sizeof (GtkAppChooserButtonPrivate));
 }
 
 static void
 gtk_app_chooser_button_init (GtkAppChooserButton *self)
 {
-  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self, GTK_TYPE_APP_CHOOSER_BUTTON,
-                                            GtkAppChooserButtonPrivate);
+  self->priv = gtk_app_chooser_button_get_instance_private (self);
   self->priv->custom_item_names =
     g_hash_table_new_full (g_str_hash, g_str_equal,
                            g_free, NULL);

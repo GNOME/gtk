@@ -145,7 +145,7 @@ static void     gtk_im_context_set_property            (GObject        *obj,
                                                         GParamSpec     *pspec);
 
 
-G_DEFINE_ABSTRACT_TYPE (GtkIMContext, gtk_im_context, G_TYPE_OBJECT)
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkIMContext, gtk_im_context, G_TYPE_OBJECT)
 
 /**
  * GtkIMContextClass:
@@ -341,7 +341,6 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
                          GTK_INPUT_HINT_NONE,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
-  g_type_class_add_private (klass, sizeof (GtkIMContextPrivate));
   g_object_class_install_properties (object_class, LAST_PROPERTY, properties);
 }
 
@@ -759,7 +758,7 @@ gtk_im_context_get_property (GObject    *obj,
                              GValue     *value,
                              GParamSpec *pspec)
 {
-  GtkIMContextPrivate *priv = G_TYPE_INSTANCE_GET_PRIVATE (obj, GTK_TYPE_IM_CONTEXT, GtkIMContextPrivate);
+  GtkIMContextPrivate *priv = gtk_im_context_get_instance_private (GTK_IM_CONTEXT (obj));
 
   switch (property_id)
     {
@@ -781,7 +780,7 @@ gtk_im_context_set_property (GObject      *obj,
                              const GValue *value,
                              GParamSpec   *pspec)
 {
-  GtkIMContextPrivate *priv = G_TYPE_INSTANCE_GET_PRIVATE (obj, GTK_TYPE_IM_CONTEXT, GtkIMContextPrivate);
+  GtkIMContextPrivate *priv = gtk_im_context_get_instance_private (GTK_IM_CONTEXT (obj));
 
   switch (property_id)
     {

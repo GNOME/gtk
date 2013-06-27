@@ -81,7 +81,7 @@ static void gtk_misc_get_property (GObject         *object,
 				   GParamSpec      *pspec);
 
 
-G_DEFINE_ABSTRACT_TYPE (GtkMisc, gtk_misc, GTK_TYPE_WIDGET)
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkMisc, gtk_misc, GTK_TYPE_WIDGET)
 
 static void
 gtk_misc_class_init (GtkMiscClass *class)
@@ -136,8 +136,6 @@ gtk_misc_class_init (GtkMiscClass *class)
 						     G_MAXINT,
 						     0,
 						     GTK_PARAM_READWRITE));
-
-  g_type_class_add_private (class, sizeof (GtkMiscPrivate));
 }
 
 static void
@@ -145,9 +143,7 @@ gtk_misc_init (GtkMisc *misc)
 {
   GtkMiscPrivate *priv;
 
-  misc->priv = G_TYPE_INSTANCE_GET_PRIVATE (misc,
-                                            GTK_TYPE_MISC,
-                                            GtkMiscPrivate);
+  misc->priv = gtk_misc_get_instance_private (misc); 
   priv = misc->priv;
 
   priv->xalign = 0.5;
