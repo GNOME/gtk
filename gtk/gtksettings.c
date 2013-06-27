@@ -1490,7 +1490,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              g_param_spec_boolean ("gtk-enable-primary-paste",
                                                                    P_("Enable primary paste"),
                                                                    P_("Whether a middle click on a mouse should paste the 'PRIMARY' clipboard content at the cursor location."),
-                                                                   TRUE,
+                                                                   FALSE,
                                                                    GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_ENABLE_PRIMARY_PASTE);
