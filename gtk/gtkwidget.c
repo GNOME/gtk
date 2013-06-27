@@ -4976,6 +4976,8 @@ gtk_widget_realize (GtkWidget *widget)
       _gtk_widget_enable_device_events (widget);
       gtk_widget_update_devices_mask (widget, TRUE);
 
+      if (priv->context)
+	gtk_style_context_set_scale (priv->context, gtk_widget_get_scale_factor (widget));
       gtk_widget_connect_frame_clock (widget,
                                       gtk_widget_get_frame_clock (widget));
 
@@ -15333,6 +15335,7 @@ gtk_widget_get_style_context (GtkWidget *widget)
       priv->context = gtk_style_context_new ();
 
       gtk_style_context_set_state (priv->context, priv->state_flags);
+      gtk_style_context_set_scale (priv->context, gtk_widget_get_scale_factor (widget));
 
       screen = gtk_widget_get_screen (widget);
       if (screen)
