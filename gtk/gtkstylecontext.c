@@ -3295,6 +3295,7 @@ _gtk_style_context_validate (GtkStyleContext  *context,
                                                   priv->parent ? style_data_lookup (priv->parent)->store : NULL,
                                                   timestamp,
                                                   GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
+						  priv->scale,
                                                   current && gtk_style_context_should_create_transitions (context) ? current->store : NULL);
       if (_gtk_css_computed_values_is_static (data->store))
         change &= ~GTK_CSS_CHANGE_ANIMATE;

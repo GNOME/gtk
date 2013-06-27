@@ -66,6 +66,7 @@ GtkCssComputedValues *  _gtk_css_computed_values_new                  (void);
 
 void                    _gtk_css_computed_values_compute_value        (GtkCssComputedValues     *values,
                                                                        GtkStyleProviderPrivate  *provider,
+								       int                       scale,
                                                                        GtkCssComputedValues     *parent_values,
                                                                        guint                     id,
                                                                        GtkCssValue              *specified,
@@ -94,6 +95,7 @@ void                    _gtk_css_computed_values_create_animations    (GtkCssCom
                                                                        GtkCssComputedValues     *parent_values,
                                                                        gint64                    timestamp,
                                                                        GtkStyleProviderPrivate  *provider,
+								       int                       scale,
                                                                        GtkCssComputedValues     *source);
 GtkBitmask *            _gtk_css_computed_values_advance              (GtkCssComputedValues     *values,
                                                                        gint64                    timestamp);

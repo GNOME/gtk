@@ -34,6 +34,7 @@ static GtkCssImage *
 gtk_css_image_gradient_compute (GtkCssImage             *image,
                                 guint                    property_id,
                                 GtkStyleProviderPrivate *provider,
+				int                      scale,
                                 GtkCssComputedValues    *values,
                                 GtkCssComputedValues    *parent_values,
                                 GtkCssDependencies      *dependencies)

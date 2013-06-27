@@ -40,6 +40,7 @@ static GtkCssValue *
 gtk_css_value_corner_compute (GtkCssValue             *corner,
                               guint                    property_id,
                               GtkStyleProviderPrivate *provider,
+			      int                      scale,
                               GtkCssComputedValues    *values,
                               GtkCssComputedValues    *parent_values,
                               GtkCssDependencies      *dependencies)
@@ -47,8 +48,8 @@ gtk_css_value_corner_compute (GtkCssValue             *corner,
   GtkCssValue *x, *y;
   GtkCssDependencies x_deps, y_deps;
 
-  x = _gtk_css_value_compute (corner->x, property_id, provider, values, parent_values, &x_deps);
-  y = _gtk_css_value_compute (corner->y, property_id, provider, values, parent_values, &y_deps);
+  x = _gtk_css_value_compute (corner->x, property_id, provider, scale, values, parent_values, &x_deps);
+  y = _gtk_css_value_compute (corner->y, property_id, provider, scale, values, parent_values, &y_deps);
   *dependencies = _gtk_css_dependencies_union (x_deps, y_deps);
   if (x == corner->x && y == corner->y)
     {
