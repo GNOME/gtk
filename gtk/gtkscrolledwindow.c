@@ -411,7 +411,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                                    g_param_spec_boolean ("window-placement-set",
 					   		 P_("Window Placement Set"),
 							 P_("Whether \"window-placement\" should be used to determine the location of the contents with respect to the scrollbars."),
-							 FALSE,
+							 TRUE,
 							 GTK_PARAM_READABLE | GTK_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
                                    PROP_SHADOW_TYPE,
