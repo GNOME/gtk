@@ -117,7 +117,7 @@ do_css_multiplebgs (GtkWidget *do_widget)
       gtk_widget_set_name (child, "bricks-button");
       gtk_widget_set_halign (child, GTK_ALIGN_CENTER);
       gtk_widget_set_valign (child, GTK_ALIGN_CENTER);
-      gtk_widget_set_size_request (child, 200, 80);
+      gtk_widget_set_size_request (child, 250, 84);
 
       paned = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
       gtk_overlay_add_overlay (GTK_OVERLAY (container), paned);

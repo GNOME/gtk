@@ -26,6 +26,7 @@
   <gresource prefix="/css_multiplebgs">
     <file>css_multiplebgs.css</file>
     <file>brick.png</file>
+    <file>brick2.png</file>
     <file>cssview.css</file>
     <file>reset.css</file>
   </gresource>
