@@ -364,6 +364,7 @@ struct _GtkStyleContextPrivate
   GtkWidgetPath *widget_path;
   GHashTable *style_data;
   GtkStyleInfo *info;
+  gint scale;
 
   GdkFrameClock *frame_clock;
   guint frame_clock_update_id;
@@ -997,6 +998,7 @@ build_properties (GtkStyleContext      *context,
 
   _gtk_css_lookup_resolve (lookup, 
                            GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
+			   priv->scale,
                            values,
                            priv->parent ? style_data_lookup (priv->parent)->store : NULL);
 
@@ -1525,6 +1527,47 @@ gtk_style_context_get_state (GtkStyleContext *context)
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), 0);
 
   return context->priv->info->state_flags;
+}
+
+/**
+ * gtk_style_context_set_scale:
+ * @context: a #GtkStyleContext
+ * @scale: scale
+ *
+ * Sets the scale to use when getting image assets for the style .
+ *
+ * Since: 3.10
+ **/
+void
+gtk_style_context_set_scale (GtkStyleContext *context,
+                             gint             scale)
+{
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+  if (context->priv->scale == scale)
+    return;
+
+  context->priv->scale = scale;
+
+  gtk_style_context_queue_invalidate_internal (context, GTK_CSS_CHANGE_SOURCE);
+}
+
+/**
+ * gtk_style_context_get_scale:
+ * @context: a #GtkStyleContext
+ *
+ * Returns the scale used for assets.
+ *
+ * Returns: the scale
+ *
+ * Since: 3.10
+ **/
+gint
+gtk_style_context_get_scale (GtkStyleContext *context)
+{
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), 0);
+
+  return context->priv->scale;
 }
 
 /**

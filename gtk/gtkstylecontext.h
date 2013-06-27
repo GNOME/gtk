@@ -817,6 +817,12 @@ void          gtk_style_context_set_state    (GtkStyleContext *context,
 GDK_AVAILABLE_IN_ALL
 GtkStateFlags gtk_style_context_get_state    (GtkStyleContext *context);
 
+GDK_AVAILABLE_IN_3_10
+void          gtk_style_context_set_scale    (GtkStyleContext *context,
+                                              gint             scale);
+GDK_AVAILABLE_IN_3_10
+gint          gtk_style_context_get_scale    (GtkStyleContext *context);
+
 GDK_DEPRECATED_IN_3_6
 gboolean      gtk_style_context_state_is_running (GtkStyleContext *context,
                                                   GtkStateType     state,
