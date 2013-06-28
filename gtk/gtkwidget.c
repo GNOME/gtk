@@ -641,7 +641,8 @@ enum {
   PROP_VEXPAND,
   PROP_HEXPAND_SET,
   PROP_VEXPAND_SET,
-  PROP_EXPAND
+  PROP_EXPAND,
+  PROP_SCALE_FACTOR
 };
 
 typedef	struct	_GtkStateData	 GtkStateData;
@@ -1607,6 +1608,25 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 							1.0,
 							1.0,
 							GTK_PARAM_READWRITE));
+
+  /**
+   * GtkWidget:scale-factor:
+   *
+   * The scale factor of the widget. See gtk_widget_get_scale_factor() for
+   * more details about widget scaling.
+   *
+   * Since: 3.10
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_SCALE_FACTOR,
+                                   g_param_spec_int ("scale-factor",
+                                                     P_("Scale factor"),
+                                                     P_("The scaling factor of the window"),
+                                                     1,
+                                                     G_MAXINT,
+                                                     1,
+                                                     GTK_PARAM_READABLE));
+
   /**
    * GtkWidget::show:
    * @widget: the object which received the signal.
@@ -3882,6 +3902,9 @@ gtk_widget_get_property (GObject         *object,
       break;
     case PROP_OPACITY:
       g_value_set_double (value, gtk_widget_get_opacity (widget));
+      break;
+    case PROP_SCALE_FACTOR:
+      g_value_set_int (value, gtk_widget_get_scale_factor (widget));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
