@@ -75,7 +75,8 @@ _gdk_x11_window_move_resize_child (GdkWindow *window,
                      GDK_WINDOW_XID (window),
                      (window->x + window->parent->abs_x) * impl->window_scale,
                      (window->y + window->parent->abs_y) * impl->window_scale,
-                     width, height);
+                     width * impl->window_scale,
+                     height * impl->window_scale);
   _gdk_x11_window_tmp_reset_parent_bg (window);
   _gdk_x11_window_tmp_reset_bg (window, TRUE);
 }
