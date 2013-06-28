@@ -63,7 +63,8 @@ static const struct {
 
   /* These are here in order to be recognized, but are not sent to
      gtk as they are handled internally by gdk: */
-  {"Gdk/WindowScalingFactor", "gdk-window-scaling-factor"}
+  {"Gdk/WindowScalingFactor", "gdk-window-scaling-factor"},
+  {"Gdk/UnscaledDPI",         "gdk-unscaled-dpi"}
 };
 
 static const char *
