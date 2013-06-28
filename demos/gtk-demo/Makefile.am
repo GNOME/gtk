@@ -5,7 +5,6 @@ include $(top_srcdir)/Makefile.decl
 ## demo app, which means alphabetized by demo title, not filename
 demos =						\
 	application.c				\
-	appwindow.c				\
 	assistant.c				\
 	builder.c				\
 	button_box.c				\
@@ -52,8 +51,7 @@ demos =						\
 	theming_style_classes.c			\
 	toolpalette.c				\
 	transparent.c				\
-	tree_store.c				\
-	ui_manager.c
+	tree_store.c
 
 AM_CPPFLAGS = \
 	-I$(top_srcdir) 			\
