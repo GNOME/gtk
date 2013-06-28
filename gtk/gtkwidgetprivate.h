@@ -47,6 +47,8 @@ void         _gtk_widget_set_alloc_needed   (GtkWidget *widget,
                                              gboolean   alloc_needed);
 void         _gtk_widget_draw               (GtkWidget *widget,
 					     cairo_t   *cr);
+void          _gtk_widget_scale_changed     (GtkWidget *widget);
+
 
 void         _gtk_widget_add_sizegroup         (GtkWidget    *widget,
 						gpointer      group);
