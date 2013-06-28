@@ -12,11 +12,11 @@ static GtkWidget *statusbar;
 static GList *active_prints = NULL;
 
 static void
-update_title (void)
+update_title (GtkWindow *window)
 {
   char *basename;
   char *title;
-  
+
   if (filename == NULL)
     basename = g_strdup ("Untitled");
   else
@@ -24,8 +24,8 @@ update_title (void)
 
   title = g_strdup_printf ("Simple Editor with printing - %s", basename);
   g_free (basename);
-  
-  gtk_window_set_title (GTK_WINDOW (main_window), title);
+
+  gtk_window_set_title (window, title);
   g_free (title);
 }
 
@@ -66,7 +66,7 @@ update_statusbar (void)
 static void
 update_ui (void)
 {
-  update_title ();
+  update_title (GTK_WINDOW (main_window));
   update_statusbar ();
 }
 
@@ -89,21 +89,13 @@ set_text (const char *text, gsize len)
 }
 
 static void
-do_new (GtkAction *action)
-{
-  g_free (filename);
-  filename = NULL;
-  set_text ("", 0);
-}
-
-static void
 load_file (const char *open_filename)
 {
   GtkWidget *error_dialog;
   char *contents;
   GError *error;
   gsize len;
-  
+
   error_dialog = NULL;
   error = NULL;
   if (g_file_get_contents (open_filename, &contents, &len, &error))
@@ -144,31 +136,6 @@ load_file (const char *open_filename)
     }
 }
 
-static void
-do_open (GtkAction *action)
-{
-  GtkWidget *dialog;
-  gint response;
-  char *open_filename;
-  
-  dialog = gtk_file_chooser_dialog_new ("Select file",
-					GTK_WINDOW (main_window),
-					GTK_FILE_CHOOSER_ACTION_OPEN,
-					"_Cancel", GTK_RESPONSE_CANCEL,
-					"_Open", GTK_RESPONSE_OK,
-					NULL);
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-  response = gtk_dialog_run (GTK_DIALOG (dialog));
-
-  if (response == GTK_RESPONSE_OK)
-    {
-      open_filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-      load_file (open_filename);
-      g_free (open_filename);
-    }
-
-  gtk_widget_destroy (dialog);
-}
 
 static void
 save_file (const char *save_filename)
@@ -206,40 +173,6 @@ save_file (const char *save_filename)
     }
 }
 
-static void
-do_save_as (GtkAction *action)
-{
-  GtkWidget *dialog;
-  gint response;
-  char *save_filename;
-  
-  dialog = gtk_file_chooser_dialog_new ("Select file",
-					GTK_WINDOW (main_window),
-					GTK_FILE_CHOOSER_ACTION_SAVE,
-					"_Cancel", GTK_RESPONSE_CANCEL,
-					"_Save", GTK_RESPONSE_OK,
-					NULL);
-  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
-  response = gtk_dialog_run (GTK_DIALOG (dialog));
-
-  if (response == GTK_RESPONSE_OK)
-    {
-      save_filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-      save_file (save_filename);
-      g_free (save_filename);
-    }
-  
-  gtk_widget_destroy (dialog);
-}
-
-static void
-do_save (GtkAction *action)
-{
-  if (filename == NULL)
-    do_save_as (action);
-  else
-    save_file (filename);
-}
 
 typedef struct {
   char *text;
@@ -364,20 +297,6 @@ draw_page (GtkPrintOperation *operation,
 	 pango_layout_iter_next_line (iter));
 
   pango_layout_iter_free (iter);
-}
-
-static void
-do_page_setup (GtkAction *action)
-{
-  GtkPageSetup *new_page_setup;
-
-  new_page_setup = gtk_print_run_page_setup_dialog (GTK_WINDOW (main_window),
-						    page_setup, settings);
-
-  if (page_setup)
-    g_object_unref (page_setup);
-  
-  page_setup = new_page_setup;
 }
 
 static void
@@ -667,7 +586,7 @@ end_print (GtkPrintOperation *op, GtkPrintContext *context, PrintData *print_dat
 }
 
 static void
-do_print_or_preview (GtkAction *action, GtkPrintOperationAction print_action)
+print_or_preview (GSimpleAction *action, GtkPrintOperationAction print_action)
 {
   GtkPrintOperation *print;
   PrintData *print_data;
@@ -680,13 +599,13 @@ do_print_or_preview (GtkAction *action, GtkPrintOperationAction print_action)
   print = gtk_print_operation_new ();
 
   gtk_print_operation_set_track_print_status (print, TRUE);
-  
+
   if (settings != NULL)
     gtk_print_operation_set_print_settings (print, settings);
 
   if (page_setup != NULL)
     gtk_print_operation_set_default_page_setup (print, page_setup);
-  
+
   g_signal_connect (print, "begin_print", G_CALLBACK (begin_print), print_data);
   g_signal_connect (print, "end-print", G_CALLBACK (end_print), print_data);
   g_signal_connect (print, "draw_page", G_CALLBACK (draw_page), print_data);
@@ -707,100 +626,225 @@ do_print_or_preview (GtkAction *action, GtkPrintOperationAction print_action)
 }
 
 static void
-do_print (GtkAction *action)
+activate_page_setup (GSimpleAction *action,
+                     GVariant      *parameter,
+                     gpointer       user_data)
 {
-  do_print_or_preview (action, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG);
+  GtkPageSetup *new_page_setup;
+
+  new_page_setup = gtk_print_run_page_setup_dialog (GTK_WINDOW (main_window),
+                                                    page_setup, settings);
+
+  if (page_setup)
+    g_object_unref (page_setup);
+
+  page_setup = new_page_setup;
 }
 
 static void
-do_preview (GtkAction *action)
+activate_print (GSimpleAction *action,
+                GVariant      *parameter,
+                gpointer       user_data)
 {
-  do_print_or_preview (action, GTK_PRINT_OPERATION_ACTION_PREVIEW);
+  print_or_preview (action, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG);
 }
 
 static void
-do_about (GtkAction *action)
+activate_preview (GSimpleAction *action,
+                GVariant      *parameter,
+                gpointer       user_data)
+{
+  print_or_preview (action, GTK_PRINT_OPERATION_ACTION_PREVIEW);
+}
+
+static void
+activate_save_as (GSimpleAction *action,
+                  GVariant      *parameter,
+                  gpointer       user_data)
+{
+  GtkWidget *dialog;
+  gint response;
+  char *save_filename;
+
+  dialog = gtk_file_chooser_dialog_new ("Select file",
+                                        GTK_WINDOW (main_window),
+                                        GTK_FILE_CHOOSER_ACTION_SAVE,
+                                        "_Cancel", GTK_RESPONSE_CANCEL,
+                                        "_Save", GTK_RESPONSE_OK,
+                                        NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+  response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+  if (response == GTK_RESPONSE_OK)
+    {
+      save_filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+      save_file (save_filename);
+      g_free (save_filename);
+    }
+
+  gtk_widget_destroy (dialog);
+}
+
+static void
+activate_save (GSimpleAction *action,
+               GVariant      *parameter,
+               gpointer       user_data)
+{
+  if (filename == NULL)
+    activate_save_as (action, NULL, NULL);
+  else
+    save_file (filename);
+}
+
+static void
+activate_open (GSimpleAction *action,
+               GVariant      *parameter,
+               gpointer       user_data)
+{
+  GtkWidget *dialog;
+  gint response;
+  char *open_filename;
+
+  dialog = gtk_file_chooser_dialog_new ("Select file",
+                                        GTK_WINDOW (main_window),
+                                        GTK_FILE_CHOOSER_ACTION_OPEN,
+                                        "_Cancel", GTK_RESPONSE_CANCEL,
+                                        "_Open", GTK_RESPONSE_OK,
+                                        NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+  response = gtk_dialog_run (GTK_DIALOG (dialog));
+
+  if (response == GTK_RESPONSE_OK)
+    {
+      open_filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+      load_file (open_filename);
+      g_free (open_filename);
+    }
+
+  gtk_widget_destroy (dialog);
+}
+
+static void
+activate_new (GSimpleAction *action,
+              GVariant      *parameter,
+              gpointer       user_data)
+{
+  g_free (filename);
+  filename = NULL;
+  set_text ("", 0);
+}
+
+static void
+activate_about (GSimpleAction *action,
+                GVariant      *parameter,
+                gpointer       user_data)
 {
   const gchar *authors[] = {
     "Alexander Larsson",
     NULL
   };
   gtk_show_about_dialog (GTK_WINDOW (main_window),
-			 "name", "print test editor",
-			 "version", "0.1",
-			 "copyright", "(C) Red Hat, Inc",
-			 "comments", "Program to demonstrate GTK+ printing.",
-			 "authors", authors,
-			 NULL);
+                         "name", "Print Test Editor",
+                         "logo-icon-name", "text-editor",
+                         "version", "0.1",
+                         "copyright", "(C) Red Hat, Inc",
+                         "comments", "Program to demonstrate GTK+ printing.",
+                         "authors", authors,
+                         NULL);
 }
 
 static void
-do_quit (GtkAction *action)
+activate_quit (GSimpleAction *action,
+               GVariant      *parameter,
+               gpointer       user_data)
 {
-  gtk_main_quit ();
+  GtkApplication *app = user_data;
+  GtkWidget *win;
+  GList *list, *next;
+
+  list = gtk_application_get_windows (app);
+  while (list)
+    {
+      win = list->data;
+      next = list->next;
+
+      gtk_widget_destroy (GTK_WIDGET (win));
+
+      list = next;
+    }
 }
 
-static GtkActionEntry entries[] = {
-  { "FileMenu", NULL, "_File" },               /* name, stock id, label */
-  { "HelpMenu", NULL, "_Help" },               /* name, stock id, label */
-  { "New", GTK_STOCK_NEW,                      /* name, stock id */
-    "_New", "<control>N",                      /* label, accelerator */
-    "Create a new file",                       /* tooltip */ 
-    G_CALLBACK (do_new) },      
-  { "Open", GTK_STOCK_OPEN,                    /* name, stock id */
-    "_Open","<control>O",                      /* label, accelerator */     
-    "Open a file",                             /* tooltip */
-    G_CALLBACK (do_open) }, 
-  { "Save", GTK_STOCK_SAVE,                    /* name, stock id */
-    "_Save","<control>S",                      /* label, accelerator */     
-    "Save current file",                       /* tooltip */
-    G_CALLBACK (do_save) },
-  { "SaveAs", GTK_STOCK_SAVE,                  /* name, stock id */
-    "Save _As...", NULL,                       /* label, accelerator */     
-    "Save to a file",                          /* tooltip */
-    G_CALLBACK (do_save_as) },
-  { "Quit", GTK_STOCK_QUIT,                    /* name, stock id */
-    "_Quit", "<control>Q",                     /* label, accelerator */     
-    "Quit",                                    /* tooltip */
-    G_CALLBACK (do_quit) },
-  { "About", NULL,                             /* name, stock id */
-    "_About", "<control>A",                    /* label, accelerator */     
-    "About",                                   /* tooltip */  
-    G_CALLBACK (do_about) },
-  { "PageSetup", NULL,                         /* name, stock id */
-    "Page _Setup", NULL,                       /* label, accelerator */     
-    "Set up the page",                         /* tooltip */
-    G_CALLBACK (do_page_setup) },
-  { "Preview", NULL,                           /* name, stock id */
-    "Print Preview", NULL,                     /* label, accelerator */     
-    "Preview the printed document",            /* tooltip */
-    G_CALLBACK (do_preview) },
-  { "Print", GTK_STOCK_PRINT,                  /* name, stock id */
-     NULL, NULL,                               /* label, accelerator */     
-    "Print the document",                      /* tooltip */
-    G_CALLBACK (do_print) }
+static GActionEntry app_entries[] = {
+  { "new", activate_new, NULL, NULL, NULL },
+  { "open", activate_open, NULL, NULL, NULL },
+  { "save", activate_save, NULL, NULL, NULL },
+  { "save-as", activate_save_as, NULL, NULL, NULL },
+  { "quit", activate_quit, NULL, NULL, NULL },
+  { "about", activate_about, NULL, NULL, NULL },
+  { "page-setup", activate_page_setup, NULL, NULL, NULL },
+  { "preview", activate_preview, NULL, NULL, NULL },
+  { "print", activate_print, NULL, NULL, NULL }
 };
-static guint n_entries = G_N_ELEMENTS (entries);
 
-static const gchar *ui_info = 
-"<ui>"
-"  <menubar name='MenuBar'>"
-"    <menu action='FileMenu'>"
-"      <menuitem action='New'/>"
-"      <menuitem action='Open'/>"
-"      <menuitem action='Save'/>"
-"      <menuitem action='SaveAs'/>"
-"      <menuitem action='PageSetup'/>"
-"      <menuitem action='Preview'/>"
-"      <menuitem action='Print'/>"
-"      <separator/>"
-"      <menuitem action='Quit'/>"
-"    </menu>"
-"    <menu action='HelpMenu'>"
-"      <menuitem action='About'/>"
-"    </menu>"
-"  </menubar>"
-"</ui>";
+static const gchar ui_info[] =
+  "<interface>"
+  "  <menu id='appmenu'>"
+  "    <section>"
+  "      <item>"
+  "        <attribute name='label'>_About</attribute>"
+  "        <attribute name='action'>app.about</attribute>"
+  "        <attribute name='accel'>&lt;Primary&gt;a</attribute>"
+  "      </item>"
+  "    </section>"
+  "    <section>"
+  "      <item>"
+  "        <attribute name='label'>_Quit</attribute>"
+  "        <attribute name='action'>app.quit</attribute>"
+  "        <attribute name='accel'>&lt;Primary&gt;q</attribute>"
+  "      </item>"
+  "    </section>"
+  "  </menu>"
+  "  <menu id='menubar'>"
+  "    <submenu>"
+  "      <attribute name='label'>_File</attribute>"
+  "      <section>"
+  "        <item>"
+  "          <attribute name='label'>_New</attribute>"
+  "          <attribute name='action'>app.new</attribute>"
+  "          <attribute name='accel'>&lt;Primary&gt;n</attribute>"
+  "        </item>"
+  "        <item>"
+  "          <attribute name='label'>_Open</attribute>"
+  "          <attribute name='action'>app.open</attribute>"
+  "        </item>"
+  "        <item>"
+  "          <attribute name='label'>_Save</attribute>"
+  "          <attribute name='action'>app.save</attribute>"
+  "          <attribute name='accel'>&lt;Primary&gt;s</attribute>"
+  "        </item>"
+  "        <item>"
+  "          <attribute name='label'>Save _As...</attribute>"
+  "          <attribute name='action'>app.save-as</attribute>"
+  "          <attribute name='accel'>&lt;Primary&gt;s</attribute>"
+  "        </item>"
+  "      </section>"
+  "      <section>"
+  "        <item>"
+  "          <attribute name='label'>Page Setup</attribute>"
+  "          <attribute name='action'>app.page-setup</attribute>"
+  "        </item>"
+  "        <item>"
+  "          <attribute name='label'>Preview</attribute>"
+  "          <attribute name='action'>app.preview</attribute>"
+  "        </item>"
+  "        <item>"
+  "          <attribute name='label'>Print</attribute>"
+  "          <attribute name='action'>app.print</attribute>"
+  "        </item>"
+  "      </section>"
+  "    </submenu>"
+  "  </menu>"
+  "</interface>";
 
 static void
 buffer_changed_callback (GtkTextBuffer *buffer)
@@ -818,50 +862,57 @@ mark_set_callback (GtkTextBuffer     *buffer,
   update_statusbar ();
 }
 
-static void
-create_window (void)
+static gint
+command_line (GApplication            *application,
+              GApplicationCommandLine *command_line)
 {
-  GtkWidget *bar;
+  int argc;
+  char **argv;
+
+  argv = g_application_command_line_get_arguments (command_line, &argc);
+
+  if (argc == 2)
+    load_file (argv[1]);
+
+  return 0;
+}
+
+static void
+startup (GApplication *app)
+{
+  GtkBuilder *builder;
+  GMenuModel *appmenu;
+  GMenuModel *menubar;
+
+  builder = gtk_builder_new ();
+  gtk_builder_add_from_string (builder, ui_info, -1, NULL);
+
+  appmenu = (GMenuModel *)gtk_builder_get_object (builder, "appmenu");
+  menubar = (GMenuModel *)gtk_builder_get_object (builder, "menubar");
+
+  gtk_application_set_app_menu (GTK_APPLICATION (app), appmenu);
+  gtk_application_set_menubar (GTK_APPLICATION (app), menubar);
+
+  g_object_unref (builder);
+}
+
+static void
+activate (GApplication *app)
+{
   GtkWidget *box;
-  GtkWidget *contents;
-  GtkUIManager *ui;
+  GtkWidget *bar;
   GtkWidget *sw;
-  GtkActionGroup *actions;
-  GError *error;
-  GtkWindowGroup *group;
-  
-  main_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  GtkWidget *contents;
 
-  group = gtk_window_group_new ();
-  gtk_window_group_add_window (group, GTK_WINDOW (main_window));
-  g_object_unref (group);
-
-  gtk_window_set_default_size (GTK_WINDOW (main_window),
-			       400, 600);
-  
-  g_signal_connect (main_window, "delete-event",
-		    G_CALLBACK (gtk_main_quit), NULL);
-  
-  actions = gtk_action_group_new ("Actions");
-  gtk_action_group_add_actions (actions, entries, n_entries, NULL);
-  
-  ui = gtk_ui_manager_new ();
-  gtk_ui_manager_insert_action_group (ui, actions, 0);
-  gtk_window_add_accel_group (GTK_WINDOW (main_window), 
-			      gtk_ui_manager_get_accel_group (ui));
-  gtk_container_set_border_width (GTK_CONTAINER (main_window), 0);
-
-  error = NULL;
-  if (!gtk_ui_manager_add_ui_from_string (ui, ui_info, -1, &error))
-    {
-      g_message ("building menus failed: %s", error->message);
-      g_error_free (error);
-    }
+  main_window = gtk_application_window_new (GTK_APPLICATION (app));
+  gtk_window_set_icon_name (GTK_WINDOW (main_window), "text-editor");
+  gtk_window_set_default_size (GTK_WINDOW (main_window), 400, 600);
+  update_title (GTK_WINDOW (main_window));
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (main_window), box);
 
-  bar = gtk_ui_manager_get_widget (ui, "/MenuBar");
+  bar = gtk_menu_bar_new ();
   gtk_widget_show (bar);
   gtk_container_add (GTK_CONTAINER (box), bar);
 
@@ -869,53 +920,52 @@ create_window (void)
   sw = gtk_scrolled_window_new (NULL, NULL);
 
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
-				  GTK_POLICY_AUTOMATIC,
-				  GTK_POLICY_AUTOMATIC);
-  
+                                  GTK_POLICY_AUTOMATIC,
+                                  GTK_POLICY_AUTOMATIC);
+
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw),
-				       GTK_SHADOW_IN);
-  
+                                       GTK_SHADOW_IN);
+
   gtk_widget_set_vexpand (sw, TRUE);
   gtk_container_add (GTK_CONTAINER (box), sw);
-  
+
   contents = gtk_text_view_new ();
   gtk_widget_grab_focus (contents);
-      
+
   gtk_container_add (GTK_CONTAINER (sw),
-		     contents);
-  
+                     contents);
+
   /* Create statusbar */
-  
   statusbar = gtk_statusbar_new ();
   gtk_container_add (GTK_CONTAINER (box), statusbar);
 
   /* Show text widget info in the statusbar */
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (contents));
-  
+
   g_signal_connect_object (buffer,
-			   "changed",
-			   G_CALLBACK (buffer_changed_callback),
-			   NULL,
-			   0);
-  
+                           "changed",
+                           G_CALLBACK (buffer_changed_callback),
+                           NULL,
+                           0);
+
   g_signal_connect_object (buffer,
-			   "mark_set", /* cursor moved */
-			   G_CALLBACK (mark_set_callback),
-			   NULL,
-			   0);
+                           "mark_set", /* cursor moved */
+                           G_CALLBACK (mark_set_callback),
+                           NULL,
+                           0);
 
   update_ui ();
-  
+
   gtk_widget_show_all (main_window);
 }
 
 int
 main (int argc, char **argv)
 {
+  GtkApplication *app;
   GError *error = NULL;
 
-  g_set_application_name ("Print editor");
-  gtk_init (&argc, &argv);
+  gtk_init (NULL, NULL);
 
   settings = gtk_print_settings_new_from_file ("print-settings.ini", &error);
   if (error) {
@@ -932,12 +982,17 @@ main (int argc, char **argv)
     g_clear_error (&error);
   }
 
-  create_window ();
+  app = gtk_application_new ("org.gtk.PrintEditor", 0);
 
-  if (argc == 2)
-    load_file (argv[1]);
-  
-  gtk_main ();
+  g_action_map_add_action_entries (G_ACTION_MAP (app),
+                                   app_entries, G_N_ELEMENTS (app_entries),
+                                   app);
+
+  g_signal_connect (app, "startup", G_CALLBACK (startup), NULL);
+  g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
+  g_signal_connect (app, "command-line", G_CALLBACK (command_line), NULL);
+
+  g_application_run (G_APPLICATION (app), argc, argv);
 
   if (!gtk_print_settings_to_file (settings, "print-settings.ini", &error)) {
     g_print ("Failed to save print settings: %s\n", error->message);
