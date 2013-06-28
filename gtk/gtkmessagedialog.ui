@@ -45,6 +45,7 @@
                 <property name="stock">gtk-missing-image</property>
                 <property name="use_fallback">True</property>
                 <property name="icon_size">6</property>
+                <property name="xpad">6</property>
               </object>
               <packing>
                 <property name="expand">False</property>
