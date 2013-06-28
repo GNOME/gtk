@@ -121,6 +121,7 @@ change_header (GtkButton *button, gpointer data)
       gtk_header_bar_set_title (GTK_HEADER_BAR (header), "Example header");
 
       widget = gtk_button_new_with_label ("_Close");
+      gtk_button_set_use_underline (GTK_BUTTON (widget), TRUE);
       gtk_style_context_add_class (gtk_widget_get_style_context (widget), "suggested-action");
       g_signal_connect (widget, "clicked", G_CALLBACK (gtk_main_quit), NULL);
 
