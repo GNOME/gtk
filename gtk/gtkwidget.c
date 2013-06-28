@@ -9994,10 +9994,33 @@ gtk_widget_has_screen (GtkWidget *widget)
   return (gtk_widget_get_screen_unchecked (widget) != NULL);
 }
 
+void
+_gtk_widget_scale_changed (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  priv = widget->priv;
+
+  if (priv->context)
+    gtk_style_context_set_scale (priv->context, gtk_widget_get_scale_factor (widget));
+
+  g_object_notify (G_OBJECT (widget), "scale-factor");
+
+  gtk_widget_queue_draw (widget);
+
+  if (GTK_IS_CONTAINER (widget))
+    gtk_container_forall (GTK_CONTAINER (widget),
+                          (GtkCallback) _gtk_widget_scale_changed,
+                          NULL);
+}
+
 gint
 gtk_widget_get_scale_factor (GtkWidget *widget)
 {
   GtkWidget *toplevel;
+  GdkScreen *screen;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 1);
 
@@ -10011,7 +10034,11 @@ gtk_widget_get_scale_factor (GtkWidget *widget)
   /* else fall back to something that is more likely to be right than
    * just returning 1:
    */
-  return gdk_screen_get_monitor_scale_factor (gtk_widget_get_screen (widget), 0);
+  screen = gtk_widget_get_screen (widget);
+  if (screen)
+    return gdk_screen_get_monitor_scale_factor (screen, 0);
+
+  return 1;
 }
 
 /**
