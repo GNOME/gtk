@@ -410,6 +410,7 @@ read_settings (GdkX11Screen *x11_screen,
 
   GHashTable *old_list = x11_screen->xsettings;
   GValue value = G_VALUE_INIT;
+  GValue *setting, *copy;
 
   x11_screen->xsettings = NULL;
 
@@ -441,6 +442,18 @@ read_settings (GdkX11Screen *x11_screen,
 	  
 	  XFree (data);
 	}
+    }
+
+  /* Since we support scaling we look at the specific Gdk/UnscaledDPI
+     setting if it exists and use that instead of Xft/DPI if it is set */
+  setting = g_hash_table_lookup (x11_screen->xsettings, "gdk-unscaled-dpi");
+  if (setting)
+    {
+      copy = g_new0 (GValue, 1);
+      g_value_init (copy, G_VALUE_TYPE (setting));
+      g_value_copy (setting, copy);
+      g_hash_table_insert (x11_screen->xsettings, 
+			   "gtk-xft-dpi", copy);
     }
 
   if (do_notify)
