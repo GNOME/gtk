@@ -259,6 +259,7 @@
  */
 
 #include "config.h"
+#define GDK_DISABLE_DEPRECATION_WARNINGS
 #include "gtkactivatable.h"
 #include "gtkactiongroup.h"
 #include "gtkprivate.h"
@@ -281,6 +282,8 @@ gtk_activatable_default_init (GtkActivatableInterface *iface)
    * call gtk_activatable_do_set_related_action() when it changes.</para></note>
    *
    * Since: 2.16
+   *
+   * Deprecated: 3.10
    */
   g_object_interface_install_property (iface,
 				       g_param_spec_object ("related-action",
@@ -304,6 +307,8 @@ gtk_activatable_default_init (GtkActivatableInterface *iface)
    * widget when it changes.</para></note>
    *
    * Since: 2.16
+   *
+   * Deprecated: 3.10
    */
   g_object_interface_install_property (iface,
 				       g_param_spec_boolean ("use-action-appearance",
@@ -343,6 +348,8 @@ gtk_activatable_update (GtkActivatable *activatable,
  * #GtkActivatable:use-action-appearance changes.
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10
  **/
 void
 gtk_activatable_sync_action_properties (GtkActivatable *activatable,
@@ -372,6 +379,8 @@ gtk_activatable_sync_action_properties (GtkActivatable *activatable,
  * property and call gtk_activatable_do_set_related_action() when it changes.</para></note>
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10
  **/
 void
 gtk_activatable_set_related_action (GtkActivatable *activatable,
@@ -413,6 +422,8 @@ gtk_activatable_action_notify (GtkAction      *action,
  * previous action</para></note>
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_activatable_do_set_related_action (GtkActivatable *activatable,
@@ -479,6 +490,8 @@ gtk_activatable_do_set_related_action (GtkActivatable *activatable,
  * Returns: (transfer none): the related #GtkAction if one is set.
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10
  **/
 GtkAction *
 gtk_activatable_get_related_action (GtkActivatable *activatable)
@@ -510,7 +523,9 @@ gtk_activatable_get_related_action (GtkActivatable *activatable)
  * if needed.</para></note>
  *
  * Since: 2.16
- **/
+  *
+ * Deprecated: 3.10
+**/
 void
 gtk_activatable_set_use_action_appearance (GtkActivatable *activatable,
 					   gboolean        use_appearance)
@@ -529,7 +544,9 @@ gtk_activatable_set_use_action_appearance (GtkActivatable *activatable,
  * Returns: whether @activatable uses its actions appearance.
  *
  * Since: 2.16
- **/
+  *
+ * Deprecated: 3.10
+**/
 gboolean
 gtk_activatable_get_use_action_appearance  (GtkActivatable *activatable)
 {

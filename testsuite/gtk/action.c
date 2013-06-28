@@ -16,6 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define GDK_DISABLE_DEPRECATION_WARNINGS
 #include <gtk/gtk.h>
 
 /* Fixture */

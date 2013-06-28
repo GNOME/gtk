@@ -19,6 +19,8 @@
 
 #include "config.h"
 
+#define GDK_DISABLE_DEPRECATION_WARNINGS
+
 #include "gtkintl.h"
 #include "gtkrecentaction.h"
 #include "gtkimagemenuitem.h"
@@ -631,6 +633,13 @@ gtk_recent_action_class_init (GtkRecentActionClass *klass)
 
   _gtk_recent_chooser_install_properties (gobject_class);
 
+  /**
+   * GtkRecentAction:show-numbers:
+   *
+   * Whether the items should be displayed with a number.
+   *
+   * Deprecated: 3.10
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_SHOW_NUMBERS,
                                    g_param_spec_boolean ("show-numbers",
@@ -685,6 +694,8 @@ gtk_recent_action_init (GtkRecentAction *action)
  * Return value: the newly created #GtkRecentAction.
  *
  * Since: 2.12
+ *
+ * Deprecated: 3.10
  */
 GtkAction *
 gtk_recent_action_new (const gchar *name,
@@ -720,6 +731,8 @@ gtk_recent_action_new (const gchar *name,
  * Return value: the newly created #GtkRecentAction
  * 
  * Since: 2.12
+ *
+ * Deprecated: 3.10
  */
 GtkAction *
 gtk_recent_action_new_for_manager (const gchar      *name,
@@ -749,6 +762,8 @@ gtk_recent_action_new_for_manager (const gchar      *name,
  * Return value: %TRUE if numbers should be shown.
  *
  * Since: 2.12
+ *
+ * Deprecated: 3.10
  */
 gboolean
 gtk_recent_action_get_show_numbers (GtkRecentAction *action)
@@ -769,6 +784,8 @@ gtk_recent_action_get_show_numbers (GtkRecentAction *action)
  * label. Only the first ten items get a number to avoid clashes.
  *
  * Since: 2.12
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_recent_action_set_show_numbers (GtkRecentAction *action,

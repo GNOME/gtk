@@ -48,6 +48,8 @@ typedef struct _GtkActivatableIface GtkActivatableIface;
  * with a %NULL action at times</para></note>
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10
  */
 
 struct _GtkActivatableIface
@@ -63,27 +65,27 @@ struct _GtkActivatableIface
 };
 
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 GType      gtk_activatable_get_type                   (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void       gtk_activatable_sync_action_properties     (GtkActivatable *activatable,
 						       GtkAction      *action);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void       gtk_activatable_set_related_action         (GtkActivatable *activatable,
 						       GtkAction      *action);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 GtkAction *gtk_activatable_get_related_action         (GtkActivatable *activatable);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void       gtk_activatable_set_use_action_appearance  (GtkActivatable *activatable,
 						       gboolean        use_appearance);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 gboolean   gtk_activatable_get_use_action_appearance  (GtkActivatable *activatable);
 
 /* For use in activatable implementations */
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void       gtk_activatable_do_set_related_action      (GtkActivatable *activatable,
 						       GtkAction      *action);
 

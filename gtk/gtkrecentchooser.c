@@ -1030,13 +1030,19 @@ _gtk_recent_chooser_update (GtkActivatable *activatable,
 			    GtkAction      *action,
 			    const gchar    *property_name)
 {
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   GtkRecentChooser *recent_chooser = GTK_RECENT_CHOOSER (activatable);
   GtkRecentChooser *action_chooser = GTK_RECENT_CHOOSER (action);
   GtkRecentAction  *recent_action  = GTK_RECENT_ACTION (action);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   if (strcmp (property_name, "show-numbers") == 0 && recent_chooser_has_show_numbers (recent_chooser))
-    g_object_set (recent_chooser, "show-numbers",
-                  gtk_recent_action_get_show_numbers (recent_action), NULL);
+    {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+      g_object_set (recent_chooser, "show-numbers",
+                    gtk_recent_action_get_show_numbers (recent_action), NULL);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
+    }
   else if (strcmp (property_name, "show-private") == 0)
     gtk_recent_chooser_set_show_private (recent_chooser, gtk_recent_chooser_get_show_private (action_chooser));
   else if (strcmp (property_name, "show-not-found") == 0)
@@ -1059,16 +1065,22 @@ void
 _gtk_recent_chooser_sync_action_properties (GtkActivatable *activatable,
 			                    GtkAction      *action)
 {
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   GtkRecentChooser *recent_chooser = GTK_RECENT_CHOOSER (activatable);
   GtkRecentChooser *action_chooser = GTK_RECENT_CHOOSER (action);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   if (!action)
     return;
 
   if (recent_chooser_has_show_numbers (recent_chooser))
-    g_object_set (recent_chooser, "show-numbers", 
-                  gtk_recent_action_get_show_numbers (GTK_RECENT_ACTION (action)),
-                  NULL);
+    {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+      g_object_set (recent_chooser, "show-numbers", 
+                    gtk_recent_action_get_show_numbers (GTK_RECENT_ACTION (action)),
+                    NULL);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
+    }
   gtk_recent_chooser_set_show_private (recent_chooser, gtk_recent_chooser_get_show_private (action_chooser));
   gtk_recent_chooser_set_show_not_found (recent_chooser, gtk_recent_chooser_get_show_not_found (action_chooser));
   gtk_recent_chooser_set_show_tips (recent_chooser, gtk_recent_chooser_get_show_tips (action_chooser));
@@ -1090,7 +1102,9 @@ _gtk_recent_chooser_set_related_action (GtkRecentChooser *recent_chooser,
   if (prev_action == action)
     return;
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   gtk_activatable_do_set_related_action (GTK_ACTIVATABLE (recent_chooser), action);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
   g_object_set_qdata (G_OBJECT (recent_chooser), quark_gtk_related_action, action);
 }
 
@@ -1118,7 +1132,9 @@ _gtk_recent_chooser_set_use_action_appearance (GtkRecentChooser *recent_chooser,
 
       g_object_set_qdata (G_OBJECT (recent_chooser), quark_gtk_use_action_appearance, GINT_TO_POINTER (!use_appearance));
  
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_activatable_sync_action_properties (GTK_ACTIVATABLE (recent_chooser), action);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
     }
 }
 

@@ -213,6 +213,7 @@ static guint menu_item_signals[LAST_SIGNAL] = { 0 };
 
 static GtkBuildableIface *parent_buildable_iface;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 G_DEFINE_TYPE_WITH_CODE (GtkMenuItem, gtk_menu_item, GTK_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_menu_item_buildable_interface_init)
@@ -220,6 +221,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkMenuItem, gtk_menu_item, GTK_TYPE_BIN,
                                                 gtk_menu_item_activatable_interface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIONABLE,
                                                 gtk_menu_item_actionable_interface_init))
+G_GNUC_END_IGNORE_DEPRECATIONS;
 
 static void
 gtk_menu_item_set_action_name (GtkActionable *actionable,
@@ -634,8 +636,10 @@ gtk_menu_item_dispose (GObject *object)
 
   if (priv->action)
     {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_action_disconnect_accelerator (priv->action);
       gtk_activatable_do_set_related_action (GTK_ACTIVATABLE (menu_item), NULL);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       priv->action = NULL;
     }
   G_OBJECT_CLASS (gtk_menu_item_parent_class)->dispose (object);
@@ -1119,7 +1123,9 @@ activatable_update_label (GtkMenuItem *menu_item, GtkAction *action)
     {
       const gchar *label;
 
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       label = gtk_action_get_label (action);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       gtk_menu_item_set_label (menu_item, label);
     }
 }
@@ -1184,10 +1190,18 @@ gtk_menu_item_update (GtkActivatable *activatable,
   GtkMenuItemPrivate *priv = menu_item->priv;
 
   if (strcmp (property_name, "visible") == 0)
-    _gtk_action_sync_menu_visible (action, GTK_WIDGET (menu_item),
-                                   gtk_menu_is_empty (gtk_menu_item_get_submenu (menu_item)));
+    {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+      _gtk_action_sync_menu_visible (action, GTK_WIDGET (menu_item),
+                                     gtk_menu_is_empty (gtk_menu_item_get_submenu (menu_item)));
+      G_GNUC_END_IGNORE_DEPRECATIONS;
+    }
   else if (strcmp (property_name, "sensitive") == 0)
-    gtk_widget_set_sensitive (GTK_WIDGET (menu_item), gtk_action_is_sensitive (action));
+    {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+      gtk_widget_set_sensitive (GTK_WIDGET (menu_item), gtk_action_is_sensitive (action));
+      G_GNUC_END_IGNORE_DEPRECATIONS;
+    }
   else if (priv->use_action_appearance)
     {
       if (strcmp (property_name, "label") == 0)
@@ -1217,7 +1231,9 @@ gtk_menu_item_sync_action_properties (GtkActivatable *activatable,
   _gtk_action_sync_menu_visible (action, GTK_WIDGET (menu_item),
                                  gtk_menu_is_empty (gtk_menu_item_get_submenu (menu_item)));
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   gtk_widget_set_sensitive (GTK_WIDGET (menu_item), gtk_action_is_sensitive (action));
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   if (priv->use_action_appearance)
     {
@@ -1236,12 +1252,14 @@ gtk_menu_item_sync_action_properties (GtkActivatable *activatable,
       /* Make label point to the menu_item's label */
       label = gtk_bin_get_child (GTK_BIN (menu_item));
 
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       if (GTK_IS_ACCEL_LABEL (label) && gtk_action_get_accel_path (action))
         {
           gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (label), NULL);
           gtk_accel_label_set_accel_closure (GTK_ACCEL_LABEL (label),
                                              gtk_action_get_accel_closure (action));
         }
+      G_GNUC_END_IGNORE_DEPRECATIONS;
 
       activatable_update_label (menu_item, action);
     }
@@ -1255,6 +1273,8 @@ gtk_menu_item_set_related_action (GtkMenuItem *menu_item,
 
     if (priv->action == action)
       return;
+
+    G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 
     if (priv->action)
       {
@@ -1275,6 +1295,8 @@ gtk_menu_item_set_related_action (GtkMenuItem *menu_item,
 
     gtk_activatable_do_set_related_action (GTK_ACTIVATABLE (menu_item), action);
 
+    G_GNUC_END_IGNORE_DEPRECATIONS;
+
     priv->action = action;
 }
 
@@ -1288,7 +1310,9 @@ gtk_menu_item_set_use_action_appearance (GtkMenuItem *menu_item,
       {
         priv->use_action_appearance = use_appearance;
 
+        G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
         gtk_activatable_sync_action_properties (GTK_ACTIVATABLE (menu_item), priv->action);
+        G_GNUC_END_IGNORE_DEPRECATIONS;
       }
 }
 
@@ -1777,11 +1801,15 @@ gtk_real_menu_item_activate (GtkMenuItem *menu_item)
 {
   GtkMenuItemPrivate *priv = menu_item->priv;
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
   if (priv->action_helper)
     gtk_action_helper_activate (priv->action_helper);
 
   if (priv->action)
     gtk_action_activate (priv->action);
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 

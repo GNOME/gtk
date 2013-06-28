@@ -497,9 +497,13 @@ gtk_radio_menu_item_activate (GtkMenuItem *menu_item)
   gboolean active;
   gint toggled;
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
   action = gtk_activatable_get_related_action (GTK_ACTIVATABLE (menu_item));
   if (action && gtk_menu_item_get_submenu (menu_item) == NULL)
     gtk_action_activate (action);
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   toggled = FALSE;
 

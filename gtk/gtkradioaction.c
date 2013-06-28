@@ -28,6 +28,8 @@
 
 #include "config.h"
 
+#define GDK_DISABLE_DEPRECATION_WARNINGS
+
 #include "gtkradioaction.h"
 #include "gtkradiomenuitem.h"
 #include "gtktoggletoolbutton.h"
@@ -109,6 +111,8 @@ gtk_radio_action_class_init (GtkRadioActionClass *klass)
    * for convenient ways to get and set this property.
    *
    * Since: 2.4
+   *
+   * Deprecated: 3.10
    */
   g_object_class_install_property (gobject_class,
 				   PROP_VALUE,
@@ -126,6 +130,8 @@ gtk_radio_action_class_init (GtkRadioActionClass *klass)
    * Sets a new group for a radio action.
    *
    * Since: 2.4
+   *
+   * Deprecated: 3.10
    */
   g_object_class_install_property (gobject_class,
 				   PROP_GROUP,
@@ -142,6 +148,8 @@ gtk_radio_action_class_init (GtkRadioActionClass *klass)
    * this action belongs. 
    *
    * Since: 2.10
+   *
+   * Deprecated: 3.10
    */
   g_object_class_install_property (gobject_class,
 				   PROP_CURRENT_VALUE,
@@ -163,6 +171,8 @@ gtk_radio_action_class_init (GtkRadioActionClass *klass)
    * for the previous and current active members.
    *
    * Since: 2.4
+   *
+   * Deprecated: 3.10
    */
   radio_action_signals[CHANGED] =
     g_signal_new (I_("changed"),
@@ -206,6 +216,8 @@ gtk_radio_action_init (GtkRadioAction *action)
  * Return value: a new #GtkRadioAction
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  */
 GtkRadioAction *
 gtk_radio_action_new (const gchar *name,
@@ -411,6 +423,8 @@ create_menu_item (GtkAction *action)
  * Returns:  (element-type GtkRadioAction) (transfer none): the list representing the radio group for this object
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  */
 GSList *
 gtk_radio_action_get_group (GtkRadioAction *action)
@@ -428,6 +442,8 @@ gtk_radio_action_get_group (GtkRadioAction *action)
  * Sets the radio group for the radio action object.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_radio_action_set_group (GtkRadioAction *action, 
@@ -495,6 +511,8 @@ gtk_radio_action_set_group (GtkRadioAction *action,
  * ]|
  * 
  * Since: 3.0
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_radio_action_join_group (GtkRadioAction *action, 
@@ -534,6 +552,8 @@ gtk_radio_action_join_group (GtkRadioAction *action,
  * Return value: The value of the currently active group member
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  **/
 gint
 gtk_radio_action_get_current_value (GtkRadioAction *action)
@@ -565,6 +585,8 @@ gtk_radio_action_get_current_value (GtkRadioAction *action)
  * property @current_value.
  *
  * Since: 2.10
+ *
+ * Deprecated: 3.10
  **/
 void
 gtk_radio_action_set_current_value (GtkRadioAction *action,

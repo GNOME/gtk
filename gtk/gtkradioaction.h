@@ -69,25 +69,25 @@ struct _GtkRadioActionClass
   void (*_gtk_reserved4) (void);
 };
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 GType           gtk_radio_action_get_type          (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 GtkRadioAction *gtk_radio_action_new               (const gchar           *name,
                                                     const gchar           *label,
                                                     const gchar           *tooltip,
                                                     const gchar           *stock_id,
                                                     gint                   value);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 GSList         *gtk_radio_action_get_group         (GtkRadioAction        *action);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void            gtk_radio_action_set_group         (GtkRadioAction        *action,
                                                     GSList                *group);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void            gtk_radio_action_join_group        (GtkRadioAction        *action,
                                                     GtkRadioAction        *group_source);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 gint            gtk_radio_action_get_current_value (GtkRadioAction        *action);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void            gtk_radio_action_set_current_value (GtkRadioAction        *action,
                                                     gint                   current_value);
 

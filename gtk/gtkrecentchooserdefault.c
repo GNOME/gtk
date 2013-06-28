@@ -287,6 +287,7 @@ static void gtk_recent_chooser_update                 (GtkActivatable       *act
 static void gtk_recent_chooser_sync_action_properties (GtkActivatable       *activatable,
 						       GtkAction            *action);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 G_DEFINE_TYPE_WITH_CODE (GtkRecentChooserDefault,
 			 _gtk_recent_chooser_default,
 			 GTK_TYPE_BOX,
@@ -294,7 +295,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkRecentChooserDefault,
 				 		gtk_recent_chooser_iface_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
 				 		gtk_recent_chooser_activatable_iface_init))
-
+G_GNUC_END_IGNORE_DEPRECATIONS;
 
 
 
@@ -1862,6 +1863,7 @@ gtk_recent_chooser_update (GtkActivatable *activatable,
 			   GtkAction      *action,
 			   const gchar    *property_name)
 {
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   if (strcmp (property_name, "visible") == 0)
     {
       if (gtk_action_is_visible (action))
@@ -1873,6 +1875,8 @@ gtk_recent_chooser_update (GtkActivatable *activatable,
   if (strcmp (property_name, "sensitive") == 0)
     gtk_widget_set_sensitive (GTK_WIDGET (activatable), gtk_action_is_sensitive (action));
 
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
   _gtk_recent_chooser_update (activatable, action, property_name);
 }
 
@@ -1881,6 +1885,7 @@ static void
 gtk_recent_chooser_sync_action_properties (GtkActivatable *activatable,
 				           GtkAction      *action)
 {
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   if (action)
     {
       if (gtk_action_is_visible (action))
@@ -1890,6 +1895,7 @@ gtk_recent_chooser_sync_action_properties (GtkActivatable *activatable,
       
       gtk_widget_set_sensitive (GTK_WIDGET (activatable), gtk_action_is_sensitive (action));
     }
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   _gtk_recent_chooser_sync_action_properties (activatable, action);
 }

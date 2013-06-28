@@ -163,9 +163,11 @@ gtk_tool_button_get_type (void)
 					    (GInstanceInitFunc) gtk_tool_button_init,
 					    0);
 
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       g_type_add_interface_static (type, GTK_TYPE_ACTIONABLE, &actionable_info);
       g_type_add_interface_static (type, GTK_TYPE_ACTIVATABLE,
                                    &activatable_info);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
     }
   return type;
 }
@@ -899,10 +901,14 @@ button_clicked (GtkWidget     *widget,
 {
   GtkAction *action;
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
   action = gtk_activatable_get_related_action (GTK_ACTIVATABLE (button));
   
   if (action)
     gtk_action_activate (action);
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   g_signal_emit_by_name (button, "clicked");
 }
@@ -952,22 +958,25 @@ gtk_tool_button_update (GtkActivatable *activatable,
 {
   GtkToolButton *button;
   GtkWidget *image;
+  gboolean use_action_appearance;
 
   parent_activatable_iface->update (activatable, action, property_name);
 
-  if (!gtk_activatable_get_use_action_appearance (activatable))
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  use_action_appearance = gtk_activatable_get_use_action_appearance (activatable);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
+  if (!use_action_appearance)
     return;
 
   button = GTK_TOOL_BUTTON (activatable);
   
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
   if (strcmp (property_name, "short-label") == 0)
     gtk_tool_button_set_label (button, gtk_action_get_short_label (action));
   else if (strcmp (property_name, "stock-id") == 0)
-    {
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_tool_button_set_stock_id (button, gtk_action_get_stock_id (action));
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-    }
+    gtk_tool_button_set_stock_id (button, gtk_action_get_stock_id (action));
   else if (strcmp (property_name, "gicon") == 0)
     {
       const gchar *stock_id = gtk_action_get_stock_id (action);
@@ -981,6 +990,7 @@ gtk_tool_button_update (GtkActivatable *activatable,
           icon_set = gtk_icon_factory_lookup_default (stock_id);
           G_GNUC_END_IGNORE_DEPRECATIONS;
         }
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 
       if (icon_set != NULL || !icon)
 	image = NULL;
@@ -999,6 +1009,8 @@ gtk_tool_button_update (GtkActivatable *activatable,
     }
   else if (strcmp (property_name, "icon-name") == 0)
     gtk_tool_button_set_icon_name (button, gtk_action_get_icon_name (action));
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 static void

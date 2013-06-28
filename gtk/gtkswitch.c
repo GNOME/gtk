@@ -95,11 +95,13 @@ static GParamSpec *switch_props[LAST_PROP] = { NULL, };
 static void gtk_switch_actionable_iface_init (GtkActionableInterface *iface);
 static void gtk_switch_activatable_interface_init (GtkActivatableIface *iface);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 G_DEFINE_TYPE_WITH_CODE (GtkSwitch, gtk_switch, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIONABLE,
                                                 gtk_switch_actionable_iface_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
                                                 gtk_switch_activatable_interface_init));
+G_GNUC_END_IGNORE_DEPRECATIONS;
 
 static gboolean
 gtk_switch_button_press (GtkWidget      *widget,
@@ -640,7 +642,9 @@ gtk_switch_set_related_action (GtkSwitch *sw,
   if (priv->action == action)
     return;
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   gtk_activatable_do_set_related_action (GTK_ACTIVATABLE (sw), action);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   priv->action = action;
 }
@@ -655,7 +659,9 @@ gtk_switch_set_use_action_appearance (GtkSwitch *sw,
     {
       priv->use_action_appearance = use_appearance;
 
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_activatable_sync_action_properties (GTK_ACTIVATABLE (sw), priv->action);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
     }
 }
 
@@ -787,7 +793,9 @@ gtk_switch_dispose (GObject *object)
 
   if (priv->action)
     {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_activatable_do_set_related_action (GTK_ACTIVATABLE (object), NULL);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       priv->action = NULL;
     }
 
@@ -803,7 +811,10 @@ gtk_switch_class_init (GtkSwitchClass *klass)
 
   g_type_class_add_private (klass, sizeof (GtkSwitchPrivate));
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   activatable_iface = g_type_default_interface_peek (GTK_TYPE_ACTIVATABLE);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
   switch_props[PROP_RELATED_ACTION] =
     g_param_spec_override ("related-action",
                            g_object_interface_find_property (activatable_iface,
@@ -942,8 +953,10 @@ gtk_switch_set_active (GtkSwitch *sw,
       if (priv->action_helper)
         gtk_action_helper_activate (priv->action_helper);
 
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       if (priv->action)
         gtk_action_activate (priv->action);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
 
       accessible = gtk_widget_get_accessible (GTK_WIDGET (sw));
       atk_object_notify_state_change (accessible, ATK_STATE_CHECKED, priv->is_active);
@@ -980,6 +993,8 @@ gtk_switch_update (GtkActivatable *activatable,
                    GtkAction      *action,
                    const gchar    *property_name)
 {
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
   if (strcmp (property_name, "visible") == 0)
     {
       if (gtk_action_is_visible (action))
@@ -997,6 +1012,8 @@ gtk_switch_update (GtkActivatable *activatable,
       gtk_switch_set_active (GTK_SWITCH (activatable), gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)));
       gtk_action_unblock_activate (action);
     }
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 static void
@@ -1005,6 +1022,8 @@ gtk_switch_sync_action_properties (GtkActivatable *activatable,
 {
   if (!action)
     return;
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 
   if (gtk_action_is_visible (action))
     gtk_widget_show (GTK_WIDGET (activatable));
@@ -1016,6 +1035,8 @@ gtk_switch_sync_action_properties (GtkActivatable *activatable,
   gtk_action_block_activate (action);
   gtk_switch_set_active (GTK_SWITCH (activatable), gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)));
   gtk_action_unblock_activate (action);
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 static void

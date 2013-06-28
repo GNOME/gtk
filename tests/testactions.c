@@ -16,6 +16,7 @@
  */
 
 #include "config.h"
+#define GDK_DISABLE_DEPRECATION_WARNINGS
 #include <gtk/gtk.h>
 
 static GtkActionGroup *action_group = NULL;

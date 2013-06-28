@@ -90,9 +90,11 @@ static void gtk_toggle_tool_button_sync_action_properties     (GtkActivatable   
 static GtkActivatableIface *parent_activatable_iface;
 static guint                toggle_signals[LAST_SIGNAL] = { 0 };
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 G_DEFINE_TYPE_WITH_CODE (GtkToggleToolButton, gtk_toggle_tool_button, GTK_TYPE_TOOL_BUTTON,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
 						gtk_toggle_tool_button_activatable_interface_init))
+G_GNUC_END_IGNORE_DEPRECATIONS;
 
 static void
 gtk_toggle_tool_button_class_init (GtkToggleToolButtonClass *klass)
@@ -349,9 +351,11 @@ gtk_toggle_tool_button_update (GtkActivatable *activatable,
 
   if (strcmp (property_name, "active") == 0)
     {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_action_block_activate (action);
       gtk_toggle_tool_button_set_active (button, gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)));
       gtk_action_unblock_activate (action);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
     }
 }
 
@@ -360,17 +364,24 @@ gtk_toggle_tool_button_sync_action_properties (GtkActivatable *activatable,
 					       GtkAction      *action)
 {
   GtkToggleToolButton *button;
+  gboolean is_toggle_action;
 
   parent_activatable_iface->sync_action_properties (activatable, action);
 
-  if (!GTK_IS_TOGGLE_ACTION (action))
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  is_toggle_action = GTK_IS_TOGGLE_ACTION (action);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
+  if (!is_toggle_action)
     return;
 
   button = GTK_TOGGLE_TOOL_BUTTON (activatable);
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   gtk_action_block_activate (action);
   gtk_toggle_tool_button_set_active (button, gtk_toggle_action_get_active (GTK_TOGGLE_ACTION (action)));
   gtk_action_unblock_activate (action);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 

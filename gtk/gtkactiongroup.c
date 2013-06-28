@@ -89,6 +89,8 @@
 #include "config.h"
 #include <string.h>
 
+#define GDK_DISABLE_DEPRECATION_WARNINGS
+
 #include "gtkactiongroup.h"
 #include "gtkbuildable.h"
 #include "gtkiconfactory.h"
@@ -222,6 +224,13 @@ gtk_action_group_class_init (GtkActionGroupClass *klass)
   gobject_class->get_property = gtk_action_group_get_property;
   klass->get_action = gtk_action_group_real_get_action;
 
+  /**
+   * GtkActionGroup:name:
+   *
+   * A name for the action.
+   *
+   * Deprecated: 3.10
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_NAME,
 				   g_param_spec_string ("name",
@@ -229,6 +238,13 @@ gtk_action_group_class_init (GtkActionGroupClass *klass)
 							P_("A name for the action group."),
 							NULL,
 							GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+  /**
+   * GtkActionGroup:sensitive:
+   *
+   * Whether the action group is enabled.
+   *
+   * Deprecated: 3.10
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_SENSITIVE,
 				   g_param_spec_boolean ("sensitive",
@@ -236,6 +252,13 @@ gtk_action_group_class_init (GtkActionGroupClass *klass)
 							 P_("Whether the action group is enabled."),
 							 TRUE,
 							 GTK_PARAM_READWRITE));
+  /**
+   * GtkActionGroup:visible:
+   *
+   * Whether the action group is visible.
+   *
+   * Deprecated: 3.10
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_VISIBLE,
 				   g_param_spec_boolean ("visible",
@@ -243,6 +266,13 @@ gtk_action_group_class_init (GtkActionGroupClass *klass)
 							 P_("Whether the action group is visible."),
 							 TRUE,
 							 GTK_PARAM_READWRITE));
+  /**
+   * GtkActionGroup:accel-group:
+   *
+   * The accelerator group the actions of this group should use.
+   *
+   * Deprecated: 3.10
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_ACCEL_GROUP,
 				   g_param_spec_object ("accel-group",
@@ -270,6 +300,8 @@ gtk_action_group_class_init (GtkActionGroupClass *klass)
    * convenient to use.
    *
    * Since: 2.4
+   *
+   * Deprecated: 3.10
    */
   action_group_signals[CONNECT_PROXY] =
     g_signal_new (I_("connect-proxy"),
@@ -293,6 +325,8 @@ gtk_action_group_class_init (GtkActionGroupClass *klass)
    * convenient to use.
    *
    * Since: 2.4
+   *
+   * Deprecated: 3.10
    */
   action_group_signals[DISCONNECT_PROXY] =
     g_signal_new (I_("disconnect-proxy"),
@@ -314,6 +348,8 @@ gtk_action_group_class_init (GtkActionGroupClass *klass)
    * notification just before any action is activated.
    *
    * Since: 2.4
+   *
+   * Deprecated: 3.10
    */
   action_group_signals[PRE_ACTIVATE] =
     g_signal_new (I_("pre-activate"),
@@ -335,6 +371,8 @@ gtk_action_group_class_init (GtkActionGroupClass *klass)
    * notification just after any action is activated.
    *
    * Since: 2.4
+   *
+   * Deprecated: 3.10
    */
   action_group_signals[POST_ACTIVATE] =
     g_signal_new (I_("post-activate"),
@@ -535,6 +573,8 @@ gtk_action_group_buildable_custom_tag_end (GtkBuildable *buildable,
  * Returns: the new #GtkActionGroup
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  */
 GtkActionGroup *
 gtk_action_group_new (const gchar *name)
@@ -659,6 +699,8 @@ gtk_action_group_real_get_action (GtkActionGroup *self,
  * Returns: the name of the action group.
  * 
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  */
 const gchar *
 gtk_action_group_get_name (GtkActionGroup *action_group)
@@ -684,6 +726,8 @@ gtk_action_group_get_name (GtkActionGroup *action_group)
  * Return value: %TRUE if the group is sensitive.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  */
 gboolean
 gtk_action_group_get_sensitive (GtkActionGroup *action_group)
@@ -715,6 +759,8 @@ cb_set_action_sensitivity (const gchar *name,
  * Changes the sensitivity of @action_group
  * 
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_action_group_set_sensitive (GtkActionGroup *action_group, 
@@ -749,6 +795,8 @@ gtk_action_group_set_sensitive (GtkActionGroup *action_group,
  * Return value: %TRUE if the group is visible.
  * 
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  */
 gboolean
 gtk_action_group_get_visible (GtkActionGroup *action_group)
@@ -772,6 +820,8 @@ gtk_action_group_get_visible (GtkActionGroup *action_group)
  * group or %NULL if there is none.
  *
  * Since: 3.6
+ *
+ * Deprecated: 3.10
  */
 GtkAccelGroup *
 gtk_action_group_get_accel_group (GtkActionGroup *action_group)
@@ -798,6 +848,8 @@ cb_set_action_visiblity (const gchar *name,
  * Changes the visible of @action_group.
  * 
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_action_group_set_visible (GtkActionGroup *action_group, 
@@ -834,6 +886,8 @@ gtk_action_group_accel_group_foreach (gpointer key, gpointer val, gpointer data)
  * Sets the accelerator group to be used by every action in this group.
  * 
  * Since: 3.6
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_action_group_set_accel_group (GtkActionGroup *action_group,
@@ -871,6 +925,8 @@ gtk_action_group_set_accel_group (GtkActionGroup *action_group,
  * Returns: (transfer none): the action, or %NULL if no action by that name exists
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  */
 GtkAction *
 gtk_action_group_get_action (GtkActionGroup *action_group,
@@ -915,6 +971,8 @@ check_unique_action (GtkActionGroup *action_group,
  * <literal>gtk_action_group_add_action_with_accel (..., NULL)</literal>.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_action_group_add_action (GtkActionGroup *action_group,
@@ -960,6 +1018,8 @@ gtk_action_group_add_action (GtkActionGroup *action_group,
  * <literal>&lt;Actions&gt;/<replaceable>group-name</replaceable>/<replaceable>action-name</replaceable></literal>.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_action_group_add_action_with_accel (GtkActionGroup *action_group,
@@ -1029,6 +1089,8 @@ gtk_action_group_add_action_with_accel (GtkActionGroup *action_group,
  * Removes an action object from the action group.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_action_group_remove_action (GtkActionGroup *action_group,
@@ -1067,6 +1129,8 @@ add_single_action (gpointer key,
  * Returns: (element-type GtkAction) (transfer container): an allocated list of the action objects in the action group
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  */
 GList *
 gtk_action_group_list_actions (GtkActionGroup *action_group)
@@ -1099,6 +1163,8 @@ gtk_action_group_list_actions (GtkActionGroup *action_group)
  * <literal>&lt;Actions&gt;/<replaceable>group-name</replaceable>/<replaceable>action-name</replaceable></literal>.  
  * 
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_action_group_add_actions (GtkActionGroup       *action_group,
@@ -1147,6 +1213,8 @@ shared_data_unref (gpointer data)
  * callback for @user_data. 
  * 
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_action_group_add_actions_full (GtkActionGroup       *action_group,
@@ -1230,6 +1298,8 @@ gtk_action_group_add_actions_full (GtkActionGroup       *action_group,
  * <literal>&lt;Actions&gt;/<replaceable>group-name</replaceable>/<replaceable>action-name</replaceable></literal>.  
  * 
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_action_group_add_toggle_actions (GtkActionGroup             *action_group,
@@ -1255,6 +1325,8 @@ gtk_action_group_add_toggle_actions (GtkActionGroup             *action_group,
  * #GDestroyNotify callback for @user_data. 
  * 
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_action_group_add_toggle_actions_full (GtkActionGroup             *action_group,
@@ -1346,6 +1418,8 @@ gtk_action_group_add_toggle_actions_full (GtkActionGroup             *action_gro
  * <literal>&lt;Actions&gt;/<replaceable>group-name</replaceable>/<replaceable>action-name</replaceable></literal>.  
  * 
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  **/
 void            
 gtk_action_group_add_radio_actions (GtkActionGroup            *action_group,
@@ -1376,6 +1450,8 @@ gtk_action_group_add_radio_actions (GtkActionGroup            *action_group,
  * #GDestroyNotify callback for @user_data. 
  * 
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  **/
 void            
 gtk_action_group_add_radio_actions_full (GtkActionGroup            *action_group,
@@ -1461,6 +1537,8 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup            *action_group
  * with gtk_action_group_set_translation_domain().
  *
  * Since: 2.4 
+ *
+ * Deprecated: 3.10
  **/
 void
 gtk_action_group_set_translate_func (GtkActionGroup   *action_group,
@@ -1507,6 +1585,8 @@ dgettext_swapped (const gchar *msgid,
  * gtk_action_group_set_translate_func().
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  **/
 void 
 gtk_action_group_set_translation_domain (GtkActionGroup *action_group,
@@ -1533,6 +1613,8 @@ gtk_action_group_set_translation_domain (GtkActionGroup *action_group,
  * Returns: the translation of @string
  *
  * Since: 2.6
+ *
+ * Deprecated: 3.10
  **/
 const gchar *
 gtk_action_group_translate_string (GtkActionGroup *action_group,

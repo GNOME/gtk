@@ -90,6 +90,8 @@ struct _GtkActionGroupClass
  *
  * #GtkActionEntry structs are used with gtk_action_group_add_actions() to
  * construct actions.
+ *
+ * Deprecated: 3.10
  */
 struct _GtkActionEntry 
 {
@@ -117,6 +119,8 @@ struct _GtkActionEntry
  *
  * #GtkToggleActionEntry structs are used with
  * gtk_action_group_add_toggle_actions() to construct toggle actions.
+ *
+ * Deprecated: 3.10
  */
 struct _GtkToggleActionEntry 
 {
@@ -145,6 +149,8 @@ struct _GtkToggleActionEntry
  *
  * #GtkRadioActionEntry structs are used with
  * gtk_action_group_add_radio_actions() to construct groups of radio actions.
+ *
+ * Deprecated: 3.10
  */
 struct _GtkRadioActionEntry 
 {
@@ -156,20 +162,20 @@ struct _GtkRadioActionEntry
   gint   value; 
 };
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 GType           gtk_action_group_get_type                (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 GtkActionGroup *gtk_action_group_new                     (const gchar                *name);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 const gchar    *gtk_action_group_get_name                (GtkActionGroup             *action_group);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 gboolean        gtk_action_group_get_sensitive           (GtkActionGroup             *action_group);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void            gtk_action_group_set_sensitive           (GtkActionGroup             *action_group,
 							  gboolean                    sensitive);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 gboolean        gtk_action_group_get_visible             (GtkActionGroup             *action_group);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void            gtk_action_group_set_visible             (GtkActionGroup             *action_group,
 							  gboolean                    visible);
 GDK_AVAILABLE_IN_3_6
@@ -178,51 +184,51 @@ GDK_AVAILABLE_IN_3_6
 void            gtk_action_group_set_accel_group         (GtkActionGroup             *action_group,
                                                           GtkAccelGroup              *accel_group);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 GtkAction      *gtk_action_group_get_action              (GtkActionGroup             *action_group,
 							  const gchar                *action_name);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 GList          *gtk_action_group_list_actions            (GtkActionGroup             *action_group);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void            gtk_action_group_add_action              (GtkActionGroup             *action_group,
 							  GtkAction                  *action);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void            gtk_action_group_add_action_with_accel   (GtkActionGroup             *action_group,
 							  GtkAction                  *action,
 							  const gchar                *accelerator);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void            gtk_action_group_remove_action           (GtkActionGroup             *action_group,
 							  GtkAction                  *action);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void            gtk_action_group_add_actions             (GtkActionGroup             *action_group,
 							  const GtkActionEntry       *entries,
 							  guint                       n_entries,
 							  gpointer                    user_data);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void            gtk_action_group_add_toggle_actions      (GtkActionGroup             *action_group,
 							  const GtkToggleActionEntry *entries,
 							  guint                       n_entries,
 							  gpointer                    user_data);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void            gtk_action_group_add_radio_actions       (GtkActionGroup             *action_group,
 							  const GtkRadioActionEntry  *entries,
 							  guint                       n_entries,
 							  gint                        value,
 							  GCallback                   on_change,
 							  gpointer                    user_data);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void            gtk_action_group_add_actions_full        (GtkActionGroup             *action_group,
 							  const GtkActionEntry       *entries,
 							  guint                       n_entries,
 							  gpointer                    user_data,
 							  GDestroyNotify              destroy);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void            gtk_action_group_add_toggle_actions_full (GtkActionGroup             *action_group,
 							  const GtkToggleActionEntry *entries,
 							  guint                       n_entries,
 							  gpointer                    user_data,
 							  GDestroyNotify              destroy);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void            gtk_action_group_add_radio_actions_full  (GtkActionGroup             *action_group,
 							  const GtkRadioActionEntry  *entries,
 							  guint                       n_entries,
@@ -230,15 +236,15 @@ void            gtk_action_group_add_radio_actions_full  (GtkActionGroup        
 							  GCallback                   on_change,
 							  gpointer                    user_data,
 							  GDestroyNotify              destroy);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void            gtk_action_group_set_translate_func      (GtkActionGroup             *action_group,
 							  GtkTranslateFunc            func,
 							  gpointer                    data,
 							  GDestroyNotify              notify);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void            gtk_action_group_set_translation_domain  (GtkActionGroup             *action_group,
 							  const gchar                *domain);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 const gchar *   gtk_action_group_translate_string        (GtkActionGroup             *action_group,
   	                                                  const gchar                *string);
 

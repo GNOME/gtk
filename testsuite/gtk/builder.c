@@ -349,7 +349,9 @@ test_uimanager_simple (void)
   builder = builder_new_from_string (buffer, -1, NULL);
 
   uimgr = gtk_builder_get_object (builder, "uimgr1");
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   g_assert (GTK_IS_UI_MANAGER (uimgr));
+  G_GNUC_END_IGNORE_DEPRECATIONS;
   g_object_unref (builder);
   
   builder = builder_new_from_string (buffer2, -1, NULL);

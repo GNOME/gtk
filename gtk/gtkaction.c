@@ -72,6 +72,8 @@
 
 #include "config.h"
 
+#define GDK_DISABLE_DEPRECATION_WARNINGS
+
 #include "gtkaction.h"
 #include "gtkactiongroup.h"
 #include "gtkaccellabel.h"
@@ -216,6 +218,13 @@ gtk_action_class_init (GtkActionClass *klass)
   klass->connect_proxy    = connect_proxy;
   klass->disconnect_proxy = disconnect_proxy;
 
+  /**
+   * GtkAction:name:
+   *
+   * A unique name for the action.
+   *
+   * Deprecated: 3.10
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_NAME,
 				   g_param_spec_string ("name",
@@ -234,6 +243,8 @@ gtk_action_class_init (GtkActionClass *klass)
    *
    * This is an appearance property and thus only applies if 
    * #GtkActivatable:use-action-appearance is %TRUE.
+   *
+   * Deprecated: 3.10
    */
   g_object_class_install_property (gobject_class,
 				   PROP_LABEL,
@@ -251,6 +262,8 @@ gtk_action_class_init (GtkActionClass *klass)
    *
    * This is an appearance property and thus only applies if 
    * #GtkActivatable:use-action-appearance is %TRUE.
+   *
+   * Deprecated: 3.10
    */
   g_object_class_install_property (gobject_class,
 				   PROP_SHORT_LABEL,
@@ -261,6 +274,13 @@ gtk_action_class_init (GtkActionClass *klass)
 							GTK_PARAM_READWRITE));
 
 
+  /**
+   * GtkAction:tooltip:
+   *
+   * A tooltip for this action.
+   *
+   * Deprecated: 3.10
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_TOOLTIP,
 				   g_param_spec_string ("tooltip",
@@ -276,6 +296,8 @@ gtk_action_class_init (GtkActionClass *klass)
    *
    * This is an appearance property and thus only applies if 
    * #GtkActivatable:use-action-appearance is %TRUE.
+   *
+   * Deprecated: 3.10
    */
   g_object_class_install_property (gobject_class,
 				   PROP_STOCK_ID,
@@ -297,6 +319,8 @@ gtk_action_class_init (GtkActionClass *klass)
    * #GtkActivatable:use-action-appearance is %TRUE.
    *
    * Since: 2.16
+   *
+   * Deprecated: 3.10
    */
   g_object_class_install_property (gobject_class,
 				   PROP_GICON,
@@ -318,6 +342,8 @@ gtk_action_class_init (GtkActionClass *klass)
    * #GtkActivatable:use-action-appearance is %TRUE.
    *
    * Since: 2.10
+   *
+   * Deprecated: 3.10
    */
   g_object_class_install_property (gobject_class,
 				   PROP_ICON_NAME,
@@ -327,6 +353,13 @@ gtk_action_class_init (GtkActionClass *klass)
 							NULL,
  							GTK_PARAM_READWRITE));
 
+  /**
+   * GtkAction:visible-horizontal:
+   *
+   * Whether the toolbar item is visible when the toolbar is in a horizontal orientation.
+   *
+   * Deprecated: 3.10
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_VISIBLE_HORIZONTAL,
 				   g_param_spec_boolean ("visible-horizontal",
@@ -342,6 +375,8 @@ gtk_action_class_init (GtkActionClass *klass)
    * toolbar overflow menu.
    *
    * Since: 2.6
+   *
+   * Deprecated: 3.10
    */
   g_object_class_install_property (gobject_class,
 				   PROP_VISIBLE_OVERFLOWN,
@@ -351,6 +386,14 @@ gtk_action_class_init (GtkActionClass *klass)
 							    "are represented in the toolbar overflow menu."),
 							 TRUE,
 							 GTK_PARAM_READWRITE));
+
+  /**
+   * GtkAction:visible-vertical:
+   *
+   * Whether the toolbar item is visible when the toolbar is in a vertical orientation.
+   *
+   * Deprecated: 3.10
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_VISIBLE_VERTICAL,
 				   g_param_spec_boolean ("visible-vertical",
@@ -359,6 +402,14 @@ gtk_action_class_init (GtkActionClass *klass)
 							    "is in a vertical orientation."),
 							 TRUE,
 							 GTK_PARAM_READWRITE));
+  /**
+   * GtkAction:is-important:
+   *
+   * Whether the action is considered important. When TRUE, toolitem
+   * proxies for this action show text in GTK_TOOLBAR_BOTH_HORIZ mode.
+   *
+   * Deprecated: 3.10
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_IS_IMPORTANT,
 				   g_param_spec_boolean ("is-important",
@@ -368,6 +419,13 @@ gtk_action_class_init (GtkActionClass *klass)
 							    "show text in GTK_TOOLBAR_BOTH_HORIZ mode."),
 							 FALSE,
 							 GTK_PARAM_READWRITE));
+  /**
+   * GtkAction:hide-if-empty:
+   *
+   * When TRUE, empty menu proxies for this action are hidden.
+   *
+   * Deprecated: 3.10
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_HIDE_IF_EMPTY,
 				   g_param_spec_boolean ("hide-if-empty",
@@ -375,6 +433,13 @@ gtk_action_class_init (GtkActionClass *klass)
 							 P_("When TRUE, empty menu proxies for this action are hidden."),
 							 TRUE,
 							 GTK_PARAM_READWRITE));
+  /**
+   * GtkAction:sensitive:
+   *
+   * Whether the action is enabled.
+   *
+   * Deprecated: 3.10
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_SENSITIVE,
 				   g_param_spec_boolean ("sensitive",
@@ -382,6 +447,13 @@ gtk_action_class_init (GtkActionClass *klass)
 							 P_("Whether the action is enabled."),
 							 TRUE,
 							 GTK_PARAM_READWRITE));
+  /**
+   * GtkAction:visible:
+   *
+   * Whether the action is visible.
+   *
+   * Deprecated: 3.10
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_VISIBLE,
 				   g_param_spec_boolean ("visible",
@@ -389,6 +461,14 @@ gtk_action_class_init (GtkActionClass *klass)
 							 P_("Whether the action is visible."),
 							 TRUE,
 							 GTK_PARAM_READWRITE));
+  /**
+   * GtkAction:action-group:
+   *
+   * The GtkActionGroup this GtkAction is associated with, or NULL
+   * (for internal use).
+   *
+   * Deprecated: 3.10
+   */
   g_object_class_install_property (gobject_class,
 				   PROP_ACTION_GROUP,
 				   g_param_spec_object ("action-group",
@@ -406,6 +486,8 @@ gtk_action_class_init (GtkActionClass *klass)
    * without their image. 
    *
    * Since: 2.20
+   *
+   * Deprecated: 3.10
    **/
   g_object_class_install_property (gobject_class,
                                    PROP_ALWAYS_SHOW_IMAGE,
@@ -422,6 +504,8 @@ gtk_action_class_init (GtkActionClass *klass)
    * The "activate" signal is emitted when the action is activated.
    *
    * Since: 2.4
+   *
+   * Deprecated: 3.10
    */
   action_signals[ACTIVATE] =
     g_signal_new (I_("activate"),
@@ -520,6 +604,8 @@ gtk_action_buildable_get_name (GtkBuildable *buildable)
  * Return value: a new #GtkAction
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  */
 GtkAction *
 gtk_action_new (const gchar *name,
@@ -759,6 +845,8 @@ disconnect_proxy (GtkAction *action,
  * </itemizedlist>
  * 
  * This function is used in the implementation of #GtkUIManager.
+ *
+ * Deprecated: 3.10
  **/
 void
 _gtk_action_sync_menu_visible (GtkAction *action,
@@ -820,6 +908,8 @@ _gtk_action_emit_activate (GtkAction *action)
  * It can also be used to manually activate an action.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_action_activate (GtkAction *action)
@@ -845,6 +935,8 @@ gtk_action_activate (GtkAction *action)
  * cases (updating toggle state for instance).
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_action_block_activate (GtkAction *action)
@@ -861,6 +953,8 @@ gtk_action_block_activate (GtkAction *action)
  * Reenable activation signals from the action 
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_action_unblock_activate (GtkAction *action)
@@ -881,6 +975,8 @@ gtk_action_unblock_activate (GtkAction *action)
  * Returns: (transfer none): a widget that displays the icon for this action.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  */
 GtkWidget *
 gtk_action_create_icon (GtkAction *action, GtkIconSize icon_size)
@@ -913,6 +1009,8 @@ gtk_action_create_icon (GtkAction *action, GtkIconSize icon_size)
  * Returns: (transfer none): a menu item connected to the action.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  */
 GtkWidget *
 gtk_action_create_menu_item (GtkAction *action)
@@ -938,6 +1036,8 @@ gtk_action_create_menu_item (GtkAction *action)
  * Returns: (transfer none): a toolbar item connected to the action.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  */
 GtkWidget *
 gtk_action_create_tool_item (GtkAction *action)
@@ -985,6 +1085,8 @@ _gtk_action_remove_from_proxy_list (GtkAction     *action,
  * and must not be modified.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  **/
 GSList*
 gtk_action_get_proxies (GtkAction *action)
@@ -1004,6 +1106,8 @@ gtk_action_get_proxies (GtkAction *action)
  *   be freed.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  **/
 const gchar *
 gtk_action_get_name (GtkAction *action)
@@ -1023,6 +1127,8 @@ gtk_action_get_name (GtkAction *action)
  * are both sensitive.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  **/
 gboolean
 gtk_action_is_sensitive (GtkAction *action)
@@ -1047,6 +1153,8 @@ gtk_action_is_sensitive (GtkAction *action)
  * Return value: %TRUE if the action itself is sensitive.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  **/
 gboolean
 gtk_action_get_sensitive (GtkAction *action)
@@ -1067,6 +1175,8 @@ gtk_action_get_sensitive (GtkAction *action)
  * for that.
  *
  * Since: 2.6
+ *
+ * Deprecated: 3.10
  **/
 void
 gtk_action_set_sensitive (GtkAction *action,
@@ -1094,6 +1204,8 @@ gtk_action_set_sensitive (GtkAction *action,
  * are both visible.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  **/
 gboolean
 gtk_action_is_visible (GtkAction *action)
@@ -1118,6 +1230,8 @@ gtk_action_is_visible (GtkAction *action)
  * Return value: %TRUE if the action itself is visible.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  **/
 gboolean
 gtk_action_get_visible (GtkAction *action)
@@ -1138,6 +1252,8 @@ gtk_action_get_visible (GtkAction *action)
  * for that.
  *
  * Since: 2.6
+ *
+ * Deprecated: 3.10
  **/
 void
 gtk_action_set_visible (GtkAction *action,
@@ -1164,6 +1280,8 @@ gtk_action_set_visible (GtkAction *action,
  * or not.
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10
  */
 void 
 gtk_action_set_is_important (GtkAction *action,
@@ -1190,6 +1308,8 @@ gtk_action_set_is_important (GtkAction *action,
  * Returns: whether @action is important
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10
  */
 gboolean 
 gtk_action_get_is_important (GtkAction *action)
@@ -1211,6 +1331,8 @@ gtk_action_get_is_important (GtkAction *action)
  * without their image.
  *
  * Since: 2.20
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_action_set_always_show_image (GtkAction *action,
@@ -1242,6 +1364,8 @@ gtk_action_set_always_show_image (GtkAction *action,
  * Returns: %TRUE if the menu item proxies will always show their image
  *
  * Since: 2.20
+ *
+ * Deprecated: 3.10
  */
 gboolean
 gtk_action_get_always_show_image  (GtkAction *action)
@@ -1259,6 +1383,8 @@ gtk_action_get_always_show_image  (GtkAction *action)
  * Sets the label of @action.
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10
  */
 void 
 gtk_action_set_label (GtkAction	  *action,
@@ -1304,6 +1430,8 @@ gtk_action_set_label (GtkAction	  *action,
  * Returns: the label text
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10
  */
 const gchar *
 gtk_action_get_label (GtkAction *action)
@@ -1321,6 +1449,8 @@ gtk_action_get_label (GtkAction *action)
  * Sets a shorter label text on @action.
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10
  */
 void 
 gtk_action_set_short_label (GtkAction   *action,
@@ -1350,6 +1480,8 @@ gtk_action_set_short_label (GtkAction   *action,
  * Returns: the short label text.
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10
  */
 const gchar *
 gtk_action_get_short_label (GtkAction *action)
@@ -1367,6 +1499,8 @@ gtk_action_get_short_label (GtkAction *action)
  * Sets whether @action is visible when horizontal
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10
  */
 void 
 gtk_action_set_visible_horizontal (GtkAction *action,
@@ -1395,6 +1529,8 @@ gtk_action_set_visible_horizontal (GtkAction *action,
  * Returns: whether @action is visible when horizontal
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10
  */
 gboolean 
 gtk_action_get_visible_horizontal (GtkAction *action)
@@ -1412,6 +1548,8 @@ gtk_action_get_visible_horizontal (GtkAction *action)
  * Sets whether @action is visible when vertical 
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10
  */
 void 
 gtk_action_set_visible_vertical (GtkAction *action,
@@ -1440,6 +1578,8 @@ gtk_action_set_visible_vertical (GtkAction *action,
  * Returns: whether @action is visible when horizontal
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10
  */
 gboolean 
 gtk_action_get_visible_vertical (GtkAction *action)
@@ -1457,6 +1597,8 @@ gtk_action_get_visible_vertical (GtkAction *action)
  * Sets the tooltip text on @action
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10
  */
 void 
 gtk_action_set_tooltip (GtkAction   *action,
@@ -1482,6 +1624,8 @@ gtk_action_set_tooltip (GtkAction   *action,
  * Returns: the tooltip text
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10
  */
 const gchar *
 gtk_action_get_tooltip (GtkAction *action)
@@ -1499,6 +1643,8 @@ gtk_action_get_tooltip (GtkAction *action)
  * Sets the stock id on @action
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10
  */
 void 
 gtk_action_set_stock_id (GtkAction   *action,
@@ -1544,6 +1690,8 @@ gtk_action_set_stock_id (GtkAction   *action,
  * Returns: the stock id
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10
  */
 const gchar *
 gtk_action_get_stock_id (GtkAction *action)
@@ -1561,6 +1709,8 @@ gtk_action_get_stock_id (GtkAction *action)
  * Sets the icon name on @action
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10
  */
 void 
 gtk_action_set_icon_name (GtkAction   *action,
@@ -1586,6 +1736,8 @@ gtk_action_set_icon_name (GtkAction   *action,
  * Returns: the icon name
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10
  */
 const gchar *
 gtk_action_get_icon_name (GtkAction *action)
@@ -1603,6 +1755,8 @@ gtk_action_get_icon_name (GtkAction *action)
  * Sets the icon of @action.
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_action_set_gicon (GtkAction *action,
@@ -1630,6 +1784,8 @@ gtk_action_set_gicon (GtkAction *action,
  * Returns: (transfer none): The action's #GIcon if one is set.
  *
  * Since: 2.16
+ *
+ * Deprecated: 3.10
  */
 GIcon *
 gtk_action_get_gicon (GtkAction *action)
@@ -1682,6 +1838,8 @@ gtk_action_set_action_group (GtkAction	    *action,
  * g_intern_static_string().
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_action_set_accel_path (GtkAction   *action, 
@@ -1703,6 +1861,8 @@ gtk_action_set_accel_path (GtkAction   *action,
  * Returns: the accel path for this action, or %NULL
  *   if none is set. The returned string is owned by GTK+ 
  *   and must not be freed or modified.
+ *
+ * Deprecated: 3.10
  */
 const gchar *
 gtk_action_get_accel_path (GtkAction *action)
@@ -1726,6 +1886,8 @@ gtk_action_get_accel_path (GtkAction *action)
  * Returns: (transfer none): the accel closure for this action. The
  *          returned closure is owned by GTK+ and must not be unreffed
  *          or modified.
+ *
+ * Deprecated: 3.10
  */
 GClosure *
 gtk_action_get_accel_closure (GtkAction *action)
@@ -1745,6 +1907,8 @@ gtk_action_get_accel_closure (GtkAction *action)
  * will be installed.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  **/
 void
 gtk_action_set_accel_group (GtkAction     *action,
@@ -1775,6 +1939,8 @@ gtk_action_set_accel_group (GtkAction     *action,
  * gtk_action_disconnect_accelerator() has been called as many times.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  **/
 void 
 gtk_action_connect_accelerator (GtkAction *action)
@@ -1805,6 +1971,8 @@ gtk_action_connect_accelerator (GtkAction *action)
  * Undoes the effect of one call to gtk_action_connect_accelerator().
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  **/
 void 
 gtk_action_disconnect_accelerator (GtkAction *action)
@@ -1834,6 +2002,8 @@ gtk_action_disconnect_accelerator (GtkAction *action)
  *               action, or %NULL.
  *
  * Since: 2.12
+ *
+ * Deprecated: 3.10
  */
 GtkWidget *
 gtk_action_create_menu (GtkAction *action)

@@ -188,10 +188,12 @@ static void gtk_button_get_preferred_height_and_baseline_for_width (GtkWidget *w
   
 static guint button_signals[LAST_SIGNAL] = { 0 };
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 G_DEFINE_TYPE_WITH_CODE (GtkButton, gtk_button, GTK_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIONABLE, gtk_button_actionable_iface_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
 						gtk_button_activatable_interface_init))
+G_GNUC_END_IGNORE_DEPRECATIONS;
 
 static void
 gtk_button_class_init (GtkButtonClass *klass)
@@ -381,8 +383,10 @@ gtk_button_class_init (GtkButtonClass *klass)
   g_object_class_override_property (gobject_class, PROP_ACTION_NAME, "action-name");
   g_object_class_override_property (gobject_class, PROP_ACTION_TARGET, "action-target");
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   g_object_class_override_property (gobject_class, PROP_ACTIVATABLE_RELATED_ACTION, "related-action");
   g_object_class_override_property (gobject_class, PROP_ACTIVATABLE_USE_ACTION_APPEARANCE, "use-action-appearance");
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   /**
    * GtkButton::pressed:
@@ -721,7 +725,9 @@ gtk_button_dispose (GObject *object)
 
   if (priv->action)
     {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_activatable_do_set_related_action (GTK_ACTIVATABLE (button), NULL);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       priv->action = NULL;
     }
   G_OBJECT_CLASS (gtk_button_parent_class)->dispose (object);
@@ -950,7 +956,9 @@ activatable_update_short_label (GtkButton *button,
       child == NULL ||
       GTK_IS_LABEL (child))
     {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_button_set_label (button, gtk_action_get_short_label (action));
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       gtk_button_set_use_underline (button, TRUE);
     }
 }
@@ -974,8 +982,12 @@ activatable_update_icon_name (GtkButton *button,
   if (GTK_IS_IMAGE (image) &&
       (gtk_image_get_storage_type (GTK_IMAGE (image)) == GTK_IMAGE_EMPTY ||
        gtk_image_get_storage_type (GTK_IMAGE (image)) == GTK_IMAGE_ICON_NAME))
-    gtk_image_set_from_icon_name (GTK_IMAGE (image),
-				  gtk_action_get_icon_name (action), GTK_ICON_SIZE_MENU);
+    {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+      gtk_image_set_from_icon_name (GTK_IMAGE (image),
+                                    gtk_action_get_icon_name (action), GTK_ICON_SIZE_MENU);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
+    }
 }
 
 static void
@@ -983,8 +995,12 @@ activatable_update_gicon (GtkButton *button,
 			  GtkAction *action)
 {
   GtkWidget *image = gtk_button_get_image (button);
-  GIcon *icon = gtk_action_get_gicon (action);
-  
+  GIcon *icon;
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  icon = gtk_action_get_gicon (action);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
   if (GTK_IS_IMAGE (image) &&
       (gtk_image_get_storage_type (GTK_IMAGE (image)) == GTK_IMAGE_EMPTY ||
        gtk_image_get_storage_type (GTK_IMAGE (image)) == GTK_IMAGE_GICON))
@@ -1001,13 +1017,19 @@ gtk_button_update (GtkActivatable *activatable,
 
   if (strcmp (property_name, "visible") == 0)
     {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       if (gtk_action_is_visible (action))
 	gtk_widget_show (GTK_WIDGET (activatable));
       else
 	gtk_widget_hide (GTK_WIDGET (activatable));
+      G_GNUC_END_IGNORE_DEPRECATIONS;
     }
   else if (strcmp (property_name, "sensitive") == 0)
-    gtk_widget_set_sensitive (GTK_WIDGET (activatable), gtk_action_is_sensitive (action));
+    {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+      gtk_widget_set_sensitive (GTK_WIDGET (activatable), gtk_action_is_sensitive (action));
+      G_GNUC_END_IGNORE_DEPRECATIONS;
+    }
 
   if (!priv->use_action_appearance)
     return;
@@ -1028,9 +1050,12 @@ gtk_button_sync_action_properties (GtkActivatable *activatable,
 {
   GtkButton *button = GTK_BUTTON (activatable);
   GtkButtonPrivate *priv = button->priv;
+  gboolean always_show_image;
 
   if (!action)
     return;
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
   if (gtk_action_is_visible (action))
     gtk_widget_show (GTK_WIDGET (activatable));
@@ -1038,7 +1063,9 @@ gtk_button_sync_action_properties (GtkActivatable *activatable,
     gtk_widget_hide (GTK_WIDGET (activatable));
   
   gtk_widget_set_sensitive (GTK_WIDGET (activatable), gtk_action_is_sensitive (action));
-  
+  always_show_image = gtk_action_get_always_show_image (action);
+  G_GNUC_END_IGNORE_DEPRECATIONS
+
   if (priv->use_action_appearance)
     {
       activatable_update_stock_id (GTK_BUTTON (activatable), action);
@@ -1047,8 +1074,7 @@ gtk_button_sync_action_properties (GtkActivatable *activatable,
       activatable_update_icon_name (GTK_BUTTON (activatable), action);
     }
 
-  gtk_button_set_always_show_image (button,
-                                    gtk_action_get_always_show_image (action));
+  gtk_button_set_always_show_image (button, always_show_image);
 }
 
 static void
@@ -1071,7 +1097,9 @@ gtk_button_set_related_action (GtkButton *button,
     g_signal_connect_after (button, "clicked",
                             G_CALLBACK (gtk_real_button_clicked), NULL);
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_activatable_do_set_related_action (GTK_ACTIVATABLE (button), action);
+  G_GNUC_END_IGNORE_DEPRECATIONS
 
   priv->action = action;
 }
@@ -1086,7 +1114,10 @@ gtk_button_set_use_action_appearance (GtkButton *button,
     {
       priv->use_action_appearance = use_appearance;
 
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_activatable_sync_action_properties (GTK_ACTIVATABLE (button), priv->action);
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
     }
 }
 

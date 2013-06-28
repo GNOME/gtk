@@ -28,6 +28,8 @@
 
 #include "config.h"
 
+#define GDK_DISABLE_DEPRECATION_WARNINGS
+
 #include <string.h>
 #include "gtkaccellabel.h"
 #include "gtkactivatable.h"
@@ -503,6 +505,8 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
    * gtk_ui_manager_get_widget().
    *
    * Since: 2.4
+   *
+   * Deprecated: 3.10
    */
   ui_manager_signals[ADD_WIDGET] =
     g_signal_new (I_("add-widget"),
@@ -522,6 +526,8 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
    * changes.
    *
    * Since: 2.4
+   *
+   * Deprecated: 3.10
    */
   ui_manager_signals[ACTIONS_CHANGED] =
     g_signal_new (I_("actions-changed"),
@@ -546,6 +552,8 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
    * statusbar.
    *
    * Since: 2.4
+   *
+   * Deprecated: 3.10
    */
   ui_manager_signals[CONNECT_PROXY] =
     g_signal_new (I_("connect-proxy"),
@@ -568,6 +576,8 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
    * from an action in the group. 
    *
    * Since: 2.4
+   *
+   * Deprecated: 3.10
    */
   ui_manager_signals[DISCONNECT_PROXY] =
     g_signal_new (I_("disconnect-proxy"),
@@ -592,6 +602,8 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
    * just before any action is activated.
    *
    * Since: 2.4
+   *
+   * Deprecated: 3.10
    */
   ui_manager_signals[PRE_ACTIVATE] =
     g_signal_new (I_("pre-activate"),
@@ -615,6 +627,8 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
    * just after any action is activated.
    *
    * Since: 2.4
+   *
+   * Deprecated: 3.10
    */
   ui_manager_signals[POST_ACTIVATE] =
     g_signal_new (I_("post-activate"),
@@ -847,6 +861,8 @@ gtk_ui_manager_real_get_action (GtkUIManager *manager,
  * Return value: a new ui manager object.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  **/
 GtkUIManager*
 gtk_ui_manager_new (void)
@@ -968,6 +984,8 @@ cb_proxy_post_activate (GtkActionGroup *group,
  * list.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  **/
 void
 gtk_ui_manager_insert_action_group (GtkUIManager   *manager,
@@ -1025,6 +1043,8 @@ gtk_ui_manager_insert_action_group (GtkUIManager   *manager,
  * with @manager.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  **/
 void
 gtk_ui_manager_remove_action_group (GtkUIManager   *manager,
@@ -1063,6 +1083,8 @@ gtk_ui_manager_remove_action_group (GtkUIManager   *manager,
  *   and should not be modified.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  **/
 GList *
 gtk_ui_manager_get_action_groups (GtkUIManager *manager)
@@ -1081,6 +1103,8 @@ gtk_ui_manager_get_action_groups (GtkUIManager *manager)
  * Return value: (transfer none): the #GtkAccelGroup.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  **/
 GtkAccelGroup *
 gtk_ui_manager_get_accel_group (GtkUIManager *manager)
@@ -1113,6 +1137,8 @@ gtk_ui_manager_get_accel_group (GtkUIManager *manager)
  *   was found.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  **/
 GtkWidget *
 gtk_ui_manager_get_widget (GtkUIManager *manager,
@@ -1169,6 +1195,8 @@ collect_toplevels (GNode   *node,
  * all toplevel widgets of the requested types.  Free the returned list with g_slist_free().
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  **/
 GSList *
 gtk_ui_manager_get_toplevels (GtkUIManager         *manager,
@@ -1205,6 +1233,8 @@ gtk_ui_manager_get_toplevels (GtkUIManager         *manager,
  *     or %NULL if no widget was found.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  **/
 GtkAction *
 gtk_ui_manager_get_action (GtkUIManager *manager,
@@ -1414,6 +1444,8 @@ free_node (GNode *node)
  * Return value: an unused merge id.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  **/
 guint
 gtk_ui_manager_new_merge_id (GtkUIManager *manager)
@@ -1938,6 +1970,8 @@ add_ui_from_string (GtkUIManager *manager,
  *   the return value is 0.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  **/
 guint
 gtk_ui_manager_add_ui_from_string (GtkUIManager *manager,
@@ -1980,6 +2014,8 @@ gtk_ui_manager_add_ui_from_string (GtkUIManager *manager,
  *   the return value is 0.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  **/
 guint
 gtk_ui_manager_add_ui_from_file (GtkUIManager *manager,
@@ -2015,6 +2051,8 @@ gtk_ui_manager_add_ui_from_file (GtkUIManager *manager,
  *   the return value is 0.
  *
  * Since: 3.4
+ *
+ * Deprecated: 3.10
  **/
 guint
 gtk_ui_manager_add_ui_from_resource (GtkUIManager *manager,
@@ -2058,6 +2096,8 @@ gtk_ui_manager_add_ui_from_resource (GtkUIManager *manager,
  * before or after this item, depending on @top.
  * 
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  **/
 void
 gtk_ui_manager_add_ui (GtkUIManager        *manager,
@@ -2216,6 +2256,8 @@ remove_ui (GNode   *node,
  * Unmerges the part of @manager<!-- -->s content identified by @merge_id.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  **/
 void
 gtk_ui_manager_remove_ui (GtkUIManager *manager, 
@@ -3165,6 +3207,8 @@ queue_update (GtkUIManager *manager)
  * ]|
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  **/
 void
 gtk_ui_manager_ensure_update (GtkUIManager *manager)
@@ -3331,6 +3375,8 @@ gtk_ui_manager_buildable_custom_tag_end (GtkBuildable *buildable,
  * the merged UI.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  **/
 gchar *
 gtk_ui_manager_get_ui (GtkUIManager *manager)

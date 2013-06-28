@@ -28,6 +28,8 @@
 
 #include "config.h"
 
+#define GDK_DISABLE_DEPRECATION_WARNINGS
+
 #include "gtkintl.h"
 #include "gtktoggleaction.h"
 #include "gtktoggletoolbutton.h"
@@ -109,6 +111,8 @@ gtk_toggle_action_class_init (GtkToggleActionClass *klass)
    *
    * This is an appearance property and thus only applies if 
    * #GtkActivatable:use-action-appearance is %TRUE.
+   *
+   * Deprecated: 3.10
    */
   g_object_class_install_property (gobject_class,
                                    PROP_DRAW_AS_RADIO,
@@ -124,6 +128,8 @@ gtk_toggle_action_class_init (GtkToggleActionClass *klass)
    * Whether the toggle action should be active.
    *
    * Since: 2.10
+   *
+   * Deprecated: 3.10
    */
   g_object_class_install_property (gobject_class,
                                    PROP_ACTIVE,
@@ -138,6 +144,8 @@ gtk_toggle_action_class_init (GtkToggleActionClass *klass)
    *
    * Should be connected if you wish to perform an action
    * whenever the #GtkToggleAction state is changed.
+   *
+   * Deprecated: 3.10
    */
   action_signals[TOGGLED] =
     g_signal_new (I_("toggled"),
@@ -177,6 +185,8 @@ gtk_toggle_action_init (GtkToggleAction *action)
  * Return value: a new #GtkToggleAction
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  */
 GtkToggleAction *
 gtk_toggle_action_new (const gchar *name,
@@ -261,6 +271,8 @@ gtk_toggle_action_activate (GtkAction *action)
  * Emits the "toggled" signal on the toggle action.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_toggle_action_toggled (GtkToggleAction *action)
@@ -278,6 +290,8 @@ gtk_toggle_action_toggled (GtkToggleAction *action)
  * Sets the checked state on the toggle action.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_toggle_action_set_active (GtkToggleAction *action, 
@@ -300,6 +314,8 @@ gtk_toggle_action_set_active (GtkToggleAction *action,
  * Returns: the checked state of the toggle action
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  */
 gboolean
 gtk_toggle_action_get_active (GtkToggleAction *action)
@@ -319,6 +335,8 @@ gtk_toggle_action_get_active (GtkToggleAction *action)
  * Sets whether the action should have proxies like a radio action.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_toggle_action_set_draw_as_radio (GtkToggleAction *action, 
@@ -345,6 +363,8 @@ gtk_toggle_action_set_draw_as_radio (GtkToggleAction *action,
  * Returns: whether the action should have proxies like a radio action.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.10
  */
 gboolean
 gtk_toggle_action_get_draw_as_radio (GtkToggleAction *action)
@@ -374,6 +394,8 @@ create_menu_item (GtkAction *action)
  *
  * Sets the #GtkToggleAction:active property directly. This function does
  * not emit signals or notifications: it is left to the caller to do so.
+ *
+ * Deprecated: 3.10
  */
 void
 _gtk_toggle_action_set_active (GtkToggleAction *toggle_action,
