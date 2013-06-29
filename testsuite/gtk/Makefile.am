@@ -54,6 +54,7 @@ TEST_PROGS += 			\
 	treepath		\
 	treeview		\
 	window			\
+	displayclose		\
 	$(NULL)
 
 if OS_UNIX
