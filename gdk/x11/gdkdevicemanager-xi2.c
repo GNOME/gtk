@@ -491,6 +491,8 @@ gdk_x11_device_manager_xi2_constructed (GObject *object)
   XIEventMask event_mask;
   unsigned char mask[2] = { 0 };
 
+  G_OBJECT_CLASS (gdk_x11_device_manager_xi2_parent_class)->constructed (object);
+
   device_manager = GDK_X11_DEVICE_MANAGER_XI2 (object);
   display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (object));
   xdisplay = GDK_DISPLAY_XDISPLAY (display);
