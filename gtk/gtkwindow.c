@@ -5046,11 +5046,13 @@ update_window_buttons (GtkWindow *window)
 {
   GtkWindowPrivate *priv = window->priv;
   gboolean maximized;
+  GtkTextDirection direction;
 
   if (priv->title_box == NULL)
     return;
 
   maximized = gtk_window_get_maximized (window);
+  direction = gtk_widget_get_direction (GTK_WIDGET (window));
 
   if (priv->fullscreen ||
       (maximized && priv->hide_titlebar_when_maximized))
@@ -5107,8 +5109,23 @@ update_window_buttons (GtkWindow *window)
         {
           for (i = 0; i < 2; i++)
             {
+              GtkWidget *box;
+
               if (tokens[i] == NULL)
                 continue;
+
+              box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+              gtk_widget_show (box);
+              gtk_widget_set_margin_bottom (box, 6);
+              if ((direction == GTK_TEXT_DIR_LTR && i == 0) ||
+                   (direction == GTK_TEXT_DIR_RTL && i == 1))
+                gtk_style_context_add_class (gtk_widget_get_style_context (box), "left");
+              else
+                gtk_style_context_add_class (gtk_widget_get_style_context (box), "right");
+              if (i == 0)
+                gtk_header_bar_pack_start (GTK_HEADER_BAR (priv->title_box), box);
+              else
+                gtk_header_bar_pack_end (GTK_HEADER_BAR (priv->title_box), box);
 
               t = g_strsplit (tokens[i], ",", -1);
               for (j = 0; t[j]; j++)
@@ -5181,12 +5198,7 @@ update_window_buttons (GtkWindow *window)
                     }
 
                   if (button)
-                    {
-                      if (i == 0)
-                        gtk_header_bar_pack_start (GTK_HEADER_BAR (priv->title_box), button);
-                      else
-                        gtk_header_bar_pack_end (GTK_HEADER_BAR (priv->title_box), button);
-                    }
+                    gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 0);
                 }
               g_strfreev (t);
             }
