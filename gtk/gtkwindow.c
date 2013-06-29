@@ -5119,6 +5119,7 @@ update_window_buttons (GtkWindow *window)
                   if (strcmp (t[j], "icon") == 0)
                     {
                       button = gtk_image_new ();
+                      gtk_style_context_add_class (gtk_widget_get_style_context (button), "titlebutton");
                       gtk_widget_set_size_request (button, 20, 20);
                       gtk_widget_show (button);
                       if (icon != NULL)
@@ -5135,6 +5136,7 @@ update_window_buttons (GtkWindow *window)
                       priv->gdk_type_hint == GDK_WINDOW_TYPE_HINT_NORMAL)
                     {
                       button = gtk_button_new ();
+                      gtk_style_context_add_class (gtk_widget_get_style_context (button), "titlebutton");
                       image = gtk_image_new_from_icon_name ("window-minimize-symbolic", GTK_ICON_SIZE_MENU);
                       g_object_set (image, "use-fallback", TRUE, NULL);
                       gtk_container_add (GTK_CONTAINER (button), image);
@@ -5152,6 +5154,7 @@ update_window_buttons (GtkWindow *window)
 
                       icon_name = maximized ? "window-restore-symbolic" : "window-maximize-symbolic";
                       button = gtk_button_new ();
+                      gtk_style_context_add_class (gtk_widget_get_style_context (button), "titlebutton");
                       image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
                       g_object_set (image, "use-fallback", TRUE, NULL);
                       gtk_container_add (GTK_CONTAINER (button), image);
@@ -5167,6 +5170,7 @@ update_window_buttons (GtkWindow *window)
                     {
                       button = gtk_button_new ();
                       image = gtk_image_new_from_icon_name ("window-delete-symbolic", GTK_ICON_SIZE_MENU);
+                      gtk_style_context_add_class (gtk_widget_get_style_context (button), "titlebutton");
                       g_object_set (image, "use-fallback", TRUE, NULL);
                       gtk_container_add (GTK_CONTAINER (button), image);
                       gtk_widget_set_can_focus (button, FALSE);
