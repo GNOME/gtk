@@ -574,7 +574,7 @@ main (int argc, char **argv)
   const char *basedir;
   
   /* I don't want to fight fuzzy scaling algorithms in GPUs,
-   * so unles you explicitly set it to something else, we
+   * so unless you explicitly set it to something else, we
    * will use Cairo's image surface.
    */
   g_setenv ("GDK_RENDERING", "image", FALSE);
