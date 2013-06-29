@@ -348,6 +348,8 @@ GDK_AVAILABLE_IN_ALL
 void     gtk_window_fullscreen    (GtkWindow *window);
 GDK_AVAILABLE_IN_ALL
 void     gtk_window_unfullscreen  (GtkWindow *window);
+GDK_AVAILABLE_IN_3_10
+void     gtk_window_close         (GtkWindow *window);
 GDK_AVAILABLE_IN_ALL
 void     gtk_window_set_keep_above    (GtkWindow *window, gboolean setting);
 GDK_AVAILABLE_IN_ALL

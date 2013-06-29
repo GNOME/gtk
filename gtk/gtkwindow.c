@@ -1235,7 +1235,7 @@ gtk_window_title_max_clicked (GtkWidget *widget, gpointer data)
 static gboolean
 send_delete_event (gpointer data)
 {
-  GtkWidget *window = GTK_WIDGET (data);
+  GtkWidget *window = data;
   GdkEvent *event;
 
   event = gdk_event_new (GDK_DELETE);
@@ -1249,10 +1249,25 @@ send_delete_event (gpointer data)
   return G_SOURCE_REMOVE;
 }
 
-static void
-gtk_window_title_close_clicked (GtkWidget *button, gpointer data)
+/**
+ * gtk_window_close:
+ * @window: a #GtkWindow
+ *
+ * Requests that the window is closed, similar to what happens
+ * when a window manager close button is clicked.
+ *
+ * This function can be used with close buttons in custom
+ * titlebars.
+ *
+ * Since: 3.10
+ */
+void
+gtk_window_close (GtkWindow *window)
 {
-  gdk_threads_add_idle (send_delete_event, data);
+  if (!gtk_widget_get_realized (GTK_WIDGET (window)))
+    return;
+
+  gdk_threads_add_idle (send_delete_event, window);
 }
 
 static void
@@ -5157,7 +5172,7 @@ update_window_buttons (GtkWindow *window)
                       gtk_widget_set_can_focus (button, FALSE);
                       gtk_widget_show_all (button);
                       g_signal_connect (button, "clicked",
-                                        G_CALLBACK (gtk_window_title_close_clicked), window);
+                                        G_CALLBACK (gtk_window_close), window);
                       priv->title_close_button = button;
                     }
 
