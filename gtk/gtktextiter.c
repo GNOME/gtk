@@ -4859,6 +4859,9 @@ strbreakup (const char *string,
  * may wish to use @limit to avoid locking up your UI on large
  * buffers.
  *
+ * @match_start will never be set to a #GtkTextIter located before @iter, even if
+ * there is a possible @match_end after or at @iter.
+ *
  * Returns: whether a match was found
  **/
 gboolean
@@ -5180,7 +5183,10 @@ lines_window_free (LinesWindow *win)
  *
  * Same as gtk_text_iter_forward_search(), but moves backward.
  *
- * Return value: whether a match was found
+ * @match_end will never be set to a #GtkTextIter located after @iter, even if
+ * there is a possible @match_start before or at @iter.
+ *
+ * Returns: whether a match was found
  **/
 gboolean
 gtk_text_iter_backward_search (const GtkTextIter *iter,
