@@ -1155,11 +1155,14 @@ gtk_text_iter_get_toggled_tags  (const GtkTextIter  *iter,
  * @tag: (allow-none): a #GtkTextTag, or %NULL
  *
  * Returns %TRUE if @tag is toggled on at exactly this point. If @tag
- * is %NULL, returns %TRUE if any tag is toggled on at this point. Note
- * that the gtk_text_iter_begins_tag () returns %TRUE if @iter is the
- * <emphasis>start</emphasis> of the tagged range;
- * gtk_text_iter_has_tag () tells you whether an iterator is
- * <emphasis>within</emphasis> a tagged range.
+ * is %NULL, returns %TRUE if any tag is toggled on at this point.
+ *
+ * Note that if gtk_text_iter_begins_tag() returns %TRUE, it means that @iter is
+ * at the beginning of the tagged range, and that the
+ * <emphasis>character</emphasis> at @iter is inside the tagged range. In other
+ * words, unlike gtk_text_iter_ends_tag(), if gtk_text_iter_begins_tag() returns
+ * %TRUE, gtk_text_iter_has_tag() will also return %TRUE for the same
+ * parameters.
  *
  * Return value: whether @iter is the start of a range tagged with @tag
  **/
@@ -1201,14 +1204,15 @@ gtk_text_iter_begins_tag    (const GtkTextIter  *iter,
  * @tag: (allow-none): a #GtkTextTag, or %NULL
  *
  * Returns %TRUE if @tag is toggled off at exactly this point. If @tag
- * is %NULL, returns %TRUE if any tag is toggled off at this point. Note
- * that the gtk_text_iter_ends_tag () returns %TRUE if @iter is the
- * <emphasis>end</emphasis> of the tagged range;
- * gtk_text_iter_has_tag () tells you whether an iterator is
- * <emphasis>within</emphasis> a tagged range.
+ * is %NULL, returns %TRUE if any tag is toggled off at this point.
+ *
+ * Note that if gtk_text_iter_ends_tag() returns %TRUE, it means that @iter is
+ * at the end of the tagged range, but that the <emphasis>character</emphasis>
+ * at @iter is <emphasis>outside</emphasis> the tagged range. In other words,
+ * unlike gtk_text_iter_begins_tag(), if gtk_text_iter_ends_tag() returns %TRUE,
+ * gtk_text_iter_has_tag() will return %FALSE for the same parameters.
  *
  * Return value: whether @iter is the end of a range tagged with @tag
- *
  **/
 gboolean
 gtk_text_iter_ends_tag   (const GtkTextIter  *iter,
@@ -1289,7 +1293,8 @@ gtk_text_iter_toggles_tag (const GtkTextIter  *iter,
  * @iter: an iterator
  * @tag: a #GtkTextTag
  *
- * Returns %TRUE if @iter is within a range tagged with @tag.
+ * Returns %TRUE if @iter points to a character that is part of a range tagged
+ * with @tag. See also gtk_text_iter_begins_tag() and gtk_text_iter_ends_tag().
  *
  * Return value: whether @iter is tagged with @tag
  **/
