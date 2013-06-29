@@ -5169,7 +5169,7 @@ update_window_buttons (GtkWindow *window)
                            priv->gdk_type_hint == GDK_WINDOW_TYPE_HINT_NORMAL)
                     {
                       button = gtk_button_new ();
-                      image = gtk_image_new_from_icon_name ("window-delete-symbolic", GTK_ICON_SIZE_MENU);
+                      image = gtk_image_new_from_icon_name ("window-close-symbolic", GTK_ICON_SIZE_MENU);
                       gtk_style_context_add_class (gtk_widget_get_style_context (button), "titlebutton");
                       g_object_set (image, "use-fallback", TRUE, NULL);
                       gtk_container_add (GTK_CONTAINER (button), image);
