@@ -88,11 +88,27 @@ gdk_x11_visual_finalize (GObject *object)
 }
 
 static void
+gdk_x11_visual_dispose (GObject *object)
+{
+  GdkVisual *visual = (GdkVisual *)object;
+  GdkX11Visual *x11_visual = (GdkX11Visual *)object;
+
+  if (x11_visual->colormap != None)
+    {
+      XFreeColormap (GDK_SCREEN_XDISPLAY (visual->screen), x11_visual->colormap);
+      x11_visual->colormap = None;
+    }
+
+  G_OBJECT_CLASS (gdk_x11_visual_parent_class)->dispose (object);
+}
+
+static void
 gdk_x11_visual_class_init (GdkX11VisualClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
   object_class->finalize = gdk_x11_visual_finalize;
+  object_class->dispose = gdk_x11_visual_dispose;
 }
 
 void
