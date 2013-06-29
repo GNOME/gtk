@@ -149,6 +149,9 @@ gdk_x11_screen_dispose (GObject *object)
   if (x11_screen->root_window)
     _gdk_window_destroy (x11_screen->root_window, TRUE);
 
+  for (i = 0; i < x11_screen->nvisuals; i++)
+    g_object_run_dispose (G_OBJECT (x11_screen->visuals[i]));
+
   G_OBJECT_CLASS (gdk_x11_screen_parent_class)->dispose (object);
 
   x11_screen->xdisplay = NULL;
