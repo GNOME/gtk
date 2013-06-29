@@ -5198,7 +5198,8 @@ create_decoration (GtkWidget *widget)
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = window->priv;
   GtkStyleContext *context;
-  const gchar *title;
+  gchar *title;
+  GtkWidget *label;
 
   /* Client decorations already created */
   if (priv->client_decorated)
@@ -5244,11 +5245,17 @@ create_decoration (GtkWidget *widget)
       gtk_style_context_add_class (context, "titlebar");
       gtk_widget_set_parent (priv->title_box, GTK_WIDGET (window));
 
-      if (priv->title)
-        title = priv->title;
-      else
-        title = get_default_title ();
-      gtk_header_bar_set_title (GTK_HEADER_BAR (priv->title_box), title);
+      title = g_markup_printf_escaped ("<b>%s</b>",
+                                       priv->title ? priv->title : get_default_title ());
+      label = gtk_label_new (title);
+      g_free (title);
+      g_object_set (label,
+                    "use-markup", TRUE,
+                    "ellipsize", PANGO_ELLIPSIZE_END,
+                    "margin", 6,
+                    NULL);
+
+      gtk_header_bar_set_custom_title (GTK_HEADER_BAR (priv->title_box), label);
 
       gtk_widget_show_all (priv->title_box);
     }
