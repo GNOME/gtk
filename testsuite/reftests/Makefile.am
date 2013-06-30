@@ -104,6 +104,8 @@ testdata = \
 	border-style-none.css \
 	border-style-none.ref.ui \
 	border-style-none.ui \
+	box-child-expand.ref.ui \
+	box-child-expand.ui \
 	box-packing.css \
 	box-packing.ref.ui \
 	box-packing.ui \
