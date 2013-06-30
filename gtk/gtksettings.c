@@ -915,6 +915,13 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              NULL);
   g_assert (result == PROP_COLOR_HASH);
 
+  /**
+   * GtkSettings:gtk-file-chooser-backend:
+   *
+   * Name of the GtkFileChooser backend to use by default.
+   *
+   * Deprecated: 3.10: This setting is ignored. #GtkFileChooser uses GIO by default.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-file-chooser-backend",
                                                                   P_("Default file chooser backend"),

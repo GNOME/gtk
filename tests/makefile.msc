@@ -37,7 +37,6 @@ all :	\
 # Test programs:
 #
 TESTAPPS = \
-#	autotestfilechooser autotestfilesystem \
 #	buildertest floatingtest \
 	flicker \
 #	objecttests \

@@ -38,7 +38,6 @@ static const struct {
   {"Gtk/IMPreeditStyle",      "gtk-im-preedit-style"},
   {"Gtk/IMStatusStyle",       "gtk-im-status-style"},
   {"Gtk/Modules",             "gtk-modules"},
-  {"Gtk/FileChooserBackend",  "gtk-file-chooser-backend"},
   {"Gtk/CursorThemeName",     "gtk-cursor-theme-name"},
   {"Gtk/CursorThemeSize",     "gtk-cursor-theme-size"},
   {"Gtk/TimeoutInitial",      "gtk-timeout-initial"},
