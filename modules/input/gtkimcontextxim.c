@@ -234,49 +234,6 @@ reinitialize_all_ics (GtkXIMInfo *info)
 }
 
 static void
-status_style_change (GtkXIMInfo *info)
-{
-  GtkIMStatusStyle status_style;
-  
-  g_object_get (info->settings,
-		"gtk-im-status-style", &status_style,
-		NULL);
-  if (status_style == GTK_IM_STATUS_CALLBACK)
-    info->status_style_setting = XIMStatusCallbacks;
-  else if (status_style == GTK_IM_STATUS_NOTHING)
-    info->status_style_setting = XIMStatusNothing;
-  else if (status_style == GTK_IM_STATUS_NONE)
-    info->status_style_setting = XIMStatusNone;
-  else
-    return;
-
-  setup_styles (info);
-  
-  reinitialize_all_ics (info);
-}
-
-static void
-preedit_style_change (GtkXIMInfo *info)
-{
-  GtkIMPreeditStyle preedit_style;
-  g_object_get (info->settings,
-		"gtk-im-preedit-style", &preedit_style,
-		NULL);
-  if (preedit_style == GTK_IM_PREEDIT_CALLBACK)
-    info->preedit_style_setting = XIMPreeditCallbacks;
-  else if (preedit_style == GTK_IM_PREEDIT_NOTHING)
-    info->preedit_style_setting = XIMPreeditNothing;
-  else if (preedit_style == GTK_IM_PREEDIT_NONE)
-    info->preedit_style_setting = XIMPreeditNone;
-  else
-    return;
-
-  setup_styles (info);
-  
-  reinitialize_all_ics (info);
-}
-
-static void
 setup_styles (GtkXIMInfo *info)
 {
   int i;
@@ -324,16 +281,6 @@ setup_im (GtkXIMInfo *info)
 		XNQueryICValuesList, &ic_values,
 		NULL);
 
-  info->settings = gtk_settings_get_for_screen (info->screen);
-  info->status_set = g_signal_connect_swapped (info->settings,
-					       "notify::gtk-im-status-style",
-					       G_CALLBACK (status_style_change),
-					       info);
-  info->preedit_set = g_signal_connect_swapped (info->settings,
-						"notify::gtk-im-preedit-style",
-						G_CALLBACK (preedit_style_change),
-						info);
-
   info->supports_string_conversion = FALSE;
   if (ic_values)
     {
@@ -357,8 +304,10 @@ setup_im (GtkXIMInfo *info)
       XFree (ic_values);
     }
 
-  status_style_change (info);
-  preedit_style_change (info);
+  info->status_style_setting = XIMStatusCallbacks;
+  info->preedit_style_setting = XIMPreeditCallbacks;
+  setup_styles (info);
+  reinitialize_all_ics (info);
 
   display = gdk_screen_get_display (info->screen);
   info->display_closed_cb = g_signal_connect (display, "closed",

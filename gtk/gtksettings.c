@@ -1438,6 +1438,13 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              NULL);
   g_assert (result == PROP_COLOR_PALETTE);
 
+  /**
+   * GtkSettings:gtk-im-preedit-style:
+   *
+   * How to draw the input method preedit string.
+   *
+   * Deprecated: 3.10: This setting is ignored.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_enum ("gtk-im-preedit-style",
                                                                 P_("IM Preedit style"),
@@ -1448,6 +1455,13 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              gtk_rc_property_parse_enum);
   g_assert (result == PROP_IM_PREEDIT_STYLE);
 
+  /**
+   * GtkSettings:gtk-im-status-style:
+   *
+   * How to draw the input method statusbar.
+   *
+   * Deprecated: 3.10: This setting is ignored.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_enum ("gtk-im-status-style",
                                                                 P_("IM Status style"),
