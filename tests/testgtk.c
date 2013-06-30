@@ -1216,6 +1216,7 @@ set_toolbar_disable (GtkWidget *widget,
   g_object_set (settings, "gtk-enable-tooltips", FALSE, NULL);
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 static GtkActionEntry create_toolbar_items[] = {
     { NULL, GTK_STOCK_NEW, NULL, NULL, "Stock icon: New",
       G_CALLBACK (set_toolbar_small_stock) },
@@ -1254,6 +1255,7 @@ static GtkActionEntry create_toolbar_items[] = {
     { NULL, NULL, "Bar", NULL, "Bar tooltip",
       NULL },
 };
+G_GNUC_END_IGNORE_DEPRECATIONS;
 
 static void
 create_toolbar (GtkWidget *widget)
