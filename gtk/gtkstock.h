@@ -88,6 +88,14 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
 					    gpointer          data,
 					    GDestroyNotify    notify);
 
+/* the following type exists just so we can get deprecation warnings */
+#ifndef GDK_DISABLE_DEPRECATION_WARNINGS
+#if GDK_VERSION_MIN_REQUIRED >= GDK_VERSION_3_10
+G_DEPRECATED
+#endif
+#endif
+typedef char * GtkStock;
+
 /* Stock IDs (not all are stock items; some are images only) */
 /**
  * GTK_STOCK_ABOUT:
@@ -99,7 +107,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;help-about&quot; or the label &quot;_About&quot;.
  */
-#define GTK_STOCK_ABOUT            "gtk-about"
+#define GTK_STOCK_ABOUT            ((GtkStock)"gtk-about")
 
 /**
  * GTK_STOCK_ADD:
@@ -109,7 +117,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;list-add&quot; or the label &quot;_Add&quot;.
  */
-#define GTK_STOCK_ADD              "gtk-add"
+#define GTK_STOCK_ADD              ((GtkStock)"gtk-add")
 
 /**
  * GTK_STOCK_APPLY:
@@ -119,7 +127,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Do not use an icon. Use label &quot;_Apply&quot;.
  */
-#define GTK_STOCK_APPLY            "gtk-apply"
+#define GTK_STOCK_APPLY            ((GtkStock)"gtk-apply")
 
 /**
  * GTK_STOCK_BOLD:
@@ -129,7 +137,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;format-text-bold&quot;.
  */
-#define GTK_STOCK_BOLD             "gtk-bold"
+#define GTK_STOCK_BOLD             ((GtkStock)"gtk-bold")
 
 /**
  * GTK_STOCK_CANCEL:
@@ -139,7 +147,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Do not use an icon. Use label &quot;_Cancel&quot;.
  */
-#define GTK_STOCK_CANCEL           "gtk-cancel"
+#define GTK_STOCK_CANCEL           ((GtkStock)"gtk-cancel")
 
 /**
  * GTK_STOCK_CAPS_LOCK_WARNING:
@@ -151,7 +159,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;dialog-warning-symbolic&quot;.
  */
-#define GTK_STOCK_CAPS_LOCK_WARNING "gtk-caps-lock-warning"
+#define GTK_STOCK_CAPS_LOCK_WARNING ((GtkStock)"gtk-caps-lock-warning")
 
 /**
  * GTK_STOCK_CDROM:
@@ -161,7 +169,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;media-optical&quot;.
  */
-#define GTK_STOCK_CDROM            "gtk-cdrom"
+#define GTK_STOCK_CDROM            ((GtkStock)"gtk-cdrom")
 
 /**
  * GTK_STOCK_CLEAR:
@@ -171,7 +179,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;edit-clear&quot;.
  */
-#define GTK_STOCK_CLEAR            "gtk-clear"
+#define GTK_STOCK_CLEAR            ((GtkStock)"gtk-clear")
 
 /**
  * GTK_STOCK_CLOSE:
@@ -181,7 +189,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;window-close&quot; or the label &quot;_Close&quot;.
  */
-#define GTK_STOCK_CLOSE            "gtk-close"
+#define GTK_STOCK_CLOSE            ((GtkStock)"gtk-close")
 
 /**
  * GTK_STOCK_COLOR_PICKER:
@@ -193,7 +201,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10
  */
-#define GTK_STOCK_COLOR_PICKER     "gtk-color-picker"
+#define GTK_STOCK_COLOR_PICKER     ((GtkStock)"gtk-color-picker")
 
 /**
  * GTK_STOCK_CONNECT:
@@ -205,7 +213,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10
  */
-#define GTK_STOCK_CONNECT          "gtk-connect"
+#define GTK_STOCK_CONNECT          ((GtkStock)"gtk-connect")
 
 /**
  * GTK_STOCK_CONVERT:
@@ -215,7 +223,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10
  */
-#define GTK_STOCK_CONVERT          "gtk-convert"
+#define GTK_STOCK_CONVERT          ((GtkStock)"gtk-convert")
 
 /**
  * GTK_STOCK_COPY:
@@ -225,7 +233,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Do not use an icon. Use label &quot;_Copy&quot;.
  */
-#define GTK_STOCK_COPY             "gtk-copy"
+#define GTK_STOCK_COPY             ((GtkStock)"gtk-copy")
 
 /**
  * GTK_STOCK_CUT:
@@ -235,7 +243,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Do not use an icon. Use label &quot;Cu_t&quot;.
  */
-#define GTK_STOCK_CUT              "gtk-cut"
+#define GTK_STOCK_CUT              ((GtkStock)"gtk-cut")
 
 /**
  * GTK_STOCK_DELETE:
@@ -245,7 +253,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Do not use an icon. Use label &quot;_Delete&quot;.
  */
-#define GTK_STOCK_DELETE           "gtk-delete"
+#define GTK_STOCK_DELETE           ((GtkStock)"gtk-delete")
 
 /**
  * GTK_STOCK_DIALOG_AUTHENTICATION:
@@ -257,7 +265,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;dialog-password&quot;.
  */
-#define GTK_STOCK_DIALOG_AUTHENTICATION "gtk-dialog-authentication"
+#define GTK_STOCK_DIALOG_AUTHENTICATION ((GtkStock)"gtk-dialog-authentication")
 
 /**
  * GTK_STOCK_DIALOG_INFO:
@@ -267,7 +275,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;dialog-information&quot;.
  */
-#define GTK_STOCK_DIALOG_INFO      "gtk-dialog-info"
+#define GTK_STOCK_DIALOG_INFO      ((GtkStock)"gtk-dialog-info")
 
 /**
  * GTK_STOCK_DIALOG_WARNING:
@@ -277,7 +285,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;dialog-warning&quot;.
  */
-#define GTK_STOCK_DIALOG_WARNING   "gtk-dialog-warning"
+#define GTK_STOCK_DIALOG_WARNING   ((GtkStock)"gtk-dialog-warning")
 
 /**
  * GTK_STOCK_DIALOG_ERROR:
@@ -287,7 +295,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;dialog-error&quot;.
  */
-#define GTK_STOCK_DIALOG_ERROR     "gtk-dialog-error"
+#define GTK_STOCK_DIALOG_ERROR     ((GtkStock)"gtk-dialog-error")
 
 /**
  * GTK_STOCK_DIALOG_QUESTION:
@@ -297,7 +305,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;dialog-question&quot;.
  */
-#define GTK_STOCK_DIALOG_QUESTION  "gtk-dialog-question"
+#define GTK_STOCK_DIALOG_QUESTION  ((GtkStock)"gtk-dialog-question")
 
 /**
  * GTK_STOCK_DIRECTORY:
@@ -309,7 +317,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;folder&quot;.
  */
-#define GTK_STOCK_DIRECTORY        "gtk-directory"
+#define GTK_STOCK_DIRECTORY        ((GtkStock)"gtk-directory")
 
 /**
  * GTK_STOCK_DISCARD:
@@ -320,7 +328,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10
  */
-#define GTK_STOCK_DISCARD          "gtk-discard"
+#define GTK_STOCK_DISCARD          ((GtkStock)"gtk-discard")
 
 /**
  * GTK_STOCK_DISCONNECT:
@@ -332,7 +340,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10
  */
-#define GTK_STOCK_DISCONNECT       "gtk-disconnect"
+#define GTK_STOCK_DISCONNECT       ((GtkStock)"gtk-disconnect")
 
 /**
  * GTK_STOCK_DND:
@@ -342,7 +350,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10
  */
-#define GTK_STOCK_DND              "gtk-dnd"
+#define GTK_STOCK_DND              ((GtkStock)"gtk-dnd")
 
 /**
  * GTK_STOCK_DND_MULTIPLE:
@@ -352,7 +360,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10
  */
-#define GTK_STOCK_DND_MULTIPLE     "gtk-dnd-multiple"
+#define GTK_STOCK_DND_MULTIPLE     ((GtkStock)"gtk-dnd-multiple")
 
 /**
  * GTK_STOCK_EDIT:
@@ -364,7 +372,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10
  */
-#define GTK_STOCK_EDIT             "gtk-edit"
+#define GTK_STOCK_EDIT             ((GtkStock)"gtk-edit")
 
 /**
  * GTK_STOCK_EXECUTE:
@@ -374,7 +382,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;system-run&quot;.
  */
-#define GTK_STOCK_EXECUTE          "gtk-execute"
+#define GTK_STOCK_EXECUTE          ((GtkStock)"gtk-execute")
 
 /**
  * GTK_STOCK_FILE:
@@ -388,7 +396,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;text-x-generic&quot;.
  */
-#define GTK_STOCK_FILE             "gtk-file"
+#define GTK_STOCK_FILE             ((GtkStock)"gtk-file")
 
 /**
  * GTK_STOCK_FIND:
@@ -398,7 +406,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;edit-find&quot;.
  */
-#define GTK_STOCK_FIND             "gtk-find"
+#define GTK_STOCK_FIND             ((GtkStock)"gtk-find")
 
 /**
  * GTK_STOCK_FIND_AND_REPLACE:
@@ -408,7 +416,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;edit-find-replace&quot;.
  */
-#define GTK_STOCK_FIND_AND_REPLACE "gtk-find-and-replace"
+#define GTK_STOCK_FIND_AND_REPLACE ((GtkStock)"gtk-find-and-replace")
 
 /**
  * GTK_STOCK_FLOPPY:
@@ -418,7 +426,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10
  */
-#define GTK_STOCK_FLOPPY           "gtk-floppy"
+#define GTK_STOCK_FLOPPY           ((GtkStock)"gtk-floppy")
 
 /**
  * GTK_STOCK_FULLSCREEN:
@@ -430,7 +438,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;view-fullscreen&quot;.
  */
-#define GTK_STOCK_FULLSCREEN       "gtk-fullscreen"
+#define GTK_STOCK_FULLSCREEN       ((GtkStock)"gtk-fullscreen")
 
 /**
  * GTK_STOCK_GOTO_BOTTOM:
@@ -440,7 +448,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;go-bottom&quot;.
  */
-#define GTK_STOCK_GOTO_BOTTOM      "gtk-goto-bottom"
+#define GTK_STOCK_GOTO_BOTTOM      ((GtkStock)"gtk-goto-bottom")
 
 /**
  * GTK_STOCK_GOTO_FIRST:
@@ -452,7 +460,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;go-first&quot;.
  */
-#define GTK_STOCK_GOTO_FIRST       "gtk-goto-first"
+#define GTK_STOCK_GOTO_FIRST       ((GtkStock)"gtk-goto-first")
 
 /**
  * GTK_STOCK_GOTO_LAST:
@@ -464,7 +472,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;go-last&quot;.
  */
-#define GTK_STOCK_GOTO_LAST        "gtk-goto-last"
+#define GTK_STOCK_GOTO_LAST        ((GtkStock)"gtk-goto-last")
 
 /**
  * GTK_STOCK_GOTO_TOP:
@@ -474,7 +482,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;go-top&quot;.
  */
-#define GTK_STOCK_GOTO_TOP         "gtk-goto-top"
+#define GTK_STOCK_GOTO_TOP         ((GtkStock)"gtk-goto-top")
 
 /**
  * GTK_STOCK_GO_BACK:
@@ -486,7 +494,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;go-previous&quot;.
 */
-#define GTK_STOCK_GO_BACK          "gtk-go-back"
+#define GTK_STOCK_GO_BACK          ((GtkStock)"gtk-go-back")
 
 /**
  * GTK_STOCK_GO_DOWN:
@@ -496,7 +504,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;go-down&quot;.
  */
-#define GTK_STOCK_GO_DOWN          "gtk-go-down"
+#define GTK_STOCK_GO_DOWN          ((GtkStock)"gtk-go-down")
 
 /**
  * GTK_STOCK_GO_FORWARD:
@@ -508,7 +516,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;go-next&quot;.
  */
-#define GTK_STOCK_GO_FORWARD       "gtk-go-forward"
+#define GTK_STOCK_GO_FORWARD       ((GtkStock)"gtk-go-forward")
 
 /**
  * GTK_STOCK_GO_UP:
@@ -518,7 +526,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;go-up&quot;.
  */
-#define GTK_STOCK_GO_UP            "gtk-go-up"
+#define GTK_STOCK_GO_UP            ((GtkStock)"gtk-go-up")
 
 /**
  * GTK_STOCK_HARDDISK:
@@ -530,7 +538,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;drive-harddisk&quot;.
  */
-#define GTK_STOCK_HARDDISK         "gtk-harddisk"
+#define GTK_STOCK_HARDDISK         ((GtkStock)"gtk-harddisk")
 
 /**
  * GTK_STOCK_HELP:
@@ -540,7 +548,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;help-browser&quot;.
  */
-#define GTK_STOCK_HELP             "gtk-help"
+#define GTK_STOCK_HELP             ((GtkStock)"gtk-help")
 
 /**
  * GTK_STOCK_HOME:
@@ -550,7 +558,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;go-home&quot;.
  */
-#define GTK_STOCK_HOME             "gtk-home"
+#define GTK_STOCK_HOME             ((GtkStock)"gtk-home")
 
 /**
  * GTK_STOCK_INDEX:
@@ -560,7 +568,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10
  */
-#define GTK_STOCK_INDEX            "gtk-index"
+#define GTK_STOCK_INDEX            ((GtkStock)"gtk-index")
 
 /**
  * GTK_STOCK_INDENT:
@@ -574,7 +582,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;format-indent-more&quot;.
  */
-#define GTK_STOCK_INDENT           "gtk-indent"
+#define GTK_STOCK_INDENT           ((GtkStock)"gtk-indent")
 
 /**
  * GTK_STOCK_INFO:
@@ -586,7 +594,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;dialog-information&quot;.
  */
-#define GTK_STOCK_INFO             "gtk-info"
+#define GTK_STOCK_INFO             ((GtkStock)"gtk-info")
 
 /**
  * GTK_STOCK_ITALIC:
@@ -596,7 +604,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;format-text-italic&quot;.
  */
-#define GTK_STOCK_ITALIC           "gtk-italic"
+#define GTK_STOCK_ITALIC           ((GtkStock)"gtk-italic")
 
 /**
  * GTK_STOCK_JUMP_TO:
@@ -608,7 +616,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;go-jump&quot;.
  */
-#define GTK_STOCK_JUMP_TO          "gtk-jump-to"
+#define GTK_STOCK_JUMP_TO          ((GtkStock)"gtk-jump-to")
 
 /**
  * GTK_STOCK_JUSTIFY_CENTER:
@@ -618,7 +626,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;format-justify-center&quot;.
  */
-#define GTK_STOCK_JUSTIFY_CENTER   "gtk-justify-center"
+#define GTK_STOCK_JUSTIFY_CENTER   ((GtkStock)"gtk-justify-center")
 
 /**
  * GTK_STOCK_JUSTIFY_FILL:
@@ -628,7 +636,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;format-justify-fill&quot;.
  */
-#define GTK_STOCK_JUSTIFY_FILL     "gtk-justify-fill"
+#define GTK_STOCK_JUSTIFY_FILL     ((GtkStock)"gtk-justify-fill")
 
 /**
  * GTK_STOCK_JUSTIFY_LEFT:
@@ -638,7 +646,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;format-justify-left&quot;.
  */
-#define GTK_STOCK_JUSTIFY_LEFT     "gtk-justify-left"
+#define GTK_STOCK_JUSTIFY_LEFT     ((GtkStock)"gtk-justify-left")
 
 /**
  * GTK_STOCK_JUSTIFY_RIGHT:
@@ -648,7 +656,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;format-justify-right&quot;.
  */
-#define GTK_STOCK_JUSTIFY_RIGHT    "gtk-justify-right"
+#define GTK_STOCK_JUSTIFY_RIGHT    ((GtkStock)"gtk-justify-right")
 
 /**
  * GTK_STOCK_LEAVE_FULLSCREEN:
@@ -660,7 +668,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;view-restore&quot;.
  */
-#define GTK_STOCK_LEAVE_FULLSCREEN "gtk-leave-fullscreen"
+#define GTK_STOCK_LEAVE_FULLSCREEN ((GtkStock)"gtk-leave-fullscreen")
 
 /**
  * GTK_STOCK_MISSING_IMAGE:
@@ -670,7 +678,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;image-missing&quot;.
  */
-#define GTK_STOCK_MISSING_IMAGE    "gtk-missing-image"
+#define GTK_STOCK_MISSING_IMAGE    ((GtkStock)"gtk-missing-image")
 
 /**
  * GTK_STOCK_MEDIA_FORWARD:
@@ -684,7 +692,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;media-seek-forward&quot; or the label &quot;_Forward&quot;.
  */
-#define GTK_STOCK_MEDIA_FORWARD    "gtk-media-forward"
+#define GTK_STOCK_MEDIA_FORWARD    ((GtkStock)"gtk-media-forward")
 
 /**
  * GTK_STOCK_MEDIA_NEXT:
@@ -698,7 +706,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;media-skip-forward&quot; or the label &quot;_Next&quot;.
  */
-#define GTK_STOCK_MEDIA_NEXT       "gtk-media-next"
+#define GTK_STOCK_MEDIA_NEXT       ((GtkStock)"gtk-media-next")
 
 /**
  * GTK_STOCK_MEDIA_PAUSE:
@@ -710,7 +718,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;media-playback-pause&quot; or the label &quot;P_ause&quot;.
  */
-#define GTK_STOCK_MEDIA_PAUSE      "gtk-media-pause"
+#define GTK_STOCK_MEDIA_PAUSE      ((GtkStock)"gtk-media-pause")
 
 /**
  * GTK_STOCK_MEDIA_PLAY:
@@ -724,7 +732,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;media-playback-start&quot; or the label &quot;_Play&quot;.
  */
-#define GTK_STOCK_MEDIA_PLAY       "gtk-media-play"
+#define GTK_STOCK_MEDIA_PLAY       ((GtkStock)"gtk-media-play")
 
 /**
  * GTK_STOCK_MEDIA_PREVIOUS:
@@ -738,7 +746,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;media-skip-backward&quot; or the label &quot;Pre_vious&quot;.
  */
-#define GTK_STOCK_MEDIA_PREVIOUS   "gtk-media-previous"
+#define GTK_STOCK_MEDIA_PREVIOUS   ((GtkStock)"gtk-media-previous")
 
 /**
  * GTK_STOCK_MEDIA_RECORD:
@@ -750,7 +758,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;media-record&quot; or the label &quot;_Record&quot;.
  */
-#define GTK_STOCK_MEDIA_RECORD     "gtk-media-record"
+#define GTK_STOCK_MEDIA_RECORD     ((GtkStock)"gtk-media-record")
 
 /**
  * GTK_STOCK_MEDIA_REWIND:
@@ -764,7 +772,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;media-seek-backward&quot; or the label &quot;R_ewind&quot;.
  */
-#define GTK_STOCK_MEDIA_REWIND     "gtk-media-rewind"
+#define GTK_STOCK_MEDIA_REWIND     ((GtkStock)"gtk-media-rewind")
 
 /**
  * GTK_STOCK_MEDIA_STOP:
@@ -776,7 +784,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;media-playback-stop&quot; or the label &quot;_Stop&quot;.
  */
-#define GTK_STOCK_MEDIA_STOP       "gtk-media-stop"
+#define GTK_STOCK_MEDIA_STOP       ((GtkStock)"gtk-media-stop")
 
 /**
  * GTK_STOCK_NETWORK:
@@ -788,7 +796,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;network-workgroup&quot;.
  */
-#define GTK_STOCK_NETWORK          "gtk-network"
+#define GTK_STOCK_NETWORK          ((GtkStock)"gtk-network")
 
 /**
  * GTK_STOCK_NEW:
@@ -798,7 +806,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;document-new&quot; or the label &quot;_New&quot;.
  */
-#define GTK_STOCK_NEW              "gtk-new"
+#define GTK_STOCK_NEW              ((GtkStock)"gtk-new")
 
 /**
  * GTK_STOCK_NO:
@@ -808,7 +816,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10
  */
-#define GTK_STOCK_NO               "gtk-no"
+#define GTK_STOCK_NO               ((GtkStock)"gtk-no")
 
 /**
  * GTK_STOCK_OK:
@@ -818,7 +826,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Do not use an icon. Use label &quot;_OK&quot;.
  */
-#define GTK_STOCK_OK               "gtk-ok"
+#define GTK_STOCK_OK               ((GtkStock)"gtk-ok")
 
 /**
  * GTK_STOCK_OPEN:
@@ -828,7 +836,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;document-open&quot; or the label &quot;_Open&quot;.
  */
-#define GTK_STOCK_OPEN             "gtk-open"
+#define GTK_STOCK_OPEN             ((GtkStock)"gtk-open")
 
 /**
  * GTK_STOCK_ORIENTATION_PORTRAIT:
@@ -840,7 +848,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10
  */
-#define GTK_STOCK_ORIENTATION_PORTRAIT "gtk-orientation-portrait"
+#define GTK_STOCK_ORIENTATION_PORTRAIT ((GtkStock)"gtk-orientation-portrait")
 
 /**
  * GTK_STOCK_ORIENTATION_LANDSCAPE:
@@ -852,7 +860,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10
  */
-#define GTK_STOCK_ORIENTATION_LANDSCAPE "gtk-orientation-landscape"
+#define GTK_STOCK_ORIENTATION_LANDSCAPE ((GtkStock)"gtk-orientation-landscape")
 
 /**
  * GTK_STOCK_ORIENTATION_REVERSE_LANDSCAPE:
@@ -864,7 +872,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10
  */
-#define GTK_STOCK_ORIENTATION_REVERSE_LANDSCAPE "gtk-orientation-reverse-landscape"
+#define GTK_STOCK_ORIENTATION_REVERSE_LANDSCAPE ((GtkStock)"gtk-orientation-reverse-landscape")
 
 /**
  * GTK_STOCK_ORIENTATION_REVERSE_PORTRAIT:
@@ -876,7 +884,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10
  */
-#define GTK_STOCK_ORIENTATION_REVERSE_PORTRAIT "gtk-orientation-reverse-portrait"
+#define GTK_STOCK_ORIENTATION_REVERSE_PORTRAIT ((GtkStock)"gtk-orientation-reverse-portrait")
 
 /**
  * GTK_STOCK_PAGE_SETUP:
@@ -888,7 +896,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;document-page-setup&quot; or the label &quot;Page Set_up&quot;.
  */
-#define GTK_STOCK_PAGE_SETUP       "gtk-page-setup"
+#define GTK_STOCK_PAGE_SETUP       ((GtkStock)"gtk-page-setup")
 
 /**
  * GTK_STOCK_PASTE:
@@ -898,7 +906,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Do not use an icon. Use label &quot;_Paste&quot;.
  */
-#define GTK_STOCK_PASTE            "gtk-paste"
+#define GTK_STOCK_PASTE            ((GtkStock)"gtk-paste")
 
 /**
  * GTK_STOCK_PREFERENCES:
@@ -908,7 +916,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;preferences-system&quot; or the label &quot;_Preferences&quot;.
  */
-#define GTK_STOCK_PREFERENCES      "gtk-preferences"
+#define GTK_STOCK_PREFERENCES      ((GtkStock)"gtk-preferences")
 
 /**
  * GTK_STOCK_PRINT:
@@ -918,7 +926,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;document-print&quot; or the label &quot;_Print&quot;.
  */
-#define GTK_STOCK_PRINT            "gtk-print"
+#define GTK_STOCK_PRINT            ((GtkStock)"gtk-print")
 
 /**
  * GTK_STOCK_PRINT_ERROR:
@@ -930,7 +938,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;printer-error&quot;.
  */
-#define GTK_STOCK_PRINT_ERROR      "gtk-print-error"
+#define GTK_STOCK_PRINT_ERROR      ((GtkStock)"gtk-print-error")
 
 /**
  * GTK_STOCK_PRINT_PAUSED:
@@ -942,7 +950,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10
  */
-#define GTK_STOCK_PRINT_PAUSED     "gtk-print-paused"
+#define GTK_STOCK_PRINT_PAUSED     ((GtkStock)"gtk-print-paused")
 
 /**
  * GTK_STOCK_PRINT_PREVIEW:
@@ -952,7 +960,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use label &quot;Pre_view&quot;.
  */
-#define GTK_STOCK_PRINT_PREVIEW    "gtk-print-preview"
+#define GTK_STOCK_PRINT_PREVIEW    ((GtkStock)"gtk-print-preview")
 
 /**
  * GTK_STOCK_PRINT_REPORT:
@@ -964,7 +972,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10
  */
-#define GTK_STOCK_PRINT_REPORT     "gtk-print-report"
+#define GTK_STOCK_PRINT_REPORT     ((GtkStock)"gtk-print-report")
 
 
 /**
@@ -977,7 +985,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10
  */
-#define GTK_STOCK_PRINT_WARNING    "gtk-print-warning"
+#define GTK_STOCK_PRINT_WARNING    ((GtkStock)"gtk-print-warning")
 
 /**
  * GTK_STOCK_PROPERTIES:
@@ -987,7 +995,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;document-properties&quot; or the label &quot;_Properties&quot;.
  */
-#define GTK_STOCK_PROPERTIES       "gtk-properties"
+#define GTK_STOCK_PROPERTIES       ((GtkStock)"gtk-properties")
 
 /**
  * GTK_STOCK_QUIT:
@@ -997,7 +1005,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;application-exit&quot; or the label &quot;_Quit&quot;.
  */
-#define GTK_STOCK_QUIT             "gtk-quit"
+#define GTK_STOCK_QUIT             ((GtkStock)"gtk-quit")
 
 /**
  * GTK_STOCK_REDO:
@@ -1009,7 +1017,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;edit-redo&quot; or the label &quot;_Redo&quot;.
  */
-#define GTK_STOCK_REDO             "gtk-redo"
+#define GTK_STOCK_REDO             ((GtkStock)"gtk-redo")
 
 /**
  * GTK_STOCK_REFRESH:
@@ -1019,7 +1027,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;view-refresh&quot; or the label &quot;_Refresh&quot;.
  */
-#define GTK_STOCK_REFRESH          "gtk-refresh"
+#define GTK_STOCK_REFRESH          ((GtkStock)"gtk-refresh")
 
 /**
  * GTK_STOCK_REMOVE:
@@ -1029,7 +1037,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;list-remove&quot; or the label &quot;_Remove&quot;.
  */
-#define GTK_STOCK_REMOVE           "gtk-remove"
+#define GTK_STOCK_REMOVE           ((GtkStock)"gtk-remove")
 
 /**
  * GTK_STOCK_REVERT_TO_SAVED:
@@ -1041,7 +1049,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;document-revert&quot; or the label &quot;_Revert&quot;.
  */
-#define GTK_STOCK_REVERT_TO_SAVED  "gtk-revert-to-saved"
+#define GTK_STOCK_REVERT_TO_SAVED  ((GtkStock)"gtk-revert-to-saved")
 
 /**
  * GTK_STOCK_SAVE:
@@ -1051,7 +1059,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;document-save&quot; or the label &quot;_Save&quot;.
  */
-#define GTK_STOCK_SAVE             "gtk-save"
+#define GTK_STOCK_SAVE             ((GtkStock)"gtk-save")
 
 /**
  * GTK_STOCK_SAVE_AS:
@@ -1061,7 +1069,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;document-save-as&quot; or the label &quot;Save _As&quot;.
  */
-#define GTK_STOCK_SAVE_AS          "gtk-save-as"
+#define GTK_STOCK_SAVE_AS          ((GtkStock)"gtk-save-as")
 
 /**
  * GTK_STOCK_SELECT_ALL:
@@ -1073,7 +1081,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;edit-select-all&quot; or the label &quot;Select _All&quot;.
  */
-#define GTK_STOCK_SELECT_ALL       "gtk-select-all"
+#define GTK_STOCK_SELECT_ALL       ((GtkStock)"gtk-select-all")
 
 /**
  * GTK_STOCK_SELECT_COLOR:
@@ -1083,7 +1091,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10
  */
-#define GTK_STOCK_SELECT_COLOR     "gtk-select-color"
+#define GTK_STOCK_SELECT_COLOR     ((GtkStock)"gtk-select-color")
 
 /**
  * GTK_STOCK_SELECT_FONT:
@@ -1093,7 +1101,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10
  */
-#define GTK_STOCK_SELECT_FONT      "gtk-select-font"
+#define GTK_STOCK_SELECT_FONT      ((GtkStock)"gtk-select-font")
 
 /**
  * GTK_STOCK_SORT_ASCENDING:
@@ -1103,7 +1111,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;view-sort-ascending&quot;.
  */
-#define GTK_STOCK_SORT_ASCENDING   "gtk-sort-ascending"
+#define GTK_STOCK_SORT_ASCENDING   ((GtkStock)"gtk-sort-ascending")
 
 /**
  * GTK_STOCK_SORT_DESCENDING:
@@ -1113,7 +1121,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;view-sort-descending&quot;.
  */
-#define GTK_STOCK_SORT_DESCENDING  "gtk-sort-descending"
+#define GTK_STOCK_SORT_DESCENDING  ((GtkStock)"gtk-sort-descending")
 
 /**
  * GTK_STOCK_SPELL_CHECK:
@@ -1123,7 +1131,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;tools-check-spelling&quot;.
  */
-#define GTK_STOCK_SPELL_CHECK      "gtk-spell-check"
+#define GTK_STOCK_SPELL_CHECK      ((GtkStock)"gtk-spell-check")
 
 /**
  * GTK_STOCK_STOP:
@@ -1133,7 +1141,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;process-stop&quot; or the label &quot;_Stop&quot;.
  */
-#define GTK_STOCK_STOP             "gtk-stop"
+#define GTK_STOCK_STOP             ((GtkStock)"gtk-stop")
 
 /**
  * GTK_STOCK_STRIKETHROUGH:
@@ -1143,7 +1151,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;format-text-strikethrough&quot; or the label &quot;_Strikethrough&quot;.
  */
-#define GTK_STOCK_STRIKETHROUGH    "gtk-strikethrough"
+#define GTK_STOCK_STRIKETHROUGH    ((GtkStock)"gtk-strikethrough")
 
 /**
  * GTK_STOCK_UNDELETE:
@@ -1155,7 +1163,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10
  */
-#define GTK_STOCK_UNDELETE         "gtk-undelete"
+#define GTK_STOCK_UNDELETE         ((GtkStock)"gtk-undelete")
 
 /**
  * GTK_STOCK_UNDERLINE:
@@ -1165,7 +1173,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;format-text-underline&quot; or the label &quot;_Underline&quot;.
  */
-#define GTK_STOCK_UNDERLINE        "gtk-underline"
+#define GTK_STOCK_UNDERLINE        ((GtkStock)"gtk-underline")
 
 /**
  * GTK_STOCK_UNDO:
@@ -1177,7 +1185,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;edit-undo&quot; or the label &quot;_Undo&quot;.
  */
-#define GTK_STOCK_UNDO             "gtk-undo"
+#define GTK_STOCK_UNDO             ((GtkStock)"gtk-undo")
 
 /**
  * GTK_STOCK_UNINDENT:
@@ -1191,7 +1199,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;format-indent-less&quot;.
  */
-#define GTK_STOCK_UNINDENT         "gtk-unindent"
+#define GTK_STOCK_UNINDENT         ((GtkStock)"gtk-unindent")
 
 /**
  * GTK_STOCK_YES:
@@ -1201,7 +1209,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10
  */
-#define GTK_STOCK_YES              "gtk-yes"
+#define GTK_STOCK_YES              ((GtkStock)"gtk-yes")
 
 /**
  * GTK_STOCK_ZOOM_100:
@@ -1211,7 +1219,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;zoom-original&quot; or the label &quot;_Normal Size&quot;.
  */
-#define GTK_STOCK_ZOOM_100         "gtk-zoom-100"
+#define GTK_STOCK_ZOOM_100         ((GtkStock)"gtk-zoom-100")
 
 /**
  * GTK_STOCK_ZOOM_FIT:
@@ -1221,7 +1229,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;zoom-fit-best&quot; or the label &quot;Best _Fit&quot;.
  */
-#define GTK_STOCK_ZOOM_FIT         "gtk-zoom-fit"
+#define GTK_STOCK_ZOOM_FIT         ((GtkStock)"gtk-zoom-fit")
 
 /**
  * GTK_STOCK_ZOOM_IN:
@@ -1231,7 +1239,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;zoom-in&quot; or the label &quot;Zoom _In&quot;.
  */
-#define GTK_STOCK_ZOOM_IN          "gtk-zoom-in"
+#define GTK_STOCK_ZOOM_IN          ((GtkStock)"gtk-zoom-in")
 
 /**
  * GTK_STOCK_ZOOM_OUT:
@@ -1241,7 +1249,7 @@ void          gtk_stock_set_translate_func (const gchar      *domain,
  *
  * Deprecated: 3.10: Use named icon &quot;zoom-out&quot; or the label &quot;Zoom _Out&quot;.
  */
-#define GTK_STOCK_ZOOM_OUT         "gtk-zoom-out"
+#define GTK_STOCK_ZOOM_OUT         ((GtkStock)"gtk-zoom-out")
 
 G_END_DECLS
 
