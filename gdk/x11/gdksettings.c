@@ -35,8 +35,6 @@ static const struct {
   {"Gtk/KeyThemeName",        "gtk-key-theme-name"},
   {"Gtk/ToolbarStyle",        "gtk-toolbar-style"},
   {"Gtk/ToolbarIconSize",     "gtk-toolbar-icon-size"},
-  {"Gtk/IMPreeditStyle",      "gtk-im-preedit-style"},
-  {"Gtk/IMStatusStyle",       "gtk-im-status-style"},
   {"Gtk/Modules",             "gtk-modules"},
   {"Gtk/CursorThemeName",     "gtk-cursor-theme-name"},
   {"Gtk/CursorThemeSize",     "gtk-cursor-theme-size"},

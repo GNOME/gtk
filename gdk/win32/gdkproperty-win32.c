@@ -310,8 +310,6 @@ _gdk_win32_window_delete_property (GdkWindow *window,
   "Gtk/KeyThemeName\0"        "gtk-key-theme-name\0"
   "Gtk/ToolbarStyle\0"        "gtk-toolbar-style\0"
   "Gtk/ToolbarIconSize\0"     "gtk-toolbar-icon-size\0"
-  "Gtk/IMPreeditStyle\0"      "gtk-im-preedit-style\0"
-  "Gtk/IMStatusStyle\0"       "gtk-im-status-style\0"
   "Gtk/Modules\0"             "gtk-modules\0"
   "Gtk/CursorThemeName\0"     "gtk-cursor-theme-name\0"
   "Gtk/CursorThemeSize\0"     "gtk-cursor-theme-size\0"
