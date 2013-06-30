@@ -34,12 +34,15 @@ typedef enum {
 
 static char *arg_output_dir = NULL;
 static char *arg_base_dir = NULL;
+static char *arg_direction = NULL;
 
 static const GOptionEntry test_args[] = {
   { "output",         'o', 0, G_OPTION_ARG_FILENAME, &arg_output_dir,
     "Directory to save image files to", "DIR" },
   { "directory",        'd', 0, G_OPTION_ARG_FILENAME, &arg_base_dir,
     "Directory to run tests from", "DIR" },
+  { "direction",       0, 0, G_OPTION_ARG_STRING, &arg_direction,
+    "Set text direction", "DIRECTION" },
   { NULL }
 };
 
@@ -60,6 +63,11 @@ parse_command_line (int *argc, char ***argv)
     }
 
   gtk_test_init (argc, argv);
+
+  if (g_strcmp0 (arg_direction, "rtl") == 0)
+    gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
+  else if (g_strcmp0 (arg_direction, "ltr") == 0)
+    gtk_widget_set_default_direction (GTK_TEXT_DIR_LTR);
 
   return TRUE;
 }
