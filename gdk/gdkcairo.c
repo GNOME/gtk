@@ -211,7 +211,7 @@ gdk_cairo_set_source_pixbuf (cairo_t         *cr,
     format = CAIRO_FORMAT_ARGB32;
 
   cairo_stride = cairo_format_stride_for_width (format, width);
-  cairo_pixels = g_malloc (height * cairo_stride);
+  cairo_pixels = g_malloc_n (height, cairo_stride);
   surface = cairo_image_surface_create_for_data ((unsigned char *)cairo_pixels,
                                                  format,
                                                  width, height, cairo_stride);
