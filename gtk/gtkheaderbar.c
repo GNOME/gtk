@@ -39,7 +39,7 @@
  * GtkHeaderBar is similar to a horizontal #GtkBox, it allows
  * to place children at the start or the end. In addition,
  * it allows a title to be displayed. The title will be
- * centered wrt to the widget of the box, even if the children
+ * centered with respect to the width of the box, even if the children
  * at either side take up different amounts of space.
  */
 
@@ -791,6 +791,10 @@ gtk_header_bar_get_title (GtkHeaderBar *bar)
  * Sets the subtitle of the #GtkHeaderBar. The title should give a user
  * an additional detail to help him identify the current view.
  *
+ * Note that GtkHeaderBar always reserves room for the subtitle, even
+ * if none is currently set. If this is not desired, use
+ * gtk_header_bar_set_custom_title().
+ *
  * Since: 3.10
  */
 void
@@ -845,8 +849,9 @@ gtk_header_bar_get_subtitle (GtkHeaderBar *bar)
  *
  * Sets a custom title for the #GtkHeaderBar. The title should help a
  * user identify the current view. This supercedes any title set by
- * gtk_header_bar_set_title(). You should set the custom title to %NULL,
- * for the header title label to be visible again.
+ * gtk_header_bar_set_title() or gtk_header_bar_set_subtitle().
+ * You should set the custom title to %NULL, for the header title label
+ * to be visible again.
  *
  * Since: 3.10
  */
@@ -911,8 +916,8 @@ gtk_header_bar_set_custom_title (GtkHeaderBar *bar,
  * Retrieves the custom title widget of the header. See
  * gtk_header_bar_set_custom_title().
  *
- * Return value: (transfer none): the custom title widget of the header, or %NULL if
- *    none has been set explicitely.
+ * Return value: (transfer none): the custom title widget
+ *    of the header, or %NULL if none has been set explicitely.
  *
  * Since: 3.10
  */
