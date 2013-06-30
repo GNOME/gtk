@@ -9,9 +9,6 @@
     <file>application.ui</file>
     <file>menus.ui</file>
   </gresource>
-  <gresource prefix="/appwindow">
-    <file preprocess="to-pixdata">gtk-logo-old.png</file>
-  </gresource>
   <gresource prefix="/builder">
     <file>demo.ui</file>
   </gresource>
@@ -79,7 +76,6 @@
   </gresource>
   <gresource prefix="/sources">
     <file>application.c</file>
-    <file>appwindow.c</file>
     <file>assistant.c</file>
     <file>builder.c</file>
     <file>button_box.c</file>
@@ -127,7 +123,6 @@
     <file>toolpalette.c</file>
     <file>transparent.c</file>
     <file>tree_store.c</file>
-    <file>ui_manager.c</file>
   </gresource>
   <gresource prefix="/textview">
     <file>floppybuddy.gif</file>

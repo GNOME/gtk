@@ -36,7 +36,6 @@ all :	\
 ## These should be in the order you want them to appear in the 
 ## demo app, which means alphabetized by demo title, not filename
 DEMOS = \
-	appwindow.c	\
 	button_box.c	\
 	clipboard.c	\
 	colorsel.c	\
@@ -63,7 +62,6 @@ demos.h: $(DEMOS) geninclude.pl
 	$(PERL) geninclude.pl $(DEMOS) > demos.h
 
 OBJECTS = \
-	appwindow.obj	\
 	button_box.obj	\
 	changedisplay.obj	\
 	clipboard.obj	\
