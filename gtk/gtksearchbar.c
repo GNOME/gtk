@@ -37,23 +37,24 @@
 
 /**
  * SECTION:gtksearchbar
- * @Short_description: An toolbar to integrate a search entry with
+ * @Short_description: A toolbar to integrate a search entry with
  * @Title: GtkSearchBar
  *
  * #GtkSearchBar is a container made to have a search entry (possibly
- * with additional connex widgets, such as drop-down menus, or buttons) built-in.
- * The search bar would appear when a search is started through typing on the
- * keyboard, or the application's search mode is toggled on.
+ * with additional connex widgets, such as drop-down menus, or buttons)
+ * built-in. The search bar would appear when a search is started through
+ * typing on the keyboard, or the application's search mode is toggled on.
  *
- * For keyboard presses to start a search, events will need to be forwarded
- * from the top-level window that contains the search bar. See
- * gtk_search_bar_handle_event() for example code. Common shortcuts such as Ctrl+F
- * should be handled as an application action, or through the menu items.
+ * For keyboard presses to start a search, events will need to be
+ * forwarded from the top-level window that contains the search bar.
+ * See gtk_search_bar_handle_event() for example code. Common shortcuts
+ * such as Ctrl+F should be handled as an application action, or through
+ * the menu items.
  *
- * You will also need to tell the search bar about which entry you are
- * using as your search entry using gtk_search_bar_connect_entry().
- * The following example shows you how to create a more complex
- * search entry.
+ * You will also need to tell the search bar about which entry you
+ * are using as your search entry using gtk_search_bar_connect_entry().
+ * The following example shows you how to create a more complex search
+ * entry.
  *
  * <example>
  * <title>Creating a search bar</title>
@@ -172,8 +173,8 @@ preedit_changed_cb (GtkEntry  *entry,
  * not propagated further.
  *
  * If no entry has been connected to the search bar, using
- * gtk_search_bar_connect_entry(), this function will return immediately with
- * a warning.
+ * gtk_search_bar_connect_entry(), this function will return
+ * immediately with a warning.
  *
  * <example>
  * <title>Showing the search bar on key presses</title>
@@ -191,12 +192,12 @@ preedit_changed_cb (GtkEntry  *entry,
  * ]]></programlisting>
  * </example>
  *
- * Return value: %GDK_EVENT_STOP if the key press event resulted in text
- * being * entered in the search entry (and revealing the search bar if
- * necessary), %GDK_EVENT_PROPAGATE otherwise.
+ * Return value: %GDK_EVENT_STOP if the key press event resulted
+ *     in text being entered in the search entry (and revealing
+ *     the search bar if necessary), %GDK_EVENT_PROPAGATE otherwise.
  *
  * Since: 3.10
- **/
+ */
 gboolean
 gtk_search_bar_handle_event (GtkSearchBar *bar,
                              GdkEvent     *event)
@@ -293,7 +294,8 @@ gtk_search_bar_add (GtkContainer *container,
     {
       GTK_CONTAINER_CLASS (gtk_search_bar_parent_class)->add (container, child);
       /* If an entry is the only child, save the developer a couple of
-       * lines of code */
+       * lines of code
+       */
       if (GTK_IS_ENTRY (child))
         gtk_search_bar_connect_entry (bar, GTK_ENTRY (child));
     }
@@ -304,10 +306,10 @@ gtk_search_bar_add (GtkContainer *container,
 }
 
 static void
-gtk_search_bar_set_property (GObject         *object,
-                             guint            prop_id,
-                             const GValue    *value,
-                             GParamSpec      *pspec)
+gtk_search_bar_set_property (GObject      *object,
+                             guint         prop_id,
+                             const GValue *value,
+                             GParamSpec   *pspec)
 {
   GtkSearchBar *bar = GTK_SEARCH_BAR (object);
 
@@ -326,10 +328,10 @@ gtk_search_bar_set_property (GObject         *object,
 }
 
 static void
-gtk_search_bar_get_property (GObject         *object,
-                             guint            prop_id,
-                             GValue          *value,
-                             GParamSpec      *pspec)
+gtk_search_bar_get_property (GObject    *object,
+                             guint       prop_id,
+                             GValue     *value,
+                             GParamSpec *pspec)
 {
   GtkSearchBar *bar = GTK_SEARCH_BAR (object);
 
@@ -381,19 +383,18 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
    * Whether the search mode is on and the search bar shown.
    *
    * See gtk_search_bar_set_search_mode() for details.
-   *
-   **/
+   */
   widget_props[PROP_SEARCH_MODE_ENABLED] = g_param_spec_boolean ("search-mode-enabled",
                                                                  P_("Search Mode Enabled"),
                                                                  P_("Whether the search mode is on and the search bar shown"),
                                                                  FALSE,
                                                                  G_PARAM_READWRITE);
+
   /**
    * GtkEntry:show-close-button:
    *
    * Whether to show the close button in the toolbar.
-   *
-   **/
+   */
   widget_props[PROP_SHOW_CLOSE_BUTTON] = g_param_spec_boolean ("show-close-button",
                                                                P_("Show Close Button"),
                                                                P_("Whether to show the close button in the toolbar"),
@@ -456,7 +457,7 @@ gtk_search_bar_new (void)
  * search bar (as in our main example).
  *
  * Since: 3.10
- **/
+ */
 void
 gtk_search_bar_connect_entry (GtkSearchBar *bar,
                               GtkEntry     *entry)
@@ -489,7 +490,7 @@ gtk_search_bar_connect_entry (GtkSearchBar *bar,
  * Return value: whether search mode is toggled on
  *
  * Since: 3.10
- **/
+ */
 gboolean
 gtk_search_bar_get_search_mode (GtkSearchBar *bar)
 {
@@ -506,7 +507,7 @@ gtk_search_bar_get_search_mode (GtkSearchBar *bar)
  * Switches the search mode on or off.
  *
  * Since: 3.10
- **/
+ */
 void
 gtk_search_bar_set_search_mode (GtkSearchBar *bar,
                                 gboolean      search_mode)
@@ -525,7 +526,7 @@ gtk_search_bar_set_search_mode (GtkSearchBar *bar,
  * Return value: whether the close button is shown
  *
  * Since: 3.10
- **/
+ */
 gboolean
 gtk_search_bar_get_show_close_button (GtkSearchBar *bar)
 {
@@ -537,12 +538,12 @@ gtk_search_bar_get_show_close_button (GtkSearchBar *bar)
 /**
  * gtk_search_bar_set_show_close_button:
  * @bar: a #GtkSearchBar
- * @visible: whether the close button will be shown or not.
+ * @visible: whether the close button will be shown or not
  *
  * Shows or hides the close button.
  *
  * Since: 3.10
- **/
+ */
 void
 gtk_search_bar_set_show_close_button (GtkSearchBar *bar,
                                       gboolean      visible)
