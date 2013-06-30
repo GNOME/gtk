@@ -1582,26 +1582,15 @@ tooltips_enabled (GdkEvent *event)
 {
   GdkDevice *source_device;
   GdkInputSource source;
-  GdkWindow *window;
-  gboolean enabled;
-  GdkScreen *screen;
-  GtkSettings *settings;
 
-  window = event->any.window;
   source_device = gdk_event_get_source_device (event);
 
   if (!source_device)
     return FALSE;
 
   source = gdk_device_get_source (source_device);
-  screen = gdk_window_get_screen (window);
-  settings = gtk_settings_get_for_screen (screen);
 
-  g_object_get (settings,
-		"gtk-enable-tooltips", &enabled,
-		NULL);
-
-  if (enabled && source != GDK_SOURCE_TOUCHSCREEN)
+  if (source != GDK_SOURCE_TOUCHSCREEN)
     return TRUE;
 
   return FALSE;

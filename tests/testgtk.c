@@ -1200,22 +1200,6 @@ set_toolbar_both_horiz (GtkWidget *widget,
   gtk_toolbar_set_style (GTK_TOOLBAR (data), GTK_TOOLBAR_BOTH_HORIZ);
 }
 
-static void
-set_toolbar_enable (GtkWidget *widget,
-		    gpointer   data)
-{
-  GtkSettings *settings = gtk_widget_get_settings (widget);
-  g_object_set (settings, "gtk-enable-tooltips", TRUE, NULL);
-}
-
-static void
-set_toolbar_disable (GtkWidget *widget,
-		     gpointer   data)
-{
-  GtkSettings *settings = gtk_widget_get_settings (widget);
-  g_object_set (settings, "gtk-enable-tooltips", FALSE, NULL);
-}
-
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 static GtkActionEntry create_toolbar_items[] = {
     { NULL, GTK_STOCK_NEW, NULL, NULL, "Stock icon: New",
@@ -1239,11 +1223,6 @@ static GtkActionEntry create_toolbar_items[] = {
     { "entry", NULL, NULL, "This is an unusable GtkEntry ;)",
       NULL },
     { NULL },
-    { NULL },
-    { NULL, NULL, "Enable", NULL, "Enable tooltips",
-      G_CALLBACK (set_toolbar_enable) },
-    { NULL, NULL, "Disable", NULL, "Disable tooltips",
-      G_CALLBACK (set_toolbar_disable) },
     { NULL },
     { NULL, NULL, "Frobate", NULL, "Frobate tooltip",
       NULL },

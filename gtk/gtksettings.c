@@ -1151,6 +1151,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * Whether tooltips should be shown on widgets.
    *
    * Since: 2.14
+   *
+   * Deprecated: 3.10: This setting is ignored.
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-enable-tooltips",
