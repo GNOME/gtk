@@ -171,4 +171,7 @@
   <link linkend="GtkStackSwitcher">
     <inlinegraphic fileref="stackswitcher.png" format="PNG"></inlinegraphic>
   </link>
+  <link linkend="GtkListBox">
+    <inlinegraphic fileref="list-box.png" format="PNG"></inlinegraphic>
+  </link>
 </para>

@@ -1426,11 +1426,64 @@ create_stack_switcher (void)
   return new_widget_info ("stackswitcher", vbox, ASIS);
 }
 
+static WidgetInfo *
+create_list_box (void)
+{
+  GtkWidget *widget;
+  GtkWidget *list;
+  GtkWidget *row;
+  GtkWidget *button;
+  WidgetInfo *info;
+
+  widget = gtk_frame_new (NULL);
+  gtk_frame_set_shadow_type (GTK_FRAME (widget), GTK_SHADOW_IN);
+
+  list = gtk_list_box_new ();
+  gtk_list_box_set_selection_mode (GTK_LIST_BOX (list), GTK_SELECTION_BROWSE);
+  row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+  button = gtk_label_new ("List Box");
+  gtk_widget_set_hexpand (button, TRUE);
+  gtk_widget_set_halign (button, GTK_ALIGN_CENTER);
+  gtk_container_add (GTK_CONTAINER (row), button);
+  gtk_container_add (GTK_CONTAINER (list), row);
+  row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+  gtk_container_add (GTK_CONTAINER (row), gtk_label_new ("Line One"));
+  button = gtk_check_button_new ();
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+  gtk_widget_set_hexpand (button, TRUE);
+  gtk_widget_set_halign (button, GTK_ALIGN_END);
+  gtk_container_add (GTK_CONTAINER (row), button);
+  gtk_container_add (GTK_CONTAINER (list), row);
+  gtk_list_box_select_row (GTK_CONTAINER (list), gtk_widget_get_parent (row));
+  row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+  gtk_container_add (GTK_CONTAINER (row), gtk_label_new ("Line Two"));
+  button = gtk_button_new_with_label ("2");
+  gtk_widget_set_hexpand (button, TRUE);
+  gtk_widget_set_halign (button, GTK_ALIGN_END);
+  gtk_container_add (GTK_CONTAINER (row), button);
+  gtk_container_add (GTK_CONTAINER (list), row);
+  row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+  gtk_container_add (GTK_CONTAINER (row), gtk_label_new ("Line Three"));
+  button = gtk_entry_new ();
+  gtk_widget_set_hexpand (button, TRUE);
+  gtk_widget_set_halign (button, GTK_ALIGN_END);
+  gtk_container_add (GTK_CONTAINER (row), button);
+  gtk_container_add (GTK_CONTAINER (list), row);
+
+  gtk_container_add (GTK_CONTAINER (widget), list);
+
+  info = new_widget_info ("list-box", widget, MEDIUM);
+  info->no_focus = FALSE;
+
+  return info;
+}
+
 GList *
 get_all_widgets (void)
 {
   GList *retval = NULL;
 
+  retval = g_list_prepend (retval, create_list_box());
   retval = g_list_prepend (retval, create_headerbar ());
   retval = g_list_prepend (retval, create_placessidebar ());
   retval = g_list_prepend (retval, create_stack ());

@@ -413,7 +413,8 @@ HTML_IMAGES = \
 	$(srcdir)/images/right-start.png				\
 	$(srcdir)/images/up-center.png					\
 	$(srcdir)/images/up-end.png					\
-	$(srcdir)/images/up-start.png
+	$(srcdir)/images/up-start.png					\
+	$(srcdir)/images/list-box.png
 
 # Extra options to supply to gtkdoc-fixref
 FIXXREF_OPTIONS=--extra-dir=../gdk/html \
