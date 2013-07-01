@@ -3014,7 +3014,7 @@ gdk_quartz_window_get_scale_factor (GdkWindow *window)
   if (GDK_WINDOW_DESTROYED (window))
     return 1;
 
-  impl = GDK_WINDOW_IMPL_QUARTZ (GDK_WINDOW_OBJECT (window)->impl);
+  impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
 
   if (gdk_quartz_osx_version() >= GDK_OSX_LION)
     return [(id <ScaleFactor>) impl->toplevel backingScaleFactor];

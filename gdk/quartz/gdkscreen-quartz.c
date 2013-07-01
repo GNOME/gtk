@@ -436,12 +436,12 @@ gint
 _gdk_quartz_screen_get_monitor_scale_factor (GdkScreen *screen,
                                              gint       monitor_num)
 {
-  GdkScreenQuartz *quartz_screen;
+  GdkQuartzScreen *quartz_screen;
   NSArray *array;
   NSScreen *nsscreen;
   gint scale_factor = 1;
 
-  quartz_screen = GDK_SCREEN_QUARTZ (screen);
+  quartz_screen = GDK_QUARTZ_SCREEN (screen);
 
   GDK_QUARTZ_ALLOC_POOL;
 
