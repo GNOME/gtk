@@ -293,15 +293,15 @@ gtk_search_bar_add (GtkContainer *container,
   if (bar->priv->box_center == NULL)
     {
       GTK_CONTAINER_CLASS (gtk_search_bar_parent_class)->add (container, child);
+    }
+  else
+    {
+      gtk_container_add (GTK_CONTAINER (bar->priv->box_center), child);
       /* If an entry is the only child, save the developer a couple of
        * lines of code
        */
       if (GTK_IS_ENTRY (child))
         gtk_search_bar_connect_entry (bar, GTK_ENTRY (child));
-    }
-  else
-    {
-      gtk_container_add (GTK_CONTAINER (bar->priv->box_center), child);
     }
 }
 
