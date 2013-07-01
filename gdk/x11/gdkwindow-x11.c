@@ -156,6 +156,7 @@ gdk_window_impl_x11_init (GdkWindowImplX11 *impl)
 {  
   impl->device_cursor = g_hash_table_new_full (NULL, NULL,
                                                NULL, g_object_unref);
+  impl->window_scale = 1;
 }
 
 GdkToplevelX11 *

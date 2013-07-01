@@ -1074,6 +1074,7 @@ _gdk_x11_screen_new (GdkDisplay *display,
 #endif
   if (scale_str)
     {
+      x11_screen->fixed_window_scale = TRUE;
       x11_screen->window_scale = atol (scale_str);
       if (x11_screen->window_scale == 0)
         x11_screen->window_scale = 1;
