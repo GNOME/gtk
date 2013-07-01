@@ -1,12 +1,7 @@
 include $(top_srcdir)/Makefile.decl
 
-SUBDIRS = \
-	crypt \
-	vs9  \
-	vs10
-
 EXTRA_DIST +=	\
-	gen-file-list-gtk.py	\
-	gengir_gtk.bat
+	crypt.h		\
+	crypt3.c	\
 
 -include $(top_srcdir)/git.mk

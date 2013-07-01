@@ -1806,6 +1806,7 @@ docs/reference/libgail-util/version.xml
 docs/tools/Makefile
 build/Makefile
 build/win32/Makefile
+build/win32/crypt/Makefile
 build/win32/vs9/Makefile
 build/win32/vs10/Makefile
 gdk/Makefile
