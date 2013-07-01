@@ -1,0 +1,103 @@
+window1
+  "window"
+  index: 0
+  state: enabled resizable sensitive showing visible
+  toolkit: gtk
+  <AtkComponent>
+  layer: window
+  alpha: 1
+  box1
+    "filler"
+    parent: window1
+    index: 0
+    state: enabled horizontal sensitive showing visible
+    toolkit: gtk
+    <AtkComponent>
+    layer: widget
+    alpha: 1
+    stackswitcher1
+      "filler"
+      parent: box1
+      index: 0
+      state: enabled horizontal sensitive showing visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      unnamed-GtkRadioButtonAccessible-0
+        "radio button"
+        parent: stackswitcher1
+        index: 0
+        name: Page 1
+        member-of: unnamed-GtkRadioButtonAccessible-1
+                   unnamed-GtkRadioButtonAccessible-0
+        state: armed checked enabled focusable sensitive showing visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkImage>
+        image size: -1 x -1
+        image description: (null)
+        <AtkAction>
+        action 0 name: click
+        action 0 description: Clicks the button
+      unnamed-GtkRadioButtonAccessible-1
+        "radio button"
+        parent: stackswitcher1
+        index: 1
+        name: Page 2
+        member-of: unnamed-GtkRadioButtonAccessible-1
+                   unnamed-GtkRadioButtonAccessible-0
+        state: enabled focusable sensitive showing visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkImage>
+        image size: -1 x -1
+        image description: (null)
+        <AtkAction>
+        action 0 name: click
+        action 0 description: Clicks the button
+    stack1
+      "panel"
+      parent: box1
+      index: 1
+      state: enabled sensitive showing visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      page1
+        "push button"
+        parent: stack1
+        index: 0
+        name: Yes
+        state: enabled focusable sensitive showing visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkImage>
+        image size: -1 x -1
+        image description: (null)
+        <AtkAction>
+        action 0 name: click
+        action 0 description: Clicks the button
+      page2
+        "push button"
+        parent: stack1
+        index: 1
+        name: No
+        state: enabled focusable sensitive visible
+        toolkit: gtk
+        <AtkComponent>
+        layer: widget
+        alpha: 1
+        <AtkImage>
+        image size: -1 x -1
+        image description: (null)
+        <AtkAction>
+        action 0 name: click
+        action 0 description: Clicks the button

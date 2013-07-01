@@ -74,6 +74,7 @@ testdata = \
 	menu.ui menu.txt \
 	combos.ui combos.txt \
 	listbox.ui listbox.txt \
+	stack.ui stack.txt \
 	$(NULL)
 
 test_in_files = \
