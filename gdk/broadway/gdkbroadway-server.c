@@ -105,7 +105,7 @@ _gdk_broadway_server_new (const char *display, GError **error)
 #ifdef G_OS_UNIX
       display = ":0";
 #else
-      display = ":tcp"
+      display = ":tcp";
 #endif
     }
 

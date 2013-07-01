@@ -72,8 +72,10 @@ libgdk_broadway_la_SOURCES =		\
 	gdkbroadway-server.h	\
 	gdkbroadway-server.c
 
+if OS_UNIX
 libgdk_broadway_la_LIBADD = \
 	-lrt
+endif
 
 broadwayd_SOURCES = \
 	broadway-protocol.h		\

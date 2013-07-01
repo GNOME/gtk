@@ -475,7 +475,7 @@ main (int argc, char *argv[])
 #ifdef G_OS_UNIX
       display = ":0";
 #else
-      display = ":tcp"
+      display = ":tcp";
 #endif
     }
 
