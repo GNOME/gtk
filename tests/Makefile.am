@@ -480,7 +480,7 @@ teststack_SOURCES = teststack.c
 
 testrevealer_SOURCES = testrevealer.c
 
-testtitlebar_SOURCES = testrevealer.c
+testtitlebar_SOURCES = testtitlebar.c
 
 testwindowsize_SOURCES = testwindowsize.c
 
