@@ -156,6 +156,7 @@ gdk_window_impl_x11_init (GdkWindowImplX11 *impl)
 {  
   impl->device_cursor = g_hash_table_new_full (NULL, NULL,
                                                NULL, g_object_unref);
+  impl->window_scale = 1;
 }
 
 GdkToplevelX11 *
@@ -1916,6 +1917,8 @@ _gdk_x11_window_set_window_scale (GdkWindow *window,
 
   if (window->window_type == GDK_WINDOW_OFFSCREEN)
     return;
+
+  g_print ("_gdk_x11_window_set_window_scale %p %d\n", window, scale);
 
   impl = GDK_WINDOW_IMPL_X11 (window->impl);
 

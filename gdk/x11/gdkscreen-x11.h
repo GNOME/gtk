@@ -48,6 +48,7 @@ struct _GdkX11Screen
   gint primary_monitor;
 
   gint window_scale;
+  gboolean fixed_window_scale;
 
   /* Xft resources for the display, used for default values for
    * the Xft/ XSETTINGS
