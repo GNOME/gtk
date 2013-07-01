@@ -812,8 +812,9 @@ should_apply_clip_as_shape (GdkWindow *window)
     gdk_window_has_impl (window) &&
     /* Not for offscreens */
     !gdk_window_is_offscreen (window) &&
-    /* or for toplevels */
-    !gdk_window_is_toplevel (window) &&
+    /* or for non-shaped toplevels */
+    (!gdk_window_is_toplevel (window) ||
+     window->shape != NULL || window->applied_shape) &&
     /* or for foreign windows */
     window->window_type != GDK_WINDOW_FOREIGN &&
     /* or for the root window */
