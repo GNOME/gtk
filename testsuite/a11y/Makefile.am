@@ -73,6 +73,7 @@ testdata = \
 	placeholder-text.ui placeholder-text.txt \
 	menu.ui menu.txt \
 	combos.ui combos.txt \
+	listbox.ui listbox.txt \
 	$(NULL)
 
 test_in_files = \
