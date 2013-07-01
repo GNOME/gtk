@@ -12,7 +12,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#elif defined (G_OS_WIN32)
+#include <io.h>
+#endif
 #include <crypt.h>
 #ifdef HAVE_SYS_MMAN_H
 #include <sys/mman.h>
@@ -979,7 +983,7 @@ static gchar *
 generate_handshake_response_wsietf_v7 (const gchar *key)
 {
   gsize digest_len = 20;
-  guchar digest[digest_len];
+  guchar digest[20];
   GChecksum *checksum;
 
   checksum = g_checksum_new (G_CHECKSUM_SHA1);

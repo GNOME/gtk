@@ -18,7 +18,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#elif defined (G_OS_WIN32)
+#include <io.h>
+#define ftruncate _chsize_s
+#endif
 #include <sys/types.h>
 #ifdef G_OS_WIN32
 #include <windows.h>
