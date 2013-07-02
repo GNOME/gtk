@@ -4158,7 +4158,14 @@ file_system_model_set (GtkFileSystemModel *model,
         {
           if (g_file_info_has_attribute (info, G_FILE_ATTRIBUTE_STANDARD_ICON))
             {
-              g_value_take_boxed (value, _gtk_file_info_render_icon (info, GTK_WIDGET (impl), priv->icon_size));
+	      cairo_pattern_t *pattern = NULL;
+	      cairo_surface_t *surface = _gtk_file_info_render_icon (info, GTK_WIDGET (impl), priv->icon_size);
+	      if (surface)
+		{
+		  pattern = cairo_pattern_create_for_surface (surface);
+		  cairo_surface_destroy (surface);
+		}
+              g_value_take_boxed (value, pattern);
             }
           else
             {
