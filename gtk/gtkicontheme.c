@@ -3909,7 +3909,7 @@ gtk_icon_info_load_pattern (GtkIconInfo *icon_info,
   if (pixbuf == NULL)
     return NULL;
 
-  surface = gdk_cairo_pixbuf_to_surface (pixbuf, for_window);
+  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, for_window);
   g_object_unref (pixbuf);
   pattern = cairo_pattern_create_for_surface (surface);
   cairo_surface_destroy (surface);

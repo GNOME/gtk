@@ -176,7 +176,7 @@ gdk_cairo_region (cairo_t         *cr,
 }
 
 /**
- * gdk_cairo_pixbuf_to_surface:
+ * gdk_cairo_surface_create_from_pixbuf:
  * @pixbuf: a #GdkPixbuf
  * @for_window: The window this will be drawn to, on %NULL.
  *
@@ -186,7 +186,7 @@ gdk_cairo_region (cairo_t         *cr,
  * Since: 3.10
  */
 cairo_surface_t *
-gdk_cairo_pixbuf_to_surface (const GdkPixbuf *pixbuf,
+gdk_cairo_surface_create_from_pixbuf (const GdkPixbuf *pixbuf,
 			     GdkWindow *for_window)
 {
   gint width = gdk_pixbuf_get_width (pixbuf);
@@ -295,7 +295,7 @@ gdk_cairo_set_source_pixbuf (cairo_t         *cr,
 {
   cairo_surface_t *surface;
 
-  surface = gdk_cairo_pixbuf_to_surface (pixbuf, NULL);
+  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, NULL);
   cairo_set_source_surface (cr, surface, pixbuf_x, pixbuf_y);
   cairo_surface_destroy (surface);
 }

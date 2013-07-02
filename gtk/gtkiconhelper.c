@@ -588,7 +588,7 @@ ensure_pattern_from_pixbuf (GtkIconHelper   *self,
   self->priv->rendered_pattern_width = (gdk_pixbuf_get_width (pixbuf) + scale - 1) / scale;
   self->priv->rendered_pattern_height = (gdk_pixbuf_get_height (pixbuf) + scale - 1) / scale;
 
-  surface = gdk_cairo_pixbuf_to_surface (pixbuf, self->priv->window);
+  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, self->priv->window);
   g_object_unref (pixbuf);
   self->priv->rendered_pattern = cairo_pattern_create_for_surface (surface);
   cairo_surface_destroy (surface);
@@ -685,7 +685,7 @@ ensure_stated_pattern_from_info (GtkIconHelper *self,
   pattern = NULL;
   if (destination)
     {
-      surface = gdk_cairo_pixbuf_to_surface (destination, self->priv->window);
+      surface = gdk_cairo_surface_create_from_pixbuf (destination, self->priv->window);
       pattern = cairo_pattern_create_for_surface (surface);
       cairo_matrix_init_scale (&matrix, scale, scale);
       cairo_pattern_set_matrix (pattern, &matrix);

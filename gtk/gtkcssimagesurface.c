@@ -145,7 +145,7 @@ _gtk_css_image_surface_new_for_pixbuf (GdkPixbuf *pixbuf)
 
   g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
 
-  surface = gdk_cairo_pixbuf_to_surface (pixbuf, NULL);
+  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, NULL);
 
   image = _gtk_css_image_surface_new (surface);
   cairo_surface_destroy (surface);

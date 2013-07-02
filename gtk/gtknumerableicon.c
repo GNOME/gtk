@@ -219,7 +219,7 @@ draw_from_gicon (GtkNumerableIcon *self)
   if (pixbuf == NULL)
     return NULL;
 
-  surface = gdk_cairo_pixbuf_to_surface (pixbuf, NULL);
+  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, NULL);
   g_object_unref (pixbuf);
 
   return surface;

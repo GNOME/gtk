@@ -819,7 +819,7 @@ _gtk_file_info_render_icon (GFileInfo *info,
 						 icon_size*scale, icon_size*scale,
 						 NULL);
 
-      surface = gdk_cairo_pixbuf_to_surface (pixbuf, 
+      surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 
 					     gtk_widget_get_window (widget));
       g_object_unref (pixbuf);
       pattern = cairo_pattern_create_for_surface (surface);
