@@ -886,8 +886,8 @@ GdkPixbuf  * gtk_icon_set_render_icon_pixbuf   (GtkIconSet      *icon_set,
                                                 GtkStyleContext *context,
                                                 GtkIconSize      size);
 GDK_AVAILABLE_IN_3_10
-cairo_pattern_t  *
-gtk_icon_set_render_icon_pattern               (GtkIconSet      *icon_set,
+cairo_surface_t  *
+gtk_icon_set_render_icon_surface               (GtkIconSet      *icon_set,
 						GtkStyleContext *context,
 						GtkIconSize      size,
 						int              scale,

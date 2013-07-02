@@ -1398,6 +1398,7 @@ change_icon_theme (GtkFileChooserButton *button)
 
   do
     {
+      cairo_surface_t *surface = NULL;
       cairo_pattern_t *pattern = NULL;
       gchar type;
       gpointer data;
@@ -1438,16 +1439,20 @@ change_icon_theme (GtkFileChooserButton *button)
 		  pattern = NULL;
 		}
 	      else
-		/* Don't call get_info for remote paths to avoid latency and
-		 * auth dialogs.
-		 * If we switch to a better bookmarks file format (XBEL), we
-		 * should use mime info to get a better icon.
-		 */
-		pattern = gtk_icon_theme_load_pattern (theme, "folder-remote",
-						       priv->icon_size, 
-						       gtk_widget_get_scale_factor (GTK_WIDGET (button)),
-						       gtk_widget_get_window (GTK_WIDGET (button)),
-						       0, NULL);
+                {
+                  /* Don't call get_info for remote paths to avoid latency and
+                   * auth dialogs.
+                   * If we switch to a better bookmarks file format (XBEL), we
+                   * should use mime info to get a better icon.
+                   */
+                  surface = gtk_icon_theme_load_surface (theme, "folder-remote",
+                                                         priv->icon_size, 
+                                                         gtk_widget_get_scale_factor (GTK_WIDGET (button)),
+                                                         gtk_widget_get_window (GTK_WIDGET (button)),
+                                                         0, NULL);
+                  pattern = cairo_pattern_create_for_surface (surface);
+                  cairo_surface_destroy (surface);
+                }
 	    }
 	  break;
 	case ROW_TYPE_VOLUME:
@@ -1974,7 +1979,8 @@ model_add_bookmarks (GtkFileChooserButton *button,
 	{
 	  gchar *label;
 	  GtkIconTheme *icon_theme;
-	  cairo_pattern_t *pattern;
+	  cairo_pattern_t *pattern = NULL;
+	  cairo_surface_t *surface = NULL;
 
 	  if (local_only)
 	    continue;
@@ -1989,11 +1995,13 @@ model_add_bookmarks (GtkFileChooserButton *button,
 	    label = _gtk_file_chooser_label_for_file (file);
 
 	  icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (button)));
-	  pattern = gtk_icon_theme_load_pattern (icon_theme, "folder-remote",
+	  surface = gtk_icon_theme_load_surface (icon_theme, "folder-remote",
 						 button->priv->icon_size, 
 						 gtk_widget_get_scale_factor (GTK_WIDGET (button)),
 						 gtk_widget_get_window (GTK_WIDGET (button)),
 						 0, NULL);
+          pattern = cairo_pattern_create_for_surface (surface);
+          cairo_surface_destroy (surface);
 
 	  gtk_list_store_insert (store, &iter, pos);
 	  gtk_list_store_set (store, &iter,
@@ -2084,7 +2092,8 @@ model_update_current_folder (GtkFileChooserButton *button,
     {
       gchar *label;
       GtkIconTheme *icon_theme;
-      cairo_pattern_t *pattern;
+      cairo_pattern_t *pattern = NULL;
+      cairo_surface_t *surface;
 
       /* Don't call get_info for remote paths to avoid latency and
        * auth dialogs.
@@ -2098,17 +2107,22 @@ model_update_current_folder (GtkFileChooserButton *button,
       icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (button)));
 
       if (g_file_is_native (file))
-	  pattern = gtk_icon_theme_load_pattern (icon_theme, "folder",
+	  surface = gtk_icon_theme_load_surface (icon_theme, "folder",
 						 button->priv->icon_size, 
 						 gtk_widget_get_scale_factor (GTK_WIDGET (button)),
 						 gtk_widget_get_window (GTK_WIDGET (button)),
 						 0, NULL);
       else
-	  pattern = gtk_icon_theme_load_pattern (icon_theme, "folder-remote",
+	  surface = gtk_icon_theme_load_surface (icon_theme, "folder-remote",
 						 button->priv->icon_size, 
 						 gtk_widget_get_scale_factor (GTK_WIDGET (button)),
 						 gtk_widget_get_window (GTK_WIDGET (button)),
 						 0, NULL);
+      if (surface)
+        {
+          pattern = cairo_pattern_create_for_surface (surface);
+          cairo_surface_destroy (surface);
+        }
 
       gtk_list_store_set (store, &iter,
 			  ICON_COLUMN, pattern,
@@ -2548,15 +2562,22 @@ update_label_and_image (GtkFileChooserButton *button)
         }
       else
         {
-          cairo_pattern_t *pattern;
+          cairo_pattern_t *pattern = NULL;
+          cairo_surface_t *surface;
 
           label_text = _gtk_bookmarks_manager_get_bookmark_label (button->priv->bookmarks_manager, file);
-          pattern = gtk_icon_theme_load_pattern (get_icon_theme (GTK_WIDGET (priv->image)),
+          surface = gtk_icon_theme_load_surface (get_icon_theme (GTK_WIDGET (priv->image)),
 						 "text-x-generic",
 						 priv->icon_size, 
 						 gtk_widget_get_scale_factor (GTK_WIDGET (button)),
 						 gtk_widget_get_window (GTK_WIDGET (button)),
 						 0, NULL);
+          if (surface)
+            {
+              pattern = cairo_pattern_create_for_surface (surface);
+              cairo_surface_destroy (surface);
+            }
+
           gtk_image_set_from_pattern (GTK_IMAGE (priv->image), pattern);
           if (pattern)
             cairo_pattern_destroy (pattern);

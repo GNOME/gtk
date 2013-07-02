@@ -718,7 +718,8 @@ get_pattern_from_gicon (GIcon      *icon,
   GdkScreen *screen;
   GtkIconTheme *icon_theme;
   GtkIconInfo *icon_info;
-  cairo_pattern_t *pattern;
+  cairo_pattern_t *pattern = NULL;
+  cairo_surface_t *surface;
 
   screen = gtk_widget_get_screen (GTK_WIDGET (widget));
   icon_theme = gtk_icon_theme_get_for_screen (screen);
@@ -732,8 +733,14 @@ get_pattern_from_gicon (GIcon      *icon,
   if (!icon_info)
     return NULL;
 
-  pattern = gtk_icon_info_load_pattern (icon_info, 
+  surface = gtk_icon_info_load_surface (icon_info,
 					gtk_widget_get_window (widget), error);
+  if (surface)
+    {
+      pattern = cairo_pattern_create_for_surface (surface);
+      cairo_surface_destroy (surface);
+    }
+
   g_object_unref (icon_info);
 
   return pattern;

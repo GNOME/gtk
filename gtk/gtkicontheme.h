@@ -211,7 +211,7 @@ GdkPixbuf *   gtk_icon_theme_load_icon_for_scale   (GtkIconTheme                
                                                     GtkIconLookupFlags           flags,
                                                     GError                     **error);
 GDK_AVAILABLE_IN_3_10
-cairo_pattern_t * gtk_icon_theme_load_pattern      (GtkIconTheme        *icon_theme,
+cairo_surface_t * gtk_icon_theme_load_surface      (GtkIconTheme        *icon_theme,
 						    const gchar         *icon_name,
 						    gint                 size,
 						    gint                 scale,
@@ -270,7 +270,7 @@ GDK_AVAILABLE_IN_ALL
 GdkPixbuf *           gtk_icon_info_load_icon          (GtkIconInfo   *icon_info,
 							GError       **error);
 GDK_AVAILABLE_IN_3_10
-cairo_pattern_t *     gtk_icon_info_load_pattern       (GtkIconInfo   *icon_info,
+cairo_surface_t *     gtk_icon_info_load_surface       (GtkIconInfo   *icon_info,
 							GdkWindow     *for_window,
 							GError       **error);
 GDK_AVAILABLE_IN_3_8
