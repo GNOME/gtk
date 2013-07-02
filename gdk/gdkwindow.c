@@ -3099,9 +3099,8 @@ gdk_window_create_cairo_surface (GdkWindow *window,
   subsurface = cairo_surface_create_for_rectangle (surface,
                                                    window->abs_x,
                                                    window->abs_y,
-                                                   width ,
+                                                   width,
                                                    height);
-  _gdk_cairo_surface_set_window (subsurface, window);
   cairo_surface_destroy (surface);
   return subsurface;
 }
@@ -3126,7 +3125,6 @@ _gdk_window_ref_cairo_surface (GdkWindow *window)
 						    window->abs_y,
 						    window->width,
 						    window->height);
-      _gdk_cairo_surface_set_window (surface, window);
     }
   else
     {
@@ -3135,7 +3133,6 @@ _gdk_window_ref_cairo_surface (GdkWindow *window)
 	  window->cairo_surface = gdk_window_create_cairo_surface (window,
                                                                    window->width,
                                                                    window->height);
-          _gdk_cairo_surface_set_window (window->cairo_surface, window);
 
 	  if (window->cairo_surface)
 	    {
@@ -9245,8 +9242,6 @@ gdk_window_create_similar_surface (GdkWindow *     window,
 
   cairo_surface_destroy (window_surface);
 
-  _gdk_cairo_surface_set_window (surface, window);
-
   return surface;
 }
 
@@ -9310,9 +9305,6 @@ gdk_window_create_similar_image_surface (GdkWindow *     window,
 #ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
   cairo_surface_set_device_scale (surface, scale, scale);
 #endif
-
-  if (window)
-    _gdk_cairo_surface_set_window (surface, window);
 
   return surface;
 }

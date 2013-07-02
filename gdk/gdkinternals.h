@@ -318,8 +318,6 @@ void gdk_synthesize_window_state (GdkWindow     *window,
 
 gboolean _gdk_cairo_surface_extents (cairo_surface_t *surface,
                                      GdkRectangle *extents);
-void _gdk_cairo_surface_set_window (cairo_surface_t *surface,
-                                    GdkWindow  *window);
 
 /*************************************
  * Interfaces used by windowing code *
