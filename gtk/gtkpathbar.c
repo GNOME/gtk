@@ -1375,7 +1375,8 @@ set_button_image_get_info_cb (GCancellable *cancellable,
 			      gpointer      user_data)
 {
   gboolean cancelled = g_cancellable_is_cancelled (cancellable);
-  cairo_pattern_t *pattern;
+  cairo_pattern_t *pattern = NULL;
+  cairo_surface_t *surface;
   struct SetButtonImageData *data = user_data;
 
   if (cancellable != data->button_data->cancellable)
@@ -1392,8 +1393,13 @@ set_button_image_get_info_cb (GCancellable *cancellable,
   if (cancelled || error)
     goto out;
 
-  pattern = _gtk_file_info_render_icon (info, GTK_WIDGET (data->path_bar),
+  surface = _gtk_file_info_render_icon (info, GTK_WIDGET (data->path_bar),
 			 	       data->path_bar->priv->icon_size);
+  if (surface)
+    {
+      pattern = cairo_pattern_create_for_surface (surface);
+      cairo_surface_destroy (surface);
+    }
   gtk_image_set_from_pattern (GTK_IMAGE (data->button_data->image), pattern);
 
   switch (data->button_data->type)
@@ -1427,6 +1433,8 @@ set_button_image (GtkPathBar *path_bar,
 {
   GtkFileSystemVolume *volume;
   struct SetButtonImageData *data;
+  cairo_pattern_t *pattern = NULL;
+  cairo_surface_t *surface;
 
   switch (button_data->type)
     {
@@ -1442,10 +1450,16 @@ set_button_image (GtkPathBar *path_bar,
       if (volume == NULL)
 	return;
 
-      path_bar->priv->root_icon = _gtk_file_system_volume_render_icon (volume,
-								 GTK_WIDGET (path_bar),
-								 path_bar->priv->icon_size,
-								 NULL);
+      surface = _gtk_file_system_volume_render_icon (volume,
+                                                     GTK_WIDGET (path_bar),
+                                                     path_bar->priv->icon_size,
+                                                     NULL);
+      if (surface)
+        {
+          pattern = cairo_pattern_create_for_surface (surface);
+          cairo_surface_destroy (surface);
+        }
+      path_bar->priv->root_icon = pattern;
       _gtk_file_system_volume_unref (volume);
 
       gtk_image_set_from_pattern (GTK_IMAGE (button_data->image), path_bar->priv->root_icon);

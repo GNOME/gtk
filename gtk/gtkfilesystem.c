@@ -709,8 +709,8 @@ _gtk_file_system_volume_get_root (GtkFileSystemVolume *volume)
   return file;
 }
 
-static cairo_pattern_t *
-get_pattern_from_gicon (GIcon      *icon,
+static cairo_surface_t *
+get_surface_from_gicon (GIcon      *icon,
 			GtkWidget  *widget,
 			gint        icon_size,
 			GError    **error)
@@ -718,7 +718,6 @@ get_pattern_from_gicon (GIcon      *icon,
   GdkScreen *screen;
   GtkIconTheme *icon_theme;
   GtkIconInfo *icon_info;
-  cairo_pattern_t *pattern = NULL;
   cairo_surface_t *surface;
 
   screen = gtk_widget_get_screen (GTK_WIDGET (widget));
@@ -735,25 +734,20 @@ get_pattern_from_gicon (GIcon      *icon,
 
   surface = gtk_icon_info_load_surface (icon_info,
 					gtk_widget_get_window (widget), error);
-  if (surface)
-    {
-      pattern = cairo_pattern_create_for_surface (surface);
-      cairo_surface_destroy (surface);
-    }
 
   g_object_unref (icon_info);
 
-  return pattern;
+  return surface;
 }
 
-cairo_pattern_t *
+cairo_surface_t *
 _gtk_file_system_volume_render_icon (GtkFileSystemVolume  *volume,
 				     GtkWidget            *widget,
 				     gint                  icon_size,
 				     GError              **error)
 {
   GIcon *icon = NULL;
-  cairo_pattern_t *pattern;
+  cairo_surface_t *surface;
 
   DEBUG ("volume_get_icon_name");
 
@@ -769,11 +763,11 @@ _gtk_file_system_volume_render_icon (GtkFileSystemVolume  *volume,
   if (!icon)
     return NULL;
 
-  pattern = get_pattern_from_gicon (icon, widget, icon_size, error);
+  surface = get_surface_from_gicon (icon, widget, icon_size, error);
 
   g_object_unref (icon);
 
-  return pattern;
+  return surface;
 }
 
 GtkFileSystemVolume *
@@ -804,17 +798,15 @@ _gtk_file_system_volume_unref (GtkFileSystemVolume *volume)
 }
 
 /* GFileInfo helper functions */
-cairo_pattern_t *
+cairo_surface_t *
 _gtk_file_info_render_icon (GFileInfo *info,
 			    GtkWidget *widget,
 			    gint       icon_size)
 {
   GIcon *icon;
   GdkPixbuf *pixbuf;
-  cairo_pattern_t *pattern = NULL;
   const gchar *thumbnail_path;
-  cairo_surface_t *surface;
-  cairo_matrix_t matrix;
+  cairo_surface_t *surface = NULL;
   int scale;
 
   thumbnail_path = g_file_info_get_attribute_byte_string (info, G_FILE_ATTRIBUTE_THUMBNAIL_PATH);
@@ -826,33 +818,28 @@ _gtk_file_info_render_icon (GFileInfo *info,
 						 icon_size*scale, icon_size*scale,
 						 NULL);
 
-      surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1,
+      surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, scale,
                                                       gtk_widget_get_window (widget));
       g_object_unref (pixbuf);
-      pattern = cairo_pattern_create_for_surface (surface);
-      cairo_surface_destroy (surface);
-      
-      cairo_matrix_init_scale (&matrix, scale, scale);
-      cairo_pattern_set_matrix (pattern, &matrix);
     }
 
-  if (!pattern)
+  if (!surface)
     {
       icon = g_file_info_get_icon (info);
 
       if (icon)
-	pattern = get_pattern_from_gicon (icon, widget, icon_size, NULL);
+	surface = get_surface_from_gicon (icon, widget, icon_size, NULL);
 
-      if (!pattern)
+      if (!surface)
 	{
 	   /* Use general fallback for all files without icon */
 	  icon = g_themed_icon_new ("text-x-generic");
-	  pattern = get_pattern_from_gicon (icon, widget, icon_size, NULL);
+	  surface = get_surface_from_gicon (icon, widget, icon_size, NULL);
 	  g_object_unref (icon);
 	}
     }
 
-  return pattern;
+  return surface;
 }
 
 gboolean

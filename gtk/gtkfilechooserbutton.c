@@ -1321,7 +1321,8 @@ change_icon_theme_get_info_cb (GCancellable *cancellable,
 			       gpointer      user_data)
 {
   gboolean cancelled = g_cancellable_is_cancelled (cancellable);
-  cairo_pattern_t *pattern;
+  cairo_pattern_t *pattern = NULL;
+  cairo_surface_t *surface;
   struct ChangeIconThemeData *data = user_data;
 
   if (!g_slist_find (data->button->priv->change_icon_theme_cancellables, cancellable))
@@ -1333,7 +1334,12 @@ change_icon_theme_get_info_cb (GCancellable *cancellable,
   if (cancelled || error)
     goto out;
 
-  pattern = _gtk_file_info_render_icon (info, GTK_WIDGET (data->button), data->button->priv->icon_size);
+  surface = _gtk_file_info_render_icon (info, GTK_WIDGET (data->button), data->button->priv->icon_size);
+  if (surface)
+    {
+      pattern = cairo_pattern_create_for_surface (surface);
+      cairo_surface_destroy (surface);
+    }
 
   if (pattern)
     {
@@ -1457,10 +1463,18 @@ change_icon_theme (GtkFileChooserButton *button)
 	  break;
 	case ROW_TYPE_VOLUME:
 	  if (data)
-	    pattern = _gtk_file_system_volume_render_icon (data,
-							   GTK_WIDGET (button),
-							   priv->icon_size,
-							   NULL);
+            {
+              surface = _gtk_file_system_volume_render_icon (data,
+                                                             GTK_WIDGET (button),
+                                                             priv->icon_size,
+                                                             NULL);
+              if (surface)
+                {
+                  pattern = cairo_pattern_create_for_surface (surface);
+                  cairo_surface_destroy (surface);
+                }
+            }
+
 	  break;
 	default:
 	  continue;
@@ -1534,7 +1548,8 @@ set_info_get_info_cb (GCancellable *cancellable,
 		      gpointer      callback_data)
 {
   gboolean cancelled = g_cancellable_is_cancelled (cancellable);
-  cairo_pattern_t *pattern;
+  cairo_pattern_t *pattern = NULL;
+  cairo_surface_t *surface;
   GtkTreePath *path;
   GtkTreeIter iter;
   GCancellable *model_cancellable = NULL;
@@ -1568,7 +1583,12 @@ set_info_get_info_cb (GCancellable *cancellable,
     /* There was an error, leave the fallback name in there */
     goto out;
 
-  pattern = _gtk_file_info_render_icon (info, GTK_WIDGET (data->button), data->button->priv->icon_size);
+  surface = _gtk_file_info_render_icon (info, GTK_WIDGET (data->button), data->button->priv->icon_size);
+  if (surface)
+    {
+      pattern = cairo_pattern_create_for_surface (surface);
+      cairo_surface_destroy (surface);
+    }
 
   if (!data->label)
     data->label = g_strdup (g_file_info_get_display_name (info));
@@ -1724,7 +1744,8 @@ model_add_special_get_info_cb (GCancellable *cancellable,
   gboolean cancelled = g_cancellable_is_cancelled (cancellable);
   GtkTreeIter iter;
   GtkTreePath *path;
-  cairo_pattern_t *pattern;
+  cairo_pattern_t *pattern = NULL;
+  cairo_surface_t *surface;
   GCancellable *model_cancellable = NULL;
   struct ChangeIconThemeData *data = user_data;
   gchar *name;
@@ -1754,7 +1775,12 @@ model_add_special_get_info_cb (GCancellable *cancellable,
   if (cancelled || error)
     goto out;
 
-  pattern = _gtk_file_info_render_icon (info, GTK_WIDGET (data->button), data->button->priv->icon_size);
+  surface = _gtk_file_info_render_icon (info, GTK_WIDGET (data->button), data->button->priv->icon_size);
+  if (surface)
+    {
+      pattern = cairo_pattern_create_for_surface (surface);
+      cairo_surface_destroy (surface);
+    }
 
   if (pattern)
     {
@@ -1889,7 +1915,8 @@ model_add_volumes (GtkFileChooserButton *button,
     {
       GtkFileSystemVolume *volume;
       GtkTreeIter iter;
-      cairo_pattern_t *pattern;
+      cairo_pattern_t *pattern = NULL;
+      cairo_surface_t *surface;
       gchar *display_name;
 
       volume = l->data;
@@ -1914,10 +1941,15 @@ model_add_volumes (GtkFileChooserButton *button,
             }
         }
 
-      pattern = _gtk_file_system_volume_render_icon (volume,
-						     GTK_WIDGET (button),
-						     button->priv->icon_size,
-						     NULL);
+      surface = _gtk_file_system_volume_render_icon (volume,
+                                                     GTK_WIDGET (button),
+                                                     button->priv->icon_size,
+                                                     NULL);
+      if (surface)
+        {
+          pattern = cairo_pattern_create_for_surface (surface);
+          cairo_surface_destroy (surface);
+        }
       display_name = _gtk_file_system_volume_get_display_name (volume);
 
       gtk_list_store_insert (store, &iter, pos);
@@ -2470,7 +2502,8 @@ update_label_get_info_cb (GCancellable *cancellable,
 			  gpointer      data)
 {
   gboolean cancelled = g_cancellable_is_cancelled (cancellable);
-  cairo_pattern_t *pattern;
+  cairo_pattern_t *pattern = NULL;
+  cairo_surface_t *surface;
   GtkFileChooserButton *button = data;
   GtkFileChooserButtonPrivate *priv = button->priv;
 
@@ -2484,7 +2517,12 @@ update_label_get_info_cb (GCancellable *cancellable,
 
   gtk_label_set_text (GTK_LABEL (priv->label), g_file_info_get_display_name (info));
 
-  pattern = _gtk_file_info_render_icon (info, GTK_WIDGET (priv->image), priv->icon_size);
+  surface = _gtk_file_info_render_icon (info, GTK_WIDGET (priv->image), priv->icon_size);
+  if (surface)
+    {
+      pattern = cairo_pattern_create_for_surface (surface);
+      cairo_surface_destroy (surface);
+    }
 
   gtk_image_set_from_pattern (GTK_IMAGE (priv->image), pattern);
   if (pattern)
@@ -2528,13 +2566,20 @@ update_label_and_image (GtkFileChooserButton *button)
           base_file = _gtk_file_system_volume_get_root (volume);
           if (base_file && g_file_equal (base_file, file))
             {
-              cairo_pattern_t *pattern;
+              cairo_pattern_t *pattern = NULL;
+              cairo_surface_t *surface;
 
               label_text = _gtk_file_system_volume_get_display_name (volume);
-              pattern = _gtk_file_system_volume_render_icon (volume,
+              surface = _gtk_file_system_volume_render_icon (volume,
 							     GTK_WIDGET (button),
 							     priv->icon_size,
 							     NULL);
+              if (surface)
+                {
+                  pattern = cairo_pattern_create_for_surface (surface);
+                  cairo_surface_destroy (surface);
+                }
+
               gtk_image_set_from_pattern (GTK_IMAGE (priv->image), pattern);
               if (pattern)
                 cairo_pattern_destroy (pattern);
