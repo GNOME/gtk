@@ -46,9 +46,9 @@ struct _GtkPathBarPrivate
 
   GCancellable *get_info_cancellable;
 
-  cairo_pattern_t *root_icon;
-  cairo_pattern_t *home_icon;
-  cairo_pattern_t *desktop_icon;
+  cairo_surface_t *root_icon;
+  cairo_surface_t *home_icon;
+  cairo_surface_t *desktop_icon;
 
   GdkWindow *event_window;
 
@@ -293,11 +293,11 @@ gtk_path_bar_finalize (GObject *object)
     g_object_unref (path_bar->priv->desktop_file);
 
   if (path_bar->priv->root_icon)
-    cairo_pattern_destroy (path_bar->priv->root_icon);
+    cairo_surface_destroy (path_bar->priv->root_icon);
   if (path_bar->priv->home_icon)
-    cairo_pattern_destroy (path_bar->priv->home_icon);
+    cairo_surface_destroy (path_bar->priv->home_icon);
   if (path_bar->priv->desktop_icon)
-    cairo_pattern_destroy (path_bar->priv->desktop_icon);
+    cairo_surface_destroy (path_bar->priv->desktop_icon);
 
   if (path_bar->priv->file_system)
     g_object_unref (path_bar->priv->file_system);
@@ -1238,17 +1238,17 @@ reload_icons (GtkPathBar *path_bar)
 
   if (path_bar->priv->root_icon)
     {
-      cairo_pattern_destroy (path_bar->priv->root_icon);
+      cairo_surface_destroy (path_bar->priv->root_icon);
       path_bar->priv->root_icon = NULL;
     }
   if (path_bar->priv->home_icon)
     {
-      cairo_pattern_destroy (path_bar->priv->home_icon);
+      cairo_surface_destroy (path_bar->priv->home_icon);
       path_bar->priv->home_icon = NULL;
     }
   if (path_bar->priv->desktop_icon)
     {
-      cairo_pattern_destroy (path_bar->priv->desktop_icon);
+      cairo_surface_destroy (path_bar->priv->desktop_icon);
       path_bar->priv->desktop_icon = NULL;
     }
 
@@ -1375,7 +1375,6 @@ set_button_image_get_info_cb (GCancellable *cancellable,
 			      gpointer      user_data)
 {
   gboolean cancelled = g_cancellable_is_cancelled (cancellable);
-  cairo_pattern_t *pattern = NULL;
   cairo_surface_t *surface;
   struct SetButtonImageData *data = user_data;
 
@@ -1395,27 +1394,22 @@ set_button_image_get_info_cb (GCancellable *cancellable,
 
   surface = _gtk_file_info_render_icon (info, GTK_WIDGET (data->path_bar),
 			 	       data->path_bar->priv->icon_size);
-  if (surface)
-    {
-      pattern = cairo_pattern_create_for_surface (surface);
-      cairo_surface_destroy (surface);
-    }
-  gtk_image_set_from_pattern (GTK_IMAGE (data->button_data->image), pattern);
+  gtk_image_set_from_surface (GTK_IMAGE (data->button_data->image), surface);
 
   switch (data->button_data->type)
     {
       case HOME_BUTTON:
 	if (data->path_bar->priv->home_icon)
-	  cairo_pattern_destroy (pattern);
+	  cairo_surface_destroy (surface);
 	else
-	  data->path_bar->priv->home_icon = pattern;
+	  data->path_bar->priv->home_icon = surface;
 	break;
 
       case DESKTOP_BUTTON:
 	if (data->path_bar->priv->desktop_icon)
-	  cairo_pattern_destroy (pattern);
+	  cairo_surface_destroy (surface);
 	else
-	  data->path_bar->priv->desktop_icon = pattern;
+	  data->path_bar->priv->desktop_icon = surface;
 	break;
 
       default:
@@ -1433,8 +1427,6 @@ set_button_image (GtkPathBar *path_bar,
 {
   GtkFileSystemVolume *volume;
   struct SetButtonImageData *data;
-  cairo_pattern_t *pattern = NULL;
-  cairo_surface_t *surface;
 
   switch (button_data->type)
     {
@@ -1442,7 +1434,7 @@ set_button_image (GtkPathBar *path_bar,
 
       if (path_bar->priv->root_icon != NULL)
         {
-          gtk_image_set_from_pattern (GTK_IMAGE (button_data->image), path_bar->priv->root_icon);
+          gtk_image_set_from_surface (GTK_IMAGE (button_data->image), path_bar->priv->root_icon);
 	  break;
 	}
 
@@ -1450,25 +1442,19 @@ set_button_image (GtkPathBar *path_bar,
       if (volume == NULL)
 	return;
 
-      surface = _gtk_file_system_volume_render_icon (volume,
-                                                     GTK_WIDGET (path_bar),
-                                                     path_bar->priv->icon_size,
-                                                     NULL);
-      if (surface)
-        {
-          pattern = cairo_pattern_create_for_surface (surface);
-          cairo_surface_destroy (surface);
-        }
-      path_bar->priv->root_icon = pattern;
+      path_bar->priv->root_icon = _gtk_file_system_volume_render_icon (volume,
+								       GTK_WIDGET (path_bar),
+								       path_bar->priv->icon_size,
+								       NULL);
       _gtk_file_system_volume_unref (volume);
 
-      gtk_image_set_from_pattern (GTK_IMAGE (button_data->image), path_bar->priv->root_icon);
+      gtk_image_set_from_surface (GTK_IMAGE (button_data->image), path_bar->priv->root_icon);
       break;
 
     case HOME_BUTTON:
       if (path_bar->priv->home_icon != NULL)
         {
-	  gtk_image_set_from_pattern (GTK_IMAGE (button_data->image), path_bar->priv->home_icon);
+	  gtk_image_set_from_surface (GTK_IMAGE (button_data->image), path_bar->priv->home_icon);
 	  break;
 	}
 
@@ -1490,7 +1476,7 @@ set_button_image (GtkPathBar *path_bar,
     case DESKTOP_BUTTON:
       if (path_bar->priv->desktop_icon != NULL)
         {
-	  gtk_image_set_from_pattern (GTK_IMAGE (button_data->image), path_bar->priv->desktop_icon);
+	  gtk_image_set_from_surface (GTK_IMAGE (button_data->image), path_bar->priv->desktop_icon);
 	  break;
 	}
 

@@ -182,9 +182,9 @@ static void gtk_theming_engine_render_icon (GtkThemingEngine *engine,
 					    GdkPixbuf *pixbuf,
                                             gdouble x,
                                             gdouble y);
-static void gtk_theming_engine_render_icon_pattern (GtkThemingEngine *engine,
+static void gtk_theming_engine_render_icon_surface (GtkThemingEngine *engine,
 						    cairo_t *cr,
-						    cairo_pattern_t *pattern,
+						    cairo_surface_t *surface,
 						    gdouble x,
 						    gdouble y);
 
@@ -244,7 +244,7 @@ gtk_theming_engine_class_init (GtkThemingEngineClass *klass)
   klass->render_handle = gtk_theming_engine_render_handle;
   klass->render_activity = gtk_theming_engine_render_activity;
   klass->render_icon_pixbuf = gtk_theming_engine_render_icon_pixbuf;
-  klass->render_icon_pattern = gtk_theming_engine_render_icon_pattern;
+  klass->render_icon_surface = gtk_theming_engine_render_icon_surface;
 
   /**
    * GtkThemingEngine:name:
@@ -2798,17 +2798,15 @@ gtk_theming_engine_render_icon (GtkThemingEngine *engine,
 }
 
 static void
-gtk_theming_engine_render_icon_pattern (GtkThemingEngine *engine,
+gtk_theming_engine_render_icon_surface (GtkThemingEngine *engine,
 					cairo_t *cr,
-					cairo_pattern_t *pattern,
+					cairo_surface_t *surface,
 					gdouble x,
 					gdouble y)
 {
   cairo_save (cr);
 
-  cairo_translate (cr, x, y);
-  cairo_set_source (cr, pattern);
-
+  cairo_set_source_surface (cr, surface, x, y);
 
   _gtk_css_shadows_value_paint_icon (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_ICON_SHADOW), cr);
 

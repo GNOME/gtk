@@ -4513,21 +4513,21 @@ gtk_render_icon (GtkStyleContext *context,
 }
 
 /**
- * gtk_render_icon_pattern:
+ * gtk_render_icon_surface:
  * @context: a #GtkStyleContext
  * @cr: a #cairo_t
- * @pattern: a #cairo_pattern_t containing the icon to draw
- * @x: X position for the @pixbuf
- * @y: Y position for the @pixbuf
+ * @surface: a #cairo_surface_t containing the icon to draw
+ * @x: X position for the @icon
+ * @y: Y position for the @incon
  *
- * Renders the icon in @pixbuf at the specified @x and @y coordinates.
+ * Renders the icon in @surface at the specified @x and @y coordinates.
  *
  * Since: 3.10
  **/
 void
-gtk_render_icon_pattern (GtkStyleContext *context,
+gtk_render_icon_surface (GtkStyleContext *context,
 			 cairo_t         *cr,
-			 cairo_pattern_t *pattern,
+			 cairo_surface_t *surface,
 			 gdouble          x,
 			 gdouble          y)
 {
@@ -4543,7 +4543,7 @@ gtk_render_icon_pattern (GtkStyleContext *context,
   cairo_save (cr);
 
   _gtk_theming_engine_set_context (engine, context);
-  engine_class->render_icon_pattern (engine, cr, pattern, x, y);
+  engine_class->render_icon_surface (engine, cr, surface, x, y);
 
   cairo_restore (cr);
 }

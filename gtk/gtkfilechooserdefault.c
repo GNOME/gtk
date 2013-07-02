@@ -365,7 +365,7 @@ enum {
   MODEL_COL_NAME_COLLATED,
   MODEL_COL_IS_FOLDER,
   MODEL_COL_IS_SENSITIVE,
-  MODEL_COL_PATTERN,
+  MODEL_COL_SURFACE,
   MODEL_COL_SIZE_TEXT,
   MODEL_COL_MTIME_TEXT,
   MODEL_COL_ELLIPSIZE,
@@ -382,7 +382,7 @@ enum {
 	G_TYPE_STRING,		  /* MODEL_COL_NAME_COLLATED */	\
 	G_TYPE_BOOLEAN,		  /* MODEL_COL_IS_FOLDER */	\
 	G_TYPE_BOOLEAN,		  /* MODEL_COL_IS_SENSITIVE */	\
-	CAIRO_GOBJECT_TYPE_PATTERN,  /* MODEL_COL_PATTERN */	\
+	CAIRO_GOBJECT_TYPE_SURFACE,  /* MODEL_COL_SURFACE */	\
 	G_TYPE_STRING,		  /* MODEL_COL_SIZE_TEXT */	\
 	G_TYPE_STRING,		  /* MODEL_COL_MTIME_TEXT */	\
 	PANGO_TYPE_ELLIPSIZE_MODE /* MODEL_COL_ELLIPSIZE */
@@ -3133,7 +3133,7 @@ change_icon_theme (GtkFileChooserDefault *impl)
   set_icon_cell_renderer_fixed_size (impl);
 
   if (priv->browse_files_model)
-    _gtk_file_system_model_clear_cache (priv->browse_files_model, MODEL_COL_PATTERN);
+    _gtk_file_system_model_clear_cache (priv->browse_files_model, MODEL_COL_SURFACE);
   gtk_widget_queue_resize (priv->browse_files_tree_view);
 
   profile_end ("end", NULL);
@@ -4153,19 +4153,12 @@ file_system_model_set (GtkFileSystemModel *model,
       else
         g_value_set_boolean (value, TRUE);
       break;
-    case MODEL_COL_PATTERN:
+    case MODEL_COL_SURFACE:
       if (info)
         {
           if (g_file_info_has_attribute (info, G_FILE_ATTRIBUTE_STANDARD_ICON))
             {
-	      cairo_pattern_t *pattern = NULL;
-	      cairo_surface_t *surface = _gtk_file_info_render_icon (info, GTK_WIDGET (impl), priv->icon_size);
-	      if (surface)
-		{
-		  pattern = cairo_pattern_create_for_surface (surface);
-		  cairo_surface_destroy (surface);
-		}
-              g_value_take_boxed (value, pattern);
+              g_value_take_boxed (value, _gtk_file_info_render_icon (info, GTK_WIDGET (impl), priv->icon_size));
             }
           else
             {
@@ -7077,7 +7070,7 @@ update_cell_renderer_attributes (GtkFileChooserDefault *impl)
       if (GTK_IS_CELL_RENDERER_PIXBUF (renderer))
         {
           gtk_tree_view_column_set_attributes (column, renderer, 
-                                               "pattern", MODEL_COL_PATTERN,
+                                               "surface", MODEL_COL_SURFACE,
                                                NULL);
         }
       else

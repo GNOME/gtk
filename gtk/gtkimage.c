@@ -186,7 +186,7 @@ enum
 {
   PROP_0,
   PROP_PIXBUF,
-  PROP_PATTERN,
+  PROP_SURFACE,
   PROP_FILE,
   PROP_STOCK,
   PROP_ICON_SET,
@@ -234,11 +234,11 @@ gtk_image_class_init (GtkImageClass *class)
                                                         GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
-                                   PROP_PATTERN,
-                                   g_param_spec_boxed ("pattern",
-						       P_("Pattern"),
-						       P_("A cairo_pattern_t to display"),
-						       CAIRO_GOBJECT_TYPE_PATTERN,
+                                   PROP_SURFACE,
+                                   g_param_spec_boxed ("surface",
+						       P_("Surface"),
+						       P_("A cairo_surface_t to display"),
+						       CAIRO_GOBJECT_TYPE_SURFACE,
 						       GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
@@ -440,8 +440,8 @@ gtk_image_set_property (GObject      *object,
       gtk_image_set_from_pixbuf (image,
                                  g_value_get_object (value));
       break;
-    case PROP_PATTERN:
-      gtk_image_set_from_pattern (image,
+    case PROP_SURFACE:
+      gtk_image_set_from_surface (image,
 				  g_value_get_boxed (value));
       break;
     case PROP_FILE:
@@ -505,8 +505,8 @@ gtk_image_get_property (GObject     *object,
     case PROP_PIXBUF:
       g_value_set_object (value, _gtk_icon_helper_peek_pixbuf (priv->icon_helper));
       break;
-    case PROP_PATTERN:
-      g_value_set_boxed (value, _gtk_icon_helper_peek_pattern (priv->icon_helper));
+    case PROP_SURFACE:
+      g_value_set_boxed (value, _gtk_icon_helper_peek_surface (priv->icon_helper));
       break;
     case PROP_FILE:
       g_value_set_string (value, priv->filename);
@@ -650,24 +650,24 @@ gtk_image_new_from_pixbuf (GdkPixbuf *pixbuf)
 }
 
 /**
- * gtk_image_new_from_pattern:
- * @pattern: (allow-none): a #cairo_pattern_t, or %NULL
+ * gtk_image_new_from_surface:
+ * @surface: (allow-none): a #cairo_surface_t, or %NULL
  *
- * Creates a new #GtkImage displaying @pattern.
+ * Creates a new #GtkImage displaying @surface.
  * The #GtkImage does not assume a reference to the
- * pattern; you still need to unref it if you own references.
+ * surface; you still need to unref it if you own references.
  * #GtkImage will add its own reference rather than adopting yours.
  * 
  * Return value: a new #GtkImage
  **/
 GtkWidget*
-gtk_image_new_from_pattern (cairo_pattern_t *pattern)
+gtk_image_new_from_surface (cairo_surface_t *surface)
 {
   GtkImage *image;
 
   image = g_object_new (GTK_TYPE_IMAGE, NULL);
 
-  gtk_image_set_from_pattern (image, pattern);
+  gtk_image_set_from_surface (image, surface);
 
   return GTK_WIDGET (image);  
 }
@@ -1169,17 +1169,17 @@ gtk_image_set_from_gicon  (GtkImage       *image,
 }
 
 /**
- * gtk_image_set_from_pattern:
+ * gtk_image_set_from_surface:
  * @image: a #GtkImage
- * @pattern: a cairo_pattern_t
+ * @surface: a cairo_surface_t
  *
- * See gtk_image_new_from_pattern() for details.
+ * See gtk_image_new_from_surface() for details.
  * 
  * Since: 3.10
  **/
 void
-gtk_image_set_from_pattern (GtkImage       *image,
-			    cairo_pattern_t *pattern)
+gtk_image_set_from_surface (GtkImage       *image,
+			    cairo_surface_t *surface)
 {
   GtkImagePrivate *priv;
 
@@ -1189,18 +1189,18 @@ gtk_image_set_from_pattern (GtkImage       *image,
 
   g_object_freeze_notify (G_OBJECT (image));
 
-  if (pattern)
-    cairo_pattern_reference (pattern);
+  if (surface)
+    cairo_surface_reference (surface);
 
   gtk_image_clear (image);
 
-  if (pattern)
+  if (surface)
     {
-      _gtk_icon_helper_set_pattern (priv->icon_helper, pattern);
-      cairo_pattern_destroy (pattern);
+      _gtk_icon_helper_set_surface (priv->icon_helper, surface);
+      cairo_surface_destroy (surface);
     }
 
-  g_object_notify (G_OBJECT (image), "pattern");
+  g_object_notify (G_OBJECT (image), "surface");
   
   g_object_thaw_notify (G_OBJECT (image));
 }

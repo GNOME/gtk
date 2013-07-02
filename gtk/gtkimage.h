@@ -60,7 +60,7 @@ typedef struct _GtkImageClass         GtkImageClass;
  *  This image type was added in GTK+ 2.6
  * @GTK_IMAGE_GICON: the widget contains a #GIcon.
  *  This image type was added in GTK+ 2.14
- * @GTK_IMAGE_PATTERN: the widget contains a #cairo_pattern_t.
+ * @GTK_IMAGE_SURFACE: the widget contains a #cairo_surface_t.
  *  This image type was added in GTK+ 3.10
  *
  * Describes the image data representation used by a #GtkImage. If you
@@ -80,7 +80,7 @@ typedef enum
   GTK_IMAGE_ANIMATION,
   GTK_IMAGE_ICON_NAME,
   GTK_IMAGE_GICON,
-  GTK_IMAGE_PATTERN
+  GTK_IMAGE_SURFACE
 } GtkImageType;
 
 /**
@@ -134,7 +134,7 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_image_new_from_gicon     (GIcon           *icon,
 					 GtkIconSize      size);
 GDK_AVAILABLE_IN_3_10
-GtkWidget* gtk_image_new_from_pattern   (cairo_pattern_t *pattern);
+GtkWidget* gtk_image_new_from_surface   (cairo_surface_t *surface);
 
 GDK_AVAILABLE_IN_ALL
 void gtk_image_clear              (GtkImage        *image);
@@ -167,8 +167,8 @@ void gtk_image_set_from_gicon     (GtkImage        *image,
 				   GIcon           *icon,
 				   GtkIconSize      size);
 GDK_AVAILABLE_IN_3_10
-void gtk_image_set_from_pattern   (GtkImage        *image,
-				   cairo_pattern_t *pattern);
+void gtk_image_set_from_surface   (GtkImage        *image,
+				   cairo_surface_t *surface);
 GDK_AVAILABLE_IN_ALL
 void gtk_image_set_pixel_size     (GtkImage        *image,
 				   gint             pixel_size);

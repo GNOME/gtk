@@ -1582,7 +1582,7 @@ gtk_icon_set_render_icon_pixbuf (GtkIconSet        *icon_set,
 }
 
 /**
- * gtk_icon_set_render_icon_pattern:
+ * gtk_icon_set_render_icon_surface:
  * @icon_set: a #GtkIconSet
  * @context: a #GtkStyleContext
  * @size: (type int): icon size. A size of (GtkIconSize)-1
@@ -1591,18 +1591,18 @@ gtk_icon_set_render_icon_pixbuf (GtkIconSet        *icon_set,
  * @for_window: (allow-none): #GdkWindow to optimize drawing for, or %NULL
  *
  * Renders an icon using gtk_render_icon_pixbuf() and converts it to a
- * cairo pattern. 
+ * cairo surface. 
  *
  * This function never returns %NULL; if the icon can't be rendered
  * (perhaps because an image file fails to load), a default "missing
  * image" icon will be returned instead.
  *
- * Return value: (transfer full): a #cairo_pattern_t to be displayed
+ * Return value: (transfer full): a #cairo_surface_t to be displayed
  *
  * Since: 3.10
  */
-cairo_pattern_t *
-gtk_icon_set_render_icon_pattern  (GtkIconSet      *icon_set,
+cairo_surface_t *
+gtk_icon_set_render_icon_surface  (GtkIconSet      *icon_set,
 				   GtkStyleContext *context,
 				   GtkIconSize      size,
 				   gint             scale,
@@ -1610,20 +1610,13 @@ gtk_icon_set_render_icon_pattern  (GtkIconSet      *icon_set,
 {
   GdkPixbuf *pixbuf;
   cairo_surface_t *surface;
-  cairo_pattern_t *pattern;
-  cairo_matrix_t matrix;
 
   pixbuf = gtk_icon_set_render_icon_pixbuf_for_scale (icon_set, context, size, scale);
 
-  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, for_window);
+  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, scale, for_window);
   g_object_unref (pixbuf);
-  pattern = cairo_pattern_create_for_surface (surface);
-  cairo_surface_destroy (surface);
 
-  cairo_matrix_init_scale (&matrix, scale, scale);
-  cairo_pattern_set_matrix (pattern, &matrix);
-
-  return pattern;
+  return surface;
 }
 
 /**

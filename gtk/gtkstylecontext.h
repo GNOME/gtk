@@ -1098,9 +1098,9 @@ void        gtk_render_icon        (GtkStyleContext     *context,
                                     gdouble              x,
                                     gdouble              y);
 GDK_AVAILABLE_IN_3_10
-void        gtk_render_icon_pattern (GtkStyleContext    *context,
+void        gtk_render_icon_surface (GtkStyleContext    *context,
 				     cairo_t            *cr,
-				     cairo_pattern_t    *pattern,
+				     cairo_surface_t    *surface,
 				     gdouble             x,
 				     gdouble             y);
 GDK_AVAILABLE_IN_3_4
