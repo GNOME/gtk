@@ -30,6 +30,7 @@ testsuite/a11y/assistant.ui
 testsuite/a11y/buttons.ui
 testsuite/a11y/entries.ui
 testsuite/a11y/expander.ui
+testsuite/a11y/headerbar.ui
 testsuite/a11y/hello-world.ui
 testsuite/a11y/infobar.ui
 testsuite/a11y/link.ui
@@ -40,6 +41,7 @@ testsuite/a11y/mnemonic.ui
 testsuite/a11y/notebook.ui
 testsuite/a11y/paned.ui
 testsuite/a11y/placeholder-text.ui
+testsuite/a11y/stack.ui
 testsuite/gtk/filechooser.c
 testsuite/reftests/background-color-transparent.ref.ui
 testsuite/reftests/background-color-transparent.ui
