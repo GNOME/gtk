@@ -172,7 +172,11 @@
 -(void)doCommandBySelector: (SEL)aSelector
 {
   GDK_NOTE (EVENTS, g_print ("doCommandBySelector\n"));
-  [super doCommandBySelector: aSelector];
+  /* Do nothing. Although we are required to implement this method for
+   * NSTextInputClient, we do not handle Cocoa command IDs, and the
+   * Apple docs explicitly say not to forward unhandled commands up
+   * the NSReponder chain, which calls NSBeep().
+  */
 }
 
 -(void)insertText: (id)aString replacementRange: (NSRange)replacementRange
