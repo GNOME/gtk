@@ -36,7 +36,6 @@ G_BEGIN_DECLS
 
 typedef struct _GtkRevealer GtkRevealer;
 typedef struct _GtkRevealerClass GtkRevealerClass;
-typedef struct _GtkRevealerPrivate GtkRevealerPrivate;
 
 typedef enum {
   GTK_REVEALER_TRANSITION_TYPE_NONE,
@@ -49,7 +48,6 @@ typedef enum {
 
 struct _GtkRevealer {
   GtkBin parent_instance;
-  GtkRevealerPrivate * priv;
 };
 
 struct _GtkRevealerClass {
