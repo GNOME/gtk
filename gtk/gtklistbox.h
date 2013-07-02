@@ -40,17 +40,13 @@ G_BEGIN_DECLS
 
 typedef struct _GtkListBox        GtkListBox;
 typedef struct _GtkListBoxClass   GtkListBoxClass;
-typedef struct _GtkListBoxPrivate GtkListBoxPrivate;
 
 typedef struct _GtkListBoxRow        GtkListBoxRow;
 typedef struct _GtkListBoxRowClass   GtkListBoxRowClass;
-typedef struct _GtkListBoxRowPrivate GtkListBoxRowPrivate;
 
 struct _GtkListBox
 {
   GtkContainer parent_instance;
-
-  GtkListBoxPrivate * priv;
 };
 
 struct _GtkListBoxClass
@@ -86,8 +82,6 @@ struct _GtkListBoxClass
 struct _GtkListBoxRow
 {
   GtkBin parent_instance;
-
-  GtkListBoxRowPrivate * priv;
 };
 
 struct _GtkListBoxRowClass
