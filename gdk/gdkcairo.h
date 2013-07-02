@@ -73,7 +73,8 @@ cairo_surface_t * gdk_cairo_surface_create_similar (cairo_surface_t *surface,
                                                     int             height);
 GDK_AVAILABLE_IN_3_10
 cairo_surface_t * gdk_cairo_surface_create_from_pixbuf      (const GdkPixbuf *pixbuf,
-						    GdkWindow *for_window);
+                                                             int scale,
+                                                             GdkWindow *for_window);
 
 G_END_DECLS
 

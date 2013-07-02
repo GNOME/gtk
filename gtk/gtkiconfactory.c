@@ -1615,7 +1615,7 @@ gtk_icon_set_render_icon_pattern  (GtkIconSet      *icon_set,
 
   pixbuf = gtk_icon_set_render_icon_pixbuf_for_scale (icon_set, context, size, scale);
 
-  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, for_window);
+  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, for_window);
   g_object_unref (pixbuf);
   pattern = cairo_pattern_create_for_surface (surface);
   cairo_surface_destroy (surface);

@@ -178,6 +178,7 @@ gdk_cairo_region (cairo_t         *cr,
 /**
  * gdk_cairo_surface_create_from_pixbuf:
  * @pixbuf: a #GdkPixbuf
+ * @scale: the scale of the new surface, or 0 to use same as @window
  * @for_window: The window this will be drawn to, on %NULL.
  *
  * Creates an image surface with the same contents as
@@ -187,7 +188,8 @@ gdk_cairo_region (cairo_t         *cr,
  */
 cairo_surface_t *
 gdk_cairo_surface_create_from_pixbuf (const GdkPixbuf *pixbuf,
-			     GdkWindow *for_window)
+                                      int scale,
+                                      GdkWindow *for_window)
 {
   gint width = gdk_pixbuf_get_width (pixbuf);
   gint height = gdk_pixbuf_get_height (pixbuf);
@@ -209,7 +211,7 @@ gdk_cairo_surface_create_from_pixbuf (const GdkPixbuf *pixbuf,
      gdk_window_create_similar_image_surface (for_window,
 					      format,
 					      width, height,
-					      1);
+					      scale);
   cairo_stride = cairo_image_surface_get_stride (surface);
   cairo_pixels = cairo_image_surface_get_data (surface);
 
@@ -295,7 +297,7 @@ gdk_cairo_set_source_pixbuf (cairo_t         *cr,
 {
   cairo_surface_t *surface;
 
-  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, NULL);
+  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, NULL);
   cairo_set_source_surface (cr, surface, pixbuf_x, pixbuf_y);
   cairo_surface_destroy (surface);
 }

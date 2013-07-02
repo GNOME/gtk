@@ -783,7 +783,7 @@ pattern_value_parse (GtkCssParser *parser,
           return FALSE;
         }
 
-      surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, NULL);
+      surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, NULL);
       pattern = cairo_pattern_create_for_surface (surface);
       cairo_surface_destroy (surface);
 
