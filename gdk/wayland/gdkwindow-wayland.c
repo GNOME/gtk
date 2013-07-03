@@ -463,6 +463,10 @@ on_monitors_changed (GdkScreen *screen,
   window_update_scale (window);
 }
 
+
+static void
+gdk_wayland_window_create_surface (GdkWindow *window);
+
 void
 _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
 					 GdkWindow     *window,
@@ -514,6 +518,8 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
     default:
       break;
     }
+
+  gdk_wayland_window_create_surface (window);
 
   if (attributes_mask & GDK_WA_TYPE_HINT)
     gdk_window_set_type_hint (window, attributes->type_hint);
@@ -985,7 +991,7 @@ static const struct wl_shell_surface_listener shell_surface_listener = {
 };
 
 static void
-gdk_wayland_window_create_surface (GdkWindow  *window)
+gdk_wayland_window_create_surface (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
