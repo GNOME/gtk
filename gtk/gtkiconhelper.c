@@ -636,10 +636,15 @@ ensure_stated_surface_from_info (GtkIconHelper *self,
   if (destination == NULL)
     {
       GtkIconSet *icon_set;
+
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
       icon_set = gtk_style_context_lookup_icon_set (context, GTK_STOCK_MISSING_IMAGE);
 
       destination =
         gtk_icon_set_render_icon_pixbuf (icon_set, context, self->priv->icon_size);
+
+      G_GNUC_END_IGNORE_DEPRECATIONS;
     }
   else if (!symbolic)
     {
