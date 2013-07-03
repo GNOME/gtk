@@ -1889,100 +1889,7 @@ gdk_window_quartz_get_device_state (GdkWindow       *window,
                                                     x, y, mask) != NULL;
 }
 
-/* Returns coordinates relative to the root. */
-void
-_gdk_windowing_get_device_state (GdkDisplay       *display,
-                                 GdkDevice        *device,
-                                 GdkScreen       **screen,
-                                 gint             *x,
-                                 gint             *y,
-                                 GdkModifierType  *mask)
-{
-  g_return_if_fail (display == _gdk_display);
-  
-  *screen = _gdk_screen;
-  gdk_window_quartz_get_device_state_helper (_gdk_root, device, x, y, mask);
-}
-
-/* Returns coordinates relative to the found window. */
-GdkWindow *
-_gdk_windowing_window_at_pointer (GdkDisplay      *display,
-				  gint            *win_x,
-				  gint            *win_y,
-                                  GdkModifierType *mask,
-				  gboolean         get_toplevel)
-{
-  GdkWindow *found_window;
-  gint x, y;
-  GdkModifierType tmp_mask = 0;
-
-  found_window = gdk_window_quartz_get_device_state_helper (_gdk_root,
-                                                            display->core_pointer,
-                                                            &x, &y,
-                                                            &tmp_mask);
-  if (found_window)
-    {
-      /* The coordinates returned above are relative the root, we want
-       * coordinates relative the window here. 
-       */
-      while (found_window != _gdk_root)
-	{
-	  x -= found_window->x;
-	  y -= found_window->y;
-	  
-	  found_window = found_window->parent;
-	}
-
-      *win_x = x;
-      *win_y = y;
-    }
-  else
-    {
-      /* Mimic the X backend here, -1,-1 for unknown windows. */
-      *win_x = -1;
-      *win_y = -1;
-    }
-
-  if (mask)
-    *mask = tmp_mask;
-
-  if (get_toplevel)
-    {
-      /* Requested toplevel, find it. */
-      /* TODO: This can be implemented more efficient by never
-	 recursing into children in the first place */
-      if (found_window)
-	{
-	  /* Convert to toplevel */
-	  while (found_window->parent != NULL &&
-		 found_window->parent->window_type != GDK_WINDOW_ROOT)
-	    {
-	      *win_x += found_window->x;
-	      *win_y += found_window->y;
-	      found_window = found_window->parent;
-	    }
-	}
-    }
-
-  return found_window;
-}
-
-GdkWindow*
-_gdk_windowing_window_at_device_position (GdkDisplay      *display,
-                                          GdkDevice       *device,
-                                          gint            *win_x,
-                                          gint            *win_y,
-                                          GdkModifierType *mask,
-                                          gboolean         get_toplevel)
-{
-  return GDK_DEVICE_GET_CLASS (device)->window_at_position (device,
-                                                            win_x, win_y,
-                                                            mask,
-                                                            get_toplevel);
-}
-
-
-static GdkEventMask  
+static GdkEventMask
 gdk_window_quartz_get_events (GdkWindow *window)
 {
   if (GDK_WINDOW_DESTROYED (window))
@@ -2681,13 +2588,6 @@ gdk_quartz_window_set_functions (GdkWindow    *window,
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   /* FIXME: Implement */
-}
-
-gboolean
-_gdk_windowing_window_queue_antiexpose (GdkWindow  *window,
-					cairo_region_t  *area)
-{
-  return FALSE;
 }
 
 static void
