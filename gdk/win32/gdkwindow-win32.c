@@ -2144,27 +2144,6 @@ gdk_window_win32_get_device_state (GdkWindow       *window,
 }
 
 void
-_gdk_windowing_get_device_state (GdkDisplay       *display,
-                                 GdkDevice        *device,
-                                 GdkScreen       **screen,
-                                 gint             *x,
-                                 gint             *y,
-                                 GdkModifierType  *mask)
-{
-  g_return_if_fail (display == _gdk_display);
-
-  if (screen)
-    *screen = _gdk_screen;
-
-  GDK_DEVICE_GET_CLASS (device)->query_state (device,
-                                              gdk_screen_get_root_window (_gdk_screen),
-                                              NULL, NULL,
-                                              x, y,
-                                              NULL, NULL,
-                                              mask);
-}
-
-void
 gdk_display_warp_device (GdkDisplay *display,
                          GdkDevice  *device,
                          GdkScreen  *screen,
@@ -2177,17 +2156,6 @@ gdk_display_warp_device (GdkDisplay *display,
   g_return_if_fail (display == gdk_device_get_display (device));
 
   GDK_DEVICE_GET_CLASS (device)->warp (device, screen, x, y);
-}
-
-GdkWindow*
-_gdk_windowing_window_at_device_position (GdkDisplay      *display,
-                                          GdkDevice       *device,
-                                          gint            *win_x,
-                                          gint            *win_y,
-                                          GdkModifierType *mask,
-                                          gboolean         get_toplevel)
-{
-  return GDK_DEVICE_GET_CLASS (device)->window_at_position (device, win_x, win_y, mask, get_toplevel);
 }
 
 static GdkEventMask  
