@@ -33,12 +33,6 @@
 #undef HAVE_MONITOR_INFO
 #endif
 
-void
-_gdk_windowing_set_default_display (GdkDisplay *display)
-{
-  g_assert (display == NULL || _gdk_display == display);
-}
-
 static gulong
 gdk_win32_display_get_next_serial (GdkDisplay *display)
 {
