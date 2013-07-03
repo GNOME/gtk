@@ -928,7 +928,7 @@ output_handle_done(void *data,
 static void
 output_handle_scale(void *data,
 		    struct wl_output *wl_output,
-		    uint32_t factor)
+		    int32_t factor)
 {
   GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)data;
 

@@ -4425,30 +4425,30 @@ gdk_window_get_pointer (GdkWindow	  *window,
 }
 
 /**
- * gdk_window_get_device_position:
+ * gdk_window_get_device_position_double:
  * @window: a #GdkWindow.
  * @device: pointer #GdkDevice to query to.
  * @x: (out) (allow-none): return location for the X coordinate of @device, or %NULL.
  * @y: (out) (allow-none): return location for the Y coordinate of @device, or %NULL.
  * @mask: (out) (allow-none): return location for the modifier mask, or %NULL.
  *
- * Obtains the current device position and modifier state.
+ * Obtains the current device position in doubles and modifier state.
  * The position is given in coordinates relative to the upper left
  * corner of @window.
  *
  * Return value: (transfer none): The window underneath @device (as with
  * gdk_device_get_window_at_position()), or %NULL if the window is not known to GDK.
  *
- * Since: 3.0
+ * Since: 3.10
  **/
 GdkWindow *
-gdk_window_get_device_position (GdkWindow       *window,
-                                GdkDevice       *device,
-                                gint            *x,
-                                gint            *y,
-                                GdkModifierType *mask)
+gdk_window_get_device_position_double (GdkWindow       *window,
+                                       GdkDevice       *device,
+                                       double          *x,
+                                       double          *y,
+                                       GdkModifierType *mask)
 {
-  gint tmp_x, tmp_y;
+  gdouble tmp_x, tmp_y;
   GdkModifierType tmp_mask;
   gboolean normal_child;
 
@@ -4476,6 +4476,44 @@ gdk_window_get_device_position (GdkWindow       *window,
   if (normal_child)
     return _gdk_window_find_child_at (window, tmp_x, tmp_y);
   return NULL;
+}
+
+/**
+ * gdk_window_get_device_position:
+ * @window: a #GdkWindow.
+ * @device: pointer #GdkDevice to query to.
+ * @x: (out) (allow-none): return location for the X coordinate of @device, or %NULL.
+ * @y: (out) (allow-none): return location for the Y coordinate of @device, or %NULL.
+ * @mask: (out) (allow-none): return location for the modifier mask, or %NULL.
+ *
+ * Obtains the current device position and modifier state.
+ * The position is given in coordinates relative to the upper left
+ * corner of @window.
+ *
+ * Use gdk_window_get_device_position_double() if you need subpixel precision.
+ *
+ * Return value: (transfer none): The window underneath @device (as with
+ * gdk_device_get_window_at_position()), or %NULL if the window is not known to GDK.
+ *
+ * Since: 3.0
+ **/
+GdkWindow *
+gdk_window_get_device_position (GdkWindow       *window,
+                                GdkDevice       *device,
+                                gint            *x,
+                                gint            *y,
+                                GdkModifierType *mask)
+{
+  gdouble tmp_x, tmp_y;
+
+  window = gdk_window_get_device_position_double (window, device,
+                                                  &tmp_x, &tmp_y, mask);
+  if (x)
+    *x = round (tmp_x);
+  if (y)
+    *y = round (tmp_y);
+
+  return window;
 }
 
 /**
@@ -6953,8 +6991,8 @@ pick_embedded_child (GdkWindow *window,
 
 GdkWindow *
 _gdk_window_find_child_at (GdkWindow *window,
-			   int        x,
-                           int        y)
+			   double     x,
+                           double     y)
 {
   GdkWindow *sub;
   double child_x, child_y;
@@ -7395,8 +7433,8 @@ send_crossing_event (GdkDisplay                 *display,
 		     GdkWindow                  *subwindow,
                      GdkDevice                  *device,
                      GdkDevice                  *source_device,
-		     gint                        toplevel_x,
-		     gint                        toplevel_y,
+		     gdouble                     toplevel_x,
+		     gdouble                     toplevel_y,
 		     GdkModifierType             mask,
 		     guint32                     time_,
 		     GdkEvent                   *event_in_queue,
@@ -7511,8 +7549,8 @@ _gdk_synthesize_crossing_events (GdkDisplay                 *display,
                                  GdkDevice                  *device,
                                  GdkDevice                  *source_device,
 				 GdkCrossingMode             mode,
-				 gint                        toplevel_x,
-				 gint                        toplevel_y,
+				 double                      toplevel_x,
+				 double                      toplevel_y,
 				 GdkModifierType             mask,
 				 guint32                     time_,
 				 GdkEvent                   *event_in_queue,

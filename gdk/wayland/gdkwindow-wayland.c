@@ -1237,8 +1237,8 @@ gdk_window_wayland_get_root_coords (GdkWindow *window,
 static gboolean
 gdk_window_wayland_get_device_state (GdkWindow       *window,
 				     GdkDevice       *device,
-				     gint            *x,
-				     gint            *y,
+				     gdouble         *x,
+				     gdouble         *y,
 				     GdkModifierType *mask)
 {
   gboolean return_val;

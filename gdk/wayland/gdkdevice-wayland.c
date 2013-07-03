@@ -135,14 +135,14 @@ gdk_wayland_device_get_state (GdkDevice       *device,
                               gdouble         *axes,
                               GdkModifierType *mask)
 {
-  gint x_int, y_int;
+  gdouble x, y;
 
-  gdk_window_get_device_position (window, device, &x_int, &y_int, mask);
+  gdk_window_get_device_position_double (window, device, &x, &y, mask);
 
   if (axes)
     {
-      axes[0] = x_int;
-      axes[1] = y_int;
+      axes[0] = x;
+      axes[1] = y;
     }
 }
 
@@ -228,8 +228,8 @@ gdk_wayland_device_set_window_cursor (GdkDevice *device,
 static void
 gdk_wayland_device_warp (GdkDevice *device,
                          GdkScreen *screen,
-                         gint       x,
-                         gint       y)
+                         gdouble    x,
+                         gdouble    y)
 {
 }
 
@@ -238,10 +238,10 @@ gdk_wayland_device_query_state (GdkDevice        *device,
                                 GdkWindow        *window,
                                 GdkWindow       **root_window,
                                 GdkWindow       **child_window,
-                                gint             *root_x,
-                                gint             *root_y,
-                                gint             *win_x,
-                                gint             *win_y,
+                                gdouble          *root_x,
+                                gdouble          *root_y,
+                                gdouble          *win_x,
+                                gdouble          *win_y,
                                 GdkModifierType  *mask)
 {
   GdkWaylandDeviceData *wd;
@@ -345,8 +345,8 @@ gdk_wayland_device_ungrab (GdkDevice *device,
 
 static GdkWindow *
 gdk_wayland_device_window_at_position (GdkDevice       *device,
-                                       gint            *win_x,
-                                       gint            *win_y,
+                                       gdouble         *win_x,
+                                       gdouble         *win_y,
                                        GdkModifierType *mask,
                                        gboolean         get_toplevel)
 {

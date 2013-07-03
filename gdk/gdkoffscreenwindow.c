@@ -280,12 +280,12 @@ gdk_offscreen_window_get_root_coords (GdkWindow *window,
 static gboolean
 gdk_offscreen_window_get_device_state (GdkWindow       *window,
                                        GdkDevice       *device,
-                                       gint            *x,
-                                       gint            *y,
+                                       gdouble         *x,
+                                       gdouble         *y,
                                        GdkModifierType *mask)
 {
   GdkOffscreenWindow *offscreen;
-  int tmpx, tmpy;
+  double tmpx, tmpy;
   double dtmpx, dtmpy;
   GdkModifierType tmpmask;
 
@@ -296,18 +296,18 @@ gdk_offscreen_window_get_device_state (GdkWindow       *window,
   offscreen = GDK_OFFSCREEN_WINDOW (window->impl);
   if (offscreen->embedder != NULL)
     {
-      gdk_window_get_device_position (offscreen->embedder, device, &tmpx, &tmpy, &tmpmask);
+      gdk_window_get_device_position_double (offscreen->embedder, device, &tmpx, &tmpy, &tmpmask);
       from_embedder (window,
 		     tmpx, tmpy,
 		     &dtmpx, &dtmpy);
-      tmpx = floor (dtmpx + 0.5);
-      tmpy = floor (dtmpy + 0.5);
+      tmpx = dtmpx;
+      tmpy = dtmpy;
     }
 
   if (x)
-    *x = tmpx;
+    *x = round (tmpx);
   if (y)
-    *y = tmpy;
+    *y = round (tmpy);
   if (mask)
     *mask = tmpmask;
   return TRUE;

@@ -845,6 +845,12 @@ GdkWindow *   gdk_window_get_device_position (GdkWindow       *window,
                                               gint            *x,
                                               gint            *y,
                                               GdkModifierType *mask);
+GDK_AVAILABLE_IN_3_10
+GdkWindow *   gdk_window_get_device_position_double (GdkWindow       *window,
+                                                     GdkDevice       *device,
+                                                     gdouble         *x,
+                                                     gdouble         *y,
+                                                     GdkModifierType *mask);
 GDK_AVAILABLE_IN_ALL
 GdkWindow *   gdk_window_get_parent      (GdkWindow       *window);
 GDK_AVAILABLE_IN_ALL
