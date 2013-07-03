@@ -1887,6 +1887,11 @@ add_preedit_attrs (GtkTextLayout     *layout,
 	continue;
 
       pango_attr_iterator_get_font (iter, font_desc, &language, &extra_attrs);
+
+      if (appearance.rgba[0])
+	appearance.rgba[0] = gdk_rgba_copy (appearance.rgba[0]);
+      if (appearance.rgba[1])
+	appearance.rgba[1] = gdk_rgba_copy (appearance.rgba[1]);
       
       tmp_list = extra_attrs;
       while (tmp_list)
@@ -1947,6 +1952,11 @@ add_preedit_attrs (GtkTextLayout     *layout,
                          attrs, start + offset,
                          size_only, TRUE);
       
+      if (appearance.rgba[0])
+	gdk_rgba_free (appearance.rgba[0]);
+      if (appearance.rgba[1])
+	gdk_rgba_free (appearance.rgba[1]);
+
       pango_font_description_free (font_desc);
     }
   while (pango_attr_iterator_next (iter));
