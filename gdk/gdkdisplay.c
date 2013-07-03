@@ -32,8 +32,11 @@
 #include "gdkmarshalers.h"
 #include "gdkscreen.h"
 
+#include <math.h>
 #include <glib.h>
 
+/* for the use of round() */
+#include "fallback-c89.c"
 
 /**
  * SECTION:gdkdisplay
@@ -546,7 +549,7 @@ gdk_display_get_pointer (GdkDisplay      *display,
 {
   GdkScreen *default_screen;
   GdkWindow *root;
-  gint tmp_x, tmp_y;
+  gdouble tmp_x, tmp_y;
   GdkModifierType tmp_mask;
 
   g_return_if_fail (GDK_IS_DISPLAY (display));
@@ -569,9 +572,9 @@ gdk_display_get_pointer (GdkDisplay      *display,
   if (screen)
     *screen = gdk_window_get_screen (root);
   if (x)
-    *x = tmp_x;
+    *x = round (tmp_x);
   if (y)
-    *y = tmp_y;
+    *y = round (tmp_y);
   if (mask)
     *mask = tmp_mask;
 }
@@ -792,7 +795,7 @@ synthesize_crossing_events (GdkDisplay      *display,
 {
   GdkWindow *src_toplevel, *dest_toplevel;
   GdkModifierType state;
-  int x, y;
+  double x, y;
 
   if (src_window)
     src_toplevel = gdk_window_get_toplevel (src_window);
@@ -810,9 +813,9 @@ synthesize_crossing_events (GdkDisplay      *display,
       src_toplevel == dest_toplevel)
     {
       /* Same toplevels */
-      gdk_window_get_device_position (dest_toplevel,
-                                      device,
-			              &x, &y, &state);
+      gdk_window_get_device_position_double (dest_toplevel,
+                                             device,
+                                             &x, &y, &state);
       _gdk_synthesize_crossing_events (display,
 				       src_window,
 				       dest_window,
@@ -825,9 +828,9 @@ synthesize_crossing_events (GdkDisplay      *display,
     }
   else if (dest_toplevel == NULL)
     {
-      gdk_window_get_device_position (src_toplevel,
-                                      device,
-			              &x, &y, &state);
+      gdk_window_get_device_position_double (src_toplevel,
+                                             device,
+                                             &x, &y, &state);
       _gdk_synthesize_crossing_events (display,
                                        src_window,
                                        NULL,
@@ -841,9 +844,9 @@ synthesize_crossing_events (GdkDisplay      *display,
   else
     {
       /* Different toplevels */
-      gdk_window_get_device_position (src_toplevel,
-                                      device,
-			              &x, &y, &state);
+      gdk_window_get_device_position_double (src_toplevel,
+                                             device,
+                                             &x, &y, &state);
       _gdk_synthesize_crossing_events (display,
 				       src_window,
 				       NULL,
@@ -853,9 +856,9 @@ synthesize_crossing_events (GdkDisplay      *display,
 				       time,
 				       NULL,
 				       serial, FALSE);
-      gdk_window_get_device_position (dest_toplevel,
-                                      device,
-			              &x, &y, &state);
+      gdk_window_get_device_position_double (dest_toplevel,
+                                             device,
+                                             &x, &y, &state);
       _gdk_synthesize_crossing_events (display,
 				       NULL,
 				       dest_window,
@@ -876,7 +879,7 @@ get_current_toplevel (GdkDisplay      *display,
 		      GdkModifierType *state_out)
 {
   GdkWindow *pointer_window;
-  int x, y;
+  gdouble x, y;
   GdkModifierType state;
 
   pointer_window = _gdk_device_window_at_position (device, &x, &y, &state, TRUE);
@@ -887,8 +890,8 @@ get_current_toplevel (GdkDisplay      *display,
        GDK_WINDOW_TYPE (pointer_window) == GDK_WINDOW_FOREIGN))
     pointer_window = NULL;
 
-  *x_out = x;
-  *y_out = y;
+  *x_out = round (x);
+  *y_out = round (y);
   *state_out = state;
 
   return pointer_window;

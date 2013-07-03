@@ -98,8 +98,8 @@ struct _GdkWindowImplClass
                                          gint            *root_y);
   gboolean     (* get_device_state)     (GdkWindow       *window,
                                          GdkDevice       *device,
-                                         gint            *x,
-                                         gint            *y,
+                                         gdouble         *x,
+                                         gdouble         *y,
                                          GdkModifierType *mask);
   gboolean    (* begin_paint_region)    (GdkWindow       *window,
 					 const cairo_region_t *region);

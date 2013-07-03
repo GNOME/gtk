@@ -47,10 +47,10 @@ static void gdk_device_virtual_query_state (GdkDevice        *device,
 					    GdkWindow        *window,
 					    GdkWindow       **root_window,
 					    GdkWindow       **child_window,
-					    gint             *root_x,
-					    gint             *root_y,
-					    gint             *win_x,
-					    gint             *win_y,
+					    gdouble          *root_x,
+					    gdouble          *root_y,
+					    gdouble          *win_x,
+					    gdouble          *win_y,
 					    GdkModifierType  *mask);
 static GdkGrabStatus gdk_device_virtual_grab   (GdkDevice     *device,
 						GdkWindow     *window,
@@ -62,8 +62,8 @@ static GdkGrabStatus gdk_device_virtual_grab   (GdkDevice     *device,
 static void          gdk_device_virtual_ungrab (GdkDevice     *device,
 						guint32        time_);
 static GdkWindow * gdk_device_virtual_window_at_position (GdkDevice       *device,
-							  gint            *win_x,
-							  gint            *win_y,
+							  gdouble         *win_x,
+							  gdouble         *win_y,
 							  GdkModifierType *mask,
 							  gboolean         get_toplevel);
 static void      gdk_device_virtual_select_window_events (GdkDevice       *device,
@@ -245,10 +245,10 @@ gdk_device_virtual_query_state (GdkDevice        *device,
 				GdkWindow        *window,
 				GdkWindow       **root_window,
 				GdkWindow       **child_window,
-				gint             *root_x,
-				gint             *root_y,
-				gint             *win_x,
-				gint             *win_y,
+				gdouble          *root_x,
+				gdouble          *root_y,
+				gdouble          *win_x,
+				gdouble          *win_y,
 				GdkModifierType  *mask)
 {
   GdkDeviceVirtual *virtual = GDK_DEVICE_VIRTUAL (device);
@@ -342,8 +342,8 @@ screen_to_client (HWND hwnd, POINT screen_pt, POINT *client_pt)
 
 static GdkWindow *
 gdk_device_virtual_window_at_position (GdkDevice       *device,
-				       gint            *win_x,
-				       gint            *win_y,
+				       gdouble         *win_x,
+				       gdouble         *win_y,
 				       GdkModifierType *mask,
 				       gboolean         get_toplevel)
 {

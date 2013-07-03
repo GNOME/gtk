@@ -750,8 +750,8 @@ gdk_broadway_window_get_frame_extents (GdkWindow    *window,
 static gboolean
 gdk_window_broadway_get_device_state (GdkWindow       *window,
 				      GdkDevice       *device,
-				      gint            *x,
-				      gint            *y,
+				      gdouble         *x,
+				      gdouble         *y,
 				      GdkModifierType *mask)
 {
   GdkWindow *child;

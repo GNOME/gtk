@@ -1818,8 +1818,8 @@ gdk_quartz_window_get_root_origin (GdkWindow *window,
 static GdkWindow *
 gdk_window_quartz_get_device_state_helper (GdkWindow       *window,
                                            GdkDevice       *device,
-                                           gint            *x,
-                                           gint            *y,
+                                           gdouble         *x,
+                                           gdouble         *y,
                                            GdkModifierType *mask)
 {
   NSPoint point;
@@ -1880,8 +1880,8 @@ gdk_window_quartz_get_device_state_helper (GdkWindow       *window,
 static gboolean
 gdk_window_quartz_get_device_state (GdkWindow       *window,
                                     GdkDevice       *device,
-                                    gint            *x,
-                                    gint            *y,
+                                    gdouble          *x,
+                                    gdouble          *y,
                                     GdkModifierType *mask)
 {
   return gdk_window_quartz_get_device_state_helper (window,

@@ -24,6 +24,9 @@
 #include "gdkinternals.h"
 #include "gdkintl.h"
 
+/* for the use of round() */
+#include "fallback-c89.c"
+
 /**
  * SECTION:gdkdevice
  * @Short_description: Object representing an input device
@@ -406,28 +409,28 @@ gdk_device_get_state (GdkDevice       *device,
 }
 
 /**
- * gdk_device_get_position:
+ * gdk_device_get_position_double:
  * @device: pointer device to query status about.
  * @screen: (out) (transfer none) (allow-none): location to store the #GdkScreen
  *          the @device is on, or %NULL.
  * @x: (out) (allow-none): location to store root window X coordinate of @device, or %NULL.
  * @y: (out) (allow-none): location to store root window Y coordinate of @device, or %NULL.
  *
- * Gets the current location of @device. As a slave device
+ * Gets the current location of @device in double precision. As a slave device
  * coordinates are those of its master pointer, This function
  * may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
  * unless there is an ongoing grab on them, see gdk_device_grab().
  *
- * Since: 3.0
+ * Since: 3.10
  **/
 void
-gdk_device_get_position (GdkDevice        *device,
-                         GdkScreen       **screen,
-                         gint             *x,
-                         gint             *y)
+gdk_device_get_position_double (GdkDevice        *device,
+                                GdkScreen       **screen,
+                                gdouble          *x,
+                                gdouble          *y)
 {
   GdkDisplay *display;
-  gint tmp_x, tmp_y;
+  gdouble tmp_x, tmp_y;
   GdkScreen *default_screen;
   GdkWindow *root;
 
@@ -456,6 +459,87 @@ gdk_device_get_position (GdkDevice        *device,
 }
 
 /**
+ * gdk_device_get_position:
+ * @device: pointer device to query status about.
+ * @screen: (out) (transfer none) (allow-none): location to store the #GdkScreen
+ *          the @device is on, or %NULL.
+ * @x: (out) (allow-none): location to store root window X coordinate of @device, or %NULL.
+ * @y: (out) (allow-none): location to store root window Y coordinate of @device, or %NULL.
+ *
+ * Gets the current location of @device. As a slave device
+ * coordinates are those of its master pointer, This function
+ * may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
+ * unless there is an ongoing grab on them, see gdk_device_grab().
+ *
+ * Since: 3.0
+ **/
+void
+gdk_device_get_position (GdkDevice        *device,
+                         GdkScreen       **screen,
+                         gint             *x,
+                         gint             *y)
+{
+  gdouble tmp_x, tmp_y;
+
+  gdk_device_get_position_double (device, screen, &tmp_x, &tmp_y);
+  if (x)
+    *x = round (tmp_x);
+  if (y)
+    *y = round (tmp_y);
+}
+
+
+/**
+ * gdk_device_get_window_at_position_double:
+ * @device: pointer #GdkDevice to query info to.
+ * @win_x: (out) (allow-none): return location for the X coordinate of the device location,
+ *         relative to the window origin, or %NULL.
+ * @win_y: (out) (allow-none): return location for the Y coordinate of the device location,
+ *         relative to the window origin, or %NULL.
+ *
+ * Obtains the window underneath @device, returning the location of the device in @win_x and @win_y in
+ * double precision. Returns %NULL if the window tree under @device is not known to GDK (for example,
+ * belongs to another application).
+ *
+ * As a slave device coordinates are those of its master pointer, This
+ * function may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
+ * unless there is an ongoing grab on them, see gdk_device_grab().
+ *
+ * Returns: (transfer none): the #GdkWindow under the device position, or %NULL.
+ *
+ * Since: 3.0
+ **/
+GdkWindow *
+gdk_device_get_window_at_position_double (GdkDevice  *device,
+                                          gdouble    *win_x,
+                                          gdouble    *win_y)
+{
+  gdouble tmp_x, tmp_y;
+  GdkWindow *window;
+
+  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
+  g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, NULL);
+  g_return_val_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE ||
+                        gdk_display_device_is_grabbed (gdk_device_get_display (device), device), NULL);
+
+  window = _gdk_device_window_at_position (device, &tmp_x, &tmp_y, NULL, FALSE);
+
+  /* This might need corrections, as the native window returned
+     may contain client side children */
+  if (window)
+    window = _gdk_window_find_descendant_at (window,
+                                             tmp_x, tmp_y,
+                                             &tmp_x, &tmp_y);
+
+  if (win_x)
+    *win_x = tmp_x;
+  if (win_y)
+    *win_y = tmp_y;
+
+  return window;
+}
+
+/**
  * gdk_device_get_window_at_position:
  * @device: pointer #GdkDevice to query info to.
  * @win_x: (out) (allow-none): return location for the X coordinate of the device location,
@@ -479,33 +563,16 @@ gdk_device_get_window_at_position (GdkDevice  *device,
                                    gint       *win_x,
                                    gint       *win_y)
 {
-  gint tmp_x, tmp_y;
+  gdouble tmp_x, tmp_y;
   GdkWindow *window;
 
-  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
-  g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, NULL);
-  g_return_val_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE ||
-                        gdk_display_device_is_grabbed (gdk_device_get_display (device), device), NULL);
-
-  window = _gdk_device_window_at_position (device, &tmp_x, &tmp_y, NULL, FALSE);
-
-  /* This might need corrections, as the native window returned
-     may contain client side children */
-  if (window)
-    {
-      double xx, yy;
-
-      window = _gdk_window_find_descendant_at (window,
-					       tmp_x, tmp_y,
-					       &xx, &yy);
-      tmp_x = floor (xx + 0.5);
-      tmp_y = floor (yy + 0.5);
-    }
+  window =
+    gdk_device_get_window_at_position_double (device, &tmp_x, &tmp_y);
 
   if (win_x)
-    *win_x = tmp_x;
+    *win_x = round (tmp_x);
   if (win_y)
-    *win_y = tmp_y;
+    *win_y = round (tmp_y);
 
   return window;
 }
@@ -1535,8 +1602,8 @@ _gdk_device_translate_window_coord (GdkDevice *device,
 gboolean
 _gdk_device_translate_screen_coord (GdkDevice *device,
                                     GdkWindow *window,
-                                    gint       window_root_x,
-                                    gint       window_root_y,
+                                    gdouble    window_root_x,
+                                    gdouble    window_root_y,
                                     guint      index_,
                                     gdouble    value,
                                     gdouble   *axis_value)
@@ -1616,10 +1683,10 @@ _gdk_device_query_state (GdkDevice        *device,
                          GdkWindow        *window,
                          GdkWindow       **root_window,
                          GdkWindow       **child_window,
-                         gint             *root_x,
-                         gint             *root_y,
-                         gint             *win_x,
-                         gint             *win_y,
+                         gdouble          *root_x,
+                         gdouble          *root_y,
+                         gdouble          *win_x,
+                         gdouble          *win_y,
                          GdkModifierType  *mask)
 {
   GDK_DEVICE_GET_CLASS (device)->query_state (device,
@@ -1635,8 +1702,8 @@ _gdk_device_query_state (GdkDevice        *device,
 
 GdkWindow *
 _gdk_device_window_at_position (GdkDevice        *device,
-                                gint             *win_x,
-                                gint             *win_y,
+                                gdouble          *win_x,
+                                gdouble          *win_y,
                                 GdkModifierType  *mask,
                                 gboolean          get_toplevel)
 {

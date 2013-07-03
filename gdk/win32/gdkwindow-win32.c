@@ -2128,8 +2128,8 @@ gdk_win32_window_get_frame_extents (GdkWindow    *window,
 static gboolean
 gdk_window_win32_get_device_state (GdkWindow       *window,
                                    GdkDevice       *device,
-                                   gint            *x,
-                                   gint            *y,
+                                   gdouble         *x,
+                                   gdouble         *y,
                                    GdkModifierType *mask)
 {
   GdkWindow *child;

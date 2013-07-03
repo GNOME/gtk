@@ -58,10 +58,10 @@ static void gdk_quartz_device_core_query_state (GdkDevice        *device,
                                                 GdkWindow        *window,
                                                 GdkWindow       **root_window,
                                                 GdkWindow       **child_window,
-                                                gint             *root_x,
-                                                gint             *root_y,
-                                                gint             *win_x,
-                                                gint             *win_y,
+                                                gdouble          *root_x,
+                                                gdouble          *root_y,
+                                                gdouble          *win_x,
+                                                gdouble          *win_y,
                                                 GdkModifierType  *mask);
 static GdkGrabStatus gdk_quartz_device_core_grab   (GdkDevice     *device,
                                                     GdkWindow     *window,
@@ -73,8 +73,8 @@ static GdkGrabStatus gdk_quartz_device_core_grab   (GdkDevice     *device,
 static void          gdk_quartz_device_core_ungrab (GdkDevice     *device,
                                                     guint32        time_);
 static GdkWindow * gdk_quartz_device_core_window_at_position (GdkDevice       *device,
-                                                              gint            *win_x,
-                                                              gint            *win_y,
+                                                              gdouble         *win_x,
+                                                              gdouble         *win_y,
                                                               GdkModifierType *mask,
                                                               gboolean         get_toplevel);
 static void      gdk_quartz_device_core_select_window_events (GdkDevice       *device,
@@ -181,8 +181,8 @@ gdk_quartz_device_core_set_window_cursor (GdkDevice *device,
 static void
 gdk_quartz_device_core_warp (GdkDevice *device,
                              GdkScreen *screen,
-                             gint       x,
-                             gint       y)
+                             gdouble    x,
+                             gdouble    y)
 {
   CGDisplayMoveCursorToPoint (CGMainDisplayID (), CGPointMake (x, y));
 }
@@ -190,8 +190,8 @@ gdk_quartz_device_core_warp (GdkDevice *device,
 static GdkWindow *
 gdk_quartz_device_core_query_state_helper (GdkWindow       *window,
                                            GdkDevice       *device,
-                                           gint            *x,
-                                           gint            *y,
+                                           gdouble         *x,
+                                           gdouble         *y,
                                            GdkModifierType *mask)
 {
   GdkWindow *toplevel;
@@ -260,10 +260,10 @@ gdk_quartz_device_core_query_state (GdkDevice        *device,
                                     GdkWindow        *window,
                                     GdkWindow       **root_window,
                                     GdkWindow       **child_window,
-                                    gint             *root_x,
-                                    gint             *root_y,
-                                    gint             *win_x,
-                                    gint             *win_y,
+                                    gdouble          *root_x,
+                                    gdouble          *root_y,
+                                    gdouble          *win_x,
+                                    gdouble          *win_y,
                                     GdkModifierType  *mask)
 {
   GdkWindow *found_window;
@@ -318,8 +318,8 @@ gdk_quartz_device_core_ungrab (GdkDevice *device,
 
 static GdkWindow *
 gdk_quartz_device_core_window_at_position (GdkDevice       *device,
-                                           gint            *win_x,
-                                           gint            *win_y,
+                                           gdouble         *win_x,
+                                           gdouble         *win_y,
                                            GdkModifierType *mask,
                                            gboolean         get_toplevel)
 {

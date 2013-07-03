@@ -80,16 +80,16 @@ struct _GdkDeviceClass
 
   void (* warp)              (GdkDevice  *device,
                               GdkScreen  *screen,
-                              gint        x,
-                              gint        y);
+                              gdouble     x,
+                              gdouble     y);
   void (* query_state)       (GdkDevice       *device,
                               GdkWindow       *window,
                               GdkWindow      **root_window,
                               GdkWindow      **child_window,
-                              gint             *root_x,
-                              gint             *root_y,
-                              gint             *win_x,
-                              gint             *win_y,
+                              gdouble          *root_x,
+                              gdouble          *root_y,
+                              gdouble          *win_x,
+                              gdouble          *win_y,
                               GdkModifierType  *mask);
   GdkGrabStatus (* grab)     (GdkDevice        *device,
                               GdkWindow        *window,
@@ -102,8 +102,8 @@ struct _GdkDeviceClass
                               guint32           time_);
 
   GdkWindow * (* window_at_position) (GdkDevice       *device,
-                                      gint            *win_x,
-                                      gint            *win_y,
+                                      double          *win_x,
+                                      double          *win_y,
                                       GdkModifierType *mask,
                                       gboolean         get_toplevel);
   void (* select_window_events)      (GdkDevice       *device,
@@ -140,8 +140,8 @@ gboolean   _gdk_device_translate_window_coord (GdkDevice *device,
 
 gboolean   _gdk_device_translate_screen_coord (GdkDevice *device,
                                                GdkWindow *window,
-                                               gint       window_root_x,
-                                               gint       window_root_y,
+                                               gdouble    window_root_x,
+                                               gdouble    window_root_y,
                                                guint      index,
                                                gdouble    value,
                                                gdouble   *axis_value);
@@ -162,14 +162,14 @@ void _gdk_device_query_state                  (GdkDevice        *device,
                                                GdkWindow        *window,
                                                GdkWindow       **root_window,
                                                GdkWindow       **child_window,
-                                               gint             *root_x,
-                                               gint             *root_y,
-                                               gint             *win_x,
-                                               gint             *win_y,
+                                               gdouble          *root_x,
+                                               gdouble          *root_y,
+                                               gdouble          *win_x,
+                                               gdouble          *win_y,
                                                GdkModifierType  *mask);
 GdkWindow * _gdk_device_window_at_position    (GdkDevice        *device,
-                                               gint             *win_x,
-                                               gint             *win_y,
+                                               gdouble          *win_x,
+                                               gdouble          *win_y,
                                                GdkModifierType  *mask,
                                                gboolean          get_toplevel);
 

@@ -198,6 +198,17 @@ GdkWindow *
                                  (GdkDevice         *device,
                                   gint              *win_x,
                                   gint              *win_y);
+GDK_AVAILABLE_IN_3_10
+void     gdk_device_get_position_double (GdkDevice         *device,
+                                         GdkScreen        **screen,
+                                         gdouble           *x,
+                                         gdouble           *y);
+GDK_AVAILABLE_IN_3_10
+GdkWindow *
+         gdk_device_get_window_at_position_double
+                                 (GdkDevice         *device,
+                                  gdouble           *win_x,
+                                  gdouble           *win_y);
 GDK_AVAILABLE_IN_ALL
 gboolean gdk_device_get_history  (GdkDevice         *device,
                                   GdkWindow         *window,
