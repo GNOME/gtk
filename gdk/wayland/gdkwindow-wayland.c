@@ -746,6 +746,14 @@ gdk_wayland_window_ref_cairo_surface (GdkWindow *window)
   return impl->cairo_surface;
 }
 
+static cairo_surface_t *
+gdk_wayland_window_create_similar_image_surface (GdkWindow *     window,
+                                                 cairo_format_t  format,
+                                                 int             width,
+                                                 int             height)
+{
+  return cairo_image_surface_create (format, width, height);
+}
 
 static gboolean
 gdk_window_impl_wayland_begin_paint_region (GdkWindow       *window,
@@ -1989,6 +1997,7 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   object_class->finalize = gdk_window_impl_wayland_finalize;
 
   impl_class->ref_cairo_surface = gdk_wayland_window_ref_cairo_surface;
+  impl_class->create_similar_image_surface = gdk_wayland_window_create_similar_image_surface;
   impl_class->show = gdk_wayland_window_show;
   impl_class->hide = gdk_wayland_window_hide;
   impl_class->withdraw = gdk_window_wayland_withdraw;

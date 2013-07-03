@@ -51,6 +51,11 @@ struct _GdkWindowImplClass
 
   cairo_surface_t *
                (* ref_cairo_surface)    (GdkWindow       *window);
+  cairo_surface_t *
+               (* create_similar_image_surface) (GdkWindow *     window,
+                                                 cairo_format_t  format,
+                                                 int             width,
+                                                 int             height);
 
   void         (* show)                 (GdkWindow       *window,
 					 gboolean         already_mapped);

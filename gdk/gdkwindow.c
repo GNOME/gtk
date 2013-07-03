@@ -9316,6 +9316,7 @@ gdk_window_create_similar_image_surface (GdkWindow *     window,
 					 int             height,
 					 int             scale)
 {
+  GdkWindowImplClass *impl_class;
   cairo_surface_t *window_surface, *surface;
   GdkDisplay *display;
   GdkScreen *screen;
@@ -9329,17 +9330,23 @@ gdk_window_create_similar_image_surface (GdkWindow *     window,
       window = gdk_screen_get_root_window (screen);
     }
 
-  window_surface = gdk_window_ref_impl_surface (window);
   if (scale == 0)
     scale = gdk_window_get_scale_factor (window);
 
-  surface =
-    cairo_surface_create_similar_image (window_surface,
-					format,
-					width,
-					height);
+  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
 
-  cairo_surface_destroy (window_surface);
+  if (impl_class->create_similar_image_surface)
+    surface = impl_class->create_similar_image_surface (window, format, width, height);
+  else
+    {
+      window_surface = gdk_window_ref_impl_surface (window);
+      surface =
+        cairo_surface_create_similar_image (window_surface,
+                                            format,
+                                            width,
+                                            height);
+      cairo_surface_destroy (window_surface);
+    }
 
 #ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
   cairo_surface_set_device_scale (surface, scale, scale);
