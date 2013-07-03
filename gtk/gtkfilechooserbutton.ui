@@ -84,7 +84,7 @@
         <child>
           <object class="GtkCellRendererPixbuf" id="icon_cell"/>
           <attributes>
-            <attribute name="pixbuf">0</attribute>
+            <attribute name="surface">0</attribute>
           </attributes>
         </child>
         <child>
@@ -104,7 +104,7 @@
   <object class="GtkListStore" id="model">
     <columns>
       <!-- column-name icon -->
-      <column type="GdkPixbuf"/>
+      <column type="CairoSurface"/>
       <!-- column-name display-name -->
       <column type="gchararray"/>
       <!-- column-name type -->

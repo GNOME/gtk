@@ -709,42 +709,45 @@ _gtk_file_system_volume_get_root (GtkFileSystemVolume *volume)
   return file;
 }
 
-static GdkPixbuf *
-get_pixbuf_from_gicon (GIcon      *icon,
-		       GtkWidget  *widget,
-		       gint        icon_size,
-		       GError    **error)
+static cairo_surface_t *
+get_surface_from_gicon (GIcon      *icon,
+			GtkWidget  *widget,
+			gint        icon_size,
+			GError    **error)
 {
   GdkScreen *screen;
   GtkIconTheme *icon_theme;
   GtkIconInfo *icon_info;
-  GdkPixbuf *pixbuf;
+  cairo_surface_t *surface;
 
   screen = gtk_widget_get_screen (GTK_WIDGET (widget));
   icon_theme = gtk_icon_theme_get_for_screen (screen);
 
-  icon_info = gtk_icon_theme_lookup_by_gicon (icon_theme,
-					      icon,
-					      icon_size,
-					      GTK_ICON_LOOKUP_USE_BUILTIN);
+  icon_info = gtk_icon_theme_lookup_by_gicon_for_scale (icon_theme,
+							icon,
+							icon_size,
+							gtk_widget_get_scale_factor (widget),
+							GTK_ICON_LOOKUP_USE_BUILTIN);
 
   if (!icon_info)
     return NULL;
 
-  pixbuf = gtk_icon_info_load_icon (icon_info, error);
+  surface = gtk_icon_info_load_surface (icon_info,
+					gtk_widget_get_window (widget), error);
+
   g_object_unref (icon_info);
 
-  return pixbuf;
+  return surface;
 }
 
-GdkPixbuf *
+cairo_surface_t *
 _gtk_file_system_volume_render_icon (GtkFileSystemVolume  *volume,
 				     GtkWidget            *widget,
 				     gint                  icon_size,
 				     GError              **error)
 {
   GIcon *icon = NULL;
-  GdkPixbuf *pixbuf;
+  cairo_surface_t *surface;
 
   DEBUG ("volume_get_icon_name");
 
@@ -760,11 +763,11 @@ _gtk_file_system_volume_render_icon (GtkFileSystemVolume  *volume,
   if (!icon)
     return NULL;
 
-  pixbuf = get_pixbuf_from_gicon (icon, widget, icon_size, error);
+  surface = get_surface_from_gicon (icon, widget, icon_size, error);
 
   g_object_unref (icon);
 
-  return pixbuf;
+  return surface;
 }
 
 GtkFileSystemVolume *
@@ -795,39 +798,48 @@ _gtk_file_system_volume_unref (GtkFileSystemVolume *volume)
 }
 
 /* GFileInfo helper functions */
-GdkPixbuf *
+cairo_surface_t *
 _gtk_file_info_render_icon (GFileInfo *info,
-			   GtkWidget *widget,
-			   gint       icon_size)
+			    GtkWidget *widget,
+			    gint       icon_size)
 {
   GIcon *icon;
-  GdkPixbuf *pixbuf = NULL;
+  GdkPixbuf *pixbuf;
   const gchar *thumbnail_path;
+  cairo_surface_t *surface = NULL;
+  int scale;
 
   thumbnail_path = g_file_info_get_attribute_byte_string (info, G_FILE_ATTRIBUTE_THUMBNAIL_PATH);
 
   if (thumbnail_path)
-    pixbuf = gdk_pixbuf_new_from_file_at_size (thumbnail_path,
-					       icon_size, icon_size,
-					       NULL);
+    {
+      scale = gtk_widget_get_scale_factor (widget);
+      pixbuf = gdk_pixbuf_new_from_file_at_size (thumbnail_path,
+						 icon_size*scale, icon_size*scale,
+						 NULL);
 
-  if (!pixbuf)
+      surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, scale,
+                                                      gtk_widget_get_window (widget));
+      g_object_unref (pixbuf);
+    }
+
+  if (!surface)
     {
       icon = g_file_info_get_icon (info);
 
       if (icon)
-	pixbuf = get_pixbuf_from_gicon (icon, widget, icon_size, NULL);
+	surface = get_surface_from_gicon (icon, widget, icon_size, NULL);
 
-      if (!pixbuf)
+      if (!surface)
 	{
 	   /* Use general fallback for all files without icon */
 	  icon = g_themed_icon_new ("text-x-generic");
-	  pixbuf = get_pixbuf_from_gicon (icon, widget, icon_size, NULL);
+	  surface = get_surface_from_gicon (icon, widget, icon_size, NULL);
 	  g_object_unref (icon);
 	}
     }
 
-  return pixbuf;
+  return surface;
 }
 
 gboolean
