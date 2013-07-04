@@ -2673,6 +2673,27 @@ gtk_list_box_row_set_header (GtkListBoxRow *row,
     g_object_ref (header);
 }
 
+/**
+ * gtk_list_box_row_get_index:
+ * @row: a #GtkListBoxRow
+ *
+ * Gets the current index of the @row in its #GtkListBox container.
+ *
+ * Returns: the index of the @row, or -1 if the @row is not in a listbox
+ *
+ * Since: 3.10
+ */
+gint
+gtk_list_box_row_get_index (GtkListBoxRow *row)
+{
+  GtkListBoxRowPrivate *priv = gtk_list_box_row_get_instance_private (row);
+
+  if (priv->iter != NULL)
+    return g_sequence_iter_get_position (priv->iter);
+
+  return -1;
+}
+
 static void
 gtk_list_box_row_finalize (GObject *obj)
 {

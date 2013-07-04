@@ -153,6 +153,8 @@ GDK_AVAILABLE_IN_3_10
 void       gtk_list_box_row_set_header    (GtkListBoxRow *row,
                                            GtkWidget     *header);
 GDK_AVAILABLE_IN_3_10
+gint       gtk_list_box_row_get_index     (GtkListBoxRow *row);
+GDK_AVAILABLE_IN_3_10
 void       gtk_list_box_row_changed       (GtkListBoxRow *row);
 
 
