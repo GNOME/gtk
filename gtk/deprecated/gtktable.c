@@ -158,7 +158,7 @@ static void gtk_table_size_allocate_pass1 (GtkTable *table);
 static void gtk_table_size_allocate_pass2 (GtkTable *table);
 
 
-G_DEFINE_TYPE (GtkTable, gtk_table, GTK_TYPE_CONTAINER)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkTable, gtk_table, GTK_TYPE_CONTAINER)
 
 static void
 gtk_table_class_init (GtkTableClass *class)
@@ -285,8 +285,6 @@ gtk_table_class_init (GtkTableClass *class)
 								 P_("Extra space to put between the child and its upper and lower neighbors, in pixels"),
 								 0, 65535, 0,
 								 GTK_PARAM_READWRITE));
-
-  g_type_class_add_private (class, sizeof (GtkTablePrivate));
 }
 
 static void
@@ -566,9 +564,7 @@ gtk_table_init (GtkTable *table)
 {
   GtkTablePrivate *priv;
 
-  table->priv = G_TYPE_INSTANCE_GET_PRIVATE (table,
-                                             GTK_TYPE_TABLE,
-                                             GtkTablePrivate);
+  table->priv = gtk_table_get_instance_private (table);
   priv = table->priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (table), FALSE);

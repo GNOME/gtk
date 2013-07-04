@@ -81,14 +81,12 @@ typedef struct {
   GValue      value;
 } PropertyValue;
 
-#define GTK_STYLE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_STYLE, GtkStylePrivate))
-
-typedef struct _GtkStylePrivate GtkStylePrivate;
-
-struct _GtkStylePrivate {
+typedef struct {
   GtkStyleContext *context;
   gulong context_changed_id;
-};
+} GtkStylePrivate;
+
+#define GTK_STYLE_GET_PRIVATE(obj) ((GtkStylePrivate *) gtk_style_get_instance_private ((GtkStyle *) (obj)))
 
 enum {
   PROP_0,
@@ -373,7 +371,7 @@ static const GdkColor gtk_default_active_base =    { 0, GTK_VERY_DARK_GRAY };
 static guint realize_signal = 0;
 static guint unrealize_signal = 0;
 
-G_DEFINE_TYPE (GtkStyle, gtk_style, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkStyle, gtk_style, G_TYPE_OBJECT)
 
 /* --- functions --- */
 
@@ -465,8 +463,6 @@ gtk_style_class_init (GtkStyleClass *klass)
   klass->draw_layout = gtk_default_draw_layout;
   klass->draw_resize_grip = gtk_default_draw_resize_grip;
   klass->draw_spinner = gtk_default_draw_spinner;
-
-  g_type_class_add_private (object_class, sizeof (GtkStylePrivate));
 
   g_object_class_install_property (object_class,
 				   PROP_CONTEXT,

@@ -222,7 +222,7 @@ static void     gtk_font_selection_ref_family            (GtkFontSelection *font
 static void     gtk_font_selection_ref_face              (GtkFontSelection *fontsel,
 							  PangoFontFace    *face);
 
-G_DEFINE_TYPE (GtkFontSelection, gtk_font_selection, GTK_TYPE_BOX)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkFontSelection, gtk_font_selection, GTK_TYPE_BOX)
 
 static void
 gtk_font_selection_class_init (GtkFontSelectionClass *klass)
@@ -251,8 +251,6 @@ gtk_font_selection_class_init (GtkFontSelectionClass *klass)
                                                         P_("The text to display in order to demonstrate the selected font"),
                                                         _(PREVIEW_TEXT),
                                                         GTK_PARAM_READWRITE));
-
-  g_type_class_add_private (klass, sizeof (GtkFontSelectionPrivate));
 }
 
 static void 
@@ -342,9 +340,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   GList *focus_chain = NULL;
   AtkObject *atk_obj;
 
-  fontsel->priv = G_TYPE_INSTANCE_GET_PRIVATE (fontsel,
-                                               GTK_TYPE_FONT_SELECTION,
-                                               GtkFontSelectionPrivate);
+  fontsel->priv = gtk_font_selection_get_instance_private (fontsel);
   priv = fontsel->priv;
 
   gtk_orientable_set_orientation (GTK_ORIENTABLE (fontsel),
@@ -1649,6 +1645,7 @@ static GObject * gtk_font_selection_dialog_buildable_get_internal_child (GtkBuil
 
 G_DEFINE_TYPE_WITH_CODE (GtkFontSelectionDialog, gtk_font_selection_dialog,
 			 GTK_TYPE_DIALOG,
+                         G_ADD_PRIVATE (GtkFontSelectionDialog)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
 						gtk_font_selection_dialog_buildable_interface_init))
 
@@ -1660,8 +1657,6 @@ gtk_font_selection_dialog_class_init (GtkFontSelectionDialogClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_FONT_CHOOSER);
-
-  g_type_class_add_private (klass, sizeof (GtkFontSelectionDialogPrivate));
 }
 
 static void
@@ -1671,9 +1666,7 @@ gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
   GtkDialog *dialog = GTK_DIALOG (fontseldiag);
   GtkWidget *action_area, *content_area;
 
-  fontseldiag->priv = G_TYPE_INSTANCE_GET_PRIVATE (fontseldiag,
-                                                   GTK_TYPE_FONT_SELECTION_DIALOG,
-                                                   GtkFontSelectionDialogPrivate);
+  fontseldiag->priv = gtk_font_selection_dialog_get_instance_private (fontseldiag);
   priv = fontseldiag->priv;
 
   content_area = gtk_dialog_get_content_area (dialog);

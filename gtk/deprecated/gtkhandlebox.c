@@ -202,7 +202,7 @@ static void     gtk_handle_box_end_drag      (GtkHandleBox   *hb,
 
 static guint handle_box_signals[SIGNAL_LAST] = { 0 };
 
-G_DEFINE_TYPE (GtkHandleBox, gtk_handle_box, GTK_TYPE_BIN)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkHandleBox, gtk_handle_box, GTK_TYPE_BIN)
 
 static void
 gtk_handle_box_class_init (GtkHandleBoxClass *class)
@@ -322,8 +322,6 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
 		  _gtk_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_WIDGET);
-
-  g_type_class_add_private (gobject_class, sizeof (GtkHandleBoxPrivate));
 }
 
 static void
@@ -332,9 +330,7 @@ gtk_handle_box_init (GtkHandleBox *handle_box)
   GtkHandleBoxPrivate *priv;
   GtkStyleContext *context;
 
-  handle_box->priv = G_TYPE_INSTANCE_GET_PRIVATE (handle_box,
-                                                  GTK_TYPE_HANDLE_BOX,
-                                                  GtkHandleBoxPrivate);
+  handle_box->priv = gtk_handle_box_get_instance_private (handle_box);
   priv = handle_box->priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (handle_box), TRUE);

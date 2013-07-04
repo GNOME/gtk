@@ -131,7 +131,7 @@ static void     gtk_hsv_move                 (GtkHSV             *hsv,
 
 static guint hsv_signals[LAST_SIGNAL];
 
-G_DEFINE_TYPE (GtkHSV, gtk_hsv, GTK_TYPE_WIDGET)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkHSV, gtk_hsv, GTK_TYPE_WIDGET)
 
 /* Class initialization function for the HSV color selector */
 static void
@@ -208,8 +208,6 @@ gtk_hsv_class_init (GtkHSVClass *class)
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Left, 0,
                                 "move", 1,
                                 G_TYPE_ENUM, GTK_DIR_LEFT);
-
-  g_type_class_add_private (gobject_class, sizeof (GtkHSVPrivate));
 }
 
 static void
@@ -217,8 +215,7 @@ gtk_hsv_init (GtkHSV *hsv)
 {
   GtkHSVPrivate *priv;
 
-  priv = G_TYPE_INSTANCE_GET_PRIVATE (hsv, GTK_TYPE_HSV, GtkHSVPrivate);
-
+  priv = gtk_hsv_get_instance_private (hsv);
   hsv->priv = priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (hsv), FALSE);

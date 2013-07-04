@@ -741,14 +741,11 @@ typedef struct
   } elt;
 } PathElt;
 
-#define GTK_RC_STYLE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_RC_STYLE, GtkRcStylePrivate))
-
-typedef struct _GtkRcStylePrivate GtkRcStylePrivate;
-
-struct _GtkRcStylePrivate
-{
+typedef struct {
   GSList *color_hashes;
-};
+} GtkRcStylePrivate;
+
+#define GTK_RC_STYLE_GET_PRIVATE(obj) ((GtkRcStylePrivate *) gtk_rc_style_get_instance_private ((GtkRcStyle *) (obj)))
 
 static void        gtk_rc_style_finalize             (GObject         *object);
 static void        gtk_rc_style_real_merge           (GtkRcStyle      *dest,
@@ -1093,7 +1090,7 @@ gtk_rc_parse (const gchar *filename)
 
 /* Handling of RC styles */
 
-G_DEFINE_TYPE (GtkRcStyle, gtk_rc_style, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkRcStyle, gtk_rc_style, G_TYPE_OBJECT)
 
 static void
 gtk_rc_style_init (GtkRcStyle *style)
@@ -1136,8 +1133,6 @@ gtk_rc_style_class_init (GtkRcStyleClass *klass)
   klass->create_rc_style = gtk_rc_style_real_create_rc_style;
   klass->merge = gtk_rc_style_real_merge;
   klass->create_style = gtk_rc_style_real_create_style;
-
-  g_type_class_add_private (object_class, sizeof (GtkRcStylePrivate));
 }
 
 static void

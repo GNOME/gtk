@@ -297,7 +297,7 @@ static const guchar dropper_bits[] = {
   "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"
   "\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0"};
 
-G_DEFINE_TYPE (GtkColorSelection, gtk_color_selection, GTK_TYPE_BOX)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkColorSelection, gtk_color_selection, GTK_TYPE_BOX)
 
 static void
 gtk_color_selection_class_init (GtkColorSelectionClass *klass)
@@ -384,8 +384,6 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
                   NULL, NULL,
                   _gtk_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
-
-  g_type_class_add_private (gobject_class, sizeof (GtkColorSelectionPrivate));
 }
 
 static void
@@ -406,7 +404,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
 
   gtk_widget_push_composite_child ();
 
-  priv = colorsel->private_data = G_TYPE_INSTANCE_GET_PRIVATE (colorsel, GTK_TYPE_COLOR_SELECTION, GtkColorSelectionPrivate);
+  priv = colorsel->private_data = gtk_color_selection_get_instance_private (colorsel);
   priv->changing = FALSE;
   priv->default_set = FALSE;
   priv->default_alpha_set = FALSE;

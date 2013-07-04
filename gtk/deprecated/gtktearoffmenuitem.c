@@ -77,7 +77,7 @@ static void gtk_tearoff_menu_item_activate             (GtkMenuItem    *menu_ite
 static void gtk_tearoff_menu_item_parent_set           (GtkWidget      *widget,
                                                         GtkWidget      *previous);
 
-G_DEFINE_TYPE (GtkTearoffMenuItem, gtk_tearoff_menu_item, GTK_TYPE_MENU_ITEM)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkTearoffMenuItem, gtk_tearoff_menu_item, GTK_TYPE_MENU_ITEM)
 
 /**
  * gtk_tearoff_menu_item_new:
@@ -112,21 +112,13 @@ gtk_tearoff_menu_item_class_init (GtkTearoffMenuItemClass *klass)
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_TEAR_OFF_MENU_ITEM);
 
   menu_item_class->activate = gtk_tearoff_menu_item_activate;
-
-  g_type_class_add_private (klass, sizeof (GtkTearoffMenuItemPrivate));
 }
 
 static void
-gtk_tearoff_menu_item_init (GtkTearoffMenuItem *tearoff_menu_item)
+gtk_tearoff_menu_item_init (GtkTearoffMenuItem *self)
 {
-  GtkTearoffMenuItemPrivate *priv;
-
-  tearoff_menu_item->priv = G_TYPE_INSTANCE_GET_PRIVATE (tearoff_menu_item,
-                                                         GTK_TYPE_TEAROFF_MENU_ITEM,
-                                                         GtkTearoffMenuItemPrivate);
-  priv = tearoff_menu_item->priv;
-
-  priv->torn_off = FALSE;
+  self->priv = gtk_tearoff_menu_item_get_instance_private (self);
+  self->priv->torn_off = FALSE;
 }
 
 static void
