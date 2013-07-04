@@ -499,8 +499,9 @@ And callback types:
   typedef void (* GtkCallback) (GtkWidget *widget,
                                 gpointer   user_data);
 
-Instance structures should only contain the parent type and a pointer to a
-private data structure, and they should be annotated as "private":
+Instance structures should only contain the parent type, and optionally a
+pointer to a private data structure, and they should be annotated as
+"private" using the gtk-doc trigraph:
 
   struct _GtkFoo
   {
@@ -510,20 +511,25 @@ private data structure, and they should be annotated as "private":
     GtkFooPrivate *priv;
   };
 
+The private data pointer is optional and should be omitted in newly
+written classes.
+
+Always use the G_DEFINE_TYPE(), G_DEFINE_TYPE_WITH_PRIVATE(), and
+G_DEFINE_TYPE_WITH_CODE() macros, or their abstract variants
+G_DEFINE_ABSTRACT_TYPE(), G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE(), and
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE(); also, use the similar macros for
+defining interfaces and boxed types.
+
 All the properties should be stored inside the private data structure, which
 is defined inside the source file - or, if needed, inside a private header
 file; the private header filename must end with "private.h" and must not be
 installed.
 
-The private data structure should only be accessed internally using the
-pointer inside the instance structure, and never using the
+The private data structure should only be accessed internally either using the
+pointer inside the instance structure, if one is available, or the generated
+instance private data getter function for your type. You should never use the
 G_TYPE_INSTANCE_GET_PRIVATE() macro or the g_type_instance_get_private()
 function.
-
-Always use the G_DEFINE_TYPE(), G_DEFINE_TYPE_WITH_CODE() macros, or
-their abstract variants G_DEFINE_ABSTRACT_TYPE() and
-G_DEFINE_ABSTRACT_TYPE_WITH_CODE(), and the similar macros for defining
-interfaces.
 
 Interface types should always have the dummy typedef for cast purposes:
 
