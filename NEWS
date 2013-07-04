@@ -1,3 +1,24 @@
+Overview of Changes from GTK+ 2.24.19 to 2.24.20
+================================================
+
+* Backport changes from GTK+ 3 to look for rc files in system
+  config dirs in addition to /etc/gtk-2.0 and ~/.gtkrc.
+
+* Backport changes from GTK+ 3 to look for the immodules cache
+  file in libdir. gtk-query-immodules-2.0 gained an --update-cache
+  option to write the output to the correct location. Note that
+  this may require slight adjustment of distro packaging.
+
+* Bug fixes:
+ 560337 GtkFileChooser hour time missing for current date files
+ 649390 CRLF text is copied to clipboard as CRCRLF on Windows
+ 698183 quartz: Text input is too slow and some keys are broken...
+ 702455 Add support for Avahi printers to gtk 2.24.x
+
+* Translation updates:
+ Polish
+
+
 Overview of Changes from GTK+ 2.24.18 to 2.24.19
 ================================================
 
