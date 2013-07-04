@@ -36,11 +36,18 @@ reveal_one (gpointer data)
   return count < 9;
 }
 
+static guint timeout = 0;
+
 static void
 response_cb (GtkWidget *dialog,
              gint       response_id,
              gpointer   data)
 {
+  if (timeout != 0)
+    {
+      g_source_remove (timeout);
+      timeout = 0;
+    }
   gtk_widget_destroy (dialog);
 }
 
@@ -71,7 +78,7 @@ do_revealer (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     {
       count = 0;
-      g_timeout_add (690, reveal_one, NULL);
+      timeout = g_timeout_add (690, reveal_one, NULL);
       gtk_widget_show_all (window);
     }
   else
