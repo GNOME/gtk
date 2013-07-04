@@ -802,8 +802,6 @@ gtk_stack_start_transition (GtkStack               *stack,
       transition_duration != 0 &&
       priv->last_visible_child != NULL)
     {
-      gtk_widget_set_opacity (widget, 0.999);
-
       priv->transition_pos = 0.0;
       priv->start_time = gdk_frame_clock_get_frame_time (gtk_widget_get_frame_clock (widget));
       priv->end_time = priv->start_time + (transition_duration * 1000);
@@ -1412,6 +1410,17 @@ gtk_stack_draw_crossfade (GtkWidget *widget,
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
 
+  cairo_push_group (cr);
+  gtk_container_propagate_draw (GTK_CONTAINER (stack),
+                                priv->visible_child->widget,
+                                cr);
+  cairo_save (cr);
+
+  /* Multiply alpha by transition pos */
+  cairo_set_source_rgba (cr, 1, 1, 1, priv->transition_pos);
+  cairo_set_operator (cr, CAIRO_OPERATOR_DEST_IN);
+  cairo_paint (cr);
+
   if (priv->last_visible_surface)
     {
       cairo_set_source_surface (cr, priv->last_visible_surface,
@@ -1421,14 +1430,11 @@ gtk_stack_draw_crossfade (GtkWidget *widget,
       cairo_paint_with_alpha (cr, MAX (1.0 - priv->transition_pos, 0));
     }
 
-  cairo_push_group (cr);
-  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-  gtk_container_propagate_draw (GTK_CONTAINER (stack),
-                                priv->visible_child->widget,
-                                cr);
+  cairo_restore (cr);
+
   cairo_pop_group_to_source (cr);
-  cairo_set_operator (cr, CAIRO_OPERATOR_ADD);
-  cairo_paint_with_alpha (cr, priv->transition_pos);
+  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+  cairo_paint (cr);
 }
 
 static void
