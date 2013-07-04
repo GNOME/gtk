@@ -145,7 +145,7 @@ gtk_message_new (const char *str)
   return msg;
 }
 
-G_DEFINE_TYPE (GtkMessageRow, gtk_message_row, GTK_TYPE_LIST_BOX_ROW);
+G_DEFINE_TYPE_WITH_PRIVATE (GtkMessageRow, gtk_message_row, GTK_TYPE_LIST_BOX_ROW);
 
 
 static void
@@ -252,8 +252,6 @@ gtk_message_row_class_init (GtkMessageRowClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  g_type_class_add_private (klass, sizeof (GtkMessageRowPrivate));
-
   gtk_widget_class_set_template_from_resource (widget_class, "/listbox/listbox.ui");
   gtk_widget_class_bind_child(widget_class, GtkMessageRowPrivate, content_label);
   gtk_widget_class_bind_child(widget_class, GtkMessageRowPrivate, source_name);
@@ -278,10 +276,7 @@ gtk_message_row_class_init (GtkMessageRowClass *klass)
 static void
 gtk_message_row_init (GtkMessageRow *row)
 {
-  GtkMessageRowPrivate *priv;
-
-  row->priv = priv =
-    G_TYPE_INSTANCE_GET_PRIVATE (row, GTK_TYPE_MESSAGE_ROW, GtkMessageRowPrivate);
+  row->priv = gtk_message_row_get_instance_private (row);
 
   gtk_widget_init_template (GTK_WIDGET (row));
 }
