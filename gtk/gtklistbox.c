@@ -2411,7 +2411,7 @@ static void
 gtk_list_box_row_real_show (GtkWidget *widget)
 {
   GtkListBoxRow *row = GTK_LIST_BOX_ROW (widget);
-  GtkListBox *list_box;;
+  GtkListBox *list_box;
 
   GTK_WIDGET_CLASS (gtk_list_box_row_parent_class)->show (widget);
 
