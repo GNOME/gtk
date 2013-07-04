@@ -460,8 +460,6 @@ struct _GtkWidgetPrivate
   /* SizeGroup related flags */
   guint have_size_groups      : 1;
 
-  guint opacity_group         : 1;
-
   guint8 alpha;
   guint8 user_alpha;
 
@@ -6584,7 +6582,6 @@ _gtk_widget_draw (GtkWidget *widget,
   cairo_save (cr);
 
   push_group =
-    widget->priv->opacity_group ||
     (widget->priv->alpha != 255 &&
      !gtk_widget_is_toplevel (widget));
 
@@ -14986,27 +14983,6 @@ gtk_widget_update_alpha (GtkWidget *widget)
     }
 }
 
-static void
-gtk_widget_set_has_opacity_group  (GtkWidget *widget,
-				   gboolean has_opacity_group)
-{
-  GtkWidgetPrivate *priv;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  priv = widget->priv;
-
-  has_opacity_group = !!has_opacity_group;
-
-  if (priv->opacity_group == has_opacity_group)
-    return;
-
-  priv->opacity_group = has_opacity_group;
-
-  if (gtk_widget_get_realized (widget))
-    gtk_widget_queue_draw (widget);
-}
-
 /**
  * gtk_widget_set_opacity:
  * @widget: a #GtkWidget
@@ -15043,13 +15019,6 @@ gtk_widget_set_opacity  (GtkWidget *widget,
   opacity = CLAMP (opacity, 0.0, 1.0);
 
   alpha = round (opacity * 255);
-
-  /* As a kind of hack for internal use we treat an alpha very
-     close to 1.0 (rounds to 255) but not 1.0 as specifying that
-     we want the opacity group behaviour wrt draw handling, but
-     not actually an alpha value. See bug #687842 for discussions. */
-  gtk_widget_set_has_opacity_group (widget,
-				    alpha == 255 && opacity != 1.0);
 
   if (alpha == priv->user_alpha)
     return;
