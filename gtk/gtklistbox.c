@@ -2623,6 +2623,8 @@ gtk_list_box_row_changed (GtkListBoxRow *row)
 {
   GtkListBox *list_box = gtk_list_box_row_get_box (row);
 
+  g_return_if_fail (GTK_IS_LIST_BOX_ROW (row));
+
   if (list_box)
     gtk_list_box_got_row_changed (GTK_LIST_BOX (list_box), row);
 }
@@ -2644,6 +2646,8 @@ gtk_list_box_row_get_header (GtkListBoxRow *row)
 {
   GtkListBoxRowPrivate *priv = gtk_list_box_row_get_instance_private (row);
 
+  g_return_val_if_fail (GTK_IS_LIST_BOX_ROW (row), NULL);
+
   return priv->header;
 }
 
@@ -2663,6 +2667,9 @@ gtk_list_box_row_set_header (GtkListBoxRow *row,
                              GtkWidget     *header)
 {
   GtkListBoxRowPrivate *priv = gtk_list_box_row_get_instance_private (row);
+
+  g_return_if_fail (GTK_IS_LIST_BOX_ROW (row));
+  g_return_if_fail (header == NULL || GTK_IS_WIDGET (header));
 
   if (priv->header)
     g_object_unref (priv->header);
@@ -2687,6 +2694,8 @@ gint
 gtk_list_box_row_get_index (GtkListBoxRow *row)
 {
   GtkListBoxRowPrivate *priv = gtk_list_box_row_get_instance_private (row);
+
+  g_return_val_if_fail (GTK_IS_LIST_BOX_ROW (row), -1);
 
   if (priv->iter != NULL)
     return g_sequence_iter_get_position (priv->iter);
