@@ -106,6 +106,7 @@ test_selection (void)
   gint i;
   gchar *s;
   gint count;
+  gint index;
 
   list = GTK_LIST_BOX (gtk_list_box_new ());
   g_object_ref_sink (list);
@@ -152,6 +153,16 @@ test_selection (void)
   g_assert_cmpint (count, ==, 4);
   row2 = gtk_list_box_get_selected_row (list);
   g_assert (row2 == NULL);
+
+  row = gtk_list_box_get_row_at_index (list, 20);
+  index = gtk_list_box_row_get_index (row);
+  g_assert_cmpint (index, ==, 20);
+
+  row = GTK_LIST_BOX_ROW (gtk_list_box_row_new ());
+  g_object_ref_sink (row);
+  index = gtk_list_box_row_get_index (row);
+  g_assert_cmpint (index, ==, -1);
+  g_object_unref (row);
 
   g_object_unref (list);
 }
