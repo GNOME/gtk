@@ -462,8 +462,6 @@ struct _GtkWidgetPrivate
   guint have_size_groups      : 1;
 
   guint opacity_group         : 1;
-  guint norender_children     : 1;
-  guint norender              : 1; /* Don't expose windows, instead recurse via draw */
 
   guint8 alpha;
   guint8 user_alpha;
@@ -14828,10 +14826,6 @@ gtk_widget_register_window (GtkWidget    *widget,
 
   gdk_window_set_user_data (window, widget);
   priv->registered_windows = g_list_prepend (priv->registered_windows, window);
-
-  if (priv->window != window && !gdk_window_has_native (window))
-    gdk_window_set_opacity (window,
-			    priv->norender_children ? 0.0 : 1.0);
 }
 
 /**
