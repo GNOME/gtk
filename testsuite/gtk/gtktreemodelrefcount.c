@@ -55,6 +55,7 @@ static void      gtk_tree_model_ref_count_unref_node      (GtkTreeModel      *mo
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkTreeModelRefCount, gtk_tree_model_ref_count, GTK_TYPE_TREE_STORE,
+                         G_ADD_PRIVATE (GtkTreeModelRefCount)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL,
                                                 gtk_tree_model_ref_count_tree_model_init))
 
@@ -83,9 +84,7 @@ row_removed (GtkTreeModelRefCount *ref_model,
 static void
 gtk_tree_model_ref_count_init (GtkTreeModelRefCount *ref_model)
 {
-  ref_model->priv = G_TYPE_INSTANCE_GET_PRIVATE (ref_model,
-                                                 GTK_TYPE_TREE_MODEL_REF_COUNT,
-                                                 GtkTreeModelRefCountPrivate);
+  ref_model->priv = gtk_tree_model_ref_count_get_instance_private (ref_model); 
 
   ref_model->priv->node_hash = g_hash_table_new_full (g_direct_hash,
                                                       g_direct_equal,
@@ -98,13 +97,7 @@ gtk_tree_model_ref_count_init (GtkTreeModelRefCount *ref_model)
 static void
 gtk_tree_model_ref_count_class_init (GtkTreeModelRefCountClass *ref_model_class)
 {
-  GObjectClass *object_class;
-
-  object_class = (GObjectClass *) ref_model_class;
-
-  object_class->finalize = gtk_tree_model_ref_count_finalize;
-
-  g_type_class_add_private (object_class, sizeof (GtkTreeModelRefCountPrivate));
+  G_OBJECT_CLASS (ref_model_class)->finalize = gtk_tree_model_ref_count_finalize;
 }
 
 static void
