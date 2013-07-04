@@ -274,11 +274,10 @@ additional environment variables.
 
   <para>
     Specifies the file listing the IM modules to load. This environment
-    variable overrides the <literal>im_module_file</literal> specified in 
-    the RC files, which in turn overrides the default value 
-    <filename><replaceable>sysconfdir</replaceable>/gtk-2.0/gtk.immodules</filename>
-    (<replaceable>sysconfdir</replaceable> is the sysconfdir specified when GTK+ was configured, 
-     usually <filename>/usr/local/etc</filename>.)
+    variable overrides the <literal>im_module_file</literal> specified in
+    the RC files, which in turn overrides the default value
+    <filename><replaceable>libdir</replaceable>/gtk-2.0/2.10.0/immodules.cache</filename>
+    (<replaceable>libdir</replaceable> has the same meaning here as explained for <envar>GTK_PATH</envar>).
   </para>
 </formalpara>
 
