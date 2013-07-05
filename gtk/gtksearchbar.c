@@ -398,7 +398,7 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
   widget_props[PROP_SHOW_CLOSE_BUTTON] = g_param_spec_boolean ("show-close-button",
                                                                P_("Show Close Button"),
                                                                P_("Whether to show the close button in the toolbar"),
-                                                               TRUE,
+                                                               FALSE,
                                                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT);
 
   g_object_class_install_properties (object_class, LAST_PROPERTY, widget_props);
@@ -540,7 +540,10 @@ gtk_search_bar_get_show_close_button (GtkSearchBar *bar)
  * @bar: a #GtkSearchBar
  * @visible: whether the close button will be shown or not
  *
- * Shows or hides the close button.
+ * Shows or hides the close button. Applications that
+ * already have a "search" toggle button should not show a close
+ * button in their search bar, as it duplicates the role of the
+ * toggle button.
  *
  * Since: 3.10
  */
