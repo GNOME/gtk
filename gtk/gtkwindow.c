@@ -5708,8 +5708,6 @@ gtk_window_realize (GtkWidget *widget)
     {
       gtk_container_set_resize_mode (GTK_CONTAINER (widget), GTK_RESIZE_PARENT);
 
-      gtk_widget_set_realized (widget, TRUE);
-
       attributes.x = allocation.x;
       attributes.y = allocation.y;
       attributes.width = allocation.width;
@@ -5727,6 +5725,7 @@ gtk_window_realize (GtkWidget *widget)
 				   &attributes, attributes_mask);
       gtk_widget_set_window (widget, gdk_window);
       gtk_widget_register_window (widget, gdk_window);
+      gtk_widget_set_realized (widget, TRUE);
 
       return;
     }
@@ -5760,9 +5759,7 @@ gtk_window_realize (GtkWidget *widget)
 
       g_return_if_fail (!gtk_widget_get_realized (widget));
     }
-  
-  gtk_widget_set_realized (widget, TRUE);
-  
+
   switch (priv->type)
     {
     case GTK_WINDOW_TOPLEVEL:
@@ -5811,6 +5808,7 @@ gtk_window_realize (GtkWidget *widget)
   gdk_window = gdk_window_new (parent_window, &attributes, attributes_mask);
   gtk_widget_set_window (widget, gdk_window);
   gtk_widget_register_window (widget, gdk_window);
+  gtk_widget_set_realized (widget, TRUE);
 
   /* We don't need to set a background on the GdkWindow; with decorations
    * we draw the background ourself
