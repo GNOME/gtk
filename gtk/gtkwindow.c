@@ -6224,7 +6224,10 @@ update_border_windows (GtkWindow *window)
                                 &border);
   gtk_style_context_restore (context);
 
-  if (!priv->resizable || gtk_window_get_maximized (window))
+  if (!priv->resizable ||
+      priv->tiled ||
+      priv->fullscreen ||
+      gtk_window_get_maximized (window))
     {
       resize_h = resize_v = FALSE;
     }
