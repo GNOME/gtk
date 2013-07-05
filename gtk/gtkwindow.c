@@ -6167,7 +6167,8 @@ get_decoration_size (GtkWidget *widget,
     return;
 
   if (gtk_window_get_maximized (GTK_WINDOW (widget)) ||
-      GTK_WINDOW (widget)->priv->tiled)
+      priv->fullscreen ||
+      priv->tiled)
     return;
 
   state = gtk_widget_get_state_flags (widget);
@@ -6614,7 +6615,6 @@ gtk_window_state_event (GtkWidget           *widget,
       priv->tiled =
         (event->new_window_state & GDK_WINDOW_STATE_TILED) ? 1 : 0;
     }
-
 
   if (event->changed_mask & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_TILED))
     {
