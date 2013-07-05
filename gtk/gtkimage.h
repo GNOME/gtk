@@ -182,7 +182,7 @@ GDK_DEPRECATED_IN_3_10_FOR(gtk_image_get_icon_name)
 void       gtk_image_get_stock    (GtkImage         *image,
                                    gchar           **stock_id,
                                    GtkIconSize      *size);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10_FOR(gtk_image_get_icon_name)
 void       gtk_image_get_icon_set (GtkImage         *image,
                                    GtkIconSet      **icon_set,
                                    GtkIconSize      *size);

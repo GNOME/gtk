@@ -1285,6 +1285,8 @@ gtk_image_get_stock  (GtkImage        *image,
  * Gets the icon set and size being displayed by the #GtkImage.
  * The storage type of the image must be %GTK_IMAGE_EMPTY or
  * %GTK_IMAGE_ICON_SET (see gtk_image_get_storage_type()).
+ *
+ * Deprecated: 3.10: Use gtk_image_get_icon_name() instead.
  **/
 void
 gtk_image_get_icon_set  (GtkImage        *image,

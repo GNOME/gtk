@@ -1597,6 +1597,8 @@ gtk_icon_set_render_icon_pixbuf (GtkIconSet        *icon_set,
  * Return value: (transfer full): a #cairo_surface_t to be displayed
  *
  * Since: 3.10
+ *
+ * Deprecated: 3.10: Use #GtkIconTheme instead.
  */
 cairo_surface_t *
 gtk_icon_set_render_icon_surface  (GtkIconSet      *icon_set,

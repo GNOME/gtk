@@ -601,10 +601,12 @@ ensure_surface_for_icon_set (GtkIconHelper *self,
 
   scale = get_scale_factor (self, context);
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   self->priv->rendered_surface =
     gtk_icon_set_render_icon_surface (icon_set, context, 
 				      self->priv->icon_size,
 				      scale, self->priv->window);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   if (self->priv->rendered_surface)
     get_surface_size (self, context, self->priv->rendered_surface, 
