@@ -6619,7 +6619,7 @@ gtk_window_state_event (GtkWidget           *widget,
   if (event->changed_mask & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_TILED))
     {
       update_window_buttons (window);
-      gtk_widget_queue_draw (GTK_WIDGET (window));
+      gtk_widget_queue_resize (widget);
     }
 
   return FALSE;
