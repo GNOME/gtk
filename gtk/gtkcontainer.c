@@ -1889,6 +1889,12 @@ gtk_container_real_check_resize (GtkContainer *container)
  *  so we simply need to reallocate and let the allocation
  *  trickle down via GTK_WIDGET_ALLOC_NEEDED flags.
  */
+/**
+ * gtk_container_resize_children:
+ * @container: a #GtkContainer
+ *
+ * Deprecated: 3.10
+ **/
 void
 gtk_container_resize_children (GtkContainer *container)
 {

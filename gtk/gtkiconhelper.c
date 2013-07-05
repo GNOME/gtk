@@ -748,11 +748,13 @@ _gtk_icon_helper_ensure_surface (GtkIconHelper *self,
       break;
 
     case GTK_IMAGE_STOCK:
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       icon_set = gtk_style_context_lookup_icon_set (context, self->priv->stock_id);
       if (icon_set != NULL)
 	ensure_surface_for_icon_set (self, context, icon_set);
       else
 	surface = NULL;
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
 
     case GTK_IMAGE_ICON_SET:

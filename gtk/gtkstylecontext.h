@@ -878,10 +878,10 @@ GDK_AVAILABLE_IN_ALL
 void gtk_style_context_get_style          (GtkStyleContext *context,
                                            ...);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10_FOR(gtk_icon_theme_lookup_icon)
 GtkIconSet * gtk_style_context_lookup_icon_set (GtkStyleContext *context,
                                                 const gchar     *stock_id);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 GdkPixbuf  * gtk_icon_set_render_icon_pixbuf   (GtkIconSet      *icon_set,
                                                 GtkStyleContext *context,
                                                 GtkIconSize      size);
@@ -1087,7 +1087,7 @@ void        gtk_render_activity    (GtkStyleContext     *context,
                                     gdouble              y,
                                     gdouble              width,
                                     gdouble              height);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10_FOR(gtk_icon_theme_load_icon)
 GdkPixbuf * gtk_render_icon_pixbuf (GtkStyleContext     *context,
                                     const GtkIconSource *source,
                                     GtkIconSize          size);

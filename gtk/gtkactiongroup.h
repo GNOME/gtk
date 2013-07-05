@@ -178,9 +178,9 @@ gboolean        gtk_action_group_get_visible             (GtkActionGroup        
 GDK_DEPRECATED_IN_3_10
 void            gtk_action_group_set_visible             (GtkActionGroup             *action_group,
 							  gboolean                    visible);
-GDK_AVAILABLE_IN_3_6
+GDK_DEPRECATED_IN_3_10
 GtkAccelGroup  *gtk_action_group_get_accel_group         (GtkActionGroup             *action_group);
-GDK_AVAILABLE_IN_3_6
+GDK_DEPRECATED_IN_3_10
 void            gtk_action_group_set_accel_group         (GtkActionGroup             *action_group,
                                                           GtkAccelGroup              *accel_group);
 

@@ -9751,12 +9751,14 @@ gtk_widget_render_icon_pixbuf (GtkWidget   *widget,
   g_return_val_if_fail (size > GTK_ICON_SIZE_INVALID || size == -1, NULL);
 
   context = gtk_widget_get_style_context (widget);
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   icon_set = gtk_style_context_lookup_icon_set (context, stock_id);
 
   if (icon_set == NULL)
     return NULL;
 
   return gtk_icon_set_render_icon_pixbuf (icon_set, context, size);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 /**
