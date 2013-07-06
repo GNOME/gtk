@@ -1,25 +1,26 @@
 # Vietnamese translation for GTK+.
-# Copyright © 2010 GNOME i18n Project for Vietnamese.
+# Copyright © 2013 GNOME i18n Project for Vietnamese.
 # Hoang Ngoc Tu <hntu@gmx.de>, 2000-2002.
 # Joern v. Kattchee <kattchee@cs.tu-berlin.de>, 2000-2002.
 # Nguyễn Thái Ngọc Duy <pclouds@gmail.com>, 2002-2004,2007-2009,2011-2013.
 # Clytie Siddall <clytie@riverland.net.au>, 2005-2010.
+# Trần Ngọc Quân <vnwildman@gmail.com>, 2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 2.15.3\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-05-30 18:03+0000\n"
-"PO-Revision-Date: 2013-07-06 18:30+0700\n"
-"Last-Translator: Nguyễn Thái Ngọc Duy <pclouds@gmail.com>\n"
-"Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
+"POT-Creation-Date: 2013-07-05 21:17+0000\n"
+"PO-Revision-Date: 2013-07-06 18:39+0700\n"
+"Last-Translator: Trần Ngọc Quân <vnwildman@gmail.com>\n"
+"Language-Team: Vietnamese <translation-team-vi@lists.sourceforge.net>\n"
 "Language: vi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: LocFactoryEditor 1.8\n"
+"X-Generator: Poedit 1.5.5\n"
 
 #: ../gdk/gdk.c:157
 #, c-format
@@ -29,7 +30,7 @@ msgstr "Lỗi phân tích cú pháp của tuỳ chọn --gdk-debug"
 #: ../gdk/gdk.c:177
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
-msgstr "Lỗi phân tích cú pháp của tuỳ chọn --gdk-no-debug»"
+msgstr "Lỗi phân tích cú pháp của tuỳ chọn --gdk-no-debug"
 
 #. Description of --class=CLASS in --help output
 #: ../gdk/gdk.c:205
@@ -119,7 +120,7 @@ msgstr "Scroll Lock"
 #: ../gdk/keyname-table.h:3957
 msgctxt "keyboard label"
 msgid "Sys_Req"
-msgstr "SysRq"
+msgstr "Sys Req"
 
 #: ../gdk/keyname-table.h:3958
 msgctxt "keyboard label"
@@ -139,22 +140,22 @@ msgstr "Home"
 #: ../gdk/keyname-table.h:3961
 msgctxt "keyboard label"
 msgid "Left"
-msgstr "Trái"
+msgstr "←"
 
 #: ../gdk/keyname-table.h:3962
 msgctxt "keyboard label"
 msgid "Up"
-msgstr "Lên"
+msgstr "↑"
 
 #: ../gdk/keyname-table.h:3963
 msgctxt "keyboard label"
 msgid "Right"
-msgstr "Phải"
+msgstr "→"
 
 #: ../gdk/keyname-table.h:3964
 msgctxt "keyboard label"
 msgid "Down"
-msgstr "Xuống"
+msgstr "↓"
 
 #: ../gdk/keyname-table.h:3965
 msgctxt "keyboard label"
@@ -195,7 +196,7 @@ msgstr "Num Lock"
 #: ../gdk/keyname-table.h:3973
 msgctxt "keyboard label"
 msgid "KP_Space"
-msgstr "Khoảng trắng"
+msgstr "<Khoảng trắng> (Ô phím số)"
 
 #: ../gdk/keyname-table.h:3974
 msgctxt "keyboard label"
@@ -411,7 +412,7 @@ msgstr "Tạm ngưng"
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:53
 msgid "Don't batch GDI requests"
-msgstr "Đừng gởi bó yêu cầu GDI"
+msgstr "Đừng gửi bó yêu cầu GDI"
 
 #. Description of --no-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:55
@@ -421,7 +422,7 @@ msgstr "Đừng dùng API Wintab để hỗ trợ phiến đồ họa"
 #. Description of --ignore-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:57
 msgid "Same as --no-wintab"
-msgstr "Bằng --no-wintab"
+msgstr "Tương đương --no-wintab"
 
 #. Description of --use-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:59
@@ -457,37 +458,34 @@ msgstr[0] "Đang mở %d mục"
 #: ../gtk/a11y/gtkbooleancellaccessible.c:43
 msgctxt "Action description"
 msgid "Toggles the cell"
-msgstr ""
+msgstr "Chuyển đổi trạng thái giữa bật và tắt của ô"
 
 #: ../gtk/a11y/gtkbooleancellaccessible.c:63
 #: ../gtk/a11y/gtkswitchaccessible.c:101
 msgctxt "Action name"
 msgid "Toggle"
-msgstr ""
+msgstr "Bật/Tắt"
 
 #: ../gtk/a11y/gtkbuttonaccessible.c:341
 #: ../gtk/a11y/gtkmenuitemaccessible.c:436
 msgctxt "Action name"
 msgid "Click"
-msgstr ""
+msgstr "Bấm chuột"
 
 #: ../gtk/a11y/gtkbuttonaccessible.c:350
 msgctxt "Action description"
 msgid "Clicks the button"
-msgstr ""
+msgstr "Nhấn chuột vào nút"
 
 #: ../gtk/a11y/gtkcellaccessible.c:258
 msgctxt "Action name"
 msgid "Expand or contract"
-msgstr ""
+msgstr "Mở rộng hay thu gọn"
 
 #: ../gtk/a11y/gtkcellaccessible.c:260
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Edit"
 msgctxt "Action name"
 msgid "Edit"
-msgstr "_Sửa"
+msgstr "Sửa"
 
 #: ../gtk/a11y/gtkcellaccessible.c:262
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:72
@@ -495,106 +493,92 @@ msgstr "_Sửa"
 #: ../gtk/a11y/gtkexpanderaccessible.c:281
 msgctxt "Action name"
 msgid "Activate"
-msgstr ""
+msgstr "Kích hoạt"
 
 #: ../gtk/a11y/gtkcellaccessible.c:275
 msgctxt "Action description"
 msgid "Expands or contracts the row in the tree view containing this cell"
-msgstr ""
+msgstr "Mở rộng hay thu gọn các dòng trong nhánh chứa ô này"
 
 #: ../gtk/a11y/gtkcellaccessible.c:277
 msgctxt "Action description"
 msgid "Creates a widget in which the contents of the cell can be edited"
-msgstr ""
+msgstr "Tạo một widget trong ngữ cảnh mà bạn có thể sửa nội dung của nó"
 
 #: ../gtk/a11y/gtkcellaccessible.c:279
 msgctxt "Action description"
 msgid "Activates the cell"
-msgstr ""
+msgstr "Kích hoạt ô"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:71
-#, fuzzy
-#| msgid "_Select"
 msgctxt "Action name"
 msgid "Select"
-msgstr "_Chọn"
+msgstr "Chọn"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:73
-#, fuzzy
-#| msgid "_Customize"
 msgctxt "Action name"
 msgid "Customize"
-msgstr "_Tuỳ biến"
+msgstr "Cá nhân hóa"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:84
-#, fuzzy
-#| msgid "Select a Color"
 msgctxt "Action description"
 msgid "Selects the color"
 msgstr "Chọn màu"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:85
-#, fuzzy
-#| msgid "Brightness of the color."
 msgctxt "Action description"
 msgid "Activates the color"
-msgstr "Độ sáng của màu."
+msgstr "Kích hoạt màu"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:86
-#, fuzzy
-#| msgid "Custom color %d: %s"
 msgctxt "Action description"
 msgid "Customizes the color"
-msgstr "Màu tự chọn %d: %s"
+msgstr "Tự chọn màu"
 
 #: ../gtk/a11y/gtkcomboboxaccessible.c:313
-#, fuzzy
-#| msgid "_Pressure:"
 msgctxt "Action name"
 msgid "Press"
-msgstr "Á_p lực:"
+msgstr "Nhấn"
 
 #: ../gtk/a11y/gtkcomboboxaccessible.c:322
-#, fuzzy
-#| msgid "Decreases the volume"
 msgctxt "Action description"
 msgid "Presses the combobox"
-msgstr "Giảm âm lượng"
+msgstr "Nhấn vào combobox"
 
 #: ../gtk/a11y/gtkentryaccessible.c:1566
 msgctxt "Action description"
 msgid "Activates the entry"
-msgstr ""
+msgstr "Kích hoạt mục"
 
 #: ../gtk/a11y/gtkexpanderaccessible.c:290
 msgctxt "Action description"
 msgid "Activates the expander"
-msgstr ""
+msgstr "Kích hoạt ô mở rộng"
 
 #: ../gtk/a11y/gtkmenuitemaccessible.c:445
 msgctxt "Action description"
 msgid "Clicks the menuitem"
-msgstr ""
+msgstr "Chọn mục trình đơn"
 
 #: ../gtk/a11y/gtkscalebuttonaccessible.c:140
 msgctxt "Action description"
 msgid "Pops up the slider"
-msgstr ""
+msgstr "Nổi thanh trượt"
 
 #: ../gtk/a11y/gtkscalebuttonaccessible.c:142
 msgctxt "Action description"
 msgid "Dismisses the slider"
-msgstr ""
+msgstr "Bỏ thanh trượt đi"
 
 #: ../gtk/a11y/gtkscalebuttonaccessible.c:170
 msgctxt "Action name"
 msgid "Popup"
-msgstr ""
+msgstr "Popup"
 
 #: ../gtk/a11y/gtkscalebuttonaccessible.c:172
 msgctxt "Action name"
 msgid "Dismiss"
-msgstr ""
+msgstr "Bỏ đi"
 
 #: ../gtk/a11y/gtkspinneraccessible.c:39
 msgctxt "throbbing progress animation widget"
@@ -617,7 +601,7 @@ msgstr "Công tắc chuyển trạng thái bật/tắt"
 #: ../gtk/a11y/gtkswitchaccessible.c:110
 msgctxt "Action description"
 msgid "Toggles the switch"
-msgstr ""
+msgstr "Bật/Tắt công tắc"
 
 #: ../gtk/deprecated/gtkcolorsel.c:425
 msgid ""
@@ -701,7 +685,7 @@ msgid ""
 "such as 'orange' in this entry."
 msgstr ""
 "Bạn có thể nhập một giá trị thập lục phân theo kiểu HTML, hoặc đơn giản là "
-"nhập tên màu như 'orange' (cam) vào ô này."
+"nhập tên màu như “orange” (cam) vào ô này."
 
 #: ../gtk/deprecated/gtkcolorsel.c:548
 msgid "_Palette:"
@@ -914,7 +898,7 @@ msgstr "Meta"
 #: ../gtk/gtkaccellabel.c:849
 msgctxt "keyboard label"
 msgid "Space"
-msgstr "Phím cách"
+msgstr "<Khoảng trắng>"
 
 #: ../gtk/gtkaccellabel.c:852
 msgctxt "keyboard label"
@@ -942,18 +926,18 @@ msgstr "Chọn ứng dụng để mở \"%s\""
 #: ../gtk/gtkappchooserdialog.c:333 ../gtk/gtkappchooserwidget.c:657
 #, c-format
 msgid "No applications available to open \"%s\""
-msgstr "Không có ứng dụng mở \"%s\""
+msgstr "Không sẵn có ứng dụng nào có thể mở \"%s\""
 
 #. Translators: %s is a file type description
 #: ../gtk/gtkappchooserdialog.c:339
 #, c-format
 msgid "Select an application for \"%s\" files"
-msgstr "Chọn ứng dụng cho tập tin \"%s\""
+msgstr "Chọn ứng dụng dành cho tập tin \"%s\""
 
 #: ../gtk/gtkappchooserdialog.c:341
 #, c-format
 msgid "No applications available to open \"%s\" files"
-msgstr "Không có ứng dụng mở tập tin \"%s\""
+msgstr "Không sẵn có ứng dụng dùng để mở tập tin \"%s\""
 
 #: ../gtk/gtkappchooserdialog.c:357
 msgid ""
@@ -1033,22 +1017,22 @@ msgstr "chữ không thể xuất hiện trong <%s>"
 #: ../gtk/gtkbuilderparser.c:341
 #, c-format
 msgid "Invalid type function on line %d: '%s'"
-msgstr "Hàm kiểu không hợp lệ tại dòng %d: '%s'"
+msgstr "Kiểu hàm không hợp lệ tại dòng %d: “%s”"
 
 #: ../gtk/gtkbuilderparser.c:405
 #, c-format
 msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
-msgstr "Trùng ID đối tượng '%s' trên dòng %d (trùng với dòng %d)"
+msgstr "Trùng ID đối tượng “%s” trên dòng %d (trùng với dòng %d)"
 
 #: ../gtk/gtkbuilderparser.c:865
 #, c-format
 msgid "Invalid root element: '%s'"
-msgstr "Yếu tố gốc không hợp lệ: '%s'"
+msgstr "Phần tử gốc không hợp lệ: “%s”"
 
 #: ../gtk/gtkbuilderparser.c:906
 #, c-format
 msgid "Unhandled tag: '%s'"
-msgstr "Thẻ không được quản lý: '%s'"
+msgstr "Thẻ không được quản lý: “%s”"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -1166,7 +1150,7 @@ msgstr "Chọn màu"
 
 #: ../gtk/gtkcolorchooserdialog.c:162
 msgid "Select a Color"
-msgstr "Chọn màu"
+msgstr "Chọn một màu"
 
 #: ../gtk/gtkcolorchooserwidget.c:281
 #, c-format
@@ -1356,7 +1340,7 @@ msgstr "Xám nhạt hơn"
 #: ../gtk/gtkcolorchooserwidget.c:470
 msgctxt "Color name"
 msgid "Very Light Gray"
-msgstr "Xám rất nhạt"
+msgstr "Xám rất sáng"
 
 #: ../gtk/gtkcolorchooserwidget.c:471
 msgctxt "Color name"
@@ -1503,7 +1487,7 @@ msgstr "_Chèn ký tự điều khiển Unicode"
 
 #: ../gtk/gtkentry.c:10317
 msgid "Caps Lock is on"
-msgstr "Caps Lock đã bật"
+msgstr "Caps Lock được bật"
 
 #. *
 #. * SECTION:gtkfilechooserbutton
@@ -1630,7 +1614,7 @@ msgstr "Tìm kiếm"
 
 #: ../gtk/gtkfilechooserdefault.c:1768 ../gtk/gtkfilechooserdefault.c:5000
 msgid "Recently Used"
-msgstr "Vừa dùng"
+msgstr "Mới dùng"
 
 #: ../gtk/gtkfilechooserdefault.c:2369
 msgid "Select which types of files are shown"
@@ -1639,7 +1623,7 @@ msgstr "Chọn hiển thị những kiểu tập tin nào"
 #: ../gtk/gtkfilechooserdefault.c:2728
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
-msgstr "Đánh dấu thư mục '%s'"
+msgstr "Đánh dấu thư mục “%s”"
 
 #: ../gtk/gtkfilechooserdefault.c:2772
 #, c-format
@@ -1654,12 +1638,12 @@ msgstr "Đánh dấu thư mục đang được chọn"
 #: ../gtk/gtkfilechooserdefault.c:2812
 #, c-format
 msgid "Remove the bookmark '%s'"
-msgstr "Bỏ đánh dấu '%s'"
+msgstr "Bỏ đánh dấu “%s”"
 
 #: ../gtk/gtkfilechooserdefault.c:2814
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
-msgstr "Không thể bỏ đánh dấu '%s'"
+msgstr "Không thể bỏ đánh dấu “%s”"
 
 #: ../gtk/gtkfilechooserdefault.c:2821 ../gtk/gtkfilechooserdefault.c:3707
 msgid "Remove the selected bookmark"
@@ -1725,7 +1709,7 @@ msgstr "Kích thước"
 
 #: ../gtk/gtkfilechooserdefault.c:4514
 msgid "Modified"
-msgstr "Lúc thay đổi"
+msgstr "Sửa cuối"
 
 #. Label
 #: ../gtk/gtkfilechooserdefault.c:4607
@@ -1795,7 +1779,7 @@ msgstr ""
 #: ../gtk/gtkfilechooserdefault.c:7947 ../gtk/gtkfilechooserdefault.c:7968
 #, c-format
 msgid "Shortcut %s already exists"
-msgstr "Phím tắt %s đã có"
+msgstr "Phím tắt %s đã sẵn có"
 
 #: ../gtk/gtkfilechooserdefault.c:8058
 #, c-format
@@ -1877,11 +1861,11 @@ msgstr "Họ phông"
 #: ../gtk/gtkicontheme.c:1935
 #, c-format
 msgid "Icon '%s' not present in theme"
-msgstr "Biểu tượng '%s' không có trong sắc thái"
+msgstr "Biểu tượng “%s” không có trong chủ đề (theme)"
 
 #: ../gtk/gtkicontheme.c:3557
 msgid "Failed to load icon"
-msgstr "Lỗi nạp biểu tượng"
+msgstr "Gặp lỗi khi tải biểu tượng"
 
 #: ../gtk/gtkimmodule.c:515
 msgid "Simple"
@@ -2064,7 +2048,7 @@ msgstr "_Nặc danh"
 
 #: ../gtk/gtkmountoperation.c:627
 msgid "Registered U_ser"
-msgstr "Người dùng có đăng _ký"
+msgstr "Người dùng đã đăng _ký"
 
 #: ../gtk/gtkmountoperation.c:638
 msgid "_Username"
@@ -2072,7 +2056,7 @@ msgstr "Tên người _dùng"
 
 #: ../gtk/gtkmountoperation.c:643
 msgid "_Domain"
-msgstr "_Miền"
+msgstr "Tên _miền"
 
 #: ../gtk/gtkmountoperation.c:649
 msgid "_Password"
@@ -2080,11 +2064,11 @@ msgstr "Mật _khẩu"
 
 #: ../gtk/gtkmountoperation.c:671
 msgid "Forget password _immediately"
-msgstr "_Quên mật khẩu ngay"
+msgstr "_Quên mật khẩu ngay lập tức"
 
 #: ../gtk/gtkmountoperation.c:681
 msgid "Remember password until you _logout"
-msgstr "_Nhớ mật khẩu đến khi bạn đăng xuất"
+msgstr "_Nhớ mật khẩu cho đến khi bạn đăng xuất"
 
 #: ../gtk/gtkmountoperation.c:691
 msgid "Remember _forever"
@@ -2303,7 +2287,7 @@ msgstr "Gặp lỗi khi khởi chạy ô xem thử"
 
 #: ../gtk/gtkprintoperation-win32.c:609
 msgid "Printer offline"
-msgstr "Máy in ngoại tuyến"
+msgstr "Máy in không bật"
 
 #: ../gtk/gtkprintoperation-win32.c:611
 msgid "Out of paper"
@@ -2338,7 +2322,7 @@ msgstr "Lỗi từ StartDoc (đầu tài liệu)"
 #: ../gtk/gtkprintoperation-win32.c:1682 ../gtk/gtkprintoperation-win32.c:1705
 #: ../gtk/gtkprintoperation-win32.c:1753
 msgid "Not enough free memory"
-msgstr "Không có đủ bộ nhớ còn rảnh"
+msgstr "Không có đủ bộ nhớ còn trống"
 
 #: ../gtk/gtkprintoperation-win32.c:1758
 msgid "Invalid argument to PrintDlgEx"
@@ -2358,7 +2342,7 @@ msgstr "Lỗi chưa xác định"
 
 #: ../gtk/gtkprintunixdialog.c:681
 msgid "Getting printer information failed"
-msgstr "Lỗi lấy thông tin máy in"
+msgstr "Gặp lỗi khi lấy thông tin máy in"
 
 #: ../gtk/gtkprintunixdialog.c:1916
 msgid "Getting printer information…"
@@ -2503,7 +2487,7 @@ msgstr "Dưới lên trên"
 
 #: ../gtk/gtkprintunixdialog.c:3352
 msgid "Layout"
-msgstr "Bố trí"
+msgstr "Bố cục"
 
 #: ../gtk/gtkprintunixdialog.c:3356
 msgid "T_wo-sided:"
@@ -2519,7 +2503,7 @@ msgstr "_Thứ tự trang:"
 
 #: ../gtk/gtkprintunixdialog.c:3395
 msgid "_Only print:"
-msgstr "In _chỉ:"
+msgstr "_Chỉ in:"
 
 #. In enum order
 #: ../gtk/gtkprintunixdialog.c:3407
@@ -2686,7 +2670,7 @@ msgstr "Chọn hiển thị những kiểu tập tin nào"
 #: ../gtk/gtkrecentchooserdefault.c:1129 ../gtk/gtkrecentchooserdefault.c:1166
 #, c-format
 msgid "No item for URI '%s' found"
-msgstr "Không tìm thấy mục cho URI '%s'"
+msgstr "Không tìm thấy mục cho URI “%s”"
 
 #: ../gtk/gtkrecentchooserdefault.c:1293
 msgid "Untitled filter"
@@ -2733,12 +2717,12 @@ msgstr "Không tìm thấy"
 #: ../gtk/gtkrecentchoosermenu.c:526 ../gtk/gtkrecentchoosermenu.c:582
 #, c-format
 msgid "No recently used resource found with URI `%s'"
-msgstr "Không tìm thấy tài nguyên vừa dùng có URI `%s'"
+msgstr "Không tìm thấy tài nguyên vừa dùng có URI “%s”"
 
 #: ../gtk/gtkrecentchoosermenu.c:792
 #, c-format
 msgid "Open '%s'"
-msgstr "Mở '%s'"
+msgstr "Mở “%s”"
 
 #: ../gtk/gtkrecentchoosermenu.c:822
 msgid "Unknown item"
@@ -2770,12 +2754,12 @@ msgstr "%d. %s"
 #: ../gtk/gtkrecentmanager.c:1271
 #, c-format
 msgid "Unable to find an item with URI '%s'"
-msgstr "Không thể tìm thấy mục có URI '%s'"
+msgstr "Không thể tìm thấy mục có URI “%s”"
 
 #: ../gtk/gtkrecentmanager.c:2471
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
-msgstr "Không tìm thấy ứng dụng nào đăng ký tên '%s' cho mục có URI '%s'"
+msgstr "Không tìm thấy ứng dụng nào đăng ký tên “%s” cho mục có URI “%s”"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: ../gtk/gtkstock.c:324
@@ -3073,7 +3057,7 @@ msgstr "Th_u"
 #: ../gtk/gtkstock.c:402
 msgctxt "Stock label, media"
 msgid "R_ewind"
-msgstr "Quay _lại"
+msgstr "Tua _lại"
 
 #. Media label
 #: ../gtk/gtkstock.c:404
@@ -3133,7 +3117,7 @@ msgstr "Đảo thẳng đứng"
 #: ../gtk/gtkstock.c:418
 msgctxt "Stock label"
 msgid "Page Set_up"
-msgstr "T_hiết lập trang"
+msgstr "Cài đặt giấ_y"
 
 #: ../gtk/gtkstock.c:419
 msgctxt "Stock label"
@@ -3247,7 +3231,7 @@ msgstr "_Phục hồi"
 #: ../gtk/gtkstock.c:444
 msgctxt "Stock label"
 msgid "_Underline"
-msgstr "Gạch _dươi"
+msgstr "Gạch _dưới"
 
 #: ../gtk/gtkstock.c:445
 msgctxt "Stock label"
@@ -3402,12 +3386,12 @@ msgstr ""
 #: ../gtk/gtktextbufferserialize.c:1369 ../gtk/gtktextbufferserialize.c:1385
 #, c-format
 msgid "A <%s> element has already been specified"
-msgstr "Một yếu tố <%s> đã được xác định"
+msgstr "Một phần tử <%s> đã được chỉ định"
 
 #: ../gtk/gtktextbufferserialize.c:1391
 msgid "A <text> element can't occur before a <tags> element"
 msgstr ""
-"Không cho phép yếu tố <text> (văn bản) nằm trước yếu tố <tags> (các thẻ)"
+"Không cho phép phần tử <text> (văn bản) nằm trước phần tử <tags> (các thẻ)"
 
 #: ../gtk/gtktextbufferserialize.c:1790
 msgid "Serialized data is malformed"
@@ -3463,7 +3447,7 @@ msgstr "ZW_NJ Bộ không nối kết có độ dài bằng không"
 #: ../gtk/gtkuimanager.c:1780
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
-msgstr "Gặp thẻ đầu bất thường '%s' trên dòng %d ký tự %d"
+msgstr "Gặp thẻ đầu bất thường “%s” trên dòng %d ký tự %d"
 
 #: ../gtk/gtkuimanager.c:1870
 #, c-format
@@ -3508,7 +3492,7 @@ msgstr "Câm"
 
 #: ../gtk/gtkvolumebutton.c:250
 msgid "Full Volume"
-msgstr "Âm lượng đầy"
+msgstr "To hết cỡ"
 
 #. Translators: this is the percentage of the current volume,
 #. * as used in the tooltip, eg. "49 %".
@@ -3589,7 +3573,7 @@ msgstr "A3"
 #: ../gtk/paper_names_offsets.c:17
 msgctxt "paper size"
 msgid "A3 Extra"
-msgstr "A3 Extra"
+msgstr "A3 Mở rộng"
 
 #: ../gtk/paper_names_offsets.c:18
 msgctxt "paper size"
@@ -3624,7 +3608,7 @@ msgstr "A4"
 #: ../gtk/paper_names_offsets.c:24
 msgctxt "paper size"
 msgid "A4 Extra"
-msgstr "A4 Extra"
+msgstr "A4 Mở rộng"
 
 #: ../gtk/paper_names_offsets.c:25
 msgctxt "paper size"
@@ -3674,7 +3658,7 @@ msgstr "A5"
 #: ../gtk/paper_names_offsets.c:34
 msgctxt "paper size"
 msgid "A5 Extra"
-msgstr "A5 Extra"
+msgstr "A5 Mở rộng"
 
 #: ../gtk/paper_names_offsets.c:35
 msgctxt "paper size"
@@ -3734,7 +3718,7 @@ msgstr "B5"
 #: ../gtk/paper_names_offsets.c:46
 msgctxt "paper size"
 msgid "B5 Extra"
-msgstr "B5 Extra"
+msgstr "B5 Mở rộng"
 
 #: ../gtk/paper_names_offsets.c:47
 msgctxt "paper size"
@@ -4139,7 +4123,7 @@ msgstr "Chỉ mục 5x8"
 #: ../gtk/paper_names_offsets.c:128
 msgctxt "paper size"
 msgid "Invoice"
-msgstr "Đơn hàng gửi "
+msgstr "Đơn hàng"
 
 #: ../gtk/paper_names_offsets.c:129
 msgctxt "paper size"
@@ -4179,27 +4163,27 @@ msgstr "Phong bì Monarch"
 #: ../gtk/paper_names_offsets.c:136
 msgctxt "paper size"
 msgid "#10 Envelope"
-msgstr "Phong bì 10"
+msgstr "Phong bì #10"
 
 #: ../gtk/paper_names_offsets.c:137
 msgctxt "paper size"
 msgid "#11 Envelope"
-msgstr "Phong bì 11"
+msgstr "Phong bì #11"
 
 #: ../gtk/paper_names_offsets.c:138
 msgctxt "paper size"
 msgid "#12 Envelope"
-msgstr "Phong bì 12"
+msgstr "Phong bì #12"
 
 #: ../gtk/paper_names_offsets.c:139
 msgctxt "paper size"
 msgid "#14 Envelope"
-msgstr "Phong bì 14"
+msgstr "Phong bì #14"
 
 #: ../gtk/paper_names_offsets.c:140
 msgctxt "paper size"
 msgid "#9 Envelope"
-msgstr "Phong bì 9"
+msgstr "Phong bì #9"
 
 #: ../gtk/paper_names_offsets.c:141
 msgctxt "paper size"
@@ -4389,7 +4373,7 @@ msgstr "Không thể thay đổi tên của %s thành %s: %s\n"
 #: ../gtk/updateiconcache.c:1586
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
-msgstr "Không thể thay đổi lại tên của %s về %s: %s.\n"
+msgstr "Không thể thay đổi tên của %s trở về %s: %s.\n"
 
 #: ../gtk/updateiconcache.c:1613
 #, c-format
@@ -4441,7 +4425,7 @@ msgid ""
 "No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
-"Không có tập tin chỉ mục sắc thái nằm trong '%s'.\n"
+"Không có tập tin chỉ mục chủ đề (theme) nằm trong “%s”.\n"
 "Nếu bạn thật muốn tạo một bộ nhớ biểu tượng ở đây, hãy dùng --ignore-theme-"
 "index.\n"
 
@@ -4493,7 +4477,7 @@ msgstr "Tigrigna-Ethiopian (EZ+)"
 #. ID
 #: ../modules/input/imviqr.c:242
 msgid "Vietnamese (VIQR)"
-msgstr "Việt (VIQR)"
+msgstr "Tiếng Việt (VIQR)"
 
 #. ID
 #: ../modules/input/imxim.c:26
@@ -4514,7 +4498,7 @@ msgstr "Mật khẩu:"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1241
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
-msgstr "Cần xác thực để in tài liệu '%s' trên máy in %s"
+msgstr "Cần xác thực để in tài liệu “%s” trên máy in %s"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1046
 #, c-format
@@ -4524,7 +4508,7 @@ msgstr "Cần xác thực để in tài liệu trên %s"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1050
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
-msgstr "Cần xác thực để lấy thuộc tính của yêu cầu '%s'"
+msgstr "Cần xác thực để lấy thuộc tính của yêu cầu “%s”"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1052
 msgid "Authentication is required to get attributes of a job"
@@ -4566,7 +4550,7 @@ msgstr "Miền:"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1243
 #, c-format
 msgid "Authentication is required to print document '%s'"
-msgstr "Cần xác thực để in tài liệu '%s'"
+msgstr "Cần xác thực để in tài liệu “%s”"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1248
 #, c-format
@@ -4580,66 +4564,66 @@ msgstr "Cần xác thực để in tài liệu này"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1812
 #, c-format
 msgid "Printer '%s' is low on toner."
-msgstr "Máy in '%s' gần cạn mực sắc điệu."
+msgstr "Máy in “%s” gần cạn mực."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1813
 #, c-format
 msgid "Printer '%s' has no toner left."
-msgstr "Máy in '%s' cạn mực sắc điệu."
+msgstr "Máy in “%s” không có trống mực."
 
 #. Translators: "Developer" like on photo development context
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1815
 #, c-format
 msgid "Printer '%s' is low on developer."
-msgstr "Máy in '%s' gần cạn thuốc rửa ảnh."
+msgstr "Máy in “%s” gần cạn thuốc rửa ảnh."
 
 #. Translators: "Developer" like on photo development context
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1817
 #, c-format
 msgid "Printer '%s' is out of developer."
-msgstr "Máy in '%s' cạn thuốc rửa ảnh."
+msgstr "Máy in “%s” cạn thuốc rửa ảnh."
 
 #. Translators: "marker" is one color bin of the printer
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1819
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
-msgstr "Máy in '%s' gần cạn ít nhất một mực ngụ ý."
+msgstr "Máy in “%s” gần cạn ít nhất một mực."
 
 #. Translators: "marker" is one color bin of the printer
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1821
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
-msgstr "Máy in '%s' cạn ít nhất một mực ngụ ý."
+msgstr "Máy in “%s” cạn ít nhất một mực."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1822
 #, c-format
 msgid "The cover is open on printer '%s'."
-msgstr "Cái nắp còn mở trên máy in '%s'."
+msgstr "Nắp trên máy in “%s” còn đang mở."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1823
 #, c-format
 msgid "The door is open on printer '%s'."
-msgstr "Cửa còn mở trên máy in '%s'."
+msgstr "Cửa trên máy in “%s” đang mở."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1824
 #, c-format
 msgid "Printer '%s' is low on paper."
-msgstr "Máy in '%s' gần hết giấy."
+msgstr "Máy in “%s” gần hết giấy."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1825
 #, c-format
 msgid "Printer '%s' is out of paper."
-msgstr "Máy in '%s' hết giấy."
+msgstr "Máy in “%s” hết giấy."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1826
 #, c-format
 msgid "Printer '%s' is currently offline."
-msgstr "Máy in '%s' hiện thời ngoại tuyến."
+msgstr "Máy in “%s” hiện thời ngoại tuyến (không bật hay không cắm cáp)."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1827
 #, c-format
 msgid "There is a problem on printer '%s'."
-msgstr "Gặp vấn đề trên máy in '%s'."
+msgstr "Gặp vấn đề trên máy in “%s”."
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2285
@@ -4654,11 +4638,11 @@ msgstr "Từ chối nhận yêu cầu in"
 #. Translators: this string connects multiple printer states together.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2333
 msgid "; "
-msgstr ""
+msgstr "; "
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3857
 msgid "Two Sided"
-msgstr "Mặt đôi"
+msgstr "Hai Mặt"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3858
 msgid "Paper Type"
@@ -4768,7 +4752,7 @@ msgstr "Ưu tiên"
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4670
 msgid "Billing Info"
-msgstr "Thông tin lập hóa đơn"
+msgstr "Thông tin hóa đơn"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
@@ -4904,7 +4888,7 @@ msgstr "Tập tin"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:735
 msgid "_Output format"
-msgstr "Dạng _xuất"
+msgstr "Định dạng _xuất"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:393
 msgid "Print to LPR"
@@ -4951,13 +4935,13 @@ msgstr "tinra.%s"
 
 #: ../modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
-msgstr "In vào máy in thử ra"
+msgstr "In vào máy in thử"
 
 #~ msgid "Could not run application"
 #~ msgstr "Không thể chạy ứng dụng"
 
 #~ msgid "Could not find '%s'"
-#~ msgstr "Không thể tìm '%s'"
+#~ msgstr "Không thể tìm “%s”"
 
 #~ msgid "Could not find application"
 #~ msgstr "Không thể tìm ứng dụng"
@@ -5005,7 +4989,7 @@ msgstr "In vào máy in thử ra"
 #~ msgstr "Chỉ có thể chọn tập tin cục bộ"
 
 #~ msgid "Incomplete hostname; end it with '/'"
-#~ msgstr "Tên máy chưa hoàn tất; kết thúc bằng '/'"
+#~ msgstr "Tên máy chưa hoàn tất; kết thúc bằng “/”"
 
 #~ msgid "Path does not exist"
 #~ msgstr "Đường dẫn không tồn tại"
@@ -5022,32 +5006,32 @@ msgstr "In vào máy in thử ra"
 #~ "You can get a copy from:\n"
 #~ "\t%s"
 #~ msgstr ""
-#~ "Không thể tìm thấy biểu tượng « %s ». Cũng không\n"
-#~ "tìm thấy sắc thái « %s ». Có lẽ bạn cần cài đặt nó.\n"
+#~ "Không thể tìm thấy biểu tượng “%s”. Cũng không\n"
+#~ "tìm thấy sắc thái “%s”. Có lẽ bạn cần cài đặt nó.\n"
 #~ "Bạn có thể lấy một bản sao từ:\n"
 #~ "\t%s"
 
 #~ msgid "Unable to locate image file in pixmap_path: \"%s\""
-#~ msgstr "Không thể định vị tập tin ảnh trong « pixmap_path: « %s »"
+#~ msgstr "Không thể định vị tập tin ảnh trong “pixmap_path: “%s”"
 
 #~ msgid "This function is not implemented for widgets of class '%s'"
-#~ msgstr "Chức năng này không được thực hiện cho ô điều khiển hạng « %s »"
+#~ msgstr "Chức năng này không được thực hiện cho ô điều khiển hạng “%s”"
 
 #~ msgid "different idatas found for symlinked '%s' and '%s'\n"
 #~ msgstr ""
-#~ "tìm thấy « idata » khác nhau cho « %s » và « %s » liên kết tượng trưng "
-#~ "với nhau\n"
+#~ "tìm thấy “idata” khác nhau cho “%s” và “%s” liên kết tượng trưng với "
+#~ "nhau\n"
 
 #~ msgid "Could not get information for file '%s': %s"
-#~ msgstr "Không thể lấy thông tin cho tập tin « %s »: %s"
+#~ msgstr "Không thể lấy thông tin cho tập tin “%s”: %s"
 
 #~ msgid "Failed to open file '%s': %s"
-#~ msgstr "Không mở được tập tin « %s »: %s"
+#~ msgstr "Không mở được tập tin “%s”: %s"
 
 #~ msgid ""
 #~ "Failed to load image '%s': reason not known, probably a corrupt image file"
 #~ msgstr ""
-#~ "Lỗi tải tập tin ảnh « %s »: không biết lý do, có lẽ tập tin ảnh bị hỏng."
+#~ "Lỗi tải tập tin ảnh “%s”: không biết lý do, có lẽ tập tin ảnh bị hỏng."
 
 #~ msgid "X screen to use"
 #~ msgstr "Màn hình X cần dùng"
@@ -5071,15 +5055,15 @@ msgstr "In vào máy in thử ra"
 #~ msgstr "_Bỏ"
 
 #~ msgid "Error creating folder '%s': %s"
-#~ msgstr "Gặp lỗi khi tạo thư mục « %s »: %s"
+#~ msgstr "Gặp lỗi khi tạo thư mục “%s”: %s"
 
 #~ msgid "Unable to find include file: \"%s\""
-#~ msgstr "Không thể tìm thấy tập tin gồm « %s »"
+#~ msgstr "Không thể tìm thấy tập tin gồm “%s”"
 
 #~ msgid "Unable to locate theme engine in module_path: \"%s\","
 #~ msgstr ""
-#~ "Không thể định vị cơ chế sắc thái tại « module_path » (đường dẫn mô-đun): "
-#~ "« %s »,"
+#~ "Không thể định vị cơ chế sắc thái tại “module_path” (đường dẫn mô-đun): "
+#~ "“%s”,"
 
 #~ msgid "Color profile has invalid length %d."
 #~ msgstr "Hồ sơ màu sắc có chiều dài sai %d."
@@ -5125,13 +5109,13 @@ msgstr "In vào máy in thử ra"
 #~ msgstr "Những cờ gỡ lỗi Gdk cần bỏ đặt"
 
 #~ msgid "Image file '%s' contains no data"
-#~ msgstr "Tập tin ảnh « %s » không chứa dữ liệu nào"
+#~ msgstr "Tập tin ảnh “%s” không chứa dữ liệu nào"
 
 #~ msgid ""
 #~ "Failed to load animation '%s': reason not known, probably a corrupt "
 #~ "animation file"
 #~ msgstr ""
-#~ "Lỗi tải tập tin hoạt cảnh « %s »: không biết sao, có lẽ tập tin hoạt cảnh "
+#~ "Lỗi tải tập tin hoạt cảnh “%s”: không biết sao, có lẽ tập tin hoạt cảnh "
 #~ "bị hỏng"
 
 #~ msgid "Unable to load image-loading module: %s: %s"
@@ -5145,16 +5129,16 @@ msgstr "In vào máy in thử ra"
 #~ "phiên bản khác của GTK?"
 
 #~ msgid "Image type '%s' is not supported"
-#~ msgstr "Không hỗ trợ kiểu ảnh « %s »"
+#~ msgstr "Không hỗ trợ kiểu ảnh “%s”"
 
 #~ msgid "Couldn't recognize the image file format for file '%s'"
-#~ msgstr "Không thể nhận ra dạng thức tập tin ảnh cho tập tin « %s »"
+#~ msgstr "Không thể nhận ra dạng thức tập tin ảnh cho tập tin “%s”"
 
 #~ msgid "Unrecognized image file format"
 #~ msgstr "Không nhận ra dạng thức tập tin ảnh"
 
 #~ msgid "Failed to load image '%s': %s"
-#~ msgstr "Lỗi tải tập tin ảnh « %s »: %s"
+#~ msgstr "Lỗi tải tập tin ảnh “%s”: %s"
 
 #~ msgid "Error writing to image file: %s"
 #~ msgstr "Gặp lỗi khi ghi vào tập tin ảnh: %s"
@@ -5173,13 +5157,13 @@ msgstr "In vào máy in thử ra"
 #~ msgstr "Lỗi đọc từ tập tin tạm"
 
 #~ msgid "Failed to open '%s' for writing: %s"
-#~ msgstr "Lỗi mở tập tin « %s » để ghi: %s"
+#~ msgstr "Lỗi mở tập tin “%s” để ghi: %s"
 
 #~ msgid ""
 #~ "Failed to close '%s' while writing image, all data may not have been "
 #~ "saved: %s"
 #~ msgstr ""
-#~ "Lỗi đóng « %s » khi đang ghi ảnh, mọi dữ liệu có lẽ không được lưu: %s"
+#~ "Lỗi đóng “%s” khi đang ghi ảnh, mọi dữ liệu có lẽ không được lưu: %s"
 
 #~ msgid "Insufficient memory to save image into a buffer"
 #~ msgstr "Không đủ bộ nhớ để lưu ảnh vào bộ đệm"
@@ -5191,11 +5175,11 @@ msgstr "In vào máy in thử ra"
 #~ "Internal error: Image loader module '%s' failed to complete an operation, "
 #~ "but didn't give a reason for the failure"
 #~ msgstr ""
-#~ "Lỗi nội bộ : mô-đun tải ảnh « %s » đã không kết thúc thao tác, cũng không "
+#~ "Lỗi nội bộ : mô-đun tải ảnh “%s” đã không kết thúc thao tác, cũng không "
 #~ "diễn tả sao"
 
 #~ msgid "Incremental loading of image type '%s' is not supported"
-#~ msgstr "Không hỗ trợ tải từ từ kiểu ảnh « %s »"
+#~ msgstr "Không hỗ trợ tải từ từ kiểu ảnh “%s”"
 
 #~ msgid "Image header corrupt"
 #~ msgstr "Phần đầu của ảnh bị hỏng"
@@ -5393,13 +5377,13 @@ msgstr "In vào máy in thử ra"
 #~ "parsed."
 #~ msgstr ""
 #~ "Hệ số chất lượng của JPEG phải nằm trong khoảng 0 và 100; không thể phân "
-#~ "tách giá trị « %s »."
+#~ "tách giá trị “%s”."
 
 #~ msgid ""
 #~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 #~ msgstr ""
 #~ "Hệ số chất lượng của JPEG phải nằm trong khoảng 0 và 100; không chấp nhận "
-#~ "giá trị « %d »."
+#~ "giá trị “%d”."
 
 #~ msgid "The JPEG image format"
 #~ msgstr "Dạng thức ảnh JPEG"
@@ -5484,14 +5468,14 @@ msgstr "In vào máy in thử ra"
 #~ "not be parsed."
 #~ msgstr ""
 #~ "Mức nén PNG phải là giá trị nằm trong khoảng 0 và 9; không thể phân tách "
-#~ "giá trị « %s »."
+#~ "giá trị “%s”."
 
 #~ msgid ""
 #~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
 #~ "allowed."
 #~ msgstr ""
 #~ "Mức nén PNG phải là giá trị nằm trong khoảng 0 và 9; không cho phép giá "
-#~ "trị « %d »."
+#~ "trị “%d”."
 
 #~ msgid ""
 #~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
@@ -5735,13 +5719,13 @@ msgstr "In vào máy in thử ra"
 #~ msgstr "Định dạng ảnh WMF"
 
 #~ msgid "\"Deepness\" of the color."
-#~ msgstr "« Độ sâu » của màu."
+#~ msgstr "“Độ sâu” của màu."
 
 #~ msgid "Error printing"
 #~ msgstr "Lỗi in"
 
 #~ msgid "Printer '%s' may not be connected."
-#~ msgstr "Có lẽ máy in « %s » không có kết nối."
+#~ msgstr "Có lẽ máy in “%s” không có kết nối."
 
 #~ msgid "Folders"
 #~ msgstr "Thư mục"
@@ -5757,7 +5741,7 @@ msgstr "In vào máy in thử ra"
 #~ "available to this program.\n"
 #~ "Are you sure that you want to select it?"
 #~ msgstr ""
-#~ "Tập tin « %s » ở trên máy khác (tên %s) và có lẽ chương trình này không "
+#~ "Tập tin “%s” ở trên máy khác (tên %s) và có lẽ chương trình này không "
 #~ "dùng được.\n"
 #~ "Bạn có chắc muốn chọn tập tin này không?"
 
@@ -5772,7 +5756,7 @@ msgstr "In vào máy in thử ra"
 
 #~ msgid ""
 #~ "The folder name \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr "Tên thư mục « %s » chứa một số ký tự không cho phép"
+#~ msgstr "Tên thư mục “%s” chứa một số ký tự không cho phép"
 
 #~ msgid "New Folder"
 #~ msgstr "Thư mục mới"
@@ -5782,40 +5766,38 @@ msgstr "In vào máy in thử ra"
 
 #~ msgid ""
 #~ "The filename \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr ""
-#~ "Tên tập tin « %s » chứa một số ký tự không cho phép trong tên tập tin"
+#~ msgstr "Tên tập tin “%s” chứa một số ký tự không cho phép trong tên tập tin"
 
 #~ msgid "Error deleting file '%s': %s"
-#~ msgstr "Gặp lỗi khi xoá bỏ tập tin « %s »: %s"
+#~ msgstr "Gặp lỗi khi xoá bỏ tập tin “%s”: %s"
 
 #~ msgid "Really delete file \"%s\"?"
-#~ msgstr "Bạn thật sự muốn xóa bỏ tập tin « %s » chứ ?"
+#~ msgstr "Bạn thật sự muốn xóa bỏ tập tin “%s” chứ ?"
 
 #~ msgid "Delete File"
 #~ msgstr "Xóa tập tin"
 
 #~ msgid "Error renaming file to \"%s\": %s"
-#~ msgstr "Gặp lỗi khi thay đổi tên của tập tin thành « %s »: %s"
+#~ msgstr "Gặp lỗi khi thay đổi tên của tập tin thành “%s”: %s"
 
 #~ msgid "Error renaming file \"%s\": %s"
-#~ msgstr "Gặp lỗi khi thay đổi tên của tập tin « %s »: %s"
+#~ msgstr "Gặp lỗi khi thay đổi tên của tập tin “%s”: %s"
 
 #~ msgid "Error renaming file \"%s\" to \"%s\": %s"
-#~ msgstr "Gặp lỗi khi đổi tên tập tin « %s » thành « %s »: %s"
+#~ msgstr "Gặp lỗi khi đổi tên tập tin “%s” thành “%s”: %s"
 
 #~ msgid "Rename File"
 #~ msgstr "Đổi tên tập tin"
 
 #~ msgid "Rename file \"%s\" to:"
-#~ msgstr "Đổi tên tập tin « %s » thành:"
+#~ msgstr "Đổi tên tập tin “%s” thành:"
 
 #~ msgid ""
 #~ "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
 #~ "environment variable G_FILENAME_ENCODING): %s"
 #~ msgstr ""
-#~ "Tên tập tin « %s » không thể được chuyển đổi sang dạng thức UTF-8 (hãy "
-#~ "thử đặt biến môi trường « G_BROKEN_FILENAMES » [G tên tập tin bị hỏng]): "
-#~ "%s"
+#~ "Tên tập tin “%s” không thể được chuyển đổi sang dạng thức UTF-8 (hãy thử "
+#~ "đặt biến môi trường “G_BROKEN_FILENAMES” [G tên tập tin bị hỏng]): %s"
 
 #~ msgid "Invalid UTF-8"
 #~ msgstr "UTF-8 không hợp lệ"
@@ -5890,13 +5872,13 @@ msgstr "In vào máy in thử ra"
 #~ msgstr "--- Không có mẹo ---"
 
 #~ msgid "Color profile has invalid length '%"
-#~ msgstr "Hồ sơ màu có độ dài không hợp lệ '%"
+#~ msgstr "Hồ sơ màu có độ dài không hợp lệ “%"
 
 #~ msgid "Color profile has invalid length '%d'."
-#~ msgstr "Hồ sơ màu có độ dài không hợp lệ '%d'."
+#~ msgstr "Hồ sơ màu có độ dài không hợp lệ “%d”."
 
 #~ msgid "Duplicate object id '%s' on line %d (previously on line %d)"
-#~ msgstr "Trùng ID đối tượng '%s' trên dòng %d (trùng với trên dòng %d)"
+#~ msgstr "Trùng ID đối tượng “%s” trên dòng %d (trùng với trên dòng %d)"
 
 #~ msgid "_Files"
 #~ msgstr "_Tập tin"
@@ -5920,10 +5902,10 @@ msgstr "In vào máy in thử ra"
 #~ msgstr "Đĩa _cứng"
 
 #~ msgid "<%s> element has invalid id \"%s\""
-#~ msgstr "Yếu tố <%s> có mã nhận diện không hợp lệ « %s »"
+#~ msgstr "Yếu tố <%s> có mã nhận diện không hợp lệ “%s”"
 
 #~ msgid "Printer '%s' is currently off-line."
-#~ msgstr "Máy in « %s » hiện thời ngoại tuyến."
+#~ msgstr "Máy in “%s” hiện thời ngoại tuyến."
 
 #~ msgid "(Empty)"
 #~ msgstr "(Rỗng)"
