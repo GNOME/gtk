@@ -51,6 +51,8 @@ testsuite/reftests/background-size.ui
 testsuite/reftests/border-image-gradient.ref.ui
 testsuite/reftests/border-image-gradient.ui
 testsuite/reftests/border-image-url.ref.ui
+testsuite/reftests/border-image-url-scaled.ref.ui
+testsuite/reftests/border-image-url-scaled.ui
 testsuite/reftests/border-image-url.ui
 testsuite/reftests/box-packing.ui
 testsuite/reftests/box-pseudo-classes.ref.ui
