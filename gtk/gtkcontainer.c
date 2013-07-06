@@ -3478,6 +3478,11 @@ gtk_container_propagate_draw (GtkContainer   *container,
   for (w = gtk_widget_get_window (child); w && w != window; w = gdk_window_get_parent (w))
     {
       int wx, wy;
+
+      if (gdk_window_get_window_type (w) == GDK_WINDOW_TOPLEVEL ||
+          gdk_window_get_window_type (w) == GDK_WINDOW_TEMP)
+        break;
+
       gdk_window_get_position (w, &wx, &wy);
       x += wx;
       y += wy;
