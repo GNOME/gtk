@@ -1807,7 +1807,7 @@ _gtk_container_queue_restyle (GtkContainer *container)
  * (typically the toplevel, but other containers can be set as resize
  * containers with gtk_container_set_resize_mode()), marks the container
  * and all parents up to and including the resize container as needing
- * to have sizes recompted, and if necessary adds the resize container
+ * to have sizes recomputed, and if necessary adds the resize container
  * to the queue of containers that will be resized out at idle.
  */
 void

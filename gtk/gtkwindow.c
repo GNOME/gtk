@@ -5265,7 +5265,7 @@ create_decoration (GtkWidget *widget)
                     NULL);
       context = gtk_widget_get_style_context (priv->title_box);
       gtk_style_context_add_class (context, "titlebar");
-      gtk_widget_set_parent (priv->title_box, GTK_WIDGET (window));
+      gtk_widget_set_parent (priv->title_box, widget);
 
       title = g_markup_printf_escaped ("<b>%s</b>",
                                        priv->title ? priv->title : get_default_title ());
@@ -8326,7 +8326,6 @@ gtk_window_move_resize (GtkWindow *window)
    * If the configure request has not changed, we don't ever resend
    * it, because it could mean fighting the user or window manager.
    *
-   * 
    *   To prepare the configure request, we come up with a base size/pos:
    *      - the one from gtk_window_move()/gtk_window_resize()
    *      - else default_width, default_height if we haven't ever
@@ -8594,8 +8593,7 @@ gtk_window_move_resize (GtkWindow *window)
            * to postpone our configure request until later.
            */
 	  info->last = saved_last_info;
-          
-	  gtk_widget_queue_resize_no_redraw (widget); /* migth recurse for GTK_RESIZE_IMMEDIATE */
+	  gtk_widget_queue_resize_no_redraw (widget); /* might recurse for GTK_RESIZE_IMMEDIATE */
 	}
 
       return;			/* Bail out, we didn't really process the move/resize */

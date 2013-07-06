@@ -6528,7 +6528,7 @@ _gtk_widget_draw_windows (GdkWindow *window,
 	    continue;
 
 	  gdk_window_get_position (child_window, &wx, &wy);
-	  _gtk_widget_draw_windows (child_window, cr, wx,wy);
+	  _gtk_widget_draw_windows (child_window, cr, wx, wy);
 	}
       g_list_free (children);
     }
