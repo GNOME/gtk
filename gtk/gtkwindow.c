@@ -3516,6 +3516,7 @@ gtk_window_set_titlebar (GtkWindow *window,
   if (visual)
     gtk_widget_set_visual (widget, visual);
 
+  update_window_buttons (window);
   gtk_widget_queue_resize (widget);
 }
 
@@ -8247,7 +8248,11 @@ add_frame_size_to_allocation (GtkWindow    *window,
   rect->x -= border.left;
   rect->y -= border.top;
   rect->width += border.left + border.right;
-  rect->height += border.top + border.bottom + info->last.title_height;
+  rect->height += border.top + border.bottom;
+
+  if (priv->title_box != NULL &&
+      gtk_widget_get_visible (priv->title_box))
+    rect->height += info->last.title_height;
 }
 
 static void
@@ -8268,7 +8273,10 @@ subtract_frame_size_from_allocation (GtkWindow    *window,
   rect->x += border.left;
   rect->y += border.top;
   rect->width -= border.left + border.right;
-  rect->height -= border.top + border.bottom + info->last.title_height;
+  rect->height -= border.top + border.bottom;
+  if (priv->title_box != NULL &&
+      gtk_widget_get_visible (priv->title_box))
+    rect->height -= info->last.title_height;
 
   rect->width = MAX (1, rect->width);
   rect->height = MAX (1, rect->height);
@@ -8468,12 +8476,16 @@ gtk_window_move_resize (GtkWindow *window)
   info->last.flags = new_flags;
   info->last.configure_request = new_request;
 
-  if (priv->title_box != NULL)
+  if (priv->title_box != NULL && gtk_widget_get_visible (priv->title_box))
     {
       gtk_widget_get_preferred_height_for_width (priv->title_box,
                                                  info->last.configure_request.width,
                                                  NULL,
                                                  &info->last.title_height);
+    }
+  else
+    {
+      info->last.title_height = 0;
     }
 
   /* need to set PPosition so the WM will look at our position,
