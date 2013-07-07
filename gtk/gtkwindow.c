@@ -7072,10 +7072,10 @@ gtk_window_key_release_event (GtkWidget   *widget,
 }
 
 static GtkWindowRegion
-get_active_region_type (GtkWindow *window, GdkEventAny *event, gint x, gint y)
+get_active_region_type (GtkWindow   *window,
+                        GdkEventAny *event)
 {
   GtkWindowPrivate *priv = window->priv;
-  GtkAllocation allocation;
   gint i;
 
   for (i = 0; i < 8; i++)
@@ -7086,10 +7086,16 @@ get_active_region_type (GtkWindow *window, GdkEventAny *event, gint x, gint y)
 
   if (priv->title_box != NULL && gtk_widget_get_visible (priv->title_box))
     {
-      gtk_widget_get_allocation (priv->title_box, &allocation);
-      if (allocation.x <= x && allocation.x + allocation.width > x &&
-          allocation.y <= y && allocation.y + allocation.height > y)
-        return GTK_WINDOW_REGION_TITLE;
+      GdkWindow *w;
+      w = event->window;
+      while (w != NULL)
+        {
+          if (w == priv->frame_window)
+            return GTK_WINDOW_REGION_TITLE;
+          else if (w == gtk_widget_get_window (GTK_WIDGET (window)))
+            return GTK_WINDOW_REGION_CONTENT;
+          w = gdk_window_get_parent (w);
+        }
     }
 
   return GTK_WINDOW_REGION_CONTENT;
@@ -7118,24 +7124,11 @@ gtk_window_button_press_event (GtkWidget      *widget,
     }
   else if (!priv->fullscreen)
     {
-      gint x, y;
-      GtkWidget *src;
-      GtkWindowRegion region;
       gboolean maximized;
+      GtkWindowRegion region;
 
       maximized = gtk_window_get_maximized (window);
-
-      gdk_window_get_user_data (event->window, (gpointer *)&src);
-      if (src && src != widget)
-        {
-          gtk_widget_translate_coordinates (src, widget, event->x, event->y, &x, &y);
-        }
-      else
-        {
-          x = event->x;
-          y = event->y;
-        }
-      region = get_active_region_type (window, (GdkEventAny*)event, x, y);
+      region = get_active_region_type (window, (GdkEventAny*)event);
 
       if (event->type == GDK_BUTTON_PRESS)
         {
