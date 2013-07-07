@@ -40,7 +40,7 @@ main (int argc, char *argv[])
   g_object_unref (icon);
   gtk_container_add (GTK_CONTAINER (button), image);
   gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
-  g_signal_connect (button, "clicked", G_CALLBACK (gtk_window_close), NULL);
+  g_signal_connect_swapped (button, "clicked", G_CALLBACK (gtk_window_close), window);
 
   gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);
 
