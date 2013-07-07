@@ -5198,8 +5198,8 @@ update_window_buttons (GtkWindow *window)
                       gtk_container_add (GTK_CONTAINER (button), image);
                       gtk_widget_set_can_focus (button, FALSE);
                       gtk_widget_show_all (button);
-                      g_signal_connect (button, "clicked",
-                                        G_CALLBACK (gtk_window_close), window);
+                      g_signal_connect_swapped (button, "clicked",
+                                                G_CALLBACK (gtk_window_close), window);
                       priv->title_close_button = button;
                     }
 
