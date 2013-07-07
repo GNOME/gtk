@@ -5654,6 +5654,10 @@ gtk_window_guess_default_size (GtkWindow *window,
 }
 
 static void
+subtract_frame_size_from_allocation (GtkWindow    *window,
+                                     GdkRectangle *rect);
+
+static void
 gtk_window_get_remembered_size (GtkWindow *window,
                                 int       *width,
                                 int       *height)
@@ -5664,12 +5668,25 @@ gtk_window_get_remembered_size (GtkWindow *window,
   *width = 0;
   *height = 0;
 
-  gdk_window = gtk_widget_get_window (GTK_WIDGET (window));
-  if (gdk_window)
+  if (window->priv->frame_window)
     {
-      *width = gdk_window_get_width (gdk_window);
-      *height = gdk_window_get_height (gdk_window);
-      return;
+      GdkRectangle rect;
+      rect.x = rect.y = 0;
+      rect.width = gdk_window_get_width (window->priv->frame_window);
+      rect.height = gdk_window_get_height (window->priv->frame_window);
+      subtract_frame_size_from_allocation (window, &rect);
+      *width = rect.width;
+      *height = rect.height;
+    }
+  else
+    {
+      gdk_window = gtk_widget_get_window (GTK_WIDGET (window));
+      if (gdk_window)
+        {
+          *width = gdk_window_get_width (gdk_window);
+          *height = gdk_window_get_height (gdk_window);
+          return;
+        }
     }
 
   info = gtk_window_get_geometry_info (window, FALSE);
