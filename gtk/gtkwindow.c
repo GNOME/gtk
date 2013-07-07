@@ -8226,9 +8226,6 @@ add_frame_size_to_geometry (GtkWindow      *window,
   GtkBorder border;
   gint title_height = 0;
 
-  if (!priv->client_decorated)
-    return;
-
   get_decoration_size (window, &border);
   if (priv->title_box &&
       gtk_widget_get_visible (priv->title_box))
@@ -8247,9 +8244,6 @@ add_frame_size_to_allocation (GtkWindow    *window,
   GtkWindowPrivate *priv = window->priv;
   GtkBorder border;
   GtkWindowGeometryInfo *info;
-
-  if (!priv->client_decorated)
-    return;
 
   info = gtk_window_get_geometry_info (window, TRUE);
   get_decoration_size (window, &border);
@@ -8272,9 +8266,6 @@ subtract_frame_size_from_allocation (GtkWindow    *window,
   GtkWindowPrivate *priv = window->priv;
   GtkBorder border;
   GtkWindowGeometryInfo *info;
-
-  if (!priv->client_decorated)
-    return;
 
   info = gtk_window_get_geometry_info (window, TRUE);
   get_decoration_size (window, &border);
