@@ -167,6 +167,8 @@ enum {
 #define NUM_CHARS 40
 #define NUM_LINES 9
 
+#define DEFAULT_RECENT_FILES_LIMIT 50
+
 
 
 /* GObject */
@@ -218,7 +220,6 @@ static void set_current_filter        (GtkRecentChooserDefault *impl,
 static GtkIconTheme *get_icon_theme_for_widget (GtkWidget   *widget);
 static gint          get_icon_size_for_widget  (GtkWidget   *widget,
 						GtkIconSize  icon_size);
-static gint          get_recent_files_limit    (GtkWidget   *widget);
 
 static void reload_recent_items (GtkRecentChooserDefault *impl);
 static void chooser_set_model   (GtkRecentChooserDefault *impl);
@@ -824,7 +825,7 @@ reload_recent_items (GtkRecentChooserDefault *impl)
 		  			      GTK_ICON_SIZE_BUTTON);
 
   if (!impl->priv->limit_set)
-    impl->priv->limit = get_recent_files_limit (widget);
+    impl->priv->limit = DEFAULT_RECENT_FILES_LIMIT;
 
   set_busy_cursor (impl, TRUE);
 
@@ -1331,22 +1332,6 @@ get_icon_size_for_widget (GtkWidget   *widget,
     return MAX (width, height);
 
   return FALLBACK_ICON_SIZE;
-}
-
-static gint
-get_recent_files_limit (GtkWidget *widget)
-{
-  GtkSettings *settings;
-  gint limit;
-
-  if (gtk_widget_has_screen (widget))
-    settings = gtk_settings_get_for_screen (gtk_widget_get_screen (widget));
-  else
-    settings = gtk_settings_get_default ();
-  
-  g_object_get (G_OBJECT (settings), "gtk-recent-files-limit", &limit, NULL);
-
-  return limit;
 }
 
 static void

@@ -220,10 +220,7 @@ gtk_recent_chooser_default_init (GtkRecentChooserInterface *iface)
    * GtkRecentChooser:limit:
    *
    * The maximum number of recently used resources to be displayed,
-   * or -1 to display all items. By default, the
-   * GtkSetting:gtk-recent-files-limit setting is respected: you can
-   * override that limit on a particular instance of #GtkRecentChooser
-   * by setting this property.
+   * or -1 to display all items.
    *
    * Since: 2.10
    */
@@ -233,7 +230,7 @@ gtk_recent_chooser_default_init (GtkRecentChooserInterface *iface)
    							 P_("The maximum number of items to be displayed"),
    							 -1,
    							 G_MAXINT,
-   							 -1,
+   							 50,
    							 GTK_PARAM_READWRITE));
   /**
    * GtkRecentChooser:sort-type:

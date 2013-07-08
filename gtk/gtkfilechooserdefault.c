@@ -392,6 +392,8 @@ enum {
   GTK_TREE_MODEL_ROW,
 };
 
+#define DEFAULT_RECENT_FILES_LIMIT 50
+
 /* Icon size for if we can't get it from the theme */
 #define FALLBACK_ICON_SIZE 16
 
@@ -6635,22 +6637,6 @@ recent_idle_cleanup (gpointer data)
   g_free (load_data);
 }
 
-static gint
-get_recent_files_limit (GtkWidget *widget)
-{
-  GtkSettings *settings;
-  gint limit;
-
-  if (gtk_widget_has_screen (widget))
-    settings = gtk_settings_get_for_screen (gtk_widget_get_screen (widget));
-  else
-    settings = gtk_settings_get_default ();
-
-  g_object_get (G_OBJECT (settings), "gtk-recent-files-limit", &limit, NULL);
-
-  return limit;
-}
-
 /* Populates the file system model with the GtkRecentInfo* items in the provided list; frees the items */
 static void
 populate_model_with_recent_items (GtkFileChooserDefault *impl, GList *items)
@@ -6660,7 +6646,7 @@ populate_model_with_recent_items (GtkFileChooserDefault *impl, GList *items)
   GList *l;
   int n;
 
-  limit = get_recent_files_limit (GTK_WIDGET (impl));
+  limit = DEFAULT_RECENT_FILES_LIMIT;
 
   n = 0;
 

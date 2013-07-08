@@ -1022,6 +1022,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * -1 means every recently used file stored.
    *
    * Since: 2.12
+   *
+   * Deprecated: 3.10: This setting is ignored
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-recent-files-limit",
@@ -1029,7 +1031,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                P_("Number of recently used files"),
                                                                -1, G_MAXINT,
                                                                50,
-                                                               GTK_PARAM_READWRITE),
+                                                               GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              NULL);
   g_assert (result == PROP_RECENT_FILES_LIMIT);
 
