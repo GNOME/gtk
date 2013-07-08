@@ -91,7 +91,7 @@ typedef struct _ToolbarContent ToolbarContent;
 #define SPACE_LINE_END      8.0
 
 #define DEFAULT_ICON_SIZE GTK_ICON_SIZE_LARGE_TOOLBAR
-#define DEFAULT_TOOLBAR_STYLE GTK_TOOLBAR_BOTH
+#define DEFAULT_TOOLBAR_STYLE GTK_TOOLBAR_BOTH_HORIZ
 #define DEFAULT_ANIMATION_STATE TRUE
 
 #define MAX_HOMOGENEOUS_N_CHARS 13 /* Items that are wider than this do not participate
@@ -2017,19 +2017,6 @@ toolbar_get_settings (GtkToolbar *toolbar)
 }
 
 static void
-style_change_notify (GtkToolbar *toolbar)
-{
-  GtkToolbarPrivate *priv = toolbar->priv;
-
-  if (!priv->style_set)
-    {
-      /* pretend it was set, then unset, thus reverting to new default */
-      priv->style_set = TRUE;
-      gtk_toolbar_unset_style (toolbar);
-    }
-}
-
-static void
 icon_size_change_notify (GtkToolbar *toolbar)
 {
   GtkToolbarPrivate *priv = toolbar->priv;
@@ -2064,9 +2051,7 @@ settings_change_notify (GtkSettings      *settings,
                         const GParamSpec *pspec,
                         GtkToolbar       *toolbar)
 {
-  if (! strcmp (pspec->name, "gtk-toolbar-style"))
-    style_change_notify (toolbar);
-  else if (! strcmp (pspec->name, "gtk-toolbar-icon-size"))
+  if (! strcmp (pspec->name, "gtk-toolbar-icon-size"))
     icon_size_change_notify (toolbar);
   else if (! strcmp (pspec->name, "gtk-enable-animations"))
     animation_change_notify (toolbar);
@@ -2108,7 +2093,6 @@ gtk_toolbar_screen_changed (GtkWidget *widget,
   else
     priv->settings = NULL;
 
-  style_change_notify (toolbar);
   icon_size_change_notify (toolbar);
   animation_change_notify (toolbar);
 }
@@ -2910,14 +2894,7 @@ gtk_toolbar_unset_style (GtkToolbar *toolbar)
 
   if (priv->style_set)
     {
-      GtkSettings *settings = toolbar_get_settings (toolbar);
-      
-      if (settings)
-	g_object_get (settings,
-		      "gtk-toolbar-style", &style,
-		      NULL);
-      else
-	style = DEFAULT_TOOLBAR_STYLE;
+      style = DEFAULT_TOOLBAR_STYLE;
 
       if (style != priv->style)
 	g_signal_emit (toolbar, toolbar_signals[STYLE_CHANGED], 0, style);

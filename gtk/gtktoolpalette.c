@@ -893,19 +893,6 @@ gtk_tool_palette_get_child_property (GtkContainer *container,
 }
 
 static void
-style_change_notify (GtkToolPalette *palette)
-{
-  GtkToolPalettePrivate* priv = palette->priv;
-
-  if (!priv->style_set)
-    {
-      /* pretend it was set, then unset, thus reverting to new default */
-      priv->style_set = TRUE;
-      gtk_tool_palette_unset_style (palette);
-    }
-}
-
-static void
 icon_size_change_notify (GtkToolPalette *palette)
 {
   GtkToolPalettePrivate* priv = palette->priv;
@@ -923,9 +910,7 @@ gtk_tool_palette_settings_change_notify (GtkSettings      *settings,
                                          const GParamSpec *pspec,
                                          GtkToolPalette   *palette)
 {
-  if (strcmp (pspec->name, "gtk-toolbar-style") == 0)
-    style_change_notify (palette);
-  else if (strcmp (pspec->name, "gtk-toolbar-icon-size") == 0)
+  if (strcmp (pspec->name, "gtk-toolbar-icon-size") == 0)
     icon_size_change_notify (palette);
 }
 
@@ -1251,14 +1236,7 @@ gtk_tool_palette_unset_style (GtkToolPalette *palette)
 
   if (priv->style_set)
     {
-      GtkSettings *settings = toolpalette_get_settings (palette);
-
-      if (settings)
-        g_object_get (settings,
-                      "gtk-toolbar-style", &style,
-                      NULL);
-      else
-        style = DEFAULT_TOOLBAR_STYLE;
+      style = DEFAULT_TOOLBAR_STYLE;
 
       if (style != priv->style)
         gtk_tool_palette_change_style (palette, style);
