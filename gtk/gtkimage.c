@@ -261,7 +261,7 @@ gtk_image_class_init (GtkImageClass *class)
                                                         P_("Stock ID"),
                                                         P_("Stock ID for a stock image to display"),
                                                         NULL,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
   
   /**
    * GtkImage:icon-set:
@@ -275,7 +275,7 @@ gtk_image_class_init (GtkImageClass *class)
                                                        P_("Icon set"),
                                                        P_("Icon set to display"),
                                                        GTK_TYPE_ICON_SET,
-                                                       GTK_PARAM_READWRITE));
+                                                       GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
   G_GNUC_END_IGNORE_DEPRECATIONS;
 
   g_object_class_install_property (gobject_class,

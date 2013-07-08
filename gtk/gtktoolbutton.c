@@ -265,7 +265,7 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
 							P_("Stock Id"),
 							P_("The stock icon displayed on the item"),
 							NULL,
-							GTK_PARAM_READWRITE));
+							GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
 
   /**
    * GtkToolButton:icon-name:

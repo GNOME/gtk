@@ -273,7 +273,7 @@ gtk_button_class_init (GtkButtonClass *klass)
 							 P_("Use stock"),
 							 P_("If set, the label is used to pick a stock item instead of being displayed"),
                                                         FALSE,
-                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_DEPRECATED));
   
   g_object_class_install_property (gobject_class,
                                    PROP_FOCUS_ON_CLICK,
@@ -566,7 +566,7 @@ gtk_button_class_init (GtkButtonClass *klass)
                                                                P_("Inner Border"),
                                                                P_("Border between button edges and child."),
                                                                GTK_TYPE_BORDER,
-                                                               GTK_PARAM_READABLE));
+                                                               GTK_PARAM_READABLE | G_PARAM_DEPRECATED));
 
   /**
    * GtkButton::image-spacing:

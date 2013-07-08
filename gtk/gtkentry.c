@@ -1077,7 +1077,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                         P_("Primary stock ID"),
                                                         P_("Stock ID for primary icon"),
                                                         NULL,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
 
   /**
    * GtkEntry:secondary-icon-stock:
@@ -1094,7 +1094,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                         P_("Secondary stock ID"),
                                                         P_("Stock ID for secondary icon"),
                                                         NULL,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
   
   /**
    * GtkEntry:primary-icon-name:

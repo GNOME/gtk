@@ -189,7 +189,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 							P_("Stock ID"),
 							P_("The stock ID of the stock icon to render"),
 							NULL,
-							GTK_PARAM_READWRITE));
+							GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
 
   g_object_class_install_property (object_class,
 				   PROP_STOCK_SIZE,

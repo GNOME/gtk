@@ -244,7 +244,7 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
 							P_("Stock ID"),
 							P_("Stock ID for a stock image to display"),
 							NULL,
-							GTK_PARAM_READWRITE));
+							GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
   
   g_object_class_install_property (gobject_class,
                                    PROP_ICON_NAME,

@@ -164,7 +164,7 @@ gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
                                                         P_("Image widget"),
                                                         P_("Child widget to appear next to the menu text"),
                                                         GTK_TYPE_WIDGET,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
   /**
    * GtkImageMenuItem:use-stock:
    *
@@ -181,7 +181,7 @@ gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
                                                          P_("Use stock"),
                                                          P_("Whether to use the label text to create a stock menu item"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_DEPRECATED));
 
   /**
    * GtkImageMenuItem:always-show-image:
@@ -201,7 +201,7 @@ gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
                                                          P_("Always show image"),
                                                          P_("Whether the image will always be shown"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_DEPRECATED));
 
   /**
    * GtkImageMenuItem:accel-group:
@@ -218,7 +218,7 @@ gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
                                                         P_("Accel Group"),
                                                         P_("The Accel Group to use for stock accelerator keys"),
                                                         GTK_TYPE_ACCEL_GROUP,
-                                                        GTK_PARAM_WRITABLE));
+                                                        GTK_PARAM_WRITABLE | G_PARAM_DEPRECATED));
 
     g_type_class_add_private (klass, sizeof (GtkImageMenuItemPrivate));
 }
