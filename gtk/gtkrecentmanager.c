@@ -1660,8 +1660,8 @@ gtk_recent_info_get_added (GtkRecentInfo *info)
  * gtk_recent_info_get_modified:
  * @info: a #GtkRecentInfo
  *
- * Gets the timestamp (seconds from system's Epoch) when the resource
- * was last modified.
+ * Gets the timestamp (seconds from system's Epoch) when the meta-data
+ * for the resource was last modified.
  *
  * Return value: the number of seconds elapsed from system's Epoch when
  *   the resource was last modified, or -1 on failure.
@@ -1680,8 +1680,8 @@ gtk_recent_info_get_modified (GtkRecentInfo *info)
  * gtk_recent_info_get_visited:
  * @info: a #GtkRecentInfo
  *
- * Gets the timestamp (seconds from system's Epoch) when the resource
- * was last visited.
+ * Gets the timestamp (seconds from system's Epoch) when the meta-data
+ * for the resource was last visited.
  *
  * Return value: the number of seconds elapsed from system's Epoch when
  *   the resource was last visited, or -1 on failure.
