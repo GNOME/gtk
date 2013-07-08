@@ -1236,13 +1236,15 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * or hidden until the user starts to use the keyboard.
    *
    * Since: 3.2
+   *
+   * Deprecated: 3.10: This setting is ignored
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_enum ("gtk-visible-focus",
                                                                 P_("Visible Focus"),
                                                                 P_("Whether 'focus rectangles' should be hidden until the user starts to use the keyboard."),
                                                                 GTK_TYPE_POLICY_TYPE,
-                                                                GTK_POLICY_ALWAYS,
+                                                                GTK_POLICY_AUTOMATIC,
                                                                 GTK_PARAM_READWRITE),
                                              gtk_rc_property_parse_enum);
   g_assert (result == PROP_VISIBLE_FOCUS);

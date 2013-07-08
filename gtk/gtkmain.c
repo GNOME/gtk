@@ -1675,11 +1675,9 @@ gtk_main_do_event (GdkEvent *event)
       /* make focus visible in a window that receives a key event */
       {
         GtkWidget *window;
-        GtkPolicyType visible_focus;
 
         window = gtk_widget_get_toplevel (grab_widget);
-        g_object_get (gtk_widget_get_settings (grab_widget), "gtk-visible-focus", &visible_focus, NULL);
-        if (GTK_IS_WINDOW (window) && visible_focus != GTK_POLICY_NEVER)
+        if (GTK_IS_WINDOW (window))
           gtk_window_set_focus_visible (GTK_WINDOW (window), TRUE);
       }
 

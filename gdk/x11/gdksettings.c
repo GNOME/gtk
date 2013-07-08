@@ -54,7 +54,6 @@ static const struct {
   {"Net/SoundThemeName",      "gtk-sound-theme-name"},
   {"Net/EnableInputFeedbackSounds", "gtk-enable-input-feedback-sounds"},
   {"Net/EnableEventSounds",   "gtk-enable-event-sounds"},
-  {"Gtk/VisibleFocus",        "gtk-visible-focus"},
   {"Gtk/ShellShowsAppMenu",   "gtk-shell-shows-app-menu"},
   {"Gtk/ShellShowsMenubar",   "gtk-shell-shows-menubar"},
   {"Gtk/EnablePrimaryPaste",  "gtk-enable-primary-paste"},

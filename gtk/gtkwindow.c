@@ -817,8 +817,7 @@ gtk_window_class_init (GtkWindowClass *klass)
    *
    * Whether 'focus rectangles' are currently visible in this window.
    *
-   * This property is maintained by GTK+ based on the
-   * #GtkSettings:gtk-visible-focus setting and user input
+   * This property is maintained by GTK+ based on user input
    * and should not be set by applications.
    *
    * Since: 2.20
@@ -5410,7 +5409,6 @@ gtk_window_map (GtkWidget *widget)
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = window->priv;
   GdkWindow *gdk_window;
-  GtkPolicyType visible_focus;
 
   if (!gtk_widget_is_toplevel (widget))
     {
@@ -5502,10 +5500,6 @@ gtk_window_map (GtkWidget *widget)
   /* if mnemonics visible is not already set
    * (as in the case of popup menus), then hide mnemonics initially
    */
-  g_object_get (gtk_widget_get_settings (widget),
-                "gtk-visible-focus", &visible_focus,
-                NULL);
-
   if (!priv->mnemonics_visible_set)
     gtk_window_set_mnemonics_visible (window, FALSE);
 
@@ -5515,7 +5509,7 @@ gtk_window_map (GtkWidget *widget)
   if (priv->transient_parent)
     gtk_window_set_focus_visible (window, gtk_window_get_focus_visible (priv->transient_parent));
   else
-    gtk_window_set_focus_visible (window, visible_focus == GTK_POLICY_ALWAYS);
+    gtk_window_set_focus_visible (window, FALSE);
 }
 
 static gboolean
