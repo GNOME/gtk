@@ -1454,7 +1454,7 @@ create_list_box (void)
   gtk_widget_set_halign (button, GTK_ALIGN_END);
   gtk_container_add (GTK_CONTAINER (row), button);
   gtk_container_add (GTK_CONTAINER (list), row);
-  gtk_list_box_select_row (GTK_CONTAINER (list), gtk_widget_get_parent (row));
+  gtk_list_box_select_row (GTK_LIST_BOX (list), GTK_LIST_BOX_ROW (gtk_widget_get_parent (row)));
   row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_container_add (GTK_CONTAINER (row), gtk_label_new ("Line Two"));
   button = gtk_button_new_with_label ("2");
