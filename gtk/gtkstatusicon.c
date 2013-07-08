@@ -605,7 +605,7 @@ gtk_status_icon_class_init (GtkStatusIconClass *class)
    * @keyboard_mode: %TRUE if the tooltip was trigged using the keyboard
    * @tooltip: a #GtkTooltip
    *
-   * Emitted when the #GtkSettings:gtk-tooltip-timeout has expired with the
+   * Emitted when the hover timeout has expired with the
    * cursor hovering above @status_icon; or emitted when @status_icon got
    * focus in keyboard mode.
    *

@@ -773,6 +773,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * cursor is hovering on top of a widget.
    *
    * Since: 2.12
+   *
+   * Deprecated: 3.10: This setting is ignored.
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-tooltip-timeout",
@@ -799,6 +801,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * for the new object.
    *
    * Since: 2.12
+   *
+   * Deprecated: 3.10: This setting is ignored.
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-tooltip-browse-timeout",
@@ -821,6 +825,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * about browse mode.
    *
    * Since: 2.12
+   *
+   * Deprecated: 3.10: This setting is ignored.
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-tooltip-browse-mode-timeout",

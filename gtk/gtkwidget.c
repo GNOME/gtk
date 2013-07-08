@@ -3237,7 +3237,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * @keyboard_mode: %TRUE if the tooltip was trigged using the keyboard
    * @tooltip: a #GtkTooltip
    *
-   * Emitted when #GtkWidget:has-tooltip is %TRUE and the #GtkSettings:gtk-tooltip-timeout
+   * Emitted when #GtkWidget:has-tooltip is %TRUE and the hover timeout
    * has expired with the cursor hovering "above" @widget; or emitted when @widget got
    * focus in keyboard mode.
    *

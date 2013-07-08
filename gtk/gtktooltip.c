@@ -109,6 +109,9 @@
 
 #undef DEBUG_TOOLTIP
 
+#define HOVER_TIMEOUT          500
+#define BROWSE_TIMEOUT         60
+#define BROWSE_DISABLE_TIMEOUT 500
 
 #define GTK_TOOLTIP_CLASS(klass)         (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TOOLTIP, GtkTooltipClass))
 #define GTK_IS_TOOLTIP_CLASS(klass)      (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TOOLTIP))
@@ -1351,14 +1354,7 @@ gtk_tooltip_hide_tooltip (GtkTooltip *tooltip)
 
   if (!tooltip->keyboard_mode_enabled)
     {
-      guint timeout;
-      GtkSettings *settings;
-
-      settings = gtk_widget_get_settings (GTK_WIDGET (tooltip->window));
-
-      g_object_get (settings,
-		    "gtk-tooltip-browse-mode-timeout", &timeout,
-		    NULL);
+      guint timeout = BROWSE_DISABLE_TIMEOUT;
 
       /* The tooltip is gone, after (by default, should be configurable) 500ms
        * we want to turn off browse mode
@@ -1414,7 +1410,6 @@ gtk_tooltip_start_delay (GdkDisplay *display)
 {
   guint timeout;
   GtkTooltip *tooltip;
-  GtkSettings *settings;
 
   tooltip = g_object_get_data (G_OBJECT (display),
 			       "gdk-display-current-tooltip");
@@ -1425,12 +1420,10 @@ gtk_tooltip_start_delay (GdkDisplay *display)
   if (tooltip->timeout_id)
     g_source_remove (tooltip->timeout_id);
 
-  settings = gtk_widget_get_settings (GTK_WIDGET (tooltip->window));
-
   if (tooltip->browse_mode_enabled)
-    g_object_get (settings, "gtk-tooltip-browse-timeout", &timeout, NULL);
+    timeout = BROWSE_TIMEOUT;
   else
-    g_object_get (settings, "gtk-tooltip-timeout", &timeout, NULL);
+    timeout = HOVER_TIMEOUT;
 
   tooltip->timeout_id = gdk_threads_add_timeout_full (0, timeout,
 						      tooltip_popup_timeout,
