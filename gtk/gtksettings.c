@@ -377,7 +377,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Cursor Blink"),
                                                                    P_("Whether the cursor should blink"),
                                                                    TRUE,
-                                                                   GTK_PARAM_READWRITE),
+                                                                   GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              NULL);
   g_assert (result == PROP_CURSOR_BLINK);
 
@@ -393,7 +393,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                P_("Cursor Blink Time"),
                                                                P_("Length of the cursor blink cycle, in milliseconds"),
                                                                100, G_MAXINT, 1200,
-                                                               GTK_PARAM_READWRITE),
+                                                               GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              NULL);
   g_assert (result == PROP_CURSOR_BLINK_TIME);
 
@@ -415,7 +415,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                P_("Cursor Blink Timeout"),
                                                                P_("Time after which the cursor stops blinking, in seconds"),
                                                                1, G_MAXINT, 10,
-                                                               GTK_PARAM_READWRITE),
+                                                               GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              NULL);
   g_assert (result == PROP_CURSOR_BLINK_TIMEOUT);
   result = settings_install_property_parser (class,
@@ -460,7 +460,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                   P_("Fallback Icon Theme Name"),
                                                                   P_("Name of a icon theme to fall back to"),
                                                                   NULL,
-                                                                  GTK_PARAM_READWRITE),
+                                                                  GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              NULL);
   g_assert (result == PROP_FALLBACK_ICON_THEME);
 
@@ -485,7 +485,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                   P_("Menu bar accelerator"),
                                                                   P_("Keybinding to activate the menu bar"),
                                                                   "F10",
-                                                                  GTK_PARAM_READWRITE),
+                                                                  GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              NULL);
   g_assert (result == PROP_MENU_BAR_ACCEL);
 
@@ -528,7 +528,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Icon Sizes"),
                                                                    P_("List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."),
                                                                   NULL,
-                                                                  GTK_PARAM_READWRITE),
+                                                                  GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              NULL);
   g_assert (result == PROP_ICON_SIZES);
 
@@ -647,7 +647,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Show the 'Input Methods' menu"),
                                                                    P_("Whether the context menus of entries and text views should offer to change the input method"),
                                                                    FALSE,
-                                                                   GTK_PARAM_READWRITE),
+                                                                   GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              NULL);
   g_assert (result == PROP_SHOW_INPUT_METHOD_MENU);
 
@@ -661,7 +661,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Show the 'Insert Unicode Control Character' menu"),
                                                                    P_("Whether the context menus of entries and text views should offer to insert control characters"),
                                                                    FALSE,
-                                                                   GTK_PARAM_READWRITE),
+                                                                   GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              NULL);
   g_assert (result == PROP_SHOW_UNICODE_MENU);
 
@@ -729,7 +729,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                   P_("Color scheme"),
                                                                   P_("A palette of named colors for use in themes"),
                                                                   "",
-                                                                  GTK_PARAM_READWRITE),
+                                                                  GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              NULL);
 
   g_assert (result == PROP_COLOR_SCHEME);
@@ -782,7 +782,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                P_("Timeout before tooltip is shown"),
                                                                0, G_MAXINT,
                                                                500,
-                                                               GTK_PARAM_READWRITE),
+                                                               GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              NULL);
 
   g_assert (result == PROP_TOOLTIP_TIMEOUT);
@@ -810,7 +810,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                P_("Timeout before tooltip is shown when browse mode is enabled"),
                                                                0, G_MAXINT,
                                                                60,
-                                                               GTK_PARAM_READWRITE),
+                                                               GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              NULL);
 
   g_assert (result == PROP_TOOLTIP_BROWSE_TIMEOUT);
@@ -834,7 +834,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                P_("Timeout after which browse mode is disabled"),
                                                                0, G_MAXINT,
                                                                500,
-                                                               GTK_PARAM_READWRITE),
+                                                               GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              NULL);
 
   g_assert (result == PROP_TOOLTIP_BROWSE_MODE_TIMEOUT);
@@ -856,7 +856,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Keynav Cursor Only"),
                                                                    P_("When TRUE, there are only cursor keys available to navigate widgets"),
                                                                    FALSE,
-                                                                   GTK_PARAM_READWRITE),
+                                                                   GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              NULL);
 
   g_assert (result == PROP_KEYNAV_CURSOR_ONLY);
@@ -876,7 +876,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Keynav Wrap Around"),
                                                                    P_("Whether to wrap around when keyboard-navigating widgets"),
                                                                    TRUE,
-                                                                   GTK_PARAM_READWRITE),
+                                                                   GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              NULL);
 
   g_assert (result == PROP_KEYNAV_WRAP_AROUND);
@@ -917,7 +917,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                  P_("Color Hash"),
                                                                  P_("A hash table representation of the color scheme."),
                                                                  G_TYPE_HASH_TABLE,
-                                                                 GTK_PARAM_READABLE),
+                                                                 GTK_PARAM_READABLE | G_PARAM_DEPRECATED),
                                              NULL);
   g_assert (result == PROP_COLOR_HASH);
 
@@ -933,7 +933,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                   P_("Default file chooser backend"),
                                                                   P_("Name of the GtkFileChooser backend to use by default"),
                                                                   NULL,
-                                                                  GTK_PARAM_READWRITE),
+                                                                  GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              NULL);
   g_assert (result == PROP_FILE_CHOOSER_BACKEND);
 
@@ -994,7 +994,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Enable Mnemonics"),
                                                                    P_("Whether labels should have mnemonics"),
                                                                    TRUE,
-                                                                   GTK_PARAM_READWRITE),
+                                                                   GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              NULL);
   g_assert (result == PROP_ENABLE_MNEMONICS);
 
@@ -1165,7 +1165,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Enable Tooltips"),
                                                                    P_("Whether tooltips should be shown on widgets"),
                                                                    TRUE,
-                                                                   GTK_PARAM_READWRITE),
+                                                                   GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              NULL);
   g_assert (result == PROP_ENABLE_TOOLTIPS);
 
@@ -1182,7 +1182,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Whether default toolbars have text only, text and icons, icons only, etc."),
                                                                    GTK_TYPE_TOOLBAR_STYLE,
                                                                    GTK_TOOLBAR_BOTH_HORIZ,
-                                                                   GTK_PARAM_READWRITE),
+                                                                   GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              gtk_rc_property_parse_enum);
   g_assert (result == PROP_TOOLBAR_STYLE);
 
@@ -1199,7 +1199,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("The size of icons in default toolbars."),
                                                                    GTK_TYPE_ICON_SIZE,
                                                                    GTK_ICON_SIZE_LARGE_TOOLBAR,
-                                                                   GTK_PARAM_READWRITE),
+                                                                   GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              gtk_rc_property_parse_enum);
   g_assert (result == PROP_TOOLBAR_ICON_SIZE);
 
@@ -1218,7 +1218,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Auto Mnemonics"),
                                                                    P_("Whether mnemonics should be automatically shown and hidden when the user presses the mnemonic activator."),
                                                                    TRUE,
-                                                                   GTK_PARAM_READWRITE),
+                                                                   GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              NULL);
   g_assert (result == PROP_AUTO_MNEMONICS);
 
@@ -1255,7 +1255,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                 P_("Whether 'focus rectangles' should be hidden until the user starts to use the keyboard."),
                                                                 GTK_TYPE_POLICY_TYPE,
                                                                 GTK_POLICY_AUTOMATIC,
-                                                                GTK_PARAM_READWRITE),
+                                                                GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              gtk_rc_property_parse_enum);
   g_assert (result == PROP_VISIBLE_FOCUS);
 
@@ -1299,7 +1299,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Show button images"),
                                                                    P_("Whether images should be shown on buttons"),
                                                                    FALSE,
-                                                                   GTK_PARAM_READWRITE),
+                                                                   GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              NULL);
   g_assert (result == PROP_BUTTON_IMAGES);
 
@@ -1343,7 +1343,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Show menu images"),
                                                                    P_("Whether images should be shown in menus"),
                                                                    FALSE,
-                                                                   GTK_PARAM_READWRITE),
+                                                                   GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              NULL);
   g_assert (result == PROP_MENU_IMAGES);
 
@@ -1360,7 +1360,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                P_("Delay before the submenus of a menu bar appear"),
                                                                0, G_MAXINT,
                                                                0,
-                                                               GTK_PARAM_READWRITE),
+                                                               GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              NULL);
   g_assert (result == PROP_MENU_BAR_POPUP_DELAY);
 
@@ -1380,7 +1380,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                 P_("Where the contents of scrolled windows are located with respect to the scrollbars, if not overridden by the scrolled window's own placement."),
                                                                 GTK_TYPE_CORNER_TYPE,
                                                                 GTK_CORNER_TOP_LEFT,
-                                                                GTK_PARAM_READWRITE),
+                                                                GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              gtk_rc_property_parse_enum);
   g_assert (result == PROP_SCROLLED_WINDOW_PLACEMENT);
 
@@ -1396,7 +1396,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Can change accelerators"),
                                                                    P_("Whether menu accelerators can be changed by pressing a key over the menu item"),
                                                                    FALSE,
-                                                                   GTK_PARAM_READWRITE),
+                                                                   GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              NULL);
   g_assert (result == PROP_CAN_CHANGE_ACCELS);
 
@@ -1413,7 +1413,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                P_("Minimum time the pointer must stay over a menu item before the submenu appear"),
                                                                0, G_MAXINT,
                                                                225,
-                                                               GTK_PARAM_READWRITE),
+                                                               GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              NULL);
   g_assert (result == PROP_MENU_POPUP_DELAY);
 
@@ -1430,7 +1430,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                P_("The time before hiding a submenu when the pointer is moving towards the submenu"),
                                                                0, G_MAXINT,
                                                                1000,
-                                                               GTK_PARAM_READWRITE),
+                                                               GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              NULL);
   g_assert (result == PROP_MENU_POPDOWN_DELAY);
 
@@ -1455,7 +1455,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                   P_("Custom palette"),
                                                                   P_("Palette to use in the color selector"),
                                                                   default_color_palette,
-                                                                  GTK_PARAM_READWRITE),
+                                                                  GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              NULL);
   g_assert (result == PROP_COLOR_PALETTE);
 
@@ -1472,7 +1472,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                 P_("How to draw the input method preedit string"),
                                                                 GTK_TYPE_IM_PREEDIT_STYLE,
                                                                 GTK_IM_PREEDIT_CALLBACK,
-                                                                GTK_PARAM_READWRITE),
+                                                                GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              gtk_rc_property_parse_enum);
   g_assert (result == PROP_IM_PREEDIT_STYLE);
 
@@ -1489,7 +1489,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                 P_("How to draw the input method statusbar"),
                                                                 GTK_TYPE_IM_STATUS_STYLE,
                                                                 GTK_IM_STATUS_CALLBACK,
-                                                                GTK_PARAM_READWRITE),
+                                                                GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              gtk_rc_property_parse_enum);
   g_assert (result == PROP_IM_STATUS_STYLE);
 
