@@ -1190,6 +1190,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * GtkSettings:gtk-toolbar-icon-size:
    *
    * The size of icons in default toolbars.
+   *
+   * Deprecated: 3.10: This setting is ignored.
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_enum ("gtk-toolbar-icon-size",

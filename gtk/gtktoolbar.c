@@ -2017,19 +2017,6 @@ toolbar_get_settings (GtkToolbar *toolbar)
 }
 
 static void
-icon_size_change_notify (GtkToolbar *toolbar)
-{
-  GtkToolbarPrivate *priv = toolbar->priv;
-
-  if (!priv->icon_size_set)
-    {
-      /* pretend it was set, then unset, thus reverting to new default */
-      priv->icon_size_set = TRUE;
-      gtk_toolbar_unset_icon_size (toolbar);
-    }
-}
-
-static void
 animation_change_notify (GtkToolbar *toolbar)
 {
   GtkToolbarPrivate *priv = toolbar->priv;
@@ -2051,9 +2038,7 @@ settings_change_notify (GtkSettings      *settings,
                         const GParamSpec *pspec,
                         GtkToolbar       *toolbar)
 {
-  if (! strcmp (pspec->name, "gtk-toolbar-icon-size"))
-    icon_size_change_notify (toolbar);
-  else if (! strcmp (pspec->name, "gtk-enable-animations"))
+  if (! strcmp (pspec->name, "gtk-enable-animations"))
     animation_change_notify (toolbar);
 }
 
@@ -2093,7 +2078,6 @@ gtk_toolbar_screen_changed (GtkWidget *widget,
   else
     priv->settings = NULL;
 
-  icon_size_change_notify (toolbar);
   animation_change_notify (toolbar);
 }
 
@@ -3190,16 +3174,7 @@ gtk_toolbar_unset_icon_size (GtkToolbar *toolbar)
 
   if (priv->icon_size_set)
     {
-      GtkSettings *settings = toolbar_get_settings (toolbar);
-      
-      if (settings)
-	{
-	  g_object_get (settings,
-			"gtk-toolbar-icon-size", &size,
-			NULL);
-	}
-      else
-	size = DEFAULT_ICON_SIZE;
+      size = DEFAULT_ICON_SIZE;
 
       if (size != priv->icon_size)
 	{
