@@ -694,12 +694,17 @@ gtk_settings_class_init (GtkSettingsClass *class)
 
   g_assert (result == PROP_TIMEOUT_REPEAT);
 
+  /**
+   * GtkSettings:gtk-timeout-expand:
+   *
+   * Deprecated: 3.10: This setting is ignored.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-timeout-expand",
                                                                P_("Expand timeout"),
                                                                P_("Expand value for timeouts, when a widget is expanding a new region"),
                                                                0, G_MAXINT, DEFAULT_TIMEOUT_EXPAND,
-                                                               GTK_PARAM_READWRITE),
+                                                               GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              NULL);
 
   g_assert (result == PROP_TIMEOUT_EXPAND);

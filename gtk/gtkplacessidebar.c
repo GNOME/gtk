@@ -104,6 +104,7 @@
 
 #define EJECT_BUTTON_XPAD 6
 #define ICON_CELL_XPAD 6
+#define TIMEOUT_EXPAND 500
 
 #define DO_NOT_COMPILE 0
 
@@ -1470,23 +1471,17 @@ switch_location_timer (gpointer user_data)
 static void
 check_switch_location_timer (GtkPlacesSidebar *sidebar, const char *uri)
 {
-	GtkSettings *settings;
-	guint timeout;
-
 	if (g_strcmp0 (uri, sidebar->drop_target_uri) == 0) {
 		return;
 	}
 	remove_switch_location_timer (sidebar);
-
-	settings = gtk_widget_get_settings (GTK_WIDGET (sidebar));
-	g_object_get (settings, "gtk-timeout-expand", &timeout, NULL);
 
 	g_free (sidebar->drop_target_uri);
 	sidebar->drop_target_uri = NULL;
 
 	if (uri != NULL) {
 		sidebar->drop_target_uri = g_strdup (uri);
-		sidebar->switch_location_timer = gdk_threads_add_timeout (timeout, switch_location_timer, sidebar);
+		sidebar->switch_location_timer = gdk_threads_add_timeout (TIMEOUT_EXPAND, switch_location_timer, sidebar);
 	}
 }
 

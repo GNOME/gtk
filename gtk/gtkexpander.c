@@ -117,6 +117,7 @@
 
 #define DEFAULT_EXPANDER_SIZE 10
 #define DEFAULT_EXPANDER_SPACING 2
+#define TIMEOUT_EXPAND 500
 
 enum
 {
@@ -1144,13 +1145,7 @@ gtk_expander_drag_motion (GtkWidget        *widget,
 
   if (!priv->expanded && !priv->expand_timer)
     {
-      GtkSettings *settings;
-      guint timeout;
-
-      settings = gtk_widget_get_settings (widget);
-      g_object_get (settings, "gtk-timeout-expand", &timeout, NULL);
-
-      priv->expand_timer = gdk_threads_add_timeout (timeout, (GSourceFunc) expand_timeout, expander);
+      priv->expand_timer = gdk_threads_add_timeout (TIMEOUT_EXPAND, (GSourceFunc) expand_timeout, expander);
     }
 
   return TRUE;
