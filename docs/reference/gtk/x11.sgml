@@ -81,6 +81,31 @@ The X11 GDK backend can be influenced with some additional environment variables
   </para>
 </formalpara>
 
+<formalpara>
+  <title><envar>GDK_SCALE</envar></title>
+
+  <para>
+    Must be set to an integer, typically 2. If set, GDK will scale all
+    windows by the specified factor. Scaled output is meant to be used on
+    high-dpi displays. Normally, GDK will pick up a suitable scale factor
+    for each monitor from the display system. This environment variable
+    allows to override that.
+  </para>
+</formalpara>
+
+<formalpara>
+  <title><envar>GDK_DPI_SCALE</envar></title>
+
+  <para>
+    This can be useful when using scale-aware GTK+ applications together
+    with scale-unaware applications on a high-dpi display. In that case,
+    the font resolution can be doubled to make scale-unaware applications
+    readable, and <envar>GDK_DPI_SCALE=0.5</envar> can be set to compensate
+    for that in GTK+ applications which are already scaled by setting
+    <envar>GDK_SCALE=2</envar>.
+  </para>
+</formalpara>
+
 </refsect2>
 
 </refsect1>
