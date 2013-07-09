@@ -20,6 +20,8 @@
 #include "gdkinternals.h"
 #include "gdkprivate-wayland.h"
 
+#include <errno.h>
+
 typedef struct _GdkWaylandEventSource {
   GSource source;
   GPollFD pfd;
@@ -47,7 +49,8 @@ gdk_event_source_prepare(GSource *base, gint *timeout)
   if (_gdk_event_queue_find_first (source->display) != NULL)
     return TRUE;
 
-  wl_display_flush(display->wl_display);
+  if (wl_display_flush (display->wl_display) < 0)
+    g_error ("Error dispatching display: %s", g_strerror (errno));
 
   return FALSE;
 }
@@ -152,7 +155,10 @@ _gdk_wayland_display_queue_events (GdkDisplay *display)
   source = (GdkWaylandEventSource *) display_wayland->event_source;
 
   if (source->pfd.revents & G_IO_IN)
-    wl_display_dispatch (display_wayland->wl_display);
+    {
+      if (wl_display_dispatch (display_wayland->wl_display) < 0)
+        g_error ("Error dispatching display: %s", g_strerror (errno));
+    }
 
   if (source->pfd.revents & (G_IO_ERR | G_IO_HUP))
     g_error ("Lost connection to wayland compositor");
