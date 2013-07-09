@@ -156,7 +156,7 @@ gdk_registry_handle_global(void *data, struct wl_registry *registry, uint32_t id
 
   if (strcmp(interface, "wl_compositor") == 0) {
     display_wayland->compositor =
-	wl_registry_bind(display_wayland->wl_registry, id, &wl_compositor_interface, 1);
+	wl_registry_bind(display_wayland->wl_registry, id, &wl_compositor_interface, 3);
   } else if (strcmp(interface, "wl_shm") == 0) {
    display_wayland->shm =
 	wl_registry_bind(display_wayland->wl_registry, id, &wl_shm_interface, 1);
