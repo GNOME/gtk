@@ -1,10 +1,80 @@
+Overview of Changes in GTK+ 3.9.6 to 3.9.8
+==========================================
+
+* We've started deprecating GtkStock apis. These apis will continue
+  working until GTK+ 4, so there is no need to rush to replace them.
+  For more information, see
+  https://mail.gnome.org/archives/gtk-devel-list/2013-July/msg00000.html
+  Wholly deprecated as part of this effort:
+  GtkIconFactory, GtkIconSet, GtkIconSource, GtkImageMenuItem,
+  GtkAction, GtkUIManager
+
+* The GtkSettings cleanup that was discussed at the recent GTK+
+  hackfest has started to land. A number of settings have been
+  deprecated and are ignored now:
+  gtk-button-images,
+  gtk-show-unicode-menu,
+  gtk-show-input-method-menu,
+  gtk-enable-mnemonics,
+  gtk-auto-mnemonics,
+  gtk-color-palette,
+  gtk-can-change-accels,
+  cursor blink settings,
+  gtk-fallback-icon-theme,
+  gtk-scrolled-window-placement,
+  menu popup delay settings,
+  gtk-menu-bar-accel,
+  keynav tweaks,
+  gtk-touchscreen-mode,
+  gtk-icon-sizes,
+  im style tweaks,
+  gtk-file-chooser-backend,
+  gtk-enable-tooltips,
+  gtk-visible-focus,
+  tooltip timeout tweaks,
+  toolbar style tweaks
+
+* Initial support for scaled output (on high-dpi screens) has been
+  added. While this can be built with cairo 1.12, it needs a cairo
+  branch to work. Support for this has been added to the Wayland,
+  OS X and Windows backends.
+
+* Bugs fixed:
+ 390048 Entire word search flag
+ 672271 File chooser seems over-enthusiastic about using subdirectories
+ 696498 can't set download folder
+ 701119 Error messages when GtkAboutDialog shows license info
+ 702332 File Browser: Filter submenu is missing from context menu
+ 702831 Shaped GDK windows do not work
+ 702913 Reduce hash table lookups in gdk_x11_screen_supports_net...
+ 702977 Problem with gtk_text_iter_forward_search(), multi-byte ...
+ 702981 GtkListBox docs still refer to GtkListBoxUpdateSeparatorFunc
+ 702996 Port to the new private macros and API
+ 703069 Opening a big menu activates some menu entry
+ 703154 Calling gtk_widget_set_opacity() on an unrealized widget...
+ 703220 Memory allocation integer overflow in gdk_cairo_set_sour...
+ 703313 Improve documentation of the GtkTextView API
+ 703406 GtkSearchBar does not automatically connect entry
+ 703533 textlayout: avoid double-free when adding preedit color
+ 703606 GtkPlacesSidebar should use g_themed_icon_new_with_default...
+ 703616 Inconsistent deprecations. GtkIconSet and other classes.
+ 703618 listbox: Add function to get the index of a GtkListBoxRow
+ 703656 GtkSearchBar: Don't show a close button by default
+ 703765 Build of wayland backend fails when not building X11 backend
+ 703827 Confusion in docs for gtk_recent_info_get_modified () and...
+
+* Translation updates:
+ Tajik
+ Vietnamese
+
+
 Overview of Changes in GTK+ 3.9.4 to 3.9.6
 ==========================================
 
 * GtkListBox:
  - handle double-clicks properly
  - add an example in gtk3-demo
-
+ 
 * Bugs fixed:
  390048 Patch for adding "whole word" search for gtk_text_iter...
  560337 GtkFileChooser hour time missing for current date files
