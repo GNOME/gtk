@@ -517,7 +517,7 @@ special_directory_get_gicon (GUserDirectory directory)
 {
 #define ICON_CASE(x)				\
 	case G_USER_DIRECTORY_ ## x:					\
-		return g_themed_icon_new (ICON_NAME_FOLDER_ ## x);
+		return g_themed_icon_new_with_default_fallbacks (ICON_NAME_FOLDER_ ## x);
 
 	switch (directory) {
 
@@ -530,7 +530,7 @@ special_directory_get_gicon (GUserDirectory directory)
 		ICON_CASE (VIDEOS);
 
 	default:
-		return g_themed_icon_new ("folder-symbolic");
+		return g_themed_icon_new_with_default_fallbacks ("folder-symbolic");
 	}
 
 #undef ICON_CASE
@@ -762,7 +762,7 @@ update_places (GtkPlacesSidebar *sidebar)
 
 	if (should_show_recent (sidebar)) {
 		mount_uri = "recent:///"; /* No need to strdup */
-		icon = g_themed_icon_new ("document-open-recent-symbolic");
+		icon = g_themed_icon_new_with_default_fallbacks ("document-open-recent-symbolic");
 		add_place (sidebar, PLACES_BUILT_IN,
 			   SECTION_COMPUTER,
 			   _("Recent"), icon, mount_uri,
@@ -773,7 +773,7 @@ update_places (GtkPlacesSidebar *sidebar)
 
 	/* home folder */
 	home_uri = get_home_directory_uri ();
-	icon = g_themed_icon_new (ICON_NAME_HOME);
+	icon = g_themed_icon_new_with_default_fallbacks (ICON_NAME_HOME);
 	add_place (sidebar, PLACES_BUILT_IN,
 		   SECTION_COMPUTER,
 		   _("Home"), icon, home_uri,
@@ -785,7 +785,7 @@ update_places (GtkPlacesSidebar *sidebar)
 	if (sidebar->show_desktop) {
 		/* desktop */
 		mount_uri = get_desktop_directory_uri ();
-		icon = g_themed_icon_new (ICON_NAME_DESKTOP);
+		icon = g_themed_icon_new_with_default_fallbacks (ICON_NAME_DESKTOP);
 		add_place (sidebar, PLACES_BUILT_IN,
 			   SECTION_COMPUTER,
 			   _("Desktop"), icon, mount_uri,
@@ -955,7 +955,7 @@ update_places (GtkPlacesSidebar *sidebar)
 	/* file system root */
 
  	mount_uri = "file:///"; /* No need to strdup */
-	icon = g_themed_icon_new (ICON_NAME_FILESYSTEM);
+	icon = g_themed_icon_new_with_default_fallbacks (ICON_NAME_FILESYSTEM);
 	add_place (sidebar, PLACES_BUILT_IN,
 		   SECTION_DEVICES,
 		   sidebar->hostname, icon, mount_uri,
@@ -1063,7 +1063,7 @@ update_places (GtkPlacesSidebar *sidebar)
 		     _("Network"));
 
  	mount_uri = "network:///"; /* No need to strdup */
-	icon = g_themed_icon_new (ICON_NAME_NETWORK);
+	icon = g_themed_icon_new_with_default_fallbacks (ICON_NAME_NETWORK);
 	add_place (sidebar, PLACES_BUILT_IN,
 		   SECTION_NETWORK,
 		   _("Browse Network"), icon, mount_uri,
@@ -1072,7 +1072,7 @@ update_places (GtkPlacesSidebar *sidebar)
 	g_object_unref (icon);
 
 	if (sidebar->show_connect_to_server) {
-		icon = g_themed_icon_new (ICON_NAME_NETWORK_SERVER);
+		icon = g_themed_icon_new_with_default_fallbacks (ICON_NAME_NETWORK_SERVER);
 		add_place (sidebar, PLACES_CONNECT_TO_SERVER,
 			   SECTION_NETWORK,
 			   _("Connect to Server"), icon, NULL,
