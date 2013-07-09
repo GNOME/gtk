@@ -104,6 +104,10 @@
 #define FRAMES_PER_SECOND     45
 #define MSECS_BETWEEN_UPDATES (1000 / FRAMES_PER_SECOND)
 
+#define TIMEOUT_INITIAL  500
+#define TIMEOUT_REPEAT    50
+#define TIMEOUT_EXPAND   500
+
 typedef struct _GtkNotebookPage GtkNotebookPage;
 
 typedef enum
@@ -3368,8 +3372,6 @@ gtk_notebook_motion_notify (GtkWidget      *widget,
   GtkNotebookPage *page;
   GtkNotebookArrow arrow;
   GtkNotebookPointerPosition pointer_position;
-  GtkSettings *settings;
-  guint timeout;
   gint x_win, y_win;
 
   page = priv->cur_page;
@@ -3433,10 +3435,7 @@ gtk_notebook_motion_notify (GtkWidget      *widget,
           if (!priv->dnd_timer)
             {
               priv->has_scrolled = TRUE;
-              settings = gtk_widget_get_settings (GTK_WIDGET (notebook));
-              g_object_get (settings, "gtk-timeout-repeat", &timeout, NULL);
-
-              priv->dnd_timer = gdk_threads_add_timeout (timeout * SCROLL_DELAY_FACTOR,
+              priv->dnd_timer = gdk_threads_add_timeout (TIMEOUT_REPEAT * SCROLL_DELAY_FACTOR,
                                                scroll_notebook_timer,
                                                (gpointer) notebook);
             }
@@ -3700,9 +3699,7 @@ gtk_notebook_drag_motion (GtkWidget      *widget,
   GtkNotebookPrivate *priv = notebook->priv;
   GtkAllocation allocation;
   GdkRectangle position;
-  GtkSettings *settings;
   GtkNotebookArrow arrow;
-  guint timeout;
   GdkAtom target, tab_target;
   GList *tab;
   gboolean retval = FALSE;
@@ -3775,10 +3772,7 @@ gtk_notebook_drag_motion (GtkWidget      *widget,
 
       if (!priv->switch_tab_timer)
         {
-          settings = gtk_widget_get_settings (widget);
-
-          g_object_get (settings, "gtk-timeout-expand", &timeout, NULL);
-          priv->switch_tab_timer = gdk_threads_add_timeout (timeout,
+          priv->switch_tab_timer = gdk_threads_add_timeout (TIMEOUT_EXPAND,
                                                   gtk_notebook_switch_tab_timeout,
                                                   widget);
         }
@@ -4834,14 +4828,8 @@ gtk_notebook_timer (GtkNotebook *notebook)
 
       if (priv->need_timer)
         {
-          GtkSettings *settings;
-          guint        timeout;
-
-          settings = gtk_widget_get_settings (GTK_WIDGET (notebook));
-          g_object_get (settings, "gtk-timeout-repeat", &timeout, NULL);
-
           priv->need_timer = FALSE;
-          priv->timer = gdk_threads_add_timeout (timeout * SCROLL_DELAY_FACTOR,
+          priv->timer = gdk_threads_add_timeout (TIMEOUT_REPEAT * SCROLL_DELAY_FACTOR,
                                            (GSourceFunc) gtk_notebook_timer,
                                            (gpointer) notebook);
         }
@@ -4856,16 +4844,10 @@ static void
 gtk_notebook_set_scroll_timer (GtkNotebook *notebook)
 {
   GtkNotebookPrivate *priv = notebook->priv;
-  GtkWidget *widget = GTK_WIDGET (notebook);
 
   if (!priv->timer)
     {
-      GtkSettings *settings = gtk_widget_get_settings (widget);
-      guint timeout;
-
-      g_object_get (settings, "gtk-timeout-initial", &timeout, NULL);
-
-      priv->timer = gdk_threads_add_timeout (timeout,
+      priv->timer = gdk_threads_add_timeout (TIMEOUT_INITIAL,
                                        (GSourceFunc) gtk_notebook_timer,
                                        (gpointer) notebook);
       priv->need_timer = TRUE;

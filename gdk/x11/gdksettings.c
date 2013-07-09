@@ -36,8 +36,6 @@ static const struct {
   {"Gtk/Modules",             "gtk-modules"},
   {"Gtk/CursorThemeName",     "gtk-cursor-theme-name"},
   {"Gtk/CursorThemeSize",     "gtk-cursor-theme-size"},
-  {"Gtk/TimeoutInitial",      "gtk-timeout-initial"},
-  {"Gtk/TimeoutRepeat",       "gtk-timeout-repeat"},
   {"Gtk/ColorScheme",         "gtk-color-scheme"},
   {"Gtk/EnableAnimations",    "gtk-enable-animations"},
   {"Xft/Antialias",           "gtk-xft-antialias"},

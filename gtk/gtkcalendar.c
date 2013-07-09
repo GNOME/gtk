@@ -81,6 +81,9 @@
 #include "gtktooltip.h"
 #include "gtkprivate.h"
 
+#define TIMEOUT_INITIAL  500
+#define TIMEOUT_REPEAT    50
+
 /***************************************************************************/
 /* The following date routines are taken from the lib_date package.
  * They have been minimally edited to avoid conflict with types defined
@@ -2884,15 +2887,9 @@ calendar_timer (gpointer data)
 
       if (priv->need_timer)
         {
-          GtkSettings *settings;
-          guint        timeout;
-
-          settings = gtk_widget_get_settings (GTK_WIDGET (calendar));
-          g_object_get (settings, "gtk-timeout-repeat", &timeout, NULL);
-
           priv->need_timer = FALSE;
           priv->timer = gdk_threads_add_timeout_full (G_PRIORITY_DEFAULT_IDLE,
-                                            timeout * SCROLL_DELAY_FACTOR,
+                                            TIMEOUT_REPEAT * SCROLL_DELAY_FACTOR,
                                             (GSourceFunc) calendar_timer,
                                             (gpointer) calendar, NULL);
         }
@@ -2913,15 +2910,9 @@ calendar_start_spinning (GtkCalendar *calendar,
 
   if (!priv->timer)
     {
-      GtkSettings *settings;
-      guint        timeout;
-
-      settings = gtk_widget_get_settings (GTK_WIDGET (calendar));
-      g_object_get (settings, "gtk-timeout-initial", &timeout, NULL);
-
       priv->need_timer = TRUE;
       priv->timer = gdk_threads_add_timeout_full (G_PRIORITY_DEFAULT_IDLE,
-                                        timeout,
+                                        TIMEOUT_INITIAL,
                                         (GSourceFunc) calendar_timer,
                                         (gpointer) calendar, NULL);
     }

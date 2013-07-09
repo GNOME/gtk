@@ -58,7 +58,8 @@
 #define EPSILON               1e-10
 #define MAX_DIGITS            20
 #define MIN_ARROW_WIDTH       6
-
+#define TIMEOUT_INITIAL       500
+#define TIMEOUT_REPEAT        50
 
 /**
  * SECTION:gtkspinbutton
@@ -1459,14 +1460,9 @@ start_spinning (GtkSpinButton *spin,
 
   if (!priv->timer)
     {
-      GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (spin));
-      guint        timeout;
-
-      g_object_get (settings, "gtk-timeout-initial", &timeout, NULL);
-
       priv->timer_step = step;
       priv->need_timer = TRUE;
-      priv->timer = gdk_threads_add_timeout (timeout,
+      priv->timer = gdk_threads_add_timeout (TIMEOUT_INITIAL,
                                    (GSourceFunc) gtk_spin_button_timer,
                                    (gpointer) spin);
     }
@@ -1590,13 +1586,8 @@ gtk_spin_button_timer (GtkSpinButton *spin_button)
 
       if (priv->need_timer)
         {
-          GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (spin_button));
-          guint        timeout;
-
-          g_object_get (settings, "gtk-timeout-repeat", &timeout, NULL);
-
           priv->need_timer = FALSE;
-          priv->timer = gdk_threads_add_timeout (timeout,
+          priv->timer = gdk_threads_add_timeout (TIMEOUT_REPEAT,
                                               (GSourceFunc) gtk_spin_button_timer,
                                               (gpointer) spin_button);
         }

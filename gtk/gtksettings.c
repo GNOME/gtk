@@ -98,8 +98,8 @@
  */
 
 
-#define DEFAULT_TIMEOUT_INITIAL 200
-#define DEFAULT_TIMEOUT_REPEAT   20
+#define DEFAULT_TIMEOUT_INITIAL 500
+#define DEFAULT_TIMEOUT_REPEAT   50
 #define DEFAULT_TIMEOUT_EXPAND  500
 
 typedef struct _GtkSettingsPropertyValue GtkSettingsPropertyValue;
@@ -664,22 +664,32 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              NULL);
   g_assert (result == PROP_SHOW_UNICODE_MENU);
 
+  /**
+   * GtkSettings:gtk-timeout-initial:
+   *
+   * Deprecated: 3.10: This setting is ignored.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-timeout-initial",
                                                                P_("Start timeout"),
                                                                P_("Starting value for timeouts, when button is pressed"),
                                                                0, G_MAXINT, DEFAULT_TIMEOUT_INITIAL,
-                                                               GTK_PARAM_READWRITE),
+                                                               GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              NULL);
 
   g_assert (result == PROP_TIMEOUT_INITIAL);
 
+  /**
+   * GtkSettings:gtk-timeout-repeat:
+   *
+   * Deprecated: 3.10: This setting is ignored.
+   */
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-timeout-repeat",
                                                                P_("Repeat timeout"),
                                                                P_("Repeat value for timeouts, when button is pressed"),
                                                                0, G_MAXINT, DEFAULT_TIMEOUT_REPEAT,
-                                                               GTK_PARAM_READWRITE),
+                                                               GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
                                              NULL);
 
   g_assert (result == PROP_TIMEOUT_REPEAT);

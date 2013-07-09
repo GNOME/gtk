@@ -60,6 +60,8 @@
 
 #define SCROLL_DELAY_FACTOR 5    /* Scroll repeat multiplier */
 #define UPDATE_DELAY        300  /* Delay for queued update */
+#define TIMEOUT_INITIAL     500
+#define TIMEOUT_REPEAT      50
 
 typedef struct _GtkRangeStepTimer GtkRangeStepTimer;
 
@@ -4068,13 +4070,8 @@ initial_timeout (gpointer data)
 {
   GtkRange *range = GTK_RANGE (data);
   GtkRangePrivate *priv = range->priv;
-  GtkSettings *settings;
-  guint        timeout;
 
-  settings = gtk_widget_get_settings (GTK_WIDGET (data));
-  g_object_get (settings, "gtk-timeout-repeat", &timeout, NULL);
-
-  priv->timer->timeout_id = gdk_threads_add_timeout (timeout * SCROLL_DELAY_FACTOR,
+  priv->timer->timeout_id = gdk_threads_add_timeout (TIMEOUT_REPEAT * SCROLL_DELAY_FACTOR,
                                                      second_timeout,
                                                      range);
   /* remove self */
@@ -4086,18 +4083,13 @@ gtk_range_add_step_timer (GtkRange      *range,
                           GtkScrollType  step)
 {
   GtkRangePrivate *priv = range->priv;
-  GtkSettings *settings;
-  guint        timeout;
 
   g_return_if_fail (priv->timer == NULL);
   g_return_if_fail (step != GTK_SCROLL_NONE);
 
-  settings = gtk_widget_get_settings (GTK_WIDGET (range));
-  g_object_get (settings, "gtk-timeout-initial", &timeout, NULL);
-
   priv->timer = g_new (GtkRangeStepTimer, 1);
 
-  priv->timer->timeout_id = gdk_threads_add_timeout (timeout,
+  priv->timer->timeout_id = gdk_threads_add_timeout (TIMEOUT_INITIAL,
                                                      initial_timeout,
                                                      range);
   priv->timer->step = step;
