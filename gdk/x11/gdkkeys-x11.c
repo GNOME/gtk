@@ -71,7 +71,6 @@ struct _GdkX11Keymap
   GdkModifierType num_lock_mask;
   GdkModifierType modmap[8];
   PangoDirection current_direction;
-  guint sun_keypad      : 1;
   guint have_direction  : 1;
   guint have_lock_state : 1;
   guint caps_lock_state : 1;
@@ -114,7 +113,6 @@ gdk_x11_keymap_init (GdkX11Keymap *keymap)
   keymap->mod_keymap = NULL;
 
   keymap->num_lock_mask = 0;
-  keymap->sun_keypad = FALSE;
   keymap->group_switch_mask = 0;
   keymap->lock_keysym = GDK_KEY_Caps_Lock;
   keymap->have_direction = FALSE;
@@ -445,16 +443,6 @@ update_keymaps (GdkX11Keymap *keymap_x11)
               break;
             }
         }
-
-      /* Hack: The Sun X server puts the keysym to use when the Num Lock
-       * modifier is on in the third element of the keysym array, instead
-       * of the second.
-       */
-      if ((strcmp (ServerVendor (xdisplay), "Sun Microsystems, Inc.") == 0) &&
-          (keymap_x11->keysyms_per_keycode > 2))
-        keymap_x11->sun_keypad = TRUE;
-      else
-        keymap_x11->sun_keypad = FALSE;
     }
 }
 
@@ -1210,7 +1198,6 @@ translate_keysym (GdkX11Keymap   *keymap_x11,
   GdkModifierType shift_modifiers;
   gint shift_level;
   guint tmp_keyval;
-  gint num_lock_index;
 
   shift_modifiers = GDK_SHIFT_MASK;
   if (keymap_x11->lock_keysym == GDK_KEY_Shift_Lock)
@@ -1222,31 +1209,12 @@ translate_keysym (GdkX11Keymap   *keymap_x11,
       (SYM (keymap_x11, 0, 0) || SYM (keymap_x11, 0, 1)))
     group = 0;
 
-  /* Hack: On Sun, the Num Lock modifier uses the third element in the
-   * keysym array, and Mode_Switch does not apply for a keypad key.
-   */
-  if (keymap_x11->sun_keypad)
-    {
-      num_lock_index = 2;
-
-      if (group != 0)
-        {
-          gint i;
-
-          for (i = 0; i < keymap_x11->keysyms_per_keycode; i++)
-            if (KEYSYM_IS_KEYPAD (SYM (keymap_x11, 0, i)))
-              group = 0;
-        }
-    }
-  else
-    num_lock_index = 1;
-
   if ((state & keymap_x11->num_lock_mask) &&
-      KEYSYM_IS_KEYPAD (SYM (keymap_x11, group, num_lock_index)))
+      KEYSYM_IS_KEYPAD (SYM (keymap_x11, group, 1)))
     {
       /* Shift, Shift_Lock cancel Num_Lock
        */
-      shift_level = (state & shift_modifiers) ? 0 : num_lock_index;
+      shift_level = (state & shift_modifiers) ? 0 : 1;
       if (!SYM (keymap_x11, group, shift_level) && SYM (keymap_x11, group, 0))
         shift_level = 0;
 
