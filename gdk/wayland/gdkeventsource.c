@@ -150,12 +150,12 @@ _gdk_wayland_display_queue_events (GdkDisplay *display)
 
   display_wayland = GDK_WAYLAND_DISPLAY (display);
   source = (GdkWaylandEventSource *) display_wayland->event_source;
+
   if (source->pfd.revents & G_IO_IN)
-    {
-	wl_display_dispatch(display_wayland->wl_display);
-	source->pfd.revents = 0;
-    }
+    wl_display_dispatch (display_wayland->wl_display);
 
   if (source->pfd.revents & (G_IO_ERR | G_IO_HUP))
     g_error ("Lost connection to wayland compositor");
+
+  source->pfd.revents = 0;
 }
