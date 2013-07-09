@@ -215,6 +215,7 @@ gdk_screen_get_monitor_at_window
 gdk_screen_get_monitor_height_mm
 gdk_screen_get_monitor_width_mm
 gdk_screen_get_monitor_plug_name
+gdk_screen_get_moniotr_scale_factor
 gdk_screen_get_setting
 gdk_screen_get_font_options
 gdk_screen_set_font_options
@@ -385,6 +386,7 @@ gdk_window_begin_move_drag
 gdk_window_begin_move_drag_for_device
 gdk_window_constrain_size
 gdk_window_beep
+gdk_window_get_scale_factor
 
 <SUBSECTION>
 gdk_window_get_clip_region
@@ -392,6 +394,8 @@ gdk_window_begin_paint_rect
 gdk_window_begin_paint_region
 gdk_window_end_paint
 gdk_window_get_visible_region
+GdkWindowInvalidateHandlerFunc
+gdk_window_set_invalidate_handler
 
 <SUBSECTION>
 gdk_window_invalidate_rect
@@ -455,6 +459,7 @@ gdk_window_get_origin
 gdk_window_get_root_coords
 gdk_window_get_pointer
 gdk_window_get_device_position
+gdk_window_get_device_position_double
 GdkModifierType
 gdk_window_get_parent
 gdk_window_get_toplevel
@@ -590,6 +595,7 @@ gdk_pango_context_get_for_screen
 <TITLE>Cairo Interaction</TITLE>
 <FILE>cairo_interaction</FILE>
 gdk_window_create_similar_surface
+gdk_window_create_similar_image_surface
 gdk_cairo_create
 gdk_cairo_get_clip_rectangle
 gdk_cairo_set_source_color
@@ -599,6 +605,7 @@ gdk_cairo_set_source_window
 gdk_cairo_rectangle
 gdk_cairo_region
 gdk_cairo_region_create_from_surface
+gdk_cairo_surface_create_from_pixbuf
 </SECTION>
 
 <SECTION>
@@ -715,7 +722,9 @@ gdk_device_ungrab
 <SUBSECTION>
 gdk_device_get_state
 gdk_device_get_position
+gdk_device_get_position_double
 gdk_device_get_window_at_position
+gdk_device_get_window_at_position_double
 gdk_device_get_history
 gdk_device_free_history
 GdkTimeCoord
