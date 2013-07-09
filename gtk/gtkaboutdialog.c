@@ -2036,12 +2036,6 @@ text_buffer_new (GtkAboutDialog  *about,
 
   buffer = gtk_text_buffer_new (NULL);
 
-  gtk_text_buffer_get_start_iter (buffer, &start_iter);
-  gtk_text_buffer_get_start_iter (buffer, &end_iter);
-  tag = gtk_text_tag_new (NULL);
-  g_object_set (tag, "font-scale", PANGO_SCALE_SMALL, NULL);
-  gtk_text_buffer_apply_tag (buffer, tag, &start_iter, &end_iter);
-
   for (p = strings; *p; p++)
     {
       q0  = *p;
@@ -2127,6 +2121,14 @@ text_buffer_new (GtkAboutDialog  *about,
       if (p[1])
         gtk_text_buffer_insert_at_cursor (buffer, "\n", 1);
     }
+
+  tag = gtk_text_buffer_create_tag (buffer, NULL,
+                                    "scale", PANGO_SCALE_SMALL,
+                                    NULL);
+
+  gtk_text_buffer_get_start_iter (buffer, &start_iter);
+  gtk_text_buffer_get_end_iter (buffer, &end_iter);
+  gtk_text_buffer_apply_tag (buffer, tag, &start_iter, &end_iter);
 
   return buffer;
 }
