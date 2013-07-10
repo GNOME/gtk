@@ -268,6 +268,80 @@ quit_activated (GSimpleAction *action,
   g_application_quit (app);
 }
 
+static void
+combo_changed (GtkComboBox *combo,
+               gpointer     user_data)
+{
+  GtkEntry *entry = g_object_get_data (user_data, "entry");
+  const gchar *action;
+  gchar **accels;
+  gchar *str;
+
+  action = gtk_combo_box_get_active_id (combo);
+
+  if (!action)
+    return;
+
+  accels = gtk_application_get_accels_for_action (gtk_window_get_application (user_data), action);
+  str = g_strjoinv (",", accels);
+  g_strfreev (accels);
+
+  gtk_entry_set_text (entry, str);
+}
+
+static void
+response (GtkDialog *dialog,
+          guint      response_id,
+          gpointer   user_data)
+{
+  GtkEntry *entry = g_object_get_data (user_data, "entry");
+  GtkComboBox *combo = g_object_get_data (user_data, "combo");
+  const gchar *action;
+  const gchar *str;
+  gchar **accels;
+
+  action = gtk_combo_box_get_active_id (combo);
+
+  if (!action)
+    return;
+
+  str = gtk_entry_get_text (entry);
+  accels = g_strsplit (str, ",", 0);
+
+  gtk_application_set_accels_for_action (gtk_window_get_application (user_data), action, (const gchar **) accels);
+  g_strfreev (accels);
+}
+
+static void
+edit_accels (GSimpleAction *action,
+             GVariant      *parameter,
+             gpointer       user_data)
+{
+  GtkApplication *app = user_data;
+  GtkWidget *combo;
+  GtkWidget *entry;
+  gchar **actions;
+  GtkWidget *dialog;
+  gint i;
+
+  dialog = gtk_dialog_new ();
+  gtk_window_set_application (GTK_WINDOW (dialog), app);
+  actions = gtk_application_list_action_descriptions (app);
+  combo = gtk_combo_box_text_new ();
+  gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), combo);
+  for (i = 0; actions[i]; i++)
+    gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), actions[i], actions[i]);
+  g_signal_connect (combo, "changed", G_CALLBACK (combo_changed), dialog);
+  entry = gtk_entry_new ();
+  gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), entry);
+  gtk_dialog_add_button (GTK_DIALOG (dialog), "Set", GTK_RESPONSE_APPLY);
+  g_signal_connect (dialog, "response", G_CALLBACK (response), dialog);
+  g_object_set_data (G_OBJECT (dialog), "combo", combo);
+  g_object_set_data (G_OBJECT (dialog), "entry", entry);
+
+  gtk_widget_show_all (dialog);
+}
+
 static gboolean
 update_time (gpointer user_data)
 {
@@ -320,8 +394,31 @@ static GActionEntry app_entries[] = {
   { "new", new_activated, NULL, NULL, NULL },
   { "about", about_activated, NULL, NULL, NULL },
   { "quit", quit_activated, NULL, NULL, NULL },
+  { "edit-accels", edit_accels },
   { "time-active", NULL, NULL, "false", time_active_changed }
 };
+
+static void
+dump_accels (GtkApplication *app)
+{
+  gchar **actions;
+  gint i;
+
+  actions = gtk_application_list_action_descriptions (app);
+  for (i = 0; actions[i]; i++)
+    {
+      gchar **accels;
+      gchar *str;
+
+      accels = gtk_application_get_accels_for_action (app, actions[i]);
+
+      str = g_strjoinv (",", accels);
+      g_print ("%s -> %s\n", actions[i], str);
+      g_strfreev (accels);
+      g_free (str);
+    }
+  g_strfreev (actions);
+}
 
 static void
 bloat_pad_startup (GApplication *application)
@@ -342,7 +439,6 @@ bloat_pad_startup (GApplication *application)
                                "      <item>"
                                "        <attribute name='label' translatable='yes'>_New Window</attribute>"
                                "        <attribute name='action'>app.new</attribute>"
-                               "        <attribute name='accel'>&lt;Primary&gt;n</attribute>"
                                "      </item>"
                                "    </section>"
                                "    <section>"
@@ -355,7 +451,6 @@ bloat_pad_startup (GApplication *application)
                                "      <item>"
                                "        <attribute name='label' translatable='yes'>_Quit</attribute>"
                                "        <attribute name='action'>app.quit</attribute>"
-                               "        <attribute name='accel'>&lt;Primary&gt;q</attribute>"
                                "      </item>"
                                "    </section>"
                                "  </menu>"
@@ -366,12 +461,16 @@ bloat_pad_startup (GApplication *application)
                                "        <item>"
                                "          <attribute name='label' translatable='yes'>_Copy</attribute>"
                                "          <attribute name='action'>win.copy</attribute>"
-                               "          <attribute name='accel'>&lt;Primary&gt;c</attribute>"
                                "        </item>"
                                "        <item>"
                                "          <attribute name='label' translatable='yes'>_Paste</attribute>"
                                "          <attribute name='action'>win.paste</attribute>"
-                               "          <attribute name='accel'>&lt;Primary&gt;v</attribute>"
+                               "        </item>"
+                               "      </section>"
+                               "      <section>"
+                               "        <item>"
+                               "          <attribute name='label' translatable='yes'>Accelerators...</attribute>"
+                               "          <attribute name='action'>app.edit-accels</attribute>"
                                "        </item>"
                                "      </section>"
                                "    </submenu>"
@@ -381,7 +480,6 @@ bloat_pad_startup (GApplication *application)
                                "        <item>"
                                "          <attribute name='label' translatable='yes'>_Fullscreen</attribute>"
                                "          <attribute name='action'>win.fullscreen</attribute>"
-                               "          <attribute name='accel'>F11</attribute>"
                                "        </item>"
                                "        <item>"
                                "          <attribute name='label' translatable='yes'>_Look Busy</attribute>"
@@ -397,6 +495,18 @@ bloat_pad_startup (GApplication *application)
                                "</interface>", -1, NULL);
   gtk_application_set_app_menu (GTK_APPLICATION (application), G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
   gtk_application_set_menubar (GTK_APPLICATION (application), G_MENU_MODEL (gtk_builder_get_object (builder, "menubar")));
+  gtk_application_add_accelerator (GTK_APPLICATION (application), "<Primary>n", "app.new", NULL);
+  gtk_application_add_accelerator (GTK_APPLICATION (application), "<Primary>q", "app.quit", NULL);
+  gtk_application_add_accelerator (GTK_APPLICATION (application), "<Primary>c", "win.copy", NULL);
+  gtk_application_add_accelerator (GTK_APPLICATION (application), "<Primary>p", "win.paste", NULL);
+  gtk_application_add_accelerator (GTK_APPLICATION (application), "<Primary>l", "win.justify", g_variant_new_string ("left"));
+  gtk_application_add_accelerator (GTK_APPLICATION (application), "<Primary>m", "win.justify", g_variant_new_string ("center"));
+  gtk_application_add_accelerator (GTK_APPLICATION (application), "<Primary>r", "win.justify", g_variant_new_string ("right"));
+
+  const gchar *new_accels[] = { "<Primary>n", "<Primary>t", NULL };
+  gtk_application_set_accels_for_action (GTK_APPLICATION (application), "app.new", new_accels);
+
+  dump_accels (GTK_APPLICATION (application));
   //gtk_application_set_menubar (GTK_APPLICATION (application), G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu")));
   bloatpad->time = G_MENU (gtk_builder_get_object (builder, "time-menu"));
   g_object_unref (builder);
