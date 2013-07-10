@@ -22,6 +22,7 @@
 #include "config.h"
 
 #include "gtkmenutrackeritem.h"
+#include "gtkactionmuxer.h"
 
 #include "gtkactionmuxer.h"
 
@@ -380,12 +381,25 @@ gtk_menu_tracker_item_action_removed (GtkActionObserver   *observer,
 }
 
 static void
+gtk_menu_tracker_item_primary_accel_changed (GtkActionObserver   *observer,
+                                             GtkActionObservable *observable,
+                                             const gchar         *action_name,
+                                             const gchar         *action_and_target)
+{
+  GtkMenuTrackerItem *self = GTK_MENU_TRACKER_ITEM (observer);
+
+  if (g_str_equal (action_and_target, self->action_and_target))
+    g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_ACCEL]);
+}
+
+static void
 gtk_menu_tracker_item_init_observer_iface (GtkActionObserverInterface *iface)
 {
   iface->action_added = gtk_menu_tracker_item_action_added;
   iface->action_enabled_changed = gtk_menu_tracker_item_action_enabled_changed;
   iface->action_state_changed = gtk_menu_tracker_item_action_state_changed;
   iface->action_removed = gtk_menu_tracker_item_action_removed;
+  iface->primary_accel_changed = gtk_menu_tracker_item_primary_accel_changed;
 }
 
 GtkMenuTrackerItem *
@@ -547,11 +561,18 @@ gtk_menu_tracker_item_get_toggled (GtkMenuTrackerItem *self)
 const gchar *
 gtk_menu_tracker_item_get_accel (GtkMenuTrackerItem *self)
 {
-  const gchar *accel = NULL;
+  const gchar *accel;
 
-  g_menu_item_get_attribute (self->item, "accel", "&s", &accel);
+  if (!self->action_and_target)
+    return NULL;
 
-  return accel;
+  if (g_menu_item_get_attribute (self->item, "accel", "&s", &accel))
+    return accel;
+
+  if (!GTK_IS_ACTION_MUXER (self->observable))
+    return NULL;
+
+  return gtk_action_muxer_get_primary_accel (GTK_ACTION_MUXER (self->observable), self->action_and_target);
 }
 
 GMenuModel *
