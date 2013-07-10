@@ -159,7 +159,6 @@ test_row_separator_height_func (GtkTreeModel *model,
   path = gtk_tree_model_get_path (model, iter);
   if (gtk_tree_path_get_indices (path)[0] == 2)
     ret = TRUE;
-  g_print ("row %d separator %d\n", gtk_tree_path_get_indices (path)[0], ret);
   gtk_tree_path_free (path);
 
   return ret;
