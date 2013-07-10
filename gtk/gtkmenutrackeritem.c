@@ -23,6 +23,10 @@
 
 #include "gtkmenutrackeritem.h"
 
+#include "gtkactionmuxer.h"
+
+#include <string.h>
+
 /**
  * SECTION:gtkmenutrackeritem
  * @Title: GtkMenuTrackerItem
@@ -83,6 +87,7 @@ struct _GtkMenuTrackerItem
 
   GtkActionObservable *observable;
   gchar *action_namespace;
+  gchar *action_and_target;
   GMenuItem *item;
   GtkMenuTrackerItemRole role : 4;
   guint is_separator : 1;
@@ -406,26 +411,24 @@ _gtk_menu_tracker_item_new (GtkActionObservable *observable,
     {
       GActionGroup *group = G_ACTION_GROUP (observable);
       const GVariantType *parameter_type;
+      GVariant *target;
       gboolean enabled;
       GVariant *state;
       gboolean found;
 
+      target = g_menu_item_get_attribute_value (self->item, "target", NULL);
+
+      self->action_and_target = gtk_print_action_and_target (action_namespace, action_name, target);
+
+      if (target)
+        g_variant_unref (target);
+
+      action_name = strrchr (self->action_and_target, '|') + 1;
+
       state = NULL;
 
-      if (action_namespace)
-        {
-          gchar *full_action;
-
-          full_action = g_strjoin (".", action_namespace, action_name, NULL);
-          gtk_action_observable_register_observer (self->observable, full_action, GTK_ACTION_OBSERVER (self));
-          found = g_action_group_query_action (group, full_action, &enabled, &parameter_type, NULL, NULL, &state);
-          g_free (full_action);
-        }
-      else
-        {
-          gtk_action_observable_register_observer (self->observable, action_name, GTK_ACTION_OBSERVER (self));
-          found = g_action_group_query_action (group, action_name, &enabled, &parameter_type, NULL, NULL, &state);
-        }
+      gtk_action_observable_register_observer (self->observable, action_name, GTK_ACTION_OBSERVER (self));
+      found = g_action_group_query_action (group, action_name, &enabled, &parameter_type, NULL, NULL, &state);
 
       if (found)
         gtk_menu_tracker_item_action_added (GTK_ACTION_OBSERVER (self), observable, NULL, parameter_type, enabled, state);
@@ -607,19 +610,10 @@ gtk_menu_tracker_item_activated (GtkMenuTrackerItem *self)
   if (!self->can_activate)
     return;
 
-  g_menu_item_get_attribute (self->item, G_MENU_ATTRIBUTE_ACTION, "&s", &action_name);
+  action_name = strrchr (self->action_and_target, '|') + 1;
   action_target = g_menu_item_get_attribute_value (self->item, G_MENU_ATTRIBUTE_TARGET, NULL);
 
-  if (self->action_namespace)
-    {
-      gchar *full_action;
-
-      full_action = g_strjoin (".", self->action_namespace, action_name, NULL);
-      g_action_group_activate_action (G_ACTION_GROUP (self->observable), full_action, action_target);
-      g_free (full_action);
-    }
-  else
-    g_action_group_activate_action (G_ACTION_GROUP (self->observable), action_name, action_target);
+  g_action_group_activate_action (G_ACTION_GROUP (self->observable), action_name, action_target);
 
   if (action_target)
     g_variant_unref (action_target);
