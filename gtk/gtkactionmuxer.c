@@ -65,6 +65,7 @@ struct _GtkActionMuxer
 
   GHashTable *observed_actions;
   GHashTable *groups;
+  GHashTable *primary_accels;
   GtkActionMuxer *parent;
 };
 
@@ -80,6 +81,8 @@ enum
 };
 
 static GParamSpec *properties[NUM_PROPERTIES];
+
+guint accel_signal;
 
 typedef struct
 {
@@ -333,6 +336,39 @@ gtk_action_muxer_action_removed_from_parent (GActionGroup *action_group,
   gtk_action_muxer_action_removed (muxer, action_name);
 }
 
+static void
+gtk_action_muxer_primary_accel_changed (GtkActionMuxer *muxer,
+                                        const gchar    *action_name,
+                                        const gchar    *action_and_target)
+{
+  Action *action;
+  GSList *node;
+
+  if (!action_name)
+    action_name = strrchr (action_and_target, '|') + 1;
+
+  action = g_hash_table_lookup (muxer->observed_actions, action_name);
+  for (node = action ? action->watchers : NULL; node; node = node->next)
+    gtk_action_observer_primary_accel_changed (node->data, GTK_ACTION_OBSERVABLE (muxer),
+                                               action_name, action_and_target);
+  g_signal_emit (muxer, accel_signal, 0, action_name, action_and_target);
+}
+
+static void
+gtk_action_muxer_parent_primary_accel_changed (GtkActionMuxer *parent,
+                                               const gchar    *action_name,
+                                               const gchar    *action_and_target,
+                                               gpointer        user_data)
+{
+  GtkActionMuxer *muxer = user_data;
+
+  /* If it's in our table then don't let the parent one filter through */
+  if (muxer->primary_accels && g_hash_table_lookup (muxer->primary_accels, action_and_target))
+    return;
+
+  gtk_action_muxer_primary_accel_changed (muxer, action_name, action_and_target);
+}
+
 static gboolean
 gtk_action_muxer_query_action (GActionGroup        *action_group,
                                const gchar         *action_name,
@@ -514,6 +550,7 @@ gtk_action_muxer_dispose (GObject *object)
     g_signal_handlers_disconnect_by_func (muxer->parent, gtk_action_muxer_action_removed_from_parent, muxer);
     g_signal_handlers_disconnect_by_func (muxer->parent, gtk_action_muxer_parent_action_enabled_changed, muxer);
     g_signal_handlers_disconnect_by_func (muxer->parent, gtk_action_muxer_parent_action_state_changed, muxer);
+    g_signal_handlers_disconnect_by_func (muxer->parent, gtk_action_muxer_parent_primary_accel_changed, muxer);
 
     g_clear_object (&muxer->parent);
   }
@@ -592,6 +629,9 @@ gtk_action_muxer_class_init (GObjectClass *class)
   class->set_property = gtk_action_muxer_set_property;
   class->finalize = gtk_action_muxer_finalize;
   class->dispose = gtk_action_muxer_dispose;
+
+  accel_signal = g_signal_new ("primary-accel-changed", GTK_TYPE_ACTION_MUXER, G_SIGNAL_RUN_LAST,
+                               0, NULL, NULL, NULL, G_TYPE_NONE, 2, G_TYPE_STRING, G_TYPE_STRING);
 
   properties[PROP_PARENT] = g_param_spec_object ("parent", "Parent",
                                                  "The parent muxer",
@@ -715,6 +755,26 @@ gtk_action_muxer_get_parent (GtkActionMuxer *muxer)
   return muxer->parent;
 }
 
+static void
+emit_changed_accels (GtkActionMuxer  *muxer,
+                     GtkActionMuxer  *parent)
+{
+  while (parent)
+    {
+      if (parent->primary_accels)
+        {
+          GHashTableIter iter;
+          gpointer key;
+
+          g_hash_table_iter_init (&iter, parent->primary_accels);
+          while (g_hash_table_iter_next (&iter, &key, NULL))
+            gtk_action_muxer_primary_accel_changed (muxer, NULL, key);
+        }
+
+      parent = parent->parent;
+    }
+}
+
 /**
  * gtk_action_muxer_set_parent:
  * @muxer: a #GtkActionMuxer
@@ -742,10 +802,13 @@ gtk_action_muxer_set_parent (GtkActionMuxer *muxer,
         gtk_action_muxer_action_removed (muxer, *it);
       g_strfreev (actions);
 
+      emit_changed_accels (muxer, muxer->parent);
+
       g_signal_handlers_disconnect_by_func (muxer->parent, gtk_action_muxer_action_added_to_parent, muxer);
       g_signal_handlers_disconnect_by_func (muxer->parent, gtk_action_muxer_action_removed_from_parent, muxer);
       g_signal_handlers_disconnect_by_func (muxer->parent, gtk_action_muxer_parent_action_enabled_changed, muxer);
       g_signal_handlers_disconnect_by_func (muxer->parent, gtk_action_muxer_parent_action_state_changed, muxer);
+      g_signal_handlers_disconnect_by_func (muxer->parent, gtk_action_muxer_parent_primary_accel_changed, muxer);
 
       g_object_unref (muxer->parent);
     }
@@ -764,6 +827,8 @@ gtk_action_muxer_set_parent (GtkActionMuxer *muxer,
         gtk_action_muxer_action_added (muxer, *it, G_ACTION_GROUP (muxer->parent), *it);
       g_strfreev (actions);
 
+      emit_changed_accels (muxer, muxer->parent);
+
       g_signal_connect (muxer->parent, "action-added",
                         G_CALLBACK (gtk_action_muxer_action_added_to_parent), muxer);
       g_signal_connect (muxer->parent, "action-removed",
@@ -772,7 +837,72 @@ gtk_action_muxer_set_parent (GtkActionMuxer *muxer,
                         G_CALLBACK (gtk_action_muxer_parent_action_enabled_changed), muxer);
       g_signal_connect (muxer->parent, "action-state-changed",
                         G_CALLBACK (gtk_action_muxer_parent_action_state_changed), muxer);
+      g_signal_connect (muxer->parent, "primary-accel-changed",
+                        G_CALLBACK (gtk_action_muxer_parent_primary_accel_changed), muxer);
     }
 
   g_object_notify_by_pspec (G_OBJECT (muxer), properties[PROP_PARENT]);
+}
+
+void
+gtk_action_muxer_set_primary_accel (GtkActionMuxer *muxer,
+                                    const gchar    *action_and_target,
+                                    const gchar    *primary_accel)
+{
+  if (!muxer->primary_accels)
+    muxer->primary_accels = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+
+  if (primary_accel)
+    g_hash_table_insert (muxer->primary_accels, g_strdup (action_and_target), g_strdup (primary_accel));
+  else
+    g_hash_table_remove (muxer->primary_accels, action_and_target);
+
+  gtk_action_muxer_primary_accel_changed (muxer, NULL, action_and_target);
+}
+
+const gchar *
+gtk_action_muxer_get_primary_accel (GtkActionMuxer *muxer,
+                                    const gchar    *action_and_target)
+{
+  if (muxer->primary_accels)
+    {
+      const gchar *primary_accel;
+
+      primary_accel = g_hash_table_lookup (muxer->primary_accels, action_and_target);
+
+      if (primary_accel)
+        return primary_accel;
+    }
+
+  if (!muxer->parent)
+    return NULL;
+
+  return gtk_action_muxer_get_primary_accel (muxer->parent, action_and_target);
+}
+
+gchar *
+gtk_print_action_and_target (const gchar *action_namespace,
+                             const gchar *action_name,
+                             GVariant    *target)
+{
+  GString *result;
+
+  g_return_if_fail (strchr (action_name, '|') == NULL);
+  g_return_if_fail (action_namespace == NULL || strchr (action_namespace, '|') == NULL);
+
+  result = g_string_new (NULL);
+
+  if (target)
+    g_variant_print_string (target, result, TRUE);
+  g_string_append_c (result, '|');
+
+  if (action_namespace)
+    {
+      g_string_append (result, action_namespace);
+      g_string_append_c (result, '.');
+    }
+
+  g_string_append (result, action_name);
+
+  return g_string_free (result, FALSE);
 }

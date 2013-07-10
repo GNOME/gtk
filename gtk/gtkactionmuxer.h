@@ -47,6 +47,18 @@ GtkActionMuxer *        gtk_action_muxer_get_parent                     (GtkActi
 void                    gtk_action_muxer_set_parent                     (GtkActionMuxer *muxer,
                                                                          GtkActionMuxer *parent);
 
+void                    gtk_action_muxer_set_primary_accel              (GtkActionMuxer *muxer,
+                                                                         const gchar    *action_and_target,
+                                                                         const gchar    *primary_accel);
+
+const gchar *           gtk_action_muxer_get_primary_accel              (GtkActionMuxer *muxer,
+                                                                         const gchar    *action_and_target);
+
+/* No better place for this... */
+gchar *                 gtk_print_action_and_target                     (const gchar    *action_namespace,
+                                                                         const gchar    *action_name,
+                                                                         GVariant       *target);
+
 G_END_DECLS
 
 #endif /* __GTK_ACTION_MUXER_H__ */

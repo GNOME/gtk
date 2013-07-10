@@ -157,3 +157,33 @@ gtk_action_observer_action_removed (GtkActionObserver   *observer,
   GTK_ACTION_OBSERVER_GET_IFACE (observer)
     ->action_removed (observer, observable, action_name);
 }
+
+/**
+ * gtk_action_observer_primary_accel_changed:
+ * @observer: a #GtkActionObserver
+ * @observable: the source of the event
+ * @action_name: the name of the action
+ * @action_and_target: detailed action of the changed accel, in "action and target" format
+ *
+ * This function is called when an action that the observer is
+ * registered to receive events for has one of its accelerators changed.
+ *
+ * Accelerator changes are reported for all targets associated with the
+ * action.  The @action_and_target string should be used to check if the
+ * reported target is the one that the observer is interested in.
+ */
+void
+gtk_action_observer_primary_accel_changed (GtkActionObserver   *observer,
+                                           GtkActionObservable *observable,
+                                           const gchar         *action_name,
+                                           const gchar         *action_and_target)
+{
+  GtkActionObserverInterface *iface;
+
+  g_return_if_fail (GTK_IS_ACTION_OBSERVER (observer));
+
+  iface = GTK_ACTION_OBSERVER_GET_IFACE (observer);
+
+  if (iface->primary_accel_changed)
+    iface->primary_accel_changed (observer, observable, action_name, action_and_target);
+}
