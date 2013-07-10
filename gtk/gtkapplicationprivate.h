@@ -23,6 +23,8 @@
 
 #include "gtkapplicationwindow.h"
 
+#include "gtkactionmuxer.h"
+
 G_GNUC_INTERNAL
 gboolean                gtk_application_window_publish                  (GtkApplicationWindow *window,
                                                                          GDBusConnection      *session,
@@ -39,5 +41,8 @@ G_GNUC_INTERNAL
 const gchar *           gtk_application_get_app_menu_object_path        (GtkApplication       *application);
 G_GNUC_INTERNAL
 const gchar *           gtk_application_get_menubar_object_path         (GtkApplication       *application);
+
+G_GNUC_INTERNAL
+GtkActionMuxer *        gtk_application_get_parent_muxer_for_window     (GtkWindow                *window);
 
 #endif /* __GTK_APPLICATION_PRIVATE_H__ */

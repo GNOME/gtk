@@ -2958,8 +2958,7 @@ gtk_window_set_application (GtkWindow      *window,
           gtk_application_add_window (priv->application, window);
         }
 
-      /* don't use a normal cast: application may be NULL */
-      gtk_widget_insert_action_group (GTK_WIDGET (window), "app", (GActionGroup *) application);
+      _gtk_widget_update_parent_muxer (GTK_WIDGET (window));
 
       g_object_notify (G_OBJECT (window), "application");
     }

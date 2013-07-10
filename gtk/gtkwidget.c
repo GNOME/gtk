@@ -64,6 +64,7 @@
 #include "gtkplug.h"
 #include "gtktypebuiltins.h"
 #include "a11y/gtkwidgetaccessible.h"
+#include "gtkapplicationprivate.h"
 
 /* for the use of round() */
 #include "fallback-c89.c"
@@ -15457,18 +15458,26 @@ _gtk_widget_set_style (GtkWidget *widget,
 void
 _gtk_widget_update_parent_muxer (GtkWidget *widget)
 {
-  GtkWidget *parent;
   GtkActionMuxer *parent_muxer;
 
   if (widget->priv->muxer == NULL)
     return;
 
-  if (GTK_IS_MENU (widget))
-    parent = gtk_menu_get_attach_widget (GTK_MENU (widget));
+  if (GTK_IS_WINDOW (widget))
+    {
+      parent_muxer = gtk_application_get_parent_muxer_for_window (GTK_WINDOW (widget));
+    }
   else
-    parent = gtk_widget_get_parent (widget);
+    {
+      GtkWidget *parent;
 
-  parent_muxer = parent ? _gtk_widget_get_action_muxer (parent) : NULL;
+      if (GTK_IS_MENU (widget))
+        parent = gtk_menu_get_attach_widget (GTK_MENU (widget));
+      else
+        parent = gtk_widget_get_parent (widget);
+
+      parent_muxer = parent ? _gtk_widget_get_action_muxer (parent) : NULL;
+    }
 
   gtk_action_muxer_set_parent (widget->priv->muxer, parent_muxer);
 }

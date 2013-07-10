@@ -143,6 +143,7 @@ struct _GtkApplicationPrivate
   GMenuModel      *menubar;
 
   gboolean register_session;
+  GtkActionMuxer  *muxer;
 
 #ifdef GDK_WINDOWING_X11
   guint next_id;
@@ -396,19 +397,24 @@ gtk_application_focus_in_event_cb (GtkWindow      *window,
 }
 
 static void
-gtk_application_startup (GApplication *application)
+gtk_application_startup (GApplication *g_application)
 {
+  GtkApplication *application = GTK_APPLICATION (g_application);
+
   G_APPLICATION_CLASS (gtk_application_parent_class)
-    ->startup (application);
+    ->startup (g_application);
+
+  application->priv->muxer = gtk_action_muxer_new ();
+  gtk_action_muxer_insert (application->priv->muxer, "app", G_ACTION_GROUP (application));
 
   gtk_init (0, 0);
 
 #ifdef GDK_WINDOWING_X11
-  gtk_application_startup_x11 (GTK_APPLICATION (application));
+  gtk_application_startup_x11 (application);
 #endif
 
 #ifdef GDK_WINDOWING_QUARTZ
-  gtk_application_startup_quartz (GTK_APPLICATION (application));
+  gtk_application_startup_quartz (application);
 #endif
 }
 
@@ -1688,3 +1694,16 @@ gtk_application_is_inhibited (GtkApplication             *application,
 }
 
 #endif
+
+GtkActionMuxer *
+gtk_application_get_parent_muxer_for_window (GtkWindow *window)
+{
+  GtkApplication *application;
+
+  application = gtk_window_get_application (window);
+
+  if (!application)
+    return NULL;
+
+  return application->priv->muxer;
+}
