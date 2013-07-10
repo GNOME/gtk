@@ -120,6 +120,7 @@
 #define MIN_ENTRY_WIDTH  150
 #define DRAW_TIMEOUT     20
 #define PASSWORD_HINT_MAX 8
+#define PASSWORD_HINT_TIMEOUT 600
 
 #define MAX_ICONS 2
 
@@ -5136,7 +5137,6 @@ buffer_inserted_text (GtkEntryBuffer *buffer,
                       GtkEntry       *entry)
 {
   GtkEntryPrivate *priv = entry->priv;
-  guint password_hint_timeout;
   guint current_pos;
   gint selection_bound;
 
@@ -5153,11 +5153,18 @@ buffer_inserted_text (GtkEntryBuffer *buffer,
   /* Calculate the password hint if it needs to be displayed. */
   if (n_chars == 1 && !priv->visible)
     {
-      g_object_get (gtk_widget_get_settings (GTK_WIDGET (entry)),
-                    "gtk-entry-password-hint-timeout", &password_hint_timeout,
-                    NULL);
+      GdkScreen *screen;
+      gint primary_num;
+      gint monitor_num;
 
-      if (password_hint_timeout > 0)
+      screen = gtk_widget_get_screen (GTK_WIDGET (entry));
+      primary_num = gdk_screen_get_primary_monitor (screen);
+      monitor_num = gdk_screen_get_monitor_at_window (screen, priv->text_area);
+
+      /* Only show password hint on the primary monitor to help avoid
+         showing passwords on presentations and the like. Would be
+         better if we had an explicit presentation mode. */
+      if (primary_num == monitor_num)
         {
           GtkEntryPasswordHint *password_hint = g_object_get_qdata (G_OBJECT (entry),
                                                                     quark_password_hint);
@@ -5171,7 +5178,7 @@ buffer_inserted_text (GtkEntryBuffer *buffer,
           password_hint->position = position;
           if (password_hint->source_id)
             g_source_remove (password_hint->source_id);
-          password_hint->source_id = gdk_threads_add_timeout (password_hint_timeout,
+          password_hint->source_id = gdk_threads_add_timeout (PASSWORD_HINT_TIMEOUT,
                                                               (GSourceFunc)gtk_entry_remove_password_hint, entry);
         }
     }
