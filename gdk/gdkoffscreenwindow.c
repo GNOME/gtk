@@ -691,6 +691,11 @@ gdk_offscreen_window_get_scale_factor (GdkWindow *window)
 }
 
 static void
+gdk_offscreen_window_set_opacity (GdkWindow *window, gdouble opacity)
+{
+}
+
+static void
 gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
 {
   GdkWindowImplClass *impl_class = GDK_WINDOW_IMPL_CLASS (klass);
@@ -764,7 +769,7 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   impl_class->begin_move_drag = NULL;
   impl_class->enable_synchronized_configure = gdk_offscreen_window_do_nothing;
   impl_class->configure_finished = NULL;
-  impl_class->set_opacity = NULL;
+  impl_class->set_opacity = gdk_offscreen_window_set_opacity;
   impl_class->set_composited = NULL;
   impl_class->destroy_notify = NULL;
   impl_class->register_dnd = gdk_offscreen_window_do_nothing;
