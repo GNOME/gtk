@@ -22,6 +22,7 @@
 #define __GTK_APPLICATION_PRIVATE_H__
 
 #include "gtkapplicationwindow.h"
+#include "gtkwindowprivate.h"
 
 #include "gtkactionmuxer.h"
 
@@ -44,5 +45,17 @@ const gchar *           gtk_application_get_menubar_object_path         (GtkAppl
 
 G_GNUC_INTERNAL
 GtkActionMuxer *        gtk_application_get_parent_muxer_for_window     (GtkWindow                *window);
+
+G_GNUC_INTERNAL
+gboolean                gtk_application_activate_accel                  (GtkApplication           *application,
+                                                                         GActionGroup             *action_group,
+                                                                         guint                     key,
+                                                                         GdkModifierType           modifier);
+
+G_GNUC_INTERNAL
+void                    gtk_application_foreach_accel_keys              (GtkApplication           *application,
+                                                                         GtkWindow                *window,
+                                                                         GtkWindowKeysForeachFunc  callback,
+                                                                         gpointer                  user_data);
 
 #endif /* __GTK_APPLICATION_PRIVATE_H__ */

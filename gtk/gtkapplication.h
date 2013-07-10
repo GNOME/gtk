@@ -127,7 +127,18 @@ GtkWindow *      gtk_application_get_window_by_id   (GtkApplication             
 GDK_AVAILABLE_IN_3_6
 GtkWindow *      gtk_application_get_active_window  (GtkApplication             *application);
 
+GDK_AVAILABLE_IN_3_10
+gchar **         gtk_application_list_action_descriptions        (GtkApplication       *application);
+
+GDK_AVAILABLE_IN_3_10
+gchar **         gtk_application_get_accels_for_action           (GtkApplication       *application,
+                                                                  const gchar          *detailed_action_name);
+
+GDK_AVAILABLE_IN_3_10
+void             gtk_application_set_accels_for_action           (GtkApplication       *application,
+                                                                  const gchar          *detailed_action_name,
+                                                                  const gchar * const  *accels);
+
 G_END_DECLS
 
 #endif /* __GTK_APPLICATION_H__ */
-

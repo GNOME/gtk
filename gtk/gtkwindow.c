@@ -55,6 +55,7 @@
 #include "gtkbutton.h"
 #include "gtkheaderbar.h"
 #include "a11y/gtkwindowaccessible.h"
+#include "gtkapplicationprivate.h"
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
@@ -467,7 +468,6 @@ static void     resize_grip_destroy_window            (GtkWindow    *window);
 static void     update_grip_visibility                (GtkWindow    *window);
 static void     update_window_buttons                 (GtkWindow    *window);
 
-static void        gtk_window_notify_keys_changed (GtkWindow   *window);
 static GtkKeyHash *gtk_window_get_key_hash        (GtkWindow   *window);
 static void        gtk_window_free_key_hash       (GtkWindow   *window);
 static void	   gtk_window_on_composited_changed (GdkScreen *screen,
@@ -2172,8 +2172,8 @@ handle_keys_changed (gpointer data)
   return FALSE;
 }
 
-static void
-gtk_window_notify_keys_changed (GtkWindow *window)
+void
+_gtk_window_notify_keys_changed (GtkWindow *window)
 {
   GtkWindowPrivate *priv = window->priv;
 
@@ -2199,9 +2199,9 @@ gtk_window_add_accel_group (GtkWindow     *window,
 
   _gtk_accel_group_attach (accel_group, G_OBJECT (window));
   g_signal_connect_object (accel_group, "accel-changed",
-			   G_CALLBACK (gtk_window_notify_keys_changed),
+			   G_CALLBACK (_gtk_window_notify_keys_changed),
 			   window, G_CONNECT_SWAPPED);
-  gtk_window_notify_keys_changed (window);
+  _gtk_window_notify_keys_changed (window);
 }
 
 /**
@@ -2219,10 +2219,10 @@ gtk_window_remove_accel_group (GtkWindow     *window,
   g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
 
   g_signal_handlers_disconnect_by_func (accel_group,
-					gtk_window_notify_keys_changed,
+					_gtk_window_notify_keys_changed,
 					window);
   _gtk_accel_group_detach (accel_group, G_OBJECT (window));
-  gtk_window_notify_keys_changed (window);
+  _gtk_window_notify_keys_changed (window);
 }
 
 static GtkMnemonicHash *
@@ -2255,7 +2255,7 @@ gtk_window_add_mnemonic (GtkWindow *window,
 
   _gtk_mnemonic_hash_add (gtk_window_get_mnemonic_hash (window, TRUE),
 			  keyval, target);
-  gtk_window_notify_keys_changed (window);
+  _gtk_window_notify_keys_changed (window);
 }
 
 /**
@@ -2276,7 +2276,7 @@ gtk_window_remove_mnemonic (GtkWindow *window,
   
   _gtk_mnemonic_hash_remove (gtk_window_get_mnemonic_hash (window, TRUE),
 			     keyval, target);
-  gtk_window_notify_keys_changed (window);
+  _gtk_window_notify_keys_changed (window);
 }
 
 /**
@@ -2330,7 +2330,7 @@ gtk_window_set_mnemonic_modifier (GtkWindow      *window,
   priv = window->priv;
 
   priv->mnemonic_modifier = modifier;
-  gtk_window_notify_keys_changed (window);
+  _gtk_window_notify_keys_changed (window);
 }
 
 /**
@@ -2959,6 +2959,8 @@ gtk_window_set_application (GtkWindow      *window,
         }
 
       _gtk_widget_update_parent_muxer (GTK_WIDGET (window));
+
+      _gtk_window_notify_keys_changed (window);
 
       g_object_notify (G_OBJECT (window), "application");
     }
@@ -11105,6 +11107,9 @@ _gtk_window_keys_foreach (GtkWindow                *window,
       
       groups = groups->next;
     }
+
+  if (window->priv->application)
+    gtk_application_foreach_accel_keys (window->priv->application, window, func, func_data);
 }
 
 static void
@@ -11256,8 +11261,19 @@ gtk_window_activate_key (GtkWindow   *window,
       else
         {
           if (enable_accels)
-            return gtk_accel_groups_activate (G_OBJECT (window), found_entry->keyval,
-                                              found_entry->modifiers);
+            {
+              if (gtk_accel_groups_activate (G_OBJECT (window), found_entry->keyval, found_entry->modifiers))
+                return TRUE;
+
+              if (window->priv->application)
+                {
+                  GtkActionMuxer *muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (window));
+
+                  return gtk_application_activate_accel (window->priv->application,
+                                                         G_ACTION_GROUP (muxer),
+                                                         found_entry->keyval, found_entry->modifiers);
+                }
+            }
         }
     }
 

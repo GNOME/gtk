@@ -135,12 +135,345 @@ enum {
   PROP_ACTIVE_WINDOW
 };
 
+/* Accel handling */
+typedef struct
+{
+  guint           key;
+  GdkModifierType modifier;
+} AccelKey;
+
+typedef struct
+{
+  GHashTable *action_to_accels;
+  GHashTable *accel_to_actions;
+} Accels;
+
+static AccelKey *
+accel_key_copy (const AccelKey *source)
+{
+  AccelKey *dest;
+
+  dest = g_slice_new (AccelKey);
+  dest->key = source->key;
+  dest->modifier = source->modifier;
+
+  return dest;
+}
+
+static void
+accel_key_free (gpointer data)
+{
+  AccelKey *key = data;
+
+  g_slice_free (AccelKey, key);
+}
+
+static guint
+accel_key_hash (gconstpointer data)
+{
+  const AccelKey *key = data;
+
+  return key->key + (key->modifier << 16);
+}
+
+static gboolean
+accel_key_equal (gconstpointer a,
+                 gconstpointer b)
+{
+  const AccelKey *ak = a;
+  const AccelKey *bk = b;
+
+  return ak->key == bk->key && ak->modifier == bk->modifier;
+}
+
+static void
+accels_foreach_key (Accels                   *accels,
+                    GtkWindow                *window,
+                    GtkWindowKeysForeachFunc  callback,
+                    gpointer                  user_data)
+{
+  GHashTableIter iter;
+  gpointer key;
+
+  g_hash_table_iter_init (&iter, accels->accel_to_actions);
+  while (g_hash_table_iter_next (&iter, &key, NULL))
+    {
+      AccelKey *accel_key = key;
+
+      (* callback) (window, accel_key->key, accel_key->modifier, FALSE, user_data);
+    }
+}
+
+static gboolean
+accels_activate (Accels          *accels,
+                 GActionGroup    *action_group,
+                 guint            key,
+                 GdkModifierType  modifier)
+{
+  AccelKey accel_key = { key, modifier };
+  const gchar **actions;
+  gint i;
+
+  actions = g_hash_table_lookup (accels->accel_to_actions, &accel_key);
+
+  if (actions == NULL)
+    return FALSE;
+
+  /* We may have more than one action on a given accel.  This could be
+   * the case if we have different types of windows with different
+   * actions in each.
+   *
+   * Find the first one that will successfully activate and use it.
+   */
+  for (i = 0; actions[i]; i++)
+    {
+      const GVariantType *parameter_type;
+      const gchar *action_name;
+      const gchar *sep;
+      gboolean enabled;
+      GVariant *target;
+
+      sep = strrchr (actions[i], '|');
+      action_name = sep + 1;
+
+      if (!g_action_group_query_action (action_group, action_name, &enabled, &parameter_type, NULL, NULL, NULL))
+        continue;
+
+      if (!enabled)
+        continue;
+
+      /* We found an action with the correct name and it's enabled.
+       * This is the action that we are going to try to invoke.
+       *
+       * There is still the possibility that the target value doesn't
+       * match the expected parameter type.  In that case, we will print
+       * a warning.
+       *
+       * Note: we want to hold a ref on the target while we're invoking
+       * the action to prevent trouble if someone uninstalls the accel
+       * from the handler.  That's not a problem since we're parsing it.
+       */
+      if (actions[i] != sep) /* if it has a target... */
+        {
+          GError *error = NULL;
+
+          if (parameter_type == NULL)
+            {
+              gchar *accel_str = gtk_accelerator_name (key, modifier);
+              g_warning ("Accelerator '%s' tries to invoke action '%s' with target, but action has no parameter",
+                         accel_str, action_name);
+              g_free (accel_str);
+              return TRUE;
+            }
+
+          target = g_variant_parse (NULL, actions[i], sep, NULL, &error);
+          g_assert_no_error (error);
+          g_assert (target);
+
+          if (!g_variant_is_of_type (target, parameter_type))
+            {
+              gchar *accel_str = gtk_accelerator_name (key, modifier);
+              gchar *typestr = g_variant_type_dup_string (parameter_type);
+              gchar *targetstr = g_variant_print (target, TRUE);
+              g_warning ("Accelerator '%s' tries to invoke action '%s' with target '%s',"
+                         " but action expects parameter with type '%s'", accel_str, action_name, targetstr, typestr);
+              g_variant_unref (target);
+              g_free (targetstr);
+              g_free (accel_str);
+              g_free (typestr);
+              return TRUE;
+            }
+        }
+      else
+        {
+          if (parameter_type != NULL)
+            {
+              gchar *accel_str = gtk_accelerator_name (key, modifier);
+              gchar *typestr = g_variant_type_dup_string (parameter_type);
+              g_warning ("Accelerator '%s' tries to invoke action '%s' without target,"
+                         " but action expects parameter with type '%s'", accel_str, action_name, typestr);
+              g_free (accel_str);
+              g_free (typestr);
+              return TRUE;
+            }
+
+          target = NULL;
+        }
+
+      g_action_group_activate_action (action_group, action_name, target);
+
+      if (target)
+        g_variant_unref (target);
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+accels_add_entry (Accels         *accels,
+                  AccelKey       *key,
+                  const gchar    *action_and_target)
+{
+  const gchar **old;
+  const gchar **new;
+  gint n;
+
+  old = g_hash_table_lookup (accels->accel_to_actions, key);
+  if (old != NULL)
+    for (n = 0; old[n]; n++)  /* find the length */
+      ;
+  else
+    n = 0;
+
+  new = g_new (const gchar *, n + 1 + 1);
+  memcpy (new, old, n * sizeof (const gchar *));
+  new[n] = action_and_target;
+  new[n + 1] = NULL;
+
+  g_hash_table_insert (accels->accel_to_actions, accel_key_copy (key), new);
+}
+
+static void
+accels_remove_entry (Accels         *accels,
+                     AccelKey       *key,
+                     const gchar    *action_and_target)
+{
+  const gchar **old;
+  const gchar **new;
+  gint n, i;
+
+  /* if we can't find the entry then something has gone very wrong... */
+  old = g_hash_table_lookup (accels->accel_to_actions, key);
+  g_assert (old != NULL);
+
+  for (n = 0; old[n]; n++)  /* find the length */
+    ;
+  g_assert_cmpint (n, >, 0);
+
+  if (n == 1)
+    {
+      /* The simple case of removing the last action for an accel. */
+      g_assert_cmpstr (old[0], ==, action_and_target);
+      g_hash_table_remove (accels->accel_to_actions, key);
+      return;
+    }
+
+  for (i = 0; i < n; i++)
+    if (g_str_equal (old[i], action_and_target))
+      break;
+
+  /* We must have found it... */
+  g_assert_cmpint (i, <, n);
+
+  new = g_new (const gchar *, n - 1 + 1);
+  memcpy (new, old, i * sizeof (const gchar *));
+  memcpy (new + i, old + i + 1, (n - (i + 1)) * sizeof (const gchar *));
+  new[n - 1] = NULL;
+
+  g_hash_table_insert (accels->accel_to_actions, accel_key_copy (key), new);
+}
+
+static void
+accels_set_accels_for_action (Accels              *accels,
+                              const gchar         *action_and_target,
+                              const gchar * const *accelerators)
+{
+  AccelKey *keys, *old_keys;
+  gint i, n;
+
+  n = accelerators ? g_strv_length ((gchar **) accelerators) : 0;
+
+  if (n > 0)
+    {
+      keys = g_new0 (AccelKey, n + 1);
+
+      for (i = 0; i < n; i++)
+        {
+          gtk_accelerator_parse (accelerators[i], &keys[i].key, &keys[i].modifier);
+
+          if (keys[i].key == 0)
+            {
+              g_warning ("Unable to parse accelerator '%s': ignored request to install %d accelerators",
+                         accelerators[i], n);
+              g_free (keys);
+              return;
+            }
+        }
+    }
+  else
+    keys = NULL;
+
+  old_keys = g_hash_table_lookup (accels->action_to_accels, action_and_target);
+  if (old_keys)
+    {
+      /* We need to remove accel entries from existing keys */
+      for (i = 0; old_keys[i].key; i++)
+        accels_remove_entry (accels, &old_keys[i], action_and_target);
+    }
+
+  if (keys)
+    {
+      gchar *my_key;
+      gint i;
+
+      my_key = g_strdup (action_and_target);
+
+      g_hash_table_replace (accels->action_to_accels, my_key, keys);
+
+      for (i = 0; i < n; i++)
+        accels_add_entry (accels, &keys[i], my_key);
+    }
+  else
+    g_hash_table_remove (accels->action_to_accels, action_and_target);
+}
+
+gchar **
+accels_get_accels_for_action (Accels      *accels,
+                              const gchar *action_and_target)
+{
+  AccelKey *keys;
+  gchar **result;
+  gint n, i = 0;
+
+  keys = g_hash_table_lookup (accels->action_to_accels, action_and_target);
+  if (!keys)
+    return g_new0 (gchar *, 0 + 1);
+
+  for (n = 0; keys[n].key; n++)
+    ;
+
+  result = g_new0 (gchar *, n + 1);
+
+  for (i = 0; i < n; i++)
+    result[i] = gtk_accelerator_name (keys[i].key, keys[i].modifier);
+
+  return result;
+}
+
+static void
+accels_init (Accels *accels)
+{
+  accels->accel_to_actions = g_hash_table_new_full (accel_key_hash, accel_key_equal,
+                                                    accel_key_free, g_free);
+  accels->action_to_accels = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+}
+
+static void
+accels_finalize (Accels *accels)
+{
+  g_hash_table_unref (accels->accel_to_actions);
+  g_hash_table_unref (accels->action_to_accels);
+}
+
 struct _GtkApplicationPrivate
 {
   GList *windows;
 
   GMenuModel      *app_menu;
   GMenuModel      *menubar;
+  Accels           accels;
 
   gboolean register_session;
   GtkActionMuxer  *muxer;
@@ -404,7 +737,6 @@ gtk_application_startup (GApplication *g_application)
   G_APPLICATION_CLASS (gtk_application_parent_class)
     ->startup (g_application);
 
-  application->priv->muxer = gtk_action_muxer_new ();
   gtk_action_muxer_insert (application->priv->muxer, "app", G_ACTION_GROUP (application));
 
   gtk_init (0, 0);
@@ -495,6 +827,10 @@ static void
 gtk_application_init (GtkApplication *application)
 {
   application->priv = gtk_application_get_instance_private (application);
+
+  application->priv->muxer = gtk_action_muxer_new ();
+
+  accels_init (&application->priv->accels);
 
 #ifdef GDK_WINDOWING_X11
   application->priv->next_id = 1;
@@ -665,6 +1001,8 @@ gtk_application_finalize (GObject *object)
 
   g_clear_object (&application->priv->app_menu);
   g_clear_object (&application->priv->menubar);
+
+  accels_finalize (&application->priv->accels);
 
   G_OBJECT_CLASS (gtk_application_parent_class)
     ->finalize (object);
@@ -941,6 +1279,15 @@ gtk_application_get_active_window (GtkApplication *application)
   return application->priv->windows ? application->priv->windows->data : NULL;
 }
 
+static void
+gtk_application_update_accels (GtkApplication *application)
+{
+  GList *l;
+
+  for (l = application->priv->windows; l != NULL; l = l->next)
+    _gtk_window_notify_keys_changed (l->data);
+}
+
 /**
  * gtk_application_add_accelerator:
  * @application: a #GtkApplication
@@ -975,31 +1322,18 @@ gtk_application_add_accelerator (GtkApplication *application,
                                  const gchar    *action_name,
                                  GVariant       *parameter)
 {
-  gchar *accel_path;
-  guint accel_key;
-  GdkModifierType accel_mods;
+  const gchar *accelerators[2] = { accelerator, NULL };
+  gchar *action_and_target;
 
   g_return_if_fail (GTK_IS_APPLICATION (application));
+  g_return_if_fail (action_name != NULL);
+  g_return_if_fail (accelerator != NULL);
 
-  /* Call this here, since gtk_init() is only getting called in startup() */
-  _gtk_accel_map_init ();
-
-  gtk_accelerator_parse (accelerator, &accel_key, &accel_mods);
-
-  if (accel_key == 0)
-    {
-      g_warning ("Failed to parse accelerator: '%s'\n", accelerator);
-      return;
-    }
-
-  accel_path = _gtk_accel_path_for_action (action_name, parameter);
-
-  if (gtk_accel_map_lookup_entry (accel_path, NULL))
-    gtk_accel_map_change_entry (accel_path, accel_key, accel_mods, TRUE);
-  else
-    gtk_accel_map_add_entry (accel_path, accel_key, accel_mods);
-
-  g_free (accel_path);
+  action_and_target = gtk_print_action_and_target (NULL, action_name, parameter);
+  accels_set_accels_for_action (&application->priv->accels, action_and_target, accelerators);
+  gtk_action_muxer_set_primary_accel (application->priv->muxer, action_and_target, accelerator);
+  gtk_application_update_accels (application);
+  g_free (action_and_target);
 }
 
 /**
@@ -1019,21 +1353,16 @@ gtk_application_remove_accelerator (GtkApplication *application,
                                     const gchar    *action_name,
                                     GVariant       *parameter)
 {
-  gchar *accel_path;
+  gchar *action_and_target;
 
   g_return_if_fail (GTK_IS_APPLICATION (application));
+  g_return_if_fail (action_name != NULL);
 
-  accel_path = _gtk_accel_path_for_action (action_name, parameter);
-
-  if (!gtk_accel_map_lookup_entry (accel_path, NULL))
-    {
-      g_warning ("No accelerator found for '%s'\n", accel_path);
-      g_free (accel_path);
-      return;
-    }
-
-  gtk_accel_map_change_entry (accel_path, 0, 0, FALSE);
-  g_free (accel_path);
+  action_and_target = gtk_print_action_and_target (NULL, action_name, parameter);
+  accels_set_accels_for_action (&application->priv->accels, action_and_target, NULL);
+  gtk_action_muxer_set_primary_accel (application->priv->muxer, action_and_target, NULL);
+  gtk_application_update_accels (application);
+  g_free (action_and_target);
 }
 
 /**
@@ -1706,4 +2035,107 @@ gtk_application_get_parent_muxer_for_window (GtkWindow *window)
     return NULL;
 
   return application->priv->muxer;
+}
+
+gboolean
+gtk_application_activate_accel (GtkApplication  *application,
+                                GActionGroup    *action_group,
+                                guint            key,
+                                GdkModifierType  modifier)
+{
+  return accels_activate (&application->priv->accels, action_group, key, modifier);
+}
+
+void
+gtk_application_foreach_accel_keys (GtkApplication           *application,
+                                    GtkWindow                *window,
+                                    GtkWindowKeysForeachFunc  callback,
+                                    gpointer                  user_data)
+{
+  accels_foreach_key (&application->priv->accels, window, callback, user_data);
+}
+
+gchar **
+gtk_application_list_action_descriptions (GtkApplication *application)
+{
+  GHashTableIter iter;
+  gchar **result;
+  gint n, i = 0;
+  gpointer key;
+
+  n = g_hash_table_size (application->priv->accels.action_to_accels);
+  result = g_new (gchar *, n + 1);
+
+  g_hash_table_iter_init (&iter, application->priv->accels.action_to_accels);
+  while (g_hash_table_iter_next (&iter, &key, NULL))
+    {
+      const gchar *action_and_target = key;
+      const gchar *sep;
+      GVariant *target;
+
+      sep = strrchr (action_and_target, '|');
+      target = g_variant_parse (NULL, action_and_target, sep, NULL, NULL);
+      result[i++] = g_action_print_detailed_name (sep + 1, target);
+      if (target)
+        g_variant_unref (target);
+    }
+  g_assert_cmpint (i, ==, n);
+  result[i] = NULL;
+
+  return result;
+}
+
+gchar *
+normalise_detailed_name (const gchar *detailed_action_name)
+{
+  GError *error = NULL;
+  gchar *action_and_target;
+  gchar *action_name;
+  GVariant *target;
+
+  g_action_parse_detailed_name (detailed_action_name, &action_name, &target, &error);
+  g_assert_no_error (error);
+
+  action_and_target = gtk_print_action_and_target (NULL, action_name, target);
+
+  if (target)
+    g_variant_unref (target);
+
+  g_free (action_name);
+
+  return action_and_target;
+}
+
+void
+gtk_application_set_accels_for_action (GtkApplication      *application,
+                                       const gchar         *detailed_action_name,
+                                       const gchar * const *accels)
+{
+  gchar *action_and_target;
+
+  g_return_if_fail (GTK_IS_APPLICATION (application));
+  g_return_if_fail (detailed_action_name != NULL);
+
+  action_and_target = normalise_detailed_name (detailed_action_name);
+  accels_set_accels_for_action (&application->priv->accels, action_and_target, accels);
+  gtk_action_muxer_set_primary_accel (application->priv->muxer, action_and_target, accels[0]);
+  gtk_application_update_accels (application);
+  g_free (action_and_target);
+}
+
+gchar **
+gtk_application_get_accels_for_action (GtkApplication *application,
+                                       const gchar    *detailed_action_name)
+{
+  gchar *action_and_target;
+  gchar **accels;
+
+  g_return_if_fail (GTK_IS_APPLICATION (application));
+  g_return_if_fail (detailed_action_name != NULL);
+
+  action_and_target = normalise_detailed_name (detailed_action_name);
+  accels = accels_get_accels_for_action (&application->priv->accels, action_and_target);
+  g_free (action_and_target);
+
+  return accels;
 }

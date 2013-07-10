@@ -82,6 +82,8 @@ gboolean        _gtk_window_query_nonaccels     (GtkWindow      *window,
 
 void            _gtk_window_schedule_mnemonics_visible (GtkWindow *window);
 
+void            _gtk_window_notify_keys_changed (GtkWindow *window);
+
 G_END_DECLS
 
 #endif /* __GTK_WINDOW_PRIVATE_H__ */
