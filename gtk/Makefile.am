@@ -1090,6 +1090,8 @@ MAINTAINERCLEANFILES = \
 	$(GENERATED_ICONS) 			\
 	stock-icons/icon-theme.cache
 
+DISTCLEANFILES =
+
 EXTRA_HEADERS =
 EXTRA_DIST += $(gtk_all_private_h_sources) $(gtk_extra_sources)
 EXTRA_DIST += $(gtk_built_sources)
@@ -1432,6 +1434,7 @@ extract-strings$(BUILD_EXEEXT): $(extract_strings_sources)
 	@rm -f extract-strings$(BUILD_EXEEXT)
 	$(AM_V_CCLD)$(CC_FOR_BUILD) $(extract_strings_cppflags) $(CPPFLAGS_FOR_BUILD) $(extract_strings_cflags) $(CFLAGS_FOR_BUILD) $^ $(LDFLAGS_FOR_BUILD) $(extract_strings_ldadd) $(LIBS_FOR_BUILD) -o $@
 EXTRA_DIST += $(extract_strings_sources)
+DISTCLEANFILES += extract-strings
 
 .PHONY: files test test-debug
 
