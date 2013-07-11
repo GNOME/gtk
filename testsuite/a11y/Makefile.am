@@ -106,6 +106,8 @@ test_files = $(test_in_files:.test.in=.test)
 $(test_files): %.test: %.test.in
 	$(AM_V_GEN) sed $(substitutions) $< > $@.tmp && mv $@.tmp $@
 
+DISTCLEANFILES = $(test_files)
+
 testmetadir = $(datadir)/installed-tests/$(PACKAGE)
 testmeta_DATA = $(test_files)
 endif

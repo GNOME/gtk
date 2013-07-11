@@ -41,6 +41,8 @@ insttest_PROGRAMS = $(TEST_PROGS)
 
 test_files = $(TEST_PROGRS:=.test)
 
+DISTCLEANFILES = $(test_files)
+
 testmetadir = $(datadir)/installed-tests/$(PACKAGE)
 testmeta_DATA = $(test_files)
 endif

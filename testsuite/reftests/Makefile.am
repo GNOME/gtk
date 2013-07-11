@@ -303,8 +303,10 @@ substitutions = \
 reftests.test: reftests.test.in Makefile
 	$(AM_V_GEN) sed $(substitutions) $< > $@.tmp && mv $@.tmp $@
 
+DISTCLEANFILES = reftests.test
+
 testmetadir = $(datadir)/installed-tests/$(PACKAGE)
 testmeta_DATA = reftests.test
 endif
- 
+
 -include $(top_srcdir)/git.mk
