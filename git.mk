@@ -75,18 +75,21 @@
 # toplevel MAINTAINERCLEANFILES:
 GITIGNORE_MAINTAINERCLEANFILES_TOPLEVEL = \
 	$(srcdir)/aclocal.m4 \
-	$(srcdir)/ar-lib \
 	$(srcdir)/autoscan.log \
-	$(srcdir)/compile \
-	$(srcdir)/config.guess \
-	$(srcdir)/config.h.in \
-	$(srcdir)/config.sub \
 	$(srcdir)/configure.scan \
-	$(srcdir)/depcomp \
-	$(srcdir)/install-sh \
-	$(srcdir)/ltmain.sh \
-	$(srcdir)/missing \
-	$(srcdir)/mkinstalldirs
+	`AUX_DIR=$(srcdir)/$$($(AUTOCONF) --trace 'AC_CONFIG_AUX_DIR:$$1'); for x in \
+		ar-lib \
+		compile \
+		config.guess \
+		config.sub \
+		depcomp \
+		install-sh \
+		ltmain.sh \
+		missing \
+		mkinstalldirs \
+	 ; do echo "$$AUX_DIR/$$x"; done` \
+	`$(AUTOCONF) --trace 'AC_CONFIG_HEADERS:$$1' $(srcdir)/configure.ac | \
+	head -n 1 | while read f; do echo "$(srcdir)/$$f.in"; done`
 #
 # All modules should also be fine including the following variable, which
 # removes automake-generated Makefile.in files:
