@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-05-17 12:52+0000\n"
-"PO-Revision-Date: 2013-05-20 12:43+0500\n"
+"PO-Revision-Date: 2013-07-11 20:09+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: \n"
 "Language: Tajik\n"
@@ -1789,7 +1789,7 @@ msgstr "Лутфан, номи файлро ворид кунед"
 #. Create Folder
 #: ../gtk/gtkfilechooserdefault.c:4958
 msgid "Create Fo_lder"
-msgstr "Эҷод кардани ҷ_узадон"
+msgstr "Эҷод _кардани ҷузадон"
 
 #: ../gtk/gtkfilechooserdefault.c:5006
 msgid "Search:"
