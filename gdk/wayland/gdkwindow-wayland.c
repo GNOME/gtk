@@ -37,6 +37,7 @@
 #include <sys/mman.h>
 #include <errno.h>
 
+#define WL_SURFACE_HAS_BUFFER_SCALE 3
 
 #define WINDOW_IS_TOPLEVEL_OR_FOREIGN(window) \
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
@@ -433,6 +434,13 @@ window_update_scale (GdkWindow *window)
   guint32 scale;
   GSList *l;
 
+  if (wayland_display->compositor_version < WL_SURFACE_HAS_BUFFER_SCALE)
+    {
+      /* We can't set the scale on this surface */
+      impl->scale = 1;
+      return;
+    }
+
   scale = 1;
   for (l = impl->outputs; l != NULL; l = l->next)
     {
@@ -538,6 +546,7 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
 static void
 gdk_wayland_window_attach_image (GdkWindow *window)
 {
+  GdkWaylandDisplay *display;
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkWaylandCairoSurfaceData *data;
   int32_t server_width, server_height, dx, dy;
@@ -584,7 +593,11 @@ gdk_wayland_window_attach_image (GdkWindow *window)
 
   /* Attach this new buffer to the surface */
   wl_surface_attach (impl->surface, data->buffer, dx, dy);
-  wl_surface_set_buffer_scale (impl->surface, data->scale);
+
+  /* Only set the buffer scale if supported by the compositor */
+  display = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+  if (display->compositor_version >= WL_SURFACE_HAS_BUFFER_SCALE)
+    wl_surface_set_buffer_scale (impl->surface, data->scale);
 
   impl->pending_commit = TRUE;
 }
