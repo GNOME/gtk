@@ -3265,13 +3265,18 @@ bookmarks_row_activated_cb (GtkWidget *widget,
 			    GtkPlacesSidebar *sidebar)
 {
 	GtkTreeIter iter;
+	GtkTreePath *clicked_path = NULL;
 	GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW (widget));
 
 	if (!gtk_tree_model_get_iter (model, &iter, path)) {
 		return;
 	}
 
-	open_selected_bookmark (sidebar, model, &iter, 0);
+	if (!clicked_eject_button (sidebar, &clicked_path)) {
+		open_selected_bookmark (sidebar, model, &iter, 0);
+	} else {
+		gtk_tree_path_free (clicked_path);
+	}
 }
 
 static gboolean
