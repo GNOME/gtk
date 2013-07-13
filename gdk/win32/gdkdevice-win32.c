@@ -41,8 +41,8 @@ static void gdk_device_win32_set_window_cursor (GdkDevice *device,
                                                 GdkCursor *cursor);
 static void gdk_device_win32_warp (GdkDevice *device,
                                    GdkScreen *screen,
-                                   gint       x,
-                                   gint       y);
+                                   gdouble    x,
+                                   gdouble    y);
 static void gdk_device_win32_query_state (GdkDevice        *device,
                                           GdkWindow        *window,
                                           GdkWindow       **root_window,
