@@ -83,10 +83,12 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
 }
 
 static void
-search_entry_clear_cb (GtkEntry *entry,
-                       gpointer  user_data)
+search_entry_clear_cb (GtkEntry             *entry,
+                       GtkEntryIconPosition  icon_pos,
+                       gpointer              user_data)
 {
-  gtk_entry_set_text (entry, "");
+  if (icon_pos == GTK_ENTRY_ICON_SECONDARY)
+    gtk_entry_set_text (entry, "");
 }
 
 static gboolean
