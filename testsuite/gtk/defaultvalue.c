@@ -75,9 +75,11 @@ test_type (gconstpointer data)
     return;
 
   /* These can't be freely constructed/destroyed */
-  if (g_type_is_a (type, GTK_TYPE_PRINT_JOB) ||
-      g_type_is_a (type, GTK_TYPE_APPLICATION) ||
+  if (g_type_is_a (type, GTK_TYPE_APPLICATION) ||
       g_type_is_a (type, GDK_TYPE_PIXBUF_LOADER) ||
+#ifdef G_OS_UNIX
+      g_type_is_a (type, GTK_TYPE_PRINT_JOB) ||
+#endif
       g_type_is_a (type, gdk_pixbuf_simple_anim_iter_get_type ()) ||
       g_str_equal (g_type_name (type), "GdkX11DeviceManagerXI2") ||
       g_str_equal (g_type_name (type), "GdkX11Display") ||
@@ -227,10 +229,12 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 	  strcmp (pspec->name, "job-name") == 0)
 	continue;
 
+#ifdef G_OS_UNIX
       if (g_type_is_a (type, GTK_TYPE_PRINT_UNIX_DIALOG) &&
 	  (strcmp (pspec->name, "page-setup") == 0 ||
 	   strcmp (pspec->name, "print-settings") == 0))
 	continue;
+#endif
 
       if (g_type_is_a (type, GTK_TYPE_PROGRESS_BAR) &&
           strcmp (pspec->name, "adjustment") == 0)
