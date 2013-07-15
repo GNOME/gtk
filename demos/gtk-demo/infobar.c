@@ -66,6 +66,7 @@ do_infobar (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (gtk_info_bar_get_content_area (GTK_INFO_BAR (bar))), label, FALSE, FALSE, 0);
 
       bar = gtk_info_bar_new_with_buttons (_("_OK"), GTK_RESPONSE_OK, NULL);
+      gtk_info_bar_set_show_close_button (GTK_INFO_BAR (bar), TRUE);
       g_signal_connect (bar, "response", G_CALLBACK (on_bar_response), window);
       gtk_box_pack_start (GTK_BOX (vbox), bar, FALSE, FALSE, 0);
       gtk_info_bar_set_message_type (GTK_INFO_BAR (bar), GTK_MESSAGE_QUESTION);
