@@ -4875,7 +4875,10 @@ gtk_widget_remove_tick_callback (GtkWidget *widget,
     {
       GtkTickCallbackInfo *info = l->data;
       if (info->id == id)
-        destroy_tick_callback_info (widget, info, l);
+        {
+          destroy_tick_callback_info (widget, info, l);
+          return;
+        }
     }
 }
 
