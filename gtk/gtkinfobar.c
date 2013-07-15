@@ -68,8 +68,8 @@
  *
  * Similar to #GtkMessageDialog, the contents of a #GtkInfoBar can by
  * classified as error message, warning, informational message, etc,
- * by using gtk_info_bar_set_message_type(). GTK+ uses the message type
- * to determine the background color of the message area.
+ * by using gtk_info_bar_set_message_type(). GTK+ may use the message type
+ * to determine how the message is displayed.
  *
  * <example>
  * <title>Simple GtkInfoBar usage.</title>
@@ -392,17 +392,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
    *
    * The type of the message.
    *
-   * The type is used to determine the colors to use in the info bar.
-   * The following symbolic color names can by used to customize
-   * these colors:
-   * "info_fg_color", "info_bg_color",
-   * "warning_fg_color", "warning_bg_color",
-   * "question_fg_color", "question_bg_color",
-   * "error_fg_color", "error_bg_color".
-   * "other_fg_color", "other_bg_color".
-   *
-   * If the type is #GTK_MESSAGE_OTHER, no info bar is painted but the
-   * colors are still set.
+   * The type may be used to determine the appearance of the info bar.
    *
    * Since: 2.18
    */
