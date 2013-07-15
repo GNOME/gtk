@@ -124,6 +124,12 @@ void           gtk_info_bar_set_message_type       (GtkInfoBar     *info_bar,
 GDK_AVAILABLE_IN_ALL
 GtkMessageType gtk_info_bar_get_message_type       (GtkInfoBar     *info_bar);
 
+GDK_AVAILABLE_IN_3_10
+void           gtk_info_bar_set_show_close_button  (GtkInfoBar     *info_bar,
+                                                    gboolean        setting);
+GDK_AVAILABLE_IN_3_10
+gboolean       gtk_info_bar_get_show_close_button  (GtkInfoBar     *info_bar);
+
 G_END_DECLS
 
 #endif  /* __GTK_INFO_BAR_H__  */
