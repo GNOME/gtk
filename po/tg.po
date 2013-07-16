@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-07-11 21:09+0000\n"
-"PO-Revision-Date: 2013-07-11 20:09+0500\n"
+"PO-Revision-Date: 2013-07-16 13:43+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: \n"
 "Language: Tajik\n"
@@ -1945,7 +1945,7 @@ msgstr "Эҷодкунии AppInfo аз id дар системаҳои ғайр�
 #: ../gtk/gtk-launch.c:129
 #, c-format
 msgid "%s: no such application %s"
-msgstr "%s: чунин барнома вуҷуд надорад %s"
+msgstr "%s: чунин барнома (%s) вуҷуд надорад"
 
 #. Translators: the first %s is the program name, the second one
 #. is the error message.
