@@ -1,184 +1,101 @@
-#include <gdk/gdk.h>
+
 #include <gtk/gtk.h>
-#include <gdkx.h>
-#include <stdio.h>
-#include <errno.h>
-#include <sys/wait.h>
-#include <unistd.h>
-#include <X11/extensions/shape.h>
-
-#include <gdk-pixbuf/gdk-pixbuf.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/wait.h>
-#include <signal.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <locale.h>
 #include "widgets.h"
-#include "shadow.h"
 
-#define MAXIMUM_WM_REPARENTING_DEPTH 4
-#ifndef _
-#define _(x) (x)
-#endif
+typedef enum {
+  SNAPSHOT_WINDOW,
+  SNAPSHOT_DRAW
+} SnapshotMode;
 
-static Window
-find_toplevel_window (Window xid)
+static gboolean
+quit_when_idle (gpointer loop)
 {
-  Window root, parent, *children;
-  guint nchildren;
+  g_main_loop_quit (loop);
 
-  do
-    {
-      if (XQueryTree (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()), xid, &root,
-		      &parent, &children, &nchildren) == 0)
-	{
-	  g_warning ("Couldn't find window manager window");
-	  return 0;
-	}
-
-      if (root == parent)
-	return xid;
-
-      xid = parent;
-    }
-  while (TRUE);
+  return G_SOURCE_REMOVE;
 }
 
-static GdkPixbuf *
-add_border_to_shot (GdkPixbuf *pixbuf)
+static void
+check_for_draw (GdkEvent *event, gpointer loop)
 {
-  GdkPixbuf *retval;
+  if (event->type == GDK_EXPOSE)
+    {
+      g_idle_add (quit_when_idle, loop);
+      gdk_event_handler_set ((GdkEventFunc) gtk_main_do_event, NULL, NULL);
+    }
 
-  retval = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8,
-			   gdk_pixbuf_get_width (pixbuf) + 2,
-			   gdk_pixbuf_get_height (pixbuf) + 2);
-
-  /* Fill with solid black */
-  gdk_pixbuf_fill (retval, 0xFF);
-  gdk_pixbuf_copy_area (pixbuf,
-			0, 0,
-			gdk_pixbuf_get_width (pixbuf),
-			gdk_pixbuf_get_height (pixbuf),
-			retval, 1, 1);
-
-  return retval;
+  gtk_main_do_event (event);
 }
 
-static GdkPixbuf *
-remove_shaped_area (GdkPixbuf *pixbuf,
-		    Window     window)
+static cairo_surface_t *
+snapshot_widget (GtkWidget *widget, SnapshotMode mode)
 {
-  GdkPixbuf *retval;
-  XRectangle *rectangles;
-  int rectangle_count, rectangle_order;
-  int i;
+  cairo_surface_t *surface;
+  cairo_pattern_t *bg;
+  GMainLoop *loop;
+  cairo_t *cr;
 
-  retval = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8,
-			   gdk_pixbuf_get_width (pixbuf),
-			   gdk_pixbuf_get_height (pixbuf));
-  
-  gdk_pixbuf_fill (retval, 0);
-  rectangles = XShapeGetRectangles (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()), window,
-				    ShapeBounding, &rectangle_count, &rectangle_order);
+  g_assert (gtk_widget_get_realized (widget));
 
-  for (i = 0; i < rectangle_count; i++)
+  surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
+                                               CAIRO_CONTENT_COLOR,
+                                               gtk_widget_get_allocated_width (widget),
+                                               gtk_widget_get_allocated_height (widget));
+
+  loop = g_main_loop_new (NULL, FALSE);
+  /* We wait until the widget is drawn for the first time.
+   * We can not wait for a GtkWidget::draw event, because that might not
+   * happen if the window is fully obscured by windowed child widgets.
+   * Alternatively, we could wait for an expose event on widget's window.
+   * Both of these are rather hairy, not sure what's best. */
+  gdk_event_handler_set (check_for_draw, loop, NULL);
+  g_main_loop_run (loop);
+
+  cr = cairo_create (surface);
+
+  switch (mode)
     {
-      int y, x;
-
-      for (y = rectangles[i].y; y < rectangles[i].y + rectangles[i].height; y++)
-	{
-	  guchar *src_pixels, *dest_pixels;
-
-	  src_pixels = gdk_pixbuf_get_pixels (pixbuf) +
-	    y * gdk_pixbuf_get_rowstride (pixbuf) +
-	    rectangles[i].x * (gdk_pixbuf_get_has_alpha (pixbuf) ? 4 : 3);
-	  dest_pixels = gdk_pixbuf_get_pixels (retval) +
-	    y * gdk_pixbuf_get_rowstride (retval) +
-	    rectangles[i].x * 4;
-
-	  for (x = rectangles[i].x; x < rectangles[i].x + rectangles[i].width; x++)
-	    {
-	      *dest_pixels++ = *src_pixels ++;
-	      *dest_pixels++ = *src_pixels ++;
-	      *dest_pixels++ = *src_pixels ++;
-	      *dest_pixels++ = 255;
-
-	      if (gdk_pixbuf_get_has_alpha (pixbuf))
-		src_pixels++;
-	    }
-	}
+    case SNAPSHOT_WINDOW:
+      {
+        GdkWindow *window = gtk_widget_get_window (widget);
+        if (gdk_window_get_window_type (window) == GDK_WINDOW_TOPLEVEL ||
+            gdk_window_get_window_type (window) == GDK_WINDOW_FOREIGN)
+          {
+            /* give the WM/server some time to sync. They need it.
+             * Also, do use popups instead of toplevls in your tests
+             * whenever you can. */
+            gdk_display_sync (gdk_window_get_display (window));
+            g_timeout_add (500, quit_when_idle, loop);
+            g_main_loop_run (loop);
+          }
+        gdk_cairo_set_source_window (cr, window, 0, 0);
+        cairo_paint (cr);
+      }
+      break;
+    case SNAPSHOT_DRAW:
+      bg = gdk_window_get_background_pattern (gtk_widget_get_window (widget));
+      if (bg)
+        {
+          cairo_set_source (cr, bg);
+          cairo_paint (cr);
+        }
+      gtk_widget_draw (widget, cr);
+      break;
+    default:
+      g_assert_not_reached();
+      break;
     }
 
-  return retval;
-}
+  cairo_destroy (cr);
+  g_main_loop_unref (loop);
+  gtk_widget_destroy (widget);
 
-static GdkPixbuf *
-take_window_shot (Window   child,
-		  gboolean include_decoration)
-{
-  GdkWindow *window;
-  Window xid;
-  gint x_orig, y_orig;
-  gint x = 0, y = 0;
-  gint width, height;
-
-  GdkPixbuf *tmp, *tmp2;
-  GdkPixbuf *retval;
-
-  if (include_decoration)
-    xid = find_toplevel_window (child);
-  else
-    xid = child;
-
-  window = gdk_x11_window_foreign_new_for_display (gdk_display_get_default (), xid);
-
-  width = gdk_window_get_width (window);
-  height = gdk_window_get_height (window);
-  gdk_window_get_origin (window, &x_orig, &y_orig);
-
-  if (x_orig < 0)
-    {
-      x = - x_orig;
-      width = width + x_orig;
-      x_orig = 0;
-    }
-
-  if (y_orig < 0)
-    {
-      y = - y_orig;
-      height = height + y_orig;
-      y_orig = 0;
-    }
-
-  if (x_orig + width > gdk_screen_width ())
-    width = gdk_screen_width () - x_orig;
-
-  if (y_orig + height > gdk_screen_height ())
-    height = gdk_screen_height () - y_orig;
-
-  tmp = gdk_pixbuf_get_from_window (window,
-				    x, y, width, height);
-
-  if (include_decoration)
-    tmp2 = remove_shaped_area (tmp, xid);
-  else
-    tmp2 = add_border_to_shot (tmp);
-
-  retval = create_shadowed_pixbuf (tmp2);
-  g_object_unref (tmp);
-  g_object_unref (tmp2);
-
-  return retval;
+  return surface;
 }
 
 int main (int argc, char **argv)
 {
   GList *toplevels;
-  GdkPixbuf *screenshot = NULL;
   GList *node;
 
   /* If there's no DISPLAY, we silently error out.  We don't want to break
@@ -190,42 +107,19 @@ int main (int argc, char **argv)
 
   for (node = toplevels; node; node = g_list_next (node))
     {
-      GtkAllocation allocation;
-      GdkWindow *window;
       WidgetInfo *info;
-      XID id;
       char *filename;
+      cairo_surface_t *surface;
 
       info = node->data;
 
       gtk_widget_show (info->window);
 
-      window = gtk_widget_get_window (info->window);
-      gtk_widget_get_allocation (info->window, &allocation);
-
-      gtk_widget_show_now (info->window);
-      gtk_widget_queue_draw_area (info->window,
-                                  allocation.x, allocation.y,
-                                  allocation.width, allocation.height);
-      gdk_window_process_updates (window, TRUE);
-
-      while (gtk_events_pending ())
-	{
-	  gtk_main_iteration ();
-	}
-      sleep (1);
-
-      while (gtk_events_pending ())
-	{
-	  gtk_main_iteration ();
-	}
-
-      id = gdk_x11_window_get_xid (window);
-      screenshot = take_window_shot (id, info->include_decorations);
+      surface = snapshot_widget (info->window,
+                                 info->include_decorations ? SNAPSHOT_WINDOW : SNAPSHOT_DRAW);
       filename = g_strdup_printf ("./%s.png", info->name);
-      gdk_pixbuf_save (screenshot, filename, "png", NULL, NULL);
-      g_free(filename);
-      gtk_widget_hide (info->window);
+      g_assert (cairo_surface_write_to_png (surface, filename) == CAIRO_STATUS_SUCCESS);
+      g_free (filename);
     }
 
   return 0;

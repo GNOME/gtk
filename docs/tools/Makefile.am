@@ -26,8 +26,6 @@ endif
 doc_shooter_DEPENDENCIES = $(DEPS)
 doc_shooter_LDADD = $(LDADDS)
 doc_shooter_SOURCES=	\
-	shadow.c	\
-	shadow.h	\
 	shooter.c	\
 	widgets.c	\
 	widgets.h
