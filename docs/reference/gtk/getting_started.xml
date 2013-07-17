@@ -16,8 +16,8 @@
     <title>Basics</title>
 
     <para>To begin our introduction to GTK, we'll start with the simplest
-    program possible. This program will create an empty 200x200 pixel
-    window:</para>
+    program possible. This program will create an empty 200 × 200 pixel
+    window.</para>
 
     <para>
       <inlinegraphic fileref="window-default.png" format="PNG"></inlinegraphic>
