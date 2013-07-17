@@ -3652,6 +3652,8 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 
 	sidebar->shortcuts = NULL;
 
+	gtk_widget_set_size_request (GTK_WIDGET (sidebar), 140, 280);
+
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sidebar),
 					GTK_POLICY_NEVER,
 					GTK_POLICY_AUTOMATIC);

@@ -6,6 +6,7 @@
     <property name="border_width">5</property>
     <property name="role">GtkFileChooserDialog</property>
     <property name="type_hint">dialog</property>
+    <property name="default_width">600</property>
     <signal name="response" handler="response_cb" swapped="no"/>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">

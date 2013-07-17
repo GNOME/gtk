@@ -233,6 +233,7 @@
                       <object class="GtkScrolledWindow" id="browse_files_swin">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="hscrollbar_policy">never</property>
                         <property name="vscrollbar_policy">always</property>
                         <property name="shadow_type">in</property>
                         <child>

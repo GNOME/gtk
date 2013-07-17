@@ -7606,6 +7606,7 @@ _gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
    */
   g_type_ensure (GTK_TYPE_PATH_BAR);
   gtk_widget_init_template (GTK_WIDGET (impl));
+  gtk_widget_set_size_request (priv->browse_files_tree_view, 280, -1);
 
   set_file_system_backend (impl);
 
