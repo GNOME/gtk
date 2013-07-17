@@ -1243,7 +1243,11 @@ gtk_dialog_set_alternative_button_order_valist (GtkDialog *dialog,
     {
       /* reorder child with response_id to position */
       child = dialog_find_button (dialog, response_id);
-      gtk_box_reorder_child (GTK_BOX (dialog->action_area), child, position);
+      if (child != NULL)
+        gtk_box_reorder_child (GTK_BOX (dialog->action_area), child, position);
+      else
+        g_warning ("%s : no child button with response id %d.", G_STRFUNC,
+                   response_id);
 
       response_id = va_arg (args, gint);
       position++;
@@ -1353,7 +1357,11 @@ gtk_dialog_set_alternative_button_order_from_array (GtkDialog *dialog,
   {
       /* reorder child with response_id to position */
       child = dialog_find_button (dialog, new_order[position]);
-      gtk_box_reorder_child (GTK_BOX (dialog->action_area), child, position);
+      if (child != NULL)
+        gtk_box_reorder_child (GTK_BOX (dialog->action_area), child, position);
+      else
+        g_warning ("%s : no child button with response id %d.", G_STRFUNC,
+                   new_order[position]);
     }
 }
 
