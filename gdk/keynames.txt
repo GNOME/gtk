@@ -2266,4 +2266,5 @@
 0x1008ffa9 TouchpadToggle
 0x1008ffb0 TouchpadOn
 0x1008ffb1 TouchpadOff
+0x1008ffb2 AudioMicMute
 0xffffff VoidSymbol

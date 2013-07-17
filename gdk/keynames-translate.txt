@@ -40,6 +40,7 @@ MonBrightnessDown
 KbdBrightnessUp
 KbdBrightnessDown
 AudioMute
+AudioMicMute
 AudioLowerVolume
 AudioRaiseVolume
 AudioPlay
