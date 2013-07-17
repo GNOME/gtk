@@ -50,13 +50,6 @@ else
 	print "as found at http://cgit.freedesktop.org/xorg/proto/x11proto/plain/XF86keysym.h\n\n";
 }
 
-if ( -f "gdkkeysyms.h" )
-{
-	print "There is already a gdkkeysyms.h file in this directory. We are not overwriting it.\n";
-	print "Please move it somewhere else in order to run this script.\n";
-	die "Exiting...\n\n";
-}
-
 # Source: http://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h
 die "Could not open file keysymdef.h: $!\n" unless open(IN_KEYSYMDEF, "<:utf8", "keysymdef.h");
 
