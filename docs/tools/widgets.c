@@ -312,7 +312,7 @@ create_entry (void)
   widget = gtk_entry_new ();
   gtk_entry_set_text (GTK_ENTRY (widget), "Entry");
   gtk_editable_set_position (GTK_EDITABLE (widget), -1);
-  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  align = gtk_alignment_new (0.5, 0.5, 1.0, 0.0);
   gtk_container_add (GTK_CONTAINER (align), widget);
 
   return  new_widget_info ("entry", align, SMALL);
@@ -326,7 +326,7 @@ create_search_entry (void)
 
   widget = gtk_search_entry_new ();
   gtk_entry_set_placeholder_text (GTK_ENTRY (widget), "Search...");
-  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  align = gtk_alignment_new (0.5, 0.5, 1.0, 0.0);
   gtk_container_add (GTK_CONTAINER (align), widget);
 
   return  new_widget_info ("search-entry", align, SMALL);
@@ -469,7 +469,7 @@ create_info_bar (void)
   gtk_container_add (GTK_CONTAINER (gtk_info_bar_get_content_area (GTK_INFO_BAR (widget))),
                      gtk_label_new ("Info Bar"));
 
-  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  align = gtk_alignment_new (0.5, 0, 1.0, 0.0);
   gtk_container_add (GTK_CONTAINER (align), widget);
 
   return new_widget_info ("info-bar", align, SMALL);
@@ -949,7 +949,7 @@ create_menubar (void)
   gtk_menu_shell_append (GTK_MENU_SHELL (widget), item);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
-  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  align = gtk_alignment_new (0.5, 0.5, 1.0, 0.0);
   gtk_container_add (GTK_CONTAINER (align), widget);
   gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox),
@@ -1029,7 +1029,7 @@ create_progressbar (void)
   gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (widget), 0.5);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
-  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  align = gtk_alignment_new (0.5, 0.5, 1.0, 0.0);
   gtk_container_add (GTK_CONTAINER (align), widget);
   gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox),
@@ -1064,7 +1064,7 @@ create_scrolledwindow (void)
 
   scrolledwin = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwin),
-                                  GTK_POLICY_ALWAYS, GTK_POLICY_ALWAYS);
+                                  GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
   label = gtk_label_new ("Scrolled Window");
 
   gtk_container_add (GTK_CONTAINER (scrolledwin), label);
@@ -1082,7 +1082,7 @@ create_scrollbar (void)
   gtk_widget_set_size_request (widget, 100, -1);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
-  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  align = gtk_alignment_new (0.5, 0.5, 1.0, 0.0);
   gtk_container_add (GTK_CONTAINER (align), widget);
   gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox),
