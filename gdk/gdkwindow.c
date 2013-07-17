@@ -4806,7 +4806,8 @@ gdk_window_raise (GdkWindow *window)
   /* Keep children in (reverse) stacking order */
   gdk_window_raise_internal (window);
 
-  if (gdk_window_is_viewable (window) &&
+  if (!gdk_window_is_toplevel (window) &&
+      gdk_window_is_viewable (window) &&
       !window->input_only)
     gdk_window_invalidate_region_full (window, window->clip_region, TRUE);
 }
