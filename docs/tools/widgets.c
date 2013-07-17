@@ -1147,6 +1147,7 @@ create_spinner (void)
 
   widget = gtk_spinner_new ();
   gtk_widget_set_size_request (widget, 24, 24);
+  gtk_spinner_start (GTK_SPINNER (widget));
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
