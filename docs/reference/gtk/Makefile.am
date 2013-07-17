@@ -304,7 +304,6 @@ HTML_IMAGES = \
 	$(srcdir)/images/button.png					\
 	$(srcdir)/images/check-button.png				\
 	$(srcdir)/images/color-button.png				\
-	$(srcdir)/images/colorsel.png					\
 	$(srcdir)/images/colorchooser.png				\
 	$(srcdir)/images/combo-box.png					\
 	$(srcdir)/images/combo-box-entry.png				\
@@ -315,7 +314,6 @@ HTML_IMAGES = \
 	$(srcdir)/images/file-button.png				\
 	$(srcdir)/images/filechooser.png				\
 	$(srcdir)/images/font-button.png				\
-	$(srcdir)/images/fontsel.png					\
 	$(srcdir)/images/fontchooser.png				\
 	$(srcdir)/images/frame.png					\
 	$(srcdir)/images/headerbar.png					\
