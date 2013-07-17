@@ -145,8 +145,6 @@ while (<IN_KEYSYMDEF>)
 
 close IN_KEYSYMDEF;
 
-#$gdksyms{"0"} = "0000";
-
 # Source: http://cgit.freedesktop.org/xorg/proto/x11proto/plain/XF86keysym.h
 die "Could not open file XF86keysym.h: $!\n" unless open(IN_XF86KEYSYM, "<:utf8", "XF86keysym.h");
 
@@ -160,10 +158,6 @@ while (<IN_XF86KEYSYM>)
 	$_ = $keysymelements[1];
 	die "Internal error, was expecting \"XF86XK_*\", found: $_\n" if ( ! /^XF86XK_/ );
 
-	# Work-around https://bugs.freedesktop.org/show_bug.cgi?id=11193
-	if ($_ eq "XF86XK_XF86BackForward") {
-		$keysymelements[1] = "XF86XK_AudioForward";
-	}
 	# XF86XK_Clear could end up a dupe of XK_Clear
 	# XF86XK_Select could end up a dupe of XK_Select
 	if ($_ eq "XF86XK_Clear") {
