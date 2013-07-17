@@ -1125,8 +1125,8 @@ create_image (void)
   GtkWidget *widget;
   GtkWidget *align, *vbox;
 
-  widget = gtk_image_new_from_icon_name ("dialog-warning",
-                                         GTK_ICON_SIZE_DND);
+  widget = gtk_image_new_from_icon_name ("applications-graphics",
+                                         GTK_ICON_SIZE_DIALOG);
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
