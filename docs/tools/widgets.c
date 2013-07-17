@@ -773,19 +773,6 @@ create_window (void)
 }
 
 static WidgetInfo *
-create_fontsel (void)
-{
-  WidgetInfo *info;
-  GtkWidget *widget;
-
-  widget = gtk_font_selection_dialog_new ("Font Selection Dialog");
-  info = new_widget_info ("fontsel", widget, ASIS);
-  info->include_decorations = TRUE;
-
-  return info;
-}
-
-static WidgetInfo *
 create_filesel (void)
 {
   WidgetInfo *info;
@@ -1488,7 +1475,6 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_tree_view ());
   retval = g_list_prepend (retval, create_window ());
   retval = g_list_prepend (retval, create_filesel ());
-  retval = g_list_prepend (retval, create_fontsel ());
   retval = g_list_prepend (retval, create_assistant ());
   retval = g_list_prepend (retval, create_recent_chooser_dialog ());
   retval = g_list_prepend (retval, create_page_setup_dialog ());
