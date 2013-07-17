@@ -427,15 +427,12 @@ create_combo_box (void)
 
   widget = gtk_combo_box_new ();
   gtk_cell_layout_clear (GTK_CELL_LAYOUT (widget));
-  cell = gtk_cell_renderer_pixbuf_new ();
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (widget), cell, FALSE);
-  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (widget), cell, "icon-name", 0, NULL);
   cell = gtk_cell_renderer_text_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (widget), cell, FALSE);
-  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (widget), cell, "text", 1, NULL);
+  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (widget), cell, "text", 0, NULL);
 
-  store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
-  gtk_list_store_insert_with_values (store, NULL, -1, 0, "edit-delete", 1, "Combo Box", -1);
+  store = gtk_list_store_new (1, G_TYPE_STRING);
+  gtk_list_store_insert_with_values (store, NULL, -1, 0, "Combo Box", -1);
   gtk_combo_box_set_model (GTK_COMBO_BOX (widget), GTK_TREE_MODEL (store));
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
