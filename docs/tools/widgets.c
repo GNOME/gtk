@@ -879,7 +879,7 @@ create_page_setup_dialog (void)
 static WidgetInfo *
 create_toolbar (void)
 {
-  GtkWidget *widget, *menu;
+  GtkWidget *widget;
   GtkToolItem *item;
 
   widget = gtk_toolbar_new ();
@@ -890,8 +890,6 @@ create_toolbar (void)
 
   item = gtk_tool_button_new (NULL, NULL);
   gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "document-open");
-  menu = gtk_menu_new ();
-  gtk_menu_tool_button_set_menu (GTK_MENU_TOOL_BUTTON (item), menu);
   gtk_toolbar_insert (GTK_TOOLBAR (widget), item, -1);
 
   item = gtk_tool_button_new (NULL, NULL);
