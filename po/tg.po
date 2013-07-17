@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-07-11 21:09+0000\n"
-"PO-Revision-Date: 2013-07-16 13:43+0500\n"
+"PO-Revision-Date: 2013-07-17 11:53+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: \n"
 "Language: Tajik\n"
@@ -424,7 +424,7 @@ msgstr "Ҳамчун --no-wintab"
 #. Description of --use-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:59
 msgid "Do use the Wintab API [default]"
-msgstr "Wintab API-ро истифода набаред [пешфарз]"
+msgstr "Истифода набурдани Wintab API [пешфарз]"
 
 #. Description of --max-colors=COLORS in --help output
 #: ../gdk/win32/gdkmain-win32.c:61
