@@ -23,17 +23,17 @@
       <inlinegraphic fileref="window-default.png" format="PNG"></inlinegraphic>
     </para>
 
-    <informalexample><programlisting>
-      <xi:include href="../../../../examples/window-default.c" parse="text">
-        <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
-      </xi:include>
-    </programlisting></informalexample>
+    <informalexample>
+      <para>Create a new file with the following content named example-0.c.</para>
+      <programlisting><xi:include href="../../../../examples/window-default.c" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+    </informalexample>
 
-    <para>You can compile the program above with GCC using:</para>
-
-    <para><literallayout>
-      <literal>gcc `pkg-config --cflags gtk+-3.0` -o window-default window-default.c `pkg-config --libs gtk+-3.0`</literal>
-    </literallayout></para>
+    <para>
+      You can compile the program above with GCC using:
+      <literallayout>
+        <literal>gcc `pkg-config --cflags gtk+-3.0` -o example-0 example-0.c `pkg-config --libs gtk+-3.0`</literal>
+      </literallayout>
+    </para>
 
     <note><para>For more information on how to compile a GTK+ application, please
     refer to the <link linkend="gtk-compiling">Compiling GTK+ Applications</link>
@@ -108,12 +108,17 @@
 
     <example id="gtk-getting-started-hello-world">
       <title>Hello World in GTK+</title>
-      <programlisting>
-        <xi:include href="../../../../examples/hello-world.c" parse="text">
-          <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
-        </xi:include>
-      </programlisting>
+      <para>Create a new file with the following content named example-1.c.</para>
+      <programlisting><xi:include href="../../../../examples/hello-world.c" parse="text">
+          <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
     </example>
+
+    <para>
+      You can compile the program above with GCC using:
+      <literallayout>
+        <literal>gcc `pkg-config --cflags gtk+-3.0` -o example-1 example-1.c `pkg-config --libs gtk+-3.0`</literal>
+      </literallayout>
+    </para>
   </simplesect>
 
   <simplesect>
@@ -139,12 +144,15 @@
 
     <example id="gtk-getting-started-grid-packing">
       <title>Packing buttons</title>
-      <programlisting>
-        <xi:include href="../../../../examples/grid-packing.c" parse="text">
-          <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
-        </xi:include>
-      </programlisting>
+      <para>Create a new file with the following content named example-2.c.</para>
+      <programlisting><xi:include href="../../../../examples/grid-packing.c" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
     </example>
+    <para>
+      You can compile the program above with GCC using:
+      <literallayout>
+        <literal>gcc `pkg-config --cflags gtk+-3.0` -o example-2 example-2.c `pkg-config --libs gtk+-3.0`</literal>
+      </literallayout>
+    </para>
   </simplesect>
 
   <simplesect>
@@ -177,12 +185,15 @@
 
     <example id="gtk-getting-started-drawing">
       <title>Drawing in response to input</title>
-      <programlisting>
-        <xi:include href="../../../../examples/drawing.c" parse="text">
-          <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
-        </xi:include>
-      </programlisting>
+      <para>Create a new file with the following content named example-3.c.</para>
+      <programlisting><xi:include href="../../../../examples/drawing.c" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
     </example>
+    <para>
+      You can compile the program above with GCC using:
+      <literallayout>
+        <literal>gcc `pkg-config --cflags gtk+-3.0` -o example-3 example-3.c `pkg-config --libs gtk+-3.0`</literal>
+      </literallayout>
+    </para>
   </simplesect>
 
   <simplesect>
@@ -198,18 +209,17 @@
 
     <example>
       <title>Packing buttons with GtkBuilder</title>
-      <programlisting>
-        <xi:include href="../../../../examples/builder.c" parse="text">
-          <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
-        </xi:include>
-      </programlisting>
-      The builder.ui file looks like this:
-      <programlisting>
-        <xi:include href="../../../../examples/builder.ui" parse="text">
-          <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
-        </xi:include>
-      </programlisting>
+      <para>Create a new file with the following content named example-4.c.</para>
+      <programlisting><xi:include href="../../../../examples/builder.c" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+      <para>Create a new file with the following content named builder.ui.</para>
+      <programlisting><xi:include href="../../../../examples/builder.ui" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
     </example>
+    <para>
+      You can compile the program above with GCC using:
+      <literallayout>
+        <literal>gcc `pkg-config --cflags gtk+-3.0` -o example-4 example-4.c `pkg-config --libs gtk+-3.0`</literal>
+      </literallayout>
+    </para>
 
     <para>Note that GtkBuilder can also be used to construct objects
     that are not widgets, such as tree models, adjustments, etc.
