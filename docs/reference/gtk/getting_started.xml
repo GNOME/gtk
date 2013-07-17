@@ -19,9 +19,13 @@
     program possible. This program will create an empty 200 × 200 pixel
     window.</para>
 
-    <para>
-      <inlinegraphic fileref="window-default.png" format="PNG"></inlinegraphic>
-    </para>
+    <informalfigure>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="window-default.png" format="PNG"/>
+        </imageobject>
+      </mediaobject>
+    </informalfigure>
 
     <informalexample>
       <para>Create a new file with the following content named example-0.c.</para>
@@ -102,9 +106,13 @@
     <para>In the long tradition of programming languages and libraries,
     it is called <emphasis>Hello, World</emphasis>.</para>
 
-    <para>
-      <inlinegraphic fileref="hello-world.png" format="PNG"></inlinegraphic>
-    </para>
+    <informalfigure>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="hello-world.png" format="PNG"/>
+        </imageobject>
+      </mediaobject>
+    </informalfigure>
 
     <example id="gtk-getting-started-hello-world">
       <title>Hello World in GTK+</title>
@@ -138,9 +146,13 @@
     <para>The following example shows how the GtkGrid container lets you
     arrange several buttons:</para>
 
-    <para>
-      <inlinegraphic fileref="grid-packing.png" format="PNG"></inlinegraphic>
-    </para>
+    <informalfigure>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="grid-packing.png" format="PNG"/>
+        </imageobject>
+      </mediaobject>
+    </informalfigure>
 
     <example id="gtk-getting-started-grid-packing">
       <title>Packing buttons</title>
@@ -179,9 +191,13 @@
     input event handling by means of ::button-press and ::motion-notify
     handlers.</para>
 
-    <para>
-      <inlinegraphic fileref="drawing.png" format="PNG"></inlinegraphic>
-    </para>
+    <informalfigure>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="drawing.png" format="PNG"/>
+        </imageobject>
+      </mediaobject>
+    </informalfigure>
 
     <example id="gtk-getting-started-drawing">
       <title>Drawing in response to input</title>
