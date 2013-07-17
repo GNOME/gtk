@@ -28,9 +28,15 @@
 
 /**
  * SECTION:gtkaction
- * @Short_description: An action which can be triggered by a menu or toolbar item
+ * @Short_description: A deprecated action which can be triggered by a menu or toolbar item
  * @Title: GtkAction
  * @See_also: #GtkActionGroup, #GtkUIManager, #GtkActivatable
+ *
+ * <warning>
+ * In GTK+ 3.10, GtkAction has been deprecated. Use #GAction instead, and
+ * associate actions with #GtkActionable widgets. Use #GMenuModel for creating
+ * menus with gtk_menu_new_from_model().
+ * </warning>
  *
  * Actions represent operations that the user can be perform, along with
  * some information how it should be presented in the interface. Each action
@@ -224,7 +230,7 @@ gtk_action_class_init (GtkActionClass *klass)
    *
    * A unique name for the action.
    *
-   * Deprecated: 3.10
+   * Deprecated: 3.10: Use #GAction::name instead
    */
   g_object_class_install_property (gobject_class,
 				   PROP_NAME,
@@ -245,7 +251,7 @@ gtk_action_class_init (GtkActionClass *klass)
    * This is an appearance property and thus only applies if 
    * #GtkActivatable:use-action-appearance is %TRUE.
    *
-   * Deprecated: 3.10
+   * Deprecated: 3.10: Use the "label" attribute on #GMenuItem instead
    */
   g_object_class_install_property (gobject_class,
 				   PROP_LABEL,
@@ -264,7 +270,8 @@ gtk_action_class_init (GtkActionClass *klass)
    * This is an appearance property and thus only applies if 
    * #GtkActivatable:use-action-appearance is %TRUE.
    *
-   * Deprecated: 3.10
+   * Deprecated: 3.10: There is no corresponding replacement when using
+   * #GAction
    */
   g_object_class_install_property (gobject_class,
 				   PROP_SHORT_LABEL,
@@ -280,7 +287,7 @@ gtk_action_class_init (GtkActionClass *klass)
    *
    * A tooltip for this action.
    *
-   * Deprecated: 3.10
+   * Deprecated: 3.10: Use gtk_widget_set_tooltip_text() instead
    */
   g_object_class_install_property (gobject_class,
 				   PROP_TOOLTIP,
@@ -298,7 +305,8 @@ gtk_action_class_init (GtkActionClass *klass)
    * This is an appearance property and thus only applies if 
    * #GtkActivatable:use-action-appearance is %TRUE.
    *
-   * Deprecated: 3.10
+   * Deprecated: 3.10: There is no corresponding replacement when using
+   * #GAction
    */
   g_object_class_install_property (gobject_class,
 				   PROP_STOCK_ID,
@@ -321,7 +329,7 @@ gtk_action_class_init (GtkActionClass *klass)
    *
    * Since: 2.16
    *
-   * Deprecated: 3.10
+   * Deprecated: 3.10: Use the "icon" attribute on a #GMenuItem instead
    */
   g_object_class_install_property (gobject_class,
 				   PROP_GICON,
@@ -344,7 +352,7 @@ gtk_action_class_init (GtkActionClass *klass)
    *
    * Since: 2.10
    *
-   * Deprecated: 3.10
+   * Deprecated: 3.10: Use the "icon" attribute on a #GMenuItem instead
    */
   g_object_class_install_property (gobject_class,
 				   PROP_ICON_NAME,
@@ -359,7 +367,8 @@ gtk_action_class_init (GtkActionClass *klass)
    *
    * Whether the toolbar item is visible when the toolbar is in a horizontal orientation.
    *
-   * Deprecated: 3.10
+   * Deprecated: 3.10: There is no corresponding replacement when using
+   * #GAction
    */
   g_object_class_install_property (gobject_class,
 				   PROP_VISIBLE_HORIZONTAL,
@@ -377,7 +386,8 @@ gtk_action_class_init (GtkActionClass *klass)
    *
    * Since: 2.6
    *
-   * Deprecated: 3.10
+   * Deprecated: 3.10: There is no corresponding replacement when using
+   * #GAction
    */
   g_object_class_install_property (gobject_class,
 				   PROP_VISIBLE_OVERFLOWN,
@@ -393,7 +403,8 @@ gtk_action_class_init (GtkActionClass *klass)
    *
    * Whether the toolbar item is visible when the toolbar is in a vertical orientation.
    *
-   * Deprecated: 3.10
+   * Deprecated: 3.10: There is no corresponding replacement when using
+   * #GAction
    */
   g_object_class_install_property (gobject_class,
 				   PROP_VISIBLE_VERTICAL,
@@ -409,7 +420,8 @@ gtk_action_class_init (GtkActionClass *klass)
    * Whether the action is considered important. When TRUE, toolitem
    * proxies for this action show text in GTK_TOOLBAR_BOTH_HORIZ mode.
    *
-   * Deprecated: 3.10
+   * Deprecated: 3.10: There is no corresponding replacement when using
+   * #GAction
    */
   g_object_class_install_property (gobject_class,
 				   PROP_IS_IMPORTANT,
@@ -425,7 +437,8 @@ gtk_action_class_init (GtkActionClass *klass)
    *
    * When TRUE, empty menu proxies for this action are hidden.
    *
-   * Deprecated: 3.10
+   * Deprecated: 3.10: There is no corresponding replacement when using
+   * #GAction
    */
   g_object_class_install_property (gobject_class,
 				   PROP_HIDE_IF_EMPTY,
@@ -439,7 +452,8 @@ gtk_action_class_init (GtkActionClass *klass)
    *
    * Whether the action is enabled.
    *
-   * Deprecated: 3.10
+   * Deprecated: 3.10: Use #GAction::enabled and #GSimpleAction::enabled
+   * instead
    */
   g_object_class_install_property (gobject_class,
 				   PROP_SENSITIVE,
@@ -453,7 +467,8 @@ gtk_action_class_init (GtkActionClass *klass)
    *
    * Whether the action is visible.
    *
-   * Deprecated: 3.10
+   * Deprecated: 3.10: There is no corresponding replacement when using
+   * #GAction
    */
   g_object_class_install_property (gobject_class,
 				   PROP_VISIBLE,
@@ -468,7 +483,8 @@ gtk_action_class_init (GtkActionClass *klass)
    * The GtkActionGroup this GtkAction is associated with, or NULL
    * (for internal use).
    *
-   * Deprecated: 3.10
+   * Deprecated: 3.10: Lookup the #GAction using g_action_map_lookup_action()
+   * instead
    */
   g_object_class_install_property (gobject_class,
 				   PROP_ACTION_GROUP,
@@ -488,7 +504,8 @@ gtk_action_class_init (GtkActionClass *klass)
    *
    * Since: 2.20
    *
-   * Deprecated: 3.10
+   * Deprecated: 3.10: There is no corresponding replacement when using
+   * #GAction
    **/
   g_object_class_install_property (gobject_class,
                                    PROP_ALWAYS_SHOW_IMAGE,
@@ -506,7 +523,7 @@ gtk_action_class_init (GtkActionClass *klass)
    *
    * Since: 2.4
    *
-   * Deprecated: 3.10
+   * Deprecated: 3.10: Use #GSimpleAction:activate instead
    */
   action_signals[ACTIVATE] =
     g_signal_new (I_("activate"),
@@ -602,7 +619,8 @@ gtk_action_buildable_get_name (GtkBuildable *buildable)
  *
  * Since: 2.4
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use #GAction instead, associating it to a widget with
+ * #GtkActionable or creating a #GtkMenu with gtk_menu_new_from_model()
  */
 GtkAction *
 gtk_action_new (const gchar *name,
@@ -906,7 +924,7 @@ _gtk_action_emit_activate (GtkAction *action)
  *
  * Since: 2.4
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use g_action_group_activate_action() on a #GAction instead
  */
 void
 gtk_action_activate (GtkAction *action)
@@ -933,7 +951,8 @@ gtk_action_activate (GtkAction *action)
  *
  * Since: 2.16
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use g_simple_action_set_enabled() to disable the
+ * #GSimpleAction instead
  */
 void
 gtk_action_block_activate (GtkAction *action)
@@ -951,7 +970,8 @@ gtk_action_block_activate (GtkAction *action)
  *
  * Since: 2.16
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use g_simple_action_set_enabled() to enable the
+ * #GSimpleAction instead
  */
 void
 gtk_action_unblock_activate (GtkAction *action)
@@ -973,7 +993,8 @@ gtk_action_unblock_activate (GtkAction *action)
  *
  * Since: 2.4
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use g_menu_item_set_icon() to set an icon on a #GMenuItem,
+ * or gtk_container_add() to add a #GtkImage to a #GtkButton
  */
 GtkWidget *
 gtk_action_create_icon (GtkAction *action, GtkIconSize icon_size)
@@ -1007,7 +1028,8 @@ gtk_action_create_icon (GtkAction *action, GtkIconSize icon_size)
  *
  * Since: 2.4
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use g_menu_item_new() and associate it with a #GAction
+ * instead.
  */
 GtkWidget *
 gtk_action_create_menu_item (GtkAction *action)
@@ -1034,7 +1056,8 @@ gtk_action_create_menu_item (GtkAction *action)
  *
  * Since: 2.4
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use a #GtkToolItem and associate it with a #GAction using
+ * gtk_actionable_set_action_name() instead
  */
 GtkWidget *
 gtk_action_create_tool_item (GtkAction *action)
@@ -1104,7 +1127,7 @@ gtk_action_get_proxies (GtkAction *action)
  *
  * Since: 2.4
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use g_action_get_name() on a #GAction instead
  **/
 const gchar *
 gtk_action_get_name (GtkAction *action)
@@ -1125,7 +1148,8 @@ gtk_action_get_name (GtkAction *action)
  *
  * Since: 2.4
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use g_simple_action_get_enabled() on a #GSimpleAction
+ * instead
  **/
 gboolean
 gtk_action_is_sensitive (GtkAction *action)
@@ -1151,7 +1175,8 @@ gtk_action_is_sensitive (GtkAction *action)
  *
  * Since: 2.4
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use g_simple_action_get_enabled() on a #GSimpleAction
+ * instead
  **/
 gboolean
 gtk_action_get_sensitive (GtkAction *action)
@@ -1173,7 +1198,8 @@ gtk_action_get_sensitive (GtkAction *action)
  *
  * Since: 2.6
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use g_simple_action_set_enabled() on a #GSimpleAction
+ * instead
  **/
 void
 gtk_action_set_sensitive (GtkAction *action,
@@ -1202,7 +1228,8 @@ gtk_action_set_sensitive (GtkAction *action,
  *
  * Since: 2.4
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use #GAction instead, and control and monitor the state of
+ * #GtkActionable widgets directly
  **/
 gboolean
 gtk_action_is_visible (GtkAction *action)
@@ -1228,7 +1255,8 @@ gtk_action_is_visible (GtkAction *action)
  *
  * Since: 2.4
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use #GAction instead, and control and monitor the state of
+ * #GtkActionable widgets directly
  **/
 gboolean
 gtk_action_get_visible (GtkAction *action)
@@ -1250,7 +1278,8 @@ gtk_action_get_visible (GtkAction *action)
  *
  * Since: 2.6
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use #GAction instead, and control and monitor the state of
+ * #GtkActionable widgets directly
  **/
 void
 gtk_action_set_visible (GtkAction *action,
@@ -1278,7 +1307,8 @@ gtk_action_set_visible (GtkAction *action,
  *
  * Since: 2.16
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use #GAction instead, and control and monitor whether
+ * labels are shown directly
  */
 void 
 gtk_action_set_is_important (GtkAction *action,
@@ -1306,7 +1336,8 @@ gtk_action_set_is_important (GtkAction *action,
  *
  * Since: 2.16
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use #GAction instead, and control and monitor whether
+ * labels are shown directly
  */
 gboolean 
 gtk_action_get_is_important (GtkAction *action)
@@ -1329,7 +1360,8 @@ gtk_action_get_is_important (GtkAction *action)
  *
  * Since: 2.20
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use g_menu_item_set_icon() on a #GMenuItem instead, if the
+ * item should have an image
  */
 void
 gtk_action_set_always_show_image (GtkAction *action,
@@ -1362,7 +1394,8 @@ gtk_action_set_always_show_image (GtkAction *action,
  *
  * Since: 2.20
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use g_menu_item_get_attribute_value() on a #GMenuItem
+ * instead
  */
 gboolean
 gtk_action_get_always_show_image  (GtkAction *action)
@@ -1381,7 +1414,9 @@ gtk_action_get_always_show_image  (GtkAction *action)
  *
  * Since: 2.16
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use #GAction instead, and set a label on a menu item with
+ * g_menu_item_set_label(). For #GtkActionable widgets, use the widget-specific
+ * API to set a label
  */
 void 
 gtk_action_set_label (GtkAction	  *action,
@@ -1428,7 +1463,9 @@ gtk_action_set_label (GtkAction	  *action,
  *
  * Since: 2.16
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use #GAction instead, and get a label from a menu item
+ * with g_menu_item_get_attribute_value(). For #GtkActionable widgets, use the
+ * widget-specific API to get a label
  */
 const gchar *
 gtk_action_get_label (GtkAction *action)
@@ -1447,7 +1484,8 @@ gtk_action_get_label (GtkAction *action)
  *
  * Since: 2.16
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use #GAction instead, which has no equivalent of short
+ * labels
  */
 void 
 gtk_action_set_short_label (GtkAction   *action,
@@ -1478,7 +1516,8 @@ gtk_action_set_short_label (GtkAction   *action,
  *
  * Since: 2.16
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use #GAction instead, which has no equivalent of short
+ * labels
  */
 const gchar *
 gtk_action_get_short_label (GtkAction *action)
@@ -1497,7 +1536,8 @@ gtk_action_get_short_label (GtkAction *action)
  *
  * Since: 2.16
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use #GAction instead, and control and monitor the
+ * visibility of associated widgets and menu items directly
  */
 void 
 gtk_action_set_visible_horizontal (GtkAction *action,
@@ -1527,7 +1567,8 @@ gtk_action_set_visible_horizontal (GtkAction *action,
  *
  * Since: 2.16
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use #GAction instead, and control and monitor the
+ * visibility of associated widgets and menu items directly
  */
 gboolean 
 gtk_action_get_visible_horizontal (GtkAction *action)
@@ -1546,7 +1587,8 @@ gtk_action_get_visible_horizontal (GtkAction *action)
  *
  * Since: 2.16
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use #GAction instead, and control and monitor the
+ * visibility of associated widgets and menu items directly
  */
 void 
 gtk_action_set_visible_vertical (GtkAction *action,
@@ -1576,7 +1618,8 @@ gtk_action_set_visible_vertical (GtkAction *action,
  *
  * Since: 2.16
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use #GAction instead, and control and monitor the
+ * visibility of associated widgets and menu items directly
  */
 gboolean 
 gtk_action_get_visible_vertical (GtkAction *action)
@@ -1595,7 +1638,8 @@ gtk_action_get_visible_vertical (GtkAction *action)
  *
  * Since: 2.16
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use #GAction instead, and set tooltips on associated
+ * #GActionable widgets with gtk_widget_set_tooltip_text()
  */
 void 
 gtk_action_set_tooltip (GtkAction   *action,
@@ -1622,7 +1666,8 @@ gtk_action_set_tooltip (GtkAction   *action,
  *
  * Since: 2.16
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use #GAction instead, and get tooltips from associated
+ * #GActionable widgets with gtk_widget_get_tooltip_text()
  */
 const gchar *
 gtk_action_get_tooltip (GtkAction *action)
@@ -1641,7 +1686,8 @@ gtk_action_get_tooltip (GtkAction *action)
  *
  * Since: 2.16
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use #GAction instead, which has no equivalent of stock
+ * items
  */
 void 
 gtk_action_set_stock_id (GtkAction   *action,
@@ -1688,7 +1734,8 @@ gtk_action_set_stock_id (GtkAction   *action,
  *
  * Since: 2.16
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use #GAction instead, which has no equivalent of stock
+ * items
  */
 const gchar *
 gtk_action_get_stock_id (GtkAction *action)
@@ -1707,7 +1754,9 @@ gtk_action_get_stock_id (GtkAction *action)
  *
  * Since: 2.16
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use #GAction instead, and g_menu_item_set_icon() to set an
+ * icon on a #GMenuItem associated with a #GAction, or gtk_container_add() to
+ * add a #GtkImage to a #GtkButton
  */
 void 
 gtk_action_set_icon_name (GtkAction   *action,
@@ -1734,7 +1783,9 @@ gtk_action_set_icon_name (GtkAction   *action,
  *
  * Since: 2.16
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use #GAction instead, and
+ * g_menu_item_get_attribute_value() to get an icon from a #GMenuItem
+ * associated with a #GAction
  */
 const gchar *
 gtk_action_get_icon_name (GtkAction *action)
@@ -1753,7 +1804,9 @@ gtk_action_get_icon_name (GtkAction *action)
  *
  * Since: 2.16
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use #GAction instead, and g_menu_item_set_icon() to set an
+ * icon on a #GMenuItem associated with a #GAction, or gtk_container_add() to
+ * add a #GtkImage to a #GtkButton
  */
 void
 gtk_action_set_gicon (GtkAction *action,
@@ -1782,7 +1835,9 @@ gtk_action_set_gicon (GtkAction *action,
  *
  * Since: 2.16
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use #GAction instead, and
+ * g_menu_item_get_attribute_value() to get an icon from a #GMenuItem
+ * associated with a #GAction
  */
 GIcon *
 gtk_action_get_gicon (GtkAction *action)
@@ -1836,7 +1891,8 @@ gtk_action_set_action_group (GtkAction	    *action,
  *
  * Since: 2.4
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use #GAction and the accelerator path on an associated
+ * #GtkMenu instead
  */
 void
 gtk_action_set_accel_path (GtkAction   *action, 
@@ -1859,7 +1915,8 @@ gtk_action_set_accel_path (GtkAction   *action,
  *   if none is set. The returned string is owned by GTK+ 
  *   and must not be freed or modified.
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use #GAction and the accelerator path on an associated
+ * #GtkMenu instead
  */
 const gchar *
 gtk_action_get_accel_path (GtkAction *action)
@@ -1884,7 +1941,8 @@ gtk_action_get_accel_path (GtkAction *action)
  *          returned closure is owned by GTK+ and must not be unreffed
  *          or modified.
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use #GAction and #GtkMenu instead, which have no
+ * equivalent for getting the accel closure
  */
 GClosure *
 gtk_action_get_accel_closure (GtkAction *action)
@@ -1905,7 +1963,8 @@ gtk_action_get_accel_closure (GtkAction *action)
  *
  * Since: 2.4
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use #GAction and the accelerator group on an associated
+ * #GtkMenu instead
  **/
 void
 gtk_action_set_accel_group (GtkAction     *action,
@@ -1937,7 +1996,8 @@ gtk_action_set_accel_group (GtkAction     *action,
  *
  * Since: 2.4
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use #GAction and the accelerator group on an associated
+ * #GtkMenu instead
  **/
 void 
 gtk_action_connect_accelerator (GtkAction *action)
@@ -1969,7 +2029,8 @@ gtk_action_connect_accelerator (GtkAction *action)
  *
  * Since: 2.4
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use #GAction and the accelerator group on an associated
+ * #GtkMenu instead
  **/
 void 
 gtk_action_disconnect_accelerator (GtkAction *action)
@@ -2000,7 +2061,8 @@ gtk_action_disconnect_accelerator (GtkAction *action)
  *
  * Since: 2.12
  *
- * Deprecated: 3.10
+ * Deprecated: 3.10: Use #GAction and #GMenuModel instead, and create a
+ * #GtkMenu with gtk_menu_new_from_model()
  */
 GtkWidget *
 gtk_action_create_menu (GtkAction *action)
