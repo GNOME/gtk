@@ -406,6 +406,7 @@ static void gtk_window_real_activate_focus   (GtkWindow         *window);
 static void gtk_window_keys_changed          (GtkWindow         *window);
 static gint gtk_window_draw                  (GtkWidget         *widget,
 					      cairo_t           *cr);
+static void update_shape                     (GtkWindow         *window);
 static void gtk_window_unset_transient_for         (GtkWindow  *window);
 static void gtk_window_transient_parent_realized   (GtkWidget  *parent,
 						    GtkWidget  *window);
@@ -3552,7 +3553,7 @@ gtk_window_set_decorated (GtkWindow *window,
           if (priv->client_decorated)
             gdk_window_set_decorations (gdk_window, 0);
           else if (priv->custom_title)
-            gdk_window_set_decorations (gdk_window, GDK_DECOR_BORDER);
+            gdk_window_set_decorations (gdk_window, 0);
           else
             gdk_window_set_decorations (gdk_window, GDK_DECOR_ALL);
         }
@@ -5858,7 +5859,7 @@ gtk_window_realize (GtkWidget *widget)
   if (!priv->decorated || priv->client_decorated)
     gdk_window_set_decorations (gdk_window, 0);
   else if (priv->custom_title)
-    gdk_window_set_decorations (gdk_window, GDK_DECOR_BORDER);
+    gdk_window_set_decorations (gdk_window, 0);
   
   if (!priv->deletable)
     gdk_window_set_functions (gdk_window, GDK_FUNC_ALL | GDK_FUNC_CLOSE);
@@ -5916,6 +5917,8 @@ gtk_window_realize (GtkWidget *widget)
   priv->scale = gtk_widget_get_scale_factor (widget);
   if (old_scale != priv->scale)
     _gtk_widget_scale_changed (widget);
+
+  update_shape (window);
 }
 
 static void
@@ -6634,6 +6637,7 @@ gtk_window_state_changed (GtkWidget    *widget,
   GtkWindow *window = GTK_WINDOW (widget);
 
   update_grip_visibility (window);
+  update_shape (window);
 }
 
 static void
@@ -6661,6 +6665,8 @@ gtk_window_style_updated (GtkWidget *widget)
                                       &transparent);
       gtk_widget_queue_resize (widget);
     }
+
+  update_shape (window);
 }
 
 static void
@@ -8910,6 +8916,68 @@ gtk_window_compute_hints (GtkWindow   *window,
 /***********************
  * Redrawing functions *
  ***********************/
+
+static void
+update_shape (GtkWindow *window)
+{
+#ifdef GDK_WINDOWING_X11
+  GtkWidget *widget = GTK_WIDGET (window);
+  GdkWindow *w;
+
+  if (!gtk_widget_get_realized (widget))
+    return;
+
+  if (window->priv->client_decorated)
+    return;
+
+  w = gtk_widget_get_window (widget);
+  if (GDK_IS_X11_WINDOW (w))
+    {
+      cairo_surface_t *surface;
+      cairo_t *cr;
+      cairo_region_t *region;
+      Atom mutter_shadow_shape, cardinal;
+      int num_rectangles, i;
+      gulong *data;
+      cairo_rectangle_int_t rectangle;
+
+      surface = gdk_window_create_similar_surface (w,
+                                                   CAIRO_CONTENT_COLOR_ALPHA,
+                                                   gdk_window_get_width (w),
+                                                   gdk_window_get_height (w));
+      cr = cairo_create (surface);
+      gtk_window_draw (widget, cr);
+      cairo_destroy (cr);
+
+      region = gdk_cairo_region_create_from_surface (surface);
+
+      num_rectangles = cairo_region_num_rectangles (region);
+      data = g_new (gulong, 4 * num_rectangles);
+      for (i = 0; i < num_rectangles; i++)
+        {
+          cairo_region_get_rectangle (region, i, &rectangle);
+          data[4*i] = rectangle.x;
+          data[4*i+1] = rectangle.y;
+          data[4*i+2] = rectangle.width;
+          data[4*i+3] = rectangle.height;
+        }
+
+      mutter_shadow_shape = gdk_x11_get_xatom_by_name_for_display (gdk_window_get_display (w),
+                                                                   "_MUTTER_SHADOW_SHAPE");
+      cardinal = gdk_x11_get_xatom_by_name_for_display (gdk_window_get_display (w),
+                                                        "CARDINAL");
+      XChangeProperty (GDK_WINDOW_XDISPLAY (w),
+                       GDK_WINDOW_XID (w),
+                       mutter_shadow_shape, cardinal,
+                       32, PropModeReplace,
+                       (guchar *)data, 4 * num_rectangles);
+      g_free (data);
+
+      cairo_surface_destroy (surface);
+      cairo_region_destroy (region);
+    }
+#endif
+}
 
 static gboolean
 gtk_window_draw (GtkWidget *widget,
