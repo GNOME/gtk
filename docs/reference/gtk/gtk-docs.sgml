@@ -202,17 +202,6 @@
       <xi:include href="xml/gtkradiotoolbutton.xml" />
     </chapter>
 
-    <chapter id="Actions">
-      <title>Action-based menus and toolbars</title>
-      <xi:include href="xml/gtkuimanager.xml" />
-      <xi:include href="xml/gtkactiongroup.xml" />
-      <xi:include href="xml/gtkaction.xml" />
-      <xi:include href="xml/gtktoggleaction.xml" />
-      <xi:include href="xml/gtkradioaction.xml" />
-      <xi:include href="xml/gtkrecentaction.xml" />
-      <xi:include href="xml/gtkactivatable.xml" />
-    </chapter>
-
     <chapter id="SelectorWidgets">
       <title>Selectors (Color/File/Font)</title>
       <xi:include href="xml/gtkcolorchooser.xml" />
@@ -360,6 +349,13 @@
       <xi:include href="xml/gtkvseparator.xml" />
       <xi:include href="xml/gtkhscrollbar.xml" />
       <xi:include href="xml/gtkvscrollbar.xml" />
+      <xi:include href="xml/gtkuimanager.xml" />
+      <xi:include href="xml/gtkactiongroup.xml" />
+      <xi:include href="xml/gtkaction.xml" />
+      <xi:include href="xml/gtktoggleaction.xml" />
+      <xi:include href="xml/gtkradioaction.xml" />
+      <xi:include href="xml/gtkrecentaction.xml" />
+      <xi:include href="xml/gtkactivatable.xml" />
     </chapter>
 
   </part>
