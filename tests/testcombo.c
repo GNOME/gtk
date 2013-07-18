@@ -1116,7 +1116,6 @@ main (int argc, char **argv)
 
         model = create_list_blaat ();
         combobox = gtk_combo_box_new_with_model (model);
-	gtk_combo_box_set_add_tearoffs (GTK_COMBO_BOX (combobox), TRUE);
         g_object_unref (model);
         gtk_container_add (GTK_CONTAINER (boom), combobox);
 
@@ -1161,7 +1160,6 @@ main (int argc, char **argv)
 	g_signal_connect (combobox, "notify::popup-shown", 
 			  G_CALLBACK (populate_list_blaat), combobox);
 
-	gtk_combo_box_set_add_tearoffs (GTK_COMBO_BOX (combobox), TRUE);
         g_object_unref (model);
         gtk_container_add (GTK_CONTAINER (boom), combobox);
 
@@ -1204,7 +1202,6 @@ main (int argc, char **argv)
 
         model = create_list_blaat ();
         combobox = gtk_combo_box_new_with_model (model);
-	gtk_combo_box_set_add_tearoffs (GTK_COMBO_BOX (combobox), TRUE);
         g_object_unref (model);
         gtk_container_add (GTK_CONTAINER (boom), combobox);
 
@@ -1265,7 +1262,6 @@ main (int argc, char **argv)
 
         model = create_tree_blaat ();
         combobox = gtk_combo_box_new_with_model (model);
-	gtk_combo_box_set_add_tearoffs (GTK_COMBO_BOX (combobox), TRUE);
         g_object_unref (model);
         gtk_container_add (GTK_CONTAINER (boom), combobox);
 
@@ -1335,7 +1331,6 @@ main (int argc, char **argv)
 
         model = create_phylogenetic_tree ();
         combobox = gtk_combo_box_new_with_model (model);
-	gtk_combo_box_set_add_tearoffs (GTK_COMBO_BOX (combobox), TRUE);
         g_object_unref (model);
         gtk_container_add (GTK_CONTAINER (boom), combobox);
 
@@ -1359,7 +1354,6 @@ main (int argc, char **argv)
 
         model = create_capital_tree ();
 	combobox = gtk_combo_box_new_with_model (model);
-	gtk_combo_box_set_add_tearoffs (GTK_COMBO_BOX (combobox), TRUE);
         g_object_unref (model);
         gtk_container_add (GTK_CONTAINER (boom), combobox);
         renderer = gtk_cell_renderer_text_new ();
