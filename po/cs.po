@@ -3135,7 +3135,7 @@ msgstr "V_ložit"
 #: ../gtk/gtkstock.c:420
 msgctxt "Stock label"
 msgid "_Preferences"
-msgstr "_Nastavení"
+msgstr "_Předvolby"
 
 #: ../gtk/gtkstock.c:421
 msgctxt "Stock label"
