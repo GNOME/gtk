@@ -827,6 +827,8 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    * Note that this only affects menu style combo boxes.
    *
    * Since: 2.6
+   *
+   * Deprecated: 3.10
    */
   g_object_class_install_property (object_class,
                                    PROP_ADD_TEAROFFS,
@@ -834,7 +836,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                          P_("Add tearoffs to menus"),
                                                          P_("Whether dropdowns should have a tearoff menu item"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
 
   /**
    * GtkComboBox:has-frame:
@@ -867,6 +869,8 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    * when the popup is torn-off.
    *
    * Since: 2.10
+   *
+   * Deprecated: 3.10
    */
   g_object_class_install_property (object_class,
                                    PROP_TEAROFF_TITLE,
@@ -874,7 +878,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                         P_("Tearoff Title"),
                                                         P_("A title that may be displayed by the window manager when the popup is torn-off"),
                                                         NULL,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
 
 
   /**
@@ -4997,6 +5001,8 @@ gtk_combo_box_start_editing (GtkCellEditable *cell_editable,
  * Gets the current value of the :add-tearoffs property.
  *
  * Return value: the current value of the :add-tearoffs property.
+ *
+ * Deprecated: 3.10
  */
 gboolean
 gtk_combo_box_get_add_tearoffs (GtkComboBox *combo_box)
@@ -5015,6 +5021,8 @@ gtk_combo_box_get_add_tearoffs (GtkComboBox *combo_box)
  * menu item.
  *
  * Since: 2.6
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_combo_box_set_add_tearoffs (GtkComboBox *combo_box,
@@ -5048,6 +5056,8 @@ gtk_combo_box_set_add_tearoffs (GtkComboBox *combo_box,
  * string which must not be freed.
  *
  * Since: 2.10
+ *
+ * Deprecated: 3.10
  */
 const gchar*
 gtk_combo_box_get_title (GtkComboBox *combo_box)
@@ -5076,6 +5086,8 @@ gtk_combo_box_update_title (GtkComboBox *combo_box)
  * Sets the menu's title in tearoff mode.
  *
  * Since: 2.10
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_combo_box_set_title (GtkComboBox *combo_box,

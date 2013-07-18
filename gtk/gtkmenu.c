@@ -606,6 +606,14 @@ gtk_menu_class_init (GtkMenuClass *class)
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE));
 
+  /**
+   * GtkMenu:tearoff-title:
+   *
+   * A title that may be displayed by the window manager when this
+   * menu is torn-off.
+   *
+   * Deprecated: 3.10
+   **/
   g_object_class_install_property (gobject_class,
                                    PROP_TEAROFF_TITLE,
                                    g_param_spec_string ("tearoff-title",
@@ -620,6 +628,8 @@ gtk_menu_class_init (GtkMenuClass *class)
    * A boolean that indicates whether the menu is torn-off.
    *
    * Since: 2.6
+   *
+   * Deprecated: 3.10
    **/
   g_object_class_install_property (gobject_class,
                                    PROP_TEAROFF_STATE,
@@ -2223,6 +2233,8 @@ tearoff_window_destroyed (GtkWidget *widget,
  * displayed as drop down menu which persists as long as the menu is
  * active.  It can also be displayed as a tearoff menu which persists
  * until it is closed or reattached.
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_menu_set_tearoff_state (GtkMenu  *menu,
@@ -2337,6 +2349,8 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
  * See gtk_menu_set_tearoff_state().
  *
  * Return value: %TRUE if the menu is currently torn off.
+ *
+ * Deprecated: 3.10
  */
 gboolean
 gtk_menu_get_tearoff_state (GtkMenu *menu)
@@ -2357,6 +2371,8 @@ gtk_menu_get_tearoff_state (GtkMenu *menu)
  * menu. If @title is %NULL, the menu will see if it is attached
  * to a parent menu item, and if so it will try to use the same
  * text as that menu item's label.
+ *
+ * Deprecated: 3.10
  */
 void
 gtk_menu_set_title (GtkMenu     *menu,
@@ -2384,6 +2400,8 @@ gtk_menu_set_title (GtkMenu     *menu,
  * Return value: the title of the menu, or %NULL if the menu
  *     has no title set on it. This string is owned by GTK+
  *     and should not be modified or freed.
+ *
+ * Deprecated: 3.10
  **/
 const gchar *
 gtk_menu_get_title (GtkMenu *menu)
