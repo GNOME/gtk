@@ -11829,8 +11829,15 @@ synth_crossing (GtkWidget       *widget,
   event->crossing.send_event = TRUE;
   event->crossing.subwindow = g_object_ref (window);
   event->crossing.time = GDK_CURRENT_TIME;
-  event->crossing.x = event->crossing.y = 0;
-  event->crossing.x_root = event->crossing.y_root = 0;
+  gdk_device_get_position_double (device,
+                                  NULL,
+                                  &event->crossing.x_root,
+                                  &event->crossing.y_root);
+  gdk_window_get_device_position_double (window,
+                                         device,
+                                         &event->crossing.x,
+                                         &event->crossing.y,
+                                         NULL);
   event->crossing.mode = mode;
   event->crossing.detail = detail;
   event->crossing.focus = FALSE;
