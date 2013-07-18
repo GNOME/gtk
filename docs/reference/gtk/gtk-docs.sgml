@@ -88,33 +88,54 @@
 
     <chapter id="Builder">
       <title>Interface builder</title>
-      <xi:include href="xml/gtkbuildable.xml" />
       <xi:include href="xml/gtkbuilder.xml" />
+      <xi:include href="xml/gtkbuildable.xml" />
     </chapter>
 
     <chapter id="WindowWidgets">
       <title>Windows</title>
       <xi:include href="xml/gtkdialog.xml" />
-      <xi:include href="xml/gtkinvisible.xml" />
       <xi:include href="xml/gtkmessagedialog.xml" />
-      <xi:include href="xml/gtkwindow.xml" />
-      <xi:include href="xml/gtkwindowgroup.xml" />
       <xi:include href="xml/gtkaboutdialog.xml" />
       <xi:include href="xml/gtkassistant.xml" />
+      <xi:include href="xml/gtkwindow.xml" />
+      <xi:include href="xml/gtkwindowgroup.xml" />
+      <xi:include href="xml/gtkinvisible.xml" />
       <xi:include href="xml/gtkoffscreenwindow.xml" />
+    </chapter>
+
+    <chapter id="LayoutContainers">
+      <title>Layout Containers</title>
+      <xi:include href="xml/gtkbox.xml" />
+      <xi:include href="xml/gtkgrid.xml" />
+      <xi:include href="xml/gtkrevealer.xml" />
+      <xi:include href="xml/gtklistbox.xml" />
+      <xi:include href="xml/gtkstack.xml" />
+      <xi:include href="xml/gtkstackswitcher.xml" />
+      <xi:include href="xml/gtkheaderbar.xml" />
+      <xi:include href="xml/gtkoverlay.xml" />
+      <xi:include href="xml/gtkalignment.xml" />
+      <xi:include href="xml/gtkbbox.xml" />
+      <xi:include href="xml/gtkpaned.xml" />
+      <xi:include href="xml/gtklayout.xml" />
+      <xi:include href="xml/gtknotebook.xml" />
+      <xi:include href="xml/gtkexpander.xml" />
+      <xi:include href="xml/gtkorientable.xml" />
+      <xi:include href="xml/gtkaspectframe.xml" />
+      <xi:include href="xml/gtkfixed.xml" />
     </chapter>
 
     <chapter id="DisplayWidgets">
       <title>Display Widgets</title>
-      <xi:include href="xml/gtkaccellabel.xml" />
-      <xi:include href="xml/gtkimage.xml" />
       <xi:include href="xml/gtklabel.xml" />
-      <xi:include href="xml/gtkprogressbar.xml" />
-      <xi:include href="xml/gtkstatusbar.xml" />
-      <xi:include href="xml/gtklevelbar.xml" />
-      <xi:include href="xml/gtkinfobar.xml" />
-      <xi:include href="xml/gtkstatusicon.xml" />
+      <xi:include href="xml/gtkimage.xml" />
       <xi:include href="xml/gtkspinner.xml" />
+      <xi:include href="xml/gtkinfobar.xml" />
+      <xi:include href="xml/gtkprogressbar.xml" />
+      <xi:include href="xml/gtklevelbar.xml" />
+      <xi:include href="xml/gtkstatusbar.xml" />
+      <xi:include href="xml/gtkaccellabel.xml" />
+      <xi:include href="xml/gtkstatusicon.xml" />
     </chapter>
 
     <chapter id="ButtonWidgets">
@@ -124,11 +145,11 @@
       <xi:include href="xml/gtkradiobutton.xml" />
       <xi:include href="xml/gtktogglebutton.xml" />
       <xi:include href="xml/gtklinkbutton.xml" />
+      <xi:include href="xml/gtkmenubutton.xml" />
+      <xi:include href="xml/gtkswitch.xml" />
       <xi:include href="xml/gtkscalebutton.xml" />
       <xi:include href="xml/gtkvolumebutton.xml" />
-      <xi:include href="xml/gtkswitch.xml" />
       <xi:include href="xml/gtklockbutton.xml" />
-      <xi:include href="xml/gtkmenubutton.xml" />
     </chapter>
 
     <chapter id="NumericEntry">
@@ -223,27 +244,6 @@
       <xi:include href="xml/gtkfontchooserwidget.xml" />
       <xi:include href="xml/gtkfontchooserdialog.xml" />
       <xi:include href="xml/gtkplacessidebar.xml" />
-    </chapter>
-
-    <chapter id="LayoutContainers">
-      <title>Layout Containers</title>
-      <xi:include href="xml/gtkgrid.xml" />
-      <xi:include href="xml/gtkalignment.xml" />
-      <xi:include href="xml/gtkaspectframe.xml" />
-      <xi:include href="xml/gtkbox.xml" />
-      <xi:include href="xml/gtkbbox.xml" />
-      <xi:include href="xml/gtklistbox.xml" />
-      <xi:include href="xml/gtkfixed.xml" />
-      <xi:include href="xml/gtkpaned.xml" />
-      <xi:include href="xml/gtklayout.xml" />
-      <xi:include href="xml/gtknotebook.xml" />
-      <xi:include href="xml/gtkstack.xml" />
-      <xi:include href="xml/gtkstackswitcher.xml" />
-      <xi:include href="xml/gtkexpander.xml" />
-      <xi:include href="xml/gtkrevealer.xml" />
-      <xi:include href="xml/gtkoverlay.xml" />
-      <xi:include href="xml/gtkheaderbar.xml" />
-      <xi:include href="xml/gtkorientable.xml" />
     </chapter>
 
     <chapter id="Ornaments">
