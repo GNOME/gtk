@@ -657,7 +657,7 @@ add_no_applications_label (GtkAppChooserWidget *self)
       if (self->priv->content_type)
 	desc = g_content_type_get_description (self->priv->content_type);
 
-      string = text = g_strdup_printf (_("No applications available to open \"%s\""),
+      string = text = g_strdup_printf (_("No applications available to open “%s”"),
                                        desc);
       g_free (desc);
     }

@@ -5475,10 +5475,10 @@ confirm_dialog_should_accept_filename (GtkFileChooserDefault *impl,
 				   GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 				   GTK_MESSAGE_QUESTION,
 				   GTK_BUTTONS_NONE,
-				   _("A file named \"%s\" already exists.  Do you want to replace it?"),
+				   _("A file named “%s” already exists.  Do you want to replace it?"),
 				   file_part);
   gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-					    _("The file already exists in \"%s\".  Replacing it will "
+					    _("The file already exists in “%s”.  Replacing it will "
 					      "overwrite its contents."),
 					    folder_display_name);
 

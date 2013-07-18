@@ -331,16 +331,16 @@ set_dialog_properties (GtkAppChooserDialog *self)
   if (name != NULL)
     {
       /* Translators: %s is a filename */
-      label = g_strdup_printf (_("Select an application to open \"%s\""), name);
-      string = g_strdup_printf (_("No applications available to open \"%s\""),
+      label = g_strdup_printf (_("Select an application to open “%s”"), name);
+      string = g_strdup_printf (_("No applications available to open “%s”"),
                                 name);
     }
   else
     {
       /* Translators: %s is a file type description */
-      label = g_strdup_printf (_("Select an application for \"%s\" files"),
+      label = g_strdup_printf (_("Select an application for “%s” files"),
                                unknown ? self->priv->content_type : description);
-      string = g_strdup_printf (_("No applications available to open \"%s\" files"),
+      string = g_strdup_printf (_("No applications available to open “%s” files"),
                                unknown ? self->priv->content_type : description);
     }
 
