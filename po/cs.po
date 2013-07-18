@@ -1906,7 +1906,7 @@ msgstr "Ko_pírovat adresu odkazu"
 
 #: ../gtk/gtk-launch.c:71
 msgid "APPLICATION [URI…] — launch an APPLICATION with URI."
-msgstr "APLIKACE [URI...] - spustit APLIKACI s URI."
+msgstr "APLIKACE [URI…] - spustit APLIKACI s URI."
 
 #. Translators: this message will appear after the usage string
 #. and before the list of options.
@@ -3165,7 +3165,7 @@ msgstr "Zn_ovu"
 #: ../gtk/gtkstock.c:426
 msgctxt "Stock label"
 msgid "_Refresh"
-msgstr "Ob_novit"
+msgstr "Akt_ualizovat"
 
 #: ../gtk/gtkstock.c:427
 msgctxt "Stock label"
