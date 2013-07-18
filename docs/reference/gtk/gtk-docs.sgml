@@ -36,35 +36,6 @@
   </part>
 
 
-  <part  id="gtkbase">
-    <title>GTK+ Core Reference</title>
-    <xi:include href="xml/gtkmain.xml" />
-    <xi:include href="xml/gtkfeatures.xml" />
-    <xi:include href="xml/gtkaccelgroup.xml" />
-    <xi:include href="xml/gtkaccelmap.xml" />
-    <xi:include href="xml/gtkclipboard.xml" />
-    <xi:include href="xml/gtkdnd.xml" />
-    <xi:include href="xml/gtksettings.xml" />
-    <xi:include href="xml/gtkbindings.xml" />
-    <xi:include href="xml/gtkenums.xml" />
-    <xi:include href="xml/gtkselection.xml" />
-    <xi:include href="xml/gtktesting.xml" />
-    <xi:include href="xml/filesystem.xml" />
-  </part>
-
-  <part id="theming">
-    <title>Theming in GTK+</title>
-    <xi:include href="xml/gtkstylecontext.xml" />
-    <xi:include href="xml/gtkcssprovider.xml" />
-    <xi:include href="xml/gtkstyleprovider.xml" />
-    <xi:include href="xml/gtkstyleproperties.xml" />
-    <xi:include href="xml/gtkthemingengine.xml" />
-    <xi:include href="xml/gtkwidgetpath.xml" />
-    <xi:include href="xml/gtkicontheme.xml" />
-    <xi:include href="xml/gtkiconfactory.xml" />
-    <xi:include href="xml/gtknumerableicon.xml" />
-  </part>
-
   <part id="gtkobjects">
     <title>GTK+ Widgets and Objects</title>
 
@@ -358,6 +329,35 @@
       <xi:include href="xml/gtkstock.xml" />
     </chapter>
 
+  </part>
+
+  <part  id="gtkbase">
+    <title>GTK+ Core Reference</title>
+    <xi:include href="xml/gtkmain.xml" />
+    <xi:include href="xml/gtkfeatures.xml" />
+    <xi:include href="xml/gtkaccelgroup.xml" />
+    <xi:include href="xml/gtkaccelmap.xml" />
+    <xi:include href="xml/gtkclipboard.xml" />
+    <xi:include href="xml/gtkdnd.xml" />
+    <xi:include href="xml/gtksettings.xml" />
+    <xi:include href="xml/gtkbindings.xml" />
+    <xi:include href="xml/gtkenums.xml" />
+    <xi:include href="xml/gtkselection.xml" />
+    <xi:include href="xml/gtktesting.xml" />
+    <xi:include href="xml/filesystem.xml" />
+  </part>
+
+  <part id="theming">
+    <title>Theming in GTK+</title>
+    <xi:include href="xml/gtkstylecontext.xml" />
+    <xi:include href="xml/gtkcssprovider.xml" />
+    <xi:include href="xml/gtkstyleprovider.xml" />
+    <xi:include href="xml/gtkstyleproperties.xml" />
+    <xi:include href="xml/gtkthemingengine.xml" />
+    <xi:include href="xml/gtkwidgetpath.xml" />
+    <xi:include href="xml/gtkicontheme.xml" />
+    <xi:include href="xml/gtkiconfactory.xml" />
+    <xi:include href="xml/gtknumerableicon.xml" />
   </part>
 
   <part id="migrating">
