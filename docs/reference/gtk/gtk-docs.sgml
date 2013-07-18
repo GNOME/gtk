@@ -79,6 +79,13 @@
       <xi:include href="visual_index.xml" />
     </chapter>
 
+    <chapter id="Application">
+      <title>Application support</title>
+      <xi:include href="xml/gtkapplication.xml" />
+      <xi:include href="xml/gtkapplicationwindow.xml" />
+      <xi:include href="xml/gtkactionable.xml" />
+    </chapter>
+
     <chapter id="WindowWidgets">
       <title>Windows</title>
       <xi:include href="xml/gtkdialog.xml" />
@@ -326,13 +333,6 @@
       <title>Interface builder</title>
       <xi:include href="xml/gtkbuildable.xml" />
       <xi:include href="xml/gtkbuilder.xml" />
-    </chapter>
-
-    <chapter id="Application">
-      <title>Application support</title>
-      <xi:include href="xml/gtkapplication.xml" />
-      <xi:include href="xml/gtkapplicationwindow.xml" />
-      <xi:include href="xml/gtkactionable.xml" />
     </chapter>
 
     <chapter id="DeprecatedObjects">
