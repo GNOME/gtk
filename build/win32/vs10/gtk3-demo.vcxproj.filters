@@ -14,9 +14,6 @@
     <ClCompile Include="..\..\..\demos\gtk-demo\application.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\demos\gtk-demo\appwindow.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\assistant.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -146,9 +143,6 @@
     <ClCompile Include="..\..\..\demos\gtk-demo\stack.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\demos\gtk-demo\stock_browser.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\textscroll.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -165,9 +159,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\tree_store.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\demos\gtk-demo\ui_manager.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

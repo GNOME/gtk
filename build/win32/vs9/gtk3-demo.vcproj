@@ -161,7 +161,6 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File RelativePath="..\..\..\demos\gtk-demo\application.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\appwindow.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\assistant.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\builder.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\button_box.c" />
@@ -205,14 +204,12 @@
 			<File RelativePath="..\..\..\demos\gtk-demo\sizegroup.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\spinner.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\stack.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\stock_browser.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\textscroll.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\textview.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\theming_style_classes.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\toolpalette.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\transparent.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\tree_store.c" />
-			<File RelativePath="..\..\..\demos\gtk-demo\ui_manager.c" />
 		</Filter>
 		<Filter
 			Name="Header Files"
