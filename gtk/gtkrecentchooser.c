@@ -1027,10 +1027,14 @@ _gtk_recent_chooser_update (GtkActivatable *activatable,
 			    GtkAction      *action,
 			    const gchar    *property_name)
 {
+  GtkRecentChooser *recent_chooser;
+  GtkRecentChooser *action_chooser;
+  GtkRecentAction  *recent_action;
+
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  GtkRecentChooser *recent_chooser = GTK_RECENT_CHOOSER (activatable);
-  GtkRecentChooser *action_chooser = GTK_RECENT_CHOOSER (action);
-  GtkRecentAction  *recent_action  = GTK_RECENT_ACTION (action);
+  recent_chooser = GTK_RECENT_CHOOSER (activatable);
+  action_chooser = GTK_RECENT_CHOOSER (action);
+  recent_action  = GTK_RECENT_ACTION (action);
   G_GNUC_END_IGNORE_DEPRECATIONS;
 
   if (strcmp (property_name, "show-numbers") == 0 && recent_chooser_has_show_numbers (recent_chooser))
@@ -1062,9 +1066,12 @@ void
 _gtk_recent_chooser_sync_action_properties (GtkActivatable *activatable,
 			                    GtkAction      *action)
 {
+  GtkRecentChooser *recent_chooser;
+  GtkRecentChooser *action_chooser;
+
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  GtkRecentChooser *recent_chooser = GTK_RECENT_CHOOSER (activatable);
-  GtkRecentChooser *action_chooser = GTK_RECENT_CHOOSER (action);
+  recent_chooser = GTK_RECENT_CHOOSER (activatable);
+  action_chooser = GTK_RECENT_CHOOSER (action);
   G_GNUC_END_IGNORE_DEPRECATIONS;
 
   if (!action)
