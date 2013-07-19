@@ -30,6 +30,8 @@
 
 #include <math.h>
 
+#include "fallback-c89.c"
+
 /* LIMITATIONS:
  *
  * Offscreen windows can't be the child of a foreign window,
