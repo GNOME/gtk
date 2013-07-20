@@ -49,7 +49,6 @@
 #include "gtkimage.h"
 #include "gtkbox.h"
 #include "deprecated/gtkstock.h"
-#include "deprecated/gtkiconfactory.h"
 #include "deprecated/gtkactivatable.h"
 #include "gtksizerequest.h"
 #include "gtktypebuiltins.h"

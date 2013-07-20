@@ -27,9 +27,7 @@
 #include "gtkrecentchooserprivate.h"
 #include "gtkrecentchoosermenu.h"
 
-#include "deprecated/gtkstock.h"
 #include "gtkicontheme.h"
-#include "deprecated/gtkiconfactory.h"
 #include "gtkintl.h"
 #include "gtksettings.h"
 #include "gtkmenushell.h"

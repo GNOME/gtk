@@ -33,7 +33,6 @@
 #include "gtklabel.h"
 #include "gtkbox.h"
 #include "gtkimage.h"
-#include "deprecated/gtkiconfactory.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"

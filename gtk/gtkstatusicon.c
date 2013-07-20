@@ -33,7 +33,6 @@
 #include "gtkstatusicon.h"
 
 #include "gtkintl.h"
-#include "deprecated/gtkiconfactory.h"
 #include "gtkiconhelperprivate.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"

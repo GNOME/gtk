@@ -37,7 +37,6 @@
 #include "gtkwidget.h"
 #include "gtkwindow.h"
 #include "gtkprivate.h"
-#include "deprecated/gtkiconfactory.h"
 #include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
 #include "gtkstylecascadeprivate.h"

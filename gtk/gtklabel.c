@@ -34,7 +34,6 @@
 #include "gtkpango.h"
 #include "gtkwindow.h"
 #include "gtkclipboard.h"
-#include "deprecated/gtkimagemenuitem.h"
 #include "gtkintl.h"
 #include "gtkseparatormenuitem.h"
 #include "gtktextutil.h"

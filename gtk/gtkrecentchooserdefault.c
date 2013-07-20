@@ -28,7 +28,6 @@
 #endif
 
 #include "gtkicontheme.h"
-#include "deprecated/gtkiconfactory.h"
 #include "gtksettings.h"
 #include "gtktreeview.h"
 #include "gtkliststore.h"
@@ -46,7 +45,6 @@
 #include "gtkbox.h"
 #include "gtkpaned.h"
 #include "gtkimage.h"
-#include "deprecated/gtkimagemenuitem.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkmenuitem.h"

@@ -38,7 +38,6 @@
 #include "gtkclipboard.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcssnumbervalueprivate.h"
-#include "deprecated/gtkiconfactory.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkselectionprivate.h"

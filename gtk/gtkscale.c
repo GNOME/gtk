@@ -34,7 +34,6 @@
 #include "gtkbindings.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
-#include "deprecated/gtkiconfactory.h"
 #include "gtkicontheme.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"

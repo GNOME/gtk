@@ -40,13 +40,11 @@
 #endif
 
 #include "gtkdnd.h"
-#include "deprecated/gtkiconfactory.h"
 #include "gtkiconhelperprivate.h"
 #include "gtkicontheme.h"
 #include "gtkinvisible.h"
 #include "gtkmain.h"
 #include "gtkplug.h"
-#include "deprecated/gtkstock.h"
 #include "gtktooltip.h"
 #include "gtkwindow.h"
 #include "gtkintl.h"

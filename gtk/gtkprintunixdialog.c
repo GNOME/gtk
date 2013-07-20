@@ -36,7 +36,6 @@
 #include "gtkspinbutton.h"
 #include "gtkcellrendererpixbuf.h"
 #include "gtkcellrenderertext.h"
-#include "deprecated/gtkiconfactory.h"
 #include "gtkimage.h"
 #include "gtktreeselection.h"
 #include "gtknotebook.h"
