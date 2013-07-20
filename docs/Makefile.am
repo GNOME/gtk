@@ -10,7 +10,6 @@ EXTRA_DIST += \
 	focus_tracking.txt		\
 	gtkdocs_fix			\
 	make-todo			\
-	refcounting.txt			\
 	RELEASE-HOWTO			\
 	sizing-test.txt			\
 	styles.txt			\
