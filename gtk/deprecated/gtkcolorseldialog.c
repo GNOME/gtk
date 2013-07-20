@@ -25,7 +25,6 @@
 
 #define GDK_DISABLE_DEPRECATION_WARNINGS
 
-
 #include <string.h>
 #include <glib.h>
 #include "gtkcolorseldialog.h"

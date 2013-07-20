@@ -259,7 +259,9 @@
  */
 
 #include "config.h"
+
 #define GDK_DISABLE_DEPRECATION_WARNINGS
+
 #include "gtkactivatable.h"
 #include "gtkactiongroup.h"
 #include "gtkprivate.h"

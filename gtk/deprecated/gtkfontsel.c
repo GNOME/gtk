@@ -53,9 +53,6 @@
 #include "gtkbuildable.h"
 #include "gtkorientable.h"
 #include "gtkprivate.h"
-
-#define GDK_DISABLE_DEPRECATION_WARNINGS
-
 #include "gtkfontsel.h"
 
 /**
