@@ -46,7 +46,7 @@
 #include "gtkorientableprivate.h"
 #include "gtkprivate.h"
 #include "gtksettings.h"
-#include "gtkstock.h"
+#include "deprecated/gtkstock.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"

@@ -33,7 +33,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtktoggleaction.h>
+#include <gtk/deprecated/gtktoggleaction.h>
 
 G_BEGIN_DECLS
 

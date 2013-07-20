@@ -30,7 +30,7 @@
 #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 #include "gtkbindings.h"
 #include "gtkdnd.h"
-#include "gtkimagemenuitem.h"
+#include "deprecated/gtkimagemenuitem.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"

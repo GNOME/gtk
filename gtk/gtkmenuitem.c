@@ -37,7 +37,7 @@
 #include "gtkseparatormenuitem.h"
 #include "gtkprivate.h"
 #include "gtkbuildable.h"
-#include "gtkactivatable.h"
+#include "deprecated/gtkactivatable.h"
 #include "gtkwidgetprivate.h"
 #include "gtkintl.h"
 #include "gtksettings.h"

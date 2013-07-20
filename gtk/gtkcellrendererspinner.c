@@ -28,7 +28,7 @@
 #include "config.h"
 
 #include "gtkcellrendererspinner.h"
-#include "gtkiconfactory.h"
+#include "deprecated/gtkiconfactory.h"
 #include "gtkicontheme.h"
 #include "gtkintl.h"
 #include "gtksettings.h"

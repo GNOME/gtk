@@ -28,7 +28,7 @@
 #include "gtktoolshell.h"
 #include "gtkseparatormenuitem.h"
 #include "gtksizerequest.h"
-#include "gtkactivatable.h"
+#include "deprecated/gtkactivatable.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 

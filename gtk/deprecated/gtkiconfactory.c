@@ -35,7 +35,7 @@
 #include "gtkdebug.h"
 #include "gtkicontheme.h"
 #include "gtksettingsprivate.h"
-#include "gtkstock.h"
+#include "deprecated/gtkstock.h"
 #include "gtkwidget.h"
 #include "gtkintl.h"
 #include "gtkbuildable.h"

@@ -52,7 +52,7 @@
 
 #include "gtkclipboard.h"
 #include "gtkdnd.h"
-#include "gtkimagemenuitem.h"
+#include "deprecated/gtkimagemenuitem.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"

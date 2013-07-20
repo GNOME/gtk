@@ -19,7 +19,7 @@
 #define __GTK_MENU_ITEM_PRIVATE_H__
 
 #include <gtk/gtkmenuitem.h>
-#include <gtk/gtkaction.h>
+#include <gtk/deprecated/gtkaction.h>
 #include <gtk/gtkactionhelper.h>
 
 G_BEGIN_DECLS

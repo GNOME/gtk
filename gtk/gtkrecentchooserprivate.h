@@ -23,7 +23,7 @@
 
 #include "gtkrecentmanager.h"
 #include "gtkrecentchooser.h"
-#include "gtkactivatable.h"
+#include "deprecated/gtkactivatable.h"
 
 G_BEGIN_DECLS
 

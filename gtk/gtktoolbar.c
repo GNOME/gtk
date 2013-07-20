@@ -49,7 +49,7 @@
 #include "gtkradiotoolbutton.h"
 #include "gtkseparatormenuitem.h"
 #include "gtkseparatortoolitem.h"
-#include "gtkstock.h"
+#include "deprecated/gtkstock.h"
 #include "gtktoolshell.h"
 #include "gtkbox.h"
 #include "gtkprivate.h"

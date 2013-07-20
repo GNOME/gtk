@@ -254,7 +254,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkwindow.h"
 #include "gtkicontheme.h"
-#include "gtkstock.h"
+#include "deprecated/gtkstock.h"
 
 
 static void gtk_builder_class_init     (GtkBuilderClass *klass);

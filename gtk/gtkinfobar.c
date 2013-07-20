@@ -45,7 +45,7 @@
 #include "gtkprivate.h"
 #include "gtkorientable.h"
 #include "gtktypebuiltins.h"
-#include "gtkstock.h"
+#include "deprecated/gtkstock.h"
 
 /**
  * SECTION:gtkinfobar

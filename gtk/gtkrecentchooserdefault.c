@@ -28,7 +28,7 @@
 #endif
 
 #include "gtkicontheme.h"
-#include "gtkiconfactory.h"
+#include "deprecated/gtkiconfactory.h"
 #include "gtksettings.h"
 #include "gtktreeview.h"
 #include "gtkliststore.h"
@@ -46,7 +46,7 @@
 #include "gtkbox.h"
 #include "gtkpaned.h"
 #include "gtkimage.h"
-#include "gtkimagemenuitem.h"
+#include "deprecated/gtkimagemenuitem.h"
 #include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkmenuitem.h"
@@ -62,7 +62,7 @@
 #include "gtktooltip.h"
 #include "gtktypebuiltins.h"
 #include "gtkorientable.h"
-#include "gtkactivatable.h"
+#include "deprecated/gtkactivatable.h"
 
 #include "gtkrecentmanager.h"
 #include "gtkrecentfilter.h"

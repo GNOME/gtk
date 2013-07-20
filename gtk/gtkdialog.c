@@ -40,7 +40,7 @@
 #include "gtkprivate.h"
 #include "gtkbuildable.h"
 #include "gtksettings.h"
-#include "gtkstock.h"
+#include "deprecated/gtkstock.h"
 
 /**
  * SECTION:gtkdialog

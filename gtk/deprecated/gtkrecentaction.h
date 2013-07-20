@@ -24,7 +24,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkaction.h>
+#include <gtk/deprecated/gtkaction.h>
 #include <gtk/gtkrecentmanager.h>
 
 G_BEGIN_DECLS

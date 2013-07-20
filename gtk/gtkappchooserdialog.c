@@ -52,7 +52,7 @@
 #include "gtkbbox.h"
 #include "gtkbutton.h"
 #include "gtkmenuitem.h"
-#include "gtkstock.h"
+#include "deprecated/gtkstock.h"
 
 #include <string.h>
 #include <glib/gi18n-lib.h>

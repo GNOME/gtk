@@ -44,7 +44,7 @@
 #include "gtkorientable.h"
 #include "gtkscrolledwindow.h"
 #include "gtktextview.h"
-#include "gtkiconfactory.h"
+#include "deprecated/gtkiconfactory.h"
 #include "gtkshow.h"
 #include "gtkmain.h"
 #include "gtkmessagedialog.h"

@@ -39,7 +39,7 @@
 
 #include "gtkicontheme.h"
 #include "gtkdebug.h"
-#include "gtkiconfactory.h"
+#include "deprecated/gtkiconfactory.h"
 #include "gtkiconcache.h"
 #include "gtkbuiltincache.h"
 #include "gtkintl.h"

@@ -20,7 +20,7 @@
 #define __GTK_BUTTON_PRIVATE_H__
 
 #include "gtkactionhelper.h"
-#include "gtkaction.h"
+#include "deprecated/gtkaction.h"
 
 G_BEGIN_DECLS
 

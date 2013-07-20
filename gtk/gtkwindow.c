@@ -40,7 +40,7 @@
 #include "gtkmain.h"
 #include "gtkmnemonichash.h"
 #include "gtkmenubar.h"
-#include "gtkiconfactory.h"
+#include "deprecated/gtkiconfactory.h"
 #include "gtkicontheme.h"
 #include "gtkmarshalers.h"
 #include "gtkplug.h"

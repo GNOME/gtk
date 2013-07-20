@@ -30,7 +30,7 @@
 #include "gdk/gdk.h"
 
 #include "gtkdnd.h"
-#include "gtkiconfactory.h"
+#include "deprecated/gtkiconfactory.h"
 #include "gtkicontheme.h"
 #include "gtkimageprivate.h"
 #include "gtkinvisible.h"

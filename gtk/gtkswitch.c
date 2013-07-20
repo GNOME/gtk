@@ -38,10 +38,10 @@
 
 #include "gtkswitch.h"
 
-#include "gtkactivatable.h"
+#include "deprecated/gtkactivatable.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
-#include "gtktoggleaction.h"
+#include "deprecated/gtktoggleaction.h"
 #include "gtkwidget.h"
 #include "gtkmarshalers.h"
 #include "gtkapplicationprivate.h"

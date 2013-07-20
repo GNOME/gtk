@@ -25,7 +25,7 @@
 #include "gtkarrow.h"
 #include "gtkbox.h"
 #include "gtkdnd.h"
-#include "gtkiconfactory.h"
+#include "deprecated/gtkiconfactory.h"
 #include "gtkicontheme.h"
 #include "gtkimage.h"
 #include "gtkintl.h"

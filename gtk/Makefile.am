@@ -136,6 +136,9 @@ endif
 # by configure)
 
 deprecated_h_sources = 			\
+	deprecated/gtkactivatable.h	\
+	deprecated/gtkaction.h		\
+	deprecated/gtkactiongroup.h	\
 	deprecated/gtkcolorsel.h	\
 	deprecated/gtkcolorseldialog.h	\
 	deprecated/gtkfontsel.h		\
@@ -148,11 +151,18 @@ deprecated_h_sources = 			\
 	deprecated/gtkhscrollbar.h	\
 	deprecated/gtkhseparator.h	\
 	deprecated/gtkhsv.h		\
+	deprecated/gtkiconfactory.h	\
+	deprecated/gtkimagemenuitem.h	\
+	deprecated/gtkradioaction.h	\
 	deprecated/gtkrc.h		\
+	deprecated/gtkrecentaction.h	\
+	deprecated/gtkstock.h		\
 	deprecated/gtkstyle.h		\
 	deprecated/gtksymboliccolor.h	\
 	deprecated/gtktable.h		\
 	deprecated/gtktearoffmenuitem.h	\
+	deprecated/gtktoggleaction.h	\
+	deprecated/gtkuimanager.h		\
 	deprecated/gtkvbbox.h		\
 	deprecated/gtkvbox.h		\
 	deprecated/gtkvscale.h		\
@@ -174,9 +184,6 @@ gtk_public_h_sources = 		\
 	gtkaccelmap.h		\
 	gtkaccessible.h		\
 	gtkactionable.h		\
-	gtkaction.h		\
-	gtkactiongroup.h	\
-	gtkactivatable.h	\
 	gtkadjustment.h		\
 	gtkalignment.h		\
 	gtkappchooser.h		\
@@ -249,11 +256,9 @@ gtk_public_h_sources = 		\
 	gtkframe.h		\
 	gtkgrid.h		\
 	gtkheaderbar.h		\
-	gtkiconfactory.h	\
 	gtkicontheme.h		\
 	gtkiconview.h		\
 	gtkimage.h		\
-	gtkimagemenuitem.h	\
 	gtkimcontext.h		\
 	gtkimcontextinfo.h	\
 	gtkimcontextsimple.h	\
@@ -294,12 +299,10 @@ gtk_public_h_sources = 		\
 	gtkprintoperationpreview.h \
 	gtkprintsettings.h	\
 	gtkprogressbar.h	\
-	gtkradioaction.h	\
 	gtkradiobutton.h	\
 	gtkradiomenuitem.h	\
 	gtkradiotoolbutton.h	\
 	gtkrange.h		\
-	gtkrecentaction.h	\
 	gtkrecentchooser.h	\
 	gtkrecentchooserdialog.h \
 	gtkrecentchoosermenu.h	\
@@ -329,7 +332,6 @@ gtk_public_h_sources = 		\
 	gtkstackswitcher.h	\
 	gtkstatusbar.h		\
 	gtkstatusicon.h		\
-	gtkstock.h		\
 	gtkstylecontext.h	\
 	gtkstyleproperties.h	\
 	gtkstyleprovider.h	\
@@ -346,7 +348,6 @@ gtk_public_h_sources = 		\
 	gtktexttagtable.h	\
 	gtktextview.h		\
 	gtkthemingengine.h	\
-	gtktoggleaction.h	\
 	gtktogglebutton.h	\
 	gtktoggletoolbutton.h	\
 	gtktoolbar.h		\
@@ -366,7 +367,6 @@ gtk_public_h_sources = 		\
 	gtktreeview.h		\
 	gtktreeviewcolumn.h	\
 	gtktypes.h		\
-	gtkuimanager.h		\
 	gtkviewport.h		\
 	gtkvolumebutton.h	\
 	gtkwidget.h		\
@@ -563,6 +563,9 @@ gtk_private_h_sources =		\
 
 # GTK+ C sources to build the library from
 deprecated_c_sources = 			\
+	deprecated/gtkactivatable.c	\
+	deprecated/gtkaction.c		\
+	deprecated/gtkactiongroup.c	\
 	deprecated/gtkcolorsel.c	\
 	deprecated/gtkcolorseldialog.c	\
 	deprecated/gtkfontsel.c		\
@@ -575,11 +578,18 @@ deprecated_c_sources = 			\
 	deprecated/gtkhscrollbar.c	\
 	deprecated/gtkhseparator.c	\
 	deprecated/gtkhsv.c		\
+	deprecated/gtkiconfactory.c	\
+	deprecated/gtkimagemenuitem.c	\
+	deprecated/gtkradioaction.c	\
 	deprecated/gtkrc.c		\
+	deprecated/gtkrecentaction.c	\
+	deprecated/gtkstock.c		\
 	deprecated/gtkstyle.c		\
 	deprecated/gtksymboliccolor.c	\
 	deprecated/gtktable.c		\
 	deprecated/gtktearoffmenuitem.c	\
+	deprecated/gtktoggleaction.c	\
+	deprecated/gtkuimanager.c	\
 	deprecated/gtkvbbox.c		\
 	deprecated/gtkvbox.c		\
 	deprecated/gtkvscale.c		\
@@ -604,10 +614,7 @@ gtk_base_c_sources = 		\
 	gtkaccellabel.c		\
 	gtkaccelmap.c		\
 	gtkaccessible.c		\
-	gtkaction.c		\
 	gtkactionhelper.c	\
-	gtkactiongroup.c	\
-	gtkactivatable.c	\
 	gtkadjustment.c		\
 	gtkalignment.c		\
 	gtkallocatedbitmask.c	\
@@ -744,12 +751,10 @@ gtk_base_c_sources = 		\
 	gtkhsla.c		\
 	gtkiconcache.c		\
 	gtkiconcachevalidator.c	\
-	gtkiconfactory.c	\
 	gtkiconhelper.c		\
 	gtkicontheme.c		\
 	gtkiconview.c		\
 	gtkimage.c		\
-	gtkimagemenuitem.c	\
 	gtkimcontext.c		\
 	gtkimcontextsimple.c	\
 	gtkimmodule.c		\
@@ -802,13 +807,11 @@ gtk_base_c_sources = 		\
 	gtkprivatetypebuiltins.c \
 	gtkprogressbar.c	\
 	gtkpixelcache.c		\
-	gtkradioaction.c	\
 	gtkradiobutton.c	\
 	gtkradiomenuitem.c	\
 	gtkradiotoolbutton.c	\
 	gtkrange.c		\
 	gtkrbtree.c		\
-	gtkrecentaction.c	\
 	gtkrecentchooserdefault.c \
 	gtkrecentchooserdialog.c \
 	gtkrecentchoosermenu.c	\
@@ -840,7 +843,6 @@ gtk_base_c_sources = 		\
 	gtkstackswitcher.c	\
 	gtkstatusbar.c		\
 	gtkstatusicon.c		\
-	gtkstock.c		\
 	gtkstyleanimation.c	\
 	gtkstylecascade.c	\
 	gtkstylecontext.c	\
@@ -869,7 +871,6 @@ gtk_base_c_sources = 		\
 	gtktextview.c		\
 	gtkthemingbackground.c  \
 	gtkthemingengine.c	\
-	gtktoggleaction.c	\
 	gtktogglebutton.c	\
 	gtktoggletoolbutton.c	\
 	gtktoolbar.c		\
@@ -892,7 +893,6 @@ gtk_base_c_sources = 		\
 	gtktreeview.c		\
 	gtktreeviewcolumn.c	\
 	gtktypebuiltins.c	\
-	gtkuimanager.c		\
 	gtkvolumebutton.c	\
 	gtkviewport.c		\
 	gtkwidget.c		\

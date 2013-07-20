@@ -26,7 +26,7 @@
 #include "gtkaccellabel.h"
 #include "gtkmarshalers.h"
 #include "gtkradiomenuitem.h"
-#include "gtkactivatable.h"
+#include "deprecated/gtkactivatable.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "a11y/gtkradiomenuitemaccessible.h"

@@ -35,8 +35,8 @@
 
 #include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkwidget.h>
-#include <gtk/gtkaction.h>
-#include <gtk/gtkactiongroup.h>
+#include <gtk/deprecated/gtkaction.h>
+#include <gtk/deprecated/gtkactiongroup.h>
 
 G_BEGIN_DECLS
 

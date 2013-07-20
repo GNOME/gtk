@@ -25,7 +25,7 @@
 #include "gtkprivate.h"
 
 #include "gtkliststore.h"
-#include "gtkstock.h"
+#include "deprecated/gtkstock.h"
 #include "gtktreeviewcolumn.h"
 #include "gtktreeselection.h"
 #include "gtktreemodel.h"

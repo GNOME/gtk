@@ -56,7 +56,7 @@
 #include "gtkcellrendererpixbuf.h"
 #include "gtkfilechooserprivate.h"
 #include "gtkicontheme.h"
-#include "gtkimagemenuitem.h"
+#include "deprecated/gtkimagemenuitem.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"

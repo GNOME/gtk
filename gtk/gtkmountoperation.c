@@ -46,7 +46,7 @@
 #include "gtkcellrendererpixbuf.h"
 #include "gtkscrolledwindow.h"
 #include "gtkicontheme.h"
-#include "gtkimagemenuitem.h"
+#include "deprecated/gtkimagemenuitem.h"
 #include "gtkmain.h"
 
 #include <glib/gprintf.h>

@@ -24,7 +24,7 @@
 
 #include <glib-object.h>
 #include <gtk/gtkenums.h>
-#include <gtk/gtkiconfactory.h>
+#include <gtk/deprecated/gtkiconfactory.h>
 #include <gtk/gtkstyleproperties.h>
 #include <gtk/gtktypes.h>
 

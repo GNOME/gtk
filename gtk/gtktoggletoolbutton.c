@@ -22,11 +22,11 @@
 #include "gtkcheckmenuitem.h"
 #include "gtklabel.h"
 #include "gtktogglebutton.h"
-#include "gtkstock.h"
+#include "deprecated/gtkstock.h"
 #include "gtkintl.h"
 #include "gtkradiotoolbutton.h"
-#include "gtktoggleaction.h"
-#include "gtkactivatable.h"
+#include "deprecated/gtktoggleaction.h"
+#include "deprecated/gtkactivatable.h"
 #include "gtkprivate.h"
 
 
