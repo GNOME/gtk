@@ -412,7 +412,14 @@ HTML_IMAGES = \
 	$(srcdir)/images/up-center.png					\
 	$(srcdir)/images/up-end.png					\
 	$(srcdir)/images/up-start.png					\
-	$(srcdir)/images/list-box.png
+	$(srcdir)/images/list-box.png					\
+	$(srcdir)/images/getting-started-app1.png			\
+	$(srcdir)/images/getting-started-app2.png			\
+	$(srcdir)/images/getting-started-app3.png			\
+	$(srcdir)/images/getting-started-app4.png			\
+	$(srcdir)/images/getting-started-app6.png			\
+	$(srcdir)/images/getting-started-app7.png			\
+	$(srcdir)/images/getting-started-app8.png
 
 # Extra options to supply to gtkdoc-fixref
 FIXXREF_OPTIONS=--extra-dir=../gdk/html \

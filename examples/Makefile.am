@@ -1,39 +1,7 @@
-
-# these have a handrolled Makefile that gets in the way of distchecking
-# so they will not be included in tarballs until they get integrated
-# in the new 'getting started' section of the docs
-OLD_EXAMPLES = \
-		arrow \
-		aspectframe \
-		base \
-		buttonbox \
-		buttons \
-		calendar \
-		entry \
-		eventbox \
-		fixed \
-		frame \
-		gtkdial \
-		helloworld \
-		helloworld2 \
-		label \
-		menu \
-		notebook \
-		packbox \
-		paned \
-		progressbar \
-		radiobuttons \
-		rangewidgets \
-		rulers \
-		scribble-simple \
-		scribble-xinput \
-		scrolledwin \
-		selection \
-		spinbutton \
-		statusbar \
-		table \
-		tictactoe \
-		wheelbarrow
+SUBDIRS = \
+	application1 application2 application3 \
+	application4 application5 application6 \
+	application7 application8
 
 AM_CPPFLAGS = \
 	-I$(top_srcdir)				\

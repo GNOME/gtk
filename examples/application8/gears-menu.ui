@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<interface>
+  <!-- interface-requires gtk+ 3.0 -->
+  <menu id="menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Words</attribute>
+        <attribute name="action">win.show-words</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>

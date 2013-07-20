@@ -12,7 +12,7 @@
   <link linkend="gtk-compiling">Compiling the GTK+ libraries</link>
   section in this reference.</para>
 
-  <simplesect>
+  <section>
     <title>Basics</title>
 
     <para>To begin our introduction to GTK, we'll start with the simplest
@@ -127,9 +127,9 @@
         <literal>gcc `pkg-config --cflags gtk+-3.0` -o example-1 example-1.c `pkg-config --libs gtk+-3.0`</literal>
       </literallayout>
     </para>
-  </simplesect>
+  </section>
 
-  <simplesect>
+  <section>
     <title>Packing</title>
 
     <para>When creating an application, you'll want to put more than one widget
@@ -165,9 +165,9 @@
         <literal>gcc `pkg-config --cflags gtk+-3.0` -o example-2 example-2.c `pkg-config --libs gtk+-3.0`</literal>
       </literallayout>
     </para>
-  </simplesect>
+  </section>
 
-  <simplesect>
+  <section>
     <title>Drawing</title>
 
     <para>Many widgets, like buttons, do all their drawing themselves. You
@@ -210,10 +210,10 @@
         <literal>gcc `pkg-config --cflags gtk+-3.0` -o example-3 example-3.c `pkg-config --libs gtk+-3.0`</literal>
       </literallayout>
     </para>
-  </simplesect>
+  </section>
 
-  <simplesect>
-    <title>Building interfaces</title>
+  <section>
+    <title>Building user interfaces</title>
 
     <para>When construcing a more complicated user interface, with dozens
     or hundreds of widgets, doing all the setup work in C code is
@@ -258,6 +258,586 @@
     UI editors such as <ulink url="http://glade.gnome.org">glade</ulink>
     can load the file and allow you to create and modify your UI by
     point-and-click.</para>
+  </section>
 
-  </simplesect>
+  <section>
+    <title>Building applications</title>
+
+    <para>GTK+ includes application support that is built on top of
+    #GApplication. In this tutorial we'll build a simple application by
+    starting from scratch, adding more and more pieces over time. Along
+    the way, we'll learn about #GtkApplication, templates, resources,
+    application menus, settings, #GtkHeaderBar, #GtkStack, #GtkSearchBar,
+    #GtkListBox, and more.</para>
+
+    <para>The full, buildable sources for these examples can be find
+    in the examples/ directory of the GTK+ source distribution, or
+    <ulink url="https://git.gnome.org/browse/gtk+/tree/examples">online</ulink> in the GTK+ git repository.</para>
+
+    <section>
+      <title>A trivial application</title>
+
+      <para>When using #GtkApplication, the main() function can be very
+      simple. We just call g_application_run() and give it an instance
+      of our application class.</para>
+
+      <informalexample>
+        <programlisting><xi:include href="../../../../examples/application1/main.c" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+      </informalexample>
+
+      <para>All the application logic is in the application class, which
+      is a subclass of #GtkApplication. Our example does not yet have any
+      interesting functionality. All it does is open a window when it is
+      activated without arguments, and open the files it is given, if it
+      is started with arguments.</para>
+
+      <informalexample>
+        <programlisting><xi:include href="../../../../examples/application1/exampleapp.c" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+      </informalexample>
+
+      <para>Another important class that is part of the application support
+      in GTK+ is #GtkApplicationWindow. It is typically subclassed as well.
+      Our subclass does not do anything yet, so we will just get an empty
+      window.</para>
+
+      <informalexample>
+        <programlisting><xi:include href="../../../../examples/application1/exampleappwin.c" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+      </informalexample>
+
+      <para>Here is what we've achieved so far:</para>
+
+      <informalfigure>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="getting-started-app1.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </informalfigure>
+
+      <para>This does not look very impressive yet, but our application
+      is already presenting itself on the session bus, it has single-instance
+      semantics, and it accepts files as commandline arguments.</para>
+    </section>
+
+    <section>
+      <title>Populating the window</title>
+
+      <para>In this step, we use a #GtkBuilder template to associate a
+      #GtkBuilder ui file with our application window class.</para>
+      <para>Our simple ui file puts a #GtkHeaderBar on top of a #GtkStack
+      widget. The header bar contains a #GtkStackSwitcher, which is a
+      standalone widget to show a row of 'tabs' for the pages of a #GtkStack.
+      </para>
+
+      <informalexample>
+        <programlisting><xi:include href="../../../../examples/application2/window.ui" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+      </informalexample>
+
+      <para>To make use of this file in our application, we revisit
+      our #GtkApplicationWindow subclass, and call
+      gtk_widget_class_set_template_from_resource() from the class init
+      function to set the ui file as template for this class. We also
+      add a call to gtk_widget_init_template() in the instance init
+      function to instantiate the template for each instance of our
+      class.</para>
+
+      <informalexample>
+        <programlisting><![CDATA[
+ ...
+
+static void
+example_app_window_init (ExampleAppWindow *win)
+{
+        gtk_widget_init_template (GTK_WIDGET (win));
+}
+
+static void
+example_app_window_class_init (ExampleAppWindowClass *class)
+{
+        gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (class),
+                                                     "/org/gtk/exampleapp/window.ui");
+}
+
+ ...
+        ]]></programlisting>
+        <para>(<ulink url="https://git.gnome.org/browse/gtk+/tree/examples/application2/exampleappwin.c">full source</ulink>)</para>
+      </informalexample>
+
+      <para>You may have noticed that we used the _from_resource() variant
+      of the function that sets a template. Now we need to use GLib's resource
+      functionality to include the ui file in the binary. This is commonly
+      done by listing all resources in a .gresource.xml file, such as this:
+      </para>
+
+      <informalexample>
+        <programlisting><xi:include href="../../../../examples/application2/exampleapp.gresource.xml" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+      </informalexample>
+
+      <para>This file has to be converted into a C source file that will be
+      compiled and linked into the application together with the other source
+      files. To do so, we use the glib-compile-resources utility:</para>
+
+      <screen>
+      glib-compile-resources exampleapp.gresource.xml --target=resources.c --generate-source
+      </screen>
+
+      <para>Our application now looks like this:</para>
+
+      <informalfigure>
+       <mediaobject>
+        <imageobject>
+          <imagedata fileref="getting-started-app2.png" format="PNG"/>
+        </imageobject>
+      </mediaobject>
+      </informalfigure>
+    </section>
+
+    <section>
+      <title>Opening files</title>
+
+      <para>In this step, we make our application show the content of
+      all the files that it is given on the commandline.</para>
+
+      <para>To this end, we add a private struct to our application
+      window subclass and keep a reference to the #GtkStack there.
+      The gtk_widget_class_bind_child() function arranges things so
+      that after instantiating the template, the @stack member of
+      the private struct will point to the widget of the same name
+      from the template.</para>
+
+      <informalexample>
+        <programlisting><![CDATA[
+...
+
+struct ExampleAppWindowPrivate {
+        GtkWidget *stack;
+};
+
+G_DEFINE_TYPE_WITH_PRIVATE(ExampleAppWindow, example_app_window, GTK_TYPE_APPLICATION_WINDOW);
+
+...
+
+static void
+example_app_window_class_init (ExampleAppWindowClass *class)
+{
+        gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (class),
+                                                     "/org/gtk/exampleapp/window.ui");
+        gtk_widget_class_bind_child (GTK_WIDGET_CLASS (class), ExampleAppWindowPrivate, stack);
+}
+
+...
+        ]]></programlisting>
+        <para>(<ulink url="https://git.gnome.org/browse/gtk+/tree/examples/application3/exampleappwin.c">full source</ulink>)</para>
+      </informalexample>
+
+      <para>Now we revisit the example_app_window_open() function that
+      is called for each commandline argument, and construct a GtkTextView
+      that we then add as a page to the stack:</para>
+
+      <informalexample>
+        <programlisting><![CDATA[
+...
+
+void
+example_app_window_open (ExampleAppWindow *win,
+                         GFile            *file)
+{
+        ExampleAppWindowPrivate *priv = example_app_window_get_instance_private (win);
+        gchar *basename;
+        GtkWidget *scrolled, *view;
+        gchar *contents;
+        gsize length;
+
+        basename = g_file_get_basename (file);
+
+        scrolled = gtk_scrolled_window_new (NULL, NULL);
+        gtk_widget_show (scrolled);
+        gtk_widget_set_hexpand (scrolled, TRUE);
+        gtk_widget_set_vexpand (scrolled, TRUE);
+        view = gtk_text_view_new ();
+        gtk_widget_show (view);
+        gtk_container_add (GTK_CONTAINER (scrolled), view);
+        gtk_stack_add_titled (GTK_STACK (priv->stack), scrolled, basename, basename);
+
+        if (g_file_load_contents (file, NULL, &contents, &length, NULL, NULL)) {
+                GtkTextBuffer *buffer;
+
+                buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+                gtk_text_buffer_set_text (buffer, contents, length);
+                g_free (contents);
+        }
+
+        g_free (basename);
+}
+
+...
+        ]]></programlisting>
+        <para>(<ulink url="https://git.gnome.org/browse/gtk+/tree/examples/application3/exampleappwin.c">full source</ulink>)</para>
+      </informalexample>
+
+      <para>Note that we did not have to touch the stack switcher
+      at all. It gets all its information from the stack that it
+      belongs to. Here, we are passing the label to show for each
+      file as the third argument to the gtk_stack_add_titled()
+      function.</para>
+
+      <para>Our application is beginning to take shape:</para>
+
+      <informalfigure>
+       <mediaobject>
+        <imageobject>
+          <imagedata fileref="getting-started-app3.png" format="PNG"/>
+        </imageobject>
+      </mediaobject>
+      </informalfigure>
+    </section>
+
+    <section>
+      <title>An application menu</title>
+
+      <para>An application menu is shown by GNOME shell at the top of the
+      screen. It is meant to collect infrequently used actions that affect
+      the whole application.</para>
+
+      <para>Just like the window template, we specify our application menu
+      in a ui file, and add it as a resource to our binary.</para>
+
+      <informalexample>
+        <programlisting><xi:include href="../../../../examples/application4/app-menu.ui" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+      </informalexample>
+
+      <para>To associate the app menu with the application, we have to call
+      gtk_application_set_app_menu(). Since app menus work by activating
+      #GActions, we also have to add a suitable set of actions to our
+      application.</para>
+
+      <para>Both of these tasks are best done in the startup() vfunc,
+      which is guaranteed to be called once for each primary application
+      instance:</para>
+      <informalexample>
+        <programlisting>
+...
+
+static void
+preferences_activated (GSimpleAction *action,
+                       GVariant      *parameter,
+                       gpointer       app)
+{
+}
+
+static void
+quit_activated (GSimpleAction *action,
+                GVariant      *parameter,
+                gpointer       app)
+{
+  g_application_quit (G_APPLICATION (app));
+}
+
+static GActionEntry app_entries[] = {
+        { "preferences", preferences_activated, NULL, NULL, NULL },
+        { "quit", quit_activated, NULL, NULL, NULL }
+};
+
+static void
+example_app_startup (GApplication *app)
+{
+        GtkBuilder *builder;
+        GMenuModel *app_menu;
+
+        G_APPLICATION_CLASS (example_app_parent_class)->startup (app);
+
+        g_action_map_add_action_entries (G_ACTION_MAP (app),
+                                         app_entries, G_N_ELEMENTS (app_entries),
+                                         app);
+
+        builder = gtk_builder_new_from_resource ("/org/gtk/exampleapp/app-menu.ui");
+        app_menu = G_MENU_MODEL (gtk_builder_get_object (builder, "appmenu"));
+        gtk_application_set_app_menu (GTK_APPLICATION (app), app_menu);
+        g_object_unref (builder);
+}
+
+static void
+example_app_class_init (ExampleAppClass *class)
+{
+        G_APPLICATION_CLASS (class)->startup = example_app_startup;
+        ...
+}
+
+...
+        </programlisting>
+        <para>(<ulink url="https://git.gnome.org/browse/gtk+/tree/examples/application4/exampleappwin.c">full source</ulink>)</para>
+      </informalexample>
+
+      <para>Our preferences menu item does not do anything yet,
+      but the Quit menu item is fully functional. Note that it
+      can also be activated by the usual Ctrl-Q shortcut. The
+      shortcut was specified in the ui file.
+      </para>
+
+      <para>The application menu looks like this:</para>
+
+      <informalfigure>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="getting-started-app4.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </informalfigure>
+    </section>
+
+    <section>
+      <title>A preference dialog</title>
+
+      <para>A typical application will have a some preferences that
+      should be remembered from one run to the next. Even for our
+      simple example application, we may want to change the font
+      that is used for the content.</para>
+
+      <para>We are going to use GSettings to store our preferences.
+      GSettings requires a schema that describes our settings:</para>
+
+      <informalexample>
+        <programlisting><xi:include href="../../../../examples/application5/org.gtk.exampleapp.gschema.xml" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+      </informalexample>
+
+      <para>Before we can make use of this schema in our application,
+      we need to compile it into the binary form that GSettings
+      expects. GIO provides <ulink url="https://developer.gnome.org/gio/2.36/ch31s06.html">macros</ulink>
+      to do this in autotools-based projects.</para>
+
+      <para>Next, we need to connect our settings to the widgets
+      that they are supposed to control. One convenient way to do
+      this is to use GSettings bind functionality to bind settings
+      keys to object properties, as we do here for the transition
+      setting.</para>
+
+      <informalexample>
+        <programlisting><![CDATA[
+...
+
+static void
+example_app_window_init (ExampleAppWindow *win)
+{
+        ExampleAppWindowPrivate *priv;
+
+        priv = example_app_window_get_instance_private (win);
+        gtk_widget_init_template (GTK_WIDGET (win));
+        priv->settings = g_settings_new ("org.gtk.exampleapp");
+
+        g_settings_bind (priv->settings, "transition",
+                         priv->stack, "transition-type",
+                         G_SETTINGS_BIND_DEFAULT);
+}
+
+...
+        ]]></programlisting>
+        <para>(<ulink url="https://git.gnome.org/browse/gtk+/tree/examples/application5/exampleappwin.c">full source</ulink>)</para>
+      </informalexample>
+
+      <para>The code to connect the font setting is a little more involved,
+      since there is no simple object property that it corresponds to, so
+      we are not going to go into that here.</para>
+
+      <para>At this point, the application will already react if you
+      change one of the settings, e.g. using the gsettings commandline
+      tool. Of course, we expect the application to provide a preference
+      dialog for these. So lets do that now. Our preference dialog will
+      be a subclass of GtkDialog, and we'll use the same techniques that
+      we've already seen: templates, private structs, settings
+      bindings.</para>
+
+      <para>Lets start with the template.</para>
+
+      <informalexample>
+        <programlisting><xi:include href="../../../../examples/application6/prefs.ui" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+      </informalexample>
+
+      <para>Next comes the dialog subclass.</para>
+
+      <informalexample>
+        <programlisting><xi:include href="../../../../examples/application6/exampleappprefs.c" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+      </informalexample>
+
+      <para>Now we revisit the preferences_activated() function in our
+      application class, and make it open a new preference dialog.</para>
+
+      <informalexample>
+        <programlisting><![CDATA[
+...
+
+static void
+preferences_activated (GSimpleAction *action,
+                       GVariant      *parameter,
+                       gpointer       app)
+{
+        ExampleAppPrefs *prefs;
+        GtkWindow *win;
+
+        win = gtk_application_get_active_window (GTK_APPLICATION (app));
+        prefs = example_app_prefs_new (EXAMPLE_APP_WINDOW (win));
+        gtk_window_present (GTK_WINDOW (prefs));
+}
+
+...
+        ]]></programlisting>
+        <para>(<ulink url="https://git.gnome.org/browse/gtk+/tree/examples/application6/exampleapp.c">full source</ulink>)</para>
+      </informalexample>
+
+      <para>After all this work, our application can now show
+      a preference dialog like this:</para>
+
+      <informalfigure>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="getting-started-app6.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </informalfigure>
+    </section>
+
+    <section>
+      <title>Adding a search bar</title>
+
+      <para>We continue to flesh out the functionality of our application.
+      For now, we add search. GTK+ supports this with #GtkSearchEntry and
+      #GtkSearchBar. The search bar is a widget that can slide in from the
+      top to present a search entry.</para>
+
+      <para>We add a toggle button to the header bar, which can be used
+      to slide out the search bar below the header bar.</para>
+
+      <informalexample>
+        <programlisting><xi:include href="../../../../examples/application7/window.ui" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+      </informalexample>
+
+      <para>Implementing the search needs quite a few code changes that
+      we are not going to completely go over here. The central piece of
+      the search implementation is a signal handler that listens for
+      text changes in the search entry.</para>
+
+      <informalexample>
+        <programlisting><![CDATA[
+...
+
+static void
+search_text_changed (GtkEntry         *entry,
+                     ExampleAppWindow *win)
+{
+        ExampleAppWindowPrivate *priv;
+        const gchar *text;
+        GtkWidget *tab;
+        GtkWidget *view;
+        GtkTextBuffer *buffer;
+        GtkTextIter start, match_start, match_end;
+
+        text = gtk_entry_get_text (entry);
+
+        if (text[0] == '\0')
+                return;
+
+        priv = example_app_window_get_instance_private (win);
+
+        tab = gtk_stack_get_visible_child (GTK_STACK (priv->stack));
+        view = gtk_bin_get_child (GTK_BIN (tab));
+        buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+
+        /* Very simple-minded search implementation */
+        gtk_text_buffer_get_start_iter (buffer, &start);
+        if (gtk_text_iter_forward_search (&start, text, GTK_TEXT_SEARCH_CASE_INSENSITIVE,
+                                          &match_start, &match_end, NULL)) {
+                gtk_text_buffer_select_range (buffer, &match_start, &match_end);
+                gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (view), &match_start,
+                                              0.0, FALSE, 0.0, 0.0);
+        }
+}
+
+static void
+example_app_window_init (ExampleAppWindow *win)
+{
+
+...
+
+        priv->text_changed_handler = g_signal_connect (priv->searchentry, "changed",
+                                                       G_CALLBACK (search_text_changed), win);
+
+...
+
+}
+
+...
+        ]]></programlisting>
+        <para>(<ulink url="https://git.gnome.org/browse/gtk+/tree/examples/application7/exampleappwin.c">full source</ulink>)</para>
+      </informalexample>
+
+      <para>With the search bar, our application now looks like this:</para>
+
+      <informalfigure>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="getting-started-app7.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </informalfigure>
+    </section>
+
+    <section>
+      <title>Adding a side bar</title>
+
+      <para>As a last piece of functionality, we are adding a sidebar,
+      which demonstrates #GtkRevealer and #GtkListBox.</para>
+
+      <informalexample>
+        <programlisting><xi:include href="../../../../examples/application8/window.ui" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+      </informalexample>
+
+      <para>The code to populate the sidebar with buttons for the words
+      found in each file is a little too involved to go into here. But we'll
+      look at the code to add the gears menu.</para>
+
+      <para>As expected by now, the gears menu is specified in a GtkBuilder
+      ui file.</para>
+
+      <informalexample>
+        <programlisting><xi:include href="../../../../examples/application8/gears-menu.ui" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+      </informalexample>
+
+      <para>To connect the menuitem to the show-words setting,
+      we use a #GSettingsAction.</para>
+
+      <informalexample>
+        <programlisting><![CDATA[
+...
+
+static void
+example_app_window_init (ExampleAppWindow *win)
+{
+
+...
+
+        builder = gtk_builder_new_from_resource ("/org/gtk/exampleapp/gears-menu.ui");
+        menu = G_MENU_MODEL (gtk_builder_get_object (builder, "menu"));
+        gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (priv->gears), menu);
+        g_object_unref (builder);
+
+        action = g_settings_create_action (priv->settings, "show-words");
+        g_action_map_add_action (G_ACTION_MAP (win), action);
+        g_object_unref (action);
+}
+
+...
+        ]]></programlisting>
+        <para>(<ulink url="https://git.gnome.org/browse/gtk+/tree/examples/application8/exampleappwin.c">full source</ulink>)</para>
+      </informalexample>
+
+      <para>What our application looks like now:</para>
+
+      <informalfigure>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="getting-started-app8.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </informalfigure>
+    </section>
+  </section>
 </chapter>
