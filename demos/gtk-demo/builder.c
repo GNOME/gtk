@@ -2,7 +2,7 @@
  *
  * Demonstrates an interface loaded from a XML description.
  */
-
+#undef GTK_DISABLE_DEPRECATED
 #include <gtk/gtk.h>
 
 static GtkBuilder *builder;
