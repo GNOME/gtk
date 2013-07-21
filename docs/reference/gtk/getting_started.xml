@@ -565,7 +565,7 @@ example_app_class_init (ExampleAppClass *class)
 
 ...
         </programlisting>
-        <para>(<ulink url="https://git.gnome.org/browse/gtk+/tree/examples/application4/exampleappwin.c">full source</ulink>)</para>
+        <para>(<ulink url="https://git.gnome.org/browse/gtk+/tree/examples/application4/exampleapp.c">full source</ulink>)</para>
       </informalexample>
 
       <para>Our preferences menu item does not do anything yet,
