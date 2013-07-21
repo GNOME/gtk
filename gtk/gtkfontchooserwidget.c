@@ -412,9 +412,9 @@ cursor_changed_cb (GtkTreeView *treeview,
 }
 
 static gboolean
-zoom_preview_cb (GtkWidget      *scrolled_window,
-                 GdkEventScroll *event,
-                 gpointer        user_data)
+resize_by_scroll_cb (GtkWidget      *scrolled_window,
+                     GdkEventScroll *event,
+                     gpointer        user_data)
 {
   GtkFontChooserWidget *fc = user_data;
   GtkFontChooserWidgetPrivate *priv = fc->priv;
@@ -428,6 +428,15 @@ zoom_preview_cb (GtkWidget      *scrolled_window,
     gtk_adjustment_set_value (adj,
                               gtk_adjustment_get_value (adj) -
                               gtk_adjustment_get_step_increment (adj));
+  else if (event->direction == GDK_SCROLL_SMOOTH && event->delta_x != 0.0)
+    gtk_adjustment_set_value (adj,
+                              gtk_adjustment_get_value (adj) +
+                              gtk_adjustment_get_step_increment (adj) * event->delta_x);
+  else if (event->direction == GDK_SCROLL_SMOOTH && event->delta_y != 0.0)
+    gtk_adjustment_set_value (adj,
+                              gtk_adjustment_get_value (adj) -
+                              gtk_adjustment_get_step_increment (adj) * event->delta_y);
+
   return TRUE;
 }
 
@@ -490,7 +499,7 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   gtk_widget_class_bind_callback (widget_class, cursor_changed_cb);
   gtk_widget_class_bind_callback (widget_class, row_activated_cb);
   gtk_widget_class_bind_callback (widget_class, gtk_font_chooser_widget_set_cell_size);
-  gtk_widget_class_bind_callback (widget_class, zoom_preview_cb);
+  gtk_widget_class_bind_callback (widget_class, resize_by_scroll_cb);
   gtk_widget_class_bind_callback (widget_class, row_deleted_cb);
   gtk_widget_class_bind_callback (widget_class, row_inserted_cb);
   gtk_widget_class_bind_callback (widget_class, row_deleted_cb);
@@ -515,6 +524,7 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
   /* Set default preview text */
   gtk_entry_set_text (GTK_ENTRY (priv->preview),
                       pango_language_get_sample_string (NULL));
+  gtk_widget_add_events (priv->preview, GDK_SCROLL_MASK);
 
   /* Set the upper values of the spin/scale with G_MAXINT / PANGO_SCALE */
   gtk_spin_button_set_range (GTK_SPIN_BUTTON (priv->size_spin),
