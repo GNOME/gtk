@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-07-11 21:09+0000\n"
-"PO-Revision-Date: 2013-07-17 11:53+0500\n"
+"PO-Revision-Date: 2013-07-21 11:12+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: \n"
 "Language: Tajik\n"
@@ -887,7 +887,7 @@ msgstr "Олӣ"
 #: ../gtk/gtkaccellabel.c:818
 msgctxt "keyboard label"
 msgid "Hyper"
-msgstr "Hyper"
+msgstr "Гипер"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the meta key. If the text on this key isn't typically
@@ -4116,12 +4116,12 @@ msgstr "Индекси 3x5"
 #: ../gtk/paper_names_offsets.c:125
 msgctxt "paper size"
 msgid "Index 4x6 (postcard)"
-msgstr "Index 4x6 (postcard)"
+msgstr "Индекси 4x6 (руқъа)"
 
 #: ../gtk/paper_names_offsets.c:126
 msgctxt "paper size"
 msgid "Index 4x6 ext"
-msgstr "Index 4x6 ext"
+msgstr "Индекси 4x6 ext"
 
 #: ../gtk/paper_names_offsets.c:127
 msgctxt "paper size"
@@ -4136,7 +4136,7 @@ msgstr "Invoice"
 #: ../gtk/paper_names_offsets.c:129
 msgctxt "paper size"
 msgid "Tabloid"
-msgstr "Tabloid"
+msgstr "Хулосашуда"
 
 #: ../gtk/paper_names_offsets.c:130
 msgctxt "paper size"
@@ -4261,7 +4261,7 @@ msgstr "Лифофаи Postfix"
 #: ../gtk/paper_names_offsets.c:154
 msgctxt "paper size"
 msgid "Small Photo"
-msgstr "Small Photo"
+msgstr "Сурати хурд"
 
 #: ../gtk/paper_names_offsets.c:155
 msgctxt "paper size"
@@ -4475,12 +4475,12 @@ msgstr "Thai-Lao"
 #. ID
 #: ../modules/input/imti-er.c:451
 msgid "Tigrigna-Eritrean (EZ+)"
-msgstr "Tigrigna-Eritrean (EZ+)"
+msgstr "Тигринияи-Эритерӣ (EZ+)"
 
 #. ID
 #: ../modules/input/imti-et.c:451
 msgid "Tigrigna-Ethiopian (EZ+)"
-msgstr "Tigrigna-Ethiopian (EZ+)"
+msgstr "Тигринияи-Эфиопӣ (EZ+)"
 
 #. ID
 #: ../modules/input/imviqr.c:242
