@@ -1206,6 +1206,11 @@ attach_widget_screen_changed (GtkWidget *attach_widget,
  * Attaches the menu to the widget and provides a callback function
  * that will be invoked when the menu calls gtk_menu_detach() during
  * its destruction.
+ *
+ * If the menu is attached to the widget then it will be destroyed
+ * when the widget is destroyed, as if it was a child widget.
+ * An attached menu will also move between screens correctly if the
+ * widgets moves between screens.
  */
 void
 gtk_menu_attach_to_widget (GtkMenu           *menu,
