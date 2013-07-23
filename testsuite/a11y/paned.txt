@@ -19,7 +19,6 @@ window1
     minimum value: 0
     maximum value: 0
     current value: 0
-    minimum increment: 0
     label1
       "label"
       parent: paned1

@@ -28,7 +28,6 @@ window1
       minimum value: 0.500000
       maximum value: 99.500000
       current value: 45.500000
-      minimum increment: 0.500000
     scale1
       "slider"
       parent: grid1
@@ -43,4 +42,3 @@ window1
       minimum value: 0.500000
       maximum value: 99.500000
       current value: 45.500000
-      minimum increment: 0.500000

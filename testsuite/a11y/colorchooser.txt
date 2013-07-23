@@ -282,7 +282,6 @@ window1
               minimum value: 0.000000
               maximum value: 255.000000
               current value: 255.000000
-              minimum increment: 1.000000
             Opacity:
               "label"
               parent: unnamed-GtkContainerAccessible-11
@@ -381,7 +380,6 @@ window1
               minimum value: 0.000000
               maximum value: 255.000000
               current value: 255.000000
-              minimum increment: 1.000000
             Blue:
               "label"
               parent: unnamed-GtkContainerAccessible-11
@@ -471,7 +469,6 @@ window1
               minimum value: 0.000000
               maximum value: 255.000000
               current value: 255.000000
-              minimum increment: 1.000000
             Green:
               "label"
               parent: unnamed-GtkContainerAccessible-11
@@ -561,7 +558,6 @@ window1
               minimum value: 0.000000
               maximum value: 255.000000
               current value: 255.000000
-              minimum increment: 1.000000
             Red:
               "label"
               parent: unnamed-GtkContainerAccessible-11
@@ -651,7 +647,6 @@ window1
               minimum value: 0.000000
               maximum value: 100.000000
               current value: 100.000000
-              minimum increment: 1.000000
             Value:
               "label"
               parent: unnamed-GtkContainerAccessible-11
@@ -741,7 +736,6 @@ window1
               minimum value: 0.000000
               maximum value: 100.000000
               current value: 0.000000
-              minimum increment: 1.000000
             Saturation:
               "label"
               parent: unnamed-GtkContainerAccessible-11
@@ -831,7 +825,6 @@ window1
               minimum value: 0.000000
               maximum value: 360.000000
               current value: 0.000000
-              minimum increment: 1.000000
             Hue:
               "label"
               parent: unnamed-GtkContainerAccessible-11

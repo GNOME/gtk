@@ -20,4 +20,3 @@ window1
     minimum value: -100.000000
     maximum value: 100.000000
     current value: -42.000000
-    minimum increment: 1.000000

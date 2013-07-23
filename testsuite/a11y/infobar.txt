@@ -68,7 +68,7 @@ window1
       "filler"
       parent: bar1
       index: 1
-      state: enabled sensitive showing vertical visible
+      state: enabled horizontal sensitive showing visible
       toolkit: gtk
       <AtkComponent>
       layer: widget

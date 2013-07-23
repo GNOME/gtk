@@ -257,7 +257,9 @@ dump_text_attributes (GString         *string,
   for (l = attributes; l; l = l->next)
     {
       attr = l->data;
-      /* don't dump values that depend on the environment */
+      /* don't dump values that depend on the environment or too
+       * closely on the exact theme pixels.
+       */
       if (strcmp (attr->name, "family-name") == 0 ||
           strcmp (attr->name, "size") == 0 ||
           strcmp (attr->name, "weight") == 0 ||
@@ -459,14 +461,10 @@ dump_atk_value (AtkValue *atk_value,
   g_value_reset (&value);
   g_value_reset (&svalue);
 
-  atk_value_get_minimum_increment (atk_value, &value);
-  if (g_value_transform (&value, &svalue))
-    g_string_append_printf (string, "%*sminimum increment: %s\n", depth, "", g_value_get_string (&svalue));
-  else
-    g_string_append_printf (string, "%*sminimum increment: %s\n", depth, "", G_VALUE_TYPE_NAME (&value));
-
-  g_value_reset (&value);
-  g_value_reset (&svalue);
+  /* Don't dump minimum increment; it changes too much in response to
+   * theme changes.
+   * https://bugzilla.gnome.org/show_bug.cgi?id=704747
+   */
 }
 
 static void
