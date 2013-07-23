@@ -8,8 +8,8 @@
 #define EXAMPLE_APP(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), EXAMPLE_APP_TYPE, ExampleApp))
 
 
-typedef struct ExampleApp       ExampleApp;
-typedef struct ExampleAppClass  ExampleAppClass;
+typedef struct _ExampleApp       ExampleApp;
+typedef struct _ExampleAppClass  ExampleAppClass;
 
 
 GType           example_app_get_type    (void);

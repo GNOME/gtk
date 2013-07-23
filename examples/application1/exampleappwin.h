@@ -9,8 +9,8 @@
 #define EXAMPLE_APP_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), EXAMPLE_APP_WINDOW_TYPE, ExampleAppWindow))
 
 
-typedef struct ExampleAppWindow         ExampleAppWindow;
-typedef struct ExampleAppWindowClass    ExampleAppWindowClass;
+typedef struct _ExampleAppWindow         ExampleAppWindow;
+typedef struct _ExampleAppWindowClass    ExampleAppWindowClass;
 
 
 GType                   example_app_window_get_type     (void);

@@ -2,12 +2,14 @@
 #include "exampleappwin.h"
 #include <gtk/gtk.h>
 
-struct ExampleAppWindow {
-        GtkApplicationWindow parent;
+struct _ExampleAppWindow
+{
+  GtkApplicationWindow parent;
 };
 
-struct ExampleAppWindowClass {
-        GtkApplicationWindowClass parent_class;
+struct _ExampleAppWindowClass
+{
+  GtkApplicationWindowClass parent_class;
 };
 
 G_DEFINE_TYPE(ExampleAppWindow, example_app_window, GTK_TYPE_APPLICATION_WINDOW);
@@ -15,20 +17,20 @@ G_DEFINE_TYPE(ExampleAppWindow, example_app_window, GTK_TYPE_APPLICATION_WINDOW)
 static void
 example_app_window_init (ExampleAppWindow *win)
 {
-        gtk_widget_init_template (GTK_WIDGET (win));
+  gtk_widget_init_template (GTK_WIDGET (win));
 }
 
 static void
 example_app_window_class_init (ExampleAppWindowClass *class)
 {
-        gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (class),
-                                                     "/org/gtk/exampleapp/window.ui");
+  gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (class),
+                                               "/org/gtk/exampleapp/window.ui");
 }
 
 ExampleAppWindow *
 example_app_window_new (ExampleApp *app)
 {
-        return g_object_new (EXAMPLE_APP_WINDOW_TYPE, "application", app, NULL);
+  return g_object_new (EXAMPLE_APP_WINDOW_TYPE, "application", app, NULL);
 }
 
 void
