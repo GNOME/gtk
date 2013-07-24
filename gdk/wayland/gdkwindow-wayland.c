@@ -237,6 +237,20 @@ _gdk_wayland_screen_create_root_window (GdkScreen *screen,
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   impl->wrapper = GDK_WINDOW (window);
+  if (gdk_screen_get_n_monitors(screen) > 0)
+    impl->scale = gdk_screen_get_monitor_scale_factor (screen, 0);
+  else
+    impl->scale = 1;
+
+  /* logical 1x1 fake buffer */
+  impl->cairo_surface =
+          cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                      impl->scale,
+                                      impl->scale);
+
+#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
+  cairo_surface_set_device_scale (impl->cairo_surface, impl->scale, impl->scale);
+#endif
 
   window->window_type = GDK_WINDOW_ROOT;
   window->depth = 32;

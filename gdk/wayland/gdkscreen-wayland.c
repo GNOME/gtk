@@ -805,12 +805,13 @@ _gdk_wayland_screen_new (GdkDisplay *display)
 
   screen_wayland->visual = gdk_wayland_visual_new (screen);
 
+  init_multihead (screen);
+
   screen_wayland->root_window =
     _gdk_wayland_screen_create_root_window (screen,
-					    screen_wayland->width,
-					    screen_wayland->height);
+                                            screen_wayland->width,
+                                            screen_wayland->height);
 
-  init_multihead (screen);
   init_settings (screen);
 
   return screen;
