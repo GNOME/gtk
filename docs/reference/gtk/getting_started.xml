@@ -327,7 +327,7 @@
       is launched with commandline arguments.</para>
 
       <para>To learn more about GApplication entry points, consult the
-      GIO <ulink url="https://developer.gnome.org/gio/2.36/GApplication.html#GApplication.description">documentation</ulink>.
+      GIO <ulink url="https://developer.gnome.org/gio/2.36/GApplication.html#GApplication.description">documentation</ulink>.</para>
 
       <informalexample>
         <programlisting><xi:include href="../../../../examples/application1/exampleapp.c" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
@@ -898,6 +898,74 @@ example_app_window_init (ExampleAppWindow *win)
         <mediaobject>
           <imageobject>
             <imagedata fileref="getting-started-app8.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </informalfigure>
+    </section>
+    <section>
+      <title>Properties</title>
+
+      <para>Widgets and other objects have many useful properties.</para>
+
+      <para>Here we show some ways to use them in new and flexible ways,
+      by wrapping them in actions with #GPropertyAction or by binding them
+      with #GBinding.</para>
+
+      <para>To set this up, we add two labels to the header bar in our
+      window template, named @lines_label and @lines, and bind them to
+      struct members in the private struct, as we've seen a couple of times
+      by now.</para>
+
+      <para>We add a new "Lines" menu item to the gears menu, which
+      triggers the show-lines action:</para>
+
+      <informalexample>
+        <programlisting><xi:include href="../../../../examples/application9/gears-menu.ui" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+      </informalexample>
+
+      <para>To make this menu item do something, we create a property
+      action for the visible property of the @lines label, and add it to the
+      actions of the window. The effect of this is that the visibility
+      of the label gets toggled every time the action is activated.</para>
+
+      <para>Since we want both labels to appear and disappear together,
+      we bind the visible property of the @lines_label widget to the
+      same property of the @lines widget.</para>
+
+      <informalexample>
+        <programlisting>
+...
+
+static void
+example_app_window_init (ExampleAppWindow *win)
+{
+  ...
+
+  action = (GAction*) g_property_action_new ("show-lines", priv->lines, "visible");
+  g_action_map_add_action (G_ACTION_MAP (win), action);
+  g_object_unref (action);
+
+  g_object_bind_property (priv->lines, "visible",
+                          priv->lines_label, "visible",
+                          G_BINDING_DEFAULT);
+}
+
+...
+        </programlisting>
+        <para>(<ulink url="https://git.gnome.org/browse/gtk+/tree/examples/application9/exampleappwin.c">full source</ulink>)</para>
+      </informalexample>
+
+      <para>We also need a function that counts the lines of the currently
+      active tab, and updates the @lines label. See the
+      <ulink url="https://git.gnome.org/browse/gtk+/tree/examples/application9/exampleappwin.c">full source</ulink>
+      if you are interested in the details.</para>
+
+      <para>This brings our example application to its final appearance:</para>
+
+      <informalfigure>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="getting-started-app9.png" format="PNG"/>
           </imageobject>
         </mediaobject>
       </informalfigure>
