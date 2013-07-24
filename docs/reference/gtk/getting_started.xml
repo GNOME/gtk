@@ -321,6 +321,14 @@
       activated without arguments, and open the files it is given, if it
       is started with arguments.</para>
 
+      <para>To handle these two cases, we override the activate() vfunc,
+      which gets called when the application is launched without commandline
+      arguments, and the open() vfunc, which gets called when the application
+      is launched with commandline arguments.</para>
+
+      <para>To learn more about GApplication entry points, consult the
+      GIO <ulink url="https://developer.gnome.org/gio/2.36/GApplication.html#GApplication.description">documentation</ulink>.
+
       <informalexample>
         <programlisting><xi:include href="../../../../examples/application1/exampleapp.c" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
       </informalexample>
@@ -505,6 +513,8 @@ example_app_window_open (ExampleAppWindow *win,
   gtk_widget_set_hexpand (scrolled, TRUE);
   gtk_widget_set_vexpand (scrolled, TRUE);
   view = gtk_text_view_new ();
+  gtk_text_view_set_editable (GTK_TEXT_VIEW (view), FALSE);
+  gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (view), FALSE);
   gtk_widget_show (view);
   gtk_container_add (GTK_CONTAINER (scrolled), view);
   gtk_stack_add_titled (GTK_STACK (priv->stack), scrolled, basename, basename);
@@ -529,7 +539,7 @@ example_app_window_open (ExampleAppWindow *win,
       <para>Note that we did not have to touch the stack switcher
       at all. It gets all its information from the stack that it
       belongs to. Here, we are passing the label to show for each
-      file as the third argument to the gtk_stack_add_titled()
+      file as the last argument to the gtk_stack_add_titled()
       function.</para>
 
       <para>Our application is beginning to take shape:</para>
