@@ -21,8 +21,6 @@ struct _ExampleAppWindowPrivate
   GtkWidget *search;
   GtkWidget *searchbar;
   GtkWidget *searchentry;
-  gulong text_changed_handler;
-  gulong tab_changed_handler;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(ExampleAppWindow, example_app_window, GTK_TYPE_APPLICATION_WINDOW);
@@ -67,6 +65,9 @@ visible_child_changed (GObject          *stack,
 {
   ExampleAppWindowPrivate *priv;
 
+  if (gtk_widget_in_destruction (GTK_WIDGET (win)))
+    return;
+
   priv = example_app_window_get_instance_private (win);
   gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (priv->searchbar), FALSE);
 }
@@ -88,10 +89,10 @@ example_app_window_init (ExampleAppWindow *win)
                           priv->searchbar, "search-mode-enabled",
                           G_BINDING_BIDIRECTIONAL);
 
-  priv->text_changed_handler = g_signal_connect (priv->searchentry, "changed",
-                                                 G_CALLBACK (search_text_changed), win);
-  priv->tab_changed_handler = g_signal_connect (priv->stack, "notify::visible-child",
-                                                G_CALLBACK (visible_child_changed), win);
+  g_signal_connect (priv->searchentry, "changed",
+                    G_CALLBACK (search_text_changed), win);
+  g_signal_connect (priv->stack, "notify::visible-child",
+                    G_CALLBACK (visible_child_changed), win);
 }
 
 static void
@@ -102,18 +103,6 @@ example_app_window_dispose (GObject *object)
 
   win = EXAMPLE_APP_WINDOW (object);
   priv = example_app_window_get_instance_private (win);
-
-  if (priv->text_changed_handler != 0)
-    {
-      g_signal_handler_disconnect (priv->searchentry, priv->text_changed_handler);
-      priv->text_changed_handler = 0;
-    }
-
-  if (priv->tab_changed_handler != 0)
-    {
-      g_signal_handler_disconnect (priv->stack, priv->tab_changed_handler);
-      priv->tab_changed_handler = 0;
-    }
 
   g_clear_object (&priv->settings);
 
