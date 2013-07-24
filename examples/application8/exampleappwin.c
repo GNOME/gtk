@@ -89,6 +89,10 @@ update_words (ExampleAppWindow *win)
   priv = example_app_window_get_instance_private (win);
 
   tab = gtk_stack_get_visible_child (GTK_STACK (priv->stack));
+
+  if (tab == NULL)
+    return;
+
   view = gtk_bin_get_child (GTK_BIN (tab));
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 
