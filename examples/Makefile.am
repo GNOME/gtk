@@ -1,7 +1,7 @@
 SUBDIRS = \
 	application1 application2 application3 \
 	application4 application5 application6 \
-	application7 application8
+	application7 application8 application9
 
 AM_CPPFLAGS = \
 	-I$(top_srcdir)				\
