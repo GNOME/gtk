@@ -263,6 +263,36 @@
   <section>
     <title>Building applications</title>
 
+    <para>An application consists of a number of files:
+    <variablelist>
+      <varlistentry>
+        <term>The binary</term>
+        <listitem>This gets installed in <filename>/usr/bin</filename>.</listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>A desktop file</term>
+        <listitem>The desktop file provides important information about the application to the desktop shell, such as its name, icon, D-Bus name, commandline to launch it, etc. It is installed in <filename>/usr/share/applications</filename>.</listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>An icon</term>
+        <listitem>The icon gets installed in <filename>/usr/share/icons/hicolor/48x48/apps</filename>, where it will be found regardless of the current theme.</listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>A settings schema</term>
+        <listitem>If the application uses GSettings, it will install its schema
+          in <filename>/usr/share/glib-2.0/schemas</filename>, so that tools
+          like dconf-editor can find it.</listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>Other resources</term>
+        <listitem>Other files, such as GtkBuilder ui files, are best loaded from
+          resources stored in the application binary itself. This eliminates the
+          need for most of the files that would traditionally be installed in
+          an application-specific location in <filename>/usr/share</filename>.</listitem>
+      </varlistentry>
+    </variablelist>
+    </para>
+
     <para>GTK+ includes application support that is built on top of
     #GApplication. In this tutorial we'll build a simple application by
     starting from scratch, adding more and more pieces over time. Along
@@ -303,6 +333,24 @@
       <informalexample>
         <programlisting><xi:include href="../../../../examples/application1/exampleappwin.c" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
       </informalexample>
+
+      <para>As part of the initial setup of our application, we also
+      create an icon and a desktop file.</para>
+
+      <informalfigure>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="exampleapp.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </informalfigure>
+
+      <informalexample>
+        <programlisting><xi:include href="../../../../examples/application1/exampleapp.desktop" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+      </informalexample>
+
+      <para>Note that <replaceable>@<!-- -->bindir@</replaceable> needs to be replaced
+      with the actual path to the binary before this desktop file can be used.</para>
 
       <para>Here is what we've achieved so far:</para>
 
