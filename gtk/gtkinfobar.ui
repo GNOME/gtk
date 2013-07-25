@@ -40,7 +40,7 @@
     </child>
     <child>
       <object class="GtkButton" id="close_button">
-        <property name="visible">True</property>
+        <property name="visible">False</property>
         <property name="can_focus">True</property>
         <property name="border_width">6</property>
         <property name="relief">none</property>
