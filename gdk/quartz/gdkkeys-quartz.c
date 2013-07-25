@@ -537,6 +537,9 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
   g_return_val_if_fail (n_keys != NULL, FALSE);
   g_return_val_if_fail (keyval != 0, FALSE);
 
+  if (!keymap)
+    keymap = gdk_keymap_get_for_display (gdk_display_get_default ());
+
   *n_keys = 0;
   keys_array = g_array_new (FALSE, FALSE, sizeof (GdkKeymapKey));
 
@@ -574,6 +577,9 @@ gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
 
   g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), FALSE);
   g_return_val_if_fail (n_entries != NULL, FALSE);
+
+  if (!keymap)
+    keymap = gdk_keymap_get_for_display (gdk_display_get_default ());
 
   *n_entries = 0;
 
@@ -630,6 +636,9 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
   g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), 0);
   g_return_val_if_fail (key != NULL, 0);
   g_return_val_if_fail (key->group < 4, 0);
+
+  if (!keymap)
+    keymap = gdk_keymap_get_for_display (gdk_display_get_default ());
 
   /* FIXME: Implement */
 
@@ -691,7 +700,10 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 
   g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), FALSE);
   g_return_val_if_fail (group >= 0 && group <= 1, FALSE);
-  
+
+  if (!keymap)
+    keymap = gdk_keymap_get_for_display (gdk_display_get_default ());
+
   if (keyval)
     *keyval = 0;
   if (effective_group)
