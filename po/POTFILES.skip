@@ -37,6 +37,10 @@ examples/application8/app-menu.ui
 examples/application8/gears-menu.ui
 examples/application8/prefs.ui
 examples/application8/window.ui
+examples/application9/app-menu.ui
+examples/application9/gears-menu.ui
+examples/application9/prefs.ui
+examples/application9/window.ui
 examples/bloatpad.c
 examples/plugman.c
 gtk/paper_names.c
