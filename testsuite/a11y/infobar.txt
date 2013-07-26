@@ -73,3 +73,18 @@ window1
       <AtkComponent>
       layer: widget
       alpha: 1
+    close_button
+      "push button"
+      parent: bar1
+      index: 2
+      state: enabled focusable sensitive
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkImage>
+      image size: -1 x -1
+      image description: (null)
+      <AtkAction>
+      action 0 name: click
+      action 0 description: Clicks the button
