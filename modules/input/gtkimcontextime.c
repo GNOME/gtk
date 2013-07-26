@@ -29,6 +29,7 @@
 
 #include "imm-extra.h"
 
+#include <gdk/gdkkeysyms.h>
 #include "gdk/win32/gdkwin32.h"
 #include "gdk/gdkkeysyms.h"
 
@@ -46,6 +47,9 @@
 #endif /* STRICT */
 
 /* #define BUFSIZE 4096 */
+
+#define IS_DEAD_KEY(k) \
+    ((k) >= GDK_dead_grave && (k) <= (GDK_dead_dasia+1))
 
 #define FREE_PREEDIT_BUFFER(ctx) \
 {                                \
@@ -68,6 +72,8 @@ struct _GtkIMContextIMEPrivate
   DWORD comp_str_len;
   LPVOID read_str;
   DWORD read_str_len;
+
+  guint32 dead_key_keyval;
 };
 
 
@@ -296,6 +302,64 @@ gtk_im_context_ime_set_client_window (GtkIMContext *context,
   context_ime->client_window = client_window;
 }
 
+static gunichar
+_gtk_im_context_ime_dead_key_unichar (guint    keyval,
+                                      gboolean spacing)
+{
+  switch (keyval)
+    {
+#define CASE(keysym, unicode, spacing_unicode) \
+      case GDK_dead_##keysym: return (spacing) ? spacing_unicode : unicode;
+
+      CASE (grave, 0x0300, 0x0060);
+      CASE (acute, 0x0301, 0x00b4);
+      CASE (circumflex, 0x0302, 0x005e);
+      CASE (tilde, 0x0303, 0x007e);	/* Also used with perispomeni, 0x342. */
+      CASE (macron, 0x0304, 0x00af);
+      CASE (breve, 0x0306, 0x02d8);
+      CASE (abovedot, 0x0307, 0x02d9);
+      CASE (diaeresis, 0x0308, 0x00a8);
+      CASE (hook, 0x0309, 0);
+      CASE (abovering, 0x030A, 0x02da);
+      CASE (doubleacute, 0x030B, 0x2dd);
+      CASE (caron, 0x030C, 0x02c7);
+      CASE (abovecomma, 0x0313, 0);         /* Equivalent to psili */
+      CASE (abovereversedcomma, 0x0314, 0); /* Equivalent to dasia */
+      CASE (horn, 0x031B, 0);	/* Legacy use for psili, 0x313 (or 0x343). */
+      CASE (belowdot, 0x0323, 0);
+      CASE (cedilla, 0x0327, 0x00b8);
+      CASE (ogonek, 0x0328, 0);	/* Legacy use for dasia, 0x314.*/
+      CASE (iota, 0x0345, 0);
+
+#undef CASE
+    default:
+      return 0;
+    }
+}
+
+static void
+_gtk_im_context_ime_commit_unichar (GtkIMContextIME *context_ime,
+                                    gunichar         c)
+{
+  gchar utf8[10];
+  int len;
+
+  if (context_ime->priv->dead_key_keyval != 0)
+    {
+      gunichar combining;
+
+      combining =
+        _gtk_im_context_ime_dead_key_unichar (context_ime->priv->dead_key_keyval,
+                                              FALSE);
+      g_unichar_compose (c, combining, &c);
+    }
+
+  len = g_unichar_to_utf8 (c, utf8);
+  utf8[len] = 0;
+
+  g_signal_emit_by_name (context_ime, "commit", utf8);
+  context_ime->priv->dead_key_keyval = 0;
+}
 
 static gboolean
 gtk_im_context_ime_filter_keypress (GtkIMContext *context,
@@ -322,15 +386,38 @@ gtk_im_context_ime_filter_keypress (GtkIMContext *context,
   if (!GDK_IS_WINDOW (context_ime->client_window))
     return FALSE;
 
+  if (event->keyval == GDK_space &&
+      context_ime->priv->dead_key_keyval != 0)
+    {
+      c = _gtk_im_context_ime_dead_key_unichar (context_ime->priv->dead_key_keyval, TRUE);
+      context_ime->priv->dead_key_keyval = 0;
+      _gtk_im_context_ime_commit_unichar (context_ime, c);
+      return TRUE;
+    }
+
   c = gdk_keyval_to_unicode (event->keyval);
+
   if (c)
     {
-      guchar utf8[10];
-      int len = g_unichar_to_utf8 (c, utf8);
-      utf8[len] = 0;
-
-      g_signal_emit_by_name (context_ime, "commit", utf8);
+      _gtk_im_context_ime_commit_unichar (context_ime, c);
       retval = TRUE;
+    }
+  else if (IS_DEAD_KEY (event->keyval))
+    {
+      gunichar dead_key;
+
+      dead_key = _gtk_im_context_ime_dead_key_unichar (event->keyval, FALSE);
+
+      /* Emulate double input of dead keys */
+      if (dead_key && event->keyval == context_ime->priv->dead_key_keyval)
+        {
+          c = _gtk_im_context_ime_dead_key_unichar (context_ime->priv->dead_key_keyval, TRUE);
+          context_ime->priv->dead_key_keyval = 0;
+          _gtk_im_context_ime_commit_unichar (context_ime, c);
+          _gtk_im_context_ime_commit_unichar (context_ime, c);
+        }
+      else
+        context_ime->priv->dead_key_keyval = event->keyval;
     }
 
   return retval;
