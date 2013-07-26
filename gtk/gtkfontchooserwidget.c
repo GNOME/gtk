@@ -478,22 +478,21 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
 
   _gtk_font_chooser_install_properties (gobject_class);
 
-  /* Bind class to template
-   */
+  /* Bind class to template */
   gtk_widget_class_set_template_from_resource (widget_class,
 					       "/org/gtk/libgtk/gtkfontchooserwidget.ui");
 
-  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidgetPrivate, search_entry);
-  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidgetPrivate, family_face_list);
-  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidgetPrivate, family_face_column);
-  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidgetPrivate, family_face_cell);
-  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidgetPrivate, list_scrolled_window);
-  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidgetPrivate, list_notebook);
-  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidgetPrivate, model);
-  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidgetPrivate, filter_model);
-  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidgetPrivate, preview);
-  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidgetPrivate, size_spin);
-  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidgetPrivate, size_slider);
+  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidget, search_entry);
+  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidget, family_face_list);
+  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidget, family_face_column);
+  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidget, family_face_cell);
+  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidget, list_scrolled_window);
+  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidget, list_notebook);
+  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidget, model);
+  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidget, filter_model);
+  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidget, preview);
+  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidget, size_spin);
+  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidget, size_slider);
 
   gtk_widget_class_bind_callback (widget_class, text_changed_cb);
   gtk_widget_class_bind_callback (widget_class, cursor_changed_cb);

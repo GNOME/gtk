@@ -11348,7 +11348,6 @@ gtk_widget_real_destroy (GtkWidget *object)
 
   if (priv->auto_children)
     {
-      GType class_type;
       GtkWidgetClass *class;
       GSList *l;
 
@@ -11397,21 +11396,17 @@ gtk_widget_real_destroy (GtkWidget *object)
 	  if (!class->priv->template)
 	    continue;
 
-	  class_type = G_OBJECT_CLASS_TYPE (class);
-
 	  for (l = class->priv->template->children; l; l = l->next)
 	    {
 	      AutomaticChildClass *child_class = l->data;
 
-	      if (child_class->offset >= 0)
+	      if (child_class->offset != 0)
 		{
-		  gpointer class_private;
-		  GObject **destination;
+		  gpointer field_p;
 
 		  /* Nullify instance private data for internal children */
-		  class_private = G_TYPE_INSTANCE_GET_PRIVATE (widget, class_type, gpointer);
-		  destination = G_STRUCT_MEMBER_P (class_private, child_class->offset);
-		  *destination = NULL;
+		  field_p = G_STRUCT_MEMBER_P (widget, child_class->offset);
+		  (* (gpointer *) field_p) = NULL;
 		}
 	    }
 	}
@@ -15658,15 +15653,13 @@ setup_automatic_child (GtkWidgetTemplate *template_data,
   auto_child_hash = get_auto_child_hash (widget, class_type, TRUE);
   g_hash_table_insert (auto_child_hash, child_class->name, g_object_ref (object));
 
-  if (child_class->offset >= 0)
+  if (child_class->offset != 0)
     {
-      gpointer class_private;
-      GObject **destination;
+      gpointer field_p;
 
-      /* Assign 'object' to the specified offset in the instance private data */
-      class_private = G_TYPE_INSTANCE_GET_PRIVATE (widget, class_type, gpointer);
-      destination = G_STRUCT_MEMBER_P (class_private, child_class->offset);
-      *destination = object;
+      /* Assign 'object' to the specified offset in the instance (or private) data */
+      field_p = G_STRUCT_MEMBER_P (widget, child_class->offset);
+      (* (gpointer *) field_p) = object;
     }
 
   return TRUE;
@@ -15919,11 +15912,14 @@ gtk_widget_class_set_connect_func (GtkWidgetClass    *widget_class,
  * @name: The "id" of the child defined in the template XML
  * @internal_child: Whether the child should be accessible as an "internal-child"
  *                  when this class is used in GtkBuilder XML
- * @struct_offset: The structure offset into the composite widget's instance private structure
+ * @struct_offset: The structure offset into the composite widget's instance public or private structure
  *                 where the automated child pointer should be set, or -1 to not assign the pointer.
  *
  * Automatically assign an object declared in the class template XML to be set to a location
  * on a freshly built instance's private data, or alternatively accessible via gtk_widget_get_automated_child().
+ *
+ * The struct can point either into the public instance, then you should use G_STRUCT_OFFSET(WidgetType, member)
+ * for @struct_offset,  or in the private struct, then you should use G_PRIVATE_OFFSET(WidgetType, member).
  *
  * An explicit strong reference will be held automatically for the duration of your
  * instance's life cycle, it will be released automatically when #GObjectClass.dispose() runs

@@ -545,9 +545,9 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
   /* Bind class to template
    */
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/gtkfontbutton.ui");
-  gtk_widget_class_bind_child (widget_class, GtkFontButtonPrivate, font_label);
-  gtk_widget_class_bind_child (widget_class, GtkFontButtonPrivate, size_label);
-  gtk_widget_class_bind_child (widget_class, GtkFontButtonPrivate, font_size_box);
+  gtk_widget_class_bind_child (widget_class, GtkFontButton, font_label);
+  gtk_widget_class_bind_child (widget_class, GtkFontButton, size_label);
+  gtk_widget_class_bind_child (widget_class, GtkFontButton, font_size_box);
 }
 
 static void

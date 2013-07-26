@@ -1176,7 +1176,7 @@ void gtk_widget_remove_tick_callback (GtkWidget       *widget,
 /**
  * gtk_widget_class_bind_child:
  * @widget_class: a #GtkWidgetClass
- * @private_data_type: the type of this widget class's instance private data
+ * @data_type: the type name of this widget
  * @member_name: name of the instance private member on @private_data_type
  *
  * Shorthand for gtk_widget_class_automate_child(). This macro assumes that
@@ -1185,14 +1185,14 @@ void gtk_widget_remove_tick_callback (GtkWidget       *widget,
  *
  * Since: 3.10
  */
-#define gtk_widget_class_bind_child(widget_class, private_data_type, member_name) \
+#define gtk_widget_class_bind_child(widget_class, data_type, member_name) \
   gtk_widget_class_automate_child (widget_class, #member_name, FALSE,	\
-				   G_STRUCT_OFFSET (private_data_type, member_name))
+				   G_PRIVATE_OFFSET (data_type, member_name))
 
 /**
  * gtk_widget_class_bind_child_internal:
  * @widget_class: a #GtkWidgetClass
- * @private_data_type: the type name of this widget class's instance private data
+ * @data_type: the type name of this widget
  * @member_name: name of the instance private member on @private_data_type
  *
  * Shorthand for gtk_widget_class_automate_child(). Essentially the same as
@@ -1201,9 +1201,9 @@ void gtk_widget_remove_tick_callback (GtkWidget       *widget,
  *
  * Since: 3.10
  */
-#define gtk_widget_class_bind_child_internal(widget_class, private_data_type, member_name) \
+#define gtk_widget_class_bind_child_internal(widget_class, data_type, member_name) \
   gtk_widget_class_automate_child (widget_class, #member_name, TRUE,	\
-				   G_STRUCT_OFFSET (private_data_type, member_name))
+				   G_PRIVATE_OFFSET (data_type, member_name))
 
 GDK_AVAILABLE_IN_3_10
 void    gtk_widget_init_template                    (GtkWidget    *widget);

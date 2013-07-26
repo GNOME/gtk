@@ -162,17 +162,17 @@ gtk_page_setup_unix_dialog_class_init (GtkPageSetupUnixDialogClass *class)
   gtk_widget_class_set_template_from_resource (widget_class,
 					       "/org/gtk/libgtk/gtkpagesetupunixdialog.ui");
 
-  gtk_widget_class_bind_child (widget_class, GtkPageSetupUnixDialogPrivate, printer_list);
-  gtk_widget_class_bind_child (widget_class, GtkPageSetupUnixDialogPrivate, page_setup_list);
-  gtk_widget_class_bind_child (widget_class, GtkPageSetupUnixDialogPrivate, custom_paper_list);
-  gtk_widget_class_bind_child (widget_class, GtkPageSetupUnixDialogPrivate, printer_combo);
-  gtk_widget_class_bind_child (widget_class, GtkPageSetupUnixDialogPrivate, paper_size_combo);
-  gtk_widget_class_bind_child (widget_class, GtkPageSetupUnixDialogPrivate, paper_size_label);
-  gtk_widget_class_bind_child (widget_class, GtkPageSetupUnixDialogPrivate, paper_size_cell);
-  gtk_widget_class_bind_child (widget_class, GtkPageSetupUnixDialogPrivate, portrait_radio);
-  gtk_widget_class_bind_child (widget_class, GtkPageSetupUnixDialogPrivate, reverse_portrait_radio);
-  gtk_widget_class_bind_child (widget_class, GtkPageSetupUnixDialogPrivate, landscape_radio);
-  gtk_widget_class_bind_child (widget_class, GtkPageSetupUnixDialogPrivate, reverse_landscape_radio);
+  gtk_widget_class_bind_child (widget_class, GtkPageSetupUnixDialog, printer_list);
+  gtk_widget_class_bind_child (widget_class, GtkPageSetupUnixDialog, page_setup_list);
+  gtk_widget_class_bind_child (widget_class, GtkPageSetupUnixDialog, custom_paper_list);
+  gtk_widget_class_bind_child (widget_class, GtkPageSetupUnixDialog, printer_combo);
+  gtk_widget_class_bind_child (widget_class, GtkPageSetupUnixDialog, paper_size_combo);
+  gtk_widget_class_bind_child (widget_class, GtkPageSetupUnixDialog, paper_size_label);
+  gtk_widget_class_bind_child (widget_class, GtkPageSetupUnixDialog, paper_size_cell);
+  gtk_widget_class_bind_child (widget_class, GtkPageSetupUnixDialog, portrait_radio);
+  gtk_widget_class_bind_child (widget_class, GtkPageSetupUnixDialog, reverse_portrait_radio);
+  gtk_widget_class_bind_child (widget_class, GtkPageSetupUnixDialog, landscape_radio);
+  gtk_widget_class_bind_child (widget_class, GtkPageSetupUnixDialog, reverse_landscape_radio);
 
   gtk_widget_class_bind_callback (widget_class, printer_changed_callback);
   gtk_widget_class_bind_callback (widget_class, paper_size_changed);

@@ -360,13 +360,13 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
 					       "/org/gtk/libgtk/gtkscalebutton.ui");
 
-  gtk_widget_class_bind_child_internal (widget_class, GtkScaleButtonPrivate, plus_button);
-  gtk_widget_class_bind_child_internal (widget_class, GtkScaleButtonPrivate, minus_button);
-  gtk_widget_class_bind_child (widget_class, GtkScaleButtonPrivate, dock);
-  gtk_widget_class_bind_child (widget_class, GtkScaleButtonPrivate, box);
-  gtk_widget_class_bind_child (widget_class, GtkScaleButtonPrivate, scale);
-  gtk_widget_class_bind_child (widget_class, GtkScaleButtonPrivate, image);
-  gtk_widget_class_bind_child (widget_class, GtkScaleButtonPrivate, adjustment);
+  gtk_widget_class_bind_child_internal (widget_class, GtkScaleButton, plus_button);
+  gtk_widget_class_bind_child_internal (widget_class, GtkScaleButton, minus_button);
+  gtk_widget_class_bind_child (widget_class, GtkScaleButton, dock);
+  gtk_widget_class_bind_child (widget_class, GtkScaleButton, box);
+  gtk_widget_class_bind_child (widget_class, GtkScaleButton, scale);
+  gtk_widget_class_bind_child (widget_class, GtkScaleButton, image);
+  gtk_widget_class_bind_child (widget_class, GtkScaleButton, adjustment);
 
   gtk_widget_class_bind_callback (widget_class, cb_dock_button_press);
   gtk_widget_class_bind_callback (widget_class, cb_dock_key_release);

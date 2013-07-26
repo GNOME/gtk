@@ -202,9 +202,9 @@ gtk_color_chooser_dialog_class_init (GtkColorChooserDialogClass *class)
    */
   gtk_widget_class_set_template_from_resource (widget_class,
 					       "/org/gtk/libgtk/gtkcolorchooserdialog.ui");
-  gtk_widget_class_bind_child (widget_class, GtkColorChooserDialogPrivate, chooser);
-  gtk_widget_class_bind_child (widget_class, GtkColorChooserDialogPrivate, cancel_button);
-  gtk_widget_class_bind_child (widget_class, GtkColorChooserDialogPrivate, select_button);
+  gtk_widget_class_bind_child (widget_class, GtkColorChooserDialog, chooser);
+  gtk_widget_class_bind_child (widget_class, GtkColorChooserDialog, cancel_button);
+  gtk_widget_class_bind_child (widget_class, GtkColorChooserDialog, select_button);
   gtk_widget_class_bind_callback (widget_class, selected_cb);
   gtk_widget_class_bind_callback (widget_class, propagate_notify);
   gtk_widget_class_bind_callback (widget_class, color_activated_cb);

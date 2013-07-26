@@ -32,7 +32,7 @@ example_app_window_class_init (ExampleAppWindowClass *class)
 {
   gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (class),
                                                "/org/gtk/exampleapp/window.ui");
-  gtk_widget_class_bind_child (GTK_WIDGET_CLASS (class), ExampleAppWindowPrivate, stack);
+  gtk_widget_class_bind_child (GTK_WIDGET_CLASS (class), ExampleAppWindow, stack);
 }
 
 ExampleAppWindow *
