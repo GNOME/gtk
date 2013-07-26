@@ -1177,7 +1177,7 @@ void gtk_widget_remove_tick_callback (GtkWidget       *widget,
                                                 G_CALLBACK (callback))
 
 /**
- * gtk_widget_class_bind_child:
+ * gtk_widget_class_bind_template_child:
  * @widget_class: a #GtkWidgetClass
  * @data_type: the type name of this widget
  * @member_name: name of the instance private member on @private_data_type
@@ -1199,7 +1199,7 @@ void gtk_widget_remove_tick_callback (GtkWidget       *widget,
                                              G_PRIVATE_OFFSET (TypeName, member_name))
 
 /**
- * gtk_widget_class_bind_child_internal:
+ * gtk_widget_class_bind_template_child_internal:
  * @widget_class: a #GtkWidgetClass
  * @TypeName: the type name, in CamelCase
  * @member_name: name of the instance private member on @private_data_type
