@@ -5170,7 +5170,7 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *icon_theme,
  *     information about the icon, or %NULL if the icon 
  *     wasn't found. Unref with g_object_unref()
  *
- * Since: 2.14
+ * Since: 3.10
  */
 GtkIconInfo *
 gtk_icon_theme_lookup_by_gicon_for_scale (GtkIconTheme       *icon_theme,

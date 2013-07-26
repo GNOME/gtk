@@ -224,6 +224,7 @@ GtkIconInfo * gtk_icon_theme_lookup_by_gicon       (GtkIconTheme                
                                                     GIcon                       *icon,
                                                     gint                         size,
                                                     GtkIconLookupFlags           flags);
+GDK_AVAILABLE_IN_3_10
 GtkIconInfo * gtk_icon_theme_lookup_by_gicon_for_scale (GtkIconTheme             *icon_theme,
                                                         GIcon                    *icon,
                                                         gint                      size,
