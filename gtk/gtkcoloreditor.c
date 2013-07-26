@@ -464,34 +464,34 @@ gtk_color_editor_class_init (GtkColorEditorClass *class)
   gtk_widget_class_set_template_from_resource (widget_class,
 					       "/org/gtk/libgtk/gtkcoloreditor.ui");
 
-  gtk_widget_class_bind_child (widget_class, GtkColorEditor, overlay);
-  gtk_widget_class_bind_child (widget_class, GtkColorEditor, grid);
-  gtk_widget_class_bind_child (widget_class, GtkColorEditor, swatch);
-  gtk_widget_class_bind_child (widget_class, GtkColorEditor, entry);
-  gtk_widget_class_bind_child (widget_class, GtkColorEditor, h_slider);
-  gtk_widget_class_bind_child (widget_class, GtkColorEditor, h_popup);
-  gtk_widget_class_bind_child (widget_class, GtkColorEditor, h_entry);
-  gtk_widget_class_bind_child (widget_class, GtkColorEditor, a_slider);
-  gtk_widget_class_bind_child (widget_class, GtkColorEditor, a_popup);
-  gtk_widget_class_bind_child (widget_class, GtkColorEditor, a_entry);
-  gtk_widget_class_bind_child (widget_class, GtkColorEditor, sv_plane);
-  gtk_widget_class_bind_child (widget_class, GtkColorEditor, sv_popup);
-  gtk_widget_class_bind_child (widget_class, GtkColorEditor, s_entry);
-  gtk_widget_class_bind_child (widget_class, GtkColorEditor, v_entry);
-  gtk_widget_class_bind_child (widget_class, GtkColorEditor, h_adj);
-  gtk_widget_class_bind_child (widget_class, GtkColorEditor, s_adj);
-  gtk_widget_class_bind_child (widget_class, GtkColorEditor, v_adj);
-  gtk_widget_class_bind_child (widget_class, GtkColorEditor, a_adj);
+  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, overlay);
+  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, grid);
+  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, swatch);
+  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, entry);
+  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, h_slider);
+  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, h_popup);
+  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, h_entry);
+  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, a_slider);
+  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, a_popup);
+  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, a_entry);
+  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, sv_plane);
+  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, sv_popup);
+  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, s_entry);
+  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, v_entry);
+  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, h_adj);
+  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, s_adj);
+  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, v_adj);
+  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, a_adj);
 
-  gtk_widget_class_bind_callback (widget_class, hsv_changed);
-  gtk_widget_class_bind_callback (widget_class, popup_draw);
-  gtk_widget_class_bind_callback (widget_class, popup_key_press);
-  gtk_widget_class_bind_callback (widget_class, dismiss_current_popup);
-  gtk_widget_class_bind_callback (widget_class, get_child_position);
-  gtk_widget_class_bind_callback (widget_class, entry_text_changed);
-  gtk_widget_class_bind_callback (widget_class, entry_apply);
-  gtk_widget_class_bind_callback (widget_class, entry_focus_out);
-  gtk_widget_class_bind_callback (widget_class, popup_edit);
+  gtk_widget_class_bind_template_callback (widget_class, hsv_changed);
+  gtk_widget_class_bind_template_callback (widget_class, popup_draw);
+  gtk_widget_class_bind_template_callback (widget_class, popup_key_press);
+  gtk_widget_class_bind_template_callback (widget_class, dismiss_current_popup);
+  gtk_widget_class_bind_template_callback (widget_class, get_child_position);
+  gtk_widget_class_bind_template_callback (widget_class, entry_text_changed);
+  gtk_widget_class_bind_template_callback (widget_class, entry_apply);
+  gtk_widget_class_bind_template_callback (widget_class, entry_focus_out);
+  gtk_widget_class_bind_template_callback (widget_class, popup_edit);
 }
 
 static void

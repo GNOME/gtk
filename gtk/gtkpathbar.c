@@ -259,16 +259,16 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
   gtk_widget_class_set_template_from_resource (widget_class,
 					       "/org/gtk/libgtk/gtkpathbar.ui");
 
-  gtk_widget_class_bind_child (widget_class, GtkPathBar, up_slider_button);
-  gtk_widget_class_bind_child (widget_class, GtkPathBar, down_slider_button);
+  gtk_widget_class_bind_template_child (widget_class, GtkPathBar, up_slider_button);
+  gtk_widget_class_bind_template_child (widget_class, GtkPathBar, down_slider_button);
 
-  gtk_widget_class_bind_callback (widget_class, gtk_path_bar_slider_button_press);
-  gtk_widget_class_bind_callback (widget_class, gtk_path_bar_slider_button_release);
-  gtk_widget_class_bind_callback (widget_class, gtk_path_bar_slider_up_defocus);
-  gtk_widget_class_bind_callback (widget_class, gtk_path_bar_slider_down_defocus);
-  gtk_widget_class_bind_callback (widget_class, gtk_path_bar_scroll_up);
-  gtk_widget_class_bind_callback (widget_class, gtk_path_bar_scroll_down);
-  gtk_widget_class_bind_callback (widget_class, on_slider_unmap);
+  gtk_widget_class_bind_template_callback (widget_class, gtk_path_bar_slider_button_press);
+  gtk_widget_class_bind_template_callback (widget_class, gtk_path_bar_slider_button_release);
+  gtk_widget_class_bind_template_callback (widget_class, gtk_path_bar_slider_up_defocus);
+  gtk_widget_class_bind_template_callback (widget_class, gtk_path_bar_slider_down_defocus);
+  gtk_widget_class_bind_template_callback (widget_class, gtk_path_bar_scroll_up);
+  gtk_widget_class_bind_template_callback (widget_class, gtk_path_bar_scroll_down);
+  gtk_widget_class_bind_template_callback (widget_class, on_slider_unmap);
 }
 
 

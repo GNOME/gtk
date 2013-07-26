@@ -815,10 +815,10 @@ static void             gtk_widget_real_adjust_baseline_allocation (GtkWidget   
 								    gint              *baseline);
 
 /* --- functions dealing with template data structures --- */
-static AutomaticChildClass  *automatic_child_class_new          (const gchar          *name,
-								 gboolean              internal_child,
-								 gssize                offset);
-static void                  automatic_child_class_free         (AutomaticChildClass  *child_class);
+static AutomaticChildClass  *template_child_class_new          (const gchar          *name,
+                                                                gboolean              internal_child,
+                                                                gssize                offset);
+static void                  template_child_class_free         (AutomaticChildClass  *child_class);
 static CallbackSymbol       *callback_symbol_new                (const gchar          *name,
 								 GCallback             callback);
 static void                  callback_symbol_free               (CallbackSymbol       *callback);
@@ -826,11 +826,11 @@ static void                  template_data_free                 (GtkWidgetTempla
 static GHashTable           *get_auto_child_hash                (GtkWidget            *widget,
 								 GType                 type,
 								 gboolean              create);
-static gboolean              setup_automatic_child              (GtkWidgetTemplate    *template_data,
-								 GType                 class_type,
-								 AutomaticChildClass  *child_class,
-								 GtkWidget            *widget,
-								 GtkBuilder           *builder);
+static gboolean              setup_template_child              (GtkWidgetTemplate    *template_data,
+                                                                GType                 class_type,
+                                                                AutomaticChildClass  *child_class,
+                                                                GtkWidget            *widget,
+                                                                GtkBuilder           *builder);
 
 static void gtk_widget_set_usize_internal (GtkWidget          *widget,
 					   gint                width,
@@ -11287,7 +11287,7 @@ finalize_assertion_new (GtkWidget           *widget,
   FinalizeAssertion *assertion = NULL;
   GObject           *object;
 
-  object = gtk_widget_get_automated_child (widget, widget_type, child_class->name);
+  object = gtk_widget_get_template_child (widget, widget_type, child_class->name);
 
   /* We control the hash table entry, the object should never be NULL
    */
@@ -13260,11 +13260,11 @@ gtk_widget_buildable_get_internal_child (GtkBuildable *buildable,
     }
 
   /* Now return the 'internal-child' from the class which declared it, note
-   * that gtk_widget_get_automated_child() an API used to access objects
+   * that gtk_widget_get_template_child() an API used to access objects
    * which are in the private scope of a given class.
    */
   if (internal_child_type != 0)
-    return gtk_widget_get_automated_child (GTK_WIDGET (buildable), internal_child_type, childname);
+    return gtk_widget_get_template_child (GTK_WIDGET (buildable), internal_child_type, childname);
 
   return NULL;
 }
@@ -15529,9 +15529,9 @@ gtk_widget_insert_action_group (GtkWidget    *widget,
  *                 GtkBuilder automated templates               *
  ****************************************************************/
 static AutomaticChildClass *
-automatic_child_class_new (const gchar         *name,
-			   gboolean             internal_child,
-			   gssize               offset)
+template_child_class_new (const gchar *name,
+                          gboolean     internal_child,
+                          gssize       offset)
 {
   AutomaticChildClass *child_class = g_slice_new0 (AutomaticChildClass);
 
@@ -15543,7 +15543,7 @@ automatic_child_class_new (const gchar         *name,
 }
 
 static void
-automatic_child_class_free (AutomaticChildClass *child_class)
+template_child_class_free (AutomaticChildClass *child_class)
 {
   if (child_class)
     {
@@ -15580,7 +15580,7 @@ template_data_free (GtkWidgetTemplate *template_data)
   if (template_data)
     {
       g_bytes_unref (template_data->data);
-      g_slist_free_full (template_data->children, (GDestroyNotify)automatic_child_class_free);
+      g_slist_free_full (template_data->children, (GDestroyNotify)template_child_class_free);
       g_slist_free_full (template_data->callbacks, (GDestroyNotify)callback_symbol_free);
 
       if (template_data->connect_data &&
@@ -15629,7 +15629,7 @@ get_auto_child_hash (GtkWidget        *widget,
 }
 
 static gboolean
-setup_automatic_child (GtkWidgetTemplate *template_data,
+setup_template_child (GtkWidgetTemplate *template_data,
 		       GType                 class_type,
 		       AutomaticChildClass  *child_class,
 		       GtkWidget         *widget,
@@ -15647,7 +15647,7 @@ setup_automatic_child (GtkWidgetTemplate *template_data,
     }
 
   /* Insert into the hash so that it can be fetched with
-   * gtk_widget_get_automated_child() and also in automated
+   * gtk_widget_get_template_child() and also in automated
    * implementations of GtkBuildable.get_internal_child()
    */
   auto_child_hash = get_auto_child_hash (widget, class_type, TRUE);
@@ -15746,7 +15746,7 @@ gtk_widget_init_template (GtkWidget *widget)
        * it to be available in any GtkBuildable.get_internal_child()
        * invocations which may follow by reference in child classes.
        */
-      if (!setup_automatic_child (template,
+      if (!setup_template_child (template,
 				  class_type,
 				  child_class,
 				  widget,
@@ -15842,7 +15842,7 @@ gtk_widget_class_set_template_from_resource (GtkWidgetClass    *widget_class,
 }
 
 /**
- * gtk_widget_class_declare_callback:
+ * gtk_widget_class_bind_template_callback_full:
  * @widget_class: A #GtkWidgetClass
  * @callback_name: The name of the callback as expected in the template XML
  * @callback_symbol: (scope async): The callback symbol
@@ -15856,9 +15856,9 @@ gtk_widget_class_set_template_from_resource (GtkWidgetClass    *widget_class,
  * Since: 3.10
  */
 void
-gtk_widget_class_declare_callback (GtkWidgetClass    *widget_class,
-				   const gchar       *callback_name,
-				   GCallback          callback_symbol)
+gtk_widget_class_bind_template_callback_full (GtkWidgetClass *widget_class,
+                                              const gchar    *callback_name,
+                                              GCallback       callback_symbol)
 {
   CallbackSymbol *cb;
 
@@ -15888,10 +15888,10 @@ gtk_widget_class_declare_callback (GtkWidgetClass    *widget_class,
  * Since: 3.10
  */
 void
-gtk_widget_class_set_connect_func (GtkWidgetClass    *widget_class,
-				   GtkBuilderConnectFunc connect_func,
-				   gpointer              connect_data,
-				   GDestroyNotify        connect_data_destroy)
+gtk_widget_class_set_connect_func (GtkWidgetClass        *widget_class,
+				   GtkBuilderConnectFunc  connect_func,
+				   gpointer               connect_data,
+				   GDestroyNotify         connect_data_destroy)
 {
   g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
   g_return_if_fail (widget_class->priv->template != NULL);
@@ -15907,7 +15907,7 @@ gtk_widget_class_set_connect_func (GtkWidgetClass    *widget_class,
 }
 
 /**
- * gtk_widget_class_automate_child:
+ * gtk_widget_class_bind_template_child_full:
  * @widget_class: A #GtkWidgetClass
  * @name: The "id" of the child defined in the template XML
  * @internal_child: Whether the child should be accessible as an "internal-child"
@@ -15937,10 +15937,10 @@ gtk_widget_class_set_connect_func (GtkWidgetClass    *widget_class,
  * Since: 3.10
  */
 void
-gtk_widget_class_automate_child (GtkWidgetClass    *widget_class,
-				 const gchar       *name,
-				 gboolean           internal_child,
-				 gssize             struct_offset)
+gtk_widget_class_bind_template_child_full (GtkWidgetClass *widget_class,
+                                           const gchar    *name,
+                                           gboolean        internal_child,
+                                           gssize          struct_offset)
 {
   AutomaticChildClass *child_class;
 
@@ -15948,22 +15948,22 @@ gtk_widget_class_automate_child (GtkWidgetClass    *widget_class,
   g_return_if_fail (widget_class->priv->template != NULL);
   g_return_if_fail (name && name[0]);
 
-  child_class = automatic_child_class_new (name,
-					   internal_child,
-					   struct_offset);
+  child_class = template_child_class_new (name,
+                                          internal_child,
+                                          struct_offset);
   widget_class->priv->template->children =
     g_slist_prepend (widget_class->priv->template->children, child_class);
 }
 
 /**
- * gtk_widget_get_automated_child:
+ * gtk_widget_get_template_child:
  * @widget: A #GtkWidget
- * @widget_type: The #GType to get an automated child for
+ * @widget_type: The #GType to get a template child for
  * @name: The "id" of the child defined in the template XML
  *
  * Fetch an object build from the template XML for @widget_type in this @widget instance.
  *
- * This will only report children which were previously declared with gtk_widget_class_automate_child().
+ * This will only report children which were previously declared with gtk_widget_class_bind_template_child_full() or one of its variants.
  *
  * This function is only meant to be called for code which is private to the @widget_type which
  * declared the child and is meant for language bindings which cannot easily make use
@@ -15972,9 +15972,9 @@ gtk_widget_class_automate_child (GtkWidgetClass    *widget_class,
  * Returns: (transfer none): The object built in the template XML with the id @name
  */
 GObject *
-gtk_widget_get_automated_child (GtkWidget         *widget,
-				GType              widget_type,
-				const gchar       *name)
+gtk_widget_get_template_child (GtkWidget   *widget,
+                               GType        widget_type,
+                               const gchar *name)
 {
   GHashTable *auto_child_hash;
   GObject *ret = NULL;

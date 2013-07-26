@@ -482,27 +482,27 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
 					       "/org/gtk/libgtk/gtkfontchooserwidget.ui");
 
-  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidget, search_entry);
-  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidget, family_face_list);
-  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidget, family_face_column);
-  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidget, family_face_cell);
-  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidget, list_scrolled_window);
-  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidget, list_notebook);
-  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidget, model);
-  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidget, filter_model);
-  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidget, preview);
-  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidget, size_spin);
-  gtk_widget_class_bind_child (widget_class, GtkFontChooserWidget, size_slider);
+  gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, search_entry);
+  gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, family_face_list);
+  gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, family_face_column);
+  gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, family_face_cell);
+  gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, list_scrolled_window);
+  gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, list_notebook);
+  gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, model);
+  gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, filter_model);
+  gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, preview);
+  gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, size_spin);
+  gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, size_slider);
 
-  gtk_widget_class_bind_callback (widget_class, text_changed_cb);
-  gtk_widget_class_bind_callback (widget_class, cursor_changed_cb);
-  gtk_widget_class_bind_callback (widget_class, row_activated_cb);
-  gtk_widget_class_bind_callback (widget_class, gtk_font_chooser_widget_set_cell_size);
-  gtk_widget_class_bind_callback (widget_class, resize_by_scroll_cb);
-  gtk_widget_class_bind_callback (widget_class, row_deleted_cb);
-  gtk_widget_class_bind_callback (widget_class, row_inserted_cb);
-  gtk_widget_class_bind_callback (widget_class, row_deleted_cb);
-  gtk_widget_class_bind_callback (widget_class, size_change_cb);
+  gtk_widget_class_bind_template_callback (widget_class, text_changed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, cursor_changed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, row_activated_cb);
+  gtk_widget_class_bind_template_callback (widget_class, gtk_font_chooser_widget_set_cell_size);
+  gtk_widget_class_bind_template_callback (widget_class, resize_by_scroll_cb);
+  gtk_widget_class_bind_template_callback (widget_class, row_deleted_cb);
+  gtk_widget_class_bind_template_callback (widget_class, row_inserted_cb);
+  gtk_widget_class_bind_template_callback (widget_class, row_deleted_cb);
+  gtk_widget_class_bind_template_callback (widget_class, size_change_cb);
 }
 
 static void

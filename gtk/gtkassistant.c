@@ -431,26 +431,26 @@ gtk_assistant_class_init (GtkAssistantClass *class)
   gtk_widget_class_set_template_from_resource (widget_class,
 					       "/org/gtk/libgtk/gtkassistant.ui");
 
-  gtk_widget_class_bind_child_internal (widget_class, GtkAssistant, action_area);
-  gtk_widget_class_bind_child (widget_class, GtkAssistant, content);
-  gtk_widget_class_bind_child (widget_class, GtkAssistant, cancel);
-  gtk_widget_class_bind_child (widget_class, GtkAssistant, forward);
-  gtk_widget_class_bind_child (widget_class, GtkAssistant, back);
-  gtk_widget_class_bind_child (widget_class, GtkAssistant, apply);
-  gtk_widget_class_bind_child (widget_class, GtkAssistant, close);
-  gtk_widget_class_bind_child (widget_class, GtkAssistant, last);
-  gtk_widget_class_bind_child (widget_class, GtkAssistant, sidebar);
-  gtk_widget_class_bind_child (widget_class, GtkAssistant, button_size_group);
-  gtk_widget_class_bind_child (widget_class, GtkAssistant, title_size_group);
+  gtk_widget_class_bind_template_child_internal (widget_class, GtkAssistant, action_area);
+  gtk_widget_class_bind_template_child (widget_class, GtkAssistant, content);
+  gtk_widget_class_bind_template_child (widget_class, GtkAssistant, cancel);
+  gtk_widget_class_bind_template_child (widget_class, GtkAssistant, forward);
+  gtk_widget_class_bind_template_child (widget_class, GtkAssistant, back);
+  gtk_widget_class_bind_template_child (widget_class, GtkAssistant, apply);
+  gtk_widget_class_bind_template_child (widget_class, GtkAssistant, close);
+  gtk_widget_class_bind_template_child (widget_class, GtkAssistant, last);
+  gtk_widget_class_bind_template_child (widget_class, GtkAssistant, sidebar);
+  gtk_widget_class_bind_template_child (widget_class, GtkAssistant, button_size_group);
+  gtk_widget_class_bind_template_child (widget_class, GtkAssistant, title_size_group);
 
-  gtk_widget_class_bind_callback (widget_class, assistant_sidebar_draw_cb);
-  gtk_widget_class_bind_callback (widget_class, assistant_remove_page_cb);
-  gtk_widget_class_bind_callback (widget_class, on_assistant_close);
-  gtk_widget_class_bind_callback (widget_class, on_assistant_apply);
-  gtk_widget_class_bind_callback (widget_class, on_assistant_forward);
-  gtk_widget_class_bind_callback (widget_class, on_assistant_back);
-  gtk_widget_class_bind_callback (widget_class, on_assistant_cancel);
-  gtk_widget_class_bind_callback (widget_class, on_assistant_last);
+  gtk_widget_class_bind_template_callback (widget_class, assistant_sidebar_draw_cb);
+  gtk_widget_class_bind_template_callback (widget_class, assistant_remove_page_cb);
+  gtk_widget_class_bind_template_callback (widget_class, on_assistant_close);
+  gtk_widget_class_bind_template_callback (widget_class, on_assistant_apply);
+  gtk_widget_class_bind_template_callback (widget_class, on_assistant_forward);
+  gtk_widget_class_bind_template_callback (widget_class, on_assistant_back);
+  gtk_widget_class_bind_template_callback (widget_class, on_assistant_cancel);
+  gtk_widget_class_bind_template_callback (widget_class, on_assistant_last);
 }
 
 static gint

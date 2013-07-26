@@ -348,24 +348,24 @@ _gtk_recent_chooser_default_class_init (GtkRecentChooserDefaultClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
 					       "/org/gtk/libgtk/gtkrecentchooserdefault.ui");
 
-  gtk_widget_class_bind_child (widget_class, GtkRecentChooserDefault, filter_combo_hbox);
-  gtk_widget_class_bind_child (widget_class, GtkRecentChooserDefault, filter_combo);
-  gtk_widget_class_bind_child (widget_class, GtkRecentChooserDefault, recent_view);
-  gtk_widget_class_bind_child (widget_class, GtkRecentChooserDefault, recent_store);
-  gtk_widget_class_bind_child (widget_class, GtkRecentChooserDefault, icon_column);
-  gtk_widget_class_bind_child (widget_class, GtkRecentChooserDefault, meta_column);
-  gtk_widget_class_bind_child (widget_class, GtkRecentChooserDefault, icon_renderer);
-  gtk_widget_class_bind_child (widget_class, GtkRecentChooserDefault, meta_renderer);
-  gtk_widget_class_bind_child (widget_class, GtkRecentChooserDefault, selection);
+  gtk_widget_class_bind_template_child (widget_class, GtkRecentChooserDefault, filter_combo_hbox);
+  gtk_widget_class_bind_template_child (widget_class, GtkRecentChooserDefault, filter_combo);
+  gtk_widget_class_bind_template_child (widget_class, GtkRecentChooserDefault, recent_view);
+  gtk_widget_class_bind_template_child (widget_class, GtkRecentChooserDefault, recent_store);
+  gtk_widget_class_bind_template_child (widget_class, GtkRecentChooserDefault, icon_column);
+  gtk_widget_class_bind_template_child (widget_class, GtkRecentChooserDefault, meta_column);
+  gtk_widget_class_bind_template_child (widget_class, GtkRecentChooserDefault, icon_renderer);
+  gtk_widget_class_bind_template_child (widget_class, GtkRecentChooserDefault, meta_renderer);
+  gtk_widget_class_bind_template_child (widget_class, GtkRecentChooserDefault, selection);
 
-  gtk_widget_class_bind_callback (widget_class, selection_changed_cb);
-  gtk_widget_class_bind_callback (widget_class, row_activated_cb);
-  gtk_widget_class_bind_callback (widget_class, filter_combo_changed_cb);
-  gtk_widget_class_bind_callback (widget_class, recent_view_popup_menu_cb);
-  gtk_widget_class_bind_callback (widget_class, recent_view_button_press_cb);
-  gtk_widget_class_bind_callback (widget_class, recent_view_drag_begin_cb);
-  gtk_widget_class_bind_callback (widget_class, recent_view_drag_data_get_cb);
-  gtk_widget_class_bind_callback (widget_class, recent_view_query_tooltip_cb);
+  gtk_widget_class_bind_template_callback (widget_class, selection_changed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, row_activated_cb);
+  gtk_widget_class_bind_template_callback (widget_class, filter_combo_changed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, recent_view_popup_menu_cb);
+  gtk_widget_class_bind_template_callback (widget_class, recent_view_button_press_cb);
+  gtk_widget_class_bind_template_callback (widget_class, recent_view_drag_begin_cb);
+  gtk_widget_class_bind_template_callback (widget_class, recent_view_drag_data_get_cb);
+  gtk_widget_class_bind_template_callback (widget_class, recent_view_query_tooltip_cb);
 }
 
 static void

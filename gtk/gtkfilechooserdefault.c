@@ -7460,58 +7460,56 @@ _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
   _gtk_file_chooser_install_properties (gobject_class);
 
   /* Bind class to template */
-
   gtk_widget_class_set_template_from_resource (widget_class,
 					       "/org/gtk/libgtk/gtkfilechooserdefault.ui");
 
   /* A *lot* of widgets that we need to handle .... */
-
-  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefault, browse_widgets_box);
-  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefault, browse_widgets_hpaned);
-  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefault, browse_header_box);
-  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefault, browse_widgets_box);
-  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefault, places_sidebar);
-  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefault, browse_files_tree_view);
-  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefault, browse_new_folder_button);
-  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefault, browse_path_bar_hbox);
-  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefault, browse_path_bar_size_group);
-  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefault, browse_path_bar);
-  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefault, browse_special_mode_icon);
-  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefault, browse_special_mode_label);
-  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefault, browse_select_a_folder_info_bar);
-  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefault, browse_select_a_folder_label);
-  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefault, browse_select_a_folder_icon);
-  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefault, filter_combo_hbox);
-  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefault, filter_combo);
-  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefault, preview_box);
-  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefault, extra_align);
-  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefault, location_button);
-  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefault, location_entry_box);
-  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefault, location_label);
-  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefault, list_name_column);
-  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefault, list_pixbuf_renderer);
-  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefault, list_name_renderer);
-  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefault, list_mtime_column);
-  gtk_widget_class_bind_child (widget_class, GtkFileChooserDefault, list_size_column);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserDefault, browse_widgets_box);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserDefault, browse_widgets_hpaned);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserDefault, browse_header_box);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserDefault, browse_widgets_box);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserDefault, places_sidebar);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserDefault, browse_files_tree_view);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserDefault, browse_new_folder_button);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserDefault, browse_path_bar_hbox);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserDefault, browse_path_bar_size_group);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserDefault, browse_path_bar);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserDefault, browse_special_mode_icon);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserDefault, browse_special_mode_label);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserDefault, browse_select_a_folder_info_bar);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserDefault, browse_select_a_folder_label);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserDefault, browse_select_a_folder_icon);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserDefault, filter_combo_hbox);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserDefault, filter_combo);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserDefault, preview_box);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserDefault, extra_align);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserDefault, location_button);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserDefault, location_entry_box);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserDefault, location_label);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserDefault, list_name_column);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserDefault, list_pixbuf_renderer);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserDefault, list_name_renderer);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserDefault, list_mtime_column);
+  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserDefault, list_size_column);
 
   /* And a *lot* of callbacks to bind ... */
-  gtk_widget_class_bind_callback (widget_class, browse_files_key_press_event_cb);
-  gtk_widget_class_bind_callback (widget_class, file_list_drag_drop_cb);
-  gtk_widget_class_bind_callback (widget_class, file_list_drag_data_received_cb);
-  gtk_widget_class_bind_callback (widget_class, list_popup_menu_cb);
-  gtk_widget_class_bind_callback (widget_class, file_list_query_tooltip_cb);
-  gtk_widget_class_bind_callback (widget_class, list_button_press_event_cb);
-  gtk_widget_class_bind_callback (widget_class, list_row_activated);
-  gtk_widget_class_bind_callback (widget_class, file_list_drag_motion_cb);
-  gtk_widget_class_bind_callback (widget_class, list_selection_changed);
-  gtk_widget_class_bind_callback (widget_class, renderer_editing_canceled_cb);
-  gtk_widget_class_bind_callback (widget_class, renderer_edited_cb);
-  gtk_widget_class_bind_callback (widget_class, filter_combo_changed);
-  gtk_widget_class_bind_callback (widget_class, location_button_toggled_cb);
-  gtk_widget_class_bind_callback (widget_class, new_folder_button_clicked);
-  gtk_widget_class_bind_callback (widget_class, path_bar_clicked);
-  gtk_widget_class_bind_callback (widget_class, places_sidebar_open_location_cb);
-  gtk_widget_class_bind_callback (widget_class, places_sidebar_show_error_message_cb);
+  gtk_widget_class_bind_template_callback (widget_class, browse_files_key_press_event_cb);
+  gtk_widget_class_bind_template_callback (widget_class, file_list_drag_drop_cb);
+  gtk_widget_class_bind_template_callback (widget_class, file_list_drag_data_received_cb);
+  gtk_widget_class_bind_template_callback (widget_class, list_popup_menu_cb);
+  gtk_widget_class_bind_template_callback (widget_class, file_list_query_tooltip_cb);
+  gtk_widget_class_bind_template_callback (widget_class, list_button_press_event_cb);
+  gtk_widget_class_bind_template_callback (widget_class, list_row_activated);
+  gtk_widget_class_bind_template_callback (widget_class, file_list_drag_motion_cb);
+  gtk_widget_class_bind_template_callback (widget_class, list_selection_changed);
+  gtk_widget_class_bind_template_callback (widget_class, renderer_editing_canceled_cb);
+  gtk_widget_class_bind_template_callback (widget_class, renderer_edited_cb);
+  gtk_widget_class_bind_template_callback (widget_class, filter_combo_changed);
+  gtk_widget_class_bind_template_callback (widget_class, location_button_toggled_cb);
+  gtk_widget_class_bind_template_callback (widget_class, new_folder_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, path_bar_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, places_sidebar_open_location_cb);
+  gtk_widget_class_bind_template_callback (widget_class, places_sidebar_show_error_message_cb);
 }
 
 static void

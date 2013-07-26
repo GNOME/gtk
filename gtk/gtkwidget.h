@@ -1160,18 +1160,21 @@ void gtk_widget_remove_tick_callback (GtkWidget       *widget,
                                       guint            id);
 
 /**
- * gtk_widget_class_bind_callback:
+ * gtk_widget_class_bind_template_callback:
  * @widget_class: a #GtkWidgetClass
  * @callback: the callback symbol
  *
- * Shorthand for gtk_widget_class_declare_callback(), adds a symbol
- * by it's own name to the @widget_class.
+ * Binds a callback function defined in a template to the @widget_class.
+ *
+ * This macro is a convenience wrapper around the
+ * gtk_widget_class_bind_template_callback_full() function.
  *
  * Since: 3.10
  */
-#define gtk_widget_class_bind_callback(widget_class, callback)		\
-  gtk_widget_class_declare_callback (GTK_WIDGET_CLASS (widget_class),	\
-				     #callback, G_CALLBACK(callback))
+#define gtk_widget_class_bind_template_callback(widget_class, callback) \
+  gtk_widget_class_bind_template_callback_full (GTK_WIDGET_CLASS (widget_class), \
+                                                #callback, \
+                                                G_CALLBACK (callback))
 
 /**
  * gtk_widget_class_bind_child:
@@ -1179,58 +1182,70 @@ void gtk_widget_remove_tick_callback (GtkWidget       *widget,
  * @data_type: the type name of this widget
  * @member_name: name of the instance private member on @private_data_type
  *
- * Shorthand for gtk_widget_class_automate_child(). This macro assumes that
- * the @member_name is the name of the component instance to lookup as specified
- * in the composite template.
+ * Binds a child widget defined in a template to the @widget_class.
+ *
+ * This macro is a convenience wrapper around the
+ * gtk_widget_class_bind_template_child_full() function.
+ *
+ * This macro will use the offset of the @member_name inside the @TypeName
+ * private data structure.
  *
  * Since: 3.10
  */
-#define gtk_widget_class_bind_child(widget_class, data_type, member_name) \
-  gtk_widget_class_automate_child (widget_class, #member_name, FALSE,	\
-				   G_PRIVATE_OFFSET (data_type, member_name))
+#define gtk_widget_class_bind_template_child(widget_class, TypeName, member_name) \
+  gtk_widget_class_bind_template_child_full (widget_class, \
+                                             #member_name, \
+                                             FALSE, \
+                                             G_PRIVATE_OFFSET (TypeName, member_name))
 
 /**
  * gtk_widget_class_bind_child_internal:
  * @widget_class: a #GtkWidgetClass
- * @data_type: the type name of this widget
+ * @TypeName: the type name, in CamelCase
  * @member_name: name of the instance private member on @private_data_type
  *
- * Shorthand for gtk_widget_class_automate_child(). Essentially the same as
- * gtk_widget_class_bind_child() except that it will export the child as
- * an internal child.
+ * Binds a child widget defined in a template to the @widget_class.
+ *
+ * This macro is a convenience wrapper around the
+ * gtk_widget_class_bind_template_child_full() function.
+ *
+ * This macro will use the offset of the @member_name inside the @TypeName
+ * private data structure.
  *
  * Since: 3.10
  */
-#define gtk_widget_class_bind_child_internal(widget_class, data_type, member_name) \
-  gtk_widget_class_automate_child (widget_class, #member_name, TRUE,	\
-				   G_PRIVATE_OFFSET (data_type, member_name))
+#define gtk_widget_class_bind_template_child_internal(widget_class, TypeName, member_name) \
+  gtk_widget_class_bind_template_child_full (widget_class, \
+                                             #member_name, \
+                                             TRUE, \
+                                             G_PRIVATE_OFFSET (TypeName, member_name))
 
 GDK_AVAILABLE_IN_3_10
-void    gtk_widget_init_template                    (GtkWidget    *widget);
+void    gtk_widget_init_template                        (GtkWidget             *widget);
 GDK_AVAILABLE_IN_3_10
-GObject *gtk_widget_get_automated_child             (GtkWidget         *widget,
-						     GType                 widget_type,
-						     const gchar          *name);
+GObject *gtk_widget_get_template_child                  (GtkWidget             *widget,
+						         GType                  widget_type,
+						         const gchar           *name);
 GDK_AVAILABLE_IN_3_10
-void    gtk_widget_class_set_template               (GtkWidgetClass    *widget_class,
-						     GBytes               *template_bytes);
+void    gtk_widget_class_set_template                   (GtkWidgetClass        *widget_class,
+						         GBytes                *template_bytes);
 GDK_AVAILABLE_IN_3_10
-void    gtk_widget_class_set_template_from_resource (GtkWidgetClass    *widget_class,
-						     const gchar          *resource_name);
+void    gtk_widget_class_set_template_from_resource     (GtkWidgetClass        *widget_class,
+						         const gchar           *resource_name);
 GDK_AVAILABLE_IN_3_10
-void    gtk_widget_class_declare_callback           (GtkWidgetClass    *widget_class,
-						     const gchar          *callback_name,
-						     GCallback             callback_symbol);
+void    gtk_widget_class_bind_template_callback_full    (GtkWidgetClass        *widget_class,
+						         const gchar           *callback_name,
+						         GCallback              callback_symbol);
 GDK_AVAILABLE_IN_3_10
-void    gtk_widget_class_set_connect_func           (GtkWidgetClass    *widget_class,
-						     GtkBuilderConnectFunc connect_func,
-						     gpointer              connect_data,
-						     GDestroyNotify        connect_data_destroy);
+void    gtk_widget_class_set_connect_func               (GtkWidgetClass        *widget_class,
+						         GtkBuilderConnectFunc  connect_func,
+						         gpointer               connect_data,
+						         GDestroyNotify         connect_data_destroy);
 GDK_AVAILABLE_IN_3_10
-void    gtk_widget_class_automate_child             (GtkWidgetClass    *widget_class,
-						     const gchar          *name,
-						     gboolean              internal_child,
-						     gssize                struct_offset);
+void    gtk_widget_class_bind_template_child_full       (GtkWidgetClass        *widget_class,
+						         const gchar           *name,
+						         gboolean               internal_child,
+						         gssize                 struct_offset);
 
 G_END_DECLS
 

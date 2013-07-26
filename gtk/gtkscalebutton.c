@@ -360,21 +360,21 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
 					       "/org/gtk/libgtk/gtkscalebutton.ui");
 
-  gtk_widget_class_bind_child_internal (widget_class, GtkScaleButton, plus_button);
-  gtk_widget_class_bind_child_internal (widget_class, GtkScaleButton, minus_button);
-  gtk_widget_class_bind_child (widget_class, GtkScaleButton, dock);
-  gtk_widget_class_bind_child (widget_class, GtkScaleButton, box);
-  gtk_widget_class_bind_child (widget_class, GtkScaleButton, scale);
-  gtk_widget_class_bind_child (widget_class, GtkScaleButton, image);
-  gtk_widget_class_bind_child (widget_class, GtkScaleButton, adjustment);
+  gtk_widget_class_bind_template_child_internal (widget_class, GtkScaleButton, plus_button);
+  gtk_widget_class_bind_template_child_internal (widget_class, GtkScaleButton, minus_button);
+  gtk_widget_class_bind_template_child (widget_class, GtkScaleButton, dock);
+  gtk_widget_class_bind_template_child (widget_class, GtkScaleButton, box);
+  gtk_widget_class_bind_template_child (widget_class, GtkScaleButton, scale);
+  gtk_widget_class_bind_template_child (widget_class, GtkScaleButton, image);
+  gtk_widget_class_bind_template_child (widget_class, GtkScaleButton, adjustment);
 
-  gtk_widget_class_bind_callback (widget_class, cb_dock_button_press);
-  gtk_widget_class_bind_callback (widget_class, cb_dock_key_release);
-  gtk_widget_class_bind_callback (widget_class, cb_dock_grab_notify);
-  gtk_widget_class_bind_callback (widget_class, cb_dock_grab_broken_event);
-  gtk_widget_class_bind_callback (widget_class, cb_button_press);
-  gtk_widget_class_bind_callback (widget_class, cb_button_release);
-  gtk_widget_class_bind_callback (widget_class, cb_scale_grab_notify);
+  gtk_widget_class_bind_template_callback (widget_class, cb_dock_button_press);
+  gtk_widget_class_bind_template_callback (widget_class, cb_dock_key_release);
+  gtk_widget_class_bind_template_callback (widget_class, cb_dock_grab_notify);
+  gtk_widget_class_bind_template_callback (widget_class, cb_dock_grab_broken_event);
+  gtk_widget_class_bind_template_callback (widget_class, cb_button_press);
+  gtk_widget_class_bind_template_callback (widget_class, cb_button_release);
+  gtk_widget_class_bind_template_callback (widget_class, cb_scale_grab_notify);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SCALE_BUTTON_ACCESSIBLE);
 }

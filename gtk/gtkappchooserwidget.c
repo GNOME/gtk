@@ -1086,14 +1086,14 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
   widget_class = GTK_WIDGET_CLASS (klass);
   gtk_widget_class_set_template_from_resource (widget_class,
 					       "/org/gtk/libgtk/gtkappchooserwidget.ui");
-  gtk_widget_class_bind_child (widget_class, GtkAppChooserWidget, program_list);
-  gtk_widget_class_bind_child (widget_class, GtkAppChooserWidget, program_list_store);
-  gtk_widget_class_bind_child (widget_class, GtkAppChooserWidget, column);
-  gtk_widget_class_bind_child (widget_class, GtkAppChooserWidget, padding_renderer);
-  gtk_widget_class_bind_child (widget_class, GtkAppChooserWidget, secondary_padding);
-  gtk_widget_class_bind_callback (widget_class, refresh_and_emit_app_selected);
-  gtk_widget_class_bind_callback (widget_class, program_list_selection_activated);
-  gtk_widget_class_bind_callback (widget_class, widget_button_press_event_cb);
+  gtk_widget_class_bind_template_child (widget_class, GtkAppChooserWidget, program_list);
+  gtk_widget_class_bind_template_child (widget_class, GtkAppChooserWidget, program_list_store);
+  gtk_widget_class_bind_template_child (widget_class, GtkAppChooserWidget, column);
+  gtk_widget_class_bind_template_child (widget_class, GtkAppChooserWidget, padding_renderer);
+  gtk_widget_class_bind_template_child (widget_class, GtkAppChooserWidget, secondary_padding);
+  gtk_widget_class_bind_template_callback (widget_class, refresh_and_emit_app_selected);
+  gtk_widget_class_bind_template_callback (widget_class, program_list_selection_activated);
+  gtk_widget_class_bind_template_callback (widget_class, widget_button_press_event_cb);
 }
 
 static void

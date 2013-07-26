@@ -557,26 +557,26 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
 					       "/org/gtk/libgtk/gtkaboutdialog.ui");
 
-  gtk_widget_class_bind_child (widget_class, GtkAboutDialog, notebook);
-  gtk_widget_class_bind_child (widget_class, GtkAboutDialog, logo_image);
-  gtk_widget_class_bind_child (widget_class, GtkAboutDialog, name_label);
-  gtk_widget_class_bind_child (widget_class, GtkAboutDialog, version_label);
-  gtk_widget_class_bind_child (widget_class, GtkAboutDialog, comments_label);
-  gtk_widget_class_bind_child (widget_class, GtkAboutDialog, copyright_label);
-  gtk_widget_class_bind_child (widget_class, GtkAboutDialog, license_label);
-  gtk_widget_class_bind_child (widget_class, GtkAboutDialog, website_label);
-  gtk_widget_class_bind_child (widget_class, GtkAboutDialog, credits_button);
-  gtk_widget_class_bind_child (widget_class, GtkAboutDialog, license_button);
-  gtk_widget_class_bind_child (widget_class, GtkAboutDialog, credits_grid);
-  gtk_widget_class_bind_child (widget_class, GtkAboutDialog, license_view);
+  gtk_widget_class_bind_template_child (widget_class, GtkAboutDialog, notebook);
+  gtk_widget_class_bind_template_child (widget_class, GtkAboutDialog, logo_image);
+  gtk_widget_class_bind_template_child (widget_class, GtkAboutDialog, name_label);
+  gtk_widget_class_bind_template_child (widget_class, GtkAboutDialog, version_label);
+  gtk_widget_class_bind_template_child (widget_class, GtkAboutDialog, comments_label);
+  gtk_widget_class_bind_template_child (widget_class, GtkAboutDialog, copyright_label);
+  gtk_widget_class_bind_template_child (widget_class, GtkAboutDialog, license_label);
+  gtk_widget_class_bind_template_child (widget_class, GtkAboutDialog, website_label);
+  gtk_widget_class_bind_template_child (widget_class, GtkAboutDialog, credits_button);
+  gtk_widget_class_bind_template_child (widget_class, GtkAboutDialog, license_button);
+  gtk_widget_class_bind_template_child (widget_class, GtkAboutDialog, credits_grid);
+  gtk_widget_class_bind_template_child (widget_class, GtkAboutDialog, license_view);
 
-  gtk_widget_class_bind_callback (widget_class, credits_button_clicked);
-  gtk_widget_class_bind_callback (widget_class, license_button_clicked);
-  gtk_widget_class_bind_callback (widget_class, emit_activate_link);
-  gtk_widget_class_bind_callback (widget_class, text_view_event_after);
-  gtk_widget_class_bind_callback (widget_class, text_view_key_press_event);
-  gtk_widget_class_bind_callback (widget_class, text_view_visibility_notify_event);
-  gtk_widget_class_bind_callback (widget_class, text_view_motion_notify_event);
+  gtk_widget_class_bind_template_callback (widget_class, credits_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, license_button_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, emit_activate_link);
+  gtk_widget_class_bind_template_callback (widget_class, text_view_event_after);
+  gtk_widget_class_bind_template_callback (widget_class, text_view_key_press_event);
+  gtk_widget_class_bind_template_callback (widget_class, text_view_visibility_notify_event);
+  gtk_widget_class_bind_template_callback (widget_class, text_view_motion_notify_event);
 }
 
 static gboolean
