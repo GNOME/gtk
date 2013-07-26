@@ -546,9 +546,9 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
   /* Bind class to template
    */
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/gtkinfobar.ui");
-  gtk_widget_class_bind_template_child_internal (widget_class, GtkInfoBar, content_area);
-  gtk_widget_class_bind_template_child_internal (widget_class, GtkInfoBar, action_area);
-  gtk_widget_class_bind_template_child_internal (widget_class, GtkInfoBar, close_button);
+  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkInfoBar, content_area);
+  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkInfoBar, action_area);
+  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkInfoBar, close_button);
 }
 
 static void

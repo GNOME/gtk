@@ -331,8 +331,8 @@ gtk_dialog_class_init (GtkDialogClass *class)
   /* Bind class to template
    */
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/gtkdialog.ui");
-  gtk_widget_class_bind_template_child_internal (widget_class, GtkDialog, vbox);
-  gtk_widget_class_bind_template_child_internal (widget_class, GtkDialog, action_area);
+  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkDialog, vbox);
+  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkDialog, action_area);
   gtk_widget_class_bind_template_callback (widget_class, gtk_dialog_delete_event_handler);
 }
 

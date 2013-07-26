@@ -219,13 +219,13 @@ example_app_window_class_init (ExampleAppWindowClass *class)
 
   gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (class),
                                                "/org/gtk/exampleapp/window.ui");
-  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), ExampleAppWindow, stack);
-  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), ExampleAppWindow, search);
-  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), ExampleAppWindow, searchbar);
-  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), ExampleAppWindow, searchentry);
-  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), ExampleAppWindow, gears);
-  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), ExampleAppWindow, words);
-  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), ExampleAppWindow, sidebar);
+  gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), ExampleAppWindow, stack);
+  gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), ExampleAppWindow, search);
+  gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), ExampleAppWindow, searchbar);
+  gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), ExampleAppWindow, searchentry);
+  gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), ExampleAppWindow, gears);
+  gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), ExampleAppWindow, words);
+  gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), ExampleAppWindow, sidebar);
 }
 
 ExampleAppWindow *

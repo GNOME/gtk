@@ -464,24 +464,24 @@ gtk_color_editor_class_init (GtkColorEditorClass *class)
   gtk_widget_class_set_template_from_resource (widget_class,
 					       "/org/gtk/libgtk/gtkcoloreditor.ui");
 
-  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, overlay);
-  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, grid);
-  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, swatch);
-  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, entry);
-  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, h_slider);
-  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, h_popup);
-  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, h_entry);
-  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, a_slider);
-  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, a_popup);
-  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, a_entry);
-  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, sv_plane);
-  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, sv_popup);
-  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, s_entry);
-  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, v_entry);
-  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, h_adj);
-  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, s_adj);
-  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, v_adj);
-  gtk_widget_class_bind_template_child (widget_class, GtkColorEditor, a_adj);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, overlay);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, grid);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, swatch);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, entry);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, h_slider);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, h_popup);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, h_entry);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, a_slider);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, a_popup);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, a_entry);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, sv_plane);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, sv_popup);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, s_entry);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, v_entry);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, h_adj);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, s_adj);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, v_adj);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkColorEditor, a_adj);
 
   gtk_widget_class_bind_template_callback (widget_class, hsv_changed);
   gtk_widget_class_bind_template_callback (widget_class, popup_draw);

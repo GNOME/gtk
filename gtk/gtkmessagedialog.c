@@ -295,10 +295,10 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
 
   /* Setup Composite data */
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/gtkmessagedialog.ui");
-  gtk_widget_class_bind_template_child (widget_class, GtkMessageDialog, image);
-  gtk_widget_class_bind_template_child (widget_class, GtkMessageDialog, label);
-  gtk_widget_class_bind_template_child (widget_class, GtkMessageDialog, secondary_label);
-  gtk_widget_class_bind_template_child_internal (widget_class, GtkMessageDialog, message_area);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkMessageDialog, image);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkMessageDialog, label);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkMessageDialog, secondary_label);
+  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkMessageDialog, message_area);
 }
 
 static void

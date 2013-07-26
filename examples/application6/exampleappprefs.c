@@ -59,9 +59,9 @@ example_app_prefs_class_init (ExampleAppPrefsClass *class)
 
         gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (class),
                                                      "/org/gtk/exampleapp/prefs.ui");
-        gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), ExampleAppPrefs, font);
-        gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), ExampleAppPrefs, transition);
-        gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), ExampleAppPrefs, close);
+        gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), ExampleAppPrefs, font);
+        gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), ExampleAppPrefs, transition);
+        gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), ExampleAppPrefs, close);
 }
 
 ExampleAppPrefs *

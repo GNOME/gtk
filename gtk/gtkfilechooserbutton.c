@@ -472,13 +472,13 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
   gtk_widget_class_set_template_from_resource (widget_class,
 					       "/org/gtk/libgtk/gtkfilechooserbutton.ui");
 
-  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserButton, model);
-  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserButton, button);
-  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserButton, image);
-  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserButton, label);
-  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserButton, combo_box);
-  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserButton, icon_cell);
-  gtk_widget_class_bind_template_child (widget_class, GtkFileChooserButton, name_cell);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserButton, model);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserButton, button);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserButton, image);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserButton, label);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserButton, combo_box);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserButton, icon_cell);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserButton, name_cell);
 
   gtk_widget_class_bind_template_callback (widget_class, button_clicked_cb);
   gtk_widget_class_bind_template_callback (widget_class, combo_box_changed_cb);

@@ -1180,8 +1180,53 @@ void gtk_widget_remove_tick_callback (GtkWidget       *widget,
  * gtk_widget_class_bind_template_child:
  * @widget_class: a #GtkWidgetClass
  * @TypeName: the type name of this widget
- * @member_name: name of the instance private member on the
- *    private struct for @data_type
+ * @member_name: name of the instance member in the instance struct for @data_type
+ *
+ * Binds a child widget defined in a template to the @widget_class.
+ *
+ * This macro is a convenience wrapper around the
+ * gtk_widget_class_bind_template_child_full() function.
+ *
+ * This macro will use the offset of the @member_name inside the @TypeName
+ * instance structure.
+ *
+ * Since: 3.10
+ */
+#define gtk_widget_class_bind_template_child(widget_class, TypeName, member_name) \
+  gtk_widget_class_bind_template_child_full (widget_class, \
+                                             #member_name, \
+                                             FALSE, \
+                                             G_STRUCT_OFFSET (TypeName, member_name))
+
+/**
+ * gtk_widget_class_bind_template_child_internal:
+ * @widget_class: a #GtkWidgetClass
+ * @TypeName: the type name, in CamelCase
+ * @member_name: name of the instance member in the instance struct for @data_type
+ *
+ * Binds a child widget defined in a template to the @widget_class, and
+ * also makes it available as an internal child in GtkBuilder, under the
+ * name @member_name.
+ *
+ * This macro is a convenience wrapper around the
+ * gtk_widget_class_bind_template_child_full() function.
+ *
+ * This macro will use the offset of the @member_name inside the @TypeName
+ * instance structure.
+ *
+ * Since: 3.10
+ */
+#define gtk_widget_class_bind_template_child_internal(widget_class, TypeName, member_name) \
+  gtk_widget_class_bind_template_child_full (widget_class, \
+                                             #member_name, \
+                                             TRUE, \
+                                             G_STRUCT_OFFSET (TypeName, member_name))
+
+/**
+ * gtk_widget_class_bind_template_child_private:
+ * @widget_class: a #GtkWidgetClass
+ * @TypeName: the type name of this widget
+ * @member_name: name of the instance private member in the private struct for @data_type
  *
  * Binds a child widget defined in a template to the @widget_class.
  *
@@ -1194,19 +1239,21 @@ void gtk_widget_remove_tick_callback (GtkWidget       *widget,
  *
  * Since: 3.10
  */
-#define gtk_widget_class_bind_template_child(widget_class, TypeName, member_name) \
+#define gtk_widget_class_bind_template_child_private(widget_class, TypeName, member_name) \
   gtk_widget_class_bind_template_child_full (widget_class, \
                                              #member_name, \
                                              FALSE, \
                                              G_PRIVATE_OFFSET (TypeName, member_name))
 
 /**
- * gtk_widget_class_bind_template_child_internal:
+ * gtk_widget_class_bind_template_child_internal_private:
  * @widget_class: a #GtkWidgetClass
  * @TypeName: the type name, in CamelCase
- * @member_name: name of the instance private member on @private_data_type
+ * @member_name: name of the instance private member on the private struct for @data_type
  *
- * Binds a child widget defined in a template to the @widget_class.
+ * Binds a child widget defined in a template to the @widget_class, and
+ * also makes it available as an internal child in GtkBuilder, under the
+ * name @member_name.
  *
  * This macro is a convenience wrapper around the
  * gtk_widget_class_bind_template_child_full() function.
@@ -1216,7 +1263,7 @@ void gtk_widget_remove_tick_callback (GtkWidget       *widget,
  *
  * Since: 3.10
  */
-#define gtk_widget_class_bind_template_child_internal(widget_class, TypeName, member_name) \
+#define gtk_widget_class_bind_template_child_internal_private(widget_class, TypeName, member_name) \
   gtk_widget_class_bind_template_child_full (widget_class, \
                                              #member_name, \
                                              TRUE, \
