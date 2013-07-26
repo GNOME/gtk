@@ -1601,7 +1601,7 @@ AM_CONDITIONAL(HAVE_DOCBOOK, $DB2HTML)
 
 AC_ARG_ENABLE(man,
               [AC_HELP_STRING([--enable-man],
-                              [regenerate man pages from Docbook [default=no]])],enable_man=yes,
+                              [regenerate man pages from Docbook [default=no]])],,
               enable_man=no)
 
 if test "${enable_man}" != no; then
