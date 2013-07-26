@@ -1179,8 +1179,9 @@ void gtk_widget_remove_tick_callback (GtkWidget       *widget,
 /**
  * gtk_widget_class_bind_template_child:
  * @widget_class: a #GtkWidgetClass
- * @data_type: the type name of this widget
- * @member_name: name of the instance private member on @private_data_type
+ * @TypeName: the type name of this widget
+ * @member_name: name of the instance private member on the
+ *    private struct for @data_type
  *
  * Binds a child widget defined in a template to the @widget_class.
  *
@@ -1188,7 +1189,8 @@ void gtk_widget_remove_tick_callback (GtkWidget       *widget,
  * gtk_widget_class_bind_template_child_full() function.
  *
  * This macro will use the offset of the @member_name inside the @TypeName
- * private data structure.
+ * private data structure (it uses G_PRIVATE_OFFSET(), so the private struct
+ * must be added with G_ADD_PRIVATE()).
  *
  * Since: 3.10
  */
