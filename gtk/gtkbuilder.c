@@ -517,7 +517,7 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
             {
               if (pspec->flags & G_PARAM_CONSTRUCT_ONLY)
                 {
-                  g_warning ("Failed to get constuct only property "
+                  g_warning ("Failed to get construct only property "
                              "%s of %s with value `%s'",
                              prop->name, object_name, prop->data);
                   continue;
