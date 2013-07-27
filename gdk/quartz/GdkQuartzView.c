@@ -122,14 +122,20 @@
 -(void)unmarkText
 {
   GDK_NOTE (EVENTS, g_print ("unmarkText\n"));
+  gchar *prev_str;
   markedRange = selectedRange = NSMakeRange (NSNotFound, 0);
+
+  prev_str = g_object_get_data (G_OBJECT (gdk_window), TIC_MARKED_TEXT);
+  if (prev_str)
+    g_free (prev_str);
+  g_object_set_data (G_OBJECT (gdk_window), TIC_MARKED_TEXT, NULL);
 }
 
 -(void)setMarkedText: (id)aString selectedRange: (NSRange)newSelection replacementRange: (NSRange)replacementRange
 {
   GDK_NOTE (EVENTS, g_print ("setMarkedText\n"));
   const char *str;
-  char *prev_str;
+  gchar *prev_str;
 
   if (replacementRange.location == NSNotFound)
     {
@@ -173,7 +179,7 @@
 {
   GDK_NOTE (EVENTS, g_print ("insertText\n"));
   const char *str;
-  char *prev_str;
+  gchar *prev_str;
 
   if ([self hasMarkedText])
     [self unmarkText];
