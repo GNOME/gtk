@@ -73,7 +73,7 @@
  * (resize it, move it, close it,...).
  *
  * GTK+ also allows windows to have a resize grip (a small area in the lower
- * right or left corner) which can be clicked to reszie the window. To
+ * right or left corner) which can be clicked to resize the window. To
  * control whether a window has a resize grip, use
  * gtk_window_set_has_resize_grip().
  *
