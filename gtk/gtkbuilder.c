@@ -1579,7 +1579,7 @@ gtk_builder_connect_signals_default (GtkBuilder    *builder,
   
       if (!g_module_symbol (args->module, handler_name, (gpointer)&func))
 	{
-	  g_warning ("Could not find signal handler '%s'", handler_name);
+	  g_warning ("Could not find signal handler '%s'.  Did you compile with -rdynamic?", handler_name);
 	  return;
 	}
     }
