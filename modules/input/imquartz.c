@@ -137,9 +137,6 @@ quartz_filter_keypress (GtkIMContext *context,
 
   GTK_NOTE (MISC, g_print ("quartz_filter_keypress\n"));
 
-  if (event->type == GDK_KEY_RELEASE)
-    return FALSE;
-
   if (!qc->client_window)
     return FALSE;
 
@@ -152,10 +149,16 @@ quartz_filter_keypress (GtkIMContext *context,
   GTK_NOTE (MISC, g_print ("client_window: %p, win: %p, nsview: %p\n",
 			   qc->client_window, win, nsview));
 
+  NSEvent *nsevent = gdk_quartz_event_get_nsevent ((GdkEvent *)event);
+  if (!nsevent)
+    return gtk_im_context_filter_keypress (qc->slave, event);
+
+  if (event->type == GDK_KEY_RELEASE)
+    return FALSE;
+
   if (event->hardware_keycode == 55)	/* Command */
     return FALSE;
 
-  NSEvent *nsevent = gdk_quartz_event_get_nsevent ((GdkEvent *)event);
   NSEventType etype = [nsevent type];
   if (etype == NSKeyDown)
        [nsview keyDown: nsevent];
