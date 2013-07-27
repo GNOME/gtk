@@ -35,7 +35,7 @@
 #include "gtkimageprivate.h"
 #include "gtkinvisible.h"
 #include "gtkmain.h"
-#include "gtkstock.h"
+#include "deprecated/gtkstock.h"
 #include "gtkwindow.h"
 #include "gtkintl.h"
 #include "gtkquartz.h"
