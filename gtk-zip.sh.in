@@ -15,7 +15,7 @@ cp -p @abs_srcdir@/COPYING share/doc/gtk+-dev-@GTK_VERSION@
 rm $ZIP
 zip $ZIP -@ <<EOF
 etc/gtk-2.0/gtkrc
-etc/gtk-2.0/gtk.immodules
+lib/gtk-2.0/@GTK_BINARY_VERSION/immodules.cache
 etc/gtk-2.0/im-multipress.conf
 bin/libgdk-win32-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll
 bin/libgtk-win32-@GTK_API_VERSION@-@LT_CURRENT_MINUS_AGE@.dll

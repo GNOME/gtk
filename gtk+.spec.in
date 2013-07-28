@@ -88,7 +88,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libgdk*.so.*
 %{_libdir}/gtk-2.0/%{binary_version}/*/*.so
 #%{_datadir}/locale/*/*/*
-%{_sysconfdir}/gtk-2.0/gtk.immodules
+%{_libdir}/gtk-2.0/%{binary_version}/immodules.cache
 
 %files devel
 %defattr(-, root, root)

@@ -953,7 +953,7 @@ dist-hook: ../build/win32/vs9/gtk.vcproj ../build/win32/vs10/gtk.vcxproj ../buil
 	done >libgtk.sourcefiles
 	$(CPP) -P - <$(top_srcdir)/build/win32/vs9/gtk.vcprojin >$@
 	rm libgtk.sourcefiles
-	
+
 ../build/win32/vs10/gtk.vcxproj: ../build/win32/vs10/gtk.vcxprojin
 	for F in $(gtk_base_c_sources) $(gtk_os_win32_c_sources) $(gtk_use_win32_c_sources); do \
 		case $$F in \
@@ -963,7 +963,7 @@ dist-hook: ../build/win32/vs9/gtk.vcproj ../build/win32/vs10/gtk.vcxproj ../buil
 	done >libgtk.vs10.sourcefiles
 	$(CPP) -P - <$(top_srcdir)/build/win32/vs10/gtk.vcxprojin >$@
 	rm libgtk.vs10.sourcefiles
-	
+
 ../build/win32/vs10/gtk.vcxproj.filters: ../build/win32/vs10/gtk.vcxproj.filtersin
 	for F in $(gtk_base_c_sources) $(gtk_os_win32_c_sources) $(gtk_use_win32_c_sources); do \
 		case $$F in \
@@ -997,7 +997,7 @@ distclean-local:
 
 DEPS = $(gtktargetlib) $(top_builddir)/gdk/$(gdktargetlib)
 
-TEST_DEPS = $(DEPS) gtk.immodules
+TEST_DEPS = $(DEPS) immodules.cache
 
 LDADDS =								\
 	$(gtktargetlib)							\

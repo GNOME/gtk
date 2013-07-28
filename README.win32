@@ -112,8 +112,8 @@ PATH="/devel/target/$HEX/bin:$PATH" gdk-pixbuf-query-loaders >/devel/target/$HEX
 
 grep -v -E 'Automatically generated|Created by|LoaderDir =' <$TARGET/etc/gtk-2.0/gdk-pixbuf.loaders >$TARGET/etc/gtk-2.0/gdk-pixbuf.loaders.temp &&
     mv $TARGET/etc/gtk-2.0/gdk-pixbuf.loaders.temp $TARGET/etc/gtk-2.0/gdk-pixbuf.loaders &&
-grep -v -E 'Automatically generated|Created by|ModulesPath =' <$TARGET/etc/gtk-2.0/gtk.immodules >$TARGET/etc/gtk-2.0/gtk.immodules.temp &&
-    mv $TARGET/etc/gtk-2.0/gtk.immodules.temp $TARGET/etc/gtk-2.0/gtk.immodules &&
+grep -v -E 'Automatically generated|Created by|ModulesPath =' <$TARGET/lib/gtk-2.0/2.10.0/immodules.cache >$TARGET/lib/gtk-2.0/2.10.0/immodules.temp &&
+    mv $TARGET/lib/gtk-2.0/2.10.0/immodules.temp $TARGET/lib/gtk-2.0/2.10.0/immodules.cache &&
 
 ./gtk-zip.sh &&
 

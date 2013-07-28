@@ -250,7 +250,7 @@ correct_libdir_prefix (gchar **path)
       /* This is an entry put there by make install on the
        * packager's system. On Windows a prebuilt GTK+
        * package can be installed in a random
-       * location. The gtk.immodules file distributed in
+       * location. The immodules.cache file distributed in
        * such a package contains paths from the package
        * builder's machine. Replace the path with the real
        * one on this machine.
