@@ -20,15 +20,14 @@ struct _ExampleAppWindowPrivate
   GtkWidget *stack;
   GtkWidget *search;
   GtkWidget *searchbar;
-  GtkWidget *searchentry;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(ExampleAppWindow, example_app_window, GTK_TYPE_APPLICATION_WINDOW);
 
 static void
-search_text_changed (GtkEntry         *entry,
-                     ExampleAppWindow *win)
+search_text_changed (GtkEntry *entry)
 {
+  ExampleAppWindow *win;
   ExampleAppWindowPrivate *priv;
   const gchar *text;
   GtkWidget *tab;
@@ -41,6 +40,7 @@ search_text_changed (GtkEntry         *entry,
   if (text[0] == '\0')
     return;
 
+  win = EXAMPLE_APP_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (entry)));
   priv = example_app_window_get_instance_private (win);
 
   tab = gtk_stack_get_visible_child (GTK_STACK (priv->stack));
@@ -59,14 +59,16 @@ search_text_changed (GtkEntry         *entry,
 }
 
 static void
-visible_child_changed (GObject          *stack,
-                       GParamSpec       *pspec,
-                       ExampleAppWindow *win)
+visible_child_changed (GObject    *stack,
+                       GParamSpec *pspec)
 {
+  ExampleAppWindow *win;
   ExampleAppWindowPrivate *priv;
 
-  if (gtk_widget_in_destruction (GTK_WIDGET (win)))
+  if (gtk_widget_in_destruction (GTK_WIDGET (stack)))
     return;
+
+  win = EXAMPLE_APP_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (stack)));
 
   priv = example_app_window_get_instance_private (win);
   gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (priv->searchbar), FALSE);
@@ -88,11 +90,6 @@ example_app_window_init (ExampleAppWindow *win)
   g_object_bind_property (priv->search, "active",
                           priv->searchbar, "search-mode-enabled",
                           G_BINDING_BIDIRECTIONAL);
-
-  g_signal_connect (priv->searchentry, "changed",
-                    G_CALLBACK (search_text_changed), win);
-  g_signal_connect (priv->stack, "notify::visible-child",
-                    G_CALLBACK (visible_child_changed), win);
 }
 
 static void
@@ -116,10 +113,13 @@ example_app_window_class_init (ExampleAppWindowClass *class)
 
   gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (class),
                                                "/org/gtk/exampleapp/window.ui");
+
   gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), ExampleAppWindow, stack);
   gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), ExampleAppWindow, search);
   gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), ExampleAppWindow, searchbar);
-  gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), ExampleAppWindow, searchentry);
+
+  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), search_text_changed);
+  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), visible_child_changed);
 }
 
 ExampleAppWindow *

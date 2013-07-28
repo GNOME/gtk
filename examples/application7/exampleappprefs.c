@@ -21,10 +21,15 @@ struct _ExampleAppPrefsPrivate
   GSettings *settings;
   GtkWidget *font;
   GtkWidget *transition;
-  GtkWidget *close;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE(ExampleAppPrefs, example_app_prefs, GTK_TYPE_DIALOG)
+
+static void
+preferences_closed (GtkWidget *button)
+{
+  gtk_widget_destroy (gtk_widget_get_toplevel (button));
+}
 
 static void
 example_app_prefs_init (ExampleAppPrefs *prefs)
@@ -41,8 +46,6 @@ example_app_prefs_init (ExampleAppPrefs *prefs)
   g_settings_bind (priv->settings, "transition",
                    priv->transition, "active-id",
                    G_SETTINGS_BIND_DEFAULT);
-  g_signal_connect_swapped (priv->close, "clicked",
-                            G_CALLBACK (gtk_widget_destroy), prefs);
 }
 
 static void
@@ -65,7 +68,8 @@ example_app_prefs_class_init (ExampleAppPrefsClass *class)
                                                "/org/gtk/exampleapp/prefs.ui");
   gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), ExampleAppPrefs, font);
   gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), ExampleAppPrefs, transition);
-  gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (class), ExampleAppPrefs, close);
+
+  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), preferences_closed);
 }
 
 ExampleAppPrefs *

@@ -73,6 +73,7 @@
             <property name="visible">True</property>
             <child>
               <object class="GtkSearchEntry" id="searchentry">
+                <signal name="changed" handler="search_text_changed"/>
                 <property name="visible">True</property>
               </object>
             </child>
@@ -102,6 +103,7 @@
             </child>
             <child>
               <object class="GtkStack" id="stack">
+                <signal name="notify::visible-child" handler="visible_child_changed"/>
                 <property name="visible">True</property>
               </object>
             </child>
