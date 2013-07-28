@@ -2209,9 +2209,10 @@ gtk_icon_view_set_cursor (GtkIconView     *icon_view,
 /**
  * gtk_icon_view_get_cursor:
  * @icon_view: A #GtkIconView
- * @path: (out) (allow-none): Return location for the current cursor path,
- *        or %NULL
- * @cell: (out) (allow-none): Return location the current focus cell, or %NULL
+ * @path: (out) (allow-none) (transfer full): Return location for the current
+ *        cursor path, or %NULL
+ * @cell: (out) (allow-none) (transfer none): Return location the current
+ *        focus cell, or %NULL
  *
  * Fills in @path and @cell with the current cursor path and cell. 
  * If the cursor isn't currently set, then *@path will be %NULL.  
