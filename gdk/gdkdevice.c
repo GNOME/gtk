@@ -388,9 +388,9 @@ gdk_device_get_property (GObject    *object,
  * @mask: location to store the modifiers, or %NULL.
  *
  * Gets the current state of a pointer device relative to @window. As a slave
- * device coordinates are those of its master pointer, This
+ * device's coordinates are those of its master pointer, this
  * function may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
- * unless there is an ongoing grab on them, see gdk_device_grab().
+ * unless there is an ongoing grab on them. See gdk_device_grab().
  */
 void
 gdk_device_get_state (GdkDevice       *device,
@@ -416,10 +416,10 @@ gdk_device_get_state (GdkDevice       *device,
  * @x: (out) (allow-none): location to store root window X coordinate of @device, or %NULL.
  * @y: (out) (allow-none): location to store root window Y coordinate of @device, or %NULL.
  *
- * Gets the current location of @device in double precision. As a slave device
- * coordinates are those of its master pointer, This function
+ * Gets the current location of @device in double precision. As a slave device's
+ * coordinates are those of its master pointer, this function
  * may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
- * unless there is an ongoing grab on them, see gdk_device_grab().
+ * unless there is an ongoing grab on them. See gdk_device_grab().
  *
  * Since: 3.10
  **/
