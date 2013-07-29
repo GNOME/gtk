@@ -28,6 +28,8 @@
 #include "config.h"
 
 #include "gtksearchentry.h"
+#include "gtkmarshalers.h"
+#include "gtkintl.h"
 
 /**
  * SECTION:gtksearchentry
@@ -46,15 +48,37 @@
  * icon, and thus does not work if you are using the secondary
  * icon position for some other purpose.
  *
+ * To make filtering appear more reactive, it is a good idea to
+ * not react to every change in the entry text immediately, but
+ * only after a short delay. To support this, #GtkSearchEntry
+ * emits the #GtkSearchEntry::search-changed signal which can
+ * be used instead of the #GtkEditable::changed signal.
+ *
  * Since: 3.6
  */
 
+enum {
+  SEARCH_CHANGED,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL] = { 0 };
+
 typedef struct {
   guint delayed_changed_id;
-  gboolean in_timeout;
 } GtkSearchEntryPrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkSearchEntry, gtk_search_entry, GTK_TYPE_ENTRY)
+static void gtk_search_entry_icon_release  (GtkEntry             *entry,
+                                            GtkEntryIconPosition  icon_pos);
+static void gtk_search_entry_changed       (GtkEditable          *editable);
+static void gtk_search_entry_editable_init (GtkEditableInterface *iface);
+
+static GtkEditableInterface *parent_editable_iface;
+
+G_DEFINE_TYPE_WITH_CODE (GtkSearchEntry, gtk_search_entry, GTK_TYPE_ENTRY,
+                         G_ADD_PRIVATE (GtkSearchEntry)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
+                                                gtk_search_entry_editable_init))
 
 /* 150 mseconds of delay */
 #define DELAYED_TIMEOUT_ID 150
@@ -75,14 +99,6 @@ gtk_search_entry_finalize (GObject *object)
 }
 
 static void
-search_entry_clear_cb (GtkEntry             *entry,
-                       GtkEntryIconPosition  icon_pos)
-{
-  if (icon_pos == GTK_ENTRY_ICON_SECONDARY)
-    gtk_entry_set_text (entry, "");
-}
-
-static void
 gtk_search_entry_class_init (GtkSearchEntryClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -91,7 +107,49 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
 
   g_signal_override_class_handler ("icon-release",
                                    GTK_TYPE_SEARCH_ENTRY,
-                                   G_CALLBACK (search_entry_clear_cb));
+                                   G_CALLBACK (gtk_search_entry_icon_release));
+
+  /**
+   * GtkSearchEntry::search-changed:
+   * @entry: the entry on which the signal was emitted
+   *
+   * The #GtkSearchEntry::search-changed signal is emitted with a short
+   * delay of 150 milliseconds after the last change to the entry text.
+   *
+   * Since: 3.10
+   */
+  signals[SEARCH_CHANGED] =
+    g_signal_new (I_("search-changed"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkSearchEntryClass, search_changed),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
+}
+
+static void
+gtk_search_entry_editable_init (GtkEditableInterface *iface)
+{
+  parent_editable_iface = g_type_interface_peek_parent (iface);
+  iface->do_insert_text = parent_editable_iface->do_insert_text;
+  iface->do_delete_text = parent_editable_iface->do_delete_text;
+  iface->insert_text = parent_editable_iface->insert_text;
+  iface->delete_text = parent_editable_iface->delete_text;
+  iface->get_chars = parent_editable_iface->get_chars;
+  iface->set_selection_bounds = parent_editable_iface->set_selection_bounds;
+  iface->get_selection_bounds = parent_editable_iface->get_selection_bounds;
+  iface->set_position = parent_editable_iface->set_position;
+  iface->get_position = parent_editable_iface->get_position;
+  iface->changed = gtk_search_entry_changed;
+}
+
+static void
+gtk_search_entry_icon_release (GtkEntry             *entry,
+                               GtkEntryIconPosition  icon_pos)
+{
+  if (icon_pos == GTK_ENTRY_ICON_SECONDARY)
+    gtk_entry_set_text (entry, "");
 }
 
 static gboolean
@@ -100,10 +158,8 @@ gtk_search_entry_changed_timeout_cb (gpointer user_data)
   GtkSearchEntry *entry = user_data;
   GtkSearchEntryPrivate *priv = GET_PRIV (entry);
 
-  priv->in_timeout = TRUE;
-  g_signal_emit_by_name (entry, "changed");
+  g_signal_emit (entry, signals[SEARCH_CHANGED], 0);
   priv->delayed_changed_id = 0;
-  priv->in_timeout = FALSE;
 
   return G_SOURCE_REMOVE;
 }
@@ -121,13 +177,12 @@ reset_timeout (GtkSearchEntry *entry)
 }
 
 static void
-search_entry_changed_cb (GtkSearchEntry *entry,
-                         gpointer        user_data)
+gtk_search_entry_changed (GtkEditable *editable)
 {
+  GtkSearchEntry *entry = GTK_SEARCH_ENTRY (editable);
   GtkSearchEntryPrivate *priv = GET_PRIV (entry);
   const char *str, *icon_name;
-  gboolean active;
-  gboolean cleared = FALSE;
+  gboolean cleared;
 
   /* Update the icons first */
   str = gtk_entry_get_text (GTK_ENTRY (entry));
@@ -135,7 +190,6 @@ search_entry_changed_cb (GtkSearchEntry *entry,
   if (str == NULL || *str == '\0')
     {
       icon_name = NULL;
-      active = FALSE;
       cleared = TRUE;
     }
   else
@@ -144,36 +198,34 @@ search_entry_changed_cb (GtkSearchEntry *entry,
         icon_name = "edit-clear-rtl-symbolic";
       else
         icon_name = "edit-clear-symbolic";
-      active = TRUE;
+      cleared = FALSE;
     }
 
   g_object_set (entry,
                 "secondary-icon-name", icon_name,
-                "secondary-icon-activatable", active,
-                "secondary-icon-sensitive", active,
+                "secondary-icon-activatable", !cleared,
+                "secondary-icon-sensitive", !cleared,
                 NULL);
 
-  /* Don't stop the emission if it's the timeout
-   * emitting the signal, otherwise we'll get in a loop */
-  if (priv->in_timeout)
-    return;
-
-  /* Don't emit the signal in a timeout if we've cleared
-   * the entry, we don't want a delay */
   if (cleared)
-    return;
-
-  /* Queue up the timeout */
-  reset_timeout (entry);
-  g_signal_stop_emission_by_name (entry, "changed");
+    {
+      if (priv->delayed_changed_id > 0)
+        {
+          g_source_remove (priv->delayed_changed_id);
+          priv->delayed_changed_id = 0;
+        }
+      g_signal_emit (entry, signals[SEARCH_CHANGED], 0);
+    }
+  else
+    {
+      /* Queue up the timeout */
+      reset_timeout (entry);
+    }
 }
 
 static void
 gtk_search_entry_init (GtkSearchEntry *entry)
 {
-  g_signal_connect (entry, "changed",
-                    G_CALLBACK (search_entry_changed_cb), NULL);
-
   g_object_set (entry,
                 "primary-icon-name", "edit-find-symbolic",
                 "primary-icon-activatable", FALSE,

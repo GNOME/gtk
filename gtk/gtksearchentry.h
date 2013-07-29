@@ -55,11 +55,12 @@ struct _GtkSearchEntryClass
 {
   GtkEntryClass parent_class;
 
+  void (*search_changed) (GtkSearchEntry *entry);
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
 };
 
 GDK_AVAILABLE_IN_3_6
