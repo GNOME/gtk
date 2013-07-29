@@ -38,7 +38,6 @@
 #include "gtkintl.h"
 #include "gtkinvisible.h"
 #include "gtkplug.h"
-#include "gtkstock.h"
 #include "gtk.h"
 #include "gtkwin32embedwidget.h"
 
