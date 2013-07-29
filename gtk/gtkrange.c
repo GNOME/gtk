@@ -64,6 +64,7 @@
 #define TIMEOUT_INITIAL     500
 #define TIMEOUT_REPEAT      50
 #define ZOOM_HOLD_TIME      500
+#define AUTOSCROLL_FACTOR   20
 
 typedef struct _GtkRangeStepTimer GtkRangeStepTimer;
 
@@ -116,7 +117,7 @@ struct _GtkRangePrivate
   gint  n_marks;
   gint  round_digits;                /* Round off value to this many digits, -1 for no rounding */
   gint  slide_initial_slider_position;
-  gint  slide_initial_coordinate;
+  gint  slide_initial_coordinate_delta;
   gint  slider_start;                /* Slider range along the long dimension, in widget->window coords */
   gint  slider_end;
 
@@ -146,6 +147,8 @@ struct _GtkRangePrivate
   guint zoom                   : 1;
   guint zoom_set               : 1;
   GtkPressAndHold *press_and_hold;
+  GtkScrollType autoscroll_mode;
+  guint autoscroll_id;
 
   /* Fill level */
   guint show_fill_level        : 1;
@@ -2536,8 +2539,8 @@ gtk_range_key_press (GtkWidget   *widget,
       stop_scrolling (range);
 
       update_slider_position (range,
-			      priv->slide_initial_coordinate,
-			      priv->slide_initial_coordinate);
+			      priv->slide_initial_coordinate_delta + priv->slide_initial_slider_position,
+			      priv->slide_initial_coordinate_delta + priv->slide_initial_slider_position);
 
       return TRUE;
     }
@@ -2732,12 +2735,12 @@ gtk_range_button_press (GtkWidget      *widget,
       if (priv->orientation == GTK_ORIENTATION_VERTICAL)
         {
           priv->slide_initial_slider_position = priv->slider.y;
-          priv->slide_initial_coordinate = event->y;
+          priv->slide_initial_coordinate_delta = event->y - priv->slider.y;
         }
       else
         {
           priv->slide_initial_slider_position = priv->slider.x;
-          priv->slide_initial_coordinate = event->x;
+          priv->slide_initial_coordinate_delta = event->x - priv->slider.x;
         }
 
       range_grab_add (range, device, MOUSE_SLIDER, event->button);
@@ -2770,11 +2773,6 @@ update_slider_position (GtkRange *range,
   gdouble zoom;
   gint i;
 
-  if (priv->orientation == GTK_ORIENTATION_VERTICAL)
-    delta = mouse_y - priv->slide_initial_coordinate;
-  else
-    delta = mouse_x - priv->slide_initial_coordinate;
-
   if (priv->zoom)
     {
       zoom = MIN(1.0, (priv->orientation == GTK_ORIENTATION_VERTICAL ?
@@ -2788,6 +2786,20 @@ update_slider_position (GtkRange *range,
     }
   else
     zoom = 1.0;
+
+  /* recalculate the initial position from the current position */
+  if (priv->slide_initial_slider_position == -1)
+    {
+      if (priv->orientation == GTK_ORIENTATION_VERTICAL)
+        priv->slide_initial_slider_position = (zoom * (mouse_y - priv->slide_initial_coordinate_delta) - priv->slider.y) / (zoom - 1.0);
+      else
+        priv->slide_initial_slider_position = (zoom * (mouse_x - priv->slide_initial_coordinate_delta) - priv->slider.x) / (zoom - 1.0);
+    }
+
+  if (priv->orientation == GTK_ORIENTATION_VERTICAL)
+    delta = mouse_y - (priv->slide_initial_coordinate_delta + priv->slide_initial_slider_position);
+  else
+    delta = mouse_x - (priv->slide_initial_coordinate_delta + priv->slide_initial_slider_position);
 
   c = priv->slide_initial_slider_position + zoom * delta;
 
@@ -2814,10 +2826,66 @@ update_slider_position (GtkRange *range,
 }
 
 static void
+remove_autoscroll (GtkRange *range)
+{
+  if (range->priv->autoscroll_id)
+    {
+      gtk_widget_remove_tick_callback (GTK_WIDGET (range),
+                                       range->priv->autoscroll_id);
+      range->priv->autoscroll_id = 0;
+    }
+
+  /* unset initial position so it can be calculated */
+  range->priv->slide_initial_slider_position = -1;
+
+  range->priv->autoscroll_mode = GTK_SCROLL_NONE;
+}
+
+static gboolean
+autoscroll_cb (GtkWidget     *widget,
+               GdkFrameClock *frame_clock,
+               gpointer       data)
+{
+  GtkRange *range;
+  gdouble increment;
+  gdouble value;
+  gboolean handled;
+
+  range = GTK_RANGE (data);
+
+  increment = gtk_adjustment_get_step_increment (range->priv->adjustment) / AUTOSCROLL_FACTOR;
+  if (range->priv->autoscroll_mode == GTK_SCROLL_STEP_BACKWARD)
+    increment *= -1;
+
+  value = gtk_adjustment_get_value (range->priv->adjustment);
+  value += increment;
+  g_signal_emit (range, signals[CHANGE_VALUE], 0, GTK_SCROLL_JUMP, value,
+                 &handled);
+
+  return G_SOURCE_CONTINUE;
+}
+
+static void
+add_autoscroll (GtkRange *range)
+{
+  GtkRangePrivate *priv = range->priv;
+
+  if (priv->autoscroll_id != 0
+      || priv->autoscroll_mode == GTK_SCROLL_NONE)
+    return;
+
+  priv->autoscroll_id = gtk_widget_add_tick_callback (GTK_WIDGET (range),
+                                                      (GtkTickCallback)autoscroll_cb,
+                                                      range,
+                                                      NULL);
+}
+
+static void
 stop_scrolling (GtkRange *range)
 {
   range_grab_remove (range);
   gtk_range_remove_step_timer (range);
+  remove_autoscroll (range);
 }
 
 static gboolean
@@ -2873,13 +2941,12 @@ gtk_range_button_release (GtkWidget      *widget,
     {
       if (priv->grab_location == MOUSE_SLIDER)
         {
-          update_slider_position (range, priv->mouse_x, priv->mouse_y);
           if (priv->press_and_hold)
             gtk_press_and_hold_process_event (priv->press_and_hold, (GdkEvent *)event);
         }
 
       stop_scrolling (range);
-      
+
       return TRUE;
     }
 
@@ -2962,6 +3029,43 @@ gtk_range_scroll_event (GtkWidget      *widget,
   return TRUE;
 }
 
+static void
+update_autoscroll_mode (GtkRange *range)
+{
+  GtkScrollType mode = GTK_SCROLL_NONE;
+
+  if (range->priv->zoom)
+    {
+      GtkAllocation allocation;
+      gint size, pos;
+
+      gtk_widget_get_allocation (GTK_WIDGET (range), &allocation);
+
+      if (range->priv->orientation == GTK_ORIENTATION_VERTICAL)
+        {
+          size = allocation.height;
+          pos = range->priv->mouse_y;
+        }
+      else
+        {
+          size = allocation.width;
+          pos = range->priv->mouse_x;
+        }
+
+      if (pos < 0)
+        mode = GTK_SCROLL_STEP_BACKWARD;
+      else if (pos > size)
+        mode = GTK_SCROLL_STEP_FORWARD;
+    }
+
+  if (mode != range->priv->autoscroll_mode)
+    {
+      remove_autoscroll (range);
+      range->priv->autoscroll_mode = mode;
+      add_autoscroll (range);
+    }
+}
+
 static gboolean
 gtk_range_motion_notify (GtkWidget      *widget,
 			 GdkEventMotion *event)
@@ -2982,7 +3086,9 @@ gtk_range_motion_notify (GtkWidget      *widget,
       if (!priv->zoom_set && priv->press_and_hold != NULL)
         gtk_press_and_hold_process_event (priv->press_and_hold, (GdkEvent *)event);
 
-      update_slider_position (range, event->x, event->y);
+      update_autoscroll_mode (range);
+      if (priv->autoscroll_mode == GTK_SCROLL_NONE)
+        update_slider_position (range, event->x, event->y);
     }
 
   /* We handled the event if the mouse was in the range_rect */
