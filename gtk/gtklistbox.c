@@ -1089,11 +1089,19 @@ gtk_list_box_update_prelight (GtkListBox    *list_box,
       if (priv->prelight_row)
         gtk_widget_unset_state_flags (GTK_WIDGET (priv->prelight_row),
                                       GTK_STATE_FLAG_PRELIGHT);
-      priv->prelight_row = row;
-      if (priv->prelight_row)
-        gtk_widget_set_state_flags (GTK_WIDGET (priv->prelight_row),
-                                    GTK_STATE_FLAG_PRELIGHT,
-                                    FALSE);
+
+      if (row != NULL && gtk_widget_is_sensitive (GTK_WIDGET (row)))
+        {
+          priv->prelight_row = row;
+          gtk_widget_set_state_flags (GTK_WIDGET (priv->prelight_row),
+                                      GTK_STATE_FLAG_PRELIGHT,
+                                      FALSE);
+        }
+      else
+        {
+          priv->prelight_row = NULL;
+        }
+
       gtk_widget_queue_draw (GTK_WIDGET (list_box));
     }
 }
@@ -1228,7 +1236,7 @@ gtk_list_box_real_button_press_event (GtkWidget      *widget,
         }
 
       row = gtk_list_box_get_row_at_y (list_box, y);
-      if (row != NULL)
+      if (row != NULL && gtk_widget_is_sensitive (GTK_WIDGET (row)))
         {
           if (event->type == GDK_2BUTTON_PRESS)
             {
