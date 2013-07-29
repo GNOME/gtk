@@ -75,20 +75,23 @@ gtk_search_entry_finalize (GObject *object)
 }
 
 static void
+search_entry_clear_cb (GtkEntry             *entry,
+                       GtkEntryIconPosition  icon_pos)
+{
+  if (icon_pos == GTK_ENTRY_ICON_SECONDARY)
+    gtk_entry_set_text (entry, "");
+}
+
+static void
 gtk_search_entry_class_init (GtkSearchEntryClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gtk_search_entry_finalize;
-}
 
-static void
-search_entry_clear_cb (GtkEntry             *entry,
-                       GtkEntryIconPosition  icon_pos,
-                       gpointer              user_data)
-{
-  if (icon_pos == GTK_ENTRY_ICON_SECONDARY)
-    gtk_entry_set_text (entry, "");
+  g_signal_override_class_handler ("icon-release",
+                                   GTK_TYPE_SEARCH_ENTRY,
+                                   G_CALLBACK (search_entry_clear_cb));
 }
 
 static gboolean
@@ -170,8 +173,6 @@ gtk_search_entry_init (GtkSearchEntry *entry)
 {
   g_signal_connect (entry, "changed",
                     G_CALLBACK (search_entry_changed_cb), NULL);
-  g_signal_connect (entry, "icon-release",
-                    G_CALLBACK (search_entry_clear_cb), NULL);
 
   g_object_set (entry,
                 "primary-icon-name", "edit-find-symbolic",
