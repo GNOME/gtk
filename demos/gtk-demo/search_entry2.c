@@ -26,6 +26,14 @@ search_changed_cb (GtkSearchEntry *entry,
   gtk_label_set_text (result_label, text ? text : "");
 }
 
+static void
+changed_cb (GtkEditable *editable)
+{
+  const char *text;
+  text = gtk_entry_get_text (GTK_ENTRY (editable));
+  g_message ("changed: %s", text);
+}
+
 static gboolean
 window_key_press_event_cb (GtkWidget    *widget,
 			   GdkEvent     *event,
@@ -96,8 +104,10 @@ do_search_entry2 (GtkWidget *do_widget)
       label = gtk_label_new ("");
       gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
 
-      g_signal_connect (entry, "changed",
+      g_signal_connect (entry, "search-changed",
                         G_CALLBACK (search_changed_cb), label);
+      g_signal_connect (entry, "changed",
+                        G_CALLBACK (changed_cb), label);
     }
 
   if (!gtk_widget_get_visible (window))
