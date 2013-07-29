@@ -135,10 +135,8 @@ copy ..\..\..\gtk\gtkaccelgroupprivate.h $(CopyDir)\include\gtk-$(ApiVersion)\gt
 copy ..\..\..\gtk\gtkaccellabel.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkaccelmap.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkaccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtkaction.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtkactiongroup.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
+
 copy ..\..\..\gtk\gtkactionable.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtkactivatable.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkadjustment.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkalignment.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkappchooser.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
@@ -211,11 +209,9 @@ copy ..\..\..\gtk\gtkfontchooserwidget.h $(CopyDir)\include\gtk-$(ApiVersion)\gt
 copy ..\..\..\gtk\gtkframe.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkgrid.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkheaderbar.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtkiconfactory.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkicontheme.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkiconview.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkimage.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtkimagemenuitem.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkimcontext.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkimcontextinfo.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkimcontextsimple.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
@@ -227,6 +223,7 @@ copy ..\..\..\gtk\gtklabel.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A
 copy ..\..\..\gtk\gtklayout.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtklevelbar.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtklinkbutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
+copy ..\..\..\gtk\gtklistbox.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkliststore.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtklockbutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkmain.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
@@ -257,12 +254,10 @@ copy ..\..\..\gtk\gtkprintsettings.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x
 copy ..\..\..\gtk\gtkprivate.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkprivatetypebuiltins.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkprogressbar.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtkradioaction.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkradiobutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkradiomenuitem.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkradiotoolbutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkrange.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtkrecentaction.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkrecentchooser.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkrecentchooserdialog.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkrecentchoosermenu.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
@@ -275,6 +270,7 @@ copy ..\..\..\gtk\gtkscalebutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D
 copy ..\..\..\gtk\gtkscrollable.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkscrollbar.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkscrolledwindow.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
+copy ..\..\..\gtk\gtksearchbar.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtksearchentry.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkselection.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkseparator.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
@@ -291,7 +287,6 @@ copy ..\..\..\gtk\gtkstack.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A
 copy ..\..\..\gtk\gtkstackswitcher.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkstatusbar.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkstatusicon.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtkstock.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkstylecontext.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkstyleproperties.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkstyleprovider.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
@@ -309,7 +304,6 @@ copy ..\..\..\gtk\gtktexttag.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x
 copy ..\..\..\gtk\gtktexttagtable.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktextview.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkthemingengine.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtktoggleaction.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktogglebutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktoggletoolbutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktoolbar.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
@@ -330,7 +324,6 @@ copy ..\..\..\gtk\gtktreeview.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#
 copy ..\..\..\gtk\gtktreeviewcolumn.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktypebuiltins.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktypes.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtkuimanager.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkversion.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkviewport.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkvolumebutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;;
@@ -340,6 +333,9 @@ copy ..\..\..\gtk\gtkwindow.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0
 
 mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated&#x0D;&#x0A;
 
+copy ..\..\..\gtk\deprecated\gtkaction.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated&#x0D;&#x0A;
+copy ..\..\..\gtk\deprecated\gtkactiongroup.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated&#x0D;&#x0A;
+copy ..\..\..\gtk\deprecated\gtkactivatable.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated&#x0D;&#x0A;
 copy ..\..\..\gtk\deprecated\gtkcolorsel.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated&#x0D;&#x0A;
 copy ..\..\..\gtk\deprecated\gtkcolorseldialog.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated&#x0D;&#x0A;
 copy ..\..\..\gtk\deprecated\gtkfontsel.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated&#x0D;&#x0A;
@@ -352,11 +348,18 @@ copy ..\..\..\gtk\deprecated\gtkhscale.h $(CopyDir)\include\gtk-$(ApiVersion)\gt
 copy ..\..\..\gtk\deprecated\gtkhsv.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated&#x0D;&#x0A;
 copy ..\..\..\gtk\deprecated\gtkhscrollbar.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated&#x0D;&#x0A;
 copy ..\..\..\gtk\deprecated\gtkhseparator.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated&#x0D;&#x0A;
+copy ..\..\..\gtk\deprecated\gtkiconfactory.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated&#x0D;&#x0A;
+copy ..\..\..\gtk\deprecated\gtkimagemenuitem.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated&#x0D;&#x0A;
+copy ..\..\..\gtk\deprecated\gtkradioaction.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated&#x0D;&#x0A;
 copy ..\..\..\gtk\deprecated\gtkrc.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated&#x0D;&#x0A;
+copy ..\..\..\gtk\deprecated\gtkrecentaction.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated&#x0D;&#x0A;
+copy ..\..\..\gtk\deprecated\gtkstock.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated&#x0D;&#x0A;
 copy ..\..\..\gtk\deprecated\gtkstyle.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated&#x0D;&#x0A;
 copy ..\..\..\gtk\deprecated\gtksymboliccolor.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated&#x0D;&#x0A;
 copy ..\..\..\gtk\deprecated\gtktable.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated&#x0D;&#x0A;
 copy ..\..\..\gtk\deprecated\gtktearoffmenuitem.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated&#x0D;&#x0A;
+copy ..\..\..\gtk\deprecated\gtktoggleaction.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated&#x0D;&#x0A;
+copy ..\..\..\gtk\deprecated\gtkuimanager.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated&#x0D;&#x0A;
 copy ..\..\..\gtk\deprecated\gtkvbbox.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated&#x0D;&#x0A;
 copy ..\..\..\gtk\deprecated\gtkvbox.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated&#x0D;&#x0A;
 copy ..\..\..\gtk\deprecated\gtkvscale.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated&#x0D;&#x0A;
