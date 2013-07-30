@@ -2655,7 +2655,7 @@ gdk_win32_window_begin_resize_drag (GdkWindow     *window,
   /* Must break the automatic grab that occured when the button was
    * pressed, otherwise it won't work.
    */
-  gdk_display_pointer_ungrab (_gdk_display, 0);
+  gdk_device_ungrab (device, 0);
 
   switch (edge)
     {
@@ -2722,7 +2722,7 @@ gdk_win32_window_begin_move_drag (GdkWindow *window,
   /* Must break the automatic grab that occured when the button was pressed,
    * otherwise it won't work.
    */
-  gdk_display_pointer_ungrab (_gdk_display, 0);
+  gdk_device_ungrab (device, 0);
 
   DefWindowProcW (GDK_WINDOW_HWND (window), WM_NCLBUTTONDOWN, HTCAPTION,
 		  MAKELPARAM (root_x - _gdk_offset_x, root_y - _gdk_offset_y));

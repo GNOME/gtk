@@ -2713,17 +2713,13 @@ gdk_event_translate (MSG  *msg,
       /* Break grabs on unmap or minimize */
       if (windowpos->flags & SWP_HIDEWINDOW || 
 	  ((windowpos->flags & SWP_STATECHANGED) && IsIconic (msg->hwnd)))
-	{
-	  if (pointer_grab != NULL)
-	    {
-	      if (pointer_grab->window == window)
-		gdk_pointer_ungrab (msg->time);
-	    }
+      {
+        GdkDevice *device = gdk_device_manager_get_client_pointer (device_manager);
 
-	  if (keyboard_grab != NULL &&
-	      keyboard_grab->window == window)
-	    gdk_keyboard_ungrab (msg->time);
-	}
+        if ((pointer_grab != NULL && pointer_grab->window == window) ||
+            (keyboard_grab != NULL && keyboard_grab->window == window))
+          gdk_device_ungrab (device, msg -> time);
+    }
 
       /* Send MAP events  */
       if ((windowpos->flags & SWP_SHOWWINDOW) &&
@@ -3115,15 +3111,12 @@ gdk_event_translate (MSG  *msg,
       break;
 
     case WM_NCDESTROY:
-      if (pointer_grab != NULL)
-	{
-	  if (pointer_grab->window == window)
-	    gdk_pointer_ungrab (msg->time);
-	}
-
-      if (keyboard_grab &&
-          keyboard_grab->window == window)
-	gdk_keyboard_ungrab (msg->time);
+      if ((pointer_grab != NULL && pointer_grab -> window == window) ||
+          (keyboard_grab && keyboard_grab -> window == window))
+      {
+        GdkDevice *device = gdk_device_manager_get_client_pointer (device_manager);
+        gdk_device_ungrab (device, msg -> time);
+      }
 
       if ((window != NULL) && (msg->hwnd != GetDesktopWindow ()))
 	gdk_window_destroy_notify (window);
