@@ -180,7 +180,7 @@ gdk_device_virtual_set_window_cursor (GdkDevice *device,
   if (hcursor != NULL)
     {
       /* If the pointer is over our window, set new cursor */
-      GdkWindow *curr_window = gdk_window_get_pointer (window, NULL, NULL, NULL);
+      GdkWindow *curr_window = gdk_window_get_device_position (window, device, NULL, NULL, NULL);
 
       if (curr_window == window ||
           (curr_window && window == gdk_window_get_toplevel (curr_window)))
