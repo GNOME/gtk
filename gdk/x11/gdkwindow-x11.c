@@ -776,15 +776,15 @@ _gdk_window_impl_new (GdkWindow     *window,
       g_object_ref (draw_impl->colormap);
     }
 
-  if (private->width > 65535 ||
-      private->height > 65535)
+  if (private->width > 32767 ||
+      private->height > 32767)
     {
-      g_warning ("Native Windows wider or taller than 65535 pixels are not supported");
+      g_warning ("Native Windows wider or taller than 32767 pixels are not supported");
       
-      if (private->width > 65535)
-	private->width = 65535;
-      if (private->height > 65535)
-	private->height = 65535;
+      if (private->width > 32767)
+	private->width = 32767;
+      if (private->height > 32767)
+	private->height = 32767;
     }
   
   xid = draw_impl->xid = XCreateWindow (xdisplay, xparent,
