@@ -1079,15 +1079,15 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
       class = InputOnly;
     }
 
-  if (window->width > 65535 ||
-      window->height > 65535)
+  if (window->width > 32767 ||
+      window->height > 32767)
     {
-      g_warning ("Native Windows wider or taller than 65535 pixels are not supported");
+      g_warning ("Native Windows wider or taller than 32767 pixels are not supported");
 
-      if (window->width > 65535)
-        window->width = 65535;
-      if (window->height > 65535)
-        window->height = 65535;
+      if (window->width > 32767)
+        window->width = 32767;
+      if (window->height > 32767)
+        window->height = 32767;
     }
 
   impl->xid = XCreateWindow (xdisplay, xparent,
