@@ -1,3 +1,53 @@
+Overview of Changes in GTK+ 3.9.8 to 3.9.10
+===========================================
+
+* GtkInfoBar updates
+ - Turn action area horizontal
+ - Fix spacing
+ - Add an easy way to add a close button
+
+* Documentation
+ - Modernize many screenshots
+ - Redo the widget gallery
+ - Improve 'Getting Started' tutorial
+ - Add new application examples to tutorial
+
+* Deprecations:
+ - tear-off menuitems
+
+* Bugs fixed:
+ 684558 gtk_tree_model_rows_reordered is skipped by introspection
+ 694086 GtkEntry elements need clipping
+ 698758 Wrong limit for "Native Windows wider or taller than 65535...
+ 700229 provide a way to rate limit change signal in GtkSearchEntry
+ 700896 Rename gtk_widget_class_declare_callback()
+ 700898 Explain what "automated" mean in the context of children c...
+ 701332 Patch for minor glitch in NSTextInput
+ 701365 Do not assert sm_proxy != NULL in GtkApplication inhibit f...
+ 701613 XEmbed doesn't work with frame-synced GTK/Mutter
+ 702563 gtk_widget_class_automate_child() takes private offset
+ 704104 gdk/wayland: cope with the compositor implementing an olde...
+ 704164 GtkSearchEntry: the contents is always cleared on icon-rel...
+ 704171 Fix prototype of gdk_device_win32_warp
+ 704216 Fix prototype for gdk_quartz_device_core_warp
+ 704274 Add API to show a close button on GtkInfoBar
+ 704392 Improve GtkAction deprecation notices
+ 704554 FIX mmap fails when getting root_window
+ 704700 Gtk.IconView.get_cursor segfault
+ 704747 testsuite/a11y: Don't check minimum increment
+ 704894 The GtkInfoBar close button is visible by default
+ 704937 IME input method does not handle dead keys
+ 705060 Remove unneeded include from gtkprintoperation-win32.c
+
+* Translation updates
+ Czech
+ Italian
+ Lithuanian
+ Norwegian bokmål
+ Tajik
+ Traditional Chinese
+
+
 Overview of Changes in GTK+ 3.9.6 to 3.9.8
 ==========================================
 
