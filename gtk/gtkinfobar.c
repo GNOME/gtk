@@ -41,6 +41,7 @@
 #include "gtkenums.h"
 #include "gtkbindings.h"
 #include "gtkdialog.h"
+#include "gtkrevealer.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkorientable.h"
@@ -127,6 +128,7 @@ struct _GtkInfoBarPrivate
   GtkWidget *content_area;
   GtkWidget *action_area;
   GtkWidget *close_button;
+  GtkWidget *revealer;
 
   gboolean show_close_button;
   GtkMessageType message_type;
@@ -378,6 +380,36 @@ gtk_info_bar_draw (GtkWidget *widget,
 }
 
 static void
+gtk_info_bar_show (GtkWidget *widget)
+{
+  GtkInfoBarPrivate *priv = GTK_INFO_BAR (widget)->priv;
+
+  GTK_WIDGET_CLASS (gtk_info_bar_parent_class)->show (widget);
+
+  gtk_revealer_set_reveal_child (GTK_REVEALER (priv->revealer), TRUE);
+}
+
+static void
+child_revealed (GObject *object, GParamSpec *pspec, gpointer data)
+{
+  GtkWidget *widget = data;
+
+  GTK_WIDGET_CLASS (gtk_info_bar_parent_class)->hide (widget);
+  g_signal_handlers_disconnect_by_func (object, child_revealed, widget);
+  g_object_notify (G_OBJECT (widget), "visible");
+}
+
+static void
+gtk_info_bar_hide (GtkWidget *widget)
+{
+  GtkInfoBarPrivate *priv = GTK_INFO_BAR (widget)->priv;
+
+  gtk_revealer_set_reveal_child (GTK_REVEALER (priv->revealer), FALSE);
+  g_signal_connect_object (priv->revealer, "notify::child-revealed",
+                           G_CALLBACK (child_revealed), widget, 0);
+}
+
+static void
 gtk_info_bar_class_init (GtkInfoBarClass *klass)
 {
   GtkWidgetClass *widget_class;
@@ -394,6 +426,8 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
   widget_class->get_preferred_width = gtk_info_bar_get_preferred_width;
   widget_class->get_preferred_height = gtk_info_bar_get_preferred_height;
   widget_class->draw = gtk_info_bar_draw;
+  widget_class->show = gtk_info_bar_show;
+  widget_class->hide = gtk_info_bar_hide;
 
   klass->close = gtk_info_bar_close;
 
@@ -549,6 +583,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkInfoBar, content_area);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkInfoBar, action_area);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkInfoBar, close_button);
+  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkInfoBar, revealer);
 }
 
 static void
