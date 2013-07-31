@@ -206,6 +206,7 @@ gtk/gtkscrollable.c
 gtk/gtkscrollbar.c
 gtk/gtkscrolledwindow.c
 gtk/gtksearchbar.c
+gtk/gtksearchentry.c
 gtk/gtkselection.c
 gtk/gtkseparator.c
 gtk/gtkseparatortoolitem.c
