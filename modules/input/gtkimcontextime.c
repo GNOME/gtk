@@ -31,7 +31,7 @@
 
 #include "imm-extra.h"
 
-#include <gdk/gdkkeysyms.h>
+#include "gdk/gdkkeysyms-compat.h"
 #include "gdk/win32/gdkwin32.h"
 #include "gdk/gdkkeysyms.h"
 
@@ -890,6 +890,8 @@ gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
   PangoContext *pango_context;
   PangoFont *font;
   LOGFONT *logfont;
+  GtkStyleContext *style;
+  PangoFontDescription *font_desc;
 
   g_return_if_fail (GTK_IS_IM_CONTEXT_IME (context));
 
@@ -941,6 +943,9 @@ gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
     default:
       lang = ""; break;
     }
+
+  style = gtk_widget_get_style_context (widget);
+  gtk_style_context_get (style, GTK_STATE_FLAG_NORMAL, "font", &font_desc, NULL);
   
   if (lang[0])
     {
@@ -949,9 +954,9 @@ gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
        */
       PangoLanguage *pango_lang = pango_language_from_string (lang);
       PangoFontset *fontset =
-	pango_context_load_fontset (pango_context,
-				    gtk_widget_get_style (widget)->font_desc,
-				    pango_lang);
+        pango_context_load_fontset (pango_context,
+				                            font_desc,
+				                            pango_lang);
       gunichar *sample =
 	g_utf8_to_ucs4 (pango_language_get_sample_string (pango_lang),
 			-1, NULL, NULL, NULL);
@@ -972,7 +977,7 @@ gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
       g_object_unref (fontset);
     }
   else
-    font = pango_context_load_font (pango_context, gtk_widget_get_style (widget)->font_desc);
+    font = pango_context_load_font (pango_context, font_desc);
 
   if (!font)
     goto ERROR_OUT;

@@ -2277,7 +2277,7 @@ gtk_status_icon_position_menu (GtkMenu  *menu,
   status_icon = GTK_STATUS_ICON (user_data);
   priv = status_icon->priv;
 
-  gtk_widget_size_request (GTK_WIDGET (menu), &menu_req);
+  gtk_widget_get_preferred_size (GTK_WIDGET (menu), &menu_req, NULL);
 
   *x = priv->last_click_x;
   *y = priv->taskbar_top - menu_req.height;
