@@ -2478,7 +2478,8 @@ gdk_x11_window_set_geometry_hints (GdkWindow         *window,
   toplevel = _gdk_x11_window_get_toplevel (window);
   if (toplevel)
     {
-      toplevel->last_geometry_hints = *geometry;
+      if (geometry)
+        toplevel->last_geometry_hints = *geometry;
       toplevel->last_geometry_hints_mask = geom_mask;
     }
   
