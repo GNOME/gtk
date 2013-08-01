@@ -820,8 +820,7 @@ example_app_window_init (ExampleAppWindow *win)
 
 ...
 
-  priv->text_changed_handler = g_signal_connect (priv->searchentry, "search-changed",
-                                                 G_CALLBACK (search_text_changed), win);
+  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), search_text_changed);
 
 ...
 

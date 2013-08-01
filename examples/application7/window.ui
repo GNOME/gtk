@@ -41,7 +41,7 @@
             <property name="visible">True</property>
             <child>
               <object class="GtkSearchEntry" id="searchentry">
-                <signal name="changed" handler="search_text_changed"/>
+                <signal name="search-changed" handler="search_text_changed"/>
                 <property name="visible">True</property>
               </object>
             </child>
