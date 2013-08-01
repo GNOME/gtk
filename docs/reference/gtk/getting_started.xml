@@ -845,8 +845,8 @@ example_app_window_init (ExampleAppWindow *win)
     <section>
       <title>Adding a side bar</title>
 
-      <para>As a last piece of functionality, we are adding a sidebar,
-      which demonstrates #GtkRevealer and #GtkListBox.</para>
+      <para>As another piece of functionality, we are adding a sidebar,
+      which demonstrates #GtkMenuButton, #GtkRevealer and #GtkListBox.</para>
 
       <informalexample>
         <programlisting><xi:include href="../../../../examples/application8/window.ui" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
