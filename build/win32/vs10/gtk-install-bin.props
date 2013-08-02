@@ -10,9 +10,9 @@ mkdir $(CopyDir)\bin
 mkdir $(CopyDir)\lib
 
 
-if exist ..\..\..\MSVC_Release_Broadway goto DO_BROADWAY_BIN
+if "$(Configuration)" == "Release_Broadway" goto DO_BROADWAY_BIN
 
-if exist ..\..\..\MSVC_Debug_Broadway goto DO_BROADWAY_BIN
+if "$(Configuration)" == "Debug_Broadway" goto DO_BROADWAY_BIN
 
 
 copy $(Configuration)\$(Platform)\bin\*.dll $(CopyDir)\bin
@@ -33,16 +33,24 @@ copy $(Configuration)\$(Platform)\bin\gdk-$(ApiVersion).lib $(CopyDir)\lib
 copy $(Configuration)\$(Platform)\bin\broadwayd.exe $(CopyDir)\bin
 
 
-if "$(Configuration)" == "Release_Broadway" copy .\Release\$(Platform)\bin\*.dll $(CopyDir)\bin
+if "$(Configuration)" == "Release_Broadway" copy .\Release\$(Platform)\bin\gtk-3-vs*.dll $(CopyDir)\bin
 
-if "$(Configuration)" == "Release_Broadway" copy .\Release\$(Platform)\bin\*-$(ApiVersion).lib $(CopyDir)\lib
+if "$(Configuration)" == "Release_Broadway" copy .\Release\$(Platform)\bin\gailutil-3-vs*.dll $(CopyDir)\bin
+
+if "$(Configuration)" == "Release_Broadway" copy .\Release\$(Platform)\bin\gtk-$(ApiVersion).lib $(CopyDir)\lib
+
+if "$(Configuration)" == "Release_Broadway" copy .\Release\$(Platform)\bin\gailutil-$(ApiVersion).lib $(CopyDir)\lib
 
 if "$(Configuration)" == "Release_Broadway" copy .\Release\$(Platform)\bin\*.exe $(CopyDir)\bin
 
 
-if "$(Configuration)" == "Debug_Broadway" copy .\Debug\$(Platform)\bin\*.dll $(CopyDir)\bin
+if "$(Configuration)" == "Debug_Broadway" copy .\Debug\$(Platform)\bin\gtk-3-vs*.dll $(CopyDir)\bin
 
-if "$(Configuration)" == "Debug_Broadway" copy .\Debug\$(Platform)\bin\*-$(ApiVersion).lib $(CopyDir)\lib
+if "$(Configuration)" == "Debug_Broadway" copy .\Debug\$(Platform)\bin\gailutil-3-vs*.dll $(CopyDir)\bin
+
+if "$(Configuration)" == "Debug_Broadway" copy .\Debug\$(Platform)\bin\gtk-$(ApiVersion).lib $(CopyDir)\lib
+
+if "$(Configuration)" == "Debug_Broadway" copy .\Debug\$(Platform)\bin\gailutil-$(ApiVersion).lib $(CopyDir)\lib
 
 if "$(Configuration)" == "Debug_Broadway" copy .\Debug\$(Platform)\bin\*.exe $(CopyDir)\bin
 

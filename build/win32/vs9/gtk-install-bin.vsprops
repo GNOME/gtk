@@ -11,8 +11,8 @@
 mkdir $(CopyDir)\bin&#x0D;&#x0A;
 mkdir $(CopyDir)\lib&#x0D;&#x0A;
 
-if exist ..\..\..\MSVC_Release_Broadway goto DO_BROADWAY_BIN&#x0D;&#x0A;
-if exist ..\..\..\MSVC_Debug_Broadway goto DO_BROADWAY_BIN&#x0D;&#x0A;
+if &quot;$(ConfigurationName)&quot; == &quot;Release_Broadway&quot; goto DO_BROADWAY_BIN&#x0D;&#x0A;
+if &quot;$(ConfigurationName)&quot; == &quot;Debug_Broadway&quot; goto DO_BROADWAY_BIN&#x0D;&#x0A;
 
 copy $(ConfigurationName)\$(PlatformName)\bin\*.dll $(CopyDir)\bin&#x0D;&#x0A;
 copy $(ConfigurationName)\$(PlatformName)\bin\*-$(ApiVersion).lib $(CopyDir)\lib&#x0D;&#x0A;
@@ -24,12 +24,16 @@ copy $(ConfigurationName)\$(PlatformName)\bin\gdk-3-vs*.dll $(CopyDir)\bin&#x0D;
 copy $(ConfigurationName)\$(PlatformName)\bin\gdk-$(ApiVersion).lib $(CopyDir)\lib&#x0D;&#x0A;
 copy $(ConfigurationName)\$(PlatformName)\bin\broadwayd.exe $(CopyDir)\bin&#x0D;&#x0A;
 
-if &quot;$(ConfigurationName)&quot; == &quot;Release_Broadway&quot; copy .\Release\$(PlatformName)\bin\*.dll $(CopyDir)\bin&#x0D;&#x0A;
-if &quot;$(ConfigurationName)&quot; == &quot;Release_Broadway&quot; copy .\Release\$(PlatformName)\bin\*-$(ApiVersion).lib $(CopyDir)\lib&#x0D;&#x0A;
+if &quot;$(ConfigurationName)&quot; == &quot;Release_Broadway&quot; copy .\Release\$(PlatformName)\bin\gtk-3-*.dll $(CopyDir)\bin&#x0D;&#x0A;
+if &quot;$(ConfigurationName)&quot; == &quot;Release_Broadway&quot; copy .\Release\$(PlatformName)\bin\gailutil-3-*.dll $(CopyDir)\bin&#x0D;&#x0A;
+if &quot;$(ConfigurationName)&quot; == &quot;Release_Broadway&quot; copy .\Release\$(PlatformName)\bin\gtk*-$(ApiVersion).lib $(CopyDir)\lib&#x0D;&#x0A;
+if &quot;$(ConfigurationName)&quot; == &quot;Release_Broadway&quot; copy .\Release\$(PlatformName)\bin\gailutil*-$(ApiVersion).lib $(CopyDir)\lib&#x0D;&#x0A;
 if &quot;$(ConfigurationName)&quot; == &quot;Release_Broadway&quot; copy .\Release\$(PlatformName)\bin\*.exe $(CopyDir)\bin&#x0D;&#x0A;
 
-if &quot;$(ConfigurationName)&quot; == &quot;Debug_Broadway&quot; copy .\Debug\$(PlatformName)\bin\*.dll $(CopyDir)\bin&#x0D;&#x0A;
-if &quot;$(ConfigurationName)&quot; == &quot;Debug_Broadway&quot; copy .\Debug\$(PlatformName)\bin\*-$(ApiVersion).lib $(CopyDir)\lib&#x0D;&#x0A;
+if &quot;$(ConfigurationName)&quot; == &quot;Debug_Broadway&quot; copy .\Debug\$(PlatformName)\bin\gtk-3-.dll $(CopyDir)\bin&#x0D;&#x0A;
+if &quot;$(ConfigurationName)&quot; == &quot;Debug_Broadway&quot; copy .\Debug\$(PlatformName)\bin\gailutil-3-.dll $(CopyDir)\bin&#x0D;&#x0A;
+if &quot;$(ConfigurationName)&quot; == &quot;Debug_Broadway&quot; copy .\Debug\$(PlatformName)\bin\gtk-$(ApiVersion).lib $(CopyDir)\lib&#x0D;&#x0A;
+if &quot;$(ConfigurationName)&quot; == &quot;Debug_Broadway&quot; copy .\Debug\$(PlatformName)\bin\gailutil-$(ApiVersion).lib $(CopyDir)\lib&#x0D;&#x0A;
 if &quot;$(ConfigurationName)&quot; == &quot;Debug_Broadway&quot; copy .\Debug\$(PlatformName)\bin\*.exe $(CopyDir)\bin&#x0D;&#x0A;
 :DONE_BIN&#x0D;&#x0A;
 		                     "
