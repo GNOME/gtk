@@ -16,7 +16,7 @@ EXTRA_DIST +=	\
 	gengir.vcproj	\
 	install.vcproj	\
 	broadwayd.vcproj	\
-	gtk-broadway.vcproj	\
+	gdk-broadway.vcproj	\
 	gtk-build-defines.vsprops	\
 	gtk-gengir.vsprops	\
 	gtk-ignore-broadway.vsprops	\
