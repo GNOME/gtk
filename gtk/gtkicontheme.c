@@ -4881,7 +4881,40 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *icon_theme,
   g_return_val_if_fail (GTK_IS_ICON_THEME (icon_theme), NULL);
   g_return_val_if_fail (G_IS_ICON (icon), NULL);
 
-  if (G_IS_LOADABLE_ICON (icon))
+  if (GDK_IS_PIXBUF (icon))
+    {
+      GdkPixbuf *pixbuf;
+
+      pixbuf = GDK_PIXBUF (icon);
+
+      if ((flags & GTK_ICON_LOOKUP_FORCE_SIZE) != 0)
+        {
+          gint width, height, max;
+          gdouble scale;
+          GdkPixbuf *scaled;
+
+          width = gdk_pixbuf_get_width (pixbuf);
+          height = gdk_pixbuf_get_height (pixbuf);
+          max = MAX (width, height);
+          scale = (gdouble) size / (gdouble) max;
+
+          scaled = gdk_pixbuf_scale_simple (pixbuf,
+                                            0.5 + width * scale,
+                                            0.5 + height * scale,
+                                            GDK_INTERP_BILINEAR);
+
+          info = gtk_icon_info_new_for_pixbuf (icon_theme, scaled);
+
+          g_object_unref (scaled);
+        }
+      else
+        {
+          info = gtk_icon_info_new_for_pixbuf (icon_theme, pixbuf);
+        }
+
+      return info;
+    }
+  else if (G_IS_LOADABLE_ICON (icon))
     {
       info = icon_info_new ();
       info->loadable = G_LOADABLE_ICON (g_object_ref (icon));
@@ -4943,39 +4976,6 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *icon_theme,
         }
       else
         return NULL;
-    }
-  else if (GDK_IS_PIXBUF (icon))
-    {
-      GdkPixbuf *pixbuf;
-
-      pixbuf = GDK_PIXBUF (icon);
-
-      if ((flags & GTK_ICON_LOOKUP_FORCE_SIZE) != 0)
-	{
-	  gint width, height, max;
-	  gdouble scale;
-	  GdkPixbuf *scaled;
-
-	  width = gdk_pixbuf_get_width (pixbuf);
-	  height = gdk_pixbuf_get_height (pixbuf);
-	  max = MAX (width, height);
-	  scale = (gdouble) size / (gdouble) max;
-
-	  scaled = gdk_pixbuf_scale_simple (pixbuf,
-					    0.5 + width * scale,
-					    0.5 + height * scale,
-					    GDK_INTERP_BILINEAR);
-
-	  info = gtk_icon_info_new_for_pixbuf (icon_theme, scaled);
-
-	  g_object_unref (scaled);
-	}
-      else
-	{
-	  info = gtk_icon_info_new_for_pixbuf (icon_theme, pixbuf);
-	}
-
-      return info;
     }
 
   return NULL;
