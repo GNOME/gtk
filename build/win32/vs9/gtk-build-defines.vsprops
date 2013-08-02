@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="gtkbuilddefinesprops"
+	OutputDirectory="$(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin"
+	IntermediateDirectory="$(SolutionDir)$(ConfigurationName)\$(PlatformName)\obj\$(ProjectName)\"
+	InheritedPropertySheets=".\gtk-version-paths.vsprops"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalIncludeDirectories="..\..\..;$(GlibEtcInstallRoot)\lib\glib-2.0\include;$(GlibEtcInstallRoot)\include\glib-2.0;$(GlibEtcInstallRoot)\include;$(GlibEtcInstallRoot)\include\cairo;$(GlibEtcInstallRoot)\include\atk-1.0;$(GlibEtcInstallRoot)\include\pango-1.0;$(GlibEtcInstallRoot)\include\gdk-pixbuf-2.0"
+		PreprocessorDefinitions="HAVE_CONFIG_H;G_DISABLE_SINGLE_INCLUDES;ATK_DISABLE_SINGLE_INCLUDES;GDK_PIXBUF_DISABLE_SINGLE_INCLUDES;GTK_DISABLE_SINGLE_INCLUDES"
+		ForcedIncludeFiles="msvc_recommended_pragmas.h"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		AdditionalDependencies="gdk_pixbuf-2.0.lib pangocairo-1.0.lib pango-1.0.lib cairo-gobject.lib cairo.lib gio-2.0.lib gmodule-2.0.lib gobject-2.0.lib glib-2.0.lib intl.lib"
+		AdditionalLibraryDirectories="$(GlibEtcInstallRoot)\lib"
+	/>
+	<UserMacro
+		Name="GtkBinaryVersion"
+		Value="3.0.0"
+	/>
+	<UserMacro
+		Name="GtkDummyPrefix"
+		Value="/dummy"
+	/>
+	<UserMacro
+		Name="GtkPrefixDefine"
+		Value="GTK_PREFIX=\&quot;$(GtkDummyPrefix)\&quot;"
+	/>
+	<UserMacro
+		Name="GdkDefines"
+		Value="GDK_COMPILATION;G_LOG_DOMAIN=\&quot;Gdk\&quot;"
+	/>
+	<UserMacro
+		Name="GtkIncludedImmodulesDefines"
+		Value="INCLUDE_IM_am_et;INCLUDE_IM_cedilla;INCLUDE_IM_cyrillic_translit;INCLUDE_IM_ime;INCLUDE_IM_inuktitut;INCLUDE_IM_ipa;INCLUDE_IM_multipress;INCLUDE_IM_thai;INCLUDE_IM_ti_er;INCLUDE_IM_ti_et;INCLUDE_IM_viqr"
+	/>
+	<UserMacro
+		Name="GtkDefines"
+		Value="GTK_COMPILATION;G_LOG_DOMAIN=\&quot;Gtk\&quot;;GTK_HOST=\&quot;i686-pc-vs$(VSVer)\&quot;;GTK_PRINT_BACKENDS=\&quot;file\&quot;;GTK_PRINT_PREVIEW_COMMAND=\&quot;undefined-gtk-print-preview-command\&quot;;$(GtkIncludedImmodulesDefines);GTK_LIBDIR=\&quot;$(GtkDummyPrefix)/lib\&quot;;GTK_DATADIR=\&quot;$(GtkDummyPrefix)/share\&quot;GTK_DATA_PREFIX=\&quot;$(GtkDummyPrefix)\&quot;;GTK_SYSCONFDIR=\&quot;$(GtkDummyPrefix)/etc\&quot;;MULTIPRESS_CONFDIR=\&quot;$(GtkDummyPrefix)/etc/gtk-$(ApiVersion)\&quot;;MULTIPRESS_LOCALEDIR=\&quot;$(GtkDummyPrefix)/share/locale\&quot;;GTK_VERSION=\&quot;$(GtkVersion)/etc\&quot;;GTK_BINARY_VERSION=\&quot;$(GtkBinaryVersion)/etc\&quot;;GDK_DISABLE_DEPRECATED"
+	/>
+</VisualStudioPropertySheet>

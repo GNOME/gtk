@@ -21,58 +21,192 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			InheritedPropertySheets=".\gtk+.vsprops"
 			OutputDirectory="$(GlibEtcInstallRoot)"
-			
-ConfigurationType="10"
+			ConfigurationType="10"
+			InheritedPropertySheets=".\gtk-install-headers-data.vsprops;.\gtk-install-bin.vsprops"
 			CharacterSet="2"
 			DeleteExtensionsOnClean=""
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="$(GtkDoInstall)"
+				CommandLine="$(GtkDoInstallBin)$(GtkDoInstall)"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			InheritedPropertySheets=".\gtk+.vsprops"
 			OutputDirectory="$(GlibEtcInstallRoot)"
 			ConfigurationType="10"
+			InheritedPropertySheets=".\gtk-install-headers-data.vsprops;.\gtk-install-bin.vsprops"
 			CharacterSet="2"
 			DeleteExtensionsOnClean=""
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="$(GtkDoInstall)"
+				CommandLine="$(GtkDoInstallBin)$(GtkDoInstall)"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Debug_Broadway|Win32"
+			OutputDirectory="$(GlibEtcInstallRoot)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="10"
+			InheritedPropertySheets=".\gtk-install-headers-data.vsprops;.\gtk-install-bin.vsprops"
+			CharacterSet="2"
+			DeleteExtensionsOnClean=""
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+				CommandLine="$(GtkDoInstallBin)$(GtkDoInstall)$(GtkDoInstallBroadwayHeaders)"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Debug_Broadway|x64"
+			OutputDirectory="$(GlibEtcInstallRoot)"
+			ConfigurationType="10"
+			InheritedPropertySheets=".\gtk-install-headers-data.vsprops;.\gtk-install-bin.vsprops"
+			CharacterSet="2"
+			DeleteExtensionsOnClean=""
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+				CommandLine="$(GtkDoInstallBin)$(GtkDoInstall)$(GtkDoInstallBroadwayHeaders)"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			InheritedPropertySheets=".\gtk+.vsprops"
 			OutputDirectory="$(GlibEtcInstallRoot)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="10"
+			InheritedPropertySheets=".\gtk-install-headers-data.vsprops;.\gtk-install-bin.vsprops"
 			CharacterSet="2"
-			WholeProgramOptimization="1"
 			DeleteExtensionsOnClean=""
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="$(GtkDoInstall)"
+				CommandLine="$(GtkDoInstallBin)$(GtkDoInstall)"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			InheritedPropertySheets=".\gtk+.vsprops"
 			OutputDirectory="$(GlibEtcInstallRoot)"
 			ConfigurationType="10"
+			InheritedPropertySheets=".\gtk-install-headers-data.vsprops;.\gtk-install-bin.vsprops"
 			CharacterSet="2"
-			WholeProgramOptimization="1"
 			DeleteExtensionsOnClean=""
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="$(GtkDoInstall)"
+				CommandLine="$(GtkDoInstallBin)$(GtkDoInstall)"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release_Broadway|Win32"
+			OutputDirectory="$(GlibEtcInstallRoot)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="10"
+			InheritedPropertySheets=".\gtk-install-headers-data.vsprops;.\gtk-install-bin.vsprops"
+			CharacterSet="2"
+			DeleteExtensionsOnClean=""
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+				CommandLine="$(GtkDoInstallBin)$(GtkDoInstall)$(GtkDoInstallBroadwayHeaders)"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release_Broadway|x64"
+			OutputDirectory="$(GlibEtcInstallRoot)"
+			ConfigurationType="10"
+			InheritedPropertySheets=".\gtk-install-headers-data.vsprops;.\gtk-install-bin.vsprops"
+			CharacterSet="2"
+			DeleteExtensionsOnClean=""
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+				CommandLine="$(GtkDoInstallBin)$(GtkDoInstall)$(GtkDoInstallBroadwayHeaders)"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
 	</Configurations>
+	<References>
+	</References>
+	<Files>
+	</Files>
+	<Globals>
+	</Globals>
 </VisualStudioProject>

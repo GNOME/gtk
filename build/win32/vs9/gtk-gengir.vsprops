@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="gtkinstallbinprops"
+	InheritedPropertySheets=".\gtk-version-paths.vsprops"
+	>
+	<UserMacro
+		Name="DoGenGir"
+		Value="
+set VSVER=$(VSVer)&#x0D;&#x0A;
+set CONF=$(ConfigurationName)&#x0D;&#x0A;
+set PLAT=$(PlatformName)&#x0D;&#x0A;
+set BASEDIR=$(GlibEtcInstallRootFromBuildWin32)&#x0D;&#x0A;
+cd ..&#x0D;&#x0A;
+
+call gengir_gtk.bat&#x0D;&#x0A;
+cd vs$(VSVer)&#x0D;&#x0A;
+		      "
+	/>
+</VisualStudioPropertySheet>
