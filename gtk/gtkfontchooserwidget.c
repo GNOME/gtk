@@ -264,10 +264,11 @@ static void
 gtk_font_chooser_widget_update_marks (GtkFontChooserWidget *fontchooser)
 {
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
-  GtkAdjustment *adj;
+  GtkAdjustment *adj, *spin_adj;
   const int *sizes;
   gint *font_sizes;
   gint i, n_sizes;
+  gdouble value, spin_value;
 
   if (gtk_list_store_iter_is_valid (GTK_LIST_STORE (priv->model), &priv->font_iter))
     {
@@ -307,12 +308,21 @@ gtk_font_chooser_widget_update_marks (GtkFontChooserWidget *fontchooser)
 
   gtk_scale_clear_marks (GTK_SCALE (priv->size_slider));
 
-  adj = gtk_range_get_adjustment(GTK_RANGE (priv->size_slider));
+  adj        = gtk_range_get_adjustment (GTK_RANGE (priv->size_slider));
+  spin_adj   = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (priv->size_spin));
+  spin_value = gtk_adjustment_get_value (spin_adj);
+
+  if (spin_value < sizes[0])
+    value = (gdouble) sizes[0];
+  else if (spin_value > sizes[n_sizes - 1])
+    value = (gdouble)sizes[n_sizes - 1];
+  else
+    value = (gdouble)spin_value;
 
   /* ensure clamping doesn't callback into font resizing code */
   g_signal_handlers_block_by_func (adj, size_change_cb, fontchooser);
   gtk_adjustment_configure (adj,
-                            gtk_adjustment_get_value (adj),
+                            value,
                             sizes[0],
                             sizes[n_sizes - 1],
                             gtk_adjustment_get_step_increment (adj),
