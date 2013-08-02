@@ -300,7 +300,7 @@
     application menus, settings, #GtkHeaderBar, #GtkStack, #GtkSearchBar,
     #GtkListBox, and more.</para>
 
-    <para>The full, buildable sources for these examples can be find
+    <para>The full, buildable sources for these examples can be found
     in the examples/ directory of the GTK+ source distribution, or
     <ulink url="https://git.gnome.org/browse/gtk+/tree/examples">online</ulink> in the GTK+ git repository.</para>
 
