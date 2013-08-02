@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets">
+    <Import Project="gtk-version-paths.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros">
+    <GtkBinaryVersion>3.0.0</GtkBinaryVersion>
+    <GtkDummyPrefix>/dummy</GtkDummyPrefix>
+    <GtkPrefixDefine>GTK_PREFIX=\"$(GtkDummyPrefix)\"</GtkPrefixDefine>
+    <GdkDefines>GDK_COMPILATION;G_LOG_DOMAIN="Gdk"</GdkDefines>
+    <GtkIncludedImmodulesDefines>INCLUDE_IM_am_et;INCLUDE_IM_cedilla;INCLUDE_IM_cyrillic_translit;INCLUDE_IM_ime;INCLUDE_IM_inuktitut;INCLUDE_IM_ipa;INCLUDE_IM_multipress;INCLUDE_IM_thai;INCLUDE_IM_ti_er;INCLUDE_IM_ti_et;INCLUDE_IM_viqr</GtkIncludedImmodulesDefines>
+    <GtkDefines>GTK_COMPILATION;G_LOG_DOMAIN="Gtk";GTK_HOST="i686-pc-vs$(VSVer)";GTK_PRINT_BACKENDS="file";GTK_PRINT_PREVIEW_COMMAND="undefined-gtk-print-preview-command";$(GtkIncludedImmodulesDefines);GTK_LIBDIR="$(GtkDummyPrefix)/lib";GTK_DATADIR="$(GtkDummyPrefix)/share";GTK_DATA_PREFIX="$(GtkDummyPrefix)";GTK_SYSCONFDIR="$(GtkDummyPrefix)/etc";MULTIPRESS_CONFDIR="$(GtkDummyPrefix)/etc/gtk-$(ApiVersion)";MULTIPRESS_LOCALEDIR="$(GtkDummyPrefix)/share/locale";GTK_VERSION="$(GtkVersion)/etc";GTK_BINARY_VERSION="$(GtkBinaryVersion)/etc";GDK_DISABLE_DEPRECATED</GtkDefines>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_PropertySheetDisplayName>gtkbuilddefinesprops</_PropertySheetDisplayName>
+    <OutDir>$(SolutionDir)$(Configuration)\$(PlatformName)\bin\</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)\$(PlatformName)\obj\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..;$(GlibEtcInstallRoot)\lib\glib-2.0\include;$(GlibEtcInstallRoot)\include\glib-2.0;$(GlibEtcInstallRoot)\include;$(GlibEtcInstallRoot)\include\cairo;$(GlibEtcInstallRoot)\include\atk-1.0;$(GlibEtcInstallRoot)\include\pango-1.0;$(GlibEtcInstallRoot)\include\gdk-pixbuf-2.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>HAVE_CONFIG_H;G_DISABLE_SINGLE_INCLUDES;ATK_DISABLE_SINGLE_INCLUDES;GDK_PIXBUF_DISABLE_SINGLE_INCLUDES;GTK_DISABLE_SINGLE_INCLUDES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ForcedIncludeFiles>msvc_recommended_pragmas.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    </ClCompile>
+	<Link>
+      <AdditionalDependencies>pangocairo-1.0.lib;cairo.lib;cairo-gobject.lib;pango-1.0.lib;gdk_pixbuf-2.0.lib;gio-2.0.lib;gmodule-2.0.lib;gobject-2.0.lib;glib-2.0.lib;intl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(GlibEtcInstallRoot)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="GtkBinaryVersion">
+      <Value>$(GtkBinaryVersion)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkDummyPrefix">
+      <Value>$(GtkDummyPrefix)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkPrefixDefine">
+      <Value>$(GtkPrefixDefine)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GdkDefines">
+      <Value>$(GdkDefines)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkIncludedImmodulesDefines">
+      <Value>$(GtkIncludedImmodulesDefines)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkDefines">
+      <Value>$(GtkDefines)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

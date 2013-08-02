@@ -3,7 +3,6 @@ include $(top_srcdir)/Makefile.decl
 EXTRA_DIST +=	\
 	README.txt	\
 	gtk+.sln	\
-	gtk+.props	\
 	gdk-win32.vcxproj	\
 	gdk-win32.vcxproj.filters	\
 	gdk.vcxproj	\
@@ -25,6 +24,18 @@ EXTRA_DIST +=	\
 	gailutil.vcxproj	\
 	gailutil.vcxproj.filters	\
 	gengir.vcxproj	\
-	install.vcxproj
+	install.vcxproj	\
+	broadwayd.vcxproj	\
+	broadwayd.vcxproj.filters	\
+	gdk-broadway.vcxproj	\
+	gdk-broadway.vcxproj.filters	\
+	gtk-build-defines.props	\
+	gtk-gengir.props	\
+	gtk-ignore-broadway.props	\
+	gtk-install-bin.props	\
+	gtk-install-headers-data.props	\
+	gtk-version-paths.props	\
+	gtkprebuild-broadway.props	\
+	gtkprebuild.props
 
 -include $(top_srcdir)/git.mk

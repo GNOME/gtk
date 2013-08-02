@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets">
+    <Import Project="gtk-version-paths.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros">
+    <DoGenGir>
+set VSVER=$(VSVer)
+
+set CONF=$(Configuration)
+
+set PLAT=$(Platform)
+
+set BASEDIR=$(GlibEtcInstallRootFromBuildWin32)
+
+cd ..
+
+
+call gengir_gtk.bat
+
+cd vs$(VSVer)
+
+        </DoGenGir>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_PropertySheetDisplayName>gtkinstallbinprops</_PropertySheetDisplayName>
+  </PropertyGroup>
+  <ItemGroup>
+    <BuildMacro Include="DoGenGir">
+      <Value>$(DoGenGir)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

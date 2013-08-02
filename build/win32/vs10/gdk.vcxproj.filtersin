@@ -21,9 +21,4 @@
 #include "libgdk.vs10.sourcefiles.filters"
     <ClCompile Include="..\..\..\gdk\gdkkeynames.c"><Filter>Source Files</Filter></ClCompile>
   </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="..\..\..\gdk\gdk.symbols">
-      <Filter>Resource Files</Filter>
-    </CustomBuild>
-  </ItemGroup>
 </Project>

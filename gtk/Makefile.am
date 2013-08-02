@@ -1279,7 +1279,7 @@ dist-hook: ../build/win32/vs9/gtk.vcproj ../build/win32/vs10/gtk.vcxproj ../buil
 	rm libgtk.vs10.sourcefiles
 
 ../build/win32/vs10/gtk.vcxproj.filters: ../build/win32/vs10/gtk.vcxproj.filtersin
-	for F in `echo $(gtk_base_c_sources) $(gtk_os_win32_c_sources) $(gtk_use_win32_c_sources) | tr '/' '\\'`; do \
+	for F in `echo $(gtk_base_c_sources) $(gtk_os_win32_c_sources) $(gtk_use_win32_c_sources) $(gtk_dbus_built_sources) | tr '/' '\\'`; do \
 		case $$F in \
 		*.c) echo '   <ClCompile Include="..\..\..\gtk\'$$F'"><Filter>Source Files</Filter></ClCompile>' \
 		     ;; \
