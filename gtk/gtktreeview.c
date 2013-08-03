@@ -15228,9 +15228,7 @@ gtk_tree_view_search_move (GtkWidget   *window,
   len = strlen (text);
 
   if (up && tree_view->priv->selected_iter == 1)
-    return strlen (text) < 1;
-
-  len = strlen (text);
+    return len < 1;
 
   if (len < 1)
     return TRUE;
