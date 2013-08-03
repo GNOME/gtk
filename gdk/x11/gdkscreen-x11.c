@@ -1114,6 +1114,8 @@ _gdk_x11_screen_set_window_scale (GdkX11Screen *x11_screen,
 
       _gdk_x11_window_set_window_scale (window, scale);
     }
+
+  g_signal_emit_by_name (GDK_SCREEN (x11_screen), "monitors-changed");
 }
 
 /*
