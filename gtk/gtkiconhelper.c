@@ -100,6 +100,11 @@ void
 _gtk_icon_helper_invalidate (GtkIconHelper *self)
 {
   g_clear_object (&self->priv->rendered_pixbuf);
+  if (self->priv->rendered_surface != NULL)
+    {
+      cairo_surface_destroy (self->priv->rendered_surface);
+      self->priv->rendered_surface = NULL;
+    }
 }
 
 void
