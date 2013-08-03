@@ -71,7 +71,7 @@
  * gtk_container_add (GTK_CONTAINER (searchbar), box);
  *
  * /<!---->* And tell the search bar about the search entry *<---->/
- * gtk_search_bar_set_search_entry (GTK_SEARCH_BAR (bar), entry);
+ * gtk_search_bar_connect_entry (GTK_SEARCH_BAR (bar), entry);
  * ]]></programlisting>
  * </example>
  *
