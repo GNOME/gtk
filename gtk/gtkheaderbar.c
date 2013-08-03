@@ -56,6 +56,8 @@ struct _GtkHeaderBarPrivate
   GtkWidget *label_box;
   GtkWidget *label_sizing_box;
   GtkWidget *custom_title;
+  GtkWidget *close_button;
+  GtkWidget *separator;
   gint spacing;
   gint hpadding;
   gint vpadding;
@@ -77,7 +79,8 @@ enum {
   PROP_CUSTOM_TITLE,
   PROP_SPACING,
   PROP_HPADDING,
-  PROP_VPADDING
+  PROP_VPADDING,
+  PROP_SHOW_CLOSE_BUTTON
 };
 
 enum {
@@ -203,6 +206,57 @@ _gtk_header_bar_create_title_box (const char *title,
 }
 
 static void
+close_button_clicked (GtkButton *button, gpointer data)
+{
+  GtkWidget *toplevel;
+
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (button));
+  gtk_window_close (GTK_WINDOW (toplevel));
+}
+
+static void
+add_close_button (GtkHeaderBar *bar)
+{
+  GtkHeaderBarPrivate *priv;
+  GtkWidget *button;
+  GIcon *icon;
+  GtkWidget *image;
+  GtkWidget *separator;
+
+  priv = gtk_header_bar_get_instance_private (bar);
+
+  button = gtk_button_new ();
+  icon = g_themed_icon_new ("window-close-symbolic");
+  image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_BUTTON);
+  g_object_unref (icon);
+  gtk_container_add (GTK_CONTAINER (button), image);
+  gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
+  g_signal_connect (button, "clicked",
+                    G_CALLBACK (close_button_clicked), NULL);
+  gtk_widget_show_all (button);
+  gtk_widget_set_parent (button, GTK_WIDGET (bar));
+
+  separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
+  gtk_widget_show (separator);
+  gtk_widget_set_parent (separator, GTK_WIDGET (bar));
+
+  priv->separator = separator;
+  priv->close_button = button;
+}
+
+static void
+remove_close_button (GtkHeaderBar *bar)
+{
+  GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
+
+  gtk_widget_unparent (priv->separator);
+  gtk_widget_unparent (priv->close_button);
+
+  priv->separator = NULL;
+  priv->close_button = NULL;
+}
+
+static void
 construct_label_box (GtkHeaderBar *bar)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
@@ -230,6 +284,8 @@ gtk_header_bar_init (GtkHeaderBar *bar)
   priv->title = NULL;
   priv->subtitle = NULL;
   priv->custom_title = NULL;
+  priv->close_button = NULL;
+  priv->separator = NULL;
   priv->children = NULL;
   priv->spacing = DEFAULT_SPACING;
   priv->hpadding = DEFAULT_HPADDING;
@@ -328,6 +384,15 @@ gtk_header_bar_get_size (GtkWidget      *widget,
         nvis_children += 1;
     }
 
+  if (priv->close_button != NULL)
+    {
+      if (add_child_size (priv->close_button, orientation, &minimum, &natural))
+        nvis_children += 1;
+
+      if (add_child_size (priv->separator, orientation, &minimum, &natural))
+        nvis_children += 1;
+    }
+
   if (nvis_children > 0 && orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       minimum += nvis_children * priv->spacing;
@@ -403,6 +468,19 @@ gtk_header_bar_compute_size_for_orientation (GtkWidget *widget,
       gtk_widget_get_visible (priv->custom_title))
     {
       gtk_widget_get_preferred_width (priv->custom_title,
+                                      &child_size, &child_natural);
+      required_size += child_size;
+      required_natural += child_natural;
+    }
+
+  if (priv->close_button != NULL)
+    {
+      gtk_widget_get_preferred_width (priv->close_button,
+                                      &child_size, &child_natural);
+      required_size += child_size;
+      required_natural += child_natural;
+
+      gtk_widget_get_preferred_width (priv->separator,
                                       &child_size, &child_natural);
       required_size += child_size;
       required_natural += child_natural;
@@ -526,6 +604,19 @@ gtk_header_bar_compute_size_for_opposing_orientation (GtkWidget *widget,
       computed_natural = MAX (computed_natural, child_natural);
     }
 
+  if (priv->close_button != NULL)
+    {
+      gtk_widget_get_preferred_height (priv->close_button,
+                                       &child_minimum, &child_natural);
+      computed_minimum = MAX (computed_minimum, child_minimum);
+      computed_natural = MAX (computed_natural, child_natural);
+
+      gtk_widget_get_preferred_height (priv->separator,
+                                       &child_minimum, &child_natural);
+      computed_minimum = MAX (computed_minimum, child_minimum);
+      computed_natural = MAX (computed_natural, child_natural);
+    }
+
   get_css_padding_and_border (widget, &css_borders);
 
   computed_minimum += 2 * priv->vpadding + css_borders.top + css_borders.bottom;
@@ -583,6 +674,9 @@ gtk_header_bar_size_allocate (GtkWidget     *widget,
   gint nvis_children;
   gint title_minimum_size;
   gint title_natural_size;
+  gint close_button_width;
+  gint separator_width;
+  gint close_width;
   gint side[2];
   GList *l;
   gint i;
@@ -636,6 +730,23 @@ gtk_header_bar_size_allocate (GtkWidget     *widget,
     }
   width -= title_natural_size;
 
+  close_button_width = separator_width = close_width = 0;
+  if (priv->close_button != NULL)
+    {
+      gint min, nat;
+      gtk_widget_get_preferred_width_for_height (priv->close_button,
+                                                 height,
+                                                 &min, &nat);
+      close_button_width = nat;
+
+      gtk_widget_get_preferred_width_for_height (priv->separator,
+                                                 height,
+                                                 &min, &nat);
+      separator_width = nat;
+      close_width = close_button_width + separator_width + 2 * priv->spacing;
+    }
+  width -= close_width;
+
   width = gtk_distribute_natural_allocation (MAX (0, width), nvis_children, sizes);
 
   side[0] = side[1] = 0;
@@ -646,7 +757,7 @@ gtk_header_bar_size_allocate (GtkWidget     *widget,
       if (packing == GTK_PACK_START)
         x = allocation->x + priv->hpadding + css_borders.left;
       else
-        x = allocation->x + allocation->width - priv->hpadding - css_borders.right;
+        x = allocation->x + allocation->width - close_width - priv->hpadding - css_borders.right;
 
       if (packing == GTK_PACK_START)
 	{
@@ -700,6 +811,8 @@ gtk_header_bar_size_allocate (GtkWidget     *widget,
         }
     }
 
+  side[GTK_PACK_END] += close_width;
+
   child_allocation.y = allocation->y + priv->vpadding + css_borders.top;
   child_allocation.height = height;
 
@@ -727,6 +840,23 @@ gtk_header_bar_size_allocate (GtkWidget     *widget,
     gtk_widget_size_allocate (priv->custom_title, &child_allocation);
   else
     gtk_widget_size_allocate (priv->label_box, &child_allocation);
+
+  if (priv->close_button)
+    {
+      if (direction == GTK_TEXT_DIR_RTL)
+        child_allocation.x = allocation->x + priv->hpadding + css_borders.left;
+      else
+        child_allocation.x = allocation->x + allocation->width - priv->hpadding - css_borders.right - close_button_width;
+      child_allocation.width = close_button_width;
+      gtk_widget_size_allocate (priv->close_button, &child_allocation);
+
+      if (direction == GTK_TEXT_DIR_RTL)
+        child_allocation.x = allocation->x + priv->hpadding + css_borders.left + close_button_width + priv->spacing;
+      else
+        child_allocation.x = allocation->x + allocation->width - priv->hpadding - css_borders.right - close_button_width - priv->spacing - separator_width;
+      child_allocation.width = separator_width;
+      gtk_widget_size_allocate (priv->separator, &child_allocation);
+    }
 }
 
 /**
@@ -976,6 +1106,10 @@ gtk_header_bar_get_property (GObject    *object,
       g_value_set_int (value, priv->vpadding);
       break;
 
+    case PROP_SHOW_CLOSE_BUTTON:
+      g_value_set_boolean (value, gtk_header_bar_get_show_close_button (bar));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1018,6 +1152,10 @@ gtk_header_bar_set_property (GObject      *object,
     case PROP_VPADDING:
       priv->vpadding = g_value_get_int (value);
       gtk_widget_queue_resize (GTK_WIDGET (bar));
+      break;
+
+    case PROP_SHOW_CLOSE_BUTTON:
+      gtk_header_bar_set_show_close_button (bar, g_value_get_boolean (value));
       break;
 
     default:
@@ -1119,6 +1257,12 @@ gtk_header_bar_forall (GtkContainer *container,
 
   if (include_internals && priv->label_box != NULL)
     (* callback) (priv->label_box, callback_data);
+
+  if (include_internals && priv->close_button != NULL)
+    (* callback) (priv->close_button, callback_data);
+
+  if (include_internals && priv->separator != NULL)
+    (* callback) (priv->separator, callback_data);
 
   children = priv->children;
   while (children)
@@ -1362,6 +1506,14 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
                                                      DEFAULT_VPADDING,
                                                      GTK_PARAM_READWRITE));
 
+  g_object_class_install_property (object_class,
+                                   PROP_SHOW_CLOSE_BUTTON,
+                                   g_param_spec_boolean ("show-close-button",
+                                                         P_("Show Close button"),
+                                                         P_("Whether to show a window close button"),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE));
+
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_FILLER);
 }
 
@@ -1432,4 +1584,62 @@ GtkWidget *
 gtk_header_bar_new (void)
 {
   return GTK_WIDGET (g_object_new (GTK_TYPE_HEADER_BAR, NULL));
+}
+
+/**
+ * gtk_header_bar_get_show_close_button:
+ * @bar: a #GtkHeaderBar
+ *
+ * Returns whether this header bar shows a window close
+ * button.
+ *
+ * Returns: %TRUE if a window close button is shown
+ *
+ * Since: 3.10
+ */
+gboolean
+gtk_header_bar_get_show_close_button (GtkHeaderBar *bar)
+{
+  GtkHeaderBarPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_HEADER_BAR (bar), FALSE);
+
+  priv = gtk_header_bar_get_instance_private (bar);
+
+  return priv->close_button != NULL;
+}
+
+/**
+ * gtk_header_bar_set_show_close_button:
+ * @bar: a #GtkHeaderBar
+ * @setting: %TRUE to show a window close button
+ *
+ * Sets whether this header bar shows a window close
+ * button.
+ *
+ * Since: 3.10
+ */
+void
+gtk_header_bar_set_show_close_button (GtkHeaderBar *bar,
+                                      gboolean      setting)
+{
+  GtkHeaderBarPrivate *priv;
+
+  g_return_if_fail (GTK_IS_HEADER_BAR (bar));
+
+  priv = gtk_header_bar_get_instance_private (bar);
+
+  setting = setting != FALSE;
+
+  if ((priv->close_button != NULL) == setting)
+    return;
+
+  if (setting)
+    add_close_button (bar);
+  else
+    remove_close_button (bar);
+
+  gtk_widget_queue_resize (GTK_WIDGET (bar));
+
+  g_object_notify (G_OBJECT (bar), "show-close-button");
 }

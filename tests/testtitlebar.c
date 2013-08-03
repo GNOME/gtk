@@ -17,7 +17,9 @@ main (int argc, char *argv[])
   gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
 
   header = gtk_header_bar_new ();
+  gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (header), TRUE);
   gtk_style_context_add_class (gtk_widget_get_style_context (header), "titlebar");
+
   title = gtk_label_new (NULL);
   gtk_label_set_markup (GTK_LABEL (title), "<b>Welcome to Facebook - Log in, sign up or learn more</b>");
   gtk_label_set_ellipsize (GTK_LABEL (title), PANGO_ELLIPSIZE_END);
@@ -30,18 +32,6 @@ main (int argc, char *argv[])
   image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_BUTTON);
   g_object_unref (icon);
   gtk_container_add (GTK_CONTAINER (button), image);
-  gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);
-
-  gtk_header_bar_pack_end (GTK_HEADER_BAR (header), gtk_separator_new (GTK_ORIENTATION_VERTICAL));
-
-  button = gtk_button_new ();
-  icon = g_themed_icon_new ("window-close-symbolic");
-  image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_BUTTON);
-  g_object_unref (icon);
-  gtk_container_add (GTK_CONTAINER (button), image);
-  gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
-  g_signal_connect_swapped (button, "clicked", G_CALLBACK (gtk_window_close), window);
-
   gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
