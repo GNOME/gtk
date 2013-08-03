@@ -582,6 +582,14 @@ gtk_container_buildable_set_child_property (GtkContainer *container,
   GValue gvalue = G_VALUE_INIT;
   GError *error = NULL;
 
+  if (gtk_widget_get_parent (child) != (GtkWidget *)container)
+    {
+      /* This can happen with internal children of complex
+       * widgets. Silently ignore the child properties in this case.
+       */
+      return;
+    }
+
   pspec = gtk_container_class_find_child_property
     (G_OBJECT_GET_CLASS (container), name);
   if (!pspec)
