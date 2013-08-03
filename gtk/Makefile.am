@@ -1138,8 +1138,6 @@ COMPOSITE_TEMPLATES =			\
 
 template_headers = $(COMPOSITE_TEMPLATES:.ui=.ui.h)
 
-MAINTAINERCLEANFILES += $(template_headers)
-
 %.ui.h: %.ui extract-strings$(BUILD_EXEEXT)
 	$(AM_V_GEN) ./extract-strings$(BUILD_EXEEXT) $< > $@
 
