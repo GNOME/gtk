@@ -789,6 +789,7 @@ pointer_handle_axis (void              *data,
   case WL_POINTER_AXIS_HORIZONTAL_SCROLL:
     delta_x = wl_fixed_to_double (value) / 10.0;
     delta_y = 0;
+    break;
   default:
     g_return_if_reached ();
   }
