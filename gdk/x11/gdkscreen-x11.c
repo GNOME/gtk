@@ -1096,11 +1096,15 @@ _gdk_x11_screen_set_window_scale (GdkX11Screen *x11_screen,
 				  int scale)
 {
   GList *toplevels, *l;
+  GdkWindow *root;
 
   if (x11_screen->window_scale == scale)
     return;
 
   x11_screen->window_scale = scale;
+
+  root = x11_screen->root_window;
+  GDK_WINDOW_IMPL_X11 (root->impl)->window_scale = scale;
 
   toplevels = gdk_screen_get_toplevel_windows (GDK_SCREEN (x11_screen));
 
