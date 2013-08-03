@@ -20,6 +20,7 @@
                 <property name="can_focus">False</property>
                 <property name="border_width">8</property>
                 <property name="spacing">16</property>
+                <property name="hexpand">True</property>
                 <child>
                   <placeholder/>
                 </child>
@@ -54,9 +55,10 @@
                 <property name="can_focus">True</property>
                 <property name="border_width">6</property>
                 <property name="relief">none</property>
+                <property name="valign">center</property>
                 <style>
                   <class name="raised"/>
-                 <class name="close"/>
+                  <class name="close"/>
                 </style>
                 <child>
                   <object class="GtkImage" id="close_image">
