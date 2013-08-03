@@ -1886,8 +1886,6 @@ draw_stepper (GtkRange     *range,
       g_assert_not_reached ();
     };
 
-  arrow_sensitive = TRUE;
-
   gtk_widget_get_allocation (widget, &allocation);
 
   if ((!priv->inverted && (arrow_type == GTK_ARROW_DOWN ||
