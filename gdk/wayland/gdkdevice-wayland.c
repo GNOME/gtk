@@ -645,6 +645,8 @@ pointer_handle_leave (void              *data,
     return;
   if (!GDK_IS_WINDOW (wl_surface_get_user_data (surface)))
     return;
+  if (!device->pointer_focus)
+    return;
 
   _gdk_wayland_display_update_serial (wayland_display, serial);
 
@@ -689,6 +691,9 @@ pointer_handle_motion (void              *data,
   GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (device->display);
   GdkEvent *event;
 
+  if (!device->pointer_focus)
+    return;
+
   event = gdk_event_new (GDK_NOTHING);
 
   device->time = time;
@@ -728,6 +733,9 @@ pointer_handle_button (void              *data,
   int gdk_button;
   GdkWaylandDisplay *wayland_display =
     GDK_WAYLAND_DISPLAY (device->display);
+
+  if (!device->pointer_focus)
+    return;
 
   _gdk_wayland_display_update_serial (wayland_display, serial);
 
@@ -783,6 +791,9 @@ pointer_handle_axis (void              *data,
   GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (device->display);
   GdkEvent *event;
   gdouble delta_x, delta_y;
+
+  if (!device->pointer_focus)
+    return;
 
   /* get the delta and convert it into the expected range */
   switch (axis) {
