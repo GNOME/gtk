@@ -863,7 +863,6 @@ gtk_menu_item_get_preferred_width (GtkWidget *widget,
   GtkStateFlags state;
   GtkBorder padding;
 
-  min_width = nat_width = 0;
   bin = GTK_BIN (widget);
   parent = gtk_widget_get_parent (widget);
 
