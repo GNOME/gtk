@@ -340,7 +340,6 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
 
   device_manager = GDK_X11_DEVICE_MANAGER_CORE (translator);
-  return_val = FALSE;
 
   window = get_event_window (translator, xevent);
 
@@ -354,7 +353,6 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
       impl = GDK_WINDOW_IMPL_X11 (window->impl);
       scale = impl->window_scale;
     }
-
 
   event->any.window = window;
   event->any.send_event = xevent->xany.send_event ? TRUE : FALSE;
