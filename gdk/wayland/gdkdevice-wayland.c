@@ -897,6 +897,8 @@ keyboard_handle_leave (void               *data,
     return;
   if (!GDK_IS_WINDOW (wl_surface_get_user_data (surface)))
     return;
+  if (!device->keyboard_focus)
+    return;
 
   _gdk_wayland_display_update_serial (wayland_display, serial);
 
@@ -1105,6 +1107,9 @@ keyboard_handle_key (void               *data,
   GdkWaylandDeviceData *device = data;
   GdkWaylandDisplay *wayland_display =
     GDK_WAYLAND_DISPLAY (device->display);
+
+  if (!device->keyboard_focus)
+    return;
 
   device->repeat_count = 0;
   _gdk_wayland_display_update_serial (wayland_display, serial);
