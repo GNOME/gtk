@@ -509,11 +509,7 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
   GtkWidget *child;
   gint width, height;
   gint border_width;
-  gint padding_horizontal, padding_vertical;
   gint baseline;
-
-  padding_horizontal = 0;
-  padding_vertical = 0;
 
   gtk_widget_set_allocation (widget, allocation);
   bin = GTK_BIN (widget);
@@ -521,6 +517,7 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
   child = gtk_bin_get_child (bin);
   if (child && gtk_widget_get_visible (child))
     {
+      gint padding_horizontal, padding_vertical;
       gint child_nat_width;
       gint child_nat_height;
       gint child_width, child_height;
