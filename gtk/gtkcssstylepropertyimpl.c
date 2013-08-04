@@ -465,6 +465,18 @@ parse_css_fill_mode (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+image_effect_parse (GtkCssStyleProperty *property,
+		    GtkCssParser        *parser)
+{
+  GtkCssValue *value = _gtk_css_image_effect_value_try_parse (parser);
+
+  if (value == NULL)
+    _gtk_css_parser_error (parser, "unknown value for property");
+
+  return value;
+}
+
+static GtkCssValue *
 bindings_value_parse_one (GtkCssParser *parser)
 {
   char *name;
@@ -1398,6 +1410,14 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           _gtk_css_number_value_new (1, GTK_CSS_NUMBER));
+  gtk_css_style_property_register        ("-gtk-image-effect",
+					  GTK_CSS_PROPERTY_GTK_IMAGE_EFFECT,
+					  G_TYPE_NONE,
+					  GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_NO_RESIZE,
+					  image_effect_parse,
+					  NULL,
+					  NULL,
+					  _gtk_css_image_effect_value_new (GTK_CSS_IMAGE_EFFECT_NONE));
 
   gtk_css_style_property_register        ("engine",
                                           GTK_CSS_PROPERTY_ENGINE,

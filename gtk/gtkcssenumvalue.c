@@ -653,3 +653,56 @@ _gtk_css_fill_mode_value_get (const GtkCssValue *value)
   return value->value;
 }
 
+/* GtkCssImageEffect */
+
+static const GtkCssValueClass GTK_CSS_VALUE_IMAGE_EFFECT = {
+  gtk_css_value_enum_free,
+  gtk_css_value_enum_compute,
+  gtk_css_value_enum_equal,
+  gtk_css_value_enum_transition,
+  gtk_css_value_enum_print
+};
+
+static GtkCssValue image_effect_values[] = {
+  { &GTK_CSS_VALUE_IMAGE_EFFECT, 1, GTK_CSS_IMAGE_EFFECT_NONE, "none" },
+  { &GTK_CSS_VALUE_IMAGE_EFFECT, 1, GTK_CSS_IMAGE_EFFECT_HIGHLIGHT, "highlight" },
+  { &GTK_CSS_VALUE_IMAGE_EFFECT, 1, GTK_CSS_IMAGE_EFFECT_DIM, "dim" }
+};
+
+GtkCssValue *
+_gtk_css_image_effect_value_new (GtkCssImageEffect image_effect)
+{
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (image_effect_values); i++)
+    {
+      if (image_effect_values[i].value == image_effect)
+        return _gtk_css_value_ref (&image_effect_values[i]);
+    }
+
+  g_return_val_if_reached (NULL);
+}
+
+GtkCssValue *
+_gtk_css_image_effect_value_try_parse (GtkCssParser *parser)
+{
+  guint i;
+
+  g_return_val_if_fail (parser != NULL, NULL);
+
+  for (i = 0; i < G_N_ELEMENTS (image_effect_values); i++)
+    {
+      if (_gtk_css_parser_try (parser, image_effect_values[i].name, TRUE))
+        return _gtk_css_value_ref (&image_effect_values[i]);
+    }
+
+  return NULL;
+}
+
+GtkCssImageEffect
+_gtk_css_image_effect_value_get (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_IMAGE_EFFECT, GTK_CSS_IMAGE_EFFECT_NONE);
+
+  return value->value;
+}

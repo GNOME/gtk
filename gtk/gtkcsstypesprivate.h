@@ -133,6 +133,7 @@ enum { /*< skip >*/
   GTK_CSS_PROPERTY_ANIMATION_DELAY,
   GTK_CSS_PROPERTY_ANIMATION_FILL_MODE,
   GTK_CSS_PROPERTY_OPACITY,
+  GTK_CSS_PROPERTY_GTK_IMAGE_EFFECT,
   GTK_CSS_PROPERTY_ENGINE,
   GTK_CSS_PROPERTY_GTK_KEY_BINDINGS,
   /* add more */
@@ -163,6 +164,12 @@ typedef enum /*< skip >*/ {
   GTK_CSS_FILL_BACKWARDS,
   GTK_CSS_FILL_BOTH
 } GtkCssFillMode;
+
+typedef enum /*< skip >*/ {
+  GTK_CSS_IMAGE_EFFECT_NONE,
+  GTK_CSS_IMAGE_EFFECT_HIGHLIGHT,
+  GTK_CSS_IMAGE_EFFECT_DIM
+} GtkCssImageEffect;
 
 typedef enum /*< skip >*/ {
   /* relative font sizes */

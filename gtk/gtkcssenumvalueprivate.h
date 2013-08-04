@@ -64,6 +64,10 @@ GtkCssValue *   _gtk_css_fill_mode_value_new          (GtkCssFillMode     fill_m
 GtkCssValue *   _gtk_css_fill_mode_value_try_parse    (GtkCssParser      *parser);
 GtkCssFillMode  _gtk_css_fill_mode_value_get          (const GtkCssValue *value);
 
+GtkCssValue *     _gtk_css_image_effect_value_new       (GtkCssImageEffect  image_effect);
+GtkCssValue *     _gtk_css_image_effect_value_try_parse (GtkCssParser      *parser);
+GtkCssImageEffect _gtk_css_image_effect_value_get       (const GtkCssValue *value);
+
 G_END_DECLS
 
 #endif /* __GTK_CSS_ENUM_VALUE_PRIVATE_H__ */
