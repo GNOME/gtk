@@ -179,6 +179,36 @@ ensure_icon_size (GtkIconHelper *self,
 }
 
 static GdkPixbuf *
+ensure_stated_pixbuf_from_pixbuf (GtkIconHelper   *self,
+				  GtkStyleContext *context,
+				  GdkPixbuf       *pixbuf)
+{
+  GdkPixbuf *rendered;
+  GtkIconSource *source;
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
+  /* FIXME: use gtk_icon_info_load_icon? */
+
+  source = gtk_icon_source_new ();
+  gtk_icon_source_set_pixbuf (source, pixbuf);
+  /* The size here is arbitrary; since size isn't
+   * wildcarded in the source, it isn't supposed to be
+   * scaled by the engine function
+   */
+  gtk_icon_source_set_size (source,
+			    GTK_ICON_SIZE_SMALL_TOOLBAR);
+  gtk_icon_source_set_size_wildcarded (source, FALSE);
+
+  rendered = gtk_render_icon_pixbuf (context, source, (GtkIconSize) -1);
+  gtk_icon_source_free (source);
+
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
+  return rendered;
+}
+
+static GdkPixbuf *
 ensure_stated_icon_from_info (GtkIconHelper *self,
                               GtkStyleContext *context,
 			      GtkIconInfo *info)
@@ -210,28 +240,9 @@ ensure_stated_icon_from_info (GtkIconHelper *self,
     }
   else if (!symbolic)
     {
-      GtkIconSource *source;
       GdkPixbuf *rendered;
 
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-      /* FIXME: use gtk_icon_info_load_icon? */
-
-      source = gtk_icon_source_new ();
-      gtk_icon_source_set_pixbuf (source, destination);
-      /* The size here is arbitrary; since size isn't
-       * wildcarded in the source, it isn't supposed to be
-       * scaled by the engine function
-       */
-      gtk_icon_source_set_size (source,
-				GTK_ICON_SIZE_SMALL_TOOLBAR);
-      gtk_icon_source_set_size_wildcarded (source, FALSE);
-
-      rendered = gtk_render_icon_pixbuf (context, source, (GtkIconSize) -1);
-      gtk_icon_source_free (source);
-
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-
+      rendered = ensure_stated_pixbuf_from_pixbuf (self, context, destination);
       g_object_unref (destination);
       destination = rendered;
     }
@@ -653,26 +664,9 @@ ensure_stated_surface_from_info (GtkIconHelper *self,
     }
   else if (!symbolic)
     {
-      GtkIconSource *source;
       GdkPixbuf *rendered;
 
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-      source = gtk_icon_source_new ();
-      gtk_icon_source_set_pixbuf (source, destination);
-      /* The size here is arbitrary; since size isn't
-       * wildcarded in the source, it isn't supposed to be
-       * scaled by the engine function
-       */
-      gtk_icon_source_set_size (source,
-				GTK_ICON_SIZE_SMALL_TOOLBAR);
-      gtk_icon_source_set_size_wildcarded (source, FALSE);
-
-      rendered = gtk_render_icon_pixbuf (context, source, (GtkIconSize) -1);
-      gtk_icon_source_free (source);
-
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-
+      rendered = ensure_stated_pixbuf_from_pixbuf (self, context, destination);
       g_object_unref (destination);
       destination = rendered;
     }
