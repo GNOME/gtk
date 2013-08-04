@@ -388,6 +388,7 @@ ensure_pixbuf_at_size (GtkIconHelper   *self,
                        GtkStyleContext *context)
 {
   gint width, height;
+  GdkPixbuf *stated;
 
   if (!check_invalidate_pixbuf (self, context))
     return;
@@ -427,6 +428,10 @@ ensure_pixbuf_at_size (GtkIconHelper   *self,
 
   if (!self->priv->rendered_pixbuf)
     self->priv->rendered_pixbuf = g_object_ref (self->priv->orig_pixbuf);
+
+  stated = ensure_stated_pixbuf_from_pixbuf (self, context, self->priv->rendered_pixbuf);
+  g_object_unref (self->priv->rendered_pixbuf);
+  self->priv->rendered_pixbuf = stated;
 }
 
 GdkPixbuf *
@@ -545,7 +550,7 @@ ensure_surface_from_pixbuf (GtkIconHelper   *self,
 			    GtkStyleContext *context)
 {
   gint width, height;
-  GdkPixbuf *pixbuf;
+  GdkPixbuf *pixbuf, *stated;
   int scale;
 
   if (!check_invalidate_surface (self, context))
@@ -584,6 +589,10 @@ ensure_surface_from_pixbuf (GtkIconHelper   *self,
       pixbuf = g_object_ref (self->priv->orig_pixbuf);
       scale = self->priv->orig_pixbuf_scale;
     }
+
+  stated = ensure_stated_pixbuf_from_pixbuf (self, context, pixbuf);
+  g_object_unref (pixbuf);
+  pixbuf = stated;
 
   self->priv->rendered_surface_width = (gdk_pixbuf_get_width (pixbuf) + scale - 1) / scale;
   self->priv->rendered_surface_height = (gdk_pixbuf_get_height (pixbuf) + scale - 1) / scale;
