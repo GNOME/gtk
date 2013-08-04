@@ -2700,6 +2700,7 @@ gtk_theming_engine_render_icon_pixbuf (GtkThemingEngine    *engine,
   cairo_t *cr;
   cairo_surface_t *surface;
   gboolean wildcarded;
+  GtkCssImageEffect image_effect;
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   base_pixbuf = gtk_icon_source_get_pixbuf (source);
@@ -2735,7 +2736,11 @@ gtk_theming_engine_render_icon_pixbuf (GtkThemingEngine    *engine,
   if (!wildcarded)
     return scaled;
 
-  if (state & GTK_STATE_FLAG_INSENSITIVE)
+  image_effect = _gtk_css_image_effect_value_get
+    (_gtk_theming_engine_peek_property (engine, GTK_CSS_PROPERTY_GTK_IMAGE_EFFECT));
+
+  if (image_effect == GTK_CSS_IMAGE_EFFECT_DIM ||
+      state & GTK_STATE_FLAG_INSENSITIVE)
     {
       surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
 					    gdk_pixbuf_get_width (scaled),
@@ -2752,7 +2757,8 @@ gtk_theming_engine_render_icon_pixbuf (GtkThemingEngine    *engine,
 					    cairo_image_surface_get_height (surface));
       cairo_surface_destroy (surface);
     }
-  else if (state & GTK_STATE_FLAG_PRELIGHT)
+  else if (image_effect == GTK_CSS_IMAGE_EFFECT_HIGHLIGHT ||
+	   state & GTK_STATE_FLAG_PRELIGHT)
     {
       surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
 					    gdk_pixbuf_get_width (scaled),
