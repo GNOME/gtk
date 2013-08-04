@@ -2732,45 +2732,43 @@ gtk_theming_engine_render_icon_pixbuf (GtkThemingEngine    *engine,
   wildcarded = gtk_icon_source_get_state_wildcarded (source);
   G_GNUC_END_IGNORE_DEPRECATIONS;
 
-  if (wildcarded)
+  if (!wildcarded)
+    return scaled;
+
+  if (state & GTK_STATE_FLAG_INSENSITIVE)
     {
-      if (state & GTK_STATE_FLAG_INSENSITIVE)
-        {
-	  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-						gdk_pixbuf_get_width (scaled),
-						gdk_pixbuf_get_height (scaled));
-	  cr = cairo_create (surface);
-	  gdk_cairo_set_source_pixbuf (cr, scaled, 0, 0);
-	  cairo_paint_with_alpha (cr, 0.5);
+      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+					    gdk_pixbuf_get_width (scaled),
+					    gdk_pixbuf_get_height (scaled));
+      cr = cairo_create (surface);
+      gdk_cairo_set_source_pixbuf (cr, scaled, 0, 0);
+      cairo_paint_with_alpha (cr, 0.5);
 
-	  cairo_destroy (cr);
+      cairo_destroy (cr);
 
-	  g_object_unref (scaled);
-	  stated = gdk_pixbuf_get_from_surface (surface, 0, 0,
-						cairo_image_surface_get_width (surface),
-						cairo_image_surface_get_height (surface));
-	  cairo_surface_destroy (surface);
-        }
-      else if (state & GTK_STATE_FLAG_PRELIGHT)
-        {
-	  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-						gdk_pixbuf_get_width (scaled),
-						gdk_pixbuf_get_height (scaled));
+      g_object_unref (scaled);
+      stated = gdk_pixbuf_get_from_surface (surface, 0, 0,
+					    cairo_image_surface_get_width (surface),
+					    cairo_image_surface_get_height (surface));
+      cairo_surface_destroy (surface);
+    }
+  else if (state & GTK_STATE_FLAG_PRELIGHT)
+    {
+      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+					    gdk_pixbuf_get_width (scaled),
+					    gdk_pixbuf_get_height (scaled));
 
-	  cr = cairo_create (surface);
-	  gdk_cairo_set_source_pixbuf (cr, scaled, 0, 0);
-	  colorshift_source (cr, 0.10);
+      cr = cairo_create (surface);
+      gdk_cairo_set_source_pixbuf (cr, scaled, 0, 0);
+      colorshift_source (cr, 0.10);
 
-	  cairo_destroy (cr);
+      cairo_destroy (cr);
 
-	  g_object_unref (scaled);
-	  stated = gdk_pixbuf_get_from_surface (surface, 0, 0,
-						cairo_image_surface_get_width (surface),
-						cairo_image_surface_get_height (surface));
-	  cairo_surface_destroy (surface);
-        }
-      else
-        stated = scaled;
+      g_object_unref (scaled);
+      stated = gdk_pixbuf_get_from_surface (surface, 0, 0,
+					    cairo_image_surface_get_width (surface),
+					    cairo_image_surface_get_height (surface));
+      cairo_surface_destroy (surface);
     }
   else
     stated = scaled;
