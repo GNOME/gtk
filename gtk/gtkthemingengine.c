@@ -2728,6 +2728,10 @@ gtk_theming_engine_render_icon_pixbuf (GtkThemingEngine    *engine,
     scaled = g_object_ref (base_pixbuf);
 
   /* If the state was wildcarded, then generate a state. */
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  wildcarded = gtk_icon_source_get_state_wildcarded (source);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
+
   if (wildcarded)
     {
       if (state & GTK_STATE_FLAG_INSENSITIVE)
