@@ -2148,7 +2148,7 @@ gtk_notebook_get_preferred_tabs_size (GtkNotebook    *notebook,
 
           action_width += action_widget_requisition[ACTION_WIDGET_START].width;
           action_width += action_widget_requisition[ACTION_WIDGET_END].width;
-          requisition->width = tab_width + tab_overlap + action_width + initial_gap;
+          requisition->width = tab_width + tab_overlap + action_width + 2 * initial_gap;
 
           requisition->height = tab_height;
           break;
@@ -2187,7 +2187,7 @@ gtk_notebook_get_preferred_tabs_size (GtkNotebook    *notebook,
           action_height += action_widget_requisition[ACTION_WIDGET_START].height;
           action_height += action_widget_requisition[ACTION_WIDGET_END].height;
 
-          requisition->height = tab_height + tab_overlap + action_height + initial_gap;
+          requisition->height = tab_height + tab_overlap + action_height + 2 * initial_gap;
 
           requisition->height = MAX (requisition->height, tab_max + tab_overlap);
 
