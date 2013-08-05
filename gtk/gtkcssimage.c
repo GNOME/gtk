@@ -389,16 +389,30 @@ _gtk_css_image_get_surface (GtkCssImage     *image,
 {
   cairo_surface_t *result;
   cairo_t *cr;
+  double sx, sy;
 
   g_return_val_if_fail (GTK_IS_CSS_IMAGE (image), NULL);
   g_return_val_if_fail (surface_width > 0, NULL);
   g_return_val_if_fail (surface_height > 0, NULL);
 
+
   if (target)
-    result = cairo_surface_create_similar (target,
-                                           CAIRO_CONTENT_COLOR_ALPHA,
-                                           surface_width,
-                                           surface_height);
+    {
+#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
+      cairo_surface_get_device_scale (target, &sx, &sy);
+#else
+      sx = sy = 1;
+#endif
+
+      result = cairo_surface_create_similar (target,
+					     CAIRO_CONTENT_COLOR_ALPHA,
+					     surface_width*sx,
+					     surface_height*sy);
+
+#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
+      cairo_surface_set_device_scale (result, sx, sy);
+#endif
+    }
   else
     result = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                          surface_width,
