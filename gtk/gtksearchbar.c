@@ -225,7 +225,8 @@ gtk_search_bar_handle_event (GtkSearchBar *bar,
   if (priv->reveal_child ||
       !gdk_event_get_keyval (event, &keyval) ||
       is_keynav_event (event, keyval) ||
-      keyval == GDK_KEY_space)
+      keyval == GDK_KEY_space ||
+      keyval == GDK_KEY_Menu)
     return GDK_EVENT_PROPAGATE;
 
   if (!gtk_widget_get_realized (priv->entry))
