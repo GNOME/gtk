@@ -4934,6 +4934,9 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
 
   if (priv->cur_page == list->data)
     {
+      if (priv->cur_page->tab_label)
+	gtk_style_context_remove_class (gtk_widget_get_style_context (priv->cur_page->tab_label),
+					"active-page");
       priv->cur_page = NULL;
       if (next_list && !destroying)
         gtk_notebook_switch_page (notebook, GTK_NOTEBOOK_PAGE (next_list));
@@ -6543,9 +6546,17 @@ gtk_notebook_real_switch_page (GtkNotebook     *notebook,
   child_has_focus = priv->child_has_focus;
 
   if (priv->cur_page)
-    gtk_widget_set_child_visible (priv->cur_page->child, FALSE);
+    {
+      gtk_widget_set_child_visible (priv->cur_page->child, FALSE);
+      if (priv->cur_page->tab_label)
+	gtk_style_context_remove_class (gtk_widget_get_style_context (priv->cur_page->tab_label),
+					"active-page");
+    }
 
   priv->cur_page = page;
+  if (page->tab_label)
+    gtk_style_context_add_class (gtk_widget_get_style_context (page->tab_label),
+				 "active-page");
 
   if (!priv->focus_tab ||
       priv->focus_tab->data != (gpointer) priv->cur_page)
