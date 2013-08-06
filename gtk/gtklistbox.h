@@ -161,6 +161,9 @@ void       gtk_list_box_row_changed       (GtkListBoxRow *row);
 GDK_AVAILABLE_IN_3_10
 GType          gtk_list_box_get_type                     (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_3_10
+void           gtk_list_box_prepend                      (GtkListBox                    *list_box,
+                                                          GtkWidget                     *child);
+GDK_AVAILABLE_IN_3_10
 GtkListBoxRow* gtk_list_box_get_selected_row             (GtkListBox                    *list_box);
 GDK_AVAILABLE_IN_3_10
 GtkListBoxRow* gtk_list_box_get_row_at_index             (GtkListBox                    *list_box,

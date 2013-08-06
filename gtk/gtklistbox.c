@@ -1672,10 +1672,10 @@ gtk_list_box_row_visibility_changed (GtkListBox    *list_box,
 }
 
 static void
-gtk_list_box_real_add (GtkContainer *container,
-                       GtkWidget    *child)
+gtk_list_box_add_row (GtkListBox *list_box,
+                      GtkWidget  *child,
+                      gboolean    prepend)
 {
-  GtkListBox *list_box = GTK_LIST_BOX (container);
   GtkListBoxPrivate *priv = gtk_list_box_get_instance_private (list_box);
   GtkListBoxRow *row;
   GSequenceIter* iter = NULL;
@@ -1692,9 +1692,10 @@ gtk_list_box_real_add (GtkContainer *container,
   if (priv->sort_func != NULL)
     iter = g_sequence_insert_sorted (priv->children, row,
                                      (GCompareDataFunc)do_sort, list_box);
+  else if (prepend)
+    iter = g_sequence_prepend (priv->children, row);
   else
     iter = g_sequence_append (priv->children, row);
-
 
   ROW_PRIV (row)->iter = iter;
   gtk_widget_set_parent (GTK_WIDGET (row), GTK_WIDGET (list_box));
@@ -1709,6 +1710,13 @@ gtk_list_box_real_add (GtkContainer *container,
       gtk_list_box_update_header (list_box,
                                   gtk_list_box_get_next_visible (list_box, ROW_PRIV (row)->iter));
     }
+}
+
+static void
+gtk_list_box_real_add (GtkContainer *container,
+                       GtkWidget    *child)
+{
+  gtk_list_box_add_row (GTK_LIST_BOX (container), child, FALSE);
 }
 
 static void
@@ -2044,6 +2052,24 @@ gtk_list_box_real_size_allocate (GtkWidget     *widget,
 
       child_allocation.y += child_min;
     }
+}
+
+/**
+ * gtk_list_box_prepend:
+ * @list_box: a #GtkListBox.
+ * @child: the #GtkWidget to add
+ *
+ * Prepend a widget to the list. If a sort function is set, the widget will
+ * actually be inserted at the calculated position and this function has the
+ * same effect of gtk_container_add().
+ *
+ * Since: 3.10
+ */
+void
+gtk_list_box_prepend (GtkListBox *list_box,
+                      GtkWidget  *child)
+{
+  gtk_list_box_add_row (list_box, child, TRUE);
 }
 
 /**
