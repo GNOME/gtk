@@ -24,12 +24,16 @@
 
 #include "config.h"
 
+#define GDK_PIXBUF_ENABLE_BACKEND
+#include <gdk-pixbuf/gdk-pixbuf.h>
+
 #include "gdkcursor.h"
 #include "gdkcursorprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkintl.h"
 #include "gdkinternals.h"
 
+#include <math.h>
 
 /**
  * SECTION:cursors
@@ -389,7 +393,74 @@ gdk_cursor_get_display (GdkCursor *cursor)
 GdkPixbuf*  
 gdk_cursor_get_image (GdkCursor *cursor)
 {
+  int w, h;
+  cairo_surface_t *surface;
+  GdkPixbuf *pixbuf;
+  gchar buf[32];
+  double x_hot, y_hot;
+  double x_scale, y_scale;
+
   g_return_val_if_fail (GDK_IS_CURSOR (cursor), NULL);
 
-  return GDK_CURSOR_GET_CLASS (cursor)->get_image (cursor);
+  surface = gdk_cursor_get_surface (cursor, &x_hot, &y_hot);
+  if (surface == NULL)
+    return NULL;
+ 
+  w = cairo_image_surface_get_width (surface);
+  h = cairo_image_surface_get_height (surface);
+
+  x_scale = y_scale = 1;
+#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
+  cairo_surface_get_device_scale (surface, &x_scale, &y_scale);
+#endif
+
+  pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, w, h);
+  cairo_surface_destroy (surface);
+
+  if (x_scale != 1)
+    {
+      GdkPixbuf *old;
+
+      old = pixbuf;
+      pixbuf = gdk_pixbuf_scale_simple (old,
+					w / x_scale, h / y_scale,
+					GDK_INTERP_HYPER);
+      g_object_unref (old);
+    }
+
+  
+  g_snprintf (buf, 32, "%d", (int)x_hot);
+  gdk_pixbuf_set_option (pixbuf, "x_hot", buf);
+
+  g_snprintf (buf, 32, "%d", (int)y_hot);
+  gdk_pixbuf_set_option (pixbuf, "y_hot", buf);
+
+  return pixbuf;
+}
+
+/**
+ * gdk_cursor_get_surface:
+ * @cursor: a #GdkCursor
+ * @x_hot: Location to store the hotspot x position, or %NULL
+ * @y_hot: Location to store the hotspot y position, or %NULL
+ *
+ * Returns a #cairo_surface_t (image surface) with the image used to display the cursor.
+ *
+ * Note that depending on the capabilities of the windowing system and
+ * on the cursor, GDK may not be able to obtain the image data. In this
+ * case, %NULL is returned.
+ *
+ * Returns: (transfer full): a #cairo_surface_t representing @cursor, or %NULL
+ *
+ * Since: 3.10
+ */
+cairo_surface_t *
+gdk_cursor_get_surface (GdkCursor *cursor,
+			gdouble *x_hot,
+			gdouble *y_hot)
+{
+  g_return_val_if_fail (GDK_IS_CURSOR (cursor), NULL);
+
+  return GDK_CURSOR_GET_CLASS (cursor)->get_surface (cursor,
+						     x_hot, y_hot);
 }

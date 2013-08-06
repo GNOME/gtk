@@ -284,7 +284,9 @@ _gdk_quartz_display_get_cursor_for_name (GdkDisplay  *display,
 
 G_DEFINE_TYPE (GdkQuartzCursor, gdk_quartz_cursor, GDK_TYPE_CURSOR)
 
-static GdkPixbuf *gdk_quartz_cursor_get_image (GdkCursor *cursor);
+static cairo_surface_t *gdk_quartz_cursor_get_surface (GdkCursor *cursor,
+						       gdouble *x_hot,
+						       gdouble *y_hot);
 
 static void
 gdk_quartz_cursor_finalize (GObject *object)
@@ -304,7 +306,7 @@ gdk_quartz_cursor_class_init (GdkQuartzCursorClass *quartz_cursor_class)
 
   object_class->finalize = gdk_quartz_cursor_finalize;
 
-  cursor_class->get_image = gdk_quartz_cursor_get_image;
+  cursor_class->get_surface = gdk_quartz_cursor_get_surface;
 }
 
 static void
@@ -360,8 +362,10 @@ _gdk_quartz_cursor_get_ns_cursor (GdkCursor *cursor)
   return cursor_private->nscursor;
 }
 
-static GdkPixbuf *
-gdk_quartz_cursor_get_image (GdkCursor *cursor)
+static cairo_surface_t *
+gdk_quartz_cursor_get_surface (GdkCursor *cursor,
+			       gdouble *x_hot,
+			       gdouble *y_hot)
 {
   /* FIXME: Implement */
   return NULL;

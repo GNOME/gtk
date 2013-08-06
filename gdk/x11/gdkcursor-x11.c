@@ -169,7 +169,9 @@ _gdk_x11_cursor_display_finalize (GdkDisplay *display)
 
 G_DEFINE_TYPE (GdkX11Cursor, gdk_x11_cursor, GDK_TYPE_CURSOR)
 
-static GdkPixbuf* gdk_x11_cursor_get_image (GdkCursor *cursor);
+static cairo_surface_t *gdk_x11_cursor_get_surface (GdkCursor *cursor,
+						    gdouble   *x_hot,
+						    gdouble   *y_hot);
 
 static void
 gdk_x11_cursor_finalize (GObject *object)
@@ -194,7 +196,7 @@ gdk_x11_cursor_class_init (GdkX11CursorClass *xcursor_class)
 
   object_class->finalize = gdk_x11_cursor_finalize;
 
-  cursor_class->get_image = gdk_x11_cursor_get_image;
+  cursor_class->get_surface = gdk_x11_cursor_get_surface;
 }
 
 static void
@@ -316,22 +318,25 @@ gdk_x11_cursor_get_xcursor (GdkCursor *cursor)
 
 #if defined(HAVE_XCURSOR) && defined(HAVE_XFIXES) && XFIXES_MAJOR >= 2
 
-static GdkPixbuf*  
-gdk_x11_cursor_get_image (GdkCursor *cursor)
+static cairo_surface_t *  
+gdk_x11_cursor_get_surface (GdkCursor *cursor,
+			    gdouble   *x_hot,
+			    gdouble   *y_hot)
 {
+  GdkDisplay *display;
   Display *xdisplay;
   GdkX11Cursor *private;
   XcursorImages *images = NULL;
   XcursorImage *image;
   gint size;
-  gchar buf[32];
-  guchar *data, *p, tmp;
-  GdkPixbuf *pixbuf;
+  cairo_surface_t *surface;
+  gint scale;
   gchar *theme;
   
   private = GDK_X11_CURSOR (cursor);
-    
-  xdisplay = GDK_DISPLAY_XDISPLAY (gdk_cursor_get_display (cursor));
+
+  display = gdk_cursor_get_display (cursor);
+  xdisplay = GDK_DISPLAY_XDISPLAY (display);
 
   size = XcursorGetDefaultSize (xdisplay);
   theme = XcursorGetTheme (xdisplay);
@@ -349,31 +354,30 @@ gdk_x11_cursor_get_image (GdkCursor *cursor)
 
   image = images->images[0];
 
-  data = g_malloc (4 * image->width * image->height);
-  memcpy (data, image->pixels, 4 * image->width * image->height);
+  /* Assume the currently set cursor was defined for the screen
+     scale */
+  scale =
+    gdk_screen_get_monitor_scale_factor (gdk_display_get_default_screen (display), 0);
 
-  for (p = data; p < data + (4 * image->width * image->height); p += 4)
-    {
-      tmp = p[0];
-      p[0] = p[2];
-      p[2] = tmp;
-    }
+  surface = gdk_window_create_similar_image_surface (NULL,
+						     CAIRO_FORMAT_ARGB32,
+						     image->width,
+						     image->height,
+						     scale);
 
-  pixbuf = gdk_pixbuf_new_from_data (data, GDK_COLORSPACE_RGB, TRUE,
-                                     8, image->width, image->height,
-                                     4 * image->width,
-                                     (GdkPixbufDestroyNotify)g_free, NULL);
+  memcpy (cairo_image_surface_get_data (surface),
+	  image->pixels, 4 * image->width * image->height);
 
-  if (private->name)
-    gdk_pixbuf_set_option (pixbuf, "name", private->name);
-  g_snprintf (buf, 32, "%d", image->xhot);
-  gdk_pixbuf_set_option (pixbuf, "x_hot", buf);
-  g_snprintf (buf, 32, "%d", image->yhot);
-  gdk_pixbuf_set_option (pixbuf, "y_hot", buf);
+  cairo_surface_mark_dirty (surface);
+
+  if (x_hot)
+    *x_hot = (double)image->xhot / scale;
+  if (y_hot)
+    *y_hot = (double)image->yhot / scale;
 
   XcursorImagesDestroy (images);
 
-  return pixbuf;
+  return surface;
 }
 
 void
@@ -484,8 +488,10 @@ gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
 
 #else
 
-static GdkPixbuf*
-gdk_x11_cursor_get_image (GdkCursor *cursor)
+static cairo_surface_t *
+gdk_x11_cursor_get_surface (GdkCursor *cursor,
+			    gdouble *x_hot,
+			    gdouble *y_hot)
 {
   return NULL;
 }

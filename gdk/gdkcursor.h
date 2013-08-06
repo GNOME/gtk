@@ -239,6 +239,10 @@ GDK_DEPRECATED_IN_3_0_FOR(g_object_unref)
 void        gdk_cursor_unref             (GdkCursor       *cursor);
 GDK_AVAILABLE_IN_ALL
 GdkPixbuf*  gdk_cursor_get_image         (GdkCursor       *cursor);
+GDK_AVAILABLE_IN_3_10
+cairo_surface_t *gdk_cursor_get_surface  (GdkCursor       *cursor,
+					  gdouble         *x_hot,
+					  gdouble         *y_hot);
 GDK_AVAILABLE_IN_ALL
 GdkCursorType gdk_cursor_get_cursor_type (GdkCursor       *cursor);
 

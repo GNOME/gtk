@@ -174,8 +174,10 @@ gdk_wayland_cursor_finalize (GObject *object)
   G_OBJECT_CLASS (_gdk_wayland_cursor_parent_class)->finalize (object);
 }
 
-static GdkPixbuf*
-gdk_wayland_cursor_get_image (GdkCursor *cursor)
+static cairo_surface_t *
+gdk_wayland_cursor_get_surface (GdkCursor *cursor,
+				gdouble *x_hot,
+				gdouble *y_hot)
 {
   return NULL;
 }
@@ -258,7 +260,7 @@ _gdk_wayland_cursor_class_init (GdkWaylandCursorClass *wayland_cursor_class)
 
   object_class->finalize = gdk_wayland_cursor_finalize;
 
-  cursor_class->get_image = gdk_wayland_cursor_get_image;
+  cursor_class->get_surface = gdk_wayland_cursor_get_surface;
 }
 
 static void

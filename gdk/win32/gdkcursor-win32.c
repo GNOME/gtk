@@ -250,7 +250,7 @@ _gdk_win32_display_get_cursor_for_name (GdkDisplay  *display,
 }
 
 GdkPixbuf *
-gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon)
+gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon, gint *x_hot, gint *y_hot)
 {
   GdkPixbuf *pixbuf = NULL;
   ICONINFO ii;
@@ -407,11 +407,10 @@ gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon)
 	}
     }
 
-  g_snprintf (buf, sizeof (buf), "%ld", ii.xHotspot);
-  gdk_pixbuf_set_option (pixbuf, "x_hot", buf);
-
-  g_snprintf (buf, sizeof (buf), "%ld", ii.yHotspot);
-  gdk_pixbuf_set_option (pixbuf, "y_hot", buf);
+  if (x_hot)
+    *x_hot = ii.xHotspot;
+  if (y_hot)
+    *y_hot = ii.yHotspot;
 
   /* release temporary resources */
  out2:
@@ -425,12 +424,25 @@ gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon)
   return pixbuf;
 }
 
-static GdkPixbuf *
-_gdk_win32_cursor_get_image (GdkCursor *cursor)
+static cairo_surface_t *
+_gdk_win32_cursor_get_surface (GdkCursor *cursor,
+			       gdouble *x_hot,
+			       gdouble *y_hot)
 {
+  GdkPixbuf *pixbuf;
+  cairo_surface_t *surface
+
   g_return_val_if_fail (cursor != NULL, NULL);
 
-  return gdk_win32_icon_to_pixbuf_libgtk_only (((GdkWin32Cursor *) cursor)->hcursor);
+  pixbuf = gdk_win32_icon_to_pixbuf_libgtk_only (((GdkWin32Cursor *) cursor)->hcursor, x_hot, y_hot);
+
+  if (pixbuf == NULL)
+    return NULL;
+
+  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, NULL);
+  g_object_unref (pixbuf);
+
+  return surface;
 }
 
 GdkCursor *
@@ -830,5 +842,5 @@ gdk_win32_cursor_class_init(GdkWin32CursorClass *klass)
 
   object_class->finalize = _gdk_win32_cursor_finalize;
   
-  cursor_class->get_image = _gdk_win32_cursor_get_image;
+  cursor_class->get_surface = _gdk_win32_cursor_get_surface;
 }
