@@ -7,10 +7,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 3.3.11\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
-"%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-07-13 13:40+0000\n"
-"PO-Revision-Date: 2013-07-25 18:39+0800\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-08-06 19:55+0800\n"
+"PO-Revision-Date: 2013-08-04 14:38+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: <>\n"
 "Language: zh_TW\n"
@@ -21,48 +20,53 @@ msgstr ""
 "X-Generator: Poedit 1.5.3\n"
 "X-Project-Style: gnome\n"
 
-#: ../gdk/gdk.c:157
+#: ../gdk/broadway/gdkbroadway-server.c:141
+#, c-format
+msgid "broadway display type not supported '%s'"
+msgstr "寬路顯示類型不支援「%s」"
+
+#: ../gdk/gdk.c:158
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "解析選項 --gdk-debug 時發生錯誤"
 
-#: ../gdk/gdk.c:177
+#: ../gdk/gdk.c:178
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "解析選項 --gdk-no-debug 時發生錯誤"
 
 #. Description of --class=CLASS in --help output
-#: ../gdk/gdk.c:205
+#: ../gdk/gdk.c:206
 msgid "Program class as used by the window manager"
 msgstr "視窗總管所需的程式類別名稱"
 
 #. Placeholder in --class=CLASS in --help output
-#: ../gdk/gdk.c:206
+#: ../gdk/gdk.c:207
 msgid "CLASS"
 msgstr "類別"
 
 #. Description of --name=NAME in --help output
-#: ../gdk/gdk.c:208
+#: ../gdk/gdk.c:209
 msgid "Program name as used by the window manager"
 msgstr "視窗總管中使用的程式名稱"
 
 #. Placeholder in --name=NAME in --help output
-#: ../gdk/gdk.c:209
+#: ../gdk/gdk.c:210
 msgid "NAME"
 msgstr "名稱"
 
 #. Description of --display=DISPLAY in --help output
-#: ../gdk/gdk.c:211
+#: ../gdk/gdk.c:212
 msgid "X display to use"
 msgstr "使用的 X 畫面"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: ../gdk/gdk.c:212
+#: ../gdk/gdk.c:213
 msgid "DISPLAY"
 msgstr "畫面"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: ../gdk/gdk.c:215
+#: ../gdk/gdk.c:216
 msgid "GDK debugging flags to set"
 msgstr "準備設定的 GDK 偵錯旗標"
 
@@ -70,12 +74,12 @@ msgstr "準備設定的 GDK 偵錯旗標"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:216 ../gdk/gdk.c:219 ../gtk/gtkmain.c:453 ../gtk/gtkmain.c:456
+#: ../gdk/gdk.c:217 ../gdk/gdk.c:220 ../gtk/gtkmain.c:454 ../gtk/gtkmain.c:457
 msgid "FLAGS"
 msgstr "旗標"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:218
+#: ../gdk/gdk.c:219
 msgid "GDK debugging flags to unset"
 msgstr "準備去除的 GDK 偵錯旗標"
 
@@ -89,375 +93,348 @@ msgstr "準備去除的 GDK 偵錯旗標"
 #. * XF86AudioMute - Audio mute
 #. * Scroll_lock   - Scroll lock
 #. * KP_Space      - Space (keypad)
-#. * Page_Up       - Page up
 #.
-#: ../gdk/keyname-table.h:3952
+#: ../gdk/keyname-table.h:6843
 msgctxt "keyboard label"
 msgid "BackSpace"
 msgstr "BackSpace"
 
-#: ../gdk/keyname-table.h:3953
+#: ../gdk/keyname-table.h:6844
 msgctxt "keyboard label"
 msgid "Tab"
 msgstr "Tab"
 
-#: ../gdk/keyname-table.h:3954
+#: ../gdk/keyname-table.h:6845
 msgctxt "keyboard label"
 msgid "Return"
 msgstr "Return"
 
-#: ../gdk/keyname-table.h:3955
+#: ../gdk/keyname-table.h:6846
 msgctxt "keyboard label"
 msgid "Pause"
 msgstr "Pause"
 
-#: ../gdk/keyname-table.h:3956
+#: ../gdk/keyname-table.h:6847
 msgctxt "keyboard label"
 msgid "Scroll_Lock"
 msgstr "Scroll_Lock"
 
-#: ../gdk/keyname-table.h:3957
+#: ../gdk/keyname-table.h:6848
 msgctxt "keyboard label"
 msgid "Sys_Req"
 msgstr "Sys_Req"
 
-#: ../gdk/keyname-table.h:3958
+#: ../gdk/keyname-table.h:6849
 msgctxt "keyboard label"
 msgid "Escape"
 msgstr "Escape"
 
-#: ../gdk/keyname-table.h:3959
+#: ../gdk/keyname-table.h:6850
 msgctxt "keyboard label"
 msgid "Multi_key"
 msgstr "Multi_key"
 
-#: ../gdk/keyname-table.h:3960
+#: ../gdk/keyname-table.h:6851
 msgctxt "keyboard label"
 msgid "Home"
 msgstr "Home"
 
-#: ../gdk/keyname-table.h:3961
+#: ../gdk/keyname-table.h:6852
 msgctxt "keyboard label"
 msgid "Left"
 msgstr "Left"
 
-#: ../gdk/keyname-table.h:3962
+#: ../gdk/keyname-table.h:6853
 msgctxt "keyboard label"
 msgid "Up"
 msgstr "Up"
 
-#: ../gdk/keyname-table.h:3963
+#: ../gdk/keyname-table.h:6854
 msgctxt "keyboard label"
 msgid "Right"
 msgstr "Right"
 
-#: ../gdk/keyname-table.h:3964
+#: ../gdk/keyname-table.h:6855
 msgctxt "keyboard label"
 msgid "Down"
 msgstr "Down"
 
-#: ../gdk/keyname-table.h:3965
+#: ../gdk/keyname-table.h:6856
 msgctxt "keyboard label"
 msgid "Page_Up"
 msgstr "Page_Up"
 
-#: ../gdk/keyname-table.h:3966
+#: ../gdk/keyname-table.h:6857
 msgctxt "keyboard label"
 msgid "Page_Down"
 msgstr "Page_Down"
 
-#: ../gdk/keyname-table.h:3967
+#: ../gdk/keyname-table.h:6858
 msgctxt "keyboard label"
 msgid "End"
 msgstr "End"
 
-#: ../gdk/keyname-table.h:3968
+#: ../gdk/keyname-table.h:6859
 msgctxt "keyboard label"
 msgid "Begin"
 msgstr "Begin"
 
-#: ../gdk/keyname-table.h:3969
+#: ../gdk/keyname-table.h:6860
 msgctxt "keyboard label"
 msgid "Print"
 msgstr "Print"
 
-#: ../gdk/keyname-table.h:3970
+#: ../gdk/keyname-table.h:6861
 msgctxt "keyboard label"
 msgid "Insert"
 msgstr "Insert"
 
-#: ../gdk/keyname-table.h:3971
+#: ../gdk/keyname-table.h:6862
 msgctxt "keyboard label"
 msgid "Num_Lock"
 msgstr "Num_Lock"
 
 #. Translators: KP_ means 'key pad' here
-#: ../gdk/keyname-table.h:3973
+#: ../gdk/keyname-table.h:6864
 msgctxt "keyboard label"
 msgid "KP_Space"
 msgstr "KP_Space"
 
-#: ../gdk/keyname-table.h:3974
+#: ../gdk/keyname-table.h:6865
 msgctxt "keyboard label"
 msgid "KP_Tab"
 msgstr "KP_Tab"
 
-#: ../gdk/keyname-table.h:3975
+#: ../gdk/keyname-table.h:6866
 msgctxt "keyboard label"
 msgid "KP_Enter"
 msgstr "KP_Enter"
 
-#: ../gdk/keyname-table.h:3976
+#: ../gdk/keyname-table.h:6867
 msgctxt "keyboard label"
 msgid "KP_Home"
 msgstr "KP_Home"
 
-#: ../gdk/keyname-table.h:3977
+#: ../gdk/keyname-table.h:6868
 msgctxt "keyboard label"
 msgid "KP_Left"
 msgstr "KP_Left"
 
-#: ../gdk/keyname-table.h:3978
+#: ../gdk/keyname-table.h:6869
 msgctxt "keyboard label"
 msgid "KP_Up"
 msgstr "KP_Up"
 
-#: ../gdk/keyname-table.h:3979
+#: ../gdk/keyname-table.h:6870
 msgctxt "keyboard label"
 msgid "KP_Right"
 msgstr "KP_Right"
 
-#: ../gdk/keyname-table.h:3980
+#: ../gdk/keyname-table.h:6871
 msgctxt "keyboard label"
 msgid "KP_Down"
 msgstr "KP_Down"
 
-#: ../gdk/keyname-table.h:3981
+#: ../gdk/keyname-table.h:6872
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
 msgstr "KP_Page_Up"
 
-#: ../gdk/keyname-table.h:3982
+#: ../gdk/keyname-table.h:6873
 msgctxt "keyboard label"
 msgid "KP_Prior"
 msgstr "KP_Prior"
 
-#: ../gdk/keyname-table.h:3983
+#: ../gdk/keyname-table.h:6874
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
 msgstr "KP_Page_Down"
 
-#: ../gdk/keyname-table.h:3984
+#: ../gdk/keyname-table.h:6875
 msgctxt "keyboard label"
 msgid "KP_Next"
 msgstr "KP_Next"
 
-#: ../gdk/keyname-table.h:3985
+#: ../gdk/keyname-table.h:6876
 msgctxt "keyboard label"
 msgid "KP_End"
 msgstr "KP_End"
 
-#: ../gdk/keyname-table.h:3986
+#: ../gdk/keyname-table.h:6877
 msgctxt "keyboard label"
 msgid "KP_Begin"
 msgstr "KP_Begin"
 
-#: ../gdk/keyname-table.h:3987
+#: ../gdk/keyname-table.h:6878
 msgctxt "keyboard label"
 msgid "KP_Insert"
 msgstr "KP_Insert"
 
-#: ../gdk/keyname-table.h:3988
+#: ../gdk/keyname-table.h:6879
 msgctxt "keyboard label"
 msgid "KP_Delete"
 msgstr "KP_Delete"
 
-#: ../gdk/keyname-table.h:3989
+#: ../gdk/keyname-table.h:6880
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Delete"
 
-#. Translators: 'Mon' means Monitor here, and the XF86 prefix should be removed
-#: ../gdk/keyname-table.h:3991
+#: ../gdk/keyname-table.h:6881
+#, fuzzy
 #| msgctxt "keyboard label"
-#| msgid "MonBrightnessUp"
+#| msgid "XF86MonBrightnessUp"
 msgctxt "keyboard label"
-msgid "XF86MonBrightnessUp"
+msgid "MonBrightnessUp"
 msgstr "螢幕亮度增加"
 
-#: ../gdk/keyname-table.h:3992
+#: ../gdk/keyname-table.h:6882
+#, fuzzy
 #| msgctxt "keyboard label"
-#| msgid "MonBrightnessDown"
+#| msgid "XF86MonBrightnessDown"
 msgctxt "keyboard label"
-msgid "XF86MonBrightnessDown"
+msgid "MonBrightnessDown"
 msgstr "螢幕亮度降低"
 
-#: ../gdk/keyname-table.h:3993
+#: ../gdk/keyname-table.h:6883
+#, fuzzy
 #| msgctxt "keyboard label"
-#| msgid "AudioMute"
+#| msgid "XF86MonBrightnessUp"
 msgctxt "keyboard label"
-msgid "XF86AudioMute"
+msgid "KbdBrightnessUp"
+msgstr "螢幕亮度增加"
+
+#: ../gdk/keyname-table.h:6884
+#, fuzzy
+#| msgctxt "keyboard label"
+#| msgid "XF86MonBrightnessDown"
+msgctxt "keyboard label"
+msgid "KbdBrightnessDown"
+msgstr "螢幕亮度降低"
+
+#: ../gdk/keyname-table.h:6885
+msgctxt "keyboard label"
+msgid "AudioMute"
 msgstr "音量靜音"
 
-#: ../gdk/keyname-table.h:3994
-#| msgctxt "keyboard label"
-#| msgid "AudioLowerVolume"
+#: ../gdk/keyname-table.h:6886
 msgctxt "keyboard label"
-msgid "XF86AudioLowerVolume"
+msgid "AudioMicMute"
+msgstr "音量麥克風靜音"
+
+#: ../gdk/keyname-table.h:6887
+msgctxt "keyboard label"
+msgid "AudioLowerVolume"
 msgstr "音量降低"
 
-#: ../gdk/keyname-table.h:3995
-#| msgctxt "keyboard label"
-#| msgid "AudioRaiseVolume"
+#: ../gdk/keyname-table.h:6888
 msgctxt "keyboard label"
-msgid "XF86AudioRaiseVolume"
+msgid "AudioRaiseVolume"
 msgstr "音量提高"
 
-#: ../gdk/keyname-table.h:3996
-#| msgctxt "keyboard label"
-#| msgid "AudioPlay"
+#: ../gdk/keyname-table.h:6889
 msgctxt "keyboard label"
-msgid "XF86AudioPlay"
+msgid "AudioPlay"
 msgstr "音效播放"
 
-#: ../gdk/keyname-table.h:3997
-#| msgctxt "keyboard label"
-#| msgid "AudioStop"
+#: ../gdk/keyname-table.h:6890
 msgctxt "keyboard label"
-msgid "XF86AudioStop"
+msgid "AudioStop"
 msgstr "音效停止"
 
-#: ../gdk/keyname-table.h:3998
-#| msgctxt "keyboard label"
-#| msgid "AudioNext"
+#: ../gdk/keyname-table.h:6891
 msgctxt "keyboard label"
-msgid "XF86AudioNext"
+msgid "AudioNext"
 msgstr "音效下一首"
 
-#: ../gdk/keyname-table.h:3999
-#| msgctxt "keyboard label"
-#| msgid "AudioPrev"
+#: ../gdk/keyname-table.h:6892
 msgctxt "keyboard label"
-msgid "XF86AudioPrev"
+msgid "AudioPrev"
 msgstr "音效上一首"
 
-#: ../gdk/keyname-table.h:4000
-#| msgctxt "keyboard label"
-#| msgid "AudioRecord"
+#: ../gdk/keyname-table.h:6893
 msgctxt "keyboard label"
-msgid "XF86AudioRecord"
+msgid "AudioRecord"
 msgstr "音效錄製"
 
-#: ../gdk/keyname-table.h:4001
-#| msgctxt "keyboard label"
-#| msgid "AudioPause"
+#: ../gdk/keyname-table.h:6894
 msgctxt "keyboard label"
-msgid "XF86AudioPause"
+msgid "AudioPause"
 msgstr "音效暫停"
 
-#: ../gdk/keyname-table.h:4002
-#| msgctxt "keyboard label"
-#| msgid "AudioRewind"
+#: ../gdk/keyname-table.h:6895
 msgctxt "keyboard label"
-msgid "XF86AudioRewind"
+msgid "AudioRewind"
 msgstr "音效倒轉"
 
-#: ../gdk/keyname-table.h:4003
-#| msgctxt "keyboard label"
-#| msgid "AudioMedia"
+#: ../gdk/keyname-table.h:6896
 msgctxt "keyboard label"
-msgid "XF86AudioMedia"
+msgid "AudioMedia"
 msgstr "音效媒體"
 
-#: ../gdk/keyname-table.h:4004
-#| msgctxt "keyboard label"
-#| msgid "ScreenSaver"
+#: ../gdk/keyname-table.h:6897
 msgctxt "keyboard label"
-msgid "XF86ScreenSaver"
+msgid "ScreenSaver"
 msgstr "螢幕保護程式"
 
-#: ../gdk/keyname-table.h:4005
-#| msgctxt "keyboard label"
-#| msgid "Battery"
+#: ../gdk/keyname-table.h:6898
 msgctxt "keyboard label"
-msgid "XF86Battery"
+msgid "Battery"
 msgstr "電池"
 
-#: ../gdk/keyname-table.h:4006
-#| msgctxt "keyboard label"
-#| msgid "Launch1"
+#: ../gdk/keyname-table.h:6899
 msgctxt "keyboard label"
-msgid "XF86Launch1"
+msgid "Launch1"
 msgstr "執行1"
 
-#: ../gdk/keyname-table.h:4007
-#| msgctxt "keyboard label"
-#| msgid "Forward"
+#: ../gdk/keyname-table.h:6900
 msgctxt "keyboard label"
-msgid "XF86Forward"
+msgid "Forward"
 msgstr "向前"
 
-#: ../gdk/keyname-table.h:4008
-#| msgctxt "keyboard label"
-#| msgid "Back"
+#: ../gdk/keyname-table.h:6901
 msgctxt "keyboard label"
-msgid "XF86Back"
+msgid "Back"
 msgstr "向後"
 
-#: ../gdk/keyname-table.h:4009
-#| msgctxt "keyboard label"
-#| msgid "Sleep"
+#: ../gdk/keyname-table.h:6902
 msgctxt "keyboard label"
-msgid "XF86Sleep"
+msgid "Sleep"
 msgstr "睡眠"
 
-#: ../gdk/keyname-table.h:4010
-#| msgctxt "keyboard label"
-#| msgid "Hibernate"
+#: ../gdk/keyname-table.h:6903
 msgctxt "keyboard label"
-msgid "XF86Hibernate"
+msgid "Hibernate"
 msgstr "休眠"
 
-#: ../gdk/keyname-table.h:4011
-#| msgctxt "keyboard label"
-#| msgid "WLAN"
+#: ../gdk/keyname-table.h:6904
 msgctxt "keyboard label"
-msgid "XF86WLAN"
+msgid "WLAN"
 msgstr "無線區域網路"
 
-#: ../gdk/keyname-table.h:4012
-#| msgctxt "keyboard label"
-#| msgid "WebCam"
+#: ../gdk/keyname-table.h:6905
 msgctxt "keyboard label"
-msgid "XF86WebCam"
+msgid "WebCam"
 msgstr "網路攝影機"
 
-#: ../gdk/keyname-table.h:4013
-#| msgctxt "keyboard label"
-#| msgid "Display"
+#: ../gdk/keyname-table.h:6906
 msgctxt "keyboard label"
-msgid "XF86Display"
+msgid "Display"
 msgstr "顯示"
 
-#: ../gdk/keyname-table.h:4014
-#| msgctxt "keyboard label"
-#| msgid "TouchpadToggle"
+#: ../gdk/keyname-table.h:6907
 msgctxt "keyboard label"
-msgid "XF86TouchpadToggle"
-msgstr "觸控板切換"
+msgid "TouchpadToggle"
+msgstr "觸控板"
 
-#: ../gdk/keyname-table.h:4015
-#| msgctxt "keyboard label"
-#| msgid "WakeUp"
+#: ../gdk/keyname-table.h:6908
 msgctxt "keyboard label"
-msgid "XF86WakeUp"
+msgid "WakeUp"
 msgstr "喚醒"
 
-#: ../gdk/keyname-table.h:4016
-#| msgctxt "keyboard label"
-#| msgid "Suspend"
+#: ../gdk/keyname-table.h:6909
 msgctxt "keyboard label"
-msgid "XF86Suspend"
+msgid "Suspend"
 msgstr "暫停"
 
 #. Description of --sync in --help output
@@ -518,7 +495,7 @@ msgid "Toggle"
 msgstr "切換"
 
 #: ../gtk/a11y/gtkbuttonaccessible.c:341
-#: ../gtk/a11y/gtkmenuitemaccessible.c:436
+#: ../gtk/a11y/gtkmenuitemaccessible.c:433
 msgctxt "Action name"
 msgid "Click"
 msgstr "點擊"
@@ -534,15 +511,13 @@ msgid "Expand or contract"
 msgstr "展開或收摺"
 
 #: ../gtk/a11y/gtkcellaccessible.c:260
-#| msgctxt "Stock label"
-#| msgid "_Edit"
 msgctxt "Action name"
 msgid "Edit"
 msgstr "編輯"
 
 #: ../gtk/a11y/gtkcellaccessible.c:262
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:72
-#: ../gtk/a11y/gtkentryaccessible.c:1557
+#: ../gtk/a11y/gtkentryaccessible.c:1554
 #: ../gtk/a11y/gtkexpanderaccessible.c:281
 msgctxt "Action name"
 msgid "Activate"
@@ -564,47 +539,41 @@ msgid "Activates the cell"
 msgstr "使用儲存格"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:71
-#| msgid "_Select"
 msgctxt "Action name"
 msgid "Select"
 msgstr "選擇"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:73
-#| msgid "_Customize"
 msgctxt "Action name"
 msgid "Customize"
 msgstr "自訂"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:84
-#| msgid "Select a Color"
 msgctxt "Action description"
 msgid "Selects the color"
 msgstr "選擇顏色"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:85
-#| msgid "Brightness of the color."
 msgctxt "Action description"
 msgid "Activates the color"
 msgstr "使用顏色"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:86
-#| msgid "Custom color %d: %s"
 msgctxt "Action description"
 msgid "Customizes the color"
 msgstr "自訂顏色"
 
-#: ../gtk/a11y/gtkcomboboxaccessible.c:313
+#: ../gtk/a11y/gtkcomboboxaccessible.c:307
 msgctxt "Action name"
 msgid "Press"
 msgstr "按下"
 
-#: ../gtk/a11y/gtkcomboboxaccessible.c:322
-#| msgid "Decreases the volume"
+#: ../gtk/a11y/gtkcomboboxaccessible.c:316
 msgctxt "Action description"
 msgid "Presses the combobox"
 msgstr "按下組合方塊"
 
-#: ../gtk/a11y/gtkentryaccessible.c:1566
+#: ../gtk/a11y/gtkentryaccessible.c:1563
 msgctxt "Action description"
 msgid "Activates the entry"
 msgstr "使用項目"
@@ -614,7 +583,7 @@ msgctxt "Action description"
 msgid "Activates the expander"
 msgstr "使用擴展器"
 
-#: ../gtk/a11y/gtkmenuitemaccessible.c:445
+#: ../gtk/a11y/gtkmenuitemaccessible.c:442
 msgctxt "Action description"
 msgid "Clicks the menuitem"
 msgstr "點擊選單項目"
@@ -662,7 +631,7 @@ msgctxt "Action description"
 msgid "Toggles the switch"
 msgstr "切換開關"
 
-#: ../gtk/deprecated/gtkcolorsel.c:425
+#: ../gtk/deprecated/gtkcolorsel.c:423
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -670,88 +639,88 @@ msgstr ""
 "在色環外部選擇想要的顏色。\n"
 "在內部的三角形中選取該顏色的暗度或亮度。"
 
-#: ../gtk/deprecated/gtkcolorsel.c:451
+#: ../gtk/deprecated/gtkcolorsel.c:449
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr "按下滴管，然後按畫面任何一處來選擇該顏色。"
 
-#: ../gtk/deprecated/gtkcolorsel.c:461
+#: ../gtk/deprecated/gtkcolorsel.c:459
 msgid "_Hue:"
 msgstr "色相(_H):"
 
-#: ../gtk/deprecated/gtkcolorsel.c:462
+#: ../gtk/deprecated/gtkcolorsel.c:460
 msgid "Position on the color wheel."
 msgstr "色相環的位置。"
 
-#: ../gtk/deprecated/gtkcolorsel.c:464
+#: ../gtk/deprecated/gtkcolorsel.c:462
 msgid "S_aturation:"
 msgstr "彩度(_S):"
 
-#: ../gtk/deprecated/gtkcolorsel.c:465
+#: ../gtk/deprecated/gtkcolorsel.c:463
 msgid "Intensity of the color."
 msgstr "顏色的強度。"
 
-#: ../gtk/deprecated/gtkcolorsel.c:466
+#: ../gtk/deprecated/gtkcolorsel.c:464
 msgid "_Value:"
 msgstr "明度(_V):"
 
-#: ../gtk/deprecated/gtkcolorsel.c:467
+#: ../gtk/deprecated/gtkcolorsel.c:465
 msgid "Brightness of the color."
 msgstr "顏色的亮度。"
 
-#: ../gtk/deprecated/gtkcolorsel.c:468
+#: ../gtk/deprecated/gtkcolorsel.c:466
 msgid "_Red:"
 msgstr "紅(_R):"
 
-#: ../gtk/deprecated/gtkcolorsel.c:469
+#: ../gtk/deprecated/gtkcolorsel.c:467
 msgid "Amount of red light in the color."
 msgstr "顏色中的紅色份量。"
 
-#: ../gtk/deprecated/gtkcolorsel.c:470
+#: ../gtk/deprecated/gtkcolorsel.c:468
 msgid "_Green:"
 msgstr "綠(_G):"
 
-#: ../gtk/deprecated/gtkcolorsel.c:471
+#: ../gtk/deprecated/gtkcolorsel.c:469
 msgid "Amount of green light in the color."
 msgstr "顏色中的綠色份量。"
 
-#: ../gtk/deprecated/gtkcolorsel.c:472
+#: ../gtk/deprecated/gtkcolorsel.c:470
 msgid "_Blue:"
 msgstr "藍(_B):"
 
-#: ../gtk/deprecated/gtkcolorsel.c:473
+#: ../gtk/deprecated/gtkcolorsel.c:471
 msgid "Amount of blue light in the color."
 msgstr "顏色中的藍色份量。"
 
-#: ../gtk/deprecated/gtkcolorsel.c:476
+#: ../gtk/deprecated/gtkcolorsel.c:474
 msgid "Op_acity:"
 msgstr "透明度(_A)："
 
-#: ../gtk/deprecated/gtkcolorsel.c:484 ../gtk/deprecated/gtkcolorsel.c:494
+#: ../gtk/deprecated/gtkcolorsel.c:482 ../gtk/deprecated/gtkcolorsel.c:492
 msgid "Transparency of the color."
 msgstr "目前選擇顏色的透明度。"
 
-#: ../gtk/deprecated/gtkcolorsel.c:501
+#: ../gtk/deprecated/gtkcolorsel.c:499
 msgid "Color _name:"
 msgstr "顏色名稱(_N)："
 
-#: ../gtk/deprecated/gtkcolorsel.c:516
+#: ../gtk/deprecated/gtkcolorsel.c:514
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
 "您可在本欄輸入 HTML 方式的 16 進位色彩值，或是像「orange」的普通顏色名稱。"
 
-#: ../gtk/deprecated/gtkcolorsel.c:548
+#: ../gtk/deprecated/gtkcolorsel.c:546
 msgid "_Palette:"
 msgstr "調色盤(_P)："
 
-#: ../gtk/deprecated/gtkcolorsel.c:578
+#: ../gtk/deprecated/gtkcolorsel.c:576
 msgid "Color Wheel"
 msgstr "色彩圓盤"
 
-#: ../gtk/deprecated/gtkcolorsel.c:1072
+#: ../gtk/deprecated/gtkcolorsel.c:1070
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -760,27 +729,27 @@ msgstr ""
 "之前選擇的顏色，用來和目前選擇的顏色作比較。您可以將本顏色拖曳至色盤項目；\n"
 "或以它作為目前選擇的顏色，方法是將它拖曳並覆蓋目前選擇的顏色。"
 
-#: ../gtk/deprecated/gtkcolorsel.c:1078
+#: ../gtk/deprecated/gtkcolorsel.c:1076
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr "您所選擇的顏色。您可以將此顏色拖曳到色盤並將之儲存供日後使用。"
 
-#: ../gtk/deprecated/gtkcolorsel.c:1084
+#: ../gtk/deprecated/gtkcolorsel.c:1082
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now."
 msgstr "前一次選取的顏色，可用來和您現在選取的顏色做比較。"
 
-#: ../gtk/deprecated/gtkcolorsel.c:1088
+#: ../gtk/deprecated/gtkcolorsel.c:1086
 msgid "The color you've chosen."
 msgstr "您所選擇的顏色。"
 
-#: ../gtk/deprecated/gtkcolorsel.c:1491
+#: ../gtk/deprecated/gtkcolorsel.c:1489
 msgid "_Save color here"
 msgstr "在這裡儲存顏色(_S)"
 
-#: ../gtk/deprecated/gtkcolorsel.c:1695
+#: ../gtk/deprecated/gtkcolorsel.c:1693
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -788,100 +757,633 @@ msgstr ""
 "按下本色盤項目會以作為目前選擇的顏色。如要更改本項目，可將顏色拖曳到此處或\n"
 "按滑鼠右鍵並選擇「儲存此顏色」。"
 
-#. We emit the response for the Select button manually,
-#. * since we want to save the color first
-#.
-#: ../gtk/deprecated/gtkcolorseldialog.c:201 ../gtk/gtkappchooserdialog.c:509
-#: ../gtk/gtkcolorchooserdialog.c:149 ../gtk/gtkfontchooserdialog.c:174
-#: ../gtk/gtkprinteroptionwidget.c:552
+#: ../gtk/deprecated/gtkcolorseldialog.c:192
+#: ../gtk/deprecated/gtkfontsel.c:1690 ../gtk/gtkfilechooserbutton.c:805
+#: ../gtk/gtkfilechooserdefault.c:5485 ../gtk/gtkmessagedialog.c:891
+#: ../gtk/gtkmessagedialog.c:910 ../gtk/gtkmountoperation.c:529
+#: ../gtk/gtkprintbackend.c:747 ../gtk/gtkprinteroptionwidget.c:545
+#: ../gtk/gtkprintunixdialog.c:684 ../gtk/gtkappchooserdialog.ui.h:1
+#: ../gtk/gtkassistant.ui.h:5 ../gtk/gtkcolorchooserdialog.ui.h:2
+#: ../gtk/gtkfontchooserdialog.ui.h:2 ../gtk/gtkpagesetupunixdialog.ui.h:1
+#: ../gtk/gtkprintunixdialog.ui.h:2
+msgid "_Cancel"
+msgstr "取消(_C)"
+
+#: ../gtk/deprecated/gtkcolorseldialog.c:196
+#: ../gtk/gtkprinteroptionwidget.c:546 ../gtk/gtkappchooserdialog.ui.h:2
+#: ../gtk/gtkcolorchooserdialog.ui.h:3 ../gtk/gtkfontchooserdialog.ui.h:3
 msgid "_Select"
 msgstr "選擇(_S)"
 
-#: ../gtk/deprecated/gtkcolorseldialog.c:219
+#: ../gtk/deprecated/gtkcolorseldialog.c:202
+msgid "_Help"
+msgstr "求助(_H)"
+
+#: ../gtk/deprecated/gtkcolorseldialog.c:214
 msgid "Color Selection"
 msgstr "顏色選擇"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
-#: ../gtk/deprecated/gtkfontsel.c:124
+#: ../gtk/deprecated/gtkfontsel.c:121
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcd ABCD 「中文測試」"
 
-#: ../gtk/deprecated/gtkfontsel.c:393
+#: ../gtk/deprecated/gtkfontsel.c:386
 msgid "_Family:"
 msgstr "字集(_F)："
 
-#: ../gtk/deprecated/gtkfontsel.c:400
+#: ../gtk/deprecated/gtkfontsel.c:393
 msgid "_Style:"
 msgstr "樣式(_S):"
 
-#: ../gtk/deprecated/gtkfontsel.c:407
+#: ../gtk/deprecated/gtkfontsel.c:400
 msgid "Si_ze:"
 msgstr "大小(_Z)："
 
 #. create the text entry widget
-#: ../gtk/deprecated/gtkfontsel.c:584
+#: ../gtk/deprecated/gtkfontsel.c:577
 msgid "_Preview:"
 msgstr "預覽(_P)："
 
-#: ../gtk/deprecated/gtkfontsel.c:1720 ../gtk/gtkfontchooserdialog.c:183
+#: ../gtk/deprecated/gtkfontsel.c:1694 ../gtk/gtkassistant.ui.h:1
+#: ../gtk/gtkpagesetupunixdialog.ui.h:2
+msgid "_Apply"
+msgstr "套用(_A)"
+
+#: ../gtk/deprecated/gtkfontsel.c:1699 ../gtk/gtkmessagedialog.c:879
+#: ../gtk/gtkmessagedialog.c:913 ../gtk/gtkprintbackend.c:748
+msgid "_OK"
+msgstr "確定(_O)"
+
+#: ../gtk/deprecated/gtkfontsel.c:1710 ../gtk/gtkfontchooserdialog.ui.h:1
 msgid "Font Selection"
 msgstr "字型選擇"
+
+#. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
+#: ../gtk/deprecated/gtkstock.c:334
+msgctxt "Stock label"
+msgid "Information"
+msgstr "Information"
+
+#: ../gtk/deprecated/gtkstock.c:335
+msgctxt "Stock label"
+msgid "Warning"
+msgstr "警告"
+
+#: ../gtk/deprecated/gtkstock.c:336
+msgctxt "Stock label"
+msgid "Error"
+msgstr "錯誤"
+
+#: ../gtk/deprecated/gtkstock.c:337
+msgctxt "Stock label"
+msgid "Question"
+msgstr "問題"
+
+#. FIXME these need accelerators when appropriate, and
+#. * need the mnemonics to be rationalized
+#.
+#: ../gtk/deprecated/gtkstock.c:342
+msgctxt "Stock label"
+msgid "_About"
+msgstr "關於(_A)"
+
+#: ../gtk/deprecated/gtkstock.c:343
+msgctxt "Stock label"
+msgid "_Add"
+msgstr "加入(_A)"
+
+#: ../gtk/deprecated/gtkstock.c:344
+msgctxt "Stock label"
+msgid "_Apply"
+msgstr "套用(_A)"
+
+#: ../gtk/deprecated/gtkstock.c:345
+msgctxt "Stock label"
+msgid "_Bold"
+msgstr "粗體(_B)"
+
+#: ../gtk/deprecated/gtkstock.c:346
+msgctxt "Stock label"
+msgid "_Cancel"
+msgstr "取消(_C)"
+
+#: ../gtk/deprecated/gtkstock.c:347
+msgctxt "Stock label"
+msgid "_CD-ROM"
+msgstr "_CD-ROM"
+
+#: ../gtk/deprecated/gtkstock.c:348
+msgctxt "Stock label"
+msgid "_Clear"
+msgstr "清除(_C)"
+
+#: ../gtk/deprecated/gtkstock.c:349
+msgctxt "Stock label"
+msgid "_Close"
+msgstr "關閉(_C)"
+
+#: ../gtk/deprecated/gtkstock.c:350
+msgctxt "Stock label"
+msgid "C_onnect"
+msgstr "連線(_O)"
+
+#: ../gtk/deprecated/gtkstock.c:351
+msgctxt "Stock label"
+msgid "_Convert"
+msgstr "轉換(_C)"
+
+#: ../gtk/deprecated/gtkstock.c:352
+msgctxt "Stock label"
+msgid "_Copy"
+msgstr "複製(_C)"
+
+#: ../gtk/deprecated/gtkstock.c:353
+msgctxt "Stock label"
+msgid "Cu_t"
+msgstr "剪下(_T)"
+
+#: ../gtk/deprecated/gtkstock.c:354
+msgctxt "Stock label"
+msgid "_Delete"
+msgstr "刪除(_D)"
+
+#: ../gtk/deprecated/gtkstock.c:355
+msgctxt "Stock label"
+msgid "_Discard"
+msgstr "放棄(_D)"
+
+#: ../gtk/deprecated/gtkstock.c:356
+msgctxt "Stock label"
+msgid "_Disconnect"
+msgstr "斷線(_D)"
+
+#: ../gtk/deprecated/gtkstock.c:357
+msgctxt "Stock label"
+msgid "_Execute"
+msgstr "執行(_E)"
+
+#: ../gtk/deprecated/gtkstock.c:358
+msgctxt "Stock label"
+msgid "_Edit"
+msgstr "編輯(_E)"
+
+#: ../gtk/deprecated/gtkstock.c:359
+msgctxt "Stock label"
+msgid "_File"
+msgstr "檔案(_F)"
+
+#: ../gtk/deprecated/gtkstock.c:360
+msgctxt "Stock label"
+msgid "_Find"
+msgstr "尋找(_F)"
+
+#: ../gtk/deprecated/gtkstock.c:361
+msgctxt "Stock label"
+msgid "Find and _Replace"
+msgstr "尋找與取代(_R)"
+
+#: ../gtk/deprecated/gtkstock.c:362
+msgctxt "Stock label"
+msgid "_Floppy"
+msgstr "軟碟(_F)"
+
+# (Abel) 「全螢幕模式」佔 gtktoolbar 按鈕的位置太闊了
+#: ../gtk/deprecated/gtkstock.c:363
+msgctxt "Stock label"
+msgid "_Fullscreen"
+msgstr "全螢幕(_F)"
+
+# (Abel) 「離開全螢幕模式」佔 gtktoolbar 按鈕的位置太闊了
+#: ../gtk/deprecated/gtkstock.c:364
+msgctxt "Stock label"
+msgid "_Leave Fullscreen"
+msgstr "離開全螢幕(_L)"
+
+#. This is a navigation label as in "go to the bottom of the page"
+#: ../gtk/deprecated/gtkstock.c:366
+msgctxt "Stock label, navigation"
+msgid "_Bottom"
+msgstr "頁尾(_B)"
+
+#. This is a navigation label as in "go to the first page"
+#: ../gtk/deprecated/gtkstock.c:368
+msgctxt "Stock label, navigation"
+msgid "_First"
+msgstr "第一頁(_F)"
+
+#. This is a navigation label as in "go to the last page"
+#: ../gtk/deprecated/gtkstock.c:370
+msgctxt "Stock label, navigation"
+msgid "_Last"
+msgstr "最後一頁(_L)"
+
+#. This is a navigation label as in "go to the top of the page"
+#: ../gtk/deprecated/gtkstock.c:372
+msgctxt "Stock label, navigation"
+msgid "_Top"
+msgstr "頁首(_T)"
+
+#. This is a navigation label as in "go back"
+#: ../gtk/deprecated/gtkstock.c:374
+msgctxt "Stock label, navigation"
+msgid "_Back"
+msgstr "返回(_B)"
+
+#. This is a navigation label as in "go down"
+#: ../gtk/deprecated/gtkstock.c:376
+msgctxt "Stock label, navigation"
+msgid "_Down"
+msgstr "向下(_D)"
+
+#. This is a navigation label as in "go forward"
+#: ../gtk/deprecated/gtkstock.c:378
+msgctxt "Stock label, navigation"
+msgid "_Forward"
+msgstr "前進(_F)"
+
+#. This is a navigation label as in "go up"
+#: ../gtk/deprecated/gtkstock.c:380
+msgctxt "Stock label, navigation"
+msgid "_Up"
+msgstr "向上(_U)"
+
+#: ../gtk/deprecated/gtkstock.c:381
+msgctxt "Stock label"
+msgid "_Hard Disk"
+msgstr "硬碟(_H)"
+
+#: ../gtk/deprecated/gtkstock.c:382
+msgctxt "Stock label"
+msgid "_Help"
+msgstr "求助(_H)"
+
+#: ../gtk/deprecated/gtkstock.c:383
+msgctxt "Stock label"
+msgid "_Home"
+msgstr "首頁(_H)"
+
+#: ../gtk/deprecated/gtkstock.c:384
+msgctxt "Stock label"
+msgid "Increase Indent"
+msgstr "增加縮排"
+
+#: ../gtk/deprecated/gtkstock.c:385
+msgctxt "Stock label"
+msgid "Decrease Indent"
+msgstr "減少縮排"
+
+#: ../gtk/deprecated/gtkstock.c:386
+msgctxt "Stock label"
+msgid "_Index"
+msgstr "索引(_I)"
+
+#: ../gtk/deprecated/gtkstock.c:387
+msgctxt "Stock label"
+msgid "_Information"
+msgstr "資訊(_I)"
+
+#: ../gtk/deprecated/gtkstock.c:388
+msgctxt "Stock label"
+msgid "_Italic"
+msgstr "斜體(_I)"
+
+#: ../gtk/deprecated/gtkstock.c:389
+msgctxt "Stock label"
+msgid "_Jump to"
+msgstr "跳轉到(_J)"
+
+#. This is about text justification, "centered text"
+#: ../gtk/deprecated/gtkstock.c:391
+msgctxt "Stock label"
+msgid "_Center"
+msgstr "置中(_C)"
+
+#. This is about text justification
+#: ../gtk/deprecated/gtkstock.c:393
+msgctxt "Stock label"
+msgid "_Fill"
+msgstr "左右填滿(_F)"
+
+#. This is about text justification, "left-justified text"
+#: ../gtk/deprecated/gtkstock.c:395
+msgctxt "Stock label"
+msgid "_Left"
+msgstr "靠左(_L)"
+
+#. This is about text justification, "right-justified text"
+#: ../gtk/deprecated/gtkstock.c:397
+msgctxt "Stock label"
+msgid "_Right"
+msgstr "靠右(_R)"
+
+#. Media label, as in "fast forward"
+#: ../gtk/deprecated/gtkstock.c:400
+msgctxt "Stock label, media"
+msgid "_Forward"
+msgstr "快轉(_F)"
+
+#. Media label, as in "next song"
+#: ../gtk/deprecated/gtkstock.c:402
+msgctxt "Stock label, media"
+msgid "_Next"
+msgstr "下一首(_N)"
+
+#. Media label, as in "pause music"
+#: ../gtk/deprecated/gtkstock.c:404
+msgctxt "Stock label, media"
+msgid "P_ause"
+msgstr "暫停(_A)"
+
+#. Media label, as in "play music"
+#: ../gtk/deprecated/gtkstock.c:406
+msgctxt "Stock label, media"
+msgid "_Play"
+msgstr "播放(_P)"
+
+#. Media label, as in  "previous song"
+#: ../gtk/deprecated/gtkstock.c:408
+msgctxt "Stock label, media"
+msgid "Pre_vious"
+msgstr "上一首(_V)"
+
+#. Media label
+#: ../gtk/deprecated/gtkstock.c:410
+msgctxt "Stock label, media"
+msgid "_Record"
+msgstr "錄製(_R)"
+
+#. Media label
+#: ../gtk/deprecated/gtkstock.c:412
+msgctxt "Stock label, media"
+msgid "R_ewind"
+msgstr "倒轉(_E)"
+
+#. Media label
+#: ../gtk/deprecated/gtkstock.c:414
+msgctxt "Stock label, media"
+msgid "_Stop"
+msgstr "停止(_S)"
+
+#: ../gtk/deprecated/gtkstock.c:415
+msgctxt "Stock label"
+msgid "_Network"
+msgstr "網路(_N)"
+
+#: ../gtk/deprecated/gtkstock.c:416
+msgctxt "Stock label"
+msgid "_New"
+msgstr "新增(_N)"
+
+#: ../gtk/deprecated/gtkstock.c:417
+msgctxt "Stock label"
+msgid "_No"
+msgstr "否(_N)"
+
+#: ../gtk/deprecated/gtkstock.c:418
+msgctxt "Stock label"
+msgid "_OK"
+msgstr "確定(_O)"
+
+#: ../gtk/deprecated/gtkstock.c:419
+msgctxt "Stock label"
+msgid "_Open"
+msgstr "開啟(_O)"
+
+#. Page orientation
+#: ../gtk/deprecated/gtkstock.c:421
+msgctxt "Stock label"
+msgid "Landscape"
+msgstr "橫向"
+
+#. Page orientation
+#: ../gtk/deprecated/gtkstock.c:423
+msgctxt "Stock label"
+msgid "Portrait"
+msgstr "直向"
+
+#. Page orientation
+#: ../gtk/deprecated/gtkstock.c:425
+msgctxt "Stock label"
+msgid "Reverse landscape"
+msgstr "橫向倒轉"
+
+#. Page orientation
+#: ../gtk/deprecated/gtkstock.c:427
+msgctxt "Stock label"
+msgid "Reverse portrait"
+msgstr "直向倒轉"
+
+#: ../gtk/deprecated/gtkstock.c:428
+msgctxt "Stock label"
+msgid "Page Set_up"
+msgstr "頁面設定(_U)"
+
+#: ../gtk/deprecated/gtkstock.c:429
+msgctxt "Stock label"
+msgid "_Paste"
+msgstr "貼上(_P)"
+
+#: ../gtk/deprecated/gtkstock.c:430
+msgctxt "Stock label"
+msgid "_Preferences"
+msgstr "偏好設定(_P)"
+
+#: ../gtk/deprecated/gtkstock.c:431
+msgctxt "Stock label"
+msgid "_Print"
+msgstr "列印(_P)"
+
+#: ../gtk/deprecated/gtkstock.c:432
+msgctxt "Stock label"
+msgid "Print Pre_view"
+msgstr "預覽列印(_V)"
+
+#: ../gtk/deprecated/gtkstock.c:433
+msgctxt "Stock label"
+msgid "_Properties"
+msgstr "屬性(_P)"
+
+#: ../gtk/deprecated/gtkstock.c:434
+msgctxt "Stock label"
+msgid "_Quit"
+msgstr "結束(_Q)"
+
+#: ../gtk/deprecated/gtkstock.c:435
+msgctxt "Stock label"
+msgid "_Redo"
+msgstr "取消復原(_R)"
+
+#: ../gtk/deprecated/gtkstock.c:436
+msgctxt "Stock label"
+msgid "_Refresh"
+msgstr "重新整理(_R)"
+
+#: ../gtk/deprecated/gtkstock.c:437
+msgctxt "Stock label"
+msgid "_Remove"
+msgstr "移除(_R)"
+
+#: ../gtk/deprecated/gtkstock.c:438
+msgctxt "Stock label"
+msgid "_Revert"
+msgstr "還原(_R)"
+
+#: ../gtk/deprecated/gtkstock.c:439
+msgctxt "Stock label"
+msgid "_Save"
+msgstr "儲存(_S)"
+
+#: ../gtk/deprecated/gtkstock.c:440
+msgctxt "Stock label"
+msgid "Save _As"
+msgstr "另存新檔(_A)"
+
+#: ../gtk/deprecated/gtkstock.c:441
+msgctxt "Stock label"
+msgid "Select _All"
+msgstr "全部選取(_A)"
+
+#: ../gtk/deprecated/gtkstock.c:442
+msgctxt "Stock label"
+msgid "_Color"
+msgstr "顏色(_C)"
+
+#: ../gtk/deprecated/gtkstock.c:443
+msgctxt "Stock label"
+msgid "_Font"
+msgstr "字型(_F)"
+
+#. Sorting direction
+#: ../gtk/deprecated/gtkstock.c:445
+msgctxt "Stock label"
+msgid "_Ascending"
+msgstr "遞增(_A)"
+
+#. Sorting direction
+#: ../gtk/deprecated/gtkstock.c:447
+msgctxt "Stock label"
+msgid "_Descending"
+msgstr "遞減(_D)"
+
+#: ../gtk/deprecated/gtkstock.c:448
+msgctxt "Stock label"
+msgid "_Spell Check"
+msgstr "拼字檢查(_S)"
+
+#: ../gtk/deprecated/gtkstock.c:449
+msgctxt "Stock label"
+msgid "_Stop"
+msgstr "停止(_S)"
+
+#. Font variant
+#: ../gtk/deprecated/gtkstock.c:451
+msgctxt "Stock label"
+msgid "_Strikethrough"
+msgstr "刪除線(_S)"
+
+#: ../gtk/deprecated/gtkstock.c:452
+msgctxt "Stock label"
+msgid "_Undelete"
+msgstr "還原刪除(_U)"
+
+#. Font variant
+#: ../gtk/deprecated/gtkstock.c:454
+msgctxt "Stock label"
+msgid "_Underline"
+msgstr "底線(_U)"
+
+#: ../gtk/deprecated/gtkstock.c:455
+msgctxt "Stock label"
+msgid "_Undo"
+msgstr "復原(_U)"
+
+#: ../gtk/deprecated/gtkstock.c:456
+msgctxt "Stock label"
+msgid "_Yes"
+msgstr "是(_Y)"
+
+#. Zoom
+#: ../gtk/deprecated/gtkstock.c:458
+msgctxt "Stock label"
+msgid "_Normal Size"
+msgstr "一般大小(_N)"
+
+#. Zoom
+#: ../gtk/deprecated/gtkstock.c:460
+msgctxt "Stock label"
+msgid "Best _Fit"
+msgstr "最適大小(_F)"
+
+#: ../gtk/deprecated/gtkstock.c:461
+msgctxt "Stock label"
+msgid "Zoom _In"
+msgstr "拉近(_I)"
+
+#: ../gtk/deprecated/gtkstock.c:462
+msgctxt "Stock label"
+msgid "Zoom _Out"
+msgstr "拉遠(_O)"
+
+#: ../gtk/deprecated/gtkuimanager.c:1803
+#, c-format
+msgid "Unexpected start tag '%s' on line %d char %d"
+msgstr "第 %2$d 行第 %3$d 字有非預設的開始標記「%1$s」"
+
+#: ../gtk/deprecated/gtkuimanager.c:1893
+#, c-format
+msgid "Unexpected character data on line %d char %d"
+msgstr "第 %d 行第 %d 字有非預設的字元資料"
+
+#: ../gtk/deprecated/gtkuimanager.c:2748
+msgid "Empty"
+msgstr "空的"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
 #.
-#: ../gtk/gtkaboutdialog.c:104
+#: ../gtk/gtkaboutdialog.c:101
 #, c-format
 msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY;\n"
 "for details, visit <a href=\"%s\">%s</a>"
 msgstr "這個程式沒有任何擔保；需要更多資訊，請參閱<a href=\"%s\">%s</a>"
 
-#: ../gtk/gtkaboutdialog.c:357
+#: ../gtk/gtkaboutdialog.c:374
 msgid "License"
 msgstr "授權條款"
 
-#: ../gtk/gtkaboutdialog.c:358
+#: ../gtk/gtkaboutdialog.c:375
 msgid "The license of the program"
 msgstr "程式的授權條款"
 
-#. Add the credits button
-#: ../gtk/gtkaboutdialog.c:751
-msgid "C_redits"
-msgstr "鳴謝(_R)"
-
-#. Add the license button
-#: ../gtk/gtkaboutdialog.c:764
-msgid "_License"
-msgstr "授權條款(_L)"
-
-#: ../gtk/gtkaboutdialog.c:980
+#: ../gtk/gtkaboutdialog.c:913
 msgid "Could not show link"
 msgstr "無法顯示連結"
 
-#: ../gtk/gtkaboutdialog.c:1017
+#: ../gtk/gtkaboutdialog.c:950
 msgid "Website"
 msgstr "網站"
 
-#: ../gtk/gtkaboutdialog.c:1071
+#: ../gtk/gtkaboutdialog.c:1004
 #, c-format
 msgid "About %s"
 msgstr "關於 %s"
 
-#: ../gtk/gtkaboutdialog.c:2398
+#: ../gtk/gtkaboutdialog.c:2262
 msgid "Created by"
 msgstr "建立者"
 
-#: ../gtk/gtkaboutdialog.c:2401
+#: ../gtk/gtkaboutdialog.c:2265
 msgid "Documented by"
 msgstr "文件編寫"
 
-#: ../gtk/gtkaboutdialog.c:2411
+#: ../gtk/gtkaboutdialog.c:2275
 msgid "Translated by"
 msgstr "翻譯"
 
-#: ../gtk/gtkaboutdialog.c:2416
+#: ../gtk/gtkaboutdialog.c:2280
 msgid "Artwork by"
 msgstr "美工設計"
 
@@ -920,7 +1422,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:805
+#: ../gtk/gtkaccellabel.c:801
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -930,7 +1432,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:818
+#: ../gtk/gtkaccellabel.c:814
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -940,56 +1442,56 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:832
+#: ../gtk/gtkaccellabel.c:828
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: ../gtk/gtkaccellabel.c:849
+#: ../gtk/gtkaccellabel.c:845
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Space"
 
-#: ../gtk/gtkaccellabel.c:852
+#: ../gtk/gtkaccellabel.c:848
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
 
-#: ../gtk/gtkappchooserbutton.c:290
+#: ../gtk/gtkappchooserbutton.c:291
 msgid "Other application…"
 msgstr "其他應用程式…"
 
-#: ../gtk/gtkappchooserdialog.c:137
+#: ../gtk/gtkappchooserdialog.c:138
 msgid "Failed to look for applications online"
 msgstr "無法在線上尋找應用程式"
 
-#: ../gtk/gtkappchooserdialog.c:188
+#: ../gtk/gtkappchooserdialog.c:189
 msgid "_Find applications online"
 msgstr "線上尋找應用程式(_F)"
 
 #. Translators: %s is a filename
-#: ../gtk/gtkappchooserdialog.c:332
+#: ../gtk/gtkappchooserdialog.c:333
 #, c-format
-msgid "Select an application to open \"%s\""
-msgstr "請選擇要用來開啟「%s」的應用程式"
+msgid "Select an application to open “%s”"
+msgstr "選擇用來開啟“%s”的應用程式"
 
-#: ../gtk/gtkappchooserdialog.c:333 ../gtk/gtkappchooserwidget.c:657
+#: ../gtk/gtkappchooserdialog.c:334 ../gtk/gtkappchooserwidget.c:660
 #, c-format
-msgid "No applications available to open \"%s\""
-msgstr "沒有程式可開啟「%s」的應用程式"
+msgid "No applications available to open “%s”"
+msgstr "沒有應用程式可開啟“%s”檔案"
 
 #. Translators: %s is a file type description
-#: ../gtk/gtkappchooserdialog.c:339
+#: ../gtk/gtkappchooserdialog.c:340
 #, c-format
-msgid "Select an application for \"%s\" files"
-msgstr "選擇用於「%s」檔案的應用程式"
+msgid "Select an application for “%s” files"
+msgstr "選擇用在“%s”檔案的應用程式"
 
-#: ../gtk/gtkappchooserdialog.c:341
+#: ../gtk/gtkappchooserdialog.c:342
 #, c-format
-msgid "No applications available to open \"%s\" files"
-msgstr "沒有應用程式可開啟「%s」檔案"
+msgid "No applications available to open “%s” files"
+msgstr "沒有應用程式可開啟“%s”檔案"
 
-#: ../gtk/gtkappchooserdialog.c:357
+#: ../gtk/gtkappchooserdialog.c:358
 msgid ""
 "Click \"Show other applications\", for more options, or \"Find applications "
 "online\" to install a new application"
@@ -997,31 +1499,27 @@ msgstr ""
 "點選「顯示其他的應用程式」取得更多選項，或「線上尋找應用程式」來安裝新的應用"
 "程式"
 
-#: ../gtk/gtkappchooserdialog.c:427
+#: ../gtk/gtkappchooserdialog.c:428
 msgid "Forget association"
 msgstr "消除關聯"
 
-#: ../gtk/gtkappchooserdialog.c:493
-msgid "Show other applications"
-msgstr "顯示其他的應用程式"
-
-#: ../gtk/gtkappchooserwidget.c:606
+#: ../gtk/gtkappchooserwidget.c:609
 msgid "Default Application"
 msgstr "預設的應用程式"
 
-#: ../gtk/gtkappchooserwidget.c:744
+#: ../gtk/gtkappchooserwidget.c:747
 msgid "Recommended Applications"
 msgstr "建議的應用程式"
 
-#: ../gtk/gtkappchooserwidget.c:759
+#: ../gtk/gtkappchooserwidget.c:762
 msgid "Related Applications"
 msgstr "相關的應用程式"
 
-#: ../gtk/gtkappchooserwidget.c:773
+#: ../gtk/gtkappchooserwidget.c:776
 msgid "Other Applications"
 msgstr "其他的應用程式"
 
-#: ../gtk/gtkapplication.c:1565
+#: ../gtk/gtkapplication.c:1569
 #, c-format
 msgid ""
 "%s cannot quit at this time:\n"
@@ -1033,21 +1531,19 @@ msgstr ""
 "%s"
 
 #: ../gtk/gtkapplicationwindow.c:334 ../gtk/gtkprintoperation-unix.c:480
-#: ../gtk/gtkprintoperation-win32.c:1445
+#: ../gtk/gtkprintoperation-win32.c:1444
 msgid "Application"
 msgstr "應用程式"
 
-#: ../gtk/gtkassistant.c:1008
-msgid "C_ontinue"
-msgstr "繼續(_O)"
+#: ../gtk/gtkbookmarksmanager.c:50
+#, c-format
+msgid "%s does not exist in the bookmarks list"
+msgstr "%s 不在書籤清單中"
 
-#: ../gtk/gtkassistant.c:1011
-msgid "Go _Back"
-msgstr "後退(_B)"
-
-#: ../gtk/gtkassistant.c:1015
-msgid "_Finish"
-msgstr "完成(_F)"
+#: ../gtk/gtkbookmarksmanager.c:367
+#, c-format
+msgid "%s already exists in the bookmarks list"
+msgstr "%s 已存在書籤清單中"
 
 #: ../gtk/gtkbuilder-menus.c:220
 #, c-format
@@ -1064,22 +1560,22 @@ msgstr "元素 <%s> 不允許在頂端層級"
 msgid "text may not appear inside <%s>"
 msgstr "文字可能不會出現在 <%s> 內"
 
-#: ../gtk/gtkbuilderparser.c:341
+#: ../gtk/gtkbuilderparser.c:354
 #, c-format
 msgid "Invalid type function on line %d: '%s'"
 msgstr "第 %d 行出現無效的類型函式：「%s」"
 
-#: ../gtk/gtkbuilderparser.c:405
+#: ../gtk/gtkbuilderparser.c:418 ../gtk/gtkbuilderparser.c:504
 #, c-format
 msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
 msgstr "重複的物件 ID「%s」於第 %d 行（前一個在第 %d 行）"
 
-#: ../gtk/gtkbuilderparser.c:865
+#: ../gtk/gtkbuilderparser.c:971
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "無效的根元件：「%s」"
 
-#: ../gtk/gtkbuilderparser.c:906
+#: ../gtk/gtkbuilderparser.c:1014
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "未處理的標籤：「%s」"
@@ -1094,7 +1590,7 @@ msgstr "未處理的標籤：「%s」"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: ../gtk/gtkcalendar.c:872
+#: ../gtk/gtkcalendar.c:869
 msgid "calendar:MY"
 msgstr "calendar:YM"
 
@@ -1102,7 +1598,7 @@ msgstr "calendar:YM"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: ../gtk/gtkcalendar.c:910
+#: ../gtk/gtkcalendar.c:907
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
 
@@ -1111,7 +1607,7 @@ msgstr "calendar:week_start:0"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: ../gtk/gtkcalendar.c:1910
+#: ../gtk/gtkcalendar.c:1907
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -1126,7 +1622,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1941 ../gtk/gtkcalendar.c:2633
+#: ../gtk/gtkcalendar.c:1938 ../gtk/gtkcalendar.c:2630
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1142,7 +1638,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1973 ../gtk/gtkcalendar.c:2499
+#: ../gtk/gtkcalendar.c:1970 ../gtk/gtkcalendar.c:2496
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1158,7 +1654,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: ../gtk/gtkcalendar.c:2268
+#: ../gtk/gtkcalendar.c:2265
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -1166,7 +1662,7 @@ msgstr "%Y"
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
-#: ../gtk/gtkcellrendereraccel.c:282
+#: ../gtk/gtkcellrendereraccel.c:278
 msgctxt "Accelerator"
 msgid "Disabled"
 msgstr "已停用"
@@ -1175,7 +1671,7 @@ msgstr "已停用"
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
 #.
-#: ../gtk/gtkcellrendereraccel.c:292
+#: ../gtk/gtkcellrendereraccel.c:288
 msgctxt "Accelerator"
 msgid "Invalid"
 msgstr "無效"
@@ -1184,282 +1680,244 @@ msgstr "無效"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: ../gtk/gtkcellrendereraccel.c:416 ../gtk/gtkcellrendereraccel.c:747
+#: ../gtk/gtkcellrendereraccel.c:412 ../gtk/gtkcellrendereraccel.c:743
 msgid "New accelerator…"
 msgstr "新捷徑鍵…"
 
-#: ../gtk/gtkcellrendererprogress.c:372 ../gtk/gtkcellrendererprogress.c:462
+#: ../gtk/gtkcellrendererprogress.c:368 ../gtk/gtkcellrendererprogress.c:458
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkcolorbutton.c:188 ../gtk/gtkcolorbutton.c:449
+#: ../gtk/gtkcolorbutton.c:189 ../gtk/gtkcolorbutton.c:444
 msgid "Pick a Color"
 msgstr "選取顏色"
 
-#: ../gtk/gtkcolorchooserdialog.c:162
-msgid "Select a Color"
-msgstr "選擇一個顏色"
-
-#: ../gtk/gtkcolorchooserwidget.c:281
+#: ../gtk/gtkcolorchooserwidget.c:282
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "紅 %d%%, 綠 %d%%, 藍 %d%%, Alpha %d%%"
 
-#: ../gtk/gtkcolorchooserwidget.c:287
+#: ../gtk/gtkcolorchooserwidget.c:288
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
 msgstr "紅 %d%%, 綠 %d%%, 藍 %d%%"
 
-#: ../gtk/gtkcolorchooserwidget.c:364
+#: ../gtk/gtkcolorchooserwidget.c:365
 #, c-format
 msgid "Color: %s"
 msgstr "顏色：%s"
 
-#: ../gtk/gtkcolorchooserwidget.c:423
+#: ../gtk/gtkcolorchooserwidget.c:424
 msgctxt "Color name"
 msgid "Light Scarlet Red"
 msgstr "淡緋紅"
 
-#: ../gtk/gtkcolorchooserwidget.c:424
+#: ../gtk/gtkcolorchooserwidget.c:425
 msgctxt "Color name"
 msgid "Scarlet Red"
 msgstr "緋紅色"
 
-#: ../gtk/gtkcolorchooserwidget.c:425
+#: ../gtk/gtkcolorchooserwidget.c:426
 msgctxt "Color name"
 msgid "Dark Scarlet Red"
 msgstr "深緋紅"
 
-#: ../gtk/gtkcolorchooserwidget.c:426
+#: ../gtk/gtkcolorchooserwidget.c:427
 msgctxt "Color name"
 msgid "Light Orange"
 msgstr "淡橘色"
 
-#: ../gtk/gtkcolorchooserwidget.c:427
+#: ../gtk/gtkcolorchooserwidget.c:428
 msgctxt "Color name"
 msgid "Orange"
 msgstr "橘色"
 
-#: ../gtk/gtkcolorchooserwidget.c:428
+#: ../gtk/gtkcolorchooserwidget.c:429
 msgctxt "Color name"
 msgid "Dark Orange"
 msgstr "深橘色"
 
-#: ../gtk/gtkcolorchooserwidget.c:429
+#: ../gtk/gtkcolorchooserwidget.c:430
 msgctxt "Color name"
 msgid "Light Butter"
 msgstr "淡奶油黃"
 
-#: ../gtk/gtkcolorchooserwidget.c:430
+#: ../gtk/gtkcolorchooserwidget.c:431
 msgctxt "Color name"
 msgid "Butter"
 msgstr "奶油黃"
 
-#: ../gtk/gtkcolorchooserwidget.c:431
+#: ../gtk/gtkcolorchooserwidget.c:432
 msgctxt "Color name"
 msgid "Dark Butter"
 msgstr "深奶油黃"
 
-#: ../gtk/gtkcolorchooserwidget.c:432
+#: ../gtk/gtkcolorchooserwidget.c:433
 msgctxt "Color name"
 msgid "Light Chameleon"
 msgstr "淡變色龍綠"
 
-#: ../gtk/gtkcolorchooserwidget.c:433
+#: ../gtk/gtkcolorchooserwidget.c:434
 msgctxt "Color name"
 msgid "Chameleon"
 msgstr "變色龍綠"
 
-#: ../gtk/gtkcolorchooserwidget.c:434
+#: ../gtk/gtkcolorchooserwidget.c:435
 msgctxt "Color name"
 msgid "Dark Chameleon"
 msgstr "深變色龍綠"
 
-#: ../gtk/gtkcolorchooserwidget.c:435
+#: ../gtk/gtkcolorchooserwidget.c:436
 msgctxt "Color name"
 msgid "Light Sky Blue"
 msgstr "淡天空藍"
 
-#: ../gtk/gtkcolorchooserwidget.c:436
+#: ../gtk/gtkcolorchooserwidget.c:437
 msgctxt "Color name"
 msgid "Sky Blue"
 msgstr "天空藍"
 
-#: ../gtk/gtkcolorchooserwidget.c:437
+#: ../gtk/gtkcolorchooserwidget.c:438
 msgctxt "Color name"
 msgid "Dark Sky Blue"
 msgstr "深天空藍"
 
-#: ../gtk/gtkcolorchooserwidget.c:438
+#: ../gtk/gtkcolorchooserwidget.c:439
 msgctxt "Color name"
 msgid "Light Plum"
 msgstr "淡紫紅"
 
-#: ../gtk/gtkcolorchooserwidget.c:439
+#: ../gtk/gtkcolorchooserwidget.c:440
 msgctxt "Color name"
 msgid "Plum"
 msgstr "紫紅色"
 
-#: ../gtk/gtkcolorchooserwidget.c:440
+#: ../gtk/gtkcolorchooserwidget.c:441
 msgctxt "Color name"
 msgid "Dark Plum"
 msgstr "深紫紅"
 
-#: ../gtk/gtkcolorchooserwidget.c:441
+#: ../gtk/gtkcolorchooserwidget.c:442
 msgctxt "Color name"
 msgid "Light Chocolate"
 msgstr "淡巧克力"
 
-#: ../gtk/gtkcolorchooserwidget.c:442
+#: ../gtk/gtkcolorchooserwidget.c:443
 msgctxt "Color name"
 msgid "Chocolate"
 msgstr "巧克力色"
 
-#: ../gtk/gtkcolorchooserwidget.c:443
+#: ../gtk/gtkcolorchooserwidget.c:444
 msgctxt "Color name"
 msgid "Dark Chocolate"
 msgstr "深巧克力"
 
-#: ../gtk/gtkcolorchooserwidget.c:444
+#: ../gtk/gtkcolorchooserwidget.c:445
 msgctxt "Color name"
 msgid "Light Aluminum 1"
 msgstr "淡鋁 1"
 
-#: ../gtk/gtkcolorchooserwidget.c:445
+#: ../gtk/gtkcolorchooserwidget.c:446
 msgctxt "Color name"
 msgid "Aluminum 1"
 msgstr "鋁 1"
 
-#: ../gtk/gtkcolorchooserwidget.c:446
+#: ../gtk/gtkcolorchooserwidget.c:447
 msgctxt "Color name"
 msgid "Dark Aluminum 1"
 msgstr "深鋁 1"
 
-#: ../gtk/gtkcolorchooserwidget.c:447
+#: ../gtk/gtkcolorchooserwidget.c:448
 msgctxt "Color name"
 msgid "Light Aluminum 2"
 msgstr "淡鋁 2"
 
-#: ../gtk/gtkcolorchooserwidget.c:448
+#: ../gtk/gtkcolorchooserwidget.c:449
 msgctxt "Color name"
 msgid "Aluminum 2"
 msgstr "鋁 2"
 
-#: ../gtk/gtkcolorchooserwidget.c:449
+#: ../gtk/gtkcolorchooserwidget.c:450
 msgctxt "Color name"
 msgid "Dark Aluminum 2"
 msgstr "深鋁 2"
 
-#: ../gtk/gtkcolorchooserwidget.c:463
+#: ../gtk/gtkcolorchooserwidget.c:464
 msgctxt "Color name"
 msgid "Black"
 msgstr "黑色"
 
-#: ../gtk/gtkcolorchooserwidget.c:464
+#: ../gtk/gtkcolorchooserwidget.c:465
 msgctxt "Color name"
 msgid "Very Dark Gray"
 msgstr "深暗灰色"
 
-#: ../gtk/gtkcolorchooserwidget.c:465
+#: ../gtk/gtkcolorchooserwidget.c:466
 msgctxt "Color name"
 msgid "Darker Gray"
 msgstr "較暗灰色"
 
-#: ../gtk/gtkcolorchooserwidget.c:466
+#: ../gtk/gtkcolorchooserwidget.c:467
 msgctxt "Color name"
 msgid "Dark Gray"
 msgstr "暗灰色"
 
-#: ../gtk/gtkcolorchooserwidget.c:467
+#: ../gtk/gtkcolorchooserwidget.c:468
 msgctxt "Color name"
 msgid "Medium Gray"
 msgstr "灰色"
 
-#: ../gtk/gtkcolorchooserwidget.c:468
+#: ../gtk/gtkcolorchooserwidget.c:469
 msgctxt "Color name"
 msgid "Light Gray"
 msgstr "淡灰色"
 
-#: ../gtk/gtkcolorchooserwidget.c:469
+#: ../gtk/gtkcolorchooserwidget.c:470
 msgctxt "Color name"
 msgid "Lighter Gray"
 msgstr "較淡灰色"
 
-#: ../gtk/gtkcolorchooserwidget.c:470
+#: ../gtk/gtkcolorchooserwidget.c:471
 msgctxt "Color name"
 msgid "Very Light Gray"
 msgstr "很淡灰色"
 
-#: ../gtk/gtkcolorchooserwidget.c:471
+#: ../gtk/gtkcolorchooserwidget.c:472
 msgctxt "Color name"
 msgid "White"
 msgstr "白色"
 
 #. translators: label for the custom section in the color chooser
-#: ../gtk/gtkcolorchooserwidget.c:520
+#: ../gtk/gtkcolorchooserwidget.c:521
 msgid "Custom"
 msgstr "自訂"
 
-#: ../gtk/gtkcolorchooserwidget.c:528
+#: ../gtk/gtkcolorchooserwidget.c:529
 msgid "Create custom color"
 msgstr "建立自訂顏色"
 
-#: ../gtk/gtkcolorchooserwidget.c:546
+#: ../gtk/gtkcolorchooserwidget.c:547
 #, c-format
 msgid "Custom color %d: %s"
 msgstr "自訂顏色 %d：%s"
 
-#: ../gtk/gtkcoloreditor.c:412
-msgid "Color Name"
-msgstr "顏色名稱"
+#: ../gtk/gtkcolorplane.c:443
+msgid "Color Plane"
+msgstr "調色盤"
 
-#: ../gtk/gtkcoloreditor.c:457
-msgctxt "Color channel"
-msgid "Saturation"
-msgstr "飽和度"
-
-#: ../gtk/gtkcoloreditor.c:463
-msgctxt "Color channel"
-msgid "Value"
-msgstr "明度"
-
-#: ../gtk/gtkcoloreditor.c:471
-msgctxt "Color channel"
-msgid "S"
-msgstr "S"
-
-#: ../gtk/gtkcoloreditor.c:473
-msgctxt "Color channel"
-msgid "V"
-msgstr "V"
-
-#: ../gtk/gtkcoloreditor.c:481 ../gtk/gtkcolorscale.c:301
+#: ../gtk/gtkcolorscale.c:300
 msgctxt "Color channel"
 msgid "Hue"
 msgstr "色相"
 
-#: ../gtk/gtkcoloreditor.c:488
-msgctxt "Color channel"
-msgid "H"
-msgstr "H"
-
-#: ../gtk/gtkcoloreditor.c:496 ../gtk/gtkcolorscale.c:303
+#: ../gtk/gtkcolorscale.c:302
 msgctxt "Color channel"
 msgid "Alpha"
 msgstr "Alpha"
 
-#: ../gtk/gtkcoloreditor.c:503
-msgctxt "Color channel"
-msgid "A"
-msgstr "A"
-
-#: ../gtk/gtkcolorplane.c:438
-msgid "Color Plane"
-msgstr "調色盤"
-
-#: ../gtk/gtkcolorswatch.c:447
+#: ../gtk/gtkcolorswatch.c:444
 msgid "_Customize"
 msgstr "自訂(_C)"
 
@@ -1473,69 +1931,89 @@ msgstr "自訂(_C)"
 msgid "default:mm"
 msgstr "default:mm"
 
+#: ../gtk/gtkcustompaperunixdialog.c:311 ../gtk/gtkmessagedialog.c:885
+#: ../gtk/gtkaboutdialog.ui.h:3 ../gtk/gtkassistant.ui.h:6
+msgid "_Close"
+msgstr "關閉(_C)"
+
 #. And show the custom paper dialog
-#: ../gtk/gtkcustompaperunixdialog.c:397 ../gtk/gtkprintunixdialog.c:3275
+#: ../gtk/gtkcustompaperunixdialog.c:389 ../gtk/gtkprintunixdialog.c:3193
 msgid "Manage Custom Sizes"
 msgstr "管理自訂大小"
 
-#: ../gtk/gtkcustompaperunixdialog.c:558 ../gtk/gtkpagesetupunixdialog.c:778
+#: ../gtk/gtkcustompaperunixdialog.c:550 ../gtk/gtkpagesetupunixdialog.c:806
 msgid "inch"
 msgstr "英吋"
 
-#: ../gtk/gtkcustompaperunixdialog.c:560 ../gtk/gtkpagesetupunixdialog.c:776
+#: ../gtk/gtkcustompaperunixdialog.c:552 ../gtk/gtkpagesetupunixdialog.c:804
 msgid "mm"
 msgstr "毫米"
 
-#: ../gtk/gtkcustompaperunixdialog.c:605
+#: ../gtk/gtkcustompaperunixdialog.c:597
 msgid "Margins from Printer…"
 msgstr "印表機邊界…"
 
-#: ../gtk/gtkcustompaperunixdialog.c:771
+#: ../gtk/gtkcustompaperunixdialog.c:763
 #, c-format
 msgid "Custom Size %d"
 msgstr "自訂大小 %d"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1109
+#: ../gtk/gtkcustompaperunixdialog.c:1101
 msgid "_Width:"
 msgstr "寬度(_W):"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1120
+#: ../gtk/gtkcustompaperunixdialog.c:1112
 msgid "_Height:"
 msgstr "高度(_H):"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1131
+#: ../gtk/gtkcustompaperunixdialog.c:1123
 msgid "Paper Size"
 msgstr "紙張大小"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1140
+#: ../gtk/gtkcustompaperunixdialog.c:1132
 msgid "_Top:"
 msgstr "上(_T):"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1151
+#: ../gtk/gtkcustompaperunixdialog.c:1143
 msgid "_Bottom:"
 msgstr "下(_B):"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1162
+#: ../gtk/gtkcustompaperunixdialog.c:1154
 msgid "_Left:"
 msgstr "左(_L):"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1173
+#: ../gtk/gtkcustompaperunixdialog.c:1165
 msgid "_Right:"
 msgstr "右(_R):"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1212
+#: ../gtk/gtkcustompaperunixdialog.c:1204
 msgid "Paper Margins"
 msgstr "紙張邊界"
 
-#: ../gtk/gtkentry.c:9205 ../gtk/gtktextview.c:8685
-msgid "Input _Methods"
-msgstr "輸入法(_M)"
+#: ../gtk/gtkentry.c:9232 ../gtk/gtkentry.c:9378 ../gtk/gtklabel.c:6241
+#: ../gtk/gtktextview.c:8593 ../gtk/gtktextview.c:8776
+msgid "Cu_t"
+msgstr "剪下(_T)"
 
-#: ../gtk/gtkentry.c:9219 ../gtk/gtktextview.c:8699
-msgid "_Insert Unicode Control Character"
-msgstr "插入萬國碼控制字元(_I)"
+#: ../gtk/gtkentry.c:9236 ../gtk/gtkentry.c:9381 ../gtk/gtklabel.c:6242
+#: ../gtk/gtktextview.c:8597 ../gtk/gtktextview.c:8780
+msgid "_Copy"
+msgstr "複製(_C)"
 
-#: ../gtk/gtkentry.c:10317
+#: ../gtk/gtkentry.c:9240 ../gtk/gtkentry.c:9384 ../gtk/gtklabel.c:6243
+#: ../gtk/gtktextview.c:8599 ../gtk/gtktextview.c:8782
+msgid "_Paste"
+msgstr "貼上(_P)"
+
+#: ../gtk/gtkentry.c:9243 ../gtk/gtklabel.c:6245 ../gtk/gtktextview.c:8602
+msgid "_Delete"
+msgstr "刪除(_D)"
+
+#: ../gtk/gtkentry.c:9254 ../gtk/gtklabel.c:6254 ../gtk/gtktextview.c:8616
+msgid "Select _All"
+msgstr "全部選取(_A)"
+
+#: ../gtk/gtkentry.c:10310
 msgid "Caps Lock is on"
 msgstr "Caps Lock 已開啟"
 
@@ -1571,7 +2049,7 @@ msgstr "Caps Lock 已開啟"
 #. *
 #. * <important>
 #. * The #GtkFileChooserButton will ellipsize the label,
-#. * and thus will thus request little horizontal space.  To give the button
+#. * and will thus request little horizontal space.  To give the button
 #. * more space, you should call gtk_widget_get_preferred_size(),
 #. * gtk_file_chooser_button_set_width_chars(), or pack the button in
 #. * such a way that other interface elements give space to the widget.
@@ -1584,39 +2062,31 @@ msgstr "Caps Lock 已開啟"
 msgid "Select a File"
 msgstr "選取檔案"
 
-#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkfilechooserdefault.c:1825
+#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkplacessidebar.c:791
 msgid "Desktop"
 msgstr "桌面"
 
-#: ../gtk/gtkfilechooserbutton.c:106
+#: ../gtk/gtkfilechooserbutton.c:106 ../gtk/gtkfilechooserbutton.ui.h:1
 msgid "(None)"
 msgstr "（無）"
 
-#: ../gtk/gtkfilechooserbutton.c:2198
+#: ../gtk/gtkfilechooserbutton.c:807 ../gtk/gtkplacessidebar.c:3104
+msgid "_Open"
+msgstr "開啟(_O)"
+
+#: ../gtk/gtkfilechooserbutton.c:2152
 msgid "Other…"
 msgstr "其他…"
 
-#: ../gtk/gtkfilechooserdefault.c:152
+#: ../gtk/gtkfilechooserdefault.c:321
 msgid "Type name of new folder"
 msgstr "請輸入新資料夾名稱"
 
-#: ../gtk/gtkfilechooserdefault.c:954
-msgid "Could not retrieve information about the file"
-msgstr "無法取得關於檔案的資訊"
-
-#: ../gtk/gtkfilechooserdefault.c:965
-msgid "Could not add a bookmark"
-msgstr "無法加入書籤"
-
-#: ../gtk/gtkfilechooserdefault.c:976
-msgid "Could not remove bookmark"
-msgstr "無法移除書籤"
-
-#: ../gtk/gtkfilechooserdefault.c:987
+#: ../gtk/gtkfilechooserdefault.c:734
 msgid "The folder could not be created"
 msgstr "無法建立資料夾"
 
-#: ../gtk/gtkfilechooserdefault.c:1000
+#: ../gtk/gtkfilechooserdefault.c:747
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -1624,26 +2094,36 @@ msgstr ""
 "此資料夾無法建立，因為已有相同名稱的檔案存在。試著使用不同的資料夾名稱，或者"
 "先重新命名該檔案。"
 
-#: ../gtk/gtkfilechooserdefault.c:1014
+#: ../gtk/gtkfilechooserdefault.c:761
 msgid "You need to choose a valid filename."
 msgstr "您需要選擇有效的檔案名稱"
 
-#: ../gtk/gtkfilechooserdefault.c:1017
+#: ../gtk/gtkfilechooserdefault.c:764
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "不能在 %s 下建立檔案，因為它不是資料夾"
 
-#: ../gtk/gtkfilechooserdefault.c:1029
-msgid ""
-"You may only select folders.  The item that you selected is not a folder; "
-"try using a different item."
-msgstr "您只能選擇資料夾。您所選取的項目不是資料夾；請試著使用不同的項目。"
+#: ../gtk/gtkfilechooserdefault.c:772
+msgid "Cannot create file as the filename is to long"
+msgstr "不能建立檔案，因為檔案名稱太長"
 
-#: ../gtk/gtkfilechooserdefault.c:1039
+#: ../gtk/gtkfilechooserdefault.c:773
+msgid "Try using a shorter name."
+msgstr "試著使用較短的名稱。"
+
+#: ../gtk/gtkfilechooserdefault.c:783
+msgid "You may only select folders"
+msgstr "您只能選取資料夾"
+
+#: ../gtk/gtkfilechooserdefault.c:784
+msgid "The item that you selected is not a folder try using a different item."
+msgstr "您所選取的項目不是資料夾；請試著使用不同的項目。"
+
+#: ../gtk/gtkfilechooserdefault.c:792
 msgid "Invalid file name"
 msgstr "無效的檔案名稱"
 
-#: ../gtk/gtkfilechooserdefault.c:1049
+#: ../gtk/gtkfilechooserdefault.c:802
 msgid "The folder contents could not be displayed"
 msgstr "無法顯示資料夾內容"
 
@@ -1651,221 +2131,118 @@ msgstr "無法顯示資料夾內容"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1575
+#: ../gtk/gtkfilechooserdefault.c:945
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s 於 %2$s"
 
-#: ../gtk/gtkfilechooserdefault.c:1724
-msgid "Search"
-msgstr "搜尋"
-
-#: ../gtk/gtkfilechooserdefault.c:1768 ../gtk/gtkfilechooserdefault.c:5000
-msgid "Recently Used"
-msgstr "最近使用"
-
-#: ../gtk/gtkfilechooserdefault.c:2369
-msgid "Select which types of files are shown"
-msgstr "選擇顯示哪種類型的檔案"
-
-#: ../gtk/gtkfilechooserdefault.c:2728
-#, c-format
-msgid "Add the folder '%s' to the bookmarks"
-msgstr "將資料夾「%s」加入書籤"
-
-#: ../gtk/gtkfilechooserdefault.c:2772
-#, c-format
-msgid "Add the current folder to the bookmarks"
-msgstr "將目前的資料夾加入書籤"
-
-#: ../gtk/gtkfilechooserdefault.c:2774
-#, c-format
-msgid "Add the selected folders to the bookmarks"
-msgstr "將已選的資料夾加入書籤"
-
-#: ../gtk/gtkfilechooserdefault.c:2812
-#, c-format
-msgid "Remove the bookmark '%s'"
-msgstr "移除書籤「%s」"
-
-#: ../gtk/gtkfilechooserdefault.c:2814
-#, c-format
-msgid "Bookmark '%s' cannot be removed"
-msgstr "無法移除書籤「%s」"
-
-#: ../gtk/gtkfilechooserdefault.c:2821 ../gtk/gtkfilechooserdefault.c:3707
-msgid "Remove the selected bookmark"
-msgstr "移除已選的書籤"
-
-#: ../gtk/gtkfilechooserdefault.c:3385
-msgid "Remove"
-msgstr "移除"
-
-#: ../gtk/gtkfilechooserdefault.c:3394
-msgid "Rename…"
-msgstr "重新命名…"
-
-#. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3558
-msgid "Places"
-msgstr "位置"
-
-#. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3615
-msgid "_Places"
-msgstr "位置(_P)"
-
-#: ../gtk/gtkfilechooserdefault.c:3695
-msgid "Add the selected folder to the Bookmarks"
-msgstr "將已選的資料夾加入書籤"
-
-#: ../gtk/gtkfilechooserdefault.c:3956
+#: ../gtk/gtkfilechooserdefault.c:1493
 msgid "Could not select file"
 msgstr "無法選取檔案"
 
-#: ../gtk/gtkfilechooserdefault.c:4185
-msgid "_Visit this file"
-msgstr "查閱這個檔案(_V)"
+#: ../gtk/gtkfilechooserdefault.c:1723
+msgid "_Visit File"
+msgstr "查閱檔案(_V)"
 
-#: ../gtk/gtkfilechooserdefault.c:4188
-msgid "_Copy file’s location"
-msgstr "複製檔案的位置(_C)"
+#: ../gtk/gtkfilechooserdefault.c:1726
+msgid "_Copy Location"
+msgstr "複製位置(_C)"
 
-#: ../gtk/gtkfilechooserdefault.c:4191
+#: ../gtk/gtkfilechooserdefault.c:1729
 msgid "_Add to Bookmarks"
 msgstr "加入書籤(_A)"
 
-#: ../gtk/gtkfilechooserdefault.c:4198
+#: ../gtk/gtkfilechooserdefault.c:1736
 msgid "Show _Hidden Files"
 msgstr "顯示隱藏檔(_H)"
 
-#: ../gtk/gtkfilechooserdefault.c:4201
+#: ../gtk/gtkfilechooserdefault.c:1739
 msgid "Show _Size Column"
 msgstr "顯示大小欄位(_S)"
 
-#: ../gtk/gtkfilechooserdefault.c:4426
-msgid "Files"
-msgstr "檔案"
-
-#: ../gtk/gtkfilechooserdefault.c:4477
-msgid "Name"
-msgstr "名稱"
-
-#: ../gtk/gtkfilechooserdefault.c:4500
-msgid "Size"
-msgstr "大小"
-
-#: ../gtk/gtkfilechooserdefault.c:4514
-msgid "Modified"
-msgstr "已修改"
-
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4607
+#: ../gtk/gtkfilechooserdefault.c:1988
 msgid "_Name:"
 msgstr "名稱(_N):"
 
-#: ../gtk/gtkfilechooserdefault.c:4838
-msgid "Type a file name"
-msgstr "輸入檔案名稱"
-
-#: ../gtk/gtkfilechooserdefault.c:4885 ../gtk/gtkfilechooserdefault.c:4896
+#: ../gtk/gtkfilechooserdefault.c:2236 ../gtk/gtkfilechooserdefault.c:2247
 msgid "Please select a folder below"
 msgstr "請選擇下面的資料夾"
 
-#: ../gtk/gtkfilechooserdefault.c:4891
+#: ../gtk/gtkfilechooserdefault.c:2242
 msgid "Please type a file name"
 msgstr "請輸入檔案名稱"
 
-#. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:4962
-msgid "Create Fo_lder"
-msgstr "建立資料夾(_L)"
+#: ../gtk/gtkfilechooserdefault.c:2298
+msgid "Recently Used"
+msgstr "最近使用"
 
-#: ../gtk/gtkfilechooserdefault.c:5010
+#: ../gtk/gtkfilechooserdefault.c:2308
 msgid "Search:"
 msgstr "搜尋："
 
-#: ../gtk/gtkfilechooserdefault.c:5061
-msgid "_Location:"
-msgstr "位置(_L):"
-
-#: ../gtk/gtkfilechooserdefault.c:5511
+#: ../gtk/gtkfilechooserdefault.c:2737
 msgid "Save in _folder:"
 msgstr "儲存於資料夾(_F):"
 
-#: ../gtk/gtkfilechooserdefault.c:5513
+#: ../gtk/gtkfilechooserdefault.c:2739
 msgid "Create in _folder:"
 msgstr "新增於資料夾(_F)："
 
-#: ../gtk/gtkfilechooserdefault.c:6534
+#: ../gtk/gtkfilechooserdefault.c:3879
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "無法讀取 %s 的內容"
 
-#: ../gtk/gtkfilechooserdefault.c:6538
+#: ../gtk/gtkfilechooserdefault.c:3883
 msgid "Could not read the contents of the folder"
 msgstr "無法讀取資料夾的內容"
 
-#: ../gtk/gtkfilechooserdefault.c:6631 ../gtk/gtkfilechooserdefault.c:6699
-#: ../gtk/gtkfilechooserdefault.c:6879
+#: ../gtk/gtkfilechooserdefault.c:3980 ../gtk/gtkfilechooserdefault.c:4048
+#: ../gtk/gtkfilechooserdefault.c:4229
 msgid "Unknown"
 msgstr "不明"
 
-#: ../gtk/gtkfilechooserdefault.c:6646
+#: ../gtk/gtkfilechooserdefault.c:3995
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6648
+#: ../gtk/gtkfilechooserdefault.c:3997
 msgid "Yesterday at %H:%M"
 msgstr "昨天 %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7350
+#: ../gtk/gtkfilechooserdefault.c:4694
 msgid "Cannot change to folder because it is not local"
 msgstr "無法進入資料夾，因為它不是本地資料夾"
 
-#: ../gtk/gtkfilechooserdefault.c:7947 ../gtk/gtkfilechooserdefault.c:7968
+#: ../gtk/gtkfilechooserdefault.c:5478 ../gtk/gtkprintunixdialog.c:675
 #, c-format
-msgid "Shortcut %s already exists"
-msgstr "捷徑 %s 已經存在"
+msgid "A file named “%s” already exists.  Do you want to replace it?"
+msgstr "已存在名為“%s”的檔案。您想要取代它嗎？"
 
-#: ../gtk/gtkfilechooserdefault.c:8058
-#, c-format
-msgid "Shortcut %s does not exist"
-msgstr "捷徑 %s 不存在"
-
-#: ../gtk/gtkfilechooserdefault.c:8305 ../gtk/gtkprintunixdialog.c:548
-#, c-format
-msgid "A file named \"%s\" already exists.  Do you want to replace it?"
-msgstr "名為「%s」的檔案已存在。是否要取代它？"
-
-#: ../gtk/gtkfilechooserdefault.c:8308 ../gtk/gtkprintunixdialog.c:552
+#: ../gtk/gtkfilechooserdefault.c:5481 ../gtk/gtkprintunixdialog.c:679
 #, c-format
 msgid ""
-"The file already exists in \"%s\".  Replacing it will overwrite its contents."
-msgstr "該檔案已存在於「%s」。取代它會覆蓋它的內容。"
+"The file already exists in “%s”.  Replacing it will overwrite its contents."
+msgstr "該檔案已存在於“%s”。取代它會覆蓋它的內容。"
 
-#: ../gtk/gtkfilechooserdefault.c:8313 ../gtk/gtkprintunixdialog.c:559
+#: ../gtk/gtkfilechooserdefault.c:5486 ../gtk/gtkprintunixdialog.c:686
 msgid "_Replace"
 msgstr "取代(_R)"
 
-#: ../gtk/gtkfilechooserdefault.c:9120
+#: ../gtk/gtkfilechooserdefault.c:6303
 msgid "Could not start the search process"
 msgstr "無法開始搜尋程序"
 
-#: ../gtk/gtkfilechooserdefault.c:9121
+#: ../gtk/gtkfilechooserdefault.c:6304
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr "此程式無法建立至 indexer 伺服程式的連線。請確認它是否已執行。"
 
-#: ../gtk/gtkfilechooserdefault.c:9135
+#: ../gtk/gtkfilechooserdefault.c:6318
 msgid "Could not send the search request"
 msgstr "無法傳送搜尋要求"
-
-#: ../gtk/gtkfilechooserdefault.c:9745
-#, c-format
-msgid "Could not mount %s"
-msgstr "無法掛載 %s"
 
 #. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
 #. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
@@ -1876,36 +2253,20 @@ msgstr "無法掛載 %s"
 msgid "File System"
 msgstr "檔案系統"
 
-#: ../gtk/gtkfontbutton.c:354
+#: ../gtk/gtkfontbutton.c:353
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: ../gtk/gtkfontbutton.c:436 ../gtk/gtkfontbutton.c:563
+#: ../gtk/gtkfontbutton.c:438 ../gtk/gtkfontbutton.c:568
 msgid "Pick a Font"
 msgstr "請選擇字型"
 
-#: ../gtk/gtkfontbutton.c:1121
-msgid "Font"
-msgstr "字型"
-
-#: ../gtk/gtkfontchooserwidget.c:110
-msgid "No fonts matched your search. You can revise your search and try again."
-msgstr "沒有字型符合您的搜尋。您可以修正您的搜尋後再試一次。"
-
-#: ../gtk/gtkfontchooserwidget.c:557
-msgid "Search font name"
-msgstr "搜尋字型的名稱"
-
-#: ../gtk/gtkfontchooserwidget.c:891
-msgid "Font Family"
-msgstr "字族"
-
-#: ../gtk/gtkicontheme.c:1935
+#: ../gtk/gtkicontheme.c:2069 ../gtk/gtkicontheme.c:2132
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "圖示「%s」不存在於佈景主題中"
 
-#: ../gtk/gtkicontheme.c:3557
+#: ../gtk/gtkicontheme.c:3835
 msgid "Failed to load icon"
 msgstr "載入圖示失敗"
 
@@ -1913,29 +2274,45 @@ msgstr "載入圖示失敗"
 msgid "Simple"
 msgstr "簡易"
 
-#: ../gtk/gtkimmulticontext.c:608
+#: ../gtk/gtkimmulticontext.c:611
 msgctxt "input method menu"
 msgid "System"
 msgstr "系統"
 
-#: ../gtk/gtkimmulticontext.c:618
+#: ../gtk/gtkimmulticontext.c:621
 msgctxt "input method menu"
 msgid "None"
 msgstr "沒有"
 
-#: ../gtk/gtkimmulticontext.c:701
+#: ../gtk/gtkimmulticontext.c:704
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "系統 (%s)"
 
+#: ../gtk/gtkinfobar.c:1192 ../gtk/gtkmessagedialog.c:366
+msgid "Information"
+msgstr "資訊"
+
+#: ../gtk/gtkinfobar.c:1196 ../gtk/gtkmessagedialog.c:371
+msgid "Question"
+msgstr "問題"
+
+#: ../gtk/gtkinfobar.c:1200 ../gtk/gtkmessagedialog.c:376
+msgid "Warning"
+msgstr "警告"
+
+#: ../gtk/gtkinfobar.c:1204 ../gtk/gtkmessagedialog.c:381
+msgid "Error"
+msgstr "錯誤"
+
 #. Open Link
-#: ../gtk/gtklabel.c:6167
+#: ../gtk/gtklabel.c:6224
 msgid "_Open Link"
 msgstr "開啟連結(_O)"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6179
+#: ../gtk/gtklabel.c:6232
 msgid "Copy _Link Address"
 msgstr "複製連結位址(_L)"
 
@@ -1989,23 +2366,23 @@ msgstr "%s：沒有應用程式 %s"
 msgid "%s: error launching application: %s\n"
 msgstr "%s：執行應用程式時發生錯誤：%s\n"
 
-#: ../gtk/gtklinkbutton.c:499
+#: ../gtk/gtklinkbutton.c:493
 msgid "Copy URL"
 msgstr "複製 URL"
 
-#: ../gtk/gtklinkbutton.c:665
+#: ../gtk/gtklinkbutton.c:656
 msgid "Invalid URI"
 msgstr "無效的 URI"
 
-#: ../gtk/gtklockbutton.c:290
+#: ../gtk/gtklockbutton.c:266 ../gtk/gtklockbutton.ui.h:1
 msgid "Lock"
 msgstr "鎖定"
 
-#: ../gtk/gtklockbutton.c:299
+#: ../gtk/gtklockbutton.c:275 ../gtk/gtklockbutton.ui.h:2
 msgid "Unlock"
 msgstr "解除鎖定"
 
-#: ../gtk/gtklockbutton.c:308
+#: ../gtk/gtklockbutton.c:284
 msgid ""
 "Dialog is unlocked.\n"
 "Click to prevent further changes"
@@ -2013,7 +2390,7 @@ msgstr ""
 "對話視窗已解除鎖定。\n"
 "點選以防止進一步變更"
 
-#: ../gtk/gtklockbutton.c:317
+#: ../gtk/gtklockbutton.c:293
 msgid ""
 "Dialog is locked.\n"
 "Click to make changes"
@@ -2021,7 +2398,7 @@ msgstr ""
 "對話視窗已解除鎖定。\n"
 "點選以進行變更"
 
-#: ../gtk/gtklockbutton.c:326
+#: ../gtk/gtklockbutton.c:302
 msgid ""
 "System policy prevents changes.\n"
 "Contact your system administrator"
@@ -2030,27 +2407,27 @@ msgstr ""
 "請聯絡您的系統管理員"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:446
+#: ../gtk/gtkmain.c:447
 msgid "Load additional GTK+ modules"
 msgstr "載入額外的 GTK+ 模組"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:447
+#: ../gtk/gtkmain.c:448
 msgid "MODULES"
 msgstr "模組"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:449
+#: ../gtk/gtkmain.c:450
 msgid "Make all warnings fatal"
 msgstr "把所有的警告訊息都當成嚴重錯誤"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:452
+#: ../gtk/gtkmain.c:453
 msgid "GTK+ debugging flags to set"
 msgstr "準備設定的 GTK+ 偵錯旗標"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:455
+#: ../gtk/gtkmain.c:456
 msgid "GTK+ debugging flags to unset"
 msgstr "準備去除的 GTK+ 偵錯旗標"
 
@@ -2059,73 +2436,81 @@ msgstr "準備去除的 GTK+ 偵錯旗標"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:703
+#: ../gtk/gtkmain.c:704
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:768
+#: ../gtk/gtkmain.c:769
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "無法開啟畫面：%s"
 
-#: ../gtk/gtkmain.c:834
+#: ../gtk/gtkmain.c:835
 msgid "GTK+ Options"
 msgstr "GTK+ 選項"
 
-#: ../gtk/gtkmain.c:834
+#: ../gtk/gtkmain.c:835
 msgid "Show GTK+ Options"
 msgstr "顯示 GTK+ 選項"
 
-#: ../gtk/gtkmountoperation.c:535
+#: ../gtk/gtkmessagedialog.c:897
+msgid "_No"
+msgstr "否(_N)"
+
+#: ../gtk/gtkmessagedialog.c:900
+msgid "_Yes"
+msgstr "是(_Y)"
+
+#: ../gtk/gtkmountoperation.c:530
 msgid "Co_nnect"
 msgstr "連線(_N)"
 
-#: ../gtk/gtkmountoperation.c:609
+#: ../gtk/gtkmountoperation.c:604
 msgid "Connect As"
 msgstr "連線身分"
 
-#: ../gtk/gtkmountoperation.c:618
+#: ../gtk/gtkmountoperation.c:613
 msgid "_Anonymous"
 msgstr "匿名(_A)"
 
-#: ../gtk/gtkmountoperation.c:627
+#: ../gtk/gtkmountoperation.c:622
 msgid "Registered U_ser"
 msgstr "已註冊使用者(_S)"
 
-#: ../gtk/gtkmountoperation.c:638
+#: ../gtk/gtkmountoperation.c:633
 msgid "_Username"
 msgstr "使用者名稱(_U)"
 
-#: ../gtk/gtkmountoperation.c:643
+#: ../gtk/gtkmountoperation.c:638
 msgid "_Domain"
 msgstr "網域(_D)"
 
-#: ../gtk/gtkmountoperation.c:649
+#: ../gtk/gtkmountoperation.c:644
 msgid "_Password"
 msgstr "密碼(_P)"
 
-#: ../gtk/gtkmountoperation.c:671
+#: ../gtk/gtkmountoperation.c:666
 msgid "Forget password _immediately"
 msgstr "立刻忘記密碼(_I)"
 
-#: ../gtk/gtkmountoperation.c:681
+#: ../gtk/gtkmountoperation.c:676
 msgid "Remember password until you _logout"
 msgstr "記憶密碼到登出之前(_L)"
 
-#: ../gtk/gtkmountoperation.c:691
+#: ../gtk/gtkmountoperation.c:686
 msgid "Remember _forever"
 msgstr "永遠記住密碼(_F)"
 
-#: ../gtk/gtkmountoperation.c:1080
+#: ../gtk/gtkmountoperation.c:1075
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "不明的應用程式（PID %d）"
 
-#: ../gtk/gtkmountoperation.c:1263
+#: ../gtk/gtkmountoperation.c:1258
 msgid "Unable to end process"
 msgstr "無法終止程序"
 
-#: ../gtk/gtkmountoperation.c:1300
+#: ../gtk/gtkmountoperation.c:1295
 msgid "_End Process"
 msgstr "終止程序(_E)"
 
@@ -2160,7 +2545,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "不能結束 PID 為 %d 的程序：%s"
 
-#: ../gtk/gtknotebook.c:5069 ../gtk/gtknotebook.c:7723
+#: ../gtk/gtknotebook.c:5015 ../gtk/gtknotebook.c:7669
 #, c-format
 msgid "Page %u"
 msgstr "第 %u 頁"
@@ -2168,7 +2553,7 @@ msgstr "第 %u 頁"
 #. Translators: the format here is used to build the string that will be rendered
 #. * in the number emblem.
 #.
-#: ../gtk/gtknumerableicon.c:482
+#: ../gtk/gtknumerableicon.c:472
 #, c-format
 msgctxt "Number format"
 msgid "%d"
@@ -2179,15 +2564,15 @@ msgstr "%d"
 msgid "Not a valid page setup file"
 msgstr "不是有效的頁面設定檔案"
 
-#: ../gtk/gtkpagesetupunixdialog.c:167
+#: ../gtk/gtkpagesetupunixdialog.c:196
 msgid "Any Printer"
 msgstr "任何印表機"
 
-#: ../gtk/gtkpagesetupunixdialog.c:167
+#: ../gtk/gtkpagesetupunixdialog.c:196
 msgid "For portable documents"
 msgstr "用於可攜式文件"
 
-#: ../gtk/gtkpagesetupunixdialog.c:796
+#: ../gtk/gtkpagesetupunixdialog.c:824
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2202,47 +2587,215 @@ msgstr ""
 " 上：%s %s\n"
 " 下：%s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:845 ../gtk/gtkprintunixdialog.c:3329
+#: ../gtk/gtkpagesetupunixdialog.c:873 ../gtk/gtkprintunixdialog.c:3247
 msgid "Manage Custom Sizes…"
 msgstr "管理自訂大小…"
 
-#: ../gtk/gtkpagesetupunixdialog.c:896
-msgid "_Format for:"
-msgstr "格式(_F)"
-
-#: ../gtk/gtkpagesetupunixdialog.c:917 ../gtk/gtkprintunixdialog.c:3477
-msgid "_Paper size:"
-msgstr "紙張大小(_P):"
-
-#: ../gtk/gtkpagesetupunixdialog.c:946
-msgid "_Orientation:"
-msgstr "方向(_O):"
-
-#: ../gtk/gtkpagesetupunixdialog.c:1006 ../gtk/gtkprintunixdialog.c:3531
+#: ../gtk/gtkpagesetupunixdialog.c:895 ../gtk/gtkprintunixdialog.ui.h:40
 msgid "Page Setup"
 msgstr "頁面設定"
 
-#: ../gtk/gtkpathbar.c:159
-msgid "Up Path"
-msgstr "向上路徑"
-
-#: ../gtk/gtkpathbar.c:161
-msgid "Down Path"
-msgstr "向下路徑"
-
-#: ../gtk/gtkpathbar.c:1644
+#: ../gtk/gtkpathbar.c:1640
 msgid "File System Root"
 msgstr "檔案系統根"
 
-#: ../gtk/gtkprintbackend.c:750
+#: ../gtk/gtkplacessidebar.c:447
+msgid "Devices"
+msgstr "裝置"
+
+#: ../gtk/gtkplacessidebar.c:455
+msgid "Bookmarks"
+msgstr "書籤"
+
+#: ../gtk/gtkplacessidebar.c:761
+msgid "Places"
+msgstr "位置"
+
+#: ../gtk/gtkplacessidebar.c:768
+msgid "Recent"
+msgstr "最近開啟"
+
+#: ../gtk/gtkplacessidebar.c:770
+msgid "Recent files"
+msgstr "最近開啟檔案"
+
+#: ../gtk/gtkplacessidebar.c:779
+msgid "Home"
+msgstr "家目錄"
+
+#: ../gtk/gtkplacessidebar.c:781
+msgid "Open your personal folder"
+msgstr "開啟您的個人資料夾"
+
+#: ../gtk/gtkplacessidebar.c:793
+msgid "Open the contents of your desktop in a folder"
+msgstr "以資料夾形式開啟桌面中的內容"
+
+#: ../gtk/gtkplacessidebar.c:806
+msgid "Trash"
+msgstr "回收筒"
+
+#: ../gtk/gtkplacessidebar.c:808
+msgid "Open the trash"
+msgstr "開啟回收筒"
+
+#: ../gtk/gtkplacessidebar.c:863 ../gtk/gtkplacessidebar.c:888
+#: ../gtk/gtkplacessidebar.c:1095
+#, c-format
+msgid "Mount and open %s"
+msgstr "掛載並開啟 %s"
+
+#: ../gtk/gtkplacessidebar.c:963
+msgid "Open the contents of the file system"
+msgstr "開啟檔案系統的內容"
+
+#: ../gtk/gtkplacessidebar.c:1063
+msgid "Network"
+msgstr "網路"
+
+#: ../gtk/gtkplacessidebar.c:1069
+msgid "Browse Network"
+msgstr "瀏覽網路"
+
+#: ../gtk/gtkplacessidebar.c:1071
+msgid "Browse the contents of the network"
+msgstr "瀏覽網路的內容"
+
+#: ../gtk/gtkplacessidebar.c:1078
+msgid "Connect to Server"
+msgstr "連接伺服器"
+
+#: ../gtk/gtkplacessidebar.c:1080
+msgid "Connect to a network server address"
+msgstr "連接到網路伺服器位址"
+
+#: ../gtk/gtkplacessidebar.c:1560
+msgid "New bookmark"
+msgstr "新增書籤"
+
+#. Adjust start/stop items to reflect the type of the drive
+#: ../gtk/gtkplacessidebar.c:2100 ../gtk/gtkplacessidebar.c:3180
+msgid "_Start"
+msgstr "起動(_S)"
+
+#: ../gtk/gtkplacessidebar.c:2101 ../gtk/gtkplacessidebar.c:3187
+msgid "_Stop"
+msgstr "關閉(_S)"
+
+#. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
+#: ../gtk/gtkplacessidebar.c:2106
+msgid "_Power On"
+msgstr "電源開啟(_P)"
+
+#: ../gtk/gtkplacessidebar.c:2107
+msgid "_Safely Remove Drive"
+msgstr "安全的移除裝置(_S)"
+
+#: ../gtk/gtkplacessidebar.c:2110
+msgid "_Connect Drive"
+msgstr "連接裝置(_C)"
+
+#: ../gtk/gtkplacessidebar.c:2111
+msgid "_Disconnect Drive"
+msgstr "中斷裝置(_D)"
+
+#: ../gtk/gtkplacessidebar.c:2114
+msgid "_Start Multi-disk Device"
+msgstr "起動多磁碟裝置(_S)"
+
+#: ../gtk/gtkplacessidebar.c:2115
+msgid "_Stop Multi-disk Device"
+msgstr "關閉多磁碟裝置(_S)"
+
+#. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
+#: ../gtk/gtkplacessidebar.c:2119
+msgid "_Unlock Drive"
+msgstr "解鎖裝置(_U)"
+
+#: ../gtk/gtkplacessidebar.c:2120
+msgid "_Lock Drive"
+msgstr "鎖定裝置(_L)"
+
+#: ../gtk/gtkplacessidebar.c:2147 ../gtk/gtkplacessidebar.c:2845
+#, c-format
+msgid "Unable to start %s"
+msgstr "無法起動 %s"
+
+#: ../gtk/gtkplacessidebar.c:2174
+#, c-format
+msgid "Unable to access “%s”"
+msgstr "無法存取“%s”"
+
+#: ../gtk/gtkplacessidebar.c:2480
+#, c-format
+msgid "Unable to unmount %s"
+msgstr "無法卸載 %s"
+
+#: ../gtk/gtkplacessidebar.c:2603 ../gtk/gtkplacessidebar.c:2630
+#: ../gtk/gtkplacessidebar.c:2657
+#, c-format
+msgid "Unable to eject %s"
+msgstr "無法退出 %s"
+
+#: ../gtk/gtkplacessidebar.c:2797
+#, c-format
+msgid "Unable to poll %s for media changes"
+msgstr "無法監測 %s 的媒體變更"
+
+#: ../gtk/gtkplacessidebar.c:2899
+#, c-format
+msgid "Unable to stop %s"
+msgstr "無法關閉 %s"
+
+#: ../gtk/gtkplacessidebar.c:3111
+msgid "Open in New _Tab"
+msgstr "在新的分頁中開啟(_T)"
+
+#: ../gtk/gtkplacessidebar.c:3119
+msgid "Open in New _Window"
+msgstr "在新的視窗中開啟(_W)"
+
+#: ../gtk/gtkplacessidebar.c:3128
+msgid "_Add Bookmark"
+msgstr "加入書籤(_A)"
+
+#: ../gtk/gtkplacessidebar.c:3134
+msgid "Remove"
+msgstr "移除"
+
+#: ../gtk/gtkplacessidebar.c:3141
+msgid "Rename…"
+msgstr "重新命名…"
+
+#: ../gtk/gtkplacessidebar.c:3152
+msgid "_Mount"
+msgstr "掛載(_M)"
+
+#: ../gtk/gtkplacessidebar.c:3159
+msgid "_Unmount"
+msgstr "卸載(_U)"
+
+#: ../gtk/gtkplacessidebar.c:3166
+msgid "_Eject"
+msgstr "退出(_E)"
+
+#: ../gtk/gtkplacessidebar.c:3173
+msgid "_Detect Media"
+msgstr "偵測媒體(_D)"
+
+#: ../gtk/gtkplacessidebar.c:3826
+msgid "Computer"
+msgstr "電腦"
+
+#: ../gtk/gtkprintbackend.c:746
 msgid "Authentication"
 msgstr "驗證"
 
-#: ../gtk/gtkprinteroptionwidget.c:548
+#: ../gtk/gtkprinteroptionwidget.c:542
 msgid "Select a filename"
 msgstr "選擇檔案名稱"
 
-#: ../gtk/gtkprinteroptionwidget.c:772
+#: ../gtk/gtkprinteroptionwidget.c:766
 msgid "Not available"
 msgstr "不存在"
 
@@ -2250,75 +2803,75 @@ msgstr "不存在"
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: ../gtk/gtkprintoperation.c:260
+#: ../gtk/gtkprintoperation.c:259
 #, c-format
 msgid "%s job #%d"
 msgstr "%s 的工作 #%d"
 
-#: ../gtk/gtkprintoperation.c:1777
+#: ../gtk/gtkprintoperation.c:1774
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "初始化狀態"
 
-#: ../gtk/gtkprintoperation.c:1778
+#: ../gtk/gtkprintoperation.c:1775
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "正在準備列印"
 
-#: ../gtk/gtkprintoperation.c:1779
+#: ../gtk/gtkprintoperation.c:1776
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "正在產生資料"
 
-#: ../gtk/gtkprintoperation.c:1780
+#: ../gtk/gtkprintoperation.c:1777
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "正在傳送資料"
 
-#: ../gtk/gtkprintoperation.c:1781
+#: ../gtk/gtkprintoperation.c:1778
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "正在等待"
 
-#: ../gtk/gtkprintoperation.c:1782
+#: ../gtk/gtkprintoperation.c:1779
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "因問題被阻擋"
 
-#: ../gtk/gtkprintoperation.c:1783
+#: ../gtk/gtkprintoperation.c:1780
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "正在列印"
 
-#: ../gtk/gtkprintoperation.c:1784
+#: ../gtk/gtkprintoperation.c:1781
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "已完成"
 
-#: ../gtk/gtkprintoperation.c:1785
+#: ../gtk/gtkprintoperation.c:1782
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "已完成但發生錯誤"
 
-#: ../gtk/gtkprintoperation.c:2349
+#: ../gtk/gtkprintoperation.c:2346
 #, c-format
 msgid "Preparing %d"
 msgstr "正在準備 %d"
 
-#: ../gtk/gtkprintoperation.c:2351 ../gtk/gtkprintoperation.c:2983
+#: ../gtk/gtkprintoperation.c:2348 ../gtk/gtkprintoperation.c:2980
 msgid "Preparing"
 msgstr "正在準備"
 
-#: ../gtk/gtkprintoperation.c:2354
+#: ../gtk/gtkprintoperation.c:2351
 #, c-format
 msgid "Printing %d"
 msgstr "正在列印 %d"
 
-#: ../gtk/gtkprintoperation.c:3013
+#: ../gtk/gtkprintoperation.c:3010
 msgid "Error creating print preview"
 msgstr "建立列印預覽時發生錯誤"
 
-#: ../gtk/gtkprintoperation.c:3016
+#: ../gtk/gtkprintoperation.c:3013
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "最可能的原因是無法建立暫存檔案。"
 
@@ -2326,135 +2879,68 @@ msgstr "最可能的原因是無法建立暫存檔案。"
 msgid "Error launching preview"
 msgstr "執行預覽時發生錯誤"
 
-#: ../gtk/gtkprintoperation-win32.c:609
+#: ../gtk/gtkprintoperation-win32.c:608
 msgid "Printer offline"
 msgstr "印表機離線"
 
-#: ../gtk/gtkprintoperation-win32.c:611
+#: ../gtk/gtkprintoperation-win32.c:610
 msgid "Out of paper"
 msgstr "沒有紙"
 
 #. Translators: this is a printer status.
-#: ../gtk/gtkprintoperation-win32.c:613
+#: ../gtk/gtkprintoperation-win32.c:612
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2288
 msgid "Paused"
 msgstr "已暫停"
 
-#: ../gtk/gtkprintoperation-win32.c:615
+#: ../gtk/gtkprintoperation-win32.c:614
 msgid "Need user intervention"
 msgstr "需要使用者干預"
 
-#: ../gtk/gtkprintoperation-win32.c:715
+#: ../gtk/gtkprintoperation-win32.c:714
 msgid "Custom size"
 msgstr "自訂大小"
 
-#: ../gtk/gtkprintoperation-win32.c:1537
+#: ../gtk/gtkprintoperation-win32.c:1536
 msgid "No printer found"
 msgstr "找不到印表機"
 
-#: ../gtk/gtkprintoperation-win32.c:1564
+#: ../gtk/gtkprintoperation-win32.c:1563
 msgid "Invalid argument to CreateDC"
 msgstr "給 CreateDC 的引數無效"
 
-#: ../gtk/gtkprintoperation-win32.c:1600 ../gtk/gtkprintoperation-win32.c:1827
+#: ../gtk/gtkprintoperation-win32.c:1599 ../gtk/gtkprintoperation-win32.c:1826
 msgid "Error from StartDoc"
 msgstr "來自 StartDoc 的錯誤"
 
-#: ../gtk/gtkprintoperation-win32.c:1682 ../gtk/gtkprintoperation-win32.c:1705
-#: ../gtk/gtkprintoperation-win32.c:1753
+#: ../gtk/gtkprintoperation-win32.c:1681 ../gtk/gtkprintoperation-win32.c:1704
+#: ../gtk/gtkprintoperation-win32.c:1752
 msgid "Not enough free memory"
 msgstr "記憶體不足"
 
-#: ../gtk/gtkprintoperation-win32.c:1758
+#: ../gtk/gtkprintoperation-win32.c:1757
 msgid "Invalid argument to PrintDlgEx"
 msgstr "給 PrintDlgEx 的參數無效"
 
-#: ../gtk/gtkprintoperation-win32.c:1763
+#: ../gtk/gtkprintoperation-win32.c:1762
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "給 PrintDlgEx 的指標無效"
 
-#: ../gtk/gtkprintoperation-win32.c:1768
+#: ../gtk/gtkprintoperation-win32.c:1767
 msgid "Invalid handle to PrintDlgEx"
 msgstr "給 PrintDlgEx 的處理無效"
 
-#: ../gtk/gtkprintoperation-win32.c:1773
+#: ../gtk/gtkprintoperation-win32.c:1772
 msgid "Unspecified error"
 msgstr "無法指定的錯誤"
 
-#: ../gtk/gtkprintunixdialog.c:681
+#: ../gtk/gtkprintunixdialog.c:820
 msgid "Getting printer information failed"
 msgstr "無法取得印表機資訊"
 
-#: ../gtk/gtkprintunixdialog.c:1916
+#: ../gtk/gtkprintunixdialog.c:2018
 msgid "Getting printer information…"
 msgstr "取得印表機資訊…"
-
-#: ../gtk/gtkprintunixdialog.c:2184
-msgid "Printer"
-msgstr "印表機"
-
-#. Translators: this is the header for the location column in the print dialog
-#: ../gtk/gtkprintunixdialog.c:2194
-msgid "Location"
-msgstr "位置"
-
-#. Translators: this is the header for the printer status column in the print dialog
-#: ../gtk/gtkprintunixdialog.c:2205
-msgid "Status"
-msgstr "狀態"
-
-#: ../gtk/gtkprintunixdialog.c:2231
-msgid "Range"
-msgstr "範圍"
-
-#: ../gtk/gtkprintunixdialog.c:2235
-msgid "_All Pages"
-msgstr "所有頁面(_A)"
-
-#: ../gtk/gtkprintunixdialog.c:2240
-msgid "C_urrent Page"
-msgstr "目前頁面(_U)"
-
-#: ../gtk/gtkprintunixdialog.c:2248
-msgid "Se_lection"
-msgstr "選擇區域(_L)"
-
-#: ../gtk/gtkprintunixdialog.c:2254
-msgid "Pag_es:"
-msgstr "頁數(_E):"
-
-#: ../gtk/gtkprintunixdialog.c:2255
-msgid ""
-"Specify one or more page ranges,\n"
-" e.g. 1-3,7,11"
-msgstr ""
-"指定一或多個頁面範圍，\n"
-"例如 1-3,7,11"
-
-#: ../gtk/gtkprintunixdialog.c:2264
-msgid "Pages"
-msgstr " 頁"
-
-#: ../gtk/gtkprintunixdialog.c:2275
-msgid "Copies"
-msgstr "列印份數"
-
-#. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:2280
-msgid "Copie_s:"
-msgstr "份數(_S)："
-
-#: ../gtk/gtkprintunixdialog.c:2296
-msgid "C_ollate"
-msgstr "順序(_O)"
-
-#: ../gtk/gtkprintunixdialog.c:2302
-msgid "_Reverse"
-msgstr "反序(_R)"
-
-#: ../gtk/gtkprintunixdialog.c:2318
-msgid "General"
-msgstr "一般"
 
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing (same as in gtkprintbackendcups.c)
@@ -2462,42 +2948,42 @@ msgstr "一般"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: ../gtk/gtkprintunixdialog.c:3058
+#: ../gtk/gtkprintunixdialog.c:2976
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4634
 msgid "Left to right, top to bottom"
 msgstr "由左至右，由上至下"
 
-#: ../gtk/gtkprintunixdialog.c:3058
+#: ../gtk/gtkprintunixdialog.c:2976
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4634
 msgid "Left to right, bottom to top"
 msgstr "由左至右，由下至上"
 
-#: ../gtk/gtkprintunixdialog.c:3059
+#: ../gtk/gtkprintunixdialog.c:2977
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4635
 msgid "Right to left, top to bottom"
 msgstr "由右至左，由上至下"
 
-#: ../gtk/gtkprintunixdialog.c:3059
+#: ../gtk/gtkprintunixdialog.c:2977
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4635
 msgid "Right to left, bottom to top"
 msgstr "由右至左，由下至上"
 
-#: ../gtk/gtkprintunixdialog.c:3060
+#: ../gtk/gtkprintunixdialog.c:2978
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4636
 msgid "Top to bottom, left to right"
 msgstr "由上至下，由左至右"
 
-#: ../gtk/gtkprintunixdialog.c:3060
+#: ../gtk/gtkprintunixdialog.c:2978
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4636
 msgid "Top to bottom, right to left"
 msgstr "由上至下，由右至左"
 
-#: ../gtk/gtkprintunixdialog.c:3061
+#: ../gtk/gtkprintunixdialog.c:2979
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4637
 msgid "Bottom to top, left to right"
 msgstr "由下至上，由左至右"
 
-#: ../gtk/gtkprintunixdialog.c:3061
+#: ../gtk/gtkprintunixdialog.c:2979
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4637
 msgid "Bottom to top, right to left"
 msgstr "由下至上，由右至左"
@@ -2505,239 +2991,61 @@ msgstr "由下至上，由右至左"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: ../gtk/gtkprintunixdialog.c:3065 ../gtk/gtkprintunixdialog.c:3078
+#: ../gtk/gtkprintunixdialog.c:2983 ../gtk/gtkprintunixdialog.c:2996
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4714
 msgid "Page Ordering"
 msgstr "頁面順序"
 
-#: ../gtk/gtkprintunixdialog.c:3094
+#: ../gtk/gtkprintunixdialog.c:3012
 msgid "Left to right"
 msgstr "左至右"
 
-#: ../gtk/gtkprintunixdialog.c:3095
+#: ../gtk/gtkprintunixdialog.c:3013
 msgid "Right to left"
 msgstr "右至左"
 
-#: ../gtk/gtkprintunixdialog.c:3107
+#: ../gtk/gtkprintunixdialog.c:3025
 msgid "Top to bottom"
 msgstr "由上至下"
 
-#: ../gtk/gtkprintunixdialog.c:3108
+#: ../gtk/gtkprintunixdialog.c:3026
 msgid "Bottom to top"
 msgstr "由下至上"
 
-#: ../gtk/gtkprintunixdialog.c:3352
-msgid "Layout"
-msgstr "配置"
-
-#: ../gtk/gtkprintunixdialog.c:3356
-msgid "T_wo-sided:"
-msgstr "雙面(_W)："
-
-#: ../gtk/gtkprintunixdialog.c:3368
-msgid "Pages per _side:"
-msgstr "每張紙的頁數(_S):"
-
-#: ../gtk/gtkprintunixdialog.c:3382
-msgid "Page or_dering:"
-msgstr "頁面順序(_D):"
-
-#: ../gtk/gtkprintunixdialog.c:3395
-msgid "_Only print:"
-msgstr "列印範圍(_O)："
-
-#. In enum order
-#: ../gtk/gtkprintunixdialog.c:3407
-msgid "All sheets"
-msgstr "所有頁面"
-
-#: ../gtk/gtkprintunixdialog.c:3408
-msgid "Even sheets"
-msgstr "奇數頁"
-
-#: ../gtk/gtkprintunixdialog.c:3409
-msgid "Odd sheets"
-msgstr "偶數頁"
-
-#: ../gtk/gtkprintunixdialog.c:3412
-msgid "Sc_ale:"
-msgstr "比例(_A)："
-
-#: ../gtk/gtkprintunixdialog.c:3436
-msgid "Paper"
-msgstr "紙張"
-
-#: ../gtk/gtkprintunixdialog.c:3440
-msgid "Paper _type:"
-msgstr "紙張類型(_T)："
-
-#: ../gtk/gtkprintunixdialog.c:3452
-msgid "Paper _source:"
-msgstr "紙張來源(_S)："
-
-#: ../gtk/gtkprintunixdialog.c:3464
-msgid "Output t_ray:"
-msgstr "出紙匣(_R)："
-
-#: ../gtk/gtkprintunixdialog.c:3497
-msgid "Or_ientation:"
-msgstr "方向(_I):"
-
-#. In enum order
-#: ../gtk/gtkprintunixdialog.c:3509
-msgid "Portrait"
-msgstr "直向"
-
-#: ../gtk/gtkprintunixdialog.c:3510
-msgid "Landscape"
-msgstr "橫向"
-
-#: ../gtk/gtkprintunixdialog.c:3511
-msgid "Reverse portrait"
-msgstr "直向倒轉"
-
-#: ../gtk/gtkprintunixdialog.c:3512
-msgid "Reverse landscape"
-msgstr "橫向倒轉"
-
-#: ../gtk/gtkprintunixdialog.c:3556
-msgid "Job Details"
-msgstr "列印工作詳細資料"
-
-#: ../gtk/gtkprintunixdialog.c:3560
-msgid "Pri_ority:"
-msgstr "優先權(_O):"
-
-#: ../gtk/gtkprintunixdialog.c:3572
-msgid "_Billing info:"
-msgstr "帳目資訊(_B)："
-
-#: ../gtk/gtkprintunixdialog.c:3587
-msgid "Print Document"
-msgstr "列印文件"
-
-#. Translators: this is one of the choices for the print at option
-#. * in the print dialog
-#.
-#: ../gtk/gtkprintunixdialog.c:3594
-msgid "_Now"
-msgstr "現在(_N)"
-
-#: ../gtk/gtkprintunixdialog.c:3603
-msgid "A_t:"
-msgstr "於(_T)："
-
-#. Translators: Ability to parse the am/pm format depends on actual locale.
-#. * You can remove the am/pm values below for your locale if they are not
-#. * supported.
-#.
-#: ../gtk/gtkprintunixdialog.c:3609
-msgid ""
-"Specify the time of print,\n"
-" e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
-msgstr ""
-"指定列印的時刻格式，\n"
-" 例如 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
-
-#: ../gtk/gtkprintunixdialog.c:3617
-msgid "Time of print"
-msgstr "列印時刻"
-
-#: ../gtk/gtkprintunixdialog.c:3631
-msgid "On _hold"
-msgstr "擱置(_H)"
-
-#: ../gtk/gtkprintunixdialog.c:3632
-msgid "Hold the job until it is explicitly released"
-msgstr "保留此工作直到它被明確的釋出"
-
-#: ../gtk/gtkprintunixdialog.c:3650
-msgid "Add Cover Page"
-msgstr "加入封面"
-
-#. Translators, this is the label used for the option in the print
-#. * dialog that controls the front cover page.
-#.
-#: ../gtk/gtkprintunixdialog.c:3657
-msgid "Be_fore:"
-msgstr "這頁之前(_F)："
-
-#. Translators, this is the label used for the option in the print
-#. * dialog that controls the back cover page.
-#.
-#: ../gtk/gtkprintunixdialog.c:3672
-msgid "_After:"
-msgstr "這頁之後(_A):"
-
-#. Translators: this is the tab label for the notebook tab containing
-#. * job-specific options in the print dialog
-#.
-#: ../gtk/gtkprintunixdialog.c:3687
-msgid "Job"
-msgstr "列印工作"
-
-#: ../gtk/gtkprintunixdialog.c:3751
-msgid "Advanced"
-msgstr "進階"
-
-#. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3789
-msgid "Image Quality"
-msgstr "圖片品質"
-
-#. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3793
-msgid "Color"
-msgstr "顏色"
-
-#. Translators: this will appear as tab label in print dialog.
-#. It's a typographical term, as in "Binding and finishing"
-#: ../gtk/gtkprintunixdialog.c:3798
-msgid "Finishing"
-msgstr "準備完成"
-
-#: ../gtk/gtkprintunixdialog.c:3808
-msgid "Some of the settings in the dialog conflict"
-msgstr "對話視窗中某些設定有衝突"
-
-#: ../gtk/gtkprintunixdialog.c:3834
+#: ../gtk/gtkprintunixdialog.c:3269
 msgid "Print"
 msgstr "列印"
 
-#: ../gtk/gtkrecentchooserdefault.c:480
-msgid "Select which type of documents are shown"
-msgstr "選擇顯示那一類型的文件"
-
-#: ../gtk/gtkrecentchooserdefault.c:1129 ../gtk/gtkrecentchooserdefault.c:1166
+#: ../gtk/gtkrecentchooserdefault.c:1048 ../gtk/gtkrecentchooserdefault.c:1085
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "找不到 URI「%s」的項目"
 
-#: ../gtk/gtkrecentchooserdefault.c:1293
+#: ../gtk/gtkrecentchooserdefault.c:1212
 msgid "Untitled filter"
 msgstr "未命名的過濾條件"
 
-#: ../gtk/gtkrecentchooserdefault.c:1646
+#: ../gtk/gtkrecentchooserdefault.c:1542
 msgid "Could not remove item"
 msgstr "無法移除項目"
 
-#: ../gtk/gtkrecentchooserdefault.c:1690
+#: ../gtk/gtkrecentchooserdefault.c:1586
 msgid "Could not clear list"
 msgstr "無法清除清單"
 
-#: ../gtk/gtkrecentchooserdefault.c:1774
+#: ../gtk/gtkrecentchooserdefault.c:1670
 msgid "Copy _Location"
 msgstr "複製位置(_L)"
 
-#: ../gtk/gtkrecentchooserdefault.c:1787
+#: ../gtk/gtkrecentchooserdefault.c:1681
 msgid "_Remove From List"
 msgstr "從清單中移除(_R)"
 
-#: ../gtk/gtkrecentchooserdefault.c:1796
+#: ../gtk/gtkrecentchooserdefault.c:1688
 msgid "_Clear List"
 msgstr "清除清單(_C)"
 
-#: ../gtk/gtkrecentchooserdefault.c:1810
+#: ../gtk/gtkrecentchooserdefault.c:1700
 msgid "Show _Private Resources"
 msgstr "顯示私有資源(_P)"
 
@@ -2751,21 +3059,21 @@ msgstr "顯示私有資源(_P)"
 #. * user appended or prepended custom menu items to the
 #. * recent chooser menu widget.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:360
+#: ../gtk/gtkrecentchoosermenu.c:355
 msgid "No items found"
 msgstr "找不到項目"
 
-#: ../gtk/gtkrecentchoosermenu.c:526 ../gtk/gtkrecentchoosermenu.c:582
+#: ../gtk/gtkrecentchoosermenu.c:521 ../gtk/gtkrecentchoosermenu.c:577
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "在 URI「%s」中找不到最近曾使用的資源"
 
-#: ../gtk/gtkrecentchoosermenu.c:792
+#: ../gtk/gtkrecentchoosermenu.c:787
 #, c-format
 msgid "Open '%s'"
 msgstr "開啟「%s」"
 
-#: ../gtk/gtkrecentchoosermenu.c:822
+#: ../gtk/gtkrecentchoosermenu.c:817
 msgid "Unknown item"
 msgstr "不明項目"
 
@@ -2774,7 +3082,7 @@ msgstr "不明項目"
 #. * the %s is the name of the item. Please keep the _ in front
 #. * of the number to give these menu items a mnemonic.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:833
+#: ../gtk/gtkrecentchoosermenu.c:828
 #, c-format
 msgctxt "recent menu label"
 msgid "_%d. %s"
@@ -2783,536 +3091,30 @@ msgstr "_%d. %s"
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:838
+#: ../gtk/gtkrecentchoosermenu.c:833
 #, c-format
 msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:1035 ../gtk/gtkrecentmanager.c:1048
-#: ../gtk/gtkrecentmanager.c:1185 ../gtk/gtkrecentmanager.c:1195
-#: ../gtk/gtkrecentmanager.c:1247 ../gtk/gtkrecentmanager.c:1256
-#: ../gtk/gtkrecentmanager.c:1271
+#: ../gtk/gtkrecentmanager.c:1030 ../gtk/gtkrecentmanager.c:1043
+#: ../gtk/gtkrecentmanager.c:1180 ../gtk/gtkrecentmanager.c:1190
+#: ../gtk/gtkrecentmanager.c:1242 ../gtk/gtkrecentmanager.c:1251
+#: ../gtk/gtkrecentmanager.c:1266
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "無法找到有 URI「%s」的項目"
 
-#: ../gtk/gtkrecentmanager.c:2471
+#: ../gtk/gtkrecentmanager.c:2466
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr "找不到 URI「%2$s」，名稱「%1$s」的註冊應用程式"
-
-#. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
-#: ../gtk/gtkstock.c:324
-msgctxt "Stock label"
-msgid "Information"
-msgstr "Information"
-
-#: ../gtk/gtkstock.c:325
-msgctxt "Stock label"
-msgid "Warning"
-msgstr "警告"
-
-#: ../gtk/gtkstock.c:326
-msgctxt "Stock label"
-msgid "Error"
-msgstr "錯誤"
-
-#: ../gtk/gtkstock.c:327
-msgctxt "Stock label"
-msgid "Question"
-msgstr "問題"
-
-#. FIXME these need accelerators when appropriate, and
-#. * need the mnemonics to be rationalized
-#.
-#: ../gtk/gtkstock.c:332
-msgctxt "Stock label"
-msgid "_About"
-msgstr "關於(_A)"
-
-#: ../gtk/gtkstock.c:333
-msgctxt "Stock label"
-msgid "_Add"
-msgstr "加入(_A)"
-
-#: ../gtk/gtkstock.c:334
-msgctxt "Stock label"
-msgid "_Apply"
-msgstr "套用(_A)"
-
-#: ../gtk/gtkstock.c:335
-msgctxt "Stock label"
-msgid "_Bold"
-msgstr "粗體(_B)"
-
-#: ../gtk/gtkstock.c:336
-msgctxt "Stock label"
-msgid "_Cancel"
-msgstr "取消(_C)"
-
-#: ../gtk/gtkstock.c:337
-msgctxt "Stock label"
-msgid "_CD-ROM"
-msgstr "_CD-ROM"
-
-#: ../gtk/gtkstock.c:338
-msgctxt "Stock label"
-msgid "_Clear"
-msgstr "清除(_C)"
-
-#: ../gtk/gtkstock.c:339
-msgctxt "Stock label"
-msgid "_Close"
-msgstr "關閉(_C)"
-
-#: ../gtk/gtkstock.c:340
-msgctxt "Stock label"
-msgid "C_onnect"
-msgstr "連線(_O)"
-
-#: ../gtk/gtkstock.c:341
-msgctxt "Stock label"
-msgid "_Convert"
-msgstr "轉換(_C)"
-
-#: ../gtk/gtkstock.c:342
-msgctxt "Stock label"
-msgid "_Copy"
-msgstr "複製(_C)"
-
-#: ../gtk/gtkstock.c:343
-msgctxt "Stock label"
-msgid "Cu_t"
-msgstr "剪下(_T)"
-
-#: ../gtk/gtkstock.c:344
-msgctxt "Stock label"
-msgid "_Delete"
-msgstr "刪除(_D)"
-
-#: ../gtk/gtkstock.c:345
-msgctxt "Stock label"
-msgid "_Discard"
-msgstr "放棄(_D)"
-
-#: ../gtk/gtkstock.c:346
-msgctxt "Stock label"
-msgid "_Disconnect"
-msgstr "斷線(_D)"
-
-#: ../gtk/gtkstock.c:347
-msgctxt "Stock label"
-msgid "_Execute"
-msgstr "執行(_E)"
-
-#: ../gtk/gtkstock.c:348
-msgctxt "Stock label"
-msgid "_Edit"
-msgstr "編輯(_E)"
-
-#: ../gtk/gtkstock.c:349
-msgctxt "Stock label"
-msgid "_File"
-msgstr "檔案(_F)"
-
-#: ../gtk/gtkstock.c:350
-msgctxt "Stock label"
-msgid "_Find"
-msgstr "尋找(_F)"
-
-#: ../gtk/gtkstock.c:351
-msgctxt "Stock label"
-msgid "Find and _Replace"
-msgstr "尋找與取代(_R)"
-
-#: ../gtk/gtkstock.c:352
-msgctxt "Stock label"
-msgid "_Floppy"
-msgstr "軟碟(_F)"
-
-# (Abel) 「全螢幕模式」佔 gtktoolbar 按鈕的位置太闊了
-#: ../gtk/gtkstock.c:353
-msgctxt "Stock label"
-msgid "_Fullscreen"
-msgstr "全螢幕(_F)"
-
-# (Abel) 「離開全螢幕模式」佔 gtktoolbar 按鈕的位置太闊了
-#: ../gtk/gtkstock.c:354
-msgctxt "Stock label"
-msgid "_Leave Fullscreen"
-msgstr "離開全螢幕(_L)"
-
-#. This is a navigation label as in "go to the bottom of the page"
-#: ../gtk/gtkstock.c:356
-msgctxt "Stock label, navigation"
-msgid "_Bottom"
-msgstr "頁尾(_B)"
-
-#. This is a navigation label as in "go to the first page"
-#: ../gtk/gtkstock.c:358
-msgctxt "Stock label, navigation"
-msgid "_First"
-msgstr "第一頁(_F)"
-
-#. This is a navigation label as in "go to the last page"
-#: ../gtk/gtkstock.c:360
-msgctxt "Stock label, navigation"
-msgid "_Last"
-msgstr "最後一頁(_L)"
-
-#. This is a navigation label as in "go to the top of the page"
-#: ../gtk/gtkstock.c:362
-msgctxt "Stock label, navigation"
-msgid "_Top"
-msgstr "頁首(_T)"
-
-#. This is a navigation label as in "go back"
-#: ../gtk/gtkstock.c:364
-msgctxt "Stock label, navigation"
-msgid "_Back"
-msgstr "返回(_B)"
-
-#. This is a navigation label as in "go down"
-#: ../gtk/gtkstock.c:366
-msgctxt "Stock label, navigation"
-msgid "_Down"
-msgstr "向下(_D)"
-
-#. This is a navigation label as in "go forward"
-#: ../gtk/gtkstock.c:368
-msgctxt "Stock label, navigation"
-msgid "_Forward"
-msgstr "前進(_F)"
-
-#. This is a navigation label as in "go up"
-#: ../gtk/gtkstock.c:370
-msgctxt "Stock label, navigation"
-msgid "_Up"
-msgstr "向上(_U)"
-
-#: ../gtk/gtkstock.c:371
-msgctxt "Stock label"
-msgid "_Hard Disk"
-msgstr "硬碟(_H)"
-
-#: ../gtk/gtkstock.c:372
-msgctxt "Stock label"
-msgid "_Help"
-msgstr "求助(_H)"
-
-#: ../gtk/gtkstock.c:373
-msgctxt "Stock label"
-msgid "_Home"
-msgstr "首頁(_H)"
-
-#: ../gtk/gtkstock.c:374
-msgctxt "Stock label"
-msgid "Increase Indent"
-msgstr "增加縮排"
-
-#: ../gtk/gtkstock.c:375
-msgctxt "Stock label"
-msgid "Decrease Indent"
-msgstr "減少縮排"
-
-#: ../gtk/gtkstock.c:376
-msgctxt "Stock label"
-msgid "_Index"
-msgstr "索引(_I)"
-
-#: ../gtk/gtkstock.c:377
-msgctxt "Stock label"
-msgid "_Information"
-msgstr "資訊(_I)"
-
-#: ../gtk/gtkstock.c:378
-msgctxt "Stock label"
-msgid "_Italic"
-msgstr "斜體(_I)"
-
-#: ../gtk/gtkstock.c:379
-msgctxt "Stock label"
-msgid "_Jump to"
-msgstr "跳轉到(_J)"
-
-#. This is about text justification, "centered text"
-#: ../gtk/gtkstock.c:381
-msgctxt "Stock label"
-msgid "_Center"
-msgstr "置中(_C)"
-
-#. This is about text justification
-#: ../gtk/gtkstock.c:383
-msgctxt "Stock label"
-msgid "_Fill"
-msgstr "左右填滿(_F)"
-
-#. This is about text justification, "left-justified text"
-#: ../gtk/gtkstock.c:385
-msgctxt "Stock label"
-msgid "_Left"
-msgstr "靠左(_L)"
-
-#. This is about text justification, "right-justified text"
-#: ../gtk/gtkstock.c:387
-msgctxt "Stock label"
-msgid "_Right"
-msgstr "靠右(_R)"
-
-#. Media label, as in "fast forward"
-#: ../gtk/gtkstock.c:390
-msgctxt "Stock label, media"
-msgid "_Forward"
-msgstr "快轉(_F)"
-
-#. Media label, as in "next song"
-#: ../gtk/gtkstock.c:392
-msgctxt "Stock label, media"
-msgid "_Next"
-msgstr "下一首(_N)"
-
-#. Media label, as in "pause music"
-#: ../gtk/gtkstock.c:394
-msgctxt "Stock label, media"
-msgid "P_ause"
-msgstr "暫停(_A)"
-
-#. Media label, as in "play music"
-#: ../gtk/gtkstock.c:396
-msgctxt "Stock label, media"
-msgid "_Play"
-msgstr "播放(_P)"
-
-#. Media label, as in  "previous song"
-#: ../gtk/gtkstock.c:398
-msgctxt "Stock label, media"
-msgid "Pre_vious"
-msgstr "上一首(_V)"
-
-#. Media label
-#: ../gtk/gtkstock.c:400
-msgctxt "Stock label, media"
-msgid "_Record"
-msgstr "錄製(_R)"
-
-#. Media label
-#: ../gtk/gtkstock.c:402
-msgctxt "Stock label, media"
-msgid "R_ewind"
-msgstr "倒轉(_E)"
-
-#. Media label
-#: ../gtk/gtkstock.c:404
-msgctxt "Stock label, media"
-msgid "_Stop"
-msgstr "停止(_S)"
-
-#: ../gtk/gtkstock.c:405
-msgctxt "Stock label"
-msgid "_Network"
-msgstr "網路(_N)"
-
-#: ../gtk/gtkstock.c:406
-msgctxt "Stock label"
-msgid "_New"
-msgstr "新增(_N)"
-
-#: ../gtk/gtkstock.c:407
-msgctxt "Stock label"
-msgid "_No"
-msgstr "否(_N)"
-
-#: ../gtk/gtkstock.c:408
-msgctxt "Stock label"
-msgid "_OK"
-msgstr "確定(_O)"
-
-#: ../gtk/gtkstock.c:409
-msgctxt "Stock label"
-msgid "_Open"
-msgstr "開啟(_O)"
-
-#. Page orientation
-#: ../gtk/gtkstock.c:411
-msgctxt "Stock label"
-msgid "Landscape"
-msgstr "橫向"
-
-#. Page orientation
-#: ../gtk/gtkstock.c:413
-msgctxt "Stock label"
-msgid "Portrait"
-msgstr "直向"
-
-#. Page orientation
-#: ../gtk/gtkstock.c:415
-msgctxt "Stock label"
-msgid "Reverse landscape"
-msgstr "橫向倒轉"
-
-#. Page orientation
-#: ../gtk/gtkstock.c:417
-msgctxt "Stock label"
-msgid "Reverse portrait"
-msgstr "直向倒轉"
-
-#: ../gtk/gtkstock.c:418
-msgctxt "Stock label"
-msgid "Page Set_up"
-msgstr "頁面設定(_U)"
-
-#: ../gtk/gtkstock.c:419
-msgctxt "Stock label"
-msgid "_Paste"
-msgstr "貼上(_P)"
-
-#: ../gtk/gtkstock.c:420
-msgctxt "Stock label"
-msgid "_Preferences"
-msgstr "偏好設定(_P)"
-
-#: ../gtk/gtkstock.c:421
-msgctxt "Stock label"
-msgid "_Print"
-msgstr "列印(_P)"
-
-#: ../gtk/gtkstock.c:422
-msgctxt "Stock label"
-msgid "Print Pre_view"
-msgstr "預覽列印(_V)"
-
-#: ../gtk/gtkstock.c:423
-msgctxt "Stock label"
-msgid "_Properties"
-msgstr "屬性(_P)"
-
-#: ../gtk/gtkstock.c:424
-msgctxt "Stock label"
-msgid "_Quit"
-msgstr "結束(_Q)"
-
-#: ../gtk/gtkstock.c:425
-msgctxt "Stock label"
-msgid "_Redo"
-msgstr "取消復原(_R)"
-
-#: ../gtk/gtkstock.c:426
-msgctxt "Stock label"
-msgid "_Refresh"
-msgstr "重新整理(_R)"
-
-#: ../gtk/gtkstock.c:427
-msgctxt "Stock label"
-msgid "_Remove"
-msgstr "移除(_R)"
-
-#: ../gtk/gtkstock.c:428
-msgctxt "Stock label"
-msgid "_Revert"
-msgstr "還原(_R)"
-
-#: ../gtk/gtkstock.c:429
-msgctxt "Stock label"
-msgid "_Save"
-msgstr "儲存(_S)"
-
-#: ../gtk/gtkstock.c:430
-msgctxt "Stock label"
-msgid "Save _As"
-msgstr "另存新檔(_A)"
-
-#: ../gtk/gtkstock.c:431
-msgctxt "Stock label"
-msgid "Select _All"
-msgstr "全部選取(_A)"
-
-#: ../gtk/gtkstock.c:432
-msgctxt "Stock label"
-msgid "_Color"
-msgstr "顏色(_C)"
-
-#: ../gtk/gtkstock.c:433
-msgctxt "Stock label"
-msgid "_Font"
-msgstr "字型(_F)"
-
-#. Sorting direction
-#: ../gtk/gtkstock.c:435
-msgctxt "Stock label"
-msgid "_Ascending"
-msgstr "遞增(_A)"
-
-#. Sorting direction
-#: ../gtk/gtkstock.c:437
-msgctxt "Stock label"
-msgid "_Descending"
-msgstr "遞減(_D)"
-
-#: ../gtk/gtkstock.c:438
-msgctxt "Stock label"
-msgid "_Spell Check"
-msgstr "拼字檢查(_S)"
-
-#: ../gtk/gtkstock.c:439
-msgctxt "Stock label"
-msgid "_Stop"
-msgstr "停止(_S)"
-
-#. Font variant
-#: ../gtk/gtkstock.c:441
-msgctxt "Stock label"
-msgid "_Strikethrough"
-msgstr "刪除線(_S)"
-
-#: ../gtk/gtkstock.c:442
-msgctxt "Stock label"
-msgid "_Undelete"
-msgstr "還原刪除(_U)"
-
-#. Font variant
-#: ../gtk/gtkstock.c:444
-msgctxt "Stock label"
-msgid "_Underline"
-msgstr "底線(_U)"
-
-#: ../gtk/gtkstock.c:445
-msgctxt "Stock label"
-msgid "_Undo"
-msgstr "復原(_U)"
-
-#: ../gtk/gtkstock.c:446
-msgctxt "Stock label"
-msgid "_Yes"
-msgstr "是(_Y)"
-
-#. Zoom
-#: ../gtk/gtkstock.c:448
-msgctxt "Stock label"
-msgid "_Normal Size"
-msgstr "一般大小(_N)"
-
-#. Zoom
-#: ../gtk/gtkstock.c:450
-msgctxt "Stock label"
-msgid "Best _Fit"
-msgstr "最適大小(_F)"
-
-#: ../gtk/gtkstock.c:451
-msgctxt "Stock label"
-msgid "Zoom _In"
-msgstr "拉近(_I)"
-
-#: ../gtk/gtkstock.c:452
-msgctxt "Stock label"
-msgid "Zoom _Out"
-msgstr "拉遠(_O)"
 
 #. Translators: if the "on" state label requires more than three
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: ../gtk/gtkswitch.c:345 ../gtk/gtkswitch.c:400 ../gtk/gtkswitch.c:591
+#: ../gtk/gtkswitch.c:347 ../gtk/gtkswitch.c:403 ../gtk/gtkswitch.c:580
 msgctxt "switch"
 msgid "ON"
 msgstr "開"
@@ -3320,7 +3122,7 @@ msgstr "開"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: ../gtk/gtkswitch.c:353 ../gtk/gtkswitch.c:401 ../gtk/gtkswitch.c:606
+#: ../gtk/gtkswitch.c:355 ../gtk/gtkswitch.c:404 ../gtk/gtkswitch.c:595
 msgctxt "switch"
 msgid "OFF"
 msgstr "關"
@@ -3479,53 +3281,15 @@ msgstr "ZW_J 零寬度連接符"
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZW_NJ 零寬度非連接符"
 
-#: ../gtk/gtkuimanager.c:1780
-#, c-format
-msgid "Unexpected start tag '%s' on line %d char %d"
-msgstr "第 %2$d 行第 %3$d 字有非預設的開始標記「%1$s」"
-
-#: ../gtk/gtkuimanager.c:1870
-#, c-format
-msgid "Unexpected character data on line %d char %d"
-msgstr "第 %d 行第 %d 字有非預設的字元資料"
-
-#: ../gtk/gtkuimanager.c:2693
-msgid "Empty"
-msgstr "空的"
-
-#: ../gtk/gtkvolumebutton.c:169
-msgid "Volume"
-msgstr "音量"
-
-#: ../gtk/gtkvolumebutton.c:171
-msgid "Turns volume down or up"
-msgstr "提高或降低音量"
-
-#: ../gtk/gtkvolumebutton.c:174
+#: ../gtk/gtkvolumebutton.c:177
 msgid "Adjusts the volume"
 msgstr "調整音量"
 
-#: ../gtk/gtkvolumebutton.c:180 ../gtk/gtkvolumebutton.c:183
-msgid "Volume Down"
-msgstr "調低音量"
-
-#: ../gtk/gtkvolumebutton.c:182
-msgid "Decreases the volume"
-msgstr "減低音量"
-
-#: ../gtk/gtkvolumebutton.c:186 ../gtk/gtkvolumebutton.c:189
-msgid "Volume Up"
-msgstr "調高音量"
-
-#: ../gtk/gtkvolumebutton.c:188
-msgid "Increases the volume"
-msgstr "增加音量"
-
-#: ../gtk/gtkvolumebutton.c:246
+#: ../gtk/gtkvolumebutton.c:220
 msgid "Muted"
 msgstr "已靜音"
 
-#: ../gtk/gtkvolumebutton.c:250
+#: ../gtk/gtkvolumebutton.c:224
 msgid "Full Volume"
 msgstr "最大音量"
 
@@ -3534,11 +3298,27 @@ msgstr "最大音量"
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: ../gtk/gtkvolumebutton.c:263
+#: ../gtk/gtkvolumebutton.c:237
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
+
+#: ../gtk/gtkwindow.c:7819
+msgid "Minimize"
+msgstr "最小化"
+
+#: ../gtk/gtkwindow.c:7828
+msgid "Unmaximize"
+msgstr "取消最大化"
+
+#: ../gtk/gtkwindow.c:7828
+msgid "Maximize"
+msgstr "最大化"
+
+#: ../gtk/gtkwindow.c:7842
+msgid "Close"
+msgstr "關閉"
 
 #: ../gtk/paper_names_offsets.c:4
 msgctxt "paper size"
@@ -4489,7 +4269,7 @@ msgid "IPA"
 msgstr "國際音標"
 
 #. ID
-#: ../modules/input/immultipress.c:29
+#: ../modules/input/immultipress.c:30
 msgid "Multipress"
 msgstr "Multipress"
 
@@ -4970,32 +4750,409 @@ msgstr "test-output.%s"
 msgid "Print to Test Printer"
 msgstr "列印至測試印表機"
 
-#~ msgid "Could not run application"
-#~ msgstr "無法啟動程式"
+#: ../gtk/gtkaboutdialog.ui.h:1
+msgid "C_redits"
+msgstr "鳴謝(_R)"
 
-#~ msgid "Could not find '%s'"
-#~ msgstr "找不到「%s」"
+#: ../gtk/gtkaboutdialog.ui.h:2
+msgid "_License"
+msgstr "授權條款(_L)"
 
-#~ msgid "Could not find application"
-#~ msgstr "找不到應用程式"
+#: ../gtk/gtkappchooserdialog.ui.h:3
+msgid "label"
+msgstr "標籤"
 
-#~ msgid "Homepage"
-#~ msgstr "首頁"
+#: ../gtk/gtkappchooserdialog.ui.h:4
+msgid "Show Other Applications"
+msgstr "顯示其他的應用程式"
 
-#~ msgid "Manage Custom Sizes..."
-#~ msgstr "管理自訂大小…"
+#: ../gtk/gtkassistant.ui.h:2
+msgid "C_ontinue"
+msgstr "繼續(_O)"
 
-#~ msgid "Connect as u_ser:"
-#~ msgstr "以使用者連線(_S):"
+#: ../gtk/gtkassistant.ui.h:3
+msgid "Go _Back"
+msgstr "後退(_B)"
 
-#~ msgid "Select a folder"
-#~ msgstr "選擇資料夾"
+#: ../gtk/gtkassistant.ui.h:4
+msgid "_Finish"
+msgstr "完成(_F)"
 
-#~ msgid "_Save in folder:"
-#~ msgstr "儲存在資料夾中(_S)："
+#: ../gtk/gtkcolorchooserdialog.ui.h:1
+msgid "Select a Color"
+msgstr "選擇一個顏色"
 
-#~ msgid "Caps Lock and Num Lock are on"
-#~ msgstr "Caps Lock 和 Num Lock 是開啟的"
+#: ../gtk/gtkcoloreditor.ui.h:1
+msgid "Color Name"
+msgstr "顏色名稱"
 
-#~ msgid "Num Lock is on"
-#~ msgstr "Num Lock 已開啟"
+#: ../gtk/gtkcoloreditor.ui.h:2
+msgctxt "Color channel"
+msgid "A"
+msgstr "A"
+
+#: ../gtk/gtkcoloreditor.ui.h:3
+msgid "Alpha"
+msgstr "透明"
+
+#: ../gtk/gtkcoloreditor.ui.h:4
+msgctxt "Color channel"
+msgid "H"
+msgstr "H"
+
+#: ../gtk/gtkcoloreditor.ui.h:5
+msgid "Hue"
+msgstr "色相"
+
+#: ../gtk/gtkcoloreditor.ui.h:6
+msgctxt "Color Channel"
+msgid "S"
+msgstr "S"
+
+#: ../gtk/gtkcoloreditor.ui.h:7
+msgctxt "Color Channel"
+msgid "V"
+msgstr "V"
+
+#: ../gtk/gtkcoloreditor.ui.h:8
+msgid "Saturation"
+msgstr "飽和度"
+
+#: ../gtk/gtkcoloreditor.ui.h:9
+msgid "Value"
+msgstr "數值"
+
+#: ../gtk/gtkfilechooserdefault.ui.h:1
+msgid "_Location:"
+msgstr "位置(_L):"
+
+#: ../gtk/gtkfilechooserdefault.ui.h:2 ../gtk/gtkfilechooserdefault.ui.h:3
+msgid "Type a file name"
+msgstr "輸入檔案名稱"
+
+#: ../gtk/gtkfilechooserdefault.ui.h:4
+msgid "Create Fo_lder"
+msgstr "建立資料夾(_L)"
+
+#: ../gtk/gtkfilechooserdefault.ui.h:5
+msgid "Files"
+msgstr "檔案"
+
+#: ../gtk/gtkfilechooserdefault.ui.h:6
+msgid "Name"
+msgstr "名稱"
+
+#: ../gtk/gtkfilechooserdefault.ui.h:7
+msgid "Size"
+msgstr "大小"
+
+#: ../gtk/gtkfilechooserdefault.ui.h:8
+msgid "Modified"
+msgstr "已修改"
+
+#: ../gtk/gtkfilechooserdefault.ui.h:9
+msgid "Select which types of files are shown"
+msgstr "選擇顯示哪種類型的檔案"
+
+#: ../gtk/gtkfontbutton.ui.h:1
+msgid "Font"
+msgstr "字型"
+
+#: ../gtk/gtkfontchooserwidget.ui.h:1
+msgid "Search font name"
+msgstr "搜尋字型的名稱"
+
+#: ../gtk/gtkfontchooserwidget.ui.h:2
+msgid "Font Family"
+msgstr "字族"
+
+#: ../gtk/gtkfontchooserwidget.ui.h:3
+msgid "No fonts matched your search. You can revise your search and try again."
+msgstr "沒有字型符合您的搜尋。您可以修正您的搜尋後再試一次。"
+
+#: ../gtk/gtkmessagedialog.ui.h:1
+msgid " "
+msgstr " "
+
+#: ../gtk/gtkpagesetupunixdialog.ui.h:3
+msgid "_Format for:"
+msgstr "格式(_F)"
+
+#: ../gtk/gtkpagesetupunixdialog.ui.h:4 ../gtk/gtkprintunixdialog.ui.h:38
+msgid "_Paper size:"
+msgstr "紙張大小(_P):"
+
+#: ../gtk/gtkpagesetupunixdialog.ui.h:5
+msgid "_Orientation:"
+msgstr "方向(_O):"
+
+#: ../gtk/gtkpagesetupunixdialog.ui.h:6
+msgid "Portrait"
+msgstr "直向"
+
+#: ../gtk/gtkpagesetupunixdialog.ui.h:7
+msgid "Reverse portrait"
+msgstr "直向倒轉"
+
+#: ../gtk/gtkpagesetupunixdialog.ui.h:8
+msgid "Landscape"
+msgstr "橫向"
+
+#: ../gtk/gtkpagesetupunixdialog.ui.h:9
+msgid "Reverse landscape"
+msgstr "橫向倒轉"
+
+#: ../gtk/gtkpathbar.ui.h:1
+msgid "Down Path"
+msgstr "向下路徑"
+
+#: ../gtk/gtkpathbar.ui.h:2
+msgid "Up Path"
+msgstr "向上路徑"
+
+#: ../gtk/gtkprintunixdialog.ui.h:1
+msgid "Pre_view"
+msgstr "預覽(_V)"
+
+#: ../gtk/gtkprintunixdialog.ui.h:3
+msgid "_Print"
+msgstr "列印(_P)"
+
+#: ../gtk/gtkprintunixdialog.ui.h:4
+msgid "Printer"
+msgstr "印表機"
+
+#. this is the header for the location column in the print dialog
+#: ../gtk/gtkprintunixdialog.ui.h:7
+msgid "Location"
+msgstr "位置"
+
+#. this is the header for the printer status column in the print dialog
+#: ../gtk/gtkprintunixdialog.ui.h:10
+msgid "Status"
+msgstr "狀態"
+
+#: ../gtk/gtkprintunixdialog.ui.h:11
+msgid "Range"
+msgstr "範圍"
+
+#: ../gtk/gtkprintunixdialog.ui.h:12
+msgid "_All Pages"
+msgstr "所有頁面(_A)"
+
+#: ../gtk/gtkprintunixdialog.ui.h:13
+msgid "C_urrent Page"
+msgstr "目前頁面(_U)"
+
+#: ../gtk/gtkprintunixdialog.ui.h:14
+msgid "Se_lection"
+msgstr "選擇區域(_L)"
+
+#: ../gtk/gtkprintunixdialog.ui.h:15
+msgid "Pag_es:"
+msgstr "頁數(_E):"
+
+#: ../gtk/gtkprintunixdialog.ui.h:16 ../gtk/gtkprintunixdialog.ui.h:18
+#: ../gtk/gtkprintunixdialog.ui.h:21
+msgid ""
+"Specify one or more page ranges,\n"
+" e.g. 1-3,7,11"
+msgstr ""
+"指定一或多個頁面範圍，\n"
+"例如 1-3,7,11"
+
+#: ../gtk/gtkprintunixdialog.ui.h:20
+msgid "Pages"
+msgstr " 頁"
+
+#: ../gtk/gtkprintunixdialog.ui.h:23
+msgid "Copies"
+msgstr "列印份數"
+
+#: ../gtk/gtkprintunixdialog.ui.h:24
+msgid "Copie_s:"
+msgstr "份數(_S)："
+
+#: ../gtk/gtkprintunixdialog.ui.h:25
+msgid "C_ollate"
+msgstr "順序(_O)"
+
+#: ../gtk/gtkprintunixdialog.ui.h:26
+msgid "_Reverse"
+msgstr "反序(_R)"
+
+#: ../gtk/gtkprintunixdialog.ui.h:27
+msgid "General"
+msgstr "一般"
+
+#: ../gtk/gtkprintunixdialog.ui.h:28
+msgid "Layout"
+msgstr "配置"
+
+#: ../gtk/gtkprintunixdialog.ui.h:29
+msgid "T_wo-sided:"
+msgstr "雙面(_W)："
+
+#: ../gtk/gtkprintunixdialog.ui.h:30
+msgid "Pages per _side:"
+msgstr "每張紙的頁數(_S):"
+
+#: ../gtk/gtkprintunixdialog.ui.h:31
+msgid "Page or_dering:"
+msgstr "頁面順序(_D):"
+
+#: ../gtk/gtkprintunixdialog.ui.h:32
+msgid "_Only print:"
+msgstr "列印範圍(_O)："
+
+#: ../gtk/gtkprintunixdialog.ui.h:33
+msgid "Sc_ale:"
+msgstr "比例(_A)："
+
+#: ../gtk/gtkprintunixdialog.ui.h:34
+msgid "Paper"
+msgstr "紙張"
+
+#: ../gtk/gtkprintunixdialog.ui.h:35
+msgid "Paper _type:"
+msgstr "紙張類型(_T)："
+
+#: ../gtk/gtkprintunixdialog.ui.h:36
+msgid "Paper _source:"
+msgstr "紙張來源(_S)："
+
+#: ../gtk/gtkprintunixdialog.ui.h:37
+msgid "Output t_ray:"
+msgstr "出紙匣(_R)："
+
+#: ../gtk/gtkprintunixdialog.ui.h:39
+msgid "Or_ientation:"
+msgstr "方向(_I):"
+
+#: ../gtk/gtkprintunixdialog.ui.h:41
+msgid "Job Details"
+msgstr "列印工作詳細資料"
+
+#: ../gtk/gtkprintunixdialog.ui.h:42
+msgid "Pri_ority:"
+msgstr "優先權(_O):"
+
+#: ../gtk/gtkprintunixdialog.ui.h:43
+msgid "_Billing info:"
+msgstr "帳目資訊(_B)："
+
+#: ../gtk/gtkprintunixdialog.ui.h:44
+msgid "Print Document"
+msgstr "列印文件"
+
+#. this is one of the choices for the print at option in the print dialog
+#: ../gtk/gtkprintunixdialog.ui.h:47
+msgid "_Now"
+msgstr "現在(_N)"
+
+#. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
+#: ../gtk/gtkprintunixdialog.ui.h:50
+msgid "A_t:"
+msgstr "於(_T)："
+
+#. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
+#: ../gtk/gtkprintunixdialog.ui.h:51 ../gtk/gtkprintunixdialog.ui.h:55
+#: ../gtk/gtkprintunixdialog.ui.h:57 ../gtk/gtkprintunixdialog.ui.h:61
+#: ../gtk/gtkprintunixdialog.ui.h:64
+msgid ""
+"Specify the time of print,\n"
+" e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
+msgstr ""
+"指定列印的時刻格式，\n"
+" 例如 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
+
+#: ../gtk/gtkprintunixdialog.ui.h:63
+msgid "Time of print"
+msgstr "列印時刻"
+
+#. this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'.
+#: ../gtk/gtkprintunixdialog.ui.h:68
+msgid "On _hold"
+msgstr "擱置(_H)"
+
+#: ../gtk/gtkprintunixdialog.ui.h:69 ../gtk/gtkprintunixdialog.ui.h:70
+msgid "Hold the job until it is explicitly released"
+msgstr "保留此工作直到它被明確的釋出"
+
+#: ../gtk/gtkprintunixdialog.ui.h:71
+msgid "Add Cover Page"
+msgstr "加入封面"
+
+#. this is the label used for the option in the print dialog that controls the front cover page.
+#: ../gtk/gtkprintunixdialog.ui.h:74
+msgid "Be_fore:"
+msgstr "這頁之前(_F)："
+
+#. this is the label used for the option in the print dialog that controls the back cover page.
+#: ../gtk/gtkprintunixdialog.ui.h:77
+msgid "_After:"
+msgstr "這頁之後(_A):"
+
+#: ../gtk/gtkprintunixdialog.ui.h:78
+msgid "Job"
+msgstr "列印工作"
+
+#. This will appear as a tab label in the print dialog.
+#: ../gtk/gtkprintunixdialog.ui.h:81
+msgid "Image Quality"
+msgstr "圖片品質"
+
+#. This will appear as a tab label in the print dialog.
+#: ../gtk/gtkprintunixdialog.ui.h:84
+msgid "Color"
+msgstr "顏色"
+
+#. This will appear as a tab label in the print dialog.
+#. It's a typographical term, as in "Binding and finishing"
+#: ../gtk/gtkprintunixdialog.ui.h:88
+msgid "Finishing"
+msgstr "準備完成"
+
+#: ../gtk/gtkprintunixdialog.ui.h:89
+msgid "Advanced"
+msgstr "進階"
+
+#: ../gtk/gtkprintunixdialog.ui.h:90
+msgid "Some of the settings in the dialog conflict"
+msgstr "對話視窗中某些設定有衝突"
+
+#: ../gtk/gtkrecentchooserdefault.ui.h:1
+msgid "Select which type of documents are shown"
+msgstr "選擇顯示那一類型的文件"
+
+#: ../gtk/gtkvolumebutton.ui.h:1
+msgid "Volume"
+msgstr "音量"
+
+#: ../gtk/gtkvolumebutton.ui.h:2
+msgid "Turns volume up or down"
+msgstr "提高或降低音量"
+
+#: ../gtk/gtkvolumebutton.ui.h:3
+msgid "+"
+msgstr "+"
+
+#: ../gtk/gtkvolumebutton.ui.h:4 ../gtk/gtkvolumebutton.ui.h:5
+msgid "Volume Up"
+msgstr "調高音量"
+
+#: ../gtk/gtkvolumebutton.ui.h:6
+msgid "Increases the volume"
+msgstr "增加音量"
+
+#: ../gtk/gtkvolumebutton.ui.h:7
+msgid "-"
+msgstr "-"
+
+#: ../gtk/gtkvolumebutton.ui.h:8 ../gtk/gtkvolumebutton.ui.h:9
+msgid "Volume Down"
+msgstr "調低音量"
+
+#: ../gtk/gtkvolumebutton.ui.h:10
+msgid "Decreases the volume"
+msgstr "減低音量"
