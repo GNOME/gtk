@@ -248,9 +248,16 @@ gdk_pixbuf_get_from_surface  (cairo_surface_t *surface,
                          8,
                          width, height);
 
-  surface = gdk_cairo_surface_coerce_to_image (surface, content,
-                                               src_x, src_y,
-                                               width, height);
+  if (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_IMAGE)
+    surface = cairo_surface_reference (surface);
+  else
+    {
+      surface = gdk_cairo_surface_coerce_to_image (surface, content,
+						   src_x, src_y,
+						   width, height);
+      src_x = 0;
+      src_y = 0;
+    }
   cairo_surface_flush (surface);
   if (cairo_surface_status (surface) || dest == NULL)
     {
@@ -263,14 +270,14 @@ gdk_pixbuf_get_from_surface  (cairo_surface_t *surface,
                    gdk_pixbuf_get_rowstride (dest),
                    cairo_image_surface_get_data (surface),
                    cairo_image_surface_get_stride (surface),
-                   0, 0,
+                   src_x, src_y,
                    width, height);
   else
     convert_no_alpha (gdk_pixbuf_get_pixels (dest),
                       gdk_pixbuf_get_rowstride (dest),
                       cairo_image_surface_get_data (surface),
                       cairo_image_surface_get_stride (surface),
-                      0, 0,
+                      src_x, src_y,
                       width, height);
 
   cairo_surface_destroy (surface);
