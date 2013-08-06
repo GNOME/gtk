@@ -9,7 +9,7 @@ window1
   button1
     "push button"
     index: 0
-    name: Page 1
+    name: Button 1
     state: enabled focusable sensitive showing visible
     toolkit: gtk
     <AtkComponent>
@@ -24,7 +24,7 @@ window1
   button2
     "push button"
     index: 0
-    name: Page 2
+    name: Button 2
     state: enabled focusable sensitive visible
     toolkit: gtk
     <AtkComponent>
