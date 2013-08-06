@@ -2183,7 +2183,7 @@ gtk_notebook_get_preferred_tabs_size (GtkNotebook    *notebook,
 
           if (priv->scrollable)
             tab_height = MIN (tab_height,
-                              tab_max + (2 * scroll_arrow_vlength + arrow_spacing));
+                              tab_max + (2 * scroll_arrow_vlength + arrow_spacing + initial_gap));
           action_height += action_widget_requisition[ACTION_WIDGET_START].height;
           action_height += action_widget_requisition[ACTION_WIDGET_END].height;
 
@@ -2662,6 +2662,7 @@ gtk_notebook_get_arrow_rect (GtkNotebook     *notebook,
   GdkRectangle event_window_pos;
   gboolean before = ARROW_IS_BEFORE (arrow);
   gboolean left = ARROW_IS_LEFT (arrow);
+  gint initial_gap;
 
   if (gtk_notebook_get_event_window_position (notebook, &event_window_pos))
     {
@@ -2671,6 +2672,7 @@ gtk_notebook_get_arrow_rect (GtkNotebook     *notebook,
       gtk_widget_style_get (GTK_WIDGET (notebook),
                             "scroll-arrow-hlength", &scroll_arrow_hlength,
                             "scroll-arrow-vlength", &scroll_arrow_vlength,
+                            "initial-gap", &initial_gap,
                             NULL);
 
       switch (priv->tab_pos)
@@ -2678,7 +2680,7 @@ gtk_notebook_get_arrow_rect (GtkNotebook     *notebook,
         case GTK_POS_LEFT:
         case GTK_POS_RIGHT:
           rectangle->width = scroll_arrow_vlength;
-          rectangle->height = scroll_arrow_vlength;
+          rectangle->height = scroll_arrow_vlength + initial_gap;
 
           if ((before && (priv->has_before_previous != priv->has_before_next)) ||
               (!before && (priv->has_after_previous != priv->has_after_next)))
@@ -2687,22 +2689,22 @@ gtk_notebook_get_arrow_rect (GtkNotebook     *notebook,
             rectangle->x = event_window_pos.x + event_window_pos.width / 2 - rectangle->width;
           else
             rectangle->x = event_window_pos.x + event_window_pos.width / 2;
-          rectangle->y = event_window_pos.y;
+          rectangle->y = event_window_pos.y + initial_gap;
           if (!before)
-            rectangle->y += event_window_pos.height - rectangle->height;
+            rectangle->y += event_window_pos.height - rectangle->height - 2 * initial_gap;
           break;
 
         case GTK_POS_TOP:
         case GTK_POS_BOTTOM:
-          rectangle->width = scroll_arrow_hlength;
+          rectangle->width = scroll_arrow_hlength + initial_gap;
           rectangle->height = scroll_arrow_hlength;
 
           if (before)
             {
               if (left || !priv->has_before_previous)
-                rectangle->x = event_window_pos.x;
+                rectangle->x = event_window_pos.x + initial_gap;
               else
-                rectangle->x = event_window_pos.x + rectangle->width;
+                rectangle->x = event_window_pos.x + initial_gap + rectangle->width;
             }
           else
             {
@@ -5566,7 +5568,7 @@ gtk_notebook_tab_space (GtkNotebook *notebook,
     }
 
   *min += initial_gap;
-  *max -= (2 * initial_gap);
+  *max -= initial_gap;
 
   if (!priv->scrollable)
     *show_arrows = FALSE;
