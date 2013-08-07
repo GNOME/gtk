@@ -222,12 +222,16 @@ add_close_button (GtkHeaderBar *bar)
   GIcon *icon;
   GtkWidget *image;
   GtkWidget *separator;
+  GtkStyleContext *context;
 
   priv = gtk_header_bar_get_instance_private (bar);
 
   button = gtk_button_new ();
+  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+  context = gtk_widget_get_style_context (button);
+  gtk_style_context_add_class (context, "image-button");
   icon = g_themed_icon_new ("window-close-symbolic");
-  image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_BUTTON);
+  image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_MENU);
   g_object_unref (icon);
   gtk_container_add (GTK_CONTAINER (button), image);
   gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
