@@ -2653,16 +2653,15 @@ gtk_drag_begin_internal (GtkWidget         *widget,
  * @button: The button the user clicked to start the drag.
  * @event: The event that triggered the start of the drag.
  *
- * Initiates a drag on the source side. The function
- * only needs to be used when the application is
- * starting drags itself, and is not needed when
+ * Initiates a drag on the source side. The function only needs to be used
+ * when the application is starting drags itself, and is not needed when
  * gtk_drag_source_set() is used.
  *
  * The @event is used to retrieve the timestamp that will be used internally to
- * grab the pointer.  If @event is #NULL, then GDK_CURRENT_TIME will be used.
+ * grab the pointer.  If @event is %NULL, then %GDK_CURRENT_TIME will be used.
  * However, you should try to pass a real event in all cases, since that can be
  * used by GTK+ to get information about the start position of the drag, for
- * example if the @event is a %GDK_MOTION_NOTIFY.
+ * example if the @event is a motion event.
  *
  * Generally there are three cases when you want to start a drag by hand by
  * calling this function:
