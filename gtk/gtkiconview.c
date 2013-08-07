@@ -6486,8 +6486,8 @@ gtk_icon_view_drag_begin (GtkWidget      *widget,
 
   g_return_if_fail (item != NULL);
 
-  x = icon_view->priv->press_start_x - item->cell_area.x;
-  y = icon_view->priv->press_start_y - item->cell_area.y;
+  x = icon_view->priv->press_start_x - item->cell_area.x + icon_view->priv->item_padding;
+  y = icon_view->priv->press_start_y - item->cell_area.y + icon_view->priv->item_padding;
   
   path = gtk_tree_path_new_from_indices (item->index, -1);
   icon = gtk_icon_view_create_drag_icon (icon_view, path);
