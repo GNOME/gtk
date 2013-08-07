@@ -6486,8 +6486,8 @@ gtk_icon_view_drag_begin (GtkWidget      *widget,
 
   g_return_if_fail (item != NULL);
 
-  x = icon_view->priv->press_start_x - item->cell_area.x + 1;
-  y = icon_view->priv->press_start_y - item->cell_area.y + 1;
+  x = icon_view->priv->press_start_x - item->cell_area.x;
+  y = icon_view->priv->press_start_y - item->cell_area.y;
   
   path = gtk_tree_path_new_from_indices (item->index, -1);
   icon = gtk_icon_view_create_drag_icon (icon_view, path);
@@ -7088,7 +7088,6 @@ gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
 				GtkTreePath *path)
 {
   GtkWidget *widget;
-  GtkStyleContext *context;
   cairo_t *cr;
   cairo_surface_t *surface;
   GList *l;
@@ -7098,7 +7097,6 @@ gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
   g_return_val_if_fail (path != NULL, NULL);
 
   widget = GTK_WIDGET (icon_view);
-  context = gtk_widget_get_style_context (widget);
 
   if (!gtk_widget_get_realized (widget))
     return NULL;
@@ -7119,30 +7117,16 @@ gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
 	  };
 
 	  surface = gdk_window_create_similar_surface (icon_view->priv->bin_window,
-                                                       CAIRO_CONTENT_COLOR,
-                                                       rect.width + 2,
-                                                       rect.height + 2);
+                                                       CAIRO_CONTENT_COLOR_ALPHA,
+                                                       rect.width,
+                                                       rect.height);
 
 	  cr = cairo_create (surface);
-	  cairo_set_line_width (cr, 1.);
-
-          gtk_render_background (context, cr, 0, 0,
-                                 rect.width + 2, rect.height + 2);
-
-          cairo_save (cr);
-
-          cairo_rectangle (cr, 1, 1, rect.width, rect.height);
-          cairo_clip (cr);
 
 	  gtk_icon_view_paint_item (icon_view, cr, item, 
-				    icon_view->priv->item_padding + 1, 
-				    icon_view->priv->item_padding + 1, FALSE);
-
-          cairo_restore (cr);
-
-	  cairo_set_source_rgb (cr, 0.0, 0.0, 0.0); /* black */
-	  cairo_rectangle (cr, 0.5, 0.5, rect.width + 1, rect.height + 1);
-	  cairo_stroke (cr);
+				    icon_view->priv->item_padding,
+				    icon_view->priv->item_padding,
+                                    FALSE);
 
 	  cairo_destroy (cr);
 
