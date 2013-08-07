@@ -27,6 +27,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 
 #include "gtknotebook.h"
 
@@ -2713,7 +2714,7 @@ gtk_notebook_get_arrow_rect (GtkNotebook     *notebook,
               else
                 rectangle->x = event_window_pos.x + event_window_pos.width - 2 * rectangle->width;
             }
-          rectangle->y = event_window_pos.y + (event_window_pos.height - rectangle->height) / 2;
+          rectangle->y = floor ((gdouble)event_window_pos.y + (event_window_pos.height - rectangle->height) / 2.0 + 0.5);
           break;
         }
     }
