@@ -4131,7 +4131,6 @@ gtk_render_layout (GtkStyleContext *context,
 {
   GtkThemingEngineClass *engine_class;
   GtkThemingEngine *engine;
-  PangoRectangle extents;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (PANGO_IS_LAYOUT (layout));
@@ -4142,8 +4141,6 @@ gtk_render_layout (GtkStyleContext *context,
 
   cairo_save (cr);
   cairo_new_path (cr);
-
-  pango_layout_get_extents (layout, &extents, NULL);
 
   _gtk_theming_engine_set_context (engine, context);
   engine_class->render_layout (engine, cr, x, y, layout);
