@@ -995,7 +995,7 @@ gtk_paned_get_preferred_size_for_opposite_orientation (GtkWidget      *widget,
       _gtk_widget_get_preferred_size_for_size (priv->child2, priv->orientation, -1, &child2_req, NULL, NULL, NULL);
 
       gtk_paned_compute_position (paned,
-                                  size, child1_req, child2_req,
+                                  size - handle_size, child1_req, child2_req,
                                   NULL, NULL, &for_child1);
 
       for_child2 = size - for_child1 - handle_size;
