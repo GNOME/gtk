@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-08-03 16:34+0000\n"
-"PO-Revision-Date: 2013-08-04 00:32+0500\n"
+"PO-Revision-Date: 2013-08-07 21:53+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: \n"
 "Language: Tajik\n"
@@ -2840,7 +2840,7 @@ msgstr "_Оғоз кардани дастгоҳ бо якчанд диск"
 
 #: ../gtk/gtkplacessidebar.c:2115
 msgid "_Stop Multi-disk Device"
-msgstr "_Манъ кардани дастгоҳ бо якчанд диск"
+msgstr "М_анъ кардани дастгоҳ бо якчанд диск"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
 #: ../gtk/gtkplacessidebar.c:2119
