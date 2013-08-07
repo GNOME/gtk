@@ -511,6 +511,7 @@ GtkListBoxUpdateHeaderFunc
 
 gtk_list_box_new
 gtk_list_box_prepend
+gtk_list_box_insert
 gtk_list_box_select_row
 gtk_list_box_get_selected_row
 

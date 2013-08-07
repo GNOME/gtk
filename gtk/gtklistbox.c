@@ -1671,14 +1671,32 @@ gtk_list_box_row_visibility_changed (GtkListBox    *list_box,
     }
 }
 
-static void
-gtk_list_box_add_row (GtkListBox *list_box,
-                      GtkWidget  *child,
-                      gboolean    prepend)
+/**
+ * gtk_list_box_insert:
+ * @list_box: a #GtkListBox.
+ * @child: the #GtkWidget to add
+ * @position: the position to insert @child in
+ *
+ * Insert the @child into the @list_box at @position. If a sort function is
+ * set, the widget will actually be inserted at the calculated position and
+ * this function has the same effect of gtk_container_add().
+ *
+ * If @position is -1, or larger than the total number of items in the
+ * @list_box, then the @child will be appended to the end.
+ *
+ * Since: 3.10
+ */
+void
+gtk_list_box_insert (GtkListBox *list_box,
+                     GtkWidget  *child,
+                     gint        position)
 {
   GtkListBoxPrivate *priv = gtk_list_box_get_instance_private (list_box);
   GtkListBoxRow *row;
   GSequenceIter* iter = NULL;
+
+  g_return_if_fail (list_box != NULL);
+  g_return_if_fail (child != NULL);
 
   if (GTK_IS_LIST_BOX_ROW (child))
     row = GTK_LIST_BOX_ROW (child);
@@ -1692,10 +1710,17 @@ gtk_list_box_add_row (GtkListBox *list_box,
   if (priv->sort_func != NULL)
     iter = g_sequence_insert_sorted (priv->children, row,
                                      (GCompareDataFunc)do_sort, list_box);
-  else if (prepend)
+  else if (position == 0)
     iter = g_sequence_prepend (priv->children, row);
-  else
+  else if (position == -1)
     iter = g_sequence_append (priv->children, row);
+  else
+    {
+      GSequenceIter *current_iter;
+
+      current_iter = g_sequence_get_iter_at_pos (priv->children, position);
+      iter = g_sequence_insert_before (current_iter, row);
+    }
 
   ROW_PRIV (row)->iter = iter;
   gtk_widget_set_parent (GTK_WIDGET (row), GTK_WIDGET (list_box));
@@ -1716,7 +1741,7 @@ static void
 gtk_list_box_real_add (GtkContainer *container,
                        GtkWidget    *child)
 {
-  gtk_list_box_add_row (GTK_LIST_BOX (container), child, FALSE);
+  gtk_list_box_insert (GTK_LIST_BOX (container), child, -1);
 }
 
 static void
@@ -2069,7 +2094,7 @@ void
 gtk_list_box_prepend (GtkListBox *list_box,
                       GtkWidget  *child)
 {
-  gtk_list_box_add_row (list_box, child, TRUE);
+  gtk_list_box_insert (list_box, child, 0);
 }
 
 /**
