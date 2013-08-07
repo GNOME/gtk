@@ -840,6 +840,26 @@ ensure_drag_cursor_pixbuf (int i)
     }
 }
 
+static void
+get_surface_size (cairo_surface_t *surface,
+		  int *width,
+		  int *height)
+{
+  double x_scale, y_scale;
+
+  x_scale = y_scale = 1;
+
+#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
+  cairo_surface_get_device_scale (surface, &x_scale, &y_scale);
+#endif
+
+  /* Assume any set scaling is icon scale */
+  *width =
+    ceil (cairo_image_surface_get_width (surface) / x_scale);
+  *height =
+    ceil (cairo_image_surface_get_height (surface) / y_scale);
+}
+
 static GdkCursor *
 gtk_drag_get_cursor (GtkWidget         *widget,
                      GdkDisplay        *display,
@@ -888,9 +908,10 @@ gtk_drag_get_cursor (GtkWidget         *widget,
       gint cursor_width, cursor_height;
       gint icon_width, icon_height;
       gint width, height;
-      GdkPixbuf *cursor_pixbuf, *pixbuf, *icon_pixbuf;
-      gint hot_x, hot_y;
+      cairo_surface_t *icon_surface, *cursor_surface;
+      gdouble hot_x, hot_y;
       gint icon_x, icon_y, ref_x, ref_y;
+      gint scale;
 
       if (info->drag_cursors[i] != NULL)
         {
@@ -901,29 +922,26 @@ gtk_drag_get_cursor (GtkWidget         *widget,
 	  info->drag_cursors[i] = NULL;
         }
 
-      icon_pixbuf = _gtk_icon_helper_ensure_pixbuf (info->icon_helper,
-                                                    gtk_widget_get_style_context (widget));
+      scale = gtk_widget_get_scale_factor (widget);
+      _gtk_icon_helper_get_size (info->icon_helper,
+				 gtk_widget_get_style_context (widget),
+				 &icon_width, &icon_height);
+      icon_surface = _gtk_icon_helper_ensure_surface (info->icon_helper,
+						      gtk_widget_get_style_context (widget));
 
       icon_x = info->hot_x;
       icon_y = info->hot_y;
-      icon_width = gdk_pixbuf_get_width (icon_pixbuf);
-      icon_height = gdk_pixbuf_get_height (icon_pixbuf);
 
       hot_x = hot_y = 0;
-      cursor_pixbuf = gdk_cursor_get_image (drag_cursors[i].cursor);
-      if (!cursor_pixbuf)
+      cursor_surface = gdk_cursor_get_surface (drag_cursors[i].cursor,
+					       &hot_x, &hot_y);
+      if (!cursor_surface)
 	{
 	  ensure_drag_cursor_pixbuf (i);
-	  cursor_pixbuf = g_object_ref (drag_cursors[i].pixbuf);
+	  cursor_surface = gdk_cairo_surface_create_from_pixbuf (drag_cursors[i].pixbuf, 1, NULL);
 	}
       else
 	{
-	  if (gdk_pixbuf_get_option (cursor_pixbuf, "x_hot"))
-	    hot_x = atoi (gdk_pixbuf_get_option (cursor_pixbuf, "x_hot"));
-	  
-	  if (gdk_pixbuf_get_option (cursor_pixbuf, "y_hot"))
-	    hot_y = atoi (gdk_pixbuf_get_option (cursor_pixbuf, "y_hot"));
-
 #if 0	  
 	  /* The code below is an attempt to let cursor themes
 	   * determine the attachment of the icon to enable things
@@ -1001,46 +1019,45 @@ gtk_drag_get_cursor (GtkWidget         *widget,
 #endif
 	}
 
-      cursor_width = gdk_pixbuf_get_width (cursor_pixbuf);
-      cursor_height = gdk_pixbuf_get_height (cursor_pixbuf);
+      get_surface_size (cursor_surface, &cursor_width, &cursor_height);
       
       ref_x = MAX (hot_x, icon_x);
       ref_y = MAX (hot_y, icon_y);
       width = ref_x + MAX (cursor_width - hot_x, icon_width - icon_x);
       height = ref_y + MAX (cursor_height - hot_y, icon_height - icon_y);
-         
-      if (gtk_drag_can_use_rgba_cursor (display, width, height))
+
+      if (gtk_drag_can_use_rgba_cursor (display, width * scale, height * scale))
 	{
+	  cairo_surface_t *surface;
+	  cairo_t *cr;
+
 	  /* Composite cursor and icon so that both hotspots
 	   * end up at (ref_x, ref_y)
 	   */
-	  pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8,
-				   width, height); 
-	  
-	  gdk_pixbuf_fill (pixbuf, 0xff000000);
-	  
-	  gdk_pixbuf_composite (icon_pixbuf, pixbuf,
-				ref_x - icon_x, ref_y - icon_y, 
-				icon_width, icon_height,
-				ref_x - icon_x, ref_y - icon_y, 
-				1.0, 1.0, 
-				GDK_INTERP_BILINEAR, 255);
-	  
-	  gdk_pixbuf_composite (cursor_pixbuf, pixbuf,
-				ref_x - hot_x, ref_y - hot_y, 
-				cursor_width, cursor_height,
-				ref_x - hot_x, ref_y - hot_y,
-				1.0, 1.0, 
-				GDK_INTERP_BILINEAR, 255);
-	  
+	  surface =
+              gdk_window_create_similar_image_surface (NULL,
+						       CAIRO_FORMAT_ARGB32,
+						       width * scale, height * scale, scale);
+
+	  cr = cairo_create (surface);
+	  cairo_set_source_surface (cr, icon_surface,
+				    ref_x - icon_x, ref_y - icon_y);
+	  cairo_paint (cr);
+
+	  cairo_set_source_surface (cr, cursor_surface,
+				    ref_x - hot_x, ref_y - hot_y);
+	  cairo_paint (cr);
+
+	  cairo_destroy (cr);
+
 	  info->drag_cursors[i] = 
-	    gdk_cursor_new_from_pixbuf (display, pixbuf, ref_x, ref_y);
+	    gdk_cursor_new_from_surface (display, surface, ref_x, ref_y);
 	  
-	  g_object_unref (pixbuf);
+	  cairo_surface_destroy (surface);
 	}
       
-      g_object_unref (cursor_pixbuf);
-      g_object_unref (icon_pixbuf);
+      cairo_surface_destroy (cursor_surface);
+      cairo_surface_destroy (icon_surface);
       
       if (info->drag_cursors[i] != NULL)
 	return info->drag_cursors[i];
