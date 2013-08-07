@@ -36,7 +36,6 @@
 
 #define DRAG_ICON_MAX_WIDTH 250
 #define DRAG_ICON_MAX_HEIGHT 250
-#define DRAG_ICON_LAYOUT_BORDER 5
 #define DRAG_ICON_MAX_LINES 7
 #define ELLIPSIS_CHARACTER "\xe2\x80\xa6"
 
@@ -191,8 +190,8 @@ limit_layout_lines (PangoLayout *layout)
     }
 }
 
-/*
- * _gtk_text_util_create_drag_icon
+/**
+ * _gtk_text_util_create_drag_icon:
  * @widget: #GtkWidget to extract the pango context
  * @text: a #gchar to render the icon
  * @len: length of @text, or -1 for NUL-terminated text
@@ -234,39 +233,26 @@ _gtk_text_util_create_drag_icon (GtkWidget *widget,
   /* get again layout extents, they may have changed */
   pango_layout_get_size (layout, &layout_width, &layout_height);
 
-  pixmap_width  = layout_width  / PANGO_SCALE + DRAG_ICON_LAYOUT_BORDER * 2;
-  pixmap_height = layout_height / PANGO_SCALE + DRAG_ICON_LAYOUT_BORDER * 2;
+  pixmap_width  = layout_width  / PANGO_SCALE;
+  pixmap_height = layout_height / PANGO_SCALE;
 
   style_context = gtk_widget_get_style_context (widget);
   state = gtk_widget_get_state_flags (widget);
 
   surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
-                                               CAIRO_CONTENT_COLOR,
-                                               pixmap_width  + 2,
-                                               pixmap_height + 2);
+                                               CAIRO_CONTENT_COLOR_ALPHA,
+                                               pixmap_width, pixmap_height);
   cr = cairo_create (surface);
 
   gtk_style_context_save (style_context);
   gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_VIEW);
 
-  gtk_style_context_get_background_color (style_context, state, &color);
-  gdk_cairo_set_source_rgba (cr, &color);
-  cairo_paint (cr);
-
   gtk_style_context_get_color (style_context, state, &color);
   gdk_cairo_set_source_rgba (cr, &color);
-  cairo_move_to (cr, 1 + DRAG_ICON_LAYOUT_BORDER, 1 + DRAG_ICON_LAYOUT_BORDER);
   pango_cairo_show_layout (cr, layout);
-
-  cairo_set_source_rgb (cr, 0, 0, 0);
-  cairo_rectangle (cr, 0.5, 0.5, pixmap_width + 1, pixmap_height + 1);
-  cairo_set_line_width (cr, 1.0);
-  cairo_stroke (cr);
 
   cairo_destroy (cr);
   g_object_unref (layout);
-
-  cairo_surface_set_device_offset (surface, 2, 2);
 
   gtk_style_context_restore (style_context);
 
@@ -309,11 +295,7 @@ _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
 {
   GtkAllocation      allocation;
   cairo_surface_t   *surface;
-  gint               pixmap_height, pixmap_width;
   gint               layout_width, layout_height;
-  GtkStyleContext   *context;
-  GtkStateFlags      state;
-  GdkRGBA            color;
   GtkTextBuffer     *new_buffer;
   GtkTextLayout     *layout;
   GtkTextAttributes *style;
@@ -325,9 +307,6 @@ _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
    g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), NULL);
    g_return_val_if_fail (start != NULL, NULL);
    g_return_val_if_fail (end != NULL, NULL);
-
-   context = gtk_widget_get_style_context (widget);
-   state = gtk_widget_get_state_flags (widget);
 
    new_buffer = gtk_text_buffer_new (gtk_text_buffer_get_tag_table (buffer));
    gtk_text_buffer_get_start_iter (new_buffer, &iter);
@@ -378,42 +357,17 @@ _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
    layout_width = MIN (layout_width, DRAG_ICON_MAX_WIDTH);
    layout_height = MIN (layout_height, DRAG_ICON_MAX_HEIGHT);
 
-   pixmap_width  = layout_width + DRAG_ICON_LAYOUT_BORDER * 2;
-   pixmap_height = layout_height + DRAG_ICON_LAYOUT_BORDER * 2;
-
    surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
-                                                CAIRO_CONTENT_COLOR,
-                                                pixmap_width  + 2,
-                                                pixmap_height + 2);
+                                                CAIRO_CONTENT_COLOR_ALPHA,
+                                                layout_width, layout_height);
 
    cr = cairo_create (surface);
 
-   gtk_style_context_save (context);
-   gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
-
-   gtk_style_context_get_background_color (context, state, &color);
-   gdk_cairo_set_source_rgba (cr, &color);
-   cairo_paint (cr);
-
-   cairo_save (cr);
-
-   cairo_translate (cr, 1 + DRAG_ICON_LAYOUT_BORDER, 1 + DRAG_ICON_LAYOUT_BORDER);
    gtk_text_layout_draw (layout, widget, cr, NULL);
-
-   cairo_restore (cr);
-
-   cairo_set_source_rgb (cr, 0, 0, 0);
-   cairo_rectangle (cr, 0.5, 0.5, pixmap_width + 1, pixmap_height + 1);
-   cairo_set_line_width (cr, 1.0);
-   cairo_stroke (cr);
 
    cairo_destroy (cr);
    g_object_unref (layout);
    g_object_unref (new_buffer);
-
-   cairo_surface_set_device_offset (surface, 2, 2);
-
-   gtk_style_context_restore (context);
 
    return surface;
 }
