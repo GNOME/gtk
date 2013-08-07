@@ -6446,11 +6446,13 @@ gtk_icon_view_maybe_begin_drag (GtkIconView    *icon_view,
   
   retval = TRUE;
 
-  context = gtk_drag_begin (widget,
-                            gtk_drag_source_get_target_list (widget),
-                            icon_view->priv->source_actions,
-                            button,
-                            (GdkEvent*)event);
+  context = gtk_drag_begin_with_coordinates (widget,
+                                             gtk_drag_source_get_target_list (widget),
+                                             icon_view->priv->source_actions,
+                                             button,
+                                             (GdkEvent*)event,
+                                             icon_view->priv->press_start_x,
+                                             icon_view->priv->press_start_y);
 
   set_source_row (context, model, path);
   

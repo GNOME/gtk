@@ -2460,7 +2460,9 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 			 GtkTargetList     *target_list,
 			 GdkDragAction      actions,
 			 gint               button,
-			 GdkEvent          *event)
+			 GdkEvent          *event,
+                         int                x,
+                         int                y)
 {
   GtkDragSourceInfo *info;
   GList *targets = NULL;
@@ -2570,16 +2572,27 @@ gtk_drag_begin_internal (GtkWidget         *widget,
   /* Set cur_x, cur_y here so if the "drag-begin" signal shows
    * the drag icon, it will be in the right place
    */
-  if (event && event->type == GDK_MOTION_NOTIFY)
+  if (event)
+    info->cur_screen = gdk_event_get_screen (event);
+  else
+    gdk_device_get_position (pointer, &info->cur_screen, NULL, NULL);
+
+  if (x != -1 && y != -1)
     {
-      info->cur_screen = gtk_widget_get_screen (widget);
-      info->cur_x = event->motion.x_root;
-      info->cur_y = event->motion.y_root;
+      GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+      gtk_widget_translate_coordinates (widget, toplevel,
+                                        x, y, &x, &y);
+      gdk_window_get_root_coords (gtk_widget_get_window (toplevel),
+                                  x, y, &info->start_x, &info->start_y);
+    }
+  else if (event && event->type == GDK_MOTION_NOTIFY)
+    {
+      info->start_x = event->motion.x_root;
+      info->start_y = event->motion.y_root;
     }
   else
-    {
-      gdk_device_get_position (pointer, &info->cur_screen, &info->cur_x, &info->cur_y);
-    }
+    gdk_device_get_position (pointer, NULL, &info->start_x, &info->start_y);
+
 
   g_signal_emit_by_name (widget, "drag-begin", info->context);
 
@@ -2610,14 +2623,14 @@ gtk_drag_begin_internal (GtkWidget         *widget,
           info->cursor = cursor;
         }
     }
-    
+
+  info->cur_x = info->start_x;
+  info->cur_y = info->start_y;
+
   if (event && event->type == GDK_MOTION_NOTIFY)
     gtk_drag_motion_cb (info->ipc_widget, (GdkEventMotion *)event, info);
   else
     gtk_drag_update (info, info->cur_screen, info->cur_x, info->cur_y, event);
-
-  info->start_x = info->cur_x;
-  info->start_y = info->cur_y;
 
   g_signal_connect (info->ipc_widget, "grab-broken-event",
 		    G_CALLBACK (gtk_drag_grab_broken_event_cb), info);
@@ -2641,13 +2654,19 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 }
 
 /**
- * gtk_drag_begin: (method)
+ * gtk_drag_begin_with_coordinates: (method)
  * @widget: the source widget.
  * @targets: The targets (data formats) in which the
  *    source can provide the data.
  * @actions: A bitmask of the allowed drag actions for this drag.
  * @button: The button the user clicked to start the drag.
  * @event: The event that triggered the start of the drag.
+ * @x: The initial x coordinate to start dragging from, in the coordinate space
+ *    of @widget. If -1 is passed, the coordinates are retrieved from @event or
+ *    the current pointer position.
+ * @y: The initial y coordinate to start dragging from, in the coordinate space
+ *    of @widget. If -1 is passed, the coordinates are retrieved from @event or
+ *    the current pointer position.
  *
  * Initiates a drag on the source side. The function only needs to be used
  * when the application is starting drags itself, and is not needed when
@@ -2656,8 +2675,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
  * The @event is used to retrieve the timestamp that will be used internally to
  * grab the pointer.  If @event is %NULL, then %GDK_CURRENT_TIME will be used.
  * However, you should try to pass a real event in all cases, since that can be
- * used by GTK+ to get information about the start position of the drag, for
- * example if the @event is a motion event.
+ * used to get information about the drag.
  *
  * Generally there are three cases when you want to start a drag by hand by
  * calling this function:
@@ -2679,6 +2697,39 @@ gtk_drag_begin_internal (GtkWidget         *widget,
  * Return value: (transfer none): the context for this drag.
  **/
 GdkDragContext *
+gtk_drag_begin_with_coordinates (GtkWidget         *widget,
+                                 GtkTargetList     *targets,
+                                 GdkDragAction      actions,
+                                 gint               button,
+                                 GdkEvent          *event,
+                                 gint               x,
+                                 gint               y)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_return_val_if_fail (gtk_widget_get_realized (widget), NULL);
+  g_return_val_if_fail (targets != NULL, NULL);
+
+  return gtk_drag_begin_internal (widget, NULL, targets,
+				  actions, button, event, x, y);
+}
+
+/**
+ * gtk_drag_begin: (method)
+ * @widget: the source widget.
+ * @targets: The targets (data formats) in which the
+ *    source can provide the data.
+ * @actions: A bitmask of the allowed drag actions for this drag.
+ * @button: The button the user clicked to start the drag.
+ * @event: The event that triggered the start of the drag.
+ *
+ * This is equivalent to gtk_drag_begin_with_coordinates(), passing -1, -1
+ * as coordinates.
+ *
+ * Return value: (transfer none): the context for this drag.
+ *
+ * Deprecated: 3.10: Use gtk_drag_begin_with_coordinates() instead.
+ **/
+GdkDragContext *
 gtk_drag_begin (GtkWidget         *widget,
 		GtkTargetList     *targets,
 		GdkDragAction      actions,
@@ -2690,7 +2741,7 @@ gtk_drag_begin (GtkWidget         *widget,
   g_return_val_if_fail (targets != NULL, NULL);
 
   return gtk_drag_begin_internal (widget, NULL, targets,
-				  actions, button, event);
+				  actions, button, event, -1, -1);
 }
 
 /**
@@ -3872,8 +3923,8 @@ gtk_drag_source_event_cb (GtkWidget      *widget,
 	    {
 	      site->state = 0;
 	      gtk_drag_begin_internal (widget, site, site->target_list,
-				       site->actions, 
-				       i, event);
+				       site->actions, i, event,
+                                       site->x, site->y);
 
 	      retval = TRUE;
 	    }

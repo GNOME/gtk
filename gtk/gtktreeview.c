@@ -7570,6 +7570,7 @@ gtk_tree_view_maybe_begin_dragging_row (GtkTreeView      *tree_view,
   GtkTreePath *path = NULL;
   gint button;
   gint cell_x, cell_y;
+  gint drag_start_x, drag_start_y;
   GtkTreeModel *model;
   gboolean retval = FALSE;
 
@@ -7618,11 +7619,17 @@ gtk_tree_view_maybe_begin_dragging_row (GtkTreeView      *tree_view,
 
   retval = TRUE;
 
-  context = gtk_drag_begin (widget,
-                            gtk_drag_source_get_target_list (widget),
-                            di->source_actions,
-                            button,
-                            (GdkEvent*)event);
+  gtk_tree_view_convert_bin_window_to_widget_coords (tree_view,
+                                                     tree_view->priv->press_start_x,
+                                                     tree_view->priv->press_start_y,
+                                                     &drag_start_x, &drag_start_y);
+
+  context = gtk_drag_begin_with_coordinates (widget,
+                                             gtk_drag_source_get_target_list (widget),
+                                             di->source_actions,
+                                             button,
+                                             (GdkEvent*)event,
+                                             drag_start_x, drag_start_y);
 
   set_source_row (context, model, path);
 

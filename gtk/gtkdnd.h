@@ -187,7 +187,16 @@ void gtk_drag_source_set_icon_gicon   (GtkWidget       *widget,
  * as a GtkTargetList
  */
 
-GDK_AVAILABLE_IN_ALL
+GDK_AVAILABLE_IN_3_10
+GdkDragContext *gtk_drag_begin_with_coordinates (GtkWidget         *widget,
+                                                 GtkTargetList     *targets,
+                                                 GdkDragAction      actions,
+                                                 gint               button,
+                                                 GdkEvent          *event,
+                                                 gint               x,
+                                                 gint               y);
+
+GDK_DEPRECATED_IN_3_10_FOR(gtk_drag_begin_with_coordinates)
 GdkDragContext *gtk_drag_begin (GtkWidget         *widget,
 				GtkTargetList     *targets,
 				GdkDragAction      actions,

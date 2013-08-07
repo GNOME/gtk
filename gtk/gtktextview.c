@@ -7291,17 +7291,19 @@ gtk_text_view_start_selection_dnd (GtkTextView       *text_view,
 {
   GtkTargetList *target_list;
 
-  text_view->priv->drag_start_x = -1;
-  text_view->priv->drag_start_y = -1;
-  text_view->priv->pending_place_cursor_button = 0;
-
   target_list = gtk_text_buffer_get_copy_target_list (get_buffer (text_view));
 
   g_signal_connect (text_view, "drag-begin",
                     G_CALLBACK (drag_begin_cb), NULL);
-  gtk_drag_begin (GTK_WIDGET (text_view), target_list,
-		  GDK_ACTION_COPY | GDK_ACTION_MOVE,
-		  1, (GdkEvent*)event);
+  gtk_drag_begin_with_coordinates (GTK_WIDGET (text_view), target_list,
+                                   GDK_ACTION_COPY | GDK_ACTION_MOVE,
+                                   1, (GdkEvent*)event,
+                                   text_view->priv->drag_start_x,
+                                   text_view->priv->drag_start_y);
+
+  text_view->priv->drag_start_x = -1;
+  text_view->priv->drag_start_y = -1;
+  text_view->priv->pending_place_cursor_button = 0;
 }
 
 static void

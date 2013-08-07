@@ -4944,9 +4944,11 @@ gtk_label_motion (GtkWidget      *widget,
 
           g_signal_connect (widget, "drag-begin",
                             G_CALLBACK (drag_begin_cb), NULL);
-	  gtk_drag_begin (widget, target_list,
-			  GDK_ACTION_COPY,
-			  1, (GdkEvent *)event);
+	  gtk_drag_begin_with_coordinates (widget, target_list,
+                                           GDK_ACTION_COPY,
+                                           1, (GdkEvent *)event,
+                                           info->drag_start_x,
+                                           info->drag_start_y);
 
 	  info->in_drag = FALSE;
 
