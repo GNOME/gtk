@@ -28,3 +28,5 @@ resources.c: exampleapp.gresource.xml window.ui
 EXTRA_DIST = \
 	window.ui \
 	exampleapp.gresource.xml
+
+-include $(top_srcdir)/git.mk

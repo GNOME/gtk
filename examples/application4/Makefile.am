@@ -29,3 +29,5 @@ EXTRA_DIST = \
 	window.ui \
 	app-menu.ui \
 	exampleapp.gresource.xml
+
+-include $(top_srcdir)/git.mk

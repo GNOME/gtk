@@ -43,3 +43,5 @@ EXTRA_DIST = \
 
 CLEANFILES = \
 	gschemas.compiled
+
+-include $(top_srcdir)/git.mk

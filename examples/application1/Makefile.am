@@ -17,3 +17,5 @@ exampleapp_SOURCES = \
 	main.c \
 	exampleapp.c exampleapp.h \
 	exampleappwin.c exampleappwin.h
+
+-include $(top_srcdir)/git.mk
