@@ -159,16 +159,12 @@ struct _GtkDragDestInfo
 
 #define DROP_ABORT_TIME 300000
 
-#define ANIM_STEP_TIME 50
-#define ANIM_STEP_LENGTH 50
-#define ANIM_MIN_STEPS 5
-#define ANIM_MAX_STEPS 10
+#define ANIM_TIME (0.5 * 1000 * 1000) /* half a second */
 
 struct _GtkDragAnim 
 {
   GtkDragSourceInfo *info;
-  gint step;
-  gint n_steps;
+  gint64 start_time;
 };
 
 typedef gboolean (* GtkDragDestCallback) (GtkWidget      *widget,
@@ -259,7 +255,10 @@ static void gtk_drag_selection_get             (GtkWidget         *widget,
 						guint              sel_info,
 						guint32            time,
 						gpointer           data);
-static gboolean gtk_drag_anim_timeout          (gpointer           data);
+static void gtk_drag_anim_destroy              (GtkDragAnim       *anim);
+static gboolean gtk_drag_anim_tick             (GtkWidget         *widget,
+                                                GdkFrameClock     *frame_clock,
+                                                gpointer           data);
 static void gtk_drag_remove_icon               (GtkDragSourceInfo *info);
 static void gtk_drag_source_info_destroy       (GtkDragSourceInfo *info);
 static void gtk_drag_add_update_idle           (GtkDragSourceInfo *info);
@@ -3727,11 +3726,7 @@ gtk_drag_drop_finished (GtkDragSourceInfo *info,
         {
           GtkDragAnim *anim = g_slice_new0 (GtkDragAnim);
           anim->info = info;
-          anim->step = 0;
-
-          anim->n_steps = MAX (info->cur_x - info->start_x,
-               info->cur_y - info->start_y) / ANIM_STEP_LENGTH;
-          anim->n_steps = CLAMP (anim->n_steps, ANIM_MIN_STEPS, ANIM_MAX_STEPS);
+          anim->start_time = gdk_frame_clock_get_frame_time (gtk_widget_get_frame_clock (info->widget));
 
 	  info->cur_screen = gtk_widget_get_screen (info->widget);
 
@@ -3745,7 +3740,7 @@ gtk_drag_drop_finished (GtkDragSourceInfo *info,
 	   * to respond really late, we still are OK.
 	   */
 	  gtk_drag_clear_source_info (info->context);
-	  gdk_threads_add_timeout (ANIM_STEP_TIME, gtk_drag_anim_timeout, anim);
+	  gtk_widget_add_tick_callback (info->widget, gtk_drag_anim_tick, anim, (GDestroyNotify) gtk_drag_anim_destroy);
 	}
     }
 }
@@ -3957,47 +3952,48 @@ gtk_drag_selection_get (GtkWidget        *widget,
     }
 }
 
-static gboolean
-gtk_drag_anim_timeout (gpointer data)
+/* From clutter-easing.c, based on Robert Penner's
+ * infamous easing equations, MIT license.
+ */
+static double
+ease_out_cubic (double t)
 {
-  GtkDragAnim *anim;
-  GtkDragSourceInfo *info;
-  gint x, y;
-  gboolean retval;
+  double p = t - 1;
+  return p * p * p + 1;
+}
 
-  anim = data;
-  info = anim->info;
+static void
+gtk_drag_anim_destroy (GtkDragAnim *anim)
+{
+  gtk_drag_source_info_destroy (anim->info);
+  g_slice_free (GtkDragAnim, anim);
+}
 
-  if (anim->step == anim->n_steps)
-    {
-      gtk_drag_source_info_destroy (anim->info);
-      g_slice_free (GtkDragAnim, anim);
+static gboolean
+gtk_drag_anim_tick (GtkWidget     *widget,
+                    GdkFrameClock *frame_clock,
+                    gpointer       data)
+{
+  GtkWidget *icon_window;
+  GtkDragAnim *anim = data;
+  GtkDragSourceInfo *info = anim->info;
+  gint64 current_time = gdk_frame_clock_get_frame_time (frame_clock);
+  int hot_x, hot_y;
+  double f = (current_time - anim->start_time) / (double) ANIM_TIME;
+  double t;
 
-      retval = FALSE;
-    }
-  else
-    {
-      x = (info->start_x * (anim->step + 1) +
-           info->cur_x * (anim->n_steps - anim->step - 1)) / anim->n_steps;
-      y = (info->start_y * (anim->step + 1) +
-           info->cur_y * (anim->n_steps - anim->step - 1)) / anim->n_steps;
-      if (info->icon_window)
-        {
-          GtkWidget *icon_window;
-          gint hot_x, hot_y;
+  if (f >= 1.0)
+    return G_SOURCE_REMOVE;
 
-          gtk_drag_get_icon (info, &icon_window, &hot_x, &hot_y);
-          gtk_window_move (GTK_WINDOW (icon_window),
-                           x - hot_x,
-                           y - hot_y);
-        }
+  t = ease_out_cubic (f);
 
-      anim->step++;
+  gtk_drag_get_icon (info, &icon_window, &hot_x, &hot_y);
+  gtk_window_move (GTK_WINDOW (icon_window),
+                   (info->cur_x + (info->start_x - info->cur_x) * t) - hot_x,
+                   (info->cur_y + (info->start_y - info->cur_y) * t) - hot_y);
+  gtk_widget_set_opacity (icon_window, (1.0 - f));
 
-      retval = TRUE;
-    }
-
-  return retval;
+  return G_SOURCE_CONTINUE;
 }
 
 static void
