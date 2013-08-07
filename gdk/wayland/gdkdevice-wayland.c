@@ -161,16 +161,17 @@ static gboolean
 gdk_wayland_device_update_window_cursor (GdkWaylandDeviceData *wd)
 {
   struct wl_buffer *buffer;
-  int x, y, w, h;
+  int x, y, w, h, scale;
   guint next_image_index, next_image_delay;
 
   buffer = _gdk_wayland_cursor_get_buffer (wd->cursor, wd->cursor_image_index,
-                                           &x, &y, &w, &h);
+                                           &x, &y, &w, &h, &scale);
   wl_pointer_set_cursor (wd->wl_pointer,
                          wd->enter_serial,
                          wd->pointer_surface,
                          x, y);
   wl_surface_attach (wd->pointer_surface, buffer, 0, 0);
+  wl_surface_set_buffer_scale (wd->pointer_surface, scale);
   wl_surface_damage (wd->pointer_surface,  0, 0, w, h);
   wl_surface_commit (wd->pointer_surface);
 

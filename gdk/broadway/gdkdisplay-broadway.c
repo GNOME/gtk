@@ -375,7 +375,7 @@ gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
   display_class->list_devices = gdk_broadway_display_list_devices;
   display_class->get_cursor_for_type = _gdk_broadway_display_get_cursor_for_type;
   display_class->get_cursor_for_name = _gdk_broadway_display_get_cursor_for_name;
-  display_class->get_cursor_for_pixbuf = _gdk_broadway_display_get_cursor_for_pixbuf;
+  display_class->get_cursor_for_surface = _gdk_broadway_display_get_cursor_for_surface;
   display_class->get_default_cursor_size = _gdk_broadway_display_get_default_cursor_size;
   display_class->get_maximal_cursor_size = _gdk_broadway_display_get_maximal_cursor_size;
   display_class->supports_cursor_alpha = _gdk_broadway_display_supports_cursor_alpha;

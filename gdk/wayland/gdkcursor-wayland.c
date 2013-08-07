@@ -55,9 +55,9 @@ struct _GdkWaylandCursor
   struct
   {
     int hotspot_x, hotspot_y;
-    int width, height;
+    int width, height, scale;
     struct wl_buffer *buffer;
-  } pixbuf;
+  } surface;
 
   struct wl_cursor *wl_cursor;
 };
@@ -168,8 +168,8 @@ gdk_wayland_cursor_finalize (GObject *object)
   GdkWaylandCursor *cursor = GDK_WAYLAND_CURSOR (object);
 
   g_free (cursor->name);
-  if (cursor->pixbuf.buffer)
-    wl_buffer_destroy (cursor->pixbuf.buffer);
+  if (cursor->surface.buffer)
+    wl_buffer_destroy (cursor->surface.buffer);
 
   G_OBJECT_CLASS (_gdk_wayland_cursor_parent_class)->finalize (object);
 }
@@ -188,7 +188,8 @@ _gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
                                 int       *hotspot_x,
                                 int       *hotspot_y,
                                 int       *w,
-                                int       *h)
+                                int       *h,
+				int       *scale)
 {
   GdkWaylandCursor *wayland_cursor = GDK_WAYLAND_CURSOR (cursor);
 
@@ -211,18 +212,20 @@ _gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
 
       *w = image->width;
       *h = image->height;
+      *scale = 1;
 
       return wl_cursor_image_get_buffer (image);
     }
-  else /* From pixbuf */
+  else /* From surface */
     {
-      *hotspot_x = wayland_cursor->pixbuf.hotspot_x;
-      *hotspot_y = wayland_cursor->pixbuf.hotspot_y;
+      *hotspot_x = wayland_cursor->surface.hotspot_x;
+      *hotspot_y = wayland_cursor->surface.hotspot_y;
 
-      *w = wayland_cursor->pixbuf.width;
-      *h = wayland_cursor->pixbuf.height;
+      *w = wayland_cursor->surface.width / wayland_cursor->surface.scale;
+      *h = wayland_cursor->surface.height / wayland_cursor->surface.scale;
+      *scale = wayland_cursor->surface.scale;
 
-      return wayland_cursor->pixbuf.buffer;
+      return wayland_cursor->surface.buffer;
     }
 }
 
@@ -266,60 +269,6 @@ _gdk_wayland_cursor_class_init (GdkWaylandCursorClass *wayland_cursor_class)
 static void
 _gdk_wayland_cursor_init (GdkWaylandCursor *cursor)
 {
-}
-
-/* Used to implement from_pixbuf below */
-static void
-set_pixbuf (gpointer argb_pixels, int width, int height, GdkPixbuf *pixbuf)
-{
-  int stride, i, n_channels;
-  unsigned char *pixels, *end, *s, *d;
-
-  stride = gdk_pixbuf_get_rowstride(pixbuf);
-  pixels = gdk_pixbuf_get_pixels(pixbuf);
-  n_channels = gdk_pixbuf_get_n_channels(pixbuf);
-
-#define MULT(_d,c,a,t) \
-	do { t = c * a + 0x7f; _d = ((t >> 8) + t) >> 8; } while (0)
-
-  if (n_channels == 4)
-    {
-      for (i = 0; i < height; i++)
-	{
-	  s = pixels + i * stride;
-          end = s + width * 4;
-          d = argb_pixels + i * width * 4;
-	  while (s < end)
-	    {
-	      unsigned int t;
-
-	      MULT(d[0], s[2], s[3], t);
-	      MULT(d[1], s[1], s[3], t);
-	      MULT(d[2], s[0], s[3], t);
-	      d[3] = s[3];
-	      s += 4;
-	      d += 4;
-	    }
-	}
-    }
-  else if (n_channels == 3)
-    {
-      for (i = 0; i < height; i++)
-	{
-	  s = pixels + i * stride;
-          end = s + width * 3;
-          d = argb_pixels + i * width * 4;
-	  while (s < end)
-	    {
-	      d[0] = s[2];
-	      d[1] = s[1];
-	      d[2] = s[0];
-	      d[3] = 0xff;
-	      s += 3;
-	      d += 4;
-	    }
-	}
-    }
 }
 
 GdkCursor *
@@ -382,10 +331,10 @@ _gdk_wayland_display_get_cursor_for_name (GdkDisplay  *display,
 }
 
 GdkCursor *
-_gdk_wayland_display_get_cursor_for_pixbuf (GdkDisplay *display,
-					    GdkPixbuf  *pixbuf,
-					    gint        x,
-					    gint        y)
+_gdk_wayland_display_get_cursor_for_surface (GdkDisplay *display,
+					     cairo_surface_t *surface,
+					     gdouble     x,
+					     gdouble     y)
 {
   GdkWaylandCursor *cursor;
   GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (display);
@@ -393,11 +342,8 @@ _gdk_wayland_display_get_cursor_for_pixbuf (GdkDisplay *display,
   size_t size;
   gpointer data;
   struct wl_shm_pool *pool;
-
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
-  g_return_val_if_fail (0 <= x && x < gdk_pixbuf_get_width (pixbuf), NULL);
-  g_return_val_if_fail (0 <= y && y < gdk_pixbuf_get_height (pixbuf), NULL);
+  cairo_surface_t *buffer_surface;
+  cairo_t *cr;
 
   cursor = g_object_new (GDK_TYPE_WAYLAND_CURSOR,
 			 "cursor-type", GDK_CURSOR_IS_PIXMAP,
@@ -405,35 +351,55 @@ _gdk_wayland_display_get_cursor_for_pixbuf (GdkDisplay *display,
 			 NULL);
   cursor->name = NULL;
   cursor->serial = theme_serial;
-  cursor->pixbuf.hotspot_x = x;
-  cursor->pixbuf.hotspot_y = y;
+  cursor->surface.hotspot_x = x;
+  cursor->surface.hotspot_y = y;
 
-  if (pixbuf)
+  cursor->surface.scale = 1;
+
+  if (surface)
     {
-      cursor->pixbuf.width = gdk_pixbuf_get_width (pixbuf);
-      cursor->pixbuf.height = gdk_pixbuf_get_height (pixbuf);
+#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
+	{
+	  double sx, sy;
+	  cairo_surface_get_device_scale (surface, &sx, &sy);
+	  cursor->surface.scale = (int)sx;
+	}
+#endif
+      cursor->surface.width = cairo_image_surface_get_width (surface);
+      cursor->surface.height = cairo_image_surface_get_height (surface);
     }
   else
     {
-      cursor->pixbuf.width = 1;
-      cursor->pixbuf.height = 1;
+      cursor->surface.width = 1;
+      cursor->surface.height = 1;
     }
 
   pool = _create_shm_pool (wayland_display->shm,
-                           cursor->pixbuf.width,
-                           cursor->pixbuf.height,
+                           cursor->surface.width,
+                           cursor->surface.height,
                            &size,
                            &data);
 
-  if (pixbuf)
-    set_pixbuf (data, cursor->pixbuf.width, cursor->pixbuf.height, pixbuf);
+  if (surface)
+    {
+      buffer_surface = cairo_image_surface_create_for_data (data,
+							    CAIRO_FORMAT_ARGB32,
+							    cursor->surface.width,
+							    cursor->surface.height,
+							    cursor->surface.width * 4);
+      cr = cairo_create (buffer_surface);
+      cairo_set_source_surface (cr, surface, 0, 0);
+      cairo_paint (cr);
+      cairo_destroy (cr);
+      cairo_surface_destroy (buffer_surface);
+    }
   else
     memset (data, 0, 4);
 
-  stride = cursor->pixbuf.width * 4;
-  cursor->pixbuf.buffer = wl_shm_pool_create_buffer (pool, 0,
-                                                     cursor->pixbuf.width,
-                                                     cursor->pixbuf.height,
+  stride = cursor->surface.width * 4;
+  cursor->surface.buffer = wl_shm_pool_create_buffer (pool, 0,
+                                                     cursor->surface.width,
+                                                     cursor->surface.height,
                                                      stride,
                                                      WL_SHM_FORMAT_ARGB8888);
 

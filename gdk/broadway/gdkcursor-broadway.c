@@ -118,10 +118,10 @@ _gdk_broadway_cursor_update_theme (GdkCursor *cursor)
 }
 
 GdkCursor *
-_gdk_broadway_display_get_cursor_for_pixbuf (GdkDisplay *display,
-					     GdkPixbuf  *pixbuf,
-					     gint        x,
-					     gint        y)
+_gdk_broadway_display_get_cursor_for_surface (GdkDisplay *display,
+					      cairo_surface_t *surface,
+					      gdouble     x,
+					      gdouble     y)
 {
   GdkBroadwayCursor *private;
   GdkCursor *cursor;

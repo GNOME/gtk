@@ -170,10 +170,10 @@ struct _GdkDisplayClass
                                                          GdkCursorType  type);
   GdkCursor *                (*get_cursor_for_name)     (GdkDisplay    *display,
                                                          const gchar   *name);
-  GdkCursor *                (*get_cursor_for_pixbuf)   (GdkDisplay    *display,
-                                                         GdkPixbuf     *pixbuf,
-                                                         gint           x,
-                                                         gint           y);
+  GdkCursor *                (*get_cursor_for_surface)  (GdkDisplay    *display,
+                                                         cairo_surface_t *surface,
+                                                         gdouble          x,
+                                                         gdouble          y);
 
   GList *                    (*list_devices)       (GdkDisplay *display);
   GdkAppLaunchContext *      (*get_app_launch_context) (GdkDisplay *display);

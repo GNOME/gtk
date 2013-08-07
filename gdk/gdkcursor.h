@@ -228,6 +228,11 @@ GdkCursor* gdk_cursor_new_from_pixbuf	 (GdkDisplay      *display,
 					  GdkPixbuf       *pixbuf,
 					  gint             x,
 					  gint             y);
+GDK_AVAILABLE_IN_3_10
+GdkCursor* gdk_cursor_new_from_surface	 (GdkDisplay      *display,
+					  cairo_surface_t *surface,
+					  gdouble          x,
+					  gdouble          y);
 GDK_AVAILABLE_IN_ALL
 GdkCursor*  gdk_cursor_new_from_name	 (GdkDisplay      *display,
 					  const gchar     *name);

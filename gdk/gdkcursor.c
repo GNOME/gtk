@@ -34,6 +34,7 @@
 #include "gdkinternals.h"
 
 #include <math.h>
+#include <errno.h>
 
 /**
  * SECTION:cursors
@@ -351,12 +352,81 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
                             gint        x,
                             gint        y)
 {
+  cairo_surface_t *surface;
+  const char *option;
+  char *end;
+  gint64 value;
+ 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
 
-  return GDK_DISPLAY_GET_CLASS (display)->get_cursor_for_pixbuf (display, pixbuf, x, y);
+  if (x == -1 && (option = gdk_pixbuf_get_option (pixbuf, "x_hot")))
+    {
+      errno = 0;
+      end = NULL;
+      value = g_ascii_strtoll (option, &end, 10);
+      if (errno == 0 &&
+          end != option &&
+          value >= 0 && value < G_MAXINT)
+        x = (gint) value;
+    }
+  
+  if (y == -1 && (option = gdk_pixbuf_get_option (pixbuf, "y_hot")))
+    {
+      errno = 0;
+      end = NULL;
+      value = g_ascii_strtoll (option, &end, 10);
+      if (errno == 0 &&
+          end != option &&
+          value >= 0 && value < G_MAXINT)
+        y = (gint) value;
+    }
+
+  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, NULL);
+  
+  return GDK_DISPLAY_GET_CLASS (display)->get_cursor_for_surface (display, surface, x, y);
 }
 
+/**
+ * gdk_cursor_new_from_surface:
+ * @display: the #GdkDisplay for which the cursor will be created
+ * @surface: the cairo image surface containing the cursor pixel data
+ * @x: the horizontal offset of the 'hotspot' of the cursor.
+ * @y: the vertical offset of the 'hotspot' of the cursor.
+ *
+ * Creates a new cursor from a pixbuf.
+ *
+ * Not all GDK backends support RGBA cursors. If they are not
+ * supported, a monochrome approximation will be displayed.
+ * The functions gdk_display_supports_cursor_alpha() and
+ * gdk_display_supports_cursor_color() can be used to determine
+ * whether RGBA cursors are supported;
+ * gdk_display_get_default_cursor_size() and
+ * gdk_display_get_maximal_cursor_size() give information about
+ * cursor sizes.
+ *
+ * On the X backend, support for RGBA cursors requires a
+ * sufficently new version of the X Render extension.
+ *
+ * Returns: a new #GdkCursor.
+ *
+ * Since: 3.10
+ */
+GdkCursor *
+gdk_cursor_new_from_surface (GdkDisplay *display,
+			     cairo_surface_t *surface,
+			     gdouble     x,
+			     gdouble     y)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  g_return_val_if_fail (surface != NULL, NULL);
+  g_return_val_if_fail (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_IMAGE, NULL);
+  g_return_val_if_fail (0 <= x && x < cairo_image_surface_get_width (surface), NULL);
+  g_return_val_if_fail (0 <= y && y < cairo_image_surface_get_height (surface), NULL);
+
+  return GDK_DISPLAY_GET_CLASS (display)->get_cursor_for_surface (display,
+								  surface, x, y);
+}
 /**
  * gdk_cursor_get_display:
  * @cursor: a #GdkCursor.
@@ -405,7 +475,7 @@ gdk_cursor_get_image (GdkCursor *cursor)
   surface = gdk_cursor_get_surface (cursor, &x_hot, &y_hot);
   if (surface == NULL)
     return NULL;
- 
+
   w = cairo_image_surface_get_width (surface);
   h = cairo_image_surface_get_height (surface);
 
