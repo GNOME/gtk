@@ -907,9 +907,6 @@ msgstr "_Náhled:"
 
 #: ../gtk/deprecated/gtkfontsel.c:1694 ../gtk/gtkassistant.ui.h:1
 #: ../gtk/gtkpagesetupunixdialog.ui.h:2
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Apply"
 msgid "_Apply"
 msgstr "_Použít"
 
