@@ -3602,6 +3602,45 @@ gdk_x11_window_set_hide_titlebar_when_maximized (GdkWindow *window,
 }
 
 /**
+ * gdk_x11_window_set_frame_extents:
+ * @window: (type GdkX11Window): a #GdkWindow
+ * @left: The left extent
+ * @right: The right extent
+ * @top: The top extent
+ * @bottom: The bottom extent
+ *
+ * Newer GTK+ windows using client-side decorations use extra geometry
+ * around their frames for effects like shadows and invisible borders.
+ * Window managers that want to maximize windows or snap to edges need
+ * to know where the extents of the actual frame lie, so that users
+ * don't feel like windows are snapping against random invisible edges.
+ *
+ * Note that this property is automatically updated by GTK+, so this
+ * function should only be used by applications which do not use GTK+
+ * to create toplevel windows.
+ *
+ * Since: 3.10
+ */
+void
+gdk_x11_window_set_frame_extents (GdkWindow *window,
+                                  int        left,
+                                  int        right,
+                                  int        top,
+                                  int        bottom)
+{
+  Atom frame_extents;
+  gulong data[4] = { left, right, top, bottom };
+
+  frame_extents = gdk_x11_get_xatom_by_name_for_display (gdk_window_get_display (window),
+                                                         "_GTK_FRAME_EXTENTS");
+  XChangeProperty (GDK_WINDOW_XDISPLAY (window),
+                   GDK_WINDOW_XID (window),
+                   frame_extents, XA_CARDINAL,
+                   32, PropModeReplace,
+                   (guchar *) &data, 4);
+}
+
+/**
  * gdk_x11_window_set_theme_variant:
  * @window: (type GdkX11Window): a #GdkWindow
  * @variant: the theme variant to export
