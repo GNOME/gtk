@@ -57,10 +57,7 @@
  * @Title: Drag and Drop
  *
  * GTK+ has a rich set of functions for doing inter-process
- * communication via the drag-and-drop metaphor. GTK+
- * can do drag-and-drop (DND) via multiple protocols.
- * The currently supported protocols are the Xdnd and
- * Motif protocols.
+ * communication via the drag-and-drop metaphor.
  *
  * As well as the functions listed here, applications
  * may need to use some facilities provided for
