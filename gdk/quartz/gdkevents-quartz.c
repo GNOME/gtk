@@ -1494,8 +1494,11 @@ gdk_event_translate (GdkEvent *event,
       }
       break;
 
-    case NSMouseEntered:
     case NSMouseExited:
+      if (WINDOW_IS_TOPLEVEL (window))
+          [[NSCursor arrowCursor] set];
+      /* fall through */
+    case NSMouseEntered:
       return_val = synthesize_crossing_event (window, event, nsevent, x, y, x_root, y_root);
       break;
 
