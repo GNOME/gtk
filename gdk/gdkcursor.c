@@ -391,10 +391,10 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
  * gdk_cursor_new_from_surface:
  * @display: the #GdkDisplay for which the cursor will be created
  * @surface: the cairo image surface containing the cursor pixel data
- * @x: the horizontal offset of the 'hotspot' of the cursor.
- * @y: the vertical offset of the 'hotspot' of the cursor.
+ * @x: the horizontal offset of the 'hotspot' of the cursor
+ * @y: the vertical offset of the 'hotspot' of the cursor
  *
- * Creates a new cursor from a pixbuf.
+ * Creates a new cursor from a cairo image surface.
  *
  * Not all GDK backends support RGBA cursors. If they are not
  * supported, a monochrome approximation will be displayed.
@@ -413,10 +413,10 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
  * Since: 3.10
  */
 GdkCursor *
-gdk_cursor_new_from_surface (GdkDisplay *display,
+gdk_cursor_new_from_surface (GdkDisplay      *display,
 			     cairo_surface_t *surface,
-			     gdouble     x,
-			     gdouble     y)
+			     gdouble          x,
+			     gdouble          y)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (surface != NULL, NULL);
@@ -514,7 +514,7 @@ gdk_cursor_get_image (GdkCursor *cursor)
  * @x_hot: Location to store the hotspot x position, or %NULL
  * @y_hot: Location to store the hotspot y position, or %NULL
  *
- * Returns a #cairo_surface_t (image surface) with the image used to display the cursor.
+ * Returns a cairo image surface with the image used to display the cursor.
  *
  * Note that depending on the capabilities of the windowing system and
  * on the cursor, GDK may not be able to obtain the image data. In this
@@ -526,11 +526,10 @@ gdk_cursor_get_image (GdkCursor *cursor)
  */
 cairo_surface_t *
 gdk_cursor_get_surface (GdkCursor *cursor,
-			gdouble *x_hot,
-			gdouble *y_hot)
+			gdouble   *x_hot,
+			gdouble   *y_hot)
 {
   g_return_val_if_fail (GDK_IS_CURSOR (cursor), NULL);
 
-  return GDK_CURSOR_GET_CLASS (cursor)->get_surface (cursor,
-						     x_hot, y_hot);
+  return GDK_CURSOR_GET_CLASS (cursor)->get_surface (cursor, x_hot, y_hot);
 }
