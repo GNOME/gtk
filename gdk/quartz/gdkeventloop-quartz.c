@@ -618,7 +618,32 @@ gdk_event_prepare (GSource *source,
   gboolean retval;
 
   gdk_threads_enter ();
-  
+
+  /* The prepare stage is the stage before the main loop starts polling
+   * and dispatching events. The autorelease poll is drained here for
+   * the preceding main loop iteration or, in case of the first iteration,
+   * for the operations carried out between event loop initialization and
+   * this first iteration.
+   *
+   * The autorelease poll must only be drained when the following conditions
+   * apply:
+   *  - We are at the base CFRunLoop level (indicated by current_loop_level),
+   *  - We are at the base g_main_loop level (indicated by
+   *    g_main_depth())
+   *  - We are at the base poll_func level (indicated by getting events).
+   *
+   * Messing with the autorelease pool at any level of nesting can cause access
+   * to deallocated memory because autorelease_pool is static and releasing a
+   * pool will cause all pools allocated inside of it to be released as well.
+   */
+  if (current_loop_level == 0 && g_main_depth() == 0 && getting_events == 0)
+    {
+      if (autorelease_pool)
+        [autorelease_pool drain];
+
+      autorelease_pool = [[NSAutoreleasePool alloc] init];
+    }
+
   *timeout = -1;
 
   if (_gdk_display->event_pause_count > 0)
@@ -658,21 +683,6 @@ gdk_event_dispatch (GSource     *source,
   GdkEvent *event;
 
   gdk_threads_enter ();
-
-  /* Refresh the autorelease pool if we're at the base CFRunLoop level
-   * (indicated by current_loop_level) and the base g_main_loop level
-   * (indicated by g_main_depth()). Messing with the autorelease pool at
-   * any level of nesting can cause access to deallocated memory because
-   * autorelease_pool is static and releasing a pool will cause all pools
-   * allocated inside of it to be released as well.
-   */
-  if (current_loop_level == 0 && g_main_depth() == 0)
-    {
-      if (autorelease_pool)
-        [autorelease_pool drain];
-
-      autorelease_pool = [[NSAutoreleasePool alloc] init];
-    }
 
   _gdk_quartz_display_queue_events (_gdk_display);
 
