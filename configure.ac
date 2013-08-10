@@ -314,6 +314,7 @@ if test -z "$backend_set"; then
     enable_win32_backend=yes
   else
     enable_x11_backend=yes
+    enable_wayland_backend=yes
   fi
 fi
 
