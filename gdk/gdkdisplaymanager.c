@@ -267,11 +267,11 @@ static GdkBackend gdk_backends[] = {
 #ifdef GDK_WINDOWING_WIN32
   { "win32",    _gdk_win32_display_open },
 #endif
-#ifdef GDK_WINDOWING_X11
-  { "x11",      _gdk_x11_display_open },
-#endif
 #ifdef GDK_WINDOWING_WAYLAND
   { "wayland",  _gdk_wayland_display_open },
+#endif
+#ifdef GDK_WINDOWING_X11
+  { "x11",      _gdk_x11_display_open },
 #endif
 #ifdef GDK_WINDOWING_BROADWAY
   { "broadway", _gdk_broadway_display_open },
