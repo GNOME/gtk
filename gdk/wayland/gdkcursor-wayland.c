@@ -317,6 +317,7 @@ _gdk_wayland_display_get_cursor_for_name (GdkDisplay  *display,
                           NULL);
   private->name = g_strdup (name);
   private->serial = theme_serial;
+  private->surface.scale = 1;
 
   /* Blank cursor case */
   if (!name || g_str_equal (name, "blank_cursor"))
