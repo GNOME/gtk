@@ -37,6 +37,18 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
+#ifdef GDK_WINDOWING_X11
+#include "x11/gdkx.h"
+#endif
+
+#ifdef GDK_WINDOWING_WAYLAND
+#include "wayland/gdkwayland.h"
+#endif
+
+#ifdef GDK_WINDOWING_WIN32
+#include "win32/gdkwin32.h"
+#endif
+
 #undef GDK_DEPRECATED
 #undef GDK_DEPRECATED_FOR
 #define GDK_DEPRECATED
@@ -638,6 +650,27 @@ match_locale (const gchar *locale,
   return 0;
 }
 
+static gboolean
+match_backend (GtkIMContextInfo *context)
+{
+#ifdef GDK_WINDOWING_WAYLAND
+  if (g_strcmp0 (context->context_id, "wayland") == 0)
+    return GDK_IS_WAYLAND_DISPLAY (gdk_display_get_default ());
+#endif
+
+#ifdef GDK_WINDOWING_X11
+  if (g_strcmp0 (context->context_id, "xim") == 0)
+    return GDK_IS_X11_DISPLAY (gdk_display_get_default ());
+#endif
+
+#ifdef GDK_WINDOWING_WIN32
+  if (g_strcmp0 (context->context_id, "ime") == 0)
+    return GDK_IS_WIN32_DISPLAY (gdk_display_get_default ());
+#endif
+
+  return TRUE;
+}
+
 static const gchar *
 lookup_immodule (gchar **immodules_list)
 {
@@ -728,7 +761,12 @@ _gtk_im_module_get_default_context_id (GdkWindow *client_window)
 
       for (i = 0; i < module->n_contexts; i++)
 	{
-	  const gchar *p = module->contexts[i]->default_locales;
+	  const gchar *p;
+
+          if (!match_backend (module->contexts[i]))
+            continue;
+
+          p = module->contexts[i]->default_locales;
 	  while (p)
 	    {
 	      const gchar *q = strchr (p, ':');
