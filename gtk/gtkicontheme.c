@@ -1843,25 +1843,47 @@ gtk_icon_theme_lookup_icon_for_scale (GtkIconTheme       *icon_theme,
 
   if (flags & GTK_ICON_LOOKUP_GENERIC_FALLBACK)
     {
-      gchar **names;
+      gchar **names, **nonsymbolic_names;
       gint dashes, i;
-      gchar *p;
+      gchar *p, *nonsymbolic_icon_name;
+      gboolean is_symbolic;
+
+      is_symbolic = g_str_has_suffix (icon_name, "-symbolic");
+      if (is_symbolic)
+        nonsymbolic_icon_name = g_strndup (icon_name, strlen (icon_name) - 9);
+      else
+        nonsymbolic_icon_name = g_strdup (icon_name);
  
       dashes = 0;
-      for (p = (gchar *) icon_name; *p; p++)
+      for (p = (gchar *) nonsymbolic_icon_name; *p; p++)
         if (*p == '-')
           dashes++;
 
-      names = g_new (gchar *, dashes + 2);
-      names[0] = g_strdup (icon_name);
+      nonsymbolic_names = g_new (gchar *, dashes + 2);
+      nonsymbolic_names[0] = nonsymbolic_icon_name;
+
       for (i = 1; i <= dashes; i++)
         {
-          names[i] = g_strdup (names[i - 1]);
-          p = strrchr (names[i], '-');
+          nonsymbolic_names[i] = g_strdup (nonsymbolic_names[i - 1]);
+          p = strrchr (nonsymbolic_names[i], '-');
           *p = '\0';
         }
-      names[dashes + 1] = NULL;
-   
+      nonsymbolic_names[dashes + 1] = NULL;
+
+      if (is_symbolic)
+        {
+          names = g_new (gchar *, dashes + 2);
+          for (i = 0; nonsymbolic_names[i] != NULL; i++)
+            names[i] = g_strconcat (nonsymbolic_names[i], "-symbolic", NULL);
+
+          names[i] = NULL;
+          g_strfreev (nonsymbolic_names);
+        }
+      else
+        {
+          names = nonsymbolic_names;
+        }
+
       info = choose_icon (icon_theme, (const gchar **) names, size, scale, flags);
       
       g_strfreev (names);
