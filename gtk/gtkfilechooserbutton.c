@@ -2328,6 +2328,8 @@ name_cell_data_func (GtkCellLayout   *layout,
 
   if (type == ROW_TYPE_CURRENT_FOLDER)
     g_object_set (cell, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
+  else if (type == ROW_TYPE_BOOKMARK || type == ROW_TYPE_SHORTCUT)
+    g_object_set (cell, "ellipsize", PANGO_ELLIPSIZE_MIDDLE, NULL);
   else
     g_object_set (cell, "ellipsize", PANGO_ELLIPSIZE_NONE, NULL);
 }
