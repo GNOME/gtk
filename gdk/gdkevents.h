@@ -1289,6 +1289,9 @@ GdkScreen *gdk_event_get_screen         (const GdkEvent  *event);
 GDK_AVAILABLE_IN_3_4
 GdkEventSequence *gdk_event_get_event_sequence (const GdkEvent *event);
 
+GDK_AVAILABLE_IN_3_10
+GdkEventType gdk_event_get_event_type   (const GdkEvent *event);
+
 GDK_AVAILABLE_IN_ALL
 void	  gdk_set_show_events		(gboolean	 show_events);
 GDK_AVAILABLE_IN_ALL
@@ -1297,8 +1300,8 @@ gboolean  gdk_get_show_events		(void);
 #ifndef GDK_MULTIHEAD_SAFE
 
 GDK_AVAILABLE_IN_ALL
-gboolean gdk_setting_get                           (const gchar *name,
-                                                    GValue          *value);
+gboolean gdk_setting_get                (const gchar    *name,
+                                         GValue         *value);
 
 #endif /* GDK_MULTIHEAD_SAFE */
 

@@ -2184,3 +2184,21 @@ gdk_setting_get (const gchar *name,
 {
   return gdk_screen_get_setting (gdk_screen_get_default (), name, value);
 }
+
+/**
+ * gdk_event_get_event_type:
+ * @event: a #GdkEvent
+ *
+ * Retrieves the type of the event.
+ *
+ * Return value: a #GdkEventType
+ *
+ * Since: 3.10
+ */
+GdkEventType
+gdk_event_get_event_type (const GdkEvent *event)
+{
+  g_return_val_if_fail (event != NULL, GDK_NOTHING);
+
+  return event->type;
+}
