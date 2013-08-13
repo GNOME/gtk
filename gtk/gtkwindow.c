@@ -5005,8 +5005,15 @@ gtk_window_finalize (GObject *object)
     }
 
   if (priv->screen)
-    g_signal_handlers_disconnect_by_func (priv->screen,
-                                          gtk_window_on_composited_changed, window);
+    {
+      g_signal_handlers_disconnect_by_func (priv->screen,
+                                            gtk_window_on_composited_changed, window);
+#ifdef GDK_WINDOWING_X11
+      g_signal_handlers_disconnect_by_func (gtk_settings_get_for_screen (priv->screen),
+                                            gtk_window_on_theme_variant_changed,
+                                            window);
+#endif
+    }
 
   g_free (priv->startup_id);
 
@@ -5015,12 +5022,6 @@ gtk_window_finalize (GObject *object)
       g_source_remove (priv->mnemonics_display_timeout_id);
       priv->mnemonics_display_timeout_id = 0;
     }
-
-#ifdef GDK_WINDOWING_X11
-  g_signal_handlers_disconnect_by_func (gtk_settings_get_default (),
-                                        gtk_window_on_theme_variant_changed,
-                                        window);
-#endif
 
   G_OBJECT_CLASS (gtk_window_parent_class)->finalize (object);
 }
