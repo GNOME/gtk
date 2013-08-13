@@ -96,15 +96,15 @@ GDK_AVAILABLE_IN_ALL
 void          gtk_combo_box_set_column_span_column (GtkComboBox *combo_box,
                                                     gint         column_span);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 gboolean      gtk_combo_box_get_add_tearoffs       (GtkComboBox *combo_box);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void          gtk_combo_box_set_add_tearoffs       (GtkComboBox *combo_box,
                                                     gboolean     add_tearoffs);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 const gchar * gtk_combo_box_get_title              (GtkComboBox *combo_box);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void          gtk_combo_box_set_title              (GtkComboBox *combo_box,
                                                     const gchar *title);
 

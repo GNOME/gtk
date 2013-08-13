@@ -620,7 +620,7 @@ gtk_menu_class_init (GtkMenuClass *class)
                                                         P_("Tearoff Title"),
                                                         P_("A title that may be displayed by the window manager when this menu is torn-off"),
                                                         NULL,
-                                                        GTK_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
 
   /**
    * GtkMenu:tearoff-state:
@@ -637,7 +637,7 @@ gtk_menu_class_init (GtkMenuClass *class)
                                                          P_("Tearoff State"),
                                                          P_("A boolean that indicates whether the menu is torn-off"),
                                                          FALSE,
-                                                         GTK_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
 
   /**
    * GtkMenu:monitor:
