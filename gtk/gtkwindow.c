@@ -7179,6 +7179,13 @@ gtk_window_button_press_event (GtkWidget      *widget,
                   return TRUE;
                 }
             }
+          else if (event->button == GDK_BUTTON_MIDDLE)
+            {
+              if (region == GTK_WINDOW_REGION_TITLE)
+                {
+                  gdk_window_lower (gtk_widget_get_window (GTK_WIDGET (window)));
+                }
+            }
         }
       else if (event->type == GDK_2BUTTON_PRESS)
         {
