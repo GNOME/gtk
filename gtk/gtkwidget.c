@@ -14802,7 +14802,7 @@ gtk_widget_set_window (GtkWidget *widget,
  * @window: a #GdkWindow
  *
  * Registers a #GdkWindow with the widget and sets it up so that
- * the widget recieves events for it. Call gtk_widget_unregister_window()
+ * the widget receives events for it. Call gtk_widget_unregister_window()
  * when destroying the window.
  *
  * Before 3.8 you needed to call gdk_window_set_user_data() directly to set
