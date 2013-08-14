@@ -1328,7 +1328,7 @@ gtk_button_new_from_icon_name (const gchar *icon_name,
 			  "image", image,
 			  NULL);
   context = gtk_widget_get_style_context (button);
-  gtk_style_context_add_class (context, "image-button"));
+  gtk_style_context_add_class (context, "image-button");
 
   return button;
 }
