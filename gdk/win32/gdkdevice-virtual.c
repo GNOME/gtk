@@ -41,8 +41,8 @@ static void gdk_device_virtual_set_window_cursor (GdkDevice *device,
 						  GdkCursor *cursor);
 static void gdk_device_virtual_warp (GdkDevice *device,
 				     GdkScreen *screen,
-				     gint       x,
-				     gint       y);
+				     gdouble   x,
+				     gdouble   y);
 static void gdk_device_virtual_query_state (GdkDevice        *device,
 					    GdkWindow        *window,
 					    GdkWindow       **root_window,
@@ -234,8 +234,8 @@ gdk_device_virtual_set_window_cursor (GdkDevice *device,
 static void
 gdk_device_virtual_warp (GdkDevice *device,
 			 GdkScreen *screen,
-			 gint       x,
-			 gint       y)
+			 gdouble   x,
+			 gdouble   y)
 {
   SetCursorPos (x - _gdk_offset_x, y - _gdk_offset_y);
 }
@@ -330,7 +330,7 @@ gdk_device_virtual_ungrab (GdkDevice *device,
       ReleaseCapture ();
     }
 
-  _gdk_display_device_grab_update (display, device, NULL, 0);
+  _gdk_display_device_grab_update (display, device, device, 0);
 }
 
 static void
