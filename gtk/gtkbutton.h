@@ -80,6 +80,9 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget*     gtk_button_new               (void);
 GDK_AVAILABLE_IN_ALL
 GtkWidget*     gtk_button_new_with_label    (const gchar    *label);
+GDK_AVAILABLE_IN_3_10
+GtkWidget*     gtk_button_new_from_icon_name (const gchar    *icon_name,
+					      GtkIconSize     size);
 GDK_DEPRECATED_IN_3_10_FOR(gtk_button_new_with_label)
 GtkWidget*     gtk_button_new_from_stock    (const gchar    *stock_id);
 GDK_AVAILABLE_IN_ALL

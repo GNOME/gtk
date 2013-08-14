@@ -1298,6 +1298,42 @@ gtk_button_new_with_label (const gchar *label)
 }
 
 /**
+ * gtk_button_new_from_icon_name:
+ * @icon_name: an icon name
+ * @size: (type int): an icon size
+ *
+ * Creates a new #GtkButton containing an icon from the current icon theme.
+ * 
+ * If the icon name isn't known, a "broken image" icon will be
+ * displayed instead. If the current icon theme is changed, the icon
+ * will be updated appropriately.
+ * 
+ * This function is a convenience wrapper around gtk_button_new() and
+ * gtk_button_set_image().
+ * 
+ * Returns: a new #GtkButton displaying the themed icon
+ * 
+ * Since: 3.10
+ **/
+GtkWidget*
+gtk_button_new_from_icon_name (const gchar *icon_name,
+			       GtkIconSize  size)
+{
+  GtkStyleContext *context;
+  GtkWidget *button;
+  GtkWidget *image;
+
+  image = gtk_image_new_from_icon_name (icon_name, size);
+  button =  g_object_new (GTK_TYPE_BUTTON,
+			  "image", image,
+			  NULL);
+  context = gtk_widget_get_style_context (button);
+  gtk_style_context_add_class (context, "image-button"));
+
+  return button;
+}
+
+/**
  * gtk_button_new_from_stock:
  * @stock_id: the name of the stock item 
  *

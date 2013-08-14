@@ -636,6 +636,7 @@ GtkButton
 gtk_button_new
 gtk_button_new_with_label
 gtk_button_new_with_mnemonic
+gtk_button_new_from_icon_name
 gtk_button_new_from_stock
 gtk_button_pressed
 gtk_button_released
