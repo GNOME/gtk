@@ -21,41 +21,63 @@
 #include <gtk/gtk.h>
 #include "gtkspinbuttonaccessible.h"
 
+struct _GtkSpinButtonAccessiblePrivate
+{
+  GtkAdjustment *adjustment;
+};
 
 static void atk_value_interface_init (AtkValueIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkSpinButtonAccessible, gtk_spin_button_accessible, GTK_TYPE_ENTRY_ACCESSIBLE,
+                         G_ADD_PRIVATE (GtkSpinButtonAccessible)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_VALUE, atk_value_interface_init))
 
 static void
 gtk_spin_button_accessible_value_changed (GtkAdjustment *adjustment,
                                           gpointer       data)
 {
-  GtkSpinButtonAccessible *spin_button;
+  g_object_notify (G_OBJECT (data), "accessible-value");
+}
 
-  if (adjustment == NULL || data == NULL)
-    return;
+static void
+gtk_spin_button_accessible_widget_set (GtkAccessible *accessible)
+{
+  GtkSpinButtonAccessiblePrivate *priv = GTK_SPIN_BUTTON_ACCESSIBLE (accessible)->priv;
+  GtkWidget *spin;
+  GtkAdjustment *adj;
 
-  spin_button = GTK_SPIN_BUTTON_ACCESSIBLE (data);
+  spin = gtk_accessible_get_widget (accessible);
+  adj = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (spin));
+  if (adj)
+    {
+      priv->adjustment = adj;
+      g_object_ref (priv->adjustment);
+      g_signal_connect (priv->adjustment, "value-changed",
+                        G_CALLBACK (gtk_spin_button_accessible_value_changed),
+                        accessible);
+    }
+}
 
-  g_object_notify (G_OBJECT (spin_button), "accessible-value");
+static void
+gtk_spin_button_accessible_widget_unset (GtkAccessible *accessible)
+{
+  GtkSpinButtonAccessiblePrivate *priv = GTK_SPIN_BUTTON_ACCESSIBLE (accessible)->priv;
+
+  if (priv->adjustment)
+    {
+      g_signal_handlers_disconnect_by_func (priv->adjustment,
+                                            G_CALLBACK (gtk_spin_button_accessible_value_changed),
+                                            accessible);
+      g_object_unref (priv->adjustment);
+      priv->adjustment = NULL;
+    }
 }
 
 static void
 gtk_spin_button_accessible_initialize (AtkObject *obj,
                                        gpointer  data)
 {
-  GtkAdjustment *adjustment;
-
   ATK_OBJECT_CLASS (gtk_spin_button_accessible_parent_class)->initialize (obj, data);
-
-  adjustment = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (data));
-  if (adjustment)
-    g_signal_connect_object (adjustment,
-                             "value-changed",
-                             G_CALLBACK (gtk_spin_button_accessible_value_changed),
-                             obj, 0);
-
   obj->role = ATK_ROLE_SPIN_BUTTON;
 }
 
@@ -64,37 +86,38 @@ gtk_spin_button_accessible_notify_gtk (GObject    *obj,
                                        GParamSpec *pspec)
 {
   GtkWidget *widget = GTK_WIDGET (obj);
-  GtkSpinButtonAccessible *spin_button = GTK_SPIN_BUTTON_ACCESSIBLE (gtk_widget_get_accessible (widget));
+  AtkObject *spin;
 
   if (strcmp (pspec->name, "adjustment") == 0)
     {
-      GtkAdjustment* adjustment;
+      spin = gtk_widget_get_accessible (widget);
+      gtk_spin_button_accessible_widget_unset (GTK_ACCESSIBLE (spin));
+      gtk_spin_button_accessible_widget_set (GTK_ACCESSIBLE (spin));
 
-      adjustment = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (widget));
-      g_signal_connect_object (adjustment, "value-changed",
-                               G_CALLBACK (gtk_spin_button_accessible_value_changed),
-                               spin_button, 0);
     }
   else
     GTK_WIDGET_ACCESSIBLE_CLASS (gtk_spin_button_accessible_parent_class)->notify_gtk (obj, pspec);
 }
 
-
-
 static void
 gtk_spin_button_accessible_class_init (GtkSpinButtonAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
+  GtkAccessibleClass *accessible_class = (GtkAccessibleClass*)klass;
   GtkWidgetAccessibleClass *widget_class = (GtkWidgetAccessibleClass*)klass;
 
-  widget_class->notify_gtk = gtk_spin_button_accessible_notify_gtk;
-
   class->initialize = gtk_spin_button_accessible_initialize;
+
+  accessible_class->widget_set = gtk_spin_button_accessible_widget_set;
+  accessible_class->widget_unset = gtk_spin_button_accessible_widget_unset;
+
+  widget_class->notify_gtk = gtk_spin_button_accessible_notify_gtk;
 }
 
 static void
 gtk_spin_button_accessible_init (GtkSpinButtonAccessible *button)
 {
+  button->priv = gtk_spin_button_accessible_get_instance_private (button);
 }
 
 static void
