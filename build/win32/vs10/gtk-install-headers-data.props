@@ -87,6 +87,8 @@ copy ..\..\..\gdk\win32\gdkwin32dnd.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk\w
 
 copy ..\..\..\gdk\win32\gdkwin32keys.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk\win32
 
+copy ..\..\..\gdk\win32\gdkwin32misc.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk\win32
+
 copy ..\..\..\gdk\win32\gdkwin32screen.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk\win32
 
 copy ..\..\..\gdk\win32\gdkwin32window.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk\win32

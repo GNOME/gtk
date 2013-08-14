@@ -50,6 +50,7 @@ copy ..\..\..\gdk\win32\gdkwin32display.h $(CopyDir)\include\gtk-$(ApiVersion)\g
 copy ..\..\..\gdk\win32\gdkwin32displaymanager.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk\win32&#x0D;&#x0A;
 copy ..\..\..\gdk\win32\gdkwin32dnd.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk\win32&#x0D;&#x0A;
 copy ..\..\..\gdk\win32\gdkwin32keys.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk\win32&#x0D;&#x0A;
+copy ..\..\..\gdk\win32\gdkwin32misc.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk\win32&#x0D;&#x0A;
 copy ..\..\..\gdk\win32\gdkwin32screen.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk\win32&#x0D;&#x0A;
 copy ..\..\..\gdk\win32\gdkwin32window.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk\win32&#x0D;&#x0A;
 
