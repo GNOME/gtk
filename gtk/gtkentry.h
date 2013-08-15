@@ -361,6 +361,13 @@ void            gtk_entry_set_attributes                     (GtkEntry          
 GDK_AVAILABLE_IN_3_6
 PangoAttrList  *gtk_entry_get_attributes                     (GtkEntry             *entry);
 
+GDK_AVAILABLE_IN_3_10
+void            gtk_entry_set_tabs                           (GtkEntry             *entry,
+                                                              PangoTabArray        *tabs);
+
+GDK_AVAILABLE_IN_3_10
+PangoTabArray  *gtk_entry_get_tabs                           (GtkEntry             *entry);
+
 G_END_DECLS
 
 #endif /* __GTK_ENTRY_H__ */

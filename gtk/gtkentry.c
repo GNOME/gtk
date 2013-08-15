@@ -149,6 +149,7 @@ struct _GtkEntryPrivate
 
   PangoLayout           *cached_layout;
   PangoAttrList         *attrs;
+  PangoTabArray         *tabs;
 
   gchar        *im_module;
 
@@ -319,7 +320,8 @@ enum {
   PROP_INPUT_PURPOSE,
   PROP_INPUT_HINTS,
   PROP_ATTRIBUTES,
-  PROP_POPULATE_ALL
+  PROP_POPULATE_ALL,
+  PROP_TABS
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -1450,7 +1452,21 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                          P_("Whether to emit ::populate-popup for touch popups"),
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
-  
+  /**
+   * GtkEntry::tabs:
+   *
+   * A list of tabstops to apply to the text of the entry.
+   *
+   * Since: 3.8
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_TABS,
+                                   g_param_spec_boxed ("tabs",
+                                                       P_("Tabs"),
+                                                       P_("A list of tabstop locations to apply to the text of the entry"),
+                                                       PANGO_TYPE_TAB_ARRAY,
+                                                       GTK_PARAM_READWRITE));
+
   /**
    * GtkEntry:icon-prelight:
    *
@@ -2288,6 +2304,10 @@ gtk_entry_set_property (GObject         *object,
       entry->priv->populate_all = g_value_get_boolean (value);
       break;
 
+    case PROP_TABS:
+      gtk_entry_set_tabs (entry, g_value_get_boxed (value));
+      break
+
     case PROP_SCROLL_OFFSET:
     case PROP_CURSOR_POSITION:
     default:
@@ -2530,6 +2550,10 @@ gtk_entry_get_property (GObject         *object,
 
     case PROP_POPULATE_ALL:
       g_value_set_boolean (value, priv->populate_all);
+      break;
+
+    case PROP_TABS:
+      g_value_set_boxed (value, priv->tabs);
       break;
 
     default:
@@ -2885,6 +2909,9 @@ gtk_entry_finalize (GObject *object)
   g_object_unref (priv->text_handle);
   g_free (priv->placeholder_text);
   g_free (priv->im_module);
+
+  if (priv->tabs)
+    pango_tab_array_free (priv->tabs);
 
   G_OBJECT_CLASS (gtk_entry_parent_class)->finalize (object);
 }
@@ -6078,6 +6105,9 @@ gtk_entry_create_layout (GtkEntry *entry,
     }
       
   pango_layout_set_attributes (layout, tmp_attrs);
+
+  if (priv->tabs)
+    pango_layout_set_tabs (layout, priv->tabs);
 
   g_free (preedit_string);
   g_free (display);
@@ -10532,3 +10562,55 @@ gtk_entry_get_attributes (GtkEntry *entry)
   return entry->priv->attrs;
 }
 
+/**
+ * gtk_entry_set_tabs:
+ * @entry: a #GtkEntry
+ * @tabs: a #PangoTabArray
+ *
+ * Sets a #PangoTabArray; the tabstops in the array are applied to the entry
+ * text.
+ *
+ * Since: 3.10
+ */
+
+void
+gtk_entry_set_tabs (GtkEntry      *entry,
+                    PangoTabArray *tabs)
+{
+  GtkEntryPrivate *priv;
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  priv = entry->priv;
+  if (priv->tabs)
+    pango_tab_array_free(priv->tabs);
+
+  if (tabs)
+    priv->tabs = pango_tab_array_copy (tabs);
+  else
+    priv->tabs = NULL;
+
+  g_object_notify (G_OBJECT (entry), "tabs");
+
+  gtk_entry_recompute (entry);
+  gtk_widget_queue_resize (GTK_WIDGET (entry));
+}
+
+/**
+ * gtk_entry_get_tabs:
+ * @entry: a #GtkEntry
+ *
+ * Gets the tabstops that were set on the entry using gtk_entry_set_tabs(), if
+ * any.
+ *
+ * Return value: (transfer none): the tabstops, or %NULL if none was set.
+ *
+ * Since: 3.10
+ */
+
+PangoTabArray *
+gtk_entry_get_tabs (GtkEntry *entry)
+{
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
+
+  return entry->priv->tabs;
+}
