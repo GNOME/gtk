@@ -16,6 +16,8 @@ if exist ..\..\..\gdk\gdkconfig.h del ..\..\..\gdk\gdkconfig.h&#x0D;&#x0A;
 if exist ..\..\..\GDK_BROADWAY_BUILD del ..\..\..\GDK_BROADWAY_BUILD&#x0D;&#x0A;
 if exist ..\..\..\MSVC_Release_Broadway del ..\..\..\MSVC_Release_Broadway&#x0D;&#x0A;
 if exist ..\..\..\MSVC_Debug_Broadway del ..\..\..\MSVC_Debug_Broadway&#x0D;&#x0A;
+if exist $(ConfigurationName)\$(PlatformName)\bin\$(GtkDllPrefix)gdk$(GtkDllSuffix).dll del $(ConfigurationName)\$(PlatformName)\bin\$(GtkDllPrefix)gdk$(GtkDllSuffix).dll&#x0D;&#x0A;
+if exist $(ConfigurationName)\$(PlatformName)\bin\gdk-$(ApiVersion).lib del $(ConfigurationName)\$(PlatformName)\bin\gdk-$(ApiVersion).lib&#x0D;&#x0A;
 if &quot;$(ConfigurationName)&quot; == &quot;Release&quot; del ..\..\..\MSVC_Debug&#x0D;&#x0A;
 if &quot;$(ConfigurationName)&quot; == &quot;Debug&quot; del ..\..\..\MSVC_Release&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkconfig.h.win32 ..\..\..\gdk\gdkconfig.h&#x0D;&#x0A;

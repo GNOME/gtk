@@ -20,18 +20,18 @@ copy $(ConfigurationName)\$(PlatformName)\bin\*.exe $(CopyDir)\bin&#x0D;&#x0A;
 goto DONE_BIN&#x0D;&#x0A;
 
 :DO_BROADWAY_BIN&#x0D;&#x0A;
-copy $(ConfigurationName)\$(PlatformName)\bin\gdk-3-vs*.dll $(CopyDir)\bin&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\$(GtkDllPrefix)gdk$(GtkDllSuffix).dll $(CopyDir)\bin&#x0D;&#x0A;
 copy $(ConfigurationName)\$(PlatformName)\bin\gdk-$(ApiVersion).lib $(CopyDir)\lib&#x0D;&#x0A;
 copy $(ConfigurationName)\$(PlatformName)\bin\broadwayd.exe $(CopyDir)\bin&#x0D;&#x0A;
 
-if &quot;$(ConfigurationName)&quot; == &quot;Release_Broadway&quot; copy .\Release\$(PlatformName)\bin\gtk-3-*.dll $(CopyDir)\bin&#x0D;&#x0A;
-if &quot;$(ConfigurationName)&quot; == &quot;Release_Broadway&quot; copy .\Release\$(PlatformName)\bin\gailutil-3-*.dll $(CopyDir)\bin&#x0D;&#x0A;
-if &quot;$(ConfigurationName)&quot; == &quot;Release_Broadway&quot; copy .\Release\$(PlatformName)\bin\gtk*-$(ApiVersion).lib $(CopyDir)\lib&#x0D;&#x0A;
-if &quot;$(ConfigurationName)&quot; == &quot;Release_Broadway&quot; copy .\Release\$(PlatformName)\bin\gailutil*-$(ApiVersion).lib $(CopyDir)\lib&#x0D;&#x0A;
+if &quot;$(ConfigurationName)&quot; == &quot;Release_Broadway&quot; copy .\Release\$(PlatformName)\bin\$(GtkDllPrefix)gtk$(GtkDllSuffix).dll $(CopyDir)\bin&#x0D;&#x0A;
+if &quot;$(ConfigurationName)&quot; == &quot;Release_Broadway&quot; copy .\Release\$(PlatformName)\bin\$(GtkDllPrefix)gailutil$(GtkDllSuffix).dll $(CopyDir)\bin&#x0D;&#x0A;
+if &quot;$(ConfigurationName)&quot; == &quot;Release_Broadway&quot; copy .\Release\$(PlatformName)\bin\gtk-$(ApiVersion).lib $(CopyDir)\lib&#x0D;&#x0A;
+if &quot;$(ConfigurationName)&quot; == &quot;Release_Broadway&quot; copy .\Release\$(PlatformName)\bin\gailutil-$(ApiVersion).lib $(CopyDir)\lib&#x0D;&#x0A;
 if &quot;$(ConfigurationName)&quot; == &quot;Release_Broadway&quot; copy .\Release\$(PlatformName)\bin\*.exe $(CopyDir)\bin&#x0D;&#x0A;
 
-if &quot;$(ConfigurationName)&quot; == &quot;Debug_Broadway&quot; copy .\Debug\$(PlatformName)\bin\gtk-3-.dll $(CopyDir)\bin&#x0D;&#x0A;
-if &quot;$(ConfigurationName)&quot; == &quot;Debug_Broadway&quot; copy .\Debug\$(PlatformName)\bin\gailutil-3-.dll $(CopyDir)\bin&#x0D;&#x0A;
+if &quot;$(ConfigurationName)&quot; == &quot;Debug_Broadway&quot; copy .\Debug\$(PlatformName)\bin\$(GtkDllPrefix)gtk$(GtkDllSuffix).dll $(CopyDir)\bin&#x0D;&#x0A;
+if &quot;$(ConfigurationName)&quot; == &quot;Debug_Broadway&quot; copy .\Debug\$(PlatformName)\bin\$(GtkDllPrefix)gailutil$(GtkDllSuffix).dll $(CopyDir)\bin&#x0D;&#x0A;
 if &quot;$(ConfigurationName)&quot; == &quot;Debug_Broadway&quot; copy .\Debug\$(PlatformName)\bin\gtk-$(ApiVersion).lib $(CopyDir)\lib&#x0D;&#x0A;
 if &quot;$(ConfigurationName)&quot; == &quot;Debug_Broadway&quot; copy .\Debug\$(PlatformName)\bin\gailutil-$(ApiVersion).lib $(CopyDir)\lib&#x0D;&#x0A;
 if &quot;$(ConfigurationName)&quot; == &quot;Debug_Broadway&quot; copy .\Debug\$(PlatformName)\bin\*.exe $(CopyDir)\bin&#x0D;&#x0A;

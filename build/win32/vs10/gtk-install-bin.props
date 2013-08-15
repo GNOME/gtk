@@ -26,16 +26,16 @@ goto DONE_BIN
 
 :DO_BROADWAY_BIN
 
-copy $(Configuration)\$(Platform)\bin\gdk-3-vs*.dll $(CopyDir)\bin
+copy $(Configuration)\$(Platform)\bin\$(GtkDllPrefix)gdk$(GtkDllSuffix).dll $(CopyDir)\bin
 
 copy $(Configuration)\$(Platform)\bin\gdk-$(ApiVersion).lib $(CopyDir)\lib
 
 copy $(Configuration)\$(Platform)\bin\broadwayd.exe $(CopyDir)\bin
 
 
-if "$(Configuration)" == "Release_Broadway" copy .\Release\$(Platform)\bin\gtk-3-vs*.dll $(CopyDir)\bin
+if "$(Configuration)" == "Release_Broadway" copy .\Release\$(Platform)\bin\$(GtkDllPrefix)gtk$(GtkDllSuffix).dll $(CopyDir)\bin
 
-if "$(Configuration)" == "Release_Broadway" copy .\Release\$(Platform)\bin\gailutil-3-vs*.dll $(CopyDir)\bin
+if "$(Configuration)" == "Release_Broadway" copy .\Release\$(Platform)\bin\$(GtkDllPrefix)gailutil$(GtkDllSuffix).dll $(CopyDir)\bin
 
 if "$(Configuration)" == "Release_Broadway" copy .\Release\$(Platform)\bin\gtk-$(ApiVersion).lib $(CopyDir)\lib
 
@@ -44,9 +44,9 @@ if "$(Configuration)" == "Release_Broadway" copy .\Release\$(Platform)\bin\gailu
 if "$(Configuration)" == "Release_Broadway" copy .\Release\$(Platform)\bin\*.exe $(CopyDir)\bin
 
 
-if "$(Configuration)" == "Debug_Broadway" copy .\Debug\$(Platform)\bin\gtk-3-vs*.dll $(CopyDir)\bin
+if "$(Configuration)" == "Debug_Broadway" copy .\Debug\$(Platform)\bin\$(GtkDllPrefix)gtk$(GtkDllSuffix).dll $(CopyDir)\bin
 
-if "$(Configuration)" == "Debug_Broadway" copy .\Debug\$(Platform)\bin\gailutil-3-vs*.dll $(CopyDir)\bin
+if "$(Configuration)" == "Debug_Broadway" copy .\Debug\$(Platform)\bin\$(GtkDllPrefix)gailutil$(GtkDllSuffix).dll $(CopyDir)\bin
 
 if "$(Configuration)" == "Debug_Broadway" copy .\Debug\$(Platform)\bin\gtk-$(ApiVersion).lib $(CopyDir)\lib
 
