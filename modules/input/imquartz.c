@@ -230,7 +230,7 @@ discard_preedit (GtkIMContext *context)
   NSInputManager *currentInputManager = [NSInputManager currentInputManager];
   [currentInputManager markedTextAbandoned:nsview];
 
-  if (qc->preedit_str)
+  if (qc->preedit_str && strlen (qc->preedit_str) > 0)
     {
       g_signal_emit_by_name (context, "commit", qc->preedit_str);
 
