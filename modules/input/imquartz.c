@@ -211,9 +211,40 @@ quartz_filter_keypress (GtkIMContext *context,
 }
 
 static void
+discard_preedit (GtkIMContext *context)
+{
+  GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
+
+  if (!qc->client_window)
+    return;
+
+  NSView *nsview = gdk_quartz_window_get_nsview (qc->client_window);
+  if (!nsview)
+    return;
+
+  if (GDK_IS_WINDOW (nsview))
+    return;
+
+  /* reset any partial input for this NSView */
+  [(GdkQuartzView *)nsview unmarkText];
+  NSInputManager *currentInputManager = [NSInputManager currentInputManager];
+  [currentInputManager markedTextAbandoned:nsview];
+
+  if (qc->preedit_str)
+    {
+      g_signal_emit_by_name (context, "commit", qc->preedit_str);
+
+      g_free (qc->preedit_str);
+      qc->preedit_str = NULL;
+      g_signal_emit_by_name (context, "preedit_changed");
+    }
+}
+
+static void
 quartz_reset (GtkIMContext *context)
 {
   GTK_NOTE (MISC, g_print ("quartz_reset\n"));
+  discard_preedit (context);
 }
 
 static void
@@ -242,6 +273,9 @@ quartz_focus_out (GtkIMContext *context)
 
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
   qc->focused = FALSE;
+
+  /* Commit any partially built strings or it'll mess up other GTK+ widgets in the window */
+  discard_preedit (context);
 }
 
 static void
