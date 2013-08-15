@@ -23,9 +23,9 @@ if exist ..\..\..\MSVC_Release_Broadway del ..\..\..\MSVC_Release_Broadway
 
 if exist ..\..\..\MSVC_Debug_Broadway del ..\..\..\MSVC_Debug_Broadway
 
-if exist $(Configuration)\$(Platform)\bin\$(GtkDllPrefix)gdk$(GtkDllSuffix).dll del $(Configuration)\$(Platform)\bin\$(GtkDllPrefix)gdk$(GtkDllSuffix).dll&#x0D;&#x0A;
+if exist $(Configuration)\$(Platform)\bin\$(GtkDllPrefix)gdk$(GtkDllSuffix).dll del $(Configuration)\$(Platform)\bin\$(GtkDllPrefix)gdk$(GtkDllSuffix).dll
 
-if exist $(Configuration)\$(Platform)\bin\gdk-$(ApiVersion).lib del $(Configuration)\$(Platform)\bin\gdk-$(ApiVersion).lib&#x0D;&#x0A;
+if exist $(Configuration)\$(Platform)\bin\gdk-$(ApiVersion).lib del $(Configuration)\$(Platform)\bin\gdk-$(ApiVersion).lib
 
 if "$(Configuration)" == "Release" del ..\..\..\MSVC_Debug
 
