@@ -126,48 +126,13 @@ quartz_get_preedit_string (GtkIMContext *context,
 }
 
 static gboolean
-quartz_filter_keypress (GtkIMContext *context,
-                        GdkEventKey *event)
+output_result (GtkIMContext *context,
+               GdkWindow *win)
 {
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
   gboolean retval = FALSE;
-  NSView *nsview;
-  GdkWindow *win;
   gchar *fixed_str, *marked_str;
 
-  GTK_NOTE (MISC, g_print ("quartz_filter_keypress\n"));
-
-  if (!qc->client_window)
-    return FALSE;
-
-  nsview = gdk_quartz_window_get_nsview (qc->client_window);
-  if (GDK_IS_WINDOW (nsview))
-       /* it gets GDK_WINDOW in some cases */
-    return gtk_im_context_filter_keypress (qc->slave, event);
-  else
-    win = (GdkWindow *)[ (GdkQuartzView *)nsview gdkWindow];
-  GTK_NOTE (MISC, g_print ("client_window: %p, win: %p, nsview: %p\n",
-			   qc->client_window, win, nsview));
-
-  NSEvent *nsevent = gdk_quartz_event_get_nsevent ((GdkEvent *)event);
-  if (!nsevent)
-    return gtk_im_context_filter_keypress (qc->slave, event);
-
-  if (event->type == GDK_KEY_RELEASE)
-    return FALSE;
-
-  if (event->hardware_keycode == 55)	/* Command */
-    return FALSE;
-
-  NSEventType etype = [nsevent type];
-  if (etype == NSKeyDown)
-       [nsview keyDown: nsevent];
-  /* JIS_Eisu || JIS_Kana */
-  if (event->hardware_keycode == 102 || event->hardware_keycode == 104)
-    return FALSE;
-
-  GTK_NOTE (MISC,
-	    g_print ("quartz_filter_keypress: getting tic-insert-text\n"));
   fixed_str = g_object_get_data (G_OBJECT (win), TIC_INSERT_TEXT);
   marked_str = g_object_get_data (G_OBJECT (win), TIC_MARKED_TEXT);
   if (fixed_str)
@@ -203,10 +168,74 @@ quartz_filter_keypress (GtkIMContext *context,
       g_signal_emit_by_name (context, "preedit_changed");
       retval = TRUE;
     }
+  if (!fixed_str && !marked_str) 
+    {
+      if (qc->preedit_str && strlen (qc->preedit_str) > 0)
+        retval = TRUE;
+    }
+
   g_free (fixed_str);
   g_free (marked_str);
 
+  return retval;
+}
+
+static gboolean
+quartz_filter_keypress (GtkIMContext *context,
+                        GdkEventKey *event)
+{
+  GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
+  gboolean retval;
+  NSView *nsview;
+  GdkWindow *win;
+
+  GTK_NOTE (MISC, g_print ("quartz_filter_keypress\n"));
+
+  if (!qc->client_window)
+    return FALSE;
+
+  nsview = gdk_quartz_window_get_nsview (qc->client_window);
+  if (GDK_IS_WINDOW (nsview))
+       /* it gets GDK_WINDOW in some cases */
+    return gtk_im_context_filter_keypress (qc->slave, event);
+  else
+    win = (GdkWindow *)[ (GdkQuartzView *)nsview gdkWindow];
+  GTK_NOTE (MISC, g_print ("client_window: %p, win: %p, nsview: %p\n",
+			   qc->client_window, win, nsview));
+
+  NSEvent *nsevent = gdk_quartz_event_get_nsevent ((GdkEvent *)event);
+
+  if (!nsevent)
+    {
+      if (event->hardware_keycode == 0 && event->keyval == 0xffffff)
+        /* update text input changes by mouse events */
+        output_result(context, win);
+      else
+        return gtk_im_context_filter_keypress (qc->slave, event);
+    }
+
+  if (event->type == GDK_KEY_RELEASE)
+    return FALSE;
+
+  if (event->hardware_keycode == 55)	/* Command */
+    return FALSE;
+
+  NSEventType etype = [nsevent type];
+  if (etype == NSKeyDown)
+    {
+       g_object_set_data (G_OBJECT (win), TIC_IN_KEY_DOWN,
+                                          GUINT_TO_POINTER (TRUE));
+       [nsview keyDown: nsevent];
+    }
+  /* JIS_Eisu || JIS_Kana */
+  if (event->hardware_keycode == 102 || event->hardware_keycode == 104)
+    return FALSE;
+
+  retval = output_result(context, win);
+  g_object_set_data (G_OBJECT (win), TIC_IN_KEY_DOWN,
+                                     GUINT_TO_POINTER (FALSE));
   GTK_NOTE (MISC, g_print ("quartz_filter_keypress done\n"));
+
   return retval;
 }
 
