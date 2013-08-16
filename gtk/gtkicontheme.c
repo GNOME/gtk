@@ -4128,7 +4128,9 @@ _gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
   gchar *css_warning;
   gchar *css_error;
   gchar *data;
-  gchar *width, *height, *uri;
+  gchar *width, *height;
+  gchar *file_data, *escaped_file_data;
+  gsize file_len;
   SymbolicPixbufCache *symbolic_cache;
 
   if (use_cache)
@@ -4172,14 +4174,13 @@ _gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
       css_error = gdk_color_to_css (&error_default_color);
     }
 
+  if (!g_file_get_contents (icon_info->filename, &file_data, &file_len, NULL))
+    return NULL;
+
   if (!icon_info->symbolic_pixbuf_size)
     {
-      stream = G_INPUT_STREAM (g_file_read (icon_info->icon_file, NULL, error));
-
-      if (!stream)
-        return NULL;
-
       /* Fetch size from the original icon */
+      stream = g_memory_input_stream_new_from_data (file_data, file_len, NULL);
       pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, error);
       g_object_unref (stream);
 
@@ -4194,7 +4195,9 @@ _gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
 
   width = g_strdup_printf ("%d", icon_info->symbolic_pixbuf_size->width);
   height = g_strdup_printf ("%d", icon_info->symbolic_pixbuf_size->height);
-  uri = g_file_get_uri (icon_info->icon_file);
+
+  escaped_file_data = g_markup_escape_text (file_data, file_len);
+  g_free (file_data);
 
   data = g_strconcat ("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
                       "<svg version=\"1.1\"\n"
@@ -4216,16 +4219,16 @@ _gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
                       "      fill: ", css_success, " !important;\n"
                       "    }\n"
                       "  </style>\n"
-                      "  <xi:include href=\"", uri, "\"/>\n"
+                      "  <xi:include href=\"data:text/xml,", escaped_file_data, "\"/>\n"
                       "</svg>",
                       NULL);
+  g_free (escaped_file_data);
   g_free (css_fg);
   g_free (css_warning);
   g_free (css_error);
   g_free (css_success);
   g_free (width);
   g_free (height);
-  g_free (uri);
 
   stream = g_memory_input_stream_new_from_data (data, -1, g_free);
   pixbuf = gdk_pixbuf_new_from_stream_at_scale (stream,
