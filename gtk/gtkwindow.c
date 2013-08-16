@@ -7514,7 +7514,11 @@ gtk_window_real_set_focus (GtkWindow *window,
       if (priv->has_focus)
 	do_focus_change (priv->focus_widget, TRUE);
 
-      g_object_notify (G_OBJECT (priv->focus_widget), "is-focus");
+      /* It's possible for do_focus_change() above to have callbacks
+       * that clear priv->focus_widget here.
+       */
+      if (priv->focus_widget)
+        g_object_notify (G_OBJECT (priv->focus_widget), "is-focus");
     }
 
   /* If the default widget changed, a redraw will have been queued
