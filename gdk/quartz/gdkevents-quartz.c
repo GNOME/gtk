@@ -1156,6 +1156,24 @@ synthesize_crossing_event (GdkWindow *window,
   return FALSE;
 }
 
+void
+_gdk_quartz_synthesize_null_key_event (GdkWindow *window)
+{
+  GdkEvent *event;
+  GdkQuartzDeviceManagerCore *device_manager;
+
+  event = gdk_event_new (GDK_KEY_PRESS);
+  event->any.type = GDK_KEY_PRESS;
+  event->key.window = window;
+  event->key.state = 0;
+  event->key.hardware_keycode = 0;
+  event->key.group = 0;
+  event->key.keyval = GDK_KEY_VoidSymbol;
+  device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_display->device_manager);
+  gdk_event_set_device (event, device_manager->core_keyboard);
+  append_event(event, FALSE);
+}
+
 GdkModifierType
 _gdk_quartz_events_get_current_keyboard_modifiers (void)
 {

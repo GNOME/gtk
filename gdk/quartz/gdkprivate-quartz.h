@@ -74,6 +74,7 @@ void       _gdk_quartz_event_loop_release_event (NSEvent *event);
 /* Keys */
 GdkEventType _gdk_quartz_keys_event_type  (NSEvent   *event);
 gboolean     _gdk_quartz_keys_is_modifier (guint      keycode);
+void         _gdk_quartz_synthesize_null_key_event (GdkWindow *window);
 
 /* Drag and Drop */
 void        _gdk_quartz_window_register_dnd      (GdkWindow   *window);
