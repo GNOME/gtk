@@ -167,6 +167,9 @@ GtkTreePath *gtk_tree_path_new_from_string  (const gchar       *path);
 GDK_AVAILABLE_IN_ALL
 GtkTreePath *gtk_tree_path_new_from_indices (gint               first_index,
 					     ...);
+GDK_AVAILABLE_IN_3_12
+GtkTreePath *gtk_tree_path_new_from_indicesv (gint             *indices,
+					      gsize             length);
 GDK_AVAILABLE_IN_ALL
 gchar       *gtk_tree_path_to_string        (GtkTreePath       *path);
 GDK_AVAILABLE_IN_ALL

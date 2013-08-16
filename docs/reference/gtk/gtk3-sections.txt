@@ -4244,6 +4244,7 @@ GtkTreeModelFlags
 gtk_tree_path_new
 gtk_tree_path_new_from_string
 gtk_tree_path_new_from_indices
+gtk_tree_path_new_from_indicesv
 gtk_tree_path_to_string
 gtk_tree_path_new_first
 gtk_tree_path_append_index

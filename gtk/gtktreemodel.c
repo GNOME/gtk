@@ -682,6 +682,34 @@ gtk_tree_path_new_from_indices (gint first_index,
 }
 
 /**
+ * gtk_tree_path_new_from_indicesv: (rename-to gtk_tree_path_new_from_indices)
+ * @indices: (array length=length): array of indices
+ * @length: length of @indices array
+ *
+ * Creates a new path with the given @indices array of @length.
+ *
+ * Return value: A newly created #GtkTreePath
+ *
+ * Since: 3.12
+ */
+GtkTreePath *
+gtk_tree_path_new_from_indicesv (gint *indices,
+                                 gsize length)
+{
+  GtkTreePath *path;
+
+  g_return_val_if_fail (indices != NULL && length != 0, NULL);
+
+  path = gtk_tree_path_new ();
+  path->alloc = length;
+  path->depth = length;
+  path->indices = g_new (gint, length);
+  memcpy (path->indices, indices, length * sizeof (gint));
+
+  return path;
+}
+
+/**
  * gtk_tree_path_to_string:
  * @path: A #GtkTreePath
  *
