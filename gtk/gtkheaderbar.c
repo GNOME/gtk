@@ -176,12 +176,15 @@ _gtk_header_bar_create_title_box (const char *title,
   GtkWidget *label_box;
   GtkWidget *title_label;
   GtkWidget *subtitle_label;
+  GtkStyleContext *context;
 
   label_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_widget_set_valign (label_box, GTK_ALIGN_CENTER);
   gtk_widget_show (label_box);
 
   title_label = gtk_label_new (title);
+  context = gtk_widget_get_style_context (title_label);
+  gtk_style_context_add_class (context, "title");
   boldify_label (title_label);
   gtk_label_set_line_wrap (GTK_LABEL (title_label), FALSE);
   gtk_label_set_single_line_mode (GTK_LABEL (title_label), TRUE);
@@ -190,6 +193,8 @@ _gtk_header_bar_create_title_box (const char *title,
   gtk_widget_show (title_label);
 
   subtitle_label = gtk_label_new (subtitle);
+  context = gtk_widget_get_style_context (subtitle_label);
+  gtk_style_context_add_class (context, "subtitle");
   smallify_label (subtitle_label);
   gtk_label_set_line_wrap (GTK_LABEL (subtitle_label), FALSE);
   gtk_label_set_single_line_mode (GTK_LABEL (subtitle_label), TRUE);
