@@ -735,6 +735,13 @@ struct _GtkStyleContextClass
  */
 #define GTK_STYLE_CLASS_INSERTION_CURSOR "insertion-cursor"
 
+/**
+ * GTK_STYLE_CLASS_TITLEBAR:
+ *
+ * A CSS class used when rendering a titlebar in a toplevel
+ * window.
+ */
+#define GTK_STYLE_CLASS_TITLEBAR "titlebar"
 
 /* Predefined set of widget regions */
 

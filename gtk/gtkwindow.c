@@ -5258,7 +5258,7 @@ create_decoration (GtkWidget *widget)
                     "vpadding", 0,
                     NULL);
       context = gtk_widget_get_style_context (priv->title_box);
-      gtk_style_context_add_class (context, "titlebar");
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_TITLEBAR);
       gtk_widget_set_parent (priv->title_box, widget);
 
       title = g_markup_printf_escaped ("<b>%s</b>",
