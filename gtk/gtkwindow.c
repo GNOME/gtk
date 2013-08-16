@@ -3505,6 +3505,9 @@ gtk_window_set_titlebar (GtkWindow *window,
   if (visual)
     gtk_widget_set_visual (widget, visual);
 
+  gtk_style_context_add_class (gtk_widget_get_style_context (titlebar),
+                               GTK_STYLE_CLASS_TITLEBAR);
+
   gtk_widget_queue_resize (widget);
 }
 
