@@ -1157,6 +1157,21 @@ synthesize_crossing_event (GdkWindow *window,
   return FALSE;
 }
 
+void
+_gdk_quartz_synthesize_null_key_event (GdkWindow *window)
+{
+  GdkEvent *event;
+
+  event = gdk_event_new (GDK_KEY_PRESS);
+  event->any.type = GDK_KEY_PRESS;
+  event->key.window = window;
+  event->key.state = 0;
+  event->key.hardware_keycode = 0;
+  event->key.group = 0;
+  event->key.keyval = GDK_VoidSymbol;
+  append_event(event, FALSE);
+}
+
 GdkEventMask 
 _gdk_quartz_events_get_current_event_mask (void)
 {

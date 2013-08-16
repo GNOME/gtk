@@ -198,6 +198,7 @@ GdkImage *_gdk_quartz_image_copy_to_image (GdkDrawable *drawable,
 /* Keys */
 GdkEventType _gdk_quartz_keys_event_type  (NSEvent   *event);
 gboolean     _gdk_quartz_keys_is_modifier (guint      keycode);
+void         _gdk_quartz_synthesize_null_key_event (GdkWindow *window);
 
 /* Drawable */
 void        _gdk_quartz_drawable_finish (GdkDrawable *drawable);

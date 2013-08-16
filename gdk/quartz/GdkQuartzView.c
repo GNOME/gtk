@@ -170,6 +170,13 @@
   GDK_NOTE (EVENTS, g_print ("setMarkedText: set %s (%p, nsview %p): %s\n",
 			     TIC_MARKED_TEXT, gdk_window, self,
 			     str ? str : "(empty)"));
+
+  /* handle text input changes by mouse events */
+  if (!GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (gdk_window),
+                                            TIC_IN_KEY_DOWN)))
+    {
+      _gdk_quartz_synthesize_null_key_event(gdk_window);
+    }
 }
 
 -(void)doCommandBySelector: (SEL)aSelector
@@ -183,19 +190,32 @@
 {
   GDK_NOTE (EVENTS, g_print ("insertText\n"));
   const char *str;
+  NSString *string;
   gchar *prev_str;
 
   if ([self hasMarkedText])
     [self unmarkText];
 
   if ([aString isKindOfClass: [NSAttributedString class]])
+      string = [aString string];
+  else
+      string = aString;
+
+  NSCharacterSet *ctrlChars = [NSCharacterSet controlCharacterSet];
+  NSCharacterSet *wsnlChars = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+  if ([string rangeOfCharacterFromSet:ctrlChars].length &&
+      [string rangeOfCharacterFromSet:wsnlChars].length == 0)
     {
-      str = [[aString string] UTF8String];
+      /* discard invalid text input with Chinese input methods */
+      str = "";
+      [self unmarkText];
+      NSInputManager *currentInputManager = [NSInputManager currentInputManager];
+      [currentInputManager markedTextAbandoned:self];
     }
   else
-    {
-      str = [aString UTF8String];
-    }
+   {
+      str = [string UTF8String];
+   }
 
   prev_str = g_object_get_data (G_OBJECT (gdk_window), TIC_INSERT_TEXT);
   if (prev_str)
@@ -207,6 +227,13 @@
 
   g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
 		     GUINT_TO_POINTER (GIC_FILTER_FILTERED));
+
+  /* handle text input changes by mouse events */
+  if (!GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (gdk_window),
+                                            TIC_IN_KEY_DOWN)))
+    {
+      _gdk_quartz_synthesize_null_key_event(gdk_window);
+    }
 }
 
 -(void)deleteBackward: (id)sender

@@ -26,6 +26,7 @@
 #define TIC_SELECTED_POS  "tic-selected-pos"
 #define TIC_SELECTED_LEN  "tic-selected-len"
 #define TIC_INSERT_TEXT "tic-insert-text"
+#define TIC_IN_KEY_DOWN "tic-in-key-down"
 
 /* GtkIMContext */
 #define GIC_CURSOR_RECT  "gic-cursor-rect"
