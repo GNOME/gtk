@@ -121,9 +121,6 @@
 
 #define MAX_ICONS 2
 
-#define CURSOR_BLINK_TIME        1200
-#define CURSOR_BLINK_TIMEOUT_SEC 10
-
 #define IS_VALID_ICON_POSITION(pos)               \
   ((pos) == GTK_ENTRY_ICON_PRIMARY ||                   \
    (pos) == GTK_ENTRY_ICON_SECONDARY)
@@ -9760,7 +9757,15 @@ cursor_blinks (GtkEntry *entry)
   if (gtk_widget_has_focus (GTK_WIDGET (entry)) &&
       priv->editable &&
       priv->selection_bound == priv->current_pos)
-    return TRUE;
+    {
+      GtkSettings *settings;
+      gboolean blink;
+
+      settings = gtk_widget_get_settings (GTK_WIDGET (entry));
+      g_object_get (settings, "gtk-cursor-blink", &blink, NULL);
+
+      return blink;
+    }
   else
     return FALSE;
 }
@@ -9775,6 +9780,28 @@ get_middle_click_paste (GtkEntry *entry)
   g_object_get (settings, "gtk-enable-primary-paste", &paste, NULL);
 
   return paste;
+}
+
+static gint
+get_cursor_time (GtkEntry *entry)
+{
+  GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (entry));
+  gint time;
+
+  g_object_get (settings, "gtk-cursor-blink-time", &time, NULL);
+
+  return time;
+}
+
+static gint
+get_cursor_blink_timeout (GtkEntry *entry)
+{
+  GtkSettings *settings = gtk_widget_get_settings (GTK_WIDGET (entry));
+  gint timeout;
+
+  g_object_get (settings, "gtk-cursor-blink-timeout", &timeout, NULL);
+
+  return timeout;
 }
 
 static void
@@ -9817,6 +9844,7 @@ blink_cb (gpointer data)
 {
   GtkEntry *entry;
   GtkEntryPrivate *priv; 
+  gint blink_timeout;
 
   entry = GTK_ENTRY (data);
   priv = entry->priv;
@@ -9834,8 +9862,9 @@ blink_cb (gpointer data)
   
   g_assert (priv->selection_bound == priv->current_pos);
   
-  if (priv->blink_time > 1000 * CURSOR_BLINK_TIMEOUT_SEC && 
-      CURSOR_BLINK_TIMEOUT_SEC < G_MAXINT/1000) 
+  blink_timeout = get_cursor_blink_timeout (entry);
+  if (priv->blink_time > 1000 * blink_timeout && 
+      blink_timeout < G_MAXINT/1000) 
     {
       /* we've blinked enough without the user doing anything, stop blinking */
       show_cursor (entry);
@@ -9844,15 +9873,15 @@ blink_cb (gpointer data)
   else if (priv->cursor_visible)
     {
       hide_cursor (entry);
-      priv->blink_timeout = gdk_threads_add_timeout (CURSOR_BLINK_TIME * CURSOR_OFF_MULTIPLIER / CURSOR_DIVIDER,
+      priv->blink_timeout = gdk_threads_add_timeout (get_cursor_time (entry) * CURSOR_OFF_MULTIPLIER / CURSOR_DIVIDER,
 					    blink_cb,
 					    entry);
     }
   else
     {
       show_cursor (entry);
-      priv->blink_time += CURSOR_BLINK_TIME;
-      priv->blink_timeout = gdk_threads_add_timeout (CURSOR_BLINK_TIME * CURSOR_ON_MULTIPLIER / CURSOR_DIVIDER,
+      priv->blink_time += get_cursor_time (entry);
+      priv->blink_timeout = gdk_threads_add_timeout (get_cursor_time (entry) * CURSOR_ON_MULTIPLIER / CURSOR_DIVIDER,
 					    blink_cb,
 					    entry);
     }
@@ -9871,7 +9900,7 @@ gtk_entry_check_cursor_blink (GtkEntry *entry)
       if (!priv->blink_timeout)
 	{
 	  show_cursor (entry);
-	  priv->blink_timeout = gdk_threads_add_timeout (CURSOR_BLINK_TIME * CURSOR_ON_MULTIPLIER / CURSOR_DIVIDER,
+	  priv->blink_timeout = gdk_threads_add_timeout (get_cursor_time (entry) * CURSOR_ON_MULTIPLIER / CURSOR_DIVIDER,
 						blink_cb,
 						entry);
 	}
@@ -9898,7 +9927,7 @@ gtk_entry_pend_cursor_blink (GtkEntry *entry)
       if (priv->blink_timeout != 0)
 	g_source_remove (priv->blink_timeout);
 
-      priv->blink_timeout = gdk_threads_add_timeout (CURSOR_BLINK_TIME * CURSOR_PEND_MULTIPLIER / CURSOR_DIVIDER,
+      priv->blink_timeout = gdk_threads_add_timeout (get_cursor_time (entry) * CURSOR_PEND_MULTIPLIER / CURSOR_DIVIDER,
                                                      blink_cb,
                                                      entry);
       show_cursor (entry);
