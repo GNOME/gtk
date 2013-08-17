@@ -1294,7 +1294,14 @@ gtk_button_construct_child (GtkButton *button)
 GtkWidget*
 gtk_button_new_with_label (const gchar *label)
 {
-  return g_object_new (GTK_TYPE_BUTTON, "label", label, NULL);
+  GtkStyleContext *context;
+  GtkWidget *button;
+
+  button =  g_object_new (GTK_TYPE_BUTTON, "label", label, NULL);
+  context = gtk_widget_get_style_context (button);
+  gtk_style_context_add_class (context, "text-button");
+
+  return button;
 }
 
 /**
@@ -1375,7 +1382,14 @@ gtk_button_new_from_stock (const gchar *stock_id)
 GtkWidget*
 gtk_button_new_with_mnemonic (const gchar *label)
 {
-  return g_object_new (GTK_TYPE_BUTTON, "label", label, "use-underline", TRUE,  NULL);
+  GtkStyleContext *context;
+  GtkWidget *button;
+
+  button = g_object_new (GTK_TYPE_BUTTON, "label", label, "use-underline", TRUE,  NULL);
+  context = gtk_widget_get_style_context (button);
+  gtk_style_context_add_class (context, "text-button");
+
+  return button;
 }
 
 /**
