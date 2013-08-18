@@ -7530,6 +7530,9 @@ gtk_notebook_popup_enable (GtkNotebook *notebook)
     return;
 
   priv->menu = gtk_menu_new ();
+  gtk_style_context_add_class (gtk_widget_get_style_context (priv->menu),
+                               GTK_STYLE_CLASS_CONTEXT_MENU);
+
   for (list = gtk_notebook_search_page (notebook, NULL, STEP_NEXT, FALSE);
        list;
        list = gtk_notebook_search_page (notebook, list, STEP_NEXT, FALSE))

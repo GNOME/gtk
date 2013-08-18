@@ -9225,60 +9225,61 @@ popup_targets_received (GtkClipboard     *clipboard,
     {
       DisplayMode mode;
       gboolean clipboard_contains_text;
+      GtkWidget *menu;
       GtkWidget *menuitem;
 
       clipboard_contains_text = gtk_selection_data_targets_include_text (data);
       if (info_entry_priv->popup_menu)
 	gtk_widget_destroy (info_entry_priv->popup_menu);
 
-      info_entry_priv->popup_menu = gtk_menu_new ();
+      info_entry_priv->popup_menu = menu = gtk_menu_new ();
+      gtk_style_context_add_class (gtk_widget_get_style_context (menu),
+                                   GTK_STYLE_CLASS_CONTEXT_MENU);
 
-      gtk_menu_attach_to_widget (GTK_MENU (info_entry_priv->popup_menu),
-				 GTK_WIDGET (entry),
-				 popup_menu_detach);
+      gtk_menu_attach_to_widget (GTK_MENU (menu), GTK_WIDGET (entry), popup_menu_detach);
 
       mode = gtk_entry_get_display_mode (entry);
-      append_action_signal (entry, info_entry_priv->popup_menu, _("Cu_t"), "cut-clipboard",
+      append_action_signal (entry, menu, _("Cu_t"), "cut-clipboard",
                             info_entry_priv->editable && mode == DISPLAY_NORMAL &&
                             info_entry_priv->current_pos != info_entry_priv->selection_bound);
 
-      append_action_signal (entry, info_entry_priv->popup_menu, _("_Copy"), "copy-clipboard",
+      append_action_signal (entry, menu, _("_Copy"), "copy-clipboard",
                             mode == DISPLAY_NORMAL &&
                             info_entry_priv->current_pos != info_entry_priv->selection_bound);
 
-      append_action_signal (entry, info_entry_priv->popup_menu, _("_Paste"), "paste-clipboard",
+      append_action_signal (entry, menu, _("_Paste"), "paste-clipboard",
                             info_entry_priv->editable && clipboard_contains_text);
 
       menuitem = gtk_menu_item_new_with_mnemonic (_("_Delete"));
       gtk_widget_set_sensitive (menuitem, info_entry_priv->editable && info_entry_priv->current_pos != info_entry_priv->selection_bound);
       g_signal_connect_swapped (menuitem, "activate",
-			        G_CALLBACK (gtk_entry_delete_cb), entry);
+                                G_CALLBACK (gtk_entry_delete_cb), entry);
       gtk_widget_show (menuitem);
-      gtk_menu_shell_append (GTK_MENU_SHELL (info_entry_priv->popup_menu), menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
       menuitem = gtk_separator_menu_item_new ();
       gtk_widget_show (menuitem);
-      gtk_menu_shell_append (GTK_MENU_SHELL (info_entry_priv->popup_menu), menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
       menuitem = gtk_menu_item_new_with_mnemonic (_("Select _All"));
       gtk_widget_set_sensitive (menuitem, gtk_entry_buffer_get_length (info_entry_priv->buffer) > 0);
       g_signal_connect_swapped (menuitem, "activate",
-			        G_CALLBACK (gtk_entry_select_all), entry);
+                                G_CALLBACK (gtk_entry_select_all), entry);
       gtk_widget_show (menuitem);
-      gtk_menu_shell_append (GTK_MENU_SHELL (info_entry_priv->popup_menu), menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
-      g_signal_emit (entry, signals[POPULATE_POPUP], 0, info_entry_priv->popup_menu);
+      g_signal_emit (entry, signals[POPULATE_POPUP], 0, menu);
 
       if (info->device)
-	gtk_menu_popup_for_device (GTK_MENU (info_entry_priv->popup_menu),
-                        info->device, NULL, NULL, NULL, NULL, NULL,
-			info->button, info->time);
+	gtk_menu_popup_for_device (GTK_MENU (menu),
+                                   info->device, NULL, NULL, NULL, NULL, NULL,
+                                   info->button, info->time);
       else
 	{
-	  gtk_menu_popup (GTK_MENU (info_entry_priv->popup_menu), NULL, NULL,
-			  popup_position_func, entry,
-			  0, gtk_get_current_event_time ());
-	  gtk_menu_shell_select_first (GTK_MENU_SHELL (info_entry_priv->popup_menu), FALSE);
+          gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
+                          popup_position_func, entry,
+                          0, gtk_get_current_event_time ());
+          gtk_menu_shell_select_first (GTK_MENU_SHELL (menu), FALSE);
 	}
     }
 

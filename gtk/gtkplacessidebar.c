@@ -3097,6 +3097,9 @@ bookmarks_build_popup_menu (GtkPlacesSidebar *sidebar)
 	GFile *file;
 
 	sidebar->popup_menu = gtk_menu_new ();
+       gtk_style_context_add_class (gtk_widget_get_style_context (sidebar->popup_menu),
+                                    GTK_STYLE_CLASS_CONTEXT_MENU);
+
 	gtk_menu_attach_to_widget (GTK_MENU (sidebar->popup_menu),
 				   GTK_WIDGET (sidebar),
 				   bookmarks_popup_menu_detach_cb);

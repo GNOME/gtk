@@ -1426,7 +1426,7 @@ rebuild_menu (GtkToolbar *toolbar)
 
   if (!priv->menu)
     {
-      priv->menu = GTK_MENU (gtk_menu_new());
+      priv->menu = GTK_MENU (gtk_menu_new ());
       gtk_menu_attach_to_widget (priv->menu,
 				 GTK_WIDGET (toolbar),
 				 menu_detached);

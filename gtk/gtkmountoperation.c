@@ -1291,6 +1291,8 @@ do_popup_menu_for_process_tree_view (GtkWidget         *widget,
   popped_up_menu = FALSE;
 
   menu = gtk_menu_new ();
+  gtk_style_context_add_class (gtk_widget_get_style_context (menu),
+                               GTK_STYLE_CLASS_CONTEXT_MENU);
 
   item = gtk_menu_item_new_with_mnemonic (_("_End Process"));
   g_signal_connect (item, "activate",

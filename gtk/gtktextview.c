@@ -8610,6 +8610,8 @@ popup_targets_received (GtkClipboard     *clipboard,
 	gtk_widget_destroy (priv->popup_menu);
 
       priv->popup_menu = gtk_menu_new ();
+      gtk_style_context_add_class (gtk_widget_get_style_context (priv->popup_menu),
+                                   GTK_STYLE_CLASS_CONTEXT_MENU);
 
       gtk_menu_attach_to_widget (GTK_MENU (priv->popup_menu),
 				 GTK_WIDGET (text_view),

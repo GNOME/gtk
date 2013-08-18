@@ -441,6 +441,9 @@ do_popup (GtkWidget      *swatch,
   GtkWidget *item;
 
   menu = gtk_menu_new ();
+  gtk_style_context_add_class (gtk_widget_get_style_context (menu),
+                               GTK_STYLE_CLASS_CONTEXT_MENU);
+
   item = gtk_menu_item_new_with_mnemonic (_("_Customize"));
   gtk_menu_attach_to_widget (GTK_MENU (menu), swatch, NULL);
 

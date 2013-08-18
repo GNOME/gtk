@@ -480,12 +480,14 @@ gtk_link_button_do_popup (GtkLinkButton  *link_button,
   if (gtk_widget_get_realized (GTK_WIDGET (link_button)))
     {
       GtkWidget *menu_item;
-      
+
       if (priv->popup_menu)
 	gtk_widget_destroy (priv->popup_menu);
 
       priv->popup_menu = gtk_menu_new ();
-      
+      gtk_style_context_add_class (gtk_widget_get_style_context (priv->popup_menu),
+                                   GTK_STYLE_CLASS_CONTEXT_MENU);
+
       gtk_menu_attach_to_widget (GTK_MENU (priv->popup_menu),
 		      		 GTK_WIDGET (link_button),
 				 popup_menu_detach);
@@ -495,7 +497,7 @@ gtk_link_button_do_popup (GtkLinkButton  *link_button,
 		        G_CALLBACK (copy_activate_cb), link_button);
       gtk_widget_show (menu_item);
       gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menu_item);
-      
+
       if (button)
         gtk_menu_popup (GTK_MENU (priv->popup_menu), NULL, NULL,
 		        NULL, NULL,

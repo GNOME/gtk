@@ -258,11 +258,22 @@ struct _GtkStyleContextClass
 /**
  * GTK_STYLE_CLASS_MENU:
  *
- * A CSS class to match popup menus.
+ * A CSS class to match menus.
  *
  * This is used in #GtkMenu.
  */
 #define GTK_STYLE_CLASS_MENU "menu"
+
+/**
+ * GTK_STYLE_CLASS_CONTEXT_MENU:
+ *
+ * A CSS class to match context menus.
+ *
+ * This style class is useful when you want to prevent
+ * a context menu from inheriting e.g. font changes from
+ * the widget it is attached to.
+ */
+#define GTK_STYLE_CLASS_CONTEXT_MENU "context-menu"
 
 /**
  * GTK_STYLE_CLASS_MENUBAR:
