@@ -2306,7 +2306,7 @@ gtk_entry_set_property (GObject         *object,
 
     case PROP_TABS:
       gtk_entry_set_tabs (entry, g_value_get_boxed (value));
-      break
+      break;
 
     case PROP_SCROLL_OFFSET:
     case PROP_CURSOR_POSITION:
