@@ -22,6 +22,7 @@
 #include <string.h>
 
 #include "gtkclipboard.h"
+#include "gtkclipboardprivate.h"
 #include "gtkinvisible.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
@@ -112,49 +113,12 @@ enum {
   LAST_SIGNAL
 };
 
-typedef struct _GtkClipboardClass GtkClipboardClass;
-
 typedef struct _RequestContentsInfo RequestContentsInfo;
 typedef struct _RequestTextInfo RequestTextInfo;
 typedef struct _RequestRichTextInfo RequestRichTextInfo;
 typedef struct _RequestImageInfo RequestImageInfo;
 typedef struct _RequestURIInfo RequestURIInfo;
 typedef struct _RequestTargetsInfo RequestTargetsInfo;
-
-struct _GtkClipboard 
-{
-  GObject parent_instance;
-
-  GdkAtom selection;
-
-  GtkClipboardGetFunc get_func;
-  GtkClipboardClearFunc clear_func;
-  gpointer user_data;
-  gboolean have_owner;
-
-  guint32 timestamp;
-
-  gboolean have_selection;
-  GdkDisplay *display;
-
-  GdkAtom *cached_targets;
-  gint     n_cached_targets;
-
-  gulong     notify_signal_id;
-  gboolean   storing_selection;
-  GMainLoop *store_loop;
-  guint      store_timeout;
-  gint       n_storable_targets;
-  GdkAtom   *storable_targets;
-};
-
-struct _GtkClipboardClass
-{
-  GObjectClass parent_class;
-
-  void (*owner_change) (GtkClipboard        *clipboard,
-			GdkEventOwnerChange *event);
-};
 
 struct _RequestContentsInfo
 {

@@ -426,6 +426,7 @@ gtk_private_h_sources =		\
 	gtkbuttonprivate.h	\
 	gtkcairoblurprivate.h	\
 	gtkcellareaboxcontextprivate.h	\
+	gtkclipboardprivate.h		\
 	gtkcolorswatchprivate.h	\
 	gtkcoloreditorprivate.h	\
 	gtkcolorplaneprivate.h	\
