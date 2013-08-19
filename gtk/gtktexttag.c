@@ -569,7 +569,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   /**
    * GtkTextTag:paragraph-background-gdk:
    *
-   * The paragraph background color as a as a #GdkColor.
+   * The paragraph background color as a #GdkColor.
    *
    * Since: 2.8
    *
@@ -586,7 +586,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   /**
    * GtkTextTag:paragraph-background-rgba:
    *
-   * The paragraph background color as a as a #GdkRGBA.
+   * The paragraph background color as a #GdkRGBA.
    *
    * Since: 3.2
    */
