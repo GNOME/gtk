@@ -393,7 +393,7 @@
 typedef struct {
   gchar               *name;           /* Name of the template automatic child */
   gboolean             internal_child; /* Whether the automatic widget should be exported as an <internal-child> */
-  gssize               offset;         /* Instance private data offset where to set the automatic child (or -1) */
+  gssize               offset;         /* Instance private data offset where to set the automatic child (or 0) */
 } AutomaticChildClass;
 
 typedef struct {
@@ -15938,7 +15938,7 @@ gtk_widget_class_set_connect_func (GtkWidgetClass        *widget_class,
  * @internal_child: Whether the child should be accessible as an "internal-child"
  *                  when this class is used in GtkBuilder XML
  * @struct_offset: The structure offset into the composite widget's instance public or private structure
- *                 where the automated child pointer should be set, or -1 to not assign the pointer.
+ *                 where the automated child pointer should be set, or 0 to not assign the pointer.
  *
  * Automatically assign an object declared in the class template XML to be set to a location
  * on a freshly built instance's private data, or alternatively accessible via gtk_widget_get_automated_child().
@@ -15948,8 +15948,8 @@ gtk_widget_class_set_connect_func (GtkWidgetClass        *widget_class,
  *
  * An explicit strong reference will be held automatically for the duration of your
  * instance's life cycle, it will be released automatically when #GObjectClass.dispose() runs
- * on your instance and if a @struct_offset that is >= 0 is specified, then the automatic location
- * in your instance private data will be set to %NULL. You can however access an automated child
+ * on your instance and if a @struct_offset that is != 0 is specified, then the automatic location
+ * in your instance public or private data will be set to %NULL. You can however access an automated child
  * pointer the first time your classes #GObjectClass.dispose() runs, or alternatively in
  * #GtkWidgetClass.destroy().
  *
