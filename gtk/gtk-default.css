@@ -54,6 +54,11 @@ GtkTreeView.dnd {
   color: shade (@bg_color, 0.7);
 }
 
+.entry.read-only {
+  border-color: shade (@bg_color, 0.7);
+  background-color: shade (@bg_color, 0.9);
+}
+
 .entry:selected {
   background-color: shade (@bg_color, 0.9);
   color: @fg_color;

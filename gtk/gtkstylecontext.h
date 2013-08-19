@@ -923,6 +923,12 @@ void           gtk_style_context_set_frame_clock (GtkStyleContext *context,
 GDK_AVAILABLE_IN_3_8
 GdkFrameClock *gtk_style_context_get_frame_clock (GtkStyleContext *context);
 
+/**
+ * GTK_STYLE_CLASS_READ_ONLY:
+ *
+ * A CSS class used to indicate a read-only state.
+ */
+#define GTK_STYLE_CLASS_READ_ONLY "read-only"
 
 GDK_DEPRECATED_IN_3_8_FOR(gtk_style_context_set_state)
 void             gtk_style_context_set_direction (GtkStyleContext  *context,

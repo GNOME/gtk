@@ -2054,6 +2054,7 @@ gtk_entry_set_property (GObject         *object,
     case PROP_EDITABLE:
       {
         gboolean new_value = g_value_get_boolean (value);
+        GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET (entry));
 
         if (new_value != priv->editable)
 	  {
@@ -2067,7 +2068,13 @@ gtk_entry_set_property (GObject         *object,
 
 		priv->preedit_length = 0;
 		priv->preedit_cursor = 0;
+
+                gtk_style_context_remove_class (context, GTK_STYLE_CLASS_READ_ONLY);
 	      }
+            else
+              {
+                gtk_style_context_add_class (context, GTK_STYLE_CLASS_READ_ONLY);
+              }
 
 	    priv->editable = new_value;
 
@@ -3705,7 +3712,7 @@ gtk_entry_draw_frame (GtkWidget       *widget,
 
   if (priv->has_frame)
     gtk_render_frame (context, cr,
-                      x, y, width, height);
+		      x, y, width, height);
 
   gtk_entry_draw_progress (widget, context, cr);
 
