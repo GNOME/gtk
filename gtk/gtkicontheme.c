@@ -1085,6 +1085,7 @@ insert_theme (GtkIconTheme *icon_theme, const char *theme_name)
   int i;
   GList *l;
   char **dirs;
+  char **scaled_dirs;
   char **themes;
   GtkIconThemePrivate *priv;
   IconTheme *theme = NULL;
@@ -1169,7 +1170,9 @@ insert_theme (GtkIconTheme *icon_theme, const char *theme_name)
       g_key_file_free (theme_file);
       return;
     }
-  
+
+  scaled_dirs = g_key_file_get_string_list (theme_file, "Icon Theme", "ScaledDirectories", NULL, NULL);
+
   theme->comment = 
     g_key_file_get_locale_string (theme_file, 
 				  "Icon Theme", "Comment",
@@ -1183,7 +1186,13 @@ insert_theme (GtkIconTheme *icon_theme, const char *theme_name)
   for (i = 0; dirs[i] != NULL; i++)
     theme_subdir_load (icon_theme, theme, theme_file, dirs[i]);
 
+  if (scaled_dirs)
+    {
+      for (i = 0; scaled_dirs[i] != NULL; i++)
+        theme_subdir_load (icon_theme, theme, theme_file, scaled_dirs[i]);
+    }
   g_strfreev (dirs);
+  g_strfreev (scaled_dirs);
 
   theme->dirs = g_list_reverse (theme->dirs);
 
