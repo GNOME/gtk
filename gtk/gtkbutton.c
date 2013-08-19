@@ -1160,13 +1160,15 @@ gtk_button_construct_child (GtkButton *button)
   gchar *label_text = NULL;
   gint image_spacing;
 
+  context = gtk_widget_get_style_context (GTK_WIDGET (button));
+  gtk_style_context_remove_class (context, "image-button");
+  gtk_style_context_remove_class (context, "text-button");
+
   if (!priv->constructed)
     return;
 
   if (!priv->label_text && !priv->image)
     return;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (button));
 
   gtk_style_context_get_style (context,
                                "image-spacing", &image_spacing,
@@ -1254,6 +1256,10 @@ gtk_button_construct_child (GtkButton *button)
 	  else
 	    gtk_box_pack_end (GTK_BOX (box), label, FALSE, FALSE, 0);
 	}
+      else
+        {
+          gtk_style_context_add_class (context, "image-button");
+        }
 
       gtk_container_add (GTK_CONTAINER (button), align);
       gtk_container_add (GTK_CONTAINER (align), box);
@@ -1279,6 +1285,8 @@ gtk_button_construct_child (GtkButton *button)
 
   gtk_widget_show (label);
   gtk_container_add (GTK_CONTAINER (button), label);
+
+  gtk_style_context_add_class (context, "text-button");
 }
 
 
@@ -1302,24 +1310,23 @@ gtk_button_new_with_label (const gchar *label)
  * @icon_name: an icon name
  * @size: (type int): an icon size
  *
- * Creates a new #GtkButton containing an icon from the current icon theme.
- * 
+ * Creates a new button containing an icon from the current icon theme.
+ *
  * If the icon name isn't known, a "broken image" icon will be
  * displayed instead. If the current icon theme is changed, the icon
  * will be updated appropriately.
- * 
+ *
  * This function is a convenience wrapper around gtk_button_new() and
  * gtk_button_set_image().
- * 
+ *
  * Returns: a new #GtkButton displaying the themed icon
- * 
+ *
  * Since: 3.10
  **/
 GtkWidget*
 gtk_button_new_from_icon_name (const gchar *icon_name,
 			       GtkIconSize  size)
 {
-  GtkStyleContext *context;
   GtkWidget *button;
   GtkWidget *image;
 
@@ -1327,8 +1334,6 @@ gtk_button_new_from_icon_name (const gchar *icon_name,
   button =  g_object_new (GTK_TYPE_BUTTON,
 			  "image", image,
 			  NULL);
-  context = gtk_widget_get_style_context (button);
-  gtk_style_context_add_class (context, "image-button");
 
   return button;
 }
