@@ -3160,8 +3160,8 @@ theme_subdir_load (GtkIconTheme *icon_theme,
   else
     threshold = 2;
 
-  if (g_key_file_has_key (theme_file, subdir, "OutputScale", NULL))
-    scale = g_key_file_get_integer (theme_file, subdir, "OutputScale", NULL);
+  if (g_key_file_has_key (theme_file, subdir, "Scale", NULL))
+    scale = g_key_file_get_integer (theme_file, subdir, "Scale", NULL);
   else
     scale = 1;
 
