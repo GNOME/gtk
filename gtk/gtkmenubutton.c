@@ -657,10 +657,7 @@ _gtk_menu_button_set_popup_with_func (GtkMenuButton                 *menu_button
     {
       if (gtk_widget_get_visible (GTK_WIDGET (priv->popup)))
         gtk_menu_shell_deactivate (GTK_MENU_SHELL (priv->popup));
-    }
 
-  if (priv->popup)
-    {
       g_signal_handlers_disconnect_by_func (priv->popup,
                                             menu_deactivate_cb,
                                             menu_button);
@@ -674,6 +671,7 @@ _gtk_menu_button_set_popup_with_func (GtkMenuButton                 *menu_button
       gtk_menu_attach_to_widget (GTK_MENU (priv->popup), GTK_WIDGET (menu_button),
                                  menu_detacher);
 
+      gtk_widget_set_visible (priv->popup, FALSE);
       gtk_widget_set_sensitive (GTK_WIDGET (menu_button), TRUE);
 
       g_signal_connect (priv->popup, "deactivate",
