@@ -235,6 +235,7 @@ add_close_button (GtkHeaderBar *bar)
   gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
   context = gtk_widget_get_style_context (button);
   gtk_style_context_add_class (context, "image-button");
+  gtk_style_context_add_class (context, "titlebutton");
   icon = g_themed_icon_new ("window-close-symbolic");
   image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_MENU);
   g_object_unref (icon);
