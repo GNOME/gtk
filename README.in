@@ -97,6 +97,25 @@ Release notes for 3.10
   to just the insensitive and backdrop states. This mostly affects
   theming.
 
+* The way widget drawing happens has changed. Earlier versions handled
+  one expose event per GdkWindow, each with a separate cairo_t. Now we
+  only handle the expose event on the toplevel and reuse the same
+  cairo_t (with the right translation and clipping) for the entire
+  widget hierarchy, recursing down via the GtkWidget::draw signal.
+  Having all rendering in the same call tree allows effects like
+  opacity and offscreen rendering of entire widget sub-hierarchies.
+  Generally this should not require any changes in widgets, but
+  code looking at e.g. the current expose event may see different
+  behavior than before.
+
+* The Gtk+ scrolling implementation has changed. gdk_window_scroll()
+  and gdk_window_move_region() no longer copy the region on the
+  window, but rather invalidate the entire scrolled region. This is
+  slightly slower, but allowed us to implement a offscreen surface
+  scrolling method which better fits modern hardware. Most scrolling
+  widgets in Gtk+ have been converted to use this model for scrolling,
+  but external widgets implementing scrolling using GdkWindow may see
+  some slowdown.
 
 Release notes for 3.8
 =====================
