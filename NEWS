@@ -1,3 +1,77 @@
+Overview of Changes in GTK+ 3.9.10 to 3.9.12
+============================================
+
+* GtkInfoBar now uses a GtkRevealer internally to slide in place.
+  It is no longer necessary to do that manually.
+
+* GtkHeaderBar can now add a window close button
+
+* The fine adjustment mode for scrolling has been revamped to be
+  easier discoverable, and visual feedback and autoscrolling has
+  been added.
+
+* GtkIconTheme now supports 2x scaled icons for hi-dpi displays.
+
+* The Wayland and X11 clipboard implementations can now coexist
+
+* Bugs fixed:
+ 448637 Convert comment in gtkmenushell.c into docs
+ 672220 GtkFileChooserButton dialog stretched, when user has a really...
+ 674108 Hard crash due to wrong NSAutoreleasePool stacking
+ 680926 generic type fallback logic is broken for -symbolic
+ 688738 GtkMenuButton problem with mnemonics / accelerators
+ 692548 Quartz: Cursor doesn't reset when the mouse leaves a toplevel...
+ 694831 GtkEntry provides no visual feedback when editable=FALSE
+ 697127 gedit context menu uses fixed-width font
+ 697399 GtkEntry: Add a "tabs" property for setting a PangoTabArray...
+ 700029 GdkEvent type not accessible from Javascript
+ 701571 1ad25dfb causes NSApp to not notice NSWindow destruction
+ 702144 Make gdkwin32.h a pure include-only header
+ 702971 GtkHeaderBar - pick up window controls from the system settings
+ 704173 Don't use UNIX-specific printer objects on non-UNIX
+ 704334 add revealer to infobar
+ 704703 fine adjustments are difficult with scrollbars
+ 705068 Update the GDK and GTK on Win32 to not use deprecated APIs
+ 705181 Annoying beep on arrow keys when using IME on MacOS
+ 705182 Reset Cocoa IME state when immodule is reset
+ 705215 Minimum required cairo version should be 1.12 since 83c5e354b
+ 705320 gtkicontheme: check for GdkPixbuf first
+ 705372 gtk_image_menu_item_new_from_stock deprecation warning point...
+ 705443 Fix image effects
+ 705498 build and enable wayland backend by default
+ 705524 searchbar: ignore GDK_KEY_Menu in handle_event()
+ 705529 GtkTextView: improve documentation
+ 705558 [listbox] convenience methods to prepend and insert at index
+ 705601 headerbar: some improvements
+ 705605 Improve the spring-back animation for drag and drop
+ 705624 paned: minus the size by the handle for the for_child1 compu...
+ 705640 GtkWindow incorrectly requires a default screen
+ 705672 Inconsistent deprecations. GtkComboBox and GtkMenu.
+ 705692 Segmentation fault on horizontal slider
+ 705750 Quartz input method doesn't work correctly for Chinese characters
+ 705765 gtkwindow: Export our custom frame extents
+ 705809 Middle click on HeaderBar (as tiitelbar) isn't moved to the...
+ 705918 Add gtk_button_new_from_icon_name
+ 706014 Searchbar entry lacks an accessible name
+ 706045 Set GtkBox as titlebar of the window - the background of the box...
+ 706152 g_object_notify called with NULL priv->focus_widget
+ 706220 Add the "text-button" style to button created with gtk_button_ne...
+ 706028 The pathbar in GTKFilechooser don't stick together
+ 706335 doc: Fix typos
+
+* Updated translations:
+ Arabic
+ Czech
+ Galician
+ Hebrew
+ Hungarian
+ Lithuanian
+ Norwegian bokmål
+ Spanish
+ Tajik
+ Traditional Chinese
+
+
 Overview of Changes in GTK+ 3.9.8 to 3.9.10
 ===========================================
 
