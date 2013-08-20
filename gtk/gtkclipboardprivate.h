@@ -59,8 +59,27 @@ struct _GtkClipboardClass
 {
   GObjectClass parent_class;
 
-  void (*owner_change) (GtkClipboard        *clipboard,
-			GdkEventOwnerChange *event);
+  /* vfuncs */
+  gboolean      (* set_contents)                (GtkClipboard                   *clipboard,
+                                                 const GtkTargetEntry           *targets,
+                                                 guint                           n_targets,
+                                                 GtkClipboardGetFunc             get_func,
+                                                 GtkClipboardClearFunc           clear_func,
+                                                 gpointer                        user_data,
+                                                 gboolean                        have_owner);
+  void          (* clear)                       (GtkClipboard                   *clipboard);
+  void          (* request_contents)            (GtkClipboard                   *clipboard,
+                                                 GdkAtom                         target,
+                                                 GtkClipboardReceivedFunc        callback,
+                                                 gpointer                        user_data);
+  void          (* set_can_store)               (GtkClipboard                   *clipboard,
+                                                 const GtkTargetEntry           *targets,
+                                                 gint                            n_targets);
+  void          (* store)                       (GtkClipboard                   *clipboard);
+
+  /* signals */
+  void          (* owner_change)                (GtkClipboard                   *clipboard,
+                                                 GdkEventOwnerChange            *event);
 };
 
 #endif /* __GTK_CLIPBOARD_PRIVATE_H__ */
