@@ -1300,6 +1300,7 @@ distclean-local:
 	  rm -f $(MAINTAINERCLEANFILES); \
 	  rm -rf stock-icons; \
 	  rm -f extract-strings$(EXEEXT); \
+	  rm -f $(template_headers); \
 	fi
 
 DEPS = libgtk-3.la $(top_builddir)/gdk/libgdk-3.la
