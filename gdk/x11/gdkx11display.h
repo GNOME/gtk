@@ -85,6 +85,10 @@ void        gdk_x11_display_grab              (GdkDisplay *display);
 GDK_AVAILABLE_IN_ALL
 void        gdk_x11_display_ungrab            (GdkDisplay *display);
 
+GDK_AVAILABLE_IN_3_10
+void        gdk_x11_display_set_window_scale (GdkDisplay *display,
+                                              gint scale);
+
 GDK_AVAILABLE_IN_ALL
 void                           gdk_x11_display_error_trap_push        (GdkDisplay *display);
 /* warn unused because you could use pop_ignored otherwise */

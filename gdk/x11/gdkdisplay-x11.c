@@ -2674,6 +2674,43 @@ gdk_x11_display_error_trap_pop_internal (GdkDisplay *display,
 }
 
 /**
+ * gdk_x11_display_set_window_scale:
+ * @display: (type GdkX11Display): the display
+ * @scale: The new scale value
+ *
+ * Forces a specific window scale for all windows on this display,
+ * instead of using the default or user configured scale. This
+ * is can be used to disable scaling support by setting @scale to
+ * 1, or to programmatically set the window scale.
+ *
+ * Once the scale is set by this call it will not change in response
+ * to later user configuration changes.
+ *
+ * Since: 3.10
+ */
+void
+gdk_x11_display_set_window_scale (GdkDisplay *display,
+                                  gint scale)
+{
+  GdkX11Screen *x11_screen;
+
+  g_return_if_fail (GDK_IS_X11_DISPLAY (display));
+
+  scale = MAX (scale, 1);
+
+#ifndef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
+  /* Without cairo support we can't support any scale but 1 */
+  scale = 1;
+#endif
+
+  x11_screen = GDK_X11_SCREEN (GDK_X11_DISPLAY (display)->screen);
+
+  x11_screen->fixed_window_scale = TRUE;
+  _gdk_x11_screen_set_window_scale (x11_screen, scale);
+}
+
+
+/**
  * gdk_x11_display_error_trap_pop:
  * @display: (type GdkX11Display): the display
  *
