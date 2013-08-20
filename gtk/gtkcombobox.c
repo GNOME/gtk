@@ -1164,7 +1164,9 @@ gtk_combo_box_set_property (GObject      *object,
       break;
 
     case PROP_ADD_TEAROFFS:
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_combo_box_set_add_tearoffs (combo_box, g_value_get_boolean (value));
+G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
 
     case PROP_HAS_FRAME:
@@ -1187,7 +1189,9 @@ gtk_combo_box_set_property (GObject      *object,
       break;
 
     case PROP_TEAROFF_TITLE:
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_combo_box_set_title (combo_box, g_value_get_string (value));
+G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
 
     case PROP_POPUP_SHOWN:
@@ -1281,7 +1285,9 @@ gtk_combo_box_get_property (GObject    *object,
         break;
 
       case PROP_ADD_TEAROFFS:
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
         g_value_set_boolean (value, gtk_combo_box_get_add_tearoffs (combo_box));
+G_GNUC_END_IGNORE_DEPRECATIONS;
         break;
 
       case PROP_HAS_FRAME:
@@ -1293,7 +1299,9 @@ gtk_combo_box_get_property (GObject    *object,
         break;
 
       case PROP_TEAROFF_TITLE:
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
         g_value_set_string (value, gtk_combo_box_get_title (combo_box));
+G_GNUC_END_IGNORE_DEPRECATIONS;
         break;
 
       case PROP_POPUP_SHOWN:
@@ -5074,8 +5082,10 @@ gtk_combo_box_update_title (GtkComboBox *combo_box)
 
   if (combo_box->priv->popup_widget &&
       GTK_IS_MENU (combo_box->priv->popup_widget))
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
     gtk_menu_set_title (GTK_MENU (combo_box->priv->popup_widget),
                         combo_box->priv->tearoff_title);
+G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 /**

@@ -918,10 +918,14 @@ gtk_menu_set_property (GObject      *object,
       }
       break;
     case PROP_TEAROFF_STATE:
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_menu_set_tearoff_state (menu, g_value_get_boolean (value));
+G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_TEAROFF_TITLE:
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_menu_set_title (menu, g_value_get_string (value));
+G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_MONITOR:
       gtk_menu_set_monitor (menu, g_value_get_int (value));
@@ -958,10 +962,14 @@ gtk_menu_get_property (GObject     *object,
       g_value_set_object (value, gtk_menu_get_attach_widget (menu));
       break;
     case PROP_TEAROFF_STATE:
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       g_value_set_boolean (value, gtk_menu_get_tearoff_state (menu));
+G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_TEAROFF_TITLE:
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       g_value_set_string (value, gtk_menu_get_title (menu));
+G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_MONITOR:
       g_value_set_int (value, gtk_menu_get_monitor (menu));
@@ -2183,7 +2191,9 @@ gtk_menu_update_title (GtkMenu *menu)
       const gchar *title;
       GtkWidget *attach_widget;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       title = gtk_menu_get_title (menu);
+G_GNUC_END_IGNORE_DEPRECATIONS;
       if (!title)
         {
           attach_widget = gtk_menu_get_attach_widget (menu);
@@ -2226,7 +2236,9 @@ static void
 tearoff_window_destroyed (GtkWidget *widget,
                           GtkMenu   *menu)
 {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   gtk_menu_set_tearoff_state (menu, FALSE);
+G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 /**
