@@ -1070,7 +1070,7 @@ _gdk_x11_screen_new (GdkDisplay *display,
 #ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
   scale_str = g_getenv ("GDK_SCALE");
 #else
-  scale_str = NULL;
+  scale_str = "1";
 #endif
   if (scale_str)
     {
