@@ -714,6 +714,8 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
       cairo_clip (cr);
       draw_shadow (shadow, cr, &box, &clip_box, FALSE);
       cairo_restore (cr);
+
+      cairo_region_destroy (remaining);
     }
 
   cairo_restore (cr);
