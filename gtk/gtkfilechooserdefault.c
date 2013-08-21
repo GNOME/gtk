@@ -2516,7 +2516,6 @@ restore_path_bar (GtkFileChooserDefault *impl)
     {
       gtk_widget_set_hexpand (priv->browse_path_bar_hbox, TRUE);
       gtk_grid_attach (GTK_GRID (priv->save_widgets_table), priv->browse_path_bar_hbox, 1, 1, 1, 1);
-      gtk_label_set_mnemonic_widget (GTK_LABEL (priv->save_folder_label), priv->browse_path_bar);
     }
   else
     g_assert_not_reached ();
@@ -2734,11 +2733,11 @@ update_appearance (GtkFileChooserDefault *impl)
       save_widgets_create (impl);
 
       if (priv->action == GTK_FILE_CHOOSER_ACTION_SAVE)
-	text = _("Save in _folder:");
+	text = _("Save in folder:");
       else
-	text = _("Create in _folder:");
+	text = _("Create in folder:");
 
-      gtk_label_set_text_with_mnemonic (GTK_LABEL (priv->save_folder_label), text);
+      gtk_label_set_text (GTK_LABEL (priv->save_folder_label), text);
 
       if (priv->select_multiple)
 	{
