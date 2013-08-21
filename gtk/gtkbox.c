@@ -264,7 +264,7 @@ gtk_box_class_init (GtkBoxClass *class)
                                    PROP_BASELINE_POSITION,
                                    g_param_spec_enum ("baseline-position",
                                                      P_("Baseline position"),
-                                                     P_("The position of the baseline aligned widgets if extra space is availible"),
+                                                     P_("The position of the baseline aligned widgets if extra space is available"),
                                                      GTK_TYPE_BASELINE_POSITION,
                                                      GTK_BASELINE_POSITION_CENTER,
                                                      GTK_PARAM_READWRITE));

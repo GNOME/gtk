@@ -1603,7 +1603,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * The requested opacity of the widget. See gtk_widget_set_opacity() for
    * more details about window opacity.
    *
-   * Before 3.8 this was only availible in GtkWindow
+   * Before 3.8 this was only available in GtkWindow
    *
    * Since: 3.8
    */
