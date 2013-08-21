@@ -814,6 +814,8 @@ gdk_window_impl_wayland_finalize (GObject *object)
   if (impl->cursor)
     g_object_unref (impl->cursor);
 
+  g_free (impl->title);
+
   G_OBJECT_CLASS (_gdk_window_impl_wayland_parent_class)->finalize (object);
 }
 
@@ -1503,7 +1505,8 @@ gdk_wayland_window_set_title (GdkWindow   *window,
 
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
-  impl->title = strdup (title);
+  g_free (impl->title);
+  impl->title = g_strdup (title);
 }
 
 static void
