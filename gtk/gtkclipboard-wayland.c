@@ -278,6 +278,7 @@ gtk_clipboard_wayland_request_contents (GtkClipboard            *gtkclipboard,
   GdkDeviceManager *device_manager;
   GdkDevice *device;
   ClipboardRequestClosure *closure;
+  gchar *mime_type;
 
   device_manager = gdk_display_get_device_manager (gdk_display_get_default ());
   device = gdk_device_manager_get_client_pointer (device_manager);
@@ -312,10 +313,14 @@ gtk_clipboard_wayland_request_contents (GtkClipboard            *gtkclipboard,
   closure->target = target;
 
   /* TODO: Do we need to check that target is valid ? */
+  mime_type = gdk_atom_name (target);
+
   gdk_wayland_device_request_selection_content (device,
-                                                gdk_atom_name (target),
+                                                mime_type,
                                                 _request_generic_cb,
                                                 closure);
+
+  g_free (mime_type);
 }
 
 static void
