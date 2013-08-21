@@ -98,7 +98,9 @@ GdkWindow *   gdk_win32_window_lookup_for_display (GdkDisplay *display,
 
 /* For internal GTK use only */
 GDK_AVAILABLE_IN_ALL
-GdkPixbuf    *gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon);
+GdkPixbuf    *gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon,
+                                                    gdouble *x_hot,
+                                                    gdouble *y_hot);
 GDK_AVAILABLE_IN_ALL
 HICON         gdk_win32_pixbuf_to_hicon_libgtk_only (GdkPixbuf *pixbuf);
 GDK_AVAILABLE_IN_ALL

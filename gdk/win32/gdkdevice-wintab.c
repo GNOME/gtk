@@ -40,8 +40,8 @@ static void gdk_device_wintab_set_window_cursor (GdkDevice *device,
                                                  GdkCursor *cursor);
 static void gdk_device_wintab_warp (GdkDevice *device,
                                     GdkScreen *screen,
-                                    gint       x,
-                                    gint       y);
+                                    gdouble   x,
+                                    gdouble   y);
 static void gdk_device_wintab_query_state (GdkDevice        *device,
                                            GdkWindow        *window,
                                            GdkWindow       **root_window,
@@ -170,8 +170,8 @@ gdk_device_wintab_set_window_cursor (GdkDevice *device,
 static void
 gdk_device_wintab_warp (GdkDevice *device,
                         GdkScreen *screen,
-                        gint       x,
-                        gint       y)
+                        gdouble   x,
+                        gdouble   y)
 {
 }
 

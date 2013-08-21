@@ -1690,7 +1690,7 @@ choose_icon (GtkIconTheme       *icon_theme,
       if (hIcon)
 	{
 	  icon_info = icon_info_new ();
-	  icon_info->cache_pixbuf = gdk_win32_icon_to_pixbuf_libgtk_only (hIcon);
+	  icon_info->cache_pixbuf = gdk_win32_icon_to_pixbuf_libgtk_only (hIcon, NULL, NULL);
 	  DestroyIcon (hIcon);
           icon_info->dir_type = ICON_THEME_DIR_UNTHEMED;
           icon_info->dir_size = size;
