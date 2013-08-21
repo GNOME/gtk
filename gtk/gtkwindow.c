@@ -207,7 +207,8 @@ struct _GtkWindowPrivate
                                             */
   guint    gravity                   : 5; /* GdkGravity */
   guint    client_decorated          : 1; /* Decorations drawn client-side */
-  guint    custom_title              : 1; /* app-provided titlebar */
+  guint    custom_title              : 1; /* app-provided titlebar if CSD can't
+                                           * be enabled */
   guint    fullscreen                : 1;
   guint    tiled                     : 1;
 
@@ -3543,7 +3544,11 @@ gtk_window_set_titlebar (GtkWindow *window,
 
   unset_titlebar (window);
 
-  priv->custom_title = TRUE;
+  if (gdk_window_supports_csd (window))
+    gdk_window_enable_csd (window);
+  else
+    priv->custom_title = TRUE;
+
   priv->title_box = titlebar;
   gtk_widget_set_parent (priv->title_box, widget);
 
