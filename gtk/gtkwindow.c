@@ -5241,43 +5241,42 @@ create_titlebar (GtkWindow *window)
   return titlebar;
 }
 
+static gboolean
+gdk_window_should_use_csd (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = window->priv;
+
+  if (!priv->decorated)
+    return FALSE;
+
+  if (priv->type == GTK_WINDOW_POPUP)
+    return FALSE;
+
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
+    return TRUE;
+#endif
+
+  return (g_strcmp0 (g_getenv ("GTK_CSD"), "1") == 0);
+}
+
 static void
 create_decoration (GtkWidget *widget)
 {
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = window->priv;
 
-  /* Client decorations already created */
-  if (priv->client_decorated)
-    return;
-
-  if (!priv->decorated)
-    return;
-
-  if (priv->type == GTK_WINDOW_POPUP)
-    return;
-
-#ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
-    priv->client_decorated = TRUE;
-#endif
-
-  if (!priv->client_decorated &&
-      g_strcmp0 (g_getenv ("GTK_CSD"), "1") == 0)
+#ifdef GDK_WINDOWING_X11
+  if (GDK_IS_X11_DISPLAY (gtk_widget_get_display (widget)))
     {
       GdkVisual *visual;
 
       /* We need a visual with alpha */
       visual = gdk_screen_get_rgba_visual (gtk_widget_get_screen (widget));
       if (visual)
-        {
-          gtk_widget_set_visual (widget, visual);
-          priv->client_decorated = TRUE;
-        }
+        gtk_widget_set_visual (widget, visual);
     }
-
-  if (!priv->client_decorated)
-    return;
+#endif
 
   if (priv->title_box == NULL)
     {
@@ -5700,7 +5699,8 @@ gtk_window_realize (GtkWidget *widget)
   window = GTK_WINDOW (widget);
   priv = window->priv;
 
-  create_decoration (widget);
+  if (!priv->client_decorated && gdk_window_should_use_csd (window))
+    create_decoration (widget);
 
   gtk_widget_get_allocation (widget, &allocation);
 
