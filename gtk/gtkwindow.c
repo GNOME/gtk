@@ -3472,6 +3472,50 @@ unset_titlebar (GtkWindow *window)
     }
 }
 
+static gboolean
+gdk_window_supports_csd (GtkWindow *window)
+{
+  GtkWidget *widget = GTK_WIDGET (window);
+
+#ifdef GDK_WINDOWING_X11
+  if (GDK_IS_X11_DISPLAY (gtk_widget_get_display (widget)))
+    {
+      GdkScreen *screen;
+      GdkVisual *visual;
+
+      screen = gtk_widget_get_screen (widget);
+
+      if (!gdk_screen_is_composited (screen))
+        return FALSE;
+
+      if (!gdk_x11_screen_supports_net_wm_hint (screen, gdk_atom_intern_static_string ("_GTK_FRAME_EXTENTS")))
+        return FALSE;
+
+      /* We need a visual with alpha */
+      visual = gdk_screen_get_rgba_visual (screen);
+      if (!visual)
+        return FALSE;
+    }
+#endif
+
+  return TRUE;
+}
+
+static void
+gdk_window_enable_csd (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = window->priv;
+  GtkWidget *widget = GTK_WIDGET (window);
+  GdkVisual *visual;
+
+  /* We need a visual with alpha */
+  visual = gdk_screen_get_rgba_visual (gtk_widget_get_screen (widget));
+  g_assert (visual != NULL);
+  gtk_widget_set_visual (widget, visual);
+
+  priv->client_decorated = TRUE;
+}
+
 /**
  * gtk_window_set_titlebar:
  * @window: a #GtkWindow
@@ -5266,17 +5310,10 @@ create_decoration (GtkWidget *widget)
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = window->priv;
 
-#ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_DISPLAY (gtk_widget_get_display (widget)))
-    {
-      GdkVisual *visual;
+  if (!gdk_window_supports_csd (window))
+    return;
 
-      /* We need a visual with alpha */
-      visual = gdk_screen_get_rgba_visual (gtk_widget_get_screen (widget));
-      if (visual)
-        gtk_widget_set_visual (widget, visual);
-    }
-#endif
+  gdk_window_enable_csd (window);
 
   if (priv->title_box == NULL)
     {
