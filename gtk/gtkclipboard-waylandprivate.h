@@ -18,10 +18,12 @@
 #ifndef __GTK_CLIPBOARD_WAYLAND_WAYLAND_PRIVATE_H__
 #define __GTK_CLIPBOARD_WAYLAND_WAYLAND_PRIVATE_H__
 
-#include <gdk/wayland/gdkwayland.h>
-#include <gtk/gtkclipboardprivate.h>
+#include <gdk/gdk.h>
 
 #ifdef GDK_WINDOWING_WAYLAND
+
+#include <gdk/wayland/gdkwayland.h>
+#include <gtk/gtkclipboardprivate.h>
 
 #define GTK_TYPE_CLIPBOARD_WAYLAND            (gtk_clipboard_wayland_get_type ())
 #define GTK_CLIPBOARD_WAYLAND(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CLIPBOARD_WAYLAND, GtkClipboardWayland))

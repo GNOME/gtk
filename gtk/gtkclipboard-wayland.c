@@ -23,14 +23,14 @@
 
 #include "gtkclipboard-waylandprivate.h"
 
+#ifdef GDK_WINDOWING_WAYLAND
+
 #include <string.h>
 
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
 #include "gtkselectionprivate.h"
-
-#ifdef GDK_WINDOWING_WAYLAND
 
 static void gtk_clipboard_wayland_owner_change     (GtkClipboard             *clipboard,
                                                     GdkEventOwnerChange      *event);
