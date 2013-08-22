@@ -35,6 +35,8 @@
 #include "gtkwindowprivate.h"
 #include "gtkaccelgroupprivate.h"
 #include "gtkbindings.h"
+#include "gtkcsscornervalueprivate.h"
+#include "gtkcssrgbavalueprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkkeyhash.h"
 #include "gtkmain.h"
@@ -6468,6 +6470,85 @@ update_frame_extents (GtkWindow *window,
 #endif
 }
 
+static void
+corner_rect (cairo_rectangle_int_t *rect,
+             const GtkCssValue     *value)
+{
+  rect->width = _gtk_css_corner_value_get_x (value, 100);
+  rect->height = _gtk_css_corner_value_get_y (value, 100);
+}
+
+static void
+subtract_corners_from_region (cairo_region_t        *region,
+                              cairo_rectangle_int_t *extents,
+                              GtkStyleContext       *context)
+{
+  cairo_rectangle_int_t rect;
+
+  gtk_style_context_save (context);
+  add_window_frame_style_class (context);
+
+  corner_rect (&rect, _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS));
+  rect.x = extents->x;
+  rect.y = extents->y;
+  cairo_region_subtract_rectangle (region, &rect);
+
+  corner_rect (&rect, _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS));
+  rect.x = extents->x + extents->width - rect.width;
+  rect.y = extents->y;
+  cairo_region_subtract_rectangle (region, &rect);
+
+  corner_rect (&rect, _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS));
+  rect.x = extents->x;
+  rect.y = extents->y + extents->height - rect.height;
+  cairo_region_subtract_rectangle (region, &rect);
+
+  corner_rect (&rect, _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS));
+  rect.x = extents->x + extents->width - rect.width;
+  rect.y = extents->y + extents->height - rect.height;
+  cairo_region_subtract_rectangle (region, &rect);
+
+  gtk_style_context_restore (context);
+}
+
+static void
+update_opaque_region (GtkWindow           *window,
+                      GtkBorder           *border,
+                      const GtkAllocation *allocation)
+{
+  const GdkRGBA *color;
+  cairo_region_t *opaque_region;
+  GtkStyleContext *context;
+
+  if (!gtk_widget_get_realized (GTK_WIDGET (window)))
+      return;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (window));
+  color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
+
+  if (color->alpha >= 1.0)
+    {
+      cairo_rectangle_int_t rect;
+
+      rect.x = border->left;
+      rect.y = border->top;
+      rect.width = allocation->width - border->left - border->right;
+      rect.height = allocation->height - border->top - border->bottom;
+
+      opaque_region = cairo_region_create_rectangle (&rect);
+
+      subtract_corners_from_region (opaque_region, &rect, context);
+    }
+  else
+    {
+      opaque_region = NULL;
+    }
+
+  gdk_window_set_opaque_region (gtk_widget_get_window (GTK_WIDGET (window)), opaque_region);
+
+  cairo_region_destroy (opaque_region);
+}
+
 /* _gtk_window_set_allocation:
  * @window: a #GtkWindow
  * @allocation: the original allocation for the window
@@ -6515,6 +6596,8 @@ _gtk_window_set_allocation (GtkWindow           *window,
 
   if (priv->client_decorated)
     update_frame_extents (window, &window_border);
+
+  update_opaque_region (window, &window_border, &child_allocation);
 
   if (priv->title_box != NULL &&
       priv->decorated &&
