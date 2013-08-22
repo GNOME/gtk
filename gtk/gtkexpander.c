@@ -1041,7 +1041,8 @@ gtk_expander_button_release (GtkWidget      *widget,
 
   if (event->button == GDK_BUTTON_PRIMARY && expander->priv->button_down)
     {
-      gtk_widget_activate (widget);
+      if (expander->priv->prelight)
+        gtk_widget_activate (widget);
       expander->priv->button_down = FALSE;
       return TRUE;
     }
