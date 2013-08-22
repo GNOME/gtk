@@ -4034,6 +4034,8 @@ gtk_combo_box_new_with_area_and_entry (GtkCellArea *area)
  * Creates a new empty #GtkComboBox with an entry.
  *
  * Return value: A new #GtkComboBox.
+ *
+ * Since: 2.24
  */
 GtkWidget *
 gtk_combo_box_new_with_entry (void)
@@ -4071,6 +4073,8 @@ gtk_combo_box_new_with_model (GtkTreeModel *model)
  * and with the model initialized to @model.
  *
  * Return value: A new #GtkComboBox
+ *
+ * Since: 2.24
  */
 GtkWidget *
 gtk_combo_box_new_with_model_and_entry (GtkTreeModel *model)
