@@ -5166,7 +5166,6 @@ update_window_buttons (GtkWindow *window)
 
           box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
           gtk_widget_show (box);
-          gtk_widget_set_margin_bottom (box, 6);
           if ((direction == GTK_TEXT_DIR_LTR && i == 0) ||
               (direction == GTK_TEXT_DIR_RTL && i == 1))
             gtk_style_context_add_class (gtk_widget_get_style_context (box), "left");
