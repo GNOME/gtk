@@ -155,6 +155,11 @@ void     gtk_label_set_max_width_chars    	  (GtkLabel         *label,
 					  	   gint              n_chars);
 GDK_AVAILABLE_IN_ALL
 gint     gtk_label_get_max_width_chars  	  (GtkLabel         *label);
+GDK_AVAILABLE_IN_3_10
+void     gtk_label_set_lines                      (GtkLabel         *label,
+                                                   gint              lines);
+GDK_AVAILABLE_IN_3_10
+gint     gtk_label_get_lines                      (GtkLabel         *label);
 GDK_AVAILABLE_IN_ALL
 void     gtk_label_set_pattern                    (GtkLabel         *label,
 						   const gchar      *pattern);
