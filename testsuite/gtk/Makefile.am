@@ -32,6 +32,7 @@ TEST_PROGS += 			\
 	bitmask			\
 	builder			\
 	cellarea		\
+	clipboard		\
 	defaultvalue		\
 	entry			\
 	expander		\
