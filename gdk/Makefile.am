@@ -194,8 +194,8 @@ endif # USE_QUARTZ
 if USE_WIN32
 libgdk_3_la_SOURCES += gdkkeynames.c
 libgdk_3_la_LIBADD += win32/libgdk-win32.la
-libgdk_3_la_DEPENDENCIES = win32/libgdk-win32.la win32/rc/gdk-win32-res.o gdk.def
-libgdk_3_la_LDFLAGS += -Wl,win32/rc/gdk-win32-res.o -export-symbols $(srcdir)/gdk.def
+libgdk_3_la_DEPENDENCIES = win32/libgdk-win32.la win32/rc/gdk-win32-res.o
+libgdk_3_la_LDFLAGS += -Wl,win32/rc/gdk-win32-res.o
 endif # USE_WIN32
 
 if USE_BROADWAY
@@ -346,9 +346,13 @@ CLEANFILES += $(gir_DATA) $(typelibs_DATA)
 endif # HAVE_INTROSPECTION
 
 if OS_WIN32
+gdk.def: libgdk-3.la
+	echo "LIBRARY libgdk-$(GTK_MAJOR_VERSION)-@LT_CURRENT_MINUS_AGE@" >$@
+	echo "EXPORTS" >>$@
+	objdump -p .libs/libgdk-$(GTK_MAJOR_VERSION)-@LT_CURRENT_MINUS_AGE@.dll | sed -n -e 's/\t\[\s\+\([0-9]\+\)\]\s\([A-Za-z_][A-Za-z0-9_]\)/\2/p' >>$@
 install-def-file: gdk.def
 	mkdir -p $(DESTDIR)$(libdir)
-	$(INSTALL) $(srcdir)/gdk.def $(DESTDIR)$(libdir)/gdk-win32-3.0.def
+	$(INSTALL) gdk.def $(DESTDIR)$(libdir)/gdk-win32-3.0.def
 uninstall-def-file:
 	-rm $(DESTDIR)$(libdir)/gdk-win32-3.0.def
 else

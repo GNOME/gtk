@@ -6,8 +6,12 @@ no_undefined = -no-undefined
 endif
 if OS_WIN32
 export_symbols = -export-symbols $(srcdir)/gailutil.def
+gailutil.def: libgailutil-3.la
+	echo "LIBRARY libgailutil-$(GTK_MAJOR_VERSION)-$(GAIL_LT_CURRENT_MINUS_AGE)" >$@
+	echo "EXPORTS" >>$@
+	objdump -p .libs/libgailutil-$(GTK_MAJOR_VERSION)-$(GAIL_LT_CURRENT_MINUS_AGE).dll | sed -n -e 's/\t\[\s\+\([0-9]\+\)\]\s\([A-Za-z_][A-Za-z0-9_]\)/\2/p' >>$@
 install-def-file: gailutil.def
-	$(INSTALL) $(srcdir)/gailutil.def $(DESTDIR)$(libdir)
+	$(INSTALL) gailutil.def $(DESTDIR)$(libdir)
 uninstall-def-file:
 	-rm $(DESTDIR)$(libdir)/gailutil.def
 else
@@ -71,7 +75,6 @@ libgailutil_3_la_LIBADD = \
 libgailutil_3_la_LDFLAGS = \
 	-version-info $(GAIL_LT_VERSION_INFO)	\
 	$(no_undefined)				\
-	$(export_symbols)			\
         $(LDFLAGS)
 
 gailutil.lib: libgailutil-3.la gailutil.def

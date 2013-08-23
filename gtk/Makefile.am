@@ -88,8 +88,13 @@ gtk_win32_res_ldflag = -Wl,gtk-win32-res.o
 gtk-win32-res.o : gtk-win32.rc
 	$(WINDRES) gtk-win32.rc $@
 
+gtk.def: libgtk-3.la
+	echo "LIBRARY libgtk-$(GTK_MAJOR_VERSION)-@LT_CURRENT_MINUS_AGE@" >$@
+	echo "EXPORTS" >>$@
+	objdump -p .libs/libgtk-$(GTK_MAJOR_VERSION)-@LT_CURRENT_MINUS_AGE@.dll | sed -n -e 's/\t\[\s\+\([0-9]\+\)\]\s\([A-Za-z_][A-Za-z0-9_]\)/\2/p' >>$@
+
 install-def-file: gtk.def
-	$(INSTALL) $(srcdir)/gtk.def $(DESTDIR)$(libdir)/gtk-win32-3.0.def
+	$(INSTALL) gtk.def $(DESTDIR)$(libdir)/gtk-win32-3.0.def
 uninstall-def-file:
 	-rm $(DESTDIR)$(libdir)/gtk-win32-3.0.def
 else
@@ -1479,8 +1484,8 @@ if USE_WIN32
 win32_theme=yes
 libgtk_3_la_LIBADD += -lole32 -lgdi32 -lcomdlg32 -lwinspool -lcomctl32
 libgtk_3_la_LDFLAGS += -Wl,-luuid
-libgtk_3_la_DEPENDENCIES += $(gtk_def) $(gtk_win32_res) $(deps)
-libgtk_target_ldflags = $(gtk_win32_res_ldflag) $(gtk_win32_symbols)
+libgtk_3_la_DEPENDENCIES += $(gtk_win32_res) $(deps)
+libgtk_target_ldflags = $(gtk_win32_res_ldflag)
 endif
 
 install-exec-hook:
