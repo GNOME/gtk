@@ -1256,6 +1256,7 @@ gtk_label_init (GtkLabel *label)
   priv->width_chars = -1;
   priv->max_width_chars = -1;
   priv->label = NULL;
+  priv->lines = -1;
 
   priv->jtype = GTK_JUSTIFY_LEFT;
   priv->wrap = FALSE;
