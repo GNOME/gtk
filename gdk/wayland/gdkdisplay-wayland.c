@@ -678,8 +678,12 @@ void
 _gdk_wayland_display_update_serial (GdkWaylandDisplay *wayland_display,
                                     guint32            serial)
 {
-  if (serial > wayland_display->serial)
+  if (serial - wayland_display->serial < 1000)
     wayland_display->serial = serial;
+  else
+    g_warning (G_STRLOC ": serial number jump bigger than 1000 (%u -> %u",
+               wayland_display->serial, serial);
+
 }
 
 /**
