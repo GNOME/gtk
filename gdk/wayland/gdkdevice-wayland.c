@@ -1668,7 +1668,7 @@ gdk_wayland_device_offer_selection_content (GdkDevice                           
 
   wl_data_device_set_selection (device->data_device,
                                 offer->source,
-                                _wl_time_now ());
+                                _gdk_wayland_display_get_serial (display_wayland));
 
   device->selection_offer_out = offer;
 
