@@ -489,7 +489,7 @@ data_device_data_offer (void                  *data,
 static void
 data_device_enter (void                  *data,
                    struct wl_data_device *data_device,
-                   uint32_t               time,
+                   uint32_t               serial,
                    struct wl_surface     *surface,
                    int32_t                x,
                    int32_t                y,
@@ -497,8 +497,8 @@ data_device_enter (void                  *data,
 {
   GdkWaylandDeviceData *device = (GdkWaylandDeviceData *)data;
 
-  g_debug (G_STRLOC ": %s data_device = %p time = %d, surface = %p, x = %d y = %d, offer = %p",
-           G_STRFUNC, data_device, time, surface, x, y, offer);
+  g_debug (G_STRLOC ": %s data_device = %p serial = %u, surface = %p, x = %d y = %d, offer = %p",
+           G_STRFUNC, data_device, serial, surface, x, y, offer);
 
   /* Retrieve the DataOffer associated with with the wl_data_offer - this
    * association is made when the listener is attached.
