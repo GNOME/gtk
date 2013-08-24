@@ -247,6 +247,7 @@ _request_generic_cb (GdkDevice   *device,
 
   selection_data.selection = GDK_SELECTION_CLIPBOARD;
   selection_data.target = closure->target;
+  selection_data.type = closure->target;
   selection_data.length = len;
   selection_data.data = (guchar *)data;
 
