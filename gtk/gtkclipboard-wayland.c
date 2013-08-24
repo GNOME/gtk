@@ -148,6 +148,9 @@ gtk_clipboard_wayland_set_contents (GtkClipboard         *gtkclipboard,
   gchar **mimetypes;
   SetContentClosure *closure, *last_closure;
 
+  if (gtkclipboard->selection != GDK_SELECTION_CLIPBOARD)
+    return;
+
   last_closure = clipboard->last_closure;
   if (!last_closure ||
       (!last_closure->have_owner && have_owner) ||
