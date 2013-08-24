@@ -104,6 +104,11 @@ GDK_AVAILABLE_IN_ALL
 XID      gdk_x11_screen_get_monitor_output   (GdkScreen *screen,
                                               gint       monitor_num);
 
+GDK_AVAILABLE_IN_3_10
+guint32  gdk_x11_screen_get_number_of_desktops (GdkScreen *screen);
+GDK_AVAILABLE_IN_3_10
+guint32  gdk_x11_screen_get_current_desktop    (GdkScreen *screen);
+
 G_END_DECLS
 
 #endif /* __GDK_X11_SCREEN_H__ */

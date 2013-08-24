@@ -1722,3 +1722,74 @@ gdk_x11_screen_class_init (GdkX11ScreenClass *klass)
                   G_TYPE_NONE,
                   0);
 }
+
+static guint32
+get_netwm_cardinal_property (GdkScreen   *screen,
+                             const gchar *name)
+{
+  GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
+  GdkAtom atom;
+  guint32 prop = 0;
+  Atom type;
+  gint format;
+  gulong nitems;
+  gulong bytes_after;
+  guchar *data;
+
+  atom = gdk_atom_intern_static_string (name);
+
+  if (!gdk_x11_screen_supports_net_wm_hint (screen, atom))
+    return 0;
+
+  XGetWindowProperty (x11_screen->xdisplay,
+                      x11_screen->xroot_window,
+                      gdk_x11_get_xatom_by_name_for_display (GDK_SCREEN_DISPLAY (screen), name),
+                      0, G_MAXLONG,
+                      False, XA_CARDINAL, &type, &format, &nitems,
+                      &bytes_after, &data);
+  if (type == XA_CARDINAL)
+    {
+      prop = *(gulong *)data;
+      XFree (data);
+    }
+
+  return prop;
+}
+
+/**
+ * gdk_x11_screen_get_number_of_desktops:
+ * @screen: a #GdkScreen
+ *
+ * Returns the number of workspaces for @screen when running under a
+ * window manager that supports multiple workspaces, as described
+ * in the <ulink url="http://www.freedesktop.org/Standards/wm-spec">Extended 
+ * Window Manager Hints</ulink>.
+ *
+ * Returns: the number of workspaces, or 0 if workspaces are not supported
+ *
+ * Since: 3.10
+ */
+guint32
+gdk_x11_screen_get_number_of_desktops (GdkScreen *screen)
+{
+  return get_netwm_cardinal_property (screen, "_NET_NUMBER_OF_DESKTOPS");
+}
+
+/**
+ * gdk_x11_screen_get_current_desktop:
+ * @screen: a #GdkScreen
+ *
+ * Returns the current workspace for @screen when running under a
+ * window manager that supports multiple workspaces, as described
+ * in the <ulink url="http://www.freedesktop.org/Standards/wm-spec">Extended 
+ * Window Manager Hints</ulink>.
+ *
+ * Returns: the current workspace, or 0 if workspaces are not supported
+ *
+ * Since: 3.10
+ */
+guint32
+gdk_x11_screen_get_current_desktop (GdkScreen *screen)
+{
+  return get_netwm_cardinal_property (screen, "_NET_CURRENT_DESKTOP");
+}
