@@ -24,7 +24,7 @@
 
 /* The extra size of the offscreen surface we allocate
    to make scrolling more efficient */
-#define EXTRA_SIZE 64
+#define DEFAULT_EXTRA_SIZE 64
 
 /* When resizing viewport to smaller we allow this extra
    size to avoid constantly reallocating when resizing */
@@ -32,6 +32,7 @@
 
 struct _GtkPixelCache {
   cairo_surface_t *surface;
+  cairo_content_t content;
 
   /* Valid if surface != NULL */
   int surface_x;
@@ -44,6 +45,9 @@ struct _GtkPixelCache {
   cairo_region_t *surface_dirty;
 
   guint timeout_tag;
+
+  guint extra_width;
+  guint extra_height;
 };
 
 GtkPixelCache *
@@ -52,6 +56,8 @@ _gtk_pixel_cache_new ()
   GtkPixelCache *cache;
 
   cache = g_new0 (GtkPixelCache, 1);
+  cache->extra_width = DEFAULT_EXTRA_SIZE;
+  cache->extra_height = DEFAULT_EXTRA_SIZE;
 
   return cache;
 }
@@ -72,6 +78,23 @@ _gtk_pixel_cache_free (GtkPixelCache *cache)
     cairo_region_destroy (cache->surface_dirty);
 
   g_free (cache);
+}
+
+void
+_gtk_pixel_cache_set_extra_size (GtkPixelCache *cache,
+                                 guint          extra_width,
+                                 guint          extra_height)
+{
+  cache->extra_width = extra_width ? extra_width : DEFAULT_EXTRA_SIZE;
+  cache->extra_height = extra_height ? extra_height : DEFAULT_EXTRA_SIZE;
+}
+
+void
+_gtk_pixel_cache_set_content (GtkPixelCache   *cache,
+			      cairo_content_t  content)
+{
+  cache->content = content;
+  _gtk_pixel_cache_invalidate (cache, NULL);
 }
 
 /* Region is in canvas coordinates */
@@ -138,21 +161,25 @@ _gtk_pixel_cache_create_surface_if_needed (GtkPixelCache         *cache,
   cairo_pattern_t *bg;
   double red, green, blue, alpha;
 
-  content = CAIRO_CONTENT_COLOR_ALPHA;
-  bg = gdk_window_get_background_pattern (window);
-  if (bg != NULL &&
-      cairo_pattern_get_type (bg) == CAIRO_PATTERN_TYPE_SOLID &&
-      cairo_pattern_get_rgba (bg, &red, &green, &blue, &alpha) == CAIRO_STATUS_SUCCESS &&
-      alpha == 1.0)
-    content = CAIRO_CONTENT_COLOR;
+  content = cache->content;
+  if (!content)
+    {
+      content = CAIRO_CONTENT_COLOR_ALPHA;
+      bg = gdk_window_get_background_pattern (window);
+      if (bg != NULL &&
+          cairo_pattern_get_type (bg) == CAIRO_PATTERN_TYPE_SOLID &&
+          cairo_pattern_get_rgba (bg, &red, &green, &blue, &alpha) == CAIRO_STATUS_SUCCESS &&
+          alpha == 1.0)
+        content = CAIRO_CONTENT_COLOR;
+    }
 
   surface_w = view_rect->width;
   if (canvas_rect->width > surface_w)
-    surface_w = MIN (surface_w + EXTRA_SIZE, canvas_rect->width);
+    surface_w = MIN (surface_w + cache->extra_width, canvas_rect->width);
 
   surface_h = view_rect->height;
   if (canvas_rect->height > surface_h)
-    surface_h = MIN (surface_h + EXTRA_SIZE, canvas_rect->height);
+    surface_h = MIN (surface_h + cache->extra_height, canvas_rect->height);
 
   /* If current surface can't fit view_rect or is too large, kill it */
   if (cache->surface != NULL &&
