@@ -537,6 +537,7 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
   gint allocation_width;
   gboolean need_sliders = FALSE;
   gint up_slider_offset = 0;
+  gint down_slider_offset = 0;
   GtkRequisition child_requisition;
   gboolean needs_reorder = FALSE;
 
@@ -703,8 +704,15 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
       gtk_widget_set_child_visible (child, TRUE);
       gtk_widget_size_allocate (child, &child_allocation);
 
-      if (direction == GTK_TEXT_DIR_LTR)
-	child_allocation.x += child_allocation.width;
+      if (direction == GTK_TEXT_DIR_RTL)
+        {
+          down_slider_offset = child_allocation.x - allocation->x - path_bar->priv->slider_width;
+        }
+      else
+        {
+          down_slider_offset += child_allocation.width;
+          child_allocation.x += child_allocation.width;
+        }
     }
   /* Now we go hide all the widgets that don't fit */
   while (list)
@@ -730,6 +738,9 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
       needs_reorder |= gtk_widget_get_child_visible (path_bar->priv->up_slider_button) == FALSE;
       gtk_widget_set_child_visible (path_bar->priv->up_slider_button, TRUE);
       gtk_widget_show_all (path_bar->priv->up_slider_button);
+
+      if (direction == GTK_TEXT_DIR_LTR)
+        down_slider_offset += path_bar->priv->slider_width;
     }
   else
     {
@@ -740,13 +751,7 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
   if (need_sliders)
     {
       child_allocation.width = path_bar->priv->slider_width;
-
-      if (direction == GTK_TEXT_DIR_RTL)
-	child_allocation.x = 0;
-      else
-	child_allocation.x = allocation->width - path_bar->priv->slider_width;
-
-      child_allocation.x += allocation->x;
+      child_allocation.x = down_slider_offset + allocation->x;
       
       gtk_widget_size_allocate (path_bar->priv->down_slider_button, &child_allocation);
 
