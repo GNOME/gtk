@@ -53,6 +53,7 @@
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkbubblewindowprivate.h"
 #include "gtktoolbar.h"
+#include "gtkpixelcacheprivate.h"
 
 #include "a11y/gtktextviewaccessibleprivate.h"
 
@@ -200,6 +201,8 @@ struct _GtkTextViewPrivate
 
   GtkTextPendingScroll *pending_scroll;
 
+  GtkPixelCache *pixel_cache;
+
   /* Default style settings */
   gint pixels_above_lines;
   gint pixels_below_lines;
@@ -238,6 +241,8 @@ struct _GtkTextViewPrivate
   guint cursor_handle_dragged : 1;
   guint selection_handle_dragged : 1;
   guint populate_all   : 1;
+
+  gboolean in_scroll : 1;
 };
 
 struct _GtkTextPendingScroll
@@ -524,6 +529,9 @@ static void gtk_text_view_update_handles       (GtkTextView           *text_view
 static void gtk_text_view_selection_bubble_popup_unset (GtkTextView *text_view);
 static void gtk_text_view_selection_bubble_popup_set   (GtkTextView *text_view);
 
+static void gtk_text_view_queue_draw_region (GtkWidget            *widget,
+                                             const cairo_region_t *region);
+
 
 /* FIXME probably need the focus methods. */
 
@@ -661,7 +669,9 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->drag_data_received = gtk_text_view_drag_data_received;
 
   widget_class->popup_menu = gtk_text_view_popup_menu;
-  
+
+  widget_class->queue_draw_region = gtk_text_view_queue_draw_region;
+
   container_class->add = gtk_text_view_add;
   container_class->remove = gtk_text_view_remove;
   container_class->forall = gtk_text_view_forall;
@@ -1458,6 +1468,9 @@ gtk_text_view_init (GtkTextView *text_view)
   priv = text_view->priv;
 
   gtk_widget_set_can_focus (widget, TRUE);
+
+  priv->pixel_cache = _gtk_pixel_cache_new ();
+  _gtk_pixel_cache_set_content (priv->pixel_cache, CAIRO_CONTENT_COLOR_ALPHA);
 
   /* Set up default style */
   priv->wrap_mode = GTK_WRAP_NONE;
@@ -3133,6 +3146,12 @@ gtk_text_view_destroy (GtkWidget *widget)
       priv->im_spot_idle = 0;
     }
 
+  if (priv->pixel_cache)
+    {
+      _gtk_pixel_cache_free (priv->pixel_cache);
+      priv->pixel_cache = NULL;
+    }
+
   GTK_WIDGET_CLASS (gtk_text_view_parent_class)->destroy (widget);
 }
 
@@ -3681,6 +3700,9 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   priv = text_view->priv;
 
   DV(g_print(G_STRLOC"\n"));
+
+  _gtk_pixel_cache_set_extra_size (priv->pixel_cache, 0,
+                                   allocation->height / 2);
 
   gtk_widget_get_allocation (widget, &widget_allocation);
   size_changed =
@@ -5214,10 +5236,20 @@ gtk_text_view_paint (GtkWidget      *widget,
   cairo_restore (cr);
 }
 
+static void
+draw_text (cairo_t  *cr,
+           gpointer  user_data)
+{
+  GtkWidget *widget = user_data;
+
+  gtk_text_view_paint (widget, cr);
+}
+
 static gboolean
 gtk_text_view_draw (GtkWidget *widget,
                     cairo_t   *cr)
 {
+  GtkTextViewPrivate *priv = ((GtkTextView *)widget)->priv;
   GSList *tmp_list;
   GdkWindow *window;
   GtkStyleContext *context;
@@ -5241,10 +5273,29 @@ gtk_text_view_draw (GtkWidget *widget,
                                      GTK_TEXT_WINDOW_TEXT);
   if (gtk_cairo_should_draw_window (cr, window))
     {
+      cairo_rectangle_int_t view_rect;
+      cairo_rectangle_int_t canvas_rect;
+      GtkAllocation alloc;
+
       DV(g_print (">Exposed ("G_STRLOC")\n"));
+
+      gtk_widget_get_allocation (widget, &alloc);
+
+      view_rect.x = 0;
+      view_rect.y = 0;
+      view_rect.width = gdk_window_get_width (window);
+      view_rect.height = gdk_window_get_height (window);
+
+      canvas_rect.x = -gtk_adjustment_get_value (priv->hadjustment);
+      canvas_rect.y = -gtk_adjustment_get_value (priv->vadjustment);
+      canvas_rect.width = priv->cached_size_request.width;
+      canvas_rect.height = priv->cached_size_request.height;
+
       cairo_save (cr);
       gtk_cairo_transform_to_window (cr, widget, window);
-      gtk_text_view_paint (widget, cr);
+      _gtk_pixel_cache_draw (priv->pixel_cache, cr, window,
+                             &view_rect, &canvas_rect,
+                             draw_text, widget);
       cairo_restore (cr);
     }
 
@@ -8912,6 +8963,45 @@ text_window_free (GtkTextWindow *win)
 }
 
 static void
+gtk_text_view_queue_draw_region (GtkWidget            *widget,
+                                 const cairo_region_t *region)
+{
+  GtkTextView *text_view = GTK_TEXT_VIEW (widget);
+
+  /* There is no way we can know if a region targets the
+     not-currently-visible but in pixel cache region, so we
+     always just invalidate the whole thing whenever the
+     text view gets a queue draw. This doesn't normally happen
+     in normal scrolling cases anyway. */
+  _gtk_pixel_cache_invalidate (text_view->priv->pixel_cache, NULL);
+
+  GTK_WIDGET_CLASS (gtk_text_view_parent_class)->queue_draw_region (widget,
+                                                                    region);
+}
+
+static void
+text_window_invalidate_handler (GdkWindow      *window,
+                                cairo_region_t *region)
+{
+  gpointer widget;
+  GtkTextView *text_view;
+  int y;
+
+  gdk_window_get_user_data (window, &widget);
+  text_view = GTK_TEXT_VIEW (widget);
+
+  /* Scrolling will invalidate everything in the bin window,
+   * but we already have it in the cache, so we can ignore that */
+  if (text_view->priv->in_scroll)
+    return;
+
+  y = gtk_adjustment_get_value (text_view->priv->vadjustment);
+  cairo_region_translate (region, 0, y);
+  _gtk_pixel_cache_invalidate (text_view->priv->pixel_cache, region);
+  cairo_region_translate (region, 0, -y);
+}
+
+static void
 text_window_realize (GtkTextWindow *win,
                      GtkWidget     *widget)
 {
@@ -8938,6 +9028,9 @@ text_window_realize (GtkTextWindow *win,
 
   win->window = gdk_window_new (window,
                                 &attributes, attributes_mask);
+
+  gdk_window_set_invalidate_handler (win->window,
+                                     text_window_invalidate_handler);
 
   gdk_window_show (win->window);
   gtk_widget_register_window (win->widget, win->window);
@@ -9050,7 +9143,9 @@ text_window_scroll        (GtkTextWindow *win,
     {
       if (priv->selection_bubble)
         _gtk_bubble_window_popdown (GTK_BUBBLE_WINDOW (priv->selection_bubble));
+      view->priv->in_scroll = TRUE;
       gdk_window_scroll (win->bin_window, dx, dy);
+      view->priv->in_scroll = FALSE;
     }
 }
 
