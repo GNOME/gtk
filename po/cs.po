@@ -2204,7 +2204,7 @@ msgstr "Jiné…"
 
 #: ../gtk/gtkfilechooserdefault.c:321
 msgid "Type name of new folder"
-msgstr "Zadání názvu nové složky"
+msgstr "Napište název nové složky"
 
 #: ../gtk/gtkfilechooserdefault.c:734
 msgid "The folder could not be created"
