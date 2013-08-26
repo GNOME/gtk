@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-25 23:48-0600\n"
-"PO-Revision-Date: 2013-08-26 00:18-0600\n"
+"POT-Creation-Date: 2013-08-26 17:31-0600\n"
+"PO-Revision-Date: 2013-08-26 17:48-0600\n"
 "Last-Translator: Seán de Búrca <leftmostcat@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
 "Language: ga\n"
@@ -1989,25 +1989,25 @@ msgid "Paper Margins"
 msgstr "Imill an Páipéar"
 
 #: ../gtk/gtkentry.c:9279 ../gtk/gtkentry.c:9425 ../gtk/gtklabel.c:6276
-#: ../gtk/gtktextview.c:8629 ../gtk/gtktextview.c:8812
+#: ../gtk/gtktextview.c:8680 ../gtk/gtktextview.c:8863
 msgid "Cu_t"
 msgstr "_Gearr"
 
 #: ../gtk/gtkentry.c:9283 ../gtk/gtkentry.c:9428 ../gtk/gtklabel.c:6277
-#: ../gtk/gtktextview.c:8633 ../gtk/gtktextview.c:8816
+#: ../gtk/gtktextview.c:8684 ../gtk/gtktextview.c:8867
 msgid "_Copy"
 msgstr "_Cóipeáil"
 
 #: ../gtk/gtkentry.c:9287 ../gtk/gtkentry.c:9431 ../gtk/gtklabel.c:6278
-#: ../gtk/gtktextview.c:8635 ../gtk/gtktextview.c:8818
+#: ../gtk/gtktextview.c:8686 ../gtk/gtktextview.c:8869
 msgid "_Paste"
 msgstr "G_reamaigh"
 
-#: ../gtk/gtkentry.c:9290 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8638
+#: ../gtk/gtkentry.c:9290 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8689
 msgid "_Delete"
 msgstr "_Scrios"
 
-#: ../gtk/gtkentry.c:9301 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8652
+#: ../gtk/gtkentry.c:9301 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8703
 msgid "Select _All"
 msgstr "Roghnaigh _Uile"
 
@@ -2126,7 +2126,7 @@ msgstr "Ainm comhaid neamhbhailí"
 
 #: ../gtk/gtkfilechooserdefault.c:802
 msgid "The folder contents could not be displayed"
-msgstr "Níorbh fhéidir ábhair an fhillteáin a thaispeáint"
+msgstr "Níorbh fhéidir ábhar an fhillteáin a thaispeáint"
 
 #. Translators: the first string is a path and the second string
 #. * is a hostname. Nautilus and the panel contain the same string
@@ -2193,11 +2193,11 @@ msgstr "Cruthaigh i bhfillteán:"
 #: ../gtk/gtkfilechooserdefault.c:3878
 #, c-format
 msgid "Could not read the contents of %s"
-msgstr "Níorbh fhéidir ábhair %s a léamh"
+msgstr "Níorbh fhéidir ábhar %s a léamh"
 
 #: ../gtk/gtkfilechooserdefault.c:3882
 msgid "Could not read the contents of the folder"
-msgstr "Níorbh fhéidir ábhair an fhíllteáin a léamh"
+msgstr "Níorbh fhéidir ábhar an fhíllteáin a léamh"
 
 #: ../gtk/gtkfilechooserdefault.c:3979 ../gtk/gtkfilechooserdefault.c:4047
 #: ../gtk/gtkfilechooserdefault.c:4228
@@ -2226,7 +2226,7 @@ msgstr "Tá comhad darbh ainm “%s” ann cheana.  Ar mhaith leat é a athchur?
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr ""
-"Tá an comhad ann i “%s” cheana.  Forscríobhfar a ábhair má ionadaítear é."
+"Tá an comhad ann i “%s” cheana.  Forscríobhfar a ábhar má ionadaítear é."
 
 #: ../gtk/gtkfilechooserdefault.c:5485 ../gtk/gtkprintunixdialog.c:686
 msgid "_Replace"
@@ -2626,9 +2626,8 @@ msgid "Open your personal folder"
 msgstr "Oscail d'fhillteán pearsanta"
 
 #: ../gtk/gtkplacessidebar.c:793
-#, fuzzy
 msgid "Open the contents of your desktop in a folder"
-msgstr "Níorbh fhéidir ábhair an fhíllteáin a léamh"
+msgstr "Oscail ábhar do dheisce i bhfillteán"
 
 #: ../gtk/gtkplacessidebar.c:806
 msgid "Trash"
@@ -2645,9 +2644,8 @@ msgid "Mount and open %s"
 msgstr "Feistigh agus oscail %s"
 
 #: ../gtk/gtkplacessidebar.c:963
-#, fuzzy
 msgid "Open the contents of the file system"
-msgstr "Níorbh fhéidir ábhair an fhíllteáin a léamh"
+msgstr "Oscail ábhar an chóras comhaid"
 
 #: ../gtk/gtkplacessidebar.c:1063
 msgid "Network"
@@ -2658,9 +2656,8 @@ msgid "Browse Network"
 msgstr "Brabhsáil Líonra"
 
 #: ../gtk/gtkplacessidebar.c:1071
-#, fuzzy
 msgid "Browse the contents of the network"
-msgstr "Níorbh fhéidir ábhair an fhíllteáin a léamh"
+msgstr "Brabhsáil ábhar an líonra"
 
 #: ../gtk/gtkplacessidebar.c:1078
 msgid "Connect to Server"
@@ -2668,7 +2665,7 @@ msgstr "Nasc le Freastalaí"
 
 #: ../gtk/gtkplacessidebar.c:1080
 msgid "Connect to a network server address"
-msgstr ""
+msgstr "Ceangail le seoladh fhreastalaí líonra"
 
 #: ../gtk/gtkplacessidebar.c:1560
 msgid "New bookmark"
@@ -2686,21 +2683,19 @@ msgstr "_Stad"
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
 #: ../gtk/gtkplacessidebar.c:2106
 msgid "_Power On"
-msgstr ""
+msgstr "Cuir ar _Siúl"
 
 #: ../gtk/gtkplacessidebar.c:2107
 msgid "_Safely Remove Drive"
 msgstr ""
 
 #: ../gtk/gtkplacessidebar.c:2110
-#, fuzzy
 msgid "_Connect Drive"
-msgstr "_Nasc"
+msgstr "_Ceangail Tiomántán"
 
 #: ../gtk/gtkplacessidebar.c:2111
-#, fuzzy
 msgid "_Disconnect Drive"
-msgstr "_Dínasc"
+msgstr "_Dícheangail Tiomántán"
 
 #: ../gtk/gtkplacessidebar.c:2114
 msgid "_Start Multi-disk Device"
@@ -2713,32 +2708,32 @@ msgstr ""
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
 #: ../gtk/gtkplacessidebar.c:2119
 msgid "_Unlock Drive"
-msgstr ""
+msgstr "Dí_ghlasáil Tiomántán"
 
 #: ../gtk/gtkplacessidebar.c:2120
 msgid "_Lock Drive"
-msgstr ""
+msgstr "Cuir Tiomántán Faoi _Ghlas"
 
 #: ../gtk/gtkplacessidebar.c:2147 ../gtk/gtkplacessidebar.c:2845
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to start %s"
-msgstr "Ní féidir deireadh a chur leis an bpróiseas"
+msgstr "Ní féidir %s a thosú"
 
 #: ../gtk/gtkplacessidebar.c:2174
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to access “%s”"
-msgstr "Ní féidir deireadh a chur leis an bpróiseas"
+msgstr "Ní féidir “%s” a rochtain"
 
 #: ../gtk/gtkplacessidebar.c:2480
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to unmount %s"
-msgstr "Ní féidir deireadh a chur leis an bpróiseas"
+msgstr "Ní féidir %s a dhífheistiú"
 
 #: ../gtk/gtkplacessidebar.c:2603 ../gtk/gtkplacessidebar.c:2630
 #: ../gtk/gtkplacessidebar.c:2657
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to eject %s"
-msgstr "Ní féidir deireadh a chur leis an bpróiseas"
+msgstr "Ní féidir %s a dhíchur"
 
 #: ../gtk/gtkplacessidebar.c:2797
 #, c-format
@@ -2746,9 +2741,9 @@ msgid "Unable to poll %s for media changes"
 msgstr ""
 
 #: ../gtk/gtkplacessidebar.c:2899
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to stop %s"
-msgstr "Ní féidir deireadh a chur leis an bpróiseas"
+msgstr "Ní féidir %s a stad"
 
 #: ../gtk/gtkplacessidebar.c:3114
 msgid "Open in New _Tab"
@@ -3155,9 +3150,9 @@ msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "Aimsíodh an tréith \"%s\" faoi dhó ar an eilimint <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:850
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> element has invalid ID \"%s\""
-msgstr "Tá ca neamhbhailí \"%2$s\" ag eilimint <%1$s>"
+msgstr "Tá CA neamhbhailí \"%2$s\" ag eilimint <%1$s>"
 
 #: ../gtk/gtktextbufferserialize.c:860
 #, c-format
@@ -3311,48 +3306,48 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:7948
+#: ../gtk/gtkwindow.c:7950
 msgid "Minimize"
 msgstr "Íoslaghdaigh"
 
-#: ../gtk/gtkwindow.c:7956
+#: ../gtk/gtkwindow.c:7958
 msgid "Unmaximize"
 msgstr "Dí-uasmhéadaigh"
 
-#: ../gtk/gtkwindow.c:7956
+#: ../gtk/gtkwindow.c:7958
 msgid "Maximize"
 msgstr "Uasmhéadaigh"
 
-#: ../gtk/gtkwindow.c:7965
+#: ../gtk/gtkwindow.c:7967
 msgid "Always on Top"
 msgstr "Ar Barr i gCónaí"
 
-#: ../gtk/gtkwindow.c:7977
+#: ../gtk/gtkwindow.c:7979
 msgid "Always on Visible Workspace"
 msgstr "Ar Spás Oibre Infheicthe i gCónaí"
 
-#: ../gtk/gtkwindow.c:7985
+#: ../gtk/gtkwindow.c:7987
 msgid "Only on This Workspace"
 msgstr "Ar an Spás Oibre Seo Amháin"
 
-#: ../gtk/gtkwindow.c:8002
+#: ../gtk/gtkwindow.c:8004
 msgid "Move to Workspace Up"
 msgstr "Bog go Spás Oibre Os Cionn"
 
-#: ../gtk/gtkwindow.c:8011
+#: ../gtk/gtkwindow.c:8013
 msgid "Move to Workspace Down"
 msgstr "Bog go Spás Oibre Faoi Bhun"
 
-#: ../gtk/gtkwindow.c:8025
+#: ../gtk/gtkwindow.c:8027
 msgid "Move to Another Workspace"
 msgstr "Bog go Spás Oibre Eile"
 
-#: ../gtk/gtkwindow.c:8033
+#: ../gtk/gtkwindow.c:8035
 #, c-format
 msgid "Workspace %d"
 msgstr "Spás Oibre %d"
 
-#: ../gtk/gtkwindow.c:8053
+#: ../gtk/gtkwindow.c:8055
 msgid "Close"
 msgstr "Dún"
 
@@ -4480,7 +4475,7 @@ msgstr "Tá fadhb ann le printéir '%s'."
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2285
 msgid "Paused; Rejecting Jobs"
-msgstr "Ar Sos ; Jabanna á nDiúltú"
+msgstr "Ar Sos; Jabanna á nDiúltú"
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2291
@@ -4683,13 +4678,11 @@ msgid "Custom %sx%s"
 msgstr "%sx%s Saincheaptha"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4918
-#, fuzzy
 msgid "Printer Profile"
-msgstr "Printéir as líne"
+msgstr "Próifíl Phrintéara"
 
 #. TRANSLATORS: this is when color profile information is unavailable
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4925
-#, fuzzy
 msgid "Unavailable"
 msgstr "Níl ar fáil"
 
@@ -4808,19 +4801,16 @@ msgid "Show Other Applications"
 msgstr "Taispeáin Feidhmchláir Eile"
 
 #: ../gtk/gtkassistant.ui.h:2
-#, fuzzy
 msgid "C_ontinue"
-msgstr "_Nasc"
+msgstr "Ar _Aghaidh"
 
 #: ../gtk/gtkassistant.ui.h:3
-#, fuzzy
 msgid "Go _Back"
 msgstr "Ar A_is"
 
 #: ../gtk/gtkassistant.ui.h:4
-#, fuzzy
 msgid "_Finish"
-msgstr "Críochnaithe"
+msgstr "_Críochnaigh"
 
 #: ../gtk/gtkcolorchooserdialog.ui.h:1
 msgid "Select a Color"
