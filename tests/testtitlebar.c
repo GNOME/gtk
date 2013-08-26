@@ -13,6 +13,9 @@ main (int argc, char *argv[])
 
   gtk_init (NULL, NULL);
 
+  if (g_getenv ("DARK"))
+    g_object_set (gtk_settings_get_default (), "gtk-application-prefer-dark-theme", TRUE, NULL);
+
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
 
