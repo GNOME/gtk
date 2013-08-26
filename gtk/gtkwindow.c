@@ -7887,6 +7887,7 @@ ontop_window_clicked (GtkMenuItem *menuitem,
   gtk_window_set_keep_above (window, !window->priv->above_initially);
 }
 
+#ifdef GDK_WINDOWING_X11
 static void
 stick_window_clicked (GtkMenuItem *menuitem,
                       gpointer     user_data)
@@ -7917,6 +7918,7 @@ workspace_change_clicked (GtkMenuItem *menuitem,
   desktop = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (menuitem), "workspace"));
   gdk_x11_window_move_to_desktop (gdk_window, desktop);
 }
+#endif
 
 static void
 close_window_clicked (GtkMenuItem *menuitem,
