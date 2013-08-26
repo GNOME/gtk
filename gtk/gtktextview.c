@@ -3701,7 +3701,7 @@ gtk_text_view_size_allocate (GtkWidget *widget,
 
   DV(g_print(G_STRLOC"\n"));
 
-  _gtk_pixel_cache_set_extra_size (priv->pixel_cache, 0,
+  _gtk_pixel_cache_set_extra_size (priv->pixel_cache, 64,
                                    allocation->height / 2);
 
   gtk_widget_get_allocation (widget, &widget_allocation);
