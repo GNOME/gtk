@@ -158,7 +158,26 @@ void              gtk_print_settings_set_int                 (GtkPrintSettings  
 #define GTK_PRINT_SETTINGS_RESOLUTION_X     "resolution-x"
 #define GTK_PRINT_SETTINGS_RESOLUTION_Y     "resolution-y"
 #define GTK_PRINT_SETTINGS_PRINTER_LPI      "printer-lpi"
+
+/**
+ * GTK_PRINT_SETTINGS_OUTPUT_DIR:
+ *
+ * The key used by the "Print to file" printer to store the
+ * directory to which the output should be written.
+ *
+ * Since: 3.6
+ */
 #define GTK_PRINT_SETTINGS_OUTPUT_DIR       "output-dir"
+
+/**
+ * GTK_PRINT_SETTINGS_OUTPUT_BASENAME:
+ *
+ * The key used by the "Print to file" printer to store the file
+ * name of the output without the path to the directory and the
+ * file extension.
+ *
+ * Since: 3.6
+ */
 #define GTK_PRINT_SETTINGS_OUTPUT_BASENAME  "output-basename"
 
 /**
