@@ -1080,5 +1080,5 @@ gdk_screen_get_monitor_scale_factor (GdkScreen *screen,
   if (screen_class->get_monitor_scale_factor)
     return screen_class->get_monitor_scale_factor (screen, monitor_num);
 
-  return 1.0;
+  return 1;
 }
