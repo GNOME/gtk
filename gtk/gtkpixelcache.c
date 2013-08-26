@@ -26,8 +26,9 @@
    to make scrolling more efficient */
 #define DEFAULT_EXTRA_SIZE 64
 
-/* When resizing viewport to smaller we allow this extra
+/* When resizing viewport we allow this extra
    size to avoid constantly reallocating when resizing */
+#define ALLOW_SMALLER_SIZE 32
 #define ALLOW_LARGER_SIZE 32
 
 struct _GtkPixelCache {
@@ -184,9 +185,9 @@ _gtk_pixel_cache_create_surface_if_needed (GtkPixelCache         *cache,
   /* If current surface can't fit view_rect or is too large, kill it */
   if (cache->surface != NULL &&
       (cairo_surface_get_content (cache->surface) != content ||
-       cache->surface_w < view_rect->width ||
+       cache->surface_w < MAX(view_rect->width, surface_w - ALLOW_SMALLER_SIZE) ||
        cache->surface_w > surface_w + ALLOW_LARGER_SIZE ||
-       cache->surface_h < view_rect->height ||
+       cache->surface_h < MAX(view_rect->height, surface_h - ALLOW_SMALLER_SIZE) ||
        cache->surface_h > surface_h + ALLOW_LARGER_SIZE ||
        cache->surface_scale != gdk_window_get_scale_factor (window)))
     {
