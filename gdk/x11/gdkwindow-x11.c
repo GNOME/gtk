@@ -2159,7 +2159,7 @@ get_netwm_cardinal_property (GdkWindow   *window,
 guint32
 gdk_x11_window_get_desktop (GdkWindow *window)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
 
   return get_netwm_cardinal_property (window, "_NET_WM_DESKTOP");
 }
