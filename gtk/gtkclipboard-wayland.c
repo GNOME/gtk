@@ -144,12 +144,12 @@ gtk_clipboard_wayland_set_contents (GtkClipboard         *gtkclipboard,
   GtkClipboardWayland *clipboard = GTK_CLIPBOARD_WAYLAND (gtkclipboard);
   GdkDeviceManager *device_manager;
   GdkDevice *device;
-  gint i;
+  gint i, j;
   gchar **mimetypes;
   SetContentClosure *closure, *last_closure;
 
   if (gtkclipboard->selection != GDK_SELECTION_CLIPBOARD)
-    return;
+    return FALSE;
 
   last_closure = clipboard->last_closure;
   if (!last_closure ||
@@ -172,24 +172,37 @@ gtk_clipboard_wayland_set_contents (GtkClipboard         *gtkclipboard,
   closure->get_func = get_func;
   closure->clear_func = clear_func;
   closure->targets = g_new0 (GtkTargetPair, n_targets);
-  closure->n_targets = n_targets;
 
   device_manager = gdk_display_get_device_manager (gdk_display_get_default ());
   device = gdk_device_manager_get_client_pointer (device_manager);
 
   mimetypes = g_new (gchar *, n_targets);
 
-  for (i = 0; i < n_targets; i++)
+  for (i = 0, j = 0; i < n_targets; i++)
     {
-      mimetypes[i] = targets[i].target;
-      closure->targets[i].target = gdk_atom_intern (targets[i].target, FALSE);
-      closure->targets[i].flags = targets[i].flags;
-      closure->targets[i].info = targets[i].info;
+      if (strcmp(targets[i].target, "COMPOUND_TEXT") == 0)
+	continue;
+      if (strcmp(targets[i].target, "UTF8_STRING") == 0)
+	continue;
+      if (strcmp(targets[i].target, "TEXT") == 0)
+	continue;
+      if (strcmp(targets[i].target, "STRING") == 0)
+	continue;
+      if (strcmp(targets[i].target, "GTK_TEXT_BUFFER_CONTENTS") == 0)
+	continue;
+
+      mimetypes[j] = targets[i].target;
+      closure->targets[j].target = gdk_atom_intern (targets[i].target, FALSE);
+      closure->targets[j].flags = targets[i].flags;
+      closure->targets[j].info = targets[i].info;
+      j++;
     }
+
+  closure->n_targets = j;
 
   gdk_wayland_device_offer_selection_content (device,
                                               (const gchar **)mimetypes,
-                                              n_targets,
+                                              j,
                                               _offer_cb,
                                               closure);
   clipboard->last_closure = closure;
@@ -268,6 +281,29 @@ gtk_clipboard_wayland_request_contents (GtkClipboard            *gtkclipboard,
 
   device_manager = gdk_display_get_device_manager (gdk_display_get_default ());
   device = gdk_device_manager_get_client_pointer (device_manager);
+
+  /* When GTK+ requests text, it tries UTF8_STRING first and then
+   * falls back to COMPOUND_TEXT and then STRING.  We rewrite
+   * UTF8_STRING to text/plain;charset=utf-8, and if that doesn't
+   * work, just fail the fallback targets.  Maybe we could do this in
+   * a generic way that just compares the target against the targets
+   * advertised by the data offer. */
+  if (target == gdk_atom_intern_static_string ("UTF8_STRING"))
+    target = gdk_atom_intern_static_string ("text/plain;charset=utf-8");
+  else if (target == gdk_atom_intern_static_string ("COMPOUND_TEXT") ||
+	   target == GDK_TARGET_STRING)
+    {
+      GtkSelectionData selection_data;
+
+      selection_data.selection = GDK_NONE;
+      selection_data.target = GDK_NONE;
+      selection_data.type = GDK_NONE;
+      selection_data.length = 0;
+      selection_data.data = NULL;
+
+      callback (gtkclipboard, &selection_data, user_data);
+      return;
+    }
 
   closure = g_new0 (ClipboardRequestClosure, 1);
   closure->clipboard = gtkclipboard;
