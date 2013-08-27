@@ -107,6 +107,7 @@ struct _GtkAssistantPrivate
   GtkWidget *last;
 
   GtkWidget *sidebar;
+  GtkWidget *sidebar_frame;
   GtkWidget *content;
   GtkWidget *action_area;
 
@@ -707,7 +708,7 @@ update_title_state (GtkAssistant *assistant)
         show_titles = TRUE;
     }
 
-  gtk_widget_set_visible (priv->sidebar, show_titles);
+  gtk_widget_set_visible (priv->sidebar_frame, show_titles);
 }
 
 static void
@@ -956,7 +957,6 @@ gtk_assistant_init (GtkAssistant *assistant)
   GtkStyleContext *context;
   GtkWidget *main_box;
   GtkWidget *content_box;
-  GtkWidget *sidebar_frame;
 
   assistant->priv = G_TYPE_INSTANCE_GET_PRIVATE (assistant,
                                                  GTK_TYPE_ASSISTANT,
@@ -974,11 +974,11 @@ gtk_assistant_init (GtkAssistant *assistant)
   /* use a frame for the sidebar, and manually render a background
    * in it. GtkFrame also gives us padding support for free.
    */
-  sidebar_frame = gtk_frame_new (NULL);
-  context = gtk_widget_get_style_context (sidebar_frame);
+  priv->sidebar_frame = gtk_frame_new (NULL);
+  context = gtk_widget_get_style_context (priv->sidebar_frame);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_SIDEBAR);
 
-  g_signal_connect (sidebar_frame, "draw",
+  g_signal_connect (priv->sidebar_frame, "draw",
                     G_CALLBACK (assistant_sidebar_draw_cb), assistant);
 
   content_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
@@ -991,8 +991,8 @@ gtk_assistant_init (GtkAssistant *assistant)
   g_signal_connect (priv->content, "remove",
                     G_CALLBACK (assistant_remove_page_cb), assistant);
 
-  gtk_container_add (GTK_CONTAINER (sidebar_frame), priv->sidebar);
-  gtk_box_pack_start (GTK_BOX (main_box), sidebar_frame, FALSE, FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (priv->sidebar_frame), priv->sidebar);
+  gtk_box_pack_start (GTK_BOX (main_box), priv->sidebar_frame, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (main_box), content_box, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (content_box), priv->content, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (content_box), priv->action_area, FALSE, TRUE, 0);
