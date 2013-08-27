@@ -6193,6 +6193,13 @@ sum_borders (GtkBorder *one,
 }
 
 static void
+add_window_frame_style_class (GtkStyleContext *context)
+{
+  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_BACKGROUND);
+  gtk_style_context_add_class (context, "window-frame");
+}
+
+static void
 get_decoration_size (GtkWidget *widget,
                      GtkBorder *decorations)
 {
@@ -6217,8 +6224,7 @@ get_decoration_size (GtkWidget *widget,
   context = gtk_widget_get_style_context (widget);
 
   gtk_style_context_save (context);
-  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_BACKGROUND);
-  gtk_style_context_add_class (context, "window-frame");
+  add_window_frame_style_class (context);
 
   /* Always sum border + padding */
   gtk_style_context_get_border (context, state, decorations);
@@ -6260,7 +6266,7 @@ update_border_windows (GtkWindow *window)
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_save (context);
-  gtk_style_context_add_class (context, "window-frame");
+  add_window_frame_style_class (context);
   gtk_style_context_get_margin (context,
                                 gtk_widget_get_state_flags (widget),
                                 &border);
@@ -9150,8 +9156,7 @@ gtk_window_draw (GtkWidget *widget,
         {
           gtk_style_context_save (context);
 
-          gtk_style_context_remove_class (context, GTK_STYLE_CLASS_BACKGROUND);
-          gtk_style_context_add_class (context, "window-frame");
+          add_window_frame_style_class (context);
 
           gtk_render_background (context, cr,
                                  window_border.left, window_border.top,
