@@ -5268,11 +5268,7 @@ create_titlebar (GtkWindow *window)
   gchar *title;
 
   titlebar = gtk_header_bar_new ();
-  g_object_set (titlebar,
-                "spacing", 0,
-                "hpadding", 0,
-                "vpadding", 0,
-                NULL);
+  g_object_set (titlebar, "spacing", 0, NULL);
   context = gtk_widget_get_style_context (titlebar);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_TITLEBAR);
   gtk_style_context_add_class (context, "default-decoration");
