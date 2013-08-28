@@ -5471,7 +5471,7 @@ gtk_window_map (GtkWidget *widget)
   if (child != NULL && gtk_widget_get_visible (child))
     gtk_widget_map (child);
 
-  if (priv->title_box != NULL)
+  if (priv->title_box != NULL && gtk_widget_get_visible (priv->title_box))
     gtk_widget_map (priv->title_box);
 
   gdk_window = gtk_widget_get_window (widget);
