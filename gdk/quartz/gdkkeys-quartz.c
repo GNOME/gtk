@@ -492,7 +492,8 @@ update_keymap (void)
         p[0] = known_numeric_keys[i].keypad_keyval;
     }
 
-  g_signal_emit_by_name (default_keymap, "keys-changed");
+  if (default_keymap != NULL)
+    g_signal_emit_by_name (default_keymap, "keys-changed");
 }
 
 static PangoDirection
