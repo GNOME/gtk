@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_PropertySheetDisplayName>gtkcopygdkbroadwayprops</_PropertySheetDisplayName>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <PostBuildEvent>
+      <Command>
+if "$(Configuration)" == "Release" goto END
+
+if "$(Configuration)" == "Debug" goto END
+
+if "$(Configuration)" == "Release_Broadway" goto DoRelease
+
+if "$(Configuration)" == "Debug_Broadway" goto DoDebug
+
+
+:DoRelease
+
+mkdir .\Release\$(Platform)\bin
+
+copy /b $(Configuration)\$(Platform)\bin\$(GtkDllPrefix)gdk$(GtkDllSuffix).dll .\Release\$(Platform)\bin\
+
+copy /b $(Configuration)\$(Platform)\bin\gdk-$(ApiVersion).lib .\Release\$(Platform)\bin\
+
+goto END
+
+
+:DoDebug
+
+mkdir .\Debug\$(Platform)\bin
+
+copy /b $(Configuration)\$(Platform)\bin\$(GtkDllPrefix)gdk$(GtkDllSuffix).dll .\Debug\$(Platform)\bin\
+
+copy /b $(Configuration)\$(Platform)\bin\gdk-$(ApiVersion).lib .\Debug\$(Platform)\bin\
+
+goto END
+
+
+:END
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+</Project>

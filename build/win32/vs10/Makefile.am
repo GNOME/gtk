@@ -36,6 +36,7 @@ EXTRA_DIST +=	\
 	gtk-install-headers-data.props	\
 	gtk-version-paths.props	\
 	gtkprebuild-broadway.props	\
-	gtkprebuild.props
+	gtkprebuild.props	\
+	gtk-copy-gdk-broadway.props
 
 -include $(top_srcdir)/git.mk

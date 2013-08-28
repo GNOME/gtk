@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="gtkcopygdkbroadwayprops"
+	>
+	<Tool
+		Name="VCPostBuildEventTool"
+		CommandLine="
+if &quot;$(ConfigurationName)&quot; == &quot;Release&quot; goto END&#x0D;&#x0A;
+if &quot;$(ConfigurationName)&quot; == &quot;Debug&quot; goto END&#x0D;&#x0A;
+if &quot;$(ConfigurationName)&quot; == &quot;Release_Broadway&quot; goto DoRelease&#x0D;&#x0A;
+if &quot;$(ConfigurationName)&quot; == &quot;Debug_Broadway&quot; goto DoDebug&#x0D;&#x0A;
+
+:DoRelease&#x0D;&#x0A;
+mkdir .\Release\$(PlatformName)\bin&#x0D;&#x0A;
+copy /b $(ConfigurationName)\$(PlatformName)\bin\$(GtkDllPrefix)gdk$(GtkDllSuffix).dll .\Release\$(PlatformName)\bin\&#x0D;&#x0A;
+copy /b $(ConfigurationName)\$(PlatformName)\bin\gdk-$(ApiVersion).lib .\Release\$(PlatformName)\bin\&#x0D;&#x0A;
+goto END&#x0D;&#x0A;
+
+:DoDebug&#x0D;&#x0A;
+mkdir .\Debug\$(PlatformName)\bin&#x0D;&#x0A;
+copy /b $(ConfigurationName)\$(PlatformName)\bin\$(GtkDllPrefix)gdk$(GtkDllSuffix).dll .\Debug\$(PlatformName)\bin\&#x0D;&#x0A;
+copy /b $(ConfigurationName)\$(PlatformName)\bin\gdk-$(ApiVersion).lib .\Debug\$(PlatformName)\bin\&#x0D;&#x0A;
+goto END&#x0D;&#x0A;
+
+:END&#x0D;&#x0A;
+"
+	/>
+</VisualStudioPropertySheet>
