@@ -582,16 +582,16 @@ gtk_container_buildable_set_child_property (GtkContainer *container,
   GValue gvalue = G_VALUE_INIT;
   GError *error = NULL;
 
-  if (gtk_widget_get_parent (child) != (GtkWidget *)container)
+  if (gtk_widget_get_parent (child) != (GtkWidget *)container && !GTK_IS_ASSISTANT (container))
     {
-      /* This can happen with internal children of complex
-       * widgets. Silently ignore the child properties in this case.
+      /* This can happen with internal children of complex widgets.
+       * Silently ignore the child properties in this case. We explicitly
+       * allow it for GtkAssistant, since that is how it works.
        */
       return;
     }
 
-  pspec = gtk_container_class_find_child_property
-    (G_OBJECT_GET_CLASS (container), name);
+  pspec = gtk_container_class_find_child_property (G_OBJECT_GET_CLASS (container), name);
   if (!pspec)
     {
       g_warning ("%s does not have a property called %s",
