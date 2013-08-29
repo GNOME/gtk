@@ -168,7 +168,7 @@ output_result (GtkIMContext *context,
       g_signal_emit_by_name (context, "preedit_changed");
       retval = TRUE;
     }
-  if (!fixed_str && !marked_str) 
+  if (!fixed_str && !marked_str)
     {
       if (qc->preedit_str && strlen (qc->preedit_str) > 0)
         retval = TRUE;
@@ -209,7 +209,7 @@ quartz_filter_keypress (GtkIMContext *context,
     {
       if (event->hardware_keycode == 0 && event->keyval == 0xffffff)
         /* update text input changes by mouse events */
-        output_result(context, win);
+        return output_result (context, win);
       else
         return gtk_im_context_filter_keypress (qc->slave, event);
     }
