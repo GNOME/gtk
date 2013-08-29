@@ -93,28 +93,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkHeaderBar, gtk_header_bar, GTK_TYPE_CONTAINER,
                                                 gtk_header_bar_buildable_init));
 
 static void
-boldify_label (GtkWidget *label)
-{
-  PangoAttrList *attrs;
-  attrs = pango_attr_list_new ();
-  pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
-  gtk_label_set_attributes (GTK_LABEL (label), attrs);
-  pango_attr_list_unref (attrs);
-}
-
-static void
-smallify_label (GtkWidget *label)
-{
-  PangoAttrList *attrs;
-  attrs = pango_attr_list_new ();
-  pango_attr_list_insert (attrs, pango_attr_scale_new (PANGO_SCALE_SMALL));
-  gtk_label_set_attributes (GTK_LABEL (label), attrs);
-  pango_attr_list_unref (attrs);
-
-  gtk_style_context_add_class (gtk_widget_get_style_context (label), "dim-label");
-}
-
-static void
 get_css_padding_and_border (GtkWidget *widget,
                             GtkBorder *border)
 {
@@ -138,6 +116,7 @@ init_sizing_box (GtkHeaderBar *bar)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   GtkWidget *w;
+  GtkStyleContext *context;
 
   /* We use this box to always request size for the two labels (title
    * and subtitle) as if they were always visible, but then allocate
@@ -147,14 +126,17 @@ init_sizing_box (GtkHeaderBar *bar)
   priv->label_sizing_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
   w = gtk_label_new (NULL);
-  boldify_label (w);
+  context = gtk_widget_get_style_context (w);
+  gtk_style_context_add_class (context, "title");
   gtk_box_pack_start (GTK_BOX (priv->label_sizing_box), w, FALSE, FALSE, 0);
   gtk_label_set_line_wrap (GTK_LABEL (w), FALSE);
   gtk_label_set_single_line_mode (GTK_LABEL (w), TRUE);
   gtk_label_set_ellipsize (GTK_LABEL (w), PANGO_ELLIPSIZE_END);
 
   w = gtk_label_new (NULL);
-  smallify_label (w);
+  context = gtk_widget_get_style_context (w);
+  gtk_style_context_add_class (context, "subtitle");
+  gtk_style_context_add_class (context, "dim-label");
   gtk_box_pack_start (GTK_BOX (priv->label_sizing_box), w, FALSE, FALSE, 0);
   gtk_label_set_line_wrap (GTK_LABEL (w), FALSE);
   gtk_label_set_single_line_mode (GTK_LABEL (w), TRUE);
@@ -181,7 +163,6 @@ _gtk_header_bar_create_title_box (const char *title,
   title_label = gtk_label_new (title);
   context = gtk_widget_get_style_context (title_label);
   gtk_style_context_add_class (context, "title");
-  boldify_label (title_label);
   gtk_label_set_line_wrap (GTK_LABEL (title_label), FALSE);
   gtk_label_set_single_line_mode (GTK_LABEL (title_label), TRUE);
   gtk_label_set_ellipsize (GTK_LABEL (title_label), PANGO_ELLIPSIZE_END);
@@ -191,7 +172,7 @@ _gtk_header_bar_create_title_box (const char *title,
   subtitle_label = gtk_label_new (subtitle);
   context = gtk_widget_get_style_context (subtitle_label);
   gtk_style_context_add_class (context, "subtitle");
-  smallify_label (subtitle_label);
+  gtk_style_context_add_class (context, "dim-label");
   gtk_label_set_line_wrap (GTK_LABEL (subtitle_label), FALSE);
   gtk_label_set_single_line_mode (GTK_LABEL (subtitle_label), TRUE);
   gtk_label_set_ellipsize (GTK_LABEL (subtitle_label), PANGO_ELLIPSIZE_END);
