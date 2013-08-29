@@ -1617,7 +1617,7 @@ gtk_label_buildable_custom_finished (GtkBuildable *buildable,
 
 /**
  * gtk_label_new:
- * @str: The text of the label
+ * @str: (allow-none): The text of the label
  *
  * Creates a new label with the given text inside it. You can
  * pass %NULL to get an empty label widget.
@@ -1639,7 +1639,7 @@ gtk_label_new (const gchar *str)
 
 /**
  * gtk_label_new_with_mnemonic:
- * @str: The text of the label, with an underscore in front of the
+ * @str: (allow-none): The text of the label, with an underscore in front of the
  *       mnemonic character
  *
  * Creates a new #GtkLabel, containing the text in @str.

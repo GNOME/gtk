@@ -219,7 +219,7 @@ gtk_aspect_frame_get_property (GObject         *object,
 
 /**
  * gtk_aspect_frame_new:
- * @label: Label text.
+ * @label: (allow-none): Label text.
  * @xalign: Horizontal alignment of the child within the allocation of
  *  the #GtkAspectFrame. This ranges from 0.0 (left aligned)
  *  to 1.0 (right aligned)

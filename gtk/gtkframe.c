@@ -332,7 +332,7 @@ gtk_frame_get_property (GObject         *object,
 
 /**
  * gtk_frame_new:
- * @label: the text to use as the label of the frame
+ * @label: (allow-none): the text to use as the label of the frame
  * 
  * Creates a new #GtkFrame, with optional label @label.
  * If @label is %NULL, the label is omitted.
