@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-26 17:31-0600\n"
-"PO-Revision-Date: 2013-08-26 17:48-0600\n"
+"POT-Creation-Date: 2013-08-29 21:53-0600\n"
+"PO-Revision-Date: 2013-08-29 22:20-0600\n"
 "Last-Translator: Seán de Búrca <leftmostcat@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
 "Language: ga\n"
@@ -1348,6 +1348,9 @@ msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY;\n"
 "for details, visit <a href=\"%s\">%s</a>"
 msgstr ""
+"Dáileadh an clár seo GAN AON BHARÁNTA;\n"
+"le haghaidh tuilleadh mionsonraí,\n"
+"féach ar <a href=\"%s\">%s</a>"
 
 #: ../gtk/gtkaboutdialog.c:374
 msgid "License"
@@ -1466,18 +1469,18 @@ msgstr ""
 
 #: ../gtk/gtkappchooserdialog.c:189
 msgid "_Find applications online"
-msgstr ""
+msgstr "_Aimsigh feidhmchláir ar líne"
 
 #. Translators: %s is a filename
 #: ../gtk/gtkappchooserdialog.c:333
 #, c-format
 msgid "Select an application to open “%s”"
-msgstr ""
+msgstr "Roghnaigh feidhmchlár chun “%s” a oscailt"
 
 #: ../gtk/gtkappchooserdialog.c:334 ../gtk/gtkappchooserwidget.c:660
 #, c-format
 msgid "No applications available to open “%s”"
-msgstr ""
+msgstr "Níl aon fheidhmchlár ar fáil chun “%s” a oscailt"
 
 #. Translators: %s is a file type description
 #: ../gtk/gtkappchooserdialog.c:340
@@ -1488,18 +1491,19 @@ msgstr ""
 #: ../gtk/gtkappchooserdialog.c:342
 #, c-format
 msgid "No applications available to open “%s” files"
-msgstr ""
+msgstr "Níl aon fheidhmchláir ar fáil chun comhaid “%s” a oscailt"
 
 #: ../gtk/gtkappchooserdialog.c:358
 msgid ""
 "Click \"Show other applications\", for more options, or \"Find applications "
 "online\" to install a new application"
 msgstr ""
+"Cliceáil \"Taispeáin feidhmchláir eile\" le haghaidh tuilleadh roghanna, nó "
+"\"Aimsigh feidhmchláir ar líne\" chun feidhmchlár nua a shuiteáil"
 
 #: ../gtk/gtkappchooserdialog.c:428
-#, fuzzy
 msgid "Forget association"
-msgstr "Déan _dearmad ar an bhfocal faire láithreach"
+msgstr "Déan dearmad ar an gcomhcheangal"
 
 #: ../gtk/gtkappchooserwidget.c:609
 msgid "Default Application"
@@ -1510,9 +1514,8 @@ msgid "Recommended Applications"
 msgstr "Feidhmchláir Mholta"
 
 #: ../gtk/gtkappchooserwidget.c:762
-#, fuzzy
 msgid "Related Applications"
-msgstr "Feidhmchlár"
+msgstr "Feidhmchláir Gaolmhara"
 
 #: ../gtk/gtkappchooserwidget.c:776
 msgid "Other Applications"
@@ -1525,6 +1528,9 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Ní féidir le %s éirí as ag an am seo:\n"
+"\n"
+"%s"
 
 #: ../gtk/gtkapplicationwindow.c:334 ../gtk/gtkprintoperation-unix.c:480
 #: ../gtk/gtkprintoperation-win32.c:1444
@@ -1534,17 +1540,17 @@ msgstr "Feidhmchlár"
 #: ../gtk/gtkbookmarksmanager.c:50
 #, c-format
 msgid "%s does not exist in the bookmarks list"
-msgstr ""
+msgstr "Níl %s ann sa liosta leabharmharcanna"
 
 #: ../gtk/gtkbookmarksmanager.c:367
 #, c-format
 msgid "%s already exists in the bookmarks list"
-msgstr ""
+msgstr "Tá %s ann sa liosta leabharmharcanna cheana"
 
 #: ../gtk/gtkbuilder-menus.c:220
-#, fuzzy, c-format
+#, c-format
 msgid "Element <%s> not allowed inside <%s>"
-msgstr "Ní cheadaítear an eilimint <%s> faoi <%s>"
+msgstr "Ní cheadaítear an eilimint <%s> istigh i <%s>"
 
 #: ../gtk/gtkbuilder-menus.c:225
 #, fuzzy, c-format
@@ -2332,23 +2338,25 @@ msgid ""
 "Launch specified application by its desktop file info\n"
 "optionally passing list of URIs as arguments."
 msgstr ""
+"Luchtaigh an feidhmchlár sonraithe le heolas óna comhad .desktop,\n"
+"agus liosta URIanna á seoladh mar argóintí go roghnach."
 
 #: ../gtk/gtk-launch.c:87
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing commandline options: %s\n"
-msgstr "Earráid agus deilbhín á luchtú: %s"
+msgstr "Earráid agus roghanna líne na n-orduithe á bparsáil: %s\n"
 
 #: ../gtk/gtk-launch.c:89 ../gtk/gtk-launch.c:102
 #, c-format
 msgid "Try \"%s --help\" for more information."
-msgstr ""
+msgstr "Bain triail as \"%s --help\" le haghaidh tuilleadh eolais."
 
 #. Translators: the %s is the program name. This error message
 #. means the user is calling gtk-launch without any argument.
 #: ../gtk/gtk-launch.c:100
 #, c-format
 msgid "%s: missing application name"
-msgstr ""
+msgstr "%s: ainm feidhmhcláir ar iarraidh"
 
 #: ../gtk/gtk-launch.c:121
 #, c-format
@@ -2360,7 +2368,7 @@ msgstr ""
 #: ../gtk/gtk-launch.c:129
 #, c-format
 msgid "%s: no such application %s"
-msgstr ""
+msgstr "%s níl a leithéid d'fheidmhclár ann: %s"
 
 #. Translators: the first %s is the program name, the second one
 #. is the error message.
@@ -2390,18 +2398,24 @@ msgid ""
 "Dialog is unlocked.\n"
 "Click to prevent further changes"
 msgstr ""
+"Tá an dialóg díghlasáilte.\n"
+"Cliceáil chun cosc a chur ar athruithe le teacht"
 
 #: ../gtk/gtklockbutton.c:293
 msgid ""
 "Dialog is locked.\n"
 "Click to make changes"
 msgstr ""
+"Tá an dialóg faoi ghlas.\n"
+"Cliceáil chun athruithe a dhéanamh"
 
 #: ../gtk/gtklockbutton.c:302
 msgid ""
 "System policy prevents changes.\n"
 "Contact your system administrator"
 msgstr ""
+"Cuireann polasaí an chórais cosc ar athruithe.\n"
+"Déan teagmháil le do riarthóir córais."
 
 #. Description of --gtk-module=MODULES in --help output
 #: ../gtk/gtkmain.c:447
@@ -2472,7 +2486,7 @@ msgstr "Gan _Ainm"
 
 #: ../gtk/gtkmountoperation.c:622
 msgid "Registered U_ser"
-msgstr ""
+msgstr "Ú_sáideoir Cláraithe"
 
 #: ../gtk/gtkmountoperation.c:633
 msgid "_Username"
@@ -2687,7 +2701,7 @@ msgstr "Cuir ar _Siúl"
 
 #: ../gtk/gtkplacessidebar.c:2107
 msgid "_Safely Remove Drive"
-msgstr ""
+msgstr "Bain Tiomántán go _Sábháilte"
 
 #: ../gtk/gtkplacessidebar.c:2110
 msgid "_Connect Drive"
@@ -2699,11 +2713,11 @@ msgstr "_Dícheangail Tiomántán"
 
 #: ../gtk/gtkplacessidebar.c:2114
 msgid "_Start Multi-disk Device"
-msgstr ""
+msgstr "_Tosaigh Gléas Ildiosca"
 
 #: ../gtk/gtkplacessidebar.c:2115
 msgid "_Stop Multi-disk Device"
-msgstr ""
+msgstr "_Stad Gléas Ildiosca"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
 #: ../gtk/gtkplacessidebar.c:2119
@@ -3306,48 +3320,48 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:7950
+#: ../gtk/gtkwindow.c:8035
 msgid "Minimize"
 msgstr "Íoslaghdaigh"
 
-#: ../gtk/gtkwindow.c:7958
+#: ../gtk/gtkwindow.c:8043
 msgid "Unmaximize"
 msgstr "Dí-uasmhéadaigh"
 
-#: ../gtk/gtkwindow.c:7958
+#: ../gtk/gtkwindow.c:8043
 msgid "Maximize"
 msgstr "Uasmhéadaigh"
 
-#: ../gtk/gtkwindow.c:7967
+#: ../gtk/gtkwindow.c:8052
 msgid "Always on Top"
 msgstr "Ar Barr i gCónaí"
 
-#: ../gtk/gtkwindow.c:7979
+#: ../gtk/gtkwindow.c:8064
 msgid "Always on Visible Workspace"
 msgstr "Ar Spás Oibre Infheicthe i gCónaí"
 
-#: ../gtk/gtkwindow.c:7987
+#: ../gtk/gtkwindow.c:8072
 msgid "Only on This Workspace"
 msgstr "Ar an Spás Oibre Seo Amháin"
 
-#: ../gtk/gtkwindow.c:8004
+#: ../gtk/gtkwindow.c:8089
 msgid "Move to Workspace Up"
 msgstr "Bog go Spás Oibre Os Cionn"
 
-#: ../gtk/gtkwindow.c:8013
+#: ../gtk/gtkwindow.c:8098
 msgid "Move to Workspace Down"
 msgstr "Bog go Spás Oibre Faoi Bhun"
 
-#: ../gtk/gtkwindow.c:8027
+#: ../gtk/gtkwindow.c:8112
 msgid "Move to Another Workspace"
 msgstr "Bog go Spás Oibre Eile"
 
-#: ../gtk/gtkwindow.c:8035
+#: ../gtk/gtkwindow.c:8120
 #, c-format
 msgid "Workspace %d"
 msgstr "Spás Oibre %d"
 
-#: ../gtk/gtkwindow.c:8055
+#: ../gtk/gtkwindow.c:8140
 msgid "Close"
 msgstr "Dún"
 
@@ -4228,7 +4242,7 @@ msgstr "D'éirigh le cruthú an chomhaid taisce.\n"
 
 #: ../gtk/updateiconcache.c:1652
 msgid "Overwrite an existing cache, even if up to date"
-msgstr ""
+msgstr "Forscríobh taisce atá ann, cé go bhfuil sí cothrom le dáta"
 
 #: ../gtk/updateiconcache.c:1653
 msgid "Don't check for the existence of index.theme"
@@ -4690,19 +4704,17 @@ msgstr "Níl ar fáil"
 #. * it hasn't registered the device with colord
 #: ../modules/printbackends/cups/gtkprintercups.c:241
 msgid "Color management unavailable"
-msgstr ""
+msgstr "Níl bainsteoireacht dathanna ar fáil"
 
 #. TRANSLATORS: when there is no color profile available
 #: ../modules/printbackends/cups/gtkprintercups.c:253
-#, fuzzy
 msgid "No profile available"
-msgstr "Níl ar fáil"
+msgstr "Níl aon phróifíl ar fáil"
 
 #. TRANSLATORS: when the color profile has no title
 #: ../modules/printbackends/cups/gtkprintercups.c:264
-#, fuzzy
 msgid "Unspecified profile"
-msgstr "Earráid gan sonrú"
+msgstr "Próifíl gan sonrú"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:249
 msgid "output"
@@ -4894,7 +4906,7 @@ msgstr "Cló"
 
 #: ../gtk/gtkfontchooserwidget.ui.h:1
 msgid "Search font name"
-msgstr ""
+msgstr "Cuardaigh ainm cló"
 
 #: ../gtk/gtkfontchooserwidget.ui.h:2
 msgid "Font Family"
