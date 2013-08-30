@@ -1,0 +1,21 @@
+<protocol name="gtk">
+
+  <interface name="gtk_shell" version="1">
+    <request name="get_gtk_surface">
+      <arg name="gtk_surface" type="new_id" interface="gtk_surface"/>
+      <arg name="surface" type="object" interface="wl_surface"/>
+    </request>
+  </interface>
+
+  <interface name="gtk_surface" version="1">
+    <request name="set_dbus_properties">
+      <arg name="application_id" type="string" allow-null="true"/>
+      <arg name="app_menu_path" type="string" allow-null="true"/>
+      <arg name="menubar_path" type="string" allow-null="true"/>
+      <arg name="window_object_path" type="string" allow-null="true"/>
+      <arg name="application_object_path" type="string" allow-null="true"/>
+      <arg name="unique_bus_name" type="string" allow-null="true"/>
+    </request>
+  </interface>
+
+</protocol>

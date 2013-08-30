@@ -19,7 +19,12 @@ LDADDS = $(GDK_DEP_LIBS)
 noinst_LTLIBRARIES =				\
 	libgdk-wayland.la
 
+BUILT_SOURCES = 				\
+	gtk-shell-client-protocol.h		\
+	gtk-shell-protocol.c
+
 libgdk_wayland_la_SOURCES =			\
+	$(BUILT_SOURCES)			\
 	gdkapplaunchcontext-wayland.c		\
 	gdkcursor-wayland.c			\
 	gdkdevice-wayland.c			\
@@ -42,5 +47,14 @@ libgdkwaylandinclude_HEADERS = 			\
 	gdkwaylanddisplay.h			\
 	gdkwaylandselection.h			\
 	gdkwaylandwindow.h
+
+%-protocol.c : protocol/%.xml
+	$(AM_V_GEN)$(WAYLAND_SCANNER) code < $< > $@
+%-server-protocol.h : protocol/%.xml
+	$(AM_V_GEN)$(WAYLAND_SCANNER) server-header < $< > $@
+%-client-protocol.h : protocol/%.xml
+	$(AM_V_GEN)$(WAYLAND_SCANNER) client-header < $< > $@
+
+EXTRA_DIST += protocol/gtk-shell.xml
 
 -include $(top_srcdir)/git.mk

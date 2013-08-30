@@ -167,6 +167,9 @@ gdk_registry_handle_global(void *data, struct wl_registry *registry, uint32_t id
   } else if (strcmp(interface, "wl_shell") == 0) {
     display_wayland->shell =
 	wl_registry_bind(display_wayland->wl_registry, id, &wl_shell_interface, 1);
+  } else if (strcmp(interface, "gtk_shell") == 0) {
+    display_wayland->gtk_shell =
+      wl_registry_bind(display_wayland->wl_registry, id, &gtk_shell_interface, 1);
   } else if (strcmp(interface, "wl_output") == 0) {
     output =
       wl_registry_bind(display_wayland->wl_registry, id, &wl_output_interface, MIN (version, 2));

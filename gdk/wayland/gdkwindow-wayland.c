@@ -102,6 +102,7 @@ struct _GdkWindowImplWayland
 
   struct wl_surface *surface;
   struct wl_shell_surface *shell_surface;
+  struct gtk_surface *gtk_surface;
   unsigned int mapped : 1;
   GdkWindow *transient_for;
   GdkWindowTypeHint hint;
@@ -1030,6 +1031,10 @@ gdk_wayland_window_create_surface (GdkWindow *window)
   wl_surface_set_user_data(impl->surface, window);
   wl_surface_add_listener(impl->surface,
                           &surface_listener, window);
+
+  if (display_wayland->gtk_shell)
+    impl->gtk_surface = gtk_shell_get_gtk_surface (display_wayland->gtk_shell,
+						   impl->surface);
 }
 
 static void
@@ -1091,6 +1096,10 @@ gdk_wayland_window_hide_surface (GdkWindow *window,
         }
       else if (impl->surface)
         {
+	  if (impl->gtk_surface)
+	    gtk_surface_destroy(impl->gtk_surface);
+	  impl->gtk_surface = NULL;
+
           wl_surface_destroy(impl->surface);
           impl->surface = NULL;
 

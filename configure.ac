@@ -404,6 +404,12 @@ if test "x$enable_wayland_backend" = "xyes"; then
 #define GDK_WINDOWING_WAYLAND"
   DISABLE_ON_WAYLAND='%'
   WAYLAND_PACKAGES="wayland-client >= 1.1.90 xkbcommon >= 0.2.0 wayland-cursor"
+
+  AC_PATH_PROG([WAYLAND_SCANNER],[wayland-scanner],[no])
+  AS_IF([test "x$WAYLAND_SCANNER" = "xno"],
+    AC_MSG_ERROR([Could not find wayland-scanner in your PATH, required for parsing wayland extension protocols]))
+  AC_SUBST([WAYLAND_SCANNER])
+
   AM_CONDITIONAL(USE_WAYLAND, true)
 else
   AM_CONDITIONAL(USE_WAYLAND, false)
