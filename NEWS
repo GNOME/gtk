@@ -1,3 +1,43 @@
+Overview of Changes in GTK+ 3.8.3
+=================================
+
+* Bugs fixed:
+ 667759 gtkdnd-quartz.c is missing annotations for introspection
+ 672271 File chooser seems over-enthusiastic about using subdir...
+ 674108 Hard crash due to wrong NSAutoreleasePool stacking
+ 680953 set_item_width / text wrapping doesn't work in iconview...
+ 688738 GtkMenuButton problem with mnemonics / accelerators
+ 691921 GTK+ (quartz) built on Mac OS X 10.5 references [NSMenu...
+ 692548 Quartz: Cursor doesn't reset when the mouse leaves a to...
+ 694273 Patch to support NSTextInputClient in text widgets
+ 694755 When clicking Activities, sometimes gnome-shell crashes.
+ 696498 can't set download folder
+ 696640 GtkButton: Don't suppress unhandled mouse events
+ 698183 Text input is too slow and some keys are broken after c...
+ 698758 Wrong limit for "Native Windows wider or taller than 65...
+ 700185 GtkWindow: problem with child widget visibility
+ 700779 gtk_menu_item_draw puts the arrow too close to the border
+ 701332 Patch for minor glitch in NSTextInput
+ 701341 Windows only paint once in Weston 1.1
+ 701365 Do not assert sm_proxy != NULL in GtkApplication inhibi...
+ 701613 XEmbed doesn't work with frame-synced GTK/Mutter
+ 702598 Invalid read of size 4 in gtk_icon_info_get_embedded_rect
+ 702763 ellipsize placeholder text
+ 702913 Reduce hash table lookups in gdk_x11_screen_supports_ne...
+ 703069 Opening a big menu activates some menu entry
+ 703220 Memory allocation integer overflow in gdk_cairo_set_sou...
+ 705181 Annoying beep on arrow keys when using IME on MacOS
+ 705182 Reset Cocoa IME state when immodule is reset
+ 705320 gtkicontheme: check for GdkPixbuf first
+ 705692 Segmentation fault on horizontal slider
+ 705750 Quartz input method doesn't work correctly for Chinese...
+ 706152 g_object_notify called with NULL priv->focus_widget
+
+* Translation updates:
+ Brazilian Portuguese
+ Traditional Chinese
+
+
 Overview of Changes in GTK+ 3.8.2
 =================================
 
