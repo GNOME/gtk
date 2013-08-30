@@ -34,6 +34,9 @@
 #ifdef GDK_WINDOWING_X11
 #include <gdk/x11/gdkx.h>
 #endif
+#ifdef GDK_WINDOWING_WAYLAND
+#include <gdk/wayland/gdkwayland.h>
+#endif
 
 #ifdef HAVE_GIO_UNIX
 #include <gio/gdesktopappinfo.h>
@@ -865,8 +868,28 @@ gtk_application_window_real_map (GtkWidget *widget)
   if (window->priv->menubar)
     gtk_widget_map (window->priv->menubar);
 
-  GTK_WIDGET_CLASS (gtk_application_window_parent_class)
-    ->map (widget);
+#ifdef GDK_WINDOWING_WAYLAND
+  {
+    GdkWindow *gdkwindow;
+    GtkApplication *application;
+
+    application = gtk_window_get_application (GTK_WINDOW (window));
+    gdkwindow = gtk_widget_get_window (widget);
+
+    if (GDK_IS_WAYLAND_WINDOW (gdkwindow) && window->priv->session)
+      {
+	gdk_wayland_window_set_dbus_properties_libgtk_only (gdkwindow,
+							    g_application_get_application_id (G_APPLICATION (application)),
+							    gtk_application_get_app_menu_object_path (application),
+							    gtk_application_get_menubar_object_path (application),
+							    window->priv->object_path,
+							    g_application_get_dbus_object_path (G_APPLICATION (application)),
+							    g_dbus_connection_get_unique_name (window->priv->session));
+      }
+  }
+#endif
+
+  GTK_WIDGET_CLASS (gtk_application_window_parent_class)->map (widget);
 }
 
 static void

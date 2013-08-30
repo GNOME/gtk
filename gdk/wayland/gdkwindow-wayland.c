@@ -2289,3 +2289,33 @@ gdk_wayland_window_set_use_custom_surface (GdkWindow *window)
 
   impl->use_custom_surface = TRUE;
 }
+
+void
+gdk_wayland_window_set_dbus_properties_libgtk_only (GdkWindow  *window,
+						    const char *application_id,
+						    const char *app_menu_path,
+						    const char *menubar_path,
+						    const char *window_object_path,
+						    const char *application_object_path,
+						    const char *unique_bus_name)
+{
+  GdkWindowImplWayland *impl;
+
+  g_return_if_fail (GDK_IS_WAYLAND_WINDOW (window));
+
+  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  if (!impl->surface)
+    gdk_wayland_window_create_surface (window);
+
+  if (impl->gtk_surface == NULL)
+    return;
+
+  gtk_surface_set_dbus_properties (impl->gtk_surface,
+				   application_id,
+				   app_menu_path,
+				   menubar_path,
+				   window_object_path,
+				   application_object_path,
+				   unique_bus_name);
+}

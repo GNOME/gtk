@@ -53,6 +53,15 @@ struct wl_shell_surface *gdk_wayland_window_get_wl_shell_surface (GdkWindow *win
 GDK_AVAILABLE_IN_ALL
 void                     gdk_wayland_window_set_use_custom_surface (GdkWindow *window);
 
+GDK_AVAILABLE_IN_3_10
+void                     gdk_wayland_window_set_dbus_properties_libgtk_only (GdkWindow  *window,
+									     const char *application_id,
+									     const char *app_menu_path,
+									     const char *menubar_path,
+									     const char *window_object_path,
+									     const char *application_object_path,
+									     const char *unique_bus_name);
+
 G_END_DECLS
 
 #endif /* __GDK_WAYLAND_WINDOW_H__ */
