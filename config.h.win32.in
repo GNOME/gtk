@@ -305,7 +305,11 @@
 /* #undef _FILE_OFFSET_BITS */
 
 /* defines how to decorate public symbols while building */
-#define _GDK_EXTERN __declspec (dllexport)
+#ifdef _MSC_VER
+#define _GDK_EXTERN __declspec (dllexport) extern
+#else
+#define _GDK_EXTERN __attribute__((visibility("default")))  __declspec (dllexport) extern
+#endif
 
 /* Define for large files, on AIX-style hosts. */
 /* #undef _LARGE_FILES */
