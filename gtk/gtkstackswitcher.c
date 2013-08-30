@@ -68,6 +68,7 @@ gtk_stack_switcher_init (GtkStackSwitcher *switcher)
   priv->buttons = g_hash_table_new (g_direct_hash, g_direct_equal);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (switcher));
+  gtk_style_context_add_class (context, "stack-switcher");
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_LINKED);
 
   gtk_orientable_set_orientation (GTK_ORIENTABLE (switcher), GTK_ORIENTATION_HORIZONTAL);
@@ -139,6 +140,25 @@ rebuild_child (GtkWidget   *self,
 }
 
 static void
+update_needs_attention (GtkWidget *widget, GtkWidget *button, gpointer *data)
+{
+  GtkContainer *container;
+  gboolean needs_attention;
+  GtkStyleContext *context;
+
+  container = GTK_CONTAINER (data);
+  gtk_container_child_get (container, widget,
+                           "needs-attention", &needs_attention,
+                           NULL);
+
+  context = gtk_widget_get_style_context (button);
+  if (needs_attention && !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_NEEDS_ATTENTION);
+  else
+    gtk_style_context_remove_class (context, GTK_STYLE_CLASS_NEEDS_ATTENTION);
+}
+
+static void
 update_button (GtkStackSwitcher *self,
                GtkWidget        *widget,
                GtkWidget        *button)
@@ -165,6 +185,8 @@ update_button (GtkStackSwitcher *self,
 
   g_free (title);
   g_free (icon_name);
+
+  update_needs_attention (widget, button, priv->stack);
 }
 
 static void
@@ -202,6 +224,20 @@ on_position_updated (GtkWidget        *widget,
 }
 
 static void
+on_needs_attention_updated (GtkWidget        *widget,
+                            GParamSpec       *pspec,
+                            GtkStackSwitcher *self)
+{
+  GtkWidget *button;
+  GtkStackSwitcherPrivate *priv;
+
+  priv = gtk_stack_switcher_get_instance_private (self);
+
+  button = g_hash_table_lookup (priv->buttons, widget);
+  update_button (self, widget, button);
+}
+
+static void
 add_child (GtkStackSwitcher *self,
            GtkWidget        *widget)
 {
@@ -230,6 +266,7 @@ add_child (GtkStackSwitcher *self,
   g_signal_connect (widget, "child-notify::title", G_CALLBACK (on_title_icon_updated), self);
   g_signal_connect (widget, "child-notify::icon-name", G_CALLBACK (on_title_icon_updated), self);
   g_signal_connect (widget, "child-notify::position", G_CALLBACK (on_position_updated), self);
+  g_signal_connect (widget, "child-notify::needs-attention", G_CALLBACK (on_needs_attention_updated), self);
 
   g_hash_table_insert (priv->buttons, widget, button);
 }
@@ -269,6 +306,10 @@ on_child_changed (GtkWidget        *widget,
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
       priv->in_child_changed = FALSE;
     }
+
+  g_hash_table_foreach (priv->buttons,
+                        (GHFunc)update_needs_attention,
+                        priv->stack);
 }
 
 static void

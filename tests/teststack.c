@@ -144,6 +144,7 @@ main (gint argc,
   gtk_container_child_set (GTK_CONTAINER (stack), w2,
 			   "name", "2",
 			   "title", "2",
+                           "needs-attention", TRUE,
 			   NULL);
 
 

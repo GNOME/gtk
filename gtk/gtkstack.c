@@ -82,7 +82,8 @@ enum
   CHILD_PROP_NAME,
   CHILD_PROP_TITLE,
   CHILD_PROP_ICON_NAME,
-  CHILD_PROP_POSITION
+  CHILD_PROP_POSITION,
+  CHILD_PROP_NEEDS_ATTENTION
 };
 
 typedef struct _GtkStackChildInfo GtkStackChildInfo;
@@ -92,6 +93,7 @@ struct _GtkStackChildInfo {
   gchar *name;
   gchar *title;
   gchar *icon_name;
+  gboolean needs_attention;
 };
 
 typedef struct {
@@ -416,6 +418,23 @@ gtk_stack_class_init (GtkStackClass *klass)
                       P_("The index of the child in the parent"),
                       -1, G_MAXINT, 0,
                       GTK_PARAM_READWRITE));
+
+  /**
+   * GtkStack:needs-attention:
+   *
+   * Sets a flag specifying whether the child requires the user attention.
+   * This is used by the #GtkStackSwitcher to change the appearance of the
+   * corresponding button when a page needs attention and it is not the
+   * current one.
+   *
+   * Since: 3.12
+   */
+  gtk_container_class_install_child_property (container_class, CHILD_PROP_NEEDS_ATTENTION,
+    g_param_spec_boolean ("needs-attention",
+                         P_("Needs Attention"),
+                         P_("Whether this page needs attention"),
+                         FALSE,
+                         GTK_PARAM_READWRITE));
 }
 
 /**
@@ -548,6 +567,10 @@ gtk_stack_get_child_property (GtkContainer *container,
       g_value_set_int (value, i);
       break;
 
+    case CHILD_PROP_NEEDS_ATTENTION:
+      g_value_set_boolean (value, info->needs_attention);
+      break;
+
     default:
       GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
       break;
@@ -613,6 +636,11 @@ gtk_stack_set_child_property (GtkContainer *container,
 
     case CHILD_PROP_POSITION:
       reorder_child (stack, child, g_value_get_int (value));
+      break;
+
+    case CHILD_PROP_NEEDS_ATTENTION:
+      info->needs_attention = g_value_get_boolean (value);
+      gtk_container_child_notify (container, child, "needs-attention");
       break;
 
     default:
@@ -1001,6 +1029,7 @@ gtk_stack_add (GtkContainer *container,
   child_info->name = NULL;
   child_info->title = NULL;
   child_info->icon_name = NULL;
+  child_info->needs_attention = FALSE;
 
   priv->children = g_list_append (priv->children, child_info);
 
