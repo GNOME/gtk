@@ -270,7 +270,7 @@ gtk_widget_accessible_ref_relation_set (AtkObject *obj)
       label = find_label (widget);
       if (label == NULL)
         {
-          if (GTK_IS_BUTTON (widget))
+          if (GTK_IS_BUTTON (widget) && gtk_widget_get_mapped (widget))
             /*
              * Handle the case where GnomeIconEntry is the mnemonic widget.
              * The GtkButton which is a grandchild of the GnomeIconEntry
@@ -783,6 +783,9 @@ gtk_widget_accessible_on_screen (GtkWidget *widget)
   gboolean return_value;
 
   gtk_widget_get_allocation (widget, &allocation);
+
+  if (!gtk_widget_get_mapped (widget))
+    return FALSE;
 
   viewport = gtk_widget_get_ancestor (widget, GTK_TYPE_VIEWPORT);
   if (viewport)
