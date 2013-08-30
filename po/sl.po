@@ -4,8 +4,8 @@
 #
 # Matic Žgur <mr.zgur@gmail.com>, 2006.
 # Martin Srebotnjak <miles@filmsi.net>, 2007.
-# Klemen Košir <klemen.kosir@gmx.com>, 2010 - 2011.
-# Matej Urbančič <mateju@svn.gnome.org>, 2007 - 2012.
+# Klemen Košir <klemen.kosir@gmx.com>, 2010-2011.
+# Matej Urbančič <mateju@svn.gnome.org>, 2007-2013.
 #
 msgid ""
 msgstr ""
