@@ -1269,8 +1269,11 @@ gdk_window_wayland_get_root_coords (GdkWindow *window,
 
   _gdk_wayland_window_offset (window, &x_offset, &y_offset);
 
-  *root_x = x_offset + x;
-  *root_y = y_offset + y;
+  if (root_x)
+    *root_x = x_offset + x;
+
+  if (root_y)
+    *root_y = y_offset + y;
 
   return 1;
 }
