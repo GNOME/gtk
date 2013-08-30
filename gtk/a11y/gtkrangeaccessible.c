@@ -29,7 +29,6 @@ struct _GtkRangeAccessiblePrivate
 static void atk_value_interface_init  (AtkValueIface  *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkRangeAccessible, gtk_range_accessible, GTK_TYPE_WIDGET_ACCESSIBLE,
-                         G_ADD_PRIVATE (GtkRangeAccessible)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_VALUE, atk_value_interface_init))
 
 static void
@@ -112,12 +111,16 @@ gtk_range_accessible_class_init (GtkRangeAccessibleClass *klass)
   accessible_class->widget_unset = gtk_range_accessible_widget_unset;
 
   widget_class->notify_gtk = gtk_range_accessible_notify_gtk;
+
+  g_type_class_add_private (klass, sizeof (GtkRangeAccessiblePrivate));
 }
 
 static void
 gtk_range_accessible_init (GtkRangeAccessible *range)
 {
-  range->priv = gtk_range_accessible_get_instance_private (range);
+  range->priv = G_TYPE_INSTANCE_GET_PRIVATE (range,
+                                             GTK_TYPE_RANGE_ACCESSIBLE,
+                                             GtkRangeAccessiblePrivate);
 }
 
 static void

@@ -29,7 +29,6 @@ struct _GtkSpinButtonAccessiblePrivate
 static void atk_value_interface_init (AtkValueIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkSpinButtonAccessible, gtk_spin_button_accessible, GTK_TYPE_ENTRY_ACCESSIBLE,
-                         G_ADD_PRIVATE (GtkSpinButtonAccessible)
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_VALUE, atk_value_interface_init))
 
 static void
@@ -112,12 +111,17 @@ gtk_spin_button_accessible_class_init (GtkSpinButtonAccessibleClass *klass)
   accessible_class->widget_unset = gtk_spin_button_accessible_widget_unset;
 
   widget_class->notify_gtk = gtk_spin_button_accessible_notify_gtk;
+
+  g_type_class_add_private (klass, sizeof (GtkSpinButtonAccessiblePrivate));
 }
 
 static void
 gtk_spin_button_accessible_init (GtkSpinButtonAccessible *button)
 {
-  button->priv = gtk_spin_button_accessible_get_instance_private (button);
+  button->priv = G_TYPE_INSTANCE_GET_PRIVATE (button,
+                                              GTK_TYPE_SPIN_BUTTON_ACCESSIBLE,
+                                              GtkSpinButtonAccessiblePrivate);
+
 }
 
 static void
