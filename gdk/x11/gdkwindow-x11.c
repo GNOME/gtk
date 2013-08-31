@@ -5576,10 +5576,10 @@ gdk_x11_window_set_opaque_region (GdkWindow      *window,
         {
           cairo_rectangle_int_t rect;
           cairo_region_get_rectangle (region, i, &rect);
-          data[i+0] = rect.x;
-          data[i+1] = rect.y;
-          data[i+2] = rect.width;
-          data[i+3] = rect.height;
+          data[i*4+0] = rect.x;
+          data[i*4+1] = rect.y;
+          data[i*4+2] = rect.width;
+          data[i*4+3] = rect.height;
         }
     }
   else
