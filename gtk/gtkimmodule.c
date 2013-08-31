@@ -49,6 +49,10 @@
 #include "win32/gdkwin32.h"
 #endif
 
+#ifdef G_OS_WIN32
+#include <windows.h>
+#endif
+
 #undef GDK_DEPRECATED
 #undef GDK_DEPRECATED_FOR
 #define GDK_DEPRECATED
@@ -693,6 +697,67 @@ lookup_immodule (gchar **immodules_list)
   return NULL;
 }
 
+#ifdef G_OS_WIN32
+
+/* max size for LOCALE_SISO639LANGNAME and LOCALE_SISO3166CTRYNAME is 9 */
+#define MAX_NAME_SIZE 9
+
+static gchar *
+get_current_input_language (void)
+{
+  LCID lcid;
+  LANGID langid;
+  HKL kblayout;
+  int name_size;
+  wchar_t name[MAX_NAME_SIZE];
+  gchar *language;
+  gchar *country;
+  gchar *full;
+
+  /* Current thread's keyboard layout */
+  kblayout = GetKeyboardLayout(0);
+  /* lowest word in the HKL is the LANGID */
+  langid = ((guint32)kblayout) & 0xFFFF;
+  /* LCID is the LANGID without order */
+  lcid = langid;
+
+  /* Get Language ID */
+  name_size = GetLocaleInfoW (lcid, LOCALE_SISO639LANGNAME, NULL, 0);
+  if (name_size <= 1)
+    return NULL;
+
+  g_assert (name_size <= MAX_NAME_SIZE);
+  GetLocaleInfoW (lcid, LOCALE_SISO639LANGNAME, name, name_size);
+
+  language = g_utf16_to_utf8 (name, name_size, NULL, NULL, NULL);
+  if (!language)
+    return NULL;
+
+  if (SUBLANGID (langid) == SUBLANG_NEUTRAL)
+    return language;
+
+  /* Get Country ID */
+  name_size = GetLocaleInfoW (lcid, LOCALE_SISO3166CTRYNAME, NULL, 0);
+  if (name_size <= 1)
+    return language;
+
+  g_assert (name_size <= MAX_NAME_SIZE);
+  GetLocaleInfoW (lcid, LOCALE_SISO3166CTRYNAME, name, name_size);
+
+  country = g_utf16_to_utf8 (name, name_size, NULL, NULL, NULL);
+  if (!country)
+    return language;
+
+  full = g_strdup_printf ("%s_%s", language, country);
+
+  g_free (language);
+  g_free (country);
+
+  return full;
+}
+
+#endif
+
 /**
  * _gtk_im_module_get_default_context_id:
  * @client_window: a window
@@ -744,9 +809,18 @@ _gtk_im_module_get_default_context_id (GdkWindow *client_window)
         return context_id;
     }
 
+#ifdef G_OS_WIN32
+  /* Read current input locale from the current keyboard info */
+  tmp_locale = get_current_input_language ();
+  if (!tmp_locale)
+    /* Default to system locale when input language is unknown */
+    tmp_locale = _gtk_get_lc_ctype ();
+#else
+  tmp_locale = _gtk_get_lc_ctype ();
+#endif
+
   /* Strip the locale code down to the essentials
    */
-  tmp_locale = _gtk_get_lc_ctype ();
   tmp = strchr (tmp_locale, '.');
   if (tmp)
     *tmp = '\0';
