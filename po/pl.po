@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-21 03:59+0200\n"
-"PO-Revision-Date: 2013-08-21 04:25+0200\n"
+"POT-Creation-Date: 2013-08-31 23:19+0200\n"
+"PO-Revision-Date: 2013-08-31 23:20+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -767,7 +767,7 @@ msgstr ""
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:192
 #: ../gtk/deprecated/gtkfontsel.c:1690 ../gtk/gtkfilechooserbutton.c:805
-#: ../gtk/gtkfilechooserdefault.c:5485 ../gtk/gtkmessagedialog.c:891
+#: ../gtk/gtkfilechooserdefault.c:5484 ../gtk/gtkmessagedialog.c:891
 #: ../gtk/gtkmessagedialog.c:910 ../gtk/gtkmountoperation.c:529
 #: ../gtk/gtkprintbackend.c:747 ../gtk/gtkprinteroptionwidget.c:545
 #: ../gtk/gtkprintunixdialog.c:684 ../gtk/gtkappchooserdialog.ui.h:1
@@ -1999,30 +1999,30 @@ msgstr "_Prawy:"
 msgid "Paper Margins"
 msgstr "Marginesy papieru"
 
-#: ../gtk/gtkentry.c:9279 ../gtk/gtkentry.c:9425 ../gtk/gtklabel.c:6245
-#: ../gtk/gtktextview.c:8629 ../gtk/gtktextview.c:8812
+#: ../gtk/gtkentry.c:9272 ../gtk/gtkentry.c:9418 ../gtk/gtklabel.c:6276
+#: ../gtk/gtktextview.c:8680 ../gtk/gtktextview.c:8863
 msgid "Cu_t"
 msgstr "_Wytnij"
 
-#: ../gtk/gtkentry.c:9283 ../gtk/gtkentry.c:9428 ../gtk/gtklabel.c:6246
-#: ../gtk/gtktextview.c:8633 ../gtk/gtktextview.c:8816
+#: ../gtk/gtkentry.c:9276 ../gtk/gtkentry.c:9421 ../gtk/gtklabel.c:6277
+#: ../gtk/gtktextview.c:8684 ../gtk/gtktextview.c:8867
 msgid "_Copy"
 msgstr "S_kopiuj"
 
-#: ../gtk/gtkentry.c:9287 ../gtk/gtkentry.c:9431 ../gtk/gtklabel.c:6247
-#: ../gtk/gtktextview.c:8635 ../gtk/gtktextview.c:8818
+#: ../gtk/gtkentry.c:9280 ../gtk/gtkentry.c:9424 ../gtk/gtklabel.c:6278
+#: ../gtk/gtktextview.c:8686 ../gtk/gtktextview.c:8869
 msgid "_Paste"
 msgstr "Wk_lej"
 
-#: ../gtk/gtkentry.c:9290 ../gtk/gtklabel.c:6249 ../gtk/gtktextview.c:8638
+#: ../gtk/gtkentry.c:9283 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8689
 msgid "_Delete"
 msgstr "_Usuń"
 
-#: ../gtk/gtkentry.c:9301 ../gtk/gtklabel.c:6258 ../gtk/gtktextview.c:8652
+#: ../gtk/gtkentry.c:9294 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8703
 msgid "Select _All"
 msgstr "Z_aznacz wszystko"
 
-#: ../gtk/gtkentry.c:10389
+#: ../gtk/gtkentry.c:10382
 msgid "Caps Lock is on"
 msgstr "Klawisz Caps Lock jest włączony"
 
@@ -2191,46 +2191,46 @@ msgstr "Ostatnio używane"
 msgid "Search:"
 msgstr "Wyszukiwanie:"
 
-#: ../gtk/gtkfilechooserdefault.c:2737
-msgid "Save in _folder:"
-msgstr "Zapis w katal_ogu:"
+#: ../gtk/gtkfilechooserdefault.c:2736
+msgid "Save in folder:"
+msgstr "Zapis w katalogu:"
 
-#: ../gtk/gtkfilechooserdefault.c:2739
-msgid "Create in _folder:"
-msgstr "Utworzenie w k_atalogu:"
+#: ../gtk/gtkfilechooserdefault.c:2738
+msgid "Create in folder:"
+msgstr "Utworzenie w katalogu:"
 
-#: ../gtk/gtkfilechooserdefault.c:3879
+#: ../gtk/gtkfilechooserdefault.c:3878
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Nie można odczytać zawartości %s"
 
-#: ../gtk/gtkfilechooserdefault.c:3883
+#: ../gtk/gtkfilechooserdefault.c:3882
 msgid "Could not read the contents of the folder"
 msgstr "Nie można odczytać zawartości katalogu"
 
-#: ../gtk/gtkfilechooserdefault.c:3980 ../gtk/gtkfilechooserdefault.c:4048
-#: ../gtk/gtkfilechooserdefault.c:4229
+#: ../gtk/gtkfilechooserdefault.c:3979 ../gtk/gtkfilechooserdefault.c:4047
+#: ../gtk/gtkfilechooserdefault.c:4228
 msgid "Unknown"
 msgstr "Nieznany"
 
-#: ../gtk/gtkfilechooserdefault.c:3995
+#: ../gtk/gtkfilechooserdefault.c:3994
 msgid "%H:%M"
 msgstr "%H∶%M"
 
-#: ../gtk/gtkfilechooserdefault.c:3997
+#: ../gtk/gtkfilechooserdefault.c:3996
 msgid "Yesterday at %H:%M"
 msgstr "Wczoraj o %H∶%M"
 
-#: ../gtk/gtkfilechooserdefault.c:4694
+#: ../gtk/gtkfilechooserdefault.c:4693
 msgid "Cannot change to folder because it is not local"
 msgstr "Nie można przejść do katalogu, ponieważ nie jest on lokalny"
 
-#: ../gtk/gtkfilechooserdefault.c:5478 ../gtk/gtkprintunixdialog.c:675
+#: ../gtk/gtkfilechooserdefault.c:5477 ../gtk/gtkprintunixdialog.c:675
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Plik o nazwie \"%s\" już istnieje. Zastąpić go?"
 
-#: ../gtk/gtkfilechooserdefault.c:5481 ../gtk/gtkprintunixdialog.c:679
+#: ../gtk/gtkfilechooserdefault.c:5480 ../gtk/gtkprintunixdialog.c:679
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
@@ -2238,15 +2238,15 @@ msgstr ""
 "Plik już istnieje w \"%s\". Zastąpienie go spowoduje nadpisanie jego "
 "zawartości."
 
-#: ../gtk/gtkfilechooserdefault.c:5486 ../gtk/gtkprintunixdialog.c:686
+#: ../gtk/gtkfilechooserdefault.c:5485 ../gtk/gtkprintunixdialog.c:686
 msgid "_Replace"
 msgstr "_Zastąp"
 
-#: ../gtk/gtkfilechooserdefault.c:6303
+#: ../gtk/gtkfilechooserdefault.c:6302
 msgid "Could not start the search process"
 msgstr "Nie można rozpocząć procesu wyszukiwania"
 
-#: ../gtk/gtkfilechooserdefault.c:6304
+#: ../gtk/gtkfilechooserdefault.c:6303
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -2254,7 +2254,7 @@ msgstr ""
 "Nie można było utworzyć połączenia z usługą indeksowania. Proszę się "
 "upewnić, czy usługa jest uruchomiona."
 
-#: ../gtk/gtkfilechooserdefault.c:6318
+#: ../gtk/gtkfilechooserdefault.c:6317
 msgid "Could not send the search request"
 msgstr "Nie można wysłać żądania wyszukiwania"
 
@@ -2284,7 +2284,7 @@ msgstr "Brak ikony \"%s\" w motywie"
 msgid "Failed to load icon"
 msgstr "Wczytanie ikony się nie powiodło"
 
-#: ../gtk/gtkimmodule.c:527
+#: ../gtk/gtkimmodule.c:531
 msgid "Simple"
 msgstr "Prosta"
 
@@ -2321,12 +2321,12 @@ msgid "Error"
 msgstr "Błąd"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6228
+#: ../gtk/gtklabel.c:6259
 msgid "_Open Link"
 msgstr "_Otwórz odnośnik"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6236
+#: ../gtk/gtklabel.c:6267
 msgid "Copy _Link Address"
 msgstr "S_kopiuj adres odnośnika"
 
@@ -3333,19 +3333,48 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:7858
+#: ../gtk/gtkwindow.c:8042
 msgid "Minimize"
 msgstr "Zminimalizuj"
 
-#: ../gtk/gtkwindow.c:7867
+#: ../gtk/gtkwindow.c:8050
 msgid "Unmaximize"
 msgstr "Cofnij maksymalizację"
 
-#: ../gtk/gtkwindow.c:7867
+#: ../gtk/gtkwindow.c:8050
 msgid "Maximize"
 msgstr "Zmaksymalizuj"
 
-#: ../gtk/gtkwindow.c:7881
+#: ../gtk/gtkwindow.c:8059
+msgid "Always on Top"
+msgstr "Zawsze na wierzchu"
+
+#: ../gtk/gtkwindow.c:8071
+msgid "Always on Visible Workspace"
+msgstr "Zawsze na widocznym obszarze roboczym"
+
+#: ../gtk/gtkwindow.c:8079
+msgid "Only on This Workspace"
+msgstr "Tylko na tym obszarze roboczym"
+
+#: ../gtk/gtkwindow.c:8096
+msgid "Move to Workspace Up"
+msgstr "Przenieś na górny obszar roboczy"
+
+#: ../gtk/gtkwindow.c:8105
+msgid "Move to Workspace Down"
+msgstr "Przenieś na dolny obszar roboczy"
+
+#: ../gtk/gtkwindow.c:8119
+msgid "Move to Another Workspace"
+msgstr "Przenieś na inny obszar roboczy"
+
+#: ../gtk/gtkwindow.c:8127
+#, c-format
+msgid "Workspace %d"
+msgstr "Obszar roboczy %d"
+
+#: ../gtk/gtkwindow.c:8147
 msgid "Close"
 msgstr "Zamknij"
 
