@@ -123,7 +123,7 @@ main (gint argc,
   stack = gtk_stack_new ();
 
   /* Make transitions longer so we can see that they work */
-  gtk_stack_set_transition_duration (GTK_STACK (stack), 500);
+  gtk_stack_set_transition_duration (GTK_STACK (stack), 1500);
 
   gtk_widget_set_halign (stack, GTK_ALIGN_START);
   gtk_container_add (GTK_CONTAINER (box), stack);
@@ -218,6 +218,15 @@ main (gint argc,
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "SLIDE_DOWN");
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "SLIDE_LEFT_RIGHT");
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "SLIDE_UP_DOWN");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "OVER_UP");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "OVER_DOWN");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "OVER_LEFT");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "OVER_RIGHT");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "UNDER_UP");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "UNDER_DOWN");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "UNDER_LEFT");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "UNDER_RIGHT");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "OVER_UP_DOWN");
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
 
   gtk_container_add (GTK_CONTAINER (hbox), combo);
