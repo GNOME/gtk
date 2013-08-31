@@ -2505,7 +2505,7 @@ gtk_icon_view_key_release (GtkWidget      *widget,
   if (icon_view->priv->doing_rubberband)
     return TRUE;
 
-  return GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->key_press_event (widget, event);
+  return GTK_WIDGET_CLASS (gtk_icon_view_parent_class)->key_release_event (widget, event);
 }
 
 static void
