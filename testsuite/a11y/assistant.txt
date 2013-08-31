@@ -47,6 +47,8 @@ window1
     alpha: 1
     close
       "push button"
+      parent: action_area
+      index: 0
       name: Close
       state: enabled focusable sensitive
       toolkit: gtk
@@ -79,6 +81,8 @@ window1
       action 0 keybinding: <Alt>c
     last
       "push button"
+      parent: action_area
+      index: 2
       name: Finish
       state: focusable
       toolkit: gtk
@@ -94,6 +98,8 @@ window1
       action 0 keybinding: <Alt>f
     back
       "push button"
+      parent: action_area
+      index: 3
       name: Go Back
       state: enabled focusable sensitive
       toolkit: gtk
@@ -126,6 +132,8 @@ window1
       action 0 keybinding: <Alt>o
     apply
       "push button"
+      parent: action_area
+      index: 5
       name: Apply
       state: enabled focusable sensitive
       toolkit: gtk
