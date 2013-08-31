@@ -6512,17 +6512,24 @@ update_opaque_region (GtkWindow           *window,
                       GtkBorder           *border,
                       const GtkAllocation *allocation)
 {
-  const GdkRGBA *color;
+  GtkWidget *widget = GTK_WIDGET (window);
   cairo_region_t *opaque_region;
   GtkStyleContext *context;
+  gboolean is_opaque = FALSE;
 
-  if (!gtk_widget_get_realized (GTK_WIDGET (window)))
+  if (!gtk_widget_get_realized (widget))
       return;
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (window));
-  color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
+  context = gtk_widget_get_style_context (widget);
 
-  if (color->alpha >= 1.0)
+  if (!gtk_widget_get_app_paintable (widget))
+    {
+      const GdkRGBA *color;
+      color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
+      is_opaque = (color->alpha >= 1.0);
+    }
+
+  if (is_opaque)
     {
       cairo_rectangle_int_t rect;
 
@@ -6540,7 +6547,7 @@ update_opaque_region (GtkWindow           *window,
       opaque_region = NULL;
     }
 
-  gdk_window_set_opaque_region (gtk_widget_get_window (GTK_WIDGET (window)), opaque_region);
+  gdk_window_set_opaque_region (gtk_widget_get_window (widget), opaque_region);
 
   cairo_region_destroy (opaque_region);
 }
