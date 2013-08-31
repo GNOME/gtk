@@ -1327,16 +1327,14 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * last char. 600 is a good value for enabling it.
    *
    * Since: 2.10
-   *
-   * Deprecated: 3.10: This setting is ignored
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_uint ("gtk-entry-password-hint-timeout",
                                                                 P_("Password Hint Timeout"),
                                                                 P_("How long to show the last input character in hidden entries"),
                                                                 0, G_MAXUINT,
-                                                                600,
-                                                                GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
+                                                                0,
+                                                                GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_ENTRY_PASSWORD_HINT_TIMEOUT);
 
