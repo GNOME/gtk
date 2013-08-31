@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-29 21:53-0600\n"
-"PO-Revision-Date: 2013-08-29 22:20-0600\n"
+"POT-Creation-Date: 2013-08-30 21:00-0600\n"
+"PO-Revision-Date: 2013-08-30 21:02-0600\n"
 "Last-Translator: Seán de Búrca <leftmostcat@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
 "Language: ga\n"
@@ -1349,8 +1349,8 @@ msgid ""
 "for details, visit <a href=\"%s\">%s</a>"
 msgstr ""
 "Dáileadh an clár seo GAN AON BHARÁNTA;\n"
-"le haghaidh tuilleadh mionsonraí,\n"
-"féach ar <a href=\"%s\">%s</a>"
+"le haghaidh tuilleadh mionsonraí, féach\n"
+"<a href=\"%s\">%s</a>"
 
 #: ../gtk/gtkaboutdialog.c:374
 msgid "License"
@@ -1486,7 +1486,7 @@ msgstr "Níl aon fheidhmchlár ar fáil chun “%s” a oscailt"
 #: ../gtk/gtkappchooserdialog.c:340
 #, c-format
 msgid "Select an application for “%s” files"
-msgstr ""
+msgstr "Roghnaigh feidhmchlár le haghaidh comhaid “%s”"
 
 #: ../gtk/gtkappchooserdialog.c:342
 #, c-format
