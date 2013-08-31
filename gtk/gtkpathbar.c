@@ -1515,32 +1515,6 @@ get_dir_name (ButtonData *button_data)
   return button_data->dir_name;
 }
 
-/* We always want to request the same size for the label, whether
- * or not the contents are bold
- */
-static void
-set_label_size_request (GtkWidget  *widget,
-			ButtonData *button_data)
-{
-  const gchar *dir_name = get_dir_name (button_data);
-  PangoLayout *layout = gtk_widget_create_pango_layout (button_data->label, dir_name);
-  gint width, height, bold_width, bold_height;
-  gchar *markup;
-  
-  pango_layout_get_pixel_size (layout, &width, &height);
-  
-  markup = g_markup_printf_escaped ("<b>%s</b>", dir_name);
-  pango_layout_set_markup (layout, markup, -1);
-  g_free (markup);
-
-  pango_layout_get_pixel_size (layout, &bold_width, &bold_height);
-
-  gtk_widget_set_size_request (widget,
-			       MAX (width, bold_width),
-			       MAX (height, bold_height));
-  g_object_unref (layout);
-}
-
 static void
 gtk_path_bar_update_button_appearance (GtkPathBar *path_bar,
 				       ButtonData *button_data,
@@ -1550,18 +1524,7 @@ gtk_path_bar_update_button_appearance (GtkPathBar *path_bar,
 
   if (button_data->label != NULL)
     {
-      if (current_dir)
-	{
-	  char *markup;
-
-	  markup = g_markup_printf_escaped ("<b>%s</b>", dir_name);
-	  gtk_label_set_markup (GTK_LABEL (button_data->label), markup);
-	  g_free (markup);
-	}
-      else
-	{
-	  gtk_label_set_text (GTK_LABEL (button_data->label), dir_name);
-	}
+      gtk_label_set_text (GTK_LABEL (button_data->label), dir_name);
     }
 
   if (button_data->image != NULL)
@@ -1655,7 +1618,6 @@ make_directory_button (GtkPathBar  *path_bar,
     case NORMAL_BUTTON:
     default:
       button_data->label = gtk_label_new (NULL);
-      gtk_label_set_ellipsize (GTK_LABEL (button_data->label), PANGO_ELLIPSIZE_END);
       child = button_data->label;
       button_data->image = NULL;
     }
@@ -1663,13 +1625,6 @@ make_directory_button (GtkPathBar  *path_bar,
   button_data->dir_name = g_strdup (dir_name);
   button_data->file = g_object_ref (file);
   button_data->file_is_hidden = file_is_hidden;
-
-  /*
-   * The following function ensures that the alignment will always
-   * request the same size whether the button's text is bold or not.
-   */
-  if (button_data->label)
-    set_label_size_request (button_data->label, button_data);
 
   gtk_container_add (GTK_CONTAINER (button_data->button), child);
   gtk_widget_show_all (button_data->button);
