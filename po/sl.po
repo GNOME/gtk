@@ -4,16 +4,16 @@
 #
 # Matic Žgur <mr.zgur@gmail.com>, 2006.
 # Martin Srebotnjak <miles@filmsi.net>, 2007.
-# Klemen Košir <klemen.kosir@gmx.com>, 2010 - 2011.
-# Matej Urbančič <mateju@svn.gnome.org>, 2007 - 2012.
+# Klemen Košir <klemen.kosir@gmx.com>, 2010-2011.
+# Matej Urbančič <mateju@svn.gnome.org>, 2007-2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-08-29 21:32+0000\n"
-"PO-Revision-Date: 2013-08-30 22:08+0100\n"
+"POT-Creation-Date: 2013-08-30 15:14+0000\n"
+"PO-Revision-Date: 2013-08-30 22:13+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -296,15 +296,11 @@ msgid "MonBrightnessDown"
 msgstr "Zmanjšaj svetlost"
 
 #: ../gdk/keyname-table.h:6883
-#| msgctxt "keyboard label"
-#| msgid "MonBrightnessUp"
 msgctxt "keyboard label"
 msgid "KbdBrightnessUp"
 msgstr "Povečaj svetlost"
 
 #: ../gdk/keyname-table.h:6884
-#| msgctxt "keyboard label"
-#| msgid "MonBrightnessDown"
 msgctxt "keyboard label"
 msgid "KbdBrightnessDown"
 msgstr "Zmanjšaj svetlost"
@@ -315,8 +311,6 @@ msgid "AudioMute"
 msgstr "Utišaj"
 
 #: ../gdk/keyname-table.h:6886
-#| msgctxt "keyboard label"
-#| msgid "AudioMute"
 msgctxt "keyboard label"
 msgid "AudioMicMute"
 msgstr "Utišaj"
@@ -773,8 +767,6 @@ msgstr ""
 #: ../gtk/gtkassistant.ui.h:5 ../gtk/gtkcolorchooserdialog.ui.h:2
 #: ../gtk/gtkfontchooserdialog.ui.h:2 ../gtk/gtkpagesetupunixdialog.ui.h:1
 #: ../gtk/gtkprintunixdialog.ui.h:2
-#| msgctxt "Stock label"
-#| msgid "_Cancel"
 msgid "_Cancel"
 msgstr "_Prekliči"
 
@@ -785,8 +777,6 @@ msgid "_Select"
 msgstr "_Izberi"
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:202
-#| msgctxt "Stock label"
-#| msgid "_Help"
 msgid "_Help"
 msgstr "Pomo_č"
 
@@ -819,15 +809,11 @@ msgstr "_Predolged:"
 
 #: ../gtk/deprecated/gtkfontsel.c:1694 ../gtk/gtkassistant.ui.h:1
 #: ../gtk/gtkpagesetupunixdialog.ui.h:2
-#| msgctxt "Stock label"
-#| msgid "_Apply"
 msgid "_Apply"
 msgstr "_Uveljavi"
 
 #: ../gtk/deprecated/gtkfontsel.c:1699 ../gtk/gtkmessagedialog.c:879
 #: ../gtk/gtkmessagedialog.c:913 ../gtk/gtkprintbackend.c:748
-#| msgctxt "Stock label"
-#| msgid "_OK"
 msgid "_OK"
 msgstr "_V redu"
 
@@ -1487,26 +1473,22 @@ msgstr "_Najdi programe na spletu"
 #. Translators: %s is a filename
 #: ../gtk/gtkappchooserdialog.c:333
 #, c-format
-#| msgid "Select an application to open \"%s\""
 msgid "Select an application to open “%s”"
 msgstr "Izberite program za odpiranje datotek “%s”."
 
 #: ../gtk/gtkappchooserdialog.c:334 ../gtk/gtkappchooserwidget.c:660
 #, c-format
-#| msgid "No applications available to open \"%s\""
 msgid "No applications available to open “%s”"
 msgstr "Za odpiranje datotek “%s” ni nameščenega ustreznega programa"
 
 #. Translators: %s is a file type description
 #: ../gtk/gtkappchooserdialog.c:340
 #, c-format
-#| msgid "Select an application for \"%s\" files"
 msgid "Select an application for “%s” files"
 msgstr "Izberite program za odpiranje datotek “%s”"
 
 #: ../gtk/gtkappchooserdialog.c:342
 #, c-format
-#| msgid "No applications available to open \"%s\" files"
 msgid "No applications available to open “%s” files"
 msgstr "Za odpiranje datotek “%s” ni nameščenega ustreznega programa"
 
@@ -1952,8 +1934,6 @@ msgstr "default:mm"
 
 #: ../gtk/gtkcustompaperunixdialog.c:311 ../gtk/gtkmessagedialog.c:885
 #: ../gtk/gtkaboutdialog.ui.h:3 ../gtk/gtkassistant.ui.h:6
-#| msgctxt "Stock label"
-#| msgid "_Close"
 msgid "_Close"
 msgstr "_Zapri"
 
@@ -2012,35 +1992,25 @@ msgid "Paper Margins"
 msgstr "Robovi papirja"
 
 #: ../gtk/gtkentry.c:9279 ../gtk/gtkentry.c:9425 ../gtk/gtklabel.c:6276
-#: ../gtk/gtktextview.c:8629 ../gtk/gtktextview.c:8812
-#| msgctxt "Stock label"
-#| msgid "Cu_t"
+#: ../gtk/gtktextview.c:8680 ../gtk/gtktextview.c:8863
 msgid "Cu_t"
 msgstr "Iz_reži"
 
 #: ../gtk/gtkentry.c:9283 ../gtk/gtkentry.c:9428 ../gtk/gtklabel.c:6277
-#: ../gtk/gtktextview.c:8633 ../gtk/gtktextview.c:8816
-#| msgctxt "Stock label"
-#| msgid "_Copy"
+#: ../gtk/gtktextview.c:8684 ../gtk/gtktextview.c:8867
 msgid "_Copy"
 msgstr "_Kopiraj"
 
 #: ../gtk/gtkentry.c:9287 ../gtk/gtkentry.c:9431 ../gtk/gtklabel.c:6278
-#: ../gtk/gtktextview.c:8635 ../gtk/gtktextview.c:8818
-#| msgctxt "Stock label"
-#| msgid "_Paste"
+#: ../gtk/gtktextview.c:8686 ../gtk/gtktextview.c:8869
 msgid "_Paste"
 msgstr "Pr_ilepi"
 
-#: ../gtk/gtkentry.c:9290 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8638
-#| msgctxt "Stock label"
-#| msgid "_Delete"
+#: ../gtk/gtkentry.c:9290 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8689
 msgid "_Delete"
 msgstr "_Izbriši"
 
-#: ../gtk/gtkentry.c:9301 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8652
-#| msgctxt "Stock label"
-#| msgid "Select _All"
+#: ../gtk/gtkentry.c:9301 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8703
 msgid "Select _All"
 msgstr "Izberi _vse"
 
@@ -2102,8 +2072,6 @@ msgid "(None)"
 msgstr "(Brez)"
 
 #: ../gtk/gtkfilechooserbutton.c:807 ../gtk/gtkplacessidebar.c:3107
-#| msgctxt "Stock label"
-#| msgid "_Open"
 msgid "_Open"
 msgstr "_Odpri"
 
@@ -2137,7 +2105,6 @@ msgid "Cannot create a file under %s as it is not a folder"
 msgstr "Datoteke pod %s ni mogoče ustvariti, ker ni mapa"
 
 #: ../gtk/gtkfilechooserdefault.c:772
-#| msgid "Cannot create a file under %s as it is not a folder"
 msgid "Cannot create file as the filename is to long"
 msgstr "Ni mogoče ustvariti datoteke s tako dolgim imenom"
 
@@ -2146,14 +2113,10 @@ msgid "Try using a shorter name."
 msgstr "Poskusite znova s krajšim imenom datoteke."
 
 #: ../gtk/gtkfilechooserdefault.c:783
-#| msgid "Could not select file"
 msgid "You may only select folders"
 msgstr "Izbrati je dovoljeno le mape."
 
 #: ../gtk/gtkfilechooserdefault.c:784
-#| msgid ""
-#| "You may only select folders.  The item that you selected is not a folder; "
-#| "try using a different item."
 msgid "The item that you selected is not a folder try using a different item."
 msgstr "Izbran predmet ni mapa. Izberite drug predmet."
 
@@ -2179,12 +2142,10 @@ msgid "Could not select file"
 msgstr "Datoteke ni mogoče izbrati"
 
 #: ../gtk/gtkfilechooserdefault.c:1723
-#| msgid "_Visit this file"
 msgid "_Visit File"
 msgstr "O_bišči datoteko"
 
 #: ../gtk/gtkfilechooserdefault.c:1726
-#| msgid "Copy _Location"
 msgid "_Copy Location"
 msgstr "Kopiraj _mesto"
 
@@ -2222,12 +2183,10 @@ msgid "Search:"
 msgstr "Poišči:"
 
 #: ../gtk/gtkfilechooserdefault.c:2736
-#| msgid "Save in _folder:"
 msgid "Save in folder:"
 msgstr "Shrani v mapo:"
 
 #: ../gtk/gtkfilechooserdefault.c:2738
-#| msgid "Create in _folder:"
 msgid "Create in folder:"
 msgstr "Ustvari v mapi:"
 
@@ -2259,15 +2218,11 @@ msgstr "Mape ni mogoče spremeniti, ker ni krajevna"
 
 #: ../gtk/gtkfilechooserdefault.c:5477 ../gtk/gtkprintunixdialog.c:675
 #, c-format
-#| msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Datoteka z imenom “%s” že obstaja. Ali jo želite zamenjati?"
 
 #: ../gtk/gtkfilechooserdefault.c:5480 ../gtk/gtkprintunixdialog.c:679
 #, c-format
-#| msgid ""
-#| "The file already exists in \"%s\".  Replacing it will overwrite its "
-#| "contents."
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "Datoteka že obstaja v “%s”. Z zamenjavo bo njena vsebina izgubljena."
@@ -2339,26 +2294,18 @@ msgid "System (%s)"
 msgstr "Sistem (%s)"
 
 #: ../gtk/gtkinfobar.c:1192 ../gtk/gtkmessagedialog.c:366
-#| msgctxt "Stock label"
-#| msgid "Information"
 msgid "Information"
 msgstr "Podrobnosti"
 
 #: ../gtk/gtkinfobar.c:1196 ../gtk/gtkmessagedialog.c:371
-#| msgctxt "Stock label"
-#| msgid "Question"
 msgid "Question"
 msgstr "Vprašanje"
 
 #: ../gtk/gtkinfobar.c:1200 ../gtk/gtkmessagedialog.c:376
-#| msgctxt "Stock label"
-#| msgid "Warning"
 msgid "Warning"
 msgstr "Opozorilo"
 
 #: ../gtk/gtkinfobar.c:1204 ../gtk/gtkmessagedialog.c:381
-#| msgctxt "Stock label"
-#| msgid "Error"
 msgid "Error"
 msgstr "Napaka"
 
@@ -2512,14 +2459,10 @@ msgid "Show GTK+ Options"
 msgstr "Pokaži možnosti GTK+"
 
 #: ../gtk/gtkmessagedialog.c:897
-#| msgctxt "Stock label"
-#| msgid "_No"
 msgid "_No"
 msgstr "_Ne"
 
 #: ../gtk/gtkmessagedialog.c:900
-#| msgctxt "Stock label"
-#| msgid "_Yes"
 msgid "_Yes"
 msgstr "_Da"
 
@@ -2666,7 +2609,6 @@ msgid "Devices"
 msgstr "Naprave"
 
 #: ../gtk/gtkplacessidebar.c:455
-#| msgid "_Add to Bookmarks"
 msgid "Bookmarks"
 msgstr "Zaznamki"
 
@@ -2675,18 +2617,14 @@ msgid "Places"
 msgstr "Mesta"
 
 #: ../gtk/gtkplacessidebar.c:768
-#| msgid "Recently Used"
 msgid "Recent"
 msgstr "Nedavno"
 
 #: ../gtk/gtkplacessidebar.c:770
-#| msgid "Recently Used"
 msgid "Recent files"
 msgstr "Nedavno uporabljeno"
 
 #: ../gtk/gtkplacessidebar.c:779
-#| msgctxt "keyboard label"
-#| msgid "Home"
 msgid "Home"
 msgstr "Osebna mapa"
 
@@ -2695,7 +2633,6 @@ msgid "Open your personal folder"
 msgstr "Odpri osebno mapo"
 
 #: ../gtk/gtkplacessidebar.c:793
-#| msgid "Could not read the contents of the folder"
 msgid "Open the contents of your desktop in a folder"
 msgstr "Odpri vsebino namizja v mapi"
 
@@ -2714,29 +2651,22 @@ msgid "Mount and open %s"
 msgstr "Priklopi in odpri %s"
 
 #: ../gtk/gtkplacessidebar.c:963
-#| msgid "Could not read the contents of the folder"
 msgid "Open the contents of the file system"
 msgstr "Odpri vsebino datotečnega sistema"
 
 #: ../gtk/gtkplacessidebar.c:1063
-#| msgctxt "Stock label"
-#| msgid "_Network"
 msgid "Network"
 msgstr "Omrežje"
 
 #: ../gtk/gtkplacessidebar.c:1069
-#| msgctxt "Stock label"
-#| msgid "_Network"
 msgid "Browse Network"
 msgstr "Brskanje omrežja"
 
 #: ../gtk/gtkplacessidebar.c:1071
-#| msgid "Could not read the contents of the folder"
 msgid "Browse the contents of the network"
 msgstr "Prebrskaj vsebino omrežja"
 
 #: ../gtk/gtkplacessidebar.c:1078
-#| msgid "Convert to PS level 1"
 msgid "Connect to Server"
 msgstr "Poveži s strežnikom"
 
@@ -2754,8 +2684,6 @@ msgid "_Start"
 msgstr "_Začni"
 
 #: ../gtk/gtkplacessidebar.c:2101 ../gtk/gtkplacessidebar.c:3190
-#| msgctxt "Stock label, media"
-#| msgid "_Stop"
 msgid "_Stop"
 msgstr "_Zaustavi"
 
@@ -2769,13 +2697,10 @@ msgid "_Safely Remove Drive"
 msgstr "_Varno odstrani pogon"
 
 #: ../gtk/gtkplacessidebar.c:2110
-#| msgid "Connect As"
 msgid "_Connect Drive"
 msgstr "_Poveži pogon"
 
 #: ../gtk/gtkplacessidebar.c:2111
-#| msgctxt "Stock label"
-#| msgid "_Disconnect"
 msgid "_Disconnect Drive"
 msgstr "_Prekini povezavo s pogonom"
 
@@ -2789,7 +2714,6 @@ msgstr "_Zaustavi več-diskovno napravo"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
 #: ../gtk/gtkplacessidebar.c:2119
-#| msgid "Unlock"
 msgid "_Unlock Drive"
 msgstr "_Odkleni pogon"
 
@@ -2799,26 +2723,22 @@ msgstr "_Zakleni pogon"
 
 #: ../gtk/gtkplacessidebar.c:2147 ../gtk/gtkplacessidebar.c:2845
 #, c-format
-#| msgid "Unable to end process"
 msgid "Unable to start %s"
 msgstr "Ni mogoče začeti “%s”"
 
 #: ../gtk/gtkplacessidebar.c:2174
 #, c-format
-#| msgid "Unable to end process"
 msgid "Unable to access “%s”"
 msgstr "Ni mogoč dostop do “%s”"
 
 #: ../gtk/gtkplacessidebar.c:2480
 #, c-format
-#| msgid "Unable to end process"
 msgid "Unable to unmount %s"
 msgstr "Ni mogoče odklopiti %s"
 
 #: ../gtk/gtkplacessidebar.c:2603 ../gtk/gtkplacessidebar.c:2630
 #: ../gtk/gtkplacessidebar.c:2657
 #, c-format
-#| msgid "Unable to end process"
 msgid "Unable to eject %s"
 msgstr "Ni mogoče izvreči %s"
 
@@ -2829,7 +2749,6 @@ msgstr "Ni mogoče preveriti %s za spremembe nosilca"
 
 #: ../gtk/gtkplacessidebar.c:2899
 #, c-format
-#| msgid "Unable to end process"
 msgid "Unable to stop %s"
 msgstr "Ni mogoče ustaviti %s"
 
@@ -2842,7 +2761,6 @@ msgid "Open in New _Window"
 msgstr "Odpri v novem _oknu"
 
 #: ../gtk/gtkplacessidebar.c:3131
-#| msgid "_Add to Bookmarks"
 msgid "_Add Bookmark"
 msgstr "_Dodaj zaznamek"
 
@@ -3398,50 +3316,48 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:7948
+#: ../gtk/gtkwindow.c:8035
 msgid "Minimize"
 msgstr "Skrči"
 
-#: ../gtk/gtkwindow.c:7956
+#: ../gtk/gtkwindow.c:8043
 msgid "Unmaximize"
 msgstr "Pomanjšaj razpeto"
 
-#: ../gtk/gtkwindow.c:7956
+#: ../gtk/gtkwindow.c:8043
 msgid "Maximize"
 msgstr "Razpni"
 
-#: ../gtk/gtkwindow.c:7965
+#: ../gtk/gtkwindow.c:8052
 msgid "Always on Top"
 msgstr "Vendno na vrhu"
 
-#: ../gtk/gtkwindow.c:7977
+#: ../gtk/gtkwindow.c:8064
 msgid "Always on Visible Workspace"
 msgstr "Vedno na vidni delovni površini"
 
-#: ../gtk/gtkwindow.c:7985
+#: ../gtk/gtkwindow.c:8072
 msgid "Only on This Workspace"
 msgstr "Le na tej delovni površini"
 
-#: ../gtk/gtkwindow.c:8002
+#: ../gtk/gtkwindow.c:8089
 msgid "Move to Workspace Up"
 msgstr "Premakni na zgornjo delovno površino"
 
-#: ../gtk/gtkwindow.c:8011
+#: ../gtk/gtkwindow.c:8098
 msgid "Move to Workspace Down"
 msgstr "Premakni na spodnjo delovno površino"
 
-#: ../gtk/gtkwindow.c:8025
+#: ../gtk/gtkwindow.c:8112
 msgid "Move to Another Workspace"
 msgstr "Premakni na drugo delovno površino"
 
-#: ../gtk/gtkwindow.c:8033
+#: ../gtk/gtkwindow.c:8120
 #, c-format
 msgid "Workspace %d"
 msgstr "Delovna površina %d"
 
-#: ../gtk/gtkwindow.c:8053
-#| msgctxt "Stock label"
-#| msgid "_Close"
+#: ../gtk/gtkwindow.c:8140
 msgid "Close"
 msgstr "Zapri"
 
@@ -4888,7 +4804,6 @@ msgid "label"
 msgstr "oznaka"
 
 #: ../gtk/gtkappchooserdialog.ui.h:4
-#| msgid "Show other applications"
 msgid "Show Other Applications"
 msgstr "Pokaži druge programe"
 
@@ -4918,8 +4833,6 @@ msgid "A"
 msgstr "A"
 
 #: ../gtk/gtkcoloreditor.ui.h:3
-#| msgctxt "Color channel"
-#| msgid "Alpha"
 msgid "Alpha"
 msgstr "Alfa"
 
@@ -4929,34 +4842,24 @@ msgid "H"
 msgstr "H"
 
 #: ../gtk/gtkcoloreditor.ui.h:5
-#| msgctxt "Color channel"
-#| msgid "Hue"
 msgid "Hue"
 msgstr "Odtenek"
 
 #: ../gtk/gtkcoloreditor.ui.h:6
-#| msgctxt "Color channel"
-#| msgid "S"
 msgctxt "Color Channel"
 msgid "S"
 msgstr "S"
 
 #: ../gtk/gtkcoloreditor.ui.h:7
-#| msgctxt "Color channel"
-#| msgid "V"
 msgctxt "Color Channel"
 msgid "V"
 msgstr "V"
 
 #: ../gtk/gtkcoloreditor.ui.h:8
-#| msgctxt "Color channel"
-#| msgid "Saturation"
 msgid "Saturation"
 msgstr "Nasičenost"
 
 #: ../gtk/gtkcoloreditor.ui.h:9
-#| msgctxt "Color channel"
-#| msgid "Value"
 msgid "Value"
 msgstr "Vrednost"
 
@@ -5010,7 +4913,6 @@ msgstr ""
 "Nobena pisava ne ustreza iskanemu nizu. Preverite niz in poskusite znova."
 
 #: ../gtk/gtkmessagedialog.ui.h:1
-#| msgid "; "
 msgid " "
 msgstr " "
 
@@ -5051,13 +4953,10 @@ msgid "Up Path"
 msgstr "Po poti navzgor"
 
 #: ../gtk/gtkprintunixdialog.ui.h:1
-#| msgid "_Preview:"
 msgid "Pre_view"
 msgstr "_Predolged"
 
 #: ../gtk/gtkprintunixdialog.ui.h:3
-#| msgctxt "Stock label"
-#| msgid "_Print"
 msgid "_Print"
 msgstr "_Natisni"
 
@@ -5273,7 +5172,6 @@ msgid "Volume"
 msgstr "Glasnost"
 
 #: ../gtk/gtkvolumebutton.ui.h:2
-#| msgid "Turns volume down or up"
 msgid "Turns volume up or down"
 msgstr "Poveča ali zmanjša glasnost"
 
