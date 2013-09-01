@@ -242,7 +242,7 @@ struct _GtkTextViewPrivate
   guint selection_handle_dragged : 1;
   guint populate_all   : 1;
 
-  gboolean in_scroll : 1;
+  guint in_scroll : 1;
 };
 
 struct _GtkTextPendingScroll
