@@ -1,3 +1,51 @@
+Overview of Changes in GTK+ 3.9.12 to 3.9.14
+============================================
+
+* GtkLabel can now ellipsize just the last line,
+  ellipsized in multi-line labels.
+
+* Bugs fixed:
+ 680953 set_item_width / text wrapping doesn't work in iconview...
+ 700428 Default input method should be chosen based on the inpu...
+ 701125 port scrolling to GtkPixelCache
+ 704278 Possible crash when destroying a tick callback
+ 705980 Update Win32 code so that GTK+ will build and run
+ 706323 HeaderBar window menus
+ 706448 Shortcut <ALT> + O in Save As Dialog is not Unique
+ 706451 Path bar - pushed buttons have an erroneous bold weight
+ 706493 fix some memory leaks
+ 706529 CSD fixes for mutter/gnome-shell
+ 706563 Un-deprecate gtk-entry-password-hint-timeout
+ 706592 csd: some fixes for the titlebar
+ 706722 path bar looks broken when the window is to small to fit...
+ 706728 pixelcache: allow specifying extra size and cairo_conten...
+ 706740 a typo in gtk_icon_view_key_release()
+ 706756 GtkAssistant behaviour changed and now throws 'Page flow...
+ 706778 GtkMessageDialog contains translatable space
+ 706802 Missing docs for GTK_PRINT_SETTINGS_OUTPUT_DIR and GTK_P...
+ 706870 serial number jump bigger than 1000 warnings
+ 706922 Set the opaque region when using CSD
+ 706929 HeaderBar padding - account for double bottom button border
+ 706938 revealer: clamp minimum size to natural one
+ 707051 Do not hardcode title and subtititle style
+ 707201 Needs glib 2.37.5
+
+* Translation updates:
+ Brazilian Portuguese
+ Czech
+ Galician
+ Irish
+ Italian
+ Kazakh
+ Lithuanian
+ Norwegian bokmål
+ Polish
+ Punjabi
+ Scottish Gaelic
+ Slovenian
+ Tajik
+
+
 Overview of Changes in GTK+ 3.9.10 to 3.9.12
 ============================================
 
