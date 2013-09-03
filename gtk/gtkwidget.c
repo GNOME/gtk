@@ -5919,7 +5919,7 @@ gtk_widget_real_adjust_baseline_allocation (GtkWidget         *widget,
 
   aux_info = _gtk_widget_get_aux_info_or_defaults (widget);
 
-  if (baseline >= 0)
+  if (*baseline >= 0)
     *baseline -= aux_info->margin.top;
 }
 
