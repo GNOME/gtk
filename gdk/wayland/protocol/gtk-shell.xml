@@ -1,6 +1,15 @@
 <protocol name="gtk">
 
   <interface name="gtk_shell" version="1">
+    <enum name="capability">
+      <entry name="global_app_menu" value="1"/>
+      <entry name="global_menu_bar" value="2"/>
+    </enum>
+    
+    <event name="capabilities">
+      <arg name="capabilities" type="uint"/>
+    </event>
+
     <request name="get_gtk_surface">
       <arg name="gtk_surface" type="new_id" interface="gtk_surface"/>
       <arg name="surface" type="object" interface="wl_surface"/>

@@ -171,6 +171,8 @@ int _gdk_wayland_screen_get_output_refresh_rate (GdkScreen        *screen,
 guint32 _gdk_wayland_screen_get_output_scale (GdkScreen        *screen,
 					      struct wl_output *output);
 
+void _gdk_wayland_screen_set_has_gtk_shell (GdkScreen       *screen);
+
 void _gdk_wayland_window_set_device_grabbed (GdkWindow      *window,
                                              GdkDevice      *device,
                                              struct wl_seat *seat,
