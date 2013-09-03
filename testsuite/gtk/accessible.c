@@ -28,7 +28,7 @@ main (int argc, char *argv[])
 
   tp = gtk_test_list_all_types (&n);
 
-  for (i = 0; i < n; n++)
+  for (i = 0; i < n; i++)
     test_type (tp[i]);
 
   return 0;
