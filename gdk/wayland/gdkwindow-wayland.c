@@ -1066,6 +1066,14 @@ gdk_wayland_window_show (GdkWindow *window, gboolean already_mapped)
                                     &shell_surface_listener, window);
     }
 
+  if (impl->shell_surface)
+    {
+      if (impl->title)
+	wl_shell_surface_set_title (impl->shell_surface, impl->title);
+
+      wl_shell_surface_set_class (impl->shell_surface, gdk_get_program_class ());
+    }
+
   gdk_window_set_type_hint (window, impl->hint);
 
   _gdk_make_event (window, GDK_MAP, NULL, FALSE);
@@ -1074,9 +1082,6 @@ gdk_wayland_window_show (GdkWindow *window, gboolean already_mapped)
 
   if (impl->cairo_surface)
     gdk_wayland_window_attach_image (window);
-
-  if (impl->shell_surface && impl->title)
-    wl_shell_surface_set_title (impl->shell_surface, impl->title);
 }
 
 static void
