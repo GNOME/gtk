@@ -26,7 +26,7 @@
 #include <stdint.h>
 #include <wayland-client.h>
 #include <wayland-cursor.h>
-#include "gtk-shell-client-protocol.h"
+#include <gdk/wayland/gtk-shell-client-protocol.h>
 
 #include <glib.h>
 #include <gdk/gdkkeys.h>
