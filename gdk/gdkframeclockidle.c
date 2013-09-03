@@ -371,6 +371,7 @@ gdk_frame_clock_paint_idle (void *data)
               g_signal_emit_by_name (G_OBJECT (clock), "before-paint");
               priv->phase = GDK_FRAME_CLOCK_PHASE_UPDATE;
             }
+          /* fallthrough */
         case GDK_FRAME_CLOCK_PHASE_UPDATE:
           if (priv->freeze_count == 0)
             {
@@ -381,6 +382,7 @@ gdk_frame_clock_paint_idle (void *data)
                   g_signal_emit_by_name (G_OBJECT (clock), "update");
                 }
             }
+          /* fallthrough */
         case GDK_FRAME_CLOCK_PHASE_LAYOUT:
           if (priv->freeze_count == 0)
             {
@@ -400,6 +402,7 @@ gdk_frame_clock_paint_idle (void *data)
                   g_signal_emit_by_name (G_OBJECT (clock), "layout");
                 }
             }
+          /* fallthrough */
         case GDK_FRAME_CLOCK_PHASE_PAINT:
           if (priv->freeze_count == 0)
             {
@@ -419,6 +422,7 @@ gdk_frame_clock_paint_idle (void *data)
                   g_signal_emit_by_name (G_OBJECT (clock), "paint");
                 }
             }
+          /* fallthrough */
         case GDK_FRAME_CLOCK_PHASE_AFTER_PAINT:
           if (priv->freeze_count == 0)
             {
@@ -433,6 +437,7 @@ gdk_frame_clock_paint_idle (void *data)
                 timings->frame_end_time = g_get_monotonic_time ();
 #endif /* G_ENABLE_DEBUG */
             }
+          /* fallthrough */
         case GDK_FRAME_CLOCK_PHASE_RESUME_EVENTS:
           ;
         }
