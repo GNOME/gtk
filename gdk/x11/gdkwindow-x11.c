@@ -5559,10 +5559,13 @@ static void
 gdk_x11_window_set_opaque_region (GdkWindow      *window,
                                   cairo_region_t *region)
 {
+  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
   GdkDisplay *display;
-
   int nitems;
   gulong *data;
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
 
   if (region != NULL)
     {
@@ -5576,10 +5579,10 @@ gdk_x11_window_set_opaque_region (GdkWindow      *window,
         {
           cairo_rectangle_int_t rect;
           cairo_region_get_rectangle (region, i, &rect);
-          data[i*4+0] = rect.x;
-          data[i*4+1] = rect.y;
-          data[i*4+2] = rect.width;
-          data[i*4+3] = rect.height;
+          data[i*4+0] = rect.x * impl->window_scale;
+          data[i*4+1] = rect.y * impl->window_scale;
+          data[i*4+2] = rect.width * impl->window_scale;
+          data[i*4+3] = rect.height * impl->window_scale;
         }
     }
   else
