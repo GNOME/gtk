@@ -626,7 +626,7 @@ gtk_list_box_set_adjustment (GtkListBox    *list_box,
 
   g_return_if_fail (list_box != NULL);
 
-  g_object_ref (adjustment);
+  g_object_ref_sink (adjustment);
   if (priv->adjustment)
     g_object_unref (priv->adjustment);
   priv->adjustment = adjustment;
@@ -2736,7 +2736,7 @@ gtk_list_box_row_set_header (GtkListBoxRow *row,
   priv->header = header;
 
   if (header)
-    g_object_ref (header);
+    g_object_ref_sink (header);
 }
 
 /**
