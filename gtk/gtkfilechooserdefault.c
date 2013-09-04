@@ -769,7 +769,7 @@ static void
 error_filename_to_long_dialog (GtkFileChooserDefault *impl)
 {
   error_message (impl,
-                 _("Cannot create file as the filename is to long"),
+                 _("Cannot create file as the filename is too long"),
                  _("Try using a shorter name."));
 }
 
