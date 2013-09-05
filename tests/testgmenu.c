@@ -518,7 +518,7 @@ get_group (void)
 
   group = g_simple_action_group_new ();
 
-  g_simple_action_group_add_entries (group, actions, G_N_ELEMENTS (actions), NULL);
+  g_action_map_add_action_entries (G_ACTION_MAP (group), actions, G_N_ELEMENTS (actions), NULL);
 
   return G_ACTION_GROUP (group);
 }
@@ -601,7 +601,7 @@ enabled_cell_toggled (GtkCellRendererToggle *cell,
   gtk_tree_model_get (model, &iter, 0, &name, -1);
 
   enabled = g_action_group_get_action_enabled (group, name);
-  action = g_simple_action_group_lookup (G_SIMPLE_ACTION_GROUP (group), name);
+  action = g_action_map_lookup_action (G_ACTION_MAP (group), name);
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !enabled);
 
   gtk_tree_model_row_changed (model, path, &iter);
@@ -628,7 +628,7 @@ state_cell_toggled (GtkCellRendererToggle *cell,
   gtk_tree_model_get (model, &iter, 0, &name, -1);
 
   state = g_action_group_get_action_state (group, name);
-  action = g_simple_action_group_lookup (G_SIMPLE_ACTION_GROUP (group), name);
+  action = g_action_map_lookup_action (G_ACTION_MAP (group), name);
   if (state && g_variant_is_of_type (state, G_VARIANT_TYPE_BOOLEAN))
     {
       gboolean b;
@@ -665,7 +665,7 @@ state_cell_edited (GtkCellRendererCombo  *cell,
   path = gtk_tree_path_new_from_string (path_str);
   gtk_tree_model_get_iter (model, &iter, path);
   gtk_tree_model_get (model, &iter, 0, &name, -1);
-  action = g_simple_action_group_lookup (G_SIMPLE_ACTION_GROUP (group), name);
+  action = g_action_map_lookup_action (G_ACTION_MAP (group), name);
   g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_string (new_text));
 
   gtk_tree_model_row_changed (model, path, &iter);
@@ -822,7 +822,7 @@ toggle_italic (GtkToggleButton *button, gpointer data)
   if (adding)
     {
       action = g_simple_action_new_stateful ("italic", NULL, g_variant_new_boolean (FALSE));
-      g_simple_action_group_insert (G_SIMPLE_ACTION_GROUP (group), G_ACTION (action));
+      g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (action));
       g_signal_connect (action, "activate", G_CALLBACK (activate_toggle), NULL);
       g_object_unref (action);
       action_list_add (store, "italic");
@@ -830,7 +830,7 @@ toggle_italic (GtkToggleButton *button, gpointer data)
     }
   else
     {
-      g_simple_action_group_remove (G_SIMPLE_ACTION_GROUP (group), "italic");
+      g_action_map_remove_action (G_ACTION_MAP (group), "italic");
       action_list_remove (store, "italic");
       g_menu_remove (G_MENU (m), 1);
     }
@@ -859,12 +859,12 @@ toggle_speed (GtkToggleButton *button, gpointer data)
   if (adding)
     {
       action = g_simple_action_new ("faster", NULL);
-      g_simple_action_group_insert (G_SIMPLE_ACTION_GROUP (group), G_ACTION (action));
+      g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (action));
       g_signal_connect (action, "activate", G_CALLBACK (activate_action), NULL);
       g_object_unref (action);
 
       action = g_simple_action_new ("slower", NULL);
-      g_simple_action_group_insert (G_SIMPLE_ACTION_GROUP (group), G_ACTION (action));
+      g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (action));
       g_signal_connect (action, "activate", G_CALLBACK (activate_action), NULL);
       g_object_unref (action);
 
@@ -878,8 +878,8 @@ toggle_speed (GtkToggleButton *button, gpointer data)
     }
   else
     {
-      g_simple_action_group_remove (G_SIMPLE_ACTION_GROUP (group), "faster");
-      g_simple_action_group_remove (G_SIMPLE_ACTION_GROUP (group), "slower");
+      g_action_map_remove_action (G_ACTION_MAP (group), "faster");
+      g_action_map_remove_action (G_ACTION_MAP (group), "slower");
 
       action_list_remove (store, "faster");
       action_list_remove (store, "slower");
