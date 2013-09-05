@@ -250,10 +250,10 @@ gtk_menu_tool_button_class_init (GtkMenuToolButtonClass *klass)
    *
    * The ::show-menu signal is emitted before the menu is shown.
    *
-   * It can be used to populate the menu on demand, using 
+   * It can be used to populate the menu on demand, using
    * gtk_menu_tool_button_set_menu().
 
-   * Note that even if you populate the menu dynamically in this way, 
+   * Note that even if you populate the menu dynamically in this way,
    * you must set an empty menu on the #GtkMenuToolButton beforehand,
    * since the arrow is made insensitive if the menu is not set.
    */
@@ -476,8 +476,8 @@ gtk_menu_tool_button_set_arrow_tooltip_text (GtkMenuToolButton *button,
  * @markup: markup text to be used as tooltip text for button's arrow button
  *
  * Sets the tooltip markup text to be used as tooltip for the arrow button
- * which pops up the menu.  See gtk_tool_item_set_tooltip_text() for setting a
- * tooltip on the whole #GtkMenuToolButton.
+ * which pops up the menu.  See gtk_tool_item_set_tooltip_text() for setting
+ * a tooltip on the whole #GtkMenuToolButton.
  *
  * Since: 2.12
  **/
