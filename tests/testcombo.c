@@ -1190,7 +1190,6 @@ main (int argc, char **argv)
 					      is_separator, NULL, NULL);
 						
         gtk_combo_box_set_active (GTK_COMBO_BOX (combobox), 0);
-	gtk_combo_box_set_title (GTK_COMBO_BOX (combobox), "Dynamic list");
 
         /* GtkComboBox custom entry */
         tmp = gtk_frame_new ("GtkComboBox (custom)");
