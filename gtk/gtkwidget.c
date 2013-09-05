@@ -12353,7 +12353,7 @@ gtk_widget_class_find_style_property (GtkWidgetClass *klass,
 /**
  * gtk_widget_class_list_style_properties:
  * @klass: a #GtkWidgetClass
- * @n_properties: location to return the number of style properties found
+ * @n_properties: (out): location to return the number of style properties found
  *
  * Returns all style properties of a widget class.
  *

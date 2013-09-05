@@ -841,7 +841,7 @@ gtk_tree_path_get_indices (GtkTreePath *path)
 /**
  * gtk_tree_path_get_indices_with_depth:
  * @path: a #GtkTreePath
- * @depth: (allow-none): return location for number of elements
+ * @depth: (out) (allow-none): return location for number of elements
  *     returned in the integer array, or %NULL
  *
  * Returns the current indices of @path.

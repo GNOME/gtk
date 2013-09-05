@@ -400,7 +400,7 @@ gtk_text_buffer_deserialize_get_can_create_tags (GtkTextBuffer *buffer,
 /**
  * gtk_text_buffer_get_serialize_formats:
  * @buffer: a #GtkTextBuffer
- * @n_formats: return location for the number of formats
+ * @n_formats: (out): return location for the number of formats
  *
  * This function returns the rich text serialize formats registered
  * with @buffer using gtk_text_buffer_register_serialize_format() or
@@ -428,7 +428,7 @@ gtk_text_buffer_get_serialize_formats (GtkTextBuffer *buffer,
 /**
  * gtk_text_buffer_get_deserialize_formats:
  * @buffer: a #GtkTextBuffer
- * @n_formats: return location for the number of formats
+ * @n_formats: (out): return location for the number of formats
  *
  * This function returns the rich text deserialize formats registered
  * with @buffer using gtk_text_buffer_register_deserialize_format() or
@@ -460,7 +460,7 @@ gtk_text_buffer_get_deserialize_formats (GtkTextBuffer *buffer,
  * @format: the rich text format to use for serializing
  * @start: start of block of text to serialize
  * @end: end of block of test to serialize
- * @length: return location for the length of the serialized data
+ * @length: (out): return location for the length of the serialized data
  *
  * This function serializes the portion of text between @start
  * and @end in the rich text format represented by @format.

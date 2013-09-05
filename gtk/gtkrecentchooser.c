@@ -845,7 +845,8 @@ gtk_recent_chooser_get_items (GtkRecentChooser *chooser)
 /**
  * gtk_recent_chooser_get_uris:
  * @chooser: a #GtkRecentChooser
- * @length: (allow-none): return location for a the length of the URI list, or %NULL
+ * @length: (out) (allow-none): return location for a the length of the
+ *     URI list, or %NULL
  *
  * Gets the URI of the recently used resources.
  *

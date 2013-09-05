@@ -1490,7 +1490,7 @@ clipboard_rich_text_received_func (GtkClipboard *clipboard,
  * @clipboard: a #GtkClipboard
  * @buffer: a #GtkTextBuffer
  * @format: (out): return location for the format of the returned data
- * @length: return location for the length of the returned data
+ * @length: (out): return location for the length of the returned data
  *
  * Requests the contents of the clipboard as rich text.  This function
  * waits for the data to be received using the main loop, so events,
@@ -1818,7 +1818,7 @@ gtk_clipboard_wait_is_uris_available (GtkClipboard *clipboard)
  * @targets: (out) (array length=n_targets) (transfer container): location
  *           to store an array of targets. The result stored here must
  *           be freed with g_free().
- * @n_targets: location to store number of items in @targets.
+ * @n_targets: (out): location to store number of items in @targets.
  *
  * Returns a list of targets that are present on the clipboard, or %NULL
  * if there aren't any targets available. The returned list must be

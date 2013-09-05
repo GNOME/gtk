@@ -2457,7 +2457,7 @@ gtk_cell_area_class_find_cell_property (GtkCellAreaClass   *aclass,
 /**
  * gtk_cell_area_class_list_cell_properties:
  * @aclass: a #GtkCellAreaClass
- * @n_properties: location to return the number of cell properties found
+ * @n_properties: (out): location to return the number of cell properties found
  *
  * Returns all cell properties of a cell area class.
  *
