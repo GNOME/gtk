@@ -244,7 +244,7 @@ gdk_cairo_surface_create_from_pixbuf (const GdkPixbuf *pixbuf,
           guchar *end = p + 4 * width;
           guint t1,t2,t3;
 
-#define MULT(d,c,a,t) G_STMT_START { t = c * a + 0x7f; d = ((t >> 8) + t) >> 8; } G_STMT_END
+#define MULT(d,c,a,t) G_STMT_START { t = c * a + 0x80; d = ((t >> 8) + t) >> 8; } G_STMT_END
 
           while (p < end)
             {
