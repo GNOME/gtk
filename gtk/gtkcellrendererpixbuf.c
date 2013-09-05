@@ -536,9 +536,7 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
   if (!gtk_widget_get_sensitive (widget) ||
       !gtk_cell_renderer_get_sensitive (cell))
     state |= GTK_STATE_FLAG_INSENSITIVE;
-  else if (priv->follow_state && 
-	   (flags & (GTK_CELL_RENDERER_SELECTED |
-		     GTK_CELL_RENDERER_PRELIT)) != 0)
+  else if (priv->follow_state)
     state = gtk_cell_renderer_get_state (cell, widget, flags);
 
   gtk_style_context_set_state (context, state);
