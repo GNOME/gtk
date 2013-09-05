@@ -117,6 +117,9 @@ testdata = \
 	box-shadow-spec-inset.ui \
 	button-wrapping.ui \
 	button-wrapping.ref.ui \
+	cellrenderer-pixbuf-stock-rtl.css \
+	cellrenderer-pixbuf-stock-rtl.ui \
+	cellrenderer-pixbuf-stock-rtl.ref.ui \
 	css-match-class.css \
 	css-match-class.ref.ui \
 	css-match-class.ui \

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.0 -->
+  <object class="GtkListStore" id="liststore1">
+    <columns>
+      <!-- column-name Name -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0">gtk-jump-to</col>
+      </row>
+      <row>
+        <col id="0">gtk-media-play</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkWindow" id="window">
+    <property name="can_focus">False</property>
+    <property name="type">popup</property>
+    <child>
+      <object class="GtkIconView" id="treeview1">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="columns">1</property>
+        <property name="item-padding">0</property>
+        <property name="margin">0</property>
+        <property name="model">liststore1</property>
+        <child>
+          <object class="GtkCellRendererPixbuf" id="cellrendererpixbuf1"/>
+          <attributes>
+            <attribute name="stock-id">0</attribute>
+          </attributes>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
