@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-31 23:19+0200\n"
-"PO-Revision-Date: 2013-08-31 23:20+0200\n"
+"POT-Creation-Date: 2013-09-05 14:39+0200\n"
+"PO-Revision-Date: 2013-09-05 14:40+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -1538,7 +1538,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../gtk/gtkapplicationwindow.c:334 ../gtk/gtkprintoperation-unix.c:480
+#: ../gtk/gtkapplicationwindow.c:337 ../gtk/gtkprintoperation-unix.c:480
 #: ../gtk/gtkprintoperation-win32.c:1444
 msgid "Application"
 msgstr "Program"
@@ -2113,7 +2113,7 @@ msgid "Cannot create a file under %s as it is not a folder"
 msgstr "Nie można utworzyć pliku w %s, ponieważ nie jest katalogiem"
 
 #: ../gtk/gtkfilechooserdefault.c:772
-msgid "Cannot create file as the filename is to long"
+msgid "Cannot create file as the filename is too long"
 msgstr "Nie można utworzyć pliku, ponieważ jego nazwa jest za długa"
 
 #: ../gtk/gtkfilechooserdefault.c:773
@@ -2612,7 +2612,7 @@ msgstr "Zarządzaj własnymi rozmiarami…"
 msgid "Page Setup"
 msgstr "Ustawienia strony"
 
-#: ../gtk/gtkpathbar.c:1645
+#: ../gtk/gtkpathbar.c:1606
 msgid "File System Root"
 msgstr "System plików"
 
@@ -4931,10 +4931,6 @@ msgid "No fonts matched your search. You can revise your search and try again."
 msgstr ""
 "Brak czcionek o nazwie pasującej do wyszukiwanej. Można ją zmienić i "
 "spróbować ponownie."
-
-#: ../gtk/gtkmessagedialog.ui.h:1
-msgid " "
-msgstr " "
 
 #: ../gtk/gtkpagesetupunixdialog.ui.h:3
 msgid "_Format for:"
