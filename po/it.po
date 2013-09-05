@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-29 18:40+0200\n"
-"PO-Revision-Date: 2013-08-25 18:02+0200\n"
+"POT-Creation-Date: 2013-09-05 10:41+0200\n"
+"PO-Revision-Date: 2013-09-05 10:41+0200\n"
 "Last-Translator: Milo Casagrande <milo@ubuntu.com>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -1579,7 +1579,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../gtk/gtkapplicationwindow.c:334 ../gtk/gtkprintoperation-unix.c:480
+#: ../gtk/gtkapplicationwindow.c:337 ../gtk/gtkprintoperation-unix.c:480
 #: ../gtk/gtkprintoperation-win32.c:1444
 msgid "Application"
 msgstr "Applicazione"
@@ -2042,30 +2042,30 @@ msgstr "_Destro:"
 msgid "Paper Margins"
 msgstr "Margini carta"
 
-#: ../gtk/gtkentry.c:9279 ../gtk/gtkentry.c:9425 ../gtk/gtklabel.c:6276
+#: ../gtk/gtkentry.c:9272 ../gtk/gtkentry.c:9418 ../gtk/gtklabel.c:6276
 #: ../gtk/gtktextview.c:8680 ../gtk/gtktextview.c:8863
 msgid "Cu_t"
 msgstr "_Taglia"
 
-#: ../gtk/gtkentry.c:9283 ../gtk/gtkentry.c:9428 ../gtk/gtklabel.c:6277
+#: ../gtk/gtkentry.c:9276 ../gtk/gtkentry.c:9421 ../gtk/gtklabel.c:6277
 #: ../gtk/gtktextview.c:8684 ../gtk/gtktextview.c:8867
 msgid "_Copy"
 msgstr "_Copia"
 
-#: ../gtk/gtkentry.c:9287 ../gtk/gtkentry.c:9431 ../gtk/gtklabel.c:6278
+#: ../gtk/gtkentry.c:9280 ../gtk/gtkentry.c:9424 ../gtk/gtklabel.c:6278
 #: ../gtk/gtktextview.c:8686 ../gtk/gtktextview.c:8869
 msgid "_Paste"
 msgstr "_Incolla"
 
-#: ../gtk/gtkentry.c:9290 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8689
+#: ../gtk/gtkentry.c:9283 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8689
 msgid "_Delete"
 msgstr "Eli_mina"
 
-#: ../gtk/gtkentry.c:9301 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8703
+#: ../gtk/gtkentry.c:9294 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8703
 msgid "Select _All"
 msgstr "_Seleziona tutto"
 
-#: ../gtk/gtkentry.c:10389
+#: ../gtk/gtkentry.c:10382
 msgid "Caps Lock is on"
 msgstr "BlocMaiusc è attivo"
 
@@ -2158,7 +2158,7 @@ msgstr ""
 "Impossibile creare un file all'interno di «%s» poiché non è una cartella"
 
 #: ../gtk/gtkfilechooserdefault.c:772
-msgid "Cannot create file as the filename is to long"
+msgid "Cannot create file as the filename is too long"
 msgstr "Impossibile creare il file poiché il nome è troppo lungo"
 
 #: ../gtk/gtkfilechooserdefault.c:773
@@ -2344,7 +2344,7 @@ msgstr "Icona «%s» non presente nel tema"
 msgid "Failed to load icon"
 msgstr "Caricamento dell'icona non riuscito"
 
-#: ../gtk/gtkimmodule.c:527
+#: ../gtk/gtkimmodule.c:531
 msgid "Simple"
 msgstr "Semplice"
 
@@ -2674,7 +2674,7 @@ msgid "Page Setup"
 msgstr "Impostazione pagina"
 
 # nome/descrizione per accessibilità
-#: ../gtk/gtkpathbar.c:1645
+#: ../gtk/gtkpathbar.c:1606
 msgid "File System Root"
 msgstr "Radice del file system"
 
@@ -3409,48 +3409,48 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d%%"
 
-#: ../gtk/gtkwindow.c:8035
+#: ../gtk/gtkwindow.c:8042
 msgid "Minimize"
 msgstr "Minimizza"
 
-#: ../gtk/gtkwindow.c:8043
+#: ../gtk/gtkwindow.c:8050
 msgid "Unmaximize"
 msgstr "Demassimizza"
 
-#: ../gtk/gtkwindow.c:8043
+#: ../gtk/gtkwindow.c:8050
 msgid "Maximize"
 msgstr "Massimizza"
 
-#: ../gtk/gtkwindow.c:8052
+#: ../gtk/gtkwindow.c:8059
 msgid "Always on Top"
 msgstr "Sempre in primo piano"
 
-#: ../gtk/gtkwindow.c:8064
+#: ../gtk/gtkwindow.c:8071
 msgid "Always on Visible Workspace"
 msgstr "Sempre su spazio di lavoro visibile"
 
-#: ../gtk/gtkwindow.c:8072
+#: ../gtk/gtkwindow.c:8079
 msgid "Only on This Workspace"
 msgstr "Solo su questo spazio di lavoro"
 
-#: ../gtk/gtkwindow.c:8089
+#: ../gtk/gtkwindow.c:8096
 msgid "Move to Workspace Up"
 msgstr "Sposta su spazio di lavoro in alto"
 
-#: ../gtk/gtkwindow.c:8098
+#: ../gtk/gtkwindow.c:8105
 msgid "Move to Workspace Down"
 msgstr "Sposta su spazio di lavoro in basso"
 
-#: ../gtk/gtkwindow.c:8112
+#: ../gtk/gtkwindow.c:8119
 msgid "Move to Another Workspace"
 msgstr "Sposta su altro spazio di lavoro"
 
-#: ../gtk/gtkwindow.c:8120
+#: ../gtk/gtkwindow.c:8127
 #, c-format
 msgid "Workspace %d"
 msgstr "Spazio di lavoro %d"
 
-#: ../gtk/gtkwindow.c:8140
+#: ../gtk/gtkwindow.c:8147
 msgid "Close"
 msgstr "Chiudi"
 
@@ -5021,10 +5021,6 @@ msgid "No fonts matched your search. You can revise your search and try again."
 msgstr ""
 "Nessun tipo di carattere corrisponde a quanto cercato. Cambiare la ricerca e "
 "provare di nuovo."
-
-#: ../gtk/gtkmessagedialog.ui.h:1
-msgid " "
-msgstr " "
 
 #: ../gtk/gtkpagesetupunixdialog.ui.h:3
 msgid "_Format for:"
