@@ -531,13 +531,10 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_save (context);
 
-  state = GTK_STATE_FLAG_NORMAL;
+  state = gtk_cell_renderer_get_state (cell, widget, flags);
 
-  if (priv->follow_state)
-    state = gtk_cell_renderer_get_state (cell, widget, flags);
-  else if (!gtk_widget_get_sensitive (widget) ||
-      !gtk_cell_renderer_get_sensitive (cell))
-    state |= GTK_STATE_FLAG_INSENSITIVE;
+  if (!priv->follow_state)
+    state &= ~(GTK_STATE_FLAG_FOCUSED | GTK_STATE_FLAG_PRELIGHT | GTK_STATE_FLAG_SELECTED);
 
   gtk_style_context_set_state (context, state);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_IMAGE);
