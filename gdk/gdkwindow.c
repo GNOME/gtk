@@ -9252,21 +9252,24 @@ gdk_window_create_similar_surface (GdkWindow *     window,
   cairo_surface_get_device_scale (window_surface, &sx, &sy);
 #endif
 
-  width = width * sx;
-  height = height * sy;
-
   switch (_gdk_rendering_mode)
   {
     case GDK_RENDERING_MODE_RECORDING:
       {
-        cairo_rectangle_t rect = { 0, 0, width, height };
+        cairo_rectangle_t rect = { 0, 0, width * sx, height *sy };
         surface = cairo_recording_surface_create (content, &rect);
+#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
+        cairo_surface_set_device_scale (surface, sx, sy);
+#endif
       }
       break;
     case GDK_RENDERING_MODE_IMAGE:
       surface = cairo_image_surface_create (content == CAIRO_CONTENT_COLOR ? CAIRO_FORMAT_RGB24 :
                                             content == CAIRO_CONTENT_ALPHA ? CAIRO_FORMAT_A8 : CAIRO_FORMAT_ARGB32,
-                                            width, height);
+                                            width * sx, height * sy);
+#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
+      cairo_surface_set_device_scale (surface, sx, sy);
+#endif
       break;
     case GDK_RENDERING_MODE_SIMILAR:
     default:
@@ -9276,9 +9279,6 @@ gdk_window_create_similar_surface (GdkWindow *     window,
       break;
   }
 
-#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
-  cairo_surface_set_device_scale (surface, sx, sy);
-#endif
 
   cairo_surface_destroy (window_surface);
 
