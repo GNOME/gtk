@@ -525,6 +525,10 @@ gtk_rc_add_initial_default_files (void)
       const gchar * const *config_dirs;
       const gchar *config_dir;
 
+      str = g_build_filename (GTK_DATA_PREFIX, "gtk-2.0", "gtkrc", NULL);
+      gtk_rc_add_default_file (str);
+      g_free (str);
+
       config_dirs = g_get_system_config_dirs ();
       for (config_dir = *config_dirs; *config_dirs != NULL; config_dirs++)
         {
