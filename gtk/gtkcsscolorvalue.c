@@ -150,7 +150,6 @@ _gtk_css_color_value_resolve (GtkCssValue             *color,
 
   g_return_val_if_fail (color != NULL, NULL);
   g_return_val_if_fail (provider == NULL || GTK_IS_STYLE_PROVIDER_PRIVATE (provider), NULL);
-  g_return_val_if_fail (current != NULL, NULL);
 
   if (dependencies == NULL)
     dependencies = &unused;
@@ -271,7 +270,12 @@ _gtk_css_color_value_resolve (GtkCssValue             *color,
         }
       else
         {
-          return NULL;
+          return _gtk_css_color_value_resolve (_gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (GTK_CSS_PROPERTY_COLOR)),
+                                               provider,
+                                               NULL,
+                                               0,
+                                               dependencies,
+                                               cycle_list);
         }
       break;
     default:
@@ -320,7 +324,7 @@ gtk_css_value_color_compute (GtkCssValue             *value,
         }
       else
         {
-          current = _gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (GTK_CSS_PROPERTY_COLOR));
+          current = NULL;
           current_deps = 0;
         }
     }
