@@ -532,6 +532,9 @@ static void gtk_text_view_selection_bubble_popup_set   (GtkTextView *text_view);
 static void gtk_text_view_queue_draw_region (GtkWidget            *widget,
                                              const cairo_region_t *region);
 
+static void gtk_text_view_get_rendered_rect (GtkTextView  *text_view,
+                                             GdkRectangle *rect);
+
 
 /* FIXME probably need the focus methods. */
 
@@ -1470,7 +1473,6 @@ gtk_text_view_init (GtkTextView *text_view)
   gtk_widget_set_can_focus (widget, TRUE);
 
   priv->pixel_cache = _gtk_pixel_cache_new ();
-  _gtk_pixel_cache_set_content (priv->pixel_cache, CAIRO_CONTENT_COLOR_ALPHA);
 
   /* Set up default style */
   priv->wrap_mode = GTK_WRAP_NONE;
@@ -4028,7 +4030,7 @@ changed_handler (GtkTextLayout     *layout,
 
   if (gtk_widget_get_realized (widget))
     {      
-      gtk_text_view_get_visible_rect (text_view, &visible_rect);
+      gtk_text_view_get_rendered_rect (text_view, &visible_rect);
 
       redraw_rect.x = visible_rect.x;
       redraw_rect.width = visible_rect.width;
@@ -5241,6 +5243,18 @@ draw_text (cairo_t  *cr,
            gpointer  user_data)
 {
   GtkWidget *widget = user_data;
+  GtkStyleContext *context;
+  GdkRectangle bg_rect;
+
+  gdk_cairo_get_clip_rectangle (cr, &bg_rect);
+
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
+  gtk_render_background (context, cr,
+                         bg_rect.x, bg_rect.y,
+                         bg_rect.width, bg_rect.height);
+  gtk_style_context_restore (context);
 
   gtk_text_view_paint (widget, cr);
 }
@@ -8963,6 +8977,26 @@ text_window_free (GtkTextWindow *win)
 }
 
 static void
+gtk_text_view_get_rendered_rect (GtkTextView  *text_view,
+                                 GdkRectangle *rect)
+{
+  GtkTextViewPrivate *priv = text_view->priv;
+  GdkWindow *window;
+  guint extra_w;
+  guint extra_h;
+
+  _gtk_pixel_cache_get_extra_size (priv->pixel_cache, &extra_w, &extra_h);
+
+  window = gtk_text_view_get_window (text_view, GTK_TEXT_WINDOW_TEXT);
+
+  rect->x = gtk_adjustment_get_value (priv->hadjustment) - extra_w;
+  rect->y = gtk_adjustment_get_value (priv->vadjustment) - extra_h;
+
+  rect->height = gdk_window_get_height (window) + (extra_h * 2);
+  rect->width = gdk_window_get_width (window) + (extra_w * 2);
+}
+
+static void
 gtk_text_view_queue_draw_region (GtkWidget            *widget,
                                  const cairo_region_t *region)
 {
@@ -9029,12 +9063,6 @@ text_window_realize (GtkTextWindow *win,
   win->window = gdk_window_new (window,
                                 &attributes, attributes_mask);
 
-  if (win->type == GTK_TEXT_WINDOW_TEXT)
-    {
-      gdk_window_set_invalidate_handler (win->window,
-                                         text_window_invalidate_handler);
-    }
-
   gdk_window_show (win->window);
   gtk_widget_register_window (win->widget, win->window);
   gdk_window_lower (win->window);
@@ -9057,8 +9085,13 @@ text_window_realize (GtkTextWindow *win,
                                     &attributes,
                                     attributes_mask);
 
-  gdk_window_show (win->bin_window);
   gtk_widget_register_window (win->widget, win->bin_window);
+
+  if (win->type == GTK_TEXT_WINDOW_TEXT)
+    gdk_window_set_invalidate_handler (win->bin_window,
+                                       text_window_invalidate_handler);
+
+  gdk_window_show (win->bin_window);
 
   context = gtk_widget_get_style_context (widget);
   state = gtk_widget_get_state_flags (widget);
