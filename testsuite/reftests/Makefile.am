@@ -172,6 +172,9 @@ testdata = \
 	font-sizes-names.css \
 	font-sizes-names.ref.ui \
 	font-sizes-names.ui \
+	gtk-image-effect-inherit.css \
+	gtk-image-effect-inherit.ref.ui \
+	gtk-image-effect-inherit.ui \
 	green-20x20.png \
 	grid-empty-with-spacing.ref.ui \
 	grid-empty-with-spacing.ui \
