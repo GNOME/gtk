@@ -9029,8 +9029,11 @@ text_window_realize (GtkTextWindow *win,
   win->window = gdk_window_new (window,
                                 &attributes, attributes_mask);
 
-  gdk_window_set_invalidate_handler (win->window,
-                                     text_window_invalidate_handler);
+  if (win->type == GTK_TEXT_WINDOW_TEXT)
+    {
+      gdk_window_set_invalidate_handler (win->window,
+                                         text_window_invalidate_handler);
+    }
 
   gdk_window_show (win->window);
   gtk_widget_register_window (win->widget, win->window);
