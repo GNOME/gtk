@@ -389,7 +389,6 @@ _gtk_css_image_get_surface (GtkCssImage     *image,
 {
   cairo_surface_t *result;
   cairo_t *cr;
-  double sx, sy;
 
   g_return_val_if_fail (GTK_IS_CSS_IMAGE (image), NULL);
   g_return_val_if_fail (surface_width > 0, NULL);
