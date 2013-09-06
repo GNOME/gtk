@@ -91,6 +91,18 @@ _gtk_pixel_cache_set_extra_size (GtkPixelCache *cache,
 }
 
 void
+_gtk_pixel_cache_get_extra_size (GtkPixelCache *cache,
+                                 guint         *extra_width,
+                                 guint         *extra_height)
+{
+  if (extra_width)
+    *extra_width = cache->extra_width;
+
+  if (extra_height)
+    *extra_height = cache->extra_height;
+}
+
+void
 _gtk_pixel_cache_set_content (GtkPixelCache   *cache,
 			      cairo_content_t  content)
 {

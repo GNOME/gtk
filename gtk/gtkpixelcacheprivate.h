@@ -41,6 +41,9 @@ void           _gtk_pixel_cache_draw           (GtkPixelCache         *cache,
                                                 cairo_rectangle_int_t *canvas_rect,
                                                 GtkPixelCacheDrawFunc  draw,
                                                 gpointer               user_data);
+void           _gtk_pixel_cache_get_extra_size (GtkPixelCache         *cache,
+                                                guint                 *extra_width,
+                                                guint                 *extra_height);
 void           _gtk_pixel_cache_set_extra_size (GtkPixelCache         *cache,
                                                 guint                  extra_width,
                                                 guint                  extra_height);
