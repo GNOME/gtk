@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 3.3.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-06 19:55+0800\n"
-"PO-Revision-Date: 2013-08-06 19:55+0800\n"
+"POT-Creation-Date: 2013-09-06 16:25+0800\n"
+"PO-Revision-Date: 2013-09-06 16:25+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Hong Kong) <community@linuxhall.org>\n"
 "Language: zh_TW\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.5.3\n"
+"X-Generator: Poedit 1.5.5\n"
 "X-Project-Style: gnome\n"
 
 #: ../gdk/broadway/gdkbroadway-server.c:141
@@ -281,36 +281,24 @@ msgid "Delete"
 msgstr "Delete"
 
 #: ../gdk/keyname-table.h:6881
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86MonBrightnessUp"
 msgctxt "keyboard label"
 msgid "MonBrightnessUp"
 msgstr "螢幕亮度增加"
 
 #: ../gdk/keyname-table.h:6882
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86MonBrightnessDown"
 msgctxt "keyboard label"
 msgid "MonBrightnessDown"
 msgstr "螢幕亮度降低"
 
 #: ../gdk/keyname-table.h:6883
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86MonBrightnessUp"
 msgctxt "keyboard label"
 msgid "KbdBrightnessUp"
-msgstr "螢幕亮度增加"
+msgstr "鍵盤亮度增加"
 
 #: ../gdk/keyname-table.h:6884
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86MonBrightnessDown"
 msgctxt "keyboard label"
 msgid "KbdBrightnessDown"
-msgstr "螢幕亮度降低"
+msgstr "鍵盤亮度降低"
 
 #: ../gdk/keyname-table.h:6885
 msgctxt "keyboard label"
@@ -758,7 +746,7 @@ msgstr ""
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:192
 #: ../gtk/deprecated/gtkfontsel.c:1690 ../gtk/gtkfilechooserbutton.c:805
-#: ../gtk/gtkfilechooserdefault.c:5485 ../gtk/gtkmessagedialog.c:891
+#: ../gtk/gtkfilechooserdefault.c:5484 ../gtk/gtkmessagedialog.c:891
 #: ../gtk/gtkmessagedialog.c:910 ../gtk/gtkmountoperation.c:529
 #: ../gtk/gtkprintbackend.c:747 ../gtk/gtkprinteroptionwidget.c:545
 #: ../gtk/gtkprintunixdialog.c:684 ../gtk/gtkappchooserdialog.ui.h:1
@@ -1527,7 +1515,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../gtk/gtkapplicationwindow.c:334 ../gtk/gtkprintoperation-unix.c:480
+#: ../gtk/gtkapplicationwindow.c:337 ../gtk/gtkprintoperation-unix.c:480
 #: ../gtk/gtkprintoperation-win32.c:1444
 msgid "Application"
 msgstr "應用程式"
@@ -1914,7 +1902,7 @@ msgctxt "Color channel"
 msgid "Alpha"
 msgstr "Alpha"
 
-#: ../gtk/gtkcolorswatch.c:444
+#: ../gtk/gtkcolorswatch.c:447
 msgid "_Customize"
 msgstr "自選(_C)"
 
@@ -1987,30 +1975,30 @@ msgstr "右(_R):"
 msgid "Paper Margins"
 msgstr "紙張邊界"
 
-#: ../gtk/gtkentry.c:9232 ../gtk/gtkentry.c:9378 ../gtk/gtklabel.c:6241
-#: ../gtk/gtktextview.c:8593 ../gtk/gtktextview.c:8776
+#: ../gtk/gtkentry.c:9272 ../gtk/gtkentry.c:9418 ../gtk/gtklabel.c:6276
+#: ../gtk/gtktextview.c:8680 ../gtk/gtktextview.c:8863
 msgid "Cu_t"
 msgstr "剪下(_T)"
 
-#: ../gtk/gtkentry.c:9236 ../gtk/gtkentry.c:9381 ../gtk/gtklabel.c:6242
-#: ../gtk/gtktextview.c:8597 ../gtk/gtktextview.c:8780
+#: ../gtk/gtkentry.c:9276 ../gtk/gtkentry.c:9421 ../gtk/gtklabel.c:6277
+#: ../gtk/gtktextview.c:8684 ../gtk/gtktextview.c:8867
 msgid "_Copy"
 msgstr "複製(_C)"
 
-#: ../gtk/gtkentry.c:9240 ../gtk/gtkentry.c:9384 ../gtk/gtklabel.c:6243
-#: ../gtk/gtktextview.c:8599 ../gtk/gtktextview.c:8782
+#: ../gtk/gtkentry.c:9280 ../gtk/gtkentry.c:9424 ../gtk/gtklabel.c:6278
+#: ../gtk/gtktextview.c:8686 ../gtk/gtktextview.c:8869
 msgid "_Paste"
 msgstr "貼上(_P)"
 
-#: ../gtk/gtkentry.c:9243 ../gtk/gtklabel.c:6245 ../gtk/gtktextview.c:8602
+#: ../gtk/gtkentry.c:9283 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8689
 msgid "_Delete"
 msgstr "刪除(_D)"
 
-#: ../gtk/gtkentry.c:9254 ../gtk/gtklabel.c:6254 ../gtk/gtktextview.c:8616
+#: ../gtk/gtkentry.c:9294 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8703
 msgid "Select _All"
 msgstr "全部選取(_A)"
 
-#: ../gtk/gtkentry.c:10310
+#: ../gtk/gtkentry.c:10382
 msgid "Caps Lock is on"
 msgstr "Caps Lock 已開啟"
 
@@ -2067,7 +2055,7 @@ msgstr "桌面"
 msgid "(None)"
 msgstr "（無）"
 
-#: ../gtk/gtkfilechooserbutton.c:807 ../gtk/gtkplacessidebar.c:3104
+#: ../gtk/gtkfilechooserbutton.c:807 ../gtk/gtkplacessidebar.c:3107
 msgid "_Open"
 msgstr "開啟(_O)"
 
@@ -2099,7 +2087,9 @@ msgid "Cannot create a file under %s as it is not a folder"
 msgstr "不能在 %s 下建立檔案，因為它不是資料夾"
 
 #: ../gtk/gtkfilechooserdefault.c:772
-msgid "Cannot create file as the filename is to long"
+#, fuzzy
+#| msgid "Cannot create file as the filename is to long"
+msgid "Cannot create file as the filename is too long"
 msgstr "不能建立檔案，因為檔案名稱太長"
 
 #: ../gtk/gtkfilechooserdefault.c:773
@@ -2176,66 +2166,66 @@ msgstr "最近使用"
 msgid "Search:"
 msgstr "搜尋："
 
-#: ../gtk/gtkfilechooserdefault.c:2737
-msgid "Save in _folder:"
-msgstr "儲存於資料夾(_F):"
+#: ../gtk/gtkfilechooserdefault.c:2736
+msgid "Save in folder:"
+msgstr "儲存於資料夾："
 
-#: ../gtk/gtkfilechooserdefault.c:2739
-msgid "Create in _folder:"
-msgstr "新增於資料夾(_F)："
+#: ../gtk/gtkfilechooserdefault.c:2738
+msgid "Create in folder:"
+msgstr "建立於目錄："
 
-#: ../gtk/gtkfilechooserdefault.c:3879
+#: ../gtk/gtkfilechooserdefault.c:3878
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "無法讀取 %s 的內容"
 
-#: ../gtk/gtkfilechooserdefault.c:3883
+#: ../gtk/gtkfilechooserdefault.c:3882
 msgid "Could not read the contents of the folder"
 msgstr "無法讀取資料夾的內容"
 
-#: ../gtk/gtkfilechooserdefault.c:3980 ../gtk/gtkfilechooserdefault.c:4048
-#: ../gtk/gtkfilechooserdefault.c:4229
+#: ../gtk/gtkfilechooserdefault.c:3979 ../gtk/gtkfilechooserdefault.c:4047
+#: ../gtk/gtkfilechooserdefault.c:4228
 msgid "Unknown"
 msgstr "不明"
 
-#: ../gtk/gtkfilechooserdefault.c:3995
+#: ../gtk/gtkfilechooserdefault.c:3994
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:3997
+#: ../gtk/gtkfilechooserdefault.c:3996
 msgid "Yesterday at %H:%M"
 msgstr "昨天 %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:4694
+#: ../gtk/gtkfilechooserdefault.c:4693
 msgid "Cannot change to folder because it is not local"
 msgstr "無法進入資料夾，因為它不是本地資料夾"
 
-#: ../gtk/gtkfilechooserdefault.c:5478 ../gtk/gtkprintunixdialog.c:675
+#: ../gtk/gtkfilechooserdefault.c:5477 ../gtk/gtkprintunixdialog.c:675
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "已存在名為“%s”的檔案。你想要取代它嗎？"
 
-#: ../gtk/gtkfilechooserdefault.c:5481 ../gtk/gtkprintunixdialog.c:679
+#: ../gtk/gtkfilechooserdefault.c:5480 ../gtk/gtkprintunixdialog.c:679
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "該檔案已存在於“%s”。取代它會覆蓋它的內容。"
 
-#: ../gtk/gtkfilechooserdefault.c:5486 ../gtk/gtkprintunixdialog.c:686
+#: ../gtk/gtkfilechooserdefault.c:5485 ../gtk/gtkprintunixdialog.c:686
 msgid "_Replace"
 msgstr "取代(_R)"
 
-#: ../gtk/gtkfilechooserdefault.c:6303
+#: ../gtk/gtkfilechooserdefault.c:6302
 msgid "Could not start the search process"
 msgstr "無法開始搜尋程序"
 
-#: ../gtk/gtkfilechooserdefault.c:6304
+#: ../gtk/gtkfilechooserdefault.c:6303
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr "此程式無法建立至 indexer 伺服程式的連線。請確認它是否已執行。"
 
-#: ../gtk/gtkfilechooserdefault.c:6318
+#: ../gtk/gtkfilechooserdefault.c:6317
 msgid "Could not send the search request"
 msgstr "無法傳送搜尋要求"
 
@@ -2256,16 +2246,16 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "請選擇字型"
 
-#: ../gtk/gtkicontheme.c:2069 ../gtk/gtkicontheme.c:2132
+#: ../gtk/gtkicontheme.c:2100 ../gtk/gtkicontheme.c:2163
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "圖示「%s」不存在於佈景主題中"
 
-#: ../gtk/gtkicontheme.c:3835
+#: ../gtk/gtkicontheme.c:3866
 msgid "Failed to load icon"
 msgstr "載入圖示失敗"
 
-#: ../gtk/gtkimmodule.c:515
+#: ../gtk/gtkimmodule.c:531
 msgid "Simple"
 msgstr "簡易"
 
@@ -2302,12 +2292,12 @@ msgid "Error"
 msgstr "錯誤"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6224
+#: ../gtk/gtklabel.c:6259
 msgid "_Open Link"
 msgstr "開啟連結(_O)"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6232
+#: ../gtk/gtklabel.c:6267
 msgid "Copy _Link Address"
 msgstr "複製連結位址(_L)"
 
@@ -2361,11 +2351,11 @@ msgstr "%s：沒有應用程式 %s"
 msgid "%s: error launching application: %s\n"
 msgstr "%s：執行應用程式時發生錯誤：%s\n"
 
-#: ../gtk/gtklinkbutton.c:493
+#: ../gtk/gtklinkbutton.c:495
 msgid "Copy URL"
 msgstr "複製 URL"
 
-#: ../gtk/gtklinkbutton.c:656
+#: ../gtk/gtklinkbutton.c:658
 msgid "Invalid URI"
 msgstr "無效的 URI"
 
@@ -2505,7 +2495,7 @@ msgstr "不明的應用程式（PID %d）"
 msgid "Unable to end process"
 msgstr "無法終止程序"
 
-#: ../gtk/gtkmountoperation.c:1295
+#: ../gtk/gtkmountoperation.c:1297
 msgid "_End Process"
 msgstr "終止程序(_E)"
 
@@ -2540,7 +2530,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "不能結束 PID 為 %d 的程序：%s"
 
-#: ../gtk/gtknotebook.c:5015 ../gtk/gtknotebook.c:7669
+#: ../gtk/gtknotebook.c:5016 ../gtk/gtknotebook.c:7673
 #, c-format
 msgid "Page %u"
 msgstr "第 %u 頁"
@@ -2590,7 +2580,7 @@ msgstr "管理自選大小…"
 msgid "Page Setup"
 msgstr "頁面設定"
 
-#: ../gtk/gtkpathbar.c:1640
+#: ../gtk/gtkpathbar.c:1606
 msgid "File System Root"
 msgstr "檔案系統根"
 
@@ -2669,11 +2659,11 @@ msgid "New bookmark"
 msgstr "新增書籤"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: ../gtk/gtkplacessidebar.c:2100 ../gtk/gtkplacessidebar.c:3180
+#: ../gtk/gtkplacessidebar.c:2100 ../gtk/gtkplacessidebar.c:3183
 msgid "_Start"
 msgstr "起動(_S)"
 
-#: ../gtk/gtkplacessidebar.c:2101 ../gtk/gtkplacessidebar.c:3187
+#: ../gtk/gtkplacessidebar.c:2101 ../gtk/gtkplacessidebar.c:3190
 msgid "_Stop"
 msgstr "關閉(_S)"
 
@@ -2742,43 +2732,43 @@ msgstr "無法監測 %s 的媒體更改"
 msgid "Unable to stop %s"
 msgstr "無法關閉 %s"
 
-#: ../gtk/gtkplacessidebar.c:3111
+#: ../gtk/gtkplacessidebar.c:3114
 msgid "Open in New _Tab"
 msgstr "在新的分頁中開啟(_T)"
 
-#: ../gtk/gtkplacessidebar.c:3119
+#: ../gtk/gtkplacessidebar.c:3122
 msgid "Open in New _Window"
 msgstr "在新的視窗中開啟(_W)"
 
-#: ../gtk/gtkplacessidebar.c:3128
+#: ../gtk/gtkplacessidebar.c:3131
 msgid "_Add Bookmark"
 msgstr "加入書籤(_A)"
 
-#: ../gtk/gtkplacessidebar.c:3134
+#: ../gtk/gtkplacessidebar.c:3137
 msgid "Remove"
 msgstr "移除"
 
-#: ../gtk/gtkplacessidebar.c:3141
+#: ../gtk/gtkplacessidebar.c:3144
 msgid "Rename…"
 msgstr "重新命名…"
 
-#: ../gtk/gtkplacessidebar.c:3152
+#: ../gtk/gtkplacessidebar.c:3155
 msgid "_Mount"
 msgstr "掛載(_M)"
 
-#: ../gtk/gtkplacessidebar.c:3159
+#: ../gtk/gtkplacessidebar.c:3162
 msgid "_Unmount"
 msgstr "卸載(_U)"
 
-#: ../gtk/gtkplacessidebar.c:3166
+#: ../gtk/gtkplacessidebar.c:3169
 msgid "_Eject"
 msgstr "退出(_E)"
 
-#: ../gtk/gtkplacessidebar.c:3173
+#: ../gtk/gtkplacessidebar.c:3176
 msgid "_Detect Media"
 msgstr "偵測媒體(_D)"
 
-#: ../gtk/gtkplacessidebar.c:3826
+#: ../gtk/gtkplacessidebar.c:3829
 msgid "Computer"
 msgstr "電腦"
 
@@ -3105,6 +3095,10 @@ msgstr "無法找到有 URI「%s」的項目"
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr "找不到 URI「%2$s」，名稱「%1$s」的註冊應用程式"
 
+#: ../gtk/gtksearchentry.c:240
+msgid "Search"
+msgstr "搜尋"
+
 #. Translators: if the "on" state label requires more than three
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
@@ -3236,43 +3230,43 @@ msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr "已還原資料的格式錯誤。第一部份不是 GTKTEXTBUFFERCONTENTS-0001"
 
-#: ../gtk/gtktextutil.c:58
+#: ../gtk/gtktextutil.c:57
 msgid "LRM _Left-to-right mark"
 msgstr "_LRM 左至右標記"
 
-#: ../gtk/gtktextutil.c:59
+#: ../gtk/gtktextutil.c:58
 msgid "RLM _Right-to-left mark"
 msgstr "_RLM 右至左標記"
 
-#: ../gtk/gtktextutil.c:60
+#: ../gtk/gtktextutil.c:59
 msgid "LRE Left-to-right _embedding"
 msgstr "LR_E 左至右內嵌"
 
-#: ../gtk/gtktextutil.c:61
+#: ../gtk/gtktextutil.c:60
 msgid "RLE Right-to-left e_mbedding"
 msgstr "RL_E 右至左內嵌"
 
-#: ../gtk/gtktextutil.c:62
+#: ../gtk/gtktextutil.c:61
 msgid "LRO Left-to-right _override"
 msgstr "LR_O 強制左至右"
 
-#: ../gtk/gtktextutil.c:63
+#: ../gtk/gtktextutil.c:62
 msgid "RLO Right-to-left o_verride"
 msgstr "RL_O 強制右至左"
 
-#: ../gtk/gtktextutil.c:64
+#: ../gtk/gtktextutil.c:63
 msgid "PDF _Pop directional formatting"
 msgstr "_PDF 回復以往方向"
 
-#: ../gtk/gtktextutil.c:65
+#: ../gtk/gtktextutil.c:64
 msgid "ZWS _Zero width space"
 msgstr "_ZWS 零闊度空格"
 
-#: ../gtk/gtktextutil.c:66
+#: ../gtk/gtktextutil.c:65
 msgid "ZWJ Zero width _joiner"
 msgstr "ZW_J 零闊度連接符"
 
-#: ../gtk/gtktextutil.c:67
+#: ../gtk/gtktextutil.c:66
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZW_NJ 零闊度非連接符"
 
@@ -3299,19 +3293,48 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:7819
+#: ../gtk/gtkwindow.c:8042
 msgid "Minimize"
 msgstr "最小化"
 
-#: ../gtk/gtkwindow.c:7828
+#: ../gtk/gtkwindow.c:8050
 msgid "Unmaximize"
 msgstr "取消最大化"
 
-#: ../gtk/gtkwindow.c:7828
+#: ../gtk/gtkwindow.c:8050
 msgid "Maximize"
 msgstr "最大化"
 
-#: ../gtk/gtkwindow.c:7842
+#: ../gtk/gtkwindow.c:8059
+msgid "Always on Top"
+msgstr "永遠在最上層"
+
+#: ../gtk/gtkwindow.c:8071
+msgid "Always on Visible Workspace"
+msgstr "永遠在顯示的工作區"
+
+#: ../gtk/gtkwindow.c:8079
+msgid "Only on This Workspace"
+msgstr "只在這個工作區"
+
+#: ../gtk/gtkwindow.c:8096
+msgid "Move to Workspace Up"
+msgstr "將工作區上移"
+
+#: ../gtk/gtkwindow.c:8105
+msgid "Move to Workspace Down"
+msgstr "將工作區下移"
+
+#: ../gtk/gtkwindow.c:8119
+msgid "Move to Another Workspace"
+msgstr "移到另一個工作區"
+
+#: ../gtk/gtkwindow.c:8127
+#, c-format
+msgid "Workspace %d"
+msgstr "工作區 %d"
+
+#: ../gtk/gtkwindow.c:8147
 msgid "Close"
 msgstr "關閉"
 
@@ -4865,10 +4888,6 @@ msgstr "字族"
 msgid "No fonts matched your search. You can revise your search and try again."
 msgstr "沒有字型符合你的搜尋。你可以修正你的搜尋後再試一次。"
 
-#: ../gtk/gtkmessagedialog.ui.h:1
-msgid " "
-msgstr " "
-
 #: ../gtk/gtkpagesetupunixdialog.ui.h:3
 msgid "_Format for:"
 msgstr "格式(_F)"
@@ -5151,3 +5170,6 @@ msgstr "調低音量"
 #: ../gtk/gtkvolumebutton.ui.h:10
 msgid "Decreases the volume"
 msgstr "減低音量"
+
+#~ msgid " "
+#~ msgstr " "
