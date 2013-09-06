@@ -120,6 +120,9 @@ testdata = \
 	cellrenderer-pixbuf-stock-rtl.css \
 	cellrenderer-pixbuf-stock-rtl.ui \
 	cellrenderer-pixbuf-stock-rtl.ref.ui \
+	css-currentcolor-alpha.css \
+	css-currentcolor-alpha.ui \
+	css-currentcolor-alpha.ref.ui \
 	css-match-class.css \
 	css-match-class.ref.ui \
 	css-match-class.ui \

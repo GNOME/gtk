@@ -1,0 +1,9 @@
+@import "reset-to-defaults.css";
+
+GtkWindow {
+  color: alpha(currentColor, 0.0);
+}
+
+#reference {
+  color: transparent;
+}
