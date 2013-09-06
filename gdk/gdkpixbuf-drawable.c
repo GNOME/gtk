@@ -248,7 +248,8 @@ gdk_pixbuf_get_from_surface  (cairo_surface_t *surface,
                          8,
                          width, height);
 
-  if (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_IMAGE)
+  if (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_IMAGE &&
+      cairo_image_surface_get_format (surface) == gdk_cairo_format_for_content (content))
     surface = cairo_surface_reference (surface);
   else
     {
