@@ -290,7 +290,8 @@ static void  check_unmount_and_eject                   (GMount *mount,
 enum {
 	GTK_TREE_MODEL_ROW,
 	TEXT_URI_LIST,
-	XDND_DIRECT_SAVE
+	XDND_DIRECT_SAVE,
+	TEXT
 };
 
 /* Target types for dragging from the shortcuts list */
@@ -1594,11 +1595,13 @@ drag_motion_callback (GtkTreeView *tree_view,
 	gboolean res;
 	gboolean drop_as_bookmarks;
 	gboolean valid_xds_drag;
+	gboolean valid_text_drag;
 	char *drop_target_uri = NULL;
 
 	action = 0;
 	drop_as_bookmarks = FALSE;
 	valid_xds_drag = FALSE;
+	valid_text_drag = FALSE;
 	path = NULL;
 
 	if (!sidebar->drag_data_received) {
@@ -1618,13 +1621,15 @@ drag_motion_callback (GtkTreeView *tree_view,
 		/* Dragging bookmarks always moves them to another position in the bookmarks list */
 		action = GDK_ACTION_MOVE;
 	} else if (sidebar->drag_data_received &&
-		   sidebar->drag_data_info == XDND_DIRECT_SAVE) {
+		   (sidebar->drag_data_info == XDND_DIRECT_SAVE ||
+		    sidebar->drag_data_info == TEXT)) {
 		gtk_tree_model_get_iter (GTK_TREE_MODEL (sidebar->store), &iter, path);
 		gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store),
 				    &iter,
 				    PLACES_SIDEBAR_COLUMN_URI, &drop_target_uri,
 				    -1);
-		valid_xds_drag = TRUE;
+		valid_text_drag = sidebar->drag_data_info == TEXT;
+		valid_xds_drag = !valid_text_drag;
 	} else {
 		/* URIs are being dragged.  See if the caller wants to handle a
 		 * file move/copy operation itself, or if we should only try to
@@ -1667,7 +1672,7 @@ drag_motion_callback (GtkTreeView *tree_view,
 	}
 
  out:
-	if (action != 0 || valid_xds_drag) {
+	if (action != 0 || valid_xds_drag || valid_text_drag) {
 		check_switch_location_timer (sidebar, drop_target_uri);
 		start_drop_feedback (sidebar, path, pos, drop_as_bookmarks);
 	} else {
@@ -3652,6 +3657,7 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 	GtkCellRenderer   *cell;
 	GtkTreeSelection  *selection;
 	GIcon             *eject;
+	GtkTargetList     *target_list;
 
 	gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (sidebar)), GTK_STYLE_CLASS_SIDEBAR);
 
@@ -3815,8 +3821,13 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 						GDK_ACTION_MOVE);
 	gtk_drag_dest_set (GTK_WIDGET (tree_view),
 			   0,
-			   dnd_drop_targets, G_N_ELEMENTS (dnd_drop_targets),
+			   NULL, 0,
 			   GDK_ACTION_MOVE | GDK_ACTION_COPY | GDK_ACTION_LINK);
+
+	target_list = gtk_target_list_new (dnd_drop_targets, G_N_ELEMENTS (dnd_drop_targets));
+	gtk_target_list_add_text_targets (target_list, TEXT);
+	gtk_drag_dest_set_target_list (GTK_WIDGET (tree_view), target_list);
+	gtk_target_list_unref (target_list);
 
 	g_signal_connect (tree_view, "key-press-event",
 			  G_CALLBACK (bookmarks_key_press_event_cb), sidebar);
