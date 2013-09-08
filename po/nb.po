@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 3.9.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-26 10:50+0200\n"
-"PO-Revision-Date: 2013-08-26 10:52+0200\n"
+"POT-Creation-Date: 2013-09-08 19:40+0200\n"
+"PO-Revision-Date: 2013-09-08 19:40+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: no\n"
@@ -1524,7 +1524,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../gtk/gtkapplicationwindow.c:334 ../gtk/gtkprintoperation-unix.c:480
+#: ../gtk/gtkapplicationwindow.c:337 ../gtk/gtkprintoperation-unix.c:480
 #: ../gtk/gtkprintoperation-win32.c:1444
 msgid "Application"
 msgstr "Program"
@@ -1984,30 +1984,30 @@ msgstr "Høy_re:"
 msgid "Paper Margins"
 msgstr "Papirmarger"
 
-#: ../gtk/gtkentry.c:9279 ../gtk/gtkentry.c:9425 ../gtk/gtklabel.c:6276
-#: ../gtk/gtktextview.c:8629 ../gtk/gtktextview.c:8812
+#: ../gtk/gtkentry.c:9272 ../gtk/gtkentry.c:9418 ../gtk/gtklabel.c:6276
+#: ../gtk/gtktextview.c:8680 ../gtk/gtktextview.c:8863
 msgid "Cu_t"
 msgstr "Klipp u_t"
 
-#: ../gtk/gtkentry.c:9283 ../gtk/gtkentry.c:9428 ../gtk/gtklabel.c:6277
-#: ../gtk/gtktextview.c:8633 ../gtk/gtktextview.c:8816
+#: ../gtk/gtkentry.c:9276 ../gtk/gtkentry.c:9421 ../gtk/gtklabel.c:6277
+#: ../gtk/gtktextview.c:8684 ../gtk/gtktextview.c:8867
 msgid "_Copy"
 msgstr "_Kopier"
 
-#: ../gtk/gtkentry.c:9287 ../gtk/gtkentry.c:9431 ../gtk/gtklabel.c:6278
-#: ../gtk/gtktextview.c:8635 ../gtk/gtktextview.c:8818
+#: ../gtk/gtkentry.c:9280 ../gtk/gtkentry.c:9424 ../gtk/gtklabel.c:6278
+#: ../gtk/gtktextview.c:8686 ../gtk/gtktextview.c:8869
 msgid "_Paste"
 msgstr "_Lim inn"
 
-#: ../gtk/gtkentry.c:9290 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8638
+#: ../gtk/gtkentry.c:9283 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8689
 msgid "_Delete"
 msgstr "_Slett"
 
-#: ../gtk/gtkentry.c:9301 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8652
+#: ../gtk/gtkentry.c:9294 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8703
 msgid "Select _All"
 msgstr "Velg _alt"
 
-#: ../gtk/gtkentry.c:10389
+#: ../gtk/gtkentry.c:10382
 msgid "Caps Lock is on"
 msgstr "Caps Lock er på"
 
@@ -2098,7 +2098,7 @@ msgid "Cannot create a file under %s as it is not a folder"
 msgstr "Kan ikke lage en fil under %s fordi den ikke er en mappe"
 
 #: ../gtk/gtkfilechooserdefault.c:772
-msgid "Cannot create file as the filename is to long"
+msgid "Cannot create file as the filename is too long"
 msgstr "Kan ikke lage filen fordi filnavnet er for langt"
 
 #: ../gtk/gtkfilechooserdefault.c:773
@@ -2269,7 +2269,7 @@ msgstr "Ikon «%s» er ikke tilstede i tema"
 msgid "Failed to load icon"
 msgstr "Feil under lasting av ikon"
 
-#: ../gtk/gtkimmodule.c:527
+#: ../gtk/gtkimmodule.c:531
 msgid "Simple"
 msgstr "Enkel"
 
@@ -2596,7 +2596,7 @@ msgstr "Håndter egendefinerte størrelser …"
 msgid "Page Setup"
 msgstr "Sideoppsett"
 
-#: ../gtk/gtkpathbar.c:1645
+#: ../gtk/gtkpathbar.c:1606
 msgid "File System Root"
 msgstr "Filsystemrot"
 
@@ -3314,48 +3314,48 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:7948
+#: ../gtk/gtkwindow.c:8042
 msgid "Minimize"
 msgstr "Minimer"
 
-#: ../gtk/gtkwindow.c:7956
+#: ../gtk/gtkwindow.c:8050
 msgid "Unmaximize"
 msgstr "Gjenopprett"
 
-#: ../gtk/gtkwindow.c:7956
+#: ../gtk/gtkwindow.c:8050
 msgid "Maximize"
 msgstr "Maksimer"
 
-#: ../gtk/gtkwindow.c:7965
+#: ../gtk/gtkwindow.c:8059
 msgid "Always on Top"
 msgstr "Alltid øverst"
 
-#: ../gtk/gtkwindow.c:7977
+#: ../gtk/gtkwindow.c:8071
 msgid "Always on Visible Workspace"
 msgstr "Alltid på synlig arbeidsområde"
 
-#: ../gtk/gtkwindow.c:7985
+#: ../gtk/gtkwindow.c:8079
 msgid "Only on This Workspace"
 msgstr "Kun på dette arbeidsområdet"
 
-#: ../gtk/gtkwindow.c:8002
+#: ../gtk/gtkwindow.c:8096
 msgid "Move to Workspace Up"
 msgstr "Flytt opp et arbeidsområde"
 
-#: ../gtk/gtkwindow.c:8011
+#: ../gtk/gtkwindow.c:8105
 msgid "Move to Workspace Down"
 msgstr "Flytt ned et arbeidsområde"
 
-#: ../gtk/gtkwindow.c:8025
+#: ../gtk/gtkwindow.c:8119
 msgid "Move to Another Workspace"
 msgstr "Flytt til annet arbeidsområde"
 
-#: ../gtk/gtkwindow.c:8033
+#: ../gtk/gtkwindow.c:8127
 #, c-format
 msgid "Workspace %d"
 msgstr "Arbeidsområde %d"
 
-#: ../gtk/gtkwindow.c:8053
+#: ../gtk/gtkwindow.c:8147
 msgid "Close"
 msgstr "Lukk"
 
@@ -4907,10 +4907,6 @@ msgstr "Skriftfamilie"
 #: ../gtk/gtkfontchooserwidget.ui.h:3
 msgid "No fonts matched your search. You can revise your search and try again."
 msgstr "Ingen skrifter passet til søket. Du kan endre søket og prøve igjen."
-
-#: ../gtk/gtkmessagedialog.ui.h:1
-msgid " "
-msgstr " "
 
 #: ../gtk/gtkpagesetupunixdialog.ui.h:3
 msgid "_Format for:"
