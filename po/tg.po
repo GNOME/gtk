@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: Tajik Gnome\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-08-24 04:53+0000\n"
-"PO-Revision-Date: 2013-08-25 21:50+0500\n"
+"POT-Creation-Date: 2013-09-06 15:51+0000\n"
+"PO-Revision-Date: 2013-09-08 17:20+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: \n"
 "Language: Tajik\n"
@@ -280,15 +280,11 @@ msgid "Delete"
 msgstr "Нест кардан"
 
 #: ../gdk/keyname-table.h:6881
-#| msgctxt "keyboard label"
-#| msgid "MonBrightnessUp"
 msgctxt "keyboard label"
 msgid "MonBrightnessUp"
 msgstr "MonBrightnessUp (Дурахшони баланд)"
 
 #: ../gdk/keyname-table.h:6882
-#| msgctxt "keyboard label"
-#| msgid "MonBrightnessDown"
 msgctxt "keyboard label"
 msgid "MonBrightnessDown"
 msgstr "MonBrightnessDown (Дурахшони паст)"
@@ -304,8 +300,6 @@ msgid "KbdBrightnessDown"
 msgstr "KbdBrightnessDown (Дурахшони паст)"
 
 #: ../gdk/keyname-table.h:6885
-#| msgctxt "keyboard label"
-#| msgid "AudioMicMute"
 msgctxt "keyboard label"
 msgid "AudioMute"
 msgstr "AudioMicMute (Бесадо)"
@@ -316,92 +310,66 @@ msgid "AudioMicMute"
 msgstr "AudioMicMute (Бесадо)"
 
 #: ../gdk/keyname-table.h:6887
-#| msgctxt "keyboard label"
-#| msgid "AudioLowerVolume"
 msgctxt "keyboard label"
 msgid "AudioLowerVolume"
 msgstr "AudioLowerVolume (Паст)"
 
 #: ../gdk/keyname-table.h:6888
-#| msgctxt "keyboard label"
-#| msgid "AudioRaiseVolume"
 msgctxt "keyboard label"
 msgid "AudioRaiseVolume"
 msgstr "AudioRaiseVolume (Баланд)"
 
 #: ../gdk/keyname-table.h:6889
-#| msgctxt "keyboard label"
-#| msgid "AudioPlay"
 msgctxt "keyboard label"
 msgid "AudioPlay"
 msgstr "AudioPlay (Пахши худкор)"
 
 #: ../gdk/keyname-table.h:6890
-#| msgctxt "keyboard label"
-#| msgid "AudioStop"
 msgctxt "keyboard label"
 msgid "AudioStop"
 msgstr "AudioStop (Ист)"
 
 #: ../gdk/keyname-table.h:6891
-#| msgctxt "keyboard label"
-#| msgid "AudioNext"
 msgctxt "keyboard label"
 msgid "AudioNext"
 msgstr "AudioNext (Навбатӣ)"
 
 #: ../gdk/keyname-table.h:6892
-#| msgctxt "keyboard label"
-#| msgid "AudioPrev"
 msgctxt "keyboard label"
 msgid "AudioPrev"
 msgstr "AudioPrev (Қаблӣ)"
 
 #: ../gdk/keyname-table.h:6893
-#| msgctxt "keyboard label"
-#| msgid "AudioRecord"
 msgctxt "keyboard label"
 msgid "AudioRecord"
 msgstr "AudioRecord (Сабт)"
 
 #: ../gdk/keyname-table.h:6894
-#| msgctxt "keyboard label"
-#| msgid "AudioPause"
 msgctxt "keyboard label"
 msgid "AudioPause"
 msgstr "AudioPause (Таваққуф)"
 
 #: ../gdk/keyname-table.h:6895
-#| msgctxt "keyboard label"
-#| msgid "AudioRewind"
 msgctxt "keyboard label"
 msgid "AudioRewind"
 msgstr "AudioRewind (Ақиб)"
 
 #: ../gdk/keyname-table.h:6896
-#| msgctxt "keyboard label"
-#| msgid "AudioMedia"
 msgctxt "keyboard label"
 msgid "AudioMedia"
 msgstr "AudioMedia (Медиа)"
 
 #: ../gdk/keyname-table.h:6897
-#| msgctxt "keyboard label"
-#| msgid "ScreenSaver"
 msgctxt "keyboard label"
 msgid "ScreenSaver"
 msgstr "ScreenSaver (Пардаи экран)"
 
 #: ../gdk/keyname-table.h:6898
-#| msgctxt "keyboard label"
-#| msgid "Battery"
 msgctxt "keyboard label"
 msgid "Battery"
 msgstr "Battery (Батарея)"
 
 #: ../gdk/keyname-table.h:6899
-#| msgctxt "keyboard label"
-#| msgid "Launch1"
 msgctxt "keyboard label"
 msgid "Launch1"
 msgstr "Launch1 (Оғоз)"
@@ -417,57 +385,41 @@ msgid "Back"
 msgstr "Ақиб"
 
 #: ../gdk/keyname-table.h:6902
-#| msgctxt "keyboard label"
-#| msgid "Sleep"
 msgctxt "keyboard label"
 msgid "Sleep"
 msgstr "Хобидан"
 
 #: ../gdk/keyname-table.h:6903
-#| msgctxt "keyboard label"
-#| msgid "Hibernate"
 msgctxt "keyboard label"
 msgid "Hibernate"
 msgstr "Гибернатсия"
 
 #: ../gdk/keyname-table.h:6904
-#| msgctxt "keyboard label"
-#| msgid "WLAN"
 msgctxt "keyboard label"
 msgid "WLAN"
 msgstr "WLAN (Шабакаи WLAN)"
 
 #: ../gdk/keyname-table.h:6905
-#| msgctxt "keyboard label"
-#| msgid "WebCam"
 msgctxt "keyboard label"
 msgid "WebCam"
 msgstr "WebCam (Веб-камера)"
 
 #: ../gdk/keyname-table.h:6906
-#| msgctxt "keyboard label"
-#| msgid "Display"
 msgctxt "keyboard label"
 msgid "Display"
 msgstr "Display (Дисплей)"
 
 #: ../gdk/keyname-table.h:6907
-#| msgctxt "keyboard label"
-#| msgid "TouchpadToggle"
 msgctxt "keyboard label"
 msgid "TouchpadToggle"
 msgstr "TouchpadToggle (Фаъоли панели ламсӣ)"
 
 #: ../gdk/keyname-table.h:6908
-#| msgctxt "keyboard label"
-#| msgid "WakeUp"
 msgctxt "keyboard label"
 msgid "WakeUp"
 msgstr "WakeUp (Бедор кардан)"
 
 #: ../gdk/keyname-table.h:6909
-#| msgctxt "keyboard label"
-#| msgid "Suspend"
 msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "Suspend (Таваққуф)"
@@ -1521,26 +1473,22 @@ msgstr "Ҷустуҷӯи барномаҳои онлайн"
 #. Translators: %s is a filename
 #: ../gtk/gtkappchooserdialog.c:333
 #, c-format
-#| msgid "Select an application to open “%s”"
 msgid "Select an application to open “%s”"
 msgstr "Барномаеро барои кушодани “%s” интихоб кунед"
 
 #: ../gtk/gtkappchooserdialog.c:334 ../gtk/gtkappchooserwidget.c:660
 #, c-format
-#| msgid "No applications available to open “%s”"
 msgid "No applications available to open “%s”"
 msgstr "Ягон барнома барои кушодани “%s” вуҷуд надорад"
 
 #. Translators: %s is a file type description
 #: ../gtk/gtkappchooserdialog.c:340
 #, c-format
-#| msgid "Select an application for “%s” files"
 msgid "Select an application for “%s” files"
 msgstr "Барномаеро барои файлҳои “%s” интихоб кунед"
 
 #: ../gtk/gtkappchooserdialog.c:342
 #, c-format
-#| msgid "No applications available to open “%s” files"
 msgid "No applications available to open “%s” files"
 msgstr "Ягон барнома барои кушодани файлҳои “%s” вуҷуд надорад"
 
@@ -1584,7 +1532,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../gtk/gtkapplicationwindow.c:334 ../gtk/gtkprintoperation-unix.c:480
+#: ../gtk/gtkapplicationwindow.c:337 ../gtk/gtkprintoperation-unix.c:480
 #: ../gtk/gtkprintoperation-win32.c:1444
 msgid "Application"
 msgstr "Барнома"
@@ -2044,30 +1992,30 @@ msgstr "_Рост:"
 msgid "Paper Margins"
 msgstr "Ҳошияҳои саҳифа"
 
-#: ../gtk/gtkentry.c:9279 ../gtk/gtkentry.c:9425 ../gtk/gtklabel.c:6276
-#: ../gtk/gtktextview.c:8629 ../gtk/gtktextview.c:8812
+#: ../gtk/gtkentry.c:9272 ../gtk/gtkentry.c:9418 ../gtk/gtklabel.c:6276
+#: ../gtk/gtktextview.c:8680 ../gtk/gtktextview.c:8863
 msgid "Cu_t"
 msgstr "_Буридан"
 
-#: ../gtk/gtkentry.c:9283 ../gtk/gtkentry.c:9428 ../gtk/gtklabel.c:6277
-#: ../gtk/gtktextview.c:8633 ../gtk/gtktextview.c:8816
+#: ../gtk/gtkentry.c:9276 ../gtk/gtkentry.c:9421 ../gtk/gtklabel.c:6277
+#: ../gtk/gtktextview.c:8684 ../gtk/gtktextview.c:8867
 msgid "_Copy"
 msgstr "_Нусха бардоштан"
 
-#: ../gtk/gtkentry.c:9287 ../gtk/gtkentry.c:9431 ../gtk/gtklabel.c:6278
-#: ../gtk/gtktextview.c:8635 ../gtk/gtktextview.c:8818
+#: ../gtk/gtkentry.c:9280 ../gtk/gtkentry.c:9424 ../gtk/gtklabel.c:6278
+#: ../gtk/gtktextview.c:8686 ../gtk/gtktextview.c:8869
 msgid "_Paste"
 msgstr "_Гузоштан"
 
-#: ../gtk/gtkentry.c:9290 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8638
+#: ../gtk/gtkentry.c:9283 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8689
 msgid "_Delete"
 msgstr "_Нест кардан"
 
-#: ../gtk/gtkentry.c:9301 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8652
+#: ../gtk/gtkentry.c:9294 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8703
 msgid "Select _All"
 msgstr "Ҳамаро интихоб _кардан"
 
-#: ../gtk/gtkentry.c:10389
+#: ../gtk/gtkentry.c:10382
 msgid "Caps Lock is on"
 msgstr "Caps Lock фаъол аст"
 
@@ -2159,8 +2107,9 @@ msgid "Cannot create a file under %s as it is not a folder"
 msgstr "Файл дар %s эҷод карда намешавад, чунки он ҷузвдон намебошад"
 
 #: ../gtk/gtkfilechooserdefault.c:772
-msgid "Cannot create file as the filename is to long"
-msgstr "Файл эҷод карда намешавад, чунки номи он хеле дароз аст"
+#| msgid "Cannot create file as the filename is to long"
+msgid "Cannot create file as the filename is too long"
+msgstr "Файл эҷод карда намешавад, зеро ки номи он хеле дароз аст"
 
 #: ../gtk/gtkfilechooserdefault.c:773
 msgid "Try using a shorter name."
@@ -2171,8 +2120,6 @@ msgid "You may only select folders"
 msgstr "Шумо метавонед танҳо ҷузвдонҳоро интихоб кунед"
 
 #: ../gtk/gtkfilechooserdefault.c:784
-#| msgid ""
-#| "The item that you selected is not a folder try using a different item."
 msgid "The item that you selected is not a folder try using a different item."
 msgstr ""
 "Объекти интихобшудаи шумо ҷузвдон намебошад. Кӯшиш кунед, ки объекти "
@@ -2200,7 +2147,6 @@ msgid "Could not select file"
 msgstr "Файл интихоб нашуд"
 
 #: ../gtk/gtkfilechooserdefault.c:1723
-#| msgid "_Visit File"
 msgid "_Visit File"
 msgstr "_Кушодани файл"
 
@@ -2242,12 +2188,10 @@ msgid "Search:"
 msgstr "Ҷустуҷӯ:"
 
 #: ../gtk/gtkfilechooserdefault.c:2736
-#| msgid "Save in _folder:"
 msgid "Save in folder:"
 msgstr "Захира кардан _дар ҷузвдон:"
 
 #: ../gtk/gtkfilechooserdefault.c:2738
-#| msgid "Create in _folder:"
 msgid "Create in folder:"
 msgstr "Эҷод _кардан дар ҷузвдон:"
 
@@ -2279,16 +2223,12 @@ msgstr "Ба ҷузвдон тағйир дода нашуд, чунки он м
 
 #: ../gtk/gtkfilechooserdefault.c:5477 ../gtk/gtkprintunixdialog.c:675
 #, c-format
-#| msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr ""
 "Файл бо номи “%s” аллакай мавҷуд аст. Шумо мехоҳед, ки онро ҷойгузин кунед?"
 
 #: ../gtk/gtkfilechooserdefault.c:5480 ../gtk/gtkprintunixdialog.c:679
 #, c-format
-#| msgid ""
-#| "The file already exists in “%s”.  Replacing it will overwrite its "
-#| "contents."
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr ""
@@ -2341,7 +2281,7 @@ msgstr "Нишонаи \"%s\" дар мавзӯъ мавҷуд нест"
 msgid "Failed to load icon"
 msgstr "Нишона бор карда нашуд"
 
-#: ../gtk/gtkimmodule.c:527
+#: ../gtk/gtkimmodule.c:531
 msgid "Simple"
 msgstr "Оддӣ"
 
@@ -2666,7 +2606,7 @@ msgstr "Идора кардани андозаҳои иловагӣ..."
 msgid "Page Setup"
 msgstr "Танзими саҳифа"
 
-#: ../gtk/gtkpathbar.c:1645
+#: ../gtk/gtkpathbar.c:1606
 msgid "File System Root"
 msgstr "Системаи файлии root"
 
@@ -3389,48 +3329,48 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:7948
+#: ../gtk/gtkwindow.c:8042
 msgid "Minimize"
 msgstr "Ҳадди ақал сохтан"
 
-#: ../gtk/gtkwindow.c:7956
+#: ../gtk/gtkwindow.c:8050
 msgid "Unmaximize"
 msgstr "Ҳадди ақал сохтан"
 
-#: ../gtk/gtkwindow.c:7956
+#: ../gtk/gtkwindow.c:8050
 msgid "Maximize"
 msgstr "Ҳадди аксар сохтан"
 
-#: ../gtk/gtkwindow.c:7965
+#: ../gtk/gtkwindow.c:8059
 msgid "Always on Top"
 msgstr "Ҳамеша дар боло"
 
-#: ../gtk/gtkwindow.c:7977
+#: ../gtk/gtkwindow.c:8071
 msgid "Always on Visible Workspace"
 msgstr "Ҳамеша дар фазои кории намоён"
 
-#: ../gtk/gtkwindow.c:7985
+#: ../gtk/gtkwindow.c:8079
 msgid "Only on This Workspace"
 msgstr "Танҳо дар ин фазои корӣ"
 
-#: ../gtk/gtkwindow.c:8002
+#: ../gtk/gtkwindow.c:8096
 msgid "Move to Workspace Up"
 msgstr "Интиқол ба фазои кории боло"
 
-#: ../gtk/gtkwindow.c:8011
+#: ../gtk/gtkwindow.c:8105
 msgid "Move to Workspace Down"
 msgstr "Интиқол ба фазои кории поён"
 
-#: ../gtk/gtkwindow.c:8025
+#: ../gtk/gtkwindow.c:8119
 msgid "Move to Another Workspace"
 msgstr "Интиқол ба фазои кории дигар"
 
-#: ../gtk/gtkwindow.c:8033
+#: ../gtk/gtkwindow.c:8127
 #, c-format
 msgid "Workspace %d"
 msgstr "Фазои кории %d"
 
-#: ../gtk/gtkwindow.c:8053
+#: ../gtk/gtkwindow.c:8147
 msgid "Close"
 msgstr "Пӯшидан"
 
@@ -4879,7 +4819,6 @@ msgid "label"
 msgstr "барчасп"
 
 #: ../gtk/gtkappchooserdialog.ui.h:4
-#| msgid "Show Other Applications"
 msgid "Show Other Applications"
 msgstr "Намоиш додани барномаҳои дигар"
 
@@ -4922,26 +4861,20 @@ msgid "Hue"
 msgstr "Навъи ранг"
 
 #: ../gtk/gtkcoloreditor.ui.h:6
-#| msgctxt "Color Channel"
-#| msgid "S"
 msgctxt "Color Channel"
 msgid "S"
 msgstr "S"
 
 #: ../gtk/gtkcoloreditor.ui.h:7
-#| msgctxt "Color Channel"
-#| msgid "V"
 msgctxt "Color Channel"
 msgid "V"
 msgstr "V"
 
 #: ../gtk/gtkcoloreditor.ui.h:8
-#| msgid "Saturation"
 msgid "Saturation"
 msgstr "Ғализӣ"
 
 #: ../gtk/gtkcoloreditor.ui.h:9
-#| msgid "Value"
 msgid "Value"
 msgstr "Қимат"
 
@@ -4994,10 +4927,6 @@ msgid "No fonts matched your search. You can revise your search and try again."
 msgstr ""
 "Ягон шрифт ба ҷустуҷӯи шумо мутобиқат накард. Шумо метавонед ҷустуҷӯи худро "
 "аз назар гузаронида, амалро такрор кунед."
-
-#: ../gtk/gtkmessagedialog.ui.h:1
-msgid " "
-msgstr " "
 
 #: ../gtk/gtkpagesetupunixdialog.ui.h:3
 msgid "_Format for:"
@@ -5255,7 +5184,6 @@ msgid "Volume"
 msgstr "Ҳаҷм"
 
 #: ../gtk/gtkvolumebutton.ui.h:2
-#| msgid "Turns volume up or down"
 msgid "Turns volume up or down"
 msgstr "Садоро баланд ё паст мекунад"
 
@@ -5282,6 +5210,9 @@ msgstr "Паст"
 #: ../gtk/gtkvolumebutton.ui.h:10
 msgid "Decreases the volume"
 msgstr "Садоро паст мекунад"
+
+#~ msgid " "
+#~ msgstr " "
 
 #, fuzzy
 #~| msgctxt "keyboard label"
