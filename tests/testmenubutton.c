@@ -69,8 +69,13 @@ int main (int argc, char **argv)
 	menu = g_menu_new ();
 	for (i = 5; i > 0; i--) {
 		char *label;
+                GMenuItem *item;
 		label = g_strdup_printf ("Item _%d", i);
-		g_menu_insert (menu, i - 1, label, NULL);
+                item = g_menu_item_new (label, NULL);
+                if (i == 3)
+                  g_menu_item_set_attribute (item, "icon", "s", "preferences-desktop-locale-symbolic");
+		g_menu_insert_item (menu, i - 1, item);
+                g_object_unref (item);
 		g_free (label);
 	}
 	button = gtk_menu_button_new ();
