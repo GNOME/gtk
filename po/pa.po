@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-08-24 04:53+0000\n"
-"PO-Revision-Date: 2013-08-25 18:27-0500\n"
+"POT-Creation-Date: 2013-09-06 15:51+0000\n"
+"PO-Revision-Date: 2013-09-09 13:26-0500\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
 "Language: pa\n"
@@ -23,7 +23,6 @@ msgstr ""
 
 #: ../gdk/broadway/gdkbroadway-server.c:141
 #, c-format
-#| msgid "TGA image type not supported"
 msgid "broadway display type not supported '%s'"
 msgstr "ਬਰੌਡਵੇ ਡਿਸਪਲੇਅ ਕਿਸਮ '%s' ਲਈ ਸਹਾਇਕ ਨਹੀਂ"
 
@@ -293,15 +292,11 @@ msgid "MonBrightnessDown"
 msgstr "MonBrightnessDown"
 
 #: ../gdk/keyname-table.h:6883
-#| msgctxt "keyboard label"
-#| msgid "MonBrightnessUp"
 msgctxt "keyboard label"
 msgid "KbdBrightnessUp"
 msgstr "KbdBrightnessUp"
 
 #: ../gdk/keyname-table.h:6884
-#| msgctxt "keyboard label"
-#| msgid "MonBrightnessDown"
 msgctxt "keyboard label"
 msgid "KbdBrightnessDown"
 msgstr "KbdBrightnessDown"
@@ -312,8 +307,6 @@ msgid "AudioMute"
 msgstr "AudioMute"
 
 #: ../gdk/keyname-table.h:6886
-#| msgctxt "keyboard label"
-#| msgid "AudioMute"
 msgctxt "keyboard label"
 msgid "AudioMicMute"
 msgstr "AudioMicMute"
@@ -508,8 +501,6 @@ msgid "Expand or contract"
 msgstr "ਫੈਲਾਉ ਜਾਂ ਸੁੰਘੜੋ"
 
 #: ../gtk/a11y/gtkcellaccessible.c:260
-#| msgctxt "Stock label"
-#| msgid "_Edit"
 msgctxt "Action name"
 msgid "Edit"
 msgstr "ਸੋਧ"
@@ -538,43 +529,36 @@ msgid "Activates the cell"
 msgstr "ਸੈੱਲ ਸਰਗਰਮ ਕਰੋ"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:71
-#| msgid "_Select"
 msgctxt "Action name"
 msgid "Select"
 msgstr "ਚੁਣੋ"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:73
-#| msgid "_Customize"
 msgctxt "Action name"
 msgid "Customize"
 msgstr "ਪਸੰਦ"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:84
-#| msgid "Select a Color"
 msgctxt "Action description"
 msgid "Selects the color"
 msgstr "ਰੰਗ ਚੁਣੋ"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:85
-#| msgid "Brightness of the color."
 msgctxt "Action description"
 msgid "Activates the color"
 msgstr "ਰੰਗ ਸਰਗਰਮ ਕਰੋ"
 
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:86
-#| msgid "Custom color %d: %s"
 msgctxt "Action description"
 msgid "Customizes the color"
 msgstr "ਪਸੰਦੀਦਾ ਰੰਗ "
 
 #: ../gtk/a11y/gtkcomboboxaccessible.c:307
-#| msgid "_Pressure:"
 msgctxt "Action name"
 msgid "Press"
 msgstr "ਦੱਬੋ"
 
 #: ../gtk/a11y/gtkcomboboxaccessible.c:316
-#| msgid "Decreases the volume"
 msgctxt "Action description"
 msgid "Presses the combobox"
 msgstr "ਕੰਬੋਬਾਕਸ ਦੱਬੋ"
@@ -780,8 +764,6 @@ msgstr ""
 #: ../gtk/gtkassistant.ui.h:5 ../gtk/gtkcolorchooserdialog.ui.h:2
 #: ../gtk/gtkfontchooserdialog.ui.h:2 ../gtk/gtkpagesetupunixdialog.ui.h:1
 #: ../gtk/gtkprintunixdialog.ui.h:2
-#| msgctxt "Stock label"
-#| msgid "_Cancel"
 msgid "_Cancel"
 msgstr "ਰੱਦ ਕਰੋ(_C)"
 
@@ -792,8 +774,6 @@ msgid "_Select"
 msgstr "ਚੁਣੋ(_S)"
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:202
-#| msgctxt "Stock label"
-#| msgid "_Help"
 msgid "_Help"
 msgstr "ਮੱਦਦ(_H)"
 
@@ -826,15 +806,11 @@ msgstr "ਝਲਕ(_P):"
 
 #: ../gtk/deprecated/gtkfontsel.c:1694 ../gtk/gtkassistant.ui.h:1
 #: ../gtk/gtkpagesetupunixdialog.ui.h:2
-#| msgctxt "Stock label"
-#| msgid "_Apply"
 msgid "_Apply"
 msgstr "ਲਾਗੂ ਕਰੋ(_A)"
 
 #: ../gtk/deprecated/gtkfontsel.c:1699 ../gtk/gtkmessagedialog.c:879
 #: ../gtk/gtkmessagedialog.c:913 ../gtk/gtkprintbackend.c:748
-#| msgctxt "Stock label"
-#| msgid "_OK"
 msgid "_OK"
 msgstr "ਠੀਕ ਹੈ(_O)"
 
@@ -1494,26 +1470,22 @@ msgstr "ਆਨਲਾਈਨ ਐਪਲੀਕੇਸ਼ਨ ਲੱਭੋ(_F)"
 #. Translators: %s is a filename
 #: ../gtk/gtkappchooserdialog.c:333
 #, c-format
-#| msgid "Select an application to open \"%s\""
 msgid "Select an application to open “%s”"
 msgstr "“%s\" ਖੋਲ੍ਹਣ ਲਈ ਐਪਲੀਕੇਸ਼ਨ ਚੁਣੋ ਜੀ"
 
 #: ../gtk/gtkappchooserdialog.c:334 ../gtk/gtkappchooserwidget.c:660
 #, c-format
-#| msgid "No applications available to open \"%s\""
 msgid "No applications available to open “%s”"
 msgstr "\"%s\" ਖੋਲ੍ਹਣ ਲਈ ਕੋਈ ਵੀ ਐਪਲੀਕੇਸ਼ਨ ਨਹੀਂ ਹੈ"
 
 #. Translators: %s is a file type description
 #: ../gtk/gtkappchooserdialog.c:340
 #, c-format
-#| msgid "Select an application for \"%s\" files"
 msgid "Select an application for “%s” files"
 msgstr "“%s\" ਫਾਇਲਾਂ ਲਈ ਐਪਲੀਕੇਸ਼ਨ ਚੁਣੋ"
 
 #: ../gtk/gtkappchooserdialog.c:342
 #, c-format
-#| msgid "No applications available to open \"%s\" files"
 msgid "No applications available to open “%s” files"
 msgstr "“%s” ਫਾਇਲਾਂ ਖੋਲ੍ਹਣ ਲਈ ਕੋਈ ਐਪਲੀਕੇਸ਼ਨ ਨਹੀਂ ਹੈ"
 
@@ -1557,7 +1529,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../gtk/gtkapplicationwindow.c:334 ../gtk/gtkprintoperation-unix.c:480
+#: ../gtk/gtkapplicationwindow.c:337 ../gtk/gtkprintoperation-unix.c:480
 #: ../gtk/gtkprintoperation-win32.c:1444
 msgid "Application"
 msgstr "ਐਪਲੀਕੇਸ਼ਨ"
@@ -1960,8 +1932,6 @@ msgstr "default:mm"
 
 #: ../gtk/gtkcustompaperunixdialog.c:311 ../gtk/gtkmessagedialog.c:885
 #: ../gtk/gtkaboutdialog.ui.h:3 ../gtk/gtkassistant.ui.h:6
-#| msgctxt "Stock label"
-#| msgid "_Close"
 msgid "_Close"
 msgstr "ਬੰਦ ਕਰੋ(_C)"
 
@@ -2019,40 +1989,30 @@ msgstr "ਸੱਜੇ(_R):"
 msgid "Paper Margins"
 msgstr "ਸਫ਼ਾ ਹਾਸ਼ੀਆ"
 
-#: ../gtk/gtkentry.c:9279 ../gtk/gtkentry.c:9425 ../gtk/gtklabel.c:6276
-#: ../gtk/gtktextview.c:8629 ../gtk/gtktextview.c:8812
-#| msgctxt "Stock label"
-#| msgid "Cu_t"
+#: ../gtk/gtkentry.c:9272 ../gtk/gtkentry.c:9418 ../gtk/gtklabel.c:6276
+#: ../gtk/gtktextview.c:8680 ../gtk/gtktextview.c:8863
 msgid "Cu_t"
 msgstr "ਕੱਟੋ(_t)"
 
-#: ../gtk/gtkentry.c:9283 ../gtk/gtkentry.c:9428 ../gtk/gtklabel.c:6277
-#: ../gtk/gtktextview.c:8633 ../gtk/gtktextview.c:8816
-#| msgctxt "Stock label"
-#| msgid "_Copy"
+#: ../gtk/gtkentry.c:9276 ../gtk/gtkentry.c:9421 ../gtk/gtklabel.c:6277
+#: ../gtk/gtktextview.c:8684 ../gtk/gtktextview.c:8867
 msgid "_Copy"
 msgstr "ਕਾਪੀ ਕਰੋ(_C)"
 
-#: ../gtk/gtkentry.c:9287 ../gtk/gtkentry.c:9431 ../gtk/gtklabel.c:6278
-#: ../gtk/gtktextview.c:8635 ../gtk/gtktextview.c:8818
-#| msgctxt "Stock label"
-#| msgid "_Paste"
+#: ../gtk/gtkentry.c:9280 ../gtk/gtkentry.c:9424 ../gtk/gtklabel.c:6278
+#: ../gtk/gtktextview.c:8686 ../gtk/gtktextview.c:8869
 msgid "_Paste"
 msgstr "ਚੇਪੋ(_P)"
 
-#: ../gtk/gtkentry.c:9290 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8638
-#| msgctxt "Stock label"
-#| msgid "_Delete"
+#: ../gtk/gtkentry.c:9283 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8689
 msgid "_Delete"
 msgstr "ਹਟਾਓ(_D)"
 
-#: ../gtk/gtkentry.c:9301 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8652
-#| msgctxt "Stock label"
-#| msgid "Select _All"
+#: ../gtk/gtkentry.c:9294 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8703
 msgid "Select _All"
 msgstr "ਸਭ ਚੁਣੋ(_A)"
 
-#: ../gtk/gtkentry.c:10389
+#: ../gtk/gtkentry.c:10382
 msgid "Caps Lock is on"
 msgstr "ਕੈਪਸ ਤਾਲਾ ਚਾਲੂ ਹੈ"
 
@@ -2110,8 +2070,6 @@ msgid "(None)"
 msgstr "(ਕੋਈ ਨਹੀਂ)"
 
 #: ../gtk/gtkfilechooserbutton.c:807 ../gtk/gtkplacessidebar.c:3107
-#| msgctxt "Stock label"
-#| msgid "_Open"
 msgid "_Open"
 msgstr "ਖੋਲ੍ਹੋ(_O)"
 
@@ -2146,8 +2104,8 @@ msgid "Cannot create a file under %s as it is not a folder"
 msgstr "%s ਵਿੱਚ ਫਾਇਲ ਬਣਾਈ ਨਹੀਂ ਜਾ ਸਕਦੀ, ਕਿਉਂਕਿ ਇਹ ਫੋਲਡਰ ਨਹੀਂ ਹੈ"
 
 #: ../gtk/gtkfilechooserdefault.c:772
-#| msgid "Cannot create a file under %s as it is not a folder"
-msgid "Cannot create file as the filename is to long"
+#| msgid "Cannot create file as the filename is to long"
+msgid "Cannot create file as the filename is too long"
 msgstr "ਫਾਇਲ ਬਣਾਈ ਨਹੀਂ ਜਾ ਸਕਦੀ ਕਿਉਂਕਿ ਫਾਇਲ-ਨਾਂ ਬਹੁਤ ਲੰਮਾ ਹੈ"
 
 #: ../gtk/gtkfilechooserdefault.c:773
@@ -2155,14 +2113,10 @@ msgid "Try using a shorter name."
 msgstr "ਹੋਰ ਛੋਟੇ ਨਾਂ ਨਾਲ ਕੋਸ਼ਿਸ਼ ਕਰੋ"
 
 #: ../gtk/gtkfilechooserdefault.c:783
-#| msgid "Could not select file"
 msgid "You may only select folders"
 msgstr "ਤੁਸੀਂ ਕੇਵਲ ਫੋਲਡਰ ਹੀ ਚੁਣ ਸਕਦੇ ਹੋ"
 
 #: ../gtk/gtkfilechooserdefault.c:784
-#| msgid ""
-#| "You may only select folders.  The item that you selected is not a folder; "
-#| "try using a different item."
 msgid "The item that you selected is not a folder try using a different item."
 msgstr ""
 "ਆਈਟਮ, ਜਿਸ ਦੀ ਤੁਸੀਂ ਚੋਣ ਕੀਤੀ ਹੈ, ਫੋਲਡਰ ਨਹੀਂ ਹੈ; ਵੱਖਰੀ ਆਈਟਮ ਦੀ ਚੋਣ ਕਰਨ ਦੀ "
@@ -2190,12 +2144,10 @@ msgid "Could not select file"
 msgstr "ਫਾਇਲ ਚੁਣੀ ਨਹੀਂ ਜਾ ਸਕੀ"
 
 #: ../gtk/gtkfilechooserdefault.c:1723
-#| msgid "_Visit this file"
 msgid "_Visit File"
 msgstr "ਫਾਇਲ ਵੇਖੋ(_V)"
 
 #: ../gtk/gtkfilechooserdefault.c:1726
-#| msgid "Copy _Location"
 msgid "_Copy Location"
 msgstr "ਟਿਕਾਣਾ ਕਾਪੀ ਕਰੋ(_C)"
 
@@ -2233,12 +2185,10 @@ msgid "Search:"
 msgstr "ਖੋਜ:"
 
 #: ../gtk/gtkfilechooserdefault.c:2736
-#| msgid "_Save in folder:"
 msgid "Save in folder:"
 msgstr "ਫੋਲਡਰ ਵਿੱਚ ਸੰਭਾਲੋ:"
 
 #: ../gtk/gtkfilechooserdefault.c:2738
-#| msgid "Create in _folder:"
 msgid "Create in folder:"
 msgstr "ਫੋਲਡਰ ਵਿੱਚ ਬਣਾਓ:"
 
@@ -2270,16 +2220,12 @@ msgstr "ਫੋਲਡਰ ਨੂੰ ਬਦਲਿਆ ਨਹੀਂ ਕਰ ਸਕਿ�
 
 #: ../gtk/gtkfilechooserdefault.c:5477 ../gtk/gtkprintunixdialog.c:675
 #, c-format
-#| msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr ""
 "ਇੱਕ ਫਾਇਲ ਨਾਂ “%s” ਪਹਿਲਾਂ ਹੀ ਮੌਜੂਦ ਹੈ। ਕੀ ਤੁਸੀਂ ਇਸ ਨੂੰ ਬਦਲਣਾ ਚਾਹੁੰਦੇ ਹੋ?"
 
 #: ../gtk/gtkfilechooserdefault.c:5480 ../gtk/gtkprintunixdialog.c:679
 #, c-format
-#| msgid ""
-#| "The file already exists in \"%s\".  Replacing it will overwrite its "
-#| "contents."
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr ""
@@ -2331,7 +2277,7 @@ msgstr "ਥੀਮ ਵਿੱਚ ਆਈਕਾਨ '%s' ਮੌਜੂਦ ਨਹੀਂ
 msgid "Failed to load icon"
 msgstr "ਆਈਕਾਨ ਲੋਡ ਕਰਨ ਦੌਰਾਨ ਗਲਤੀ"
 
-#: ../gtk/gtkimmodule.c:527
+#: ../gtk/gtkimmodule.c:531
 msgid "Simple"
 msgstr "ਸੈਂਪਲ"
 
@@ -2352,26 +2298,18 @@ msgid "System (%s)"
 msgstr "ਸਿਸਟਮ (%s)"
 
 #: ../gtk/gtkinfobar.c:1192 ../gtk/gtkmessagedialog.c:366
-#| msgctxt "Stock label"
-#| msgid "Information"
 msgid "Information"
 msgstr "ਜਾਣਕਾਰੀ"
 
 #: ../gtk/gtkinfobar.c:1196 ../gtk/gtkmessagedialog.c:371
-#| msgctxt "Stock label"
-#| msgid "Question"
 msgid "Question"
 msgstr "ਸਵਾਲ"
 
 #: ../gtk/gtkinfobar.c:1200 ../gtk/gtkmessagedialog.c:376
-#| msgctxt "Stock label"
-#| msgid "Warning"
 msgid "Warning"
 msgstr "ਚੇਤਾਵਨੀ"
 
 #: ../gtk/gtkinfobar.c:1204 ../gtk/gtkmessagedialog.c:381
-#| msgctxt "Stock label"
-#| msgid "Error"
 msgid "Error"
 msgstr "ਗਲਤੀ"
 
@@ -2523,14 +2461,10 @@ msgid "Show GTK+ Options"
 msgstr "GTK+ ਚੋਣ ਵੇਖੋ"
 
 #: ../gtk/gtkmessagedialog.c:897
-#| msgctxt "Stock label"
-#| msgid "_No"
 msgid "_No"
 msgstr "ਨਹੀਂ(_N)"
 
 #: ../gtk/gtkmessagedialog.c:900
-#| msgctxt "Stock label"
-#| msgid "_Yes"
 msgid "_Yes"
 msgstr "ਹਾਂ(_Y)"
 
@@ -2668,17 +2602,15 @@ msgstr "…ਕਸਟਮ ਅਕਾਰ ਪਰਬੰਧ"
 msgid "Page Setup"
 msgstr "ਸਫ਼ਾ ਸੈੱਟਅੱਪ"
 
-#: ../gtk/gtkpathbar.c:1645
+#: ../gtk/gtkpathbar.c:1606
 msgid "File System Root"
 msgstr "ਫਾਇਲ ਸਿਸਟਮ ਰੂਟ"
 
 #: ../gtk/gtkplacessidebar.c:447
-#| msgid "_Device:"
 msgid "Devices"
 msgstr "ਜੰਤਰ"
 
 #: ../gtk/gtkplacessidebar.c:455
-#| msgid "_Add to Bookmarks"
 msgid "Bookmarks"
 msgstr "ਬੁੱਕਮਾਰਕ"
 
@@ -2687,18 +2619,14 @@ msgid "Places"
 msgstr "ਥਾਵਾਂ"
 
 #: ../gtk/gtkplacessidebar.c:768
-#| msgid "Recently Used"
 msgid "Recent"
 msgstr "ਤਾਜ਼ਾ"
 
 #: ../gtk/gtkplacessidebar.c:770
-#| msgid "Recently Used"
 msgid "Recent files"
 msgstr "ਤਾਜ਼ਾ ਫਾਇਲਾਂ"
 
 #: ../gtk/gtkplacessidebar.c:779
-#| msgctxt "keyboard label"
-#| msgid "Home"
 msgid "Home"
 msgstr "ਘਰ"
 
@@ -2707,7 +2635,6 @@ msgid "Open your personal folder"
 msgstr "ਆਪਣਾ ਨਿੱਜੀ ਫੋਲਡਰ ਖੋਲ੍ਹੋ"
 
 #: ../gtk/gtkplacessidebar.c:793
-#| msgid "Could not read the contents of the folder"
 msgid "Open the contents of your desktop in a folder"
 msgstr "ਫੋਲਡਰ ਵਿੱਚ ਆਪਣੇ ਡੈਸਕਟਾਪ ਦੀ ਸਮੱਗਰੀ ਖੋਲ੍ਹੋ"
 
@@ -2726,29 +2653,22 @@ msgid "Mount and open %s"
 msgstr "%s ਮਾਊਂਟ ਕਰੋ ਅਤੇ ਖੋਲ੍ਹੋ"
 
 #: ../gtk/gtkplacessidebar.c:963
-#| msgid "Could not read the contents of the folder"
 msgid "Open the contents of the file system"
 msgstr "ਫਾਇਲ ਸਿਸਟਮ ਦੀ ਸਮੱਗਰੀ ਖੋਲ੍ਹੋ"
 
 #: ../gtk/gtkplacessidebar.c:1063
-#| msgctxt "Stock label"
-#| msgid "_Network"
 msgid "Network"
 msgstr "ਨੈੱਟਵਰਕ"
 
 #: ../gtk/gtkplacessidebar.c:1069
-#| msgctxt "Stock label"
-#| msgid "_Network"
 msgid "Browse Network"
 msgstr "ਨੈੱਟਵਰਕ ਝਲਕ ਵੇਖੋ"
 
 #: ../gtk/gtkplacessidebar.c:1071
-#| msgid "Could not read the contents of the folder"
 msgid "Browse the contents of the network"
 msgstr "ਨੈੱਟਵਰਕ ਦੀ ਸਮੱਗਰੀ ਦੀ ਝਲਕ ਵੇਖੋ"
 
 #: ../gtk/gtkplacessidebar.c:1078
-#| msgid "Convert to PS level 1"
 msgid "Connect to Server"
 msgstr "ਸਰਵਰ ਨਾਲ ਕੁਨੈਕਟ ਕਰੋ"
 
@@ -2766,8 +2686,6 @@ msgid "_Start"
 msgstr "ਸ਼ੁਰੂ(_S)"
 
 #: ../gtk/gtkplacessidebar.c:2101 ../gtk/gtkplacessidebar.c:3190
-#| msgctxt "Stock label, media"
-#| msgid "_Stop"
 msgid "_Stop"
 msgstr "ਰੋਕੋ(_S)"
 
@@ -2781,13 +2699,10 @@ msgid "_Safely Remove Drive"
 msgstr "ਡਰਾਇਵ ਸੁਰੱਖਿਅਤ ਹਟਾਓ(_S)"
 
 #: ../gtk/gtkplacessidebar.c:2110
-#| msgid "Connect As"
 msgid "_Connect Drive"
 msgstr "ਡਰਾਇਵ ਕੁਨੈਕਟ ਕਰੋ(_C)"
 
 #: ../gtk/gtkplacessidebar.c:2111
-#| msgctxt "Stock label"
-#| msgid "_Disconnect"
 msgid "_Disconnect Drive"
 msgstr "ਡਰਾਇਵ ਡਿਸਕੁਨੈਕਟ ਕਰੋ(_D)"
 
@@ -2801,7 +2716,6 @@ msgstr "ਮਲਟੀ-ਡਿਸਕ ਜੰਤਰ ਰੋਕੋ(_S)"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
 #: ../gtk/gtkplacessidebar.c:2119
-#| msgid "Unlock"
 msgid "_Unlock Drive"
 msgstr "ਡਰਾਇਵ ਅਣ-ਲਾਕ ਕਰੋ(_U)"
 
@@ -2811,26 +2725,22 @@ msgstr "ਡਰਾਇਵ ਲਾਕ ਕਰੋ(_L)"
 
 #: ../gtk/gtkplacessidebar.c:2147 ../gtk/gtkplacessidebar.c:2845
 #, c-format
-#| msgid "Unable to end process"
 msgid "Unable to start %s"
 msgstr "%s ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਅਸਮਰੱਥ"
 
 #: ../gtk/gtkplacessidebar.c:2174
 #, c-format
-#| msgid "Unable to end process"
 msgid "Unable to access “%s”"
 msgstr "“%s” ਵਰਤਣ ਲਈ ਅਸਮਰੱਥ"
 
 #: ../gtk/gtkplacessidebar.c:2480
 #, c-format
-#| msgid "Unable to end process"
 msgid "Unable to unmount %s"
 msgstr "%s ਅਣ-ਮਾਊਂਟ ਕਰਨ ਲਈ ਅਸਮਰੱਥ"
 
 #: ../gtk/gtkplacessidebar.c:2603 ../gtk/gtkplacessidebar.c:2630
 #: ../gtk/gtkplacessidebar.c:2657
 #, c-format
-#| msgid "Unable to end process"
 msgid "Unable to eject %s"
 msgstr "%s ਬਾਹਰ ਕੱਢਣ ਲਈ ਅਸਮਰੱਥ"
 
@@ -2841,7 +2751,6 @@ msgstr "ਮੀਡਿਆ ਬਦਲਾਅ ਲਈ %s ਪੋਲ ਕਰਨ ਲਈ ਅ
 
 #: ../gtk/gtkplacessidebar.c:2899
 #, c-format
-#| msgid "Unable to end process"
 msgid "Unable to stop %s"
 msgstr "%s ਰੋਕਣ ਲਈ ਅਸਮਰੱਥ"
 
@@ -2854,7 +2763,6 @@ msgid "Open in New _Window"
 msgstr "ਨਵੀਂ ਵਿੰਡੋ 'ਚ ਖੋਲ੍ਹੋ(_W)"
 
 #: ../gtk/gtkplacessidebar.c:3131
-#| msgid "_Add to Bookmarks"
 msgid "_Add Bookmark"
 msgstr "ਬੁੱਕਮਾਰਕ ਸ਼ਾਮਲ(_A)"
 
@@ -3408,50 +3316,48 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%Id %%"
 
-#: ../gtk/gtkwindow.c:7948
+#: ../gtk/gtkwindow.c:8042
 msgid "Minimize"
 msgstr "ਨਿਊਨਤਮ ਕਰੋ"
 
-#: ../gtk/gtkwindow.c:7956
+#: ../gtk/gtkwindow.c:8050
 msgid "Unmaximize"
 msgstr "ਅਣ-ਵੱਧੋ-ਵੱਧ"
 
-#: ../gtk/gtkwindow.c:7956
+#: ../gtk/gtkwindow.c:8050
 msgid "Maximize"
 msgstr "ਅਧਿਕਤਮ ਕਰੋ "
 
-#: ../gtk/gtkwindow.c:7965
+#: ../gtk/gtkwindow.c:8059
 msgid "Always on Top"
 msgstr "ਹਮੇਸ਼ਾ ਉੱਤੇ ਰੱਖੋ"
 
-#: ../gtk/gtkwindow.c:7977
+#: ../gtk/gtkwindow.c:8071
 msgid "Always on Visible Workspace"
 msgstr "ਹਮੇਸ਼ਾ ਉਪਲੱਬਧ ਵਰਕਸਪੇਸ 'ਚ"
 
-#: ../gtk/gtkwindow.c:7985
+#: ../gtk/gtkwindow.c:8079
 msgid "Only on This Workspace"
 msgstr "ਸਿਰਫ਼ ਇਸ ਵਰਕਸਪੇਸ ਵਿੱਚ ਰੱਖੋ"
 
-#: ../gtk/gtkwindow.c:8002
+#: ../gtk/gtkwindow.c:8096
 msgid "Move to Workspace Up"
 msgstr "ਵਰਕਸਪੇਸ ਵਿੱਚ ਉੱਤੇ ਲੈ ਜਾਓ"
 
-#: ../gtk/gtkwindow.c:8011
+#: ../gtk/gtkwindow.c:8105
 msgid "Move to Workspace Down"
 msgstr "ਵਰਕਸਪੇਸ ਵਿੱਚ ਉੱਤੇ ਲੈ ਜਾਓ"
 
-#: ../gtk/gtkwindow.c:8025
+#: ../gtk/gtkwindow.c:8119
 msgid "Move to Another Workspace"
 msgstr "ਵਰਕਸਪੇਸ ਵਿੱਚ ਉੱਤੇ ਲੈ ਜਾਓ"
 
-#: ../gtk/gtkwindow.c:8033
+#: ../gtk/gtkwindow.c:8127
 #, c-format
 msgid "Workspace %d"
 msgstr "ਵਰਕਸਪੇਸ %d"
 
-#: ../gtk/gtkwindow.c:8053
-#| msgctxt "Stock label"
-#| msgid "_Close"
+#: ../gtk/gtkwindow.c:8147
 msgid "Close"
 msgstr "ਬੰਦ ਕਰੋ"
 
@@ -4576,7 +4482,6 @@ msgstr "ਪਰਿੰਟਰ '%s' ਉੱਤੇ ਸਮੱਸਿਆ ਹੈ।"
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2285
-#| msgid "Paused ; Rejecting Jobs"
 msgid "Paused; Rejecting Jobs"
 msgstr "ਵਿਰਾਮ; ਜੌਬ ਰੱਦ ਕੀਤੀਆਂ ਜਾ ਰਹੀਆਂ ਹਨ।"
 
@@ -4898,7 +4803,6 @@ msgid "label"
 msgstr "ਲੇਬਲ"
 
 #: ../gtk/gtkappchooserdialog.ui.h:4
-#| msgid "Show other applications"
 msgid "Show Other Applications"
 msgstr "ਹੋਰ ਐਪਲੀਕੇਸ਼ਨ ਵੇਖੋ"
 
@@ -4928,8 +4832,6 @@ msgid "A"
 msgstr "A"
 
 #: ../gtk/gtkcoloreditor.ui.h:3
-#| msgctxt "Color channel"
-#| msgid "Alpha"
 msgid "Alpha"
 msgstr "ਐਲਫਾ"
 
@@ -4939,34 +4841,24 @@ msgid "H"
 msgstr "H"
 
 #: ../gtk/gtkcoloreditor.ui.h:5
-#| msgctxt "Color channel"
-#| msgid "Hue"
 msgid "Hue"
 msgstr "ਰੰਗਤ"
 
 #: ../gtk/gtkcoloreditor.ui.h:6
-#| msgctxt "Color channel"
-#| msgid "S"
 msgctxt "Color Channel"
 msgid "S"
 msgstr "S"
 
 #: ../gtk/gtkcoloreditor.ui.h:7
-#| msgctxt "Color channel"
-#| msgid "V"
 msgctxt "Color Channel"
 msgid "V"
 msgstr "V"
 
 #: ../gtk/gtkcoloreditor.ui.h:8
-#| msgctxt "Color channel"
-#| msgid "Saturation"
 msgid "Saturation"
 msgstr "ਸੰਤ੍ਰਿਪਤ"
 
 #: ../gtk/gtkcoloreditor.ui.h:9
-#| msgctxt "Color channel"
-#| msgid "Value"
 msgid "Value"
 msgstr "ਮੁੱਲ"
 
@@ -5020,10 +4912,6 @@ msgstr ""
 "ਤੁਹਾਡੀ ਖੋਜ ਨਾਲ ਮਿਲਦਾ ਕੋਈ ਫੋਂਟ ਨਹੀਂ ਹੈ। ਤੁਸੀਂ ਆਪਣੀ ਖੋਜ ਬਦਲ ਕੇ ਮੁੜ ਕੋਸਿਸ਼ ਕਰ "
 "ਸਕਦੇ ਹੋ।"
 
-#: ../gtk/gtkmessagedialog.ui.h:1
-msgid " "
-msgstr " "
-
 #: ../gtk/gtkpagesetupunixdialog.ui.h:3
 msgid "_Format for:"
 msgstr "ਫਾਰਮੈਟ(_F):"
@@ -5061,13 +4949,10 @@ msgid "Up Path"
 msgstr "ਉੱਤੇ ਮਾਰਗ"
 
 #: ../gtk/gtkprintunixdialog.ui.h:1
-#| msgid "_Preview:"
 msgid "Pre_view"
 msgstr "ਝਲਕ(_v)"
 
 #: ../gtk/gtkprintunixdialog.ui.h:3
-#| msgctxt "Stock label"
-#| msgid "_Print"
 msgid "_Print"
 msgstr "ਪਰਿੰਟ ਕਰੋ(_P)"
 
@@ -5283,7 +5168,6 @@ msgid "Volume"
 msgstr "ਵਾਲੀਅਮ"
 
 #: ../gtk/gtkvolumebutton.ui.h:2
-#| msgid "Turns volume down or up"
 msgid "Turns volume up or down"
 msgstr "ਆਵਾਜ਼ ਵਧਾਓ ਜਾਂ ਘਟਾਓ"
 
@@ -5310,6 +5194,9 @@ msgstr "ਆਵਾਜ਼ ਘਟਾਓ"
 #: ../gtk/gtkvolumebutton.ui.h:10
 msgid "Decreases the volume"
 msgstr "ਵਾਲੀਅਮ ਘਟਾਓ"
+
+#~ msgid " "
+#~ msgstr " "
 
 #~ msgid "Could not run application"
 #~ msgstr "ਐਪਲੀਕੇਸ਼ਨ ਚਲਾਈ ਨਹੀਂ ਜਾ ਸਕੀ"
