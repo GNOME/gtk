@@ -174,6 +174,11 @@ _gtk_pixel_cache_create_surface_if_needed (GtkPixelCache         *cache,
   cairo_pattern_t *bg;
   double red, green, blue, alpha;
 
+#ifdef G_ENABLE_DEBUG
+  if (gtk_get_debug_flags () & GTK_DEBUG_NO_PIXEL_CACHE)
+    return;
+#endif
+
   content = cache->content;
   if (!content)
     {
