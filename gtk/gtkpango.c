@@ -1014,7 +1014,7 @@ _gtk_pango_get_text_before (PangoLayout     *layout,
 
   text = pango_layout_get_text (layout);
 
-  if (text[0] == 0)
+  if (text == NULL || text[0] == 0)
     {
       *start_offset = 0;
       *end_offset = 0;
@@ -1115,7 +1115,7 @@ _gtk_pango_get_text_after (PangoLayout     *layout,
 
   text = pango_layout_get_text (layout);
 
-  if (text[0] == 0)
+  if (text == NULL || text[0] == 0)
     {
       *start_offset = 0;
       *end_offset = 0;
@@ -1222,7 +1222,7 @@ _gtk_pango_get_text_at (PangoLayout     *layout,
 
   text = pango_layout_get_text (layout);
 
-  if (text[0] == 0)
+  if (text == NULL || text[0] == 0)
     {
       *start_offset = 0;
       *end_offset = 0;
