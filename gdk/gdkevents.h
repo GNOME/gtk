@@ -1209,6 +1209,9 @@ GdkEvent* gdk_event_copy     		(const GdkEvent *event);
 GDK_AVAILABLE_IN_ALL
 void	  gdk_event_free     		(GdkEvent 	*event);
 
+GDK_AVAILABLE_IN_3_10
+GdkWindow *gdk_event_get_window         (const GdkEvent *event);
+
 GDK_AVAILABLE_IN_ALL
 guint32   gdk_event_get_time            (const GdkEvent  *event);
 GDK_AVAILABLE_IN_ALL

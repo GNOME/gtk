@@ -799,6 +799,24 @@ gdk_event_free (GdkEvent *event)
 }
 
 /**
+ * gdk_event_get_window:
+ * @event: a #GdkEvent
+ *
+ * Extracts the #GdkWindow associated with an event.
+ *
+ * Return value: (transfer none): The #GdkWindow associated with the event
+ *
+ * Since: 3.10
+ */
+GdkWindow *
+gdk_event_get_window (const GdkEvent *event)
+{
+  g_return_val_if_fail (event != NULL, NULL);
+
+  return event->any.window;
+}
+
+/**
  * gdk_event_get_time:
  * @event: a #GdkEvent
  * 
