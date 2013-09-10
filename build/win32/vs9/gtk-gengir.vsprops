@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8.00"
 	Name="gtkinstallbinprops"
-	InheritedPropertySheets=".\gtk-version-paths.vsprops"
+	InheritedPropertySheets=".\gtk-version-paths.vsprops;.\gtk-build-defines.vsprops"
 	>
 	<UserMacro
 		Name="DoGenGir"
