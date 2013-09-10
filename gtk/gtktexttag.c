@@ -1907,8 +1907,8 @@ gtk_text_tag_get_priority (GtkTextTag *tag)
  * gtk_text_tag_set_priority:
  * @tag: a #GtkTextTag
  * @priority: the new priority
- * 
- * Sets the priority of a #GtkTextTag. Valid priorities are
+ *
+ * Sets the priority of a #GtkTextTag. Valid priorities
  * start at 0 and go to one less than gtk_text_tag_table_get_size().
  * Each tag in a table has a unique priority; setting the priority
  * of one tag shifts the priorities of all the other tags in the

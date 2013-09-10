@@ -3704,7 +3704,6 @@ gtk_text_mark_get_type
 <FILE>gtktexttag</FILE>
 <TITLE>GtkTextTag</TITLE>
 GtkTextTag
-GtkWrapMode
 gtk_text_tag_new
 gtk_text_tag_get_priority
 gtk_text_tag_set_priority
@@ -3757,6 +3756,7 @@ gtk_text_tag_table_get_type
 <TITLE>GtkTextView</TITLE>
 GtkTextView
 GtkTextWindowType
+GtkWrapMode
 gtk_text_view_new
 gtk_text_view_new_with_buffer
 gtk_text_view_set_buffer

@@ -2111,8 +2111,8 @@ gtk_text_buffer_set_mark (GtkTextBuffer     *buffer,
  * return value if you like. Marks are owned by the buffer and go 
  * away when the buffer does.
  *
- * Emits the "mark-set" signal as notification of the mark's initial
- * placement.
+ * Emits the #GtkTextBuffer::mark-set signal as notification of the mark's
+ * initial placement.
  *
  * Return value: (transfer none): the new #GtkTextMark object
  **/
@@ -2138,8 +2138,8 @@ gtk_text_buffer_create_mark (GtkTextBuffer     *buffer,
  * another buffer, and if its name is not %NULL then there must not
  * be another mark in the buffer with the same name.
  *
- * Emits the "mark-set" signal as notification of the mark's initial
- * placement.
+ * Emits the #GtkTextBuffer::mark-set signal as notification of the mark's
+ * initial placement.
  *
  * Since: 2.12
  **/
@@ -2172,8 +2172,8 @@ gtk_text_buffer_add_mark (GtkTextBuffer     *buffer,
  * @mark: a #GtkTextMark
  * @where: new location for @mark in @buffer
  *
- * Moves @mark to the new location @where. Emits the "mark-set" signal
- * as notification of the move.
+ * Moves @mark to the new location @where. Emits the #GtkTextBuffer::mark-set
+ * signal as notification of the move.
  **/
 void
 gtk_text_buffer_move_mark (GtkTextBuffer     *buffer,
@@ -2221,7 +2221,7 @@ gtk_text_buffer_get_iter_at_mark (GtkTextBuffer *buffer,
  * invalid, until it gets added to a buffer again with 
  * gtk_text_buffer_add_mark(). Use gtk_text_mark_get_deleted() to  
  * find out if a mark has been removed from its buffer.
- * The "mark-deleted" signal will be emitted as notification after 
+ * The #GtkTextBuffer::mark-deleted signal will be emitted as notification after
  * the mark is deleted.
  **/
 void
@@ -2911,8 +2911,9 @@ gtk_text_buffer_get_iter_at_line_index  (GtkTextBuffer *buffer,
  * @buffer: a #GtkTextBuffer 
  * @iter: (out): iterator to initialize
  * @line_number: line number counting from 0
- * 
- * Initializes @iter to the start of the given line.
+ *
+ * Initializes @iter to the start of the given line. If @line_number is greater
+ * than the number of lines in the @buffer, the end iterator is returned.
  **/
 void
 gtk_text_buffer_get_iter_at_line (GtkTextBuffer *buffer,
