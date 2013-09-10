@@ -109,6 +109,11 @@ enum {
   LAST_SIGNAL
 };
 
+enum {
+  ROW__ACTIVATE,
+  ROW__LAST_SIGNAL
+};
+
 enum  {
   PROP_0,
   PROP_SELECTION_MODE,
@@ -206,6 +211,7 @@ static void                 gtk_list_box_real_get_preferred_width_for_height (Gt
 
 static GParamSpec *properties[LAST_PROPERTY] = { NULL, };
 static guint signals[LAST_SIGNAL] = { 0 };
+static guint row_signals[ROW__LAST_SIGNAL] = { 0 };
 
 /**
  * gtk_list_box_new:
@@ -2467,6 +2473,17 @@ gtk_list_box_row_real_focus (GtkWidget        *widget,
 }
 
 static void
+gtk_list_box_row_real_activate (GtkListBoxRow *row)
+{
+  GtkListBox *list_box;
+
+  list_box = gtk_list_box_row_get_box (row);
+  if (list_box)
+    gtk_list_box_select_and_activate (list_box, row);
+}
+
+
+static void
 gtk_list_box_row_real_show (GtkWidget *widget)
 {
   GtkListBoxRow *row = GTK_LIST_BOX_ROW (widget);
@@ -2792,4 +2809,16 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
   widget_class->get_preferred_width_for_height = gtk_list_box_row_real_get_preferred_width_for_height;
   widget_class->size_allocate = gtk_list_box_row_real_size_allocate;
   widget_class->focus = gtk_list_box_row_real_focus;
+
+  klass->activate = gtk_list_box_row_real_activate;
+
+  row_signals[ROW__ACTIVATE] =
+    g_signal_new (I_("activate"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkListBoxRowClass, activate),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
+  widget_class->activate_signal = row_signals[ROW__ACTIVATE];
 }
