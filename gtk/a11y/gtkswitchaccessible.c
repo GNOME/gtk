@@ -60,7 +60,6 @@ gtk_switch_accessible_initialize (AtkObject *accessible,
   ATK_OBJECT_CLASS (gtk_switch_accessible_parent_class)->initialize (accessible, widget);
 
   atk_object_set_role (accessible, ATK_ROLE_TOGGLE_BUTTON);
-  atk_object_set_name (accessible, C_("light switch widget", "Switch"));
   atk_object_set_description (accessible, _("Switches between on and off states"));
 }
 
