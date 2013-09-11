@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-09-09 18:36+0000\n"
-"PO-Revision-Date: 2013-09-09 21:00+0100\n"
+"PO-Revision-Date: 2013-09-11 20:52+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenščina <gnome-si@googlegroups.com>\n"
 "Language: Slovenian\n"
@@ -1364,12 +1364,12 @@ msgstr "Ali naj so vsi podrejeni predmeti enake velikosti"
 
 #: ../gtk/gtkbox.c:266
 msgid "Baseline position"
-msgstr ""
+msgstr "Položaj osnovnice"
 
 #: ../gtk/gtkbox.c:267
 msgid ""
 "The position of the baseline aligned widgets if extra space is available"
-msgstr ""
+msgstr "Položaj z osnovnico poravnanih gradnikov, kadar je prostor na voljo"
 
 #: ../gtk/gtkbox.c:291 ../gtk/gtkcellareabox.c:330 ../gtk/gtktoolbar.c:555
 #: ../gtk/gtktoolitemgroup.c:1653 ../gtk/gtktoolpalette.c:1004
@@ -1994,7 +1994,7 @@ msgstr "Medpomnilnik sličic zaprtega razširilnika"
 
 #: ../gtk/gtkcellrendererpixbuf.c:173
 msgid "surface"
-msgstr ""
+msgstr "površina"
 
 #: ../gtk/gtkcellrendererpixbuf.c:174
 msgid "The surface to render"
@@ -3772,11 +3772,13 @@ msgstr "Izbrana možnost omogoča, da imajo vsi stolpci enako širino"
 
 #: ../gtk/gtkgrid.c:1743
 msgid "Baseline Row"
-msgstr ""
+msgstr "Vrstica osnovnice"
 
 #: ../gtk/gtkgrid.c:1744
 msgid "The row to align the to the baseline when valign is GTK_ALIGN_BASELINE"
 msgstr ""
+"Vrstica za poravnavo osnovnice, kadar je uveljavljena možnost "
+"GTK_ALIGN_BASELINE"
 
 #: ../gtk/gtkgrid.c:1758
 msgid "The row number to attach the top side of a child widget to"
@@ -3975,11 +3977,11 @@ msgstr "GdkPixbuf, ki naj se prikaže"
 
 #: ../gtk/gtkimage.c:239
 msgid "Surface"
-msgstr ""
+msgstr "Površina"
 
 #: ../gtk/gtkimage.c:240
 msgid "A cairo_surface_t to display"
-msgstr ""
+msgstr "Predmet cairo_surface_t za prikaz"
 
 #: ../gtk/gtkimage.c:247 ../gtk/gtkrecentmanager.c:293
 #: ../gtk/gtkstatusicon.c:230
@@ -4196,7 +4198,7 @@ msgstr "Število vrstic"
 
 #: ../gtk/gtklabel.c:981
 msgid "The desired number of lines, when ellipsizing a wrapping label"
-msgstr ""
+msgstr "Želeno število vrstic za prikaz okrajšane oznake med prelomom"
 
 #: ../gtk/gtklayout.c:674
 msgid "The width of the layout"
@@ -4995,6 +4997,8 @@ msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
 msgstr ""
+"Načini, v katerih lahko program za klic odpira mesta, ki so izbrana v bočnem "
+"oknu"
 
 #: ../gtk/gtkplacessidebar.c:4193
 msgid "Show 'Desktop'"
@@ -5006,13 +5010,15 @@ msgstr "Ali naj bočno okno vključuje tudi bližnico do mape namizja"
 
 #: ../gtk/gtkplacessidebar.c:4199
 msgid "Show 'Connect to Server'"
-msgstr ""
+msgstr "Pokaži možnost 'Poveži s strežnikom'"
 
 #: ../gtk/gtkplacessidebar.c:4200
 msgid ""
 "Whether the sidebar includes a builtin shortcut to a 'Connect to server' "
 "dialog"
 msgstr ""
+"Ali naj bočno okno vključuje tudi bližnico do pogovornega okna 'Povezave s "
+"strežnikom'"
 
 #: ../gtk/gtkplug.c:202 ../gtk/gtkstatusicon.c:318
 msgid "Embedded"
@@ -5669,7 +5675,7 @@ msgstr "Vrsta prehoda"
 
 #: ../gtk/gtkrevealer.c:222 ../gtk/gtkstack.c:387
 msgid "The type of animation used to transition"
-msgstr ""
+msgstr "Vrsta a nimacije, uporabljene za prehode"
 
 #: ../gtk/gtkrevealer.c:230 ../gtk/gtkstack.c:378
 msgid "Transition duration"
@@ -5677,7 +5683,7 @@ msgstr "Trajanje prehoda"
 
 #: ../gtk/gtkrevealer.c:231 ../gtk/gtkstack.c:379
 msgid "The animation duration, in milliseconds"
-msgstr ""
+msgstr "Trajanje animacije v milisekundah"
 
 #: ../gtk/gtkrevealer.c:238
 msgid "Reveal Child"
@@ -8511,11 +8517,11 @@ msgstr "Gradnik, kateremu je pripeto okno"
 
 #: ../gtk/gtkwindow.c:1061 ../gtk/gtkwindow.c:1062
 msgid "Decorated button layout"
-msgstr ""
+msgstr "Porazdelitev oblikovanih gumbov"
 
 #: ../gtk/gtkwindow.c:1068 ../gtk/gtkwindow.c:1069
 msgid "Decoration resize handle size"
-msgstr ""
+msgstr "Velikost ročnika za spreminjanje velikosti oblikovanih gumbov"
 
 #: ../gtk/gtkwindow.c:1075 ../gtk/gtkwindow.c:1076
 msgid "Width of resize grip"
