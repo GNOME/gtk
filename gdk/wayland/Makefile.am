@@ -48,11 +48,11 @@ libgdkwaylandinclude_HEADERS = 			\
 	gdkwaylandselection.h			\
 	gdkwaylandwindow.h
 
-%-protocol.c : protocol/%.xml
+%-protocol.c : $(srcdir)/protocol/%.xml
 	$(AM_V_GEN)$(WAYLAND_SCANNER) code < $< > $@
-%-server-protocol.h : protocol/%.xml
+%-server-protocol.h : $(srcdir)/protocol/%.xml
 	$(AM_V_GEN)$(WAYLAND_SCANNER) server-header < $< > $@
-%-client-protocol.h : protocol/%.xml
+%-client-protocol.h : $(srcdir)/protocol/%.xml
 	$(AM_V_GEN)$(WAYLAND_SCANNER) client-header < $< > $@
 
 EXTRA_DIST += protocol/gtk-shell.xml
