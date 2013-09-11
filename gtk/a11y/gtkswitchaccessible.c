@@ -54,21 +54,10 @@ gtk_switch_accessible_ref_state_set (AtkObject *accessible)
 }
 
 static void
-gtk_switch_accessible_initialize (AtkObject *accessible,
-                                  gpointer   widget)
-{
-  ATK_OBJECT_CLASS (gtk_switch_accessible_parent_class)->initialize (accessible, widget);
-
-  atk_object_set_role (accessible, ATK_ROLE_TOGGLE_BUTTON);
-  atk_object_set_description (accessible, _("Switches between on and off states"));
-}
-
-static void
 gtk_switch_accessible_class_init (GtkSwitchAccessibleClass *klass)
 {
   AtkObjectClass *atk_class = ATK_OBJECT_CLASS (klass);
 
-  atk_class->initialize = gtk_switch_accessible_initialize;
   atk_class->ref_state_set = gtk_switch_accessible_ref_state_set;
 }
 

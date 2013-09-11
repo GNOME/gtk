@@ -882,6 +882,7 @@ gtk_switch_class_init (GtkSwitchClass *klass)
   g_object_class_override_property (gobject_class, PROP_ACTION_TARGET, "action-target");
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_SWITCH_ACCESSIBLE);
+  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_TOGGLE_BUTTON);
 }
 
 static void
