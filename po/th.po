@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-09-09 18:28+0000\n"
-"PO-Revision-Date: 2013-09-11 16:25+0700\n"
+"POT-Creation-Date: 2013-09-11 09:49+0000\n"
+"PO-Revision-Date: 2013-09-11 17:35+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "Language: th\n"
@@ -476,7 +476,7 @@ msgid "Toggles the cell"
 msgstr "สลับค่าของเซลล์"
 
 #: ../gtk/a11y/gtkbooleancellaccessible.c:63
-#: ../gtk/a11y/gtkswitchaccessible.c:101
+#: ../gtk/a11y/gtkswitchaccessible.c:100
 msgctxt "Action name"
 msgid "Toggle"
 msgstr "สลับค่า"
@@ -605,15 +605,10 @@ msgid "Provides visual indication of progress"
 msgstr "แสดงภาพบ่งบอกการอยู่ระหว่างดำเนินการ"
 
 #: ../gtk/a11y/gtkswitchaccessible.c:63
-msgctxt "light switch widget"
-msgid "Switch"
-msgstr "สวิตช์"
-
-#: ../gtk/a11y/gtkswitchaccessible.c:64
 msgid "Switches between on and off states"
 msgstr "สวิตช์ปิด/เปิด"
 
-#: ../gtk/a11y/gtkswitchaccessible.c:110
+#: ../gtk/a11y/gtkswitchaccessible.c:109
 msgctxt "Action description"
 msgid "Toggles the switch"
 msgstr "สลับสวิตช์"
@@ -1325,7 +1320,7 @@ msgstr "ว่าง"
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
 #.
-#: ../gtk/gtkaboutdialog.c:101
+#: ../gtk/gtkaboutdialog.c:102
 #, c-format
 msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY;\n"
@@ -1334,40 +1329,40 @@ msgstr ""
 "โปรแกรมนี้ไม่มีการรับประกันใดๆ\n"
 "ดูรายละเอียดเพิ่มเติมได้ที่ <a href=\"%s\">%s</a>"
 
-#: ../gtk/gtkaboutdialog.c:374
+#: ../gtk/gtkaboutdialog.c:375
 msgid "License"
 msgstr "สัญญาอนุญาต"
 
-#: ../gtk/gtkaboutdialog.c:375
+#: ../gtk/gtkaboutdialog.c:376
 msgid "The license of the program"
 msgstr "สัญญาอนุญาตใช้งานของโปรแกรม"
 
-#: ../gtk/gtkaboutdialog.c:913
+#: ../gtk/gtkaboutdialog.c:914
 msgid "Could not show link"
 msgstr "ไม่สามารถแสดงลิงก์ได้"
 
-#: ../gtk/gtkaboutdialog.c:950
+#: ../gtk/gtkaboutdialog.c:951
 msgid "Website"
 msgstr "เว็บไซต์"
 
-#: ../gtk/gtkaboutdialog.c:1004
+#: ../gtk/gtkaboutdialog.c:1005
 #, c-format
 msgid "About %s"
 msgstr "เกี่ยวกับ %s"
 
-#: ../gtk/gtkaboutdialog.c:2262
+#: ../gtk/gtkaboutdialog.c:2290
 msgid "Created by"
 msgstr "สร้างโดย"
 
-#: ../gtk/gtkaboutdialog.c:2265
+#: ../gtk/gtkaboutdialog.c:2293
 msgid "Documented by"
 msgstr "เอกสารโดย"
 
-#: ../gtk/gtkaboutdialog.c:2275
+#: ../gtk/gtkaboutdialog.c:2303
 msgid "Translated by"
 msgstr "แปลโดย"
 
-#: ../gtk/gtkaboutdialog.c:2280
+#: ../gtk/gtkaboutdialog.c:2308
 msgid "Artwork by"
 msgstr "งานศิลป์โดย"
 
@@ -1552,7 +1547,7 @@ msgstr "ฟังก์ชันถามชนิดใช้ไม่ได้
 #: ../gtk/gtkbuilderparser.c:418 ../gtk/gtkbuilderparser.c:504
 #, c-format
 msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
-msgstr "ID ของอ็อบเจกต์ '%s' ซ้ำที่บรรทัด %d (ใช้แล้วที่บรรทัด %d)"
+msgstr "ID ของออบเจกต์ '%s' ซ้ำที่บรรทัด %d (ใช้แล้วที่บรรทัด %d)"
 
 #: ../gtk/gtkbuilderparser.c:971
 #, c-format
@@ -2085,7 +2080,7 @@ msgstr "คุณต้องระบุชื่อแฟ้มที่ถู
 #: ../gtk/gtkfilechooserdefault.c:764
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
-msgstr "ไม่สามารถสร้างแฟ้มภายใต้ %s เพราะไม่ใช่โฟลเดอร์"
+msgstr "ไม่สามารถสร้างแฟ้มภายใต้ %s เพราะตำแหน่งดังกล่าวไม่ใช่โฟลเดอร์"
 
 #: ../gtk/gtkfilechooserdefault.c:772
 msgid "Cannot create file as the filename is too long"
@@ -5170,6 +5165,10 @@ msgstr "หรี่เสียง"
 #: ../gtk/gtkvolumebutton.ui.h:10
 msgid "Decreases the volume"
 msgstr "ลดความดัง"
+
+#~ msgctxt "light switch widget"
+#~ msgid "Switch"
+#~ msgstr "สวิตช์"
 
 #~ msgid "Input _Methods"
 #~ msgstr "_วิธีป้อนข้อความ"
