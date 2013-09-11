@@ -36,6 +36,7 @@
 #include "gtkdialog.h"
 #include "gtkgrid.h"
 #include "gtkbox.h"
+#include "gtkicontheme.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
 #include "gtklinkbutton.h"
@@ -1773,6 +1774,8 @@ gtk_about_dialog_set_logo_icon_name (GtkAboutDialog *about,
                                      const gchar    *icon_name)
 {
   GtkAboutDialogPrivate *priv;
+  gint *sizes;
+  gint i, best_size;
 
   g_return_if_fail (GTK_IS_ABOUT_DIALOG (about));
 
@@ -1783,8 +1786,33 @@ gtk_about_dialog_set_logo_icon_name (GtkAboutDialog *about,
   if (gtk_image_get_storage_type (GTK_IMAGE (priv->logo_image)) == GTK_IMAGE_PIXBUF)
     g_object_notify (G_OBJECT (about), "logo");
 
+  sizes = gtk_icon_theme_get_icon_sizes (gtk_icon_theme_get_default (), icon_name);
+  best_size = 0;
+  for (i = 0; sizes[i]; i++)
+    {
+      if (sizes[i] >= 128 || sizes[i] == -1)
+        {
+          best_size = 128;
+          break;
+        }
+      else if (sizes[i] >= 96)
+        {
+          best_size = MAX (96, best_size);
+        }
+      else if (sizes[i] >= 64)
+        {
+          best_size = MAX (64, best_size);
+        }
+      else
+        {
+          best_size = MAX (48, best_size);
+        }
+    }
+  g_free (sizes);
+
   gtk_image_set_from_icon_name (GTK_IMAGE (priv->logo_image), icon_name,
                                 GTK_ICON_SIZE_DIALOG);
+  gtk_image_set_pixel_size (GTK_IMAGE (priv->logo_image), best_size);
   g_object_notify (G_OBJECT (about), "logo-icon-name");
 
   g_object_thaw_notify (G_OBJECT (about));
