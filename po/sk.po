@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-09-03 15:04+0000\n"
-"PO-Revision-Date: 2013-09-03 15:24+0100\n"
+"POT-Creation-Date: 2013-09-11 02:47+0000\n"
+"PO-Revision-Date: 2013-09-05 09:50+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <gnome-sk-list@gnome.org>\n"
 "Language: sk\n"
@@ -79,7 +79,7 @@ msgstr "Ladiace príznaky GDK, ktoré nastaviť"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:217 ../gdk/gdk.c:220 ../gtk/gtkmain.c:454 ../gtk/gtkmain.c:457
+#: ../gdk/gdk.c:217 ../gdk/gdk.c:220 ../gtk/gtkmain.c:455 ../gtk/gtkmain.c:458
 msgid "FLAGS"
 msgstr "PRÍZNAKY"
 
@@ -485,7 +485,7 @@ msgid "Toggles the cell"
 msgstr "Prepne bunku"
 
 #: ../gtk/a11y/gtkbooleancellaccessible.c:63
-#: ../gtk/a11y/gtkswitchaccessible.c:101
+#: ../gtk/a11y/gtkswitchaccessible.c:100
 msgctxt "Action name"
 msgid "Toggle"
 msgstr "Prepnutie"
@@ -615,15 +615,10 @@ msgid "Provides visual indication of progress"
 msgstr "Poskytuje optickú indikáciu priebehu"
 
 #: ../gtk/a11y/gtkswitchaccessible.c:63
-msgctxt "light switch widget"
-msgid "Switch"
-msgstr "Prepínač"
-
-#: ../gtk/a11y/gtkswitchaccessible.c:64
 msgid "Switches between on and off states"
 msgstr "Prepína medzi zapnutým a vypnutým stavom"
 
-#: ../gtk/a11y/gtkswitchaccessible.c:110
+#: ../gtk/a11y/gtkswitchaccessible.c:109
 msgctxt "Action description"
 msgid "Toggles the switch"
 msgstr "Uskutoční prepnutie prepínača"
@@ -1347,7 +1342,7 @@ msgstr "Prázdne"
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
 #.
-#: ../gtk/gtkaboutdialog.c:101
+#: ../gtk/gtkaboutdialog.c:102
 #, c-format
 msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY;\n"
@@ -1356,40 +1351,40 @@ msgstr ""
 "Tento program je vydaný ABSOLÚTNE BEZ ZÁRUKY;\n"
 "podrobnosti nájdete na <a href=\"%s\">%s</a>"
 
-#: ../gtk/gtkaboutdialog.c:374
+#: ../gtk/gtkaboutdialog.c:375
 msgid "License"
 msgstr "Licencia"
 
-#: ../gtk/gtkaboutdialog.c:375
+#: ../gtk/gtkaboutdialog.c:376
 msgid "The license of the program"
 msgstr "Licencia programu"
 
-#: ../gtk/gtkaboutdialog.c:913
+#: ../gtk/gtkaboutdialog.c:914
 msgid "Could not show link"
 msgstr "Nepodarilo sa zobraziť odkaz"
 
-#: ../gtk/gtkaboutdialog.c:950
+#: ../gtk/gtkaboutdialog.c:951
 msgid "Website"
 msgstr "Webová stránka"
 
-#: ../gtk/gtkaboutdialog.c:1004
+#: ../gtk/gtkaboutdialog.c:1005
 #, c-format
 msgid "About %s"
 msgstr "O programe %s"
 
-#: ../gtk/gtkaboutdialog.c:2262
+#: ../gtk/gtkaboutdialog.c:2290
 msgid "Created by"
 msgstr "Vytvoril"
 
-#: ../gtk/gtkaboutdialog.c:2265
+#: ../gtk/gtkaboutdialog.c:2293
 msgid "Documented by"
 msgstr "Zdokumentoval"
 
-#: ../gtk/gtkaboutdialog.c:2275
+#: ../gtk/gtkaboutdialog.c:2303
 msgid "Translated by"
 msgstr "Preložil"
 
-#: ../gtk/gtkaboutdialog.c:2280
+#: ../gtk/gtkaboutdialog.c:2308
 msgid "Artwork by"
 msgstr "Grafika"
 
@@ -2004,25 +1999,25 @@ msgid "Paper Margins"
 msgstr "Okraje papiera"
 
 #: ../gtk/gtkentry.c:9272 ../gtk/gtkentry.c:9418 ../gtk/gtklabel.c:6276
-#: ../gtk/gtktextview.c:8680 ../gtk/gtktextview.c:8863
+#: ../gtk/gtktextview.c:8694 ../gtk/gtktextview.c:8877
 msgid "Cu_t"
 msgstr "Vystri_hnúť"
 
 #: ../gtk/gtkentry.c:9276 ../gtk/gtkentry.c:9421 ../gtk/gtklabel.c:6277
-#: ../gtk/gtktextview.c:8684 ../gtk/gtktextview.c:8867
+#: ../gtk/gtktextview.c:8698 ../gtk/gtktextview.c:8881
 msgid "_Copy"
 msgstr "_Kopírovať"
 
 #: ../gtk/gtkentry.c:9280 ../gtk/gtkentry.c:9424 ../gtk/gtklabel.c:6278
-#: ../gtk/gtktextview.c:8686 ../gtk/gtktextview.c:8869
+#: ../gtk/gtktextview.c:8700 ../gtk/gtktextview.c:8883
 msgid "_Paste"
 msgstr "_Vložiť"
 
-#: ../gtk/gtkentry.c:9283 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8689
+#: ../gtk/gtkentry.c:9283 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8703
 msgid "_Delete"
 msgstr "O_dstrániť"
 
-#: ../gtk/gtkentry.c:9294 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8703
+#: ../gtk/gtkentry.c:9294 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8717
 msgid "Select _All"
 msgstr "Vybr_ať všetko"
 
@@ -2119,7 +2114,7 @@ msgid "Cannot create a file under %s as it is not a folder"
 msgstr "Nedá sa vytvoriť súbor v %s, pretože to nie je priečinok"
 
 #: ../gtk/gtkfilechooserdefault.c:772
-msgid "Cannot create file as the filename is to long"
+msgid "Cannot create file as the filename is too long"
 msgstr "Nedá sa vytvoriť súbor kvôli príliš dlhému názvu"
 
 #: ../gtk/gtkfilechooserdefault.c:773
@@ -2442,27 +2437,27 @@ msgstr ""
 "Kontaktujte správcu vášho systému"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:447
+#: ../gtk/gtkmain.c:448
 msgid "Load additional GTK+ modules"
 msgstr "Načíta prídavné moduly GTK+"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:448
+#: ../gtk/gtkmain.c:449
 msgid "MODULES"
 msgstr "MODULY"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:450
+#: ../gtk/gtkmain.c:451
 msgid "Make all warnings fatal"
 msgstr "Zmení všetky upozornenia na závažné"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:453
+#: ../gtk/gtkmain.c:454
 msgid "GTK+ debugging flags to set"
 msgstr "Ladiace príznaky GTK+, ktoré nastaví"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:456
+#: ../gtk/gtkmain.c:457
 msgid "GTK+ debugging flags to unset"
 msgstr "Ladiace príznaky GTK+, ktoré vypne"
 
@@ -2471,21 +2466,21 @@ msgstr "Ladiace príznaky GTK+, ktoré vypne"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:704
+#: ../gtk/gtkmain.c:705
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:769
+#: ../gtk/gtkmain.c:770
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Nedá sa otvoriť displej: %s"
 
-#: ../gtk/gtkmain.c:835
+#: ../gtk/gtkmain.c:836
 msgid "GTK+ Options"
 msgstr "Voľby GTK+"
 
 #  cmd desc
-#: ../gtk/gtkmain.c:835
+#: ../gtk/gtkmain.c:836
 msgid "Show GTK+ Options"
 msgstr "Zobrazí voľby GTK+"
 
@@ -5276,3 +5271,7 @@ msgstr "Znížiť hlasitosť"
 #: ../gtk/gtkvolumebutton.ui.h:10
 msgid "Decreases the volume"
 msgstr "Zníženie hlasitosti"
+
+#~ msgctxt "light switch widget"
+#~ msgid "Switch"
+#~ msgstr "Prepínač"
