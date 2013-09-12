@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-08-24 04:53+0000\n"
-"PO-Revision-Date: 2013-08-28 22:18+0300\n"
+"POT-Creation-Date: 2013-09-12 09:54+0000\n"
+"PO-Revision-Date: 2013-09-12 23:07+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -82,7 +82,7 @@ msgstr "GDK derinimo parametrai, kuriuos naudoti"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:217 ../gdk/gdk.c:220 ../gtk/gtkmain.c:454 ../gtk/gtkmain.c:457
+#: ../gdk/gdk.c:217 ../gdk/gdk.c:220 ../gtk/gtkmain.c:455 ../gtk/gtkmain.c:458
 msgid "FLAGS"
 msgstr "PARAMETRAI"
 
@@ -487,7 +487,7 @@ msgid "Toggles the cell"
 msgstr "Perjungia langelį"
 
 #: ../gtk/a11y/gtkbooleancellaccessible.c:63
-#: ../gtk/a11y/gtkswitchaccessible.c:101
+#: ../gtk/a11y/gtkswitchaccessible.c:89
 msgctxt "Action name"
 msgid "Toggle"
 msgstr "Perjungti"
@@ -616,16 +616,7 @@ msgstr "Suktukas"
 msgid "Provides visual indication of progress"
 msgstr "Vizualiai parodo vykdomo veiksmo progresą"
 
-#: ../gtk/a11y/gtkswitchaccessible.c:63
-msgctxt "light switch widget"
-msgid "Switch"
-msgstr "Jungiklis"
-
-#: ../gtk/a11y/gtkswitchaccessible.c:64
-msgid "Switches between on and off states"
-msgstr "Perjungia tarp įjungimo ir išjungimo būsenų"
-
-#: ../gtk/a11y/gtkswitchaccessible.c:110
+#: ../gtk/a11y/gtkswitchaccessible.c:98
 msgctxt "Action description"
 msgid "Toggles the switch"
 msgstr "Perjungia jungiklį"
@@ -1348,7 +1339,7 @@ msgstr "Tuščias"
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
 #.
-#: ../gtk/gtkaboutdialog.c:101
+#: ../gtk/gtkaboutdialog.c:102
 #, c-format
 msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY;\n"
@@ -1357,40 +1348,40 @@ msgstr ""
 "Ši programa teikiama BE JOKIOS GARANTIJOS;\n"
 "daugiau informacijos rasite <a href=\"%s\">%s</a>"
 
-#: ../gtk/gtkaboutdialog.c:374
+#: ../gtk/gtkaboutdialog.c:375
 msgid "License"
 msgstr "Licencija"
 
-#: ../gtk/gtkaboutdialog.c:375
+#: ../gtk/gtkaboutdialog.c:376
 msgid "The license of the program"
 msgstr "Programos licencija"
 
-#: ../gtk/gtkaboutdialog.c:913
+#: ../gtk/gtkaboutdialog.c:914
 msgid "Could not show link"
 msgstr "Nepavyko parodyti nuorodos"
 
-#: ../gtk/gtkaboutdialog.c:950
+#: ../gtk/gtkaboutdialog.c:951
 msgid "Website"
 msgstr "Tinklapis"
 
-#: ../gtk/gtkaboutdialog.c:1004
+#: ../gtk/gtkaboutdialog.c:1005
 #, c-format
 msgid "About %s"
 msgstr "Apie %s"
 
-#: ../gtk/gtkaboutdialog.c:2262
+#: ../gtk/gtkaboutdialog.c:2290
 msgid "Created by"
 msgstr "Autoriai"
 
-#: ../gtk/gtkaboutdialog.c:2265
+#: ../gtk/gtkaboutdialog.c:2293
 msgid "Documented by"
 msgstr "Dokumentavo"
 
-#: ../gtk/gtkaboutdialog.c:2275
+#: ../gtk/gtkaboutdialog.c:2303
 msgid "Translated by"
 msgstr "Išvertė"
 
-#: ../gtk/gtkaboutdialog.c:2280
+#: ../gtk/gtkaboutdialog.c:2308
 msgid "Artwork by"
 msgstr "Apipavidalino"
 
@@ -1537,7 +1528,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../gtk/gtkapplicationwindow.c:334 ../gtk/gtkprintoperation-unix.c:480
+#: ../gtk/gtkapplicationwindow.c:337 ../gtk/gtkprintoperation-unix.c:480
 #: ../gtk/gtkprintoperation-win32.c:1444
 msgid "Application"
 msgstr "Programa"
@@ -1997,30 +1988,30 @@ msgstr "_Dešinė:"
 msgid "Paper Margins"
 msgstr "Popieriaus paraštės"
 
-#: ../gtk/gtkentry.c:9279 ../gtk/gtkentry.c:9425 ../gtk/gtklabel.c:6276
-#: ../gtk/gtktextview.c:8629 ../gtk/gtktextview.c:8812
+#: ../gtk/gtkentry.c:9272 ../gtk/gtkentry.c:9418 ../gtk/gtklabel.c:6276
+#: ../gtk/gtktextview.c:8694 ../gtk/gtktextview.c:8877
 msgid "Cu_t"
 msgstr "_Iškirpti"
 
-#: ../gtk/gtkentry.c:9283 ../gtk/gtkentry.c:9428 ../gtk/gtklabel.c:6277
-#: ../gtk/gtktextview.c:8633 ../gtk/gtktextview.c:8816
+#: ../gtk/gtkentry.c:9276 ../gtk/gtkentry.c:9421 ../gtk/gtklabel.c:6277
+#: ../gtk/gtktextview.c:8698 ../gtk/gtktextview.c:8881
 msgid "_Copy"
 msgstr "_Kopijuoti"
 
-#: ../gtk/gtkentry.c:9287 ../gtk/gtkentry.c:9431 ../gtk/gtklabel.c:6278
-#: ../gtk/gtktextview.c:8635 ../gtk/gtktextview.c:8818
+#: ../gtk/gtkentry.c:9280 ../gtk/gtkentry.c:9424 ../gtk/gtklabel.c:6278
+#: ../gtk/gtktextview.c:8700 ../gtk/gtktextview.c:8883
 msgid "_Paste"
 msgstr "Į_dėti"
 
-#: ../gtk/gtkentry.c:9290 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8638
+#: ../gtk/gtkentry.c:9283 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8703
 msgid "_Delete"
 msgstr "Iš_trinti"
 
-#: ../gtk/gtkentry.c:9301 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8652
+#: ../gtk/gtkentry.c:9294 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8717
 msgid "Select _All"
 msgstr "P_ažymėti viską"
 
-#: ../gtk/gtkentry.c:10389
+#: ../gtk/gtkentry.c:10382
 msgid "Caps Lock is on"
 msgstr "Caps Lock įjungtas"
 
@@ -2111,7 +2102,8 @@ msgid "Cannot create a file under %s as it is not a folder"
 msgstr "Nepavyko sukurti failo %s viduje, nes tai nėra aplankas"
 
 #: ../gtk/gtkfilechooserdefault.c:772
-msgid "Cannot create file as the filename is to long"
+#| msgid "Cannot create file as the filename is to long"
+msgid "Cannot create file as the filename is too long"
 msgstr "Nepavyko sukurti failo, kadangi failo pavadinimas per ilgas"
 
 #: ../gtk/gtkfilechooserdefault.c:773
@@ -2189,12 +2181,10 @@ msgid "Search:"
 msgstr "Ieškoti:"
 
 #: ../gtk/gtkfilechooserdefault.c:2736
-#| msgid "Save in _folder:"
 msgid "Save in folder:"
 msgstr "Įrašyti aplanke:"
 
 #: ../gtk/gtkfilechooserdefault.c:2738
-#| msgid "Create in _folder:"
 msgid "Create in folder:"
 msgstr "Sukurti aplanke:"
 
@@ -2281,7 +2271,7 @@ msgstr "Piktogramos „%s“ temoje nėra"
 msgid "Failed to load icon"
 msgstr "Nepavyko įkelti piktogramos"
 
-#: ../gtk/gtkimmodule.c:527
+#: ../gtk/gtkimmodule.c:531
 msgid "Simple"
 msgstr "Paprastasis"
 
@@ -2418,27 +2408,27 @@ msgstr ""
 "Susisiekite su sistemos administratoriumi"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:447
+#: ../gtk/gtkmain.c:448
 msgid "Load additional GTK+ modules"
 msgstr "Įkelti papildomus GTK+ modulius"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:448
+#: ../gtk/gtkmain.c:449
 msgid "MODULES"
 msgstr "MODULIAI"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:450
+#: ../gtk/gtkmain.c:451
 msgid "Make all warnings fatal"
 msgstr "Visi perspėjimai yra „mirtini“"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:453
+#: ../gtk/gtkmain.c:454
 msgid "GTK+ debugging flags to set"
 msgstr "GTK+ derinimo parametrai, kuriuos naudoti"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:456
+#: ../gtk/gtkmain.c:457
 msgid "GTK+ debugging flags to unset"
 msgstr "GTK+ derinimo parametrai, kuriu nenaudoti"
 
@@ -2447,20 +2437,20 @@ msgstr "GTK+ derinimo parametrai, kuriu nenaudoti"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:704
+#: ../gtk/gtkmain.c:705
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:769
+#: ../gtk/gtkmain.c:770
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Nepavyko atverti displėjaus: „%s“"
 
-#: ../gtk/gtkmain.c:835
+#: ../gtk/gtkmain.c:836
 msgid "GTK+ Options"
 msgstr "GTK+ parinktys"
 
-#: ../gtk/gtkmain.c:835
+#: ../gtk/gtkmain.c:836
 msgid "Show GTK+ Options"
 msgstr "Rodyti GTK+ parinktis"
 
@@ -2606,7 +2596,7 @@ msgstr "Tvarkyti pasirinktinius dydžius..."
 msgid "Page Setup"
 msgstr "Puslapio sąranka"
 
-#: ../gtk/gtkpathbar.c:1645
+#: ../gtk/gtkpathbar.c:1606
 msgid "File System Root"
 msgstr "Failų sistemos šakninis aplankas"
 
@@ -3122,7 +3112,6 @@ msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr "Nerasta registruota programa pavadinimu „%s“ elementui su URI „%s“"
 
 #: ../gtk/gtksearchentry.c:240
-#| msgid "Search:"
 msgid "Search"
 msgstr "Ieškoti"
 
@@ -3322,48 +3311,48 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:7948
+#: ../gtk/gtkwindow.c:8042
 msgid "Minimize"
 msgstr "Sumažinti"
 
-#: ../gtk/gtkwindow.c:7956
+#: ../gtk/gtkwindow.c:8050
 msgid "Unmaximize"
 msgstr "Atstatyti"
 
-#: ../gtk/gtkwindow.c:7956
+#: ../gtk/gtkwindow.c:8050
 msgid "Maximize"
 msgstr "Išdidinti"
 
-#: ../gtk/gtkwindow.c:7965
+#: ../gtk/gtkwindow.c:8059
 msgid "Always on Top"
 msgstr "Visada viršuje"
 
-#: ../gtk/gtkwindow.c:7977
+#: ../gtk/gtkwindow.c:8071
 msgid "Always on Visible Workspace"
 msgstr "Visada matomame darbalaukyje"
 
-#: ../gtk/gtkwindow.c:7985
+#: ../gtk/gtkwindow.c:8079
 msgid "Only on This Workspace"
 msgstr "Tik šiame darbalaukyje"
 
-#: ../gtk/gtkwindow.c:8002
+#: ../gtk/gtkwindow.c:8096
 msgid "Move to Workspace Up"
 msgstr "Perkelti į aukštesnįjį darbalaukį"
 
-#: ../gtk/gtkwindow.c:8011
+#: ../gtk/gtkwindow.c:8105
 msgid "Move to Workspace Down"
 msgstr "Perkelti į žemesnįjį darbalaukį"
 
-#: ../gtk/gtkwindow.c:8025
+#: ../gtk/gtkwindow.c:8119
 msgid "Move to Another Workspace"
 msgstr "Perkelti į kitą darbalaukį"
 
-#: ../gtk/gtkwindow.c:8033
+#: ../gtk/gtkwindow.c:8127
 #, c-format
 msgid "Workspace %d"
 msgstr "Darbalaukis %d"
 
-#: ../gtk/gtkwindow.c:8053
+#: ../gtk/gtkwindow.c:8147
 msgid "Close"
 msgstr "Užverti"
 
@@ -4922,10 +4911,6 @@ msgstr ""
 "Joks šriftas neatitiko jūsų paieškos. Galite peržiūrėti paiešką ir bandyti "
 "vėl."
 
-#: ../gtk/gtkmessagedialog.ui.h:1
-msgid " "
-msgstr " "
-
 #: ../gtk/gtkpagesetupunixdialog.ui.h:3
 msgid "_Format for:"
 msgstr "_Formatas kam:"
@@ -5208,3 +5193,4 @@ msgstr "Patylinti"
 #: ../gtk/gtkvolumebutton.ui.h:10
 msgid "Decreases the volume"
 msgstr "Patylina"
+
