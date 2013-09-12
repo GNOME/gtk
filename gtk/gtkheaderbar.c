@@ -1457,7 +1457,7 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
 
-  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_FILLER);
+  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_PANEL);
 }
 
 static void
