@@ -1774,6 +1774,33 @@ gtk_window_new (GtkWindowType type)
   return GTK_WIDGET (window);
 }
 
+static void
+gtk_window_set_title_internal (GtkWindow   *window,
+                               const gchar *title,
+                               gboolean     update_titlebar)
+{
+  GtkWindowPrivate *priv;
+  GtkWidget *widget;
+  char *new_title;
+
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  priv = window->priv;
+  widget = GTK_WIDGET (window);
+
+  new_title = g_strdup (title);
+  g_free (priv->title);
+  priv->title = new_title;
+
+  if (gtk_widget_get_realized (widget))
+    gdk_window_set_title (gtk_widget_get_window (widget), priv->title);
+
+  if (priv->titlebar != NULL && update_titlebar)
+    gtk_header_bar_set_title (GTK_HEADER_BAR (priv->titlebar), priv->title);
+
+  g_object_notify (G_OBJECT (window), "title");
+}
+
 /**
  * gtk_window_set_title:
  * @window: a #GtkWindow
@@ -1793,26 +1820,9 @@ void
 gtk_window_set_title (GtkWindow   *window,
 		      const gchar *title)
 {
-  GtkWindowPrivate *priv;
-  GtkWidget *widget;
-  char *new_title;
-  
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  priv = window->priv;
-  widget = GTK_WIDGET (window);
-
-  new_title = g_strdup (title);
-  g_free (priv->title);
-  priv->title = new_title;
-
-  if (gtk_widget_get_realized (widget))
-    gdk_window_set_title (gtk_widget_get_window (widget), priv->title);
-
-  if (priv->titlebar != NULL)
-    gtk_header_bar_set_title (GTK_HEADER_BAR (priv->titlebar), priv->title);
-
-  g_object_notify (G_OBJECT (window), "title");
+  gtk_window_set_title_internal (window, title, TRUE);
 }
 
 /**
@@ -3519,6 +3529,15 @@ gdk_window_enable_csd (GtkWindow *window)
   priv->client_decorated = TRUE;
 }
 
+static void
+on_titlebar_title_notify (GtkHeaderBar *titlebar,
+                          GParamSpec *pspec,
+                          GtkWindow *self)
+{
+  gtk_window_set_title_internal (self, gtk_header_bar_get_title (titlebar),
+                                 FALSE);
+}
+
 /**
  * gtk_window_set_titlebar:
  * @window: a #GtkWindow
@@ -3553,6 +3572,8 @@ gtk_window_set_titlebar (GtkWindow *window,
 
   priv->title_box = titlebar;
   gtk_widget_set_parent (priv->title_box, widget);
+  g_signal_connect (titlebar, "notify::title",
+                    G_CALLBACK (on_titlebar_title_notify), window);
 
   visual = gdk_screen_get_rgba_visual (gtk_widget_get_screen (widget));
   if (visual)
