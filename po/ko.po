@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-09-02 12:26+0000\n"
-"PO-Revision-Date: 2013-09-04 01:04+0900\n"
+"POT-Creation-Date: 2013-09-12 09:54+0000\n"
+"PO-Revision-Date: 2013-09-14 22:43+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr@googlegroups.com>\n"
 "Language: Korean\n"
@@ -77,7 +77,7 @@ msgstr "설정할 GDK 디버깅 플래그"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:217 ../gdk/gdk.c:220 ../gtk/gtkmain.c:454 ../gtk/gtkmain.c:457
+#: ../gdk/gdk.c:217 ../gdk/gdk.c:220 ../gtk/gtkmain.c:455 ../gtk/gtkmain.c:458
 msgid "FLAGS"
 msgstr "<플래그>"
 
@@ -506,7 +506,7 @@ msgid "Toggles the cell"
 msgstr "셀을 토글합니다"
 
 #: ../gtk/a11y/gtkbooleancellaccessible.c:63
-#: ../gtk/a11y/gtkswitchaccessible.c:101
+#: ../gtk/a11y/gtkswitchaccessible.c:89
 msgctxt "Action name"
 msgid "Toggle"
 msgstr "토글"
@@ -634,16 +634,7 @@ msgstr "스피너"
 msgid "Provides visual indication of progress"
 msgstr "진행 상황을 볼 수 있게 표시합니다"
 
-#: ../gtk/a11y/gtkswitchaccessible.c:63
-msgctxt "light switch widget"
-msgid "Switch"
-msgstr "스위치"
-
-#: ../gtk/a11y/gtkswitchaccessible.c:64
-msgid "Switches between on and off states"
-msgstr "켜고 끄는 상태를 전환합니다"
-
-#: ../gtk/a11y/gtkswitchaccessible.c:110
+#: ../gtk/a11y/gtkswitchaccessible.c:98
 msgctxt "Action description"
 msgid "Toggles the switch"
 msgstr "스위치를 토글합니다"
@@ -1364,7 +1355,7 @@ msgstr "비었음"
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
 #.
-#: ../gtk/gtkaboutdialog.c:101
+#: ../gtk/gtkaboutdialog.c:102
 #, c-format
 msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY;\n"
@@ -1373,40 +1364,40 @@ msgstr ""
 "이 프로그램은 어떠한 형태의 보증도 제공하지 않습니다.\n"
 "자세한 정보는 <a href=\"%s\">%s</a> 페이지를 참고하십시오."
 
-#: ../gtk/gtkaboutdialog.c:374
+#: ../gtk/gtkaboutdialog.c:375
 msgid "License"
 msgstr "라이선스"
 
-#: ../gtk/gtkaboutdialog.c:375
+#: ../gtk/gtkaboutdialog.c:376
 msgid "The license of the program"
 msgstr "프로그램의 사용권"
 
-#: ../gtk/gtkaboutdialog.c:913
+#: ../gtk/gtkaboutdialog.c:914
 msgid "Could not show link"
 msgstr "링크를 표시할 수 없습니다"
 
-#: ../gtk/gtkaboutdialog.c:950
+#: ../gtk/gtkaboutdialog.c:951
 msgid "Website"
 msgstr "웹사이트"
 
-#: ../gtk/gtkaboutdialog.c:1004
+#: ../gtk/gtkaboutdialog.c:1005
 #, c-format
 msgid "About %s"
 msgstr "%s 정보"
 
-#: ../gtk/gtkaboutdialog.c:2262
+#: ../gtk/gtkaboutdialog.c:2290
 msgid "Created by"
 msgstr "만든 사람"
 
-#: ../gtk/gtkaboutdialog.c:2265
+#: ../gtk/gtkaboutdialog.c:2293
 msgid "Documented by"
 msgstr "문서 작성"
 
-#: ../gtk/gtkaboutdialog.c:2275
+#: ../gtk/gtkaboutdialog.c:2303
 msgid "Translated by"
 msgstr "번역"
 
-#: ../gtk/gtkaboutdialog.c:2280
+#: ../gtk/gtkaboutdialog.c:2308
 msgid "Artwork by"
 msgstr "아트워크"
 
@@ -1553,7 +1544,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../gtk/gtkapplicationwindow.c:334 ../gtk/gtkprintoperation-unix.c:480
+#: ../gtk/gtkapplicationwindow.c:337 ../gtk/gtkprintoperation-unix.c:480
 #: ../gtk/gtkprintoperation-win32.c:1444
 msgid "Application"
 msgstr "프로그램"
@@ -2014,25 +2005,25 @@ msgid "Paper Margins"
 msgstr "용지 여백"
 
 #: ../gtk/gtkentry.c:9272 ../gtk/gtkentry.c:9418 ../gtk/gtklabel.c:6276
-#: ../gtk/gtktextview.c:8680 ../gtk/gtktextview.c:8863
+#: ../gtk/gtktextview.c:8694 ../gtk/gtktextview.c:8877
 msgid "Cu_t"
 msgstr "잘라내기(_T)"
 
 #: ../gtk/gtkentry.c:9276 ../gtk/gtkentry.c:9421 ../gtk/gtklabel.c:6277
-#: ../gtk/gtktextview.c:8684 ../gtk/gtktextview.c:8867
+#: ../gtk/gtktextview.c:8698 ../gtk/gtktextview.c:8881
 msgid "_Copy"
 msgstr "복사(_C)"
 
 #: ../gtk/gtkentry.c:9280 ../gtk/gtkentry.c:9424 ../gtk/gtklabel.c:6278
-#: ../gtk/gtktextview.c:8686 ../gtk/gtktextview.c:8869
+#: ../gtk/gtktextview.c:8700 ../gtk/gtktextview.c:8883
 msgid "_Paste"
 msgstr "붙여넣기(_P)"
 
-#: ../gtk/gtkentry.c:9283 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8689
+#: ../gtk/gtkentry.c:9283 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8703
 msgid "_Delete"
 msgstr "삭제(_D)"
 
-#: ../gtk/gtkentry.c:9294 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8703
+#: ../gtk/gtkentry.c:9294 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8717
 msgid "Select _All"
 msgstr "모두 선택(_A)"
 
@@ -2128,7 +2119,7 @@ msgid "Cannot create a file under %s as it is not a folder"
 msgstr "폴더가 아니므로 %s 아래에 파일을 만들 수 없습니다"
 
 #: ../gtk/gtkfilechooserdefault.c:772
-msgid "Cannot create file as the filename is to long"
+msgid "Cannot create file as the filename is too long"
 msgstr "파일 이름이 너무 길어서 파일을 만들 수 없습니다"
 
 #: ../gtk/gtkfilechooserdefault.c:773
@@ -2248,7 +2239,8 @@ msgstr "이름이 “%s”인 파일이 이미 있습니다. 이 파일을 바�
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
-msgstr "“%s” 안에 파일이 이미 있습니다. 파일을 바꾸면 그 내용을 덮어 쓰게 됩니다."
+msgstr ""
+"“%s” 안에 파일이 이미 있습니다. 파일을 바꾸면 그 내용을 덮어 쓰게 됩니다."
 
 #: ../gtk/gtkfilechooserdefault.c:5485 ../gtk/gtkprintunixdialog.c:686
 msgid "_Replace"
@@ -2435,27 +2427,27 @@ msgstr ""
 "시스템 관리자에게 문의하십시오"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:447
+#: ../gtk/gtkmain.c:448
 msgid "Load additional GTK+ modules"
 msgstr "GTK+ 모듈을 추가로 읽어들입니다"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:448
+#: ../gtk/gtkmain.c:449
 msgid "MODULES"
 msgstr "<모듈>"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:450
+#: ../gtk/gtkmain.c:451
 msgid "Make all warnings fatal"
 msgstr "모든 경고를 치명적인 것으로 간주합니다"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:453
+#: ../gtk/gtkmain.c:454
 msgid "GTK+ debugging flags to set"
 msgstr "설정할 GTK+ 디버깅 플래그"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:456
+#: ../gtk/gtkmain.c:457
 msgid "GTK+ debugging flags to unset"
 msgstr "설정 해제할 GTK+ 디버깅 플래그"
 
@@ -2464,20 +2456,20 @@ msgstr "설정 해제할 GTK+ 디버깅 플래그"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:704
+#: ../gtk/gtkmain.c:705
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:769
+#: ../gtk/gtkmain.c:770
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "디스플레이를 열 수 없습니다: %s"
 
-#: ../gtk/gtkmain.c:835
+#: ../gtk/gtkmain.c:836
 msgid "GTK+ Options"
 msgstr "GTK+ 옵션"
 
-#: ../gtk/gtkmain.c:835
+#: ../gtk/gtkmain.c:836
 msgid "Show GTK+ Options"
 msgstr "GTK+ 옵션 표시"
 
