@@ -1319,6 +1319,95 @@ test_tag (void)
   g_object_unref (buffer);
 }
 
+static void
+check_buffer_contents (GtkTextBuffer *buffer,
+                       const gchar   *contents)
+{
+  GtkTextIter start;
+  GtkTextIter end;
+  gchar *buffer_contents;
+
+  gtk_text_buffer_get_start_iter (buffer, &start);
+  gtk_text_buffer_get_end_iter (buffer, &end);
+  buffer_contents = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
+  g_assert_cmpstr (buffer_contents, ==, contents);
+}
+
+static void
+test_clipboard (void)
+{
+  GtkClipboard *clipboard;
+  GtkTextBuffer *buffer;
+  GtkTextIter start;
+  GtkTextIter end;
+  GtkTextTag *tag;
+
+  clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
+
+  buffer = gtk_text_buffer_new (NULL);
+  gtk_text_buffer_set_text (buffer, "abcdef", -1);
+
+  /* Simple cut & paste */
+  gtk_text_buffer_get_start_iter (buffer, &start);
+  gtk_text_buffer_get_iter_at_offset (buffer, &end, 3);
+  gtk_text_buffer_select_range (buffer, &start, &end);
+
+  gtk_text_buffer_cut_clipboard (buffer, clipboard, TRUE);
+  check_buffer_contents (buffer, "def");
+
+  gtk_text_buffer_get_end_iter (buffer, &end);
+  gtk_text_buffer_paste_clipboard (buffer, clipboard, &end, TRUE);
+  check_buffer_contents (buffer, "defabc");
+
+  /* Simple copy & paste */
+  gtk_text_buffer_get_iter_at_offset (buffer, &start, 3);
+  gtk_text_buffer_get_end_iter (buffer, &end);
+  gtk_text_buffer_select_range (buffer, &start, &end);
+  gtk_text_buffer_copy_clipboard (buffer, clipboard);
+
+  gtk_text_buffer_get_start_iter (buffer, &start);
+  gtk_text_buffer_paste_clipboard (buffer, clipboard, &start, TRUE);
+  check_buffer_contents (buffer, "abcdefabc");
+
+  /* Replace the selection when pasting */
+  gtk_text_buffer_set_text (buffer, "abcdef", -1);
+
+  gtk_text_buffer_get_start_iter (buffer, &start);
+  gtk_text_buffer_get_iter_at_offset (buffer, &end, 3);
+  gtk_text_buffer_select_range (buffer, &start, &end);
+  gtk_text_buffer_copy_clipboard (buffer, clipboard);
+
+  gtk_text_buffer_get_iter_at_offset (buffer, &start, 3);
+  gtk_text_buffer_get_end_iter (buffer, &end);
+  gtk_text_buffer_select_range (buffer, &start, &end);
+  gtk_text_buffer_paste_clipboard (buffer, clipboard, NULL, TRUE);
+  check_buffer_contents (buffer, "abcabc");
+
+  /* Copy & paste text with tags.
+   * See https://bugzilla.gnome.org/show_bug.cgi?id=339539
+   */
+  gtk_text_buffer_set_text (buffer, "abcdef", -1);
+
+  tag = gtk_text_buffer_create_tag (buffer, NULL, NULL);
+
+  gtk_text_buffer_get_start_iter (buffer, &start);
+  gtk_text_buffer_get_iter_at_offset (buffer, &end, 4);
+  gtk_text_buffer_apply_tag (buffer, tag, &start, &end);
+
+  gtk_text_buffer_get_iter_at_offset (buffer, &start, 3);
+  gtk_text_buffer_get_end_iter (buffer, &end);
+  gtk_text_buffer_select_range (buffer, &start, &end);
+  gtk_text_buffer_copy_clipboard (buffer, clipboard);
+  gtk_text_buffer_paste_clipboard (buffer, clipboard, NULL, TRUE);
+  check_buffer_contents (buffer, "abcdef");
+
+  gtk_text_buffer_get_iter_at_offset (buffer, &start, 3);
+  g_assert (gtk_text_iter_forward_to_tag_toggle (&start, tag));
+  g_assert_cmpint (4, ==, gtk_text_iter_get_offset (&start));
+
+  g_object_unref (buffer);
+}
+
 int
 main (int argc, char** argv)
 {
@@ -1336,6 +1425,7 @@ main (int argc, char** argv)
   g_test_add_func ("/TextBuffer/Get and Set", test_get_set);
   g_test_add_func ("/TextBuffer/Fill and Empty", test_fill_empty);
   g_test_add_func ("/TextBuffer/Tag", test_tag);
-  
+  g_test_add_func ("/TextBuffer/Clipboard", test_clipboard);
+
   return g_test_run();
 }
