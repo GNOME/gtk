@@ -161,8 +161,8 @@ static gboolean             gtk_list_box_real_focus                   (GtkWidget
                                                                        GtkDirectionType     direction);
 static GSequenceIter*       gtk_list_box_get_previous_visible         (GtkListBox          *list_box,
                                                                        GSequenceIter       *_iter);
-static GtkListBoxRow       *gtk_list_box_get_first_visible            (GtkListBox          *list_box);
-static GtkListBoxRow       *gtk_list_box_get_last_visible             (GtkListBox          *list_box);
+static GtkListBoxRow       *gtk_list_box_get_first_focusable          (GtkListBox          *list_box);
+static GtkListBoxRow       *gtk_list_box_get_last_focusable           (GtkListBox          *list_box);
 static gboolean             gtk_list_box_real_draw                    (GtkWidget           *widget,
                                                                        cairo_t             *cr);
 static void                 gtk_list_box_real_realize                 (GtkWidget           *widget);
@@ -1344,14 +1344,30 @@ gtk_list_box_real_focus (GtkWidget        *widget,
       if (direction == GTK_DIR_UP || direction == GTK_DIR_TAB_BACKWARD)
         {
           i = gtk_list_box_get_previous_visible (list_box, ROW_PRIV (priv->cursor_row)->iter);
-          if (i != NULL)
-            next_focus_row = g_sequence_get (i);
+          while (i != NULL)
+            {
+              if (gtk_widget_get_sensitive (g_sequence_get (i)))
+                {
+                  next_focus_row = g_sequence_get (i);
+                  break;
+                }
+
+              i = gtk_list_box_get_previous_visible (list_box, i);
+            }
         }
       else if (direction == GTK_DIR_DOWN || direction == GTK_DIR_TAB_FORWARD)
         {
           i = gtk_list_box_get_next_visible (list_box, ROW_PRIV (priv->cursor_row)->iter);
-          if (!g_sequence_iter_is_end (i))
-            next_focus_row = g_sequence_get (i);
+          while (!g_sequence_iter_is_end (i))
+            {
+              if (gtk_widget_get_sensitive (g_sequence_get (i)))
+                {
+                  next_focus_row = g_sequence_get (i);
+                  break;
+                }
+
+              i = gtk_list_box_get_next_visible (list_box, i);
+            }
         }
     }
   else
@@ -1364,13 +1380,13 @@ gtk_list_box_real_focus (GtkWidget        *widget,
         case GTK_DIR_TAB_BACKWARD:
           next_focus_row = priv->selected_row;
           if (next_focus_row == NULL)
-            next_focus_row = gtk_list_box_get_last_visible (list_box);
+            next_focus_row = gtk_list_box_get_last_focusable (list_box);
           break;
         default:
           next_focus_row = priv->selected_row;
           if (next_focus_row == NULL)
             next_focus_row =
-              gtk_list_box_get_first_visible (list_box);
+              gtk_list_box_get_first_focusable (list_box);
           break;
         }
     }
@@ -1513,7 +1529,7 @@ gtk_list_box_apply_filter_all (GtkListBox *list_box)
 }
 
 static GtkListBoxRow *
-gtk_list_box_get_first_visible (GtkListBox *list_box)
+gtk_list_box_get_first_focusable (GtkListBox *list_box)
 {
   GtkListBoxPrivate *priv = gtk_list_box_get_instance_private (list_box);
   GtkListBoxRow *row;
@@ -1524,7 +1540,7 @@ gtk_list_box_get_first_visible (GtkListBox *list_box)
        iter = g_sequence_iter_next (iter))
     {
         row = g_sequence_get (iter);
-        if (row_is_visible (row))
+        if (row_is_visible (row) && gtk_widget_is_sensitive (GTK_WIDGET (row)))
           return row;
     }
 
@@ -1532,7 +1548,7 @@ gtk_list_box_get_first_visible (GtkListBox *list_box)
 }
 
 static GtkListBoxRow *
-gtk_list_box_get_last_visible (GtkListBox *list_box)
+gtk_list_box_get_last_focusable (GtkListBox *list_box)
 {
   GtkListBoxPrivate *priv = gtk_list_box_get_instance_private (list_box);
   GtkListBoxRow *row;
@@ -1543,7 +1559,7 @@ gtk_list_box_get_last_visible (GtkListBox *list_box)
     {
       iter = g_sequence_iter_prev (iter);
       row = g_sequence_get (iter);
-      if (row_is_visible (row))
+      if (row_is_visible (row) && gtk_widget_is_sensitive (GTK_WIDGET (row)))
         return row;
     }
 
@@ -2223,9 +2239,9 @@ gtk_list_box_real_move_cursor (GtkListBox      *list_box,
     {
     case GTK_MOVEMENT_BUFFER_ENDS:
       if (count < 0)
-        row = gtk_list_box_get_first_visible (list_box);
+        row = gtk_list_box_get_first_focusable (list_box);
       else
-        row = gtk_list_box_get_last_visible (list_box);
+        row = gtk_list_box_get_last_focusable (list_box);
       break;
     case GTK_MOVEMENT_DISPLAY_LINES:
       if (priv->cursor_row != NULL)
