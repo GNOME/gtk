@@ -1106,7 +1106,7 @@ gdk_wayland_window_hide_surface (GdkWindow *window,
           wl_surface_attach (impl->surface, NULL, 0, 0);
           wl_surface_commit (impl->surface);
         }
-      else if (impl->surface)
+      else
         {
           if (impl->gtk_surface)
             gtk_surface_destroy (impl->gtk_surface);
