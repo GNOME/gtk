@@ -2774,7 +2774,12 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * The ::drag-leave signal is emitted on the drop site when the cursor
    * leaves the widget. A typical reason to connect to this signal is to
    * undo things done in #GtkWidget::drag-motion, e.g. undo highlighting
-   * with gtk_drag_unhighlight()
+   * with gtk_drag_unhighlight().
+   *
+   *
+   * Likewise, the #GtkWidget::drag-leave signal is also emitted before the 
+   * ::drag-drop signal, for instance to allow cleaning up of a preview item  
+   * created in the #GtkWidget::drag-motion signal handler.
    */
   widget_signals[DRAG_LEAVE] =
     g_signal_new (I_("drag-leave"),
@@ -3065,6 +3070,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * signal is expected to process the received data and then call
    * gtk_drag_finish(), setting the @success parameter depending on
    * whether the data was processed successfully.
+   *
+   * Applications must create some means to determine why the signal was emitted 
+   * and therefore whether to call gdk_drag_status() or gtk_drag_finish(). 
    *
    * The handler may inspect the selected action with
    * gdk_drag_context_get_selected_action() before calling

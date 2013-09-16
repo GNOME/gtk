@@ -21,6 +21,7 @@ struct _CanvasItem
   gdouble x, y;
 };
 
+static gboolean drag_data_requested_for_drop = FALSE;
 static CanvasItem *drop_item = NULL;
 static GList *canvas_items = NULL;
 
@@ -273,6 +274,7 @@ interactive_canvas_drag_motion (GtkWidget      *widget,
       if (!target)
         return FALSE;
 
+      drag_data_requested_for_drop = FALSE;
       gtk_drag_get_data (widget, context, target, time);
     }
 
@@ -302,16 +304,36 @@ interactive_canvas_drag_data_received (GtkWidget        *widget,
     tool_item = gtk_tool_palette_get_drag_item (GTK_TOOL_PALETTE (palette),
                                                 selection);
 
-  /* create a drop indicator when a tool button was found */
+  /* create a canvas item when a tool button was found */
 
   g_assert (NULL == drop_item);
 
-  if (GTK_IS_TOOL_ITEM (tool_item))
+  if (!GTK_IS_TOOL_ITEM (tool_item))
+    return;
+
+  if (drop_item)
     {
-      drop_item = canvas_item_new (widget, GTK_TOOL_BUTTON (tool_item), x, y);
-      gdk_drag_status (context, GDK_ACTION_COPY, time);
-      gtk_widget_queue_draw (widget);
+      canvas_item_free (drop_item);
+      drop_item = NULL;
     }
+
+  CanvasItem *item = canvas_item_new (widget, GTK_TOOL_BUTTON (tool_item), x, y);
+
+  /* Either create a new item or just create a preview item, 
+     depending on why the drag data was requested. */
+  if(drag_data_requested_for_drop)
+    {
+      canvas_items = g_list_append (canvas_items, item);
+      drop_item = NULL;
+
+      gtk_drag_finish (context, TRUE, FALSE, time);
+    } else
+    {
+      drop_item = item;
+      gdk_drag_status (context, GDK_ACTION_COPY, time);
+    }
+
+  gtk_widget_queue_draw (widget);
 }
 
 static gboolean
@@ -322,29 +344,19 @@ interactive_canvas_drag_drop (GtkWidget      *widget,
                               guint           time,
                               gpointer        data)
 {
-  if (drop_item)
-    {
-      /* turn the drop indicator into a real canvas item */
+  GdkAtom target = gtk_drag_dest_find_target (widget, context, NULL);
 
-      drop_item->x = x;
-      drop_item->y = y;
+  if (!target)
+    return FALSE;
 
-      canvas_items = g_list_append (canvas_items, drop_item);
-      drop_item = NULL;
-
-      /* signal the item was accepted and redraw */
-
-      gtk_drag_finish (context, TRUE, FALSE, time);
-      gtk_widget_queue_draw (widget);
-
-      return TRUE;
-    }
+  drag_data_requested_for_drop = TRUE;
+  gtk_drag_get_data (widget, context, target, time);
 
   return FALSE;
 }
 
-static gboolean
-interactive_canvas_real_drag_leave (gpointer data)
+static void
+interactive_canvas_drag_leave (gpointer data)
 {
   if (drop_item)
     {
@@ -353,20 +365,9 @@ interactive_canvas_real_drag_leave (gpointer data)
       canvas_item_free (drop_item);
       drop_item = NULL;
 
-      gtk_widget_queue_draw (widget);
+      if (widget)
+        gtk_widget_queue_draw (widget);
     }
-
-  return G_SOURCE_REMOVE;
-}
-
-static void
-interactive_canvas_drag_leave (GtkWidget      *widget,
-                               GdkDragContext *context,
-                               guint           time,
-                               gpointer        data)
-{
-  /* defer cleanup until a potential "drag-drop" signal was received */
-  g_idle_add (interactive_canvas_real_drag_leave, widget);
 }
 
 static void
@@ -598,7 +599,7 @@ do_toolpalette (GtkWidget *do_widget)
                         "signal::draw", canvas_draw, NULL,
                         "signal::drag-motion", interactive_canvas_drag_motion, NULL,
                         "signal::drag-data-received", interactive_canvas_drag_data_received, NULL,
-                        "signal::drag-leave", interactive_canvas_drag_leave, NULL,
+                        "signal::drag-leave", interactive_canvas_drag_leave, contents,
                         "signal::drag-drop", interactive_canvas_drag_drop, NULL,
                         NULL);
 
