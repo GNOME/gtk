@@ -1175,8 +1175,6 @@ gtk_main (void)
 
       /* Synchronize the recent manager singleton */
       _gtk_recent_manager_sync ();
-
-      _gtk_accessibility_shutdown ();
     }
 }
 

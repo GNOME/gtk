@@ -47,8 +47,6 @@
 #include <gdk/x11/gdkx.h>
 #endif
 
-extern void _gtk_accessibility_shutdown (void);
-
 /**
  * SECTION:gtkapplication
  * @title: GtkApplication
@@ -432,8 +430,6 @@ gtk_application_shutdown (GApplication *application)
 
   /* Synchronize the recent manager singleton */
   _gtk_recent_manager_sync ();
-
-  _gtk_accessibility_shutdown ();
 
   G_APPLICATION_CLASS (gtk_application_parent_class)
     ->shutdown (application);

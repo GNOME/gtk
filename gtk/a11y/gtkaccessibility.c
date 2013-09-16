@@ -967,35 +967,6 @@ do_window_event_initialization (void)
   g_signal_connect (root, "children-changed::remove", (GCallback) window_removed, NULL);
 }
 
-static void
-undo_window_event_initialization (void)
-{
-  AtkObject *root;
-
-  root = atk_get_root ();
-
-  g_signal_handlers_disconnect_by_func (root, (GCallback) window_added, NULL);
-  g_signal_handlers_disconnect_by_func (root, (GCallback) window_removed, NULL);
-}
-
-
-void
-_gtk_accessibility_shutdown (void)
-{
-  if (!initialized)
-    return;
-
-  initialized = FALSE;
-
-  g_clear_object (&atk_misc_instance);
-
-#ifdef GDK_WINDOWING_X11
-  atk_bridge_adaptor_cleanup ();
-#endif
-
-  undo_window_event_initialization ();
-}
-
 void
 _gtk_accessibility_init (void)
 {

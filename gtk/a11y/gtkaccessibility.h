@@ -23,7 +23,6 @@
 
 G_BEGIN_DECLS
 
-void      _gtk_accessibility_shutdown    (void);
 void      _gtk_accessibility_init        (void);
 
 gboolean  _gtk_accessibility_key_snooper (GtkWidget   *widget,
