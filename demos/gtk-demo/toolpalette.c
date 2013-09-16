@@ -649,6 +649,8 @@ load_icon_items (GtkToolPalette *palette)
       gchar *context = l->data;
       GList *icon_names;
       GList *ll;
+      const guint max_icons = 10;
+      guint icons_count = 0;
 
       GtkWidget *group = gtk_tool_item_group_new (context);
       gtk_container_add (GTK_CONTAINER (palette), group);
@@ -668,6 +670,11 @@ load_icon_items (GtkToolPalette *palette)
           gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), id);
           gtk_tool_item_set_tooltip_text (GTK_TOOL_ITEM (item), id);
           gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
+
+          /* Prevent us having an insane number of icons: */
+          ++icons_count;
+          if(icons_count >= max_icons)
+            break;
         }
 
       g_list_free_full (icon_names, g_free);
