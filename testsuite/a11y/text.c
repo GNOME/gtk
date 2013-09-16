@@ -828,6 +828,7 @@ test_words (GtkWidget *widget)
             continue;
         }
 
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       switch (expected[i].gravity)
         {
           case -1:
@@ -852,6 +853,7 @@ test_words (GtkWidget *widget)
             g_assert_not_reached ();
             break;
         }
+      G_GNUC_END_IGNORE_DEPRECATIONS;
 
       g_assert_cmpstr (word, ==, expected[i].word);
       g_assert_cmpint (start, ==, expected[i].start);
