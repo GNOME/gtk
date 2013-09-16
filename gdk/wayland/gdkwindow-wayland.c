@@ -1123,8 +1123,9 @@ gdk_wayland_window_hide_surface (GdkWindow *window,
       impl->shell_surface = NULL;
       cairo_surface_destroy (impl->server_surface);
       impl->server_surface = NULL;
-      impl->mapped = FALSE;
     }
+
+  impl->mapped = FALSE;
 }
 
 static void
