@@ -2081,6 +2081,9 @@ gdk_wayland_window_set_opaque_region (GdkWindow      *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
+  if (!impl->surface)
+    gdk_wayland_window_create_surface (window);
+
   wl_region = wl_region_from_cairo_region (GDK_WAYLAND_DISPLAY (gdk_window_get_display (window)), region);
   if (wl_region == NULL)
     return;
