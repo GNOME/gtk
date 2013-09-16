@@ -7555,7 +7555,7 @@ gtk_window_focus (GtkWidget        *widget,
   bin = GTK_BIN (widget);
 
   old_focus_child = gtk_container_get_focus_child (container);
-  
+
   /* We need a special implementation here to deal properly with wrapping
    * around in the tab chain without the danger of going into an
    * infinite loop.
@@ -7587,8 +7587,17 @@ gtk_window_focus (GtkWidget        *widget,
       gtk_window_set_focus (GTK_WINDOW (container), NULL);
     }
 
-  /* Now try to focus the first widget in the window */
-  child = gtk_bin_get_child (bin);
+  /* Now try to focus the first widget in the window,
+   * taking care to hook titlebar widgets into the
+   * focus chain.
+  */
+  if (priv->title_box != NULL &&
+      old_focus_child != NULL &&
+      priv->title_box != old_focus_child)
+    child = priv->title_box;
+  else
+    child = gtk_bin_get_child (bin);
+
   if (child)
     {
       if (gtk_widget_child_focus (child, direction))
