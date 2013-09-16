@@ -18,7 +18,7 @@ window1
     <AtkSelection>
     selected children: unnamed-GtkContainerAccessible-0
     unnamed-GtkContainerAccessible-0
-      "panel"
+      "list item"
       parent: box1
       index: 0
       state: enabled focusable sensitive showing visible
@@ -66,7 +66,7 @@ window1
                             weight: <omitted>
                             wrap-mode: word
     unnamed-GtkContainerAccessible-1
-      "panel"
+      "list item"
       parent: box1
       index: 1
       state: enabled focusable sensitive showing visible
