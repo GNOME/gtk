@@ -1101,8 +1101,6 @@ gdk_wayland_window_hide_surface (GdkWindow *window,
 
   if (impl->surface)
     {
-      if (impl->shell_surface)
-        wl_shell_surface_destroy (impl->shell_surface);
       if (impl->use_custom_surface && !is_destroy)
         {
           wl_surface_attach (impl->surface, NULL, 0, 0);
@@ -1120,7 +1118,13 @@ gdk_wayland_window_hide_surface (GdkWindow *window,
           g_slist_free (impl->outputs);
           impl->outputs = NULL;
         }
-      impl->shell_surface = NULL;
+
+      if (impl->shell_surface)
+        {
+          wl_shell_surface_destroy (impl->shell_surface);
+          impl->shell_surface = NULL;
+        }
+
       cairo_surface_destroy (impl->server_surface);
       impl->server_surface = NULL;
     }
