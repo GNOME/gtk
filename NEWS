@@ -1,3 +1,33 @@
+Overview of Changes from GTK+ 2.24.20 to 2.24.21
+================================================
+
+* OS X: Various input handling fixes
+ - Avoid a crash on first key press
+ - Fall back from native input method to GtkIMContextSimple
+ - Avoid beeping when using native input method
+ - Reset preedit state when needed
+
+* Look for gtkrc in /usr/share/gtk-2.0, in addition to to system config
+  dirs
+
+* Bug fixes:
+ 513812 Optimize gdk_cairo_set_source_pixbuf() alpha multiplication...
+ 536767 gtksignal.h includes gtk.h
+ 692548 Quartz: Cursor doesn't reset when the mouse leaves a toplev...
+ 695636 _gdk_windowing_create_cairo_surface() may return already fi...
+ 698758 Wrong limit for "Native Windows wider or taller than 65535 ...
+ 699236 Assert triggered during gdk_pixmap_new() if some failure ha...
+ 699673 [3.2/3.4/3.6/3.8] uuid conflicting on Windows
+ 701332 Patch for minor glitch in NSTextInput
+ 701571 1ad25dfb causes NSApp to not notice NSWindow destruction
+ 703789 gtk.immodules still referenced after switch to immodules.cache
+ 705181 Annoying beep on arrow keys when using IME on MacOS
+ 705182 Reset Cocoa IME state when immodule is reset
+
+* Translation updates:
+ Thai
+
+
 Overview of Changes from GTK+ 2.24.19 to 2.24.20
 ================================================
 
