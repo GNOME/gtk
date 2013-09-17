@@ -937,7 +937,9 @@ gtk_header_bar_get_title (GtkHeaderBar *bar)
  *
  * Note that GtkHeaderBar always reserves room for the subtitle, even
  * if none is currently set. If this is not desired, use
- * gtk_header_bar_set_custom_title().
+ * gtk_header_bar_set_custom_title() to place your own label in the
+ * title position. To achieve the same style, use the "title" style
+ * class.
  *
  * Since: 3.10
  */
