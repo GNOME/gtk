@@ -387,6 +387,7 @@ gdk_window_begin_move_drag_for_device
 gdk_window_constrain_size
 gdk_window_beep
 gdk_window_get_scale_factor
+gdk_window_set_opaque_region
 
 <SUBSECTION>
 gdk_window_get_clip_region
@@ -808,6 +809,8 @@ gdk_event_get_scroll_direction
 gdk_event_get_scroll_deltas
 gdk_event_get_state
 gdk_event_get_time
+gdk_event_get_event_type
+gdk_event_get_window
 gdk_event_get_type
 GdkEventSequence
 gdk_event_get_event_sequence
@@ -1010,6 +1013,8 @@ gdk_x11_window_move_to_current_desktop
 gdk_x11_window_move_to_desktop
 gdk_x11_window_get_desktop
 gdk_x11_window_set_utf8_property
+gdk_x11_window_set_frame_extents
+gdk_x11_window_set_frame_sync_enabled
 gdk_x11_get_default_root_xwindow
 gdk_x11_get_default_screen
 gdk_x11_get_default_xdisplay
