@@ -7,7 +7,7 @@ window1
   layer: window
   alpha: 1
   headerbar1
-    "filler"
+    "panel"
     parent: window1
     index: 0
     state: enabled sensitive showing visible

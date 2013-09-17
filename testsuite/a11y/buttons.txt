@@ -20,7 +20,6 @@ window1
       parent: grid1
       index: 0
       name: Test switch
-      description: Switches between on and off states
       state: enabled focusable sensitive showing visible
       toolkit: gtk
       <AtkComponent>
@@ -33,8 +32,6 @@ window1
       "toggle button"
       parent: grid1
       index: 1
-      name: Switch
-      description: Switches between on and off states
       state: checked enabled focusable sensitive showing visible
       toolkit: gtk
       <AtkComponent>
