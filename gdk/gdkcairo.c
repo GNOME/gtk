@@ -157,7 +157,7 @@ gdk_cairo_rectangle (cairo_t            *cr,
  * Since: 2.8
  */
 void
-gdk_cairo_region (cairo_t         *cr,
+gdk_cairo_region (cairo_t              *cr,
                   const cairo_region_t *region)
 {
   cairo_rectangle_int_t box;
@@ -184,12 +184,14 @@ gdk_cairo_region (cairo_t         *cr,
  * Creates an image surface with the same contents as
  * the pixbuf.
  *
+ * Returns: a new cairo surface, must be freed with cairo_surface_destroy()
+ *
  * Since: 3.10
  */
 cairo_surface_t *
 gdk_cairo_surface_create_from_pixbuf (const GdkPixbuf *pixbuf,
-                                      int scale,
-                                      GdkWindow *for_window)
+                                      int              scale,
+                                      GdkWindow       *for_window)
 {
   gint width = gdk_pixbuf_get_width (pixbuf);
   gint height = gdk_pixbuf_get_height (pixbuf);

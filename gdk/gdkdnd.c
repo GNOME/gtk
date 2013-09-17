@@ -315,6 +315,8 @@ gdk_drag_status (GdkDragContext *context,
  * set of actions changes.
  *
  * This function is called by the drag source.
+ *
+ * Returns:
  */
 gboolean
 gdk_drag_motion (GdkDragContext *context,

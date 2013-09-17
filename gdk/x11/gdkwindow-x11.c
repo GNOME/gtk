@@ -2156,6 +2156,16 @@ get_netwm_cardinal_property (GdkWindow   *window,
   return prop;
 }
 
+/**
+ * gdk_x11_window_get_desktop:
+ * @window: a #GdkWindow
+ *
+ * Gets the number of the workspace @window is on.
+ *
+ * Returns: the current workspace of @window
+ *
+ * Since: 3.10
+ */
 guint32
 gdk_x11_window_get_desktop (GdkWindow *window)
 {
