@@ -400,6 +400,16 @@ gdk_wayland_device_init (GdkWaylandDevice *device_core)
   _gdk_device_add_axis (device, GDK_NONE, GDK_AXIS_Y, 0, 0, 1);
 }
 
+/**
+ * gdk_wayland_device_get_wl_seat:
+ * @device: (type GdkWaylandDevice): a #GdkDevice
+ *
+ * Returns the Wayland wl_seat of a #GdkDevice
+ *
+ * Returns: (transfer none): a Wayland wl_seat
+ *
+ * Since: 3.10
+ */
 struct wl_seat *
 gdk_wayland_device_get_wl_seat (GdkDevice *device)
 {
@@ -408,6 +418,16 @@ gdk_wayland_device_get_wl_seat (GdkDevice *device)
   return GDK_WAYLAND_DEVICE (device)->device->wl_seat;
 }
 
+/**
+ * gdk_wayland_device_get_wl_pointer:
+ * @device: (type GdkWaylandDevice): a #GdkDevice
+ *
+ * Returns the Wayland wl_pointer of a #GdkDevice
+ *
+ * Returns: (transfer none): a Wayland wl_pointer
+ *
+ * Since: 3.10
+ */
 struct wl_pointer *
 gdk_wayland_device_get_wl_pointer (GdkDevice *device)
 {
@@ -416,7 +436,16 @@ gdk_wayland_device_get_wl_pointer (GdkDevice *device)
   return GDK_WAYLAND_DEVICE (device)->device->wl_pointer;
 }
 
-
+/**
+ * gdk_wayland_device_get_wl_keyboard:
+ * @device: (type GdkWaylandDevice): a #GdkDevice
+ *
+ * Returns the Wayland wl_keyboard of a #GdkDevice
+ *
+ * Returns: (transfer none): a Wayland wl_keyboard
+ *
+ * Since: 3.10
+ */
 struct wl_keyboard *
 gdk_wayland_device_get_wl_keyboard (GdkDevice *device)
 {
