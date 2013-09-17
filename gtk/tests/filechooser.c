@@ -873,7 +873,7 @@ test_file_chooser_button_combo_box_1 (void)
   other_index = num_items - 1;
 
   item_a = atk_object_ref_accessible_child (menu_a, other_index);
-  g_assert_cmpstr (atk_object_get_name (item_a), ==, "Other…");  /* FIXME: how do we translate this? */
+  g_assert_cmpstr (atk_object_get_name (item_a), ==, "Other...");  /* FIXME: how do we translate this? */
 
   /* Activate the item */
 
