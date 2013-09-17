@@ -55,10 +55,10 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  *   gtk_orientable_set_orientation (GTK_ORIENTABLE (object),
  *                                   GTK_ORIENTATION_VERTICAL);
  * ]|
- * If you want your code to be future-proof, the recommendation is to
- * switch to #GtkGrid, since #GtkBox is going to be deprecated in favor
- * of the more flexible grid widget eventually. For more information
- * about migrating to #GtkGrid, see <xref linkend="gtk-migrating-GtkGrid"/>.
+ * If you don't need first-child or last-child styling and want your code
+ * to be future-proof, the recommendation is to switch to #GtkGrid instead
+ * of nested boxes. For more information about migrating to #GtkGrid,
+ * see <xref linkend="gtk-migrating-GtkGrid"/>.
  */
 
 G_DEFINE_TYPE (GtkVBox, gtk_vbox, GTK_TYPE_BOX)
