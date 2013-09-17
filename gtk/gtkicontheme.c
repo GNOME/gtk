@@ -3721,12 +3721,12 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo  *icon_info,
   if (icon_info->forced_size)
     icon_info->scale = -1;
   else if (icon_info->dir_type == ICON_THEME_DIR_FIXED)
-    icon_info->scale = round((gdouble) scaled_desired_size / (icon_info->dir_size * icon_info->dir_scale));
+    icon_info->scale = MAX(round((gdouble) scaled_desired_size / (icon_info->dir_size * icon_info->dir_scale)), 1.0);
   else if (icon_info->dir_type == ICON_THEME_DIR_THRESHOLD)
     {
       if (scaled_desired_size  >= (icon_info->dir_size - icon_info->threshold) * icon_info->dir_scale &&
 	  scaled_desired_size <= (icon_info->dir_size + icon_info->threshold) * icon_info->dir_scale)
-	icon_info->scale = round((gdouble) scaled_desired_size / (icon_info->dir_size * icon_info->dir_scale));
+	icon_info->scale = MAX(round((gdouble) scaled_desired_size / (icon_info->dir_size * icon_info->dir_scale)), 1.0);
       else if (icon_info->dir_size > 0)
 	icon_info->scale =(gdouble) scaled_desired_size / (icon_info->dir_size * icon_info->dir_scale);
     }
