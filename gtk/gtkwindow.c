@@ -7792,6 +7792,8 @@ gtk_window_get_preferred_width_for_height (GtkWidget *widget,
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
 
+  height -= 2 * border_width;
+
   if (priv->decorated &&
       !priv->fullscreen)
     {
@@ -7895,6 +7897,8 @@ gtk_window_get_preferred_height_for_width (GtkWidget *widget,
   *natural_size = 0;
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
+
+  width -= 2 * border_width;
 
   if (priv->decorated &&
       !priv->fullscreen)
