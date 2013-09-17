@@ -1,3 +1,64 @@
+Overview of Changes in GTK+ 3.9.14 to 3.9.16
+============================================
+
+* Bug fixes:
+ 339539 Ctrl-C, Ctrl-V changes tags
+ 513812 Optimize gdk_cairo_set_source_pixbuf() alpha multiplication loop
+ 696756 gdk_device_get_source : assertion `GDK_IS_DEVICE(source)` failed
+ 702034 color_value_parse() memory leak
+ 702423 CellRendererPixbuf regression: Stock icons with rtl/ltr varia...
+ 706269 Clarify GtkBox, GtkHBox, and GtkVBox documentation
+ 706345 GtkExpander's click-and-drag behavior should match that of Gt...
+ 706708 GtkHeaderBar doesn't respect titlebar button layout setting
+ 707129 wayland: support application menus
+ 707244 pixelcache: gtktextview pixelcache does not invalidate textma...
+ 707328 Segmentation fault when running on Wayland compositor
+ 707445 ghost cursor when mouse hovers over an image file in a tab
+ 707488 Typo in error message in gtkfilechooserdefault.c
+ 707519 Missing introspection annotations
+ 707659 orca becomes non-responsive when doing read line on Unbound
+ 707704 Prefer Wayland to X11
+ 707778 The redesigned "Universal Access" and "Date & Time" panels ca...
+ 707786 Collapsed Gtk combo boxes no longer emit accessible selection...
+ 707844 No way to get window field a GdkEvent from Gjs
+ 707872 GtkSwitch shouldn't have a default name
+ 707915 Accessible object for GtkListBoxRow should have list_item role
+ 707926 GtkSwitch shouldn't have a default accessible description
+ 707981 GtkHeaderBar needs a better accessible role
+ 708012 Wayland dependency inaccurate
+ 708067 Headerbar 'Previous' and 'Next' buttons are not keyboard navi...
+ 708076 Doc: small fixes in GtkTextView
+ 708128 listbox keynav gets stuck at insensitive rows
+ 708150 GtkWidget: Add gtk_widget_remove_action_group()?
+
+* Translation updates:
+ Belarusian
+ Brazilian Portuguese
+ Czech
+ Danish
+ Finnish
+ French
+ Galician
+ Hebrew
+ Hungarian
+ Indonesian
+ Italian
+ Japanese
+ Korean
+ Latvian
+ Lithuanian
+ Norwegian bokmål
+ Polish
+ Punjabi
+ Russian
+ Slovak
+ Slovenian
+ Spanish
+ Tajik
+ Thai
+ Traditional Chinese
+
+
 Overview of Changes in GTK+ 3.9.12 to 3.9.14
 ============================================
 
