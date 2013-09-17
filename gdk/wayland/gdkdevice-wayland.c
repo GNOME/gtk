@@ -203,14 +203,16 @@ gdk_wayland_device_set_window_cursor (GdkDevice *device,
                                       GdkWindow *window,
                                       GdkCursor *cursor)
 {
-  GdkWaylandDeviceData *wd = GDK_WAYLAND_DEVICE(device)->device;
+  GdkWaylandDeviceData *wd = GDK_WAYLAND_DEVICE (device)->device;
 
-  /* Setting the cursor to NULL means that we should use the default cursor */
+  /* Setting the cursor to NULL means that we should use
+   * the default cursor
+   */
   if (!cursor)
     {
       /* FIXME: Is this the best sensible default ? */
       cursor = _gdk_wayland_display_get_cursor_for_type (device->display,
-                                                             GDK_LEFT_PTR);
+                                                         GDK_LEFT_PTR);
     }
 
   if (cursor == wd->cursor)
@@ -248,7 +250,7 @@ gdk_wayland_device_query_state (GdkDevice        *device,
   GdkWaylandDeviceData *wd;
   GdkScreen *default_screen;
 
-  wd = GDK_WAYLAND_DEVICE(device)->device;
+  wd = GDK_WAYLAND_DEVICE (device)->device;
   default_screen = gdk_display_get_default_screen (wd->display);
 
   if (root_window)
@@ -300,10 +302,10 @@ gdk_wayland_device_grab (GdkDevice    *device,
       wayland_device->pointer_grab_window = window;
       wayland_device->pointer_grab_time = time_;
 
-      /* FIXME: This probably breaks if you end up with multiple grabs on the
-       * same window - but we need to know the input device for when we are
-       * asked to map a popup window so that the grab can be managed by the
-       * compositor.
+      /* FIXME: This probably breaks if you end up with multiple grabs
+       * on the same window - but we need to know the input device for
+       * when we are asked to map a popup window so that the grab can
+       * be managed by the compositor.
        */
       _gdk_wayland_window_set_device_grabbed (window,
                                               device,
@@ -566,8 +568,8 @@ data_device_selection (void                  *data,
       device->selection_offer = NULL;
     }
 
-  /* Retrieve the DataOffer associated with with the wl_data_offer - this
-   * association is made when the listener is attached.
+  /* Retrieve the DataOffer associated with with the wl_data_offer -
+   * this association is made when the listener is attached.
    */
   g_assert (device->selection_offer == NULL);
   device->selection_offer = wl_data_offer_get_user_data (offer);
@@ -974,7 +976,7 @@ translate_keyboard_string (GdkEventKey *event)
       event->string = g_strdup ("\033");
     }
   else if (event->keyval == GDK_KEY_Return ||
-          event->keyval == GDK_KEY_KP_Enter)
+           event->keyval == GDK_KEY_KP_Enter)
     {
       event->length = 1;
       event->string = g_strdup ("\r");
@@ -1011,8 +1013,10 @@ get_key_repeat (GdkWaylandDeviceData *device,
 }
 
 static gboolean
-deliver_key_event(GdkWaylandDeviceData *device,
-                  uint32_t time, uint32_t key, uint32_t state)
+deliver_key_event (GdkWaylandDeviceData *device,
+                   uint32_t              time_,
+                   uint32_t              key,
+                   uint32_t              state)
 {
   GdkEvent *event;
   struct xkb_state *xkb_state;
@@ -1027,13 +1031,13 @@ deliver_key_event(GdkWaylandDeviceData *device,
 
   sym = xkb_state_key_get_one_sym (xkb_state, key);
 
-  device->time = time;
+  device->time = time_;
   device->modifiers = gdk_keymap_get_modifier_state (keymap);
 
   event = gdk_event_new (state ? GDK_KEY_PRESS : GDK_KEY_RELEASE);
-  event->key.window = device->keyboard_focus?g_object_ref (device->keyboard_focus):NULL;
+  event->key.window = device->keyboard_focus ? g_object_ref (device->keyboard_focus) : NULL;
   gdk_event_set_device (event, device->keyboard);
-  event->button.time = time;
+  event->button.time = time_;
   event->key.state = device->modifiers;
   event->key.group = 0;
   event->key.hardware_keycode = key;
@@ -1160,19 +1164,19 @@ static const struct wl_keyboard_listener keyboard_listener = {
 };
 
 static void
-seat_handle_capabilities(void *data, struct wl_seat *seat,
-                         enum wl_seat_capability caps)
+seat_handle_capabilities (void                    *data,
+                          struct wl_seat          *seat,
+                          enum wl_seat_capability  caps)
 {
   GdkWaylandDeviceData *device = data;
   GdkWaylandDeviceManager *device_manager =
-    GDK_WAYLAND_DEVICE_MANAGER(device->device_manager);
+    GDK_WAYLAND_DEVICE_MANAGER (device->device_manager);
 
   if ((caps & WL_SEAT_CAPABILITY_POINTER) && !device->wl_pointer)
     {
-      device->wl_pointer = wl_seat_get_pointer(seat);
-      wl_pointer_set_user_data(device->wl_pointer, device);
-      wl_pointer_add_listener(device->wl_pointer, &pointer_listener,
-                              device);
+      device->wl_pointer = wl_seat_get_pointer (seat);
+      wl_pointer_set_user_data (device->wl_pointer, device);
+      wl_pointer_add_listener (device->wl_pointer, &pointer_listener, device);
 
       device->pointer = g_object_new (GDK_TYPE_WAYLAND_DEVICE,
                                       "name", "Core Pointer",
@@ -1192,7 +1196,7 @@ seat_handle_capabilities(void *data, struct wl_seat *seat,
     }
   else if (!(caps & WL_SEAT_CAPABILITY_POINTER) && device->wl_pointer)
     {
-      wl_pointer_destroy(device->wl_pointer);
+      wl_pointer_destroy (device->wl_pointer);
       device->wl_pointer = NULL;
 
       device_manager->devices =
@@ -1205,10 +1209,9 @@ seat_handle_capabilities(void *data, struct wl_seat *seat,
 
   if ((caps & WL_SEAT_CAPABILITY_KEYBOARD) && !device->wl_keyboard)
     {
-      device->wl_keyboard = wl_seat_get_keyboard(seat);
-      wl_keyboard_set_user_data(device->wl_keyboard, device);
-      wl_keyboard_add_listener(device->wl_keyboard, &keyboard_listener,
-                               device);
+      device->wl_keyboard = wl_seat_get_keyboard (seat);
+      wl_keyboard_set_user_data (device->wl_keyboard, device);
+      wl_keyboard_add_listener (device->wl_keyboard, &keyboard_listener, device);
 
       device->keyboard = g_object_new (GDK_TYPE_WAYLAND_DEVICE,
                                        "name", "Core Keyboard",
@@ -1226,9 +1229,9 @@ seat_handle_capabilities(void *data, struct wl_seat *seat,
 
       g_signal_emit_by_name (device_manager, "device-added", device->keyboard);
     }
-  else if (!(caps & WL_SEAT_CAPABILITY_KEYBOARD) && device->wl_keyboard) 
+  else if (!(caps & WL_SEAT_CAPABILITY_KEYBOARD) && device->wl_keyboard)
     {
-      wl_keyboard_destroy(device->wl_keyboard);
+      wl_keyboard_destroy (device->wl_keyboard);
       device->wl_keyboard = NULL;
 
       device_manager->devices =
@@ -1346,7 +1349,7 @@ gdk_wayland_device_manager_finalize (GObject *object)
 
 static GList *
 gdk_wayland_device_manager_list_devices (GdkDeviceManager *device_manager,
-                                      GdkDeviceType     type)
+                                         GdkDeviceType     type)
 {
   GdkWaylandDeviceManager *wayland_device_manager;
   GList *devices = NULL;
@@ -1354,7 +1357,7 @@ gdk_wayland_device_manager_list_devices (GdkDeviceManager *device_manager,
   if (type == GDK_DEVICE_TYPE_MASTER)
     {
       wayland_device_manager = (GdkWaylandDeviceManager *) device_manager;
-      devices = g_list_copy(wayland_device_manager->devices);
+      devices = g_list_copy (wayland_device_manager->devices);
     }
 
   return devices;
@@ -1405,7 +1408,7 @@ _gdk_wayland_device_manager_new (GdkDisplay *display)
 }
 
 uint32_t
-_gdk_wayland_device_get_button_press_serial(GdkWaylandDeviceData *device)
+_gdk_wayland_device_get_button_press_serial (GdkWaylandDeviceData *device)
 {
   return device->button_press_serial;
 }
@@ -1455,23 +1458,20 @@ typedef struct
 } RequestContentClosure;
 
 static gboolean
-_request_content_io_func (GIOChannel *channel,
-                          GIOCondition condition,
-                          gpointer userdata)
+_request_content_io_func (GIOChannel   *channel,
+                          GIOCondition  condition,
+                          gpointer      userdata)
 {
   RequestContentClosure *closure = (RequestContentClosure *)userdata;
   gchar *data = NULL;
   gsize len = 0;
   GError *error = NULL;
 
-  /* FIXME: We probably want to do something better than this to avoid
-   * blocking on the transfer of large pieces of data: call the callback
-   * multiple times I should think.
+  /* FIXME: We probably want to do something better than this
+   * to avoid blocking on the transfer of large pieces of data:
+   * call the callback multiple times I should think.
    */
-  if (g_io_channel_read_to_end (channel,
-                                &data,
-                                &len,
-                                &error) != G_IO_STATUS_NORMAL)
+  if (g_io_channel_read_to_end (channel, &data, &len, &error) != G_IO_STATUS_NORMAL)
     {
       g_warning (G_STRLOC ": Error reading content from pipe: %s", error->message);
       g_clear_error (&error);
@@ -1625,7 +1625,7 @@ _wl_time_now (void)
 {
   struct timeval tv;
 
-  gettimeofday(&tv, NULL);
+  gettimeofday (&tv, NULL);
 
   return tv.tv_sec * 1000 + tv.tv_usec / 1000;
 }
@@ -1657,10 +1657,7 @@ gdk_wayland_device_offer_selection_content (GdkDevice                           
   offer->device = device;
 
   for (i = 0; i < nr_mime_types; i++)
-    {
-      wl_data_source_offer (offer->source,
-                            mime_types[i]);
-    }
+    wl_data_source_offer (offer->source, mime_types[i]);
 
   wl_data_source_add_listener (offer->source,
                                &data_source_listener,
