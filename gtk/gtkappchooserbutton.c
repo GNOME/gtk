@@ -349,9 +349,6 @@ gtk_app_chooser_button_populate (GtkAppChooserButton *self)
     {
       app = l->data;
 
-      if (!g_app_info_should_show (app))
-        continue;
-
       if (default_app != NULL && g_app_info_equal (app, default_app))
         continue;
 
