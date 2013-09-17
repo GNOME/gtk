@@ -15932,7 +15932,7 @@ gtk_widget_class_set_connect_func (GtkWidgetClass        *widget_class,
 }
 
 /**
- * gtk_widget_class_bind_template_child_private_full:
+ * gtk_widget_class_bind_template_child_full:
  * @widget_class: A #GtkWidgetClass
  * @name: The "id" of the child defined in the template XML
  * @internal_child: Whether the child should be accessible as an "internal-child"

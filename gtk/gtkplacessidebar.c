@@ -4207,9 +4207,15 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
 /**
  * gtk_places_sidebar_new:
  *
- * Creates a new #GtkPlacesSidebar widget.  The application should connect
- * to at least the #GtkPlacesSidebar::open-location signal to be notified
+ * Creates a new #GtkPlacesSidebar widget.
+ *
+ * The application should connect to at least the
+ * #GtkPlacesSidebar::open-location signal to be notified
  * when the user makes a selection in the sidebar.
+ *
+ * Returns: a newly created #GtkPlacesSidebar
+ *
+ * Since: 3.10
  */
 GtkWidget *
 gtk_places_sidebar_new (void)
@@ -4332,6 +4338,16 @@ gtk_places_sidebar_set_open_flags (GtkPlacesSidebar *sidebar, GtkPlacesOpenFlags
 	}
 }
 
+/**
+ * gtk_places_sidebar_get_open_flags:
+ * @sidebar: a #GtkPlacesSidebar
+ *
+ * Gets the open flags.
+ *
+ * Returns: the #GtkPlacesOpenFlags of @sidebar
+ *
+ * Since: 3.10
+ */
 GtkPlacesOpenFlags
 gtk_places_sidebar_get_open_flags (GtkPlacesSidebar *sidebar)
 {
@@ -4602,8 +4618,11 @@ gtk_places_sidebar_remove_shortcut (GtkPlacesSidebar *sidebar, GFile *location)
  * gtk_places_sidebar_list_shortcuts:
  * @sidebar: a places sidebar
  *
- * Return value: (element-type GFile) (transfer full): A #GSList of #GFile of the locations
- * that have been added as application-specific shortcuts with gtk_places_sidebar_add_shortcut().
+ * Gets the list of shortcuts.
+ *
+ * Return value: (element-type GFile) (transfer full):
+ *     A #GSList of #GFile of the locations that have been added as
+ *     application-specific shortcuts with gtk_places_sidebar_add_shortcut().
  * To free this list, you can use
  * |[
  * g_slist_free_full (list, (GDestroyNotify) g_object_unref);

@@ -5200,8 +5200,8 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *icon_theme,
  * The icon can then be rendered into a pixbuf using
  * gtk_icon_info_load_icon_for_scale ().
  *
- * Return value: (transfer full): a #GtkIconInfo structure containing 
- *     information about the icon, or %NULL if the icon 
+ * Return value: (transfer full): a #GtkIconInfo structure containing
+ *     information about the icon, or %NULL if the icon
  *     wasn't found. Unref with g_object_unref()
  *
  * Since: 3.10

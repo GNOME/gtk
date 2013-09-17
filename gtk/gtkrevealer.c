@@ -249,6 +249,15 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
                                                          G_PARAM_READABLE));
 }
 
+/**
+ * gtk_revealer_new:
+ *
+ * Creates a new #GtkRevealer.
+ *
+ * Returns: a newly created #GtkRevealer
+ *
+ * Since: 3.10
+ */
 GtkWidget *
 gtk_revealer_new (void)
 {
