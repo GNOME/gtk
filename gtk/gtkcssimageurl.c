@@ -65,11 +65,14 @@ gtk_css_image_url_load_image (GtkCssImageUrl *url)
   if (pixbuf == NULL)
     {
       cairo_surface_t *empty = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 0, 0);
+      char *uri;
 
       /* XXX: Can we get the error somehow sent to the CssProvider?
        * I don't like just dumping it to stderr or losing it completely. */
-      g_warning ("Error loading image: %s", error->message);
+      uri = g_file_get_uri (url->file);
+      g_warning ("Error loading image '%s': %s", uri, error->message);
       g_error_free (error);
+      g_free (uri);
       url->loaded_image = _gtk_css_image_surface_new (empty);
       cairo_surface_destroy (empty);
       return url->loaded_image; 
