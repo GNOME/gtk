@@ -415,7 +415,7 @@ How do I use GTK+ with other non-C languages?
 
 <answer>
 <para>
-See the <ulink url="http://www.gtk.org/bindings.html">list of language
+See the <ulink url="http://www.gtk.org/language-bindings.php">list of language
 bindings</ulink> on <ulink
 url="http://www.gtk.org">http://www.gtk.org</ulink>.
 </para>
