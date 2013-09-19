@@ -1343,7 +1343,7 @@ gtk_list_box_real_focus (GtkWidget        *widget,
 
       if (direction == GTK_DIR_UP || direction == GTK_DIR_TAB_BACKWARD)
         {
-          i = gtk_list_box_get_previous_visible (list_box, ROW_PRIV (priv->cursor_row)->iter);
+          i = gtk_list_box_get_previous_visible (list_box, ROW_PRIV (GTK_LIST_BOX_ROW (focus_child))->iter);
           while (i != NULL)
             {
               if (gtk_widget_get_sensitive (g_sequence_get (i)))
@@ -1357,7 +1357,7 @@ gtk_list_box_real_focus (GtkWidget        *widget,
         }
       else if (direction == GTK_DIR_DOWN || direction == GTK_DIR_TAB_FORWARD)
         {
-          i = gtk_list_box_get_next_visible (list_box, ROW_PRIV (priv->cursor_row)->iter);
+          i = gtk_list_box_get_next_visible (list_box, ROW_PRIV (GTK_LIST_BOX_ROW (focus_child))->iter);
           while (!g_sequence_iter_is_end (i))
             {
               if (gtk_widget_get_sensitive (g_sequence_get (i)))
