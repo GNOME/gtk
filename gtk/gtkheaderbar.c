@@ -203,6 +203,7 @@ add_close_button (GtkHeaderBar *bar)
   GtkWidget *image;
   GtkWidget *separator;
   GtkStyleContext *context;
+  AtkObject *accessible;
 
   priv = gtk_header_bar_get_instance_private (bar);
 
@@ -218,6 +219,9 @@ add_close_button (GtkHeaderBar *bar)
   gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
   g_signal_connect (button, "clicked",
                     G_CALLBACK (close_button_clicked), NULL);
+  accessible = gtk_widget_get_accessible (button);
+  if (GTK_IS_ACCESSIBLE (accessible))
+    atk_object_set_name (accessible, _("Close"));
   gtk_widget_show_all (button);
   gtk_widget_set_parent (button, GTK_WIDGET (bar));
 

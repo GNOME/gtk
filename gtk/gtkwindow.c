@@ -5207,6 +5207,7 @@ update_window_buttons (GtkWindow *window)
             {
               GtkWidget *button = NULL;
               GtkWidget *image = NULL;
+              AtkObject *accessible;
 
               if (strcmp (t[j], "icon") == 0)
                 {
@@ -5236,6 +5237,9 @@ update_window_buttons (GtkWindow *window)
                   gtk_widget_show_all (button);
                   g_signal_connect (button, "clicked",
                                     G_CALLBACK (gtk_window_titlebar_min_clicked), window);
+                  accessible = gtk_widget_get_accessible (button);
+                  if (GTK_IS_ACCESSIBLE (accessible))
+                    atk_object_set_name (accessible, _("Minimize"));
                   priv->titlebar_min_button = button;
                 }
               else if (strcmp (t[j], "maximize") == 0 &&
@@ -5254,6 +5258,9 @@ update_window_buttons (GtkWindow *window)
                   gtk_widget_show_all (button);
                   g_signal_connect (button, "clicked",
                                     G_CALLBACK (gtk_window_titlebar_max_clicked), window);
+                  accessible = gtk_widget_get_accessible (button);
+                  if (GTK_IS_ACCESSIBLE (accessible))
+                    atk_object_set_name (accessible, maximized ? _("Restore") : _("Maximize"));
                   priv->titlebar_max_button = button;
                 }
               else if (strcmp (t[j], "close") == 0 &&
@@ -5269,6 +5276,9 @@ update_window_buttons (GtkWindow *window)
                   gtk_widget_show_all (button);
                   g_signal_connect_swapped (button, "clicked",
                                             G_CALLBACK (gtk_window_close), window);
+                  accessible = gtk_widget_get_accessible (button);
+                  if (GTK_IS_ACCESSIBLE (accessible))
+                    atk_object_set_name (accessible, _("Close"));
                   priv->titlebar_close_button = button;
                 }
 
