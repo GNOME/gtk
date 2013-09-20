@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922___.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-07 18:51+0200\n"
-"PO-Revision-Date: 2013-09-07 18:51+0200\n"
+"POT-Creation-Date: 2013-09-20 23:59+0200\n"
+"PO-Revision-Date: 2013-09-21 00:00+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -84,7 +84,7 @@ msgstr "Opcións de depuración GDK para estabelecer"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:217 ../gdk/gdk.c:220 ../gtk/gtkmain.c:454 ../gtk/gtkmain.c:457
+#: ../gdk/gdk.c:217 ../gdk/gdk.c:220 ../gtk/gtkmain.c:455 ../gtk/gtkmain.c:458
 msgid "FLAGS"
 msgstr "OPCIÓNS"
 
@@ -488,7 +488,7 @@ msgid "Toggles the cell"
 msgstr "Troca a cela"
 
 #: ../gtk/a11y/gtkbooleancellaccessible.c:63
-#: ../gtk/a11y/gtkswitchaccessible.c:101
+#: ../gtk/a11y/gtkswitchaccessible.c:89
 msgctxt "Action name"
 msgid "Toggle"
 msgstr "Trocar"
@@ -562,12 +562,12 @@ msgctxt "Action description"
 msgid "Customizes the color"
 msgstr "Personaliza a cor"
 
-#: ../gtk/a11y/gtkcomboboxaccessible.c:307
+#: ../gtk/a11y/gtkcomboboxaccessible.c:310
 msgctxt "Action name"
 msgid "Press"
 msgstr "Premer"
 
-#: ../gtk/a11y/gtkcomboboxaccessible.c:316
+#: ../gtk/a11y/gtkcomboboxaccessible.c:319
 msgctxt "Action description"
 msgid "Presses the combobox"
 msgstr "Preme a caixa de verificación"
@@ -616,16 +616,7 @@ msgstr "Marcador incrementábel"
 msgid "Provides visual indication of progress"
 msgstr "Fornece unha indicación visual do progreso"
 
-#: ../gtk/a11y/gtkswitchaccessible.c:63
-msgctxt "light switch widget"
-msgid "Switch"
-msgstr "Interruptor"
-
-#: ../gtk/a11y/gtkswitchaccessible.c:64
-msgid "Switches between on and off states"
-msgstr "Cambia entre os estados acendido e apagado"
-
-#: ../gtk/a11y/gtkswitchaccessible.c:110
+#: ../gtk/a11y/gtkswitchaccessible.c:98
 msgctxt "Action description"
 msgid "Toggles the switch"
 msgstr "Troca o interruptor"
@@ -1352,7 +1343,7 @@ msgstr "Baleiro"
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
 #.
-#: ../gtk/gtkaboutdialog.c:101
+#: ../gtk/gtkaboutdialog.c:102
 #, c-format
 msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY;\n"
@@ -1361,40 +1352,40 @@ msgstr ""
 "Este programa non fornece NINGUNHA GARANTÍA, \n"
 "para máis información visite <a href=\"%s\">%s</a>"
 
-#: ../gtk/gtkaboutdialog.c:374
+#: ../gtk/gtkaboutdialog.c:375
 msgid "License"
 msgstr "Licenza"
 
-#: ../gtk/gtkaboutdialog.c:375
+#: ../gtk/gtkaboutdialog.c:376
 msgid "The license of the program"
 msgstr "A licenza do programa"
 
-#: ../gtk/gtkaboutdialog.c:913
+#: ../gtk/gtkaboutdialog.c:914
 msgid "Could not show link"
 msgstr "Non foi posíbel mostrar a ligazón"
 
-#: ../gtk/gtkaboutdialog.c:950
+#: ../gtk/gtkaboutdialog.c:951
 msgid "Website"
 msgstr "Sitio web"
 
-#: ../gtk/gtkaboutdialog.c:1004
+#: ../gtk/gtkaboutdialog.c:1005
 #, c-format
 msgid "About %s"
 msgstr "Sobre %s"
 
-#: ../gtk/gtkaboutdialog.c:2262
+#: ../gtk/gtkaboutdialog.c:2290
 msgid "Created by"
 msgstr "Creado por"
 
-#: ../gtk/gtkaboutdialog.c:2265
+#: ../gtk/gtkaboutdialog.c:2293
 msgid "Documented by"
 msgstr "Documentado por"
 
-#: ../gtk/gtkaboutdialog.c:2275
+#: ../gtk/gtkaboutdialog.c:2303
 msgid "Translated by"
 msgstr "Traducido por"
 
-#: ../gtk/gtkaboutdialog.c:2280
+#: ../gtk/gtkaboutdialog.c:2308
 msgid "Artwork by"
 msgstr "Material gráfico por"
 
@@ -1486,7 +1477,7 @@ msgstr "_Atopar aplicativos en Internet"
 msgid "Select an application to open “%s”"
 msgstr "Seleccione un aplicativo para abrir «%s»"
 
-#: ../gtk/gtkappchooserdialog.c:334 ../gtk/gtkappchooserwidget.c:660
+#: ../gtk/gtkappchooserdialog.c:334 ../gtk/gtkappchooserwidget.c:657
 #, c-format
 msgid "No applications available to open “%s”"
 msgstr "Non existen aplicativos dispoñíbeis para abrir «%s»"
@@ -1514,19 +1505,19 @@ msgstr ""
 msgid "Forget association"
 msgstr "Esquecer asociación"
 
-#: ../gtk/gtkappchooserwidget.c:609
+#: ../gtk/gtkappchooserwidget.c:606
 msgid "Default Application"
 msgstr "Aplicativo predeterminado"
 
-#: ../gtk/gtkappchooserwidget.c:747
+#: ../gtk/gtkappchooserwidget.c:744
 msgid "Recommended Applications"
 msgstr "Aplicativos recomendados"
 
-#: ../gtk/gtkappchooserwidget.c:762
+#: ../gtk/gtkappchooserwidget.c:759
 msgid "Related Applications"
 msgstr "Aplicativos relacionados"
 
-#: ../gtk/gtkappchooserwidget.c:776
+#: ../gtk/gtkappchooserwidget.c:773
 msgid "Other Applications"
 msgstr "Outros aplicativos"
 
@@ -2002,25 +1993,25 @@ msgid "Paper Margins"
 msgstr "Marxes do papel"
 
 #: ../gtk/gtkentry.c:9272 ../gtk/gtkentry.c:9418 ../gtk/gtklabel.c:6276
-#: ../gtk/gtktextview.c:8680 ../gtk/gtktextview.c:8863
+#: ../gtk/gtktextview.c:8694 ../gtk/gtktextview.c:8877
 msgid "Cu_t"
 msgstr "Cor_tar"
 
 #: ../gtk/gtkentry.c:9276 ../gtk/gtkentry.c:9421 ../gtk/gtklabel.c:6277
-#: ../gtk/gtktextview.c:8684 ../gtk/gtktextview.c:8867
+#: ../gtk/gtktextview.c:8698 ../gtk/gtktextview.c:8881
 msgid "_Copy"
 msgstr "_Copiar"
 
 #: ../gtk/gtkentry.c:9280 ../gtk/gtkentry.c:9424 ../gtk/gtklabel.c:6278
-#: ../gtk/gtktextview.c:8686 ../gtk/gtktextview.c:8869
+#: ../gtk/gtktextview.c:8700 ../gtk/gtktextview.c:8883
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: ../gtk/gtkentry.c:9283 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8689
+#: ../gtk/gtkentry.c:9283 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8703
 msgid "_Delete"
 msgstr "E_liminar"
 
-#: ../gtk/gtkentry.c:9294 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8703
+#: ../gtk/gtkentry.c:9294 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8717
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
@@ -2278,6 +2269,10 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "Escolla un tipo de letra"
 
+#: ../gtk/gtkheaderbar.c:224 ../gtk/gtkwindow.c:5281 ../gtk/gtkwindow.c:8194
+msgid "Close"
+msgstr "Pechar"
+
 #: ../gtk/gtkicontheme.c:2100 ../gtk/gtkicontheme.c:2163
 #, c-format
 msgid "Icon '%s' not present in theme"
@@ -2426,27 +2421,27 @@ msgstr ""
 "Contacte co administrador do seu sistema"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:447
+#: ../gtk/gtkmain.c:448
 msgid "Load additional GTK+ modules"
 msgstr "Cargar módulos adicionais de GTK+"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:448
+#: ../gtk/gtkmain.c:449
 msgid "MODULES"
 msgstr "MÓDULOS"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:450
+#: ../gtk/gtkmain.c:451
 msgid "Make all warnings fatal"
 msgstr "Facer todos os avisos fatais"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:453
+#: ../gtk/gtkmain.c:454
 msgid "GTK+ debugging flags to set"
 msgstr "Opcións de depuración GTK+ a poñer"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:456
+#: ../gtk/gtkmain.c:457
 msgid "GTK+ debugging flags to unset"
 msgstr "Opcións de depuración GTK+ a quitar"
 
@@ -2455,20 +2450,20 @@ msgstr "Opcións de depuración GTK+ a quitar"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:704
+#: ../gtk/gtkmain.c:705
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:769
+#: ../gtk/gtkmain.c:770
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Non é posíbel abrir o visor: %s"
 
-#: ../gtk/gtkmain.c:835
+#: ../gtk/gtkmain.c:836
 msgid "GTK+ Options"
 msgstr "Opcións de GTK+"
 
-#: ../gtk/gtkmain.c:835
+#: ../gtk/gtkmain.c:836
 msgid "Show GTK+ Options"
 msgstr "Mostrar opcións de GTK+"
 
@@ -2803,7 +2798,7 @@ msgstr "_Expulsar"
 msgid "_Detect Media"
 msgstr "_Detectar soporte"
 
-#: ../gtk/gtkplacessidebar.c:3829
+#: ../gtk/gtkplacessidebar.c:3834
 msgid "Computer"
 msgstr "Computador"
 
@@ -3335,50 +3330,50 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:8042
+#: ../gtk/gtkwindow.c:5242 ../gtk/gtkwindow.c:8089
 msgid "Minimize"
 msgstr "Minimizar"
 
-#: ../gtk/gtkwindow.c:8050
-msgid "Unmaximize"
+#: ../gtk/gtkwindow.c:5263
+msgid "Restore"
 msgstr "Restaurar"
 
-#: ../gtk/gtkwindow.c:8050
+#: ../gtk/gtkwindow.c:5263 ../gtk/gtkwindow.c:8097
 msgid "Maximize"
 msgstr "Maximizar"
 
-#: ../gtk/gtkwindow.c:8059
+#: ../gtk/gtkwindow.c:8097
+msgid "Unmaximize"
+msgstr "Restaurar"
+
+#: ../gtk/gtkwindow.c:8106
 msgid "Always on Top"
 msgstr "Sempre enriba"
 
-#: ../gtk/gtkwindow.c:8071
+#: ../gtk/gtkwindow.c:8118
 msgid "Always on Visible Workspace"
 msgstr "Sempre no espazo de traballo visible"
 
-#: ../gtk/gtkwindow.c:8079
+#: ../gtk/gtkwindow.c:8126
 msgid "Only on This Workspace"
 msgstr "Só neste espazo de traballo"
 
-#: ../gtk/gtkwindow.c:8096
+#: ../gtk/gtkwindow.c:8143
 msgid "Move to Workspace Up"
 msgstr "Mover ao espazo de arriba"
 
-#: ../gtk/gtkwindow.c:8105
+#: ../gtk/gtkwindow.c:8152
 msgid "Move to Workspace Down"
 msgstr "Mover ao espazo de abaixo"
 
-#: ../gtk/gtkwindow.c:8119
+#: ../gtk/gtkwindow.c:8166
 msgid "Move to Another Workspace"
 msgstr "Mover a outro espazo de traballo"
 
-#: ../gtk/gtkwindow.c:8127
+#: ../gtk/gtkwindow.c:8174
 #, c-format
 msgid "Workspace %d"
 msgstr "Espazo de traballo %d"
-
-#: ../gtk/gtkwindow.c:8147
-msgid "Close"
-msgstr "Pechar"
 
 #: ../gtk/paper_names_offsets.c:4
 msgctxt "paper size"
@@ -5220,6 +5215,13 @@ msgstr "Baixar o volume"
 #: ../gtk/gtkvolumebutton.ui.h:10
 msgid "Decreases the volume"
 msgstr "Abaixa o volume"
+
+#~ msgctxt "light switch widget"
+#~ msgid "Switch"
+#~ msgstr "Interruptor"
+
+#~ msgid "Switches between on and off states"
+#~ msgstr "Cambia entre os estados acendido e apagado"
 
 #~ msgid " "
 #~ msgstr " "
