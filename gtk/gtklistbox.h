@@ -116,7 +116,7 @@ typedef gboolean (*GtkListBoxFilterFunc) (GtkListBoxRow *row,
  * @row2: the second row
  * @user_data: (closure): user data
  *
- * Compare two rows to determin which should be first.
+ * Compare two rows to determine which should be first.
  *
  * Returns: < 0 if @row1 should be before @row2, 0 if they are
  *     equal and > 0 otherwise
