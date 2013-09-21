@@ -3265,18 +3265,13 @@ bookmarks_row_activated_cb (GtkWidget *widget,
 			    GtkPlacesSidebar *sidebar)
 {
 	GtkTreeIter iter;
-	GtkTreePath *clicked_path = NULL;
 	GtkTreeModel *model = gtk_tree_view_get_model (GTK_TREE_VIEW (widget));
 
 	if (!gtk_tree_model_get_iter (model, &iter, path)) {
 		return;
 	}
 
-	if (!clicked_eject_button (sidebar, &clicked_path)) {
-		open_selected_bookmark (sidebar, model, &iter, 0);
-	} else {
-		gtk_tree_path_free (clicked_path);
-	}
+	open_selected_bookmark (sidebar, model, &iter, 0);
 }
 
 static gboolean
@@ -3301,7 +3296,7 @@ bookmarks_button_release_event_cb (GtkWidget *widget,
 		eject_or_unmount_bookmark (sidebar, path);
 		gtk_tree_path_free (path);
 
-		return FALSE;
+		return TRUE;
 	}
 
 	if (event->button == 1) {
