@@ -8378,12 +8378,12 @@ msgstr ""
 
 #: ../gtk/gtkwindow.c:714
 msgid "Startup ID"
-msgstr "ID de startup"
+msgstr "ID de inicialização"
 
 #: ../gtk/gtkwindow.c:715
 msgid "Unique startup identifier for the window used by startup-notification"
 msgstr ""
-"Identificador único de startup da janela usado pela notificação de startup"
+"Identificador único de inicialização da janela usado pela notificação de inicialização"
 
 #: ../gtk/gtkwindow.c:723
 msgid "If TRUE, users can resize the window"
