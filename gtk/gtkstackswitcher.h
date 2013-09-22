@@ -32,15 +32,11 @@ G_BEGIN_DECLS
 #define GTK_STACK_SWITCHER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_STACK_SWITCHER, GtkStackSwitcherClass))
 
 typedef struct _GtkStackSwitcher              GtkStackSwitcher;
-typedef struct _GtkStackSwitcherPrivate       GtkStackSwitcherPrivate;
 typedef struct _GtkStackSwitcherClass         GtkStackSwitcherClass;
 
 struct _GtkStackSwitcher
 {
   GtkBox widget;
-
-  /*< private >*/
-  GtkStackSwitcherPrivate *priv;
 };
 
 struct _GtkStackSwitcherClass
