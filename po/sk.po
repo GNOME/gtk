@@ -14,8 +14,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-09-22 03:51+0000\n"
-"PO-Revision-Date: 2013-09-21 19:49+0100\n"
-"Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
+"PO-Revision-Date: 2013-09-22 20:37+0100\n"
+"Last-Translator: Peter Mráz <etkinator@gmail.com>\n"
 "Language-Team: Slovak <gnome-sk-list@gnome.org>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
@@ -43,7 +43,7 @@ msgstr "Chyba spracovania voľby --gdk-no-debug"
 #. Description of --class=CLASS in --help output
 #: ../gdk/gdk.c:206
 msgid "Program class as used by the window manager"
-msgstr "Trieda programu, ako je použitá správcom okien"
+msgstr "Trieda programu aká je použitá správcom okien"
 
 #. Placeholder in --class=CLASS in --help output
 #: ../gdk/gdk.c:207
@@ -53,7 +53,7 @@ msgstr "TRIEDA"
 #. Description of --name=NAME in --help output
 #: ../gdk/gdk.c:209
 msgid "Program name as used by the window manager"
-msgstr "Názov programu, ako je použitý správcom okien"
+msgstr "Názov programu aká je použitá správcom okien"
 
 #. Placeholder in --name=NAME in --help output
 #: ../gdk/gdk.c:210
@@ -63,7 +63,7 @@ msgstr "NÁZOV"
 #. Description of --display=DISPLAY in --help output
 #: ../gdk/gdk.c:212
 msgid "X display to use"
-msgstr "X displej, ktorý použiť"
+msgstr "X displej, ktorý sa má použiť"
 
 #. Placeholder in --display=DISPLAY in --help output
 #: ../gdk/gdk.c:213
@@ -73,7 +73,7 @@ msgstr "DISPLEJ"
 #. Description of --gdk-debug=FLAGS in --help output
 #: ../gdk/gdk.c:216
 msgid "GDK debugging flags to set"
-msgstr "Ladiace príznaky GDK, ktoré nastaviť"
+msgstr "Ladiace príznaky GDK, ktoré sa majú nastaviť"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
@@ -86,7 +86,7 @@ msgstr "PRÍZNAKY"
 #. Description of --gdk-no-debug=FLAGS in --help output
 #: ../gdk/gdk.c:219
 msgid "GDK debugging flags to unset"
-msgstr "Ladiace príznaky GDK, ktoré vypnúť"
+msgstr "Ladiace príznaky GDK, ktoré sa majú vypnúť"
 
 #.
 #. * Translators, the strings in the 'keyboard label' context are
@@ -434,22 +434,22 @@ msgstr "Uspať"
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:53
 msgid "Don't batch GDI requests"
-msgstr "Nedávkovať GDI požiadavky"
+msgstr "Nebude dávkovať požiadavky GDI"
 
 #. Description of --no-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:55
 msgid "Don't use the Wintab API for tablet support"
-msgstr "Nepoužiť Wintab API pre podporu tabletu"
+msgstr "Nepoužije API Wintab pre podporu tabletu"
 
 #. Description of --ignore-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:57
 msgid "Same as --no-wintab"
-msgstr "Také isté ako --no-wintab"
+msgstr "To isté ako --no-wintab"
 
 #. Description of --use-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:59
 msgid "Do use the Wintab API [default]"
-msgstr "Nepoužívať API Wintab [predvolené]"
+msgstr "Nepoužije API Wintab [predvolené]"
 
 #. Description of --max-colors=COLORS in --help output
 #: ../gdk/win32/gdkmain-win32.c:61
@@ -624,8 +624,8 @@ msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
-"Vyberte farbu z vonkajšieho kruhu. Tmavosť farby vyberte pomocou vnútorného "
-"trojuholníka."
+"Vyberte farbu z vonkajšieho prstenca. Tmavosť farby vyberte pomocou "
+"vnútorného trojuholníka."
 
 #: ../gtk/deprecated/gtkcolorsel.c:449
 msgid ""
@@ -641,7 +641,7 @@ msgstr "_Odtieň:"
 
 #: ../gtk/deprecated/gtkcolorsel.c:460
 msgid "Position on the color wheel."
-msgstr "Pozícia na farebnom kruhu."
+msgstr "Pozícia na farebnom kotúči."
 
 #: ../gtk/deprecated/gtkcolorsel.c:462
 msgid "S_aturation:"
@@ -653,7 +653,7 @@ msgstr "Intenzita farby."
 
 #: ../gtk/deprecated/gtkcolorsel.c:464
 msgid "_Value:"
-msgstr "_Hodnota:"
+msgstr "_Jas:"
 
 #: ../gtk/deprecated/gtkcolorsel.c:465
 msgid "Brightness of the color."
@@ -685,7 +685,7 @@ msgstr "Množstvo modrého svetla vo farbe."
 
 #: ../gtk/deprecated/gtkcolorsel.c:474
 msgid "Op_acity:"
-msgstr "_Nepriehľadnosť:"
+msgstr "_Krytie:"
 
 #: ../gtk/deprecated/gtkcolorsel.c:482 ../gtk/deprecated/gtkcolorsel.c:492
 msgid "Transparency of the color."
@@ -700,7 +700,7 @@ msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
-"Môžete zadať hexadecimálnu hodnotu farby v štýle HTML alebo jednoducho názov "
+"Môžete zadať šestnástkovú hodnotu farby v štýle HTML alebo jednoducho názov "
 "farby, napríklad „orange“ (oranžová)."
 
 #: ../gtk/deprecated/gtkcolorsel.c:546
@@ -739,6 +739,7 @@ msgstr "Predtým vybraná farba. Na porovnanie s farbou, ktorú vyberáte teraz.
 msgid "The color you've chosen."
 msgstr "Farba, ktorú ste si zvolili."
 
+# menu item
 #: ../gtk/deprecated/gtkcolorsel.c:1489
 msgid "_Save color here"
 msgstr "_Sem uložiť farbu"
@@ -1458,6 +1459,7 @@ msgstr "Spätná lomka"
 msgid "Other application…"
 msgstr "Iná aplikácia…"
 
+# PM: nedá sa online nahradiť na internete?
 #: ../gtk/gtkappchooserdialog.c:138
 msgid "Failed to look for applications online"
 msgstr "Online vyhľadávanie aplikácií zlyhalo"
@@ -1481,20 +1483,22 @@ msgstr "Na otvorenie „%s“ nie je dostupná žiadna aplikácia"
 #: ../gtk/gtkappchooserdialog.c:340
 #, c-format
 msgid "Select an application for “%s” files"
-msgstr "Vyberte aplikáciu pre súbory typu „%s“"
+msgstr "Vyberte aplikáciu na otvorenie súborov typu „%s“"
 
 #: ../gtk/gtkappchooserdialog.c:342
 #, c-format
 msgid "No applications available to open “%s” files"
 msgstr "Na otvorenie súborov typu „%s“ nie je dostupná žiadna aplikácia"
 
+# PM: ak sa nahradí online vyššie tak ja tu treba
+# PM: druhá časť vety znie neprirodzene treba zmeniť slovosled
 #: ../gtk/gtkappchooserdialog.c:358
 msgid ""
 "Click \"Show other applications\", for more options, or \"Find applications "
 "online\" to install a new application"
 msgstr ""
-"Viac volieb získate kliknutím na „Zobraziť ďalšie aplikácie“, alebo kliknite "
-"na „Nájsť aplikácie online“ pre nainštalovanie novej aplikácie"
+"Viac volieb získate kliknutím na „Zobraziť ďalšie aplikácie“, alebo "
+"kliknutím na „Nájsť aplikácie online“ pre nainštalovanie novej aplikácie"
 
 #: ../gtk/gtkappchooserdialog.c:428
 msgid "Forget association"
@@ -1523,7 +1527,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"%s teraz nemôže skončiť:\n"
+"Aplikácia %s teraz nemôže skončiť:\n"
 "\n"
 "%s"
 
@@ -1535,22 +1539,22 @@ msgstr "Aplikácia"
 #: ../gtk/gtkbookmarksmanager.c:50
 #, c-format
 msgid "%s does not exist in the bookmarks list"
-msgstr "%s neexistuje v zozname záložiek"
+msgstr "Identifikátor %s neexistuje v zozname záložiek"
 
 #: ../gtk/gtkbookmarksmanager.c:367
 #, c-format
 msgid "%s already exists in the bookmarks list"
-msgstr "%s už existuje v zozname záložiek"
+msgstr "Identifikátor %s už existuje v zozname záložiek"
 
 #: ../gtk/gtkbuilder-menus.c:220
 #, c-format
 msgid "Element <%s> not allowed inside <%s>"
-msgstr "Element <%s> nie je povolený vo vnútri <%s>"
+msgstr "Prvok <%s> nie je povolený vo vnútri <%s>"
 
 #: ../gtk/gtkbuilder-menus.c:225
 #, c-format
 msgid "Element <%s> not allowed at toplevel"
-msgstr "Element <%s> nie je povolený na najvyššej úrovni"
+msgstr "Prvok <%s> nie je povolený na najvyššej úrovni"
 
 #: ../gtk/gtkbuilder-menus.c:314
 #, c-format
@@ -1560,7 +1564,7 @@ msgstr "text sa nesmie objaviť vo vnútri <%s>"
 #: ../gtk/gtkbuilderparser.c:354
 #, c-format
 msgid "Invalid type function on line %d: '%s'"
-msgstr "Neplatná funkcia pre typ na riadku č. %d: „%s“"
+msgstr "Neplatná návratový typ funkcie na riadku č. %d: „%s“"
 
 #: ../gtk/gtkbuilderparser.c:418 ../gtk/gtkbuilderparser.c:504
 #, c-format
@@ -1572,7 +1576,7 @@ msgstr ""
 #: ../gtk/gtkbuilderparser.c:971
 #, c-format
 msgid "Invalid root element: '%s'"
-msgstr "Neplatný koreňový element: „%s“"
+msgstr "Neplatný koreňový prvok: „%s“"
 
 #: ../gtk/gtkbuilderparser.c:1014
 #, c-format
@@ -1757,6 +1761,7 @@ msgctxt "Color name"
 msgid "Dark Butter"
 msgstr "Tmavá maslová"
 
+# PM: myslím že chameleonia farba je dosť divné označenie lebo ako je známe chameleón farby mení.
 #: ../gtk/gtkcolorchooserwidget.c:433
 msgctxt "Color name"
 msgid "Light Chameleon"
@@ -2351,8 +2356,8 @@ msgid ""
 "Launch specified application by its desktop file info\n"
 "optionally passing list of URIs as arguments."
 msgstr ""
-"Spustiť určenú aplikáciu pomocou informácií jej desktop súboru\n"
-"voliteľne s predaním zoznamu URI ako parametrov."
+"Spustí určenú aplikáciu pomocou informácie z jej  súboru .desktop\n"
+"voliteľne s predaním zoznamu identifikátorv URI ako parametrov."
 
 #: ../gtk/gtk-launch.c:87
 #, c-format
@@ -2362,7 +2367,7 @@ msgstr "Chyba pri analýze volieb príkazového riadka: %s\n"
 #: ../gtk/gtk-launch.c:89 ../gtk/gtk-launch.c:102
 #, c-format
 msgid "Try \"%s --help\" for more information."
-msgstr "Viac informácií získate po zadaní „%s --help“."
+msgstr "Viac informácií získate po zadaní príkazu „%s --help“."
 
 #. Translators: the %s is the program name. This error message
 #. means the user is calling gtk-launch without any argument.
@@ -2454,12 +2459,12 @@ msgstr "Zmení všetky upozornenia na závažné"
 #. Description of --gtk-debug=FLAGS in --help output
 #: ../gtk/gtkmain.c:454
 msgid "GTK+ debugging flags to set"
-msgstr "Ladiace príznaky GTK+, ktoré nastaví"
+msgstr "Ladiace príznaky GTK+, ktoré sa majú nastaviť"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
 #: ../gtk/gtkmain.c:457
 msgid "GTK+ debugging flags to unset"
-msgstr "Ladiace príznaky GTK+, ktoré vypne"
+msgstr "Ladiace príznaky GTK+, ktoré sa majú vypnúť"
 
 #. Translate to default:RTL if you want your widgets
 #. * to be RTL, otherwise translate to default:LTR.
@@ -2671,7 +2676,7 @@ msgstr "Kôš"
 # tooltip
 #: ../gtk/gtkplacessidebar.c:807
 msgid "Open the trash"
-msgstr "Otvorí kôš"
+msgstr "Otvorí Kôš"
 
 #  tooltip (all 3x)
 #: ../gtk/gtkplacessidebar.c:862 ../gtk/gtkplacessidebar.c:887
@@ -2706,7 +2711,7 @@ msgstr "Pripojiť k serveru"
 #  tooltip
 #: ../gtk/gtkplacessidebar.c:1079
 msgid "Connect to a network server address"
-msgstr "Pripojí k sieťovej adrese serveru"
+msgstr "Pripojí k sieťovej adrese servera"
 
 #: ../gtk/gtkplacessidebar.c:1559
 msgid "New bookmark"
