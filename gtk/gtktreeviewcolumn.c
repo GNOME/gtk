@@ -133,8 +133,8 @@ struct _GtkTreeViewColumnPrivate
   GtkWidget *arrow;
   GtkWidget *alignment;
   GdkWindow *window;
-  gfloat xalign;
   gulong property_changed_signal;
+  gfloat xalign;
 
   /* Sizing fields */
   /* see gtk+/doc/tree-column-sizing.txt for more information on them */

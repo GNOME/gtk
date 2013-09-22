@@ -294,6 +294,8 @@ struct _GtkTreeViewPrivate
   GList *children;
   gint width;
 
+  guint presize_handler_tick_cb;
+
   /* Adjustments */
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;
@@ -313,7 +315,6 @@ struct _GtkTreeViewPrivate
   /* we cache it for simplicity of the code */
   gint dy;
 
-  guint presize_handler_tick_cb;
   guint validate_rows_timer;
   guint scroll_sync_timer;
 
@@ -364,9 +365,9 @@ struct _GtkTreeViewPrivate
   GtkTreeSelection *selection;
 
   /* Header information */
+  gint header_height;
   gint n_columns;
   GList *columns;
-  gint header_height;
 
   GtkTreeViewColumnDropFunc column_drop_func;
   gpointer column_drop_func_data;
@@ -375,6 +376,9 @@ struct _GtkTreeViewPrivate
   GtkTreeViewColumnReorder *cur_reorder;
 
   gint prev_width_before_expander;
+
+  /* Scroll timeout (e.g. during dnd, rubber banding) */
+  guint scroll_timeout;
 
   /* Interactive Header reordering */
   GdkWindow *drag_window;
@@ -396,9 +400,6 @@ struct _GtkTreeViewPrivate
   gpointer destroy_count_data;
   GDestroyNotify destroy_count_destroy;
 
-  /* Scroll timeout (e.g. during dnd, rubber banding) */
-  guint scroll_timeout;
-
   /* Row drag-and-drop */
   GtkTreeRowReference *drag_dest_row;
   GtkTreeViewDropPosition drag_dest_pos;
@@ -411,14 +412,14 @@ struct _GtkTreeViewPrivate
   gint rubber_band_extend;
   gint rubber_band_modify;
 
+  /* fixed height */
+  gint fixed_height;
+
   GtkRBNode *rubber_band_start_node;
   GtkRBTree *rubber_band_start_tree;
 
   GtkRBNode *rubber_band_end_node;
   GtkRBTree *rubber_band_end_tree;
-
-  /* fixed height */
-  gint fixed_height;
 
   /* Scroll-to functionality when unrealized */
   GtkTreeRowReference *scroll_to_path;

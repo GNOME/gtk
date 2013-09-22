@@ -63,14 +63,15 @@ struct _GtkRBNode
 {
   guint flags : 14;
 
-  GtkRBNode *left;
-  GtkRBNode *right;
-  GtkRBNode *parent;
-
   /* count is the number of nodes beneath us, plus 1 for ourselves.
    * i.e. node->left->count + node->right->count + 1
    */
   gint count;
+
+  GtkRBNode *left;
+  GtkRBNode *right;
+  GtkRBNode *parent;
+
   /* count the number of total nodes beneath us, including nodes
    * of children trees.
    * i.e. node->left->count + node->right->count + node->children->root->count + 1

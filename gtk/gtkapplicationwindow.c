@@ -221,9 +221,9 @@ struct _GtkApplicationWindowPrivate
   GSList *accel_closures;
   guint accel_map_changed_id;
 
+  gboolean show_menubar;
   GMenu *app_menu_section;
   GMenu *menubar_section;
-  gboolean show_menubar;
 
   GDBusConnection *session;
   gchar           *object_path;

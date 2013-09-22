@@ -65,12 +65,12 @@
 struct _GtkTreeStorePrivate
 {
   gint stamp;
+  GtkSortType order;
   gpointer root;
   gpointer last;
   gint n_columns;
   gint sort_column_id;
   GList *sort_list;
-  GtkSortType order;
   GType *column_headers;
   GtkTreeIterCompareFunc default_sort_func;
   gpointer default_sort_data;

@@ -144,16 +144,12 @@ struct _GtkPlacesSidebar {
 
 	/* DnD */
 	GList     *drag_list; /* list of GFile */
-	gboolean  drag_data_received;
 	int       drag_data_info;
-	gboolean  drop_occured;
-
-	GtkWidget *popup_menu;
 
 	/* volume mounting - delayed open process */
-	gboolean mounting;
 	GtkPlacesOpenFlags go_to_after_mount_open_flags;
 
+	GtkWidget *popup_menu;
 	GSList *shortcuts;
 
 	GDBusProxy *hostnamed_proxy;
@@ -165,9 +161,12 @@ struct _GtkPlacesSidebar {
 	DropState drop_state;
 	int new_bookmark_index;
 	guint drag_leave_timeout_id;
-	guint switch_location_timer;
 	char *drop_target_uri;
+	guint switch_location_timer;
 
+	guint mounting : 1;
+	guint  drag_data_received : 1;
+	guint drop_occured : 1;
 	guint show_desktop : 1;
 	guint show_connect_to_server : 1;
 };

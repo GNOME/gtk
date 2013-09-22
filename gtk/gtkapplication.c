@@ -141,12 +141,14 @@ struct _GtkApplicationPrivate
 {
   GList *windows;
 
-  gboolean register_session;
-
   GMenuModel      *app_menu;
   GMenuModel      *menubar;
 
+  gboolean register_session;
+
 #ifdef GDK_WINDOWING_X11
+  guint next_id;
+
   GDBusConnection *session_bus;
   const gchar     *application_id;
   const gchar     *object_path;
@@ -154,10 +156,8 @@ struct _GtkApplicationPrivate
   gchar           *app_menu_path;
   guint            app_menu_id;
 
-  gchar           *menubar_path;
   guint            menubar_id;
-
-  guint next_id;
+  gchar           *menubar_path;
 
   GDBusProxy *sm_proxy;
   GDBusProxy *client_proxy;

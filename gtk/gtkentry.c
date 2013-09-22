@@ -234,10 +234,9 @@ struct _EntryIconInfo
   guint in_drag        : 1;
   guint pressed        : 1;
 
-  GtkIconHelper *icon_helper;
-
-  GtkTargetList *target_list;
   GdkDragAction actions;
+  GtkTargetList *target_list;
+  GtkIconHelper *icon_helper;
 };
 
 struct _GtkEntryPasswordHint

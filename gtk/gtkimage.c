@@ -136,13 +136,13 @@ struct _GtkImagePrivate
 {
   GtkIconHelper *icon_helper;
 
-  gint animation_timeout;
   GdkPixbufAnimationIter *animation_iter;
+  gint animation_timeout;
+
+  float baseline_align;
 
   gchar                *filename;       /* Only used with GTK_IMAGE_ANIMATION, GTK_IMAGE_PIXBUF */
   gchar                *resource_path;  /* Only used with GTK_IMAGE_PIXBUF */
-
-  float baseline_align;
 };
 
 

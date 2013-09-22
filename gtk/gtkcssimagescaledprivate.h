@@ -38,9 +38,10 @@ struct _GtkCssImageScaled
 {
   GtkCssImage parent;
 
-  int          scale;
   GtkCssImage **images;
   int          n_images;
+
+  int          scale;
 };
 
 struct _GtkCssImageScaledClass

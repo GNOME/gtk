@@ -160,9 +160,9 @@ struct _GtkMenuButtonPrivate
   GtkMenuButtonShowMenuCallback func;
   gpointer user_data;
 
-  GtkArrowType arrow_type;
   GtkWidget *align_widget;
   gpointer arrow_widget;
+  GtkArrowType arrow_type;
 };
 
 enum

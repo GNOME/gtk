@@ -524,9 +524,9 @@ struct _GtkWidgetPrivate
 
 struct _GtkWidgetClassPrivate
 {
+  GtkWidgetTemplate *template;
   GType accessible_type;
   AtkRole accessible_role;
-  GtkWidgetTemplate *template;
 };
 
 enum {

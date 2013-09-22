@@ -236,8 +236,8 @@ struct _GtkContainerPrivate
 {
   GtkWidget *focus_child;
 
-  guint resize_handler;
   GdkFrameClock *resize_clock;
+  guint resize_handler;
 
   guint border_width : 16;
 

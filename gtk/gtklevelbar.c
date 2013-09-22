@@ -136,13 +136,13 @@ typedef struct {
 struct _GtkLevelBarPrivate {
   GtkOrientation orientation;
 
+  GtkLevelBarMode bar_mode;
+
   gdouble min_value;
   gdouble max_value;
   gdouble cur_value;
 
   GList *offsets;
-
-  GtkLevelBarMode bar_mode;
 
   guint inverted : 1;
 };

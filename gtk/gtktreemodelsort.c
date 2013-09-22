@@ -228,8 +228,8 @@ struct _SortElt
   gint           offset;
   gint           ref_count;
   gint           zero_ref_count;
-  GSequenceIter *siter; /* iter into seq */
   gint           old_index; /* used while sorting */
+  GSequenceIter *siter; /* iter into seq */
 };
 
 struct _SortLevel
@@ -247,8 +247,8 @@ struct _SortData
   gpointer sort_data;
 
   GtkTreePath *parent_path;
-  gint parent_path_depth;
   gint *parent_path_indices;
+  gint parent_path_depth;
 };
 
 /* Properties */

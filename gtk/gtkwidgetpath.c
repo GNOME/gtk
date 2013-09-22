@@ -89,10 +89,10 @@ struct GtkPathElement
 {
   GType type;
   GQuark name;
+  guint sibling_index;
   GHashTable *regions;
   GArray *classes;
   GtkWidgetPath *siblings;
-  guint sibling_index;
 };
 
 struct _GtkWidgetPath

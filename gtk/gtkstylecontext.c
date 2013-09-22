@@ -365,8 +365,8 @@ struct _GtkStyleContextPrivate
   GtkStyleInfo *info;
   gint scale;
 
-  GdkFrameClock *frame_clock;
   guint frame_clock_update_id;
+  GdkFrameClock *frame_clock;
 
   GtkCssChange relevant_changes;
   GtkCssChange pending_changes;

@@ -45,10 +45,10 @@ struct _GtkCssAnimation
   GtkCssValue     *ease;
   gint64           timestamp;           /* elapsed time when paused, start time when playing (can be negative) */
   gint64           duration;            /* duration of 1 cycle */
+  double           iteration_count;
   GtkCssDirection  direction;
   GtkCssPlayState  play_state;
   GtkCssFillMode   fill_mode;
-  double           iteration_count;
 };
 
 struct _GtkCssAnimationClass
