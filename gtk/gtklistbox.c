@@ -28,6 +28,7 @@
 #include <string.h>
 
 #include "a11y/gtklistboxaccessibleprivate.h"
+#include "a11y/gtklistboxrowaccessible.h"
 
 /**
  * SECTION:gtklistbox
@@ -2811,6 +2812,8 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_LIST_BOX_ROW_ACCESSIBLE);
 
   object_class->get_property = gtk_list_box_row_get_property;
   object_class->set_property = gtk_list_box_row_set_property;
