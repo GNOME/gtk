@@ -2840,6 +2840,4 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
                   _gtk_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
   widget_class->activate_signal = row_signals[ROW__ACTIVATE];
-
-  gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_LIST_ITEM);
 }
