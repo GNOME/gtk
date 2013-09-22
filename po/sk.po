@@ -641,7 +641,7 @@ msgstr "_Odtieň:"
 
 #: ../gtk/deprecated/gtkcolorsel.c:460
 msgid "Position on the color wheel."
-msgstr "Pozícia na farebnom kotúči."
+msgstr "Pozícia na farebnom kruhu."
 
 #: ../gtk/deprecated/gtkcolorsel.c:462
 msgid "S_aturation:"
@@ -709,7 +709,7 @@ msgstr "_Paleta:"
 
 #: ../gtk/deprecated/gtkcolorsel.c:576
 msgid "Color Wheel"
-msgstr "Kotúč farieb"
+msgstr "Farebný kruh"
 
 #: ../gtk/deprecated/gtkcolorsel.c:1070
 msgid ""
