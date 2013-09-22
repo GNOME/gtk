@@ -104,8 +104,11 @@ struct _GdkWindowImplWayland
   struct wl_shell_surface *shell_surface;
   struct gtk_surface *gtk_surface;
   unsigned int mapped : 1;
-  GdkWindow *transient_for;
+  unsigned int fullscreen : 1;
+  unsigned int use_custom_surface : 1;
+  unsigned int pending_commit : 1;
   GdkWindowTypeHint hint;
+  GdkWindow *transient_for;
 
   /* The surface which is being "drawn to" to */
   cairo_surface_t *cairo_surface;
@@ -124,32 +127,23 @@ struct _GdkWindowImplWayland
 
   int focus_count;
 
-  gulong map_serial;    /* Serial of last transition from unmapped */
-
-  cairo_surface_t *icon_pixmap;
-  cairo_surface_t *icon_mask;
-
   /* Time of most recent user interaction. */
   gulong user_time;
 
   GdkGeometry geometry_hints;
   GdkWindowHints geometry_mask;
 
+  guint32 grab_time;
   GdkDevice *grab_device;
   struct wl_seat *grab_input_seat;
-  guint32 grab_time;
 
-  gboolean fullscreen;
   struct
     {
       int width, height;
     } saved_fullscreen, saved_maximized;
 
-  gboolean use_custom_surface;
-
-  guint32 scale;
-  gboolean pending_commit;
   gint64 pending_frame_counter;
+  guint32 scale;
 };
 
 struct _GdkWindowImplWaylandClass
