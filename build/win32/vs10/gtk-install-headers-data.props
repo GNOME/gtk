@@ -615,6 +615,8 @@ copy ..\..\..\gtk\a11y\gtklinkbuttonaccessible.h $(CopyDir)\include\gtk-$(ApiVer
 
 copy ..\..\..\gtk\a11y\gtklistboxaccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y
 
+copy ..\..\..\gtk\a11y\gtklistboxrowaccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y
+
 copy ..\..\..\gtk\a11y\gtklockbuttonaccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y
 
 copy ..\..\..\gtk\a11y\gtkmenuaccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y
