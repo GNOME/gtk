@@ -218,10 +218,29 @@ gtk_link_button_accessible_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_link_button_accessible_parent_class)->finalize (object);
 }
 
+static AtkStateSet *
+gtk_link_button_ref_state_set (AtkObject *accessible)
+{
+  AtkStateSet *state_set;
+  GtkWidget *widget;
+
+  state_set = ATK_OBJECT_CLASS (gtk_link_button_accessible_parent_class)->ref_state_set (accessible);
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
+  if (widget != NULL)
+    {
+      if (gtk_link_button_get_visited (GTK_LINK_BUTTON (widget)))
+        atk_state_set_add_state (state_set, ATK_STATE_VISITED);
+    }
+
+  return state_set;
+}
+
 static void
 gtk_link_button_accessible_class_init (GtkLinkButtonAccessibleClass *klass)
 {
   G_OBJECT_CLASS (klass)->finalize = gtk_link_button_accessible_finalize;
+  ATK_OBJECT_CLASS (klass)->ref_state_set = gtk_link_button_ref_state_set;
 }
 
 static void

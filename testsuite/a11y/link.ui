@@ -10,6 +10,7 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="uri">http://www.gtk.org</property>
+        <property name="visited">True</property>
       </object>
     </child>
   </object>
