@@ -1006,14 +1006,15 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Since: 2.12
    *
-   * Deprecated: 3.10: This setting is ignored
+   * Deprecated: 3.10: This setting can still be used for application
+   *      overrides, but will be ignored in the future
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-enable-mnemonics",
                                                                    P_("Enable Mnemonics"),
                                                                    P_("Whether labels should have mnemonics"),
                                                                    TRUE,
-                                                                   GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
+                                                                   GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_ENABLE_MNEMONICS);
 
