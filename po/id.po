@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: gtk+ gtk-3-8\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-09-13 16:09+0000\n"
-"PO-Revision-Date: 2013-09-14 15:51+0700\n"
+"POT-Creation-Date: 2013-09-22 10:11+0000\n"
+"PO-Revision-Date: 2013-09-23 09:47+0700\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: Indonesian <gnome@i15n.org>\n"
 "Language: id_ID\n"
@@ -556,12 +556,12 @@ msgctxt "Action description"
 msgid "Customizes the color"
 msgstr "Gubah warna"
 
-#: ../gtk/a11y/gtkcomboboxaccessible.c:307
+#: ../gtk/a11y/gtkcomboboxaccessible.c:310
 msgctxt "Action name"
 msgid "Press"
 msgstr "Tekan"
 
-#: ../gtk/a11y/gtkcomboboxaccessible.c:316
+#: ../gtk/a11y/gtkcomboboxaccessible.c:319
 msgctxt "Action description"
 msgid "Presses the combobox"
 msgstr "Menekan kotak kombo"
@@ -1468,7 +1468,7 @@ msgstr "_Cari aplikasi daring"
 msgid "Select an application to open “%s”"
 msgstr "Pilih aplikasi untuk membuka \"%s\""
 
-#: ../gtk/gtkappchooserdialog.c:334 ../gtk/gtkappchooserwidget.c:660
+#: ../gtk/gtkappchooserdialog.c:334 ../gtk/gtkappchooserwidget.c:657
 #, c-format
 msgid "No applications available to open “%s”"
 msgstr "Tak tersedia aplikasi untuk membuka \"%s\""
@@ -1496,19 +1496,19 @@ msgstr ""
 msgid "Forget association"
 msgstr "Lupakan asosiasi"
 
-#: ../gtk/gtkappchooserwidget.c:609
+#: ../gtk/gtkappchooserwidget.c:606
 msgid "Default Application"
 msgstr "Aplikasi Bawaan"
 
-#: ../gtk/gtkappchooserwidget.c:747
+#: ../gtk/gtkappchooserwidget.c:744
 msgid "Recommended Applications"
 msgstr "Aplikasi Yang Disarankan"
 
-#: ../gtk/gtkappchooserwidget.c:762
+#: ../gtk/gtkappchooserwidget.c:759
 msgid "Related Applications"
 msgstr "Aplikasi Terkait"
 
-#: ../gtk/gtkappchooserwidget.c:776
+#: ../gtk/gtkappchooserwidget.c:773
 msgid "Other Applications"
 msgstr "Aplikasi Lain"
 
@@ -1984,30 +1984,30 @@ msgstr "_Kanan:"
 msgid "Paper Margins"
 msgstr "Margin Kertas"
 
-#: ../gtk/gtkentry.c:9272 ../gtk/gtkentry.c:9418 ../gtk/gtklabel.c:6276
+#: ../gtk/gtkentry.c:9271 ../gtk/gtkentry.c:9417 ../gtk/gtklabel.c:6276
 #: ../gtk/gtktextview.c:8694 ../gtk/gtktextview.c:8877
 msgid "Cu_t"
 msgstr "Po_tong"
 
-#: ../gtk/gtkentry.c:9276 ../gtk/gtkentry.c:9421 ../gtk/gtklabel.c:6277
+#: ../gtk/gtkentry.c:9275 ../gtk/gtkentry.c:9420 ../gtk/gtklabel.c:6277
 #: ../gtk/gtktextview.c:8698 ../gtk/gtktextview.c:8881
 msgid "_Copy"
 msgstr "_Salin"
 
-#: ../gtk/gtkentry.c:9280 ../gtk/gtkentry.c:9424 ../gtk/gtklabel.c:6278
+#: ../gtk/gtkentry.c:9279 ../gtk/gtkentry.c:9423 ../gtk/gtklabel.c:6278
 #: ../gtk/gtktextview.c:8700 ../gtk/gtktextview.c:8883
 msgid "_Paste"
 msgstr "Tem_pel"
 
-#: ../gtk/gtkentry.c:9283 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8703
+#: ../gtk/gtkentry.c:9282 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8703
 msgid "_Delete"
 msgstr "_Hapus"
 
-#: ../gtk/gtkentry.c:9294 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8717
+#: ../gtk/gtkentry.c:9293 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8717
 msgid "Select _All"
 msgstr "Pilih Semu_a"
 
-#: ../gtk/gtkentry.c:10382
+#: ../gtk/gtkentry.c:10381
 msgid "Caps Lock is on"
 msgstr "Caps Lock menyala"
 
@@ -2056,7 +2056,7 @@ msgstr "Caps Lock menyala"
 msgid "Select a File"
 msgstr "Pilih Berkas"
 
-#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkplacessidebar.c:791
+#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkplacessidebar.c:790
 msgid "Desktop"
 msgstr "Desktop"
 
@@ -2064,7 +2064,7 @@ msgstr "Desktop"
 msgid "(None)"
 msgstr "(Nihil)"
 
-#: ../gtk/gtkfilechooserbutton.c:807 ../gtk/gtkplacessidebar.c:3107
+#: ../gtk/gtkfilechooserbutton.c:807 ../gtk/gtkplacessidebar.c:3106
 msgid "_Open"
 msgstr "Buk_a"
 
@@ -2259,6 +2259,10 @@ msgstr "Sans 12"
 #: ../gtk/gtkfontbutton.c:438 ../gtk/gtkfontbutton.c:568
 msgid "Pick a Font"
 msgstr "Pilih Fonta"
+
+#: ../gtk/gtkheaderbar.c:224 ../gtk/gtkwindow.c:5281 ../gtk/gtkwindow.c:8194
+msgid "Close"
+msgstr "Tutup"
 
 #: ../gtk/gtkicontheme.c:2100 ../gtk/gtkicontheme.c:2163
 #, c-format
@@ -2599,191 +2603,191 @@ msgstr "Atur Halaman"
 msgid "File System Root"
 msgstr "Akar Sistem Berkas"
 
-#: ../gtk/gtkplacessidebar.c:447
+#: ../gtk/gtkplacessidebar.c:446
 msgid "Devices"
 msgstr "Perangkat"
 
-#: ../gtk/gtkplacessidebar.c:455
+#: ../gtk/gtkplacessidebar.c:454
 msgid "Bookmarks"
 msgstr "Penanda Taut"
 
-#: ../gtk/gtkplacessidebar.c:761
+#: ../gtk/gtkplacessidebar.c:760
 msgid "Places"
 msgstr "Lokasi"
 
-#: ../gtk/gtkplacessidebar.c:768
+#: ../gtk/gtkplacessidebar.c:767
 msgid "Recent"
 msgstr "Baru-baru Ini Dipakai"
 
-#: ../gtk/gtkplacessidebar.c:770
+#: ../gtk/gtkplacessidebar.c:769
 msgid "Recent files"
 msgstr "Berkas yang baru-baru ini dipakai"
 
-#: ../gtk/gtkplacessidebar.c:779
+#: ../gtk/gtkplacessidebar.c:778
 msgid "Home"
 msgstr "Rumah"
 
-#: ../gtk/gtkplacessidebar.c:781
+#: ../gtk/gtkplacessidebar.c:780
 msgid "Open your personal folder"
 msgstr "Buka folder personal Anda."
 
-#: ../gtk/gtkplacessidebar.c:793
+#: ../gtk/gtkplacessidebar.c:792
 msgid "Open the contents of your desktop in a folder"
 msgstr "Buka isi dari desktop Anda dalam suatu folder"
 
-#: ../gtk/gtkplacessidebar.c:806
+#: ../gtk/gtkplacessidebar.c:805
 msgid "Trash"
 msgstr "Tong Sampah"
 
-#: ../gtk/gtkplacessidebar.c:808
+#: ../gtk/gtkplacessidebar.c:807
 msgid "Open the trash"
 msgstr "Buka tong sampah"
 
-#: ../gtk/gtkplacessidebar.c:863 ../gtk/gtkplacessidebar.c:888
-#: ../gtk/gtkplacessidebar.c:1095
+#: ../gtk/gtkplacessidebar.c:862 ../gtk/gtkplacessidebar.c:887
+#: ../gtk/gtkplacessidebar.c:1094
 #, c-format
 msgid "Mount and open %s"
 msgstr "Kait dan buka %s"
 
-#: ../gtk/gtkplacessidebar.c:963
+#: ../gtk/gtkplacessidebar.c:962
 msgid "Open the contents of the file system"
 msgstr "Buka isi dari sistem berkas"
 
-#: ../gtk/gtkplacessidebar.c:1063
+#: ../gtk/gtkplacessidebar.c:1062
 msgid "Network"
 msgstr "Jaringan"
 
-#: ../gtk/gtkplacessidebar.c:1069
+#: ../gtk/gtkplacessidebar.c:1068
 msgid "Browse Network"
 msgstr "Ramban Jaringan"
 
-#: ../gtk/gtkplacessidebar.c:1071
+#: ../gtk/gtkplacessidebar.c:1070
 msgid "Browse the contents of the network"
 msgstr "Ramban isi jaringan"
 
-#: ../gtk/gtkplacessidebar.c:1078
+#: ../gtk/gtkplacessidebar.c:1077
 msgid "Connect to Server"
 msgstr "Menyambung ke Server"
 
-#: ../gtk/gtkplacessidebar.c:1080
+#: ../gtk/gtkplacessidebar.c:1079
 msgid "Connect to a network server address"
 msgstr "Menyambung ke alamat server jaringan"
 
-#: ../gtk/gtkplacessidebar.c:1560
+#: ../gtk/gtkplacessidebar.c:1559
 msgid "New bookmark"
 msgstr "Tanda taut baru"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: ../gtk/gtkplacessidebar.c:2100 ../gtk/gtkplacessidebar.c:3183
+#: ../gtk/gtkplacessidebar.c:2099 ../gtk/gtkplacessidebar.c:3182
 msgid "_Start"
 msgstr "_Mulai"
 
-#: ../gtk/gtkplacessidebar.c:2101 ../gtk/gtkplacessidebar.c:3190
+#: ../gtk/gtkplacessidebar.c:2100 ../gtk/gtkplacessidebar.c:3189
 msgid "_Stop"
 msgstr "_Hentikan"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: ../gtk/gtkplacessidebar.c:2106
+#: ../gtk/gtkplacessidebar.c:2105
 msgid "_Power On"
 msgstr "_Nyalakan"
 
-#: ../gtk/gtkplacessidebar.c:2107
+#: ../gtk/gtkplacessidebar.c:2106
 msgid "_Safely Remove Drive"
 msgstr "Lepa_s Kandar Dengan Aman"
 
-#: ../gtk/gtkplacessidebar.c:2110
+#: ../gtk/gtkplacessidebar.c:2109
 msgid "_Connect Drive"
 msgstr "_Sambungkan Kandar"
 
-#: ../gtk/gtkplacessidebar.c:2111
+#: ../gtk/gtkplacessidebar.c:2110
 msgid "_Disconnect Drive"
 msgstr "Putuskan Kan_dar"
 
-#: ../gtk/gtkplacessidebar.c:2114
+#: ../gtk/gtkplacessidebar.c:2113
 msgid "_Start Multi-disk Device"
 msgstr "Mulai Perangkat Multi-di_ska"
 
-#: ../gtk/gtkplacessidebar.c:2115
+#: ../gtk/gtkplacessidebar.c:2114
 msgid "_Stop Multi-disk Device"
 msgstr "Hentikan Perangkat Multi-di_ska"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: ../gtk/gtkplacessidebar.c:2119
+#: ../gtk/gtkplacessidebar.c:2118
 msgid "_Unlock Drive"
 msgstr "Buka K_unci Kandar"
 
-#: ../gtk/gtkplacessidebar.c:2120
+#: ../gtk/gtkplacessidebar.c:2119
 msgid "_Lock Drive"
 msgstr "_Kunci Kandar"
 
-#: ../gtk/gtkplacessidebar.c:2147 ../gtk/gtkplacessidebar.c:2845
+#: ../gtk/gtkplacessidebar.c:2146 ../gtk/gtkplacessidebar.c:2844
 #, c-format
 msgid "Unable to start %s"
 msgstr "Tak bisa memulai %s"
 
-#: ../gtk/gtkplacessidebar.c:2174
+#: ../gtk/gtkplacessidebar.c:2173
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Tak bisa mengakses \"%s\""
 
-#: ../gtk/gtkplacessidebar.c:2480
+#: ../gtk/gtkplacessidebar.c:2479
 #, c-format
 msgid "Unable to unmount %s"
 msgstr "Tak bisa melepas kait %s"
 
-#: ../gtk/gtkplacessidebar.c:2603 ../gtk/gtkplacessidebar.c:2630
-#: ../gtk/gtkplacessidebar.c:2657
+#: ../gtk/gtkplacessidebar.c:2602 ../gtk/gtkplacessidebar.c:2629
+#: ../gtk/gtkplacessidebar.c:2656
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Tak bisa mengeluarkan %s"
 
-#: ../gtk/gtkplacessidebar.c:2797
+#: ../gtk/gtkplacessidebar.c:2796
 #, c-format
 msgid "Unable to poll %s for media changes"
 msgstr "Tak bisa mem-poll %s untuk pergantian media"
 
-#: ../gtk/gtkplacessidebar.c:2899
+#: ../gtk/gtkplacessidebar.c:2898
 #, c-format
 msgid "Unable to stop %s"
 msgstr "Tak bisa menghentikan %s"
 
-#: ../gtk/gtkplacessidebar.c:3114
+#: ../gtk/gtkplacessidebar.c:3113
 msgid "Open in New _Tab"
 msgstr "Buka dalam _Tab Baru"
 
-#: ../gtk/gtkplacessidebar.c:3122
+#: ../gtk/gtkplacessidebar.c:3121
 msgid "Open in New _Window"
 msgstr "Buka dalam _Jendela Baru"
 
-#: ../gtk/gtkplacessidebar.c:3131
+#: ../gtk/gtkplacessidebar.c:3130
 msgid "_Add Bookmark"
 msgstr "T_ambah Tanda Taut"
 
-#: ../gtk/gtkplacessidebar.c:3137
+#: ../gtk/gtkplacessidebar.c:3136
 msgid "Remove"
 msgstr "Hapus"
 
-#: ../gtk/gtkplacessidebar.c:3144
+#: ../gtk/gtkplacessidebar.c:3143
 msgid "Rename…"
 msgstr "Ubah Nama…"
 
-#: ../gtk/gtkplacessidebar.c:3155
+#: ../gtk/gtkplacessidebar.c:3154
 msgid "_Mount"
 msgstr "_Kait"
 
-#: ../gtk/gtkplacessidebar.c:3162
+#: ../gtk/gtkplacessidebar.c:3161
 msgid "_Unmount"
 msgstr "_Lepas Kait"
 
-#: ../gtk/gtkplacessidebar.c:3169
+#: ../gtk/gtkplacessidebar.c:3168
 msgid "_Eject"
 msgstr "_Keluarkan"
 
-#: ../gtk/gtkplacessidebar.c:3176
+#: ../gtk/gtkplacessidebar.c:3175
 msgid "_Detect Media"
 msgstr "_Deteksi Media"
 
-#: ../gtk/gtkplacessidebar.c:3829
+#: ../gtk/gtkplacessidebar.c:3828
 msgid "Computer"
 msgstr "Komputer"
 
@@ -3310,50 +3314,50 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:8063
+#: ../gtk/gtkwindow.c:5242 ../gtk/gtkwindow.c:8089
 msgid "Minimize"
 msgstr "Minimalkan"
 
-#: ../gtk/gtkwindow.c:8071
-msgid "Unmaximize"
-msgstr "Tak Maksimalkan"
+#: ../gtk/gtkwindow.c:5263
+msgid "Restore"
+msgstr "Pulihkan"
 
-#: ../gtk/gtkwindow.c:8071
+#: ../gtk/gtkwindow.c:5263 ../gtk/gtkwindow.c:8097
 msgid "Maximize"
 msgstr "Maksimalkan"
 
-#: ../gtk/gtkwindow.c:8080
+#: ../gtk/gtkwindow.c:8097
+msgid "Unmaximize"
+msgstr "Tak Maksimalkan"
+
+#: ../gtk/gtkwindow.c:8106
 msgid "Always on Top"
 msgstr "Selalu di Atas"
 
-#: ../gtk/gtkwindow.c:8092
+#: ../gtk/gtkwindow.c:8118
 msgid "Always on Visible Workspace"
 msgstr "Selalu pada Ruang Kerja Nampak"
 
-#: ../gtk/gtkwindow.c:8100
+#: ../gtk/gtkwindow.c:8126
 msgid "Only on This Workspace"
 msgstr "Hanya pada Ruang Kerja Ini"
 
-#: ../gtk/gtkwindow.c:8117
+#: ../gtk/gtkwindow.c:8143
 msgid "Move to Workspace Up"
 msgstr "Pindah ke Ruang Kerja Atas"
 
-#: ../gtk/gtkwindow.c:8126
+#: ../gtk/gtkwindow.c:8152
 msgid "Move to Workspace Down"
 msgstr "Pindah ke Ruang Kerja Bawah"
 
-#: ../gtk/gtkwindow.c:8140
+#: ../gtk/gtkwindow.c:8166
 msgid "Move to Another Workspace"
 msgstr "Pindah ke Ruang Kerja Lain"
 
-#: ../gtk/gtkwindow.c:8148
+#: ../gtk/gtkwindow.c:8174
 #, c-format
 msgid "Workspace %d"
 msgstr "Ruang Kerja %d"
-
-#: ../gtk/gtkwindow.c:8168
-msgid "Close"
-msgstr "Tutup"
 
 #: ../gtk/paper_names_offsets.c:4
 msgctxt "paper size"
