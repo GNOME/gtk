@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-22 12:26+0300\n"
-"PO-Revision-Date: 2013-09-22 12:28+0300\n"
+"POT-Creation-Date: 2013-09-23 17:10+0300\n"
+"PO-Revision-Date: 2013-09-23 17:10+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -2259,12 +2259,12 @@ msgstr "בחירת גופן"
 msgid "Close"
 msgstr "סגירה"
 
-#: ../gtk/gtkicontheme.c:2100 ../gtk/gtkicontheme.c:2163
+#: ../gtk/gtkicontheme.c:2116 ../gtk/gtkicontheme.c:2179
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "הסמל '%s' לא קיים בערכת הנושא"
 
-#: ../gtk/gtkicontheme.c:3866
+#: ../gtk/gtkicontheme.c:3883
 msgid "Failed to load icon"
 msgstr "טעינת הסמל נכשלה"
 
@@ -3350,7 +3350,7 @@ msgstr "הזזת החלון למרחב העבודה שלמטה"
 
 #: ../gtk/gtkwindow.c:8166
 msgid "Move to Another Workspace"
-msgstr "הזז חלון למרחב עבודה אחר"
+msgstr "הזזת החלון למרחב עבודה אחר"
 
 #: ../gtk/gtkwindow.c:8174
 #, c-format
