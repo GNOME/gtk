@@ -696,34 +696,53 @@ window_key_press_handler (GtkWidget   *widget,
                           GdkEventKey *event,
                           gpointer     data)
 {
+  gchar *accel = NULL;
   gboolean retval = FALSE;
-  guint keyval = GDK_KEY_F10;
 
-  /* FIXME this is wrong, needs to be in the global accel resolution
-   * thing, to properly consider i18n etc., but that probably requires
-   * AccelGroup changes etc.
-   */
-  if (event->keyval == keyval && event->state == 0)
+  g_object_get (gtk_widget_get_settings (widget),
+                "gtk-menu-bar-accel", &accel,
+                NULL);
+
+  if (accel && *accel)
     {
-      GList *tmp_menubars = get_viewable_menu_bars (GTK_WINDOW (widget));
-      GList *menubars;
+      guint keyval = 0;
+      GdkModifierType mods = 0;
 
-      menubars = _gtk_container_focus_sort (GTK_CONTAINER (widget), tmp_menubars,
-                                            GTK_DIR_TAB_FORWARD, NULL);
-      g_list_free (tmp_menubars);
+      gtk_accelerator_parse (accel, &keyval, &mods);
 
-      if (menubars)
+      if (keyval == 0)
+        g_warning ("Failed to parse menu bar accelerator '%s'\n", accel);
+
+      /* FIXME this is wrong, needs to be in the global accel resolution
+       * thing, to properly consider i18n etc., but that probably requires
+       * AccelGroup changes etc.
+       */
+      if (event->keyval == keyval &&
+          ((event->state & gtk_accelerator_get_default_mod_mask ()) ==
+          (mods & gtk_accelerator_get_default_mod_mask ())))
         {
-          GtkMenuShell *menu_shell = GTK_MENU_SHELL (menubars->data);
+          GList *tmp_menubars = get_viewable_menu_bars (GTK_WINDOW (widget));
+          GList *menubars;
 
-          _gtk_menu_shell_set_keyboard_mode (menu_shell, TRUE);
-          gtk_menu_shell_select_first (menu_shell, FALSE);
+          menubars = _gtk_container_focus_sort (GTK_CONTAINER (widget), tmp_menubars,
+                                                GTK_DIR_TAB_FORWARD, NULL);
+          g_list_free (tmp_menubars);
 
-          g_list_free (menubars);
+          if (menubars)
+            {
+              GtkMenuShell *menu_shell = GTK_MENU_SHELL (menubars->data);
 
-          retval = TRUE;
+              _gtk_menu_shell_set_keyboard_mode (menu_shell, TRUE);
+              gtk_menu_shell_select_first (menu_shell, FALSE);
+
+              g_list_free (menubars);
+
+              retval = TRUE;
+            }
         }
     }
+
+  g_free (accel);
 
   return retval;
 }
