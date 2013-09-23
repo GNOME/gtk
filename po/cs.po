@@ -11,17 +11,16 @@
 # Miloslav Trmac <mitr@volny.cz>, 2003, 2004, 2005.
 # Jakub Friedl <jfriedl@suse.cz>, 2006.
 # Lukas Novotny <lukasnov@cvs.gnome.org>, 2006.
-# Petr Kovar <pknbe@volny.cz>, 2007, 2008, 2009, 2010, 2011, 2012, 2013.
 # Marek Černocký <marek@manet.cz>, 2012, 2013.
+# Petr Kovar <pknbe@volny.cz>, 2007, 2008, 2009, 2010, 2011, 2012, 2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
-"%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-09-11 02:47+0000\n"
-"PO-Revision-Date: 2013-08-04 09:25+0200\n"
-"Last-Translator: Marek Černocký <marek@manet.cz>\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-09-23 14:25+0200\n"
+"PO-Revision-Date: 2013-09-23 14:25+0200\n"
+"Last-Translator: Petr Kovar <pknbe@volny.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
@@ -34,7 +33,7 @@ msgstr ""
 #: ../gdk/broadway/gdkbroadway-server.c:141
 #, c-format
 msgid "broadway display type not supported '%s'"
-msgstr ""
+msgstr "displej typu broadway není podporovaný „%s“"
 
 #: ../gdk/gdk.c:158
 #, c-format
@@ -292,236 +291,149 @@ msgid "Delete"
 msgstr "Delete"
 
 #: ../gdk/keyname-table.h:6881
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86MonBrightnessUp"
 msgctxt "keyboard label"
 msgid "MonBrightnessUp"
-msgstr "MonBrightnessUp"
+msgstr "MonitorJasZvýšit"
 
 #: ../gdk/keyname-table.h:6882
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86MonBrightnessDown"
 msgctxt "keyboard label"
 msgid "MonBrightnessDown"
-msgstr "MonBrightnessDown"
+msgstr "MonitorJasSnížit"
 
 #: ../gdk/keyname-table.h:6883
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86MonBrightnessUp"
 msgctxt "keyboard label"
 msgid "KbdBrightnessUp"
-msgstr "MonBrightnessUp"
+msgstr "KlávesniceJasZvýšit"
 
 #: ../gdk/keyname-table.h:6884
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86MonBrightnessDown"
 msgctxt "keyboard label"
 msgid "KbdBrightnessDown"
-msgstr "MonBrightnessDown"
+msgstr "KlávesniceJasSnížit"
 
 #: ../gdk/keyname-table.h:6885
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86AudioMute"
 msgctxt "keyboard label"
 msgid "AudioMute"
-msgstr "AudioMute"
+msgstr "ZvukZtlumit"
 
 #: ../gdk/keyname-table.h:6886
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86AudioMute"
 msgctxt "keyboard label"
 msgid "AudioMicMute"
-msgstr "AudioMute"
+msgstr "MikrofonZtlumit"
 
 #: ../gdk/keyname-table.h:6887
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86AudioLowerVolume"
 msgctxt "keyboard label"
 msgid "AudioLowerVolume"
-msgstr "AudioLowerVolume"
+msgstr "ZvukHlasitostSnížit"
 
 #: ../gdk/keyname-table.h:6888
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86AudioRaiseVolume"
 msgctxt "keyboard label"
 msgid "AudioRaiseVolume"
-msgstr "AudioRaiseVolume"
+msgstr "ZvukHlasitostZvýšit"
 
 #: ../gdk/keyname-table.h:6889
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86AudioPlay"
 msgctxt "keyboard label"
 msgid "AudioPlay"
-msgstr "AudioPlay"
+msgstr "ZvukPřehrát"
 
 #: ../gdk/keyname-table.h:6890
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86AudioStop"
 msgctxt "keyboard label"
 msgid "AudioStop"
-msgstr "AudioStop"
+msgstr "ZvukZastavit"
 
 #: ../gdk/keyname-table.h:6891
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86AudioNext"
 msgctxt "keyboard label"
 msgid "AudioNext"
-msgstr "AudioNext"
+msgstr "ZvukNásledující"
 
 #: ../gdk/keyname-table.h:6892
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86AudioPrev"
 msgctxt "keyboard label"
 msgid "AudioPrev"
-msgstr "AudioPrev"
+msgstr "ZvukPředchozí"
 
 #: ../gdk/keyname-table.h:6893
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86AudioRecord"
 msgctxt "keyboard label"
 msgid "AudioRecord"
-msgstr "AudioRecord"
+msgstr "ZvukNahrát"
 
 #: ../gdk/keyname-table.h:6894
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86AudioPause"
 msgctxt "keyboard label"
 msgid "AudioPause"
-msgstr "AudioPause"
+msgstr "ZvukPozastavit"
 
 #: ../gdk/keyname-table.h:6895
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86AudioRewind"
 msgctxt "keyboard label"
 msgid "AudioRewind"
-msgstr "AudioRewind"
+msgstr "ZvukPřetočit"
 
 #: ../gdk/keyname-table.h:6896
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86AudioMedia"
 msgctxt "keyboard label"
 msgid "AudioMedia"
-msgstr "AudioMedia"
+msgstr "ZvukMutlimédium"
 
 #: ../gdk/keyname-table.h:6897
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86ScreenSaver"
 msgctxt "keyboard label"
 msgid "ScreenSaver"
-msgstr "ScreenSaver"
+msgstr "ŠetřičObrazovky"
 
 #: ../gdk/keyname-table.h:6898
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86Battery"
 msgctxt "keyboard label"
 msgid "Battery"
-msgstr "Battery"
+msgstr "Baterie"
 
 #: ../gdk/keyname-table.h:6899
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86Launch1"
 msgctxt "keyboard label"
 msgid "Launch1"
-msgstr "Launch1"
+msgstr "Spustit1"
 
 #: ../gdk/keyname-table.h:6900
-#, fuzzy
-#| msgctxt "Stock label, navigation"
-#| msgid "_Forward"
 msgctxt "keyboard label"
 msgid "Forward"
-msgstr "_Vpřed"
+msgstr "Vpřed"
 
 #: ../gdk/keyname-table.h:6901
-#, fuzzy
-#| msgctxt "Stock label, navigation"
-#| msgid "_Back"
 msgctxt "keyboard label"
 msgid "Back"
-msgstr "_Zpět"
+msgstr "Zpět"
 
 #: ../gdk/keyname-table.h:6902
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86Sleep"
 msgctxt "keyboard label"
 msgid "Sleep"
-msgstr "Sleep"
+msgstr "Uspat"
 
 #: ../gdk/keyname-table.h:6903
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86Hibernate"
 msgctxt "keyboard label"
 msgid "Hibernate"
-msgstr "Hibernate"
+msgstr "UspatNaDisk"
 
 #: ../gdk/keyname-table.h:6904
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86WLAN"
 msgctxt "keyboard label"
 msgid "WLAN"
 msgstr "WLAN"
 
 #: ../gdk/keyname-table.h:6905
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86WebCam"
 msgctxt "keyboard label"
 msgid "WebCam"
-msgstr "WebCam"
+msgstr "Webkamera"
 
 #: ../gdk/keyname-table.h:6906
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86Display"
 msgctxt "keyboard label"
 msgid "Display"
-msgstr "Display"
+msgstr "Displej"
 
 #: ../gdk/keyname-table.h:6907
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86TouchpadToggle"
 msgctxt "keyboard label"
 msgid "TouchpadToggle"
-msgstr "TouchpadToggle"
+msgstr "TouchpadPřepnout"
 
 #: ../gdk/keyname-table.h:6908
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86WakeUp"
 msgctxt "keyboard label"
 msgid "WakeUp"
-msgstr "WakeUp"
+msgstr "Probudit"
 
 #: ../gdk/keyname-table.h:6909
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "XF86Suspend"
 msgctxt "keyboard label"
 msgid "Suspend"
-msgstr "Suspend"
+msgstr "UspatDoPaměti"
 
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:53
@@ -577,7 +489,7 @@ msgid "Toggles the cell"
 msgstr "Přepne buňku"
 
 #: ../gtk/a11y/gtkbooleancellaccessible.c:63
-#: ../gtk/a11y/gtkswitchaccessible.c:100
+#: ../gtk/a11y/gtkswitchaccessible.c:89
 msgctxt "Action name"
 msgid "Toggle"
 msgstr "Přepnout"
@@ -651,12 +563,12 @@ msgctxt "Action description"
 msgid "Customizes the color"
 msgstr "Přizpůsobí barvu"
 
-#: ../gtk/a11y/gtkcomboboxaccessible.c:307
+#: ../gtk/a11y/gtkcomboboxaccessible.c:310
 msgctxt "Action name"
 msgid "Press"
 msgstr "Stisknout"
 
-#: ../gtk/a11y/gtkcomboboxaccessible.c:316
+#: ../gtk/a11y/gtkcomboboxaccessible.c:319
 msgctxt "Action description"
 msgid "Presses the combobox"
 msgstr "Stiskne rozbalovací seznam"
@@ -705,11 +617,7 @@ msgstr "Animace průběhu"
 msgid "Provides visual indication of progress"
 msgstr "Poskytuje vizuální indikaci průběhu"
 
-#: ../gtk/a11y/gtkswitchaccessible.c:63
-msgid "Switches between on and off states"
-msgstr "Přepíná mezi stavem zapnuto a vypnuto"
-
-#: ../gtk/a11y/gtkswitchaccessible.c:109
+#: ../gtk/a11y/gtkswitchaccessible.c:98
 msgctxt "Action description"
 msgid "Toggles the switch"
 msgstr "Přepne přepínač"
@@ -1563,7 +1471,7 @@ msgstr "_Vyhledat aplikace online"
 msgid "Select an application to open “%s”"
 msgstr "Vyberte aplikaci k zobrazení souboru „%s“"
 
-#: ../gtk/gtkappchooserdialog.c:334 ../gtk/gtkappchooserwidget.c:660
+#: ../gtk/gtkappchooserdialog.c:334 ../gtk/gtkappchooserwidget.c:657
 #, c-format
 msgid "No applications available to open “%s”"
 msgstr "Pro zobrazení souboru „%s“ nejsou k dispozici žádné aplikace"
@@ -1591,19 +1499,19 @@ msgstr ""
 msgid "Forget association"
 msgstr "Zapomenout asociaci"
 
-#: ../gtk/gtkappchooserwidget.c:609
+#: ../gtk/gtkappchooserwidget.c:606
 msgid "Default Application"
 msgstr "Výchozí aplikace"
 
-#: ../gtk/gtkappchooserwidget.c:747
+#: ../gtk/gtkappchooserwidget.c:744
 msgid "Recommended Applications"
 msgstr "Doporučené aplikace"
 
-#: ../gtk/gtkappchooserwidget.c:762
+#: ../gtk/gtkappchooserwidget.c:759
 msgid "Related Applications"
 msgstr "Související aplikace"
 
-#: ../gtk/gtkappchooserwidget.c:776
+#: ../gtk/gtkappchooserwidget.c:773
 msgid "Other Applications"
 msgstr "Další aplikace"
 
@@ -2078,30 +1986,30 @@ msgstr "P_ravý:"
 msgid "Paper Margins"
 msgstr "Okraje papíru"
 
-#: ../gtk/gtkentry.c:9272 ../gtk/gtkentry.c:9418 ../gtk/gtklabel.c:6276
+#: ../gtk/gtkentry.c:9271 ../gtk/gtkentry.c:9417 ../gtk/gtklabel.c:6276
 #: ../gtk/gtktextview.c:8694 ../gtk/gtktextview.c:8877
 msgid "Cu_t"
 msgstr "_Vyjmout"
 
-#: ../gtk/gtkentry.c:9276 ../gtk/gtkentry.c:9421 ../gtk/gtklabel.c:6277
+#: ../gtk/gtkentry.c:9275 ../gtk/gtkentry.c:9420 ../gtk/gtklabel.c:6277
 #: ../gtk/gtktextview.c:8698 ../gtk/gtktextview.c:8881
 msgid "_Copy"
 msgstr "_Kopírovat"
 
-#: ../gtk/gtkentry.c:9280 ../gtk/gtkentry.c:9424 ../gtk/gtklabel.c:6278
+#: ../gtk/gtkentry.c:9279 ../gtk/gtkentry.c:9423 ../gtk/gtklabel.c:6278
 #: ../gtk/gtktextview.c:8700 ../gtk/gtktextview.c:8883
 msgid "_Paste"
 msgstr "V_ložit"
 
-#: ../gtk/gtkentry.c:9283 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8703
+#: ../gtk/gtkentry.c:9282 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8703
 msgid "_Delete"
 msgstr "_Smazat"
 
-#: ../gtk/gtkentry.c:9294 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8717
+#: ../gtk/gtkentry.c:9293 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8717
 msgid "Select _All"
 msgstr "Vybr_at vše"
 
-#: ../gtk/gtkentry.c:10382
+#: ../gtk/gtkentry.c:10381
 msgid "Caps Lock is on"
 msgstr "Funkce Caps Lock je zapnuta"
 
@@ -2150,7 +2058,7 @@ msgstr "Funkce Caps Lock je zapnuta"
 msgid "Select a File"
 msgstr "Vyberte soubor"
 
-#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkplacessidebar.c:791
+#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkplacessidebar.c:790
 msgid "Desktop"
 msgstr "Pracovní plocha"
 
@@ -2158,7 +2066,7 @@ msgstr "Pracovní plocha"
 msgid "(None)"
 msgstr "(žádný)"
 
-#: ../gtk/gtkfilechooserbutton.c:807 ../gtk/gtkplacessidebar.c:3107
+#: ../gtk/gtkfilechooserbutton.c:807 ../gtk/gtkplacessidebar.c:3106
 msgid "_Open"
 msgstr "_Otevřít"
 
@@ -2197,7 +2105,7 @@ msgstr "Nelze vytvořit soubor, protože název je příliš dlouhý"
 
 #: ../gtk/gtkfilechooserdefault.c:773
 msgid "Try using a shorter name."
-msgstr ""
+msgstr "Zkuste použít kratší název."
 
 #: ../gtk/gtkfilechooserdefault.c:783
 msgid "You may only select folders"
@@ -2229,8 +2137,6 @@ msgid "Could not select file"
 msgstr "Nelze vybrat soubor"
 
 #: ../gtk/gtkfilechooserdefault.c:1723
-#, fuzzy
-#| msgid "_Visit this file"
 msgid "_Visit File"
 msgstr "Podí_vat se na tento soubor"
 
@@ -2354,12 +2260,16 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "Vybrat písmo"
 
-#: ../gtk/gtkicontheme.c:2100 ../gtk/gtkicontheme.c:2163
+#: ../gtk/gtkheaderbar.c:224 ../gtk/gtkwindow.c:5281 ../gtk/gtkwindow.c:8194
+msgid "Close"
+msgstr "Zavřít"
+
+#: ../gtk/gtkicontheme.c:2116 ../gtk/gtkicontheme.c:2179
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "V motivu není obsažena ikona „%s“"
 
-#: ../gtk/gtkicontheme.c:3866
+#: ../gtk/gtkicontheme.c:3883
 msgid "Failed to load icon"
 msgstr "Nelze načíst ikonu"
 
@@ -2693,222 +2603,191 @@ msgstr "Vzhled stránky"
 msgid "File System Root"
 msgstr "Kořen systému souborů"
 
-#: ../gtk/gtkplacessidebar.c:447
+#: ../gtk/gtkplacessidebar.c:446
 msgid "Devices"
-msgstr ""
+msgstr "Zařízení"
 
-#: ../gtk/gtkplacessidebar.c:455
+#: ../gtk/gtkplacessidebar.c:454
 msgid "Bookmarks"
 msgstr "Záložky"
 
-#: ../gtk/gtkplacessidebar.c:761
+#: ../gtk/gtkplacessidebar.c:760
 msgid "Places"
 msgstr "Místa"
 
-#: ../gtk/gtkplacessidebar.c:768
-#, fuzzy
-#| msgid "Recently Used"
+#: ../gtk/gtkplacessidebar.c:767
 msgid "Recent"
 msgstr "Naposledy použité"
 
-#: ../gtk/gtkplacessidebar.c:770
-#, fuzzy
-#| msgid "Recently Used"
+#: ../gtk/gtkplacessidebar.c:769
 msgid "Recent files"
-msgstr "Naposledy použité"
+msgstr "Naposledy použité soubory"
 
-#: ../gtk/gtkplacessidebar.c:779
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "Home"
+#: ../gtk/gtkplacessidebar.c:778
 msgid "Home"
-msgstr "Home"
+msgstr "Domů"
 
-#: ../gtk/gtkplacessidebar.c:781
+#: ../gtk/gtkplacessidebar.c:780
 msgid "Open your personal folder"
-msgstr ""
+msgstr "Otevřít osobní složku"
 
-#: ../gtk/gtkplacessidebar.c:793
-#, fuzzy
-#| msgid "Could not read the contents of the folder"
+#: ../gtk/gtkplacessidebar.c:792
 msgid "Open the contents of your desktop in a folder"
-msgstr "Nelze přečíst obsah složky"
+msgstr "Otevřít obsah vaší plochy ve složce"
 
-#: ../gtk/gtkplacessidebar.c:806
+#: ../gtk/gtkplacessidebar.c:805
 msgid "Trash"
 msgstr "Koš"
 
-#: ../gtk/gtkplacessidebar.c:808
+#: ../gtk/gtkplacessidebar.c:807
 msgid "Open the trash"
-msgstr ""
+msgstr "Otevřít koš"
 
-#: ../gtk/gtkplacessidebar.c:863 ../gtk/gtkplacessidebar.c:888
-#: ../gtk/gtkplacessidebar.c:1095
+#: ../gtk/gtkplacessidebar.c:862 ../gtk/gtkplacessidebar.c:887
+#: ../gtk/gtkplacessidebar.c:1094
 #, c-format
 msgid "Mount and open %s"
-msgstr ""
+msgstr "Připojit a otevřít %s"
 
-#: ../gtk/gtkplacessidebar.c:963
-#, fuzzy
-#| msgid "Could not read the contents of the folder"
+#: ../gtk/gtkplacessidebar.c:962
 msgid "Open the contents of the file system"
-msgstr "Nelze přečíst obsah složky"
+msgstr "Otevřít obsah systému souborů"
 
-#: ../gtk/gtkplacessidebar.c:1063
+#: ../gtk/gtkplacessidebar.c:1062
 msgid "Network"
 msgstr "Síť"
 
-#: ../gtk/gtkplacessidebar.c:1069
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Network"
+#: ../gtk/gtkplacessidebar.c:1068
 msgid "Browse Network"
-msgstr "_Síť"
+msgstr "Procházet síť"
 
-#: ../gtk/gtkplacessidebar.c:1071
-#, fuzzy
-#| msgid "Could not read the contents of the folder"
+#: ../gtk/gtkplacessidebar.c:1070
 msgid "Browse the contents of the network"
-msgstr "Nelze přečíst obsah složky"
+msgstr "Procházet obsah na síti"
 
-#: ../gtk/gtkplacessidebar.c:1078
-#, fuzzy
-#| msgid "Convert to PS level 1"
+#: ../gtk/gtkplacessidebar.c:1077
 msgid "Connect to Server"
-msgstr "Převést na PS, úroveň 1"
+msgstr "Připojit k serveru"
 
-#: ../gtk/gtkplacessidebar.c:1080
+#: ../gtk/gtkplacessidebar.c:1079
 msgid "Connect to a network server address"
-msgstr ""
+msgstr "Připojit k síťové adrese serveru"
 
-#: ../gtk/gtkplacessidebar.c:1560
+#: ../gtk/gtkplacessidebar.c:1559
 msgid "New bookmark"
 msgstr "Nová záložka"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: ../gtk/gtkplacessidebar.c:2100 ../gtk/gtkplacessidebar.c:3183
+#: ../gtk/gtkplacessidebar.c:2099 ../gtk/gtkplacessidebar.c:3182
 msgid "_Start"
-msgstr ""
+msgstr "_Spustit"
 
-#: ../gtk/gtkplacessidebar.c:2101 ../gtk/gtkplacessidebar.c:3190
-#, fuzzy
-#| msgctxt "Stock label, media"
-#| msgid "_Stop"
+#: ../gtk/gtkplacessidebar.c:2100 ../gtk/gtkplacessidebar.c:3189
 msgid "_Stop"
-msgstr "Za_stavit"
+msgstr "_Zastavit"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: ../gtk/gtkplacessidebar.c:2106
+#: ../gtk/gtkplacessidebar.c:2105
 msgid "_Power On"
-msgstr ""
+msgstr "_Zapnout"
 
-#: ../gtk/gtkplacessidebar.c:2107
+#: ../gtk/gtkplacessidebar.c:2106
 msgid "_Safely Remove Drive"
-msgstr ""
+msgstr "_Bezpečně odebrat jednotku"
+
+#: ../gtk/gtkplacessidebar.c:2109
+msgid "_Connect Drive"
+msgstr "_Připojit jednotku"
 
 #: ../gtk/gtkplacessidebar.c:2110
-#, fuzzy
-#| msgid "Connect As"
-msgid "_Connect Drive"
-msgstr "Připojit se jako"
-
-#: ../gtk/gtkplacessidebar.c:2111
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Disconnect"
 msgid "_Disconnect Drive"
-msgstr "_Odpojit"
+msgstr "_Odpojit jednotku"
+
+#: ../gtk/gtkplacessidebar.c:2113
+msgid "_Start Multi-disk Device"
+msgstr "_Spustit zařízení s více disky"
 
 #: ../gtk/gtkplacessidebar.c:2114
-msgid "_Start Multi-disk Device"
-msgstr ""
-
-#: ../gtk/gtkplacessidebar.c:2115
 msgid "_Stop Multi-disk Device"
-msgstr ""
+msgstr "_Zastavit zařízení s více disky"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: ../gtk/gtkplacessidebar.c:2119
-#, fuzzy
-#| msgid "Unlock"
+#: ../gtk/gtkplacessidebar.c:2118
 msgid "_Unlock Drive"
-msgstr "Odemknout"
+msgstr "_Odemknout jednotku"
 
-#: ../gtk/gtkplacessidebar.c:2120
+#: ../gtk/gtkplacessidebar.c:2119
 msgid "_Lock Drive"
-msgstr ""
+msgstr "_Uzamknout jednotku"
 
-#: ../gtk/gtkplacessidebar.c:2147 ../gtk/gtkplacessidebar.c:2845
-#, fuzzy, c-format
-#| msgid "Unable to end process"
+#: ../gtk/gtkplacessidebar.c:2146 ../gtk/gtkplacessidebar.c:2844
+#, c-format
 msgid "Unable to start %s"
-msgstr "Není možné ukončit proces"
+msgstr "Nezdařilo se spustit %s"
 
-#: ../gtk/gtkplacessidebar.c:2174
-#, fuzzy, c-format
-#| msgid "Unable to end process"
+#: ../gtk/gtkplacessidebar.c:2173
+#, c-format
 msgid "Unable to access “%s”"
-msgstr "Není možné ukončit proces"
+msgstr "Nezdařilo se přistoupit k „%s“"
 
-#: ../gtk/gtkplacessidebar.c:2480
+#: ../gtk/gtkplacessidebar.c:2479
 #, c-format
 msgid "Unable to unmount %s"
-msgstr "Není možné odpojit %s"
+msgstr "Nezdařilo se odpojit %s"
 
-#: ../gtk/gtkplacessidebar.c:2603 ../gtk/gtkplacessidebar.c:2630
-#: ../gtk/gtkplacessidebar.c:2657
+#: ../gtk/gtkplacessidebar.c:2602 ../gtk/gtkplacessidebar.c:2629
+#: ../gtk/gtkplacessidebar.c:2656
 #, c-format
 msgid "Unable to eject %s"
-msgstr "Není možné vysunout %s"
+msgstr "Nezdařilo se vysunout %s"
 
-#: ../gtk/gtkplacessidebar.c:2797
+#: ../gtk/gtkplacessidebar.c:2796
 #, c-format
 msgid "Unable to poll %s for media changes"
-msgstr ""
+msgstr "Nezdařilo se zkontrolovat %s na změnu média"
 
-#: ../gtk/gtkplacessidebar.c:2899
-#, fuzzy, c-format
-#| msgid "Unable to end process"
+#: ../gtk/gtkplacessidebar.c:2898
+#, c-format
 msgid "Unable to stop %s"
-msgstr "Není možné ukončit proces"
+msgstr "Nezdařilo se zastavit %s"
 
-#: ../gtk/gtkplacessidebar.c:3114
+#: ../gtk/gtkplacessidebar.c:3113
 msgid "Open in New _Tab"
 msgstr "Otevřít v nové kar_tě"
 
-#: ../gtk/gtkplacessidebar.c:3122
+#: ../gtk/gtkplacessidebar.c:3121
 msgid "Open in New _Window"
 msgstr "Otevřít v no_vém okně"
 
-#: ../gtk/gtkplacessidebar.c:3131
+#: ../gtk/gtkplacessidebar.c:3130
 msgid "_Add Bookmark"
 msgstr "_Přidat záložku"
 
-#: ../gtk/gtkplacessidebar.c:3137
+#: ../gtk/gtkplacessidebar.c:3136
 msgid "Remove"
 msgstr "Odstranit"
 
-#: ../gtk/gtkplacessidebar.c:3144
+#: ../gtk/gtkplacessidebar.c:3143
 msgid "Rename…"
 msgstr "Přejmenovat…"
 
-#: ../gtk/gtkplacessidebar.c:3155
+#: ../gtk/gtkplacessidebar.c:3154
 msgid "_Mount"
-msgstr ""
+msgstr "_Připojit"
 
-#: ../gtk/gtkplacessidebar.c:3162
+#: ../gtk/gtkplacessidebar.c:3161
 msgid "_Unmount"
-msgstr ""
+msgstr "_Odpojit"
 
-#: ../gtk/gtkplacessidebar.c:3169
+#: ../gtk/gtkplacessidebar.c:3168
 msgid "_Eject"
 msgstr "V_ysunout"
 
-#: ../gtk/gtkplacessidebar.c:3176
+#: ../gtk/gtkplacessidebar.c:3175
 msgid "_Detect Media"
-msgstr ""
+msgstr "_Rozpoznat médium"
 
-#: ../gtk/gtkplacessidebar.c:3829
+#: ../gtk/gtkplacessidebar.c:3828
 msgid "Computer"
 msgstr "Počítač"
 
@@ -3436,53 +3315,50 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:8042
+#: ../gtk/gtkwindow.c:5242 ../gtk/gtkwindow.c:8089
 msgid "Minimize"
-msgstr ""
+msgstr "Minimalizovat"
 
-#: ../gtk/gtkwindow.c:8050
-msgid "Unmaximize"
-msgstr ""
+#: ../gtk/gtkwindow.c:5263
+msgid "Restore"
+msgstr "Obnovit"
 
-#: ../gtk/gtkwindow.c:8050
+#: ../gtk/gtkwindow.c:5263 ../gtk/gtkwindow.c:8097
 msgid "Maximize"
-msgstr ""
+msgstr "Maximalizovat"
 
-#: ../gtk/gtkwindow.c:8059
+#: ../gtk/gtkwindow.c:8097
+msgid "Unmaximize"
+msgstr "Zrušit maximalizaci"
+
+#: ../gtk/gtkwindow.c:8106
 msgid "Always on Top"
-msgstr ""
+msgstr "Vždy nahoře"
 
-#: ../gtk/gtkwindow.c:8071
+#: ../gtk/gtkwindow.c:8118
 msgid "Always on Visible Workspace"
-msgstr ""
+msgstr "Vždy na viditelné ploše"
 
-#: ../gtk/gtkwindow.c:8079
+#: ../gtk/gtkwindow.c:8126
 msgid "Only on This Workspace"
-msgstr ""
+msgstr "Pouze na této ploše"
 
-#: ../gtk/gtkwindow.c:8096
+#: ../gtk/gtkwindow.c:8143
 msgid "Move to Workspace Up"
-msgstr ""
+msgstr "Přesunout na pracovní plochu výše"
 
-#: ../gtk/gtkwindow.c:8105
+#: ../gtk/gtkwindow.c:8152
 msgid "Move to Workspace Down"
-msgstr ""
+msgstr "Přesunout na pracovní plochu níže"
 
-#: ../gtk/gtkwindow.c:8119
+#: ../gtk/gtkwindow.c:8166
 msgid "Move to Another Workspace"
-msgstr ""
+msgstr "Přesunout na jinou plochu"
 
-#: ../gtk/gtkwindow.c:8127
+#: ../gtk/gtkwindow.c:8174
 #, c-format
 msgid "Workspace %d"
-msgstr ""
-
-#: ../gtk/gtkwindow.c:8147
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Close"
-msgid "Close"
-msgstr "_Zavřít"
+msgstr "Pracovní plocha %d"
 
 #: ../gtk/paper_names_offsets.c:4
 msgctxt "paper size"
@@ -4927,11 +4803,9 @@ msgstr "_Licence"
 
 #: ../gtk/gtkappchooserdialog.ui.h:3
 msgid "label"
-msgstr ""
+msgstr "popisek"
 
 #: ../gtk/gtkappchooserdialog.ui.h:4
-#, fuzzy
-#| msgid "Show other applications"
 msgid "Show Other Applications"
 msgstr "Zobrazit další aplikace"
 
@@ -4961,9 +4835,6 @@ msgid "A"
 msgstr "A"
 
 #: ../gtk/gtkcoloreditor.ui.h:3
-#, fuzzy
-#| msgctxt "Color channel"
-#| msgid "Alpha"
 msgid "Alpha"
 msgstr "Alfa"
 
@@ -4977,17 +4848,11 @@ msgid "Hue"
 msgstr "Odstín"
 
 #: ../gtk/gtkcoloreditor.ui.h:6
-#, fuzzy
-#| msgctxt "Color channel"
-#| msgid "S"
 msgctxt "Color Channel"
 msgid "S"
 msgstr "S"
 
 #: ../gtk/gtkcoloreditor.ui.h:7
-#, fuzzy
-#| msgctxt "Color channel"
-#| msgid "V"
 msgctxt "Color Channel"
 msgid "V"
 msgstr "H"
@@ -5306,14 +5171,12 @@ msgid "Volume"
 msgstr "Hlasitost"
 
 #: ../gtk/gtkvolumebutton.ui.h:2
-#, fuzzy
-#| msgid "Turns volume down or up"
 msgid "Turns volume up or down"
 msgstr "Sníží nebo zvýší hlasitost"
 
 #: ../gtk/gtkvolumebutton.ui.h:3
 msgid "+"
-msgstr ""
+msgstr "+"
 
 #: ../gtk/gtkvolumebutton.ui.h:4 ../gtk/gtkvolumebutton.ui.h:5
 msgid "Volume Up"
@@ -5334,3 +5197,6 @@ msgstr "Snížit hlasitost"
 #: ../gtk/gtkvolumebutton.ui.h:10
 msgid "Decreases the volume"
 msgstr "Sníží hlasitost"
+
+#~ msgid "Switches between on and off states"
+#~ msgstr "Přepíná mezi stavem zapnuto a vypnuto"
