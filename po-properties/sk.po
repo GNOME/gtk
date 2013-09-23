@@ -566,7 +566,7 @@ msgstr "Skupina"
 
 #: ../gtk/deprecated/gtkradioaction.c:140
 msgid "The radio action whose group this action belongs to."
-msgstr "Skupina rádiovej akcie do ktorej patrí táto akcia."
+msgstr "Skupina rádiovej akcie, do ktorej patrí táto akcia."
 
 #: ../gtk/deprecated/gtkradioaction.c:157
 msgid "The current value"
