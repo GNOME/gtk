@@ -1,3 +1,41 @@
+Overview of Changes in GTK+ 3.9.16 to 3.10.0
+============================================
+
+* Accessibility improvements
+ - Add accessible names to csd window buttons
+ - Mark GtkLinkButton as visited when appropriate
+ - Add a GtkListBoxRow accessible
+
+* Bug fixes:
+ 692258 Implement GtkListBoxRowAccessible, set its state to...
+ 702681 Issues with applications marked as NoDisplay
+ 704087 GtkPlacesSidebar shouldn't open a bookmark when the...
+ 708320 listbox: Update the cursor row when the row's child...
+ 708384 icontheme: Make sure icon_info->scale doesn't end u...
+
+* Translation updates
+ Assamese
+ Brazilian Portuguese
+ Czech
+ French
+ Galician
+ Hebrew
+ Indonesian
+ Italian
+ Kazakh
+ Latvian
+ Lithuanian
+ Polish
+ Portuguese
+ Russian
+ Scottish Gaelic
+ Serbian
+ Slovak
+ Slovenian
+ Spanish
+ Traditional Chinese
+
+
 Overview of Changes in GTK+ 3.9.14 to 3.9.16
 ============================================
 
