@@ -24,11 +24,11 @@
 static void
 usage (void)
 {
-  g_print ("usage: test-icon-theme lookup <theme name> <icon name> [size]]\n"
+  g_print ("usage: test-icon-theme lookup <theme name> <icon name> [size] [scale]\n"
 	   " or\n"
 	   "usage: test-icon-theme list <theme name> [context]\n"
 	   " or\n"
-	   "usage: test-icon-theme display <theme name> <icon name> [size]\n"
+	   "usage: test-icon-theme display <theme name> <icon name> [size] [scale]\n"
 	   " or\n"
 	   "usage: test-icon-theme contexts <theme name>\n"
 	   );
@@ -70,6 +70,7 @@ main (int argc, char *argv[])
   char *themename;
   GList *list;
   int size = 48;
+  int scale = 1;
   int i;
   
   gtk_init (&argc, &argv);
@@ -91,7 +92,6 @@ main (int argc, char *argv[])
       GError *error;
       GdkPixbuf *pixbuf;
       GtkWidget *window, *image;
-      GtkIconSize size;
 
       if (argc < 4)
 	{
@@ -102,12 +102,13 @@ main (int argc, char *argv[])
       
       if (argc >= 5)
 	size = atoi (argv[4]);
-      else 
-	size = GTK_ICON_SIZE_BUTTON;
+
+      if (argc >= 6)
+	scale = atoi (argv[5]);
 
       error = NULL;
-      pixbuf = gtk_icon_theme_load_icon (icon_theme, argv[3], size,
-                                         GTK_ICON_LOOKUP_USE_BUILTIN, &error);
+      pixbuf = gtk_icon_theme_load_icon_for_scale (icon_theme, argv[3], size, scale,
+                                                   GTK_ICON_LOOKUP_USE_BUILTIN, &error);
       if (!pixbuf)
         {
           g_print ("%s\n", error->message);
@@ -128,7 +129,6 @@ main (int argc, char *argv[])
   else if (strcmp (argv[1], "display-async") == 0)
     {
       GtkWidget *window, *image;
-      GtkIconSize size;
       GtkIconInfo *info;
 
       if (argc < 4)
@@ -140,8 +140,9 @@ main (int argc, char *argv[])
 
       if (argc >= 5)
 	size = atoi (argv[4]);
-      else
-	size = GTK_ICON_SIZE_BUTTON;
+
+      if (argc >= 6)
+	scale = atoi (argv[5]);
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       image = gtk_image_new ();
@@ -150,8 +151,8 @@ main (int argc, char *argv[])
                         G_CALLBACK (gtk_main_quit), window);
       gtk_widget_show_all (window);
 
-      info = gtk_icon_theme_lookup_icon (icon_theme, argv[3], size,
-                                         GTK_ICON_LOOKUP_USE_BUILTIN);
+      info = gtk_icon_theme_lookup_icon_for_scale (icon_theme, argv[3], size, scale,
+                                                   GTK_ICON_LOOKUP_USE_BUILTIN);
 
       if (info == NULL)
 	{
@@ -198,16 +199,30 @@ main (int argc, char *argv[])
 	  usage ();
 	  return 1;
 	}
-      
+
       if (argc >= 5)
 	size = atoi (argv[4]);
-      
-      icon_info = gtk_icon_theme_lookup_icon (icon_theme, argv[3], size, GTK_ICON_LOOKUP_USE_BUILTIN);
-      g_print ("icon for %s at %dx%d is %s\n", argv[3], size, size,
+
+      if (argc >= 6)
+	scale = atoi (argv[5]);
+
+      icon_info = gtk_icon_theme_lookup_icon_for_scale (icon_theme, argv[3], size, scale, GTK_ICON_LOOKUP_USE_BUILTIN);
+      g_print ("icon for %s at %dx%d@%dx is %s\n", argv[3], size, size, scale,
 	       icon_info ? (gtk_icon_info_get_builtin_pixbuf (icon_info) ? "<builtin>" : gtk_icon_info_get_filename (icon_info)) : "<none>");
 
-      if (icon_info) 
+      if (icon_info)
 	{
+          GdkPixbuf *pixbuf;
+
+          g_print ("Base size: %d, Scale: %d\n", gtk_icon_info_get_base_size (icon_info), gtk_icon_info_get_base_scale (icon_info));
+
+          pixbuf = gtk_icon_info_load_icon (icon_info, NULL);
+          if (pixbuf != NULL)
+            {
+              g_print ("Pixbuf size: %dx%d\n", gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf));
+              g_object_unref (pixbuf);
+            }
+
 	  if (gtk_icon_info_get_embedded_rect (icon_info, &embedded_rect))
 	    {
 	      g_print ("Embedded rect: %d,%d %dx%d\n",
