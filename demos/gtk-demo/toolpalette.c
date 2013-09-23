@@ -296,6 +296,7 @@ interactive_canvas_drag_data_received (GtkWidget        *widget,
 
   GtkWidget *palette = gtk_drag_get_source_widget (context);
   GtkWidget *tool_item = NULL;
+  CanvasItem *item;
 
   while (palette && !GTK_IS_TOOL_PALETTE (palette))
     palette = gtk_widget_get_parent (palette);
@@ -317,7 +318,7 @@ interactive_canvas_drag_data_received (GtkWidget        *widget,
       drop_item = NULL;
     }
 
-  CanvasItem *item = canvas_item_new (widget, GTK_TOOL_BUTTON (tool_item), x, y);
+  item = canvas_item_new (widget, GTK_TOOL_BUTTON (tool_item), x, y);
 
   /* Either create a new item or just create a preview item, 
      depending on why the drag data was requested. */
