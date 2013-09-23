@@ -258,6 +258,7 @@ struct _GtkIconInfo
   IconThemeDirType dir_type;
   gint dir_size;
   gint dir_scale;
+  gdouble unscaled_scale;
   gint threshold;
 
   /* Parameters influencing the scaled icon
@@ -1598,9 +1599,12 @@ choose_icon (GtkIconTheme       *icon_theme,
   GtkIconThemePrivate *priv;
   GList *l;
   GtkIconInfo *icon_info = NULL;
+  GtkIconInfo *unscaled_icon_info;
   UnthemedIcon *unthemed_icon = NULL;
+  const char *icon_name = NULL;
   gboolean allow_svg;
   gboolean use_builtin;
+  IconTheme *theme = NULL;
   gint i;
   IconInfoKey key;
 
@@ -1647,8 +1651,9 @@ choose_icon (GtkIconTheme       *icon_theme,
     {
       for (l = priv->themes; l; l = l->next)
         {
-          IconTheme *theme = l->data;
-          icon_info = theme_lookup_icon (theme, icon_names[0], size, scale, allow_svg, use_builtin);
+          theme = l->data;
+          icon_name = icon_names[0];
+          icon_info = theme_lookup_icon (theme, icon_name, size, scale, allow_svg, use_builtin);
           if (icon_info)
             goto out;
         }
@@ -1656,15 +1661,18 @@ choose_icon (GtkIconTheme       *icon_theme,
 
   for (l = priv->themes; l; l = l->next)
     {
-      IconTheme *theme = l->data;
-      
+      theme = l->data;
+
       for (i = 0; icon_names[i]; i++)
         {
-          icon_info = theme_lookup_icon (theme, icon_names[i], size, scale, allow_svg, use_builtin);
+          icon_name = icon_names[i];
+          icon_info = theme_lookup_icon (theme, icon_name, size, scale, allow_svg, use_builtin);
           if (icon_info)
             goto out;
         }
     }
+
+  theme = NULL;
 
   for (i = 0; icon_names[i]; i++)
     {
@@ -1721,6 +1729,21 @@ choose_icon (GtkIconTheme       *icon_theme,
       icon_info->desired_size = size;
       icon_info->desired_scale = scale;
       icon_info->forced_size = (flags & GTK_ICON_LOOKUP_FORCE_SIZE) != 0;
+
+      /* In case we're not scaling the icon we want to reuse the exact same size
+       * as a scale==1 lookup would be, rather than not scaling at all and
+       * causing a different layout */
+      icon_info->unscaled_scale = 1.0;
+      if (scale != 1 && !icon_info->forced_size && theme != NULL)
+        {
+          unscaled_icon_info = theme_lookup_icon (theme, icon_name, size, 1, allow_svg, use_builtin);
+          if (unscaled_icon_info)
+            {
+              icon_info->unscaled_scale =
+                (gdouble) unscaled_icon_info->dir_size * scale / (icon_info->dir_size * icon_info->dir_scale);
+              g_object_unref (unscaled_icon_info);
+            }
+        }
 
       icon_info->key.icon_names = g_strdupv ((char **)icon_names);
       icon_info->key.size = size;
@@ -3281,6 +3304,7 @@ icon_info_new (IconThemeDirType type, int dir_size, int dir_scale)
   icon_info->dir_type = type;
   icon_info->dir_size = dir_size;
   icon_info->dir_scale = dir_scale;
+  icon_info->unscaled_scale = 1.0;
 
   return icon_info;
 }
@@ -3315,6 +3339,7 @@ icon_info_dup (GtkIconInfo *icon_info)
     dup->cache_pixbuf = g_object_ref (icon_info->cache_pixbuf);
 
   dup->data = icon_data_dup (icon_info->data);
+  dup->unscaled_scale = icon_info->unscaled_scale;
   dup->threshold = icon_info->threshold;
   dup->desired_size = icon_info->desired_size;
   dup->desired_scale = icon_info->desired_scale;
@@ -3713,12 +3738,12 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo  *icon_info,
   if (icon_info->forced_size)
     icon_info->scale = -1;
   else if (icon_info->dir_type == ICON_THEME_DIR_FIXED)
-    icon_info->scale = MAX(round((gdouble) scaled_desired_size / (icon_info->dir_size * icon_info->dir_scale)), 1.0);
+    icon_info->scale = icon_info->unscaled_scale;
   else if (icon_info->dir_type == ICON_THEME_DIR_THRESHOLD)
     {
       if (scaled_desired_size  >= (icon_info->dir_size - icon_info->threshold) * icon_info->dir_scale &&
 	  scaled_desired_size <= (icon_info->dir_size + icon_info->threshold) * icon_info->dir_scale)
-	icon_info->scale = MAX(round((gdouble) scaled_desired_size / (icon_info->dir_size * icon_info->dir_scale)), 1.0);
+        icon_info->scale = icon_info->unscaled_scale;
       else if (icon_info->dir_size > 0)
 	icon_info->scale =(gdouble) scaled_desired_size / (icon_info->dir_size * icon_info->dir_scale);
     }
