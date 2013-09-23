@@ -473,14 +473,15 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Keybinding to activate the menu bar.
    *
-   * Deprecated: 3.10: This setting is ignored.
+   * Deprecated: 3.10: This setting can still be used for application
+   *      overrides, but will be ignored in the future
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-menu-bar-accel",
                                                                   P_("Menu bar accelerator"),
                                                                   P_("Keybinding to activate the menu bar"),
                                                                   "F10",
-                                                                  GTK_PARAM_READWRITE | G_PARAM_DEPRECATED),
+                                                                  GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_MENU_BAR_ACCEL);
 
