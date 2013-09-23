@@ -76,6 +76,9 @@ Even better are git-formatted patches. (Use git format-patch)
 Release notes for 3.10
 ======================
 
+* A number of GTK+ settings that have accumulated of the years
+  have been deprecated and are now ignored.
+
 * GDK has been changed to allow only a single screen per display.
   Only the X11 backend had multiple screens before, and multi-screen
   setups (not multi-monitor!) are very rare nowadays. If you really
