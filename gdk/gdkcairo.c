@@ -321,9 +321,19 @@ gdk_cairo_set_source_pixbuf (cairo_t         *cr,
                              gdouble          pixbuf_x,
                              gdouble          pixbuf_y)
 {
+  cairo_format_t format;
   cairo_surface_t *surface;
 
-  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, NULL);
+  if (gdk_pixbuf_get_n_channels (pixbuf) == 3)
+    format = CAIRO_FORMAT_RGB24;
+  else
+    format = CAIRO_FORMAT_ARGB32;
+
+  surface = cairo_surface_create_similar_image (cairo_get_target (cr),
+                                                format,
+                                                gdk_pixbuf_get_width (pixbuf),
+                                                gdk_pixbuf_get_height (pixbuf));
+
   cairo_set_source_surface (cr, surface, pixbuf_x, pixbuf_y);
   cairo_surface_destroy (surface);
 }
