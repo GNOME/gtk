@@ -7,9 +7,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 3.3.11\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-20 13:50+0800\n"
-"PO-Revision-Date: 2013-09-20 10:43+0800\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
+"%2b&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2013-09-23 13:10+0000\n"
+"PO-Revision-Date: 2013-09-23 21:16+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: <>\n"
 "Language: zh_TW\n"
@@ -1969,30 +1970,30 @@ msgstr "右(_R):"
 msgid "Paper Margins"
 msgstr "紙張邊界"
 
-#: ../gtk/gtkentry.c:9272 ../gtk/gtkentry.c:9418 ../gtk/gtklabel.c:6276
+#: ../gtk/gtkentry.c:9271 ../gtk/gtkentry.c:9417 ../gtk/gtklabel.c:6276
 #: ../gtk/gtktextview.c:8694 ../gtk/gtktextview.c:8877
 msgid "Cu_t"
 msgstr "剪下(_T)"
 
-#: ../gtk/gtkentry.c:9276 ../gtk/gtkentry.c:9421 ../gtk/gtklabel.c:6277
+#: ../gtk/gtkentry.c:9275 ../gtk/gtkentry.c:9420 ../gtk/gtklabel.c:6277
 #: ../gtk/gtktextview.c:8698 ../gtk/gtktextview.c:8881
 msgid "_Copy"
 msgstr "複製(_C)"
 
-#: ../gtk/gtkentry.c:9280 ../gtk/gtkentry.c:9424 ../gtk/gtklabel.c:6278
+#: ../gtk/gtkentry.c:9279 ../gtk/gtkentry.c:9423 ../gtk/gtklabel.c:6278
 #: ../gtk/gtktextview.c:8700 ../gtk/gtktextview.c:8883
 msgid "_Paste"
 msgstr "貼上(_P)"
 
-#: ../gtk/gtkentry.c:9283 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8703
+#: ../gtk/gtkentry.c:9282 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8703
 msgid "_Delete"
 msgstr "刪除(_D)"
 
-#: ../gtk/gtkentry.c:9294 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8717
+#: ../gtk/gtkentry.c:9293 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8717
 msgid "Select _All"
 msgstr "全部選取(_A)"
 
-#: ../gtk/gtkentry.c:10382
+#: ../gtk/gtkentry.c:10381
 msgid "Caps Lock is on"
 msgstr "Caps Lock 已開啟"
 
@@ -2041,7 +2042,7 @@ msgstr "Caps Lock 已開啟"
 msgid "Select a File"
 msgstr "選取檔案"
 
-#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkplacessidebar.c:791
+#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkplacessidebar.c:790
 msgid "Desktop"
 msgstr "桌面"
 
@@ -2049,7 +2050,7 @@ msgstr "桌面"
 msgid "(None)"
 msgstr "（無）"
 
-#: ../gtk/gtkfilechooserbutton.c:807 ../gtk/gtkplacessidebar.c:3107
+#: ../gtk/gtkfilechooserbutton.c:807 ../gtk/gtkplacessidebar.c:3106
 msgid "_Open"
 msgstr "開啟(_O)"
 
@@ -2240,12 +2241,16 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "請選擇字型"
 
-#: ../gtk/gtkicontheme.c:2100 ../gtk/gtkicontheme.c:2163
+#: ../gtk/gtkheaderbar.c:224 ../gtk/gtkwindow.c:5281 ../gtk/gtkwindow.c:8194
+msgid "Close"
+msgstr "關閉"
+
+#: ../gtk/gtkicontheme.c:2116 ../gtk/gtkicontheme.c:2179
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "圖示「%s」不存在於佈景主題中"
 
-#: ../gtk/gtkicontheme.c:3866
+#: ../gtk/gtkicontheme.c:3883
 msgid "Failed to load icon"
 msgstr "載入圖示失敗"
 
@@ -2578,197 +2583,197 @@ msgstr "頁面設定"
 msgid "File System Root"
 msgstr "檔案系統根"
 
-#: ../gtk/gtkplacessidebar.c:447
+#: ../gtk/gtkplacessidebar.c:446
 msgid "Devices"
 msgstr "裝置"
 
-#: ../gtk/gtkplacessidebar.c:455
+#: ../gtk/gtkplacessidebar.c:454
 msgid "Bookmarks"
 msgstr "書籤"
 
-#: ../gtk/gtkplacessidebar.c:761
+#: ../gtk/gtkplacessidebar.c:760
 msgid "Places"
 msgstr "位置"
 
-#: ../gtk/gtkplacessidebar.c:768
+#: ../gtk/gtkplacessidebar.c:767
 msgid "Recent"
 msgstr "最近開啟"
 
-#: ../gtk/gtkplacessidebar.c:770
+#: ../gtk/gtkplacessidebar.c:769
 msgid "Recent files"
 msgstr "最近開啟檔案"
 
-#: ../gtk/gtkplacessidebar.c:779
+#: ../gtk/gtkplacessidebar.c:778
 msgid "Home"
 msgstr "家目錄"
 
-#: ../gtk/gtkplacessidebar.c:781
+#: ../gtk/gtkplacessidebar.c:780
 msgid "Open your personal folder"
 msgstr "開啟您的個人資料夾"
 
-#: ../gtk/gtkplacessidebar.c:793
+#: ../gtk/gtkplacessidebar.c:792
 msgid "Open the contents of your desktop in a folder"
 msgstr "以資料夾形式開啟桌面中的內容"
 
-#: ../gtk/gtkplacessidebar.c:806
+#: ../gtk/gtkplacessidebar.c:805
 msgid "Trash"
 msgstr "回收筒"
 
-#: ../gtk/gtkplacessidebar.c:808
+#: ../gtk/gtkplacessidebar.c:807
 msgid "Open the trash"
 msgstr "開啟回收筒"
 
-#: ../gtk/gtkplacessidebar.c:863 ../gtk/gtkplacessidebar.c:888
-#: ../gtk/gtkplacessidebar.c:1095
+#: ../gtk/gtkplacessidebar.c:862 ../gtk/gtkplacessidebar.c:887
+#: ../gtk/gtkplacessidebar.c:1094
 #, c-format
 msgid "Mount and open %s"
 msgstr "掛載並開啟 %s"
 
-#: ../gtk/gtkplacessidebar.c:963
+#: ../gtk/gtkplacessidebar.c:962
 msgid "Open the contents of the file system"
 msgstr "開啟檔案系統的內容"
 
-#: ../gtk/gtkplacessidebar.c:1063
+#: ../gtk/gtkplacessidebar.c:1062
 msgid "Network"
 msgstr "網路"
 
-#: ../gtk/gtkplacessidebar.c:1069
+#: ../gtk/gtkplacessidebar.c:1068
 msgid "Browse Network"
 msgstr "瀏覽網路"
 
-#: ../gtk/gtkplacessidebar.c:1071
+#: ../gtk/gtkplacessidebar.c:1070
 msgid "Browse the contents of the network"
 msgstr "瀏覽網路的內容"
 
-#: ../gtk/gtkplacessidebar.c:1078
+#: ../gtk/gtkplacessidebar.c:1077
 msgid "Connect to Server"
 msgstr "連接伺服器"
 
-#: ../gtk/gtkplacessidebar.c:1080
+#: ../gtk/gtkplacessidebar.c:1079
 msgid "Connect to a network server address"
 msgstr "連接到網路伺服器位址"
 
-#: ../gtk/gtkplacessidebar.c:1560
+#: ../gtk/gtkplacessidebar.c:1559
 msgid "New bookmark"
 msgstr "新增書籤"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: ../gtk/gtkplacessidebar.c:2100 ../gtk/gtkplacessidebar.c:3183
+#: ../gtk/gtkplacessidebar.c:2099 ../gtk/gtkplacessidebar.c:3182
 msgid "_Start"
 msgstr "起動(_S)"
 
-#: ../gtk/gtkplacessidebar.c:2101 ../gtk/gtkplacessidebar.c:3190
+#: ../gtk/gtkplacessidebar.c:2100 ../gtk/gtkplacessidebar.c:3189
 msgid "_Stop"
 msgstr "關閉(_S)"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: ../gtk/gtkplacessidebar.c:2106
+#: ../gtk/gtkplacessidebar.c:2105
 msgid "_Power On"
 msgstr "電源開啟(_P)"
 
-#: ../gtk/gtkplacessidebar.c:2107
+#: ../gtk/gtkplacessidebar.c:2106
 msgid "_Safely Remove Drive"
 msgstr "安全的移除裝置(_S)"
 
-#: ../gtk/gtkplacessidebar.c:2110
+#: ../gtk/gtkplacessidebar.c:2109
 msgid "_Connect Drive"
 msgstr "連接裝置(_C)"
 
-#: ../gtk/gtkplacessidebar.c:2111
+#: ../gtk/gtkplacessidebar.c:2110
 msgid "_Disconnect Drive"
 msgstr "中斷裝置(_D)"
 
-#: ../gtk/gtkplacessidebar.c:2114
+#: ../gtk/gtkplacessidebar.c:2113
 msgid "_Start Multi-disk Device"
 msgstr "起動多磁碟裝置(_S)"
 
-#: ../gtk/gtkplacessidebar.c:2115
+#: ../gtk/gtkplacessidebar.c:2114
 msgid "_Stop Multi-disk Device"
 msgstr "關閉多磁碟裝置(_S)"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: ../gtk/gtkplacessidebar.c:2119
+#: ../gtk/gtkplacessidebar.c:2118
 msgid "_Unlock Drive"
 msgstr "解鎖裝置(_U)"
 
-#: ../gtk/gtkplacessidebar.c:2120
+#: ../gtk/gtkplacessidebar.c:2119
 msgid "_Lock Drive"
 msgstr "鎖定裝置(_L)"
 
-#: ../gtk/gtkplacessidebar.c:2147 ../gtk/gtkplacessidebar.c:2845
+#: ../gtk/gtkplacessidebar.c:2146 ../gtk/gtkplacessidebar.c:2844
 #, c-format
 msgid "Unable to start %s"
 msgstr "無法起動 %s"
 
-#: ../gtk/gtkplacessidebar.c:2174
+#: ../gtk/gtkplacessidebar.c:2173
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "無法存取“%s”"
 
-#: ../gtk/gtkplacessidebar.c:2480
+#: ../gtk/gtkplacessidebar.c:2479
 #, c-format
 msgid "Unable to unmount %s"
 msgstr "無法卸載 %s"
 
-#: ../gtk/gtkplacessidebar.c:2603 ../gtk/gtkplacessidebar.c:2630
-#: ../gtk/gtkplacessidebar.c:2657
+#: ../gtk/gtkplacessidebar.c:2602 ../gtk/gtkplacessidebar.c:2629
+#: ../gtk/gtkplacessidebar.c:2656
 #, c-format
 msgid "Unable to eject %s"
 msgstr "無法退出 %s"
 
-#: ../gtk/gtkplacessidebar.c:2797
+#: ../gtk/gtkplacessidebar.c:2796
 #, c-format
 msgid "Unable to poll %s for media changes"
 msgstr "無法監測 %s 的媒體變更"
 
-#: ../gtk/gtkplacessidebar.c:2899
+#: ../gtk/gtkplacessidebar.c:2898
 #, c-format
 msgid "Unable to stop %s"
 msgstr "無法關閉 %s"
 
-#: ../gtk/gtkplacessidebar.c:3114
+#: ../gtk/gtkplacessidebar.c:3113
 msgid "Open in New _Tab"
 msgstr "在新的分頁中開啟(_T)"
 
-#: ../gtk/gtkplacessidebar.c:3122
+#: ../gtk/gtkplacessidebar.c:3121
 msgid "Open in New _Window"
 msgstr "在新的視窗中開啟(_W)"
 
-#: ../gtk/gtkplacessidebar.c:3131
+#: ../gtk/gtkplacessidebar.c:3130
 msgid "_Add Bookmark"
 msgstr "加入書籤(_A)"
 
-#: ../gtk/gtkplacessidebar.c:3137
+#: ../gtk/gtkplacessidebar.c:3136
 msgid "Remove"
 msgstr "移除"
 
-#: ../gtk/gtkplacessidebar.c:3144
+#: ../gtk/gtkplacessidebar.c:3143
 msgid "Rename…"
 msgstr "重新命名…"
 
-#: ../gtk/gtkplacessidebar.c:3155
+#: ../gtk/gtkplacessidebar.c:3154
 msgid "_Mount"
 msgstr "掛載(_M)"
 
-#: ../gtk/gtkplacessidebar.c:3162
+#: ../gtk/gtkplacessidebar.c:3161
 msgid "_Unmount"
 msgstr "卸載(_U)"
 
-#: ../gtk/gtkplacessidebar.c:3169
+#: ../gtk/gtkplacessidebar.c:3168
 msgid "_Eject"
 msgstr "退出(_E)"
 
-#: ../gtk/gtkplacessidebar.c:3176
+#: ../gtk/gtkplacessidebar.c:3175
 msgid "_Detect Media"
 msgstr "偵測媒體(_D)"
 
-#: ../gtk/gtkplacessidebar.c:3834
+#: ../gtk/gtkplacessidebar.c:3828
 msgid "Computer"
 msgstr "電腦"
 
 #: ../gtk/gtkprintbackend.c:746
 msgid "Authentication"
-msgstr "驗證"
+msgstr "核對"
 
 #: ../gtk/gtkprinteroptionwidget.c:542
 msgid "Select a filename"
@@ -3287,50 +3292,50 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:8079
+#: ../gtk/gtkwindow.c:5242 ../gtk/gtkwindow.c:8089
 msgid "Minimize"
 msgstr "最小化"
 
-#: ../gtk/gtkwindow.c:8087
-msgid "Unmaximize"
-msgstr "取消最大化"
+#: ../gtk/gtkwindow.c:5263
+msgid "Restore"
+msgstr "還原"
 
-#: ../gtk/gtkwindow.c:8087
+#: ../gtk/gtkwindow.c:5263 ../gtk/gtkwindow.c:8097
 msgid "Maximize"
 msgstr "最大化"
 
-#: ../gtk/gtkwindow.c:8096
+#: ../gtk/gtkwindow.c:8097
+msgid "Unmaximize"
+msgstr "取消最大化"
+
+#: ../gtk/gtkwindow.c:8106
 msgid "Always on Top"
 msgstr "永遠在最上層"
 
-#: ../gtk/gtkwindow.c:8108
+#: ../gtk/gtkwindow.c:8118
 msgid "Always on Visible Workspace"
 msgstr "永遠在顯示的工作區"
 
-#: ../gtk/gtkwindow.c:8116
+#: ../gtk/gtkwindow.c:8126
 msgid "Only on This Workspace"
 msgstr "只在這個工作區"
 
-#: ../gtk/gtkwindow.c:8133
+#: ../gtk/gtkwindow.c:8143
 msgid "Move to Workspace Up"
 msgstr "將工作區上移"
 
-#: ../gtk/gtkwindow.c:8142
+#: ../gtk/gtkwindow.c:8152
 msgid "Move to Workspace Down"
 msgstr "將工作區下移"
 
-#: ../gtk/gtkwindow.c:8156
+#: ../gtk/gtkwindow.c:8166
 msgid "Move to Another Workspace"
 msgstr "移到另一個工作區"
 
-#: ../gtk/gtkwindow.c:8164
+#: ../gtk/gtkwindow.c:8174
 #, c-format
 msgid "Workspace %d"
 msgstr "工作區 %d"
-
-#: ../gtk/gtkwindow.c:8184
-msgid "Close"
-msgstr "關閉"
 
 #: ../gtk/paper_names_offsets.c:4
 msgctxt "paper size"
@@ -4229,7 +4234,7 @@ msgstr "關閉詳細輸出"
 
 #: ../gtk/updateiconcache.c:1657
 msgid "Validate existing icon cache"
-msgstr "驗證既存的圖示快取"
+msgstr "核對既存的圖示快取"
 
 #: ../gtk/updateiconcache.c:1724
 #, c-format
@@ -4325,50 +4330,50 @@ msgstr "密碼："
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1241
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
-msgstr "要在印表機 %2$s 列印文件「%1$s」需要驗證"
+msgstr "要在印表機 %2$s 列印文件「%1$s」需要核對"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1046
 #, c-format
 msgid "Authentication is required to print a document on %s"
-msgstr "要在 %s 列印文件需要驗證"
+msgstr "要在 %s 列印文件需要核對"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1050
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
-msgstr "要取得工作「%s」的屬性需要驗證"
+msgstr "要取得工作「%s」的屬性需要核對"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1052
 msgid "Authentication is required to get attributes of a job"
-msgstr "要取得工作的屬性需要驗證"
+msgstr "要取得工作的屬性需要核對"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1056
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
-msgstr "要取得印表機「%s」的屬性需要驗證"
+msgstr "要取得印表機「%s」的屬性需要核對"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1058
 msgid "Authentication is required to get attributes of a printer"
-msgstr "要取得印表機的屬性需要驗證"
+msgstr "要取得印表機的屬性需要核對"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1061
 #, c-format
 msgid "Authentication is required to get default printer of %s"
-msgstr "要取得 %s 的預設印表機需要驗證"
+msgstr "要取得 %s 的預設印表機需要核對"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1064
 #, c-format
 msgid "Authentication is required to get printers from %s"
-msgstr "要從 %s 取得印表機需要驗證"
+msgstr "要從 %s 取得印表機需要核對"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1069
 #, c-format
 msgid "Authentication is required to get a file from %s"
-msgstr "從 %s 取得檔案需要驗證"
+msgstr "從 %s 取得檔案需要核對"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1071
 #, c-format
 msgid "Authentication is required on %s"
-msgstr "%s 需要驗證"
+msgstr "%s 需要核對"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1213
 msgid "Domain:"
@@ -4377,16 +4382,16 @@ msgstr "網域："
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1243
 #, c-format
 msgid "Authentication is required to print document '%s'"
-msgstr "列印文件「%s」需要驗證"
+msgstr "列印文件「%s」需要核對"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1248
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
-msgstr "要在印表機 %s 列印文件需要驗證"
+msgstr "要在印表機 %s 列印文件需要核對"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1250
 msgid "Authentication is required to print this document"
-msgstr "要列印這份文件需要驗證"
+msgstr "要列印這份文件需要核對"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1812
 #, c-format
