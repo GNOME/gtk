@@ -41,6 +41,7 @@ TEST_PROGS += 			\
 	gtkmenu			\
 	keyhash			\
 	listbox			\
+	no-gtk-init		\
 	object			\
 	objects-finalize	\
 	papersize		\
