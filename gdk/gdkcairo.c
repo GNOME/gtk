@@ -334,6 +334,8 @@ gdk_cairo_set_source_pixbuf (cairo_t         *cr,
                                                 gdk_pixbuf_get_width (pixbuf),
                                                 gdk_pixbuf_get_height (pixbuf));
 
+  gdk_cairo_surface_paint_pixbuf (surface, pixbuf);
+
   cairo_set_source_surface (cr, surface, pixbuf_x, pixbuf_y);
   cairo_surface_destroy (surface);
 }
