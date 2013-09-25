@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-09-17 13:54+0000\n"
-"PO-Revision-Date: 2013-09-17 21:01+0300\n"
+"POT-Creation-Date: 2013-09-24 07:21+0000\n"
+"PO-Revision-Date: 2013-09-25 23:22+0300\n"
 "Last-Translator: Yuri Myasoedov <omerta13@yandex.ru>\n"
 "Language-Team: русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -33,7 +33,7 @@ msgstr ""
 "X-Generator: Poedit 1.5.7\n"
 
 #: ../gdk/broadway/gdkbroadway-server.c:141
-#, fuzzy, c-format
+#, c-format
 msgid "broadway display type not supported '%s'"
 msgstr "Тип дисплея broadway не поддерживается «%s»"
 
@@ -1464,7 +1464,7 @@ msgid "Select an application to open “%s”"
 msgstr "Выберите приложение, чтобы открыть «%s»"
 
 #: ../gtk/gtkappchooserdialog.c:334
-#: ../gtk/gtkappchooserwidget.c:660
+#: ../gtk/gtkappchooserwidget.c:657
 #, c-format
 msgid "No applications available to open “%s”"
 msgstr "Нет доступных приложений для открытия «%s»"
@@ -1488,19 +1488,19 @@ msgstr "Для получения дополнительных параметр�
 msgid "Forget association"
 msgstr "Забыть ассоциацию"
 
-#: ../gtk/gtkappchooserwidget.c:609
+#: ../gtk/gtkappchooserwidget.c:606
 msgid "Default Application"
 msgstr "Приложение по умолчанию"
 
-#: ../gtk/gtkappchooserwidget.c:747
+#: ../gtk/gtkappchooserwidget.c:744
 msgid "Recommended Applications"
 msgstr "Рекомендуемые приложения"
 
-#: ../gtk/gtkappchooserwidget.c:762
+#: ../gtk/gtkappchooserwidget.c:759
 msgid "Related Applications"
 msgstr "Связанные приложения"
 
-#: ../gtk/gtkappchooserwidget.c:776
+#: ../gtk/gtkappchooserwidget.c:773
 msgid "Other Applications"
 msgstr "Другие приложения"
 
@@ -1987,43 +1987,43 @@ msgstr "_Правое:"
 msgid "Paper Margins"
 msgstr "Поля страницы"
 
-#: ../gtk/gtkentry.c:9272
-#: ../gtk/gtkentry.c:9418
-#: ../gtk/gtklabel.c:6276
+#: ../gtk/gtkentry.c:9271
+#: ../gtk/gtkentry.c:9417
+#: ../gtk/gtklabel.c:6287
 #: ../gtk/gtktextview.c:8694
 #: ../gtk/gtktextview.c:8877
 msgid "Cu_t"
 msgstr "В_ырезать"
 
-#: ../gtk/gtkentry.c:9276
-#: ../gtk/gtkentry.c:9421
-#: ../gtk/gtklabel.c:6277
+#: ../gtk/gtkentry.c:9275
+#: ../gtk/gtkentry.c:9420
+#: ../gtk/gtklabel.c:6288
 #: ../gtk/gtktextview.c:8698
 #: ../gtk/gtktextview.c:8881
 msgid "_Copy"
 msgstr "_Копировать"
 
-#: ../gtk/gtkentry.c:9280
-#: ../gtk/gtkentry.c:9424
-#: ../gtk/gtklabel.c:6278
+#: ../gtk/gtkentry.c:9279
+#: ../gtk/gtkentry.c:9423
+#: ../gtk/gtklabel.c:6289
 #: ../gtk/gtktextview.c:8700
 #: ../gtk/gtktextview.c:8883
 msgid "_Paste"
 msgstr "Вст_авить"
 
-#: ../gtk/gtkentry.c:9283
-#: ../gtk/gtklabel.c:6280
+#: ../gtk/gtkentry.c:9282
+#: ../gtk/gtklabel.c:6291
 #: ../gtk/gtktextview.c:8703
 msgid "_Delete"
 msgstr "_Удалить"
 
-#: ../gtk/gtkentry.c:9294
-#: ../gtk/gtklabel.c:6289
+#: ../gtk/gtkentry.c:9293
+#: ../gtk/gtklabel.c:6300
 #: ../gtk/gtktextview.c:8717
 msgid "Select _All"
 msgstr "Выделить вс_ё"
 
-#: ../gtk/gtkentry.c:10382
+#: ../gtk/gtkentry.c:10381
 msgid "Caps Lock is on"
 msgstr "Включён режим Caps Lock"
 
@@ -2073,7 +2073,7 @@ msgid "Select a File"
 msgstr "Выберите файл"
 
 #: ../gtk/gtkfilechooserbutton.c:105
-#: ../gtk/gtkplacessidebar.c:791
+#: ../gtk/gtkplacessidebar.c:790
 msgid "Desktop"
 msgstr "Рабочий стол"
 
@@ -2083,7 +2083,7 @@ msgid "(None)"
 msgstr "(Нет)"
 
 #: ../gtk/gtkfilechooserbutton.c:807
-#: ../gtk/gtkplacessidebar.c:3107
+#: ../gtk/gtkplacessidebar.c:3106
 msgid "_Open"
 msgstr "_Открыть"
 
@@ -2273,13 +2273,19 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "Выберите шрифт"
 
-#: ../gtk/gtkicontheme.c:2100
-#: ../gtk/gtkicontheme.c:2163
+#: ../gtk/gtkheaderbar.c:224
+#: ../gtk/gtkwindow.c:5281
+#: ../gtk/gtkwindow.c:8194
+msgid "Close"
+msgstr "Закрыть"
+
+#: ../gtk/gtkicontheme.c:2116
+#: ../gtk/gtkicontheme.c:2179
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Значок «%s» не присутствует в теме"
 
-#: ../gtk/gtkicontheme.c:3866
+#: ../gtk/gtkicontheme.c:3883
 msgid "Failed to load icon"
 msgstr "Не удалось загрузить значок"
 
@@ -2324,12 +2330,12 @@ msgid "Error"
 msgstr "Ошибка"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6259
+#: ../gtk/gtklabel.c:6270
 msgid "_Open Link"
 msgstr "_Открыть ссылку"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6267
+#: ../gtk/gtklabel.c:6278
 msgid "Copy _Link Address"
 msgstr "_Скопировать адрес ссылки"
 
@@ -2623,196 +2629,196 @@ msgstr "Параметры страницы"
 msgid "File System Root"
 msgstr "Корень файловой системы"
 
-#: ../gtk/gtkplacessidebar.c:447
+#: ../gtk/gtkplacessidebar.c:446
 msgid "Devices"
 msgstr "Устройства"
 
-#: ../gtk/gtkplacessidebar.c:455
+#: ../gtk/gtkplacessidebar.c:454
 msgid "Bookmarks"
 msgstr "Закладки"
 
-#: ../gtk/gtkplacessidebar.c:761
+#: ../gtk/gtkplacessidebar.c:760
 msgid "Places"
 msgstr "Места"
 
-#: ../gtk/gtkplacessidebar.c:768
+#: ../gtk/gtkplacessidebar.c:767
 msgid "Recent"
 msgstr "Недавние документы"
 
-#: ../gtk/gtkplacessidebar.c:770
+#: ../gtk/gtkplacessidebar.c:769
 msgid "Recent files"
 msgstr "Недавние документы"
 
-#: ../gtk/gtkplacessidebar.c:779
+#: ../gtk/gtkplacessidebar.c:778
 msgid "Home"
 msgstr "Домашний каталог"
 
-#: ../gtk/gtkplacessidebar.c:781
+#: ../gtk/gtkplacessidebar.c:780
 msgid "Open your personal folder"
 msgstr "Открыть личную папку"
 
-#: ../gtk/gtkplacessidebar.c:793
+#: ../gtk/gtkplacessidebar.c:792
 msgid "Open the contents of your desktop in a folder"
 msgstr "Открыть содержимое рабочего стола в папке"
 
-#: ../gtk/gtkplacessidebar.c:806
+#: ../gtk/gtkplacessidebar.c:805
 msgid "Trash"
 msgstr "Корзина"
 
-#: ../gtk/gtkplacessidebar.c:808
+#: ../gtk/gtkplacessidebar.c:807
 msgid "Open the trash"
 msgstr "Открыть корзину"
 
-#: ../gtk/gtkplacessidebar.c:863
-#: ../gtk/gtkplacessidebar.c:888
-#: ../gtk/gtkplacessidebar.c:1095
+#: ../gtk/gtkplacessidebar.c:862
+#: ../gtk/gtkplacessidebar.c:887
+#: ../gtk/gtkplacessidebar.c:1094
 #, c-format
 msgid "Mount and open %s"
 msgstr "Смонтировать и открыть %s"
 
-#: ../gtk/gtkplacessidebar.c:963
+#: ../gtk/gtkplacessidebar.c:962
 msgid "Open the contents of the file system"
 msgstr "Открыть содержимое файловой системы"
 
-#: ../gtk/gtkplacessidebar.c:1063
+#: ../gtk/gtkplacessidebar.c:1062
 msgid "Network"
 msgstr "Сеть"
 
-#: ../gtk/gtkplacessidebar.c:1069
+#: ../gtk/gtkplacessidebar.c:1068
 msgid "Browse Network"
 msgstr "Обзор сети"
 
-#: ../gtk/gtkplacessidebar.c:1071
+#: ../gtk/gtkplacessidebar.c:1070
 msgid "Browse the contents of the network"
 msgstr "Обзор содержимого сети"
 
-#: ../gtk/gtkplacessidebar.c:1078
+#: ../gtk/gtkplacessidebar.c:1077
 msgid "Connect to Server"
 msgstr "Подключиться к серверу"
 
-#: ../gtk/gtkplacessidebar.c:1080
+#: ../gtk/gtkplacessidebar.c:1079
 msgid "Connect to a network server address"
 msgstr "Подключение к серверу по сетевому адресу"
 
-#: ../gtk/gtkplacessidebar.c:1560
+#: ../gtk/gtkplacessidebar.c:1559
 msgid "New bookmark"
 msgstr "Создать закладку"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: ../gtk/gtkplacessidebar.c:2100
-#: ../gtk/gtkplacessidebar.c:3183
+#: ../gtk/gtkplacessidebar.c:2099
+#: ../gtk/gtkplacessidebar.c:3182
 msgid "_Start"
 msgstr "_Запустить"
 
-#: ../gtk/gtkplacessidebar.c:2101
-#: ../gtk/gtkplacessidebar.c:3190
+#: ../gtk/gtkplacessidebar.c:2100
+#: ../gtk/gtkplacessidebar.c:3189
 msgid "_Stop"
 msgstr "_Остановить"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: ../gtk/gtkplacessidebar.c:2106
+#: ../gtk/gtkplacessidebar.c:2105
 msgid "_Power On"
 msgstr "_Включить"
 
-#: ../gtk/gtkplacessidebar.c:2107
+#: ../gtk/gtkplacessidebar.c:2106
 msgid "_Safely Remove Drive"
 msgstr "_Безопасное извлечение устройства"
 
-#: ../gtk/gtkplacessidebar.c:2110
+#: ../gtk/gtkplacessidebar.c:2109
 msgid "_Connect Drive"
 msgstr "_Подключить диск"
 
-#: ../gtk/gtkplacessidebar.c:2111
+#: ../gtk/gtkplacessidebar.c:2110
 msgid "_Disconnect Drive"
 msgstr "О_тключить диск"
 
-#: ../gtk/gtkplacessidebar.c:2114
+#: ../gtk/gtkplacessidebar.c:2113
 msgid "_Start Multi-disk Device"
 msgstr "_Запустить многодисковое устройство"
 
-#: ../gtk/gtkplacessidebar.c:2115
+#: ../gtk/gtkplacessidebar.c:2114
 msgid "_Stop Multi-disk Device"
 msgstr "_Остановить многодисковое устройство"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: ../gtk/gtkplacessidebar.c:2119
+#: ../gtk/gtkplacessidebar.c:2118
 msgid "_Unlock Drive"
 msgstr "_Разблокировать диск"
 
-#: ../gtk/gtkplacessidebar.c:2120
+#: ../gtk/gtkplacessidebar.c:2119
 msgid "_Lock Drive"
 msgstr "_Заблокировать диск"
 
-#: ../gtk/gtkplacessidebar.c:2147
-#: ../gtk/gtkplacessidebar.c:2845
+#: ../gtk/gtkplacessidebar.c:2146
+#: ../gtk/gtkplacessidebar.c:2844
 #, c-format
 msgid "Unable to start %s"
 msgstr "Не удалось запустить %s"
 
-#: ../gtk/gtkplacessidebar.c:2174
+#: ../gtk/gtkplacessidebar.c:2173
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Не удалось получить доступ к «%s»"
 
-#: ../gtk/gtkplacessidebar.c:2480
+#: ../gtk/gtkplacessidebar.c:2479
 #, c-format
 msgid "Unable to unmount %s"
 msgstr "Не удалось размонтировать %s"
 
-#: ../gtk/gtkplacessidebar.c:2603
-#: ../gtk/gtkplacessidebar.c:2630
-#: ../gtk/gtkplacessidebar.c:2657
+#: ../gtk/gtkplacessidebar.c:2602
+#: ../gtk/gtkplacessidebar.c:2629
+#: ../gtk/gtkplacessidebar.c:2656
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Не удалось извлечь %s"
 
-#: ../gtk/gtkplacessidebar.c:2797
-#, fuzzy, c-format
+#: ../gtk/gtkplacessidebar.c:2796
+#, c-format
 msgid "Unable to poll %s for media changes"
-msgstr "Не удалось опросить %s для смены носителя"
+msgstr "Не удалось опросить %s об изменении носителей"
 
-#: ../gtk/gtkplacessidebar.c:2899
+#: ../gtk/gtkplacessidebar.c:2898
 #, c-format
 msgid "Unable to stop %s"
 msgstr "Не удалось остановить %s"
 
-#: ../gtk/gtkplacessidebar.c:3114
+#: ../gtk/gtkplacessidebar.c:3113
 msgid "Open in New _Tab"
 msgstr "Открыть в новой _вкладке"
 
-#: ../gtk/gtkplacessidebar.c:3122
+#: ../gtk/gtkplacessidebar.c:3121
 msgid "Open in New _Window"
 msgstr "Открыть в новом _окне"
 
-#: ../gtk/gtkplacessidebar.c:3131
+#: ../gtk/gtkplacessidebar.c:3130
 msgid "_Add Bookmark"
 msgstr "_Добавить в закладки"
 
-#: ../gtk/gtkplacessidebar.c:3137
+#: ../gtk/gtkplacessidebar.c:3136
 msgid "Remove"
 msgstr "Удалить"
 
-#: ../gtk/gtkplacessidebar.c:3144
+#: ../gtk/gtkplacessidebar.c:3143
 msgid "Rename…"
 msgstr "Переименовать…"
 
-#: ../gtk/gtkplacessidebar.c:3155
+#: ../gtk/gtkplacessidebar.c:3154
 msgid "_Mount"
 msgstr "_Монтировать"
 
-#: ../gtk/gtkplacessidebar.c:3162
+#: ../gtk/gtkplacessidebar.c:3161
 msgid "_Unmount"
 msgstr "_Размонтировать"
 
-#: ../gtk/gtkplacessidebar.c:3169
+#: ../gtk/gtkplacessidebar.c:3168
 msgid "_Eject"
 msgstr "_Извлечь"
 
-#: ../gtk/gtkplacessidebar.c:3176
+#: ../gtk/gtkplacessidebar.c:3175
 msgid "_Detect Media"
 msgstr "Определить _носитель"
 
-#: ../gtk/gtkplacessidebar.c:3829
+#: ../gtk/gtkplacessidebar.c:3828
 msgid "Computer"
 msgstr "Компьютер"
 
@@ -3354,50 +3360,52 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:8079
+#: ../gtk/gtkwindow.c:5242
+#: ../gtk/gtkwindow.c:8089
 msgid "Minimize"
 msgstr "Свернуть"
 
-#: ../gtk/gtkwindow.c:8087
-msgid "Unmaximize"
+#: ../gtk/gtkwindow.c:5263
+msgid "Restore"
 msgstr "Восстановить"
 
-#: ../gtk/gtkwindow.c:8087
+#: ../gtk/gtkwindow.c:5263
+#: ../gtk/gtkwindow.c:8097
 msgid "Maximize"
 msgstr "Развернуть"
 
-#: ../gtk/gtkwindow.c:8096
+#: ../gtk/gtkwindow.c:8097
+msgid "Unmaximize"
+msgstr "Восстановить"
+
+#: ../gtk/gtkwindow.c:8106
 msgid "Always on Top"
 msgstr "Поверх всех окон"
 
-#: ../gtk/gtkwindow.c:8108
+#: ../gtk/gtkwindow.c:8118
 msgid "Always on Visible Workspace"
 msgstr "Всегда на видимом рабочем месте"
 
-#: ../gtk/gtkwindow.c:8116
+#: ../gtk/gtkwindow.c:8126
 msgid "Only on This Workspace"
 msgstr "Только на этом рабочем месте"
 
-#: ../gtk/gtkwindow.c:8133
+#: ../gtk/gtkwindow.c:8143
 msgid "Move to Workspace Up"
 msgstr "Переместить в рабочее место выше"
 
-#: ../gtk/gtkwindow.c:8142
+#: ../gtk/gtkwindow.c:8152
 msgid "Move to Workspace Down"
 msgstr "Переместить в рабочее место ниже"
 
-#: ../gtk/gtkwindow.c:8156
+#: ../gtk/gtkwindow.c:8166
 msgid "Move to Another Workspace"
 msgstr "Переместить на другое рабочее место"
 
-#: ../gtk/gtkwindow.c:8164
+#: ../gtk/gtkwindow.c:8174
 #, c-format
 msgid "Workspace %d"
 msgstr "Рабочее место %d"
-
-#: ../gtk/gtkwindow.c:8184
-msgid "Close"
-msgstr "Закрыть"
 
 #: ../gtk/paper_names_offsets.c:4
 msgctxt "paper size"
@@ -5240,3 +5248,4 @@ msgstr "Тише"
 #: ../gtk/gtkvolumebutton.ui.h:10
 msgid "Decreases the volume"
 msgstr "Понижает громкость"
+
