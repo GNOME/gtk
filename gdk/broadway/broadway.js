@@ -67,71 +67,6 @@ function logStackTrace(len) {
 	log(callstack[i]);
 }
 
-var base64Values = [
-    255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
-    255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
-    255,255,255,255,255,255,255,255,255,255,255, 62,255,255,255, 63,
-    52, 53, 54, 55, 56, 57, 58, 59, 60, 61,255,255,255,  0,255,255,
-    255,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
-    15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,255,255,255,255,255,
-    255, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-    41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,255,255,255,255,255
-];
-
-function base64_8(str, index) {
-    var v =
-	(base64Values[str.charCodeAt(index)]) +
-	(base64Values[str.charCodeAt(index+1)] << 6);
-    return v;
-}
-
-function base64_16(str, index) {
-    var v =
-	(base64Values[str.charCodeAt(index)]) +
-	(base64Values[str.charCodeAt(index+1)] << 6) +
-	(base64Values[str.charCodeAt(index+2)] << 12);
-    return v;
-}
-
-function base64_16s(str, index) {
-    var v = base64_16(str, index);
-    if (v > 32767)
-	return v - 65536;
-    else
-	return v;
-}
-
-function base64_24(str, index) {
-    var v =
-	(base64Values[str.charCodeAt(index)]) +
-	(base64Values[str.charCodeAt(index+1)] << 6) +
-	(base64Values[str.charCodeAt(index+2)] << 12) +
-	(base64Values[str.charCodeAt(index+3)] << 18);
-    return v;
-}
-
-function base64_32(str, index) {
-    var v =
-	(base64Values[str.charCodeAt(index)]) +
-	(base64Values[str.charCodeAt(index+1)] << 6) +
-	(base64Values[str.charCodeAt(index+2)] << 12) +
-	(base64Values[str.charCodeAt(index+3)] << 18) +
-	(base64Values[str.charCodeAt(index+4)] << 24) +
-	(base64Values[str.charCodeAt(index+5)] << 30);
-    return v;
-}
-
-function createXHR()
-{
-    try { return new XMLHttpRequest(); } catch(e) {}
-    try { return new ActiveXObject("Msxml2.XMLHTTP.6.0"); } catch (e) {}
-    try { return new ActiveXObject("Msxml2.XMLHTTP.3.0"); } catch (e) {}
-    try { return new ActiveXObject("Msxml2.XMLHTTP"); } catch (e) {}
-    try { return new ActiveXObject("Microsoft.XMLHTTP"); } catch (e) {}
-
-    return null;
-}
-
 function resizeCanvas(canvas, w, h)
 {
     /* Canvas resize clears the data, so we need to save it first */
@@ -653,45 +588,6 @@ function handleOutstanding()
     }
 }
 
-function TextCommands(message) {
-    this.data = message;
-    this.length = message.length;
-    this.pos = 0;
-}
-
-TextCommands.prototype.get_char = function() {
-    return this.data[this.pos++];
-};
-TextCommands.prototype.get_bool = function() {
-    return this.get_char() == '1';
-};
-TextCommands.prototype.get_flags = function() {
-    return this.get_char() - 48;
-}
-TextCommands.prototype.get_16 = function() {
-    var n = base64_16(this.data, this.pos);
-    this.pos = this.pos + 3;
-    return n;
-};
-TextCommands.prototype.get_16s = function() {
-    var n = base64_16s(this.data, this.pos);
-    this.pos = this.pos + 3;
-    return n;
-};
-TextCommands.prototype.get_32 = function() {
-    var n = base64_32(this.data, this.pos);
-    this.pos = this.pos + 6;
-    return n;
-};
-TextCommands.prototype.get_image_url = function() {
-    var size = this.get_32();
-    var url = this.data.slice(this.pos, this.pos + size);
-    this.pos = this.pos + size;
-    return url;
-};
-TextCommands.prototype.free_image_url = function(url) {
-};
-
 function BinCommands(message) {
     this.arraybuffer = message;
     this.u8 = new Uint8Array(message);
@@ -748,11 +644,7 @@ BinCommands.prototype.free_image_url = function(url) {
 
 function handleMessage(message)
 {
-    var cmd;
-    if (message instanceof ArrayBuffer)
-	cmd = new BinCommands(message);
-    else
-	cmd = new TextCommands(message);
+    var cmd = new BinCommands(message);
     outstandingCommands.push(cmd);
     if (outstandingCommands.length == 1) {
 	handleOutstanding();
@@ -2614,18 +2506,6 @@ function setupDocument(document)
     }
 }
 
-function newWS(loc) {
-    var ws = null;
-    if ("WebSocket" in window) {
-	ws = new WebSocket(loc, "broadway");
-    } else if ("MozWebSocket" in window) { // Firefox 6
-	ws = new MozWebSocket(loc);
-    } else {
-	alert("WebSocket not supported, broadway will not work!");
-    }
-    return ws;
-}
-
 function start()
 {
     setupDocument(document);
@@ -2677,14 +2557,8 @@ function connect()
 
     var loc = window.location.toString().replace("http:", "ws:").replace("https:", "wss:");
     loc = loc.substr(0, loc.lastIndexOf('/')) + "/socket";
-
-    var supports_binary = newWS (loc + "-test").binaryType == "blob";
-    if (supports_binary) {
-	ws = newWS (loc + "-bin");
-	ws.binaryType = "arraybuffer";
-    } else {
-	ws = newWS (loc);
-    }
+    ws = new WebSocket(loc, "broadway");
+    ws.binaryType = "arraybuffer";
 
     ws.onopen = function() {
 	inputSocket = ws;

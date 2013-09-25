@@ -96,8 +96,6 @@ struct BroadwayInput {
   GSource *source;
   gboolean seen_time;
   gint64 time_base;
-  gboolean proto_v7_plus;
-  gboolean binary;
   gboolean active;
 };
 
@@ -557,138 +555,97 @@ hex_dump (guchar *data, gsize len)
 static void
 parse_input (BroadwayInput *input)
 {
-  BroadwayServer *server = input->server;
-
   if (!input->buffer->len)
     return;
 
-  if (input->proto_v7_plus)
+  hex_dump (input->buffer->data, input->buffer->len);
+
+  while (input->buffer->len > 2)
     {
-      hex_dump (input->buffer->data, input->buffer->len);
+      gsize len, payload_len;
+      BroadwayWSOpCode code;
+      gboolean is_mask, fin;
+      guchar *buf, *data, *mask;
 
-      while (input->buffer->len > 2)
-	{
-	  gsize len, payload_len;
-	  BroadwayWSOpCode code;
-	  gboolean is_mask, fin;
-	  guchar *buf, *data, *mask;
-
-	  buf = input->buffer->data;
-	  len = input->buffer->len;
-
-#ifdef DEBUG_WEBSOCKETS
-	  g_print ("Parse input first byte 0x%2x 0x%2x\n", buf[0], buf[1]);
-#endif
-
-	  fin = buf[0] & 0x80;
-	  code = buf[0] & 0x0f;
-	  payload_len = buf[1] & 0x7f;
-	  is_mask = buf[1] & 0x80;
-	  data = buf + 2;
-
-	  if (payload_len > 125)
-	    {
-	      if (len < 4)
-		return;
-	      payload_len = GUINT16_FROM_BE( *(guint16 *) data );
-	      data += 2;
-	    }
-	  else if (payload_len > 126)
-	    {
-	      if (len < 10)
-		return;
-	      payload_len = GUINT64_FROM_BE( *(guint64 *) data );
-	      data += 8;
-	    }
-
-	  mask = NULL;
-	  if (is_mask)
-	    {
-	      if (data - buf + 4 > len)
-		return;
-	      mask = data;
-	      data += 4;
-	    }
-
-	  if (data - buf + payload_len > len)
-	    return; /* wait to accumulate more */
-
-	  if (is_mask)
-	    {
-	      gsize i;
-	      for (i = 0; i < payload_len; i++)
-		data[i] ^= mask[i%4];
-	    }
-
-	  switch (code) {
-	  case BROADWAY_WS_CNX_CLOSE:
-	    break; /* hang around anyway */
-	  case BROADWAY_WS_TEXT:
-	    if (!fin)
-	      {
-#ifdef DEBUG_WEBSOCKETS
-		g_warning ("can't yet accept fragmented input");
-#endif
-	      }
-	    else
-	      {
-		char *terminated = g_strndup((char *)data, payload_len);
-	        parse_input_message (input, terminated);
-		g_free (terminated);
-	      }
-	    break;
-	  case BROADWAY_WS_CNX_PING:
-	    broadway_output_pong (input->output);
-	    break;
-	  case BROADWAY_WS_CNX_PONG:
-	    break; /* we never send pings, but tolerate pongs */
-	  case BROADWAY_WS_BINARY:
-	  case BROADWAY_WS_CONTINUATION:
-	  default:
-	    {
-	      g_warning ("fragmented or unknown input code 0x%2x with fin set", code);
-	      break;
-	    }
-	  }
-
-	  g_byte_array_remove_range (input->buffer, 0, data - buf + payload_len);
-	}
-    }
-  else /* old style protocol */
-    {
-      char *buf, *ptr;
-      gsize len;
-
-      buf = (char *)input->buffer->data;
+      buf = input->buffer->data;
       len = input->buffer->len;
 
-      if (buf[0] != 0)
-	{
-	  if (server->input == input)
-	    server->input = NULL;
-	  broadway_input_free (input);
-	  return;
-	}
+#ifdef DEBUG_WEBSOCKETS
+      g_print ("Parse input first byte 0x%2x 0x%2x\n", buf[0], buf[1]);
+#endif
 
-      while ((ptr = memchr (buf, 0xff, len)) != NULL)
-	{
-	  *ptr = 0;
-	  ptr++;
+      fin = buf[0] & 0x80;
+      code = buf[0] & 0x0f;
+      payload_len = buf[1] & 0x7f;
+      is_mask = buf[1] & 0x80;
+      data = buf + 2;
 
-	  parse_input_message (input, buf + 1);
+      if (payload_len > 125)
+        {
+          if (len < 4)
+            return;
+          payload_len = GUINT16_FROM_BE( *(guint16 *) data );
+          data += 2;
+        }
+      else if (payload_len > 126)
+        {
+          if (len < 10)
+            return;
+          payload_len = GUINT64_FROM_BE( *(guint64 *) data );
+          data += 8;
+        }
 
-	  len -= ptr - buf;
-	  buf = ptr;
+      mask = NULL;
+      if (is_mask)
+        {
+          if (data - buf + 4 > len)
+            return;
+          mask = data;
+          data += 4;
+        }
 
-	  if (len > 0 && buf[0] != 0)
-	    {
-	      if (server->input == input)
-		server->input = NULL;
-	      broadway_input_free (input);
-	      break;
-	    }
-	}
-      g_byte_array_remove_range (input->buffer, 0, buf - (char *)input->buffer->data);
+      if (data - buf + payload_len > len)
+        return; /* wait to accumulate more */
+
+      if (is_mask)
+        {
+          gsize i;
+          for (i = 0; i < payload_len; i++)
+            data[i] ^= mask[i%4];
+        }
+
+      switch (code) {
+      case BROADWAY_WS_CNX_CLOSE:
+        break; /* hang around anyway */
+      case BROADWAY_WS_TEXT:
+        if (!fin)
+          {
+#ifdef DEBUG_WEBSOCKETS
+            g_warning ("can't yet accept fragmented input");
+#endif
+          }
+        else
+          {
+            char *terminated = g_strndup((char *)data, payload_len);
+            parse_input_message (input, terminated);
+            g_free (terminated);
+          }
+        break;
+      case BROADWAY_WS_CNX_PING:
+        broadway_output_pong (input->output);
+        break;
+      case BROADWAY_WS_CNX_PONG:
+        break; /* we never send pings, but tolerate pongs */
+      case BROADWAY_WS_BINARY:
+      case BROADWAY_WS_CONTINUATION:
+      default:
+        {
+          g_warning ("fragmented or unknown input code 0x%2x with fin set", code);
+          break;
+        }
+      }
+
+      g_byte_array_remove_range (input->buffer, 0, data - buf + payload_len);
     }
 }
 
@@ -1002,25 +959,18 @@ generate_handshake_response_wsietf_v7 (const gchar *key)
 }
 
 static void
-start_input (HttpRequest *request, gboolean binary)
+start_input (HttpRequest *request)
 {
   char **lines;
   char *p;
-  int num_key1, num_key2;
-  guint64 key1, key2;
-  int num_space;
   int i;
-  guint8 challenge[16];
   char *res;
-  gsize len;
-  GChecksum *checksum;
   char *origin, *host;
   BroadwayInput *input;
   const void *data_buffer;
   gsize data_buffer_size;
   GInputStream *in;
-  char *key_v7;
-  gboolean proto_v7_plus;
+  char *key;
   GSocket *socket;
   int flag = 1;
 
@@ -1029,61 +979,19 @@ start_input (HttpRequest *request, gboolean binary)
 #endif
   lines = g_strsplit (request->request->str, "\n", 0);
 
-  num_key1 = 0;
-  num_key2 = 0;
-  key1 = 0;
-  key2 = 0;
-  key_v7 = NULL;
+  key = NULL;
   origin = NULL;
   host = NULL;
   for (i = 0; lines[i] != NULL; i++)
     {
-      if ((p = parse_line (lines[i], "Sec-WebSocket-Key1")))
-	{
-	  num_space = 0;
-	  while (*p != 0)
-	    {
-	      if (g_ascii_isdigit (*p))
-		key1 = key1 * 10 + g_ascii_digit_value (*p);
-	      else if (*p == ' ')
-		num_space++;
-
-	      p++;
-	    }
-	  key1 /= num_space;
-	  num_key1++;
-	}
-      else if ((p = parse_line (lines[i], "Sec-WebSocket-Key2")))
-	{
-	  num_space = 0;
-	  while (*p != 0)
-	    {
-	      if (g_ascii_isdigit (*p))
-		key2 = key2 * 10 + g_ascii_digit_value (*p);
-	      else if (*p == ' ')
-		num_space++;
-
-	      p++;
-	    }
-	  key2 /= num_space;
-	  num_key2++;
-	}
-      else if ((p = parse_line (lines[i], "Sec-WebSocket-Key")))
-	{
-	  key_v7 = p;
-	}
+      if ((p = parse_line (lines[i], "Sec-WebSocket-Key")))
+        key = p;
       else if ((p = parse_line (lines[i], "Origin")))
-	{
-	  origin = p;
-	}
+        origin = p;
       else if ((p = parse_line (lines[i], "Host")))
-	{
-	  host = p;
-	}
+        host = p;
       else if ((p = parse_line (lines[i], "Sec-WebSocket-Origin")))
-	{
-	  origin = p;
-	}
+        origin = p;
     }
 
   if (host == NULL)
@@ -1093,9 +1001,9 @@ start_input (HttpRequest *request, gboolean binary)
       return;
     }
 
-  if (key_v7 != NULL)
+  if (key != NULL)
     {
-      char* accept = generate_handshake_response_wsietf_v7 (key_v7);
+      char* accept = generate_handshake_response_wsietf_v7 (key);
       res = g_strdup_printf ("HTTP/1.1 101 Switching Protocols\r\n"
 			     "Upgrade: websocket\r\n"
 			     "Connection: Upgrade\r\n"
@@ -1115,58 +1023,12 @@ start_input (HttpRequest *request, gboolean binary)
       g_output_stream_write_all (g_io_stream_get_output_stream (G_IO_STREAM (request->connection)),
 				 res, strlen (res), NULL, NULL, NULL);
       g_free (res);
-      proto_v7_plus = TRUE;
     }
   else
     {
-      if (num_key1 != 1 || num_key2 != 1)
-	{
-	  g_strfreev (lines);
-	  send_error (request, 400, "Bad websocket request");
-	  return;
-	}
-
-      challenge[0] = (key1 >> 24) & 0xff;
-      challenge[1] = (key1 >> 16) & 0xff;
-      challenge[2] = (key1 >>  8) & 0xff;
-      challenge[3] = (key1 >>  0) & 0xff;
-      challenge[4] = (key2 >> 24) & 0xff;
-      challenge[5] = (key2 >> 16) & 0xff;
-      challenge[6] = (key2 >>  8) & 0xff;
-      challenge[7] = (key2 >>  0) & 0xff;
-
-      if (!g_input_stream_read_all (G_INPUT_STREAM (request->data), challenge+8, 8, NULL, NULL, NULL))
-	{
-	  g_strfreev (lines);
-	  send_error (request, 400, "Bad websocket request");
-	  return;
-	}
-
-      checksum = g_checksum_new (G_CHECKSUM_MD5);
-      g_checksum_update (checksum, challenge, 16);
-      len = 16;
-      g_checksum_get_digest (checksum, challenge, &len);
-      g_checksum_free (checksum);
-
-      res = g_strdup_printf ("HTTP/1.1 101 WebSocket Protocol Handshake\r\n"
-			     "Upgrade: WebSocket\r\n"
-			     "Connection: Upgrade\r\n"
-			     "%s%s%s"
-			     "Sec-WebSocket-Location: ws://%s/socket\r\n"
-			     "Sec-WebSocket-Protocol: broadway\r\n"
-			     "\r\n",
-			     origin?"Sec-WebSocket-Origin: ":"", origin?origin:"", origin?"\r\n":"",
-			     host);
-
-#ifdef DEBUG_WEBSOCKETS
-      g_print ("legacy response:\n%s", res);
-#endif
-      g_output_stream_write_all (g_io_stream_get_output_stream (G_IO_STREAM (request->connection)),
-				 res, strlen (res), NULL, NULL, NULL);
-      g_free (res);
-      g_output_stream_write_all (g_io_stream_get_output_stream (G_IO_STREAM (request->connection)),
-				 challenge, 16, NULL, NULL, NULL);
-      proto_v7_plus = FALSE;
+      g_strfreev (lines);
+      send_error (request, 400, "Bad websocket request");
+      return;
     }
 
   socket = g_socket_connection_get_socket (request->connection);
@@ -1176,16 +1038,13 @@ start_input (HttpRequest *request, gboolean binary)
   input = g_new0 (BroadwayInput, 1);
   input->server = request->server;
   input->connection = g_object_ref (request->connection);
-  input->proto_v7_plus = proto_v7_plus;
-  input->binary = binary;
 
   data_buffer = g_buffered_input_stream_peek_buffer (G_BUFFERED_INPUT_STREAM (request->data), &data_buffer_size);
   input->buffer = g_byte_array_sized_new (data_buffer_size);
   g_byte_array_append (input->buffer, data_buffer, data_buffer_size);
 
   input->output =
-    broadway_output_new (g_io_stream_get_output_stream (G_IO_STREAM (request->connection)),
-			 0, proto_v7_plus, binary);
+    broadway_output_new (g_io_stream_get_output_stream (G_IO_STREAM (request->connection)), 0);
 
   /* This will free and close the data input stream, but we got all the buffered content already */
   http_request_free (request);
@@ -1316,9 +1175,7 @@ got_request (HttpRequest *request)
   else if (strcmp (escaped, "/broadway.js") == 0)
     send_data (request, "text/javascript", broadway_js, G_N_ELEMENTS(broadway_js) - 1);
   else if (strcmp (escaped, "/socket") == 0)
-    start_input (request, FALSE);
-  else if (strcmp (escaped, "/socket-bin") == 0)
-    start_input (request, TRUE);
+    start_input (request);
   else
     send_error (request, 404, "File not found");
 
