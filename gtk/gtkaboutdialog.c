@@ -41,7 +41,7 @@
 #include "gtklabel.h"
 #include "gtklinkbutton.h"
 #include "gtkmarshalers.h"
-#include "gtknotebook.h"
+#include "gtkstack.h"
 #include "gtkorientable.h"
 #include "gtkscrolledwindow.h"
 #include "gtktextview.h"
@@ -124,7 +124,7 @@ typedef struct
   gchar **people;
 } CreditSection;
 
-struct _GtkAboutDialogPrivate 
+struct _GtkAboutDialogPrivate
 {
   gchar *name;
   gchar *version;
@@ -142,10 +142,10 @@ struct _GtkAboutDialogPrivate
 
   GSList *credit_sections;
 
-  gint credits_page;
-  gint license_page;
+  gboolean credits_page_initialized;
+  gboolean license_page_initialized;
 
-  GtkWidget *notebook;
+  GtkWidget *stack;
   GtkWidget *logo_image;
   GtkWidget *name_label;
   GtkWidget *version_label;
@@ -169,11 +169,8 @@ struct _GtkAboutDialogPrivate
 
   guint hovering_over_link : 1;
   guint wrap_license : 1;
+  guint in_child_changed : 1;
 };
-
-/* The indexes of the credits and license page in the builder xml */
-#define CREDITS_PAGE_ID  1
-#define LICENSE_PAGE_ID  2
 
 enum
 {
@@ -558,7 +555,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class,
 					       "/org/gtk/libgtk/gtkaboutdialog.ui");
 
-  gtk_widget_class_bind_template_child_private (widget_class, GtkAboutDialog, notebook);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkAboutDialog, stack);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAboutDialog, logo_image);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAboutDialog, name_label);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAboutDialog, version_label);
@@ -623,11 +620,11 @@ update_credits_button_visibility (GtkAboutDialog *about)
 
 static void
 switch_page (GtkAboutDialog *about,
-             gint            page)
+             const gchar    *name)
 {
   GtkAboutDialogPrivate *priv = about->priv;
 
-  gtk_notebook_set_current_page (GTK_NOTEBOOK (priv->notebook), page);
+  gtk_stack_set_visible_child_name (GTK_STACK (priv->stack), name);
 }
 
 static void
@@ -636,7 +633,7 @@ display_main_page (GtkButton *button,
 {
   GtkAboutDialog *about = (GtkAboutDialog *)data;
 
-  switch_page (about, 0);
+  switch_page (about, "main");
 }
 
 static void
@@ -647,11 +644,16 @@ credits_button_clicked (GtkButton *button,
   GtkAboutDialogPrivate *priv = about->priv;
   gboolean active;
 
+  if (priv->in_child_changed)
+    return;
+
   active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
 
   if (active)
     {
+      priv->in_child_changed = TRUE;
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->license_button), FALSE);
+      priv->in_child_changed = FALSE;
       display_credits_page (NULL, data);
     }
   else
@@ -668,11 +670,16 @@ license_button_clicked (GtkButton *button,
   GtkAboutDialogPrivate *priv = about->priv;
   gboolean active;
 
+  if (priv->in_child_changed)
+    return;
+
   active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
 
   if (active)
     {
+      priv->in_child_changed = TRUE;
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->credits_button), FALSE);
+      priv->in_child_changed = FALSE;
       display_license_page (NULL, data);
     }
   else
@@ -712,7 +719,7 @@ gtk_about_dialog_init (GtkAboutDialog *about)
 
   gtk_widget_init_template (GTK_WIDGET (about));
 
-  switch_page (about, 0);
+  switch_page (about, "main");
 
   /* force defaults */
   gtk_about_dialog_set_program_name (about, NULL);
@@ -2325,13 +2332,13 @@ display_credits_page (GtkWidget *button,
   GtkAboutDialog *about = (GtkAboutDialog *)data;
   GtkAboutDialogPrivate *priv = about->priv;
 
-  if (priv->credits_page == 0)
+  if (!priv->credits_page_initialized)
     {
       populate_credits_page (about);
-      priv->credits_page = CREDITS_PAGE_ID;
+      priv->credits_page_initialized = TRUE;
     }
 
-  switch_page (about, priv->credits_page);
+  switch_page (about, "credits");
 }
 
 static void
@@ -2357,13 +2364,13 @@ display_license_page (GtkWidget *button,
   GtkAboutDialog *about = (GtkAboutDialog *)data;
   GtkAboutDialogPrivate *priv = about->priv;
 
-  if (priv->license_page == 0)
+  if (!priv->license_page_initialized)
     {
       populate_license_page (about);
-      priv->license_page = LICENSE_PAGE_ID;
+      priv->license_page_initialized = TRUE;
     }
 
-  switch_page (about, priv->license_page);
+  switch_page (about, "license");
 }
 
 /**
@@ -2388,7 +2395,7 @@ close_cb (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv = about->priv;
 
-  switch_page (about, 0);
+  switch_page (about, "main");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->credits_button), FALSE);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->license_button), FALSE);
   gtk_widget_hide (GTK_WIDGET (about));
