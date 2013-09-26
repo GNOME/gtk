@@ -447,23 +447,19 @@ function cmdUngrabPointer()
 	doUngrab();
 }
 
+var active = false;
 function handleCommands(cmd)
 {
+    if (!active) {
+        start();
+        active = true;
+    }
+
     while (cmd.pos < cmd.length) {
 	var id, x, y, w, h, q;
 	var command = cmd.get_char();
 	lastSerial = cmd.get_32();
 	switch (command) {
-	case 'l':
-	    login ();
-	    break;
-
-	case 'L':
-	    if (loginDiv != null)
-		loginDiv.parentNode.removeChild(loginDiv);
-	    start ();
-	    break;
-
 	case 'D':
 	    alert ("disconnected");
 	    inputSocket = null;
@@ -2520,31 +2516,6 @@ function start()
 	sendInput ("d", [w, h]);
     };
     sendInput ("d", [w, h]);
-}
-
-var loginDiv = null;
-function login()
-{
-    if (loginDiv == null) {
-	var div = document.createElement('div');
-	document.body.appendChild(div);
-	div.innerHTML = "Please enter password<br>";
-	div.style.marginTop = "40px";
-	div.style.textAlign = "center";
-
-	var input = document.createElement("input");
-	input.setAttribute("type", "password");
-	div.appendChild(input);
-	input.focus ();
-	input.onkeyup = function(e) {
-	    if (e.keyCode === 13 && input.value != "") {
-		inputSocket.send ("l" + input.value);
-	    }
-	}
-	loginDiv = div;
-    } else {
-	alert ("Wrong password");
-    }
 }
 
 function connect()

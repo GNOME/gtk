@@ -31,8 +31,6 @@ void            broadway_output_new_surface     (BroadwayOutput *output,
 						 int             w,
 						 int             h,
 						 gboolean        is_temp);
-void            broadway_output_request_auth    (BroadwayOutput *output);
-void            broadway_output_auth_ok         (BroadwayOutput *output);
 void            broadway_output_disconnected    (BroadwayOutput *output);
 void            broadway_output_show_surface    (BroadwayOutput *output,
 						 int             id);

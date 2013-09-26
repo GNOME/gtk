@@ -266,18 +266,6 @@ broadway_output_new_surface(BroadwayOutput *output,
 }
 
 void
-broadway_output_request_auth (BroadwayOutput *output)
-{
-  write_header (output, BROADWAY_OP_REQUEST_AUTH);
-}
-
-void
-broadway_output_auth_ok (BroadwayOutput *output)
-{
-  write_header (output, BROADWAY_OP_AUTH_OK);
-}
-
-void
 broadway_output_disconnected (BroadwayOutput *output)
 {
   write_header (output, BROADWAY_OP_DISCONNECTED);

@@ -39,7 +39,6 @@ typedef struct BroadwayWindow BroadwayWindow;
 struct _BroadwayServer {
   GObject parent_instance;
 
-  char *password;
   char *address;
   int port;
   GSocketService *service;
@@ -124,8 +123,6 @@ static void
 broadway_server_init (BroadwayServer *server)
 {
   BroadwayWindow *root;
-  char *passwd_file;
-  char *password, *p;
 
   server->service = g_socket_service_new ();
   server->pointer_grab_window_id = -1;
@@ -133,22 +130,6 @@ broadway_server_init (BroadwayServer *server)
   server->last_seen_time = 1;
   server->id_ht = g_hash_table_new (NULL, NULL);
   server->id_counter = 0;
-
-  passwd_file = g_build_filename (g_get_user_config_dir (),
-				  "broadway.passwd", NULL);
-
-  if (g_file_get_contents (passwd_file,
-			   &password, NULL, NULL))
-    {
-      p = strchr (password, '\n');
-      if (p)
-	*p = 0;
-      g_strstrip (password);
-      if (strlen (password) > 3)
-	server->password = password;
-      else
-	g_free (password);
-    }
 
   root = g_new0 (BroadwayWindow, 1);
   root->id = server->id_counter++;
@@ -391,14 +372,6 @@ update_future_pointer_info (BroadwayServer *server, BroadwayInputPointerMsg *dat
   server->future_mouse_in_toplevel = data->mouse_window_id;
 }
 
-static gboolean
-verify_password (BroadwayServer *server, const char *password)
-{
-  char *hash;
-  hash = crypt (password, server->password);
-  return strcmp (hash, server->password) == 0;
-}
-
 static void
 parse_input_message (BroadwayInput *input, const char *message)
 {
@@ -406,22 +379,6 @@ parse_input_message (BroadwayInput *input, const char *message)
   BroadwayInputMsg msg;
   char *p;
   gint64 time_;
-
-  if (!input->active)
-    {
-      /* The input has not been activated yet, handle auth/start */
-
-      if (message[0] != 'l' ||
-	  !verify_password (server, message+1))
-	{
-	  broadway_output_request_auth (input->output);
-	  broadway_output_flush (input->output);
-	}
-      else
-	start (input);
-
-      return;
-    }
 
   memset (&msg, 0, sizeof (msg));
 
@@ -1054,13 +1011,7 @@ start_input (HttpRequest *request)
   g_source_set_callback (input->source, (GSourceFunc)input_data_cb, input, NULL);
   g_source_attach (input->source, NULL);
 
-  if (input->server->password)
-    {
-      broadway_output_request_auth (input->output);
-      broadway_output_flush (input->output);
-    }
-  else
-    start (input);
+  start (input);
 
   /* Process any data in the pipe already */
   parse_input (input);
@@ -1099,7 +1050,6 @@ start (BroadwayInput *input)
   server->output = input->output;
 
   broadway_output_set_next_serial (server->output, server->saved_serial);
-  broadway_output_auth_ok (server->output);
   broadway_output_flush (server->output);
 
   broadway_server_resync_windows (server);
