@@ -345,26 +345,26 @@ static void gtk_notebook_get_preferred_height_for_width
                                               gint             *natural);
 static void gtk_notebook_size_allocate       (GtkWidget        *widget,
                                               GtkAllocation    *allocation);
-static gint gtk_notebook_draw                (GtkWidget        *widget,
+static gboolean gtk_notebook_draw            (GtkWidget        *widget,
                                               cairo_t          *cr);
-static gint gtk_notebook_button_press        (GtkWidget        *widget,
+static gboolean gtk_notebook_button_press    (GtkWidget        *widget,
                                               GdkEventButton   *event);
-static gint gtk_notebook_button_release      (GtkWidget        *widget,
+static gboolean gtk_notebook_button_release  (GtkWidget        *widget,
                                               GdkEventButton   *event);
 static gboolean gtk_notebook_popup_menu      (GtkWidget        *widget);
-static gint gtk_notebook_leave_notify        (GtkWidget        *widget,
+static gboolean gtk_notebook_leave_notify    (GtkWidget        *widget,
                                               GdkEventCrossing *event);
-static gint gtk_notebook_motion_notify       (GtkWidget        *widget,
+static gboolean gtk_notebook_motion_notify   (GtkWidget        *widget,
                                               GdkEventMotion   *event);
-static gint gtk_notebook_focus_in            (GtkWidget        *widget,
+static gboolean gtk_notebook_focus_in        (GtkWidget        *widget,
                                               GdkEventFocus    *event);
-static gint gtk_notebook_focus_out           (GtkWidget        *widget,
+static gboolean gtk_notebook_focus_out       (GtkWidget        *widget,
                                               GdkEventFocus    *event);
 static void gtk_notebook_grab_notify         (GtkWidget          *widget,
                                               gboolean            was_grabbed);
 static void gtk_notebook_state_flags_changed (GtkWidget          *widget,
                                               GtkStateFlags       previous_state);
-static gint gtk_notebook_focus               (GtkWidget        *widget,
+static gboolean gtk_notebook_focus           (GtkWidget        *widget,
                                               GtkDirectionType  direction);
 static void gtk_notebook_style_updated       (GtkWidget        *widget);
 
@@ -2558,7 +2558,7 @@ gtk_notebook_size_allocate (GtkWidget     *widget,
     }
 }
 
-static gint
+static gboolean
 gtk_notebook_draw (GtkWidget *widget,
                    cairo_t   *cr)
 {
@@ -3207,7 +3207,7 @@ gtk_notebook_stop_reorder (GtkNotebook *notebook)
     }
 }
 
-static gint
+static gboolean
 gtk_notebook_button_release (GtkWidget      *widget,
                              GdkEventButton *event)
 {
@@ -3237,7 +3237,7 @@ gtk_notebook_button_release (GtkWidget      *widget,
     return FALSE;
 }
 
-static gint
+static gboolean
 gtk_notebook_leave_notify (GtkWidget        *widget,
                            GdkEventCrossing *event)
 {
@@ -3363,7 +3363,7 @@ check_threshold (GtkNotebook *notebook,
           current_y > rectangle.y + rectangle.height);
 }
 
-static gint
+static gboolean
 gtk_notebook_motion_notify (GtkWidget      *widget,
                             GdkEventMotion *event)
 {
@@ -3495,7 +3495,7 @@ gtk_notebook_state_flags_changed (GtkWidget     *widget,
     stop_scrolling (GTK_NOTEBOOK (widget));
 }
 
-static gint
+static gboolean
 gtk_notebook_focus_in (GtkWidget     *widget,
                        GdkEventFocus *event)
 {
@@ -3504,7 +3504,7 @@ gtk_notebook_focus_in (GtkWidget     *widget,
   return FALSE;
 }
 
-static gint
+static gboolean
 gtk_notebook_focus_out (GtkWidget     *widget,
                         GdkEventFocus *event)
 {
@@ -4195,7 +4195,7 @@ focus_action_in (GtkNotebook      *notebook,
 /* Focus in the notebook can either be on the pages, or on
  * the tabs or on the action_widgets.
  */
-static gint
+static gboolean
 gtk_notebook_focus (GtkWidget        *widget,
                     GtkDirectionType  direction)
 {
