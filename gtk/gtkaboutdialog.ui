@@ -135,6 +135,7 @@
                         <property name="label">version 1.0</property>
                         <property name="justify">center</property>
                         <property name="selectable">True</property>
+                        <property name="no-show-all">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -149,6 +150,7 @@
                         <property name="justify">center</property>
                         <property name="wrap">True</property>
                         <property name="selectable">True</property>
+                        <property name="no-show-all">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -190,6 +192,7 @@
                         <property name="justify">center</property>
                         <property name="wrap">True</property>
                         <property name="selectable">True</property>
+                        <property name="no_show_all">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -205,6 +208,7 @@
                         <property name="justify">center</property>
                         <property name="wrap">True</property>
                         <property name="selectable">True</property>
+                        <property name="no-show-all">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
