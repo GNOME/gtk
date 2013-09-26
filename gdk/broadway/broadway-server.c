@@ -568,9 +568,7 @@ parse_input (BroadwayInput *input)
           }
         else
           {
-            char *terminated = g_memdup ((char *)data, payload_len);
-            parse_input_message (input, terminated);
-            g_free (terminated);
+            parse_input_message (input, data);
           }
         break;
       case BROADWAY_WS_CNX_PING:
