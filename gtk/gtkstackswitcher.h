@@ -20,7 +20,8 @@
 #ifndef __GTK_STACK_SWITCHER_H__
 #define __GTK_STACK_SWITCHER_H__
 
-#include "gtkstack.h"
+#include <gtk/gtkbox.h>
+#include <gtk/gtkstack.h>
 
 G_BEGIN_DECLS
 

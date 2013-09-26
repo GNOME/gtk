@@ -22,7 +22,7 @@
 #ifndef __GTK_STACK_H__
 #define __GTK_STACK_H__
 
-#include <gtk/gtk.h>
+#include <gtk/gtkcontainer.h>
 
 G_BEGIN_DECLS
 

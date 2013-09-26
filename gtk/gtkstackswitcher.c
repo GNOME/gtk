@@ -19,6 +19,9 @@
 
 #include "config.h"
 #include "gtkstackswitcher.h"
+#include "gtkradiobutton.h"
+#include "gtklabel.h"
+#include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -140,7 +143,7 @@ rebuild_child (GtkWidget   *self,
 }
 
 static void
-update_needs_attention (GtkWidget *widget, GtkWidget *button, gpointer *data)
+update_needs_attention (GtkWidget *widget, GtkWidget *button, gpointer data)
 {
   GtkContainer *container;
   gboolean needs_attention;
