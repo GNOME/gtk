@@ -467,7 +467,7 @@ gtk_tree_view_column_init (GtkTreeViewColumn *tree_column)
   priv->button = NULL;
   priv->xalign = 0.0;
   priv->width = 0;
-  priv->padding = -1;
+  priv->padding = 0;
   priv->min_width = -1;
   priv->max_width = -1;
   priv->column_type = GTK_TREE_VIEW_COLUMN_GROW_ONLY;
