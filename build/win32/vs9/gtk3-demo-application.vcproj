@@ -52,7 +52,7 @@
 			InheritedPropertySheets=".\gtk-build-defines.vsprops"
 			ConfigurationType="1"
 			CharacterSet="2"
-			WholeProgramOptimization="0"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -73,7 +73,7 @@
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="1"
-				OptimizeReferences="2"
+				OptimizeReferences="1"
 				EnableCOMDATFolding="2"
 				TargetMachine="1"
 			/>
@@ -112,7 +112,7 @@
 			InheritedPropertySheets=".\gtk-build-defines.vsprops"
 			ConfigurationType="1"
 			CharacterSet="2"
-			WholeProgramOptimization="0"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCMIDLTool"
@@ -134,7 +134,7 @@
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="1"
-				OptimizeReferences="2"
+				OptimizeReferences="1"
 				EnableCOMDATFolding="2"
 				TargetMachine="17"
 			/>
