@@ -656,9 +656,17 @@ function getSurfaceId(ev) {
 
 function sendInput(cmd, args)
 {
-    if (inputSocket != null) {
-	inputSocket.send(cmd + ([lastSerial, lastTimeStamp].concat(args)).join(","));
-    }
+    if (inputSocket == null)
+        return;
+
+    var fullArgs = [cmd.charCodeAt(0), lastSerial, lastTimeStamp].concat(args);
+    var buffer = new ArrayBuffer(fullArgs.length * 4);
+    var view = new DataView(buffer);
+    fullArgs.forEach(function(arg, i) {
+        view.setInt32(i*4, arg, false);
+    });
+
+    inputSocket.send(buffer);
 }
 
 function getPositionsFromAbsCoord(absX, absY, relativeId) {

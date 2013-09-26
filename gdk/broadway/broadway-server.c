@@ -12,6 +12,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#include <endian.h>
+
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #elif defined (G_OS_WIN32)
@@ -343,22 +345,16 @@ fake_configure_notify (BroadwayServer *server,
   process_input_message (server, &ev);
 }
 
-static char *
-parse_pointer_data (char *p, BroadwayInputPointerMsg *data)
+static guint32 *
+parse_pointer_data (guint32 *p, BroadwayInputPointerMsg *data)
 {
-  data->mouse_window_id = strtol (p, &p, 10);
-  p++; /* Skip , */
-  data->event_window_id = strtol (p, &p, 10);
-  p++; /* Skip , */
-  data->root_x = strtol (p, &p, 10);
-  p++; /* Skip , */
-  data->root_y = strtol (p, &p, 10);
-  p++; /* Skip , */
-  data->win_x = strtol (p, &p, 10);
-  p++; /* Skip , */
-  data->win_y = strtol (p, &p, 10);
-  p++; /* Skip , */
-  data->state = strtol (p, &p, 10);
+  data->mouse_window_id = be32toh (*p++);
+  data->event_window_id = be32toh (*p++);
+  data->root_x = be32toh (*p++);
+  data->root_y = be32toh (*p++);
+  data->win_x = be32toh (*p++);
+  data->win_y = be32toh (*p++);
+  data->state = be32toh (*p++);
 
   return p;
 }
@@ -377,17 +373,16 @@ parse_input_message (BroadwayInput *input, const char *message)
 {
   BroadwayServer *server = input->server;
   BroadwayInputMsg msg;
-  char *p;
+  guint32 *p;
   gint64 time_;
 
   memset (&msg, 0, sizeof (msg));
 
-  p = (char *)message;
-  msg.base.type = *p++;
-  msg.base.serial = (guint32)strtol (p, &p, 10);
-  p++; /* Skip , */
-  time_ = strtol(p, &p, 10);
-  p++; /* Skip , */
+  p = (guint32 *) message;
+
+  msg.base.type = be32toh (*p++);
+  msg.base.serial = be32toh (*p++);
+  time_ = be32toh (*p++);
 
   if (time_ == 0) {
     time_ = server->last_seen_time;
@@ -411,8 +406,7 @@ parse_input_message (BroadwayInput *input, const char *message)
   case BROADWAY_EVENT_LEAVE:
     p = parse_pointer_data (p, &msg.pointer);
     update_future_pointer_info (server, &msg.pointer);
-    p++; /* Skip , */
-    msg.crossing.mode = strtol(p, &p, 10);
+    msg.crossing.mode = be32toh (*p++);
     break;
 
   case BROADWAY_EVENT_POINTER_MOVE: /* Mouse move */
@@ -424,51 +418,42 @@ parse_input_message (BroadwayInput *input, const char *message)
   case BROADWAY_EVENT_BUTTON_RELEASE:
     p = parse_pointer_data (p, &msg.pointer);
     update_future_pointer_info (server, &msg.pointer);
-    p++; /* Skip , */
-    msg.button.button = strtol(p, &p, 10);
+    msg.button.button = be32toh (*p++);
     break;
 
   case BROADWAY_EVENT_SCROLL:
     p = parse_pointer_data (p, &msg.pointer);
     update_future_pointer_info (server, &msg.pointer);
-    p++; /* Skip , */
-    msg.scroll.dir = strtol(p, &p, 10);
+    msg.scroll.dir = be32toh (*p++);
     break;
 
   case BROADWAY_EVENT_KEY_PRESS:
   case BROADWAY_EVENT_KEY_RELEASE:
-    msg.key.mouse_window_id = strtol(p, &p, 10);
-    p++; /* Skip , */
-    msg.key.key = strtol(p, &p, 10);
-    p++; /* Skip , */
-    msg.key.state = strtol(p, &p, 10);
+    msg.key.mouse_window_id = be32toh (*p++);
+    msg.key.key = be32toh (*p++);
+    msg.key.state = be32toh (*p++);
     break;
 
   case BROADWAY_EVENT_GRAB_NOTIFY:
   case BROADWAY_EVENT_UNGRAB_NOTIFY:
-    msg.grab_reply.res = strtol(p, &p, 10);
+    msg.grab_reply.res = be32toh (*p++);
     break;
 
   case BROADWAY_EVENT_CONFIGURE_NOTIFY:
-    msg.configure_notify.id = strtol(p, &p, 10);
-    p++; /* Skip , */
-    msg.configure_notify.x = strtol (p, &p, 10);
-    p++; /* Skip , */
-    msg.configure_notify.y = strtol (p, &p, 10);
-    p++; /* Skip , */
-    msg.configure_notify.width = strtol (p, &p, 10);
-    p++; /* Skip , */
-    msg.configure_notify.height = strtol (p, &p, 10);
+    msg.configure_notify.id = be32toh (*p++);
+    msg.configure_notify.x = be32toh (*p++);
+    msg.configure_notify.y = be32toh (*p++);
+    msg.configure_notify.width = be32toh (*p++);
+    msg.configure_notify.height = be32toh (*p++);
     break;
 
   case BROADWAY_EVENT_DELETE_NOTIFY:
-    msg.delete_notify.id = strtol(p, &p, 10);
+    msg.delete_notify.id = be32toh (*p++);
     break;
 
   case BROADWAY_EVENT_SCREEN_SIZE_CHANGED:
-    msg.screen_resize_notify.width = strtol (p, &p, 10);
-    p++; /* Skip , */
-    msg.screen_resize_notify.height = strtol (p, &p, 10);
+    msg.screen_resize_notify.width = be32toh (*p++);
+    msg.screen_resize_notify.height = be32toh (*p++);
     break;
 
   default:
@@ -574,7 +559,7 @@ parse_input (BroadwayInput *input)
       switch (code) {
       case BROADWAY_WS_CNX_CLOSE:
         break; /* hang around anyway */
-      case BROADWAY_WS_TEXT:
+      case BROADWAY_WS_BINARY:
         if (!fin)
           {
 #ifdef DEBUG_WEBSOCKETS
@@ -583,7 +568,7 @@ parse_input (BroadwayInput *input)
           }
         else
           {
-            char *terminated = g_strndup((char *)data, payload_len);
+            char *terminated = g_memdup ((char *)data, payload_len);
             parse_input_message (input, terminated);
             g_free (terminated);
           }
@@ -593,7 +578,7 @@ parse_input (BroadwayInput *input)
         break;
       case BROADWAY_WS_CNX_PONG:
         break; /* we never send pings, but tolerate pongs */
-      case BROADWAY_WS_BINARY:
+      case BROADWAY_WS_TEXT:
       case BROADWAY_WS_CONTINUATION:
       default:
         {
