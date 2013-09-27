@@ -650,12 +650,15 @@ gtk_header_bar_get_preferred_height_for_width (GtkWidget *widget,
 static gboolean
 close_button_at_end (GtkWidget *widget)
 {
+  GtkWidget *toplevel;
   gchar *layout_desc;
   gboolean at_end;
   gchar *p;
 
-  gtk_widget_style_get (gtk_widget_get_toplevel (widget),
-                        "decoration-button-layout", &layout_desc, NULL);
+  toplevel = gtk_widget_get_toplevel (widget);
+  if (!GTK_IS_WINDOW (toplevel))
+    return TRUE;
+  gtk_widget_style_get (toplevel, "decoration-button-layout", &layout_desc, NULL);
 
   p = strchr (layout_desc, ':');
   if (p && strstr (p, "close"))
