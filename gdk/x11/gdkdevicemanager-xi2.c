@@ -765,6 +765,7 @@ handle_device_changed (GdkX11DeviceManagerXI2 *device_manager,
   if (device)
     {
       _gdk_device_reset_axes (device);
+      _gdk_device_xi2_unset_scroll_valuators ((GdkX11DeviceXI2 *) device);
       translate_device_classes (display, device, ev->classes, ev->num_classes);
 
       g_signal_emit_by_name (G_OBJECT (device), "changed");
