@@ -859,6 +859,14 @@ _gdk_device_xi2_reset_scroll_valuators (GdkX11DeviceXI2 *device)
     }
 }
 
+void
+_gdk_device_xi2_unset_scroll_valuators (GdkX11DeviceXI2 *device)
+{
+  if (device->scroll_valuators->len > 0)
+    g_array_remove_range (device->scroll_valuators, 0,
+                          device->scroll_valuators->len);
+}
+
 gint
 _gdk_x11_device_xi2_get_id (GdkX11DeviceXI2 *device)
 {
