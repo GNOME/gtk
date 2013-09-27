@@ -6225,6 +6225,16 @@ sum_borders (GtkBorder *one,
 }
 
 static void
+max_borders (GtkBorder *one,
+             GtkBorder *two)
+{
+  one->top = MAX (one->top, two->top);
+  one->right = MAX (one->right, two->right);
+  one->bottom = MAX (one->bottom, two->bottom);
+  one->left = MAX (one->left, two->left);
+}
+
+static void
 add_window_frame_style_class (GtkStyleContext *context)
 {
   gtk_style_context_remove_class (context, GTK_STYLE_CLASS_BACKGROUND);
@@ -6237,10 +6247,12 @@ get_decoration_size (GtkWidget *widget,
 {
   GtkWindowPrivate *priv = GTK_WINDOW (widget)->priv;
   GtkBorder border = { 0 };
+  GtkBorder d = { 0 };
   GtkBorder margin;
   GtkStyleContext *context;
-  GtkStateFlags state;
+  GtkStateFlags state, s;
   GtkCssValue *shadows;
+  gint i;
 
   *decorations = border;
 
@@ -6258,28 +6270,70 @@ get_decoration_size (GtkWidget *widget,
   gtk_style_context_save (context);
   add_window_frame_style_class (context);
 
-  /* Always sum border + padding */
-  gtk_style_context_get_border (context, state, decorations);
-  gtk_style_context_get_padding (context, state, &border);
-  sum_borders (decorations, &border);
+  /* We don't want windows to jump as they go to backdrop,
+   * therefore we use the maximum of the decoration sizes
+   * for focused and unfocused.
+   */
+  for (i = 0; i < 2; i++)
+    {
+      if (i == 0)
+        s = state & ~GTK_STATE_FLAG_BACKDROP;
+      else
+        s = state | GTK_STATE_FLAG_BACKDROP;
 
-  /* Calculate the size of the drop shadows ... */
-  shadows = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BOX_SHADOW);
-  _gtk_css_shadows_value_get_extents (shadows, &border);
+      /* Always sum border + padding */
+      gtk_style_context_get_border (context, s, &border);
+      gtk_style_context_get_padding (context, s, &d);
+      sum_borders (&d, &border);
 
-  /* ... and compare it to the margin size, which we use for resize grips */
-  gtk_style_context_get_margin (context, state, &margin);
+      /* Calculate the size of the drop shadows ... */
+      gtk_style_context_set_state (context, s);
+      shadows = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BOX_SHADOW);
+      _gtk_css_shadows_value_get_extents (shadows, &border);
 
-  border.top = MAX (border.top, margin.top);
-  border.right = MAX (border.right, margin.right);
-  border.bottom = MAX (border.bottom, margin.bottom);
-  border.left = MAX (border.left, margin.left);
+      /* ... and compare it to the margin size, which we use for resize grips */
+      gtk_style_context_get_margin (context, s, &margin);
+      max_borders (&border, &margin);
 
-  sum_borders (decorations, &border);
+      sum_borders (&d, &border);
+      max_borders (decorations, &d);
+    }
 
   gtk_style_context_restore (context);
 }
 
+/* We're placing 8 input-only windows around
+ * the window content as resize handles, as
+ * follows:
+ *
+ * +-----------------------------------+
+ * | +------+-----------------+------+ |
+ * | |      |                 |      | |
+ * | |   +--+-----------------+--+   | |
+ * | |   |                       |   | |
+ * | +---+                       +---+ |
+ * | |   |                       |   | |
+ * | |   |                       |   | |
+ * | |   |                       |   | |
+ * | +---+                       +---+ |
+ * | |   |                       |   | |
+ * | |   +--+-----------------+--+   | |
+ * | |      |                 |      | |
+ * | +------+-----------------+------+ |
+ * +-----------------------------------+
+ *
+ * The corner windows are shaped to allow them
+ * to extend into the edges. If the window is
+ * not resizable in both dimensions, we hide
+ * the corner windows and the edge windows in
+ * the nonresizable dimension and make the
+ * remaining edge window extend all the way.
+ *
+ * The border are where we place the resize handles
+ * is also used to draw the window shadow, which may
+ * extend out farther than the handles (or the other
+ * way around).
+ */
 static void
 update_border_windows (GtkWindow *window)
 {
@@ -6291,18 +6345,25 @@ update_border_windows (GtkWindow *window)
   cairo_rectangle_int_t rect;
   gint width, height;
   GtkBorder border;
+  GtkBorder window_border;
   GtkStyleContext *context;
+  GtkStateFlags state;
 
   if (priv->border_window[0] == NULL)
     return;
 
+  state = gtk_widget_get_state_flags (widget);
   context = gtk_widget_get_style_context (widget);
+
   gtk_style_context_save (context);
   add_window_frame_style_class (context);
-  gtk_style_context_get_margin (context,
-                                gtk_widget_get_state_flags (widget),
-                                &border);
+  gtk_style_context_set_state (context, state);
+  gtk_style_context_get_margin (context, state, &border);
+  gtk_widget_style_get (widget,
+                        "decoration-resize-handle", &handle,
+                        NULL);
   gtk_style_context_restore (context);
+  get_decoration_size (widget, &window_border);
 
   if (!priv->resizable ||
       priv->tiled ||
@@ -6327,26 +6388,22 @@ update_border_windows (GtkWindow *window)
         }
     }
 
-  gtk_widget_style_get (widget,
-                        "decoration-resize-handle", &handle,
-                        NULL);
-
-  width = gtk_widget_get_allocated_width (widget) - (border.left + border.right);
-  height = gtk_widget_get_allocated_height (widget) - (border.top + border.bottom);
+  width = gtk_widget_get_allocated_width (widget) - (window_border.left + window_border.right);
+  height = gtk_widget_get_allocated_height (widget) - (window_border.top + window_border.bottom);
 
   if (resize_h && resize_v)
     {
       gdk_window_move_resize (priv->border_window[GDK_WINDOW_EDGE_NORTH_WEST],
-                              0, 0,
+                              window_border.left - border.left, window_border.top - border.top,
                               border.left + handle, border.top + handle);
       gdk_window_move_resize (priv->border_window[GDK_WINDOW_EDGE_NORTH_EAST],
-                              border.left + width - handle, 0,
+                              window_border.left + width - handle, 0,
                               border.right + handle, border.top + handle);
       gdk_window_move_resize (priv->border_window[GDK_WINDOW_EDGE_SOUTH_WEST],
-                              0, border.top + height - handle,
-                              border.left + handle, border.bottom + handle);
+                              window_border.left - border.left, window_border.top + height - handle,
+                              window_border.left + handle, border.bottom + handle);
       gdk_window_move_resize (priv->border_window[GDK_WINDOW_EDGE_SOUTH_EAST],
-                              border.left + width - handle, border.top + height - handle,
+                              window_border.left + width - handle, window_border.top + height - handle,
                               border.right + handle, border.bottom + handle);
 
       rect.x = 0;
@@ -6424,20 +6481,20 @@ update_border_windows (GtkWindow *window)
 
       if (resize_h)
         {
-          x = border.left + handle;
+          x = window_border.left + handle;
           w = width - 2 * handle;
         }
       else
         {
           x = 0;
-          w = width + border.left + border.right;
+          w = width + window_border.left + window_border.right;
         }
 
       gdk_window_move_resize (priv->border_window[GDK_WINDOW_EDGE_NORTH],
-                              x, 0,
+                              x, window_border.top - border.top,
                               w, border.top);
       gdk_window_move_resize (priv->border_window[GDK_WINDOW_EDGE_SOUTH],
-                              x, border.top + height,
+                              x, window_border.top + height,
                               w, border.bottom);
 
       gdk_window_show (priv->border_window[GDK_WINDOW_EDGE_NORTH]);
@@ -6455,21 +6512,21 @@ update_border_windows (GtkWindow *window)
 
       if (resize_v)
         {
-          y = border.top + handle;
+          y = window_border.top + handle;
           h = height - 2 * handle;
         }
       else
         {
           y = 0;
-          h = height + border.top + border.bottom;
+          h = height + window_border.top + window_border.bottom;
         }
 
       gdk_window_move_resize (priv->border_window[GDK_WINDOW_EDGE_WEST],
-                              0, y,
+                              window_border.left - border.left, y,
                               border.left, h);
 
       gdk_window_move_resize (priv->border_window[GDK_WINDOW_EDGE_EAST],
-                              border.left + width, y,
+                              window_border.left + width, y,
                               border.right, h);
 
       gdk_window_show (priv->border_window[GDK_WINDOW_EDGE_WEST]);
