@@ -130,7 +130,7 @@ static gboolean paper_size_row_is_separator      (GtkTreeModel           *model,
 						  gpointer                data);
 
 
-static const gchar const common_paper_sizes[][16] = {
+static const gchar common_paper_sizes[][16] = {
   "na_letter",
   "na_legal",
   "iso_a4",
