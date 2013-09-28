@@ -3382,11 +3382,8 @@ _gtk_style_context_queue_invalidate (GtkStyleContext *context,
  * @context: a #GtkStyleContext.
  *
  * Invalidates @context style information, so it will be reconstructed
- * again.
- *
- * If you're using a #GtkStyleContext returned from
- * gtk_widget_get_style_context(), you do not need to
- * call this yourself.
+ * again. It is useful if you modify the @context and need the new
+ * information immediately.
  *
  * Since: 3.0
  **/
