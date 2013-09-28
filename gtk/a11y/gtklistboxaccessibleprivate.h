@@ -22,7 +22,6 @@
 
 G_BEGIN_DECLS
 
-void _gtk_list_box_accessible_update_selected (GtkListBox *box, GtkListBoxRow *child);
 void _gtk_list_box_accessible_update_cursor   (GtkListBox *box, GtkListBoxRow *child);
 void _gtk_list_box_accessible_selection_changed (GtkListBox *box);
 
