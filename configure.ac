@@ -1087,13 +1087,14 @@ if test "x$enable_x11_backend" = xyes; then
       case "$host" in
         *-*-solaris*)
             # Check for solaris
-	    AC_MSG_CHECKING(for Xinerama support on Solaris)
 
 	    have_solaris_xinerama=false
 	    AC_CHECK_FUNC(XineramaGetInfo,
 	        [AC_CHECK_HEADER(X11/extensions/xinerama.h,
 		    [have_solaris_xinerama=true], :,
 		    [#include <X11/Xlib.h>])])
+
+	    AC_MSG_CHECKING(for Xinerama support on Solaris)
 
             if $have_solaris_xinerama ; then
               X_EXTENSIONS="$X_EXTENSIONS Xinerama"
