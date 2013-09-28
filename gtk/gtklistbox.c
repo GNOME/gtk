@@ -147,68 +147,67 @@ static void                 gtk_list_box_update_prelight              (GtkListBo
                                                                        GtkListBoxRow       *row);
 static void                 gtk_list_box_update_active                (GtkListBox          *list_box,
                                                                        GtkListBoxRow       *row);
-static gboolean             gtk_list_box_real_enter_notify_event      (GtkWidget           *widget,
+static gboolean             gtk_list_box_enter_notify_event           (GtkWidget           *widget,
                                                                        GdkEventCrossing    *event);
-static gboolean             gtk_list_box_real_leave_notify_event      (GtkWidget           *widget,
+static gboolean             gtk_list_box_leave_notify_event           (GtkWidget           *widget,
                                                                        GdkEventCrossing    *event);
-static gboolean             gtk_list_box_real_motion_notify_event     (GtkWidget           *widget,
+static gboolean             gtk_list_box_motion_notify_event          (GtkWidget           *widget,
                                                                        GdkEventMotion      *event);
-static gboolean             gtk_list_box_real_button_press_event      (GtkWidget           *widget,
+static gboolean             gtk_list_box_button_press_event           (GtkWidget           *widget,
                                                                        GdkEventButton      *event);
-static gboolean             gtk_list_box_real_button_release_event    (GtkWidget           *widget,
+static gboolean             gtk_list_box_button_release_event         (GtkWidget           *widget,
                                                                        GdkEventButton      *event);
-static void                 gtk_list_box_real_show                    (GtkWidget           *widget);
-static gboolean             gtk_list_box_real_focus                   (GtkWidget           *widget,
+static void                 gtk_list_box_show                         (GtkWidget           *widget);
+static gboolean             gtk_list_box_focus                        (GtkWidget           *widget,
                                                                        GtkDirectionType     direction);
 static GSequenceIter*       gtk_list_box_get_previous_visible         (GtkListBox          *list_box,
                                                                        GSequenceIter       *_iter);
 static GtkListBoxRow       *gtk_list_box_get_first_focusable          (GtkListBox          *list_box);
 static GtkListBoxRow       *gtk_list_box_get_last_focusable           (GtkListBox          *list_box);
-static gboolean             gtk_list_box_real_draw                    (GtkWidget           *widget,
+static gboolean             gtk_list_box_draw                         (GtkWidget           *widget,
                                                                        cairo_t             *cr);
-static void                 gtk_list_box_real_realize                 (GtkWidget           *widget);
-static void                 gtk_list_box_real_add                     (GtkContainer        *container,
+static void                 gtk_list_box_realize                      (GtkWidget           *widget);
+static void                 gtk_list_box_add                          (GtkContainer        *container,
                                                                        GtkWidget           *widget);
-static void                 gtk_list_box_real_remove                  (GtkContainer        *container,
+static void                 gtk_list_box_remove                       (GtkContainer        *container,
                                                                        GtkWidget           *widget);
-static void                 gtk_list_box_real_forall_internal         (GtkContainer        *container,
+static void                 gtk_list_box_forall_internal              (GtkContainer        *container,
                                                                        gboolean             include_internals,
                                                                        GtkCallback          callback,
                                                                        gpointer             callback_target);
-static void                 gtk_list_box_real_compute_expand_internal (GtkWidget           *widget,
+static void                 gtk_list_box_compute_expand_internal      (GtkWidget           *widget,
                                                                        gboolean            *hexpand,
                                                                        gboolean            *vexpand);
-static GType                gtk_list_box_real_child_type              (GtkContainer        *container);
-static GtkSizeRequestMode   gtk_list_box_real_get_request_mode        (GtkWidget           *widget);
-static void                 gtk_list_box_real_size_allocate           (GtkWidget           *widget,
+static GType                gtk_list_box_child_type                   (GtkContainer        *container);
+static GtkSizeRequestMode   gtk_list_box_get_request_mode             (GtkWidget           *widget);
+static void                 gtk_list_box_size_allocate                (GtkWidget           *widget,
                                                                        GtkAllocation       *allocation);
-static void                 gtk_list_box_real_drag_leave              (GtkWidget           *widget,
+static void                 gtk_list_box_drag_leave                   (GtkWidget           *widget,
                                                                        GdkDragContext      *context,
                                                                        guint                time_);
-static void                 gtk_list_box_real_activate_cursor_row     (GtkListBox          *list_box);
-static void                 gtk_list_box_real_toggle_cursor_row       (GtkListBox          *list_box);
-static void                 gtk_list_box_real_move_cursor             (GtkListBox          *list_box,
+static void                 gtk_list_box_activate_cursor_row          (GtkListBox          *list_box);
+static void                 gtk_list_box_toggle_cursor_row            (GtkListBox          *list_box);
+static void                 gtk_list_box_move_cursor                  (GtkListBox          *list_box,
                                                                        GtkMovementStep      step,
                                                                        gint                 count);
 static void                 gtk_list_box_finalize                     (GObject             *obj);
-static void                 gtk_list_box_real_parent_set              (GtkWidget           *widget,
+static void                 gtk_list_box_parent_set                   (GtkWidget           *widget,
                                                                        GtkWidget           *prev_parent);
 
-
-static void                 gtk_list_box_real_get_preferred_height           (GtkWidget           *widget,
-                                                                              gint                *minimum_height,
-                                                                              gint                *natural_height);
-static void                 gtk_list_box_real_get_preferred_height_for_width (GtkWidget           *widget,
-                                                                              gint                 width,
-                                                                              gint                *minimum_height,
-                                                                              gint                *natural_height);
-static void                 gtk_list_box_real_get_preferred_width            (GtkWidget           *widget,
-                                                                              gint                *minimum_width,
-                                                                              gint                *natural_width);
-static void                 gtk_list_box_real_get_preferred_width_for_height (GtkWidget           *widget,
-                                                                              gint                 height,
-                                                                              gint                *minimum_width,
-                                                                              gint                *natural_width);
+static void                 gtk_list_box_get_preferred_height           (GtkWidget           *widget,
+                                                                         gint                *minimum_height,
+                                                                         gint                *natural_height);
+static void                 gtk_list_box_get_preferred_height_for_width (GtkWidget           *widget,
+                                                                         gint                 width,
+                                                                         gint                *minimum_height,
+                                                                         gint                *natural_height);
+static void                 gtk_list_box_get_preferred_width            (GtkWidget           *widget,
+                                                                         gint                *minimum_width,
+                                                                         gint                *natural_width);
+static void                 gtk_list_box_get_preferred_width_for_height (GtkWidget           *widget,
+                                                                         gint                 height,
+                                                                         gint                *minimum_width,
+                                                                         gint                *natural_width);
 
 static GParamSpec *properties[LAST_PROPERTY] = { NULL, };
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -327,31 +326,31 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
   object_class->get_property = gtk_list_box_get_property;
   object_class->set_property = gtk_list_box_set_property;
   object_class->finalize = gtk_list_box_finalize;
-  widget_class->enter_notify_event = gtk_list_box_real_enter_notify_event;
-  widget_class->leave_notify_event = gtk_list_box_real_leave_notify_event;
-  widget_class->motion_notify_event = gtk_list_box_real_motion_notify_event;
-  widget_class->button_press_event = gtk_list_box_real_button_press_event;
-  widget_class->button_release_event = gtk_list_box_real_button_release_event;
-  widget_class->show = gtk_list_box_real_show;
-  widget_class->focus = gtk_list_box_real_focus;
-  widget_class->draw = gtk_list_box_real_draw;
-  widget_class->realize = gtk_list_box_real_realize;
-  widget_class->compute_expand = gtk_list_box_real_compute_expand_internal;
-  widget_class->get_request_mode = gtk_list_box_real_get_request_mode;
-  widget_class->get_preferred_height = gtk_list_box_real_get_preferred_height;
-  widget_class->get_preferred_height_for_width = gtk_list_box_real_get_preferred_height_for_width;
-  widget_class->get_preferred_width = gtk_list_box_real_get_preferred_width;
-  widget_class->get_preferred_width_for_height = gtk_list_box_real_get_preferred_width_for_height;
-  widget_class->size_allocate = gtk_list_box_real_size_allocate;
-  widget_class->drag_leave = gtk_list_box_real_drag_leave;
-  widget_class->parent_set = gtk_list_box_real_parent_set;
-  container_class->add = gtk_list_box_real_add;
-  container_class->remove = gtk_list_box_real_remove;
-  container_class->forall = gtk_list_box_real_forall_internal;
-  container_class->child_type = gtk_list_box_real_child_type;
-  klass->activate_cursor_row = gtk_list_box_real_activate_cursor_row;
-  klass->toggle_cursor_row = gtk_list_box_real_toggle_cursor_row;
-  klass->move_cursor = gtk_list_box_real_move_cursor;
+  widget_class->enter_notify_event = gtk_list_box_enter_notify_event;
+  widget_class->leave_notify_event = gtk_list_box_leave_notify_event;
+  widget_class->motion_notify_event = gtk_list_box_motion_notify_event;
+  widget_class->button_press_event = gtk_list_box_button_press_event;
+  widget_class->button_release_event = gtk_list_box_button_release_event;
+  widget_class->show = gtk_list_box_show;
+  widget_class->focus = gtk_list_box_focus;
+  widget_class->draw = gtk_list_box_draw;
+  widget_class->realize = gtk_list_box_realize;
+  widget_class->compute_expand = gtk_list_box_compute_expand_internal;
+  widget_class->get_request_mode = gtk_list_box_get_request_mode;
+  widget_class->get_preferred_height = gtk_list_box_get_preferred_height;
+  widget_class->get_preferred_height_for_width = gtk_list_box_get_preferred_height_for_width;
+  widget_class->get_preferred_width = gtk_list_box_get_preferred_width;
+  widget_class->get_preferred_width_for_height = gtk_list_box_get_preferred_width_for_height;
+  widget_class->size_allocate = gtk_list_box_size_allocate;
+  widget_class->drag_leave = gtk_list_box_drag_leave;
+  widget_class->parent_set = gtk_list_box_parent_set;
+  container_class->add = gtk_list_box_add;
+  container_class->remove = gtk_list_box_remove;
+  container_class->forall = gtk_list_box_forall_internal;
+  container_class->child_type = gtk_list_box_child_type;
+  klass->activate_cursor_row = gtk_list_box_activate_cursor_row;
+  klass->toggle_cursor_row = gtk_list_box_toggle_cursor_row;
+  klass->move_cursor = gtk_list_box_move_cursor;
 
   properties[PROP_SELECTION_MODE] =
     g_param_spec_enum ("selection-mode",
@@ -675,8 +674,8 @@ gtk_list_box_get_adjustment (GtkListBox *list_box)
 }
 
 static void
-gtk_list_box_real_parent_set (GtkWidget *widget,
-                              GtkWidget *prev_parent)
+gtk_list_box_parent_set (GtkWidget *widget,
+                         GtkWidget *prev_parent)
 {
   GtkWidget *parent;
   GtkAdjustment *adjustment;
@@ -1171,8 +1170,8 @@ gtk_list_box_update_active (GtkListBox    *list_box,
 }
 
 static gboolean
-gtk_list_box_real_enter_notify_event (GtkWidget        *widget,
-                                      GdkEventCrossing *event)
+gtk_list_box_enter_notify_event (GtkWidget        *widget,
+                                 GdkEventCrossing *event)
 {
   GtkListBox *list_box = GTK_LIST_BOX (widget);
   GtkListBoxPrivate *priv = gtk_list_box_get_instance_private (list_box);
@@ -1191,8 +1190,8 @@ gtk_list_box_real_enter_notify_event (GtkWidget        *widget,
 }
 
 static gboolean
-gtk_list_box_real_leave_notify_event (GtkWidget        *widget,
-                                      GdkEventCrossing *event)
+gtk_list_box_leave_notify_event (GtkWidget        *widget,
+                                 GdkEventCrossing *event)
 {
   GtkListBox *list_box = GTK_LIST_BOX (widget);
   GtkListBoxPrivate *priv = gtk_list_box_get_instance_private (list_box);
@@ -1216,8 +1215,8 @@ gtk_list_box_real_leave_notify_event (GtkWidget        *widget,
 }
 
 static gboolean
-gtk_list_box_real_motion_notify_event (GtkWidget      *widget,
-                                       GdkEventMotion *event)
+gtk_list_box_motion_notify_event (GtkWidget      *widget,
+                                  GdkEventMotion *event)
 {
   GtkListBox *list_box = GTK_LIST_BOX (widget);
   GtkListBoxPrivate *priv = gtk_list_box_get_instance_private (list_box);
@@ -1248,8 +1247,8 @@ gtk_list_box_real_motion_notify_event (GtkWidget      *widget,
 }
 
 static gboolean
-gtk_list_box_real_button_press_event (GtkWidget      *widget,
-                                      GdkEventButton *event)
+gtk_list_box_button_press_event (GtkWidget      *widget,
+                                 GdkEventButton *event)
 {
   GtkListBox *list_box = GTK_LIST_BOX (widget);
   GtkListBoxPrivate *priv = gtk_list_box_get_instance_private (list_box);
@@ -1312,8 +1311,8 @@ gtk_list_box_real_button_press_event (GtkWidget      *widget,
 }
 
 static gboolean
-gtk_list_box_real_button_release_event (GtkWidget      *widget,
-                                        GdkEventButton *event)
+gtk_list_box_button_release_event (GtkWidget      *widget,
+                                   GdkEventButton *event)
 {
   GtkListBox *list_box = GTK_LIST_BOX (widget);
   GtkListBoxPrivate *priv = gtk_list_box_get_instance_private (list_box);
@@ -1346,9 +1345,9 @@ gtk_list_box_real_button_release_event (GtkWidget      *widget,
 }
 
 static void
-gtk_list_box_real_show (GtkWidget *widget)
+gtk_list_box_show (GtkWidget *widget)
 {
-  GtkListBox * list_box = GTK_LIST_BOX (widget);
+  GtkListBox *list_box = GTK_LIST_BOX (widget);
 
   gtk_list_box_do_reseparate (list_box);
 
@@ -1358,8 +1357,8 @@ gtk_list_box_real_show (GtkWidget *widget)
 #define ROW_PRIV(_row) ((GtkListBoxRowPrivate *)gtk_list_box_row_get_instance_private (_row))
 
 static gboolean
-gtk_list_box_real_focus (GtkWidget        *widget,
-                         GtkDirectionType  direction)
+gtk_list_box_focus (GtkWidget        *widget,
+                    GtkDirectionType  direction)
 {
   GtkListBox *list_box = GTK_LIST_BOX (widget);
   GtkListBoxPrivate *priv = gtk_list_box_get_instance_private (list_box);
@@ -1407,7 +1406,6 @@ gtk_list_box_real_focus (GtkWidget        *widget,
   else
     {
       /* No current focus row */
-
       switch (direction)
         {
         case GTK_DIR_UP:
@@ -1443,8 +1441,8 @@ gtk_list_box_real_focus (GtkWidget        *widget,
 }
 
 static gboolean
-gtk_list_box_real_draw (GtkWidget *widget,
-                        cairo_t   *cr)
+gtk_list_box_draw (GtkWidget *widget,
+                   cairo_t   *cr)
 {
   GtkAllocation allocation;
   GtkStyleContext *context;
@@ -1459,11 +1457,11 @@ gtk_list_box_real_draw (GtkWidget *widget,
 }
 
 static void
-gtk_list_box_real_realize (GtkWidget *widget)
+gtk_list_box_realize (GtkWidget *widget)
 {
   GtkListBox *list_box = GTK_LIST_BOX (widget);
   GtkAllocation allocation;
-  GdkWindowAttr attributes = {0};
+  GdkWindowAttr attributes = { 0, };
   GdkWindow *window;
 
   gtk_widget_get_allocation (GTK_WIDGET (list_box), &allocation);
@@ -1728,15 +1726,15 @@ gtk_list_box_row_visibility_changed (GtkListBox    *list_box,
 }
 
 static void
-gtk_list_box_real_add (GtkContainer *container,
-                       GtkWidget    *child)
+gtk_list_box_add (GtkContainer *container,
+                  GtkWidget    *child)
 {
   gtk_list_box_insert (GTK_LIST_BOX (container), child, -1);
 }
 
 static void
-gtk_list_box_real_remove (GtkContainer *container,
-                          GtkWidget    *child)
+gtk_list_box_remove (GtkContainer *container,
+                     GtkWidget    *child)
 {
   GtkListBox *list_box = GTK_LIST_BOX (container);
   GtkListBoxPrivate *priv = gtk_list_box_get_instance_private (list_box);
@@ -1811,10 +1809,10 @@ gtk_list_box_real_remove (GtkContainer *container,
 }
 
 static void
-gtk_list_box_real_forall_internal (GtkContainer *container,
-                                   gboolean      include_internals,
-                                   GtkCallback   callback,
-                                   gpointer      callback_target)
+gtk_list_box_forall_internal (GtkContainer *container,
+                              gboolean      include_internals,
+                              GtkCallback   callback,
+                              gpointer      callback_target)
 {
   GtkListBox *list_box = GTK_LIST_BOX (container);
   GtkListBoxPrivate *priv = gtk_list_box_get_instance_private (list_box);
@@ -1836,9 +1834,9 @@ gtk_list_box_real_forall_internal (GtkContainer *container,
 }
 
 static void
-gtk_list_box_real_compute_expand_internal (GtkWidget *widget,
-                                           gboolean  *hexpand,
-                                           gboolean  *vexpand)
+gtk_list_box_compute_expand_internal (GtkWidget *widget,
+                                      gboolean  *hexpand,
+                                      gboolean  *vexpand)
 {
   GTK_WIDGET_CLASS (gtk_list_box_parent_class)->compute_expand (widget,
                                                                 hexpand, vexpand);
@@ -1849,7 +1847,7 @@ gtk_list_box_real_compute_expand_internal (GtkWidget *widget,
 }
 
 static GType
-gtk_list_box_real_child_type (GtkContainer *container)
+gtk_list_box_child_type (GtkContainer *container)
 {
   /* We really support any type but we wrap it in a row. But that is
    * more like a C helper function, in an abstract sense we only support
@@ -1859,27 +1857,27 @@ gtk_list_box_real_child_type (GtkContainer *container)
 }
 
 static GtkSizeRequestMode
-gtk_list_box_real_get_request_mode (GtkWidget *widget)
+gtk_list_box_get_request_mode (GtkWidget *widget)
 {
   return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
 }
 
 static void
-gtk_list_box_real_get_preferred_height (GtkWidget *widget,
-                                        gint      *minimum_height,
-                                        gint      *natural_height)
+gtk_list_box_get_preferred_height (GtkWidget *widget,
+                                   gint      *minimum_height,
+                                   gint      *natural_height)
 {
   gint natural_width;
-  gtk_list_box_real_get_preferred_width (widget, NULL, &natural_width);
-  gtk_list_box_real_get_preferred_height_for_width (widget, natural_width,
-                                                    minimum_height, natural_height);
+  gtk_list_box_get_preferred_width (widget, NULL, &natural_width);
+  gtk_list_box_get_preferred_height_for_width (widget, natural_width,
+                                               minimum_height, natural_height);
 }
 
 static void
-gtk_list_box_real_get_preferred_height_for_width (GtkWidget *widget,
-                                                  gint       width,
-                                                  gint      *minimum_height_out,
-                                                  gint      *natural_height_out)
+gtk_list_box_get_preferred_height_for_width (GtkWidget *widget,
+                                             gint       width,
+                                             gint      *minimum_height_out,
+                                             gint      *natural_height_out)
 {
   GtkListBox *list_box = GTK_LIST_BOX (widget);
   GtkListBoxPrivate *priv = gtk_list_box_get_instance_private (list_box);
@@ -1925,9 +1923,9 @@ gtk_list_box_real_get_preferred_height_for_width (GtkWidget *widget,
 }
 
 static void
-gtk_list_box_real_get_preferred_width (GtkWidget *widget,
-                                       gint      *minimum_width_out,
-                                       gint      *natural_width_out)
+gtk_list_box_get_preferred_width (GtkWidget *widget,
+                                  gint      *minimum_width_out,
+                                  gint      *natural_width_out)
 {
   GtkListBox *list_box = GTK_LIST_BOX (widget);
   GtkListBoxPrivate *priv = gtk_list_box_get_instance_private (list_box);
@@ -1976,18 +1974,17 @@ gtk_list_box_real_get_preferred_width (GtkWidget *widget,
 }
 
 static void
-gtk_list_box_real_get_preferred_width_for_height (GtkWidget *widget,
-                                                  gint       height,
-                                                  gint      *minimum_width,
-                                                  gint      *natural_width)
+gtk_list_box_get_preferred_width_for_height (GtkWidget *widget,
+                                             gint       height,
+                                             gint      *minimum_width,
+                                             gint      *natural_width)
 {
-  GtkListBox *list_box = GTK_LIST_BOX (widget);
-  gtk_list_box_real_get_preferred_width (GTK_WIDGET (list_box), minimum_width, natural_width);
+  gtk_list_box_get_preferred_width (widget, minimum_width, natural_width);
 }
 
 static void
-gtk_list_box_real_size_allocate (GtkWidget     *widget,
-                                 GtkAllocation *allocation)
+gtk_list_box_size_allocate (GtkWidget     *widget,
+                            GtkAllocation *allocation)
 {
   GtkListBox *list_box = GTK_LIST_BOX (widget);
   GtkListBoxPrivate *priv = gtk_list_box_get_instance_private (list_box);
@@ -2050,19 +2047,18 @@ gtk_list_box_real_size_allocate (GtkWidget     *widget,
                                                      allocation->width, &child_min, NULL);
           header_allocation.height = child_min;
           header_allocation.y = child_allocation.y;
-          gtk_widget_size_allocate (ROW_PRIV (row)->header,
-                                    &header_allocation);
+          gtk_widget_size_allocate (ROW_PRIV (row)->header, &header_allocation);
           child_allocation.y += child_min;
         }
 
       ROW_PRIV (row)->y = child_allocation.y;
 
-      gtk_widget_get_preferred_height_for_width (GTK_WIDGET (row), child_allocation.width, &child_min, NULL);
+      gtk_widget_get_preferred_height_for_width (GTK_WIDGET (row),
+                                                 child_allocation.width, &child_min, NULL);
       child_allocation.height = child_min;
 
       ROW_PRIV (row)->height = child_allocation.height;
       gtk_widget_size_allocate (GTK_WIDGET (row), &child_allocation);
-
       child_allocation.y += child_min;
     }
 }
@@ -2210,9 +2206,9 @@ gtk_list_box_drag_highlight_row (GtkListBox    *list_box,
 }
 
 static void
-gtk_list_box_real_drag_leave (GtkWidget      *widget,
-                              GdkDragContext *context,
-                              guint           time_)
+gtk_list_box_drag_leave (GtkWidget      *widget,
+                         GdkDragContext *context,
+                         guint           time_)
 {
   GtkListBox *list_box = GTK_LIST_BOX (widget);
 
@@ -2220,7 +2216,7 @@ gtk_list_box_real_drag_leave (GtkWidget      *widget,
 }
 
 static void
-gtk_list_box_real_activate_cursor_row (GtkListBox *list_box)
+gtk_list_box_activate_cursor_row (GtkListBox *list_box)
 {
   GtkListBoxPrivate *priv = gtk_list_box_get_instance_private (list_box);
 
@@ -2228,7 +2224,7 @@ gtk_list_box_real_activate_cursor_row (GtkListBox *list_box)
 }
 
 static void
-gtk_list_box_real_toggle_cursor_row (GtkListBox *list_box)
+gtk_list_box_toggle_cursor_row (GtkListBox *list_box)
 {
   GtkListBoxPrivate *priv = gtk_list_box_get_instance_private (list_box);
 
@@ -2243,9 +2239,9 @@ gtk_list_box_real_toggle_cursor_row (GtkListBox *list_box)
 }
 
 static void
-gtk_list_box_real_move_cursor (GtkListBox      *list_box,
-                               GtkMovementStep  step,
-                               gint             count)
+gtk_list_box_move_cursor (GtkListBox      *list_box,
+                          GtkMovementStep  step,
+                          gint             count)
 {
   GtkListBoxPrivate *priv = gtk_list_box_get_instance_private (list_box);
   GdkModifierType state;
