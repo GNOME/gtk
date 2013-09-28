@@ -96,16 +96,16 @@ _gdk_event_queue_find_first (GdkDisplay *display)
     {
       GdkEventPrivate *event = tmp_list->data;
 
-      if (event->flags & GDK_EVENT_PENDING)
-        continue;
+      if (!(event->flags & GDK_EVENT_PENDING))
+        {
+          if (pending_motion)
+            return pending_motion;
 
-      if (pending_motion)
-        return pending_motion;
-
-      if (event->event.type == GDK_MOTION_NOTIFY && !display->flushing_events)
-        pending_motion = tmp_list;
-      else
-        return tmp_list;
+          if (event->event.type == GDK_MOTION_NOTIFY && !display->flushing_events)
+            pending_motion = tmp_list;
+          else
+            return tmp_list;
+        }
 
       tmp_list = g_list_next (tmp_list);
     }
