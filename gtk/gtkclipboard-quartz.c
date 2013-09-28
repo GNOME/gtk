@@ -703,10 +703,12 @@ gtk_clipboard_wait_for_contents (GtkClipboard *clipboard,
       GdkAtom *atoms;
 
       length = [types count] * sizeof (GdkAtom);
-      
+
       selection_data = g_slice_new0 (GtkSelectionData);
       selection_data->selection = clipboard->selection;
       selection_data->target = target;
+      if (!selection_data->display)
+	selection_data->display = gdk_display_get_default ();
 
       atoms = g_malloc (length);
 
