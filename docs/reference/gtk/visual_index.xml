@@ -126,6 +126,9 @@
     <link linkend="GtkListBox">
       <inlinegraphic fileref="list-box.png" format="PNG"></inlinegraphic>
     </link>
+    <link linkend="GtkFlowBox">
+      <inlinegraphic fileref="flow-box.png" format="PNG"></inlinegraphic>
+    </link>
     <link linkend="GtkStack">
       <inlinegraphic fileref="stack.png" format="PNG"></inlinegraphic>
     </link>

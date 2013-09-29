@@ -1430,12 +1430,56 @@ create_list_box (void)
   return info;
 }
 
+static WidgetInfo *
+create_flow_box (void)
+{
+  GtkWidget *widget;
+  GtkWidget *box;
+  GtkWidget *vbox;
+  GtkWidget *child;
+  GtkWidget *button;
+  WidgetInfo *info;
+
+  widget = gtk_frame_new (NULL);
+  gtk_frame_set_shadow_type (GTK_FRAME (widget), GTK_SHADOW_IN);
+
+  box = gtk_flow_box_new ();
+  gtk_flow_box_set_min_children_per_line (GTK_FLOW_BOX (box), 2);
+  gtk_flow_box_set_max_children_per_line (GTK_FLOW_BOX (box), 2);
+  gtk_flow_box_set_selection_mode (GTK_FLOW_BOX (box), GTK_SELECTION_BROWSE);
+  button = gtk_label_new ("Child One");
+  gtk_container_add (GTK_CONTAINER (box), button);
+  button = gtk_button_new_with_label ("Child Two");
+  gtk_container_add (GTK_CONTAINER (box), button);
+  child = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  gtk_container_add (GTK_CONTAINER (child), gtk_label_new ("Child Three"));
+  button = gtk_check_button_new ();
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+  gtk_container_add (GTK_CONTAINER (child), button);
+  gtk_container_add (GTK_CONTAINER (box), child);
+  gtk_flow_box_select_child (GTK_FLOW_BOX (box),
+                             GTK_FLOW_BOX_CHILD (gtk_widget_get_parent (child)));
+
+  gtk_container_add (GTK_CONTAINER (widget), box);
+
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+
+  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), gtk_label_new ("Flow Box"),
+                      FALSE, FALSE, 0);
+  info = new_widget_info ("flow-box", vbox, ASIS);
+  info->no_focus = FALSE;
+
+  return info;
+}
+
 GList *
 get_all_widgets (void)
 {
   GList *retval = NULL;
 
   retval = g_list_prepend (retval, create_list_box());
+  retval = g_list_prepend (retval, create_flow_box());
   retval = g_list_prepend (retval, create_headerbar ());
   retval = g_list_prepend (retval, create_placessidebar ());
   retval = g_list_prepend (retval, create_stack ());

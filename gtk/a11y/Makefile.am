@@ -18,6 +18,8 @@ gtka11y_c_sources =			\
 	gtkcontainercellaccessible.c	\
 	gtkentryaccessible.c		\
 	gtkexpanderaccessible.c		\
+	gtkflowboxaccessible.c		\
+	gtkflowboxchildaccessible.c	\
 	gtkframeaccessible.c		\
 	gtkiconviewaccessible.c		\
 	gtkimageaccessible.c		\

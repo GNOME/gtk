@@ -99,6 +99,7 @@
 #include <gtk/gtkfilechooserdialog.h>
 #include <gtk/gtkfilechooserwidget.h>
 #include <gtk/gtkfilefilter.h>
+#include <gtk/gtkflowbox.h>
 #include <gtk/gtkfontbutton.h>
 #include <gtk/gtkfontchooser.h>
 #include <gtk/gtkfontchooserdialog.h>

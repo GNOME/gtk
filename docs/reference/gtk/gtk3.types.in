@@ -70,6 +70,8 @@ gtk_file_chooser_get_type
 gtk_file_chooser_widget_get_type
 gtk_file_filter_get_type
 gtk_fixed_get_type
+gtk_flow_box_get_type
+gtk_flow_box_child_get_type
 gtk_font_button_get_type
 gtk_font_chooser_get_type
 gtk_font_chooser_dialog_get_type

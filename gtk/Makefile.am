@@ -249,6 +249,7 @@ gtk_public_h_sources = 		\
 	gtkfilechooserwidget.h	\
 	gtkfilefilter.h		\
 	gtkfixed.h		\
+	gtkflowbox.h		\
 	gtkfontbutton.h		\
 	gtkfontchooser.h	\
 	gtkfontchooserdialog.h  \
@@ -741,6 +742,7 @@ gtk_base_c_sources = 		\
 	gtkfilesystem.c		\
 	gtkfilesystemmodel.c	\
 	gtkfixed.c		\
+	gtkflowbox.c		\
 	gtkfontbutton.c		\
 	gtkfontchooser.c	\
 	gtkfontchooserdialog.c	\

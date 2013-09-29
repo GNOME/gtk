@@ -39,6 +39,8 @@
 #include <gtk/a11y/gtkcontainercellaccessible.h>
 #include <gtk/a11y/gtkentryaccessible.h>
 #include <gtk/a11y/gtkexpanderaccessible.h>
+#include <gtk/a11y/gtkflowboxaccessible.h>
+#include <gtk/a11y/gtkflowboxchildaccessible.h>
 #include <gtk/a11y/gtkframeaccessible.h>
 #include <gtk/a11y/gtkiconviewaccessible.h>
 #include <gtk/a11y/gtkimageaccessible.h>
