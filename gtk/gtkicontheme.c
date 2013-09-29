@@ -3854,7 +3854,7 @@ _gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
       css_error = gdk_color_to_css (&error_default_color);
     }
 
-  if (!g_file_get_contents (icon_info->filename, &file_data, &file_len, NULL))
+  if (!g_file_load_contents (icon_info->icon_file, NULL, &file_data, &file_len, NULL, NULL))
     return NULL;
 
   if (!icon_info->symbolic_pixbuf_size)
