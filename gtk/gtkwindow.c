@@ -5141,12 +5141,12 @@ update_window_buttons (GtkWindow *window)
   if (priv->fullscreen ||
       (maximized && priv->hide_titlebar_when_maximized))
     {
-      gtk_widget_hide (priv->title_box);
+      gtk_widget_set_child_visible (priv->title_box, FALSE);
       return;
     }
   else
     {
-      gtk_widget_show (priv->title_box);
+      gtk_widget_set_child_visible (priv->title_box, TRUE);
     }
 
   if (priv->titlebar == NULL)
