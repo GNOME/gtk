@@ -935,6 +935,23 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                                                              GTK_PARAM_READABLE));
 
   /**
+   * GtkNotebook:has-tab-gap:
+   *
+   * The "has-tab-gap" property defines whether the active tab is draw
+   * with a gap at the bottom. When %TRUE the theme engine uses
+   * gtk_render_extension to draw the active tab. When %FALSE
+   * gtk_render_background and gtk_render_frame are used.
+   *
+   * Since: 3.12
+   */
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_boolean ("has-tab-gap",
+                                                                 P_("Tab gap"),
+                                                                 P_("Active tab is drawn with a gap at the bottom"),
+                                                                 TRUE,
+                                                                 GTK_PARAM_READABLE));
+
+  /**
    * GtkNotebook::switch-page:
    * @notebook: the object which received the signal.
    * @page: the new current page
@@ -3550,7 +3567,7 @@ on_drag_icon_draw (GtkWidget *widget,
   GtkWidget *notebook, *child;
   GtkRequisition requisition;
   GtkStyleContext *context;
-  gint gap_pos;
+  gboolean has_tab_gap;
 
   notebook = GTK_WIDGET (data);
   child = gtk_bin_get_child (GTK_BIN (widget));
@@ -3561,11 +3578,29 @@ on_drag_icon_draw (GtkWidget *widget,
 
   gtk_widget_get_preferred_size (widget,
                                  &requisition, NULL);
-  gap_pos = get_tab_gap_pos (GTK_NOTEBOOK (notebook));
 
-  gtk_render_extension (context, cr, 0, 0,
-                        requisition.width, requisition.height,
-                        gap_pos);
+  gtk_widget_style_get (GTK_WIDGET (notebook),
+                        "has-tab-gap", &has_tab_gap,
+                        NULL);
+
+  if (has_tab_gap)
+    {
+      gint gap_pos;
+      gap_pos = get_tab_gap_pos (GTK_NOTEBOOK (notebook));
+      gtk_render_extension (context, cr, 0, 0,
+                            requisition.width, requisition.height,
+                            gap_pos);
+    }
+  else
+    {
+      gtk_render_background (context, cr, 0, 0,
+                             requisition.width,
+                             requisition.height);
+
+      gtk_render_frame (context, cr, 0, 0,
+                        requisition.width,
+                        requisition.height);
+    }
 
   if (child)
     gtk_container_propagate_draw (GTK_CONTAINER (widget), child, cr);
@@ -5128,6 +5163,7 @@ gtk_notebook_paint (GtkWidget    *widget,
   guint border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   gint gap_x = 0, gap_width = 0, step = STEP_PREV;
   gboolean is_rtl;
+  gboolean has_tab_gap;
   gint tab_pos;
   GtkStyleContext *context;
 
@@ -5270,11 +5306,19 @@ gtk_notebook_paint (GtkWidget    *widget,
       gtk_style_context_set_junction_sides (context, junction);
     }
 
+  gtk_widget_style_get (GTK_WIDGET (notebook),
+                        "has-tab-gap", &has_tab_gap,
+                        NULL);
+
   gtk_render_background (context, cr,
                          x, y, width, height);
-  gtk_render_frame_gap (context, cr,
-                        x, y, width, height,
-                        tab_pos, gap_x, gap_x + gap_width);
+  if (has_tab_gap)
+    gtk_render_frame_gap (context, cr,
+                          x, y, width, height,
+                          tab_pos, gap_x, gap_x + gap_width);
+  else
+    gtk_render_frame (context, cr,
+                      x, y, width, height);
 
   gtk_style_context_restore (context);
 
@@ -5349,6 +5393,7 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
   GtkNotebookPrivate *priv;
   GtkWidget *widget;
   GtkStyleContext *context;
+  gboolean has_tab_gap;
 
   if (!NOTEBOOK_IS_TAB_LABEL_PARENT (notebook, page) ||
       !gtk_widget_get_mapped (page->tab_label) ||
@@ -5362,12 +5407,33 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
   gtk_style_context_save (context);
   notebook_tab_prepare_style_context (notebook, page, context, use_flags);
 
-  gtk_render_extension (context, cr,
-                       page->allocation.x,
-                       page->allocation.y,
-                       page->allocation.width,
-                       page->allocation.height,
-                       get_tab_gap_pos (notebook));
+  gtk_widget_style_get (GTK_WIDGET (notebook),
+                        "has-tab-gap", &has_tab_gap,
+                        NULL);
+
+  if (has_tab_gap)
+    {
+      gtk_render_extension (context, cr,
+                            page->allocation.x,
+                            page->allocation.y,
+                            page->allocation.width,
+                            page->allocation.height,
+                            get_tab_gap_pos (notebook));
+    }
+  else
+    {
+      gtk_render_background (context, cr,
+                             page->allocation.x,
+                             page->allocation.y,
+                             page->allocation.width,
+                             page->allocation.height);
+
+      gtk_render_frame (context, cr,
+                        page->allocation.x,
+                        page->allocation.y,
+                        page->allocation.width,
+                        page->allocation.height);
+    }
 
   if (gtk_widget_has_visible_focus (widget) &&
       priv->cur_page == page)
