@@ -120,7 +120,6 @@ int main (int argc, char **argv)
       filename = g_strdup_printf ("./%s.png", info->name);
       g_assert (cairo_surface_write_to_png (surface, filename) == CAIRO_STATUS_SUCCESS);
       g_free (filename);
-      cairo_surface_destroy (surface);
     }
 
   return 0;
