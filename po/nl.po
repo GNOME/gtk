@@ -1,19 +1,12 @@
 # Dutch translation for gtk+
 # This file is distributed under the same license as the gtk+ package.
-# Dirk-Jan C. Binnema <djcb@djcbsoftware.nl>, 2002
-# Ronald Hummelink <ronald@hummelink.xs4all.nl>, 2002
-# Tino Meinen <tino.meinen@gmail.com>, 2002–2010
-# Reinout van Schouwen <reinouts@gnome.org>, 2009
-# Vincent van Adrighem <adrighem@gnome.org>, 2009
-# Wouter Bolsterlee <wbolster@gnome.org>, 2011–2013
 #
-# Rachid BM <rachidbm@ubuntu.com>, 2011–2012
 # expander             - samenvouwer/openvouwen
 # image format         - bestandsformaat
 # image file           - afbeelding
 # image file format    - afbeeldingstype
 # image type           - afbeeldingstype
-# job                  - printopdracht
+# job                  - printopdracht (HD: waar taak stond heb ik dit vervangen)
 # render               - render/weergeven/tonen/opmaken
 # spinbutton           - spinknop/teller
 # tag                  - markering/etiket/label/trefwoord
@@ -22,20 +15,28 @@
 # selected             - geselecteerde/gekozen
 # standard display     - standaard display
 #
+# Dirk-Jan C. Binnema <djcb@djcbsoftware.nl>, 2002.
+# Ronald Hummelink <ronald@hummelink.xs4all.nl>, 2002.
+# Tino Meinen <tino.meinen@gmail.com>, 2002–2010.
+# Reinout van Schouwen <reinouts@gnome.org>, 2009.
+# Vincent van Adrighem <adrighem@gnome.org>, 2009.
+# Wouter Bolsterlee <wbolster@gnome.org>, 2011–2013.
+# Rachid BM <rachidbm@ubuntu.com>, 2011–2012.
+# Hannie Dumoleyn <hannie@ubuntu-nl.org>, 2013.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-02-01 16:46+0100\n"
-"PO-Revision-Date: 2013-02-01 16:46+0100\n"
-"Last-Translator: Wouter Bolsterlee <wbolster@gnome.org>\n"
-"Language-Team: Gnome NL\n"
+"PO-Revision-Date: 2013-09-30 16:20+0200\n"
+"Last-Translator: Hannie Dumoleyn <hannie@ubuntu-nl.org>\n"
+"Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Virtaal 0.7.0\n"
+"X-Generator: Lokalize 1.5\n"
 "X-Launchpad-Export-Date: 2012-05-13 21:20+0000\n"
 "X-Project-Style: gnome\n"
 
@@ -52,7 +53,7 @@ msgstr "Fout bij verwerken optie --gdk-no-debug"
 #. Description of --class=CLASS in --help output
 #: ../gdk/gdk.c:203
 msgid "Program class as used by the window manager"
-msgstr "Programmaklasse zoals gebruikt door de window-manager"
+msgstr "Programmaklasse zoals gebruikt door het vensterbeheerprogramma"
 
 #. Placeholder in --class=CLASS in --help output
 #: ../gdk/gdk.c:204
@@ -62,7 +63,7 @@ msgstr "KLASSE"
 #. Description of --name=NAME in --help output
 #: ../gdk/gdk.c:206
 msgid "Program name as used by the window manager"
-msgstr "Programmanaam zoals gebruikt door de window-manager"
+msgstr "Programmanaam zoals gebruikt door het vensterbeheerprogramma"
 
 #. Placeholder in --name=NAME in --help output
 #: ../gdk/gdk.c:207
@@ -72,12 +73,12 @@ msgstr "NAAM"
 #. Description of --display=DISPLAY in --help output
 #: ../gdk/gdk.c:209
 msgid "X display to use"
-msgstr "Te gebruiken X-display"
+msgstr "Te gebruiken X-scherm"
 
 #. Placeholder in --display=DISPLAY in --help output
 #: ../gdk/gdk.c:210
 msgid "DISPLAY"
-msgstr "DISPLAY"
+msgstr "SCHERM"
 
 #. Description of --gdk-debug=FLAGS in --help output
 #: ../gdk/gdk.c:213
@@ -128,7 +129,7 @@ msgstr "Enter"
 #: ../gdk/keyname-table.h:3955
 msgctxt "keyboard label"
 msgid "Pause"
-msgstr "Pauze"
+msgstr "Pause"
 
 #: ../gdk/keyname-table.h:3956
 msgctxt "keyboard label"
@@ -138,7 +139,7 @@ msgstr "Scroll Lock"
 #: ../gdk/keyname-table.h:3957
 msgctxt "keyboard label"
 msgid "Sys_Req"
-msgstr "Sys Req"
+msgstr "Sys Rq"
 
 #: ../gdk/keyname-table.h:3958
 msgctxt "keyboard label"
@@ -220,83 +221,83 @@ msgstr "Num Lock"
 #: ../gdk/keyname-table.h:3973
 msgctxt "keyboard label"
 msgid "KP_Space"
-msgstr "NUM_Spatie"
+msgstr "Num Spatie"
 
 #: ../gdk/keyname-table.h:3974
 msgctxt "keyboard label"
 msgid "KP_Tab"
-msgstr "NB_Tab"
+msgstr "Num Tab"
 
 #: ../gdk/keyname-table.h:3975
 msgctxt "keyboard label"
 msgid "KP_Enter"
-msgstr "NUM_Enter"
+msgstr "Num Enter"
 
 #: ../gdk/keyname-table.h:3976
 msgctxt "keyboard label"
 msgid "KP_Home"
-msgstr "NUM_Home"
+msgstr "Num Home"
 
 #: ../gdk/keyname-table.h:3977
 msgctxt "keyboard label"
 msgid "KP_Left"
-msgstr "NUM_Links"
+msgstr "Num Links"
 
 #: ../gdk/keyname-table.h:3978
 msgctxt "keyboard label"
 msgid "KP_Up"
-msgstr "NUM_Omhoog"
+msgstr "Num Omhoog"
 
 #: ../gdk/keyname-table.h:3979
 msgctxt "keyboard label"
 msgid "KP_Right"
-msgstr "NUM_Rechts"
+msgstr "Num Rechts"
 
 #: ../gdk/keyname-table.h:3980
 msgctxt "keyboard label"
 msgid "KP_Down"
-msgstr "NUM_Omlaag"
+msgstr "Num Omlaag"
 
 #: ../gdk/keyname-table.h:3981
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
-msgstr "NUM_Page Up"
+msgstr "Num Page Up"
 
 # vorige
 #: ../gdk/keyname-table.h:3982
 msgctxt "keyboard label"
 msgid "KP_Prior"
-msgstr "NUM_Prior"
+msgstr "Num Prior"
 
 #: ../gdk/keyname-table.h:3983
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
-msgstr "NUM_Page Down"
+msgstr "Num Page Down"
 
 #: ../gdk/keyname-table.h:3984
 msgctxt "keyboard label"
 msgid "KP_Next"
-msgstr "NUM_Next"
+msgstr "Num Next"
 
 #: ../gdk/keyname-table.h:3985
 msgctxt "keyboard label"
 msgid "KP_End"
-msgstr "NUM_End"
+msgstr "Num End"
 
 #: ../gdk/keyname-table.h:3986
 msgctxt "keyboard label"
 msgid "KP_Begin"
-msgstr "NUM_Begin"
+msgstr "Num Begin"
 
 #: ../gdk/keyname-table.h:3987
 msgctxt "keyboard label"
 msgid "KP_Insert"
-msgstr "NUM_Insert"
+msgstr "Num Insert"
 
 #: ../gdk/keyname-table.h:3988
 msgctxt "keyboard label"
 msgid "KP_Delete"
-msgstr "NUM_Delete"
+msgstr "Num Delete"
 
 #: ../gdk/keyname-table.h:3989
 msgctxt "keyboard label"
@@ -337,7 +338,7 @@ msgstr "Afspelen"
 #: ../gdk/keyname-table.h:3997
 msgctxt "keyboard label"
 msgid "AudioStop"
-msgstr "Stop"
+msgstr "Stoppen"
 
 #: ../gdk/keyname-table.h:3998
 msgctxt "keyboard label"
@@ -452,7 +453,7 @@ msgstr "Zelfde als --no-wintab"
 #. Description of --use-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:59
 msgid "Do use the Wintab API [default]"
-msgstr "Wintab-API niet gebruiken [standaard]"
+msgstr "Wintab-API gebruiken [standaard]"
 
 #. Description of --max-colors=COLORS in --help output
 #: ../gdk/win32/gdkmain-win32.c:61
@@ -486,11 +487,11 @@ msgstr[1] "Openen van %d items"
 #: ../gtk/a11y/gtkspinneraccessible.c:39
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
-msgstr "Spinner"
+msgstr "Animatie"
 
 #: ../gtk/a11y/gtkspinneraccessible.c:40
 msgid "Provides visual indication of progress"
-msgstr "Geeft visuele voortgansindicatie"
+msgstr "Geeft visuele voortgangsindicatie"
 
 #: ../gtk/a11y/gtkswitchaccessible.c:62
 msgctxt "light switch widget"
@@ -499,7 +500,7 @@ msgstr "Schakelaar"
 
 #: ../gtk/a11y/gtkswitchaccessible.c:63
 msgid "Switches between on and off states"
-msgstr "Schakelt tussen aan en uit."
+msgstr "Schakelt tussen aan en uit"
 
 # niet strikt vertaald
 #: ../gtk/deprecated/gtkcolorsel.c:425
@@ -515,8 +516,8 @@ msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
-"Klik op de pipet, klik dan op een kleur ergens op je scherm om die kleur te "
-"selecteren."
+"Klik op de pipet, en klik daarna op een kleur ergens op het scherm om die "
+"kleur te selecteren."
 
 #: ../gtk/deprecated/gtkcolorsel.c:461
 msgid "_Hue:"
@@ -573,12 +574,12 @@ msgstr "Hoeveelheid blauw licht in de kleur."
 # eigenlijk: ondoorzichtig/troebel
 #: ../gtk/deprecated/gtkcolorsel.c:476
 msgid "Op_acity:"
-msgstr "_Doorzichtig:"
+msgstr "_Doorzichtigheid:"
 
 # doorzichtigheid/transparantie
 #: ../gtk/deprecated/gtkcolorsel.c:484 ../gtk/deprecated/gtkcolorsel.c:494
 msgid "Transparency of the color."
-msgstr "Transparantie van de kleur."
+msgstr "Doorzichtigheid van de kleur."
 
 #: ../gtk/deprecated/gtkcolorsel.c:501
 msgid "Color _name:"
@@ -713,9 +714,11 @@ msgstr "_Met dank aan"
 msgid "_License"
 msgstr "_Licentie"
 
+# Link: koppeling, verwijzing, link.
+# Als het om een weblink gaat prefereer ik het woord link omdat dat nu ingeburgerd is. (Hannie)
 #: ../gtk/gtkaboutdialog.c:980
 msgid "Could not show link"
-msgstr "Kon de verwijzing niet tonen"
+msgstr "Kon de link niet tonen"
 
 #: ../gtk/gtkaboutdialog.c:1017
 msgid "Website"
@@ -724,7 +727,7 @@ msgstr "Website"
 #: ../gtk/gtkaboutdialog.c:1071
 #, c-format
 msgid "About %s"
-msgstr "Over %s"
+msgstr "Info %s"
 
 #: ../gtk/gtkaboutdialog.c:2398
 msgid "Created by"
@@ -803,10 +806,12 @@ msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
+# (Was Spatie). Ik denk dat hier de spatiebalk wordt bedoeld, niet een spatie. In het Engels wordt zowel Spacebar als Space gebruikt. Het is wel verwarrend.
+# (Hannie)
 #: ../gtk/gtkaccellabel.c:848
 msgctxt "keyboard label"
 msgid "Space"
-msgstr "Spatie"
+msgstr "Spatiebalk"
 
 #: ../gtk/gtkaccellabel.c:851
 msgctxt "keyboard label"
@@ -819,7 +824,7 @@ msgstr "Andere toepassing…"
 
 #: ../gtk/gtkappchooserdialog.c:137
 msgid "Failed to look for applications online"
-msgstr "Online toepassingen opzoeken mislukt"
+msgstr "Online naar toepassingen zoeken is mislukt"
 
 #: ../gtk/gtkappchooserdialog.c:188
 msgid "_Find applications online"
@@ -858,7 +863,7 @@ msgstr "Kies een toepassing voor bestanden van het type ‘%s’"
 #: ../gtk/gtkappchooserdialog.c:406
 #, c-format
 msgid "No applications available to open \"%s\" files"
-msgstr "Geen toepassing beschikbaar voor bestanden van het type ‘%s’"
+msgstr "Geen toepassingen beschikbaar om ‘%s’-bestanden te openen"
 
 #: ../gtk/gtkappchooserdialog.c:422
 msgid ""
@@ -1095,7 +1100,7 @@ msgstr "Kleur: %s"
 #: ../gtk/gtkcolorchooserwidget.c:419
 msgctxt "Color name"
 msgid "Light Scarlet Red"
-msgstr "Licht scharlakenrood"
+msgstr "Lichtscharlakenrood"
 
 #: ../gtk/gtkcolorchooserwidget.c:420
 msgctxt "Color name"
@@ -1105,7 +1110,7 @@ msgstr "Scharlakenrood"
 #: ../gtk/gtkcolorchooserwidget.c:421
 msgctxt "Color name"
 msgid "Dark Scarlet Red"
-msgstr "Donker scharlakenrood"
+msgstr "Donkerscharlakenrood"
 
 #: ../gtk/gtkcolorchooserwidget.c:422
 msgctxt "Color name"
@@ -1140,17 +1145,17 @@ msgstr "Donkerboterkleur"
 #: ../gtk/gtkcolorchooserwidget.c:428
 msgctxt "Color name"
 msgid "Light Chameleon"
-msgstr "Licht kameleon"
+msgstr "Lichtkameleon"
 
 #: ../gtk/gtkcolorchooserwidget.c:429
 msgctxt "Color name"
 msgid "Chameleon"
-msgstr "Chameleon"
+msgstr "Kameleon"
 
 #: ../gtk/gtkcolorchooserwidget.c:430
 msgctxt "Color name"
 msgid "Dark Chameleon"
-msgstr "Donker kameleon"
+msgstr "Donkerkameleon"
 
 #: ../gtk/gtkcolorchooserwidget.c:431
 msgctxt "Color name"
@@ -1160,12 +1165,12 @@ msgstr "Lichthemelblauw"
 #: ../gtk/gtkcolorchooserwidget.c:432
 msgctxt "Color name"
 msgid "Sky Blue"
-msgstr "Hemelblauw"
+msgstr "Hemelsblauw"
 
 #: ../gtk/gtkcolorchooserwidget.c:433
 msgctxt "Color name"
 msgid "Dark Sky Blue"
-msgstr "Donkerhemelblauw"
+msgstr "Donkerhemelsblauw"
 
 #: ../gtk/gtkcolorchooserwidget.c:434
 msgctxt "Color name"
@@ -1235,7 +1240,7 @@ msgstr "Zwart"
 #: ../gtk/gtkcolorchooserwidget.c:460
 msgctxt "Color name"
 msgid "Very Dark Gray"
-msgstr "Erg donkergrijs"
+msgstr "Zeer donkergrijs"
 
 #: ../gtk/gtkcolorchooserwidget.c:461
 msgctxt "Color name"
@@ -1265,7 +1270,7 @@ msgstr "Lichter grijs"
 #: ../gtk/gtkcolorchooserwidget.c:466
 msgctxt "Color name"
 msgid "Very Light Gray"
-msgstr "Erg licht grijs"
+msgstr "Zeer lichtgrijs"
 
 #: ../gtk/gtkcolorchooserwidget.c:467
 msgctxt "Color name"
@@ -1351,7 +1356,7 @@ msgstr "default:mm"
 #. And show the custom paper dialog
 #: ../gtk/gtkcustompaperunixdialog.c:397 ../gtk/gtkprintunixdialog.c:3275
 msgid "Manage Custom Sizes"
-msgstr "Aangepaste groottes beheren"
+msgstr "Aangepaste papierformaten beheren"
 
 #: ../gtk/gtkcustompaperunixdialog.c:558 ../gtk/gtkpagesetupunixdialog.c:778
 msgid "inch"
@@ -1368,7 +1373,7 @@ msgstr "Printermarges…"
 #: ../gtk/gtkcustompaperunixdialog.c:771
 #, c-format
 msgid "Custom Size %d"
-msgstr "Aangepaste grootte %d"
+msgstr "Aangepast formaat %d"
 
 #: ../gtk/gtkcustompaperunixdialog.c:1109
 msgid "_Width:"
@@ -1511,15 +1516,15 @@ msgstr "U dient een geldige bestandsnaam te kiezen."
 #: ../gtk/gtkfilechooserdefault.c:1020
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
-msgstr "Kan geen bestanden in %s maken, omdat dit geen map is."
+msgstr "Kan geen bestanden in %s maken, omdat dit geen map is"
 
 #: ../gtk/gtkfilechooserdefault.c:1032
 msgid ""
 "You may only select folders.  The item that you selected is not a folder; "
 "try using a different item."
 msgstr ""
-"Er kunnen alleen mappen geselecteerd worden. Het gekozen item is geen map. "
-"Probeer een ander item."
+"U kunt alleen mappen selecteren. Het door u geselecteerde item is geen map; "
+"probeer een ander item."
 
 #: ../gtk/gtkfilechooserdefault.c:1042
 msgid "Invalid file name"
@@ -1705,7 +1710,7 @@ msgstr "_Opslaan in map:"
 # zie de uitleg bij 'save in _folder'
 #: ../gtk/gtkfilechooserdefault.c:5490
 msgid "Create in _folder:"
-msgstr "Aanma_ken in map:"
+msgstr "Aanmaken in _map:"
 
 #: ../gtk/gtkfilechooserdefault.c:6515
 #, c-format
@@ -1806,7 +1811,7 @@ msgstr "Lettertype"
 #: ../gtk/gtkfontchooserwidget.c:110
 msgid "No fonts matched your search. You can revise your search and try again."
 msgstr ""
-"Geen lettertypes gevonden voor de zoekopdracht. U kunt de zoekopdracht "
+"Geen lettertypen gevonden voor de zoekopdracht. U kunt de zoekopdracht "
 "aanpassen en het opnieuw proberen."
 
 #: ../gtk/gtkfontchooserwidget.c:557
@@ -1850,12 +1855,12 @@ msgstr "Systeem (%s)"
 #. Open Link
 #: ../gtk/gtklabel.c:6139
 msgid "_Open Link"
-msgstr "Verwijzing _openen"
+msgstr "Link _openen"
 
 #. Copy Link Address
 #: ../gtk/gtklabel.c:6151
 msgid "Copy _Link Address"
-msgstr "Verwijzingsadres _kopiëren"
+msgstr "Linkadres _kopiëren"
 
 #: ../gtk/gtk-launch.c:71
 msgid "APPLICATION [URI…] — launch an APPLICATION with URI."
@@ -1952,7 +1957,7 @@ msgstr ""
 #. Description of --gtk-module=MODULES in --help output
 #: ../gtk/gtkmain.c:446
 msgid "Load additional GTK+ modules"
-msgstr "Extra GTK+ modules laden"
+msgstr "Extra GTK+-modules laden"
 
 #. Placeholder in --gtk-module=MODULES in --help output
 #: ../gtk/gtkmain.c:447
@@ -1986,7 +1991,7 @@ msgstr "default:LTR"
 #: ../gtk/gtkmain.c:768
 #, c-format
 msgid "Cannot open display: %s"
-msgstr "Kan display ‘%s’ niet opnenen"
+msgstr "Kan scherm ‘%s’ niet openen"
 
 #: ../gtk/gtkmain.c:834
 msgid "GTK+ Options"
@@ -1994,7 +1999,7 @@ msgstr "GTK+-opties"
 
 #: ../gtk/gtkmain.c:834
 msgid "Show GTK+ Options"
-msgstr "GTK+-options tonen"
+msgstr "GTK+-opties tonen"
 
 # mount: verbinden? aankoppelen?
 #: ../gtk/gtkmountoperation.c:535
@@ -2129,7 +2134,7 @@ msgstr ""
 
 #: ../gtk/gtkpagesetupunixdialog.c:845 ../gtk/gtkprintunixdialog.c:3329
 msgid "Manage Custom Sizes…"
-msgstr "Aangepaste groottes beheren…"
+msgstr "Aangepaste papierformaten beheren…"
 
 # format is hier opmaak? ipv formatteren
 #: ../gtk/gtkpagesetupunixdialog.c:896
@@ -2143,12 +2148,12 @@ msgstr "_Papierformaat:"
 # ligging/orientatie/positie/positionering
 #: ../gtk/gtkpagesetupunixdialog.c:946
 msgid "_Orientation:"
-msgstr "_Ligging:"
+msgstr "_Oriëntatie:"
 
 # indelingen/instellingen
 #: ../gtk/gtkpagesetupunixdialog.c:1006 ../gtk/gtkprintunixdialog.c:3531
 msgid "Page Setup"
-msgstr "Paginainstellingen"
+msgstr "Pagina-instellingen"
 
 # Op pad/pad naar boven/naar links
 #: ../gtk/gtkpathbar.c:159
@@ -2372,7 +2377,7 @@ msgid ""
 " e.g. 1-3,7,11"
 msgstr ""
 "Geef één of meer paginabereiken,\n"
-"bijv. 1-3,7,11"
+" bijv. 1-3,7,11"
 
 #: ../gtk/gtkprintunixdialog.c:2264
 msgid "Pages"
@@ -2483,7 +2488,7 @@ msgstr "T_weezijdig:"
 
 #: ../gtk/gtkprintunixdialog.c:3368
 msgid "Pages per _side:"
-msgstr "Pagina's per _bladzijde:"
+msgstr "Pagina's per _zijde:"
 
 #: ../gtk/gtkprintunixdialog.c:3382
 msgid "Page or_dering:"
@@ -2552,7 +2557,7 @@ msgstr "Ondersteboven liggend"
 
 #: ../gtk/gtkprintunixdialog.c:3556
 msgid "Job Details"
-msgstr "Printopdracht details"
+msgstr "Printopdracht-details"
 
 #: ../gtk/gtkprintunixdialog.c:3560
 msgid "Pri_ority:"
@@ -2561,7 +2566,7 @@ msgstr "Pri_oriteit:"
 # betaling afschrif/rekeningafschrift/kostenplaatje/kosten
 #: ../gtk/gtkprintunixdialog.c:3572
 msgid "_Billing info:"
-msgstr "Info _kosten:"
+msgstr "Info _facturering:"
 
 #: ../gtk/gtkprintunixdialog.c:3587
 msgid "Print Document"
@@ -2668,7 +2673,7 @@ msgstr "Afdrukken"
 #             type
 #: ../gtk/gtkrecentchooserdefault.c:480
 msgid "Select which type of documents are shown"
-msgstr "Kiezen welk soort bestanden getoond worden"
+msgstr "Kiezen welk soort documenten getoond worden"
 
 #: ../gtk/gtkrecentchooserdefault.c:1129 ../gtk/gtkrecentchooserdefault.c:1166
 #, c-format
@@ -2976,7 +2981,7 @@ msgstr "_Hulp"
 #: ../gtk/gtkstock.c:373
 msgctxt "Stock label"
 msgid "_Home"
-msgstr "_Thuis"
+msgstr "_Home"
 
 # Inspringen verhogen/Meer inspringen
 #: ../gtk/gtkstock.c:374
@@ -3068,7 +3073,7 @@ msgstr "Afs_pelen"
 #: ../gtk/gtkstock.c:398
 msgctxt "Stock label, media"
 msgid "Pre_vious"
-msgstr "V_olgende"
+msgstr "V_orige"
 
 #. Media label
 #: ../gtk/gtkstock.c:400
@@ -3108,7 +3113,7 @@ msgstr "_Nee"
 #: ../gtk/gtkstock.c:408
 msgctxt "Stock label"
 msgid "_OK"
-msgstr "_OK"
+msgstr "_Ok"
 
 #: ../gtk/gtkstock.c:409
 msgctxt "Stock label"
@@ -3242,7 +3247,7 @@ msgstr "_Aflopend"
 #: ../gtk/gtkstock.c:438
 msgctxt "Stock label"
 msgid "_Spell Check"
-msgstr "_Spellingscontrole"
+msgstr "_Spellingcontrole"
 
 #: ../gtk/gtkstock.c:439
 msgctxt "Stock label"
@@ -3291,7 +3296,7 @@ msgstr "Best _passend"
 #: ../gtk/gtkstock.c:451
 msgctxt "Stock label"
 msgid "Zoom _In"
-msgstr "_Inzoomen"
+msgstr "In_zoomen"
 
 #: ../gtk/gtkstock.c:452
 msgctxt "Stock label"
@@ -3338,7 +3343,7 @@ msgstr "Het attribuut ‘%s’ is tweemaal gevonden op het <%s>-element"
 #: ../gtk/gtktextbufferserialize.c:850
 #, c-format
 msgid "<%s> element has invalid ID \"%s\""
-msgstr "<%s>-element heeft een ongeldig id \"%s\""
+msgstr "<%s>-element heeft een ongeldig id ‘%s’"
 
 #: ../gtk/gtktextbufferserialize.c:860
 #, c-format
@@ -3375,7 +3380,7 @@ msgstr ""
 #: ../gtk/gtktextbufferserialize.c:1331 ../gtk/gtktextbufferserialize.c:1405
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
-msgstr "Element <%s>  mag niet onder <%s> staan"
+msgstr "Element <%s> mag niet onder <%s> staan"
 
 #: ../gtk/gtktextbufferserialize.c:1182
 #, c-format
@@ -3502,7 +3507,7 @@ msgstr "Zet het geluid harder of zachter"
 
 #: ../gtk/gtkvolumebutton.c:174
 msgid "Adjusts the volume"
-msgstr "Past het geluidsvoluma aan"
+msgstr "Past het geluidsvolume aan"
 
 #: ../gtk/gtkvolumebutton.c:180 ../gtk/gtkvolumebutton.c:183
 msgid "Volume Down"
@@ -3958,7 +3963,7 @@ msgstr "Choukei 4 envelop"
 #: ../gtk/paper_names_offsets.c:87
 msgctxt "paper size"
 msgid "hagaki (postcard)"
-msgstr "hagaki (ansichtkaart)"
+msgstr "hagaki (postcard)"
 
 #: ../gtk/paper_names_offsets.c:88
 msgctxt "paper size"
@@ -4243,7 +4248,7 @@ msgstr "Super B"
 #: ../gtk/paper_names_offsets.c:145
 msgctxt "paper size"
 msgid "Wide Format"
-msgstr "Wide Format"
+msgstr "Breedformaat"
 
 #: ../gtk/paper_names_offsets.c:146
 msgctxt "paper size"
@@ -4433,9 +4438,10 @@ msgid "Don't include image data in the cache"
 msgstr "Afbeeldingen niet in de cache opslaan"
 
 # aanmaken/opmaken/uitvoeren
+# afdrukken (zie #909 en 925)
 #: ../gtk/updateiconcache.c:1637
 msgid "Output a C header file"
-msgstr "Een C-headerbestand opmaken"
+msgstr "Een C-headerbestand afdrukken"
 
 # uitvoerige/uitgebreide uitvoer/berichten/berichtgeving
 # kort en bondige uitvoer
@@ -4481,7 +4487,7 @@ msgstr "Amharic (EZ+)"
 #. ID
 #: ../modules/input/imcedilla.c:90
 msgid "Cedilla"
-msgstr "Cedilla"
+msgstr "Cedille"
 
 #. ID
 #: ../modules/input/imcyrillic-translit.c:215
@@ -4526,7 +4532,7 @@ msgstr "Viëtnamees (VIQR)"
 #. ID
 #: ../modules/input/imxim.c:26
 msgid "X Input Method"
-msgstr "X Invoer-Methode"
+msgstr "X-Invoermethode"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:858
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1073
@@ -4554,12 +4560,14 @@ msgstr "Aanmeldingscontrole is vereist om een document af te drukken op %s"
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
 msgstr ""
-"Aanmeldingscontrole is vereist om attributen van taak ʻ%sʼ te verkrijgen"
+"Aanmeldingscontrole is vereist om attributen van printopdracht ʻ%sʼ te "
+"verkrijgen"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:906
 msgid "Authentication is required to get attributes of a job"
 msgstr ""
-"Aanmeldingscontrole is vereist om attributen van een taak te verkrijgen"
+"Aanmeldingscontrole is vereist om attributen van een printopdracht te "
+"verkrijgen"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:910
 #, c-format
@@ -4671,7 +4679,7 @@ msgstr "Het papier van printer ‘%s’ is op."
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1680
 #, c-format
 msgid "Printer '%s' is currently offline."
-msgstr "Printer ‘%s’ is momenteel off-line."
+msgstr "Printer ‘%s’ is momenteel offline."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1681
 #, c-format
@@ -4682,12 +4690,12 @@ msgstr "Er is een probleem met printer ‘%s’."
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2123
 msgid "Paused; Rejecting Jobs"
-msgstr "Gepauzeerd ; taken weigeren"
+msgstr "Gepauzeerd; printopdrachten afwijzen"
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2129
 msgid "Rejecting Jobs"
-msgstr "Taken weigeren"
+msgstr "Printopdrachten afwijzen"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2915
 msgid "Two Sided"
@@ -4799,15 +4807,15 @@ msgstr "Laag"
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3717
 msgid "Job Priority"
-msgstr "Taak pri_oriteit"
+msgstr "Taakprioriteit"
 
-# betaling afschrif/rekeningafschrift/kostenplaatje/kosten
+# betaling afschrif/rekeningafschrift/kostenplaatje/kosten/factuurgegevens
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3728
 msgid "Billing Info"
-msgstr "Facturering"
+msgstr "Info facturering"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
@@ -4848,7 +4856,7 @@ msgstr "Openbaar"
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3754
 msgid "Pages per Sheet"
-msgstr "Pagina's per bladzijde"
+msgstr "Pagina's per vel"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
@@ -4937,7 +4945,7 @@ msgstr "SVG"
 #: ../modules/printbackends/file/gtkprintbackendfile.c:660
 #: ../modules/printbackends/test/gtkprintbackendtest.c:501
 msgid "Pages per _sheet:"
-msgstr "Pagina's per _bladzijde:"
+msgstr "Pagina's per _vel:"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:719
 msgid "File"
@@ -4953,7 +4961,7 @@ msgstr "Afdrukken naar LPR"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:419
 msgid "Pages Per Sheet"
-msgstr "Pagina's per bladzijde"
+msgstr "Pagina's per vel"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:426
 msgid "Command Line"
@@ -4972,7 +4980,7 @@ msgstr "klaar om af te drukken"
 #. SUN_BRANDING
 #: ../modules/printbackends/papi/gtkprintbackendpapi.c:830
 msgid "processing job"
-msgstr "taak verwerken"
+msgstr "printopdracht verwerken"
 
 #. SUN_BRANDING
 #: ../modules/printbackends/papi/gtkprintbackendpapi.c:834
@@ -5011,15 +5019,15 @@ msgstr "Afdrukken om printer te testen"
 # _Naam | _Opslaan in map | _Bladeren naar andere mappen
 # _Toevoegen | _Verwijderen | _Annuleren | Op_slaan
 # _Map aanmaken:
-#
 # Als je _Opslaan in map zou wijzigen in Opslaan in _map,
 # zou dat consistent kunnen worden met Aanmaken in _map,
 # maar dan moet _Map aanmaken worden: Map aanma_ken
 # wat lelijk is.
 # Vandaar dat we kiezen om Create in _folder te vertalen met
 # Aanma_ken in map
+#, fuzzy
 #~ msgid "_Save in folder:"
-#~ msgstr "_Opslaan in map:"
+#~ msgstr "Opslaan in map:"
 
 #~ msgid ""
 #~ "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -5090,3 +5098,385 @@ msgstr "Afdrukken om printer te testen"
 #~ msgstr ""
 #~ "Deze toepassing komt ZONDER ENIGE GARANTIE. Bezoek voor details <a href="
 #~ "\"%s\">%s</a>"
+
+#~ msgid "broadway display type not supported '%s'"
+#~ msgstr "broadway schermtype wordt niet ondersteund ‘%s’"
+
+#~ msgctxt "keyboard label"
+#~ msgid "KbdBrightnessUp"
+#~ msgstr "Tb: schermhelderheid omhoog"
+
+#~ msgctxt "keyboard label"
+#~ msgid "KbdBrightnessDown"
+#~ msgstr "Tb: schermhelderheid omlaag"
+
+#~ msgctxt "keyboard label"
+#~ msgid "AudioMicMute"
+#~ msgstr "Geluid microfoon dempen"
+
+#~ msgctxt "Action description"
+#~ msgid "Toggles the cell"
+#~ msgstr "Wisselt de cel om"
+
+#~ msgctxt "Action name"
+#~ msgid "Toggle"
+#~ msgstr "Omwisselen"
+
+#~ msgctxt "Action name"
+#~ msgid "Click"
+#~ msgstr "Klikken"
+
+#~ msgctxt "Action description"
+#~ msgid "Clicks the button"
+#~ msgstr "Klikt op de knop"
+
+#~ msgctxt "Action name"
+#~ msgid "Expand or contract"
+#~ msgstr "Uitklappen of inklappen"
+
+#~ msgctxt "Action name"
+#~ msgid "Edit"
+#~ msgstr "Bewerken"
+
+#~ msgctxt "Action name"
+#~ msgid "Activate"
+#~ msgstr "Activeren"
+
+#~ msgctxt "Action description"
+#~ msgid "Expands or contracts the row in the tree view containing this cell"
+#~ msgstr ""
+#~ "Uitklappen of inklappen van de rij in de boomstructuurweergave waarin "
+#~ "deze cel zich bevindt"
+
+#~ msgctxt "Action description"
+#~ msgid "Creates a widget in which the contents of the cell can be edited"
+#~ msgstr "Creëert een widget waarin de inhoud van de cel bewerkt kan worden"
+
+#~ msgctxt "Action description"
+#~ msgid "Activates the cell"
+#~ msgstr "Activeert de cel"
+
+#~ msgctxt "Action name"
+#~ msgid "Select"
+#~ msgstr "Selecteren"
+
+#~ msgctxt "Action name"
+#~ msgid "Customize"
+#~ msgstr "Aanpassen"
+
+#~ msgctxt "Action description"
+#~ msgid "Selects the color"
+#~ msgstr "Selecteert de kleur"
+
+#~ msgctxt "Action description"
+#~ msgid "Activates the color"
+#~ msgstr "Activeert de kleur"
+
+#~ msgctxt "Action description"
+#~ msgid "Customizes the color"
+#~ msgstr "Past de kleur aan"
+
+#~ msgctxt "Action name"
+#~ msgid "Press"
+#~ msgstr "Drukken"
+
+#~ msgctxt "Action description"
+#~ msgid "Presses the combobox"
+#~ msgstr "Drukt op de keuzelijst"
+
+#~ msgctxt "Action description"
+#~ msgid "Activates the entry"
+#~ msgstr "Activeert het item"
+
+#~ msgctxt "Action description"
+#~ msgid "Activates the expander"
+#~ msgstr "Activeert het uitklappen"
+
+#~ msgctxt "Action description"
+#~ msgid "Clicks the menuitem"
+#~ msgstr "Klikt op het menu-item"
+
+#~ msgctxt "Action description"
+#~ msgid "Pops up the slider"
+#~ msgstr "Doet de schuifknop verschijnen"
+
+#~ msgctxt "Action description"
+#~ msgid "Dismisses the slider"
+#~ msgstr "Doet de schuifknop verdwijnen"
+
+#~ msgctxt "Action name"
+#~ msgid "Popup"
+#~ msgstr "Popup"
+
+#~ msgctxt "Action name"
+#~ msgid "Dismiss"
+#~ msgstr "Doen verdwijnen"
+
+#~ msgctxt "Action description"
+#~ msgid "Toggles the switch"
+#~ msgstr "Zet de schakelaar om"
+
+#~ msgid "_Cancel"
+#~ msgstr " _Annuleren"
+
+#~ msgid "_Help"
+#~ msgstr "_Hulp"
+
+# sneltoets _T conflicteert in wizards op de laatste pagina met _Terug.
+# De _p wordt gebruikt bij _Plakken en _Pauzeren en _Passend, maar die
+# combinatie van knoppen komt niet/weinig voor.
+# Het zou in een wizard heel vervelend zijn als je eigenlijk _terug wilt maar
+# dat het _toepassen tot gevolg heeft.
+#~ msgid "_Apply"
+#~ msgstr "Toe_passen"
+
+# Ok/OK
+#~ msgid "_OK"
+#~ msgstr "_Ok"
+
+#~ msgid "%s does not exist in the bookmarks list"
+#~ msgstr "%s komt niet voor in de lijst met bladwijzers"
+
+#~ msgid "%s already exists in the bookmarks list"
+#~ msgstr "%s bestaat al in de lijst met bladwijzers"
+
+#~ msgid "_Close"
+#~ msgstr "Sl_uiten"
+
+#~ msgid "Cu_t"
+#~ msgstr "K_nippen"
+
+#~ msgid "_Copy"
+#~ msgstr "_Kopiëren"
+
+#~ msgid "_Paste"
+#~ msgstr "_Plakken"
+
+#~ msgid "_Delete"
+#~ msgstr "_Verwijderen"
+
+#~ msgid "Select _All"
+#~ msgstr "_Alles selecteren"
+
+#~ msgid "_Open"
+#~ msgstr "_Openen"
+
+#~ msgid "Cannot create file as the filename is too long"
+#~ msgstr "Kan bestand niet aanmaken, omdat de bestandsnaam te lang is"
+
+#~ msgid "Try using a shorter name."
+#~ msgstr "Probeer een kortere naam te gebruiken."
+
+#~ msgid "You may only select folders"
+#~ msgstr "U kunt alleen mappen selecteren"
+
+#~ msgid "_Copy Location"
+#~ msgstr "_Locatie kopiëren"
+
+#~ msgid "Close"
+#~ msgstr "Sluiten"
+
+#~ msgid "Information"
+#~ msgstr "Informatie"
+
+#~ msgid "Question"
+#~ msgstr "Vraag"
+
+#~ msgid "Warning"
+#~ msgstr "Waarschuwing"
+
+#~ msgid "Error"
+#~ msgstr "Fout"
+
+#~ msgid "_No"
+#~ msgstr "_Nee"
+
+#~ msgid "_Yes"
+#~ msgstr "_Ja"
+
+#~ msgid "Devices"
+#~ msgstr "Apparaten"
+
+#~ msgid "Bookmarks"
+#~ msgstr "Bladwijzers"
+
+# Recentelijk gebruikt/onlangs gebruikt
+#~ msgid "Recent"
+#~ msgstr "Onlangs gebruikt"
+
+# Recentelijk gebruikt/onlangs gebruikt
+#~ msgid "Recent files"
+#~ msgstr "Onlangs gebruikte bestanden"
+
+# Dit is de titel van de persoonlijke map in de bestandkiezer
+# eigen map
+# persoonlijke map
+#~ msgid "Home"
+#~ msgstr "Persoonlijke map"
+
+#~ msgid "Open your personal folder"
+#~ msgstr "Uw persoonlijke map openen"
+
+#~ msgid "Open the contents of your desktop in a folder"
+#~ msgstr "De inhoud van uw bureaublad in een map openen"
+
+#~ msgid "Trash"
+#~ msgstr "Prullenbak"
+
+#~ msgid "Open the trash"
+#~ msgstr "Prullenbak openen"
+
+#~ msgid "Mount and open %s"
+#~ msgstr "%s aankoppelen en openen"
+
+#~ msgid "Open the contents of the file system"
+#~ msgstr "De inhoud van het bestandssysteem openen"
+
+#~ msgid "Network"
+#~ msgstr "Netwerk"
+
+#~ msgid "Browse Network"
+#~ msgstr "Het netwerk doorbladeren"
+
+#~ msgid "Browse the contents of the network"
+#~ msgstr "De inhoud van het netwerk doorbladeren"
+
+# niveau 1/level 1
+#~ msgid "Connect to Server"
+#~ msgstr "Met de server verbinden"
+
+#~ msgid "Connect to a network server address"
+#~ msgstr "Verbinding maken met een netwerkserver"
+
+#~ msgid "New bookmark"
+#~ msgstr "Nieuwe bladwijzer"
+
+#~ msgid "_Start"
+#~ msgstr "_Starten"
+
+#~ msgid "_Stop"
+#~ msgstr "_Stoppen"
+
+#~ msgid "_Power On"
+#~ msgstr "I_nschakelen"
+
+#~ msgid "_Safely Remove Drive"
+#~ msgstr "Station _veilig verwijderen"
+
+# mount: verbinden? aankoppelen?
+#~ msgid "_Connect Drive"
+#~ msgstr "Station _aansluiten"
+
+#~ msgid "_Disconnect Drive"
+#~ msgstr "Station l_oskoppelen"
+
+#~ msgid "_Start Multi-disk Device"
+#~ msgstr "Multischijvenapparaat _starten"
+
+#~ msgid "_Stop Multi-disk Device"
+#~ msgstr "Multischijvenapparaat _stoppen"
+
+#~ msgid "_Unlock Drive"
+#~ msgstr "Station _ontgrendelen"
+
+#~ msgid "_Lock Drive"
+#~ msgstr "Station _vergrendelen"
+
+#~ msgid "Unable to start %s"
+#~ msgstr "Kan %s niet starten"
+
+#~ msgid "Unable to access “%s”"
+#~ msgstr "Geen toegang tot ‘%s’"
+
+#~ msgid "Unable to unmount %s"
+#~ msgstr "Kan %s niet ontkoppelen"
+
+#~ msgid "Unable to eject %s"
+#~ msgstr "Kan %s niet uitwerpen"
+
+#~ msgid "Unable to poll %s for media changes"
+#~ msgstr "Kan %s niet controleren op mediawijzigingen"
+
+#~ msgid "Unable to stop %s"
+#~ msgstr "Kan %s niet stoppen"
+
+#~ msgid "Open in New _Tab"
+#~ msgstr "Openen in nieuw _tabblad"
+
+#~ msgid "Open in New _Window"
+#~ msgstr "Openen in nieuw _venster"
+
+#~ msgid "_Add Bookmark"
+#~ msgstr "Bladwijzer _toevoegen"
+
+#~ msgid "_Mount"
+#~ msgstr "_Aankoppelen"
+
+#~ msgid "_Unmount"
+#~ msgstr "_Ontkoppelen"
+
+#~ msgid "_Eject"
+#~ msgstr "_Uitwerpen"
+
+#~ msgid "_Detect Media"
+#~ msgstr "Media _detecteren"
+
+#~ msgid "Computer"
+#~ msgstr "Computer"
+
+#~ msgid "Minimize"
+#~ msgstr "Minimaliseren"
+
+#~ msgid "Restore"
+#~ msgstr "Herstellen"
+
+#~ msgid "Maximize"
+#~ msgstr "Maximaliseren"
+
+#~ msgid "Unmaximize"
+#~ msgstr "Herstellen"
+
+#~ msgid "Always on Top"
+#~ msgstr "Altijd op de voorgrond"
+
+#~ msgid "Always on Visible Workspace"
+#~ msgstr "Altijd op zichtbare werkblad"
+
+#~ msgid "Only on This Workspace"
+#~ msgstr "Alleen op dit werkblad"
+
+#~ msgid "Move to Workspace Up"
+#~ msgstr "Naar werkblad omhoog verplaatsen"
+
+#~ msgid "Move to Workspace Down"
+#~ msgstr "Naar werkblad omlaag verplaatsen"
+
+#~ msgid "Move to Another Workspace"
+#~ msgstr "Naar ander werkblad verplaatsen"
+
+#~ msgid "Workspace %d"
+#~ msgstr "Werkblad %d"
+
+#~ msgid "; "
+#~ msgstr "; "
+
+#~ msgid "label"
+#~ msgstr "label"
+
+#~ msgid "Alpha"
+#~ msgstr "Alfa"
+
+#~ msgid "Hue"
+#~ msgstr "Tint"
+
+#~ msgid "Pre_view"
+#~ msgstr "_Voorbeeld:"
+
+#~ msgid "_Print"
+#~ msgstr "Af_drukken"
+
+#~ msgid "+"
+#~ msgstr "+"
+
+#~ msgid "-"
+#~ msgstr "-"
