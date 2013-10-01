@@ -83,8 +83,7 @@ activate (GApplication *app,
   win = gtk_application_window_new (GTK_APPLICATION (app));
 
   doc_actions = g_simple_action_group_new ();
-  g_simple_action_group_add_entries (doc_actions, doc_entries,
-                                     G_N_ELEMENTS (doc_entries), win);
+  g_action_map_add_action_entries (G_ACTION_MAP (doc_actions), doc_entries, G_N_ELEMENTS (doc_entries), win);
 
   g_action_map_add_action_entries (G_ACTION_MAP (win), win_entries,
                                    G_N_ELEMENTS (win_entries), win);
