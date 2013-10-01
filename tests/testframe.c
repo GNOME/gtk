@@ -47,7 +47,6 @@ spin_ythickness_cb (GtkSpinButton *spin, gpointer user_data)
   gtk_css_provider_load_from_data (provider, data, -1, NULL);
   g_free (data);
 
-  gtk_style_context_invalidate (context);
   gtk_widget_queue_resize (frame);
 }
 
@@ -80,7 +79,6 @@ spin_xthickness_cb (GtkSpinButton *spin, gpointer user_data)
   gtk_css_provider_load_from_data (provider, data, -1, NULL);
   g_free (data);
 
-  gtk_style_context_invalidate (context);
   gtk_widget_queue_resize (frame);
 }
 
