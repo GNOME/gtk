@@ -30,7 +30,7 @@
  * @Short_Description: A container that allows reflowing its children
  * @Title: GtkFlowBox
  *
- * An GtkFlowBox positions child widgets in sequence according to its
+ * A GtkFlowBox positions child widgets in sequence according to its
  * orientation.
  *
  * For instance, with the horizontal orientation, the widgets will be
