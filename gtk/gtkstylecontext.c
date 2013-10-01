@@ -3373,7 +3373,9 @@ _gtk_style_context_queue_invalidate (GtkStyleContext *context,
     }
   else if (priv->widget_path == NULL)
     {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_style_context_invalidate (context);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
     }
 }
 
@@ -3386,6 +3388,8 @@ _gtk_style_context_queue_invalidate (GtkStyleContext *context,
  * information immediately.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.12: Style contexts are invalidated automatically.
  **/
 void
 gtk_style_context_invalidate (GtkStyleContext *context)

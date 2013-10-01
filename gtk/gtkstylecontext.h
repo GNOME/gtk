@@ -1010,7 +1010,7 @@ void gtk_style_context_get_margin           (GtkStyleContext *context,
                                              GtkStateFlags    state,
                                              GtkBorder       *margin);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_12
 void gtk_style_context_invalidate           (GtkStyleContext *context);
 GDK_AVAILABLE_IN_ALL
 void gtk_style_context_reset_widgets        (GdkScreen       *screen);
