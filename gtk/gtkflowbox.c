@@ -927,6 +927,23 @@ gtk_flow_box_apply_filter (GtkFlowBox      *box,
 }
 
 static void
+gtk_flow_box_apply_filter_all (GtkFlowBox *box)
+{
+  GSequenceIter *iter;
+
+  for (iter = g_sequence_get_begin_iter (BOX_PRIV (box)->children);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter))
+    {
+      GtkFlowBoxChild *child;
+
+      child = g_sequence_get (iter);
+      gtk_flow_box_apply_filter (box, child);
+    }
+  gtk_widget_queue_resize (GTK_WIDGET (box));
+}
+
+static void
 gtk_flow_box_apply_sort (GtkFlowBox      *box,
                          GtkFlowBoxChild *child)
 {
@@ -4582,7 +4599,7 @@ gtk_flow_box_set_filter_func (GtkFlowBox           *box,
   priv->filter_data = user_data;
   priv->filter_destroy = destroy;
 
-  gtk_flow_box_invalidate_filter (box);
+  gtk_flow_box_apply_filter_all (box);
 }
 
 /**
@@ -4605,20 +4622,7 @@ gtk_flow_box_invalidate_filter (GtkFlowBox *box)
   g_return_if_fail (GTK_IS_FLOW_BOX (box));
 
   if (BOX_PRIV (box)->filter_func != NULL)
-    {
-      GSequenceIter *iter;
-
-      for (iter = g_sequence_get_begin_iter (BOX_PRIV (box)->children);
-           !g_sequence_iter_is_end (iter);
-           iter = g_sequence_iter_next (iter))
-        {
-          GtkFlowBoxChild *child;
-
-          child = g_sequence_get (iter);
-          gtk_flow_box_apply_filter (box, child);
-        }
-      gtk_widget_queue_resize (GTK_WIDGET (box));
-    }
+    gtk_flow_box_apply_filter_all (box);
 }
 
 /* Sorting {{{2 */
