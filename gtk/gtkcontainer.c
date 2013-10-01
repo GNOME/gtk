@@ -1520,7 +1520,11 @@ gtk_container_get_border_width (GtkContainer *container)
  * gtk_grid_attach() as an alternative to gtk_container_add() in
  * those cases. A widget may be added to only one container at a time;
  * you can't place the same widget inside two different containers.
- **/
+ *
+ * Note that some containers, such as #GtkScrolledWindow or #GtkListBox,
+ * may add intermediate children between the added widget and the
+ * container.
+ */
 void
 gtk_container_add (GtkContainer *container,
                    GtkWidget    *widget)
