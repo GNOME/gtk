@@ -36,8 +36,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-23 19:35+0200\n"
-"PO-Revision-Date: 2013-09-23 15:25+0200\n"
+"POT-Creation-Date: 2013-10-01 19:10+0200\n"
+"PO-Revision-Date: 2013-09-29 11:57+0200\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Dansk <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -1373,40 +1373,40 @@ msgstr ""
 "Med dette program følger ABSOLUT INGEN GARANTI;\n"
 "detaljer kan findes på <a href=\"%s\">%s</a>"
 
-#: ../gtk/gtkaboutdialog.c:375
+#: ../gtk/gtkaboutdialog.c:372
 msgid "License"
 msgstr "Licens"
 
-#: ../gtk/gtkaboutdialog.c:376
+#: ../gtk/gtkaboutdialog.c:373
 msgid "The license of the program"
 msgstr "Vis licensen for programmet"
 
-#: ../gtk/gtkaboutdialog.c:914
+#: ../gtk/gtkaboutdialog.c:921
 msgid "Could not show link"
 msgstr "Kunne ikke vise link"
 
-#: ../gtk/gtkaboutdialog.c:951
+#: ../gtk/gtkaboutdialog.c:958
 msgid "Website"
 msgstr "Websted"
 
-#: ../gtk/gtkaboutdialog.c:1005
+#: ../gtk/gtkaboutdialog.c:1012
 #, c-format
 msgid "About %s"
 msgstr "Om %s"
 
-#: ../gtk/gtkaboutdialog.c:2290
+#: ../gtk/gtkaboutdialog.c:2297
 msgid "Created by"
 msgstr "Skrevet af"
 
-#: ../gtk/gtkaboutdialog.c:2293
+#: ../gtk/gtkaboutdialog.c:2300
 msgid "Documented by"
 msgstr "Dokumenteret af"
 
-#: ../gtk/gtkaboutdialog.c:2303
+#: ../gtk/gtkaboutdialog.c:2310
 msgid "Translated by"
 msgstr "Oversat af"
 
-#: ../gtk/gtkaboutdialog.c:2308
+#: ../gtk/gtkaboutdialog.c:2315
 msgid "Artwork by"
 msgstr "Grafik af"
 
@@ -1542,7 +1542,7 @@ msgstr "Relaterede programmer"
 msgid "Other Applications"
 msgstr "Andre programmer"
 
-#: ../gtk/gtkapplication.c:1569
+#: ../gtk/gtkapplication.c:1565
 #, c-format
 msgid ""
 "%s cannot quit at this time:\n"
@@ -2014,25 +2014,25 @@ msgid "Paper Margins"
 msgstr "Papirmargener"
 
 #: ../gtk/gtkentry.c:9271 ../gtk/gtkentry.c:9417 ../gtk/gtklabel.c:6276
-#: ../gtk/gtktextview.c:8694 ../gtk/gtktextview.c:8877
+#: ../gtk/gtktextview.c:8703 ../gtk/gtktextview.c:8886
 msgid "Cu_t"
 msgstr "K_lip"
 
 #: ../gtk/gtkentry.c:9275 ../gtk/gtkentry.c:9420 ../gtk/gtklabel.c:6277
-#: ../gtk/gtktextview.c:8698 ../gtk/gtktextview.c:8881
+#: ../gtk/gtktextview.c:8707 ../gtk/gtktextview.c:8890
 msgid "_Copy"
 msgstr "_Kopiér"
 
 #: ../gtk/gtkentry.c:9279 ../gtk/gtkentry.c:9423 ../gtk/gtklabel.c:6278
-#: ../gtk/gtktextview.c:8700 ../gtk/gtktextview.c:8883
+#: ../gtk/gtktextview.c:8709 ../gtk/gtktextview.c:8892
 msgid "_Paste"
 msgstr "_Indsæt"
 
-#: ../gtk/gtkentry.c:9282 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8703
+#: ../gtk/gtkentry.c:9282 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8712
 msgid "_Delete"
 msgstr "_Slet"
 
-#: ../gtk/gtkentry.c:9293 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8717
+#: ../gtk/gtkentry.c:9293 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8726
 msgid "Select _All"
 msgstr "Markér _alt"
 
@@ -2288,7 +2288,7 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "Vælg en skrifttype"
 
-#: ../gtk/gtkheaderbar.c:224 ../gtk/gtkwindow.c:5281 ../gtk/gtkwindow.c:8194
+#: ../gtk/gtkheaderbar.c:224 ../gtk/gtkwindow.c:5281 ../gtk/gtkwindow.c:8251
 msgid "Close"
 msgstr "Luk"
 
@@ -2580,7 +2580,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Kan ikke afbryde processen med PID %d: %s"
 
-#: ../gtk/gtknotebook.c:5016 ../gtk/gtknotebook.c:7673
+#: ../gtk/gtknotebook.c:5019 ../gtk/gtknotebook.c:7692
 #, c-format
 msgid "Page %u"
 msgstr "Side %u"
@@ -3355,7 +3355,7 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:5242 ../gtk/gtkwindow.c:8089
+#: ../gtk/gtkwindow.c:5242 ../gtk/gtkwindow.c:8146
 msgid "Minimize"
 msgstr "Minimér"
 
@@ -3363,39 +3363,39 @@ msgstr "Minimér"
 msgid "Restore"
 msgstr "Gendan"
 
-#: ../gtk/gtkwindow.c:5263 ../gtk/gtkwindow.c:8097
+#: ../gtk/gtkwindow.c:5263 ../gtk/gtkwindow.c:8154
 msgid "Maximize"
 msgstr "Maksimér"
 
-#: ../gtk/gtkwindow.c:8097
+#: ../gtk/gtkwindow.c:8154
 msgid "Unmaximize"
 msgstr "Afmaksimér"
 
-#: ../gtk/gtkwindow.c:8106
+#: ../gtk/gtkwindow.c:8163
 msgid "Always on Top"
 msgstr "Altid øverst"
 
-#: ../gtk/gtkwindow.c:8118
+#: ../gtk/gtkwindow.c:8175
 msgid "Always on Visible Workspace"
 msgstr "Altid på det synlige arbejdsområde"
 
-#: ../gtk/gtkwindow.c:8126
+#: ../gtk/gtkwindow.c:8183
 msgid "Only on This Workspace"
 msgstr "Kun dette arbejdsområde"
 
-#: ../gtk/gtkwindow.c:8143
+#: ../gtk/gtkwindow.c:8200
 msgid "Move to Workspace Up"
 msgstr "Flyt til arbejdsområde over"
 
-#: ../gtk/gtkwindow.c:8152
+#: ../gtk/gtkwindow.c:8209
 msgid "Move to Workspace Down"
 msgstr "Flyt til arbejdsområde under"
 
-#: ../gtk/gtkwindow.c:8166
+#: ../gtk/gtkwindow.c:8223
 msgid "Move to Another Workspace"
 msgstr "Flyt til et andet arbejdsområde"
 
-#: ../gtk/gtkwindow.c:8174
+#: ../gtk/gtkwindow.c:8231
 #, c-format
 msgid "Workspace %d"
 msgstr "Arbejdsområde %d"
