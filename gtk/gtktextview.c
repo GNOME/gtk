@@ -5297,8 +5297,8 @@ gtk_text_view_draw (GtkWidget *widget,
 
       canvas_rect.x = -gtk_adjustment_get_value (priv->hadjustment);
       canvas_rect.y = -gtk_adjustment_get_value (priv->vadjustment);
-      canvas_rect.width = priv->cached_size_request.width;
-      canvas_rect.height = priv->cached_size_request.height;
+      canvas_rect.width = priv->width;
+      canvas_rect.height = priv->height;
 
       cairo_save (cr);
       gtk_cairo_transform_to_window (cr, widget, window);
@@ -9014,7 +9014,7 @@ text_window_invalidate_handler (GdkWindow      *window,
 {
   gpointer widget;
   GtkTextView *text_view;
-  int y;
+  int x, y;
 
   gdk_window_get_user_data (window, &widget);
   text_view = GTK_TEXT_VIEW (widget);
@@ -9024,10 +9024,11 @@ text_window_invalidate_handler (GdkWindow      *window,
   if (text_view->priv->in_scroll)
     return;
 
+  x = gtk_adjustment_get_value (text_view->priv->hadjustment);
   y = gtk_adjustment_get_value (text_view->priv->vadjustment);
-  cairo_region_translate (region, 0, y);
+  cairo_region_translate (region, x, y);
   _gtk_pixel_cache_invalidate (text_view->priv->pixel_cache, region);
-  cairo_region_translate (region, 0, -y);
+  cairo_region_translate (region, -x, -y);
 }
 
 static void
