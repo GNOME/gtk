@@ -3413,15 +3413,11 @@ gtk_icon_info_finalize (GObject *object)
   g_free (icon_info->filename);
   g_clear_object (&icon_info->icon_file);
 
-  if (icon_info->loadable)
-    g_object_unref (icon_info->loadable);
+  g_clear_object (&icon_info->loadable);
   g_slist_free_full (icon_info->emblem_infos, (GDestroyNotify) g_object_unref);
-  if (icon_info->pixbuf)
-    g_object_unref (icon_info->pixbuf);
-  if (icon_info->cache_pixbuf)
-    g_object_unref (icon_info->cache_pixbuf);
-  if (icon_info->symbolic_pixbuf_size)
-    gtk_requisition_free (icon_info->symbolic_pixbuf_size);
+  g_clear_object (&icon_info->pixbuf);
+  g_clear_object (&icon_info->cache_pixbuf);
+  g_clear_pointer (&icon_info->symbolic_pixbuf_size, gtk_requisition_free);
   icon_data_unref (icon_info->data);
 
   symbolic_pixbuf_cache_free (icon_info->symbolic_pixbuf_cache);
