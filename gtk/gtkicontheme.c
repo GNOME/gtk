@@ -3416,7 +3416,9 @@ gtk_icon_info_finalize (GObject *object)
   g_clear_object (&icon_info->loadable);
   g_slist_free_full (icon_info->emblem_infos, (GDestroyNotify) g_object_unref);
   g_clear_object (&icon_info->pixbuf);
+  g_clear_object (&icon_info->proxy_pixbuf);
   g_clear_object (&icon_info->cache_pixbuf);
+  g_clear_error (&icon_info->load_error);
   g_clear_pointer (&icon_info->symbolic_pixbuf_size, gtk_requisition_free);
   icon_data_unref (icon_info->data);
 
