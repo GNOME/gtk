@@ -667,6 +667,7 @@ ensure_stated_surface_from_info (GtkIconHelper *self,
 	(gdk_pixbuf_get_width (destination) + scale - 1) / scale;
       self->priv->rendered_surface_height = 
 	(gdk_pixbuf_get_height (destination) + scale - 1) / scale;
+      g_object_unref (destination);
     }
 
   self->priv->rendered_surface = surface;
