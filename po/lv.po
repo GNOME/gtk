@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2013-09-23 20:16+0000\n"
-"PO-Revision-Date: 2013-09-21 21:50+0300\n"
+"PO-Revision-Date: 2013-10-02 11:49+0300\n"
 "Last-Translator: Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>\n"
 "Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
 "Language: lv\n"
@@ -1166,7 +1166,7 @@ msgstr "Apgriezts portrets"
 #: ../gtk/deprecated/gtkstock.c:428
 msgctxt "Stock label"
 msgid "Page Set_up"
-msgstr "Lapas iestatīj_ums"
+msgstr "Lappuses iestatīj_ums"
 
 #: ../gtk/deprecated/gtkstock.c:429
 msgctxt "Stock label"
@@ -2544,7 +2544,7 @@ msgstr "Nevar beigt procesu ar PID %d — %s"
 #: ../gtk/gtknotebook.c:5016 ../gtk/gtknotebook.c:7673
 #, c-format
 msgid "Page %u"
-msgstr "Lapa %u"
+msgstr "Lappuse %u"
 
 #. Translators: the format here is used to build the string that will be rendered
 #. * in the number emblem.
@@ -2558,7 +2558,7 @@ msgstr "%d"
 #: ../gtk/gtkpagesetup.c:646 ../gtk/gtkpapersize.c:848
 #: ../gtk/gtkpapersize.c:888
 msgid "Not a valid page setup file"
-msgstr "Nav derīga lapas iestatījumu datne"
+msgstr "Nav derīga lappušu iestatījumu datne"
 
 #: ../gtk/gtkpagesetupunixdialog.c:196
 msgid "Any Printer"
@@ -2990,7 +2990,7 @@ msgstr "No lejas uz augšu, no labās uz kreiso"
 #: ../gtk/gtkprintunixdialog.c:2983 ../gtk/gtkprintunixdialog.c:2996
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4714
 msgid "Page Ordering"
-msgstr "Lapu secība"
+msgstr "Lappušu secība"
 
 #: ../gtk/gtkprintunixdialog.c:3012
 msgid "Left to right"
@@ -4637,7 +4637,7 @@ msgstr "Brīvi pieejama"
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4696
 msgid "Pages per Sheet"
-msgstr "Lapas uz loksnes"
+msgstr "Lappuses uz loksnes"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
@@ -4725,7 +4725,7 @@ msgstr "SVG"
 #: ../modules/printbackends/file/gtkprintbackendfile.c:666
 #: ../modules/printbackends/test/gtkprintbackendtest.c:501
 msgid "Pages per _sheet:"
-msgstr "Lapas uz loks_nes:"
+msgstr "Lappuses uz loks_nes:"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:725
 msgid "File"
@@ -4741,7 +4741,7 @@ msgstr "Drukāt uz LPR"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:419
 msgid "Pages Per Sheet"
-msgstr "Lapas uz loksnes"
+msgstr "Lappuses uz loksnes"
 
 #: ../modules/printbackends/lpr/gtkprintbackendlpr.c:426
 msgid "Command Line"
@@ -4968,11 +4968,11 @@ msgstr "Drukāt"
 
 #: ../gtk/gtkprintunixdialog.ui.h:12
 msgid "_All Pages"
-msgstr "Vis_as lapas"
+msgstr "Vis_as lappuses"
 
 #: ../gtk/gtkprintunixdialog.ui.h:13
 msgid "C_urrent Page"
-msgstr "Šo lap_u"
+msgstr "Šo lapp_usi"
 
 #: ../gtk/gtkprintunixdialog.ui.h:14
 msgid "Se_lection"
@@ -4980,7 +4980,7 @@ msgstr "Izvē_lēto"
 
 #: ../gtk/gtkprintunixdialog.ui.h:15
 msgid "Pag_es:"
-msgstr "L_apas:"
+msgstr "L_appuses:"
 
 #: ../gtk/gtkprintunixdialog.ui.h:16 ../gtk/gtkprintunixdialog.ui.h:18
 #: ../gtk/gtkprintunixdialog.ui.h:21
@@ -4988,12 +4988,12 @@ msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
 msgstr ""
-"Norādiet vienu vai vairākus lapu apgabalus,\n"
+"Norādiet vienu vai vairākus lappušu apgabalus,\n"
 "piemēram: 1-3,7,11"
 
 #: ../gtk/gtkprintunixdialog.ui.h:20
 msgid "Pages"
-msgstr "Lapas"
+msgstr "Lappuses"
 
 #: ../gtk/gtkprintunixdialog.ui.h:23
 msgid "Copies"
@@ -5025,11 +5025,11 @@ msgstr "Di_vpusējs:"
 
 #: ../gtk/gtkprintunixdialog.ui.h:30
 msgid "Pages per _side:"
-msgstr "Lapa_s lappusē:"
+msgstr "Lappu_ses vienā pusē:"
 
 #: ../gtk/gtkprintunixdialog.ui.h:31
 msgid "Page or_dering:"
-msgstr "Lapu _secība:"
+msgstr "Lappušu _secība:"
 
 #: ../gtk/gtkprintunixdialog.ui.h:32
 msgid "_Only print:"
@@ -5111,7 +5111,7 @@ msgstr "Apturēt uzdevumu, līdz tiks norādīts to atsākt"
 
 #: ../gtk/gtkprintunixdialog.ui.h:71
 msgid "Add Cover Page"
-msgstr "Pievienot vāka lapu"
+msgstr "Pievienot vāka lappusi"
 
 #. this is the label used for the option in the print dialog that controls the front cover page.
 #: ../gtk/gtkprintunixdialog.ui.h:74
