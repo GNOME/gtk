@@ -350,7 +350,7 @@ gtk_print_backend_papi_print_stream (GtkPrintBackend        *print_backend,
   const gchar *title;
   char *prtnm = NULL;
   GtkPrintDuplex val;
-  papi_status_t pstatus = NULL;
+  papi_status_t pstatus;
   papi_attribute_t **attrs = NULL;
   papi_job_ticket_t *ticket = NULL;
   
