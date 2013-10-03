@@ -389,6 +389,8 @@ static gint gtk_window_focus_out_event    (GtkWidget         *widget,
 static void gtk_window_style_updated      (GtkWidget         *widget);
 static gboolean gtk_window_state_event    (GtkWidget          *widget,
                                            GdkEventWindowState *event);
+static void gtk_window_remove             (GtkContainer      *container,
+                                           GtkWidget         *widget);
 static void gtk_window_check_resize       (GtkContainer      *container);
 static void gtk_window_forall             (GtkContainer   *container,
 					   gboolean	include_internals,
@@ -666,6 +668,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->get_preferred_height = gtk_window_get_preferred_height;
   widget_class->get_preferred_height_for_width = gtk_window_get_preferred_height_for_width;
 
+  container_class->remove = gtk_window_remove;
   container_class->check_resize = gtk_window_check_resize;
   container_class->forall = gtk_window_forall;
 
@@ -7569,6 +7572,17 @@ gtk_window_focus_out_event (GtkWidget     *widget,
   gtk_window_set_mnemonics_visible (window, FALSE);
 
   return FALSE;
+}
+
+static void
+gtk_window_remove (GtkContainer *container,
+                  GtkWidget     *widget)
+{
+  GtkWindow *window = GTK_WINDOW (container);
+  if (widget == window->priv->title_box)
+    unset_titlebar (window);
+  else
+    GTK_CONTAINER_CLASS (gtk_window_parent_class)->remove (container, widget);
 }
 
 static void
