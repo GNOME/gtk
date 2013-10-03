@@ -2418,6 +2418,9 @@ gtk_list_box_row_set_focus (GtkListBoxRow *row)
   GdkModifierType state = 0;
   gboolean modify_selection_pressed;
 
+  if (!list_box)
+    return;
+
   modify_selection_pressed = FALSE;
   if (gtk_get_current_event_state (&state))
     {
