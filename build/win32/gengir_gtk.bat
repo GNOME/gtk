@@ -72,6 +72,8 @@ echo python %BASEDIR%\bin\g-ir-scanner --verbose -I..\.. -I..\..\gdk ^^>> gtk_gi
 echo -I%BASEDIR%\include\glib-2.0 -I%BASEDIR%\lib\glib-2.0\include ^^>> gtk_gir.bat
 echo -I%BASEDIR%\include\pango-1.0 -I%BASEDIR%\include\atk-1.0 ^^>> gtk_gir.bat
 echo -I%BASEDIR%\include\gdk-pixbuf-2.0 -I%BASEDIR%\include ^^>> gtk_gir.bat
+if "%PLAT%" == "x64" echo -D__int64=long long ^^>> gtk_gir.bat
+if "%PLAT%" == "Win32" echo -Dtime_t=long ^^>> gtk_gir.bat
 echo --namespace=Gdk --nsversion=3.0 ^^>> gtk_gir.bat
 echo --include=Gio-2.0 --include=GdkPixbuf-2.0 ^^>> gtk_gir.bat
 echo --include=Pango-1.0 --include=cairo-1.0 ^^>> gtk_gir.bat
@@ -111,7 +113,8 @@ echo --no-libtool --library=gtk-3-vs%VSVER% ^^>> gtk_gir.bat
 echo --reparse-validate --add-include-path=%BASEDIR%\share\gir-1.0 --add-include-path=. ^^>> gtk_gir.bat
 echo --pkg-export gtk+-3.0 --warn-all --c-include="gtk/gtkx.h" ^^>> gtk_gir.bat
 echo -I..\.. -DG_LOG_DOMAIN=\"Gtk\" -DGTK_LIBDIR=\"/dummy/lib\" ^^>> gtk_gir.bat
-echo -Dtime_t=long ^^>> gtk_gir.bat
+if "%PLAT%" == "x64" echo -D__int64=long long ^^>> gtk_gir.bat
+if "%PLAT%" == "Win32" echo -Dtime_t=long ^^>> gtk_gir.bat
 echo -DGTK_DATADIR=\"/dummy/share\" -DGTK_DATA_PREFIX=\"/dummy\" ^^>> gtk_gir.bat
 echo -DGTK_SYSCONFDIR=\"/dummy/etc\" -DGTK_VERSION=\"3.6.2\" ^^>> gtk_gir.bat
 echo -DGTK_BINARY_VERSION=\"3.0.0\" -DGTK_HOST=\"i686-pc-vs%VSVER%\" ^^>> gtk_gir.bat
