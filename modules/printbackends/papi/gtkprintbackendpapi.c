@@ -748,13 +748,6 @@ is_local_printer (gchar *printer_uri)
     return FALSE;
 }
 
-void
-merge_ppd_data (papi_attribute_t ***attributes, gchar *ppdfile)
-{
-  get_ppd_attrs (attributes, ppdfile);
-}
-
-
 static void
 papi_display_printer_status_done (gpointer user_data)
 {
