@@ -344,9 +344,6 @@ gtk_print_backend_papi_print_stream (GtkPrintBackend        *print_backend,
   GtkPrinterPapi *printer;
   _PrintStreamData *ps;
   GtkPrintSettings *settings;
-  gint argc;  
-  gint in_fd;
-  gchar **argv = NULL; 
   const gchar *title;
   char *prtnm = NULL;
   GtkPrintDuplex val;
@@ -544,18 +541,10 @@ static gboolean
 papi_get_printer_list (GtkPrintBackendPapi *papi_backend)
 {
   int i;
-  const char *attributes[] =  /* Attributes we're interested in */
-    {
-      "printer-name",
-      "printer-uri-supported",
-      NULL
-    };
-  papi_status_t status, status2;
+  papi_status_t status;
   papi_service_t service = NULL;
   char **printers = NULL;
-  GtkPrinter *printer;
   GtkPrinterPapi *papi_printer;
-  GList *current_printer_list;
   GtkPrintBackend *backend = GTK_PRINT_BACKEND (papi_backend);
   
   if ((status = papiServiceCreate (&service, NULL, NULL, NULL, NULL,
@@ -576,8 +565,6 @@ papi_get_printer_list (GtkPrintBackendPapi *papi_backend)
   for (i = 0; printers[i] != NULL; i++) 
     {
       GtkPrinter *printer;
-      char *name = NULL, *url = NULL;
-      papi_attribute_t **attrs = NULL;
 
           printer = gtk_print_backend_find_printer (backend, printers[i]);
 
@@ -642,14 +629,12 @@ update_printer_status (GtkPrinter *printer)
 {
   GtkPrintBackend *backend;
   GtkPrinterPapi *papi_printer;
-  gboolean status_changed = FALSE;
 
   backend = gtk_printer_get_backend (printer);
   papi_printer = GTK_PRINTER_PAPI (printer);
 
-  /* if (status_changed) */
-    g_signal_emit_by_name (GTK_PRINT_BACKEND (backend),
-                           "printer-status-changed", printer);
+  g_signal_emit_by_name (GTK_PRINT_BACKEND (backend),
+                         "printer-status-changed", printer);
 
 }
 
@@ -662,7 +647,6 @@ papi_printer_get_options (GtkPrinter           *printer,
 {
   GtkPrinterOptionSet *set;
   GtkPrinterOption *option;
-  int i;
   char *print_at[] = { "now", "on-hold" };
   char *n_up[] = {"1"};
 
@@ -790,7 +774,7 @@ papi_display_printer_status (gpointer user_data)
 {
   GtkPrinter *printer = (GtkPrinter *) user_data;
   GtkPrinterPapi *papi_printer;
-  gchar *loc, *printer_uri, *ppdfile;
+  gchar *loc;
   int state;
   papi_service_t service;
   papi_attribute_t **attrs = NULL;
