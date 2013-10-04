@@ -684,9 +684,6 @@ gtk_accel_map_load (const gchar *file_name)
 
   g_return_if_fail (file_name != NULL);
 
-  if (!g_file_test (file_name, G_FILE_TEST_IS_REGULAR))
-    return;
-
   fd = g_open (file_name, O_RDONLY, 0);
   if (fd < 0)
     return;
