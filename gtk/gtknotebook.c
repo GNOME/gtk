@@ -5209,31 +5209,36 @@ gtk_notebook_paint (GtkWidget    *widget,
   header_width = width;
   header_height = height;
 
+  gtk_style_context_save (context);
+
   switch (tab_pos)
     {
     case GTK_POS_TOP:
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOP);
       y += page->allocation.height;
       height -= page->allocation.height;
       header_height = page->allocation.height;
       break;
     case GTK_POS_BOTTOM:
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM);
       height -= page->allocation.height;
       header_y += height;
       header_height = page->allocation.height;
       break;
     case GTK_POS_LEFT:
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
       x += page->allocation.width;
       width -= page->allocation.width;
       header_width = page->allocation.width;
       break;
     case GTK_POS_RIGHT:
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
       width -= page->allocation.width;
       header_width = page->allocation.width;
       header_x += width;
       break;
     }
 
-  gtk_style_context_save (context);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_HEADER);
   gtk_render_background (context, cr,
                          header_x, header_y, header_width, header_height);
