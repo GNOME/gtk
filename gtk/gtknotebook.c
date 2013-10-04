@@ -5240,6 +5240,8 @@ gtk_notebook_paint (GtkWidget    *widget,
     }
 
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_HEADER);
+  if (priv->show_border)
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_FRAME);
   gtk_render_background (context, cr,
                          header_x, header_y, header_width, header_height);
   gtk_render_frame (context, cr,
