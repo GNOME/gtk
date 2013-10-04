@@ -5159,7 +5159,9 @@ gtk_notebook_paint (GtkWidget    *widget,
   GList *children;
   gboolean showarrow;
   gint width, height;
+  gint header_width, header_height;
   gint x, y;
+  gint header_x, header_y;
   guint border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   gint gap_x = 0, gap_width = 0, step = STEP_PREV;
   gboolean is_rtl;
@@ -5202,29 +5204,42 @@ gtk_notebook_paint (GtkWidget    *widget,
   else
     page = priv->cur_page;
 
-  gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_HEADER);
-  gtk_render_background (context, cr,
-                         x, y, width, page->allocation.height);
-  gtk_render_frame (context, cr,
-                    x, y, width, page->allocation.height);
-  gtk_style_context_restore (context);
+  header_x = x;
+  header_y = y;
+  header_width = width;
+  header_height = height;
 
   switch (tab_pos)
     {
     case GTK_POS_TOP:
       y += page->allocation.height;
-      /* fall thru */
+      height -= page->allocation.height;
+      header_height = page->allocation.height;
+      break;
     case GTK_POS_BOTTOM:
       height -= page->allocation.height;
+      header_y += height;
+      header_height = page->allocation.height;
       break;
     case GTK_POS_LEFT:
       x += page->allocation.width;
-      /* fall thru */
+      width -= page->allocation.width;
+      header_width = page->allocation.width;
+      break;
     case GTK_POS_RIGHT:
       width -= page->allocation.width;
+      header_width = page->allocation.width;
+      header_x += width;
       break;
     }
+
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_HEADER);
+  gtk_render_background (context, cr,
+                         header_x, header_y, header_width, header_height);
+  gtk_render_frame (context, cr,
+                    header_x, header_y, header_width, header_height);
+  gtk_style_context_restore (context);
 
   if (!NOTEBOOK_IS_TAB_LABEL_PARENT (notebook, priv->cur_page) ||
       !gtk_widget_get_mapped (priv->cur_page->tab_label))
