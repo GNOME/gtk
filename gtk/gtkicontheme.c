@@ -4077,17 +4077,6 @@ gdk_color_to_css (GdkColor *color)
                           color->blue >> 8);
 }
 
-static gchar *
-gdk_rgba_to_css (const GdkRGBA *color)
-{
-  /* drop alpha for now, since librsvg does not understand rgba() */
-  return g_strdup_printf ("rgba(%d,%d,%d,%g)",
-                          (gint)(color->red * 255),
-                          (gint)(color->green * 255),
-                          (gint)(color->blue * 255),
-                          color->alpha);
-}
-
 static void
 proxy_symbolic_pixbuf_destroy (guchar *pixels, gpointer data)
 {
@@ -4170,18 +4159,18 @@ _gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
    * that would mean we have a broken style */
   g_return_val_if_fail (fg != NULL, NULL);
 
-  css_fg = gdk_rgba_to_css (fg);
+  css_fg = gdk_rgba_to_string (fg);
 
   css_success = css_warning = css_error = NULL;
 
   if (warning_color)
-    css_warning = gdk_rgba_to_css (warning_color);
+    css_warning = gdk_rgba_to_string (warning_color);
 
   if (error_color)
-    css_error = gdk_rgba_to_css (error_color);
+    css_error = gdk_rgba_to_string (error_color);
 
   if (success_color)
-    css_success = gdk_rgba_to_css (success_color);
+    css_success = gdk_rgba_to_string (success_color);
 
   if (!css_success)
     {
