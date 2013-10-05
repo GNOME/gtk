@@ -1419,7 +1419,9 @@ gtk_container_set_property (GObject         *object,
       gtk_container_set_border_width (container, g_value_get_uint (value));
       break;
     case PROP_RESIZE_MODE:
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_container_set_resize_mode (container, g_value_get_enum (value));
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_CHILD:
       gtk_container_add (container, GTK_WIDGET (g_value_get_object (value)));
@@ -1595,6 +1597,10 @@ _gtk_container_dequeue_resize_handler (GtkContainer *container)
  * The resize mode of a container determines whether a resize request
  * will be passed to the container's parent, queued for later execution
  * or executed immediately.
+ *
+ * Deprecated: 3.12: Resize modes are deprecated. They aren't necessary
+ *     anymore since frame clocks and might introduce obscure bugs if
+ *     used.
  **/
 void
 gtk_container_set_resize_mode (GtkContainer  *container,
@@ -1630,6 +1636,10 @@ gtk_container_set_resize_mode (GtkContainer  *container,
  * gtk_container_set_resize_mode ().
  *
  * Return value: the current resize mode
+ *
+ * Deprecated: 3.12: Resize modes are deprecated. They aren't necessary
+ *     anymore since frame clocks and might introduce obscure bugs if
+ *     used.
  **/
 GtkResizeMode
 gtk_container_get_resize_mode (GtkContainer *container)
@@ -1748,7 +1758,9 @@ gtk_container_queue_resize_handler (GtkContainer *container)
 {
   GtkWidget *widget;
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   g_return_if_fail (GTK_IS_RESIZE_CONTAINER (container));
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   widget = GTK_WIDGET (container);
 
@@ -1793,8 +1805,10 @@ _gtk_container_queue_resize_internal (GtkContainer *container,
       _gtk_widget_set_alloc_needed (widget, TRUE);
       _gtk_size_request_cache_clear (_gtk_widget_peek_request_cache (widget));
 
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       if (GTK_IS_RESIZE_CONTAINER (widget))
         break;
+      G_GNUC_END_IGNORE_DEPRECATIONS;
 
       widget = gtk_widget_get_parent (widget);
     }
@@ -1879,6 +1893,7 @@ gtk_container_real_check_resize (GtkContainer *container)
   if (requisition.width > allocation.width ||
       requisition.height > allocation.height)
     {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       if (GTK_IS_RESIZE_CONTAINER (container))
         {
           gtk_widget_size_allocate (widget, &allocation);
@@ -1886,6 +1901,7 @@ gtk_container_real_check_resize (GtkContainer *container)
         }
       else
         gtk_widget_queue_resize (widget);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
     }
   else
     {

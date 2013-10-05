@@ -1069,10 +1069,12 @@ gtk_style_context_set_invalid (GtkStyleContext *context,
 
   if (invalid)
     {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       if (GTK_IS_RESIZE_CONTAINER (priv->widget))
         _gtk_container_queue_restyle (GTK_CONTAINER (priv->widget));
       else if (priv->parent)
         gtk_style_context_set_invalid (priv->parent, TRUE);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
     }
 }
 

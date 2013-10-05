@@ -1287,7 +1287,9 @@ gtk_window_init (GtkWindow *window)
   _gtk_widget_set_is_toplevel (widget, TRUE);
   _gtk_widget_set_anchored (widget, TRUE);
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   gtk_container_set_resize_mode (GTK_CONTAINER (window), GTK_RESIZE_QUEUE);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   priv->title = NULL;
   priv->wmclass_name = g_strdup (g_get_prgname ());
@@ -5780,7 +5782,9 @@ gtk_window_realize (GtkWidget *widget)
 
   if (gtk_widget_get_parent_window (widget))
     {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_container_set_resize_mode (GTK_CONTAINER (widget), GTK_RESIZE_PARENT);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
 
       attributes.x = allocation.x;
       attributes.y = allocation.y;
@@ -5804,7 +5808,9 @@ gtk_window_realize (GtkWidget *widget)
       return;
     }
 
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   gtk_container_set_resize_mode (GTK_CONTAINER (window), GTK_RESIZE_QUEUE);
+  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   /* ensure widget tree is properly size allocated */
   if (allocation.x == -1 &&
@@ -9040,8 +9046,10 @@ gtk_window_move_resize (GtkWindow *window)
 
 	  gdk_window_process_updates (gdk_window, TRUE);
 
+          G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 	  if (gtk_container_get_resize_mode (container) == GTK_RESIZE_QUEUE)
 	    gtk_widget_queue_draw (widget);
+          G_GNUC_END_IGNORE_DEPRECATIONS;
 	}
       else
         {
@@ -9064,11 +9072,13 @@ gtk_window_move_resize (GtkWindow *window)
 	   * FIXME: we should also dequeue the pending redraws here, since
 	   * we handle those ourselves upon ->configure_notify_received==TRUE.
 	   */
+          G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 	  if (gtk_container_get_resize_mode (container) == GTK_RESIZE_QUEUE)
 	    {
 	      gtk_widget_queue_resize_no_redraw (widget);
 	      _gtk_container_dequeue_resize_handler (container);
 	    }
+          G_GNUC_END_IGNORE_DEPRECATIONS;
 	}
     }
   else

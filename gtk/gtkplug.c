@@ -313,7 +313,9 @@ gtk_plug_set_is_child (GtkPlug  *plug,
 	gtk_widget_unmap (widget);
 
       _gtk_window_set_is_toplevel (GTK_WINDOW (plug), FALSE);
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_container_set_resize_mode (GTK_CONTAINER (plug), GTK_RESIZE_PARENT);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
 
       _gtk_widget_propagate_hierarchy_changed (widget, widget);
     }
@@ -328,7 +330,9 @@ gtk_plug_set_is_child (GtkPlug  *plug,
       gtk_window_group_add_window (priv->modality_group, GTK_WINDOW (plug));
 
       _gtk_window_set_is_toplevel (GTK_WINDOW (plug), TRUE);
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_container_set_resize_mode (GTK_CONTAINER (plug), GTK_RESIZE_QUEUE);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
 
       _gtk_widget_propagate_hierarchy_changed (GTK_WIDGET (plug), NULL);
     }

@@ -119,10 +119,10 @@ GDK_AVAILABLE_IN_ALL
 void    gtk_container_remove		 (GtkContainer	   *container,
 					  GtkWidget	   *widget);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_12
 void    gtk_container_set_resize_mode    (GtkContainer     *container,
 					  GtkResizeMode     resize_mode);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_12
 GtkResizeMode gtk_container_get_resize_mode (GtkContainer     *container);
 
 GDK_AVAILABLE_IN_ALL
