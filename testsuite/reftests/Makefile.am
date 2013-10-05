@@ -282,6 +282,9 @@ testdata = \
 	style-properties-only-child.css \
 	style-properties-only-child.ref.ui \
 	style-properties-only-child.ui \
+	symbolic-icon-translucent-color.css \
+	symbolic-icon-translucent-color.ref.ui \
+	symbolic-icon-translucent-color.ui \
 	toplevel-vs-popup.ref.ui \
 	toplevel-vs-popup.ui \
 	treeview-headers-hidden.ref.ui \
