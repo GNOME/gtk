@@ -4081,10 +4081,11 @@ static gchar *
 gdk_rgba_to_css (const GdkRGBA *color)
 {
   /* drop alpha for now, since librsvg does not understand rgba() */
-  return g_strdup_printf ("rgb(%d,%d,%d)",
+  return g_strdup_printf ("rgba(%d,%d,%d,%g)",
                           (gint)(color->red * 255),
                           (gint)(color->green * 255),
-                          (gint)(color->blue * 255));
+                          (gint)(color->blue * 255),
+                          color->alpha);
 }
 
 static void
