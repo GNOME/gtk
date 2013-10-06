@@ -3839,6 +3839,9 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 
 	sidebar->drop_state = DROP_STATE_NORMAL;
 	sidebar->new_bookmark_index = -1;
+
+	/* populate the sidebar */
+	update_places (sidebar);
 }
 
 static void
