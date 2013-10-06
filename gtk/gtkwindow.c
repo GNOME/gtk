@@ -6253,6 +6253,25 @@ add_window_frame_style_class (GtkStyleContext *context)
 }
 
 static void
+update_window_style_classes (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = window->priv;
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (window));
+
+  if (priv->tiled)
+    gtk_style_context_add_class (context, "tiled");
+  else
+    gtk_style_context_remove_class (context, "tiled");
+
+  if (gtk_window_get_maximized (window))
+    gtk_style_context_add_class (context, "maximized");
+  else
+    gtk_style_context_remove_class (context, "maximized");
+}
+
+static void
 get_decoration_size (GtkWidget *widget,
                      GtkBorder *decorations)
 {
@@ -6878,6 +6897,7 @@ gtk_window_state_event (GtkWidget           *widget,
 
   if (event->changed_mask & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_TILED))
     {
+      update_window_style_classes (window);
       update_window_buttons (window);
       gtk_widget_queue_resize (widget);
     }
