@@ -72,7 +72,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
  Spanish
  Uyghur</property>
   </object>
-  <object class="GtkAccelGroup" id="accelgroup1"/>
   <object class="GtkWindow" id="window">
     <property name="can_focus">False</property>
     <property name="title">GTK+ Widget Factory</property>
@@ -169,7 +168,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <child>
                       <object class="GtkMenuItem" id="menuitem106">
                         <property name="label" translatable="yes">Cu_t</property>
-                        <property name="accel_group">accelgroup1</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="use_action_appearance">False</property>
@@ -179,7 +177,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <child>
                       <object class="GtkMenuItem" id="menuitem107">
                         <property name="label" translatable="yes">_Copy</property>
-                        <property name="accel_group">accelgroup1</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_action_appearance">False</property>
@@ -189,7 +186,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <child>
                       <object class="GtkMenuItem" id="menuitem108">
                         <property name="label" translatable="yes">_Paste</property>
-                        <property name="accel_group">accelgroup1</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_action_appearance">False</property>
@@ -199,7 +195,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     <child>
                       <object class="GtkMenuItem" id="menuitem109">
                         <property name="label" translatable="yes">_Delete</property>
-                        <property name="accel_group">accelgroup1</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_action_appearance">False</property>
@@ -2325,8 +2320,5 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
         </child>
       </object>
     </child>
-    <accel-groups>
-      <group name="accelgroup1"/>
-    </accel-groups>
   </object>
 </interface>
