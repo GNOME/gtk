@@ -211,6 +211,7 @@ struct _GtkWindowPrivate
   guint    client_decorated          : 1; /* Decorations drawn client-side */
   guint    custom_title              : 1; /* app-provided titlebar if CSD can't
                                            * be enabled */
+  guint    maximized                 : 1;
   guint    fullscreen                : 1;
   guint    tiled                     : 1;
 
@@ -1205,18 +1206,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_WINDOW_ACCESSIBLE);
 }
 
-static gboolean
-gtk_window_get_maximized (GtkWindow *window)
-{
-  GdkWindow *gdk_window = gtk_widget_get_window (GTK_WIDGET (window));
-  gboolean maximized = FALSE;
-
-  if (gdk_window)
-    maximized = (gdk_window_get_state (gdk_window) & GDK_WINDOW_STATE_MAXIMIZED) != 0;
-
-  return maximized;
-}
-
 static void
 gtk_window_titlebar_min_clicked (GtkWidget *widget, gpointer data)
 {
@@ -1229,8 +1218,9 @@ static void
 gtk_window_titlebar_max_clicked (GtkWidget *widget, gpointer data)
 {
   GtkWindow *window = (GtkWindow *)data;
+  GtkWindowPrivate *priv = window->priv;
 
-  if (gtk_window_get_maximized (window))
+  if (priv->maximized)
     gtk_window_unmaximize (window);
   else
     gtk_window_maximize (window);
@@ -5130,7 +5120,6 @@ static void
 update_window_buttons (GtkWindow *window)
 {
   GtkWindowPrivate *priv = window->priv;
-  gboolean maximized;
   GtkTextDirection direction;
   gchar *layout_desc;
   gchar **tokens, **t;
@@ -5140,11 +5129,10 @@ update_window_buttons (GtkWindow *window)
   if (priv->title_box == NULL)
     return;
 
-  maximized = gtk_window_get_maximized (window);
   direction = gtk_widget_get_direction (GTK_WIDGET (window));
 
   if (priv->fullscreen ||
-      (maximized && priv->hide_titlebar_when_maximized))
+      (priv->maximized && priv->hide_titlebar_when_maximized))
     {
       gtk_widget_set_child_visible (priv->title_box, FALSE);
       return;
@@ -5253,7 +5241,7 @@ update_window_buttons (GtkWindow *window)
                 {
                   const gchar *icon_name;
 
-                  icon_name = maximized ? "window-restore-symbolic" : "window-maximize-symbolic";
+                  icon_name = priv->maximized ? "window-restore-symbolic" : "window-maximize-symbolic";
                   button = gtk_button_new ();
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "titlebutton");
                   image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
@@ -5265,7 +5253,7 @@ update_window_buttons (GtkWindow *window)
                                     G_CALLBACK (gtk_window_titlebar_max_clicked), window);
                   accessible = gtk_widget_get_accessible (button);
                   if (GTK_IS_ACCESSIBLE (accessible))
-                    atk_object_set_name (accessible, maximized ? _("Restore") : _("Maximize"));
+                    atk_object_set_name (accessible, priv->maximized ? _("Restore") : _("Maximize"));
                   priv->titlebar_max_button = button;
                 }
               else if (strcmp (t[j], "close") == 0 &&
@@ -6265,7 +6253,7 @@ update_window_style_classes (GtkWindow *window)
   else
     gtk_style_context_remove_class (context, "tiled");
 
-  if (gtk_window_get_maximized (window))
+  if (priv->maximized)
     gtk_style_context_add_class (context, "maximized");
   else
     gtk_style_context_remove_class (context, "maximized");
@@ -6289,7 +6277,7 @@ get_decoration_size (GtkWidget *widget,
   if (!priv->client_decorated)
     return;
 
-  if (gtk_window_get_maximized (GTK_WINDOW (widget)) ||
+  if (priv->maximized ||
       priv->fullscreen ||
       priv->tiled)
     return;
@@ -6398,7 +6386,7 @@ update_border_windows (GtkWindow *window)
   if (!priv->resizable ||
       priv->tiled ||
       priv->fullscreen ||
-      gtk_window_get_maximized (window))
+      priv->maximized)
     {
       resize_h = resize_v = FALSE;
     }
@@ -6893,6 +6881,12 @@ gtk_window_state_event (GtkWidget           *widget,
     {
       priv->tiled =
         (event->new_window_state & GDK_WINDOW_STATE_TILED) ? 1 : 0;
+    }
+
+  if (event->changed_mask & GDK_WINDOW_STATE_MAXIMIZED)
+    {
+      priv->maximized =
+        (event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED) ? 1 : 0;
     }
 
   if (event->changed_mask & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_TILED))
@@ -7390,9 +7384,6 @@ gtk_window_button_press_event (GtkWidget      *widget,
       gint x, y;
       GtkWidget *src;
       GtkWindowRegion region;
-      gboolean maximized;
-
-      maximized = gtk_window_get_maximized (window);
 
       gdk_window_get_user_data (event->window, (gpointer *)&src);
       if (src && src != widget)
@@ -7426,7 +7417,7 @@ gtk_window_button_press_event (GtkWidget      *widget,
                   return TRUE;
 
                 default:
-                  if (!maximized)
+                  if (!priv->maximized)
                     {
                       gdk_window_begin_resize_drag_for_device (gdk_window,
                                                                (GdkWindowEdge)region,
@@ -8195,7 +8186,7 @@ gtk_window_do_popup (GtkWindow      *window,
                     G_CALLBACK (minimize_window_clicked), window);
   gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
 
-  menuitem = gtk_menu_item_new_with_label (gtk_window_get_maximized (window) ? _("Unmaximize") : _("Maximize"));
+  menuitem = gtk_menu_item_new_with_label (priv->maximized ? _("Unmaximize") : _("Maximize"));
   gtk_widget_show (menuitem);
   if (!priv->resizable ||
       priv->gdk_type_hint != GDK_WINDOW_TYPE_HINT_NORMAL)
@@ -8206,7 +8197,7 @@ gtk_window_do_popup (GtkWindow      *window,
 
   menuitem = gtk_check_menu_item_new_with_label (_("Always on Top"));
   gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), priv->above_initially);
-  if (gtk_window_get_maximized (window))
+  if (priv->maximized)
     gtk_widget_set_sensitive (menuitem, FALSE);
   gtk_widget_show (menuitem);
   g_signal_connect (G_OBJECT (menuitem), "activate",
@@ -9390,7 +9381,7 @@ gtk_window_draw (GtkWidget *widget,
           priv->decorated &&
           !priv->fullscreen &&
           !priv->tiled &&
-          !gtk_window_get_maximized (GTK_WINDOW (widget)))
+          !priv->maximized)
         {
           gtk_style_context_save (context);
 
