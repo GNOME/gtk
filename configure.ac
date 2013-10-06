@@ -314,7 +314,7 @@ if test -z "$backend_set"; then
     enable_win32_backend=yes
   else
     enable_x11_backend=yes
-    enable_wayland_backend=yes
+    enable_wayland_backend=maybe
   fi
 fi
 
@@ -394,8 +394,23 @@ else
   AM_CONDITIONAL(USE_BROADWAY, false)
 fi
 
+PKG_PROG_PKG_CONFIG
+
+WAYLAND_DEPENDENCIES="wayland-client >= 1.2.0 xkbcommon >= 0.2.0 wayland-cursor"
+if test "$enable_wayland_backend" = "maybe" ; then
+  AC_PATH_PROG([WAYLAND_SCANNER],[wayland-scanner],[no])
+  PKG_CHECK_EXISTS($WAYLAND_DEPENDENCIES, [have_wayland_deps=yes], [have_wayland_deps=no])
+  AC_MSG_CHECKING([for WAYLAND_DEPENDENCIES])
+  if test "$WAYLAND_SCANNER" = "no" -o "$have_wayland_deps" = "no" ; then
+    enable_wayland_backend=no
+  else
+    enable_wayland_backend=yes
+  fi
+  AC_MSG_RESULT($enable_wayland_backend)
+fi
+
 DISABLE_ON_WAYLAND=''
-if test "x$enable_wayland_backend" = "xyes"; then
+if test "$enable_wayland_backend" = "yes"; then
   # For the cairo image backend
   cairo_backends="$cairo_backends cairo"
   GDK_BACKENDS="$GDK_BACKENDS wayland"
@@ -403,9 +418,7 @@ if test "x$enable_wayland_backend" = "xyes"; then
   GDK_WINDOWING="$GDK_WINDOWING
 #define GDK_WINDOWING_WAYLAND"
   DISABLE_ON_WAYLAND='%'
-  WAYLAND_PACKAGES="wayland-client >= 1.2.0 xkbcommon >= 0.2.0 wayland-cursor"
-
-  AC_PATH_PROG([WAYLAND_SCANNER],[wayland-scanner],[no])
+  WAYLAND_PACKAGES="$WAYLAND_DEPENDENCIES"
   AS_IF([test "x$WAYLAND_SCANNER" = "xno"],
     AC_MSG_ERROR([Could not find wayland-scanner in your PATH, required for parsing wayland extension protocols]))
   AC_SUBST([WAYLAND_SCANNER])
@@ -527,7 +540,7 @@ AC_ARG_ENABLE(explicit-deps,
                               [use explicit dependencies in .pc files [default=auto]])],,
               [enable_explicit_deps=auto])
 
-AC_MSG_CHECKING([Whether to write dependencies into .pc files])
+AC_MSG_CHECKING([whether to write dependencies into .pc files])
 case $enable_explicit_deps in
   auto)
     export SED
