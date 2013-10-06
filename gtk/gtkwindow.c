@@ -5503,7 +5503,9 @@ gtk_window_map (GtkWidget *widget)
   if (child != NULL && gtk_widget_get_visible (child))
     gtk_widget_map (child);
 
-  if (priv->title_box != NULL && gtk_widget_get_visible (priv->title_box))
+  if (priv->title_box != NULL &&
+      gtk_widget_get_visible (priv->title_box) &&
+      gtk_widget_get_child_visible (priv->title_box))
     gtk_widget_map (priv->title_box);
 
   gdk_window = gtk_widget_get_window (widget);
@@ -7323,7 +7325,9 @@ get_active_region_type (GtkWindow *window, GdkEventAny *event, gint x, gint y)
         return i;
     }
 
-  if (priv->title_box != NULL && gtk_widget_get_visible (priv->title_box))
+  if (priv->title_box != NULL &&
+      gtk_widget_get_visible (priv->title_box) &&
+      gtk_widget_get_child_visible (priv->title_box))
     {
       gtk_widget_get_allocation (priv->title_box, &allocation);
       if (allocation.x <= x && allocation.x + allocation.width > x &&
@@ -9374,7 +9378,9 @@ gtk_window_draw (GtkWidget *widget,
           gtk_style_context_restore (context);
         }
 
-      if (priv->title_box && gtk_widget_get_visible (priv->title_box))
+      if (priv->title_box &&
+          gtk_widget_get_visible (priv->title_box) &&
+          gtk_widget_get_child_visible (priv->title_box))
         title_height = priv->title_height;
       else
         title_height = 0;
