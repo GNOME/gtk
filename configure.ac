@@ -332,6 +332,7 @@ GDK_EXTRA_CFLAGS=
 GDK_WINDOWING=
 PANGO_PACKAGES="pango pangocairo"
 
+ENABLE_ON_X11='%'
 if test "$enable_x11_backend" = "yes"; then
   # GDK calls the xlib backend "x11," cairo calls it "xlib." Other
   # backend names are identical.
@@ -343,7 +344,9 @@ if test "$enable_x11_backend" = "yes"; then
   backend_immodules="$backend_immodules,xim"
   GDK_WINDOWING="$GDK_WINDOWING
 #define GDK_WINDOWING_X11"
+  ENABLE_ON_X11=''
 fi
+AC_SUBST(ENABLE_ON_X11)
 
 if test "$enable_win32_backend" = "yes"; then
   cairo_backends="$cairo_backends cairo-win32"
@@ -409,7 +412,6 @@ if test "$enable_wayland_backend" = "maybe" ; then
   AC_MSG_RESULT($enable_wayland_backend)
 fi
 
-DISABLE_ON_WAYLAND=''
 if test "$enable_wayland_backend" = "yes"; then
   # For the cairo image backend
   cairo_backends="$cairo_backends cairo"
@@ -417,7 +419,6 @@ if test "$enable_wayland_backend" = "yes"; then
   have_gio_unix=yes
   GDK_WINDOWING="$GDK_WINDOWING
 #define GDK_WINDOWING_WAYLAND"
-  DISABLE_ON_WAYLAND='%'
   WAYLAND_PACKAGES="$WAYLAND_DEPENDENCIES"
   AC_PATH_PROG([WAYLAND_SCANNER],[wayland-scanner],[no])
   AS_IF([test "x$WAYLAND_SCANNER" = "xno"],
@@ -428,7 +429,6 @@ if test "$enable_wayland_backend" = "yes"; then
 else
   AM_CONDITIONAL(USE_WAYLAND, false)
 fi
-AC_SUBST(DISABLE_ON_WAYLAND)
 
 # strip leading space
 GDK_BACKENDS=${GDK_BACKENDS#* }

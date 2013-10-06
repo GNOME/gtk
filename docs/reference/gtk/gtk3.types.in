@@ -123,7 +123,7 @@ gtk_page_setup_get_type
 gtk_paned_get_type
 gtk_paper_size_get_type
 gtk_places_sidebar_get_type
-@DISABLE_ON_W32@@DISABLE_ON_QUARTZ@@DISABLE_ON_WAYLAND@gtk_plug_get_type
+@ENABLE_ON_X11@gtk_plug_get_type
 @DISABLE_ON_W32@gtk_printer_get_type
 gtk_print_context_get_type
 @DISABLE_ON_W32@gtk_print_job_get_type
@@ -157,7 +157,7 @@ gtk_separator_menu_item_get_type
 gtk_separator_tool_item_get_type
 gtk_settings_get_type
 gtk_size_group_get_type
-@DISABLE_ON_W32@@DISABLE_ON_QUARTZ@@DISABLE_ON_WAYLAND@gtk_socket_get_type
+@ENABLE_ON_X11@gtk_socket_get_type
 gtk_spin_button_get_type
 gtk_spinner_get_type
 gtk_stack_get_type
