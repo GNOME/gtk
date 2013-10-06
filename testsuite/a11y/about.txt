@@ -76,46 +76,124 @@ window1
                             variant: <omitted>
                             weight: <omitted>
                             wrap-mode: word
-      notebook
-        "page tab list"
+      stack
+        "panel"
         parent: box
         index: 2
-        state: enabled sensitive showing visible
+        state: enabled focusable sensitive showing visible
         toolkit: gtk
         <AtkComponent>
         layer: widget
         alpha: 1
-        <AtkSelection>
-        selected children: unnamed-GtkNotebookPageAccessible-0
-        unnamed-GtkNotebookPageAccessible-0
-          "page tab"
-          parent: notebook
+        page_vbox
+          "filler"
+          parent: stack
           index: 0
-          state: enabled selectable selected showing visible
+          state: enabled sensitive showing vertical visible
+          toolkit: gtk
           <AtkComponent>
           layer: widget
           alpha: 1
-          page_vbox
-            "filler"
+          version_label
+            "label"
+            parent: page_vbox
             index: 0
-            state: enabled sensitive showing vertical visible
+            name: 0.99
+            state: enabled focusable multi-line sensitive showing visible
             toolkit: gtk
             <AtkComponent>
             layer: widget
             alpha: 1
-            version_label
+            <AtkText>
+            text: 0.99
+            character count: 4
+            caret offset: 0
+            default attributes: bg-color: <omitted>
+                                bg-full-height: 0
+                                direction: <omitted>
+                                editable: false
+                                family-name: <omitted>
+                                fg-color: <omitted>
+                                indent: 0
+                                invisible: false
+                                justification: center
+                                language: <omitted>
+                                left-margin: 0
+                                pixels-above-lines: 0
+                                pixels-below-lines: 0
+                                pixels-inside-wrap: 0
+                                right-margin: 0
+                                rise: 0
+                                scale: 1
+                                size: <omitted>
+                                stretch: <omitted>
+                                strikethrough: false
+                                style: <omitted>
+                                underline: none
+                                variant: <omitted>
+                                weight: <omitted>
+                                wrap-mode: word
+          comments_label
+            "label"
+            parent: page_vbox
+            index: 1
+            name: comments
+            state: enabled focusable multi-line sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkText>
+            text: comments
+            character count: 8
+            caret offset: 0
+            default attributes: bg-color: <omitted>
+                                bg-full-height: 0
+                                direction: <omitted>
+                                editable: false
+                                family-name: <omitted>
+                                fg-color: <omitted>
+                                indent: 0
+                                invisible: false
+                                justification: center
+                                language: <omitted>
+                                left-margin: 0
+                                pixels-above-lines: 0
+                                pixels-below-lines: 0
+                                pixels-inside-wrap: 0
+                                right-margin: 0
+                                rise: 0
+                                scale: 1
+                                size: <omitted>
+                                stretch: <omitted>
+                                strikethrough: false
+                                style: <omitted>
+                                underline: none
+                                variant: <omitted>
+                                weight: <omitted>
+                                wrap-mode: word
+          hbox
+            "filler"
+            parent: page_vbox
+            index: 2
+            state: enabled horizontal sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            website_label
               "label"
-              parent: page_vbox
+              parent: hbox
               index: 0
-              name: 0.99
+              name: Website
               state: enabled focusable multi-line sensitive showing visible
               toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
               <AtkText>
-              text: 0.99
-              character count: 4
+              text: Website
+              character count: 7
               caret offset: 0
               default attributes: bg-color: <omitted>
                                   bg-full-height: 0
@@ -125,7 +203,7 @@ window1
                                   fg-color: <omitted>
                                   indent: 0
                                   invisible: false
-                                  justification: center
+                                  justification: left
                                   language: <omitted>
                                   left-margin: 0
                                   pixels-above-lines: 0
@@ -142,329 +220,228 @@ window1
                                   variant: <omitted>
                                   weight: <omitted>
                                   wrap-mode: word
-            comments_label
-              "label"
-              parent: page_vbox
-              index: 1
-              name: comments
-              state: enabled focusable multi-line sensitive showing visible
-              toolkit: gtk
-              <AtkComponent>
-              layer: widget
-              alpha: 1
-              <AtkText>
-              text: comments
-              character count: 8
-              caret offset: 0
-              default attributes: bg-color: <omitted>
-                                  bg-full-height: 0
-                                  direction: <omitted>
-                                  editable: false
-                                  family-name: <omitted>
-                                  fg-color: <omitted>
-                                  indent: 0
-                                  invisible: false
-                                  justification: center
-                                  language: <omitted>
-                                  left-margin: 0
-                                  pixels-above-lines: 0
-                                  pixels-below-lines: 0
-                                  pixels-inside-wrap: 0
-                                  right-margin: 0
-                                  rise: 0
-                                  scale: 1
-                                  size: <omitted>
-                                  stretch: <omitted>
-                                  strikethrough: false
-                                  style: <omitted>
-                                  underline: none
-                                  variant: <omitted>
-                                  weight: <omitted>
-                                  wrap-mode: word
-            hbox
-              "filler"
-              parent: page_vbox
-              index: 2
-              state: enabled horizontal sensitive showing visible
-              toolkit: gtk
-              <AtkComponent>
-              layer: widget
-              alpha: 1
-              website_label
-                "label"
-                parent: hbox
-                index: 0
-                name: Website
-                state: enabled focusable multi-line sensitive showing visible
-                toolkit: gtk
-                <AtkComponent>
-                layer: widget
-                alpha: 1
-                <AtkText>
-                text: Website
-                character count: 7
-                caret offset: 0
-                default attributes: bg-color: <omitted>
-                                    bg-full-height: 0
-                                    direction: <omitted>
-                                    editable: false
-                                    family-name: <omitted>
-                                    fg-color: <omitted>
-                                    indent: 0
-                                    invisible: false
-                                    justification: left
-                                    language: <omitted>
-                                    left-margin: 0
-                                    pixels-above-lines: 0
-                                    pixels-below-lines: 0
-                                    pixels-inside-wrap: 0
-                                    right-margin: 0
-                                    rise: 0
-                                    scale: 1
-                                    size: <omitted>
-                                    stretch: <omitted>
-                                    strikethrough: false
-                                    style: <omitted>
-                                    underline: none
-                                    variant: <omitted>
-                                    weight: <omitted>
-                                    wrap-mode: word
-            copyright_label
-              "label"
-              parent: page_vbox
-              index: 3
-              name: no comments
-              state: enabled focusable multi-line sensitive showing visible
-              toolkit: gtk
-              <AtkComponent>
-              layer: widget
-              alpha: 1
-              <AtkText>
-              text: no comments
-              character count: 11
-              caret offset: 0
-              default attributes: bg-color: <omitted>
-                                  bg-full-height: 0
-                                  direction: <omitted>
-                                  editable: false
-                                  family-name: <omitted>
-                                  fg-color: <omitted>
-                                  indent: 0
-                                  invisible: false
-                                  justification: center
-                                  language: <omitted>
-                                  left-margin: 0
-                                  pixels-above-lines: 0
-                                  pixels-below-lines: 0
-                                  pixels-inside-wrap: 0
-                                  right-margin: 0
-                                  rise: 0
-                                  scale: 1
-                                  size: <omitted>
-                                  stretch: <omitted>
-                                  strikethrough: false
-                                  style: <omitted>
-                                  underline: none
-                                  variant: <omitted>
-                                  weight: <omitted>
-                                  wrap-mode: word
-            license_label
-              "label"
-              parent: page_vbox
-              index: 4
-              name: This program comes with ABSOLUTELY NO WARRANTY;
+          copyright_label
+            "label"
+            parent: page_vbox
+            index: 3
+            name: no comments
+            state: enabled focusable multi-line sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkText>
+            text: no comments
+            character count: 11
+            caret offset: 0
+            default attributes: bg-color: <omitted>
+                                bg-full-height: 0
+                                direction: <omitted>
+                                editable: false
+                                family-name: <omitted>
+                                fg-color: <omitted>
+                                indent: 0
+                                invisible: false
+                                justification: center
+                                language: <omitted>
+                                left-margin: 0
+                                pixels-above-lines: 0
+                                pixels-below-lines: 0
+                                pixels-inside-wrap: 0
+                                right-margin: 0
+                                rise: 0
+                                scale: 1
+                                size: <omitted>
+                                stretch: <omitted>
+                                strikethrough: false
+                                style: <omitted>
+                                underline: none
+                                variant: <omitted>
+                                weight: <omitted>
+                                wrap-mode: word
+          license_label
+            "label"
+            parent: page_vbox
+            index: 4
+            name: This program comes with ABSOLUTELY NO WARRANTY;
 for details, visit http://www.gnu.org/licenses/gpl.html
-              state: enabled focusable multi-line sensitive showing visible
-              toolkit: gtk
-              <AtkComponent>
-              layer: widget
-              alpha: 1
-              <AtkText>
-              text: This program comes with ABSOLUTELY NO WARRANTY;
+            state: enabled focusable multi-line sensitive showing visible
+            toolkit: gtk
+            <AtkComponent>
+            layer: widget
+            alpha: 1
+            <AtkText>
+            text: This program comes with ABSOLUTELY NO WARRANTY;
 for details, visit http://www.gnu.org/licenses/gpl.html
-              character count: 103
-              caret offset: 67
-              default attributes: bg-color: <omitted>
-                                  bg-full-height: 0
-                                  direction: <omitted>
-                                  editable: false
-                                  family-name: <omitted>
-                                  fg-color: <omitted>
-                                  indent: 0
-                                  invisible: false
-                                  justification: center
-                                  language: <omitted>
-                                  left-margin: 0
-                                  pixels-above-lines: 0
-                                  pixels-below-lines: 0
-                                  pixels-inside-wrap: 0
-                                  right-margin: 0
-                                  rise: 0
-                                  scale: 1
-                                  size: <omitted>
-                                  stretch: <omitted>
-                                  strikethrough: false
-                                  style: <omitted>
-                                  underline: none
-                                  variant: <omitted>
-                                  weight: <omitted>
-                                  wrap-mode: word
-        unnamed-GtkNotebookPageAccessible-1
-          "page tab"
-          parent: notebook
+            character count: 103
+            caret offset: 0
+            default attributes: bg-color: <omitted>
+                                bg-full-height: 0
+                                direction: <omitted>
+                                editable: false
+                                family-name: <omitted>
+                                fg-color: <omitted>
+                                indent: 0
+                                invisible: false
+                                justification: center
+                                language: <omitted>
+                                left-margin: 0
+                                pixels-above-lines: 0
+                                pixels-below-lines: 0
+                                pixels-inside-wrap: 0
+                                right-margin: 0
+                                rise: 0
+                                scale: 1
+                                size: <omitted>
+                                stretch: <omitted>
+                                strikethrough: false
+                                style: <omitted>
+                                underline: none
+                                variant: <omitted>
+                                weight: <omitted>
+                                wrap-mode: word
+        credits_page
+          "filler"
+          parent: stack
           index: 1
-          state: enabled selectable visible
+          state: enabled sensitive vertical visible
+          toolkit: gtk
           <AtkComponent>
           layer: widget
           alpha: 1
-          credits_page
-            "filler"
+          scrolledwindow1
+            "scroll pane"
+            parent: credits_page
             index: 0
-            state: enabled sensitive vertical visible
+            state: enabled focusable sensitive visible
             toolkit: gtk
             <AtkComponent>
             layer: widget
             alpha: 1
-            scrolledwindow1
-              "scroll pane"
-              parent: credits_page
+            viewport1
+              "viewport"
+              parent: scrolledwindow1
               index: 0
-              state: enabled focusable sensitive visible
+              state: enabled sensitive visible
               toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
-              viewport1
-                "viewport"
-                parent: scrolledwindow1
+              credits_grid
+                "panel"
+                parent: viewport1
                 index: 0
-                state: enabled sensitive visible
-                toolkit: gtk
-                <AtkComponent>
-                layer: widget
-                alpha: 1
-                credits_grid
-                  "panel"
-                  parent: viewport1
-                  index: 0
-                  state: enabled sensitive vertical visible
-                  toolkit: gtk
-                  <AtkComponent>
-                  layer: widget
-                  alpha: 1
-              unnamed-GtkRangeAccessible-2
-                "scroll bar"
-                parent: scrolledwindow1
-                state: enabled horizontal sensitive visible
-                toolkit: gtk
-                <AtkComponent>
-                layer: widget
-                alpha: 1
-                <AtkValue>
-                minimum value: 0.000000
-                maximum value: 0.000000
-                current value: 0.000000
-              unnamed-GtkRangeAccessible-3
-                "scroll bar"
-                parent: scrolledwindow1
                 state: enabled sensitive vertical visible
                 toolkit: gtk
                 <AtkComponent>
                 layer: widget
                 alpha: 1
-                <AtkValue>
-                minimum value: 0.000000
-                maximum value: 0.000000
-                current value: 0.000000
-        unnamed-GtkNotebookPageAccessible-4
-          "page tab"
-          parent: notebook
+            unnamed-GtkRangeAccessible-0
+              "scroll bar"
+              parent: scrolledwindow1
+              state: enabled horizontal sensitive visible
+              toolkit: gtk
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkValue>
+              minimum value: 0.000000
+              maximum value: 9.000000
+              current value: 0.000000
+            unnamed-GtkRangeAccessible-1
+              "scroll bar"
+              parent: scrolledwindow1
+              state: enabled sensitive vertical visible
+              toolkit: gtk
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkValue>
+              minimum value: 0.000000
+              maximum value: 9.000000
+              current value: 0.000000
+        license_page
+          "filler"
+          parent: stack
           index: 2
-          state: enabled selectable visible
+          state: enabled sensitive vertical visible
+          toolkit: gtk
           <AtkComponent>
           layer: widget
           alpha: 1
-          license_page
-            "filler"
+          scrolledwindow2
+            "scroll pane"
+            parent: license_page
             index: 0
-            state: enabled sensitive vertical visible
+            state: enabled focusable sensitive visible
             toolkit: gtk
             <AtkComponent>
             layer: widget
             alpha: 1
-            scrolledwindow2
-              "scroll pane"
-              parent: license_page
+            license_view
+              "text"
+              parent: scrolledwindow2
               index: 0
-              state: enabled focusable sensitive visible
+              state: enabled focusable multi-line sensitive visible
               toolkit: gtk
               <AtkComponent>
               layer: widget
               alpha: 1
-              license_view
-                "text"
-                parent: scrolledwindow2
-                index: 0
-                state: enabled focusable multi-line sensitive visible
-                toolkit: gtk
-                <AtkComponent>
-                layer: widget
-                alpha: 1
-                <AtkText>
-                text: 
-                character count: 0
-                caret offset: 0
-                default attributes: bg-color: <omitted>
-                                    bg-full-height: false
-                                    direction: <omitted>
-                                    editable: false
-                                    family-name: <omitted>
-                                    fg-color: <omitted>
-                                    indent: 0
-                                    invisible: false
-                                    justification: left
-                                    language: <omitted>
-                                    left-margin: 8
-                                    pixels-above-lines: 0
-                                    pixels-below-lines: 0
-                                    pixels-inside-wrap: 0
-                                    right-margin: 8
-                                    rise: 0
-                                    scale: 1
-                                    size: <omitted>
-                                    stretch: <omitted>
-                                    strikethrough: false
-                                    style: <omitted>
-                                    underline: none
-                                    variant: <omitted>
-                                    weight: <omitted>
-                                    wrap-mode: none
-                <AtkStreamableContent>
-                mime types: application/x-gtk-text-buffer-rich-text text/plain
-              unnamed-GtkRangeAccessible-5
-                "scroll bar"
-                parent: scrolledwindow2
-                state: enabled horizontal sensitive visible
-                toolkit: gtk
-                <AtkComponent>
-                layer: widget
-                alpha: 1
-                <AtkValue>
-                minimum value: 0.000000
-                maximum value: 0.000000
-                current value: 0.000000
-              unnamed-GtkRangeAccessible-6
-                "scroll bar"
-                parent: scrolledwindow2
-                state: enabled sensitive vertical visible
-                toolkit: gtk
-                <AtkComponent>
-                layer: widget
-                alpha: 1
-                <AtkValue>
-                minimum value: 0.000000
-                maximum value: 0.000000
-                current value: 0.000000
+              <AtkText>
+              text: 
+              character count: 0
+              caret offset: 0
+              default attributes: bg-color: <omitted>
+                                  bg-full-height: false
+                                  direction: <omitted>
+                                  editable: false
+                                  family-name: <omitted>
+                                  fg-color: <omitted>
+                                  indent: 0
+                                  invisible: false
+                                  justification: left
+                                  language: <omitted>
+                                  left-margin: 8
+                                  pixels-above-lines: 0
+                                  pixels-below-lines: 0
+                                  pixels-inside-wrap: 0
+                                  right-margin: 8
+                                  rise: 0
+                                  scale: 1
+                                  size: <omitted>
+                                  stretch: <omitted>
+                                  strikethrough: false
+                                  style: <omitted>
+                                  underline: none
+                                  variant: <omitted>
+                                  weight: <omitted>
+                                  wrap-mode: none
+              <AtkStreamableContent>
+              mime types: application/x-gtk-text-buffer-rich-text text/plain
+            unnamed-GtkRangeAccessible-2
+              "scroll bar"
+              parent: scrolledwindow2
+              state: enabled horizontal sensitive visible
+              toolkit: gtk
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkValue>
+              minimum value: 0.000000
+              maximum value: 0.000000
+              current value: 0.000000
+            unnamed-GtkRangeAccessible-3
+              "scroll bar"
+              parent: scrolledwindow2
+              state: enabled sensitive vertical visible
+              toolkit: gtk
+              <AtkComponent>
+              layer: widget
+              alpha: 1
+              <AtkValue>
+              minimum value: 0.000000
+              maximum value: 0.000000
+              current value: 0.000000
     dialog-action_area1
       "filler"
       parent: dialog-vbox1
