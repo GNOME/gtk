@@ -1341,7 +1341,11 @@ gtk_stack_set_visible_child (GtkStack  *stack,
 
   child_info = find_child_info_for_widget (stack, child);
   if (child_info == NULL)
-    return;
+    {
+      g_warning ("Given child of type '%s' not found in GtkStack",
+                 G_OBJECT_TYPE_NAME (child));
+      return;
+    }
 
   if (gtk_widget_get_visible (child_info->widget))
     set_visible_child (stack, child_info,
@@ -1406,7 +1410,13 @@ gtk_stack_set_visible_child_full (GtkStack               *stack,
         }
     }
 
-  if (child_info != NULL && gtk_widget_get_visible (child_info->widget))
+  if (child_info == NULL)
+    {
+      g_warning ("Child name '%s' not found in GtkStack", name);
+      return;
+    }
+
+  if (gtk_widget_get_visible (child_info->widget))
     set_visible_child (stack, child_info, transition, priv->transition_duration);
 }
 
