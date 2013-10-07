@@ -261,12 +261,12 @@ static void
 gtk_flow_box_child_set_focus (GtkFlowBoxChild *child)
 {
   GtkFlowBox *box = gtk_flow_box_child_get_box (child);
-  gboolean modify_selection;
-  gboolean extend_selection;
+  gboolean modify;
+  gboolean extend;
 
-  get_current_selection_modifiers (GTK_WIDGET (box), &modify_selection, &extend_selection);
+  get_current_selection_modifiers (GTK_WIDGET (box), &modify, &extend);
 
-  if (modify_selection)
+  if (modify)
     gtk_flow_box_update_cursor (box, child);
   else
     gtk_flow_box_update_selection (box, child, FALSE, FALSE);
@@ -804,6 +804,8 @@ struct _GtkFlowBoxPrivate {
   GtkFlowBoxChild   *rubberband_last;
   gint               button_down_x;
   gint               button_down_y;
+  gboolean           rubberband_modify;
+  gboolean           rubberband_extend;
   GdkDevice         *rubberband_device;
 
   GtkScrollType      autoscroll_mode;
@@ -1006,8 +1008,8 @@ gtk_flow_box_unselect_all_internal (GtkFlowBox *box)
 }
 
 static void
-gtk_flow_box_unselect_child_info (GtkFlowBox      *box,
-                                  GtkFlowBoxChild *child)
+gtk_flow_box_unselect_child_internal (GtkFlowBox      *box,
+                                      GtkFlowBoxChild *child)
 {
   if (!CHILD_PRIV (child)->selected)
     return;
@@ -1033,8 +1035,8 @@ gtk_flow_box_update_cursor (GtkFlowBox      *box,
 }
 
 static void
-gtk_flow_box_select_child_info (GtkFlowBox      *box,
-                                GtkFlowBoxChild *child)
+gtk_flow_box_select_child_internal (GtkFlowBox      *box,
+                                    GtkFlowBoxChild *child)
 {
   if (CHILD_PRIV (child)->selected)
     return;
@@ -1048,14 +1050,13 @@ gtk_flow_box_select_child_info (GtkFlowBox      *box,
   BOX_PRIV (box)->selected_child = child;
 
   g_signal_emit (box, signals[SELECTED_CHILDREN_CHANGED], 0);
-
-  gtk_flow_box_update_cursor (box, child);
 }
 
 static void
 gtk_flow_box_select_all_between (GtkFlowBox      *box,
                                  GtkFlowBoxChild *child1,
-                                 GtkFlowBoxChild *child2)
+                                 GtkFlowBoxChild *child2,
+				 gboolean         modify)
 {
   GSequenceIter *iter, *iter1, *iter2;
 
@@ -1084,7 +1085,12 @@ gtk_flow_box_select_all_between (GtkFlowBox      *box,
 
       child = g_sequence_get (iter);
       if (child_is_visible (child))
-        gtk_flow_box_child_set_selected (GTK_FLOW_BOX_CHILD (child), TRUE);
+        {
+          if (modify)
+            gtk_flow_box_child_set_selected (GTK_FLOW_BOX_CHILD (child), !CHILD_PRIV (child)->selected);
+          else
+            gtk_flow_box_child_set_selected (GTK_FLOW_BOX_CHILD (child), TRUE);
+	}
 
       if (g_sequence_iter_compare (iter, iter2) == 0)
         break;
@@ -1130,12 +1136,20 @@ gtk_flow_box_update_selection (GtkFlowBox      *box,
               priv->selected_child = child;
             }
           else
-            gtk_flow_box_select_all_between (box, priv->selected_child, child);
+            gtk_flow_box_select_all_between (box, priv->selected_child, child, FALSE);
         }
       else
         {
-          gtk_flow_box_child_set_selected (child, modify ? !CHILD_PRIV (child)->selected : TRUE);
-          priv->selected_child = child;
+          if (modify)
+            {
+              gtk_flow_box_child_set_selected (child, !CHILD_PRIV (child)->selected);
+            }
+          else
+            {
+              gtk_flow_box_unselect_all_internal (box);
+              gtk_flow_box_child_set_selected (child, !CHILD_PRIV (child)->selected);
+              priv->selected_child = child;
+            }
         }
     }
 
@@ -1148,7 +1162,8 @@ gtk_flow_box_select_and_activate (GtkFlowBox      *box,
 {
   if (child != NULL)
     {
-      gtk_flow_box_select_child_info (box, child);
+      gtk_flow_box_select_child_internal (box, child);
+      gtk_flow_box_update_cursor (box, child);
       g_signal_emit (box, signals[CHILD_ACTIVATED], 0, child);
     }
 }
@@ -2871,6 +2886,9 @@ gtk_flow_box_motion_notify_event (GtkWidget      *widget,
         {
           priv->rubberband_select = TRUE;
           priv->rubberband_first = gtk_flow_box_find_child_at_pos (box, priv->button_down_x, priv->button_down_y);
+
+          /* Grab focus here, so Escape-to-stop-rubberband  works */
+          gtk_flow_box_update_cursor (box, priv->rubberband_first);
         }
 
       if (priv->rubberband_select)
@@ -2920,10 +2938,26 @@ gtk_flow_box_button_press_event (GtkWidget      *widget,
           priv->button_down_x = event->x;
           priv->button_down_y = event->y;
           priv->rubberband_device = gdk_event_get_device ((GdkEvent*)event);
+          get_current_selection_modifiers (widget, &priv->rubberband_modify, &priv->rubberband_extend);
         }
     }
 
   return FALSE;
+}
+
+static void
+gtk_flow_box_stop_rubberband (GtkFlowBox *box)
+{
+  GtkFlowBoxPrivate *priv = BOX_PRIV (box);
+
+  priv->rubberband_select = FALSE;
+  priv->rubberband_first = NULL;
+  priv->rubberband_last = NULL;
+  priv->rubberband_device = NULL;
+
+  remove_autoscroll (box);
+
+  gtk_widget_queue_draw (GTK_WIDGET (box));
 }
 
 static gboolean
@@ -2932,19 +2966,31 @@ gtk_flow_box_button_release_event (GtkWidget      *widget,
 {
   GtkFlowBox *box = GTK_FLOW_BOX (widget);
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
-  gboolean modify_selection;
-  gboolean extend_selection;
 
   if (event->button == GDK_BUTTON_PRIMARY)
     {
       if (priv->active_child != NULL && priv->active_child_active)
         {
-          get_current_selection_modifiers (GTK_WIDGET (box), &modify_selection, &extend_selection);
-
           if (priv->activate_on_single_click)
             gtk_flow_box_select_and_activate (box, priv->active_child);
           else
-            gtk_flow_box_update_selection (box, priv->active_child, TRUE, extend_selection);
+            {
+              gboolean modify;
+              gboolean extend;
+              GdkDevice *device;
+
+              get_current_selection_modifiers (widget, &modify, &extend);
+
+              /* With touch, we default to modifying the selection.
+               * You can still clear the selection and start over
+               * by holding Ctrl.
+               */
+              device = gdk_event_get_source_device ((GdkEvent *)event);
+              if (gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN)
+                modify = !modify;
+              
+              gtk_flow_box_update_selection (box, priv->active_child, modify, extend);
+            }
         }
 
       priv->active_child = NULL;
@@ -2952,18 +2998,53 @@ gtk_flow_box_button_release_event (GtkWidget      *widget,
       gtk_widget_queue_draw (GTK_WIDGET (box));
   }
 
-  remove_autoscroll (box);
   priv->track_motion = FALSE;
   if (priv->rubberband_select)
     {
-      gtk_flow_box_select_all_between (box, priv->rubberband_first, priv->rubberband_last);
-      priv->rubberband_first = NULL;
-      priv->rubberband_last = NULL;
-      priv->rubberband_select = FALSE;
-      priv->rubberband_device = NULL;
+      if (!priv->rubberband_extend && !priv->rubberband_modify)
+        gtk_flow_box_unselect_all_internal (box);
+      gtk_flow_box_select_all_between (box, priv->rubberband_first, priv->rubberband_last, priv->rubberband_modify);
+
+      gtk_flow_box_stop_rubberband (box);
+
+      g_signal_emit (box, signals[SELECTED_CHILDREN_CHANGED], 0);
+
     }
 
   return FALSE;
+}
+
+static gboolean
+gtk_flow_box_key_press_event (GtkWidget   *widget,
+                              GdkEventKey *event)
+{
+  GtkFlowBox *box = GTK_FLOW_BOX (widget);
+  GtkFlowBoxPrivate *priv = BOX_PRIV (box);
+
+  if (priv->rubberband_select)
+    {
+      if (event->keyval == GDK_KEY_Escape)
+        {
+          gtk_flow_box_stop_rubberband (box);
+          return TRUE;
+        }
+    }
+
+  return GTK_WIDGET_CLASS (gtk_flow_box_parent_class)->key_press_event (widget, event);
+}
+
+static void
+gtk_flow_box_grab_notify (GtkWidget *widget,
+                          gboolean   was_grabbed)
+{
+  GtkFlowBox *box = GTK_FLOW_BOX (widget);
+  GtkFlowBoxPrivate *priv = BOX_PRIV (box);
+
+  if (!was_grabbed)
+    {
+      if (priv->rubberband_select)
+        gtk_flow_box_stop_rubberband (box);
+    }
 }
 
 /* Realize and map {{{3 */
@@ -2989,6 +3070,7 @@ gtk_flow_box_realize (GtkWidget *widget)
                                 | GDK_LEAVE_NOTIFY_MASK
                                 | GDK_POINTER_MOTION_MASK
                                 | GDK_EXPOSURE_MASK
+                                | GDK_KEY_PRESS_MASK
                                 | GDK_BUTTON_PRESS_MASK
                                 | GDK_BUTTON_RELEASE_MASK;
   attributes.wclass = GDK_INPUT_OUTPUT;
@@ -3211,7 +3293,7 @@ gtk_flow_box_toggle_cursor_child (GtkFlowBox *box)
   if ((priv->selection_mode == GTK_SELECTION_SINGLE ||
        priv->selection_mode == GTK_SELECTION_MULTIPLE) &&
       CHILD_PRIV (priv->cursor_child)->selected)
-    gtk_flow_box_unselect_child_info (box, priv->cursor_child);
+    gtk_flow_box_unselect_child_internal (box, priv->cursor_child);
   else
     gtk_flow_box_select_and_activate (box, priv->cursor_child);
 }
@@ -3222,8 +3304,8 @@ gtk_flow_box_move_cursor (GtkFlowBox      *box,
                           gint             count)
 {
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
-  gboolean modify_selection;
-  gboolean extend_selection;
+  gboolean modify;
+  gboolean extend;
   GtkFlowBoxChild *child;
   GtkFlowBoxChild *prev;
   GtkFlowBoxChild *next;
@@ -3235,8 +3317,6 @@ gtk_flow_box_move_cursor (GtkFlowBox      *box,
   gboolean vertical;
 
   vertical = priv->orientation == GTK_ORIENTATION_VERTICAL;
-
-  get_current_selection_modifiers (GTK_WIDGET (box), &modify_selection, &extend_selection);
 
   if (vertical)
     {
@@ -3397,8 +3477,11 @@ gtk_flow_box_move_cursor (GtkFlowBox      *box,
       return;
     }
 
+  get_current_selection_modifiers (GTK_WIDGET (box), &modify, &extend);
+
   gtk_flow_box_update_cursor (box, child);
-  gtk_flow_box_update_selection (box, child, modify_selection, extend_selection);
+  if (!modify)
+    gtk_flow_box_update_selection (box, child, FALSE, extend);
 }
 
 /* Selection {{{2 */
@@ -3534,6 +3617,8 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
   widget_class->draw = gtk_flow_box_draw;
   widget_class->button_press_event = gtk_flow_box_button_press_event;
   widget_class->button_release_event = gtk_flow_box_button_release_event;
+  widget_class->key_press_event = gtk_flow_box_key_press_event;
+  widget_class->grab_notify = gtk_flow_box_grab_notify;
   widget_class->get_request_mode = gtk_flow_box_get_request_mode;
   widget_class->get_preferred_width = gtk_flow_box_get_preferred_width;
   widget_class->get_preferred_height = gtk_flow_box_get_preferred_height;
@@ -3984,8 +4069,8 @@ gtk_flow_box_get_child_at_index (GtkFlowBox *box,
  * @adjustment: an adjustment which should be adjusted
  *    when the focus is moved among the descendents of @container
  *
- * Hooks up an adjustment to focus handling in @box. The
- * adjustment is also used for autoscrolling during
+ * Hooks up an adjustment to focus handling in @box.
+ * The adjustment is also used for autoscrolling during
  * rubberband selection. See gtk_scrolled_window_get_hadjustment()
  * for a typical way of obtaining the adjustment, and
  * gtk_flow_box_set_vadjustment()for setting the vertical
@@ -4021,8 +4106,8 @@ gtk_flow_box_set_hadjustment (GtkFlowBox    *box,
  * @adjustment: an adjustment which should be adjusted
  *    when the focus is moved among the descendents of @container
  *
- * Hooks up an adjustment to focus handling in @box. The
- * adjustment is also used for autoscrolling during
+ * Hooks up an adjustment to focus handling in @box.
+ * The adjustment is also used for autoscrolling during
  * rubberband selection. See gtk_scrolled_window_get_vadjustment()
  * for a typical way of obtaining the adjustment, and
  * gtk_flow_box_set_hadjustment()for setting the horizontal
@@ -4321,8 +4406,8 @@ gtk_flow_box_get_activate_on_single_click (GtkFlowBox *box)
 
   return BOX_PRIV (box)->activate_on_single_click;
 }
-
-/* Selection handling {{{2 */
+ 
+ /* Selection handling {{{2 */
 
 /**
  * gtk_flow_box_get_selected_children:
@@ -4374,7 +4459,7 @@ gtk_flow_box_select_child (GtkFlowBox      *box,
   g_return_if_fail (GTK_IS_FLOW_BOX (box));
   g_return_if_fail (GTK_IS_FLOW_BOX_CHILD (child));
 
-  gtk_flow_box_select_child_info (box, child);
+  gtk_flow_box_select_child_internal (box, child);
 }
 
 /**
@@ -4394,7 +4479,7 @@ gtk_flow_box_unselect_child (GtkFlowBox      *box,
   g_return_if_fail (GTK_IS_FLOW_BOX (box));
   g_return_if_fail (GTK_IS_FLOW_BOX_CHILD (child));
 
-  gtk_flow_box_unselect_child_info (box, child);
+  gtk_flow_box_unselect_child_internal (box, child);
 }
 
 /**
@@ -4416,7 +4501,7 @@ gtk_flow_box_select_all (GtkFlowBox *box)
 
   if (g_sequence_get_length (BOX_PRIV (box)->children) > 0)
     {
-      gtk_flow_box_select_all_between (box, NULL, NULL);
+      gtk_flow_box_select_all_between (box, NULL, NULL, FALSE);
       g_signal_emit (box, signals[SELECTED_CHILDREN_CHANGED], 0);
     }
 }
@@ -4720,4 +4805,4 @@ gtk_flow_box_invalidate_sort (GtkFlowBox *box)
     }
 }
 
-/* vim:set foldmethod=marker: */
+/* vim:set foldmethod=marker expandtab: */
