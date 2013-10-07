@@ -69,6 +69,8 @@ gtka11yinclude_HEADERS =		\
 	gtkcontainercellaccessible.h	\
 	gtkentryaccessible.h		\
 	gtkexpanderaccessible.h		\
+	gtkflowboxaccessible.h		\
+	gtkflowboxchildaccessible.h	\
 	gtkframeaccessible.h		\
 	gtkiconviewaccessible.h		\
 	gtkimageaccessible.h		\
