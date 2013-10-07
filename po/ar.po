@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-11 12:26+0200\n"
-"PO-Revision-Date: 2013-08-11 13:04+0200\n"
+"POT-Creation-Date: 2013-10-07 17:02+0200\n"
+"PO-Revision-Date: 2013-10-07 17:06+0200\n"
 "Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
 "Language: ar\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Virtaal 0.7.0\n"
+"X-Generator: Virtaal 0.7.1-rc1\n"
 
 #: ../gdk/broadway/gdkbroadway-server.c:141
 #, c-format
@@ -79,7 +79,7 @@ msgstr "شارات تنقيح ج‌د‌ك+ التي ستضبط"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:217 ../gdk/gdk.c:220 ../gtk/gtkmain.c:454 ../gtk/gtkmain.c:457
+#: ../gdk/gdk.c:217 ../gdk/gdk.c:220 ../gtk/gtkmain.c:455 ../gtk/gtkmain.c:458
 msgid "FLAGS"
 msgstr "شارات"
 
@@ -488,7 +488,7 @@ msgid "Toggles the cell"
 msgstr "يبدّل الخليّة"
 
 #: ../gtk/a11y/gtkbooleancellaccessible.c:63
-#: ../gtk/a11y/gtkswitchaccessible.c:101
+#: ../gtk/a11y/gtkswitchaccessible.c:89
 msgctxt "Action name"
 msgid "Toggle"
 msgstr "تبديل"
@@ -562,12 +562,12 @@ msgctxt "Action description"
 msgid "Customizes the color"
 msgstr "يُخصص اللون"
 
-#: ../gtk/a11y/gtkcomboboxaccessible.c:307
+#: ../gtk/a11y/gtkcomboboxaccessible.c:310
 msgctxt "Action name"
 msgid "Press"
 msgstr "اضغط"
 
-#: ../gtk/a11y/gtkcomboboxaccessible.c:316
+#: ../gtk/a11y/gtkcomboboxaccessible.c:319
 msgctxt "Action description"
 msgid "Presses the combobox"
 msgstr "يضغط المربع المنسدل"
@@ -575,12 +575,12 @@ msgstr "يضغط المربع المنسدل"
 #: ../gtk/a11y/gtkentryaccessible.c:1563
 msgctxt "Action description"
 msgid "Activates the entry"
-msgstr ""
+msgstr "يُنشّط المدخلة"
 
 #: ../gtk/a11y/gtkexpanderaccessible.c:290
 msgctxt "Action description"
 msgid "Activates the expander"
-msgstr ""
+msgstr "يُنشّط المُوسّع"
 
 #: ../gtk/a11y/gtkmenuitemaccessible.c:442
 msgctxt "Action description"
@@ -605,7 +605,7 @@ msgstr ""
 #: ../gtk/a11y/gtkscalebuttonaccessible.c:172
 msgctxt "Action name"
 msgid "Dismiss"
-msgstr ""
+msgstr "ارفض"
 
 #: ../gtk/a11y/gtkspinneraccessible.c:39
 msgctxt "throbbing progress animation widget"
@@ -616,16 +616,7 @@ msgstr "دوّارة"
 msgid "Provides visual indication of progress"
 msgstr "يوفر إشارة مرئية على التقدم"
 
-#: ../gtk/a11y/gtkswitchaccessible.c:63
-msgctxt "light switch widget"
-msgid "Switch"
-msgstr "مفتاح"
-
-#: ../gtk/a11y/gtkswitchaccessible.c:64
-msgid "Switches between on and off states"
-msgstr "يبدّل بين حالات الفتح والإغلاق"
-
-#: ../gtk/a11y/gtkswitchaccessible.c:110
+#: ../gtk/a11y/gtkswitchaccessible.c:98
 msgctxt "Action description"
 msgid "Toggles the switch"
 msgstr ""
@@ -761,7 +752,7 @@ msgstr ""
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:192
 #: ../gtk/deprecated/gtkfontsel.c:1690 ../gtk/gtkfilechooserbutton.c:805
-#: ../gtk/gtkfilechooserdefault.c:5485 ../gtk/gtkmessagedialog.c:891
+#: ../gtk/gtkfilechooserdefault.c:5484 ../gtk/gtkmessagedialog.c:891
 #: ../gtk/gtkmessagedialog.c:910 ../gtk/gtkmountoperation.c:529
 #: ../gtk/gtkprintbackend.c:747 ../gtk/gtkprinteroptionwidget.c:545
 #: ../gtk/gtkprintunixdialog.c:684 ../gtk/gtkappchooserdialog.ui.h:1
@@ -1343,7 +1334,7 @@ msgstr "فارغ"
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
 #.
-#: ../gtk/gtkaboutdialog.c:101
+#: ../gtk/gtkaboutdialog.c:102
 #, c-format
 msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY;\n"
@@ -1352,40 +1343,40 @@ msgstr ""
 "يأتي هذا البرنامج دون أي ضمانات على الإطلاق؛\n"
 "زر <a href=\"%s\">%s</a> لمزيد من المعلومات"
 
-#: ../gtk/gtkaboutdialog.c:374
+#: ../gtk/gtkaboutdialog.c:372
 msgid "License"
 msgstr "الترخيص"
 
-#: ../gtk/gtkaboutdialog.c:375
+#: ../gtk/gtkaboutdialog.c:373
 msgid "The license of the program"
 msgstr "ترخيص البرنامج"
 
-#: ../gtk/gtkaboutdialog.c:913
+#: ../gtk/gtkaboutdialog.c:921
 msgid "Could not show link"
 msgstr "تعذّر إظهار الوصلة"
 
-#: ../gtk/gtkaboutdialog.c:950
+#: ../gtk/gtkaboutdialog.c:958
 msgid "Website"
 msgstr "الموقع"
 
-#: ../gtk/gtkaboutdialog.c:1004
+#: ../gtk/gtkaboutdialog.c:1012
 #, c-format
 msgid "About %s"
 msgstr "عنْ %s"
 
-#: ../gtk/gtkaboutdialog.c:2262
+#: ../gtk/gtkaboutdialog.c:2297
 msgid "Created by"
 msgstr "أنشئه"
 
-#: ../gtk/gtkaboutdialog.c:2265
+#: ../gtk/gtkaboutdialog.c:2300
 msgid "Documented by"
 msgstr "وثّقه"
 
-#: ../gtk/gtkaboutdialog.c:2275
+#: ../gtk/gtkaboutdialog.c:2310
 msgid "Translated by"
 msgstr "ترجَمَهُ"
 
-#: ../gtk/gtkaboutdialog.c:2280
+#: ../gtk/gtkaboutdialog.c:2315
 msgid "Artwork by"
 msgstr "جمَّلَهُ"
 
@@ -1477,7 +1468,7 @@ msgstr "اب_حث عن التطبيقات على الإنترنت"
 msgid "Select an application to open “%s”"
 msgstr "اختر تطبيقا لفتح ”%s“"
 
-#: ../gtk/gtkappchooserdialog.c:334 ../gtk/gtkappchooserwidget.c:660
+#: ../gtk/gtkappchooserdialog.c:334 ../gtk/gtkappchooserwidget.c:657
 #, c-format
 msgid "No applications available to open “%s”"
 msgstr "لا توجد أي تطبيقات لفتح ”%s“"
@@ -1505,23 +1496,23 @@ msgstr ""
 msgid "Forget association"
 msgstr "انس الارتباط"
 
-#: ../gtk/gtkappchooserwidget.c:609
+#: ../gtk/gtkappchooserwidget.c:606
 msgid "Default Application"
 msgstr "التطبيق المبدئي"
 
-#: ../gtk/gtkappchooserwidget.c:747
+#: ../gtk/gtkappchooserwidget.c:744
 msgid "Recommended Applications"
 msgstr "التطبيقات المُزكّاة"
 
-#: ../gtk/gtkappchooserwidget.c:762
+#: ../gtk/gtkappchooserwidget.c:759
 msgid "Related Applications"
 msgstr "التطبيقات المتعلقة"
 
-#: ../gtk/gtkappchooserwidget.c:776
+#: ../gtk/gtkappchooserwidget.c:773
 msgid "Other Applications"
 msgstr "التطبيقات الأخرى"
 
-#: ../gtk/gtkapplication.c:1569
+#: ../gtk/gtkapplication.c:1565
 #, c-format
 msgid ""
 "%s cannot quit at this time:\n"
@@ -1532,7 +1523,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../gtk/gtkapplicationwindow.c:334 ../gtk/gtkprintoperation-unix.c:480
+#: ../gtk/gtkapplicationwindow.c:337 ../gtk/gtkprintoperation-unix.c:480
 #: ../gtk/gtkprintoperation-win32.c:1444
 msgid "Application"
 msgstr "تطبيق"
@@ -1919,7 +1910,7 @@ msgctxt "Color channel"
 msgid "Alpha"
 msgstr "ألفا"
 
-#: ../gtk/gtkcolorswatch.c:444
+#: ../gtk/gtkcolorswatch.c:447
 msgid "_Customize"
 msgstr "_خصّص"
 
@@ -1939,7 +1930,7 @@ msgid "_Close"
 msgstr "أ_غلق"
 
 #. And show the custom paper dialog
-#: ../gtk/gtkcustompaperunixdialog.c:389 ../gtk/gtkprintunixdialog.c:3193
+#: ../gtk/gtkcustompaperunixdialog.c:389 ../gtk/gtkprintunixdialog.c:3202
 msgid "Manage Custom Sizes"
 msgstr "أدِر المقاسات المخصّصة"
 
@@ -1992,30 +1983,30 @@ msgstr "_يمين:"
 msgid "Paper Margins"
 msgstr "حواف الورق"
 
-#: ../gtk/gtkentry.c:9232 ../gtk/gtkentry.c:9378 ../gtk/gtklabel.c:6241
-#: ../gtk/gtktextview.c:8593 ../gtk/gtktextview.c:8776
+#: ../gtk/gtkentry.c:9271 ../gtk/gtkentry.c:9417 ../gtk/gtklabel.c:6276
+#: ../gtk/gtktextview.c:8698 ../gtk/gtktextview.c:8881
 msgid "Cu_t"
 msgstr "_قصّ"
 
-#: ../gtk/gtkentry.c:9236 ../gtk/gtkentry.c:9381 ../gtk/gtklabel.c:6242
-#: ../gtk/gtktextview.c:8597 ../gtk/gtktextview.c:8780
+#: ../gtk/gtkentry.c:9275 ../gtk/gtkentry.c:9420 ../gtk/gtklabel.c:6277
+#: ../gtk/gtktextview.c:8702 ../gtk/gtktextview.c:8885
 msgid "_Copy"
 msgstr "ا_نسخ"
 
-#: ../gtk/gtkentry.c:9240 ../gtk/gtkentry.c:9384 ../gtk/gtklabel.c:6243
-#: ../gtk/gtktextview.c:8599 ../gtk/gtktextview.c:8782
+#: ../gtk/gtkentry.c:9279 ../gtk/gtkentry.c:9423 ../gtk/gtklabel.c:6278
+#: ../gtk/gtktextview.c:8704 ../gtk/gtktextview.c:8887
 msgid "_Paste"
 msgstr "أ_لصق"
 
-#: ../gtk/gtkentry.c:9243 ../gtk/gtklabel.c:6245 ../gtk/gtktextview.c:8602
+#: ../gtk/gtkentry.c:9282 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8707
 msgid "_Delete"
 msgstr "ا_حذف"
 
-#: ../gtk/gtkentry.c:9254 ../gtk/gtklabel.c:6254 ../gtk/gtktextview.c:8616
+#: ../gtk/gtkentry.c:9293 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8721
 msgid "Select _All"
 msgstr "اختر ال_كل"
 
-#: ../gtk/gtkentry.c:10310
+#: ../gtk/gtkentry.c:10381
 msgid "Caps Lock is on"
 msgstr "زر الحروف العالية مفعّل"
 
@@ -2064,7 +2055,7 @@ msgstr "زر الحروف العالية مفعّل"
 msgid "Select a File"
 msgstr "اختر ملفًا"
 
-#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkplacessidebar.c:791
+#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkplacessidebar.c:790
 msgid "Desktop"
 msgstr "سطح المكتب"
 
@@ -2072,7 +2063,7 @@ msgstr "سطح المكتب"
 msgid "(None)"
 msgstr "(لا شيء)"
 
-#: ../gtk/gtkfilechooserbutton.c:807 ../gtk/gtkplacessidebar.c:3104
+#: ../gtk/gtkfilechooserbutton.c:807 ../gtk/gtkplacessidebar.c:3106
 msgid "_Open"
 msgstr "ا_فتح"
 
@@ -2107,7 +2098,7 @@ msgstr "تعذّر إنشاء ملف داخل %s لأنه ليس مجلدا"
 
 #: ../gtk/gtkfilechooserdefault.c:772
 #, fuzzy
-msgid "Cannot create file as the filename is to long"
+msgid "Cannot create file as the filename is too long"
 msgstr "تعذّر إنشاء ملف داخل %s لأنه ليس مجلدا"
 
 #: ../gtk/gtkfilechooserdefault.c:773
@@ -2188,67 +2179,67 @@ msgstr "مستخدمة مؤخرا"
 msgid "Search:"
 msgstr "ابحث:"
 
-#: ../gtk/gtkfilechooserdefault.c:2737
-msgid "Save in _folder:"
-msgstr "احفظ في ال_مجلّد:"
+#: ../gtk/gtkfilechooserdefault.c:2736
+msgid "Save in folder:"
+msgstr "احفظ في مجلّد:"
 
-#: ../gtk/gtkfilechooserdefault.c:2739
-msgid "Create in _folder:"
-msgstr "أنشئ في ال_مجلّد:"
+#: ../gtk/gtkfilechooserdefault.c:2738
+msgid "Create in folder:"
+msgstr "أنشئ في المجلّد:"
 
-#: ../gtk/gtkfilechooserdefault.c:3879
+#: ../gtk/gtkfilechooserdefault.c:3878
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "تعذّرت قراءة محتويات %s"
 
-#: ../gtk/gtkfilechooserdefault.c:3883
+#: ../gtk/gtkfilechooserdefault.c:3882
 msgid "Could not read the contents of the folder"
 msgstr "تعذّرت قراءة محتويات المجلّد"
 
-#: ../gtk/gtkfilechooserdefault.c:3980 ../gtk/gtkfilechooserdefault.c:4048
-#: ../gtk/gtkfilechooserdefault.c:4229
+#: ../gtk/gtkfilechooserdefault.c:3979 ../gtk/gtkfilechooserdefault.c:4047
+#: ../gtk/gtkfilechooserdefault.c:4228
 msgid "Unknown"
 msgstr "مجهول"
 
-#: ../gtk/gtkfilechooserdefault.c:3995
+#: ../gtk/gtkfilechooserdefault.c:3994
 msgid "%H:%M"
 msgstr "%OH:%OM"
 
-#: ../gtk/gtkfilechooserdefault.c:3997
+#: ../gtk/gtkfilechooserdefault.c:3996
 msgid "Yesterday at %H:%M"
 msgstr "أمس في %OH:%OM"
 
-#: ../gtk/gtkfilechooserdefault.c:4694
+#: ../gtk/gtkfilechooserdefault.c:4693
 msgid "Cannot change to folder because it is not local"
 msgstr "تعذّر الانتقال إلى المجلّد لأنه غير محلي"
 
-#: ../gtk/gtkfilechooserdefault.c:5478 ../gtk/gtkprintunixdialog.c:675
+#: ../gtk/gtkfilechooserdefault.c:5477 ../gtk/gtkprintunixdialog.c:675
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "هناك ملف باسم ”%s“ موجود حاليا. أتريد استبداله؟"
 
-#: ../gtk/gtkfilechooserdefault.c:5481 ../gtk/gtkprintunixdialog.c:679
+#: ../gtk/gtkfilechooserdefault.c:5480 ../gtk/gtkprintunixdialog.c:679
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "الملف موجود بالفعل في ”%s“.  استبداله سيكتب فوق محتواه."
 
-#: ../gtk/gtkfilechooserdefault.c:5486 ../gtk/gtkprintunixdialog.c:686
+#: ../gtk/gtkfilechooserdefault.c:5485 ../gtk/gtkprintunixdialog.c:686
 msgid "_Replace"
 msgstr "است_بدِل"
 
-#: ../gtk/gtkfilechooserdefault.c:6303
+#: ../gtk/gtkfilechooserdefault.c:6302
 msgid "Could not start the search process"
 msgstr "تعذّر تشغيل عملية البحث"
 
-#: ../gtk/gtkfilechooserdefault.c:6304
+#: ../gtk/gtkfilechooserdefault.c:6303
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 "لم يمكن للبرنامج أن ينشئ اتصالا بخادوم الفهرسة. الرجاء التأكد من أنه مشتغل."
 
-#: ../gtk/gtkfilechooserdefault.c:6318
+#: ../gtk/gtkfilechooserdefault.c:6317
 msgid "Could not send the search request"
 msgstr "تعذّر إرسال طلب البحث"
 
@@ -2269,16 +2260,20 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "اختر خطًا"
 
-#: ../gtk/gtkicontheme.c:2069 ../gtk/gtkicontheme.c:2132
+#: ../gtk/gtkheaderbar.c:224 ../gtk/gtkwindow.c:5274 ../gtk/gtkwindow.c:8286
+msgid "Close"
+msgstr "أغلق"
+
+#: ../gtk/gtkicontheme.c:2116 ../gtk/gtkicontheme.c:2179
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "الأيقونة '%s' غير موجودة في السِمة"
 
-#: ../gtk/gtkicontheme.c:3835
+#: ../gtk/gtkicontheme.c:3881
 msgid "Failed to load icon"
 msgstr "فشل تحميل الأيقونة"
 
-#: ../gtk/gtkimmodule.c:515
+#: ../gtk/gtkimmodule.c:531
 msgid "Simple"
 msgstr "بسيط"
 
@@ -2315,12 +2310,12 @@ msgid "Error"
 msgstr "عُطل"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6224
+#: ../gtk/gtklabel.c:6259
 msgid "_Open Link"
 msgstr "ا_فتح الوصلة"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6232
+#: ../gtk/gtklabel.c:6267
 msgid "Copy _Link Address"
 msgstr "ا_نسخ عنوان الوصلة"
 
@@ -2372,11 +2367,11 @@ msgstr "تعذّر تشغيل التّطبيق"
 msgid "%s: error launching application: %s\n"
 msgstr "خطأ أثناء تحميل الأيقونة: %s"
 
-#: ../gtk/gtklinkbutton.c:493
+#: ../gtk/gtklinkbutton.c:495
 msgid "Copy URL"
 msgstr "ا_نسخ المسار"
 
-#: ../gtk/gtklinkbutton.c:656
+#: ../gtk/gtklinkbutton.c:658
 msgid "Invalid URI"
 msgstr "عنوان غير صحيح"
 
@@ -2413,27 +2408,27 @@ msgstr ""
 "راجع مدير النظام"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:447
+#: ../gtk/gtkmain.c:448
 msgid "Load additional GTK+ modules"
 msgstr "حمّل وحدات ج‌ت‌ك+ إضافية"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:448
+#: ../gtk/gtkmain.c:449
 msgid "MODULES"
 msgstr "وحدات"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:450
+#: ../gtk/gtkmain.c:451
 msgid "Make all warnings fatal"
 msgstr "اجعل جميع التحذيرات قاتلة"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:453
+#: ../gtk/gtkmain.c:454
 msgid "GTK+ debugging flags to set"
 msgstr "شارات تنقيح ج‌ت‌ك+ التي ستضبط"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:456
+#: ../gtk/gtkmain.c:457
 msgid "GTK+ debugging flags to unset"
 msgstr "شارات تنقيح ج‌ت‌ك+ التي ستُصفّر"
 
@@ -2442,20 +2437,20 @@ msgstr "شارات تنقيح ج‌ت‌ك+ التي ستُصفّر"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:704
+#: ../gtk/gtkmain.c:705
 msgid "default:LTR"
 msgstr "default:RTL"
 
-#: ../gtk/gtkmain.c:769
+#: ../gtk/gtkmain.c:770
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "غير قادر على فتح العرض: %s"
 
-#: ../gtk/gtkmain.c:835
+#: ../gtk/gtkmain.c:836
 msgid "GTK+ Options"
 msgstr "خيارات ج‌ت‌ك+"
 
-#: ../gtk/gtkmain.c:835
+#: ../gtk/gtkmain.c:836
 msgid "Show GTK+ Options"
 msgstr "اعرض خيارات ج‌ت‌ك+"
 
@@ -2516,7 +2511,7 @@ msgstr "تطبيق مجهول (معرف العملية %d)"
 msgid "Unable to end process"
 msgstr "تعذّر إنهاء العملية"
 
-#: ../gtk/gtkmountoperation.c:1295
+#: ../gtk/gtkmountoperation.c:1297
 msgid "_End Process"
 msgstr "أ_نه العملية"
 
@@ -2551,7 +2546,7 @@ msgstr "صدفة زِد"
 msgid "Cannot end process with PID %d: %s"
 msgstr "تعذّر إنهاء العملية ذات المعرف %d:‏ %s"
 
-#: ../gtk/gtknotebook.c:5015 ../gtk/gtknotebook.c:7669
+#: ../gtk/gtknotebook.c:5057 ../gtk/gtknotebook.c:7783
 #, c-format
 msgid "Page %u"
 msgstr "صفحة %Iu"
@@ -2593,7 +2588,7 @@ msgstr ""
 "فوق: %s %s\n"
 "تحت: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:873 ../gtk/gtkprintunixdialog.c:3247
+#: ../gtk/gtkpagesetupunixdialog.c:873 ../gtk/gtkprintunixdialog.c:3256
 msgid "Manage Custom Sizes…"
 msgstr "أدِر المقاسات المخصّصة…"
 
@@ -2601,195 +2596,195 @@ msgstr "أدِر المقاسات المخصّصة…"
 msgid "Page Setup"
 msgstr "إعداد الصفحة"
 
-#: ../gtk/gtkpathbar.c:1640
+#: ../gtk/gtkpathbar.c:1606
 msgid "File System Root"
 msgstr "جذر نظام الملفات"
 
-#: ../gtk/gtkplacessidebar.c:447
+#: ../gtk/gtkplacessidebar.c:446
 msgid "Devices"
 msgstr "الأجهزة"
 
-#: ../gtk/gtkplacessidebar.c:455
+#: ../gtk/gtkplacessidebar.c:454
 msgid "Bookmarks"
 msgstr "العلامات"
 
-#: ../gtk/gtkplacessidebar.c:761
+#: ../gtk/gtkplacessidebar.c:760
 msgid "Places"
 msgstr "أماكن"
 
-#: ../gtk/gtkplacessidebar.c:768
+#: ../gtk/gtkplacessidebar.c:767
 msgid "Recent"
 msgstr "مستخدمة مؤخرا"
 
-#: ../gtk/gtkplacessidebar.c:770
+#: ../gtk/gtkplacessidebar.c:769
 msgid "Recent files"
 msgstr "الملفات المستخدمة مؤخرا"
 
-#: ../gtk/gtkplacessidebar.c:779
+#: ../gtk/gtkplacessidebar.c:778
 msgid "Home"
 msgstr "المنزل"
 
-#: ../gtk/gtkplacessidebar.c:781
+#: ../gtk/gtkplacessidebar.c:780
 msgid "Open your personal folder"
 msgstr "افتح مجلدك الشخصي"
 
-#: ../gtk/gtkplacessidebar.c:793
+#: ../gtk/gtkplacessidebar.c:792
 msgid "Open the contents of your desktop in a folder"
 msgstr "افتح محتويات سطح المكتب في مجلد"
 
-#: ../gtk/gtkplacessidebar.c:806
+#: ../gtk/gtkplacessidebar.c:805
 msgid "Trash"
 msgstr "المهملات"
 
-#: ../gtk/gtkplacessidebar.c:808
+#: ../gtk/gtkplacessidebar.c:807
 msgid "Open the trash"
 msgstr "افتح المهملات"
 
-#: ../gtk/gtkplacessidebar.c:863 ../gtk/gtkplacessidebar.c:888
-#: ../gtk/gtkplacessidebar.c:1095
+#: ../gtk/gtkplacessidebar.c:862 ../gtk/gtkplacessidebar.c:887
+#: ../gtk/gtkplacessidebar.c:1094
 #, c-format
 msgid "Mount and open %s"
 msgstr "أوصل وافتح %s"
 
-#: ../gtk/gtkplacessidebar.c:963
+#: ../gtk/gtkplacessidebar.c:962
 msgid "Open the contents of the file system"
 msgstr "افتح محتويات نظام الملفات"
 
-#: ../gtk/gtkplacessidebar.c:1063
+#: ../gtk/gtkplacessidebar.c:1062
 msgid "Network"
 msgstr "الشبكة"
 
-#: ../gtk/gtkplacessidebar.c:1069
+#: ../gtk/gtkplacessidebar.c:1068
 msgid "Browse Network"
 msgstr "تصفّح الشبكة"
 
-#: ../gtk/gtkplacessidebar.c:1071
+#: ../gtk/gtkplacessidebar.c:1070
 msgid "Browse the contents of the network"
 msgstr "تصفّح محتويات الشبكة"
 
-#: ../gtk/gtkplacessidebar.c:1078
+#: ../gtk/gtkplacessidebar.c:1077
 msgid "Connect to Server"
 msgstr "اتصل بخادوم"
 
-#: ../gtk/gtkplacessidebar.c:1080
+#: ../gtk/gtkplacessidebar.c:1079
 msgid "Connect to a network server address"
 msgstr "اتّصل بعنوان خادوم شبكة"
 
-#: ../gtk/gtkplacessidebar.c:1560
+#: ../gtk/gtkplacessidebar.c:1559
 msgid "New bookmark"
 msgstr "علامة جديدة"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: ../gtk/gtkplacessidebar.c:2100 ../gtk/gtkplacessidebar.c:3180
+#: ../gtk/gtkplacessidebar.c:2099 ../gtk/gtkplacessidebar.c:3182
 msgid "_Start"
 msgstr "اب_دأ"
 
-#: ../gtk/gtkplacessidebar.c:2101 ../gtk/gtkplacessidebar.c:3187
+#: ../gtk/gtkplacessidebar.c:2100 ../gtk/gtkplacessidebar.c:3189
 msgid "_Stop"
 msgstr "أو_قف"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: ../gtk/gtkplacessidebar.c:2106
+#: ../gtk/gtkplacessidebar.c:2105
 msgid "_Power On"
 msgstr "_شغّل"
 
-#: ../gtk/gtkplacessidebar.c:2107
+#: ../gtk/gtkplacessidebar.c:2106
 msgid "_Safely Remove Drive"
 msgstr "أزِل المشغّل بأ_مان"
 
-#: ../gtk/gtkplacessidebar.c:2110
+#: ../gtk/gtkplacessidebar.c:2109
 msgid "_Connect Drive"
 msgstr "أ_وصل المشغّل"
 
-#: ../gtk/gtkplacessidebar.c:2111
+#: ../gtk/gtkplacessidebar.c:2110
 msgid "_Disconnect Drive"
 msgstr "ا_فصل المشغّل"
 
-#: ../gtk/gtkplacessidebar.c:2114
+#: ../gtk/gtkplacessidebar.c:2113
 msgid "_Start Multi-disk Device"
 msgstr "اب_دأ المشغّل متعدد الأقراص"
 
-#: ../gtk/gtkplacessidebar.c:2115
+#: ../gtk/gtkplacessidebar.c:2114
 msgid "_Stop Multi-disk Device"
 msgstr "أو_قف المشغّل متعدد الأقراص"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: ../gtk/gtkplacessidebar.c:2119
+#: ../gtk/gtkplacessidebar.c:2118
 msgid "_Unlock Drive"
 msgstr "ا_فتح قفل المشغّل"
 
-#: ../gtk/gtkplacessidebar.c:2120
+#: ../gtk/gtkplacessidebar.c:2119
 msgid "_Lock Drive"
 msgstr "أ_وصد المشغّل"
 
-#: ../gtk/gtkplacessidebar.c:2147 ../gtk/gtkplacessidebar.c:2845
+#: ../gtk/gtkplacessidebar.c:2146 ../gtk/gtkplacessidebar.c:2844
 #, c-format
 msgid "Unable to start %s"
 msgstr "تعذّر بدء %s"
 
-#: ../gtk/gtkplacessidebar.c:2174
+#: ../gtk/gtkplacessidebar.c:2173
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "تعذّر الوصول إلى ”%s“"
 
-#: ../gtk/gtkplacessidebar.c:2480
+#: ../gtk/gtkplacessidebar.c:2479
 #, c-format
 msgid "Unable to unmount %s"
 msgstr "تعذر فصْل %s"
 
-#: ../gtk/gtkplacessidebar.c:2603 ../gtk/gtkplacessidebar.c:2630
-#: ../gtk/gtkplacessidebar.c:2657
+#: ../gtk/gtkplacessidebar.c:2602 ../gtk/gtkplacessidebar.c:2629
+#: ../gtk/gtkplacessidebar.c:2656
 #, c-format
 msgid "Unable to eject %s"
 msgstr "تعذّر إخراج %s"
 
-#: ../gtk/gtkplacessidebar.c:2797
+#: ../gtk/gtkplacessidebar.c:2796
 #, c-format
 msgid "Unable to poll %s for media changes"
 msgstr "تعذّر جس %s للتأكد من التغيرات في الوسائط"
 
-#: ../gtk/gtkplacessidebar.c:2899
+#: ../gtk/gtkplacessidebar.c:2898
 #, c-format
 msgid "Unable to stop %s"
 msgstr "تعذّر إيقاف %s"
 
-#: ../gtk/gtkplacessidebar.c:3111
+#: ../gtk/gtkplacessidebar.c:3113
 msgid "Open in New _Tab"
 msgstr "افتح في _لسان جديد"
 
-#: ../gtk/gtkplacessidebar.c:3119
+#: ../gtk/gtkplacessidebar.c:3121
 msgid "Open in New _Window"
 msgstr "افتح في _نافذة جديدة"
 
-#: ../gtk/gtkplacessidebar.c:3128
+#: ../gtk/gtkplacessidebar.c:3130
 msgid "_Add Bookmark"
 msgstr "أ_ضف علامة"
 
-#: ../gtk/gtkplacessidebar.c:3134
+#: ../gtk/gtkplacessidebar.c:3136
 msgid "Remove"
 msgstr "احذف"
 
-#: ../gtk/gtkplacessidebar.c:3141
+#: ../gtk/gtkplacessidebar.c:3143
 msgid "Rename…"
 msgstr "غيّر الاسم…"
 
-#: ../gtk/gtkplacessidebar.c:3152
+#: ../gtk/gtkplacessidebar.c:3154
 msgid "_Mount"
 msgstr "أو_صِل"
 
-#: ../gtk/gtkplacessidebar.c:3159
+#: ../gtk/gtkplacessidebar.c:3161
 msgid "_Unmount"
 msgstr "ا_فصل"
 
-#: ../gtk/gtkplacessidebar.c:3166
+#: ../gtk/gtkplacessidebar.c:3168
 msgid "_Eject"
 msgstr "أ_خرج"
 
-#: ../gtk/gtkplacessidebar.c:3173
+#: ../gtk/gtkplacessidebar.c:3175
 msgid "_Detect Media"
 msgstr "_تعرف على الوسائط"
 
-#: ../gtk/gtkplacessidebar.c:3826
+#: ../gtk/gtkplacessidebar.c:3828
 msgid "Computer"
 msgstr "الحاسوب"
 
@@ -2954,42 +2949,42 @@ msgstr "يجلب معلومات الطابعة…"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: ../gtk/gtkprintunixdialog.c:2976
+#: ../gtk/gtkprintunixdialog.c:2985
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4634
 msgid "Left to right, top to bottom"
 msgstr "من اليسار لليمين، ومن الأعلى للأسفل"
 
-#: ../gtk/gtkprintunixdialog.c:2976
+#: ../gtk/gtkprintunixdialog.c:2985
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4634
 msgid "Left to right, bottom to top"
 msgstr "من اليسار لليمين، ومن الأسفل للأعلى"
 
-#: ../gtk/gtkprintunixdialog.c:2977
+#: ../gtk/gtkprintunixdialog.c:2986
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4635
 msgid "Right to left, top to bottom"
 msgstr "من اليمين لليسار، ومن الأعلى للأسفل"
 
-#: ../gtk/gtkprintunixdialog.c:2977
+#: ../gtk/gtkprintunixdialog.c:2986
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4635
 msgid "Right to left, bottom to top"
 msgstr "من اليمين لليسار، ومن الأسفل للأعلى"
 
-#: ../gtk/gtkprintunixdialog.c:2978
+#: ../gtk/gtkprintunixdialog.c:2987
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4636
 msgid "Top to bottom, left to right"
 msgstr "من الأعلى للأسفل، ومن اليسار لليمين"
 
-#: ../gtk/gtkprintunixdialog.c:2978
+#: ../gtk/gtkprintunixdialog.c:2987
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4636
 msgid "Top to bottom, right to left"
 msgstr "من الأعلى للأسفل، ومن اليمين لليسار"
 
-#: ../gtk/gtkprintunixdialog.c:2979
+#: ../gtk/gtkprintunixdialog.c:2988
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4637
 msgid "Bottom to top, left to right"
 msgstr "من الأسفل للأعلى، ومن اليسار لليمين"
 
-#: ../gtk/gtkprintunixdialog.c:2979
+#: ../gtk/gtkprintunixdialog.c:2988
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4637
 msgid "Bottom to top, right to left"
 msgstr "من الأسفل للأعلى، ومن اليمين لليسار"
@@ -2997,28 +2992,28 @@ msgstr "من الأسفل للأعلى، ومن اليمين لليسار"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: ../gtk/gtkprintunixdialog.c:2983 ../gtk/gtkprintunixdialog.c:2996
+#: ../gtk/gtkprintunixdialog.c:2992 ../gtk/gtkprintunixdialog.c:3005
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4714
 msgid "Page Ordering"
 msgstr "ترتيب الصفحات"
 
-#: ../gtk/gtkprintunixdialog.c:3012
+#: ../gtk/gtkprintunixdialog.c:3021
 msgid "Left to right"
 msgstr "من اليسار لليمين"
 
-#: ../gtk/gtkprintunixdialog.c:3013
+#: ../gtk/gtkprintunixdialog.c:3022
 msgid "Right to left"
 msgstr "من اليمين لليسار"
 
-#: ../gtk/gtkprintunixdialog.c:3025
+#: ../gtk/gtkprintunixdialog.c:3034
 msgid "Top to bottom"
 msgstr "من الأعلى للأسفل"
 
-#: ../gtk/gtkprintunixdialog.c:3026
+#: ../gtk/gtkprintunixdialog.c:3035
 msgid "Bottom to top"
 msgstr "من الأسفل للأعلى"
 
-#: ../gtk/gtkprintunixdialog.c:3269
+#: ../gtk/gtkprintunixdialog.c:3278
 msgid "Print"
 msgstr "اطبع"
 
@@ -3115,6 +3110,10 @@ msgstr "لا يُمكن العثور على عنصر بالعنوان '%s'"
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr "لا يوجد أي تطبيق مسجّل بالاسم '%s' لعناصر مسار '%s'"
+
+#: ../gtk/gtksearchentry.c:240
+msgid "Search"
+msgstr "ابحث"
 
 #. Translators: if the "on" state label requires more than three
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
@@ -3247,43 +3246,43 @@ msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr "البيانات المرسلة غير صالحة. القسم الأول ليس GTKTEXTBUFFERCONTENTS-0001"
 
-#: ../gtk/gtktextutil.c:58
+#: ../gtk/gtktextutil.c:57
 msgid "LRM _Left-to-right mark"
 msgstr "علامة يسار إلى _يمين (LRM)"
 
-#: ../gtk/gtktextutil.c:59
+#: ../gtk/gtktextutil.c:58
 msgid "RLM _Right-to-left mark"
 msgstr "علامة ي_مين إلى يسار (RLM)"
 
-#: ../gtk/gtktextutil.c:60
+#: ../gtk/gtktextutil.c:59
 msgid "LRE Left-to-right _embedding"
 msgstr "_غرس يسار إلى يمين (LRE)"
 
-#: ../gtk/gtktextutil.c:61
+#: ../gtk/gtktextutil.c:60
 msgid "RLE Right-to-left e_mbedding"
 msgstr "غ_رس يمين إلى يسار (RLE)"
 
-#: ../gtk/gtktextutil.c:62
+#: ../gtk/gtktextutil.c:61
 msgid "LRO Left-to-right _override"
 msgstr "_تخطي يسار إلى يمين (LRO)"
 
-#: ../gtk/gtktextutil.c:63
+#: ../gtk/gtktextutil.c:62
 msgid "RLO Right-to-left o_verride"
 msgstr "ت_خطي يمين إلى يسار (RLO)"
 
-#: ../gtk/gtktextutil.c:64
+#: ../gtk/gtktextutil.c:63
 msgid "PDF _Pop directional formatting"
 msgstr "أوقف تن_سيق الاتجاه (PDF)"
 
-#: ../gtk/gtktextutil.c:65
+#: ../gtk/gtktextutil.c:64
 msgid "ZWS _Zero width space"
 msgstr "مسافة _صفرية العرض (ZWS)"
 
-#: ../gtk/gtktextutil.c:66
+#: ../gtk/gtktextutil.c:65
 msgid "ZWJ Zero width _joiner"
 msgstr "_واصل صفري العرض (ZWJ)"
 
-#: ../gtk/gtktextutil.c:67
+#: ../gtk/gtktextutil.c:66
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "_فاصل صفري العرض (ZWNJ)"
 
@@ -3310,21 +3309,50 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%Id %%"
 
-#: ../gtk/gtkwindow.c:7819
+#: ../gtk/gtkwindow.c:5235 ../gtk/gtkwindow.c:8181
 msgid "Minimize"
 msgstr "صغّر"
 
-#: ../gtk/gtkwindow.c:7828
-msgid "Unmaximize"
-msgstr "ألغ التكبي_ر"
+#: ../gtk/gtkwindow.c:5256
+msgid "Restore"
+msgstr "استعِد"
 
-#: ../gtk/gtkwindow.c:7828
+#: ../gtk/gtkwindow.c:5256 ../gtk/gtkwindow.c:8189
 msgid "Maximize"
 msgstr "كبِّر"
 
-#: ../gtk/gtkwindow.c:7842
-msgid "Close"
-msgstr "أغلق"
+#: ../gtk/gtkwindow.c:8189
+msgid "Unmaximize"
+msgstr "ألغ التكبير"
+
+#: ../gtk/gtkwindow.c:8198
+msgid "Always on Top"
+msgstr "دائما في القمّة"
+
+#: ../gtk/gtkwindow.c:8210
+msgid "Always on Visible Workspace"
+msgstr "دائما على مساحة العمل المرئية"
+
+#: ../gtk/gtkwindow.c:8218
+msgid "Only on This Workspace"
+msgstr "فقط على مساحة العمل هذه"
+
+#: ../gtk/gtkwindow.c:8235
+msgid "Move to Workspace Up"
+msgstr "انقل لمساحة العمل فوق"
+
+#: ../gtk/gtkwindow.c:8244
+msgid "Move to Workspace Down"
+msgstr "انقل ل_مساحة العمل تحت"
+
+#: ../gtk/gtkwindow.c:8258
+msgid "Move to Another Workspace"
+msgstr "انقل لمساحة عمل أخرى"
+
+#: ../gtk/gtkwindow.c:8266
+#, c-format
+msgid "Workspace %d"
+msgstr "مساحة العمل %d"
 
 #: ../gtk/paper_names_offsets.c:4
 msgctxt "paper size"
@@ -4721,27 +4749,27 @@ msgid "Command Line"
 msgstr "سطر الأوامر"
 
 #. SUN_BRANDING
-#: ../modules/printbackends/papi/gtkprintbackendpapi.c:809
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:786
 msgid "printer offline"
 msgstr "الطابعة غير متصلة"
 
 #. SUN_BRANDING
-#: ../modules/printbackends/papi/gtkprintbackendpapi.c:827
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:804
 msgid "ready to print"
 msgstr "مستعد للطباعة"
 
 #. SUN_BRANDING
-#: ../modules/printbackends/papi/gtkprintbackendpapi.c:830
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:807
 msgid "processing job"
 msgstr "يعالج المهمة"
 
 #. SUN_BRANDING
-#: ../modules/printbackends/papi/gtkprintbackendpapi.c:834
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:811
 msgid "paused"
 msgstr "مُلبَثة"
 
 #. SUN_BRANDING
-#: ../modules/printbackends/papi/gtkprintbackendpapi.c:837
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:814
 msgid "unknown"
 msgstr "غير معروف"
 
@@ -4874,11 +4902,6 @@ msgstr "عائلة الخطوط"
 #: ../gtk/gtkfontchooserwidget.ui.h:3
 msgid "No fonts matched your search. You can revise your search and try again."
 msgstr "لا خطوط تطابق عبارة البحث، من فضلك راجعها ثم أعِد المحاولة."
-
-#: ../gtk/gtkmessagedialog.ui.h:1
-#, fuzzy
-msgid " "
-msgstr "؛ "
 
 #: ../gtk/gtkpagesetupunixdialog.ui.h:3
 msgid "_Format for:"
@@ -5163,6 +5186,20 @@ msgstr "أخفض الصوت"
 msgid "Decreases the volume"
 msgstr "يخفض الصوت"
 
+#~ msgctxt "light switch widget"
+#~ msgid "Switch"
+#~ msgstr "مفتاح"
+
+#~ msgid "Switches between on and off states"
+#~ msgstr "يبدّل بين حالات الفتح والإغلاق"
+
+#~ msgid "Save in _folder:"
+#~ msgstr "احفظ في ال_مجلّد:"
+
+#, fuzzy
+#~ msgid " "
+#~ msgstr "؛ "
+
 #~ msgid "Input _Methods"
 #~ msgstr "طرق ال_إدخال"
 
@@ -5177,9 +5214,6 @@ msgstr "يخفض الصوت"
 
 #~ msgid "Could not remove bookmark"
 #~ msgstr "تعذّر حذف العلامة"
-
-#~ msgid "Search"
-#~ msgstr "ابحث"
 
 #~ msgid "Add the folder '%s' to the bookmarks"
 #~ msgstr "أضِف المجلّد '%s' إلى العلامات"
@@ -5246,9 +5280,6 @@ msgstr "يخفض الصوت"
 
 #~ msgid "Select a folder"
 #~ msgstr "اختر مجلدًا"
-
-#~ msgid "_Save in folder:"
-#~ msgstr "ا_حفظ في مجلّد:"
 
 #~ msgid "Caps Lock and Num Lock are on"
 #~ msgstr "زر الحروف العالية والأرقام مفعل"
