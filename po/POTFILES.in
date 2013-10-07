@@ -130,6 +130,7 @@ gtk/gtkfilefilter.c
 gtk/gtkfilesystem.c
 gtk/gtkfilesystemmodel.c
 gtk/gtkfixed.c
+gtk/gtkflowbox.c
 gtk/gtkfontbutton.c
 gtk/gtkfontchooser.c
 gtk/gtkfontchooser.c
