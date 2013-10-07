@@ -1,3 +1,20 @@
+Overview of Changes in GTK+ 3.10 to 3.11.0
+==========================================
+
+* New notebook tab styling: GtkNotebook now offers a way
+  for themes to opt out of the tab rendering, with the
+  'has-tab-gap' style property. The Adwaita theme is using
+  this to achieve a more modern tab appearance.
+
+* GtkFlowBox: A container that its children in a reflowing
+  grid, which can be oriented horizontally or vertically.
+  It is similar to GtkListBox in that the children can
+  be sorted and filtered, and by requiring a dedicated child
+  widget type, GtkFlowBoxChild. It is similar to GtkTreeView
+  in that is supports a full set of selection modes, including
+  rubberband selection.
+
+
 Overview of Changes in GTK+ 3.9.14 to 3.9.16
 ============================================
 
