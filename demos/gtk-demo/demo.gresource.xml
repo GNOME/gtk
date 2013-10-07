@@ -95,6 +95,7 @@
     <file>entry_buffer.c</file>
     <file>entry_completion.c</file>
     <file>expander.c</file>
+    <file>flowbox.c</file>
     <file>hypertext.c</file>
     <file>iconview.c</file>
     <file>iconview_edit.c</file>

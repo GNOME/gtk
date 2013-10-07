@@ -30,6 +30,7 @@ demos =						\
 	infobar.c				\
 	links.c					\
 	listbox.c				\
+	flowbox.c				\
 	list_store.c				\
 	menus.c					\
 	offscreen_window.c			\
