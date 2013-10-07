@@ -15,11 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\demos\gtk-demo\application-standalone.c">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\demos\gtk-demo\demo_resources.c">
-      <Filter>Sources</Filter>
-    </ClCompile>
+    <ClCompile Include="..\..\..\demos\gtk-demo\application-standalone.c"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\demos\gtk-demo\demo_resources.c"><Filter>Sources</Filter></ClCompile>
   </ItemGroup>
 </Project>

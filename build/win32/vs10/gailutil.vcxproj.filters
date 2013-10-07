@@ -15,11 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\libgail-util\gailmisc.c">
-      <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\libgail-util\gailtextutil.c">
-      <Filter>Sources</Filter>
-    </ClCompile>
+    <ClCompile Include="..\..\..\libgail-util\gailmisc.c"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\libgail-util\gailtextutil.c"><Filter>Sources</Filter></ClCompile>
   </ItemGroup>
 </Project>
