@@ -680,7 +680,7 @@ gtk_flow_box_child_get_index (GtkFlowBoxChild *child)
 gboolean
 gtk_flow_box_child_is_selected (GtkFlowBoxChild *child)
 {
-  g_return_if_fail (GTK_IS_FLOW_BOX_CHILD (child));
+  g_return_val_if_fail (GTK_IS_FLOW_BOX_CHILD (child), FALSE);
 
   return CHILD_PRIV (child)->selected;
 }
