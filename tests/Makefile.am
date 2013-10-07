@@ -97,6 +97,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	$(testsocket_programs)		\
 	testspinbutton			\
 	teststatusicon			\
+	teststockbuttonmenu		\
 	testtoolbar			\
 	stresstest-toolbar		\
 	testtreechanging                \
@@ -232,6 +233,7 @@ testsocket_DEPENDENCIES = $(DEPS)
 testsocket_child_DEPENDENCIES = $(DEPS)
 testspinbutton_DEPENDENCIES = $(TEST_DEPS)
 teststatusicon_DEPENDENCIES = $(TEST_DEPS)
+teststockbuttonmenu_DEPENDENCIES = $(TEST_DEPS)
 testtreechanging_DEPENDENCIES =	$(DEPS)
 testtreeedit_DEPENDENCIES = $(DEPS)
 testtreemodel_DEPENDENCIES = $(DEPS)
