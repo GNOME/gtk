@@ -887,7 +887,7 @@ setup_default_icon (void)
 {
   GdkPixbuf *pixbuf;
 
-  pixbuf = gdk_pixbuf_new_from_resource ("/gtk-logo-old.png", NULL);
+  pixbuf = gdk_pixbuf_new_from_resource ("/application/gtk-logo-48.png", NULL);
   /* We load a resource, so we can guarantee that loading it is successful */
   g_assert (pixbuf);
 
