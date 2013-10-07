@@ -131,6 +131,7 @@ copy ..\..\..\gtk\gtkfilechooserdialog.h $(CopyDir)\include\gtk-$(ApiVersion)\gt
 copy ..\..\..\gtk\gtkfilechooserwidget.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkfilefilter.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkfixed.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
+copy ..\..\..\gtk\gtkflowbox.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkfontbutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkfontchooser.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkfontchooserdialog.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk&#x0D;&#x0A;
@@ -309,6 +310,8 @@ copy ..\..\..\gtk\a11y\gtkcontaineraccessible.h $(CopyDir)\include\gtk-$(ApiVers
 copy ..\..\..\gtk\a11y\gtkcontainercellaccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y&#x0D;&#x0A;
 copy ..\..\..\gtk\a11y\gtkentryaccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y&#x0D;&#x0A;
 copy ..\..\..\gtk\a11y\gtkexpanderaccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y&#x0D;&#x0A;
+copy ..\..\..\gtk\a11y\gtkflowboxaccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y&#x0D;&#x0A;
+copy ..\..\..\gtk\a11y\gtkflowboxchildaccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y&#x0D;&#x0A;
 copy ..\..\..\gtk\a11y\gtkframeaccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y&#x0D;&#x0A;
 copy ..\..\..\gtk\a11y\gtkiconviewaccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y&#x0D;&#x0A;
 copy ..\..\..\gtk\a11y\gtkimageaccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y&#x0D;&#x0A;

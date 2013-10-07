@@ -247,6 +247,8 @@ copy ..\..\..\gtk\gtkfilefilter.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkfixed.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
+copy ..\..\..\gtk\gtkflowbox.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
+
 copy ..\..\..\gtk\gtkfontbutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
 copy ..\..\..\gtk\gtkfontchooser.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
@@ -598,6 +600,10 @@ copy ..\..\..\gtk\a11y\gtkcontainercellaccessible.h $(CopyDir)\include\gtk-$(Api
 copy ..\..\..\gtk\a11y\gtkentryaccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y
 
 copy ..\..\..\gtk\a11y\gtkexpanderaccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkflowboxaccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y
+
+copy ..\..\..\gtk\a11y\gtkflowboxchildaccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y
 
 copy ..\..\..\gtk\a11y\gtkframeaccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y
 
