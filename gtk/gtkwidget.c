@@ -9064,6 +9064,11 @@ _gtk_widget_get_modifier_properties (GtkWidget *widget)
  *
  * All other style values are left untouched.
  *
+ * This function does not act recursively. Setting the color of a
+ * container does not affect its children. Note that some widgets that
+ * you may not think of as containers, for instance #GtkButton<!-- -->s,
+ * are actually containers.
+ *
  * <note><para>
  * This API is mostly meant as a quick way for applications to
  * change a widget appearance. If you are developing a widgets
