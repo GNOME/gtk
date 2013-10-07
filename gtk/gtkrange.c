@@ -65,6 +65,7 @@
 #define TIMEOUT_REPEAT      50
 #define ZOOM_HOLD_TIME      500
 #define AUTOSCROLL_FACTOR   20
+#define SCROLL_EDGE_SIZE 15
 
 typedef struct _GtkRangeStepTimer GtkRangeStepTimer;
 
@@ -3052,9 +3053,9 @@ update_autoscroll_mode (GtkRange *range)
           pos = range->priv->mouse_x;
         }
 
-      if (pos < 0)
+      if (pos < SCROLL_EDGE_SIZE)
         mode = GTK_SCROLL_STEP_BACKWARD;
-      else if (pos > size)
+      else if (pos > (size - SCROLL_EDGE_SIZE))
         mode = GTK_SCROLL_STEP_FORWARD;
     }
 
