@@ -323,7 +323,7 @@ do_listbox (GtkWidget *do_widget)
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window),
                              gtk_widget_get_screen (do_widget));
-      gtk_window_set_title (GTK_WINDOW (window), "ListBox");
+      gtk_window_set_title (GTK_WINDOW (window), "List Box");
       gtk_window_set_default_size (GTK_WINDOW (window),
                                    400, 600);
 
