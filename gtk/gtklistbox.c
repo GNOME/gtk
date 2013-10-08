@@ -2277,17 +2277,18 @@ gtk_list_box_move_cursor (GtkListBox      *list_box,
     case GTK_MOVEMENT_DISPLAY_LINES:
       if (priv->cursor_row != NULL)
         {
+          int i = count;
           iter = ROW_PRIV (priv->cursor_row)->iter;
 
-          while (count < 0  && iter != NULL)
+          while (i < 0  && iter != NULL)
             {
               iter = gtk_list_box_get_previous_visible (list_box, iter);
-              count = count + 1;
+              i = i + 1;
             }
-          while (count > 0  && iter != NULL)
+          while (i > 0  && iter != NULL)
             {
               iter = gtk_list_box_get_next_visible (list_box, iter);
-              count = count - 1;
+              i = i - 1;
             }
 
           if (iter != NULL && !g_sequence_iter_is_end (iter))
