@@ -367,9 +367,6 @@ enum {
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-static const GdkColor default_link_color = { 0, 0, 0, 0xeeee };
-static const GdkColor default_visited_link_color = { 0, 0x5555, 0x1a1a, 0x8b8b };
-
 static void gtk_label_set_property      (GObject          *object,
 					 guint             prop_id,
 					 const GValue     *value,
@@ -498,9 +495,6 @@ static gboolean      gtk_label_activate_link    (GtkLabel    *label,
                                                  const gchar *uri);
 static void          gtk_label_activate_current_link (GtkLabel *label);
 static GtkLabelLink *gtk_label_get_current_link (GtkLabel  *label);
-static void          gtk_label_get_link_colors  (GtkWidget  *widget,
-                                                 GdkColor   *link_color,
-                                                 GdkColor   *visited_link_color);
 static void          emit_activate_link         (GtkLabel     *label,
                                                  GtkLabelLink *link);
 
@@ -2422,35 +2416,6 @@ link_free (GtkLabelLink *link)
   g_free (link);
 }
 
-static void
-gtk_label_get_link_colors (GtkWidget *widget,
-                           GdkColor  *link_color,
-                           GdkColor  *visited_link_color)
-{
-  GtkStyleContext *context;
-  GdkColor *link, *visited;
-
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_get_style (context,
-                               "link-color", &link,
-                               "visited-link-color", &visited,
-                                NULL);
-  if (link)
-    {
-      *link_color = *link;
-      gdk_color_free (link);
-    }
-  else
-    *link_color = default_link_color;
-
-  if (visited)
-    {
-      *visited_link_color = *visited;
-      gdk_color_free (visited);
-    }
-  else
-    *visited_link_color = default_visited_link_color;
-}
 
 static gboolean
 parse_uri_markup (GtkLabel     *label,
@@ -3345,8 +3310,10 @@ gtk_label_ensure_layout (GtkLabel *label)
   GtkLabelPrivate *priv = label->priv;
   GtkWidget *widget;
   gboolean rtl;
+  GtkStyleContext *context;
 
   widget = GTK_WIDGET (label);
+  context = gtk_widget_get_style_context (widget);
 
   rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
 
@@ -3382,30 +3349,33 @@ gtk_label_ensure_layout (GtkLabel *label)
 
       if (priv->select_info && priv->select_info->links)
         {
-          GdkColor link_color, visited_color;
+          GdkRGBA link_color;
           PangoAttribute *attribute;
           GList *list;
           
-          gtk_label_get_link_colors (widget, &link_color, &visited_color);
           attrs = pango_attr_list_new ();
 
           for (list = priv->select_info->links; list; list = list->next)
             {
               GtkLabelLink *link = list->data;
+              GtkStateFlags state;
 
               attribute = pango_attr_underline_new (TRUE);
               attribute->start_index = link->start;
               attribute->end_index = link->end;
               pango_attr_list_insert (attrs, attribute);
 
+              state = gtk_widget_get_state_flags (widget);
               if (link->visited)
-                attribute = pango_attr_foreground_new (visited_color.red,
-                                                       visited_color.green,
-                                                       visited_color.blue);
+                state |= GTK_STATE_FLAG_VISITED;
               else
-                attribute = pango_attr_foreground_new (link_color.red,
-                                                       link_color.green,
-                                                       link_color.blue);
+                state |= GTK_STATE_FLAG_LINK;
+
+              gtk_style_context_get_color (context, state, &link_color);
+
+              attribute = pango_attr_foreground_new (link_color.red * 65535,
+                                                     link_color.green * 65535,
+                                                     link_color.blue * 65535);
               attribute->start_index = link->start;
               attribute->end_index = link->end;
               pango_attr_list_insert (attrs, attribute);
@@ -4137,9 +4107,7 @@ gtk_label_draw (GtkWidget *widget,
           gint range[2];
           cairo_region_t *clip;
           GdkRectangle rect;
-          GdkColor *text_color;
-          GdkColor link_color;
-          GdkColor visited_link_color;
+          GdkRGBA link_color;
 
           if (info->selectable &&
               gtk_widget_has_focus (widget) &&
@@ -4174,12 +4142,6 @@ gtk_label_draw (GtkWidget *widget,
               cairo_clip (cr);
               cairo_region_destroy (clip);
 
-              gtk_label_get_link_colors (widget, &link_color, &visited_link_color);
-              if (active_link->visited)
-                text_color = &visited_link_color;
-              else
-                text_color = &link_color;
-
               if (info->link_clicked)
                 state |= GTK_STATE_FLAG_ACTIVE;
               else
@@ -4190,9 +4152,14 @@ gtk_label_draw (GtkWidget *widget,
               gdk_cairo_set_source_rgba (cr, &bg_color);
               cairo_paint (cr);
 
-              cairo_set_source_rgb (cr, text_color->red / 65535., 
-                                        text_color->green / 65535.,
-                                        text_color->blue / 65535.);
+              if (active_link->visited)
+                state |= GTK_STATE_FLAG_VISITED;
+              else
+                state |= GTK_STATE_FLAG_LINK;
+
+              gtk_style_context_get_color (context, state, &link_color);
+              gdk_cairo_set_source_rgba (cr, &link_color);
+
               cairo_move_to (cr, x, y);
               _gtk_pango_fill_layout (cr, priv->layout);
 
