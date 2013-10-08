@@ -389,7 +389,7 @@
 
 #define WIDGET_CLASS(w)	 GTK_WIDGET_GET_CLASS (w)
 
-#define GTK_STATE_FLAGS_BITS 9
+#define GTK_STATE_FLAGS_BITS 11
 
 typedef struct {
   gchar               *name;           /* Name of the template automatic child */

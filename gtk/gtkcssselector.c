@@ -1827,7 +1827,9 @@ parse_selector_pseudo_class (GtkCssParser   *parser,
     { "focus",        GTK_STATE_FLAG_FOCUSED, },
     { "backdrop",     GTK_STATE_FLAG_BACKDROP, },
     { "dir(ltr)",     GTK_STATE_FLAG_DIR_LTR, },
-    { "dir(rtl)",     GTK_STATE_FLAG_DIR_RTL, }
+    { "dir(rtl)",     GTK_STATE_FLAG_DIR_RTL, },
+    { "link",         GTK_STATE_FLAG_LINK, },
+    { "visited",      GTK_STATE_FLAG_VISITED, }
   };
   guint i;
 
