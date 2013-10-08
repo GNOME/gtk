@@ -93,9 +93,6 @@
  * the 'Close' button returns the #GTK_RESPONSE_CANCEL response id.
  */
 
-static GdkColor default_link_color = { 0, 0, 0, 0xeeee };
-static GdkColor default_visited_link_color = { 0, 0x5555, 0x1a1a, 0x8b8b };
-
 /* Translators: this is the license preamble; the string at the end
  * contains the URL of the license.
  */
@@ -1845,21 +1842,12 @@ follow_if_link (GtkAboutDialog *about,
 
       if (uri && !g_slist_find_custom (priv->visited_links, uri, (GCompareFunc)strcmp))
         {
-          GdkColor *style_visited_link_color;
-          GdkColor color;
+          GdkRGBA visited_link_color;
+          GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET (about));
+          GtkStateFlags state = gtk_widget_get_state_flags (GTK_WIDGET (about));
+          gtk_style_context_get_color (context, state | GTK_STATE_FLAG_VISITED, &visited_link_color);
 
-          gtk_widget_style_get (GTK_WIDGET (about),
-                                "visited-link-color", &style_visited_link_color,
-                                NULL);
-          if (style_visited_link_color)
-            {
-              color = *style_visited_link_color;
-              gdk_color_free (style_visited_link_color);
-            }
-          else
-            color = default_visited_link_color;
-
-          g_object_set (G_OBJECT (tag), "foreground-gdk", &color, NULL);
+          g_object_set (G_OBJECT (tag), "foreground-rgba", visited_link_color, NULL);
 
           priv->visited_links = g_slist_prepend (priv->visited_links, g_strdup (uri));
         }
@@ -2034,35 +2022,17 @@ text_buffer_new (GtkAboutDialog  *about,
   gchar **p;
   gchar *q0, *q1, *q2, *r1, *r2;
   GtkTextBuffer *buffer;
-  GdkColor *style_link_color;
-  GdkColor *style_visited_link_color;
-  GdkColor color;
-  GdkColor link_color;
-  GdkColor visited_link_color;
+  GdkRGBA color;
+  GdkRGBA link_color;
+  GdkRGBA visited_link_color;
   GtkAboutDialogPrivate *priv = about->priv;
   GtkTextIter start_iter, end_iter;
   GtkTextTag *tag;
+  GtkStateFlags state = gtk_widget_get_state_flags (GTK_WIDGET (about));
+  GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET (about));
 
-  gtk_widget_style_get (GTK_WIDGET (about),
-                        "link-color", &style_link_color,
-                        "visited-link-color", &style_visited_link_color,
-                        NULL);
-  if (style_link_color)
-    {
-      link_color = *style_link_color;
-      gdk_color_free (style_link_color);
-    }
-  else
-    link_color = default_link_color;
-
-  if (style_visited_link_color)
-    {
-      visited_link_color = *style_visited_link_color;
-      gdk_color_free (style_visited_link_color);
-    }
-  else
-    visited_link_color = default_visited_link_color;
-
+  gtk_style_context_get_color (context, state | GTK_STATE_FLAG_LINK, &link_color);
+  gtk_style_context_get_color (context, state | GTK_STATE_FLAG_VISITED, &visited_link_color);
   buffer = gtk_text_buffer_new (NULL);
 
   for (p = strings; *p; p++)
@@ -2120,7 +2090,7 @@ text_buffer_new (GtkAboutDialog  *about,
                 color = link_color;
 
               tag = gtk_text_buffer_create_tag (buffer, NULL,
-                                                "foreground-gdk", &color,
+                                                "foreground-rgba", &color,
                                                 "underline", PANGO_UNDERLINE_SINGLE,
                                                 NULL);
               if (strcmp (link_type, "email") == 0)
