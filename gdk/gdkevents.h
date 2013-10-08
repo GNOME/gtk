@@ -588,7 +588,8 @@ struct _GdkEventVisibility
  *   buttons. See #GdkModifierType.
  * @is_hint: set to 1 if this event is just a hint, see the
  *   %GDK_POINTER_MOTION_HINT_MASK value of #GdkEventMask.
- * @device: the device where the event originated.
+ * @device: the master device that the event originated from. Use
+ * gdk_event_get_source_device() to get the slave device.
  * @x_root: the x coordinate of the pointer relative to the root of the
  *   screen.
  * @y_root: the y coordinate of the pointer relative to the root of the
@@ -630,7 +631,8 @@ struct _GdkEventMotion
  *   Normally button 1 is the left mouse button, 2 is the middle button,
  *   and 3 is the right button. On 2-button mice, the middle button can
  *   often be simulated by pressing both mouse buttons together.
- * @device: the device where the event originated.
+ * @device: the master device that the event originated from. Use
+ * gdk_event_get_source_device() to get the slave device.
  * @x_root: the x coordinate of the pointer relative to the root of the
  *   screen.
  * @y_root: the y coordinate of the pointer relative to the root of the
@@ -704,7 +706,8 @@ struct _GdkEventButton
  * @sequence: the event sequence that the event belongs to
  * @emulating_pointer: whether the event should be used for emulating
  *   pointer event
- * @device: the device where the event originated
+ * @device: the master device that the event originated from. Use
+ * gdk_event_get_source_device() to get the slave device.
  * @x_root: the x coordinate of the pointer relative to the root of the
  *   screen
  * @y_root: the y coordinate of the pointer relative to the root of the
@@ -752,7 +755,8 @@ struct _GdkEventTouch
  * @direction: the direction to scroll to (one of %GDK_SCROLL_UP,
  *   %GDK_SCROLL_DOWN, %GDK_SCROLL_LEFT, %GDK_SCROLL_RIGHT or
  *   %GDK_SCROLL_SMOOTH).
- * @device: the device where the event originated.
+ * @device: the master device that the event originated from. Use
+ * gdk_event_get_source_device() to get the slave device.
  * @x_root: the x coordinate of the pointer relative to the root of the
  *   screen.
  * @y_root: the y coordinate of the pointer relative to the root of the
@@ -1004,7 +1008,8 @@ struct _GdkEventOwnerChange
  * @window: the window which received the event.
  * @send_event: %TRUE if the event was sent explicitly (e.g. using <function>XSendEvent</function>).
  * @time: the time of the event in milliseconds.
- * @device: the device where the event originated.
+ * @device: the master device that the event originated from. Use
+ * gdk_event_get_source_device() to get the slave device.
  *
  * Proximity events are generated when using GDK's wrapper for the
  * XInput extension. The XInput extension is an add-on for standard X
