@@ -839,7 +839,7 @@ gtk_tree_path_get_indices (GtkTreePath *path)
 }
 
 /**
- * gtk_tree_path_get_indices_with_depth:
+ * gtk_tree_path_get_indices_with_depth: (rename-to gtk_tree_path_get_indices)
  * @path: a #GtkTreePath
  * @depth: (out) (allow-none): return location for number of elements
  *     returned in the integer array, or %NULL
@@ -854,8 +854,6 @@ gtk_tree_path_get_indices (GtkTreePath *path)
  *     indices, or %NULL
  *
  * Since: 3.0
- *
- * Rename to: gtk_tree_path_get_indices
  */
 gint *
 gtk_tree_path_get_indices_with_depth (GtkTreePath *path,
@@ -1896,7 +1894,7 @@ gtk_tree_model_rows_reordered (GtkTreeModel *tree_model,
 }
 
 /**
- * gtk_tree_model_rows_reordered_with_length:
+ * gtk_tree_model_rows_reordered_with_length: (rename-to gtk_tree_model_rows_reordered)
  * @tree_model: a #GtkTreeModel
  * @path: a #GtkTreePath pointing to the tree node whose children
  *     have been reordered
@@ -1913,8 +1911,6 @@ gtk_tree_model_rows_reordered (GtkTreeModel *tree_model,
  *
  * This should be called by models when their rows have been
  * reordered.
- *
- * Rename to: gtk_tree_model_rows_reordered
  *
  * Since: 3.10
  */

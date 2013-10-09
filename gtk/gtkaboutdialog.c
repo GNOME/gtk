@@ -1128,7 +1128,7 @@ gtk_about_dialog_get_copyright (GtkAboutDialog *about)
 /**
  * gtk_about_dialog_set_copyright:
  * @about: a #GtkAboutDialog
- * @copyright: (allow-none) the copyright string
+ * @copyright: (allow-none): the copyright string
  *
  * Sets the copyright string to display in the about dialog.
  * This should be a short string of one or two lines.

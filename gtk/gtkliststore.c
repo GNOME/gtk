@@ -459,14 +459,13 @@ gtk_list_store_new (gint n_columns,
 
 
 /**
- * gtk_list_store_newv:
+ * gtk_list_store_newv: (rename-to gtk_list_store_new)
  * @n_columns: number of columns in the list store
  * @types: (array length=n_columns): an array of #GType types for the columns, from first to last
  *
  * Non-vararg creation function.  Used primarily by language bindings.
  *
  * Return value: (transfer full): a new #GtkListStore
- * Rename to: gtk_list_store_new
  **/
 GtkListStore *
 gtk_list_store_newv (gint   n_columns,
@@ -1073,7 +1072,7 @@ gtk_list_store_set_valist_internal (GtkListStore *list_store,
 }
 
 /**
- * gtk_list_store_set_valuesv:
+ * gtk_list_store_set_valuesv: (rename-to gtk_list_store_set)
  * @list_store: A #GtkListStore
  * @iter: A valid #GtkTreeIter for the row being modified
  * @columns: (array length=n_values): an array of column numbers
@@ -1087,7 +1086,6 @@ gtk_list_store_set_valist_internal (GtkListStore *list_store,
  * change is not known until run-time.
  *
  * Since: 2.12
- * Rename to: gtk_list_store_set
  */
 void
 gtk_list_store_set_valuesv (GtkListStore *list_store,

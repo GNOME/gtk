@@ -2113,7 +2113,7 @@ gtk_container_class_handle_border_width (GtkContainerClass *klass)
 }
 
 /**
- * gtk_container_forall:
+ * gtk_container_forall: (virtual forall)
  * @container: a #GtkContainer
  * @callback: (scope call) (closure callback_data): a callback
  * @callback_data: callback user data
@@ -2124,8 +2124,6 @@ gtk_container_class_handle_border_width (GtkContainerClass *klass)
  * of the container, but were added by the container implementation
  * itself.  Most applications should use gtk_container_foreach(),
  * rather than gtk_container_forall().
- *
- * Virtual: forall
  **/
 void
 gtk_container_forall (GtkContainer *container,

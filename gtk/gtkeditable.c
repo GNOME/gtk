@@ -185,7 +185,7 @@ gtk_editable_base_init (gpointer g_class)
 }
 
 /**
- * gtk_editable_insert_text:
+ * gtk_editable_insert_text: (virtual do_insert_text)
  * @editable: a #GtkEditable
  * @new_text: the text to append
  * @new_text_length: the length of the text in bytes, or -1
@@ -196,8 +196,6 @@ gtk_editable_base_init (gpointer g_class)
  *
  * Note that the position is in characters, not in bytes. 
  * The function updates @position to point after the newly inserted text.
- *
- * Virtual: do_insert_text
  */
 void
 gtk_editable_insert_text (GtkEditable *editable,
@@ -215,7 +213,7 @@ gtk_editable_insert_text (GtkEditable *editable,
 }
 
 /**
- * gtk_editable_delete_text:
+ * gtk_editable_delete_text: (virtual do_delete_text)
  * @editable: a #GtkEditable
  * @start_pos: start position
  * @end_pos: end position
@@ -226,8 +224,6 @@ gtk_editable_insert_text (GtkEditable *editable,
  * are those from @start_pos to the end of the text.
  *
  * Note that the positions are specified in characters, not bytes.
- *
- * Virtual: do_delete_text
  */
 void
 gtk_editable_delete_text (GtkEditable *editable,
@@ -360,7 +356,7 @@ gtk_editable_delete_selection (GtkEditable *editable)
 }
 
 /**
- * gtk_editable_select_region:
+ * gtk_editable_select_region: (virtual set_selection_bounds)
  * @editable: a #GtkEditable
  * @start_pos: start of region
  * @end_pos: end of region
@@ -372,8 +368,6 @@ gtk_editable_delete_selection (GtkEditable *editable)
  * the end of the text.
  * 
  * Note that positions are specified in characters, not bytes.
- *
- * Virtual: set_selection_bounds
  */
 void
 gtk_editable_select_region (GtkEditable *editable,
