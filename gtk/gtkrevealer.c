@@ -506,11 +506,14 @@ gtk_revealer_set_position (GtkRevealer *revealer,
     g_object_notify (G_OBJECT (revealer), "child-revealed");
 }
 
-static gdouble
-ease_out_quad (gdouble t, gdouble d)
+/* From clutter-easing.c, based on Robert Penner's
+ * infamous easing equations, MIT license.
+ */
+static double
+ease_out_cubic (double t)
 {
-  gdouble p = t / d;
-  return  ((-1.0) * p) * (p - 2);
+  double p = t - 1;
+  return p * p * p + 1;
 }
 
 static void
@@ -520,10 +523,11 @@ gtk_revealer_animate_step (GtkRevealer *revealer,
   GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
   gdouble t;
 
-  t = 1.0;
   if (now < priv->end_time)
-      t = (now - priv->start_time) / (gdouble) (priv->end_time - priv->start_time);
-  t = ease_out_quad (t, 1.0);
+    t = (now - priv->start_time) / (gdouble) (priv->end_time - priv->start_time);
+  else
+    t = 1.0;
+  t = ease_out_cubic (t);
 
   gtk_revealer_set_position (revealer,
                             priv->source_pos + (t * (priv->target_pos - priv->source_pos)));
