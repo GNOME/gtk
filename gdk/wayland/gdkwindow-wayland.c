@@ -1647,15 +1647,23 @@ gdk_wayland_window_deiconify (GdkWindow *window)
 static void
 gdk_wayland_window_stick (GdkWindow *window)
 {
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
   if (GDK_WINDOW_DESTROYED (window))
     return;
+
+  gtk_surface_set_on_all_workspaces (impl->gtk_surface, TRUE);
 }
 
 static void
 gdk_wayland_window_unstick (GdkWindow *window)
 {
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
   if (GDK_WINDOW_DESTROYED (window))
     return;
+
+  gtk_surface_set_on_all_workspaces (impl->gtk_surface, FALSE);
 }
 
 static void
@@ -1769,10 +1777,12 @@ static void
 gdk_wayland_window_set_keep_above (GdkWindow *window,
                                    gboolean   setting)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
+
+  gtk_surface_set_always_on_top (impl->gtk_surface, setting);
 }
 
 static void

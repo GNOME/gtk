@@ -8119,7 +8119,6 @@ ontop_window_clicked (GtkMenuItem *menuitem,
   gtk_window_set_keep_above (window, !window->priv->above_initially);
 }
 
-#ifdef GDK_WINDOWING_X11
 static void
 stick_window_clicked (GtkMenuItem *menuitem,
                       gpointer     user_data)
@@ -8138,6 +8137,7 @@ unstick_window_clicked (GtkMenuItem *menuitem,
   gtk_window_unstick (window);
 }
 
+#ifdef GDK_WINDOWING_X11
 static void
 workspace_change_clicked (GtkMenuItem *menuitem,
                           gpointer     user_data)
@@ -8205,25 +8205,25 @@ gtk_window_do_popup (GtkWindow      *window,
                     G_CALLBACK (ontop_window_clicked), window);
   gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
 
+  menuitem = gtk_check_menu_item_new_with_label (_("Always on Visible Workspace"));
+  gtk_check_menu_item_set_draw_as_radio (GTK_CHECK_MENU_ITEM (menuitem), TRUE);
+  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), priv->stick_initially);
+  gtk_widget_show (menuitem);
+  g_signal_connect (G_OBJECT (menuitem), "activate",
+                    G_CALLBACK (stick_window_clicked), window);
+  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
+
+  menuitem = gtk_check_menu_item_new_with_label (_("Only on This Workspace"));
+  gtk_check_menu_item_set_draw_as_radio (GTK_CHECK_MENU_ITEM (menuitem), TRUE);
+  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), !priv->stick_initially);
+  gtk_widget_show (menuitem);
+  g_signal_connect (G_OBJECT (menuitem), "activate",
+                    G_CALLBACK (unstick_window_clicked), window);
+  gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
+
 #ifdef GDK_WINDOWING_X11
   if (GDK_IS_X11_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
     {
-      menuitem = gtk_check_menu_item_new_with_label (_("Always on Visible Workspace"));
-      gtk_check_menu_item_set_draw_as_radio (GTK_CHECK_MENU_ITEM (menuitem), TRUE);
-      gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), priv->stick_initially);
-      gtk_widget_show (menuitem);
-      g_signal_connect (G_OBJECT (menuitem), "activate",
-                        G_CALLBACK (stick_window_clicked), window);
-      gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
-
-      menuitem = gtk_check_menu_item_new_with_label (_("Only on This Workspace"));
-      gtk_check_menu_item_set_draw_as_radio (GTK_CHECK_MENU_ITEM (menuitem), TRUE);
-      gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), !priv->stick_initially);
-      gtk_widget_show (menuitem);
-      g_signal_connect (G_OBJECT (menuitem), "activate",
-                        G_CALLBACK (unstick_window_clicked), window);
-      gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
-
       if (!priv->stick_initially)
         {
           guint32 n_desktops, desktop;

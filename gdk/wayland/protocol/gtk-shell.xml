@@ -1,11 +1,11 @@
 <protocol name="gtk">
 
-  <interface name="gtk_shell" version="1">
+  <interface name="gtk_shell" version="2">
     <enum name="capability">
       <entry name="global_app_menu" value="1"/>
       <entry name="global_menu_bar" value="2"/>
     </enum>
-    
+
     <event name="capabilities">
       <arg name="capabilities" type="uint"/>
     </event>
@@ -16,7 +16,7 @@
     </request>
   </interface>
 
-  <interface name="gtk_surface" version="1">
+  <interface name="gtk_surface" version="2">
     <request name="set_dbus_properties">
       <arg name="application_id" type="string" allow-null="true"/>
       <arg name="app_menu_path" type="string" allow-null="true"/>
@@ -24,6 +24,32 @@
       <arg name="window_object_path" type="string" allow-null="true"/>
       <arg name="application_object_path" type="string" allow-null="true"/>
       <arg name="unique_bus_name" type="string" allow-null="true"/>
+    </request>
+
+    <request name="set_workspace">
+      <arg name="workspace" type="uint" />
+    </request>
+
+    <event name="workspace_changed">
+      <arg name="new_workspace" type="uint" />
+    </event>
+
+    <enum name="always_on_top_state">
+      <entry name="not_always_on_top" value="0" />
+      <entry name="always_on_top" value="1" />
+    </enum>
+
+    <request name="set_always_on_top">
+      <arg name="always_on_top" type="uint" />
+    </request>
+
+    <enum name="on_all_workspaces">
+      <entry name="not_on_all_workspaces" value="0" />
+      <entry name="on_all_workspaces" value="1" />
+    </enum>
+
+    <request name="set_on_all_workspaces">
+      <arg name="on_all_workspaces" type="uint" />
     </request>
   </interface>
 
