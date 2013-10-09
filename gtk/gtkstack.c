@@ -684,7 +684,6 @@ get_bin_window_x (GtkStack      *stack,
         x = allocation->width * (1 - ease_out_cubic (priv->transition_pos));
       if (priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT ||
           priv->active_transition_type == GTK_STACK_TRANSITION_TYPE_OVER_RIGHT)
-
         x = -allocation->width * (1 - ease_out_cubic (priv->transition_pos));
     }
 
