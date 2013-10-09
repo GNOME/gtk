@@ -26,7 +26,8 @@ noinst_PROGRAMS = \
 	action-namespace			\
 	grid-packing				\
 	drawing					\
-	builder
+	builder					\
+	search-bar
 
 EXTRA_DIST = builder.ui
 
