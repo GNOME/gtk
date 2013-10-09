@@ -58,21 +58,11 @@
  *
  * <example>
  * <title>Creating a search bar</title>
- * <programlisting><![CDATA[
- * bar = gtk_search_bar_new ();
- *
- * /<!---->* Create a box for the search entry and related widgets *<---->/
- * entry = gtk_search_entry_new ();
- * box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
- * gtk_box_pack_start (GTK_BOX (box), entry, TRUE, TRUE, 0);
- * /<!---->* Add a menu button to select the category of the search *<---->/
- * menu_button = gtk_menu_button_new ();
- * gtk_box_pack_start (GTK_BOX (box), menu_button, FALSE, FALSE, 0);
- * gtk_container_add (GTK_CONTAINER (searchbar), box);
- *
- * /<!---->* And tell the search bar about the search entry *<---->/
- * gtk_search_bar_connect_entry (GTK_SEARCH_BAR (bar), entry);
- * ]]></programlisting>
+ * <programlisting>
+ * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../examples/search-bar.c">
+ *  <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
+ * </xi:include>
+ * </programlisting>
  * </example>
  *
  * Since: 3.10
