@@ -342,7 +342,7 @@ _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
      }
 
    style->direction = gtk_widget_get_direction (widget);
-   style->wrap_mode = PANGO_WRAP_WORD_CHAR;
+   style->wrap_mode = GTK_WRAP_WORD_CHAR;
 
    gtk_text_layout_set_default_style (layout, style);
    gtk_text_attributes_unref (style);
