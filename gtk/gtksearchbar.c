@@ -30,8 +30,6 @@
 #include "gtkentry.h"
 #include "gtkentryprivate.h"
 #include "gtkintl.h"
-#include "gtktoolbar.h"
-#include "gtktoolitem.h"
 #include "gtkstylecontext.h"
 #include "gtksearchbar.h"
 
@@ -71,7 +69,7 @@
 typedef struct {
   /* Template widgets */
   GtkWidget   *revealer;
-  GtkWidget   *toolbar;
+  GtkWidget   *tool_box;
   GtkWidget   *box_center;
   GtkWidget   *close_button;
 
@@ -286,7 +284,7 @@ gtk_search_bar_add (GtkContainer *container,
   /* When constructing the widget, we want the revealer to be added
    * as the first child of the search bar, as an implementation detail.
    * After that, the child added by the application should be added
-   * to the toolbar's box_center.
+   * to box_center.
    */
   if (priv->box_center == NULL)
     {
@@ -364,6 +362,25 @@ gtk_search_bar_dispose (GObject *object)
   G_OBJECT_CLASS (gtk_search_bar_parent_class)->dispose (object);
 }
 
+static gboolean
+gtk_search_bar_draw (GtkWidget *widget,
+                     cairo_t *cr)
+{
+  gint width, height;
+  GtkStyleContext *context;
+
+  width = gtk_widget_get_allocated_width (widget);
+  height = gtk_widget_get_allocated_height (widget);
+  context = gtk_widget_get_style_context (widget);
+
+  gtk_render_background (context, cr, 0, 0, width, height);
+  gtk_render_frame (context, cr, 0, 0, width, height);
+
+  GTK_WIDGET_CLASS (gtk_search_bar_parent_class)->draw (widget, cr);
+
+  return FALSE;
+}
+
 static void
 gtk_search_bar_class_init (GtkSearchBarClass *klass)
 {
@@ -374,6 +391,7 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
   object_class->dispose = gtk_search_bar_dispose;
   object_class->set_property = gtk_search_bar_set_property;
   object_class->get_property = gtk_search_bar_get_property;
+  widget_class->draw = gtk_search_bar_draw;
 
   container_class->add = gtk_search_bar_add;
 
@@ -404,7 +422,7 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
   g_object_class_install_properties (object_class, LAST_PROPERTY, widget_props);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/gtksearchbar.ui");
-  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkSearchBar, toolbar);
+  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkSearchBar, tool_box);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkSearchBar, revealer);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkSearchBar, box_center);
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkSearchBar, close_button);
@@ -414,10 +432,11 @@ static void
 gtk_search_bar_init (GtkSearchBar *bar)
 {
   GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
+  GtkStyleContext *context;
 
   gtk_widget_init_template (GTK_WIDGET (bar));
 
-  gtk_widget_show_all (priv->toolbar);
+  gtk_widget_show_all (priv->tool_box);
 
   g_signal_connect (priv->revealer, "notify::reveal-child",
                     G_CALLBACK (reveal_child_changed_cb), bar);
@@ -425,6 +444,11 @@ gtk_search_bar_init (GtkSearchBar *bar)
   gtk_widget_set_no_show_all (priv->close_button, TRUE);
   g_signal_connect (priv->close_button, "clicked",
                     G_CALLBACK (close_button_clicked_cb), bar);
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (bar));
+  gtk_style_context_add_class (context, "search-bar");
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_HORIZONTAL);
+
 };
 
 /**
