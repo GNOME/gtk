@@ -2697,7 +2697,8 @@ settings_update_cursor_theme (GtkSettings *settings)
                 "gtk-cursor-theme-name", &theme,
                 "gtk-cursor-theme-size", &size,
                 NULL);
-
+  if (theme == NULL)
+    return;
 #ifdef GDK_WINDOWING_X11
   if (GDK_IS_X11_DISPLAY (display))
     gdk_x11_display_set_cursor_theme (display, theme, size);
