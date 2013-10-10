@@ -1194,7 +1194,9 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 			 GtkTargetList     *target_list,
 			 GdkDragAction      actions,
 			 gint               button,
-			 GdkEvent          *event)
+			 GdkEvent          *event,
+			 gint               x,
+			 gint               y)
 {
   GtkDragSourceInfo *info;
   GdkDevice *pointer;
@@ -1202,36 +1204,49 @@ gtk_drag_begin_internal (GtkWidget         *widget,
   GdkDragContext *context;
   NSWindow *nswindow = get_toplevel_nswindow (widget);
   NSPoint point = {0, 0};
-  gdouble x, y;
   double time = (double)g_get_real_time ();
   NSEvent *nsevent;
   NSTimeInterval nstime;
 
-  if (event)
+  if ((x != -1 && y != -1) || event)
     {
-      if (gdk_event_get_coords (event, &x, &y))
-        {
-          /* We need to translate (x, y) to coordinates relative to the
-           * toplevel GdkWindow, which should be the GdkWindow backing
-           * nswindow. Then, we convert to the NSWindow coordinate system.
-           */
-          GdkWindow *window = event->any.window;
-          GdkWindow *toplevel = gdk_window_get_effective_toplevel (window);
+      GdkWindow *window;
+      gdouble dx, dy;
+      if (x != -1 && y != -1)
+	{
+	  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+	  window = gtk_widget_get_window (toplevel);
+	  gtk_widget_translate_coordinates (widget, toplevel, x, y, &x, &y);
+	  gdk_window_get_root_coords (gtk_widget_get_window (toplevel), x, y,
+							     &x, &y);
+	  dx = (gdouble)x;
+	  dy = (gdouble)y;
+	}
+      else if (event)
+	{
+	  if (gdk_event_get_coords (event, &dx, &dy))
+	    {
+	      /* We need to translate (x, y) to coordinates relative to the
+	       * toplevel GdkWindow, which should be the GdkWindow backing
+	       * nswindow. Then, we convert to the NSWindow coordinate system.
+	       */
+	      window = event->any.window;
+	      GdkWindow *toplevel = gdk_window_get_effective_toplevel (window);
 
-          while (window != toplevel)
-            {
-              double old_x = x;
-              double old_y = y;
+	      while (window != toplevel)
+		{
+		  double old_x = dx;
+		  double old_y = dy;
 
-              gdk_window_coords_to_parent (window, old_x, old_y,
-                                           &x, &y);
-              window = gdk_window_get_effective_parent (window);
-            }
-
-          point.x = x;
-          point.y = gdk_window_get_height (window) - y;
-        }
-      time = (double)gdk_event_get_time (event);
+		  gdk_window_coords_to_parent (window, old_x, old_y,
+					       &dx, &dy);
+		  window = gdk_window_get_effective_parent (window);
+		}
+	    }
+	  time = (double)gdk_event_get_time (event);
+	}
+      point.x = dx;
+      point.y = gdk_window_get_height (window) - dy;
     }
 
   nstime = [[NSDate dateWithTimeIntervalSince1970: time / 1000] timeIntervalSinceReferenceDate];
@@ -1309,6 +1324,22 @@ gtk_drag_begin_internal (GtkWidget         *widget,
   return context;
 }
 
+GdkDragContext *
+gtk_drag_begin_with_coordinates (GtkWidget         *widget,
+				 GtkTargetList     *targets,
+				 GdkDragAction      actions,
+				 gint               button,
+				 GdkEvent          *event,
+				 gint               x,
+				 gint               y)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_return_val_if_fail (gtk_widget_get_realized (widget), NULL);
+  g_return_val_if_fail (targets != NULL, NULL);
+
+  return gtk_drag_begin_internal (widget, NULL, targets,
+				  actions, button, event, x, y);
+}
 /**
  * gtk_drag_begin: (method)
  * @widget: the source widget.
@@ -1330,7 +1361,7 @@ gtk_drag_begin (GtkWidget         *widget,
   g_return_val_if_fail (targets != NULL, NULL);
 
   return gtk_drag_begin_internal (widget, NULL, targets,
-				  actions, button, event);
+				  actions, button, event, -1, -1);
 }
 
 
@@ -1368,7 +1399,7 @@ gtk_drag_source_event_cb (GtkWidget      *widget,
 	  int i;
 	  for (i=1; i<6; i++)
 	    {
-	      if (site->state & event->motion.state & 
+	      if (site->state & event->motion.state &
 		  GDK_BUTTON1_MASK << (i - 1))
 		break;
 	    }
@@ -1378,8 +1409,7 @@ gtk_drag_source_event_cb (GtkWidget      *widget,
 	    {
 	      site->state = 0;
 	      gtk_drag_begin_internal (widget, site, site->target_list,
-				       site->actions, 
-				       i, event);
+				       site->actions, i, event, -1, -1);
 
 	      retval = TRUE;
 	    }
