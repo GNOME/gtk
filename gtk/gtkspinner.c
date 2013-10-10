@@ -52,7 +52,7 @@
  */
 
 
-#define SPINNER_SIZE 12
+#define SPINNER_SIZE 16
 
 enum {
   PROP_0,
@@ -204,6 +204,12 @@ gtk_spinner_draw (GtkWidget *widget,
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
   size = MIN (width, height);
+
+  /* at most allow a double size spinner */
+  if (size >= 3 * SPINNER_SIZE)
+    size = SPINNER_SIZE * 2;
+  else
+    size = SPINNER_SIZE;
 
   gtk_render_activity (context, cr,
                        (width - size) / 2,
