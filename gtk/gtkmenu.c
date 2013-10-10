@@ -5614,6 +5614,9 @@ gtk_menu_get_reserve_toggle_size (GtkMenu *menu)
  * by means of being attached to a widget (see gtk_menu_attach_to_widget())
  * that is contained within the #GtkApplicationWindows widget hierarchy.
  *
+ * Actions can also be added using gtk_widget_insert_action_group() on menu's
+ * attach widget or any if its parent widgets.
+ *
  * Returns: a new #GtkMenu
  *
  * Since: 3.4
