@@ -1,3 +1,26 @@
+Overview of Changes in GTK+ 3.8.5
+=================================
+
+* Bugs fixed:
+ 339539 Ctrl-C, Ctrl-V changes tags
+ 341146 reorder lines in configure.in for a better display
+ 513812 Optimize gdk_cairo_set_source_pixbuf() alpha multipli...
+ 586107 gtkprintbackendpapi.c does not compile on Solaris 10
+ 696756 x11: gdk_device_get_source : assertion `GDK_IS_DEVICE...
+ 703062 GtkTreeViewColumn returns negative size request on em...
+ 706269 Clarify GtkBox, GtkHBox, and GtkVBox documentation
+ 706345 GtkExpander's click-and-drag behavior should match th...
+ 707872 GtkSwitch shouldn't have a default name
+ 707926 GtkSwitch shouldn't have a default accessible description
+ 708414 entrycompletion: set the GtkWindow as attached to the...
+ 709056 icontheme: use g_file_load_contents() for symbolic icons
+ 709264 Fix memory leaks in icons handling 
+
+* Translation updates:
+ Scottish Gaelic
+ Slovenian
+
+
 Overview of Changes in GTK+ 3.8.3
 =================================
 
