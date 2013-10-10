@@ -10,9 +10,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-12 17:26+0200\n"
-"PO-Revision-Date: 2013-09-12 17:10+0200\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
+"%2b&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2013-10-09 11:13+0000\n"
+"PO-Revision-Date: 2013-10-10 14:06+0200\n"
 "Last-Translator: Gabor Kelemen <kelemeng at gnome dot hu>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
@@ -554,12 +555,12 @@ msgctxt "Action description"
 msgid "Customizes the color"
 msgstr "Személyre szabja a színt"
 
-#: ../gtk/a11y/gtkcomboboxaccessible.c:307
+#: ../gtk/a11y/gtkcomboboxaccessible.c:310
 msgctxt "Action name"
 msgid "Press"
 msgstr "Megnyomás"
 
-#: ../gtk/a11y/gtkcomboboxaccessible.c:316
+#: ../gtk/a11y/gtkcomboboxaccessible.c:319
 msgctxt "Action description"
 msgid "Presses the combobox"
 msgstr "Megnyomja a kombinált listamezőt"
@@ -1467,7 +1468,7 @@ msgstr "_Alkalmazások keresése online"
 msgid "Select an application to open “%s”"
 msgstr "Válasszon alkalmazást a(z) „%s” megnyitásához"
 
-#: ../gtk/gtkappchooserdialog.c:334 ../gtk/gtkappchooserwidget.c:660
+#: ../gtk/gtkappchooserdialog.c:334 ../gtk/gtkappchooserwidget.c:657
 #, c-format
 msgid "No applications available to open “%s”"
 msgstr "Nem érhetők el alkalmazások a(z) „%s” megnyitásához"
@@ -1495,19 +1496,19 @@ msgstr ""
 msgid "Forget association"
 msgstr "Társítás elfelejtése"
 
-#: ../gtk/gtkappchooserwidget.c:609
+#: ../gtk/gtkappchooserwidget.c:606
 msgid "Default Application"
 msgstr "Alapértelmezett alkalmazás"
 
-#: ../gtk/gtkappchooserwidget.c:747
+#: ../gtk/gtkappchooserwidget.c:744
 msgid "Recommended Applications"
 msgstr "Javasolt alkalmazások"
 
-#: ../gtk/gtkappchooserwidget.c:762
+#: ../gtk/gtkappchooserwidget.c:759
 msgid "Related Applications"
 msgstr "Kapcsolódó alkalmazások"
 
-#: ../gtk/gtkappchooserwidget.c:776
+#: ../gtk/gtkappchooserwidget.c:773
 msgid "Other Applications"
 msgstr "Más alkalmazások"
 
@@ -1985,30 +1986,30 @@ msgstr "J_obb:"
 msgid "Paper Margins"
 msgstr "Papírmargók"
 
-#: ../gtk/gtkentry.c:9272 ../gtk/gtkentry.c:9418 ../gtk/gtklabel.c:6276
-#: ../gtk/gtktextview.c:8694 ../gtk/gtktextview.c:8877
+#: ../gtk/gtkentry.c:9271 ../gtk/gtkentry.c:9417 ../gtk/gtklabel.c:6287
+#: ../gtk/gtktextview.c:8689 ../gtk/gtktextview.c:8872
 msgid "Cu_t"
 msgstr "_Kivágás"
 
-#: ../gtk/gtkentry.c:9276 ../gtk/gtkentry.c:9421 ../gtk/gtklabel.c:6277
-#: ../gtk/gtktextview.c:8698 ../gtk/gtktextview.c:8881
+#: ../gtk/gtkentry.c:9275 ../gtk/gtkentry.c:9420 ../gtk/gtklabel.c:6288
+#: ../gtk/gtktextview.c:8693 ../gtk/gtktextview.c:8876
 msgid "_Copy"
 msgstr "_Másolás"
 
-#: ../gtk/gtkentry.c:9280 ../gtk/gtkentry.c:9424 ../gtk/gtklabel.c:6278
-#: ../gtk/gtktextview.c:8700 ../gtk/gtktextview.c:8883
+#: ../gtk/gtkentry.c:9279 ../gtk/gtkentry.c:9423 ../gtk/gtklabel.c:6289
+#: ../gtk/gtktextview.c:8695 ../gtk/gtktextview.c:8878
 msgid "_Paste"
 msgstr "_Beillesztés"
 
-#: ../gtk/gtkentry.c:9283 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8703
+#: ../gtk/gtkentry.c:9282 ../gtk/gtklabel.c:6291 ../gtk/gtktextview.c:8698
 msgid "_Delete"
 msgstr "_Törlés"
 
-#: ../gtk/gtkentry.c:9294 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8717
+#: ../gtk/gtkentry.c:9293 ../gtk/gtklabel.c:6300 ../gtk/gtktextview.c:8712
 msgid "Select _All"
 msgstr "Ö_sszes kijelölése"
 
-#: ../gtk/gtkentry.c:10382
+#: ../gtk/gtkentry.c:10381
 msgid "Caps Lock is on"
 msgstr "A Caps Lock be van kapcsolva"
 
@@ -2057,7 +2058,7 @@ msgstr "A Caps Lock be van kapcsolva"
 msgid "Select a File"
 msgstr "Válasszon ki egy fájlt"
 
-#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkplacessidebar.c:791
+#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkplacessidebar.c:790
 msgid "Desktop"
 msgstr "Asztal"
 
@@ -2065,7 +2066,7 @@ msgstr "Asztal"
 msgid "(None)"
 msgstr "(Nincs)"
 
-#: ../gtk/gtkfilechooserbutton.c:807 ../gtk/gtkplacessidebar.c:3107
+#: ../gtk/gtkfilechooserbutton.c:807 ../gtk/gtkplacessidebar.c:3106
 msgid "_Open"
 msgstr "_Megnyitás"
 
@@ -2260,12 +2261,16 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "Válasszon betűkészletet"
 
-#: ../gtk/gtkicontheme.c:2100 ../gtk/gtkicontheme.c:2163
+#: ../gtk/gtkheaderbar.c:224 ../gtk/gtkwindow.c:5281 ../gtk/gtkwindow.c:8194
+msgid "Close"
+msgstr "Bezárás"
+
+#: ../gtk/gtkicontheme.c:2116 ../gtk/gtkicontheme.c:2179
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "„%s” ikon nincs a témában"
 
-#: ../gtk/gtkicontheme.c:3866
+#: ../gtk/gtkicontheme.c:3881
 msgid "Failed to load icon"
 msgstr "Nem sikerült betölteni az ikont"
 
@@ -2306,12 +2311,12 @@ msgid "Error"
 msgstr "Hiba"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6259
+#: ../gtk/gtklabel.c:6270
 msgid "_Open Link"
 msgstr "Hi_vatkozás megnyitása"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6267
+#: ../gtk/gtklabel.c:6278
 msgid "Copy _Link Address"
 msgstr "_Hivatkozás címének másolása"
 
@@ -2593,7 +2598,7 @@ msgstr ""
 msgid "Manage Custom Sizes…"
 msgstr "Egyéni méretek kezelése…"
 
-#: ../gtk/gtkpagesetupunixdialog.c:895 ../gtk/gtkprintunixdialog.ui.h:41
+#: ../gtk/gtkpagesetupunixdialog.c:895 ../gtk/gtkprintunixdialog.ui.h:40
 msgid "Page Setup"
 msgstr "Oldalbeállítás"
 
@@ -2601,191 +2606,191 @@ msgstr "Oldalbeállítás"
 msgid "File System Root"
 msgstr "Fájlrendszer gyökere"
 
-#: ../gtk/gtkplacessidebar.c:447
+#: ../gtk/gtkplacessidebar.c:446
 msgid "Devices"
 msgstr "Eszközök"
 
-#: ../gtk/gtkplacessidebar.c:455
+#: ../gtk/gtkplacessidebar.c:454
 msgid "Bookmarks"
 msgstr "Könyvjelzők"
 
-#: ../gtk/gtkplacessidebar.c:761
+#: ../gtk/gtkplacessidebar.c:760
 msgid "Places"
 msgstr "Helyek"
 
-#: ../gtk/gtkplacessidebar.c:768
+#: ../gtk/gtkplacessidebar.c:767
 msgid "Recent"
 msgstr "Legutóbbi"
 
-#: ../gtk/gtkplacessidebar.c:770
+#: ../gtk/gtkplacessidebar.c:769
 msgid "Recent files"
 msgstr "Legutóbbi fájlok"
 
-#: ../gtk/gtkplacessidebar.c:779
+#: ../gtk/gtkplacessidebar.c:778
 msgid "Home"
 msgstr "Saját mappa"
 
-#: ../gtk/gtkplacessidebar.c:781
+#: ../gtk/gtkplacessidebar.c:780
 msgid "Open your personal folder"
 msgstr "A személyes mappájának megnyitása"
 
-#: ../gtk/gtkplacessidebar.c:793
+#: ../gtk/gtkplacessidebar.c:792
 msgid "Open the contents of your desktop in a folder"
 msgstr "Az Asztal tartalmának megnyitása mappaként"
 
-#: ../gtk/gtkplacessidebar.c:806
+#: ../gtk/gtkplacessidebar.c:805
 msgid "Trash"
 msgstr "Kuka"
 
-#: ../gtk/gtkplacessidebar.c:808
+#: ../gtk/gtkplacessidebar.c:807
 msgid "Open the trash"
 msgstr "A Kuka megnyitása"
 
-#: ../gtk/gtkplacessidebar.c:863 ../gtk/gtkplacessidebar.c:888
-#: ../gtk/gtkplacessidebar.c:1095
+#: ../gtk/gtkplacessidebar.c:862 ../gtk/gtkplacessidebar.c:887
+#: ../gtk/gtkplacessidebar.c:1094
 #, c-format
 msgid "Mount and open %s"
 msgstr "%s csatolása és megnyitása"
 
-#: ../gtk/gtkplacessidebar.c:963
+#: ../gtk/gtkplacessidebar.c:962
 msgid "Open the contents of the file system"
 msgstr "A fájlrendszer tartalmának megnyitása"
 
-#: ../gtk/gtkplacessidebar.c:1063
+#: ../gtk/gtkplacessidebar.c:1062
 msgid "Network"
 msgstr "Hálózat"
 
-#: ../gtk/gtkplacessidebar.c:1069
+#: ../gtk/gtkplacessidebar.c:1068
 msgid "Browse Network"
 msgstr "Hálózat tallózása"
 
-#: ../gtk/gtkplacessidebar.c:1071
+#: ../gtk/gtkplacessidebar.c:1070
 msgid "Browse the contents of the network"
 msgstr "A hálózat tartalmának tallózása"
 
-#: ../gtk/gtkplacessidebar.c:1078
+#: ../gtk/gtkplacessidebar.c:1077
 msgid "Connect to Server"
 msgstr "Kapcsolódás kiszolgálóhoz"
 
-#: ../gtk/gtkplacessidebar.c:1080
+#: ../gtk/gtkplacessidebar.c:1079
 msgid "Connect to a network server address"
 msgstr "Kapcsolódás egy hálózati kiszolgálócímhez"
 
-#: ../gtk/gtkplacessidebar.c:1560
+#: ../gtk/gtkplacessidebar.c:1559
 msgid "New bookmark"
 msgstr "Új könyvjelző"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: ../gtk/gtkplacessidebar.c:2100 ../gtk/gtkplacessidebar.c:3183
+#: ../gtk/gtkplacessidebar.c:2099 ../gtk/gtkplacessidebar.c:3182
 msgid "_Start"
 msgstr "In_dítás"
 
-#: ../gtk/gtkplacessidebar.c:2101 ../gtk/gtkplacessidebar.c:3190
+#: ../gtk/gtkplacessidebar.c:2100 ../gtk/gtkplacessidebar.c:3189
 msgid "_Stop"
 msgstr "_Leállítás"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: ../gtk/gtkplacessidebar.c:2106
+#: ../gtk/gtkplacessidebar.c:2105
 msgid "_Power On"
 msgstr "Be_kapcsolás"
 
-#: ../gtk/gtkplacessidebar.c:2107
+#: ../gtk/gtkplacessidebar.c:2106
 msgid "_Safely Remove Drive"
 msgstr "Meghajtó _biztonságos eltávolítása"
 
-#: ../gtk/gtkplacessidebar.c:2110
+#: ../gtk/gtkplacessidebar.c:2109
 msgid "_Connect Drive"
 msgstr "Meghajtó _csatlakoztatása"
 
-#: ../gtk/gtkplacessidebar.c:2111
+#: ../gtk/gtkplacessidebar.c:2110
 msgid "_Disconnect Drive"
 msgstr "_Kapcsolat bontása a meghajtóval"
 
-#: ../gtk/gtkplacessidebar.c:2114
+#: ../gtk/gtkplacessidebar.c:2113
 msgid "_Start Multi-disk Device"
 msgstr "_Többlemezes eszköz indítása"
 
-#: ../gtk/gtkplacessidebar.c:2115
+#: ../gtk/gtkplacessidebar.c:2114
 msgid "_Stop Multi-disk Device"
 msgstr "_Többlemezes eszköz leállítása"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: ../gtk/gtkplacessidebar.c:2119
+#: ../gtk/gtkplacessidebar.c:2118
 msgid "_Unlock Drive"
 msgstr "Meghajtó fel_oldása"
 
-#: ../gtk/gtkplacessidebar.c:2120
+#: ../gtk/gtkplacessidebar.c:2119
 msgid "_Lock Drive"
 msgstr "Meghajtó _zárolása"
 
-#: ../gtk/gtkplacessidebar.c:2147 ../gtk/gtkplacessidebar.c:2845
+#: ../gtk/gtkplacessidebar.c:2146 ../gtk/gtkplacessidebar.c:2844
 #, c-format
 msgid "Unable to start %s"
 msgstr "A(z) %s nem indítható"
 
-#: ../gtk/gtkplacessidebar.c:2174
+#: ../gtk/gtkplacessidebar.c:2173
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "„%s” nem érhető el"
 
-#: ../gtk/gtkplacessidebar.c:2480
+#: ../gtk/gtkplacessidebar.c:2479
 #, c-format
 msgid "Unable to unmount %s"
 msgstr "%s nem választható le"
 
-#: ../gtk/gtkplacessidebar.c:2603 ../gtk/gtkplacessidebar.c:2630
-#: ../gtk/gtkplacessidebar.c:2657
+#: ../gtk/gtkplacessidebar.c:2602 ../gtk/gtkplacessidebar.c:2629
+#: ../gtk/gtkplacessidebar.c:2656
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Nem adható ki: %s"
 
-#: ../gtk/gtkplacessidebar.c:2797
+#: ../gtk/gtkplacessidebar.c:2796
 #, c-format
 msgid "Unable to poll %s for media changes"
 msgstr "A(z) %s adathordozó-változásai nem kérdezhetők le"
 
-#: ../gtk/gtkplacessidebar.c:2899
+#: ../gtk/gtkplacessidebar.c:2898
 #, c-format
 msgid "Unable to stop %s"
 msgstr "A(z) %s nem állítható le"
 
-#: ../gtk/gtkplacessidebar.c:3114
+#: ../gtk/gtkplacessidebar.c:3113
 msgid "Open in New _Tab"
 msgstr "Megnyi_tás új lapon"
 
-#: ../gtk/gtkplacessidebar.c:3122
+#: ../gtk/gtkplacessidebar.c:3121
 msgid "Open in New _Window"
 msgstr "Megnyitás új _ablakban"
 
-#: ../gtk/gtkplacessidebar.c:3131
+#: ../gtk/gtkplacessidebar.c:3130
 msgid "_Add Bookmark"
 msgstr "Könyvjelző hozzá_adása"
 
-#: ../gtk/gtkplacessidebar.c:3137
+#: ../gtk/gtkplacessidebar.c:3136
 msgid "Remove"
 msgstr "Eltávolítás"
 
-#: ../gtk/gtkplacessidebar.c:3144
+#: ../gtk/gtkplacessidebar.c:3143
 msgid "Rename…"
 msgstr "Átnevezés…"
 
-#: ../gtk/gtkplacessidebar.c:3155
+#: ../gtk/gtkplacessidebar.c:3154
 msgid "_Mount"
 msgstr "_Csatolás"
 
-#: ../gtk/gtkplacessidebar.c:3162
+#: ../gtk/gtkplacessidebar.c:3161
 msgid "_Unmount"
 msgstr "_Leválasztás"
 
-#: ../gtk/gtkplacessidebar.c:3169
+#: ../gtk/gtkplacessidebar.c:3168
 msgid "_Eject"
 msgstr "_Kiadás"
 
-#: ../gtk/gtkplacessidebar.c:3176
+#: ../gtk/gtkplacessidebar.c:3175
 msgid "_Detect Media"
 msgstr "A_dathordozó felismerése"
 
-#: ../gtk/gtkplacessidebar.c:3829
+#: ../gtk/gtkplacessidebar.c:3828
 msgid "Computer"
 msgstr "Számítógép"
 
@@ -3317,50 +3322,50 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:8042
+#: ../gtk/gtkwindow.c:5242 ../gtk/gtkwindow.c:8089
 msgid "Minimize"
 msgstr "Minimalizálás"
 
-#: ../gtk/gtkwindow.c:8050
-msgid "Unmaximize"
-msgstr "Maximalizálás megszüntetése"
+#: ../gtk/gtkwindow.c:5263
+msgid "Restore"
+msgstr "Visszaállítás"
 
-#: ../gtk/gtkwindow.c:8050
+#: ../gtk/gtkwindow.c:5263 ../gtk/gtkwindow.c:8097
 msgid "Maximize"
 msgstr "Maximalizálás"
 
-#: ../gtk/gtkwindow.c:8059
+#: ../gtk/gtkwindow.c:8097
+msgid "Unmaximize"
+msgstr "Maximalizálás megszüntetése"
+
+#: ../gtk/gtkwindow.c:8106
 msgid "Always on Top"
 msgstr "Mindig legfelül"
 
-#: ../gtk/gtkwindow.c:8071
+#: ../gtk/gtkwindow.c:8118
 msgid "Always on Visible Workspace"
 msgstr "Mindig a látható munkaterületen"
 
-#: ../gtk/gtkwindow.c:8079
+#: ../gtk/gtkwindow.c:8126
 msgid "Only on This Workspace"
 msgstr "Csak ezen a munkaterületen"
 
-#: ../gtk/gtkwindow.c:8096
+#: ../gtk/gtkwindow.c:8143
 msgid "Move to Workspace Up"
 msgstr "Áthelyezés a felső munkaterületre"
 
-#: ../gtk/gtkwindow.c:8105
+#: ../gtk/gtkwindow.c:8152
 msgid "Move to Workspace Down"
 msgstr "Áthelyezés az alsó munkaterületre"
 
-#: ../gtk/gtkwindow.c:8119
+#: ../gtk/gtkwindow.c:8166
 msgid "Move to Another Workspace"
 msgstr "Áthelyezés másik munkaterületre"
 
-#: ../gtk/gtkwindow.c:8127
+#: ../gtk/gtkwindow.c:8174
 #, c-format
 msgid "Workspace %d"
 msgstr "%d. munkaterület"
-
-#: ../gtk/gtkwindow.c:8147
-msgid "Close"
-msgstr "Bezárás"
 
 #: ../gtk/paper_names_offsets.c:4
 msgctxt "paper size"
@@ -4874,31 +4879,31 @@ msgstr "Érték"
 msgid "_Location:"
 msgstr "Hel_y:"
 
-#: ../gtk/gtkfilechooserdefault.ui.h:2
+#: ../gtk/gtkfilechooserdefault.ui.h:2 ../gtk/gtkfilechooserdefault.ui.h:3
 msgid "Type a file name"
 msgstr "Írjon be egy fájlnevet"
 
-#: ../gtk/gtkfilechooserdefault.ui.h:3
+#: ../gtk/gtkfilechooserdefault.ui.h:4
 msgid "Create Fo_lder"
 msgstr "M_appa létrehozása"
 
-#: ../gtk/gtkfilechooserdefault.ui.h:4
+#: ../gtk/gtkfilechooserdefault.ui.h:5
 msgid "Files"
 msgstr "Fájlok"
 
-#: ../gtk/gtkfilechooserdefault.ui.h:5
+#: ../gtk/gtkfilechooserdefault.ui.h:6
 msgid "Name"
 msgstr "Név"
 
-#: ../gtk/gtkfilechooserdefault.ui.h:6
+#: ../gtk/gtkfilechooserdefault.ui.h:7
 msgid "Size"
 msgstr "Méret"
 
-#: ../gtk/gtkfilechooserdefault.ui.h:7
+#: ../gtk/gtkfilechooserdefault.ui.h:8
 msgid "Modified"
 msgstr "Módosítva"
 
-#: ../gtk/gtkfilechooserdefault.ui.h:8
+#: ../gtk/gtkfilechooserdefault.ui.h:9
 msgid "Select which types of files are shown"
 msgstr "Válassza ki, hogy milyen típusú fájlok jelenjenek meg"
 
@@ -4924,7 +4929,7 @@ msgstr ""
 msgid "_Format for:"
 msgstr "_Formátum ehhez:"
 
-#: ../gtk/gtkpagesetupunixdialog.ui.h:4 ../gtk/gtkprintunixdialog.ui.h:35
+#: ../gtk/gtkpagesetupunixdialog.ui.h:4 ../gtk/gtkprintunixdialog.ui.h:38
 msgid "_Paper size:"
 msgstr "_Papírméret:"
 
@@ -4932,19 +4937,19 @@ msgstr "_Papírméret:"
 msgid "_Orientation:"
 msgstr "_Tájolás:"
 
-#: ../gtk/gtkpagesetupunixdialog.ui.h:6 ../gtk/gtkprintunixdialog.ui.h:37
+#: ../gtk/gtkpagesetupunixdialog.ui.h:6
 msgid "Portrait"
 msgstr "Álló"
 
-#: ../gtk/gtkpagesetupunixdialog.ui.h:7 ../gtk/gtkprintunixdialog.ui.h:39
+#: ../gtk/gtkpagesetupunixdialog.ui.h:7
 msgid "Reverse portrait"
 msgstr "Fordított álló"
 
-#: ../gtk/gtkpagesetupunixdialog.ui.h:8 ../gtk/gtkprintunixdialog.ui.h:38
+#: ../gtk/gtkpagesetupunixdialog.ui.h:8
 msgid "Landscape"
 msgstr "Fekvő"
 
-#: ../gtk/gtkpagesetupunixdialog.ui.h:9 ../gtk/gtkprintunixdialog.ui.h:40
+#: ../gtk/gtkpagesetupunixdialog.ui.h:9
 msgid "Reverse landscape"
 msgstr "Fordított fekvő"
 
@@ -4969,36 +4974,37 @@ msgid "Printer"
 msgstr "Nyomtató"
 
 #. this is the header for the location column in the print dialog
-#: ../gtk/gtkprintunixdialog.ui.h:6
+#: ../gtk/gtkprintunixdialog.ui.h:7
 msgid "Location"
 msgstr "Hely"
 
 #. this is the header for the printer status column in the print dialog
-#: ../gtk/gtkprintunixdialog.ui.h:8
+#: ../gtk/gtkprintunixdialog.ui.h:10
 msgid "Status"
 msgstr "Állapot"
 
-#: ../gtk/gtkprintunixdialog.ui.h:9
+#: ../gtk/gtkprintunixdialog.ui.h:11
 msgid "Range"
 msgstr "Tartomány"
 
-#: ../gtk/gtkprintunixdialog.ui.h:10
+#: ../gtk/gtkprintunixdialog.ui.h:12
 msgid "_All Pages"
 msgstr "Min_den oldal"
 
-#: ../gtk/gtkprintunixdialog.ui.h:11
+#: ../gtk/gtkprintunixdialog.ui.h:13
 msgid "C_urrent Page"
 msgstr "J_elenlegi oldal"
 
-#: ../gtk/gtkprintunixdialog.ui.h:12
+#: ../gtk/gtkprintunixdialog.ui.h:14
 msgid "Se_lection"
 msgstr "_Kijelölés"
 
-#: ../gtk/gtkprintunixdialog.ui.h:13
+#: ../gtk/gtkprintunixdialog.ui.h:15
 msgid "Pag_es:"
 msgstr "_Oldalak:"
 
-#: ../gtk/gtkprintunixdialog.ui.h:14
+#: ../gtk/gtkprintunixdialog.ui.h:16 ../gtk/gtkprintunixdialog.ui.h:18
+#: ../gtk/gtkprintunixdialog.ui.h:21
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -5006,99 +5012,87 @@ msgstr ""
 "Adjon meg oldaltartományokat,\n"
 "például 1-3,7,11"
 
-#: ../gtk/gtkprintunixdialog.ui.h:16
+#: ../gtk/gtkprintunixdialog.ui.h:20
 msgid "Pages"
 msgstr "Oldalak"
 
-#: ../gtk/gtkprintunixdialog.ui.h:17
+#: ../gtk/gtkprintunixdialog.ui.h:23
 msgid "Copies"
 msgstr "Példányszám"
 
-#: ../gtk/gtkprintunixdialog.ui.h:18
+#: ../gtk/gtkprintunixdialog.ui.h:24
 msgid "Copie_s:"
 msgstr "Pél_dányszám:"
 
-#: ../gtk/gtkprintunixdialog.ui.h:19
+#: ../gtk/gtkprintunixdialog.ui.h:25
 msgid "C_ollate"
 msgstr "_Szétválogatás"
 
-#: ../gtk/gtkprintunixdialog.ui.h:20
+#: ../gtk/gtkprintunixdialog.ui.h:26
 msgid "_Reverse"
 msgstr "_Fordított"
 
-#: ../gtk/gtkprintunixdialog.ui.h:21
+#: ../gtk/gtkprintunixdialog.ui.h:27
 msgid "General"
 msgstr "Általános"
 
-#: ../gtk/gtkprintunixdialog.ui.h:22
+#: ../gtk/gtkprintunixdialog.ui.h:28
 msgid "Layout"
 msgstr "Elrendezés"
 
-#: ../gtk/gtkprintunixdialog.ui.h:23
+#: ../gtk/gtkprintunixdialog.ui.h:29
 msgid "T_wo-sided:"
 msgstr "_Kétoldalas:"
 
-#: ../gtk/gtkprintunixdialog.ui.h:24
+#: ../gtk/gtkprintunixdialog.ui.h:30
 msgid "Pages per _side:"
 msgstr "_Lapok oldalanként:"
 
-#: ../gtk/gtkprintunixdialog.ui.h:25
+#: ../gtk/gtkprintunixdialog.ui.h:31
 msgid "Page or_dering:"
 msgstr "Ol_dalsorrend:"
 
-#: ../gtk/gtkprintunixdialog.ui.h:26
+#: ../gtk/gtkprintunixdialog.ui.h:32
 msgid "_Only print:"
 msgstr "_Nyomtatandó:"
 
-#: ../gtk/gtkprintunixdialog.ui.h:27
-msgid "All sheets"
-msgstr "Minden oldal"
-
-#: ../gtk/gtkprintunixdialog.ui.h:28
-msgid "Even sheets"
-msgstr "Páros oldalak"
-
-#: ../gtk/gtkprintunixdialog.ui.h:29
-msgid "Odd sheets"
-msgstr "Páratlan oldalak"
-
-#: ../gtk/gtkprintunixdialog.ui.h:30
+#: ../gtk/gtkprintunixdialog.ui.h:33
 msgid "Sc_ale:"
 msgstr "_Méretezés:"
 
-#: ../gtk/gtkprintunixdialog.ui.h:31
+#: ../gtk/gtkprintunixdialog.ui.h:34
 msgid "Paper"
 msgstr "Papír"
 
-#: ../gtk/gtkprintunixdialog.ui.h:32
+#: ../gtk/gtkprintunixdialog.ui.h:35
 msgid "Paper _type:"
 msgstr "Papír _típusa:"
 
-#: ../gtk/gtkprintunixdialog.ui.h:33
+#: ../gtk/gtkprintunixdialog.ui.h:36
 msgid "Paper _source:"
 msgstr "_Papírforrás:"
 
-#: ../gtk/gtkprintunixdialog.ui.h:34
+#: ../gtk/gtkprintunixdialog.ui.h:37
 msgid "Output t_ray:"
 msgstr "Kimeneti tál_ca:"
 
-#: ../gtk/gtkprintunixdialog.ui.h:36
+#: ../gtk/gtkprintunixdialog.ui.h:39
 msgid "Or_ientation:"
 msgstr "_Tájolás:"
 
-#: ../gtk/gtkprintunixdialog.ui.h:42
+#: ../gtk/gtkprintunixdialog.ui.h:41
 msgid "Job Details"
 msgstr "Feladat részletei"
 
-#: ../gtk/gtkprintunixdialog.ui.h:43
+#: ../gtk/gtkprintunixdialog.ui.h:42
 msgid "Pri_ority:"
 msgstr "_Prioritás:"
 
-#: ../gtk/gtkprintunixdialog.ui.h:44
+#: ../gtk/gtkprintunixdialog.ui.h:43
 msgid "_Billing info:"
 msgstr "_Fizetési információk:"
 
-#: ../gtk/gtkprintunixdialog.ui.h:45
+#: ../gtk/gtkprintunixdialog.ui.h:44
 msgid "Print Document"
 msgstr "Dokumentum nyomtatása"
 
@@ -5108,12 +5102,14 @@ msgid "_Now"
 msgstr "_Azonnal"
 
 #. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
-#: ../gtk/gtkprintunixdialog.ui.h:49
+#: ../gtk/gtkprintunixdialog.ui.h:50
 msgid "A_t:"
 msgstr "_Ekkor:"
 
 #. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
-#: ../gtk/gtkprintunixdialog.ui.h:51
+#: ../gtk/gtkprintunixdialog.ui.h:51 ../gtk/gtkprintunixdialog.ui.h:55
+#: ../gtk/gtkprintunixdialog.ui.h:57 ../gtk/gtkprintunixdialog.ui.h:61
+#: ../gtk/gtkprintunixdialog.ui.h:64
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -5121,57 +5117,58 @@ msgstr ""
 "A nyomtatás idejének megadása\n"
 " például: 15.30, 2.35 du, 14.15.20, 11.46.30 de, 4 du"
 
-#: ../gtk/gtkprintunixdialog.ui.h:53
+#: ../gtk/gtkprintunixdialog.ui.h:63
 msgid "Time of print"
 msgstr "Nyomtatás ideje"
 
 #. this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'.
-#: ../gtk/gtkprintunixdialog.ui.h:55
+#: ../gtk/gtkprintunixdialog.ui.h:68
 msgid "On _hold"
 msgstr "_Várakoztatás"
 
-#: ../gtk/gtkprintunixdialog.ui.h:56
+#: ../gtk/gtkprintunixdialog.ui.h:69 ../gtk/gtkprintunixdialog.ui.h:70
 msgid "Hold the job until it is explicitly released"
 msgstr "A feladat felfüggesztése kifejezett elengedéséig"
 
-#: ../gtk/gtkprintunixdialog.ui.h:57
+#: ../gtk/gtkprintunixdialog.ui.h:71
 msgid "Add Cover Page"
 msgstr "Borítóoldal hozzáadása"
 
 #. this is the label used for the option in the print dialog that controls the front cover page.
-#: ../gtk/gtkprintunixdialog.ui.h:59
+#: ../gtk/gtkprintunixdialog.ui.h:74
 msgid "Be_fore:"
 msgstr "_Elé:"
 
 #. this is the label used for the option in the print dialog that controls the back cover page.
-#: ../gtk/gtkprintunixdialog.ui.h:61
+#: ../gtk/gtkprintunixdialog.ui.h:77
 msgid "_After:"
 msgstr "_Mögé:"
 
-#: ../gtk/gtkprintunixdialog.ui.h:62
+#: ../gtk/gtkprintunixdialog.ui.h:78
 msgid "Job"
 msgstr "Feladat"
 
 #. This will appear as a tab label in the print dialog.
-#: ../gtk/gtkprintunixdialog.ui.h:64
+#: ../gtk/gtkprintunixdialog.ui.h:81
 msgid "Image Quality"
 msgstr "Képminőség"
 
 #. This will appear as a tab label in the print dialog.
-#: ../gtk/gtkprintunixdialog.ui.h:66
+#: ../gtk/gtkprintunixdialog.ui.h:84
 msgid "Color"
 msgstr "Szín"
 
-#. This will appear as a tab label in the print dialog.&#10;It's a typographical term, as in "Binding and finishing"
-#: ../gtk/gtkprintunixdialog.ui.h:68
+#. This will appear as a tab label in the print dialog.
+#. It's a typographical term, as in "Binding and finishing"
+#: ../gtk/gtkprintunixdialog.ui.h:88
 msgid "Finishing"
 msgstr "Befejezés"
 
-#: ../gtk/gtkprintunixdialog.ui.h:69
+#: ../gtk/gtkprintunixdialog.ui.h:89
 msgid "Advanced"
 msgstr "Speciális"
 
-#: ../gtk/gtkprintunixdialog.ui.h:70
+#: ../gtk/gtkprintunixdialog.ui.h:90
 msgid "Some of the settings in the dialog conflict"
 msgstr "A párbeszédablak egyes beállításai ütköznek"
 
@@ -5191,25 +5188,34 @@ msgstr "Növeli vagy csökkenti a hangerőt"
 msgid "+"
 msgstr "+"
 
-#: ../gtk/gtkvolumebutton.ui.h:4
+#: ../gtk/gtkvolumebutton.ui.h:4 ../gtk/gtkvolumebutton.ui.h:5
 msgid "Volume Up"
 msgstr "Hangerő fel"
 
-#: ../gtk/gtkvolumebutton.ui.h:5
+#: ../gtk/gtkvolumebutton.ui.h:6
 msgid "Increases the volume"
 msgstr "Növeli a hangerőt"
 
-#: ../gtk/gtkvolumebutton.ui.h:6
+#: ../gtk/gtkvolumebutton.ui.h:7
 msgid "-"
 msgstr "-"
 
-#: ../gtk/gtkvolumebutton.ui.h:7
+#: ../gtk/gtkvolumebutton.ui.h:8 ../gtk/gtkvolumebutton.ui.h:9
 msgid "Volume Down"
 msgstr "Hangerő le"
 
-#: ../gtk/gtkvolumebutton.ui.h:8
+#: ../gtk/gtkvolumebutton.ui.h:10
 msgid "Decreases the volume"
 msgstr "Csökkenti a hangerőt"
+
+#~ msgid "All sheets"
+#~ msgstr "Minden oldal"
+
+#~ msgid "Even sheets"
+#~ msgstr "Páros oldalak"
+
+#~ msgid "Odd sheets"
+#~ msgstr "Páratlan oldalak"
 
 #~ msgid "Switches between on and off states"
 #~ msgstr "Váltás a be és ki állapotok közt"
