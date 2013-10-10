@@ -181,6 +181,9 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
    *        event location
    *
    * The ::toggled signal is emitted when the cell is toggled. 
+   *
+   * It is the responsibility of the application to update the model
+   * and store the "active" property at the position indicated by @path.
    **/
   toggle_cell_signals[TOGGLED] =
     g_signal_new (I_("toggled"),
