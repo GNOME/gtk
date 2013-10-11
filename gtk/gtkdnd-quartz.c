@@ -1263,7 +1263,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
   window = [(id<GdkNSView>)[nswindow contentView] gdkWindow];
   g_return_val_if_fail (nsevent != NULL, NULL);
 
-  context = gdk_drag_begin (window, target_list->list);
+  context = gdk_drag_begin (window, g_list_copy (target_list->list));
   g_return_val_if_fail (context != NULL, NULL);
 
   info = gtk_drag_get_source_info (context, TRUE);
