@@ -7570,8 +7570,9 @@ _gdk_synthesize_crossing_events (GdkDisplay                 *display,
 
   /* TODO: Don't send events to toplevel, as we get those from the windowing system */
 
-  a = src;
-  b = dest;
+  a = (src && GDK_IS_WINDOW (src)) ? src : NULL;
+  b = (dest && GDK_IS_WINDOW (dest)) ? dest : NULL;
+
   if (src == dest)
     return; /* No crossings generated between src and dest */
 
