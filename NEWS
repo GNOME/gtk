@@ -1,3 +1,14 @@
+Overview of Changes from GTK+ 2.24.21 to 2.24.22
+================================================
+
+* Look in /usr/share/gtk-2.0 for the default gtkrc file
+
+* Support building with automake 1.14
+
+* Translation updates:
+ Hungarian
+
+
 Overview of Changes from GTK+ 2.24.20 to 2.24.21
 ================================================
 
