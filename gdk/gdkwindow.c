@@ -7477,8 +7477,8 @@ send_crossing_event (GdkDisplay                 *display,
 
   if (type == GDK_ENTER_NOTIFY &&
       (pointer_info->need_touch_press_enter ||
-       source_device &&
-       gdk_device_get_source (source_device) == GDK_SOURCE_TOUCHSCREEN) &&
+       (source_device &&
+        gdk_device_get_source (source_device) == GDK_SOURCE_TOUCHSCREEN)) &&
       mode != GDK_CROSSING_TOUCH_BEGIN &&
       mode != GDK_CROSSING_TOUCH_END)
     {
