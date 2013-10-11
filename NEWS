@@ -1,3 +1,43 @@
+Overview of Changes in GTK+ 3.10.0 to 3.10.1
+============================================
+
+* Bug fixes:
+ 341146 reorder lines in configure.in for a better display
+ 586107 gtkprintbackendpapi.c does not compile on Solaris 10
+ 681484 GtkAboutDialog has extra space when gtk_widget_show...
+ 684076 clean up a11y on shutdown
+ 702196 Unfinished frame being presented
+ 703062 GtkTreeViewColumn returns negative size request on ...
+ 707524 CSD windows "shake" when they go backdrop
+ 708019 Invisible characters at the end of a TextView withi...
+ 708024 Accessibility being initialized in the wrong place
+ 708414 entrycompletion: set the GtkWindow as attached to t...
+ 708423 GtkTextView regression: current line highlighting n...
+ 708547 search provider crashes: gnome-contacts-3.9.90-1.fc...
+ 709049 gtk_widget_destroy() on a GtkHeaderBar tries to gtk...
+ 709056 icontheme: use g_file_load_contents() for symbolic icons
+ 709212 Configure fails if I don't have wayland dependency
+ 709264 Fix memory leaks in icons handling
+ 709522 GtkFileChooser sidebar is not populated since 742a2f11
+ 709613 GtkStack: Warn when setting a child visible which i...
+ 709745 GtkSearchBar example problems 
+
+* Translation updates:
+ Arabic
+ Basque
+ Catalan
+ Danish
+ Dutch
+ German
+ Hungarian
+ Latvian
+ Norwegian bokmål
+ Russian
+ Serbian
+ Slovak
+ Tajik
+
+
 Overview of Changes in GTK+ 3.9.16 to 3.10.0
 ============================================
 
