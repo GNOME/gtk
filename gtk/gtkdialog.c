@@ -370,6 +370,8 @@ gtk_dialog_init (GtkDialog *dialog)
 {
   dialog->priv = gtk_dialog_get_instance_private (dialog);
 
+  g_type_ensure (GTK_TYPE_BUTTON_BOX);
+
   gtk_widget_init_template (GTK_WIDGET (dialog));
 
   update_spacings (dialog);

@@ -45,6 +45,7 @@
 #include "gtkorientable.h"
 #include "gtkscrolledwindow.h"
 #include "gtktextview.h"
+#include "gtkviewport.h"
 #include "gtkshow.h"
 #include "gtkmain.h"
 #include "gtkmessagedialog.h"
@@ -684,6 +685,14 @@ static void
 gtk_about_dialog_init (GtkAboutDialog *about)
 {
   GtkAboutDialogPrivate *priv;
+
+  g_type_ensure (GTK_TYPE_IMAGE);
+  g_type_ensure (GTK_TYPE_TOGGLE_BUTTON);
+  g_type_ensure (GTK_TYPE_STACK);
+  g_type_ensure (GTK_TYPE_SCROLLED_WINDOW);
+  g_type_ensure (GTK_TYPE_VIEWPORT);
+  g_type_ensure (GTK_TYPE_GRID);
+  g_type_ensure (GTK_TYPE_TEXT_VIEW);
 
   /* Data */
   priv = gtk_about_dialog_get_instance_private (about);
