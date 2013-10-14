@@ -254,6 +254,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkwindow.h"
 #include "gtkicontheme.h"
+#include "gtktestutils.h"
 #include "deprecated/gtkstock.h"
 
 
@@ -454,7 +455,12 @@ gtk_builder_real_get_type_from_name (GtkBuilder  *builder,
   if (gtype != G_TYPE_INVALID)
     return gtype;
 
-  return _gtk_builder_resolve_type_lazily (type_name);
+  gtype = _gtk_builder_resolve_type_lazily (type_name);
+  if (gtype != G_TYPE_INVALID)
+    return gtype;
+
+  gtk_test_register_all_types ();
+  return g_type_from_name (type_name);
 }
 
 typedef struct
