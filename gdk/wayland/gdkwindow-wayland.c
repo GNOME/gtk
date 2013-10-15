@@ -2070,7 +2070,7 @@ gdk_wayland_window_set_opaque_region (GdkWindow      *window,
                                       cairo_region_t *region)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  struct wl_region *wl_region;
+  struct wl_region *wl_region = NULL;
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
@@ -2078,12 +2078,13 @@ gdk_wayland_window_set_opaque_region (GdkWindow      *window,
   if (!impl->surface)
     gdk_wayland_window_create_surface (window);
 
-  wl_region = wl_region_from_cairo_region (GDK_WAYLAND_DISPLAY (gdk_window_get_display (window)), region);
-  if (wl_region == NULL)
-    return;
+  if (region != NULL)
+    wl_region = wl_region_from_cairo_region (GDK_WAYLAND_DISPLAY (gdk_window_get_display (window)), region);
 
   wl_surface_set_opaque_region (impl->surface, wl_region);
-  wl_region_destroy (wl_region);
+
+  if (wl_region != NULL)
+    wl_region_destroy (wl_region);
 }
 
 
