@@ -1096,6 +1096,7 @@ gtk_tooltip_position (GtkTooltip *tooltip,
 #define MAX_DISTANCE 32
 
   gtk_widget_realize (GTK_WIDGET (tooltip->current_window));
+  gtk_widget_set_visible (GTK_WIDGET (tooltip->current_window), TRUE);
 
   tooltip->tooltip_widget = new_tooltip_widget;
 
