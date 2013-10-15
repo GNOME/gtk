@@ -50,6 +50,8 @@ libgdkwaylandinclude_HEADERS = 			\
 
 %-protocol.c : $(srcdir)/protocol/%.xml
 	$(AM_V_GEN)$(WAYLAND_SCANNER) code < $< > $@
+	$(AM_V_GEN)$(SED) -i -e 's/WL_EXPORT //' $@
+
 %-server-protocol.h : $(srcdir)/protocol/%.xml
 	$(AM_V_GEN)$(WAYLAND_SCANNER) server-header < $< > $@
 %-client-protocol.h : $(srcdir)/protocol/%.xml
