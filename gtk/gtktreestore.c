@@ -2280,6 +2280,12 @@ gtk_tree_store_reorder (GtkTreeStore *tree_store,
   else
     level = G_NODE (parent->user_data)->children;
 
+  if (G_UNLIKELY (!level))
+    {
+      g_warning ("%s: Cannot reorder, parent has no children", G_STRLOC);
+      return;
+    }
+
   /* count nodes */
   node = level;
   while (node)
