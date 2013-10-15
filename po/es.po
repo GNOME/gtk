@@ -15,18 +15,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
-"%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-09-20 19:02+0000\n"
-"PO-Revision-Date: 2013-09-22 12:06+0200\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
+"2b&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2013-10-11 17:59+0000\n"
+"PO-Revision-Date: 2013-10-15 11:11+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
-"Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
+"Language-Team: Español <gnome-es-list@gnome.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Gtranslator 2.91.6\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
 
 #: ../gdk/broadway/gdkbroadway-server.c:141
 #, c-format
@@ -1353,40 +1353,40 @@ msgstr ""
 "Este programa viene SIN NINGUNA GARANTÍA;\n"
 "para obtener más detalles visite <a href=\"%s\">%s</a>"
 
-#: ../gtk/gtkaboutdialog.c:375
+#: ../gtk/gtkaboutdialog.c:372
 msgid "License"
 msgstr "Licencia"
 
-#: ../gtk/gtkaboutdialog.c:376
+#: ../gtk/gtkaboutdialog.c:373
 msgid "The license of the program"
 msgstr "La licencia del programa"
 
-#: ../gtk/gtkaboutdialog.c:914
+#: ../gtk/gtkaboutdialog.c:921
 msgid "Could not show link"
 msgstr "No se pudo mostrar el enlace"
 
-#: ../gtk/gtkaboutdialog.c:951
+#: ../gtk/gtkaboutdialog.c:958
 msgid "Website"
 msgstr "Página web"
 
-#: ../gtk/gtkaboutdialog.c:1005
+#: ../gtk/gtkaboutdialog.c:1012
 #, c-format
 msgid "About %s"
 msgstr "Acerca de %s"
 
-#: ../gtk/gtkaboutdialog.c:2290
+#: ../gtk/gtkaboutdialog.c:2297
 msgid "Created by"
 msgstr "Creado por"
 
-#: ../gtk/gtkaboutdialog.c:2293
+#: ../gtk/gtkaboutdialog.c:2300
 msgid "Documented by"
 msgstr "Documentado por"
 
-#: ../gtk/gtkaboutdialog.c:2303
+#: ../gtk/gtkaboutdialog.c:2310
 msgid "Translated by"
 msgstr "Traducido por"
 
-#: ../gtk/gtkaboutdialog.c:2308
+#: ../gtk/gtkaboutdialog.c:2315
 msgid "Artwork by"
 msgstr "Arte por"
 
@@ -1522,7 +1522,7 @@ msgstr "Aplicaciones relacionadas"
 msgid "Other Applications"
 msgstr "Otras aplicaciones"
 
-#: ../gtk/gtkapplication.c:1569
+#: ../gtk/gtkapplication.c:1565
 #, c-format
 msgid ""
 "%s cannot quit at this time:\n"
@@ -1942,7 +1942,7 @@ msgid "_Close"
 msgstr "_Cerrar"
 
 #. And show the custom paper dialog
-#: ../gtk/gtkcustompaperunixdialog.c:389 ../gtk/gtkprintunixdialog.c:3193
+#: ../gtk/gtkcustompaperunixdialog.c:389 ../gtk/gtkprintunixdialog.c:3202
 msgid "Manage Custom Sizes"
 msgstr "Gestionar tamaños personalizados"
 
@@ -1995,30 +1995,30 @@ msgstr "_Derecho:"
 msgid "Paper Margins"
 msgstr "Márgenes del papel"
 
-#: ../gtk/gtkentry.c:9272 ../gtk/gtkentry.c:9418 ../gtk/gtklabel.c:6276
-#: ../gtk/gtktextview.c:8694 ../gtk/gtktextview.c:8877
+#: ../gtk/gtkentry.c:9271 ../gtk/gtkentry.c:9417 ../gtk/gtklabel.c:6276
+#: ../gtk/gtktextview.c:8698 ../gtk/gtktextview.c:8881
 msgid "Cu_t"
 msgstr "Cor_tar"
 
-#: ../gtk/gtkentry.c:9276 ../gtk/gtkentry.c:9421 ../gtk/gtklabel.c:6277
-#: ../gtk/gtktextview.c:8698 ../gtk/gtktextview.c:8881
+#: ../gtk/gtkentry.c:9275 ../gtk/gtkentry.c:9420 ../gtk/gtklabel.c:6277
+#: ../gtk/gtktextview.c:8702 ../gtk/gtktextview.c:8885
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: ../gtk/gtkentry.c:9280 ../gtk/gtkentry.c:9424 ../gtk/gtklabel.c:6278
-#: ../gtk/gtktextview.c:8700 ../gtk/gtktextview.c:8883
+#: ../gtk/gtkentry.c:9279 ../gtk/gtkentry.c:9423 ../gtk/gtklabel.c:6278
+#: ../gtk/gtktextview.c:8704 ../gtk/gtktextview.c:8887
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: ../gtk/gtkentry.c:9283 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8703
+#: ../gtk/gtkentry.c:9282 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8707
 msgid "_Delete"
 msgstr "_Eliminar"
 
-#: ../gtk/gtkentry.c:9294 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8717
+#: ../gtk/gtkentry.c:9293 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8721
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
-#: ../gtk/gtkentry.c:10382
+#: ../gtk/gtkentry.c:10381
 msgid "Caps Lock is on"
 msgstr "Bloq Mayús está activado"
 
@@ -2067,7 +2067,7 @@ msgstr "Bloq Mayús está activado"
 msgid "Select a File"
 msgstr "Seleccionar un archivo"
 
-#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkplacessidebar.c:791
+#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkplacessidebar.c:790
 msgid "Desktop"
 msgstr "Escritorio"
 
@@ -2076,7 +2076,7 @@ msgstr "Escritorio"
 msgid "(None)"
 msgstr "(Ninguno)"
 
-#: ../gtk/gtkfilechooserbutton.c:807 ../gtk/gtkplacessidebar.c:3107
+#: ../gtk/gtkfilechooserbutton.c:807 ../gtk/gtkplacessidebar.c:3106
 msgid "_Open"
 msgstr "_Abrir"
 
@@ -2273,16 +2273,16 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "Escoja una tipografía"
 
-#: ../gtk/gtkheaderbar.c:224 ../gtk/gtkwindow.c:5281 ../gtk/gtkwindow.c:8194
+#: ../gtk/gtkheaderbar.c:224 ../gtk/gtkwindow.c:5274 ../gtk/gtkwindow.c:8286
 msgid "Close"
 msgstr "Cerrar"
 
-#: ../gtk/gtkicontheme.c:2100 ../gtk/gtkicontheme.c:2163
+#: ../gtk/gtkicontheme.c:2116 ../gtk/gtkicontheme.c:2179
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "El icono «%s» no está presente en el tema"
 
-#: ../gtk/gtkicontheme.c:3866
+#: ../gtk/gtkicontheme.c:3881
 msgid "Failed to load icon"
 msgstr "No se pudo cargar el icono"
 
@@ -2563,7 +2563,7 @@ msgstr "Shell Z"
 msgid "Cannot end process with PID %d: %s"
 msgstr "No se puede finalizar el proceso con PID %d: %s"
 
-#: ../gtk/gtknotebook.c:5016 ../gtk/gtknotebook.c:7673
+#: ../gtk/gtknotebook.c:5057 ../gtk/gtknotebook.c:7783
 #, c-format
 msgid "Page %u"
 msgstr "Página %u"
@@ -2605,7 +2605,7 @@ msgstr ""
 " Superior: %s %s\n"
 " Inferior: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:873 ../gtk/gtkprintunixdialog.c:3247
+#: ../gtk/gtkpagesetupunixdialog.c:873 ../gtk/gtkprintunixdialog.c:3256
 msgid "Manage Custom Sizes…"
 msgstr "Gestionar tamaños personalizados…"
 
@@ -2617,191 +2617,191 @@ msgstr "Configuración de página"
 msgid "File System Root"
 msgstr "Sistema de archivos raíz"
 
-#: ../gtk/gtkplacessidebar.c:447
+#: ../gtk/gtkplacessidebar.c:446
 msgid "Devices"
 msgstr "Dispositivos"
 
-#: ../gtk/gtkplacessidebar.c:455
+#: ../gtk/gtkplacessidebar.c:454
 msgid "Bookmarks"
 msgstr "Marcadores"
 
-#: ../gtk/gtkplacessidebar.c:761
+#: ../gtk/gtkplacessidebar.c:760
 msgid "Places"
 msgstr "Lugares"
 
-#: ../gtk/gtkplacessidebar.c:768
+#: ../gtk/gtkplacessidebar.c:767
 msgid "Recent"
 msgstr "Recientes"
 
-#: ../gtk/gtkplacessidebar.c:770
+#: ../gtk/gtkplacessidebar.c:769
 msgid "Recent files"
 msgstr "Archivos recientes"
 
-#: ../gtk/gtkplacessidebar.c:779
+#: ../gtk/gtkplacessidebar.c:778
 msgid "Home"
 msgstr "Carpeta personal"
 
-#: ../gtk/gtkplacessidebar.c:781
+#: ../gtk/gtkplacessidebar.c:780
 msgid "Open your personal folder"
 msgstr "Abrir su carpeta personal"
 
-#: ../gtk/gtkplacessidebar.c:793
+#: ../gtk/gtkplacessidebar.c:792
 msgid "Open the contents of your desktop in a folder"
 msgstr "Abrir el contenido de su escritorio en una carpeta"
 
-#: ../gtk/gtkplacessidebar.c:806
+#: ../gtk/gtkplacessidebar.c:805
 msgid "Trash"
 msgstr "Papelera"
 
-#: ../gtk/gtkplacessidebar.c:808
+#: ../gtk/gtkplacessidebar.c:807
 msgid "Open the trash"
 msgstr "Abrir la papelera"
 
-#: ../gtk/gtkplacessidebar.c:863 ../gtk/gtkplacessidebar.c:888
-#: ../gtk/gtkplacessidebar.c:1095
+#: ../gtk/gtkplacessidebar.c:862 ../gtk/gtkplacessidebar.c:887
+#: ../gtk/gtkplacessidebar.c:1094
 #, c-format
 msgid "Mount and open %s"
 msgstr "Montar y abrir %s"
 
-#: ../gtk/gtkplacessidebar.c:963
+#: ../gtk/gtkplacessidebar.c:962
 msgid "Open the contents of the file system"
 msgstr "Abrir el contenido del sistema de archivos"
 
-#: ../gtk/gtkplacessidebar.c:1063
+#: ../gtk/gtkplacessidebar.c:1062
 msgid "Network"
 msgstr "Red"
 
-#: ../gtk/gtkplacessidebar.c:1069
+#: ../gtk/gtkplacessidebar.c:1068
 msgid "Browse Network"
 msgstr "Examinar red"
 
-#: ../gtk/gtkplacessidebar.c:1071
+#: ../gtk/gtkplacessidebar.c:1070
 msgid "Browse the contents of the network"
 msgstr "Examinar el contenido de la red"
 
-#: ../gtk/gtkplacessidebar.c:1078
+#: ../gtk/gtkplacessidebar.c:1077
 msgid "Connect to Server"
-msgstr "Convertir al servidor"
+msgstr "Conectar al servidor"
 
-#: ../gtk/gtkplacessidebar.c:1080
+#: ../gtk/gtkplacessidebar.c:1079
 msgid "Connect to a network server address"
 msgstr "Conectar a una dirección de servidor en red"
 
-#: ../gtk/gtkplacessidebar.c:1560
+#: ../gtk/gtkplacessidebar.c:1559
 msgid "New bookmark"
 msgstr "Marcado nuevo"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: ../gtk/gtkplacessidebar.c:2100 ../gtk/gtkplacessidebar.c:3183
+#: ../gtk/gtkplacessidebar.c:2099 ../gtk/gtkplacessidebar.c:3182
 msgid "_Start"
 msgstr "_Iniciar"
 
-#: ../gtk/gtkplacessidebar.c:2101 ../gtk/gtkplacessidebar.c:3190
+#: ../gtk/gtkplacessidebar.c:2100 ../gtk/gtkplacessidebar.c:3189
 msgid "_Stop"
 msgstr "_Detener"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: ../gtk/gtkplacessidebar.c:2106
+#: ../gtk/gtkplacessidebar.c:2105
 msgid "_Power On"
 msgstr "_Encender"
 
-#: ../gtk/gtkplacessidebar.c:2107
+#: ../gtk/gtkplacessidebar.c:2106
 msgid "_Safely Remove Drive"
 msgstr "_Quitar unidad con seguridad"
 
-#: ../gtk/gtkplacessidebar.c:2110
+#: ../gtk/gtkplacessidebar.c:2109
 msgid "_Connect Drive"
 msgstr "_Conectar unidad"
 
-#: ../gtk/gtkplacessidebar.c:2111
+#: ../gtk/gtkplacessidebar.c:2110
 msgid "_Disconnect Drive"
 msgstr "_Desconectar unidad"
 
-#: ../gtk/gtkplacessidebar.c:2114
+#: ../gtk/gtkplacessidebar.c:2113
 msgid "_Start Multi-disk Device"
 msgstr "_Iniciar dispositivo multidisco"
 
-#: ../gtk/gtkplacessidebar.c:2115
+#: ../gtk/gtkplacessidebar.c:2114
 msgid "_Stop Multi-disk Device"
 msgstr "_Detener dispositivo multidisco"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: ../gtk/gtkplacessidebar.c:2119
+#: ../gtk/gtkplacessidebar.c:2118
 msgid "_Unlock Drive"
 msgstr "_Desbloquear unidad"
 
-#: ../gtk/gtkplacessidebar.c:2120
+#: ../gtk/gtkplacessidebar.c:2119
 msgid "_Lock Drive"
 msgstr "_Bloquear unidad"
 
-#: ../gtk/gtkplacessidebar.c:2147 ../gtk/gtkplacessidebar.c:2845
+#: ../gtk/gtkplacessidebar.c:2146 ../gtk/gtkplacessidebar.c:2844
 #, c-format
 msgid "Unable to start %s"
 msgstr "No se pudo iniciar %s"
 
-#: ../gtk/gtkplacessidebar.c:2174
+#: ../gtk/gtkplacessidebar.c:2173
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "No se puede acceder a «%s»"
 
-#: ../gtk/gtkplacessidebar.c:2480
+#: ../gtk/gtkplacessidebar.c:2479
 #, c-format
 msgid "Unable to unmount %s"
 msgstr "No se puede desmontar %s"
 
-#: ../gtk/gtkplacessidebar.c:2603 ../gtk/gtkplacessidebar.c:2630
-#: ../gtk/gtkplacessidebar.c:2657
+#: ../gtk/gtkplacessidebar.c:2602 ../gtk/gtkplacessidebar.c:2629
+#: ../gtk/gtkplacessidebar.c:2656
 #, c-format
 msgid "Unable to eject %s"
 msgstr "No se pudo expulsar %s"
 
-#: ../gtk/gtkplacessidebar.c:2797
+#: ../gtk/gtkplacessidebar.c:2796
 #, c-format
 msgid "Unable to poll %s for media changes"
 msgstr "No se puede consultar a %s si hay cambios en el medio"
 
-#: ../gtk/gtkplacessidebar.c:2899
+#: ../gtk/gtkplacessidebar.c:2898
 #, c-format
 msgid "Unable to stop %s"
 msgstr "No se pudo detener %s"
 
-#: ../gtk/gtkplacessidebar.c:3114
+#: ../gtk/gtkplacessidebar.c:3113
 msgid "Open in New _Tab"
 msgstr "Abrir en una _pestaña nueva"
 
-#: ../gtk/gtkplacessidebar.c:3122
+#: ../gtk/gtkplacessidebar.c:3121
 msgid "Open in New _Window"
 msgstr "Abrir en una _ventana nueva"
 
-#: ../gtk/gtkplacessidebar.c:3131
+#: ../gtk/gtkplacessidebar.c:3130
 msgid "_Add Bookmark"
 msgstr "_Añadir marcador"
 
-#: ../gtk/gtkplacessidebar.c:3137
+#: ../gtk/gtkplacessidebar.c:3136
 msgid "Remove"
 msgstr "Quitar"
 
-#: ../gtk/gtkplacessidebar.c:3144
+#: ../gtk/gtkplacessidebar.c:3143
 msgid "Rename…"
 msgstr "Renombrar…"
 
-#: ../gtk/gtkplacessidebar.c:3155
+#: ../gtk/gtkplacessidebar.c:3154
 msgid "_Mount"
 msgstr "_Montar"
 
-#: ../gtk/gtkplacessidebar.c:3162
+#: ../gtk/gtkplacessidebar.c:3161
 msgid "_Unmount"
 msgstr "_Desmontar"
 
-#: ../gtk/gtkplacessidebar.c:3169
+#: ../gtk/gtkplacessidebar.c:3168
 msgid "_Eject"
 msgstr "_Expulsar"
 
-#: ../gtk/gtkplacessidebar.c:3176
+#: ../gtk/gtkplacessidebar.c:3175
 msgid "_Detect Media"
 msgstr "_Detectar medio"
 
-#: ../gtk/gtkplacessidebar.c:3834
+#: ../gtk/gtkplacessidebar.c:3828
 msgid "Computer"
 msgstr "Equipo"
 
@@ -2966,42 +2966,42 @@ msgstr "Obteniendo la información de la impresora…"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: ../gtk/gtkprintunixdialog.c:2976
+#: ../gtk/gtkprintunixdialog.c:2985
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4634
 msgid "Left to right, top to bottom"
 msgstr "De izquierda a derecha, de arriba a abajo"
 
-#: ../gtk/gtkprintunixdialog.c:2976
+#: ../gtk/gtkprintunixdialog.c:2985
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4634
 msgid "Left to right, bottom to top"
 msgstr "De izquierda a derecha, de abajo a arriba"
 
-#: ../gtk/gtkprintunixdialog.c:2977
+#: ../gtk/gtkprintunixdialog.c:2986
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4635
 msgid "Right to left, top to bottom"
 msgstr "De derecha a izquierda, de arriba a abajo"
 
-#: ../gtk/gtkprintunixdialog.c:2977
+#: ../gtk/gtkprintunixdialog.c:2986
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4635
 msgid "Right to left, bottom to top"
 msgstr "De derecha a izquierda, de abajo a arriba"
 
-#: ../gtk/gtkprintunixdialog.c:2978
+#: ../gtk/gtkprintunixdialog.c:2987
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4636
 msgid "Top to bottom, left to right"
 msgstr "De arriba a abajo, de izquierda a derecha"
 
-#: ../gtk/gtkprintunixdialog.c:2978
+#: ../gtk/gtkprintunixdialog.c:2987
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4636
 msgid "Top to bottom, right to left"
 msgstr "De arriba a abajo, de derecha a izquierda"
 
-#: ../gtk/gtkprintunixdialog.c:2979
+#: ../gtk/gtkprintunixdialog.c:2988
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4637
 msgid "Bottom to top, left to right"
 msgstr "De abajo a arriba, de izquierda a derecha"
 
-#: ../gtk/gtkprintunixdialog.c:2979
+#: ../gtk/gtkprintunixdialog.c:2988
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4637
 msgid "Bottom to top, right to left"
 msgstr "De abajo a arriba, de derecha a izquierda"
@@ -3009,28 +3009,28 @@ msgstr "De abajo a arriba, de derecha a izquierda"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: ../gtk/gtkprintunixdialog.c:2983 ../gtk/gtkprintunixdialog.c:2996
+#: ../gtk/gtkprintunixdialog.c:2992 ../gtk/gtkprintunixdialog.c:3005
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4714
 msgid "Page Ordering"
 msgstr "Orden de las hojas"
 
-#: ../gtk/gtkprintunixdialog.c:3012
+#: ../gtk/gtkprintunixdialog.c:3021
 msgid "Left to right"
 msgstr "De izquierda a derecha"
 
-#: ../gtk/gtkprintunixdialog.c:3013
+#: ../gtk/gtkprintunixdialog.c:3022
 msgid "Right to left"
 msgstr "De derecha a izquierda"
 
-#: ../gtk/gtkprintunixdialog.c:3025
+#: ../gtk/gtkprintunixdialog.c:3034
 msgid "Top to bottom"
 msgstr "De arriba a abajo"
 
-#: ../gtk/gtkprintunixdialog.c:3026
+#: ../gtk/gtkprintunixdialog.c:3035
 msgid "Bottom to top"
 msgstr "De abajo a arriba"
 
-#: ../gtk/gtkprintunixdialog.c:3269
+#: ../gtk/gtkprintunixdialog.c:3278
 msgid "Print"
 msgstr "Imprimir"
 
@@ -3332,47 +3332,47 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:5242 ../gtk/gtkwindow.c:8089
+#: ../gtk/gtkwindow.c:5235 ../gtk/gtkwindow.c:8181
 msgid "Minimize"
 msgstr "Minimizar"
 
-#: ../gtk/gtkwindow.c:5263
+#: ../gtk/gtkwindow.c:5256
 msgid "Restore"
 msgstr "Restaurar"
 
-#: ../gtk/gtkwindow.c:5263 ../gtk/gtkwindow.c:8097
+#: ../gtk/gtkwindow.c:5256 ../gtk/gtkwindow.c:8189
 msgid "Maximize"
 msgstr "Maximizar"
 
-#: ../gtk/gtkwindow.c:8097
+#: ../gtk/gtkwindow.c:8189
 msgid "Unmaximize"
 msgstr "Desmaximizar"
 
-#: ../gtk/gtkwindow.c:8106
+#: ../gtk/gtkwindow.c:8198
 msgid "Always on Top"
 msgstr "Siempre encima"
 
-#: ../gtk/gtkwindow.c:8118
+#: ../gtk/gtkwindow.c:8210
 msgid "Always on Visible Workspace"
 msgstr "Siempre en el área de trabajo visible"
 
-#: ../gtk/gtkwindow.c:8126
+#: ../gtk/gtkwindow.c:8218
 msgid "Only on This Workspace"
 msgstr "Sólo en este área de trabajo"
 
-#: ../gtk/gtkwindow.c:8143
+#: ../gtk/gtkwindow.c:8235
 msgid "Move to Workspace Up"
 msgstr "Subir a un área de trabajo"
 
-#: ../gtk/gtkwindow.c:8152
+#: ../gtk/gtkwindow.c:8244
 msgid "Move to Workspace Down"
 msgstr "Bajar a un área de trabajo"
 
-#: ../gtk/gtkwindow.c:8166
+#: ../gtk/gtkwindow.c:8258
 msgid "Move to Another Workspace"
 msgstr "Mover a otro área de trabajo"
 
-#: ../gtk/gtkwindow.c:8174
+#: ../gtk/gtkwindow.c:8266
 #, c-format
 msgid "Workspace %d"
 msgstr "Área de trabajo %d"
@@ -4778,27 +4778,27 @@ msgid "Command Line"
 msgstr "Línea de comandos"
 
 #. SUN_BRANDING
-#: ../modules/printbackends/papi/gtkprintbackendpapi.c:809
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:786
 msgid "printer offline"
 msgstr "impresora desconectada"
 
 #. SUN_BRANDING
-#: ../modules/printbackends/papi/gtkprintbackendpapi.c:827
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:804
 msgid "ready to print"
 msgstr "preparada para imprimir"
 
 #. SUN_BRANDING
-#: ../modules/printbackends/papi/gtkprintbackendpapi.c:830
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:807
 msgid "processing job"
 msgstr "procesando trabajo"
 
 #. SUN_BRANDING
-#: ../modules/printbackends/papi/gtkprintbackendpapi.c:834
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:811
 msgid "paused"
 msgstr "pausada"
 
 #. SUN_BRANDING
-#: ../modules/printbackends/papi/gtkprintbackendpapi.c:837
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:814
 msgid "unknown"
 msgstr "desconocido"
 
@@ -5397,8 +5397,8 @@ msgstr "Disminuye el volumen"
 
 #~ msgid "different idatas found for symlinked '%s' and '%s'\n"
 #~ msgstr ""
-#~ "se encontraron diferentes idatas para el «%s» enlazado simbólicamente y "
-#~ "«%s»\n"
+#~ "se encontraron diferentes idatas para el «%s» enlazado simbólicamente y «%"
+#~ "s»\n"
 
 #~ msgid "_Add"
 #~ msgstr "_Añadir"
@@ -5507,8 +5507,8 @@ msgstr "Disminuye el volumen"
 #~ "Internal error: Image loader module '%s' failed to complete an operation, "
 #~ "but didn't give a reason for the failure"
 #~ msgstr ""
-#~ "Error interno: El módulo de carga de imágenes «%s» ha fallado al "
-#~ "completar una operación, pero no ha dado ninguna razón del fallo"
+#~ "Error interno: El módulo de carga de imágenes «%s» ha fallado al completar "
+#~ "una operación, pero no ha dado ninguna razón del fallo"
 
 #~ msgid "Incremental loading of image type '%s' is not supported"
 #~ msgstr ""
@@ -5711,8 +5711,8 @@ msgstr "Disminuye el volumen"
 #~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 #~ "parsed."
 #~ msgstr ""
-#~ "La calidad de un JPEG debe ser un valor entre 0 y 100; el valor «%s» no "
-#~ "se puede interpretar."
+#~ "La calidad de un JPEG debe ser un valor entre 0 y 100; el valor «%s» no se "
+#~ "puede interpretar."
 
 #~ msgid ""
 #~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -5809,15 +5809,15 @@ msgstr "Disminuye el volumen"
 #~ "PNG compression level must be a value between 0 and 9; value '%s' could "
 #~ "not be parsed."
 #~ msgstr ""
-#~ "El nivel de compresión PNG debe ser un valor entre 0 y 9; el valor «%s» "
-#~ "no se puede interpretar."
+#~ "El nivel de compresión PNG debe ser un valor entre 0 y 9; el valor «%s» no "
+#~ "se puede interpretar."
 
 #~ msgid ""
 #~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
 #~ "allowed."
 #~ msgstr ""
-#~ "El nivel de compresión PNG debe ser un valor entre 0 y 9; el valor «%d» "
-#~ "no está permitido."
+#~ "El nivel de compresión PNG debe ser un valor entre 0 y 9; el valor «%d» no "
+#~ "está permitido."
 
 #~ msgid ""
 #~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
