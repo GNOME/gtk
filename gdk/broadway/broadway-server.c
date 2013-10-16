@@ -567,7 +567,7 @@ parse_input (BroadwayInput *input)
           }
         else
           {
-            parse_input_message (input, data);
+            parse_input_message (input, (char *) data);
           }
         break;
       case BROADWAY_WS_CNX_PING:
