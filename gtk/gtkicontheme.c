@@ -904,7 +904,7 @@ gtk_icon_theme_finalize (GObject *object)
  * the right name is found directly in one of the elements of
  * @path, then that image will be used for the icon name.
  * (This is legacy feature, and new icons should be put
- * into the default icon theme, which is called DEFAULT_THEME_NAME,
+ * into the default icon theme, which is called hicolor,
  * rather than directly on the icon path.)
  *
  * Since: 2.4
@@ -1897,12 +1897,15 @@ gtk_icon_theme_lookup_icon_for_scale (GtkIconTheme       *icon_theme,
 
       if (is_symbolic)
         {
-          names = g_new (gchar *, dashes + 2);
+          names = g_new (gchar *, 2 * dashes + 3);
           for (i = 0; nonsymbolic_names[i] != NULL; i++)
-            names[i] = g_strconcat (nonsymbolic_names[i], "-symbolic", NULL);
+            {
+              names[i] = g_strconcat (nonsymbolic_names[i], "-symbolic", NULL);
+              names[dashes + 1 + i] = nonsymbolic_names[i];
+            }
 
-          names[i] = NULL;
-          g_strfreev (nonsymbolic_names);
+          names[dashes + 1 + i] = NULL;
+          g_free (nonsymbolic_names);
         }
       else
         {
@@ -1910,13 +1913,13 @@ gtk_icon_theme_lookup_icon_for_scale (GtkIconTheme       *icon_theme,
         }
 
       info = choose_icon (icon_theme, (const gchar **) names, size, scale, flags);
-      
+
       g_strfreev (names);
     }
-  else 
+  else
     {
       const gchar *names[2];
-      
+
       names[0] = icon_name;
       names[1] = NULL;
 
