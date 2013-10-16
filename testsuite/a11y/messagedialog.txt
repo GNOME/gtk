@@ -29,6 +29,7 @@ window1
         "icon"
         parent: box
         index: 0
+        name: Information
         state: enabled sensitive showing visible
         toolkit: gtk
         <AtkComponent>
