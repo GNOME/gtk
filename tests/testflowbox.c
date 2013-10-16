@@ -158,14 +158,20 @@ populate_flowbox_stock (GtkFlowBox *flowbox)
   gint i;
 
   if (!stock_ids)
-    stock_ids = gtk_stock_list_ids ();
+    {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+      stock_ids = gtk_stock_list_ids ();
+      G_GNUC_END_IGNORE_DEPRECATIONS;
+    }
 
   for (i = 0, l = stock_ids; i < 30 && l != NULL; i++, l = l->next)
     {
       gchar *stock_id = l->data;
       gchar *text = g_strdup_printf ("Item %02d", i);
 
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       widget = gtk_button_new_from_stock (stock_id);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       gtk_widget_show (widget);
 
       g_object_set_data_full (G_OBJECT (widget), "id", (gpointer)g_strdup (text), g_free);
@@ -336,7 +342,7 @@ on_child_activated (GtkFlowBox *self,
   g_message ("Child activated %p: %s", child, id);
 }
 
-static void
+static G_GNUC_UNUSED void
 selection_foreach (GtkFlowBox      *self,
                    GtkFlowBoxChild *child_info,
                    gpointer         data)
