@@ -3877,7 +3877,7 @@ gtk_icon_info_load_icon (GtkIconInfo *icon_info,
     {
       if (icon_info->load_error)
         {
-          if (*error)
+          if (error)
             *error = g_error_copy (icon_info->load_error);
         }
       else
