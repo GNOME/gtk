@@ -5189,10 +5189,14 @@ gtk_notebook_paint (GtkWidget    *widget,
 
   if (priv->show_border && (!priv->show_tabs || !priv->children))
     {
+      gtk_style_context_save (context);
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_FRAME);
+
       gtk_render_background (context, cr,
                              x, y, width, height);
       gtk_render_frame (context, cr,
                         x, y, width, height);
+      gtk_style_context_restore (context);
       return;
     }
 
@@ -5331,6 +5335,9 @@ gtk_notebook_paint (GtkWidget    *widget,
   gtk_widget_style_get (GTK_WIDGET (notebook),
                         "has-tab-gap", &has_tab_gap,
                         NULL);
+
+  if (priv->show_border)
+    gtk_style_context_add_class (context, GTK_STYLE_CLASS_FRAME);
 
   gtk_render_background (context, cr,
                          x, y, width, height);
