@@ -1,3 +1,29 @@
+Overview of Changes in GTK+ 3.10.1 to 3.10.2
+============================================
+
+* Bug fixes:
+ 168530 gtk_accel_map_load: wasteful extra stat call
+ 698730 tooltip: Fix possible wrong placement
+ 708163 all symbolic icons are missing when using icon theme diff...
+ 708346 gnome-terminal does not respect "Disable mnemonics" and "...
+ 709621 gdkevents.h: Mention _get_source_device()
+ 709697 Fix a warning in builg gtk+ with clang
+ 709854 Wayland: Reliable crash when hovering over items with an ...
+ 709939 monitor reconfiguration while GtkOffscreenWindows exist t...
+ 709967 Double free in gtkicontheme.c
+ 710073 Assertion failure because _gtk_icon_info_load_symbolic_in...
+ 710096 gtk3.10 doesn't work correctly when used from a dynamic l...
+ 710141 gtk_shell_interface exported in libgdk
+ 
+* Translation updates:
+ Africaans
+ Belarusian
+ Catalan
+ Catalan (Valencian)
+ Persian
+ Spanish
+
+
 Overview of Changes in GTK+ 3.10.0 to 3.10.1
 ============================================
 
