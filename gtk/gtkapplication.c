@@ -2055,6 +2055,18 @@ gtk_application_foreach_accel_keys (GtkApplication           *application,
   accels_foreach_key (&application->priv->accels, window, callback, user_data);
 }
 
+/**
+ * gtk_application_list_action_descriptions:
+ * @application: a #GtkApplication
+ *
+ * Lists the detailed action names which have associated accelerators.
+ * See gtk_application_set_accels_for_action().
+ *
+ * Returns: (transfer full): a %NULL-terminated array of strings,
+ *     free with g_strfreev() when done
+ *
+ * Since: 3.12
+ */
 gchar **
 gtk_application_list_action_descriptions (GtkApplication *application)
 {
@@ -2106,6 +2118,20 @@ normalise_detailed_name (const gchar *detailed_action_name)
   return action_and_target;
 }
 
+/**
+ * gtk_application_set_accels_for_action:
+ * @application: a #GtkApplication
+ * @detailed_action_name: a detailed action name, specifying and action
+ *     and target to associate accelerators with
+ * @accels: a list of accelerators in the format understood by
+ *     gtk_accelerator_parse()
+ *
+ * Sets one or more keyboard accelerator that will trigger the
+ * given action. The first item in @accels will be the primary 
+ * accelerator, which may be displayed in the UI.
+ *
+ * Since: 3.12
+ */
 void
 gtk_application_set_accels_for_action (GtkApplication      *application,
                                        const gchar         *detailed_action_name,
@@ -2123,6 +2149,20 @@ gtk_application_set_accels_for_action (GtkApplication      *application,
   g_free (action_and_target);
 }
 
+/**
+ * gtk_application_get_accels_for_action:
+ * @application: a #GtkApplication
+ * @detailed_action_name: a detailed action name, specifying and action
+ *     and target to obtain accelerators for
+ *
+ * Gets the accelerators that are currently associated with
+ * the given action.
+ *
+ * Returns: (transfer full): accelerators for @detailed_action_name, as
+ *     a %NULL-terminated array. Free with g_strfreev() when no longer needed
+ *
+ * Since: 3.12
+ */
 gchar **
 gtk_application_get_accels_for_action (GtkApplication *application,
                                        const gchar    *detailed_action_name)
