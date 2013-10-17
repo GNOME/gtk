@@ -201,11 +201,11 @@ GDK_AVAILABLE_IN_3_10
 GCallback    gtk_builder_lookup_callback_symbol  (GtkBuilder    *builder,
 						  const gchar   *callback_name);
 
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_3_12
 void         gtk_builder_set_application         (GtkBuilder     *builder,
                                                   GtkApplication *application);
 
-GDK_AVAILABLE_IN_3_10
+GDK_AVAILABLE_IN_3_12
 GtkApplication * gtk_builder_get_application     (GtkBuilder     *builder);
 
 
