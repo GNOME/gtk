@@ -179,7 +179,7 @@ update_button (GtkStackSwitcher *self,
 
   rebuild_child (button, icon_name, title);
 
-  gtk_widget_set_visible (button, title != NULL || icon_name != NULL);
+  gtk_widget_set_visible (button, gtk_widget_get_visible (widget) && (title != NULL || icon_name != NULL));
 
   if (icon_name != NULL)
     gtk_widget_set_size_request (button, -1, -1);
@@ -193,9 +193,9 @@ update_button (GtkStackSwitcher *self,
 }
 
 static void
-on_title_icon_updated (GtkWidget        *widget,
-                       GParamSpec       *pspec,
-                       GtkStackSwitcher *self)
+on_title_icon_visible_updated (GtkWidget        *widget,
+                               GParamSpec       *pspec,
+                               GtkStackSwitcher *self)
 {
   GtkWidget *button;
   GtkStackSwitcherPrivate *priv;
@@ -266,8 +266,9 @@ add_child (GtkStackSwitcher *self,
 
   g_object_set_data (G_OBJECT (button), "stack-child", widget);
   g_signal_connect (button, "clicked", G_CALLBACK (on_button_clicked), self);
-  g_signal_connect (widget, "child-notify::title", G_CALLBACK (on_title_icon_updated), self);
-  g_signal_connect (widget, "child-notify::icon-name", G_CALLBACK (on_title_icon_updated), self);
+  g_signal_connect (widget, "notify::visible", G_CALLBACK (on_title_icon_visible_updated), self);
+  g_signal_connect (widget, "child-notify::title", G_CALLBACK (on_title_icon_visible_updated), self);
+  g_signal_connect (widget, "child-notify::icon-name", G_CALLBACK (on_title_icon_visible_updated), self);
   g_signal_connect (widget, "child-notify::position", G_CALLBACK (on_position_updated), self);
   g_signal_connect (widget, "child-notify::needs-attention", G_CALLBACK (on_needs_attention_updated), self);
 
