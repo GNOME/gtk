@@ -526,12 +526,12 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
    */
   g_object_class_install_property (gobject_class,
 				   PROP_ICON_SIZE,
-				   g_param_spec_int ("icon-size",
-						     P_("Icon size"),
-						     P_("Size of icons in this toolbar"),
-						     0, G_MAXINT,
-						     DEFAULT_ICON_SIZE,
-						     GTK_PARAM_READWRITE));  
+				   g_param_spec_enum ("icon-size",
+                                                      P_("Icon size"),
+                                                      P_("Size of icons in this toolbar"),
+                                                      GTK_TYPE_ICON_SIZE,
+                                                      DEFAULT_ICON_SIZE,
+                                                      GTK_PARAM_READWRITE));
 
   /**
    * GtkToolbar:icon-size-set:
@@ -737,7 +737,7 @@ gtk_toolbar_set_property (GObject      *object,
       gtk_toolbar_set_show_arrow (toolbar, g_value_get_boolean (value));
       break;
     case PROP_ICON_SIZE:
-      gtk_toolbar_set_icon_size (toolbar, g_value_get_int (value));
+      gtk_toolbar_set_icon_size (toolbar, g_value_get_enum (value));
       break;
     case PROP_ICON_SIZE_SET:
       if (g_value_get_boolean (value))
@@ -772,7 +772,7 @@ gtk_toolbar_get_property (GObject    *object,
       g_value_set_boolean (value, priv->show_arrow);
       break;
     case PROP_ICON_SIZE:
-      g_value_set_int (value, gtk_toolbar_get_icon_size (toolbar));
+      g_value_set_enum (value, gtk_toolbar_get_icon_size (toolbar));
       break;
     case PROP_ICON_SIZE_SET:
       g_value_set_boolean (value, priv->icon_size_set);
@@ -2949,8 +2949,7 @@ gtk_toolbar_get_nth_item (GtkToolbar *toolbar,
  *
  * Retrieves the icon size for the toolbar. See gtk_toolbar_set_icon_size().
  *
- * Return value: (type int): the current icon size for the icons on
- * the toolbar.
+ * Return value: the current icon size for the icons on the toolbar.
  **/
 GtkIconSize
 gtk_toolbar_get_icon_size (GtkToolbar *toolbar)
@@ -3111,8 +3110,7 @@ gtk_toolbar_finalize (GObject *object)
 /**
  * gtk_toolbar_set_icon_size:
  * @toolbar: A #GtkToolbar
- * @icon_size: (type int): The #GtkIconSize that stock icons in the
- *     toolbar shall have.
+ * @icon_size: The #GtkIconSize that stock icons in the toolbar shall have.
  *
  * This function sets the size of stock icons in the toolbar. You
  * can call it both before you add the icons and after they've been
