@@ -16,24 +16,27 @@
 # Lebedev Roman <roman@lebedev.com>, 2009.
 # Yuri Kozlov <yuray@komyakino.ru>, 2010, 2012.
 # Yuri Myasoedov <omerta13@yandex.ru>, 2012, 2013.
+# Stas Solovey <whats_up@tut.by>, 2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2013-09-17 13:54+0000\n"
-"PO-Revision-Date: 2013-09-17 21:01+0300\n"
-"Last-Translator: Yuri Myasoedov <omerta13@yandex.ru>\n"
-"Language-Team: русский <gnome-cyr@gnome.org>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
+"%2b&keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2013-10-16 17:07+0000\n"
+"PO-Revision-Date: 2013-10-15 12:14+0300\n"
+"Last-Translator: Stas Solovey <whats_up@tut.by>\n"
+"Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 1.5.7\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+"X-Generator: Gtranslator 2.91.6\n"
 
 #: ../gdk/broadway/gdkbroadway-server.c:141
-#, fuzzy, c-format
+#, c-format
 msgid "broadway display type not supported '%s'"
 msgstr "Тип дисплея broadway не поддерживается «%s»"
 
@@ -86,10 +89,7 @@ msgstr "Установить указанные отладочные флаги 
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:217
-#: ../gdk/gdk.c:220
-#: ../gtk/gtkmain.c:455
-#: ../gtk/gtkmain.c:458
+#: ../gdk/gdk.c:217 ../gdk/gdk.c:220 ../gtk/gtkmain.c:455 ../gtk/gtkmain.c:458
 msgid "FLAGS"
 msgstr "ФЛАГИ"
 
@@ -588,6 +588,420 @@ msgctxt "Action description"
 msgid "Activates the expander"
 msgstr "Активирует экспандер"
 
+#. FIXME these need accelerators when appropriate, and
+#. * need the mnemonics to be rationalized
+#.
+#: ../gtk/a11y/gtkimageaccessible.c:52 ../gtk/deprecated/gtkstock.c:342
+msgctxt "Stock label"
+msgid "_About"
+msgstr "_О программе"
+
+#: ../gtk/a11y/gtkimageaccessible.c:53 ../gtk/deprecated/gtkstock.c:343
+msgctxt "Stock label"
+msgid "_Add"
+msgstr "_Добавить"
+
+#: ../gtk/a11y/gtkimageaccessible.c:54 ../gtk/deprecated/gtkstock.c:345
+msgctxt "Stock label"
+msgid "_Bold"
+msgstr "Полу_жирный"
+
+#: ../gtk/a11y/gtkimageaccessible.c:55 ../gtk/deprecated/gtkstock.c:347
+msgctxt "Stock label"
+msgid "_CD-ROM"
+msgstr "_CD-ROM"
+
+#: ../gtk/a11y/gtkimageaccessible.c:56 ../gtk/deprecated/gtkstock.c:348
+msgctxt "Stock label"
+msgid "_Clear"
+msgstr "О_чистить"
+
+#: ../gtk/a11y/gtkimageaccessible.c:57 ../gtk/deprecated/gtkstock.c:349
+msgctxt "Stock label"
+msgid "_Close"
+msgstr "_Закрыть"
+
+#: ../gtk/a11y/gtkimageaccessible.c:58 ../gtk/gtkwindow.c:5236
+#: ../gtk/gtkwindow.c:8182
+msgid "Minimize"
+msgstr "Свернуть"
+
+#: ../gtk/a11y/gtkimageaccessible.c:59 ../gtk/gtkwindow.c:5257
+#: ../gtk/gtkwindow.c:8190
+msgid "Maximize"
+msgstr "Развернуть"
+
+#: ../gtk/a11y/gtkimageaccessible.c:60 ../gtk/gtkwindow.c:5257
+msgid "Restore"
+msgstr "Восстановить"
+
+#: ../gtk/a11y/gtkimageaccessible.c:61 ../gtk/deprecated/gtkstock.c:352
+msgctxt "Stock label"
+msgid "_Copy"
+msgstr "_Копировать"
+
+#: ../gtk/a11y/gtkimageaccessible.c:62 ../gtk/deprecated/gtkstock.c:353
+msgctxt "Stock label"
+msgid "Cu_t"
+msgstr "_Вырезать"
+
+#: ../gtk/a11y/gtkimageaccessible.c:63 ../gtk/deprecated/gtkstock.c:354
+msgctxt "Stock label"
+msgid "_Delete"
+msgstr "_Удалить"
+
+#: ../gtk/a11y/gtkimageaccessible.c:64 ../gtk/deprecated/gtkstock.c:336
+msgctxt "Stock label"
+msgid "Error"
+msgstr "Ошибка"
+
+#. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
+#: ../gtk/a11y/gtkimageaccessible.c:65 ../gtk/deprecated/gtkstock.c:334
+msgctxt "Stock label"
+msgid "Information"
+msgstr "Информация"
+
+#: ../gtk/a11y/gtkimageaccessible.c:66 ../gtk/deprecated/gtkstock.c:337
+msgctxt "Stock label"
+msgid "Question"
+msgstr "Вопрос"
+
+#: ../gtk/a11y/gtkimageaccessible.c:67 ../gtk/deprecated/gtkstock.c:335
+msgctxt "Stock label"
+msgid "Warning"
+msgstr "Предупреждение"
+
+#: ../gtk/a11y/gtkimageaccessible.c:68 ../gtk/deprecated/gtkstock.c:357
+msgctxt "Stock label"
+msgid "_Execute"
+msgstr "_Выполнить"
+
+#: ../gtk/a11y/gtkimageaccessible.c:69 ../gtk/deprecated/gtkstock.c:359
+msgctxt "Stock label"
+msgid "_File"
+msgstr "_Файл"
+
+#: ../gtk/a11y/gtkimageaccessible.c:70 ../gtk/deprecated/gtkstock.c:360
+msgctxt "Stock label"
+msgid "_Find"
+msgstr "_Найти"
+
+#: ../gtk/a11y/gtkimageaccessible.c:71 ../gtk/deprecated/gtkstock.c:361
+msgctxt "Stock label"
+msgid "Find and _Replace"
+msgstr "Найти и _заменить"
+
+#: ../gtk/a11y/gtkimageaccessible.c:72 ../gtk/deprecated/gtkstock.c:362
+msgctxt "Stock label"
+msgid "_Floppy"
+msgstr "_Дискета"
+
+#: ../gtk/a11y/gtkimageaccessible.c:73 ../gtk/deprecated/gtkstock.c:363
+msgctxt "Stock label"
+msgid "_Fullscreen"
+msgstr "_Во весь экран"
+
+#. This is a navigation label as in "go to the bottom of the page"
+#: ../gtk/a11y/gtkimageaccessible.c:74 ../gtk/deprecated/gtkstock.c:366
+msgctxt "Stock label, navigation"
+msgid "_Bottom"
+msgstr "К ни_зу"
+
+#. This is a navigation label as in "go to the first page"
+#: ../gtk/a11y/gtkimageaccessible.c:75 ../gtk/deprecated/gtkstock.c:368
+msgctxt "Stock label, navigation"
+msgid "_First"
+msgstr "В н_ачало"
+
+#. This is a navigation label as in "go to the last page"
+#: ../gtk/a11y/gtkimageaccessible.c:76 ../gtk/deprecated/gtkstock.c:370
+msgctxt "Stock label, navigation"
+msgid "_Last"
+msgstr "В _конец"
+
+#. This is a navigation label as in "go to the top of the page"
+#: ../gtk/a11y/gtkimageaccessible.c:77 ../gtk/deprecated/gtkstock.c:372
+msgctxt "Stock label, navigation"
+msgid "_Top"
+msgstr "К _верху"
+
+#. This is a navigation label as in "go back"
+#: ../gtk/a11y/gtkimageaccessible.c:78 ../gtk/deprecated/gtkstock.c:374
+msgctxt "Stock label, navigation"
+msgid "_Back"
+msgstr "На_зад"
+
+#. This is a navigation label as in "go down"
+#: ../gtk/a11y/gtkimageaccessible.c:79 ../gtk/deprecated/gtkstock.c:376
+msgctxt "Stock label, navigation"
+msgid "_Down"
+msgstr "В_низ"
+
+#. This is a navigation label as in "go forward"
+#: ../gtk/a11y/gtkimageaccessible.c:80 ../gtk/deprecated/gtkstock.c:378
+msgctxt "Stock label, navigation"
+msgid "_Forward"
+msgstr "_Вперёд"
+
+#. This is a navigation label as in "go up"
+#: ../gtk/a11y/gtkimageaccessible.c:81 ../gtk/deprecated/gtkstock.c:380
+msgctxt "Stock label, navigation"
+msgid "_Up"
+msgstr "Вв_ерх"
+
+#: ../gtk/a11y/gtkimageaccessible.c:82 ../gtk/deprecated/gtkstock.c:381
+msgctxt "Stock label"
+msgid "_Hard Disk"
+msgstr "_Жёсткий диск"
+
+#: ../gtk/a11y/gtkimageaccessible.c:83 ../gtk/deprecated/gtkstock.c:382
+msgctxt "Stock label"
+msgid "_Help"
+msgstr "_Справка"
+
+#: ../gtk/a11y/gtkimageaccessible.c:84 ../gtk/deprecated/gtkstock.c:383
+msgctxt "Stock label"
+msgid "_Home"
+msgstr "_Домой"
+
+#: ../gtk/a11y/gtkimageaccessible.c:85 ../gtk/deprecated/gtkstock.c:384
+msgctxt "Stock label"
+msgid "Increase Indent"
+msgstr "Увеличить отступ"
+
+#: ../gtk/a11y/gtkimageaccessible.c:86 ../gtk/deprecated/gtkstock.c:387
+msgctxt "Stock label"
+msgid "_Information"
+msgstr "_Информация"
+
+#: ../gtk/a11y/gtkimageaccessible.c:87 ../gtk/deprecated/gtkstock.c:388
+msgctxt "Stock label"
+msgid "_Italic"
+msgstr "_Курсив"
+
+#: ../gtk/a11y/gtkimageaccessible.c:88 ../gtk/deprecated/gtkstock.c:389
+msgctxt "Stock label"
+msgid "_Jump to"
+msgstr "Перейти _к"
+
+#. This is about text justification, "centered text"
+#: ../gtk/a11y/gtkimageaccessible.c:89 ../gtk/deprecated/gtkstock.c:391
+msgctxt "Stock label"
+msgid "_Center"
+msgstr "По _центру"
+
+#. This is about text justification
+#: ../gtk/a11y/gtkimageaccessible.c:90 ../gtk/deprecated/gtkstock.c:393
+msgctxt "Stock label"
+msgid "_Fill"
+msgstr "По _ширине"
+
+#. This is about text justification, "left-justified text"
+#: ../gtk/a11y/gtkimageaccessible.c:91 ../gtk/deprecated/gtkstock.c:395
+msgctxt "Stock label"
+msgid "_Left"
+msgstr "По _левому краю"
+
+#. This is about text justification, "right-justified text"
+#: ../gtk/a11y/gtkimageaccessible.c:92 ../gtk/deprecated/gtkstock.c:397
+msgctxt "Stock label"
+msgid "_Right"
+msgstr "По _правому краю"
+
+#: ../gtk/a11y/gtkimageaccessible.c:93 ../gtk/deprecated/gtkstock.c:364
+msgctxt "Stock label"
+msgid "_Leave Fullscreen"
+msgstr "П_окинуть полноэкранный режим"
+
+#. Media label, as in "fast forward"
+#: ../gtk/a11y/gtkimageaccessible.c:94 ../gtk/deprecated/gtkstock.c:400
+msgctxt "Stock label, media"
+msgid "_Forward"
+msgstr "_Вперёд"
+
+#. Media label, as in "next song"
+#: ../gtk/a11y/gtkimageaccessible.c:95 ../gtk/deprecated/gtkstock.c:402
+msgctxt "Stock label, media"
+msgid "_Next"
+msgstr "_Следующая"
+
+#. Media label, as in "pause music"
+#: ../gtk/a11y/gtkimageaccessible.c:96 ../gtk/deprecated/gtkstock.c:404
+msgctxt "Stock label, media"
+msgid "P_ause"
+msgstr "_Приостановить"
+
+#. Media label, as in "play music"
+#: ../gtk/a11y/gtkimageaccessible.c:97 ../gtk/deprecated/gtkstock.c:406
+msgctxt "Stock label, media"
+msgid "_Play"
+msgstr "_Воспроизвести"
+
+#. Media label, as in  "previous song"
+#: ../gtk/a11y/gtkimageaccessible.c:98 ../gtk/deprecated/gtkstock.c:408
+msgctxt "Stock label, media"
+msgid "Pre_vious"
+msgstr "П_редыдущая"
+
+#. Media label
+#: ../gtk/a11y/gtkimageaccessible.c:99 ../gtk/deprecated/gtkstock.c:410
+msgctxt "Stock label, media"
+msgid "_Record"
+msgstr "_Записать"
+
+#. Media label
+#: ../gtk/a11y/gtkimageaccessible.c:100 ../gtk/deprecated/gtkstock.c:412
+msgctxt "Stock label, media"
+msgid "R_ewind"
+msgstr "_Назад"
+
+#. Media label
+#: ../gtk/a11y/gtkimageaccessible.c:101 ../gtk/deprecated/gtkstock.c:414
+msgctxt "Stock label, media"
+msgid "_Stop"
+msgstr "_Остановить"
+
+#: ../gtk/a11y/gtkimageaccessible.c:102 ../gtk/deprecated/gtkstock.c:415
+msgctxt "Stock label"
+msgid "_Network"
+msgstr "_Сеть"
+
+#: ../gtk/a11y/gtkimageaccessible.c:103 ../gtk/deprecated/gtkstock.c:416
+msgctxt "Stock label"
+msgid "_New"
+msgstr "_Создать"
+
+#: ../gtk/a11y/gtkimageaccessible.c:104 ../gtk/deprecated/gtkstock.c:419
+msgctxt "Stock label"
+msgid "_Open"
+msgstr "_Открыть"
+
+#: ../gtk/a11y/gtkimageaccessible.c:105 ../gtk/deprecated/gtkstock.c:429
+msgctxt "Stock label"
+msgid "_Paste"
+msgstr "Вст_авить"
+
+#: ../gtk/a11y/gtkimageaccessible.c:106 ../gtk/deprecated/gtkstock.c:431
+msgctxt "Stock label"
+msgid "_Print"
+msgstr "Пе_чать"
+
+#: ../gtk/a11y/gtkimageaccessible.c:107 ../gtk/deprecated/gtkstock.c:432
+msgctxt "Stock label"
+msgid "Print Pre_view"
+msgstr "П_росмотр"
+
+#: ../gtk/a11y/gtkimageaccessible.c:108 ../gtk/deprecated/gtkstock.c:433
+msgctxt "Stock label"
+msgid "_Properties"
+msgstr "_Свойства"
+
+#: ../gtk/a11y/gtkimageaccessible.c:109 ../gtk/deprecated/gtkstock.c:434
+msgctxt "Stock label"
+msgid "_Quit"
+msgstr "В_ыход"
+
+#: ../gtk/a11y/gtkimageaccessible.c:110 ../gtk/deprecated/gtkstock.c:435
+msgctxt "Stock label"
+msgid "_Redo"
+msgstr "Ве_рнуть"
+
+#: ../gtk/a11y/gtkimageaccessible.c:111 ../gtk/deprecated/gtkstock.c:436
+msgctxt "Stock label"
+msgid "_Refresh"
+msgstr "Об_новить"
+
+#: ../gtk/a11y/gtkimageaccessible.c:112 ../gtk/deprecated/gtkstock.c:437
+msgctxt "Stock label"
+msgid "_Remove"
+msgstr "_Удалить"
+
+#: ../gtk/a11y/gtkimageaccessible.c:113 ../gtk/deprecated/gtkstock.c:438
+msgctxt "Stock label"
+msgid "_Revert"
+msgstr "_Восстановить"
+
+#: ../gtk/a11y/gtkimageaccessible.c:114 ../gtk/deprecated/gtkstock.c:439
+msgctxt "Stock label"
+msgid "_Save"
+msgstr "Со_хранить"
+
+#: ../gtk/a11y/gtkimageaccessible.c:115 ../gtk/deprecated/gtkstock.c:440
+msgctxt "Stock label"
+msgid "Save _As"
+msgstr "Сохранить _как"
+
+#: ../gtk/a11y/gtkimageaccessible.c:116 ../gtk/deprecated/gtkstock.c:441
+msgctxt "Stock label"
+msgid "Select _All"
+msgstr "Выделить вс_ё"
+
+#. Sorting direction
+#: ../gtk/a11y/gtkimageaccessible.c:117 ../gtk/deprecated/gtkstock.c:445
+msgctxt "Stock label"
+msgid "_Ascending"
+msgstr "По воз_растанию"
+
+#. Sorting direction
+#: ../gtk/a11y/gtkimageaccessible.c:118 ../gtk/deprecated/gtkstock.c:447
+msgctxt "Stock label"
+msgid "_Descending"
+msgstr "По _убыванию"
+
+#: ../gtk/a11y/gtkimageaccessible.c:119 ../gtk/deprecated/gtkstock.c:448
+msgctxt "Stock label"
+msgid "_Spell Check"
+msgstr "Проверить право_писание"
+
+#: ../gtk/a11y/gtkimageaccessible.c:120 ../gtk/deprecated/gtkstock.c:449
+msgctxt "Stock label"
+msgid "_Stop"
+msgstr "_Остановить"
+
+#. Font variant
+#: ../gtk/a11y/gtkimageaccessible.c:121 ../gtk/deprecated/gtkstock.c:451
+msgctxt "Stock label"
+msgid "_Strikethrough"
+msgstr "Пере_чёркивание"
+
+#. Font variant
+#: ../gtk/a11y/gtkimageaccessible.c:122 ../gtk/deprecated/gtkstock.c:454
+msgctxt "Stock label"
+msgid "_Underline"
+msgstr "По_дчёркивание"
+
+#: ../gtk/a11y/gtkimageaccessible.c:123 ../gtk/deprecated/gtkstock.c:455
+msgctxt "Stock label"
+msgid "_Undo"
+msgstr "_Отменить"
+
+#: ../gtk/a11y/gtkimageaccessible.c:124 ../gtk/deprecated/gtkstock.c:385
+msgctxt "Stock label"
+msgid "Decrease Indent"
+msgstr "Уменьшить отступ"
+
+#. Zoom
+#: ../gtk/a11y/gtkimageaccessible.c:125 ../gtk/deprecated/gtkstock.c:458
+msgctxt "Stock label"
+msgid "_Normal Size"
+msgstr "В обы_чном размере"
+
+#. Zoom
+#: ../gtk/a11y/gtkimageaccessible.c:126 ../gtk/deprecated/gtkstock.c:460
+msgctxt "Stock label"
+msgid "Best _Fit"
+msgstr "Наилучшее _заполнение"
+
+#: ../gtk/a11y/gtkimageaccessible.c:127 ../gtk/deprecated/gtkstock.c:461
+msgctxt "Stock label"
+msgid "Zoom _In"
+msgstr "У_величить"
+
+#: ../gtk/a11y/gtkimageaccessible.c:128 ../gtk/deprecated/gtkstock.c:462
+msgctxt "Stock label"
+msgid "Zoom _Out"
+msgstr "У_меньшить"
+
 #: ../gtk/a11y/gtkmenuitemaccessible.c:442
 msgctxt "Action description"
 msgid "Clicks the menuitem"
@@ -628,12 +1042,19 @@ msgid "Toggles the switch"
 msgstr "Изменяет состояние переключателя"
 
 #: ../gtk/deprecated/gtkcolorsel.c:423
-msgid "Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle."
-msgstr "Выберите нужный цвет на внешнем кольце. Выберите более тёмный или более светлый оттенок, используя треугольник."
+msgid ""
+"Select the color you want from the outer ring. Select the darkness or "
+"lightness of that color using the inner triangle."
+msgstr ""
+"Выберите нужный цвет на внешнем кольце. Выберите более тёмный или более "
+"светлый оттенок, используя треугольник."
 
 #: ../gtk/deprecated/gtkcolorsel.c:449
-msgid "Click the eyedropper, then click a color anywhere on your screen to select that color."
-msgstr "Нажмите на пипетку и выберите с помощью щелчка цвет на любом месте экрана."
+msgid ""
+"Click the eyedropper, then click a color anywhere on your screen to select "
+"that color."
+msgstr ""
+"Нажмите на пипетку и выберите с помощью щелчка цвет на любом месте экрана."
 
 #: ../gtk/deprecated/gtkcolorsel.c:459
 msgid "_Hue:"
@@ -687,8 +1108,7 @@ msgstr "Количество синего оттенка в цвете."
 msgid "Op_acity:"
 msgstr "Не_прозрачность:"
 
-#: ../gtk/deprecated/gtkcolorsel.c:482
-#: ../gtk/deprecated/gtkcolorsel.c:492
+#: ../gtk/deprecated/gtkcolorsel.c:482 ../gtk/deprecated/gtkcolorsel.c:492
 msgid "Transparency of the color."
 msgstr "Прозрачность цвета."
 
@@ -697,8 +1117,12 @@ msgid "Color _name:"
 msgstr "Наи_менование цвета:"
 
 #: ../gtk/deprecated/gtkcolorsel.c:514
-msgid "You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' in this entry."
-msgstr "Вы можете ввести в этой строке или шестнадцатеричное значение цвета (в стиле HTML), или название цвета, например, «orange»."
+msgid ""
+"You can enter an HTML-style hexadecimal color value, or simply a color name "
+"such as 'orange' in this entry."
+msgstr ""
+"Вы можете ввести в этой строке или шестнадцатеричное значение цвета (в стиле "
+"HTML), или название цвета, например, «orange»."
 
 #: ../gtk/deprecated/gtkcolorsel.c:546
 msgid "_Palette:"
@@ -709,15 +1133,27 @@ msgid "Color Wheel"
 msgstr "Цветовой круг"
 
 #: ../gtk/deprecated/gtkcolorsel.c:1070
-msgid "The previously-selected color, for comparison to the color you're selecting now. You can drag this color to a palette entry, or select this color as current by dragging it to the other color swatch alongside."
-msgstr "Ранее выбранный цвет для сравнения с выбираемым цветом. Вы можете перетащить этот цвет в палитру или сделать его текущим, перетащив на другой образец цвета сбоку."
+msgid ""
+"The previously-selected color, for comparison to the color you're selecting "
+"now. You can drag this color to a palette entry, or select this color as "
+"current by dragging it to the other color swatch alongside."
+msgstr ""
+"Ранее выбранный цвет для сравнения с выбираемым цветом. Вы можете перетащить "
+"этот цвет в палитру или сделать его текущим, перетащив на другой образец "
+"цвета сбоку."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1076
-msgid "The color you've chosen. You can drag this color to a palette entry to save it for use in the future."
-msgstr "Цвет, который вы выбрали. Вы можете перетащить его в палитру, чтобы сохранить для последующего использования."
+msgid ""
+"The color you've chosen. You can drag this color to a palette entry to save "
+"it for use in the future."
+msgstr ""
+"Цвет, который вы выбрали. Вы можете перетащить его в палитру, чтобы "
+"сохранить для последующего использования."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1082
-msgid "The previously-selected color, for comparison to the color you're selecting now."
+msgid ""
+"The previously-selected color, for comparison to the color you're selecting "
+"now."
 msgstr "Выбранный ранее цвет для сравнения с цветом, выбранным сейчас."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1086
@@ -729,33 +1165,29 @@ msgid "_Save color here"
 msgstr "Со_хранить цвет здесь"
 
 #: ../gtk/deprecated/gtkcolorsel.c:1693
-msgid "Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select \"Save color here.\""
-msgstr "Щёлкните по элементу в палитре, чтобы сделать его текущим цветом. Чтобы изменить этот элемент, перетащите сюда образец цвета или щёлкните правой клавишей и выберите «Сохранить цвет здесь»"
+msgid ""
+"Click this palette entry to make it the current color. To change this entry, "
+"drag a color swatch here or right-click it and select \"Save color here.\""
+msgstr ""
+"Щёлкните по элементу в палитре, чтобы сделать его текущим цветом. Чтобы "
+"изменить этот элемент, перетащите сюда образец цвета или щёлкните правой "
+"клавишей и выберите «Сохранить цвет здесь»"
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:192
-#: ../gtk/deprecated/gtkfontsel.c:1690
-#: ../gtk/gtkfilechooserbutton.c:805
-#: ../gtk/gtkfilechooserdefault.c:5484
-#: ../gtk/gtkmessagedialog.c:891
-#: ../gtk/gtkmessagedialog.c:910
-#: ../gtk/gtkmountoperation.c:529
-#: ../gtk/gtkprintbackend.c:747
-#: ../gtk/gtkprinteroptionwidget.c:545
-#: ../gtk/gtkprintunixdialog.c:684
-#: ../gtk/gtkappchooserdialog.ui.h:1
-#: ../gtk/gtkassistant.ui.h:5
-#: ../gtk/gtkcolorchooserdialog.ui.h:2
-#: ../gtk/gtkfontchooserdialog.ui.h:2
-#: ../gtk/gtkpagesetupunixdialog.ui.h:1
+#: ../gtk/deprecated/gtkfontsel.c:1690 ../gtk/gtkfilechooserbutton.c:805
+#: ../gtk/gtkfilechooserdefault.c:5484 ../gtk/gtkmessagedialog.c:891
+#: ../gtk/gtkmessagedialog.c:910 ../gtk/gtkmountoperation.c:529
+#: ../gtk/gtkprintbackend.c:747 ../gtk/gtkprinteroptionwidget.c:545
+#: ../gtk/gtkprintunixdialog.c:684 ../gtk/gtkappchooserdialog.ui.h:1
+#: ../gtk/gtkassistant.ui.h:5 ../gtk/gtkcolorchooserdialog.ui.h:2
+#: ../gtk/gtkfontchooserdialog.ui.h:2 ../gtk/gtkpagesetupunixdialog.ui.h:1
 #: ../gtk/gtkprintunixdialog.ui.h:2
 msgid "_Cancel"
 msgstr "_Отмена"
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:196
-#: ../gtk/gtkprinteroptionwidget.c:546
-#: ../gtk/gtkappchooserdialog.ui.h:2
-#: ../gtk/gtkcolorchooserdialog.ui.h:3
-#: ../gtk/gtkfontchooserdialog.ui.h:3
+#: ../gtk/gtkprinteroptionwidget.c:546 ../gtk/gtkappchooserdialog.ui.h:2
+#: ../gtk/gtkcolorchooserdialog.ui.h:3 ../gtk/gtkfontchooserdialog.ui.h:3
 msgid "_Select"
 msgstr "_Выбрать"
 
@@ -790,87 +1222,29 @@ msgstr "_Размер:"
 msgid "_Preview:"
 msgstr "О_бразец:"
 
-#: ../gtk/deprecated/gtkfontsel.c:1694
-#: ../gtk/gtkassistant.ui.h:1
+#: ../gtk/deprecated/gtkfontsel.c:1694 ../gtk/gtkassistant.ui.h:1
 #: ../gtk/gtkpagesetupunixdialog.ui.h:2
 msgid "_Apply"
 msgstr "_Применить"
 
-#: ../gtk/deprecated/gtkfontsel.c:1699
-#: ../gtk/gtkmessagedialog.c:879
-#: ../gtk/gtkmessagedialog.c:913
-#: ../gtk/gtkprintbackend.c:748
+#: ../gtk/deprecated/gtkfontsel.c:1699 ../gtk/gtkmessagedialog.c:879
+#: ../gtk/gtkmessagedialog.c:913 ../gtk/gtkprintbackend.c:748
 msgid "_OK"
 msgstr "_OK"
 
-#: ../gtk/deprecated/gtkfontsel.c:1710
-#: ../gtk/gtkfontchooserdialog.ui.h:1
+#: ../gtk/deprecated/gtkfontsel.c:1710 ../gtk/gtkfontchooserdialog.ui.h:1
 msgid "Font Selection"
 msgstr "Выбор шрифта"
-
-#. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
-#: ../gtk/deprecated/gtkstock.c:334
-msgctxt "Stock label"
-msgid "Information"
-msgstr "Информация"
-
-#: ../gtk/deprecated/gtkstock.c:335
-msgctxt "Stock label"
-msgid "Warning"
-msgstr "Предупреждение"
-
-#: ../gtk/deprecated/gtkstock.c:336
-msgctxt "Stock label"
-msgid "Error"
-msgstr "Ошибка"
-
-#: ../gtk/deprecated/gtkstock.c:337
-msgctxt "Stock label"
-msgid "Question"
-msgstr "Вопрос"
-
-#. FIXME these need accelerators when appropriate, and
-#. * need the mnemonics to be rationalized
-#.
-#: ../gtk/deprecated/gtkstock.c:342
-msgctxt "Stock label"
-msgid "_About"
-msgstr "_О программе"
-
-#: ../gtk/deprecated/gtkstock.c:343
-msgctxt "Stock label"
-msgid "_Add"
-msgstr "_Добавить"
 
 #: ../gtk/deprecated/gtkstock.c:344
 msgctxt "Stock label"
 msgid "_Apply"
 msgstr "_Применить"
 
-#: ../gtk/deprecated/gtkstock.c:345
-msgctxt "Stock label"
-msgid "_Bold"
-msgstr "Полу_жирный"
-
 #: ../gtk/deprecated/gtkstock.c:346
 msgctxt "Stock label"
 msgid "_Cancel"
 msgstr "О_тменить"
-
-#: ../gtk/deprecated/gtkstock.c:347
-msgctxt "Stock label"
-msgid "_CD-ROM"
-msgstr "_CD-ROM"
-
-#: ../gtk/deprecated/gtkstock.c:348
-msgctxt "Stock label"
-msgid "_Clear"
-msgstr "О_чистить"
-
-#: ../gtk/deprecated/gtkstock.c:349
-msgctxt "Stock label"
-msgid "_Close"
-msgstr "_Закрыть"
 
 #: ../gtk/deprecated/gtkstock.c:350
 msgctxt "Stock label"
@@ -882,21 +1256,6 @@ msgctxt "Stock label"
 msgid "_Convert"
 msgstr "П_реобразовать"
 
-#: ../gtk/deprecated/gtkstock.c:352
-msgctxt "Stock label"
-msgid "_Copy"
-msgstr "_Копировать"
-
-#: ../gtk/deprecated/gtkstock.c:353
-msgctxt "Stock label"
-msgid "Cu_t"
-msgstr "_Вырезать"
-
-#: ../gtk/deprecated/gtkstock.c:354
-msgctxt "Stock label"
-msgid "_Delete"
-msgstr "_Удалить"
-
 #: ../gtk/deprecated/gtkstock.c:355
 msgctxt "Stock label"
 msgid "_Discard"
@@ -907,220 +1266,15 @@ msgctxt "Stock label"
 msgid "_Disconnect"
 msgstr "_Отключиться"
 
-#: ../gtk/deprecated/gtkstock.c:357
-msgctxt "Stock label"
-msgid "_Execute"
-msgstr "_Выполнить"
-
 #: ../gtk/deprecated/gtkstock.c:358
 msgctxt "Stock label"
 msgid "_Edit"
 msgstr "_Изменить"
 
-#: ../gtk/deprecated/gtkstock.c:359
-msgctxt "Stock label"
-msgid "_File"
-msgstr "_Файл"
-
-#: ../gtk/deprecated/gtkstock.c:360
-msgctxt "Stock label"
-msgid "_Find"
-msgstr "_Найти"
-
-#: ../gtk/deprecated/gtkstock.c:361
-msgctxt "Stock label"
-msgid "Find and _Replace"
-msgstr "Найти и _заменить"
-
-#: ../gtk/deprecated/gtkstock.c:362
-msgctxt "Stock label"
-msgid "_Floppy"
-msgstr "_Дискета"
-
-#: ../gtk/deprecated/gtkstock.c:363
-msgctxt "Stock label"
-msgid "_Fullscreen"
-msgstr "_Во весь экран"
-
-#: ../gtk/deprecated/gtkstock.c:364
-msgctxt "Stock label"
-msgid "_Leave Fullscreen"
-msgstr "П_окинуть полноэкранный режим"
-
-#. This is a navigation label as in "go to the bottom of the page"
-#: ../gtk/deprecated/gtkstock.c:366
-msgctxt "Stock label, navigation"
-msgid "_Bottom"
-msgstr "К ни_зу"
-
-#. This is a navigation label as in "go to the first page"
-#: ../gtk/deprecated/gtkstock.c:368
-msgctxt "Stock label, navigation"
-msgid "_First"
-msgstr "В н_ачало"
-
-#. This is a navigation label as in "go to the last page"
-#: ../gtk/deprecated/gtkstock.c:370
-msgctxt "Stock label, navigation"
-msgid "_Last"
-msgstr "В _конец"
-
-#. This is a navigation label as in "go to the top of the page"
-#: ../gtk/deprecated/gtkstock.c:372
-msgctxt "Stock label, navigation"
-msgid "_Top"
-msgstr "К _верху"
-
-#. This is a navigation label as in "go back"
-#: ../gtk/deprecated/gtkstock.c:374
-msgctxt "Stock label, navigation"
-msgid "_Back"
-msgstr "На_зад"
-
-#. This is a navigation label as in "go down"
-#: ../gtk/deprecated/gtkstock.c:376
-msgctxt "Stock label, navigation"
-msgid "_Down"
-msgstr "В_низ"
-
-#. This is a navigation label as in "go forward"
-#: ../gtk/deprecated/gtkstock.c:378
-msgctxt "Stock label, navigation"
-msgid "_Forward"
-msgstr "_Вперёд"
-
-#. This is a navigation label as in "go up"
-#: ../gtk/deprecated/gtkstock.c:380
-msgctxt "Stock label, navigation"
-msgid "_Up"
-msgstr "Вв_ерх"
-
-#: ../gtk/deprecated/gtkstock.c:381
-msgctxt "Stock label"
-msgid "_Hard Disk"
-msgstr "_Жёсткий диск"
-
-#: ../gtk/deprecated/gtkstock.c:382
-msgctxt "Stock label"
-msgid "_Help"
-msgstr "_Справка"
-
-#: ../gtk/deprecated/gtkstock.c:383
-msgctxt "Stock label"
-msgid "_Home"
-msgstr "_Домой"
-
-#: ../gtk/deprecated/gtkstock.c:384
-msgctxt "Stock label"
-msgid "Increase Indent"
-msgstr "Увеличить отступ"
-
-#: ../gtk/deprecated/gtkstock.c:385
-msgctxt "Stock label"
-msgid "Decrease Indent"
-msgstr "Уменьшить отступ"
-
 #: ../gtk/deprecated/gtkstock.c:386
 msgctxt "Stock label"
 msgid "_Index"
 msgstr "_Индекс"
-
-#: ../gtk/deprecated/gtkstock.c:387
-msgctxt "Stock label"
-msgid "_Information"
-msgstr "_Информация"
-
-#: ../gtk/deprecated/gtkstock.c:388
-msgctxt "Stock label"
-msgid "_Italic"
-msgstr "_Курсив"
-
-#: ../gtk/deprecated/gtkstock.c:389
-msgctxt "Stock label"
-msgid "_Jump to"
-msgstr "Перейти _к"
-
-#. This is about text justification, "centered text"
-#: ../gtk/deprecated/gtkstock.c:391
-msgctxt "Stock label"
-msgid "_Center"
-msgstr "По _центру"
-
-#. This is about text justification
-#: ../gtk/deprecated/gtkstock.c:393
-msgctxt "Stock label"
-msgid "_Fill"
-msgstr "По _ширине"
-
-#. This is about text justification, "left-justified text"
-#: ../gtk/deprecated/gtkstock.c:395
-msgctxt "Stock label"
-msgid "_Left"
-msgstr "По _левому краю"
-
-#. This is about text justification, "right-justified text"
-#: ../gtk/deprecated/gtkstock.c:397
-msgctxt "Stock label"
-msgid "_Right"
-msgstr "По _правому краю"
-
-#. Media label, as in "fast forward"
-#: ../gtk/deprecated/gtkstock.c:400
-msgctxt "Stock label, media"
-msgid "_Forward"
-msgstr "_Вперёд"
-
-#. Media label, as in "next song"
-#: ../gtk/deprecated/gtkstock.c:402
-msgctxt "Stock label, media"
-msgid "_Next"
-msgstr "_Следующая"
-
-#. Media label, as in "pause music"
-#: ../gtk/deprecated/gtkstock.c:404
-msgctxt "Stock label, media"
-msgid "P_ause"
-msgstr "_Приостановить"
-
-#. Media label, as in "play music"
-#: ../gtk/deprecated/gtkstock.c:406
-msgctxt "Stock label, media"
-msgid "_Play"
-msgstr "_Воспроизвести"
-
-#. Media label, as in  "previous song"
-#: ../gtk/deprecated/gtkstock.c:408
-msgctxt "Stock label, media"
-msgid "Pre_vious"
-msgstr "П_редыдущая"
-
-#. Media label
-#: ../gtk/deprecated/gtkstock.c:410
-msgctxt "Stock label, media"
-msgid "_Record"
-msgstr "_Записать"
-
-#. Media label
-#: ../gtk/deprecated/gtkstock.c:412
-msgctxt "Stock label, media"
-msgid "R_ewind"
-msgstr "_Назад"
-
-#. Media label
-#: ../gtk/deprecated/gtkstock.c:414
-msgctxt "Stock label, media"
-msgid "_Stop"
-msgstr "_Остановить"
-
-#: ../gtk/deprecated/gtkstock.c:415
-msgctxt "Stock label"
-msgid "_Network"
-msgstr "_Сеть"
-
-#: ../gtk/deprecated/gtkstock.c:416
-msgctxt "Stock label"
-msgid "_New"
-msgstr "_Создать"
 
 #: ../gtk/deprecated/gtkstock.c:417
 msgctxt "Stock label"
@@ -1131,11 +1285,6 @@ msgstr "_Нет"
 msgctxt "Stock label"
 msgid "_OK"
 msgstr "_OK"
-
-#: ../gtk/deprecated/gtkstock.c:419
-msgctxt "Stock label"
-msgid "_Open"
-msgstr "_Открыть"
 
 #. Page orientation
 #: ../gtk/deprecated/gtkstock.c:421
@@ -1166,70 +1315,10 @@ msgctxt "Stock label"
 msgid "Page Set_up"
 msgstr "Параметры стран_ицы"
 
-#: ../gtk/deprecated/gtkstock.c:429
-msgctxt "Stock label"
-msgid "_Paste"
-msgstr "Вст_авить"
-
 #: ../gtk/deprecated/gtkstock.c:430
 msgctxt "Stock label"
 msgid "_Preferences"
 msgstr "_Параметры"
-
-#: ../gtk/deprecated/gtkstock.c:431
-msgctxt "Stock label"
-msgid "_Print"
-msgstr "Пе_чать"
-
-#: ../gtk/deprecated/gtkstock.c:432
-msgctxt "Stock label"
-msgid "Print Pre_view"
-msgstr "П_росмотр"
-
-#: ../gtk/deprecated/gtkstock.c:433
-msgctxt "Stock label"
-msgid "_Properties"
-msgstr "_Свойства"
-
-#: ../gtk/deprecated/gtkstock.c:434
-msgctxt "Stock label"
-msgid "_Quit"
-msgstr "В_ыход"
-
-#: ../gtk/deprecated/gtkstock.c:435
-msgctxt "Stock label"
-msgid "_Redo"
-msgstr "Ве_рнуть"
-
-#: ../gtk/deprecated/gtkstock.c:436
-msgctxt "Stock label"
-msgid "_Refresh"
-msgstr "Об_новить"
-
-#: ../gtk/deprecated/gtkstock.c:437
-msgctxt "Stock label"
-msgid "_Remove"
-msgstr "_Удалить"
-
-#: ../gtk/deprecated/gtkstock.c:438
-msgctxt "Stock label"
-msgid "_Revert"
-msgstr "_Восстановить"
-
-#: ../gtk/deprecated/gtkstock.c:439
-msgctxt "Stock label"
-msgid "_Save"
-msgstr "Со_хранить"
-
-#: ../gtk/deprecated/gtkstock.c:440
-msgctxt "Stock label"
-msgid "Save _As"
-msgstr "Сохранить _как"
-
-#: ../gtk/deprecated/gtkstock.c:441
-msgctxt "Stock label"
-msgid "Select _All"
-msgstr "Выделить вс_ё"
 
 #: ../gtk/deprecated/gtkstock.c:442
 msgctxt "Stock label"
@@ -1241,76 +1330,15 @@ msgctxt "Stock label"
 msgid "_Font"
 msgstr "_Шрифт"
 
-#. Sorting direction
-#: ../gtk/deprecated/gtkstock.c:445
-msgctxt "Stock label"
-msgid "_Ascending"
-msgstr "По воз_растанию"
-
-#. Sorting direction
-#: ../gtk/deprecated/gtkstock.c:447
-msgctxt "Stock label"
-msgid "_Descending"
-msgstr "По _убыванию"
-
-#: ../gtk/deprecated/gtkstock.c:448
-msgctxt "Stock label"
-msgid "_Spell Check"
-msgstr "Проверить право_писание"
-
-#: ../gtk/deprecated/gtkstock.c:449
-msgctxt "Stock label"
-msgid "_Stop"
-msgstr "_Остановить"
-
-#. Font variant
-#: ../gtk/deprecated/gtkstock.c:451
-msgctxt "Stock label"
-msgid "_Strikethrough"
-msgstr "Пере_чёркивание"
-
 #: ../gtk/deprecated/gtkstock.c:452
 msgctxt "Stock label"
 msgid "_Undelete"
 msgstr "Вос_становить удалённое"
 
-#. Font variant
-#: ../gtk/deprecated/gtkstock.c:454
-msgctxt "Stock label"
-msgid "_Underline"
-msgstr "По_дчёркивание"
-
-#: ../gtk/deprecated/gtkstock.c:455
-msgctxt "Stock label"
-msgid "_Undo"
-msgstr "_Отменить"
-
 #: ../gtk/deprecated/gtkstock.c:456
 msgctxt "Stock label"
 msgid "_Yes"
 msgstr "_Да"
-
-#. Zoom
-#: ../gtk/deprecated/gtkstock.c:458
-msgctxt "Stock label"
-msgid "_Normal Size"
-msgstr "В обы_чном размере"
-
-#. Zoom
-#: ../gtk/deprecated/gtkstock.c:460
-msgctxt "Stock label"
-msgid "Best _Fit"
-msgstr "Наилучшее _заполнение"
-
-#: ../gtk/deprecated/gtkstock.c:461
-msgctxt "Stock label"
-msgid "Zoom _In"
-msgstr "У_величить"
-
-#: ../gtk/deprecated/gtkstock.c:462
-msgctxt "Stock label"
-msgid "Zoom _Out"
-msgstr "У_меньшить"
 
 #: ../gtk/deprecated/gtkuimanager.c:1803
 #, c-format
@@ -1338,40 +1366,40 @@ msgstr ""
 "Это приложение распространяется без КАКИХ-ЛИБО ГАРАНТИЙ;\n"
 "подробнее см. <a href=\"%s\">%s</a>"
 
-#: ../gtk/gtkaboutdialog.c:375
+#: ../gtk/gtkaboutdialog.c:372
 msgid "License"
 msgstr "Лицензия"
 
-#: ../gtk/gtkaboutdialog.c:376
+#: ../gtk/gtkaboutdialog.c:373
 msgid "The license of the program"
 msgstr "Лицензия программы"
 
-#: ../gtk/gtkaboutdialog.c:914
+#: ../gtk/gtkaboutdialog.c:921
 msgid "Could not show link"
 msgstr "Не удалось показать ссылку"
 
-#: ../gtk/gtkaboutdialog.c:951
+#: ../gtk/gtkaboutdialog.c:958
 msgid "Website"
 msgstr "Веб-страница"
 
-#: ../gtk/gtkaboutdialog.c:1005
+#: ../gtk/gtkaboutdialog.c:1012
 #, c-format
 msgid "About %s"
 msgstr "О программе %s"
 
-#: ../gtk/gtkaboutdialog.c:2290
+#: ../gtk/gtkaboutdialog.c:2297
 msgid "Created by"
 msgstr "Автор"
 
-#: ../gtk/gtkaboutdialog.c:2293
+#: ../gtk/gtkaboutdialog.c:2300
 msgid "Documented by"
 msgstr "Документация"
 
-#: ../gtk/gtkaboutdialog.c:2303
+#: ../gtk/gtkaboutdialog.c:2310
 msgid "Translated by"
 msgstr "Перевод"
 
-#: ../gtk/gtkaboutdialog.c:2308
+#: ../gtk/gtkaboutdialog.c:2315
 msgid "Artwork by"
 msgstr "Графический дизайн"
 
@@ -1463,8 +1491,7 @@ msgstr "_Найти приложения в Интернете"
 msgid "Select an application to open “%s”"
 msgstr "Выберите приложение, чтобы открыть «%s»"
 
-#: ../gtk/gtkappchooserdialog.c:334
-#: ../gtk/gtkappchooserwidget.c:660
+#: ../gtk/gtkappchooserdialog.c:334 ../gtk/gtkappchooserwidget.c:657
 #, c-format
 msgid "No applications available to open “%s”"
 msgstr "Нет доступных приложений для открытия «%s»"
@@ -1481,30 +1508,35 @@ msgid "No applications available to open “%s” files"
 msgstr "Нет доступных приложений, способных открыть файлы «%s»"
 
 #: ../gtk/gtkappchooserdialog.c:358
-msgid "Click \"Show other applications\", for more options, or \"Find applications online\" to install a new application"
-msgstr "Для получения дополнительных параметров нажмите «Показать другие приложения»; чтобы установить новое приложение нажмите «Найти приложения в Интернете»"
+msgid ""
+"Click \"Show other applications\", for more options, or \"Find applications "
+"online\" to install a new application"
+msgstr ""
+"Для получения дополнительных параметров нажмите «Показать другие "
+"приложения»; чтобы установить новое приложение нажмите «Найти приложения в "
+"Интернете»"
 
 #: ../gtk/gtkappchooserdialog.c:428
 msgid "Forget association"
 msgstr "Забыть ассоциацию"
 
-#: ../gtk/gtkappchooserwidget.c:609
+#: ../gtk/gtkappchooserwidget.c:606
 msgid "Default Application"
 msgstr "Приложение по умолчанию"
 
-#: ../gtk/gtkappchooserwidget.c:747
+#: ../gtk/gtkappchooserwidget.c:744
 msgid "Recommended Applications"
 msgstr "Рекомендуемые приложения"
 
-#: ../gtk/gtkappchooserwidget.c:762
+#: ../gtk/gtkappchooserwidget.c:759
 msgid "Related Applications"
 msgstr "Связанные приложения"
 
-#: ../gtk/gtkappchooserwidget.c:776
+#: ../gtk/gtkappchooserwidget.c:773
 msgid "Other Applications"
 msgstr "Другие приложения"
 
-#: ../gtk/gtkapplication.c:1569
+#: ../gtk/gtkapplication.c:1900
 #, c-format
 msgid ""
 "%s cannot quit at this time:\n"
@@ -1513,10 +1545,9 @@ msgid ""
 msgstr ""
 "Приложение %s не может быть завершено в данный момент:\n"
 "\n"
-"%s "
+"%s"
 
-#: ../gtk/gtkapplicationwindow.c:337
-#: ../gtk/gtkprintoperation-unix.c:480
+#: ../gtk/gtkapplicationwindow.c:332 ../gtk/gtkprintoperation-unix.c:480
 #: ../gtk/gtkprintoperation-win32.c:1444
 msgid "Application"
 msgstr "Приложение"
@@ -1551,11 +1582,11 @@ msgstr "текст может не отображаться внутри эле�
 msgid "Invalid type function on line %d: '%s'"
 msgstr "Недопустимый тип функции в строке %d: «%s»"
 
-#: ../gtk/gtkbuilderparser.c:418
-#: ../gtk/gtkbuilderparser.c:504
+#: ../gtk/gtkbuilderparser.c:418 ../gtk/gtkbuilderparser.c:504
 #, c-format
 msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
-msgstr "Повторяющийся идентификатор объекта «%s» в строке %d (ранее — в строке %d)"
+msgstr ""
+"Повторяющийся идентификатор объекта «%s» в строке %d (ранее — в строке %d)"
 
 #: ../gtk/gtkbuilderparser.c:971
 #, c-format
@@ -1609,8 +1640,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1938
-#: ../gtk/gtkcalendar.c:2630
+#: ../gtk/gtkcalendar.c:1938 ../gtk/gtkcalendar.c:2630
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1626,8 +1656,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1970
-#: ../gtk/gtkcalendar.c:2496
+#: ../gtk/gtkcalendar.c:1970 ../gtk/gtkcalendar.c:2496
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1669,20 +1698,17 @@ msgstr "Неверный"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: ../gtk/gtkcellrendereraccel.c:412
-#: ../gtk/gtkcellrendereraccel.c:743
+#: ../gtk/gtkcellrendereraccel.c:412 ../gtk/gtkcellrendereraccel.c:743
 msgid "New accelerator…"
 msgstr "Создать ускоритель…"
 
-#: ../gtk/gtkcellrendererprogress.c:368
-#: ../gtk/gtkcellrendererprogress.c:458
+#: ../gtk/gtkcellrendererprogress.c:368 ../gtk/gtkcellrendererprogress.c:458
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkcolorbutton.c:189
-#: ../gtk/gtkcolorbutton.c:444
+#: ../gtk/gtkcolorbutton.c:189 ../gtk/gtkcolorbutton.c:444
 msgid "Pick a Color"
 msgstr "Выберите цвет"
 
@@ -1923,26 +1949,21 @@ msgstr "_Изменить"
 msgid "default:mm"
 msgstr "default:mm"
 
-#: ../gtk/gtkcustompaperunixdialog.c:311
-#: ../gtk/gtkmessagedialog.c:885
-#: ../gtk/gtkaboutdialog.ui.h:3
-#: ../gtk/gtkassistant.ui.h:6
+#: ../gtk/gtkcustompaperunixdialog.c:311 ../gtk/gtkmessagedialog.c:885
+#: ../gtk/gtkaboutdialog.ui.h:3 ../gtk/gtkassistant.ui.h:6
 msgid "_Close"
 msgstr "_Закрыть"
 
 #. And show the custom paper dialog
-#: ../gtk/gtkcustompaperunixdialog.c:389
-#: ../gtk/gtkprintunixdialog.c:3193
+#: ../gtk/gtkcustompaperunixdialog.c:389 ../gtk/gtkprintunixdialog.c:3202
 msgid "Manage Custom Sizes"
 msgstr "Управление пользовательскими размерами"
 
-#: ../gtk/gtkcustompaperunixdialog.c:550
-#: ../gtk/gtkpagesetupunixdialog.c:806
+#: ../gtk/gtkcustompaperunixdialog.c:550 ../gtk/gtkpagesetupunixdialog.c:806
 msgid "inch"
 msgstr "дюймы"
 
-#: ../gtk/gtkcustompaperunixdialog.c:552
-#: ../gtk/gtkpagesetupunixdialog.c:804
+#: ../gtk/gtkcustompaperunixdialog.c:552 ../gtk/gtkpagesetupunixdialog.c:804
 msgid "mm"
 msgstr "мм"
 
@@ -1987,43 +2008,30 @@ msgstr "_Правое:"
 msgid "Paper Margins"
 msgstr "Поля страницы"
 
-#: ../gtk/gtkentry.c:9272
-#: ../gtk/gtkentry.c:9418
-#: ../gtk/gtklabel.c:6276
-#: ../gtk/gtktextview.c:8694
-#: ../gtk/gtktextview.c:8877
+#: ../gtk/gtkentry.c:9271 ../gtk/gtkentry.c:9417 ../gtk/gtklabel.c:6276
+#: ../gtk/gtktextview.c:8698 ../gtk/gtktextview.c:8881
 msgid "Cu_t"
 msgstr "В_ырезать"
 
-#: ../gtk/gtkentry.c:9276
-#: ../gtk/gtkentry.c:9421
-#: ../gtk/gtklabel.c:6277
-#: ../gtk/gtktextview.c:8698
-#: ../gtk/gtktextview.c:8881
+#: ../gtk/gtkentry.c:9275 ../gtk/gtkentry.c:9420 ../gtk/gtklabel.c:6277
+#: ../gtk/gtktextview.c:8702 ../gtk/gtktextview.c:8885
 msgid "_Copy"
 msgstr "_Копировать"
 
-#: ../gtk/gtkentry.c:9280
-#: ../gtk/gtkentry.c:9424
-#: ../gtk/gtklabel.c:6278
-#: ../gtk/gtktextview.c:8700
-#: ../gtk/gtktextview.c:8883
+#: ../gtk/gtkentry.c:9279 ../gtk/gtkentry.c:9423 ../gtk/gtklabel.c:6278
+#: ../gtk/gtktextview.c:8704 ../gtk/gtktextview.c:8887
 msgid "_Paste"
 msgstr "Вст_авить"
 
-#: ../gtk/gtkentry.c:9283
-#: ../gtk/gtklabel.c:6280
-#: ../gtk/gtktextview.c:8703
+#: ../gtk/gtkentry.c:9282 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8707
 msgid "_Delete"
 msgstr "_Удалить"
 
-#: ../gtk/gtkentry.c:9294
-#: ../gtk/gtklabel.c:6289
-#: ../gtk/gtktextview.c:8717
+#: ../gtk/gtkentry.c:9293 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8721
 msgid "Select _All"
 msgstr "Выделить вс_ё"
 
-#: ../gtk/gtkentry.c:10382
+#: ../gtk/gtkentry.c:10381
 msgid "Caps Lock is on"
 msgstr "Включён режим Caps Lock"
 
@@ -2072,18 +2080,15 @@ msgstr "Включён режим Caps Lock"
 msgid "Select a File"
 msgstr "Выберите файл"
 
-#: ../gtk/gtkfilechooserbutton.c:105
-#: ../gtk/gtkplacessidebar.c:791
+#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkplacessidebar.c:790
 msgid "Desktop"
 msgstr "Рабочий стол"
 
-#: ../gtk/gtkfilechooserbutton.c:106
-#: ../gtk/gtkfilechooserbutton.ui.h:1
+#: ../gtk/gtkfilechooserbutton.c:106 ../gtk/gtkfilechooserbutton.ui.h:1
 msgid "(None)"
 msgstr "(Нет)"
 
-#: ../gtk/gtkfilechooserbutton.c:807
-#: ../gtk/gtkplacessidebar.c:3107
+#: ../gtk/gtkfilechooserbutton.c:807 ../gtk/gtkplacessidebar.c:3106
 msgid "_Open"
 msgstr "_Открыть"
 
@@ -2100,8 +2105,12 @@ msgid "The folder could not be created"
 msgstr "Не удалось создать папку"
 
 #: ../gtk/gtkfilechooserdefault.c:747
-msgid "The folder could not be created, as a file with the same name already exists.  Try using a different name for the folder, or rename the file first."
-msgstr "Папка не может быть создана, так как файл с таким именем уже существует.  Выберите другое имя для папки, или переименуйте файл."
+msgid ""
+"The folder could not be created, as a file with the same name already "
+"exists.  Try using a different name for the folder, or rename the file first."
+msgstr ""
+"Папка не может быть создана, так как файл с таким именем уже существует.  "
+"Выберите другое имя для папки, или переименуйте файл."
 
 #: ../gtk/gtkfilechooserdefault.c:761
 msgid "You need to choose a valid filename."
@@ -2110,7 +2119,7 @@ msgstr "Необходимо выбрать корректное имя файл
 #: ../gtk/gtkfilechooserdefault.c:764
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
-msgstr "Невозможно создать файл в %s, т. к. это не папка"
+msgstr "Невозможно создать файл в %s, так как это не папка"
 
 #: ../gtk/gtkfilechooserdefault.c:772
 msgid "Cannot create file as the filename is too long"
@@ -2174,8 +2183,7 @@ msgstr "Показывать _размер"
 msgid "_Name:"
 msgstr "_Имя:"
 
-#: ../gtk/gtkfilechooserdefault.c:2236
-#: ../gtk/gtkfilechooserdefault.c:2247
+#: ../gtk/gtkfilechooserdefault.c:2236 ../gtk/gtkfilechooserdefault.c:2247
 msgid "Please select a folder below"
 msgstr "Выберите папку"
 
@@ -2185,7 +2193,7 @@ msgstr "Введите имя файла"
 
 #: ../gtk/gtkfilechooserdefault.c:2298
 msgid "Recently Used"
-msgstr "Недавние документы"
+msgstr "Недавно использованные"
 
 #: ../gtk/gtkfilechooserdefault.c:2308
 msgid "Search:"
@@ -2208,8 +2216,7 @@ msgstr "Не удалось прочитать содержимое %s"
 msgid "Could not read the contents of the folder"
 msgstr "Не удалось прочитать содержимое папки"
 
-#: ../gtk/gtkfilechooserdefault.c:3979
-#: ../gtk/gtkfilechooserdefault.c:4047
+#: ../gtk/gtkfilechooserdefault.c:3979 ../gtk/gtkfilechooserdefault.c:4047
 #: ../gtk/gtkfilechooserdefault.c:4228
 msgid "Unknown"
 msgstr "Неизвестен"
@@ -2226,20 +2233,19 @@ msgstr "Вчера в %H:%M"
 msgid "Cannot change to folder because it is not local"
 msgstr "Не удалось перейти в папку, так как она не является локальной"
 
-#: ../gtk/gtkfilechooserdefault.c:5477
-#: ../gtk/gtkprintunixdialog.c:675
+#: ../gtk/gtkfilechooserdefault.c:5477 ../gtk/gtkprintunixdialog.c:675
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Файл с именем «%s» уже существует. Заменить его?"
 
-#: ../gtk/gtkfilechooserdefault.c:5480
-#: ../gtk/gtkprintunixdialog.c:679
+#: ../gtk/gtkfilechooserdefault.c:5480 ../gtk/gtkprintunixdialog.c:679
 #, c-format
-msgid "The file already exists in “%s”.  Replacing it will overwrite its contents."
-msgstr "Файл уже существует в «%s». Его замена приведёт к перезаписи содержимого."
+msgid ""
+"The file already exists in “%s”.  Replacing it will overwrite its contents."
+msgstr ""
+"Файл уже существует в «%s». Его замена приведёт к перезаписи содержимого."
 
-#: ../gtk/gtkfilechooserdefault.c:5485
-#: ../gtk/gtkprintunixdialog.c:686
+#: ../gtk/gtkfilechooserdefault.c:5485 ../gtk/gtkprintunixdialog.c:686
 msgid "_Replace"
 msgstr "_Заменить"
 
@@ -2248,8 +2254,12 @@ msgid "Could not start the search process"
 msgstr "Не удалось начать поиск"
 
 #: ../gtk/gtkfilechooserdefault.c:6303
-msgid "The program was not able to create a connection to the indexer daemon.  Please make sure it is running."
-msgstr "Не удалось соединиться с сервисом индексированного поиска. Проверьте, что сервис запущен."
+msgid ""
+"The program was not able to create a connection to the indexer daemon.  "
+"Please make sure it is running."
+msgstr ""
+"Не удалось соединиться с сервисом индексированного поиска. Проверьте, что "
+"сервис запущен."
 
 #: ../gtk/gtkfilechooserdefault.c:6317
 msgid "Could not send the search request"
@@ -2268,18 +2278,20 @@ msgstr "Файловая система"
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: ../gtk/gtkfontbutton.c:438
-#: ../gtk/gtkfontbutton.c:568
+#: ../gtk/gtkfontbutton.c:438 ../gtk/gtkfontbutton.c:568
 msgid "Pick a Font"
 msgstr "Выберите шрифт"
 
-#: ../gtk/gtkicontheme.c:2100
-#: ../gtk/gtkicontheme.c:2163
+#: ../gtk/gtkheaderbar.c:224 ../gtk/gtkwindow.c:5275 ../gtk/gtkwindow.c:8287
+msgid "Close"
+msgstr "Закрыть"
+
+#: ../gtk/gtkicontheme.c:2119 ../gtk/gtkicontheme.c:2182
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Значок «%s» не присутствует в теме"
 
-#: ../gtk/gtkicontheme.c:3866
+#: ../gtk/gtkicontheme.c:3888
 msgid "Failed to load icon"
 msgstr "Не удалось загрузить значок"
 
@@ -2303,23 +2315,19 @@ msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "Системный (%s)"
 
-#: ../gtk/gtkinfobar.c:1192
-#: ../gtk/gtkmessagedialog.c:366
+#: ../gtk/gtkinfobar.c:1192 ../gtk/gtkmessagedialog.c:366
 msgid "Information"
 msgstr "Информация"
 
-#: ../gtk/gtkinfobar.c:1196
-#: ../gtk/gtkmessagedialog.c:371
+#: ../gtk/gtkinfobar.c:1196 ../gtk/gtkmessagedialog.c:371
 msgid "Question"
 msgstr "Вопрос"
 
-#: ../gtk/gtkinfobar.c:1200
-#: ../gtk/gtkmessagedialog.c:376
+#: ../gtk/gtkinfobar.c:1200 ../gtk/gtkmessagedialog.c:376
 msgid "Warning"
 msgstr "Предупреждение"
 
-#: ../gtk/gtkinfobar.c:1204
-#: ../gtk/gtkmessagedialog.c:381
+#: ../gtk/gtkinfobar.c:1204 ../gtk/gtkmessagedialog.c:381
 msgid "Error"
 msgstr "Ошибка"
 
@@ -2352,8 +2360,7 @@ msgstr ""
 msgid "Error parsing commandline options: %s\n"
 msgstr "Ошибка при разборе параметров командной строки: %s\n"
 
-#: ../gtk/gtk-launch.c:89
-#: ../gtk/gtk-launch.c:102
+#: ../gtk/gtk-launch.c:89 ../gtk/gtk-launch.c:102
 #, c-format
 msgid "Try \"%s --help\" for more information."
 msgstr "Попробуйте «%s --help» для дополнительной информации."
@@ -2392,13 +2399,11 @@ msgstr "Копировать URL"
 msgid "Invalid URI"
 msgstr "Неверный URI"
 
-#: ../gtk/gtklockbutton.c:266
-#: ../gtk/gtklockbutton.ui.h:1
+#: ../gtk/gtklockbutton.c:266 ../gtk/gtklockbutton.ui.h:1
 msgid "Lock"
 msgstr "Заблокировать"
 
-#: ../gtk/gtklockbutton.c:275
-#: ../gtk/gtklockbutton.ui.h:2
+#: ../gtk/gtklockbutton.c:275 ../gtk/gtklockbutton.ui.h:2
 msgid "Unlock"
 msgstr "Разблокировать"
 
@@ -2407,16 +2412,16 @@ msgid ""
 "Dialog is unlocked.\n"
 "Click to prevent further changes"
 msgstr ""
-"Диалог разблокирован.\n"
-"Щёлкните мышью, чтобы предотвратить изменения"
+"Диалоговое окно разблокировано.\n"
+"Нажмите, чтобы предотвратить дальнейшие изменения"
 
 #: ../gtk/gtklockbutton.c:293
 msgid ""
 "Dialog is locked.\n"
 "Click to make changes"
 msgstr ""
-"Диалог заблокирован.\n"
-"Щёлкните мышью, чтобы изменить"
+"Диалоговое окно заблокировано.\n"
+"Нажмите, чтобы сделать изменения"
 
 #: ../gtk/gtklockbutton.c:302
 msgid ""
@@ -2565,8 +2570,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Не удалось завершить процесс с PID %d: %s"
 
-#: ../gtk/gtknotebook.c:5016
-#: ../gtk/gtknotebook.c:7673
+#: ../gtk/gtknotebook.c:5057 ../gtk/gtknotebook.c:7790
 #, c-format
 msgid "Page %u"
 msgstr "Страница %u"
@@ -2580,8 +2584,7 @@ msgctxt "Number format"
 msgid "%d"
 msgstr "%d"
 
-#: ../gtk/gtkpagesetup.c:646
-#: ../gtk/gtkpapersize.c:848
+#: ../gtk/gtkpagesetup.c:646 ../gtk/gtkpapersize.c:848
 #: ../gtk/gtkpapersize.c:888
 msgid "Not a valid page setup file"
 msgstr "Некорректный файл настройки печати"
@@ -2609,13 +2612,11 @@ msgstr ""
 " верхнее: %s %s\n"
 " нижнее: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:873
-#: ../gtk/gtkprintunixdialog.c:3247
+#: ../gtk/gtkpagesetupunixdialog.c:873 ../gtk/gtkprintunixdialog.c:3256
 msgid "Manage Custom Sizes…"
 msgstr "Управление размерами…"
 
-#: ../gtk/gtkpagesetupunixdialog.c:895
-#: ../gtk/gtkprintunixdialog.ui.h:40
+#: ../gtk/gtkpagesetupunixdialog.c:895 ../gtk/gtkprintunixdialog.ui.h:40
 msgid "Page Setup"
 msgstr "Параметры страницы"
 
@@ -2623,196 +2624,192 @@ msgstr "Параметры страницы"
 msgid "File System Root"
 msgstr "Корень файловой системы"
 
-#: ../gtk/gtkplacessidebar.c:447
+#: ../gtk/gtkplacessidebar.c:446
 msgid "Devices"
 msgstr "Устройства"
 
-#: ../gtk/gtkplacessidebar.c:455
+#: ../gtk/gtkplacessidebar.c:454
 msgid "Bookmarks"
 msgstr "Закладки"
 
-#: ../gtk/gtkplacessidebar.c:761
+#: ../gtk/gtkplacessidebar.c:760
 msgid "Places"
 msgstr "Места"
 
-#: ../gtk/gtkplacessidebar.c:768
+#: ../gtk/gtkplacessidebar.c:767
 msgid "Recent"
-msgstr "Недавние документы"
+msgstr "Недавние"
 
-#: ../gtk/gtkplacessidebar.c:770
+#: ../gtk/gtkplacessidebar.c:769
 msgid "Recent files"
-msgstr "Недавние документы"
+msgstr "Недавние файлы"
 
-#: ../gtk/gtkplacessidebar.c:779
+#: ../gtk/gtkplacessidebar.c:778
 msgid "Home"
-msgstr "Домашний каталог"
+msgstr "Домашняя папка"
 
-#: ../gtk/gtkplacessidebar.c:781
+#: ../gtk/gtkplacessidebar.c:780
 msgid "Open your personal folder"
 msgstr "Открыть личную папку"
 
-#: ../gtk/gtkplacessidebar.c:793
+#: ../gtk/gtkplacessidebar.c:792
 msgid "Open the contents of your desktop in a folder"
 msgstr "Открыть содержимое рабочего стола в папке"
 
-#: ../gtk/gtkplacessidebar.c:806
+#: ../gtk/gtkplacessidebar.c:805
 msgid "Trash"
 msgstr "Корзина"
 
-#: ../gtk/gtkplacessidebar.c:808
+#: ../gtk/gtkplacessidebar.c:807
 msgid "Open the trash"
 msgstr "Открыть корзину"
 
-#: ../gtk/gtkplacessidebar.c:863
-#: ../gtk/gtkplacessidebar.c:888
-#: ../gtk/gtkplacessidebar.c:1095
+#: ../gtk/gtkplacessidebar.c:862 ../gtk/gtkplacessidebar.c:887
+#: ../gtk/gtkplacessidebar.c:1094
 #, c-format
 msgid "Mount and open %s"
 msgstr "Смонтировать и открыть %s"
 
-#: ../gtk/gtkplacessidebar.c:963
+#: ../gtk/gtkplacessidebar.c:962
 msgid "Open the contents of the file system"
 msgstr "Открыть содержимое файловой системы"
 
-#: ../gtk/gtkplacessidebar.c:1063
+#: ../gtk/gtkplacessidebar.c:1062
 msgid "Network"
 msgstr "Сеть"
 
-#: ../gtk/gtkplacessidebar.c:1069
+#: ../gtk/gtkplacessidebar.c:1068
 msgid "Browse Network"
 msgstr "Обзор сети"
 
-#: ../gtk/gtkplacessidebar.c:1071
+#: ../gtk/gtkplacessidebar.c:1070
 msgid "Browse the contents of the network"
 msgstr "Обзор содержимого сети"
 
-#: ../gtk/gtkplacessidebar.c:1078
+# кнопка, вызывает диалоговое окно. перевод сокращен, иначе не влазит в строку
+#: ../gtk/gtkplacessidebar.c:1077
 msgid "Connect to Server"
-msgstr "Подключиться к серверу"
+msgstr "Подключиться…"
 
-#: ../gtk/gtkplacessidebar.c:1080
+#: ../gtk/gtkplacessidebar.c:1079
 msgid "Connect to a network server address"
 msgstr "Подключение к серверу по сетевому адресу"
 
-#: ../gtk/gtkplacessidebar.c:1560
+#: ../gtk/gtkplacessidebar.c:1559
 msgid "New bookmark"
 msgstr "Создать закладку"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: ../gtk/gtkplacessidebar.c:2100
-#: ../gtk/gtkplacessidebar.c:3183
+#: ../gtk/gtkplacessidebar.c:2099 ../gtk/gtkplacessidebar.c:3182
 msgid "_Start"
 msgstr "_Запустить"
 
-#: ../gtk/gtkplacessidebar.c:2101
-#: ../gtk/gtkplacessidebar.c:3190
+#: ../gtk/gtkplacessidebar.c:2100 ../gtk/gtkplacessidebar.c:3189
 msgid "_Stop"
 msgstr "_Остановить"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: ../gtk/gtkplacessidebar.c:2106
+#: ../gtk/gtkplacessidebar.c:2105
 msgid "_Power On"
 msgstr "_Включить"
 
-#: ../gtk/gtkplacessidebar.c:2107
+#: ../gtk/gtkplacessidebar.c:2106
 msgid "_Safely Remove Drive"
 msgstr "_Безопасное извлечение устройства"
 
-#: ../gtk/gtkplacessidebar.c:2110
+#: ../gtk/gtkplacessidebar.c:2109
 msgid "_Connect Drive"
 msgstr "_Подключить диск"
 
-#: ../gtk/gtkplacessidebar.c:2111
+#: ../gtk/gtkplacessidebar.c:2110
 msgid "_Disconnect Drive"
 msgstr "О_тключить диск"
 
-#: ../gtk/gtkplacessidebar.c:2114
+#: ../gtk/gtkplacessidebar.c:2113
 msgid "_Start Multi-disk Device"
 msgstr "_Запустить многодисковое устройство"
 
-#: ../gtk/gtkplacessidebar.c:2115
+#: ../gtk/gtkplacessidebar.c:2114
 msgid "_Stop Multi-disk Device"
 msgstr "_Остановить многодисковое устройство"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: ../gtk/gtkplacessidebar.c:2119
+#: ../gtk/gtkplacessidebar.c:2118
 msgid "_Unlock Drive"
 msgstr "_Разблокировать диск"
 
-#: ../gtk/gtkplacessidebar.c:2120
+#: ../gtk/gtkplacessidebar.c:2119
 msgid "_Lock Drive"
 msgstr "_Заблокировать диск"
 
-#: ../gtk/gtkplacessidebar.c:2147
-#: ../gtk/gtkplacessidebar.c:2845
+#: ../gtk/gtkplacessidebar.c:2146 ../gtk/gtkplacessidebar.c:2844
 #, c-format
 msgid "Unable to start %s"
 msgstr "Не удалось запустить %s"
 
-#: ../gtk/gtkplacessidebar.c:2174
+#: ../gtk/gtkplacessidebar.c:2173
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Не удалось получить доступ к «%s»"
 
-#: ../gtk/gtkplacessidebar.c:2480
+#: ../gtk/gtkplacessidebar.c:2479
 #, c-format
 msgid "Unable to unmount %s"
 msgstr "Не удалось размонтировать %s"
 
-#: ../gtk/gtkplacessidebar.c:2603
-#: ../gtk/gtkplacessidebar.c:2630
-#: ../gtk/gtkplacessidebar.c:2657
+#: ../gtk/gtkplacessidebar.c:2602 ../gtk/gtkplacessidebar.c:2629
+#: ../gtk/gtkplacessidebar.c:2656
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Не удалось извлечь %s"
 
-#: ../gtk/gtkplacessidebar.c:2797
-#, fuzzy, c-format
+#: ../gtk/gtkplacessidebar.c:2796
+#, c-format
 msgid "Unable to poll %s for media changes"
-msgstr "Не удалось опросить %s для смены носителя"
+msgstr "Не удалось опросить %s об изменении носителей"
 
-#: ../gtk/gtkplacessidebar.c:2899
+#: ../gtk/gtkplacessidebar.c:2898
 #, c-format
 msgid "Unable to stop %s"
 msgstr "Не удалось остановить %s"
 
-#: ../gtk/gtkplacessidebar.c:3114
+#: ../gtk/gtkplacessidebar.c:3113
 msgid "Open in New _Tab"
 msgstr "Открыть в новой _вкладке"
 
-#: ../gtk/gtkplacessidebar.c:3122
+#: ../gtk/gtkplacessidebar.c:3121
 msgid "Open in New _Window"
 msgstr "Открыть в новом _окне"
 
-#: ../gtk/gtkplacessidebar.c:3131
+#: ../gtk/gtkplacessidebar.c:3130
 msgid "_Add Bookmark"
 msgstr "_Добавить в закладки"
 
-#: ../gtk/gtkplacessidebar.c:3137
+#: ../gtk/gtkplacessidebar.c:3136
 msgid "Remove"
 msgstr "Удалить"
 
-#: ../gtk/gtkplacessidebar.c:3144
+#: ../gtk/gtkplacessidebar.c:3143
 msgid "Rename…"
 msgstr "Переименовать…"
 
-#: ../gtk/gtkplacessidebar.c:3155
+#: ../gtk/gtkplacessidebar.c:3154
 msgid "_Mount"
 msgstr "_Монтировать"
 
-#: ../gtk/gtkplacessidebar.c:3162
+#: ../gtk/gtkplacessidebar.c:3161
 msgid "_Unmount"
 msgstr "_Размонтировать"
 
-#: ../gtk/gtkplacessidebar.c:3169
+#: ../gtk/gtkplacessidebar.c:3168
 msgid "_Eject"
 msgstr "_Извлечь"
 
-#: ../gtk/gtkplacessidebar.c:3176
+#: ../gtk/gtkplacessidebar.c:3175
 msgid "_Detect Media"
 msgstr "Определить _носитель"
 
-#: ../gtk/gtkplacessidebar.c:3829
+#: ../gtk/gtkplacessidebar.c:3828
 msgid "Computer"
 msgstr "Компьютер"
 
@@ -2887,8 +2884,7 @@ msgstr "Завершено с ошибкой"
 msgid "Preparing %d"
 msgstr "Подготовка %d"
 
-#: ../gtk/gtkprintoperation.c:2348
-#: ../gtk/gtkprintoperation.c:2980
+#: ../gtk/gtkprintoperation.c:2348 ../gtk/gtkprintoperation.c:2980
 msgid "Preparing"
 msgstr "Подготовка"
 
@@ -2939,13 +2935,11 @@ msgstr "Принтеры не найдены"
 msgid "Invalid argument to CreateDC"
 msgstr "Неверный аргумент для CreateDC"
 
-#: ../gtk/gtkprintoperation-win32.c:1599
-#: ../gtk/gtkprintoperation-win32.c:1826
+#: ../gtk/gtkprintoperation-win32.c:1599 ../gtk/gtkprintoperation-win32.c:1826
 msgid "Error from StartDoc"
 msgstr "Ошибка от StartDoc"
 
-#: ../gtk/gtkprintoperation-win32.c:1681
-#: ../gtk/gtkprintoperation-win32.c:1704
+#: ../gtk/gtkprintoperation-win32.c:1681 ../gtk/gtkprintoperation-win32.c:1704
 #: ../gtk/gtkprintoperation-win32.c:1752
 msgid "Not enough free memory"
 msgstr "Недостаточно свободной памяти"
@@ -2980,42 +2974,42 @@ msgstr "Получение информации о принтере…"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: ../gtk/gtkprintunixdialog.c:2976
+#: ../gtk/gtkprintunixdialog.c:2985
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4634
 msgid "Left to right, top to bottom"
 msgstr "Слева направо, сверху вниз"
 
-#: ../gtk/gtkprintunixdialog.c:2976
+#: ../gtk/gtkprintunixdialog.c:2985
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4634
 msgid "Left to right, bottom to top"
 msgstr "Слева направо, снизу вверх"
 
-#: ../gtk/gtkprintunixdialog.c:2977
+#: ../gtk/gtkprintunixdialog.c:2986
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4635
 msgid "Right to left, top to bottom"
 msgstr "Справа налево, сверху вниз"
 
-#: ../gtk/gtkprintunixdialog.c:2977
+#: ../gtk/gtkprintunixdialog.c:2986
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4635
 msgid "Right to left, bottom to top"
 msgstr "Справа налево, снизу вверх"
 
-#: ../gtk/gtkprintunixdialog.c:2978
+#: ../gtk/gtkprintunixdialog.c:2987
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4636
 msgid "Top to bottom, left to right"
 msgstr "Сверху вниз, слева направо"
 
-#: ../gtk/gtkprintunixdialog.c:2978
+#: ../gtk/gtkprintunixdialog.c:2987
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4636
 msgid "Top to bottom, right to left"
 msgstr "Сверху вниз, справа налево"
 
-#: ../gtk/gtkprintunixdialog.c:2979
+#: ../gtk/gtkprintunixdialog.c:2988
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4637
 msgid "Bottom to top, left to right"
 msgstr "Снизу вверх, слева направо"
 
-#: ../gtk/gtkprintunixdialog.c:2979
+#: ../gtk/gtkprintunixdialog.c:2988
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4637
 msgid "Bottom to top, right to left"
 msgstr "Снизу вверх, справа налево"
@@ -3023,34 +3017,32 @@ msgstr "Снизу вверх, справа налево"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: ../gtk/gtkprintunixdialog.c:2983
-#: ../gtk/gtkprintunixdialog.c:2996
+#: ../gtk/gtkprintunixdialog.c:2992 ../gtk/gtkprintunixdialog.c:3005
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4714
 msgid "Page Ordering"
 msgstr "Порядок страниц"
 
-#: ../gtk/gtkprintunixdialog.c:3012
+#: ../gtk/gtkprintunixdialog.c:3021
 msgid "Left to right"
 msgstr "Слева направо"
 
-#: ../gtk/gtkprintunixdialog.c:3013
+#: ../gtk/gtkprintunixdialog.c:3022
 msgid "Right to left"
 msgstr "Справа налево"
 
-#: ../gtk/gtkprintunixdialog.c:3025
+#: ../gtk/gtkprintunixdialog.c:3034
 msgid "Top to bottom"
 msgstr "Сверху вниз"
 
-#: ../gtk/gtkprintunixdialog.c:3026
+#: ../gtk/gtkprintunixdialog.c:3035
 msgid "Bottom to top"
 msgstr "Снизу вверх"
 
-#: ../gtk/gtkprintunixdialog.c:3269
+#: ../gtk/gtkprintunixdialog.c:3278
 msgid "Print"
 msgstr "Печать"
 
-#: ../gtk/gtkrecentchooserdefault.c:1048
-#: ../gtk/gtkrecentchooserdefault.c:1085
+#: ../gtk/gtkrecentchooserdefault.c:1048 ../gtk/gtkrecentchooserdefault.c:1085
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "Не найден элемент для URI «%s»"
@@ -3097,8 +3089,7 @@ msgstr "_Показать личные ресурсы"
 msgid "No items found"
 msgstr "Элементы не найдены"
 
-#: ../gtk/gtkrecentchoosermenu.c:521
-#: ../gtk/gtkrecentchoosermenu.c:577
+#: ../gtk/gtkrecentchoosermenu.c:521 ../gtk/gtkrecentchoosermenu.c:577
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "Недавно использовавшийся ресурс не найден по URI «%s»"
@@ -3132,12 +3123,9 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:1030
-#: ../gtk/gtkrecentmanager.c:1043
-#: ../gtk/gtkrecentmanager.c:1180
-#: ../gtk/gtkrecentmanager.c:1190
-#: ../gtk/gtkrecentmanager.c:1242
-#: ../gtk/gtkrecentmanager.c:1251
+#: ../gtk/gtkrecentmanager.c:1030 ../gtk/gtkrecentmanager.c:1043
+#: ../gtk/gtkrecentmanager.c:1180 ../gtk/gtkrecentmanager.c:1190
+#: ../gtk/gtkrecentmanager.c:1242 ../gtk/gtkrecentmanager.c:1251
 #: ../gtk/gtkrecentmanager.c:1266
 #, c-format
 msgid "Unable to find an item with URI '%s'"
@@ -3146,7 +3134,9 @@ msgstr "Не удалось найти элемент с URI «%s»"
 #: ../gtk/gtkrecentmanager.c:2466
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
-msgstr "Не найдено ни одного зарегистрированного приложения с названием «%s» для элемента с URI «%s»"
+msgstr ""
+"Не найдено ни одного зарегистрированного приложения с названием «%s» для "
+"элемента с URI «%s»"
 
 #: ../gtk/gtksearchentry.c:240
 msgid "Search"
@@ -3156,9 +3146,7 @@ msgstr "Поиск"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: ../gtk/gtkswitch.c:347
-#: ../gtk/gtkswitch.c:403
-#: ../gtk/gtkswitch.c:580
+#: ../gtk/gtkswitch.c:347 ../gtk/gtkswitch.c:403 ../gtk/gtkswitch.c:580
 msgctxt "switch"
 msgid "ON"
 msgstr "❙ "
@@ -3166,9 +3154,7 @@ msgstr "❙ "
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: ../gtk/gtkswitch.c:355
-#: ../gtk/gtkswitch.c:404
-#: ../gtk/gtkswitch.c:595
+#: ../gtk/gtkswitch.c:355 ../gtk/gtkswitch.c:404 ../gtk/gtkswitch.c:595
 msgctxt "switch"
 msgid "OFF"
 msgstr "○"
@@ -3183,14 +3169,12 @@ msgstr "Неизвестная ошибка при попытке десериа
 msgid "No deserialize function found for format %s"
 msgstr "Не найдена функция десериализации для формата %s"
 
-#: ../gtk/gtktextbufferserialize.c:798
-#: ../gtk/gtktextbufferserialize.c:824
+#: ../gtk/gtktextbufferserialize.c:798 ../gtk/gtktextbufferserialize.c:824
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "В элементе <%s> присутствует как «id», так и «name»"
 
-#: ../gtk/gtktextbufferserialize.c:808
-#: ../gtk/gtktextbufferserialize.c:834
+#: ../gtk/gtktextbufferserialize.c:808 ../gtk/gtktextbufferserialize.c:834
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "Атрибут «%s» был дважды найден в элементе <%s>"
@@ -3210,8 +3194,7 @@ msgstr "Элемент <%s> не имеет ни атрибута «name», ни
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgstr "Атрибут «%s» дважды повторяется в одном элементе <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:965
-#: ../gtk/gtktextbufferserialize.c:990
+#: ../gtk/gtktextbufferserialize.c:965 ../gtk/gtktextbufferserialize.c:990
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr "Атрибут «%s» ошибочен в элементе <%s> в этом контексте"
@@ -3230,10 +3213,8 @@ msgstr "Найден анонимный тег, невозможно созда�
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr "Тега «%s» не существует в буфере, тег не может быть создан."
 
-#: ../gtk/gtktextbufferserialize.c:1151
-#: ../gtk/gtktextbufferserialize.c:1226
-#: ../gtk/gtktextbufferserialize.c:1331
-#: ../gtk/gtktextbufferserialize.c:1405
+#: ../gtk/gtktextbufferserialize.c:1151 ../gtk/gtktextbufferserialize.c:1226
+#: ../gtk/gtktextbufferserialize.c:1331 ../gtk/gtktextbufferserialize.c:1405
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr "Элемент <%s> не может быть размещён перед <%s>"
@@ -3250,8 +3231,10 @@ msgstr "«%s» не является допустимым именем атри�
 
 #: ../gtk/gtktextbufferserialize.c:1200
 #, c-format
-msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
-msgstr "«%s» не может быть преобразовано к значению типа «%s» для атрибута «%s»"
+msgid ""
+"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgstr ""
+"«%s» не может быть преобразовано к значению типа «%s» для атрибута «%s»"
 
 #: ../gtk/gtktextbufferserialize.c:1209
 #, c-format
@@ -3271,10 +3254,11 @@ msgstr "Тег «%s» имеет ошибочный приоритет «%s»"
 #: ../gtk/gtktextbufferserialize.c:1360
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
-msgstr "Наиболее удалённым элементом в тексте должен быть <text_view_markup>, а не <%s>"
+msgstr ""
+"Наиболее удалённым элементом в тексте должен быть <text_view_markup>, а не <"
+"%s>"
 
-#: ../gtk/gtktextbufferserialize.c:1369
-#: ../gtk/gtktextbufferserialize.c:1385
+#: ../gtk/gtktextbufferserialize.c:1369 ../gtk/gtktextbufferserialize.c:1385
 #, c-format
 msgid "A <%s> element has already been specified"
 msgstr "Элемент <%s> уже был определён"
@@ -3288,8 +3272,11 @@ msgid "Serialized data is malformed"
 msgstr "Сериализованные данные неправильно сформированы"
 
 #: ../gtk/gtktextbufferserialize.c:1868
-msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
-msgstr "Сериализованные данные неправильно сформированы. Первым разделом является не GTKTEXTBUFFERCONTENTS-0001"
+msgid ""
+"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgstr ""
+"Сериализованные данные неправильно сформированы. Первым разделом является не "
+"GTKTEXTBUFFERCONTENTS-0001"
 
 #: ../gtk/gtktextutil.c:57
 msgid "LRM _Left-to-right mark"
@@ -3354,50 +3341,38 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:8079
-msgid "Minimize"
-msgstr "Свернуть"
-
-#: ../gtk/gtkwindow.c:8087
+#: ../gtk/gtkwindow.c:8190
 msgid "Unmaximize"
 msgstr "Восстановить"
 
-#: ../gtk/gtkwindow.c:8087
-msgid "Maximize"
-msgstr "Развернуть"
-
-#: ../gtk/gtkwindow.c:8096
+#: ../gtk/gtkwindow.c:8199
 msgid "Always on Top"
 msgstr "Поверх всех окон"
 
-#: ../gtk/gtkwindow.c:8108
+#: ../gtk/gtkwindow.c:8211
 msgid "Always on Visible Workspace"
 msgstr "Всегда на видимом рабочем месте"
 
-#: ../gtk/gtkwindow.c:8116
+#: ../gtk/gtkwindow.c:8219
 msgid "Only on This Workspace"
 msgstr "Только на этом рабочем месте"
 
-#: ../gtk/gtkwindow.c:8133
+#: ../gtk/gtkwindow.c:8236
 msgid "Move to Workspace Up"
 msgstr "Переместить в рабочее место выше"
 
-#: ../gtk/gtkwindow.c:8142
+#: ../gtk/gtkwindow.c:8245
 msgid "Move to Workspace Down"
 msgstr "Переместить в рабочее место ниже"
 
-#: ../gtk/gtkwindow.c:8156
+#: ../gtk/gtkwindow.c:8259
 msgid "Move to Another Workspace"
 msgstr "Переместить на другое рабочее место"
 
-#: ../gtk/gtkwindow.c:8164
+#: ../gtk/gtkwindow.c:8267
 #, c-format
 msgid "Workspace %d"
 msgstr "Рабочее место %d"
-
-#: ../gtk/gtkwindow.c:8184
-msgid "Close"
-msgstr "Закрыть"
 
 #: ../gtk/paper_names_offsets.c:4
 msgctxt "paper size"
@@ -3854,8 +3829,7 @@ msgctxt "paper size"
 msgid "10x14"
 msgstr "10x14"
 
-#: ../gtk/paper_names_offsets.c:95
-#: ../gtk/paper_names_offsets.c:96
+#: ../gtk/paper_names_offsets.c:95 ../gtk/paper_names_offsets.c:96
 msgctxt "paper size"
 msgid "10x15"
 msgstr "10x15"
@@ -4245,8 +4219,7 @@ msgstr "Сбой при перезаписи заголовка\n"
 msgid "Failed to open file %s : %s\n"
 msgstr "Не удалось открыть файл %s : %s\n"
 
-#: ../gtk/updateiconcache.c:1508
-#: ../gtk/updateiconcache.c:1538
+#: ../gtk/updateiconcache.c:1508 ../gtk/updateiconcache.c:1538
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "Сбой при открытии кеш-файла: %s\n"
@@ -4322,7 +4295,8 @@ msgid ""
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
 "Нет индексного файла темы в «%s».\n"
-"Если Вы действительно хотите создать здесь кеш значков, используйте --ignore-theme-index.\n"
+"Если Вы действительно хотите создать здесь кеш значков, используйте --ignore-"
+"theme-index.\n"
 
 #. ID
 #: ../modules/input/imam-et.c:452
@@ -4393,7 +4367,8 @@ msgstr "Пароль:"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1241
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
-msgstr "Для печати документа %s на принтере %s требуется проверить права доступа"
+msgstr ""
+"Для печати документа %s на принтере %s требуется проверить права доступа"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1046
 #, c-format
@@ -4421,7 +4396,8 @@ msgstr "Для получения параметров принтера треб
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1061
 #, c-format
 msgid "Authentication is required to get default printer of %s"
-msgstr "Для получения принтера по умолчанию на %s требуется проверить права доступа"
+msgstr ""
+"Для получения принтера по умолчанию на %s требуется проверить права доступа"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1064
 #, c-format
@@ -4445,7 +4421,8 @@ msgstr "Домен:"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1243
 #, c-format
 msgid "Authentication is required to print document '%s'"
-msgstr "Для печати документа на принтере '%s' требуется проверить права доступа"
+msgstr ""
+"Для печати документа на принтере '%s' требуется проверить права доступа"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1248
 #, c-format
@@ -4454,41 +4431,42 @@ msgstr "Для печати документа на принтере %s треб
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1250
 msgid "Authentication is required to print this document"
-msgstr "Для печати этого документа на принтере требуется проверить права доступа"
+msgstr ""
+"Для печати этого документа на принтере требуется проверить права доступа"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1812
 #, c-format
 msgid "Printer '%s' is low on toner."
-msgstr "В принтере «%s» кончается тонер."
+msgstr "В принтере «%s» заканчивается тонер."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1813
 #, c-format
 msgid "Printer '%s' has no toner left."
-msgstr "В принтере «%s» кончился тонер."
+msgstr "В принтере «%s» закончился тонер."
 
 #. Translators: "Developer" like on photo development context
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1815
 #, c-format
 msgid "Printer '%s' is low on developer."
-msgstr "В принтере «%s» кончается проявитель."
+msgstr "В принтере «%s» заканчивается проявитель."
 
 #. Translators: "Developer" like on photo development context
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1817
 #, c-format
 msgid "Printer '%s' is out of developer."
-msgstr "В принтере «%s» кончился проявитель."
+msgstr "В принтере «%s» закончился проявитель."
 
 #. Translators: "marker" is one color bin of the printer
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1819
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
-msgstr "В принтере «%s» кончается один из тонеров."
+msgstr "В принтере «%s» заканчивается один из тонеров."
 
 #. Translators: "marker" is one color bin of the printer
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1821
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
-msgstr "В принтере «%s» кончился один из тонеров."
+msgstr "В принтере «%s» закончился один из тонеров."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1822
 #, c-format
@@ -4503,12 +4481,12 @@ msgstr "В принтере «%s» открыта дверца."
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1824
 #, c-format
 msgid "Printer '%s' is low on paper."
-msgstr "В принтере «%s» кончается бумага."
+msgstr "В принтере «%s» заканчивается бумага."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1825
 #, c-format
 msgid "Printer '%s' is out of paper."
-msgstr "В принтере «%s» кончилась бумага."
+msgstr "В принтере «%s» закончилась бумага."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1826
 #, c-format
@@ -4518,12 +4496,12 @@ msgstr "Принтер «%s» в данный момент отключён."
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1827
 #, c-format
 msgid "There is a problem on printer '%s'."
-msgstr "Проблема с принтером «%s»."
+msgstr "Неполадка с принтером «%s»."
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2285
 msgid "Paused; Rejecting Jobs"
-msgstr "Приостановлено ; отмена заданий"
+msgstr "Приостановлено; отмена заданий"
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2291
@@ -4796,27 +4774,27 @@ msgid "Command Line"
 msgstr "Командная строка"
 
 #. SUN_BRANDING
-#: ../modules/printbackends/papi/gtkprintbackendpapi.c:809
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:786
 msgid "printer offline"
 msgstr "принтер выключен"
 
 #. SUN_BRANDING
-#: ../modules/printbackends/papi/gtkprintbackendpapi.c:827
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:804
 msgid "ready to print"
 msgstr "готов к печати"
 
 #. SUN_BRANDING
-#: ../modules/printbackends/papi/gtkprintbackendpapi.c:830
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:807
 msgid "processing job"
 msgstr "обработка задания"
 
 #. SUN_BRANDING
-#: ../modules/printbackends/papi/gtkprintbackendpapi.c:834
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:811
 msgid "paused"
 msgstr "приостановлено"
 
 #. SUN_BRANDING
-#: ../modules/printbackends/papi/gtkprintbackendpapi.c:837
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:814
 msgid "unknown"
 msgstr "неизвестен"
 
@@ -4906,8 +4884,7 @@ msgstr "Значение"
 msgid "_Location:"
 msgstr "_Расположение:"
 
-#: ../gtk/gtkfilechooserdefault.ui.h:2
-#: ../gtk/gtkfilechooserdefault.ui.h:3
+#: ../gtk/gtkfilechooserdefault.ui.h:2 ../gtk/gtkfilechooserdefault.ui.h:3
 msgid "Type a file name"
 msgstr "Введите имя файла"
 
@@ -4949,14 +4926,15 @@ msgstr "Гарнитура шрифта"
 
 #: ../gtk/gtkfontchooserwidget.ui.h:3
 msgid "No fonts matched your search. You can revise your search and try again."
-msgstr "Нет шрифтов, соответствующих вашему запросу. Измените параметры поиска и попробуйте ещё раз."
+msgstr ""
+"Нет шрифтов, соответствующих вашему запросу. Измените параметры поиска и "
+"попробуйте ещё раз."
 
 #: ../gtk/gtkpagesetupunixdialog.ui.h:3
 msgid "_Format for:"
 msgstr "_Формат для:"
 
-#: ../gtk/gtkpagesetupunixdialog.ui.h:4
-#: ../gtk/gtkprintunixdialog.ui.h:38
+#: ../gtk/gtkpagesetupunixdialog.ui.h:4 ../gtk/gtkprintunixdialog.ui.h:38
 msgid "_Paper size:"
 msgstr "Размер _бумаги:"
 
@@ -5030,8 +5008,7 @@ msgstr "_Выделенное"
 msgid "Pag_es:"
 msgstr "Страни_цы:"
 
-#: ../gtk/gtkprintunixdialog.ui.h:16
-#: ../gtk/gtkprintunixdialog.ui.h:18
+#: ../gtk/gtkprintunixdialog.ui.h:16 ../gtk/gtkprintunixdialog.ui.h:18
 #: ../gtk/gtkprintunixdialog.ui.h:21
 msgid ""
 "Specify one or more page ranges,\n"
@@ -5135,10 +5112,8 @@ msgid "A_t:"
 msgstr "_В:"
 
 #. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
-#: ../gtk/gtkprintunixdialog.ui.h:51
-#: ../gtk/gtkprintunixdialog.ui.h:55
-#: ../gtk/gtkprintunixdialog.ui.h:57
-#: ../gtk/gtkprintunixdialog.ui.h:61
+#: ../gtk/gtkprintunixdialog.ui.h:51 ../gtk/gtkprintunixdialog.ui.h:55
+#: ../gtk/gtkprintunixdialog.ui.h:57 ../gtk/gtkprintunixdialog.ui.h:61
 #: ../gtk/gtkprintunixdialog.ui.h:64
 msgid ""
 "Specify the time of print,\n"
@@ -5156,8 +5131,7 @@ msgstr "Время печати"
 msgid "On _hold"
 msgstr "О_жидание"
 
-#: ../gtk/gtkprintunixdialog.ui.h:69
-#: ../gtk/gtkprintunixdialog.ui.h:70
+#: ../gtk/gtkprintunixdialog.ui.h:69 ../gtk/gtkprintunixdialog.ui.h:70
 msgid "Hold the job until it is explicitly released"
 msgstr "Задержать задание до дополнительной команды"
 
@@ -5219,8 +5193,7 @@ msgstr "Повышает или понижает громкость"
 msgid "+"
 msgstr "+"
 
-#: ../gtk/gtkvolumebutton.ui.h:4
-#: ../gtk/gtkvolumebutton.ui.h:5
+#: ../gtk/gtkvolumebutton.ui.h:4 ../gtk/gtkvolumebutton.ui.h:5
 msgid "Volume Up"
 msgstr "Громче"
 
@@ -5232,8 +5205,7 @@ msgstr "Повышает громкость"
 msgid "-"
 msgstr "-"
 
-#: ../gtk/gtkvolumebutton.ui.h:8
-#: ../gtk/gtkvolumebutton.ui.h:9
+#: ../gtk/gtkvolumebutton.ui.h:8 ../gtk/gtkvolumebutton.ui.h:9
 msgid "Volume Down"
 msgstr "Тише"
 
