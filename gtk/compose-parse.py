@@ -21,7 +21,7 @@ import sys
 import getopt
 
 # We grab files off the web, left and right.
-URL_COMPOSE = 'http://gitweb.freedesktop.org/?p=xorg/lib/libX11.git;a=blob_plain;f=nls/en_US.UTF-8/Compose.pre'
+URL_COMPOSE = 'http://cgit.freedesktop.org/xorg/lib/libX11/plain/nls/en_US.UTF-8/Compose.pre'
 URL_KEYSYMSTXT = "http://www.cl.cam.ac.uk/~mgk25/ucs/keysyms.txt"
 URL_GDKKEYSYMSH = "http://git.gnome.org/browse/gtk%2B/plain/gdk/gdkkeysyms.h"
 URL_UNICODEDATATXT = 'http://www.unicode.org/Public/6.0.0/ucd/UnicodeData.txt'
@@ -52,13 +52,13 @@ headerfile_start = """/* GTK - The GIMP Tool Kit
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this library. If not, see see <http://www.gnu.org/licenses/>.
+ * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /*
  * File auto-generated from script found at http://bugzilla.gnome.org/show_bug.cgi?id=321896
  * using the input files
- *  Input   : http://gitweb.freedesktop.org/?p=xorg/lib/libX11.git;a=blob_plain;f=nls/en_US.UTF-8/Compose.pre
+ *  Input   : http://cgit.freedesktop.org/xorg/lib/libX11/plain/nls/en_US.UTF-8/Compose.pre
  *  Input   : http://www.cl.cam.ac.uk/~mgk25/ucs/keysyms.txt
  *  Input   : http://www.unicode.org/Public/UNIDATA/UnicodeData.txt
  *
@@ -375,6 +375,7 @@ def process_keysymstxt():
         keysymdb['ninesubscript'] = 0x2089
         keysymdb['dead_doublegrave'] = 0x030F
         keysymdb['dead_invertedbreve'] = 0x0311
+        keysymdb['dead_greek'] = 0xfe8c
 
 	return keysymdb
 
@@ -499,18 +500,18 @@ for line in xorg_compose_sequences_raw:
 		continue
 
 	#line = line[:-1]
-	components = split(':', line)
+	components = split(':', line, 1)
 	if len(components) != 2:
 		print "Invalid line %(linenum_compose)d in %(filename)s: No sequence\
 		/value pair found" % { "linenum_compose": linenum_compose, "filename": filename_compose }
 		exit(-1)
-	(seq, val ) = split(':', line)
+	(seq, val ) = split(':', line, 1)
 	seq = seq.strip()
 	val = val.strip()
 	raw_sequence = findall('\w+', seq)
 	values = split('\s+', val)
 	unichar_temp = split('"', values[0])
-	unichar = unichar_temp[1]
+	unichar_utf8 = unichar_temp[1]
 	if len(values) == 1:
 		continue
 	codepointstr = values[1]
@@ -527,10 +528,8 @@ for line in xorg_compose_sequences_raw:
 			#print raw_sequence, codepointstr
 		codepoint = keysymunicodedatabase[codepointstr]
 	else:
-		print
-		print "Invalid codepoint at line %(linenum_compose)d in %(filename)s:\
-		 %(line)s" % { "linenum_compose": linenum_compose, "filename": filename_compose, "line": line }
-		exit(-1)
+		unichar = unicode(unichar_utf8, 'utf-8')
+		codepoint = ord(unichar)
 	sequence = rename_combining(raw_sequence)
 	reject_this = False
 	for i in sequence:
@@ -773,6 +772,16 @@ def convert_UnotationToHex(arg):
 def addprefix_GDK(arg):
 	if match('^0x', arg):
 		return '%(arg)s, ' % { 'arg': arg }
+	elif match('^U[0-9A-F][0-9A-F][0-9A-F][0-9A-F]$', arg.upper()):
+                keysym = ''
+                for k, c in keysymunicodedatabase.items():
+                    if c == keysymvalue(arg):
+                        keysym = k
+                        break
+                if keysym != '':
+		    return 'GDK_KEY_%(arg)s, ' % { 'arg': keysym }
+                else:
+		    return '0x%(arg)04X, ' % { 'arg': keysymvalue(arg) }
 	else:
 		return 'GDK_KEY_%(arg)s, ' % { 'arg': arg }
 
