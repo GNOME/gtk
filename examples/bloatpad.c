@@ -113,12 +113,46 @@ window_paste (GSimpleAction *action,
 
 }
 
+static void
+activate_clear (GSimpleAction *action,
+                GVariant      *parameter,
+                gpointer       user_data)
+{
+  GtkWindow *window = GTK_WINDOW (user_data);
+  GtkTextView *text = g_object_get_data ((GObject*)window, "bloatpad-text");
+
+  gtk_text_buffer_set_text (gtk_text_view_get_buffer (text), "", -1);
+}
+
+static void
+text_buffer_changed_cb (GtkTextBuffer *buffer,
+                        GApplication  *app)
+{
+  gint old_n, n;
+
+  old_n = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (buffer), "line-count"));
+  n = gtk_text_buffer_get_line_count (buffer);
+  g_object_set_data (G_OBJECT (buffer), "line-count", GINT_TO_POINTER (n));
+
+  if (old_n < 3 && n == 3)
+    {
+      GNotification *n;
+      n = g_notification_new ("Three lines of text");
+      g_notification_set_body (n, "Keep up the good work!");
+      g_notification_add_button (n, "Start over", "app.clear");
+      g_application_send_notification (app, "three-lines", n);
+      g_object_unref (n);
+    }
+}
+
 static GActionEntry win_entries[] = {
   { "copy", window_copy, NULL, NULL, NULL },
   { "paste", window_paste, NULL, NULL, NULL },
   { "fullscreen", activate_toggle, NULL, "false", change_fullscreen_state },
   { "busy", activate_toggle, NULL, "false", change_busy_state },
-  { "justify", activate_radio, "s", "'left'", change_justify_state }
+  { "justify", activate_radio, "s", "'left'", change_justify_state },
+  { "clear", activate_clear, NULL, NULL, NULL }
+
 };
 
 static void
@@ -196,6 +230,8 @@ new_window (GApplication *app,
           g_free (contents);
         }
     }
+  g_signal_connect (gtk_text_view_get_buffer (GTK_TEXT_VIEW (view)), "changed",
+                    G_CALLBACK (text_buffer_changed_cb), app);
 
   gtk_widget_show_all (GTK_WIDGET (window));
 }
