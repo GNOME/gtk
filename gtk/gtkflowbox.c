@@ -1215,6 +1215,9 @@ gtk_flow_box_get_first_focusable (GtkFlowBox *box)
   GtkFlowBoxChild *child;
 
   iter = g_sequence_get_begin_iter (BOX_PRIV (box)->children);
+  if (g_sequence_iter_is_end (iter))
+    return NULL;
+
   child = g_sequence_get (iter);
   if (child_is_visible (GTK_WIDGET (child)) &&
       gtk_widget_is_sensitive (GTK_WIDGET (child)))
