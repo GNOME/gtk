@@ -1255,7 +1255,12 @@ load_themes (GtkIconTheme *icon_theme)
   if (priv->current_theme)
     insert_theme (icon_theme, priv->current_theme);
 
-  /* Always look in the "default" icon theme */
+  /* Always look in the gnome and hicolor icon themes.
+   * Looking in hicolor is mandated by the spec, looking
+   * in gnome is a pragmatic solution to prevent missing
+   * icons in GTK+ applications when run under, e.g. KDE.
+   */
+  insert_theme (icon_theme, "gnome");
   insert_theme (icon_theme, DEFAULT_THEME_NAME);
   priv->themes = g_list_reverse (priv->themes);
 
