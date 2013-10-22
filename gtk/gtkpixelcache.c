@@ -413,6 +413,7 @@ _gtk_pixel_cache_draw (GtkPixelCache *cache,
 
   cache->timeout_tag = g_timeout_add_seconds (BLOW_CACHE_TIMEOUT_SEC,
 					      blow_cache_cb, cache);
+  g_source_set_name_by_id (cache->timeout_tag, "[gtk+] blow_cache_cb");
 
   _gtk_pixel_cache_create_surface_if_needed (cache, window,
 					     view_rect, canvas_rect);

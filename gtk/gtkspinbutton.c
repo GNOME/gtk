@@ -1464,6 +1464,7 @@ start_spinning (GtkSpinButton *spin,
       priv->timer = gdk_threads_add_timeout (TIMEOUT_INITIAL,
                                    (GSourceFunc) gtk_spin_button_timer,
                                    (gpointer) spin);
+      g_source_set_name_by_id (priv->timer, "[gtk+] gtk_spin_button_timer");
     }
   gtk_spin_button_real_spin (spin, click_child == priv->up_panel ? step : -step);
 
@@ -1589,6 +1590,7 @@ gtk_spin_button_timer (GtkSpinButton *spin_button)
           priv->timer = gdk_threads_add_timeout (TIMEOUT_REPEAT,
                                               (GSourceFunc) gtk_spin_button_timer,
                                               (gpointer) spin_button);
+          g_source_set_name_by_id (priv->timer, "[gtk+] gtk_spin_button_timer");
         }
       else
         {

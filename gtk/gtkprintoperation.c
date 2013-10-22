@@ -2985,6 +2985,7 @@ print_pages (GtkPrintOperation       *op,
 	gdk_threads_add_timeout (SHOW_PROGRESS_TIME, 
 		       (GSourceFunc)show_progress_timeout,
 		       data);
+      g_source_set_name_by_id (priv->show_progress_timeout_id, "[gtk+] show_progress_timeout");
 
       data->progress = progress;
     }

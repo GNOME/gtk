@@ -188,6 +188,7 @@ gdk_wayland_device_update_window_cursor (GdkWaylandDeviceData *wd)
       id = g_timeout_add (next_image_delay,
                           (GSourceFunc)gdk_wayland_device_update_window_cursor,
                           wd);
+      g_source_set_name_by_id (id, "[gtk+] gdk_wayland_device_update_window_cursor");
 
       wd->cursor_timeout_id = id;
       wd->cursor_image_index = next_image_index;
@@ -1112,10 +1113,12 @@ deliver_key_event (GdkWaylandDeviceData *device,
 
       device->repeat_timer =
         gdk_threads_add_timeout (delay, keyboard_repeat, device);
+      g_source_set_name_by_id (device->repeat_timer, "[gtk+] keyboard_repeat");
       return TRUE;
     case 2:
       device->repeat_timer =
         gdk_threads_add_timeout (interval, keyboard_repeat, device);
+      g_source_set_name_by_id (device->repeat_timer, "[gtk+] keyboard_repeat");
       return FALSE;
     default:
       return TRUE;

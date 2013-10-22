@@ -1051,6 +1051,7 @@ gtk_selection_convert (GtkWidget *widget,
   GList *tmp_list;
   GdkWindow *owner_window;
   GdkDisplay *display;
+  guint id;
   
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   g_return_val_if_fail (selection != GDK_NONE, FALSE);
@@ -1131,8 +1132,9 @@ gtk_selection_convert (GtkWidget *widget,
   
   current_retrievals = g_list_append (current_retrievals, info);
   gdk_selection_convert (gtk_widget_get_window (widget), selection, target, time_);
-  gdk_threads_add_timeout (1000,
+  id = gdk_threads_add_timeout (1000,
       (GSourceFunc) gtk_selection_retrieval_timeout, info);
+  g_source_set_name_by_id (id, "[gtk+] gtk_selection_retrieval_timeout");
   
   return TRUE;
 }
@@ -2465,6 +2467,8 @@ _gtk_selection_request (GtkWidget *widget,
   
   if (info->num_incrs > 0)
     {
+      guint id;
+
       /* FIXME: this could be dangerous if window doesn't still
 	 exist */
       
@@ -2476,7 +2480,8 @@ _gtk_selection_request (GtkWidget *widget,
 			     gdk_window_get_events (info->requestor) |
 			     GDK_PROPERTY_CHANGE_MASK);
       current_incrs = g_list_append (current_incrs, info);
-      gdk_threads_add_timeout (1000, (GSourceFunc) gtk_selection_incr_timeout, info);
+      id = gdk_threads_add_timeout (1000, (GSourceFunc) gtk_selection_incr_timeout, info);
+      g_source_set_name_by_id (id, "[gtk+] gtk_selection_incr_timeout");
     }
   
   /* If it was a MULTIPLE request, set the property to indicate which

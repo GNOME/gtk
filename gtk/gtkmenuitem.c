@@ -2009,6 +2009,7 @@ _gtk_menu_item_popup_submenu (GtkWidget *widget,
           priv->timer = gdk_threads_add_timeout (popup_delay,
                                                  gtk_menu_item_popup_timeout,
                                                  menu_item);
+          g_source_set_name_by_id (priv->timer, "[gtk+] gtk_menu_item_popup_timeout");
 
           if (event &&
               event->type != GDK_BUTTON_PRESS &&

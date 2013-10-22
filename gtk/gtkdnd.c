@@ -3872,6 +3872,7 @@ gtk_drag_drop (GtkDragSourceInfo *info,
       info->drop_timeout = gdk_threads_add_timeout (DROP_ABORT_TIME,
 					  gtk_drag_abort_timeout,
 					  info);
+      g_source_set_name_by_id (info->drop_timeout, "[gtk+] gtk_drag_abort_timeout");
     }
 }
 

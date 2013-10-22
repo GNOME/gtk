@@ -4257,6 +4257,7 @@ initial_timeout (gpointer data)
   priv->timer->timeout_id = gdk_threads_add_timeout (TIMEOUT_REPEAT * SCROLL_DELAY_FACTOR,
                                                      second_timeout,
                                                      range);
+  g_source_set_name_by_id (priv->timer->timeout_id, "[gtk+] second_timeout");
   /* remove self */
   return FALSE;
 }
@@ -4275,6 +4276,7 @@ gtk_range_add_step_timer (GtkRange      *range,
   priv->timer->timeout_id = gdk_threads_add_timeout (TIMEOUT_INITIAL,
                                                      initial_timeout,
                                                      range);
+  g_source_set_name_by_id (priv->timer->timeout_id, "[gtk+] initial_timeout");
   priv->timer->step = step;
 
   gtk_range_scroll (range, priv->timer->step);

@@ -5588,14 +5588,18 @@ blink_cb (gpointer data)
       priv->blink_timeout = 0;
     } 
   else if (visible)
-    priv->blink_timeout = gdk_threads_add_timeout (get_cursor_time (text_view) * CURSOR_OFF_MULTIPLIER / CURSOR_DIVIDER,
-						   blink_cb,
-						   text_view);
+    {
+      priv->blink_timeout = gdk_threads_add_timeout (get_cursor_time (text_view) * CURSOR_OFF_MULTIPLIER / CURSOR_DIVIDER,
+						     blink_cb,
+						     text_view);
+      g_source_set_name_by_id (priv->blink_timeout, "[gtk+] blink_cb");
+    }
   else 
     {
       priv->blink_timeout = gdk_threads_add_timeout (get_cursor_time (text_view) * CURSOR_ON_MULTIPLIER / CURSOR_DIVIDER,
 						     blink_cb,
 						     text_view);
+      g_source_set_name_by_id (priv->blink_timeout, "[gtk+] blink_cb");
       priv->blink_time += get_cursor_time (text_view);
     }
 
@@ -5646,6 +5650,7 @@ gtk_text_view_check_cursor_blink (GtkTextView *text_view)
 	      priv->blink_timeout = gdk_threads_add_timeout (get_cursor_time (text_view) * CURSOR_OFF_MULTIPLIER / CURSOR_DIVIDER,
 							     blink_cb,
 							     text_view);
+	      g_source_set_name_by_id (priv->blink_timeout, "[gtk+] blink_cb");
 	    }
 	}
       else
@@ -5677,6 +5682,7 @@ gtk_text_view_pend_cursor_blink (GtkTextView *text_view)
       priv->blink_timeout = gdk_threads_add_timeout (get_cursor_time (text_view) * CURSOR_PEND_MULTIPLIER / CURSOR_DIVIDER,
 						     blink_cb,
 						     text_view);
+      g_source_set_name_by_id (priv->blink_timeout, "[gtk+] blink_cb");
     }
 }
 
@@ -6930,6 +6936,7 @@ selection_motion_event_handler (GtkTextView    *text_view,
   
   text_view->priv->scroll_timeout =
     gdk_threads_add_timeout (50, selection_scan_timeout, text_view);
+  g_source_set_name_by_id (text_view->priv->scroll_timeout, "[gtk+] selection_scan_timeout");
 
   if (test_touchscreen || input_source == GDK_SOURCE_TOUCHSCREEN)
     gtk_text_view_update_handles (text_view, GTK_TEXT_HANDLE_MODE_SELECTION);
@@ -7605,8 +7612,11 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
   priv->dnd_device = gdk_drag_context_get_device (context);
 
   if (!priv->scroll_timeout)
+  {
     priv->scroll_timeout =
       gdk_threads_add_timeout (100, drag_scan_timeout, text_view);
+    g_source_set_name_by_id (text_view->priv->scroll_timeout, "[gtk+] drag_scan_timeout");
+  }
 
   /* TRUE return means don't propagate the drag motion to parent
    * widgets that may also be drop sites.
@@ -8942,6 +8952,7 @@ gtk_text_view_selection_bubble_popup_set (GtkTextView *text_view)
   priv->selection_bubble_timeout_id =
     gdk_threads_add_timeout (1000, gtk_text_view_selection_bubble_popup_cb,
                              text_view);
+  g_source_set_name_by_id (priv->selection_bubble_timeout_id, "[gtk+] gtk_text_view_selection_bubble_popup_cb");
 }
 
 /* Child GdkWindows */

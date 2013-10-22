@@ -2519,6 +2519,7 @@ gtk_entry_completion_changed (GtkWidget *widget,
     gdk_threads_add_timeout (COMPLETION_TIMEOUT,
                    gtk_entry_completion_timeout,
                    completion);
+  g_source_set_name_by_id (completion->priv->completion_timeout, "[gtk+] gtk_entry_completion_timeout");
 }
 
 static gboolean

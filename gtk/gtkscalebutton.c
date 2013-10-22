@@ -1237,6 +1237,7 @@ cb_button_press (GtkWidget      *widget,
   priv->click_id = gdk_threads_add_timeout (priv->click_timeout,
                                             cb_button_timeout,
                                             button);
+  g_source_set_name_by_id (priv->click_id, "[gtk+] cb_button_timeout");
   cb_button_timeout (button);
 
   return TRUE;

@@ -1394,7 +1394,10 @@ gtk_recent_manager_changed (GtkRecentManager *manager)
    * schedule an emission immediately.
    */
   if (manager->priv->changed_timeout == 0)
-    manager->priv->changed_timeout = gdk_threads_add_timeout (250, emit_manager_changed, manager);
+    {
+      manager->priv->changed_timeout = gdk_threads_add_timeout (250, emit_manager_changed, manager);
+      g_source_set_name_by_id (manager->priv->changed_timeout, "[gtk+] emit_manager_changed");
+    }
   else
     {
       manager->priv->changed_age += 1;

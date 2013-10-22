@@ -2022,9 +2022,11 @@ gtk_icon_view_motion (GtkWidget      *widget,
 	  icon_view->priv->event_last_x = event->x;
 	  icon_view->priv->event_last_y = event->y;
 
-	  if (icon_view->priv->scroll_timeout_id == 0)
+	  if (icon_view->priv->scroll_timeout_id == 0) {
 	    icon_view->priv->scroll_timeout_id = gdk_threads_add_timeout (30, rubberband_scroll_timeout, 
 								icon_view);
+	    g_source_set_name_by_id (icon_view->priv->scroll_timeout_id, "[gtk+] rubberband_scroll_timeout");
+	  }
  	}
       else 
 	remove_scroll_timeout (icon_view);
@@ -6668,6 +6670,7 @@ gtk_icon_view_drag_motion (GtkWidget      *widget,
 
 	  icon_view->priv->scroll_timeout_id =
 	    gdk_threads_add_timeout_full (G_PRIORITY_DEFAULT, 50, drag_scroll_timeout, data, (GDestroyNotify) drag_scroll_data_free);
+	  g_source_set_name_by_id (icon_view->priv->scroll_timeout_id, "[gtk+] drag_scroll_timeout");
 	}
 
       if (target == gdk_atom_intern_static_string ("GTK_TREE_MODEL_ROW"))

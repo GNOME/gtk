@@ -3682,10 +3682,12 @@ gtk_combo_box_list_button_pressed (GtkWidget      *widget,
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->button), TRUE);
 
   priv->auto_scroll = FALSE;
-  if (priv->scroll_timer == 0)
+  if (priv->scroll_timer == 0) {
     priv->scroll_timer = gdk_threads_add_timeout (SCROLL_TIME,
                                                   (GSourceFunc) gtk_combo_box_list_scroll_timeout,
                                                    combo_box);
+    g_source_set_name_by_id (priv->scroll_timer, "[gtk+] gtk_combo_box_list_scroll_timeout");
+  }
 
   priv->popup_in_progress = TRUE;
 

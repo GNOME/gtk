@@ -1480,6 +1480,7 @@ animation_timeout (gpointer data)
 
       priv->animation_timeout =
         gdk_threads_add_timeout (delay, animation_timeout, image);
+      g_source_set_name_by_id (priv->animation_timeout, "[gtk+] animation_timeout");
 
       gtk_widget_queue_draw (widget);
     }
@@ -1500,9 +1501,11 @@ get_animation_frame (GtkImage *image)
         gdk_pixbuf_animation_get_iter (_gtk_icon_helper_peek_animation (priv->icon_helper), NULL);
 
       delay = gdk_pixbuf_animation_iter_get_delay_time (priv->animation_iter);
-      if (delay >= 0)
+      if (delay >= 0) {
         priv->animation_timeout =
           gdk_threads_add_timeout (delay, animation_timeout, image);
+        g_source_set_name_by_id (priv->animation_timeout, "[gtk+] animation_timeout");
+      }
     }
 
   /* don't advance the anim iter here, or we could get frame changes between two

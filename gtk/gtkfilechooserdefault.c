@@ -3653,6 +3653,7 @@ load_setup_timer (GtkFileChooserDefault *impl)
   g_assert (priv->load_state != LOAD_PRELOAD);
 
   priv->load_timeout_id = gdk_threads_add_timeout (MAX_LOADING_TIME, load_timeout_cb, impl);
+  g_source_set_name_by_id (priv->load_timeout_id, "[gtk+] load_timeout_cb");
   priv->load_state = LOAD_PRELOAD;
 }
 

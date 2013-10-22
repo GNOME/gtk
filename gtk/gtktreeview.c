@@ -3690,6 +3690,7 @@ do_prelight (GtkTreeView *tree_view,
     {
       tree_view->priv->auto_expand_timeout = 
 	gdk_threads_add_timeout (AUTO_EXPAND_TIMEOUT, auto_expand_timeout, tree_view);
+      g_source_set_name_by_id (tree_view->priv->auto_expand_timeout, "[gtk+] auto_expand_timeout");
     }
 }
 
@@ -7281,6 +7282,7 @@ add_scroll_timeout (GtkTreeView *tree_view)
     {
       tree_view->priv->scroll_timeout =
 	gdk_threads_add_timeout (150, scroll_row_timeout, tree_view);
+      g_source_set_name_by_id (tree_view->priv->scroll_timeout, "[gtk+] scroll_row_timeout");
     }
 }
 
@@ -7837,6 +7839,7 @@ gtk_tree_view_drag_motion (GtkWidget        *widget,
         {
           tree_view->priv->open_dest_timeout =
             gdk_threads_add_timeout (AUTO_EXPAND_TIMEOUT, open_row_timeout, tree_view);
+          g_source_set_name_by_id (tree_view->priv->open_dest_timeout, "[gtk+] open_row_timeout");
         }
       else
         {
@@ -11132,6 +11135,7 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view,
     gdk_threads_add_timeout (GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT,
 		   (GSourceFunc) gtk_tree_view_search_entry_flush_timeout,
 		   tree_view);
+  g_source_set_name_by_id (tree_view->priv->typeselect_flush_timeout, "[gtk+] gtk_tree_view_search_entry_flush_timeout");
 
   /* Grab focus without selecting all the text. */
   _gtk_entry_grab_focus (GTK_ENTRY (tree_view->priv->search_entry), FALSE);
@@ -15030,6 +15034,7 @@ gtk_tree_view_search_preedit_changed (GtkIMContext *im_context,
 	gdk_threads_add_timeout (GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT,
 		       (GSourceFunc) gtk_tree_view_search_entry_flush_timeout,
 		       tree_view);
+      g_source_set_name_by_id (tree_view->priv->typeselect_flush_timeout, "[gtk+] gtk_tree_view_search_entry_flush_timeout");
     }
 
 }
@@ -15072,7 +15077,9 @@ static void
 gtk_tree_view_search_enable_popdown (GtkWidget *widget,
 				     gpointer   data)
 {
-  gdk_threads_add_timeout_full (G_PRIORITY_HIGH, 200, gtk_tree_view_real_search_enable_popdown, g_object_ref (data), g_object_unref);
+  guint id;
+  id = gdk_threads_add_timeout_full (G_PRIORITY_HIGH, 200, gtk_tree_view_real_search_enable_popdown, g_object_ref (data), g_object_unref);
+  g_source_set_name_by_id (id, "[gtk+] gtk_tree_view_real_search_enable_popdown");
 }
 
 static gboolean
@@ -15132,6 +15139,7 @@ gtk_tree_view_search_scroll_event (GtkWidget *widget,
 	gdk_threads_add_timeout (GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT,
 		       (GSourceFunc) gtk_tree_view_search_entry_flush_timeout,
 		       tree_view);
+      g_source_set_name_by_id (tree_view->priv->typeselect_flush_timeout, "[gtk+] gtk_tree_view_search_entry_flush_timeout");
     }
 
   return retval;
@@ -15208,6 +15216,7 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
 	gdk_threads_add_timeout (GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT,
 		       (GSourceFunc) gtk_tree_view_search_entry_flush_timeout,
 		       tree_view);
+      g_source_set_name_by_id (tree_view->priv->typeselect_flush_timeout, "[gtk+] gtk_tree_view_search_entry_flush_timeout");
     }
 
   return retval;
@@ -15460,6 +15469,7 @@ gtk_tree_view_search_init (GtkWidget   *entry,
 	gdk_threads_add_timeout (GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT,
 		       (GSourceFunc) gtk_tree_view_search_entry_flush_timeout,
 		       tree_view);
+      g_source_set_name_by_id (tree_view->priv->typeselect_flush_timeout, "[gtk+] gtk_tree_view_search_entry_flush_timeout");
     }
 
   if (*text == '\0')

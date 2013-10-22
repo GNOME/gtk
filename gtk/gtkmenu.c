@@ -3847,6 +3847,7 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
                                            ? MENU_SCROLL_TIMEOUT2
                                            : MENU_SCROLL_TIMEOUT1,
                                          gtk_menu_scroll_timeout, menu);
+              g_source_set_name_by_id (priv->scroll_timeout, "[gtk+] gtk_menu_scroll_timeout");
             }
           else if (!enter && !in_arrow && priv->upper_arrow_prelight)
             {
@@ -3919,6 +3920,7 @@ gtk_menu_handle_scrolling (GtkMenu *menu,
                                            ? MENU_SCROLL_TIMEOUT2
                                            : MENU_SCROLL_TIMEOUT1,
                                          gtk_menu_scroll_timeout, menu);
+              g_source_set_name_by_id (priv->scroll_timeout, "[gtk+] gtk_menu_scroll_timeout");
             }
           else if (!enter && !in_arrow && priv->lower_arrow_prelight)
             {
@@ -4401,6 +4403,7 @@ gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
                                                                gtk_menu_stop_navigating_submenu_cb,
                                                                popdown_data,
                                                                (GDestroyNotify) g_free);
+      g_source_set_name_by_id (priv->navigation_timeout, "[gtk+] gtk_menu_stop_navigating_submenu_cb");
     }
 }
 

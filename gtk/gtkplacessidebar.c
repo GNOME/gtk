@@ -1480,6 +1480,7 @@ check_switch_location_timer (GtkPlacesSidebar *sidebar, const char *uri)
 	if (uri != NULL) {
 		sidebar->drop_target_uri = g_strdup (uri);
 		sidebar->switch_location_timer = gdk_threads_add_timeout (TIMEOUT_EXPAND, switch_location_timer, sidebar);
+		g_source_set_name_by_id (sidebar->switch_location_timer, "[gtk+] switch_location_timer");
 	}
 }
 
@@ -1698,6 +1699,7 @@ drag_leave_callback (GtkTreeView *tree_view,
 		g_source_remove (sidebar->drag_leave_timeout_id);
 
 	sidebar->drag_leave_timeout_id = gdk_threads_add_timeout (500, drag_leave_timeout_cb, sidebar);
+	g_source_set_name_by_id (sidebar->drag_leave_timeout_id, "[gtk+] drag_leave_timeout_cb");
 
 	remove_switch_location_timer (sidebar);
 

@@ -2892,6 +2892,7 @@ calendar_timer (gpointer data)
                                             TIMEOUT_REPEAT * SCROLL_DELAY_FACTOR,
                                             (GSourceFunc) calendar_timer,
                                             (gpointer) calendar, NULL);
+          g_source_set_name_by_id (priv->timer, "[gtk+] calendar_timer");
         }
       else
         retval = TRUE;
@@ -2915,6 +2916,7 @@ calendar_start_spinning (GtkCalendar *calendar,
                                         TIMEOUT_INITIAL,
                                         (GSourceFunc) calendar_timer,
                                         (gpointer) calendar, NULL);
+      g_source_set_name_by_id (priv->timer, "[gtk+] calendar_timer");
     }
 }
 

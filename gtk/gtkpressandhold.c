@@ -205,6 +205,7 @@ gtk_press_and_hold_process_event (GtkPressAndHold *pah,
       priv->start_y = priv->y;
       priv->timeout =
           gdk_threads_add_timeout (priv->hold_time, hold_action, pah);
+      g_source_set_name_by_id (priv->timeout, "[gtk+] hold_action");
     }
   else if (event->type == GDK_TOUCH_UPDATE)
     {
@@ -233,6 +234,7 @@ gtk_press_and_hold_process_event (GtkPressAndHold *pah,
       priv->start_y = priv->y;
       priv->timeout =
           gdk_threads_add_timeout (priv->hold_time, hold_action, pah);
+      g_source_set_name_by_id (priv->timeout, "[gtk+] hold_action");
     }
   else if (event->type == GDK_BUTTON_RELEASE)
     {

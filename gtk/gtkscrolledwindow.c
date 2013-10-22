@@ -2742,10 +2742,13 @@ gtk_scrolled_window_captured_button_press (GtkWidget *widget,
 
   /* Only set the timeout if we're going to store an event */
   if (priv->capture_button_press)
-    priv->release_timeout_id =
-      gdk_threads_add_timeout (RELEASE_EVENT_TIMEOUT,
-                               (GSourceFunc) gtk_scrolled_window_release_captured_event,
-                               scrolled_window);
+    {
+      priv->release_timeout_id =
+        gdk_threads_add_timeout (RELEASE_EVENT_TIMEOUT,
+                                 (GSourceFunc) gtk_scrolled_window_release_captured_event,
+                                 scrolled_window);
+      g_source_set_name_by_id (priv->release_timeout_id, "[gtk+] gtk_scrolled_window_release_captured_event");
+    }
 
   priv->in_drag = FALSE;
 

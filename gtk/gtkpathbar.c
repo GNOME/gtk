@@ -1080,6 +1080,7 @@ gtk_path_bar_scroll_timeout (GtkPathBar *path_bar)
 	  path_bar->priv->timer = gdk_threads_add_timeout (TIMEOUT_REPEAT * SCROLL_DELAY_FACTOR,
 					   (GSourceFunc)gtk_path_bar_scroll_timeout,
 					   path_bar);
+          g_source_set_name_by_id (path_bar->priv->timer, "[gtk+] gtk_path_bar_scroll_timeout");
 	}
       else
 	retval = TRUE;
@@ -1184,6 +1185,7 @@ gtk_path_bar_slider_button_press (GtkWidget      *widget,
       path_bar->priv->timer = gdk_threads_add_timeout (TIMEOUT_INITIAL,
 				       (GSourceFunc)gtk_path_bar_scroll_timeout,
 				       path_bar);
+      g_source_set_name_by_id (path_bar->priv->timer, "[gtk+] gtk_path_bar_scroll_timeout");
     }
 
   return FALSE;

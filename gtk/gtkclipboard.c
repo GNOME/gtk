@@ -2148,6 +2148,7 @@ gtk_clipboard_real_store (GtkClipboard *clipboard)
 
   clipboard->store_loop = g_main_loop_new (NULL, TRUE);
   clipboard->store_timeout = g_timeout_add_seconds (10, (GSourceFunc) gtk_clipboard_store_timeout, clipboard);
+  g_source_set_name_by_id (clipboard->store_timeout, "[gtk+] gtk_clipboard_store_timeout");
 
   if (g_main_loop_is_running (clipboard->store_loop))
     {

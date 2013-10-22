@@ -3459,6 +3459,7 @@ gtk_notebook_motion_notify (GtkWidget      *widget,
               priv->dnd_timer = gdk_threads_add_timeout (TIMEOUT_REPEAT * SCROLL_DELAY_FACTOR,
                                                scroll_notebook_timer,
                                                (gpointer) notebook);
+              g_source_set_name_by_id (priv->dnd_timer, "[gtk+] scroll_notebook_timer");
             }
         }
       else
@@ -3814,6 +3815,7 @@ gtk_notebook_drag_motion (GtkWidget      *widget,
           priv->switch_tab_timer = gdk_threads_add_timeout (TIMEOUT_EXPAND,
                                                   gtk_notebook_switch_tab_timeout,
                                                   widget);
+          g_source_set_name_by_id (priv->switch_tab_timer, "[gtk+] gtk_notebook_switch_tab_timeout");
         }
     }
   else
@@ -4871,6 +4873,7 @@ gtk_notebook_timer (GtkNotebook *notebook)
           priv->timer = gdk_threads_add_timeout (TIMEOUT_REPEAT * SCROLL_DELAY_FACTOR,
                                            (GSourceFunc) gtk_notebook_timer,
                                            (gpointer) notebook);
+          g_source_set_name_by_id (priv->timer, "[gtk+] gtk_notebook_timer");
         }
       else
         retval = TRUE;
@@ -4889,6 +4892,7 @@ gtk_notebook_set_scroll_timer (GtkNotebook *notebook)
       priv->timer = gdk_threads_add_timeout (TIMEOUT_INITIAL,
                                        (GSourceFunc) gtk_notebook_timer,
                                        (gpointer) notebook);
+      g_source_set_name_by_id (priv->timer, "[gtk+] gtk_notebook_timer");
       priv->need_timer = TRUE;
     }
 }
