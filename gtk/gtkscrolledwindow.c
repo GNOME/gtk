@@ -1145,7 +1145,7 @@ gtk_scrolled_window_set_kinetic_scrolling (GtkScrolledWindow *scrolled_window,
         }
       if (priv->deceleration_id)
         {
-          g_source_remove (priv->deceleration_id);
+          gtk_widget_remove_tick_callback (GTK_WIDGET (scrolled_window), priv->deceleration_id);
           priv->deceleration_id = 0;
         }
     }
@@ -1252,7 +1252,7 @@ gtk_scrolled_window_destroy (GtkWidget *widget)
     }
   if (priv->deceleration_id)
     {
-      g_source_remove (priv->deceleration_id);
+      gtk_widget_remove_tick_callback (widget, priv->deceleration_id);
       priv->deceleration_id = 0;
     }
 
