@@ -8501,6 +8501,20 @@ gtk_text_view_value_changed (GtkAdjustment *adjustment,
       priv->first_validate_idle = 0;
     }
 
+  /* Allow to extend selection with mouse scrollwheel. Bug 710612 */
+  if (gtk_gesture_is_active (priv->drag_gesture))
+    {
+      GdkEvent *current_event;
+      current_event = gtk_get_current_event ();
+      if (current_event != NULL)
+        {
+          if (current_event->type == GDK_SCROLL)
+            move_mark_to_pointer_and_scroll (text_view, "insert");
+
+          gdk_event_free (current_event);
+        }
+    }
+
   /* Finally we update the IM cursor location again, to ensure any
    * changes made by the validation are pushed through.
    */
