@@ -302,6 +302,7 @@ static const GtkTargetEntry dnd_source_targets[] = {
 /* Target types for dropping into the shortcuts list */
 static const GtkTargetEntry dnd_drop_targets [] = {
 	{ "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET, GTK_TREE_MODEL_ROW },
+	{ "text/uri-list", 0, TEXT_URI_LIST },
 	{ "XdndDirectSave0", 0, XDND_DIRECT_SAVE } /* XDS Protocol Type */
 };
 
@@ -3824,7 +3825,6 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 			   GDK_ACTION_MOVE | GDK_ACTION_COPY | GDK_ACTION_LINK);
 
 	target_list = gtk_target_list_new (dnd_drop_targets, G_N_ELEMENTS (dnd_drop_targets));
-	gtk_target_list_add_uri_targets (target_list, TEXT_URI_LIST);
 	gtk_target_list_add_text_targets (target_list, TEXT);
 	gtk_drag_dest_set_target_list (GTK_WIDGET (tree_view), target_list);
 	gtk_target_list_unref (target_list);
