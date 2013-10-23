@@ -158,7 +158,7 @@
  *     </object>
  *   </child>
  *   <action-widgets>
- *     <action-widget response="3">button_ok</action-widget>
+ *     <action-widget response="-3">button_ok</action-widget>
  *     <action-widget response="-5">button_cancel</action-widget>
  *   </action-widgets>
  * </object>
