@@ -40,7 +40,7 @@ test: test-cwd test-recurse
 # test-cwd: run tests in cwd
 test-cwd: ${TEST_PROGS}
 	@$(SKIP_GDKTARGET) || test -z "${TEST_PROGS}" || { \
-	  $(XVFB_START) && { set -e; $(TESTS_ENVIRONMENT) G_TEST_SRCDIR="${abs_strcdir}" G_TEST_BUILDDIR="${abs_builddir}" ${GTESTER} --verbose ${TEST_PROGS}; }; \
+	  $(XVFB_START) && { set -e; $(TESTS_ENVIRONMENT) G_TEST_SRCDIR="${abs_srcdir}" G_TEST_BUILDDIR="${abs_builddir}" ${GTESTER} --verbose ${TEST_PROGS}; }; \
 	}
 # test-recurse: run tests in subdirs
 test-recurse:
