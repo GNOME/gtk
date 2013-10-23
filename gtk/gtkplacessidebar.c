@@ -289,8 +289,7 @@ static void  check_unmount_and_eject                   (GMount *mount,
 /* Identifiers for target types */
 enum {
 	GTK_TREE_MODEL_ROW,
-	TEXT_URI_LIST,
-	XDND_DIRECT_SAVE
+	TEXT_URI_LIST
 };
 
 /* Target types for dragging from the shortcuts list */
@@ -301,8 +300,7 @@ static const GtkTargetEntry dnd_source_targets[] = {
 /* Target types for dropping into the shortcuts list */
 static const GtkTargetEntry dnd_drop_targets [] = {
 	{ "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET, GTK_TREE_MODEL_ROW },
-	{ "text/uri-list", 0, TEXT_URI_LIST },
-	{ "XdndDirectSave0", 0, XDND_DIRECT_SAVE } /* XDS Protocol Type */
+	{ "text/uri-list", 0, TEXT_URI_LIST }
 };
 
 /* Drag and drop interface declarations */
@@ -1593,12 +1591,10 @@ drag_motion_callback (GtkTreeView *tree_view,
 	GtkTreeIter iter;
 	gboolean res;
 	gboolean drop_as_bookmarks;
-	gboolean valid_xds_drag;
 	char *drop_target_uri = NULL;
 
 	action = 0;
 	drop_as_bookmarks = FALSE;
-	valid_xds_drag = FALSE;
 	path = NULL;
 
 	if (!sidebar->drag_data_received) {
@@ -1617,14 +1613,6 @@ drag_motion_callback (GtkTreeView *tree_view,
 	    sidebar->drag_data_info == GTK_TREE_MODEL_ROW) {
 		/* Dragging bookmarks always moves them to another position in the bookmarks list */
 		action = GDK_ACTION_MOVE;
-	} else if (sidebar->drag_data_received &&
-		   sidebar->drag_data_info == XDND_DIRECT_SAVE) {
-		gtk_tree_model_get_iter (GTK_TREE_MODEL (sidebar->store), &iter, path);
-		gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store),
-				    &iter,
-				    PLACES_SIDEBAR_COLUMN_URI, &drop_target_uri,
-				    -1);
-		valid_xds_drag = TRUE;
 	} else {
 		/* URIs are being dragged.  See if the caller wants to handle a
 		 * file move/copy operation itself, or if we should only try to
@@ -1667,7 +1655,7 @@ drag_motion_callback (GtkTreeView *tree_view,
 	}
 
  out:
-	if (action != 0 || valid_xds_drag) {
+	if (action != 0) {
 		check_switch_location_timer (sidebar, drop_target_uri);
 		start_drop_feedback (sidebar, path, pos, drop_as_bookmarks);
 	} else {
