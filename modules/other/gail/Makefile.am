@@ -151,9 +151,15 @@ libgail_la_CPPFLAGS = \
 	-DGTK_DISABLE_DEPRECATED	\
 	$(AM_CPPFLAGS)
 
+if PLATFORM_WIN32
+WIN32_ADDITIONAL_CFLAGS = $(GMODULE_CFLAGS)
+WIN32_ADDITIONAL_LIBS = $(GMODULE_LIBS)
+endif
+
 libgail_la_CFLAGS = \
 	$(GTK_DEP_CFLAGS)	\
 	$(GTK_DEBUG_FLAGS)	\
+	$(WIN32_ADDITIONAL_CFLAGS)		\
 	$(AM_CFLAGS)
 
 libgail_la_LIBADD =  \
@@ -161,6 +167,7 @@ libgail_la_LIBADD =  \
 	$(top_builddir)/gtk/$(gtktargetlib)				\
 	$(top_builddir)/modules/other/gail/libgail-util/libgailutil.la	\
 	$(GTK_DEP_LIBS)							\
+	$(WIN32_ADDITIONAL_LIBS)		\
 	$(INTLLIBS)
 
 libgail_la_LDFLAGS =    \

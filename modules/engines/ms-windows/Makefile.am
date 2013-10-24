@@ -9,13 +9,15 @@ INCLUDES = \
 	-I$(top_srcdir)/gdk		\
 	-I$(top_builddir)/gdk		\
 	-DGDK_DISABLE_DEPRECATED	\
-	$(GTK_DEP_CFLAGS)
+	$(GTK_DEP_CFLAGS)	\
+	$(GMODULE_CFLAGS)
 
 
 LDADDS = \
 	$(top_builddir)/gdk/$(gdktargetlib)		\
 	$(top_builddir)/gtk/$(gtktargetlib)		\
-	$(GTK_DEP_LIBS)
+	$(GTK_DEP_LIBS)		\
+	$(GMODULE_LIBS)
 
 enginedir = $(libdir)/gtk-2.0/$(GTK_BINARY_VERSION)/engines
 
