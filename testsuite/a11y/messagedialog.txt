@@ -1,3 +1,5 @@
+looking up gicon dialog-information-symbolic
+looking up gicon dialog-information-symbolic
 window1
   "alert"
   index: 0
@@ -29,6 +31,7 @@ window1
         "icon"
         parent: box
         index: 0
+        name: Information
         state: enabled sensitive showing visible
         toolkit: gtk
         <AtkComponent>

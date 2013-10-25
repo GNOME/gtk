@@ -18,5 +18,5 @@ window1
     layer: widget
     alpha: 1
     <AtkImage>
-    image size: 12 x 12
+    image size: 16 x 16
     image description: (null)
