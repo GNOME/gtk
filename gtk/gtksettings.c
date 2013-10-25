@@ -1304,7 +1304,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Since: 2.4
    *
-   * Deprecated: 3.10: This setting is ignored
+   * Deprecated: 3.10: This setting is deprecated
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-button-images",
