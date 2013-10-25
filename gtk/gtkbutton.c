@@ -364,8 +364,8 @@ gtk_button_class_init (GtkButtonClass *klass)
   /**
    * GtkButton:always-show-image:
    *
-   * If %TRUE, the button will show the image in addition to the
-   * label, if available.
+   * If %TRUE, the button will ignore the #GtkSettings:gtk-button-images
+   * setting and always show the image, if available.
    *
    * Use this property if the button would be useless or hard to use
    * without the image.
@@ -1137,10 +1137,15 @@ show_image (GtkButton *button)
   GtkButtonPrivate *priv = button->priv;
   gboolean show;
 
-  if (priv->label_text == NULL || priv->always_show_image)
-    show = TRUE;
+  if (priv->label_text && !priv->always_show_image)
+    {
+      GtkSettings *settings;
+
+      settings = gtk_widget_get_settings (GTK_WIDGET (button));        
+      g_object_get (settings, "gtk-button-images", &show, NULL);
+    }
   else
-    show = FALSE;
+    show = TRUE;
 
   return show;
 }
@@ -2617,12 +2622,52 @@ gtk_button_update_state (GtkButton *button)
   gtk_widget_set_state_flags (GTK_WIDGET (button), new_state, TRUE);
 }
 
+static void 
+show_image_change_notify (GtkButton *button)
+{
+  GtkButtonPrivate *priv = button->priv;
+
+  if (priv->image) 
+    {
+      if (show_image (button))
+	gtk_widget_show (priv->image);
+      else
+	gtk_widget_hide (priv->image);
+    }
+}
+
+static void
+traverse_container (GtkWidget *widget,
+		    gpointer   data)
+{
+  if (GTK_IS_BUTTON (widget))
+    show_image_change_notify (GTK_BUTTON (widget));
+  else if (GTK_IS_CONTAINER (widget))
+    gtk_container_forall (GTK_CONTAINER (widget), traverse_container, NULL);
+}
+
+static void
+gtk_button_setting_changed (GtkSettings *settings)
+{
+  GList *list, *l;
+
+  list = gtk_window_list_toplevels ();
+
+  for (l = list; l; l = l->next)
+    gtk_container_forall (GTK_CONTAINER (l->data), 
+			  traverse_container, NULL);
+
+  g_list_free (list);
+}
+
 static void
 gtk_button_screen_changed (GtkWidget *widget,
 			   GdkScreen *previous_screen)
 {
   GtkButton *button;
   GtkButtonPrivate *priv;
+  GtkSettings *settings;
+  gulong show_image_connection;
 
   if (!gtk_widget_has_screen (widget))
     return;
@@ -2637,6 +2682,20 @@ gtk_button_screen_changed (GtkWidget *widget,
       priv->button_down = FALSE;
       gtk_button_update_state (button);
     }
+
+  settings = gtk_widget_get_settings (widget);
+
+  show_image_connection = 
+    g_signal_handler_find (settings, G_SIGNAL_MATCH_FUNC, 0, 0,
+                           NULL, gtk_button_setting_changed, NULL);
+  
+  if (show_image_connection)
+    return;
+
+  g_signal_connect (settings, "notify::gtk-button-images",
+                    G_CALLBACK (gtk_button_setting_changed), NULL);
+
+  show_image_change_notify (button);
 }
 
 static void
@@ -2793,8 +2852,8 @@ gtk_button_get_image_position (GtkButton *button)
  * @button: a #GtkButton
  * @always_show: %TRUE if the menuitem should always show the image
  *
- * If %TRUE, the button will always show the image in addition to the
- * label, if available.
+ * If %TRUE, the button will ignore the #GtkSettings:gtk-button-images
+ * setting and always show the image, if available.
  *
  * Use this property if the button  would be useless or hard to use
  * without the image.
@@ -2831,8 +2890,8 @@ gtk_button_set_always_show_image (GtkButton *button,
  * gtk_button_get_always_show_image:
  * @button: a #GtkButton
  *
- * Returns whether the button will always show the image in addition
- * to the label, if available.
+ * Returns whether the button will ignore the #GtkSettings:gtk-button-images
+ * setting and always show the image, if available.
  *
  * Returns: %TRUE if the button will always show the image
  *
