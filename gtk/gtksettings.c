@@ -1348,7 +1348,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Whether images should be shown in menu items
    *
-   * Deprecated: 3.10: This setting is ignored
+   * Deprecated: 3.10: This setting is deprecated
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-menu-images",
