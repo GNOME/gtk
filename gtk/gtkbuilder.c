@@ -2568,7 +2568,7 @@ gtk_builder_set_application (GtkBuilder     *builder,
 GtkApplication *
 gtk_builder_get_application (GtkBuilder *builder)
 {
-  g_return_if_fail (GTK_IS_BUILDER (builder));
+  g_return_val_if_fail (GTK_IS_BUILDER (builder), NULL);
 
   if (!builder->priv->application)
     {

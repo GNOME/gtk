@@ -887,8 +887,8 @@ gtk_print_action_and_target (const gchar *action_namespace,
 {
   GString *result;
 
-  g_return_if_fail (strchr (action_name, '|') == NULL);
-  g_return_if_fail (action_namespace == NULL || strchr (action_namespace, '|') == NULL);
+  g_return_val_if_fail (strchr (action_name, '|') == NULL, NULL);
+  g_return_val_if_fail (action_namespace == NULL || strchr (action_namespace, '|') == NULL, NULL);
 
   result = g_string_new (NULL);
 

@@ -2170,8 +2170,8 @@ gtk_application_get_accels_for_action (GtkApplication *application,
   gchar *action_and_target;
   gchar **accels;
 
-  g_return_if_fail (GTK_IS_APPLICATION (application));
-  g_return_if_fail (detailed_action_name != NULL);
+  g_return_val_if_fail (GTK_IS_APPLICATION (application), NULL);
+  g_return_val_if_fail (detailed_action_name != NULL, NULL);
 
   action_and_target = normalise_detailed_name (detailed_action_name);
   accels = accels_get_accels_for_action (&application->priv->accels, action_and_target);
