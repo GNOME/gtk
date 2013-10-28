@@ -6491,17 +6491,32 @@ _gtk_widget_draw_windows (GdkWindow *window,
   gboolean do_clip;
   GtkWidget *widget = NULL;
   GList *children, *l;
+  GdkRectangle current_clip, window_clip;
   int x, y;
 
   if (!gdk_window_is_viewable (window))
     return;
 
+  window_clip.x = window_x;
+  window_clip.y = window_y;
+  window_clip.width = gdk_window_get_width (window);
+  window_clip.height = gdk_window_get_height (window);
+
+  /* Cairo paths are fixed point 24.8, but gdk supports 32bit window
+     sizes, so we can't feed window_clip to e.g. cairo_rectangle()
+     directly. Instead, we pre-clip the window clip to the existing
+     clip regions in full 32bit precision and feed that to cairo. */
+  if (!gdk_cairo_get_clip_rectangle (cr, &current_clip) ||
+      !gdk_rectangle_intersect (&window_clip, &current_clip, &window_clip))
+    return;
+
   cairo_save (cr);
-  cairo_translate (cr, window_x, window_y);
-  cairo_rectangle (cr, 0, 0,
-		   gdk_window_get_width (window),
-		   gdk_window_get_height (window));
+  cairo_rectangle (cr,
+                   window_clip.x, window_clip.y,
+                   window_clip.width, window_clip.height);
   cairo_clip (cr);
+
+  cairo_translate (cr, window_x, window_y);
 
   if (gdk_cairo_get_clip_rectangle (cr, NULL))
     {
