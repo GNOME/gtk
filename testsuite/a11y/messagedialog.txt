@@ -1,5 +1,3 @@
-looking up gicon dialog-information-symbolic
-looking up gicon dialog-information-symbolic
 window1
   "alert"
   index: 0
