@@ -40,6 +40,7 @@
 #include "gtkprivate.h"
 #include "gtkbuildable.h"
 #include "gtksettings.h"
+#include "gtktypebuiltins.h"
 #include "deprecated/gtkstock.h"
 
 /**
@@ -158,8 +159,8 @@
  *     </object>
  *   </child>
  *   <action-widgets>
- *     <action-widget response="3">button_ok</action-widget>
- *     <action-widget response="-5">button_cancel</action-widget>
+ *     <action-widget response="ok">button_ok</action-widget>
+ *     <action-widget response="cancel">button_cancel</action-widget>
  *   </action-widgets>
  * </object>
  * ]]></programlisting>
@@ -1344,7 +1345,7 @@ gtk_dialog_set_alternative_button_order_from_array (GtkDialog *dialog,
 
 typedef struct {
   gchar *widget_name;
-  gchar *response_id;
+  gint response_id;
 } ActionWidgetInfo;
 
 typedef struct {
@@ -1353,6 +1354,31 @@ typedef struct {
   GSList *items;
   gchar *response;
 } ActionWidgetsSubParserData;
+
+static gint
+parse_response_id (gchar *response_attr)
+{
+  int response_id;
+  GEnumClass *enum_class = NULL;
+  GEnumValue *enum_value;
+
+  response_id = g_ascii_strtoll (response_attr, NULL, 10);
+  if (response_id != 0)
+    goto out;
+
+  enum_class = g_type_class_ref (GTK_TYPE_RESPONSE_TYPE);
+  enum_value = g_enum_get_value_by_nick (enum_class, response_attr);
+  if (enum_value == NULL)
+    goto out;
+
+  response_id = enum_value->value;
+
+ out:
+  if (enum_class)
+    g_type_class_unref (enum_class);
+
+  return response_id;
+}
 
 static void
 attributes_start_element (GMarkupParseContext *context,
@@ -1392,7 +1418,8 @@ attributes_text_element (GMarkupParseContext *context,
 
   item = g_new (ActionWidgetInfo, 1);
   item->widget_name = g_strndup (text, text_len);
-  item->response_id = parser_data->response;
+  item->response_id = parse_response_id (parser_data->response);
+  g_free (parser_data->response);
   parser_data->items = g_slist_prepend (parser_data->items, item);
   parser_data->response = NULL;
 }
@@ -1471,7 +1498,7 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
 	}
 
       ad = get_response_data (GTK_WIDGET (object), TRUE);
-      ad->response_id = g_ascii_strtoll (item->response_id, NULL, 10);
+      ad->response_id = item->response_id;
 
       if (GTK_IS_BUTTON (object))
 	signal_id = g_signal_lookup ("clicked", GTK_TYPE_BUTTON);
@@ -1496,7 +1523,6 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
 					    GTK_WIDGET (object), TRUE);
 
       g_free (item->widget_name);
-      g_free (item->response_id);
       g_free (item);
     }
   g_slist_free (parser_data->items);
