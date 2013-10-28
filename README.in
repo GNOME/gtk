@@ -73,6 +73,15 @@ Patches should be in unified diff form. (The -up option to GNU diff)
 Even better are git-formatted patches. (Use git format-patch)
 
 
+Release notes for 3.12
+======================
+
+* GtkWidget had a hack where if opacity is 0.999 we set up an opacity
+  group when rendering the widget. This is no longer needed in 3.10,
+  and GtkStack doesn't use it anymore. It has been removed in 3.12.
+  GdStack is using it, so applications should be ported from GdStack
+  to GtkStack in 3.12.
+
 Release notes for 3.10
 ======================
 
