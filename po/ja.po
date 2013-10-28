@@ -995,7 +995,7 @@ msgstr "フォルダの中に作成(_F):"
 #: ../gtk/gtkfilechooserdefault.c:6431
 #, c-format
 msgid "Could not read the contents of %s"
-msgstr "%s の内容を読み込めませんでしtqあ"
+msgstr "%s の内容を読み込めませんでした"
 
 #: ../gtk/gtkfilechooserdefault.c:6435
 msgid "Could not read the contents of the folder"
