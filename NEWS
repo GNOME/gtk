@@ -14,6 +14,96 @@ Overview of Changes in GTK+ 3.10 to 3.11.0
   in that is supports a full set of selection modes, including
   rubberband selection.
 
+* GtkStack: children can now indicate that they require
+  attention by setting the needs-attention child property.
+
+* Broadway now requires binary array buffers and modern WebSocket
+  protocol support
+
+* Autoscrolling in range widgets has been improved to work more
+  reliably in maximized windows.
+
+* GtkSpinner has been changed to render in in a limited set of
+  sizes.
+
+* GtkApplication now stores and handles accelerators for GActions
+  itself.
+
+* GtkIconTheme now falls back to the gnome icontheme to fix
+  problems with the availability of symbolic icons in other
+  icon themes.
+
+* GTK+ respects the deprecated gtk-button-images and gtk-menu-images
+  settings again.
+
+* Bugs fixed:
+ 168530 gtk_accel_map_load: wasteful extra stat call.
+ 341146 reorder lines in configure.in for a better display
+ 467720 Useless use of const qualifier
+ 586107 gtkprintbackendpapi.c does not compile on Solaris 10
+ 643914 Area under tabs need its own style class
+ 651224 null pointer dereferenced due to multiple bugs in gtk...
+ 681484 GtkAboutDialog has extra space when gtk_widget_show_a...
+ 691163 GtkNotebook unable to style active tab
+ 693586 Erroneous focus claims resulting from gtk_notebook_se...
+ 697031 gtk_notebook_draw's type doesn't match GtkWidget::draw
+ 698730 tooltip: Fix possible wrong placement
+ 702196 Unfinished frame being presented
+ 703062 GtkTreeViewColumn returns negative size request on em...
+ 703603 Remove GtkWidget opacity-group hack in 3.12
+ 707132 gtkwindow: Allow removing titlebar all together
+ 707187 GtkStack: Add more transition types
+ 707524 CSD windows "shake" when they go backdrop
+ 707920 notebook tab style improvements
+ 708019 Invisible characters at the end of a TextView within...
+ 708024 Accessibility being initialized in the wrong place
+ 708163 all symbolic icons are missing when using icon theme...
+ 708414 entrycompletion: set the GtkWindow as attached to th...
+ 708423 current line highlighting not working anymore in Gtk...
+ 708547 search provider crashes: gnome-contacts-3.9.90-1.fc2...
+ 708583 StyleContext: removing or adding a provider doesn't ...
+ 708584 GtkTextView: add a virtual function create_buffer()
+ 708787 GtkStatusbar text is mangled
+ 709049 gtk_widget_destroy() on a GtkHeaderBar tries to gtk_...
+ 709212 Configure fails if I don't have wayland dependency
+ 709215 Rounded-corners on CSD apps dont flatten when snapped
+ 709264 Fix memory leaks in icons handling
+ 709323 properly check titlebox visibility
+ 709420 Rulers hardly visible in dark themed page setup tab
+ 709522 GtkFileChooser sidebar is not populated since 742a2f11
+ 709613 GtkStack: Warn when setting a child visible which is...
+ 709621 gdkevents.h: Mention _get_source_device()
+ 709687 listbox: Fix keynav_failed() parameter in move_cursor()
+ 709697 Fix a warning in builg gtk+ with clang
+ 709745 GtkSearchBar example problems
+ 709854 Wayland: Reliable crash when hovering over items wit...
+ 709939 monitor reconfiguration while GtkOffscreenWindows ex...
+ 709967 Double free in gtkicontheme.c
+ 710073 Assertion failure because _gtk_icon_info_load_symbol...
+ 710096 gtk3.10 doesn't work correctly when used from a dyna...
+ 710134 GtkToolButton possibly being empty
+ 710141 gtk_shell_interface exported in libgdk
+ 710389 Don't set WM_TAKE_FOCUS if accept_focus is FALSE
+ 710651 all: Add names to timeouts
+ 710666 Frame clock related bug fixes 
+
+* Translations:
+ Afrikaans
+ Arabic
+ Basque
+ Catalan
+ Catalan (Valcencian)
+ Danish
+ Dutch
+ German
+ Hungarian
+ Indonesian
+ Latvian
+ Russian
+ Slovenian
+ Spanish
+ Traditional Chinese
+
 
 Overview of Changes in GTK+ 3.9.14 to 3.9.16
 ============================================
