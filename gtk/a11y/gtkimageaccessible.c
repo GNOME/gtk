@@ -202,7 +202,6 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       if (!gtk_stock_lookup (stock_id, &stock_item))
         return NULL;
 
-g_print ("looking up stock %s\n", stock_id);
 G_GNUC_END_IGNORE_DEPRECATIONS;
 
       image_accessible->priv->stock_name = _gtk_toolbar_elide_underscores (stock_item.label);
@@ -212,7 +211,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
       const gchar *icon_name;
 
       gtk_image_get_icon_name (image, &icon_name, NULL);
-g_print ("looking up icon_name %s\n", icon_name);
       image_accessible->priv->stock_name = name_from_icon_name (icon_name);
     }
   else if (storage_type == GTK_IMAGE_GICON)
@@ -224,7 +222,6 @@ g_print ("looking up icon_name %s\n", icon_name);
       if (G_IS_THEMED_ICON (icon))
         {
 	  icon_names = g_themed_icon_get_names (G_THEMED_ICON (icon));
-g_print ("looking up gicon %s\n", icon_names[0]);
           image_accessible->priv->stock_name = name_from_icon_name (icon_names[0]);
         }
     }
