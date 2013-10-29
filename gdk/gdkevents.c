@@ -293,6 +293,9 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
           pending_motion_device != event->event.motion.device)
         break;
 
+      if (!event->event.motion.window->event_compression)
+        break;
+
       pending_motion_window = event->event.motion.window;
       pending_motion_device = event->event.motion.device;
       pending_motions = tmp_list;

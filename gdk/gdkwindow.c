@@ -1284,6 +1284,7 @@ gdk_window_new (GdkWindow     *parent,
 
   window->accept_focus = TRUE;
   window->focus_on_map = TRUE;
+  window->event_compression = TRUE;
 
   if (attributes_mask & GDK_WA_X)
     x = attributes->x;
@@ -9709,6 +9710,49 @@ gdk_window_set_focus_on_map (GdkWindow *window,
 			     gboolean focus_on_map)
 {
   GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_focus_on_map (window, focus_on_map);
+}
+
+/**
+ * gdk_window_set_event_compression:
+ * @window: a #GdkWindow
+ * @event_compression: %TRUE if motion events should be compressed
+ *
+ * Determines whether or not extra unprocessed motion events in
+ * the event queue can be discarded. If %TRUE only the most recent
+ * event will be delivered.
+ *
+ * Some types of applications, e.g. paint programs, need to see all
+ * motion events and will benefit from turning off event compression.
+ *
+ * By default, event compression is enabled.
+ *
+ * Since: 3.12
+ **/
+void
+gdk_window_set_event_compression (GdkWindow *window,
+                                  gboolean   event_compression)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  window->event_compression = event_compression;
+}
+
+/**
+ * gdk_window_get_event_compression:
+ * @window: a #GdkWindow
+ *
+ * Get the current event compression setting for this window.
+ *
+ * Return value: %TRUE if motion events will be compressed
+ *
+ * Since: 3.12
+ **/
+gboolean
+gdk_window_get_event_compression (GdkWindow *window)
+{
+  g_return_val_if_fail (GDK_IS_WINDOW (window), TRUE);
+
+  return window->event_compression;
 }
 
 /**

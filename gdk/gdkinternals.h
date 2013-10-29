@@ -227,6 +227,7 @@ struct _GdkWindow
   guint applied_shape : 1;
   guint in_update : 1;
   guint geometry_dirty : 1;
+  guint event_compression : 1;
   GdkFullscreenMode fullscreen_mode;
 
   /* The GdkWindow that has the impl, ref:ed if another window.
