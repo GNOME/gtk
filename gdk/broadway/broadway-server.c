@@ -12,7 +12,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-#include <endian.h>
 
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
@@ -348,13 +347,13 @@ fake_configure_notify (BroadwayServer *server,
 static guint32 *
 parse_pointer_data (guint32 *p, BroadwayInputPointerMsg *data)
 {
-  data->mouse_window_id = be32toh (*p++);
-  data->event_window_id = be32toh (*p++);
-  data->root_x = be32toh (*p++);
-  data->root_y = be32toh (*p++);
-  data->win_x = be32toh (*p++);
-  data->win_y = be32toh (*p++);
-  data->state = be32toh (*p++);
+  data->mouse_window_id = ntohl (*p++);
+  data->event_window_id = ntohl (*p++);
+  data->root_x = ntohl (*p++);
+  data->root_y = ntohl (*p++);
+  data->win_x = ntohl (*p++);
+  data->win_y = ntohl (*p++);
+  data->state = ntohl (*p++);
 
   return p;
 }
@@ -380,9 +379,9 @@ parse_input_message (BroadwayInput *input, const char *message)
 
   p = (guint32 *) message;
 
-  msg.base.type = be32toh (*p++);
-  msg.base.serial = be32toh (*p++);
-  time_ = be32toh (*p++);
+  msg.base.type = ntohl (*p++);
+  msg.base.serial = ntohl (*p++);
+  time_ = ntohl (*p++);
 
   if (time_ == 0) {
     time_ = server->last_seen_time;
@@ -406,7 +405,7 @@ parse_input_message (BroadwayInput *input, const char *message)
   case BROADWAY_EVENT_LEAVE:
     p = parse_pointer_data (p, &msg.pointer);
     update_future_pointer_info (server, &msg.pointer);
-    msg.crossing.mode = be32toh (*p++);
+    msg.crossing.mode = ntohl (*p++);
     break;
 
   case BROADWAY_EVENT_POINTER_MOVE: /* Mouse move */
@@ -418,42 +417,42 @@ parse_input_message (BroadwayInput *input, const char *message)
   case BROADWAY_EVENT_BUTTON_RELEASE:
     p = parse_pointer_data (p, &msg.pointer);
     update_future_pointer_info (server, &msg.pointer);
-    msg.button.button = be32toh (*p++);
+    msg.button.button = ntohl (*p++);
     break;
 
   case BROADWAY_EVENT_SCROLL:
     p = parse_pointer_data (p, &msg.pointer);
     update_future_pointer_info (server, &msg.pointer);
-    msg.scroll.dir = be32toh (*p++);
+    msg.scroll.dir = ntohl (*p++);
     break;
 
   case BROADWAY_EVENT_KEY_PRESS:
   case BROADWAY_EVENT_KEY_RELEASE:
-    msg.key.mouse_window_id = be32toh (*p++);
-    msg.key.key = be32toh (*p++);
-    msg.key.state = be32toh (*p++);
+    msg.key.mouse_window_id = ntohl (*p++);
+    msg.key.key = ntohl (*p++);
+    msg.key.state = ntohl (*p++);
     break;
 
   case BROADWAY_EVENT_GRAB_NOTIFY:
   case BROADWAY_EVENT_UNGRAB_NOTIFY:
-    msg.grab_reply.res = be32toh (*p++);
+    msg.grab_reply.res = ntohl (*p++);
     break;
 
   case BROADWAY_EVENT_CONFIGURE_NOTIFY:
-    msg.configure_notify.id = be32toh (*p++);
-    msg.configure_notify.x = be32toh (*p++);
-    msg.configure_notify.y = be32toh (*p++);
-    msg.configure_notify.width = be32toh (*p++);
-    msg.configure_notify.height = be32toh (*p++);
+    msg.configure_notify.id = ntohl (*p++);
+    msg.configure_notify.x = ntohl (*p++);
+    msg.configure_notify.y = ntohl (*p++);
+    msg.configure_notify.width = ntohl (*p++);
+    msg.configure_notify.height = ntohl (*p++);
     break;
 
   case BROADWAY_EVENT_DELETE_NOTIFY:
-    msg.delete_notify.id = be32toh (*p++);
+    msg.delete_notify.id = ntohl (*p++);
     break;
 
   case BROADWAY_EVENT_SCREEN_SIZE_CHANGED:
-    msg.screen_resize_notify.width = be32toh (*p++);
-    msg.screen_resize_notify.height = be32toh (*p++);
+    msg.screen_resize_notify.width = ntohl (*p++);
+    msg.screen_resize_notify.height = ntohl (*p++);
     break;
 
   default:
