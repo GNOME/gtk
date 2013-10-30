@@ -94,12 +94,10 @@ struct _GtkTextAppearance
   guint inside_selection : 1;
   guint is_text : 1;
 
-  GdkRGBA *rgba[2];
-
-#if (defined(__SIZEOF_INT__) && defined(__SIZEOF_POINTER__)) && (__SIZEOF_INT__ == __SIZEOF_POINTER__)
-  /* unusable, just for ABI compat */
-  guint padding[2];
-#endif
+  union {
+    GdkRGBA *rgba[2];
+    guint padding[4];
+  };
 };
 
 /**
