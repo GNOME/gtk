@@ -13163,7 +13163,8 @@ gtk_tree_view_real_set_cursor (GtkTreeView     *tree_view,
        */
       _gtk_tree_view_find_node (tree_view, path, &new_tree, &new_node);
 
-      if (tree_view->priv->cursor_node != new_node)
+      if (tree_view->priv->cursor_node == NULL ||
+          tree_view->priv->cursor_node != new_node)
         return;
 
       if (flags & CLAMP_NODE)
