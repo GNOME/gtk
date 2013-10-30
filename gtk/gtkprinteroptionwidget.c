@@ -521,7 +521,16 @@ filesave_changed_cb (GtkWidget              *button,
       if (g_uri_parse_scheme (file) != NULL)
         uri = g_strdup (file);
       else
-        uri = g_build_path ("/", gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (priv->combo)), file, NULL);
+        {
+          gchar *chooser_uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER (priv->combo));
+          if (chooser_uri)
+            {
+              uri = g_build_path ("/", chooser_uri, file, NULL);
+              g_free (chooser_uri);
+            }
+          else
+            uri = g_filename_to_uri (file, NULL, NULL);
+        }
     }
  
   if (uri)
