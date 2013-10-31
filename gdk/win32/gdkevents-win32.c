@@ -3303,6 +3303,11 @@ gdk_event_translate (MSG  *msg,
 	  mmi->ptMaxTrackSize.x = maxw > 0 && maxw < G_MAXSHORT ? maxw : G_MAXSHORT;
 	  mmi->ptMaxTrackSize.y = maxh > 0 && maxh < G_MAXSHORT ? maxh : G_MAXSHORT;
 	}
+      else
+	{
+	  mmi->ptMaxTrackSize.x = 30000;
+	  mmi->ptMaxTrackSize.y = 30000;
+	}
 
       if (impl->hint_flags & (GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE))
 	{
@@ -3315,8 +3320,7 @@ gdk_event_translate (MSG  *msg,
 				     mmi->ptMaxSize.x, mmi->ptMaxSize.y));
 	  return_val = TRUE;
 	}
-      mmi->ptMaxTrackSize.x = 30000;
-      mmi->ptMaxTrackSize.y = 30000;
+
       return_val = TRUE;
       break;
 
