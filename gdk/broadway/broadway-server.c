@@ -368,7 +368,7 @@ update_future_pointer_info (BroadwayServer *server, BroadwayInputPointerMsg *dat
 }
 
 static void
-parse_input_message (BroadwayInput *input, const char *message)
+parse_input_message (BroadwayInput *input, const unsigned char *message)
 {
   BroadwayServer *server = input->server;
   BroadwayInputMsg msg;
