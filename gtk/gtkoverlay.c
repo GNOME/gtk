@@ -310,44 +310,6 @@ gtk_overlay_child_allocate (GtkOverlay      *overlay,
 }
 
 static void
-gtk_overlay_get_preferred_width (GtkWidget *widget,
-                                 gint      *minimum,
-                                 gint      *natural)
-{
-  GtkBin *bin = GTK_BIN (widget);
-  GtkWidget *child;
-
-  if (minimum)
-    *minimum = 0;
-
-  if (natural)
-    *natural = 0;
-
-  child = gtk_bin_get_child (bin);
-  if (child && gtk_widget_get_visible (child))
-    gtk_widget_get_preferred_width (child, minimum, natural);
-}
-
-static void
-gtk_overlay_get_preferred_height (GtkWidget *widget,
-                                  gint      *minimum,
-                                  gint      *natural)
-{
-  GtkBin *bin = GTK_BIN (widget);
-  GtkWidget *child;
-
-  if (minimum)
-    *minimum = 0;
-
-  if (natural)
-    *natural = 0;
-
-  child = gtk_bin_get_child (bin);
-  if (child && gtk_widget_get_visible (child))
-    gtk_widget_get_preferred_height (child, minimum, natural);
-}
-
-static void
 gtk_overlay_size_allocate (GtkWidget     *widget,
                            GtkAllocation *allocation)
 {
@@ -609,8 +571,6 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
 
-  widget_class->get_preferred_width = gtk_overlay_get_preferred_width;
-  widget_class->get_preferred_height = gtk_overlay_get_preferred_height;
   widget_class->size_allocate = gtk_overlay_size_allocate;
   widget_class->realize = gtk_overlay_realize;
   widget_class->unrealize = gtk_overlay_unrealize;
