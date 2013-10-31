@@ -149,6 +149,8 @@ struct _GtkBoxChild
 
 static void gtk_box_size_allocate         (GtkWidget              *widget,
                                            GtkAllocation          *allocation);
+static gboolean gtk_box_draw           (GtkWidget        *widget,
+                                        cairo_t          *cr);
 
 static void gtk_box_direction_changed  (GtkWidget        *widget,
                                         GtkTextDirection  previous_direction);
@@ -221,6 +223,7 @@ gtk_box_class_init (GtkBoxClass *class)
   object_class->set_property = gtk_box_set_property;
   object_class->get_property = gtk_box_get_property;
 
+  widget_class->draw                           = gtk_box_draw;
   widget_class->size_allocate                  = gtk_box_size_allocate;
   widget_class->get_preferred_width            = gtk_box_get_preferred_width;
   widget_class->get_preferred_height           = gtk_box_get_preferred_height;
@@ -416,6 +419,21 @@ gtk_box_get_property (GObject    *object,
     }
 }
 
+static gboolean
+gtk_box_draw (GtkWidget *widget,
+              cairo_t   *cr)
+{
+  GtkStyleContext *context;
+  GtkAllocation alloc;
+
+  context = gtk_widget_get_style_context (widget);
+  gtk_widget_get_allocation (widget, &alloc);
+
+  gtk_render_background (context, cr, 0, 0, alloc.width, alloc.height);
+  gtk_render_frame (context, cr, 0, 0, alloc.width, alloc.height);
+
+  return GTK_WIDGET_CLASS (gtk_box_parent_class)->draw (widget, cr);
+}
 
 static void
 count_expand_children (GtkBox *box,
