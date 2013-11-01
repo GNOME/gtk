@@ -207,6 +207,12 @@ gdk_device_win32_query_state (GdkDevice        *device,
 
       if (win_y)
         *win_y += _gdk_offset_y;
+      
+      if (root_x)
+        *root_x += _gdk_offset_x;
+
+      if (root_y)
+        *root_y += _gdk_offset_y;
     }
 
   if (child_window)
