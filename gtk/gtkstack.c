@@ -1612,6 +1612,9 @@ gtk_stack_draw_slide (GtkWidget *widget,
           break;
         }
 
+      x += priv->last_visible_surface_allocation.x;
+      y += priv->last_visible_surface_allocation.y;
+
       cairo_save (cr);
       cairo_set_source_surface (cr, priv->last_visible_surface, x, y);
       cairo_paint (cr);
