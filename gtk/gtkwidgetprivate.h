@@ -149,6 +149,23 @@ void              _gtk_widget_style_context_invalidated    (GtkWidget    *widget
 void              _gtk_widget_update_parent_muxer          (GtkWidget    *widget);
 GtkActionMuxer *  _gtk_widget_get_action_muxer             (GtkWidget    *widget);
 
+void              _gtk_widget_get_content_box              (GtkWidget           *widget,
+                                                            const GtkAllocation *box,
+                                                            GtkAllocation       *content_box);
+void              _gtk_widget_adjust_for_width             (GtkWidget           *widget,
+                                                            int                 *for_width);
+void              _gtk_widget_adjust_preferred_width       (GtkWidget           *widget,
+                                                            int                 *minimum_width,
+                                                            int                 *natural_width);
+void              _gtk_widget_adjust_for_height            (GtkWidget           *widget,
+                                                            int                 *for_height);
+void              _gtk_widget_adjust_preferred_height      (GtkWidget           *widget,
+                                                            int                 *minimum_height,
+                                                            int                 *natural_height);
+void              _gtk_widget_adjust_baseline              (GtkWidget           *widget,
+                                                            int                 *minimum_baseline,
+                                                            int                 *natural_baseline);
+
 G_END_DECLS
 
 #endif /* __GTK_WIDGET_PRIVATE_H__ */

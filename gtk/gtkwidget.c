@@ -16011,3 +16011,198 @@ gtk_widget_get_template_child (GtkWidget   *widget,
 
   return ret;
 }
+
+static int
+get_width_inc (GtkStyleContext *context)
+{
+  return (_gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_PADDING_LEFT), 0) +
+          _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_PADDING_RIGHT), 0) +
+          _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 0) +
+          _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 0));
+}
+
+static int
+get_height_inc (GtkStyleContext *context)
+{
+  return (_gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_PADDING_TOP), 0) +
+          _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_PADDING_BOTTOM), 0) +
+          _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 0) +
+          _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 0));
+}
+
+static int
+get_content_offset_x (GtkStyleContext *context)
+{
+  return (_gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_PADDING_LEFT), 0) +
+          _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 0));
+}
+
+static int
+get_content_offset_y (GtkStyleContext *context)
+{
+  return (_gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_PADDING_TOP), 0) +
+          _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 0));
+}
+
+/**
+ * _gtk_widget_get_context_box:
+ * @context: A #GtkWidget
+ * @box: The input allocation
+ * @content_box: (out): The content box for the widget
+ *
+ * Given an input allocation, @box, this calculates the "context box"
+ * in CSS box model terms. Currently this simply subtracts padding
+ * and border from the input allocation, but in the future could be
+ * expanded to reflect the addition of a 'box-sizing' property in CSS.
+ *
+ * This is meant as a helper method for widgets to use in their
+ * size_allocate() implementation.
+ *
+ * Since: 3.12
+ */
+void
+_gtk_widget_get_content_box (GtkWidget           *widget,
+                             const GtkAllocation *box,
+                             GtkAllocation       *content_box)
+{
+  GtkStyleContext *context = gtk_widget_get_style_context (widget);
+
+  content_box->x = get_content_offset_x (context);
+  content_box->y = get_content_offset_y (context);
+
+  content_box->width = MAX (box->width - get_width_inc (context), 0);
+  content_box->height = MAX (box->height - get_height_inc (context), 0);
+}
+
+/**
+ * _gtk_widget_adjust_for_width:
+ * @widget: A #GtkWidget
+ * @for_width: (inout): The width request
+ *
+ * Adjusts @for_width to remove elements outside the content box,
+ * such as padding and border.
+ *
+ * This is meant as a helper method for widgets to use at the top
+ * of their get_preferred_height_for_width() implementation.
+ *
+ * Since: 3.12
+ */
+void
+_gtk_widget_adjust_for_width (GtkWidget *widget,
+                              int       *for_width)
+{
+  GtkStyleContext *context = gtk_widget_get_style_context (widget);
+  if (*for_width >= 0)
+    *for_width = MAX (0, *for_width - get_width_inc (context));
+}
+
+/**
+ * _gtk_widget_adjust_preferred_width:
+ * @widget: A #GtkWidget
+ * @minimum_width: (inout): The minimum width
+ * @natural_width: (inout): The natural width
+ *
+ * Adjusts @minimum_width and @natural_width to include elements
+ * outside the content box, such as padding and border.
+ *
+ * This is meant as a helper method for widgets to use at the bottom
+ * of their get_preferred_width() and get_preferred_width_for_height()
+ * implementations: simply calculate the width required for the
+ * content, and adjust it with this method to make sure you've
+ * calculated everything correctly.
+ *
+ * Since: 3.12
+ */
+void
+_gtk_widget_adjust_preferred_width (GtkWidget *widget,
+                                    int       *minimum_width,
+                                    int       *natural_width)
+{
+  GtkStyleContext *context = gtk_widget_get_style_context (widget);
+  int width_inc = get_width_inc (context);
+
+  if (minimum_width)
+    *minimum_width += width_inc;
+  if (natural_width)
+    *natural_width += width_inc;
+}
+
+/**
+ * _gtk_widget_adjust_for_height:
+ * @widget: A #GtkWidget
+ * @for_height: (inout): The height request
+ *
+ * Adjusts @for_height to remove elements outside the content box.
+ *
+ * This is meant as a helper method for widgets to use at the top
+ * of their get_preferred_width_for_height() implementation.
+ *
+ * Since: 3.12
+ */
+void
+_gtk_widget_adjust_for_height (GtkWidget *widget,
+                               int       *for_height)
+{
+  GtkStyleContext *context = gtk_widget_get_style_context (widget);
+  if (*for_height >= 0)
+    *for_height = MAX (0, *for_height - get_height_inc (context));
+}
+
+/**
+ * _gtk_widget_adjust_preferred_height:
+ * @widget: A #GtkWidget
+ * @minimum_height: (inout): The minimum height
+ * @natural_height: (inout): The natural height
+ *
+ * Adjusts @minimum_height and @natural_height to include elements
+ * outside the content box, such as padding and border.
+ *
+ * This is meant as a helper method for widgets to use at the bottom
+ * of their get_preferred_height() and get_preferred_height_for_width()
+ * implementations: simply calculate the height required for the
+ * content, and adjust it with this method to make sure you've
+ * calculated everything correctly.
+ *
+ * Since: 3.12
+ */
+void
+_gtk_widget_adjust_preferred_height (GtkWidget *widget,
+                                     int       *minimum_height,
+                                     int       *natural_height)
+{
+  GtkStyleContext *context = gtk_widget_get_style_context (widget);
+  int height_inc = get_height_inc (context);
+
+  if (minimum_height)
+    *minimum_height += height_inc;
+  if (natural_height)
+    *natural_height += height_inc;
+}
+
+/**
+ * _gtk_widget_adjust_baseline:
+ * @widget: A #GtkWidget
+ * @minimum_baseline: (inout): The minimum baseline
+ * @natural_baseline: (inout): The natural baseline
+ *
+ * Adjusts @minimum_baseline and @natural_baseline to include elements
+ * outside the content box, such as padding and border.
+ *
+ * This is meant as a helper method for widgets to use at the bottom
+ * of their get_preferred_height_and_baseline_for_width() implementation.
+ *
+ * Since: 3.12
+ */
+void
+_gtk_widget_adjust_baseline (GtkWidget *widget,
+                             int       *minimum_baseline,
+                             int       *natural_baseline)
+{
+  GtkStyleContext *context = gtk_widget_get_style_context (widget);
+  int offset_y = get_content_offset_y (context);
+
+  if (minimum_baseline && *minimum_baseline >= 0)
+    *minimum_baseline += offset_y;
+  if (natural_baseline && *natural_baseline >= 0)
+    *natural_baseline += offset_y;
+}
