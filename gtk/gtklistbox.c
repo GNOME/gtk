@@ -2022,7 +2022,7 @@ gtk_list_box_size_allocate (GtkWidget     *widget,
     {
       gtk_widget_get_preferred_height_for_width (priv->placeholder,
                                                  allocation->width, &child_min, NULL);
-      header_allocation.height = child_min;
+      header_allocation.height = allocation->height;
       header_allocation.y = child_allocation.y;
       gtk_widget_size_allocate (priv->placeholder,
                                 &header_allocation);
