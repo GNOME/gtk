@@ -1226,6 +1226,7 @@ gtk_box_get_preferred_width (GtkWidget *widget,
                              gint      *natural_size)
 {
   gtk_box_get_size (widget, GTK_ORIENTATION_HORIZONTAL, minimum_size, natural_size, NULL, NULL);
+  _gtk_widget_adjust_preferred_width (widget, minimum_size, natural_size);
 }
 
 static void
@@ -1234,6 +1235,7 @@ gtk_box_get_preferred_height (GtkWidget *widget,
                               gint      *natural_size)
 {
   gtk_box_get_size (widget, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size, NULL, NULL);
+  _gtk_widget_adjust_preferred_height (widget, minimum_size, natural_size);
 }
 
 static void
@@ -1528,10 +1530,14 @@ gtk_box_get_preferred_width_for_height (GtkWidget *widget,
   GtkBox        *box     = GTK_BOX (widget);
   GtkBoxPrivate *private = box->priv;
 
+  _gtk_widget_adjust_for_height (widget, &height);
+
   if (private->orientation == GTK_ORIENTATION_VERTICAL)
     gtk_box_compute_size_for_opposing_orientation (box, height, minimum_width, natural_width, NULL, NULL);
   else
     gtk_box_compute_size_for_orientation (box, height, minimum_width, natural_width);
+
+  _gtk_widget_adjust_preferred_width (widget, minimum_width, natural_width);
 }
 
 static void
@@ -1544,6 +1550,8 @@ gtk_box_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
 {
   GtkBox        *box     = GTK_BOX (widget);
   GtkBoxPrivate *private = box->priv;
+
+  _gtk_widget_adjust_for_width (widget, &width);
 
   if (width < 0)
     gtk_box_get_size (widget, GTK_ORIENTATION_VERTICAL, minimum_height, natural_height, minimum_baseline, natural_baseline);
@@ -1560,6 +1568,9 @@ gtk_box_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
 	  gtk_box_compute_size_for_orientation (box, width, minimum_height, natural_height);
 	}
     }
+
+  _gtk_widget_adjust_preferred_height (widget, minimum_height, natural_height);
+  _gtk_widget_adjust_baseline (widget, minimum_baseline, natural_baseline);
 }
 
 static void

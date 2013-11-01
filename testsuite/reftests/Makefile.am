@@ -115,6 +115,7 @@ testdata = \
 	border-style.css \
 	border-style.ref.ui \
 	border-style.ui \
+	box-child-expand.css \
 	box-child-expand.ref.ui \
 	box-child-expand.ui \
 	box-packing.css \
@@ -197,8 +198,10 @@ testdata = \
 	grid-homogeneous.css \
 	grid-homogeneous.ref.ui \
 	grid-homogeneous.ui \
+	grid-spacing1.css \
 	grid-spacing1.ref.ui \
 	grid-spacing1.ui \
+	grid-spacing2.css \
 	grid-spacing2.ref.ui \
 	grid-spacing2.ui \
 	grid-spacing3.css \
@@ -273,6 +276,7 @@ testdata = \
 	reset-to-defaults.css \
 	rotated-layout.ref.ui \
 	rotated-layout.ui \
+	separator-size.css \
 	separator-size.ref.ui \
 	separator-size.ui \
 	shorthand-entry-border.css \
@@ -283,6 +287,7 @@ testdata = \
 	sizegroups-basics.css \
 	sizegroups-basics.ui \
 	sizegroups-basics.ref.ui \
+	sizegroups-evolution-identity-page.css \
 	sizegroups-evolution-identity-page.ui \
 	sizegroups-evolution-identity-page.ref.ui \
 	sizegroups-get-preferred-null.ui \

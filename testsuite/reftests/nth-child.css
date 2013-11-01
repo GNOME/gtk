@@ -1,3 +1,5 @@
+@import "reset-to-defaults.css";
+
 /* For nth-child, we have a custom rule for every multiple of
  * the prime numbers.
  * For nth-last-child, we also color the prime number itself.
