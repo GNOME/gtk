@@ -844,6 +844,16 @@ parse_border_width (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+parse_size (GtkCssStyleProperty *property,
+            GtkCssParser        *parser)
+{
+  return _gtk_css_number_value_parse (parser,
+                                      GTK_CSS_POSITIVE_ONLY
+                                      | GTK_CSS_NUMBER_AS_PIXELS
+                                      | GTK_CSS_PARSE_LENGTH);
+}
+
+static GtkCssValue *
 background_repeat_value_parse_one (GtkCssParser *parser)
 {
   GtkCssValue *value = _gtk_css_background_repeat_value_try_parse (parser);
@@ -974,6 +984,39 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           _gtk_css_shadows_value_new_none ());
+
+  gtk_css_style_property_register        ("min-width",
+                                          GTK_CSS_PROPERTY_MIN_WIDTH,
+                                          G_TYPE_INT,
+                                          GTK_STYLE_PROPERTY_ANIMATED,
+                                          parse_size,
+                                          query_length_as_int,
+                                          assign_length_from_int,
+                                          _gtk_css_number_value_new (0.0, GTK_CSS_PX));
+  gtk_css_style_property_register        ("min-height",
+                                          GTK_CSS_PROPERTY_MIN_HEIGHT,
+                                          G_TYPE_INT,
+                                          GTK_STYLE_PROPERTY_ANIMATED,
+                                          parse_size,
+                                          query_length_as_int,
+                                          assign_length_from_int,
+                                          _gtk_css_number_value_new (0.0, GTK_CSS_PX));
+  gtk_css_style_property_register        ("max-width",
+                                          GTK_CSS_PROPERTY_MAX_WIDTH,
+                                          G_TYPE_INT,
+                                          GTK_STYLE_PROPERTY_ANIMATED,
+                                          parse_size,
+                                          query_length_as_int,
+                                          assign_length_from_int,
+                                          _gtk_css_number_value_new (G_MAXDOUBLE, GTK_CSS_PX));
+  gtk_css_style_property_register        ("max-height",
+                                          GTK_CSS_PROPERTY_MAX_HEIGHT,
+                                          G_TYPE_INT,
+                                          GTK_STYLE_PROPERTY_ANIMATED,
+                                          parse_size,
+                                          query_length_as_int,
+                                          assign_length_from_int,
+                                          _gtk_css_number_value_new (G_MAXDOUBLE, GTK_CSS_PX));
 
   gtk_css_style_property_register        ("margin-top",
                                           GTK_CSS_PROPERTY_MARGIN_TOP,

@@ -16044,6 +16044,42 @@ get_content_offset_y (GtkStyleContext *context)
           _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 0));
 }
 
+static void
+constrain_width (GtkStyleContext *context,
+                 int             *width)
+{
+  double min_width, max_width;
+
+  if (!width)
+    return;
+
+  min_width = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_MIN_WIDTH), 0);
+  max_width = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_MAX_WIDTH), 0);
+
+  if (*width < min_width)
+    *width = min_width;
+  if (*width > max_width)
+    *width = max_width;
+}
+
+static void
+constrain_height (GtkStyleContext *context,
+                 int             *height)
+{
+  double min_height, max_height;
+
+  if (!height)
+    return;
+
+  min_height = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_MIN_HEIGHT), 0);
+  max_height = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_MAX_HEIGHT), 0);
+
+  if (*height < min_height)
+    *height = min_height;
+  if (*height > max_height)
+    *height = max_height;
+}
+
 /**
  * _gtk_widget_get_context_box:
  * @context: A #GtkWidget
@@ -16070,8 +16106,19 @@ _gtk_widget_get_content_box (GtkWidget           *widget,
   content_box->x = get_content_offset_x (context);
   content_box->y = get_content_offset_y (context);
 
-  content_box->width = MAX (box->width - get_width_inc (context), 0);
-  content_box->height = MAX (box->height - get_height_inc (context), 0);
+  content_box->width = box->width;
+  content_box->height = box->height;
+
+  constrain_width (context, &content_box->width);
+  constrain_height (context, &content_box->height);
+
+  content_box->width -= get_width_inc (context);
+  content_box->height -= get_height_inc (context);
+
+  if (content_box->width < 0)
+    content_box->width = 0;
+  if (content_box->height < 0)
+    content_box->height = 0;
 }
 
 /**
@@ -16125,6 +16172,9 @@ _gtk_widget_adjust_preferred_width (GtkWidget *widget,
     *minimum_width += width_inc;
   if (natural_width)
     *natural_width += width_inc;
+
+  constrain_width (context, minimum_width);
+  constrain_width (context, natural_width);
 }
 
 /**
@@ -16177,6 +16227,9 @@ _gtk_widget_adjust_preferred_height (GtkWidget *widget,
     *minimum_height += height_inc;
   if (natural_height)
     *natural_height += height_inc;
+
+  constrain_height (context, minimum_height);
+  constrain_height (context, natural_height);
 }
 
 /**
