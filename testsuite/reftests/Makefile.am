@@ -31,6 +31,9 @@ EXTRA_DIST += \
 	$(NULL)
 
 testdata = \
+	alignment-props.css \
+	alignment-props.ref.ui \
+	alignment-props.ui \
 	background-area.css \
 	background-area.ref.ui \
 	background-area.ui \
@@ -64,6 +67,9 @@ testdata = \
 	background-size-zero.css \
 	background-size-zero.ref.ui \
 	background-size-zero.ui \
+	background-size.css \
+	background-size.ref.ui \
+	background-size.ui \
 	background-window-transparent.css \
 	background-window-transparent.ref.ui \
 	background-window-transparent.ui \
@@ -92,18 +98,23 @@ testdata = \
 	border-image-repeat.css \
 	border-image-repeat.ref.ui \
 	border-image-repeat.ui \
+	border-image-url-scaled.css \
+	border-image-url-scaled.ref.ui \
+	border-image-url-scaled.ui \
 	border-image-url.css \
 	border-image-url.ref.ui \
 	border-image-url.ui \
-	border-radius-clamp.css\
+	border-radius-clamp.css \
 	border-radius-clamp.ref.ui \
 	border-radius-clamp.ui \
-	border-style.css \
-	border-style.ref.ui \
-	border-style.ui \
+	border-rgb.png \
+	border-rgb@2.png \
 	border-style-none.css \
 	border-style-none.ref.ui \
 	border-style-none.ui \
+	border-style.css \
+	border-style.ref.ui \
+	border-style.ui \
 	box-child-expand.ref.ui \
 	box-child-expand.ui \
 	box-packing.css \
@@ -287,11 +298,16 @@ testdata = \
 	symbolic-icon-translucent-color.ui \
 	toplevel-vs-popup.ref.ui \
 	toplevel-vs-popup.ui \
+	treeview-fixed-height.css \
+	treeview-fixed-height.ref.ui \
+	treeview-fixed-height.ui \
 	treeview-headers-hidden.ref.ui \
 	treeview-headers-hidden.ui \
 	unresolvable.css \
 	unresolvable.ref.ui \
 	unresolvable.ui \
+	window-border-width.ref.ui \
+	window-border-width.ui \
 	window-default-size.ref.ui \
 	window-default-size.ui \
 	$(NULL)
