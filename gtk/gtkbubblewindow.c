@@ -40,6 +40,7 @@
 #include "gtkmain.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkwidgetprivate.h"
 
 #define TAIL_GAP_WIDTH 24
 #define TAIL_HEIGHT    12
@@ -610,25 +611,6 @@ gtk_bubble_window_draw (GtkWidget *widget,
 }
 
 static void
-get_padding_and_border (GtkWidget *widget,
-                        GtkBorder *border)
-{
-  GtkStyleContext *context;
-  GtkStateFlags state;
-  GtkBorder tmp;
-
-  context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-
-  gtk_style_context_get_padding (context, state, border);
-  gtk_style_context_get_border (context, state, &tmp);
-  border->top += tmp.top;
-  border->right += tmp.right;
-  border->bottom += tmp.bottom;
-  border->left += tmp.left;
-}
-
-static void
 gtk_bubble_window_get_preferred_width (GtkWidget *widget,
                                        gint      *minimum_width,
                                        gint      *natural_width)
@@ -636,7 +618,6 @@ gtk_bubble_window_get_preferred_width (GtkWidget *widget,
   GtkBubbleWindowPrivate *priv;
   GtkWidget *child;
   gint min, nat;
-  GtkBorder border;
 
   priv = GTK_BUBBLE_WINDOW (widget)->priv;
   child = gtk_bin_get_child (GTK_BIN (widget));
@@ -644,10 +625,6 @@ gtk_bubble_window_get_preferred_width (GtkWidget *widget,
 
   if (child)
     gtk_widget_get_preferred_width (child, &min, &nat);
-
-  get_padding_and_border (widget, &border);
-  min += border.left + border.right;
-  nat += border.left + border.right;
 
   if (!POS_IS_VERTICAL (priv->final_position))
     {
@@ -660,6 +637,8 @@ gtk_bubble_window_get_preferred_width (GtkWidget *widget,
 
   if (natural_width)
     *natural_width = MAX (nat, TAIL_GAP_WIDTH);
+
+  _gtk_widget_adjust_preferred_width (widget, minimum_width, natural_width);
 }
 
 static void
@@ -670,7 +649,6 @@ gtk_bubble_window_get_preferred_height (GtkWidget *widget,
   GtkBubbleWindowPrivate *priv;
   GtkWidget *child;
   gint min, nat;
-  GtkBorder border;
 
   priv = GTK_BUBBLE_WINDOW (widget)->priv;
   child = gtk_bin_get_child (GTK_BIN (widget));
@@ -678,10 +656,6 @@ gtk_bubble_window_get_preferred_height (GtkWidget *widget,
 
   if (child)
     gtk_widget_get_preferred_height (child, &min, &nat);
-
-  get_padding_and_border (widget, &border);
-  min += border.top + border.bottom;
-  nat += border.top + border.bottom;
 
   if (POS_IS_VERTICAL (priv->final_position))
     {
@@ -694,6 +668,8 @@ gtk_bubble_window_get_preferred_height (GtkWidget *widget,
 
   if (natural_height)
     *natural_height = MAX (nat, TAIL_GAP_WIDTH);
+
+  _gtk_widget_adjust_preferred_height (widget, minimum_height, natural_height);
 }
 
 static void
@@ -710,14 +686,8 @@ gtk_bubble_window_size_allocate (GtkWidget     *widget,
   if (child)
     {
       GtkAllocation child_alloc;
-      GtkBorder border;
 
-      get_padding_and_border (widget, &border);
-
-      child_alloc.x = border.left;
-      child_alloc.y = border.top;
-      child_alloc.width = allocation->width - border.left - border.right;
-      child_alloc.height = allocation->height - border.top - border.bottom;
+      _gtk_widget_get_content_box (widget, allocation, &child_alloc);
 
       if (POS_IS_VERTICAL (priv->final_position))
         child_alloc.height -= TAIL_HEIGHT;

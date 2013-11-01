@@ -47,6 +47,7 @@
 #include "gtkorientable.h"
 #include "gtktypebuiltins.h"
 #include "deprecated/gtkstock.h"
+#include "gtkwidgetprivate.h"
 
 /**
  * SECTION:gtkinfobar
@@ -303,41 +304,14 @@ gtk_info_bar_close (GtkInfoBar *info_bar)
 }
 
 static void
-get_padding_and_border (GtkWidget *widget,
-                        GtkBorder *border)
-{
-  GtkStyleContext *context;
-  GtkStateFlags state;
-  GtkBorder tmp;
-
-  context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-
-  gtk_style_context_get_padding (context, state, border);
-  gtk_style_context_get_border (context, state, &tmp);
-  border->top += tmp.top;
-  border->right += tmp.right;
-  border->bottom += tmp.bottom;
-  border->left += tmp.left;
-}
-
-static void
 gtk_info_bar_get_preferred_width (GtkWidget *widget,
                                   gint      *minimum_width,
                                   gint      *natural_width)
 {
-  GtkBorder border;
-
-  get_padding_and_border (widget, &border);
-
   GTK_WIDGET_CLASS (gtk_info_bar_parent_class)->get_preferred_width (widget,
                                                                      minimum_width,
                                                                      natural_width);
-
-  if (minimum_width)
-    *minimum_width += border.left + border.right;
-  if (natural_width)
-    *natural_width += border.left + border.right;
+  _gtk_widget_adjust_preferred_width (widget, minimum_width, natural_width);
 }
 
 static void
@@ -345,18 +319,10 @@ gtk_info_bar_get_preferred_height (GtkWidget *widget,
                                    gint      *minimum_height,
                                    gint      *natural_height)
 {
-  GtkBorder border;
-
-  get_padding_and_border (widget, &border);
-
   GTK_WIDGET_CLASS (gtk_info_bar_parent_class)->get_preferred_height (widget,
                                                                       minimum_height,
                                                                       natural_height);
-
-  if (minimum_height)
-    *minimum_height += border.top + border.bottom;
-  if (natural_height)
-    *natural_height += border.top + border.bottom;
+  _gtk_widget_adjust_preferred_width (widget, minimum_height, natural_height);
 }
 
 static gboolean
