@@ -851,15 +851,14 @@ gtk_frame_real_compute_child_allocation (GtkFrame      *frame,
 }
 
 static void
-gtk_frame_get_preferred_size (GtkWidget      *request,
+gtk_frame_get_preferred_size (GtkWidget      *widget,
                               GtkOrientation  orientation,
                               gint           *minimum_size,
                               gint           *natural_size)
 {
-  GtkFrame *frame = GTK_FRAME (request);
+  GtkFrame *frame = GTK_FRAME (widget);
   GtkFramePrivate *priv = frame->priv;
   GtkBorder padding;
-  GtkWidget *widget = GTK_WIDGET (request);
   GtkWidget *child;
   GtkBin *bin = GTK_BIN (widget);
   gint child_min, child_nat;
@@ -947,12 +946,11 @@ gtk_frame_get_preferred_height (GtkWidget *widget,
 
 
 static void
-gtk_frame_get_preferred_height_for_width (GtkWidget *request,
+gtk_frame_get_preferred_height_for_width (GtkWidget *widget,
                                           gint       width,
                                           gint      *minimum_height,
                                           gint      *natural_height)
 {
-  GtkWidget *widget = GTK_WIDGET (request);
   GtkWidget *child;
   GtkFrame *frame = GTK_FRAME (widget);
   GtkFramePrivate *priv = frame->priv;
