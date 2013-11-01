@@ -1573,46 +1573,45 @@ gtk_stack_draw_slide (GtkWidget *widget,
 {
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  GtkAllocation allocation;
-  gint x = 0;
-  gint y = 0;
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  x = get_bin_window_x (stack, &allocation);
-  y = get_bin_window_y (stack, &allocation);
-
-  switch (priv->active_transition_type)
-    {
-    case GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT:
-      x -= allocation.width;
-      break;
-    case GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT:
-      x += allocation.width;
-      break;
-    case GTK_STACK_TRANSITION_TYPE_SLIDE_UP:
-      y -= allocation.height;
-      break;
-    case GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN:
-      y += allocation.height;
-      break;
-    case GTK_STACK_TRANSITION_TYPE_OVER_UP:
-    case GTK_STACK_TRANSITION_TYPE_OVER_DOWN:
-      y = 0;
-      break;
-    case GTK_STACK_TRANSITION_TYPE_OVER_LEFT:
-    case GTK_STACK_TRANSITION_TYPE_OVER_RIGHT:
-      x = 0;
-      break;
-    default:
-      g_assert_not_reached ();
-      break;
-    }
 
   if (priv->last_visible_surface &&
       gtk_cairo_should_draw_window (cr, priv->view_window))
-
     {
+      GtkAllocation allocation;
+      int x, y;
+
+      gtk_widget_get_allocation (widget, &allocation);
+
+      x = get_bin_window_x (stack, &allocation);
+      y = get_bin_window_y (stack, &allocation);
+
+      switch (priv->active_transition_type)
+        {
+        case GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT:
+          x -= allocation.width;
+          break;
+        case GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT:
+          x += allocation.width;
+          break;
+        case GTK_STACK_TRANSITION_TYPE_SLIDE_UP:
+          y -= allocation.height;
+          break;
+        case GTK_STACK_TRANSITION_TYPE_SLIDE_DOWN:
+          y += allocation.height;
+          break;
+        case GTK_STACK_TRANSITION_TYPE_OVER_UP:
+        case GTK_STACK_TRANSITION_TYPE_OVER_DOWN:
+          y = 0;
+          break;
+        case GTK_STACK_TRANSITION_TYPE_OVER_LEFT:
+        case GTK_STACK_TRANSITION_TYPE_OVER_RIGHT:
+          x = 0;
+          break;
+        default:
+          g_assert_not_reached ();
+          break;
+        }
+
       cairo_save (cr);
       cairo_set_source_surface (cr, priv->last_visible_surface, x, y);
       cairo_paint (cr);
