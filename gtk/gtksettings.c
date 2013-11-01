@@ -2881,45 +2881,57 @@ settings_update_provider (GdkScreen       *screen,
     }
 }
 
+static char *
+get_theme_name (GtkSettings *settings)
+{
+  char *theme_name = NULL;
+
+  if (g_getenv ("GTK_THEME"))
+    theme_name = g_strdup (g_getenv ("GTK_THEME"));
+
+  if (theme_name && *theme_name)
+    return theme_name;
+
+  g_free (theme_name);
+  g_object_get (settings,
+                "gtk-theme-name", &theme_name,
+                NULL);
+
+  if (theme_name && *theme_name)
+    return theme_name;
+
+  g_free (theme_name);
+  return g_strdup ("Raleigh");
+}
+
 static void
 settings_update_theme (GtkSettings *settings)
 {
   GtkSettingsPrivate *priv = settings->priv;
   gboolean prefer_dark_theme;
   gchar *theme_name;
+  gchar *theme_dir;
+  gchar *path;
 
   g_object_get (settings,
-                "gtk-theme-name", &theme_name,
                 "gtk-application-prefer-dark-theme", &prefer_dark_theme,
                 NULL);
 
-  if (!theme_name || !*theme_name)
-    {
-      g_free (theme_name);
-      theme_name = g_strdup ("Raleigh");
-    }
-  
+  theme_name = get_theme_name (settings);
+
   _gtk_css_provider_load_named (priv->theme_provider,
                                 theme_name,
                                 prefer_dark_theme ? "dark" : NULL);
 
-  if (theme_name && *theme_name)
-    {
-      gchar *theme_dir;
-      gchar *path;
+  /* reload per-theme settings */
+  theme_dir = _gtk_css_provider_get_theme_dir ();
+  path = g_build_filename (theme_dir, theme_name, "gtk-3.0", "settings.ini", NULL);
 
-      /* reload per-theme settings */
-      theme_dir = _gtk_css_provider_get_theme_dir ();
-      path = g_build_filename (theme_dir, theme_name, "gtk-3.0", "settings.ini", NULL);
+  if (g_file_test (path, G_FILE_TEST_EXISTS))
+    gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_THEME);
 
-     if (g_file_test (path, G_FILE_TEST_EXISTS))
-       gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_THEME);
-
-      g_free (theme_dir);
-      g_free (path);
-    }
-
-  g_free (theme_name);
+  g_free (theme_dir);
+  g_free (path);
 }
 
 static void
