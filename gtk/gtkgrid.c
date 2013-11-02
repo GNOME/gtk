@@ -1682,6 +1682,22 @@ gtk_grid_size_allocate (GtkWidget     *widget,
   gtk_grid_request_allocate_children (&request);
 }
 
+static gboolean
+gtk_grid_draw (GtkWidget *widget,
+               cairo_t   *cr)
+{
+  GtkStyleContext *context;
+  GtkAllocation allocation;
+
+  context = gtk_widget_get_style_context (widget);
+  gtk_widget_get_allocation (widget, &allocation);
+
+  gtk_render_background (context, cr, 0, 0, allocation.width, allocation.height);
+  gtk_render_frame (context, cr, 0, 0, allocation.width, allocation.height);
+
+  return GTK_WIDGET_CLASS (gtk_grid_parent_class)->draw (widget, cr);
+}
+
 static void
 gtk_grid_class_init (GtkGridClass *class)
 {
@@ -1699,6 +1715,7 @@ gtk_grid_class_init (GtkGridClass *class)
   widget_class->get_preferred_width_for_height = gtk_grid_get_preferred_width_for_height;
   widget_class->get_preferred_height_for_width = gtk_grid_get_preferred_height_for_width;
   widget_class->get_preferred_height_and_baseline_for_width = gtk_grid_get_preferred_height_and_baseline_for_width;
+  widget_class->draw = gtk_grid_draw;
 
   container_class->add = gtk_grid_add;
   container_class->remove = gtk_grid_remove;
