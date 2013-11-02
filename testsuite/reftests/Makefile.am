@@ -67,9 +67,6 @@ testdata = \
 	background-size-zero.css \
 	background-size-zero.ref.ui \
 	background-size-zero.ui \
-	background-size.css \
-	background-size.ref.ui \
-	background-size.ui \
 	background-window-transparent.css \
 	background-window-transparent.ref.ui \
 	background-window-transparent.ui \
