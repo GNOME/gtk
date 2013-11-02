@@ -622,6 +622,9 @@ gtk_event_box_draw (GtkWidget *widget,
       gtk_render_background (context, cr, 0, 0,
                              gtk_widget_get_allocated_width (widget),
                              gtk_widget_get_allocated_height (widget));
+      gtk_render_frame (context, cr, 0, 0,
+                        gtk_widget_get_allocated_width (widget),
+                        gtk_widget_get_allocated_height (widget));
     }
 
   GTK_WIDGET_CLASS (gtk_event_box_parent_class)->draw (widget, cr);
