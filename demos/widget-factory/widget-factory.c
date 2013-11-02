@@ -107,6 +107,13 @@ dismiss (GtkWidget *button)
   gtk_revealer_set_reveal_child (GTK_REVEALER (w), FALSE);
 }
 
+static gboolean
+pulse_it (GtkWidget *widget)
+{
+  gtk_progress_bar_pulse (GTK_PROGRESS_BAR (widget));
+  return TRUE;
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -127,6 +134,9 @@ main (int argc, char *argv[])
 
   window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
   gtk_builder_connect_signals (builder, NULL);
+
+  widget = (GtkWidget*) gtk_builder_get_object (builder, "progressbar3");
+  g_timeout_add (250, (GSourceFunc)pulse_it, widget);
 
   widget = (GtkWidget*) gtk_builder_get_object (builder, "darkmenuitem");
   g_signal_connect (widget, "toggled", G_CALLBACK (dark_toggled), NULL);
