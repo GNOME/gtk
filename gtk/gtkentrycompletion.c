@@ -117,6 +117,14 @@ enum
 
 
 static void     gtk_entry_completion_cell_layout_init    (GtkCellLayoutIface      *iface);
+static GList *  gtk_entry_completion_get_cells           (GtkCellLayout           *cell_layout);
+static void     gtk_entry_completion_clear               (GtkCellLayout           *cell_layout);
+static void     gtk_entry_completion_pack_start          (GtkCellLayout           *cell_layout,
+                                                          GtkCellRenderer         *cell,
+                                                          gboolean                 expand);
+static void     gtk_entry_completion_pack_end            (GtkCellLayout           *cell_layout,
+                                                          GtkCellRenderer         *cell,
+                                                          gboolean                 expand);
 static GtkCellArea* gtk_entry_completion_get_area        (GtkCellLayout           *cell_layout);
 
 static GObject *gtk_entry_completion_constructor         (GType                    type,
@@ -478,6 +486,10 @@ gtk_entry_completion_buildable_init (GtkBuildableIface *iface)
 static void
 gtk_entry_completion_cell_layout_init (GtkCellLayoutIface *iface)
 {
+  iface->get_cells = gtk_entry_completion_get_cells;
+  iface->clear = gtk_entry_completion_clear;
+  iface->pack_start = gtk_entry_completion_pack_start;
+  iface->pack_end = gtk_entry_completion_pack_end;
   iface->get_area = gtk_entry_completion_get_area;
 }
 
@@ -814,7 +826,73 @@ gtk_entry_completion_dispose (GObject *object)
   G_OBJECT_CLASS (gtk_entry_completion_parent_class)->dispose (object);
 }
 
-/* implement cell layout interface (only need to return the underlying cell area) */
+static void
+gtk_entry_completion_clear_text_column_renderer (GtkEntryCompletion *completion)
+{
+  if (completion->priv->text_column != -1)
+    {
+      gtk_cell_layout_clear (GTK_CELL_LAYOUT (completion));
+      completion->priv->text_column = -1;
+      g_object_notify (G_OBJECT (completion), "text_column");
+    }
+}
+
+static GList *
+gtk_entry_completion_get_cells (GtkCellLayout *cell_layout)
+{
+  GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (cell_layout);
+
+  if (completion->priv->text_column == -1)
+    {
+      GtkCellArea *area;
+
+      area = gtk_entry_completion_get_area (cell_layout);
+      return gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (area));
+    }
+  else
+    {
+      /* Don't expose the internally created cell renderer */
+      return NULL;
+    }
+}
+
+static void
+gtk_entry_completion_clear (GtkCellLayout *cell_layout)
+{
+  GtkCellArea *area;
+
+  gtk_entry_completion_clear_text_column_renderer (GTK_ENTRY_COMPLETION (cell_layout));
+
+  area = gtk_entry_completion_get_area (cell_layout);
+  gtk_cell_layout_clear (GTK_CELL_LAYOUT (area));
+}
+
+static void
+gtk_entry_completion_pack_start (GtkCellLayout   *cell_layout,
+                                 GtkCellRenderer *cell,
+                                 gboolean         expand)
+{
+  GtkCellArea *area;
+
+  gtk_entry_completion_clear_text_column_renderer (GTK_ENTRY_COMPLETION (cell_layout));
+
+  area = gtk_entry_completion_get_area (cell_layout);
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (area), cell, expand);
+}
+
+static void
+gtk_entry_completion_pack_end (GtkCellLayout   *cell_layout,
+                               GtkCellRenderer *cell,
+                               gboolean         expand)
+{
+  GtkCellArea *area;
+
+  gtk_entry_completion_clear_text_column_renderer (GTK_ENTRY_COMPLETION (cell_layout));
+
+  area = gtk_entry_completion_get_area (cell_layout);
+  gtk_cell_layout_pack_end (GTK_CELL_LAYOUT (area), cell, expand);
+}
+
 static GtkCellArea*
 gtk_entry_completion_get_area (GtkCellLayout *cell_layout)
 {
@@ -1393,10 +1471,12 @@ gtk_entry_completion_delete_action (GtkEntryCompletion *completion,
  * to have a list displaying all (and just) strings in the completion list,
  * and to get those strings from @column in the model of @completion.
  *
- * This functions creates and adds a #GtkCellRendererText for the selected
- * column. If you need to set the text column, but don't want the cell
- * renderer, use g_object_set() to set the #GtkEntryCompletion:text-column
- * property directly.
+ * Any cell renderers that were added to @completion before calling this
+ * function will be removed.
+ *
+ * Conversely, the cell renderer created by this function will be
+ * removed when new renderers are added to @completion with
+ * gtk_cell_layout_pack_start() or gtk_cell_layout_pack_end().
  *
  * Since: 2.4
  */
@@ -1409,15 +1489,39 @@ gtk_entry_completion_set_text_column (GtkEntryCompletion *completion,
   g_return_if_fail (GTK_IS_ENTRY_COMPLETION (completion));
   g_return_if_fail (column >= 0);
 
+  /* clear manually set cell renderers */
+  if (completion->priv->text_column == -1)
+    gtk_cell_layout_clear (GTK_CELL_LAYOUT (completion));
+
+  if (completion->priv->text_column >= 0)
+    {
+      GtkCellArea *area;
+      GList *cells;
+
+      /* Call get_cells() on the internal area instead of on completion,
+       * because completion returns NULL for when the renderer is
+       * internal (i.e., was added by this function).
+       */
+      area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (completion));
+      cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (area));
+      g_assert (cells);
+
+      cell = cells->data;
+
+      g_list_free (cells);
+    }
+  else
+    {
+      cell = gtk_cell_renderer_text_new ();
+      gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (completion),
+                                  cell, TRUE);
+    }
+
+  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (completion), cell,
+                                  "text", column,
+                                  NULL);
+
   completion->priv->text_column = column;
-
-  cell = gtk_cell_renderer_text_new ();
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (completion),
-                              cell, TRUE);
-  gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (completion),
-                                 cell,
-                                 "text", column);
-
   g_object_notify (G_OBJECT (completion), "text-column");
 }
 
