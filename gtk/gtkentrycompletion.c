@@ -844,20 +844,21 @@ gtk_entry_completion_clear_text_column_renderer (GtkEntryCompletion *completion)
 static GList *
 gtk_entry_completion_get_cells (GtkCellLayout *cell_layout)
 {
+  static gboolean warned = FALSE;
+
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (cell_layout);
+  GtkCellArea *area;
 
-  if (completion->priv->text_column == -1)
+  if (!warned && completion->priv->text_column != -1)
     {
-      GtkCellArea *area;
+      g_warning ("GtkEntryCompletion: don't call gtk_cell_layout_get_cells() to get "
+                 "the cell renderer that was created by setting 'text-column'.");
+      warned = TRUE;
+    }
 
-      area = gtk_entry_completion_get_area (cell_layout);
-      return gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (area));
-    }
-  else
-    {
-      /* Don't expose the internally created cell renderer */
-      return NULL;
-    }
+  area = gtk_entry_completion_get_area (cell_layout);
+
+  return gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (area));
 }
 
 static void
@@ -1474,6 +1475,9 @@ gtk_entry_completion_delete_action (GtkEntryCompletion *completion,
  * completion list with just strings. This function will set up @completion
  * to have a list displaying all (and just) strings in the completion list,
  * and to get those strings from @column in the model of @completion.
+ *
+ * The cell renderer added by this function is managed internally. Do
+ * not access or modify it.
  *
  * Any cell renderers that were added to @completion before calling this
  * function will be removed.
