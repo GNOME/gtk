@@ -24,19 +24,38 @@
 #include <gtk/gtk.h>
 
 static void
-dark_toggled (GtkCheckMenuItem *item, gpointer data)
+activate_toggle (GSimpleAction *action,
+                 GVariant      *parameter,
+                 gpointer       user_data)
 {
-  gboolean dark;
+  GVariant *state;
 
-  dark = gtk_check_menu_item_get_active (item);
-  g_object_set (gtk_settings_get_default (),
-                "gtk-application-prefer-dark-theme", dark,
-                NULL);
+  state = g_action_get_state (G_ACTION (action));
+  g_action_change_state (G_ACTION (action), g_variant_new_boolean (!g_variant_get_boolean (state)));
+  g_variant_unref (state);
 }
 
 static void
-show_about (GtkMenuItem *item, GtkWidget *window)
+change_theme_state (GSimpleAction *action,
+                    GVariant      *state,
+                    gpointer       user_data)
 {
+  GtkSettings *settings = gtk_settings_get_default ();
+
+  g_object_set (G_OBJECT (settings),
+                "gtk-application-prefer-dark-theme",
+                g_variant_get_boolean (state),
+                NULL);
+
+  g_simple_action_set_state (action, state);
+}
+
+static void
+activate_about (GSimpleAction *action,
+                GVariant      *parameter,
+                gpointer       user_data)
+{
+  GtkWidget *window = user_data;
   GdkPixbuf *pixbuf;
   const gchar *authors[] = {
     "Andrea Cimitan",
@@ -66,16 +85,24 @@ show_about (GtkMenuItem *item, GtkWidget *window)
 }
 
 static void
-on_page_toggled (GtkToggleButton *button,
-                 GtkNotebook     *pages)
+activate_quit (GSimpleAction *action,
+               GVariant      *parameter,
+               gpointer       user_data)
 {
-  gint page;
+  GtkApplication *app = user_data;
+  GtkWidget *win;
+  GList *list, *next;
 
-  if (!gtk_toggle_button_get_active (button))
-    return;
+  list = gtk_application_get_windows (app);
+  while (list)
+    {
+      win = list->data;
+      next = list->next;
 
-  page = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (button), "page"));
-  gtk_notebook_set_current_page (pages, page);
+      gtk_widget_destroy (GTK_WIDGET (win));
+
+      list = next;
+    }
 }
 
 static void
@@ -114,58 +141,78 @@ pulse_it (GtkWidget *widget)
   return TRUE;
 }
 
-int
-main (int argc, char *argv[])
+static void
+startup (GApplication *app)
 {
   GtkBuilder *builder;
-  GtkWidget  *window;
-  GtkWidget  *widget;
-  GtkWidget  *notebook;
-  gboolean    dark = FALSE;
-  GtkAdjustment *adj;
-
-  gtk_init (&argc, &argv);
-
-  if (argc > 1 && (g_strcmp0 (argv[1], "--dark") == 0))
-    dark = TRUE;
+  GMenuModel *appmenu;
 
   builder = gtk_builder_new ();
   gtk_builder_add_from_resource (builder, "/ui/widget-factory.ui", NULL);
 
-  window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
-  gtk_builder_connect_signals (builder, NULL);
+  appmenu = (GMenuModel *)gtk_builder_get_object (builder, "appmenu");
 
-  widget = (GtkWidget*) gtk_builder_get_object (builder, "progressbar3");
+  gtk_application_set_app_menu (GTK_APPLICATION (app), appmenu);
+
+  g_object_unref (builder);
+}
+
+static void
+activate (GApplication *app)
+{
+  GtkBuilder *builder;
+  GtkWindow *window;
+  GtkWidget *widget;
+  GtkAdjustment *adj;
+  static GActionEntry win_entries[] = {
+    { "dark", activate_toggle, NULL, "false", change_theme_state }
+  };
+
+  builder = gtk_builder_new ();
+  gtk_builder_add_from_resource (builder, "/ui/widget-factory.ui", NULL);
+
+  window = (GtkWindow *)gtk_builder_get_object (builder, "window");
+  gtk_application_add_window (GTK_APPLICATION (app), window);
+  g_action_map_add_action_entries (G_ACTION_MAP (window),
+                                   win_entries, G_N_ELEMENTS (win_entries),
+                                   window);
+
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "progressbar3");
   g_timeout_add (250, (GSourceFunc)pulse_it, widget);
 
-  widget = (GtkWidget*) gtk_builder_get_object (builder, "darkmenuitem");
-  g_signal_connect (widget, "toggled", G_CALLBACK (dark_toggled), NULL);
-  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (widget), dark);
-
-  notebook = (GtkWidget*) gtk_builder_get_object (builder, "toplevel_notebook");
-  widget = (GtkWidget*) gtk_builder_get_object (builder, "togglepage1");
-  g_object_set_data (G_OBJECT (widget), "page", GINT_TO_POINTER (0));
-  g_signal_connect (widget, "toggled", G_CALLBACK (on_page_toggled), notebook);
-
-  widget = (GtkWidget*) gtk_builder_get_object (builder, "togglepage2");
-  g_object_set_data (G_OBJECT (widget), "page", GINT_TO_POINTER (1));
-  g_signal_connect (widget, "toggled", G_CALLBACK (on_page_toggled), notebook);
-
-  widget = (GtkWidget*) gtk_builder_get_object (builder, "aboutmenuitem");
-  g_signal_connect (widget, "activate", G_CALLBACK (show_about), window);
-
-  widget = (GtkWidget*) gtk_builder_get_object (builder, "page2dismiss");
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "page2dismiss");
   g_signal_connect (widget, "clicked", G_CALLBACK (dismiss), NULL);
 
-  widget = (GtkWidget*) gtk_builder_get_object (builder, "page2note");
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "page2note");
   adj = (GtkAdjustment *) gtk_builder_get_object (builder, "adjustment2");
-  g_signal_connect (adj, "value-changed",
-                    G_CALLBACK (spin_value_changed), widget);
+  g_signal_connect (adj, "value-changed", G_CALLBACK (spin_value_changed), widget);
 
-  g_object_unref (G_OBJECT (builder));
+  gtk_widget_show_all (GTK_WIDGET (window));
 
-  gtk_widget_show (window);
-  gtk_main ();
+  g_object_unref (builder);
+}
+
+int
+main (int argc, char *argv[])
+{
+  GtkApplication *app;
+  static GActionEntry app_entries[] = {
+    { "about", activate_about, NULL, NULL, NULL },
+    { "quit", activate_quit, NULL, NULL, NULL },
+  };
+
+  gtk_init (&argc, &argv);
+
+  app = gtk_application_new ("org.gtk.WidgetFactory", 0);
+
+  g_action_map_add_action_entries (G_ACTION_MAP (app),
+                                   app_entries, G_N_ELEMENTS (app_entries),
+                                   app);
+
+  g_signal_connect (app, "startup", G_CALLBACK (startup), NULL);
+  g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
+
+  g_application_run (G_APPLICATION (app), argc, argv);
 
   return 0;
 }
