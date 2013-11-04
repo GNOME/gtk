@@ -386,7 +386,7 @@ AC_SUBST(DISABLE_ON_QUARTZ)
 if test "x$enable_broadway_backend" = xyes; then
   GDK_BACKENDS="$GDK_BACKENDS broadway"
   cairo_backends="$cairo_backends cairo"
-  if test "$os_unix" = "yes"; then
+  if test "$host_os" != "mingw*|windows*|winnt"; then
     have_gio_unix=yes
   fi
   GDK_WINDOWING="$GDK_WINDOWING
