@@ -238,6 +238,9 @@ testdata = \
 	linear-gradient-transition-to-other.css \
 	linear-gradient-transition-to-other.ref.ui \
 	linear-gradient-transition-to-other.ui \
+	link-coloring.css \
+	link-coloring.ref.ui \
+	link-coloring.ui \
 	marble.xpm \
 	messagedialog-secondarytext.ui \
 	messagedialog-secondarytext.ref.ui \

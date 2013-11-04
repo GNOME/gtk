@@ -1,0 +1,14 @@
+@import "reset-to-defaults.css";
+
+:link {
+  color: blue;
+}
+
+:visited {
+  color: purple;
+}
+
+/* should never happen */
+:link:visited {
+  color: red;
+}
