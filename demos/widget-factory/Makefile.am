@@ -2,6 +2,9 @@ include $(top_srcdir)/Makefile.decl
 
 bin_PROGRAMS = gtk3-widget-factory
 
+desktopdir = $(datadir)/applications
+desktop_DATA = gtk3-widget-factory.desktop
+
 gtk3_widget_factory_SOURCES = \
 	widget-factory.c	\
 	widget_factory_resources.c
