@@ -156,6 +156,8 @@ testsuite/reftests/label-width-chars-dont-shrink.ref.ui
 testsuite/reftests/label-width-chars-dont-shrink.ui
 testsuite/reftests/label-wrap-justify.ref.ui
 testsuite/reftests/label-wrap-justify.ui
+testsuite/reftests/link-coloring.ref.ui
+testsuite/reftests/link-coloring.ui
 testsuite/reftests/messagedialog-secondarytext.ref.ui
 testsuite/reftests/messagedialog-secondarytext.ui
 testsuite/reftests/misc-alignment.ref.ui
