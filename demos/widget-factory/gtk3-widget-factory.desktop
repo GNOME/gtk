@@ -2,7 +2,7 @@
 Name=Widget Factory
 Comment=A showcase for GTK+ widgets, designed for testing themes.
 Exec=gtk3-widget-factory
-Icon=
+Icon=gtk3-widget-factory
 Terminal=false
 Type=Application
 StartupNotify=true
