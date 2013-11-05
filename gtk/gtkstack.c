@@ -590,7 +590,8 @@ gtk_stack_set_child_property (GtkContainer *container,
       gtk_container_child_notify (container, child, "name");
 
       if (priv->visible_child == info)
-        g_object_notify (G_OBJECT (stack), "visible-child-name");
+        g_object_notify_by_pspec (G_OBJECT (stack),
+                                  stack_props[PROP_VISIBLE_CHILD_NAME]);
 
       break;
 
@@ -894,8 +895,9 @@ set_visible_child (GtkStack               *stack,
   gtk_widget_queue_resize (GTK_WIDGET (stack));
   gtk_widget_queue_draw (GTK_WIDGET (stack));
 
-  g_object_notify (G_OBJECT (stack), "visible-child");
-  g_object_notify (G_OBJECT (stack), "visible-child-name");
+  g_object_notify_by_pspec (G_OBJECT (stack), stack_props[PROP_VISIBLE_CHILD]);
+  g_object_notify_by_pspec (G_OBJECT (stack),
+                            stack_props[PROP_VISIBLE_CHILD_NAME]);
 
   gtk_stack_start_transition (stack, transition_type, transition_duration);
 }
@@ -1087,7 +1089,7 @@ gtk_stack_set_homogeneous (GtkStack *stack,
   if (gtk_widget_get_visible (GTK_WIDGET(stack)))
     gtk_widget_queue_resize (GTK_WIDGET (stack));
 
-  g_object_notify (G_OBJECT (stack), "homogeneous");
+  g_object_notify_by_pspec (G_OBJECT (stack), stack_props[PROP_HOMOGENEOUS]);
 }
 
 /**
@@ -1151,7 +1153,8 @@ gtk_stack_set_transition_duration (GtkStack *stack,
   g_return_if_fail (GTK_IS_STACK (stack));
 
   priv->transition_duration = duration;
-  g_object_notify (G_OBJECT (stack), "transition-duration");
+  g_object_notify_by_pspec (G_OBJECT (stack),
+                            stack_props[PROP_TRANSITION_DURATION]);
 }
 
 /**
@@ -1199,7 +1202,8 @@ gtk_stack_set_transition_type (GtkStack              *stack,
   g_return_if_fail (GTK_IS_STACK (stack));
 
   priv->transition_type = transition;
-  g_object_notify (G_OBJECT (stack), "transition-type");
+  g_object_notify_by_pspec (G_OBJECT (stack),
+                            stack_props[PROP_TRANSITION_TYPE]);
 }
 
 /**
