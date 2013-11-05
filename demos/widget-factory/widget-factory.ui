@@ -1883,7 +1883,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <child>
                               <object class="GtkImage" id="imageo">
                                 <property name="visible">True</property>
-                                <property name="resource">/logos/gtk-logo-256.png</property>
+                                <property name="icon-name">gtk3-widget-factory</property>
                               </object>
                               <packing>
                                 <property name="name">page2</property>

@@ -56,14 +56,11 @@ activate_about (GSimpleAction *action,
                 gpointer       user_data)
 {
   GtkWidget *window = user_data;
-  GdkPixbuf *pixbuf;
   const gchar *authors[] = {
     "Andrea Cimitan",
     "Cosimo Cecchi",
     NULL
   };
-
-  pixbuf = gdk_pixbuf_new_from_resource ("/logos/gtk-logo-256.png", NULL);
 
   gtk_show_about_dialog (GTK_WINDOW (window),
                          "program-name", "GTK+ Widget Factory",
@@ -77,11 +74,9 @@ activate_about (GSimpleAction *action,
                          "website", "http://www.gtk.org",
                          "comments", "Program to demonstrate GTK+ themes and widgets",
                          "authors", authors,
-                         "logo", pixbuf,
+                         "logo-icon-name", "gtk3-widget-factory",
                          "title", "About GTK+ Widget Factory",
                          NULL);
-
-  g_object_unref (pixbuf);
 }
 
 static void
