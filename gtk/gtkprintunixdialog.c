@@ -823,7 +823,9 @@ printer_status_cb (GtkPrintBackend    *backend,
    * of GTK_RESPONSE_OK button inside of selected_printer_changed function.
    */
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->printer_treeview));
+  priv->internal_printer_change = TRUE;
   selected_printer_changed (selection, dialog);
+  priv->internal_printer_change = FALSE;
 
   if (gtk_print_backend_printer_list_is_done (backend) &&
       gtk_printer_is_default (printer) &&
