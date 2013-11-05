@@ -327,13 +327,15 @@ _gtk_pixel_cache_repaint (GtkPixelCache *cache,
 			  gpointer user_data)
 {
   cairo_t *backing_cr;
+  cairo_region_t *region_dirty = cache->surface_dirty;
+  cache->surface_dirty = NULL;
 
   if (cache->surface &&
-      cache->surface_dirty &&
-      !cairo_region_is_empty (cache->surface_dirty))
+      region_dirty &&
+      !cairo_region_is_empty (region_dirty))
     {
       backing_cr = cairo_create (cache->surface);
-      gdk_cairo_region (backing_cr, cache->surface_dirty);
+      gdk_cairo_region (backing_cr, region_dirty);
       cairo_clip (backing_cr);
       cairo_translate (backing_cr,
 		       -cache->surface_x - canvas_rect->x - view_rect->x,
@@ -370,11 +372,8 @@ _gtk_pixel_cache_repaint (GtkPixelCache *cache,
       cairo_destroy (backing_cr);
     }
 
-  if (cache->surface_dirty)
-    {
-      cairo_region_destroy (cache->surface_dirty);
-      cache->surface_dirty = NULL;
-    }
+  if (region_dirty)
+    cairo_region_destroy (region_dirty);
 }
 
 static gboolean
