@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/application">
-    <file preprocess="to-pixdata">gtk-logo-24.png</file>
-    <file preprocess="to-pixdata">gtk-logo-48.png</file>
     <file>application.ui</file>
     <file>menus.ui</file>
   </gresource>
@@ -59,7 +57,6 @@
   <gresource prefix="/images">
     <file>alphatest.png</file>
     <file>floppybuddy.gif</file>
-    <file>gtk-logo-old.png</file>
   </gresource>
   <gresource prefix="/pixbufs">
     <file>apple-red.png</file>
@@ -125,12 +122,10 @@
   </gresource>
   <gresource prefix="/textview">
     <file>floppybuddy.gif</file>
-    <file>gtk-logo-old.png</file>
   </gresource>
   <gresource prefix="/listbox">
     <file>listbox.ui</file>
     <file>messages.txt</file>
-    <file>gtk-logo-48.png</file>
     <file>apple-red.png</file>
   </gresource>
 </gresources>

@@ -882,20 +882,6 @@ create_tree (void)
   return box;
 }
 
-static void
-setup_default_icon (void)
-{
-  GdkPixbuf *pixbuf;
-
-  pixbuf = gdk_pixbuf_new_from_resource ("/application/gtk-logo-48.png", NULL);
-  /* We load a resource, so we can guarantee that loading it is successful */
-  g_assert (pixbuf);
-
-  gtk_window_set_default_icon (pixbuf);
-  
-  g_object_unref (pixbuf);
-}
-
 int
 main (int argc, char **argv)
 {
@@ -915,7 +901,7 @@ main (int argc, char **argv)
 
   gtk_init (&argc, &argv);
 
-  setup_default_icon ();
+  gtk_window_set_default_icon_name ("gtk3-demo");
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "GTK+ Code Demos");

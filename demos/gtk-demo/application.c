@@ -95,7 +95,6 @@ activate_about (GSimpleAction *action,
                 gpointer       user_data)
 {
   GtkWidget *window = user_data;
-  GdkPixbuf *pixbuf;
 
   const gchar *authors[] = {
     "Peter Mattis",
@@ -113,8 +112,6 @@ activate_about (GSimpleAction *action,
     NULL
   };
 
-  pixbuf = gdk_pixbuf_new_from_resource ("/application/gtk-logo-48.png", NULL);
-
   gtk_show_about_dialog (GTK_WINDOW (window),
                          "program-name", "GTK+ Code Demos",
                          "version", g_strdup_printf ("%s,\nRunning against GTK+ %d.%d.%d",
@@ -128,10 +125,9 @@ activate_about (GSimpleAction *action,
                          "comments", "Program to demonstrate GTK+ functions.",
                          "authors", authors,
                          "documenters", documentors,
-                         "logo", pixbuf,
+                         "logo-icon-name", "gtk3-demo",
                          "title", "About GTK+ Code Demos",
                          NULL);
-  g_object_unref (pixbuf);
 }
 
 static void

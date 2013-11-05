@@ -134,9 +134,6 @@ RESOURCES=	$(demos)			\
 		gnome-gmush.png			\
 		gnome-gsame.png			\
 		gnu-keys.png			\
-		gtk-logo-24.png			\
-		gtk-logo-48.png			\
-		gtk-logo-old.png		\
 		messages.txt			\
 		css_accordion.css		\
 		css_basics.css			\

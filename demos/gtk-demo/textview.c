@@ -129,14 +129,15 @@ insert_text (GtkTextBuffer *buffer)
   GtkTextIter iter;
   GtkTextIter start, end;
   GdkPixbuf *pixbuf;
-  GdkPixbuf *scaled;
+  GtkIconTheme *icon_theme;
 
-  pixbuf = gdk_pixbuf_new_from_resource ("/textview/gtk-logo-old.png", NULL);
+  icon_theme = gtk_icon_theme_get_default ();
+  pixbuf = gtk_icon_theme_load_icon (icon_theme,
+                                     "gtk3-demo",
+                                     32,
+                                     GTK_ICON_LOOKUP_GENERIC_FALLBACK,
+                                     NULL);
   g_assert (pixbuf);
-
-  scaled = gdk_pixbuf_scale_simple (pixbuf, 32, 32, GDK_INTERP_BILINEAR);
-  g_object_unref (pixbuf);
-  pixbuf = scaled;
 
   /* get start of buffer; each insertion will revalidate the
    * iterator to point to just after the inserted text.

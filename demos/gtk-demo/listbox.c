@@ -9,7 +9,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-static GdkPixbuf *avatar_pixbuf_gtk;
 static GdkPixbuf *avatar_pixbuf_other;
 static GtkWidget *window = NULL;
 
@@ -183,7 +182,7 @@ gtk_message_row_update (GtkMessageRow *row)
     gtk_button_set_label (GTK_BUTTON (priv->resent_by_button), priv->message->resent_by);
 
   if (strcmp (priv->message->sender_nick, "@GTKtoolkit") == 0)
-    gtk_image_set_from_pixbuf (priv->avatar_image, avatar_pixbuf_gtk);
+    gtk_image_set_from_icon_name (priv->avatar_image, "gtk3-demo", GTK_ICON_SIZE_DND);
   else
     gtk_image_set_from_pixbuf (priv->avatar_image, avatar_pixbuf_other);
 
@@ -317,7 +316,6 @@ do_listbox (GtkWidget *do_widget)
 
   if (!window)
     {
-      avatar_pixbuf_gtk = gdk_pixbuf_new_from_resource_at_scale ("/listbox/gtk-logo-48.png", 32, 32, FALSE, NULL);
       avatar_pixbuf_other = gdk_pixbuf_new_from_resource_at_scale ("/listbox/apple-red.png", 32, 32, FALSE, NULL);
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
