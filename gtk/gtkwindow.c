@@ -65,6 +65,10 @@
 #include "wayland/gdkwayland.h"
 #endif
 
+#ifdef GDK_WINDOWING_BROADWAY
+#include "broadway/gdkbroadway.h"
+#endif
+
 /**
  * SECTION:gtkwindow
  * @title: GtkWindow
@@ -5329,6 +5333,11 @@ gdk_window_should_use_csd (GtkWindow *window)
 
 #ifdef GDK_WINDOWING_WAYLAND
   if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
+    return TRUE;
+#endif
+
+#ifdef GDK_WINDOWING_BROADWAY
+  if (GDK_IS_BROADWAY_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
     return TRUE;
 #endif
 

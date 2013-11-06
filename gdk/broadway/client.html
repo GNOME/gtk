@@ -4,67 +4,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf8" />
 <title>broadway 2.0</title>
 <script type="text/javascript" src="broadway.js"></script>
-<style type="text/css">
-
-.frame-window {
-    background-color: rgb(248, 248, 248);
-    background-image: -moz-linear-gradient(rgb(255, 255, 255) 1px, rgb(247, 247, 247) 1px, rgb(237, 236, 235) 32px);
-/*    background-image: -webkit-gradient(linear, left top, left 50, from(rgba(250, 253, 255, 0.9)), to(rgba(250, 253, 255, 0)), color-stop(88%, rgba(250, 253, 255, 0.75))); */
-    border-radius: 5px 5px 0 0;
-    -moz-border-radius: 5px 5px 0 0;
-    border: 1px solid rgb(142, 142, 142);
-    padding: 0 0 3px;
-}
-
-.frame-contents {
-    clear: both;
-    position: relative;
-}
-
-.frame-close {
-    margin: 0 0 4px;
-    background-color: #BFC1C1;
-    background-image: -moz-linear-gradient(#D1D2D2 0%, #BABBBC 65%, #D4D4D5 100%);
-/*    background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0.35)), to(rgba(255, 255, 255, 0.5)), color-stop(50%, rgba(255, 255, 255, 0.5)), color-stop(50%, rgba(255, 255, 255, 0))); */
-    border-radius: 0 4px 0 5px;
-/*    border-top-left-radius: 0;
-    border-top-right-radius: 4px;
-    -moz-border-radius: 2px;
-    -moz-border-top-left-radius: 0;
-    -moz-border-top-right-radius: 0; */
-    border-top: none;
-    border-right: none;
-    border-bottom: 1px solid #BEBEBE;
-    border-left: 1px solid #8E8E8E;
-    float: right;
-    color: white;
-    line-height: 30px;
-    width: 30px;
-    text-shadow: 0 1px 0 #8E8E8E;
-    font-weight: bold;
-    font-family: sans-serif;
-    font-size: 190%;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -o-user-select: none;
-    user-select: none;
-}
-
-.frame-close.frame-hover {
-    background-image: -moz-linear-gradient(#E8E8E8 0%, #C7C8C9 65%, #D6D6D6 100%);
-}
-
-.frame-close.frame-active {
-    background-image: -moz-linear-gradient(#8E8E8E 1px, #BEBEBE 100%);
-    text-shadow: none;
-    /* this is a gross hack, remove if it break things */
-    margin: -1px 0 4px;
-    padding-top: 1px;
-}
-
-</style>
 </head>
 
 <body onload="connect()">

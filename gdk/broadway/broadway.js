@@ -90,7 +90,6 @@ var grab = new Object();
 grab.window = null;
 grab.ownerEvents = false;
 grab.implicit = false;
-var localGrab = null;
 var keyDownList = [];
 var lastSerial = 0;
 var lastX = 0;
@@ -166,47 +165,6 @@ function sendConfigureNotify(surface)
     sendInput("w", [surface.id, surface.x, surface.y, surface.width, surface.height]);
 }
 
-function getStyle(el, styleProp)
-{
-    if (el.currentStyle) {
-	return el.currentStyle[styleProp];
-    }  else if (window.getComputedStyle) {
-	var win = el.ownerDocument.defaultView;
-	return win.getComputedStyle(el, null).getPropertyValue(styleProp);
-    }
-    return undefined;
-}
-
-function parseOffset(value)
-{
-    var px = value.indexOf("px");
-    if (px > 0)
-	return parseInt(value.slice(0,px));
-    return 0;
-}
-
-function getFrameOffset(surface) {
-    var x = 0;
-    var y = 0;
-    var el = surface.canvas;
-    while (el != null && el != surface.frame) {
-	x += el.offsetLeft;
-	y += el.offsetTop;
-
-	/* For some reason the border is not includes in the offsets.. */
-	x += parseOffset(getStyle(el, "border-left-width"));
-	y += parseOffset(getStyle(el, "border-top-width"));
-
-	el = el.offsetParent;
-    }
-
-    /* Also include frame border as per above */
-    x += parseOffset(getStyle(el, "border-left-width"));
-    y += parseOffset(getStyle(el, "border-top-width"));
-
-    return {x: x, y: y};
-}
-
 var positionIndex = 0;
 function cmdCreateSurface(id, x, y, width, height, isTemp)
 {
@@ -215,7 +173,6 @@ function cmdCreateSurface(id, x, y, width, height, isTemp)
     surface.drawQueue = [];
     surface.transientParent = 0;
     surface.visible = false;
-    surface.frame = null;
 
     var canvas = document.createElement("canvas");
     canvas.width = width;
@@ -224,32 +181,8 @@ function cmdCreateSurface(id, x, y, width, height, isTemp)
     surface.canvas = canvas;
     var toplevelElement;
 
-    if (isTemp) {
-	toplevelElement = canvas;
-	document.body.appendChild(canvas);
-    } else {
-	var frame = document.createElement("div");
-	frame.frameFor = surface;
-	frame.className = "frame-window";
-	surface.frame = frame;
-
-	var button = document.createElement("center");
-	button.closeFor = surface;
-	var X = document.createTextNode("\u00d7");
-	button.appendChild(X);
-	button.className = "frame-close";
-	frame.appendChild(button);
-
-	var contents = document.createElement("div");
-	contents.className = "frame-contents";
-	frame.appendChild(contents);
-
-	canvas.style["display"] = "block";
-	contents.appendChild(canvas);
-
-	toplevelElement = frame;
-	document.body.appendChild(frame);
-    }
+    toplevelElement = canvas;
+    document.body.appendChild(canvas);
 
     surface.toplevelElement = toplevelElement;
     toplevelElement.style["position"] = "absolute";
@@ -259,9 +192,7 @@ function cmdCreateSurface(id, x, y, width, height, isTemp)
     toplevelElement.style["top"] = surface.y + "px";
     toplevelElement.style["display"] = "inline";
 
-    /* We hide the frame with visibility rather than display none
-     * so getFrameOffset still works with hidden windows. */
-    toplevelElement.style["visibility"] = "hidden";
+    toplevelElement.style["visibility"] = "none";
 
     surfaces[id] = surface;
     stackingOrder.push(surface);
@@ -279,12 +210,6 @@ function cmdShowSurface(id)
 
     var xOffset = surface.x;
     var yOffset = surface.y;
-
-    if (surface.frame) {
-	var offset = getFrameOffset(surface);
-	xOffset -= offset.x;
-	yOffset -= offset.y;
-    }
 
     surface.toplevelElement.style["left"] = xOffset + "px";
     surface.toplevelElement.style["top"] = yOffset + "px";
@@ -365,9 +290,6 @@ function cmdDeleteSurface(id)
 	stackingOrder.splice(i, 1);
     var canvas = surface.canvas;
     canvas.parentNode.removeChild(canvas);
-    var frame = surface.frame;
-    if (frame)
-	frame.parentNode.removeChild(frame);
     delete surfaces[id];
 }
 
@@ -396,12 +318,6 @@ function cmdMoveResizeSurface(id, has_pos, x, y, has_size, w, h)
 	    var yOffset = surface.y;
 
 	    var element = surface.canvas;
-	    if (surface.frame) {
-		element = surface.frame;
-		var offset = getFrameOffset(surface);
-		xOffset -= offset.x;
-		yOffset -= offset.y;
-	    }
 
 	    element.style["left"] = xOffset + "px";
 	    element.style["top"] = yOffset + "px";
@@ -703,24 +619,6 @@ function updateForEvent(ev) {
 
 function onMouseMove (ev) {
     updateForEvent(ev);
-    if (localGrab) {
-	if (localGrab.type == "move") {
-	    var dx = ev.pageX - localGrab.lastX;
-	    var dy = ev.pageY - localGrab.lastY;
-	    var surface = localGrab.surface;
-	    surface.x += dx;
-	    surface.y += dy;
-	    var offset = getFrameOffset(surface);
-	    if (surface.y < offset.y)
-		surface.y = offset.y;
-	    localGrab.frame.style["left"] = (surface.x - offset.x) + "px";
-	    localGrab.frame.style["top"] = (surface.y - offset.y) + "px";
-	    sendConfigureNotify(surface);
-	    localGrab.lastX = ev.pageX;
-	    localGrab.lastY = ev.pageY;
-	}
-	return;
-    }
     var id = getSurfaceId(ev);
     id = getEffectiveEventTarget (id);
     var pos = getPositionsFromEvent(ev, id);
@@ -730,14 +628,6 @@ function onMouseMove (ev) {
 function onMouseOver (ev) {
     updateForEvent(ev);
 
-    if (!grab.window && ev.target.closeFor) {
-	ev.target.className = ev.target.className + " frame-hover";
-	if (ev.target.isDown)
-	    ev.target.className = ev.target.className + " frame-active";
-    }
-
-    if (localGrab)
-	return;
     var id = getSurfaceId(ev);
     realWindowWithMouse = id;
     id = getEffectiveEventTarget (id);
@@ -750,13 +640,6 @@ function onMouseOver (ev) {
 
 function onMouseOut (ev) {
     updateForEvent(ev);
-    if (ev.target.closeFor) {
-	ev.target.className = ev.target.className.replace(" frame-hover", "");
-	if (ev.target.isDown)
-	    ev.target.className = ev.target.className.replace(" frame-active", "");
-    }
-    if (localGrab)
-	return;
     var id = getSurfaceId(ev);
     var origId = id;
     id = getEffectiveEventTarget (id);
@@ -810,29 +693,6 @@ function onMouseDown (ev) {
     var id = getSurfaceId(ev);
     id = getEffectiveEventTarget (id);
 
-    if (id == 0 && ev.target.frameFor) { /* mouse click on frame */
-	localGrab = new Object();
-	localGrab.surface = ev.target.frameFor;
-	localGrab.type = "move";
-	localGrab.frame = ev.target;
-	localGrab.lastX = ev.pageX;
-	localGrab.lastY = ev.pageY;
-	moveToTop(localGrab.frame.frameFor);
-	return false;
-    }
-
-    if (id == 0 && ev.target.closeFor) { /* mouse click on frame */
-	ev.target.isDown = true;
-	ev.target.className = ev.target.className + " frame-active";
-	localGrab = new Object();
-	localGrab.surface = ev.target.closeFor;
-	localGrab.type = "close";
-	localGrab.button = ev.target;
-	localGrab.lastX = ev.pageX;
-	localGrab.lastY = ev.pageY;
-	return false;
-    }
-
     var pos = getPositionsFromEvent(ev, id);
     if (grab.window == null)
 	doGrab (id, false, true);
@@ -847,28 +707,6 @@ function onMouseUp (ev) {
     var evId = getSurfaceId(ev);
     id = getEffectiveEventTarget (evId);
     var pos = getPositionsFromEvent(ev, id);
-
-    if (localGrab) {
-	realWindowWithMouse = evId;
-	if (windowWithMouse != id) {
-	    if (windowWithMouse != 0) {
-		sendInput ("l", [realWindowWithMouse, windowWithMouse, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
-	    }
-	    windowWithMouse = id;
-	    if (windowWithMouse != 0) {
-		sendInput ("e", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
-	    }
-	}
-
-	if (localGrab.type == "close") {
-	    localGrab.button.isDown = false;
-	    localGrab.button.className = localGrab.button.className.replace( " frame-active", "");
-	    if (ev.target == localGrab.button)
-		sendInput ("W", [localGrab.surface.id]);
-	}
-	localGrab = null;
-	return false;
-    }
 
     sendInput ("B", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, button]);
 
@@ -2421,22 +2259,16 @@ function handleKeyUp(e) {
 
 function onKeyDown (ev) {
     updateForEvent(ev);
-    if (localGrab)
-	return cancelEvent(ev);
     return handleKeyDown(ev);
 }
 
 function onKeyPress(ev) {
     updateForEvent(ev);
-    if (localGrab)
-	return cancelEvent(ev);
     return handleKeyPress(ev);
 }
 
 function onKeyUp (ev) {
     updateForEvent(ev);
-    if (localGrab)
-	return cancelEvent(ev);
     return handleKeyUp(ev);
 }
 
@@ -2456,8 +2288,6 @@ function cancelEvent(ev)
 function onMouseWheel(ev)
 {
     updateForEvent(ev);
-    if (localGrab)
-	return false;
     ev = ev ? ev : window.event;
 
     var id = getSurfaceId(ev);
