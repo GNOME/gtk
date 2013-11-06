@@ -146,13 +146,12 @@ function flushSurface(surface)
     var commands = surface.drawQueue;
     surface.queue = [];
     var context = surface.canvas.getContext("2d");
-    context.globalCompositeOperation = "source-over";
+    context.globalCompositeOperation = "copy";
     var i = 0;
     for (i = 0; i < commands.length; i++) {
 	var cmd = commands[i];
 	switch (cmd.op) {
 	case 'i': // put image data surface
-	    context.globalCompositeOperation = "source-over";
 	    context.drawImage(cmd.img, cmd.x, cmd.y);
 	    break;
 

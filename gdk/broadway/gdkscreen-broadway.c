@@ -219,7 +219,7 @@ _gdk_broadway_screen_setup (GdkScreen *screen)
 static gboolean
 gdk_broadway_screen_is_composited (GdkScreen *screen)
 {
-  return FALSE;
+  return TRUE;
 }
 
 

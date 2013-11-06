@@ -676,7 +676,7 @@ _gdk_broadway_server_create_surface (int                 width,
   data->data = create_random_shm (data->name, data->data_size);
 
   surface = cairo_image_surface_create_for_data ((guchar *)data->data,
-						 CAIRO_FORMAT_RGB24, width, height, width * sizeof (guint32));
+						 CAIRO_FORMAT_ARGB32, width, height, width * sizeof (guint32));
   g_assert (surface != NULL);
   
   cairo_surface_set_user_data (surface, &gdk_broadway_shm_cairo_key,
