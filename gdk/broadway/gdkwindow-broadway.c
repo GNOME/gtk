@@ -1405,10 +1405,32 @@ gdk_broadway_window_begin_move_drag (GdkWindow *window,
 				     gint       root_y,
 				     guint32    timestamp)
 {
+  MoveResizeData *mv_resize;
+  GdkWindowImplBroadway *impl;
+
+  impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
+
   if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
+  mv_resize = get_move_resize_data (gdk_window_get_display (window), TRUE);
+
+  mv_resize->is_resize = FALSE;
+  mv_resize->moveresize_button = button;
+  mv_resize->moveresize_x = root_x;
+  mv_resize->moveresize_y = root_y;
+  mv_resize->moveresize_window = g_object_ref (window);
+
+  mv_resize->moveresize_orig_width = gdk_window_get_width (window);
+  mv_resize->moveresize_orig_height = gdk_window_get_height (window);
+
+  mv_resize->moveresize_geom_mask = impl->geometry_hints_mask;
+  mv_resize->moveresize_geometry = impl->geometry_hints;
+
+  calculate_unmoving_origin (mv_resize);
+
+  create_moveresize_window (mv_resize, timestamp);
 }
 
 static gboolean
