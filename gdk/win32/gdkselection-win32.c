@@ -530,21 +530,20 @@ _gdk_win32_display_convert_selection (GdkDisplay *display,
 
       if ((hdata = GetClipboardData (CF_UNICODETEXT)) != NULL)
 	{
-	  wchar_t *ptr, *wcs, *p, *q;
+	  wchar_t *ptr, *p, *q;
 	  guchar *data;
 	  glong length, wclen;
 
 	  if ((ptr = GlobalLock (hdata)) != NULL)
 	    {
 	      length = GlobalSize (hdata);
-	      
+
 	      GDK_NOTE (DND, g_print ("... CF_UNICODETEXT: %ld bytes\n",
 				      length));
 
 	      /* Strip out \r */
-	      wcs = g_new (wchar_t, length / 2 + 1);
 	      p = ptr;
-	      q = wcs;
+	      q = ptr;
 	      wclen = 0;
 	      while (p < ptr + length / 2)
 		{
@@ -556,8 +555,7 @@ _gdk_win32_display_convert_selection (GdkDisplay *display,
 		  p++;
 		}
 
-	      data = g_utf16_to_utf8 (wcs, wclen, NULL, NULL, NULL);
-	      g_free (wcs);
+	      data = g_utf16_to_utf8 (ptr, wclen, NULL, NULL, NULL);
 
 	      if (data)
 		selection_property_store (requestor, _utf8_string, 8,
