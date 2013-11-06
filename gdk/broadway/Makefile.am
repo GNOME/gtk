@@ -24,6 +24,7 @@ libgdkinclude_HEADERS = 	\
 	gdkbroadway.h
 
 libgdkbroadwayinclude_HEADERS = 	\
+	gdkbroadwaydisplay.h		\
 	gdkbroadwaywindow.h		\
 	gdkbroadwaycursor.h		\
 	gdkbroadwayvisual.h

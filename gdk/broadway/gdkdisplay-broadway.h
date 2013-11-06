@@ -22,6 +22,8 @@
 #ifndef __GDK_BROADWAY_DISPLAY__
 #define __GDK_BROADWAY_DISPLAY__
 
+#include "gdkbroadwaydisplay.h"
+
 #include "gdkdisplayprivate.h"
 #include "gdkkeys.h"
 #include "gdkwindow.h"
@@ -30,16 +32,6 @@
 #include "gdkbroadway-server.h"
 
 G_BEGIN_DECLS
-
-typedef struct _GdkBroadwayDisplay GdkBroadwayDisplay;
-typedef struct _GdkBroadwayDisplayClass GdkBroadwayDisplayClass;
-
-#define GDK_TYPE_BROADWAY_DISPLAY              (gdk_broadway_display_get_type())
-#define GDK_BROADWAY_DISPLAY(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_BROADWAY_DISPLAY, GdkBroadwayDisplay))
-#define GDK_BROADWAY_DISPLAY_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_BROADWAY_DISPLAY, GdkBroadwayDisplayClass))
-#define GDK_IS_BROADWAY_DISPLAY(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_BROADWAY_DISPLAY))
-#define GDK_IS_BROADWAY_DISPLAY_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_BROADWAY_DISPLAY))
-#define GDK_BROADWAY_DISPLAY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_BROADWAY_DISPLAY, GdkBroadwayDisplayClass))
 
 struct _GdkBroadwayDisplay
 {
@@ -74,8 +66,6 @@ struct _GdkBroadwayDisplayClass
 {
   GdkDisplayClass parent_class;
 };
-
-GType      gdk_broadway_display_get_type            (void);
 
 G_END_DECLS
 
