@@ -210,27 +210,6 @@ write_header(BroadwayOutput *output, char op)
 }
 
 void
-broadway_output_copy_rectangles (BroadwayOutput *output,  int id,
-				 BroadwayRect *rects, int n_rects,
-				 int dx, int dy)
-{
-  int i;
-
-  write_header (output, BROADWAY_OP_COPY_RECTANGLES);
-  append_uint16 (output, id);
-  append_uint16 (output, n_rects);
-  for (i = 0; i < n_rects; i++)
-    {
-      append_uint16 (output, rects[i].x);
-      append_uint16 (output, rects[i].y);
-      append_uint16 (output, rects[i].width);
-      append_uint16 (output, rects[i].height);
-    }
-  append_uint16 (output, dx);
-  append_uint16 (output, dy);
-}
-
-void
 broadway_output_grab_pointer (BroadwayOutput *output,
 			      int id,
 			      gboolean owner_event)

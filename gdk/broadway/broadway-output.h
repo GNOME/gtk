@@ -67,12 +67,6 @@ void            broadway_output_put_rgba        (BroadwayOutput *output,
 						 void           *data);
 void            broadway_output_surface_flush   (BroadwayOutput *output,
 						 int             id);
-void            broadway_output_copy_rectangles (BroadwayOutput *output,
-						 int             id,
-						 BroadwayRect   *rects,
-						 int             n_rects,
-						 int             dx,
-						 int             dy);
 void            broadway_output_grab_pointer    (BroadwayOutput *output,
 						 int id,
 						 gboolean owner_event);

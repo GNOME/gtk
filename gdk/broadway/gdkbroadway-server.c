@@ -509,43 +509,6 @@ _gdk_broadway_server_window_set_transient_for (GdkBroadwayServer *server,
 				    BROADWAY_REQUEST_SET_TRANSIENT_FOR);
 }
 
-gboolean
-_gdk_broadway_server_window_translate (GdkBroadwayServer *server,
-				       gint id,
-				       cairo_region_t *area,
-				       gint            dx,
-				       gint            dy)
-{
-  BroadwayRequestTranslate *msg;
-  cairo_rectangle_int_t rect;
-  int i, n_rects;
-  gsize msg_size;
-
-  n_rects = cairo_region_num_rectangles (area);
-
-  msg_size = sizeof (BroadwayRequestTranslate) + (n_rects-1) * sizeof (BroadwayRect);
-  msg = g_malloc (msg_size);
-
-  msg->id = id;
-  msg->dx = dx;
-  msg->dy = dy;
-  msg->n_rects = n_rects;
-  
-  for (i = 0; i < n_rects; i++)
-    {
-      cairo_region_get_rectangle (area, i, &rect);
-      msg->rects[i].x = rect.x;
-      msg->rects[i].y = rect.y;
-      msg->rects[i].width = rect.width;
-      msg->rects[i].height = rect.height;
-    }
-
-  gdk_broadway_server_send_message_with_size (server, (BroadwayRequestBase *)msg, msg_size,
-					      BROADWAY_REQUEST_TRANSLATE);
-  g_free (msg);
-  return TRUE;
-}
-
 static void *
 map_named_shm (char *name, gsize size)
 {

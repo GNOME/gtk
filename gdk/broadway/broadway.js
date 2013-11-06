@@ -156,23 +156,6 @@ function flushSurface(surface)
 	    context.drawImage(cmd.img, cmd.x, cmd.y);
 	    break;
 
-	case 'b': // copy rects
-	    context.save();
-	    context.beginPath();
-
-	    for (var j = 0; j < cmd.rects.length; j++) {
-		var rect = cmd.rects[j];
-		context.rect(rect.x, rect.y, rect.w, rect.h);
-	    }
-	    context.clip();
-	    // This seems to break chrome when src overlaps dest
-	    // But source-over should be fine for rgb surfaces anyway
-	    //context.globalCompositeOperation = "copy";
-	    context.drawImage(surface.canvas,
-			      cmd.dx, cmd.dy);
-	    context.restore();
-	    break;
-
 	default:
 	    alert("Unknown drawing op " + cmd.op);
 	}
