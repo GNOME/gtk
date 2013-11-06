@@ -1884,6 +1884,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                               <object class="GtkImage" id="imageo">
                                 <property name="visible">True</property>
                                 <property name="icon-name">gtk3-widget-factory</property>
+                                <property name="pixel-size">256</property>
                               </object>
                               <packing>
                                 <property name="name">page2</property>
