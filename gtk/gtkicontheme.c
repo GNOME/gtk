@@ -3569,25 +3569,19 @@ gtk_icon_info_is_symbolic (GtkIconInfo *icon_info)
 
 static gboolean icon_info_ensure_scale_and_pixbuf (GtkIconInfo*, gboolean);
 
-/* Combine the icon with all emblems, the first emblem is placed 
- * in the southeast corner. Scale emblems to be at most 3/4 of the
- * size of the icon itself.
- */
-static void 
-apply_emblems (GtkIconInfo *info)
+static GdkPixbuf *
+apply_emblems_to_pixbuf (GdkPixbuf *pixbuf,
+                         GtkIconInfo *info)
 {
   GdkPixbuf *icon = NULL;
   gint w, h, pos;
   GSList *l;
 
   if (info->emblem_infos == NULL)
-    return;
+    return g_object_ref (pixbuf);
 
-  if (info->emblems_applied)
-    return;
-
-  w = gdk_pixbuf_get_width (info->pixbuf);
-  h = gdk_pixbuf_get_height (info->pixbuf);
+  w = gdk_pixbuf_get_width (pixbuf);
+  h = gdk_pixbuf_get_height (pixbuf);
 
   for (l = info->emblem_infos, pos = 0; l; l = l->next, pos++)
     {
@@ -3633,7 +3627,7 @@ apply_emblems (GtkIconInfo *info)
 
           if (icon == NULL)
             {
-              icon = gdk_pixbuf_copy (info->pixbuf);
+              icon = gdk_pixbuf_copy (pixbuf);
               if (icon == NULL)
                 break;
             }
@@ -3642,6 +3636,23 @@ apply_emblems (GtkIconInfo *info)
                                 scale, scale, GDK_INTERP_BILINEAR, 255);
        }
    }
+
+  return icon;
+}
+
+/* Combine the icon with all emblems, the first emblem is placed 
+ * in the southeast corner. Scale emblems to be at most 3/4 of the
+ * size of the icon itself.
+ */
+static void 
+apply_emblems (GtkIconInfo *info)
+{
+  GdkPixbuf *icon;
+
+  if (info->emblems_applied)
+    return;
+
+  icon = apply_emblems_to_pixbuf (info->pixbuf, info);
 
   if (icon)
     {
@@ -4291,6 +4302,12 @@ _gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
 
   if (pixbuf != NULL)
     {
+      GdkPixbuf *icon;
+
+      icon = apply_emblems_to_pixbuf (pixbuf, icon_info);
+      g_object_unref (pixbuf);
+      pixbuf = icon;
+
       if (use_cache)
 	{
 	  icon_info->symbolic_pixbuf_cache =
