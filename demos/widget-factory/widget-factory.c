@@ -55,14 +55,14 @@ activate_about (GSimpleAction *action,
                 GVariant      *parameter,
                 gpointer       user_data)
 {
-  GtkWidget *window = user_data;
+  GtkApplication *app = user_data;
   const gchar *authors[] = {
     "Andrea Cimitan",
     "Cosimo Cecchi",
     NULL
   };
 
-  gtk_show_about_dialog (GTK_WINDOW (window),
+  gtk_show_about_dialog (GTK_WINDOW (gtk_application_get_active_window (app)),
                          "program-name", "GTK+ Widget Factory",
                          "version", g_strdup_printf ("%s,\nRunning against GTK+ %d.%d.%d",
                                                      PACKAGE_VERSION,
