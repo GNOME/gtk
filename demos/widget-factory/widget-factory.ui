@@ -139,6 +139,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
+        <property name="border-width">10</property>
         <child>
           <object class="GtkStack" id="toplevel_stack">
             <property name="visible">True</property>
@@ -146,17 +147,18 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
               <object class="GtkBox" id="page1">
                 <property name="visible">True</property>
                 <property name="orientation">vertical</property>
+                <property name="spacing">10</property>
                 <child>
                   <object class="GtkBox" id="box2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="spacing">6</property>
+                    <property name="spacing">10</property>
                     <child>
                       <object class="GtkBox" id="box3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
-                        <property name="spacing">4</property>
+                        <property name="spacing">10</property>
                         <child>
                           <object class="GtkComboBoxText" id="comboboxtext1">
                             <property name="visible">True</property>
@@ -294,7 +296,9 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="row_homogeneous">True</property>
-                            <property name="column_homogeneous">True</property>
+                            <property name="column_homogeneous">False</property>
+                            <property name="column_spacing">18</property>
+                            <property name="row_spacing">6</property>
                             <child>
                               <object class="GtkCheckButton" id="checkbutton1">
                                 <property name="label" translatable="yes">checkbutton</property>
@@ -522,30 +526,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkSwitch" id="switch1">
-                                <property name="visible">True</property>
-                                <property name="sensitive">True</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">6</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkSwitch" id="switch2">
-                                <property name="visible">True</property>
-                                <property name="sensitive">False</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">6</property>
-                                <property name="width">1</property>
-                                <property name="height">1</property>
-                              </packing>
-                            </child>
-                            <child>
                               <object class="GtkSpinner" id="spinner1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
@@ -608,7 +588,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">False</property>
-                        <property name="padding">4</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
@@ -626,11 +605,10 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                     </child>
                     <child>
                       <object class="GtkBox" id="box19">
-                        <property name="width_request">110</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
-                        <property name="spacing">4</property>
+                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkToggleButton" id="togglebutton1">
                             <property name="label" translatable="yes">togglebutton</property>
@@ -769,10 +747,15 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLevelBar" id="levelbar1">
+                          <object class="GtkLinkButton" id="linkbutton1">
+                            <property name="label" translatable="yes">link button</property>
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="value">0.6</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="has_tooltip">True</property>
+                            <property name="use_action_appearance">False</property>
+                            <property name="relief">none</property>
+                            <property name="uri">http://www.gtk.org</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -781,18 +764,25 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLevelBar" id="levelbar2">
+                          <object class="GtkSwitch" id="switch1">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="min-value">0</property>
-                            <property name="max-value">5</property>
-                            <property name="value">2</property>
-                            <property name="mode">1</property>
+                            <property name="sensitive">True</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
                             <property name="position">10</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSwitch" id="switch2">
+                            <property name="visible">True</property>
+                            <property name="sensitive">False</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">11</property>
                           </packing>
                         </child>
                       </object>
@@ -819,14 +809,13 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
-                        <property name="spacing">4</property>
+                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkBox" id="box21">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="orientation">vertical</property>
-                            <property name="spacing">8</property>
-                            <property name="homogeneous">True</property>
+                            <property name="spacing">6</property>
                             <child>
                               <object class="GtkProgressBar" id="progressbar1">
                                 <property name="visible">True</property>
@@ -863,6 +852,33 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                 <property name="expand">False</property>
                                 <property name="fill">False</property>
                                 <property name="position">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLevelBar" id="levelbar1">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="value">0.6</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">10</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLevelBar" id="levelbar2">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="min-value">0</property>
+                                <property name="max-value">5</property>
+                                <property name="value">2</property>
+                                <property name="mode">1</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">11</property>
                               </packing>
                             </child>
                           </object>
@@ -938,7 +954,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="vexpand">True</property>
-                                <property name="spacing">4</property>
+                                <property name="spacing">6</property>
                                 <child>
                                   <object class="GtkProgressBar" id="progressbar5">
                                     <property name="visible">True</property>
@@ -978,7 +994,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="vexpand">True</property>
-                                <property name="spacing">4</property>
+                                <property name="spacing">6</property>
                                 <child>
                                   <object class="GtkScale" id="scale3">
                                     <property name="height_request">100</property>
@@ -1034,29 +1050,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <property name="can_focus">False</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkHandleBox" id="handlebox1">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <child>
-                                  <object class="GtkLinkButton" id="linkbutton1">
-                                    <property name="label" translatable="yes">link button</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="receives_default">True</property>
-                                    <property name="has_tooltip">True</property>
-                                    <property name="use_action_appearance">False</property>
-                                    <property name="relief">none</property>
-                                    <property name="uri">http://www.gtk.org</property>
-                                  </object>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
                               <object class="GtkExpander" id="expander1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
@@ -1065,6 +1058,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="shadow_type">in</property>
+                                    <property name="hscrollbar_policy">never</property>
                                     <child>
                                       <object class="GtkViewport" id="viewport1">
                                         <property name="visible">True</property>
@@ -1073,6 +1067,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                           <object class="GtkLabel" id="label20">
                                             <property name="visible">True</property>
                                             <property name="can_focus">False</property>
+                                            <property name="wrap">True</property>
+                                            <property name="wrap_mode">word</property>
                                             <property name="label" translatable="yes">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 Nullam fringilla, est ut feugiat ultrices, elit lacus ultricies nibh, id commodo tortor nisi id elit.
 Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
@@ -1116,7 +1112,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
-                        <property name="fill">False</property>
+                        <property name="fill">True</property>
                         <property name="position">4</property>
                       </packing>
                     </child>
@@ -1138,6 +1134,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
                         <property name="homogeneous">True</property>
+                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkFrame" id="frame1">
                             <property name="visible">True</property>
@@ -1285,7 +1282,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
-                        <property name="spacing">4</property>
+                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkScrolledWindow" id="scrolledwindow1">
                             <property name="width_request">150</property>
@@ -1363,11 +1360,13 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="shadow_type">in</property>
+                            <property name="hscrollbar_policy">never</property>
                             <child>
                               <object class="GtkTextView" id="textview1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="buffer">textbuffer1</property>
+                                <property name="wrap_mode">2</property>
                               </object>
                             </child>
                           </object>
@@ -1381,7 +1380,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                       <packing>
                         <property name="expand">True</property>
                         <property name="fill">True</property>
-                        <property name="padding">6</property>
                         <property name="position">8</property>
                       </packing>
                     </child>
@@ -1389,7 +1387,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="padding">10</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
@@ -1408,9 +1405,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                   <object class="GtkBox" id="box5">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_left">5</property>
-                    <property name="margin_right">5</property>
-                    <property name="margin_bottom">5</property>
                     <property name="spacing">10</property>
                     <property name="homogeneous">True</property>
                     <child>
@@ -1802,7 +1796,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                       <object class="GtkBox" id="page2box1">
                         <property name="visible">True</property>
                         <property name="orientation">horizontal</property>
-                        <property name="spacing">4</property>
+                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkSpinButton" id="verticalspin1">
                             <property name="visible">True</property>
@@ -1866,6 +1860,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                               <object class="GtkScrolledWindow" id="swo">
                                 <property name="visible">True</property>
                                 <property name="shadow-type">none</property>
+                                <property name="hscrollbar_policy">never</property>
                                 <child>
                                   <object class="GtkTextView" id="tvo">
                                     <property name="visible">True</property>
@@ -1909,17 +1904,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
               </packing>
             </child>
           </object>
-        </child>
-        <child>
-          <object class="GtkStatusbar" id="statusbar1">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">5</property>
-          </packing>
         </child>
       </object>
     </child>
