@@ -254,7 +254,9 @@ enum {
 #define ICON_NAME_EJECT    "media-eject-symbolic"
 #define ICON_NAME_NETWORK  "network-workgroup-symbolic"
 #define ICON_NAME_NETWORK_SERVER "network-server-symbolic"
+#define ICON_NAME_FOLDER_NETWORK "folder-remote-symbolic"
 
+#define ICON_NAME_FOLDER                "folder-symbolic"
 #define ICON_NAME_FOLDER_DESKTOP  "user-desktop"
 #define ICON_NAME_FOLDER_DOCUMENTS      "folder-documents-symbolic"
 #define ICON_NAME_FOLDER_DOWNLOAD       "folder-download-symbolic"
@@ -1084,8 +1086,10 @@ update_places (GtkPlacesSidebar *sidebar)
   for (sl = bookmarks, index = 0; sl; sl = sl->next, index++)
     {
       GFileInfo *info;
+      gboolean is_native;
 
       root = sl->data;
+      is_native = g_file_is_native (root);
 
 #if 0
       /* FIXME: remove this?  If we *do* show bookmarks for nonexistent files, the user will eventually clean them up */
@@ -1096,6 +1100,9 @@ update_places (GtkPlacesSidebar *sidebar)
       if (_gtk_bookmarks_manager_get_is_builtin (sidebar->bookmarks_manager, root))
         continue;
 
+      if (sidebar->local_only && !is_native)
+        continue;
+
       /* FIXME: we are getting file info synchronously.  We may want to do it async at some point. */
       info = g_file_query_info (root,
                                 "standard::display-name,standard::symbolic-icon",
@@ -1103,29 +1110,40 @@ update_places (GtkPlacesSidebar *sidebar)
                                 NULL,
                                 NULL); /* NULL-GError */
 
-      if (info)
+      bookmark_name = _gtk_bookmarks_manager_get_bookmark_label (sidebar->bookmarks_manager, root);
+      if (bookmark_name == NULL && info != NULL)
+        bookmark_name = g_strdup (g_file_info_get_display_name (info));
+      else if (bookmark_name == NULL)
         {
-          bookmark_name = _gtk_bookmarks_manager_get_bookmark_label (sidebar->bookmarks_manager, root);
-
-          if (bookmark_name == NULL)
-            bookmark_name = g_strdup (g_file_info_get_display_name (info));
-
-          icon = g_file_info_get_symbolic_icon (info);
-          mount_uri = g_file_get_uri (root);
-          tooltip = g_file_get_parse_name (root);
-
-          add_place (sidebar, PLACES_BOOKMARK,
-                     SECTION_BOOKMARKS,
-                     bookmark_name, icon, mount_uri,
-                     NULL, NULL, NULL, index,
-                     tooltip);
-
-          g_free (mount_uri);
-          g_free (tooltip);
-          g_free (bookmark_name);
-
-          g_object_unref (info);
+          /* Don't add non-UTF-8 bookmarks */
+          bookmark_name = g_file_get_basename (root);
+          if (!g_utf8_validate (bookmark_name, -1, NULL))
+            {
+              g_free (bookmark_name);
+              continue;
+            }
         }
+
+      if (info)
+        icon = g_object_ref (g_file_info_get_symbolic_icon (info));
+      else
+        icon = g_themed_icon_new_with_default_fallbacks (is_native ? ICON_NAME_FOLDER : ICON_NAME_FOLDER_NETWORK);
+
+      mount_uri = g_file_get_uri (root);
+      tooltip = g_file_get_parse_name (root);
+
+      add_place (sidebar, PLACES_BOOKMARK,
+                 SECTION_BOOKMARKS,
+                 bookmark_name, icon, mount_uri,
+                 NULL, NULL, NULL, index,
+                 tooltip);
+
+      g_free (mount_uri);
+      g_free (tooltip);
+      g_free (bookmark_name);
+
+      if (info)
+        g_object_unref (info);
     }
 
   g_slist_foreach (bookmarks, (GFunc) g_object_unref, NULL);
