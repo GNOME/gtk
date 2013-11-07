@@ -155,18 +155,6 @@ append_uint32 (BroadwayOutput *output, guint32 v)
 }
 
 static void
-overwrite_uint32 (BroadwayOutput *output, gsize pos, guint32 v)
-{
-  guint8 *buf = (guint8 *)output->buf->str + pos;
-
-  buf[0] = (v >> 0) & 0xff;
-  buf[1] = (v >> 8) & 0xff;
-  buf[2] = (v >> 16) & 0xff;
-  buf[3] = (v >> 24) & 0xff;
-}
-
-
-static void
 write_header(BroadwayOutput *output, char op)
 {
   append_char (output, op);
@@ -283,8 +271,11 @@ broadway_output_put_buffer (BroadwayOutput *output,
                             BroadwayBuffer *prev_buffer,
                             BroadwayBuffer *buffer)
 {
-  gsize size_start, image_start, len;
+  gsize len;
   int w, h;
+  GZlibCompressor *compressor;
+  GOutputStream *out, *out_mem;
+  GString *encoded;
 
   write_header (output, BROADWAY_OP_PUT_BUFFER);
 
@@ -295,12 +286,26 @@ broadway_output_put_buffer (BroadwayOutput *output,
   append_uint16 (output, w);
   append_uint16 (output, h);
 
-  size_start = output->buf->len;
-  append_uint32 (output, 0);
+  encoded = g_string_new ("");
+  broadway_buffer_encode (buffer, prev_buffer, encoded);
 
-  image_start = output->buf->len;
-  broadway_buffer_encode (buffer, prev_buffer, output->buf);
-  len = output->buf->len - image_start;
+  compressor = g_zlib_compressor_new (G_ZLIB_COMPRESSOR_FORMAT_RAW, -1);
+  out_mem = g_memory_output_stream_new_resizable ();
+  out = g_converter_output_stream_new (out_mem, G_CONVERTER (compressor));
+  g_object_unref (compressor);
 
-  overwrite_uint32 (output, size_start, len);
+  if (!g_output_stream_write_all (out, encoded->str, encoded->len,
+                                  NULL, NULL, NULL) ||
+      !g_output_stream_close (out, NULL, NULL))
+    g_warning ("compression failed\n");
+
+
+  len = g_memory_output_stream_get_data_size (G_MEMORY_OUTPUT_STREAM (out_mem));
+  append_uint32 (output, len);
+
+  g_string_append_len (output->buf, g_memory_output_stream_get_data (G_MEMORY_OUTPUT_STREAM (out_mem)), len);
+
+  g_string_free (encoded, TRUE);
+  g_object_unref (out);
+  g_object_unref (out_mem);
 }

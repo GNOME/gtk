@@ -329,7 +329,7 @@ function copyRect(src, srcX, srcY, dest, destX, destY, width, height)
     }
 }
 
-function cmdPutBuffer(id, w, h, data)
+function cmdPutBuffer(id, w, h, compressed)
 {
     var surface = surfaces[id];
     var context = surface.canvas.getContext("2d");
@@ -345,7 +345,8 @@ function cmdPutBuffer(id, w, h, data)
     var src = 0;
     var dest = 0;
 
-    //log("put buffer " + w + "x" + h + " size: " + data.length);
+    var inflate = new Zlib.RawInflate(compressed);
+    var data = inflate.decompress();
 
     while (src < data.length)  {
         var b = data[src++];
