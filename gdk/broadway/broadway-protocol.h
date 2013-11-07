@@ -34,10 +34,10 @@ typedef enum {
   BROADWAY_OP_MOVE_RESIZE = 'm',
   BROADWAY_OP_SET_TRANSIENT_FOR = 'p',
   BROADWAY_OP_PUT_RGB = 'i',
-  BROADWAY_OP_FLUSH = 'f',
   BROADWAY_OP_REQUEST_AUTH = 'l',
   BROADWAY_OP_AUTH_OK = 'L',
   BROADWAY_OP_DISCONNECTED = 'D',
+  BROADWAY_OP_PUT_BUFFER = 'b',
 } BroadwayOpType;
 
 typedef struct {

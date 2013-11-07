@@ -140,26 +140,6 @@ function getButtonMask (button) {
     return 0;
 }
 
-function flushSurface(surface)
-{
-    var commands = surface.drawQueue;
-    surface.queue = [];
-    var context = surface.canvas.getContext("2d");
-    context.globalCompositeOperation = "copy";
-    var i = 0;
-    for (i = 0; i < commands.length; i++) {
-	var cmd = commands[i];
-	switch (cmd.op) {
-	case 'i': // put image data surface
-	    context.drawImage(cmd.img, cmd.x, cmd.y);
-	    break;
-
-	default:
-	    alert("Unknown drawing op " + cmd.op);
-	}
-    }
-}
-
 function sendConfigureNotify(surface)
 {
     sendInput("w", [surface.id, surface.x, surface.y, surface.width, surface.height]);
@@ -170,9 +150,9 @@ function cmdCreateSurface(id, x, y, width, height, isTemp)
 {
     var surface = { id: id, x: x, y:y, width: width, height: height, isTemp: isTemp };
     surface.positioned = isTemp;
-    surface.drawQueue = [];
     surface.transientParent = 0;
     surface.visible = false;
+    surface.imageData = null;
 
     var canvas = document.createElement("canvas");
     canvas.width = width;
@@ -192,7 +172,7 @@ function cmdCreateSurface(id, x, y, width, height, isTemp)
     toplevelElement.style["top"] = surface.y + "px";
     toplevelElement.style["display"] = "inline";
 
-    toplevelElement.style["visibility"] = "none";
+    toplevelElement.style["visibility"] = "hidden";
 
     surfaces[id] = surface;
     stackingOrder.push(surface);
@@ -306,9 +286,6 @@ function cmdMoveResizeSurface(id, has_pos, x, y, has_size, w, h)
 	surface.height = h;
     }
 
-    /* Flush any outstanding draw ops before (possibly) changing size */
-    flushSurface(surface);
-
     if (has_size)
 	resizeCanvas(surface.canvas, w, h);
 
@@ -327,9 +304,145 @@ function cmdMoveResizeSurface(id, has_pos, x, y, has_size, w, h)
     sendConfigureNotify(surface);
 }
 
-function cmdFlushSurface(id)
+function copyRect(src, srcX, srcY, dest, destX, destY, width, height)
 {
-    flushSurface(surfaces[id]);
+    // Clip to src
+    if (srcX + width > src.width)
+        width = src.width - srcX;
+    if (srcY + height > src.height)
+        height = src.height - srcY;
+
+    // Clip to dest
+    if (destX + width > dest.width)
+        width = dest.width - destX;
+    if (destY + height > dest.height)
+        height = dest.height - destY;
+
+    var srcRect = src.width * 4 * srcY + srcX * 4;
+    var destRect = dest.width * 4 * destY + destX * 4;
+
+    for (var i = 0; i < height; i++) {
+        var line = src.data.subarray(srcRect, srcRect + width *4);
+        dest.data.set(line, destRect);
+        srcRect += src.width * 4;
+        destRect += dest.width * 4;
+    }
+}
+
+function cmdPutBuffer(id, w, h, data)
+{
+    var surface = surfaces[id];
+    var context = surface.canvas.getContext("2d");
+    var imageData = context.createImageData(w, h);
+    var oldData = surface.imageData;
+    var i, j;
+
+    if (oldData != null) {
+        // Copy old frame into new buffer
+        copyRect(oldData, 0, 0, imageData, 0, 0, oldData.width, oldData.height);
+    }
+
+    var src = 0;
+    var dest = 0;
+
+    //log("put buffer " + w + "x" + h + " size: " + data.length);
+
+    while (src < data.length)  {
+        var b = data[src++];
+        var g = data[src++];
+        var r = data[src++];
+        var alpha = data[src++];
+        var len;
+
+        if (alpha != 0) {
+            imageData.data[dest++] = r;
+            imageData.data[dest++] = g;
+            imageData.data[dest++] = b;
+            imageData.data[dest++] = alpha;
+        } else {
+            var cmd = r & 0xf0;
+            switch (cmd) {
+            case 0x00: // Transparent pixel
+                //log("Got transparent");
+                imageData.data[dest++] = 0;
+                imageData.data[dest++] = 0;
+                imageData.data[dest++] = 0;
+                imageData.data[dest++] = 0;
+                break;
+
+            case 0x10: // Delta 0 run
+                len = (r & 0xf) << 16 | g << 8 | b;
+                //log("Got delta0, len: " + len);
+                dest += len * 4;
+                break;
+
+            case 0x20: // Block reference
+                var blockid = (r & 0xf) << 16 | g << 8 | b;
+
+                var block_stride = (oldData.width + 32 - 1) / 32 | 0;
+                var srcY = (blockid / block_stride | 0) * 32;
+                var srcX = (blockid % block_stride | 0) * 32;
+
+                b = data[src++];
+                g = data[src++];
+                r = data[src++];
+                alpha = data[src++];
+
+                var destX = alpha << 8 | r;
+                var destY = g << 8 | b;
+
+                copyRect(oldData, srcX, srcY, imageData, destX, destY, 32, 32);
+
+                //log("Got block, id: " + blockid +  "(" + srcX +"," + srcY + ") at " + destX + "," + destY);
+
+                break;
+
+            case 0x30: // Color run
+                len = (r & 0xf) << 16 | g << 8 | b;
+                //log("Got color run, len: " + len);
+
+                b = data[src++];
+                g = data[src++];
+                r = data[src++];
+                alpha = data[src++];
+
+                for (i = 0; i < len; i++) {
+                    imageData.data[dest++] = r;
+                    imageData.data[dest++] = g;
+                    imageData.data[dest++] = b;
+                    imageData.data[dest++] = alpha;
+                }
+                break;
+
+            case 0x40: // Delta run
+                len = (r & 0xf) << 16 | g << 8 | b;
+                //log("Got delta run, len: " + len);
+
+                b = data[src++];
+                g = data[src++];
+                r = data[src++];
+                alpha = data[src++];
+
+                for (i = 0; i < len; i++) {
+                    imageData.data[dest] = (imageData.data[dest] + r) & 0xff;
+                    dest++;
+                    imageData.data[dest] = (imageData.data[dest] + g) & 0xff;
+                    dest++;
+                    imageData.data[dest] = (imageData.data[dest] + b) & 0xff;
+                    dest++;
+                    imageData.data[dest] = (imageData.data[dest] + alpha) & 0xff;
+                    dest++;
+                }
+                break;
+
+            default:
+                alert("Unknown buffer commend " + cmd);
+            }
+        }
+    }
+
+    context.putImageData(imageData, 0, 0);
+    surface.imageData = imageData;
 }
 
 function cmdGrabPointer(id, ownerEvents)
@@ -410,49 +523,13 @@ function handleCommands(cmd)
 	    cmdMoveResizeSurface(id, has_pos, x, y, has_size, w, h);
 	    break;
 
-	case 'i': // Put image data surface
-	    q = new Object();
-	    q.op = 'i';
-	    q.id = cmd.get_16();
-	    q.x = cmd.get_16();
-	    q.y = cmd.get_16();
-	    var url = cmd.get_image_url ();
-	    q.img = new Image();
-	    q.img.src = url;
-	    surfaces[q.id].drawQueue.push(q);
-	    if (!q.img.complete) {
-		q.img.onload = function() { cmd.free_image_url (url); handleOutstanding(); };
-		return false;
-	    }
-	    cmd.free_image_url (url);
-	    break;
-
-	case 'b': // Copy rects
-	    q = new Object();
-	    q.op = 'b';
-	    q.id = cmd.get_16();
-	    var nrects = cmd.get_16();
-
-	    q.rects = [];
-	    for (var r = 0; r < nrects; r++) {
-		var rect = new Object();
-		rect.x = cmd.get_16();
-		rect.y = cmd.get_16();
-		rect.w = cmd.get_16();
-		rect.h = cmd.get_16();
-		q.rects.push (rect);
-	    }
-
-	    q.dx = cmd.get_16s();
-	    q.dy = cmd.get_16s();
-	    surfaces[q.id].drawQueue.push(q);
-	    break;
-
-	case 'f': // Flush surface
+	case 'b': // Put image buffer
 	    id = cmd.get_16();
-
-	    cmdFlushSurface(id);
-	    break;
+	    w = cmd.get_16();
+	    h = cmd.get_16();
+            var data = cmd.get_data();
+            cmdPutBuffer(id, w, h, data);
+            break;
 
 	case 'g': // Grab
 	    id = cmd.get_16();
@@ -521,19 +598,11 @@ BinCommands.prototype.get_32 = function() {
     this.pos = this.pos + 4;
     return v;
 };
-BinCommands.prototype.get_image_url = function() {
+BinCommands.prototype.get_data = function() {
     var size = this.get_32();
-    var png_blob = new Blob ([new Uint8Array (this.arraybuffer, this.pos, size)], {type:"image/png"});
-    var url;
-    if (window.webkitURL)
-	url = window.webkitURL.createObjectURL(png_blob);
-    else
-	url = window.URL.createObjectURL(png_blob, {oneTimeOnly: true});
+    var data = new Uint8Array (this.arraybuffer, this.pos, size);
     this.pos = this.pos + size;
-    return url;
-};
-BinCommands.prototype.free_image_url = function(url) {
-    URL.revokeObjectURL(url);
+    return data;
 };
 
 function handleMessage(message)

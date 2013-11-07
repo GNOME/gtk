@@ -106,11 +106,11 @@ struct BroadwayWindow {
   gint32 width;
   gint32 height;
   gboolean is_temp;
-  gboolean last_synced;
   gboolean visible;
   gint32 transient_for;
 
-  cairo_surface_t *last_surface;
+  BroadwayBuffer *buffer;
+  gboolean buffer_synced;
 
   char *cached_surface_name;
   cairo_surface_t *cached_surface;
@@ -1385,8 +1385,8 @@ broadway_server_window_update (BroadwayServer *server,
 			       gint id,
 			       cairo_surface_t *surface)
 {
-  cairo_t *cr;
   BroadwayWindow *window;
+  BroadwayBuffer *buffer;
 
   if (surface == NULL)
     return;
@@ -1396,33 +1396,24 @@ broadway_server_window_update (BroadwayServer *server,
   if (window == NULL)
     return;
 
-  if (window->last_surface == NULL)
-    window->last_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-						       window->width,
-						       window->height);
-
-  g_assert (window->width == cairo_image_surface_get_width (window->last_surface));
   g_assert (window->width == cairo_image_surface_get_width (surface));
-  g_assert (window->height == cairo_image_surface_get_height (window->last_surface));
   g_assert (window->height == cairo_image_surface_get_height (surface));
+
+  buffer = broadway_buffer_create (window->width, window->height,
+                                   cairo_image_surface_get_data (surface),
+                                   cairo_image_surface_get_stride (surface));
 
   if (server->output != NULL)
     {
-      window->last_synced = TRUE;
-      broadway_output_put_rgba (server->output, window->id, 0, 0,
-                                cairo_image_surface_get_width (surface),
-                                cairo_image_surface_get_height (surface),
-                                cairo_image_surface_get_stride (surface),
-                                cairo_image_surface_get_data (surface));
-
-      broadway_output_surface_flush (server->output, window->id);
+      window->buffer_synced = TRUE;
+      broadway_output_put_buffer (server->output, window->id,
+                                  window->buffer, buffer);
     }
 
-  cr = cairo_create (window->last_surface);
-  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-  cairo_set_source_surface (cr, surface, 0, 0);
-  cairo_paint (cr);
-  cairo_destroy (cr);
+  if (window->buffer)
+    broadway_buffer_destroy (window->buffer);
+
+  window->buffer = buffer;
 }
 
 gboolean
@@ -1437,7 +1428,6 @@ broadway_server_window_move_resize (BroadwayServer *server,
   BroadwayWindow *window;
   gboolean with_resize;
   gboolean sent = FALSE;
-  cairo_t *cr;
 
   window = g_hash_table_lookup (server->id_ht,
 				GINT_TO_POINTER (id));
@@ -1447,25 +1437,6 @@ broadway_server_window_move_resize (BroadwayServer *server,
   with_resize = width != window->width || height != window->height;
   window->width = width;
   window->height = height;
-
-  if (with_resize && window->last_surface != NULL)
-    {
-      cairo_surface_t *old;
-
-      old = window->last_surface;
-
-      window->last_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-							 width, height);
-
-
-      cr = cairo_create (window->last_surface);
-      cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-      cairo_set_source_surface (cr, old, 0, 0);
-      cairo_paint (cr);
-      cairo_destroy (cr);
-
-      cairo_surface_destroy (old);
-    }
 
   if (server->output != NULL)
     {
@@ -1682,7 +1653,7 @@ broadway_server_resync_windows (BroadwayServer *server)
       if (window->id == 0)
 	continue; /* Skip root */
 
-      window->last_synced = FALSE;
+      window->buffer_synced = FALSE;
       broadway_output_new_surface (server->output,
 				   window->id,
 				   window->x,
@@ -1706,16 +1677,12 @@ broadway_server_resync_windows (BroadwayServer *server)
 	{
 	  broadway_output_show_surface (server->output, window->id);
 
-	  if (window->last_surface != NULL)
+	  if (window->buffer != NULL)
 	    {
-	      window->last_synced = TRUE;
-	      broadway_output_put_rgba (server->output, window->id, 0, 0,
-                                        cairo_image_surface_get_width (window->last_surface),
-                                        cairo_image_surface_get_height (window->last_surface),
-                                        cairo_image_surface_get_stride (window->last_surface),
-                                        cairo_image_surface_get_data (window->last_surface));
+	      window->buffer_synced = TRUE;
+              broadway_output_put_buffer (server->output, window->id,
+                                          NULL, window->buffer);
 	    }
-	  broadway_output_surface_flush (server->output, window->id);
 	}
     }
 

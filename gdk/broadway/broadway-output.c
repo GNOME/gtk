@@ -7,42 +7,6 @@
 
 #include "broadway-output.h"
 
-static cairo_status_t
-write_png_data (void		  *closure,
-		const unsigned char *data,
-		unsigned int	   data_len)
-{
-  GString *buf = closure;
-
-  g_string_append_len (buf,  (char *)data, data_len);
-
-  return CAIRO_STATUS_SUCCESS;
-}
-
-static void
-to_png_rgb (GString *buf, int w, int h, int byte_stride, guint32 *data)
-{
-  cairo_surface_t *surface;
-
-  surface = cairo_image_surface_create_for_data ((guchar *)data,
-						 CAIRO_FORMAT_RGB24, w, h, byte_stride);
-
-  cairo_surface_write_to_png_stream (surface, write_png_data, buf);
-  cairo_surface_destroy (surface);
-}
-
-static void
-to_png_rgba (GString *buf, int w, int h, int byte_stride, guint32 *data)
-{
-  cairo_surface_t *surface;
-
-  surface = cairo_image_surface_create_for_data ((guchar *)data,
-						 CAIRO_FORMAT_ARGB32, w, h, byte_stride);
-
-  cairo_surface_write_to_png_stream (surface, write_png_data, buf);
-  cairo_surface_destroy (surface);
-}
-
 /************************************************************************
  *                Basic I/O primitives                                  *
  ************************************************************************/
@@ -313,294 +277,30 @@ broadway_output_set_transient_for (BroadwayOutput *output,
   append_uint16 (output, parent_id);
 }
 
-
 void
-broadway_output_put_rgb (BroadwayOutput *output,  int id, int x, int y,
-			 int w, int h, int byte_stride, void *data)
+broadway_output_put_buffer (BroadwayOutput *output,
+                            int             id,
+                            BroadwayBuffer *prev_buffer,
+                            BroadwayBuffer *buffer)
 {
   gsize size_start, image_start, len;
+  int w, h;
 
-  write_header (output, BROADWAY_OP_PUT_RGB);
+  write_header (output, BROADWAY_OP_PUT_BUFFER);
+
+  w = broadway_buffer_get_width (buffer);
+  h = broadway_buffer_get_height (buffer);
 
   append_uint16 (output, id);
-  append_uint16 (output, x);
-  append_uint16 (output, y);
+  append_uint16 (output, w);
+  append_uint16 (output, h);
 
   size_start = output->buf->len;
   append_uint32 (output, 0);
 
   image_start = output->buf->len;
-  to_png_rgb (output->buf, w, h, byte_stride, (guint32*)data);
-
+  broadway_buffer_encode (buffer, prev_buffer, output->buf);
   len = output->buf->len - image_start;
 
   overwrite_uint32 (output, size_start, len);
-}
-
-typedef struct  {
-  int x1, y1;
-  int x2, y2;
-} BroadwayBox;
-
-static int
-is_any_x_set (unsigned char *data,
-	      int box_x1, int box_x2,
-	      int x1, int x2, int y, int *x_set,
-	      int byte_stride)
-{
-  int w ;
-  guint32 *ptr;
-
-  if (x1 < box_x1)
-    x1 = box_x1;
-
-  if (x2 > box_x2)
-    x2 = box_x2;
-
-  w = x2 - x1;
-  if (w > 0)
-    {
-      ptr = (guint32 *)(data + y * byte_stride + x1 * 4);
-      while (w-- > 0)
-	{
-	  if (*ptr != 0)
-	    {
-	      if (x_set)
-		*x_set = x1;
-	      return 1;
-	    }
-	  ptr++;
-	  x1++;
-	}
-    }
-  return 0;
-}
-
-
-#define EXTEND_X_FUZZ 10
-#define EXTEND_Y_FUZZ 10
-
-static int
-extend_x_range (unsigned char *data,
-		int box_x1, int box_y1,
-		int box_x2, int box_y2,
-		int *x1, int *x2, int y,
-		int byte_stride)
-{
-  int extended = 0;
-  int new_x;
-
-  while (is_any_x_set (data, box_x1, box_x2, *x1 - EXTEND_X_FUZZ, *x1, y, &new_x, byte_stride))
-    {
-      *x1 = new_x;
-      extended = 1;
-    }
-
-  while (is_any_x_set (data, box_x1, box_x2, *x2, *x2 + EXTEND_X_FUZZ, y, &new_x, byte_stride))
-    {
-      *x2 = new_x + 1;
-      extended = 1;
-    }
-
-  return extended;
-}
-
-static int
-extend_y_range (unsigned char *data,
-		int box_x1, int box_y1,
-		int box_x2, int box_y2,
-		int x1, int x2, int *y,
-		int byte_stride)
-{
-  int extended = 0;
-  int found_set;
-  int yy, y2;
-
-  while (*y < box_y2)
-    {
-      found_set = 0;
-
-      y2 = *y + EXTEND_Y_FUZZ;
-      if (y2 > box_y2)
-	y2 = box_y2;
-
-      for (yy = y2; yy > *y + 1; yy--)
-	{
-	  if (is_any_x_set (data, box_x1, box_x2, x1, x2, yy - 1, NULL, byte_stride))
-	    {
-	      found_set = 1;
-	      break;
-	    }
-	}
-      if (!found_set)
-	break;
-      *y = yy;
-      extended = 1;
-    }
-
-  return extended;
-}
-
-
-static void
-rgba_find_rects_extents (unsigned char *data,
-			 int box_x1, int box_y1,
-			 int box_x2, int box_y2,
-			 int x, int y,
-			 BroadwayBox *rect,
-			 int byte_stride)
-{
-  int x1, x2, y1, y2, yy;
-  int extended;
-
-  x1 = x;
-  x2 = x + 1;
-  y1 = y;
-  y2 = y + 1;
-
-  do
-    {
-      /* Expand maximally for all known rows */
-      do
-	{
-	  extended = 0;
-
-	  for (yy = y1; yy < y2; yy++)
-	    extended |= extend_x_range (data,
-					box_x1, box_y1,
-					box_x2, box_y2,
-					&x1, &x2, yy,
-					byte_stride);
-	}
-      while (extended);
-    }
-  while (extend_y_range(data,
-			box_x1, box_y1,
-			box_x2, box_y2,
-			x1, x2, &y2,
-			byte_stride));
-
-  rect->x1 = x1;
-  rect->x2 = x2;
-  rect->y1 = y1;
-  rect->y2 = y2;
-}
-
-static void
-rgba_find_rects_sub (unsigned char *data,
-		     int box_x1, int box_y1,
-		     int box_x2, int box_y2,
-		     int byte_stride,
-		     BroadwayBox **rects,
-		     int *n_rects, int *alloc_rects)
-{
-  guint32 *line;
-  BroadwayBox rect;
-  int x, y;
-
-  if (box_x1 == box_x2 || box_y1 == box_y2)
-    return;
-
-  for (y = box_y1; y < box_y2; y++)
-    {
-      line = (guint32 *)(data + y * byte_stride + box_x1 * 4);
-
-      for (x = box_x1; x < box_x2; x++)
-	{
-	  if (*line != 0)
-	    {
-	      rgba_find_rects_extents (data,
-				       box_x1, box_y1, box_x2, box_y2,
-				       x, y, &rect, byte_stride);
-	      if (*n_rects == *alloc_rects)
-		{
-		  (*alloc_rects) *= 2;
-		  *rects = g_renew (BroadwayBox, *rects, *alloc_rects);
-		}
-	      (*rects)[*n_rects] = rect;
-	      (*n_rects)++;
-	      rgba_find_rects_sub (data,
-				   box_x1, rect.y1,
-				   rect.x1, rect.y2,
-				   byte_stride,
-				   rects, n_rects, alloc_rects);
-	      rgba_find_rects_sub (data,
-				   rect.x2, rect.y1,
-				   box_x2, rect.y2,
-				   byte_stride,
-				   rects, n_rects, alloc_rects);
-	      rgba_find_rects_sub (data,
-				   box_x1, rect.y2,
-				   box_x2, box_y2,
-				   byte_stride,
-				   rects, n_rects, alloc_rects);
-	      return;
-	    }
-	  line++;
-	}
-    }
-}
-
-static BroadwayBox *
-rgba_find_rects (unsigned char *data,
-		 int w, int h, int byte_stride,
-		 int *n_rects)
-{
-  BroadwayBox *rects;
-  int alloc_rects;
-
-  alloc_rects = 20;
-  rects = g_new (BroadwayBox, alloc_rects);
-
-  *n_rects = 0;
-  rgba_find_rects_sub (data,
-		       0, 0, w, h, byte_stride,
-		       &rects, n_rects, &alloc_rects);
-
-  return rects;
-}
-
-void
-broadway_output_put_rgba (BroadwayOutput *output,  int id, int x, int y,
-			  int w, int h, int byte_stride, void *data)
-{
-  BroadwayBox *rects;
-  int i, n_rects;
-  gsize size_start, image_start, len;
-
-  rects = rgba_find_rects (data, w, h, byte_stride, &n_rects);
-
-  for (i = 0; i < n_rects; i++)
-    {
-      guint8 *subdata;
-
-      write_header (output, BROADWAY_OP_PUT_RGB);
-      append_uint16 (output, id);
-      append_uint16 (output, x + rects[i].x1);
-      append_uint16 (output, y + rects[i].y1);
-
-      size_start = output->buf->len;
-      append_uint32 (output, 0);
-
-      image_start = output->buf->len;
-
-      subdata = (guint8 *)data + rects[i].x1 * 4 + rects[i].y1 * byte_stride;
-      to_png_rgba (output->buf, rects[i].x2 - rects[i].x1,
-                   rects[i].y2 - rects[i].y1,
-                   byte_stride, (guint32*)subdata);
-
-      len = output->buf->len - image_start;
-
-      overwrite_uint32 (output, size_start, len);
-    }
-
-  free (rects);
-}
-
-void
-broadway_output_surface_flush (BroadwayOutput *output,
-			       int             id)
-{
-  write_header (output, BROADWAY_OP_FLUSH);
-  append_uint16 (output, id);
 }

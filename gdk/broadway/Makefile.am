@@ -83,6 +83,8 @@ broadwayd_SOURCES = \
 	broadwayd.c 			\
 	broadway-server.h		\
 	broadway-server.c		\
+	broadway-buffer.c		\
+	broadway-buffer.h		\
 	broadway-output.h		\
 	broadway-output.c
 
