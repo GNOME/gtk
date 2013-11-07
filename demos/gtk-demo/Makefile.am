@@ -74,7 +74,7 @@ LDADDS = \
 bin_PROGRAMS = gtk3-demo gtk3-demo-application
 
 desktopdir = $(datadir)/applications
-desktop_DATA = gtk3-demo.desktop
+dist_desktop_DATA = gtk3-demo.desktop
 
 BUILT_SOURCES = demos.h demo_resources.c
 
