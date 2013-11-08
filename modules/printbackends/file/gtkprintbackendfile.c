@@ -219,7 +219,7 @@ output_file_from_settings (GtkPrintSettings *settings,
 
   if (uri == NULL)
     { 
-      const gchar *extension, *basename, *output_dir;
+      const gchar *extension, *basename = NULL, *output_dir = NULL;
       gchar *name, *locale_name, *path;
 
       if (default_format)
@@ -244,7 +244,8 @@ output_file_from_settings (GtkPrintSettings *settings,
             }
         }
 
-      basename = gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_OUTPUT_BASENAME);
+      if (settings)
+        basename = gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_OUTPUT_BASENAME);
       if (basename == NULL)
         basename = _("output");
 
@@ -254,8 +255,9 @@ output_file_from_settings (GtkPrintSettings *settings,
       g_free (name);
 
       if (locale_name != NULL)
-        {      
-          output_dir = gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_OUTPUT_DIR);
+        {
+          if (settings)
+            output_dir = gtk_print_settings_get (settings, GTK_PRINT_SETTINGS_OUTPUT_DIR);
           if (output_dir == NULL)
             {
               const gchar *document_dir = g_get_user_special_dir (G_USER_DIRECTORY_DOCUMENTS);
