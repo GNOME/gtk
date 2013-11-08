@@ -102,6 +102,7 @@ var surfaces = {};
 var stackingOrder = [];
 var outstandingCommands = new Array();
 var inputSocket = null;
+var debugDecoding = false;
 
 var GDK_CROSSING_NORMAL = 0;
 var GDK_CROSSING_GRAB = 1;
@@ -329,7 +330,45 @@ function copyRect(src, srcX, srcY, dest, destX, destY, width, height)
     }
 }
 
-function decodeBuffer(context, oldData, w, h, data)
+
+function markRun(dest, start, length, r, g, b)
+{
+    for (var i = start; i < start + length * 4; i += 4) {
+        dest[i+0] = dest[i+0] / 2 | 0 + r;
+        dest[i+1] = dest[i+1] / 2 | 0 + g;
+        dest[i+2] = dest[i+2] / 2 | 0 + b;
+    }
+}
+
+function markRect(src, srcX, srcY, dest, destX, destY, width, height, r, g, b)
+{
+    // Clip to src
+    if (srcX + width > src.width)
+        width = src.width - srcX;
+    if (srcY + height > src.height)
+        height = src.height - srcY;
+
+    // Clip to dest
+    if (destX + width > dest.width)
+        width = dest.width - destX;
+    if (destY + height > dest.height)
+        height = dest.height - destY;
+
+    var destRect = dest.width * 4 * destY + destX * 4;
+
+    for (var i = 0; i < height; i++) {
+        if (i == 0 || i == height-1)
+            markRun(dest.data, destRect, width, 0, 0, 0);
+        else {
+            markRun(dest.data, destRect, 1, 0 ,0, 0);
+            markRun(dest.data, destRect+4, width-2, r, g, b);
+            markRun(dest.data, destRect+4*width-4, 1, 0, 0, 0);
+        }
+        destRect += dest.width * 4;
+    }
+}
+
+function decodeBuffer(context, oldData, w, h, data, debug)
 {
     var i, j;
     var imageData = context.createImageData(w, h);
@@ -347,9 +386,16 @@ function decodeBuffer(context, oldData, w, h, data)
         var g = data[src++];
         var r = data[src++];
         var alpha = data[src++];
-        var len;
+        var len, start;
 
         if (alpha != 0) {
+            // Regular data is red
+            if (debug) {
+                r = r / 2 | 0 + 128;
+                g = g / 2 | 0;
+                b = r / 2 | 0;
+            }
+
             imageData.data[dest++] = r;
             imageData.data[dest++] = g;
             imageData.data[dest++] = b;
@@ -387,6 +433,8 @@ function decodeBuffer(context, oldData, w, h, data)
                 var destY = g << 8 | b;
 
                 copyRect(oldData, srcX, srcY, imageData, destX, destY, 32, 32);
+                if (debug) // blocks are green
+                    markRect(oldData, srcX, srcY, imageData, destX, destY, 32, 32, 0x00, 128, 0x00);
 
                 //log("Got block, id: " + blockid +  "(" + srcX +"," + srcY + ") at " + destX + "," + destY);
 
@@ -401,12 +449,18 @@ function decodeBuffer(context, oldData, w, h, data)
                 r = data[src++];
                 alpha = data[src++];
 
+                start = dest;
+
                 for (i = 0; i < len; i++) {
                     imageData.data[dest++] = r;
                     imageData.data[dest++] = g;
                     imageData.data[dest++] = b;
                     imageData.data[dest++] = alpha;
                 }
+
+                if (debug) // Color runs are blue
+                    markRun(imageData.data, start, len, 0x00, 0x00, 128);
+
                 break;
 
             case 0x40: // Delta run
@@ -418,6 +472,8 @@ function decodeBuffer(context, oldData, w, h, data)
                 r = data[src++];
                 alpha = data[src++];
 
+                start = dest;
+
                 for (i = 0; i < len; i++) {
                     imageData.data[dest] = (imageData.data[dest] + r) & 0xff;
                     dest++;
@@ -428,6 +484,8 @@ function decodeBuffer(context, oldData, w, h, data)
                     imageData.data[dest] = (imageData.data[dest] + alpha) & 0xff;
                     dest++;
                 }
+                if (debug) // Delta runs are violet
+                    markRun(imageData.data, start, len, 0xff, 0x00, 0xff);
                 break;
 
             default:
@@ -439,7 +497,6 @@ function decodeBuffer(context, oldData, w, h, data)
     return imageData;
 }
 
-
 function cmdPutBuffer(id, w, h, compressed)
 {
     var surface = surfaces[id];
@@ -448,9 +505,12 @@ function cmdPutBuffer(id, w, h, compressed)
     var inflate = new Zlib.RawInflate(compressed);
     var data = inflate.decompress();
 
-    var imageData = decodeBuffer (context, surface.imageData, w, h, data);
-
+    var imageData = decodeBuffer (context, surface.imageData, w, h, data, debugDecoding);
     context.putImageData(imageData, 0, 0);
+
+    if (debugDecoding)
+        imageData = decodeBuffer (context, surface.imageData, w, h, data, false);
+
     surface.imageData = imageData;
 }
 
@@ -2422,6 +2482,12 @@ function connect()
     var query_string = url.split("?");
     if (query_string.length > 1) {
 	var params = query_string[1].split("&");
+
+        for (var i=0; i<params.length; i++) {
+            var pair = params[i].split("=");
+            if (pair[0] == "debug" && pair[1] == "decoding")
+                debugDecoding = true;
+        }
     }
 
     var loc = window.location.toString().replace("http:", "ws:").replace("https:", "wss:");
