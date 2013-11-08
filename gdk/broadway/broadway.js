@@ -329,13 +329,10 @@ function copyRect(src, srcX, srcY, dest, destX, destY, width, height)
     }
 }
 
-function cmdPutBuffer(id, w, h, compressed)
+function decodeBuffer(context, oldData, w, h, data)
 {
-    var surface = surfaces[id];
-    var context = surface.canvas.getContext("2d");
-    var imageData = context.createImageData(w, h);
-    var oldData = surface.imageData;
     var i, j;
+    var imageData = context.createImageData(w, h);
 
     if (oldData != null) {
         // Copy old frame into new buffer
@@ -344,9 +341,6 @@ function cmdPutBuffer(id, w, h, compressed)
 
     var src = 0;
     var dest = 0;
-
-    var inflate = new Zlib.RawInflate(compressed);
-    var data = inflate.decompress();
 
     while (src < data.length)  {
         var b = data[src++];
@@ -441,6 +435,20 @@ function cmdPutBuffer(id, w, h, compressed)
             }
         }
     }
+
+    return imageData;
+}
+
+
+function cmdPutBuffer(id, w, h, compressed)
+{
+    var surface = surfaces[id];
+    var context = surface.canvas.getContext("2d");
+
+    var inflate = new Zlib.RawInflate(compressed);
+    var data = inflate.decompress();
+
+    var imageData = decodeBuffer (context, surface.imageData, w, h, data);
 
     context.putImageData(imageData, 0, 0);
     surface.imageData = imageData;
