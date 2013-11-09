@@ -106,6 +106,7 @@ GDK_AVAILABLE_IN_3_10
 void               gtk_places_sidebar_set_show_connect_to_server (GtkPlacesSidebar   *sidebar,
                                                                   gboolean            show_connect_to_server);
 
+
 GDK_AVAILABLE_IN_3_10
 void               gtk_places_sidebar_add_shortcut               (GtkPlacesSidebar   *sidebar,
                                                                   GFile              *location);

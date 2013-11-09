@@ -163,6 +163,7 @@ struct _GtkPlacesSidebar {
   guint drop_occured           : 1;
   guint show_desktop           : 1;
   guint show_connect_to_server : 1;
+  guint local_only             : 1;
 };
 
 struct _GtkPlacesSidebarClass {
@@ -242,6 +243,7 @@ enum {
   PROP_OPEN_FLAGS,
   PROP_SHOW_DESKTOP,
   PROP_SHOW_CONNECT_TO_SERVER,
+  PROP_LOCAL_ONLY,
   NUM_PROPERTIES
 };
 
@@ -278,6 +280,9 @@ static void  check_unmount_and_eject       (GMount             *mount,
                                             GDrive             *drive,
                                             gboolean           *show_unmount,
                                             gboolean           *show_eject);
+static void gtk_places_sidebar_set_local_only (GtkPlacesSidebar *sidebar,
+                                 	       gboolean          local_only);
+static gboolean gtk_places_sidebar_get_local_only (GtkPlacesSidebar *sidebar);
 
 /* Identifiers for target types */
 enum {
@@ -650,6 +655,25 @@ get_desktop_directory_uri (void)
   return g_strconcat ("file://", name, NULL);
 }
 
+static gboolean
+should_show_file (GtkPlacesSidebar *sidebar,
+                  GFile            *file)
+{
+  gchar *path;
+
+  if (!sidebar->local_only)
+    return TRUE;
+
+  path = g_file_get_path (file);
+  if (path)
+    {
+      g_free (path);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 add_application_shortcuts (GtkPlacesSidebar *sidebar)
 {
@@ -661,6 +685,9 @@ add_application_shortcuts (GtkPlacesSidebar *sidebar)
       GFileInfo *info;
 
       file = G_FILE (l->data);
+
+      if (!should_show_file (sidebar, file))
+        continue;
 
       /* FIXME: we are getting file info synchronously.  We may want to do it async at some point. */
       info = g_file_query_info (file,
@@ -788,14 +815,17 @@ update_places (GtkPlacesSidebar *sidebar)
   add_special_dirs (sidebar);
 
   /* Trash */
-  mount_uri = "trash:///"; /* No need to strdup */
-  icon = _gtk_trash_monitor_get_icon (sidebar->trash_monitor);
-  add_place (sidebar, PLACES_BUILT_IN,
-             SECTION_COMPUTER,
-             _("Trash"), icon, mount_uri,
-             NULL, NULL, NULL, 0,
-             _("Open the trash"));
-  g_object_unref (icon);
+  if (!sidebar->local_only)
+    {
+      mount_uri = "trash:///"; /* No need to strdup */
+      icon = _gtk_trash_monitor_get_icon (sidebar->trash_monitor);
+      add_place (sidebar, PLACES_BUILT_IN,
+                 SECTION_COMPUTER,
+                 _("Trash"), icon, mount_uri,
+                 NULL, NULL, NULL, 0,
+                 _("Open the trash"));
+      g_object_unref (icon);
+    }
 
   /* Application-side shortcuts */
   add_application_shortcuts (sidebar);
@@ -1067,77 +1097,79 @@ update_places (GtkPlacesSidebar *sidebar)
   g_slist_free (bookmarks);
 
   /* network */
-  add_heading (sidebar, SECTION_NETWORK, _("Network"));
-
-  mount_uri = "network:///";
-  icon = g_themed_icon_new_with_default_fallbacks (ICON_NAME_NETWORK);
-  add_place (sidebar, PLACES_BUILT_IN,
-             SECTION_NETWORK,
-             _("Browse Network"), icon, mount_uri,
-             NULL, NULL, NULL, 0,
-             _("Browse the contents of the network"));
-  g_object_unref (icon);
-
-  if (sidebar->show_connect_to_server)
+  if (!sidebar->local_only)
     {
-      icon = g_themed_icon_new_with_default_fallbacks (ICON_NAME_NETWORK_SERVER);
-      add_place (sidebar, PLACES_CONNECT_TO_SERVER,
+      add_heading (sidebar, SECTION_NETWORK, _("Network"));
+
+      mount_uri = "network:///";
+      icon = g_themed_icon_new_with_default_fallbacks (ICON_NAME_NETWORK);
+      add_place (sidebar, PLACES_BUILT_IN,
                  SECTION_NETWORK,
-                 _("Connect to Server"), icon, NULL,
+                 _("Browse Network"), icon, mount_uri,
                  NULL, NULL, NULL, 0,
-                 _("Connect to a network server address"));
+                 _("Browse the contents of the network"));
       g_object_unref (icon);
-    }
 
-  network_volumes = g_list_reverse (network_volumes);
-  for (l = network_volumes; l != NULL; l = l->next)
-    {
-      volume = l->data;
-      mount = g_volume_get_mount (volume);
-
-      if (mount != NULL)
+      if (sidebar->show_connect_to_server)
         {
-          network_mounts = g_list_prepend (network_mounts, mount);
-          continue;
+          icon = g_themed_icon_new_with_default_fallbacks (ICON_NAME_NETWORK_SERVER);
+          add_place (sidebar, PLACES_CONNECT_TO_SERVER,
+                     SECTION_NETWORK,
+                     _("Connect to Server"), icon, NULL,
+                     NULL, NULL, NULL, 0,
+                     _("Connect to a network server address"));
+          g_object_unref (icon);
         }
-      else
-        {
-          icon = g_volume_get_symbolic_icon (volume);
-          name = g_volume_get_name (volume);
-          tooltip = g_strdup_printf (_("Mount and open %s"), name);
 
+      network_volumes = g_list_reverse (network_volumes);
+      for (l = network_volumes; l != NULL; l = l->next)
+        {
+          volume = l->data;
+          mount = g_volume_get_mount (volume);
+
+          if (mount != NULL)
+            {
+              network_mounts = g_list_prepend (network_mounts, mount);
+              continue;
+            }
+          else
+            {
+              icon = g_volume_get_symbolic_icon (volume);
+              name = g_volume_get_name (volume);
+              tooltip = g_strdup_printf (_("Mount and open %s"), name);
+
+              add_place (sidebar, PLACES_MOUNTED_VOLUME,
+                         SECTION_NETWORK,
+                         name, icon, NULL,
+                         NULL, volume, NULL, 0, tooltip);
+              g_object_unref (icon);
+              g_free (name);
+              g_free (tooltip);
+            }
+        }
+
+      network_mounts = g_list_reverse (network_mounts);
+      for (l = network_mounts; l != NULL; l = l->next)
+        {
+          mount = l->data;
+          root = g_mount_get_default_location (mount);
+          icon = g_mount_get_symbolic_icon (mount);
+          mount_uri = g_file_get_uri (root);
+          name = g_mount_get_name (mount);
+          tooltip = g_file_get_parse_name (root);
           add_place (sidebar, PLACES_MOUNTED_VOLUME,
                      SECTION_NETWORK,
-                     name, icon, NULL,
-                     NULL, volume, NULL, 0, tooltip);
+                     name, icon, mount_uri,
+                     NULL, NULL, mount, 0, tooltip);
+          g_object_unref (root);
           g_object_unref (icon);
           g_free (name);
+          g_free (mount_uri);
           g_free (tooltip);
         }
     }
 
   g_list_free_full (network_volumes, g_object_unref);
-
-  network_mounts = g_list_reverse (network_mounts);
-  for (l = network_mounts; l != NULL; l = l->next)
-    {
-      mount = l->data;
-      root = g_mount_get_default_location (mount);
-      icon = g_mount_get_symbolic_icon (mount);
-      mount_uri = g_file_get_uri (root);
-      name = g_mount_get_name (mount);
-      tooltip = g_file_get_parse_name (root);
-      add_place (sidebar, PLACES_MOUNTED_VOLUME,
-                 SECTION_NETWORK,
-                 name, icon, mount_uri,
-                 NULL, NULL, mount, 0, tooltip);
-      g_object_unref (root);
-      g_object_unref (icon);
-      g_free (name);
-      g_free (mount_uri);
-      g_free (tooltip);
-    }
-
   g_list_free_full (network_mounts, g_object_unref);
 
   /* restore original selection */
@@ -3824,6 +3856,10 @@ gtk_places_sidebar_set_property (GObject      *obj,
       gtk_places_sidebar_set_show_connect_to_server (sidebar, g_value_get_boolean (value));
       break;
 
+    case PROP_LOCAL_ONLY:
+      gtk_places_sidebar_set_local_only (sidebar, g_value_get_boolean (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
       break;
@@ -3854,6 +3890,10 @@ gtk_places_sidebar_get_property (GObject    *obj,
 
     case PROP_SHOW_CONNECT_TO_SERVER:
       g_value_set_boolean (value, gtk_places_sidebar_get_show_connect_to_server (sidebar));
+      break;
+
+    case PROP_LOCAL_ONLY:
+      g_value_set_boolean (value, gtk_places_sidebar_get_local_only (sidebar));
       break;
 
     default:
@@ -4153,6 +4193,12 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
           g_param_spec_boolean ("show-connect-to-server",
                                 P_("Show 'Connect to Server'"),
                                 P_("Whether the sidebar includes a builtin shortcut to a 'Connect to server' dialog"),
+                                FALSE,
+                                G_PARAM_READWRITE);
+  properties[PROP_LOCAL_ONLY] =
+          g_param_spec_boolean ("local-only",
+                                P_("Local Only"),
+                                P_("Whether the sidebar only includes local files"),
                                 FALSE,
                                 G_PARAM_READWRITE);
 
@@ -4501,6 +4547,29 @@ gtk_places_sidebar_get_show_connect_to_server (GtkPlacesSidebar *sidebar)
   g_return_val_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar), FALSE);
 
   return sidebar->show_connect_to_server;
+}
+
+static void
+gtk_places_sidebar_set_local_only (GtkPlacesSidebar *sidebar,
+                                   gboolean          local_only)
+{
+  g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
+
+  local_only = !!local_only;
+  if (sidebar->local_only != local_only)
+    {
+      sidebar->local_only = local_only;
+      update_places (sidebar);
+      g_object_notify_by_pspec (G_OBJECT (sidebar), properties[PROP_LOCAL_ONLY]);
+    }
+}
+
+static gboolean
+gtk_places_sidebar_get_local_only (GtkPlacesSidebar *sidebar)
+{
+  g_return_val_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar), FALSE);
+
+  return sidebar->local_only;
 }
 
 static GSList *
