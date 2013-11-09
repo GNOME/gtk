@@ -299,8 +299,7 @@ static const GtkTargetEntry dnd_source_targets[] = {
 
 /* Target types for dropping into the shortcuts list */
 static const GtkTargetEntry dnd_drop_targets [] = {
-	{ "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET, GTK_TREE_MODEL_ROW },
-	{ "text/uri-list", 0, TEXT_URI_LIST }
+	{ "GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET, GTK_TREE_MODEL_ROW }
 };
 
 /* Drag and drop interface declarations */
@@ -3638,6 +3637,7 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 	GtkCellRenderer   *cell;
 	GtkTreeSelection  *selection;
 	GIcon             *eject;
+        GtkTargetList     *target_list;
 
 	gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (sidebar)), GTK_STYLE_CLASS_SIDEBAR);
 
@@ -3801,8 +3801,11 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 						GDK_ACTION_MOVE);
 	gtk_drag_dest_set (GTK_WIDGET (tree_view),
 			   0,
-			   dnd_drop_targets, G_N_ELEMENTS (dnd_drop_targets),
+                           NULL, 0,
 			   GDK_ACTION_MOVE | GDK_ACTION_COPY | GDK_ACTION_LINK);
+	target_list = gtk_target_list_new  (dnd_drop_targets, G_N_ELEMENTS (dnd_drop_targets));
+	gtk_target_list_add_uri_targets (target_list, TEXT_URI_LIST);
+        gtk_drag_dest_set_target_list (GTK_WIDGET (tree_view), target_list);
 
 	g_signal_connect (tree_view, "key-press-event",
 			  G_CALLBACK (bookmarks_key_press_event_cb), sidebar);
