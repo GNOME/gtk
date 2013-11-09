@@ -2414,6 +2414,8 @@ set_local_only (GtkFileChooserDefault *impl,
       if (priv->location_entry)
 	_gtk_file_chooser_entry_set_local_only (GTK_FILE_CHOOSER_ENTRY (priv->location_entry), local_only);
 
+      gtk_places_sidebar_set_local_only (GTK_PLACES_SIDEBAR (priv->places_sidebar), local_only);
+
       if (local_only && priv->current_folder &&
            !_gtk_file_has_native_path (priv->current_folder))
 	{
