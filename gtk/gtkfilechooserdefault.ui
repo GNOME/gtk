@@ -200,6 +200,7 @@
                 <property name="can_focus">True</property>
                 <property name="hscrollbar_policy">never</property>
                 <property name="shadow_type">in</property>
+                <property name="local_only">True</property>
                 <signal name="open-location" handler="places_sidebar_open_location_cb" swapped="no"/>
                 <signal name="show-error-message" handler="places_sidebar_show_error_message_cb" swapped="no"/>
               </object>
