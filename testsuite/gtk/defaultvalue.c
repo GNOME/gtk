@@ -87,6 +87,17 @@ test_type (gconstpointer data)
       g_str_equal (g_type_name (type), "GdkX11Screen"))
     return;
 
+  /* This throws a critical when the connection is dropped */
+  if (g_type_is_a (type, GTK_TYPE_APP_CHOOSER_DIALOG))
+    return;
+
+  /* These leak their GDBusConnections */
+  if (g_type_is_a (type, GTK_TYPE_FILE_CHOOSER_BUTTON) ||
+      g_type_is_a (type, GTK_TYPE_FILE_CHOOSER_DIALOG) ||
+      g_type_is_a (type, GTK_TYPE_FILE_CHOOSER_WIDGET) ||
+      g_type_is_a (type, GTK_TYPE_PLACES_SIDEBAR))
+    return;
+
   klass = g_type_class_ref (type);
 
   if (g_type_is_a (type, GTK_TYPE_SETTINGS))
@@ -384,9 +395,26 @@ main (int argc, char **argv)
 {
   const GType *otypes;
   guint i;
+  gchar *schema_dir;
+  GTestDBus *bus;
+  gint result;
+
+  /* These must be set before before gtk_test_init */
+  g_setenv ("GIO_USE_VFS", "local", TRUE);
+  g_setenv ("GSETTINGS_BACKEND", "memory", TRUE);
 
   gtk_test_init (&argc, &argv);
   gtk_test_register_all_types();
+
+  /* g_test_build_filename must be called after gtk_test_init */
+  schema_dir = g_test_build_filename (G_TEST_BUILT, "", NULL);
+  g_setenv ("GSETTINGS_SCHEMA_DIR", schema_dir, TRUE);
+
+  /* Create one test bus for all tests, as we have a lot of very small
+   * and quick tests.
+   */
+  bus = g_test_dbus_new (G_TEST_DBUS_NONE);
+  g_test_dbus_up (bus);
 
   otypes = gtk_test_list_all_types (NULL);
   for (i = 0; otypes[i]; i++)
@@ -401,5 +429,11 @@ main (int argc, char **argv)
       g_free (testname);
     }
 
-  return g_test_run();
+  result = g_test_run();
+
+  g_test_dbus_down (bus);
+  g_object_unref (bus);
+  g_free (schema_dir);
+
+  return result;
 }

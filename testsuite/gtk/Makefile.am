@@ -129,6 +129,20 @@ EXTRA_DIST +=				\
 	file-chooser-test-dir/text.txt	\
 	$(NULL)
 
+GTK_GSETTINGS_SCHEMAS = \
+	$(top_srcdir)/gtk/org.gtk.Settings.ColorChooser.gschema.xml \
+	$(top_srcdir)/gtk/org.gtk.Settings.FileChooser.gschema.xml \
+	$(NULL)
+
+BUILT_SOURCES = gschemas.compiled
+
+gschemas.compiled: $(GTK_GSETTINGS_SCHEMAS)
+	$(GLIB_COMPILE_SCHEMAS) \
+		$(addprefix --schema-file=,$(GTK_GSETTINGS_SCHEMAS)) \
+		--targetdir=$(builddir)
+
+all-am: gschemas.compiled
+
 if BUILDOPT_INSTALL_TESTS
 insttestdir = $(pkglibexecdir)/installed-tests
 insttest_PROGRAMS = $(TEST_PROGS)
