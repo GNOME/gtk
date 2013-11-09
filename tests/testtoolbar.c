@@ -509,7 +509,6 @@ main (gint argc, gchar **argv)
   gtk_container_add (GTK_CONTAINER (window), grid);
 
   toolbar = gtk_toolbar_new ();
-  gtk_widget_set_vexpand (toolbar, TRUE);
   gtk_grid_attach (GTK_GRID (grid), toolbar, 0, 0, 2, 1);
 
   hbox1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
@@ -646,6 +645,7 @@ main (gint argc, gchar **argv)
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
   item = gtk_toggle_tool_button_new ();
+  gtk_tool_button_set_label (GTK_TOOL_BUTTON (item), "Bold");
   gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "format-text-bold");
   g_signal_connect (item, "toggled", G_CALLBACK (bold_toggled), NULL);
   add_item_to_list (store, item, "Bold");  
@@ -660,6 +660,7 @@ main (gint argc, gchar **argv)
   g_assert (gtk_toolbar_get_nth_item (GTK_TOOLBAR (toolbar), 0) != 0);
   
   item = gtk_radio_tool_button_new (NULL);
+  gtk_tool_button_set_label (GTK_TOOL_BUTTON (item), "Left");
   gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "format-justify-left");
   group = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON (item));
   add_item_to_list (store, item, "Left");
@@ -667,6 +668,7 @@ main (gint argc, gchar **argv)
   
   
   item = gtk_radio_tool_button_new (group);
+  gtk_tool_button_set_label (GTK_TOOL_BUTTON (item), "Center");
   gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "format-justify-center");
   make_prop_editor (G_OBJECT (item));
 
@@ -675,6 +677,7 @@ main (gint argc, gchar **argv)
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
   item = gtk_radio_tool_button_new (group);
+  gtk_tool_button_set_label (GTK_TOOL_BUTTON (item), "Right");
   gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), "format-justify-right");
   add_item_to_list (store, item, "Right");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
