@@ -123,6 +123,7 @@
                 <property name="can_focus">True</property>
                 <property name="homogeneous">True</property>
                 <property name="transition-type">over-up-down</property>
+                <property name="transition-duration">600</property>
                 <child>
                   <object class="GtkBox" id="page_vbox">
                     <property name="visible">True</property>
