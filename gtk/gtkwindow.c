@@ -1211,17 +1211,8 @@ gtk_window_class_init (GtkWindowClass *klass)
 }
 
 static void
-gtk_window_titlebar_min_clicked (GtkWidget *widget, gpointer data)
+gtk_window_toggle_maximized (GtkWindow *window)
 {
-  GtkWindow *window = (GtkWindow *)data;
-
-  gtk_window_iconify (window);
-}
-
-static void
-gtk_window_titlebar_max_clicked (GtkWidget *widget, gpointer data)
-{
-  GtkWindow *window = (GtkWindow *)data;
   GtkWindowPrivate *priv = window->priv;
 
   if (priv->maximized)
@@ -5233,8 +5224,8 @@ update_window_buttons (GtkWindow *window)
                   gtk_container_add (GTK_CONTAINER (button), image);
                   gtk_widget_set_can_focus (button, FALSE);
                   gtk_widget_show_all (button);
-                  g_signal_connect (button, "clicked",
-                                    G_CALLBACK (gtk_window_titlebar_min_clicked), window);
+                  g_signal_connect_swapped (button, "clicked",
+                                            G_CALLBACK (gtk_window_iconify), window);
                   accessible = gtk_widget_get_accessible (button);
                   if (GTK_IS_ACCESSIBLE (accessible))
                     atk_object_set_name (accessible, _("Minimize"));
@@ -5254,8 +5245,8 @@ update_window_buttons (GtkWindow *window)
                   gtk_container_add (GTK_CONTAINER (button), image);
                   gtk_widget_set_can_focus (button, FALSE);
                   gtk_widget_show_all (button);
-                  g_signal_connect (button, "clicked",
-                                    G_CALLBACK (gtk_window_titlebar_max_clicked), window);
+                  g_signal_connect_swapped (button, "clicked",
+                                            G_CALLBACK (gtk_window_toggle_maximized), window);
                   accessible = gtk_widget_get_accessible (button);
                   if (GTK_IS_ACCESSIBLE (accessible))
                     atk_object_set_name (accessible, priv->maximized ? _("Restore") : _("Maximize"));
@@ -7453,7 +7444,8 @@ gtk_window_button_press_event (GtkWidget      *widget,
             {
               if (region == GTK_WINDOW_REGION_TITLE)
                 {
-                  gdk_window_lower (gtk_widget_get_window (GTK_WIDGET (window)));
+                  gdk_window_lower (gdk_window);
+                  return TRUE;
                 }
             }
         }
@@ -7461,7 +7453,7 @@ gtk_window_button_press_event (GtkWidget      *widget,
         {
           if (region == GTK_WINDOW_REGION_TITLE)
             {
-              gtk_window_titlebar_max_clicked (widget, widget);
+              gtk_window_toggle_maximized (window);
               return TRUE;
             }
         }
@@ -8102,24 +8094,6 @@ popup_position_func (GtkMenu   *menu,
 }
 
 static void
-minimize_window_clicked (GtkMenuItem *menuitem,
-                         gpointer     user_data)
-{
-  GtkWindow *window = (GtkWindow *)user_data;
-
-  gtk_window_titlebar_min_clicked (GTK_WIDGET (window), window);
-}
-
-static void
-maximize_window_clicked (GtkMenuItem *menuitem,
-                         gpointer     user_data)
-{
-  GtkWindow *window = (GtkWindow *)user_data;
-
-  gtk_window_titlebar_max_clicked (GTK_WIDGET (window), window);
-}
-
-static void
 ontop_window_clicked (GtkMenuItem *menuitem,
                       gpointer     user_data)
 {
@@ -8192,8 +8166,8 @@ gtk_window_do_popup (GtkWindow      *window,
   gtk_widget_show (menuitem);
   if (priv->gdk_type_hint != GDK_WINDOW_TYPE_HINT_NORMAL)
     gtk_widget_set_sensitive (menuitem, FALSE);
-  g_signal_connect (G_OBJECT (menuitem), "activate",
-                    G_CALLBACK (minimize_window_clicked), window);
+  g_signal_connect_swapped (G_OBJECT (menuitem), "activate",
+                            G_CALLBACK (gtk_window_iconify), window);
   gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
 
   menuitem = gtk_menu_item_new_with_label (priv->maximized ? _("Unmaximize") : _("Maximize"));
@@ -8201,8 +8175,8 @@ gtk_window_do_popup (GtkWindow      *window,
   if (!priv->resizable ||
       priv->gdk_type_hint != GDK_WINDOW_TYPE_HINT_NORMAL)
     gtk_widget_set_sensitive (menuitem, FALSE);
-  g_signal_connect (G_OBJECT (menuitem), "activate",
-                    G_CALLBACK (maximize_window_clicked), window);
+  g_signal_connect_swapped (G_OBJECT (menuitem), "activate",
+                            G_CALLBACK (gtk_window_toggle_maximized), window);
   gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), menuitem);
 
   menuitem = gtk_check_menu_item_new_with_label (_("Always on Top"));
@@ -11672,7 +11646,6 @@ gboolean
 _gtk_window_handle_button_press_for_widget (GtkWidget      *widget,
                                             GdkEventButton *event)
 {
-  gboolean processed = FALSE;
   gboolean window_drag = FALSE;
   GtkWindow *window;
 
@@ -11696,25 +11669,15 @@ _gtk_window_handle_button_press_for_widget (GtkWidget      *widget,
                                   event->x_root,
                                   event->y_root,
                                   event->time);
-      processed = TRUE;
-      break;
+      return TRUE;
 
     case GDK_2BUTTON_PRESS:
-      {
-        GdkWindow *gdk_window = gtk_widget_get_window (GTK_WIDGET (window));
-
-        if (gdk_window_get_state (gdk_window) & GDK_WINDOW_STATE_MAXIMIZED)
-          gdk_window_unmaximize (gdk_window);
-          else
-            gdk_window_maximize (gdk_window);
-
-        processed = TRUE;
-      }
-      break;
+      gtk_window_toggle_maximized (window);
+      return TRUE;
 
     default:
       break;
     }
 
-  return processed;
+  return FALSE;
 }
