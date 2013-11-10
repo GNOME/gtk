@@ -54,6 +54,8 @@ GList *_gtk_file_chooser_extract_recent_folders (GList *infos);
 
 GSettings *_gtk_file_chooser_get_settings_for_widget (GtkWidget *widget);
 
+gchar * _gtk_file_chooser_label_for_file (GFile *file);
+
 G_END_DECLS
 
 #endif /* __GTK_FILE_CHOOSER_UTILS_H__ */

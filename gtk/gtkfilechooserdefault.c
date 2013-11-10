@@ -896,62 +896,6 @@ set_preview_widget (GtkFileChooserDefault *impl,
   update_preview_widget_visibility (impl);
 }
 
-/* FIXME: GtkFileSystem needs a function to split a remote path
- * into hostname and path components, or maybe just have a 
- * gtk_file_system_path_get_display_name().
- *
- * This function is also used in gtkfilechooserbutton.c
- */
-gchar *
-_gtk_file_chooser_label_for_file (GFile *file)
-{
-  const gchar *path, *start, *end, *p;
-  gchar *uri, *host, *label;
-
-  uri = g_file_get_uri (file);
-
-  start = strstr (uri, "://");
-  if (start)
-    {
-      start += 3;
-      path = strchr (start, '/');
-      if (path)
-        end = path;
-      else
-        {
-          end = uri + strlen (uri);
-          path = "/";
-        }
-
-      /* strip username */
-      p = strchr (start, '@');
-      if (p && p < end)
-        start = p + 1;
-  
-      p = strchr (start, ':');
-      if (p && p < end)
-        end = p;
-  
-      host = g_strndup (start, end - start);
-  
-      /* Translators: the first string is a path and the second string 
-       * is a hostname. Nautilus and the panel contain the same string 
-       * to translate. 
-       */
-      label = g_strdup_printf (_("%1$s on %2$s"), path, host);
-  
-      g_free (host);
-    }
-  else
-    {
-      label = g_strdup (uri);
-    }
-  
-  g_free (uri);
-
-  return label;
-}
-
 /* Callback used when the "New Folder" button is clicked */
 static void
 new_folder_button_clicked (GtkButton             *button,
