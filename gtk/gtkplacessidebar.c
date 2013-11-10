@@ -698,7 +698,7 @@ file_is_shown (GtkPlacesSidebar *sidebar,
             return TRUE;
         }
     }
-  while (gtk_tree_model_iter_next (sidebar->store, &iter));
+  while (gtk_tree_model_iter_next (GTK_TREE_MODEL (sidebar->store), &iter));
 
   return FALSE;
 }
