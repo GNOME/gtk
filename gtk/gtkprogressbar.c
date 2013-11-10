@@ -463,8 +463,8 @@ gtk_progress_bar_real_update (GtkProgress *progress)
 		      widget->allocation.width -
 		      widget->style->xthickness)
 		    {
-		      pbar->activity_pos = widget->allocation.width -
-			widget->style->xthickness - size;
+		      pbar->activity_pos = MAX (0, widget->allocation.width -
+			widget->style->xthickness - size);
 		      pbar->activity_dir = 1;
 		    }
 		}
@@ -493,8 +493,8 @@ gtk_progress_bar_real_update (GtkProgress *progress)
 		      widget->allocation.height -
 		      widget->style->ythickness)
 		    {
-		      pbar->activity_pos = widget->allocation.height -
-			widget->style->ythickness - size;
+		      pbar->activity_pos = MAX (0, widget->allocation.height -
+			widget->style->ythickness - size);
 		      pbar->activity_dir = 1;
 		    }
 		}
