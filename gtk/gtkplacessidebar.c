@@ -674,6 +674,38 @@ should_show_file (GtkPlacesSidebar *sidebar,
   return FALSE;
 }
 
+static gboolean
+file_is_shown (GtkPlacesSidebar *sidebar,
+               GFile            *file)
+{
+  GtkTreeIter iter;
+  gchar *uri;
+
+  if (!gtk_tree_model_get_iter_first (GTK_TREE_MODEL (sidebar->store), &iter))
+    return FALSE;
+
+  do
+    {
+      gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store), &iter,
+                          PLACES_SIDEBAR_COLUMN_URI, &uri,
+                          -1);
+      if (uri)
+        {
+          GFile *other;
+          gboolean found;
+          other = g_file_new_for_uri (uri);
+          g_free (uri);
+          found = g_file_equal (file, other);
+          g_object_unref (other);
+          if (found)
+            return TRUE;
+        }
+    }
+  while (gtk_tree_model_iter_next (sidebar->store, &iter));
+
+  return FALSE;
+}
+
 static void
 add_application_shortcuts (GtkPlacesSidebar *sidebar)
 {
@@ -687,6 +719,9 @@ add_application_shortcuts (GtkPlacesSidebar *sidebar)
       file = G_FILE (l->data);
 
       if (!should_show_file (sidebar, file))
+        continue;
+
+      if (file_is_shown (sidebar, file))
         continue;
 
       /* FIXME: we are getting file info synchronously.  We may want to do it async at some point. */
