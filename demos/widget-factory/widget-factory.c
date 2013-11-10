@@ -129,11 +129,27 @@ dismiss (GtkWidget *button)
   gtk_revealer_set_reveal_child (GTK_REVEALER (w), FALSE);
 }
 
+static gint pulse_time = 250;
+
+static void
+update_pulse_time (GtkAdjustment *adjustment)
+{
+  gdouble value;
+
+  value = gtk_adjustment_get_value (adjustment);
+
+  /* vary between 50 and 450 */
+  pulse_time = 50 + 4 * value;
+}
+
 static gboolean
 pulse_it (GtkWidget *widget)
 {
   gtk_progress_bar_pulse (GTK_PROGRESS_BAR (widget));
-  return TRUE;
+
+  g_timeout_add (pulse_time, pulse_it, widget);
+  
+  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -171,6 +187,10 @@ activate (GApplication *app)
   g_action_map_add_action_entries (G_ACTION_MAP (window),
                                    win_entries, G_N_ELEMENTS (win_entries),
                                    window);
+
+  g_signal_connect (gtk_builder_get_object (builder, "adjustment1"),
+                    "value-changed",
+                    G_CALLBACK (update_pulse_time), NULL);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "progressbar3");
   g_timeout_add (250, (GSourceFunc)pulse_it, widget);
