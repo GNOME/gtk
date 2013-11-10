@@ -80,6 +80,11 @@ struct _GtkProgressBarPrivate
 
   GtkOrientation orientation;
 
+  guint          tick_id;
+  gint64         pulse1;
+  gint64         pulse2;
+  gint64         frame1;
+
   guint          activity_dir  : 1;
   guint          activity_mode : 1;
   guint          ellipsize     : 3;
@@ -113,10 +118,10 @@ static void gtk_progress_bar_get_preferred_height (GtkWidget      *widget,
                                                    gint           *minimum,
                                                    gint           *natural);
 
-static void     gtk_progress_bar_real_update      (GtkProgressBar *progress);
 static gboolean gtk_progress_bar_draw             (GtkWidget      *widget,
                                                    cairo_t        *cr);
 static void     gtk_progress_bar_act_mode_enter   (GtkProgressBar *progress);
+static void     gtk_progress_bar_act_mode_leave   (GtkProgressBar *progress);
 static void     gtk_progress_bar_finalize         (GObject        *object);
 static void     gtk_progress_bar_set_orientation  (GtkProgressBar *progress,
                                                    GtkOrientation  orientation);
@@ -408,46 +413,13 @@ gtk_progress_bar_new (void)
 }
 
 static void
-gtk_progress_bar_real_update (GtkProgressBar *pbar)
-{
-  GtkProgressBarPrivate *priv;
-  GtkWidget *widget;
-
-  g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
-
-  priv = pbar->priv;
-  widget = GTK_WIDGET (pbar);
-
-  if (priv->activity_mode)
-    {
-      /* advance the block */
-      if (priv->activity_dir == 0)
-        {
-          priv->activity_pos += priv->pulse_fraction;
-          if (priv->activity_pos > 1.0)
-            {
-              priv->activity_pos = 1.0;
-              priv->activity_dir = 1;
-            }
-        }
-      else
-        {
-          priv->activity_pos -= priv->pulse_fraction;
-          if (priv->activity_pos <= 0)
-            {
-              priv->activity_pos = 0;
-              priv->activity_dir = 0;
-            }
-        }
-    }
-  gtk_widget_queue_draw (widget);
-}
-
-static void
 gtk_progress_bar_finalize (GObject *object)
 {
   GtkProgressBar *pbar = GTK_PROGRESS_BAR (object);
   GtkProgressBarPrivate *priv = pbar->priv;
+
+  if (priv->activity_mode)
+    gtk_progress_bar_act_mode_leave (pbar);
 
   g_free (priv->text);
 
@@ -597,6 +569,58 @@ gtk_progress_bar_get_preferred_height (GtkWidget *widget,
   *minimum = *natural = MAX (min_height, height);
 }
 
+static gboolean
+tick_cb (GtkWidget     *widget,
+         GdkFrameClock *frame_clock,
+         gpointer       user_data)
+{
+  GtkProgressBar *pbar = GTK_PROGRESS_BAR (widget);
+  GtkProgressBarPrivate *priv = pbar->priv;
+  gint64 frame2;
+  gdouble fraction;
+
+  frame2 = gdk_frame_clock_get_frame_time (frame_clock);
+  if (priv->frame1 == 0)
+    priv->frame1 = frame2 - 16667;
+  if (priv->pulse1 == 0)
+    priv->pulse1 = priv->pulse2 - 250 * 1000000;
+
+  g_assert (priv->pulse2 > priv->pulse1);
+  g_assert (frame2 > priv->frame1);
+
+  /* Determine the fraction to move the block from one frame
+   * to the next when pulse_fraction is how far the block should
+   * move between two calls to gtk_progress_bar_pulse().
+   */
+  fraction = priv->pulse_fraction * (frame2 - priv->frame1) / (priv->pulse2 - priv->pulse1);
+
+  priv->frame1 = frame2;
+
+  /* advance the block */
+  if (priv->activity_dir == 0)
+    {
+      priv->activity_pos += fraction;
+      if (priv->activity_pos > 1.0)
+        {
+          priv->activity_pos = 1.0;
+          priv->activity_dir = 1;
+        }
+    }
+  else
+    {
+      priv->activity_pos -= fraction;
+      if (priv->activity_pos <= 0)
+        {
+          priv->activity_pos = 0;
+          priv->activity_dir = 0;
+        }
+    }
+
+  gtk_widget_queue_draw (widget);
+
+  return G_SOURCE_CONTINUE;
+}
+
 static void
 gtk_progress_bar_act_mode_enter (GtkProgressBar *pbar)
 {
@@ -648,6 +672,21 @@ gtk_progress_bar_act_mode_enter (GtkProgressBar *pbar)
           priv->activity_dir = 1;
         }
     }
+
+  priv->tick_id = gtk_widget_add_tick_callback (widget, tick_cb, NULL, NULL);
+  priv->pulse2 = 0;
+  priv->pulse1 = 0;
+  priv->frame1 = 0;
+}
+
+static void
+gtk_progress_bar_act_mode_leave (GtkProgressBar *pbar)
+{
+  GtkProgressBarPrivate *priv = pbar->priv;
+
+  if (priv->tick_id)
+    gtk_widget_remove_tick_callback (GTK_WIDGET (pbar), priv->tick_id);
+  priv->tick_id = 0;
 }
 
 static void
@@ -998,6 +1037,8 @@ gtk_progress_bar_set_activity_mode (GtkProgressBar *pbar,
 
       if (priv->activity_mode)
         gtk_progress_bar_act_mode_enter (pbar);
+      else
+        gtk_progress_bar_act_mode_leave (pbar);
 
       gtk_widget_queue_resize (GTK_WIDGET (pbar));
     }
@@ -1022,11 +1063,20 @@ gtk_progress_bar_set_fraction (GtkProgressBar *pbar,
 
   priv = pbar->priv;
 
-  priv->fraction = CLAMP(fraction, 0.0, 1.0);
+  priv->fraction = CLAMP (fraction, 0.0, 1.0);
   gtk_progress_bar_set_activity_mode (pbar, FALSE);
-  gtk_progress_bar_real_update (pbar);
+  gtk_widget_queue_draw (GTK_WIDGET (pbar));
 
   g_object_notify (G_OBJECT (pbar), "fraction");
+}
+
+static void
+gtk_progress_bar_update_pulse (GtkProgressBar *pbar)
+{
+  GtkProgressBarPrivate *priv = pbar->priv;
+
+  priv->pulse1 = priv->pulse2;
+  priv->pulse2 = g_get_monotonic_time ();
 }
 
 /**
@@ -1045,7 +1095,7 @@ gtk_progress_bar_pulse (GtkProgressBar *pbar)
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
 
   gtk_progress_bar_set_activity_mode (pbar, TRUE);
-  gtk_progress_bar_real_update (pbar);
+  gtk_progress_bar_update_pulse (pbar);
 }
 
 /**
