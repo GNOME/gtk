@@ -674,6 +674,9 @@ main (int argc, char **argv)
   gtk_file_chooser_add_shortcut_folder_uri (GTK_FILE_CHOOSER (dialog),
 					    "file:///usr/share/pixmaps",
 					    NULL);
+  gtk_file_chooser_add_shortcut_folder (GTK_FILE_CHOOSER (dialog),
+					g_get_user_special_dir (G_USER_DIRECTORY_MUSIC),
+					NULL);
 
   /* Initial filename or folder */
 
