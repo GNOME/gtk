@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VisualStudioProject
+ ProjectType="Visual C++"
+ Version="9.00"
+ Name="gdk"
+ ProjectGUID="{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073F7}"
+ RootNamespace="gdk"
+ Keyword="Win32Proj"
+ TargetFrameworkVersion="0"
+ >
+ <Platforms>
+  <Platform
+   Name="Win32"
+  />
+  <Platform
+   Name="x64"
+  />
+ </Platforms>
+ <ToolFiles>
+ </ToolFiles>
+ <Configurations>
+  <Configuration
+   Name="Debug|Win32"
+   InheritedPropertySheets=".\gtk-build-defines.vsprops;.\gtk-ignore-broadway.vsprops"
+   ConfigurationType="2"
+   CharacterSet="2"
+   >
+   <Tool
+    Name="VCPreBuildEventTool"
+   />
+   <Tool
+    Name="VCCLCompilerTool"
+    Optimization="0"
+    AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gdk\win32"
+    PreprocessorDefinitions="_DEBUG;G_ENABLE_DEBUG;$(GdkDefines)"
+    MinimalRebuild="true"
+    BasicRuntimeChecks="3"
+    RuntimeLibrary="3"
+    UsePrecompiledHeader="0"
+    WarningLevel="3"
+    DebugInformationFormat="4"
+   />
+   <Tool
+    Name="VCLinkerTool"
+    AdditionalDependencies="imm32.lib winmm.lib"
+    OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
+    LinkIncremental="1"
+    GenerateDebugInformation="true"
+    SubSystem="2"
+    ImportLibrary="$(TargetDir)$(ProjectName)-$(ApiVersion).lib"
+    TargetMachine="1"
+   />
+  </Configuration>
+  <Configuration
+   Name="Debug_Broadway|Win32"
+   InheritedPropertySheets=".\gtk-build-defines.vsprops;.\gtk-copy-gdk-broadway.vsprops"
+   ConfigurationType="2"
+   CharacterSet="2"
+   >
+   <Tool
+    Name="VCPreBuildEventTool"
+   />
+   <Tool
+    Name="VCCLCompilerTool"
+    Optimization="0"
+    AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gdk\win32;..\..\..\gdk\broadway"
+    PreprocessorDefinitions="_DEBUG;G_ENABLE_DEBUG;$(GdkDefines)"
+    MinimalRebuild="true"
+    BasicRuntimeChecks="3"
+    RuntimeLibrary="3"
+    UsePrecompiledHeader="0"
+    WarningLevel="3"
+    DebugInformationFormat="4"
+   />
+   <Tool
+    Name="VCLinkerTool"
+    AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib"
+    OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
+    LinkIncremental="1"
+    GenerateDebugInformation="true"
+    SubSystem="2"
+    ImportLibrary="$(TargetDir)$(ProjectName)-$(ApiVersion).lib"
+    TargetMachine="1"
+   />
+  </Configuration>
+  <Configuration
+   Name="Release|Win32"
+   InheritedPropertySheets=".\gtk-build-defines.vsprops;.\gtk-ignore-broadway.vsprops"
+   ConfigurationType="2"
+   CharacterSet="2"
+   WholeProgramOptimization="1"
+   >
+   <Tool
+    Name="VCPreBuildEventTool"
+   />
+   <Tool
+    Name="VCCLCompilerTool"
+    AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gdk\win32"
+    PreprocessorDefinitions="$(GdkDefines)"
+    RuntimeLibrary="2"
+    UsePrecompiledHeader="0"
+    WarningLevel="3"
+    DebugInformationFormat="3"
+   />
+   <Tool
+    Name="VCLinkerTool"
+    AdditionalDependencies="imm32.lib winmm.lib"
+    OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
+    LinkIncremental="1"
+    GenerateDebugInformation="true"
+    SubSystem="2"
+    OptimizeReferences="2"
+    EnableCOMDATFolding="2"
+    ImportLibrary="$(TargetDir)$(ProjectName)-$(ApiVersion).lib"
+    TargetMachine="1"
+   />
+  </Configuration>
+  <Configuration
+   Name="Release_Broadway|Win32"
+   InheritedPropertySheets=".\gtk-build-defines.vsprops;.\gtk-copy-gdk-broadway.vsprops"
+   ConfigurationType="2"
+   CharacterSet="2"
+   WholeProgramOptimization="1"
+   >
+   <Tool
+    Name="VCPreBuildEventTool"
+   />
+   <Tool
+    Name="VCCLCompilerTool"
+    AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gdk\win32;..\..\..\gdk\broadway"
+    PreprocessorDefinitions="$(GdkDefines)"
+    RuntimeLibrary="2"
+    UsePrecompiledHeader="0"
+    WarningLevel="3"
+    DebugInformationFormat="3"
+   />
+   <Tool
+    Name="VCLinkerTool"
+    AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib"
+    OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
+    LinkIncremental="1"
+    GenerateDebugInformation="true"
+    SubSystem="2"
+    OptimizeReferences="2"
+    EnableCOMDATFolding="2"
+    ImportLibrary="$(TargetDir)$(ProjectName)-$(ApiVersion).lib"
+    TargetMachine="1"
+   />
+  </Configuration>
+  <Configuration
+   Name="Debug|x64"
+   InheritedPropertySheets=".\gtk-build-defines.vsprops;.\gtk-ignore-broadway.vsprops"
+   ConfigurationType="2"
+   CharacterSet="2"
+   >
+   <Tool
+    Name="VCPreBuildEventTool"
+   />
+   <Tool
+    Name="VCCLCompilerTool"
+    Optimization="0"
+    AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gdk\win32"
+    PreprocessorDefinitions="_DEBUG;G_ENABLE_DEBUG;$(GdkDefines)"
+    MinimalRebuild="true"
+    BasicRuntimeChecks="3"
+    RuntimeLibrary="3"
+    UsePrecompiledHeader="0"
+    WarningLevel="3"
+    DebugInformationFormat="3"
+   />
+   <Tool
+    Name="VCLinkerTool"
+    AdditionalDependencies="imm32.lib winmm.lib"
+    OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
+    LinkIncremental="1"
+    GenerateDebugInformation="true"
+    SubSystem="2"
+    ImportLibrary="$(TargetDir)$(ProjectName)-$(ApiVersion).lib"
+    TargetMachine="17"
+   />
+  </Configuration>
+  <Configuration
+   Name="Debug_Broadway|x64"
+   InheritedPropertySheets=".\gtk-build-defines.vsprops;.\gtk-copy-gdk-broadway.vsprops"
+   ConfigurationType="2"
+   CharacterSet="2"
+   >
+   <Tool
+    Name="VCPreBuildEventTool"
+   />
+   <Tool
+    Name="VCCLCompilerTool"
+    Optimization="0"
+    AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gdk\win32;..\..\..\gdk\broadway"
+    PreprocessorDefinitions="_DEBUG;G_ENABLE_DEBUG;$(GdkDefines)"
+    MinimalRebuild="true"
+    BasicRuntimeChecks="3"
+    RuntimeLibrary="3"
+    UsePrecompiledHeader="0"
+    WarningLevel="3"
+    DebugInformationFormat="3"
+   />
+   <Tool
+    Name="VCLinkerTool"
+    AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib"
+    OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
+    LinkIncremental="1"
+    GenerateDebugInformation="true"
+    SubSystem="2"
+    ImportLibrary="$(TargetDir)$(ProjectName)-$(ApiVersion).lib"
+    TargetMachine="17"
+   />
+  </Configuration>
+  <Configuration
+   Name="Release|x64"
+   InheritedPropertySheets=".\gtk-build-defines.vsprops;.\gtk-ignore-broadway.vsprops"
+   ConfigurationType="2"
+   CharacterSet="2"
+   WholeProgramOptimization="1"
+   >
+   <Tool
+    Name="VCPreBuildEventTool"
+   />
+   <Tool
+    Name="VCCLCompilerTool"
+    AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gdk\win32"
+    PreprocessorDefinitions="$(GdkDefines)"
+    RuntimeLibrary="2"
+    UsePrecompiledHeader="0"
+    WarningLevel="3"
+    DebugInformationFormat="3"
+   />
+   <Tool
+    Name="VCLinkerTool"
+    AdditionalDependencies="imm32.lib winmm.lib"
+    OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
+    LinkIncremental="1"
+    GenerateDebugInformation="true"
+    SubSystem="2"
+    OptimizeReferences="2"
+    EnableCOMDATFolding="2"
+    ImportLibrary="$(TargetDir)$(ProjectName)-$(ApiVersion).lib"
+    TargetMachine="17"
+   />
+  </Configuration>
+  <Configuration
+   Name="Release_Broadway|x64"
+   InheritedPropertySheets=".\gtk-build-defines.vsprops"
+   ConfigurationType="2"
+   CharacterSet="2"
+   WholeProgramOptimization="1"
+   >
+   <Tool
+    Name="VCPreBuildEventTool"
+   />
+   <Tool
+    Name="VCCLCompilerTool"
+    AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gdk\win32;..\..\..\gdk\broadway"
+    PreprocessorDefinitions="$(GdkDefines)"
+    RuntimeLibrary="2"
+    UsePrecompiledHeader="0"
+    WarningLevel="3"
+    DebugInformationFormat="3"
+   />
+   <Tool
+    Name="VCLinkerTool"
+    AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib"
+    OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
+    LinkIncremental="1"
+    GenerateDebugInformation="true"
+    SubSystem="2"
+    OptimizeReferences="2"
+    EnableCOMDATFolding="2"
+    ImportLibrary="$(TargetDir)$(ProjectName)-$(ApiVersion).lib"
+    TargetMachine="17"
+   />
+  </Configuration>
+ </Configurations>
+ <References>
+ </References>
+ <Files>
+  <Filter
+   Name="Header Files"
+   Filter="h;hpp;hxx;hm;inl;inc;xsd"
+   UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+   >
+  </Filter>
+  <Filter
+   Name="Resource Files"
+   Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
+   UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
+   >
+   <File RelativePath="..\..\..\gdk\win32\rc\gdk.rc" />
+  </Filter>
+  <Filter
+   Name="Source Files"
+   Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
+   UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
+   >
+   <File RelativePath="..\..\..\gdk\gdk.c" />
+   <File RelativePath="..\..\..\gdk\gdkapplaunchcontext.c" />
+   <File RelativePath="..\..\..\gdk\gdkcairo.c" />
+   <File RelativePath="..\..\..\gdk\gdkcolor.c" />
+   <File RelativePath="..\..\..\gdk\gdkcursor.c" />
+   <File RelativePath="..\..\..\gdk\gdkdeprecated.c" />
+   <File RelativePath="..\..\..\gdk\gdkdevice.c" />
+   <File RelativePath="..\..\..\gdk\gdkdevicemanager.c" />
+   <File RelativePath="..\..\..\gdk\gdkdisplay.c" />
+   <File RelativePath="..\..\..\gdk\gdkdisplaymanager.c" />
+   <File RelativePath="..\..\..\gdk\gdkdnd.c" />
+   <File RelativePath="..\..\..\gdk\gdkevents.c" />
+   <File RelativePath="..\..\..\gdk\gdkframetimings.c" />
+   <File RelativePath="..\..\..\gdk\gdkglobals.c" />
+   <File RelativePath="..\..\..\gdk\gdkkeys.c" />
+   <File RelativePath="..\..\..\gdk\gdkkeyuni.c" />
+   <File RelativePath="..\..\..\gdk\gdkoffscreenwindow.c" />
+   <File RelativePath="..\..\..\gdk\gdkframeclock.c" />
+   <File RelativePath="..\..\..\gdk\gdkframeclockidle.c" />
+   <File RelativePath="..\..\..\gdk\gdkpango.c" />
+   <File RelativePath="..\..\..\gdk\gdkpixbuf-drawable.c" />
+   <File RelativePath="..\..\..\gdk\gdkproperty.c" />
+   <File RelativePath="..\..\..\gdk\gdkrectangle.c" />
+   <File RelativePath="..\..\..\gdk\gdkrgba.c" />
+   <File RelativePath="..\..\..\gdk\gdkscreen.c" />
+   <File RelativePath="..\..\..\gdk\gdkselection.c" />
+   <File RelativePath="..\..\..\gdk\gdkvisual.c" />
+   <File RelativePath="..\..\..\gdk\gdkwindow.c" />
+   <File RelativePath="..\..\..\gdk\gdkwindowimpl.c" />
+   <File RelativePath="..\..\..\gdk\gdkenumtypes.c" />
+   <File RelativePath="..\..\..\gdk\gdkmarshalers.c" />
+   <File RelativePath="..\..\..\gdk\gdkkeynames.c" />
+  </Filter>
+ </Files>
+</VisualStudioProject>

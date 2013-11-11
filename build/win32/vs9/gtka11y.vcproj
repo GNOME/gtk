@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="big5"?>
+<VisualStudioProject
+ ProjectType="Visual C++"
+ Version="9.00"
+ Name="gtka11y"
+ ProjectGUID="{F756B0DB-40A1-4E9F-BE1F-8F02CB86EA46}"
+ RootNamespace="gtka11y"
+ Keyword="Win32Proj"
+ TargetFrameworkVersion="196613"
+ >
+ <Platforms>
+  <Platform
+   Name="Win32"
+  />
+  <Platform
+   Name="x64"
+  />
+ </Platforms>
+ <ToolFiles>
+ </ToolFiles>
+ <Configurations>
+  <Configuration
+   Name="Debug|Win32"
+   InheritedPropertySheets=".\gtk-build-defines.vsprops;.\gtkprebuild.vsprops"
+   ConfigurationType="4"
+   CharacterSet="2"
+   >
+   <Tool
+    Name="VCPreBuildEventTool"
+   />
+   <Tool
+    Name="VCCLCompilerTool"
+    Optimization="0"
+    PreprocessorDefinitions="_DEBUG;G_ENABLE_DEBUG;$(GtkDefines)"
+    AdditionalIncludeDirectories="..\..\..\gtk;..\..\..\gdk;..\..\..\gdk\win32"
+    MinimalRebuild="true"
+    BasicRuntimeChecks="3"
+    RuntimeLibrary="3"
+    UsePrecompiledHeader="0"
+    WarningLevel="3"
+    DebugInformationFormat="4"
+   />
+  </Configuration>
+  <Configuration
+   Name="Debug_Broadway|Win32"
+   InheritedPropertySheets=".\gtk-build-defines.vsprops"
+   ConfigurationType="4"
+   CharacterSet="2"
+   >
+   <Tool
+    Name="VCPreBuildEventTool"
+   />
+   <Tool
+    Name="VCCLCompilerTool"
+    Optimization="0"
+    PreprocessorDefinitions="_DEBUG;G_ENABLE_DEBUG;$(GtkDefines)"
+    AdditionalIncludeDirectories="..\..\..\gtk;..\..\..\gdk;..\..\..\gdk\win32"
+    MinimalRebuild="true"
+    BasicRuntimeChecks="3"
+    RuntimeLibrary="3"
+    UsePrecompiledHeader="0"
+    WarningLevel="3"
+    DebugInformationFormat="4"
+   />
+  </Configuration>
+  <Configuration
+   Name="Debug|x64"
+   InheritedPropertySheets=".\gtk-build-defines.vsprops;.\gtkprebuild.vsprops"
+   ConfigurationType="4"
+   CharacterSet="2"
+   >
+   <Tool
+    Name="VCPreBuildEventTool"
+   />
+   <Tool
+    Name="VCCLCompilerTool"
+    Optimization="0"
+    PreprocessorDefinitions="_DEBUG;G_ENABLE_DEBUG;$(GtkDefines)"
+    AdditionalIncludeDirectories="..\..\..\gtk;..\..\..\gdk;..\..\..\gdk\win32"
+    MinimalRebuild="true"
+    BasicRuntimeChecks="3"
+    RuntimeLibrary="3"
+    UsePrecompiledHeader="0"
+    WarningLevel="3"
+    DebugInformationFormat="3"
+   />
+  </Configuration>
+  <Configuration
+   Name="Debug_Broadway|x64"
+   InheritedPropertySheets=".\gtk-build-defines.vsprops"
+   ConfigurationType="4"
+   CharacterSet="2"
+   >
+   <Tool
+    Name="VCPreBuildEventTool"
+   />
+   <Tool
+    Name="VCCLCompilerTool"
+    Optimization="0"
+    PreprocessorDefinitions="_DEBUG;G_ENABLE_DEBUG;$(GtkDefines)"
+    AdditionalIncludeDirectories="..\..\..\gtk;..\..\..\gdk;..\..\..\gdk\win32"
+    MinimalRebuild="true"
+    BasicRuntimeChecks="3"
+    RuntimeLibrary="3"
+    UsePrecompiledHeader="0"
+    WarningLevel="3"
+    DebugInformationFormat="3"
+   />
+  </Configuration>
+  <Configuration
+   Name="Release|Win32"
+   InheritedPropertySheets=".\gtk-build-defines.vsprops;.\gtkprebuild.vsprops"
+   ConfigurationType="4"
+   CharacterSet="2"
+   WholeProgramOptimization="1"
+   >
+   <Tool
+    Name="VCPreBuildEventTool"
+   />
+   <Tool
+    Name="VCCLCompilerTool"
+    Optimization="2"
+    EnableIntrinsicFunctions="true"
+    PreprocessorDefinitions="$(GtkDefines)"
+    AdditionalIncludeDirectories="..\..\..\gtk;..\..\..\gdk;..\..\..\gdk\win32"
+    RuntimeLibrary="2"
+    EnableFunctionLevelLinking="true"
+    UsePrecompiledHeader="0"
+    WarningLevel="3"
+    DebugInformationFormat="3"
+   />
+  </Configuration>
+  <Configuration
+   Name="Release_Broadway|Win32"
+   InheritedPropertySheets=".\gtk-build-defines.vsprops"
+   ConfigurationType="4"
+   CharacterSet="2"
+   WholeProgramOptimization="1"
+   >
+   <Tool
+    Name="VCPreBuildEventTool"
+   />
+   <Tool
+    Name="VCCLCompilerTool"
+    Optimization="2"
+    EnableIntrinsicFunctions="true"
+    PreprocessorDefinitions="$(GtkDefines)"
+    AdditionalIncludeDirectories="..\..\..\gtk;..\..\..\gdk;..\..\..\gdk\win32"
+    RuntimeLibrary="2"
+    EnableFunctionLevelLinking="true"
+    UsePrecompiledHeader="0"
+    WarningLevel="3"
+    DebugInformationFormat="3"
+   />
+  </Configuration>
+  <Configuration
+   Name="Release|x64"
+   InheritedPropertySheets=".\gtk-build-defines.vsprops;.\gtkprebuild.vsprops"
+   ConfigurationType="4"
+   CharacterSet="2"
+   WholeProgramOptimization="1"
+   >
+   <Tool
+    Name="VCPreBuildEventTool"
+   />
+   <Tool
+    Name="VCCLCompilerTool"
+    PreprocessorDefinitions="$(GtkDefines)"
+    AdditionalIncludeDirectories="..\..\..\gtk;..\..\..\gdk;..\..\..\gdk\win32"
+    RuntimeLibrary="2"
+    UsePrecompiledHeader="0"
+    WarningLevel="3"
+    DebugInformationFormat="3"
+   />
+  </Configuration>
+  <Configuration
+   Name="Release_Broadway|x64"
+   InheritedPropertySheets=".\gtk-build-defines.vsprops"
+   ConfigurationType="4"
+   CharacterSet="2"
+   WholeProgramOptimization="1"
+   >
+   <Tool
+    Name="VCPreBuildEventTool"
+   />
+   <Tool
+    Name="VCCLCompilerTool"
+    PreprocessorDefinitions="$(GtkDefines)"
+    AdditionalIncludeDirectories="..\..\..\gtk;..\..\..\gdk;..\..\..\gdk\win32"
+    RuntimeLibrary="2"
+    UsePrecompiledHeader="0"
+    WarningLevel="3"
+    DebugInformationFormat="3"
+   />
+  </Configuration>
+ </Configurations>
+ <References>
+ </References>
+ <Files>
+  <Filter
+   Name="Sources"
+   Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
+   UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
+   >
+   <File RelativePath="..\..\..\gtk\a11y\gtkaccessibility.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkaccessibilitymisc.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkaccessibilityutil.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkarrowaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkbooleancellaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkbuttonaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkcellaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkcellaccessibleparent.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkcheckmenuitemaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkcolorswatchaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkcomboboxaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkcontaineraccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkcontainercellaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkentryaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkexpanderaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkframeaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkiconviewaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkimageaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkimagecellaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtklabelaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtklevelbaraccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtklinkbuttonaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtklistboxaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtklistboxrowaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtklockbuttonaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkmenuaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkmenushellaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkmenuitemaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtknotebookaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtknotebookpageaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkpanedaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkprogressbaraccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkradiobuttonaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkradiomenuitemaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkrangeaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkrenderercellaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkscaleaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkscalebuttonaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkscrolledwindowaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkspinbuttonaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkspinneraccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkstatusbaraccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkswitchaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtktextcellaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtktextviewaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtktogglebuttonaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtktoplevelaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtktreeviewaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkwidgetaccessible.c" />
+   <File RelativePath="..\..\..\gtk\a11y\gtkwindowaccessible.c" />
+  </Filter>
+  <Filter
+   Name="Headers"
+   Filter="h;hpp;hxx;hm;inl;inc;xsd"
+   UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+   >
+  </Filter>
+  <Filter
+   Name="Resource Files"
+   Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
+   UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
+   >
+  </Filter>
+ </Files>
+ <Globals>
+ </Globals>
+</VisualStudioProject>
