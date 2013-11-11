@@ -156,7 +156,13 @@ typedef enum
    * 1) touch events emulating pointer events
    * 2) pointer events being emulated by a touch sequence.
    */
-  GDK_EVENT_POINTER_EMULATED = 1 << 1
+  GDK_EVENT_POINTER_EMULATED = 1 << 1,
+
+  /* When we are ready to draw a frame, we pause event delivery,
+   * mark all events in the queue with this flag, and deliver
+   * only those events until we finish the frame.
+   */
+  GDK_EVENT_FLUSHED = 1 << 2
 } GdkEventFlags;
 
 struct _GdkEventPrivate
@@ -305,6 +311,7 @@ GList* _gdk_event_queue_insert_before(GdkDisplay *display,
                                       GdkEvent   *event);
 
 void    _gdk_event_queue_handle_motion_compression (GdkDisplay *display);
+void    _gdk_event_queue_flush                     (GdkDisplay       *display);
 
 void   _gdk_event_button_generate    (GdkDisplay *display,
                                       GdkEvent   *event);

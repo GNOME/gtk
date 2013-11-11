@@ -40,7 +40,7 @@ gdk_event_source_prepare(GSource *base, gint *timeout)
   *timeout = -1;
 
   if (source->display->event_pause_count > 0)
-    return FALSE;
+    return _gdk_event_queue_find_first (source->display) != NULL;
 
   /* We have to add/remove the GPollFD if we want to update our
    * poll event mask dynamically.  Instead, let's just flush all
@@ -64,7 +64,7 @@ gdk_event_source_check(GSource *base)
   GdkWaylandEventSource *source = (GdkWaylandEventSource *) base;
 
   if (source->display->event_pause_count > 0)
-    return FALSE;
+    return _gdk_event_queue_find_first (source->display) != NULL;
 
   return _gdk_event_queue_find_first (source->display) != NULL ||
     source->pfd.revents;

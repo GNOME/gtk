@@ -116,7 +116,6 @@ struct _GdkDisplay
   guint event_pause_count;       /* How many times events are blocked */
 
   guint closed             : 1;  /* Whether this display has been closed */
-  guint flushing_events    : 1;  /* Inside gdk_display_flush_events */
 
   GArray *touch_implicit_grabs;
   GHashTable *device_grabs;
@@ -300,7 +299,6 @@ void                _gdk_display_pointer_info_foreach (GdkDisplay       *display
 gulong              _gdk_display_get_next_serial      (GdkDisplay       *display);
 void                _gdk_display_pause_events         (GdkDisplay       *display);
 void                _gdk_display_unpause_events       (GdkDisplay       *display);
-void                _gdk_display_flush_events         (GdkDisplay       *display);
 void                _gdk_display_event_data_copy      (GdkDisplay       *display,
                                                        const GdkEvent   *event,
                                                        GdkEvent         *new_event);

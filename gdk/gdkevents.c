@@ -88,20 +88,20 @@ _gdk_event_queue_find_first (GdkDisplay *display)
   GList *tmp_list;
   GList *pending_motion = NULL;
 
-  if (display->event_pause_count > 0)
-    return NULL;
+  gboolean paused = display->event_pause_count > 0;
 
   tmp_list = display->queued_events;
   while (tmp_list)
     {
       GdkEventPrivate *event = tmp_list->data;
 
-      if (!(event->flags & GDK_EVENT_PENDING))
+      if ((event->flags & GDK_EVENT_PENDING) == 0 &&
+	  (!paused || (event->flags & GDK_EVENT_FLUSHED) != 0))
         {
           if (pending_motion)
             return pending_motion;
 
-          if (event->event.type == GDK_MOTION_NOTIFY && !display->flushing_events)
+          if (event->event.type == GDK_MOTION_NOTIFY && (event->flags & GDK_EVENT_FLUSHED) == 0)
             pending_motion = tmp_list;
           else
             return tmp_list;
@@ -318,6 +318,18 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
       GdkFrameClock *clock = gdk_window_get_frame_clock (pending_motion_window);
       if (clock) /* might be NULL if window was destroyed */
 	gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS);
+    }
+}
+
+void
+_gdk_event_queue_flush (GdkDisplay *display)
+{
+  GList *tmp_list;
+
+  for (tmp_list = display->queued_events; tmp_list; tmp_list = tmp_list->next)
+    {
+      GdkEventPrivate *event = tmp_list->data;
+      event->flags |= GDK_EVENT_FLUSHED;
     }
 }
 

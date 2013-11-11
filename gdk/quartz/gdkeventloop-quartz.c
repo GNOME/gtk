@@ -647,7 +647,7 @@ gdk_event_prepare (GSource *source,
   *timeout = -1;
 
   if (_gdk_display->event_pause_count > 0)
-    retval = FALSE;
+    retval = _gdk_event_queue_find_first (_gdk_display) != NULL;
   else
     retval = (_gdk_event_queue_find_first (_gdk_display) != NULL ||
               _gdk_quartz_event_loop_check_pending ());
@@ -665,7 +665,7 @@ gdk_event_check (GSource *source)
   gdk_threads_enter ();
 
   if (_gdk_display->event_pause_count > 0)
-    retval = FALSE;
+    retval = _gdk_event_queue_find_first (_gdk_display) != NULL;
   else
     retval = (_gdk_event_queue_find_first (_gdk_display) != NULL ||
               _gdk_quartz_event_loop_check_pending ());
