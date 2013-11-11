@@ -8888,7 +8888,6 @@ bubble_targets_received (GtkClipboard     *clipboard,
   gboolean can_insert;
   GtkTextIter iter;
   GtkTextIter sel_start, sel_end;
-  GdkWindow *window;
   GtkWidget *toolbar;
 
   has_selection = gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
@@ -8902,8 +8901,7 @@ bubble_targets_received (GtkClipboard     *clipboard,
   if (priv->selection_bubble)
     gtk_widget_destroy (priv->selection_bubble);
 
-  window = gtk_widget_get_window (GTK_WIDGET (text_view));
-  priv->selection_bubble = _gtk_bubble_window_new ();
+  priv->selection_bubble = _gtk_bubble_window_new (GTK_WIDGET (text_view));
   toolbar = GTK_WIDGET (gtk_toolbar_new ());
   gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), GTK_TOOLBAR_TEXT);
   gtk_toolbar_set_show_arrow (GTK_TOOLBAR (toolbar), FALSE);
@@ -8931,7 +8929,7 @@ bubble_targets_received (GtkClipboard     *clipboard,
   rect.x -= priv->xoffset;
   rect.y -= priv->yoffset;
   _gtk_bubble_window_popup (GTK_BUBBLE_WINDOW (priv->selection_bubble),
-                           window, &rect, GTK_POS_TOP);
+                            GTK_WIDGET (text_view), &rect, GTK_POS_TOP);
 
   priv->selection_bubble_timeout_id = 0;
 }
