@@ -911,8 +911,6 @@ keyboard_handle_enter (void               *data,
                        device, device->keyboard_focus));
 
   _gdk_wayland_display_deliver_event (device->display, event);
-
-  _gdk_wayland_window_add_focus (device->keyboard_focus);
 }
 
 static void
@@ -935,7 +933,6 @@ keyboard_handle_leave (void               *data,
 
   _gdk_wayland_display_update_serial (wayland_display, serial);
 
-  _gdk_wayland_window_remove_focus (device->keyboard_focus);
   event = gdk_event_new (GDK_FOCUS_CHANGE);
   event->focus_change.window = g_object_ref (device->keyboard_focus);
   event->focus_change.send_event = FALSE;

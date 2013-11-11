@@ -164,9 +164,9 @@ gdk_registry_handle_global(void *data, struct wl_registry *registry, uint32_t id
 
     /* SHM interface is prerequisite */
     _gdk_wayland_display_load_cursor_theme(display_wayland);
-  } else if (strcmp(interface, "wl_shell") == 0) {
-    display_wayland->shell =
-	wl_registry_bind(display_wayland->wl_registry, id, &wl_shell_interface, 1);
+  } else if (strcmp(interface, "xdg_shell") == 0) {
+    display_wayland->xdg_shell =
+      wl_registry_bind(display_wayland->wl_registry, id, &xdg_shell_interface, 1);
   } else if (strcmp(interface, "gtk_shell") == 0) {
     display_wayland->gtk_shell =
       wl_registry_bind(display_wayland->wl_registry, id, &gtk_shell_interface, 1);
@@ -728,21 +728,21 @@ gdk_wayland_display_get_wl_compositor (GdkDisplay *display)
 }
 
 /**
- * gdk_wayland_display_get_wl_shell
+ * gdk_wayland_display_get_xdg_shell
  * @display: (type GdkWaylandDisplay): a #GdkDisplay
  *
  * Returns the Wayland global singleton shell of a #GdkDisplay
  *
- * Returns: (transfer none): a Wayland wl_shell
+ * Returns: (transfer none): a Wayland xdg_shell
  *
  * Since: 3.8
  */
-struct wl_shell *
-gdk_wayland_display_get_wl_shell (GdkDisplay *display)
+struct xdg_shell *
+gdk_wayland_display_get_xdg_shell (GdkDisplay *display)
 {
   GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY(display);
 
   g_return_val_if_fail (GDK_IS_WAYLAND_DISPLAY(display), NULL);
 
-  return wayland_display->shell;
+  return wayland_display->xdg_shell;
 }

@@ -20,6 +20,8 @@ noinst_LTLIBRARIES =				\
 	libgdk-wayland.la
 
 BUILT_SOURCES = 				\
+	xdg-shell-client-protocol.h		\
+	xdg-shell-protocol.c			\
 	gtk-shell-client-protocol.h		\
 	gtk-shell-protocol.c
 
@@ -57,6 +59,8 @@ libgdkwaylandinclude_HEADERS = 			\
 %-client-protocol.h : $(srcdir)/protocol/%.xml
 	$(AM_V_GEN)$(WAYLAND_SCANNER) client-header < $< > $@
 
-EXTRA_DIST += protocol/gtk-shell.xml
+EXTRA_DIST += 					\
+	protocol/xdg-shell.xml			\
+	protocol/gtk-shell.xml
 
 -include $(top_srcdir)/git.mk

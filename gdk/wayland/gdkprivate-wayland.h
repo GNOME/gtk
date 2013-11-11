@@ -42,9 +42,6 @@
 
 #define GDK_WINDOW_IS_WAYLAND(win)    (GDK_IS_WINDOW_IMPL_WAYLAND (((GdkWindow *)win)->impl))
 
-void _gdk_wayland_window_add_focus    (GdkWindow *window);
-void _gdk_wayland_window_remove_focus (GdkWindow *window);
-
 GdkKeymap *_gdk_wayland_keymap_new (void);
 void       _gdk_wayland_keymap_update_from_fd (GdkKeymap *keymap,
                                                uint32_t   format,
