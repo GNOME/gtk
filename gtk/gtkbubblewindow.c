@@ -59,7 +59,6 @@ struct _GtkBubbleWindowPrivate
   GdkDevice *device;
   GtkWidget *widget;
   GtkWindow *window;
-  GdkWindow *relative_to;
   cairo_rectangle_int_t pointing_to;
   gint win_x;
   gint win_y;
@@ -118,7 +117,7 @@ gtk_bubble_window_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_RELATIVE_TO:
-      g_value_set_object (value, priv->relative_to);
+      g_value_set_object (value, priv->widget);
       break;
     case PROP_POINTING_TO:
       g_value_set_boxed (value, &priv->pointing_to);
@@ -135,12 +134,8 @@ static void
 gtk_bubble_window_finalize (GObject *object)
 {
   GtkBubbleWindow *window = GTK_BUBBLE_WINDOW (object);
-  GtkBubbleWindowPrivate *priv = window->priv;
 
   _gtk_bubble_window_popdown (window);
-
-  if (priv->relative_to)
-    g_object_unref (priv->relative_to);
 
   G_OBJECT_CLASS (_gtk_bubble_window_parent_class)->finalize (object);
 }
@@ -827,7 +822,7 @@ _gtk_bubble_window_class_init (GtkBubbleWindowClass *klass)
                                    g_param_spec_object ("relative-to",
                                                         P_("Relative to"),
                                                         P_("Window the bubble window points to"),
-                                                        GDK_TYPE_WINDOW,
+                                                        GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE));
   g_object_class_install_property (object_class,
                                    PROP_POINTING_TO,
@@ -847,17 +842,14 @@ _gtk_bubble_window_class_init (GtkBubbleWindowClass *klass)
 
 static void
 gtk_bubble_window_update_relative_to (GtkBubbleWindow *window,
-                                      GdkWindow       *relative_to)
+                                      GtkWidget       *relative_to)
 {
   GtkBubbleWindowPrivate *priv;
 
   priv = window->priv;
 
-  if (priv->relative_to == relative_to)
+  if (priv->widget == relative_to)
     return;
-
-  if (priv->relative_to)
-    g_object_unref (priv->relative_to);
 
   if (priv->window)
     {
@@ -865,20 +857,12 @@ gtk_bubble_window_update_relative_to (GtkBubbleWindow *window,
       priv->window = NULL;
     }
 
-  priv->relative_to = (relative_to) ? g_object_ref (relative_to) : NULL;
+  priv->widget = relative_to;
   g_object_notify (G_OBJECT (window), "relative-to");
 
-  if (priv->relative_to)
-    {
-      gdk_window_get_user_data (priv->relative_to, (gpointer*) &priv->widget);
-      priv->window =
-        GTK_WINDOW (gtk_widget_get_ancestor (priv->widget, GTK_TYPE_WINDOW));
-    }
-  else
-    {
-      priv->window = NULL;
-      priv->widget = NULL;
-    }
+  if (priv->widget)
+    priv->window =
+      GTK_WINDOW (gtk_widget_get_ancestor (priv->widget, GTK_TYPE_WINDOW));
 
   if (priv->window)
     gtk_window_add_popover (priv->window, GTK_WIDGET (window));
@@ -917,9 +901,11 @@ gtk_bubble_window_update_preferred_position (GtkBubbleWindow *window,
  * Since: 3.8
  */
 GtkWidget *
-_gtk_bubble_window_new (void)
+_gtk_bubble_window_new (GtkWidget *relative_to)
 {
-  return g_object_new (GTK_TYPE_BUBBLE_WINDOW, NULL);
+  return g_object_new (GTK_TYPE_BUBBLE_WINDOW,
+                       "relative-to", relative_to,
+                       NULL);
 }
 
 /*
@@ -938,10 +924,10 @@ _gtk_bubble_window_new (void)
  */
 void
 _gtk_bubble_window_set_relative_to (GtkBubbleWindow *window,
-                                    GdkWindow       *relative_to)
+                                    GtkWidget       *relative_to)
 {
   g_return_if_fail (GTK_IS_BUBBLE_WINDOW (window));
-  g_return_if_fail (!relative_to || GDK_IS_WINDOW (relative_to));
+  g_return_if_fail (GTK_IS_WIDGET (relative_to));
 
   gtk_bubble_window_update_relative_to (window, relative_to);
 
@@ -961,7 +947,7 @@ _gtk_bubble_window_set_relative_to (GtkBubbleWindow *window,
  *
  * Since: 3.8
  */
-GdkWindow *
+GtkWidget *
 _gtk_bubble_window_get_relative_to (GtkBubbleWindow *window)
 {
   GtkBubbleWindowPrivate *priv;
@@ -970,7 +956,7 @@ _gtk_bubble_window_get_relative_to (GtkBubbleWindow *window)
 
   priv = window->priv;
 
-  return priv->relative_to;
+  return priv->widget;
 }
 
 /*
@@ -1092,12 +1078,12 @@ _gtk_bubble_window_get_position (GtkBubbleWindow *window)
  */
 void
 _gtk_bubble_window_popup (GtkBubbleWindow       *window,
-                          GdkWindow             *relative_to,
+                          GtkWidget             *relative_to,
                           cairo_rectangle_int_t *pointing_to,
                           GtkPositionType        position)
 {
   g_return_if_fail (GTK_IS_BUBBLE_WINDOW (window));
-  g_return_if_fail (!relative_to || GDK_IS_WINDOW (relative_to));
+  g_return_if_fail (GTK_IS_WIDGET (relative_to));
   g_return_if_fail (position >= GTK_POS_LEFT && position <= GTK_POS_BOTTOM);
   g_return_if_fail (pointing_to != NULL);
 
@@ -1122,8 +1108,6 @@ _gtk_bubble_window_popup (GtkBubbleWindow       *window,
 void
 _gtk_bubble_window_popdown (GtkBubbleWindow *window)
 {
-  GtkBubbleWindowPrivate *priv = window->priv;
-
   g_return_if_fail (GTK_IS_BUBBLE_WINDOW (window));
 
   if (gtk_widget_get_visible (GTK_WIDGET (window)))

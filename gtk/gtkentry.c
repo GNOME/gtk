@@ -9387,7 +9387,7 @@ bubble_targets_received (GtkClipboard     *clipboard,
   GtkEntry *entry = user_data;
   GtkEntryPrivate *priv = entry->priv;
   cairo_rectangle_int_t rect;
-  GtkAllocation allocation;
+  GtkAllocation allocation, primary, secondary;
   gint start_x, end_x;
   gboolean has_selection;
   gboolean has_clipboard;
@@ -9405,7 +9405,7 @@ bubble_targets_received (GtkClipboard     *clipboard,
   if (priv->selection_bubble)
     gtk_widget_destroy (priv->selection_bubble);
 
-  priv->selection_bubble = _gtk_bubble_window_new ();
+  priv->selection_bubble = _gtk_bubble_window_new (GTK_WIDGET (entry));
   toolbar = GTK_WIDGET (gtk_toolbar_new ());
   gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), GTK_TOOLBAR_TEXT);
   gtk_toolbar_set_show_arrow (GTK_TOOLBAR (toolbar), FALSE);
@@ -9434,7 +9434,9 @@ bubble_targets_received (GtkClipboard     *clipboard,
   start_x -= priv->scroll_offset;
   start_x = CLAMP (start_x, 0, gdk_window_get_width (priv->text_area));
 
-  rect.y = 0;
+  gtk_entry_get_text_area_size (entry, &rect.x, &rect.y, NULL, NULL);
+  get_icon_allocations (entry, &primary, &secondary);
+  rect.x += primary.width;
   rect.height = gdk_window_get_height (priv->text_area);
 
   if (has_selection)
@@ -9442,17 +9444,17 @@ bubble_targets_received (GtkClipboard     *clipboard,
       end_x = gtk_entry_get_selection_bound_location (entry) - priv->scroll_offset;
       end_x = CLAMP (end_x, 0, gdk_window_get_width (priv->text_area));
 
-      rect.x = MIN (start_x, end_x);
-      rect.width = MAX (start_x, end_x) - rect.x;
+      rect.x += MIN (start_x, end_x);
+      rect.width = MAX (start_x, end_x) - MIN (start_x, end_x);
     }
   else
     {
-      rect.x = start_x;
+      rect.x += start_x;
       rect.width = 0;
     }
 
   _gtk_bubble_window_popup (GTK_BUBBLE_WINDOW (priv->selection_bubble),
-                            priv->text_area, &rect, GTK_POS_TOP);
+                            GTK_WIDGET (entry), &rect, GTK_POS_TOP);
 
   priv->selection_bubble_timeout_id = 0;
 }

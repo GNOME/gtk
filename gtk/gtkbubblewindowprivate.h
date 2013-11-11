@@ -47,11 +47,11 @@ struct _GtkBubbleWindowClass
 
 GType       _gtk_bubble_window_get_type        (void) G_GNUC_CONST;
 
-GtkWidget * _gtk_bubble_window_new             (void);
+GtkWidget * _gtk_bubble_window_new             (GtkWidget             *relative_to);
 
-void        _gtk_bubble_window_set_relative_to (GtkBubbleWindow *window,
-                                                GdkWindow       *relative_to);
-GdkWindow * _gtk_bubble_window_get_relative_to (GtkBubbleWindow *window);
+void        _gtk_bubble_window_set_relative_to (GtkBubbleWindow       *window,
+                                                GtkWidget             *relative_to);
+GtkWidget * _gtk_bubble_window_get_relative_to (GtkBubbleWindow       *window);
 
 void        _gtk_bubble_window_set_pointing_to (GtkBubbleWindow       *window,
                                                 cairo_rectangle_int_t *rect);
@@ -64,7 +64,7 @@ GtkPositionType
             _gtk_bubble_window_get_position    (GtkBubbleWindow       *window);
 
 void        _gtk_bubble_window_popup           (GtkBubbleWindow       *window,
-                                                GdkWindow             *relative_to,
+                                                GtkWidget             *relative_to,
                                                 cairo_rectangle_int_t *pointing_to,
                                                 GtkPositionType        position);
 
