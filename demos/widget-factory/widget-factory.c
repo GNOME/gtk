@@ -130,9 +130,20 @@ dismiss (GtkWidget *button)
 }
 
 static gint pulse_time = 250;
+static guint pulse_id = 0;
+
+static gboolean
+pulse_it (GtkWidget *widget)
+{
+  gtk_progress_bar_pulse (GTK_PROGRESS_BAR (widget));
+
+  pulse_id = g_timeout_add (pulse_time, (GSourceFunc)pulse_it, widget);
+
+  return G_SOURCE_REMOVE;
+}
 
 static void
-update_pulse_time (GtkAdjustment *adjustment)
+update_pulse_time (GtkAdjustment *adjustment, GtkWidget *widget)
 {
   gdouble value;
 
@@ -140,16 +151,16 @@ update_pulse_time (GtkAdjustment *adjustment)
 
   /* vary between 50 and 450 */
   pulse_time = 50 + 4 * value;
-}
 
-static gboolean
-pulse_it (GtkWidget *widget)
-{
-  gtk_progress_bar_pulse (GTK_PROGRESS_BAR (widget));
-
-  g_timeout_add (pulse_time, pulse_it, widget);
-  
-  return G_SOURCE_REMOVE;
+  if (value == 100 && pulse_id != 0)
+    {
+      g_source_remove (pulse_id);
+      pulse_id = 0;
+    }
+  else if (value < 100 && pulse_id == 0)
+    {
+      pulse_id = g_timeout_add (pulse_time, (GSourceFunc)pulse_it, widget);
+    }
 }
 
 static void
@@ -188,12 +199,11 @@ activate (GApplication *app)
                                    win_entries, G_N_ELEMENTS (win_entries),
                                    window);
 
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "progressbar3");
+  pulse_id = g_timeout_add (250, (GSourceFunc)pulse_it, widget);
   g_signal_connect (gtk_builder_get_object (builder, "adjustment1"),
                     "value-changed",
-                    G_CALLBACK (update_pulse_time), NULL);
-
-  widget = (GtkWidget *)gtk_builder_get_object (builder, "progressbar3");
-  g_timeout_add (250, (GSourceFunc)pulse_it, widget);
+                    G_CALLBACK (update_pulse_time), widget);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "page2dismiss");
   g_signal_connect (widget, "clicked", G_CALLBACK (dismiss), NULL);
