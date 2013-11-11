@@ -62,6 +62,8 @@ enum {
 struct _GtkBubbleWindowPrivate
 {
   GdkDevice *device;
+  GtkWidget *widget;
+  GtkWindow *window;
   GdkWindow *relative_to;
   cairo_rectangle_int_t pointing_to;
   gint win_x;
@@ -72,45 +74,18 @@ struct _GtkBubbleWindowPrivate
   guint final_position     : 2;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkBubbleWindow, _gtk_bubble_window, GTK_TYPE_WINDOW)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkBubbleWindow, _gtk_bubble_window, GTK_TYPE_BIN)
 
 static void
 _gtk_bubble_window_init (GtkBubbleWindow *window)
 {
   GtkWidget *widget;
-  GdkScreen *screen;
-  GdkVisual *visual;
 
   widget = GTK_WIDGET (window);
+  gtk_widget_set_has_window (widget, TRUE);
   window->priv = _gtk_bubble_window_get_instance_private (window);
-  gtk_window_set_default_size (GTK_WINDOW (window),
-                               TAIL_GAP_WIDTH, TAIL_GAP_WIDTH);
-  gtk_widget_set_app_paintable (widget, TRUE);
-
-  screen = gtk_widget_get_screen (widget);
-  visual = gdk_screen_get_rgba_visual (screen);
-
-  if (visual)
-    gtk_widget_set_visual (widget, visual);
-
   gtk_style_context_add_class (gtk_widget_get_style_context (widget),
                                GTK_STYLE_CLASS_OSD);
-}
-
-static GObject *
-gtk_bubble_window_constructor (GType                  type,
-                               guint                  n_construct_properties,
-                               GObjectConstructParam *construct_properties)
-{
-  GObject *object;
-
-  object =
-    G_OBJECT_CLASS (_gtk_bubble_window_parent_class)->constructor (type,
-                                                                  n_construct_properties,
-                                                                  construct_properties);
-  g_object_set (object, "type", GTK_WINDOW_POPUP, NULL);
-
-  return object;
 }
 
 static void
@@ -177,26 +152,86 @@ gtk_bubble_window_finalize (GObject *object)
 }
 
 static void
+gtk_bubble_window_dispose (GObject *object)
+{
+  GtkBubbleWindow *window = GTK_BUBBLE_WINDOW (object);
+  GtkBubbleWindowPrivate *priv = window->priv;
+
+  if (priv->window)
+    gtk_window_remove_popover (priv->window, GTK_WIDGET (object));
+
+  priv->window = NULL;
+  priv->widget = NULL;
+
+  G_OBJECT_CLASS (_gtk_bubble_window_parent_class)->dispose (object);
+}
+
+static void
+gtk_bubble_window_realize (GtkWidget *widget)
+{
+  GtkAllocation allocation;
+  GdkWindowAttr attributes;
+  gint attributes_mask;
+  GdkWindow *window;
+
+  gtk_widget_get_allocation (widget, &allocation);
+
+  attributes.x = 0;
+  attributes.y = 0;
+  attributes.width = allocation.width;
+  attributes.height = allocation.height;
+  attributes.window_type = GDK_WINDOW_CHILD;
+  attributes.visual = gtk_widget_get_visual (widget);
+  attributes.wclass = GDK_INPUT_OUTPUT;
+  attributes.event_mask =
+    gtk_widget_get_events (widget) |
+    GDK_BUTTON_MOTION_MASK |
+    GDK_BUTTON_PRESS_MASK |
+    GDK_BUTTON_RELEASE_MASK |
+    GDK_EXPOSURE_MASK |
+    GDK_ENTER_NOTIFY_MASK |
+    GDK_LEAVE_NOTIFY_MASK;
+
+  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
+  window = gdk_window_new (gtk_widget_get_parent_window (widget),
+                           &attributes, attributes_mask);
+  gtk_widget_set_window (widget, window);
+  gtk_widget_register_window (widget, window);
+  gtk_widget_set_realized (widget, TRUE);
+}
+
+static void
+gtk_bubble_window_map (GtkWidget *widget)
+{
+  gdk_window_show (gtk_widget_get_window (widget));
+  GTK_WIDGET_CLASS (_gtk_bubble_window_parent_class)->map (widget);
+}
+
+static void
+gtk_bubble_window_unmap (GtkWidget *widget)
+{
+  gdk_window_hide (gtk_widget_get_window (widget));
+  GTK_WIDGET_CLASS (_gtk_bubble_window_parent_class)->unmap (widget);
+}
+
+static void
 gtk_bubble_window_get_pointed_to_coords (GtkBubbleWindow       *window,
                                          gint                  *x,
                                          gint                  *y,
-                                         cairo_rectangle_int_t *root_rect)
+                                         cairo_rectangle_int_t *rect_out)
 {
   GtkBubbleWindowPrivate *priv = window->priv;
   cairo_rectangle_int_t rect;
-  GdkScreen *screen;
+  GtkAllocation window_alloc;
 
   rect = priv->pointing_to;
-  screen = gtk_widget_get_screen (GTK_WIDGET (window));
-
-  if (priv->relative_to)
-    gdk_window_get_root_coords (priv->relative_to,
-                                rect.x, rect.y, &rect.x, &rect.y);
+  gtk_widget_get_allocation (GTK_WIDGET (priv->window), &window_alloc);
+  gtk_widget_translate_coordinates (priv->widget, GTK_WIDGET (priv->window),
+                                    rect.x, rect.y, &rect.x, &rect.y);
 
   if (POS_IS_VERTICAL (priv->final_position))
     {
-      *x = CLAMP (rect.x + (rect.width / 2),
-                  0, gdk_screen_get_width (screen));
+      *x = CLAMP (rect.x + (rect.width / 2), 0, window_alloc.width);
       *y = rect.y;
 
       if (priv->final_position == GTK_POS_BOTTOM)
@@ -204,16 +239,15 @@ gtk_bubble_window_get_pointed_to_coords (GtkBubbleWindow       *window,
     }
   else
     {
-      *y = CLAMP (rect.y + (rect.height / 2),
-                  0, gdk_screen_get_height (screen));
+      *y = CLAMP (rect.y + (rect.height / 2), 0, window_alloc.height);
       *x = rect.x;
 
       if (priv->final_position == GTK_POS_RIGHT)
         (*x) += rect.width;
     }
 
-  if (root_rect)
-    *root_rect = rect;
+  if (rect_out)
+    *rect_out = rect;
 }
 
 static void
@@ -448,10 +482,7 @@ gtk_bubble_window_update_shape (GtkBubbleWindow *window)
   region = gdk_cairo_region_create_from_surface (surface);
   cairo_surface_destroy (surface);
 
-  if (!gtk_widget_is_composited (GTK_WIDGET (window)))
-    gtk_widget_shape_combine_region (GTK_WIDGET (window), region);
-
-  gtk_widget_input_shape_combine_region (GTK_WIDGET (window), region);
+  gtk_widget_shape_combine_region (GTK_WIDGET (window), region);
   cairo_region_destroy (region);
 }
 
@@ -508,9 +539,12 @@ gtk_bubble_window_update_position (GtkBubbleWindow *window)
 
   priv->win_x = win_x;
   priv->win_y = win_y;
-  gtk_window_move (GTK_WINDOW (window), win_x, win_y);
 
-  gtk_widget_queue_resize (GTK_WIDGET (window));
+  gtk_window_set_popover_position (priv->window,
+                                   GTK_WIDGET (window),
+                                   win_x, win_y);
+
+  gtk_bubble_window_update_shape (window);
 }
 
 static gboolean
@@ -531,15 +565,6 @@ gtk_bubble_window_draw (GtkWidget *widget,
   context = gtk_widget_get_style_context (widget);
   state = gtk_widget_get_state_flags (widget);
   gtk_widget_get_allocation (widget, &allocation);
-
-  if (gtk_widget_is_composited (widget))
-    {
-      cairo_save (cr);
-      cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-      cairo_set_source_rgba (cr, 0, 0, 0, 0);
-      cairo_paint (cr);
-      cairo_restore (cr);
-    }
 
   gtk_bubble_window_get_rect_coords (GTK_BUBBLE_WINDOW (widget),
                                      &rect_x1, &rect_y1,
@@ -714,8 +739,8 @@ gtk_bubble_window_size_allocate (GtkWidget     *widget,
 
       get_padding_and_border (widget, &border);
 
-      child_alloc.x = border.left;
-      child_alloc.y = border.top;
+      child_alloc.x = allocation->x + border.left;
+      child_alloc.y = allocation->y + border.top;
       child_alloc.width = allocation->width - border.left - border.right;
       child_alloc.height = allocation->height - border.top - border.bottom;
 
@@ -733,7 +758,11 @@ gtk_bubble_window_size_allocate (GtkWidget     *widget,
     }
 
   if (gtk_widget_get_realized (widget))
-    gtk_bubble_window_update_shape (GTK_BUBBLE_WINDOW (widget));
+    {
+      gdk_window_move_resize (gtk_widget_get_window (widget),
+                              0, 0, allocation->width, allocation->height);
+      gtk_bubble_window_update_shape (GTK_BUBBLE_WINDOW (widget));
+    }
 
   if (gtk_widget_get_visible (widget))
     gtk_bubble_window_update_position (GTK_BUBBLE_WINDOW (widget));
@@ -810,30 +839,19 @@ gtk_bubble_window_grab_notify (GtkWidget *widget,
 }
 
 static void
-gtk_bubble_window_screen_changed (GtkWidget *widget,
-                                  GdkScreen *previous_screen)
-{
-  GdkScreen *screen;
-  GdkVisual *visual;
-
-  screen = gtk_widget_get_screen (widget);
-  visual = gdk_screen_get_rgba_visual (screen);
-
-  if (visual)
-    gtk_widget_set_visual (widget, visual);
-}
-
-static void
 _gtk_bubble_window_class_init (GtkBubbleWindowClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->constructor = gtk_bubble_window_constructor;
   object_class->set_property = gtk_bubble_window_set_property;
   object_class->get_property = gtk_bubble_window_get_property;
   object_class->finalize = gtk_bubble_window_finalize;
+  object_class->dispose = gtk_bubble_window_dispose;
 
+  widget_class->realize = gtk_bubble_window_realize;
+  widget_class->map = gtk_bubble_window_map;
+  widget_class->unmap = gtk_bubble_window_unmap;
   widget_class->get_preferred_width = gtk_bubble_window_get_preferred_width;
   widget_class->get_preferred_height = gtk_bubble_window_get_preferred_height;
   widget_class->size_allocate = gtk_bubble_window_size_allocate;
@@ -842,7 +860,6 @@ _gtk_bubble_window_class_init (GtkBubbleWindowClass *klass)
   widget_class->key_press_event = gtk_bubble_window_key_press;
   widget_class->grab_broken_event = gtk_bubble_window_grab_broken;
   widget_class->grab_notify = gtk_bubble_window_grab_notify;
-  widget_class->screen_changed = gtk_bubble_window_screen_changed;
 
   g_object_class_install_property (object_class,
                                    PROP_RELATIVE_TO,
@@ -881,8 +898,29 @@ gtk_bubble_window_update_relative_to (GtkBubbleWindow *window,
   if (priv->relative_to)
     g_object_unref (priv->relative_to);
 
+  if (priv->window)
+    {
+      gtk_window_remove_popover (priv->window, GTK_WIDGET (window));
+      priv->window = NULL;
+    }
+
   priv->relative_to = (relative_to) ? g_object_ref (relative_to) : NULL;
   g_object_notify (G_OBJECT (window), "relative-to");
+
+  if (priv->relative_to)
+    {
+      gdk_window_get_user_data (priv->relative_to, (gpointer*) &priv->widget);
+      priv->window =
+        GTK_WINDOW (gtk_widget_get_ancestor (priv->widget, GTK_TYPE_WINDOW));
+    }
+  else
+    {
+      priv->window = NULL;
+      priv->widget = NULL;
+    }
+
+  if (priv->window)
+    gtk_window_add_popover (priv->window, GTK_WIDGET (window));
 }
 
 static void
@@ -1106,10 +1144,10 @@ _gtk_bubble_window_popup (GtkBubbleWindow       *window,
   gtk_bubble_window_update_relative_to (window, relative_to);
   gtk_bubble_window_update_pointing_to (window, pointing_to);
 
+  gtk_bubble_window_update_position (window);
+
   if (!gtk_widget_get_visible (GTK_WIDGET (window)))
     gtk_widget_show (GTK_WIDGET (window));
-
-  gtk_bubble_window_update_position (window);
 }
 
 /*
