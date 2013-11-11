@@ -34,7 +34,7 @@ typedef struct _GtkBubbleWindowClass GtkBubbleWindowClass;
 
 struct _GtkBubbleWindow
 {
-  GtkWindow parent_instance;
+  GtkBin parent_instance;
 
   /*< private >*/
   gpointer priv;
@@ -42,7 +42,7 @@ struct _GtkBubbleWindow
 
 struct _GtkBubbleWindowClass
 {
-  GtkWindowClass parent_class;
+  GtkBinClass parent_class;
 };
 
 GType       _gtk_bubble_window_get_type        (void) G_GNUC_CONST;
