@@ -108,6 +108,8 @@ void                   gtk_stack_set_transition_type     (GtkStack              
                                                           GtkStackTransitionType  transition);
 GDK_AVAILABLE_IN_3_10
 GtkStackTransitionType gtk_stack_get_transition_type     (GtkStack               *stack);
+GDK_AVAILABLE_IN_3_12
+gboolean               gtk_stack_get_transition_running  (GtkStack               *stack);
 
 G_END_DECLS
 

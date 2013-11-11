@@ -85,6 +85,7 @@ enum  {
   PROP_VISIBLE_CHILD_NAME,
   PROP_TRANSITION_DURATION,
   PROP_TRANSITION_TYPE,
+  PROP_TRANSITION_RUNNING,
   LAST_PROP
 };
 
@@ -236,6 +237,9 @@ gtk_stack_get_property (GObject   *object,
       break;
     case PROP_TRANSITION_TYPE:
       g_value_set_enum (value, gtk_stack_get_transition_type (stack));
+      break;
+    case PROP_TRANSITION_RUNNING:
+      g_value_set_boolean (value, gtk_stack_get_transition_running (stack));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -394,6 +398,11 @@ gtk_stack_class_init (GtkStackClass *klass)
                                                          GTK_TYPE_STACK_TRANSITION_TYPE,
                                                          GTK_STACK_TRANSITION_TYPE_NONE,
                                                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT);
+  stack_props[PROP_TRANSITION_RUNNING] = g_param_spec_boolean ("transition-running",
+                                                               P_("Transition running"),
+                                                               P_("Whether or not the transition is currently running"),
+                                                               FALSE,
+                                                               GTK_PARAM_READABLE);
 
   g_object_class_install_properties (object_class, LAST_PROP, stack_props);
 
@@ -780,6 +789,7 @@ gtk_stack_transition_cb (GtkStack      *stack,
     {
       gtk_widget_set_opacity (GTK_WIDGET (stack), 1.0);
       priv->tick_id = 0;
+      g_object_notify_by_pspec (G_OBJECT (stack), stack_props[PROP_TRANSITION_RUNNING]);
 
       return FALSE;
     }
@@ -796,6 +806,7 @@ gtk_stack_schedule_ticks (GtkStack *stack)
     {
       priv->tick_id =
         gtk_widget_add_tick_callback (GTK_WIDGET (stack), (GtkTickCallback)gtk_stack_transition_cb, stack, NULL);
+      g_object_notify_by_pspec (G_OBJECT (stack), stack_props[PROP_TRANSITION_RUNNING]);
     }
 }
 
@@ -808,6 +819,7 @@ gtk_stack_unschedule_ticks (GtkStack *stack)
     {
       gtk_widget_remove_tick_callback (GTK_WIDGET (stack), priv->tick_id);
       priv->tick_id = 0;
+      g_object_notify_by_pspec (G_OBJECT (stack), stack_props[PROP_TRANSITION_RUNNING]);
     }
 }
 
@@ -1266,6 +1278,27 @@ gtk_stack_set_transition_type (GtkStack              *stack,
   priv->transition_type = transition;
   g_object_notify_by_pspec (G_OBJECT (stack),
                             stack_props[PROP_TRANSITION_TYPE]);
+}
+
+/**
+ * gtk_stack_get_transition_running:
+ * @stack: a #GtkStack
+ *
+ * Returns whether the @stack is currently in a transition from one page to
+ * another.
+ *
+ * Return value: %TRUE if the transition is currently running, %FALSE otherwise.
+ *
+ * Since: 3.12
+ */
+gboolean
+gtk_stack_get_transition_running (GtkStack *stack)
+{
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+
+  g_return_val_if_fail (GTK_IS_STACK (stack), FALSE);
+
+  return (priv->tick_id != 0);
 }
 
 /**
