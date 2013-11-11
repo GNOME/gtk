@@ -1,3 +1,31 @@
+Overview of Changes in GTK+ 3.10.2 to 3.10.3
+============================================
+
+* Theme support
+ - Always fall back to 'gnome' icon theme in addition to 'hicolor'
+ - Respect deprecated gtk-button-images setting
+ - Respect deprecated gtk-menu-images setting
+
+* Bugs fixed:
+ 577642 Selected Printer Does Not Stick Between Sessions
+ 693227 Incorrect size allocation with overflow
+ 703784 Epiphany crash during displaying printing dialog
+ 710389 x11: Don't set WM_TAKE_FOCUS if accept_focus is FALSE
+ 710411 [PATCH] Fix key "Page_Down" identified as "Next"
+ 710666 Frame clock related bug fixes
+ 710958 Problem with very large window
+ 711110 GDK_HINT_MAX_SIZE ignored on Win32
+ 711255 GtkListBox: Expand the placeholder
+ 711553 gdk/win32: remove extra allocation for \r removal
+ 711611 GtkStack: Use new-style property installation/notification 
+
+* Translation updates:
+ Arabic
+ German
+ Greek
+ Russian
+
+
 Overview of Changes in GTK+ 3.10.1 to 3.10.2
 ============================================
 
