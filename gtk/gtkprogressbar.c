@@ -588,11 +588,17 @@ tick_cb (GtkWidget     *widget,
   g_assert (priv->pulse2 > priv->pulse1);
   g_assert (frame2 > priv->frame1);
 
+  if (frame2 - priv->pulse2 > 3 * (priv->pulse2 - priv->pulse1))
+    {
+      priv->pulse1 = 0;
+      return G_SOURCE_CONTINUE;
+    }
+
   /* Determine the fraction to move the block from one frame
    * to the next when pulse_fraction is how far the block should
    * move between two calls to gtk_progress_bar_pulse().
    */
-  fraction = priv->pulse_fraction * (frame2 - priv->frame1) / (priv->pulse2 - priv->pulse1);
+  fraction = priv->pulse_fraction * (frame2 - priv->frame1) / MAX (frame2 - priv->pulse2, priv->pulse2 - priv->pulse1);
 
   priv->frame1 = frame2;
 
