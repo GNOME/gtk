@@ -46,11 +46,6 @@
 
 #define POS_IS_VERTICAL(p) ((p) == GTK_POS_TOP || (p) == GTK_POS_BOTTOM)
 
-#define GRAB_EVENT_MASK                             \
-  GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | \
-  GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK |       \
-  GDK_POINTER_MOTION_MASK
-
 typedef struct _GtkBubbleWindowPrivate GtkBubbleWindowPrivate;
 
 enum {
@@ -69,7 +64,6 @@ struct _GtkBubbleWindowPrivate
   gint win_x;
   gint win_y;
   guint has_pointing_to    : 1;
-  guint grabbed            : 1;
   guint preferred_position : 2;
   guint final_position     : 2;
 };
@@ -807,37 +801,6 @@ gtk_bubble_window_key_press (GtkWidget   *widget,
   return GDK_EVENT_PROPAGATE;
 }
 
-static gboolean
-gtk_bubble_window_grab_broken (GtkWidget          *widget,
-                               GdkEventGrabBroken *grab_broken)
-{
-  GtkBubbleWindow *window = GTK_BUBBLE_WINDOW (widget);
-  GtkBubbleWindowPrivate *priv;
-  GdkDevice *event_device;
-
-  priv = window->priv;
-  event_device = gdk_event_get_device ((GdkEvent *) grab_broken);
-
-  if (event_device == priv->device ||
-      event_device == gdk_device_get_associated_device (priv->device))
-    _gtk_bubble_window_ungrab (window);
-
-  return FALSE;
-}
-
-static void
-gtk_bubble_window_grab_notify (GtkWidget *widget,
-                               gboolean   was_grabbed)
-{
-  GtkBubbleWindow *window = GTK_BUBBLE_WINDOW (widget);
-  GtkBubbleWindowPrivate *priv;
-
-  priv = window->priv;
-
-  if (priv->device && gtk_widget_device_is_shadowed (widget, priv->device))
-    _gtk_bubble_window_ungrab (window);
-}
-
 static void
 _gtk_bubble_window_class_init (GtkBubbleWindowClass *klass)
 {
@@ -858,8 +821,6 @@ _gtk_bubble_window_class_init (GtkBubbleWindowClass *klass)
   widget_class->draw = gtk_bubble_window_draw;
   widget_class->button_press_event = gtk_bubble_window_button_press;
   widget_class->key_press_event = gtk_bubble_window_key_press;
-  widget_class->grab_broken_event = gtk_bubble_window_grab_broken;
-  widget_class->grab_notify = gtk_bubble_window_grab_notify;
 
   g_object_class_install_property (object_class,
                                    PROP_RELATIVE_TO,
@@ -1156,11 +1117,6 @@ _gtk_bubble_window_popup (GtkBubbleWindow       *window,
  *
  * Removes the window from the screen
  *
- * <note>
- *   If a grab was previously added through gtk_bubble_window_grab(),
- *   the grab will be removed by this function.
- * </note>
- *
  * Since: 3.8
  */
 void
@@ -1170,111 +1126,6 @@ _gtk_bubble_window_popdown (GtkBubbleWindow *window)
 
   g_return_if_fail (GTK_IS_BUBBLE_WINDOW (window));
 
-  if (priv->grabbed)
-    _gtk_bubble_window_ungrab (window);
-
   if (gtk_widget_get_visible (GTK_WIDGET (window)))
     gtk_widget_hide (GTK_WIDGET (window));
-}
-
-/*
- * gtk_bubble_window_grab:
- * @window: a #GtkBubbleWindow
- * @device: a master #GdkDevice
- * @activate_time: timestamp to perform the grab
- *
- * This function performs GDK and GTK+ grabs on @device and
- * its paired #GdkDevice. After this call all pointer/keyboard
- * events will be handled by @window.
- *
- * Calling this also brings in a #GtkMenu alike behavior, clicking
- * outside the #GtkBubbleWindow or pressing the Escape key will
- * popdown the menu by default.
- *
- * <note>
- *   If there was a previous grab, it will be undone before doing
- *   the requested grab.
- * </note>
- *
- * Returns: %TRUE if the grab was successful
- *
- * Since: 3.8
- */
-gboolean
-_gtk_bubble_window_grab (GtkBubbleWindow *window,
-                         GdkDevice       *device,
-                         guint32          activate_time)
-{
-  GtkBubbleWindowPrivate *priv;
-  GdkDevice *other_device;
-  GdkWindow *grab_window;
-  GdkGrabStatus status;
-
-  g_return_val_if_fail (GTK_IS_BUBBLE_WINDOW (window), FALSE);
-  g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
-  g_return_val_if_fail (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_MASTER, FALSE);
-
-  priv = window->priv;
-
-  if (!priv->has_pointing_to ||
-      gdk_window_is_destroyed (priv->relative_to))
-    return FALSE;
-
-  if (priv->device)
-    _gtk_bubble_window_ungrab (window);
-
-  gtk_widget_realize (GTK_WIDGET (window));
-  grab_window = gtk_widget_get_window (GTK_WIDGET (window));
-  other_device = gdk_device_get_associated_device (device);
-
-  status = gdk_device_grab (device, grab_window,
-                            GDK_OWNERSHIP_WINDOW, TRUE, GRAB_EVENT_MASK,
-                            NULL, activate_time);
-
-  if (status == GDK_GRAB_SUCCESS)
-    {
-      status = gdk_device_grab (other_device, grab_window,
-                                GDK_OWNERSHIP_WINDOW, TRUE, GRAB_EVENT_MASK,
-                                NULL, activate_time);
-
-      /* Ungrab the first device on error */
-      if (status != GDK_GRAB_SUCCESS)
-        gdk_device_ungrab (device, activate_time);
-    }
-
-  if (status == GDK_GRAB_SUCCESS)
-    {
-      gtk_device_grab_add (GTK_WIDGET (window), device, TRUE);
-      priv->device = device;
-    }
-
-  return status == GDK_GRAB_SUCCESS;
-}
-
-/*
- * gtk_bubble_window_ungrab:
- * @window: a #GtkBubbleWindow
- *
- * This functions undoes a grab added through gtk_bubble_window_grab()
- * in this @window,
- *
- * Since: 3.8
- */
-void
-_gtk_bubble_window_ungrab (GtkBubbleWindow *window)
-{
-  GtkBubbleWindowPrivate *priv;
-
-  g_return_if_fail (GTK_IS_BUBBLE_WINDOW (window));
-
-  priv = window->priv;
-
-  if (!priv->device)
-    return;
-
-  gdk_device_ungrab (priv->device, GDK_CURRENT_TIME);
-  gdk_device_ungrab (gdk_device_get_associated_device (priv->device),
-                     GDK_CURRENT_TIME);
-  gtk_device_grab_remove (GTK_WIDGET (window), priv->device);
-  priv->device = NULL;
 }

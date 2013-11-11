@@ -70,12 +70,6 @@ void        _gtk_bubble_window_popup           (GtkBubbleWindow       *window,
 
 void        _gtk_bubble_window_popdown         (GtkBubbleWindow       *window);
 
-gboolean    _gtk_bubble_window_grab            (GtkBubbleWindow       *window,
-                                                GdkDevice             *device,
-                                                guint32                activate_time);
-
-void        _gtk_bubble_window_ungrab          (GtkBubbleWindow       *window);
-
 G_END_DECLS
 
 #endif /* __GTK_BUBBLE_WINDOW_H__ */
