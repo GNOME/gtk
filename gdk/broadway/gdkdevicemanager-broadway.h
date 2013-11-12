@@ -37,6 +37,7 @@ struct _GdkBroadwayDeviceManager
   GdkDeviceManager parent_object;
   GdkDevice *core_pointer;
   GdkDevice *core_keyboard;
+  GdkDevice *touchscreen;
 };
 
 struct _GdkBroadwayDeviceManagerClass

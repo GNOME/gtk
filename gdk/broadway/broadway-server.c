@@ -236,6 +236,9 @@ update_event_state (BroadwayServer *server,
     server->last_state = message->pointer.state;
     server->real_mouse_in_toplevel_id = message->pointer.mouse_window_id;
     break;
+  case BROADWAY_EVENT_TOUCH:
+    server->last_state = message->touch.state;
+    break;
   case BROADWAY_EVENT_KEY_PRESS:
   case BROADWAY_EVENT_KEY_RELEASE:
     server->last_state = message->key.state;
@@ -368,6 +371,21 @@ parse_pointer_data (guint32 *p, BroadwayInputPointerMsg *data)
   return p;
 }
 
+static guint32 *
+parse_touch_data (guint32 *p, BroadwayInputTouchMsg *data)
+{
+  data->touch_type = ntohl (*p++);
+  data->event_window_id = ntohl (*p++);
+  data->sequence_id = ntohl (*p++);
+  data->root_x = ntohl (*p++);
+  data->root_y = ntohl (*p++);
+  data->win_x = ntohl (*p++);
+  data->win_y = ntohl (*p++);
+  data->state = ntohl (*p++);
+
+  return p;
+}
+
 static void
 update_future_pointer_info (BroadwayServer *server, BroadwayInputPointerMsg *data)
 {
@@ -434,6 +452,10 @@ parse_input_message (BroadwayInput *input, const unsigned char *message)
     p = parse_pointer_data (p, &msg.pointer);
     update_future_pointer_info (server, &msg.pointer);
     msg.scroll.dir = ntohl (*p++);
+    break;
+
+  case BROADWAY_EVENT_TOUCH:
+    p = parse_touch_data (p, &msg.touch);
     break;
 
   case BROADWAY_EVENT_KEY_PRESS:

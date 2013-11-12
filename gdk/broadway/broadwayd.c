@@ -528,6 +528,8 @@ get_event_size (int type)
       return sizeof (BroadwayInputButtonMsg);
     case BROADWAY_EVENT_SCROLL:
       return sizeof (BroadwayInputScrollMsg);
+    case BROADWAY_EVENT_TOUCH:
+      return sizeof (BroadwayInputTouchMsg);
     case BROADWAY_EVENT_KEY_PRESS:
     case BROADWAY_EVENT_KEY_RELEASE:
       return  sizeof (BroadwayInputKeyMsg);

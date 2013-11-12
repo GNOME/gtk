@@ -79,6 +79,21 @@ create_core_keyboard (GdkDeviceManager *device_manager,
                        NULL);
 }
 
+static GdkDevice *
+create_touchscreen (GdkDeviceManager *device_manager,
+                    GdkDisplay       *display)
+{
+  return g_object_new (GDK_TYPE_BROADWAY_DEVICE,
+                       "name", "Touchscreen",
+                       "type", GDK_DEVICE_TYPE_SLAVE,
+                       "input-source", GDK_SOURCE_TOUCHSCREEN,
+                       "input-mode", GDK_MODE_SCREEN,
+                       "has-cursor", FALSE,
+                       "display", display,
+                       "device-manager", device_manager,
+                       NULL);
+}
+
 static void
 gdk_broadway_device_manager_init (GdkBroadwayDeviceManager *device_manager)
 {
@@ -93,6 +108,7 @@ gdk_broadway_device_manager_finalize (GObject *object)
 
   g_object_unref (device_manager->core_pointer);
   g_object_unref (device_manager->core_keyboard);
+  g_object_unref (device_manager->touchscreen);
 
   G_OBJECT_CLASS (gdk_broadway_device_manager_parent_class)->finalize (object);
 }
@@ -107,9 +123,12 @@ gdk_broadway_device_manager_constructed (GObject *object)
   display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (object));
   device_manager->core_pointer = create_core_pointer (GDK_DEVICE_MANAGER (device_manager), display);
   device_manager->core_keyboard = create_core_keyboard (GDK_DEVICE_MANAGER (device_manager), display);
+  device_manager->touchscreen = create_touchscreen (GDK_DEVICE_MANAGER (device_manager), display);
 
   _gdk_device_set_associated_device (device_manager->core_pointer, device_manager->core_keyboard);
   _gdk_device_set_associated_device (device_manager->core_keyboard, device_manager->core_pointer);
+  _gdk_device_set_associated_device (device_manager->touchscreen, device_manager->core_pointer);
+  _gdk_device_add_slave (device_manager->core_pointer, device_manager->touchscreen);
 }
 
 
@@ -124,6 +143,11 @@ gdk_broadway_device_manager_list_devices (GdkDeviceManager *device_manager,
     {
       devices = g_list_prepend (devices, broadway_device_manager->core_keyboard);
       devices = g_list_prepend (devices, broadway_device_manager->core_pointer);
+    }
+
+  if (type == GDK_DEVICE_TYPE_SLAVE)
+    {
+      devices = g_list_prepend (devices, broadway_device_manager->touchscreen);
     }
 
   return devices;

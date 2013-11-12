@@ -2462,14 +2462,47 @@ function onMouseWheel(ev)
 
 function onTouchStart(ev) {
     event.preventDefault();
-}
 
-function onTouchEnd(ev) {
-    event.preventDefault();
+    updateForEvent(ev);
+
+    for (var i = 0; i < ev.changedTouches.length; i++) {
+        var touch = ev.changedTouches.item(i);
+
+        var id = getSurfaceId(touch);
+        var pos = getPositionsFromEvent(touch, id);
+
+        sendInput ("t", [0, id, touch.identifier, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
+    }
 }
 
 function onTouchMove(ev) {
     event.preventDefault();
+
+    updateForEvent(ev);
+
+    for (var i = 0; i < ev.changedTouches.length; i++) {
+        var touch = ev.changedTouches.item(i);
+
+        var id = getSurfaceId(touch);
+        var pos = getPositionsFromEvent(touch, id);
+
+        sendInput ("t", [1, id, touch.identifier, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
+    }
+}
+
+function onTouchEnd(ev) {
+    event.preventDefault();
+
+    updateForEvent(ev);
+
+    for (var i = 0; i < ev.changedTouches.length; i++) {
+        var touch = ev.changedTouches.item(i);
+
+        var id = getSurfaceId(touch);
+        var pos = getPositionsFromEvent(touch, id);
+
+        sendInput ("t", [2, id, touch.identifier, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
+    }
 }
 
 function setupDocument(document)
@@ -2489,7 +2522,7 @@ function setupDocument(document)
       document.addEventListener('mousewheel', onMouseWheel, false);
       document.addEventListener('touchstart', onTouchStart, false);
       document.addEventListener('touchmove', onTouchMove, false);
-      document.addEventListener('touchstart', onTouchEnd, false);
+      document.addEventListener('touchend', onTouchEnd, false);
     } else if (document.attachEvent) {
       element.attachEvent("onmousewheel", onMouseWheel);
     }

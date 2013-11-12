@@ -102,7 +102,7 @@ gdk_broadway_display_init_input (GdkDisplay *display)
 
   for (l = list; l; l = l->next)
     {
-      device = list->data;
+      device = l->data;
 
       if (gdk_device_get_source (device) != GDK_SOURCE_MOUSE)
         continue;

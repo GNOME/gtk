@@ -14,6 +14,7 @@ typedef enum {
   BROADWAY_EVENT_POINTER_MOVE = 'm',
   BROADWAY_EVENT_BUTTON_PRESS = 'b',
   BROADWAY_EVENT_BUTTON_RELEASE = 'B',
+  BROADWAY_EVENT_TOUCH = 't',
   BROADWAY_EVENT_SCROLL = 's',
   BROADWAY_EVENT_KEY_PRESS = 'k',
   BROADWAY_EVENT_KEY_RELEASE = 'K',
@@ -77,6 +78,18 @@ typedef struct {
 
 typedef struct {
   BroadwayInputBaseMsg base;
+  guint32 touch_type;
+  guint32 event_window_id;
+  guint32 sequence_id;
+  gint32 root_x;
+  gint32 root_y;
+  gint32 win_x;
+  gint32 win_y;
+  guint32 state;
+} BroadwayInputTouchMsg;
+
+typedef struct {
+  BroadwayInputBaseMsg base;
   guint32 mouse_window_id; /* The real window, not taking grabs into account */
   guint32 state;
   gint32 key;
@@ -118,6 +131,7 @@ typedef union {
   BroadwayInputCrossingMsg crossing;
   BroadwayInputButtonMsg button;
   BroadwayInputScrollMsg scroll;
+  BroadwayInputTouchMsg touch;
   BroadwayInputKeyMsg key;
   BroadwayInputGrabReply grab_reply;
   BroadwayInputConfigureNotify configure_notify;
