@@ -478,15 +478,14 @@ gtk_bubble_window_update_shape (GtkBubbleWindow *window)
 static void
 gtk_bubble_window_update_position (GtkBubbleWindow *window)
 {
+  GtkAllocation allocation, window_alloc;
   GtkBubbleWindowPrivate *priv;
   cairo_rectangle_int_t rect;
-  GtkAllocation allocation;
   gint win_x, win_y, x, y;
-  GdkScreen *screen;
 
   priv = window->priv;
-  screen = gtk_widget_get_screen (GTK_WIDGET (window));
   gtk_widget_get_allocation (GTK_WIDGET (window), &allocation);
+  gtk_widget_get_allocation (GTK_WIDGET (priv->window), &window_alloc);
   priv->final_position = priv->preferred_position;
   rect = priv->pointing_to;
 
@@ -498,32 +497,35 @@ gtk_bubble_window_update_position (GtkBubbleWindow *window)
   if (priv->preferred_position == GTK_POS_TOP && rect.y < allocation.height)
     priv->final_position = GTK_POS_BOTTOM;
   else if (priv->preferred_position == GTK_POS_BOTTOM &&
-           rect.y > gdk_screen_get_height (screen) - allocation.height)
+           rect.y > window_alloc.height - allocation.height)
     priv->final_position = GTK_POS_TOP;
   else if (priv->preferred_position == GTK_POS_LEFT && rect.x < allocation.width)
     priv->final_position = GTK_POS_RIGHT;
   else if (priv->preferred_position == GTK_POS_RIGHT &&
-           rect.x > gdk_screen_get_width (screen) - allocation.width)
+           rect.x > window_alloc.width - allocation.width)
     priv->final_position = GTK_POS_LEFT;
 
   if (POS_IS_VERTICAL (priv->final_position))
     {
       win_x = CLAMP (x - allocation.width / 2,
-                     0, gdk_screen_get_width (screen) - allocation.width);
+                     0, window_alloc.width - allocation.width);
       win_y = y;
 
       if (priv->final_position == GTK_POS_TOP)
         win_y -= allocation.height;
+      else if (priv->final_position == GTK_POS_BOTTOM)
+        win_y += rect.height;
     }
   else
     {
       win_y = CLAMP (y - allocation.height / 2,
-                     0, gdk_screen_get_height (screen) - allocation.height);
+		     0, window_alloc.height - allocation.height);
       win_x = x;
 
       if (priv->final_position == GTK_POS_LEFT)
         win_x -= allocation.width;
-
+      else if (priv->final_position == GTK_POS_RIGHT)
+        win_x += rect.width;
     }
 
   priv->win_x = win_x;
@@ -721,6 +723,9 @@ gtk_bubble_window_size_allocate (GtkWidget     *widget,
   gtk_widget_set_allocation (widget, allocation);
   child = gtk_bin_get_child (GTK_BIN (widget));
 
+  if (gtk_widget_get_visible (widget))
+    gtk_bubble_window_update_position (GTK_BUBBLE_WINDOW (widget));
+
   if (child)
     {
       GtkAllocation child_alloc;
@@ -752,9 +757,6 @@ gtk_bubble_window_size_allocate (GtkWidget     *widget,
                               0, 0, allocation->width, allocation->height);
       gtk_bubble_window_update_shape (GTK_BUBBLE_WINDOW (widget));
     }
-
-  if (gtk_widget_get_visible (widget))
-    gtk_bubble_window_update_position (GTK_BUBBLE_WINDOW (widget));
 }
 
 static gboolean
