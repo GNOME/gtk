@@ -213,7 +213,7 @@ gtk_bubble_window_get_pointed_to_coords (GtkBubbleWindow       *window,
   cairo_rectangle_int_t rect;
   GtkAllocation window_alloc;
 
-  rect = priv->pointing_to;
+  _gtk_bubble_window_get_pointing_to (window, &rect);
   gtk_widget_get_allocation (GTK_WIDGET (priv->window), &window_alloc);
   gtk_widget_translate_coordinates (priv->widget, GTK_WIDGET (priv->window),
                                     rect.x, rect.y, &rect.x, &rect.y);
@@ -493,7 +493,7 @@ gtk_bubble_window_update_position (GtkBubbleWindow *window)
   gtk_widget_get_allocation (GTK_WIDGET (window), &allocation);
   gtk_widget_get_allocation (GTK_WIDGET (priv->window), &window_alloc);
   priv->final_position = priv->preferred_position;
-  rect = priv->pointing_to;
+  _gtk_bubble_window_get_pointing_to (window, &rect);
 
   gtk_bubble_window_get_pointed_to_coords (window, &x, &y, &rect);
 
@@ -883,8 +883,15 @@ gtk_bubble_window_update_pointing_to (GtkBubbleWindow       *window,
   GtkBubbleWindowPrivate *priv;
 
   priv = window->priv;
-  priv->pointing_to = *pointing_to;
-  priv->has_pointing_to = TRUE;
+
+  if (pointing_to)
+    {
+      priv->pointing_to = *pointing_to;
+      priv->has_pointing_to = TRUE;
+    }
+  else
+    priv->has_pointing_to = FALSE;
+
   g_object_notify (G_OBJECT (window), "pointing-to");
 }
 
@@ -1015,7 +1022,15 @@ _gtk_bubble_window_get_pointing_to (GtkBubbleWindow       *window,
   priv = window->priv;
 
   if (rect)
-    *rect = priv->pointing_to;
+    {
+      if (priv->has_pointing_to)
+        *rect = priv->pointing_to;
+      else if (priv->widget)
+        {
+          gtk_widget_get_allocation (priv->widget, rect);
+          rect->x = rect->y = 0;
+        }
+    }
 
   return priv->has_pointing_to;
 }
