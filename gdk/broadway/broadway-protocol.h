@@ -90,7 +90,7 @@ typedef struct {
 
 typedef struct {
   BroadwayInputBaseMsg base;
-  guint32 mouse_window_id; /* The real window, not taking grabs into account */
+  guint32 window_id;
   guint32 state;
   gint32 key;
 } BroadwayInputKeyMsg;

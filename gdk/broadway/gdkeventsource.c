@@ -273,7 +273,7 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
   case BROADWAY_EVENT_KEY_PRESS:
   case BROADWAY_EVENT_KEY_RELEASE:
     window = g_hash_table_lookup (display_broadway->id_ht,
-				  GINT_TO_POINTER (message->key.mouse_window_id));
+				  GINT_TO_POINTER (message->key.window_id));
     if (window)
       {
 	event = gdk_event_new (message->base.type == 'k' ? GDK_KEY_PRESS : GDK_KEY_RELEASE);

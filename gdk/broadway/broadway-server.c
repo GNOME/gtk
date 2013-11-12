@@ -237,6 +237,14 @@ update_event_state (BroadwayServer *server,
     server->real_mouse_in_toplevel_id = message->pointer.mouse_window_id;
     break;
   case BROADWAY_EVENT_TOUCH:
+    if (message->touch.touch_type == 0 &&
+        server->focused_window_id != message->touch.event_window_id)
+      {
+        broadway_server_window_raise (server, message->touch.event_window_id);
+        broadway_server_focus_window (server, message->touch.event_window_id);
+        broadway_server_flush (server);
+      }
+
     server->last_state = message->touch.state;
     break;
   case BROADWAY_EVENT_KEY_PRESS:
@@ -460,7 +468,7 @@ parse_input_message (BroadwayInput *input, const unsigned char *message)
 
   case BROADWAY_EVENT_KEY_PRESS:
   case BROADWAY_EVENT_KEY_RELEASE:
-    msg.key.mouse_window_id = ntohl (*p++);
+    msg.key.window_id = server->focused_window_id;
     msg.key.key = ntohl (*p++);
     msg.key.state = ntohl (*p++);
     break;
