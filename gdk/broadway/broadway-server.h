@@ -58,6 +58,10 @@ gboolean            broadway_server_window_show              (BroadwayServer   *
 							      gint              id);
 gboolean            broadway_server_window_hide              (BroadwayServer   *server,
 							      gint              id);
+void                broadway_server_window_raise             (BroadwayServer   *server,
+							      gint              id);
+void                broadway_server_window_lower             (BroadwayServer   *server,
+							      gint              id);
 void                broadway_server_window_set_transient_for (BroadwayServer   *server,
 							      gint              id,
 							      gint              parent);

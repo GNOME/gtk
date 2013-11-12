@@ -217,6 +217,20 @@ broadway_output_hide_surface(BroadwayOutput *output,  int id)
 }
 
 void
+broadway_output_raise_surface(BroadwayOutput *output,  int id)
+{
+  write_header (output, BROADWAY_OP_RAISE_SURFACE);
+  append_uint16 (output, id);
+}
+
+void
+broadway_output_lower_surface(BroadwayOutput *output,  int id)
+{
+  write_header (output, BROADWAY_OP_LOWER_SURFACE);
+  append_uint16 (output, id);
+}
+
+void
 broadway_output_destroy_surface(BroadwayOutput *output,  int id)
 {
   write_header (output, BROADWAY_OP_DESTROY_SURFACE);

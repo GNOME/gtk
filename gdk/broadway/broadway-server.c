@@ -1360,6 +1360,42 @@ broadway_server_window_hide (BroadwayServer *server,
 }
 
 void
+broadway_server_window_raise (BroadwayServer *server,
+                              gint id)
+{
+  BroadwayWindow *window;
+
+  window = g_hash_table_lookup (server->id_ht,
+				GINT_TO_POINTER (id));
+  if (window == NULL)
+    return;
+
+  server->toplevels = g_list_remove (server->toplevels, window);
+  server->toplevels = g_list_append (server->toplevels, window);
+
+  if (server->output)
+    broadway_output_raise_surface (server->output, window->id);
+}
+
+void
+broadway_server_window_lower (BroadwayServer *server,
+                              gint id)
+{
+  BroadwayWindow *window;
+
+  window = g_hash_table_lookup (server->id_ht,
+				GINT_TO_POINTER (id));
+  if (window == NULL)
+    return;
+
+  server->toplevels = g_list_remove (server->toplevels, window);
+  server->toplevels = g_list_prepend (server->toplevels, window);
+
+  if (server->output)
+    broadway_output_lower_surface (server->output, window->id);
+}
+
+void
 broadway_server_window_set_transient_for (BroadwayServer *server,
 					  gint id, gint parent)
 {
@@ -1646,7 +1682,7 @@ broadway_server_new_window (BroadwayServer *server,
 		       GINT_TO_POINTER (window->id),
 		       window);
 
-  server->toplevels = g_list_prepend (server->toplevels, window);
+  server->toplevels = g_list_append (server->toplevels, window);
 
   if (server->output)
     broadway_output_new_surface (server->output,

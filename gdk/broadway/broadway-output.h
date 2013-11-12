@@ -37,6 +37,10 @@ void            broadway_output_show_surface    (BroadwayOutput *output,
 						 int             id);
 void            broadway_output_hide_surface    (BroadwayOutput *output,
 						 int             id);
+void            broadway_output_raise_surface   (BroadwayOutput *output,
+                                                 int             id);
+void            broadway_output_lower_surface   (BroadwayOutput *output,
+                                                 int             id);
 void            broadway_output_destroy_surface (BroadwayOutput *output,
 						 int             id);
 void            broadway_output_move_resize_surface (BroadwayOutput *output,

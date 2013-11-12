@@ -254,12 +254,6 @@ function moveToHelper(surface, position) {
     }
 }
 
-function moveToTop(surface) {
-    moveToHelper(surface);
-    restackWindows();
-}
-
-
 function cmdDeleteSurface(id)
 {
     if (grab.window == id)
@@ -303,6 +297,22 @@ function cmdMoveResizeSurface(id, has_pos, x, y, has_size, w, h)
     }
 
     sendConfigureNotify(surface);
+}
+
+function cmdRaiseSurface(id)
+{
+    var surface = surfaces[id];
+
+    moveToHelper(surface);
+    restackWindows();
+}
+
+function cmdLowerSurface(id)
+{
+    var surface = surfaces[id];
+
+    moveToHelper(surface, 0);
+    restackWindows();
 }
 
 function copyRect(src, srcX, srcY, dest, destX, destY, width, height)
@@ -590,6 +600,16 @@ function handleCommands(cmd)
 		h = cmd.get_16();
 	    }
 	    cmdMoveResizeSurface(id, has_pos, x, y, has_size, w, h);
+	    break;
+
+	case 'r': // Raise a surface
+	    id = cmd.get_16();
+	    cmdRaiseSurface(id);
+	    break;
+
+	case 'R': // Lower a surface
+	    id = cmd.get_16();
+	    cmdLowerSurface(id);
 	    break;
 
 	case 'b': // Put image buffer
