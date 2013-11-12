@@ -2460,6 +2460,18 @@ function onMouseWheel(ev)
     return cancelEvent(ev);
 }
 
+function onTouchStart(ev) {
+    event.preventDefault();
+}
+
+function onTouchEnd(ev) {
+    event.preventDefault();
+}
+
+function onTouchMove(ev) {
+    event.preventDefault();
+}
+
 function setupDocument(document)
 {
     document.oncontextmenu = function () { return false; };
@@ -2475,6 +2487,9 @@ function setupDocument(document)
     if (document.addEventListener) {
       document.addEventListener('DOMMouseScroll', onMouseWheel, false);
       document.addEventListener('mousewheel', onMouseWheel, false);
+      document.addEventListener('touchstart', onTouchStart, false);
+      document.addEventListener('touchmove', onTouchMove, false);
+      document.addEventListener('touchstart', onTouchEnd, false);
     } else if (document.attachEvent) {
       element.attachEvent("onmousewheel", onMouseWheel);
     }
