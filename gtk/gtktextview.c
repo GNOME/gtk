@@ -51,7 +51,7 @@
 #include "gtktexthandleprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkcssstylepropertyprivate.h"
-#include "gtkbubblewindowprivate.h"
+#include "gtkpopover.h"
 #include "gtktoolbar.h"
 #include "gtkpixelcacheprivate.h"
 
@@ -8901,9 +8901,9 @@ bubble_targets_received (GtkClipboard     *clipboard,
   if (priv->selection_bubble)
     gtk_widget_destroy (priv->selection_bubble);
 
-  priv->selection_bubble = _gtk_bubble_window_new (GTK_WIDGET (text_view));
-  _gtk_bubble_window_set_position (GTK_BUBBLE_WINDOW (priv->selection_bubble),
-                                   GTK_POS_TOP);
+  priv->selection_bubble = gtk_popover_new (GTK_WIDGET (text_view));
+  gtk_popover_set_position (GTK_POPOVER (priv->selection_bubble),
+                            GTK_POS_TOP);
 
   toolbar = GTK_WIDGET (gtk_toolbar_new ());
   gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), GTK_TOOLBAR_TEXT);
@@ -8932,8 +8932,7 @@ bubble_targets_received (GtkClipboard     *clipboard,
   rect.x -= priv->xoffset;
   rect.y -= priv->yoffset;
 
-  _gtk_bubble_window_set_pointing_to (GTK_BUBBLE_WINDOW (priv->selection_bubble),
-                                      &rect);
+  gtk_popover_set_pointing_to (GTK_POPOVER (priv->selection_bubble), &rect);
   gtk_widget_show (priv->selection_bubble);
 
   priv->selection_bubble_timeout_id = 0;

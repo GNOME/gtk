@@ -296,6 +296,7 @@ gtk_public_h_sources = 		\
 	gtkpapersize.h		\
 	gtkplacessidebar.h	\
 	gtkplug.h		\
+	gtkpopover.h		\
 	gtkprintcontext.h	\
 	gtkprintoperation.h	\
 	gtkprintoperationpreview.h \
@@ -411,7 +412,6 @@ gtk_private_h_sources =		\
 	gtkbookmarksmanager.h	\
 	gtkborderimageprivate.h \
 	gtkboxprivate.h         \
-	gtkbubblewindowprivate.h	\
 	gtkbuilderprivate.h	\
 	gtkbuttonprivate.h	\
 	gtkcairoblurprivate.h	\
@@ -628,7 +628,6 @@ gtk_base_c_sources = 		\
 	gtkborder.c		\
 	gtkborderimage.c	\
 	gtkbox.c		\
-	gtkbubblewindow.c	\
 	gtkbuildable.c		\
 	gtkbuilder.c		\
 	gtkbuilderparser.c	\
@@ -800,6 +799,7 @@ gtk_base_c_sources = 		\
 	gtkprivatetypebuiltins.c \
 	gtkprogressbar.c	\
 	gtkpixelcache.c		\
+	gtkpopover.c		\
 	gtkradiobutton.c	\
 	gtkradiomenuitem.c	\
 	gtkradiotoolbutton.c	\
