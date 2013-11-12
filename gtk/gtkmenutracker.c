@@ -290,7 +290,7 @@ gtk_menu_tracker_add_items (GtkMenuTracker         *tracker,
               g_free (namespace);
             }
           else
-            subsection = gtk_menu_tracker_section_new (tracker, submenu, FALSE, offset, section->action_namespace);
+            subsection = gtk_menu_tracker_section_new (tracker, submenu, FALSE, offset, action_namespace);
 
           *change_point = g_slist_prepend (*change_point, subsection);
           g_free (action_namespace);
