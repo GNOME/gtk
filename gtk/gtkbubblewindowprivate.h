@@ -59,16 +59,8 @@ gboolean    _gtk_bubble_window_get_pointing_to (GtkBubbleWindow       *window,
                                                 cairo_rectangle_int_t *rect);
 void        _gtk_bubble_window_set_position    (GtkBubbleWindow       *window,
                                                 GtkPositionType        position);
-
 GtkPositionType
             _gtk_bubble_window_get_position    (GtkBubbleWindow       *window);
-
-void        _gtk_bubble_window_popup           (GtkBubbleWindow       *window,
-                                                GtkWidget             *relative_to,
-                                                cairo_rectangle_int_t *pointing_to,
-                                                GtkPositionType        position);
-
-void        _gtk_bubble_window_popdown         (GtkBubbleWindow       *window);
 
 G_END_DECLS
 
