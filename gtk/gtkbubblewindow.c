@@ -135,8 +135,6 @@ gtk_bubble_window_finalize (GObject *object)
 {
   GtkBubbleWindow *window = GTK_BUBBLE_WINDOW (object);
 
-  _gtk_bubble_window_popdown (window);
-
   G_OBJECT_CLASS (_gtk_bubble_window_parent_class)->finalize (object);
 }
 
@@ -783,10 +781,10 @@ gtk_bubble_window_button_press (GtkWidget      *widget,
           event->x > child_alloc.x + child_alloc.width ||
           event->y < child_alloc.y ||
           event->y > child_alloc.y + child_alloc.height)
-        _gtk_bubble_window_popdown (GTK_BUBBLE_WINDOW (widget));
+        gtk_widget_hide (widget);
     }
   else
-    _gtk_bubble_window_popdown (GTK_BUBBLE_WINDOW (widget));
+    gtk_widget_hide (widget);
 
   return GDK_EVENT_PROPAGATE;
 }
@@ -797,7 +795,7 @@ gtk_bubble_window_key_press (GtkWidget   *widget,
 {
   if (event->keyval == GDK_KEY_Escape)
     {
-      _gtk_bubble_window_popdown (GTK_BUBBLE_WINDOW (widget));
+      gtk_widget_hide (widget);
       return GDK_EVENT_STOP;
     }
 
@@ -1085,54 +1083,4 @@ _gtk_bubble_window_get_position (GtkBubbleWindow *window)
   priv = window->priv;
 
   return priv->preferred_position;
-}
-
-/*
- * gtk_bubble_window_popup:
- * @window: a #GtkBubbleWindow
- * @relative_to: #GdkWindow to position upon
- * @pointing_to: rectangle to point to, in @relative_to coordinates
- * @position: preferred position for @window
- *
- * This function sets atomically all #GtkBubbleWindow position
- * parameters, and shows/updates @window
- *
- * Since: 3.8
- */
-void
-_gtk_bubble_window_popup (GtkBubbleWindow       *window,
-                          GtkWidget             *relative_to,
-                          cairo_rectangle_int_t *pointing_to,
-                          GtkPositionType        position)
-{
-  g_return_if_fail (GTK_IS_BUBBLE_WINDOW (window));
-  g_return_if_fail (GTK_IS_WIDGET (relative_to));
-  g_return_if_fail (position >= GTK_POS_LEFT && position <= GTK_POS_BOTTOM);
-  g_return_if_fail (pointing_to != NULL);
-
-  gtk_bubble_window_update_preferred_position (window, position);
-  gtk_bubble_window_update_relative_to (window, relative_to);
-  gtk_bubble_window_update_pointing_to (window, pointing_to);
-
-  gtk_bubble_window_update_position (window);
-
-  if (!gtk_widget_get_visible (GTK_WIDGET (window)))
-    gtk_widget_show (GTK_WIDGET (window));
-}
-
-/*
- * gtk_bubble_window_popdown:
- * @window: a #GtkBubbleWindow
- *
- * Removes the window from the screen
- *
- * Since: 3.8
- */
-void
-_gtk_bubble_window_popdown (GtkBubbleWindow *window)
-{
-  g_return_if_fail (GTK_IS_BUBBLE_WINDOW (window));
-
-  if (gtk_widget_get_visible (GTK_WIDGET (window)))
-    gtk_widget_hide (GTK_WIDGET (window));
 }
