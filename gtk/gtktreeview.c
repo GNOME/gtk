@@ -9923,8 +9923,6 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   gdk_window_show (tree_view->priv->drag_window);
 
   gtk_widget_grab_focus (GTK_WIDGET (tree_view));
-  while (gtk_events_pending ())
-    gtk_main_iteration ();
 
   tree_view->priv->in_column_drag = TRUE;
 
