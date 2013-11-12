@@ -294,6 +294,9 @@ client_handle_request (BroadwayClient *client,
       send_reply (client, request, (BroadwayReply *)&reply_ungrab_pointer, sizeof (reply_ungrab_pointer),
 		  BROADWAY_REPLY_UNGRAB_POINTER);
       break;
+    case BROADWAY_REQUEST_FOCUS_WINDOW:
+      broadway_server_focus_window (server, request->focus_window.id);
+      break;
     default:
       g_warning ("Unknown request of type %d\n", request->base.type);
     }
@@ -537,6 +540,8 @@ get_event_size (int type)
       return sizeof (BroadwayInputDeleteNotify);
     case BROADWAY_EVENT_SCREEN_SIZE_CHANGED:
       return sizeof (BroadwayInputScreenResizeNotify);
+    case BROADWAY_EVENT_FOCUS:
+      return sizeof (BroadwayInputFocusMsg);
     default:
       g_assert_not_reached ();
     }

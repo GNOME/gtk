@@ -47,6 +47,8 @@ gboolean           _gdk_broadway_server_window_show              (GdkBroadwaySer
 								  gint                id);
 gboolean           _gdk_broadway_server_window_hide              (GdkBroadwayServer  *server,
 								  gint                id);
+void               _gdk_broadway_server_window_focus             (GdkBroadwayServer  *server,
+								  gint                id);
 void               _gdk_broadway_server_window_set_transient_for (GdkBroadwayServer  *server,
 								  gint                id,
 								  gint                parent);

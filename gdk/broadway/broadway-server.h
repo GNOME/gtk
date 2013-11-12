@@ -78,6 +78,8 @@ gboolean            broadway_server_window_move_resize       (BroadwayServer   *
 							      int               y,
 							      int               width,
 							      int               height);
+void                broadway_server_focus_window             (BroadwayServer   *server,
+                                                              gint              new_focused_window);
 cairo_surface_t * broadway_server_open_surface (BroadwayServer *server,
 						guint32 id,
 						char *name,

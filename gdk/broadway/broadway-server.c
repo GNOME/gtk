@@ -54,6 +54,7 @@ struct _BroadwayServer {
   GHashTable *id_ht;
   GList *toplevels;
   BroadwayWindow *root;
+  gint32 focused_window_id; /* -1 => none */
 
   guint32 screen_width;
   guint32 screen_height;
@@ -215,6 +216,10 @@ update_event_state (BroadwayServer *server,
     break;
   case BROADWAY_EVENT_BUTTON_PRESS:
   case BROADWAY_EVENT_BUTTON_RELEASE:
+    if (message->base.type == BROADWAY_EVENT_BUTTON_PRESS &&
+        server->focused_window_id != message->pointer.mouse_window_id)
+      broadway_server_focus_window (server, message->pointer.mouse_window_id);
+
     server->last_x = message->pointer.root_x;
     server->last_y = message->pointer.root_y;
     server->last_state = message->pointer.state;
@@ -1458,6 +1463,26 @@ broadway_server_window_move_resize (BroadwayServer *server,
     }
 
   return sent;
+}
+
+void
+broadway_server_focus_window (BroadwayServer *server,
+                              gint new_focused_window)
+{
+  BroadwayInputMsg focus_msg;
+
+  if (server->focused_window_id == new_focused_window)
+    return;
+
+  /* Keep track of the new focused window */
+  server->focused_window_id = new_focused_window;
+
+  memset (&focus_msg, 0, sizeof (focus_msg));
+  focus_msg.base.type = BROADWAY_EVENT_FOCUS;
+  focus_msg.base.time = broadway_server_get_last_seen_time (server);
+  focus_msg.focus.id = new_focused_window;
+
+  broadway_events_got_input (&focus_msg, -1);
 }
 
 guint32

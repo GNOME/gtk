@@ -537,6 +537,19 @@ static void
 gdk_broadway_window_focus (GdkWindow *window,
 			   guint32    timestamp)
 {
+  GdkWindowImplBroadway *impl;
+  GdkBroadwayDisplay *broadway_display;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !window->accept_focus)
+    return;
+
+  impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
+  broadway_display = GDK_BROADWAY_DISPLAY (gdk_window_get_display (window));
+  _gdk_broadway_server_window_focus (broadway_display->server,
+				     impl->id);
 }
 
 static void

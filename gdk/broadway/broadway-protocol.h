@@ -21,7 +21,8 @@ typedef enum {
   BROADWAY_EVENT_UNGRAB_NOTIFY = 'u',
   BROADWAY_EVENT_CONFIGURE_NOTIFY = 'w',
   BROADWAY_EVENT_DELETE_NOTIFY = 'W',
-  BROADWAY_EVENT_SCREEN_SIZE_CHANGED = 'd'
+  BROADWAY_EVENT_SCREEN_SIZE_CHANGED = 'd',
+  BROADWAY_EVENT_FOCUS = 'f'
 } BroadwayEventType;
 
 typedef enum {
@@ -104,6 +105,11 @@ typedef struct {
   gint32 id;
 } BroadwayInputDeleteNotify;
 
+typedef struct {
+  BroadwayInputBaseMsg base;
+  gint32 id;
+} BroadwayInputFocusMsg;
+
 typedef union {
   BroadwayInputBaseMsg base;
   BroadwayInputPointerMsg pointer;
@@ -115,6 +121,7 @@ typedef union {
   BroadwayInputConfigureNotify configure_notify;
   BroadwayInputDeleteNotify delete_notify;
   BroadwayInputScreenResizeNotify screen_resize_notify;
+  BroadwayInputFocusMsg focus;
 } BroadwayInputMsg;
 
 typedef enum {
@@ -129,7 +136,8 @@ typedef enum {
   BROADWAY_REQUEST_UPDATE,
   BROADWAY_REQUEST_MOVE_RESIZE,
   BROADWAY_REQUEST_GRAB_POINTER,
-  BROADWAY_REQUEST_UNGRAB_POINTER
+  BROADWAY_REQUEST_UNGRAB_POINTER,
+  BROADWAY_REQUEST_FOCUS_WINDOW
 } BroadwayRequestType;
 
 typedef struct {
@@ -141,7 +149,7 @@ typedef struct {
 typedef struct {
   BroadwayRequestBase base;
   guint32 id;
-} BroadwayRequestDestroyWindow, BroadwayRequestShowWindow, BroadwayRequestHideWindow;
+} BroadwayRequestDestroyWindow, BroadwayRequestShowWindow, BroadwayRequestHideWindow, BroadwayRequestFocusWindow;
 
 typedef struct {
   BroadwayRequestBase base;
@@ -213,6 +221,7 @@ typedef union {
   BroadwayRequestGrabPointer grab_pointer;
   BroadwayRequestUngrabPointer ungrab_pointer;
   BroadwayRequestTranslate translate;
+  BroadwayRequestFocusWindow focus_window;
 } BroadwayRequest;
 
 typedef enum {

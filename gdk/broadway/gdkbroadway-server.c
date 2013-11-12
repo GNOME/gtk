@@ -498,6 +498,17 @@ _gdk_broadway_server_window_hide (GdkBroadwayServer *server,
 }
 
 void
+_gdk_broadway_server_window_focus (GdkBroadwayServer *server,
+				   gint id)
+{
+  BroadwayRequestFocusWindow msg;
+
+  msg.id = id;
+  gdk_broadway_server_send_message (server, msg,
+				    BROADWAY_REQUEST_FOCUS_WINDOW);
+}
+
+void
 _gdk_broadway_server_window_set_transient_for (GdkBroadwayServer *server,
 					       gint id, gint parent)
 {

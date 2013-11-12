@@ -117,14 +117,6 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
 
 	node = _gdk_event_queue_append (display, event);
 	_gdk_windowing_got_event (display, node, event, message->base.serial);
-
-	event = gdk_event_new (GDK_FOCUS_CHANGE);
-	event->focus_change.window = g_object_ref (window);
-	event->focus_change.in = TRUE;
-	gdk_event_set_device (event, display->core_pointer);
-
-	node = _gdk_event_queue_append (display, event);
-	_gdk_windowing_got_event (display, node, event, message->base.serial);
       }
     break;
   case BROADWAY_EVENT_LEAVE:
@@ -141,14 +133,6 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
 	event->crossing.state = message->pointer.state;
 	event->crossing.mode = message->crossing.mode;
 	event->crossing.detail = GDK_NOTIFY_ANCESTOR;
-	gdk_event_set_device (event, display->core_pointer);
-
-	node = _gdk_event_queue_append (display, event);
-	_gdk_windowing_got_event (display, node, event, message->base.serial);
-
-	event = gdk_event_new (GDK_FOCUS_CHANGE);
-	event->focus_change.window = g_object_ref (window);
-	event->focus_change.in = FALSE;
 	gdk_event_set_device (event, display->core_pointer);
 
 	node = _gdk_event_queue_append (display, event);
@@ -293,6 +277,19 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
 
     _gdk_window_update_size (window);
     _gdk_broadway_screen_size_changed (screen, &message->screen_resize_notify);
+    break;
+
+  case BROADWAY_EVENT_FOCUS:
+    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->focus.id));
+    if (window)
+      {
+	event = gdk_event_new (GDK_FOCUS_CHANGE);
+	event->focus_change.window = g_object_ref (window);
+	event->focus_change.in = TRUE;
+	gdk_event_set_device (event, display->core_pointer);
+	node = _gdk_event_queue_append (display, event);
+	_gdk_windowing_got_event (display, node, event, message->base.serial);
+      }
     break;
 
   default:
