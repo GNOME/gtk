@@ -256,9 +256,15 @@ gtk_bubble_window_get_gap_coords (GtkBubbleWindow *window,
   gint final_x, final_y;
   GtkPositionType gap_side;
   GtkAllocation allocation;
+  gint border_radius;
 
   gtk_bubble_window_get_pointed_to_coords (window, &x, &y, NULL);
   gtk_widget_get_allocation (GTK_WIDGET (window), &allocation);
+
+  gtk_style_context_get (gtk_widget_get_style_context (GTK_WIDGET (window)),
+                         gtk_widget_get_state_flags (GTK_WIDGET (window)),
+                         GTK_STYLE_PROPERTY_BORDER_RADIUS, &border_radius,
+                         NULL);
 
   base = tip = 0;
   gap_side = GTK_POS_LEFT;
@@ -287,28 +293,28 @@ gtk_bubble_window_get_gap_coords (GtkBubbleWindow *window,
   if (POS_IS_VERTICAL (priv->final_position))
     {
       initial_x = CLAMP (x - priv->win_x - TAIL_GAP_WIDTH / 2,
-                         0, allocation.width - TAIL_GAP_WIDTH);
+                         border_radius, allocation.width - TAIL_GAP_WIDTH);
       initial_y = base;
 
       tip_x = CLAMP (x - priv->win_x, 0, allocation.width);
       tip_y = tip;
 
       final_x = CLAMP (x - priv->win_x + TAIL_GAP_WIDTH / 2,
-                       TAIL_GAP_WIDTH, allocation.width);
+                       TAIL_GAP_WIDTH, allocation.width - border_radius);
       final_y = base;
     }
   else
     {
       initial_x = base;
       initial_y = CLAMP (y - priv->win_y - TAIL_GAP_WIDTH / 2,
-                         0, allocation.height - TAIL_GAP_WIDTH);
+                         border_radius, allocation.height - TAIL_GAP_WIDTH);
 
       tip_x = tip;
       tip_y = CLAMP (y - priv->win_y, 0, allocation.height);
 
       final_x = base;
       final_y = CLAMP (y - priv->win_y + TAIL_GAP_WIDTH / 2,
-                       TAIL_GAP_WIDTH, allocation.height);
+                       TAIL_GAP_WIDTH, allocation.height - border_radius);
     }
 
   if (initial_x_out)
