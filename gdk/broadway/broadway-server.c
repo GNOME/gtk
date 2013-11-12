@@ -217,8 +217,13 @@ update_event_state (BroadwayServer *server,
   case BROADWAY_EVENT_BUTTON_PRESS:
   case BROADWAY_EVENT_BUTTON_RELEASE:
     if (message->base.type == BROADWAY_EVENT_BUTTON_PRESS &&
-        server->focused_window_id != message->pointer.mouse_window_id)
-      broadway_server_focus_window (server, message->pointer.mouse_window_id);
+        server->focused_window_id != message->pointer.mouse_window_id &&
+        server->pointer_grab_window_id == -1)
+      {
+        broadway_server_window_raise (server, message->pointer.mouse_window_id);
+        broadway_server_focus_window (server, message->pointer.mouse_window_id);
+        broadway_server_flush (server);
+      }
 
     server->last_x = message->pointer.root_x;
     server->last_y = message->pointer.root_y;
