@@ -1197,6 +1197,34 @@ _gdk_broadway_moveresize_handle_event (GdkDisplay *display,
 
   switch (event->base.type)
     {
+    case BROADWAY_EVENT_TOUCH:
+      if (event->touch.touch_type == 2) /* END */
+        {
+          update_pos (mv_resize,
+                      event->touch.root_x,
+                      event->touch.root_y);
+
+          finish_drag (mv_resize);
+        }
+      else if (event->touch.touch_type == 1) /* UPDATE */
+        {
+          if (mv_resize->moveresize_window->resize_count > 0)
+            {
+              if (mv_resize->moveresize_pending_event)
+                *mv_resize->moveresize_pending_event = *event;
+              else
+                mv_resize->moveresize_pending_event =
+                  g_memdup (event, sizeof (BroadwayInputMsg));
+
+              break;
+            }
+          update_pos (mv_resize,
+                      event->touch.root_x,
+                      event->touch.root_y);
+        }
+
+      break;
+
     case BROADWAY_EVENT_POINTER_MOVE:
       if (mv_resize->moveresize_window->resize_count > 0)
 	{

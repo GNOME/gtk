@@ -241,6 +241,10 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
             display_broadway->touch_sequence_down == message->touch.sequence_id)
           display_broadway->touch_sequence_down = 0;
 
+        if (event_type != GDK_TOUCH_BEGIN &&
+            is_first_down && _gdk_broadway_moveresize_handle_event (display, message))
+          break;
+
 	event = gdk_event_new (event_type);
 	event->touch.window = g_object_ref (window);
 	event->touch.sequence = GUINT_TO_POINTER(message->touch.sequence_id);
