@@ -16,26 +16,26 @@
  */
 
 /*
- * GtkBubbleWindow is a bubble-like context window, primarily mean for
+ * GtkPopover is a bubble-like context window, primarily mean for
  * context-dependent helpers on touch interfaces.
  *
- * In order to place a GtkBubbleWindow to point to some other area,
- * use gtk_bubble_window_set_relative_to(), gtk_bubble_window_set_pointing_to()
- * and gtk_bubble_window_set_position(). Although it is usually  more
- * convenient to use gtk_bubble_window_popup() which handles all of those
+ * In order to place a GtkPopover to point to some other area,
+ * use gtk_popover_set_relative_to(), gtk_popover_set_pointing_to()
+ * and gtk_popover_set_position(). Although it is usually  more
+ * convenient to use gtk_popover_popup() which handles all of those
  * at once.
  *
- * By default, no grabs are performed on the GtkBubbleWindow, leaving
- * the popup/popdown semantics up to the caller, gtk_bubble_window_grab()
+ * By default, no grabs are performed on the GtkPopover, leaving
+ * the popup/popdown semantics up to the caller, gtk_popover_grab()
  * can be used to grab the window for a device pair, bringing #GtkMenu alike
  * popdown behavior by default on keyboard/pointer interaction. Grabs need
- * to be undone through gtk_bubble_window_ungrab().
+ * to be undone through gtk_popover_ungrab().
  */
 
 #include "config.h"
 #include <gdk/gdk.h>
 #include <cairo-gobject.h>
-#include "gtkbubblewindowprivate.h"
+#include "gtkpopover.h"
 #include "gtktypebuiltins.h"
 #include "gtkmain.h"
 #include "gtkprivate.h"
@@ -46,7 +46,7 @@
 
 #define POS_IS_VERTICAL(p) ((p) == GTK_POS_TOP || (p) == GTK_POS_BOTTOM)
 
-typedef struct _GtkBubbleWindowPrivate GtkBubbleWindowPrivate;
+typedef struct _GtkPopoverPrivate GtkPopoverPrivate;
 
 enum {
   PROP_RELATIVE_TO = 1,
@@ -54,52 +54,53 @@ enum {
   PROP_POSITION
 };
 
-struct _GtkBubbleWindowPrivate
+struct _GtkPopoverPrivate
 {
   GdkDevice *device;
   GtkWidget *widget;
   GtkWindow *window;
   cairo_rectangle_int_t pointing_to;
-  gint win_x;
-  gint win_y;
   guint has_pointing_to    : 1;
   guint preferred_position : 2;
   guint final_position     : 2;
+  guint current_position   : 2;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkBubbleWindow, _gtk_bubble_window, GTK_TYPE_BIN)
+static void gtk_popover_update_position    (GtkPopover *popover);
+
+G_DEFINE_TYPE_WITH_PRIVATE (GtkPopover, gtk_popover, GTK_TYPE_BIN)
 
 static void
-_gtk_bubble_window_init (GtkBubbleWindow *window)
+gtk_popover_init (GtkPopover *popover)
 {
   GtkWidget *widget;
 
-  widget = GTK_WIDGET (window);
+  widget = GTK_WIDGET (popover);
   gtk_widget_set_has_window (widget, TRUE);
-  window->priv = _gtk_bubble_window_get_instance_private (window);
+  popover->priv = gtk_popover_get_instance_private (popover);
   gtk_style_context_add_class (gtk_widget_get_style_context (widget),
                                GTK_STYLE_CLASS_OSD);
 }
 
 static void
-gtk_bubble_window_set_property (GObject      *object,
-                                guint         prop_id,
-                                const GValue *value,
-                                GParamSpec   *pspec)
+gtk_popover_set_property (GObject      *object,
+                          guint         prop_id,
+                          const GValue *value,
+                          GParamSpec   *pspec)
 {
   switch (prop_id)
     {
     case PROP_RELATIVE_TO:
-      _gtk_bubble_window_set_relative_to (GTK_BUBBLE_WINDOW (object),
-                                          g_value_get_object (value));
+      gtk_popover_set_relative_to (GTK_POPOVER (object),
+                                   g_value_get_object (value));
       break;
     case PROP_POINTING_TO:
-      _gtk_bubble_window_set_pointing_to (GTK_BUBBLE_WINDOW (object),
-                                          g_value_get_boxed (value));
+      gtk_popover_set_pointing_to (GTK_POPOVER (object),
+                                   g_value_get_boxed (value));
       break;
     case PROP_POSITION:
-      _gtk_bubble_window_set_position (GTK_BUBBLE_WINDOW (object),
-                                       g_value_get_enum (value));
+      gtk_popover_set_position (GTK_POPOVER (object),
+                                g_value_get_enum (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -107,12 +108,12 @@ gtk_bubble_window_set_property (GObject      *object,
 }
 
 static void
-gtk_bubble_window_get_property (GObject    *object,
-                                guint       prop_id,
-                                GValue     *value,
-                                GParamSpec *pspec)
+gtk_popover_get_property (GObject    *object,
+                          guint       prop_id,
+                          GValue     *value,
+                          GParamSpec *pspec)
 {
-  GtkBubbleWindowPrivate *priv = GTK_BUBBLE_WINDOW (object)->priv;
+  GtkPopoverPrivate *priv = GTK_POPOVER (object)->priv;
 
   switch (prop_id)
     {
@@ -131,18 +132,18 @@ gtk_bubble_window_get_property (GObject    *object,
 }
 
 static void
-gtk_bubble_window_finalize (GObject *object)
+gtk_popover_finalize (GObject *object)
 {
-  GtkBubbleWindow *window = GTK_BUBBLE_WINDOW (object);
+  GtkPopover *popover = GTK_POPOVER (object);
 
-  G_OBJECT_CLASS (_gtk_bubble_window_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_popover_parent_class)->finalize (object);
 }
 
 static void
-gtk_bubble_window_dispose (GObject *object)
+gtk_popover_dispose (GObject *object)
 {
-  GtkBubbleWindow *window = GTK_BUBBLE_WINDOW (object);
-  GtkBubbleWindowPrivate *priv = window->priv;
+  GtkPopover *popover = GTK_POPOVER (object);
+  GtkPopoverPrivate *priv = popover->priv;
 
   if (priv->window)
     gtk_window_remove_popover (priv->window, GTK_WIDGET (object));
@@ -150,11 +151,11 @@ gtk_bubble_window_dispose (GObject *object)
   priv->window = NULL;
   priv->widget = NULL;
 
-  G_OBJECT_CLASS (_gtk_bubble_window_parent_class)->dispose (object);
+  G_OBJECT_CLASS (gtk_popover_parent_class)->dispose (object);
 }
 
 static void
-gtk_bubble_window_realize (GtkWidget *widget)
+gtk_popover_realize (GtkWidget *widget)
 {
   GtkAllocation allocation;
   GdkWindowAttr attributes;
@@ -188,67 +189,50 @@ gtk_bubble_window_realize (GtkWidget *widget)
 }
 
 static void
-gtk_bubble_window_map (GtkWidget *widget)
+gtk_popover_map (GtkWidget *widget)
 {
+  GTK_WIDGET_CLASS (gtk_popover_parent_class)->map (widget);
   gdk_window_show (gtk_widget_get_window (widget));
-  GTK_WIDGET_CLASS (_gtk_bubble_window_parent_class)->map (widget);
+  gtk_popover_update_position (GTK_POPOVER (widget));
 }
 
 static void
-gtk_bubble_window_unmap (GtkWidget *widget)
+gtk_popover_unmap (GtkWidget *widget)
 {
   gdk_window_hide (gtk_widget_get_window (widget));
-  GTK_WIDGET_CLASS (_gtk_bubble_window_parent_class)->unmap (widget);
+  GTK_WIDGET_CLASS (gtk_popover_parent_class)->unmap (widget);
 }
 
 static void
-gtk_bubble_window_get_pointed_to_coords (GtkBubbleWindow       *window,
-                                         gint                  *x,
-                                         gint                  *y,
-                                         cairo_rectangle_int_t *rect_out)
+gtk_popover_get_pointed_to_coords (GtkPopover            *popover,
+                                   cairo_rectangle_int_t *rect_out)
 {
-  GtkBubbleWindowPrivate *priv = window->priv;
+  GtkPopoverPrivate *priv = popover->priv;
   cairo_rectangle_int_t rect;
-  GtkAllocation window_alloc;
 
-  _gtk_bubble_window_get_pointing_to (window, &rect);
-  gtk_widget_get_allocation (GTK_WIDGET (priv->window), &window_alloc);
+  if (!rect_out)
+    return;
+
+  gtk_popover_get_pointing_to (popover, &rect);
   gtk_widget_translate_coordinates (priv->widget, GTK_WIDGET (priv->window),
                                     rect.x, rect.y, &rect.x, &rect.y);
-
-  if (POS_IS_VERTICAL (priv->final_position))
-    {
-      *x = CLAMP (rect.x + (rect.width / 2), 0, window_alloc.width);
-      *y = rect.y;
-
-      if (priv->final_position == GTK_POS_BOTTOM)
-        (*y) += rect.height;
-    }
-  else
-    {
-      *y = CLAMP (rect.y + (rect.height / 2), 0, window_alloc.height);
-      *x = rect.x;
-
-      if (priv->final_position == GTK_POS_RIGHT)
-        (*x) += rect.width;
-    }
-
-  if (rect_out)
-    *rect_out = rect;
+  *rect_out = rect;
 }
 
 static void
-gtk_bubble_window_get_gap_coords (GtkBubbleWindow *window,
-                                  gint            *initial_x_out,
-                                  gint            *initial_y_out,
-                                  gint            *tip_x_out,
-                                  gint            *tip_y_out,
-                                  gint            *final_x_out,
-                                  gint            *final_y_out,
-                                  GtkPositionType *gap_side_out)
+gtk_popover_get_gap_coords (GtkPopover      *popover,
+                            gint            *initial_x_out,
+                            gint            *initial_y_out,
+                            gint            *tip_x_out,
+                            gint            *tip_y_out,
+                            gint            *final_x_out,
+                            gint            *final_y_out,
+                            GtkPositionType *gap_side_out)
 {
-  GtkBubbleWindowPrivate *priv = window->priv;
-  gint base, tip, x, y;
+  GtkWidget *widget = GTK_WIDGET (popover);
+  GtkPopoverPrivate *priv = popover->priv;
+  cairo_rectangle_int_t rect;
+  gint base, tip, tip_pos;
   gint initial_x, initial_y;
   gint tip_x, tip_y;
   gint final_x, final_y;
@@ -256,23 +240,28 @@ gtk_bubble_window_get_gap_coords (GtkBubbleWindow *window,
   GtkAllocation allocation;
   gint border_radius;
 
-  gtk_bubble_window_get_pointed_to_coords (window, &x, &y, NULL);
-  gtk_widget_get_allocation (GTK_WIDGET (window), &allocation);
+  gtk_popover_get_pointing_to (popover, &rect);
+  gtk_widget_get_allocation (widget, &allocation);
+  gtk_widget_translate_coordinates (priv->widget, widget,
+                                    rect.x, rect.y, &rect.x, &rect.y);
 
-  gtk_style_context_get (gtk_widget_get_style_context (GTK_WIDGET (window)),
-                         gtk_widget_get_state_flags (GTK_WIDGET (window)),
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
+    rect.x += gtk_widget_get_margin_start (widget);
+  else
+    rect.x += gtk_widget_get_margin_end (widget);
+
+  rect.y += gtk_widget_get_margin_top (widget);
+
+  gtk_style_context_get (gtk_widget_get_style_context (GTK_WIDGET (popover)),
+                         gtk_widget_get_state_flags (GTK_WIDGET (popover)),
                          GTK_STYLE_PROPERTY_BORDER_RADIUS, &border_radius,
                          NULL);
-
-  base = tip = 0;
-  gap_side = GTK_POS_LEFT;
 
   if (priv->final_position == GTK_POS_BOTTOM ||
       priv->final_position == GTK_POS_RIGHT)
     {
       base = TAIL_HEIGHT;
       tip = 0;
-
       gap_side = (priv->final_position == GTK_POS_BOTTOM) ? GTK_POS_TOP : GTK_POS_LEFT;
     }
   else if (priv->final_position == GTK_POS_TOP)
@@ -287,32 +276,37 @@ gtk_bubble_window_get_gap_coords (GtkBubbleWindow *window,
       tip = allocation.width;
       gap_side = GTK_POS_RIGHT;
     }
+  else
+    g_assert_not_reached ();
 
   if (POS_IS_VERTICAL (priv->final_position))
     {
-      initial_x = CLAMP (x - priv->win_x - TAIL_GAP_WIDTH / 2,
+      tip_pos = rect.x + (rect.width / 2);
+      initial_x = CLAMP (tip_pos - TAIL_GAP_WIDTH / 2,
                          border_radius, allocation.width - TAIL_GAP_WIDTH);
       initial_y = base;
 
-      tip_x = CLAMP (x - priv->win_x, 0, allocation.width);
+      tip_x = CLAMP (tip_pos, 0, allocation.width);
       tip_y = tip;
 
-      final_x = CLAMP (x - priv->win_x + TAIL_GAP_WIDTH / 2,
-                       TAIL_GAP_WIDTH, allocation.width - border_radius);
+      final_x = CLAMP (tip_pos + TAIL_GAP_WIDTH / 2,
+                       TAIL_GAP_WIDTH, allocation.width - (2 * border_radius));
       final_y = base;
     }
   else
     {
+      tip_pos = rect.y + (rect.height / 2);
+
       initial_x = base;
-      initial_y = CLAMP (y - priv->win_y - TAIL_GAP_WIDTH / 2,
+      initial_y = CLAMP (tip_pos - TAIL_GAP_WIDTH / 2,
                          border_radius, allocation.height - TAIL_GAP_WIDTH);
 
       tip_x = tip;
-      tip_y = CLAMP (y - priv->win_y, 0, allocation.height);
+      tip_y = CLAMP (tip_pos, 0, allocation.height);
 
       final_x = base;
-      final_y = CLAMP (y - priv->win_y + TAIL_GAP_WIDTH / 2,
-                       TAIL_GAP_WIDTH, allocation.height - border_radius);
+      final_y = CLAMP (tip_pos + TAIL_GAP_WIDTH / 2,
+                       TAIL_GAP_WIDTH, allocation.height - (2 * border_radius));
     }
 
   if (initial_x_out)
@@ -335,47 +329,38 @@ gtk_bubble_window_get_gap_coords (GtkBubbleWindow *window,
 }
 
 static void
-gtk_bubble_window_get_rect_coords (GtkBubbleWindow *window,
-                                   gint            *x1_out,
-                                   gint            *y1_out,
-                                   gint            *x2_out,
-                                   gint            *y2_out)
+gtk_popover_get_rect_coords (GtkPopover *popover,
+                             gint       *x1_out,
+                             gint       *y1_out,
+                             gint       *x2_out,
+                             gint       *y2_out)
 {
-  GtkBubbleWindowPrivate *priv = window->priv;
-  gint x1, x2, y1, y2;
+  GtkWidget *widget = GTK_WIDGET (popover);
+  GtkPopoverPrivate *priv = popover->priv;
   GtkAllocation allocation;
+  gint x1, x2, y1, y2;
 
-  x1 = y1 = x2 = y2 = 0;
-  gtk_widget_get_allocation (GTK_WIDGET (window), &allocation);
+  gtk_widget_get_allocation (widget, &allocation);
+
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
+    x1 = gtk_widget_get_margin_start (widget);
+  else
+    x1 = gtk_widget_get_margin_end (widget);
+
+  y1 = gtk_widget_get_margin_top (widget);
+  x2 = allocation.width -
+    gtk_widget_get_margin_end (widget) + x1;
+  y2 = allocation.height -
+    gtk_widget_get_margin_bottom (widget) + y1;
 
   if (priv->final_position == GTK_POS_TOP)
-    {
-      x1 = 0;
-      y1 = 0;
-      x2 = allocation.width;
-      y2 = allocation.height - TAIL_HEIGHT;
-    }
+    y2 -= TAIL_HEIGHT;
   else if (priv->final_position == GTK_POS_BOTTOM)
-    {
-      x1 = 0;
-      y1 = TAIL_HEIGHT;
-      x2 = allocation.width;
-      y2 = allocation.height;
-    }
+    y1 += TAIL_HEIGHT;
   else if (priv->final_position == GTK_POS_LEFT)
-    {
-      x1 = 0;
-      y1 = 0;
-      x2 = allocation.width - TAIL_HEIGHT;
-      y2 = allocation.height;
-    }
+    x2 -= TAIL_HEIGHT;
   else if (priv->final_position == GTK_POS_RIGHT)
-    {
-      x1 = TAIL_HEIGHT;
-      y1 = 0;
-      x2 = allocation.width;
-      y2 = allocation.height;
-    }
+    x1 += TAIL_HEIGHT;
 
   if (x1_out)
     *x1_out = x1;
@@ -388,18 +373,18 @@ gtk_bubble_window_get_rect_coords (GtkBubbleWindow *window,
 }
 
 static void
-gtk_bubble_window_apply_tail_path (GtkBubbleWindow *window,
-                                   cairo_t         *cr)
+gtk_popover_apply_tail_path (GtkPopover *popover,
+                             cairo_t    *cr)
 {
   gint initial_x, initial_y;
   gint tip_x, tip_y;
   gint final_x, final_y;
 
-  gtk_bubble_window_get_gap_coords (window,
-                                    &initial_x, &initial_y,
-                                    &tip_x, &tip_y,
-                                    &final_x, &final_y,
-                                    NULL);
+  gtk_popover_get_gap_coords (popover,
+                              &initial_x, &initial_y,
+                              &tip_x, &tip_y,
+                              &final_x, &final_y,
+                              NULL);
 
   cairo_move_to (cr, initial_x, initial_y);
   cairo_line_to (cr, tip_x, tip_y);
@@ -407,18 +392,18 @@ gtk_bubble_window_apply_tail_path (GtkBubbleWindow *window,
 }
 
 static void
-gtk_bubble_window_apply_border_path (GtkBubbleWindow *window,
-                                     cairo_t         *cr)
+gtk_popover_apply_border_path (GtkPopover *popover,
+                               cairo_t    *cr)
 {
-  GtkBubbleWindowPrivate *priv;
+  GtkPopoverPrivate *priv;
   GtkAllocation allocation;
   gint x1, y1, x2, y2;
 
-  priv = window->priv;
-  gtk_widget_get_allocation (GTK_WIDGET (window), &allocation);
+  priv = popover->priv;
+  gtk_widget_get_allocation (GTK_WIDGET (popover), &allocation);
 
-  gtk_bubble_window_apply_tail_path (window, cr);
-  gtk_bubble_window_get_rect_coords (window, &x1, &y1, &x2, &y2);
+  gtk_popover_apply_tail_path (popover, cr);
+  gtk_popover_get_rect_coords (popover, &x1, &y1, &x2, &y2);
 
   if (priv->final_position == GTK_POS_TOP)
     {
@@ -453,14 +438,14 @@ gtk_bubble_window_apply_border_path (GtkBubbleWindow *window,
 }
 
 static void
-gtk_bubble_window_update_shape (GtkBubbleWindow *window)
+gtk_popover_update_shape (GtkPopover *popover)
 {
   cairo_surface_t *surface;
   cairo_region_t *region;
   GdkWindow *win;
   cairo_t *cr;
 
-  win = gtk_widget_get_window (GTK_WIDGET (window));
+  win = gtk_widget_get_window (GTK_WIDGET (popover));
   surface =
     gdk_window_create_similar_surface (win,
                                        CAIRO_CONTENT_COLOR_ALPHA,
@@ -468,83 +453,65 @@ gtk_bubble_window_update_shape (GtkBubbleWindow *window)
                                        gdk_window_get_height (win));
 
   cr = cairo_create (surface);
-  gtk_bubble_window_apply_border_path (window, cr);
+  gtk_popover_apply_border_path (popover, cr);
   cairo_fill (cr);
   cairo_destroy (cr);
 
   region = gdk_cairo_region_create_from_surface (surface);
   cairo_surface_destroy (surface);
 
-  gtk_widget_shape_combine_region (GTK_WIDGET (window), region);
+  gtk_widget_shape_combine_region (GTK_WIDGET (popover), region);
   cairo_region_destroy (region);
 }
 
 static void
-gtk_bubble_window_update_position (GtkBubbleWindow *window)
+gtk_popover_update_position (GtkPopover *popover)
 {
-  GtkAllocation allocation, window_alloc;
-  GtkBubbleWindowPrivate *priv;
+  GtkAllocation window_alloc;
   cairo_rectangle_int_t rect;
-  gint win_x, win_y, x, y;
+  GtkPopoverPrivate *priv;
+  GtkRequisition req;
 
-  priv = window->priv;
-  gtk_widget_get_allocation (GTK_WIDGET (window), &allocation);
+  priv = popover->priv;
+
+  if (!priv->window)
+    return;
+
+  gtk_widget_get_preferred_size (GTK_WIDGET (popover), NULL, &req);
   gtk_widget_get_allocation (GTK_WIDGET (priv->window), &window_alloc);
   priv->final_position = priv->preferred_position;
-  _gtk_bubble_window_get_pointing_to (window, &rect);
 
-  gtk_bubble_window_get_pointed_to_coords (window, &x, &y, &rect);
+  gtk_popover_get_pointed_to_coords (popover, &rect);
 
   /* Check whether there's enough room on the
    * preferred side, move to the opposite one if not.
    */
-  if (priv->preferred_position == GTK_POS_TOP && rect.y < allocation.height)
+  if (priv->preferred_position == GTK_POS_TOP && rect.y < req.height)
     priv->final_position = GTK_POS_BOTTOM;
   else if (priv->preferred_position == GTK_POS_BOTTOM &&
-           rect.y > window_alloc.height - allocation.height)
+           rect.y > window_alloc.height - req.height)
     priv->final_position = GTK_POS_TOP;
-  else if (priv->preferred_position == GTK_POS_LEFT && rect.x < allocation.width)
+  else if (priv->preferred_position == GTK_POS_LEFT && rect.x < req.width)
     priv->final_position = GTK_POS_RIGHT;
   else if (priv->preferred_position == GTK_POS_RIGHT &&
-           rect.x > window_alloc.width - allocation.width)
+           rect.x > window_alloc.width - req.width)
     priv->final_position = GTK_POS_LEFT;
 
-  if (POS_IS_VERTICAL (priv->final_position))
+  gtk_window_set_popover_position (priv->window, GTK_WIDGET (popover),
+                                   priv->final_position, &rect);
+
+  if (priv->final_position != priv->current_position)
     {
-      win_x = CLAMP (x - allocation.width / 2,
-                     0, window_alloc.width - allocation.width);
-      win_y = y;
+      if (gtk_widget_is_drawable (GTK_WIDGET (popover)))
+        gtk_popover_update_shape (popover);
 
-      if (priv->final_position == GTK_POS_TOP)
-        win_y -= allocation.height;
-      else if (priv->final_position == GTK_POS_BOTTOM)
-        win_y += rect.height;
+      priv->current_position = priv->final_position;
     }
-  else
-    {
-      win_y = CLAMP (y - allocation.height / 2,
-		     0, window_alloc.height - allocation.height);
-      win_x = x;
-
-      if (priv->final_position == GTK_POS_LEFT)
-        win_x -= allocation.width;
-      else if (priv->final_position == GTK_POS_RIGHT)
-        win_x += rect.width;
-    }
-
-  priv->win_x = win_x;
-  priv->win_y = win_y;
-
-  gtk_window_set_popover_position (priv->window,
-                                   GTK_WIDGET (window),
-                                   win_x, win_y);
-
-  gtk_bubble_window_update_shape (window);
 }
 
 static gboolean
-gtk_bubble_window_draw (GtkWidget *widget,
-                        cairo_t   *cr)
+gtk_popover_draw (GtkWidget *widget,
+                  cairo_t   *cr)
 {
   GtkStyleContext *context;
   GtkAllocation allocation;
@@ -561,20 +528,20 @@ gtk_bubble_window_draw (GtkWidget *widget,
   state = gtk_widget_get_state_flags (widget);
   gtk_widget_get_allocation (widget, &allocation);
 
-  gtk_bubble_window_get_rect_coords (GTK_BUBBLE_WINDOW (widget),
-                                     &rect_x1, &rect_y1,
-                                     &rect_x2, &rect_y2);
+  gtk_popover_get_rect_coords (GTK_POPOVER (widget),
+                               &rect_x1, &rect_y1,
+                               &rect_x2, &rect_y2);
 
   /* Render the rect background */
   gtk_render_background (context, cr,
                          rect_x1, rect_y1,
                          rect_x2 - rect_x1, rect_y2 - rect_y1);
 
-  gtk_bubble_window_get_gap_coords (GTK_BUBBLE_WINDOW (widget),
-                                    &initial_x, &initial_y,
-                                    NULL, NULL,
-                                    &final_x, &final_y,
-                                    &gap_side);
+  gtk_popover_get_gap_coords (GTK_POPOVER (widget),
+                              &initial_x, &initial_y,
+                              NULL, NULL,
+                              &final_x, &final_y,
+                              &gap_side);
 
   if (POS_IS_VERTICAL (gap_side))
     {
@@ -597,7 +564,7 @@ gtk_bubble_window_draw (GtkWidget *widget,
   /* Clip to the arrow shape */
   cairo_save (cr);
 
-  gtk_bubble_window_apply_tail_path (GTK_BUBBLE_WINDOW (widget), cr);
+  gtk_popover_apply_tail_path (GTK_POPOVER (widget), cr);
   cairo_clip (cr);
 
   /* Render the arrow background */
@@ -611,7 +578,7 @@ gtk_bubble_window_draw (GtkWidget *widget,
   if (border.bottom > 0)
     {
       gtk_style_context_get_border_color (context, state, &border_color);
-      gtk_bubble_window_apply_tail_path (GTK_BUBBLE_WINDOW (widget), cr);
+      gtk_popover_apply_tail_path (GTK_POPOVER (widget), cr);
       gdk_cairo_set_source_rgba (cr, &border_color);
 
       cairo_set_line_width (cr, border.bottom);
@@ -649,16 +616,16 @@ get_padding_and_border (GtkWidget *widget,
 }
 
 static void
-gtk_bubble_window_get_preferred_width (GtkWidget *widget,
-                                       gint      *minimum_width,
-                                       gint      *natural_width)
+gtk_popover_get_preferred_width (GtkWidget *widget,
+                                 gint      *minimum_width,
+                                 gint      *natural_width)
 {
-  GtkBubbleWindowPrivate *priv;
+  GtkPopoverPrivate *priv;
   GtkWidget *child;
   gint min, nat;
   GtkBorder border;
 
-  priv = GTK_BUBBLE_WINDOW (widget)->priv;
+  priv = GTK_POPOVER (widget)->priv;
   child = gtk_bin_get_child (GTK_BIN (widget));
   min = nat = 0;
 
@@ -669,7 +636,7 @@ gtk_bubble_window_get_preferred_width (GtkWidget *widget,
   min += border.left + border.right;
   nat += border.left + border.right;
 
-  if (!POS_IS_VERTICAL (priv->final_position))
+  if (!POS_IS_VERTICAL (priv->preferred_position))
     {
       min += TAIL_HEIGHT;
       nat += TAIL_HEIGHT;
@@ -683,16 +650,16 @@ gtk_bubble_window_get_preferred_width (GtkWidget *widget,
 }
 
 static void
-gtk_bubble_window_get_preferred_height (GtkWidget *widget,
-                                        gint      *minimum_height,
-                                        gint      *natural_height)
+gtk_popover_get_preferred_height (GtkWidget *widget,
+                                  gint      *minimum_height,
+                                  gint      *natural_height)
 {
-  GtkBubbleWindowPrivate *priv;
+  GtkPopoverPrivate *priv;
   GtkWidget *child;
   gint min, nat;
   GtkBorder border;
 
-  priv = GTK_BUBBLE_WINDOW (widget)->priv;
+  priv = GTK_POPOVER (widget)->priv;
   child = gtk_bin_get_child (GTK_BIN (widget));
   min = nat = 0;
 
@@ -703,7 +670,7 @@ gtk_bubble_window_get_preferred_height (GtkWidget *widget,
   min += border.top + border.bottom;
   nat += border.top + border.bottom;
 
-  if (POS_IS_VERTICAL (priv->final_position))
+  if (POS_IS_VERTICAL (priv->preferred_position))
     {
       min += TAIL_HEIGHT;
       nat += TAIL_HEIGHT;
@@ -717,41 +684,28 @@ gtk_bubble_window_get_preferred_height (GtkWidget *widget,
 }
 
 static void
-gtk_bubble_window_size_allocate (GtkWidget     *widget,
-                                 GtkAllocation *allocation)
+gtk_popover_size_allocate (GtkWidget     *widget,
+                           GtkAllocation *allocation)
 {
-  GtkBubbleWindowPrivate *priv;
   GtkWidget *child;
 
-  priv = GTK_BUBBLE_WINDOW (widget)->priv;
   gtk_widget_set_allocation (widget, allocation);
   child = gtk_bin_get_child (GTK_BIN (widget));
-
-  if (gtk_widget_get_visible (widget))
-    gtk_bubble_window_update_position (GTK_BUBBLE_WINDOW (widget));
 
   if (child)
     {
       GtkAllocation child_alloc;
+      gint x1, y1, x2, y2;
       GtkBorder border;
 
+      gtk_popover_get_rect_coords (GTK_POPOVER (widget),
+                                   &x1, &y1, &x2, &y2);
       get_padding_and_border (widget, &border);
 
-      child_alloc.x = allocation->x + border.left;
-      child_alloc.y = allocation->y + border.top;
-      child_alloc.width = allocation->width - border.left - border.right;
-      child_alloc.height = allocation->height - border.top - border.bottom;
-
-      if (POS_IS_VERTICAL (priv->final_position))
-        child_alloc.height -= TAIL_HEIGHT;
-      else
-        child_alloc.width -= TAIL_HEIGHT;
-
-      if (priv->final_position == GTK_POS_BOTTOM)
-        child_alloc.y += TAIL_HEIGHT;
-      else if (priv->final_position == GTK_POS_RIGHT)
-        child_alloc.x += TAIL_HEIGHT;
-
+      child_alloc.x = x1 + border.left;
+      child_alloc.y = y1 + border.top;
+      child_alloc.width = (x2 - x1) - border.left - border.right;
+      child_alloc.height = (y2 - y1) - border.top - border.bottom;
       gtk_widget_size_allocate (child, &child_alloc);
     }
 
@@ -759,13 +713,13 @@ gtk_bubble_window_size_allocate (GtkWidget     *widget,
     {
       gdk_window_move_resize (gtk_widget_get_window (widget),
                               0, 0, allocation->width, allocation->height);
-      gtk_bubble_window_update_shape (GTK_BUBBLE_WINDOW (widget));
+      gtk_popover_update_shape (GTK_POPOVER (widget));
     }
 }
 
 static gboolean
-gtk_bubble_window_button_press (GtkWidget      *widget,
-                                GdkEventButton *event)
+gtk_popover_button_press (GtkWidget      *widget,
+                          GdkEventButton *event)
 {
   GtkWidget *child;
 
@@ -790,8 +744,8 @@ gtk_bubble_window_button_press (GtkWidget      *widget,
 }
 
 static gboolean
-gtk_bubble_window_key_press (GtkWidget   *widget,
-                             GdkEventKey *event)
+gtk_popover_key_press (GtkWidget   *widget,
+                       GdkEventKey *event)
 {
   if (event->keyval == GDK_KEY_Escape)
     {
@@ -803,25 +757,25 @@ gtk_bubble_window_key_press (GtkWidget   *widget,
 }
 
 static void
-_gtk_bubble_window_class_init (GtkBubbleWindowClass *klass)
+gtk_popover_class_init (GtkPopoverClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->set_property = gtk_bubble_window_set_property;
-  object_class->get_property = gtk_bubble_window_get_property;
-  object_class->finalize = gtk_bubble_window_finalize;
-  object_class->dispose = gtk_bubble_window_dispose;
+  object_class->set_property = gtk_popover_set_property;
+  object_class->get_property = gtk_popover_get_property;
+  object_class->finalize = gtk_popover_finalize;
+  object_class->dispose = gtk_popover_dispose;
 
-  widget_class->realize = gtk_bubble_window_realize;
-  widget_class->map = gtk_bubble_window_map;
-  widget_class->unmap = gtk_bubble_window_unmap;
-  widget_class->get_preferred_width = gtk_bubble_window_get_preferred_width;
-  widget_class->get_preferred_height = gtk_bubble_window_get_preferred_height;
-  widget_class->size_allocate = gtk_bubble_window_size_allocate;
-  widget_class->draw = gtk_bubble_window_draw;
-  widget_class->button_press_event = gtk_bubble_window_button_press;
-  widget_class->key_press_event = gtk_bubble_window_key_press;
+  widget_class->realize = gtk_popover_realize;
+  widget_class->map = gtk_popover_map;
+  widget_class->unmap = gtk_popover_unmap;
+  widget_class->get_preferred_width = gtk_popover_get_preferred_width;
+  widget_class->get_preferred_height = gtk_popover_get_preferred_height;
+  widget_class->size_allocate = gtk_popover_size_allocate;
+  widget_class->draw = gtk_popover_draw;
+  widget_class->button_press_event = gtk_popover_button_press;
+  widget_class->key_press_event = gtk_popover_key_press;
 
   g_object_class_install_property (object_class,
                                    PROP_RELATIVE_TO,
@@ -847,40 +801,56 @@ _gtk_bubble_window_class_init (GtkBubbleWindowClass *klass)
 }
 
 static void
-gtk_bubble_window_update_relative_to (GtkBubbleWindow *window,
-                                      GtkWidget       *relative_to)
+_gtk_popover_update_context_parent (GtkPopover *popover)
 {
-  GtkBubbleWindowPrivate *priv;
+  GtkStyleContext *context, *parent_context = NULL;
+  GtkPopoverPrivate *priv = popover->priv;
 
-  priv = window->priv;
+  context = gtk_widget_get_style_context (GTK_WIDGET (popover));
+
+  if (priv->widget)
+    parent_context = gtk_widget_get_style_context (priv->widget);
+
+  gtk_style_context_set_parent (context, parent_context);
+}
+
+static void
+gtk_popover_update_relative_to (GtkPopover *popover,
+                                GtkWidget  *relative_to)
+{
+  GtkPopoverPrivate *priv;
+
+  priv = popover->priv;
 
   if (priv->widget == relative_to)
     return;
 
   if (priv->window)
     {
-      gtk_window_remove_popover (priv->window, GTK_WIDGET (window));
+      gtk_window_remove_popover (priv->window, GTK_WIDGET (popover));
       priv->window = NULL;
     }
 
   priv->widget = relative_to;
-  g_object_notify (G_OBJECT (window), "relative-to");
+  g_object_notify (G_OBJECT (popover), "relative-to");
 
   if (priv->widget)
     priv->window =
       GTK_WINDOW (gtk_widget_get_ancestor (priv->widget, GTK_TYPE_WINDOW));
 
   if (priv->window)
-    gtk_window_add_popover (priv->window, GTK_WIDGET (window));
+    gtk_window_add_popover (priv->window, GTK_WIDGET (popover));
+
+  _gtk_popover_update_context_parent (popover);
 }
 
 static void
-gtk_bubble_window_update_pointing_to (GtkBubbleWindow       *window,
-                                      cairo_rectangle_int_t *pointing_to)
+gtk_popover_update_pointing_to (GtkPopover            *popover,
+                                cairo_rectangle_int_t *pointing_to)
 {
-  GtkBubbleWindowPrivate *priv;
+  GtkPopoverPrivate *priv;
 
-  priv = window->priv;
+  priv = popover->priv;
 
   if (pointing_to)
     {
@@ -890,45 +860,45 @@ gtk_bubble_window_update_pointing_to (GtkBubbleWindow       *window,
   else
     priv->has_pointing_to = FALSE;
 
-  g_object_notify (G_OBJECT (window), "pointing-to");
+  g_object_notify (G_OBJECT (popover), "pointing-to");
 }
 
 static void
-gtk_bubble_window_update_preferred_position (GtkBubbleWindow *window,
-                                             GtkPositionType  position)
+gtk_popover_update_preferred_position (GtkPopover      *popover,
+                                       GtkPositionType  position)
 {
-  GtkBubbleWindowPrivate *priv;
+  GtkPopoverPrivate *priv;
 
-  priv = window->priv;
+  priv = popover->priv;
   priv->preferred_position = position;
-  g_object_notify (G_OBJECT (window), "position");
+  g_object_notify (G_OBJECT (popover), "position");
 }
 
 /*
- * gtk_bubble_window_new:
+ * gtk_popover_new:
  *
  * Returns a newly created #GtkBubblewindow
  *
- * Returns: a new #GtkBubbleWindow
+ * Returns: a new #GtkPopover
  *
  * Since: 3.8
  */
 GtkWidget *
-_gtk_bubble_window_new (GtkWidget *relative_to)
+gtk_popover_new (GtkWidget *relative_to)
 {
-  return g_object_new (GTK_TYPE_BUBBLE_WINDOW,
+  return g_object_new (GTK_TYPE_POPOVER,
                        "relative-to", relative_to,
                        NULL);
 }
 
 /*
- * gtk_bubble_window_set_relative_to:
- * @window: a #GtkBubbleWindow
+ * gtk_popover_set_relative_to:
+ * @window: a #GtkPopover
  * @relative_to: a #GdkWindow
  *
  * Sets the #GdkWindow to act as the origin of coordinates of
  * @window, or %NULL to use the root window. See
- * gtk_bubble_window_set_pointing_to()
+ * gtk_popover_set_pointing_to()
  *
  * If @window is currently visible, it will be moved to reflect
  * this change.
@@ -936,21 +906,19 @@ _gtk_bubble_window_new (GtkWidget *relative_to)
  * Since: 3.8
  */
 void
-_gtk_bubble_window_set_relative_to (GtkBubbleWindow *window,
-                                    GtkWidget       *relative_to)
+gtk_popover_set_relative_to (GtkPopover *popover,
+                             GtkWidget  *relative_to)
 {
-  g_return_if_fail (GTK_IS_BUBBLE_WINDOW (window));
+  g_return_if_fail (GTK_IS_POPOVER (popover));
   g_return_if_fail (GTK_IS_WIDGET (relative_to));
 
-  gtk_bubble_window_update_relative_to (window, relative_to);
-
-  if (gtk_widget_get_visible (GTK_WIDGET (window)))
-    gtk_bubble_window_update_position (window);
+  gtk_popover_update_relative_to (popover, relative_to);
+  gtk_popover_update_position (popover);
 }
 
 /*
- * gtk_bubble_window_get_relative_to:
- * @window: a #GtkBubbleWindow
+ * gtk_popover_get_relative_to:
+ * @window: a #GtkPopover
  *
  * Returns the #GdkWindow used as the origin of coordinates.
  * If @window is currently visible, it will be moved to reflect
@@ -961,44 +929,42 @@ _gtk_bubble_window_set_relative_to (GtkBubbleWindow *window,
  * Since: 3.8
  */
 GtkWidget *
-_gtk_bubble_window_get_relative_to (GtkBubbleWindow *window)
+gtk_popover_get_relative_to (GtkPopover *popover)
 {
-  GtkBubbleWindowPrivate *priv;
+  GtkPopoverPrivate *priv;
 
-  g_return_val_if_fail (GTK_IS_BUBBLE_WINDOW (window), NULL);
+  g_return_val_if_fail (GTK_IS_POPOVER (popover), NULL);
 
-  priv = window->priv;
+  priv = popover->priv;
 
   return priv->widget;
 }
 
 /*
- * gtk_bubble_window_set_pointing_to:
- * @window: a #GtkBubbleWindow
+ * gtk_popover_set_pointing_to:
+ * @window: a #GtkPopover
  * @rect: rectangle to point to
  *
  * Sets the rectangle that @window will point to, the coordinates
  * of this rectangle are relative to the #GdkWindow set through
- * gtk_bubble_window_set_relative_to().
+ * gtk_popover_set_relative_to().
  *
  * Since: 3.8
  */
 void
-_gtk_bubble_window_set_pointing_to (GtkBubbleWindow       *window,
-                                    cairo_rectangle_int_t *rect)
+gtk_popover_set_pointing_to (GtkPopover            *popover,
+                             cairo_rectangle_int_t *rect)
 {
-  g_return_if_fail (GTK_IS_BUBBLE_WINDOW (window));
+  g_return_if_fail (GTK_IS_POPOVER (popover));
   g_return_if_fail (rect != NULL);
 
-  gtk_bubble_window_update_pointing_to (window, rect);
-
-  if (gtk_widget_get_visible (GTK_WIDGET (window)))
-    gtk_bubble_window_update_position (window);
+  gtk_popover_update_pointing_to (popover, rect);
+  gtk_popover_update_position (popover);
 }
 
 /*
- * gtk_bubble_window_get_pointing_to:
- * @window: a #GtkBubbleWindow
+ * gtk_popover_get_pointing_to:
+ * @window: a #GtkPopover
  * @rect: (out): location to store the rectangle
  *
  * If a rectangle to point to is set, this function will return
@@ -1010,14 +976,14 @@ _gtk_bubble_window_set_pointing_to (GtkBubbleWindow       *window,
  * Since: 3.8
  */
 gboolean
-_gtk_bubble_window_get_pointing_to (GtkBubbleWindow       *window,
-                                    cairo_rectangle_int_t *rect)
+gtk_popover_get_pointing_to (GtkPopover            *popover,
+                             cairo_rectangle_int_t *rect)
 {
-  GtkBubbleWindowPrivate *priv;
+  GtkPopoverPrivate *priv;
 
-  g_return_val_if_fail (GTK_IS_BUBBLE_WINDOW (window), FALSE);
+  g_return_val_if_fail (GTK_IS_POPOVER (popover), FALSE);
 
-  priv = window->priv;
+  priv = popover->priv;
 
   if (rect)
     {
@@ -1034,8 +1000,8 @@ _gtk_bubble_window_get_pointing_to (GtkBubbleWindow       *window,
 }
 
 /*
- * gtk_bubble_window_set_position:
- * @window: a #GtkBubbleWindow
+ * gtk_popover_set_position:
+ * @window: a #GtkPopover
  * @position: preferred bubble position
  *
  * Sets the preferred position for @window to appear.
@@ -1045,27 +1011,25 @@ _gtk_bubble_window_get_pointing_to (GtkBubbleWindow       *window,
  * <note>
  *   This preference will be respected where possible, although
  *   on lack of space (eg. if close to the screen edges), the
- *   #GtkBubbleWindow may choose to appear on the opposite side
+ *   #GtkPopover may choose to appear on the opposite side
  * </note>
  *
  * Since: 3.8
  */
 void
-_gtk_bubble_window_set_position (GtkBubbleWindow *window,
-                                 GtkPositionType  position)
+gtk_popover_set_position (GtkPopover      *popover,
+                          GtkPositionType  position)
 {
-  g_return_if_fail (GTK_IS_BUBBLE_WINDOW (window));
+  g_return_if_fail (GTK_IS_POPOVER (popover));
   g_return_if_fail (position >= GTK_POS_LEFT && position <= GTK_POS_BOTTOM);
 
-  gtk_bubble_window_update_preferred_position (window, position);
-
-  if (gtk_widget_get_visible (GTK_WIDGET (window)))
-    gtk_bubble_window_update_position (window);
+  gtk_popover_update_preferred_position (popover, position);
+  gtk_popover_update_position (popover);
 }
 
 /*
- * gtk_bubble_window_get_position:
- * @window: a #GtkBubbleWindow
+ * gtk_popover_get_position:
+ * @window: a #GtkPopover
  *
  * Returns the preferred position to place @window
  *
@@ -1074,13 +1038,13 @@ _gtk_bubble_window_set_position (GtkBubbleWindow *window,
  * Since: 3.8
  */
 GtkPositionType
-_gtk_bubble_window_get_position (GtkBubbleWindow *window)
+gtk_popover_get_position (GtkPopover *popover)
 {
-  GtkBubbleWindowPrivate *priv;
+  GtkPopoverPrivate *priv;
 
-  g_return_val_if_fail (GTK_IS_BUBBLE_WINDOW (window), GTK_POS_TOP);
+  g_return_val_if_fail (GTK_IS_POPOVER (popover), GTK_POS_TOP);
 
-  priv = window->priv;
+  priv = popover->priv;
 
   return priv->preferred_position;
 }
