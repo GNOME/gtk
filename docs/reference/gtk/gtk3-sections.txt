@@ -5673,6 +5673,9 @@ gtk_window_get_application
 gtk_window_set_application
 gtk_window_set_has_user_ref_count
 gtk_window_set_titlebar
+gtk_window_add_popover
+gtk_window_remove_popover
+gtk_window_set_popover_position
 
 <SUBSECTION Standard>
 GTK_WINDOW
@@ -7830,4 +7833,17 @@ gtk_flow_box_child_new
 gtk_flow_box_child_get_index
 gtk_flow_box_child_is_selected
 gtk_flow_box_child_changed
+</SECTION>
+
+<SECTION>
+<FILE>gtkpopover</FILE>
+<TITLE>GtkPopover</TITLE>
+GtkPopover
+gtk_popover_new
+gtk_popover_set_relative_to
+gtk_popover_get_relative_to
+gtk_popover_set_pointing_to
+gtk_popover_get_pointing_to
+gtk_popover_set_position
+gtk_popover_get_position
 </SECTION>

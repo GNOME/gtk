@@ -11914,6 +11914,16 @@ _gtk_window_get_shadow_width (GtkWindow *window,
   get_shadow_width (GTK_WIDGET (window), border);
 }
 
+/**
+ * gtk_window_add_popover:
+ * @window: a #GtkWindow
+ * @popover: a #GtkWidget to be added as a popover of @window
+ *
+ * Adds a widget so it acts as a popover within @window, it can
+ * be later positioned through gtk_window_set_popover_position().
+ *
+ * Since: 3.12
+ **/
 void
 gtk_window_add_popover (GtkWindow *window,
                         GtkWidget *popover)
@@ -11940,6 +11950,15 @@ gtk_window_add_popover (GtkWindow *window,
   gtk_widget_set_parent (popover, GTK_WIDGET (window));
 }
 
+/**
+ * gtk_window_remove_popover:
+ * @window: a #GtkWindow
+ * @popover: a #GtkWidget acting as a popover on @window
+ *
+ * Removes @popover from being a popover of @window.
+ *
+ * Since: 3.12
+ **/
 void
 gtk_window_remove_popover (GtkWindow *window,
                            GtkWidget *popover)
