@@ -209,6 +209,7 @@ gtk_popover_map (GtkWidget *widget)
 static void
 gtk_popover_unmap (GtkWidget *widget)
 {
+  gtk_grab_remove (widget);
   gdk_window_hide (gtk_widget_get_window (widget));
   GTK_WIDGET_CLASS (gtk_popover_parent_class)->unmap (widget);
 }
