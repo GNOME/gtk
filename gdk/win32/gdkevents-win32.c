@@ -3347,7 +3347,7 @@ gdk_event_check (GSource *source)
   gdk_threads_enter ();
 
   if (_gdk_display->event_pause_count > 0)
-    retval = gdk_event_queue_find_first (_gdk_display) != NULL;
+    retval = _gdk_event_queue_find_first (_gdk_display) != NULL;
   else if (event_poll_fd.revents & G_IO_IN)
     retval = (_gdk_event_queue_find_first (_gdk_display) != NULL ||
               (modal_win32_dialog == NULL &&
