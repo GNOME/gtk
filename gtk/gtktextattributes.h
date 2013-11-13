@@ -94,10 +94,24 @@ struct _GtkTextAppearance
   guint inside_selection : 1;
   guint is_text : 1;
 
+  /* For the sad story of this bit of code, see
+   * https://bugzilla.gnome.org/show_bug.cgi?id=711158
+   */
+#ifdef __GI_SCANNER__
+  /* The scanner should only see the transparent union, so that its
+   * content does not vary across architectures.
+   */
   union {
     GdkRGBA *rgba[2];
     guint padding[4];
   };
+#else
+  GdkRGBA *rgba[2];
+#if (defined(__SIZEOF_INT__) && defined(__SIZEOF_POINTER__)) && (__SIZEOF_INT__ == __SIZEOF_POINTER__)
+  /* unusable, just for ABI compat */
+  guint padding[2];
+#endif
+#endif
 };
 
 /**
