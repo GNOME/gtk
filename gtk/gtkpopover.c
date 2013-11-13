@@ -613,17 +613,20 @@ get_padding_and_border (GtkWidget *widget,
 {
   GtkStyleContext *context;
   GtkStateFlags state;
+  gint border_width;
   GtkBorder tmp;
 
   context = gtk_widget_get_style_context (widget);
   state = gtk_widget_get_state_flags (widget);
 
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+
   gtk_style_context_get_padding (context, state, border);
   gtk_style_context_get_border (context, state, &tmp);
-  border->top += tmp.top;
-  border->right += tmp.right;
-  border->bottom += tmp.bottom;
-  border->left += tmp.left;
+  border->top += tmp.top + border_width;
+  border->right += tmp.right + border_width;
+  border->bottom += tmp.bottom + border_width;
+  border->left += tmp.left + border_width;
 }
 
 static void
