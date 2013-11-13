@@ -122,7 +122,8 @@ typedef struct {
 
 typedef struct {
   BroadwayInputBaseMsg base;
-  gint32 id;
+  gint32 new_id;
+  gint32 old_id;
 } BroadwayInputFocusMsg;
 
 typedef union {

@@ -1545,15 +1545,16 @@ broadway_server_focus_window (BroadwayServer *server,
   if (server->focused_window_id == new_focused_window)
     return;
 
-  /* Keep track of the new focused window */
-  server->focused_window_id = new_focused_window;
-
   memset (&focus_msg, 0, sizeof (focus_msg));
   focus_msg.base.type = BROADWAY_EVENT_FOCUS;
   focus_msg.base.time = broadway_server_get_last_seen_time (server);
-  focus_msg.focus.id = new_focused_window;
+  focus_msg.focus.old_id = server->focused_window_id;
+  focus_msg.focus.new_id = new_focused_window;
 
   broadway_events_got_input (&focus_msg, -1);
+
+  /* Keep track of the new focused window */
+  server->focused_window_id = new_focused_window;
 }
 
 guint32

@@ -345,7 +345,17 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
     break;
 
   case BROADWAY_EVENT_FOCUS:
-    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->focus.id));
+    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->focus.old_id));
+    if (window)
+      {
+	event = gdk_event_new (GDK_FOCUS_CHANGE);
+	event->focus_change.window = g_object_ref (window);
+	event->focus_change.in = FALSE;
+	gdk_event_set_device (event, display->core_pointer);
+	node = _gdk_event_queue_append (display, event);
+	_gdk_windowing_got_event (display, node, event, message->base.serial);
+      }
+    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (message->focus.new_id));
     if (window)
       {
 	event = gdk_event_new (GDK_FOCUS_CHANGE);
