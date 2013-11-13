@@ -15,21 +15,23 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
- * GtkPopover is a bubble-like context window, primarily mean for
- * context-dependent helpers on touch interfaces.
+/**
+ * SECTION:gtkpopover
+ * @Short_description: Context dependent bubbles
+ * @Title: GtkPopover
  *
- * In order to place a GtkPopover to point to some other area,
- * use gtk_popover_set_relative_to(), gtk_popover_set_pointing_to()
- * and gtk_popover_set_position(). Although it is usually  more
- * convenient to use gtk_popover_popup() which handles all of those
- * at once.
+ * GtkPopover is a bubble-like context window, primarily meant to
+ * provide context-dependent information or options. Popovers are
+ * attached to a widget, passed at construction time on gtk_popover_new(),
+ * or updated afterwards through gtk_popover_set_relative_to(), by
+ * default they will point to the whole widget area, although this
+ * behavior can be changed through gtk_popover_set_pointing_to().
  *
- * By default, no grabs are performed on the GtkPopover, leaving
- * the popup/popdown semantics up to the caller, gtk_popover_grab()
- * can be used to grab the window for a device pair, bringing #GtkMenu alike
- * popdown behavior by default on keyboard/pointer interaction. Grabs need
- * to be undone through gtk_popover_ungrab().
+ * The position of a popover relative to the widget it is attached to
+ * can also be changed through gtk_popover_set_position().
+ *
+ * By default, no grabs are performed on #GtkPopover<!-- -->s, if a
+ * modal behavior is desired, a GTK+ grab can be added with gtk_grab_add()
  */
 
 #include "config.h"
@@ -791,13 +793,27 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   widget_class->button_press_event = gtk_popover_button_press;
   widget_class->key_press_event = gtk_popover_key_press;
 
+  /**
+   * GtkPopover:relative-to:
+   *
+   * Sets the attached widget.
+   *
+   * Since: 3.12
+   */
   g_object_class_install_property (object_class,
                                    PROP_RELATIVE_TO,
                                    g_param_spec_object ("relative-to",
                                                         P_("Relative to"),
-                                                        P_("Window the bubble window points to"),
+                                                        P_("Widget the bubble window points to"),
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE));
+  /**
+   * GtkPopover:pointing-to:
+   *
+   * Marks a specific rectangle to be pointed.
+   *
+   * Since: 3.12
+   */
   g_object_class_install_property (object_class,
                                    PROP_POINTING_TO,
                                    g_param_spec_boxed ("pointing-to",
@@ -805,6 +821,13 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                                                        P_("Rectangle the bubble window points to"),
                                                        CAIRO_GOBJECT_TYPE_RECTANGLE_INT,
                                                        GTK_PARAM_READWRITE));
+  /**
+   * GtkPopover:position
+   *
+   * Sets the preferred position of the popover.
+   *
+   * Since: 3.12
+   */
   g_object_class_install_property (object_class,
                                    PROP_POSITION,
                                    g_param_spec_enum ("position",
@@ -966,15 +989,16 @@ gtk_popover_update_preferred_position (GtkPopover      *popover,
   g_object_notify (G_OBJECT (popover), "position");
 }
 
-/*
+/**
  * gtk_popover_new:
+ * @relative_to: #GtkWidget the popover is related to
  *
- * Returns a newly created #GtkBubblewindow
+ * Creates a new popover to point to @relative_to
  *
  * Returns: a new #GtkPopover
  *
- * Since: 3.8
- */
+ * Since: 3.12
+ **/
 GtkWidget *
 gtk_popover_new (GtkWidget *relative_to)
 {
@@ -983,20 +1007,16 @@ gtk_popover_new (GtkWidget *relative_to)
                        NULL);
 }
 
-/*
+/**
  * gtk_popover_set_relative_to:
- * @window: a #GtkPopover
- * @relative_to: a #GdkWindow
+ * @popover: a #GtkPopover
+ * @relative_to: a #GtkWidget
  *
- * Sets the #GdkWindow to act as the origin of coordinates of
- * @window, or %NULL to use the root window. See
- * gtk_popover_set_pointing_to()
+ * Sets a new widget to be attached to @popover. If @popover is
+ * visible, the position will be updated.
  *
- * If @window is currently visible, it will be moved to reflect
- * this change.
- *
- * Since: 3.8
- */
+ * Since: 3.12
+ **/
 void
 gtk_popover_set_relative_to (GtkPopover *popover,
                              GtkWidget  *relative_to)
@@ -1008,18 +1028,16 @@ gtk_popover_set_relative_to (GtkPopover *popover,
   gtk_popover_update_position (popover);
 }
 
-/*
+/**
  * gtk_popover_get_relative_to:
- * @window: a #GtkPopover
+ * @popover: a #GtkPopover
  *
- * Returns the #GdkWindow used as the origin of coordinates.
- * If @window is currently visible, it will be moved to reflect
- * this change.
+ * Returns the wigdet @popover is currently attached to
  *
- * Returns: the #GdkWindow @window is placed upon
+ * Returns: a #GtkWidget
  *
- * Since: 3.8
- */
+ * Since: 3.12
+ **/
 GtkWidget *
 gtk_popover_get_relative_to (GtkPopover *popover)
 {
@@ -1032,17 +1050,17 @@ gtk_popover_get_relative_to (GtkPopover *popover)
   return priv->widget;
 }
 
-/*
+/**
  * gtk_popover_set_pointing_to:
- * @window: a #GtkPopover
+ * @popover: a #GtkPopover
  * @rect: rectangle to point to
  *
- * Sets the rectangle that @window will point to, the coordinates
- * of this rectangle are relative to the #GdkWindow set through
- * gtk_popover_set_relative_to().
+ * Sets the rectangle that @popover will point to, in the coordinate
+ * space of the widget @popover is attached to, see
+ * gtk_popover_set_relative_to()
  *
- * Since: 3.8
- */
+ * Since: 3.12
+ **/
 void
 gtk_popover_set_pointing_to (GtkPopover            *popover,
                              cairo_rectangle_int_t *rect)
@@ -1054,19 +1072,18 @@ gtk_popover_set_pointing_to (GtkPopover            *popover,
   gtk_popover_update_position (popover);
 }
 
-/*
+/**
  * gtk_popover_get_pointing_to:
- * @window: a #GtkPopover
+ * @popover: a #GtkPopover
  * @rect: (out): location to store the rectangle
  *
- * If a rectangle to point to is set, this function will return
- * %TRUE and fill in @rect with the rectangle @window is currently
- * pointing to.
+ * If a rectangle to point to has been set, this function will
+ * return %TRUE and fill in @rect with such rectangle, otherwise
+ * it will return %FALSE and fill in @rect with the attached
+ * widget coordinates.
  *
- * Returns: %TRUE if a rectangle is set
- *
- * Since: 3.8
- */
+ * Returns: %TRUE if a rectangle to point to was set.
+ **/
 gboolean
 gtk_popover_get_pointing_to (GtkPopover            *popover,
                              cairo_rectangle_int_t *rect)
@@ -1091,23 +1108,22 @@ gtk_popover_get_pointing_to (GtkPopover            *popover,
   return priv->has_pointing_to;
 }
 
-/*
+/**
  * gtk_popover_set_position:
- * @window: a #GtkPopover
- * @position: preferred bubble position
+ * @popover: a #GtkPopover
+ * @position: preferred popover position
  *
- * Sets the preferred position for @window to appear.
- * If @window is currently visible, it will be moved to reflect
- * this change.
+ * Sets the preferred position for @popover to appear. If the @popover
+ * is currently visible, it will be immediately updated.
  *
  * <note>
  *   This preference will be respected where possible, although
- *   on lack of space (eg. if close to the screen edges), the
+ *   on lack of space (eg. if close to the window edges), the
  *   #GtkPopover may choose to appear on the opposite side
  * </note>
  *
- * Since: 3.8
- */
+ * Since: 3.12
+ **/
 void
 gtk_popover_set_position (GtkPopover      *popover,
                           GtkPositionType  position)
@@ -1119,16 +1135,14 @@ gtk_popover_set_position (GtkPopover      *popover,
   gtk_popover_update_position (popover);
 }
 
-/*
+/**
  * gtk_popover_get_position:
- * @window: a #GtkPopover
+ * @popover: a #GtkPopover
  *
- * Returns the preferred position to place @window
+ * Returns the preferred position of @popover.
  *
- * Returns: The preferred position
- *
- * Since: 3.8
- */
+ * Returns: The preferred position.
+ **/
 GtkPositionType
 gtk_popover_get_position (GtkPopover *popover)
 {

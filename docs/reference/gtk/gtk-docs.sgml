@@ -190,6 +190,7 @@
       <xi:include href="xml/gtkmenutoolbutton.xml" />
       <xi:include href="xml/gtktoggletoolbutton.xml" />
       <xi:include href="xml/gtkradiotoolbutton.xml" />
+      <xi:include href="xml/gtkpopover.xml" />
     </chapter>
 
     <chapter id="SelectorWidgets">
