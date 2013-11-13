@@ -56,10 +56,12 @@ enum {
 
 struct _GtkPopoverPrivate
 {
-  GdkDevice *device;
   GtkWidget *widget;
   GtkWindow *window;
   cairo_rectangle_int_t pointing_to;
+  guint hierarchy_changed_id;
+  guint size_allocate_id;
+  guint unmap_id;
   guint has_pointing_to    : 1;
   guint preferred_position : 2;
   guint final_position     : 2;
@@ -67,6 +69,8 @@ struct _GtkPopoverPrivate
 };
 
 static void gtk_popover_update_position    (GtkPopover *popover);
+static void gtk_popover_update_relative_to (GtkPopover *popover,
+                                            GtkWidget  *relative_to);
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkPopover, gtk_popover, GTK_TYPE_BIN)
 
@@ -135,6 +139,10 @@ static void
 gtk_popover_finalize (GObject *object)
 {
   GtkPopover *popover = GTK_POPOVER (object);
+  GtkPopoverPrivate *priv = popover->priv;
+
+  if (priv->widget)
+    gtk_popover_update_relative_to (popover, NULL);
 
   G_OBJECT_CLASS (gtk_popover_parent_class)->finalize (object);
 }
@@ -149,7 +157,9 @@ gtk_popover_dispose (GObject *object)
     gtk_window_remove_popover (priv->window, GTK_WIDGET (object));
 
   priv->window = NULL;
-  priv->widget = NULL;
+
+  if (priv->widget)
+    gtk_popover_update_relative_to (popover, NULL);
 
   G_OBJECT_CLASS (gtk_popover_parent_class)->dispose (object);
 }
@@ -815,6 +825,59 @@ _gtk_popover_update_context_parent (GtkPopover *popover)
 }
 
 static void
+_gtk_popover_parent_hierarchy_changed (GtkWidget  *widget,
+                                       GtkWidget  *previous_toplevel,
+                                       GtkPopover *popover)
+{
+  GtkPopoverPrivate *priv;
+  GtkWindow *new_window;
+
+  priv = popover->priv;
+  new_window = GTK_WINDOW (gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW));
+
+  if (priv->window == new_window)
+    return;
+
+  g_object_ref (popover);
+
+  if (priv->window)
+    gtk_window_remove_popover (priv->window, GTK_WIDGET (popover));
+
+  if (new_window)
+    {
+      gtk_window_add_popover (new_window, GTK_WIDGET (popover));
+      g_object_unref (popover);
+    }
+  else
+    g_object_force_floating (G_OBJECT (popover));
+
+  priv->window = new_window;
+
+  if (new_window)
+    gtk_popover_update_position (popover);
+
+  _gtk_popover_update_context_parent (popover);
+
+  if (gtk_widget_is_visible (GTK_WIDGET (popover)))
+    gtk_widget_queue_resize (GTK_WIDGET (popover));
+}
+
+static void
+_gtk_popover_parent_unmap (GtkWidget *widget,
+                           GtkPopover *popover)
+{
+  gtk_widget_unmap (GTK_WIDGET (popover));
+}
+
+static void
+_gtk_popover_parent_size_allocate (GtkWidget     *widget,
+                                   GtkAllocation *allocation,
+                                   GtkPopover    *popover)
+{
+  gtk_popover_update_position (popover);
+}
+
+static void
 gtk_popover_update_relative_to (GtkPopover *popover,
                                 GtkWidget  *relative_to)
 {
@@ -831,12 +894,37 @@ gtk_popover_update_relative_to (GtkPopover *popover,
       priv->window = NULL;
     }
 
+  if (priv->widget)
+    {
+      if (g_signal_handler_is_connected (priv->widget, priv->hierarchy_changed_id))
+        g_signal_handler_disconnect (priv->widget, priv->hierarchy_changed_id);
+      if (g_signal_handler_is_connected (priv->widget, priv->size_allocate_id))
+        g_signal_handler_disconnect (priv->widget, priv->size_allocate_id);
+      if (g_signal_handler_is_connected (priv->widget, priv->unmap_id))
+        g_signal_handler_disconnect (priv->widget, priv->unmap_id);
+    }
+
   priv->widget = relative_to;
   g_object_notify (G_OBJECT (popover), "relative-to");
 
   if (priv->widget)
-    priv->window =
-      GTK_WINDOW (gtk_widget_get_ancestor (priv->widget, GTK_TYPE_WINDOW));
+    {
+      priv->window =
+        GTK_WINDOW (gtk_widget_get_ancestor (priv->widget, GTK_TYPE_WINDOW));
+
+      priv->hierarchy_changed_id =
+        g_signal_connect (priv->widget, "hierarchy-changed",
+                          G_CALLBACK (_gtk_popover_parent_hierarchy_changed),
+                          popover);
+      priv->size_allocate_id =
+        g_signal_connect (priv->widget, "size-allocate",
+                          G_CALLBACK (_gtk_popover_parent_size_allocate),
+                          popover);
+      priv->unmap_id =
+        g_signal_connect (priv->widget, "unmap",
+                          G_CALLBACK (_gtk_popover_parent_unmap),
+                          popover);
+    }
 
   if (priv->window)
     gtk_window_add_popover (priv->window, GTK_WIDGET (popover));
