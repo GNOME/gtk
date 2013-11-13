@@ -2487,7 +2487,7 @@ msgstr "Se co_nnecter"
 
 #: ../gtk/gtkmountoperation.c:604
 msgid "Connect As"
-msgstr "Se co_nnecter comme"
+msgstr "Se connecter comme"
 
 #: ../gtk/gtkmountoperation.c:613
 msgid "_Anonymous"
