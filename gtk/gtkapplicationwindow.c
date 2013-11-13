@@ -723,19 +723,11 @@ gtk_application_window_real_size_allocate (GtkWidget     *widget,
       menubar_allocation.height = menubar_height;
       gtk_widget_size_allocate (window->priv->menubar, &menubar_allocation);
 
+      child_allocation.y += menubar_height;
+      child_allocation.height -= menubar_height;
       child = gtk_bin_get_child (GTK_BIN (window));
       if (child != NULL && gtk_widget_get_visible (child))
-        {
-          gint border_width;
-
-          border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
-          child_allocation.x += border_width;
-          child_allocation.y += border_width + menubar_height;
-          child_allocation.width = MAX (1, child_allocation.width - border_width * 2);
-          child_allocation.height = MAX (1, child_allocation.height - border_width * 2 - menubar_height);
-
-          gtk_widget_size_allocate (child, &child_allocation);
-        }
+        gtk_widget_size_allocate (child, &child_allocation);
     }
   else
     GTK_WIDGET_CLASS (gtk_application_window_parent_class)
