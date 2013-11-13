@@ -42,6 +42,7 @@ typedef enum {
   BROADWAY_OP_AUTH_OK = 'L',
   BROADWAY_OP_DISCONNECTED = 'D',
   BROADWAY_OP_PUT_BUFFER = 'b',
+  BROADWAY_OP_SET_SHOW_KEYBOARD = 'k',
 } BroadwayOpType;
 
 typedef struct {
@@ -154,7 +155,8 @@ typedef enum {
   BROADWAY_REQUEST_MOVE_RESIZE,
   BROADWAY_REQUEST_GRAB_POINTER,
   BROADWAY_REQUEST_UNGRAB_POINTER,
-  BROADWAY_REQUEST_FOCUS_WINDOW
+  BROADWAY_REQUEST_FOCUS_WINDOW,
+  BROADWAY_REQUEST_SET_SHOW_KEYBOARD
 } BroadwayRequestType;
 
 typedef struct {
@@ -223,6 +225,11 @@ typedef struct {
   guint32 height;
 } BroadwayRequestMoveResize;
 
+typedef struct {
+  BroadwayRequestBase base;
+  guint32 show_keyboard;
+} BroadwayRequestSetShowKeyboard;
+
 typedef union {
   BroadwayRequestBase base;
   BroadwayRequestNewWindow new_window;
@@ -239,6 +246,7 @@ typedef union {
   BroadwayRequestUngrabPointer ungrab_pointer;
   BroadwayRequestTranslate translate;
   BroadwayRequestFocusWindow focus_window;
+  BroadwayRequestSetShowKeyboard set_show_keyboard;
 } BroadwayRequest;
 
 typedef enum {

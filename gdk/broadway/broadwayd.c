@@ -297,6 +297,9 @@ client_handle_request (BroadwayClient *client,
     case BROADWAY_REQUEST_FOCUS_WINDOW:
       broadway_server_focus_window (server, request->focus_window.id);
       break;
+    case BROADWAY_REQUEST_SET_SHOW_KEYBOARD:
+      broadway_server_set_show_keyboard (server, request->set_show_keyboard.show_keyboard);
+      break;
     default:
       g_warning ("Unknown request of type %d\n", request->base.type);
     }

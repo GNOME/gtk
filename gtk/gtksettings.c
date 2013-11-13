@@ -44,6 +44,10 @@
 #include "wayland/gdkwayland.h"
 #endif
 
+#ifdef GDK_WINDOWING_BROADWAY
+#include "broadway/gdkbroadway.h"
+#endif
+
 #ifdef GDK_WINDOWING_QUARTZ
 #include "quartz/gdkquartz.h"
 #endif
@@ -1670,11 +1674,22 @@ gtk_settings_get_for_screen (GdkScreen *screen)
     {
 #ifdef GDK_WINDOWING_QUARTZ
       if (GDK_IS_QUARTZ_SCREEN (screen))
-        settings = g_object_new (GTK_TYPE_SETTINGS,
-                                 "gtk-key-theme-name", "Mac",
-                                 "gtk-shell-shows-app-menu", TRUE,
-                                 "gtk-shell-shows-menubar", TRUE,
-                                 NULL);
+        {
+          settings = g_object_new (GTK_TYPE_SETTINGS,
+                                   "gtk-key-theme-name", "Mac",
+                                   "gtk-shell-shows-app-menu", TRUE,
+                                   "gtk-shell-shows-menubar", TRUE,
+                                   NULL);
+        }
+      else
+#endif
+#ifdef GDK_WINDOWING_BROADWAY
+      if (GDK_IS_BROADWAY_DISPLAY (gdk_screen_get_display (screen)))
+        {
+          settings = g_object_new (GTK_TYPE_SETTINGS,
+                                   "gtk-im-module", "broadway",
+                                   NULL);
+        }
       else
 #endif
         settings = g_object_new (GTK_TYPE_SETTINGS, NULL);

@@ -55,6 +55,7 @@ struct _BroadwayServer {
   GList *toplevels;
   BroadwayWindow *root;
   gint32 focused_window_id; /* -1 => none */
+  gint show_keyboard;
 
   guint32 screen_width;
   guint32 screen_height;
@@ -1413,6 +1414,19 @@ broadway_server_window_raise (BroadwayServer *server,
 }
 
 void
+broadway_server_set_show_keyboard (BroadwayServer *server,
+                                   gboolean show)
+{
+  server->show_keyboard = show;
+
+  if (server->output)
+    {
+      broadway_output_set_show_keyboard (server->output, server->show_keyboard);
+      broadway_server_flush (server);
+   }
+}
+
+void
 broadway_server_window_lower (BroadwayServer *server,
                               gint id)
 {
@@ -1782,6 +1796,9 @@ broadway_server_resync_windows (BroadwayServer *server)
 	    }
 	}
     }
+
+  if (server->show_keyboard)
+    broadway_output_set_show_keyboard (server->output, TRUE);
 
   broadway_server_flush (server);
 }

@@ -346,6 +346,22 @@ gdk_broadway_display_event_data_free (GdkDisplay    *display,
 {
 }
 
+void
+gdk_broadway_display_show_keyboard (GdkBroadwayDisplay *display)
+{
+  g_return_if_fail (GDK_IS_BROADWAY_DISPLAY (display));
+
+  _gdk_broadway_server_set_show_keyboard (display->server, TRUE);
+}
+
+void
+gdk_broadway_display_hide_keyboard (GdkBroadwayDisplay *display)
+{
+  g_return_if_fail (GDK_IS_BROADWAY_DISPLAY (display));
+
+  _gdk_broadway_server_set_show_keyboard (display->server, FALSE);
+}
+
 static void
 gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
 {

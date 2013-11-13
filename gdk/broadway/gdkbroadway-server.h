@@ -52,6 +52,8 @@ void               _gdk_broadway_server_window_focus             (GdkBroadwaySer
 void               _gdk_broadway_server_window_set_transient_for (GdkBroadwayServer  *server,
 								  gint                id,
 								  gint                parent);
+void               _gdk_broadway_server_set_show_keyboard        (GdkBroadwayServer  *server,
+								  gboolean            show_keyboard);
 gboolean           _gdk_broadway_server_window_translate         (GdkBroadwayServer  *server,
 								  gint                id,
 								  cairo_region_t     *area,

@@ -103,6 +103,9 @@ var stackingOrder = [];
 var outstandingCommands = new Array();
 var inputSocket = null;
 var debugDecoding = false;
+var fakeInput = null;
+var showKeyboard = false;
+var showKeyboardChanged = false;
 
 var GDK_CROSSING_NORMAL = 0;
 var GDK_CROSSING_GRAB = 1;
@@ -630,6 +633,12 @@ function handleCommands(cmd)
 	case 'u': // Ungrab
 	    cmdUngrabPointer();
 	    break;
+
+        case 'k': // show keyboard
+            showKeyboard = cmd.get_16() != 0;
+            showKeyboardChanged = true;
+            break;
+
 	default:
 	    alert("Unknown op " + command);
 	}
@@ -761,6 +770,16 @@ function getEffectiveEventTarget (id) {
 	    return grab.window;
     }
     return id;
+}
+
+function updateKeyboardStatus() {
+    if (fakeInput != null && showKeyboardChanged) {
+        showKeyboardChanged = false;
+        if (showKeyboard)
+            fakeInput.focus();
+        else
+            fakeInput.blur();
+    }
 }
 
 function updateForEvent(ev) {
@@ -2463,6 +2482,7 @@ function onMouseWheel(ev)
 function onTouchStart(ev) {
     event.preventDefault();
 
+    updateKeyboardStatus();
     updateForEvent(ev);
 
     for (var i = 0; i < ev.changedTouches.length; i++) {
@@ -2478,6 +2498,7 @@ function onTouchStart(ev) {
 function onTouchMove(ev) {
     event.preventDefault();
 
+    updateKeyboardStatus();
     updateForEvent(ev);
 
     for (var i = 0; i < ev.changedTouches.length; i++) {
@@ -2493,6 +2514,7 @@ function onTouchMove(ev) {
 function onTouchEnd(ev) {
     event.preventDefault();
 
+    updateKeyboardStatus();
     updateForEvent(ev);
 
     for (var i = 0; i < ev.changedTouches.length; i++) {
@@ -2574,4 +2596,14 @@ function connect()
     ws.onmessage = function(event) {
 	handleMessage(event.data);
     };
+
+    var iOS = /(iPad|iPhone|iPod)/g.test( navigator.userAgent );
+    if (iOS) {
+        fakeInput = document.createElement("input");
+        fakeInput.type = "text";
+        fakeInput.style.position = "absolute";
+        fakeInput.style.left = "-1000px";
+        fakeInput.style.top = "-1000px";
+        document.body.appendChild(fakeInput);
+    }
 }

@@ -45,6 +45,10 @@
 #include "wayland/gdkwayland.h"
 #endif
 
+#ifdef GDK_WINDOWING_BROADWAY
+#include "broadway/gdkbroadway.h"
+#endif
+
 #ifdef GDK_WINDOWING_WIN32
 #include "win32/gdkwin32.h"
 #endif
@@ -381,6 +385,9 @@ gtk_im_module_initialize (void)
 #ifdef INCLUDE_IM_xim
   do_builtin (xim);
 #endif
+#ifdef INCLUDE_IM_broadway
+  do_builtin (broadway);
+#endif
 
 #undef do_builtin
 
@@ -660,6 +667,11 @@ match_backend (GtkIMContextInfo *context)
 #ifdef GDK_WINDOWING_WAYLAND
   if (g_strcmp0 (context->context_id, "wayland") == 0)
     return GDK_IS_WAYLAND_DISPLAY (gdk_display_get_default ());
+#endif
+
+#ifdef GDK_WINDOWING_BROADWAY
+  if (g_strcmp0 (context->context_id, "broadway") == 0)
+    return GDK_IS_BROADWAY_DISPLAY (gdk_display_get_default ());
 #endif
 
 #ifdef GDK_WINDOWING_X11

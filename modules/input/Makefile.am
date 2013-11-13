@@ -164,6 +164,19 @@ QUARTZ_MODULE = im-quartz.la
 endif
 endif
 
+im_broadway_la_CPPFLAGS = $(AM_CPPFLAGS)
+im_broadway_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
+im_broadway_la_SOURCES = imbroadway.c
+libstatic_im_broadway_la_SOURCES = $(im_broadway_la_SOURCES)
+im_broadway_la_LIBADD = $(LDADDS)
+if INCLUDE_IM_BROADWAY
+STATIC_BROADWAY_MODULE = libstatic-im-broadway.la
+else
+if USE_BROADWAY
+BROADWAY_MODULE = im-broadway.la
+endif
+endif
+
 multipress_defs = -DMULTIPRESS_LOCALEDIR=\""$(mplocaledir)"\" -DMULTIPRESS_CONFDIR=\""$(sysconfdir)/gtk-2.0"\"
 im_multipress_la_CPPFLAGS = $(AM_CPPFLAGS) $(multipress_defs)
 libstatic_im_multipress_la_CPPFLAGS = $(im_multipress_la_CPPFLAGS)
@@ -224,6 +237,7 @@ module_LTLIBRARIES =			\
 	$(IPA_MODULE)			\
 	$(MULTIPRESS_MODULE)		\
 	$(QUARTZ_MODULE)		\
+	$(BROADWAY_MODULE)		\
 	$(THAI_MODULE)			\
 	$(TI_ER_MODULE)			\
 	$(TI_ET_MODULE)			\
@@ -241,6 +255,7 @@ noinst_LTLIBRARIES =				\
 	$(STATIC_IPA_MODULE)			\
 	$(STATIC_MULTIPRESS_MODULE)		\
 	$(STATIC_QUARTZ_MODULE)			\
+	$(STATIC_BROADWAY_MODULE)		\
 	$(STATIC_THAI_MODULE)			\
 	$(STATIC_TI_ER_MODULE)			\
 	$(STATIC_TI_ET_MODULE)			\

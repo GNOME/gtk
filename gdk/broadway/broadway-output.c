@@ -237,6 +237,13 @@ broadway_output_destroy_surface(BroadwayOutput *output,  int id)
   append_uint16 (output, id);
 }
 
+void
+broadway_output_set_show_keyboard (BroadwayOutput *output,
+                                   gboolean show)
+{
+  write_header (output, BROADWAY_OP_SET_SHOW_KEYBOARD);
+  append_uint16 (output, show);
+}
 
 void
 broadway_output_move_resize_surface (BroadwayOutput *output,

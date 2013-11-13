@@ -63,5 +63,7 @@ void            broadway_output_grab_pointer    (BroadwayOutput *output,
 						 gboolean owner_event);
 guint32         broadway_output_ungrab_pointer  (BroadwayOutput *output);
 void            broadway_output_pong            (BroadwayOutput *output);
+void            broadway_output_set_show_keyboard (BroadwayOutput *output,
+                                                   gboolean show);
 
 #endif /* __BROADWAY_H__ */
