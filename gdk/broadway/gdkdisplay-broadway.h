@@ -59,8 +59,6 @@ struct _GdkBroadwayDisplay
 
   GdkBroadwayServer *server;
 
-  guint32 touch_sequence_down;
-
   gpointer move_resize_data;
 };
 

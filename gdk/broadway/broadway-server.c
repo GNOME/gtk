@@ -238,12 +238,18 @@ update_event_state (BroadwayServer *server,
     server->real_mouse_in_toplevel_id = message->pointer.mouse_window_id;
     break;
   case BROADWAY_EVENT_TOUCH:
-    if (message->touch.touch_type == 0 &&
+    if (message->touch.touch_type == 0 && message->touch.is_emulated &&
         server->focused_window_id != message->touch.event_window_id)
       {
         broadway_server_window_raise (server, message->touch.event_window_id);
         broadway_server_focus_window (server, message->touch.event_window_id);
         broadway_server_flush (server);
+      }
+
+    if (message->touch.is_emulated)
+      {
+        server->last_x = message->pointer.root_x;
+        server->last_y = message->pointer.root_y;
       }
 
     server->last_state = message->touch.state;
@@ -386,6 +392,7 @@ parse_touch_data (guint32 *p, BroadwayInputTouchMsg *data)
   data->touch_type = ntohl (*p++);
   data->event_window_id = ntohl (*p++);
   data->sequence_id = ntohl (*p++);
+  data->is_emulated = ntohl (*p++);
   data->root_x = ntohl (*p++);
   data->root_y = ntohl (*p++);
   data->win_x = ntohl (*p++);

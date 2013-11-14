@@ -46,6 +46,8 @@ guint32             broadway_server_grab_pointer             (BroadwayServer   *
 guint32             broadway_server_ungrab_pointer           (BroadwayServer   *server,
 							      guint32           time_);
 gint32              broadway_server_get_mouse_toplevel       (BroadwayServer   *server);
+void                broadway_server_set_show_keyboard        (BroadwayServer   *server,
+                                                              gboolean          show);
 guint32             broadway_server_new_window               (BroadwayServer   *server,
 							      int               x,
 							      int               y,

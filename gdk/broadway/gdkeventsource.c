@@ -214,7 +214,6 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
     if (window)
       {
         GdkEventType event_type = 0;
-        gboolean is_first_down = FALSE;
 
         switch (message->touch.touch_type) {
         case 0:
@@ -230,25 +229,14 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
           g_printerr ("_gdk_broadway_events_got_input - Unknown touch type %d\n", message->touch.touch_type);
         }
 
-        if (event_type == GDK_TOUCH_BEGIN &&
-            display_broadway->touch_sequence_down == 0)
-          display_broadway->touch_sequence_down = message->touch.sequence_id;
-
-        if (display_broadway->touch_sequence_down == message->touch.sequence_id)
-          is_first_down = TRUE;
-
-        if (event_type == GDK_TOUCH_END &&
-            display_broadway->touch_sequence_down == message->touch.sequence_id)
-          display_broadway->touch_sequence_down = 0;
-
         if (event_type != GDK_TOUCH_BEGIN &&
-            is_first_down && _gdk_broadway_moveresize_handle_event (display, message))
+            message->touch.is_emulated && _gdk_broadway_moveresize_handle_event (display, message))
           break;
 
 	event = gdk_event_new (event_type);
 	event->touch.window = g_object_ref (window);
 	event->touch.sequence = GUINT_TO_POINTER(message->touch.sequence_id);
-	event->touch.emulating_pointer = is_first_down;
+	event->touch.emulating_pointer = message->touch.is_emulated;
 	event->touch.time = message->base.time;
 	event->touch.x = message->touch.win_x;
 	event->touch.y = message->touch.win_y;
@@ -259,7 +247,7 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
 	gdk_event_set_device (event, device_manager->core_pointer);
 	gdk_event_set_source_device (event, device_manager->touchscreen);
 
-        if (is_first_down)
+        if (message->touch.is_emulated)
           _gdk_event_set_pointer_emulated (event, TRUE);
 
         if (event_type == GDK_TOUCH_BEGIN || event_type == GDK_TOUCH_UPDATE)

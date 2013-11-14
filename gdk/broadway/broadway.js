@@ -106,6 +106,7 @@ var debugDecoding = false;
 var fakeInput = null;
 var showKeyboard = false;
 var showKeyboardChanged = false;
+var firstTouchDownId = null;
 
 var GDK_CROSSING_NORMAL = 0;
 var GDK_CROSSING_GRAB = 1;
@@ -2488,10 +2489,28 @@ function onTouchStart(ev) {
     for (var i = 0; i < ev.changedTouches.length; i++) {
         var touch = ev.changedTouches.item(i);
 
-        var id = getSurfaceId(touch);
+        var origId = getSurfaceId(touch);
+        var id = getEffectiveEventTarget (origId);
         var pos = getPositionsFromEvent(touch, id);
+        var isEmulated = 0;
 
-        sendInput ("t", [0, id, touch.identifier, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
+        if (firstTouchDownId == null) {
+            firstTouchDownId = touch.identifier;
+            isEmulated = 1;
+
+            if (realWindowWithMouse != origId || id != windowWithMouse) {
+                if (id != 0) {
+                    sendInput ("l", [realWindowWithMouse, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
+                }
+
+                windowWithMouse = id;
+                realWindowWithMouse = origId;
+
+                sendInput ("e", [origId, id, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState, GDK_CROSSING_NORMAL]);
+            }
+        }
+
+        sendInput ("t", [0, id, touch.identifier, isEmulated, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
     }
 }
 
@@ -2504,10 +2523,16 @@ function onTouchMove(ev) {
     for (var i = 0; i < ev.changedTouches.length; i++) {
         var touch = ev.changedTouches.item(i);
 
-        var id = getSurfaceId(touch);
+        var origId = getSurfaceId(touch);
+        var id = getEffectiveEventTarget (origId);
         var pos = getPositionsFromEvent(touch, id);
 
-        sendInput ("t", [1, id, touch.identifier, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
+        var isEmulated = 0;
+        if (firstTouchDownId == touch.identifier) {
+            isEmulated = 1;
+        }
+
+        sendInput ("t", [1, id, touch.identifier, isEmulated, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
     }
 }
 
@@ -2520,10 +2545,17 @@ function onTouchEnd(ev) {
     for (var i = 0; i < ev.changedTouches.length; i++) {
         var touch = ev.changedTouches.item(i);
 
-        var id = getSurfaceId(touch);
+        var origId = getSurfaceId(touch);
+        var id = getEffectiveEventTarget (origId);
         var pos = getPositionsFromEvent(touch, id);
 
-        sendInput ("t", [2, id, touch.identifier, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
+        var isEmulated = 0;
+        if (firstTouchDownId == touch.identifier) {
+            isEmulated = 1;
+            firstTouchDownId = null;
+        }
+
+        sendInput ("t", [2, id, touch.identifier, isEmulated, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
     }
 }
 

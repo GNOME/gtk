@@ -804,6 +804,4 @@ _gdk_broadway_server_set_show_keyboard (GdkBroadwayServer *server,
   msg.show_keyboard = show;
   gdk_broadway_server_send_message (server, msg,
 				    BROADWAY_REQUEST_SET_SHOW_KEYBOARD);
-
-  return TRUE;
 }

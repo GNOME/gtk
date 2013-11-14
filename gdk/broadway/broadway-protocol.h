@@ -82,6 +82,7 @@ typedef struct {
   guint32 touch_type;
   guint32 event_window_id;
   guint32 sequence_id;
+  guint32 is_emulated;
   gint32 root_x;
   gint32 root_y;
   gint32 win_x;
