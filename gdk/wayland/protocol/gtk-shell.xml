@@ -4,6 +4,7 @@
     <enum name="capability">
       <entry name="global_app_menu" value="1"/>
       <entry name="global_menu_bar" value="2"/>
+      <entry name="desktop_icons" value="3"/>
     </enum>
     
     <event name="capabilities">

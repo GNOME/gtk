@@ -715,6 +715,9 @@ gdk_wayland_screen_get_setting (GdkScreen   *screen,
   if (strcmp (name, "gtk-shell-shows-menubar") == 0)
     return set_capability_setting (screen, value, GTK_SHELL_CAPABILITY_GLOBAL_MENU_BAR);
 
+  if (strcmp (name, "gtk-shell-shows-desktop") == 0)
+    return set_capability_setting (screen, value, GTK_SHELL_CAPABILITY_DESKTOP_ICONS);
+
   return FALSE;
 }
 
