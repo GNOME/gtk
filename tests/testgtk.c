@@ -6020,8 +6020,8 @@ create_pages (GtkNotebook *notebook, gint start, gint end)
       g_object_set_data (G_OBJECT (child), "tab_pixmap", pixwid);
 			   
       gtk_box_pack_start (GTK_BOX (label_box), pixwid, FALSE, TRUE, 0);
-      gtk_widget_set_margin_left (pixwid, 3);
-      gtk_widget_set_margin_right (pixwid, 3);
+      gtk_widget_set_margin_start (pixwid, 3);
+      gtk_widget_set_margin_end (pixwid, 3);
       gtk_widget_set_margin_bottom (pixwid, 1);
       gtk_widget_set_margin_top (pixwid, 1);
       label = gtk_label_new_with_mnemonic (accel_buffer);
@@ -6034,8 +6034,8 @@ create_pages (GtkNotebook *notebook, gint start, gint end)
       g_object_set_data (G_OBJECT (child), "menu_pixmap", pixwid);
       
       gtk_box_pack_start (GTK_BOX (menu_box), pixwid, FALSE, TRUE, 0);
-      gtk_widget_set_margin_left (pixwid, 3);
-      gtk_widget_set_margin_right (pixwid, 3);
+      gtk_widget_set_margin_start (pixwid, 3);
+      gtk_widget_set_margin_end (pixwid, 3);
       gtk_widget_set_margin_bottom (pixwid, 1);
       gtk_widget_set_margin_top (pixwid, 1);
       label = gtk_label_new (buffer);

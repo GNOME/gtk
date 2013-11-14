@@ -30,8 +30,8 @@
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_left">10</property>
-            <property name="margin_right">10</property>
+            <property name="margin_start">10</property>
+            <property name="margin_end">10</property>
             <property name="margin_top">10</property>
             <property name="margin_bottom">10</property>
             <property name="halign">start</property>
@@ -51,8 +51,8 @@
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_left">20</property>
-            <property name="margin_right">20</property>
+            <property name="margin_start">20</property>
+            <property name="margin_end">20</property>
             <property name="margin_top">20</property>
             <property name="margin_bottom">20</property>
             <property name="halign">center</property>
@@ -72,8 +72,8 @@
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_left">10</property>
-            <property name="margin_right">10</property>
+            <property name="margin_start">10</property>
+            <property name="margin_end">10</property>
             <property name="margin_top">10</property>
             <property name="margin_bottom">10</property>
             <property name="halign">end</property>
@@ -126,8 +126,8 @@
           <object class="GtkArrow" id="arrow2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_left">10</property>
-            <property name="margin_right">10</property>
+            <property name="margin_start">10</property>
+            <property name="margin_end">10</property>
             <property name="margin_top">10</property>
             <property name="margin_bottom">10</property>
             <property name="halign">start</property>
@@ -147,8 +147,8 @@
             <property name="width_request">16</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_left">20</property>
-            <property name="margin_right">20</property>
+            <property name="margin_start">20</property>
+            <property name="margin_end">20</property>
             <property name="margin_top">20</property>
             <property name="margin_bottom">20</property>
             <property name="halign">center</property>
@@ -167,8 +167,8 @@
           <object class="GtkArrow" id="arrow4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin_left">10</property>
-            <property name="margin_right">10</property>
+            <property name="margin_start">10</property>
+            <property name="margin_end">10</property>
             <property name="margin_top">10</property>
             <property name="margin_bottom">10</property>
             <property name="halign">end</property>
@@ -224,8 +224,8 @@
             <property name="can_focus">False</property>
             <property name="halign">start</property>
             <property name="valign">start</property>
-            <property name="margin_left">10</property>
-            <property name="margin_right">10</property>
+            <property name="margin_start">10</property>
+            <property name="margin_end">10</property>
             <property name="margin_top">10</property>
             <property name="margin_bottom">10</property>
             <property name="hexpand">True</property>
@@ -245,8 +245,8 @@
             <property name="can_focus">False</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="margin_left">20</property>
-            <property name="margin_right">20</property>
+            <property name="margin_start">20</property>
+            <property name="margin_end">20</property>
             <property name="margin_top">20</property>
             <property name="margin_bottom">20</property>
             <property name="hexpand">True</property>
@@ -266,8 +266,8 @@
             <property name="can_focus">False</property>
             <property name="halign">end</property>
             <property name="valign">end</property>
-            <property name="margin_left">10</property>
-            <property name="margin_right">10</property>
+            <property name="margin_start">10</property>
+            <property name="margin_end">10</property>
             <property name="margin_top">10</property>
             <property name="margin_bottom">10</property>
             <property name="hexpand">True</property>

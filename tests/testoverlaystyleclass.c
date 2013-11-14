@@ -116,7 +116,7 @@ main (int argc, char *argv[])
   str = g_strdup_printf ("%p", child);
   gtk_label_set_text (GTK_LABEL (child), str);
   g_free (str);
-  gtk_widget_set_margin_left (child, 55);
+  gtk_widget_set_margin_start (child, 55);
   gtk_widget_set_margin_top (child, 4);
   g_print ("Left/Top margined child: %p\n", child);
   gtk_widget_set_halign (child, GTK_ALIGN_START);

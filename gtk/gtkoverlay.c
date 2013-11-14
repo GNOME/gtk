@@ -104,8 +104,8 @@ gtk_overlay_compute_child_allocation (GtkOverlay      *overlay,
   /* put the margins outside the window; also arrange things
    * so that the adjusted child allocation still ends up at 0, 0
    */
-  left = gtk_widget_get_margin_left (child->widget);
-  right = gtk_widget_get_margin_right (child->widget);
+  left = gtk_widget_get_margin_start (child->widget);
+  right = gtk_widget_get_margin_end (child->widget);
   top = gtk_widget_get_margin_top (child->widget);
   bottom = gtk_widget_get_margin_bottom (child->widget);
 

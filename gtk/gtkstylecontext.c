@@ -3634,23 +3634,26 @@ gtk_style_context_get_margin (GtkStyleContext *context,
                               GtkStateFlags    state,
                               GtkBorder       *margin)
 {
-  int top, left, bottom, right;
+  int top, start, bottom, end;
+  gboolean rtl;
 
   g_return_if_fail (margin != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
+  rtl = (gtk_style_context_get_state (context) & GTK_STATE_FLAG_DIR_RTL);
+
   gtk_style_context_get (context,
                          state,
                          "margin-top", &top,
-                         "margin-left", &left,
+                         "margin-start", &start,
                          "margin-bottom", &bottom,
-                         "margin-right", &right,
+                         "margin-end", &end,
                          NULL);
 
   margin->top = top;
-  margin->left = left;
+  margin->left = rtl ? start : end;
   margin->bottom = bottom;
-  margin->right = right;
+  margin->right = rtl ? end : start;
 }
 
 /**

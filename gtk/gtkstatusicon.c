@@ -1469,8 +1469,8 @@ gtk_status_icon_padding_changed (GtkStatusIcon *status_icon)
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      gtk_widget_set_margin_left (priv->image, padding);
-      gtk_widget_set_margin_right (priv->image, padding);
+      gtk_widget_set_margin_start (priv->image, padding);
+      gtk_widget_set_margin_end (priv->image, padding);
     }
   else
     {

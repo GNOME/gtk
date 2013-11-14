@@ -897,8 +897,8 @@ gtk_table_get_row_spacing (GtkTable *table,
  * Alters the amount of space between a given table column and the following
  * column.
  *
- * Deprecated: 3.4: Use gtk_widget_set_margin_left() and
- *     gtk_widget_set_margin_right() on the widgets contained in the row if
+ * Deprecated: 3.4: Use gtk_widget_set_margin_start() and
+ *     gtk_widget_set_margin_end() on the widgets contained in the row if
  *     you need this functionality. #GtkGrid does not support per-row spacing.
  */
 void

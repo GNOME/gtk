@@ -354,8 +354,8 @@ open_margin_window (void)
   GtkWidget *box;
   int i;
   const char * margins[] = {
-    "margin-left",
-    "margin-right",
+    "margin-start",
+    "margin-end",
     "margin-top",
     "margin-bottom",
     "margin"

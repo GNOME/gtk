@@ -51,8 +51,8 @@ do_overlay (GtkWidget *do_widget)
       gtk_widget_set_halign (label, GTK_ALIGN_END);
       gtk_widget_set_valign (label, GTK_ALIGN_END);
       gtk_overlay_add_overlay (GTK_OVERLAY (overlay), label);
-      gtk_widget_set_margin_left (label, 20);
-      gtk_widget_set_margin_right (label, 20);
+      gtk_widget_set_margin_start (label, 20);
+      gtk_widget_set_margin_end (label, 20);
       gtk_widget_set_margin_top (label, 5);
       gtk_widget_set_margin_bottom (label, 5);
 
@@ -65,8 +65,8 @@ do_overlay (GtkWidget *do_widget)
       gtk_widget_set_halign (label, GTK_ALIGN_START);
       gtk_widget_set_valign (label, GTK_ALIGN_END);
       gtk_overlay_add_overlay (GTK_OVERLAY (overlay), label);
-      gtk_widget_set_margin_left (label, 20);
-      gtk_widget_set_margin_right (label, 20);
+      gtk_widget_set_margin_start (label, 20);
+      gtk_widget_set_margin_end (label, 20);
       gtk_widget_set_margin_top (label, 5);
       gtk_widget_set_margin_bottom (label, 5);
 
@@ -79,8 +79,8 @@ do_overlay (GtkWidget *do_widget)
       gtk_widget_set_halign (label, GTK_ALIGN_END);
       gtk_widget_set_valign (label, GTK_ALIGN_START);
       gtk_overlay_add_overlay (GTK_OVERLAY (overlay), label);
-      gtk_widget_set_margin_left (label, 20);
-      gtk_widget_set_margin_right (label, 20);
+      gtk_widget_set_margin_start (label, 20);
+      gtk_widget_set_margin_end (label, 20);
       gtk_widget_set_margin_top (label, 5);
       gtk_widget_set_margin_bottom (label, 5);
 
@@ -93,8 +93,8 @@ do_overlay (GtkWidget *do_widget)
       gtk_widget_set_halign (label, GTK_ALIGN_START);
       gtk_widget_set_valign (label, GTK_ALIGN_START);
       gtk_overlay_add_overlay (GTK_OVERLAY (overlay), label);
-      gtk_widget_set_margin_left (label, 20);
-      gtk_widget_set_margin_right (label, 20);
+      gtk_widget_set_margin_start (label, 20);
+      gtk_widget_set_margin_end (label, 20);
       gtk_widget_set_margin_top (label, 5);
       gtk_widget_set_margin_bottom (label, 5);
 
@@ -107,8 +107,8 @@ do_overlay (GtkWidget *do_widget)
       gtk_widget_set_halign (label, GTK_ALIGN_END);
       gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_overlay_add_overlay (GTK_OVERLAY (overlay), label);
-      gtk_widget_set_margin_left (label, 20);
-      gtk_widget_set_margin_right (label, 20);
+      gtk_widget_set_margin_start (label, 20);
+      gtk_widget_set_margin_end (label, 20);
       gtk_widget_set_margin_top (label, 5);
       gtk_widget_set_margin_bottom (label, 5);
 
@@ -121,8 +121,8 @@ do_overlay (GtkWidget *do_widget)
       gtk_widget_set_halign (label, GTK_ALIGN_START);
       gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_overlay_add_overlay (GTK_OVERLAY (overlay), label);
-      gtk_widget_set_margin_left (label, 20);
-      gtk_widget_set_margin_right (label, 20);
+      gtk_widget_set_margin_start (label, 20);
+      gtk_widget_set_margin_end (label, 20);
       gtk_widget_set_margin_top (label, 5);
       gtk_widget_set_margin_bottom (label, 5);
 
@@ -135,8 +135,8 @@ do_overlay (GtkWidget *do_widget)
       gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
       gtk_widget_set_valign (label, GTK_ALIGN_START);
       gtk_overlay_add_overlay (GTK_OVERLAY (overlay), label);
-      gtk_widget_set_margin_left (label, 20);
-      gtk_widget_set_margin_right (label, 20);
+      gtk_widget_set_margin_start (label, 20);
+      gtk_widget_set_margin_end (label, 20);
       gtk_widget_set_margin_top (label, 5);
       gtk_widget_set_margin_bottom (label, 5);
 
@@ -149,8 +149,8 @@ do_overlay (GtkWidget *do_widget)
       gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
       gtk_widget_set_valign (label, GTK_ALIGN_END);
       gtk_overlay_add_overlay (GTK_OVERLAY (overlay), label);
-      gtk_widget_set_margin_left (label, 10);
-      gtk_widget_set_margin_right (label, 10);
+      gtk_widget_set_margin_start (label, 10);
+      gtk_widget_set_margin_end (label, 10);
       gtk_widget_set_margin_top (label, 5);
       gtk_widget_set_margin_bottom (label, 5);
 

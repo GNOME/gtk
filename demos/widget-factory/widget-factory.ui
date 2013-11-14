@@ -1756,8 +1756,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                             <property name="visible">True</property>
                             <property name="margin-top">10</property>
                             <property name="margin-bottom">10</property>
-                            <property name="margin-left">10</property>
-                            <property name="margin-right">10</property>
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
                             <property name="spacing">20</property>
                             <child>
                               <object class="GtkLabel" id="page2note">

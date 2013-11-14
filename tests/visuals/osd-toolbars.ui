@@ -104,8 +104,8 @@
                   <object class="GtkLabel" id="status_label">
                     <property name="visible">True</property>
                     <property name="label">OSD Toolbar</property>
-                    <property name="margin_left">10</property>
-                    <property name="margin_right">10</property>
+                    <property name="margin_start">10</property>
+                    <property name="margin_end">10</property>
                   </object>
                 </child>
               </object>
@@ -204,8 +204,8 @@
                   <object class="GtkLabel" id="tb5_label">
                     <property name="visible">True</property>
                     <property name="label">Another kind of OSD toolbar</property>
-                    <property name="margin_left">10</property>
-                    <property name="margin_right">10</property>
+                    <property name="margin_start">10</property>
+                    <property name="margin_end">10</property>
                   </object>
                 </child>
               </object>

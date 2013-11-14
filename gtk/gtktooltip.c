@@ -240,8 +240,8 @@ gtk_tooltip_init (GtkTooltip *tooltip)
 
   /* FIXME: don't hardcode the padding */
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-  gtk_widget_set_margin_left (box, 6);
-  gtk_widget_set_margin_right (box, 6);
+  gtk_widget_set_margin_start (box, 6);
+  gtk_widget_set_margin_end (box, 6);
   gtk_widget_set_margin_top (box, 6);
   gtk_widget_set_margin_bottom (box, 6);
   gtk_container_add (GTK_CONTAINER (window), box);

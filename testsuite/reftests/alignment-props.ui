@@ -79,8 +79,8 @@
             <property name="vexpand">True</property>
             <property name="margin-top">10</property>
             <property name="margin-bottom">30</property>
-            <property name="margin-left">20</property>
-            <property name="margin-right">40</property>
+            <property name="margin-start">20</property>
+            <property name="margin-end">40</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -100,8 +100,8 @@
             <property name="vexpand">True</property>
             <property name="margin-top">10</property>
             <property name="margin-bottom">30</property>
-            <property name="margin-left">20</property>
-            <property name="margin-right">40</property>
+            <property name="margin-start">20</property>
+            <property name="margin-end">40</property>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -121,8 +121,8 @@
             <property name="vexpand">True</property>
             <property name="margin-top">10</property>
             <property name="margin-bottom">30</property>
-            <property name="margin-left">20</property>
-            <property name="margin-right">40</property>
+            <property name="margin-start">20</property>
+            <property name="margin-end">40</property>
           </object>
           <packing>
             <property name="left_attach">2</property>
