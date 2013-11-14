@@ -130,6 +130,7 @@ struct _GtkPlacesSidebar {
   GtkBookmarksManager     *bookmarks_manager;
   GVolumeMonitor    *volume_monitor;
   GtkTrashMonitor   *trash_monitor;
+  GtkSettings       *gtk_settings;
 
   gulong trash_monitor_changed_id;
 
@@ -161,6 +162,7 @@ struct _GtkPlacesSidebar {
   guint mounting               : 1;
   guint  drag_data_received    : 1;
   guint drop_occured           : 1;
+  guint show_desktop_set       : 1;
   guint show_desktop           : 1;
   guint show_connect_to_server : 1;
   guint local_only             : 1;
@@ -3666,6 +3668,30 @@ create_volume_monitor (GtkPlacesSidebar *sidebar)
 }
 
 static void
+shell_shows_desktop_changed (GtkSettings *settings,
+                             GParamSpec  *pspec,
+                             gpointer     user_data)
+{
+  GtkPlacesSidebar *sidebar = user_data;
+  gboolean b;
+
+  g_assert (settings == sidebar->gtk_settings);
+
+  /* Check if the user explicitly set this and, if so, don't change it. */
+  if (sidebar->show_desktop_set)
+    return;
+
+  g_object_get (settings, "gtk-shell-shows-desktop", &b, NULL);
+
+  if (b != sidebar->show_desktop)
+    {
+      sidebar->show_desktop = b;
+      update_places (sidebar);
+      g_object_notify_by_pspec (G_OBJECT (sidebar), properties[PROP_SHOW_DESKTOP]);
+    }
+}
+
+static void
 gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 {
   GtkTreeView       *tree_view;
@@ -3674,6 +3700,7 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   GtkTreeSelection  *selection;
   GIcon             *eject;
   GtkTargetList     *target_list;
+  gboolean           b;
 
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (sidebar)), GTK_STYLE_CLASS_SIDEBAR);
 
@@ -3879,6 +3906,13 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   sidebar->drop_state = DROP_STATE_NORMAL;
   sidebar->new_bookmark_index = -1;
 
+  /* Don't bother trying to trace this across hierarchy changes... */
+  sidebar->gtk_settings = gtk_settings_get_default ();
+  g_signal_connect (sidebar->gtk_settings, "notify::gtk-shell-shows-desktop",
+                    G_CALLBACK (shell_shows_desktop_changed), sidebar);
+  g_object_get (sidebar->gtk_settings, "gtk-shell-shows-desktop", &b, NULL);
+  sidebar->show_desktop = b;
+
   /* populate the sidebar */
   update_places (sidebar);
 }
@@ -4012,6 +4046,12 @@ gtk_places_sidebar_dispose (GObject *object)
   g_clear_object (&sidebar->hostnamed_proxy);
   g_free (sidebar->hostname);
   sidebar->hostname = NULL;
+
+  if (sidebar->gtk_settings)
+    {
+      g_signal_handlers_disconnect_by_func (sidebar->gtk_settings, shell_shows_desktop_changed, sidebar);
+      g_clear_object (&sidebar->gtk_settings);
+    }
 
   G_OBJECT_CLASS (gtk_places_sidebar_parent_class)->dispose (object);
 }
@@ -4519,9 +4559,10 @@ gtk_places_sidebar_get_location (GtkPlacesSidebar *sidebar)
  * @sidebar: a places sidebar
  * @show_desktop: whether to show an item for the Desktop folder
  *
- * Sets whether the @sidebar should show an item for the Desktop folder; this is off by default.
- * An application may want to turn this on if the desktop environment actually supports the
- * notion of a desktop.
+ * Sets whether the @sidebar should show an item for the Desktop folder.
+ * The default value for this option is determined by the desktop
+ * environment and the user's configuration, but this function can be
+ * used to override it on a per-application basis.
  *
  * Since: 3.10
  */
@@ -4530,6 +4571,12 @@ gtk_places_sidebar_set_show_desktop (GtkPlacesSidebar *sidebar,
                                      gboolean          show_desktop)
 {
   g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
+
+  /* Don't bother disconnecting from the GtkSettings -- it will just
+   * complicate things.  Besides, it's highly unlikely that this will
+   * change while we're running, but we can ignore it if it does.
+   */
+  sidebar->show_desktop_set = TRUE;
 
   show_desktop = !!show_desktop;
   if (sidebar->show_desktop != show_desktop)
