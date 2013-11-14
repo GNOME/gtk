@@ -209,6 +209,7 @@ enum {
   PROP_IM_STATUS_STYLE,
   PROP_SHELL_SHOWS_APP_MENU,
   PROP_SHELL_SHOWS_MENUBAR,
+  PROP_SHELL_SHOWS_DESKTOP,
   PROP_ENABLE_PRIMARY_PASTE,
   PROP_RECENT_FILES_ENABLED
 };
@@ -1526,6 +1527,16 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    FALSE, GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_SHELL_SHOWS_MENUBAR);
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-shell-shows-desktop",
+                                                                   P_("Desktop environment shows the desktop folder"),
+                                                                   P_("Set to TRUE if the desktop environment "
+                                                                      "is displaying the desktop folder, FALSE "
+                                                                      "if not."),
+                                                                   TRUE, GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_SHELL_SHOWS_DESKTOP);
 
   /**
    * GtkSettings:gtk-enable-primary-paste:

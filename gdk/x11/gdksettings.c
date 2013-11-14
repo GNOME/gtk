@@ -57,6 +57,7 @@ static const struct {
   {"Gtk/CursorBlinkTimeout",  "gtk-cursor-blink-timeout"},
   {"Gtk/ShellShowsAppMenu",   "gtk-shell-shows-app-menu"},
   {"Gtk/ShellShowsMenubar",   "gtk-shell-shows-menubar"},
+  {"Gtk/ShellShowsDesktop",   "gtk-shell-shows-desktop"},
   {"Gtk/EnablePrimaryPaste",  "gtk-enable-primary-paste"},
   {"Gtk/RecentFilesMaxAge",   "gtk-recent-files-max-age"},
   {"Gtk/RecentFilesEnabled",  "gtk-recent-files-enabled"},
