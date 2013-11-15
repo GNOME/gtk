@@ -2068,14 +2068,14 @@ text_buffer_new (GtkAboutDialog  *about,
           r1 = strstr (q0, "http://");
           if (r1)
             {
-              r2 = strpbrk (r1, " \n\t");
+              r2 = strpbrk (r1, " \n\t>");
               if (!r2)
                 r2 = strchr (r1, '\0');
             }
           else
             r2 = NULL;
 
-          if (r1 && r2 && (!q1 || !q2 || (r1 < q1)))
+          if (r1 && r2 && (!q1 || !q2 || (r1 <= q1 + 1)))
             {
               q1 = r1;
               q2 = r2;
