@@ -320,6 +320,11 @@ G_GNUC_END_IGNORE_DEPRECATIONS
           strcmp (pspec->name, "resize-grip-visible") == 0)
         continue;
 
+      /* show-desktop depends on desktop environment */
+      if (g_type_is_a (type, GTK_TYPE_PLACES_SIDEBAR) &&
+          strcmp (pspec->name, "show-desktop") == 0)
+        continue;
+
       if (g_test_verbose ())
       g_print ("Property %s.%s\n",
 	     g_type_name (pspec->owner_type),
