@@ -4050,7 +4050,7 @@ gtk_places_sidebar_dispose (GObject *object)
   if (sidebar->gtk_settings)
     {
       g_signal_handlers_disconnect_by_func (sidebar->gtk_settings, shell_shows_desktop_changed, sidebar);
-      g_clear_object (&sidebar->gtk_settings);
+      sidebar->gtk_settings = NULL;
     }
 
   G_OBJECT_CLASS (gtk_places_sidebar_parent_class)->dispose (object);
