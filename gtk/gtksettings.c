@@ -1536,7 +1536,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    P_("Set to TRUE if the desktop environment "
                                                                       "is displaying the desktop folder, FALSE "
                                                                       "if not."),
-                                                                   TRUE, GTK_PARAM_READWRITE),
+                                                                   FALSE, GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_SHELL_SHOWS_DESKTOP);
 
