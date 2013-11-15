@@ -1,3 +1,21 @@
+Overview of Changes in GTK+ 3.10.3 to 3.10.4
+============================================
+
+* Bugs fixed:
+ 705176 Reordering columns in GtkTreeView freezes mutter
+ 710909 Buttons are cut in some windows
+ 711545 gtkpixelcache: Possibly ignoring queued redraw
+ 711548 GtkPlacesSidebar doesn't show unmounted bookmarks
+ 711574 GtkPlacesSidebar is missing "local-only" flag
+ 711636 Duplicated 'Music' and 'Videos' from favorites...
+ 712164 GtkMenuTracker: set action namespace correctly
+ 712213 Nautilus "connect to server" dialog has an incorrect...
+ 712302 GtkPlacesSideBar showing "Desktop" or not shouldn't...
+
+* Translation updates:
+ Polish
+
+
 Overview of Changes in GTK+ 3.10.2 to 3.10.3
 ============================================
 
