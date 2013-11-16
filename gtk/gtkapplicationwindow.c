@@ -297,12 +297,10 @@ gtk_application_window_update_shell_shows_app_menu (GtkApplicationWindow *window
 {
   gboolean shown_by_shell;
   gboolean shown_by_titlebar;
-  GtkWidget *titlebar;
 
   g_object_get (settings, "gtk-shell-shows-app-menu", &shown_by_shell, NULL);
 
-  titlebar = _gtk_window_get_titlebar (GTK_WINDOW (window));
-  shown_by_titlebar = GTK_IS_HEADER_BAR (titlebar) && gtk_header_bar_get_show_fallback_app_menu (GTK_HEADER_BAR (titlebar));
+  shown_by_titlebar = _gtk_window_titlebar_shows_app_menu (GTK_WINDOW (window));
 
   if (shown_by_shell || shown_by_titlebar)
     {
@@ -632,12 +630,11 @@ gtk_application_window_real_realize (GtkWidget *widget)
   g_signal_connect (settings, "notify::gtk-shell-shows-menubar",
                     G_CALLBACK (gtk_application_window_shell_shows_menubar_changed), window);
 
+  GTK_WIDGET_CLASS (gtk_application_window_parent_class)->realize (widget);
+
   gtk_application_window_update_shell_shows_app_menu (window, settings);
   gtk_application_window_update_shell_shows_menubar (window, settings);
   gtk_application_window_update_menubar (window);
-
-  GTK_WIDGET_CLASS (gtk_application_window_parent_class)
-    ->realize (widget);
 
 #ifdef GDK_WINDOWING_X11
   {
@@ -679,8 +676,7 @@ gtk_application_window_real_unrealize (GtkWidget *widget)
   g_signal_handlers_disconnect_by_func (settings, gtk_application_window_shell_shows_app_menu_changed, widget);
   g_signal_handlers_disconnect_by_func (settings, gtk_application_window_shell_shows_menubar_changed, widget);
 
-  GTK_WIDGET_CLASS (gtk_application_window_parent_class)
-    ->unrealize (widget);
+  GTK_WIDGET_CLASS (gtk_application_window_parent_class)->unrealize (widget);
 }
 
 gboolean

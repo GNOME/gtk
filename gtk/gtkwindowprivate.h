@@ -87,7 +87,10 @@ void            _gtk_window_schedule_mnemonics_visible (GtkWindow *window);
 
 void            _gtk_window_notify_keys_changed (GtkWindow *window);
 
-GtkWidget      *_gtk_window_get_titlebar (GtkWindow *window);
+gboolean        _gtk_window_titlebar_shows_app_menu (GtkWindow *window);
+
+void            _gtk_window_get_decoration_size (GtkWindow *window,
+                                                 GtkBorder *border);
 
 G_END_DECLS
 
