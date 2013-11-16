@@ -494,9 +494,9 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
       remaining_space.x = (border_width + border.left);
       remaining_space.y = (border_width + border.top);
       remaining_space.width = allocation->width -
-        2 * (border_width) - border.left - border.right;
+        2 * border_width - border.left - border.right;
       remaining_space.height = allocation->height -
-        2 * (border_width) - border.top - border.bottom;
+        2 * border_width - border.top - border.bottom;
 
       if (get_shadow_type (menu_bar) != GTK_SHADOW_NONE)
 	{
