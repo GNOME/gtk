@@ -24,6 +24,7 @@
 #include "gtkapplicationprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
+#include "gtkheaderbar.h"
 #include "gtkmenubar.h"
 #include "gtkintl.h"
 #include "gtksettings.h"
@@ -295,10 +296,15 @@ gtk_application_window_update_shell_shows_app_menu (GtkApplicationWindow *window
                                                     GtkSettings          *settings)
 {
   gboolean shown_by_shell;
+  gboolean shown_by_titlebar;
+  GtkWidget *titlebar;
 
   g_object_get (settings, "gtk-shell-shows-app-menu", &shown_by_shell, NULL);
 
-  if (shown_by_shell)
+  titlebar = _gtk_window_get_titlebar (GTK_WINDOW (window));
+  shown_by_titlebar = GTK_IS_HEADER_BAR (titlebar) && gtk_header_bar_get_show_fallback_app_menu (GTK_HEADER_BAR (titlebar));
+
+  if (shown_by_shell || shown_by_titlebar)
     {
       /* the shell shows it, so don't show it locally */
       if (g_menu_model_get_n_items (G_MENU_MODEL (window->priv->app_menu_section)) != 0)
