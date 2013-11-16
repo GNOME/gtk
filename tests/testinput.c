@@ -256,8 +256,6 @@ motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
       motion_time = event->time;
     }
 
-  if (event->is_hint)
-    gdk_device_get_state (event->device, event->window, NULL, NULL);
 
   print_axes (event->device, event->axes);
   update_cursor (widget, event->x, event->y);
@@ -299,8 +297,8 @@ main (int argc, char *argv[])
   GtkWidget *window;
   GtkWidget *drawing_area;
   GtkWidget *vbox;
-
   GtkWidget *button;
+  GdkWindow *gdk_win;
 
   gtk_init (&argc, &argv);
 
@@ -351,7 +349,6 @@ main (int argc, char *argv[])
     GDK_BUTTON_PRESS_MASK |
     GDK_KEY_PRESS_MASK |
     GDK_POINTER_MOTION_MASK |
-    GDK_POINTER_MOTION_HINT_MASK |
     GDK_PROXIMITY_OUT_MASK;
 
   gtk_widget_set_events (drawing_area, event_mask);
@@ -382,6 +379,10 @@ main (int argc, char *argv[])
   gtk_widget_show (button);
 
   gtk_widget_show (window);
+
+  /* request all motion events */
+  gdk_win = gtk_widget_get_window (drawing_area);
+  gdk_window_set_event_compression (gdk_win, FALSE);
 
   gtk_main ();
 
