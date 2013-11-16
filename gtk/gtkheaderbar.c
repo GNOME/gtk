@@ -921,15 +921,15 @@ gtk_header_bar_size_allocate (GtkWidget     *widget,
         x = allocation->x + allocation->width - (at_end ? close_width : 0) - (at_end ? 0 : menu_width) - css_borders.right;
 
       if (packing == GTK_PACK_START)
-	{
-	  l = priv->children;
-	  i = 0;
-	}
+        {
+          l = priv->children;
+          i = 0;
+        }
       else
-	{
-	  l = g_list_last (priv->children);
-	  i = nvis_children - 1;
-	}
+        {
+          l = g_list_last (priv->children);
+          i = nvis_children - 1;
+        }
 
       for (; l != NULL; (packing == GTK_PACK_START) ? (l = l->next) : (l = l->prev))
         {
@@ -1914,7 +1914,7 @@ gtk_header_bar_get_show_fallback_app_menu (GtkHeaderBar *bar)
  */
 void
 gtk_header_bar_set_show_fallback_app_menu (GtkHeaderBar *bar,
-					   gboolean      setting)
+                                           gboolean      setting)
 {
   GtkHeaderBarPrivate *priv;
 
