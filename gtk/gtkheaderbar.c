@@ -1908,7 +1908,8 @@ gtk_header_bar_get_show_fallback_app_menu (GtkHeaderBar *bar)
  * @setting: %TRUE to enable the fallback application menu
  *
  * Sets whether this header bar may show a menu button
- * for the application menu when needed.
+ * for the application menu when it is not shown by the
+ * desktop environment.
  *
  * Since: 3.12
  */

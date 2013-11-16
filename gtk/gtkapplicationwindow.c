@@ -82,7 +82,9 @@
  * looks on different platforms).
  * This behaviour can be overridden with the #GtkApplicationWindow:show-menubar
  * property. If the desktop environment does not display the application
- * menu, then it will automatically be included in the menubar.
+ * menu, then it will automatically be included in the menubar. It can
+ * also be shown as part of client-side window decorations, e.g. by
+ * using gtk_header_bar_set_show_fallback_app_menu().
  *
  * <example><title>A GtkApplicationWindow with a menubar</title>
  * <programlisting><![CDATA[
