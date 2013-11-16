@@ -3579,6 +3579,12 @@ gtk_window_set_titlebar (GtkWindow *window,
   gtk_widget_queue_resize (widget);
 }
 
+GtkWidget *
+_gtk_window_get_titlebar (GtkWindow *window)
+{
+  return window->priv->title_box;
+}
+
 /**
  * gtk_window_set_decorated:
  * @window: a #GtkWindow
