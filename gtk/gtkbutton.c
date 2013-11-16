@@ -1922,6 +1922,10 @@ gtk_button_button_press (GtkWidget      *widget,
           return GDK_EVENT_STOP;
         }
     }
+  else if (event->type == GDK_2BUTTON_PRESS)
+    {
+      return GDK_EVENT_STOP;
+    }
 
   return GDK_EVENT_PROPAGATE;
 }
