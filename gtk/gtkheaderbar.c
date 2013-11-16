@@ -256,7 +256,6 @@ add_menu_button (GtkHeaderBar *bar,
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
   GtkWidget *window;
   GtkWidget *button;
-  const gchar *icon_name;
   GtkWidget *image;
   GtkWidget *separator;
   GtkStyleContext *context;
@@ -271,13 +270,33 @@ add_menu_button (GtkHeaderBar *bar,
   context = gtk_widget_get_style_context (button);
   gtk_style_context_add_class (context, "image-button");
   gtk_style_context_add_class (context, "titlebutton");
+  image = NULL;
   window = gtk_widget_get_toplevel (GTK_WIDGET (bar));
-  icon_name = NULL;
   if (GTK_IS_WINDOW (window))
-    icon_name = gtk_window_get_icon_name (GTK_WINDOW (window));
-  if (icon_name == NULL)
-    icon_name = "process-stop-symbolic";
-  image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
+    {
+      const gchar *icon_name;
+      GdkPixbuf *icon;
+      icon_name = gtk_window_get_icon_name (GTK_WINDOW (window));
+      icon = gtk_window_get_icon (GTK_WINDOW (window));
+      if (icon_name != NULL)
+        {
+          image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
+        }
+      else if (icon != NULL)
+        {
+          if (gdk_pixbuf_get_width (icon) > 16)
+            {
+              GdkPixbuf *pixbuf;
+              pixbuf = gdk_pixbuf_scale_simple (icon, 16, 16, GDK_INTERP_BILINEAR);
+              image = gtk_image_new_from_pixbuf (pixbuf);
+              g_object_unref (pixbuf);
+            }
+          else
+            image = gtk_image_new_from_pixbuf (icon);
+        }
+    }
+  if (image == NULL)
+    image = gtk_image_new_from_icon_name ("process-stop-symbolic", GTK_ICON_SIZE_MENU);
   gtk_container_add (GTK_CONTAINER (button), image);
   gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
   accessible = gtk_widget_get_accessible (button);
