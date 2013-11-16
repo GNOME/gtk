@@ -593,6 +593,10 @@ gdk_device_get_window_at_position (GdkDevice  *device,
  * be returned. (This is not distinguishable from the case where
  * motion history is supported and no events were found.)
  *
+ * Note that there is also gdk_window_set_event_compression() to get
+ * more motion events delivered directly, independent of the windowing
+ * system.
+ *
  * Return value: %TRUE if the windowing system supports motion history and
  *  at least one event was found.
  **/
