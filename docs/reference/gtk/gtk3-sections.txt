@@ -7693,6 +7693,8 @@ gtk_header_bar_pack_start
 gtk_header_bar_pack_end
 gtk_header_bar_set_show_close_button
 gtk_header_bar_get_show_close_button
+gtk_header_bar_set_show_fallback_app_menu
+gtk_header_bar_get_show_fallback_app_menu
 
 <SUBSECTION Standard>
 GTK_TYPE_HEADER_BAR
