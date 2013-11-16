@@ -1221,6 +1221,15 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
         GdkDevice *source_device;
 
+        GDK_NOTE (EVENTS,
+                  g_message ("button %s:\twindow %ld\n\tdevice:%u\n"
+                             "\tsource device:%u\n\tbutton number: %u\n"
+                             "\tx,y: %.2f %.2f",
+                             (ev->evtype == XI_ButtonPress) ? "press" : "release",
+                             xev->event, xev->detail,
+                             xev->deviceid, xev->sourceid,
+                             xev->event_x, xev->event_y));
+
         if (ev->evtype == XI_ButtonRelease &&
             (xev->detail >= 4 && xev->detail <= 7))
           return FALSE;
@@ -1546,6 +1555,15 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
       {
         XIEnterEvent *xev = (XIEnterEvent *) ev;
         GdkDevice *device, *source_device;
+
+        GDK_NOTE (EVENTS,
+                  g_message ("%s notify:\twindow %ld\n\tsubwindow:%ld\n"
+                             "\tdevice: %u\n\tsource device: %u\n"
+                             "\tnotify type: %u\n\tcrossing mode: %u",
+                             (ev->evtype == XI_Enter) ? "enter" : "leave",
+                             xev->event, xev->child,
+                             xev->deviceid, xev->sourceid,
+                             xev->detail, xev->mode));
 
         event->crossing.type = (ev->evtype == XI_Enter) ? GDK_ENTER_NOTIFY : GDK_LEAVE_NOTIFY;
 
