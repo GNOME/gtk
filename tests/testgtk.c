@@ -6857,8 +6857,7 @@ shape_pressed (GtkWidget *widget, GdkEventButton *event)
                    GDK_OWNERSHIP_NONE,
                    TRUE,
                    GDK_BUTTON_RELEASE_MASK |
-                   GDK_BUTTON_MOTION_MASK |
-                   GDK_POINTER_MOTION_HINT_MASK,
+                   GDK_BUTTON_MOTION_MASK,
                    NULL,
                    event->time);
 }
@@ -6922,7 +6921,6 @@ shape_create_icon (GdkScreen *screen,
   gtk_widget_set_events (window, 
 			 gtk_widget_get_events (window) |
 			 GDK_BUTTON_MOTION_MASK |
-			 GDK_POINTER_MOTION_HINT_MASK |
 			 GDK_BUTTON_PRESS_MASK);
 
   gtk_widget_realize (window);
