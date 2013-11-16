@@ -959,7 +959,7 @@ example_app_window_init (ExampleAppWindow *win)
       <ulink url="https://git.gnome.org/browse/gtk+/tree/examples/application9/exampleappwin.c">full source</ulink>
       if you are interested in the details.</para>
 
-      <para>This brings our example application to its final appearance:</para>
+      <para>This brings our example application to this appearance:</para>
 
       <informalfigure>
         <mediaobject>
@@ -968,6 +968,36 @@ example_app_window_init (ExampleAppWindow *win)
           </imageobject>
         </mediaobject>
       </informalfigure>
+    </section>
+    <section>
+      <title>Header bar</title>
+
+      <para>Our application already uses a GtkHeaderBar, but so far it
+      still gets a 'normal' window titlebar on top of that. This is a
+      bit redundant, and we will now tell GTK+ to use the header bar
+      as replacement for the titlebar. To do so, we move it around to
+      be a direct child of the window, and set its type to be titlebar.</para>
+
+      <informalexample>
+        <programlisting><xi:include href="../../../../examples/application10/window.ui" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+      </informalexample>
+
+      <para>A small extra refinement that we have added here is to allow
+      the header bar to provide a fallback application menu, by setting
+      the show-fallback-app-menu property to TRUE. Here is how the
+      application now looks, if this fallback is used.</para>
+
+      <informalfigure>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="getting-started-app10.png" format="PNG"/>
+          </imageobject>
+        </mediaobject>
+      </informalfigure>
+
+      <para>If we set up the window icon for our window, the menu button
+      will use that instead of the generic placeholder icon you see
+      here.
     </section>
   </section>
 </chapter>

@@ -241,7 +241,6 @@ example_app_window_init (ExampleAppWindow *win)
                           priv->lines_label, "visible",
                           G_BINDING_DEFAULT);
 
-  gtk_window_set_icon_name (GTK_WINDOW (win), "sunny");
   g_object_set (gtk_settings_get_default (), "gtk-shell-shows-app-menu", FALSE, NULL);
   gtk_application_window_set_show_menubar (GTK_APPLICATION_WINDOW (win), TRUE);
 }

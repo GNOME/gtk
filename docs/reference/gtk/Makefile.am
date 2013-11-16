@@ -421,6 +421,7 @@ HTML_IMAGES = \
 	$(srcdir)/images/getting-started-app7.png			\
 	$(srcdir)/images/getting-started-app8.png			\
 	$(srcdir)/images/getting-started-app9.png			\
+	$(srcdir)/images/getting-started-app10.png			\
 	$(srcdir)/images/exampleapp.png					\
 	$(srcdir)/images/flow-box.png
 
