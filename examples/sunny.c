@@ -6,37 +6,23 @@ new_window (GApplication *app,
             GFile        *file)
 {
   GtkWidget *window, *scrolled, *view, *overlay;
-  GtkSettings *settings;
-  gboolean appmenu;
+  GtkWidget *header;
 
   window = gtk_application_window_new (GTK_APPLICATION (app));
   gtk_application_window_set_show_menubar (GTK_APPLICATION_WINDOW (window), FALSE);
   gtk_window_set_default_size ((GtkWindow*)window, 640, 480);
   gtk_window_set_title (GTK_WINDOW (window), "Sunny");
+  gtk_window_set_icon_name (GTK_WINDOW (window), "sunny");
+
+  header = gtk_header_bar_new ();
+  gtk_widget_show (header);
+  gtk_header_bar_set_title (GTK_HEADER_BAR (header), "Sunny");
+  gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (header), TRUE);
+  gtk_header_bar_set_show_fallback_app_menu (GTK_HEADER_BAR (header), TRUE);
+  gtk_window_set_titlebar (GTK_WINDOW (window), header);
 
   overlay = gtk_overlay_new ();
   gtk_container_add (GTK_CONTAINER (window), overlay);
-
-  settings = gtk_settings_get_default ();
-  g_object_get (settings, "gtk-shell-shows-app-menu", &appmenu, NULL);
-  if (!appmenu)
-    {
-      GMenuModel *model;
-      GtkWidget *menu;
-      GtkWidget *image;
-
-      model = gtk_application_get_app_menu (GTK_APPLICATION (app));
-      menu = gtk_menu_button_new ();
-      gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (menu), model);
-      gtk_widget_set_halign (menu, GTK_ALIGN_END);
-      gtk_widget_set_valign (menu, GTK_ALIGN_START);
-      image = gtk_image_new ();
-      gtk_image_set_from_icon_name (GTK_IMAGE (image),
-                                    "sunny",
-                                    GTK_ICON_SIZE_MENU);
-      gtk_button_set_image (GTK_BUTTON (menu), image);
-      gtk_overlay_add_overlay (GTK_OVERLAY (overlay), menu);
-    }
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_hexpand (scrolled, TRUE);
@@ -148,6 +134,9 @@ startup (GApplication *application)
 
   g_action_map_add_action_entries (G_ACTION_MAP (application), app_entries, G_N_ELEMENTS (app_entries), application);
 
+  if (g_getenv ("APP_MENU_FALLBACK"))
+    g_object_set (gtk_settings_get_default (), "gtk-shell-shows-app-menu", FALSE, NULL);
+ 
   builder = gtk_builder_new ();
   gtk_builder_add_from_string (builder,
                                "<interface>"
