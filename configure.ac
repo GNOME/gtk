@@ -1829,6 +1829,7 @@ examples/application6/Makefile
 examples/application7/Makefile
 examples/application8/Makefile
 examples/application9/Makefile
+examples/application10/Makefile
 tests/Makefile
 tests/visuals/Makefile
 testsuite/Makefile

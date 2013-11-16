@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <!-- interface-requires gtk+ 3.8 -->
+  <template class="ExampleAppPrefs" parent="GtkDialog">
+    <property name="title" translatable="yes">Preferences</property>
+    <property name="resizable">False</property>
+    <property name="modal">True</property>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="vbox">
+        <child>
+          <object class="GtkGrid" id="grid">
+            <property name="visible">True</property>
+            <property name="margin">6</property>
+            <property name="row-spacing">12</property>
+            <property name="column-spacing">6</property>
+            <child>
+              <object class="GtkLabel" id="fontlabel">
+                <property name="visible">True</property>
+                <property name="label">_Font:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">font</property>
+                <property name="xalign">1</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkFontButton" id="font">
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="transitionlabel">
+                <property name="visible">True</property>
+                <property name="label">_Transition:</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">transition</property>
+                <property name="xalign">1</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="transition">
+                <property name="visible">True</property>
+                <items>
+                  <item translatable="yes" id="none">None</item>
+                  <item translatable="yes" id="crossfade">Fade</item>
+                  <item translatable="yes" id="slide-left-right">Slide</item>
+                </items>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="action_area">
+            <property name="visible">True</property>
+            <child>
+              <object class="GtkButton" id="close">
+                <signal name="clicked" handler="preferences_closed"/>
+                <property name="visible">True</property>
+                <property name="label">_Close</property>
+                <property name="use-underline">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
