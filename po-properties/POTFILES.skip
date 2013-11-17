@@ -21,6 +21,10 @@ demos/gtk-demo/spinner.c
 demos/gtk-demo/stack.ui
 demos/gtk-demo/theming.ui
 demos/widget-factory/widget-factory.ui
+examples/application10/app-menu.ui
+examples/application10/gears-menu.ui
+examples/application10/prefs.ui
+examples/application10/window.ui
 examples/application2/window.ui
 examples/application3/window.ui
 examples/application4/app-menu.ui
