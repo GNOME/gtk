@@ -11742,5 +11742,5 @@ void
 _gtk_window_get_decoration_size (GtkWindow *window,
                                  GtkBorder *border)
 {
-  get_decoration_size (window, border);
+  get_decoration_size (GTK_WIDGET (window), border);
 }
