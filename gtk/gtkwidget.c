@@ -3764,10 +3764,14 @@ gtk_widget_set_property (GObject         *object,
       gtk_widget_set_valign (widget, g_value_get_enum (value));
       break;
     case PROP_MARGIN_LEFT:
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_widget_set_margin_left (widget, g_value_get_int (value));
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_MARGIN_RIGHT:
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       gtk_widget_set_margin_right (widget, g_value_get_int (value));
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_MARGIN_START:
       gtk_widget_set_margin_start (widget, g_value_get_int (value));
@@ -3924,10 +3928,14 @@ gtk_widget_get_property (GObject         *object,
       g_value_set_enum (value, gtk_widget_get_valign (widget));
       break;
     case PROP_MARGIN_LEFT:
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       g_value_set_int (value, gtk_widget_get_margin_left (widget));
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_MARGIN_RIGHT:
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       g_value_set_int (value, gtk_widget_get_margin_right (widget));
+      G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case PROP_MARGIN_TOP:
       g_value_set_int (value, gtk_widget_get_margin_top (widget));
