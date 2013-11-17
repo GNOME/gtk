@@ -807,6 +807,27 @@ theme_parse_image(GtkSettings  *settings,
       data->overlay = NULL;
     }
 
+  if (data->gap && !data->gap->filename)
+    {
+      g_scanner_warn (scanner, "Gap image options specified without filename");
+      theme_pixbuf_destroy (data->gap);
+      data->gap = NULL;
+    }
+
+  if (data->gap_start && !data->gap_start->filename)
+    {
+      g_scanner_warn (scanner, "Gap start image options specified without filename");
+      theme_pixbuf_destroy (data->gap_start);
+      data->gap_start = NULL;
+    }
+
+  if (data->gap_end && !data->gap_end->filename)
+    {
+      g_scanner_warn (scanner, "Gap end image options specified without filename");
+      theme_pixbuf_destroy (data->gap_end);
+      data->gap_end = NULL;
+    }
+
   if (token != G_TOKEN_RIGHT_CURLY)
     {
       /* error - cleanup for exit */
