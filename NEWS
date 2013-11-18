@@ -1,3 +1,82 @@
+Overview of Changes in GTK+ 3.11.0 to 3.11.1
+============================================
+
+* Theming:
+ - A number of containers have been changed to draw
+   backgrounds and borders. By default these are fully
+   transparent, so nothing should change:
+   GtkBox GtkFixed GtkGrid GtkEventBox
+ - Link colors are not rendered using the :visited and :link
+   states instead of the link-color and visited-link-color
+   style properties
+
+* Broadway:
+ - Use client-side decorations
+ - Implement window movement, raise/lower
+ - Use rolling hashes for optimizing scrolling
+ - Use click-to-focus
+ - Support touch events
+ - Support IPad on-screen keyboard
+
+* GtkFileChooser:
+ - Respect local-only in the places sidebar
+ - Filter out duplicate application shortcuts
+ - Show unmounted bookmarks
+
+* GtkProgressBar:
+ - Activity mode is now using a tick callback to move the block
+   smoothly
+
+* GtkWindow:
+ - Fix size allocation for the fallback menubar
+ - Improve application menu fallback if we have client-side
+   decorations or a header bar
+
+* GtkBuilder:
+ - No longer requires every object to have an id
+
+* Bugs fixed:
+ 577642 Selected Printer Does Not Stick Between Sessions
+ 635499 gtk_entry_completion_set_text_column doesn't remove old...
+ 668598 Printing to PDF should register the generated file with...
+ 679019 Popup menu misplaced in dual monitor
+ 693227 Incorrect size allocation with overflow
+ 699574 gtk_selection_owner_set() breaks mouse wheel scrolling
+ 700419 Trigger toggle maximize on double click in menubar/menu...
+ 702392 motion_compression hurts precision for drawing
+ 703784 Epiphany crash during displaying printing dialog
+ 705176 Reordering columns in GtkTreeView freezes mutter
+ 709629 Use :link and :visited for link colors
+ 710238 Fix the margin in RTL
+ 710533 GtkBuilder can no longer construct GtkEntryCompletions ...
+ 710909 Buttons are cut in some windows
+ 710987 g_return_if_fail used even if function requires return value
+ 711110 GDK_HINT_MAX_SIZE ignored on Win32
+ 711158 gtktextattributes: Use an anonymous union instead of arch-...
+ 711255 GtkListBox: Expand the placeholder
+ 711324 Some more patches to make more containers honor background...
+ 711354 Doc: some GtkPrintSettings symbols are missing
+ 711494 GtkStack: add a signal telling when transition is done
+ 711545 gtkpixelcache: Possibly ignoring queued redraw
+ 711548 GtkPlacesSidebar doesn't show unmounted bookmarks
+ 711553 gdk/win32: remove extra allocation for \r removal
+ 711574 GtkPlacesSidebar is missing "local-only" flag
+ 711611 GtkStack: Use new-style property installation/notification
+ 711636 Duplicated 'Music' and 'Videos' from favorites on ...
+ 712164 GtkMenuTracker: set action namespace correctly
+ 712302 GtkPlacesSideBar showing "Desktop" or not shouldn't be...
+ 712553 GtkBuilder: Make IDs optional 
+
+* Translation updates:
+ Arabic
+ Brazilian Portuguese
+ British English
+ French
+ Greek
+ Polish
+ Spanish
+
+
 Overview of Changes in GTK+ 3.10 to 3.11.0
 ==========================================
 
