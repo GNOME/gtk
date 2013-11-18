@@ -997,7 +997,7 @@ example_app_window_init (ExampleAppWindow *win)
 
       <para>If we set up the window icon for our window, the menu button
       will use that instead of the generic placeholder icon you see
-      here.
+      here.</para>
     </section>
   </section>
 </chapter>
