@@ -41,6 +41,9 @@
  * The style of transition can be controlled with
  * gtk_revealer_set_transition_type().
  *
+ * These animations respect the #GtkSettings::gtk-enable-animations
+ * setting.
+ *
  * The GtkRevealer widget was added in GTK+ 3.10.
  */
 
@@ -268,6 +271,13 @@ static GtkRevealerTransitionType
 effective_transition (GtkRevealer *revealer)
 {
   GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
+  gboolean animations_enabled;
+
+  g_object_get (gtk_widget_get_settings (GTK_WIDGET (revealer)),
+                "gtk-enable-animations", &animations_enabled,
+                NULL);
+  if (!animations_enabled)
+    return GTK_REVEALER_TRANSITION_TYPE_NONE;
 
   if (gtk_widget_get_direction (GTK_WIDGET (revealer)) == GTK_TEXT_DIR_RTL)
     {
