@@ -314,6 +314,16 @@ additional environment variables.
   </para>
 </formalpara>
 
+<formalpara>
+  <title><envar>GTK_THEME</envar></title>
+
+  <para>
+    If set, makes GTK+ use the named theme instead of the theme
+    that is specified by the gtk-theme-name setting. This is intended
+    mainly for easy debugging of theme issues.
+  </para>
+</formalpara>
+
 <para>
 The following environment variables are used by GdkPixbuf, GDK or
 Pango, not by GTK+ itself, but we list them here for completeness
