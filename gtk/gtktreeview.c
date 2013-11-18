@@ -49,6 +49,7 @@
 #include "gtkentryprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkcssstylepropertyprivate.h"
+#include "gtkcssrgbavalueprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkmain.h"
 #include "gtksettings.h"
@@ -4689,13 +4690,19 @@ gtk_tree_view_draw_line (GtkTreeView         *tree_view,
                         2, 0.5);
       break;
     case GTK_TREE_VIEW_GRID_LINE:
-      cairo_set_source_rgb (cr, 0, 0, 0);
-      cairo_set_line_width (cr, tree_view->priv->grid_line_width);
-      if (tree_view->priv->grid_line_dashes[0])
-        cairo_set_dash (cr, 
-                        tree_view->priv->grid_line_dashes,
-                        2, 0.5);
+      {
+        GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
+        const GdkRGBA *color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
+
+        gdk_cairo_set_source_rgba (cr, color);
+        cairo_set_line_width (cr, tree_view->priv->grid_line_width);
+        if (tree_view->priv->grid_line_dashes[0])
+          cairo_set_dash (cr,
+                          tree_view->priv->grid_line_dashes,
+                          2, 0.5);
+      }
       break;
+
     default:
       g_assert_not_reached ();
       /* fall through */
