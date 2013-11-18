@@ -654,18 +654,22 @@ theme_image_unref (ThemeImage *data)
   if (data->refcount == 0)
     {
       g_free (data->match_data.detail);
-      if (data->background)
-	theme_pixbuf_destroy (data->background);
-      if (data->overlay)
-	theme_pixbuf_destroy (data->overlay);
-      if (data->gap_start)
-	theme_pixbuf_destroy (data->gap_start);
-      if (data->gap)
-	theme_pixbuf_destroy (data->gap);
-      if (data->gap_end)
-	theme_pixbuf_destroy (data->gap_end);
+      theme_pixbuf_destroy (data->background);
+      theme_pixbuf_destroy (data->overlay);
+      theme_pixbuf_destroy (data->gap_start);
+      theme_pixbuf_destroy (data->gap_end);
+      theme_pixbuf_destroy (data->gap);
       g_free (data);
     }
+}
+
+static inline void
+clear_theme_pixbuf_and_warn (ThemePixbuf **theme_pb,
+                             GScanner     *scanner,
+                             const char   *message)
+{
+  theme_clear_pixbuf (theme_pb);
+  g_scanner_warn (scanner, message);
 }
 
 static guint
@@ -794,38 +798,21 @@ theme_parse_image(GtkSettings  *settings,
   token = g_scanner_get_next_token(scanner);
 
   if (data->background && !data->background->filename)
-    {
-      g_scanner_warn (scanner, "Background image options specified without filename");
-      theme_pixbuf_destroy (data->background);
-      data->background = NULL;
-    }
+    clear_theme_pixbuf_and_warn (&data->background, scanner, "Background image options specified without filename");
 
   if (data->overlay && !data->overlay->filename)
-    {
-      g_scanner_warn (scanner, "Overlay image options specified without filename");
-      theme_pixbuf_destroy (data->overlay);
-      data->overlay = NULL;
-    }
+    clear_theme_pixbuf_and_warn (&data->overlay, scanner, "Overlay image options specified without filename");
 
-  if (data->gap && !data->gap->filename)
+  if (!data->gap->filename)
     {
-      g_scanner_warn (scanner, "Gap image options specified without filename");
-      theme_pixbuf_destroy (data->gap);
-      data->gap = NULL;
-    }
+      if (data->gap)
+        clear_theme_pixbuf_and_warn (&data->gap, scanner, "Gap image options specified without filename");
 
-  if (data->gap_start && !data->gap_start->filename)
-    {
-      g_scanner_warn (scanner, "Gap start image options specified without filename");
-      theme_pixbuf_destroy (data->gap_start);
-      data->gap_start = NULL;
-    }
+      if (data->gap_start)
+        clear_theme_pixbuf_and_warn (&data->gap_start, scanner, "Gap start image options specified without filename");
 
-  if (data->gap_end && !data->gap_end->filename)
-    {
-      g_scanner_warn (scanner, "Gap end image options specified without filename");
-      theme_pixbuf_destroy (data->gap_end);
-      data->gap_end = NULL;
+      if (data->gap_end)
+        clear_theme_pixbuf_and_warn (&data->gap_end, scanner, "Gap end image options specified without filename");
     }
 
   if (token != G_TOKEN_RIGHT_CURLY)
