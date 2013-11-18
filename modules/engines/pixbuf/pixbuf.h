@@ -195,6 +195,7 @@ struct _ThemeImage
 
 G_GNUC_INTERNAL ThemePixbuf *theme_pixbuf_new          (void);
 G_GNUC_INTERNAL void         theme_pixbuf_destroy      (ThemePixbuf  *theme_pb);
+G_GNUC_INTERNAL void         theme_clear_pixbuf        (ThemePixbuf **theme_pb);
 G_GNUC_INTERNAL void         theme_pixbuf_set_filename (ThemePixbuf  *theme_pb,
 					const char   *filename);
 G_GNUC_INTERNAL GdkPixbuf *  theme_pixbuf_get_pixbuf   (ThemePixbuf  *theme_pb);

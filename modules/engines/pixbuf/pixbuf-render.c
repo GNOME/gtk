@@ -524,8 +524,25 @@ theme_pixbuf_new (void)
 void
 theme_pixbuf_destroy (ThemePixbuf *theme_pb)
 {
-  theme_pixbuf_set_filename (theme_pb, NULL);
-  g_free (theme_pb);
+  if (G_LIKELY (theme_pb))
+    {
+      theme_pixbuf_set_filename (theme_pb, NULL);
+      g_free (theme_pb);
+    }
+}
+
+void
+theme_clear_pixbuf (ThemePixbuf **theme_pb)
+{
+#if GLIB_CHECK_VERSION (2, 34, 0)
+  g_clear_pointer (theme_pb, theme_pixbuf_destroy);
+#else
+  if (*theme_pb)
+    {
+      theme_pixbuf_destroy (*theme_pb);
+      *theme_pb = NULL;
+    }
+#endif
 }
 
 void         
