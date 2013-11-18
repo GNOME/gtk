@@ -29,9 +29,11 @@
   </define>
   <define name="object">
     <element name="object">
-      <attribute name="id">
-        <data type="ID" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"/>
-      </attribute>
+      <optional>
+        <attribute name="id">
+          <data type="ID" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"/>
+        </attribute>
+      </optional>
       <attribute name="class">
         <text/>
       </attribute>

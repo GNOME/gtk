@@ -301,7 +301,7 @@ is_requested_object (const gchar *object,
 
   for (l = data->requested_objects; l; l = l->next)
     {
-      if (strcmp (l->data, object) == 0)
+      if (g_strcmp0 (l->data, object) == 0)
         return TRUE;
     }
 
@@ -369,10 +369,11 @@ parse_object (GMarkupParseContext  *context,
       return;
     }
 
+  data->object_counter++;
+
   if (!object_id)
     {
-      error_missing_attribute (data, element_name, "id", error);
-      return;
+      object_id = g_strdup_printf ("___object_%d___", data->object_counter++);
     }
 
   ++data->cur_object_level;
@@ -419,7 +420,6 @@ parse_object (GMarkupParseContext  *context,
                    object_id, line, line2);
       return;
     }
-
 
   g_hash_table_insert (data->object_ids, g_strdup (object_id), GINT_TO_POINTER (line));
 }

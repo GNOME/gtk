@@ -107,6 +107,8 @@ typedef struct {
   gint requested_object_level;
   gint cur_object_level;
 
+  gint object_counter;
+
   GHashTable *object_ids;
 } ParserData;
 

@@ -100,17 +100,12 @@
  * specifying the id of the #GtkUIManager in the "constructor" attribute and the
  * name of the object in the "id" attribute.
  *
- * Objects must be given a name with the "id" attribute, which allows the
+ * Objects may be given a name with the "id" attribute, which allows the
  * application to retrieve them from the builder with gtk_builder_get_object().
  * An id is also necessary to use the object as property value in other parts of
- * the UI definition.
+ * the UI definition. GTK+ reserves ids starting and ending with ___ (3 underscores)
+ * for its own purposes.
  * </para>
- * <note><para>
- * Prior to 2.20, GtkBuilder was setting the "name" property of constructed widgets to the
- * "id" attribute. In GTK+ 2.20 or newer, you have to use gtk_buildable_get_name() instead
- * of gtk_widget_get_name() to obtain the "id", or set the "name" property in your UI
- * definition.
- * </para></note>
  * <para>
  * Setting properties of objects is pretty straightforward with the
  * &lt;property&gt; element: the "name" attribute specifies the name of the

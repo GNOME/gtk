@@ -2728,6 +2728,53 @@ test_expose_object (void)
   g_object_unref (image);
 }
 
+static void
+test_no_ids (void)
+{
+  GtkBuilder *builder;
+  GError *error = NULL;
+  GObject *obj;
+  const gchar buffer[] =
+    "<interface>"
+    "  <object class=\"GtkInfoBar\">"
+    "    <child internal-child=\"content_area\">"
+    "      <object class=\"GtkHBox\">"
+    "        <child>"
+    "          <object class=\"GtkLabel\">"
+    "            <property name=\"label\" translatable=\"yes\">Message</property>"
+    "          </object>"
+    "          <packing>"
+    "            <property name='expand'>False</property>"
+    "          </packing>"
+    "        </child>"
+    "      </object>"
+    "    </child>"
+    "    <child internal-child=\"action_area\">"
+    "      <object class=\"GtkVButtonBox\">"
+    "        <child>"
+    "          <object class=\"GtkButton\" id=\"button_ok\">"
+    "            <property name=\"label\">gtk-ok</property>"
+    "            <property name=\"use-stock\">yes</property>"
+    "          </object>"
+    "        </child>"
+    "      </object>"
+    "    </child>"
+    "    <action-widgets>"
+    "      <action-widget response=\"1\">button_ok</action-widget>"
+    "    </action-widgets>"
+    "  </object>"
+    "</interface>";
+
+  builder = gtk_builder_new ();
+  gtk_builder_add_from_string (builder, buffer, -1, &error);
+  g_assert (error == NULL);
+
+  obj = gtk_builder_get_object (builder, "button_ok");
+  g_assert (GTK_IS_BUTTON (obj));
+
+  g_object_unref (builder);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -2777,6 +2824,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/GMenu", test_gmenu);
   g_test_add_func ("/Builder/LevelBar", test_level_bar);
   g_test_add_func ("/Builder/Expose Object", test_expose_object);
+  g_test_add_func ("/Builder/No IDs", test_no_ids);
 
   return g_test_run();
 }

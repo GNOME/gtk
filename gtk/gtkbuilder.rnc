@@ -9,7 +9,7 @@ requires = element requires {
 }
 
 object = element object {
-  attribute id { xsd:ID },
+  attribute id { xsd:ID } ?,
   attribute class { text },
   attribute type-func { text } ?,
   attribute constructor { text } ?,
