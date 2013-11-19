@@ -750,6 +750,8 @@ gtk_application_window_real_map (GtkWidget *widget)
   if (window->priv->menubar)
     gtk_widget_map (window->priv->menubar);
 
+  GTK_WIDGET_CLASS (gtk_application_window_parent_class)->map (widget);
+
 #ifdef GDK_WINDOWING_WAYLAND
   {
     GdkWindow *gdkwindow;
@@ -770,8 +772,6 @@ gtk_application_window_real_map (GtkWidget *widget)
       }
   }
 #endif
-
-  GTK_WIDGET_CLASS (gtk_application_window_parent_class)->map (widget);
 }
 
 static void

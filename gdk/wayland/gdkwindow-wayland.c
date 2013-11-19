@@ -902,10 +902,6 @@ gdk_wayland_window_create_surface (GdkWindow *window)
   wl_surface_set_user_data (impl->surface, window);
   wl_surface_add_listener (impl->surface,
                            &surface_listener, window);
-
-  if (display_wayland->gtk_shell)
-    impl->gtk_surface = gtk_shell_get_gtk_surface (display_wayland->gtk_shell,
-                                                   impl->surface);
 }
 
 static void
@@ -1054,6 +1050,7 @@ gdk_wayland_window_create_xdg_popup (GdkWindow            *window,
 static void
 gdk_wayland_window_map (GdkWindow *window)
 {
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkWindowImplWayland *parent;
   GdkWindow *transient_for;
@@ -1116,6 +1113,10 @@ gdk_wayland_window_map (GdkWindow *window)
 
     mapped:
       impl->mapped = TRUE;
+
+      if (display_wayland->gtk_shell)
+        impl->gtk_surface = gtk_shell_get_gtk_surface (display_wayland->gtk_shell,
+                                                       impl->surface);
     }
 }
 
@@ -2299,9 +2300,6 @@ gdk_wayland_window_set_dbus_properties_libgtk_only (GdkWindow  *window,
   g_return_if_fail (GDK_IS_WAYLAND_WINDOW (window));
 
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-
-  if (!impl->surface)
-    gdk_wayland_window_create_surface (window);
 
   if (impl->gtk_surface == NULL)
     return;
