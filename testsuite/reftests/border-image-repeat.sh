@@ -26,15 +26,15 @@ cat << EOF
         <child>
           <object class="GtkToolbar" id="toolbar-$hrepeat-$vrepeat-hstretch$side">
             <property name="name">yellow</property>
-            <property name="width_request">13</property>
-            <property name="height_request">5</property>
+            <property name="width_request">52</property>
+            <property name="height_request">20</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="show_arrow">False</property>
           </object>
           <packing>
-            <property name="x">`expr $x \* 25 + 5`</property>
-            <property name="y">`expr $y \* 25 + $side \* 18`</property>
+            <property name="x">`expr $x \* 100 + 20`</property>
+            <property name="y">`expr $y \* 100 + $side \* 72`</property>
           </packing>
         </child>
 EOF
@@ -44,15 +44,15 @@ cat << EOF
         <child>
           <object class="GtkToolbar" id="toolbar-$hrepeat-$vrepeat-hrepeat$side">
             <property name="name">yellow-3</property>
-            <property name="width_request">15</property>
-            <property name="height_request">5</property>
+            <property name="width_request">60</property>
+            <property name="height_request">20</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="show_arrow">False</property>
           </object>
           <packing>
-            <property name="x">`expr $x \* 25 + 4`</property>
-            <property name="y">`expr $y \* 25 + $side \* 18`</property>
+            <property name="x">`expr $x \* 100 + 16`</property>
+            <property name="y">`expr $y \* 100 + $side \* 72`</property>
           </packing>
         </child>
 EOF
@@ -62,15 +62,15 @@ cat << EOF
         <child>
           <object class="GtkToolbar" id="toolbar-$hrepeat-$vrepeat-hround$side">
             <property name="name">yellow-3</property>
-            <property name="width_request">13</property>
-            <property name="height_request">5</property>
+            <property name="width_request">52</property>
+            <property name="height_request">20</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="show_arrow">False</property>
           </object>
           <packing>
-            <property name="x">`expr $x \* 25 + 5`</property>
-            <property name="y">`expr $y \* 25 + $side \* 18`</property>
+            <property name="x">`expr $x \* 100 + 20`</property>
+            <property name="y">`expr $y \* 100 + $side \* 72`</property>
           </packing>
         </child>
 EOF
@@ -80,29 +80,29 @@ cat << EOF
         <child>
           <object class="GtkToolbar" id="toolbar-$hrepeat-$vrepeat-hspace0$side">
             <property name="name">yellow</property>
-            <property name="width_request">5</property>
-            <property name="height_request">5</property>
+            <property name="width_request">20</property>
+            <property name="height_request">20</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="show_arrow">False</property>
           </object>
           <packing>
-            <property name="x">`expr $x \* 25 + 6`</property>
-            <property name="y">`expr $y \* 25 + $side \* 18`</property>
+            <property name="x">`expr $x \* 100 + 24`</property>
+            <property name="y">`expr $y \* 100 + $side \* 72`</property>
           </packing>
         </child>
         <child>
           <object class="GtkToolbar" id="toolbar-$hrepeat-$vrepeat-hspace1$side">
             <property name="name">yellow</property>
-            <property name="width_request">5</property>
-            <property name="height_request">5</property>
+            <property name="width_request">20</property>
+            <property name="height_request">20</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="show_arrow">False</property>
           </object>
           <packing>
-            <property name="x">`expr $x \* 25 + 12`</property>
-            <property name="y">`expr $y \* 25 + $side \* 18`</property>
+            <property name="x">`expr $x \* 100 + 48`</property>
+            <property name="y">`expr $y \* 100 + $side \* 72`</property>
           </packing>
         </child>
 EOF
@@ -114,15 +114,15 @@ cat << EOF
         <child>
           <object class="GtkToolbar" id="toolbar-$hrepeat-$vrepeat-vstretch$side">
             <property name="name">green</property>
-            <property name="width_request">5</property>
-            <property name="height_request">13</property>
+            <property name="width_request">20</property>
+            <property name="height_request">52</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="show_arrow">False</property>
           </object>
           <packing>
-            <property name="x">`expr $x \* 25 + $side \* 18`</property>
-            <property name="y">`expr $y \* 25 + 5`</property>
+            <property name="x">`expr $x \* 100 + $side \* 72`</property>
+            <property name="y">`expr $y \* 100 + 20`</property>
           </packing>
         </child>
 EOF
@@ -132,15 +132,15 @@ cat << EOF
         <child>
           <object class="GtkToolbar" id="toolbar-$hrepeat-$vrepeat-vrepeat$side">
             <property name="name">green-3</property>
-            <property name="width_request">5</property>
-            <property name="height_request">15</property>
+            <property name="width_request">20</property>
+            <property name="height_request">60</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="show_arrow">False</property>
           </object>
           <packing>
-            <property name="x">`expr $x \* 25 + $side \* 18`</property>
-            <property name="y">`expr $y \* 25 + 4`</property>
+            <property name="x">`expr $x \* 100 + $side \* 72`</property>
+            <property name="y">`expr $y \* 100 + 16`</property>
           </packing>
         </child>
 EOF
@@ -150,15 +150,15 @@ cat << EOF
         <child>
           <object class="GtkToolbar" id="toolbar-$hrepeat-$vrepeat-vround$side">
             <property name="name">green-3</property>
-            <property name="width_request">5</property>
-            <property name="height_request">13</property>
+            <property name="width_request">20</property>
+            <property name="height_request">52</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="show_arrow">False</property>
           </object>
           <packing>
-            <property name="x">`expr $x \* 25 + $side \* 18`</property>
-            <property name="y">`expr $y \* 25 + 5`</property>
+            <property name="x">`expr $x \* 100 + $side \* 72`</property>
+            <property name="y">`expr $y \* 100 + 20`</property>
           </packing>
         </child>
 EOF
@@ -168,29 +168,29 @@ cat << EOF
         <child>
           <object class="GtkToolbar" id="toolbar-$hrepeat-$vrepeat-vspace0$side">
             <property name="name">green</property>
-            <property name="width_request">5</property>
-            <property name="height_request">5</property>
+            <property name="width_request">20</property>
+            <property name="height_request">20</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="show_arrow">False</property>
           </object>
           <packing>
-            <property name="x">`expr $x \* 25 + $side \* 18`</property>
-            <property name="y">`expr $y \* 25 + 6`</property>
+            <property name="x">`expr $x \* 100 + $side \* 72`</property>
+            <property name="y">`expr $y \* 100 + 24`</property>
           </packing>
         </child>
         <child>
           <object class="GtkToolbar" id="toolbar-$hrepeat-$vrepeat-vspace1$side">
             <property name="name">green</property>
-            <property name="width_request">5</property>
-            <property name="height_request">5</property>
+            <property name="width_request">20</property>
+            <property name="height_request">20</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="show_arrow">False</property>
           </object>
           <packing>
-            <property name="x">`expr $x \* 25 + $side \* 18`</property>
-            <property name="y">`expr $y \* 25 + 12`</property>
+            <property name="x">`expr $x \* 100 + $side \* 72`</property>
+            <property name="y">`expr $y \* 100 + 48`</property>
           </packing>
         </child>
 EOF
@@ -201,23 +201,17 @@ EOF
       for xcorner in 0 1; do
 cat << EOF
         <child>
-          <object class="GtkEventBox" id="eventbox-corner-$hrepeat-$vrepeat-$xcorner$ycorner">
+          <object class="GtkToolbar" id="toolbar-corner-$hrepeat-$vrepeat-$xcorner$ycorner">
+            <property name="name">red</property>
+            <property name="width_request">20</property>
+            <property name="height_request">20</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <child>
-              <object class="GtkToolbar" id="toolbar-corner-$hrepeat-$vrepeat-$xcorner$ycorner">
-                <property name="name">red</property>
-                <property name="width_request">5</property>
-                <property name="height_request">5</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="show_arrow">False</property>
-              </object>
-            </child>
+            <property name="show_arrow">False</property>
           </object>
           <packing>
-            <property name="x">`expr $x \* 25 + $xcorner \* 18`</property>
-            <property name="y">`expr $y \* 25 + $ycorner \* 18`</property>
+            <property name="x">`expr $x \* 100 + $xcorner \* 72`</property>
+            <property name="y">`expr $y \* 100 + $ycorner \* 72`</property>
           </packing>
         </child>
 EOF

@@ -8,7 +8,7 @@ GtkButton {
   border-image-source: url("border-image-balls.png");
   border-image-slice: 20;
   border-image-repeat: stretch;
-  border-width: 5px;
+  border-width: 20px;
   border-style: solid;
 }
 
@@ -31,20 +31,25 @@ GtkButton {
 
 #red {
   background-image: url("border-image-ball-red.png");
+  background-color: black;
 }
 
 #yellow {
   background-image: url("border-image-ball-yellow.png");
+  background-color: black;
 }
 
 #yellow-3 {
   background-image: url("border-image-3-balls-yellow.png");
+  background-color: black;
 }
 
 #green {
   background-image: url("border-image-ball-green.png");
+  background-color: black;
 }
 
 #green-3 {
   background-image: url("border-image-3-balls-green.png");
+  background-color: black;
 }
