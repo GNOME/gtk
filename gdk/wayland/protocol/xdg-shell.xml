@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<protocol name="xdg_surface">
+<protocol name="xdg_shell">
 
   <copyright>
     Copyright © 2008-2013 Kristian Høgsberg
