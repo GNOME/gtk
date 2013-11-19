@@ -45,9 +45,6 @@
  * These animations respect the #GtkSettings::gtk-enable-animations
  * setting.
  *
- * These animations respect the #GtkSettings::gtk-enable-animations
- * setting.
- *    
  * The GtkStack widget was added in GTK+ 3.10.
  */
 
@@ -830,14 +827,6 @@ static GtkStackTransitionType
 effective_transition_type (GtkStack               *stack,
                            GtkStackTransitionType  transition_type)
 {
-  gboolean animations_enabled;
-
-  g_object_get (gtk_widget_get_settings (GTK_WIDGET (stack)),
-                "gtk-enable-animations", &animations_enabled,
-                NULL);
-  if (!animations_enabled)
-    return GTK_STACK_TRANSITION_TYPE_NONE;
-
   if (gtk_widget_get_direction (GTK_WIDGET (stack)) == GTK_TEXT_DIR_RTL)
     {
       if (transition_type == GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT)
