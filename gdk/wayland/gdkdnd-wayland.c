@@ -176,6 +176,8 @@ _gdk_wayland_window_drag_begin (GdkWindow *window,
   GdkDragContext *context;
 
   context = (GdkDragContext *) g_object_new (GDK_TYPE_WAYLAND_DRAG_CONTEXT, NULL);
+  context->source_window = window;
+  context->is_source = TRUE;
 
   gdk_drag_context_set_device (context, device);
 
