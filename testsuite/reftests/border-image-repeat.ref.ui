@@ -234,7 +234,7 @@
         </child>
         <child>
           <object class="GtkToolbar" id="toolbar-round-stretch-hround0">
-            <property name="name">yellow-3</property>
+            <property name="name">yellow-3-round</property>
             <property name="width_request">52</property>
             <property name="height_request">20</property>
             <property name="visible">True</property>
@@ -262,7 +262,7 @@
         </child>
         <child>
           <object class="GtkToolbar" id="toolbar-round-stretch-hround1">
-            <property name="name">yellow-3</property>
+            <property name="name">yellow-3-round</property>
             <property name="width_request">52</property>
             <property name="height_request">20</property>
             <property name="visible">True</property>
@@ -710,7 +710,7 @@
         </child>
         <child>
           <object class="GtkToolbar" id="toolbar-round-repeat-hround0">
-            <property name="name">yellow-3</property>
+            <property name="name">yellow-3-round</property>
             <property name="width_request">52</property>
             <property name="height_request">20</property>
             <property name="visible">True</property>
@@ -738,7 +738,7 @@
         </child>
         <child>
           <object class="GtkToolbar" id="toolbar-round-repeat-hround1">
-            <property name="name">yellow-3</property>
+            <property name="name">yellow-3-round</property>
             <property name="width_request">52</property>
             <property name="height_request">20</property>
             <property name="visible">True</property>
@@ -976,7 +976,7 @@
         </child>
         <child>
           <object class="GtkToolbar" id="toolbar-stretch-round-vround0">
-            <property name="name">green-3</property>
+            <property name="name">green-3-round</property>
             <property name="width_request">20</property>
             <property name="height_request">52</property>
             <property name="visible">True</property>
@@ -1004,7 +1004,7 @@
         </child>
         <child>
           <object class="GtkToolbar" id="toolbar-stretch-round-vround1">
-            <property name="name">green-3</property>
+            <property name="name">green-3-round</property>
             <property name="width_request">20</property>
             <property name="height_request">52</property>
             <property name="visible">True</property>
@@ -1088,7 +1088,7 @@
         </child>
         <child>
           <object class="GtkToolbar" id="toolbar-repeat-round-vround0">
-            <property name="name">green-3</property>
+            <property name="name">green-3-round</property>
             <property name="width_request">20</property>
             <property name="height_request">52</property>
             <property name="visible">True</property>
@@ -1116,7 +1116,7 @@
         </child>
         <child>
           <object class="GtkToolbar" id="toolbar-repeat-round-vround1">
-            <property name="name">green-3</property>
+            <property name="name">green-3-round</property>
             <property name="width_request">20</property>
             <property name="height_request">52</property>
             <property name="visible">True</property>
@@ -1186,7 +1186,7 @@
         </child>
         <child>
           <object class="GtkToolbar" id="toolbar-round-round-hround0">
-            <property name="name">yellow-3</property>
+            <property name="name">yellow-3-round</property>
             <property name="width_request">52</property>
             <property name="height_request">20</property>
             <property name="visible">True</property>
@@ -1200,7 +1200,7 @@
         </child>
         <child>
           <object class="GtkToolbar" id="toolbar-round-round-vround0">
-            <property name="name">green-3</property>
+            <property name="name">green-3-round</property>
             <property name="width_request">20</property>
             <property name="height_request">52</property>
             <property name="visible">True</property>
@@ -1214,7 +1214,7 @@
         </child>
         <child>
           <object class="GtkToolbar" id="toolbar-round-round-hround1">
-            <property name="name">yellow-3</property>
+            <property name="name">yellow-3-round</property>
             <property name="width_request">52</property>
             <property name="height_request">20</property>
             <property name="visible">True</property>
@@ -1228,7 +1228,7 @@
         </child>
         <child>
           <object class="GtkToolbar" id="toolbar-round-round-vround1">
-            <property name="name">green-3</property>
+            <property name="name">green-3-round</property>
             <property name="width_request">20</property>
             <property name="height_request">52</property>
             <property name="visible">True</property>
@@ -1326,7 +1326,7 @@
         </child>
         <child>
           <object class="GtkToolbar" id="toolbar-space-round-vround0">
-            <property name="name">green-3</property>
+            <property name="name">green-3-round</property>
             <property name="width_request">20</property>
             <property name="height_request">52</property>
             <property name="visible">True</property>
@@ -1368,7 +1368,7 @@
         </child>
         <child>
           <object class="GtkToolbar" id="toolbar-space-round-vround1">
-            <property name="name">green-3</property>
+            <property name="name">green-3-round</property>
             <property name="width_request">20</property>
             <property name="height_request">52</property>
             <property name="visible">True</property>
@@ -1718,7 +1718,7 @@
         </child>
         <child>
           <object class="GtkToolbar" id="toolbar-round-space-hround0">
-            <property name="name">yellow-3</property>
+            <property name="name">yellow-3-round</property>
             <property name="width_request">52</property>
             <property name="height_request">20</property>
             <property name="visible">True</property>
@@ -1760,7 +1760,7 @@
         </child>
         <child>
           <object class="GtkToolbar" id="toolbar-round-space-hround1">
-            <property name="name">yellow-3</property>
+            <property name="name">yellow-3-round</property>
             <property name="width_request">52</property>
             <property name="height_request">20</property>
             <property name="visible">True</property>

@@ -61,7 +61,7 @@ EOF
 cat << EOF
         <child>
           <object class="GtkToolbar" id="toolbar-$hrepeat-$vrepeat-hround$side">
-            <property name="name">yellow-3</property>
+            <property name="name">yellow-3-round</property>
             <property name="width_request">52</property>
             <property name="height_request">20</property>
             <property name="visible">True</property>
@@ -149,7 +149,7 @@ EOF
 cat << EOF
         <child>
           <object class="GtkToolbar" id="toolbar-$hrepeat-$vrepeat-vround$side">
-            <property name="name">green-3</property>
+            <property name="name">green-3-round</property>
             <property name="width_request">20</property>
             <property name="height_request">52</property>
             <property name="visible">True</property>

@@ -44,6 +44,11 @@ GtkButton {
   background-color: black;
 }
 
+#yellow-3-round {
+  background-image: url("border-image-3-balls-yellow-squished.png");
+  background-color: black;
+}
+
 #green {
   background-image: url("border-image-ball-green.png");
   background-color: black;
@@ -51,5 +56,10 @@ GtkButton {
 
 #green-3 {
   background-image: url("border-image-3-balls-green.png");
+  background-color: black;
+}
+
+#green-3-round {
+  background-image: url("border-image-3-balls-green-squished.png");
   background-color: black;
 }

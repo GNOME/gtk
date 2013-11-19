@@ -85,7 +85,9 @@ testdata = \
 	border-image-ball-yellow.png \
 	border-image-balls.png \
 	border-image-3-balls-green.png \
+	border-image-3-balls-green-squished.png \
 	border-image-3-balls-yellow.png \
+	border-image-3-balls-yellow-squished.png \
 	border-image-excess-size.css \
 	border-image-excess-size.ref.ui \
 	border-image-excess-size.ui \
