@@ -104,8 +104,8 @@ struct _GdkWindowImplWayland
 
   struct xdg_surface *xdg_surface;
   struct xdg_popup   *xdg_popup;
-
   struct gtk_surface *gtk_surface;
+
   unsigned int mapped : 1;
   unsigned int fullscreen : 1;
   unsigned int use_custom_surface : 1;
@@ -1050,7 +1050,6 @@ gdk_wayland_window_create_xdg_popup (GdkWindow            *window,
 static void
 gdk_wayland_window_map (GdkWindow *window)
 {
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkWindowImplWayland *parent;
   GdkWindow *transient_for;
@@ -1113,10 +1112,6 @@ gdk_wayland_window_map (GdkWindow *window)
 
     mapped:
       impl->mapped = TRUE;
-
-      if (display_wayland->gtk_shell)
-        impl->gtk_surface = gtk_shell_get_gtk_surface (display_wayland->gtk_shell,
-                                                       impl->surface);
     }
 }
 
@@ -1173,10 +1168,6 @@ gdk_wayland_window_hide_surface (GdkWindow *window,
         }
       else
         {
-          if (impl->gtk_surface)
-            gtk_surface_destroy (impl->gtk_surface);
-          impl->gtk_surface = NULL;
-
           wl_surface_destroy (impl->surface);
           impl->surface = NULL;
 
@@ -2295,6 +2286,7 @@ gdk_wayland_window_set_dbus_properties_libgtk_only (GdkWindow  *window,
                                                     const char *application_object_path,
                                                     const char *unique_bus_name)
 {
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   GdkWindowImplWayland *impl;
 
   g_return_if_fail (GDK_IS_WAYLAND_WINDOW (window));
@@ -2302,7 +2294,14 @@ gdk_wayland_window_set_dbus_properties_libgtk_only (GdkWindow  *window,
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   if (impl->gtk_surface == NULL)
-    return;
+    {
+      if (impl->xdg_surface == NULL)
+        return;
+      if (display_wayland->gtk_shell == NULL)
+        return;
+
+      impl->gtk_surface = gtk_shell_get_gtk_surface (display_wayland->gtk_shell, impl->surface);
+    }
 
   gtk_surface_set_dbus_properties (impl->gtk_surface,
                                    application_id,
