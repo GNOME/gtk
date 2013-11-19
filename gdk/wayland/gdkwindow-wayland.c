@@ -839,16 +839,25 @@ static void
 gdk_wayland_window_sync_transient_for (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkWindowImplWayland *impl_parent = GDK_WINDOW_IMPL_WAYLAND (impl->transient_for);
+  struct wl_surface *transient_for_surface;
 
   if (!impl->xdg_surface)
     return;
 
-  /* XXX: Is this correct? */
-  if (!impl_parent->surface)
-    return;
+  if (impl->transient_for)
+    {
+      GdkWindowImplWayland *impl_parent = GDK_WINDOW_IMPL_WAYLAND (impl->transient_for->impl);
 
-  xdg_surface_set_transient_for (impl->xdg_surface, impl_parent->surface);
+      /* XXX: Is this correct? */
+      if (!impl_parent->surface)
+        return;
+
+      transient_for_surface = impl_parent->surface;
+    }
+  else
+    transient_for_surface = NULL;
+
+  xdg_surface_set_transient_for (impl->xdg_surface, transient_for_surface);
 }
 
 static void
