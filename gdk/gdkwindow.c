@@ -9935,7 +9935,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
       /* We ended up in this window after some (perhaps other clients)
        * grab, so update the toplevel_under_window state
        */
-      if (is_toplevel &&
+      if (pointer_info && is_toplevel &&
           event->type == GDK_ENTER_NOTIFY &&
           event->crossing.mode == GDK_CROSSING_UNGRAB)
         {
@@ -9949,7 +9949,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
     }
 
   /* Track toplevel_under_pointer */
-  if (is_toplevel)
+  if (pointer_info && is_toplevel)
     {
       if (event->type == GDK_ENTER_NOTIFY &&
           event->crossing.detail != GDK_NOTIFY_INFERIOR)
