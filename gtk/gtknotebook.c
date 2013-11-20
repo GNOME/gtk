@@ -5233,7 +5233,6 @@ gtk_notebook_search_page (GtkNotebook *notebook,
     }
   else
     {
-      old_list = list;
       list = list->prev;
     }
   while (list)
@@ -5244,7 +5243,6 @@ gtk_notebook_search_page (GtkNotebook *notebook,
            (gtk_widget_get_visible (page->child) &&
             (!page->tab_label || NOTEBOOK_IS_TAB_LABEL_PARENT (notebook, page)))))
         return list;
-      old_list = list;
       list = list->prev;
     }
   return NULL;
