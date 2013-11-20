@@ -1478,7 +1478,7 @@ set_stroke_style (cairo_t        *cr,
           n = round ((1. / 3) * n);
 
           segments[0] = n ? (1. / 3) * length / n : 1;
-          segments[1] = 2 * segments[1];
+          segments[1] = 2 * segments[0];
         }
       cairo_set_dash (cr, segments, G_N_ELEMENTS (segments), 0);
 
