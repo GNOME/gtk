@@ -7437,7 +7437,10 @@ gtk_entry_clear (GtkEntry             *entry,
   EntryIconInfo *icon_info = priv->icons[icon_pos];
   GtkImageType storage_type;
 
-  if (icon_info && _gtk_icon_helper_get_is_empty (icon_info->icon_helper))
+  if (icon_info == NULL)
+    return;
+
+  if (_gtk_icon_helper_get_is_empty (icon_info->icon_helper))
     return;
 
   g_object_freeze_notify (G_OBJECT (entry));
