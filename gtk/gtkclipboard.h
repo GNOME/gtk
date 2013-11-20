@@ -189,6 +189,9 @@ GtkClipboard *gtk_clipboard_get_for_display (GdkDisplay   *display,
 GDK_AVAILABLE_IN_ALL
 GtkClipboard *gtk_clipboard_get             (GdkAtom       selection);
 
+GDK_AVAILABLE_IN_3_16
+GtkClipboard *gtk_clipboard_get_default     (GdkDisplay    *display);
+
 GDK_AVAILABLE_IN_ALL
 GdkDisplay   *gtk_clipboard_get_display     (GtkClipboard *clipboard);
 

@@ -6476,6 +6476,7 @@ GtkClipboardClearFunc
 gtk_clipboard_get
 gtk_clipboard_get_for_display
 gtk_clipboard_get_display
+gtk_clipboard_get_default
 gtk_clipboard_set_with_data
 gtk_clipboard_set_with_owner
 gtk_clipboard_get_owner
