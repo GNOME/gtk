@@ -30,7 +30,8 @@
 #include "gtkprintoperation.h"  /* for GtkPrintError */
 #include "gtkintl.h"
 
-#ifdef G_OS_UNIX                /* _gtk_load_custom_papers() only on Unix so far  */
+/* _gtk_load_custom_papers() only on Unix so far  */
+#ifdef G_OS_UNIX
 #include "gtkcustompaperunixdialog.h"
 #endif
 
@@ -475,7 +476,8 @@ gtk_paper_size_get_paper_sizes (gboolean include_custom)
 {
   GList *list = NULL;
   guint i;
-#ifdef G_OS_UNIX                /* _gtk_load_custom_papers() only on Unix so far  */
+/* _gtk_load_custom_papers() only on Unix so far  */
+#ifdef G_OS_UNIX
   if (include_custom)
     {
       GList *page_setups, *l;
