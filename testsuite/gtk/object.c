@@ -225,7 +225,7 @@ object_test_property (GObject           *object,
              (MATCH_ANY_VALUE == ignore_properties[i].value ||
               value_as_pointer (&value) == ignore_properties[i].value ||
               (G_VALUE_HOLDS_STRING (&value) &&
-               strcmp (g_value_get_string (&value), ignore_properties[i].value) == 0))))
+               g_strcmp0 (g_value_get_string (&value), ignore_properties[i].value) == 0))))
           break;
       /* ignore known property bugs if not testing thoroughly */
       if (ignore_properties[i].name == NULL && !g_test_thorough ())
@@ -237,7 +237,7 @@ object_test_property (GObject           *object,
                 (MATCH_ANY_VALUE == ignore_properties[i].value ||
                  value_as_pointer (&value) == ignore_properties[i].value ||
                  (G_VALUE_HOLDS_STRING (&value) &&
-                  strcmp (g_value_get_string (&value), ignore_properties[i].value) == 0)))
+                  g_strcmp0 (g_value_get_string (&value), ignore_properties[i].value) == 0)))
               break;
         }
       /* assign unignored properties */
