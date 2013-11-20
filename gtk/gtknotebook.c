@@ -2637,7 +2637,7 @@ gtk_notebook_draw (GtkWidget *widget,
       }
     }
 
-  if (priv->operation == DRAG_OPERATION_REORDER &&
+  if (priv->cur_page && priv->operation == DRAG_OPERATION_REORDER &&
       gtk_cairo_should_draw_window (cr, priv->drag_window))
     {
       cairo_save (cr);
