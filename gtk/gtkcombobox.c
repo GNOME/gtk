@@ -3483,6 +3483,7 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
       gtk_cell_view_set_background_rgba (GTK_CELL_VIEW (priv->cell_view), &color);
 
       priv->box = gtk_event_box_new ();
+      gtk_widget_add_events (priv->box, GDK_SCROLL_MASK);
       gtk_event_box_set_visible_window (GTK_EVENT_BOX (priv->box),
                                         FALSE);
 
