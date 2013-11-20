@@ -954,7 +954,7 @@ gtk_tree_view_accessible_ref_selection (AtkSelection *selection,
   table = ATK_TABLE (selection);
   n_columns = gtk_tree_view_accessible_get_n_columns (table);
   n_selected = gtk_tree_view_accessible_get_selected_rows (table, &selected);
-  if (i >= n_columns * n_selected)
+  if (n_columns == 0 || i >= n_columns * n_selected)
     return NULL;
 
   row = selected[i / n_columns];
