@@ -2824,7 +2824,7 @@ gdk_window_end_paint (GdkWindow *window)
   GdkWindow *composited;
   GdkWindowPaint *paint;
   GdkWindowImplClass *impl_class;
-  GdkRectangle clip_box;
+  GdkRectangle clip_box = { 0, };
   cairo_region_t *full_clip;
   cairo_t *cr;
 
@@ -8256,6 +8256,10 @@ get_event_window (GdkDisplay                 *display,
 
   touch_grab = _gdk_display_has_touch_grab (display, device, sequence, serial);
   grab = _gdk_display_get_last_device_grab (display, device);
+
+  /* Default value. */
+  if (evmask_out)
+    *evmask_out = 0;
 
   if (is_touch_type (type) && pointer_emulated)
     {
