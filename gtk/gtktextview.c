@@ -8787,7 +8787,7 @@ gtk_text_view_get_virtual_cursor_pos (GtkTextView *text_view,
 
   if (y)
     {
-      if (priv->virtual_cursor_x != -1)
+      if (priv->virtual_cursor_y != -1)
         *y = priv->virtual_cursor_y;
       else
         *y = pos.y + pos.height / 2;
