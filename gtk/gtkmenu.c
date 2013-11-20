@@ -5414,9 +5414,9 @@ gtk_menu_real_move_scroll (GtkMenu       *menu,
           {
             gint child_height;
 
-            compute_child_offset (menu, menu_shell->priv->active_menu_item,
-                                  &child_offset, &child_height, NULL);
-            child_offset += child_height / 2;
+            if (compute_child_offset (menu, menu_shell->priv->active_menu_item,
+                                      &child_offset, &child_height, NULL))
+              child_offset += child_height / 2;
           }
 
         menu_shell->priv->ignore_enter = TRUE;
