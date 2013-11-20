@@ -480,7 +480,7 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
   GtkRBTree *tree;
   GtkRBNode *node;
   GtkTreePath *anchor_path;
-  gboolean retval;
+  gboolean retval = FALSE;
   gboolean found_node;
 
   g_return_val_if_fail (GTK_IS_TREE_SELECTION (selection), FALSE);
@@ -501,8 +501,6 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
 
   if (anchor_path == NULL)
     return FALSE;
-
-  retval = FALSE;
 
   found_node = !_gtk_tree_view_find_node (priv->tree_view,
                                           anchor_path,
