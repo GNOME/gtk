@@ -1110,6 +1110,9 @@ find_native_sibling_above (GdkWindow *parent,
 {
   GdkWindow *w;
 
+  if (!parent)
+    return NULL;
+
   w = find_native_sibling_above_helper (parent, child);
   if (w)
     return w;
