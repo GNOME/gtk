@@ -9975,7 +9975,6 @@ gtk_entry_drag_motion (GtkWidget        *widget,
   state = gtk_style_context_get_state (style_context);
   gtk_style_context_get_padding (style_context, state, &padding);
   x -= padding.left;
-  y -= padding.top;
 
   get_icon_allocations (entry, &primary, &secondary);
 
@@ -10054,7 +10053,6 @@ gtk_entry_drag_data_received (GtkWidget        *widget,
   state = gtk_style_context_get_state (style_context);
   gtk_style_context_get_padding (style_context, state, &padding);
   x -= padding.left;
-  y -= padding.top;
 
   get_icon_allocations (entry, &primary, &secondary);
 
