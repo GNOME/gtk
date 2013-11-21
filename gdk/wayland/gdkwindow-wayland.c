@@ -861,6 +861,20 @@ gdk_wayland_window_sync_transient_for (GdkWindow *window)
 }
 
 static void
+gdk_wayland_window_sync_title (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  if (!impl->xdg_surface)
+    return;
+
+  if (!impl->title)
+    return;
+
+  xdg_surface_set_title (impl->xdg_surface, impl->title);
+}
+
+static void
 surface_enter (void              *data,
                struct wl_surface *wl_surface,
                struct wl_output  *output)
@@ -982,6 +996,9 @@ gdk_wayland_window_create_xdg_surface (GdkWindow *window)
 
   impl->xdg_surface = xdg_shell_get_xdg_surface (display_wayland->xdg_shell, impl->surface);
   xdg_surface_add_listener (impl->xdg_surface, &xdg_surface_listener, window);
+
+  gdk_wayland_window_sync_title (window);
+  xdg_surface_set_app_id (impl->xdg_surface, gdk_get_program_class ());
 }
 
 static void
@@ -1134,14 +1151,6 @@ gdk_wayland_window_show (GdkWindow *window,
 
   if (!impl->surface)
     gdk_wayland_window_create_surface (window);
-
-  if (impl->xdg_surface)
-    {
-      if (impl->title)
-        xdg_surface_set_title (impl->xdg_surface, impl->title);
-
-      xdg_surface_set_app_id (impl->xdg_surface, gdk_get_program_class ());
-    }
 
   gdk_window_set_type_hint (window, impl->hint);
 
@@ -1569,6 +1578,8 @@ gdk_wayland_window_set_title (GdkWindow   *window,
 
   g_free (impl->title);
   impl->title = g_strdup (title);
+
+  gdk_wayland_window_sync_title (window);
 }
 
 static void
