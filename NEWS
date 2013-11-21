@@ -1,3 +1,17 @@
+Overview of Changes in GTK+ 3.8.7
+=================================
+
+* Bugs fixed:
+ 577642 Selected Printer Does Not Stick Between Sessions
+ 699574 gtk_selection_owner_set() breaks mouse wheel scrolling
+ 702663 GtkComboBox::appears-as-list does not respect scrolling
+ 703784 Epiphany crash during displaying printing dialog
+ 705176 Reordering columns in GtkTreeView freezes mutter
+ 710666 Frame clock related bug fixes
+ 710754 GtkModelMenu: don't leak submenus
+ 712213 Nautilus "connect to server" dialog has an incorrect "_"...
+
+
 Overview of Changes in GTK+ 3.8.6
 =================================
 
