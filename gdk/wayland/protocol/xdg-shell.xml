@@ -121,7 +121,7 @@
 	unmapped if the parent is unmapped too. They should not appear
 	on task bars and alt+tab.
       </description>
-      <arg name="parent" type="object" interface="wl_surface"/>
+      <arg name="parent" type="object" interface="wl_surface" allow-null="true"/>
     </request>
 
     <request name="set_title">
