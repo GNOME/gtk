@@ -997,6 +997,7 @@ gdk_wayland_window_create_xdg_surface (GdkWindow *window)
   impl->xdg_surface = xdg_shell_get_xdg_surface (display_wayland->xdg_shell, impl->surface);
   xdg_surface_add_listener (impl->xdg_surface, &xdg_surface_listener, window);
 
+  gdk_wayland_window_sync_transient_for (window);
   gdk_wayland_window_sync_title (window);
   xdg_surface_set_app_id (impl->xdg_surface, gdk_get_program_class ());
 }
