@@ -2697,10 +2697,11 @@ avahi_service_resolver_cb (GObject      *source_object,
   gchar                   *endptr;
   gchar                   *key;
   gchar                   *value;
+  gsize                    length;
   gint                     interface;
   gint                     protocol;
   gint                     aprotocol;
-  gint                     i, j;
+  gint                     i;
 
   output = g_dbus_connection_call_finish (G_DBUS_CONNECTION (source_object),
                                           res,
@@ -2728,50 +2729,55 @@ avahi_service_resolver_cb (GObject      *source_object,
         {
           child = g_variant_get_child_value (txt, i);
 
-          tmp = g_new0 (gchar, g_variant_n_children (child) + 1);
-          for (j = 0; j < g_variant_n_children (child); j++)
+          length = g_variant_get_size (child);
+          if (length > 0)
             {
-              tmp[j] = g_variant_get_byte (g_variant_get_child_value (child, j));
-            }
+              tmp = g_strndup (g_variant_get_data (child), length);
+              g_variant_unref (child);
 
-          if (!avahi_txt_get_key_value_pair (tmp, &key, &value))
-            {
+              if (!avahi_txt_get_key_value_pair (tmp, &key, &value))
+                {
+                  g_free (tmp);
+                  continue;
+                }
+
+              if (g_strcmp0 (key, "rp") == 0)
+                {
+                  queue_name = g_strdup (value);
+
+                  printer_name = g_strrstr (queue_name, "/");
+                  if (printer_name != NULL)
+                    data->printer_name = g_strdup (printer_name + 1);
+                  else
+                    data->printer_name = g_strdup (queue_name);
+                }
+              else if (g_strcmp0 (key, "note") == 0)
+                {
+                  data->location = g_strdup (value);
+                }
+              else if (g_strcmp0 (key, "printer-type") == 0)
+                {
+                  endptr = NULL;
+                  data->printer_type = g_ascii_strtoull (value, &endptr, 16);
+                  if (data->printer_type != 0 || endptr != value)
+                    data->got_printer_type = TRUE;
+                }
+              else if (g_strcmp0 (key, "printer-state") == 0)
+                {
+                  endptr = NULL;
+                  data->printer_state = g_ascii_strtoull (value, &endptr, 10);
+                  if (data->printer_state != 0 || endptr != value)
+                    data->got_printer_state = TRUE;
+                }
+
+              g_clear_pointer (&key, g_free);
+              g_clear_pointer (&value, g_free);
               g_free (tmp);
-              continue;
             }
-
-          if (g_strcmp0 (key, "rp") == 0)
+          else
             {
-              queue_name = g_strdup (value);
-
-              printer_name = g_strrstr (queue_name, "/");
-              if (printer_name != NULL)
-                data->printer_name = g_strdup (printer_name + 1);
-              else
-                data->printer_name = g_strdup (queue_name);
+              g_variant_unref (child);
             }
-          else if (g_strcmp0 (key, "note") == 0)
-            {
-              data->location = g_strdup (value);
-            }
-          else if (g_strcmp0 (key, "printer-type") == 0)
-            {
-              endptr = NULL;
-              data->printer_type = g_ascii_strtoull (value, &endptr, 16);
-              if (data->printer_type != 0 || endptr != value)
-                data->got_printer_type = TRUE;
-            }
-          else if (g_strcmp0 (key, "printer-state") == 0)
-            {
-              endptr = NULL;
-              data->printer_state = g_ascii_strtoull (value, &endptr, 10);
-              if (data->printer_state != 0 || endptr != value)
-                data->got_printer_state = TRUE;
-            }
-
-          g_clear_pointer (&key, g_free);
-          g_clear_pointer (&value, g_free);
-          g_free (tmp);
         }
 
       if (queue_name)
@@ -2810,6 +2816,7 @@ avahi_service_resolver_cb (GObject      *source_object,
           g_free (data);
         }
 
+      g_variant_unref (txt);
       g_variant_unref (output);
     }
   else
