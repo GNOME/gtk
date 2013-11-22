@@ -47,6 +47,9 @@ struct _GdkX11Screen
   GdkX11Monitor *monitors;
   gint primary_monitor;
 
+  gint width;
+  gint height;
+
   gint window_scale;
   gboolean fixed_window_scale;
 
