@@ -47,6 +47,9 @@ struct _GdkX11Screen
   GdkX11Monitor *monitors;
   gint primary_monitor;
 
+  gint width;
+  gint height;
+
   /* Xft resources for the display, used for default values for
    * the Xft/ XSETTINGS
    */
