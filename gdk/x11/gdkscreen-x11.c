@@ -96,13 +96,13 @@ gdk_x11_screen_get_display (GdkScreen *screen)
 static gint
 gdk_x11_screen_get_width (GdkScreen *screen)
 {
-  return WidthOfScreen (GDK_X11_SCREEN (screen)->xscreen) / GDK_X11_SCREEN (screen)->window_scale;
+  return GDK_X11_SCREEN (screen)->width / GDK_X11_SCREEN (screen)->window_scale;
 }
 
 static gint
 gdk_x11_screen_get_height (GdkScreen *screen)
 {
-  return HeightOfScreen (GDK_X11_SCREEN (screen)->xscreen) / GDK_X11_SCREEN (screen)->window_scale;
+  return GDK_X11_SCREEN (screen)->height / GDK_X11_SCREEN (screen)->window_scale;
 }
 
 static gint
@@ -916,8 +916,8 @@ _gdk_x11_screen_get_edge_monitors (GdkScreen *screen,
                                    gint      *right)
 {
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
-  gint          top_most_pos = HeightOfScreen (GDK_X11_SCREEN (screen)->xscreen);
-  gint          left_most_pos = WidthOfScreen (GDK_X11_SCREEN (screen)->xscreen);
+  gint          top_most_pos = x11_screen->height;
+  gint          left_most_pos = x11_screen->width;
   gint          bottom_most_pos = 0;
   gint          right_most_pos = 0;
   gint          monitor_num;
@@ -1046,6 +1046,30 @@ init_multihead (GdkScreen *screen)
 			 HeightOfScreen (x11_screen->xscreen));
 }
 
+static void
+update_bounding_box (GdkScreen *screen)
+{
+  GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
+  gint i, x1, y1, x2, y2;
+
+  x1 = y1 = G_MAXINT;
+  x2 = y2 = G_MININT;
+
+  for (i = 0; i < x11_screen->n_monitors; i++)
+    {
+      GdkX11Monitor *monitor;
+
+      monitor = &x11_screen->monitors[i];
+      x1 = MIN (x1, monitor->geometry.x);
+      y1 = MIN (y1, monitor->geometry.y);
+      x2 = MAX (x2, monitor->geometry.x + monitor->geometry.width);
+      y2 = MAX (y2, monitor->geometry.y + monitor->geometry.height);
+    }
+
+  x11_screen->width = x2 - x1;
+  x11_screen->height = y2 - y1;
+}
+
 GdkScreen *
 _gdk_x11_screen_new (GdkDisplay *display,
 		     gint	 screen_number) 
@@ -1087,7 +1111,8 @@ _gdk_x11_screen_new (GdkDisplay *display,
   
   _gdk_x11_screen_init_visuals (screen);
   _gdk_x11_screen_init_root_window (screen);
-  
+  update_bounding_box (screen);
+
   return screen;
 }
 
@@ -1186,11 +1211,13 @@ process_monitors_change (GdkScreen *screen)
 		       x11_screen->monitors, x11_screen->n_monitors) ||
     x11_screen->primary_monitor != primary_monitor;
 
-
   free_monitors (monitors, n_monitors);
 
   if (changed)
-    g_signal_emit_by_name (screen, "monitors-changed");
+    {
+      update_bounding_box (screen);
+      g_signal_emit_by_name (screen, "monitors-changed");
+    }
 }
 
 void
