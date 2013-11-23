@@ -765,17 +765,14 @@ theme_parse_image(GtkSettings  *settings,
   if (data->overlay && !data->overlay->filename)
     clear_theme_pixbuf_and_warn (&data->overlay, scanner, "Overlay image options specified without filename");
 
-  if (!data->gap->filename)
-    {
-      if (data->gap)
-        clear_theme_pixbuf_and_warn (&data->gap, scanner, "Gap image options specified without filename");
+  if (data->gap && !data->gap->filename)
+    clear_theme_pixbuf_and_warn (&data->gap, scanner, "Gap image options specified without filename");
 
-      if (data->gap_start)
-        clear_theme_pixbuf_and_warn (&data->gap_start, scanner, "Gap start image options specified without filename");
+  if (data->gap_start && !data->gap_start->filename)
+    clear_theme_pixbuf_and_warn (&data->gap_start, scanner, "Gap start image options specified without filename");
 
-      if (data->gap_end)
-        clear_theme_pixbuf_and_warn (&data->gap_end, scanner, "Gap end image options specified without filename");
-    }
+  if (data->gap_end && !data->gap_end->filename)
+    clear_theme_pixbuf_and_warn (&data->gap_end, scanner, "Gap end image options specified without filename");
 
   if (token != G_TOKEN_RIGHT_CURLY)
     {
