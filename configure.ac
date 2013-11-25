@@ -387,7 +387,7 @@ if test "x$enable_broadway_backend" = xyes; then
   GDK_BACKENDS="$GDK_BACKENDS broadway"
   cairo_backends="$cairo_backends cairo"
   backend_immodules="$backend_immodules,broadway"
-  if test "$host_os" != "mingw*|windows*|winnt"; then
+  if test "$os_win32" != "yes"; then
     have_gio_unix=yes
   fi
   GDK_WINDOWING="$GDK_WINDOWING
