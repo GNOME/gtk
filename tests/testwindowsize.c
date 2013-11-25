@@ -3,6 +3,7 @@
 
 static GtkWidget *window;
 static GtkWidget *width_chars_spin;
+static GtkWidget *max_width_chars_spin;
 static GtkWidget *default_width_spin;
 static GtkWidget *default_height_spin;
 static GtkWidget *resizable_check;
@@ -26,10 +27,11 @@ show_dialog (void)
 {
   GtkWidget *dialog;
   GtkWidget *label;
-  gint width_chars, default_width, default_height;
+  gint width_chars, max_width_chars, default_width, default_height;
   gboolean resizable;
 
   width_chars = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (width_chars_spin));
+  max_width_chars = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (max_width_chars_spin));
   default_width = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (default_width_spin));
   default_height = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (default_height_spin));
   resizable = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (resizable_check));
@@ -53,6 +55,7 @@ show_dialog (void)
 
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
   gtk_label_set_width_chars (GTK_LABEL (label), width_chars);
+  gtk_label_set_max_width_chars (GTK_LABEL (label), max_width_chars);
   gtk_window_set_default_size (GTK_WINDOW (dialog), default_width, default_height);
   gtk_window_set_resizable (GTK_WINDOW (dialog), resizable);
 
@@ -61,7 +64,7 @@ show_dialog (void)
   gtk_widget_show (label);
 
   label = gtk_label_new ("? x ?");
-  gtk_widget_show (label);
+  //gtk_widget_show (label);
 
   gtk_dialog_add_action_widget (GTK_DIALOG (dialog), label, GTK_RESPONSE_HELP);
   g_signal_connect (dialog, "configure-event",
@@ -97,6 +100,14 @@ create_window (void)
   gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), width_chars_spin, 1, 0, 1, 1);
 
+  label = gtk_label_new ("Max width chars");
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  max_width_chars_spin = gtk_spin_button_new_with_range (-1, 1000, 1);
+  gtk_widget_set_halign (width_chars_spin, GTK_ALIGN_START);
+
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), max_width_chars_spin, 1, 1, 1, 1);
+
   label = gtk_label_new ("Default size");
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   default_width_spin = gtk_spin_button_new_with_range (-1, 1000, 1);
@@ -104,21 +115,21 @@ create_window (void)
   default_height_spin = gtk_spin_button_new_with_range (-1, 1000, 1);
   gtk_widget_set_halign (default_height_spin, GTK_ALIGN_START);
 
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
-  gtk_grid_attach (GTK_GRID (grid), default_width_spin, 1, 1, 1, 1);
-  gtk_grid_attach (GTK_GRID (grid), default_height_spin, 2, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 2, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), default_width_spin, 1, 2, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), default_height_spin, 2, 2, 1, 1);
 
   label = gtk_label_new ("Resizable");
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   resizable_check = gtk_check_button_new ();
   gtk_widget_set_halign (resizable_check, GTK_ALIGN_START);
 
-  gtk_grid_attach (GTK_GRID (grid), label, 0, 2, 1, 1);
-  gtk_grid_attach (GTK_GRID (grid), resizable_check, 1, 2, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 3, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), resizable_check, 1, 3, 1, 1);
 
   button = gtk_button_new_with_label ("Show");
   g_signal_connect (button, "clicked", G_CALLBACK (show_dialog), NULL);
-  gtk_grid_attach (GTK_GRID (grid), button, 2, 3, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), button, 2, 4, 1, 1);
 
   gtk_widget_show_all (window);
 }
