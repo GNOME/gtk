@@ -5728,13 +5728,6 @@ gtk_window_unmap (GtkWidget *widget)
  *    information from the windowing system.)
  */
 
-/* We use these for now to not make windows too big by accident. Note
- * that we still clamp these numbers by screen size. Also note that
- * minimum size still overrides this. So keep your windows small! :)
- */
-#define MAX_DEFAULT_WINDOW_WIDTH 640
-#define MAX_DEFAULT_WINDOW_HEIGHT 480
-
 static void
 gtk_window_guess_default_size (GtkWindow *window,
                                gint      *width,
@@ -5742,26 +5735,30 @@ gtk_window_guess_default_size (GtkWindow *window,
 {
   GtkWidget *widget;
   GdkScreen *screen;
+  GdkWindow *gdkwindow;
+  GdkRectangle workarea;
   int minimum, natural;
 
   widget = GTK_WIDGET (window);
   screen = gtk_widget_get_screen (widget);
+  gdkwindow = gtk_widget_get_window (GTK_WIDGET (window));
 
-  *width = gdk_screen_get_width (screen);
-  *height = gdk_screen_get_height (screen);
-
-  if (*width >= *height)
+  if (gdkwindow)
     {
-      /* landscape */
-      *width = MIN (*width, MAX_DEFAULT_WINDOW_WIDTH);
-      *height = MIN (*height, MAX_DEFAULT_WINDOW_HEIGHT);
+      gdk_screen_get_monitor_workarea (screen,
+                                       gdk_screen_get_monitor_at_window (screen, gdkwindow),
+                                       &workarea);
     }
   else
     {
-      /* portrait */
-      *width = MIN (*width, MAX_DEFAULT_WINDOW_HEIGHT);
-      *height = MIN (*height, MAX_DEFAULT_WINDOW_WIDTH);
+      /* XXX: Figure out what screen we appear on */
+      gdk_screen_get_monitor_workarea (screen,
+                                       0,
+                                       &workarea);
     }
+
+  *width = workarea.width;
+  *height = workarea.height;
 
   if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT)
     {
