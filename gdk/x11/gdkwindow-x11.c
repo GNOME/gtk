@@ -1229,6 +1229,8 @@ gdk_x11_window_foreign_new_for_display (GdkDisplay *display,
     XFree (children);
 
   screen = _gdk_x11_display_screen_for_xrootwin (display, root);
+  if (screen == NULL)
+    return NULL;
 
   win = _gdk_display_create_window (display);
   win->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_X11, NULL);
