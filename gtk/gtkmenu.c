@@ -3273,18 +3273,19 @@ gtk_menu_get_preferred_height_for_width (GtkWidget *widget,
                                          gint      *minimum_size,
                                          gint      *natural_size)
 {
-  GtkBorder       padding;
+  GtkBorder       padding, arrow_border;
   GtkMenu        *menu = GTK_MENU (widget);
   GtkMenuPrivate *priv = menu->priv;
   guint          *min_heights, *nat_heights;
   guint           border_width;
   gint            n_heights, i;
-  gint            min_height, nat_height;
+  gint            min_height, single_height, nat_height;
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (menu));
   get_menu_padding (widget, &padding);
 
   min_height = nat_height = (2 * border_width) + padding.top + padding.bottom;
+  single_height = 0;
 
   n_heights =
     calculate_line_heights (menu, for_size, &min_heights, &nat_heights);
@@ -3292,8 +3293,15 @@ gtk_menu_get_preferred_height_for_width (GtkWidget *widget,
   for (i = 0; i < n_heights; i++)
     {
       min_height += min_heights[i];
+      single_height = MAX (single_height, min_heights[i]);
       nat_height += nat_heights[i];
     }
+
+  get_arrows_border (menu, &arrow_border);
+  single_height += (2 * border_width) 
+                   + padding.top + padding.bottom
+                   + arrow_border.top + arrow_border.bottom;
+  min_height = MIN (min_height, single_height);
 
   if (priv->have_position)
     {
