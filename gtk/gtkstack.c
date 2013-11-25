@@ -227,7 +227,7 @@ gtk_stack_get_property (GObject   *object,
       g_value_set_boolean (value, priv->homogeneous);
       break;
     case PROP_VISIBLE_CHILD:
-      g_value_set_object (value, priv->visible_child);
+      g_value_set_object (value, gtk_stack_get_visible_child (stack));
       break;
     case PROP_VISIBLE_CHILD_NAME:
       g_value_set_string (value, gtk_stack_get_visible_child_name (stack));
