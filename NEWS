@@ -1,3 +1,26 @@
+Overview of Changes in GTK+ 3.10.4 to 3.10.5
+============================================
+
+* Bugs fixed:
+ 691974 ComboBox only scrolls the first time
+ 694859 Can not scroll down list in Combobox the first time...
+ 699574 gtk_selection_owner_set() breaks mouse wheel scrolling
+ 702663 GtkComboBox::appears-as-list does not respect scrolling
+ 705203 Natural scroll doesn't work immediately
+ 709716 gdk_x11_screen_lookup_visual segfault on multiple X...
+ 712302 GtkPlacesSideBar showing "Desktop" or not shouldn't...
+ 712632 infobar and revealer not respecting enable-animations=false
+ 712760 Clang static analysis fixes
+ 712799 Memory leak when listing Avahi printers
+ 715029 Ensure GdkScreen::monitors-changed gets emitted after...
+
+* Translation updates:
+ Brazilian Portuguese
+ Indonesian
+ Polish
+ Spanish
+
+
 Overview of Changes in GTK+ 3.10.3 to 3.10.4
 ============================================
 
