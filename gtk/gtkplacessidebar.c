@@ -4280,7 +4280,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
           g_param_spec_boolean ("show-desktop",
                                 P_("Show 'Desktop'"),
                                 P_("Whether the sidebar includes a builtin shortcut to the Desktop folder"),
-                                FALSE,
+                                TRUE,
                                 G_PARAM_READWRITE);
   properties[PROP_SHOW_CONNECT_TO_SERVER] =
           g_param_spec_boolean ("show-connect-to-server",
