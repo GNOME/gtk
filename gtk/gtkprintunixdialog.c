@@ -2092,8 +2092,8 @@ selected_printer_changed (GtkTreeSelection   *selection,
           if (page_setup && priv->page_setup)
             gtk_page_setup_set_orientation (page_setup, gtk_page_setup_get_orientation (priv->page_setup));
 
-          g_object_unref (priv->page_setup);
-          priv->page_setup = page_setup;
+          g_clear_object (&priv->page_setup);
+          priv->page_setup = page_setup; /* transfer ownership */
         }
 
       priv->printer_capabilities = gtk_printer_get_capabilities (printer);
@@ -3249,7 +3249,7 @@ custom_paper_dialog_response_cb (GtkDialog *custom_paper_dialog,
                              gtk_paper_size_get_display_name (gtk_page_setup_get_paper_size (priv->page_setup))) == 0)
                 gtk_print_unix_dialog_set_page_setup (print_dialog, page_setup);
 
-              g_object_unref (page_setup);
+              g_clear_object (&page_setup);
             } while (gtk_tree_model_iter_next (model, &iter));
         }
     }
@@ -3437,7 +3437,7 @@ gtk_print_unix_dialog_set_page_setup (GtkPrintUnixDialog *dialog,
 
   if (priv->page_setup != page_setup)
     {
-      g_object_unref (priv->page_setup);
+      g_clear_object (&priv->page_setup);
       priv->page_setup = g_object_ref (page_setup);
 
       priv->page_setup_set = TRUE;
