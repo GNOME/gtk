@@ -961,7 +961,7 @@ void set_cell_sensitivity_func (GtkTreeViewColumn *tree_column,
   else
     g_object_set (cell, "sensitive", TRUE, NULL);
 
-  g_object_unref (printer);
+  g_clear_object (&printer);
 }
 
 static void
