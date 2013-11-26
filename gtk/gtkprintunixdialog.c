@@ -659,8 +659,7 @@ error_dialogs (GtkPrintUnixDialog *print_dialog,
                 {
                   file = g_file_new_for_uri (option->value);
 
-                  if (file != NULL &&
-                      g_file_query_exists (file, NULL))
+                  if (g_file_query_exists (file, NULL))
                     {
                       toplevel = get_toplevel (GTK_WIDGET (print_dialog));
 
