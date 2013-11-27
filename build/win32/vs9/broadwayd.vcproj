@@ -54,7 +54,7 @@
 			InheritedPropertySheets=".\gtk-build-defines.vsprops;.\gtkprebuild-broadway.vsprops"
 			ConfigurationType="1"
 			CharacterSet="2"
-			WholeProgramOptimization="0"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -118,7 +118,7 @@
 			InheritedPropertySheets=".\gtk-build-defines.vsprops;.\gtkprebuild-broadway.vsprops"
 			ConfigurationType="1"
 			CharacterSet="2"
-			WholeProgramOptimization="0"
+			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCMIDLTool"
