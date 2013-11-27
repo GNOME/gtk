@@ -1,3 +1,12 @@
+Overview of Changes in GTK+ 3.8.8
+=================================
+
+* Bugs fixed:
+ 705203 Natural scroll doesn't work immediately
+ 712799 Memory leak when listing Avahi printers
+ 715029 Ensure GdkScreen::monitors-changed gets emitted...
+
+
 Overview of Changes in GTK+ 3.8.7
 =================================
 
