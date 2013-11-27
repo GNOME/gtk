@@ -22,6 +22,7 @@ demos =						\
 	editable_cells.c			\
 	entry_buffer.c				\
 	entry_completion.c			\
+	event_axes.c				\
 	expander.c  				\
 	hypertext.c				\
 	iconview.c				\
