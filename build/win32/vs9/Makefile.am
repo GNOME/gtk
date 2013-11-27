@@ -25,6 +25,7 @@ EXTRA_DIST +=	\
 	gtk-version-paths.vsprops	\
 	gtkprebuild.vsprops	\
 	gtkprebuild-broadway.vsprops	\
-	gtk-copy-gdk-broadway.vsprops
+	gtk-copy-gdk-broadway.vsprops	\
+	gtk-gen-sources.vsprops
 
 -include $(top_srcdir)/git.mk

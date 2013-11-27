@@ -18,6 +18,9 @@
     <ResourceCompile Include="..\..\..\gtk\gtk-win32.rc"><Filter>Resource Files</Filter></ResourceCompile>
   </ItemGroup>
   <ItemGroup>
+    <CustomBuild Include="..\..\..\gtk\gtkdbusinterfaces.xml"><Filter>Resource Files</Filter></CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
 #include "libgtk.vs10.sourcefiles.filters"
     <ClCompile Include="..\..\..\modules\input\gtkimcontextime.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\modules\input\gtkimcontextmultipress.c"><Filter>Source Files</Filter></ClCompile>

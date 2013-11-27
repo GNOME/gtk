@@ -10,7 +10,7 @@
 	/>
 	<UserMacro
 		Name="GlibEtcInstallRoot"
-		Value="..\..\..\..\vs$(VSVer)\$(PlatformName)"
+		Value="$(SolutionDir)\..\..\..\..\vs$(VSVer)\$(PlatformName)"
 	/>
 	<UserMacro
 		Name="GlibEtcInstallRootFromBuildWin32"
@@ -18,7 +18,7 @@
 	/>
 	<UserMacro
 		Name="CopyDir"
-		Value="$(GlibEtcInstallRoot)"
+		Value="..\..\..\..\vs$(VSVer)\$(PlatformName)"
 	/>
 	<UserMacro
 		Name="ApiVersion"
