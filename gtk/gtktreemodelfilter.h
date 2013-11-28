@@ -53,8 +53,8 @@ typedef gboolean (* GtkTreeModelFilterVisibleFunc) (GtkTreeModel *model,
  * GtkTreeModelFilterModifyFunc:
  * @model: the #GtkTreeModelFilter
  * @iter: a #GtkTreeIter pointing to the row whose display values are determined
- * @value: A #GValue which is already initialized for with the correct type for
- *  the column @column.
+ * @value: (out caller-allocates): A #GValue which is already initialized for
+ *  with the correct type for the column @column.
  * @column: the column whose display value is determined
  * @data: (closure): user data given to gtk_tree_model_filter_set_modify_func()
  *
