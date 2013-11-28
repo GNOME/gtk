@@ -679,7 +679,7 @@ GDK_DEPRECATED_IN_3_0_FOR(gtk_widget_override_color)
 void        gtk_widget_modify_fg          (GtkWidget            *widget,
                                            GtkStateType          state,
                                            const GdkColor       *color);
-GDK_DEPRECATED_IN_3_0_FOR(gtk_widget_override_background)
+GDK_DEPRECATED_IN_3_0_FOR(gtk_widget_override_background_color)
 void        gtk_widget_modify_bg          (GtkWidget            *widget,
                                            GtkStateType          state,
                                            const GdkColor       *color);
