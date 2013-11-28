@@ -286,7 +286,7 @@ gtk_clipboard_finalize (GObject *object)
   if (clipboard->store_timeout != 0)
     g_source_remove (clipboard->store_timeout);
 
-  if (clipboard->notify_signal_id != 0)
+  if (clipboard_widget != NULL && clipboard->notify_signal_id != 0)
     g_signal_handler_disconnect (clipboard_widget, clipboard->notify_signal_id);
 
   g_free (clipboard->storable_targets);
