@@ -210,6 +210,36 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File RelativePath="..\..\..\gtk\gtkdbusinterfaces.xml">
+				<FileConfiguration Name="Debug|Win32">
+				<Tool Name="VCCustomBuildTool"
+						Description="Generating GTK+ DBus Sources..."
+						CommandLine="$(GenerateGtkDbusBuiltSources)"
+						Outputs="..\..\..\gtk\gtkdbusgenerated.c;..\..\..\gtk\gtkdbusgenerated.h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Release|Win32">
+					<Tool Name="VCCustomBuildTool"
+						Description="Generating GTK+ DBus Sources..."
+						CommandLine="$(GenerateGtkDbusBuiltSources)"
+						Outputs="..\..\..\gtk\gtkdbusgenerated.c;..\..\..\gtk\gtkdbusgenerated.h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Debug|x64">
+					<Tool Name="VCCustomBuildTool"
+						Description="Generating GTK+ DBus Sources..."
+						CommandLine="$(GenerateGtkDbusBuiltSources)"
+						Outputs="..\..\..\gtk\gtkdbusgenerated.c;..\..\..\gtk\gtkdbusgenerated.h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Release|x64">
+					<Tool Name="VCCustomBuildTool"
+						Description="Generating GTK+ DBus Sources..."
+						CommandLine="$(GenerateGtkDbusBuiltSources)"
+						Outputs="..\..\..\gtk\gtkdbusgenerated.c;..\..\..\gtk\gtkdbusgenerated.h"
+					/>
+				</FileConfiguration>
+			</File>
 			<File RelativePath="..\..\..\gtk\gtk-win32.rc" />
 		</Filter>
 		<Filter

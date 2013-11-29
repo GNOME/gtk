@@ -2,9 +2,9 @@
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="UserMacros">
     <VSVer>10</VSVer>
-    <GlibEtcInstallRoot>..\..\..\..\vs$(VSVer)\$(Platform)</GlibEtcInstallRoot>
+    <GlibEtcInstallRoot>$(SolutionDir)\..\..\..\..\vs$(VSVer)\$(Platform)</GlibEtcInstallRoot>
     <GlibEtcInstallRootFromBuildWin32>..\..\..\vs$(VSVer)\$(Platform)</GlibEtcInstallRootFromBuildWin32>
-    <CopyDir>$(GlibEtcInstallRoot)</CopyDir>
+    <CopyDir>..\..\..\..\vs$(VSVer)\$(Platform)</CopyDir>
     <DefDir>$(SolutionDir)$(Configuration)\$(Platform)\obj\$(ProjectName)</DefDir>
     <ApiVersion>3.0</ApiVersion>
     <GtkBinaryVersion>3.0.0</GtkBinaryVersion>
@@ -710,6 +710,13 @@ cd vs$(VSVer)
 </DoGenGir>
     <GtkGenerateGdkDef>echo EXPORTS &gt;"$(DefDir)\gdk.def" &amp;&amp; cl /EP -DGDK_WINDOWING_WIN32 -DALL_FILES -DG_GNUC_CONST= ..\..\..\gdk\gdk.symbols &gt;&gt;"$(DefDir)\gdk.def"</GtkGenerateGdkDef>
     <GtkGenerateGtkDef>echo EXPORTS &gt;"$(DefDir)\gtk.def" &amp;&amp; cl /EP -DGDK_WINDOWING_WIN32 -DINCLUDE_VARIABLES -DG_OS_WIN32 -DALL_FILES -DG_GNUC_MALLOC= -DG_GNUC_CONST= -DG_GNUC_NULL_TERMINATED= -DG_GNUC_PRINTF=;G_GNUC_PRINTF ..\..\..\gtk\gtk.symbols &gt;&gt;"$(DefDir)\gtk.def"</GtkGenerateGtkDef>
+    <GenerateGtkDbusBuiltSources>
+cd ..\..\..\gtk
+
+python $(GlibEtcInstallRoot)\bin\gdbus-codegen --interface-prefix org.Gtk. --c-namespace _Gtk --generate-c-code gtkdbusgenerated ./gtkdbusinterfaces.xml
+
+cd $(SolutionDir)
+    </GenerateGtkDbusBuiltSources>
     <GtkLibtoolCompatibleDllPrefix>lib</GtkLibtoolCompatibleDllPrefix>
     <GtkLibtoolCompatibleDllSuffix>-$(ApiVersion)-0</GtkLibtoolCompatibleDllSuffix>
     <GtkSeparateVSDllPrefix />
@@ -794,6 +801,9 @@ copy ..\..\..\gdk\gdkconfig.h.win32 ..\..\..\gdk\gdkconfig.h
     </BuildMacro>
     <BuildMacro Include="GtkGenerateGtkDef">
       <Value>$(GtkGenerateGtkDef)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GenerateGtkDbusBuiltSources">
+      <Value>$(GenerateGtkDbusBuiltSources)</Value>
     </BuildMacro>
     <BuildMacro Include="GtkLibtoolCompatibleDllPrefix">
       <Value>$(GtkLibtoolCompatibleDllPrefix)</Value>

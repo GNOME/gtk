@@ -36,8 +36,7 @@
     <ClCompile Include="..\..\..\modules\input\thai-charprop.c"><Filter>Source Files</Filter></ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="..\..\..\gdk\gtk.symbols">
-      <Filter>Resource Files</Filter>
-    </CustomBuild>
+    <CustomBuild Include="..\..\..\gdk\gtk.symbols"><Filter>Resource Files</Filter></CustomBuild>
+    <CustomBuild Include="..\..\..\gtk\gtkdbusinterfaces.xml"><Filter>Resource Files</Filter></CustomBuild>
   </ItemGroup>
 </Project>
