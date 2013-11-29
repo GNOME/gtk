@@ -23,7 +23,7 @@ build/win32/vs10/README.txt file in glib for details where to unpack them.
 You will also need a Python 2.x/3.x interpretor installed on your system,
 which can be obtained from the official installers available from
 http://www.python.org.  Please note that the Python interpretor (python.exe)
-needs to be in your path before attempting the build of GTK+.
+needs to be in your PATH before attempting the build of GTK+.
 
 It is recommended that one builds the dependencies with VS10 as far as
 possible, especially those from and using the GTK+ stack (i.e. GLib,
