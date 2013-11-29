@@ -404,9 +404,9 @@ gtk_info_bar_hide (GtkWidget *widget)
 {
   GtkInfoBarPrivate *priv = GTK_INFO_BAR (widget)->priv;
 
-  gtk_revealer_set_reveal_child (GTK_REVEALER (priv->revealer), FALSE);
   g_signal_connect_object (priv->revealer, "notify::child-revealed",
                            G_CALLBACK (child_revealed), widget, 0);
+  gtk_revealer_set_reveal_child (GTK_REVEALER (priv->revealer), FALSE);
 }
 
 static void
