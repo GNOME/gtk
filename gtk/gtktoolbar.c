@@ -678,6 +678,9 @@ gtk_toolbar_init (GtkToolbar *toolbar)
   toolbar->priv = gtk_toolbar_get_instance_private (toolbar);
   priv = toolbar->priv;
 
+  context = gtk_widget_get_style_context (GTK_WIDGET (toolbar));
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOOLBAR);
+
   gtk_widget_set_can_focus (GTK_WIDGET (toolbar), FALSE);
   gtk_widget_set_has_window (GTK_WIDGET (toolbar), FALSE);
 
@@ -711,9 +714,6 @@ gtk_toolbar_init (GtkToolbar *toolbar)
   priv->max_homogeneous_pixels = -1;
   
   priv->timer = g_timer_new ();
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (toolbar));
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOOLBAR);
 }
 
 static void
