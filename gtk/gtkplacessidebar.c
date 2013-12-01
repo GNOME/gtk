@@ -251,7 +251,7 @@ enum {
 
 /* Names for themed icons */
 #define ICON_NAME_HOME     "user-home-symbolic"
-#define ICON_NAME_DESKTOP  "user-desktop"
+#define ICON_NAME_DESKTOP  "user-desktop-symbolic"
 #define ICON_NAME_FILESYSTEM     "drive-harddisk-symbolic"
 #define ICON_NAME_EJECT    "media-eject-symbolic"
 #define ICON_NAME_NETWORK  "network-workgroup-symbolic"
@@ -259,7 +259,7 @@ enum {
 #define ICON_NAME_FOLDER_NETWORK "folder-remote-symbolic"
 
 #define ICON_NAME_FOLDER                "folder-symbolic"
-#define ICON_NAME_FOLDER_DESKTOP  "user-desktop"
+#define ICON_NAME_FOLDER_DESKTOP  "user-desktop-symbolic"
 #define ICON_NAME_FOLDER_DOCUMENTS      "folder-documents-symbolic"
 #define ICON_NAME_FOLDER_DOWNLOAD       "folder-download-symbolic"
 #define ICON_NAME_FOLDER_MUSIC    "folder-music-symbolic"
@@ -514,6 +514,7 @@ special_directory_get_gicon (GUserDirectory directory)
   switch (directory)
     {
 
+    ICON_CASE (DESKTOP);
     ICON_CASE (DOCUMENTS);
     ICON_CASE (DOWNLOAD);
     ICON_CASE (MUSIC);
