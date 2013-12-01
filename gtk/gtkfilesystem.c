@@ -863,6 +863,9 @@ enumerate_children_callback (GObject      *source_object,
 
   free_async_data (async_data);
 
+  if (folder)
+    g_object_unref (folder);
+
   if (error)
     g_error_free (error);
 }
