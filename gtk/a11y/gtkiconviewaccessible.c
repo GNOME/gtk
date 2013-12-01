@@ -237,6 +237,8 @@ get_pixbuf_box (GtkIconView     *icon_view,
                                &item->cell_area, &item->cell_area,
                                (GtkCellAllocCallback)get_pixbuf_foreach, &data);
 
+  *box = data.box;
+
   return data.pixbuf_found;
 }
 
