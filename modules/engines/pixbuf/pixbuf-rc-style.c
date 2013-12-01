@@ -803,7 +803,7 @@ theme_parse_image(GtkSettings  *settings,
   if (data->overlay && !data->overlay->filename)
     clear_theme_pixbuf_and_warn (&data->overlay, scanner, "Overlay image options specified without filename");
 
-  if (!data->gap->filename)
+  if (data->gap && !data->gap->filename)
     {
       if (data->gap)
         clear_theme_pixbuf_and_warn (&data->gap, scanner, "Gap image options specified without filename");
