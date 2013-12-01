@@ -5708,7 +5708,10 @@ gtk_window_guess_default_size (GtkWindow *window,
                                        &workarea);
     }
 
-  *width = workarea.width;
+  /* We still cap the width at 640, to avoid dialogs with wrapping labels
+   * without max-width-chars from filling the entire width of the screen
+   */
+  *width = GTK_IS_DIALOG (window) ? 640 : workarea.width;
   *height = workarea.height;
 
   if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT)
