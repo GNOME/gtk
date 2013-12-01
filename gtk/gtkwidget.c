@@ -3857,31 +3857,31 @@ gtk_widget_get_property (GObject         *object,
       }
       break;
     case PROP_VISIBLE:
-      g_value_set_boolean (value, (gtk_widget_get_visible (widget) != FALSE));
+      g_value_set_boolean (value, gtk_widget_get_visible (widget));
       break;
     case PROP_SENSITIVE:
-      g_value_set_boolean (value, (gtk_widget_get_sensitive (widget) != FALSE));
+      g_value_set_boolean (value, gtk_widget_get_sensitive (widget));
       break;
     case PROP_APP_PAINTABLE:
-      g_value_set_boolean (value, (gtk_widget_get_app_paintable (widget) != FALSE));
+      g_value_set_boolean (value, gtk_widget_get_app_paintable (widget));
       break;
     case PROP_CAN_FOCUS:
-      g_value_set_boolean (value, (gtk_widget_get_can_focus (widget) != FALSE));
+      g_value_set_boolean (value, gtk_widget_get_can_focus (widget));
       break;
     case PROP_HAS_FOCUS:
-      g_value_set_boolean (value, (gtk_widget_has_focus (widget) != FALSE));
+      g_value_set_boolean (value, gtk_widget_has_focus (widget));
       break;
     case PROP_IS_FOCUS:
-      g_value_set_boolean (value, (gtk_widget_is_focus (widget)));
+      g_value_set_boolean (value, gtk_widget_is_focus (widget));
       break;
     case PROP_CAN_DEFAULT:
-      g_value_set_boolean (value, (gtk_widget_get_can_default (widget) != FALSE));
+      g_value_set_boolean (value, gtk_widget_get_can_default (widget));
       break;
     case PROP_HAS_DEFAULT:
-      g_value_set_boolean (value, (gtk_widget_has_default (widget) != FALSE));
+      g_value_set_boolean (value, gtk_widget_has_default (widget));
       break;
     case PROP_RECEIVES_DEFAULT:
-      g_value_set_boolean (value, (gtk_widget_get_receives_default (widget) != FALSE));
+      g_value_set_boolean (value, gtk_widget_get_receives_default (widget));
       break;
     case PROP_COMPOSITE_CHILD:
       g_value_set_boolean (value, widget->priv->composite_child);
