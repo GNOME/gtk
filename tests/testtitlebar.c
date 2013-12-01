@@ -26,8 +26,8 @@ main (int argc, char *argv[])
   title = gtk_label_new (NULL);
   gtk_label_set_markup (GTK_LABEL (title), "<b>Welcome to Facebook - Log in, sign up or learn more</b>");
   gtk_label_set_ellipsize (GTK_LABEL (title), PANGO_ELLIPSIZE_END);
-  gtk_widget_set_margin_left (title, 6);
-  gtk_widget_set_margin_right (title, 6);
+  gtk_widget_set_margin_start (title, 6);
+  gtk_widget_set_margin_end (title, 6);
   gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header), title);
 
   button = gtk_button_new ();
