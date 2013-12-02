@@ -9338,9 +9338,6 @@ gdk_window_create_similar_image_surface (GdkWindow *     window,
       window = gdk_screen_get_root_window (screen);
     }
 
-  if (scale == 0)
-    scale = gdk_window_get_scale_factor (window);
-
   impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
 
   if (impl_class->create_similar_image_surface)
@@ -9357,6 +9354,9 @@ gdk_window_create_similar_image_surface (GdkWindow *     window,
     }
 
 #ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
+  if (scale == 0)
+    scale = gdk_window_get_scale_factor (window);
+
   cairo_surface_set_device_scale (surface, scale, scale);
 #endif
 
