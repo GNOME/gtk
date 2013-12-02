@@ -1546,7 +1546,6 @@ gdk_window_reparent (GdkWindow *window,
   old_parent = window->parent;
 
   was_mapped = GDK_WINDOW_IS_MAPPED (window);
-  show = FALSE;
 
   /* Reparenting to toplevel. Ensure we have a native window so this can work */
   if (new_parent->window_type == GDK_WINDOW_ROOT ||
