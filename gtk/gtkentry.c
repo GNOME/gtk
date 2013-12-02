@@ -10616,7 +10616,7 @@ gtk_entry_set_progress_fraction (GtkEntry *entry,
   GtkEntryPrivate *private;
   gdouble          old_fraction;
   gint x, y, width, height;
-  gint old_x, old_y, old_width, old_height;
+  gint old_x = 0, old_y = 0, old_width = 0, old_height = 0;
   gboolean was_pulse;
 
   g_return_if_fail (GTK_IS_ENTRY (entry));
