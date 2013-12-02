@@ -3626,8 +3626,8 @@ get_text_area_size (GtkEntry *entry,
 
   class = GTK_ENTRY_GET_CLASS (entry);
 
-  if (class->get_text_area_size)
-    class->get_text_area_size (entry, x, y, width, height);
+  g_assert (class->get_text_area_size != NULL);
+  class->get_text_area_size (entry, x, y, width, height);
 }
 
 
@@ -3704,8 +3704,8 @@ get_frame_size (GtkEntry *entry,
 
   class = GTK_ENTRY_GET_CLASS (entry);
 
-  if (class->get_frame_size)
-    class->get_frame_size (entry, x, y, width, height);
+  g_assert (class->get_frame_size != NULL);
+  class->get_frame_size (entry, x, y, width, height);
 
   if (!relative_to_window)
     {
