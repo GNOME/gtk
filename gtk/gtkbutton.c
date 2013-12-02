@@ -1995,21 +1995,8 @@ gtk_button_grab_broken (GtkWidget          *widget,
 			GdkEventGrabBroken *event)
 {
   GtkButton *button = GTK_BUTTON (widget);
-  GtkButtonPrivate *priv = button->priv;
-  gboolean save_in;
   
-  /* Simulate a button release without the pointer in the button */
-  if (priv->button_down)
-    {
-      save_in = priv->in_button;
-      priv->in_button = FALSE;
-      gtk_real_button_released (button);
-      if (save_in != priv->in_button)
-	{
-	  priv->in_button = save_in;
-	  gtk_button_update_state (button);
-	}
-    }
+  gtk_button_do_release (button, FALSE);
 
   return TRUE;
 }
@@ -2721,7 +2708,7 @@ gtk_button_state_changed (GtkWidget    *widget,
   if (!gtk_widget_is_sensitive (widget))
     {
       priv->in_button = FALSE;
-      gtk_real_button_released (button);
+      gtk_button_do_release (button, FALSE);
     }
 }
 
@@ -2731,7 +2718,6 @@ gtk_button_grab_notify (GtkWidget *widget,
 {
   GtkButton *button = GTK_BUTTON (widget);
   GtkButtonPrivate *priv = button->priv;
-  gboolean save_in;
 
   if (priv->activate_timeout &&
       priv->grab_keyboard &&
@@ -2739,16 +2725,7 @@ gtk_button_grab_notify (GtkWidget *widget,
     gtk_button_finish_activate (button, FALSE);
 
   if (!was_grabbed)
-    {
-      save_in = priv->in_button;
-      priv->in_button = FALSE;
-      gtk_real_button_released (button);
-      if (save_in != priv->in_button)
-        {
-          priv->in_button = save_in;
-          gtk_button_update_state (button);
-        }
-    }
+    gtk_button_do_release (button, FALSE);
 }
 
 /**
