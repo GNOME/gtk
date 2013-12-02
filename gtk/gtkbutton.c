@@ -1983,7 +1983,7 @@ gtk_button_grab_broken (GtkWidget          *widget,
     {
       save_in = priv->in_button;
       priv->in_button = FALSE;
-      g_signal_emit (button, button_signals[RELEASED], 0);
+      gtk_real_button_released (button);
       if (save_in != priv->in_button)
 	{
 	  priv->in_button = save_in;
