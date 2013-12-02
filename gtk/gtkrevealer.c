@@ -745,7 +745,8 @@ gtk_revealer_real_get_preferred_height (GtkWidget *widget,
   GTK_WIDGET_CLASS (gtk_revealer_parent_class)->get_preferred_height (widget, &minimum_height, &natural_height);
 
   transition = effective_transition (revealer);
-  if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP ||
+  if (transition == GTK_REVEALER_TRANSITION_TYPE_NONE ||
+      transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP ||
       transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN)
     natural_height = round (natural_height * priv->current_pos);
 
@@ -772,7 +773,8 @@ gtk_revealer_real_get_preferred_height_for_width (GtkWidget *widget,
   GTK_WIDGET_CLASS (gtk_revealer_parent_class)->get_preferred_height_for_width (widget, width, &minimum_height, &natural_height);
 
   transition = effective_transition (revealer);
-  if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP ||
+  if (transition == GTK_REVEALER_TRANSITION_TYPE_NONE ||
+      transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP ||
       transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN)
     natural_height = round (natural_height * priv->current_pos);
 
@@ -798,7 +800,8 @@ gtk_revealer_real_get_preferred_width (GtkWidget *widget,
   GTK_WIDGET_CLASS (gtk_revealer_parent_class)->get_preferred_width (widget, &minimum_width, &natural_width);
 
   transition = effective_transition (revealer);
-  if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT ||
+  if (transition == GTK_REVEALER_TRANSITION_TYPE_NONE ||
+      transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT ||
       transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
     natural_width = round (natural_width * priv->current_pos);
 
@@ -825,7 +828,8 @@ gtk_revealer_real_get_preferred_width_for_height (GtkWidget *widget,
   GTK_WIDGET_CLASS (gtk_revealer_parent_class)->get_preferred_width_for_height (widget, height, &minimum_width, &natural_width);
 
   transition = effective_transition (revealer);
-  if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT ||
+  if (transition == GTK_REVEALER_TRANSITION_TYPE_NONE ||
+      transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT ||
       transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_RIGHT)
     natural_width = round (natural_width * priv->current_pos);
 
