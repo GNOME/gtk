@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "config.h"
+
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
 
@@ -30,6 +32,55 @@ struct _CallbackData
   GtkTreeModel *model;
   GtkTreePath *path;
 };
+
+static void
+activate_about (GSimpleAction *action,
+                GVariant      *parameter,
+                gpointer       user_data)
+{
+  GtkApplication *app = user_data;
+  const gchar *authors[] = {
+    "The GTK+ Team",
+    NULL
+  };
+
+  gtk_show_about_dialog (GTK_WINDOW (gtk_application_get_active_window (app)),
+                         "program-name", "GTK+ Demo",
+                         "version", g_strdup_printf ("%s,\nRunning against GTK+ %d.%d.%d",
+                                                     PACKAGE_VERSION,
+                                                     gtk_get_major_version (),
+                                                     gtk_get_minor_version (),
+                                                     gtk_get_micro_version ()),
+                         "copyright", "(C) 1997-2013 The GTK+ Team",
+                         "license-type", GTK_LICENSE_LGPL_2_1,
+                         "website", "http://www.gtk.org",
+                         "comments", "Program to demonstrate GTK+ widgets",
+                         "authors", authors,
+                         "logo-icon-name", "gtk3-demo",
+                         "title", "About GTK+ Demo",
+                         NULL);
+}
+
+static void
+activate_quit (GSimpleAction *action,
+               GVariant      *parameter,
+               gpointer       user_data)
+{
+  GtkApplication *app = user_data;
+  GtkWidget *win;
+  GList *list, *next;
+
+  list = gtk_application_get_windows (app);
+  while (list)
+    {
+      win = list->data;
+      next = list->next;
+
+      gtk_widget_destroy (GTK_WIDGET (win));
+
+      list = next;
+    }
+}
 
 static void
 window_closed_cb (GtkWidget *window, gpointer data)
@@ -747,7 +798,7 @@ create_text (GtkWidget **view,
                                   GTK_POLICY_AUTOMATIC,
                                   GTK_POLICY_AUTOMATIC);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_window),
-                                       GTK_SHADOW_IN);
+                                       GTK_SHADOW_NONE);
 
   *view = text_view = gtk_text_view_new ();
   g_object_set (text_view, "margin", 20, NULL);
@@ -780,27 +831,10 @@ create_text (GtkWidget **view,
   return scrolled_window;
 }
 
-static GtkWidget *
-create_tree (void)
+static void
+populate_model (GtkTreeModel *model)
 {
-  GtkTreeSelection *selection;
-  GtkCellRenderer *cell;
-  GtkWidget *tree_view;
-  GtkTreeViewColumn *column;
-  GtkTreeStore *model;
-  GtkTreeIter iter;
-  GtkWidget *box, *label, *scrolled_window;
-
   Demo *d = gtk_demos;
-
-  model = gtk_tree_store_new (NUM_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_INT);
-  tree_view = gtk_tree_view_new ();
-  gtk_tree_view_set_model (GTK_TREE_VIEW (tree_view), GTK_TREE_MODEL (model));
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view));
-
-  gtk_tree_selection_set_mode (GTK_TREE_SELECTION (selection),
-                               GTK_SELECTION_BROWSE);
-  gtk_widget_set_size_request (tree_view, 200, -1);
 
   /* this code only supports 1 level of children. If we
    * want more we probably have to use a recursing function.
@@ -808,6 +842,7 @@ create_tree (void)
   while (d->title)
     {
       Demo *children = d->children;
+      GtkTreeIter iter;
 
       gtk_tree_store_append (GTK_TREE_STORE (model), &iter, NULL);
 
@@ -844,50 +879,86 @@ create_tree (void)
         }
     }
 
-  cell = gtk_cell_renderer_text_new ();
+}
 
-  column = gtk_tree_view_column_new_with_attributes ("Widget (double click for demo)",
-                                                     cell,
-                                                     "text", TITLE_COLUMN,
-                                                     "style", STYLE_COLUMN,
-                                                     NULL);
+static void
+startup (GApplication *app)
+{
+  GtkBuilder *builder;
+  GMenuModel *appmenu;
 
-  gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view),
-                               GTK_TREE_VIEW_COLUMN (column));
+  builder = gtk_builder_new ();
+  gtk_builder_add_from_resource (builder, "/ui/main.ui", NULL);
 
-  gtk_tree_model_get_iter_first (GTK_TREE_MODEL (model), &iter);
-  gtk_tree_selection_select_iter (GTK_TREE_SELECTION (selection), &iter);
+  appmenu = (GMenuModel *)gtk_builder_get_object (builder, "appmenu");
 
-  g_signal_connect (selection, "changed", G_CALLBACK (selection_cb), model);
-  g_signal_connect (tree_view, "row_activated", G_CALLBACK (row_activated_cb), model);
+  gtk_application_set_app_menu (GTK_APPLICATION (app), appmenu);
 
-  gtk_tree_view_collapse_all (GTK_TREE_VIEW (tree_view));
-  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (tree_view), FALSE);
+  g_object_unref (builder);
+}
 
-  scrolled_window = gtk_scrolled_window_new (NULL, NULL);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
-                                  GTK_POLICY_NEVER,
-                                  GTK_POLICY_AUTOMATIC);
-  gtk_container_add (GTK_CONTAINER (scrolled_window), tree_view);
+static void
+activate (GApplication *app)
+{
+  GtkBuilder *builder;
+  GtkWindow *window;
+  GtkWidget *treeview;
+  GtkWidget *widget;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  GError *error = NULL;
 
-  label = gtk_label_new ("Widget (double click for demo)");
+  builder = gtk_builder_new ();
+  gtk_builder_add_from_resource (builder, "/ui/main.ui", &error);
+  if (error != NULL)
+    {
+      g_critical ("%s", error->message);
+      exit (1);
+    }
 
-  box = gtk_notebook_new ();
-  gtk_notebook_append_page (GTK_NOTEBOOK (box), scrolled_window, label);
+  window = (GtkWindow *)gtk_builder_get_object (builder, "window");
+  gtk_application_add_window (GTK_APPLICATION (app), window);
+#if 0
+  g_action_map_add_action_entries (G_ACTION_MAP (window),
+                                   win_entries, G_N_ELEMENTS (win_entries),
+                                   window);
+#endif
 
-  gtk_widget_grab_focus (tree_view);
+  notebook = (GtkWidget *)gtk_builder_get_object (builder, "notebook");
 
-   g_object_unref (model);
+  info_view = (GtkWidget *)gtk_builder_get_object (builder, "info-textview");
+  source_view = (GtkWidget *)gtk_builder_get_object (builder, "source-textview");
 
-  return box;
+  treeview = (GtkWidget *)gtk_builder_get_object (builder, "treeview");
+  model = gtk_tree_view_get_model (GTK_TREE_VIEW (treeview));
+
+  load_file (gtk_demos[0].name, gtk_demos[0].filename);
+
+  populate_model (model);
+
+  g_signal_connect (treeview, "row-activated", G_CALLBACK (row_activated_cb), model);
+
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "treeview-selection");
+  g_signal_connect (widget, "changed", G_CALLBACK (selection_cb), model);
+
+  gtk_tree_model_get_iter_first (gtk_tree_view_get_model (GTK_TREE_VIEW (treeview)), &iter);
+  gtk_tree_selection_select_iter (GTK_TREE_SELECTION (widget), &iter);
+
+  gtk_tree_view_collapse_all (GTK_TREE_VIEW (treeview));
+
+  gtk_widget_show_all (GTK_WIDGET (window));
+
+  g_object_unref (builder);
 }
 
 int
 main (int argc, char **argv)
 {
-  GtkWidget *window;
-  GtkWidget *hbox;
-  GtkWidget *tree;
+  GtkApplication *app;
+  static GActionEntry app_entries[] = {
+    { "about", activate_about, NULL, NULL, NULL },
+    { "quit", activate_quit, NULL, NULL, NULL },
+  };
 
   /* Most code in gtk-demo is intended to be exemplary, but not
    * these few lines, which are just a hack so gtk-demo will work
@@ -901,38 +972,16 @@ main (int argc, char **argv)
 
   gtk_init (&argc, &argv);
 
-  gtk_window_set_default_icon_name ("gtk3-demo");
+  app = gtk_application_new ("org.gtk.Demo", 0);
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_title (GTK_WINDOW (window), "GTK+ Code Demos");
-  g_signal_connect_after (window, "destroy",
-                    G_CALLBACK (gtk_main_quit), NULL);
+  g_action_map_add_action_entries (G_ACTION_MAP (app),
+                                   app_entries, G_N_ELEMENTS (app_entries),
+                                   app);
 
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_container_add (GTK_CONTAINER (window), hbox);
+  g_signal_connect (app, "startup", G_CALLBACK (startup), NULL);
+  g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
 
-  tree = create_tree ();
-  gtk_box_pack_start (GTK_BOX (hbox), tree, FALSE, FALSE, 0);
-
-  notebook = gtk_notebook_new ();
-  gtk_notebook_set_scrollable (GTK_NOTEBOOK (notebook), TRUE);
-  gtk_notebook_popup_enable (GTK_NOTEBOOK (notebook));
-  gtk_box_pack_start (GTK_BOX (hbox), notebook, TRUE, TRUE, 0);
-
-  gtk_notebook_append_page (GTK_NOTEBOOK (notebook),
-                            create_text (&info_view, FALSE),
-                            gtk_label_new_with_mnemonic ("_Info"));
-
-  gtk_notebook_append_page (GTK_NOTEBOOK (notebook),
-                            create_text (&source_view, TRUE),
-                            gtk_label_new_with_mnemonic ("_Source"));
-
-  gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
-  gtk_widget_show_all (window);
-
-  load_file (gtk_demos[0].name, gtk_demos[0].filename);
-
-  gtk_main ();
+  g_application_run (G_APPLICATION (app), argc, argv);
 
   return 0;
 }

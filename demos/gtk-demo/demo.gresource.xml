@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
+  <gresource prefix="/ui">
+    <file preprocess="xml-stripblanks">main.ui</file>
+  </gresource>
   <gresource prefix="/application">
     <file>application.ui</file>
     <file>menus.ui</file>
