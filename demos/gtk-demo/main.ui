@@ -49,7 +49,7 @@
             <property name="can_focus">False</property>
             <property name="action_name">win.run</property>
             <style>
-              <class name="image-button"/>
+              <class name="text-button"/>
             </style>
             <child>
               <object class="GtkLabel" id="run_label">
