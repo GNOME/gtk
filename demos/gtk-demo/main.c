@@ -510,6 +510,10 @@ add_data_tab (const gchar *demoname)
       label = gtk_label_new (resources[i]);
       gtk_widget_show (label);
       gtk_notebook_append_page (GTK_NOTEBOOK (notebook), widget, label);
+      gtk_container_child_set (GTK_CONTAINER (notebook),
+                               GTK_WIDGET (widget),
+                               "tab-expand", TRUE,
+                               NULL);
 
       g_free (content_mime);
       g_free (content_type);
