@@ -16,6 +16,8 @@ static GtkWidget *source_view;
 static gchar *current_file = NULL;
 
 static GtkWidget *notebook;
+static GtkWidget *treeview;
+static GtkWidget *headerbar;
 
 enum {
   NAME_COLUMN,
@@ -100,6 +102,50 @@ window_closed_cb (GtkWidget *window, gpointer data)
 
   gtk_tree_path_free (cbdata->path);
   g_free (cbdata);
+}
+
+static void
+activate_run (GSimpleAction *action,
+              GVariant      *parameter,
+              gpointer       user_data)
+{
+  GtkWidget *window = user_data;
+  GtkTreeSelection *selection;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  PangoStyle style;
+  GDoDemoFunc func;
+  GtkWidget *demo;
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
+  gtk_tree_selection_get_selected (selection, &model, &iter);
+
+  gtk_tree_model_get (GTK_TREE_MODEL (model),
+                      &iter,
+                      FUNC_COLUMN, &func,
+                      STYLE_COLUMN, &style,
+                      -1);
+
+  if (func)
+    {
+      gtk_tree_store_set (GTK_TREE_STORE (model),
+                          &iter,
+                          STYLE_COLUMN, (style == PANGO_STYLE_ITALIC ? PANGO_STYLE_NORMAL : PANGO_STYLE_ITALIC),
+                          -1);
+      demo = (func) (window);
+
+      if (demo != NULL)
+        {
+          CallbackData *cbdata;
+
+          cbdata = g_new (CallbackData, 1);
+          cbdata->model = model;
+          cbdata->path = gtk_tree_model_get_path (model, &iter);
+
+          g_signal_connect (demo, "destroy",
+                            G_CALLBACK (window_closed_cb), cbdata);
+        }
+    }
 }
 
 /* Stupid syntax highlighting.
@@ -725,67 +771,31 @@ load_file (const gchar *demoname,
   g_object_unref (source_buffer);
 }
 
-void
-row_activated_cb (GtkTreeView       *tree_view,
-                  GtkTreePath       *path,
-                  GtkTreeViewColumn *column)
-{
-  GtkTreeIter iter;
-  PangoStyle style;
-  GDoDemoFunc func;
-  GtkWidget *window;
-  GtkTreeModel *model;
-
-  model = gtk_tree_view_get_model (tree_view);
-
-  gtk_tree_model_get_iter (model, &iter, path);
-  gtk_tree_model_get (GTK_TREE_MODEL (model),
-                      &iter,
-                      FUNC_COLUMN, &func,
-                      STYLE_COLUMN, &style,
-                      -1);
-
-  if (func)
-    {
-      gtk_tree_store_set (GTK_TREE_STORE (model),
-                          &iter,
-                          STYLE_COLUMN, (style == PANGO_STYLE_ITALIC ? PANGO_STYLE_NORMAL : PANGO_STYLE_ITALIC),
-                          -1);
-      window = (func) (gtk_widget_get_toplevel (GTK_WIDGET (tree_view)));
-
-      if (window != NULL)
-        {
-          CallbackData *cbdata;
-
-          cbdata = g_new (CallbackData, 1);
-          cbdata->model = model;
-          cbdata->path = gtk_tree_path_copy (path);
-
-          g_signal_connect (window, "destroy",
-                            G_CALLBACK (window_closed_cb), cbdata);
-        }
-    }
-}
-
 static void
 selection_cb (GtkTreeSelection *selection,
               GtkTreeModel     *model)
 {
   GtkTreeIter iter;
-  char *name, *filename;
+  char *name;
+  char *filename;
+  char *title;
 
   if (! gtk_tree_selection_get_selected (selection, NULL, &iter))
     return;
 
   gtk_tree_model_get (model, &iter,
                       NAME_COLUMN, &name,
+                      TITLE_COLUMN, &title,
                       FILENAME_COLUMN, &filename,
                       -1);
 
   if (filename)
     load_file (name, filename);
 
+  gtk_header_bar_set_title (GTK_HEADER_BAR (headerbar), title);
+
   g_free (name);
+  g_free (title);
   g_free (filename);
 }
 
@@ -906,11 +916,13 @@ activate (GApplication *app)
 {
   GtkBuilder *builder;
   GtkWindow *window;
-  GtkWidget *treeview;
   GtkWidget *widget;
   GtkTreeModel *model;
   GtkTreeIter iter;
   GError *error = NULL;
+  static GActionEntry win_entries[] = {
+    { "run", activate_run, NULL, NULL, NULL }
+  };
 
   builder = gtk_builder_new ();
   gtk_builder_add_from_resource (builder, "/ui/main.ui", &error);
@@ -922,25 +934,21 @@ activate (GApplication *app)
 
   window = (GtkWindow *)gtk_builder_get_object (builder, "window");
   gtk_application_add_window (GTK_APPLICATION (app), window);
-#if 0
   g_action_map_add_action_entries (G_ACTION_MAP (window),
                                    win_entries, G_N_ELEMENTS (win_entries),
                                    window);
-#endif
 
   notebook = (GtkWidget *)gtk_builder_get_object (builder, "notebook");
 
   info_view = (GtkWidget *)gtk_builder_get_object (builder, "info-textview");
   source_view = (GtkWidget *)gtk_builder_get_object (builder, "source-textview");
-
+  headerbar = (GtkWidget *)gtk_builder_get_object (builder, "headerbar");
   treeview = (GtkWidget *)gtk_builder_get_object (builder, "treeview");
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (treeview));
 
   load_file (gtk_demos[0].name, gtk_demos[0].filename);
 
   populate_model (model);
-
-  g_signal_connect (treeview, "row-activated", G_CALLBACK (row_activated_cb), model);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "treeview-selection");
   g_signal_connect (widget, "changed", G_CALLBACK (selection_cb), model);
