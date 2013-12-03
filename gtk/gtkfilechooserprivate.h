@@ -44,6 +44,7 @@ G_BEGIN_DECLS
 #define SETTINGS_KEY_WINDOW_SIZE         "window-size"
 #define SETTINGS_KEY_SIDEBAR_WIDTH       "sidebar-width"
 #define SETTINGS_KEY_STARTUP_MODE        "startup-mode"
+#define SETTINGS_KEY_SORT_DIRECTORIES_FIRST "sort-directories-first"
 
 #define GTK_FILE_CHOOSER_GET_IFACE(inst)  (G_TYPE_INSTANCE_GET_INTERFACE ((inst), GTK_TYPE_FILE_CHOOSER, GtkFileChooserIface))
 

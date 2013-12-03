@@ -300,6 +300,7 @@ typedef struct {
   guint use_preview_label : 1;
   guint select_multiple : 1;
   guint show_hidden : 1;
+  guint sort_directories_first : 1;
   guint do_overwrite_confirmation : 1;
   guint list_sort_ascending : 1;
   guint changing_folder : 1;
@@ -3196,6 +3197,7 @@ settings_load (GtkFileChooserDefault *impl)
   LocationMode location_mode;
   gboolean show_hidden;
   gboolean show_size_column;
+  gboolean sort_directories_first;
   gint sort_column;
   GtkSortType sort_order;
   StartupMode startup_mode;
@@ -3211,6 +3213,7 @@ settings_load (GtkFileChooserDefault *impl)
   sort_order = g_settings_get_enum (settings, SETTINGS_KEY_SORT_ORDER);
   sidebar_width = g_settings_get_int (settings, SETTINGS_KEY_SIDEBAR_WIDTH);
   startup_mode = g_settings_get_enum (settings, SETTINGS_KEY_STARTUP_MODE);
+  sort_directories_first = g_settings_get_boolean (settings, SETTINGS_KEY_SORT_DIRECTORIES_FIRST);
 
   location_mode_set (impl, location_mode, TRUE);
 
@@ -3222,6 +3225,7 @@ settings_load (GtkFileChooserDefault *impl)
   priv->sort_column = sort_column;
   priv->sort_order = sort_order;
   priv->startup_mode = startup_mode;
+  priv->sort_directories_first = sort_directories_first;
 
   /* We don't call set_sort_column() here as the models may not have been
    * created yet.  The individual functions that create and set the models will
@@ -3421,7 +3425,7 @@ gtk_file_chooser_default_unmap (GtkWidget *widget)
   dir_a = g_value_get_boolean (_gtk_file_system_model_get_value (fs_model, a, MODEL_COL_IS_FOLDER));           \
   dir_b = g_value_get_boolean (_gtk_file_system_model_get_value (fs_model, b, MODEL_COL_IS_FOLDER));           \
 													       \
-  if (dir_a != dir_b)											       \
+  if (priv->sort_directories_first && dir_a != dir_b)											       \
     return priv->list_sort_ascending ? (dir_a ? -1 : 1) : (dir_a ? 1 : -1) /* Directories *always* go first */
 
 /* Sort callback for the filename column */
