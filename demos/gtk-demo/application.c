@@ -338,7 +338,7 @@ main (int argc, char *argv[])
 
   gtk_init (NULL, NULL);
 
-  app = gtk_application_new ("org.gtk.Demo", 0);
+  app = gtk_application_new ("org.gtk.Demo2", 0);
   settings = g_settings_new ("org.gtk.Demo");
 
   g_action_map_add_action_entries (G_ACTION_MAP (app),
@@ -400,7 +400,7 @@ do_application (GtkWidget *toplevel)
 
   if (watch == 0)
     watch = g_bus_watch_name (G_BUS_TYPE_SESSION,
-                              "org.gtk.Demo",
+                              "org.gtk.Demo2",
                               0,
                               on_name_appeared,
                               on_name_vanished,
@@ -428,8 +428,8 @@ do_application (GtkWidget *toplevel)
   else
     {
       g_dbus_connection_call_sync (g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL),
-                              "org.gtk.Demo",
-                              "/org/gtk/Demo",
+                              "org.gtk.Demo2",
+                              "/org/gtk/Demo2",
                               "org.gtk.Actions",
                               "Activate",
                               g_variant_new ("(sava{sv})", "quit", NULL, NULL),
