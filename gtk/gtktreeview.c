@@ -2221,7 +2221,6 @@ gtk_tree_view_ensure_background (GtkTreeView *tree_view)
 
   context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
 
-  gtk_style_context_set_background (context, tree_view->priv->bin_window);
   gtk_style_context_set_background (context, gtk_widget_get_window (GTK_WIDGET (tree_view)));
   gtk_style_context_set_background (context, tree_view->priv->header_window);
 }
@@ -5457,10 +5456,6 @@ gtk_tree_view_draw (GtkWidget *widget,
   GtkStyleContext *context;
 
   context = gtk_widget_get_style_context (widget);
-  gtk_render_background (context, cr,
-                         0, 0,
-                         gtk_widget_get_allocated_width (widget),
-                         gtk_widget_get_allocated_height (widget));
 
   if (gtk_cairo_should_draw_window (cr, tree_view->priv->bin_window))
     {
@@ -5480,6 +5475,13 @@ gtk_tree_view_draw (GtkWidget *widget,
       _gtk_pixel_cache_draw (tree_view->priv->pixel_cache, cr, tree_view->priv->bin_window,
 			     &view_rect, &canvas_rect,
 			     draw_bin, widget);
+    }
+  else
+    {
+      gtk_render_background (context, cr,
+                             0, 0,
+                             gtk_widget_get_allocated_width (widget),
+                             gtk_widget_get_allocated_height (widget));
     }
 
   gtk_style_context_save (context);
