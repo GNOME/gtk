@@ -849,6 +849,7 @@ load_recent_items (gpointer user_data)
       chooser_set_model (impl);
 
       retval = FALSE;
+      impl->load_id = 0;
     }
   else
     {
