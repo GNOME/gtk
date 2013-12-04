@@ -780,12 +780,16 @@ translate_crossing_mode (gint mode)
 {
   switch (mode)
     {
-    case NotifyNormal:
+    case XINotifyNormal:
       return GDK_CROSSING_NORMAL;
-    case NotifyGrab:
+    case XINotifyGrab:
+    case XINotifyPassiveGrab:
       return GDK_CROSSING_GRAB;
-    case NotifyUngrab:
+    case XINotifyUngrab:
+    case XINotifyPassiveUngrab:
       return GDK_CROSSING_UNGRAB;
+    case XINotifyWhileGrabbed:
+      /* Fall through, unexpected in pointer crossing events */
     default:
       g_assert_not_reached ();
     }
