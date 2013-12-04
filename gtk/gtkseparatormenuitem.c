@@ -51,10 +51,6 @@ gtk_separator_menu_item_class_init (GtkSeparatorMenuItemClass *class)
 static void 
 gtk_separator_menu_item_init (GtkSeparatorMenuItem *item)
 {
-  GtkStyleContext *context;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (item));
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SEPARATOR);
 }
 
 /**
