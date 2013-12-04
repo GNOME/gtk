@@ -5390,6 +5390,7 @@ static gboolean
 gdk_window_should_use_csd (GtkWindow *window)
 {
   GtkWindowPrivate *priv = window->priv;
+  const gchar *csd_env;
 
   if (!priv->decorated)
     return FALSE;
@@ -5397,17 +5398,20 @@ gdk_window_should_use_csd (GtkWindow *window)
   if (priv->type == GTK_WINDOW_POPUP)
     return FALSE;
 
-#ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
-    return TRUE;
-#endif
-
 #ifdef GDK_WINDOWING_BROADWAY
   if (GDK_IS_BROADWAY_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
     return TRUE;
 #endif
 
-  return (g_strcmp0 (g_getenv ("GTK_CSD"), "1") == 0);
+  csd_env = g_getenv ("GTK_CSD");
+
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))) &&
+      g_strcmp0 (csd_env, "0") != 0)
+    return TRUE;
+#endif
+
+  return (g_strcmp0 (csd_env, "1") == 0);
 }
 
 static void
