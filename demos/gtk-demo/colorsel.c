@@ -52,6 +52,7 @@ change_color_callback (GtkWidget *button,
   GtkWidget *dialog;
 
   dialog = gtk_color_chooser_dialog_new ("Changing color", GTK_WINDOW (window));
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
   gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (dialog), &color);
 
   g_signal_connect (dialog,
