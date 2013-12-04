@@ -12,6 +12,7 @@ demos/gtk-demo/expander.c
 demos/gtk-demo/iconview.c
 demos/gtk-demo/infobar.c
 demos/gtk-demo/listbox.ui
+demos/gtk-demo/main.ui
 demos/gtk-demo/menus.ui
 demos/gtk-demo/offscreen_window2.c
 demos/gtk-demo/revealer.ui
