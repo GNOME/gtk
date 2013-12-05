@@ -2695,6 +2695,8 @@ gtk_drag_begin_internal (GtkWidget         *widget,
  * If you can really not pass a real event, pass #NULL instead.
  *
  * Return value: (transfer none): the context for this drag.
+ *
+ * Since: 3.10
  **/
 GdkDragContext *
 gtk_drag_begin_with_coordinates (GtkWidget         *widget,
