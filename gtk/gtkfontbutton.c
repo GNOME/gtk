@@ -1049,6 +1049,9 @@ gtk_font_button_clicked (GtkButton *button)
 
       g_signal_connect (font_dialog, "destroy",
                         G_CALLBACK (dialog_destroy), font_button);
+
+      g_signal_connect (font_dialog, "delete-event",
+                        G_CALLBACK (gtk_widget_hide_on_delete), NULL);
     }
   
   if (!gtk_widget_get_visible (font_button->priv->font_dialog))
