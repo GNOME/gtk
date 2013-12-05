@@ -136,6 +136,8 @@ GTK_GSETTINGS_SCHEMAS = \
 
 BUILT_SOURCES = gschemas.compiled
 
+CLEANFILES = gschemas.compiled
+
 gschemas.compiled: $(GTK_GSETTINGS_SCHEMAS)
 	$(GLIB_COMPILE_SCHEMAS) \
 		$(addprefix --schema-file=,$(GTK_GSETTINGS_SCHEMAS)) \
