@@ -1,3 +1,25 @@
+Overview of Changes in GTK+ 3.10.5 to 3.10.6
+============================================
+
+* Bugs fixed:
+ 709027 List mode has black background
+ 711715 gtk object tests: run under local environment
+ 719469 Alternative for deprecated function in gtkstyle.h...
+ 719505 Wrong icon for desktop entry in FileChooser dialog
+ 719510 Infobar always visible on gtk 3.10.5 with enable-...
+ 719516 3.10.4 -> 3.10.5 makes labels not wrap in dialogs
+ 719568 Search bar area is still visible when switched off
+ 719569 The widest dialog I know
+ 719595 Toolbar style context is created before style cla...
+ 719762 translate_crossing_mode() assertion error since r...
+        On-screen keyboards like iok should work again
+
+* Translation updates:
+ Galician
+ Lithuanian
+ Serbian
+
+
 Overview of Changes in GTK+ 3.10.4 to 3.10.5
 ============================================
 
