@@ -25,8 +25,10 @@ BUILT_SOURCES = 				\
 	gtk-shell-client-protocol.h		\
 	gtk-shell-protocol.c
 
+nodist_libgdk_wayland_la_SOURCES =		\
+	$(BUILT_SOURCES)
+
 libgdk_wayland_la_SOURCES =			\
-	$(BUILT_SOURCES)			\
 	gdkapplaunchcontext-wayland.c		\
 	gdkcursor-wayland.c			\
 	gdkdevice-wayland.c			\
