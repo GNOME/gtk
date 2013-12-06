@@ -813,9 +813,12 @@ _gtk_file_info_render_icon (GFileInfo *info,
 						 icon_size*scale, icon_size*scale,
 						 NULL);
 
-      surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, scale,
-                                                      gtk_widget_get_window (widget));
-      g_object_unref (pixbuf);
+      if (pixbuf != NULL)
+        {
+          surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, scale,
+                                                          gtk_widget_get_window (widget));
+          g_object_unref (pixbuf);
+        }
     }
 
   if (!surface)
