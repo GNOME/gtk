@@ -264,8 +264,8 @@ gtk_radio_button_get_property (GObject    *object,
 /**
  * gtk_radio_button_set_group:
  * @radio_button: a #GtkRadioButton.
- * @group: (transfer none) (element-type GtkRadioButton): an existing radio
- *     button group, such as one returned from gtk_radio_button_get_group().
+ * @group: (element-type GtkRadioButton) (allow-none): an existing radio
+ *     button group, such as one returned from gtk_radio_button_get_group(), or %NULL.
  *
  * Sets a #GtkRadioButton's group. It should be noted that this does not change
  * the layout of your interface in any way, so if you are changing the group,
@@ -449,7 +449,7 @@ gtk_radio_button_new_with_label (GSList      *group,
 /**
  * gtk_radio_button_new_with_mnemonic:
  * @group: (element-type GtkRadioButton) (allow-none): the radio button
- *         group
+ *         group, or %NULL
  * @label: the text of the button, with an underscore in front of the
  *         mnemonic character
  *

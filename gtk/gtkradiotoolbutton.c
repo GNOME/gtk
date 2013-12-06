@@ -124,7 +124,7 @@ gtk_radio_tool_button_set_property (GObject         *object,
 
 /**
  * gtk_radio_tool_button_new:
- * @group: (allow-none) (transfer none) (element-type GtkRadioButton): An
+ * @group: (allow-none) (element-type GtkRadioButton): An
  *   existing radio button group, or %NULL if you are creating a new group
  * 
  * Creates a new #GtkRadioToolButton, adding it to @group.
@@ -264,7 +264,7 @@ gtk_radio_tool_button_get_group (GtkRadioToolButton *button)
 /**
  * gtk_radio_tool_button_set_group:
  * @button: a #GtkRadioToolButton
- * @group: (transfer none) (element-type GtkRadioButton): an existing radio button group
+ * @group: (element-type GtkRadioButton) (allow-none): an existing radio button group, or %NULL
  * 
  * Adds @button to @group, removing it from the group it belonged to before.
  * 
