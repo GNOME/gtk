@@ -284,6 +284,10 @@ gdk_cairo_surface_create_from_pixbuf (const GdkPixbuf *pixbuf,
   cairo_format_t format;
   cairo_surface_t *surface;
 
+  g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
+  g_return_val_if_fail (scale > 0, NULL);
+  g_return_val_if_fail (for_window == NULL || GDK_IS_WINDOW (for_window), NULL);
+
   if (gdk_pixbuf_get_n_channels (pixbuf) == 3)
     format = CAIRO_FORMAT_RGB24;
   else
