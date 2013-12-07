@@ -2044,8 +2044,7 @@ gtk_button_leave_notify (GtkWidget        *widget,
   GtkButtonPrivate *priv = button->priv;
 
   if ((event->window == button->priv->event_window) &&
-      (event->detail != GDK_NOTIFY_INFERIOR) &&
-      (gtk_widget_get_sensitive (widget)))
+      (event->detail != GDK_NOTIFY_INFERIOR))
     {
       priv->in_button = FALSE;
       g_signal_emit (button, button_signals[LEAVE], 0);
@@ -2104,8 +2103,9 @@ static void
 gtk_real_button_released (GtkButton *button)
 {
   gtk_button_do_release (button,
-                         button->priv->in_button ||
-                         touch_release_in_button (button));
+                         gtk_widget_is_sensitive (GTK_WIDGET (button)) &&
+                         (button->priv->in_button ||
+                          touch_release_in_button (button)));
 }
 
 static void 
@@ -2703,13 +2703,9 @@ gtk_button_state_changed (GtkWidget    *widget,
                           GtkStateType  previous_state)
 {
   GtkButton *button = GTK_BUTTON (widget);
-  GtkButtonPrivate *priv = button->priv;
 
   if (!gtk_widget_is_sensitive (widget))
-    {
-      priv->in_button = FALSE;
-      gtk_button_do_release (button, FALSE);
-    }
+    gtk_button_do_release (button, FALSE);
 }
 
 static void
