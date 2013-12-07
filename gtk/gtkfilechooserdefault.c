@@ -3909,103 +3909,30 @@ stop_loading_and_clear_list_model (GtkFileChooserDefault *impl,
 static char *
 my_g_format_time_for_display (glong secs)
 {
-  GDate mtime, now;
-  gint days_diff;
-  struct tm tm_mtime;
-  time_t time_mtime, time_now;
+  GDateTime *now, *time;
+  GTimeSpan time_diff;
   const gchar *format;
-  gchar *locale_format = NULL;
-  gchar buf[256];
-  char *date_str = NULL;
-#ifdef G_OS_WIN32
-  const char *locale, *dot = NULL;
-  gint64 codepage = -1;
-  char charset[20];
-#endif
+  gchar *date_str;
 
-  time_mtime = secs;
+  now = g_date_time_new_now_local ();
+  time = g_date_time_new_from_unix_local (secs);
+  time_diff = g_date_time_difference (now, time);
 
-#ifdef HAVE_LOCALTIME_R
-  localtime_r ((time_t *) &time_mtime, &tm_mtime);
-#else
-  {
-    struct tm *ptm = localtime ((time_t *) &time_mtime);
-
-    if (!ptm)
-      {
-        g_warning ("ptm != NULL failed");
-        
-        return g_strdup (_("Unknown"));
-      }
-    else
-      memcpy ((void *) &tm_mtime, (void *) ptm, sizeof (struct tm));
-  }
-#endif /* HAVE_LOCALTIME_R */
-
-  g_date_set_time_t (&mtime, time_mtime);
-  time_now = time (NULL);
-  g_date_set_time_t (&now, time_now);
-
-  days_diff = g_date_get_julian (&now) - g_date_get_julian (&mtime);
-
-  /* Translators: %H means "hours" and %M means "minutes" */
-  if (days_diff == 0)
+  /* Translators: see g_date_time_format() for details on the format */
+  if (time_diff >= 0 && time_diff < G_TIME_SPAN_DAY)
     format = _("%H:%M");
-  else if (days_diff == 1)
+  else if (time_diff >= 0 && time_diff < 2 * G_TIME_SPAN_DAY)
     format = _("Yesterday at %H:%M");
+  else if (time_diff >= 0 && time_diff < 7 * G_TIME_SPAN_DAY)
+    format = "%A"; /* Days from last week */
   else
-    {
-      if (days_diff > 1 && days_diff < 7)
-        format = "%A"; /* Days from last week */
-      else
-        format = "%x"; /* Any other date */
-    }
+    format = "%x"; /* Any other date */
 
-#ifdef G_OS_WIN32
-  /* g_locale_from_utf8() returns a string in the system
-   * code-page, which is not always the same as that used by the C
-   * library. For instance when running a GTK+ program with
-   * LANG=ko on an English version of Windows, the system
-   * code-page is 1252, but the code-page used by the C library is
-   * 949. (It's GTK+ itself that sets the C library locale when it
-   * notices the LANG environment variable. See gtkmain.c The
-   * Microsoft C library doesn't look at any locale environment
-   * variables.) We need to pass strftime() a string in the C
-   * library's code-page. See bug #509885.
-   */
-  locale = setlocale (LC_ALL, NULL);
-  if (locale != NULL)
-    dot = strchr (locale, '.');
-  if (dot != NULL)
-    {
-      codepage = g_ascii_strtoll (dot+1, NULL, 10);
-      
-      /* All codepages should fit in 16 bits AFAIK */
-      if (codepage > 0 && codepage < 65536)
-        {
-          sprintf (charset, "CP%u", (guint) codepage);
-          locale_format = g_convert (format, -1, charset, "UTF-8", NULL, NULL, NULL);
-        }
-    }
-#else
-  locale_format = g_locale_from_utf8 (format, -1, NULL, NULL, NULL);
-#endif
-  if (locale_format != NULL &&
-      strftime (buf, sizeof (buf), locale_format, &tm_mtime) != 0)
-    {
-#ifdef G_OS_WIN32
-      /* As above but in opposite direction... */
-      if (codepage > 0 && codepage < 65536)
-        date_str = g_convert (buf, -1, "UTF-8", charset, NULL, NULL, NULL);
-#else
-      date_str = g_locale_to_utf8 (buf, -1, NULL, NULL, NULL);
-#endif
-    }
+  date_str = g_date_time_format (time, format);
 
-  if (date_str == NULL)
-    date_str = g_strdup (_("Unknown"));
+  g_date_time_unref (time);
+  g_date_time_unref (now);
 
-  g_free (locale_format);
   return date_str;
 }
 
