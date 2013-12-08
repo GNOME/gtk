@@ -1,6 +1,3 @@
-N_("Pre_view");
-N_("_Cancel");
-N_("_Print");
 N_("Printer");
 
 /* this is the header for the location column in the print dialog */

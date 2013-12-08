@@ -55,6 +55,7 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
+#include "gtkdialogprivate.h"
 
 
 /**
@@ -132,6 +133,9 @@
 #define RULER_RADIUS 2
 
 
+static GObject *gtk_print_unix_dialog_constructor  (GType               type,
+                                                    guint               n_params,
+                                                    GObjectConstructParam *params);
 static void     gtk_print_unix_dialog_destroy      (GtkPrintUnixDialog *dialog);
 static void     gtk_print_unix_dialog_finalize     (GObject            *object);
 static void     gtk_print_unix_dialog_set_property (GObject            *object,
@@ -307,7 +311,6 @@ struct GtkPrintUnixDialogPrivate
   GtkWidget *print_at_radio;
   GtkWidget *print_at_entry;
   GtkWidget *print_hold_radio;
-  GtkWidget *preview_button;
   GtkWidget *paper_size_combo;
   GtkWidget *paper_size_combo_label;
   GtkCellRenderer *paper_size_renderer;
@@ -401,6 +404,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
   object_class = (GObjectClass *) class;
   widget_class = (GtkWidgetClass *) class;
 
+  object_class->constructor = gtk_print_unix_dialog_constructor;
   object_class->finalize = gtk_print_unix_dialog_finalize;
   object_class->set_property = gtk_print_unix_dialog_set_property;
   object_class->get_property = gtk_print_unix_dialog_get_property;
@@ -514,7 +518,6 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, print_at_radio);
   gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, print_at_entry);
   gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, print_hold_radio);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, preview_button);
   gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, paper_size_combo);
   gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, paper_size_combo_label);
   gtk_widget_class_bind_template_child_private (widget_class, GtkPrintUnixDialog, paper_size_renderer);
@@ -743,6 +746,13 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   priv->has_selection = FALSE;
 
   gtk_widget_init_template (GTK_WIDGET (dialog));
+  gtk_dialog_set_use_header_bar_from_setting (GTK_DIALOG (dialog));
+  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+                          _("Pre_view"), GTK_RESPONSE_APPLY,
+                          _("_Cancel"), GTK_RESPONSE_CANCEL,
+                          _("_Print"), GTK_RESPONSE_OK,
+                          NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 
   /* Treeview auxilary functions need to be setup here  */
   gtk_tree_model_filter_set_visible_func (priv->printer_list_filter,
@@ -792,6 +802,32 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
 
   /* Load custom papers */
   _gtk_print_load_custom_papers (priv->custom_paper_list);
+}
+
+static GObject *
+gtk_print_unix_dialog_constructor (GType                  type,
+                                   guint                  n_params,
+                                   GObjectConstructParam *params)
+{
+  GObject *object;
+  gboolean use_header;
+
+  object = G_OBJECT_CLASS (gtk_print_unix_dialog_parent_class)->constructor (type, n_params, params);
+
+  g_object_get (object, "use-header-bar", &use_header, NULL);
+  if (use_header)
+    {
+       /* Reorder the preview button */
+       GtkWidget *button, *parent;
+       button = gtk_dialog_get_widget_for_response (GTK_DIALOG (object), GTK_RESPONSE_APPLY);
+       g_object_ref (button);
+       parent = gtk_widget_get_parent (button);
+       gtk_container_remove (GTK_CONTAINER (parent), button); 
+       gtk_header_bar_pack_end (GTK_HEADER_BAR (parent), button);
+       g_object_unref (button);
+    }
+
+  return object;
 }
 
 static void
@@ -1612,6 +1648,7 @@ update_dialog_from_capabilities (GtkPrintUnixDialog *dialog)
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
   gboolean can_collate;
   const gchar *copies;
+  GtkWidget *button;
 
   copies = gtk_entry_get_text (GTK_ENTRY (priv->copies_spin));
   can_collate = (*copies != '\0' && atoi (copies) > 1);
@@ -1632,10 +1669,8 @@ update_dialog_from_capabilities (GtkPrintUnixDialog *dialog)
   gtk_widget_set_sensitive (GTK_WIDGET (priv->pages_per_sheet),
                             caps & GTK_PRINT_CAPABILITY_NUMBER_UP);
 
-  if (caps & GTK_PRINT_CAPABILITY_PREVIEW)
-    gtk_widget_show (priv->preview_button);
-  else
-    gtk_widget_hide (priv->preview_button);
+  button = gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog), GTK_RESPONSE_APPLY);
+  gtk_widget_set_visible (button, (caps & GTK_PRINT_CAPABILITY_PREVIEW) != 0);
 
   update_collate_icon (NULL, dialog);
 
