@@ -168,13 +168,13 @@ GDK_AVAILABLE_IN_ALL
 gint gtk_dialog_get_response_for_widget (GtkDialog *dialog,
                                          GtkWidget *widget);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 gboolean gtk_alternative_dialog_button_order (GdkScreen *screen);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void     gtk_dialog_set_alternative_button_order (GtkDialog *dialog,
                                                   gint       first_response_id,
                                                   ...);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_10
 void     gtk_dialog_set_alternative_button_order_from_array (GtkDialog *dialog,
                                                              gint       n_params,
                                                              gint      *new_order);
