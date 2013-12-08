@@ -11,77 +11,25 @@
     <property name="border_width">5</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
+    <child internal-child="headerbar">
+      <object class="GtkHeaderBar" id="headerbar1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="show-close-button">True</property>
+        <child type="title">
+          <object class="GtkStackSwitcher" id="stack_switcher">
+            <property name="visible">False</property>
+            <property name="stack">stack</property>
+            <property name="no-show-all">True</property>
+          </object>
+        </child>
+      </object>
+    </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area1">
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkToggleButton" id="credits_button">
-                <property name="label" translatable="yes">C_redits</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="no_show_all">True</property>
-                <property name="image">image1</property>
-                <property name="use_underline">True</property>
-                <signal name="clicked" handler="credits_button_clicked" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="pack_type">end</property>
-                <property name="position">0</property>
-                <property name="secondary">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToggleButton" id="license_button">
-                <property name="label" translatable="yes">_License</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="no_show_all">True</property>
-                <property name="use_underline">True</property>
-                <signal name="clicked" handler="license_button_clicked" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="pack_type">end</property>
-                <property name="position">1</property>
-                <property name="secondary">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="close_button">
-                <property name="label" translatable="yes">_Close</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="is_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
         <child>
           <object class="GtkBox" id="box">
             <property name="visible">True</property>
@@ -124,6 +72,7 @@
                 <property name="homogeneous">True</property>
                 <property name="transition-type">over-up-down</property>
                 <property name="transition-duration">600</property>
+                <signal name="notify::visible-child" handler="stack_visible_child_notify" swapped="no"/>
                 <child>
                   <object class="GtkBox" id="page_vbox">
                     <property name="visible">True</property>
@@ -224,11 +173,12 @@
                   </object>
                   <packing>
                     <property name="name">main</property>
+                    <property name="title" translatable="yes">About</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkBox" id="credits_page">
-                    <property name="visible">True</property>
+                    <property name="visible">False</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">8</property>
@@ -296,11 +246,12 @@
                   </object>
                   <packing>
                     <property name="name">credits</property>
+                    <property name="title" translatable="yes">Credits</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkBox" id="license_page">
-                    <property name="visible">True</property>
+                    <property name="visible">False</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
                     <property name="spacing">8</property>
@@ -334,6 +285,7 @@
                   </object>
                   <packing>
                     <property name="name">license</property>
+                    <property name="title" translatable="yes">License</property>
                   </packing>
                 </child>
               </object>
@@ -352,8 +304,5 @@
         </child>
       </object>
     </child>
-    <action-widgets>
-      <action-widget response="-6">close_button</action-widget>
-    </action-widgets>
   </template>
 </interface>

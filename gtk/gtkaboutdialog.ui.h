@@ -1,3 +1,3 @@
-N_("C_redits");
-N_("_License");
-N_("_Close");
+N_("About");
+N_("Credits");
+N_("License");
