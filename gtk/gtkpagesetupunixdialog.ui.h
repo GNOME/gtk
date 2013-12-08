@@ -1,5 +1,4 @@
-N_("_Cancel");
-N_("_Apply");
+N_("Page Setup");
 N_("_Format for:");
 N_("_Paper size:");
 N_("_Orientation:");

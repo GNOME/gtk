@@ -43,6 +43,7 @@
 #include "gtkprintbackend.h"
 #include "gtkpapersize.h"
 #include "gtkprintutils.h"
+#include "gtkdialogprivate.h"
 
 /**
  * SECTION:gtkpagesetupunixdialog
@@ -190,6 +191,19 @@ gtk_page_setup_unix_dialog_init (GtkPageSetupUnixDialog *dialog)
   priv->print_backends = NULL;
 
   gtk_widget_init_template (GTK_WIDGET (dialog));
+  gtk_dialog_set_use_header_bar_from_setting (GTK_DIALOG (dialog));
+  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+                          _("_Cancel"), GTK_RESPONSE_CANCEL,
+                          _("_Apply"), GTK_RESPONSE_OK,
+                          NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
+                                           GTK_RESPONSE_OK,
+                                           GTK_RESPONSE_CANCEL,
+                                           -1);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   /* Do this in code, we want the translatable strings without the markup */
   gtk_list_store_append (priv->printer_list, &iter);
@@ -213,12 +227,6 @@ gtk_page_setup_unix_dialog_init (GtkPageSetupUnixDialog *dialog)
   /* Load data */
   _gtk_print_load_custom_papers (priv->custom_paper_list);
   load_print_backends (dialog);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
-                                           GTK_RESPONSE_OK,
-                                           GTK_RESPONSE_CANCEL,
-                                           -1);
-G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
