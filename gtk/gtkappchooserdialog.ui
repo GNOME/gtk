@@ -4,6 +4,7 @@
   <template class="GtkAppChooserDialog" parent="GtkDialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
+    <property name="title" translatable="yes">Select Application</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -14,36 +15,6 @@
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="cancel">
-                <property name="label" translatable="yes">_Cancel</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="button">
-                <property name="label" translatable="yes">_Select</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="use_underline">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -102,10 +73,6 @@
         </child>
       </object>
     </child>
-    <action-widgets>
-      <action-widget response="-6">cancel</action-widget>
-      <action-widget response="-5">button</action-widget>
-    </action-widgets>
   </template>
   <object class="GtkImage" id="show_more_image">
     <property name="visible">True</property>

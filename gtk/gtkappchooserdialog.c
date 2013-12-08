@@ -46,10 +46,13 @@
 #include "gtkappchooserprivate.h"
 
 #include "gtkmessagedialog.h"
+#include "gtksettings.h"
 #include "gtklabel.h"
 #include "gtkbbox.h"
 #include "gtkbutton.h"
 #include "gtkmenuitem.h"
+#include "gtkheaderbar.h"
+#include "gtkdialogprivate.h"
 
 #include <string.h>
 #include <glib/gi18n-lib.h>
@@ -63,7 +66,6 @@ struct _GtkAppChooserDialogPrivate {
   char *heading;
 
   GtkWidget *label;
-  GtkWidget *button;
   GtkWidget *software_button;
   GtkWidget *inner_box;
 
@@ -122,7 +124,7 @@ gtk_app_chooser_dialog_response (GtkDialog *dialog,
     case GTK_RESPONSE_CANCEL:
     case GTK_RESPONSE_DELETE_EVENT:
       self->priv->dismissed = TRUE;
-    default :
+    default:
       break;
     }
 }
@@ -132,9 +134,9 @@ widget_application_selected_cb (GtkAppChooserWidget *widget,
                                 GAppInfo            *app_info,
                                 gpointer             user_data)
 {
-  GtkAppChooserDialog *self = user_data;
+  GtkDialog *self = user_data;
 
-  gtk_widget_set_sensitive (self->priv->button, TRUE);
+  gtk_dialog_set_response_sensitive (self, GTK_RESPONSE_OK, TRUE);
 }
 
 static void
@@ -340,7 +342,7 @@ construct_appchooser_widget (GtkAppChooserDialog *self)
 		      self->priv->show_more_button, FALSE, FALSE, 6);
 
   info = gtk_app_chooser_get_app_info (GTK_APP_CHOOSER (self->priv->app_chooser_widget));
-  gtk_widget_set_sensitive (self->priv->button, info != NULL);
+  gtk_dialog_set_response_sensitive (GTK_DIALOG (self), GTK_RESPONSE_OK, info != NULL);
   if (info)
     g_object_unref (info);
 }
@@ -433,23 +435,32 @@ ensure_software_button (GtkAppChooserDialog *self)
 {
   if (g_find_program_in_path ("gnome-software"))
     {
-      GtkWidget *action_area;
+      GtkWidget *parent;
+      gboolean use_header;
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      action_area = gtk_dialog_get_action_area (GTK_DIALOG (self));
-G_GNUC_END_IGNORE_DEPRECATIONS
-      self->priv->software_button = gtk_button_new_with_mnemonic (_("Software"));
+      self->priv->software_button = gtk_button_new_with_label (_("Software"));
+
       gtk_button_set_always_show_image (GTK_BUTTON (self->priv->software_button), TRUE);
       gtk_button_set_image (GTK_BUTTON (self->priv->software_button), gtk_image_new_from_icon_name ("gnome-software", GTK_ICON_SIZE_BUTTON));
-
-      gtk_box_pack_start (GTK_BOX (action_area), self->priv->software_button,
-                          FALSE, FALSE, 0);
-      gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (action_area), self->priv->software_button,
-                                          TRUE);
+      gtk_widget_set_valign (self->priv->software_button, GTK_ALIGN_CENTER);
       g_signal_connect (self->priv->software_button, "clicked",
                         G_CALLBACK (software_button_clicked_cb), self);
-
       gtk_widget_show (self->priv->software_button);
+      
+      g_object_get (self, "use-header-bar", &use_header, NULL);
+      if (use_header)
+        {
+          parent = gtk_dialog_get_header_bar (GTK_DIALOG (self));
+          gtk_header_bar_pack_end (GTK_HEADER_BAR (parent), self->priv->software_button);
+        }
+      else
+        {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+          parent = gtk_dialog_get_action_area (GTK_DIALOG (self));
+          gtk_container_add (GTK_CONTAINER (parent), self->priv->software_button);
+          gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (parent), self->priv->software_button, TRUE);
+G_GNUC_END_IGNORE_DEPRECATIONS
+        }
     }
 }
 
@@ -595,10 +606,10 @@ gtk_app_chooser_dialog_class_init (GtkAppChooserDialogClass *klass)
   /* Bind class to template
    */
   widget_class = GTK_WIDGET_CLASS (klass);
+
   gtk_widget_class_set_template_from_resource (widget_class,
 					       "/org/gtk/libgtk/gtkappchooserdialog.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserDialog, label);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserDialog, button);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserDialog, show_more_button);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserDialog, inner_box);
   gtk_widget_class_bind_template_callback (widget_class, show_more_button_clicked_cb);
@@ -610,15 +621,25 @@ gtk_app_chooser_dialog_init (GtkAppChooserDialog *self)
   self->priv = gtk_app_chooser_dialog_get_instance_private (self);
 
   gtk_widget_init_template (GTK_WIDGET (self));
+  gtk_dialog_set_use_header_bar_from_setting (GTK_DIALOG (self));
+  gtk_dialog_add_buttons (GTK_DIALOG (self),
+                          _("_Cancel"), GTK_RESPONSE_CANCEL,
+                          _("_Select"), GTK_RESPONSE_OK,
+                          NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (self), GTK_RESPONSE_OK);
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  gtk_dialog_set_alternative_button_order (GTK_DIALOG (self),
+                                           GTK_RESPONSE_OK,
+                                           GTK_RESPONSE_CANCEL,
+                                           -1);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   /* we can't override the class signal handler here, as it's a RUN_LAST;
    * we want our signal handler instead to be executed before any user code.
    */
   g_signal_connect (self, "response",
                     G_CALLBACK (gtk_app_chooser_dialog_response), NULL);
-
-  gtk_dialog_set_default_response (GTK_DIALOG (self),
-                                   GTK_RESPONSE_OK);
 }
 
 static void
