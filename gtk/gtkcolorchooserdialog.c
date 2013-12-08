@@ -18,10 +18,12 @@
 #include "config.h"
 
 #include "gtkdialog.h"
+#include "gtkdialogprivate.h"
 #include "gtkbutton.h"
 #include "gtkbox.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtksettings.h"
 
 #include "gtkcolorchooserprivate.h"
 #include "gtkcolorchooserdialog.h"
@@ -42,9 +44,6 @@
 struct _GtkColorChooserDialogPrivate
 {
   GtkWidget *chooser;
-
-  GtkWidget *select_button;
-  GtkWidget *cancel_button;
 };
 
 enum
@@ -92,10 +91,12 @@ color_activated_cb (GtkColorChooser *chooser,
 }
 
 static void
-selected_cb (GtkButton *button,
-             GtkDialog *dialog)
+gtk_color_chooser_dialog_response (GtkDialog *dialog,
+                                   gint       response_id,
+                                   gpointer   user_data)
 {
-  save_color (GTK_COLOR_CHOOSER_DIALOG (dialog));
+  if (response_id == GTK_RESPONSE_OK)
+    save_color (GTK_COLOR_CHOOSER_DIALOG (dialog));
 }
 
 static void
@@ -104,6 +105,22 @@ gtk_color_chooser_dialog_init (GtkColorChooserDialog *cc)
   cc->priv = gtk_color_chooser_dialog_get_instance_private (cc);
 
   gtk_widget_init_template (GTK_WIDGET (cc));
+  gtk_dialog_set_use_header_bar_from_setting (GTK_DIALOG (cc));
+  gtk_dialog_add_buttons (GTK_DIALOG (cc),
+                          _("_Cancel"), GTK_RESPONSE_CANCEL,
+                          _("_Select"), GTK_RESPONSE_OK,
+                          NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (cc), GTK_RESPONSE_OK);
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  gtk_dialog_set_alternative_button_order (GTK_DIALOG (cc),
+                                           GTK_RESPONSE_OK,
+                                           GTK_RESPONSE_CANCEL,
+                                           -1);
+G_GNUC_END_IGNORE_DEPRECATIONS
+
+  g_signal_connect (cc, "response",
+                    G_CALLBACK (gtk_color_chooser_dialog_response), NULL);
 }
 
 static void
@@ -203,9 +220,6 @@ gtk_color_chooser_dialog_class_init (GtkColorChooserDialogClass *class)
   gtk_widget_class_set_template_from_resource (widget_class,
 					       "/org/gtk/libgtk/gtkcolorchooserdialog.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkColorChooserDialog, chooser);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkColorChooserDialog, cancel_button);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkColorChooserDialog, select_button);
-  gtk_widget_class_bind_template_callback (widget_class, selected_cb);
   gtk_widget_class_bind_template_callback (widget_class, propagate_notify);
   gtk_widget_class_bind_template_callback (widget_class, color_activated_cb);
 }
