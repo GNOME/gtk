@@ -1680,6 +1680,7 @@ _gdk_quartz_screen_get_setting (GdkScreen   *screen,
       g_value_set_boolean (value, TRUE);
 
       GDK_QUARTZ_RELEASE_POOL;
+    }
   
   /* FIXME: Add more settings */
 
