@@ -142,8 +142,11 @@ activate_run (GSimpleAction *action,
           cbdata->model = model;
           cbdata->path = gtk_tree_model_get_path (model, &iter);
 
-          gtk_window_set_transient_for (GTK_WINDOW (demo), GTK_WINDOW (window));
-          gtk_window_set_modal (GTK_WINDOW (demo), TRUE);
+          if (gtk_widget_is_toplevel (demo))
+            {
+              gtk_window_set_transient_for (GTK_WINDOW (demo), GTK_WINDOW (window));
+              gtk_window_set_modal (GTK_WINDOW (demo), TRUE);
+            }
 
           g_signal_connect (demo, "destroy",
                             G_CALLBACK (window_closed_cb), cbdata);
