@@ -59,7 +59,7 @@
             </child>
           </object>
           <packing>
-            <property name="pack_type">end</property>
+            <property name="pack_type">start</property>
           </packing>
         </child>
       </object>
