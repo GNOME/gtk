@@ -3557,8 +3557,10 @@ on_titlebar_title_notify (GtkHeaderBar *titlebar,
                           GParamSpec   *pspec,
                           GtkWindow    *self)
 {
-  gtk_window_set_title_internal (self, gtk_header_bar_get_title (titlebar),
-                                 FALSE);
+  const gchar *title;
+
+  title = gtk_header_bar_get_title (titlebar);
+  gtk_window_set_title_internal (self, title, FALSE);
 }
 
 /**
@@ -3595,8 +3597,12 @@ gtk_window_set_titlebar (GtkWindow *window,
 
   priv->title_box = titlebar;
   gtk_widget_set_parent (priv->title_box, widget);
-  g_signal_connect (titlebar, "notify::title",
-                    G_CALLBACK (on_titlebar_title_notify), window);
+  if (GTK_IS_HEADER_BAR (titlebar))
+    {
+      g_signal_connect (titlebar, "notify::title",
+                        G_CALLBACK (on_titlebar_title_notify), window);
+      on_titlebar_title_notify (GTK_HEADER_BAR (titlebar), NULL, window);
+    }
 
   visual = gdk_screen_get_rgba_visual (gtk_widget_get_screen (widget));
   if (visual)
