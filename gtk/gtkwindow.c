@@ -558,6 +558,9 @@ static void gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
 
 static void ensure_state_flag_backdrop (GtkWidget *widget);
 static void unset_titlebar (GtkWindow *window);
+static void on_titlebar_title_notify (GtkHeaderBar *titlebar,
+                                      GParamSpec   *pspec,
+                                      GtkWindow    *self);
 
 G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_BIN,
                          G_ADD_PRIVATE (GtkWindow)
@@ -3472,6 +3475,11 @@ unset_titlebar (GtkWindow *window)
 {
   GtkWindowPrivate *priv = window->priv;
 
+  if (priv->titlebar != NULL)
+    g_signal_handlers_disconnect_by_func (priv->titlebar,
+                                          on_titlebar_title_notify,
+                                          window);
+
   if (priv->title_box != NULL)
     {
       gtk_widget_unparent (priv->title_box);
@@ -3546,8 +3554,8 @@ gdk_window_enable_csd (GtkWindow *window)
 
 static void
 on_titlebar_title_notify (GtkHeaderBar *titlebar,
-                          GParamSpec *pspec,
-                          GtkWindow *self)
+                          GParamSpec   *pspec,
+                          GtkWindow    *self)
 {
   gtk_window_set_title_internal (self, gtk_header_bar_get_title (titlebar),
                                  FALSE);
