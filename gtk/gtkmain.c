@@ -696,18 +696,7 @@ do_post_parse_initialization (int    *argc,
   if (debug_flags & GTK_DEBUG_UPDATES)
     gdk_window_set_debug_updates (TRUE);
 
-  {
-  /* Translate to default:RTL if you want your widgets
-   * to be RTL, otherwise translate to default:LTR.
-   * Do *not* translate it to "predefinito:LTR", if it
-   * it isn't default:LTR or default:RTL it will not work 
-   */
-    char *e = _("default:LTR");
-    if (strcmp (e, "default:RTL")==0) 
-      gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
-    else if (strcmp (e, "default:LTR"))
-      g_warning ("Whoever translated default:LTR did so wrongly.\n");
-  }
+  gtk_widget_set_default_direction (gtk_get_locale_direction ());
 
   _gtk_ensure_resources ();
 
@@ -1112,6 +1101,54 @@ gtk_init_check_abi_check (int *argc, char ***argv, int num_checks, size_t sizeof
 }
 
 #endif
+
+/**
+ * gtk_get_locale_direction:
+ *
+ * Get the direction of the current locale. This is the expected
+ * reading direction for text and UI.
+ *
+ * This function depends on the current locale being set with
+ * setlocale() and will default to setting the %GTK_TEXT_DIR_LTR
+ * direction otherwise. %GTK_TEXT_DIR_NONE will never be returned.
+ *
+ * GTK+ sets the default text direction according to the locale
+ * during gtk_init(), and you should normally use
+ * gtk_widget_get_direction() or gtk_widget_get_default_direction()
+ * to obtain the current direcion.
+ *
+ * This function is only needed rare cases when the locale is
+ * changed after GTK+ has already been initialized. In this case,
+ * you can use it to update the default text direction as follows:
+ *
+ * |[
+ * setlocale (LC_ALL, new_locale);
+ * direction = gtk_get_locale_direction ();
+ * gtk_widget_set_default_direction (direction);
+ * ]|
+ *
+ * Returns: the #GtkTextDirection of the current locale
+ *
+ * Since: 3.12
+ */
+GtkTextDirection
+gtk_get_locale_direction (void)
+{
+  gchar            *e   = _("default:LTR");
+  GtkTextDirection  dir = GTK_TEXT_DIR_LTR;
+
+  /* Translate to default:RTL if you want your widgets
+   * to be RTL, otherwise translate to default:LTR.
+   * Do *not* translate it to "predefinito:LTR", if it
+   * it isn't default:LTR or default:RTL it will not work
+   */
+  if (g_strcmp0 (e, "default:RTL") == 0)
+    dir = GTK_TEXT_DIR_RTL;
+  else if (g_strcmp0 (e, "default:LTR") != 0)
+    g_warning ("Whoever translated default:LTR did so wrongly. Defaulting to LTR.\n");
+
+  return dir;
+}
 
 /**
  * gtk_get_default_language:

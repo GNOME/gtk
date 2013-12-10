@@ -143,8 +143,15 @@ GDK_AVAILABLE_IN_ALL
 void           gtk_disable_setlocale    (void);
 GDK_AVAILABLE_IN_ALL
 PangoLanguage *gtk_get_default_language (void);
+GDK_AVAILABLE_IN_3_12
+GtkTextDirection gtk_get_locale_direction (void);
 GDK_AVAILABLE_IN_ALL
 gboolean       gtk_events_pending       (void);
+
+#ifndef GTK_DISABLE_DEPRECATED
+void     gtk_exit                 (gint    error_code);
+gchar *        gtk_set_locale           (void);
+#endif /* GTK_DISABLE_DEPRECATED */
 
 GDK_AVAILABLE_IN_ALL
 void       gtk_main_do_event       (GdkEvent           *event);
