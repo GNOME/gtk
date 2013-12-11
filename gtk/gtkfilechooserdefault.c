@@ -303,7 +303,6 @@ typedef struct {
   guint sort_directories_first : 1;
   guint do_overwrite_confirmation : 1;
   guint list_sort_ascending : 1;
-  guint changing_folder : 1;
   guint shortcuts_current_folder_active : 1;
   guint show_size_column : 1;
   guint create_folders : 1;
