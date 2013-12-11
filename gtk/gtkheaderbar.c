@@ -152,11 +152,11 @@ init_sizing_box (GtkHeaderBar *bar)
   priv->subtitle_sizing_label = w;
 }
 
-GtkWidget *
-_gtk_header_bar_create_title_box (const char *title,
-                                  const char *subtitle,
-                                  GtkWidget **ret_title_label,
-                                  GtkWidget **ret_subtitle_label)
+static GtkWidget *
+create_title_box (const char *title,
+                  const char *subtitle,
+                  GtkWidget **ret_title_label,
+                  GtkWidget **ret_subtitle_label)
 {
   GtkWidget *label_box;
   GtkWidget *title_label;
@@ -372,10 +372,10 @@ construct_label_box (GtkHeaderBar *bar)
 
   g_assert (priv->label_box == NULL);
 
-  priv->label_box = _gtk_header_bar_create_title_box (priv->title,
-                                                      priv->subtitle,
-                                                      &priv->title_label,
-                                                      &priv->subtitle_label);
+  priv->label_box = create_title_box (priv->title,
+                                      priv->subtitle,
+                                      &priv->title_label,
+                                      &priv->subtitle_label);
   gtk_widget_set_parent (priv->label_box, GTK_WIDGET (bar));
 }
 

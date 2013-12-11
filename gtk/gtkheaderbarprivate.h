@@ -20,9 +20,4 @@
 #ifndef __GTK_HEADER_BAR_PRIVATE_H__
 #define __GTK_HEADER_BAR_PRIVATE_H__
 
-GtkWidget * _gtk_header_bar_create_title_box (const char *title,
-                                              const char *subtitle,
-                                              GtkWidget **ret_title_label,
-                                              GtkWidget **ret_subtitle_label);
-
 #endif /* __GTK_HEADER_BAR_PRIVATE_H__ */
