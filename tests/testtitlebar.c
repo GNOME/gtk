@@ -23,12 +23,8 @@ main (int argc, char *argv[])
   gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (header), TRUE);
   gtk_style_context_add_class (gtk_widget_get_style_context (header), "titlebar");
 
-  title = gtk_label_new (NULL);
-  gtk_label_set_markup (GTK_LABEL (title), "<b>Welcome to Facebook - Log in, sign up or learn more</b>");
-  gtk_label_set_ellipsize (GTK_LABEL (title), PANGO_ELLIPSIZE_END);
-  gtk_widget_set_margin_start (title, 6);
-  gtk_widget_set_margin_end (title, 6);
-  gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header), title);
+  gtk_header_bar_set_title (GTK_HEADER_BAR (header), "Welcome to Facebook - Log in, sign up or learn more");
+  gtk_header_bar_set_has_subtitle (GTK_HEADER_BAR (header), FALSE);
 
   button = gtk_button_new ();
   icon = g_themed_icon_new ("mail-send-receive-symbolic");
