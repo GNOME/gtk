@@ -396,6 +396,19 @@ blow_cache_cb  (gpointer user_data)
   return G_SOURCE_REMOVE;
 }
 
+static gboolean
+context_is_unscaled (cairo_t *cr)
+{
+  cairo_matrix_t matrix;
+  gdouble x, y;
+
+  x = y = 1;
+  cairo_get_matrix (cr, &matrix);
+  cairo_matrix_transform_distance (&matrix, &x, &y);
+
+  return x == 1 && y == 1;
+}
+
 
 void
 _gtk_pixel_cache_draw (GtkPixelCache *cache,
@@ -420,7 +433,7 @@ _gtk_pixel_cache_draw (GtkPixelCache *cache,
   _gtk_pixel_cache_set_position (cache, view_rect, canvas_rect);
   _gtk_pixel_cache_repaint (cache, draw, view_rect, canvas_rect, user_data);
 
-  if (cache->surface &&
+  if (cache->surface && context_is_unscaled (cr) &&
       /* Don't use backing surface if rendering elsewhere */
       cairo_surface_get_type (cache->surface) == cairo_surface_get_type (cairo_get_target (cr)))
     {
