@@ -91,13 +91,6 @@ void         gtk_header_bar_set_show_close_button (GtkHeaderBar *bar,
                                                    gboolean      setting);
 
 GDK_AVAILABLE_IN_3_12
-gboolean     gtk_header_bar_get_show_fallback_app_menu (GtkHeaderBar *bar);
-
-GDK_AVAILABLE_IN_3_12
-void         gtk_header_bar_set_show_fallback_app_menu (GtkHeaderBar *bar,
-							gboolean      setting);
-
-GDK_AVAILABLE_IN_3_12
 void         gtk_header_bar_set_has_subtitle (GtkHeaderBar *bar,
                                               gboolean      setting);
 GDK_AVAILABLE_IN_3_12
