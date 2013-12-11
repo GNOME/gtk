@@ -5377,30 +5377,18 @@ static GtkWidget *
 create_titlebar (GtkWindow *window)
 {
   GtkWindowPrivate *priv = window->priv;
-  GtkWidget *label;
   GtkWidget *titlebar;
   GtkStyleContext *context;
-  gchar *title;
 
   titlebar = gtk_header_bar_new ();
   g_object_set (titlebar,
                 "spacing", 0,
+                "title", priv->title ? priv->title : get_default_title (),
+                "has-subtitle", FALSE,
                 NULL);
   context = gtk_widget_get_style_context (titlebar);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_TITLEBAR);
   gtk_style_context_add_class (context, "default-decoration");
-
-  title = g_markup_printf_escaped ("<b>%s</b>",
-                                   priv->title ? priv->title : get_default_title ());
-  label = gtk_label_new (title);
-  g_free (title);
-  g_object_set (label,
-                "use-markup", TRUE,
-                "ellipsize", PANGO_ELLIPSIZE_END,
-                "margin", 6,
-                NULL);
-
-  gtk_header_bar_set_custom_title (GTK_HEADER_BAR (titlebar), label);
 
   return titlebar;
 }
