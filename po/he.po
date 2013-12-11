@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-23 17:10+0300\n"
-"PO-Revision-Date: 2013-09-23 17:10+0300\n"
+"POT-Creation-Date: 2013-12-11 13:36+0200\n"
+"PO-Revision-Date: 2013-12-11 13:37+0200\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -461,17 +461,17 @@ msgstr "Size of the palette in 8 bit mode"
 msgid "COLORS"
 msgstr "COLORS"
 
-#: ../gdk/x11/gdkapplaunchcontext-x11.c:292
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:296
 #, c-format
 msgid "Starting %s"
 msgstr "%s מתחיל"
 
-#: ../gdk/x11/gdkapplaunchcontext-x11.c:305
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:309
 #, c-format
 msgid "Opening %s"
 msgstr "%s נפתח"
 
-#: ../gdk/x11/gdkapplaunchcontext-x11.c:310
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:314
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
@@ -577,6 +577,425 @@ msgstr "מפעיל את הרשומה"
 msgctxt "Action description"
 msgid "Activates the expander"
 msgstr "מפעיל את המרחיב"
+
+#. FIXME these need accelerators when appropriate, and
+#. * need the mnemonics to be rationalized
+#.
+#: ../gtk/a11y/gtkimageaccessible.c:52 ../gtk/deprecated/gtkstock.c:342
+msgctxt "Stock label"
+msgid "_About"
+msgstr "על _אודות"
+
+#: ../gtk/a11y/gtkimageaccessible.c:53 ../gtk/deprecated/gtkstock.c:343
+msgctxt "Stock label"
+msgid "_Add"
+msgstr "הו_ספה"
+
+#: ../gtk/a11y/gtkimageaccessible.c:54 ../gtk/deprecated/gtkstock.c:345
+msgctxt "Stock label"
+msgid "_Bold"
+msgstr "_מודגש"
+
+#: ../gtk/a11y/gtkimageaccessible.c:55 ../gtk/deprecated/gtkstock.c:347
+msgctxt "Stock label"
+msgid "_CD-ROM"
+msgstr "_תקליטור"
+
+#: ../gtk/a11y/gtkimageaccessible.c:56 ../gtk/deprecated/gtkstock.c:348
+msgctxt "Stock label"
+msgid "_Clear"
+msgstr "_פינוי"
+
+#: ../gtk/a11y/gtkimageaccessible.c:57 ../gtk/deprecated/gtkstock.c:349
+msgctxt "Stock label"
+msgid "_Close"
+msgstr "_סגירה"
+
+#: ../gtk/a11y/gtkimageaccessible.c:58 ../gtk/gtkwindow.c:5316
+#: ../gtk/gtkwindow.c:8243
+msgid "Minimize"
+msgstr "מזעור"
+
+#: ../gtk/a11y/gtkimageaccessible.c:59 ../gtk/gtkwindow.c:5337
+#: ../gtk/gtkwindow.c:8251
+msgid "Maximize"
+msgstr "הגדלה"
+
+#: ../gtk/a11y/gtkimageaccessible.c:60 ../gtk/gtkwindow.c:5337
+msgid "Restore"
+msgstr "שחזור"
+
+#: ../gtk/a11y/gtkimageaccessible.c:61 ../gtk/deprecated/gtkstock.c:352
+msgctxt "Stock label"
+msgid "_Copy"
+msgstr "ה_עתקה"
+
+#: ../gtk/a11y/gtkimageaccessible.c:62 ../gtk/deprecated/gtkstock.c:353
+msgctxt "Stock label"
+msgid "Cu_t"
+msgstr "_גזירה"
+
+#: ../gtk/a11y/gtkimageaccessible.c:63 ../gtk/deprecated/gtkstock.c:354
+msgctxt "Stock label"
+msgid "_Delete"
+msgstr "מ_חיקה"
+
+#: ../gtk/a11y/gtkimageaccessible.c:64 ../gtk/deprecated/gtkstock.c:336
+msgctxt "Stock label"
+msgid "Error"
+msgstr "שגיאה"
+
+#. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
+#: ../gtk/a11y/gtkimageaccessible.c:65 ../gtk/deprecated/gtkstock.c:334
+msgctxt "Stock label"
+msgid "Information"
+msgstr "מידע"
+
+#: ../gtk/a11y/gtkimageaccessible.c:66 ../gtk/deprecated/gtkstock.c:337
+msgctxt "Stock label"
+msgid "Question"
+msgstr "שאלה"
+
+#: ../gtk/a11y/gtkimageaccessible.c:67 ../gtk/deprecated/gtkstock.c:335
+msgctxt "Stock label"
+msgid "Warning"
+msgstr "אזהרה"
+
+#: ../gtk/a11y/gtkimageaccessible.c:68 ../gtk/deprecated/gtkstock.c:357
+msgctxt "Stock label"
+msgid "_Execute"
+msgstr "ה_פעלה"
+
+# hebrew note: "תיקייה" is "folder", but there is no better word for
+# "directory"
+#: ../gtk/a11y/gtkimageaccessible.c:69 ../gtk/deprecated/gtkstock.c:359
+msgctxt "Stock label"
+msgid "_File"
+msgstr "_קובץ"
+
+#: ../gtk/a11y/gtkimageaccessible.c:70 ../gtk/deprecated/gtkstock.c:360
+msgctxt "Stock label"
+msgid "_Find"
+msgstr "_חיפוש"
+
+#: ../gtk/a11y/gtkimageaccessible.c:71 ../gtk/deprecated/gtkstock.c:361
+msgctxt "Stock label"
+msgid "Find and _Replace"
+msgstr "חיפוש וה_חלפה"
+
+#: ../gtk/a11y/gtkimageaccessible.c:72 ../gtk/deprecated/gtkstock.c:362
+msgctxt "Stock label"
+msgid "_Floppy"
+msgstr "ת_קליטון"
+
+#: ../gtk/a11y/gtkimageaccessible.c:73 ../gtk/deprecated/gtkstock.c:363
+msgctxt "Stock label"
+msgid "_Fullscreen"
+msgstr "מסך _מלא"
+
+#. This is a navigation label as in "go to the bottom of the page"
+#: ../gtk/a11y/gtkimageaccessible.c:74 ../gtk/deprecated/gtkstock.c:366
+msgctxt "Stock label, navigation"
+msgid "_Bottom"
+msgstr "_תחתון"
+
+#. This is a navigation label as in "go to the first page"
+#: ../gtk/a11y/gtkimageaccessible.c:75 ../gtk/deprecated/gtkstock.c:368
+msgctxt "Stock label, navigation"
+msgid "_First"
+msgstr "_ראשון"
+
+#. This is a navigation label as in "go to the last page"
+#: ../gtk/a11y/gtkimageaccessible.c:76 ../gtk/deprecated/gtkstock.c:370
+msgctxt "Stock label, navigation"
+msgid "_Last"
+msgstr "_אחרון"
+
+#. This is a navigation label as in "go to the top of the page"
+#: ../gtk/a11y/gtkimageaccessible.c:77 ../gtk/deprecated/gtkstock.c:372
+msgctxt "Stock label, navigation"
+msgid "_Top"
+msgstr "_עליון"
+
+#. This is a navigation label as in "go back"
+#: ../gtk/a11y/gtkimageaccessible.c:78 ../gtk/deprecated/gtkstock.c:374
+msgctxt "Stock label, navigation"
+msgid "_Back"
+msgstr "_חזרה"
+
+#. This is a navigation label as in "go down"
+#: ../gtk/a11y/gtkimageaccessible.c:79 ../gtk/deprecated/gtkstock.c:376
+msgctxt "Stock label, navigation"
+msgid "_Down"
+msgstr "_מטה"
+
+#. This is a navigation label as in "go forward"
+#: ../gtk/a11y/gtkimageaccessible.c:80 ../gtk/deprecated/gtkstock.c:378
+msgctxt "Stock label, navigation"
+msgid "_Forward"
+msgstr "_קדימה"
+
+#. This is a navigation label as in "go up"
+#: ../gtk/a11y/gtkimageaccessible.c:81 ../gtk/deprecated/gtkstock.c:380
+msgctxt "Stock label, navigation"
+msgid "_Up"
+msgstr "מ_עלה"
+
+#: ../gtk/a11y/gtkimageaccessible.c:82 ../gtk/deprecated/gtkstock.c:381
+msgctxt "Stock label"
+msgid "_Hard Disk"
+msgstr "_כונן קשיח"
+
+#: ../gtk/a11y/gtkimageaccessible.c:83 ../gtk/deprecated/gtkstock.c:382
+msgctxt "Stock label"
+msgid "_Help"
+msgstr "_עזרה"
+
+#: ../gtk/a11y/gtkimageaccessible.c:84 ../gtk/deprecated/gtkstock.c:383
+msgctxt "Stock label"
+msgid "_Home"
+msgstr "_בית"
+
+#: ../gtk/a11y/gtkimageaccessible.c:85 ../gtk/deprecated/gtkstock.c:384
+msgctxt "Stock label"
+msgid "Increase Indent"
+msgstr "הגדלת זיח"
+
+#: ../gtk/a11y/gtkimageaccessible.c:86 ../gtk/deprecated/gtkstock.c:387
+msgctxt "Stock label"
+msgid "_Information"
+msgstr "_מידע"
+
+#: ../gtk/a11y/gtkimageaccessible.c:87 ../gtk/deprecated/gtkstock.c:388
+msgctxt "Stock label"
+msgid "_Italic"
+msgstr "_נטוי"
+
+#: ../gtk/a11y/gtkimageaccessible.c:88 ../gtk/deprecated/gtkstock.c:389
+msgctxt "Stock label"
+msgid "_Jump to"
+msgstr "_קפיצה אל"
+
+#. This is about text justification, "centered text"
+#: ../gtk/a11y/gtkimageaccessible.c:89 ../gtk/deprecated/gtkstock.c:391
+msgctxt "Stock label"
+msgid "_Center"
+msgstr "מ_רכז"
+
+# hebrew note: "תיקייה" is "folder", but there is no better word for
+# "directory"
+#. This is about text justification
+#: ../gtk/a11y/gtkimageaccessible.c:90 ../gtk/deprecated/gtkstock.c:393
+msgctxt "Stock label"
+msgid "_Fill"
+msgstr "_מילוי"
+
+#. This is about text justification, "left-justified text"
+#: ../gtk/a11y/gtkimageaccessible.c:91 ../gtk/deprecated/gtkstock.c:395
+msgctxt "Stock label"
+msgid "_Left"
+msgstr "_שמאל"
+
+#. This is about text justification, "right-justified text"
+#: ../gtk/a11y/gtkimageaccessible.c:92 ../gtk/deprecated/gtkstock.c:397
+msgctxt "Stock label"
+msgid "_Right"
+msgstr "_ימין"
+
+#: ../gtk/a11y/gtkimageaccessible.c:93 ../gtk/deprecated/gtkstock.c:364
+msgctxt "Stock label"
+msgid "_Leave Fullscreen"
+msgstr "י_ציאה ממסך מלא"
+
+#. Media label, as in "fast forward"
+#: ../gtk/a11y/gtkimageaccessible.c:94 ../gtk/deprecated/gtkstock.c:400
+msgctxt "Stock label, media"
+msgid "_Forward"
+msgstr "_קדימה"
+
+#. Media label, as in "next song"
+#: ../gtk/a11y/gtkimageaccessible.c:95 ../gtk/deprecated/gtkstock.c:402
+msgctxt "Stock label, media"
+msgid "_Next"
+msgstr "_הבא"
+
+#. Media label, as in "pause music"
+#: ../gtk/a11y/gtkimageaccessible.c:96 ../gtk/deprecated/gtkstock.c:404
+msgctxt "Stock label, media"
+msgid "P_ause"
+msgstr "ה_שהיה"
+
+#. Media label, as in "play music"
+#: ../gtk/a11y/gtkimageaccessible.c:97 ../gtk/deprecated/gtkstock.c:406
+msgctxt "Stock label, media"
+msgid "_Play"
+msgstr "_ניגון"
+
+#. Media label, as in  "previous song"
+#: ../gtk/a11y/gtkimageaccessible.c:98 ../gtk/deprecated/gtkstock.c:408
+msgctxt "Stock label, media"
+msgid "Pre_vious"
+msgstr "ה_קודם"
+
+#. Media label
+#: ../gtk/a11y/gtkimageaccessible.c:99 ../gtk/deprecated/gtkstock.c:410
+msgctxt "Stock label, media"
+msgid "_Record"
+msgstr "הק_לטה"
+
+#. Media label
+#: ../gtk/a11y/gtkimageaccessible.c:100 ../gtk/deprecated/gtkstock.c:412
+msgctxt "Stock label, media"
+msgid "R_ewind"
+msgstr "הרצה _לאחור"
+
+#. Media label
+#: ../gtk/a11y/gtkimageaccessible.c:101 ../gtk/deprecated/gtkstock.c:414
+msgctxt "Stock label, media"
+msgid "_Stop"
+msgstr "_עצירה"
+
+#: ../gtk/a11y/gtkimageaccessible.c:102 ../gtk/deprecated/gtkstock.c:415
+msgctxt "Stock label"
+msgid "_Network"
+msgstr "_רשת"
+
+#: ../gtk/a11y/gtkimageaccessible.c:103 ../gtk/deprecated/gtkstock.c:416
+msgctxt "Stock label"
+msgid "_New"
+msgstr "_חדש"
+
+#: ../gtk/a11y/gtkimageaccessible.c:104 ../gtk/deprecated/gtkstock.c:419
+msgctxt "Stock label"
+msgid "_Open"
+msgstr "_פתיחה"
+
+#: ../gtk/a11y/gtkimageaccessible.c:105 ../gtk/deprecated/gtkstock.c:429
+msgctxt "Stock label"
+msgid "_Paste"
+msgstr "ה_דבקה"
+
+#: ../gtk/a11y/gtkimageaccessible.c:106 ../gtk/deprecated/gtkstock.c:431
+msgctxt "Stock label"
+msgid "_Print"
+msgstr "_הדפסה"
+
+#: ../gtk/a11y/gtkimageaccessible.c:107 ../gtk/deprecated/gtkstock.c:432
+msgctxt "Stock label"
+msgid "Print Pre_view"
+msgstr "_תצוגה מקדימה"
+
+#: ../gtk/a11y/gtkimageaccessible.c:108 ../gtk/deprecated/gtkstock.c:433
+msgctxt "Stock label"
+msgid "_Properties"
+msgstr "_מאפיינים"
+
+#: ../gtk/a11y/gtkimageaccessible.c:109 ../gtk/deprecated/gtkstock.c:434
+msgctxt "Stock label"
+msgid "_Quit"
+msgstr "י_ציאה"
+
+#: ../gtk/a11y/gtkimageaccessible.c:110 ../gtk/deprecated/gtkstock.c:435
+msgctxt "Stock label"
+msgid "_Redo"
+msgstr "_ביצוע שוב"
+
+#: ../gtk/a11y/gtkimageaccessible.c:111 ../gtk/deprecated/gtkstock.c:436
+msgctxt "Stock label"
+msgid "_Refresh"
+msgstr "_רענון"
+
+#: ../gtk/a11y/gtkimageaccessible.c:112 ../gtk/deprecated/gtkstock.c:437
+msgctxt "Stock label"
+msgid "_Remove"
+msgstr "ה_סרה"
+
+#: ../gtk/a11y/gtkimageaccessible.c:113 ../gtk/deprecated/gtkstock.c:438
+msgctxt "Stock label"
+msgid "_Revert"
+msgstr "ה_חזרה"
+
+#: ../gtk/a11y/gtkimageaccessible.c:114 ../gtk/deprecated/gtkstock.c:439
+msgctxt "Stock label"
+msgid "_Save"
+msgstr "_שמירה"
+
+# hebrew note: note that "key" has a different meaning - "מפתח"
+#: ../gtk/a11y/gtkimageaccessible.c:115 ../gtk/deprecated/gtkstock.c:440
+msgctxt "Stock label"
+msgid "Save _As"
+msgstr "שמירה _בשם"
+
+#: ../gtk/a11y/gtkimageaccessible.c:116 ../gtk/deprecated/gtkstock.c:441
+msgctxt "Stock label"
+msgid "Select _All"
+msgstr "בחירת ה_כול"
+
+#. Sorting direction
+#: ../gtk/a11y/gtkimageaccessible.c:117 ../gtk/deprecated/gtkstock.c:445
+msgctxt "Stock label"
+msgid "_Ascending"
+msgstr "סדר _עולה"
+
+#. Sorting direction
+#: ../gtk/a11y/gtkimageaccessible.c:118 ../gtk/deprecated/gtkstock.c:447
+msgctxt "Stock label"
+msgid "_Descending"
+msgstr "סדר _יורד"
+
+#: ../gtk/a11y/gtkimageaccessible.c:119 ../gtk/deprecated/gtkstock.c:448
+msgctxt "Stock label"
+msgid "_Spell Check"
+msgstr "_בדיקת איות"
+
+#: ../gtk/a11y/gtkimageaccessible.c:120 ../gtk/deprecated/gtkstock.c:449
+msgctxt "Stock label"
+msgid "_Stop"
+msgstr "_עצירה"
+
+#. Font variant
+#: ../gtk/a11y/gtkimageaccessible.c:121 ../gtk/deprecated/gtkstock.c:451
+msgctxt "Stock label"
+msgid "_Strikethrough"
+msgstr "_קו חוצה"
+
+#. Font variant
+#: ../gtk/a11y/gtkimageaccessible.c:122 ../gtk/deprecated/gtkstock.c:454
+msgctxt "Stock label"
+msgid "_Underline"
+msgstr "קו _תחתי"
+
+#: ../gtk/a11y/gtkimageaccessible.c:123 ../gtk/deprecated/gtkstock.c:455
+msgctxt "Stock label"
+msgid "_Undo"
+msgstr "_ביטול"
+
+#: ../gtk/a11y/gtkimageaccessible.c:124 ../gtk/deprecated/gtkstock.c:385
+msgctxt "Stock label"
+msgid "Decrease Indent"
+msgstr "הקטנת זיח"
+
+#. Zoom
+#: ../gtk/a11y/gtkimageaccessible.c:125 ../gtk/deprecated/gtkstock.c:458
+msgctxt "Stock label"
+msgid "_Normal Size"
+msgstr "גודל _רגיל"
+
+#. Zoom
+#: ../gtk/a11y/gtkimageaccessible.c:126 ../gtk/deprecated/gtkstock.c:460
+msgctxt "Stock label"
+msgid "Best _Fit"
+msgstr "ההתאמה ה_טובה ביותר"
+
+#: ../gtk/a11y/gtkimageaccessible.c:127 ../gtk/deprecated/gtkstock.c:461
+msgctxt "Stock label"
+msgid "Zoom _In"
+msgstr "הת_קרבות"
+
+#: ../gtk/a11y/gtkimageaccessible.c:128 ../gtk/deprecated/gtkstock.c:462
+msgctxt "Stock label"
+msgid "Zoom _Out"
+msgstr "הת_רחקות"
 
 #: ../gtk/a11y/gtkmenuitemaccessible.c:442
 msgctxt "Action description"
@@ -746,10 +1165,10 @@ msgstr ""
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:192
 #: ../gtk/deprecated/gtkfontsel.c:1690 ../gtk/gtkfilechooserbutton.c:805
-#: ../gtk/gtkfilechooserdefault.c:5484 ../gtk/gtkmessagedialog.c:891
+#: ../gtk/gtkfilechooserdefault.c:5431 ../gtk/gtkmessagedialog.c:891
 #: ../gtk/gtkmessagedialog.c:910 ../gtk/gtkmountoperation.c:529
 #: ../gtk/gtkprintbackend.c:747 ../gtk/gtkprinteroptionwidget.c:545
-#: ../gtk/gtkprintunixdialog.c:684 ../gtk/gtkappchooserdialog.ui.h:1
+#: ../gtk/gtkprintunixdialog.c:683 ../gtk/gtkappchooserdialog.ui.h:1
 #: ../gtk/gtkassistant.ui.h:5 ../gtk/gtkcolorchooserdialog.ui.h:2
 #: ../gtk/gtkfontchooserdialog.ui.h:2 ../gtk/gtkpagesetupunixdialog.ui.h:1
 #: ../gtk/gtkprintunixdialog.ui.h:2
@@ -807,69 +1226,15 @@ msgstr "_אישור"
 msgid "Font Selection"
 msgstr "בחירת גופן"
 
-#. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
-#: ../gtk/deprecated/gtkstock.c:334
-msgctxt "Stock label"
-msgid "Information"
-msgstr "מידע"
-
-#: ../gtk/deprecated/gtkstock.c:335
-msgctxt "Stock label"
-msgid "Warning"
-msgstr "אזהרה"
-
-#: ../gtk/deprecated/gtkstock.c:336
-msgctxt "Stock label"
-msgid "Error"
-msgstr "שגיאה"
-
-#: ../gtk/deprecated/gtkstock.c:337
-msgctxt "Stock label"
-msgid "Question"
-msgstr "שאלה"
-
-#. FIXME these need accelerators when appropriate, and
-#. * need the mnemonics to be rationalized
-#.
-#: ../gtk/deprecated/gtkstock.c:342
-msgctxt "Stock label"
-msgid "_About"
-msgstr "על _אודות"
-
-#: ../gtk/deprecated/gtkstock.c:343
-msgctxt "Stock label"
-msgid "_Add"
-msgstr "הו_ספה"
-
 #: ../gtk/deprecated/gtkstock.c:344
 msgctxt "Stock label"
 msgid "_Apply"
 msgstr "ה_חלה"
 
-#: ../gtk/deprecated/gtkstock.c:345
-msgctxt "Stock label"
-msgid "_Bold"
-msgstr "_מודגש"
-
 #: ../gtk/deprecated/gtkstock.c:346
 msgctxt "Stock label"
 msgid "_Cancel"
 msgstr "_ביטול"
-
-#: ../gtk/deprecated/gtkstock.c:347
-msgctxt "Stock label"
-msgid "_CD-ROM"
-msgstr "_תקליטור"
-
-#: ../gtk/deprecated/gtkstock.c:348
-msgctxt "Stock label"
-msgid "_Clear"
-msgstr "_פינוי"
-
-#: ../gtk/deprecated/gtkstock.c:349
-msgctxt "Stock label"
-msgid "_Close"
-msgstr "_סגירה"
 
 #: ../gtk/deprecated/gtkstock.c:350
 msgctxt "Stock label"
@@ -881,21 +1246,6 @@ msgctxt "Stock label"
 msgid "_Convert"
 msgstr "_המרה"
 
-#: ../gtk/deprecated/gtkstock.c:352
-msgctxt "Stock label"
-msgid "_Copy"
-msgstr "ה_עתקה"
-
-#: ../gtk/deprecated/gtkstock.c:353
-msgctxt "Stock label"
-msgid "Cu_t"
-msgstr "_גזירה"
-
-#: ../gtk/deprecated/gtkstock.c:354
-msgctxt "Stock label"
-msgid "_Delete"
-msgstr "מ_חיקה"
-
 #: ../gtk/deprecated/gtkstock.c:355
 msgctxt "Stock label"
 msgid "_Discard"
@@ -906,224 +1256,15 @@ msgctxt "Stock label"
 msgid "_Disconnect"
 msgstr "_ניתוק"
 
-#: ../gtk/deprecated/gtkstock.c:357
-msgctxt "Stock label"
-msgid "_Execute"
-msgstr "ה_פעלה"
-
 #: ../gtk/deprecated/gtkstock.c:358
 msgctxt "Stock label"
 msgid "_Edit"
 msgstr "_עריכה"
 
-# hebrew note: "תיקייה" is "folder", but there is no better word for
-# "directory"
-#: ../gtk/deprecated/gtkstock.c:359
-msgctxt "Stock label"
-msgid "_File"
-msgstr "_קובץ"
-
-#: ../gtk/deprecated/gtkstock.c:360
-msgctxt "Stock label"
-msgid "_Find"
-msgstr "_חיפוש"
-
-#: ../gtk/deprecated/gtkstock.c:361
-msgctxt "Stock label"
-msgid "Find and _Replace"
-msgstr "חיפוש וה_חלפה"
-
-#: ../gtk/deprecated/gtkstock.c:362
-msgctxt "Stock label"
-msgid "_Floppy"
-msgstr "ת_קליטון"
-
-#: ../gtk/deprecated/gtkstock.c:363
-msgctxt "Stock label"
-msgid "_Fullscreen"
-msgstr "מסך _מלא"
-
-#: ../gtk/deprecated/gtkstock.c:364
-msgctxt "Stock label"
-msgid "_Leave Fullscreen"
-msgstr "י_ציאה ממסך מלא"
-
-#. This is a navigation label as in "go to the bottom of the page"
-#: ../gtk/deprecated/gtkstock.c:366
-msgctxt "Stock label, navigation"
-msgid "_Bottom"
-msgstr "_תחתון"
-
-#. This is a navigation label as in "go to the first page"
-#: ../gtk/deprecated/gtkstock.c:368
-msgctxt "Stock label, navigation"
-msgid "_First"
-msgstr "_ראשון"
-
-#. This is a navigation label as in "go to the last page"
-#: ../gtk/deprecated/gtkstock.c:370
-msgctxt "Stock label, navigation"
-msgid "_Last"
-msgstr "_אחרון"
-
-#. This is a navigation label as in "go to the top of the page"
-#: ../gtk/deprecated/gtkstock.c:372
-msgctxt "Stock label, navigation"
-msgid "_Top"
-msgstr "_עליון"
-
-#. This is a navigation label as in "go back"
-#: ../gtk/deprecated/gtkstock.c:374
-msgctxt "Stock label, navigation"
-msgid "_Back"
-msgstr "_חזרה"
-
-#. This is a navigation label as in "go down"
-#: ../gtk/deprecated/gtkstock.c:376
-msgctxt "Stock label, navigation"
-msgid "_Down"
-msgstr "_מטה"
-
-#. This is a navigation label as in "go forward"
-#: ../gtk/deprecated/gtkstock.c:378
-msgctxt "Stock label, navigation"
-msgid "_Forward"
-msgstr "_קדימה"
-
-#. This is a navigation label as in "go up"
-#: ../gtk/deprecated/gtkstock.c:380
-msgctxt "Stock label, navigation"
-msgid "_Up"
-msgstr "מ_עלה"
-
-#: ../gtk/deprecated/gtkstock.c:381
-msgctxt "Stock label"
-msgid "_Hard Disk"
-msgstr "_כונן קשיח"
-
-#: ../gtk/deprecated/gtkstock.c:382
-msgctxt "Stock label"
-msgid "_Help"
-msgstr "_עזרה"
-
-#: ../gtk/deprecated/gtkstock.c:383
-msgctxt "Stock label"
-msgid "_Home"
-msgstr "_בית"
-
-#: ../gtk/deprecated/gtkstock.c:384
-msgctxt "Stock label"
-msgid "Increase Indent"
-msgstr "הגדלת זיח"
-
-#: ../gtk/deprecated/gtkstock.c:385
-msgctxt "Stock label"
-msgid "Decrease Indent"
-msgstr "הקטנת זיח"
-
 #: ../gtk/deprecated/gtkstock.c:386
 msgctxt "Stock label"
 msgid "_Index"
 msgstr "_אינדקס"
-
-#: ../gtk/deprecated/gtkstock.c:387
-msgctxt "Stock label"
-msgid "_Information"
-msgstr "_מידע"
-
-#: ../gtk/deprecated/gtkstock.c:388
-msgctxt "Stock label"
-msgid "_Italic"
-msgstr "_נטוי"
-
-#: ../gtk/deprecated/gtkstock.c:389
-msgctxt "Stock label"
-msgid "_Jump to"
-msgstr "_קפיצה אל"
-
-#. This is about text justification, "centered text"
-#: ../gtk/deprecated/gtkstock.c:391
-msgctxt "Stock label"
-msgid "_Center"
-msgstr "מ_רכז"
-
-# hebrew note: "תיקייה" is "folder", but there is no better word for
-# "directory"
-#. This is about text justification
-#: ../gtk/deprecated/gtkstock.c:393
-msgctxt "Stock label"
-msgid "_Fill"
-msgstr "_מילוי"
-
-#. This is about text justification, "left-justified text"
-#: ../gtk/deprecated/gtkstock.c:395
-msgctxt "Stock label"
-msgid "_Left"
-msgstr "_שמאל"
-
-#. This is about text justification, "right-justified text"
-#: ../gtk/deprecated/gtkstock.c:397
-msgctxt "Stock label"
-msgid "_Right"
-msgstr "_ימין"
-
-#. Media label, as in "fast forward"
-#: ../gtk/deprecated/gtkstock.c:400
-msgctxt "Stock label, media"
-msgid "_Forward"
-msgstr "_קדימה"
-
-#. Media label, as in "next song"
-#: ../gtk/deprecated/gtkstock.c:402
-msgctxt "Stock label, media"
-msgid "_Next"
-msgstr "_הבא"
-
-#. Media label, as in "pause music"
-#: ../gtk/deprecated/gtkstock.c:404
-msgctxt "Stock label, media"
-msgid "P_ause"
-msgstr "ה_שהיה"
-
-#. Media label, as in "play music"
-#: ../gtk/deprecated/gtkstock.c:406
-msgctxt "Stock label, media"
-msgid "_Play"
-msgstr "_ניגון"
-
-#. Media label, as in  "previous song"
-#: ../gtk/deprecated/gtkstock.c:408
-msgctxt "Stock label, media"
-msgid "Pre_vious"
-msgstr "ה_קודם"
-
-#. Media label
-#: ../gtk/deprecated/gtkstock.c:410
-msgctxt "Stock label, media"
-msgid "_Record"
-msgstr "הק_לטה"
-
-#. Media label
-#: ../gtk/deprecated/gtkstock.c:412
-msgctxt "Stock label, media"
-msgid "R_ewind"
-msgstr "הרצה _לאחור"
-
-#. Media label
-#: ../gtk/deprecated/gtkstock.c:414
-msgctxt "Stock label, media"
-msgid "_Stop"
-msgstr "_עצירה"
-
-#: ../gtk/deprecated/gtkstock.c:415
-msgctxt "Stock label"
-msgid "_Network"
-msgstr "_רשת"
-
-#: ../gtk/deprecated/gtkstock.c:416
-msgctxt "Stock label"
-msgid "_New"
-msgstr "_חדש"
 
 #: ../gtk/deprecated/gtkstock.c:417
 msgctxt "Stock label"
@@ -1134,11 +1275,6 @@ msgstr "_לא"
 msgctxt "Stock label"
 msgid "_OK"
 msgstr "_אישור"
-
-#: ../gtk/deprecated/gtkstock.c:419
-msgctxt "Stock label"
-msgid "_Open"
-msgstr "_פתיחה"
 
 #. Page orientation
 #: ../gtk/deprecated/gtkstock.c:421
@@ -1169,71 +1305,10 @@ msgctxt "Stock label"
 msgid "Page Set_up"
 msgstr "ה_גדרות עמוד"
 
-#: ../gtk/deprecated/gtkstock.c:429
-msgctxt "Stock label"
-msgid "_Paste"
-msgstr "ה_דבקה"
-
 #: ../gtk/deprecated/gtkstock.c:430
 msgctxt "Stock label"
 msgid "_Preferences"
 msgstr "_העדפות"
-
-#: ../gtk/deprecated/gtkstock.c:431
-msgctxt "Stock label"
-msgid "_Print"
-msgstr "_הדפסה"
-
-#: ../gtk/deprecated/gtkstock.c:432
-msgctxt "Stock label"
-msgid "Print Pre_view"
-msgstr "_תצוגה מקדימה"
-
-#: ../gtk/deprecated/gtkstock.c:433
-msgctxt "Stock label"
-msgid "_Properties"
-msgstr "_מאפיינים"
-
-#: ../gtk/deprecated/gtkstock.c:434
-msgctxt "Stock label"
-msgid "_Quit"
-msgstr "י_ציאה"
-
-#: ../gtk/deprecated/gtkstock.c:435
-msgctxt "Stock label"
-msgid "_Redo"
-msgstr "_ביצוע שוב"
-
-#: ../gtk/deprecated/gtkstock.c:436
-msgctxt "Stock label"
-msgid "_Refresh"
-msgstr "_רענון"
-
-#: ../gtk/deprecated/gtkstock.c:437
-msgctxt "Stock label"
-msgid "_Remove"
-msgstr "ה_סרה"
-
-#: ../gtk/deprecated/gtkstock.c:438
-msgctxt "Stock label"
-msgid "_Revert"
-msgstr "ה_חזרה"
-
-#: ../gtk/deprecated/gtkstock.c:439
-msgctxt "Stock label"
-msgid "_Save"
-msgstr "_שמירה"
-
-# hebrew note: note that "key" has a different meaning - "מפתח"
-#: ../gtk/deprecated/gtkstock.c:440
-msgctxt "Stock label"
-msgid "Save _As"
-msgstr "שמירה _בשם"
-
-#: ../gtk/deprecated/gtkstock.c:441
-msgctxt "Stock label"
-msgid "Select _All"
-msgstr "בחירת ה_כול"
 
 #: ../gtk/deprecated/gtkstock.c:442
 msgctxt "Stock label"
@@ -1245,76 +1320,15 @@ msgctxt "Stock label"
 msgid "_Font"
 msgstr "_גופן"
 
-#. Sorting direction
-#: ../gtk/deprecated/gtkstock.c:445
-msgctxt "Stock label"
-msgid "_Ascending"
-msgstr "סדר _עולה"
-
-#. Sorting direction
-#: ../gtk/deprecated/gtkstock.c:447
-msgctxt "Stock label"
-msgid "_Descending"
-msgstr "סדר _יורד"
-
-#: ../gtk/deprecated/gtkstock.c:448
-msgctxt "Stock label"
-msgid "_Spell Check"
-msgstr "_בדיקת איות"
-
-#: ../gtk/deprecated/gtkstock.c:449
-msgctxt "Stock label"
-msgid "_Stop"
-msgstr "_עצירה"
-
-#. Font variant
-#: ../gtk/deprecated/gtkstock.c:451
-msgctxt "Stock label"
-msgid "_Strikethrough"
-msgstr "_קו חוצה"
-
 #: ../gtk/deprecated/gtkstock.c:452
 msgctxt "Stock label"
 msgid "_Undelete"
 msgstr "_ביטול מחיקה"
 
-#. Font variant
-#: ../gtk/deprecated/gtkstock.c:454
-msgctxt "Stock label"
-msgid "_Underline"
-msgstr "קו _תחתי"
-
-#: ../gtk/deprecated/gtkstock.c:455
-msgctxt "Stock label"
-msgid "_Undo"
-msgstr "_ביטול"
-
 #: ../gtk/deprecated/gtkstock.c:456
 msgctxt "Stock label"
 msgid "_Yes"
 msgstr "_כן"
-
-#. Zoom
-#: ../gtk/deprecated/gtkstock.c:458
-msgctxt "Stock label"
-msgid "_Normal Size"
-msgstr "גודל _רגיל"
-
-#. Zoom
-#: ../gtk/deprecated/gtkstock.c:460
-msgctxt "Stock label"
-msgid "Best _Fit"
-msgstr "ההתאמה ה_טובה ביותר"
-
-#: ../gtk/deprecated/gtkstock.c:461
-msgctxt "Stock label"
-msgid "Zoom _In"
-msgstr "הת_קרבות"
-
-#: ../gtk/deprecated/gtkstock.c:462
-msgctxt "Stock label"
-msgid "Zoom _Out"
-msgstr "הת_רחקות"
 
 #: ../gtk/deprecated/gtkuimanager.c:1803
 #, c-format
@@ -1330,10 +1344,48 @@ msgstr "מידע תו לא צפוי בשורה %d תו %d"
 msgid "Empty"
 msgstr "ריק"
 
+#. *
+#. * SECTION:gtkaboutdialog
+#. * @Short_description: Display information about an application
+#. * @Title: GtkAboutDialog
+#. *
+#. * The GtkAboutDialog offers a simple way to display information about
+#. * a program like its logo, name, copyright, website and license. It is
+#. * also possible to give credits to the authors, documenters, translators
+#. * and artists who have worked on the program. An about dialog is typically
+#. * opened when the user selects the <literal>About</literal> option from
+#. * the <literal>Help</literal> menu. All parts of the dialog are optional.
+#. *
+#. * About dialog often contain links and email addresses. GtkAboutDialog
+#. * displays these as clickable links. By default, it calls gtk_show_uri()
+#. * when a user clicks one. The behaviour can be overridden with the
+#. * #GtkAboutDialog::activate-link signal.
+#. *
+#. * To make constructing a GtkAboutDialog as convenient as possible, you can
+#. * use the function gtk_show_about_dialog() which constructs and shows a dialog
+#. * and keeps it around so that it can be shown again.
+#. *
+#. * Note that GTK+ sets a default title of <literal>_("About &percnt;s")</literal>
+#. * on the dialog window (where &percnt;s is replaced by the name of the
+#. * application, but in order to ensure proper translation of the title,
+#. * applications should set the title property explicitly when constructing
+#. * a GtkAboutDialog, as shown in the following example:
+#. * <informalexample><programlisting>
+#. * gtk_show_about_dialog (NULL,
+#. *                        "program-name", "ExampleCode",
+#. *                        "logo", example_logo,
+#. *                        "title" _("About ExampleCode"),
+#. *                        NULL);
+#. * </programlisting></informalexample>
+#. *
+#. * It is also possible to show a #GtkAboutDialog like any other #GtkDialog,
+#. * e.g. using gtk_dialog_run(). In this case, you might need to know that
+#. * the 'Close' button returns the #GTK_RESPONSE_CANCEL response id.
+#.
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
 #.
-#: ../gtk/gtkaboutdialog.c:102
+#: ../gtk/gtkaboutdialog.c:99
 #, c-format
 msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY;\n"
@@ -1342,40 +1394,40 @@ msgstr ""
 "תכנית זו מופצת ללא שום אחריות;\n"
 "לפרטים ניתן לבקר בכתובת <a href=\"%s\">%s</a>"
 
-#: ../gtk/gtkaboutdialog.c:375
+#: ../gtk/gtkaboutdialog.c:369
 msgid "License"
 msgstr "רישיון"
 
-#: ../gtk/gtkaboutdialog.c:376
+#: ../gtk/gtkaboutdialog.c:370
 msgid "The license of the program"
 msgstr "רישיון השימוש בתכנה"
 
-#: ../gtk/gtkaboutdialog.c:914
+#: ../gtk/gtkaboutdialog.c:918
 msgid "Could not show link"
 msgstr "לא ניתן להציג את הקישור"
 
-#: ../gtk/gtkaboutdialog.c:951
+#: ../gtk/gtkaboutdialog.c:955
 msgid "Website"
 msgstr "אתר אינטרנט"
 
-#: ../gtk/gtkaboutdialog.c:1005
+#: ../gtk/gtkaboutdialog.c:1009
 #, c-format
 msgid "About %s"
 msgstr "על אודות %s"
 
-#: ../gtk/gtkaboutdialog.c:2290
+#: ../gtk/gtkaboutdialog.c:2281
 msgid "Created by"
 msgstr "נוצר על ידי"
 
-#: ../gtk/gtkaboutdialog.c:2293
+#: ../gtk/gtkaboutdialog.c:2284
 msgid "Documented by"
 msgstr "תועד על ידי"
 
-#: ../gtk/gtkaboutdialog.c:2303
+#: ../gtk/gtkaboutdialog.c:2294
 msgid "Translated by"
 msgstr "תורגם על ידי"
 
-#: ../gtk/gtkaboutdialog.c:2308
+#: ../gtk/gtkaboutdialog.c:2299
 msgid "Artwork by"
 msgstr "אומנות על ידי"
 
@@ -1511,7 +1563,7 @@ msgstr "יישומים קשורים"
 msgid "Other Applications"
 msgstr "יישומים אחרים"
 
-#: ../gtk/gtkapplication.c:1569
+#: ../gtk/gtkapplication.c:1900
 #, c-format
 msgid ""
 "%s cannot quit at this time:\n"
@@ -1522,8 +1574,8 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../gtk/gtkapplicationwindow.c:337 ../gtk/gtkprintoperation-unix.c:480
-#: ../gtk/gtkprintoperation-win32.c:1444
+#: ../gtk/gtkapplicationwindow.c:338 ../gtk/gtkprintoperation-unix.c:480
+#: ../gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "יישום"
 
@@ -1557,7 +1609,7 @@ msgstr "ייתכן שהטקסט לא יופיע בתוך <%s>"
 msgid "Invalid type function on line %d: '%s'"
 msgstr "סוג הפונקציה שבשורה %d אינו תקין: '%s'"
 
-#: ../gtk/gtkbuilderparser.c:418 ../gtk/gtkbuilderparser.c:504
+#: ../gtk/gtkbuilderparser.c:419 ../gtk/gtkbuilderparser.c:504
 #, c-format
 msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
 msgstr "מזהה פריט כפול '%s' בשורה %d (לשעבר בשורה %d)"
@@ -1929,7 +1981,7 @@ msgid "_Close"
 msgstr "_סגירה"
 
 #. And show the custom paper dialog
-#: ../gtk/gtkcustompaperunixdialog.c:389 ../gtk/gtkprintunixdialog.c:3193
+#: ../gtk/gtkcustompaperunixdialog.c:389 ../gtk/gtkprintunixdialog.c:3203
 msgid "Manage Custom Sizes"
 msgstr "ניהול גדלים מותאמים"
 
@@ -1982,30 +2034,30 @@ msgstr "_ימין:"
 msgid "Paper Margins"
 msgstr "שולי נייר"
 
-#: ../gtk/gtkentry.c:9271 ../gtk/gtkentry.c:9417 ../gtk/gtklabel.c:6276
-#: ../gtk/gtktextview.c:8694 ../gtk/gtktextview.c:8877
+#: ../gtk/gtkentry.c:9272 ../gtk/gtkentry.c:9418 ../gtk/gtklabel.c:6243
+#: ../gtk/gtktextview.c:8708 ../gtk/gtktextview.c:8891
 msgid "Cu_t"
 msgstr "_גזירה"
 
-#: ../gtk/gtkentry.c:9275 ../gtk/gtkentry.c:9420 ../gtk/gtklabel.c:6277
-#: ../gtk/gtktextview.c:8698 ../gtk/gtktextview.c:8881
+#: ../gtk/gtkentry.c:9276 ../gtk/gtkentry.c:9421 ../gtk/gtklabel.c:6244
+#: ../gtk/gtktextview.c:8712 ../gtk/gtktextview.c:8895
 msgid "_Copy"
 msgstr "ה_עתקה"
 
-#: ../gtk/gtkentry.c:9279 ../gtk/gtkentry.c:9423 ../gtk/gtklabel.c:6278
-#: ../gtk/gtktextview.c:8700 ../gtk/gtktextview.c:8883
+#: ../gtk/gtkentry.c:9280 ../gtk/gtkentry.c:9424 ../gtk/gtklabel.c:6245
+#: ../gtk/gtktextview.c:8714 ../gtk/gtktextview.c:8897
 msgid "_Paste"
 msgstr "ה_דבקה"
 
-#: ../gtk/gtkentry.c:9282 ../gtk/gtklabel.c:6280 ../gtk/gtktextview.c:8703
+#: ../gtk/gtkentry.c:9283 ../gtk/gtklabel.c:6247 ../gtk/gtktextview.c:8717
 msgid "_Delete"
 msgstr "מ_חיקה"
 
-#: ../gtk/gtkentry.c:9293 ../gtk/gtklabel.c:6289 ../gtk/gtktextview.c:8717
+#: ../gtk/gtkentry.c:9294 ../gtk/gtklabel.c:6256 ../gtk/gtktextview.c:8731
 msgid "Select _All"
 msgstr "בחירת ה_כול"
 
-#: ../gtk/gtkentry.c:10381
+#: ../gtk/gtkentry.c:10387
 msgid "Caps Lock is on"
 msgstr "ה־Caps Lock פעיל"
 
@@ -2054,7 +2106,7 @@ msgstr "ה־Caps Lock פעיל"
 msgid "Select a File"
 msgstr "נא לבחור קובץ"
 
-#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkplacessidebar.c:790
+#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/gtkplacessidebar.c:844
 msgid "Desktop"
 msgstr "שולחן עבודה"
 
@@ -2062,7 +2114,7 @@ msgstr "שולחן עבודה"
 msgid "(None)"
 msgstr "(ללא)"
 
-#: ../gtk/gtkfilechooserbutton.c:807 ../gtk/gtkplacessidebar.c:3106
+#: ../gtk/gtkfilechooserbutton.c:807 ../gtk/gtkplacessidebar.c:3170
 msgid "_Open"
 msgstr "_פתיחה"
 
@@ -2070,15 +2122,15 @@ msgstr "_פתיחה"
 msgid "Other…"
 msgstr "אחר…"
 
-#: ../gtk/gtkfilechooserdefault.c:321
+#: ../gtk/gtkfilechooserdefault.c:318
 msgid "Type name of new folder"
 msgstr "הזנת שם לתיקייה החדשה"
 
-#: ../gtk/gtkfilechooserdefault.c:734
+#: ../gtk/gtkfilechooserdefault.c:731
 msgid "The folder could not be created"
 msgstr "לא ניתן ליצור את התיקייה"
 
-#: ../gtk/gtkfilechooserdefault.c:747
+#: ../gtk/gtkfilechooserdefault.c:744
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -2086,155 +2138,155 @@ msgstr ""
 "לא ניתן לייצר את התיקייה מכיוון שקיים קובץ בעל שם דומה. יש לנסות ולבחור שם "
 "חדש לתיקייה, או לשנות את שם הקובץ."
 
-#: ../gtk/gtkfilechooserdefault.c:761
+#: ../gtk/gtkfilechooserdefault.c:758
 msgid "You need to choose a valid filename."
 msgstr "עליך לבחור בשם קובץ תקני."
 
-#: ../gtk/gtkfilechooserdefault.c:764
+#: ../gtk/gtkfilechooserdefault.c:761
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "לא ניתן ליצור קובץ תחת %s כיוון שזו איננה תיקייה"
 
-#: ../gtk/gtkfilechooserdefault.c:772
+#: ../gtk/gtkfilechooserdefault.c:769
 msgid "Cannot create file as the filename is too long"
 msgstr "לא ניתן ליצור קובץ כיוון ששם הקובץ ארוך מדי"
 
-#: ../gtk/gtkfilechooserdefault.c:773
+#: ../gtk/gtkfilechooserdefault.c:770
 msgid "Try using a shorter name."
 msgstr "כדאי לנסות לקצר את השם."
 
-#: ../gtk/gtkfilechooserdefault.c:783
+#: ../gtk/gtkfilechooserdefault.c:780
 msgid "You may only select folders"
 msgstr "ניתן לבחור תיקיות בלבד"
 
-#: ../gtk/gtkfilechooserdefault.c:784
+#: ../gtk/gtkfilechooserdefault.c:781
 msgid "The item that you selected is not a folder try using a different item."
 msgstr "הפריט שברחת אינו תיקייה, נא לנסות לבחור בפריט אחר."
 
-#: ../gtk/gtkfilechooserdefault.c:792
+#: ../gtk/gtkfilechooserdefault.c:789
 msgid "Invalid file name"
 msgstr "שם קובץ לא תקני"
 
-#: ../gtk/gtkfilechooserdefault.c:802
+#: ../gtk/gtkfilechooserdefault.c:799
 msgid "The folder contents could not be displayed"
 msgstr "לא ניתן להציג את תוכן התיקייה"
 
-#. Translators: the first string is a path and the second string
-#. * is a hostname. Nautilus and the panel contain the same string
-#. * to translate.
-#.
-#: ../gtk/gtkfilechooserdefault.c:945
-#, c-format
-msgid "%1$s on %2$s"
-msgstr "‏%1$s ב־%2$s"
-
-#: ../gtk/gtkfilechooserdefault.c:1493
+#: ../gtk/gtkfilechooserdefault.c:1434
 msgid "Could not select file"
 msgstr "לא ניתן לבחור את הקובץ"
 
-#: ../gtk/gtkfilechooserdefault.c:1723
+#: ../gtk/gtkfilechooserdefault.c:1664
 msgid "_Visit File"
 msgstr "_ביקור בקובץ"
 
-#: ../gtk/gtkfilechooserdefault.c:1726
+#: ../gtk/gtkfilechooserdefault.c:1667
 msgid "_Copy Location"
 msgstr "ה_עתקת מיקום"
 
-#: ../gtk/gtkfilechooserdefault.c:1729
+#: ../gtk/gtkfilechooserdefault.c:1670
 msgid "_Add to Bookmarks"
 msgstr "_הוספה לסימניות"
 
-#: ../gtk/gtkfilechooserdefault.c:1736
+#: ../gtk/gtkfilechooserdefault.c:1677
 msgid "Show _Hidden Files"
 msgstr "הצגת קבצים _נסתרים"
 
-#: ../gtk/gtkfilechooserdefault.c:1739
+#: ../gtk/gtkfilechooserdefault.c:1680
 msgid "Show _Size Column"
 msgstr "הצגת _רוחב העמודה"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:1988
+#: ../gtk/gtkfilechooserdefault.c:1929
 msgid "_Name:"
 msgstr "_שם:"
 
-#: ../gtk/gtkfilechooserdefault.c:2236 ../gtk/gtkfilechooserdefault.c:2247
+#: ../gtk/gtkfilechooserdefault.c:2177 ../gtk/gtkfilechooserdefault.c:2188
 msgid "Please select a folder below"
 msgstr "נא לבחור תיקייה להלן"
 
-#: ../gtk/gtkfilechooserdefault.c:2242
+#: ../gtk/gtkfilechooserdefault.c:2183
 msgid "Please type a file name"
 msgstr "נא להזין שם קובץ"
 
-#: ../gtk/gtkfilechooserdefault.c:2298
+#: ../gtk/gtkfilechooserdefault.c:2239
 msgid "Recently Used"
 msgstr "בשימוש לאחרונה"
 
-#: ../gtk/gtkfilechooserdefault.c:2308
+#: ../gtk/gtkfilechooserdefault.c:2249
 msgid "Search:"
 msgstr "חיפוש:"
 
-#: ../gtk/gtkfilechooserdefault.c:2736
+#: ../gtk/gtkfilechooserdefault.c:2679
 msgid "Save in folder:"
 msgstr "שמירה בתיקייה:"
 
-#: ../gtk/gtkfilechooserdefault.c:2738
+#: ../gtk/gtkfilechooserdefault.c:2681
 msgid "Create in folder:"
 msgstr "יצירה בתיקייה:"
 
-#: ../gtk/gtkfilechooserdefault.c:3878
+#: ../gtk/gtkfilechooserdefault.c:3825
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "לא ניתן לקרוא את התוכן של %s"
 
-#: ../gtk/gtkfilechooserdefault.c:3882
+#: ../gtk/gtkfilechooserdefault.c:3829
 msgid "Could not read the contents of the folder"
 msgstr "לא ניתן לקרוא את תכני התיקייה"
 
-#: ../gtk/gtkfilechooserdefault.c:3979 ../gtk/gtkfilechooserdefault.c:4047
-#: ../gtk/gtkfilechooserdefault.c:4228
+#: ../gtk/gtkfilechooserdefault.c:3926 ../gtk/gtkfilechooserdefault.c:3994
+#: ../gtk/gtkfilechooserdefault.c:4175
 msgid "Unknown"
 msgstr "לא ידוע"
 
-#: ../gtk/gtkfilechooserdefault.c:3994
+#: ../gtk/gtkfilechooserdefault.c:3941
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:3996
+#: ../gtk/gtkfilechooserdefault.c:3943
 msgid "Yesterday at %H:%M"
 msgstr "אתמול ב־%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:4693
+#: ../gtk/gtkfilechooserdefault.c:4640
 msgid "Cannot change to folder because it is not local"
 msgstr "לא ניתן לשנות תיקייה כיוון שהיא איננה מקומית"
 
-#: ../gtk/gtkfilechooserdefault.c:5477 ../gtk/gtkprintunixdialog.c:675
+#: ../gtk/gtkfilechooserdefault.c:5424 ../gtk/gtkprintunixdialog.c:674
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "כבר קיים קובץ בשם „%s“. האם להחליפו?"
 
-#: ../gtk/gtkfilechooserdefault.c:5480 ../gtk/gtkprintunixdialog.c:679
+#: ../gtk/gtkfilechooserdefault.c:5427 ../gtk/gtkprintunixdialog.c:678
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "הקובץ כבר קיים תחת „%s“. החלפתו תגרום לאיבוד תוכנו."
 
-#: ../gtk/gtkfilechooserdefault.c:5485 ../gtk/gtkprintunixdialog.c:686
+#: ../gtk/gtkfilechooserdefault.c:5432 ../gtk/gtkprintunixdialog.c:685
 msgid "_Replace"
 msgstr "ה_חלפה"
 
-#: ../gtk/gtkfilechooserdefault.c:6302
+#: ../gtk/gtkfilechooserdefault.c:6249
 msgid "Could not start the search process"
 msgstr "לא ניתן להתחיל את תהליך החיפוש"
 
-#: ../gtk/gtkfilechooserdefault.c:6303
+#: ../gtk/gtkfilechooserdefault.c:6250
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr "התכנית לא הצליחה ליצור חיבור אל סוכן האינדקס. יש לוודא כי הוא פעיל."
 
-#: ../gtk/gtkfilechooserdefault.c:6317
+#: ../gtk/gtkfilechooserdefault.c:6264
 msgid "Could not send the search request"
 msgstr "לא ניתן לשלוח את בקשת החיפוש"
+
+#. Translators: the first string is a path and the second string
+#. * is a hostname. Nautilus and the panel contain the same string
+#. * to translate.
+#.
+#: ../gtk/gtkfilechooserutils.c:488
+#, c-format
+msgid "%1$s on %2$s"
+msgstr "‏%1$s ב־%2$s"
 
 # hebrew note: "תיקייה" is "folder", but there is no better word for
 # "directory"
@@ -2255,20 +2307,24 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "בחירת גופן"
 
-#: ../gtk/gtkheaderbar.c:224 ../gtk/gtkwindow.c:5281 ../gtk/gtkwindow.c:8194
+#: ../gtk/gtkheaderbar.c:233 ../gtk/gtkwindow.c:5355 ../gtk/gtkwindow.c:8348
 msgid "Close"
 msgstr "סגירה"
 
-#: ../gtk/gtkicontheme.c:2116 ../gtk/gtkicontheme.c:2179
+#: ../gtk/gtkheaderbar.c:309 ../gtk/gtkwindow.c:5298
+msgid "Application menu"
+msgstr "תפריט יישום"
+
+#: ../gtk/gtkicontheme.c:2124 ../gtk/gtkicontheme.c:2187
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "הסמל '%s' לא קיים בערכת הנושא"
 
-#: ../gtk/gtkicontheme.c:3883
+#: ../gtk/gtkicontheme.c:3893
 msgid "Failed to load icon"
 msgstr "טעינת הסמל נכשלה"
 
-#: ../gtk/gtkimmodule.c:531
+#: ../gtk/gtkimmodule.c:538
 msgid "Simple"
 msgstr "פשוט"
 
@@ -2307,12 +2363,12 @@ msgid "Error"
 msgstr "שגיאה"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6259
+#: ../gtk/gtklabel.c:6226
 msgid "_Open Link"
 msgstr "_פתיחת קישור"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6267
+#: ../gtk/gtklabel.c:6234
 msgid "Copy _Link Address"
 msgstr "העתקת כתובת ה_קישור"
 
@@ -2366,11 +2422,11 @@ msgstr "%s: no such application %s"
 msgid "%s: error launching application: %s\n"
 msgstr "%s: error launching application: %s\n"
 
-#: ../gtk/gtklinkbutton.c:495
+#: ../gtk/gtklinkbutton.c:442
 msgid "Copy URL"
 msgstr "ה_עתקת כתובת"
 
-#: ../gtk/gtklinkbutton.c:658
+#: ../gtk/gtklinkbutton.c:605
 msgid "Invalid URI"
 msgstr "כתובת לא תקנית"
 
@@ -2431,27 +2487,27 @@ msgstr "GTK+ debugging flags to set"
 msgid "GTK+ debugging flags to unset"
 msgstr "GTK+ debugging flags to unset"
 
+#: ../gtk/gtkmain.c:759
+#, c-format
+msgid "Cannot open display: %s"
+msgstr "Cannot open display: %s"
+
+#: ../gtk/gtkmain.c:825
+msgid "GTK+ Options"
+msgstr "GTK+ Options"
+
+#: ../gtk/gtkmain.c:825
+msgid "Show GTK+ Options"
+msgstr "Show GTK+ Options"
+
 #. Translate to default:RTL if you want your widgets
 #. * to be RTL, otherwise translate to default:LTR.
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:705
+#: ../gtk/gtkmain.c:1142
 msgid "default:LTR"
 msgstr "default:RTL"
-
-#: ../gtk/gtkmain.c:770
-#, c-format
-msgid "Cannot open display: %s"
-msgstr "Cannot open display: %s"
-
-#: ../gtk/gtkmain.c:836
-msgid "GTK+ Options"
-msgstr "GTK+ Options"
-
-#: ../gtk/gtkmain.c:836
-msgid "Show GTK+ Options"
-msgstr "Show GTK+ Options"
 
 #: ../gtk/gtkmessagedialog.c:897
 msgid "_No"
@@ -2545,7 +2601,7 @@ msgstr "מעטפת Z"
 msgid "Cannot end process with PID %d: %s"
 msgstr "לא ניתן לסיים את התהליך בעל המזהה %d: ‏%s"
 
-#: ../gtk/gtknotebook.c:5063 ../gtk/gtknotebook.c:7720
+#: ../gtk/gtknotebook.c:5108 ../gtk/gtknotebook.c:7841
 #, c-format
 msgid "Page %u"
 msgstr "עמוד %u"
@@ -2559,8 +2615,8 @@ msgctxt "Number format"
 msgid "%d"
 msgstr "%d"
 
-#: ../gtk/gtkpagesetup.c:646 ../gtk/gtkpapersize.c:848
-#: ../gtk/gtkpapersize.c:888
+#: ../gtk/gtkpagesetup.c:646 ../gtk/gtkpapersize.c:850
+#: ../gtk/gtkpapersize.c:890
 msgid "Not a valid page setup file"
 msgstr "קובץ הגדרות עמוד לא תקין"
 
@@ -2587,7 +2643,7 @@ msgstr ""
 " מעלה: %s %s\n"
 " מטה: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:873 ../gtk/gtkprintunixdialog.c:3247
+#: ../gtk/gtkpagesetupunixdialog.c:873 ../gtk/gtkprintunixdialog.c:3257
 msgid "Manage Custom Sizes…"
 msgstr "ניהול גדלים מותאמים…"
 
@@ -2597,195 +2653,196 @@ msgstr "הגדרות עמוד"
 
 # hebrew note: "תיקייה" is "folder", but there is no better word for
 # "directory"
-#: ../gtk/gtkpathbar.c:1606
+#: ../gtk/gtkpathbar.c:1608
 msgid "File System Root"
 msgstr "שורש מערכת הקבצים"
 
-#: ../gtk/gtkplacessidebar.c:446
+#: ../gtk/gtkplacessidebar.c:441
 msgid "Devices"
 msgstr "התקנים"
 
-#: ../gtk/gtkplacessidebar.c:454
+#: ../gtk/gtkplacessidebar.c:449
 msgid "Bookmarks"
 msgstr "סימניות"
 
-#: ../gtk/gtkplacessidebar.c:760
+#. add built-in bookmarks
+#: ../gtk/gtkplacessidebar.c:812
 msgid "Places"
 msgstr "מקומות"
 
-#: ../gtk/gtkplacessidebar.c:767
+#: ../gtk/gtkplacessidebar.c:820
 msgid "Recent"
 msgstr "בשימוש לאחרונה"
 
-#: ../gtk/gtkplacessidebar.c:769
+#: ../gtk/gtkplacessidebar.c:822
 msgid "Recent files"
 msgstr "קבצים אחרונים"
 
-#: ../gtk/gtkplacessidebar.c:778
+#: ../gtk/gtkplacessidebar.c:831
 msgid "Home"
 msgstr "תיקיית הבית"
 
-#: ../gtk/gtkplacessidebar.c:780
+#: ../gtk/gtkplacessidebar.c:833
 msgid "Open your personal folder"
 msgstr "פתיחת התיקייה האישית שלך"
 
-#: ../gtk/gtkplacessidebar.c:792
+#: ../gtk/gtkplacessidebar.c:846
 msgid "Open the contents of your desktop in a folder"
 msgstr "פתיחת תכני שולחן העבודה בתיקייה"
 
-#: ../gtk/gtkplacessidebar.c:805
+#: ../gtk/gtkplacessidebar.c:861
 msgid "Trash"
 msgstr "אשפה"
 
-#: ../gtk/gtkplacessidebar.c:807
+#: ../gtk/gtkplacessidebar.c:863
 msgid "Open the trash"
 msgstr "פתיחת האשפה"
 
-#: ../gtk/gtkplacessidebar.c:862 ../gtk/gtkplacessidebar.c:887
-#: ../gtk/gtkplacessidebar.c:1094
+#: ../gtk/gtkplacessidebar.c:926 ../gtk/gtkplacessidebar.c:954
+#: ../gtk/gtkplacessidebar.c:1192
 #, c-format
 msgid "Mount and open %s"
 msgstr "לעגן ולפתוח את %s"
 
-#: ../gtk/gtkplacessidebar.c:962
+#: ../gtk/gtkplacessidebar.c:1035
 msgid "Open the contents of the file system"
 msgstr "פתיחת תכני מערכת הקבצים"
 
-#: ../gtk/gtkplacessidebar.c:1062
+#: ../gtk/gtkplacessidebar.c:1155
 msgid "Network"
 msgstr "רשת"
 
-#: ../gtk/gtkplacessidebar.c:1068
+#: ../gtk/gtkplacessidebar.c:1161
 msgid "Browse Network"
 msgstr "עיון ברשת"
 
-#: ../gtk/gtkplacessidebar.c:1070
+#: ../gtk/gtkplacessidebar.c:1163
 msgid "Browse the contents of the network"
 msgstr "עיון בתוכן הרשת"
 
-#: ../gtk/gtkplacessidebar.c:1077
+#: ../gtk/gtkplacessidebar.c:1171
 msgid "Connect to Server"
 msgstr "התחברות לשרת"
 
-#: ../gtk/gtkplacessidebar.c:1079
+#: ../gtk/gtkplacessidebar.c:1173
 msgid "Connect to a network server address"
 msgstr "התחברות לכתובת שרת ברשת"
 
-#: ../gtk/gtkplacessidebar.c:1559
+#: ../gtk/gtkplacessidebar.c:1575
 msgid "New bookmark"
 msgstr "סימנייה חדשה"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: ../gtk/gtkplacessidebar.c:2099 ../gtk/gtkplacessidebar.c:3182
+#: ../gtk/gtkplacessidebar.c:2132 ../gtk/gtkplacessidebar.c:3248
 msgid "_Start"
 msgstr "ה_תחלה"
 
-#: ../gtk/gtkplacessidebar.c:2100 ../gtk/gtkplacessidebar.c:3189
+#: ../gtk/gtkplacessidebar.c:2133 ../gtk/gtkplacessidebar.c:3255
 msgid "_Stop"
 msgstr "_עצירה"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: ../gtk/gtkplacessidebar.c:2105
+#: ../gtk/gtkplacessidebar.c:2140
 msgid "_Power On"
 msgstr "לה_פעיל"
 
-#: ../gtk/gtkplacessidebar.c:2106
+#: ../gtk/gtkplacessidebar.c:2141
 msgid "_Safely Remove Drive"
 msgstr "ה_סרת הכונן באופן בטוח"
 
-#: ../gtk/gtkplacessidebar.c:2109
+#: ../gtk/gtkplacessidebar.c:2145
 msgid "_Connect Drive"
 msgstr "הת_חברות לכונן"
 
-#: ../gtk/gtkplacessidebar.c:2110
+#: ../gtk/gtkplacessidebar.c:2146
 msgid "_Disconnect Drive"
 msgstr "_ניתוק הכונן"
 
-#: ../gtk/gtkplacessidebar.c:2113
+#: ../gtk/gtkplacessidebar.c:2150
 msgid "_Start Multi-disk Device"
 msgstr "הפעל התקן מ_רובה כוננים"
 
-#: ../gtk/gtkplacessidebar.c:2114
+#: ../gtk/gtkplacessidebar.c:2151
 msgid "_Stop Multi-disk Device"
 msgstr "ע_צירת התקן מרובה כוננים"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: ../gtk/gtkplacessidebar.c:2118
+#: ../gtk/gtkplacessidebar.c:2156
 msgid "_Unlock Drive"
 msgstr "_שחרור הכונן"
 
-#: ../gtk/gtkplacessidebar.c:2119
+#: ../gtk/gtkplacessidebar.c:2157
 msgid "_Lock Drive"
 msgstr "_נעילת הכונן"
 
-#: ../gtk/gtkplacessidebar.c:2146 ../gtk/gtkplacessidebar.c:2844
+#: ../gtk/gtkplacessidebar.c:2186 ../gtk/gtkplacessidebar.c:2901
 #, c-format
 msgid "Unable to start %s"
 msgstr "לא ניתן להפעיל את %s"
 
-#: ../gtk/gtkplacessidebar.c:2173
+#: ../gtk/gtkplacessidebar.c:2216
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "לא ניתן לגשת אל „%s“"
 
-#: ../gtk/gtkplacessidebar.c:2479
+#: ../gtk/gtkplacessidebar.c:2527
 #, c-format
 msgid "Unable to unmount %s"
 msgstr "לא ניתן לנתק את %s"
 
-#: ../gtk/gtkplacessidebar.c:2602 ../gtk/gtkplacessidebar.c:2629
-#: ../gtk/gtkplacessidebar.c:2656
+#: ../gtk/gtkplacessidebar.c:2653 ../gtk/gtkplacessidebar.c:2682
+#: ../gtk/gtkplacessidebar.c:2711
 #, c-format
 msgid "Unable to eject %s"
 msgstr "לא ניתן לשלוף את %s"
 
-#: ../gtk/gtkplacessidebar.c:2796
+#: ../gtk/gtkplacessidebar.c:2851
 #, c-format
 msgid "Unable to poll %s for media changes"
 msgstr "לא ניתן לתשאל את %s מהם השינויים במדיה"
 
-#: ../gtk/gtkplacessidebar.c:2898
+#: ../gtk/gtkplacessidebar.c:2957
 #, c-format
 msgid "Unable to stop %s"
 msgstr "לא ניתן לעצור את %s"
 
-#: ../gtk/gtkplacessidebar.c:3113
+#: ../gtk/gtkplacessidebar.c:3178
 msgid "Open in New _Tab"
 msgstr "פתיחה ב_לשונית חדשה"
 
-#: ../gtk/gtkplacessidebar.c:3121
+#: ../gtk/gtkplacessidebar.c:3187
 msgid "Open in New _Window"
 msgstr "פתיחה ב_חלון חדש"
 
-#: ../gtk/gtkplacessidebar.c:3130
+#: ../gtk/gtkplacessidebar.c:3196
 msgid "_Add Bookmark"
 msgstr "הו_ספה לסימניות"
 
-#: ../gtk/gtkplacessidebar.c:3136
+#: ../gtk/gtkplacessidebar.c:3202
 msgid "Remove"
 msgstr "הסרה"
 
-#: ../gtk/gtkplacessidebar.c:3143
+#: ../gtk/gtkplacessidebar.c:3209
 msgid "Rename…"
 msgstr "שינוי שם…"
 
-#: ../gtk/gtkplacessidebar.c:3154
+#: ../gtk/gtkplacessidebar.c:3220
 msgid "_Mount"
 msgstr "_עיגון"
 
-#: ../gtk/gtkplacessidebar.c:3161
+#: ../gtk/gtkplacessidebar.c:3227
 msgid "_Unmount"
 msgstr "_ניתוק"
 
-#: ../gtk/gtkplacessidebar.c:3168
+#: ../gtk/gtkplacessidebar.c:3234
 msgid "_Eject"
 msgstr "_שליפה"
 
-#: ../gtk/gtkplacessidebar.c:3175
+#: ../gtk/gtkplacessidebar.c:3241
 msgid "_Detect Media"
 msgstr "_זיהוי מדיה"
 
-#: ../gtk/gtkplacessidebar.c:3828
+#: ../gtk/gtkplacessidebar.c:3892
 msgid "Computer"
 msgstr "מחשב"
 
@@ -2869,11 +2926,11 @@ msgstr "בהכנה"
 msgid "Printing %d"
 msgstr "%d בהדפסה"
 
-#: ../gtk/gtkprintoperation.c:3010
+#: ../gtk/gtkprintoperation.c:3011
 msgid "Error creating print preview"
 msgstr "שגיאה ביצירת תצוגה מקדימה"
 
-#: ../gtk/gtkprintoperation.c:3013
+#: ../gtk/gtkprintoperation.c:3014
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "הסיבה ההגיונית ביותר שבגללה לא ניתן היה ליצור קובץ זמני."
 
@@ -2881,66 +2938,66 @@ msgstr "הסיבה ההגיונית ביותר שבגללה לא ניתן היה
 msgid "Error launching preview"
 msgstr "שגיאה בשיגור תצוגה מקדימה"
 
-#: ../gtk/gtkprintoperation-win32.c:608
+#: ../gtk/gtkprintoperation-win32.c:611
 msgid "Printer offline"
 msgstr "מדפסת לא זמינה"
 
-#: ../gtk/gtkprintoperation-win32.c:610
+#: ../gtk/gtkprintoperation-win32.c:613
 msgid "Out of paper"
 msgstr "חסר נייר"
 
 #. Translators: this is a printer status.
-#: ../gtk/gtkprintoperation-win32.c:612
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2288
+#: ../gtk/gtkprintoperation-win32.c:615
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2290
 msgid "Paused"
 msgstr "מופסק"
 
-#: ../gtk/gtkprintoperation-win32.c:614
+#: ../gtk/gtkprintoperation-win32.c:617
 msgid "Need user intervention"
 msgstr "דרושה התערבות המשתמש"
 
-#: ../gtk/gtkprintoperation-win32.c:714
+#: ../gtk/gtkprintoperation-win32.c:717
 msgid "Custom size"
 msgstr "גודל מותאם אישית"
 
-#: ../gtk/gtkprintoperation-win32.c:1536
+#: ../gtk/gtkprintoperation-win32.c:1539
 msgid "No printer found"
 msgstr "לא נמצאה מדפסת"
 
-#: ../gtk/gtkprintoperation-win32.c:1563
+#: ../gtk/gtkprintoperation-win32.c:1566
 msgid "Invalid argument to CreateDC"
 msgstr "Invalid argument to CreateDC"
 
-#: ../gtk/gtkprintoperation-win32.c:1599 ../gtk/gtkprintoperation-win32.c:1826
+#: ../gtk/gtkprintoperation-win32.c:1602 ../gtk/gtkprintoperation-win32.c:1829
 msgid "Error from StartDoc"
 msgstr "Error from StartDoc"
 
-#: ../gtk/gtkprintoperation-win32.c:1681 ../gtk/gtkprintoperation-win32.c:1704
-#: ../gtk/gtkprintoperation-win32.c:1752
+#: ../gtk/gtkprintoperation-win32.c:1684 ../gtk/gtkprintoperation-win32.c:1707
+#: ../gtk/gtkprintoperation-win32.c:1755
 msgid "Not enough free memory"
 msgstr "אין מספיק זיכרון פנוי"
 
-#: ../gtk/gtkprintoperation-win32.c:1757
+#: ../gtk/gtkprintoperation-win32.c:1760
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Invalid argument to PrintDlgEx"
 
-#: ../gtk/gtkprintoperation-win32.c:1762
+#: ../gtk/gtkprintoperation-win32.c:1765
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Invalid pointer to PrintDlgEx"
 
-#: ../gtk/gtkprintoperation-win32.c:1767
+#: ../gtk/gtkprintoperation-win32.c:1770
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Invalid handle to PrintDlgEx"
 
-#: ../gtk/gtkprintoperation-win32.c:1772
+#: ../gtk/gtkprintoperation-win32.c:1775
 msgid "Unspecified error"
 msgstr "שגיאה בלתי מוגדרת"
 
-#: ../gtk/gtkprintunixdialog.c:820
+#: ../gtk/gtkprintunixdialog.c:819
 msgid "Getting printer information failed"
 msgstr "קבלת נתוני המדפסת נכשלה"
 
-#: ../gtk/gtkprintunixdialog.c:2018
+#: ../gtk/gtkprintunixdialog.c:2019
 msgid "Getting printer information…"
 msgstr "נתוני המדפסת מתקבלים…"
 
@@ -2950,104 +3007,104 @@ msgstr "נתוני המדפסת מתקבלים…"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: ../gtk/gtkprintunixdialog.c:2976
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4634
+#: ../gtk/gtkprintunixdialog.c:2986
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4777
 msgid "Left to right, top to bottom"
 msgstr "שמאל לימין, מלמעלה למטה"
 
-#: ../gtk/gtkprintunixdialog.c:2976
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4634
+#: ../gtk/gtkprintunixdialog.c:2986
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4777
 msgid "Left to right, bottom to top"
 msgstr "שמאל לימין, מלמטה למעלה"
 
-#: ../gtk/gtkprintunixdialog.c:2977
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4635
+#: ../gtk/gtkprintunixdialog.c:2987
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4778
 msgid "Right to left, top to bottom"
 msgstr "ימין לשמאל, מלמעלה למטה"
 
-#: ../gtk/gtkprintunixdialog.c:2977
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4635
+#: ../gtk/gtkprintunixdialog.c:2987
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4778
 msgid "Right to left, bottom to top"
 msgstr "ימין לשמאל, מלמטה למעלה"
 
-#: ../gtk/gtkprintunixdialog.c:2978
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4636
+#: ../gtk/gtkprintunixdialog.c:2988
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4779
 msgid "Top to bottom, left to right"
 msgstr "מלמעלה למטה, משמאל לימין"
 
-#: ../gtk/gtkprintunixdialog.c:2978
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4636
+#: ../gtk/gtkprintunixdialog.c:2988
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4779
 msgid "Top to bottom, right to left"
 msgstr "מלמעלה למטה, מימין לשמאל"
 
-#: ../gtk/gtkprintunixdialog.c:2979
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4637
+#: ../gtk/gtkprintunixdialog.c:2989
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4780
 msgid "Bottom to top, left to right"
 msgstr "מלמטה למעלה, משמאל לימין"
 
-#: ../gtk/gtkprintunixdialog.c:2979
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4637
+#: ../gtk/gtkprintunixdialog.c:2989
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4780
 msgid "Bottom to top, right to left"
 msgstr "מלמטה למעלה, מימין לשמאל"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: ../gtk/gtkprintunixdialog.c:2983 ../gtk/gtkprintunixdialog.c:2996
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4714
+#: ../gtk/gtkprintunixdialog.c:2993 ../gtk/gtkprintunixdialog.c:3006
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4857
 msgid "Page Ordering"
 msgstr "סדר דפים"
 
-#: ../gtk/gtkprintunixdialog.c:3012
+#: ../gtk/gtkprintunixdialog.c:3022
 msgid "Left to right"
 msgstr "שמאל לימין"
 
-#: ../gtk/gtkprintunixdialog.c:3013
+#: ../gtk/gtkprintunixdialog.c:3023
 msgid "Right to left"
 msgstr "ימין לשמאל"
 
-#: ../gtk/gtkprintunixdialog.c:3025
+#: ../gtk/gtkprintunixdialog.c:3035
 msgid "Top to bottom"
 msgstr "מלמעלה למטה"
 
-#: ../gtk/gtkprintunixdialog.c:3026
+#: ../gtk/gtkprintunixdialog.c:3036
 msgid "Bottom to top"
 msgstr "מלמטה למעלה"
 
-#: ../gtk/gtkprintunixdialog.c:3269
+#: ../gtk/gtkprintunixdialog.c:3279
 msgid "Print"
 msgstr "הדפסה"
 
-#: ../gtk/gtkrecentchooserdefault.c:1048 ../gtk/gtkrecentchooserdefault.c:1085
+#: ../gtk/gtkrecentchooserdefault.c:1049 ../gtk/gtkrecentchooserdefault.c:1086
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "לא נמצא פריט עבור הכתובת '%s'"
 
-#: ../gtk/gtkrecentchooserdefault.c:1212
+#: ../gtk/gtkrecentchooserdefault.c:1213
 msgid "Untitled filter"
 msgstr "מסנן ללא שם"
 
-#: ../gtk/gtkrecentchooserdefault.c:1542
+#: ../gtk/gtkrecentchooserdefault.c:1543
 msgid "Could not remove item"
 msgstr "לא ניתן להסיר את הפריט"
 
-#: ../gtk/gtkrecentchooserdefault.c:1586
+#: ../gtk/gtkrecentchooserdefault.c:1587
 msgid "Could not clear list"
 msgstr "לא ניתן לפנות את הרשימה"
 
-#: ../gtk/gtkrecentchooserdefault.c:1670
+#: ../gtk/gtkrecentchooserdefault.c:1671
 msgid "Copy _Location"
 msgstr "הע_תקת מיקום"
 
-#: ../gtk/gtkrecentchooserdefault.c:1681
+#: ../gtk/gtkrecentchooserdefault.c:1682
 msgid "_Remove From List"
 msgstr "ה_סרה מהרשימה"
 
-#: ../gtk/gtkrecentchooserdefault.c:1688
+#: ../gtk/gtkrecentchooserdefault.c:1689
 msgid "_Clear List"
 msgstr "_פינוי הרשימה"
 
-#: ../gtk/gtkrecentchooserdefault.c:1700
+#: ../gtk/gtkrecentchooserdefault.c:1701
 msgid "Show _Private Resources"
 msgstr "הצגת _משאבים פרטיים"
 
@@ -3107,12 +3164,12 @@ msgstr "%d. %s"
 msgid "Unable to find an item with URI '%s'"
 msgstr "לא ניתן למצוא פריט עם כתובת '%s'"
 
-#: ../gtk/gtkrecentmanager.c:2466
+#: ../gtk/gtkrecentmanager.c:2469
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr "לא נמצא יישום הרשום בשם '%s' עבור הפריט בעל הכתובת '%s'"
 
-#: ../gtk/gtksearchentry.c:240
+#: ../gtk/gtksearchentry.c:241
 msgid "Search"
 msgstr "חיפוש"
 
@@ -3312,47 +3369,35 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:5242 ../gtk/gtkwindow.c:8089
-msgid "Minimize"
-msgstr "מזעור"
-
-#: ../gtk/gtkwindow.c:5263
-msgid "Restore"
-msgstr "שחזור"
-
-#: ../gtk/gtkwindow.c:5263 ../gtk/gtkwindow.c:8097
-msgid "Maximize"
-msgstr "הגדלה"
-
-#: ../gtk/gtkwindow.c:8097
+#: ../gtk/gtkwindow.c:8251
 msgid "Unmaximize"
 msgstr "ביטול המזעור"
 
-#: ../gtk/gtkwindow.c:8106
+#: ../gtk/gtkwindow.c:8260
 msgid "Always on Top"
 msgstr "תמיד עליון"
 
-#: ../gtk/gtkwindow.c:8118
+#: ../gtk/gtkwindow.c:8272
 msgid "Always on Visible Workspace"
 msgstr "הצגה בכל מרחבי העבודה"
 
-#: ../gtk/gtkwindow.c:8126
+#: ../gtk/gtkwindow.c:8280
 msgid "Only on This Workspace"
 msgstr "רק במרחב עבודה זה"
 
-#: ../gtk/gtkwindow.c:8143
+#: ../gtk/gtkwindow.c:8297
 msgid "Move to Workspace Up"
 msgstr "הזזת החלון למרחב העבודה שלמעלה"
 
-#: ../gtk/gtkwindow.c:8152
+#: ../gtk/gtkwindow.c:8306
 msgid "Move to Workspace Down"
 msgstr "הזזת החלון למרחב העבודה שלמטה"
 
-#: ../gtk/gtkwindow.c:8166
+#: ../gtk/gtkwindow.c:8320
 msgid "Move to Another Workspace"
 msgstr "הזזת החלון למרחב עבודה אחר"
 
-#: ../gtk/gtkwindow.c:8174
+#: ../gtk/gtkwindow.c:8328
 #, c-format
 msgid "Workspace %d"
 msgstr "מרחב עבודה %d"
@@ -4412,248 +4457,248 @@ msgstr "נדרש אימות כדי להדפיס מסמך זה למדפסת %s"
 msgid "Authentication is required to print this document"
 msgstr "נדרש אימות כדי להדפיס מסמך זה"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1812
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1814
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "במדפסת '%s' חסר דיו."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1813
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1815
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "במדפסת '%s' לא נשאר דיו."
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1815
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1817
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr "המדפסת '%s' דלה בחומרי פיתוח."
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1817
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1819
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr "למדפסת '%s' אזלו חומרי הפיתוח."
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1819
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1821
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr "למדפסת '%s' כמעט אזל לפחות אחד מחומרי ההדפסה."
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1821
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1823
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr "במדפסת '%s' אזל לפחות אחד מחומרי ההדפסה."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1822
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1824
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr "המכסה פתוח במדפסת '%s'."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1823
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1825
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr "הדלת פתוחה במדפסת '%s'."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1824
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1826
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "במדפסת '%s' חסר נייר."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1825
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1827
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "במדפסת '%s' אין נייר"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1826
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1828
 #, c-format
 msgid "Printer '%s' is currently offline."
 msgstr "המדפסת '%s' אינה מקוונת נכון לעכשיו."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1827
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1829
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "קיימת בעיה במדפסת '%s'."
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2285
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2287
 msgid "Paused; Rejecting Jobs"
 msgstr "מופסק; דוחה עבודות"
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2291
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2293
 msgid "Rejecting Jobs"
 msgstr "דוחה עבודות"
 
 #. Translators: this string connects multiple printer states together.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2333
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2335
 msgid "; "
 msgstr "; "
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3857
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4000
 msgid "Two Sided"
 msgstr "שני צדדים"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3858
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4001
 msgid "Paper Type"
 msgstr "סוג נייר"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3859
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4002
 msgid "Paper Source"
 msgstr "מקור נייר"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3860
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4003
 msgid "Output Tray"
 msgstr "מגש פלט"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3861
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4004
 msgid "Resolution"
 msgstr "רזולוציה"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3862
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4005
 msgid "GhostScript pre-filtering"
 msgstr "סינון קדם של GhostScript"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3871
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4014
 msgid "One Sided"
 msgstr "צד אחד"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3873
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4016
 msgid "Long Edge (Standard)"
 msgstr "הצד הארוך (תקני)"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3875
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4018
 msgid "Short Edge (Flip)"
 msgstr "הצד הקצר (היפוך)"
 
 #. Translators: this is an option of "Paper Source"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3877
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3879
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3887
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4020
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4022
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4030
 msgid "Auto Select"
 msgstr "בחירה אוטומטית"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3881
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3883
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3885
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3889
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4377
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4024
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4026
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4028
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4032
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4520
 msgid "Printer Default"
 msgstr "בררת מחדל עבור המדפסת"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3891
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4034
 msgid "Embed GhostScript fonts only"
 msgstr "הטמעת גופני PostScript בלבד"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3893
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4036
 msgid "Convert to PS level 1"
 msgstr "המרה ל־PS רמה 1"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3895
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4038
 msgid "Convert to PS level 2"
 msgstr "המרה ל־PS רמה 2"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3897
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4040
 msgid "No pre-filtering"
 msgstr "אין סינון קדם"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:3906
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4049
 msgid "Miscellaneous"
 msgstr "שונות"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4629
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4772
 msgid "Urgent"
 msgstr "דחוף"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4629
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4772
 msgid "High"
 msgstr "גבוה"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4629
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4772
 msgid "Medium"
 msgstr "בינוני"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4629
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4772
 msgid "Low"
 msgstr "נמוך"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4659
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4802
 msgid "Job Priority"
 msgstr "עדיפות המשימה"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4670
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4813
 msgid "Billing Info"
 msgstr "נתוני חיוב"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4685
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4828
 msgid "None"
 msgstr "ללא"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4685
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4828
 msgid "Classified"
 msgstr "מסווג"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4685
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4828
 msgid "Confidential"
 msgstr "חסוי"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4685
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4828
 msgid "Secret"
 msgstr "סודי"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4685
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4828
 msgid "Standard"
 msgstr "רגיל"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4685
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4828
 msgid "Top Secret"
 msgstr "סודי ביותר"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4685
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4828
 msgid "Unclassified"
 msgstr "לא מסווג"
 
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4696
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4839
 msgid "Pages per Sheet"
 msgstr "מספר העמודים בדף"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4756
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4899
 msgid "Before"
 msgstr "לפני"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4771
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4914
 msgid "After"
 msgstr "אחרי"
 
@@ -4661,14 +4706,14 @@ msgstr "אחרי"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4791
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4934
 msgid "Print at"
 msgstr "זמן הדפסה"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4802
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4945
 msgid "Print at time"
 msgstr "הדפסה בזמן"
 
@@ -4676,17 +4721,17 @@ msgstr "הדפסה בזמן"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4837
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4980
 #, c-format
 msgid "Custom %sx%s"
 msgstr "מותאם אישית %s‏×%s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4918
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5061
 msgid "Printer Profile"
 msgstr "פרופיל מדפסת"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4925
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5068
 msgid "Unavailable"
 msgstr "לא זמין"
 
@@ -4706,38 +4751,38 @@ msgstr "אין פרופיל זמין"
 msgid "Unspecified profile"
 msgstr "פרופיל בלתי מוגדר"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:249
+#: ../modules/printbackends/file/gtkprintbackendfile.c:250
 msgid "output"
 msgstr "output"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:527
+#: ../modules/printbackends/file/gtkprintbackendfile.c:537
 msgid "Print to File"
 msgstr "הדפסה לקובץ"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:653
+#: ../modules/printbackends/file/gtkprintbackendfile.c:663
 msgid "PDF"
 msgstr "PDF"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:653
+#: ../modules/printbackends/file/gtkprintbackendfile.c:663
 msgid "Postscript"
 msgstr "Postscript"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:653
+#: ../modules/printbackends/file/gtkprintbackendfile.c:663
 msgid "SVG"
 msgstr "SVG"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:666
+#: ../modules/printbackends/file/gtkprintbackendfile.c:676
 #: ../modules/printbackends/test/gtkprintbackendtest.c:501
 msgid "Pages per _sheet:"
 msgstr "מספר העמודים ב_דף"
 
 # hebrew note: "תיקייה" is "folder", but there is no better word for
 # "directory"
-#: ../modules/printbackends/file/gtkprintbackendfile.c:725
+#: ../modules/printbackends/file/gtkprintbackendfile.c:735
 msgid "File"
 msgstr "קובץ"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:735
+#: ../modules/printbackends/file/gtkprintbackendfile.c:745
 msgid "_Output format"
 msgstr "_תצורת הפלט"
 
@@ -4754,27 +4799,27 @@ msgid "Command Line"
 msgstr "שורת פקודה"
 
 #. SUN_BRANDING
-#: ../modules/printbackends/papi/gtkprintbackendpapi.c:809
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:786
 msgid "printer offline"
 msgstr "מדפסת לא זמינה"
 
 #. SUN_BRANDING
-#: ../modules/printbackends/papi/gtkprintbackendpapi.c:827
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:804
 msgid "ready to print"
 msgstr "מוכן להדפסה"
 
 #. SUN_BRANDING
-#: ../modules/printbackends/papi/gtkprintbackendpapi.c:830
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:807
 msgid "processing job"
 msgstr "המשימה מתבצעת"
 
 #. SUN_BRANDING
-#: ../modules/printbackends/papi/gtkprintbackendpapi.c:834
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:811
 msgid "paused"
 msgstr "מופסק"
 
 #. SUN_BRANDING
-#: ../modules/printbackends/papi/gtkprintbackendpapi.c:837
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:814
 msgid "unknown"
 msgstr "לא ידוע"
 
