@@ -111,7 +111,8 @@ event_data_new (void)
 static void
 event_data_free (EventData *data)
 {
-  axes_info_free (data->pointer_info);
+  if (data->pointer_info)
+    axes_info_free (data->pointer_info);
   g_hash_table_destroy (data->touch_info);
   g_free (data);
 }
