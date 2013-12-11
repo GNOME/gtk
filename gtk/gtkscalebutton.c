@@ -911,6 +911,9 @@ gtk_scale_popup (GtkWidget *widget,
   x += allocation.x;
   y += allocation.y;
 
+  gtk_window_set_transient_for (GTK_WINDOW (priv->dock),
+                                GTK_WINDOW (gtk_widget_get_toplevel (widget)));
+
   if (priv->orientation == GTK_ORIENTATION_VERTICAL)
     gtk_window_move (GTK_WINDOW (priv->dock), x, y - (SCALE_SIZE / 2));
   else
