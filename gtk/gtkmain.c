@@ -1134,14 +1134,14 @@ gtk_init_check_abi_check (int *argc, char ***argv, int num_checks, size_t sizeof
 GtkTextDirection
 gtk_get_locale_direction (void)
 {
-  gchar            *e   = _("default:LTR");
-  GtkTextDirection  dir = GTK_TEXT_DIR_LTR;
-
   /* Translate to default:RTL if you want your widgets
    * to be RTL, otherwise translate to default:LTR.
    * Do *not* translate it to "predefinito:LTR", if it
    * it isn't default:LTR or default:RTL it will not work
    */
+  gchar            *e   = _("default:LTR");
+  GtkTextDirection  dir = GTK_TEXT_DIR_LTR;
+
   if (g_strcmp0 (e, "default:RTL") == 0)
     dir = GTK_TEXT_DIR_RTL;
   else if (g_strcmp0 (e, "default:LTR") != 0)
