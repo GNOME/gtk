@@ -1796,13 +1796,8 @@ gtk_window_set_title_internal (GtkWindow   *window,
   if (gtk_widget_get_realized (widget))
     gdk_window_set_title (gtk_widget_get_window (widget), new_title);
 
-  if (update_titlebar)
-    {
-      if (GTK_IS_HEADER_BAR (priv->titlebar))
-        gtk_header_bar_set_title (GTK_HEADER_BAR (priv->titlebar), new_title);
-      else if (GTK_IS_HEADER_BAR (priv->title_box))
-        gtk_header_bar_set_title (GTK_HEADER_BAR (priv->title_box), new_title);
-    }
+  if (update_titlebar && GTK_IS_HEADER_BAR (priv->title_box))
+    gtk_header_bar_set_title (GTK_HEADER_BAR (priv->title_box), new_title);
 
   g_object_notify (G_OBJECT (window), "title");
 }
