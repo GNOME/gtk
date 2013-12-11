@@ -1729,7 +1729,7 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
   g_object_class_install_property (object_class,
                                    PROP_SUBTITLE,
                                    g_param_spec_string ("subtitle",
-                                                        P_("Subitle"),
+                                                        P_("Subtitle"),
                                                         P_("The subtitle to display"),
                                                         NULL,
                                                         G_PARAM_READWRITE));
