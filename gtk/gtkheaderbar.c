@@ -53,6 +53,7 @@ struct _GtkHeaderBarPrivate
   GtkWidget *subtitle_label;
   GtkWidget *label_box;
   GtkWidget *label_sizing_box;
+  GtkWidget *subtitle_sizing_label;
   GtkWidget *custom_title;
   GtkWidget *close_button;
   GtkWidget *separator;
@@ -60,6 +61,7 @@ struct _GtkHeaderBarPrivate
   gboolean show_fallback_app_menu;
   GtkWidget *menu_button;
   GtkWidget *menu_separator;
+  gboolean has_subtitle;
 
   GList *children;
 };
@@ -75,6 +77,7 @@ enum {
   PROP_0,
   PROP_TITLE,
   PROP_SUBTITLE,
+  PROP_HAS_SUBTITLE,
   PROP_CUSTOM_TITLE,
   PROP_SPACING,
   PROP_SHOW_CLOSE_BUTTON,
@@ -126,8 +129,10 @@ init_sizing_box (GtkHeaderBar *bar)
    * in case we have only the title.
    */
   priv->label_sizing_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_widget_show (priv->label_sizing_box);
 
   w = gtk_label_new (NULL);
+  gtk_widget_show (w);
   context = gtk_widget_get_style_context (w);
   gtk_style_context_add_class (context, "title");
   gtk_box_pack_start (GTK_BOX (priv->label_sizing_box), w, FALSE, FALSE, 0);
@@ -143,8 +148,8 @@ init_sizing_box (GtkHeaderBar *bar)
   gtk_label_set_line_wrap (GTK_LABEL (w), FALSE);
   gtk_label_set_single_line_mode (GTK_LABEL (w), TRUE);
   gtk_label_set_ellipsize (GTK_LABEL (w), PANGO_ELLIPSIZE_END);
-
-  gtk_widget_show_all (priv->label_sizing_box);
+  gtk_widget_set_visible (w, priv->has_subtitle || priv->subtitle);
+  priv->subtitle_sizing_label = w;
 }
 
 GtkWidget *
@@ -392,6 +397,7 @@ gtk_header_bar_init (GtkHeaderBar *bar)
   priv->separator = NULL;
   priv->children = NULL;
   priv->spacing = DEFAULT_SPACING;
+  priv->has_subtitle = TRUE;
 
   init_sizing_box (bar);
   construct_label_box (bar);
@@ -1082,7 +1088,7 @@ gtk_header_bar_size_allocate (GtkWidget     *widget,
 /**
  * gtk_header_bar_set_title:
  * @bar: a #GtkHeaderBar
- * @title: (allow-none): a title
+ * @title: (allow-none): a title, or %NULL
  *
  * Sets the title of the #GtkHeaderBar. The title should help a user
  * identify the current view. A good title should not include the
@@ -1137,16 +1143,14 @@ gtk_header_bar_get_title (GtkHeaderBar *bar)
 /**
  * gtk_header_bar_set_subtitle:
  * @bar: a #GtkHeaderBar
- * @subtitle: (allow-none): a subtitle
+ * @subtitle: (allow-none): a subtitle, or %NULL
  *
  * Sets the subtitle of the #GtkHeaderBar. The title should give a user
  * an additional detail to help him identify the current view.
  *
- * Note that GtkHeaderBar always reserves room for the subtitle, even
- * if none is currently set. If this is not desired, use
- * gtk_header_bar_set_custom_title() to place your own label in the
- * title position. To achieve the same style, use the "title" style
- * class.
+ * Note that GtkHeaderBar by default reserves room for the subtitle,
+ * even if none is currently set. If this is not desired, set the
+ * #GtkHeaderBar:has-subtitle property to %FALSE.
  *
  * Since: 3.10
  */
@@ -1169,6 +1173,8 @@ gtk_header_bar_set_subtitle (GtkHeaderBar *bar,
       gtk_widget_set_visible (priv->subtitle_label, priv->subtitle != NULL);
       gtk_widget_queue_resize (GTK_WIDGET (bar));
     }
+
+  gtk_widget_set_visible (priv->subtitle_sizing_label, priv->has_subtitle || priv->subtitle);
 
   g_object_notify (G_OBJECT (bar), "subtitle");
 }
@@ -1200,11 +1206,16 @@ gtk_header_bar_get_subtitle (GtkHeaderBar *bar)
  * @bar: a #GtkHeaderBar
  * @title_widget: (allow-none): a custom widget to use for a title
  *
- * Sets a custom title for the #GtkHeaderBar. The title should help a
- * user identify the current view. This supercedes any title set by
- * gtk_header_bar_set_title() or gtk_header_bar_set_subtitle().
- * You should set the custom title to %NULL, for the header title label
- * to be visible again.
+ * Sets a custom title for the #GtkHeaderBar.
+ *
+ * The title should help a user identify the current view. This
+ * supersedes any title set by gtk_header_bar_set_title() or
+ * gtk_header_bar_set_subtitle(). To achieve the same style as
+ * the builtin title and subtitle, use the "title" and "subtitle"
+ * style classes.
+ *
+ * You should set the custom title to %NULL, for the header title
+ * label to be visible again.
  *
  * Since: 3.10
  */
@@ -1328,6 +1339,10 @@ gtk_header_bar_get_property (GObject    *object,
       g_value_set_boolean (value, priv->show_fallback_app_menu);
       break;
 
+    case PROP_HAS_SUBTITLE:
+      g_value_set_boolean (value, gtk_header_bar_get_has_subtitle (bar));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1368,6 +1383,10 @@ gtk_header_bar_set_property (GObject      *object,
 
     case PROP_SHOW_FALLBACK_APP_MENU:
       gtk_header_bar_set_show_fallback_app_menu (bar, g_value_get_boolean (value));
+      break;
+
+    case PROP_HAS_SUBTITLE:
+      gtk_header_bar_set_has_subtitle (bar, g_value_get_boolean (value));
       break;
 
     default:
@@ -1743,6 +1762,22 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
                                                          GTK_PARAM_READWRITE));
 
   /**
+   * GtkHeaderBar:has-subtitle: 
+   * 
+   * If %TRUE, reserve space for a subtitle, even if none
+   * is currently set.
+   *
+   * Since: 3.12
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_HAS_SUBTITLE,
+                                   g_param_spec_boolean ("has-subtitle",
+                                                         P_("Has Subtitle"),
+                                                         P_("Whether to reserve space for a subtitle"),
+                                                         TRUE,
+                                                         GTK_PARAM_READWRITE));
+
+  /**
    * GtkHeaderBar:show-fallback-app-menu:
    *
    * If %TRUE, the header bar will show a menu button for the
@@ -1951,4 +1986,58 @@ gtk_header_bar_set_show_fallback_app_menu (GtkHeaderBar *bar,
   update_fallback_app_menu (bar);
 
   g_object_notify (G_OBJECT (bar), "show-fallback-app-menu");
+}
+
+/**
+ * gtk_header_bar_set_has_subtitle:
+ * @bar: a #GtkHeaderBar
+ * @setting: %TRUE to reserve space for a subtitle
+ *
+ * Sets whether the header bar should reserve space
+ * for a subtitle, even if none is currently set.
+ *
+ * Since: 3.12
+ */
+void
+gtk_header_bar_set_has_subtitle (GtkHeaderBar *bar,
+                                 gboolean      setting)
+{
+  GtkHeaderBarPrivate *priv;
+
+  g_return_if_fail (GTK_IS_HEADER_BAR (bar));
+
+  priv = gtk_header_bar_get_instance_private (bar);
+
+  setting = setting != FALSE;
+
+  if (priv->has_subtitle == setting)
+    return;
+
+  priv->has_subtitle = setting;
+  gtk_widget_set_visible (priv->subtitle_sizing_label, setting || priv->subtitle);
+
+  gtk_widget_queue_resize (GTK_WIDGET (bar));
+
+  g_object_notify (G_OBJECT (bar), "has-subtitle");
+}
+
+/**
+ * gtk_header_bar_get_has_subtitle:
+ * @bar: a #GtkHeaderBar
+ *
+ * Returns whether the header bar reserves space
+ * for a subtitle.
+ *
+ * Since: 3.12
+ */
+gboolean
+gtk_header_bar_get_has_subtitle (GtkHeaderBar *bar)
+{
+  GtkHeaderBarPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_HEADER_BAR (bar), FALSE);
+
+  priv = gtk_header_bar_get_instance_private (bar);
+
+  return priv->has_subtitle;
 }

@@ -97,6 +97,12 @@ GDK_AVAILABLE_IN_3_12
 void         gtk_header_bar_set_show_fallback_app_menu (GtkHeaderBar *bar,
 							gboolean      setting);
 
+GDK_AVAILABLE_IN_3_12
+void         gtk_header_bar_set_has_subtitle (GtkHeaderBar *bar,
+                                              gboolean      setting);
+GDK_AVAILABLE_IN_3_12
+gboolean     gtk_header_bar_get_has_subtitle (GtkHeaderBar *bar);
+
 G_END_DECLS
 
 #endif /* __GTK_HEADER_BAR_H__ */
