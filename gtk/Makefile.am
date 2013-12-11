@@ -490,6 +490,7 @@ gtk_private_h_sources =		\
 	gtkkeyhash.h		\
 	gtklabelprivate.h	\
 	gtklockbuttonprivate.h	\
+	gtkmagnifierprivate.h	\
 	gtkmenubuttonprivate.h	\
 	gtkmenuprivate.h	\
 	gtkmenuitemprivate.h	\
@@ -763,6 +764,7 @@ gtk_base_c_sources = 		\
 	gtkliststore.c		\
 	gtklockbutton.c		\
 	gtkmain.c		\
+	gtkmagnifier.c		\
 	gtkmarshalers.c		\
 	gtkmenu.c		\
 	gtkmenubar.c		\
