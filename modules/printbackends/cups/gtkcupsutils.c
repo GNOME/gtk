@@ -1130,13 +1130,14 @@ _post_check (GtkCupsRequest *request)
         }
 
       request->poll_state = GTK_CUPS_HTTP_IDLE;
-       
-      httpFlush (request->http); 
-      
       request->last_status = HTTP_CONTINUE;
-      httpClose (request->http);
+
+      httpFlush (request->http);
+      if (request->own_http)
+        httpClose (request->http);
       request->http = NULL;
-      return;  
+
+      return;
     }
   else
     {
@@ -1398,12 +1399,14 @@ _get_check (GtkCupsRequest *request)
         }
 
       request->poll_state = GTK_CUPS_HTTP_IDLE;
-      httpFlush (request->http);
-      httpClose (request->http);
       request->last_status = HTTP_CONTINUE;
-      request->http = NULL;
-      return;
 
+      httpFlush (request->http);
+      if (request->own_http)
+        httpClose (request->http);
+      request->http = NULL;
+
+      return;
     }
   else
     {
