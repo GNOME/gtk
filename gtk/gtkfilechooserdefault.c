@@ -306,6 +306,7 @@ typedef struct {
   guint shortcuts_current_folder_active : 1;
   guint show_size_column : 1;
   guint create_folders : 1;
+  guint auto_selecting_first_row : 1;
 } GtkFileChooserDefaultPrivate;
 
 #define GTK_FILE_CHOOSER_DEFAULT_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FILE_CHOOSER_DEFAULT, GtkFileChooserDefaultClass))
@@ -3644,8 +3645,20 @@ browse_files_select_first_row (GtkFileChooserDefault *impl)
 
   /* If the list is empty, do nothing. */
   if (gtk_tree_model_get_iter (tree_model, &dummy_iter, path))
+    {
+      /* Although the following call to gtk_tree_view_set_cursor() is intended to
+       * only change the focus to the first row (not select it), GtkTreeView *will*
+       * select the row anyway due to bug #492206.  So, we'll use a flag to
+       * keep our own callbacks from changing the location_entry when the selection
+       * is changed.  This entire function, browse_files_select_first_row(), may
+       * go away when that bug is fixed in GtkTreeView.
+       */
+      priv->auto_selecting_first_row = TRUE;
+
       gtk_tree_view_set_cursor (GTK_TREE_VIEW (priv->browse_files_tree_view), path, NULL, FALSE);
 
+      priv->auto_selecting_first_row = FALSE;
+    }
   gtk_tree_path_free (path);
 }
 
@@ -4307,40 +4320,40 @@ update_chooser_entry (GtkFileChooserDefault *impl)
     {
       if (priv->operation_mode == OPERATION_MODE_BROWSE)
         {
-          GFileInfo *info;
-          gboolean change_entry;
+	  GFileInfo *info;
+	  gboolean change_entry;
 
-          info = _gtk_file_system_model_get_info (priv->browse_files_model, &closure.first_selected_iter);
+	  info = _gtk_file_system_model_get_info (priv->browse_files_model, &closure.first_selected_iter);
 
-          /* If the cursor moved to the row of the newly created folder,
-           * retrieving info will return NULL.
-           */
-          if (!info)
-            return;
+	  /* If the cursor moved to the row of the newly created folder,
+	   * retrieving info will return NULL.
+	   */
+	  if (!info)
+	    return;
 
-          g_free (priv->browse_files_last_selected_name);
-          priv->browse_files_last_selected_name =
-            g_strdup (g_file_info_get_display_name (info));
+	  g_free (priv->browse_files_last_selected_name);
+	  priv->browse_files_last_selected_name =
+	    g_strdup (g_file_info_get_display_name (info));
 
-          if (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
-              priv->action == GTK_FILE_CHOOSER_ACTION_SAVE ||
-              priv->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
-            {
-              /* Don't change the name when clicking on a folder... */
-              change_entry = (! _gtk_file_info_consider_as_directory (info));
-            }
-          else
-            change_entry = TRUE; /* ... unless we are in SELECT_FOLDER mode */
+	  if (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
+	      priv->action == GTK_FILE_CHOOSER_ACTION_SAVE ||
+	      priv->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+	    {
+	      /* Don't change the name when clicking on a folder... */
+	      change_entry = (! _gtk_file_info_consider_as_directory (info));
+	    }
+	  else
+	    change_entry = TRUE; /* ... unless we are in SELECT_FOLDER mode */
 
-          if (change_entry)
-            {
-              gtk_entry_set_text (GTK_ENTRY (priv->location_entry), priv->browse_files_last_selected_name);
+	  if (change_entry && !priv->auto_selecting_first_row)
+	    {
+	      gtk_entry_set_text (GTK_ENTRY (priv->location_entry), priv->browse_files_last_selected_name);
 
-              if (priv->action == GTK_FILE_CHOOSER_ACTION_SAVE)
-                _gtk_file_chooser_entry_select_filename (GTK_FILE_CHOOSER_ENTRY (priv->location_entry));
-            }
+	      if (priv->action == GTK_FILE_CHOOSER_ACTION_SAVE)
+		_gtk_file_chooser_entry_select_filename (GTK_FILE_CHOOSER_ENTRY (priv->location_entry));
+	    }
 
-          return;
+	  return;
         }
       else if (priv->operation_mode == OPERATION_MODE_RECENT
 	       && priv->action == GTK_FILE_CHOOSER_ACTION_SAVE)
@@ -7543,6 +7556,7 @@ _gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
   priv->sort_order = GTK_SORT_ASCENDING;
   priv->recent_manager = gtk_recent_manager_get_default ();
   priv->create_folders = TRUE;
+  priv->auto_selecting_first_row = FALSE;
 
   /* Ensure GTK+ private types used by the template
    * definition before calling gtk_widget_init_template()
