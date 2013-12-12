@@ -5,7 +5,6 @@ main (int argc, char *argv[])
 {
   GtkWidget *window;
   GtkWidget *header;
-  GtkWidget *title;
   GtkWidget *button;
   GtkWidget *box;
   GtkWidget *image;
