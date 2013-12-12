@@ -1,4 +1,4 @@
-/* Application class
+/* Application Class
  *
  * Demonstrates a simple application.
  *

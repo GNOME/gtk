@@ -1,4 +1,4 @@
-/* Event axes
+/* Event Axes
  *
  * Demonstrates advanced handling of event information from exotic
  * input devices.

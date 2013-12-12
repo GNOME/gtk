@@ -1,4 +1,4 @@
-/* Offscreen windows/Effects
+/* Offscreen Windows/Effects
  *
  * Offscreen windows can be used to render elements multiple times to achieve
  * various effects.

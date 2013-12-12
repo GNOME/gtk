@@ -1,7 +1,7 @@
-/* Combo boxes
+/* Combo Boxes
  *
- * The ComboBox widget allows to select one option out of a list.
- * The ComboBoxEntry additionally allows the user to enter a value
+ * The GtkComboBox widget allows to select one option out of a list.
+ * The GtkComboBoxEntry additionally allows the user to enter a value
  * that is not in the list of options.
  *
  * How the options are displayed is controlled by cell renderers.

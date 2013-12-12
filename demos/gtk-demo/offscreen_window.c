@@ -1,4 +1,4 @@
-/* Offscreen windows/Rotated button
+/* Offscreen Windows/Rotated Button
  *
  * Offscreen windows can be used to transform parts of a widget
  * hierarchy. Note that the rotated button is fully functional.

@@ -1,4 +1,4 @@
-/* Transparent
+/* Transparency
  *
  * Use transparent background on GdkWindows to create a shadow effect on a GtkOverlay widget.
  */
