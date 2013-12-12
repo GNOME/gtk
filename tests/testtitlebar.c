@@ -5,47 +5,63 @@ main (int argc, char *argv[])
 {
   GtkWidget *window;
   GtkWidget *header;
-  GtkWidget *button;
-  GtkWidget *box;
-  GtkWidget *image;
-  GIcon *icon;
+  GtkWidget *grid;
+  GtkWidget *label;
+  GtkWidget *entry;
+  GtkWidget *check;
 
   gtk_init (NULL, NULL);
 
-  if (g_getenv ("DARK"))
-    g_object_set (gtk_settings_get_default (), "gtk-application-prefer-dark-theme", TRUE, NULL);
-
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
 
   header = gtk_header_bar_new ();
-  gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (header), TRUE);
-  gtk_style_context_add_class (gtk_widget_get_style_context (header), "titlebar");
-
-  gtk_header_bar_set_title (GTK_HEADER_BAR (header), "Welcome to Facebook - Log in, sign up or learn more");
-  gtk_header_bar_set_has_subtitle (GTK_HEADER_BAR (header), FALSE);
-
-  button = gtk_button_new ();
-  icon = g_themed_icon_new ("mail-send-receive-symbolic");
-  image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_BUTTON);
-  g_object_unref (icon);
-  gtk_container_add (GTK_CONTAINER (button), image);
-  gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);
-
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-  gtk_style_context_add_class (gtk_widget_get_style_context (box), "linked");
-  button = gtk_button_new ();
-  gtk_container_add (GTK_CONTAINER (button), gtk_arrow_new (GTK_ARROW_LEFT, GTK_SHADOW_NONE));
-  gtk_container_add (GTK_CONTAINER (box), button);
-  button = gtk_button_new ();
-  gtk_container_add (GTK_CONTAINER (button), gtk_arrow_new (GTK_ARROW_RIGHT, GTK_SHADOW_NONE));
-  gtk_container_add (GTK_CONTAINER (box), button);
-
-  gtk_header_bar_pack_start (GTK_HEADER_BAR (header), box);
-
   gtk_window_set_titlebar (GTK_WINDOW (window), header);
 
-  gtk_container_add (GTK_CONTAINER (window), gtk_text_view_new ());
+  grid = gtk_grid_new ();
+  g_object_set (grid,
+                "halign", GTK_ALIGN_CENTER,
+                "margin", 20,
+                "row-spacing", 12,
+                "column-spacing", 12,
+                NULL);
+
+  label = gtk_label_new ("Title");
+  gtk_widget_set_halign (label, GTK_ALIGN_END);
+  entry = gtk_entry_new ();
+  g_object_bind_property (entry, "text",
+                          header, "title",
+                          G_BINDING_SYNC_CREATE);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), entry, 1, 0, 1, 1);
+
+  label = gtk_label_new ("Subtitle");
+  gtk_widget_set_halign (label, GTK_ALIGN_END);
+  entry = gtk_entry_new ();
+  g_object_bind_property (entry, "text",
+                          header, "subtitle",
+                          G_BINDING_SYNC_CREATE);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), entry, 1, 1, 1, 1);
+
+  label = gtk_label_new ("Has Subtitle");
+  gtk_widget_set_halign (label, GTK_ALIGN_END);
+  check = gtk_check_button_new ();
+  g_object_bind_property (check, "active",
+                          header, "has-subtitle",
+                          G_BINDING_SYNC_CREATE);
+  gtk_grid_attach (GTK_GRID (grid), label, 2, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), check, 3, 1, 1, 1);
+
+  label = gtk_label_new ("Close Button");
+  gtk_widget_set_halign (label, GTK_ALIGN_END);
+  check = gtk_check_button_new ();
+  g_object_bind_property (check, "active",
+                          header, "show-close-button",
+                          G_BINDING_SYNC_CREATE);
+  gtk_grid_attach (GTK_GRID (grid), label, 2, 0, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), check, 3, 0, 1, 1);
+
+  gtk_container_add (GTK_CONTAINER (window), grid);
   gtk_widget_show_all (window);
 
   gtk_main ();
