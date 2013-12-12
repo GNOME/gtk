@@ -1004,12 +1004,12 @@ xdg_surface_request_unset_maximized (void *data,
 static const struct xdg_surface_listener xdg_surface_listener = {
   xdg_surface_ping,
   xdg_surface_configure,
-  xdg_surface_focused_set,
-  xdg_surface_focused_unset,
   xdg_surface_request_set_fullscreen,
   xdg_surface_request_unset_fullscreen,
   xdg_surface_request_set_maximized,
   xdg_surface_request_unset_maximized,
+  xdg_surface_focused_set,
+  xdg_surface_focused_unset,
 };
 
 static void
