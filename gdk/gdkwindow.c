@@ -4274,12 +4274,12 @@ gdk_window_set_debug_updates (gboolean setting)
  * set of geometry hints (such as minimum and maximum size).
  */
 void
-gdk_window_constrain_size (GdkGeometry *geometry,
-			   guint        flags,
-			   gint         width,
-			   gint         height,
-			   gint        *new_width,
-			   gint        *new_height)
+gdk_window_constrain_size (GdkGeometry    *geometry,
+			   GdkWindowHints  flags,
+			   gint            width,
+			   gint            height,
+			   gint           *new_width,
+			   gint           *new_height)
 {
   /* This routine is partially borrowed from fvwm.
    *

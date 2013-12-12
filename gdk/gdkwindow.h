@@ -1048,12 +1048,12 @@ GDK_AVAILABLE_IN_ALL
 void       gdk_window_set_debug_updates   (gboolean      setting);
 
 GDK_AVAILABLE_IN_ALL
-void       gdk_window_constrain_size      (GdkGeometry  *geometry,
-                                           guint         flags,
-                                           gint          width,
-                                           gint          height,
-                                           gint         *new_width,
-                                           gint         *new_height);
+void       gdk_window_constrain_size      (GdkGeometry    *geometry,
+                                           GdkWindowHints  flags,
+                                           gint            width,
+                                           gint            height,
+                                           gint           *new_width,
+                                           gint           *new_height);
 
 GDK_DEPRECATED_IN_3_8
 void gdk_window_enable_synchronized_configure (GdkWindow *window);
