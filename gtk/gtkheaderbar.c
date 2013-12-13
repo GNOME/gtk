@@ -346,6 +346,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
           t = g_strsplit (tokens[i], ",", -1);
 
           separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
+          gtk_widget_show (separator);
 
           box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, priv->spacing);
 
@@ -364,8 +365,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   priv->titlebar_icon = button;
                   if (!_gtk_header_bar_update_window_icon (bar, window))
                     gtk_widget_hide (button);
-                  else
-                    gtk_widget_show (separator);
                 }
               else if (strcmp (t[j], "menu") == 0 && menu != NULL)
                 {
@@ -381,10 +380,8 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                     atk_object_set_name (accessible, _("Application menu"));
                   priv->titlebar_icon = image;
                   priv->titlebar_menu_button = button;
-
                   if (!_gtk_header_bar_update_window_icon (bar, window))
                     gtk_image_set_from_icon_name (GTK_IMAGE (priv->titlebar_icon), "process-stop-symbolic", GTK_ICON_SIZE_MENU);
-                  gtk_widget_show (separator);
                 }
               else if (strcmp (t[j], "minimize") == 0 &&
                        gtk_window_get_type_hint (window) == GDK_WINDOW_TYPE_HINT_NORMAL)
@@ -402,7 +399,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   if (GTK_IS_ACCESSIBLE (accessible))
                     atk_object_set_name (accessible, _("Minimize"));
                   priv->titlebar_min_button = button;
-                  gtk_widget_show (separator);
                 }
               else if (strcmp (t[j], "maximize") == 0 &&
                        gtk_window_get_resizable (window) &&
@@ -425,7 +421,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   if (GTK_IS_ACCESSIBLE (accessible))
                     atk_object_set_name (accessible, maximized ? _("Restore") : _("Maximize"));
                   priv->titlebar_max_button = button;
-                  gtk_widget_show (separator);
                 }
               else if (strcmp (t[j], "close") == 0 &&
                        gtk_window_get_deletable (window) &&
@@ -444,7 +439,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   if (GTK_IS_ACCESSIBLE (accessible))
                     atk_object_set_name (accessible, _("Close"));
                   priv->titlebar_close_button = button;
-                  gtk_widget_show (separator);
                 }
 
               if (button)
