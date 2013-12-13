@@ -5220,7 +5220,7 @@ create_decoration (GtkWidget *widget)
       priv->title_box = priv->titlebar;
     }
 
-  update_csd_visibility (window);
+  update_window_buttons (window);
 }
 
 static void
@@ -6756,7 +6756,7 @@ gtk_window_state_event (GtkWidget           *widget,
   if (event->changed_mask & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_TILED))
     {
       update_window_style_classes (window);
-      update_csd_visibility (window);
+      update_window_buttons (window);
       gtk_widget_queue_resize (widget);
     }
 
