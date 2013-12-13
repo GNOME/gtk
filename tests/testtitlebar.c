@@ -71,8 +71,8 @@ activate (GApplication *gapp)
   label = gtk_label_new ("Title");
   gtk_widget_set_halign (label, GTK_ALIGN_END);
   entry = gtk_entry_new ();
-  g_object_bind_property (entry, "text",
-                          header, "title",
+  g_object_bind_property (header, "title",
+                          entry, "text",
                           G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE);
   gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), entry, 1, 0, 1, 1);
@@ -80,8 +80,8 @@ activate (GApplication *gapp)
   label = gtk_label_new ("Subtitle");
   gtk_widget_set_halign (label, GTK_ALIGN_END);
   entry = gtk_entry_new ();
-  g_object_bind_property (entry, "text",
-                          header, "subtitle",
+  g_object_bind_property (header, "subtitle",
+                          entry, "text",
                           G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE);
   gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), entry, 1, 1, 1, 1);
@@ -102,8 +102,8 @@ activate (GApplication *gapp)
   label = gtk_label_new ("Close Button");
   gtk_widget_set_halign (label, GTK_ALIGN_END);
   check = gtk_check_button_new ();
-  g_object_bind_property (check, "active",
-                          header, "show-close-button",
+  g_object_bind_property (header, "show-close-button",
+                          check, "active",
                           G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE);
   gtk_grid_attach (GTK_GRID (grid), label, 2, 0, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), check, 3, 0, 1, 1);
@@ -111,8 +111,8 @@ activate (GApplication *gapp)
   label = gtk_label_new ("Has Subtitle");
   gtk_widget_set_halign (label, GTK_ALIGN_END);
   check = gtk_check_button_new ();
-  g_object_bind_property (check, "active",
-                          header, "has-subtitle",
+  g_object_bind_property (header, "has-subtitle",
+                          check, "active",
                           G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE);
   gtk_grid_attach (GTK_GRID (grid), label, 2, 1, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), check, 3, 1, 1, 1);
@@ -120,8 +120,8 @@ activate (GApplication *gapp)
   label = gtk_label_new ("Shell Shows Menu");
   gtk_widget_set_halign (label, GTK_ALIGN_END);
   check = gtk_check_button_new ();
-  g_object_bind_property (check, "active",
-                          gtk_settings_get_default (), "gtk-shell-shows-app-menu",
+  g_object_bind_property (gtk_settings_get_default (), "gtk-shell-shows-app-menu",
+                          check, "active",
                           G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE);
   gtk_grid_attach (GTK_GRID (grid), label, 2, 2, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), check, 3, 2, 1, 1);
