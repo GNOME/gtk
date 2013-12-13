@@ -200,22 +200,30 @@ create_title_box (const char *title,
   return label_box;
 }
 
-void
+gboolean
 _gtk_header_bar_update_window_icon (GtkHeaderBar *bar,
-                                    GList        *list)
+                                    GtkWindow    *window)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
+  gint size;
+  GList *list;
+  const gchar *name;
+  GdkPixbuf *best = NULL;
 
-  if (priv->titlebar_icon && list != NULL)
+  if (priv->titlebar_icon == NULL)
+    return FALSE;
+
+  if (GTK_IS_BUTTON (gtk_widget_get_parent (priv->titlebar_icon)))
+    size = 16;
+  else
+    size = 20;
+
+  list = gtk_window_get_icon_list (window);
+
+  if (list != NULL)
     {
-      GdkPixbuf *pixbuf, *best;
+      GdkPixbuf *pixbuf;
       GList *l;
-      gint size;
-
-      if (GTK_IS_BUTTON (gtk_widget_get_parent (priv->titlebar_icon)))
-        size = 16;
-      else
-        size = 20;
 
       best = NULL;
       for (l = list; l; l = l->next)
@@ -231,11 +239,26 @@ _gtk_header_bar_update_window_icon (GtkHeaderBar *bar,
       if (best == NULL)
         best = gdk_pixbuf_scale_simple (GDK_PIXBUF (list->data), size, size, GDK_INTERP_BILINEAR);
 
+      g_list_free (list);
+    }
+  else
+    {
+      name = gtk_window_get_icon_name (window);
+      if (name != NULL)
+        best = gtk_icon_theme_load_icon (gtk_icon_theme_get_default (),
+                                         name, size, GTK_ICON_LOOKUP_FORCE_SIZE, NULL);
+    }
+
+  if (best)
+    {
       gtk_image_set_from_pixbuf (GTK_IMAGE (priv->titlebar_icon), best);
       g_object_unref (best);
-
       gtk_widget_show (priv->titlebar_icon);
+
+      return TRUE;
     }
+
+  return FALSE;
 }
 
 void
@@ -247,7 +270,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
   gchar *layout_desc;
   gchar **tokens, **t;
   gint i, j;
-  GdkPixbuf *icon = NULL;
   GMenuModel *menu;
   gboolean shown_by_shell;
 
@@ -260,9 +282,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
 
   if (priv->titlebar_icon)
     {
-      icon = gtk_image_get_pixbuf (GTK_IMAGE (priv->titlebar_icon));
-      if (icon)
-        g_object_ref (icon);
       gtk_widget_destroy (priv->titlebar_icon);
       priv->titlebar_icon = NULL;
     }
@@ -343,30 +362,27 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "titlebutton");
                   gtk_widget_set_size_request (button, 20, 20);
                   gtk_widget_show (button);
-                  if (icon != NULL)
-                    gtk_image_set_from_pixbuf (GTK_IMAGE (button), icon);
-                  else
-                    gtk_widget_hide (button);
-
                   priv->titlebar_icon = button;
+                  if (!_gtk_header_bar_update_window_icon (bar, window))
+                    gtk_widget_hide (button);
                 }
               else if (strcmp (t[j], "menu") == 0 && menu != NULL)
                 {
                   button = gtk_menu_button_new ();
                   gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (button), menu);
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "titlebutton");
-                  if (icon != NULL)
-                    image = gtk_image_new_from_pixbuf (icon);
-                  else
-                    image = gtk_image_new_from_icon_name ("process-stop-symbolic", GTK_ICON_SIZE_MENU);
+                  image = gtk_image_new ();
                   gtk_container_add (GTK_CONTAINER (button), image);
                   gtk_widget_set_can_focus (button, FALSE);
                   gtk_widget_show_all (button);
                   accessible = gtk_widget_get_accessible (button);
                   if (GTK_IS_ACCESSIBLE (accessible))
                     atk_object_set_name (accessible, _("Application menu"));
-		  priv->titlebar_icon = image;
+                  priv->titlebar_icon = image;
                   priv->titlebar_menu_button = button;
+
+                  if (!_gtk_header_bar_update_window_icon (bar, window))
+                    gtk_image_set_from_icon_name (GTK_IMAGE (priv->titlebar_icon), "process-stop-symbolic", GTK_ICON_SIZE_MENU);
                 }
               else if (strcmp (t[j], "minimize") == 0 &&
                        gtk_window_get_type_hint (window) == GDK_WINDOW_TYPE_HINT_NORMAL)
@@ -464,8 +480,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
       g_strfreev (tokens);
     }
   g_free (layout_desc);
-  if (icon)
-    g_object_unref (icon);
 }
 
 gboolean

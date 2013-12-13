@@ -3908,7 +3908,7 @@ gtk_window_realize_icon (GtkWindow *window)
 
   gdk_window_set_icon_list (gtk_widget_get_window (widget), icon_list);
   if (GTK_IS_HEADER_BAR (priv->title_box))
-    _gtk_header_bar_update_window_icon (GTK_HEADER_BAR (priv->title_box), icon_list);
+    _gtk_header_bar_update_window_icon (GTK_HEADER_BAR (priv->title_box), window);
 
   if (info->using_themed_icon) 
     {

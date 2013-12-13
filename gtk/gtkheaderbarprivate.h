@@ -22,7 +22,7 @@
 
 gboolean     _gtk_header_bar_get_shows_app_menu    (GtkHeaderBar *bar);
 void         _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar);
-void         _gtk_header_bar_update_window_icon    (GtkHeaderBar *bar,
-                                                    GList        *list);
+gboolean     _gtk_header_bar_update_window_icon    (GtkHeaderBar *bar,
+                                                    GtkWindow    *window);
 
 #endif /* __GTK_HEADER_BAR_PRIVATE_H__ */
