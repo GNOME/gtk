@@ -297,6 +297,9 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
       priv->titlebar_end_box = NULL;
     }
 
+  if (!priv->shows_wm_decorations)
+    return;
+
   gtk_widget_style_get (GTK_WIDGET (window),
                         "decoration-button-layout", &layout_desc,
                         NULL);
