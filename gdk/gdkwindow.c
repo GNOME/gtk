@@ -10872,3 +10872,42 @@ gdk_window_set_opaque_region (GdkWindow      *window,
   if (impl_class->set_opaque_region)
     return impl_class->set_opaque_region (window, region);
 }
+
+/**
+ * gdk_window_set_shadow_width:
+ * @window: a #GdkWindow
+ * @left: The left extent
+ * @right: The right extent
+ * @top: The top extent
+ * @bottom: The bottom extent
+ *
+ * Newer GTK+ windows using client-side decorations use extra geometry
+ * around their frames for effects like shadows and invisible borders.
+ * Window managers that want to maximize windows or snap to edges need
+ * to know where the extents of the actual frame lie, so that users
+ * don't feel like windows are snapping against random invisible edges.
+ *
+ * Note that this property is automatically updated by GTK+, so this
+ * function should only be used by applications which do not use GTK+
+ * to create toplevel windows.
+ *
+ * Since: 3.12
+ */
+void
+gdk_window_set_shadow_width (GdkWindow *window,
+                             gint       left,
+                             gint       right,
+                             gint       top,
+                             gint       bottom)
+{
+  GdkWindowImplClass *impl_class;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (!GDK_WINDOW_DESTROYED (window));
+  g_return_if_fail (left >= 0 && right >= 0 && top >= 0 && bottom >= 0);
+
+  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+
+  if (impl_class->set_shadow_width)
+    impl_class->set_shadow_width (window, left, right, top, bottom);
+}

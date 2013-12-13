@@ -6422,21 +6422,19 @@ update_border_windows (GtkWindow *window)
 }
 
 static void
-update_frame_extents (GtkWindow *window,
-                      GtkBorder *border)
+update_shadow_width (GtkWindow *window,
+                     GtkBorder *border)
 {
-#ifdef GDK_WINDOWING_X11
   GdkWindow *gdk_window;
 
   gdk_window = gtk_widget_get_window (GTK_WIDGET (window));
 
-  if (GDK_IS_X11_WINDOW (gdk_window))
-    gdk_x11_window_set_frame_extents (gdk_window,
-                                      border->left,
-                                      border->right,
-                                      border->top,
-                                      border->bottom);
-#endif
+  if (gdk_window)
+    gdk_window_set_shadow_width (gdk_window,
+                                 border->left,
+                                 border->right,
+                                 border->top,
+                                 border->bottom);
 }
 
 static void
@@ -6571,7 +6569,7 @@ _gtk_window_set_allocation (GtkWindow           *window,
   priv->title_height = 0;
 
   if (priv->client_decorated)
-    update_frame_extents (window, &window_border);
+    update_shadow_width (window, &window_border);
 
   update_opaque_region (window, &window_border, &child_allocation);
 

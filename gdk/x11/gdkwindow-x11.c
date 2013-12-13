@@ -3660,32 +3660,12 @@ gdk_x11_window_set_hide_titlebar_when_maximized (GdkWindow *window,
     }
 }
 
-/**
- * gdk_x11_window_set_frame_extents:
- * @window: (type GdkX11Window): a #GdkWindow
- * @left: The left extent
- * @right: The right extent
- * @top: The top extent
- * @bottom: The bottom extent
- *
- * Newer GTK+ windows using client-side decorations use extra geometry
- * around their frames for effects like shadows and invisible borders.
- * Window managers that want to maximize windows or snap to edges need
- * to know where the extents of the actual frame lie, so that users
- * don't feel like windows are snapping against random invisible edges.
- *
- * Note that this property is automatically updated by GTK+, so this
- * function should only be used by applications which do not use GTK+
- * to create toplevel windows.
- *
- * Since: 3.10
- */
-void
-gdk_x11_window_set_frame_extents (GdkWindow *window,
-                                  int        left,
-                                  int        right,
-                                  int        top,
-                                  int        bottom)
+static void
+gdk_x11_window_set_shadow_width (GdkWindow *window,
+                                 int        left,
+                                 int        right,
+                                 int        top,
+                                 int        bottom)
 {
   Atom frame_extents;
   gulong data[4] = { left, right, top, bottom };
@@ -3697,6 +3677,31 @@ gdk_x11_window_set_frame_extents (GdkWindow *window,
                    frame_extents, XA_CARDINAL,
                    32, PropModeReplace,
                    (guchar *) &data, 4);
+}
+
+/**
+ * gdk_x11_window_set_frame_extents:
+ * @window: (type GdkX11Window): a #GdkWindow
+ * @left: The left extent
+ * @right: The right extent
+ * @top: The top extent
+ * @bottom: The bottom extent
+ *
+ * This is the same as gdk_window_set_shadow_width() but it only works
+ * on GdkX11Window.
+ *
+ * Since: 3.10
+ *
+ * Deprecated: 3.12: Use gdk_window_set_shadow_width() instead.
+ */
+void
+gdk_x11_window_set_frame_extents (GdkWindow *window,
+                                  int        left,
+                                  int        right,
+                                  int        top,
+                                  int        bottom)
+{
+  gdk_x11_window_set_shadow_width (window, left, right, top, bottom);
 }
 
 /**
@@ -5712,4 +5717,5 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->delete_property = _gdk_x11_window_delete_property;
   impl_class->get_scale_factor = gdk_x11_window_get_scale_factor;
   impl_class->set_opaque_region = gdk_x11_window_set_opaque_region;
+  impl_class->set_shadow_width = gdk_x11_window_set_shadow_width;
 }

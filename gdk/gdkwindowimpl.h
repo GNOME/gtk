@@ -295,6 +295,11 @@ struct _GdkWindowImplClass
 
   void         (* set_opaque_region)      (GdkWindow      *window,
                                            cairo_region_t *region);
+  void         (* set_shadow_width)       (GdkWindow      *window,
+                                           gint            left,
+                                           gint            right,
+                                           gint            top,
+                                           gint            bottom);
 };
 
 /* Interface Functions */
