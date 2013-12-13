@@ -3619,7 +3619,7 @@ _gtk_window_titlebar_shows_app_menu (GtkWindow *window)
   GtkWindowPrivate *priv = window->priv;
 
   if (GTK_IS_HEADER_BAR (priv->title_box))
-    return gtk_header_bar_get_show_close_button (GTK_HEADER_BAR (priv->title_box));
+    return _gtk_header_bar_shows_app_menu (GTK_HEADER_BAR (priv->title_box));
 
   return FALSE;
 }

@@ -486,11 +486,24 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
 }
 
 gboolean
-_gtk_header_bar_get_shows_app_menu (GtkHeaderBar *bar)
+_gtk_header_bar_shows_app_menu (GtkHeaderBar *bar)
 {
   GtkHeaderBarPrivate *priv = gtk_header_bar_get_instance_private (bar);
+  GtkWindow *window;
+  gchar *layout_desc;
+  gboolean ret;
 
-  return (priv->titlebar_menu_button != NULL);
+  window = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (bar)));
+  gtk_widget_style_get (GTK_WIDGET (window),
+                        "decoration-button-layout", &layout_desc,
+                        NULL);
+
+  ret = priv->shows_wm_decorations &&
+        (layout_desc && strstr (layout_desc, "menu"));
+
+  g_free (layout_desc);
+
+  return ret;
 }
 
 static void
