@@ -2887,6 +2887,25 @@ gdk_quartz_window_set_opacity (GdkWindow *window,
   [impl->toplevel setAlphaValue: opacity];
 }
 
+static void
+gdk_quartz_window_set_shadow_width (GdkWindow *window,
+                                    gint       left,
+                                    gint       right,
+                                    gint       top,
+                                    gint       bottom)
+{
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (WINDOW_IS_TOPLEVEL (window));
+
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL (window))
+    return;
+
+  impl->shadow_top = top;
+}
+
 static cairo_region_t *
 gdk_quartz_window_get_shape (GdkWindow *window)
 {
@@ -3000,6 +3019,7 @@ gdk_window_impl_quartz_class_init (GdkWindowImplQuartzClass *klass)
   impl_class->begin_resize_drag = gdk_quartz_window_begin_resize_drag;
   impl_class->begin_move_drag = gdk_quartz_window_begin_move_drag;
   impl_class->set_opacity = gdk_quartz_window_set_opacity;
+  impl_class->set_shadow_width = gdk_quartz_window_set_shadow_width;
   impl_class->destroy_notify = gdk_quartz_window_destroy_notify;
   impl_class->register_dnd = _gdk_quartz_window_register_dnd;
   impl_class->drag_begin = _gdk_quartz_window_drag_begin;
