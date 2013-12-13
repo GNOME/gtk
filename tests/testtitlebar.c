@@ -47,6 +47,7 @@ activate (GApplication *gapp)
                                "  </menu>"
                                "</interface>", -1, NULL);
   window = gtk_application_window_new (app);
+  gtk_window_set_icon_name (GTK_WINDOW (window), "preferences-desktop-font");
 
   menu = (GMenuModel*)gtk_builder_get_object (builder, "app-menu");
   gtk_application_add_window (app, GTK_WINDOW (window));
