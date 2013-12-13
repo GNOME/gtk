@@ -148,7 +148,7 @@ init_sizing_box (GtkHeaderBar *bar)
   gtk_label_set_line_wrap (GTK_LABEL (w), FALSE);
   gtk_label_set_single_line_mode (GTK_LABEL (w), TRUE);
   gtk_label_set_ellipsize (GTK_LABEL (w), PANGO_ELLIPSIZE_END);
-  gtk_widget_set_visible (w, priv->has_subtitle || priv->subtitle);
+  gtk_widget_set_visible (w, priv->has_subtitle || (priv->subtitle && priv->subtitle[0]));
   priv->subtitle_sizing_label = w;
 }
 
@@ -1170,11 +1170,11 @@ gtk_header_bar_set_subtitle (GtkHeaderBar *bar,
   if (priv->subtitle_label != NULL)
     {
       gtk_label_set_label (GTK_LABEL (priv->subtitle_label), priv->subtitle);
-      gtk_widget_set_visible (priv->subtitle_label, priv->subtitle != NULL);
+      gtk_widget_set_visible (priv->subtitle_label, priv->subtitle && priv->subtitle[0]);
       gtk_widget_queue_resize (GTK_WIDGET (bar));
     }
 
-  gtk_widget_set_visible (priv->subtitle_sizing_label, priv->has_subtitle || priv->subtitle);
+  gtk_widget_set_visible (priv->subtitle_sizing_label, priv->has_subtitle || (priv->subtitle && priv->subtitle[0]));
 
   g_object_notify (G_OBJECT (bar), "subtitle");
 }
@@ -2014,7 +2014,7 @@ gtk_header_bar_set_has_subtitle (GtkHeaderBar *bar,
     return;
 
   priv->has_subtitle = setting;
-  gtk_widget_set_visible (priv->subtitle_sizing_label, setting || priv->subtitle);
+  gtk_widget_set_visible (priv->subtitle_sizing_label, setting || (priv->subtitle && priv->subtitle[0]));
 
   gtk_widget_queue_resize (GTK_WIDGET (bar));
 
