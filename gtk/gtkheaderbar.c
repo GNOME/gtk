@@ -359,12 +359,16 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
               if (strcmp (t[j], "icon") == 0)
                 {
                   button = gtk_image_new ();
+                  priv->titlebar_icon = button;
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "titlebutton");
                   gtk_widget_set_size_request (button, 20, 20);
                   gtk_widget_show (button);
-                  priv->titlebar_icon = button;
                   if (!_gtk_header_bar_update_window_icon (bar, window))
-                    gtk_widget_hide (button);
+                    {
+                      gtk_widget_destroy (button);
+                      priv->titlebar_icon = NULL;
+                      button = NULL;
+                    }
                 }
               else if (strcmp (t[j], "menu") == 0 && menu != NULL)
                 {
