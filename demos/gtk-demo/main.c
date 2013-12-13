@@ -105,23 +105,16 @@ window_closed_cb (GtkWidget *window, gpointer data)
 }
 
 static void
-activate_run (GSimpleAction *action,
-              GVariant      *parameter,
-              gpointer       user_data)
+run_example_for_row (GtkWidget    *window,
+                     GtkTreeModel *model,
+                     GtkTreeIter  *iter)
 {
-  GtkWidget *window = user_data;
-  GtkTreeSelection *selection;
-  GtkTreeModel *model;
-  GtkTreeIter iter;
   PangoStyle style;
   GDoDemoFunc func;
   GtkWidget *demo;
 
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
-  gtk_tree_selection_get_selected (selection, &model, &iter);
-
   gtk_tree_model_get (GTK_TREE_MODEL (model),
-                      &iter,
+                      iter,
                       FUNC_COLUMN, &func,
                       STYLE_COLUMN, &style,
                       -1);
@@ -129,7 +122,7 @@ activate_run (GSimpleAction *action,
   if (func)
     {
       gtk_tree_store_set (GTK_TREE_STORE (model),
-                          &iter,
+                          iter,
                           STYLE_COLUMN, (style == PANGO_STYLE_ITALIC ? PANGO_STYLE_NORMAL : PANGO_STYLE_ITALIC),
                           -1);
       demo = (func) (window);
@@ -140,7 +133,7 @@ activate_run (GSimpleAction *action,
 
           cbdata = g_new (CallbackData, 1);
           cbdata->model = model;
-          cbdata->path = gtk_tree_model_get_path (model, &iter);
+          cbdata->path = gtk_tree_model_get_path (model, iter);
 
           if (gtk_widget_is_toplevel (demo))
             {
@@ -152,6 +145,22 @@ activate_run (GSimpleAction *action,
                             G_CALLBACK (window_closed_cb), cbdata);
         }
     }
+}
+
+static void
+activate_run (GSimpleAction *action,
+              GVariant      *parameter,
+              gpointer       user_data)
+{
+  GtkWidget *window = user_data;
+  GtkTreeSelection *selection;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview));
+  gtk_tree_selection_get_selected (selection, &model, &iter);
+
+  run_example_for_row (window, model, &iter);
 }
 
 /* Stupid syntax highlighting.
@@ -918,6 +927,22 @@ startup (GApplication *app)
 }
 
 static void
+row_activated_cb (GtkWidget         *tree_view,
+                  GtkTreePath       *path,
+                  GtkTreeViewColumn *column)
+{
+  GtkTreeIter iter;
+  GtkWidget *window;
+  GtkTreeModel *model;
+
+  window = gtk_widget_get_toplevel (tree_view);
+  model = gtk_tree_view_get_model (GTK_TREE_VIEW (tree_view));
+  gtk_tree_model_get_iter (model, &iter, path);
+
+  run_example_for_row (window, model, &iter);
+}
+
+static void
 activate (GApplication *app)
 {
   GtkBuilder *builder;
@@ -955,6 +980,8 @@ activate (GApplication *app)
   load_file (gtk_demos[0].name, gtk_demos[0].filename);
 
   populate_model (model);
+
+  g_signal_connect (treeview, "row-activated", G_CALLBACK (row_activated_cb), model);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "treeview-selection");
   g_signal_connect (widget, "changed", G_CALLBACK (selection_cb), model);
