@@ -9177,22 +9177,21 @@ gtk_window_compute_hints (GtkWindow   *window,
   
   if (*new_flags & GDK_HINT_MAX_SIZE)
     {
-      if (new_geometry->max_width < 0)
-	new_geometry->max_width = requisition.width;
-      else
+      if (new_geometry->max_width >= 0)
 	new_geometry->max_width += extra_width;
+      new_geometry->max_width = MAX (new_geometry->max_width, new_geometry->min_width);
 
-      if (new_geometry->max_height < 0)
-	new_geometry->max_height = requisition.height;
-      else
+      if (new_geometry->max_height >= 0)
 	new_geometry->max_height += extra_height;
+
+      new_geometry->max_height = MAX (new_geometry->max_height, new_geometry->min_height);
     }
   else if (!priv->resizable)
     {
       *new_flags |= GDK_HINT_MAX_SIZE;
       
-      new_geometry->max_width = requisition.width;
-      new_geometry->max_height = requisition.height;
+      new_geometry->max_width = new_geometry->min_width;
+      new_geometry->max_height = new_geometry->min_height;
     }
 
   *new_flags |= GDK_HINT_WIN_GRAVITY;
