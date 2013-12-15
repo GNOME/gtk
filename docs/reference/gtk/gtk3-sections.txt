@@ -6677,6 +6677,7 @@ gtk_icon_info_set_raw_coordinates
 gtk_icon_info_get_embedded_rect
 gtk_icon_info_get_attach_points
 gtk_icon_info_get_display_name
+gtk_icon_info_is_symbolic
 <SUBSECTION Standard>
 GtkIconThemeClass
 GTK_ICON_THEME
