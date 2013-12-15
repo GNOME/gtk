@@ -3544,6 +3544,36 @@ gtk_icon_info_get_builtin_pixbuf (GtkIconInfo *icon_info)
   return icon_info->cache_pixbuf;
 }
 
+/**
+ * gtk_icon_info_is_symbolic:
+ * @icon_info: a #GtkIconInfo structure
+ *
+ * Checks if the icon is symbolic or not. This currently uses only
+ * the file name and not the file contents for determining this.
+ * This behaviour may change in the future.
+ *
+ * Return value: %TRUE if the icon is symbolic, %FALSE otherwise.
+ *
+ * Since: 3.12
+ **/
+gboolean
+gtk_icon_info_is_symbolic (GtkIconInfo *icon_info)
+{
+  gchar *icon_uri;
+  gboolean is_symbolic;
+
+  g_return_val_if_fail (GTK_IS_ICON_INFO (icon_info), FALSE);
+
+  icon_uri = NULL;
+  if (icon_info->icon_file)
+    icon_uri = g_file_get_uri (icon_info->icon_file);
+
+  is_symbolic = (icon_uri != NULL) && (g_str_has_suffix (icon_uri, "-symbolic.svg"));
+  g_free (icon_uri);
+
+  return is_symbolic;
+}
+
 static gboolean icon_info_ensure_scale_and_pixbuf (GtkIconInfo*, gboolean);
 
 /* Combine the icon with all emblems, the first emblem is placed 
@@ -4329,18 +4359,12 @@ gtk_icon_info_load_symbolic (GtkIconInfo    *icon_info,
                              gboolean       *was_symbolic,
                              GError        **error)
 {
-  gchar *icon_uri;
   gboolean is_symbolic;
 
   g_return_val_if_fail (icon_info != NULL, NULL);
   g_return_val_if_fail (fg != NULL, NULL);
 
-  icon_uri = NULL;
-  if (icon_info->icon_file)
-    icon_uri = g_file_get_uri (icon_info->icon_file);
-
-  is_symbolic = (icon_uri != NULL) && (g_str_has_suffix (icon_uri, "-symbolic.svg"));
-  g_free (icon_uri);
+  is_symbolic = gtk_icon_info_is_symbolic (icon_info);
 
   if (was_symbolic)
     *was_symbolic = is_symbolic;
@@ -4396,18 +4420,12 @@ gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,
   GdkRGBA error_color;
   GdkRGBA *error_colorp;
   GtkStateFlags state;
-  gchar *icon_uri;
   gboolean is_symbolic;
 
   g_return_val_if_fail (icon_info != NULL, NULL);
   g_return_val_if_fail (context != NULL, NULL);
 
-  icon_uri = NULL;
-  if (icon_info->icon_file)
-    icon_uri = g_file_get_uri (icon_info->icon_file);
-
-  is_symbolic = (icon_uri != NULL) && (g_str_has_suffix (icon_uri, "-symbolic.svg"));
-  g_free (icon_uri);
+  is_symbolic = gtk_icon_info_is_symbolic (icon_info);
 
   if (was_symbolic)
     *was_symbolic = is_symbolic;
@@ -4542,7 +4560,6 @@ gtk_icon_info_load_symbolic_async (GtkIconInfo   *icon_info,
 {
   GTask *task;
   AsyncSymbolicData *data;
-  gchar *icon_uri;
   SymbolicPixbufCache *symbolic_cache;
   GdkPixbuf *pixbuf;
 
@@ -4554,12 +4571,7 @@ gtk_icon_info_load_symbolic_async (GtkIconInfo   *icon_info,
   data = g_slice_new0 (AsyncSymbolicData);
   g_task_set_task_data (task, data, (GDestroyNotify) async_symbolic_data_free);
 
-  icon_uri = NULL;
-  if (icon_info->icon_file)
-    icon_uri = g_file_get_uri (icon_info->icon_file);
-
-  data->is_symbolic = (icon_uri != NULL) && (g_str_has_suffix (icon_uri, "-symbolic.svg"));
-  g_free (icon_uri);
+  data->is_symbolic = gtk_icon_info_is_symbolic (icon_info);
 
   if (!data->is_symbolic)
     {
@@ -4814,18 +4826,12 @@ gtk_icon_info_load_symbolic_for_style (GtkIconInfo   *icon_info,
   GdkRGBA *warning_colorp;
   GdkRGBA error_color;
   GdkRGBA *error_colorp;
-  gchar *icon_uri;
   gboolean is_symbolic;
 
   g_return_val_if_fail (icon_info != NULL, NULL);
   g_return_val_if_fail (style != NULL, NULL);
 
-  icon_uri = NULL;
-  if (icon_info->icon_file)
-    icon_uri = g_file_get_uri (icon_info->icon_file);
-
-  is_symbolic = (icon_uri != NULL) && (g_str_has_suffix (icon_uri, "-symbolic.svg"));
-  g_free (icon_uri);
+  is_symbolic = gtk_icon_info_is_symbolic (icon_info);
 
   if (was_symbolic)
     *was_symbolic = is_symbolic;

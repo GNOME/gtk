@@ -267,6 +267,8 @@ GDK_AVAILABLE_IN_ALL
 const gchar *         gtk_icon_info_get_filename       (GtkIconInfo   *icon_info);
 GDK_AVAILABLE_IN_ALL
 GdkPixbuf *           gtk_icon_info_get_builtin_pixbuf (GtkIconInfo   *icon_info);
+GDK_AVAILABLE_IN_3_12
+gboolean              gtk_icon_info_is_symbolic        (GtkIconInfo   *icon_info);
 GDK_AVAILABLE_IN_ALL
 GdkPixbuf *           gtk_icon_info_load_icon          (GtkIconInfo   *icon_info,
 							GError       **error);
