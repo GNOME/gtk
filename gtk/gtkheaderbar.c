@@ -359,6 +359,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
               if (strcmp (t[j], "icon") == 0)
                 {
                   button = gtk_image_new ();
+                  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
                   priv->titlebar_icon = button;
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "titlebutton");
                   gtk_widget_set_size_request (button, 20, 20);
@@ -373,6 +374,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
               else if (strcmp (t[j], "menu") == 0 && menu != NULL)
                 {
                   button = gtk_menu_button_new ();
+                  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
                   gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (button), menu);
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "titlebutton");
                   image = gtk_image_new ();
@@ -391,6 +393,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                        gtk_window_get_type_hint (window) == GDK_WINDOW_TYPE_HINT_NORMAL)
                 {
                   button = gtk_button_new ();
+                  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "titlebutton");
                   image = gtk_image_new_from_icon_name ("window-minimize-symbolic", GTK_ICON_SIZE_MENU);
                   g_object_set (image, "use-fallback", TRUE, NULL);
@@ -413,6 +416,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
 
                   icon_name = maximized ? "window-restore-symbolic" : "window-maximize-symbolic";
                   button = gtk_button_new ();
+                  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "titlebutton");
                   image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
                   g_object_set (image, "use-fallback", TRUE, NULL);
@@ -431,6 +435,7 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                        gtk_window_get_type_hint (window) == GDK_WINDOW_TYPE_HINT_NORMAL)
                 {
                   button = gtk_button_new ();
+                  gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
                   image = gtk_image_new_from_icon_name ("window-close-symbolic", GTK_ICON_SIZE_MENU);
                   gtk_style_context_add_class (gtk_widget_get_style_context (button), "titlebutton");
                   g_object_set (image, "use-fallback", TRUE, NULL);
