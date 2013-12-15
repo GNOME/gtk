@@ -1,6 +1,19 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
 
+typedef struct
+{
+  GtkApplication parent_instance;
+
+  guint quit_inhibit;
+  GMenu *time;
+  guint timeout;
+} BloatPad;
+
+typedef GtkApplicationClass BloatPadClass;
+
+G_DEFINE_TYPE (BloatPad, bloat_pad, GTK_TYPE_APPLICATION)
+
 static void
 activate_toggle (GSimpleAction *action,
                  GVariant      *parameter,
@@ -126,9 +139,27 @@ activate_clear (GSimpleAction *action,
 
 static void
 text_buffer_changed_cb (GtkTextBuffer *buffer,
-                        GApplication  *app)
+                        BloatPad      *app)
 {
   gint old_n, n;
+
+  n = gtk_text_buffer_get_char_count (buffer);
+  if (n > 0)
+    {
+      if (!app->quit_inhibit)
+        app->quit_inhibit = gtk_application_inhibit (GTK_APPLICATION (app),
+                                                     gtk_application_get_active_window (GTK_APPLICATION (app)),
+                                                     GTK_APPLICATION_INHIBIT_LOGOUT,
+                                                     "bloatpad can't save, so you can't logout; erase your text");
+    }
+  else
+    {
+      if (app->quit_inhibit)
+        {
+          gtk_application_uninhibit (GTK_APPLICATION (app), app->quit_inhibit);
+          app->quit_inhibit = 0;
+        }
+    }
 
   old_n = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (buffer), "line-count"));
   n = gtk_text_buffer_get_line_count (buffer);
@@ -140,7 +171,7 @@ text_buffer_changed_cb (GtkTextBuffer *buffer,
       n = g_notification_new ("Three lines of text");
       g_notification_set_body (n, "Keep up the good work!");
       g_notification_add_button (n, "Start over", "app.clear");
-      g_application_send_notification (app, "three-lines", n);
+      g_application_send_notification (G_APPLICATION (app), "three-lines", n);
       g_object_unref (n);
     }
 }
@@ -253,18 +284,6 @@ bloat_pad_open (GApplication  *application,
   for (i = 0; i < n_files; i++)
     new_window (application, files[i]);
 }
-
-typedef struct
-{
-  GtkApplication parent_instance;
-
-  GMenu *time;
-  guint timeout;
-} BloatPad;
-
-typedef GtkApplicationClass BloatPadClass;
-
-G_DEFINE_TYPE (BloatPad, bloat_pad, GTK_TYPE_APPLICATION)
 
 static void
 bloat_pad_finalize (GObject *object)
