@@ -575,6 +575,16 @@ gtk_menu_tracker_item_get_accel (GtkMenuTrackerItem *self)
   return gtk_action_muxer_get_primary_accel (GTK_ACTION_MUXER (self->observable), self->action_and_target);
 }
 
+const gchar *
+gtk_menu_tracker_item_get_special (GtkMenuTrackerItem *self)
+{
+  const gchar *special = NULL;;
+
+  g_menu_item_get_attribute (self->item, "gtk-private-special", "&s", &special);
+
+  return special;
+}
+
 GMenuModel *
 _gtk_menu_tracker_item_get_submenu (GtkMenuTrackerItem *self)
 {
