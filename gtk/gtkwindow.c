@@ -5451,6 +5451,9 @@ gtk_window_map (GtkWidget *widget)
     gtk_window_set_focus_visible (window, gtk_window_get_focus_visible (priv->transient_parent));
   else
     gtk_window_set_focus_visible (window, FALSE);
+
+  if (priv->application)
+    gtk_application_handle_window_map (priv->application, window);
 }
 
 static gboolean
@@ -5854,6 +5857,9 @@ gtk_window_realize (GtkWidget *widget)
         gdk_x11_window_set_user_time (gdk_window, priv->initial_timestamp);
     }
 #endif
+
+  if (priv->application)
+    gtk_application_handle_window_realize (priv->application, window);
 
   /* Icons */
   gtk_window_realize_icon (window);

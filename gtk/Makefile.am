@@ -628,6 +628,7 @@ gtk_base_c_sources = 		\
 	gtkappchoosermodule.c	\
 	gtkappchooseronline.c	\
 	gtkapplication.c	\
+	gtkapplicationimpl.c	\
 	gtkapplicationwindow.c	\
 	gtkarrow.c		\
 	gtkaspectframe.c	\
@@ -962,7 +963,15 @@ gtk_use_x11_c_sources = 	\
 	gtksocket.c		\
 	gtkxembed.c		\
 	gtktrayicon-x11.c	\
+	gtkapplication-x11.c	\
 	gtkmountoperation-x11.c
+
+gtk_use_wayland_c_sources = \
+	gtkapplication-wayland.c
+
+gtk_use_wayland_or_x11_c_sources = \
+	gtkapplication-dbus.c
+
 gtk_use_win32_c_sources = 	\
 	gtkwin32embed.c		\
 	gtkwin32embedwidget.c	\
@@ -971,6 +980,7 @@ gtk_use_quartz_c_sources = 	\
 	gtksearchenginequartz.c	\
 	gtkmountoperation-stub.c \
 	gtkmodelmenu-quartz.c \
+	gtkapplication-quartz.c \
 	gtkquartz.c
 gtk_use_stub_c_sources = 	\
 	gtkmountoperation-stub.c
@@ -982,6 +992,20 @@ gtk_use_x11_private_h_sources = 	\
 if USE_X11
 gtk_c_sources += $(gtk_use_x11_c_sources)
 gtk_private_h_sources += $(gtk_use_x11_private_h_sources)
+endif
+
+if USE_WAYLAND
+gtk_c_sources += $(gtk_use_wayland_c_sources)
+endif
+
+# pretty tricky way to write USE_WAYLAND || USE_X11...
+if USE_WAYLAND
+gtk_c_sources += $(gtk_use_wayland_or_x11_c_sources)
+else
+if USE_X11
+gtk_c_sources += $(gtk_use_wayland_or_x11_c_sources)
+else
+endif
 endif
 
 gtk_use_win32_private_h_sources = 	\
