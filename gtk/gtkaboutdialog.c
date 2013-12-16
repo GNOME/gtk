@@ -94,25 +94,31 @@
  */
 
 /* Translators: this is the license preamble; the string at the end
- * contains the URL of the license.
+ * contains the name of the license as link text.
  */
-static const gchar *gtk_license_preamble = N_("This program comes with ABSOLUTELY NO WARRANTY;\nfor details, visit <a href=\"%s\">%s</a>");
+static const gchar *gtk_license_preamble = N_("This program comes with ABSOLUTELY NO WARRANTY.\nSee the <a href=\"%s\">%s</a> for details.");
 
-/* URLs for each GtkLicense type; keep in the same order as the enumeration */
-static const gchar *gtk_license_urls[] = {
-  NULL,
-  NULL,
+typedef struct
+{
+  const gchar *name;
+  const gchar *url;
+} LicenseInfo;
 
-  "http://www.gnu.org/licenses/old-licenses/gpl-2.0.html",
-  "http://www.gnu.org/licenses/gpl.html",
-
-  "http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html",
-  "http://www.gnu.org/licenses/lgpl.html",
-
-  "http://opensource.org/licenses/bsd-license.php",
-  "http://opensource.org/licenses/mit-license.php",
-
-  "http://opensource.org/licenses/artistic-license-2.0.php"
+/* LicenseInfo for each GtkLicense type; keep in the same order as the enumeration */
+static const LicenseInfo gtk_license_info [] = {
+  { N_("License"), NULL },
+  { N_("Custom License") , NULL },
+  { N_("GNU General Public License, version 2 or later"), "http://www.gnu.org/licenses/old-licenses/gpl-2.0.html" },
+  { N_("GNU General Public License, version 3 or later"), "http://www.gnu.org/licenses/gpl.html" },
+  { N_("GNU Lesser General Public License, version 2.1 or later"), "http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html" },
+  { N_("GNU Lesser General Public License, version 3 or later"), "http://www.gnu.org/licenses/lgpl.html" },
+  { N_("BSD 2-Clause License"), "http://opensource.org/licenses/bsd-license.php" },
+  { N_("The MIT License (MIT)"), "http://opensource.org/licenses/mit-license.php" },
+  { N_("Artistic License 2.0"), "http://opensource.org/licenses/artistic-license-2.0.php" },
+  { N_("GNU General Public License, version 2 only"), "http://www.gnu.org/licenses/old-licenses/gpl-2.0.html" },
+  { N_("GNU General Public License, version 3 only"), "http://www.gnu.org/licenses/gpl.html" },
+  { N_("GNU Lesser General Public License, version 2.1 only"), "http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html" },
+  { N_("GNU Lesser General Public License, version 3 only"), "http://www.gnu.org/licenses/lgpl.html" }
 };
 
 typedef struct
@@ -2479,16 +2485,18 @@ gtk_about_dialog_set_license_type (GtkAboutDialog *about,
       /* custom licenses use the contents of the :license property */
       if (priv->license_type != GTK_LICENSE_CUSTOM)
         {
+          const gchar *name;
           const gchar *url;
           gchar *license_string;
           GString *str;
 
-          url = gtk_license_urls[priv->license_type];
+          name = _(gtk_license_info[priv->license_type].name);
+          url = gtk_license_info[priv->license_type].url;
           if (url == NULL)
             url = priv->website_url;
 
           str = g_string_sized_new (256);
-          g_string_append_printf (str, _(gtk_license_preamble), url, url);
+          g_string_append_printf (str, _(gtk_license_preamble), url, name);
 
           g_free (priv->license);
           priv->license = g_string_free (str, FALSE);
