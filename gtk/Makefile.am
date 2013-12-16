@@ -979,8 +979,8 @@ gtk_use_win32_c_sources = 	\
 gtk_use_quartz_c_sources = 	\
 	gtksearchenginequartz.c	\
 	gtkmountoperation-stub.c \
-	gtkmodelmenu-quartz.c \
 	gtkapplication-quartz.c \
+	gtkapplication-quartz-menu.c \
 	gtkquartz.c
 gtk_use_stub_c_sources = 	\
 	gtkmountoperation-stub.c
@@ -1018,7 +1018,6 @@ endif
 
 gtk_use_quartz_private_h_sources = 	\
 	gtksearchenginequartz.h	\
-	gtkmodelmenu-quartz.h \
 	gtkquartz.h
 if USE_QUARTZ
 gtk_c_sources += $(gtk_use_quartz_c_sources)
