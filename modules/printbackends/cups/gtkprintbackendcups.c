@@ -480,6 +480,7 @@ typedef struct {
   GtkPrintJob *job;
   gpointer user_data;
   GDestroyNotify dnotify;
+  http_t *http;
 } CupsPrintStreamData;
 
 static void
@@ -491,6 +492,8 @@ cups_free_print_stream_data (CupsPrintStreamData *data)
   if (data->dnotify)
     data->dnotify (data->user_data);
   g_object_unref (data->job);
+  if (data->http != NULL)
+    httpClose (data->http);
   g_free (data);
 }
 
@@ -621,6 +624,7 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
   GtkPrintSettings *settings;
   const gchar *title;
   char  printer_absolute_uri[HTTP_MAX_URI];
+  http_t *http = NULL;
 
   GTK_NOTE (PRINTING,
             g_print ("CUPS Backend: %s\n", G_STRFUNC));
@@ -631,8 +635,6 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
 #ifdef HAVE_CUPS_API_1_6
   if (cups_printer->avahi_browsed)
     {
-      http_t *http;
-
       http = httpConnect (cups_printer->hostname, cups_printer->port);
       if (http)
         {
@@ -718,6 +720,7 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
   ps->user_data = user_data;
   ps->dnotify = dnotify;
   ps->job = g_object_ref (job);
+  ps->http = http;
 
   request->need_auth_info = cups_printer->auth_info_required != NULL;
   request->auth_info_required = g_strdupv (cups_printer->auth_info_required);
@@ -2502,8 +2505,8 @@ cups_request_avahi_printer_info (const gchar         *printer_uri,
       cups_request_execute (backend,
                             request,
                             (GtkPrintCupsResponseCallbackFunc) cups_request_avahi_printer_info_cb,
-                            NULL,
-                            NULL);
+                            http,
+                            (GDestroyNotify) httpClose);
     }
 }
 
