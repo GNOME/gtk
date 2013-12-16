@@ -5162,9 +5162,9 @@ create_titlebar (GtkWindow *window)
 
   titlebar = gtk_header_bar_new ();
   g_object_set (titlebar,
-                "spacing", 0,
                 "title", priv->title ? priv->title : get_default_title (),
                 "has-subtitle", FALSE,
+                "show-close-button", TRUE,
                 NULL);
   context = gtk_widget_get_style_context (titlebar);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_TITLEBAR);
