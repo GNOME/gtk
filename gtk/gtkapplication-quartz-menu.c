@@ -59,6 +59,7 @@
   GtkMenuTrackerItem *trackerItem;
   gulong trackerItemChangedHandler;
   GCancellable *cancellable;
+  BOOL isSpecial;
 }
 
 - (id)initWithTrackerItem:(GtkMenuTrackerItem *)aTrackerItem;
@@ -167,6 +168,7 @@ icon_loaded (GObject      *object,
 
       trackerItem = g_object_ref (aTrackerItem);
       trackerItemChangedHandler = g_signal_connect (trackerItem, "notify", G_CALLBACK (tracker_item_changed), self);
+      isSpecial = (special != NULL);
 
       [self didChangeLabel];
       [self didChangeIcon];
@@ -199,7 +201,29 @@ icon_loaded (GObject      *object,
 {
   gchar *label = _gtk_toolbar_elide_underscores (gtk_menu_tracker_item_get_label (trackerItem));
 
-  [self setTitle:[NSString stringWithUTF8String:label ? : ""]];
+  NSString *title = [NSString stringWithUTF8String:label ? : ""];
+
+  if (isSpecial)
+    {
+      NSRange range = [title rangeOfString:@"%s"];
+
+      if (range.location != NSNotFound)
+        {
+          NSBundle *bundle = [NSBundle mainBundle];
+          NSString *name = [[bundle localizedInfoDictionary] objectForKey:@"CFBundleName"];
+
+          if (name == nil)
+            name = [[bundle infoDictionary] objectForKey:@"CFBundleName"];
+
+          if (name == nil)
+            name = [[NSProcessInfo processInfo] processName];
+
+          if (name != nil)
+            title = [title stringByReplacingCharactersInRange:range withString:name];
+        }
+    }
+
+  [self setTitle:title];
 
   g_free (label);
 }
