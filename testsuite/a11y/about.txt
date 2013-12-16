@@ -263,16 +263,16 @@ window1
             "label"
             parent: page_vbox
             index: 4
-            name: This program comes with ABSOLUTELY NO WARRANTY;
-for details, visit http://www.gnu.org/licenses/gpl.html
+            name: This program comes with ABSOLUTELY NO WARRANTY.
+See the GNU General Public License, version 3 or later for details.
             state: enabled focusable multi-line sensitive showing visible
             toolkit: gtk
             <AtkComponent>
             layer: widget
             alpha: 1
             <AtkText>
-            text: This program comes with ABSOLUTELY NO WARRANTY;
-for details, visit http://www.gnu.org/licenses/gpl.html
+            text: This program comes with ABSOLUTELY NO WARRANTY.
+See the GNU General Public License, version 3 or later for details.
             character count: 103
             caret offset: 0
             default attributes: bg-color: <omitted>
