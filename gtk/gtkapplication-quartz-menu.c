@@ -61,12 +61,12 @@
 
 - (void)didChangeLabel;
 - (void)didChangeIcon;
-- (void)didChangeSensitive;
 - (void)didChangeVisible;
 - (void)didChangeToggled;
 - (void)didChangeAccel;
 
 - (void)didSelectItem:(id)sender;
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem;
 
 @end
 
@@ -296,7 +296,6 @@ tracker_item_changed (GObject    *object,
 {
   static const gchar *label = NULL;
   static const gchar *icon = NULL;
-  static const gchar *sensitive = NULL;
   static const gchar *visible = NULL;
   static const gchar *toggled = NULL;
   static const gchar *accel = NULL;
@@ -308,8 +307,6 @@ tracker_item_changed (GObject    *object,
     label = g_intern_static_string ("label");
   if (G_UNLIKELY (icon == NULL))
     icon = g_intern_static_string ("icon");
-  if (G_UNLIKELY (sensitive == NULL))
-    sensitive = g_intern_static_string ("sensitive");
   if (G_UNLIKELY (visible == NULL))
     visible = g_intern_static_string ("visible");
   if (G_UNLIKELY (toggled == NULL))
@@ -321,8 +318,6 @@ tracker_item_changed (GObject    *object,
     [item didChangeLabel];
   else if (name == icon)
     [item didChangeIcon];
-  else if (name == sensitive)
-    [item didChangeSensitive];
   else if (name == visible)
     [item didChangeVisible];
   else if (name == toggled)
@@ -332,6 +327,11 @@ tracker_item_changed (GObject    *object,
 }
 
 @implementation GNSMenuItem
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+  return gtk_menu_tracker_item_get_sensitive (trackerItem) ? YES : NO;
+}
 
 - (id)initWithTrackerItem:(GtkMenuTrackerItem *)aTrackerItem
 {
@@ -346,7 +346,6 @@ tracker_item_changed (GObject    *object,
 
       [self didChangeLabel];
       [self didChangeIcon];
-      [self didChangeSensitive];
       [self didChangeVisible];
       [self didChangeToggled];
       [self didChangeAccel];
@@ -553,11 +552,6 @@ tracker_item_changed (GObject    *object,
     [self setImage:nil];
 }
 
-- (void)didChangeSensitive
-{
-  [self setEnabled:gtk_menu_tracker_item_get_sensitive (trackerItem) ? YES : NO];
-}
-
 - (void)didChangeVisible
 {
   [self setHidden:gtk_menu_tracker_item_get_visible (trackerItem) ? NO : YES];
@@ -646,8 +640,6 @@ menu_item_removed (gint     position,
 {
   if ((self = [super initWithTitle:title]) != nil)
     {
-      [self setAutoenablesItems:NO];
-
       tracker = gtk_menu_tracker_new (observable,
                                       model,
                                       NO,
@@ -664,8 +656,6 @@ menu_item_removed (gint     position,
 {
   if ((self = [super initWithTitle:title]) != nil)
     {
-      [self setAutoenablesItems:NO];
-
       tracker = gtk_menu_tracker_new_for_item_submenu (trackerItem,
                                                        menu_item_inserted,
                                                        menu_item_removed,
