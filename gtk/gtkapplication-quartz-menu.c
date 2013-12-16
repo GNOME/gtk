@@ -433,7 +433,12 @@ tracker_item_changed (GObject    *object,
 {
   NSString *label = [NSString stringWithUTF8String:gtk_menu_tracker_item_get_label (trackerItem) ? : ""];
   NSMutableString *title = [NSMutableString stringWithCapacity:[label length]];
+  NSRange range;
   int i;
+
+  range = [label rangeOfString:@"`gtk-private-appname`"];
+  if (range.location != NSNotFound)
+    label = [label stringByReplacingCharactersInRange:range withString:[[NSProcessInfo processInfo] processName]];
 
   for (i = 0; i < [label length]; i++)
     {
